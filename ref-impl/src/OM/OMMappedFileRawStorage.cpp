@@ -135,10 +135,10 @@ void OMMappedFileRawStorage::read(OMByte* /* bytes */,
   //        <mf OMMappedFileRawStorage::size> causes <p bytesRead> to be less
   //        than <p byteCount>. Reading bytes that have never been written
   //        returns undefined data in <p bytes>.
-  //   @parm TBS
-  //   @parm The buffer into which the bytes are to be read.
-  //   @parm The number of bytes to read.
-  //   @parm The number of bytes actually read.
+  //   @parm OMUInt64 | position | TBS
+  //   @parm OMByte* | bytes | The buffer into which the bytes are to be read.
+  //   @parm OMUInt32 | byteCount | The number of bytes to read.
+  //   @parm OMUInt32& | bytesRead | The number of bytes actually read.
   //   @this const
 void OMMappedFileRawStorage::readAt(OMUInt64 /* position */,
                                     OMByte* /* bytes */,
@@ -197,10 +197,11 @@ void OMMappedFileRawStorage::write(const OMByte* /* bytes */,
   //        <c OMMappedFileRawStorage> to be extended, however such
   //        extension can fail, causing <p bytesWritten> to be less
   //        than <p byteCount>.
-  //   @parm TBS
-  //   @parm The buffer from which the bytes are to be written.
-  //   @parm The number of bytes to write.
-  //   @parm The actual number of bytes written.
+  //   @parm OMUInt64 | position | TBS
+  //   @parm OMByte* | bytes | The buffer from which the bytes are to be
+  //         written.
+  //   @parm OMUInt32 | byteCount | The number of bytes to write.
+  //   @parm OMUInt32& | bytesWritten | The actual number of bytes written.
 void OMMappedFileRawStorage::writeAt(OMUInt64 /* position */,
                                      const OMByte* /* bytes */,
                                      OMUInt32 /* byteCount */,
@@ -280,6 +281,15 @@ bool OMMappedFileRawStorage::isPositionable(void) const
   return false;
 }
 
+  // @mfunc Synchronize this <c OMMappedFileRawStorage> with its external
+  //        representation.
+void OMMappedFileRawStorage::synchronize(void)
+{
+  TRACE("OMMappedFileRawStorage::synchronize");
+
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
   // @mfunc The current position for <f read()> and <f write()>, as an
   //        offset in bytes from the beginning of this
   //        <c OMMappedFileRawStorage>.
@@ -299,20 +309,12 @@ OMUInt64 OMMappedFileRawStorage::position(void) const
   //        <c OMMappedFileRawStorage>.
   //        precondition - isPositionable()
   //   @parm The new position.
+  //   @this const
   //   @devnote fseek takes a long int for offset this may not be sufficient
   //            for 64-bit offsets.
-void OMMappedFileRawStorage::setPosition(OMUInt64 /* newPosition */)
+void OMMappedFileRawStorage::setPosition(OMUInt64 /* newPosition */) const
 {
   TRACE("OMMappedFileRawStorage::setPosition");
-
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-}
-
-  // @mfunc Synchronize this <c OMMappedFileRawStorage> with its external
-  //        representation.
-void OMMappedFileRawStorage::synchronize(void)
-{
-  TRACE("OMMappedFileRawStorage::synchronize");
 
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }

@@ -91,7 +91,7 @@ public:
     //          than <p byteCount>. Reading bytes that have never been written
     //          returns undefined data in <p bytes>.
     //          @precondition <f isReadable()> && <f isPositionable()>
-  virtual void readAt(OMUInt64 possition,
+  virtual void readAt(OMUInt64 position,
                       OMByte* bytes,
                       OMUInt32 byteCount,
                       OMUInt32& bytesRead) const;
@@ -153,6 +153,16 @@ public:
     //          of this <c OMDiskRawStorage> be changed ?
   virtual bool isPositionable(void) const;
 
+    // @cmember Synchronize this <c OMDiskRawStorage> with its external
+    //          representation.
+  virtual void synchronize(void);
+
+protected:
+  // @access Protected members.
+
+    // @cmember Constructor.
+  OMDiskRawStorage(FILE* file, OMFile::OMAccessMode accessMode);
+
     // @cmember The current position for <f read()> and <f write()>, as an
     //          offset in bytes from the beginning of this
     //          <c OMDiskRawStorage>.
@@ -163,17 +173,7 @@ public:
     //          offset in bytes from the beginning of this
     //          <c OMDiskRawStorage>.
     //          precondition - isPositionable()
-  virtual void setPosition(OMUInt64 newPosition);
-
-    // @cmember Synchronize this <c OMDiskRawStorage> with its external
-    //          representation.
-  virtual void synchronize(void);
-
-protected:
-  // @access Protected members.
-
-    // @cmember Constructor.
-  OMDiskRawStorage(FILE* file, OMFile::OMAccessMode accessMode);
+  virtual void setPosition(OMUInt64 newPosition) const;
 
   virtual void read(FILE* file,
                     OMByte* bytes,
@@ -191,7 +191,7 @@ protected:
 
   virtual OMUInt64 position(FILE* file) const;
 
-  virtual void setPosition(FILE* file, OMUInt64 newPosition);
+  virtual void setPosition(FILE* file, OMUInt64 newPosition) const;
 
 private:
   // @access Private members.

@@ -100,11 +100,11 @@ OMRawStorageLockBytes::ReadAt(ULARGE_INTEGER ulOffset,
 {
   TRACE("OMRawStorageLockBytes::ReadAt");
 
-  _rawStorage->setPosition(toOMUInt64(ulOffset));
   OMUInt32 bytesRead = 0;
-  _rawStorage->read(static_cast<OMByte*>(pv),
-                    cb,
-                    bytesRead);
+  _rawStorage->readAt(toOMUInt64(ulOffset),
+                      static_cast<OMByte*>(pv),
+                      cb,
+                      bytesRead);
   *pcbRead = bytesRead;
   return NOERROR;
 }
@@ -118,11 +118,11 @@ OMRawStorageLockBytes::WriteAt(ULARGE_INTEGER ulOffset,
 {
   TRACE("OMRawStorageLockBytes::WriteAt");
 
-  _rawStorage->setPosition(toOMUInt64(ulOffset));
   OMUInt32 bytesWritten = 0;
-  _rawStorage->write(static_cast<const OMByte*>(pv),
-                     cb,
-                     bytesWritten);
+  _rawStorage->writeAt(toOMUInt64(ulOffset),
+                       static_cast<const OMByte*>(pv),
+                       cb,
+                       bytesWritten);
   *pcbWritten = bytesWritten;
   return NOERROR;
 }

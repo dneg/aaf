@@ -163,16 +163,17 @@ void OMDiskRawStorage::read(OMByte* bytes,
   //   @parm The number of bytes to read.
   //   @parm The number of bytes actually read.
   //   @this const
-void OMDiskRawStorage::readAt(OMUInt64 /* position */,
-                              OMByte* /* bytes */,
-                              OMUInt32 /* byteCount */,
-                              OMUInt32& /* bytesRead */) const
+void OMDiskRawStorage::readAt(OMUInt64 position,
+                              OMByte* bytes,
+                              OMUInt32 byteCount,
+                              OMUInt32& bytesRead) const
 {
   TRACE("OMDiskRawStorage::readAt");
   PRECONDITION("Readable", isReadable());
   PRECONDITION("Readable", isPositionable());
 
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  setPosition(position);
+  read(bytes, byteCount, bytesRead);
 }
 
   // @mfunc Is it possible to write to this <c OMDiskRawStorage> ?
@@ -227,17 +228,18 @@ void OMDiskRawStorage::write(const OMByte* bytes,
   //   @parm The buffer from which the bytes are to be written.
   //   @parm The number of bytes to write.
   //   @parm The actual number of bytes written.
-void OMDiskRawStorage::writeAt(OMUInt64 /* position */,
-                               const OMByte* /* bytes */,
-                               OMUInt32 /* byteCount */,
-                               OMUInt32& /* bytesWritten */)
+void OMDiskRawStorage::writeAt(OMUInt64 position,
+                               const OMByte* bytes,
+                               OMUInt32 byteCount,
+                               OMUInt32& bytesWritten)
 {
   TRACE("OMDiskRawStorage::writeAt");
 
   PRECONDITION("Writable", isWritable());
   PRECONDITION("Readable", isPositionable());
 
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  setPosition(position);
+  write(bytes, byteCount, bytesWritten);
 }
 
   // @mfunc May this <c OMDiskRawStorage> be changed in size ?
@@ -309,38 +311,6 @@ bool OMDiskRawStorage::isPositionable(void) const
   return true;
 }
 
-  // @mfunc The current position for <f read()> and <f write()>, as an
-  //        offset in bytes from the beginning of this
-  //        <c OMDiskRawStorage>.
-  //        precondition - isPositionable()
-  //   @rdesc The current position for <f read()> and <f write()>.
-  //   @this const
-OMUInt64 OMDiskRawStorage::position(void) const
-{
-  TRACE("OMDiskRawStorage::position");
-
-  PRECONDITION("Positionable", isPositionable());
-
-  OMUInt64 result = position(_file);
-  return result;
-}
-
-  // @mfunc Set the current position for <f read()> and <f write()>, as an
-  //        offset in bytes from the beginning of this
-  //        <c OMDiskRawStorage>.
-  //        precondition - isPositionable()
-  //   @parm The new position.
-  //   @devnote fseek takes a long int for offset this may not be sufficient
-  //            for 64-bit offsets.
-void OMDiskRawStorage::setPosition(OMUInt64 newPosition)
-{
-  TRACE("OMDiskRawStorage::setPosition");
-
-  PRECONDITION("Positionable", isPositionable());
-
-  setPosition(_file, newPosition);
-}
-
   // @mfunc Synchronize this <c OMDiskRawStorage> with its external
   //        representation.
 void OMDiskRawStorage::synchronize(void)
@@ -365,6 +335,39 @@ OMDiskRawStorage::OMDiskRawStorage(FILE* file,
   PRECONDITION("Valid mode", (_mode == OMFile::readOnlyMode)  ||
                              (_mode == OMFile::writeOnlyMode) ||
                              (_mode == OMFile::modifyMode));
+}
+
+  // @mfunc The current position for <f read()> and <f write()>, as an
+  //        offset in bytes from the beginning of this
+  //        <c OMDiskRawStorage>.
+  //        precondition - isPositionable()
+  //   @rdesc The current position for <f read()> and <f write()>.
+  //   @this const
+OMUInt64 OMDiskRawStorage::position(void) const
+{
+  TRACE("OMDiskRawStorage::position");
+
+  PRECONDITION("Positionable", isPositionable());
+
+  OMUInt64 result = position(_file);
+  return result;
+}
+
+  // @mfunc Set the current position for <f read()> and <f write()>, as an
+  //        offset in bytes from the beginning of this
+  //        <c OMDiskRawStorage>.
+  //        precondition - isPositionable()
+  //   @parm The new position.
+  //   @this const
+  //   @devnote fseek takes a long int for offset this may not be sufficient
+  //            for 64-bit offsets.
+void OMDiskRawStorage::setPosition(OMUInt64 newPosition) const
+{
+  TRACE("OMDiskRawStorage::setPosition");
+
+  PRECONDITION("Positionable", isPositionable());
+
+  setPosition(_file, newPosition);
 }
 
 void OMDiskRawStorage::read(FILE* file,
@@ -445,7 +448,7 @@ OMUInt64 OMDiskRawStorage::position(FILE* file) const
   return result;
 }
 
-void OMDiskRawStorage::setPosition(FILE* file, OMUInt64 newPosition)
+void OMDiskRawStorage::setPosition(FILE* file, OMUInt64 newPosition) const
 {
   TRACE("OMDiskRawStorage::setPosition");
 

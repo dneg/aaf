@@ -92,7 +92,7 @@ public:
     //          than <p byteCount>. Reading bytes that have never been written
     //          returns undefined data in <p bytes>.
     //          @precondition <f isReadable()> && <f isPositionable()>
-  virtual void readAt(OMUInt64 possition,
+  virtual void readAt(OMUInt64 position,
                       OMByte* bytes,
                       OMUInt32 byteCount,
                       OMUInt32& bytesRead) const = 0;
@@ -165,16 +165,6 @@ public:
     //          for network streams would return false. An implementation
     //          for memory files would return true.
   virtual bool isPositionable(void) const = 0;
-
-    // @cmember The current position for <f read()> and <f write()>, as an
-    //          offset in bytes from the beginning of this <c OMRawStorage>.
-    //          @precondition <f isPositionable()>
-  virtual OMUInt64 position(void) const = 0;
-
-    // @cmember Set the current position for <f read()> and <f write()>, as an
-    //          offset in bytes from the beginning of this <c OMRawStorage>.
-    //          @precondition <f isPositionable()>
-  virtual void setPosition(OMUInt64 newPosition) = 0;
 
     // @cmember Synchronize this <c OMRawStorage> with its external
     //          representation.
