@@ -104,6 +104,13 @@ public:
 	 IAAFEssenceStream *stream,
      /*[out]*/ aafInt16 *  pNumChannels); // The number of channels present 
 
+  // Returns the number of samples which this codec can find on the
+			// given slot.
+  STDMETHOD (GetNumSamples)
+     (/*[in]*/ aafUID_t  essenceKind, // This is the type of essence to check
+	/*[out]*/ aafLength_t *  pNumSamples); // The number of samples present of that type
+
+	 
   // Returns a (possibly zero-length) string listing any problems
 			//found with the essence, or the relationship between variables
 			// in the essence descriptor, and any such values contained within
@@ -127,6 +134,7 @@ public:
   // Open a media data object.
   STDMETHOD (Open)
     (/*[in]*/ IUnknown *fileMob, // Open the essence attached to this file mob
+        aafSlotID_t	slotID,
      /*[in]*/ aafMediaOpenMode_t  openMode, // In this mode
      /*[in]*/ IAAFEssenceStream * stream); // Here is an essence stream with the raw data 
 	
@@ -215,7 +223,7 @@ public:
   // Supply an essence format object specifying what data is
 			// required, and it is filled in with the data values.
   STDMETHOD (GetEssenceFormat)
-    (/*[in,out]*/ IAAFEssenceFormat ** ppFormat); // An essence format object 
+    (/*[in,out]*/ IAAFEssenceFormat *pFormat); // An essence format object 
 
 
 protected:
@@ -257,8 +265,8 @@ private:
 	aafBool				_sampleDataHeaderWritten;
 	aafBool				_initialSeekPerformed;
 
-	AAFRESULT writeSwappedWAVEData(aafUInt8 **destBufHdl, aafInt32 maxsize, void *data);
-	AAFRESULT readSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data);
+	AAFRESULT fillSwappedWAVEData(aafUInt8 **destBufHdl, aafInt32 maxsize, void *data);
+	AAFRESULT scanSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data);
 	AAFRESULT CreateWAVEheader(aafUInt8 *buffer, aafInt32 bufsize, aafInt16 numCh);
 	AAFRESULT loadWAVEHeader(void);
 	AAFRESULT GetWAVEData(aafUInt32 len, void *buf);
