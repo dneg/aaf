@@ -507,12 +507,53 @@ AAFRESULT aafMobIDNew(
         aafUID_t *mobID)     /* OUT - Newly created Mob ID */
 {
 	union label		aLabel;
+	aafUInt32	major, minor;
 	static aafUInt32 last_part2 = 0;		// Get rid of this!!!
 //#ifdef sun
 //	struct rusage rusage_struct;
 //	int status;
 //#endif
 	aafTimeStamp_t	timestamp;
+	
+	AAFGetDateTime(&timestamp);
+	major = (aafUInt32)timestamp.TimeVal;	// Will truncate
+#if defined(_MAC) || defined(macintosh)
+	minor = TickCount();
+#else
+#ifdef _WIN32
+	minor = ((unsigned long)(time(NULL)*60/CLK_TCK));
+#else 
+//#if defined(sun)
+//	status = getrusage(RUSAGE_SELF, &rusage_struct);
+//
+//	/* On the Sun, add system and user time */
+//	minor = rusage_struct.ru_utime.tv_sec*60 + 
+//	      rusage_struct.ru_utime.tv_usec*60/1000000 +
+//		  rusage_struct.ru_stime.tv_sec*60 +
+//		  rusage_struct.ru_stime.tv_usec*60/1000000;
+//#else
+	{
+	  static struct tms timebuf;
+	  minor = ((unsigned long)(times(&timebuf)*60/HZ));
+	}	
+//#endif
+#endif
+#endif
+
+	if (last_part2 >= minor)
+	  aLabel.smpte.MobIDMinor = last_part2 + 1;
+		
+	last_part2 = minor;
+
+	return(aafMobIDFromMajorMinor(major, minor, mobID));
+}
+
+AAFRESULT aafMobIDFromMajorMinor(
+        aafUInt32	major,
+		aafUInt32	minor,
+		aafUID_t *mobID)     /* OUT - Newly created Mob ID */
+{
+	union label		aLabel;
 	
 	aLabel.smpte.oid = 0x06;
 	aLabel.smpte.size = 0x0E;
@@ -522,35 +563,8 @@ AAFRESULT aafMobIDNew(
 	aLabel.smpte.unused = 0;
 	aLabel.smpte.MobIDPrefix = 42;		// Means its an OMF Uid
 
-	AAFGetDateTime(&timestamp);
-	aLabel.smpte.MobIDMajor = (aafUInt32)timestamp.TimeVal;	// Will truncate
-#if defined(_MAC) || defined(macintosh)
-	aLabel.smpte.MobIDMinor = TickCount();
-#else
-#ifdef _WIN32
-	aLabel.smpte.MobIDMinor = ((unsigned long)(time(NULL)*60/CLK_TCK));
-#else 
-//#if defined(sun)
-//	status = getrusage(RUSAGE_SELF, &rusage_struct);
-//
-//	/* On the Sun, add system and user time */
-//	label.smpte.MobIDMminor = rusage_struct.ru_utime.tv_sec*60 + 
-//	      rusage_struct.ru_utime.tv_usec*60/1000000 +
-//		  rusage_struct.ru_stime.tv_sec*60 +
-//		  rusage_struct.ru_stime.tv_usec*60/1000000;
-//#else
-	{
-	  static struct tms timebuf;
-	  aLabel.smpte.MobIDMminor = ((unsigned long)(times(&timebuf)*60/HZ));
-	}	
-//#endif
-#endif
-#endif
-
-	if (last_part2 >= aLabel.smpte.MobIDMinor)
-	  aLabel.smpte.MobIDMinor = last_part2 + 1;
-		
-	last_part2 = aLabel.smpte.MobIDMinor;
+	aLabel.smpte.MobIDMajor = major;
+	aLabel.smpte.MobIDMinor = minor;
 
 	*mobID = aLabel.guid;
 	return(OM_ERR_NONE);
