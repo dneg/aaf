@@ -45,6 +45,10 @@
 // Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
 #include "AAFStoredObjectIDs.h"
 
+#if defined(macintosh) || defined(_MAC)
+#include "DataInput.h"
+#endif
+
 
 // There are differences in the microsoft and other compilers in the "Length" specifier
 // used in printf for 64bit integers.
@@ -959,7 +963,7 @@ struct CComInitialize
   }
 };
 
-int main()
+int main(int argc, char *argv[])
 {
   CComInitialize comInit;
   aafWChar * pwFileName = L"CutsOnly.aaf";
