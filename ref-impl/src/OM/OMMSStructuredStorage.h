@@ -26,6 +26,7 @@
 #ifndef OMMSSTRUCTUREDSTORAGE_H
 #define OMMSSTRUCTUREDSTORAGE_H
 
+#include <time.h>
 #include "OMDataTypes.h"
 
 // @module OMMSStructuredStorage | Interface to various implementations
@@ -70,7 +71,7 @@
 #error "Don't know which structured storage implementation to use."
 #endif
 
- //redefine STGOPTIONS so that it is available on all platforms
+// redefine STGOPTIONS so that it is available on all platforms
 typedef struct tagOM_STGOPTIONS
 {
   USHORT      usVersion;
@@ -137,6 +138,52 @@ static inline ULARGE_INTEGER fromOMUInt64(const OMUInt64& x)
 
 #endif
 
+/*
+* Formula from From Microsoft FAQ Q167296
+* Under UNIX platforms, file times are maintained in the form of a ANSI C
+* runtime arithmetic type named 'time_t', which represents seconds since
+* midnight January 1, 1970 UTC (coordinated universal time).
+*
+* Under Win32 platforms, file times are maintained primarily in the form of a
+* 64-bit FILETIME structure, which represents the number of 100-nanosecond
+* intervals since January 1, 1601 UTC (coordinate universal time).
+*
+*/
+// Portable way to define 64 bit constants
+#ifdef _MSC_VER
+#define UINT64_C(c)	c
+#else
+#define UINT64_C(c) c##LL
+static inline OMInt64 Int32x32To64 (DWORD multiplier, DWORD multiplicand)
+{
+	OMInt64 ret = (OMInt64)multiplier * (OMInt64)multiplicand;
+}
+#endif
+
+const OMInt64 SECS_TO_100NS = 10000000;
+const OMInt64 NS100_BETWEEN_EPOCHS = UINT64_C(116444736000000000);
+
+static inline void convertUnixTimeToFileTime (time_t ut, FILETIME *ft)
+{
+	OMInt64 ll = Int32x32To64(ut, SECS_TO_100NS) + NS100_BETWEEN_EPOCHS;
+	ft->dwLowDateTime = (DWORD)ll;
+	ft->dwHighDateTime = (DWORD)(ll >> 32);
+}
+
+static inline void convertFileTimeToUnixTime (const FILETIME *ft, time_t *ut)
+{
+	// first convert filetime to long long in 100ns
+	OMInt64 ll = ((OMInt64)ft->dwHighDateTime << 32) + ft->dwLowDateTime;
+
+
+	// then convert to seconds in units of 100ns since unix epocs
+	ll -= NS100_BETWEEN_EPOCHS;
+
+	// convert it to seconds from Win Epoch
+	ll /= SECS_TO_100NS;
+	*ut = (time_t)ll;
+}
+
 // Initialization and finalization.
 //
 void OMMSSInitialize(void);
@@ -192,10 +239,10 @@ void OMCoUninitialize(void);
 
 #ifdef OM_USE_STORAGE_EX
 
-//this function does ot exist in the current MS Structured Storage Library
-// but is reqruied to create 4K files through the raw interface.
-//Therefore the function is simulated in OMMSStructuredStorage.cpp
-//040109 Ian Baker Metaglue Corp.
+// This function does not exist in the current MS Structured Storage library
+// but is required to create 4K files through the raw interface.
+// Therefore the function is simulated in OMMSStructuredStorage.cpp
+// 040109 Ian Baker Metaglue Corp.
 OMInt32 StgCreateDocfileOnILockBytesEx (
 										ILockBytes* plkbyt,
 										DWORD grfMode,

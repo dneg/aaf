@@ -187,10 +187,31 @@ SOURCE="..\..\..\ref-impl\src\OM\OMMemoryRawStorage.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMMSSStoredObject.cpp"
+
+!IF  "$(CFG)" == "OM - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "OM - Win32 Debug"
+
+# SUBTRACT CPP /FA<none>
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMMSSStoredObjectFactory.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMMSxMSSStoredObjectFactory.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMSSxMSSStoredObjectFactory.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMGSFxMSSStoredObjectFactory.cpp"
 # End Source File
 # Begin Source File
 
@@ -274,15 +295,7 @@ SOURCE="..\..\..\ref-impl\src\OM\OMSSSStorageRWInputSource.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMSSSStoredObject.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\OMSSSStoredObjectFactory.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\OMSSSStoredStream.cpp"
+SOURCE="..\..\..\ref-impl\src\OM\OMSSSStructuredStorage.cpp"
 # End Source File
 # Begin Source File
 
@@ -559,6 +572,18 @@ SOURCE="..\..\..\ref-impl\include\OM\OMMSSStoredObject.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMMSSStoredObjectFactory.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMMSxMSSStoredObjectFactory.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMGSFxMSSStoredObjectFactory.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMSSxMSSStoredObjectFactory.h"
 # End Source File
 # Begin Source File
 

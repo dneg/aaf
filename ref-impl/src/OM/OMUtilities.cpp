@@ -223,12 +223,22 @@ int compareWideString(const wchar_t* string1, const wchar_t* string2)
   return result;
 }
 
-void convertWideStringToString(char* /* result */,
-                               const wchar_t* /* string */,
-                               size_t /* resultSize */)
+void convertWideStringToString(char*  result,
+                               const wchar_t*  string ,
+                               size_t  resultSize)
 {
   TRACE("convertWideStringToString");
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Valid string", validWideString(string));
+  PRECONDITION("Valid output buffer", result != 0);
+  PRECONDITION("Valid output buffer size", resultSize > 0);
+
+  size_t length = lengthOfWideString(string);
+  if (length > (resultSize - 1)) {
+    length = resultSize - 1;
+  }
+  size_t status = wcstombs(result, string, length);
+  ASSERT("Successful conversion", status != (size_t)-1);
+  result[length] = 0;
 }
 
 void convertStringToWideString(wchar_t* result,

@@ -17,47 +17,68 @@
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
-// Licensor of the AAF Association is Avid Technology.
+// Licensor of the AAF Association is Schema Software Inc.
 // All rights reserved.
 //
 //=---------------------------------------------------------------------=
 
-#ifndef OMSSSSTRUCTUREDSTORAGE_H
-#define OMSSSSTRUCTUREDSTORAGE_H
+
+/************************************************************************
+* StructuredStorage.h
+* Public Header file for Structured Storage library
+*
+* (c) Schema Software Inc., 2001-2004
+* Authors: Bob Sabiston, Yuri Khramov, Mark Ambachtsheer
+************************************************************************
+
+$Revision$
+$Date$
+*/
+#ifndef OMGSFSTRUCTUREDSTORAGE_H
+#define OMGSFSTRUCTUREDSTORAGE_H
+
 #include "OMMSStructuredStorage.h"
 #include "OMRawStorage.h"
 #include "OMFile.h"
-#include "StructuredStorage.h"
 
-class OMSSIStorage : public IStorage
+// TODO: revisit all these typedefs
+typedef long  HRESULT;
+
+typedef enum { GSF_READ, GSF_WRITE, GSF_READWRITE } GsfAccessMode;
+
+typedef void GsfStorage;
+typedef void GsfStream;
+
+#define GSTG_OK 0
+#define GSTG_ERROR 1
+
+class OMGSFIStorage : public IStorage
 {
 	public:
 	// function to create root storage in a compound file
 	static HRESULT STDMETHODCALLTYPE StgCreateStorageEx(
 								const TCHAR FAR* in_filename,
-								const OMFile::OMAccessMode in_accessMode,
+								OMFile::OMAccessMode in_accessMode,
 								void **out_storage,
 								unsigned long in_sectorSize);
-
 
 	// function to open a compound file
 	static HRESULT STDMETHODCALLTYPE StgOpenStorageEx(
 								const TCHAR FAR* in_filename,
-								const OMFile::OMAccessMode in_accessMode,
+								OMFile::OMAccessMode in_accessMode,
 								void **out_storage);
-
 
 	// function to create root storage in raw storage
 	static HRESULT STDMETHODCALLTYPE StgCreateStorageInOMRawStorage(
 								const OMRawStorage* in_pRaw,
-								const OMFile::OMAccessMode in_accessMode,
+								OMFile::OMAccessMode in_accessMode,
 								void** out_storage,
 								unsigned long in_sectorSize);
 
 	// function to open root storage in raw storage
 	static HRESULT STDMETHODCALLTYPE StgOpenStorageInOMRawStorage(
 								const OMRawStorage* in_pRaw,
-								const OMFile::OMAccessMode in_accessMode,
+								OMFile::OMAccessMode in_accessMode,
 								void** out_storage);
 
 	// @access Public members
@@ -151,26 +172,28 @@ public:
 										);
 
 protected:
-	// Make default contructor private so that an OMSSIStorage object cannot
+	// Make default contructor private so that an OMGSFIStorage object cannot
 	// be instantiated
-	OMSSIStorage(RootStorage *in_root, Storage *in_storage);
+	OMGSFIStorage(GsfStorage *in_storage, GsfAccessMode _mode, const char  *sname);
 
 	// keeping destructor protected means that the object must always be
 	// instantiated on the heap;
-	virtual ~OMSSIStorage();
+	virtual ~OMGSFIStorage();
 
 private:
-	RootStorage*	_root;
-	Storage*		_storage;
+	GsfStorage*		_storage;
+	GsfAccessMode	_mode;				// TODO: does gsf store this somewhere?
 	ULONG 			_referenceCount;
+	char 			_storageName[256];	// TODO: does gsf store this somewhere?
 };
 
 
-class OMSSIStream : public IStream
+class OMGSFIStream : public IStream
 {
 public:
 	// public constructor
-	OMSSIStream(Stream *in_stream);
+	OMGSFIStream(GsfStream *in_stream, GsfAccessMode mode, const char *sname);
+
 	// IUnknown interface
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** ppvObject);
 	virtual ULONG STDMETHODCALLTYPE AddRef(void);
@@ -232,12 +255,25 @@ public:
 
 protected:
 
-	// Make destructor virtual so that this object can only be instantiated
-	// on the heap
-	virtual ~OMSSIStream();
+	// Make destructor virtual so that this objeact can only be instantiated
+	// on heap
+	virtual ~OMGSFIStream();
 
 private:
-	Stream*			_stream;
+	int Tell (OMUInt64 *position) const;
+	int Seek (OMInt64 offset, DWORD whence);
+	int Size (OMUInt64 *ssize) const;
+
+
+private:
+	GsfStream*			_stream;
+	GsfAccessMode	_mode;				// TODO: does gsf store this somewhere?
 	ULONG 			_referenceCount;
+	char 			_streamName[256];	// TODO: does gsf store this somewhere?
 };
+
+void OMGSFInitialize();
+
+void OMGSFFinalize();
+
 #endif

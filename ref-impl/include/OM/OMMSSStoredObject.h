@@ -47,52 +47,15 @@ class OMMSSStoredObject : public OMStoredObject {
 public:
   // @access Static members.
 
-    // @cmember Perform Microsoft Structured Storage specific initialization.
-  static void initialize(void);
+    // @cmember Open the root <c OMMSSStoredObject>, using the root
+	//			storage <p in_storage>. <p mode> specifies the mode in which
+	//			to open the root.
+  static OMMSSStoredObject* open (IStorage *in_storage, OMFile::OMAccessMode mode);
 
-    // @cmember Perform Microsoft Structured Storage specific finalization.
-  static void finalize(void);
-
-    // @cmember Open the root <c OMMSSStoredObject> in the disk file
-    //          <p fileName> for reading only.
-    //   @devnote Soon to be obsolete.
-  static OMMSSStoredObject* openRead(const wchar_t* fileName);
-
-    // @cmember Open the root <c OMMSSStoredObject> in the disk file
-    //          <p fileName> for modification.
-    //   @devnote Soon to be obsolete.
-  static OMMSSStoredObject* openModify(const wchar_t* fileName);
-
-    // @cmember Create a new root <c OMMSSStoredObject> in the disk file
-    //          <p fileName>. The byte order of the newly created root
-    //          is given by <p byteOrder>.
-    //   @devnote Soon to be obsolete.
-  static OMMSSStoredObject* createModify(const wchar_t* fileName,
-                                         const OMByteOrder byteOrder,
-					 const OMUniqueObjectIdentification& signature);
-
-    // @cmember Open the root <c OMMSSStoredObject> in the raw storage
-    //          <p rawStorage> for reading only.
-  static OMMSSStoredObject* openRead(OMRawStorage* rawStorage);
-
-    // @cmember Open the root <c OMMSSStoredObject> in the raw storage
-    //          <p rawStorage> for modification.
-  static OMMSSStoredObject* openModify(OMRawStorage* rawStorage);
-
-    // @cmember Create a new root <c OMMSSStoredObject> in the raw storage
-    //          <p rawStorage>. The byte order of the newly created root
-    //          is given by <p byteOrder>.
-  static OMMSSStoredObject* createWrite(OMRawStorage* rawStorage,
-                                        const OMByteOrder byteOrder,
-																				const OMUniqueObjectIdentification& signature);
-
-    // @cmember Create a new root <c OMMSSStoredObject> in the raw storage
-    //          <p rawStorage>. The byte order of the newly created root
-    //          is given by <p byteOrder>.
-  static OMMSSStoredObject* createModify(OMRawStorage* rawStorage,
-                                         const OMByteOrder byteOrder,
-					 const OMUniqueObjectIdentification& signature);
-
+    // @cmember Create a new root <c OMMSSStoredObject>, using the root
+	//			storage <p in_storage>. The byte order of the newly created 
+	//			root is given by <p byteOrder>.
+  static OMMSSStoredObject* create (IStorage *in_storage, const OMByteOrder byteOrder);
   // @access Public members.
 
     // @cmember Destructor.
@@ -496,16 +459,6 @@ protected:
 
 private:
   // @access Private members.
-
-  static OMMSSStoredObject* openFile(const wchar_t* fileName,
-                                     const OMFile::OMAccessMode mode);
-  static OMMSSStoredObject* createFile(const wchar_t* fileName,
-  				       const OMUniqueObjectIdentification& signature);
-  static OMMSSStoredObject* openFile(OMRawStorage* rawStorage,
-                                     const OMFile::OMAccessMode mode);
-  static OMMSSStoredObject* createFile(OMRawStorage* rawStorage,
- 				       const OMUniqueObjectIdentification& signature);
-
   void create(const OMByteOrder byteOrder);
   void open(const OMFile::OMAccessMode mode);
 

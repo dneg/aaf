@@ -106,6 +106,15 @@ ifndef UUIDLIB
     UUIDLIB = -luuid
 endif
 
+# Optional libgsf support is enabled by the LIBGSF_PATH variable which must
+# contain the path to the installed libgsf includes and library
+# e.g. make LIBGSF_PATH=/usr/local
+# libgsf itself requires glib (for gobject and glib calls) and zlib
+ifdef LIBGSF_PATH
+	PLATFORMLIBS += -L$(LIBGSF_PATH)/lib -lgsf-1 -lgobject-2.0 -lglib-2.0 -lz
+	ADD_CFLAGS += -I$(LIBGSF_PATH)/include -I$(LIBGSF_PATH)/include/glib-2.0 -I$(LIBGSF_PATH)/lib/glib-2.0/include -DUSE_LIBGSF
+endif
+
 
 #------------------------------------------------------------------------------
 # Select UNICODE or ansi API's:
@@ -130,4 +139,3 @@ DLL ?= .so
 # BYTE_ORDER = -DBIGENDIAN=1
 #------------------------------------------------------------------------------
 BYTE_ORDER = -DLITTLEENDIAN=1
-

@@ -49,6 +49,11 @@ const aafUID_t aafFileKindAafM512Binary = aafFileKindAafM512Binary_Value;
 {0x42464141, 0x1205, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}}
 const aafUID_t aafFileKindAafS512Binary = aafFileKindAafS512Binary_Value;
 
+// the enum to select the GSF implementation with 512 byte sectors
+#define aafFileKindAafG512Binary_Value \
+{0x42464141, 0x23fd, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}}
+const aafUID_t aafFileKindAafG512Binary = aafFileKindAafG512Binary_Value;
+
 // the enum to select the SchemaSoft implementation with 4096 byte sectors
 #define aafFileKindAafS4KBinary_Value \
 {0x42464141, 0x9640, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}}
@@ -60,6 +65,11 @@ const aafUID_t aafFileKindAafS4KBinary = aafFileKindAafS4KBinary_Value;
 {0x42464141, 0xa838, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}}
 const aafUID_t aafFileKindAafM4KBinary = aafFileKindAafM4KBinary_Value;
 
+
+// the enum to select the GSF implementation with 4096 byte sectors
+#define aafFileKindAafG4KBinary_Value \
+{0x42464141, 0xba30, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}}
+const aafUID_t aafFileKindAafG4KBinary = aafFileKindAafG4KBinary_Value;
 
 // AAF files encoded as XML (text).
 //
@@ -108,10 +118,17 @@ const aafUID_t aafFileKindAaf512Binary = aafFileKindAafS512Binary_Value;
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 
 #elif defined( OS_LINUX )
+
+#ifdef USE_LIBGSF
+// When LIBGSF is requested make it the default for 512 and 4k
+const aafUID_t aafFileKindAaf512Binary = aafFileKindAafG512Binary_Value;
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafG4KBinary_Value;
+#else
 // DEFAULT is Schemasoft 512 (via libSSRW2C.a). 
 const aafUID_t aafFileKindAaf512Binary = aafFileKindAafS512Binary_Value;
-//NOTE: Add default 4k binary
+// default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
+#endif
 
 #elif defined( OS_FREEBSD )
 // No SS implementations ported as yet

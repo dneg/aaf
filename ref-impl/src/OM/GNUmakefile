@@ -48,8 +48,14 @@ INCLUDES = -I. \
 	   -I$(AAFBASE)/ss-impl/ref \
        -I$(AAFBASE)/sss-impl/include
 
+# Optional libgsf support is enabled by LIBGSF_PATH variable
+# E.g. "make LIBGSF_PATH=/usr/local"
+ifndef LIBGSF_PATH
+CXXOBJS:=$(filter-out %/OMGSFStructuredStorage.o,$(CXXOBJS))
+CXXOBJS:=$(filter-out %/OMGSFxMSSStoredObjectFactory.o,$(CXXOBJS))
+endif
 
-CFLAGS +=  -DOM_PERMIT_ZERO_LENGTH -DOM_STACK_TRACE_ON_ASSERT
+CFLAGS += -DOM_PERMIT_ZERO_LENGTH -DOM_STACK_TRACE_ON_ASSERT
 
 
 .PHONY : all
