@@ -224,12 +224,24 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::GetMobInfo (aafTimeStamp_t *  /*lastModified*/,
-                           aafTimeStamp_t *  /*creationTime*/,
-							aafWChar *  /*name*/,
+    ImplAAFMob::GetMobInfo (aafTimeStamp_t *lastModified,
+                           aafTimeStamp_t *creationTime,
+							aafWChar *name,
 							aafInt32 nameLen)
-                           {
-  return AAFRESULT_NOT_IMPLEMENTED;
+{
+	aafAssert(creationTime != NULL, NULL, AAFRESULT_NULL_PARAM);
+	aafAssert(creationTime != NULL, NULL, AAFRESULT_NULL_PARAM);
+	aafAssert(creationTime != NULL, NULL, AAFRESULT_NULL_PARAM);
+    XPROTECT()
+	{
+		CHECK(GetCreateTime (creationTime));
+		CHECK(GetModTime (creationTime));
+		CHECK(GetName(name, nameLen));
+	}
+	XEXCEPT
+	XEND;
+
+	return(AAFRESULT_SUCCESS); 
 }
 
 AAFRESULT STDMETHODCALLTYPE
@@ -243,16 +255,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 	return(AAFRESULT_SUCCESS);
 }
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::SetNewProps (aafBool  /*isMasterMob*/,
-                           aafWChar *  /*name*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::SetModTime (aafTimeStamp_t *modTime)
