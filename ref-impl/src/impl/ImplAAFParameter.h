@@ -18,7 +18,6 @@
 
 class ImplAAFParameterDef;
 class ImplAAFTypeDef;
-class ImplAAFReferenceValue;
 
 #ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"
