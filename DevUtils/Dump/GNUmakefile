@@ -36,20 +36,20 @@ INCLUDES = -I$(AAFSDKINCLUDEDIR) \
 	   -I../../ss-impl/ref
 
 
-ifeq ($(AAFPLATFORM),SunSunOS)
-
+ifeq ($(AAFPLATFORM),SparcSolaris)
 .PHONY : all
-
 else
+ifeq ($(AAFPLATFORM),PPCDarwin)
 .PHONY : all
+else
+
 all : $(OBJDIR) $(AAFSDKBINDIR)/dump$(EXE)
-
-
 
 $(AAFSDKBINDIR)/dump$(EXE) : $(CXXOBJS)
 	$(LD) $(CXXOBJS) $(RPATH_OPT) -L$(AAFSDKLIBDIR) $(LIBCIO) -o $@ \
 	$(AAFBUILDDIR)/ss-impl/librefstg$(LIB)
 
+endif 
 endif 
 
 .PHONY : clean
