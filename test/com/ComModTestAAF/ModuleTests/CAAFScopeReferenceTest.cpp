@@ -38,6 +38,7 @@
 #include "AAFSmartPointer.h"
 #include "AAFStoredObjectIDs.h"
 #include "CAAFBuiltinDefs.h"
+#include "AAFDefUIDs.h"
 
 typedef IAAFSmartPointer<IAAFComponent> IAAFComponentSP;
 typedef IAAFSmartPointer<IAAFCompositionMob> IAAFCompositionMobSP;
@@ -85,6 +86,7 @@ static void FillInProductInfo(aafProductIdentification_t& ProductInfo,
 	ProductInfo.productVersion = &v;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.platform = NULL;
+	ProductInfo.productID = UnitTestProductID;
 }
 
 // Cross-platform utility to delete a file.
