@@ -15,7 +15,7 @@ AAFPERSISTENTOBJECTS = \
 	AAFComponent \
 	AAFCompositionMob \
 	AAFConstValue \
-	AAFControlCodeDefinition \
+	AAFParameterDefinition \
 	AAFControlPoint \
 	AAFDataDefinition \
 	AAFDefinitionObject \
@@ -71,7 +71,7 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFAttributes \
 	EnumAAFClassDefinitions \
 	EnumAAFComponents \
-	EnumAAFControlCodeDefinitions \
+	EnumAAFParameterDefinitions \
 	EnumAAFControlPoints \
 	EnumAAFDataDefinitions \
 	EnumAAFDefinitions \
@@ -167,7 +167,7 @@ AAFOBJECTS = \
 	AAFWindowsLocator \
 	EnumAAFAttributes \
 	EnumAAFClassDefinitions \
-	EnumAAFControlCodeDefinitions \
+	EnumAAFParameterDefinitions \
 	EnumAAFComponents \
 	EnumAAFControlPoints \
 	EnumAAFDataDefinitions \
