@@ -263,11 +263,11 @@ size_t ImplAAFTypeDefRename::NativeSize() const
 }
 
 
-OMProperty * ImplAAFTypeDefRename::pvtCreateOMProperty
+OMProperty * ImplAAFTypeDefRename::pvtCreateOMPropertyMBS
   (OMPropertyId pid,
-   const aafCharacter * name) const
+   const char * name) const
 {
-  return BaseType()->pvtCreateOMProperty (pid, name);
+  return BaseType()->pvtCreateOMPropertyMBS (pid, name);
 }
 
 AAFRESULT STDMETHODCALLTYPE
