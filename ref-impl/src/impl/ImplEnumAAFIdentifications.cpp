@@ -132,13 +132,14 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	ImplAAFIdentification**	ppDef;
 	aafUInt32				numDefs;
-	HRESULT					hr;
+	HRESULT					hr = S_OK;
 
-	if ((pNumFetched == NULL && count != 1) || (pNumFetched != NULL && count == 1))
-		return E_INVALIDARG;
-
+	if (pNumFetched == NULL || ppIdentifications == NULL)
+		return AAFRESULT_NULL_PARAM;
+		
 	// Point at the first component in the array.
 	ppDef = ppIdentifications;
+
 	for (numDefs = 0; numDefs < count; numDefs++)
 	{
 		hr = NextOne(ppDef);
@@ -154,6 +155,9 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	if (pNumFetched)
 		*pNumFetched = numDefs;
+		
+	if (count > 0 && numDefs > 0)
+		hr = AAFRESULT_SUCCESS;
 
 	return hr;
 }
@@ -183,14 +187,14 @@ AAFRESULT STDMETHODCALLTYPE
 
 	newCurrent = _current + count;
 
-	if(newCurrent < numElem)
+	if(newCurrent <= numElem)
 	{
 		_current = newCurrent;
 		hr = AAFRESULT_SUCCESS;
 	}
 	else
 	{
-		hr = E_FAIL;
+		hr = AAFRESULT_NO_MORE_OBJECTS;
 	}
 
 	return hr;
