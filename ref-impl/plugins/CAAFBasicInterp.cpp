@@ -41,6 +41,8 @@
 #include "AAFInterpolatorDefs.h"
 #include "AAFTypeDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 const aafProductVersion_t AAFPluginImplementationVersion = {1, 0, 0, 1, kVersionBeta};
 
 const CLSID CLSID_AAFBasicInterp = { 0x5B6C85A1, 0x0EDE, 0x11d3, { 0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
@@ -99,7 +101,8 @@ HRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		CHECK(dict->CreateInstance(AUID_AAFInterpolationDefinition,
+	    CAAFBuiltinDefs defs (dict);
+		CHECK(dict->CreateInstance(defs.cdInterpolationDefinition(),
 							IID_IAAFInterpolationDef, 
 							(IUnknown **)&interpDef));
 		uid = LinearInterpolator;
@@ -136,7 +139,8 @@ HRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		CHECK(dict->CreateInstance(AUID_AAFPluginDescriptor,
+	    CAAFBuiltinDefs defs (dict);
+		CHECK(dict->CreateInstance(defs.cdPluginDescriptor(),
 			IID_IAAFPluginDescriptor, 
 			(IUnknown **)&desc));
 		*descPtr = desc;
@@ -144,7 +148,7 @@ HRESULT STDMETHODCALLTYPE
 		CHECK(desc->Initialize(BASIC_INTERP_PLUGIN, L"Example interpolators", L"Handles step and linear interpolation."));
 		CHECK(desc->SetCategoryClass(AUID_AAFDefObject));
 		CHECK(desc->SetPluginVersionString(manufRev));
-		CHECK(dict->CreateInstance(AUID_AAFNetworkLocator,
+		CHECK(dict->CreateInstance(defs.cdNetworkLocator(),
 			IID_IAAFLocator, 
 			(IUnknown **)&pLoc));
 		CHECK(pLoc->SetPath (manufURL));
@@ -162,7 +166,7 @@ HRESULT STDMETHODCALLTYPE
 		CHECK(desc->SetSupportsAuthentication(AAFFalse));
 		
 		/**/
-		CHECK(dict->CreateInstance(AUID_AAFNetworkLocator,
+		CHECK(dict->CreateInstance(defs.cdNetworkLocator(),
 			IID_IAAFLocator, 
 			(IUnknown **)&pLoc));
 		CHECK(pLoc->SetPath (downloadURL));

@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -39,7 +39,7 @@
 #include "AAFCodecDefs.h"
 #include "AAFEssenceFormats.h"
 
-
+#include "CAAFBuiltinDefs.h"
 
 
 // {0DB382D1-3BAC-11d3-BFD6-00104BC9156D}
@@ -322,6 +322,7 @@ HRESULT STDMETHODCALLTYPE
 	HRESULT hr = S_OK;
 	IAAFCodecDef	*codecDef = NULL;
 	IAAFDefObject	*obj = NULL;
+	IAAFClassDef    *pcd = 0;
 	aafUID_t		uid;
 	
 	if((dict == NULL) || (def == NULL))
@@ -336,12 +337,16 @@ HRESULT STDMETHODCALLTYPE
 		//!!!Later, add in dataDefs supported & filedescriptor class
 
 		// Create the Codec Definition:
-		checkResult(dict->CreateInstance(AUID_AAFCodecDef,
+	    checkResult(dict->LookupClassDef(AUID_AAFCodecDef, &pcd));
+		checkResult(dict->CreateInstance(pcd,
 							IID_IAAFCodecDef, 
 							(IUnknown **)&codecDef));
+		pcd->Release();
+		pcd = 0;
 		
 		// Support "Picture" type of data definition.
-		checkResult(codecDef->AddEssenceKind (DDEF_Picture));
+		CAAFBuiltinDefs defs (dict);
+		checkResult(codecDef->AddEssenceKind (defs.ddPicture()));
 
 		
 		// Initialize the standard Definition properties.
@@ -373,10 +378,20 @@ HRESULT STDMETHODCALLTYPE
 
 	// Cleanup on error.
 	if (NULL != codecDef)
+	  {
 		codecDef->Release();
+		codecDef = 0;
+	  }
 	if (NULL != obj)
+	  {
 		obj->Release();
-
+		obj = 0;
+	  }
+	if (pcd)
+	  {
+		pcd->Release();
+		pcd = 0;
+	  }
 
 	return hr;
 }
@@ -389,6 +404,7 @@ HRESULT STDMETHODCALLTYPE
 	IAAFPluginDescriptor	*desc = NULL;
 	IAAFLocator				*pLoc = NULL;
  	IAAFNetworkLocator		*pNetLoc = NULL;
+	IAAFClassDef            *pcd = 0;
 	
 	if ((NULL == dict) || (NULL == descPtr))
 		return AAFRESULT_NULL_PARAM;
@@ -398,9 +414,12 @@ HRESULT STDMETHODCALLTYPE
 
 	try
 	{
-		checkResult(dict->CreateInstance(AUID_AAFPluginDescriptor,
+	    checkResult(dict->LookupClassDef(AUID_AAFPluginDescriptor, &pcd));
+		checkResult(dict->CreateInstance(pcd,
 			IID_IAAFPluginDescriptor, 
 			(IUnknown **)&desc));
+		pcd->Release ();
+		pcd = 0;
 
 		checkResult(desc->Initialize(AVID_JPEG_PLUGIN,
 		                       const_cast<wchar_t *>(kDisplayName),
@@ -414,7 +433,8 @@ HRESULT STDMETHODCALLTYPE
 		checkResult(desc->SetSupportsAuthentication(AAFFalse));
 
 		// Create the network locator for the Manufacturer's web site: 
-		checkResult(dict->CreateInstance(AUID_AAFNetworkLocator,
+		checkResult(dict->LookupClassDef(AUID_AAFNetworkLocator, &pcd));
+		checkResult(dict->CreateInstance(pcd,
 			IID_IAAFLocator, 
 			(IUnknown **)&pLoc));
 		checkResult(pLoc->SetPath (kManufURL));
@@ -427,9 +447,11 @@ HRESULT STDMETHODCALLTYPE
 
 		
 		// Create a Network locator to point to our default download site.
-		checkResult(dict->CreateInstance(AUID_AAFNetworkLocator,
+		checkResult(dict->CreateInstance(pcd,
 			IID_IAAFLocator, 
 			(IUnknown **)&pLoc));
+		pcd->Release ();
+		pcd = 0;
 		checkResult(pLoc->SetPath (kDownloadURL));
 		checkResult(desc->AppendLocator(pLoc));
 	
@@ -452,12 +474,25 @@ HRESULT STDMETHODCALLTYPE
 
 	// Cleanup...
 	if (NULL != desc)
+	  {
 		desc->Release();
+		desc = 0;
+	  }
 	if (NULL != pLoc)
+	  {
 		pLoc->Release();
+		pLoc = 0;
+	  }
 	if (NULL != pNetLoc)
+	  {
 		pNetLoc->Release();
-
+		pNetLoc = 0;
+	  }
+	if (pcd)
+	  {
+		pcd->Release ();
+		pcd = 0;
+	  }
 
 	return hr;
 }
@@ -523,7 +558,7 @@ HRESULT STDMETHODCALLTYPE
 
 HRESULT STDMETHODCALLTYPE
     CAAFJPEGCodec::GetIndexedDataDefinition (aafInt32  index,
-        aafUID_t *  pVariant)
+        aafUID_t * pVariant)
 {
 	if (NULL == pVariant)
 		return AAFRESULT_NULL_PARAM;
@@ -533,7 +568,7 @@ HRESULT STDMETHODCALLTYPE
 
 HRESULT STDMETHODCALLTYPE
     CAAFJPEGCodec::GetMaxCodecDisplayNameLength (
-        aafInt32  *bufSize)
+        aafUInt32  *bufSize)
 {
 	if (NULL == bufSize)
 		return AAFRESULT_NULL_PARAM;
@@ -544,16 +579,16 @@ HRESULT STDMETHODCALLTYPE
 }	
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGCodec::GetCodecDisplayName (aafUID_t  variant,
-        wchar_t *  pName,
-        aafInt32  bufSize)
+    CAAFJPEGCodec::GetCodecDisplayName (aafUID_constref variant,
+        aafCharacter *  pName,
+        aafUInt32  bufSize)
 {
 	if (NULL == pName)
 		return AAFRESULT_NULL_PARAM;
 	if (0 >= bufSize)
 		return AAFRESULT_INVALID_PARAM;
 
-	aafInt32	len = sizeof(kDisplayName);
+	aafUInt32	len = sizeof(kDisplayName);
 	if(len > bufSize)
 		len = bufSize;
 	memcpy(pName, kDisplayName, len);
@@ -562,7 +597,7 @@ HRESULT STDMETHODCALLTYPE
 	
 HRESULT STDMETHODCALLTYPE
     CAAFJPEGCodec::GetNumChannels (IAAFSourceMob *fileMob,
-        aafUID_t  essenceKind,
+        aafUID_constref essenceKind,
         IAAFEssenceStream *stream,
         aafInt16 *  pNumChannels)
 {
@@ -708,7 +743,7 @@ HRESULT STDMETHODCALLTYPE
 
 HRESULT STDMETHODCALLTYPE
     CAAFJPEGCodec::GetNumSamples (
-        aafUID_t  essenceKind,
+        aafUID_constref essenceKind,
         aafLength_t *  pNumSamples)
 {
 	if (NULL == pNumSamples)
@@ -743,7 +778,7 @@ HRESULT STDMETHODCALLTYPE
 		
 HRESULT STDMETHODCALLTYPE
     CAAFJPEGCodec::Create (IAAFSourceMob *unk,
-        aafUID_t  variant,
+        aafUID_constref variant,
         IAAFEssenceStream * stream,
         aafInt32 numParms,
         aafmMultiCreate_t *createParms)
@@ -2266,14 +2301,16 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGCodec::GetIndexedSampleSize (aafUID_t dataDefID, aafPosition_t pos, aafLength_t *pResult)
+    CAAFJPEGCodec::GetIndexedSampleSize (aafUID_constref dataDefID,
+										 aafPosition_t pos,
+										 aafLength_t *pResult)
 {
 	HRESULT hr = S_OK;
 
 
 	if (NULL == pResult)
 		return AAFRESULT_NULL_PARAM;
-	else if(pos < 0 || pos > _numberOfSamples) // zero based sample index.
+	if(pos < 0 || pos > _numberOfSamples) // zero based sample index.
 		return AAFRESULT_EOF;
 
 	// Initialize the return value.
@@ -2315,10 +2352,10 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGCodec::GetLargestSampleSize (aafUID_t dataDefID, aafLength_t *pResult)
+    CAAFJPEGCodec::GetLargestSampleSize (aafUID_constref dataDefID,
+										 aafLength_t *pResult)
 {
 	HRESULT hr = S_OK;
-
 
 	if (NULL == pResult)
 		return AAFRESULT_NULL_PARAM;

@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -191,7 +191,7 @@ static HRESULT LoadIfNecessary(AAFDLL **ppAAFDLL)
 // AAFFileOpenExistingRead()
 // 
 STDAPI AAFFileOpenExistingRead (
-  wchar_t *  pFileName,
+  const wchar_t *  pFileName,
   aafUInt32  modeFlags,
   IAAFFile ** ppFile)
 {
@@ -232,7 +232,7 @@ STDAPI AAFFileOpenExistingRead (
 // AAFFileOpenExistingModify()
 // 
 STDAPI AAFFileOpenExistingModify (
-  wchar_t *  pFileName,
+  const wchar_t *  pFileName,
   aafUInt32  modeFlags,
   aafProductIdentification_t *  pIdent,
   IAAFFile ** ppFile)
@@ -276,7 +276,7 @@ STDAPI AAFFileOpenExistingModify (
 //
 // 
 STDAPI AAFFileOpenNewModify (
-  wchar_t *  pFileName,
+  const wchar_t *  pFileName,
   aafUInt32  modeFlags,
   aafProductIdentification_t *  pIdent,
   IAAFFile ** ppFile)
@@ -540,7 +540,7 @@ void AAFDLL::ClearEntrypoints()
 //
 
 HRESULT AAFDLL::OpenExistingRead (
-    wchar_t *  pFileName,
+    const wchar_t *  pFileName,
     aafUInt32  modeFlags,
     IAAFFile ** ppFile)
 {
@@ -551,7 +551,7 @@ HRESULT AAFDLL::OpenExistingRead (
 }
   
 HRESULT AAFDLL::OpenExistingModify (
-    wchar_t *  pFileName,
+    const wchar_t *  pFileName,
     aafUInt32  modeFlags,
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile)
@@ -562,7 +562,7 @@ HRESULT AAFDLL::OpenExistingModify (
 }
 
 HRESULT AAFDLL::OpenNewModify (
-    wchar_t *  pFileName,
+    const wchar_t *  pFileName,
     aafUInt32  modeFlags,
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile)

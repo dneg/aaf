@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -117,7 +117,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDef ** ppMemberTypes,
       aafString_t * pMemberNames,
       aafUInt32 numMembers,
-      wchar_t * pTypeName)
+      const aafCharacter * pTypeName)
 {
   if (!pTypeName)
     return AAFRESULT_NULL_PARAM;
@@ -144,12 +144,12 @@ AAFRESULT STDMETHODCALLTYPE
 	  totalNameSize += (wcslen (pMemberNames[i]) + 1);
 	}
 
-  wchar_t * namesBuf = new wchar_t[totalNameSize];
+  aafCharacter * namesBuf = new aafCharacter[totalNameSize];
   if (!namesBuf)
 	return AAFRESULT_NOMEMORY;
   // make it an empty string
   *namesBuf = 0;
-  wchar_t * tmpNamePtr = namesBuf;
+  aafCharacter * tmpNamePtr = namesBuf;
 
   assert (0 == _memberTypes.count());
   aafUID_t * buf = new aafUID_t[numMembers*sizeof(aafUID_t)];
@@ -168,7 +168,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
   _memberTypes.setValue(buf, numMembers*sizeof(aafUID_t));
   delete[] buf;
-  _memberNames.setValue (namesBuf, totalNameSize * sizeof(wchar_t));
+  _memberNames.setValue (namesBuf, totalNameSize * sizeof(aafCharacter));
   delete[] namesBuf;
 
   return AAFRESULT_SUCCESS;
@@ -182,7 +182,7 @@ AAFRESULT STDMETHODCALLTYPE
       aafUID_t ** pMemberTypeIDs,
       aafString_t * pMemberNames,
       aafUInt32 numMembers,
-      wchar_t * pTypeName)
+      const aafCharacter * pTypeName)
 {
   if (!pTypeName)
     return AAFRESULT_NULL_PARAM;
@@ -207,12 +207,12 @@ AAFRESULT STDMETHODCALLTYPE
 	  totalNameSize += (wcslen (pMemberNames[i]) + 1);
 	}
 
-  wchar_t * namesBuf = new wchar_t[totalNameSize];
+  aafCharacter * namesBuf = new aafCharacter[totalNameSize];
   if (!namesBuf)
 	return AAFRESULT_NOMEMORY;
   // make it an empty string
   *namesBuf = 0;
-  wchar_t * tmpNamePtr = namesBuf;
+  aafCharacter * tmpNamePtr = namesBuf;
 
   assert (0 == _memberTypes.count());
   aafUID_t * buf = new aafUID_t[numMembers*sizeof(aafUID_t)];
@@ -228,7 +228,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
   _memberTypes.setValue(buf, numMembers*sizeof(aafUID_t));
   delete[] buf;
-  _memberNames.setValue (namesBuf, totalNameSize * sizeof(wchar_t));
+  _memberNames.setValue (namesBuf, totalNameSize * sizeof(aafCharacter));
   delete[] namesBuf;
 
   return AAFRESULT_SUCCESS;
@@ -288,7 +288,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefRecord::GetMemberName (
       aafUInt32 index,
-      wchar_t * pName,
+      aafCharacter * pName,
       aafUInt32  bufSize)
 {
   AAFRESULT hr;
@@ -310,7 +310,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (bufSize < requiredSize)
 	return AAFRESULT_SMALLBUF;
 
-  wchar_t c;
+  aafCharacter c;
   size_t numChars = _memberNames.count();
   indexIntoProp = 0;
   currentIndex = 0;
@@ -367,7 +367,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   if (index >= count) return AAFRESULT_ILLEGAL_VALUE;
 
-  wchar_t c;
+  aafCharacter c;
   size_t numChars = _memberNames.count();
   indexIntoProp = 0;
   currentIndex = 0;
