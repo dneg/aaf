@@ -15,19 +15,6 @@
 #include "OMSSSStorageRWInputSource.h"
 
 
-//Type definitiosn taken from the schemasoft source
-
-typedef unsigned long UINT4;
-
-#ifdef _MSC_VER /* If this is Visual C++ */
-typedef signed __int64 SINT8;
-#else /* _MSC_VER */
-typedef signed long long SINT8;
-#endif /* _MSC_VER */
-
-typedef signed long SINT4;
-
-
 #ifdef DEBUG
 #define ASSERT(x) if ((x)) {} else { AssertProc((char*)"#x", (char*)__FILE__, __LINE__); }
 extern void AssertProc(char* cond, char* file, SINT4 line);
