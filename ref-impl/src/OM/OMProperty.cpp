@@ -410,6 +410,20 @@ void OMSimpleProperty::getBits(OMByte* bits, size_t bitsSize) const
   memcpy(bits, _bits, _size);
 }
 
+  // @mfunc Set the raw bits of this <c OMSimpleProperty>.
+  //        The raw bits are copied from the buffer at address <p bits> which
+  //        is <p size> bytes in size.
+  //   @parm The address of the buffer from which the raw bits are copied.
+  //   @parm The size of the buffer.
+void OMSimpleProperty::setBits(const OMByte* bits, size_t size)
+{
+  TRACE("OMSimpleProperty::setBits");
+  PRECONDITION("Valid bits", bits != 0);
+  PRECONDITION("Valid size", size > 0);
+
+  set(bits, size);
+}
+
 // class OMCollectionProperty
 
 OMCollectionProperty::OMCollectionProperty(const OMPropertyId propertyId,
