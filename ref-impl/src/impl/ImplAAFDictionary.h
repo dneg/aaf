@@ -33,7 +33,6 @@
 
 class ImplAAFBuiltinClasses;
 class ImplAAFBuiltinTypes;
-class ImplAAFBuiltinProps;
 class ImplAAFClassDef;
 class ImplAAFCodecDef;
 class ImplAAFContainerDef;
@@ -358,12 +357,6 @@ public:
   virtual AAFRESULT
     GetNthContainerDef (aafInt32 index, ImplAAFContainerDef **ppEnum);
 
-  AAFRESULT LookupPropTypeByOMPid (OMPropertyId opid,
-								   ImplAAFTypeDef ** ppTypeDef) const;
-
-  AAFRESULT LookupPropDefByOMPid (OMPropertyId opid,
-								  ImplAAFPropertyDef ** ppd) const;
-
   // make sure built-in types are initialized.
   void InitBuiltins();
 
@@ -405,14 +398,9 @@ public:
 
   static ImplAAFObject* pvtCreateBaseClassInstance(const aafUID_t* pAUID);
 
-
-  // Initializes the built-in types critical to building the dictionary.
-  void pvtInitCriticalBuiltins (void);
-
-  // Register the given object to be initialized "at the right time".
-  // If that time is now, will init immediately.  If not ready yet,
-  // will put obj on queue to be initialized when everything's ready.
-  void pvtInitObjectProperties (ImplAAFObject * pObj) const;
+  // Similar to create(), but takes an AUID as argument and doesn't
+  // init properties.
+  ImplAAFObject* pvtInstantiate(const aafUID_t * pAUID) const;
 
   // Attempt to register the sizes of this type def if it is a
   // built-in type.  Currently implemented for Enum and Record
@@ -420,64 +408,27 @@ public:
   void pvtAttemptBuiltinSizeRegistration (ImplAAFTypeDefEnum * ptde) const;
   void pvtAttemptBuiltinSizeRegistration (ImplAAFTypeDefRecord * ptdr) const;
 
+  // Assures that all prop types in all contained classes are present,
+  // as well as the prop types in all classes looked up in the
+  // future.
+  void AssureClassPropertyTypes ();
+  void AssurePropertyTypes (ImplAAFClassDef * pcd);
+
+  // Enables/disables registration of definitions.  Used during save()
+  // to assure contents of dict remains constant.  Returns current
+  // value of flag.  Default is enabled.
+  bool SetEnableDefRegistration (bool isEnabled);
+
 private:
 
-  // Like the non-private LookupPropTypeByOMPid(), except will
-  // only look at types currently registered in this dictionary; will
-  // not attempt to look at builtins which may have not already been
-  // entered into the dict.
-  AAFRESULT pvtLookupPropTypeByOMPid (OMPropertyId opid,
-									  ImplAAFTypeDef ** ppTypeDef) const;
+  bool pvtLookupAxiomaticType (const aafUID_t &typeID,
+							   ImplAAFTypeDef ** ppTypeDef);
 
-
-  // Like the non-private LookupPropDefByOMPid(), except will only
-  // look at classes currently registered in this dictionary; will not
-  // attempt to look at builtins which may have not already been
-  // entered into the dict.
-  AAFRESULT pvtLookupPropDefByOMPid (OMPropertyId opid,
-									 ImplAAFPropertyDef ** ppd) const;
-
-
+  bool pvtLookupAxiomaticClass (const aafUID_t &classID,
+								ImplAAFClassDef ** ppClassDef);
 
   ImplAAFBuiltinClasses * _pBuiltinClasses;
-  ImplAAFBuiltinProps   * _pBuiltinProps;
   ImplAAFBuiltinTypes   * _pBuiltinTypes;
-
-  // Flag to show if initialization of critical builtins has been
-  // started yet.
-  aafBool                 _initStarted;
-
-  // Flag to show if it's OK to initialize properties of newly created
-  // objects.
-  aafBool                 _OKToInitProps;
-
-
-
-  //
-  // Private class to keep a FIFO of objects
-  //
-  struct pvtObjFifo
-  {
-	pvtObjFifo ();
-
-	ImplAAFObjectSP GetNext (void);
-
-	void Append (ImplAAFObject * obj);
-
-  private:
-	enum {
-	  kPvtMaxInitObjs = 2000
-	};
-	ImplAAFObjectSP _objs[kPvtMaxInitObjs];
-	aafUInt32 _putIdx;
-	aafUInt32 _getIdx;
-  };
-
-  //
-  // Fifo of objects which will require initialization
-  //
-  pvtObjFifo _objsToInit;
-
 
   OMStrongReferenceVectorProperty<ImplAAFCodecDef>         _codecDefinitions;
   OMStrongReferenceVectorProperty<ImplAAFContainerDef>     _containerDefinitions;
@@ -490,6 +441,25 @@ private:
   OMStrongReferenceVectorProperty<ImplAAFPluginDescriptor> _pluginDefinitions;
 
   aafInt32 _lastGeneratedPid;	// must be signed!
+
+  static const aafUID_t * sAxiomaticTypeGuids[];
+  static const aafUID_t * sAxiomaticClassGuids[];
+
+  ImplAAFTypeDefSP * _axiomaticTypes;
+
+  struct axClassLookupElem
+  {
+	ImplAAFClassDef * pClassDef;
+	aafUID_t          classId;
+  };
+
+  axClassLookupElem * _axiomaticClasses;
+
+  // if true, signifies that it's OK to assure that all prop types in
+  // all looked-up classes are present.
+  bool _OKToAssurePropTypes;
+
+  bool _defRegistrationAllowed;
 };
 
 //
