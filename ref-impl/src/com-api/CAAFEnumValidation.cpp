@@ -382,6 +382,7 @@ bool Is_aafFileRev_t_Valid(aafFileRev_t param)
 {
   switch (param) {
     case kAAFRev1:
+    case kAAFRev2:
       return true;
     default:
       return false;
@@ -674,12 +675,12 @@ bool Is_aafSignalStandard_t_Valid(aafSignalStandard_t param)
 {
   switch (param) {
     case kAAFSignalNone:
-    case kAAFSignalS125MInterlace:
-    case kAAFSignalS125MProgressive:
-    case kAAFSignalS347M:
-    case kAAFSignalS274M:
-    case kAAFSignalS296M:
-    case kAAFSignalS349M:
+    case kAAFSignalITU601:
+    case kAAFSignalITU1358:
+    case kAAFSignalSMPTE347M:
+    case kAAFSignalSMPTE274M:
+    case kAAFSignalSMPTE296M:
+    case kAAFSignalSMPTE349M:
       return true;
     default:
       return false;
