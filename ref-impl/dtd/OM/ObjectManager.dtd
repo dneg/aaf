@@ -1,0 +1,111 @@
+<!-- A proposal for a low-level AAF dtd -->
+<!-- Tim Bingham 12/22/99 -->
+
+  <!-- object -->
+    <!-- An object contains one or more properties. -->
+<!ELEMENT object (property+)>
+    <!-- All objects have a class -->
+<!ATTLIST object class CDATA #REQUIRED> <!-- guid -->
+    <!-- All objects have a property count. -->
+<!ATTLIST object count CDATA #REQUIRED> <!-- integer -->
+
+  <!-- property -->
+    <!-- Properties contain data, streams, objects or references (to objects).
+         Objects and references may be singletons or collected together
+         as vectors (ordered) or sets (unordered and uniquely identified). -->
+    <!-- TBS - do we also need identifier here? -->
+<!ELEMENT property (data | stream |
+                    object    | object-vector    | object-set |
+                    reference | reference-vector | reference-set)>
+    <!-- Every property has an identification. -->
+<!ATTLIST property identification CDATA #REQUIRED> <!-- integer -->
+<!ATTLIST property name CDATA #REQUIRED> <!-- name -->
+
+  <!-- data -->
+    <!-- Data elements are used to represent all of the non-object,
+         non-essence content. -->
+<!ELEMENT data (#PCDATA)> <!-- data -->
+    <!-- Every data element has a size in bytes -->
+<!ATTLIST data size CDATA #REQUIRED> <!-- integer -->
+
+  <!-- stream -->
+    <!-- Stream elemens are used to represent essence content. -->
+<!ELEMENT stream (#PCDATA)> <!-- binary -->
+    <!-- Every stream has a size in bytes -->
+<!ATTLIST stream size CDATA #REQUIRED> <!-- integer -->
+
+  <!-- element -->
+    <!-- A uniquely identified object. -->
+<!ELEMENT element (object)>
+    <!-- All set elements have a key that uniquely identifies the element. -->
+<!ATTLIST element key CDATA #REQUIRED> <!-- guid -->
+
+  <!-- object-vector -->
+    <!-- An ordered collection of zero or more contained objects. -->
+<!ELEMENT object-vector (object*)>
+    <!-- All vectors have an element count. -->
+<!ATTLIST object-vector count CDATA #REQUIRED> <!-- integer -->
+
+  <!-- object-set -->
+    <!-- An unordered collection of zero or more
+         uniquely identified contained objects. -->
+<!ELEMENT object-set (element*)>
+    <!-- All sets have an element count. -->
+<!ATTLIST object-set count CDATA #REQUIRED> <!-- integer -->
+
+  <!-- identification -->
+    <!-- A unique identifier for an object. -->
+<!ELEMENT identification EMPTY>
+    <!-- All identifiers hav a guid. -->
+<!ATTLIST identification guid CDATA #REQUIRED> <!-- guid -->
+
+  <!-- reference -->
+    <!-- A reference to another object. The target attribute identifies
+         the object-set containing the referenced object. The identification
+         content identifies the particular object within the target
+         object-set. -->
+<!ELEMENT reference (identification)>
+    <!-- All references have a target. -->
+<!ATTLIST reference target IDREF #REQUIRED> <!-- name -->
+
+  <!-- reference-vector -->
+    <!-- An ordered collection of references to uniquely identified
+         objects. -->
+<!ELEMENT reference-vector (identification+)>
+    <!-- All reference-vectors have an element count. -->
+<!ATTLIST reference-vector count CDATA #REQUIRED> <!-- integer -->
+    <!-- All reference-vectors have a target. All references in a given
+         reference-vector reference objects in the same target. -->
+<!ATTLIST reference-vector target IDREF #REQUIRED> <!-- name -->
+
+  <!-- reference-set -->
+    <!-- An unordered collection of references to uniquely identified
+         objects. -->
+<!ELEMENT reference-set (identification+)>
+    <!-- All reference-sets have an element count. -->
+<!ATTLIST reference-set count CDATA #REQUIRED> <!-- integer -->
+    <!-- All reference-sets have a target. All references in a given
+         reference-set reference objects in the same target. -->
+<!ATTLIST reference-set target IDREF #REQUIRED> <!-- name -->
+
+
+<!-- Data types (for the vaules of CDATA, ID and IDREF attributes
+       and for PCDATA content) -->
+
+<!-- guid -->
+  <!-- The "standard" text representation of a guid. -->
+  <!--   example - {51a1b923-d588-11d2-bfe2-080036210804} -->
+
+<!-- integer -->
+  <!-- The decimal text representation of an integer. -->
+  <!--   example 123456 -->
+
+<!-- name -->
+  <!-- An identifier (using URI escaping mechanism for seocial characters) -->
+  <!--   example TBS - what do names look like? -->
+
+<!-- data -->
+  <!-- Binary data encoded (base-64) as text. -->
+
+<!-- binary-->
+  <!-- Binary data encoded (base-64) as text. -->
