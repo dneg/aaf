@@ -358,11 +358,11 @@ void HTMLClipTest::OpenHTMLClip()
   assert(_pHeader);
 
   HRESULT hr = S_OK;
-  aafInt32 compositionMobs = 0;
+  aafNumSlots_t compositionMobs = 0;
   IEnumAAFMobs *pEnumMobs = NULL;
   IAAFMob *pReferencingMob = NULL;
   IAAFCompositionMob *pCompositionMob = NULL;
-  aafInt32 mobSlots = 0;
+  aafNumSlots_t mobSlots = 0;
   IEnumAAFMobSlots *pEnumSlots = NULL;
   IAAFMobSlot *pMobSlot = NULL;
   IAAFSegment *pSegment = NULL;
