@@ -41,6 +41,16 @@
 
 #include <assert.h>
 
+// Partially initialized AAF file signature.
+static const OMFileSignature protosig =
+  { 0x0D464141,
+    0x0000, 0x0000,  // Must be zero - filled in by Object Manager
+  { 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0xFF } };
+
+// Fully initialized AAF file signature.
+static const OMFileSignature aafFileSignature =
+                                         OMFile::initializeSignature(protosig);
+
 // local function for simplifying error handling.
 inline void checkResult(AAFRESULT r)
 {
@@ -107,6 +117,10 @@ ImplAAFFile::OpenExistingRead (wchar_t * pFileName,
 		// Ask the OM to open the file.
 		_file = OMFile::openExistingRead(pFileName, _factory, OMFile::lazyLoad);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
+
+        // Check the file's signature.
+        OMFileSignature sig = _file->signature();
+        checkExpression(sig == aafFileSignature, AAFRESULT_NOT_AAF_FILE);
 
 		// Get the byte order
 		_byteOrder = _file->byteOrder();
@@ -317,7 +331,7 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 		pCStore = 0;
 
 		// Attempt to create the file.
-		_file = OMFile::openNewModify(pFileName, _factory, _byteOrder, _head);
+		_file = OMFile::openNewModify(pFileName, _factory, _byteOrder, _head, aafFileSignature);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Now that the file is open and the header has been
