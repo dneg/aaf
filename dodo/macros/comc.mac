@@ -1507,7 +1507,7 @@ pinternal%01\
 		hStat = pUnknown->QueryInterface(IID_I%01, (void **)%02);
 		assert (SUCCEEDED (hStat));
 		//pUnknown->Release();
-    internal%02->ReleaseRef(); // We are through with this pointer.
+    internal%02->ReleaseReference(); // We are through with this pointer.
 	}
 	else
 	{
