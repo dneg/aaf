@@ -436,7 +436,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		// now create the Essence data file
 		checkResult(pMasterMob->CreateEssence(1,				// Slot ID
 			defs.ddSound(),	// MediaKind
-			CodecWave,		// codecID
+			kAAFCodecWAVE,		// codecID
 			editRate,		// edit rate
 			sampleRate,		// sample rate
 			kAAFCompressionDisable,
@@ -447,7 +447,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
     // Get the codecID and validate that it is what we expect.
     aafUID_t codecID = {0};
 		checkResult(pEssenceAccess->GetCodecID(&codecID));
-		checkExpression(0 == memcmp(&codecID, &CodecWave, sizeof(codecID)), AAFRESULT_TEST_FAILED);
+		checkExpression(0 == memcmp(&codecID, &kAAFCodecWAVE, sizeof(codecID)), AAFRESULT_TEST_FAILED);
     
 
 		checkResult(pEssenceAccess->GetFileFormatParameterList (&format));
@@ -632,7 +632,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 			
 			aafUID_t codecID = {0};
 			checkResult(pEssenceAccess->GetCodecID(&codecID));
-			if (false && memcmp(&codecID, &CodecWave, sizeof(codecID)))
+			if (false && memcmp(&codecID, &kAAFCodecWAVE, sizeof(codecID)))
 			{
 			  cout << "     Warning:GetCodecID did not return CodecJPEG." << endl;
 			}
@@ -979,7 +979,7 @@ static HRESULT CreateJPEGAAFFile(
 		// now create the Essence data file
 		checkResult(pMasterMob->CreateEssence(STD_SLOT_ID,				// Slot ID
 			defs.ddPicture(),	// MediaKind
-			CodecJPEG,		// codecID
+			kAAFCodecJPEG,		// codecID
 			editRate,		// edit rate
 			sampleRate,		// sample rate
 			compressEnable, // compression
@@ -995,7 +995,7 @@ static HRESULT CreateJPEGAAFFile(
     // Get the codecID and validate that it is what we expect.
     aafUID_t codecID = {0};
 		checkResult(pEssenceAccess->GetCodecID(&codecID));
-		checkExpression(0 == memcmp(&codecID, &CodecJPEG, sizeof(codecID)), AAFRESULT_TEST_FAILED);
+		checkExpression(0 == memcmp(&codecID, &kAAFCodecJPEG, sizeof(codecID)), AAFRESULT_TEST_FAILED);
 
 
 		checkResult(pEssenceAccess->GetFileFormatParameterList (&format));
@@ -1296,7 +1296,7 @@ static HRESULT ReadJPEGAAFFile(
 
 			aafUID_t codecID = {0};
 			checkResult(pEssenceAccess->GetCodecID(&codecID));
-			if (false && memcmp(&codecID, &CodecWave, sizeof(codecID)))
+			if (false && memcmp(&codecID, &kAAFCodecWAVE, sizeof(codecID)))
 			{
 			  cout << "     Warning:GetCodecID did not return CodecJPEG." << endl;
 			}
