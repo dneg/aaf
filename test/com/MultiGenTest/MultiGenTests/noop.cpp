@@ -20,34 +20,22 @@
 
 namespace {
 
-class Noop : public MultiGenTest
-{ 
-public:
-  Noop( const char* name,
-	const char* desc,
-	const char* usage,
-	const char* notes )
-    : MultiGenTest( name, desc, usage, notes )
-  {}
+STANDARD_TEST_DECLARATION(Noop);
+StandardFactory<Noop> NoopFactory(
+  "Noop",
+  "No Description",
+  "No Usage",
+  "No Description",
+  1, // Minimum number of args (Noop itself counts as one)
+  5  // Maximum number of args (-1 if unlimited)
+  );
 
-  virtual ~Noop()
-  {}
-
-  virtual void RunTest( CmdState& state, int argc, char** argv );
-};
-
-void Noop::RunTest( CmdState&, int, char** )
+void Noop::RunTest( CmdState& state, int argc, char** argv)
 {
+  // Avoid "not used" compiler errors...
+  (void)state;
+  (void)argc;
+  (void)argv;
 }
-
-MULTIGEN_TEST_FACTORY( NoopFactory,
-		       Noop,
-		       "No Operation",
-		       "No Usage",
-		       "No Notes" )
-
-// Global static instance of factory.  Ctor will register this
-// instance with the MultiGenTestRegistry.
-NoopFactory factory;
 
 } // end of namespace

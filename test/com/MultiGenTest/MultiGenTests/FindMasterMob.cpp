@@ -17,6 +17,9 @@
 //=---------------------------------------------------------------------=
 
 #include <MultiGenTest.h>
+
+#include "MultiGenCommon.h"
+
 #include <AAFStoredObjectIDs.h>
 
 #include <memory>
@@ -26,11 +29,8 @@ namespace {
 class FindMasterMobs : public MultiGenTest
 { 
 public:
-  FindMasterMobs( const char* name,
-	const char* desc,
-	const char* usage,
-	const char* notes )
-    : MultiGenTest( name, desc, usage, notes )
+  FindMasterMobs()
+    : MultiGenTest()
   {}
 
   virtual ~FindMasterMobs()
@@ -48,13 +48,13 @@ void FindMasterMobs::RunTest( CmdState& state, int argc, char** argv )
   
   IAAFSmartPointer<IAAFFile> file = state.GetFile();
   IAAFSmartPointer<IAAFHeader> header;
-  checkResult( file->GetHeader( &header ) );
+  CHECK_HRESULT( file->GetHeader( &header ) );
 
   aafSearchCrit_t	criteria;
   criteria.searchTag = kAAFByMobKind;
   criteria.tags.mobKind = kAAFMasterMob;
   IAAFSmartPointer<IEnumAAFMobs> mobsEnumerator;
-  checkResult( header->GetMobs( &criteria, &mobsEnumerator ) );
+  CHECK_HRESULT( header->GetMobs( &criteria, &mobsEnumerator ) );
 
   IAAFSmartPointer<IAAFMob> nextMob;
   HRESULT hr;
@@ -74,11 +74,11 @@ void FindMasterMobs::RunTest( CmdState& state, int argc, char** argv )
        hr = mobsEnumerator->NextOne( &nextMob ), mobCount++ ) {
 
     aafUInt32 bufSize;
-    checkResult( nextMob->GetNameBufLen( &bufSize ) );
+    CHECK_HRESULT( nextMob->GetNameBufLen( &bufSize ) );
     // Convert bufSize from bytes to wide char;
     bufSize = (bufSize+1)/2;
     auto_ptr<wchar_t> buf( new wchar_t [ bufSize ] );
-    checkResult( nextMob->GetName( buf.get(), sizeof(wchar_t)*bufSize ) );
+    CHECK_HRESULT( nextMob->GetName( buf.get(), sizeof(wchar_t)*bufSize ) );
 
     for( i = 1; i < argc; i++ ) {
       if ( found[i] ) {
@@ -92,7 +92,7 @@ void FindMasterMobs::RunTest( CmdState& state, int argc, char** argv )
     }
   }
   if ( hr != AAFRESULT_NO_MORE_OBJECTS ) {
-    checkResult( hr );
+    CHECK_HRESULT( hr );
   }
 
   // See if any mobs were not found.
@@ -117,6 +117,7 @@ void FindMasterMobs::RunTest( CmdState& state, int argc, char** argv )
 
 }
 
+#if 0
 MULTIGEN_TEST_FACTORY( FindMasterMobsFactory,
 		       FindMasterMobs,
 		       "Verify that named mobs exist. Other master mobs may also exist.",
@@ -134,5 +135,22 @@ MULTIGEN_TEST_FACTORY_LONG( FindMasterMobsExclusiveFactory,
 // instance with the MultiGenTestRegistry.
 FindMasterMobsFactory factoryA;
 FindMasterMobsExclusiveFactory factoryB;
+#endif
+
+StandardFactory<FindMasterMobs> factoryA (
+  "FindMasterMobs",
+  "Verify that named mobs exist. Other master mobs may also exist.",
+  "[mob_name mob_name mob_name ... ]",
+  "Depricated.  Do not use in new test configurations.",
+  1, -1
+);
+
+StandardFactory<FindMasterMobs> factoryB (
+  "FindMasterMobsExclusive",
+  "Verify that named mobs are the only master mobs in the file.",
+  "[mob_name mob_name mob_name ...]",
+  "Depricated. Do not use in new test configurations.",
+  1, -1
+);
 
 } // end of namespace

@@ -18,20 +18,40 @@
 
 #include <MultiGenTest.h>
 
+#include "MultiGenCommon.h"
+
 #include <assert.h>
 
 #include <string>
+#include <memory>
 
 namespace {
+
+STANDARD_TEST_DECLARATION(RegPlugins);
+StandardFactory<RegPlugins> RegPluginsFactory(
+  "RegPlugins",
+  "Register plugins",
+  "full path to plugin library to load",
+  "",
+  2,2
+  );
+
+void RegPlugins::RunTest( CmdState& state, int argc, char **argv )
+{
+  IAAFSmartPointer<IAAFPluginManager> mgr;
+
+  CHECK_HRESULT( AAFGetPluginManager(&mgr) );
+
+  auto_ptr<wchar_t> wpath( ToWideString(argv[1]) );
+
+  CHECK_HRESULT( mgr->RegisterPluginFile( wpath.get() ) );
+}
 
 class LoadLib : public MultiGenTest
 { 
 public:
-  LoadLib( const char* name,
-	const char* desc,
-	const char* usage,
-	const char* notes )
-    : MultiGenTest( name, desc, usage, notes )
+  LoadLib()
+    : MultiGenTest()
   {}
 
   virtual ~LoadLib()
@@ -60,22 +80,20 @@ void LoadLib::RunTest( CmdState& state, int argc, char** argv )
   }
 }
 
-MULTIGEN_TEST_FACTORY( LoadLibFactory,
-		       LoadLib,
-		       "Load COM library",
-		       "full path to com library",
-		       "This is the only way that MultiGenTest will load the AAF COM library." )
+StandardFactory<LoadLib> loadFactory (
+  "LoadLib",
+  "Load COM library.",
+  "full path to com library",
+  "This is the only way that MultiGenTest will load the AAF COM library.",
+  2,2
+);
 
-MULTIGEN_TEST_FACTORY_LONG( UnloadLibFactory,
-			    UnloadLib,
-			    LoadLib,
-			    "Unload COM library",
-			    "",
-			    "Unload the COM library." )
-
-// Global static instance of factory.  Ctor will register this
-// instance with the MultiGenTestRegistry.
-LoadLibFactory loadFactory;
-UnloadLibFactory unloadFactory;
+StandardFactory<LoadLib> unloadFactory (
+  "UnloadLib",
+  "Unload COM library.",
+  "",
+  "",
+  1,1
+);
 
 } // end of namespace

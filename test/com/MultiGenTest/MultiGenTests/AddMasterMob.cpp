@@ -17,6 +17,9 @@
 //=---------------------------------------------------------------------=
 
 #include <MultiGenTest.h>
+
+#include "MultiGenCommon.h"
+
 #include <AAFStoredObjectIDs.h>
 
 #include <memory>
@@ -26,11 +29,8 @@ namespace {
 class AddMasterMobs : public MultiGenTest
 { 
 public:
-  AddMasterMobs( const char* name,
-	const char* desc,
-	const char* usage,
-	const char* notes )
-    : MultiGenTest( name, desc, usage, notes )
+  AddMasterMobs()
+    : MultiGenTest()
   {}
 
   virtual ~AddMasterMobs()
@@ -48,38 +48,35 @@ void AddMasterMobs::RunTest( CmdState& state, int argc, char** argv )
 
   IAAFSmartPointer<IAAFFile> file = state.GetFile();
   IAAFSmartPointer<IAAFHeader> header;
-  checkResult( file->GetHeader( &header ) );
+  CHECK_HRESULT( file->GetHeader( &header ) );
   
   IAAFSmartPointer<IAAFDictionary> dictionary;
-  checkResult( file->GetDictionary( &dictionary ) );
+  CHECK_HRESULT( file->GetDictionary( &dictionary ) );
 
   int i;
   for( i = 1; i < argc; i++ ) {
 
     IAAFSmartPointer<IAAFMasterMob> masmob;
-    checkResult( dictionary->CreateInstance( AUID_AAFMasterMob,
+    CHECK_HRESULT( dictionary->CreateInstance( AUID_AAFMasterMob,
 					   IID_IAAFMasterMob,
 					   ToIUnknown( &masmob ) ) );
     IAAFSmartPointer<IAAFMob> mob;
-    checkResult( masmob->QueryInterface( IID_IAAFMob, ToVoid(&mob) ) );
-    checkResult( masmob->Initialize() );
+    CHECK_HRESULT( masmob->QueryInterface( IID_IAAFMob, ToVoid(&mob) ) );
+    CHECK_HRESULT( masmob->Initialize() );
 
     auto_ptr<wchar_t> mobName( ToWideString( argv[i] ) );
     
-    checkResult( mob->SetName( mobName.get() ) );
+    CHECK_HRESULT( mob->SetName( mobName.get() ) );
 
-    checkResult( header->AddMob( mob ) );
+    CHECK_HRESULT( header->AddMob( mob ) );
   }
 }
 
-MULTIGEN_TEST_FACTORY( AddMasterMobFactory,
-		       AddMasterMobs,
-		       "Add one or more MasterMob's to a file.",
-		       "[mob_name mob_name mob_name ...]",
-		       "" );
-
-// Global static instance of factory.  Ctor will register this
-// instance with the MultiGenTestRegistry.
-AddMasterMobFactory factory;
+StandardFactory<AddMasterMobs> factory( "AddMasterMobs",
+					"Add on or more MasterMob's to a file.",
+					"[mod_name mob_name mob_name ...]",
+					"Depricated.  Do not use in new test configurations.",
+					1, -1
+				      );
 
 } // end of namespace

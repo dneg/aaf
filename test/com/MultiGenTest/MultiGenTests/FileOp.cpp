@@ -18,6 +18,8 @@
 
 #include <MultiGenTest.h>
 
+#include "MultiGenCommon.h"
+
 #include <AAFDefUIDs.h>
 
 #include <string>
@@ -31,11 +33,8 @@ namespace {
 class FileOp : public MultiGenTest
 { 
 public:
-  FileOp( const char* name,
-	  const char* desc,
-	  const char* usage,
-	  const char* notes )
-    : MultiGenTest( name, desc, usage, notes )
+  FileOp()
+    : MultiGenTest()
   {}
 
   virtual ~FileOp()
@@ -65,7 +64,7 @@ void FileOp::RunTest( CmdState& state, int argc, char** argv )
   productInfo.platform = NULL;
 
   if ( argc < 2 ) {
-    throw UsageEx("FileOp at least one argument is required");
+    throw UsageEx("FileOp requires least one argument.");
   }
 
   string which(argv[1]);
@@ -114,33 +113,27 @@ void FileOp::RunTest( CmdState& state, int argc, char** argv )
     state.SetFile( iaafFile );
   }
   else if ( which == "save" ) {
-    checkResult( state.GetFile()->Save() );
+    CHECK_HRESULT( state.GetFile()->Save() );
   }
   else if ( which == "close" ) {
-    checkResult( state.GetFile()->Close() );
+    CHECK_HRESULT( state.GetFile()->Close() );
   }
   else if ( which == "save_and_close" ) {
-    checkResult( state.GetFile()->Save() );
-    checkResult( state.GetFile()->Close() );
+    CHECK_HRESULT( state.GetFile()->Save() );
+    CHECK_HRESULT( state.GetFile()->Close() );
   }
   else {
     string msg("FileOp option unrecognized: " + which);
     throw UsageEx( msg );
   }
-
 }
 
-MULTIGEN_TEST_FACTORY( FileOpFactory,
-		       FileOp,
-		       "File Operations",
-		       "{ {write|read|modify filename} | save | close | save_and_close }",
-		       "Save also closes the file."
-		       "\n\tTypically save the file as the last test in a sequence."
-		       "\n\te.g. -r FileOp write /tmp/test.aaf -r aTest -r FileOp save_and_close"
-		     )
-
-// Global static instance of factory.  Ctor will register this
-// instance with the MultiGenTestRegistry.
-FileOpFactory factory;
+StandardFactory<FileOp> factory(
+  "FileOp",
+  "File Operations",
+  "{ {write|read|modify filename} | save | close | save_and_close }",
+  "",
+  2, 3
+  );
 
 } // end of namespace
