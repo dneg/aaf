@@ -82,13 +82,15 @@ AAFRESULT STDMETHODCALLTYPE
 		return(AAFRESULT_NULL_PARAM);
 	if (numberElements > MAX_NUM_RGBA_COMPS)
 	  return AAFRESULT_SMALLBUF;
-	memcpy(local.comps, PixelLayoutArray, numberElements*sizeof(aafRGBAComponent_t));
+
+	memcpy(&local, PixelLayoutArray, numberElements*sizeof(aafRGBAComponent_t));
+
 	for(n = numberElements; n < MAX_NUM_RGBA_COMPS; n++)
 	{
 		local.comps[n].Code = kAAFCompNone;
 		local.comps[n].Size = 0;
 	}
-	_pixelLayout.setValue(local);
+	_pixelLayout = local;
 
 	return AAFRESULT_SUCCESS;
 }
@@ -104,10 +106,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if(PixelLayoutArray == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
-	if (_pixelLayout.size() < numberElements)
+	if (MAX_NUM_RGBA_COMPS < numberElements)
 	  return AAFRESULT_SMALLBUF;
 
-	_pixelLayout.getValue(local);
+	local = _pixelLayout;
 	memcpy(PixelLayoutArray, local.comps, numberElements * sizeof(aafRGBAComponent_t));
 
 	return(AAFRESULT_SUCCESS);
