@@ -24,7 +24,7 @@ AD_HEAD
 // aafRational_t,
 // AAFSegment,
 // aafPosition_t,
-// aafTrackID_t,
+// aafSlotID_t,
 // aafUInt32,
 // AAFDataDef
 
@@ -42,49 +42,49 @@ AD_XMETHOD1(GetSegment,
 This method will get the segment for this mob slot.)
 
 AD_METHOD1(GetName,
-[in\\\,out], aafString_t *, name, Mob Slot Name,
+[in\\\,out], aafWChar *, name, Mob Slot Name,
 This method will copy the mob slot name into the given aafString.)
 
 AD_METHOD1(GetPhysicalNum,
-[out\\\,retval], aafUInt32 *, result, The physical track number property value,
+[out\\\,retval], aafUInt32 *, result, The physical slot number property value,
 Returns information about the physical output channel associated with the
-  // Track.
-  // @commThis function returns the physical track number of the specified track. The
-  // physical track number identifies the physical track associated with the media.
+  // Slot.
+  // @commThis function returns the physical slot number of the specified slot. The
+  // physical slot number identifies the physical slot associated with the media.
   // For File Source Mobs that describe stereo audio media\\\, the left channel should
-  // have a PhysicalTrack of 1 and the right channel should have a Physical-Track
+  // have a PhysicalSlot of 1 and the right channel should have a Physical-Slot
   // of 2.
-  // The function returns an error if the object specified in the track parameter is not
-  // a track.)
+  // The function returns an error if the object specified in the slot parameter is not
+  // a slot.)
 
 AD_METHOD1(GetDataDef,
 [out\\\,retval], aafUID_t *, result, Data Definition AUID,
 This method will return Data Definition object associated with segment in this Mob Slot.)
 
-AD_METHOD1(GetTrackID,
-	   [out\\\,retval], aafTrackID_t *, result, Track id of the Mob Slot,
-	   This method will return the track id of this mob slot.)
+AD_METHOD1(GetSlotID,
+	   [out\\\,retval], aafSlotID_t *, result, Slot id of the Mob Slot,
+	   This method will return the slot id of this mob slot.)
 
 AD_XMETHOD1(SetSegment,
 [in], objIn, AAFSegment, result, Segment property value,
 This method will set the segment for this mob slot.)
 
 AD_METHOD1(SetName,
-[in], aafString_t *, name, Mob Slot Name,
+[in], aafWChar *, name, Mob Slot Name,
 This method will copy the given aafString into the mob slot name.)
 
 AD_METHOD1(SetPhysicalNum,
-[in], aafUInt32, number, The physical track number property value,
-Sets the physical output channel associated with the Track.
-  // @commThis function sets the physical track number of the specified track. The physical 
-  // track number identifies the physical track associated with the media. For
+[in], aafUInt32, number, The physical slot number property value,
+Sets the physical output channel associated with the Slot.
+  // @commThis function sets the physical slot number of the specified slot. The physical 
+  // slot number identifies the physical slot associated with the media. For
   // File Source Mobs that describe stereo audio media\\\, the left channel should
-  // have a PhysicalTrack of 1 and the right channel should have a Physical-Track
+  // have a PhysicalSlot of 1 and the right channel should have a Physical-Slot
   // of 2.
-  // The function returns an error if the Mob Slot passed in is not a track.)
+  // The function returns an error if the Mob Slot passed in is not a slot.)
 
-AD_METHOD1(SetTrackID,
-	   [in], aafTrackID_t, value, Track id of the Mob Slot,
-	   This method will set the track id of this mob slot.)
+AD_METHOD1(SetSlotID,
+	   [in], aafSlotID_t, value, Slot id of the Mob Slot,
+	   This method will set the slot id of this mob slot.)
 
 AD_CLASS_END
