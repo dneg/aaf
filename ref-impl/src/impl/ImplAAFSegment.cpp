@@ -1,3 +1,11 @@
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
 
 /******************************************\
 *                                          *
@@ -32,39 +40,33 @@ ImplAAFSegment::~ImplAAFSegment ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSegment::SegmentOffsetToTC (aafPosition_t	/* offset*/,
-                           aafTimecode_t *				/* tc */,
-                           aafBool *found)
+    ImplAAFSegment::SegmentOffsetToTC (aafPosition_t *pOffset,
+                           aafTimecode_t *pTimecode)
 {
-    AAFRESULT aafError = AAFRESULT_SUCCESS;
-
-	*found = AAFFalse;
-	return aafError;
-}
-
-
- AAFRESULT STDMETHODCALLTYPE
-   ImplAAFSegment::SegmentTCToOffset (aafTimecode_t  /*tc*/,
-                           aafRational_t  /*editRate*/,
-                           aafFrameOffset_t *  /*offset*/,
-                           aafBool *found)
-{
-    AAFRESULT aafError = AAFRESULT_SUCCESS;
-
-	*found = AAFFalse;
+    AAFRESULT aafError = AAFRESULT_TIMECODE_NOT_FOUND;
 	return aafError;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSegment::NumRepresentations (aafInt32 *count)
+    ImplAAFSegment::SegmentTCToOffset (aafTimecode_t *pTimecode,
+                           aafRational_t *pEditRate,
+                           aafFrameOffset_t *pOffset)
+{
+    AAFRESULT aafError = AAFRESULT_TIMECODE_NOT_FOUND;
+	return aafError;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFSegment::NumRepresentations (aafInt32 *pCount)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
-	*count = 1;
-
+	*pCount = 1;
 	return aafError;
 }
+
 
 AAFRESULT ImplAAFSegment::AccumulateLength( aafLength_t *length)
 {
@@ -155,3 +157,4 @@ AAFRESULT ImplAAFSegment::GenerateSequence(ImplAAFSequence **seq)
 extern "C" const aafClassID_t CLSID_AAFSegment;
 
 OMDEFINE_STORABLE(ImplAAFSegment, CLSID_AAFSegment);
+
