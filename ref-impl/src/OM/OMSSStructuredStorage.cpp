@@ -559,7 +559,7 @@ OMSSIStream::Release(void)
 	{
 		if (_stream != 0)
 		{
-			OMUInt64 p, sz;
+			unsigned SSRW_INT64 p, sz;
 			// save position for later test
 			status = streamGetPos64(_stream, &p);
 			// seek to the end of the stream
@@ -589,8 +589,8 @@ OMSSIStream::Read(
 {
 	TRACE("OMSSIStream::Read");
 
-	// Convert ULONG (which is a 32bit unsigned int) between unsigned long
-	// (64bit unsigned int on 64bit CPUs) for the streamRead API.
+	// Convert ULONG (which is 32bit) between unsigned long
+	// (64bit on 64bit CPUs) for the streamRead API.
 	unsigned long full_read = cb;
 	sresult result = streamRead( _stream, pv, &full_read);
 	*pcbRead = (ULONG)full_read;
@@ -625,8 +625,8 @@ OMSSIStream::Write(
 {
 	TRACE("OMSSIStream::Write");
 
-	// Convert ULONG (which is a 32bit unsigned int) between unsigned long
-	// (64bit unsigned int on 64bit CPUs) for the streamRead API.
+	// Convert ULONG (which is 32bit) between unsigned long
+	// (64bit on 64bit CPUs) for the streamWrite API.
 	unsigned long full_written = cb;
 	sresult result = streamWrite( _stream, pv, &full_written);
 	*pcbWritten = (ULONG)full_written;
@@ -662,7 +662,7 @@ OMSSIStream::Seek(
 	sresult status = streamSeek64( _stream, toOMUInt64(offset), pos);
 	if (status == SSTG_OK && plibNewPosition != 0)
 	{
-		OMUInt64 newPos = 0;
+		unsigned SSRW_INT64 newPos = 0;
 		status = streamGetPos64 (_stream, &newPos);
 		*plibNewPosition = fromOMUInt64(newPos);
 	}
@@ -736,7 +736,7 @@ OMSSIStream::Stat(
 	{
 		//apparently, info->size isn't updated after write()
 		// these four lines get the actual end of stream in sz
-		OMUInt64 p, sz;
+		unsigned SSRW_INT64 p, sz;
 		if ( SSTG_OK == (status = streamGetPos64 ( _stream, &p)) &&
 		     SSTG_OK == (status = streamSeek64( _stream, 0, STG_END )))
 		{
