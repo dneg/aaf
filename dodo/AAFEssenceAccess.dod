@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*	                                            *
+#c* Advanced Authoring Format	                    *
+#c*                                                 *
+#c* Copyright (c) 1998-1999 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFEssenceAccess\
@@ -12,8 +12,6 @@ AAFEssenceAccess\
 AAFRoot\
 #endm
 #c
-#c #import ./AAFObject.exp
-#import ./AAFEssenceRawAccess.exp
 #import ./AAFEssenceMultiAccess.exp
 AD_HEAD
 
@@ -24,9 +22,6 @@ AD_IDL(//
 // compression or decompression of the data if required.  You may need
 // to QueryInterface for an AAFEssenceAccess interface in order to do
 // non-read write operations such as seek.
-//
-// For access to data in raw form\, call QueryInterface\(\) on this
-// interface which gives access to raw I\/O methods.
 //
 // You should call the CreateMultiEssence or OpenMultiEssence calls on
 // AAFMasterMob in order to get an interface pointer to
@@ -47,7 +42,7 @@ AD_FORWARD_DECLARATION(AAFDataDef)
 AD_CLASS_UUID(aed97eb1, 2bc8, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(aed97eb0, 2bc8, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
-AD_COM_EXT2_CLASS_BEGIN(public IAAFEssenceRawAccess,public IAAFEssenceMultiAccess)
+AD_COM_EXT_CLASS_BEGIN(public IAAFEssenceMultiAccess)
 
 
 AD_XMETHOD1(SetEssenceCodecFlavour,
@@ -62,20 +57,28 @@ AD_XMETHOD1(SetEssenceCodecFlavour,
   // JPEG tables.)
 
 
-AD_METHOD3(WriteSamples,
+AD_METHOD5(WriteSamples,
 	[in],
 	aafUInt32,
 	nSamples,
 	write this many samples,
+	[in],
+	aafUInt32,
+	buflen,
+	from a buffer of this size,
 	[in\\\,size_is\\\(buflen\\\)],
 	aafDataBuffer_t,
 	buffer,
 	from a buffer,
-	[in],
-	aafUInt32,
-	buflen,
-	of this size,
-     Writes data to a single-channel essence stream.
+	[out\\\, ref],
+	aafUInt32 *,
+	samplesWritten,
+	The number of samples actually written,
+	[out\\\, ref],
+	aafUInt32 *,
+	bytesWritten,
+	The number of bytes actually written,
+     Writes data to the given essence stream.
   //
   // A single video frame is ONE sample.
   //
@@ -87,30 +90,6 @@ AD_METHOD3(WriteSamples,
   //   AAFRESULT_BADDATAADDRESS    -- The buffer must not be a NULL
   //                                  pointer.)
 
-
-AD_METHOD3(WriteFractionalSample,
-	[in],
-	aafUInt32,
-	nBytes,
-	Write this many bytes,
-	[in\\\, size_is\\\(nBytes\\\)],
-	aafDataBuffer_t,
-	buffer,
-	from a buffer,
-	[out\\\, ref],
-	aafUInt32 *,
-	bytesWritten,
-	Returns the number of bytes actualy written,
-     Writes fractional samples of essence to the stream.  When enough
-  // bytes have been written to constitute one sample\\\, then the
-  // number of samples will be incremented by one. This function is
-  // useful in low-memory situations.
-  //
-  // Possible Errors:
-  //   AAFRESULT_STREAM_FULL -- The essence can not be written because
-  //                            of a fault such as a disk full error
-  //                            in the underlying operating system.)
-	
 
 AD_XMETHOD2(GetLargestSampleSize,
 	[in],
@@ -133,7 +112,7 @@ AD_XMETHOD2(GetLargestSampleSize,
   // interleaved essence types.)
 
 
-AD_XMETHOD3(GetSampleFrameSize,
+AD_XMETHOD3(GetIndexedSampleSize,
 	[in],
 	objIn,
 	AAFDataDef,
@@ -143,7 +122,7 @@ AD_XMETHOD3(GetSampleFrameSize,
 	objPass,
 	aafPosition_t,
 	frameNum,
-	for this [1-based] sample frame number,
+	for this [0-based] sample frame number,
 	[out],
 	objPass,
 	aafLength_t*,
@@ -185,7 +164,7 @@ AD_XMETHOD1(SetTransformParameters,
   // in-memory format.)
 	 
 
-AD_XMETHOD2(GetSampleCount,
+AD_XMETHOD2(CountSamples,
 	[in],
 	objIn,
 	AAFDataDef,
@@ -237,33 +216,6 @@ AD_METHOD5(ReadSamples,
   //   AAFRESULT_END_OF_DATA -- Hit the end of the essence \\\(like
   //                            EOF\\\) while reading.
   //   AAFRESULT_SMALLBUF    -- Buffer too small for samples.)
-
-
-AD_METHOD3(ReadFractionalSample,
-	[in],
-	aafUInt32,
-	nBytes,
-	Read this many bytes,
-	[out\\\, size_is\\\(nBytes\\\)\\\,length_is\\\(*bytesRead\\\)],
-	aafDataBuffer_t,
-	buffer,
-	transfer into this buffer,
-	[out\\\, ref],
-	aafUInt32 *,
-	bytesRead,
-	The number of bytes actually transferred,
-     Reads fractional samples from a file.
-  //
-  // This function allows reading video frames in pieces\\\, for
-  // low-memory situations.
-  //
-  // The buffer must be large enough to hold the specified number of
-  // bytes.
-  //
-  // Possible Errors:
-  //   AAFRESULT_END_OF_ESSENCE -- Hit the end of the essence \\\(like
-  //                               EOF\\\) while reading.
-  //   AAFRESULT_SMALLBUF       -- Buffer too small for samples.)
 
 
 AD_METHOD1(Seek,
@@ -374,18 +326,8 @@ AD_METHOD0(CompleteWrite,
   //   - The essence can not be written because of a fault such as a
   //     disk full error in the underlying operating system.)
 
-
-AD_COM_METH(.method-AddSampleIndexEntry)
-
-
-AD_COM_METH(.method-ReadRawData)
-
-
-AD_COM_METH(.method-WriteRawData)
-
-
 AD_COM_METH(.method-WriteMultiSamples)
 
-
 AD_COM_METH(.method-ReadMultiSamples)
-AD_COM_EXT2_CLASS_END(AAFEssenceRawAccess,AAFEssenceMultiAccess)
+
+AD_COM_EXT_CLASS_END(AAFEssenceMultiAccess)

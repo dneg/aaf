@@ -85,8 +85,9 @@ METHODDEF(boolean)
 empty_output_buffer (j_compress_ptr cinfo)
 {
   my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
+  aafUInt32 bytesWritten;
 
-  HRESULT hr = (dest->outfile)->Write((aafDataBuffer_t)dest->buffer, OUTPUT_BUF_SIZE);
+  HRESULT hr = (dest->outfile)->Write(OUTPUT_BUF_SIZE, (aafDataBuffer_t)dest->buffer, &bytesWritten);
 	if (FAILED(hr))
     ERREXIT(cinfo, JERR_FILE_WRITE);
 
@@ -112,10 +113,11 @@ term_destination (j_compress_ptr cinfo)
 	HRESULT hr = S_OK;
   my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
   size_t datacount = OUTPUT_BUF_SIZE - dest->pub.free_in_buffer;
+  aafUInt32 bytesWritten;
 
   /* Write any data remaining in the buffer */
   if (datacount > 0) {
-    hr = (dest->outfile)->Write((aafDataBuffer_t)dest->buffer, datacount);
+    hr = (dest->outfile)->Write(datacount, (aafDataBuffer_t)dest->buffer, &bytesWritten);
 	  if (FAILED(hr))
       ERREXIT(cinfo, JERR_FILE_WRITE);
   }

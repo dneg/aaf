@@ -103,7 +103,7 @@ public:
 		SetEnumCodec( IAAFEssenceCodec *pCodec);
 
 private:
-	aafInt32			_current;
+	aafUInt32			_current;
 	IAAFEssenceCodec	*_codec;
 };
 

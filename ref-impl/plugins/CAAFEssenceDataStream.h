@@ -75,9 +75,10 @@ public:
   //
 
   // Write some number of bytes to the stream exactly and with no formatting or compression.
-  STDMETHOD (Write)
-    (/*[in,size_is(buflen)]*/ aafDataBuffer_t  buffer, // to a buffer
-     /*[in]*/ aafInt32  buflen); // of this size 
+  STDMETHOD(Write)
+    (/*[in]*/ aafUInt32  bytes, // write this many bytes
+     /*[out, size_is(bytes), length_is(*bytesWritten)]*/ aafDataBuffer_t  buffer, // here is the buffer
+     /*[out,ref]*/ aafUInt32 *  bytesWritten); // return bytes actually written.
 
   // Read some number of bytes from the stream exactly and with no formatting or compression.
   STDMETHOD (Read)
@@ -87,7 +88,7 @@ public:
 
   // Seek to the absolute byte offset into the stream.
   STDMETHOD (Seek)
-    (/*[in]*/ aafInt64  byteOffset); // The absolute byte offset into the stream. 
+    (/*[in]*/ aafPosition_t  byteOffset); // The absolute byte offset into the stream. 
 
   // Seek forward or backward the given byte count.
   STDMETHOD (SeekRelative)
@@ -95,16 +96,16 @@ public:
 
   // Returns kAAFTrue if the byte offset is within the stream.
   STDMETHOD (IsPosValid)
-    (/*[in]*/ aafInt64  byteOffset, // The absolute byte offset into the stream.
-     /*[out]*/ aafBool *  isValid); // The result. 
+    (/*[in]*/ aafPosition_t  byteOffset, // The absolute byte offset into the stream.
+     /*[out]*/ aafBoolean_t *  isValid); // The result. 
 
   // Returns the position within the stream.
   STDMETHOD (GetPosition)
-    (/*[out]*/ aafInt64 *  position); // The position within the stream. 
+    (/*[out]*/ aafPosition_t *  position); // The position within the stream. 
 
   // Returns the length of the stream.
   STDMETHOD (GetLength)
-    (/*[out]*/ aafInt64 *  position); // The length of the stream. 
+    (/*[out]*/ aafLength_t *  position); // The length of the stream. 
 
   // Ensure that all bits are written.
   STDMETHOD (FlushCache)
@@ -114,7 +115,7 @@ public:
   // Sets the size of the cache buffer used for further operations.
 			// Destroys the current contents of the cache.
   STDMETHOD (SetCacheSize)
-    (/*[in]*/ aafInt32  itsSize); // The size of the cache buffer. 
+    (/*[in]*/ aafUInt32  itsSize); // The size of the cache buffer. 
 
 
   
