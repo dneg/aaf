@@ -6,7 +6,6 @@ AAFIdentification\
 AAFObject\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFObject.exp
 AD_HEAD
 /******************************************\
@@ -77,7 +76,4 @@ AD_METHOD1(SetProductID,
 [in\\\,ref], aafUID_t *, pProductID, The Product ID,
 Set the Product ID property.)
 	
-
-AD_OVERRIDE(.method-Test)
-
 AD_CLASS_END
