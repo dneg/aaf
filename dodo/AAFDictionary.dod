@@ -27,7 +27,6 @@ AD_FORWARD_DECLARATION(AAFDataDefinition)
 AD_FORWARD_DECLARATION(EnumAAFDataDefinitions)
 AD_FORWARD_DECLARATION(AAFEffectDefinition)
 AD_FORWARD_DECLARATION(EnumAAFEffectDefinitions)
-AD_FORWARD_DECLARATION(EnumAAFDefinitions)
 
 
 
@@ -42,7 +41,7 @@ AD_XMETHOD2(LookupClass,
 Return the class definition with the given id.)
 
 AD_XMETHOD1(RegisterClass,
-[in\,ref], objIn, AAFClassDefinition, pClassDefinition, Class Definition,
+[in], objIn, AAFClassDefinition, pClassDefinition, Class Definition,
 Add the class definition object to the dictionary.)
 
 AD_XMETHOD1(GetClassDefinitions,
@@ -51,7 +50,7 @@ Return an enumerator for all class definitions.)
 
 
 AD_XMETHOD1(RegisterType,
-[in\,ref], objIn, AAFTypeDefinition, pTypeDefinition, Type Definition Object,
+[in], objIn, AAFTypeDefinition, pTypeDefinition, Type Definition Object,
 Add the type definition object to the header's list of definitions.)
 
 AD_XMETHOD2(LookupType,
@@ -65,7 +64,7 @@ Return an enumerator for all type definitions.)
 
 
 AD_XMETHOD1(RegisterDataDefintion,
-[in\,ref], objIn, AAFDataDefinition, pDataDefinition, Data Definition Object,
+[in], objIn, AAFDataDefinition, pDataDefinition, Data Definition Object,
 Add the data definition object to the header's list of definitions.
   // @devnote based on omfiDatakindRegister.)
 
@@ -81,7 +80,7 @@ Return an enumerator for aff data definitions.)
 
 
 AD_XMETHOD1(RegisterEffectDefinition,
-[in\,ref], objIn, AAFEffectDefinition, pEffectDefinition, Effect Definition Object,
+[in], objIn, AAFEffectDefinition, pEffectDefinition, Effect Definition Object,
 Add the effect definition object to the header's list of definitions.
   // @devnote based on omfiEffectDefRegister.)
 
@@ -94,13 +93,6 @@ Return the effect definition object with the given id.
 AD_XMETHOD1(GetEffectDefinitions,
 [out\,retval], objOut, EnumAAFEffectDefinitions, ppEnum, Definition Enumeration,
 Return an enumerator for aff effect definitions.)
-
-
-AD_XMETHOD2(GetDefinitions,
-[in\,ref], objPass, aafDefinitionCrit_t *, pDefCriteria, Definition Criteria for enumeration,
-[out\,retval], objOut, EnumAAFDefinitions, ppEnum, Definition Enumeration,
-Return an enumerator for definitions that will apply the criteria.
-// @devnote Should this method be private?)
 
 
 AD_CLASS_END
