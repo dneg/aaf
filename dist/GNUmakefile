@@ -39,7 +39,7 @@
 #  ./CreateDistribution.bash release Dist/release-files Dist/aaf_release ../AAFMacSDK Mac ../ref-impl/include/AAFSDKBuild.h
 #
 #   mkdir -p ../AAFMacSDK/Dist
-#   cp sdk_files.mac ../AAFMacSDK/Dist/sdk-files
+#   cp sdk-files.mac ../AAFMacSDK/Dist/sdk-files
 #  ./CreateDistribution.bash sdk Dist/sdk-files Dist/aaf_sdk ../AAFMacSDK Mac ../ref-impl/include/AAFSDKBuild.h
 # 
 #   The folowing should work, when/if a pdefs-Mac.mk file appears in the build directory.
