@@ -17,56 +17,48 @@ AD_CPP_QUOTE(\ * Basic types that don't depend on other types.)
 AD_CPP_QUOTE(\ */)
 
 
+AD_CPP_QUOTE(#if 0)
+AD_CPP_QUOTE(// MIDL only defintion for 64 bit integer)
 
+#if ((!defined(MIDL_PASS) || defined(__midl)) && (!defined(_M_IX86) || (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 64)))
 
-
-AD_CPP_QUOTE(/*)
-AD_CPP_QUOTE(\ * May have to add compile-time switches for various)
-AD_CPP_QUOTE(\ * machines/compilers.  For now these work on the following platforms:)
-AD_CPP_QUOTE(\ *)
-AD_CPP_QUOTE(\ *	- NT/intel/VC++)
-AD_CPP_QUOTE(\ *	- FreeBSD/intel/GCC.)
-AD_CPP_QUOTE(\ *	- Irix/SGI/CC)
-AD_CPP_QUOTE(\ *	- MacOS/PPC+68k/CWPro)
-AD_CPP_QUOTE(\ */)
-
-typedef long			aafInt32;
-typedef short			aafInt16;
 typedef signed char		aafInt8;
+typedef signed short int	aafInt16;
+typedef signed long int		aafInt32;
 
-typedef unsigned long	aafUInt32;
-typedef unsigned short	aafUInt16;
-typedef unsigned char	aafUInt8;
+typedef unsigned char		aafUInt8;
+typedef unsigned short int	aafUInt16;
+typedef unsigned long int	aafUInt32;
+
+typedef hyper			aafInt64;
+typedef unsigned hyper		aafUInt64;
+#define AAF_INT64_NATIVE	1
+
+typedef wchar_t			aafWChar;
+typedef wchar_t			aafCharacter;
+
+#else
+#error Using an incompatible midl host compiler!
+#endif
+
+AD_CPP_QUOTE(#else)
+AD_CPP_QUOTE(#include <AAFPlatform.h>)
+AD_CPP_QUOTE(#endif  // #if 0)
+
+
+AD_CPP_QUOTE(// Add compatibility with 32/64 conversion routines.)
+AD_CPP_QUOTE(#undef PORT_USE_NATIVE64)
+AD_CPP_QUOTE(#undef PORTKEY_INT64_TYPE)
+AD_CPP_QUOTE(#if AAF_INT64_NATIVE)
+AD_CPP_QUOTE(#define PORT_USE_NATIVE64 1)
+AD_CPP_QUOTE(#define PORTKEY_INT64_TYPE aafInt64)
+AD_CPP_QUOTE(#else)
+AD_CPP_QUOTE(#define PORT_USE_NATIVE64 0)
+AD_CPP_QUOTE(#define PORTKEY_INT64_TYPE aafInt64)
+AD_CPP_QUOTE(#endif)
+
 
 typedef unsigned char * aafMemPtr_t;
-
-AD_CPP_QUOTE(// All characters and strings are in AAF are unicode.)
-AD_CPP_QUOTE(#ifndef __sgi)
-AD_CPP_QUOTE(#ifndef _MAC)
-AD_CPP_QUOTE(#ifndef _WCHAR_T_DEFINED)
-AD_CPP_QUOTE(typedef unsigned short wchar_t;)
-AD_CPP_QUOTE(#endif // _WCHAR_T_DEFINED)
-AD_CPP_QUOTE(#endif // ndef _MAC)
-AD_CPP_QUOTE(#endif // ndef __sgi)
-
-AD_CPP_QUOTE(#ifdef __MWERKS__)
-AD_CPP_QUOTE(#if !__option\(wchar_type\))
-AD_CPP_QUOTE(typedef aafUInt16 	aafWChar;)
-AD_CPP_QUOTE(typedef aafUInt16 	aafCharacter;)
-AD_CPP_QUOTE(#else //!__option\(wchar_type\))
-AD_CPP_QUOTE(typedef wchar_t 	aafWChar;)
-AD_CPP_QUOTE(typedef wchar_t 	aafCharacter;)
-AD_CPP_QUOTE(#endif //!__option\(wchar_type\))
-AD_CPP_QUOTE(#else // __MWERKS__)
-AD_CPP_QUOTE( #ifdef __sgi)
-AD_CPP_QUOTE(  // BobT: temporarily use wchar_t for our aafCharacter on sgi )
-AD_CPP_QUOTE(  // typedef aafUInt16 aafCharacter;)
-AD_CPP_QUOTE(  typedef wchar_t aafWChar;)
-AD_CPP_QUOTE(  typedef wchar_t aafCharacter;)
-AD_CPP_QUOTE( #endif // __sgi)
-typedef wchar_t		aafWChar;
-typedef wchar_t		aafCharacter;
-AD_CPP_QUOTE(#endif // __MWERKS__)
 
 typedef aafInt32		AAFRESULT;
 
@@ -94,78 +86,6 @@ typedef enum _aafMAX_NUM_RGBA_COMPS_e
   MAX_NUM_RGBA_COMPS = 8				// Lower to 6 to match type object
 } aafMAX_NUM_RGBA_COMPS_e;
 AD_CPP_QUOTE(#endif)
-AD_CPP_QUOTE(#endif)
-
-
-AD_CPP_QUOTE(#if 0)
-AD_CPP_QUOTE(// MIDL only defintion for 64 bit integer)
-#if (!defined(AAF_INT64_TYPE) && (!defined(MIDL_PASS) || defined(__midl)) && (!defined(_M_IX86) || (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 64)))
-#define AAF_INT64_TYPE hyper
-typedef AAF_INT64_TYPE aafInt64;
-#define AAF_UINT64_TYPE hyper
-typedef AAF_UINT64_TYPE aafUInt64;
-#else
-#error Using an incompatible midl host compiler!
-#endif
-AD_CPP_QUOTE(#else)
-
-AD_CPP_QUOTE(#ifdef __MWERKS__)
-AD_CPP_QUOTE(#if \(__MWERKS__ >= 0x1100\))
-AD_CPP_QUOTE(#define AAF_INT64_NATIVE	1)
-AD_CPP_QUOTE(#define AAF_INT64_TYPE		long long)
-AD_CPP_QUOTE(#define AAF_UINT64_TYPE	unsigned long long)
-AD_CPP_QUOTE(#endif)
-AD_CPP_QUOTE(#endif)
-
-AD_CPP_QUOTE(/* SGI Port definitions */)
-AD_CPP_QUOTE(#ifdef __sgi)
-AD_CPP_QUOTE(#if defined\(__LONGLONG\) || defined\(_LONGLONG\))
-AD_CPP_QUOTE(#define AAF_INT64_NATIVE	1)
-AD_CPP_QUOTE(#define AAF_INT64_TYPE		long long)
-AD_CPP_QUOTE(#define AAF_UINT64_TYPE	unsigned long long)
-AD_CPP_QUOTE(#endif)
-AD_CPP_QUOTE(#endif)
-
-AD_CPP_QUOTE(/* PC Windows 32 Port Definitions */)
-AD_CPP_QUOTE(#if defined\(_WIN32\) || defined\(WIN32\))
-AD_CPP_QUOTE(#if \(!defined\(_M_IX86\) || \(defined\(_INTEGRAL_MAX_BITS\) && _INTEGRAL_MAX_BITS >= 64\)\))
-AD_CPP_QUOTE(#define AAF_INT64_NATIVE 1)
-AD_CPP_QUOTE(#define AAF_INT64_TYPE   __int64)
-AD_CPP_QUOTE(#define AAF_UINT64_TYPE  unsigned __int64)
-AD_CPP_QUOTE(#endif)
-AD_CPP_QUOTE(#endif)
-
-AD_CPP_QUOTE(/* Default definitions */)
-AD_CPP_QUOTE(#ifndef AAF_INT64_TYPE)
-AD_CPP_QUOTE(#undef AAF_INT64_NATIVE)
-AD_CPP_QUOTE(#define AAF_INT64_NATIVE 0)
-AD_CPP_QUOTE(/* Treated as an integer\, defined as array of 4 shorts if needed */)
-AD_CPP_QUOTE(typedef struct _aafInt64_t)
-AD_CPP_QUOTE({)
-AD_CPP_QUOTE(\	aafUInt16	words[4];)
-AD_CPP_QUOTE(} aafInt64_t;)
-AD_CPP_QUOTE(#define AAF_INT64_TYPE aafInt64_t)
-AD_CPP_QUOTE(#endif)
-AD_CPP_QUOTE(#ifndef AAF_UINT64_TYPE)
-AD_CPP_QUOTE(#define AAF_UINT64_TYPE aafInt64_t)
-AD_CPP_QUOTE(#endif)
-
-AD_CPP_QUOTE(// Define the 64 bit integer type.)
-AD_CPP_QUOTE(typedef AAF_INT64_TYPE aafInt64;)
-AD_CPP_QUOTE(// Define the 64 bit unsigned integer type.)
-AD_CPP_QUOTE(typedef AAF_UINT64_TYPE aafUInt64;)
-
-AD_CPP_QUOTE(// Add compatibility with 32/64 conversion routines.)
-AD_CPP_QUOTE(#undef PORT_USE_NATIVE64)
-AD_CPP_QUOTE(#undef PORTKEY_INT64_TYPE)
-AD_CPP_QUOTE(#if AAF_INT64_NATIVE)
-AD_CPP_QUOTE(#define PORT_USE_NATIVE64 1)
-AD_CPP_QUOTE(#define PORTKEY_INT64_TYPE AAF_INT64_TYPE)
-AD_CPP_QUOTE(#else)
-AD_CPP_QUOTE(#define PORT_USE_NATIVE64 0)
-AD_CPP_QUOTE(#define PORTKEY_INT64_TYPE AAF_INT64_TYPE)
-AD_CPP_QUOTE(#endif)
-
 AD_CPP_QUOTE(#endif)
 
 
