@@ -234,6 +234,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFFindSourceInfo.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFGetFileBits.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFGPITrigger.cpp"
 # End Source File
 # Begin Source File
@@ -302,6 +306,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFObject.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFOMRawStorage.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFOperationDef.cpp"
 # End Source File
 # Begin Source File
@@ -350,6 +358,18 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPulldown.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFRandomFile.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFRandomRawStorage.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFRawStorage.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFRefArrayValue.cpp"
 # End Source File
 # Begin Source File
@@ -387,6 +407,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFSelector.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFSequence.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFSetFileBits.cpp"
 # End Source File
 # Begin Source File
 
