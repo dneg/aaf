@@ -24,6 +24,8 @@
 #----------------------------------------------------------
 # Determine the platform we're building on and include
 # platfrom specific definitions.
+# N.B. Requires GNU Make for the $(shell ...) command -
+# see http://www.gnu.org/software/make/make.html
 #----------------------------------------------------------
 ifndef AAFPLATFORM
     AAFPLATFORM = $(shell $(AAFBASE)/build/aafplatform.sh)
