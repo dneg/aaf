@@ -1953,9 +1953,12 @@ ImplAAFObjectSP ImplAAFDictionary::pvtObjFifo::GetNext (void)
   ImplAAFObjectSP result;
 
   if (_getIdx < _putIdx)
-	result = _objs[_getIdx++];
+	{
+	  result = _objs[_getIdx];
+    _objs[_getIdx++] = 0;
+	}
   else
-	result = 0;
+	  result = 0;
 
   return result;
 }
