@@ -112,6 +112,7 @@ HUMAN_TYPED_IMPL="\
 	AAFTypeDefExtEnum \
 	AAFTypeDefFixedArray \
 	AAFTypeDefRecord \
+	AAFTypeDefSet \
 	AAFTypeDefStream \
 	AAFTypeDefString \
 	AAFTypeDefStrongObjRef \
