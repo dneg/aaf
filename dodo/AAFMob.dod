@@ -225,7 +225,7 @@ Clones the specified Source Mob\, and optionally all dependent Mobs\, to an
   // Both AAF files must be open before you call this function and both must have
   // the same AAF Version number.)
 
-AD_OVERRIDE(.method-Delete)
+// ADx_OVERRIDE(.method-Delete)
   // @commDeletes the entire Mob structure \(the MOBJ object and all its contained objects\)
   // and deletes the entry from the Header.
 
