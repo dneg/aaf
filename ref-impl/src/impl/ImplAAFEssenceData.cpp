@@ -59,6 +59,9 @@ ImplAAFEssenceData::~ImplAAFEssenceData ()
 
   if (NULL == buffer || NULL == bytesWritten)
     return AAFRESULT_NULL_PARAM;
+  // Cannot access the data property if it is NOT associated with a file.
+  if (!attached())
+    return AAFRESULT_NOT_IN_FILE;
   
   try
   {
@@ -87,6 +90,9 @@ ImplAAFEssenceData::~ImplAAFEssenceData ()
 
   if (NULL == buffer || NULL == bytesRead)
     return AAFRESULT_NULL_PARAM;
+  // Cannot access the data property if it is NOT associated with a file.
+  if (!attached())
+    return AAFRESULT_NOT_IN_FILE;
   
   try
   {
@@ -110,6 +116,9 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceData::SetPosition (aafPosition_t  offset)
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
+  // Cannot access the data property if it is NOT associated with a file.
+  if (!attached())
+    return AAFRESULT_NOT_IN_FILE;
 
   try
   {
@@ -136,6 +145,9 @@ AAFRESULT STDMETHODCALLTYPE
 
   if (NULL == pOffset)
     return AAFRESULT_NULL_PARAM;
+  // Cannot access the data property if it is NOT associated with a file.
+  if (!attached())
+    return AAFRESULT_NOT_IN_FILE;
 
   try
   {
@@ -161,6 +173,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (NULL == pSize)
     return AAFRESULT_NULL_PARAM;
+  // Cannot access the data property if it is NOT associated with a file.
+  if (!attached())
+    return AAFRESULT_NOT_IN_FILE;
 
 
   AAFRESULT result = AAFRESULT_SUCCESS;
@@ -185,38 +200,67 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceData::SetFileMob (ImplAAFSourceMob * pFileMob)
 {
-	AAFRESULT result = AAFRESULT_SUCCESS;
-	ImplAAFMob *pMob = NULL;
-	ImplAAFHeader *pHeader = NULL;
-	aafUID_t mobID;
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  ImplAAFMob *pMob = NULL;
+  ImplAAFSourceMob *pSourceMob = NULL;
+  ImplAAFEssenceDescriptor *pEssenceDescriptor = NULL;
+  ImplAAFFileDescriptor *pFileDescriptor = NULL;
+  ImplAAFHeader *pHeader = NULL;
+  aafUID_t mobID;
 
-	if(NULL == pFileMob)
-		return(AAFRESULT_NULL_PARAM);
+  if(NULL == pFileMob)
+    return(AAFRESULT_NULL_PARAM);
 
-	XPROTECT()
-	{
-		CHECK(pFileMob->GetMobID(&mobID));
+  XPROTECT()
+  {
+    CHECK(pFileMob->GetMobID(&mobID));
 
-		// Does a mob with the ID already exist?  If not, return error
-		CHECK(MyHeadObject(&pHeader));
-		CHECK(pHeader->LookupMob(&mobID, &pMob));
+ // move to ImplAAFContentStorage::AppendEssenceData().
+    // Does a mob with the ID already exist?  If not, return error
+    CHECK(pFileMob->MyHeadObject(&pHeader));
+    CHECK(pHeader->LookupMob(&mobID, &pMob));
 
-		// TODO: Make sure the mob is a valid File source mob???
-		_fileMobID = mobID;
-	} /* XPROTECT */
-	XEXCEPT
-	{	// save the error code.
-		result = (XCODE());
-	}
-	XEND;
 
-	// cleanup
-	if (pHeader)
-	{
-		pHeader->ReleaseReference();
-		pHeader = NULL;
-	}
-	return(result);
+    // Make sure the mob is a valid File source mob???
+    pSourceMob = dynamic_cast<ImplAAFSourceMob *>(pMob);
+    if (NULL == pSourceMob)
+      RAISE(AAFRESULT_INVALID_FILE_MOB);
+    // Must       
+    result = pSourceMob->GetEssenceDescriptor(&pEssenceDescriptor);
+    if (AAFRESULT_SUCCESS != result)
+      RAISE(AAFRESULT_INVALID_FILE_MOB);
+
+    pFileDescriptor = dynamic_cast<ImplAAFFileDescriptor *>(pEssenceDescriptor);
+    if (NULL == pFileDescriptor)
+      RAISE(AAFRESULT_INVALID_FILE_MOB);
+
+    // The mob id refers to a valid file source mob so we can save
+    // the id.
+    _fileMobID = mobID;
+  } /* XPROTECT */
+  XEXCEPT
+  {  // save the error code.
+    result = (XCODE());
+  }
+  XEND;
+
+  // cleanup
+  if (pEssenceDescriptor)
+  {
+    pEssenceDescriptor->ReleaseReference();
+    pEssenceDescriptor = NULL;
+  }
+  if (pMob)
+  {
+    pMob->ReleaseReference();
+    pMob = NULL;
+  }
+  if (pHeader)
+  {
+    pHeader->ReleaseReference();
+    pHeader = NULL;
+  }
+  return(result);
 }
 
 
@@ -224,57 +268,64 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceData::GetFileMob (ImplAAFSourceMob ** ppFileMob)
 {
-	AAFRESULT result = AAFRESULT_SUCCESS;
-	ImplAAFMob *pMob = NULL;
-	ImplAAFSourceMob *pSourceMob = NULL;
-	ImplAAFEssenceDescriptor *pEssenceDescriptor = NULL;
-	ImplAAFHeader *pHeader = NULL;
-	aafUID_t mobID;
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  ImplAAFMob *pMob = NULL;
+  ImplAAFSourceMob *pSourceMob = NULL;
+  ImplAAFEssenceDescriptor *pEssenceDescriptor = NULL;
+  ImplAAFHeader *pHeader = NULL;
+  aafUID_t mobID;
 
-	if(NULL == ppFileMob)
-		return(AAFRESULT_NULL_PARAM);
+  if(NULL == ppFileMob)
+    return(AAFRESULT_NULL_PARAM);
 
-	XPROTECT()
-	{
-		CHECK(GetFileMobID(&mobID));
+  XPROTECT()
+  {
+    CHECK(GetFileMobID(&mobID));
 
-		// Does a mob with the ID already exist?  If not, return error
-		CHECK(MyHeadObject(&pHeader));
-		CHECK(pHeader->LookupMob(&mobID, &pMob));
+    // Does a mob with the ID already exist?  If not, return error.
+    // NOTE: Will return AAFRESULT_NOT_IN_FILE if this object has
+    // not been appended to to the file.
+    CHECK(MyHeadObject(&pHeader));
+    CHECK(pHeader->LookupMob(&mobID, &pMob));
 
-		// This should be a valid file mob which is a file mob.
-		pSourceMob = dynamic_cast<ImplAAFSourceMob *>(pMob);
-		if (NULL == pSourceMob)
-			RAISE(AAFRESULT_NOT_FILEMOB);
+    // This should be a valid file mob which is a file mob.
+    pSourceMob = dynamic_cast<ImplAAFSourceMob *>(pMob);
+    if (NULL == pSourceMob)
+      RAISE(AAFRESULT_NOT_FILEMOB);
 
-		// Does the source mob contain a file descriptor?
-		CHECK(pSourceMob->GetEssenceDescriptor(&pEssenceDescriptor));
-		if (dynamic_cast<ImplAAFFileDescriptor *>(pEssenceDescriptor))
-		{
-			(*ppFileMob) = pSourceMob;
-			pSourceMob->AcquireReference();
-		}
+    // Does the source mob contain a file descriptor?
+    CHECK(pSourceMob->GetEssenceDescriptor(&pEssenceDescriptor));
+    if (dynamic_cast<ImplAAFFileDescriptor *>(pEssenceDescriptor))
+    {
+      (*ppFileMob) = pSourceMob;
+      pSourceMob->AcquireReference();
+    }
 
-	} /* XPROTECT */
-	XEXCEPT
-	{	// save the error code.
-		result = (XCODE());
-	}
-	XEND;
+  } /* XPROTECT */
+  XEXCEPT
+  {  // save the error code.
+    result = (XCODE());
+  }
+  XEND;
 
-	// cleanup
-	// Note: pMob and pSourceMob are temp and should not be released.
-	if (pEssenceDescriptor)
-	{
-		pEssenceDescriptor->ReleaseReference();
-		pEssenceDescriptor = NULL;
-	}
-	if (pHeader)
-	{
-		pHeader->ReleaseReference();
-		pHeader = NULL;
-	}
-	return(result);
+  // cleanup
+  // Note: pMob and pSourceMob are temp and should not be released.
+  if (pEssenceDescriptor)
+  {
+    pEssenceDescriptor->ReleaseReference();
+    pEssenceDescriptor = NULL;
+  }
+  if (pMob)
+  {
+    pMob->ReleaseReference();
+    pMob = NULL;
+  }
+  if (pHeader)
+  {
+    pHeader->ReleaseReference();
+    pHeader = NULL;
+  }
+  return(result);
 
 }
 
@@ -286,7 +337,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (NULL == pFileMobID)
     return AAFRESULT_NULL_PARAM;
 
-  _fileMobID = *pFileMobID;
+  *pFileMobID = _fileMobID;
   return AAFRESULT_SUCCESS;
 }
 
@@ -301,9 +352,9 @@ AAFRESULT STDMETHODCALLTYPE
 ImplAAFEssenceData::GetObjectClass(aafUID_t * pClass)
 {
   if (! pClass)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
+  {
+    return AAFRESULT_NULL_PARAM;
+  }
   memcpy (pClass, &CLSID_AAFEssenceData, sizeof (aafClassID_t));
   return AAFRESULT_SUCCESS;
 }
