@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "all"=.\all\all.dsp - Package Owner=<4>
+Project: "all"=".\all\all.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -36,7 +36,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "classDefUids"=.\classDefUids\classDefUids.dsp - Package Owner=<4>
+Project: "classDefUids"=".\classDefUids\classDefUids.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -51,7 +51,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "extEnumUid"=.\extEnumUid\extEnumUid.dsp - Package Owner=<4>
+Project: "extEnumUid"=".\extEnumUid\extEnumUid.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -66,19 +66,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "headerGenUtils"=.\headerGenUtils\headerGenUtils.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "propertyDefUid"=.\propertyDefUid\propertyDefUid.dsp - Package Owner=<4>
+Project: "genDefInstances"=".\genDefInstances\genDefInstances.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -93,7 +81,19 @@ Package=<4>
 
 ###############################################################################
 
-Project: "propertyId"=.\propertyId\propertyId.dsp - Package Owner=<4>
+Project: "headerGenUtils"=".\headerGenUtils\headerGenUtils.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "propertyDefUid"=".\propertyDefUid\propertyDefUid.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -108,7 +108,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "storedObjectUid"=.\storedObjectUid\storedObjectUid.dsp - Package Owner=<4>
+Project: "propertyId"=".\propertyId\propertyId.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -123,7 +123,22 @@ Package=<4>
 
 ###############################################################################
 
-Project: "typeDefUid"=.\typeDefUid\typeDefUid.dsp - Package Owner=<4>
+Project: "storedObjectUid"=".\storedObjectUid\storedObjectUid.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name headerGenUtils
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "typeDefUid"=".\typeDefUid\typeDefUid.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
