@@ -156,8 +156,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFFile*		pFile = NULL;
 	IAAFHeader*		pHeader = NULL;
 	IAAFDictionary*  pDictionary = NULL;
-//@!!!	IEnumAAFContainerDefs *pPlug = NULL;
-//	IAAFPluggableDef		*pPlugDef = NULL;
+	IEnumAAFContainerDefs *pPlug = NULL;
+	IAAFContainerDef		*pPlugDef = NULL;
 	IAAFContainerDef		*pContainerDef = NULL;
 	bool bFileOpen = false;
 	aafBool			testBool;
@@ -171,11 +171,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
-//!!!		checkResult(pDictionary->GetPluggableDefinitions(&pPlug));
-//!!!		checkResult(pPlug->NextOne (&pPlugDef));
-//!!!		checkResult(pPlugDef->QueryInterface (IID_IAAFContainerDef, (void **)&pContainerDef));
-//!!!		checkResult(pContainerDef->EssenceIsIdentified (&testBool));
-//!!!		checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
+		checkResult(pDictionary->GetContainerDefinitions(&pPlug));
+		checkResult(pPlug->NextOne (&pPlugDef));
+		checkResult(pPlugDef->QueryInterface (IID_IAAFContainerDef, (void **)&pContainerDef));
+		checkResult(pContainerDef->EssenceIsIdentified (&testBool));
+		checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
 	}
 	catch (HRESULT& rResult)
 	{
