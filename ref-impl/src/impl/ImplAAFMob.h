@@ -193,7 +193,14 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetModTime
-        (const aafTimeStamp_t & modTime);  //@parm [in, ref] New Modification Time
+        (aafTimeStamp_constref modTime);  //@parm [in, ref] New Modification Time
+
+  //****************
+  // SetCreateTime()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetCreateTime
+        (aafTimeStamp_constref createTime);  //@parm [in, ref] New Creation Time
 
   //****************
   // SetIdentity()
