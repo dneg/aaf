@@ -41,6 +41,8 @@
 #include "ImplAAFTypeDefObjectRef.h"
 #endif
 
+#include "OMAssertions.h"
+
 #include <assert.h>
 #include <string.h>
 
@@ -124,9 +126,15 @@ size_t ImplAAFTypeDefObjectRef::externalSize(OMByte* /*internalBytes*/,
 void ImplAAFTypeDefObjectRef::externalize(OMByte* internalBytes,
 										  size_t internalBytesSize,
 										  OMByte* externalBytes,
-										  size_t externalBytesSize,
-										  OMByteOrder /*byteOrder*/) const
+										  size_t ANAME(externalBytesSize),
+										  OMByteOrder NNAME(byteOrder)) const
 {
+  TRACE("ImplAAFTypeDefObjectRef::externalize");
+  PRECONDITION("Valid internal bytes", internalBytes != 0);
+  PRECONDITION("Valid internal byte size", internalBytesSize > 0);
+  PRECONDITION("Valid external bytes", externalBytes != 0);
+  PRECONDITION("Valid external byte size", externalBytesSize > 0);
+
   assert (externalBytesSize >= internalBytesSize);
   copy (internalBytes, externalBytes, internalBytesSize);
 }
@@ -142,9 +150,15 @@ size_t ImplAAFTypeDefObjectRef::internalSize(OMByte* /*externalBytes*/,
 void ImplAAFTypeDefObjectRef::internalize(OMByte* externalBytes,
 										  size_t externalBytesSize,
 										  OMByte* internalBytes,
-										  size_t internalBytesSize,
-										  OMByteOrder /*byteOrder*/) const
+										  size_t ANAME(internalBytesSize),
+										  OMByteOrder NNAME(byteOrder)) const
 {
+  TRACE("ImplAAFTypeDefObjectRef::internalize");
+  PRECONDITION("Valid external bytes", externalBytes != 0);
+  PRECONDITION("Valid external byte size", externalBytesSize > 0);
+  PRECONDITION("Valid internal bytes", internalBytes != 0);
+  PRECONDITION("Valid internal byte size", internalBytesSize > 0);
+		           
   assert (internalBytesSize >= externalBytesSize);
   copy (externalBytes, internalBytes, externalBytesSize);
 }
