@@ -13,7 +13,7 @@ AAFPERSISTENTOBJECTS="\
 
 # These are all of the other non-persistent objects:
 AAFNONPERSISTENTOBJECTS="\
-	EnumAAFPropertyValues "
+	 "
 
 
 # These are files which specify COM interfaces, but which are
@@ -137,6 +137,7 @@ HUMAN_TYPED_IMPL="\
 	EnumAAFParameters \
 	EnumAAFProperties \
 	EnumAAFPropertyDefs \
+	EnumAAFPropertyValues \
 	EnumAAFPluginDefs \
 	EnumAAFPluginLocators \
 	EnumAAFSegments \
