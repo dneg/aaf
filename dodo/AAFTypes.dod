@@ -333,15 +333,6 @@ typedef enum
 
 typedef enum
 {
-	kRefLimitMinimum = 0,
-	kRefLimitMaximum,
-	kRefMinimum,
-	kRefMaximum,
-	kRefEnumvalue
-} aafReferenceType_t;
-
-typedef enum
-{
   kFindNull, kFindIncoming, kFindOutgoing, kFindRender,
   kFindEffectSrc1, kFindEffectSrc2, kFindEffectSrc3, kFindEffectSrc4, 
   kFindEffectSrc5, kFindEffectSrc6, kFindEffectSrc7, kFindEffectSrc8
@@ -774,6 +765,60 @@ typedef struct
 		aafProductVersion_t toolkitVersion;
 	} tags;
 } aafIdentificationCrit_t;
+
+
+AD_CPP_QUOTE(/************************************************************) 
+AD_CPP_QUOTE(\ *)
+AD_CPP_QUOTE(\ * Data Types for Searching the Class Dictionary) 
+AD_CPP_QUOTE(\ *)
+AD_CPP_QUOTE(\ *************************************************************/) 
+
+typedef enum
+{
+	kAllClasses = 0,   // selects all classes in the given class dictionary.
+	kByClassID = 1,    // selects the class with the given class id.
+	kByParentClassID,  // selects all classes with the given parent class id. 
+	kByPropertyID,     // selects all classes that contain the given property id.
+	kByTypeID,         // selects all classes that contain properties with the given type id.
+	kByClassName       // selects all classes with the given name
+} aafSearchDictionaryTag_t;
+
+
+AD_CPP_QUOTE(#if 0)
+typedef struct _aafSearchDictionaryCrit_t
+{
+
+    aafSearchDictionaryTag_t     searchTag;
+    [switch_is(searchTag)] union
+    {
+        [case(kByClassID)]
+            aafUID_t    * classID;
+        [case(kByParentClassID)]
+            aafUID_t    * parentClassID;
+        [case(kByPropertyID)]
+            aafUID_t	* propertyID;
+        [case(kByTypeID)]
+            aafUID_t	* typeID;
+        [case(kByClassName)]
+            aafString_t * name;
+        [default] ;
+    } ;
+
+} aafSearchDictionaryCrit_t;
+AD_CPP_QUOTE(#endif)
+AD_CPP_QUOTE(//)
+AD_CPP_QUOTE(typedef struct _aafSearchDictionaryCrit_t)
+AD_CPP_QUOTE({)
+AD_CPP_QUOTE(\	aafSearchDictionaryTag_t     searchTag;)
+AD_CPP_QUOTE(\	union )
+AD_CPP_QUOTE(\	{)
+AD_CPP_QUOTE(\		aafUID_t    * classID;)
+AD_CPP_QUOTE(\		aafUID_t    * parentClassID;)
+AD_CPP_QUOTE(\		aafUID_t	* propertyID;)
+AD_CPP_QUOTE(\		aafUID_t	* typeID;)
+AD_CPP_QUOTE(\		aafString_t * name;)
+AD_CPP_QUOTE(\	} tags;)
+AD_CPP_QUOTE(} aafSearchDictionaryCrit_t;)
 
 
 
