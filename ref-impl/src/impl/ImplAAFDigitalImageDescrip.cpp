@@ -10,6 +10,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
+#include "AAFDefUIDs.h"
 
 #include <assert.h>
 #include <string.h>
@@ -33,6 +34,8 @@ ImplAAFDigitalImageDescriptor::ImplAAFDigitalImageDescriptor ()
 	_gamma(PID_DigitalImageDescriptor_Gamma,								"Gamma"),
 	_imageAlignmentFactor(PID_DigitalImageDescriptor_ImageAlignmentFactor,	"Image Alignment Factor")
 {
+	aafInt32	videoLineMap[2];
+
 	_persistentProperties.put(_compression.address());
 	_persistentProperties.put(_storedHeight.address());
 	_persistentProperties.put(_storedWidth.address());
@@ -58,12 +61,14 @@ ImplAAFDigitalImageDescriptor::ImplAAFDigitalImageDescriptor ()
 	// Initialize Required properties
 	_storedHeight = 0;
 	_storedWidth = 0;
-	//_frameLayout = kFullFrame;
+	_frameLayout = kFullFrame;
 	_imageAspectRatio = zero;
-	//_videoLineMap =
-
+	videoLineMap[0] = 0;
+	videoLineMap[1] = 1;
+	_videoLineMap.setValue(videoLineMap, 2*sizeof(aafInt32));
 	// Initialize Optional properties
-	//_compression = ;
+
+	_compression = NoCodec;
 	_sampledHeight = 0;
 	_sampledWidth = 0;
 	_sampledXOffset = 0;
