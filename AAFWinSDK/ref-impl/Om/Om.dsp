@@ -206,10 +206,6 @@ SOURCE="..\..\..\ref-impl\include\OM\OMContainerProperty.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMContainerPropertyT.h"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\include\OM\OMDataStreamProperty.h"
 # End Source File
 # Begin Source File
@@ -263,10 +259,6 @@ SOURCE="..\..\..\ref-impl\include\OM\OMPropertyDefinition.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMPropertySet.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\OMPropertyT.h"
 # End Source File
 # Begin Source File
 
