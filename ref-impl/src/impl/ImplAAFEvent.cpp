@@ -62,29 +62,31 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFEvent::SetComment (
       wchar_t *  pComment)
 {
-  if (NULL == pComment)
-    return (AAFRESULT_NULL_PARAM);
-
-  _comment = pComment;
-
-  return (AAFRESULT_SUCCESS);
+	if (NULL == pComment)
+		return (AAFRESULT_NULL_PARAM);
+	
+	_comment = pComment;
+	
+	return (AAFRESULT_SUCCESS);
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEvent::GetComment (
-      wchar_t *  pComment,
-      aafUInt32  bufSize)
+ImplAAFEvent::GetComment (wchar_t *  pComment,
+						  aafUInt32  bufSize)
 {
-  if (NULL == pComment)
-    return(AAFRESULT_NULL_PARAM);
-
-  bool stat = _comment.copyToBuffer(pComment, bufSize);
-  if (!stat)
-    return AAFRESULT_SMALLBUF;
-
-  return (AAFRESULT_SUCCESS); 
+	if (NULL == pComment)
+		return(AAFRESULT_NULL_PARAM);
+	
+	if (!_comment.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
+	bool stat = _comment.copyToBuffer(pComment, bufSize);
+	if (!stat)
+		return AAFRESULT_SMALLBUF;
+	
+	return (AAFRESULT_SUCCESS); 
 }
 
 
@@ -93,12 +95,15 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFEvent::GetCommentBufLen (
       aafUInt32 *  pBufSize)
 {
-  if (NULL == pBufSize)
-    return (AAFRESULT_NULL_PARAM);
-  
-  *pBufSize = _comment.size();
-
-  return (AAFRESULT_SUCCESS); 
+	if (NULL == pBufSize)
+		return (AAFRESULT_NULL_PARAM);
+	
+	if (!_comment.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
+	*pBufSize = _comment.size();
+	
+	return (AAFRESULT_SUCCESS); 
 }
 
 

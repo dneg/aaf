@@ -245,16 +245,15 @@ AAFRESULT STDMETHODCALLTYPE
 												  aafInt32* pSampledXOffset,
 												  aafInt32* pSampledYOffset)
 {
+	if ((pSampledHeight == NULL) || (pSampledWidth == NULL) ||
+		(pSampledXOffset == NULL) || (pSampledYOffset == NULL))
+		return(AAFRESULT_NULL_PARAM);
 	
 	if (!_sampledHeight.isPresent()  || !_sampledWidth.isPresent()   || 
 		!_sampledXOffset.isPresent() ||	!_sampledYOffset.isPresent())
 		return AAFRESULT_PROP_NOT_PRESENT;
 		
-	if ((pSampledHeight == NULL) || (pSampledWidth == NULL) ||
-		(pSampledXOffset == NULL) || (pSampledYOffset == NULL))
-		return(AAFRESULT_NULL_PARAM);
-
-	*pSampledHeight = _sampledHeight;
+		*pSampledHeight = _sampledHeight;
 	*pSampledWidth = _sampledWidth;
 	*pSampledXOffset = _sampledXOffset;
 	*pSampledYOffset = _sampledYOffset;
@@ -269,14 +268,13 @@ AAFRESULT STDMETHODCALLTYPE
 												  aafInt32*  pDisplayXOffset,
 												  aafInt32* pDisplayYOffset)
 {
+	if ((pDisplayHeight == NULL)  || (pDisplayWidth == NULL) ||
+		(pDisplayXOffset == NULL) || (pDisplayYOffset == NULL))
+		return(AAFRESULT_NULL_PARAM);
 	
 	if (!_displayHeight.isPresent()	 || !_displayWidth.isPresent()	 ||
 		!_displayXOffset.isPresent() || !_displayXOffset.isPresent())
 		return AAFRESULT_PROP_NOT_PRESENT;
-	 
-	if ((pDisplayHeight == NULL)  || (pDisplayWidth == NULL) ||
-		(pDisplayXOffset == NULL) || (pDisplayYOffset == NULL))
-		return(AAFRESULT_NULL_PARAM);
 
 	*pDisplayHeight = _displayHeight;
 	*pDisplayWidth = _displayWidth;
@@ -341,12 +339,11 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDigitalImageDescriptor::GetAlphaTransparency (aafAlphaTransparency_t* pAlphaTransparency)
 {
+	if (pAlphaTransparency == NULL)
+		return(AAFRESULT_NULL_PARAM);
 	
 	if (!_alphaTransparency.isPresent())
 		return AAFRESULT_PROP_NOT_PRESENT;
-	
-	if (pAlphaTransparency == NULL)
-		return(AAFRESULT_NULL_PARAM);
 	
 	aafRational_t transparency = _alphaTransparency;
 
@@ -366,12 +363,11 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDigitalImageDescriptor::GetGamma (aafRational_t* pGamma)
 {
+	if (pGamma == NULL)
+		return(AAFRESULT_NULL_PARAM);
 	
 	if (!_gamma.isPresent())
 		return AAFRESULT_PROP_NOT_PRESENT;
-	
-	if (pGamma == NULL)
-		return(AAFRESULT_NULL_PARAM);
 
 	*pGamma = _gamma;
 
@@ -382,12 +378,12 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDigitalImageDescriptor::GetImageAlignmentFactor (aafInt32* pImageAlignmentFactor)
 {
-	if (!_imageAlignmentFactor.isPresent())
-		return AAFRESULT_PROP_NOT_PRESENT;
-	
 	if (pImageAlignmentFactor == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
+	if (!_imageAlignmentFactor.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
 	*pImageAlignmentFactor = _imageAlignmentFactor;
 
 	return AAFRESULT_SUCCESS;
