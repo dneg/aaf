@@ -215,7 +215,15 @@ AAFRESULT STDMETHODCALLTYPE
   if (index >= count)
 	return AAFRESULT_BADINDEX;
 
-	_controlPoints.removeAt(index);
+	ImplAAFControlPoint *pPoint = NULL;
+	pPoint = 	_controlPoints.removeAt(index);
+	if (pPoint)
+	{
+		// We have removed an element from a "stong reference container" so we must
+		// decrement the objects reference count. This will not delete the object
+		// since the caller must have alread acquired a reference. (transdel 2000-MAR-10)
+		pPoint->ReleaseReference ();
+	}
 	return AAFRESULT_SUCCESS;
 }
 

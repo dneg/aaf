@@ -547,11 +547,16 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	aafInt32 count;
 	AAFRESULT hr;
+	ImplAAFSegment	*pSeg;
+	
 	hr = CountSourceSegments (&count);
 	if (AAFRESULT_FAILED (hr)) return hr;
 	if (index >= (aafUInt32)count)
 		return AAFRESULT_BADINDEX;
 	
-	_inputSegments.removeAt(index);
+	pSeg = _inputSegments.removeAt(index);
+	if(pSeg)
+		pSeg->ReleaseReference();
+
 	return AAFRESULT_SUCCESS;
 }
