@@ -47,9 +47,13 @@ ImplAAFClassDef::~ImplAAFClassDef ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::Initialize (
-      ImplAAFClassDef * /*pParentClass*/)
+      ImplAAFClassDef * pParentClass)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (!pParentClass) return AAFRESULT_NULL_PARAM;
+
+  // BobT hack: need real implementation
+
+  return AAFRESULT_SUCCESS;
 }
 
 
