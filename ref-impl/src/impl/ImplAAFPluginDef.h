@@ -546,7 +546,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     IsPluginLocal
-        // @parm [out] Returns AAFTrue if the plugin is local
+        // @parm [out] Returns kAAFTrue if the plugin is local
         (aafBool *  pIsLocal);
 
 
