@@ -18,7 +18,7 @@ BEGIN {
     f = split(filesandcomments, fields, ":");
     printf("[%d]\n", f);
     for (i = 1; i <= f; i++) {
-      printf("[%d : %s]\n", i, fields[i]);
+      printf("[%d : \"%s\"]\n", i, fields[i]);
     }
     if (f < 2) {
       printf("cl2html : Error near \"%s\"\n", filesandcomments) | "cat 1>&2";
