@@ -46,6 +46,7 @@ endif
 INCLUDES = -I. \
 	   -I../../include/OM \
 	   -I$(AAFBASE)/ss-impl/ref \
+		 -I$(AAFBASE)/ref-impl/include \
        -I$(AAFBASE)/sss-impl/include
 
 # Optional libgsf support is enabled by LIBGSF_PATH variable
