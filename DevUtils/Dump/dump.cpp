@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -27,6 +27,7 @@
 //             19-June-1998
 //             12-August-1998
 //                April-2000
+//                May/June-2002
 //
 // Tom Ransdell 28-Sept-1998 Tom_Ransdell@avid.com
 //              Adapt to building on the Macintosh with CodeWarrior Pro3
