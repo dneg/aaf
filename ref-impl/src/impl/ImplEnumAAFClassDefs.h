@@ -29,12 +29,11 @@
  *
  ************************************************************************/
 
-class ImplAAFClassDef;
+class ImplAAFMetaDictionary;
 
-#ifndef __ImplAAFObject_h__
-#include "ImplAAFObject.h"
-#endif
+#include "ImplAAFClassDef.h"
 #include "OMReferenceContainerIter.h"
+
 
 
 class ImplEnumAAFClassDefs : public ImplAAFRoot
@@ -100,11 +99,11 @@ public:
 public:
   // SDK Internal 
   virtual AAFRESULT STDMETHODCALLTYPE
-	  SetIterator(ImplAAFObject *pObj,
+	  SetIterator(ImplAAFMetaDictionary *pObj,
 				OMReferenceContainerIterator<ImplAAFClassDef>* iterator);
 
 private:
-	ImplAAFObject*	_enumObj;
+	ImplAAFMetaDictionary*	_enumObj;
 	OMReferenceContainerIterator<ImplAAFClassDef>*	_iterator;
 };
 

@@ -39,8 +39,7 @@
 #include "aafErr.h"
 #include "AAFResult.h"
 #include "ImplAAFObjectCreation.h"
-#include "ImplAAFHeader.h"
-#include "ImplAAFDictionary.h"
+#include "ImplAAFMetaDictionary.h"
 
 extern "C" const aafClassID_t CLSID_EnumAAFClassDefs;
 
@@ -176,7 +175,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFClassDefs::SetIterator(
-                        ImplAAFObject *pObj,
+                        ImplAAFMetaDictionary *pObj,
                         OMReferenceContainerIterator<ImplAAFClassDef>* iterator)
 {
 	AAFRESULT ar = AAFRESULT_SUCCESS;
