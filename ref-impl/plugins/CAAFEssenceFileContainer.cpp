@@ -15,6 +15,7 @@
 #include "AAFDefUIDs.h"
 #include "aafErr.h"
 #include "AAFStoredObjectIDs.h"
+#include "AAFContainerDefs.h"
 
 #include <errno.h>
 
