@@ -45,6 +45,9 @@ CAAFServer* g_pAAFServer = &g_AAFInProcServer;
 #include <initguid.h>
 #include <coguid.h>	
 
+// temporarily include this definition here. This will be removed later.
+DEFINE_GUID(IID_IAAFEndian, 0x6BACC0C1, 0x6091, 0x11D2, 0x84, 0x1B, 0x00, 0x60, 0x08, 0x32, 0xAC, 0xB8);
+
 // Define struc
 typedef struct
 {
