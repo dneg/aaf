@@ -248,7 +248,23 @@ AAFRESULT STDMETHODCALLTYPE
 	*ppEnum = (ImplEnumAAFSegments *)CreateImpl(CLSID_EnumAAFSegments);
 	if(*ppEnum == NULL)
 		return(AAFRESULT_NOMEMORY);
-	(*ppEnum)->SetEnumStrongProperty(this, &_alternates);
+
+	XPROTECT()
+	{
+		OMStrongReferenceVectorIterator<ImplAAFSegment>* iter = 
+			new OMStrongReferenceVectorIterator<ImplAAFSegment>(_alternates);
+		if(iter == 0)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK((*ppEnum)->Initialize(&CLSID_EnumAAFSegments, this, iter));
+	}
+	XEXCEPT
+	{
+		if (*ppEnum)
+		  (*ppEnum)->ReleaseReference();
+		(*ppEnum) = 0;
+		return(XCODE());
+	}
+	XEND;
 
 	return(AAFRESULT_SUCCESS);
 }

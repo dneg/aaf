@@ -855,8 +855,11 @@ AAFRESULT STDMETHODCALLTYPE
 		
 	XPROTECT()
 	{
-		CHECK(theEnum->SetPluginDescriptor(this));
-		CHECK(theEnum->Reset());
+		OMStrongReferenceVectorIterator<ImplAAFLocator>* iter = 
+			new OMStrongReferenceVectorIterator<ImplAAFLocator>(_locators);
+		if(iter == 0)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(theEnum->Initialize(&CLSID_EnumAAFPluginLocators, this, iter));
 		*ppEnum = theEnum;
 	}
 	XEXCEPT
