@@ -7,7 +7,7 @@ SRC="src/*.cpp src/*.h"
 #
 OUT=docs/ObjectManager
 HFMT="c:/program files/autoduck/html.fmt"
-OMFMT="docs/OM.fmt"
+OMFMT="docs/html.fmt"
 CONT="docs/contents.d"
 #
 # html output
