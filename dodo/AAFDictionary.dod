@@ -31,8 +31,8 @@ AD_FORWARD_DECLARATION(EnumAAFCodecDefs)
 AD_FORWARD_DECLARATION(EnumAAFContainerDefs)
 AD_FORWARD_DECLARATION(AAFInterpolationDef)
 AD_FORWARD_DECLARATION(EnumAAFInterpolationDefs)
-AD_FORWARD_DECLARATION(AAFPluginDescriptor)
-AD_FORWARD_DECLARATION(EnumAAFPluginDescriptors)
+AD_FORWARD_DECLARATION(AAFPluginDef)
+AD_FORWARD_DECLARATION(EnumAAFPluginDefs)
 
 AD_CLASS_UUID(B1A21399, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
@@ -764,9 +764,9 @@ AD_XMETHOD1(RegisterPluginDef,
 
             [in],
             objIn,
-            AAFPluginDescriptor,
-            pPlugDesc,
-            plugin descriptor Object,
+            AAFPluginDef,
+            pPlugDef,
+            plugin definition Object,
 
             Add the Interpolation definition object to the header's list of definitions.)
 
@@ -781,8 +781,8 @@ AD_XMETHOD2(LookupPluginDef,
 
             [out\,retval],
             objOut,
-            AAFPluginDescriptor,
-            ppPlugDesc,
+            AAFPluginDef,
+            ppPlugDef,
             plugin descriptor object,
 
             Return the plugin descriptor object with the given id.)
@@ -792,7 +792,7 @@ AD_XMETHOD1(GetPluginDefs,
 
             [out\,retval],
             objOut,
-            EnumAAFPluginDescriptors,
+            EnumAAFPluginDefs,
             ppEnum,
             Definition Enumeration,
 

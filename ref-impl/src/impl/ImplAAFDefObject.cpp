@@ -43,8 +43,8 @@
 #include "ImplAAFDefObject.h"
 #endif
 
-#ifndef __ImplEnumAAFPluginDescriptors_h__
-#include "ImplEnumAAFPluginDescriptors.h"
+#ifndef __ImplEnumAAFPluginDefs_h__
+#include "ImplEnumAAFPluginDefs.h"
 #endif
 
 #ifndef __ImplAAFDictionary_h_
@@ -55,7 +55,7 @@
 #include <string.h>
 #include "ImplAAFObjectCreation.h"
 #include "aafErr.h"
-#include "ImplAAFPluginDescriptor.h"
+#include "ImplAAFPluginDef.h"
 #include "aafUtils.h"
 #include "AAFDefUIDs.h"
 
@@ -64,13 +64,11 @@ extern "C" const aafClassID_t CLSID_EnumAAFPluginDescriptors;
 ImplAAFDefObject::ImplAAFDefObject ()
 : _name           (PID_DefinitionObject_Name,           "Name"),
   _description    (PID_DefinitionObject_Description,    "Description"),
-  _identification (PID_DefinitionObject_Identification, "Identification"),
-  _descriptors(    PID_DefinitionObject_PluginDescriptors, "PluginDescriptors")
+  _identification (PID_DefinitionObject_Identification, "Identification")
 {
   _persistentProperties.put(_name.address());
   _persistentProperties.put(_description.address());
   _persistentProperties.put(_identification.address());
-  _persistentProperties.put(_descriptors.address());
 }
 
 
@@ -246,191 +244,7 @@ AAFRESULT STDMETHODCALLTYPE
   return AAFRESULT_SUCCESS;
 }
 
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDefObject::AppendPluginDef (
-      ImplAAFPluginDescriptor *pPluginDescriptor)
-{
-	aafUID_t	*tmp, newUID;
-	aafInt32	oldCount;
-	aafInt32	newCount;
-	static const aafUID_t nullID = { 0 };
 
-
-//!!!	if(pPluginDescriptor == NULL)
-//		return AAFRESULT_NULL_PARAM;
-
-	XPROTECT()
-	{
-		oldCount = _descriptors.count();
-		if (oldCount == 1) {
-			aafUID_t first;
-			_descriptors.getValueAt(&first, 0);
-		  	if(EqualAUID(&first, &nullID))	//!!! Handle non-optional props
-		  	{									//!!!
-				oldCount = 0;					//!!!
-			}									//!!!
-		}
-		newCount = oldCount + 1;
-		if(pPluginDescriptor == NULL)	//!!!
-			newUID = nullID;			//!!!
-		else
-		{
-			CHECK(pPluginDescriptor->GetAUID(&newUID));
-		}
-		tmp = new aafUID_t[newCount];
-		if(tmp == NULL)
-			RAISE(AAFRESULT_NOMEMORY);
-		if(oldCount != 0)
-		{
-			_descriptors.copyToBuffer(tmp, oldCount * sizeof(aafUID_t));
-		}
-		tmp[newCount - 1] = newUID;
-		_descriptors.setValue(tmp, newCount * sizeof(aafUID_t));
-		delete [] tmp;
-	}
-	XEXCEPT
-	{
-		if(tmp != NULL)
-			delete [] tmp;
-	}
-	XEND;
-
-	return AAFRESULT_SUCCESS;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDefObject::PrependPluginDef (
-      ImplAAFPluginDescriptor *pPluginDescriptor)
-{
-	aafUID_t	*tmp = NULL, newUID;
-	aafInt32	oldCount;
-	aafInt32	newCount;
-
-	if(pPluginDescriptor == NULL)
-		return AAFRESULT_NULL_PARAM;
-	
-	XPROTECT()
-	{
-		oldCount = _descriptors.count();
-		newCount = oldCount + 1;
-		CHECK(pPluginDescriptor->GetAUID(&newUID));
-		tmp = new aafUID_t[newCount];
-		if(tmp == NULL)
-			RAISE(AAFRESULT_NOMEMORY);
-		if(oldCount != 0)
-			_descriptors.copyToBuffer(&tmp[1], oldCount * sizeof(aafUID_t));
-		tmp[0] = newUID;
-		_descriptors.setValue(tmp, newCount * sizeof(aafUID_t));
-		delete [] tmp;
-	}
-	XEXCEPT
-	{
-		if(tmp != NULL)
-			delete [] tmp;
-	}
-	XEND;
-
-	return AAFRESULT_SUCCESS;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDefObject::GetPluginDefs (
-      ImplEnumAAFPluginDescriptors **ppEnum)
-{
-	if(ppEnum == NULL)
-		return(AAFRESULT_NULL_PARAM);
-
-	*ppEnum = (ImplEnumAAFPluginDescriptors *)CreateImpl (CLSID_EnumAAFPluginDescriptors);
-	if(*ppEnum == NULL)
-		return(AAFRESULT_NOMEMORY);
-	(*ppEnum)->SetEnumProperty(this, &_descriptors);
-
-	return(AAFRESULT_SUCCESS);
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDefObject::CountPluginDefs
-        (aafUInt32 * pResult)
-{
-	if (! pResult)
-		return AAFRESULT_NULL_PARAM;
-	return AAFRESULT_NOT_IMPLEMENTED;
-// !!Put this back when we have weak references
-//	*pResult = _descriptors.count();
-//	return AAFRESULT_SUCCESS;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDefObject::InsertPluginDefAt
-        (aafUInt32 index,
-		 ImplAAFPluginDescriptor * pPluginDescriptor)
-{
-	if (! pPluginDescriptor)
-		return AAFRESULT_NULL_PARAM;
-	
-	aafUInt32 count;
-	AAFRESULT hr;
-	hr = CountPluginDefs (&count);
-	if (AAFRESULT_FAILED (hr))
-		return hr;
-	
-	if (index > count)
-		return AAFRESULT_BADINDEX;
-	
-	return AAFRESULT_NOT_IMPLEMENTED;
-// !!Put this back when we have weak references
-//	_descriptors.insertAt(pPluginDescriptor, index);
-//	return AAFRESULT_SUCCESS;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDefObject::GetPluginDefAt
-        (aafUInt32 index,
-		 ImplAAFPluginDescriptor ** ppPluginDescriptor)
-{
-	if (! ppPluginDescriptor)
-		return AAFRESULT_NULL_PARAM;
-	
-	aafUInt32 count;
-	AAFRESULT hr;
-	hr = CountPluginDefs (&count);
-	if (AAFRESULT_FAILED (hr))
-		return hr;
-	
-	if (index >= count)
-		return AAFRESULT_BADINDEX;
-	
-	return AAFRESULT_NOT_IMPLEMENTED;
-// !!Put this back when we have weak references
-//	_descriptors.getValueAt(ppPluginDescriptor, index);
-//	return AAFRESULT_SUCCESS;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDefObject::RemovePluginDefAt
-        (aafUInt32 index)
-{
-	aafUInt32 count;
-	AAFRESULT hr;
-	hr = CountPluginDefs (&count);
-	if (AAFRESULT_FAILED (hr))
-		return hr;
-	
-	if (index >= count)
-		return AAFRESULT_BADINDEX;
-	
-	return AAFRESULT_NOT_IMPLEMENTED;
-// !!Put this back when we have weak references
-//	_descriptors.removeAt(index);
-//	return AAFRESULT_SUCCESS;
-}
 
 const OMUniqueObjectIdentification&
   ImplAAFDefObject::identification(void) const
