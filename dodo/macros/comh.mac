@@ -683,7 +683,7 @@ private:
 #c Macro Arg 16: method description
 #c
 #startm AD_XCONSTRUCTOR3 16
-    C.this-module (.%07-adornment%03 .%02-indirection %04,
+    C.this-module (.%02-adornment%03 .%02-indirection %04,
 		.%07-adornment%08 .%07-indirection %09,
 		.%12-adornment%13 .%12-indirection %14);\
 #endm
