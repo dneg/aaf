@@ -39,6 +39,7 @@ using namespace std;
 #include "AAFResult.h"
 #include "ModuleTest.h"
 #include "AAFDefUIDs.h"
+#include "AAFExtEnum.h"
 
 #include "CAAFBuiltinDefs.h"
 
@@ -123,6 +124,11 @@ static const char KLVfrowney[] =        /* 16x16 frowney face */
   "      ****     ";
 
 
+
+const aafCharacter* AttributeNames[]  = { L"Attribute A Name", L"Attribute B Name" };
+const aafCharacter* AttributeValues[] = { L"Attribute A Value", L"Attribute B Value" };
+
+
 static aafFrameOffset_t 	TCstartFrame = 108000;	// One hour
 static aafDropType_t 		TCdrop = kAAFTcNonDrop;
 static aafUInt16		 	TCfps = 30;
@@ -161,6 +167,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFDictionary*  				pDictionary = NULL;
   IAAFMob						*pMob = NULL;
   IAAFMob						*pMob2 = NULL;
+  IAAFMob2                                              *pMobInterface2 = NULL;
   IAAFTimelineMobSlot 			*newSlot = NULL;
   IAAFSegment					*seg = NULL;
   IAAFSourceClip				*sclp = NULL;
@@ -547,6 +554,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		enumTaggedVal->Release();
 		enumTaggedVal = NULL;
 		
+
+  	  // Check the Mob2 attribute and usage code implementations.
+ 	  // Need IAAFMob2 for that;
+	 checkResult( pMob->QueryInterface( IID_IAAFMob2, reinterpret_cast<void**>(&pMobInterface2) ) );
+	 checkResult( pMobInterface2->AppendAttribute( AttributeNames[0], AttributeValues[0] ) );
+	 checkResult( pMobInterface2->AppendAttribute( AttributeNames[1], AttributeValues[1] ) );
+	 checkResult( pMobInterface2->SetUsageCode( kAAFUsage_SubClip ) );
+
 	  // Add the mob to the file.
 	  checkResult(pHeader->AddMob(pMob));
 
@@ -584,6 +599,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  aafCharacter dest_filename[128];
 	  wcscpy(dest_filename, pFileName);
 	  wcscat(dest_filename, L"_clone");
+
+
 	  // Remove the previous test file if any.
 	  RemoveTestFile(dest_filename);
 	  checkResult(AAFFileOpenNewModify(dest_filename, 0, &ProductInfo, &spDestFile));
@@ -618,6 +635,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   if (pMob2)
     pMob2->Release();
+
+  if (pMobInterface2)
+    pMobInterface2->Release();
 
   if (pDictionary)
     pDictionary->Release();
@@ -994,12 +1014,82 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			taggedVal = NULL;
 		  }		
 
+
+
+		  // Check attributes and usage code.
+		  // Need IAAFMob2 for that;
+		  IAAFMob2* aMobInterface2 = 0;
+		  checkResult( aMob->QueryInterface( IID_IAAFMob2, reinterpret_cast<void**>(&aMobInterface2) ) );
+		  
+		  IEnumAAFTaggedValues* pAttributesEnum = 0;
+		  checkResult( aMobInterface2->GetAttributes( &pAttributesEnum ) );
+
+		  int attributeCount = 0;
+		  HRESULT atthr = AAFRESULT_SUCCESS;
+		  IAAFTaggedValue* pAttribute = 0;
+		  for( atthr = pAttributesEnum->NextOne( &pAttribute );
+		       atthr == AAFRESULT_SUCCESS;
+		       atthr = pAttributesEnum->NextOne( &pAttribute ) ) {
+
+		    aafUInt32 bufLen = 0;
+		    checkResult( pAttribute->GetNameBufLen(&bufLen) );
+
+		    // "name" is 500 chars long... sized more than
+		    // large enough for a simple test.
+		    checkExpression( attributeCount < 2, AAFRESULT_TEST_FAILED );
+		    checkResult( pAttribute->GetName( name, bufLen ) );
+		    checkExpression( wcscmp(name, AttributeNames[attributeCount] ) == 0, AAFRESULT_TEST_FAILED );
+
+
+		    // check the value
+
+		    IAAFTypeDef* pAttributeTypeDef = NULL;
+		    checkResult( pAttribute->GetTypeDefinition( &pAttributeTypeDef ) );
+		    // It should be a string.
+		    IAAFTypeDefString* pTDString = NULL;
+		    checkResult( pAttributeTypeDef->QueryInterface( IID_IAAFTypeDefString, reinterpret_cast<void**>(&pTDString) ) );
+		    checkResult( pAttribute->GetValue( sizeof(name),
+		    			       reinterpret_cast<aafDataBuffer_t>(name), &bufLen ) );
+		    checkExpression( wcscmp( AttributeValues[attributeCount], name ) == 0, AAFRESULT_TEST_FAILED );
+		    
+
+		    pAttributeTypeDef->Release();
+		    pAttributeTypeDef = NULL;
+
+		    pTDString->Release();
+		    pTDString = NULL;
+
+		    pAttribute->Release();
+		    pAttribute = NULL;
+
+
+		    attributeCount++;
+		  }
+
+		  checkExpression( 2 == attributeCount && atthr == AAFRESULT_NO_MORE_OBJECTS,
+				   AAFRESULT_TEST_FAILED );
+
+		  aafUID_t code;
+		  checkResult( aMobInterface2->GetUsageCode( &code ) );
+		  checkExpression( memcmp( &code, &kAAFUsage_SubClip, sizeof(code) ) == 0, AAFRESULT_TEST_FAILED );
+
+
+
+		  pAttributesEnum->Release();
+		  pAttributesEnum = NULL;
+		    
 		  enumTaggedVal->Release();
 		  enumTaggedVal = NULL;
 			
+		  aMobInterface2->Release();
+		  aMobInterface2 = NULL;
 		  aMob->Release();
 		  aMob = NULL;
 		}
+
+
+
+
 	}
   catch (HRESULT& rResult)
 	{
