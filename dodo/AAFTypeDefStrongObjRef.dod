@@ -3,7 +3,7 @@ AAFTypeDefStrongObjRef\
 #endm
 #c
 #startm .parent-module 0
-AAFTypeDef\
+AAFTypeDefObjectRef\
 #endm
 #c
 #import ./AAFTypeDefObjectRef.exp
