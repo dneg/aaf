@@ -125,9 +125,9 @@ public:
   AAFRESULT SetString (aafCharacter_constptr  pCharSet,
 		       OMWideStringProperty& theStoredString );
   AAFRESULT GetString( aafCharacter *  pCharSet, aafUInt32 bufSize,
-		       OMWideStringProperty& theStoredString );
+		       bool isOptional, OMWideStringProperty& theStoredString );
   AAFRESULT GetStringBufLen( aafUInt32 *  pBufSize,
-			     OMWideStringProperty& theStoredString );
+			     bool isOptional, OMWideStringProperty& theStoredString );
     
   OMWideStringProperty _mimeType;
   OMWideStringProperty _charSet;

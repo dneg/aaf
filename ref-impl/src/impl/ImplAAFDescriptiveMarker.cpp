@@ -47,13 +47,19 @@ ImplAAFDescriptiveMarker::ImplAAFDescriptiveMarker ()
 
 
 ImplAAFDescriptiveMarker::~ImplAAFDescriptiveMarker ()
-{}
+{
+  ImplAAFDescriptiveFramework* pFramework = _descriptiveFramework.clearValue();
+  if ( pFramework ) {
+    pFramework->ReleaseReference();
+    pFramework = 0;
+  }
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDescriptiveMarker::Initialize ()
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_SUCCESS;
 }
 
 
