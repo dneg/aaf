@@ -128,16 +128,27 @@ AAFRESULT ImplAAFTimelineMobSlot::FindSegment(aafPosition_t offset,
 		CHECK(GetSegment(&tmpSegment));
 		*srcRate = tmpSrcRate;
 		
-		/* Normalize the requested position on the track by adding
-		* the StartPosition (1.x) or Origin (2.x) to it.  The origin
-		* was acquired above with omfiTrackGetInfo().
-		* The StartPosition/Origin will usually be 0.  It may be 
-		* negative, if more data before the original "origin" was 
-		* digitized later.
-		*/
-		if (!IsInt64Positive(origin))
-			MultInt32byInt64(-1, origin, &origin);
-		AddInt64toInt64(origin, &offset);
+		// The origin of a track is normally zero - ie. it is
+		// at the first sample position.  If samples are
+		// inserted at the start of the track, then the origin
+		// shifts to the right and is greater than zero.  If
+		// samples are removed from the start of the track the
+		// origin shifts to the left and is less than zero.
+		//
+		// External sample references (by SourceClip's) into
+		// the track are always relative to the origin.  This
+		// ensures that external references do not have to be
+		// adjusted when samples are inserted or removed.
+		//
+		// For example, if a SourceClip references sample
+		// number 10, then someone inserts 5 samples, the
+		// origin and the referenced sample shift 5 positions
+		// to the right.  When the source clip fetches (what
+		// it considers to be) sample 10, it actually gets
+		// sample 10+5 = 15.
+		// 
+		// All that, to explain the following line of code:
+   		AddInt64toInt64(origin, &offset);
 		
 		CHECK(tmpSegment->FindSubSegment(offset, &begPos, segment, &foundClip));
 		if(!foundClip)
