@@ -48,6 +48,7 @@ typedef IAAFSmartPointer<IAAFComponent>             IAAFComponentSP;
 typedef IAAFSmartPointer<IAAFContainerDef>          IAAFContainerDefSP;
 typedef IAAFSmartPointer<IAAFDataDef>               IAAFDataDefSP;
 typedef IAAFSmartPointer<IAAFDefObject>             IAAFDefObjectSP;
+typedef IAAFSmartPointer<IAAFMetaDefinition>        IAAFMetaDefinitionSP;
 typedef IAAFSmartPointer<IAAFDictionary>            IAAFDictionarySP;
 typedef IAAFSmartPointer<IAAFFile>                  IAAFFileSP;
 typedef IAAFSmartPointer<IAAFFiller>                IAAFFillerSP;
@@ -374,8 +375,8 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* SP of def to use with Init */ IAAFTypeDefRenameSP,
 				  /* Init() invocation */
 				  Initialize (kTestTypeID, defs.tdUInt8(), L"TestUInt8"),
-				  /* IID of type to QI */          IID_IAAFDefObject,
-				  /* SP for type to QI */          IAAFDefObjectSP,
+				  /* IID of type to QI */          IID_IAAFMetaDefinition,
+				  /* SP for type to QI */          IAAFMetaDefinitionSP,
 				  /* IID of def to register */     IID_IAAFTypeDef,
 				  /* SP for def to register */     IAAFTypeDefSP,
 				  /* reg method on pDict */        RegisterTypeDef);
@@ -502,8 +503,8 @@ static HRESULT LookupDefs (IAAFDictionary * pDict)
 				/* IID of def for lookup */    IID_IAAFTypeDef,
 				/* SP of def to lookup */      IAAFTypeDefSP,
 				/* lookup method on pDict */   LookupTypeDef,
-				/* IID of def for name */      IID_IAAFDefObject,
-				/* SP of def for name */       IAAFDefObjectSP,
+				/* IID of def for name */      IID_IAAFMetaDefinition,
+				/* SP of def for name */       IAAFMetaDefinitionSP,
 				/* SP of enumerator */         IEnumAAFTypeDefsSP,
 				/* get-enum method on pDict */ GetTypeDefs);
 
@@ -891,8 +892,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		  IAAFClassDefSP cd;
 		  while (SUCCEEDED (pClassDefEnum->NextOne (&cd)))
 			{
-			  IAAFDefObjectSP def;
-			  checkResult(cd->QueryInterface(IID_IAAFDefObject,
+			  IAAFMetaDefinitionSP def;
+			  checkResult(cd->QueryInterface(IID_IAAFMetaDefinition,
 											 (void **) &def));
 			  aafUID_t classid;
 			  checkResult (def->GetAUID (&classid));
