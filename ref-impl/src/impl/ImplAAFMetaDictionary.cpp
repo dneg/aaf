@@ -1335,21 +1335,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-   ImplAAFMetaDictionary::CreateTypeDefStream (
-      aafUID_constref typeID,
-      aafCharacter_constptr pTypeName,
-      aafCharacter_constptr pDescription,
-      ImplAAFTypeDef *pElementType,
-      ImplAAFTypeDefStream ** ppNewStream)
-{
-  if (!pTypeName || !pElementType || !ppNewStream) 
-    return AAFRESULT_NULL_PARAM;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
    ImplAAFMetaDictionary::CreateTypeDefString (
       aafUID_constref typeID,
       aafCharacter_constptr pTypeName,

@@ -218,7 +218,7 @@ ImplAAFBuiltinClasses::sBuiltinPropTable[] = \
 #else
 
 // Streams are not yet implemented.
-#define kAAFTypeID_DataStream kAAFTypeID_UInt8Array
+//#define kAAFTypeID_DataStream kAAFTypeID_UInt8Array
 
 // String arrays are currently implemented as a single
 // null-character-delimited string
@@ -264,6 +264,7 @@ const /*static*/ aafUID_t * ImplAAFBuiltinClasses::sAxClassIDs[] =
   &AUID_AAFTypeDefIndirect,
   &AUID_AAFTypeDefOpaque,
   &AUID_AAFTypeDefEnum,
+  &AUID_AAFTypeDefStream,
   &AUID_AAFTypeDefRename,
   &AUID_AAFTypeDefStrongObjRef,
 

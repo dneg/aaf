@@ -863,6 +863,7 @@ const aafUID_t * ImplAAFDictionary::sAxiomaticTypeGuids[] =
   & kAAFTypeID_UInt8Array8,
   & kAAFTypeID_Indirect,
   & kAAFTypeID_Opaque,
+  & kAAFTypeID_Stream,
   & kAAFTypeID_VersionType,
   & kAAFTypeID_RGBAComponent,
   & kAAFTypeID_MobID,
@@ -2271,19 +2272,6 @@ AAFRESULT STDMETHODCALLTYPE
 {
   // Defer to the meta dictionary.
   return(metaDictionary()->CreateTypeDefRename(typeID, pTypeName, pDescription, pBaseType, ppNewRename));
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-   ImplAAFDictionary::CreateTypeDefStream (
-      aafUID_constref typeID,
-      aafCharacter_constptr pTypeName,
-      aafCharacter_constptr pDescription,
-      ImplAAFTypeDef *pElementType,
-      ImplAAFTypeDefStream ** ppNewStream)
-{
-  // Defer to the meta dictionary.
-  return(metaDictionary()->CreateTypeDefStream(typeID, pTypeName, pDescription, pElementType, ppNewStream));
 }
 
 

@@ -50,7 +50,6 @@ class ImplAAFTypeDefVariableArray;
 class ImplAAFTypeDefFixedArray;
 class ImplAAFTypeDefRecord;
 class ImplAAFTypeDefRename;
-class ImplAAFTypeDefStream;
 class ImplAAFTypeDefString;
 class ImplAAFTypeDefStrongObjRef;
 class ImplAAFTypeDefWeakObjRef;
@@ -323,14 +322,6 @@ public:
       aafCharacter_constptr pDescription,
       ImplAAFTypeDef *pBaseType,
       ImplAAFTypeDefRename ** ppNewRename);
-
-  virtual AAFRESULT STDMETHODCALLTYPE
-   CreateTypeDefStream (
-      aafUID_constref typeID,
-      aafCharacter_constptr pTypeName,
-      aafCharacter_constptr pDescription,
-      ImplAAFTypeDef *pElementType,
-      ImplAAFTypeDefStream ** ppNewStream);
 
   virtual AAFRESULT STDMETHODCALLTYPE
    CreateTypeDefString (

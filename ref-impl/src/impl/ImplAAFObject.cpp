@@ -965,8 +965,6 @@ void ImplAAFObject::pvtSetSoid (const aafUID_t & id)
 //   if elem is fixed data  VariableData(sizeof elem)
 //   else                   <not yet supported; maybe never!>
 //
-// AAFTypeDefStream			<not yet supported>
-//
 // AAFTypeDefString			VariableData(sizeof elem)
 //
 // AAFTypeDefStrongObjRef	OMStrongReferenceProperty<AAFObject>
