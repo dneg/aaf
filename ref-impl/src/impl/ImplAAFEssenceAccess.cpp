@@ -146,7 +146,8 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 {
 	IUnknown				*dataObj = NULL;
 	IUnknown				*iFileMob = NULL;
-	IUnknown				*iAccess = NULL;
+	IAAFEssenceAccess		*iAccess = NULL;
+	IUnknown				*iUnk = NULL;
 	IAAFEssenceDataStream	*edStream = NULL;
 	IAAFPlugin				*plugin = NULL;
 	IAAFEssenceContainer	*container = NULL;
@@ -210,7 +211,10 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 		createBlock.slotID = DEFAULT_FILE_SLOT;
 		createBlock.sampleRate = sampleRate;
 		
-		iAccess = static_cast<IUnknown *> (this->GetContainer());
+		iUnk = static_cast<IUnknown *> (this->GetContainer());
+		CHECK(iUnk->QueryInterface(IID_IAAFEssenceAccess, (void **)&iAccess));
+		iUnk->Release();
+		iUnk = NULL;
 		CHECK(_codec->SetEssenceAccess(iAccess));
 		// Now _codec is holding onto a reference to THIS, and we have a reference to _codec
 		// Creating a cycle which will never free.  I am decrementing the AAFEssenceAccess reference
@@ -227,6 +231,7 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 		{
 			CHECK(CreateFileMob(dataHead, DEFAULT_FILE_SLOT, &fileMobUID, mediaKind, editRate, sampleRate,
 				NULL, &_dataFileMob));
+			_dataFileMob->AcquireReference();	//!!!Leaking here?
 		}
 		else
 			_dataFileMob = NULL;
@@ -314,7 +319,7 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 		
 		iFileMob = static_cast<IUnknown *> (_compFileMob->GetContainer());	// Codec knowns about compFilemob only
 		CHECK(_codec->Create(iFileMob, _variety, _stream, 1, &createBlock));
-		(void)(_codec->SetCompression(enable));
+		(void)(_codec->SetCompressionEnabled(enable == kSDKCompressionEnable ? AAFTrue : AAFFalse));
 
 //		if(dataObj != NULL)
 //		{
@@ -560,7 +565,9 @@ AAFRESULT STDMETHODCALLTYPE
 	IUnknown				*edUnknown = NULL;
 	IAAFEssenceContainer	*container = NULL;
 	IAAFPlugin				*plug = NULL;
-	IUnknown				*iFileMob = NULL, *iAccess = NULL;
+	IUnknown				*iUnk = NULL;
+	IUnknown				*iFileMob = NULL;
+	IAAFEssenceAccess		*iAccess = NULL;
 	ImplAAFDictionary		*dict = NULL;
 	ImplAAFContainerDef		*containerDef = NULL;
 	ImplAAFContentStorage	*cStore = NULL;
@@ -622,7 +629,10 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(plugins->MakeCodecFromEssenceDesc(essenceDescClass, &_codec));
 
 
-		iAccess = static_cast<IUnknown *> (this->GetContainer());
+		iUnk = static_cast<IUnknown *> (this->GetContainer());
+		CHECK(iUnk->QueryInterface(IID_IAAFEssenceAccess, (void **)&iAccess));
+		iUnk->Release();
+		iUnk = NULL;
 		CHECK(_codec->SetEssenceAccess(iAccess));
 		// Now _codec is holding onto a reference to THIS, and we have a reference to _codec
 		// Creating a cycle which will never free.  I am decrementing the AAFEssenceAccess reference
@@ -806,6 +816,8 @@ AAFRESULT STDMETHODCALLTYPE
 			plugins->ReleaseReference();
 		if(edStream != NULL)
 			edStream->Release();
+		if(iUnk != NULL)
+			iUnk->Release();
 		if(iAccess != NULL)
 			iAccess->Release();
 //		if(edUnknown != NULL)
@@ -814,32 +826,30 @@ AAFRESULT STDMETHODCALLTYPE
 			container->Release();
 		if(plug != NULL)
 			plug->Release();
-		if(dict == NULL)
+		if(dict != NULL)
 			dict->ReleaseReference();
-		if(containerDef == NULL)
+		if(containerDef != NULL)
 			containerDef->ReleaseReference();
-		if(cStore == NULL)
+		if(cStore != NULL)
 			cStore->ReleaseReference();
-		if(slot == NULL)
+		if(slot != NULL)
 			slot->ReleaseReference();
-		if(seg == NULL)
+		if(seg != NULL)
 			seg->ReleaseReference();
-		if(sourceInfo == NULL)
+		if(sourceInfo != NULL)
 			sourceInfo->ReleaseReference();
-		if(fileMob == NULL)
+		if(fileMob != NULL)
 			fileMob->ReleaseReference();
-		if(dataHead == NULL)
+		if(dataHead != NULL)
 			dataHead->ReleaseReference();
-		if(essenceData == NULL)
+		if(essenceData != NULL)
 			essenceData->ReleaseReference();
-		if(compHead == NULL)
+		if(compHead != NULL)
 			compHead->ReleaseReference();
-		if(enumLocate == NULL)
+		if(enumLocate != NULL)
 			enumLocate->ReleaseReference();
-		if(pLoc == NULL)
+		if(pLoc != NULL)
 			pLoc->ReleaseReference();
-		if(cStore == NULL)
-			cStore->ReleaseReference();
 	}
 	XEND
 	
@@ -993,7 +1003,7 @@ AAFRESULT ImplAAFEssenceAccess::SetEssenceDestination(
 }
 
  //Sets which variety of the codec ID is to be used.)
-AAFRESULT ImplAAFEssenceAccess::SetEssenceCodecVariety(aafUID_t variety)
+AAFRESULT ImplAAFEssenceAccess::SetEssenceCodecFlavour(aafUID_t variety)
 {
 	_variety = variety;
 	return AAFRESULT_SUCCESS;
@@ -1038,7 +1048,7 @@ AAFRESULT STDMETHODCALLTYPE
 /****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::WriteMultiSamples (aafInt16  arrayElemCount,
-                           aafmMultiXfer_t *xferArray)
+                           aafmMultiXfer_t *xferArray, aafmMultiResult_t *resultArray)
 {
 
 	aafAssert((_openType == kAAFCreated) ||
@@ -1046,7 +1056,7 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		CHECK (_codec->WriteBlocks(deinterleave, arrayElemCount, xferArray));
+		CHECK (_codec->WriteBlocks(deinterleave, arrayElemCount, xferArray, resultArray));
 	}
 	XEXCEPT
 	XEND
@@ -1066,7 +1076,8 @@ AAFRESULT STDMETHODCALLTYPE
                            aafDataBuffer_t  buffer,
                            aafUInt32  buflen)
 {
-	aafmMultiXfer_t xfer;
+	aafmMultiXfer_t		xfer;
+	aafmMultiResult_t	result;
 
 	aafAssert(_numChannels == 1, _mainFile,
 		AAFRESULT_SINGLE_CHANNEL_OP);
@@ -1080,9 +1091,9 @@ AAFRESULT STDMETHODCALLTYPE
 		xfer.numSamples = nSamples;
 		xfer.buflen = buflen;
 		xfer.buffer = buffer;
-		xfer.bytesXfered = 0;
+		result.bytesXfered = 0;
 	
-		CHECK (_codec->WriteBlocks(deinterleave, 1, &xfer));
+		CHECK (_codec->WriteBlocks(deinterleave, 1, &xfer, &result));
 	}
 	XEXCEPT
 	XEND
@@ -1105,7 +1116,7 @@ AAFRESULT STDMETHODCALLTYPE
                            aafDataBuffer_t  buffer,
                            aafUInt32  sampleSize)
 {
-	IAAFEssenceSampleStream	*pSamples = NULL;
+	IAAFEssenceStream	*pSamples = NULL;
 
 	aafAssert(buffer != NULL, _mainFile, AAFRESULT_BADDATAADDRESS);
 	aafAssert((_openType == kAAFCreated) ||
@@ -1113,8 +1124,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(_codec->QueryInterface(IID_IAAFEssenceSampleStream, (void **)&pSamples));
-		CHECK(pSamples->WriteRawData (nSamples, buffer, sampleSize));
+//!!!		CHECK(_codec->QueryInterface(IID_IAAFEssenceStream, (void **)&pSamples));
+		CHECK(_codec->WriteRawData (nSamples, buffer, sampleSize));
 		if(pSamples != NULL)
 			pSamples->Release();
 	}
@@ -1144,13 +1155,13 @@ AAFRESULT STDMETHODCALLTYPE
                            aafUInt32 *samplesRead,
                            aafUInt32 *bytesRead)
 {
-	IAAFEssenceSampleStream	*pSamples = NULL;
+	IAAFEssenceStream		*pSamples = NULL;
 
 	aafAssert(buffer != NULL, _mainFile, AAFRESULT_BADDATAADDRESS);
 	XPROTECT()
 	{
-		CHECK(_codec->QueryInterface(IID_IAAFEssenceSampleStream, (void **)&pSamples));
-		CHECK(pSamples->ReadRawData (nSamples, buflen, buffer, bytesRead, samplesRead));
+//!!!		CHECK(_codec->QueryInterface(IID_IAAFEssenceSampleStream, (void **)&pSamples));
+		CHECK(_codec->ReadRawData (nSamples, buflen, buffer, bytesRead, samplesRead));
 		if(pSamples != NULL)
 			pSamples->Release();
 	}
@@ -1213,7 +1224,8 @@ AAFRESULT STDMETHODCALLTYPE
 	aafAssertMediaInitComplete(_mainFile);
 	main = _mainFile;
 #endif
-	IUnknown					*iCompFM = NULL;
+	IUnknown					*iUnk = NULL;
+	IAAFSourceMob				*iCompFM = NULL;
 
 
 	XPROTECT()
@@ -1225,7 +1237,10 @@ AAFRESULT STDMETHODCALLTYPE
 		{
 			if(_dataFileMob != _compFileMob && _dataFileMob != NULL)	// codec will flush out _compFileMob, must be told to do the other
 			{
-				iCompFM = static_cast<IUnknown *> (_dataFileMob->GetContainer());
+				iUnk = static_cast<IUnknown *> (_dataFileMob->GetContainer());
+				CHECK(iUnk->QueryInterface(IID_IAAFSourceMob, (void **)&iCompFM));
+				iUnk->Release();
+				iUnk = NULL;
 				CHECK(_codec->CompleteWrite(iCompFM));
 			}
 			else
@@ -1344,6 +1359,8 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
+		if(iUnk != NULL)
+			iUnk->Release();
 	}
 	XEND
 	
@@ -1531,7 +1548,8 @@ AAFRESULT STDMETHODCALLTYPE
                            aafUInt32*  samplesRead,
                            aafUInt32*  bytesRead)
 {
-	aafmMultiXfer_t xfer;
+	aafmMultiXfer_t		xfer;
+	aafmMultiResult_t	result;
 //!!!	aafInt64		one;
 	
 	aafAssert(buffer != NULL, _mainFile, AAFRESULT_NULL_PARAM);
@@ -1547,17 +1565,17 @@ AAFRESULT STDMETHODCALLTYPE
 		xfer.numSamples = nSamples;
 		xfer.buflen = buflen;
 		xfer.buffer = buffer;
-		xfer.bytesXfered = 0;
+		result.bytesXfered = 0;
 	
-		CHECK(_codec->ReadBlocks(deinterleave, 1, &xfer));
+		CHECK(_codec->ReadBlocks(deinterleave, 1, &xfer, &result));
 	}
 	XEXCEPT
 	{
-		*bytesRead = xfer.bytesXfered;
+		*bytesRead = result.bytesXfered;
 	}
 	XEND
 	
-	*bytesRead = xfer.bytesXfered;
+	*bytesRead = result.bytesXfered;
 
 	return (AAFRESULT_SUCCESS);
 }
@@ -1572,11 +1590,11 @@ AAFRESULT STDMETHODCALLTYPE
 /****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::ReadMultiSamples (aafInt16  elemCount,
-                           aafmMultiXfer_t *xferArray)
+                           aafmMultiXfer_t *xferArray, aafmMultiResult_t *resultArray)
 {
 	aafAssert(xferArray != NULL, _mainFile, AAFRESULT_NULL_PARAM);
 
-	return (_codec->ReadBlocks(deinterleave, elemCount, xferArray));
+	return (_codec->ReadBlocks(deinterleave, elemCount, xferArray, resultArray));
 }
 
 	//@comm arrayElemCount is the size of the array or transfer operations.
@@ -1588,15 +1606,13 @@ AAFRESULT STDMETHODCALLTYPE
 /****/
  AAFRESULT STDMETHODCALLTYPE
    ImplAAFEssenceAccess::ReadFractionalSample (
-                           aafUInt32 nBytes,
 						   aafUInt32 bufLen,
                            aafDataBuffer_t  buffer,
                            aafUInt32*  bytesRead)
 {
 	aafAssert(buffer != NULL, _mainFile, AAFRESULT_NULL_PARAM);
-	aafAssert(nBytes <= bufLen, _mainFile, AAFRESULT_SMALLBUF);
 
-	return (_codec->ReadFractionalSample(nBytes, buffer, bytesRead));
+	return (_codec->ReadFractionalSample(bufLen, buffer, bytesRead));
 }
 
 	//@comm This function allows reading
@@ -1609,7 +1625,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::SeektoEditFrame (aafInt64  /*frameNum*/)
+    ImplAAFEssenceAccess::Seek (aafInt64  /*frameNum*/)
 {
 #if FULL_TOOLKIT
 	aafInt64		one;
@@ -1848,7 +1864,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(_codec->QueryInterface(IID_IAAFPlugin, (void **)&plug));
-		CHECK(plug->GetPluggableID(codecID));
+//!!!		CHECK(plug->GetPluggableID(codecID));
 		plug->Release();
 		plug = NULL;
 	}
@@ -1987,7 +2003,7 @@ ImplAAFEssenceAccess::CreateContainerDef (ImplAAFHeader *head)
 				
 
 				CHECK(plugins->GetPluginInstance(_fileFormat, &plug));
-				CHECK(plug->GetDefinitionObject (dictInterface, &pDef));
+				CHECK(plug->GetIndexedDefinitionObject (/*!!!*/0, dictInterface, &pDef));
 				CHECK(pDef->QueryInterface(IID_IAAFContainerDef, (void **)&containerDef));
 				plug->Release();
 				plug = NULL;
@@ -2057,7 +2073,7 @@ ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, aafUID_t codecID, IAA
 			pUnknown = static_cast<IUnknown *> (dict->GetContainer());
 			CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
 			CHECK(_codec->QueryInterface(IID_IAAFPlugin, (void **)&plug));
-			CHECK(plug->GetDefinitionObject (dictInterface, &def));
+			CHECK(plug->GetIndexedDefinitionObject (/*!!!*/0,dictInterface, &def));
 			CHECK(def->QueryInterface(IID_IAAFCodecDef, (void **)&codecDef));
 			CHECK(dictInterface->RegisterCodecDefinition (codecDef));
 			CHECK(dict->LookupCodecDefinition (&codecID, &codecImpl));
@@ -2105,7 +2121,7 @@ ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, aafUID_t codecID, IAA
 		if(found == AAFFalse)	// If pluginDescriptor is not in place
 		{
 			
-			CHECK(plug->GetDescriptor (dictInterface, &pluginDesc));
+			CHECK(plug->CreateDescriptor (dictInterface, &pluginDesc));
 			CHECK(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&def));
 			CHECK(def->AppendPluginDescriptor (pluginDesc));
 			if(ppPluginDesc != NULL)
