@@ -233,9 +233,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			checkResult(AAFRESULT_TEST_FAILED);
 
 
-		//!!!	aafSearchCrit_t		criteria;
-		//!!!	criteria.searchTag = kNoSearch;
-
 		checkResult(pHeader->EnumAAFAllMobs (NULL, &pMobIter));
 		for(n = 0; n < numMobs; n++)
 		{
