@@ -18,3 +18,8 @@ EXPORTS		DllRegisterServer private
 EXPORTS		DllUnregisterServer private
 EXPORTS		DllCanUnloadNow private
 EXPORTS		DllGetClassObject private
+
+EXPORTS		AAFFileOpenExistingRead
+EXPORTS		AAFFileOpenExistingModify
+EXPORTS		AAFFileOpenNewModify
+EXPORTS		AAFFileOpenTransient
