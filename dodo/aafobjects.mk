@@ -62,8 +62,6 @@ HUMAN_TYPED_IMPL="\
 	AAFOperationGroup \
 	AAFGPITrigger \
 	AAFHeader \
-	AAFHTMLClip \
-	AAFHTMLDescriptor \
 	AAFIdentification \
 	AAFInterpolationDef \
 	AAFKLVData \
@@ -93,7 +91,6 @@ HUMAN_TYPED_IMPL="\
 	AAFStaticMobSlot \
 	AAFTapeDescriptor \
 	AAFTaggedValue \
-	AAFTextClip \
 	AAFTextLocator \
 	AAFTimecode \
 	AAFTimelineMobSlot \
@@ -166,9 +163,12 @@ AAFOBJECTS="\
 # Build the list of all private objects that need to be built into the COM DLL
 # These objects will 
 PRIVATE_AAFOBJECTS="\
+	AAFHTMLClip \
+	AAFHTMLDescriptor \
 	AAFMetaDictionary \
 	AAFPropValData \
-	AAFStreamPropertyValue "
+	AAFStreamPropertyValue \
+	AAFTextClip "
 
 
 # Build the list of all objects that have automatically-generated
