@@ -151,17 +151,20 @@ STDMETHODIMP CAAFModuleTest::Test
 	}
 	else
 	{
-		cout<< "Running Module tests ....  please wait\n"<< endl;
+		cout<< "Running Module tests .... \n"<< endl;
 
 		while (NULL != AAFObjectMap[testCount].pCLSID && MAX_TEST_COUNT > testCount)
 		{
+			cout<< "  "<< AAFObjectMap[testCount].pClassName << endl;
 			testResults[testCount] = AAFObjectMap[testCount].pfnTestProc();
 
 			++testCount;
 			if ( MAX_TEST_COUNT <= testCount ) 
 				cout << "\n\nMAX_TEST_COUNT has been reached\n";
 		}
-		cout<< "Module tests completed\n\n"<< endl;
+		cout<< "\n******************************";
+		cout<< "\n*  COM Module Tests Results: *";
+		cout<< "\n******************************\n"<< endl;
 
 		for ( index = 0; index < testCount; ++index )
 			if ( AAFRESULT_SUCCESS == testResults[index] )
