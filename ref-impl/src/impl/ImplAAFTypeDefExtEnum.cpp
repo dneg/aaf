@@ -309,7 +309,6 @@ AAFRESULT STDMETHODCALLTYPE
 		throw hr;
 	  assert (ptd);
 
-
 	  ptAuid = dynamic_cast<ImplAAFTypeDefRecord*> (ptd);
 	  assert (ptAuid);
 
@@ -548,6 +547,115 @@ ImplAAFTypeDefExtEnum::GetElementNameBufLen (
   assert (pLen);
   *pLen = nameLength;
   return AAFRESULT_SUCCESS;
+}
+
+
+ImplAAFTypeDef * ImplAAFTypeDefExtEnum::GetBaseType ()
+{
+  AAFRESULT hr;
+  ImplAAFDictionary * pDict = 0;
+  hr = GetDictionary (&pDict);
+  assert (AAFRESULT_SUCCEEDED(hr));
+  assert (pDict);
+
+  ImplAAFTypeDef * ptd = 0;
+  hr = pDict->LookupType (&gTypeID_AUID ,&ptd);
+  pDict->ReleaseReference ();
+  assert (AAFRESULT_SUCCEEDED(hr));
+  assert (ptd);
+
+  return ptd;
+}
+
+
+void ImplAAFTypeDefExtEnum::reorder(OMByte* bytes,
+									size_t bytesSize) const
+{
+  // BobT hack: need non-const this pointer in order to call
+  // GetBaseType(), and to do ReleaseReference() later.  Since we know
+  // we're not changing this object for real, we don't *really* mind
+  // cheating a bit on const-ness...
+  ImplAAFTypeDefExtEnum * pNonConstThis =
+	(ImplAAFTypeDefExtEnum *) this;
+  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
+  ptd->reorder (bytes, bytesSize);
+  ptd->ReleaseReference ();
+}
+
+
+size_t ImplAAFTypeDefExtEnum::externalSize(OMByte* internalBytes,
+										   size_t internalBytesSize) const
+{
+  // BobT hack: need non-const this pointer in order to call
+  // GetBaseType(), and to do ReleaseReference() later.  Since we know
+  // we're not changing this object for real, we don't *really* mind
+  // cheating a bit on const-ness...
+  ImplAAFTypeDefExtEnum * pNonConstThis =
+	(ImplAAFTypeDefExtEnum *) this;
+  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
+  size_t result = ptd->externalSize (internalBytes, internalBytesSize);
+  ptd->ReleaseReference ();
+  return result;
+}
+
+
+void ImplAAFTypeDefExtEnum::externalize(OMByte* internalBytes,
+										size_t internalBytesSize,
+										OMByte* externalBytes,
+										size_t externalBytesSize,
+										OMByteOrder byteOrder) const
+{
+  // BobT hack: need non-const this pointer in order to call
+  // GetBaseType(), and to do ReleaseReference() later.  Since we know
+  // we're not changing this object for real, we don't *really* mind
+  // cheating a bit on const-ness...
+  ImplAAFTypeDefExtEnum * pNonConstThis =
+	(ImplAAFTypeDefExtEnum *) this;
+  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
+  ptd->externalize (internalBytes,
+					internalBytesSize,
+					externalBytes,
+					externalBytesSize,
+					byteOrder);
+  ptd->ReleaseReference ();
+}
+
+
+size_t ImplAAFTypeDefExtEnum::internalSize(OMByte* externalBytes,
+										   size_t externalBytesSize) const
+{
+  // BobT hack: need non-const this pointer in order to call
+  // GetBaseType(), and to do ReleaseReference() later.  Since we know
+  // we're not changing this object for real, we don't *really* mind
+  // cheating a bit on const-ness...
+  ImplAAFTypeDefExtEnum * pNonConstThis =
+	(ImplAAFTypeDefExtEnum *) this;
+  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
+  size_t result = ptd->internalSize (externalBytes, externalBytesSize);
+  ptd->ReleaseReference ();
+  return result;
+}
+
+
+void ImplAAFTypeDefExtEnum::internalize(OMByte* externalBytes,
+										size_t externalBytesSize,
+										OMByte* internalBytes,
+										size_t internalBytesSize,
+										OMByteOrder byteOrder) const
+{
+  // BobT hack: need non-const this pointer in order to call
+  // GetBaseType(), and to do ReleaseReference() later.  Since we know
+  // we're not changing this object for real, we don't *really* mind
+  // cheating a bit on const-ness...
+  ImplAAFTypeDefExtEnum * pNonConstThis =
+	(ImplAAFTypeDefExtEnum *) this;
+  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
+  ptd->internalize (internalBytes,
+					internalBytesSize,
+					externalBytes,
+					externalBytesSize,
+					byteOrder);
+  ptd->ReleaseReference ();
 }
 
 
