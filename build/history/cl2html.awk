@@ -6,7 +6,7 @@
 # $ cat Changes-x-y.log | awk -f cl2html.awk colormap > Changes-x-y.html
 #
 #
-# Tim Bingham
+# Author : Tim Bingham - Tim_Bingham@avid.com
 #
 BEGIN {
   if (ARGC != 2) {
