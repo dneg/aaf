@@ -30,6 +30,10 @@ typedef aafUInt16 OMLContainerFlags;               /* container label flags     
 
 typedef aafInt32   OMLErrorNbr;                     /* error handler error numbers        */
 #endif
+typedef enum
+{
+	kOmCreate, kOmModify, kOmOpenRead, kOmUndefined = -1
+}				openType_t;
 
 class OMContainer
 {
@@ -43,6 +47,7 @@ class OMContainer
                                          OMLRefCon attributes,
                                          OMLconst_OMLGlobalName typeName, 
                                          OMLContainerUseMode useFlags,
+										 openType_t type,
                                          ImplAAFHeader*& header);
 		void OMLSetContainerVersion1(void);
 		void OMLOpenNewContainer(aafWChar* stream,
