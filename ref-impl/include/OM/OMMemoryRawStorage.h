@@ -139,16 +139,6 @@ public:
     //          of this <c OMMemoryRawStorage> be changed ?
   virtual bool isPositionable(void) const;
 
-    // @cmember Synchronize this <c OMMemoryRawStorage> with its external
-    //          representation.
-  virtual void synchronize(void);
-
-private:
-  // @access Private members.
-
-    // @cmember Constructor.
-  OMMemoryRawStorage(void);
-
     // @cmember The current position for <f read()> and <f write()>, as an
     //          offset in bytes from the beginning of this
     //          <c OMMemoryRawStorage>.
@@ -160,6 +150,16 @@ private:
     //          <c OMMemoryRawStorage>.
     //          precondition - isPositionable()
   virtual void setPosition(OMUInt64 newPosition) const;
+
+    // @cmember Synchronize this <c OMMemoryRawStorage> with its external
+    //          representation.
+  virtual void synchronize(void);
+
+private:
+  // @access Private members.
+
+    // @cmember Constructor.
+  OMMemoryRawStorage(void);
 
     // @cmember Write a page or partial page.
   virtual void write(size_t page,

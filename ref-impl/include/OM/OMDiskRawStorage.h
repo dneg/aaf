@@ -148,16 +148,6 @@ public:
     //          of this <c OMDiskRawStorage> be changed ?
   virtual bool isPositionable(void) const;
 
-    // @cmember Synchronize this <c OMDiskRawStorage> with its external
-    //          representation.
-  virtual void synchronize(void);
-
-protected:
-  // @access Protected members.
-
-    // @cmember Constructor.
-  OMDiskRawStorage(FILE* file, OMFile::OMAccessMode accessMode);
-
     // @cmember The current position for <f read()> and <f write()>, as an
     //          offset in bytes from the beginning of this
     //          <c OMDiskRawStorage>.
@@ -169,6 +159,16 @@ protected:
     //          <c OMDiskRawStorage>.
     //          precondition - isPositionable()
   virtual void setPosition(OMUInt64 newPosition) const;
+
+    // @cmember Synchronize this <c OMDiskRawStorage> with its external
+    //          representation.
+  virtual void synchronize(void);
+
+protected:
+  // @access Protected members.
+
+    // @cmember Constructor.
+  OMDiskRawStorage(FILE* file, OMFile::OMAccessMode accessMode);
 
   virtual void read(FILE* file,
                     OMByte* bytes,
