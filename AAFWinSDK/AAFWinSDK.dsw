@@ -15,7 +15,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "AafOmf"=".\examples\com-api\AafOmf\AafOmf.dsp" - Package Owner=<4>
+Project: "AafOmf"=".\Utilities\AafOmf\AafOmf.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
