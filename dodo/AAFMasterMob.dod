@@ -1,0 +1,161 @@
+#startm .this-module 0
+AAFMasterMob\
+#endm
+#c
+#startm .parent-module 0
+AAFMob\
+#endm
+#c
+#import ./AAFUnitTest.exp
+#import ./AAFObject.exp
+#import ./AAFMob.exp
+
+AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Types required by this module:
+//
+// aafMobKind_t
+// aafBool
+// AAFDataDefinition [ a.k.a. AAFDataKind ]
+// aafTrackID_t
+// aafString
+// AAFSourceClip      [ was AAFFileMob ]
+// aafMediaCriteria_t
+// aafCriteriaType_t
+// aafCriteriaProc_t
+// aafEffectChoice_t
+// AAFComponent
+// aafFindSourceInfo_t
+
+AD_CLASS_UUID(b1a21373, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
+
+AD_DEFAULT_UUID(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
+AD_CLASS_BEGIN
+
+AD_METHOD5(AddMasterTrack,
+[in\,ref], AAFDataDefinition *, mediaKind, Data kind of new track. The mediaKind 
+  // parameter requires a data kind valid for a media stream. Valid data kinds are:
+  // Picture
+  // Sound,
+[in], aafTrackID_t, trackID, TrackID of new Master Mob track.,
+[in], aafTrackID_t, fileTrackID, TrackID of File Source Mob track to be associated with the new
+  // Master Mob track.,
+[in\,ref], aafString *, trackName, Name to assign to new track in Master Mob. If track
+  // Name is passed in with zero length\, then the track is not assigned a name. Track
+  // names are not used by the Toolkit\, and exist only so the user can name
+  // tracks.,
+[in\,ref], AAFSourceMob *, fileMob, File Source Mob to be associated with new track in Master Mob.,
+This function adds a track to the specified Master Mob that references the specified 
+  // File Source Mob. The new track in the Master Mob contains a Source Clip
+  // that specifies the File Source Mob in its source reference properties. Typically
+  // this is done automatically by passing the Master Mob handle to omfmMedia-Create\,
+  // but this function allows you to add it later.)
+
+AD_METHOD2(GetTapeName,
+[in], aafInt32, masterTrackID, TrackID of the Master Mob track.,
+[in\,out], aafString *, tapeName, The returned name.,
+Returns the name of the videotape that the media was derived from.
+  // @commThis function finds the videotape Source Mob associated with a Master Mob
+  // track and returns the name of the videotape\, which is stored in the Mobs Name
+  // property.)
+
+AD_METHOD2(GetNumRepresentations,
+[in], aafTrackID_t, trackID, TrackID,
+[out\,retval], aafNumSlots_t *, numReps, Returned number of representations for the specified TrackID in
+  // this Master Mob.,
+This function returns the number of media representations available for the
+  // specified TrackID on a specified Master Mob. This function is meant to work
+  // with omfmGetRepresentationSourceClip\, so that you can iterate
+  // through all of the choices yourself.
+  // In most cases\, you can use omfmGetCriteriaSourceClip to handle
+  // multiple representations. this function and omfmGetRepresentation-SourceClip
+  // are lower-level functions.)
+
+AD_METHOD3(GetRepresentationSourceClip,
+[in], aafTrackID_t, trackID, TrackID.,
+[in], aafInt32, index, Index of requested representation.,
+[out], AAFSourceClip **, sourceClip, Source Clip that is the requested number representation within
+  // the specified track of this Master Mob.,
+Returns the indexed media representation for the specified Master Mob\,
+  // TrackID\, and index.
+  // @commThis method returns the indexed media representation for the specified
+  // Master Mob\, TrackID\, and index. This call is meant to work with GetNumRepresentations\,
+  // so that you can iterate through all of the choices
+  // yourself.
+  // This method uses an integer index\, not an iterator.
+  // The function GetRepresentationSourceClip takes an index
+  // between 1 and the number of representations \(inclusive\)\, and returns the
+  // indexed File Source Mob. You can make calls to functions such as
+  // omfmGetVideoInfo and omfmIsMediaContiguous to determine which
+  // media is the best fit.)
+
+AD_METHOD3(GetCriteriaSourceClip,
+[in], aafTrackID_t, trackID, TrackID.,
+[in\,ref], aafMediaCriteria_t *, criteria, Index of requested representation.,
+[out], AAFSourceClip **, sourceClip, Returned Source Clip within the specified track in the Master
+  // Mob that points to the File Source Mob of the media that best fits the
+  // selection criteria.,
+Returns the Source Clip on the specified track of a Master Mob that references
+  // the File Source Mob that best meets the specified criteria. This function will
+  // work whether multiple media representations exist or not.
+  // @ex The aafMediaCriteria_t is defined as the following structure: |
+  // typedef struct
+  // {
+  //	aafCriteriaType_t type;
+  //	aafCriteriaProc_t proc;
+  // } aafMediaCriteria_t;
+  // 
+  // @ex The type field can have one of the following values: |
+  // typedef enum
+  // {
+  //	kAAFAnyRepresentation = 0\,
+  //	kAAFFastestRepresentation\,
+  //	kAAFBestFidelityRepresentation\,
+  //	kAAFSmallestRepresentation\,
+  //	kAAFUseRepresentationProc
+  // } aafCriteriaType_t;
+  // @devnote TODO: Can we use a callback function in COM? Should we convert this to a type
+  // of interface?)
+
+AD_METHOD7(SearchSource,
+[in], aafTrackID_t, trackID, Track ID of the track \(Mob Slot\) to get information about.,
+[in], aafPosition_t, offset, Offset within the track to get information about.,
+[in], aafMobKind, mobKind, Kind of referenced Mob to get information about. 
+  // @ex Possible values for MobKind_t are: |
+  //	kCompMob
+  //	kMasterMob
+  //	kFileMob
+  //	kTapeMob
+  //	kFilmMob,
+[in\,ref], aafMediaCriteria_t *, mediaCriteria, Criteria for selecting media.,
+[in\,ref], aafEffectChoice_t *, effectChoice, Parameter that is not used in this function.
+  // @ex Possible values for omfEffectChoice_t are: |
+  //	kFindNull,
+[out], AAFComponent **, component, The current object in the sequence in the specified track and Mob.,
+[out], aafFindSourceInfo_t *, sourceInfo, Preallocated buffer to hold source information.,
+Returns source information for a track in a Master Mob or Source Mob.
+  // @commThis function returns the source information for a track in a Master Mob or
+  // Source Mob. It follows the Source Clip references in the specified track until it
+  // encounters the kind of Mob specified in the mobKind parameter.
+  // This function cannot be used on a Composition Mob and is not intended to be
+  // called iteratively; use the omfiMobOpenSearch\, omfiMobGetNextSource\,
+  // omfiMobGetThisSource\, and omfiMobCloseSearch functions for those
+  // purposes.)
+
+AD_OVERRIDE(.method-Test)
+
+AD_OVERRIDE(.method-Delete)
+
+AD_OVERRIDE(.method-IsMobKind)
+
+AD_CLASS_END
