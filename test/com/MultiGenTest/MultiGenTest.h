@@ -78,8 +78,8 @@ class MultiGenTestFactory {
   const char* GetDesc() const;
   const char* GetUsage() const;
   const char* GetNotes() const;
-  const int   GetMinArgC() const;
-  const int   GetMaxArgC() const;
+  int   GetMinArgC() const;
+  int   GetMaxArgC() const;
 
   // Caller takes ownership of the returned pointer.
   virtual MultiGenTest* Create() = 0;

@@ -161,12 +161,12 @@ const char* MultiGenTestFactory::GetNotes() const
   return _notes;
 }
 
-const int  MultiGenTestFactory::GetMinArgC() const
+int  MultiGenTestFactory::GetMinArgC() const
 {
   return _minArgC;
 }
 
-const int  MultiGenTestFactory::GetMaxArgC() const
+int  MultiGenTestFactory::GetMaxArgC() const
 {
   return _maxArgC;
 }
