@@ -40,6 +40,7 @@ class OMPropertyTable;
 class OMStoredObject;
 class OMDictionary;
 class OMRootStorable;
+class OMRawStorage;
 
 // @class Files supported by the Object Manager.
 //
@@ -57,6 +58,13 @@ public:
   enum OMLoadMode {
     eagerLoad,   // @@emem Objects are loaded when the root object is loaded.
     lazyLoad     // @@emem Objects are loaded on demand.
+  };
+
+    // @cmember,menum Supported file encodings.
+  enum OMFileEncoding {
+    MSSBinaryEncoding,  // @@emem Microsoft Structured Storage (binary).
+    KLVBinaryEncoding,  // @@emem SMPTE KLV (binary).
+    XMLTextEncoding     // @@emem XML (text).
   };
 
   // @access Static members.
@@ -170,6 +178,12 @@ public:
     // @cmember The signature of this <c OMFile>.
   OMFileSignature signature(void) const;
 
+    // @cmember The encoding of this <c OMFile>.
+  OMFileEncoding encoding(void) const;
+
+    // @cmember The raw storage on which this <c OMFile> is stored.
+  OMRawStorage* rawStorage(void) const;
+
     // @cmember Find the property instance in this <c OMFile>
     //          named by <p propertyPathName>.
   virtual OMProperty* findPropertyPath(const wchar_t* propertyPathName) const;
@@ -218,6 +232,8 @@ private:
   void* _clientOnSaveContext;
   void* _clientOnRestoreContext;
 
+  enum OMFileEncoding _encoding;
+  OMRawStorage* _rawStorage;
 };
 
 #endif
