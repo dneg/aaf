@@ -291,6 +291,7 @@ private:
     //          an existing named external file.
   OMFile(const wchar_t* fileName,
          void* clientOnRestoreContext,
+         OMFileSignature signature,
          const OMAccessMode mode,
          OMStoredObject* store,
          const OMClassFactory* factory,

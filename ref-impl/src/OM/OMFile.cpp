@@ -79,9 +79,12 @@ OMFile* OMFile::openExistingRead(const wchar_t* fileName,
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid dictionary", dictionary != 0);
 
+  OMFileSignature signature;
+  readSignature(fileName, signature);
   OMStoredObject* store = OMMSSStoredObject::openRead(fileName);
   OMFile* newFile = new OMFile(fileName,
                                clientOnRestoreContext,
+                               signature,
                                readOnlyMode,
                                store,
                                factory,
@@ -113,9 +116,12 @@ OMFile* OMFile::openExistingModify(const wchar_t* fileName,
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid dictionary", dictionary != 0);
 
+  OMFileSignature signature;
+  readSignature(fileName, signature);
   OMStoredObject* store = OMMSSStoredObject::openModify(fileName);
   OMFile* newFile = new OMFile(fileName,
                                clientOnRestoreContext,
+                               signature,
                                modifyMode,
                                store,
                                factory,
@@ -915,6 +921,7 @@ void* OMFile::clientOnRestoreContext(void)
   //   @parm The <e OMFile::OMLoadMode> for this <c OMFile>.
 OMFile::OMFile(const wchar_t* fileName,
                void* clientOnRestoreContext,
+               OMFileSignature signature,
                const OMAccessMode mode,
                OMStoredObject* store,
                const OMClassFactory* factory,
@@ -928,7 +935,7 @@ OMFile::OMFile(const wchar_t* fileName,
   _mode(mode),
   _loadMode(loadMode),
   _fileName(0),
-  _signature(nullOMFileSignature),
+  _signature(signature),
   _clientOnSaveContext(0),
   _clientOnRestoreContext(clientOnRestoreContext),
   _encoding(MSSBinaryEncoding),
@@ -944,7 +951,6 @@ OMFile::OMFile(const wchar_t* fileName,
   PRECONDITION("Valid dictionary", _dictionary != 0);
   _fileName = saveWideString(fileName);
   setClassFactory(factory);
-  readSignature(_fileName, _signature);
   setName(L"/");
   ASSERT("No root object", _root == 0);
   _root = restoreRoot();
