@@ -54,6 +54,11 @@
 #include <assert.h>
 #include <string.h>
 
+// Weak references may not be in v1.0...
+#ifndef ENABLE_TYPE_DEF_SET
+#define ENABLE_TYPE_DEF_SET 0
+#endif
+
 extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 ImplAAFTypeDefSet::ImplAAFTypeDefSet () :
@@ -75,6 +80,7 @@ ImplAAFTypeDefSet::Initialize (
       ImplAAFTypeDef * pTypeDef,
       aafCharacter_constptr  pTypeName)
 {
+#ifndef ENABLE_TYPE_DEF_SET
 	if (! pTypeName) 
 		return AAFRESULT_NULL_PARAM;
 	if (! pTypeDef)
@@ -86,6 +92,11 @@ ImplAAFTypeDefSet::Initialize (
 	//
 	
 	return pvtInitialize(id, pTypeDef, pTypeName);
+#else // #if ENABLE_TYPE_DEF_SET
+    
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+    
+#endif // #else // #if ENABLE_TYPE_DEF_SET
 }
 
 
@@ -95,6 +106,7 @@ ImplAAFTypeDefSet::pvtInitialize (
 								  ImplAAFTypeDef * pTypeDef,
 								  aafCharacter_constptr  pTypeName)
 {
+#ifndef ENABLE_TYPE_DEF_SET
 	ImplAAFTypeDefObjectRef	*objRef;
 	AAFRESULT				result;
 	
@@ -117,12 +129,18 @@ ImplAAFTypeDefSet::pvtInitialize (
 		}
 	}
 	return result;
+#else // #if ENABLE_TYPE_DEF_SET
+    
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+    
+#endif // #else // #if ENABLE_TYPE_DEF_SET
 }
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefSet::GetElementType (
 							ImplAAFTypeDef ** ppTypeDef)
 {
+#ifndef ENABLE_TYPE_DEF_SET
 	if (! ppTypeDef)
 		return AAFRESULT_NULL_PARAM;
 	
@@ -135,6 +153,11 @@ ImplAAFTypeDefSet::GetElementType (
 	(*ppTypeDef)->AcquireReference ();
 	
 	return AAFRESULT_SUCCESS;
+#else // #if ENABLE_TYPE_DEF_SET
+    
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+    
+#endif // #else // #if ENABLE_TYPE_DEF_SET
 }
 
 
@@ -143,6 +166,7 @@ ImplAAFTypeDefSet::AddElement (
       ImplAAFPropertyValue * pSetPropertyValue,
       ImplAAFPropertyValue * pElementPropertyValue)
 {
+#ifndef ENABLE_TYPE_DEF_SET
 	if (!pSetPropertyValue || !pElementPropertyValue)
 		return AAFRESULT_NULL_PARAM;
 
@@ -208,6 +232,11 @@ ImplAAFTypeDefSet::AddElement (
 	delete[] buf;
 	return AAFRESULT_SUCCESS;
 #endif // #if 0
+#else // #if ENABLE_TYPE_DEF_SET
+    
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+    
+#endif // #else // #if ENABLE_TYPE_DEF_SET
 }
 
 
@@ -217,6 +246,7 @@ ImplAAFTypeDefSet::RemoveElement(
       ImplAAFPropertyValue * pSetPropertyValue,
       ImplAAFPropertyValue * pElementPropertyValue)
 {
+#ifndef ENABLE_TYPE_DEF_SET
 	if (!pSetPropertyValue || !pElementPropertyValue)
 		return AAFRESULT_NULL_PARAM;
 
@@ -301,6 +331,11 @@ ImplAAFTypeDefSet::RemoveElement(
 	else
 		return AAFRESULT_ELEMENT_NOT_PRESENT;
 #endif // #if 0
+#else // #if ENABLE_TYPE_DEF_SET
+    
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+    
+#endif // #else // #if ENABLE_TYPE_DEF_SET
 }
 
 //****************
@@ -312,10 +347,16 @@ ImplAAFTypeDefSet::ContainsElement(
       ImplAAFPropertyValue * pElementPropertyValue,
       aafBoolean_t*  pContainsElement)
 {
+#ifndef ENABLE_TYPE_DEF_SET
 	if (!pSetPropertyValue || !pElementPropertyValue || !pContainsElement)
 		return AAFRESULT_NULL_PARAM;
 
 	return AAFRESULT_NOT_IMPLEMENTED;
+#else // #if ENABLE_TYPE_DEF_SET
+    
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+    
+#endif // #else // #if ENABLE_TYPE_DEF_SET
 }
 
 
@@ -325,6 +366,7 @@ ImplAAFTypeDefSet::GetCount (
       ImplAAFPropertyValue * pSetPropertyValue,
       aafUInt32 *  pCount)
 {
+#ifndef ENABLE_TYPE_DEF_SET
 	if (!pSetPropertyValue || !pCount)
 		return AAFRESULT_NULL_PARAM;
 
@@ -359,6 +401,11 @@ ImplAAFTypeDefSet::GetCount (
 	
 	return AAFRESULT_SUCCESS;
 #endif // #if 0
+#else // #if ENABLE_TYPE_DEF_SET
+    
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+    
+#endif // #else // #if ENABLE_TYPE_DEF_SET
 }
 
 
@@ -371,6 +418,7 @@ AAFRESULT ImplAAFTypeDefSet::CreateKey (
       aafUInt32  length,
       ImplAAFPropertyValue ** ppKey)
 {
+#ifndef ENABLE_TYPE_DEF_SET
 	if (!pKeyPtr || !ppKey)
 		return AAFRESULT_NULL_PARAM;
 	if (0 == length)
@@ -393,6 +441,11 @@ AAFRESULT ImplAAFTypeDefSet::CreateKey (
 	
 	return hr;
 #endif // #if 0
+#else // #if ENABLE_TYPE_DEF_SET
+    
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+    
+#endif // #else // #if ENABLE_TYPE_DEF_SET
 }
 
 
@@ -404,10 +457,16 @@ AAFRESULT ImplAAFTypeDefSet::LookupElement (
       ImplAAFPropertyValue * pKey,
       ImplAAFPropertyValue ** ppElementPropertyValue)
 {
+#ifndef ENABLE_TYPE_DEF_SET
 	if (!pSetPropertyValue || !pKey || !ppElementPropertyValue)
 		return AAFRESULT_NULL_PARAM;
 
 	return AAFRESULT_NOT_IMPLEMENTED;
+#else // #if ENABLE_TYPE_DEF_SET
+    
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+    
+#endif // #else // #if ENABLE_TYPE_DEF_SET
 }
 
 //***********************************************************
@@ -418,10 +477,16 @@ AAFRESULT ImplAAFTypeDefSet::ContainsKey (
       ImplAAFPropertyValue * pKey,
       aafBoolean_t*  pContainsKey)
 {
+#ifndef ENABLE_TYPE_DEF_SET
 	if (!pSetPropertyValue || !pKey || !pContainsKey)
 		return AAFRESULT_NULL_PARAM;
 
 	return AAFRESULT_NOT_IMPLEMENTED;
+#else // #if ENABLE_TYPE_DEF_SET
+    
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+    
+#endif // #else // #if ENABLE_TYPE_DEF_SET
 }
 
 
@@ -430,10 +495,16 @@ ImplAAFTypeDefSet::GetElements (
       ImplAAFPropertyValue * pSetPropertyValue,
       ImplEnumAAFPropertyValues ** ppEnum)
 {
+#ifndef ENABLE_TYPE_DEF_SET
 	if (!pSetPropertyValue || !ppEnum)
 		return AAFRESULT_NULL_PARAM;
 
 	return AAFRESULT_NOT_IMPLEMENTED;
+#else // #if ENABLE_TYPE_DEF_SET
+    
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+    
+#endif // #else // #if ENABLE_TYPE_DEF_SET
 }
 
 
