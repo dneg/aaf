@@ -203,18 +203,16 @@ void WaveHeader::SetStr4( int idx, const char str[4] )
 aafUInt32 WaveHeader::GetInt32( int idx )
 {
 	aafUInt32 val;
-
+	assert( reinterpret_cast<aafUInt64>(&_header[idx]) % 4 == 0 );
 	val = *reinterpret_cast<aafUInt32*>(&_header[idx]);
-
 	return val;
 }
 
 aafUInt16 WaveHeader::GetInt16( int idx )
 {
 	aafUInt16 val;
-
+	assert( reinterpret_cast<aafUInt64>(&_header[idx]) % 2 == 0 );
 	val = *reinterpret_cast<aafUInt16*>(&_header[idx]);
-
 	return val;
 }
 
