@@ -59,7 +59,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (_ReferencedType)
 	_ReferencedType->AcquireReference ();
 
-  hr = SetIdentification (pID);
+  hr = SetAUID (pID);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
   return AAFRESULT_SUCCESS;
