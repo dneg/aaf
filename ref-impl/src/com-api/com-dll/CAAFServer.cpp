@@ -82,7 +82,7 @@ aafUInt32 CAAFServer::GetActiveObjectCount()
 aafUInt32 CAAFServer::InterlockedIncrement(aafUInt32 *value)
 {
 #if defined( OS_WINDOWS )
-	return ::InterlockedIncrement(reinterpret_cast<int *>(value));
+	return ::InterlockedIncrement(reinterpret_cast<long *>(value));
 #else
 	return (++(*value));
 #endif
@@ -90,7 +90,7 @@ aafUInt32 CAAFServer::InterlockedIncrement(aafUInt32 *value)
 aafUInt32 CAAFServer::InterlockedDecrement(aafUInt32 *value)
 {
 #if defined( OS_WINDOWS )
-	return ::InterlockedDecrement(reinterpret_cast<int *>(value));
+	return ::InterlockedDecrement(reinterpret_cast<long *>(value));
 #else
 	return (--(*value));
 #endif

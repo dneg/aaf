@@ -105,7 +105,7 @@ aafUInt32 ImplAAFPluginFile::AcquireReference() const
 {  
   ImplAAFPluginFile *nonConstThis = const_cast<ImplAAFPluginFile *>(this);
 #if defined( OS_WINDOWS )
-	return ::InterlockedIncrement(reinterpret_cast<int *>(&nonConstThis->_refCount));
+	return ::InterlockedIncrement(reinterpret_cast<long *>(&nonConstThis->_refCount));
 #else
   ++(nonConstThis->_refCount);
 #endif
@@ -116,7 +116,7 @@ aafUInt32 ImplAAFPluginFile::AcquireReference() const
 aafUInt32 ImplAAFPluginFile::ReleaseReference()
 {
 #if defined( OS_WINDOWS )
-	aafUInt32 count = ::InterlockedDecrement(reinterpret_cast<int *>(&_refCount));
+	aafUInt32 count = ::InterlockedDecrement(reinterpret_cast<long *>(&_refCount));
 #else
 	aafUInt32 count = --(_refCount);
 #endif
