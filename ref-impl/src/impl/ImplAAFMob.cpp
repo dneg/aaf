@@ -164,10 +164,10 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 //****************
-// GetNameLen()
+// GetNameBufLen()
 //
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFMob::GetNameLen
+ImplAAFMob::GetNameBufLen
         (aafInt32 *  pSize)  //@parm [in,out] Mob Name length
 {
 	if(pSize == NULL)
