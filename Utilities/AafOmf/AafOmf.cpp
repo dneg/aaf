@@ -1110,10 +1110,17 @@ HRESULT AafOmf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFSegment** 
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
 
+	OMF2::omfEdgecode_t		OMFEdgecode;
+	OMF2::omfLength_t		OMFLength;
+	OMF2::omfDDefObj_t		OMFDatakind;
+	OMF2::omfTimecode_t		OMFTimecode;
+
 	IAAFSequence*			pSequence = NULL;
 	IAAFSourceClip*			pSourceClip = NULL;
 	IAAFTimecode*			pTimecode = NULL;
-//	IAAFEdgecode			pEdgecode = NULL;
+	IAAFEdgecode*			pEdgecode = NULL;
+	aafEdgecode_t			edgecode;
+	aafTimecode_t			timecode;
 
 	// First get sequence information
 	if (OMF2::omfiIsASequence(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
@@ -1146,28 +1153,62 @@ HRESULT AafOmf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFSegment** 
 	}
 	else if (OMF2::omfiIsATimecodeClip(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
+		// Get Timecode information
+		OMF2::omfiTimecodeGetInfo(OMFFileHdl, OMFSegment, &OMFDatakind, &OMFLength, &OMFTimecode);
+		timecode.startFrame = OMFTimecode.startFrame;
+		timecode.drop = (aafDropType_t)OMFTimecode.drop;
+		timecode.fps  = OMFTimecode.fps;
+		if (bVerboseMode)
+		{
+			Indent(4);
+			cout <<"Found Timecode"<< endl;
+			Indent(4);
+			cout <<"      length        : "<<(int)OMFLength<<endl;
+			Indent(4);
+			cout <<"      start Frame   : "<< timecode.startFrame<<endl;
+			Indent(4);
+			if (timecode.drop == AAFTrue)
+				cout <<"      drop          : True"<<endl;
+			else
+				cout <<"      drop          : False"<<endl;
+			Indent(4);
+			cout <<"      Frames/second : "<< timecode.fps<<endl;     
+				
+		}
+
 		rc = pDictionary->CreateInstance(&AUID_AAFTimecode,
 										 IID_IAAFTimecode,
 										 (IUnknown **)&pTimecode);
+
+		pTimecode->Initialize((aafLength_t)OMFLength, &timecode);
+
 		pTimecode->QueryInterface(IID_IAAFSegment, (void **)ppSegment);
-		if (bVerboseMode)
-		{
-			Indent(4);
-			cout <<"Processing TimecodeClip"<< endl;
-		}
 	}
 	else if (OMF2::omfiIsAnEdgecodeClip(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
-//		rc = pDictionary->CreateInstance(&AUID_AAFEdgecode,
-//										 IID_IAAFEdgecode,
-//										 (IUnknown **)&pEdgecode);
-//		pEdgecode->QueryInterface(IID_IAAFSegment, (void **)ppSegment);
+		// Get edgecode data
+		OMF2::omfiEdgecodeGetInfo(OMFFileHdl, OMFSegment, &OMFDatakind, &OMFLength, &OMFEdgecode);
+		edgecode.startFrame = OMFEdgecode.startFrame;
+		edgecode.filmKind = (aafFilmType_t)OMFEdgecode.filmKind;
+		edgecode.codeFormat = (aafEdgeType_t)OMFEdgecode.codeFormat;
+		for (int ii=0;ii<sizeof(edgecode.header);ii++)
+			edgecode.header[ii] = OMFEdgecode.header[ii];
+
 		if (bVerboseMode)
 		{
 			Indent(4);
-			cout <<"Found EdgecodeClip"<< endl;
-			cout <<"Edgecode conversion NOT yet implemented !!!"<<endl;
+			cout <<"Found Edgecode "<< endl;
+			Indent(4);
+			cout <<"      length        : "<<(int)OMFLength<<endl;
+			Indent(4);
+			cout <<"      start Frame   : "<< edgecode.startFrame<<endl;
 		}
+		rc = pDictionary->CreateInstance(&AUID_AAFEdgecode,
+										 IID_IAAFEdgecode,
+										 (IUnknown **)&pEdgecode);
+
+		pEdgecode->Create((aafLength_t)OMFLength, edgecode);
+		pEdgecode->QueryInterface(IID_IAAFSegment, (void **)ppSegment);
 	}
 	else if (OMF2::omfiIsAFiller(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
