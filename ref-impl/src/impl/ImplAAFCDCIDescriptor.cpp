@@ -36,14 +36,14 @@ ImplAAFCDCIDescriptor::ImplAAFCDCIDescriptor ()
 	_persistentProperties.put(_paddingBits.address());
 
 	// Initialize Required properties
-	//_componentWidth = 0;	// valid values are 8, 10, and 16 ?
-	//_horizontalSubsampling = 0; // valid values are 1 and 2?
+	_componentWidth = 8;	// valid values are 8, 10, and 16 ?
+	_horizontalSubsampling = 1; // valid values are 1 and 2?
 
 	// Initialize Optional properties
 	_colorSiting = kCoSiting;
 	_blackReferenceLevel = 0;
-	//_whiteReferenceLevel = 255;
-	//_colorRange = 255;
+	_whiteReferenceLevel = 255;
+	_colorRange = 255;
 	_paddingBits = 0;
 }
 
