@@ -111,15 +111,15 @@
 #c
 #c Arguments: none
 #c
+#c MattS: changed forward reference to #include for compatibility with common
+#c enumerators 6/19/00.
+#c
 #startm AD_CLASS_BEGIN 00
 #ifndef __C.parent-module_h__
 #include "C.parent-module.h"
 #endif
 
-//
-// Forward declaration
-//
-class Impl.this-module;
+#include "Impl.this-module.h"
 
 
 class C.this-module

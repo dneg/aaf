@@ -2120,11 +2120,13 @@ pinternal%01\
 #c arg3 = aux arg
 #c arg4 = aux arg
 #c
+#c MattS: added check for AAFRESULT_NO_MORE_OBJECTS 6/19/00
+#c
 #startm .objOutArray-cleanup 04
   //
   // cleanup for %02
   //
-  if (SUCCEEDED(hr))
+  if (SUCCEEDED(hr)||hr==AAFRESULT_NO_MORE_OBJECTS)
     {
       IUnknown *pUnknown;
       HRESULT hStat;
