@@ -591,6 +591,7 @@ static void CreateAAFFile(aafWChar * pFileName)
   pHeader->Release();
   pHeader = NULL;
   
+  check(pFile->Save());
   check(pFile->Close());
   if (pFile)
     pFile->Release();

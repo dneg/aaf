@@ -357,6 +357,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
   pDictionary = NULL;
 	pHeader->Release();
 	pHeader = NULL;
+	pFile->Save();
 	pFile->Close();
 	pFile->Release();
 	pFile = NULL;
