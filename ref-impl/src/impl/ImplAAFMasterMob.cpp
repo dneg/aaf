@@ -439,9 +439,9 @@ AAFRESULT STDMETHODCALLTYPE
 //   - TODO: add this to idl
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMasterMob::GetRepresentationSourceClip (aafSlotID_t			slotID,
-												   aafUInt32				index,
-												   ImplAAFSourceClip**	ppSourceClip)
+    ImplAAFMasterMob::GetRepresentation (aafSlotID_t			slotID,
+										 aafUInt32				index,
+										 ImplAAFSegment**		ppSegment)
 {
 	ImplAAFMobSlot	*pSlot = NULL;
 	ImplAAFSegment	*pSegment = NULL;
@@ -449,7 +449,7 @@ AAFRESULT STDMETHODCALLTYPE
 	HRESULT			hr;
 	aafNumSlots_t	numReps;
 
-	if (!ppSourceClip)
+	if (!ppSegment)
 		return AAFRESULT_NULL_PARAM;
 
 	numReps = 0;
@@ -466,7 +466,7 @@ AAFRESULT STDMETHODCALLTYPE
 			pGroup = dynamic_cast<ImplAAFEssenceGroup*>(pSegment);
 			if(pGroup == NULL)
 				return(AAFRESULT_INCONSISTANCY);
-			hr = pGroup->GetChoiceAt (index, ppSourceClip);
+			hr = pGroup->GetChoiceAt (index, ppSegment);
 			pGroup->ReleaseReference();
 			pGroup = NULL;
 			pSegment->ReleaseReference();
@@ -527,9 +527,9 @@ AAFRESULT STDMETHODCALLTYPE
 //
 // 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMasterMob::GetCriteriaSourceClip (aafSlotID_t			slotID,
+    ImplAAFMasterMob::GetCriteriaSegment (aafSlotID_t			slotID,
 											 aafMediaCriteria_t*	pCriteria,
-											 ImplAAFSourceClip**	ppSourceClip)
+											 ImplAAFSegment**	ppSourceClip)
 {
 	ImplAAFMobSlot	*pSlot = NULL;
 	ImplAAFSegment	*pSegment = NULL;
@@ -552,7 +552,7 @@ AAFRESULT STDMETHODCALLTYPE
 			pGroup = dynamic_cast<ImplAAFEssenceGroup*>(pSegment);
 			if(pGroup == NULL)
 				return(AAFRESULT_INCONSISTANCY);
-			hr = pGroup->GetCriteriaSourceClip (pCriteria, ppSourceClip);
+			hr = pGroup->GetCriteriaSegment (pCriteria, ppSourceClip);
 			pGroup->ReleaseReference();
 			pGroup = NULL;
 			pSegment->ReleaseReference();
