@@ -25,6 +25,7 @@
 #include "AAFResult.h"
 
 
+
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -62,15 +63,23 @@ public:
   void Open(wchar_t *pFileName);
   void Close();
 
+  IAAFEvent *CreateAnEvent(aafPosition_t* position, 
+                           wchar_t *comment, 
+                           IAAFSequence *pSequence = NULL);
+
   void CreateEventMobSlot();
   void OpenEventMobSlot();
+
+  void CreateEventSequenceMobSlot();
+  void OpenEventSequenceMobSlot();
 
 private:
   IAAFFile *_pFile;
   bool _bWritableFile;
   IAAFHeader *_pHeader;
   IAAFDictionary *_pDictionary;
-  aafUID_t _compositionMobID;
+  aafUID_t _eventMobID1;
+  aafUID_t _eventMobID2;
 
   // EventMobSlot static data
   static const aafRational_t _editRate;
@@ -134,7 +143,8 @@ EventMobSlotTest::EventMobSlotTest() :
   _pHeader(NULL),
   _pDictionary(NULL)
 {
-  memset(&_compositionMobID, 0, sizeof(_compositionMobID));
+  memset(&_eventMobID1, 0, sizeof(_eventMobID1));
+  memset(&_eventMobID2, 0, sizeof(_eventMobID1));
 }
 
 EventMobSlotTest::~EventMobSlotTest()
@@ -161,8 +171,11 @@ void EventMobSlotTest::Create(wchar_t *pFileName,
   // Get the AAF Dictionary so that we can create valid AAF objects.
   checkResult(_pHeader->GetDictionary(&_pDictionary));
 
-  // Make a text clip.
+  // Make a simple event mob slot
   CreateEventMobSlot();
+
+  // Make a more complex mob slot.
+  CreateEventSequenceMobSlot();
 
   // cleanup
   Close();
@@ -182,6 +195,9 @@ void EventMobSlotTest::Open(wchar_t *pFileName)
 
   // Open and validate the text clip.
   OpenEventMobSlot();
+
+  // Open and validate a mob slot with a sequence of events.
+  OpenEventSequenceMobSlot();
 
   // cleanup
   Close();
@@ -215,17 +231,15 @@ void EventMobSlotTest::Close()
 }
 
 
-void EventMobSlotTest::CreateEventMobSlot()
+IAAFEvent *EventMobSlotTest::CreateAnEvent(aafPosition_t* position,
+                                           wchar_t *comment,
+                                           IAAFSequence *pSequence)
 {
   assert(_pHeader && _pDictionary);
+  assert(position && comment);
 
-  HRESULT hr = S_OK;
   IAAFEvent *pEvent = NULL;
-  IAAFEventMobSlot *pEventMobSlot = NULL;
-  IAAFSegment *pSegment = NULL;
-  IAAFMobSlot *pMobSlot = NULL;
-  IAAFMob *pMob = NULL;
-
+  IAAFComponent *pComponent = NULL;
 
   try
   {
@@ -234,11 +248,65 @@ void EventMobSlotTest::CreateEventMobSlot()
     checkResult(_pDictionary->CreateInstance(&AUID_AAFEvent,
                                              IID_IAAFEvent, 
                                              (IUnknown **)&pEvent));
-    checkResult(pEvent->SetPosition(0));
+    checkResult(pEvent->SetPosition(*position));
     checkResult(pEvent->SetComment(L"Event::Comment:This is a test event"));
+
+    if (NULL != pSequence)
+    {
+      // Get the segment inteface to add to the mob slot
+      checkResult(pEvent->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+ 
+      // Add the event to the sequence.
+      checkResult(pSequence->AppendComponent(pComponent));
+      pComponent->Release();
+      pComponent = NULL;      
+    }
+  }
+  catch (...)
+  {
+    if (pComponent)
+    {
+      pComponent->Release();
+      pComponent = NULL;
+    }
+
+    if (pEvent)
+    {
+      pEvent->Release();
+      pEvent = NULL;
+    }
+    
+    throw;
+  }
+  
+  return pEvent;
+}
+
+void EventMobSlotTest::CreateEventMobSlot()
+{
+  assert(_pHeader && _pDictionary);
+
+  HRESULT hr = S_OK;
+  aafPosition_t position;
+  IAAFEvent *pEvent = NULL;
+  IAAFComponent *pComponent = NULL;
+  IAAFSegment *pSegment = NULL;
+  IAAFEventMobSlot *pEventMobSlot = NULL;
+  IAAFMobSlot *pMobSlot = NULL;
+  IAAFMob *pMob = NULL;
+
+
+  try
+  {
+    // Create an event (note: this will be replaced by a concrete event in a
+    // later version after such an event is implemented.)
+    position = 0;
+    pEvent = CreateAnEvent(&position, L"Event::Comment:This is a test event");
 
     // Get the segment inteface to add to the mob slot
     checkResult(pEvent->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
+    pEvent->Release();
+    pEvent = NULL;
 
     // Create and initialize an EventMobSlot
     checkResult(_pDictionary->CreateInstance(&AUID_AAFEventMobSlot,
@@ -248,9 +316,13 @@ void EventMobSlotTest::CreateEventMobSlot()
 
     // Get the mob slot interface so that we can add the event segment.
     checkResult(pEventMobSlot->QueryInterface(IID_IAAFMobSlot, (void **)&pMobSlot));
+    pEventMobSlot->Release();
+    pEventMobSlot = NULL;
 
     // Add the event segment to the event mob slot.
     checkResult(pMobSlot->SetSegment(pSegment));
+    pSegment->Release();
+    pSegment = NULL;
 
     // Create the mob to hold the new event mob slot.
     checkResult(_pDictionary->CreateInstance(&AUID_AAFCompositionMob,
@@ -260,55 +332,54 @@ void EventMobSlotTest::CreateEventMobSlot()
 
     // Append event slot to the composition mob.
     checkResult(pMob->AppendSlot(pMobSlot));
+    pMobSlot->Release();
+    pMobSlot = NULL;
 
     // Attach the mob to the header...
     checkResult(_pHeader->AppendMob(pMob));
 
     // Save the id of the composition mob that contains our test
     // event mob slot.
-    checkResult(pMob->GetMobID(&_compositionMobID));
-  }
-  catch (HRESULT& rHR)
-  {
-    hr = rHR;
-    // fall through and handle cleanup
-  }
-
-  // Cleanup local references
-  if (pMob)
-  {
+    checkResult(pMob->GetMobID(&_eventMobID1));
     pMob->Release();
     pMob = NULL;
   }
-
-  if (pMobSlot)
+  catch (...)
   {
-    pMobSlot->Release();
-    pMobSlot = NULL;
+    // Cleanup local references
+    if (pMob)
+    {
+      pMob->Release();
+      pMob = NULL;
+    }
+
+    if (pMobSlot)
+    {
+      pMobSlot->Release();
+      pMobSlot = NULL;
+    }
+
+    if (pEventMobSlot)
+    {
+      pEventMobSlot->Release();
+      pEventMobSlot = NULL;
+    }
+
+    if (pSegment)
+    {
+      pSegment->Release();
+      pSegment = NULL;
+    }
+
+    if (pEvent)
+    {
+      pEvent->Release();
+      pEvent = NULL;
+    }
+ 
+    // Propogate the error.
+    throw;
   }
-
-  if (pEventMobSlot)
-  {
-    pEventMobSlot->Release();
-    pEventMobSlot = NULL;
-  }
-
-  if (pSegment)
-  {
-    pSegment->Release();
-    pSegment = NULL;
-  }
-
-  if (pEvent)
-  {
-    pEvent->Release();
-    pEvent = NULL;
-  }
-
-
-
-  // Propogate the error if necessary.
-  checkResult(hr);
 }
 
 
@@ -329,7 +400,7 @@ void EventMobSlotTest::OpenEventMobSlot()
   try
   {
     // Get the composition mob that we created to hold the
-    checkResult(_pHeader->LookupMob(&_compositionMobID, &pMob));
+    checkResult(_pHeader->LookupMob(&_eventMobID1, &pMob));
 
     // Get the first mob slot and check that it is an event mob slot.
     checkResult(pMob->EnumAAFAllMobSlots(&pEnumSlots));
@@ -342,62 +413,290 @@ void EventMobSlotTest::OpenEventMobSlot()
     checkResult(pMobSlot->GetSegment(&pSegment));
     checkResult(pSegment->QueryInterface(IID_IAAFEvent, (void **)&pEvent));
 
-
-    
-  }
-  catch (HRESULT& rHR)
-  {
-    hr = rHR;
-    // fall through and handle cleanup
-  }
-
-  // Cleanup local references
-  if (pEvent)
-  {
     pEvent->Release();
     pEvent = NULL;
-  }
-
-  if (pSegment)
-  {
     pSegment->Release();
     pSegment = NULL;
-  }
-
-  if (pEventMobSlot)
-  {
     pEventMobSlot->Release();
     pEventMobSlot = NULL;
-  }
-
-  if (pMobSlot)
-  {
     pMobSlot->Release();
     pMobSlot = NULL;
-  }
-
-  if (pEnumSlots)
-  {
     pEnumSlots->Release();
     pEnumSlots = NULL;
-  }
-
-  if (pMob)
-  {
     pMob->Release();
     pMob = NULL;
   }
+  catch (...)
+  {
+    // Cleanup local references
+    if (pEvent)
+    {
+      pEvent->Release();
+      pEvent = NULL;
+    }
 
+    if (pSegment)
+    {
+      pSegment->Release();
+      pSegment = NULL;
+    }
 
+    if (pEventMobSlot)
+    {
+      pEventMobSlot->Release();
+      pEventMobSlot = NULL;
+    }
 
-  // Propogate the error if necessary.
-  checkResult(hr);
+    if (pMobSlot)
+    {
+      pMobSlot->Release();
+      pMobSlot = NULL;
+    }
+
+    if (pEnumSlots)
+    {
+      pEnumSlots->Release();
+      pEnumSlots = NULL;
+    }
+
+    if (pMob)
+    {
+      pMob->Release();
+      pMob = NULL;
+    }
+ 
+    // Propogate the error.
+    throw; 
+  }
 }
 
 
+void EventMobSlotTest::CreateEventSequenceMobSlot()
+{
+  assert(_pHeader && _pDictionary);
+
+  HRESULT hr = S_OK;
+  aafPosition_t position;
+  IAAFSequence *pSequence = NULL;
+  IAAFEvent *pEvent = NULL;
+  IAAFComponent *pComponent = NULL;
+  IAAFSegment *pSegment = NULL;
+  IAAFEventMobSlot *pEventMobSlot = NULL;
+  IAAFMobSlot *pMobSlot = NULL;
+  IAAFMob *pMob = NULL;
 
 
+  try
+  {
+    // Create a sequence to hold our list of events.
+    checkResult(_pDictionary->CreateInstance(&AUID_AAFSequence,
+                                             IID_IAAFSequence, 
+                                             (IUnknown **)&pSequence));
 
+
+    // Create an event (note: this will be replaced by a concrete event in a
+    // later version after such an event is implemented.)
+    position = 0;
+    pEvent = CreateAnEvent(&position, L"Event::Comment:This is a test event 0", pSequence);
+    pEvent->Release();
+    pEvent = NULL;
+
+
+    // Create an event (note: this will be replaced by a concrete event in a
+    // later version after such an event is implemented.)
+    position = 1;
+    pEvent = CreateAnEvent(&position, L"Event::Comment:This is a test event 1", pSequence);
+    pEvent->Release();
+    pEvent = NULL;
+
+
+    // Create an event (note: this will be replaced by a concrete event in a
+    // later version after such an event is implemented.)
+    position = 1;
+    pEvent = CreateAnEvent(&position, L"Event::Comment:This is a test event 2", pSequence);
+    pEvent->Release();
+    pEvent = NULL;
+
+
+    // Get the segment inteface to add to the mob slot
+    checkResult(pSequence->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
+    pSequence->Release();
+    pSequence = NULL;
+
+    // Create and initialize an EventMobSlot
+    checkResult(_pDictionary->CreateInstance(&AUID_AAFEventMobSlot,
+                                             IID_IAAFEventMobSlot, 
+                                             (IUnknown **)&pEventMobSlot));
+    checkResult(pEventMobSlot->SetEditRate(const_cast<aafRational_t *>(&_editRate)));
+
+    // Get the mob slot interface so that we can add the event segment.
+    checkResult(pEventMobSlot->QueryInterface(IID_IAAFMobSlot, (void **)&pMobSlot));
+    pEventMobSlot->Release();
+    pEventMobSlot = NULL;
+
+    // Add the event segment to the event mob slot.
+    checkResult(pMobSlot->SetSegment(pSegment));
+    pSegment->Release();
+    pSegment = NULL;
+
+    // Create the mob to hold the new event mob slot.
+    checkResult(_pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+                                             IID_IAAFMob, 
+                                             (IUnknown **)&pMob));
+    checkResult(pMob->SetName(L"CompositionMob::Name:Test mob to hold an event mob slot"));
+
+    // Append event slot to the composition mob.
+    checkResult(pMob->AppendSlot(pMobSlot));
+    pMobSlot->Release();
+    pMobSlot = NULL;
+
+    // Attach the mob to the header...
+    checkResult(_pHeader->AppendMob(pMob));
+
+    // Save the id of the composition mob that contains our test
+    // event mob slot.
+    checkResult(pMob->GetMobID(&_eventMobID2));
+    pMob->Release();
+    pMob = NULL;
+  }
+  catch (...)
+  {
+    // Cleanup local references
+    if (pMob)
+    {
+      pMob->Release();
+      pMob = NULL;
+    }
+
+    if (pMobSlot)
+    {
+      pMobSlot->Release();
+      pMobSlot = NULL;
+    }
+
+    if (pEventMobSlot)
+    {
+      pEventMobSlot->Release();
+      pEventMobSlot = NULL;
+    }
+
+    if (pSegment)
+    {
+      pSegment->Release();
+      pSegment = NULL;
+    }
+
+    if (pComponent)
+    {
+      pComponent->Release();
+      pComponent = NULL;
+    }
+
+    if (pEvent)
+    {
+      pEvent->Release();
+      pEvent = NULL;
+    }
+
+    if (pSequence)
+    {
+      pSequence->Release();
+      pSequence = NULL;
+    }
+ 
+    // Propogate the error.
+    throw;
+  }
+}
+
+
+void EventMobSlotTest::OpenEventSequenceMobSlot()
+{
+  assert(_pHeader);
+
+  HRESULT hr = S_OK;
+  IAAFMob *pMob = NULL;
+  IEnumAAFMobSlots *pEnumSlots = NULL;
+  IAAFMobSlot *pMobSlot = NULL;
+  IAAFEventMobSlot *pEventMobSlot = NULL;
+  aafRational_t editRate = {0};
+  IAAFSegment *pSegment = NULL;
+  IAAFSequence *pSequence = NULL;
+
+
+  try
+  {
+    // Get the composition mob that we created to hold the
+    checkResult(_pHeader->LookupMob(&_eventMobID2, &pMob));
+
+    // Get the first mob slot and check that it is an event mob slot.
+    checkResult(pMob->EnumAAFAllMobSlots(&pEnumSlots));
+    checkResult(pEnumSlots->NextOne(&pMobSlot));
+    checkResult(pMobSlot->QueryInterface(IID_IAAFEventMobSlot, (void **)&pEventMobSlot));
+    checkResult(pEventMobSlot->GetEditRate(&editRate));
+    checkExpression(0 == memcmp(&editRate, &_editRate, sizeof(editRate)), AAFRESULT_TEST_FAILED);
+
+    // Get the event slot's segment and check that it is an event.
+    checkResult(pMobSlot->GetSegment(&pSegment));
+    checkResult(pSegment->QueryInterface(IID_IAAFSequence, (void **)&pSequence));
+
+
+    pSequence->Release();
+    pSequence = NULL;
+    pSegment->Release();
+    pSegment = NULL;
+    pEventMobSlot->Release();
+    pEventMobSlot = NULL;
+    pMobSlot->Release();
+    pMobSlot = NULL;
+    pEnumSlots->Release();
+    pEnumSlots = NULL;
+    pMob->Release();
+    pMob = NULL;
+  }
+  catch (...)
+  {
+    // Cleanup local references
+    if (pSequence)
+    {
+      pSequence->Release();
+      pSequence = NULL;
+    }
+
+    if (pSegment)
+    {
+      pSegment->Release();
+      pSegment = NULL;
+    }
+
+    if (pEventMobSlot)
+    {
+      pEventMobSlot->Release();
+      pEventMobSlot = NULL;
+    }
+
+    if (pMobSlot)
+    {
+      pMobSlot->Release();
+      pMobSlot = NULL;
+    }
+
+    if (pEnumSlots)
+    {
+      pEnumSlots->Release();
+      pEnumSlots = NULL;
+    }
+
+    if (pMob)
+    {
+      pMob->Release();
+      pMob = NULL;
+    }
+ 
+    // Propogate the error.
+    throw; 
+  }
+}
 
 
 
