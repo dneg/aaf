@@ -289,7 +289,6 @@ static void ReadAAFFile(aafWChar * pFileName)
       check(hr); // display error message
       if (SUCCEEDED(hr))
       {
-        fprintf(stdout, "LastIdentification\n");
         printIdentification(pIdent);
 
         pIdent->Release();
@@ -329,7 +328,6 @@ int main(int argumentCount, char* argumentVector[])
   wchar_t wInputFileName[256];
   convert(wInputFileName, 256, inputFileName);
 
-  printf("Attempting to load the AAF dll...\n");
   HRESULT hr = AAFLoad(0);
   if (!AAFRESULT_SUCCEEDED(hr))
   {
@@ -337,11 +335,8 @@ int main(int argumentCount, char* argumentVector[])
     fprintf(stderr, "Is the $PATH environment variable set correctly ?\n");
     exit(1);
   }
-  printf("DONE\n");
 
   ReadAAFFile(wInputFileName);
-
-  fprintf(stdout, "Done\n");
 
   AAFUnload();
 
