@@ -434,8 +434,9 @@ void OMSimpleProperty::set(const void* value, size_t valueSize)
 }
 
   // @mfunc Save this <c OMSimpleProperty>.
+  //   @parm Client context for callbacks.
   //   @this const
-void OMSimpleProperty::save(void) const
+void OMSimpleProperty::save(void* /* clientContext */) const
 {
   TRACE("OMSimpleProperty::save");
   PRECONDITION("Optional property is present",
