@@ -50,6 +50,7 @@
 // name in AAF.
 //
 #define AUID_AAFClassDefinition AUID_AAFClassDef
+#define AUID_AAFCodecDefinition AUID_AAFCodecDef
 #define AUID_AAFDataDefinition AUID_AAFDataDef
 #define AUID_AAFDefinitionObject AUID_AAFDefObject
 #define AUID_AAFEdgeCode AUID_AAFEdgecode

@@ -63,7 +63,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     NextOne
         // @parm [out,retval] The Next AAFPluginDescriptor
-        (ImplAAFPluginDef ** ppAAFPluginDescriptor);
+        (aafUID_t * ppAAFPluginDescriptor);
 
   //****************
   // Next()
@@ -74,7 +74,7 @@ public:
          aafUInt32  count,
 
          // @parm [out, size_is(count), length_is(*pFetched)] array to receive AAFPluginDescriptors
-         ImplAAFPluginDef ** ppAAFPluginDesc,
+         aafUID_t *ppAAFPluginDesc,
 
          // @parm [out,ref] number of actual AAFPluginDescriptor fetched into ppAAFPluginDesc array
          aafUInt32 *  pFetched);

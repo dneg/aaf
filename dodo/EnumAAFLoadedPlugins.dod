@@ -37,10 +37,10 @@ AD_XCLASS_BEGIN(Concrete, Transient)
 
 AD_XMETHOD1(NextOne,
 			[out\,retval],
-			objOut,
-			AAFPluginDef,
-			ppAAFPluginDef,
-			The Next AAFPluginDef,
+			objPass,
+			aafUID_t*,
+			ppAAFPluginID,
+			The Next AAFPluginID,
 			Enumerates to the next element in the enumerators list. The caller is responsible 
   // for properly releasing the returned pointer when it is no longer needed.
   // @comm This is a just simplified version of the Next method. )
@@ -48,7 +48,7 @@ AD_XMETHOD1(NextOne,
 AD_X2METHOD3(Next,
 			[in], objPass, aafUInt32, count, number of AAFPluginDef requested,xxx,xxx,
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
-			objOutArray, AAFPluginDef, ppAAFPluginDef, array to receive AAFPluginDefs,count,*pFetched,
+			objPass, aafUID_t*, pAAFPluginIDs, array to receive aafUID_t,count,*pFetched,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
 			number of actual AAFPluginDef fetched into ppAAFPluginDef array,xxx,xxx,
 			Enumerates the next count elements \(AAFPluginDesc pointers\) in 
