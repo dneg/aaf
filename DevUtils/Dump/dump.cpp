@@ -1464,6 +1464,8 @@ void dumpStorage(IStorage* storage,
           fatalError("dumpStorage", "IStorage::OpenStorage() failed.");
         }
         dumpStorage(subStorage, &statstg, myPathName, 0);
+        subStorage->Release();
+        subStorage = 0;
         break;
 
       case STGTY_STREAM:
@@ -1478,6 +1480,8 @@ void dumpStorage(IStorage* storage,
           fatalError("dumpStorage", "IStorage::OpenStream() failed.");
         }
         dumpStream(subStream, &statstg, myPathName);
+        subStream->Release();
+        subStream = 0;
         break;
 
       case STGTY_LOCKBYTES:
@@ -2535,6 +2539,9 @@ void dumpContainedObjects(IStorage* storage,
 
       delete [] subStorageName;
       subStorageName = 0;
+
+      subStorage->Release();
+      subStorage = 0;
     }
     break;
 
@@ -2644,6 +2651,9 @@ void dumpContainedObjects(IStorage* storage,
 
         delete [] subStorageName;
         subStorageName = 0;
+
+        subStorage->Release();
+        subStorage = 0;
       }
 
       delete [] vectorName;
@@ -2654,6 +2664,9 @@ void dumpContainedObjects(IStorage* storage,
 
       delete [] vectorIndex;
       vectorIndex = 0;
+
+      subStream->Release();
+      subStream = 0;
     }
     break;
     case SF_STRONG_OBJECT_REFERENCE_SET : {
@@ -2814,6 +2827,9 @@ void dumpContainedObjects(IStorage* storage,
 
         delete [] subStorageName;
         subStorageName = 0;
+
+        subStorage->Release();
+        subStorage = 0;
       }
 
       delete [] setName;
@@ -2824,6 +2840,9 @@ void dumpContainedObjects(IStorage* storage,
 
       delete [] setIndex;
       setIndex = 0;
+
+      subStream->Release();
+      subStream = 0;
     }
     break;
     case SF_WEAK_OBJECT_REFERENCE:
@@ -2920,6 +2939,9 @@ void dumpContainedObjects(IStorage* storage,
 
       delete [] collectionIndex;
       collectionIndex = 0;
+
+      subStream->Release();
+      subStream = 0;
       }
       break;
 
