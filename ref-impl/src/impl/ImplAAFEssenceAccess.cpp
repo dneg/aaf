@@ -1633,6 +1633,53 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
+// INTERNAL to the SDK
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceAccess::GetSelectInfo (ImplAAFSourceMob *fileMob,
+                           aafSelectInfo_t* pSelectInfo)
+{
+	IAAFEssenceStream		*stream;
+	ImplAAFDictionary		*dict = NULL;
+	IUnknown				*iUnk = NULL;
+	IAAFSourceMob			*iFileMob = NULL;
+	ImplAAFPluginManager *plugins = NULL;
+
+	aafAssert(pSelectInfo != NULL, _mainFile, AAFRESULT_NULL_PARAM);
+	XPROTECT()
+	{
+		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
+		CHECK(plugins->CreateInstance(CLSID_AAFEssenceDataStream,
+				NULL, 
+				IID_IAAFEssenceStream, 
+				(void **)&stream));
+		iUnk = static_cast<IUnknown *> (fileMob->GetContainer());	// Codec knowns about compFilemob only
+		CHECK(iUnk->QueryInterface(IID_IAAFSourceMob, (void **)&iFileMob));
+		iUnk->Release();
+		iUnk= NULL;
+		CHECK(_codec->GetSelectInfo(iFileMob, stream, pSelectInfo));
+		dict->ReleaseReference();
+		dict = NULL;
+		stream->Release();
+		stream = NULL;
+		plugins->ReleaseReference();
+		plugins = NULL;
+		iFileMob->Release();
+		iFileMob = NULL;
+	}
+	XEXCEPT
+	{
+		if(dict)
+			dict->ReleaseReference();
+		if(stream)
+			stream->Release();
+		if (plugins)
+			plugins->ReleaseReference();
+
+	}
+	XEND
+	
+	return(AAFRESULT_SUCCESS);
+}
 
 	//@comm Returns the number of interleaved essence channels of a given type in the essence stream referenced by the given file mob
 	//@comm If the data format is not interleaved, then the answer will
