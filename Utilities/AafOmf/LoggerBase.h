@@ -71,17 +71,41 @@ Notes:
 	is set once when the object is constructed. The idea is
 	that you must make up your mind up front on whether to 
 	use mask vs. levels and not mix and match them in mid-stream. 
+
+  The helper class VaList is there because the definition of va_list
+  is:
+
+  typedef char *va_list;
+
+  This causes problems with calls like
+
+  Log( level, "bla, bla, bla %s\n", "A string" );
+
+  because the compiler can't distinguish between "A string" and
+  a va_list.
+
 ****************************************************************/
+
+class VaList
+{
+public:
+	va_list args;
+	VaList( va_list a );
+};
+
+inline VaList::VaList( va_list a ): args( a ) 
+{
+}
 
 class LoggerBase
 {
 protected:
 	unsigned iLevel; // The log level or mask to test against.
 	bool iIsMask; // Is the log level used as a mask?
+	virtual void Print( unsigned level, const char *fmt, va_list args  ) = 0;
 public:
 	virtual void Log( unsigned level, const char *fmt, ... );
-	virtual void Log( unsigned level, const char *fmt, va_list args  );
-	virtual void Print( unsigned level, const char *fmt, va_list args  ) = 0;
+	virtual void Log( unsigned level, const char *fmt, VaList &valist  );
 	virtual bool LogThisMsg( unsigned level );
 	virtual unsigned SetLevel( unsigned level );
 	virtual unsigned GetLevel( void );

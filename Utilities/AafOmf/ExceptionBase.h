@@ -49,8 +49,8 @@ protected:
 public:
 	ExceptionBase( long errCode );
 	virtual ~ExceptionBase( void);
-	virtual	const char *Type( void ) = 0; // A string which IDs the exception.
-	virtual long	Code( void );
+	virtual	const char *Type( void ); // A string which IDs the exception.
+	virtual long	Code( void );	// The return code.
 	static LoggerBase *SetLogger( LoggerBase *logger );
 };
 
@@ -92,4 +92,20 @@ inline long	ExceptionBase::Code( void )
 	return iErrorCode; 
 }
 
+/*******************************************************************
+Name:
+	ExceptionBase::Type
+Description:
+Returns:
+	Return the type of exception. 
+	
+	  This method really *should* be overridden by the child class.
+	  This is not enforced with a pure virtual function specification
+	  because an ExceptionBase object couldn't be constructed by value
+	  in a catch() statement.
+********************************************************************/
+inline	const char *ExceptionBase::Type( void )
+{
+	return "Base";
+}
 #endif

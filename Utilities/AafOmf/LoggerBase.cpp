@@ -40,11 +40,11 @@ Returns:
 	None
 	
 ****************************************************************/
-void LoggerBase::Log( unsigned level, const char *fmt, va_list args )
+void LoggerBase::Log( unsigned level, const char *fmt, VaList &valist )
 {
 	if( LogThisMsg( level ) )
 	{
-		Print( level, fmt, args );
+		Print( level, fmt, valist.args );
 	}
 }
 
