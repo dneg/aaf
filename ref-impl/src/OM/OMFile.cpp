@@ -76,7 +76,7 @@ OMFile::OMFile(const wchar_t* fileName,
   PRECONDITION("Valid dictionary", _dictionary != 0);
   _fileName = saveWideString(fileName);
   setClassFactory(factory);
-  readSignature(_fileName);
+  readSignature(_fileName, _signature);
   setName(L"/");
 }
 
@@ -337,7 +337,7 @@ void OMFile::close(void)
 
   _root->close();
   if (_mode == modifyMode) {
-    writeSignature(_fileName);
+    writeSignature(_fileName, _signature);
   }
   _root->detach();
   delete _root;
@@ -585,11 +585,15 @@ void* OMFile::clientOnRestoreContext(void)
 
   // @mfunc Write the signature to the given file.
   //   @parm The file name.
-void OMFile::writeSignature(const wchar_t* fileName)
+  //   @parm The signature.
+void OMFile::writeSignature(const wchar_t* fileName,
+                            const OMFileSignature& signature)
 {
   TRACE("OMFile::writeSignature");
 
-  OMFileSignature sig = _signature;
+  PRECONDITION("Valid file name", validWideString(fileName));
+
+  OMFileSignature sig = signature;
 
   // There's no ANSI function to open a file with a wchar_t* name.
   // for now convert the name. In future add 
@@ -615,11 +619,13 @@ void OMFile::writeSignature(const wchar_t* fileName)
 
   // @mfunc Read the signature from the given file.
   //   @parm The file name.
-void OMFile::readSignature(const wchar_t* fileName)
+  //   @parm The signature.
+void OMFile::readSignature(const wchar_t* fileName,
+                           OMFileSignature& signature)
 {
   TRACE("OMFile::readSignature");
 
-  OMFileSignature sig;
+  PRECONDITION("Valid file name", validWideString(fileName));
 
   char cFileName[256];
   size_t status = wcstombs(cFileName, fileName, 256);
@@ -629,15 +635,12 @@ void OMFile::readSignature(const wchar_t* fileName)
   ASSERT("File exists", f != 0);
   status = fseek(f, 8, SEEK_SET);
   ASSERT("Seek succeeded", status == 0);
-  status = fread(&sig, sizeof(sig), 1, f);
+  status = fread(&signature, sizeof(signature), 1, f);
   ASSERT("Read succeeded", status == 1);
 
   fclose(f);
 
   if (hostByteOrder() != littleEndian) {
-    OMStoredObject::reorderUniqueObjectIdentification(sig);
+    OMStoredObject::reorderUniqueObjectIdentification(signature);
   }
-
-  _signature = sig;
-
 }
