@@ -278,6 +278,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFKLVData.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFKLVDataDefinition.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFLocator.cpp"
 # End Source File
 # Begin Source File
@@ -478,6 +482,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTaggedValue.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTaggedValueDefinition.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTaggedValueUtil.cpp"
 # End Source File
 # Begin Source File
@@ -654,6 +662,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFKLVData.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFKLVDataDefs.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFLoadedPlugins.cpp"
 # End Source File
 # Begin Source File
@@ -707,6 +719,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFSegments.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFStorablePropVals.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFTaggedValueDefs.cpp"
 # End Source File
 # Begin Source File
 

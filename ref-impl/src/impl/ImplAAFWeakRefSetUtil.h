@@ -45,8 +45,8 @@
 // This code was factored out of ImplAAFOperationDef.  The were the
 // original the methods that accessed ImplAAFOperationDef::_paramDefined
 
-class AAFWeakRefSetUtil {
- public:
+namespace AAFWeakRefSetUtil {
+
 
   // Requires specialized implementations.
   // Implementations currentl exist for:

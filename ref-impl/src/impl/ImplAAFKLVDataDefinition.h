@@ -33,9 +33,9 @@
 
 
 
-class ImplAAFTypeDef;
+#include "ImplAAFTypeDef.h"
 
-class ImplAAFPropertyDef;
+#include "ImplAAFPropertyDef.h"
 
 template <class T> class ImplAAFEnumerator;
 typedef ImplAAFEnumerator<ImplAAFPropertyDef> ImplEnumAAFPropertyDefs;
