@@ -210,6 +210,9 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
     writeToStream(_indexStream, &offset, sizeof(length));
     writeToStream(_indexStream, &length, sizeof(length));
   }
+
+  streamSetPosition(_indexStream, 0);
+  POSTCONDITION("At start of index stream", streamPosition(_indexStream) == 0);
 }
 
 OMStoredPropertySetIndex* OMStoredObject::restore(void)
@@ -251,6 +254,8 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
     index->insert(propertyId, type, offset, length);
   }
   
+  streamSetPosition(_indexStream, 0);
+  POSTCONDITION("At start of index stream", streamPosition(_indexStream) == 0);
   POSTCONDITION("Sorted index", index->isSorted());
   return index;
 }
@@ -278,7 +283,10 @@ void OMStoredObject::restore(OMPropertySet& properties)
     ASSERT("Valid property", p != 0);
     p->restoreFrom(*this, length);
   }
-  
+
+  streamSetPosition(_propertiesStream, 0);
+  POSTCONDITION("At start of properties stream",
+                streamPosition(_propertiesStream) == 0);
 }
 
 void OMStoredObject::saveIndex(void)
