@@ -25,7 +25,6 @@
 //         OMBuiltinPropertyDefinition
 
 #include "OMPropertyDefinition.h"
-#include "OMDictionary.h"
 
 #include "OMAssertions.h"
 
@@ -41,8 +40,6 @@ OMBuiltinPropertyDefinition::OMBuiltinPropertyDefinition(
   _isOptional(isOptional)  
 {
   TRACE("OMBuiltinPropertyDefinition::OMBuiltinPropertyDefinition");
-
-  OMDictionary::insert(localIdentification(), this);
 }
 
   // @mfunc Destructor.

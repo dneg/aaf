@@ -28,11 +28,6 @@
 
 OMDictionary::PropertyDefinitionSet OMDictionary::_propertyDefinitions;
 
-static
-OMBuiltinPropertyDefinition dictionary(0, L"MetaDictionary", 0x0001, false);
-static
-OMBuiltinPropertyDefinition clientRoot(0, L"Header",         0x0002, false);
-
 OMPropertyDefinition* OMDictionary::find(const OMPropertyId propertyId)
 {
   TRACE("OMDictionary::find");
