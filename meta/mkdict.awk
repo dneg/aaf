@@ -69,6 +69,10 @@
 #                            abstract, this field contains "abstract" otherwise
 #                            this filed should be empty.
 #
+# $36     = column(AJ)    => if this entity is a property and the property is
+#                            unique identifier, this field contains "uid" otherwise
+#                            this filed should be empty.
+#
 BEGIN {
   errors = 0;
   FS=","
@@ -170,7 +174,7 @@ BEGIN {
   printf("//\n");
   printf("//   Separate one AAF class definition from another.\n");
   printf("//\n");
-  printf("// AAF_PROPERTY(name, id, tag, type, mandatory, container)\n");
+  printf("// AAF_PROPERTY(name, id, tag, type, mandatory, uid, container)\n");
   printf("//\n");
   printf("//   Define an AAF property.\n");
   printf("//\n");
@@ -180,6 +184,8 @@ BEGIN {
   printf("//     type      = the type of the property [*]\n");
   printf("//     mandatory = true if the property is mandatory\n");
   printf("//                 false if the property is optional\n");
+  printf("//     uid       = true if the property is the unique identifier for this class\n");
+  printf("//                 false if the property is not the unique identifier for this class\n");
   printf("//     container = the class that defines this property\n");
   printf("//\n");
   printf("// AAF_TYPE(type)\n");
@@ -432,7 +438,7 @@ BEGIN {
   printf("#endif\n");
   printf("\n");
   printf("#ifndef AAF_PROPERTY\n");
-  printf("#define AAF_PROPERTY(name, id, tag, type, mandatory, container)\n");
+  printf("#define AAF_PROPERTY(name, id, tag, type, mandatory, uid, container)\n");
   printf("#endif\n");
   printf("\n");
   printf("#ifndef AAF_TYPE\n");
@@ -791,8 +797,17 @@ BEGIN {
         printError(sprintf("Illegal entry \"%s\" in column AI, for property \"%s\" of class \"%s\".\n", $35, $10, class));
         errors++;
       }
+      if ($36 == "uid") {
+        uid = "true";
+        if ($26 == "O") {
+          printError(sprintf("Illegal entry \"%s\" in column AJ, for property \"%s\" of class \"%s\". A unique identifier must be manditory.\n", $36, $10, class));
+          errors++;
+        }
+      } else {
+        uid = "false";
+      }
       # AAF_PROPERTY(name, id, tag, type, mandatory, container)
-      printf("  AAF_PROPERTY(%s,\n    AAF_LITERAL_AUID(0x%s%s%s%s,\n      0x%s%s, 0x%s%s,\n      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x%s),\n    0x%s,\n    %s,\n    %s,\n    %s)\n", $10, $2, $3, $4, $5, $6, $7, $8, $9, $1, $33, type, mandatory, class);
+      printf("  AAF_PROPERTY(%s,\n    AAF_LITERAL_AUID(0x%s%s%s%s,\n      0x%s%s, 0x%s%s,\n      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x%s),\n    0x%s,\n    %s,\n    %s,\n    %s,\n    %s)\n", $10, $2, $3, $4, $5, $6, $7, $8, $9, $1, $33, type, mandatory, uid, class);
     }
   }
 }
