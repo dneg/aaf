@@ -24,6 +24,7 @@
 
 
 const int PID_TIMELINEMOBSLOT_EDITRATE	= 4;
+const int PID_TIMELINEMOBSLOT_ORIGIN	= 5;
 
 
 
@@ -87,6 +88,7 @@ public:
 
 protected:
 	OMFixedSizeProperty<aafRational_t>	_editRate;
+	OMFixedSizeProperty<aafPosition_t>	_origin; 
 
 };
 
