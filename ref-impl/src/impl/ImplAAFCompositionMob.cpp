@@ -104,9 +104,14 @@ AAFRESULT STDMETHODCALLTYPE
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
-	_defaultFadeLen = fadeLength;
-	_defaultFadeType = fadeType;
-	_defaultFadeEditUnit = fadeEditUnit;
+	if (fadelength > 0) 
+	{
+		_defaultFadeLen = fadeLength;
+		_defaultFadeType = fadeType;
+		_defaultFadeEditUnit = fadeEditUnit;
+	}
+	else
+		aafError = AAFRESULT_BAD_LENGTH;
 
 	return aafError;
 }
