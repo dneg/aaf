@@ -179,7 +179,17 @@ template <typename ReferencedObject>
 const ReferencedObject*
 OMStrongReferenceProperty<ReferencedObject>::operator -> (void) const
 {
-  return _reference.getValue();
+  TRACE("OMStrongReferenceProperty<ReferencedObject>::operator ->");
+
+  OMStorable*p = _reference.getValue();
+  const ReferencedObject* result = 0;
+  if (p != 0) {
+    result = dynamic_cast<const ReferencedObject*>(p);
+    ASSERT("Object is correct type", p != 0);
+  } else {
+    result = 0;
+  }
+  return result;
 }
 
   // @mfunc Type conversion. Convert an

@@ -422,7 +422,13 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   SetElement* element = 0;
 
   _set.find(identification, &element);
-  ReferencedObject* result = element->getValue();
+
+  ReferencedObject* result = 0;
+  OMStorable* p = element->getValue();
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  }
 
   POSTCONDITION("Valid result", result != 0);
   POSTCONDITION("Consistent keys", result->identification() == identification);
