@@ -45,12 +45,14 @@ $(OBJDIR)/%$(OBJ): %.$(CPP_EXTENSION)
 #------------------------------------------------------------------------------
 
 $(OBJDIR)/%.d : %.c 
+	@echo Generating dependencies for $<; \
 	$(SHELL) -ec 'if [ ! -d $(OBJDIR) ]; then $(MKDIR) $(OBJDIR); fi; \
 	$(CC) -M $(CFLAGS) $(INCLUDES) $< \
 	| sed '\''s,\($(*F)\)\.o[ :]*,$(@D)/\1.o $@ : ,g'\'' > $@; \
 	[ -s $@ ] || rm -f $@'
 
 $(OBJDIR)/%.d : %.$(CPP_EXTENSION)
+	@echo Generating dependencies for $<; \
 	$(SHELL) -ec 'if [ ! -d $(OBJDIR) ]; then $(MKDIR) $(OBJDIR); fi; \
 	$(CC) -M $(CFLAGS) $(INCLUDES) $< \
 	| sed '\''s,\($(*F)\)\.o[ :]*,$(@D)/\1.o $@ : ,g'\'' > $@; \
