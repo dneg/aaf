@@ -25,6 +25,10 @@
 
 #include <assert.h>
 
+#if defined(__MWERKS__)
+#include <wstring.h>	// include wcslen declaration.
+#endif
+
 extern "C" const aafClassID_t CLSID_AAFFile;
 
 ImplAAFSession::ImplAAFSession ()
