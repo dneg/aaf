@@ -26,16 +26,17 @@
 #include "OMDictionary.h"
 #include "OMPropertyDefinition.h"
 
-OMDictionary::PropertyDefinitionSet OMDictionary::_propertyDefinitions;
+OMDictionary::PropertyDefinitionSet* OMDictionary::_propertyDefinitions;
 
 OMPropertyDefinition* OMDictionary::find(const OMPropertyId propertyId)
 {
   TRACE("OMDictionary::find");
 
+  PRECONDITION("Definitions initialized", _propertyDefinitions != 0);
   PRECONDITION("Valid property id", propertyId != 0);
 
   OMPropertyDefinition* result = 0;
-  bool status = _propertyDefinitions.find(propertyId, result);
+  bool status = _propertyDefinitions->find(propertyId, result);
 
   POSTCONDITION("Property definition found", status);
   POSTCONDITION("Valid result", result != 0);
@@ -48,37 +49,39 @@ void OMDictionary::insert(const OMPropertyId propertyId,
 {
   TRACE("OMDictionary::insert");
 
+  PRECONDITION("Definitions initialized", _propertyDefinitions != 0);
   PRECONDITION("Valid property id", propertyId != 0);
   PRECONDITION("Valid property definition", definition != 0);
   PRECONDITION("Definition not already present",
-                                   !_propertyDefinitions.contains(propertyId));
+                                  !_propertyDefinitions->contains(propertyId));
 
-  bool status = _propertyDefinitions.insert(
+  bool status = _propertyDefinitions->insert(
                                 propertyId,
                                 const_cast<OMPropertyDefinition*>(definition));
 
   POSTCONDITION("Definition not previously present", status);
   POSTCONDITION("Definition present",
-                                    _propertyDefinitions.contains(propertyId));
+                                   _propertyDefinitions->contains(propertyId));
 }
 
 OMPropertyDefinition* OMDictionary::remove(const OMPropertyId propertyId)
 {
   TRACE("OMDictionary::remove");
 
+  PRECONDITION("Definitions initialized", _propertyDefinitions != 0);
   PRECONDITION("Valid property id", propertyId != 0);
   PRECONDITION("Definition present",
-                                    _propertyDefinitions.contains(propertyId));
+                                   _propertyDefinitions->contains(propertyId));
 
   OMPropertyDefinition* result = 0;
-  bool status = _propertyDefinitions.find(propertyId, result);
+  bool status = _propertyDefinitions->find(propertyId, result);
   ASSERT("Property definition found", status);
 
-  status = _propertyDefinitions.remove(propertyId);
+  status = _propertyDefinitions->remove(propertyId);
   ASSERT("Property definition removed", status);
 
   POSTCONDITION("Definition no longer present",
-                                   !_propertyDefinitions.contains(propertyId));
+                                  !_propertyDefinitions->contains(propertyId));
   return result;
 }
 
@@ -86,8 +89,11 @@ bool OMDictionary::contains(const OMPropertyId propertyId)
 {
   TRACE("OMDictionary::contains");
 
+  PRECONDITION("Definitions initialized", _propertyDefinitions != 0);
+  PRECONDITION("Valid property id", propertyId != 0);
+
   OMPropertyDefinition* d = 0;
-  bool result = _propertyDefinitions.find(propertyId, d);
+  bool result = _propertyDefinitions->find(propertyId, d);
 
   return result;
 }
@@ -103,6 +109,10 @@ struct {
 void OMDictionary::initialize(void)
 {
   TRACE("OMDictionary::initialize");
+  PRECONDITION("Definitions not initialized", _propertyDefinitions == 0);
+
+  _propertyDefinitions = new PropertyDefinitionSet();
+  ASSERT("Valid heap pointer", _propertyDefinitions != 0);
 
   for (size_t i = 0; i < sizeof(_properties)/sizeof(_properties[0]); i++) {
     OMPropertyDefinition* d =
@@ -119,10 +129,13 @@ void OMDictionary::finalize(void)
 {
   TRACE("OMDictionary::finalize");
 
+  PRECONDITION("Definitions initialized", _propertyDefinitions != 0);
+
   for (size_t i = 0; i < sizeof(_properties)/sizeof(_properties[0]); i++) {
     if (contains(_properties[i]._pid)) {
       OMPropertyDefinition* d = remove(_properties[i]._pid);
       delete d;
     }
   }
+  delete _propertyDefinitions;
 }

@@ -56,7 +56,7 @@ private:
   typedef OMRedBlackTree<OMPropertyId,
                          OMPropertyDefinition*> PropertyDefinitionSet;
 
-  static PropertyDefinitionSet _propertyDefinitions;
+  static PropertyDefinitionSet* _propertyDefinitions;
 
 };
 
