@@ -153,6 +153,20 @@ typedef unsigned long long int OMUInt64;
 typedef OMUInt8                OMByte;
 typedef OMUInt16               OMCharacter;
 
+const OMInt8   OMINT8_MIN  = (OMInt8) ((OMInt8) 1 << ( 8 - 1));
+const OMInt8   OMINT8_MAX  = ~OMINT8_MIN;
+const OMInt16  OMINT16_MIN = (OMInt16)((OMInt16)1 << (16 - 1));
+const OMInt16  OMINT16_MAX = ~OMINT16_MIN;
+const OMInt32  OMINT32_MIN = (OMInt32)((OMInt32)1 << (32 - 1));
+const OMInt32  OMINT32_MAX = ~OMINT32_MIN;
+const OMInt64  OMINT64_MIN = (OMInt64)((OMInt64)1 << (64 - 1));
+const OMInt64  OMINT64_MAX = ~OMINT64_MIN;
+
+const OMUInt8  OMUINT8_MAX  = ~(OMUInt8) 0;
+const OMUInt16 OMUINT16_MAX = ~(OMUInt16)0;
+const OMUInt32 OMUINT32_MAX = ~(OMUInt32)0;
+const OMUInt64 OMUINT64_MAX = ~(OMUInt64)0;
+
 typedef OMUInt16 OMPropertyId;
 typedef OMUInt16 OMPropertySize;
 typedef OMUInt16 OMPropertyCount;
