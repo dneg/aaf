@@ -160,5 +160,23 @@ HRESULT CAAFModuleTest::test()
 	return S_OK;
 }
 
+//
+// Return private implementation pointer for delegation.
+// NOTE: This is NOT the pointer to the COM object's implementation
+// object!
+//
+HRESULT STDMETHODCALLTYPE
+    CAAFModuleTest::GetImplRep(unsigned char **ppRep)
+{
+#ifdef BOB_TEST
+    if (!ppRep)
+        return E_INVALIDARG;
+	*ppRep = static_cast<unsigned char *>(_rep); // GetRepObject();
+	return S_OK;
+#else
+    return AAFRESULT_NOT_IMPLEMENTED;
+#endif
+}
+
 
 

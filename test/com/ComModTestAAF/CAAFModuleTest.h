@@ -36,7 +36,12 @@ protected:
 	//
     virtual HRESULT InternalQueryInterface(REFIID riid, void **ppv);
 
-private:
+public:
+  //
+  // Return private implementation pointer for delegation.
+  // NOTE: This is NOT the pointer to the COM object's implementation
+  // object!
+  STDMETHOD(GetImplRep)(/*[retval, string, out]*/ unsigned char **);
 };
 
 
