@@ -117,6 +117,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFAttributeTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFCDCIDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFCDCIDescriptorTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFClassDef.cpp"
 # End Source File
 # Begin Source File
@@ -198,6 +206,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFDictionary.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFDictionaryTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFDigitalImageDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFDigitalImageDescriptorTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -586,6 +602,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFVaryingValue.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFVaryingValueTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFWAVEDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFWAVEDescriptorTest.cpp"
 # End Source File
 # Begin Source File
 

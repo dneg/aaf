@@ -104,6 +104,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFAttribute.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFCDCIDescriptor.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFClassDef.cpp"
 # End Source File
 # Begin Source File
@@ -141,6 +145,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFDefObject.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFDictionary.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFDigitalImageDescriptor.cpp"
 # End Source File
 # Begin Source File
 
@@ -329,6 +337,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFUnixLocator.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFVaryingValue.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFWAVEDescriptor.cpp"
 # End Source File
 # Begin Source File
 
