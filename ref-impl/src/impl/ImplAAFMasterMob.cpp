@@ -645,7 +645,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFMasterMob::GetNumChannels (
                            aafSlotID_t  slotID,
                            aafMediaCriteria_t *essenceCrit,
-                           ImplAAFDataDef *essenceKind,
+                           aafUID_t essenceKind,
                            aafInt16 *numCh)
 {
 	ImplAAFEssenceAccess	*access;
