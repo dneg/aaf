@@ -91,6 +91,8 @@ ReferencedObject* OMWeakReferenceProperty<ReferencedObject>::setValue(
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::setValue");
 
+  PRECONDITION("Valid object", object != 0);
+
   ReferencedObject* result = _reference.setValue(object);
   setPresent();
   return result;
