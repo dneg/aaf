@@ -250,9 +250,9 @@ OMPageCache::CacheEntry* OMPageCache::findEntry(OMUInt64 page)
     result = entry;
     ASSERT("Consistent page numbers", page == entry->_pageNumber);
     // Promote to most recently used
-    _mru.remove(entry->_position);
-    _mru.prepend(entry);
-     entry->_position = _mru.first();
+    _mruList.remove(entry->_position);
+    _mruList.prepend(entry);
+     entry->_position = _mruList.first();
   } else {
     result = 0;
   }
@@ -301,11 +301,11 @@ OMPageCache::CacheEntry* OMPageCache::newEntry(OMUInt64 page)
   ASSERT("Valid heap pointer", entry != 0);
 
   // Add new entry to head of most recently used list
-  _mru.prepend(entry);
+  _mruList.prepend(entry);
   entry->_pageNumber = page;
   entry->_page = p;
   entry->_isDirty = false;
-  entry->_position = _mru.first();
+  entry->_position = _mruList.first();
   _cache.insert(page, entry);
 
   return entry;
@@ -321,20 +321,20 @@ OMPageCache::CacheEntry* OMPageCache::replaceEntry(OMUInt64 page)
 
   // Victim is at the tail of the most recently used list
   // Add new entry to head of most recently used list
-  CacheListIterator iterator = _mru.last();
+  CacheListIterator iterator = _mruList.last();
   CacheEntry* victim = iterator.value();
   OMUInt64 victimPage = victim->_pageNumber;
-  _mru.remove(iterator);
+  _mruList.remove(iterator);
   if (victim->_isDirty) {
     writePage(victimPage * _pageSize, _pageSize, victim->_page);
     victim->_isDirty = false;
   }
   _cache.remove(victimPage);
   CacheEntry* newEntry = victim;
-  _mru.prepend(newEntry);
+  _mruList.prepend(newEntry);
 
   newEntry->_pageNumber = page;
-  newEntry->_position = _mru.first();
+  newEntry->_position = _mruList.first();
   _cache.insert(page, newEntry);
   return newEntry;
 }

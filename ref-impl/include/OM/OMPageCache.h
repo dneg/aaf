@@ -130,7 +130,7 @@ private:
   OMUInt32 _pageCount;
   OMUInt32 _validPageCount;
   Cache _cache;
-  CacheList _mru;
+  CacheList _mruList;
 
 };
 
