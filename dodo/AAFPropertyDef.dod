@@ -86,50 +86,6 @@ AD_XMETHOD1(GetIsOptional,
   //   - The pIsOptional pointer is NULL.)
 
 
-AD_XMETHOD1(GetIsSearchable,
-			[out\, retval],
-			objPass,
-			aafBoolean_t *,
-			pIsSearchable,
-			pointer to the result, 
-
-			Sets *pIsSearchable to AAFTrue for properties that can contain
-  // user-searchable data.  Sets it to AAFFalse otherwise.
-  //
-  // Succeeds if:
-  // - The pIsSearchable pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  AD_STD_COMMENT_METH_STUB
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - The pIsSearchable pointer is NULL.)
-
-
-AD_XMETHOD1(SetIsSearchable,
-			[in],
-			enumIn,
-			aafBoolean_t,
-			IsSearchable,
-			is searchable value, 
-
-			Sets the user-searchable boolean\, which will indicate
-  // whether or not this property can contain user-searchable data.
-  // Set it to AAFTrue if it can contain user-searchable data; set it
-  // to AAFFalse otherwise.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  AD_STD_COMMENT_METH_STUB
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Description,
