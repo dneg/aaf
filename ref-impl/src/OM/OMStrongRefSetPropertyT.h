@@ -526,16 +526,14 @@ void OMStrongReferenceSetProperty<ReferencedObject>::setBits(
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", size >= bitsSize());
 
+  size_t count = size / sizeof(ReferencedObject*);
   ReferencedObject** p = (ReferencedObject**)bits;
 
-  OMSetIterator<OMUniqueObjectIdentification,
-                OMSetElement<OMStrongObjectReference<ReferencedObject>,
-                             ReferencedObject> > iterator(_set, OMBefore);
-  while (++iterator) {
-    OMSetElement<OMStrongObjectReference<ReferencedObject>,
-                 ReferencedObject>& element = iterator.value();
-    element.setValue(*p++);
+  for (size_t i = 0; i < count; i++) {
+    ReferencedObject* object = p[i];
+    insert(object);
   }
+
 }
 
 #endif
