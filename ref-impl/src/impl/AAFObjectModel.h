@@ -135,8 +135,8 @@ public:
     _axiomatic(false),
     _cyclic(false),
     _containsCycles(false),
-    _createDefinitionProc(NULL),
-    _initializeDefinitionProc(NULL)
+    _createDefinitionProc(0),
+    _initializeDefinitionProc(0)
   {}
 
   aafUID_constptr id(void) const { return _id; }
@@ -209,7 +209,7 @@ public:
     Definition (name, id, concrete),
     _privateClass(false),
     _parentId(parentId),
-    _parentClass(NULL),
+    _parentClass(0),
     _propertyCount(propertyCount),
     _propertyDefinitions(propertyDefinitions)
   {}
@@ -289,8 +289,8 @@ public:
     _required(required),
     _uid(uid),
     _classId(classId),
-    _typeDefinition(NULL),
-    _container(NULL)
+    _typeDefinition(0),
+    _container(0)
   {}
 
   virtual void Initialize (void); // only the member data of this object
@@ -392,7 +392,7 @@ public:
                         DefinitionEnumerationMember **members) :
     TypeDefinition (name, id, true /*always concrete*/),
     _typeId(typeId),
-    _typeDefinition(NULL),
+    _typeDefinition(0),
     _memberCount(memberCount),
     _members(members)
   {}
@@ -463,7 +463,7 @@ public:
                         aafUID_constptr elementTypeId) :
     TypeDefinition (name, id, true /*always concrete*/),
     _elementTypeId(elementTypeId),
-    _elementType(NULL)
+    _elementType(0)
   {}
 
   virtual void Initialize (void); // only the member data of this object
@@ -567,7 +567,7 @@ public:
     _typeId(typeId),
     _containerId(containerId),
     _fieldOffset(fieldOffset),
-    _typeDefinition(NULL)
+    _typeDefinition(0)
   {}
 
   virtual void Initialize (void); // only the member data of this object
@@ -599,7 +599,7 @@ public:
                        aafUID_constptr renamedTypeId) :
     TypeDefinition (name, id, true /*always concrete*/),
     _renamedTypeId(renamedTypeId),
-    _renamedType(NULL)
+    _renamedType(0)
   {}
 
   virtual void Initialize (void); // only the member data of this object
@@ -651,7 +651,7 @@ public:
                        aafUID_constptr stringTypeId) :
     TypeDefinition (name, id, true /*always concrete*/),
     _stringTypeId(stringTypeId),
-    _stringType(NULL)
+    _stringType(0)
   {}
 
   virtual void Initialize (void); // only the member data of this object
@@ -750,7 +750,7 @@ protected:
                        bool concrete) :
     TypeDefinition (name, id, concrete),
     _elementTypeId(elementTypeId),
-    _elementType(NULL)
+    _elementType(0)
   {}
 
 public:
@@ -788,7 +788,7 @@ protected:
                        bool concrete) :
     TypeDefinition (name, id, concrete),
     _targetId(targetId),
-    _target(NULL)
+    _target(0)
   {}
 
 public:
@@ -917,10 +917,10 @@ class TypeDefinitionStream : public TypeDefinition
 public:
   TypeDefinitionStream(aafCharacter_constptr name, 
                        aafUID_constptr id,
-                       aafUID_constptr elementTypeId = NULL) :
+                       aafUID_constptr elementTypeId = 0) :
     TypeDefinition (name, id, true /*always concrete*/),
     _elementTypeId(elementTypeId),
-    _elementType(NULL)
+    _elementType(0)
   {}
 
   virtual void Initialize (void); // only the member data of this object
