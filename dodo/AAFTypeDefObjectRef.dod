@@ -1,5 +1,5 @@
 #startm .this-module 0
-AAFTypeDefObject\
+AAFTypeDefObjectRef\
 #endm
 #c
 #startm .parent-module 0
@@ -8,122 +8,145 @@ AAFTypeDef\
 #c
 AD_HEAD
 AD_IDL(//
-// This interface is used to define Object types used in AAF persistent
-// objects.
+// This interface is used to define Object references \(either strong
+// or weak\) used in AAF persistent objects.
 //
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/)
-AD_FORWARD_DECLARATION(AAFPropertyValue)
-
+AD_STD_COMMENT_IFC_HEADER
+AD_STD_COMMENT_IFC_STUB)
 AD_CLASS_UUID(c3274643, 9467, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(c3274644, 9467, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_METHOD0(Initialize,
-		   Initializes a newly allocated\, empty IAAFTypeDefObject-supporting
-  // object.  This method must be called after allocation\, and before
+AD_XMETHOD3(Initialize,
+			[in],
+			objPass,
+			aafUID_t *,
+			pID,
+			auid to be used to identify this type,
+
+			[in],
+			objIn,
+			AAFClassDef,
+			pObjType,
+			class def of objects permitted to be referenced,
+
+			[in\, string],
+			objPass,
+			wchar_t *,
+			pTypeName,
+			friendly name of this type definition,
+
+     Initializes this type def to be a reference to objects of
+  // the given type\, and assigns this object the given AUID.  pObjType
+  // points to the class definition of the least-derived class which
+  // is possible to be contained in property values of this type.
+  // 
+  // This method must be called after allocation\, and before
   // any other method can be called.
   //
   // Succeeds if:
   // - Initialize\(\) has not yet been called on this object.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
+  // - pObjType is a valid pointer.
   // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_ALREADY_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pObjType\))
+
+
+AD_XMETHOD2(CreateValue,
+			[in],
+			objIn,
+			AAFObject,
+			pObj,
+			object with which to initialize this object reference,
+
+			[out],
+			objOut,
+			AAFPropertyValue,
+			ppPropVal,
+			newly created property value,
+
+     Creates a property value which contains an object reference.
+  // Initializes it to refer to the given object\, and returns the
+  // newly-created property value in ppPropVal.
   //
-  // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize\(\) has already been called on this object.)
+  // Succeeds if:
+  // - The pObj pointer is valid.
+  // - The ppPropVal pointer is valid.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pObj or ppPropVal\))
+
+
+AD_XMETHOD1(GetObjectType,
+			[out],
+			objOut,
+			AAFClassDef,
+			ppObjType,
+			class def of objects permitted to be referenced,
+
+     Returns the class def representing objects to which this type def
+  // can refer.  The returned type def is the class definition of the
+  // least-derived type which is permissible to be represented.
+  //
+  // Succeeds if:
+  // - this object has been Initialize\(\)d.
+  // - The ppObjType pointer is valid.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppObjType\))
 
 
 AD_XMETHOD2(GetObject,
 			[in],
 			objIn,
 			AAFPropertyValue,
-			pPVal,
-			The Property Value which is to be read for this data,
+			pPropVal,
+			property value from which value is to be read,
 
 			[out],
 			objOut,
 			AAFObject,
 			ppObject,
-			The contained object,
+			pointer to object value,
 
-			Returns the object contained in the specified Property Value.
-  // Assumes that the given Property Value is of the
-  // kAAFTypeCategoryObject.  If there is no contained object\,
-  // *ppObject will be set to NULL.
+     Returns the object contained in the named property value.
+  // Requires that pPropVal be a strong object reference or a weak
+  // object reference.
   //
   // Succeeds if:
-  // - The pPVal pointer is valid.
+  // - The pPropVal pointer is valid.
   // - The ppObject pointer is valid.
-  // - The given Property Value is a kAAFTypeCategoryObject.
   //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - Either pPVal or ppObject pointer is NULL.
-  //
-  // AAFRESULT_BAD_TYPE_CATEGORY
-  //   - The given Property Value is not a kAAFTypeCategoryObject.)
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or ppObject\))
 
 
 AD_XMETHOD2(SetObject,
 			[in],
 			objIn,
 			AAFPropertyValue,
-			pPVal,
-			The Property Value which is to be read for this data,
+			pPropVal,
+			property value from which value is to be read,
 
 			[in],
 			objIn,
 			AAFObject,
-			pObject,
-			The object to be contained,
+			ppObject,
+			pointer to object value,
 
-			Places the given object to be contained in the specified Property
-  // Value.  Assumes that the given Property Value refers to an
-  // AAFObject \(that is\, the AAFTypeDef associated with that
-  // PropertyValue has a type category ofkAAFTypeCategoryObject\).  It
-  // is legal for pObject to be NULL.
+     Sets the named property value to refer to the named object.
+  // Requires that pPropVal be a strong object reference or a weak
+  // object reference.
   //
   // Succeeds if:
-  // - The pPVal pointer is valid.
-  // - The given Property Value's type definition is of type category
-  //   kAAFTypeCategoryObject.
+  // - The pPropVal pointer is valid.
+  // - The ppObject pointer is valid.
   //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - The pPVal pointer is NULL.
-  //
-  // AAFRESULT_BAD_TYPE_CATEGORY
-  //   - The given Property Value is not a kAAFTypeCategoryObject.)
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or ppObject\))
 AD_XCLASS_END(Concrete, StoredObject)
