@@ -732,7 +732,7 @@ void AAFByteSwap16(
 /************************
  * Function: AAFByteSwap32		(INTERNAL)
  *
- * 	Byte swap a long value to convert between big-endian and
+ * 	Byte swap a 32-bit int value to convert between big-endian and
  *		little-endian formats.
  *
  * Argument Notes:
@@ -761,7 +761,7 @@ void AAFByteSwap32(
 /************************
  * Function: AAFByteSwap64		(INTERNAL)
  *
- * 	Byte swap a long value to convert between big-endian and
+ * 	Byte swap a 32-bit int value to convert between big-endian and
  *		little-endian formats.
  *
  * Argument Notes:

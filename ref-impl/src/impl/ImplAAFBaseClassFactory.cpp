@@ -128,7 +128,7 @@ static int CompareTableEntries(const AAFObjectEntry_t **elem1,
   const aafUID_t &auid1 = *((**elem1).pAUID);
   const aafUID_t &auid2 = *((**elem2).pAUID);
 
-  // Compare the unsigned long member
+  // Compare the unsigned int member
   if (auid1.Data1 < auid2.Data1)
     return -1;
   else if (auid1.Data1 > auid2.Data1)
