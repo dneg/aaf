@@ -143,7 +143,6 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
-//!!!!Isn't there a setter?
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::GetPluginVersion (
       aafVersionType_t *pVersion)
