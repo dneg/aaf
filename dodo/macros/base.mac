@@ -507,6 +507,15 @@ AD_XCONSTRUCTOR4(%01, objPass, %02, %03, %04,
 #endm
 
 
+#startm .enumIn-adornment 00
+\
+#endm
+
+#startm .enumIn-indirection 00
+\
+#endm
+
+
 #ccccccccccccccccccccccccccccccccccc
 #c
 #c Standard macro to declare a method to get a string value from an
