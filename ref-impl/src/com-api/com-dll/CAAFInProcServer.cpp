@@ -575,7 +575,7 @@ HRESULT AAFGetLibraryInfo(
    }
    else
    {
-	*pServerPath = new char[strlen((char*)hInstance)];
+	*pServerPath = new char[strlen((char*)hInstance)+1];
 	strcpy( *pServerPath, (char*)hInstance);
    }
 
