@@ -1731,6 +1731,12 @@ AAFRESULT ImplAAFMob::MobFindSource(
 	
 	return(OM_ERR_NONE);
 }
+
+AAFRESULT ImplAAFMob::ReconcileMobLength(void)
+{
+	return(AAFRESULT_NOT_IMPLEMENTED);	// MUST call one of the subclasses
+}
+
 extern "C" const aafClassID_t CLSID_AAFMob;
 
 OMDEFINE_STORABLE(ImplAAFMob, CLSID_AAFMob);
