@@ -155,8 +155,8 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDef*  pTypeDef)
 {
 	aafUID_t			newUID;
-	ImplAAFHeader		*head;
-	ImplAAFDictionary	*dict;
+	ImplAAFHeader		*head = NULL;
+	ImplAAFDictionary	*dict = NULL;
 	ImplAAFPluggableDef	*def;
 
 	if(pTypeDef == NULL)
@@ -172,8 +172,18 @@ AAFRESULT STDMETHODCALLTYPE
 
 		_type = newUID;
 		pTypeDef->AcquireReference();
+		head->ReleaseReference();
+		head = NULL;
+		dict->ReleaseReference();
+		dict = NULL;
 	}
 	XEXCEPT
+	{
+		if(head)
+			head->ReleaseReference();
+		if(dict)
+			dict->ReleaseReference();
+	}
 	XEND;
 
 	return AAFRESULT_SUCCESS;
@@ -184,8 +194,8 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFControlPoint::GetTypeDefinition (
       ImplAAFTypeDef **ppTypeDef)
 {
-	ImplAAFHeader		*head;
-	ImplAAFDictionary	*dict;
+	ImplAAFHeader		*head = NULL;
+	ImplAAFDictionary	*dict =  NULL;
 
 	if(ppTypeDef == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -196,8 +206,18 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(head->GetDictionary(&dict));
 		CHECK(dict->LookupPluggableDef(&_type, (ImplAAFPluggableDef **)ppTypeDef) == AAFRESULT_SUCCESS);
 		(*ppTypeDef)->AcquireReference();
+		head->ReleaseReference();
+		head = NULL;
+		dict->ReleaseReference();
+		dict = NULL;
 	}
 	XEXCEPT
+	{
+		if(head)
+			head->ReleaseReference();
+		if(dict)
+			dict->ReleaseReference();
+	}
 	XEND;
 
 	return AAFRESULT_SUCCESS;
