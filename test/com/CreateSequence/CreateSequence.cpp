@@ -569,9 +569,12 @@ cleanup:
 //  A new usage function to make program more friendly
 void usage(void)
 {
-  printf("Usage:\n Createsequence.exe <Number of components in file> <file name>.aaf \n");
-  printf(" NB: Number is required to be integer greater than zero.\n");
-  printf(" If only the number is given, the filename defaults to <number>.aaf\n");
+  printf("Usage:\n");
+  printf("  CreateSequence <Number of components> <file>.aaf\n");
+  printf("  CreateSequence <Number of components> <file>\n");
+  printf("  CreateSequence <Number of components>\n");
+  printf("<Number of components> must be greater than zero.\n");
+  printf("<file> defaults to <Number of components>.aaf\n");
 }
 
 //  Main adapted to use command-line arguments with argument checking
@@ -634,7 +637,7 @@ int main(int argumentCount, char *argumentVector[])
   aafWChar * pwFileName = FileNameBuffer;
 
   //  Give a nice output here too...
-  printf("Creating file %s with %ld components...\n", niceFileName, N);
+  printf("Creating file %s with %ld components.\n", niceFileName, N);
   checkFatal(CreateAAFFile(pwFileName, N));
 
   // Open the file and gather statistics
