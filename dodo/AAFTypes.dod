@@ -13,9 +13,9 @@ AD_HEAD
 \******************************************/
 
 
-AD_DECLARE_FORWARD_AAFTYPES(AAFMob)
-AD_DECLARE_FORWARD_AAFTYPES(AAFPulldown)
-AD_DECLARE_FORWARD_AAFTYPES(AAFEffect)
+AD_FORWARD_DECLARATION(AAFMob)
+AD_FORWARD_DECLARATION(AAFPulldown)
+AD_FORWARD_DECLARATION(AAFEffect)
 
 
 AD_TYPES_BEGIN(B1A2137B, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
@@ -769,8 +769,8 @@ typedef struct
 	aafIdentificationCritType_t type;
 	union 
 	{
-		aafUID_t *		    productID;
-		aafUID_t *          generation;
+		aafUID_t		    productID;
+		aafUID_t            generation;
 		aafProductVersion_t toolkitVersion;
 	} tags;
 } aafIdentificationCrit_t;
