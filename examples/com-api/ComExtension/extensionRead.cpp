@@ -64,31 +64,31 @@ bool extensionRead (const aafCharacter * filename)
   IAAFClassDef *pcd=NULL;
 
   cout << "Verifying position enum type has been registered." << endl;
-  check (pDict->LookupType (kTypeID_ePosition, &ptd));
+  check (pDict->LookupTypeDef (kTypeID_ePosition, &ptd));
   ptd->Release();
   ptd=NULL;
 
   cout << "Verifying PersonnelResource class has been registered." << endl;
-  check (pDict->LookupClass (kClassID_PersonnelResource, &pcd));
+  check (pDict->LookupClassDef (kClassID_PersonnelResource, &pcd));
   pcd->Release();
   pcd=NULL;
 
   cout << "Verifying AdminMob class has been registered." << endl;
-  check (pDict->LookupClass (kClassID_AdminMob, &pcd));
+  check (pDict->LookupClassDef (kClassID_AdminMob, &pcd));
   pcd->Release();
   pcd=NULL;
 
   cout << "Verifying PersonnelResourceReference type has been"
 	   << " registered." << endl;
-  check (pDict->LookupType (kTypeID_PersonnelResourceStrongReference,
-							&ptd));
+  check (pDict->LookupTypeDef (kTypeID_PersonnelResourceStrongReference,
+							   &ptd));
   ptd->Release();
   ptd=NULL;
 
   cout << "Verifying PersonnelResourceReferenceVector type has been"
 	   << " registered." << endl; 
-  check (pDict->LookupType (kTypeID_PersonnelResourceStrongReferenceVector,
-							&ptd));
+  check (pDict->LookupTypeDef (kTypeID_PersonnelResourceStrongReferenceVector,
+							   &ptd));
   ptd->Release();
   ptd=NULL;
 
@@ -98,7 +98,7 @@ bool extensionRead (const aafCharacter * filename)
   IEnumAAFMobs*	pMobIter = NULL;
   IAAFMob *pMob=NULL;
   bool foundAdmin=false;
-  check(pHead->EnumAAFAllMobs(NULL, &pMobIter));
+  check(pHead->GetMobs(NULL, &pMobIter));
   while(!foundAdmin && (AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob)))
   {
 	//Check if Mob is a Admin Mob

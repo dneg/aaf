@@ -64,13 +64,13 @@ AD_XMETHOD1(AppendSegment,
   //   - pSegment is null.)
 
 
-AD_XMETHOD1(RemoveSegment,
+AD_XMETHOD1(PrependSegment,
 			[in],
 			objIn,
 			AAFSegment,
 			pSegment, 
-			Pointer to segment to be removed,
-			Remove the Segment from the Slots list.
+			Pointer to segment to be added,
+     Prepend another input segment to the list of source segments.
   // 
   // Succeeds if all of the following are true:
   // - the pSegment pointer is valid.
@@ -88,8 +88,141 @@ AD_XMETHOD1(RemoveSegment,
   //   - pSegment is null.)
 
 
-AD_XMETHOD1(GetSlots,
-			[retval][out],
+AD_XMETHOD2(InsertSegmentAt,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index, 
+			index where segment is to be inserted,
+
+			[in],
+			objIn,
+			AAFSegment,
+			pSegment, 
+			Pointer to segment to be added,
+
+     Insert an input segment to the list of source segments at the
+  // given index.  Segments already existing at the given and higher
+  // indices will be moved up one index to accommodate.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pSegment pointer is valid.
+  // - index is less than or equal to the value returned by
+  //   CountSegments\(\).
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pSegment is null.
+  //
+  // AAFRESULT_BADINDEX
+  //   - index is greater than the value returned by
+  //     CountSegments\(\).)
+
+
+AD_XMETHOD1(RemoveSegmentAt,
+			[in],
+			objPass,
+			aafUInt32,
+			index, 
+			index of segment to be removed,
+
+     Removes the indexed segment.  Segments already existing at
+  // indices greater than the given index will be moved down by one
+  // index to accommodate.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pSegment pointer is valid.
+  // - index is less than the value returned by CountSegments\(\).
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pSegment is null.
+  //
+  // AAFRESULT_BADINDEX
+  //   - index is greater than or equal to the value returned by
+  //     CountSegments\(\).)
+
+
+AD_XMETHOD1(CountSegments,
+			[out\, retval],
+			objPass,
+			aafUInt32 *,
+			pResult, 
+			number of segments contained,
+
+     Returns the number of source segments currently contained.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails no value will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.)
+
+
+AD_XMETHOD2(GetSegmentAt,
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			index of segment to retrieve,
+
+			[out\, retval],
+			objOut,
+			AAFSegment,
+			ppSegment,
+			retrieved segment,
+
+     Retrieves the indexed segment.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  // - index is less than the value returned by CountSegments\(\).
+  // 
+  // If this method fails nothing will be written to *ppSegment.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.
+  //
+  // AAFRESULT_BADINDEX
+  //   - index is greater than or equal to the value returned by
+  //     CountSegments\(\).)
+
+
+AD_XMETHOD1(GetSegments,
+			[out\, retval],
 			objOut,
 			EnumAAFSegments,
 			ppEnum,
