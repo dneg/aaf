@@ -1,3 +1,4 @@
+// @doc
 #include "OMStoredObject.h"
 #include "OMStoredPropertySetIndex.h"
 #include "OMProperty.h"
@@ -65,6 +66,11 @@ OMStoredObject::~OMStoredObject(void)
 {
 }
 
+  // @mfunc Open the root <c OMStoredObject> in the disk file
+  //        <p fileName> for reading only.
+  //   @parm The name of the file to open. The file must already exist.
+  //   @rdesc An <c OMStoredObject> representing the root object in
+  //          the disk file.
 OMStoredObject* OMStoredObject::openRead(const wchar_t* fileName)
 {
   OMStoredObject* newStoredObject = OMStoredObject::open(fileName,
@@ -74,6 +80,11 @@ OMStoredObject* OMStoredObject::openRead(const wchar_t* fileName)
   return newStoredObject;
 }
 
+  // @mfunc Open the root <c OMStoredObject> in the disk file
+  //        <p fileName> for modification.
+  //   @parm The name of the file to open. The file must already exist.
+  //   @rdesc An <c OMStoredObject> representing the root object in
+  //          the disk file.
 OMStoredObject* OMStoredObject::openModify(const wchar_t* fileName)
 {
   OMStoredObject* newStoredObject = OMStoredObject::open(fileName,
@@ -83,6 +94,11 @@ OMStoredObject* OMStoredObject::openModify(const wchar_t* fileName)
   return newStoredObject;
 }
 
+  // @mfunc Create a new root <c OMStoredObject> in the disk file
+  //        <p fileName>.
+  //   @parm The name of the file to create. The file must not exist.
+  //   @rdesc An <c OMStoredObject> representing the root object in
+  //          the disk file.
 OMStoredObject* OMStoredObject::createModify(const wchar_t* fileName)
 {
   OMStoredObject* newStoredObject = OMStoredObject::create(fileName);
@@ -91,6 +107,11 @@ OMStoredObject* OMStoredObject::createModify(const wchar_t* fileName)
   return newStoredObject;
 }
 
+  // @mfunc Open the existing <c OMStoredObject> named by <p
+  //        storagePathName>.
+  //   @parm The path name of the <c StoredObject> to open.
+  //   @rdesc An <c OMStoredObject> representing the object currently
+  //          stored at <c storagePathName> in the disk file.
 OMStoredObject* OMStoredObject::openStoragePath(const char* storagePathName)
 {
   TRACE("OMStoredObject::openStoragePath");
@@ -125,6 +146,8 @@ OMStoredObject* OMStoredObject::openStoragePath(const char* storagePathName)
   return result;
 }
 
+  // @mfunc Save the <c OMProperty> <p p> in this <c OMStoredObject>.
+  //   @parm The <c OMProperty> to save.
 void OMStoredObject::save(OMProperty* p)
 {
   TRACE("OMStoredObject::save(OMProperty*)");
@@ -214,6 +237,9 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
   return index;
 }
 
+  // @mfunc Restore the <c OMPropertySet> <p properties> into
+  //        this <c OMStoredObject>.
+  //   @parm The <c OMPropertySet> to restore.
 void OMStoredObject::restore(OMPropertySet& properties)
 {
   TRACE("OMStoredObject::restore");
@@ -323,6 +349,7 @@ void OMStoredObject::open(const OMAccessMode mode)
   _index = restore();
 }
 
+  // @mfunc Close this <c OMStoredObject>.
 void OMStoredObject::close(void)
 {
   TRACE("OMStoredObject::close");
@@ -342,6 +369,14 @@ void OMStoredObject::close(void)
   _open = false;
 }
 
+  // @mfunc Write a property value to this <c OMStoredObject>. The
+  //        property value to be written occupies <p size> bytes at
+  //        the address <p start>. The property id is <p pid>. The
+  //        property type is <p type>.
+  //   @parm The property id.
+  //   @parm The property type.
+  //   @parm The start address of the property value.
+  //   @parm The size of the property value in bytes.
 void OMStoredObject::write(int pid, int type, void* start, size_t size)
 {
   TRACE("OMStoredObject::write");
@@ -354,6 +389,14 @@ void OMStoredObject::write(int pid, int type, void* start, size_t size)
   _offset += size;
 }
 
+  // @mfunc Read a property value from this <c OMStoredObject>.
+  //        The property value is read into a buffer which occupies
+  //        <p size> bytes at the address <p start>. The property id
+  //        is <p pid>. The property type is <p type>.
+  //   @parm The property id.
+  //   @parm The property type.
+  //   @parm The start address of the buffer to hold the property value.
+  //   @parm The size of the buffer in bytes.
 void OMStoredObject::read(int pid, int type, void* start, size_t size)
 {
   TRACE("OMStoredObject::read");
@@ -363,6 +406,8 @@ void OMStoredObject::read(int pid, int type, void* start, size_t size)
   readFromStream(_propertiesStream, start, size);
 }
 
+  // @mfunc Save the <c OMClassId> <p cid> in this <c OMStoredObject>.
+  //   @parm The <c OMClassId> of this <c OMStoredObject>.
 void OMStoredObject::saveClassId(const OMClassId& cid)
 {
   TRACE("OMStoredObject::saveClassId");
@@ -370,6 +415,8 @@ void OMStoredObject::saveClassId(const OMClassId& cid)
   setClass(_storage, cid);
 }
 
+  // @mfunc Restore the class id of this <c OMStoredObject>.
+  //   @parm The <c OMClassId> of this <c OMStoredObject>.
 OMClassId OMStoredObject::restoreClassId(void)
 {
   TRACE("OMStoredObject::restoreClassId");
@@ -379,6 +426,11 @@ OMClassId OMStoredObject::restoreClassId(void)
   return cid;
 }
 
+  // @mfunc Create a new <c OMStoredObject>, named <p name>,
+  //        contained by this <c OMStoredObject>.
+  //   @parm The name to be used for the new <c OMStoredObject>.
+  //   @rdesc A new <c OMStoredObject> contained by this
+  //          <c OMStoredObject>.
 OMStoredObject* OMStoredObject::createSubStorage(const char* name)
 {
   TRACE("OMStoredObject::createSubStorage");
@@ -389,6 +441,11 @@ OMStoredObject* OMStoredObject::createSubStorage(const char* name)
   return result;
 }
 
+  // @mfunc Open an exsiting <c OMStoredObject>, named <p name>,
+  //        contained by this <c OMStoredObject>.
+  //   @parm The name of the existing <c OMStoredObject>.
+  //   @rdesc The existing <c OMStoredObject> contained by this
+  //          <c OMStoredObject>.
 OMStoredObject* OMStoredObject::openSubStorage(const char* name)
 {
   TRACE("OMStoredObject::openSubStorage");
@@ -399,6 +456,10 @@ OMStoredObject* OMStoredObject::openSubStorage(const char* name)
   return result;
 }
 
+  // @mfunc  Save the <c OMStoredVectorIndex> <p index> in this
+  //         <c OMStoredObject>, the vector is named <p vectorName>.
+  //   @parm The <c OMStoredVectorIndex> to save.
+  //   @parm The name of the vector.
 void OMStoredObject::save(const OMStoredVectorIndex* index,
                           const char* vectorName)
 {
@@ -438,6 +499,10 @@ void OMStoredObject::save(const OMStoredVectorIndex* index,
   delete [] vectorIndexName;
 }
 
+  // @mfunc Restore the vector named <p vectorName> into this
+  //        <c OMStoredObject>.
+  //   @parm The name of the vector.
+  //   @rdesc The newly restored <c OMStoredVectorIndex>.
 OMStoredVectorIndex* OMStoredObject::restore(const char* vectorName)
 {
   TRACE("OMStoredObject::restore");
