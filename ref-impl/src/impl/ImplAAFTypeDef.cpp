@@ -200,6 +200,7 @@ size_t ImplAAFTypeDef::NativeSize (void) const
 }
 
 
+/*
 OMProperty * ImplAAFTypeDef::pvtCreateOMProperty
   (OMPropertyId pid,
    const aafCharacter * name) const
@@ -216,7 +217,7 @@ OMProperty * ImplAAFTypeDef::pvtCreateOMProperty
   delete[] nameBuf;
   return result;
 }
-
+*/
 
 OMProperty * ImplAAFTypeDef::pvtCreateOMPropertyMBS
   (OMPropertyId /*pid*/,
