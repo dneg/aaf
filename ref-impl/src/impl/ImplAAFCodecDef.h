@@ -118,7 +118,8 @@ public:
   // in /test/ImplAAFCodecDefTest.cpp.
   static AAFRESULT test();
 private:
-	DataDefWeakRefArrayProp_t						_dataDefs;
+	DataDefWeakRefArrayProp_t			_dataDefs;
+	OMFixedSizeProperty<aafUID_t>		_fileDescClass;
 };
 
 #endif // ! __ImplAAFCodecDef_h__
