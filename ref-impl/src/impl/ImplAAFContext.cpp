@@ -19,11 +19,12 @@
 
 #include "OMUtilities.h"
 
-#include "AAFFile.h"
+#include "ImplAAFObjectCreation.h"
 #include "ImplAAFFile.h"
 
 #include <assert.h>
 
+EXTERN_C const CLSID CLSID_AAFFile;
 
 ImplAAFSession::ImplAAFSession ()
 {}
@@ -48,12 +49,16 @@ AAFRESULT STDMETHODCALLTYPE
 		 aafFileRev_t  rev,   //@parm [in] File revision to create
          ImplAAFFile ** file)  //@parm [out] Current AAF file
   {
-	  AAFFile	*apiFile;
-		  
-	AAFFile::CreateObject(&apiFile);
-	  *file = static_cast<ImplAAFFile*>(apiFile->GetRepObject());
-	  (*file)->Create(filePath, this, rev);
-	  return(AAFRESULT_SUCCESS);
+	ImplAAFRoot	*pRoot;
+
+	pRoot = CreateImpl(CLSID_AAFFile);
+	if (!pRoot)
+		return(0x80004005L);	// TODO: change this to AAFRESULT_FAILED
+
+	*file = static_cast<ImplAAFFile*>(pRoot);
+	(*file)->Create(filePath, this, rev);
+
+	return(AAFRESULT_SUCCESS);
   }
 
   //****************
@@ -64,12 +69,16 @@ AAFRESULT STDMETHODCALLTYPE
         (aafDataBuffer_t  filePath,   //@parm [in] File path [replace with object later]
 		 ImplAAFFile ** file)  //@parm [out] Current AAF file
   {
-	  AAFFile	*apiFile;
-		  
-	AAFFile::CreateObject(&apiFile);
-	  *file = static_cast<ImplAAFFile*>(apiFile->GetRepObject());
-	  (*file)->OpenRead(filePath, this);
-	  return(AAFRESULT_SUCCESS);
+	ImplAAFRoot	*pRoot;
+
+	pRoot = CreateImpl(CLSID_AAFFile);
+	if (!pRoot)
+		return(0x80004005L);	// TODO: change this to AAFRESULT_FAILED
+
+	*file = static_cast<ImplAAFFile*>(pRoot);
+	(*file)->OpenRead(filePath, this);
+
+	return(AAFRESULT_SUCCESS);
   }
 
   //****************
@@ -80,12 +89,17 @@ AAFRESULT STDMETHODCALLTYPE
         (aafDataBuffer_t  filePath,   //@parm [in] File path [replace with object later]
 		 ImplAAFFile ** file)  //@parm [out] Current AAF file
   {
-	  AAFFile	*apiFile;
-		  
-	AAFFile::CreateObject(&apiFile);
-	  *file = static_cast<ImplAAFFile*>(apiFile->GetRepObject());
-	  (*file)->OpenModify(filePath, this);
-	return(AAFRESULT_SUCCESS);
+	AAFRESULT hr;
+	ImplAAFRoot	*pRoot;
+
+	pRoot = CreateImpl(CLSID_AAFFile);
+	if (!pRoot)
+		return(0x80004005L);	// TODO: change this to AAFRESULT_FAILED
+
+	*file = static_cast<ImplAAFFile*>(pRoot);
+	hr = (*file)->OpenModify(filePath, this);
+
+	return(hr);
   }
 
 ImplAAFFile *ImplAAFSession::GetTopFile()
@@ -125,7 +139,7 @@ ImplAAFSession::SetDefaultIdentification (
 	  _defaultIdent = ident;
 
     if ((_defaultIdent != 0) && (_defaultIdent->productName != 0)) {
-      setProgramName(_defaultIdent->productName);
+      setProgramName((const char *)_defaultIdent->productName);
     } else {
       setProgramName("Unknown");
     }
