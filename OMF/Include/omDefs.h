@@ -36,8 +36,12 @@ extern "C"
 #endif
 
 /* To support DLLs */
-#if PORT_SUPPORTS_DLL
-#define OMF_EXPORT __declspec( dllexport )
+#if PORT_SUPPORTS_DLL && defined (OMF_USE_DLL) /* Second expression protects static lib projects */
+	#if defined (OMF_BUILDING_TOOLKIT_DLL)
+	#define OMF_EXPORT __declspec( dllexport )
+	#else
+	#define OMF_EXPORT __declspec( dllimport )
+	#endif
 #else
 #define OMF_EXPORT
 #endif
@@ -62,9 +66,12 @@ extern "C"
 #define MOTOROLA_ORDER 0x4d4d	/* 'MM' */
 #define INTEL_ORDER    0x4949	/* 'II' */
 
+#if !defined( CS_NULL )
 #define CS_NULL (omfCharSetType_t)0
 #define CS_ASCII (omfCharSetType_t)1
+#endif	/* CS_NULL */
 
+#if !defined( TT_NULL )
 #define TT_NULL 0		/* 1.5 compatability */
 #define TT_PICTURE 1		/* 1.5 compatability */
 #define TT_SOUND 2		/* 1.5 compatability */
@@ -72,7 +79,9 @@ extern "C"
 #define TT_EDGECODE 4		/* 1.5 compatability */
 #define TT_ATTRIBUTE 5		/* 1.5 compatability */
 #define TT_EFFECTDATA 6		/* 1.5 compatability */
+#endif	/* TT_NULL */
 
+#if !defined( UC_NULL )
 #define UC_NULL		  (omfUsageCode_t)0	/* Null app code; no special use.   */
 #define	UC_MASTERMOB	  (omfUsageCode_t)7	/* log mob to group phys mobs. */
 
@@ -84,39 +93,54 @@ extern "C"
 #define UC_GROUPOOFTER	(omfUsageCode_t)5	/* log mob that back up groups	*/
 #define UC_MOTION		(omfUsageCode_t)6	/* log mob - motion effect clip	*/
 #define	UC_PRECOMPUTE_FILE	(omfUsageCode_t)9	/* file mob with a precompute*/
+#endif	/* UC_NULL */
 
+#if !defined( PT_NULL )
 #define PT_NULL (omfPhysicalMobType_t)0
 #define PT_FILE_MOB (omfPhysicalMobType_t)1
 #define PT_TAPE_MOB (omfPhysicalMobType_t)2
 #define PT_FILM_MOB (omfPhysicalMobType_t)3
 #define PT_NAGRA_MOB (omfPhysicalMobType_t)4
+#endif	/* PT_NULL */
 
+#if !defined( AK_NULL )
 #define AK_NULL		kOMFNullAttribute		/* 1.5 compatability */
 #define AK_INT		kOMFIntegerAttribute		/* 1.5 compatability */
 #define AK_STRING	kOMFStringAttribute		/* 1.5 compatability */
 #define AK_OBJECT	kOMFObjectAttribute		/* 1.5 compatability */
+#endif	/* AK_NULL */
 
+#if !defined( ET_NULL )
 #define ET_NULL (omfEdgeType_t)0
 #define ET_KEYCODE (omfEdgeType_t)1
 #define ET_EDGENUM4 (omfEdgeType_t)2
 #define ET_EDGENUM5 (omfEdgeType_t)3
+#endif	/* ET_NULL */
 
+#if !defined( FT_NULL )
 #define FT_NULL (omfFilmType_t)0
 #define FT_35MM (omfFilmType_t)1
 #define FT_16MM (omfFilmType_t)2
 #define FT_8MM (omfFilmType_t)3
 #define FT_65MM (omfFilmType_t)4
+#endif	/* FT_NULL */
 
+#if !defined( OMFI_LAYOUT_FULL )
 #define OMFI_LAYOUT_FULL 0
 #define OMFI_LAYOUT_SEPARATE 1
 #define OMFI_LAYOUT_SINGLE 2
 #define OMFI_LAYOUT_MIXED 3
+#endif	/* OMFI_LAYOUT_FULL */
+
 
 /************************************************************************
  *
  *              P R O P E R T I E S
  *
  ************************************************************************/
+
+#if !defined( OMF_PROPERTY_T )
+#define OMF_PROPERTY_T
 
 typedef enum
 {
@@ -220,12 +244,17 @@ typedef enum
 	OMLASTPROP,
 	OMPrivatePropStart=(1 << ((sizeof(int)*8)-2))
 } omfProperty_t;
+#endif /* OMF_PROPERTY_T */
+
 
 /************************************************************************
  *
  *              T Y P E S
  *
  ************************************************************************/
+
+#if !defined( OMF_TYPE_T )
+#define OMF_TYPE_T
  
 typedef enum 
 {
@@ -247,6 +276,8 @@ typedef enum
   OMLASTTYPE,
   OMPrivateTypeStart=(1 << ((sizeof(int)*8)-2))
 } omfType_t;
+
+#endif /* OMF_TYPE_T */
 
 /************************************************************************
  *

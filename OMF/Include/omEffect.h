@@ -130,6 +130,9 @@ typedef enum
 #define kOmfFxSVDissolveGlobalName \
   (omfUniqueNamePtr_t)"omfi:effect:VideoDissolve"
 
+#define kOmfFxSVMCDissolveGlobalName \
+  (omfUniqueNamePtr_t)"omfi:effect:SimpleVideoDissolve"
+
 #define kOmfFxVDissolveName (omfString)"Simple Video Dissolve"
 
 #define kOmfFxSVDissolveDescription (omfString) \
@@ -141,6 +144,9 @@ typedef enum
 #define kOmfFxSMADissolveGlobalName \
   (omfUniqueNamePtr_t)"omfi:effect:MonoAudioDissolve"
 
+#define kOmfFxSMAMCDissolveGlobalName \
+  (omfUniqueNamePtr_t)"omfi:effect:SimpleMonoAudioDissolve"
+
 #define kOmfFxSMADissolveName (omfString)"Simple Mono Audio Dissolve"
 
 #define kOmfFxSMADissolveDescription (omfString) \
@@ -150,6 +156,9 @@ typedef enum
 
 #define kOmfFxSSADissolveGlobalName \
   (omfUniqueNamePtr_t)"omfi:effect:StereoAudioDissolve"
+
+#define kOmfFxSSAMCDissolveGlobalName \
+  (omfUniqueNamePtr_t)"omfi:effect:SimpleStereoAudioDissolve"
 
 #define kOmfFxSSADissolveName (omfString)"Simple Stereo Audio Dissolve"
 
@@ -229,6 +238,7 @@ typedef struct {
 	omfBool spotlight;
 	omfInt32	replicationH;
 	omfInt32	replicationV;
+	omfBool checkerboard;
 } omfWipeArgs_t;
 
 #define kOmfFxVSMPTEWipeGlobalName \

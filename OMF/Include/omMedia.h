@@ -33,6 +33,7 @@
 #include "omCodId.h"
 #include "omCodCmn.h"
 
+
 #if PORT_LANG_CPLUSPLUS
 extern          "C"
 {
@@ -397,6 +398,15 @@ OMF_EXPORT omfErr_t omfmGetNumChannels(
 			omfDDefObj_t  	mediaKind,		/* IN -- for this media type */
 			omfInt16		*numCh);		/* OUT -- How many channels? */
 
+OMF_EXPORT omfErr_t omfmGetNumChannelsWithPosition(
+			omfHdl_t		file,			/* IN -- For this file */
+			omfObject_t		masterMob,		/* IN -- In this master mob */
+			omfTrackID_t	trackID,		/* IN -- On this track */
+			omfMediaCriteria_t *mediaCrit,	/* IN -- using this media criteria */
+			omfDDefObj_t  	mediaKind,		/* IN -- for this media type */
+			omfPosition_t	position,
+			omfInt16		*numCh);		/* OUT -- How many channels? */
+
 OMF_EXPORT omfErr_t omfmGetLargestSampleSize(
 			omfMediaHdl_t	media,		/* IN -- For this media stream */
 			omfDDefObj_t  mediaKind,		/* IN -- and this media type */
@@ -408,6 +418,16 @@ OMF_EXPORT omfErr_t omfmGetSampleFrameSize(
 			omfPosition_t	frameNum,	/* IN -- for this (1-based) sample frame number */
 			omfLength_t		*frameSize);	/* OUT -- How big is the sample frame? */
 
+OMF_EXPORT omfErr_t omfmMediaOpenFromOffset(
+			omfHdl_t				file,			/* IN -- For this file */
+			omfObject_t				masterMob,	/* IN -- In this master mob */
+			omfPosition_t			pos,		/* IN -- offset in master mob */
+			omfTrackID_t			trackID,		/* IN -- On this track */
+			omfMediaCriteria_t	*mediaCrit,	/* IN -- using this media criteria */
+			omfMediaOpenMode_t	openMode,	/* IN -- ReadOnly or Append */
+			omfCompressEnable_t	compEnable,	/* IN -- optionally decompressing */
+			omfMediaHdl_t			*mediaPtr);	/* OUT -- and return a media handle */
+
 OMF_EXPORT omfErr_t omfmMediaOpen(
 			omfHdl_t		file,			/* IN -- For this file */
 			omfObject_t		masterMob,		/* IN -- In this master mob */
@@ -415,6 +435,16 @@ OMF_EXPORT omfErr_t omfmMediaOpen(
 			omfMediaCriteria_t *mediaCrit,	/* IN -- using this media criteria */
 			omfMediaOpenMode_t	openMode,	/* IN -- ReadOnly or Append */
 			omfCompressEnable_t compEnable,	/* IN - optionally decompressing */
+			omfMediaHdl_t	*mediaPtr);		/* OUT -- and return a meida handle */
+
+OMF_EXPORT omfErr_t omfmMediaOpenWithPosition(
+			omfHdl_t		file,			/* IN -- For this file */
+			omfObject_t		masterMob,		/* IN -- In this master mob */
+			omfTrackID_t	trackID,		/* IN -- On this track */
+			omfMediaCriteria_t *mediaCrit,	/* IN -- using this media criteria */
+			omfMediaOpenMode_t	openMode,	/* IN -- ReadOnly or Append */
+			omfCompressEnable_t compEnable,	/* IN - optionally decompressing */
+			omfPosition_t	position,
 			omfMediaHdl_t	*mediaPtr);		/* OUT -- and return a meida handle */
 
 OMF_EXPORT omfErr_t omfmMediaMultiOpen(
@@ -482,6 +512,10 @@ OMF_EXPORT omfErr_t        omfmGotoShortFrameNumber(omfMediaHdl_t media,	/* IN -
 
 OMF_EXPORT omfErr_t        omfmGotoFrameNumber(omfMediaHdl_t media,	/* IN -- */
 					                omfPosition_t frameNumber);	/* IN -- */
+
+OMF_EXPORT omfErr_t        omfmGetFrameOffset(omfMediaHdl_t media,	/* IN -- */
+					                omfPosition_t frameNumber,	/* IN -- */
+									omfInt64 *frameOffset); /* OUT -- */
 
 OMF_EXPORT omfErr_t        omfmGetAudioCompressParms(omfMediaHdl_t file,	/* IN -- */
 				                       omfInt16 * blockLength);	/* OUT -- */
@@ -560,7 +594,7 @@ OMF_EXPORT omfErr_t   omfmSourceGetVideoSignalType(omfMediaHdl_t media,
 /******	Media codec related calls	*****/
 /****************************************/
 
-omfErr_t omfmRegisterCodec(omfSessionHdl_t file,
+OMF_EXPORT omfErr_t omfmRegisterCodec(omfSessionHdl_t file,
 						   omfCodecDispPtr_t pluginRoutine,
 						   omfCodecType_t		type);
 

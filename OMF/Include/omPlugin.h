@@ -24,4 +24,4 @@
  *
  ************************************************************************/
 
-omfErr_t omfmLoadMediaPlugins(omfSessionHdl_t session);
+OMF_EXPORT omfErr_t omfmLoadMediaPlugins(omfSessionHdl_t session);

@@ -217,10 +217,10 @@ OMF_EXPORT void     omfRegErrDebug(omfHdl_t file,
            return(OM_ERR_BAD_ITHDL)
           
 #define omfAssert(b, file, msgcode) \
-	if (!(b)) { omfRegErrorReturn(file, msgcode); }
+	if (!(b)) { omfRegErrorReturn(file, (omfErr_t)msgcode); }
 
 #define omfAssertBool(b, file, msgcode, msgparam, retval) \
-    if (!(b)) { omfRegErrReturnBool(file, msgcode, msgparam, retval); }
+    if (!(b)) { omfRegErrReturnBool(file, (omfErr_t)msgcode, msgparam, retval); }
 
 #define omfAssertNot1x(file) \
     omfAssert((file->setrev != kOmfRev1x) && (file->setrev != kOmfRevIMA), \
@@ -254,7 +254,7 @@ OMF_EXPORT void     omfRegErrDebug(omfHdl_t file,
 OMF_EXPORT void omfPrintStackTrace(omfHdl_t file);
 
 #define omfRegErrorReturn(file, ec) { \
-   omfRegErrDebug(file, ec, __FILE__, __LINE__); return(ec); }
+   omfRegErrDebug(file, (omfErr_t)ec, __FILE__, (omfInt16)__LINE__); return(ec); }
 
 #define omfCheckBentoRaiseError(file, ec) { if (file->BentoErrorRaised) { \
     printf("<Bento %1ld>%s @ %d in '%s'\n", file->BentoErrorNumber, \
@@ -262,13 +262,13 @@ OMF_EXPORT void omfPrintStackTrace(omfHdl_t file);
 			RAISE(ec); \
     } }
 #define omfRegErrReturnBool(file, ec, errparam, retval) { \
-        omfRegErr(file, ec); *errparam = ec; return(retval); }
+        omfRegErr(file, (omfErr_t)ec); *errparam = ec; return(retval); }
 
 #else /* OMFI_ERROR_TRACE */
 
-#define omfRegErrorReturn(file, ec) { omfRegErr(file, ec); return(ec); }
+#define omfRegErrorReturn(file, ec) { omfRegErr(file, (omfErr_t)ec); return(ec); }
 #define omfRegErrReturnBool(file, ec, errparam, retval) { \
-        omfRegErr(file, ec); *errparam = ec; return(retval); }
+        omfRegErr(file, (omfErr_t)ec); *errparam = ec; return(retval); }
 #define omfCheckBentoRaiseError(file, ec) { if(file->BentoErrorRaised) \
 											  RAISE(ec); }
 
@@ -286,8 +286,8 @@ OMF_EXPORT void omfPrintStackTrace(omfHdl_t file);
 #define CHECK(a) { if((zzOmfEcode = (a)) != OM_ERR_NONE) goto zzOmfCleanup; }
 
 #if defined(OMFI_ERROR_TRACE)
-#define REG_ERR(file,ecode)	   omfRegErrDebug(file,ecode, __FILE__, __LINE__)
-#define REREG_ERR(file,ecode)  omfReregErrDebug(file,ecode, __FILE__, __LINE__)
+#define REG_ERR(file,ecode)	   omfRegErrDebug(file,(omfErr_t)ecode, __FILE__, (omfInt16)__LINE__)
+#define REREG_ERR(file,ecode)  omfReregErrDebug(file,(omfErr_t)ecode, __FILE__, (omfInt16)__LINE__)
 #else 
 #define REG_ERR(file,ecode)
 #define REREG_ERR(file,ecode)

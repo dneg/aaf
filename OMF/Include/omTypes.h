@@ -193,7 +193,12 @@ typedef enum
 	kClsRequired, kClsRegistered, kClsPrivate
 } omfClassType_t;
 
-extern const omfUInt16 OMNativeByteOrder;
+#if PORT_BYTESEX_BIG_ENDIAN
+#define NATIVE_ORDER MOTOROLA_ORDER	/* 'MM' (PORT_BYTESEX_BIG_ENDIAN) */
+#else
+#define NATIVE_ORDER INTEL_ORDER/* 'II' (PORT_BYTESEX_LITTLE_ENDIAN)  */
+#endif
+
 
 typedef enum
 {
@@ -367,7 +372,7 @@ typedef enum
 /* omfFadeType_t: describes values for SCLP fadein and fadeout types  */
 typedef enum
 {
-	kFadeNone = 0, kFadeLinearAmp, kFadeLinearPower
+	kFadeNone = 0, kFadeLinearAmp, kFadeLinearPower, kLinearDB
 }               omfFadeType_t;
 
 typedef enum
@@ -411,7 +416,8 @@ typedef enum
 	kOMFNullAttribute = 0,
 	kOMFIntegerAttribute,
 	kOMFStringAttribute,
-	kOMFObjectAttribute
+	kOMFObjectAttribute,
+	kOMFDataValueAttribute	/*...extension for opaque application attributes; a "bag o'bits".*/
 } omfAttributeKind_t;
 	
 typedef enum
@@ -500,9 +506,16 @@ typedef struct
 	omfInt32			productID;
 	char				*platform;
 	omfProductVersion_t	productVersion;
+#if OMF_ID_SIG_OFFSET
+	omfInt32			idGenerationSig;	// Added to help make multi-process UIDs unique
+#endif
 } omfProductIdentification_t;
 
-extern const omfProductVersion_t omfiToolkitVersion;
+OMF_EXPORT extern const omfUInt16    OMNativeByteOrder;
+
+OMF_EXPORT extern const omfProductVersion_t omfiToolkitVersion;
+
+
 
 typedef struct
 {

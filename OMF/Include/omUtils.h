@@ -50,7 +50,7 @@ typedef omfBool(*omfDataValidityTest_t) (omfHdl_t file,
 										 const void *data,
 										 omfErr_t *omfError);
 
-#ifdef OMFI_ENABLE_SEMCHECK
+#if OMFI_ENABLE_SEMCHECK
 /************************************************************************
  *
  * Semantic Checking
@@ -179,7 +179,7 @@ OMF_EXPORT omfErr_t omfiEffectDefRegister(
  *
  ************************************************************************/
 
-OMF_EXPORT void omfsGetDateTime(omfTimeStamp_t *time);
+OMF_EXPORT void omfsGetDateTime(omfTimeStamp_t *ptime);
 
 OMF_EXPORT omfErr_t omfiGetNextProperty(
 	omfIterHdl_t iterHdl,    /* IN - Iterator Handle */
@@ -807,6 +807,13 @@ OMF_EXPORT omfLength_t omfsLengthDataValue(
 			omfObject_t		obj,	/* IN - and this object, return the */
 			omfProperty_t	prop); /* IN - length of this property. */
 
+OMF_EXPORT omfErr_t omfsRemovePropData(
+			omfHdl_t			file,	/* IN - From this file */
+			omfObject_t			obj,	/* IN - and this object */
+			omfProperty_t		prop, 	/* IN -  with this property */
+			omfPosition_t		offset,	/* IN - at this byte offset */
+			omfLength_t			count);	/* IN - for this many bytes */
+
 OMF_EXPORT omfErr_t omfsReadClassID(
 			omfHdl_t				file,	/* IN - From this file */
 			omfObject_t 		obj,	/* IN - and this object */
@@ -1016,6 +1023,14 @@ OMF_EXPORT omfErr_t OMLengthProp(
 			omfType_t		dataType,	/* IN -- Check the type */
 			omfInt32			defaultVal,	/* IN -- and pass back this if property is missing */
 			omfLength_t		*length);	/* OUT -- Return the length through here. */
+
+OMF_EXPORT omfErr_t OMRemovePropData(
+			omfHdl_t			file,			/* IN -- For this omf file */
+			omfObject_t		obj,			/* IN -- in this object */
+			omfProperty_t	prop,			/* IN -- find the length of this properties value */
+			omfType_t		dataType,	/* IN -- Check the type */
+			omfPosition_t	offset,	/* IN - at this byte offset */
+			omfLength_t		length);	/* IN - for this many bytes */
 
 OMF_EXPORT omfErr_t OMPutNthPropHdr(
 			omfHdl_t			file,			/* IN -- For this omf file */

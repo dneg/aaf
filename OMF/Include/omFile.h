@@ -27,8 +27,8 @@
 #ifndef _OMF_FILE_API_
 #define _OMF_FILE_API_ 1
 
+#include "omPublic.h"
 #include "omErr.h"
-#include "omFile.h"
 
 #if PORT_LANG_CPLUSPLUS
 extern          "C"
@@ -48,6 +48,10 @@ typedef enum
 
 typedef void   *fileHandleType;
 
+#ifndef NO_CONTAINER_EXPORTS
+#include "omCntPvt.h"
+#endif
+
 /*
  * The call to set up all read-only data.  This routine is not
  * thread-safe and MUST therefore not be called before threads.
@@ -55,6 +59,10 @@ typedef void   *fileHandleType;
 OMF_EXPORT omfErr_t omfsBeginSession(
 			omfProductIdentification_t	*ident, 		/* IN - Open a session */
 			omfSessionHdl_t * result);
+
+OMF_EXPORT omfErr_t omfsSetSessionIOHandlers( omfSessionHdl_t session,
+											  struct omfiBentoIOFuncs ioFuncs);
+
 OMF_EXPORT omfErr_t omfsEndSession(omfSessionHdl_t session);
 
 OMF_EXPORT omfErr_t omfsFileGetRev(omfHdl_t file, 
