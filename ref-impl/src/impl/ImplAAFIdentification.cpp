@@ -112,6 +112,8 @@ ImplAAFIdentification::Initialize
   AAFGetDateTime (&timestamp);
   _date = timestamp;
 
+  _toolkitVersion = AAFReferenceImplementationVersion;
+
   setInitialized ();
 
   return AAFRESULT_SUCCESS;
