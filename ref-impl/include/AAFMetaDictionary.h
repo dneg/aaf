@@ -49,7 +49,7 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Thu Sep 16 16:55:33 EDT 1999
+// This file was generated on Tue Sep 21 10:12:03 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -3449,7 +3449,7 @@ AAF_TYPE_SEPARATOR()
 // PulldownKindType
 //
 AAF_TYPE_DEFINITION_ENUMERATION(PulldownKindType, 
-  AAF_LITERAL_AUID(0x0C020A00,
+  AAF_LITERAL_AUID(0x0C020F00,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(UInt8))
   AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(kAAFTwoThreePD,
@@ -3587,7 +3587,7 @@ AAF_TYPE_SEPARATOR()
 // StringArray
 //
 AAF_TYPE_DEFINITION_VARYING_ARRAY(StringArray, 
-  AAF_LITERAL_AUID(0x0C040300,
+  AAF_LITERAL_AUID(0x0C040500,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C),
   AAF_TYPE(String))
@@ -3790,7 +3790,7 @@ AAF_TYPE_SEPARATOR()
 //
 AAF_TYPE_DEFINITION_VARYING_ARRAY(PositionArray, 
   AAF_LITERAL_AUID(0xFFFFFFFF,
-    0xFFFF, 0xFFFF,
+    0xFFFF, 0xFFFE,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0xFF),
   AAF_TYPE(UInt8))
 AAF_TYPE_SEPARATOR()
