@@ -25,8 +25,8 @@
 // Author : Tim Bingham (Tim_Bingham@avid.com) - after an initial
 // implementation by Bob Tillman.
 
-#include <iostream.h>
-#include <iomanip.h>
+#include <iostream>
+#include <iomanip>
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>

@@ -25,7 +25,7 @@
 // Author : Tim Bingham (Tim_Bingham@avid.com) - after an initial
 // implementation by Bob Tillman.
 
-#include <iostream.h>
+#include <iostream>
 #include <assert.h>
 #include <stdlib.h>
 

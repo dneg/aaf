@@ -30,7 +30,8 @@
 
 #include "AAFTypes.h"
 
-#include <iostream.h>
+#include <iostream>
+using namespace std;
 
 void printBeginGuard(const char* module, ostream& s);
 
