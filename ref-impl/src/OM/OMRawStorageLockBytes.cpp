@@ -29,6 +29,33 @@
 #include "OMRawStorageLockBytes.h"
 
 #include "OMAssertions.h"
+HRESULT STDMETHODCALLTYPE
+OMRawStorageLockBytes::QueryInterface(REFIID riid,
+                                      void** ppvObject)
+{
+  TRACE("OMRawStorageLockBytes::QueryInterface");
+
+  // TBS
+  return E_FAIL;
+}
+
+ULONG STDMETHODCALLTYPE
+OMRawStorageLockBytes::AddRef(void)
+{
+  TRACE("OMRawStorageLockBytes::AddRef");
+
+  // TBS
+  return 0;
+}
+
+ULONG STDMETHODCALLTYPE
+OMRawStorageLockBytes::Release(void)
+{
+  TRACE("OMRawStorageLockBytes::Release");
+
+  // TBS
+  return 0;
+}
 
   // @mfunc Constructor.
 OMRawStorageLockBytes::OMRawStorageLockBytes(OMRawStorage* rawStorage)
