@@ -176,7 +176,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	bool bFileOpen = false;
 	aafBool			testResult;
 	aafUID_t		codecID = CodecWave;
-	aafUID_t		testMatte = DDEF_Matte, testPicture = DDEF_Picture;
+	// aafUID_t		testMatte = DDEF_Matte;
+	aafUID_t		testPicture = DDEF_Picture;
 	aafUID_t		checkFlavour = NilCodecVariety;
 	aafUID_t		testFlavour;
 	HRESULT			hr = S_OK;
@@ -194,7 +195,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkExpression (testResult == AAFFalse, AAFRESULT_TEST_FAILED);
 		checkResult(pCodec->EnumCodecFlavours (&pEnum));
 		checkResult(pEnum->NextOne (&testFlavour));
-		checkExpression (EqualAUID(&testFlavour, &checkFlavour), AAFRESULT_TEST_FAILED);
+		checkExpression (EqualAUID(&testFlavour, &checkFlavour) ? true : false,
+						 AAFRESULT_TEST_FAILED);
 	}
 	catch (HRESULT& rResult)
 	{
