@@ -58,6 +58,7 @@
 
 class Impl.this-module : public Impl.parent-module
 {
+  public:
   Impl.this-module ();
   ~Impl.this-module ();
   //
