@@ -134,7 +134,7 @@ public:
     //          in the current position for <f read()> and <f write()>
     //          being set to <mf OMMemoryRawStorage::size>.
     //          precondition - isExtendible()
-  virtual void setSize(OMUInt64 newSize);
+  virtual void extend(OMUInt64 newSize);
 
     // @cmember May the current position, for <f read()> and <f write()>,
     //          of this <c OMMemoryRawStorage> be changed ?

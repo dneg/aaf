@@ -152,7 +152,7 @@ public:
     //          being set to <mf OMRawStorage::size>.
     //          @precondition <f isExtendible()>
     //   @devnote How is failure to extend indicated ?
-  virtual void setSize(OMUInt64 newSize) = 0;
+  virtual void extend(OMUInt64 newSize) = 0;
 
     // @cmember May the current position, for <f read()> and <f write()>,
     //          of this <c OMRawStorage> be changed ?

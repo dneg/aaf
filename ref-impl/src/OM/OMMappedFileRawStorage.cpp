@@ -249,9 +249,9 @@ OMUInt64 OMMappedFileRawStorage::size(void) const
   //        precondition - isExtendible()
   //   @parm The new size of this <c OMMappedFileRawStorage> in bytes.
   //   @devnote There is no ISO/ANSI way of truncating a file in place.
-void OMMappedFileRawStorage::setSize(OMUInt64 /* newSize */)
+void OMMappedFileRawStorage::extend(OMUInt64 /* newSize */)
 {
-  TRACE("OMMappedFileRawStorage::setSize");
+  TRACE("OMMappedFileRawStorage::extend");
 
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }

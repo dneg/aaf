@@ -145,7 +145,7 @@ OMRawStorageLockBytes::SetSize(ULARGE_INTEGER cb)
 {
   TRACE("OMRawStorageLockBytes::SetSize");
 
-  _rawStorage->setSize(toOMUInt64(cb));
+  _rawStorage->extend(toOMUInt64(cb));
   return NOERROR;
 }
 

@@ -151,7 +151,7 @@ public:
     //          <f read()> and <f write()> being set to
     //          <mf OMMappedFileRawStorage::size>.
     //          precondition - isExtendible()
-  virtual void setSize(OMUInt64 newSize);
+  virtual void extend(OMUInt64 newSize);
 
     // @cmember May the current position, for <f read()> and <f write()>,
     //          of this <c OMMappedFileRawStorage> be changed ?
