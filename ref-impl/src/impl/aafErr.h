@@ -143,7 +143,7 @@ AAF_EXPORT void aafPrintStackTrace(AAFFile * file);
 	 *
 	 *************************************************************/
 #define XPROTECT()	{ aafErr_t zzOmfEcode = AAFRESULT_SUCCESS; \
-						aafBool zzOmfPropagate = AAFTrue;
+						aafBool zzOmfPropagate = kAAFTrue;
 
 #define CHECK(a) { if((zzOmfEcode = (a)) != AAFRESULT_SUCCESS) goto zzOmfCleanup; }
 
@@ -167,7 +167,7 @@ AAF_EXPORT void aafPrintStackTrace(AAFFile * file);
 						}
 						
 #define RERAISE(a)		zzOmfEcode = (a)
-#define NO_PROPAGATE()	zzOmfPropagate = AAFFalse
+#define NO_PROPAGATE()	zzOmfPropagate = kAAFFalse
 #define XCODE()			zzOmfEcode
 #define XEXCEPT			goto zzOmfExit; \
 						zzOmfCleanup:

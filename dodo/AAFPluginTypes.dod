@@ -16,15 +16,15 @@ AD_TYPES_BEGIN(410ED8B1, 912B, 11D2, 80, 88, 00, 60, 08, 14, 3e, 6f)
 typedef aafInt32 aafDeinterleave_t;
 typedef enum _aafDeinterleave_e
 {
-	deinterleave,
-	leaveInterleaved
+	kAAFdeinterleave,
+	kAAFleaveInterleaved
 } aafDeinterleave_e;
 
 typedef aafInt32 aafCheckVerbose_t;
 typedef enum _aafCheckVerbose_e
 {
 	kAAFCheckVerbose, 
-	kCheckQuiet
+	kAAFCheckQuiet
 } aafCheckVerbose_e;
 
 typedef aafInt32 aafCheckWarnings_t;

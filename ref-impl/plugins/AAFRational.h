@@ -53,17 +53,17 @@ public:
 	AAFRational operator/(const AAFRational& s) const;
 	// ------- relational operators
 	aafBool operator==(const AAFRational& s) const
-	{ return (aafBool) (num == s.num ? AAFTrue : AAFFalse); }
+	{ return (aafBool) (num == s.num ? kAAFTrue : kAAFFalse); }
 	aafBool operator!=(const AAFRational& s) const
-		{ return (aafBool) (num != s.num ? AAFTrue : AAFFalse); }
+		{ return (aafBool) (num != s.num ? kAAFTrue : kAAFFalse); }
 	aafBool operator>(const AAFRational& s) const
-		{ return (aafBool) ((double)*this > (double)s ? AAFTrue : AAFFalse); }
+		{ return (aafBool) ((double)*this > (double)s ? kAAFTrue : kAAFFalse); }
 	aafBool operator<(const AAFRational& s) const
-		{ return (aafBool) ((double)*this < (double)s ? AAFTrue : AAFFalse); }
+		{ return (aafBool) ((double)*this < (double)s ? kAAFTrue : kAAFFalse); }
 	aafBool operator<=(const AAFRational& s) const
-		{ return (aafBool) (*this > s ? AAFFalse : AAFTrue); }
+		{ return (aafBool) (*this > s ? kAAFFalse : kAAFTrue); }
 	aafBool operator>=(const AAFRational& s) const
-		{ return (aafBool) (*this < s ? AAFFalse : AAFTrue); }
+		{ return (aafBool) (*this < s ? kAAFFalse : kAAFTrue); }
 };
 
 #endif
