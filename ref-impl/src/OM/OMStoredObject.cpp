@@ -30,6 +30,7 @@
 #include "OMStoredPropertySetIndex.h"
 #include "OMProperty.h"
 #include "OMPropertySet.h"
+#include "OMPropertySetIterator.h"
 #include "OMStoredVectorIndex.h"
 #include "OMStoredSetIndex.h"
 #include "OMDataTypes.h"
@@ -216,15 +217,16 @@ void OMStoredObject::save(const OMPropertySet& properties)
   size_t indexSize = indexHeaderSize + (countPresent * indexEntrySize);
   streamSetPosition(_properties, indexSize);
   _offset = indexSize;
-  size_t context = 0;
-  for (size_t i = 0; i < count; i++) {
-    OMProperty* p = 0;
-    properties.iterate(context, p);
+
+  OMPropertySetIterator iterator(properties, OMBefore);
+  while (++iterator) {
+    OMProperty* p = iterator.property();
     ASSERT("Valid property", p != 0);
     if (!p->isOptional() || p->isPresent()) {
       p->save();
     }
   }
+
 #if !defined(OM_DISABLE_VALIDATE)
   validate(&properties, _index);
 #endif
@@ -672,11 +674,9 @@ void OMStoredObject::validate(
 
   // Check that all required properties are present.
   //
-  size_t count = propertySet->count();
-  context = 0;
-  for (size_t j = 0; j < count; j++) {
-    OMProperty* p = 0;
-    propertySet->iterate(context, p);
+  OMPropertySetIterator iterator(*propertySet, OMBefore);
+  while (++iterator) {
+    OMProperty* p = iterator.property();
     ASSERT("Valid property", p != 0);
     propertyId = p->propertyId();
     if (!p->isOptional()) {
