@@ -2,7 +2,7 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# TARGTYPE "Win32 (x86) External Target" 0x0106
+# TARGTYPE "Win32 (x86) Generic Project" 0x010a
 
 CFG=Everything - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
@@ -17,50 +17,40 @@ CFG=Everything - Win32 Debug
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "Everything - Win32 Release" (based on "Win32 (x86) External Target")
-!MESSAGE "Everything - Win32 Debug" (based on "Win32 (x86) External Target")
+!MESSAGE "Everything - Win32 Release" (based on "Win32 (x86) Generic Project")
+!MESSAGE "Everything - Win32 Debug" (based on "Win32 (x86) Generic Project")
 !MESSAGE 
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
+MTL=midl.exe
 
 !IF  "$(CFG)" == "Everything - Win32 Release"
 
+# PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "Release"
 # PROP BASE Intermediate_Dir "Release"
-# PROP BASE Cmd_Line "NMAKE /f Everything.mak"
-# PROP BASE Rebuild_Opt "/a"
-# PROP BASE Target_File "Everything.exe"
-# PROP BASE Bsc_Name "Everything.bsc"
 # PROP BASE Target_Dir ""
+# PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
-# PROP Cmd_Line ""
-# PROP Rebuild_Opt ""
-# PROP Target_File "Everything.exe"
-# PROP Bsc_Name ""
 # PROP Target_Dir ""
 
 !ELSEIF  "$(CFG)" == "Everything - Win32 Debug"
 
+# PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "Debug"
 # PROP BASE Intermediate_Dir "Debug"
-# PROP BASE Cmd_Line "NMAKE /f Everything.mak"
-# PROP BASE Rebuild_Opt "/a"
-# PROP BASE Target_File "Everything.exe"
-# PROP BASE Bsc_Name "Everything.bsc"
 # PROP BASE Target_Dir ""
+# PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
-# PROP Cmd_Line ""
-# PROP Rebuild_Opt ""
-# PROP Bsc_Name ""
 # PROP Target_Dir ""
 
 !ENDIF 
@@ -69,12 +59,5 @@ CFG=Everything - Win32 Debug
 
 # Name "Everything - Win32 Release"
 # Name "Everything - Win32 Debug"
-
-!IF  "$(CFG)" == "Everything - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "Everything - Win32 Debug"
-
-!ENDIF 
-
 # End Target
 # End Project
