@@ -982,12 +982,12 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFSegment		*pdwnInput = NULL;
 	ImplEnumAAFMobSlots *iter = NULL;
 	ImplAAFSegment		*seg = NULL;
-	aafTimecode_t		timecode;
+//	aafTimecode_t		timecode;
 	aafBool				reverse = kAAFFalse;
-	aafUInt32			frameOffset;
-	aafUID_t			dataDefID;
-	aafPosition_t		newStart;
-	aafInt32			start32;
+//	aafUInt32			frameOffset;
+//	aafUID_t			dataDefID;
+//	aafPosition_t		newStart;
+//	aafInt32			start32;
 	AAFRESULT			aafError = AAFRESULT_SUCCESS;
 	
 
@@ -995,7 +995,9 @@ AAFRESULT STDMETHODCALLTYPE
   if (NULL == tcSlotID || NULL == offset || NULL == result)
     return (AAFRESULT_NULL_PARAM);
   
-  memset(result, 0, sizeof(aafTimecode_t));
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+#if 0
+	memset(result, 0, sizeof(aafTimecode_t));
 	memset(&timecode, 0, sizeof(aafTimecode_t));
 	result->startFrame = 0;
 	
@@ -1090,6 +1092,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XEND;
 	
 	return(AAFRESULT_SUCCESS);
+#endif
 }
 
 
