@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Fri Jun  4 16:30:42 EDT 1999
+// This file was generated on Fri Jun 11 08:49:30 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -1050,38 +1050,6 @@ AAF_CLASS(TypeDefinition,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   DefinitionObject)
-AAF_PROPERTY(MinimumRev,
-  AAF_LITERAL_AUID(0x06444601,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  0x2101,
-  VersionType,
-  false,
-  TypeDefinition)
-AAF_PROPERTY(MaximumRev,
-  AAF_LITERAL_AUID(0x06444602,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  0x2102,
-  VersionType,
-  false,
-  TypeDefinition)
-AAF_PROPERTY(SwabNeeded,
-  AAF_LITERAL_AUID(0x06444603,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  0x2103,
-  Boolean,
-  true,
-  TypeDefinition)
-AAF_PROPERTY(ReferenceValues,
-  AAF_LITERAL_AUID(0x06444604,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  0x2104,
-  ObjRefArray,
-  false,
-  TypeDefinition)
 AAF_CLASS_END(TypeDefinition)
 AAF_CLASS_SEPARATOR()
 
