@@ -159,13 +159,15 @@ class Impl.this-module;
 
 class .this-module : public .parent-module
 {
-  public:
-  .this-module (aafBool doInit = AAFTrue);
-  ~.this-module ();
+protected:
   //
   // Constructor/destructor
   //
   //********
+  .this-module (aafBool doInit = AAFTrue);
+  ~.this-module ();
+
+public:
 #endm
 
 
@@ -188,13 +190,15 @@ class Impl.this-module;
 
 class .this-module
 {
-public:
-  .this-module (aafBool doInit=AAFTrue);
-  ~.this-module ();
+protected:
   //
   // Constructor/destructor
   //
   //********
+  .this-module (aafBool doInit=AAFTrue);
+  virtual ~.this-module ();
+
+public:
 #endm
 
 

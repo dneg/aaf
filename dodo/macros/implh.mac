@@ -151,13 +151,13 @@ class Impl%01;
 
 class Impl.this-module : public Impl.parent-module
 {
-  public:
-  Impl.this-module ();
-  virtual ~Impl.this-module ();
+public:
   //
   // Constructor/destructor
   //
   //********
+  Impl.this-module ();
+  ~Impl.this-module ();
 #endm
 
 
@@ -178,12 +178,12 @@ class .this-module;
 class Impl.this-module
 {
 public:
-  Impl.this-module ();
-  ~Impl.this-module ();
   //
   // Constructor/destructor
   //
   //********
+  Impl.this-module ();
+  virtual~Impl.this-module ();
 #endm
 
 
