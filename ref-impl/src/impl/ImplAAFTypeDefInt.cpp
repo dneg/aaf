@@ -315,12 +315,12 @@ AAFRESULT STDMETHODCALLTYPE
 	return hr;
 
   aafMemPtr_t pBits = NULL;
-  hr = pv->AllocateBits (valSize, &pBits);
+  hr = pv->AllocateBits (_size, &pBits);
   if (! AAFRESULT_SUCCEEDED (hr))
 	return hr;
 
   assert (pBits);
-  memcpy (pBits, valBuf, valSize);
+  memcpy (pBits, valBuf, _size);
 
   *ppPropVal = pv;
   (*ppPropVal)->AcquireReference ();
