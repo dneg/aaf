@@ -16,13 +16,10 @@ AD_HEAD
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
-AD_FORWARD_DECLARATION(AAFPulldown)
-AD_FORWARD_DECLARATION(AAFTimecode)
 
 AD_CLASS_UUID(7a2f0571, 1ba3, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(7a2f0570, 1ba3, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
-
 AD_CLASS_BEGIN
 
 AD_METHOD3(SegmentOffsetToTC,
@@ -36,28 +33,6 @@ AD_METHOD4(SegmentTCToOffset,
 		   [in],aafRational_t,editRate,,
 		   [out],aafFrameOffset_t *,offset,,
 		   [out],aafBool *,found,,
-		   )
-
-AD_XMETHOD4(FindSubSegment,
-			[in],objPass,aafPosition_t,offset,,
-			[out],objPass,aafPosition_t *,sequPosPtr,,
-			[out],objOut,AAFSegment,subseg,,
-			[out],objPass,aafBool *,found,,
-			)
-
-AD_XMETHOD6(TraverseToClip,
-			[in],objPass,aafLength_t,length,,
-			[out],objOut,AAFSegment,sclp,,
-			[out],objOut,AAFPulldown,pulldownObj,,
-			[out],objPass,aafInt32 *,pulldownPhase,,
-			[out],objPass,aafLength_t *,sclpLen,,
-			[out],objPass,aafBool *,isMask,,
-			)
-
-AD_XMETHOD3(OffsetToTimecodeClip,
-			[in],objPass,aafPosition_t,offset,,
-			[out],objOut,AAFTimecode,result,,
-			[out],objPass,aafPosition_t *,tcStartPos,,
 		   )
 
 AD_METHOD1(NumRepresentations,
