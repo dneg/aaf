@@ -936,6 +936,20 @@ OMStrongReferenceSetProperty<UniqueIdentification,
 }
 
 template <typename UniqueIdentification, typename ReferencedObject>
+bool
+OMStrongReferenceSetProperty<UniqueIdentification,
+                             ReferencedObject>::find(
+                                   void* key,
+                                   OMStrongReferenceSetElement** element) const
+{
+  TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
+                                     "ReferencedObject>::find");
+
+  UniqueIdentification* k = reinterpret_cast<UniqueIdentification*>(key);
+  return _set.find(*k, element);
+}
+
+template <typename UniqueIdentification, typename ReferencedObject>
 void
 OMStrongReferenceSetProperty<UniqueIdentification,
                              ReferencedObject>::find(void* key,

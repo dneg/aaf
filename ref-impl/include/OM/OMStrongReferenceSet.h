@@ -55,6 +55,9 @@ public:
 
   virtual void find(void* key, OMStrongReferenceSetElement& element) const = 0;
 
+  virtual bool find(void* key,
+                    OMStrongReferenceSetElement** element) const = 0;
+
   virtual void find(void* key, OMStorable*& object) const = 0;
 
   virtual OMKeySize keySize(void) const = 0;
