@@ -331,10 +331,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPluggableCode.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPluggableDef.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPluginDescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -531,11 +527,19 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFClassDefs.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFCodecDefs.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFCodecFlavours.cpp"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFComponents.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFContainerDefs.cpp"
 # End Source File
 # Begin Source File
 
@@ -584,10 +588,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFMobSlots.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFParameterDefs.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFPluggableDefs.cpp"
 # End Source File
 # Begin Source File
 

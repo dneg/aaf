@@ -571,14 +571,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFPluggableCodeTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFPluggableDef.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFPluggableDefTest.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFPluginDescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -971,6 +963,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFClassDefsTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFCodecDefs.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFCodecDefsTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFCodecFlavours.cpp"
 # End Source File
 # Begin Source File
@@ -984,6 +984,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFComponents.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFComponentsTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFContainerDefs.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFContainerDefsTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -1080,14 +1088,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFParameterDefs.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFParameterDefsTest.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFPluggableDefs.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFPluggableDefsTest.cpp"
 # End Source File
 # Begin Source File
 
