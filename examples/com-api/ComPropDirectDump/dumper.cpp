@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -256,15 +256,15 @@ HRESULT dumpObject(IAAFObjectSP pContainer,
 	  os << "Object of Class: ";
 	  checkResult(pContainer->GetDefinition (&pClassDef));
       aafUInt32 bufClassNameSize;
-		  checkResult(pClassDef->GetNameBufLen (&bufClassNameSize));
-		  aafCharacter * classNameBuf = new aafCharacter[bufClassNameSize];
-		  assert (classNameBuf);
-		  checkResult(pClassDef->GetName(classNameBuf, bufClassNameSize));
-		  char *mbBuf = make_mbstring(bufClassNameSize, classNameBuf); // create an ansi/asci
-		  checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
-		  os << mbBuf << endl;
-		  delete[] mbBuf;
-		  delete[] classNameBuf;
+	  checkResult(pClassDef->GetNameBufLen (&bufClassNameSize));
+	  aafCharacter * classNameBuf = new aafCharacter[bufClassNameSize];
+	  assert (classNameBuf);
+	  checkResult(pClassDef->GetName(classNameBuf, bufClassNameSize));
+	  char *mbBuf = make_mbstring(bufClassNameSize, classNameBuf); // create an ansi/asci
+	  checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
+	  os << mbBuf << endl;
+	  delete[] mbBuf;
+	  delete[] classNameBuf;
 
 	  // Enumerate across Properties
 	  while (AAFRESULT_SUCCEEDED (pPropEnum->NextOne (&pProp)))
@@ -289,7 +289,7 @@ HRESULT dumpObject(IAAFObjectSP pContainer,
 		  checkResult(pProp->GetValue(&pPVal));
 
 		  // dump property value
-		  dumpPropertyValue (pPVal, pDict, indent+1, os);
+		  checkResult (dumpPropertyValue (pPVal, pDict, indent+1, os));
 
 		} // while ()...
 	}
@@ -347,7 +347,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 			IAAFTypeDefIntSP pTDI;
 			
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefInt,
-										   (void**)&pTDI));
+											(void**)&pTDI));
 
 			aafInt64 val;
 			checkResult(pTDI->GetInteger(pPVal, (aafMemPtr_t) &val, sizeof (val)));
@@ -386,7 +386,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 			IAAFObjectSP pObj;
 			checkResult(pTDO->GetObject(pPVal, &pObj));
 			os << "Value: an object:" << endl;
-			dumpObject (pObj, pDict, indent+1, os);
+			checkResult (dumpObject (pObj, pDict, indent+1, os));
 
 			break;	
 		  }
@@ -398,7 +398,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 			// recursively)
 			IAAFTypeDefObjectRefSP pTDO;
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefObjectRef,
-										   (void**)&pTDO));
+											(void**)&pTDO));
 
 			IAAFObjectSP pObj;
 			checkResult(pTDO->GetObject(pPVal, &pObj));
@@ -418,13 +418,16 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 			// as source type
 			IAAFTypeDefRenameSP pTDR;
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefRename,
-										   (void**)&pTDR));
+											(void**)&pTDR));
 			// Here print rename's type using pTDR->GetName()
 
 			// Now get base property value and recursively print that
 			IAAFPropertyValueSP pBasePropVal;
 			checkResult(pTDR->GetValue (pPVal, &pBasePropVal));
-			dumpPropertyValue (pBasePropVal, pDict, indent+1, os);
+			checkResult (dumpPropertyValue (pBasePropVal,
+											pDict,
+											indent+1,
+											os));
 
 			break;
 		  }
@@ -434,7 +437,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 			// Print enum element's text tag as well as int value
 			IAAFTypeDefEnumSP pTDE;
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefEnum,
-										   (void**)&pTDE));
+											(void**)&pTDE));
 
 			// first, get the int value
 			aafInt64 enumValue;
@@ -468,7 +471,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 			// Print enum element's text tag
 			IAAFTypeDefExtEnumSP pTDE;
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefExtEnum,
-										   (void**)&pTDE));
+											(void**)&pTDE));
 
 			// first, get the AUID value
 			aafUID_t enumValue;
@@ -502,7 +505,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 			// Print out elements of array.
 			IAAFTypeDefFixedArraySP pTDFA;
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefFixedArray,
-										   (void**)&pTDFA));
+											(void**)&pTDFA));
 
 			// Get number of elements
 			aafUInt32 numElems = 0;
@@ -517,7 +520,10 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 				os << "  [" << i << "]: ";
 				IAAFPropertyValueSP pElemPropVal;
 				checkResult(pTDFA->GetElementValue(pPVal, i, &pElemPropVal));
-				dumpPropertyValue (pElemPropVal, pDict, indent+1, os);
+				checkResult (dumpPropertyValue (pElemPropVal,
+												pDict,
+												indent+1,
+												os));
 			  }
 
 			break;
@@ -528,7 +534,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 			// Print out elements of array.
 			IAAFTypeDefVariableArraySP pTDVA;
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefVariableArray,
-										   (void**)&pTDVA));
+											(void**)&pTDVA));
 
 			// Get number of elements
 			aafUInt32 numElems;
@@ -543,7 +549,10 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 				os << "[" << i << "]: ";
 				IAAFPropertyValueSP pElemPropVal;
 				checkResult(pTDVA->GetElementValue(pPVal, i, &pElemPropVal));
-				dumpPropertyValue (pElemPropVal, pDict, indent+1, os);
+				checkResult (dumpPropertyValue (pElemPropVal,
+												pDict,
+												indent+1,
+												os));
 			  }
 
 			break;
@@ -553,7 +562,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 		  {
 			IAAFTypeDefStringSP pTDS;
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefString,
-										   (void**)&pTDS));
+											(void**)&pTDS));
 
 			// Get typedef of an element
 			IAAFTypeDefSP pETD;
@@ -576,12 +585,12 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 			aafUInt32 elemSize = 0;
 			checkResult(pTDS->GetCount(pPVal, &count));
 			count ++; // make room for terminator
-//			checkResult(pETDcharacter->GetSize (&elemSize));
-      // The element size must be the in-memory size of an aafCharacter since
-      // the character type currently only supports 2 byte <=> 2 byte and
-      // 2 byte <=> 4 byte character conversion. There is no support for
-      // non-unicode character conversion: 1 byte <=> 2 byte, or 1 byte <=> 4 byte.
-      elemSize = sizeof(aafCharacter);
+			//			checkResult(pETDcharacter->GetSize (&elemSize));
+			// The element size must be the in-memory size of an aafCharacter since
+			// the character type currently only supports 2 byte <=> 2 byte and
+			// 2 byte <=> 4 byte character conversion. There is no support for
+			// non-unicode character conversion: 1 byte <=> 2 byte, or 1 byte <=> 4 byte.
+			elemSize = sizeof(aafCharacter);
 			bufSize = count * elemSize;
 
 			// First, let's actually get the bits.
@@ -608,7 +617,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 			aafUInt32 i;
 			IAAFTypeDefRecordSP pTDR;
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefRecord,
-										   (void**)&pTDR));
+											(void**)&pTDR));
 
 			// Special case!  See if this is an AUID
 			IUnknown * pUnkTest = 0;
@@ -691,7 +700,10 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 					IAAFPropertyValueSP pMemberPropVal;
 					checkResult(pTDR->GetValue(pPVal, i, &pMemberPropVal));
 					// recursively dump prop value
-					dumpPropertyValue (pMemberPropVal, pDict, indent+1, os);
+					checkResult (dumpPropertyValue (pMemberPropVal,
+													pDict,
+													indent+1,
+													os));
 				  }
 			  }
 			if (pUnkTest)
@@ -717,16 +729,18 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 			// Print out elements of array.
 			IAAFTypeDefIndirectSP pIndirectType;
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefIndirect,
-										   (void**)&pIndirectType));
+											(void**)&pIndirectType));
 
 			os << "Value [indirect]:" << endl;
 
 			// Get the actual value
-      IAAFPropertyValueSP pActualValue;
+			IAAFPropertyValueSP pActualValue;
 			checkResult(pIndirectType->GetActualValue(pPVal, &pActualValue));
 			// recursively dump prop value
-			dumpPropertyValue (pActualValue, pDict, indent+1, os);
-
+			checkResult (dumpPropertyValue (pActualValue,
+											pDict,
+											indent+1,
+											os));
 			break;
 		  }
 
@@ -830,11 +844,11 @@ int main(int argc, char* argv[])
   ofstream filestream;
   bool file_opened = false;
 
-	/* console window for mac */
+  /* console window for mac */
 
-	#if defined(macintosh) || defined(_MAC)
-	argc = ccommand(&argv);
-	#endif
+#if defined(macintosh) || defined(_MAC)
+  argc = ccommand(&argv);
+#endif
 
   CComInitialize comInit;
   CAAFInitialize aafInit;
