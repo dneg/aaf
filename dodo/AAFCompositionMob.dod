@@ -21,7 +21,7 @@ AD_DEFAULT_UUID(91920d63, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
   //@access Public Members
-AD_CONSTRUCTOR2(
+AD_METHOD2(SetInitialValues,
 				[in],aafString_t *,name,Mob name [optional],
 				[in],aafBool,isPrimary,Whether or not the mob is a primary mob,
 				Constructor given name and primary mob status.)
