@@ -31,6 +31,7 @@
 #define OMREFERENCESETT_H
 
 #include "OMAssertions.h"
+#include "OMReferenceSetIter.h"
 
   // @mfunc Constructor.
 template <typename UniqueIdentification, typename ReferencedObject>
@@ -347,8 +348,9 @@ OMReferenceSet<UniqueIdentification, ReferencedObject>::insertObject(
   TRACE("OMReferenceSet<UniqueIdentification, ReferencedObject>::"
                                                                "insertObject");
 
-  // tjb TBS
-  ASSERT("Unimplemented code not reached", false);
+  const ReferencedObject* obj = dynamic_cast<const ReferencedObject*>(object);
+  ASSERT("Object is correct type", obj != 0);
+  insert(obj);
 }
 
   // @mfunc Does this <c OMReferenceSet> contain <p object> ?
@@ -365,8 +367,9 @@ OMReferenceSet<UniqueIdentification, ReferencedObject>::containsObject(
   TRACE("OMReferenceSet<UniqueIdentification, ReferencedObject>::"
                                                              "containsObject");
 
-  ASSERT("Unimplemented code not reached", false);
-  return false; // tjb TBS
+  const ReferencedObject* obj = dynamic_cast<const ReferencedObject*>(object);
+  ASSERT("Object is correct type", obj != 0);
+  return containsValue(obj);
 }
 
   // @mfunc Remove <p object> from this <c OMReferenceSet>.
@@ -382,8 +385,9 @@ OMReferenceSet<UniqueIdentification, ReferencedObject>::removeObject(
   TRACE("OMReferenceSet<UniqueIdentification, ReferencedObject>::"
                                                                "removeObject");
 
-  // tjb TBS
-  ASSERT("Unimplemented code not reached", false);
+  const ReferencedObject* obj = dynamic_cast<const ReferencedObject*>(object);
+  ASSERT("Object is correct type", obj != 0);
+  removeValue(obj);
 }
 
   // @mfunc Remove all objects from this <c OMReferenceSet>.
@@ -397,8 +401,8 @@ OMReferenceSet<UniqueIdentification, ReferencedObject>::removeAllObjects(void)
   TRACE("OMReferenceSet<UniqueIdentification, ReferencedObject>::"
                                                            "removeAllObjects");
 
-  // tjb TBS
-  ASSERT("Unimplemented code not reached", false);
+  _set.clear();
+  POSTCONDITION("All objects removed", count() == 0);
 }
 
   // @mfunc Create an <c OMReferenceContainerIterator> over this
@@ -413,10 +417,14 @@ OMReferenceSet<UniqueIdentification, ReferencedObject>::createIterator(
                                                                     void) const
 {
   TRACE("OMReferenceSet<UniqueIdentification, ReferencedObject>::"
-                                                              "creatIterator");
+                                                             "createIterator");
 
-  ASSERT("Unimplemented code not reached", false);
-  return 0; // tjb TBS
+  OMReferenceSetIterator<UniqueIdentification,
+                         ReferencedObject>* result =
+                 new OMReferenceSetIterator<UniqueIdentification,
+                                            ReferencedObject>(*this, OMBefore);
+  ASSERT("Valid heap pointer", result != 0);
+  return result;
 }
 
   // @mfunc Remove the <c OMObject> identified by <p identification>
@@ -433,8 +441,9 @@ OMReferenceSet<UniqueIdentification, ReferencedObject>::remove(
 {
   TRACE("OMReferenceSet<UniqueIdentification, ReferencedObject>::remove");
 
-  ASSERT("Unimplemented code not reached", false);
-  return 0; // tjb TBS
+  UniqueIdentification* id =
+                       reinterpret_cast<UniqueIdentification*>(identification);
+  return remove(id);
 }
 
   // @mfunc Does this <c OMReferenceSet> contain an
@@ -451,8 +460,9 @@ OMReferenceSet<UniqueIdentification, ReferencedObject>::contains(
 {
   TRACE("OMReferenceSet<UniqueIdentification, ReferencedObject>::contains");
 
-  ASSERT("Unimplemented code not reached", false);
-  return false; // tjb TBS
+  UniqueIdentification* id =
+                       reinterpret_cast<UniqueIdentification*>(identification);
+  return contains(id);
 }
 
   // @mfunc Find the <c OMObject> in this <c OMReferenceSet>
@@ -473,8 +483,11 @@ OMReferenceSet<UniqueIdentification, ReferencedObject>::findObject(
 {
   TRACE("OMReferenceSet<UniqueIdentification, ReferencedObject>::findObject");
 
-  ASSERT("Unimplemented code not reached", false);
-  return false; // tjb TBS
+  UniqueIdentification* id =
+                       reinterpret_cast<UniqueIdentification*>(identification);
+  ReferencedObject* obj = dynamic_cast<ReferencedObject*>(object);
+  ASSERT("Object is correct type", obj != 0);
+  return find(*id, obj);
 }
 
 #endif

@@ -450,6 +450,7 @@ template <typename ReferencedObject>
 void OMReferenceVector<ReferencedObject>::insertObject(const OMObject* object)
 {
   TRACE("OMReferenceVector<ReferencedObject>::insertObject");
+  appendObject(object);
 }
 
   // @mfunc Does this <c OMReferenceVector> contain <p object> ?
@@ -463,8 +464,9 @@ OMReferenceVector<ReferencedObject>::containsObject(
 {
   TRACE("OMReferenceVector<ReferencedObject>::containsObject");
 
-  ASSERT("Unimplemented code not reached", false);
-  return false; // tjb TBS
+  const ReferencedObject* obj = dynamic_cast<const ReferencedObject*>(object);
+  ASSERT("Object is correct type", obj != 0);
+  return containsValue(obj);
 }
 
   // @mfunc Remove <p object> from this <c OMReferenceVector>.
@@ -475,8 +477,9 @@ void OMReferenceVector<ReferencedObject>::removeObject(const OMObject* object)
 {
   TRACE("OMReferenceVector<ReferencedObject>::removeObject");
 
-  // tjb TBS
-  ASSERT("Unimplemented code not reached", false);
+  const ReferencedObject* obj = dynamic_cast<const ReferencedObject*>(object);
+  ASSERT("Object is correct type", obj != 0);
+  removeValue(obj);
 }
 
   // @mfunc Remove all objects from this <c OMReferenceVector>.
@@ -486,8 +489,8 @@ void OMReferenceVector<ReferencedObject>::removeAllObjects(void)
 {
   TRACE("OMReferenceVector<ReferencedObject>::removeAllObjects");
 
-  // tjb TBS
-  ASSERT("Unimplemented code not reached", false);
+  _vector.clear();
+  POSTCONDITION("All objects removed", count() == 0);
 }
 
   // @mfunc Create an <c OMReferenceContainerIterator> over this
@@ -500,8 +503,10 @@ OMReferenceVector<ReferencedObject>::createIterator(void) const
 {
   TRACE("OMReferenceVector<ReferencedObject>::createIterator");
 
-  ASSERT("Unimplemented code not reached", false);
-  return 0; // tjb TBS
+  OMReferenceVectorIterator<ReferencedObject>* result =
+              new OMReferenceVectorIterator<ReferencedObject>(*this, OMBefore);
+  ASSERT("Valid heap pointer", result != 0);
+  return result;
 }
 
   // @mfunc Set the value of this <c OMReferenceVector>
@@ -516,8 +521,9 @@ OMReferenceVector<ReferencedObject>::setObjectAt(const OMObject* object,
 {
   TRACE("OMReferenceVector<ReferencedObject>::setObjectAt");
 
-  ASSERT("Unimplemented code not reached", false);
-  return 0; // tjb TBS
+  const ReferencedObject* obj = dynamic_cast<const ReferencedObject*>(object);
+  ASSERT("Object is correct type", obj != 0);
+  return setValueAt(obj, index);
 }
 
   // @mfunc The value of this <c OMReferenceVector>
@@ -531,8 +537,7 @@ OMReferenceVector<ReferencedObject>::getObjectAt(const size_t index) const
 {
   TRACE("OMReferenceVector<ReferencedObject>::getObjectAt");
 
-  ASSERT("Unimplemented code not reached", false);
-  return 0; // tjb TBS
+  return valueAt(index);
 }
 
   // @mfunc Append the given <p OMObject> <p object> to
@@ -544,8 +549,7 @@ void OMReferenceVector<ReferencedObject>::appendObject(const OMObject* object)
 {
   TRACE("OMReferenceVector<ReferencedObject>::appendObject");
 
-  // tjb TBS
-  ASSERT("Unimplemented code not reached", false);
+  insertObjectAt(object, count());
 }
 
   // @mfunc Prepend the given <p OMObject> <p object> to
@@ -557,8 +561,7 @@ void OMReferenceVector<ReferencedObject>::prependObject(const OMObject* object)
 {
   TRACE("OMReferenceVector<ReferencedObject>::prependObject");
 
-  // tjb TBS
-  ASSERT("Unimplemented code not reached", false);
+  insertObjectAt(object, 0);
 }
 
   // @mfunc Remove the object from this
@@ -575,8 +578,7 @@ OMReferenceVector<ReferencedObject>::removeObjectAt(const size_t index)
 {
   TRACE("OMReferenceVector<ReferencedObject>::removeObjectAt");
 
-  ASSERT("Unimplemented code not reached", false);
-  return 0; // tjb TBS
+  return removeAt(index);
 }
 
   // @mfunc Insert <p object> into this <c OMReferenceVector>
@@ -592,8 +594,10 @@ OMReferenceVector<ReferencedObject>::insertObjectAt(const OMObject* object,
 {
   TRACE("OMReferenceVector<ReferencedObject>::insertObjectAt");
 
-  // tjb TBS
-  ASSERT("Unimplemented code not reached", false);
+  const ReferencedObject* obj = dynamic_cast<const ReferencedObject*>(object);
+  ASSERT("Object is correct type", obj != 0);
+  ReferencedObject* o = const_cast<ReferencedObject*>(obj);
+  insertAt(o, index);
 }
 
 #endif
