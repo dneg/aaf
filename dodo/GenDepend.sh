@@ -20,20 +20,20 @@ echo AAFTypes.idl : macros/idl.mac macros/base.mac
 echo AAFTypes.refh : macros/refh.mac macros/base.mac
 echo ""
 echo "#" Special case AAFRoot since this is a private implementation object...
-echo AAFRoot.all : AAFRoot.idl
-echo AAFRoot.all : AAFRoot.refh
 echo AAFRoot.all : AAFRoot.comc AAFRoot.comh
 echo AAFRoot.all : AAFRoot.implc AAFRoot.implh
-echo AAFRoot.idl : macros/idl.mac macros/base.mac
-echo AAFRoot.refh : macros/refh.mac macros/base.mac
+echo AAFRoot.all : AAFRoot.fidl
+echo AAFRoot.all : AAFRoot.frefh
 echo AAFRoot.comc : macros/comc.mac macros/base.mac
 echo AAFRoot.comh : macros/comh.mac macros/base.mac
 echo AAFRoot.implc : macros/implc.mac macros/base.mac
 echo AAFRoot.implh : macros/implh.mac macros/base.mac
+echo AAFRoot.fidl : macros/fidl.mac macros/base.mac ; \
+echo AAFRoot.frefh : macros/frefh.mac macros/base.mac ; \
 echo AAFRoot.exp : macros/exp.mac macros/base.mac
 echo ""
 echo "#" Special case private objects since they should not have a public module test...
-for base in AAFRoot ${PRIVATE_AAFOBJECTS} ; do \
+for base in ${PRIVATE_AAFOBJECTS} ; do \
 	echo "" ; \
 	echo $base.all : $base.comc $base.comh ; \
 	echo $base.all : $base.comt ; \
