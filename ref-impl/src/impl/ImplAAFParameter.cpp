@@ -32,11 +32,11 @@
 #include "ImplAAFTypeDef.h"
 
 ImplAAFParameter::ImplAAFParameter ()
-: _parmDef(			PID_Parameter_Definition,	"Definition")//,
-//  _typeDef(			PID_Parameter_Type,			"Type")
+: _parmDef(			PID_Parameter_Definition,	"Definition"),
+  _typeDef(			PID_Parameter_Type,			"Type")
 {
 	_persistentProperties.put(_parmDef.address());
-//	_persistentProperties.put(_typeDef.address());
+	_persistentProperties.put(_typeDef.address());
 }
 
 
@@ -52,7 +52,6 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUID_t			newUID;
 	ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
-	ImplAAFParameterDef	*def;
 
 	if(pParmDef == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -67,7 +66,7 @@ AAFRESULT STDMETHODCALLTYPE
 //			def->ReleaseReference();
 
 		_parmDef = newUID;
-		pParmDef->AcquireReference();
+//		pParmDef->AcquireReference();
 		head->ReleaseReference();
 		head = NULL;
 		dict->ReleaseReference();
@@ -102,7 +101,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(MyHeadObject(&head));
 		CHECK(head->GetDictionary(&dict));
 		CHECK(dict->LookupParameterDefinition(&_parmDef, ppParmDef));
-		(*ppParmDef)->AcquireReference();
+//		(*ppParmDef)->AcquireReference();
 		head->ReleaseReference();
 		head = NULL;
 		dict->ReleaseReference();
@@ -126,11 +125,9 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameter::SetTypeDefinition (
       ImplAAFTypeDef*  pTypeDef)
 {
-#if 0
 	aafUID_t			newUID;
 	ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
-	ImplAAFTypeDef		*def;
 
 	if(pTypeDef == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -145,7 +142,7 @@ AAFRESULT STDMETHODCALLTYPE
 //			def->ReleaseReference();
 
 		_typeDef = newUID;
-		pTypeDef->AcquireReference();
+//		pTypeDef->AcquireReference();
 		head->ReleaseReference();
 		head = NULL;
 		dict->ReleaseReference();
@@ -161,9 +158,6 @@ AAFRESULT STDMETHODCALLTYPE
 	XEND;
 
 	return AAFRESULT_SUCCESS;
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 
@@ -171,7 +165,6 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameter::GetTypeDefinition (
       ImplAAFTypeDef **ppTypeDef)
 {
-#if 0
 	ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
 
@@ -182,8 +175,8 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		CHECK(MyHeadObject(&head));
 		CHECK(head->GetDictionary(&dict));
-		CHECK(dict->LookupPluggableDef(&_typeDef, (ImplAAFPluggableDef **)ppTypeDef) == AAFRESULT_SUCCESS);
-		(*ppTypeDef)->AcquireReference();
+		CHECK(dict->LookupType(&_typeDef, ppTypeDef));
+//		(*ppTypeDef)->AcquireReference();
 		head->ReleaseReference();
 		head = NULL;
 		dict->ReleaseReference();
@@ -199,9 +192,6 @@ AAFRESULT STDMETHODCALLTYPE
 	XEND;
 
 	return AAFRESULT_SUCCESS;
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 
