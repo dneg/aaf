@@ -157,11 +157,9 @@ OMStrongReferenceProperty<ReferencedObject>::operator ReferencedObject* ()
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable>.
-  //   @parm Client context for callbacks.
   //   @this const
 template <typename ReferencedObject>
-void OMStrongReferenceProperty<ReferencedObject>::save(
-                                                     void* clientContext) const
+void OMStrongReferenceProperty<ReferencedObject>::save(void) const
 {
   TRACE("OMStrongReferenceProperty<ReferencedObject>::save");
 
@@ -179,7 +177,7 @@ void OMStrongReferenceProperty<ReferencedObject>::save(
            (void *)propertyName,
            strlen(propertyName) + 1);
 
-  _reference.save(clientContext);
+  _reference.save();
 
 }
 

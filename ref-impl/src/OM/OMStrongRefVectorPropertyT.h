@@ -61,11 +61,9 @@ OMStrongReferenceVectorProperty<ReferencedObject>::
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable>.
-  //   @parm Client context for callbacks.
   //   @this const
 template <typename ReferencedObject>
-void OMStrongReferenceVectorProperty<ReferencedObject>::save(
-                                                     void* clientContext) const
+void OMStrongReferenceVectorProperty<ReferencedObject>::save(void) const
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::save");
 
@@ -100,7 +98,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::save(
 
     // save the object
     //
-    element.save(clientContext);
+    element.save();
 
     position = position + 1;
 

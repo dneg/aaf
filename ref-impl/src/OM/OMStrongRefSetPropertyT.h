@@ -70,12 +70,11 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable> and <c OMUnique>.
-  //   @parm Client context for callbacks.
   //   @this const
 template <typename UniqueIdentification, typename ReferencedObject>
 void
 OMStrongReferenceSetProperty<UniqueIdentification,
-                             ReferencedObject>::save(void* clientContext) const
+                             ReferencedObject>::save(void) const
 {
   TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
                                      "ReferencedObject>::save");
@@ -121,7 +120,7 @@ OMStrongReferenceSetProperty<UniqueIdentification,
 
     // save the object
     //
-    element.save(clientContext);
+    element.save();
 
     position = position + 1;
 

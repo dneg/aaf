@@ -66,7 +66,7 @@ public:
   void setName(const char* name);
 
     // @cmember Save this <c OMStorable>.
-  void save(void* clientContext) const;
+  void save(void) const;
 
     // @cmember Close this <c OMStorable>.
   void close(void);

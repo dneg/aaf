@@ -61,7 +61,7 @@ public:
   virtual ~OMStrongReferenceVectorProperty(void);
 
     // @cmember Save this <c OMStrongReferenceVectorProperty>.
-  virtual void save(void* clientContext) const;
+  virtual void save(void) const;
 
     // @cmember Close this <c OMStrongReferenceVectorProperty>.
   virtual void close(void);

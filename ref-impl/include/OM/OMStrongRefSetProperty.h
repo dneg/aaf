@@ -61,7 +61,7 @@ public:
   virtual ~OMStrongReferenceSetProperty(void);
 
     // @cmember Save this <c OMStrongReferenceSetProperty>.
-  virtual void save(void* clientContext) const;
+  virtual void save(void) const;
 
     // @cmember Close this <c OMStrongReferenceSetProperty>.
   virtual void close(void);
