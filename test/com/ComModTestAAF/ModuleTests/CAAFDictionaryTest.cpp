@@ -240,6 +240,42 @@ static void RegisterNewClass (IAAFDictionary * pDictionary)
   checkExpression (kAAFFalse == isaFowardReference, AAFRESULT_TEST_FAILED);
 }
 										  
+#define RegisterOneMetaDef( \
+ pDict,   /* Dictionary with which to test */ \
+ auid,   /* auid of class def for the def to test */ \
+ \
+ initTypeIID, /* IID of type to pass to Init */ \
+ initTypeSP, /* Type of smart pointer to use with Init */ \
+ initInvoc, /* expression to invoke to initialize */ \
+ \
+ qiTypeIID, /* IID of type to QI */ \
+ qiTypeSP,  /* SP for type to QI */ \
+ \
+ registerTypeIID, /* IID of type to register */ \
+ registerTypeSP, /* Type of smart pointer to register def */ \
+ regFunc) /* Registration function on dict */ \
+{ \
+  HRESULT hr; \
+  assert (pDict); \
+  \
+  initTypeSP pInitIfc; \
+  hr = pDict->CreateMetaInstance(auid, initTypeIID, (IUnknown**) &pInitIfc); \
+  if (AAFRESULT_FAILED (hr)) return hr; \
+  \
+  hr = pInitIfc->initInvoc; \
+  if (AAFRESULT_FAILED (hr)) return hr; \
+  \
+  qiTypeSP pDef; \
+  hr = pInitIfc->QueryInterface (qiTypeIID, (void **)&pDef); \
+  if (AAFRESULT_FAILED (hr)) return hr; \
+  \
+  registerTypeSP pRegIfc; \
+  hr = pInitIfc->QueryInterface (registerTypeIID, (void **)&pRegIfc); \
+  if (AAFRESULT_FAILED (hr)) return hr; \
+  \
+  hr = pDict->regFunc (pRegIfc); \
+  if (AAFRESULT_FAILED (hr)) return hr; \
+}
 
 
 #define RegisterOneDef( \
@@ -365,14 +401,14 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
   { // Create an opaque type and register it in the dictionary.
     IAAFTypeDefSP pOpaqueType;
     IAAFTypeDefRenameSP pOpaqueTestType;
-	  checkResult(defs.cdTypeDefRename()->CreateInstance(IID_IAAFTypeDefRename, (IUnknown **)&pOpaqueTestType));
+	  checkResult(pDict->CreateMetaInstance(AUID_AAFTypeDefRename, IID_IAAFTypeDefRename, (IUnknown **)&pOpaqueTestType));
     checkResult(pOpaqueTestType->Initialize(kTestTypeID, defs.tdUInt8(), L"TestUInt8"));
     checkResult(pOpaqueTestType->QueryInterface(IID_IAAFTypeDef, (void **)&pOpaqueType));
     checkResult(pDict->RegisterOpaqueTypeDef(pOpaqueType));
   }
 
-  RegisterOneDef (/* dictionary*/                  pDict,
-				  /* def object's class */         defs.cdTypeDefRename(),
+  RegisterOneMetaDef (/* dictionary*/      pDict,
+				  /* def object's class id */      AUID_AAFTypeDefRename,
 				  /* IID of def to pass to Init */ IID_IAAFTypeDefRename,
 				  /* SP of def to use with Init */ IAAFTypeDefRenameSP,
 				  /* Init() invocation */
