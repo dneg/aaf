@@ -46,6 +46,7 @@ public:
   ImplAAFTimelineMobSlot ();
   ~ImplAAFTimelineMobSlot ();
 
+  OMDECLARE_STORABLE(ImplAAFMobSlot);
 
   //****************
   // GetEditRate()
@@ -56,11 +57,26 @@ public:
 
 
   //****************
+  // SetEditRate()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetEditRate
+        (aafRational_t *  value);  //@parm [in] Edit rate property value
+
+
+  //****************
   // GetOrigin()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetOrigin
         (aafPosition_t *  result);  //@parm [out,retval] Origin property value
+
+  //****************
+  // SetOrigin()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetOrigin
+        (aafPosition_t  value);  //@parm [in] Origin property value
 
 
   //****************
