@@ -61,7 +61,6 @@
 #include "dispatch.h"
 #include "wintypes.h"
 #include <olectl.h>
-#include <console.h> /* Mac command line window */
 #endif
 
 
