@@ -27,6 +27,13 @@ PACKAGE = Test
 AAFBASE ?= ../../..
 
 
+ifeq ($(shell uname), IRIX)
+# Warnings turned off:
+# 1107 - signed bit field has length of 1 bit in various stl files
+MODULE_PLATFORM_CFLAGS = -LANG:std -woff 1107
+LIBCIO = -lCio
+endif
+
 # Common definitions
 include $(AAFBASE)/build/common.mk
 
@@ -44,7 +51,7 @@ $(AAFSDKBINDIR)/ScaleTest$(EXE) : $(CXXOBJS)
 	$(LD) $(CXXOBJS) $(STATIC_LINK_LINE) -o $@
 else
 $(AAFSDKBINDIR)/ScaleTest$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(PLATFORMLIBS) -o $@
+	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(PLATFORMLIBS) $(LIBCIO) -o $@
 endif
 
 
