@@ -63,6 +63,9 @@ public:
     // @cmember Close this <c OMStrongReferenceVectorProperty>.
   virtual void close(void);
 
+    // @cmember Detach this <c OMStrongReferenceVectorProperty>.
+  virtual void detach(void);
+
     // @cmember Restore this <c OMStrongReferenceVectorProperty>, the
     //          external (persisted) size of the
     //          <c OMStrongReferenceVectorProperty> is <p externalSize>.

@@ -145,6 +145,22 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::close(void)
   }
 }
 
+  // @mfunc Detach this <c OMStrongReferenceVectorProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+template <typename ReferencedObject>
+void OMStrongReferenceVectorProperty<ReferencedObject>::detach(void)
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::detach");
+  size_t count = _vector.count();
+  for (size_t i = 0; i < count; i++) {
+    OMVectorElement<OMStrongObjectReference<ReferencedObject>,
+                    ReferencedObject>& element = _vector.getAt(i);
+    element.detach();
+  }
+}
+
   // @mfunc Restore this <c OMStrongReferenceVectorProperty>, the external
   //        (persisted) size of the <c OMStrongReferenceVectorProperty> is
   //        <p externalSize>.

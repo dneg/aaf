@@ -148,6 +148,25 @@ void OMStrongReferenceSetProperty<ReferencedObject>::close(void)
   }
 }
 
+  // @mfunc Detach this <c OMStrongReferenceSetProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+template <typename ReferencedObject>
+void OMStrongReferenceSetProperty<ReferencedObject>::detach(void)
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::detach");
+
+  OMSetIterator<OMUniqueObjectIdentification,
+                OMSetElement<OMStrongObjectReference<ReferencedObject>,
+                             ReferencedObject> > iterator(_set, OMBefore);
+  while (++iterator) {
+    OMSetElement<OMStrongObjectReference<ReferencedObject>,
+                 ReferencedObject>& element = iterator.value();
+    element.detach();
+  }
+}
+
   // @mfunc Restore this <c OMStrongReferenceSetProperty>, the external
   //        (persisted) size of the <c OMStrongReferenceSetProperty> is
   //        <p externalSize>.

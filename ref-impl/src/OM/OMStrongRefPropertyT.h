@@ -195,6 +195,19 @@ void OMStrongReferenceProperty<ReferencedObject>::close(void)
   }
 }
 
+  // @mfunc Detach this <c OMStrongReferenceProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+template <typename ReferencedObject>
+void OMStrongReferenceProperty<ReferencedObject>::detach(void)
+{
+  TRACE("OMStrongReferenceProperty<ReferencedObject>::detach");
+  if (!isOptional() || isPresent()) {
+    _reference.detach();
+  }
+}
+
   // @mfunc Restore this <c OMStrongReferenceProperty>, the external
   //        (persisted) size of the <c OMStrongReferenceProperty> is
   //        <p externalSize>.
