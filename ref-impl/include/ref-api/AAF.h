@@ -8953,6 +8953,14 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor, IUnknown)
 
 
 
+
+
+
+
+
+
+
+
   END_INTERFACE
 };
 #endif // __IAAFDigitalImageDescriptor_INTERFACE_DEFINED__
@@ -38207,7 +38215,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   STDMETHOD(SetTransferCharacteristic) (THIS_
     // Optional
-    /*[in]*/ aafUID_constref  TransferCharacteristic) PURE;
+    /*[in]*/ aafUID_constref  transferCharacteristic) PURE;
 
 
   //***********************************************************
@@ -38255,7 +38263,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   STDMETHOD(SetCodingEquations) (THIS_
     // Optional
-    /*[in]*/ aafUID_constref  CodingEquations) PURE;
+    /*[in]*/ aafUID_constref  codingEquations) PURE;
 
 
   //***********************************************************
@@ -38303,7 +38311,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   STDMETHOD(SetColorPrimaries) (THIS_
     // Optional
-    /*[in]*/ aafUID_constref  ColorPrimaries) PURE;
+    /*[in]*/ aafUID_constref  colorPrimaries) PURE;
 
 
   //***********************************************************
@@ -38350,7 +38358,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   STDMETHOD(SetFieldStartOffset) (THIS_
     // Optional.
-    /*[in]*/ aafUInt32  FieldStartOffset) PURE;
+    /*[in]*/ aafUInt32  fieldStartOffset) PURE;
 
 
   //***********************************************************
@@ -38397,7 +38405,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   STDMETHOD(SetFieldEndOffset) (THIS_
     // Optional.
-    /*[in]*/ aafUInt32  FieldEndOffset) PURE;
+    /*[in]*/ aafUInt32  fieldEndOffset) PURE;
 
 
   //***********************************************************
@@ -38447,7 +38455,7 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   //
   STDMETHOD(SetFieldDominance) (THIS_
     // Optional.
-    /*[in]*/ aafFieldNumber_t  FieldDominance) PURE;
+    /*[in]*/ aafFieldNumber_t  fieldDominance) PURE;
 
 
   //***********************************************************
@@ -38475,6 +38483,203 @@ DECLARE_INTERFACE_(IAAFDigitalImageDescriptor2, IUnknown)
   STDMETHOD(GetFieldDominance) (THIS_
     // Optional.
     /*[out]*/ aafFieldNumber_t *  pFieldDominance) PURE;
+
+  //***********************************************************
+  //
+  // SetDisplayF2Offset()
+  //
+  // Sets the DisplayF2Offset property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the DisplayF2Offset property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_ILLEGAL_VALUE
+  //   - displayF2Offset is not a valid value.
+  //
+  STDMETHOD(SetDisplayF2Offset) (THIS_
+    // Optional.
+    /*[in]*/ aafInt32  displayF2Offset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetDisplayF2Offset()
+  //
+  // Gets the DisplayF2Offset property.
+  //
+  // Succeeds if all of the following are true:
+  // - pDisplayF2Offset is a valid pointer
+  // 
+  // If this method fails, pDisplayF2Offset will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDisplayF2Offset is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetDisplayF2Offset) (THIS_
+    // Optional.
+    /*[out]*/ aafInt32 *  pDisplayF2Offset) PURE;
+
+  //***********************************************************
+  //
+  // SetStoredF2Offset()
+  //
+  // Sets the StoredF2Offset property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the StoredF2Offset property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_ILLEGAL_VALUE
+  //   - storedF2Offset is not a valid value.
+  //
+  STDMETHOD(SetStoredF2Offset) (THIS_
+    // Optional.
+    /*[in]*/ aafInt32  storedF2Offset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetStoredF2Offset()
+  //
+  // Gets the StoredF2Offset property.
+  //
+  // Succeeds if all of the following are true:
+  // - pStoredF2Offset is a valid pointer
+  // 
+  // If this method fails, pStoredF2Offset will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pStoredF2Offset is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetStoredF2Offset) (THIS_
+    // Optional.
+    /*[out]*/ aafInt32 *  pStoredF2Offset) PURE;
+
+  //***********************************************************
+  //
+  // SetActiveFormatDescriptor()
+  //
+  // Sets the ActiveFormatDescriptor property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the ActiveFormatDescriptor property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetActiveFormatDescriptor) (THIS_
+    // Optional.
+    /*[in]*/ aafUInt8  activeFormatDescriptor) PURE;
+
+
+  //***********************************************************
+  //
+  // GetActiveFormatDescriptor()
+  //
+  // Gets the ActiveFormatDescriptor property.
+  //
+  // Succeeds if all of the following are true:
+  // - pActiveFormatDescriptor is a valid pointer
+  // 
+  // If this method fails, pActiveFormatDescriptor will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pActiveFormatDescriptor is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetActiveFormatDescriptor) (THIS_
+    // Optional.
+    /*[out]*/ aafUInt8 *  pActiveFormatDescriptor) PURE;
+
+  //***********************************************************
+  //
+  // SetSignalStandard()
+  //
+  // Sets the SignalStandard property.  This property is optional.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the SignalStandard property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_AAFRESULT_INVALID_ENUM_VALUE
+  //   - signalStandard is not a valid value.
+  //
+  STDMETHOD(SetSignalStandard) (THIS_
+    // Signal standard value.
+    /*[in]*/ aafSignalStandard_t  signalStandard) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSignalStandard()
+  //
+  // Gets the SignalStandard property.  This property is optional.
+  //
+  // Succeeds if all of the following are true:
+  // - pSignalStandard is a valid pointer
+  // 
+  // If this method fails, pSignalStandard not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pSignalStandard is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetSignalStandard) (THIS_
+    // Signal standard value.
+    /*[out]*/ aafSignalStandard_t *  pSignalStandard) PURE;
 
 
   END_INTERFACE

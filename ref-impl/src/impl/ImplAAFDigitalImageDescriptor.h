@@ -361,6 +361,73 @@ public:
         // @parm [out] Optional.
         (aafFieldNumber_t *  pFieldDominance);
 
+  //****************
+  // SetStoredF2Offset()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetStoredF2Offset
+        // @parm [in] Optional.
+        (aafInt32  storedF2Offset);
+
+
+  //****************
+  // GetStoredF2Offset()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetStoredF2Offset
+        // @parm [out] Optional.
+        (aafInt32 *  pStoredF2Offset);
+
+  //****************
+  // SetDisplayF2Offset()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetDisplayF2Offset
+        // @parm [in] Optional.
+        (aafInt32  displayF2Offset);
+
+
+  //****************
+  // GetDisplayF2Offset()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetDisplayF2Offset
+        // @parm [out] Optional.
+        (aafInt32 *  pDisplayF2Offset);
+
+  //****************
+  // SetActiveFormatDescriptor()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetActiveFormatDescriptor
+        // @parm [in] Optional.
+        (aafUInt8  activeFormatDescriptor);
+
+
+  //****************
+  // GetActiveFormatDescriptor()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetActiveFormatDescriptor
+        // @parm [out] Optional.
+        (aafUInt8 *  pActiveFormatDescriptor);
+
+  //****************
+  // SetSignalStandard()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetSignalStandard
+        // @parm [in] Optional
+        (aafSignalStandard_t  signalStandard);
+
+
+  //****************
+  // GetSignalStandard()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetSignalStandard
+        // @parm [out] Optional.
+        (aafSignalStandard_t *  pSignalStandard);
 
 protected:
 	OMFixedSizeProperty<aafUID_t>				_compression;
@@ -385,6 +452,10 @@ protected:
 	OMFixedSizeProperty<aafFieldNumber_t>				_fieldDominance;
 	OMFixedSizeProperty<aafUInt32>				_fieldStartOffset;
 	OMFixedSizeProperty<aafUInt32>				_fieldEndOffset;
+	OMFixedSizeProperty<aafInt32>				_displayF2Offset;
+	OMFixedSizeProperty<aafInt32>				_storedF2Offset;
+	OMFixedSizeProperty<aafUInt8>				_activeFormatDescriptor;
+	OMFixedSizeProperty<aafSignalStandard_t>		_signalStandard;
 };
 
 #endif // ! __ImplAAFDigitalImageDescriptor_h__

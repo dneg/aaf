@@ -760,7 +760,7 @@ AD_XMETHOD1(SetTransferCharacteristic,
 			[in],
 				objPass,
 				aafUID_constref,
-				TransferCharacteristic,
+				transferCharacteristic,
 				Optional,
 			Sets the TransferCharacteristic property.
   //
@@ -804,7 +804,7 @@ AD_XMETHOD1(SetCodingEquations,
 			[in],
 				objPass,
 				aafUID_constref,
-				CodingEquations,
+				codingEquations,
 				Optional,
 			Sets the CodingEquations property.
   //
@@ -848,7 +848,7 @@ AD_XMETHOD1(SetColorPrimaries,
 			[in],
 				objPass,
 				aafUID_constref,
-				ColorPrimaries,
+				colorPrimaries,
 				Optional,
 			Sets the ColorPrimaries property.
   //
@@ -892,7 +892,7 @@ AD_XMETHOD1(SetFieldStartOffset,
 			[in],
 				objPass,
 				aafUInt32,
-				FieldStartOffset,
+				fieldStartOffset,
 				Optional.,
 			Sets the FieldStartOffset property.
   //
@@ -935,7 +935,7 @@ AD_XMETHOD1(SetFieldEndOffset,
 			[in],
 				objPass,
 				aafUInt32,
-				FieldEndOffset,
+				fieldEndOffset,
 				Optional.,
 			Sets the FieldEndOffset property.
   //
@@ -978,7 +978,7 @@ AD_XMETHOD1(SetFieldDominance,
 			[in],
 				objPass,
 				aafFieldNumber_t,
-				FieldDominance,
+				fieldDominance,
 				Optional.,
 			Sets the FieldDominance property.
   //
@@ -1016,6 +1016,187 @@ AD_XMETHOD1(GetFieldDominance,
   //
   // AAFRESULT_NULL_PARAM
   //   - pFieldDominance is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+AD_XMETHOD1(SetDisplayF2Offset,
+			[in],
+				objPass,
+				aafInt32,
+				displayF2Offset,
+				Optional.,
+			Sets the DisplayF2Offset property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails\, the DisplayF2Offset property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_ILLEGAL_VALUE
+  //   - displayF2Offset is not a valid value.)
+
+
+AD_XMETHOD1(GetDisplayF2Offset,
+			[out],
+				objPass,
+				aafInt32 *,
+				pDisplayF2Offset,
+				Optional.,
+			Gets the DisplayF2Offset property.
+  //
+  // Succeeds if all of the following are true:
+  // - pDisplayF2Offset is a valid pointer
+  // 
+  // If this method fails\, pDisplayF2Offset will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDisplayF2Offset is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+AD_XMETHOD1(SetStoredF2Offset,
+			[in],
+				objPass,
+				aafInt32,
+				storedF2Offset,
+				Optional.,
+			Sets the StoredF2Offset property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails\, the StoredF2Offset property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_ILLEGAL_VALUE
+  //   - storedF2Offset is not a valid value.)
+
+
+AD_XMETHOD1(GetStoredF2Offset,
+			[out],
+				objPass,
+				aafInt32 *,
+				pStoredF2Offset,
+				Optional.,
+			Gets the StoredF2Offset property.
+  //
+  // Succeeds if all of the following are true:
+  // - pStoredF2Offset is a valid pointer
+  // 
+  // If this method fails\, pStoredF2Offset will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pStoredF2Offset is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+AD_XMETHOD1(SetActiveFormatDescriptor,
+			[in],
+				objPass,
+				aafUInt8,
+				activeFormatDescriptor,
+				Optional.,
+			Sets the ActiveFormatDescriptor property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails\, the ActiveFormatDescriptor property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\))
+
+
+AD_XMETHOD1(GetActiveFormatDescriptor,
+			[out],
+				objPass,
+				aafUInt8 *,
+				pActiveFormatDescriptor,
+				Optional.,
+			Gets the ActiveFormatDescriptor property.
+  //
+  // Succeeds if all of the following are true:
+  // - pActiveFormatDescriptor is a valid pointer
+  // 
+  // If this method fails\, pActiveFormatDescriptor will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pActiveFormatDescriptor is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+AD_XMETHOD1(SetSignalStandard,
+			[in],
+				enumIn,
+				aafSignalStandard_t,
+				signalStandard,
+				Signal standard value.,
+			Sets the SignalStandard property.  This property is optional.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails\, the SignalStandard property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_AAFRESULT_INVALID_ENUM_VALUE
+  //   - signalStandard is not a valid value.)
+
+
+AD_XMETHOD1(GetSignalStandard,
+			[out],
+				objPass,
+				aafSignalStandard_t *,
+				pSignalStandard,
+				Signal standard value.,
+			Gets the SignalStandard property.  This property is optional.
+  //
+  // Succeeds if all of the following are true:
+  // - pSignalStandard is a valid pointer
+  // 
+  // If this method fails\, pSignalStandard not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pSignalStandard is NULL.
   //
   // AAFRESULT_PROP_NOT_PRESENT
   //   - the property is not present.)

@@ -61,8 +61,12 @@ using namespace std;
 #define kAlphaTransparencyTestVal		kAAFMaxValueTransparent
 #define kImageAlignmentFactorTestVal	0
 #define kFieldDominanceTestVal	kAAFFieldOne
-#define kFieldStartOffsetTestVal	128
-#define kFieldEndOffsetTestVal	512
+#define kFieldStartOffsetTestVal		128
+#define kFieldEndOffsetTestVal			512
+#define kDisplayF2OffsetTestVal			1
+#define kStoredF2OffsetTestVal			-1
+#define kActiveFormatDescriptorTestVal	3
+#define kSignalStandardTestVal			kAAFSignalS125MProgressive
 
 static const 	aafMobID_t	TEST_MobID =
 {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
@@ -230,9 +234,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pDIDesc->SetGamma(kGammaTestVal));
 
     // Optional Properties accessed using IAAFDigitalImageDescriptor2
-		checkResult(pDIDesc->QueryInterface (IID_IAAFDigitalImageDescriptor2, (void **)&pDIDesc2));
+	checkResult(pDIDesc->QueryInterface (IID_IAAFDigitalImageDescriptor2, (void **)&pDIDesc2));
 
-		// DID2::SetTransferCharacteristic() sets the same property as DID::SetGamma()
+	// DID2::SetTransferCharacteristic() sets the same property as DID::SetGamma()
     checkResult(pDIDesc2->SetTransferCharacteristic(kTransferCharacteristicTestVal));
 
     checkResult(pDIDesc2->SetColorPrimaries(kColorPrimariesTestVal));
@@ -240,6 +244,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pDIDesc2->SetFieldDominance(kFieldDominanceTestVal));
     checkResult(pDIDesc2->SetFieldStartOffset(kFieldStartOffsetTestVal));
     checkResult(pDIDesc2->SetFieldEndOffset(kFieldEndOffsetTestVal));
+
+    checkResult(pDIDesc2->SetDisplayF2Offset(kDisplayF2OffsetTestVal));
+    checkResult(pDIDesc2->SetStoredF2Offset(kStoredF2OffsetTestVal));
+    checkResult(pDIDesc2->SetActiveFormatDescriptor(kActiveFormatDescriptorTestVal));
+    checkResult(pDIDesc2->SetSignalStandard(kSignalStandardTestVal));
 
     // Save the initialized descriptor with the source mob.
     checkResult(pDIDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc));
@@ -335,6 +344,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		aafFieldNumber_t fieldDominance = kAAFUnspecifiedField;
 	  aafUInt32				fieldStartOffset = 0;
 	  aafUInt32				fieldEndOffset = 0;
+	  aafInt32				displayF2Offset = 0;
+	  aafInt32				storedF2Offset = 0;
+	  aafUInt8				activeFormatDescriptor = 0;
+	  aafSignalStandard_t signalStandard = kAAFSignalNone;
 
 	  memset(&compTestVal, 0, sizeof(aafUID_t));
 
@@ -410,6 +423,21 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
     checkResult(pDIDesc2->GetFieldEndOffset(&fieldEndOffset));
 		checkExpression(fieldEndOffset == kFieldEndOffsetTestVal, AAFRESULT_TEST_FAILED);
+
+
+
+
+    checkResult(pDIDesc2->GetDisplayF2Offset(&displayF2Offset));
+		checkExpression(displayF2Offset == kDisplayF2OffsetTestVal, AAFRESULT_TEST_FAILED);
+
+    checkResult(pDIDesc2->GetStoredF2Offset(&storedF2Offset));
+		checkExpression(storedF2Offset == kStoredF2OffsetTestVal, AAFRESULT_TEST_FAILED);
+
+    checkResult(pDIDesc2->GetActiveFormatDescriptor(&activeFormatDescriptor));
+		checkExpression(activeFormatDescriptor == kActiveFormatDescriptorTestVal, AAFRESULT_TEST_FAILED);
+
+    checkResult(pDIDesc2->GetSignalStandard(&signalStandard));
+		checkExpression(signalStandard == kSignalStandardTestVal, AAFRESULT_TEST_FAILED);
 
   }
   catch (HRESULT& rResult)

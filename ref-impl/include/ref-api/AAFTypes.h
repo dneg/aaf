@@ -305,6 +305,18 @@ typedef enum _aafElectroSpatialFormulation_e
 	kAAFEsMultiChannelMode = 15
 } aafElectroSpatialFormulation_e;
 	
+typedef aafInt32 aafSignalStandard_t;
+typedef enum _aafSignalStandard_e
+{
+	kAAFSignalNone = 0,
+	kAAFSignalS125MInterlace = 1,
+	kAAFSignalS125MProgressive = 2,
+	kAAFSignalS347M = 3,
+	kAAFSignalS274M = 4,
+	kAAFSignalS296M = 5,
+	kAAFSignalS349M = 6
+} aafSignalStandard_e;
+	
 typedef aafInt32 aafColorSiting_t;
 typedef enum _aafColorSiting_e
 {
@@ -1009,6 +1021,7 @@ typedef aafFrameLayout_t        aafLayoutType_t;
 typedef aafTimecodeSourceType_t aafTCSource_t;
 typedef aafPulldownDir_t        aafPulldownDirectionType_t;
 typedef aafPulldownKind_t       aafPulldownKindType_t;
+typedef aafSignalStandard_t     aafSignalStandardType_t;
 
 
 /**************************/
