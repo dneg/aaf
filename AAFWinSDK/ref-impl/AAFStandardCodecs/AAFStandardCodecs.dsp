@@ -99,11 +99,19 @@ PostBuild_Cmds=regsvr32 /s Debug/AAFPGAPI.dll
 # Name "AAFStandardCodecs - Win32 Debug"
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\aafCvt.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\plugins\AAFPluginCOM.cpp"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\plugins\AafPlugincom.def"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\AAFUtils.cpp"
 # End Source File
 # Begin Source File
 
