@@ -84,8 +84,6 @@ extern "C" const aafClassID_t CLSID_AAFSegment;
 extern "C" const aafClassID_t CLSID_EnumAAFParameters;
 
 
-const aafUID_t kNullID = {0};
-
 ImplAAFOperationGroup::ImplAAFOperationGroup ()
 : _operationDefinition( PID_OperationGroup_OperationDefinition, L"OperationDefinition", L"/Header/Dictionary/OperationDefinitions", PID_DefinitionObject_Identification),
   _inputSegments( PID_OperationGroup_InputSegments, L"InputSegments"),
@@ -139,7 +137,7 @@ AAFRESULT STDMETHODCALLTYPE
                              ImplAAFOperationDef* pOperationDef)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
-	ImplAAFOperationDef*	pOldOperationDef = NULL;
+//	ImplAAFOperationDef*	pOldOperationDef = NULL;
 
 	if (pOperationDef == NULL)
 		return AAFRESULT_NULL_PARAM;
