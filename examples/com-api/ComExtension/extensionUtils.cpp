@@ -170,13 +170,13 @@ void PrintPersonnelResource (IAAFDictionary * pDict,
 
 
 //
-// Prints all personnel resources in the given PersonnelMob.
+// Prints all personnel resources in the given AdminMob.
 //
 void PrintPersonnelResources (IAAFDictionary * pDict,
 							  IAAFMob * pMob)
 {
   // Get an IAAFObject for the mob, then use it to get the class
-  // definition describing the PersonnelMob
+  // definition describing the AdminMob
   IAAFObject *pMobObj=NULL;
   check (pMob->QueryInterface (IID_IAAFObject, (void **)&pMobObj));
   IAAFClassDef *cd=NULL;
@@ -185,7 +185,7 @@ void PrintPersonnelResources (IAAFDictionary * pDict,
   // Use the class definition to get the definition for the Personnel
   // property.
   IAAFPropertyDef *pd=NULL;
-  check (cd->LookupPropertyDef (kPropID_PersonnelMob_Personnel,
+  check (cd->LookupPropertyDef (kPropID_AdminMob_Personnel,
 								&pd));
 
   // Get the property value for the array of personnel objects
@@ -439,6 +439,11 @@ void PersonnelRecordSetRole (IAAFObject * pObj,
   tde=NULL;
 }
 
+void PersonnelRecordSetJobFunction (IAAFObject *pObj,
+									eJobFunction jobFunction)
+{
+	PersonnelRecordSetRole (pObj, jobFunction);
+}
 
 eRole PersonnelRecordGetRole (IAAFObject * pObj)
 {

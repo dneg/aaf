@@ -63,6 +63,12 @@ static const aafUID_t kRole_Editor =
 static const aafUID_t kRole_FloorManager = 
 { 0x5f72ad6b, 0x703d, 0x11d3, { 0x84, 0x49, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
 
+//		Actor
+//  {F611B4AE-9070-11d3-A6A8-00609419FDAF}
+static const aafUID_t kRole_Actor  = 
+{ 0xf611b4ae, 0x9070, 0x11d3, { 0xa6, 0xa8, 0x0, 0x60, 0x94, 0x19, 0xfd, 0xaf } };
+
+
 
 //********
 //
@@ -106,23 +112,23 @@ static const aafUID_t kPropID_PersonnelResource_ContractID =
 
 //********
 //
-// ClassID for PersonnelMob class
+// ClassID for AdminMob class
 //
 // {5F72AD71-703D-11d3-8449-00600832ACB8}
-static const aafUID_t kClassID_PersonnelMob = 
+static const aafUID_t kClassID_AdminMob = 
 { 0x5f72ad71, 0x703d, 0x11d3, { 0x84, 0x49, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
 //
 //
-// PropertyIDs for PersonnelMob class properties
+// PropertyIDs for AdminMob class properties
 //
 // {5F72AD72-703D-11d3-8449-00600832ACB8}
-static const aafUID_t kPropID_PersonnelMob_Personnel = 
+static const aafUID_t kPropID_AdminMob_Personnel = 
 { 0x5f72ad72, 0x703d, 0x11d3, { 0x84, 0x49, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
 
 
 //********
 //
-// MobID for our PersonnelMob instance
+// MobID for our AdminMob instance
 //
 // {5F72AD75-703D-11d3-8449-00600832ACB8}
 static const aafUID_t kMobID_Personnel = 
@@ -200,7 +206,7 @@ void PrintPersonnelResource (IAAFDictionary * pDict,
 							 const PersonnelResource & resource);
 
 //
-// Prints all personnel resources in the given PersonnelMob.
+// Prints all personnel resources in the given AdminMob.
 //
 void PrintPersonnelResources (IAAFDictionary * pDict,
 							  IAAFMob * pMob);
@@ -223,6 +229,9 @@ void PersonnelRecordGetName (IAAFObject * pObj,
 void PersonnelRecordSetRole (IAAFObject * pObj,
 							 eRole role);
 eRole PersonnelRecordGetRole (IAAFObject * pObj);
+
+void PersonnelRecordSetJobFunction (IAAFObject *pObj,
+									eJobFunction jobFunction);
 
 //
 // Set/Get contract ID on a PersonnelResource object.  Get requires
