@@ -69,9 +69,8 @@ void OMVariableSizeProperty<PropertyType>::getValue(PropertyType* value,
   //        address <p value> into the <c OMVariableSizeProperty>.
   //   @tcarg class | PropertyType | The type of the property. This
   //          can be any type.
-  //   @parm A pointer to a <p PropertyType>
-  //   @parm The size of the <p value>
-  //   @this const
+  //   @parm A pointer to an array of <p PropertyType>s
+  //   @parm The size of the array <p value> in bytes
 template<typename PropertyType>
 void OMVariableSizeProperty<PropertyType>::setValue(const PropertyType* value,
                                                     size_t valueSize)
@@ -79,6 +78,26 @@ void OMVariableSizeProperty<PropertyType>::setValue(const PropertyType* value,
   TRACE("OMVariableSizeProperty<PropertyType>::setValue");
 
   set(value, valueSize);
+}
+
+  // @mfunc Set the value of this <c OMVariableSizeProperty>. The
+  //        value is set by copying <p elementCount> elements from the
+  //        address <p value> into the <c OMVariableSizeProperty>.
+  //   @tcarg class | PropertyType | The type of the property. This
+  //          can be any type.
+  //   @parm A pointer to an array of <p PropertyType>s
+  //   @parm The number of element in the array <p value>
+template<typename PropertyType>
+void OMVariableSizeProperty<PropertyType>::setElementValues(
+                                                     const PropertyType* value,
+                                                     size_t elementCount)
+{
+  TRACE("OMVariableSizeProperty<PropertyType>::setElementValues");
+  PRECONDITION("Valid value", value != 0);
+  PRECONDITION("Valid count", elementCount > 0);
+
+  setValue(value, elementCount * sizeof(PropertyType));
+
 }
 
   // @mfunc Get the value of the item at position <p index> in this
@@ -123,6 +142,59 @@ void OMVariableSizeProperty<PropertyType>::setValueAt(
   ((PropertyType*)_bits)[index] = *value;
 }
 
+  // @mfunc Set the value of the item at the last position in this
+  //        <c OMVariableSizeProperty>. The <c OMVariableSizeProperty>
+  //        is first increased in size by one item. The value is then
+  //        set by copying a single item of type PropertyType into this
+  //        <c OMVariableSizeProperty> at the last position.
+  //   @tcarg class | PropertyType | The type of the property. This
+  //          can be any type.
+  //   @parm A pointer to the new value that is to be copied into
+  //         this <c OMVariableSizeProperty>.
+template<typename PropertyType>
+void OMVariableSizeProperty<PropertyType>::appendValue(
+                                                     const PropertyType* value)
+{
+  TRACE("OMVariableSizeProperty<PropertyType>::prependValue");
+  PRECONDITION("Valid value", value != 0);
+
+  size_t oldCount = count();
+  size_t newCount = oldCount + 1;
+  PropertyType* buffer = new PropertyType[newCount];
+  ASSERT("Valid heap pointer", buffer != 0);
+  if (oldCount > 0) {
+    copyElementsToBuffer(buffer, oldCount);
+  }
+  buffer[newCount - 1] = *value;
+  setElementValues(buffer, newCount);
+}
+
+  // @mfunc Set the value of the item at the first position in this
+  //        <c OMVariableSizeProperty>. The <c OMVariableSizeProperty>
+  //        is first increased in size by one item and all existing items
+  //        are moved up by on position. The value is then
+  //        set by copying a single item of type PropertyType into this
+  //        <c OMVariableSizeProperty> at the first position.
+  //   @parm A pointer to the new value that is to be copied into
+  //         this <c OMVariableSizeProperty>.
+template<typename PropertyType>
+void OMVariableSizeProperty<PropertyType>::prependValue(
+                                                     const PropertyType* value)
+{
+  TRACE("OMVariableSizeProperty<PropertyType>::prependValue");
+  PRECONDITION("Valid value", value != 0);
+
+  size_t oldCount = count();
+  size_t newCount = oldCount + 1;
+  PropertyType* buffer = new PropertyType[newCount];
+  ASSERT("Valid heap pointer", buffer != 0);
+  if (oldCount > 0) {
+    copyElementsToBuffer(&buffer[1], oldCount);
+  }
+  buffer[0] = *value;
+  setElementValues(buffer, newCount);
+}
+
   // @mfunc Get the value of this <c OMVariableSizeProperty>.  The
   //        value is obtained by copying the value from the
   //        <c OMVariableSizeProperty>. The buffer is at address
@@ -130,7 +202,7 @@ void OMVariableSizeProperty<PropertyType>::setValueAt(
   //        Copying only takes place if the buffer is large enough.
   //   @tcarg class | PropertyType | The type of the property. This
   //          can be any type.
-  //   @parm A pointer to a the buffer.
+  //   @parm A pointer to the buffer.
   //   @parm The size of the buffer.
   //   @rdesc <e bool.true> if the value was successfully copied <e
   //          bool.false> otherwise.
@@ -140,6 +212,10 @@ bool OMVariableSizeProperty<PropertyType>::copyToBuffer(
                                                        PropertyType* buffer,
                                                        size_t bufferSize) const
 {
+  TRACE("OMVariableSizeProperty<PropertyType>::copyToBuffer");
+  PRECONDITION("Valid buffer", buffer != 0);
+  PRECONDITION("Valid buffer size", bufferSize > 0);
+
   bool result;
   if (bufferSize >= size()) {
     getValue(buffer, bufferSize);
@@ -148,6 +224,30 @@ bool OMVariableSizeProperty<PropertyType>::copyToBuffer(
     result = false;
   }
   return result;
+}
+
+  // @mfunc Get the value of this <c OMVariableSizeProperty>.  The
+  //        value is obtained by copying the value from the
+  //        <c OMVariableSizeProperty>. The buffer is at address
+  //        <p buffer> and is <p elementCount> elements in size.
+  //        Copying only takes place if the buffer is large enough.
+  //   @tcarg class | PropertyType | The type of the property. This
+  //          can be any type.
+  //   @parm A pointer to the buffer.
+  //   @parm The number of elements in the buffer.
+  //   @rdesc <e bool.true> if the value was successfully copied <e
+  //          bool.false> otherwise.
+  //   @this const
+template<typename PropertyType>
+bool OMVariableSizeProperty<PropertyType>::copyElementsToBuffer(
+                                                     PropertyType* buffer,
+                                                     size_t elementCount) const
+{
+  TRACE("OMVariableSizeProperty<PropertyType>::copyElementsToBuffer");
+  PRECONDITION("Valid buffer", buffer != 0);
+  PRECONDITION("Valid count", elementCount > 0);
+
+  return copyToBuffer(buffer, elementCount * sizeof(PropertyType));
 }
 
   // @mfunc Restore this <c OMVariableSizeProperty>, the external
