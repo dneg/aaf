@@ -53,8 +53,7 @@ CXXFILES = AAFPluginCOM.cpp \
 		CAAFWAVECodec.cpp \
 		CAAFAIFCCodec.cpp \
 		jpegesdatadst.cpp \
-		jpegesdatasrc.cpp \
-		utf8.cpp
+		jpegesdatasrc.cpp
 
 
 SUPOBJS = $(OBJDIR)/aafCvt$(OBJ) \
