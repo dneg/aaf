@@ -163,7 +163,6 @@ AAFRESULT STDMETHODCALLTYPE
   }
 
   OMStorable ** ppStorable = NULL;
-  aafUInt32 bitsSize = 0;
   AAFRESULT hr;
   ImplAAFPropValDataSP pvd;
   pvd = dynamic_cast<ImplAAFPropValData*>(pPropVal);

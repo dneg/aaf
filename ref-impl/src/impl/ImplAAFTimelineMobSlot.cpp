@@ -113,7 +113,6 @@ AAFRESULT ImplAAFTimelineMobSlot::FindSegment(aafPosition_t offset,
 					  aafPosition_t *diffPos)
 {
 	aafBool					foundClip = kAAFFalse;
-	ImplAAFMobSlot			*tmpTrack = NULL;
 	aafPosition_t begPos = CvtInt32toPosition(0, begPos);
 	aafRational_t tmpSrcRate;
 	aafPosition_t origin = 0;
