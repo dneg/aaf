@@ -10,32 +10,42 @@
 
 static char* currentRoutineName = "unknown";
 
-void reportAssertionFailure(char* kind, char* name, char* expressionString, char* routine, char* fileName, size_t lineNumber);
+void reportAssertionFailure(char* kind,
+                            char* name,
+                            char* expressionString,
+                            char* routine,
+                            char* fileName,
+                            size_t lineNumber);
 
 #if defined(OM_ENABLE_TRACE)
 
-#define TRACE(routine) char* currentRoutineName = routine; cerr << "Enter \"" << currentRoutineName << "\"." << endl;
+#define TRACE(routine) \
+  currentRoutineName = routine; \
+  cerr << "Enter \"" << currentRoutineName << "\"." << endl;
 
 #else
 
-#define TRACE(routine) char* currentRoutineName = routine;
+#define TRACE(routine) currentRoutineName = routine;
 
 #endif
 
 #define PRECONDITION(name, expression) \
   (expression) \
     ? (void)0  \
-    : reportAssertionFailure("Precondition", name, #expression, currentRoutineName, __FILE__, __LINE__)
+    : reportAssertionFailure("Precondition", name, #expression, \
+                             currentRoutineName, __FILE__, __LINE__)
 
 #define POSTCONDITION(name, expression) \
   (expression) \
     ? (void)0  \
-    : reportAssertionFailure("Postcondition", name, #expression, currentRoutineName, __FILE__, __LINE__)
+    : reportAssertionFailure("Postcondition", name, #expression, \
+                             currentRoutineName, __FILE__, __LINE__)
 
 #define ASSERT(name, expression) \
   (expression) \
     ? (void)0  \
-    : reportAssertionFailure("Assertion",    name, #expression, currentRoutineName, __FILE__, __LINE__)
+    : reportAssertionFailure("Assertion",    name, #expression, \
+                             currentRoutineName, __FILE__, __LINE__)
 
 #define INVARIANT() checkInvariant();
 
