@@ -19,7 +19,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFPluggableCode \
 	AAFReferenceValue \
 	AAFRGBADescriptor \
-	AAFTextLocator \
 	AAFTIFFData \
 	AAFTypeDefSet \
 	AAFWAVEData
@@ -111,11 +110,12 @@ HUMAN_TYPED_IMPL = \
 	AAFSourceMob \
 	AAFSourceReference \
 	AAFStaticMobSlot \
+	AAFTapeDescriptor \
 	AAFTaggedValue \
+	AAFTextClip \
+	AAFTextLocator \
 	AAFTimecode \
 	AAFTimelineMobSlot \
-	AAFTapeDescriptor \
-	AAFTextClip \
 	AAFTransition \
 	AAFTIFFDescriptor \
 	AAFTimecodeStream \
