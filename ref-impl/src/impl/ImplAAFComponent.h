@@ -3,8 +3,10 @@
 #ifndef __ImplAAFComponent_h__
 #define __ImplAAFComponent_h__
 
+#ifndef __ImplAAFDataDef_h__
+#include "ImplAAFDataDef.h"
+#endif
 
-class ImplAAFDataDef;
 class ImplAAFMob;
 class ImplAAFMobSlot;
 class ImplAAFOperationDef;
@@ -119,7 +121,7 @@ public:
 
 
 private:
-	OMFixedSizeProperty<aafUID_t>		_dataDef;
+	OMWeakReferenceProperty<ImplAAFDataDef>		_dataDef;
 	OMFixedSizeProperty<aafLength_t>	_length;
 };
 
