@@ -418,6 +418,41 @@ void AxOperationDef::SetBypass( aafUInt32 bypassTrack )
 	CHECK_HRESULT( _spIaafOperationDef->SetBypass( bypassTrack ) );
 }
 
+IAAFDataDefSP AxOperationDef::GetDataDef()
+{
+	IAAFDataDefSP dataDef;
+	CHECK_HRESULT( _spIaafOperationDef->GetDataDef( &dataDef ) );
+	return dataDef;
+}
+
+aafBoolean_t AxOperationDef::IsTimeWarp()
+{
+	aafBoolean_t isTimeWarp;
+	CHECK_HRESULT( _spIaafOperationDef->IsTimeWarp( &isTimeWarp ) );
+	return isTimeWarp;
+}
+
+aafUID_t AxOperationDef::GetCategory()
+{
+	aafUID_t category;
+	CHECK_HRESULT( _spIaafOperationDef->GetCategory( &category ) );
+	return category;
+}
+
+aafInt32 AxOperationDef::GetNumberInputs()
+{
+	aafInt32 numInputs;
+	CHECK_HRESULT( _spIaafOperationDef->GetNumberInputs( &numInputs ) );
+	return numInputs;
+}
+
+aafUInt32 AxOperationDef::GetBypass()
+{
+	aafUInt32 bypassTrack;
+	CHECK_HRESULT( _spIaafOperationDef->GetBypass( &bypassTrack ) );
+	return bypassTrack;
+}
+
 //=---------------------------------------------------------------------=
 
 AxEssenceDescriptor::AxEssenceDescriptor( IAAFEssenceDescriptorSP sp )
@@ -467,6 +502,33 @@ aafRational_t AxFileDescriptor::GetSampleRate()
 	CHECK_HRESULT(_spIaafFileDescriptor->GetSampleRate(&rate));
 
 	return rate;
+}
+
+aafLength_t AxFileDescriptor::GetLength()
+{
+	aafLength_t length;
+
+	CHECK_HRESULT(_spIaafFileDescriptor->GetLength(&length));
+
+	return length;
+}
+
+IAAFContainerDefSP AxFileDescriptor::GetContainerFormat()
+{
+	IAAFContainerDefSP cfmt;
+
+	CHECK_HRESULT(_spIaafFileDescriptor->GetContainerFormat(&cfmt));
+
+	return cfmt;
+}
+
+IAAFCodecDefSP AxFileDescriptor::GetCodecDef()
+{
+	IAAFCodecDefSP codec;
+
+	CHECK_HRESULT(_spIaafFileDescriptor->GetCodecDef(&codec));
+
+	return codec;
 }
 
 void AxFileDescriptor::SetCodecDef(IAAFCodecDefSP codec)

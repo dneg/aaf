@@ -266,6 +266,12 @@ public:
 	void SetNumberInputs( aafInt32 );
 	void SetBypass( aafUInt32 );
 	
+	IAAFDataDefSP GetDataDef();
+	aafBoolean_t IsTimeWarp();
+	aafUID_t GetCategory();
+	aafInt32 GetNumberInputs();
+	aafUInt32 GetBypass();
+
 	inline operator IAAFOperationDefSP ()
 	{ return _spIaafOperationDef; }
 
@@ -305,7 +311,11 @@ public:
 	AxFileDescriptor( IAAFFileDescriptorSP spIaafFileDescriptor );
 	~AxFileDescriptor();
 
+	IAAFCodecDefSP GetCodecDef();
+	IAAFContainerDefSP GetContainerFormat();
+	aafLength_t GetLength();
 	aafRational_t GetSampleRate();
+
 	void SetCodecDef(IAAFCodecDefSP codec);
 	void SetContainerFormat(IAAFContainerDefSP container);
 	void SetLength(aafLength_t length);
