@@ -38,12 +38,110 @@
 #endif
 
 
+#ifndef __ImplAAFPropValData_h__
+#include "ImplAAFPropValData.h"
+#endif
+
 
 #include "AAFStoredObjectIDs.h"
+#include "ImplAAFObjectCreation.h"
 
 
 #include <assert.h>
 #include <string.h>
+
+
+// We should not have to include this declaration in every type definition
+// file. A better alternative would be to have a single factory method that
+// creates ImplAAFPropValData objects. Possibly a static method of 
+// ImplAAFPropValData. (TRR 2000-MAR-03)
+extern "C" const aafClassID_t CLSID_AAFPropValData;
+
+
+// The current version of the opaque handle data.
+const OMVersion kAAFCurrentOpaqueHandleVersion = 1;
+const size_t kAAFOpaqueHandleSignatureSize = 4;
+const aafUInt8 kAAFOpaqueHandleSignature[] = { 'O', 'P', 'A', 'Q' };
+const size_t kAAFOpaqueHandleOverhead = sizeof(OMVersion) + (2 * kAAFOpaqueHandleSignatureSize);
+
+
+//
+// Utility to make sure that the given property value is for an opaque type.
+//
+AAFRESULT ImplAAFTypeDefOpaque::ValidateOpaquePropertyValue(ImplAAFPropertyValue * pOpaquePropertyValue)
+{
+  //
+	// Make sure that the input value is infact a valid indirect value.
+  //
+	ImplAAFTypeDef *pTypeDef = NULL;
+	AAFRESULT result = pOpaquePropertyValue->GetType (&pTypeDef);
+	if (AAFRESULT_FAILED (result))
+		return result;
+	ImplAAFTypeDefOpaque *pValidOpaqueType = 
+		                          dynamic_cast<ImplAAFTypeDefOpaque*>(pTypeDef);
+  pTypeDef->ReleaseReference();
+	pTypeDef = NULL;
+	if (!pValidOpaqueType)
+		return AAFRESULT_ILLEGAL_VALUE;
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+//
+// Utility to make sure that the given property value is for an opaque type.
+//
+AAFRESULT ImplAAFTypeDefOpaque::GetOpaqueHandleInfo(aafUInt32 handleSize, aafDataBuffer_t pHandle,
+                                                    aafUInt32& opaqueDataSize, aafDataBuffer_t& opaqueDataBits)
+{
+  aafUInt32 offset;
+  //
+  // Check for the supported version.
+  //
+  if (handleSize < sizeof(OMVersion))
+    return AAFRESULT_INVALID_PARAM; // not even large enough for the version.
+
+  OMVersion handleVersion = 0;
+  copy ((OMByte *)pHandle, (OMByte *)&handleVersion, sizeof(OMVersion));
+
+  if (kAAFCurrentOpaqueHandleVersion == handleVersion)
+  {
+    // Check that the opaque handle is large enough for this version.
+    if (handleSize < kAAFOpaqueHandleOverhead + GetIndirectValueOverhead())
+      return AAFRESULT_INVALID_PARAM;
+
+    // Check for the opaque signature at the beginning of the handle after
+    // the version.
+    offset = sizeof(OMVersion);
+    if (0 != memcmp(&pHandle[offset], &kAAFOpaqueHandleSignature[0], kAAFOpaqueHandleSignatureSize))  
+      return AAFRESULT_INVALID_PARAM;
+
+    // Check for the opaque signature at the end of the handle
+    // the version.
+    offset = handleSize - kAAFOpaqueHandleSignatureSize;
+    if (0 != memcmp(&pHandle[offset], &kAAFOpaqueHandleSignature[0], kAAFOpaqueHandleSignatureSize))  
+      return AAFRESULT_INVALID_PARAM;
+
+    //
+    // Return the opaque data size and the pointer to the begining of the opaque data.
+    //
+    opaqueDataSize = handleSize - kAAFOpaqueHandleOverhead;
+    offset = sizeof(OMVersion) + kAAFOpaqueHandleSignatureSize;
+    opaqueDataBits = &pHandle[offset];
+  }
+  else
+  {
+    // not a recognized version.
+    return AAFRESULT_INVALID_PARAM;
+  }
+
+
+
+
+  return AAFRESULT_SUCCESS;
+}
+
+
 
 
 ImplAAFTypeDefOpaque::ImplAAFTypeDefOpaque ()
@@ -119,7 +217,7 @@ AAFRESULT STDMETHODCALLTYPE
 // 
 AAFRESULT ImplAAFTypeDefOpaque::GetHandle (
     // value to get data from.
-    ImplAAFPropertyValue * pPropVal,
+    ImplAAFPropertyValue * pOpaquePropertyValue,
 
     // Size of preallocated buffer
     aafUInt32  handleSize,
@@ -130,7 +228,65 @@ AAFRESULT ImplAAFTypeDefOpaque::GetHandle (
     // Number of actual bytes read
     aafUInt32*  bytesRead)
 {
-	return AAFRESULT_NOT_IMPLEMENTED;
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  if (!pOpaquePropertyValue || !pHandle || !bytesRead)
+    return (AAFRESULT_NULL_PARAM);
+
+  result = ValidateOpaquePropertyValue(pOpaquePropertyValue);
+	if (AAFRESULT_FAILED (result))
+		return result;
+
+
+  // Get the private value data interface so that we can access the bits.
+  ImplAAFPropValData* pOpaqueValueData = dynamic_cast<ImplAAFPropValData*>(pOpaquePropertyValue);
+  assert (NULL != pOpaqueValueData);
+  if (NULL == pOpaqueValueData)
+    return AAFRESULT_INTERNAL_ERROR; // AAFRESULT_INVALID_OBJ?
+
+  // Get the size and the bits from the opaque value.
+  aafUInt32 opaqueValueDataSize = 0;
+  result = pOpaqueValueData->GetBitsSize (&opaqueValueDataSize);
+  if (AAFRESULT_FAILED(result))
+    return result;
+
+  // Make sure that the input size if big enough.
+  if (handleSize < opaqueValueDataSize)
+    return AAFRESULT_SMALLBUF;
+
+	// Get the pointer to the opaque value bits.
+  aafMemPtr_t pOpaqueValueDataBits = NULL;
+  result = pOpaqueValueData->GetBits (&pOpaqueValueDataBits);
+  if (AAFRESULT_FAILED(result))
+    return result;
+
+  //
+  // Copy our opaque handle version
+  // 
+  aafUInt32 bytesCopied = 0;
+  pHandle[bytesCopied++] = kAAFCurrentOpaqueHandleVersion;
+
+  //
+  // Copy the opaque signature before the opaque data.
+  //
+  copy ((OMByte *)kAAFOpaqueHandleSignature, (OMByte *)&pHandle[bytesCopied], sizeof(kAAFOpaqueHandleSignature));
+  bytesCopied += kAAFOpaqueHandleSignatureSize;
+
+  //
+  // Copy the opaque data.
+  //
+  copy ((OMByte *)pOpaqueValueDataBits, (OMByte *)&pHandle[bytesCopied], opaqueValueDataSize);
+  bytesCopied += opaqueValueDataSize;
+
+  //
+  // Copy the opaque signature again after the opaque data.
+  //
+  copy ((OMByte *)kAAFOpaqueHandleSignature, (OMByte *)&pHandle[bytesCopied], sizeof(kAAFOpaqueHandleSignature));
+  bytesCopied += kAAFOpaqueHandleSignatureSize;
+
+  // Return the actual number of bytes copied to the handle.
+  *bytesRead = bytesCopied;
+
+	return (result);
 }
 
 
@@ -159,12 +315,37 @@ AAFRESULT ImplAAFTypeDefOpaque::GetHandle (
 // 
 AAFRESULT ImplAAFTypeDefOpaque::GetHandleBufLen (
     // value to set.
-   ImplAAFPropertyValue * pPropVal,
+   ImplAAFPropertyValue * pOpaquePropertyValue,
 
     // Pointer to an variable used to return the length
-   aafUInt32 *  pLen)
+   aafUInt32 *  pLength)
 {
-	return AAFRESULT_NOT_IMPLEMENTED;
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  if (!pOpaquePropertyValue || !pLength)
+    return (AAFRESULT_NULL_PARAM);
+
+  result = ValidateOpaquePropertyValue(pOpaquePropertyValue);
+	if (AAFRESULT_FAILED (result))
+		return result;
+
+
+  // Get the private value data interface so that we can access the bits.
+  ImplAAFPropValData* pOpaqueValueData = dynamic_cast<ImplAAFPropValData*>(pOpaquePropertyValue);
+  if (NULL == pOpaqueValueData)
+    return AAFRESULT_INTERNAL_ERROR; // AAFRESULT_INVALID_OBJ?
+
+  // Get the size and the bits from the opaque value.
+  result = pOpaqueValueData->GetBitsSize (pLength);
+  if (AAFRESULT_FAILED(result))
+    return result;
+
+  //
+  // Add the size of the extra version and validation information that
+  // we added to the opaque data from the OM.
+  //
+  *pLength += kAAFOpaqueHandleOverhead;
+
+	return (result);
 }
 
 //***********************************************************
@@ -193,7 +374,7 @@ AAFRESULT ImplAAFTypeDefOpaque::GetHandleBufLen (
 // 
 AAFRESULT ImplAAFTypeDefOpaque::SetHandle (
     // value to write data to.
-    ImplAAFPropertyValue * pPropVal,
+    ImplAAFPropertyValue * pOpaquePropertyValue,
 
     // Size of preallocated buffer
 	aafUInt32  handleSize,
@@ -201,7 +382,40 @@ AAFRESULT ImplAAFTypeDefOpaque::SetHandle (
     // buffer containing handle
 	aafDataBuffer_t  pHandle)
 {
-	return AAFRESULT_NOT_IMPLEMENTED;
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  if (!pOpaquePropertyValue || !pHandle)
+    return (AAFRESULT_NULL_PARAM);
+
+  result = ValidateOpaquePropertyValue(pOpaquePropertyValue);
+	if (AAFRESULT_FAILED (result))
+		return result;
+
+  //
+  // Validate and extract the opaque data info from the given handle.
+  //
+  aafUInt32  opaqueDataSize = 0;
+  aafDataBuffer_t opaqueDataBits = NULL;
+  result = GetOpaqueHandleInfo(handleSize, pHandle, opaqueDataSize, opaqueDataBits);
+	if (AAFRESULT_FAILED (result))
+		return result;
+
+  // Get the private value data interface so that we can access the bits.
+  ImplAAFPropValData* pOpaqueValueData = dynamic_cast<ImplAAFPropValData*>(pOpaquePropertyValue);
+  if (NULL == pOpaqueValueData)
+    return AAFRESULT_INTERNAL_ERROR; // AAFRESULT_INVALID_OBJ?
+
+  // Allocate the correct size value.
+  aafMemPtr_t pOpaqueValueDataBits = NULL;
+  result = pOpaqueValueData->AllocateBits (opaqueDataSize, &pOpaqueValueDataBits);
+  if (AAFRESULT_FAILED(result))
+    return result;
+
+  //
+  // Copy the opaque data from the handle into the newly resized opaque value.
+  //
+  copy ((OMByte *)opaqueDataBits, pOpaqueValueDataBits, opaqueDataSize);
+
+  return (result);
 }
 
 
@@ -248,7 +462,38 @@ AAFRESULT ImplAAFTypeDefOpaque::SetHandle (
     // newly created property value
     ImplAAFPropertyValue ** ppOpaquePropertyValue)
 {
-	return AAFRESULT_NOT_IMPLEMENTED;
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  if (!pInitData || !ppOpaquePropertyValue)
+    return (AAFRESULT_NULL_PARAM);
+
+  //
+  // Now we are ready to allocate and initialize the opaque value
+  // that will contain a copy of the bits from the opaque handle.
+  //
+  ImplAAFPropValDataSP pOpaqueValueData;
+  pOpaqueValueData = (ImplAAFPropValData*) CreateImpl (CLSID_AAFPropValData);
+  if (!pOpaqueValueData)
+    return AAFRESULT_NOMEMORY;
+  pOpaqueValueData->ReleaseReference(); // make sure reference count is one.
+
+  // Initialize the new property value with this opaque type.
+  result = pOpaqueValueData->Initialize (this);
+  if (AAFRESULT_FAILED(result))
+    return result;
+
+  // Attempt to initialize the opaque property value from the given opaque handle
+  // data.
+  result = SetHandle(pOpaqueValueData, initDataSize, pInitData);
+  if (AAFRESULT_FAILED(result))
+    return result;
+
+  //
+  // Return the newly allocated and initialized opaque data value.
+  *ppOpaquePropertyValue = pOpaqueValueData;
+  (*ppOpaquePropertyValue)->AcquireReference(); // refcount == 2, smartptr will reduce this to one.
+
+
+  return (result);
 }
 
 // Find the actual type definition from the dictionary.
