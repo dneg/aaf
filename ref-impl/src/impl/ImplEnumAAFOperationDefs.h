@@ -107,7 +107,7 @@ public:
 public:
   // SDK Internal 
   virtual AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFEffectDefs::SetEnumProperty( ImplAAFObject *pObj, effectDefWeakRefArrayProp_t *pProp);
+    SetEnumProperty( ImplAAFObject *pObj, effectDefWeakRefArrayProp_t *pProp);
 
 public:
   // Declare the module test method. The implementation of the will be be
