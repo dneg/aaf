@@ -87,6 +87,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFTimelineMobSlot*		newSlot = NULL;
 	IAAFEssenceGroup*			essenceGroup = NULL;
 	IAAFSegment*				pSeg = NULL;
+	IAAFSegment*				pSegment = NULL;
 	IAAFSourceClip*				pSourceClip = NULL;
 	IAAFComponent*				pComponent = NULL;
 	bool bFileOpen = false;
@@ -167,7 +168,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pSourceClip->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
 		checkResult(pComponent->SetDataDef (defs.ddSound()));
 		checkResult(pComponent->SetLength (segLen));
-		checkResult(essenceGroup->AppendChoice(pSourceClip)); 
+		checkResult(pSourceClip->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
+		checkResult(essenceGroup->AppendChoice(pSegment)); 
+		pSegment->Release();
+		pSegment = NULL;
 		pComponent->Release();
 		pComponent = NULL;
 		pSourceClip->Release();
@@ -181,7 +185,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pSourceClip->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
 		checkResult(pComponent->SetDataDef (defs.ddSound()));
 		checkResult(pComponent->SetLength (segLen));
-		checkResult(essenceGroup->AppendChoice(pSourceClip)); 
+		checkResult(pSourceClip->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
+		checkResult(essenceGroup->AppendChoice(pSegment)); 
+		pSegment->Release();
+		pSegment = NULL;
 		pComponent->Release();
 		pComponent = NULL;
 		pSourceClip->Release();
@@ -357,12 +364,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				checkResult(pEssenceGroup->CountChoices(&readNumChoices));
 				checkExpression(1 == readNumChoices, AAFRESULT_TEST_FAILED);
 				/***/
-				checkResult(pEssenceGroup->GetChoiceAt (0, &pSourceClip));
-				checkResult(pSourceClip->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
+				checkResult(pEssenceGroup->GetChoiceAt (0, &pSegment));
+				checkResult(pSegment->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
 				checkResult(pComponent->GetLength(&readLength));
 				checkExpression(SUBSEG_LENGTH == readLength, AAFRESULT_TEST_FAILED);
-				pSourceClip->Release();
-				pSourceClip = NULL;
+				pSegment->Release();
+				pSegment = NULL;
 				pComponent->Release();
 				pComponent = NULL;
 
