@@ -235,6 +235,7 @@ HRESULT STDMETHODCALLTYPE
 		pcd->Release();
 		pcd = 0;
 		*descPtr = desc;
+		desc->AddRef();
 		CHECK(desc->Initialize(EXAMPLE_FILE_PLUGIN, L"Essence File Container", L"Handles non-container files."));
 
 		CHECK(desc->SetCategoryClass(AUID_AAFDefObject));
