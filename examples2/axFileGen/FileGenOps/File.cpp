@@ -239,7 +239,7 @@ AXFG_OP(
   L"CreateAAFFileOnRawStorage",
   L"Create an IAAFile out of an IAAFRawStorage",
   L"FileName StorageName",
-  L"existence = new, access = writable, kind = SSBinary, ident = AxProductItentification, mode flags = 0",
+  L"existence = new, access = writable, kind = SSBin512, ident = AxProductItentification, mode flags = 0",
   3,
   3 ) 
 
@@ -259,7 +259,7 @@ void CreateAAFFileOnRawStorage::Execute( const std::vector<AxString>& argv )
 	CHECK_HRESULT( AAFCreateAAFFileOnRawStorage( spRawStorage,
 												 kAAFFileExistence_new,
 												 kAAFFileAccess_write,
-												 &aafFileKindAafSSBinary,
+												 &aafFileKindAaf4KBinary,
 												 0,
 												 ident.getProductId(),
 												 &spFile ) );

@@ -39,15 +39,15 @@ const aafUID_t aafFileKindDontCare = aafFileKindDontCare_Value;
 const aafUID_t aafFileKindPathalogical = aafFileKindPathalogical_Value;
 
 // the enum to select the Microsoft implementation
-#define aafFileKindAafMSSBinary_Value \
+#define aafFileKindAafM512Binary_Value \
 {0x42464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}}
-const aafUID_t aafFileKindAafMSSBinary = aafFileKindAafMSSBinary_Value;
+const aafUID_t aafFileKindAafM512Binary = aafFileKindAafM512Binary_Value;
 
 
 // the enum to select the SchemaSoft implementation with 512 byte sectors
-#define aafFileKindAafSSSBinary_Value \
+#define aafFileKindAafS512Binary_Value \
 {0x42464141, 0x1205, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}}
-const aafUID_t aafFileKindAafSSSBinary = aafFileKindAafSSSBinary_Value;
+const aafUID_t aafFileKindAafS512Binary = aafFileKindAafS512Binary_Value;
 
 // the enum to select the SchemaSoft implementation with 4096 byte sectors
 #define aafFileKindAafS4KBinary_Value \
@@ -81,21 +81,21 @@ const aafUID_t aafFileKindMxfKlvBinary = aafFileKindMxfKlvBinary_Value;
 // this MUST match what is selected in ImplAAFFile.cpp
 #if defined( OS_WINDOWS )
 // DEFAULT for this build is Microsoft 512.
-const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary_Value;
+const aafUID_t aafFileKindAaf512Binary = aafFileKindAafM512Binary_Value;
 //NOTE: Add default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafM4KBinary_Value;
 
 #elif defined( OS_MACOS )
 // No SS implementation available since Microsoft 512 (via MacOLE) has been
 // deleted
-const aafUID_t aafFileKindAafSSBinary = aafFileKindPathalogical_Value;
+const aafUID_t aafFileKindAaf512Binary = aafFileKindPathalogical_Value;
 // default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical_Value;
 
 
 #elif defined( OS_DARWIN )
 // DEFAULT is Schemasoft 512 (via libSSRW2C.a).
-const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary_Value;
+const aafUID_t aafFileKindAaf512Binary = aafFileKindAafS512Binary_Value;
 // default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 
@@ -103,26 +103,26 @@ const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 #elif defined( OS_IRIX )
 
 // DEFAULT is Schemasoft 512 (via libSSRW2C.a). 
-const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary_Value;
+const aafUID_t aafFileKindAaf512Binary = aafFileKindAafS512Binary_Value;
 // default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 
 #elif defined( OS_LINUX )
 // DEFAULT is Schemasoft 512 (via libSSRW2C.a). 
-const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary_Value;
+const aafUID_t aafFileKindAaf512Binary = aafFileKindAafS512Binary_Value;
 //NOTE: Add default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 
 #elif defined( OS_FREEBSD )
 // No SS implementations ported as yet
-const aafUID_t aafFileKindAafSSBinary = aafFileKindPathalogical_Value;
+const aafUID_t aafFileKindAaf512Binary = aafFileKindPathalogical_Value;
 // default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical_Value;
 
 
 #elif defined( OS_SOLARIS )
 // DEFAULT is SSS 512 (via libSSRW2C.a)
-const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary_Value;
+const aafUID_t aafFileKindAaf512Binary = aafFileKindAafS512Binary_Value;
 // default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 
@@ -139,9 +139,9 @@ const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 //
 // the signature actually stored in all AAF SS (512) files
 // note this is not a properly-formed SMPTE label, but this is legacy
-#define aafSignature_Aaf_SSBinary_Value \
+#define aafSignature_Aaf_SSBin_512_Value \
 {0x42464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
-const aafUID_t aafSignature_Aaf_SSBinary = aafSignature_Aaf_SSBinary_Value; 
+const aafUID_t aafSignature_Aaf_SSBin_512 = aafSignature_Aaf_SSBin_512_Value; 
 
 
 // the signature actually stored in all AAF SS (4096) files

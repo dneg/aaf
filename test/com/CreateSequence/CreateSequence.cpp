@@ -606,7 +606,7 @@ STDAPI MemoryFileOpenNewModify (
     rs,
     kAAFFileExistence_new,
     kAAFFileAccess_write,
-    &aafFileKindAafSSBinary,
+    &aafFileKindAaf4KBinary,
     modeFlags,
     pIdent,
     ppFile);
