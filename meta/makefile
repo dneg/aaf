@@ -13,7 +13,7 @@ DictP18-277-1847BMaster.csv : DictP18-277-1847BMaster.xls
 	$(EXCEL) /e /r DictP18-277-1847BMaster.xls /p .
 
 AAFMetaDictionary.h : DictP18-277-1847BMaster.csv
-	awk -f mkdict.awk DictP18-277-1847BMaster.csv | flip -u > AAFMetaDictionary.h
+	awk -f mkdict.awk DictP18-277-1847BMaster.csv > AAFMetaDictionary.h
 
 clean:
 	rm -f DictP18-277-1847BMaster.csv
