@@ -18,6 +18,7 @@
 #include "aafUtils.h"
 #include "aafCvt.h"
 #include "aafDefUIDs.h"
+#include "AAFDataDefs.h"
 #include "AAFStoredObjectIDs.h"
 
 #define STD_HDRSIZE_DATA		42
