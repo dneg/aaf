@@ -38,7 +38,6 @@ OMPropertySet::OMPropertySet(void)
 : _propertySet(0), _capacity(OMPROPERTYSET_CHUNKSIZE), _count(0), _container(0)
 {
   TRACE("OMPropertySet::OMPropertySet");
-  PRECONDITION("Valid Capacity", _capacity >= 0);
 
   _propertySet = new OMPropertySetElement[_capacity];
   ASSERT("Valid heap pointer", _propertySet != 0);
@@ -46,7 +45,7 @@ OMPropertySet::OMPropertySet(void)
   for (size_t i = 0; i < _capacity; i++) {
     _propertySet[i]._valid = false;
   }
-  POSTCONDITION("Valid count", ((_count >= 0) && (_count <= _capacity)));
+  POSTCONDITION("Valid count", _count <= _capacity);
 }
 
 OMPropertySet::~OMPropertySet(void)
@@ -74,7 +73,7 @@ OMProperty* OMPropertySet::get(const OMPropertyId propertyId) const
   ASSERT("Valid element", element->_valid);
   result = element->_property;
   POSTCONDITION("Valid result", result != 0);
-  POSTCONDITION("Valid count", ((_count >= 0) && (_count <= _capacity)));
+  POSTCONDITION("Valid count", _count <= _capacity);
   return result;
 }
 
@@ -127,7 +126,7 @@ void OMPropertySet::put(OMProperty* property)
   POSTCONDITION("Consistent property set",
                 property == find(property->propertyId())->_property);
   // POSTCONDITION("Count increased by one", _count == OLD(_count) + 1);
-  POSTCONDITION("Valid count", ((_count >= 0) && (_count <= _capacity)));
+  POSTCONDITION("Valid count", _count <= _capacity);
 }
 
   // @mfunc Iterate over the <c OMProperty> objects in this
@@ -232,7 +231,7 @@ bool OMPropertySet::isRequired(const OMPropertyId propertyId) const
 size_t OMPropertySet::count(void) const
 {
   TRACE("OMPropertySet::count");
-  POSTCONDITION("Valid count", ((_count >= 0) && (_count <= _capacity)));
+  POSTCONDITION("Valid count", _count <= _capacity);
   return _count;
 }
 
@@ -265,7 +264,7 @@ void OMPropertySet::setContainer(const OMStorable* container)
   PRECONDITION("No valid old container", _container == 0);
   PRECONDITION("Valid new container", container != 0);
   _container = container;
-  POSTCONDITION("Valid count", ((_count >= 0) && (_count <= _capacity)));
+  POSTCONDITION("Valid count", _count <= _capacity);
 }
 
   // @mfunc The <c OMStorable> object that contains this
