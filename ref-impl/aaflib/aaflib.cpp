@@ -832,25 +832,29 @@ HRESULT AAFDLL::Load(const char *dllname)
   if (AAFRESULT_FAILED(rc))
     return rc;
 
+  // These callbacks did not exist in DR4 or earlier toolkits. Ignore the error
+  // return if the first new exported function cannot be found. If the first
+  // exported function is present then all three must be present for the dll
+  // to be valid.
   rc = ::AAFFindSymbol(_libHandle,
 					   "AAFCreateRawStorageMemory",
 					   (AAFSymbolAddr *)&_pfnCreateRawStorageMemory);
-  if (AAFRESULT_FAILED(rc))
-    return rc;
+  if (AAFRESULT_SUCCEEDED(rc))
+  {
+    rc = ::AAFFindSymbol(_libHandle,
+  					   "AAFCreateRawStorageDisk",
+  					   (AAFSymbolAddr *)&_pfnCreateRawStorageDisk);
+    if (AAFRESULT_FAILED(rc))
+      return rc;
 
-  rc = ::AAFFindSymbol(_libHandle,
-					   "AAFCreateRawStorageDisk",
-					   (AAFSymbolAddr *)&_pfnCreateRawStorageDisk);
-  if (AAFRESULT_FAILED(rc))
-    return rc;
+    rc = ::AAFFindSymbol(_libHandle,
+  					   "AAFCreateAAFFileOnRawStorage",
+  					   (AAFSymbolAddr *)&_pfnCreateAAFFileOnRawStorage);
+    if (AAFRESULT_FAILED(rc))
+      return rc;
+  }
 
-  rc = ::AAFFindSymbol(_libHandle,
-					   "AAFCreateAAFFileOnRawStorage",
-					   (AAFSymbolAddr *)&_pfnCreateAAFFileOnRawStorage);
-  if (AAFRESULT_FAILED(rc))
-    return rc;
-
-  return rc;
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -955,7 +959,11 @@ HRESULT AAFDLL::CreateRawStorageMemory (
 	IAAFRawStorage ** ppNewRawStorage)
 {
   TRACE("AAFDLL::CreateRawStorageMemory");
-  ASSERT("Valid dll callback function", _pfnCreateRawStorageMemory);
+//  ASSERT("Valid dll callback function", _pfnCreateRawStorageMemory);
+  // This callback did not exist in DR4 or earlier toolkits.
+  if (NULL == _pfnCreateRawStorageMemory)
+    return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+    
   return _pfnCreateRawStorageMemory(access, ppNewRawStorage);
 }
 
@@ -966,7 +974,11 @@ HRESULT AAFDLL::CreateRawStorageDisk (
 	IAAFRawStorage ** ppNewRawStorage)
 {
   TRACE("AAFDLL::CreateRawStorageDisk");
-  ASSERT("Valid dll callback function", _pfnCreateRawStorageDisk);
+//  ASSERT("Valid dll callback function", _pfnCreateRawStorageDisk);
+  // This callback did not exist in DR4 or earlier toolkits.
+  if (NULL == _pfnCreateRawStorageDisk)
+    return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+    
   return _pfnCreateRawStorageDisk(filename, existence, access, ppNewRawStorage);  
 }
 
@@ -978,7 +990,11 @@ HRESULT AAFDLL::CreateAAFFileOnRawStorage (
 	IAAFFile ** ppNewFile)
 {
   TRACE("AAFDLL::CreateAAFFileOnRawStorage");
-  ASSERT("Valid dll callback function", _pfnCreateAAFFileOnRawStorage);
+//  ASSERT("Valid dll callback function", _pfnCreateAAFFileOnRawStorage);
+  // This callback did not exist in DR4 or earlier toolkits.
+  if (NULL == _pfnCreateAAFFileOnRawStorage)
+    return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+    
   return _pfnCreateAAFFileOnRawStorage
 	(pRawStorage,
 	 pFileKind,
