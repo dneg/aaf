@@ -42,6 +42,9 @@
 #include "OMMemoryRawStorage.h"
 #include "OMRawStorageLockBytes.h"
 
+#include "OMObjectReference.h"
+#include "OMStrongReference.h"
+
 #include "OMAssertions.h"
 #include "OMUtilities.h"
 
@@ -354,10 +357,17 @@ void OMStoredObject::save(const OMSimpleProperty& property)
   // @mfunc Save the <c OMStrongReference> <p singleton> in this
   //        <c OMStoredObject>.
   //   @parm TBS
-void OMStoredObject::save(const OMStrongReference& /* singleton */)
+void OMStoredObject::save(const OMStrongReference& singleton)
 {
   TRACE("OMStoredObject::save");
-  ASSERT("Unimplemented code not reached", false);
+
+  // Write the index entry.
+  //
+  wchar_t* name = referenceName(singleton.name(), singleton.propertyId());
+  saveName(singleton, name);
+  delete [] name;
+
+  singleton.reference().save();
 }
 
   // @mfunc Save the <c OMStrongReferenceVector> <p vector> in this
@@ -556,11 +566,16 @@ void OMStoredObject::restore(OMSimpleProperty& property,
   //        <c OMStoredObject>.
   //   @parm TBS
   //   @parm TBS
-void OMStoredObject::restore(OMStrongReference& /* singleton */,
-                             size_t /* externalSize */)
+void OMStoredObject::restore(OMStrongReference& singleton,
+                             size_t externalSize)
 {
   TRACE("OMStoredObject::restore");
-  ASSERT("Unimplemented code not reached", false);
+  wchar_t* name = referenceName(singleton.name(), singleton.propertyId());
+  restoreName(singleton, name, externalSize);
+  OMStrongObjectReference newReference(&singleton, name);
+  delete [] name;
+  singleton.reference() = newReference;
+  singleton.reference().restore();
 }
 
   // @mfunc Restore the <c OMStrongReferenceVector> <p vector> into this
@@ -1771,11 +1786,14 @@ void OMStoredObject::closeStream(IStream*& stream)
   //   @parm The property.
   //   @parm TBS
   //   @this const
-void OMStoredObject::saveName(const OMProperty& /* property */,
-                              const wchar_t* /* name */)
+void OMStoredObject::saveName(const OMProperty& property,
+                              const wchar_t* name)
 {
   TRACE("OMStoredObject::saveName");
-  ASSERT("Unimplemented code not reached", false);
+
+  OMPropertyId propertyId = property.propertyId();
+  OMStoredForm storedForm = property.storedForm();
+  writeName(propertyId, storedForm, name);
 }
 
   // @mfunc The persisted value of <p property> is its name.
@@ -1783,12 +1801,21 @@ void OMStoredObject::saveName(const OMProperty& /* property */,
   //   @parm The property.
   //   @parm The expected property name.
   //   @parm The (expected) size of the property name.
-void OMStoredObject::restoreName(OMProperty& /* property */,
-                                 const wchar_t* /* name */,
-                                 size_t /* size */)
+void OMStoredObject::restoreName(OMProperty& property,
+                                 const wchar_t* name,
+                                 size_t size)
 {
   TRACE("OMStoredObject::restoreName");
-  ASSERT("Unimplemented code not reached", false);
+
+  OMPropertyId propertyId = property.propertyId();
+  OMStoredForm storedForm = property.storedForm();
+  wchar_t* propertyName = readName(propertyId, storedForm, size);
+  ASSERT("Consistent property size",
+                      size == (lengthOfWideString(name) + 1) *
+                              sizeof(OMCharacter));
+  ASSERT("Consistent property name",
+                  compareWideString(propertyName, name) == 0);
+  delete [] propertyName;
 }
 
 void OMStoredObject::mapCharacters(wchar_t* /* name */,
