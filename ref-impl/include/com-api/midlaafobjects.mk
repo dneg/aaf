@@ -123,8 +123,46 @@ DODO_TARGET_NAMES = \
 # 	$(AAFNONPERSISTENTOBJECTS)
 # 
 AAFOBJECTS = \
-	AAFObject \
+	AAFAttribute \
+	AAFClassDefinition \
+	AAFComponent \
+	AAFConstValue \
+	AAFControlCodeDefinition \
+	AAFControlPoint \
 	AAFDataDefinition \
 	AAFDefinitionObject \
+	AAFDictionary \
+	AAFEffectDefinition \
+	AAFFile \
+	AAFFindSourceInfo \
+	AAFIdentification \
+	AAFIntegerAttribute \
 	AAFLocator \
-	EnumAAFControlCodeDefinitions
+	AAFMacLocator \
+	AAFMediaDescriptor \
+	AAFMediaFileDescriptor \
+	AAFMediaFilmDescriptor \
+	AAFMediaTapeDescriptor \
+	AAFObject \
+	AAFObjectAttribute \
+	AAFParameter \
+	AAFParameterSlot \
+	AAFPropertyDefinition \
+	AAFStringAttribute \
+	AAFTypeDefinition \
+	AAFUnixLocator \
+	AAFVaryingValue \
+	AAFWindowsLocator \
+	EnumAAFAttributes \
+	EnumAAFClassDefinitions \
+	EnumAAFControlCodeDefinitions \
+	EnumAAFComponents \
+	EnumAAFControlPoints \
+	EnumAAFDataDefinitions \
+	EnumAAFEffectDefinitions \
+	EnumAAFIdentifications \
+	EnumAAFLocators \
+	EnumAAFMobComments \
+	EnumAAFPropertyDefinitions \
+	EnumAAFReferenceValues \
+	EnumAAFTypeDefinitions
