@@ -167,7 +167,12 @@ AAFRESULT STDMETHODCALLTYPE
   if (index >= count)
 	return AAFRESULT_BADINDEX;
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+  _slots.getValueAt(*ppSegment,index);
+
+  assert(*ppSegment);
+  (*ppSegment)->AcquireReference();
+
+  return AAFRESULT_SUCCESS;
 }
 
 
