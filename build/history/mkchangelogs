@@ -201,3 +201,30 @@ done >> $index
 endList >> $index
 writeFooter >> $index
 
+validate=Changes-validate.html
+
+writeHeader "Validation of cvs change logs" > $validate
+startList >> $validate
+
+files="Changes-index.html"
+
+let i=$n-1
+while [[ i -gt 0 ]]
+do
+  ptag=${tagnames[i - 1]}
+  tag=${tagnames[i]}
+  file=Changes-${ptag}-${tag}
+  if [[ -s ${file}.clog ]]
+  then
+    files="$files ${file}.html"
+  fi
+  let i=$i-1
+done
+
+for f in $files
+do
+  echo "<li>$f <a href=\"http://validator.w3.org/check?uri=http://aaf.sourceforge.net/build/$f\"> Validate</a>"
+done >> $validate
+
+endList >> $validate
+writeFooter >> $validate
