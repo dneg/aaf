@@ -43,12 +43,6 @@ adds the source clip specified in the choice argument as  a choice to the given 
     //@comm Replaces omfiMediaGroupAddChoice
 
 /****/
-AD_METHOD1(NumRepresentations,
-[out], aafInt32 *, count,number of representations in this media group,
-adds the source clip specified in the choice argument as  a choice to the given media group object.)
-    //@comm Replaces omfiMediaGroupNumRepresentations
-
-/****/
 AD_METHOD2(GetIndexedRepresentation,
 [in], aafInt32, index,The 1-based index into the array,
 [out], AAFSegment *, result,The representation at that index,
@@ -57,6 +51,8 @@ adds the source clip specified in the choice argument as  a choice to the given 
 //	private:
 //		AAFSourceClip			*_stillFrame;
 //		vector<AAFSourceClip *>	_choices;
+
+AD_OVERRIDE(.method-NumRepresentations)
 
 AD_OVERRIDE(.method-Test)
 
