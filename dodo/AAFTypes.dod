@@ -13,13 +13,6 @@ AD_TYPES_HEAD
 \******************************************/
 
 
-interface IAAFTypeDef;
-interface IAAFPropertyValue;
-
-AD_CPP_QUOTE(interface IAAFTypeDef;)
-AD_CPP_QUOTE(interface IAAFPropertyValue;)
-
-
 AD_TYPES_BEGIN(B1A2137B, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_CPP_QUOTE(/*)
@@ -877,7 +870,6 @@ AD_CPP_QUOTE(} aafSearchDictionaryCrit_t;)
 
 
 
-AD_CPP_QUOTE(#if 0)
 typedef enum _eAAFTypeCategory_t
 {
   kAAFTypeCatUnknown       = 0, // can only occur in damaged files
@@ -889,62 +881,8 @@ typedef enum _eAAFTypeCategory_t
   kAAFTypeCatFixedArray    = 6, // fixed-size array
   kAAFTypeCatVariableArray = 7, // variably-sized array
   kAAFTypeCatComposite     = 8, // a structured type
-  kAAFTypeCatStream        = 9, // potentially huge amount of data
+  kAAFTypeCatStream        = 9  // potentially huge amount of data
 } eAAFTypeCategory_t;
-
-AD_CPP_QUOTE(#endif)
-AD_CPP_QUOTE(//)
-AD_CPP_QUOTE(typedef enum _eAAFTypeCategory_t)
-AD_CPP_QUOTE({)
-AD_CPP_QUOTE(  kAAFTypeCatUnknown       = 0\, // can only occur in damaged files)
-AD_CPP_QUOTE(  kAAFTypeCatInt           = 1\, // any integral type)
-AD_CPP_QUOTE(  kAAFTypeCatStrongObjRef  = 2\, // strong object reference)
-AD_CPP_QUOTE(  kAAFTypeCatWeakObjRef    = 3\, // weak object reference)
-AD_CPP_QUOTE(  kAAFTypeCatRename        = 4\, // renamed type)
-AD_CPP_QUOTE(  kAAFTypeCatEnum          = 5\, // enumerated type)
-AD_CPP_QUOTE(  kAAFTypeCatFixedArray    = 6\, // fixed-size array)
-AD_CPP_QUOTE(  kAAFTypeCatVariableArray = 7\, // variably-sized array)
-AD_CPP_QUOTE(  kAAFTypeCatComposite     = 8\, // a structured type)
-AD_CPP_QUOTE(  kAAFTypeCatStream        = 9\, // potentially huge amount of data)
-AD_CPP_QUOTE(} eAAFTypeCategory_t;)
-
-
-
-AD_CPP_QUOTE(#if 0)
-typedef struct _aafTypeDefCompositeMemberPair_t
-{
-  [string, size_is(nameSize)] wchar_t * pName;
-  IAAFTypeDef * pType;
-  aafUInt32 nameSize;
-} aafTypeDefCompositeMemberPair_t;
-
-AD_CPP_QUOTE(#endif)
-AD_CPP_QUOTE(//)
-AD_CPP_QUOTE(typedef struct _aafTypeDefCompositeMemberPair_t)
-AD_CPP_QUOTE({)
-AD_CPP_QUOTE(  wchar_t * pName;)
-AD_CPP_QUOTE(  IAAFTypeDef * pType;)
-AD_CPP_QUOTE(  aafUInt32 nameSize;)
-AD_CPP_QUOTE(} aafTypeDefCompositeMemberPair_t;)
-
-
-
-AD_CPP_QUOTE(#if 0)
-typedef struct _aafTypeDefEnumElementPair_t
-{
-  [string, size_is(nameSize)] wchar_t * pName;
-  IAAFPropertyValue * pValue;
-  aafUInt32 nameSize;
-} aafTypeDefEnumElementPair_t;
-
-AD_CPP_QUOTE(#endif)
-AD_CPP_QUOTE(//)
-AD_CPP_QUOTE(typedef struct _aafTypeDefEnumElementPair_t)
-AD_CPP_QUOTE({)
-AD_CPP_QUOTE(  wchar_t * pName;)
-AD_CPP_QUOTE(  IAAFPropertyValue * pValue;)
-AD_CPP_QUOTE(  aafUInt32 nameSize;)
-AD_CPP_QUOTE(} aafTypeDefEnumElementPair_t;)
 
 
 
