@@ -7,11 +7,17 @@
 
 #include <string.h>
 
+#define OM_CLASS_FACTORY_CAPACITY      (200)
+#define OM_OBJECT_DIRECTORY_CAPACITY  (5000)
+
 OMFile::OMFile(const char* name, const OMAccessMode mode)
-: _name(name), _root(0), _classFactory(0), _objectDirectory(0),
+: _name(0), _root(0), _classFactory(0), _objectDirectory(0),
   _mode(mode)
 {
   TRACE("OMFile::OMFile");
+
+  _name = new char[strlen(name) + 1];
+  strcpy(_name, name);
 
   setName("/");
 }
@@ -19,6 +25,13 @@ OMFile::OMFile(const char* name, const OMAccessMode mode)
 OMFile::~OMFile(void)
 {
   TRACE("OMFile::~OMFile");
+
+  delete _name;
+  _name = 0;
+  delete _classFactory;
+  _classFactory = 0;
+  delete _objectDirectory;
+  _objectDirectory = 0;
 }
 
 OMFile* OMFile::openRead(const char* fileName)
@@ -71,6 +84,8 @@ void OMFile::close(void)
   TRACE("OMFile::close");
 
   _root->close();
+  delete _root;
+  _root = 0;
 }
 
 OMStoredObject* OMFile::root(void)
@@ -95,7 +110,7 @@ OMClassFactory* OMFile::classFactory(void)
   TRACE("OMFile::classFactory");
 
   if (_classFactory == 0) {
-    _classFactory = new OMClassFactory(100);
+    _classFactory = new OMClassFactory(OM_CLASS_FACTORY_CAPACITY);
   }
 
   return _classFactory;
@@ -106,7 +121,7 @@ OMObjectDirectory* OMFile::objectDirectory(void)
   TRACE("OMFile::objectDirectory");
 
   if (_objectDirectory == 0) {
-    _objectDirectory = new OMObjectDirectory(100);
+    _objectDirectory = new OMObjectDirectory(OM_OBJECT_DIRECTORY_CAPACITY);
   }
   return _objectDirectory;
 }
@@ -114,10 +129,8 @@ OMObjectDirectory* OMFile::objectDirectory(void)
 const OMClassId& OMFile::classId(void) const
 {
   TRACE("OMFile::classId");
-  OMClassId g = {0};
-  g.Data4[7] = (unsigned char)63;
 
-  return g;
+  return nullOMClassId;
 }
 
 OMFile* OMFile::file(void) const
