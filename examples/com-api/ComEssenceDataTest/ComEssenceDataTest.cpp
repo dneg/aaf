@@ -23,7 +23,6 @@
 
 
 
-
 // Include the defintions for the AAF Stored Object identifiers.
 #define INIT_AUID
 #include "AAFStoredObjectIDs.h"
@@ -122,10 +121,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	IAAFHeader*					pHeader = NULL;
 	IAAFDictionary*					pDictionary = NULL;
 	IAAFMob*					pMob = NULL;
-	IAAFEssenceDescriptor*		aDesc = NULL;
 	IAAFMasterMob*				pMasterMob = NULL;
+
 	IAAFEssenceAccess*			pEssenceAccess = NULL;
-	IAAFEssenceFormat*			pFormat;
+	IAAFEssenceFormat*			pFormat = NULL;
+	IAAFEssenceFormat			*format = NULL;
+	IAAFLocator					*pLocator = NULL;
 	// !!!Previous revisions of this file contained variables here required to handle external essence
 	aafUID_t					masterMobID;
 	aafProductIdentification_t	ProductInfo;
@@ -136,10 +137,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	size_t						bytesRead;
 	aafUInt32					bytesWritten, dataOffset, dataLen;
 	aafUInt16					bitsPerSample, numCh;
-		IAAFEssenceFormat	*format;
 		aafInt32			n, numSpecifiers;
 		aafUID_t			essenceFormatCode, testContainer;
-	IAAFLocator	*pLocator;
   // delete any previous test file before continuing...
   char chFileName[1000];
   convert(chFileName, sizeof(chFileName), pFileName);
@@ -246,7 +245,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 									pLocator,	// In current file
 									testContainer,	// In AAF Format
 									&pEssenceAccess));// Compress disabled
-#if 1
 
 		check(pEssenceAccess->GetFileFormatParameterList (&format));
 		check(format->NumFormatSpecifiers (&numSpecifiers));
@@ -254,6 +252,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		{
 			check(format->GetIndexedFormatSpecifier (n, &essenceFormatCode, 0, NULL, NULL));
 		}
+		format->Release();
+		format = NULL;
 
 		// Tell the AAFEssenceAccess what the format is.
 		check(pEssenceAccess->GetEmptyFileFormat (&pFormat));
@@ -262,7 +262,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		aafInt32	sampleSize = bitsPerSample;
 		check(pFormat->AddFormatSpecifier (kAAFAudioSampleBits, sizeof(sampleSize), (aafUInt8 *)&sampleSize));
 		check(pEssenceAccess->PutFileFormat (pFormat));
-		
+		pFormat->Release();
+		pFormat = NULL;
 		// write out the data
 		if(testType == testRawCalls)
 		{
@@ -298,7 +299,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 
 		// close essence data file
 		fclose(pWavFile);
-#endif
 
 		// Finish writing the destination
 		check(pEssenceAccess->CompleteWrite());
@@ -311,7 +311,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 
 	// Release all unnecesary interfaces
 
-#if 1
 	if(pMasterMob)
 		pMasterMob->Release();
 	pMasterMob = NULL;
@@ -325,17 +324,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	if(pHeader)
 		pHeader->Release();
 	pHeader = NULL;
-#endif
-	if (pEssenceAccess)
-	{	
-		pEssenceAccess->Release();
-		pEssenceAccess= NULL;
-	}
 	//!!!DebugOnly
 	pFile->Save();
 	pFile->Close();
 	pFile->Release();
 	pFile = NULL;
+	if (pEssenceAccess)
+	{	
+		pEssenceAccess->Release();
+		pEssenceAccess= NULL;
+	}
 
 cleanup:
 	// Cleanup and return
@@ -355,7 +353,14 @@ cleanup:
 		pHeader->Release();
 
 	if (pFile)
-		pFile->Release();
+		pFile->Release(); 
+
+	if(pFormat)
+		pFormat->Release();
+	if(format)
+		format->Release();
+	if(pLocator)
+		pLocator->Release();
 
 	return moduleErrorTmp;
 }
@@ -365,10 +370,11 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
 	IAAFDictionary*					pDictionary = NULL;
+	IAAFEssenceAccess*			pEssenceAccess = NULL;
+	IAAFEssenceFormat			*fmtTemplate =  NULL;
 	IEnumAAFMobs*				pMobIter = NULL;
 	IAAFMob*					pMob = NULL;
 	IAAFMasterMob*				pMasterMob = NULL;
-	IAAFEssenceAccess*			pEssenceAccess = NULL;
 	IAAFEssenceFormat*			pFormat = NULL;
 
 	aafNumSlots_t				numMobs, numSlots;
@@ -452,13 +458,17 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 
 					aafUInt32			sampleBits;
 					aafInt32			bytesRead;
-					IAAFEssenceFormat	*fmtTemplate;
 					
 					check(pEssenceAccess->GetEmptyFileFormat (&fmtTemplate));
 					check(fmtTemplate->AddFormatSpecifier (kAAFAudioSampleBits, 0, NULL));
 					check(pEssenceAccess->GetFileFormat (fmtTemplate, &pFormat));
+					fmtTemplate->Release();
+					fmtTemplate = NULL;
+					
 					check(pFormat->GetFormatSpecifier (kAAFAudioSampleBits, sizeof(sampleBits),
                            (aafDataBuffer_t)&sampleBits, &bytesRead));
+					pFormat->Release();
+					pFormat = NULL;
 					if(sampleBits != bitsPerSample)
 					{
 						printf("***Wrong sample size read ( was %ld , should be %ld)\n",
@@ -523,11 +533,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 				printf("***Wrong number of slots in the Master Mob (was %ld should be %ld)\n",
 					numSlots, 1L);
 			}
-			if (pEssenceAccess)
-			{
-				pEssenceAccess->Release();
-				pEssenceAccess = NULL;
-			}
 			if (pMasterMob)
 			{
 				pMasterMob->Release();
@@ -536,10 +541,16 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 
 			pMob->Release();
 			pMob = NULL;
+			if (pEssenceAccess)
+			{
+				pEssenceAccess->Release();
+				pEssenceAccess = NULL;
+			}
 		}
 
 		pMobIter->Release();
 		pMobIter = NULL;
+
 	}
 	else
 	{
@@ -552,7 +563,11 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 cleanup:
 	// Cleanup and return
 
-
+	if(fmtTemplate)
+	{
+		fmtTemplate->Release();
+		fmtTemplate = NULL;
+	}
 	if (pEssenceAccess)
 	{
 		pEssenceAccess->Release();
@@ -563,6 +578,10 @@ cleanup:
 
 	if (pHeader)
 		pHeader->Release();
+	if (pMobIter)
+		pMobIter->Release();
+	if (pFormat)
+		pFormat->Release();
 
 	if (pFile) 
 	{
@@ -744,7 +763,6 @@ main()
 
 	printf("***Creating file %s using writeRawData (Internal Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, NULL, testRawCalls));
-#if 1	
 	printf("***Re-opening file %s using readRawData\n", pFileName);
 	ReadAAFFile(pwFileName, testRawCalls);
 
@@ -775,6 +793,7 @@ main()
 	dataFile.dataFormat = ContainerAAF;
 	printf("***Creating file %s using WriteSamples (External AAF Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, &dataFile, testStandardCalls));
+#if 1
 	printf("***Re-opening file %s using ReadSamples\n", pFileName);
 	ReadAAFFile(pwFileName, testStandardCalls);
 #endif
