@@ -12,21 +12,15 @@ INCLUDES = -I../../../include/ref-api \
 	   -I../../../include/platform \
 	   -I../test -I.. -I. -I../../impl
 
-OBJDIR = $(PACKDIR)/obj/com-dll
+OBJDIR = $(PACKDIR)/obj
 
 CFLAGS += -DDONT_DELETE_LAST_REFERENCE
-
-LIBTARGET = $(LIBDIR)/libcom-dll$(LIB_SUFFIX)
 
 .PHONY : all
 all : com-dll
 
 .PHONY : com-dll
-com-dll : $(LIBTARGET)
-
-$(LIBTARGET) : $(OBJDIR) $(LIBDIR) $(CXXOBJS)
-	$(LD_DYN_LIB) $(CC2LDOPT) $(LD_DYN_LIB_PATH_FLAG) $(CC2LDOPT) \
-	$(LIBDIR) -L$(LIBDIR) $(CXXOBJS) -o $@
+com-dll : $(OBJDIR) $(LIBDIR) $(CXXOBJS)
 
 .PHONY : clean
 clean:
