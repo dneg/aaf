@@ -917,6 +917,7 @@ AAFRESULT ImplAAFSequence::GetOptionalComponentLength( ImplAAFComponent* pCompon
 
 	// Convert this to success
 	if( AAFRESULT_PROP_NOT_PRESENT == status ) {
+ 	    refLength = 0;
 		status = AAFRESULT_SUCCESS;
 	}
 
@@ -1003,15 +1004,24 @@ AAFRESULT ImplAAFSequence::CheckLengthSemantics( ImplAAFEvent* pEvent )
 
 AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFEvent* pEvent )
 {
-	// If the sequence has no length property, then one is always
-	// created.
-	// If pEvent has no length property, then a default length of zero
-	// is used.
+	// If this sequence does not have a length property, and pEvent
+	// does not have a length property, then do nothing (i.e. do not set
+	// this sequence's length).
+	//
+	// If this sequence does have a length property, and pEvent does not
+	// have a length property then assume the length of pEvent is zero and
+	// update length normally.
+	//
+	// If both this sequence and pEvent have a length properties then update
+	// this sequence normally.
+
+	aafLength_t dummy;
+	if ( AAFRESULT_PROP_NOT_PRESENT == GetLength(&dummy) &&
+ 		 AAFRESULT_PROP_NOT_PRESENT == pEvent->GetLength(&dummy) ) {
+		return AAFRESULT_SUCCESS;
+	}
 
 	AAFRESULT status;
-
-    // One of them has a length property, so update the length of
-	// the sequence.
 
 	aafPosition_t posNext;
 	status = pEvent->GetPosition( &posNext );
@@ -1024,13 +1034,10 @@ AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFEvent* pEvent )
 	if ( AAFRESULT_SUCCESS != status ) {
 		return status;
 	}
-	
-	// This routine is also responsible for appending the first event.
-	// Hence, a special case.
-	if ( _components.count() == 0 ) {
 
-		// The component has a length, but is first, so simply
-		// set the value.
+	// This routine is also responsible for updating the length
+	// when the first event is appended.  Hence, this special case.
+	if ( _components.count() == 0 ) {
 
 		status = SetLength( lengthNext );
 		if ( AAFRESULT_SUCCESS != status ) {
