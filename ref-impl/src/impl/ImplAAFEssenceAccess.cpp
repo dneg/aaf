@@ -378,9 +378,10 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 
 		iUnk = static_cast<IUnknown *> (_compFileMob->GetContainer());	// Codec knowns about compFilemob only
 		CHECK(iUnk->QueryInterface(IID_IAAFSourceMob, (void **)&iFileMob));
-		iUnk->Release();
-		iUnk= NULL;
 		CHECK(_codec->Create(iFileMob, _flavour, mediaKind, sampleRate, _stream, compEnable));
+
+    iFileMob->Release();
+    iFileMob = NULL;
 
 		if(dataDict != NULL)
 		{
@@ -410,6 +411,11 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 	}
 	XEXCEPT
 	{
+    if (NULL != iFileMob)
+    {
+      iFileMob->Release();
+      iFileMob = NULL;
+    }
 		if(dataDict != NULL)
 		  dataDict->ReleaseReference();
 		dataDict = 0;
@@ -671,10 +677,10 @@ AAFRESULT STDMETHODCALLTYPE
      
 			iUnk = static_cast<IUnknown *> (_compFileMob->GetContainer());	// Codec knowns about compFilemob only
 			CHECK(iUnk->QueryInterface(IID_IAAFSourceMob, (void **)&iFileMob));
-			iUnk->Release();
-			iUnk= NULL;
       CHECK(_multicodec->MultiCreate(iFileMob, _flavour, _stream, compEnable, arrayElemCount, mediaArray));
-			
+
+      iFileMob->Release();
+      iFileMob = NULL;
 			//		if(dataObj != NULL)
 			//		{
 			//			dataObj->Release();
@@ -713,6 +719,11 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
+    if (NULL != iFileMob)
+    {
+      iFileMob->Release();
+      iFileMob = NULL;
+    }
 		if(fileMob != NULL)
 		  fileMob->ReleaseReference();
 		fileMob = 0;
@@ -1002,8 +1013,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 		iUnk = static_cast<IUnknown *> (fileMob->GetContainer());	// Codec knowns about compFilemob only
 		CHECK(iUnk->QueryInterface(IID_IAAFSourceMob, (void **)&iFileMob));
-		iUnk->Release();
-		iUnk= NULL;
 		CHECK(_codec->CountChannels(iFileMob, mediaKind, _stream, &numCh));
 		if (numCh == 0)
 		  RAISE(AAFRESULT_INVALID_DATADEF);
@@ -1021,16 +1030,14 @@ AAFRESULT STDMETHODCALLTYPE
     
     CHECK(InstallEssenceAccessIntoCodec());
    
-    iUnk = static_cast<IUnknown *> (fileMob->GetContainer());	// Codec knowns about compFilemob only
-		CHECK(iUnk->QueryInterface(IID_IAAFSourceMob, (void **)&iFileMob));
-		iUnk->Release();
-		iUnk= NULL;
     CHECK(_codec->Open(iFileMob, openMode, _stream, compEnable));
 		
 		_masterMob = masterMob;
 		_masterMob->AcquireReference();
 		iFileMob->Release();
 		iFileMob = NULL;
+    fileMob->ReleaseReference();
+    fileMob = 0;
 		compHead->ReleaseReference();
 		compHead = NULL;
 		if(plugins != NULL)
@@ -1039,6 +1046,11 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
+    if (NULL != iFileMob)
+    {
+      iFileMob->Release();
+      iFileMob = NULL;
+    }
 		if(_dataFile != NULL)
 			_dataFile->ReleaseReference();
 		_dataFile = NULL;
@@ -1047,10 +1059,6 @@ AAFRESULT STDMETHODCALLTYPE
 		plugins = 0;
 		if(edStream != NULL)
 			edStream->Release();
-		if(iUnk != NULL)
-			iUnk->Release();
-//		if(edUnknown != NULL)
-//			edUnknown->Release();
 		if(container != NULL)
 			container->Release();
 		if(plug != NULL)
@@ -1347,8 +1355,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 		iUnk = static_cast<IUnknown *> (fileMob->GetContainer());	// Codec knowns about compFilemob only
 		CHECK(iUnk->QueryInterface(IID_IAAFSourceMob, (void **)&iFileMob));
-		iUnk->Release();
-		iUnk= NULL;
 		CHECK(_codec->CountChannels(iFileMob, mediaKind, _stream, &numCh));
 		if (numCh == 0)
 		  RAISE(AAFRESULT_INVALID_DATADEF);
@@ -1366,14 +1372,12 @@ AAFRESULT STDMETHODCALLTYPE
 
     CHECK(InstallEssenceAccessIntoCodec());
 
-    iUnk = static_cast<IUnknown *> (fileMob->GetContainer());	// Codec knowns about compFilemob only
-		CHECK(iUnk->QueryInterface(IID_IAAFSourceMob, (void **)&iFileMob));
-		iUnk->Release();
-		iUnk= NULL;
 		CHECK(_multicodec->MultiOpen(iFileMob, openMode, _stream, compEnable));
 		
 		_masterMob = masterMob;
 		_masterMob->AcquireReference();
+    iFileMob->Release();
+    iFileMob = NULL;
 		fileMob->ReleaseReference();
 		fileMob = NULL;
 		compHead->ReleaseReference();
@@ -1384,6 +1388,8 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
+		if(NULL != iFileMob)
+			iFileMob->Release();
 		if(_dataFile != NULL)
 			_dataFile->ReleaseReference();
 		_dataFile = NULL;
@@ -1392,8 +1398,6 @@ AAFRESULT STDMETHODCALLTYPE
 		plugins = 0;
 		if(edStream != NULL)
 			edStream->Release();
-		if(iUnk != NULL)
-			iUnk->Release();
 //		if(edUnknown != NULL)
 //			edUnknown->Release();
 		if(container != NULL)
@@ -1669,6 +1673,8 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
+		if(iFileMob)
+		  iFileMob->Release();
 		if(fileMob)
 		  fileMob->ReleaseReference();
 		if(dict)
@@ -2274,40 +2280,37 @@ ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, const aafUID_t & code
 	aafBool						found = kAAFFalse;
 	aafUID_t					currentPlugDesc, testAUID;
 
+  if (NULL == head)
+    return AAFRESULT_NULL_PARAM;
+
+  if (ppPluginDesc)
+    *ppPluginDesc = NULL;
+
 	XPROTECT()
 	{
-		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
+    plugins = ImplAAFContext::GetInstance()->GetPluginManager();
 		CHECK(head->GetDictionary (&dict));	//!!!Only makes essence in the current file?
+    pUnknown = static_cast<IUnknown *> (dict->GetContainer());
+		CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
+    CHECK(_codec->QueryInterface(IID_IAAFPlugin, (void **)&plug));
+
 		if(dict->LookupCodecDef (codecID, &codecImpl) != AAFRESULT_SUCCESS)
 		{
-			pUnknown = static_cast<IUnknown *> (dict->GetContainer());
-			CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
-			CHECK(_codec->QueryInterface(IID_IAAFPlugin, (void **)&plug));
 			CHECK(plug->GetIndexedDefinitionObject (/*!!!*/0,dictInterface, &def));
 			CHECK(def->QueryInterface(IID_IAAFCodecDef, (void **)&codecDef));
 			CHECK(dictInterface->RegisterCodecDef (codecDef));
 			CHECK(dict->LookupCodecDef (codecID, &codecImpl));
 			
-			plug->Release();
-			plug = NULL;
-			dictInterface->Release();
-			dictInterface = NULL;
+		  codecDef->Release();
+		  codecDef = NULL;
 			def->Release();
 			def = NULL;
 		}
 		
-		pUnknown = static_cast<IUnknown *> (dict->GetContainer());
-		CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
-		CHECK(_codec->QueryInterface(IID_IAAFPlugin, (void **)&plug));
 		CHECK(plug->GetPluginDescriptorID(&currentPlugDesc));
-
-//		pUnknown = static_cast<IUnknown *> (codecImpl->GetContainer());
-//		CHECK(pUnknown->QueryInterface(IID_IAAFDefObject, (void **)&defInterface));
-		
-
 		CHECK(dictInterface->GetPluginDefs (&descEnum));
 		
-		while(descEnum->NextOne(&pluginDesc) == AAFRESULT_SUCCESS)
+		while((kAAFTrue != found) && (descEnum->NextOne(&pluginDesc) == AAFRESULT_SUCCESS))
 		{
 			CHECK(pluginDesc->QueryInterface(IID_IAAFDefObject, (void **)&defInterface));
 			CHECK(defInterface->GetAUID(&testAUID));
@@ -2342,8 +2345,6 @@ ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, const aafUID_t & code
 //			def->Release();
 //		}
 		
-		codecDef->Release();
-		codecDef = NULL;
 		dictInterface->Release();
 		dictInterface = NULL;
 		plug->Release();
@@ -2375,8 +2376,6 @@ ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, const aafUID_t & code
 			codecDef->Release();
 		if(dictInterface != NULL)
 			dictInterface->Release();
-//		if(pUnknown != NULL)
-//			pUnknown->Release();
 		if(def != NULL)
 			def->Release();
 		if(pluginDesc != NULL)
@@ -2640,6 +2639,8 @@ ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *       newHead,
 			CHECK(mdes->SetContainerFormat (container));
 			CHECK(mdes->SetCodecDef(codecDef));
 		}
+    codecDef->ReleaseReference();
+    codecDef = 0;
 		if(dict != NULL)
 		  dict->ReleaseReference();
 		dict = 0;
@@ -2658,6 +2659,9 @@ ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *       newHead,
 	}
 	XEXCEPT
 	{
+		if(codecDef != NULL)
+		  codecDef->ReleaseReference();
+		codecDef = 0;
 		if(dict != NULL)
 		  dict->ReleaseReference();
 		dict = 0;
