@@ -26,6 +26,8 @@
 ************************************************************************/
 
 // @doc OMEXTERNAL
+#include "OMPropertyBase.h"
+
 #include "OMProperty.h"
 
 #include "OMStorable.h"
@@ -538,7 +540,7 @@ void OMSimpleProperty::setBits(const OMByte* bits, size_t size)
 OMContainerProperty::OMContainerProperty(const OMPropertyId propertyId,
                                          const int storedForm,
                                          const char* name)
-: OMProperty(propertyId, storedForm, name), _propertyName(0), _key(0)
+: OMProperty(propertyId, storedForm, name), _propertyName(0), _localKey(0)
 {
   TRACE("OMContainerProperty::OMContainerProperty");
   PRECONDITION("Valid name", validString(name));
@@ -550,14 +552,16 @@ OMContainerProperty::~OMContainerProperty(void)
   TRACE("OMContainerProperty::~OMContainerProperty");
 }
 
-  // @mfunc Compute the name of an element in this <c OMContainter>
-  //        given the name of the <p containerName> and the <p elementKey>.
-  //   @parm The name of this <c OMContainerProperty>.
-  //   @parm The element key.
-char* OMContainerProperty::elementName(const char* containerName,
-                                       size_t elementKey)
+  // @mfunc Compute the name of an element in this <c OMContainer>
+  //        given the element's <p localKey>.
+  //   @parm The element's local key.
+char* OMContainerProperty::elementName(OMUInt32 localKey)
 {
   TRACE("OMContainerProperty::elementName");
+
+  const char* containerName = name();
+
+  ASSERT("Valid container property name", validString(containerName));
 
   char* elementName = new char[strlen(containerName) + 1 + 1];
   ASSERT("Valid heap pointer", elementName != 0);
@@ -565,7 +569,7 @@ char* OMContainerProperty::elementName(const char* containerName,
   strcat(elementName, "{");
 
   char number[256];
-  sprintf(number, "%x", elementKey);
+  sprintf(number, "%x", localKey);
 
   char* storageName = new char[strlen(elementName) + strlen(number) + 1 + 1];
   ASSERT("Valid heap pointer", storageName != 0);
@@ -578,13 +582,27 @@ char* OMContainerProperty::elementName(const char* containerName,
   return storageName;
 }
 
-  // @mfunc Obtain the next available element key.
-  //   @rdesc The next available key.
-OMUInt32 OMContainerProperty::nextKey(void)
+  // @mfunc Obtain the next available local key.
+  //   @rdesc The next available local key.
+OMUInt32 OMContainerProperty::nextLocalKey(void)
 {
-  TRACE("OMContainerProperty::nextKey");
+  return _localKey++;
+}
 
-  return _key++;
+  // @mfunc The current local key.
+  //   @rdesc The current local key.
+  //   @this const
+OMUInt32 OMContainerProperty::localKey(void) const
+{
+  return _localKey;
+}
+
+  // @mfunc Set the current local key. Used on restore to restart
+  //        local key assignment.
+  //   @parm The new local key.
+void OMContainerProperty::setLocalKey(OMUInt32 newLocalKey)
+{
+  _localKey = newLocalKey;
 }
 
 // class OMStringProperty
