@@ -18,11 +18,17 @@ $(OBJDIR)/%$(OBJ): %.$(CPP_EXTENSION)
 # files.
 #------------------------------------------------------------------------------
 
-$(OBJDIR)/%.d : %.$(CPP_EXTENSION)
-	$(MKDIRCMD) $(OBJDIR);$(DFILECMD)
+$(OBJDIR)/%.d : %.c 
+	$(SHELL) -ec 'if [ ! -d $(OBJDIR) ]; then $(MKDIR) $(OBJDIR); fi; \
+	$(CC) -M $(CFLAGS) $(INCLUDES) $< \
+	| sed '\''s,\($(*F)\)\.o[ :]*,$(@D)/\1.o $@ : ,g'\'' > $@; \
+	[ -s $@ ] || rm -f $@'
 
-$(OBJDIR)/%.d : %.c
-	$(MKDIRCMD) $(OBJDIR);$(DFILECMD)
+$(OBJDIR)/%.d : %.$(CPP_EXTENSION)
+	$(SHELL) -ec 'if [ ! -d $(OBJDIR) ]; then $(MKDIR) $(OBJDIR); fi; \
+	$(CC) -M $(CFLAGS) $(INCLUDES) $< \
+	| sed '\''s,\($(*F)\)\.o[ :]*,$(@D)/\1.o $@ : ,g'\'' > $@; \
+	[ -s $@ ] || rm -f $@'
 
 
 #------------------------------------------------------------------------------
@@ -42,6 +48,10 @@ $(BINDIR):
 #------------------------------------------------------------------------------
 # Now includes the header file dependencies makefiles.
 #------------------------------------------------------------------------------
+
+ifneq ($(GENDEPS), 0)
+-include $(DEPS)
+endif
 
 # Disable header dependencies for now, because they make the build process 
 # approximately 10^64 times slower.

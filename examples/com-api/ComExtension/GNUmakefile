@@ -47,8 +47,14 @@ $(BINDIR)/ComExtensionWrite$(EXE) : $(BINDIR) $(OBJDIR) $(CXXOBJS2)
 clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(CXXOBJS2)
+	@$(RM) $(DEPS)
 	@$(RM) $(BINDIR)/ComExtensionRead$(EXE)
 	@$(RM) $(BINDIR)/ComExtensionWrite$(EXE)
+	@$(RMDIR) $(OBJDIR)/ii_files
+
+
+.PHONY : realclean
+realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk

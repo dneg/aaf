@@ -4,70 +4,86 @@
 #                                               #
 #################################################
 
-echo "#" This file automatically generated make.
-echo "#" Special case AAFTypes since no object is to be built only headers...
-echo "#" special case the utility classes since they will not be exposed by com 
-echo DODO_TARGETS = '\' 
-echo '	'AAFTypes.all \\c 
-for base in AAFRoot ${PRIVATE_AAFOBJECTS} ${AAFOBJECTS} ${AAFCOMINTERFACESONLY} ;  do \
-	echo '\' ; \
-	echo '	'$base.all \\c ; \
+#
+# Function: output
+#
+# output() writes its arguments separated by blanks on the standard output.
+# The arguments will not be terminated by a new-line.
+#
+function output
+{
+	printf "$*"
+}
+
+#
+# Function: outputln
+#
+# outputln() writes its arguments separated by blanks and
+# terminated by a new-line on the standard output.
+#
+function outputln
+{
+	printf "$*\n"
+}
+
+outputln "#" This file automatically generated make.
+outputln "#" Special case AAFTypes since no object is to be built only headers...
+outputln "#" special case the utility classes since they will not be exposed by com 
+outputln DODO_TARGETS = '\\'
+for base in AAFTypes AAFRoot ${PRIVATE_AAFOBJECTS} ${AAFOBJECTS} ${AAFCOMINTERFACESONLY} ; do
+	outputln '	'$base.all' \\'
 done
-echo '\'
-echo '	'AAFModule.all \\c ;
-echo ''
-echo ''
-echo PRIVATE_FIDL_TARGETS = \\c 
-for base in ${PRIVATE_AAFOBJECTS} ;  do \
-	echo '\' ; \
-	echo '	'$base.fidl \\c ; \
+outputln '	'AAFModule.all
+outputln ''
+output   'PRIVATE_FIDL_TARGETS = '
+for base in ${PRIVATE_AAFOBJECTS} ;  do
+	outputln '\\'
+	output   '	'$base.fidl' '
 done
-echo ''
-echo ''
-echo FIDL_TARGETS = \\c 
-for base in ${AAFOBJECTS} ${AAFCOMINTERFACESONLY} ;  do \
-	echo '\' ; \
-	echo '	'$base.fidl \\c ; \
+outputln ''
+outputln ''
+output   'FIDL_TARGETS = '
+for base in ${AAFOBJECTS} ${AAFCOMINTERFACESONLY} ;  do
+	outputln '\\'
+	output   '	'$base.fidl' '
 done
-echo '\'
-echo '	'AAFModule.fidl \\c ;
-echo ''
-echo ''
-echo PRIVATE_FREFH_TARGETS = \\c 
-for base in AAFRoot ${PRIVATE_AAFOBJECTS} ;  do \
-	echo '\' ; \
-	echo '	'$base.frefh \\c ; \
+outputln '\\'
+outputln '	AAFModule.fidl '
+outputln ''
+output   'PRIVATE_FREFH_TARGETS = '
+for base in AAFRoot ${PRIVATE_AAFOBJECTS} ;  do
+	outputln '\\'
+	output   '	'$base.frefh' '
 done
-echo ''
-echo ''
-echo FREFH_TARGETS = \\c 
-for base in ${AAFOBJECTS} ${AAFCOMINTERFACESONLY} ;  do \
-	echo '\' ; \
-	echo '	'$base.frefh \\c ; \
+outputln ''
+outputln ''
+output   'FREFH_TARGETS = '
+for base in ${AAFOBJECTS} ${AAFCOMINTERFACESONLY} ;  do
+	outputln '\\'
+	output   '	'$base.frefh' '
 done
-echo '\'
-echo '	'AAFModule.frefh \\c ;
-echo ''
-echo ''
-echo PLUGIN_TARGETS = '\' 
-echo '	'AAFTypes.all' \' 
-echo '	'AAFPluginTypes.all \\c 
-for base in ${PLUGIN_OBJECTS} ;  do \
-	echo '\' ; \
-	echo '	'$base.all \\c ; \
+outputln '\\'
+outputln '	AAFModule.frefh '
+outputln ''
+outputln 'PLUGIN_TARGETS = \\'
+outputln '	AAFTypes.all \\' 
+output   '	AAFPluginTypes.all '
+for base in ${PLUGIN_OBJECTS} ;  do
+	outputln '\\'
+	output   '	'$base.all' '
 done
-echo ''
-echo ''
-echo PLUGIN_FIDL_TARGETS = \\c 
-for base in ${PLUGIN_OBJECTS} ;  do \
-	echo '\' ; \
-	echo '	'$base.fidl \\c ; \
+outputln ''
+outputln ''
+output   'PLUGIN_FIDL_TARGETS = '
+for base in ${PLUGIN_OBJECTS} ;  do
+	outputln '\\'
+	output   '	'$base.fidl' '
 done
-echo ''
-echo ''
-echo PLUGIN_FREFH_TARGETS = \\c 
-for base in ${PLUGIN_OBJECTS} ;  do \
-	echo '\' ; \
-	echo '	'$base.frefh \\c ; \
+outputln ''
+outputln ''
+output   'PLUGIN_FREFH_TARGETS = '
+for base in ${PLUGIN_OBJECTS} ;  do
+	outputln '\\'
+	output   '	'$base.frefh' '
 done
-echo ''
+outputln ''

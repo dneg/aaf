@@ -19,7 +19,13 @@ EssenceAccess :
 
 .PHONY : clean
 clean :
-	cd ComModTestAAF && $(MAKE) clean
-	cd CreateSequence && $(MAKE) clean
-	cd EssenceAccess && $(MAKE) clean
+	cd ComModTestAAF && $(MAKE) GENDEPS=0 $@
+	cd CreateSequence && $(MAKE) GENDEPS=0 $@
+	cd EssenceAccess && $(MAKE) GENDEPS=0 $@
+
+.PHONY : realclean
+realclean :
+	cd ComModTestAAF && $(MAKE) GENDEPS=0 $@
+	cd CreateSequence && $(MAKE) GENDEPS=0 $@
+	cd EssenceAccess && $(MAKE) GENDEPS=0 $@
 

@@ -56,9 +56,13 @@ $(BINTARGET) : $(BINDIR) $(OBJDIR) $(CXXOBJS2) $(LIBTARGET)
 clean :
 	@$(RM) $(LIBCXXOBJS)
 	@$(RM) $(CXXOBJS2)
-	@$(RMDIR) $(OBJDIR)/*
 	@$(RM) $(LIBTARGET)
 	@$(RM) $(BINTARGET)
+	@$(RMDIR) $(OBJDIR)/ii_files
+
+
+.PHONY : realclean
+realclean : clean
 
 
 CFLAGS += -DNO_CONTAINER_EXPORTS

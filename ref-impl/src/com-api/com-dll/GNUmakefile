@@ -13,9 +13,6 @@ INCLUDES = -I../../../include/ref-api \
 	   -I../test -I.. -I. -I../../impl
 
 
-OBJDIR = $(PACKDIR)/obj/com-dll
-
-
 CFLAGS += -DDONT_DELETE_LAST_REFERENCE
 
 
@@ -29,7 +26,13 @@ com-dll : $(OBJDIR) $(LIBDIR) $(CXXOBJS)
 
 .PHONY : clean
 clean:
-	$(RM) $(OBJDIR)/*$(OBJ)
+	@$(RM) $(CXXOBJS)
+	@$(RM) $(DEPS)
+	@$(RMDIR) $(OBJDIR)/ii_files
+
+
+.PHONY : realclean
+realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk

@@ -15,6 +15,10 @@ case "${MACHINE}:${OS}" in
     sun*:SunOS)
 	echo SunSunOS
 	exit 0;;
+
+    *86:Windows_NT)
+	echo Win
+	exit 0;;
 esac
 
 echo Unknown

@@ -1,7 +1,6 @@
 .PHONY : all
 all :
 	cd src && $(MAKE)
-	cd aafutils && $(MAKE)
 	cd aafiid && $(MAKE)
 	cd aaflib && $(MAKE)
 	cd libjpeg && $(MAKE)
@@ -13,14 +12,17 @@ check :
 
 .PHONY : clean
 clean :
-	cd plugins && $(MAKE) clean
-	cd libjpeg && $(MAKE) clean
-	cd aaflib && $(MAKE) clean
-	cd aafiid && $(MAKE) clean
-	cd aafutils && $(MAKE) clean
-	cd src && $(MAKE) clean
+	cd plugins && $(MAKE) GENDEPS=0 $@
+	cd libjpeg && $(MAKE) GENDEPS=0 $@
+	cd aaflib && $(MAKE) GENDEPS=0 $@
+	cd aafiid && $(MAKE) GENDEPS=0 $@
+	cd src && $(MAKE) GENDEPS=0 $@
 
-
-
-
+.PHONY : realclean
+realclean :
+	cd plugins && $(MAKE) GENDEPS=0 $@
+	cd libjpeg && $(MAKE) GENDEPS=0 $@
+	cd aaflib && $(MAKE) GENDEPS=0 $@
+	cd aafiid && $(MAKE) GENDEPS=0 $@
+	cd src && $(MAKE) GENDEPS=0 $@
 

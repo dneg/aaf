@@ -1,4 +1,4 @@
-PACKAGE = ref-impl
+PACKAGE = OM
 export PACKAGE
 
 AAFBASE ?= ../../..
@@ -27,8 +27,14 @@ $(LIBDIR)/libom$(LIB) : $(OBJDIR) $(LIBDIR) $(CXXOBJS)
 
 .PHONY : clean
 clean :
-	$(RM) $(OBJDIR)/*$(OBJ)
-	$(RM) $(LIBDIR)/libom$(LIB)
+	@$(RM) $(CXXOBJS)
+	@$(RM) $(DEPS)
+	@$(RM) $(LIBDIR)/libom$(LIB)
+	@$(RMDIR) $(OBJDIR)/ii_files
+
+
+.PHONY : realclean
+realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk

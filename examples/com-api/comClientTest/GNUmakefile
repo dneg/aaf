@@ -36,8 +36,14 @@ $(BINDIR)/ComClientAAF$(EXE) : $(BINDIR) $(OBJDIR) $(CXXOBJS2)
 clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(CXXOBJS2)
+	@$(RM) $(DEPS)
 	@$(RM) $(BINDIR)/ComAAFInfo$(EXE)
 	@$(RM) $(BINDIR)/ComClientAAF$(EXE)
+	@$(RMDIR) $(OBJDIR)/ii_files
+
+
+.PHONY : realclean
+realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk

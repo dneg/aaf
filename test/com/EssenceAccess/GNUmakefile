@@ -24,8 +24,14 @@ $(BINDIR)/EssenceAccess$(EXE) : $(BINDIR) $(OBJDIR) $(CXXOBJS)
 
 .PHONY : clean
 clean :
-	$(RM) $(CXXOBJS)
-	$(RM) $(BINDIR)/EssenceAccess$(EXE)
+	@$(RM) $(CXXOBJS)
+	@$(RM) $(DEPS)
+	@$(RM) $(BINDIR)/EssenceAccess$(EXE)
+	@$(RMDIR) $(OBJDIR)/ii_files
+
+
+.PHONY : realclean
+realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk

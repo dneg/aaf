@@ -22,7 +22,15 @@ com-api : OM impl
 
 .PHONY : clean
 clean : 
-	cd OM && $(MAKE) clean
-	cd impl && $(MAKE) clean
-	cd com-api && $(MAKE) clean
+	cd OM && $(MAKE) GENDEPS=0 $@
+	cd impl && $(MAKE) GENDEPS=0 $@
+	cd com-api && $(MAKE) GENDEPS=0 $@
+
+
+.PHONY : realclean
+realclean :
+	cd OM && $(MAKE) GENDEPS=0 $@
+	cd impl && $(MAKE) GENDEPS=0 $@
+	cd com-api && $(MAKE) GENDEPS=0 $@
+
 

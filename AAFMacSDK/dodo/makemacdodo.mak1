@@ -4,25 +4,9 @@
 # Copyright (c) 1998-2001 Avid Technology, Inc. #
 #                                               #
 #################################################
-dod = {aaf}dodo:
-macros = {aaf}dodo:macros:
-exp = {aaf}dodo:
-frefh = {aaf}dodo:
-refh = {aaf}ref-impl:include:ref-api:
-comh = {aaf}ref-impl:src:com-api:
-comc = {aaf}ref-impl:src:com-api:
-comt = {aaf}test:com:ComModTestAAF:ModuleTests:
-impl = {aaf}ref-impl:src:impl:
-AAFMacSDK = {aaf}AAFMacSDK:
-DODO = {AAFMacSDK}dodo:tool:dodo
-convertmk = {AAFMacSDK}dodo:tool:ConvertMake
 
 
-all Ä start "{dod}macdodo.mak1"
-
-# Dependency to show start time
-start Ä $OutOfDate
-	echo Dodo make file generation stated at: `date`
+all Ä "{dod}macdodo.mak1"
 
 
 MAKEFILE     = makemacdodo.mk
@@ -30,33 +14,16 @@ MAKEFILE     = makemacdodo.mk
 
 
 macaafobjects.mk Ä "{dod}aafobjects.mk"
-	"{convertmk}" < "{dod}aafobjects.mk" > macaafobjects.t00
-	Rename -y macaafobjects.t00 macaafobjects.mk
+	make -f macaafobjects.make > macaafobjects.make.out
+	macaafobjects.make.out
 
 
 "{dod}macdodo.mak1" Ä macaafobjects.mk 
-	echo 'Creating macdodo.tmp ...'
-	Delete -i -ay macdodo.tmp
-	set dod "{aaf}dodo:"
+	rm -f macdodo.tmp
 	echo '#' This file automatically generated make. > macdodo.tmp
 	echo '#   File:       makemakedodo.mak' >> macdodo.tmp
 	echo '#   Target:     dodo generated source files' >> macdodo.tmp
 	echo '#   Sources:    all dod files' >> macdodo.tmp
-	echo '#   Created:    '`date` >> macdodo.tmp
-	echo "" >> macdodo.tmp
-	echo "" >> macdodo.tmp
-	echo '#' Define output direcories >> macdodo.tmp
-	echo 'dod = {aaf}dodo:' >> macdodo.tmp
-	echo 'macros = {aaf}dodo:macros:' >> macdodo.tmp
-	echo 'exp = {aaf}dodo:' >> macdodo.tmp
-	echo 'frefh = {aaf}dodo:' >> macdodo.tmp
-	echo 'refh = {aaf}ref-impl:include:ref-api:' >> macdodo.tmp
-	echo 'comh = {aaf}ref-impl:src:com-api:' >> macdodo.tmp
-	echo 'comc = {aaf}ref-impl:src:com-api:' >> macdodo.tmp
-	echo 'comt = {aaf}test:com:ComModTestAAF:ModuleTests:' >> macdodo.tmp
-	echo 'impl = {aaf}ref-impl:src:impl:' >> macdodo.tmp
-	echo 'AAFMacSDK = {aaf}AAFMacSDK:' >> macdodo.tmp
-	echo 'DODO = {AAFMacSDK}dodo:tool:dodo' >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo 'all Ä start dodofiles.txt' >> macdodo.tmp
@@ -64,7 +31,6 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo "" >> macdodo.tmp
 	echo '# Dependency to show start time' >> macdodo.tmp
 	echo 'start Ä $OutOfDate' >> macdodo.tmp
-	echo '	''echo Dodo source generation stated at: `date`'  >> macdodo.tmp
 	echo '	''set startingDirectory "`directory`"' >> macdodo.tmp
 	echo '	''directory "{dod}"' >> macdodo.tmp
 	echo "" >> macdodo.tmp
@@ -76,19 +42,19 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '#'  >> macdodo.tmp
-	Delete -i -ay generated_exp.tmp
-	Delete -i -ay targets_all.tmp
-	Delete -i -ay generated_targets.tmp
-	Delete -i -ay generated_refh.tmp
-	Delete -i -ay generated_frefh.tmp
-	Delete -i -ay generated_private_frefh.tmp
-	Delete -i -ay generated_comh.tmp
-	Delete -i -ay generated_comc.tmp
-	Delete -i -ay generated_comt.tmp
-	Delete -i -ay generated_impl.tmp
-	Delete -i -ay plugin_frefh_targets.tmp
+	rm -f generated_exp.tmp
+	rm -f targets_all.tmp
+	rm -f generated_files.tmp
+	rm -f generated_refh.tmp
+	rm -f generated_frefh.tmp
+	rm -f generated_private_frefh.tmp
+	rm -f generated_comh.tmp
+	rm -f generated_comc.tmp
+	rm -f generated_comt.tmp
+	rm -f generated_impl.tmp
+	rm -f plugin_frefh_targets.tmp
 	echo 'DODO_TARGETS = ¶' > targets_all.tmp
-	echo 'GENERATED_TARGETS = ¶' > generated_targets.tmp
+	echo 'GENERATED_FILES = ¶' > generated_files.tmp
 	echo 'GENERATED_EXP = ¶' > generated_exp.tmp
 	echo 'GENERATED_REFH = ¶' > generated_refh.tmp
 	echo 'GENERATED_FREFH = ¶' > generated_frefh.tmp
@@ -97,34 +63,46 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo 'GENERATED_COMC = ¶' > generated_comc.tmp
 	echo 'GENERATED_COMT = ¶' > generated_comt.tmp
 	echo 'GENERATED_IMPL = ¶' > generated_impl.tmp
+	echo 'GENERATED_TARGETS = ¶' > generated_targets.tmp
 	echo 'PLUGIN_FREFH_TARGETS = ¶' > plugin_frefh_targets.tmp
 	echo ""
 	echo 'Making build rules and dependencies for API headers and COM sources...'
 	echo '	''AAFTypes.all ¶' >> targets_all.tmp
 	echo 'AAFTypes.all...'
 	echo '# AAFTypes.all composite target' >> macdodo.tmp
-	echo 'AAFTypes.all Ä "{refh}AAFTypes.h"' >> macdodo.tmp
+	echo 'AAFTypes.all Ä "{dod}AAFTypes.refh"' >> macdodo.tmp
 	echo "" >> macdodo.tmp
+	echo '	"{dod}AAFTypes.refh" ¶' >> generated_files.tmp
+	echo '	"{dod}AAFTypes.refh" ¶' >> generated_refh.tmp
+	echo '"{dod}AAFTypes.refh" Ä "{dod}AAFTypes.dod" "{macros}refh.mac" "{macros}base.mac"' >> macdodo.tmp
+	echo '	''"{DODO}" -f "{macros}refh.mac" < "{dod}AAFTypes.dod" > "{dod}AAFTypes.t01"'  >> macdodo.tmp
+	echo '	''SetFile -t TEXT -c CWIE "{dod}AAFTypes.t01"'  >> macdodo.tmp
+	echo '	''Rename -y "{dod}AAFTypes.t01" "{dod}AAFTypes.refh"'  >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo '	"{refh}AAFTypes.h" ¶' >> generated_files.tmp
 	echo '	"{refh}AAFTypes.h" ¶' >> generated_targets.tmp
-	echo '	"{refh}AAFTypes.h" ¶' >> generated_refh.tmp
-	echo '"{refh}AAFTypes.h" Ä "{dod}AAFTypes.dod" "{macros}refh.mac" "{macros}base.mac"' >> macdodo.tmp
-	echo '	''echo "{refh}AAFTypes.h"' >> macdodo.tmp
-	echo '	''"{DODO}" -f "{macros}refh.mac" < "{dod}AAFTypes.dod" > "{refh}AAFTypes.t01"'  >> macdodo.tmp
-	echo '	''SetFile -t TEXT -c CWIE "{refh}AAFTypes.t01"'  >> macdodo.tmp
-	echo '	''Rename -y "{refh}AAFTypes.t01" "{refh}AAFTypes.h"'  >> macdodo.tmp
+	echo '"{refh}AAFTypes.h" Ä "{dod}AAFTypes.refh"' >> macdodo.tmp
+	echo '	''copy_if_diff -p "{dod}AAFTypes.refh" "{refh}AAFTypes.h"'  >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '	AAFEnumValidation.all ¶' >> targets_all.tmp
-	echo 'AAFEnumValidation.all Ä "{comc}CAAFEnumValidation.h" "{comc}CAAFEnumValidation.cpp" "{comc}CAAFEnumValidation.log"' >> macdodo.tmp
+	echo 'AAFEnumValidation.all Ä "{dod}CAAFEnumValidation.h" "{dod}CAAFEnumValidation.cpp" "{dod}CAAFEnumValidation.log"' >> macdodo.tmp
+	echo '	"{dod}CAAFEnumValidation.h" ¶' >> generated_files.tmp
+	echo '	"{dod}CAAFEnumValidation.cpp" ¶' >> generated_files.tmp
+	echo '	"{dod}CAAFEnumValidation.log" ¶' >> generated_files.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo '	"{comh}CAAFEnumValidation.h" ¶' >> generated_files.tmp
+	echo '	"{comc}CAAFEnumValidation.cpp" ¶' >> generated_files.tmp
 	echo '	"{comh}CAAFEnumValidation.h" ¶' >> generated_targets.tmp
 	echo '	"{comc}CAAFEnumValidation.cpp" ¶' >> generated_targets.tmp
-	echo '	"{comh}CAAFEnumValidation.log" ¶' >> generated_targets.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '	''AAFRoot.all ¶' >> targets_all.tmp
 	echo 'AAFRoot.all...'
 	echo '# AAFRoot.all composite target' >> macdodo.tmp
-	echo '	"{dod}AAFRoot.exp" ¶' >> generated_targets.tmp
+	echo '	"{dod}AAFRoot.exp" ¶' >> generated_files.tmp
 	echo '	"{dod}AAFRoot.exp" ¶' >> generated_exp.tmp
 	#echo 'AAFRoot.all Ä "{dod}AAFRoot.exp"' >> macdodo.tmp
 	echo "" >> macdodo.tmp
@@ -134,7 +112,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo '	''Rename -y "{dod}AAFRoot.t02" "{dod}AAFRoot.exp"'  >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
-	echo '	"{dod}AAFRoot.frefh" ¶' >> generated_targets.tmp
+	echo '	"{dod}AAFRoot.frefh" ¶' >> generated_files.tmp
 	echo '	"{dod}AAFRoot.frefh" ¶' >> generated_private_frefh.tmp
 	echo 'AAFRoot.all Ä "{dod}AAFRoot.frefh"' >> macdodo.tmp
 	echo "" >> macdodo.tmp
@@ -144,54 +122,139 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo '	''Rename -y "{dod}AAFRoot.t03" "{dod}AAFRoot.frefh"'  >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
+	echo '	"{dod}AAFRoot.comh" ¶' >> generated_files.tmp
+	echo '	"{dod}AAFRoot.comh" ¶' >> generated_comh.tmp
+	echo 'AAFRoot.all Ä "{dod}AAFRoot.comh"' >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo '"{dod}AAFRoot.comh" Ä "{dod}AAFRoot.dod" "{macros}comh.mac" "{macros}base.mac"' >> macdodo.tmp
+	echo '	''"{DODO}" -f "{macros}comh.mac" < "{dod}AAFRoot.dod" > "{dod}AAFRoot.t04"'  >> macdodo.tmp
+	echo '	''SetFile -t TEXT -c CWIE "{dod}AAFRoot.t04"'  >> macdodo.tmp
+	echo '	''Rename -y "{dod}AAFRoot.t04" "{dod}AAFRoot.comh"'  >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo '	"{comh}CAAFRoot.h" ¶' >> generated_files.tmp
 	echo '	"{comh}CAAFRoot.h" ¶' >> generated_targets.tmp
-	echo '	"{comh}CAAFRoot.h" ¶' >> generated_comh.tmp
 	echo 'AAFRoot.all Ä "{comh}CAAFRoot.h"' >> macdodo.tmp
 	echo "" >> macdodo.tmp
-	echo '"{comh}CAAFRoot.h" Ä "{dod}AAFRoot.dod" "{macros}comh.mac" "{macros}base.mac"' >> macdodo.tmp
-	echo '	''echo "{comh}CAAFRoot.h"' >> macdodo.tmp
-	echo '	''"{DODO}" -f "{macros}comh.mac" < "{dod}AAFRoot.dod" > "{comh}CAAFRoot.t04"'  >> macdodo.tmp
-	echo '	''SetFile -t TEXT -c CWIE "{comh}CAAFRoot.t04"'  >> macdodo.tmp
-	echo '	''Rename -y "{comh}CAAFRoot.t04" "{comh}CAAFRoot.h"'  >> macdodo.tmp
+	echo '"{comh}CAAFRoot.h" Ä "{dod}AAFRoot.comh"' >> macdodo.tmp
+	echo '	''copy_if_diff -p "{dod}AAFRoot.comh" "{comh}CAAFRoot.h"'  >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
+	echo '	"{dod}AAFRoot.comc" ¶' >> generated_files.tmp
+	echo '	"{dod}AAFRoot.comc" ¶' >> generated_comc.tmp
+	echo 'AAFRoot.all Ä "{dod}AAFRoot.comc"' >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo '"{dod}AAFRoot.comc" Ä "{dod}AAFRoot.dod" "{macros}comc.mac" "{macros}base.mac"' >> macdodo.tmp
+	echo '	''"{DODO}" -f "{macros}comc.mac" < "{dod}AAFRoot.dod" > "{dod}AAFRoot.t05"'  >> macdodo.tmp
+	echo '	''SetFile -t TEXT -c CWIE "{dod}AAFRoot.t05"'  >> macdodo.tmp
+	echo '	''Rename -y "{dod}AAFRoot.t05" "{dod}AAFRoot.comc"'  >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo '	"{comc}CAAFRoot.cpp" ¶' >> generated_files.tmp
 	echo '	"{comc}CAAFRoot.cpp" ¶' >> generated_targets.tmp
-	echo '	"{comc}CAAFRoot.cpp" ¶' >> generated_comc.tmp
 	echo 'AAFRoot.all Ä "{comc}CAAFRoot.cpp"' >> macdodo.tmp
 	echo "" >> macdodo.tmp
-	echo '"{comc}CAAFRoot.cpp" Ä "{dod}AAFRoot.dod" "{macros}comc.mac" "{macros}base.mac"' >> macdodo.tmp
-	echo '	''echo "{comc}CAAFRoot.cpp"' >> macdodo.tmp
-	echo '	''"{DODO}" -f "{macros}comc.mac" < "{dod}AAFRoot.dod" > "{comc}CAAFRoot.t05"'  >> macdodo.tmp
-	echo '	''SetFile -t TEXT -c CWIE "{comc}CAAFRoot.t05"'  >> macdodo.tmp
-	echo '	''Rename -y "{comc}CAAFRoot.t05" "{comc}CAAFRoot.cpp"'  >> macdodo.tmp
+	echo '"{comc}CAAFRoot.cpp" Ä "{dod}AAFRoot.comc"' >> macdodo.tmp
+	echo '	''copy_if_diff -p "{dod}AAFRoot.comc" "{comc}CAAFRoot.cpp"'  >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
+	echo '	"{dod}AAFRoot.implh" ¶' >> generated_files.tmp
+	echo '	"{dod}AAFRoot.implh" ¶' >> generated_impl.tmp
+	echo 'AAFRoot.all Ä "{dod}AAFRoot.implh"' >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo '"{dod}AAFRoot.implh" Ä "{dod}AAFRoot.dod" "{macros}implh.mac" "{macros}base.mac"' >> macdodo.tmp
+	echo '	''"{DODO}" -f "{macros}implh.mac" < "{dod}AAFRoot.dod" > "{dod}AAFRoot.t06"'  >> macdodo.tmp
+	echo '	''SetFile -t TEXT -c CWIE "{dod}AAFRoot.t06"'  >> macdodo.tmp
+	echo '	''Rename -y "{dod}AAFRoot.t06" "{dod}AAFRoot.implh"'  >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo '	"{impl}ImplAAFRoot.h" ¶' >> generated_files.tmp
 	echo '	"{impl}ImplAAFRoot.h" ¶' >> generated_targets.tmp
-	echo '	"{impl}ImplAAFRoot.h" ¶' >> generated_impl.tmp
 	echo 'AAFRoot.all Ä "{impl}ImplAAFRoot.h"' >> macdodo.tmp
 	echo "" >> macdodo.tmp
-	echo '"{impl}ImplAAFRoot.h" Ä "{dod}AAFRoot.dod" "{macros}implh.mac" "{macros}base.mac"' >> macdodo.tmp
-	echo '	''echo "{impl}ImplAAFRoot.h"' >> macdodo.tmp
-	echo '	''"{DODO}" -f "{macros}implh.mac" < "{dod}AAFRoot.dod" > "{impl}ImplAAFRoot.t06"'  >> macdodo.tmp
-	echo '	''SetFile -t TEXT -c CWIE "{impl}ImplAAFRoot.t06"'  >> macdodo.tmp
-	echo '	''Rename -y "{impl}ImplAAFRoot.t06" "{impl}ImplAAFRoot.h"'  >> macdodo.tmp
+	echo '"{impl}ImplAAFRoot.h" Ä "{dod}AAFRoot.implh"' >> macdodo.tmp
+	echo '	''copy_if_diff -p "{dod}AAFRoot.implh" "{impl}ImplAAFRoot.h"'  >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
+	echo '	"{dod}AAFRoot.implc" ¶' >> generated_files.tmp
+	echo '	"{dod}AAFRoot.implc" ¶' >> generated_impl.tmp
+	echo 'AAFRoot.all Ä "{dod}AAFRoot.implc"' >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo '"{dod}AAFRoot.implc" Ä "{dod}AAFRoot.dod" "{macros}implc.mac" "{macros}base.mac"' >> macdodo.tmp
+	echo '	''"{DODO}" -f "{macros}implc.mac" < "{dod}AAFRoot.dod" > "{dod}AAFRoot.t07"'  >> macdodo.tmp
+	echo '	''SetFile -t TEXT -c CWIE "{dod}AAFRoot.t07"'  >> macdodo.tmp
+	echo '	''Rename -y "{dod}AAFRoot.t07" "{dod}AAFRoot.implc"'  >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo '	"{impl}ImplAAFRoot.cpp" ¶' >> generated_files.tmp
 	echo '	"{impl}ImplAAFRoot.cpp" ¶' >> generated_targets.tmp
-	echo '	"{impl}ImplAAFRoot.cpp" ¶' >> generated_impl.tmp
 	echo 'AAFRoot.all Ä "{impl}ImplAAFRoot.cpp"' >> macdodo.tmp
 	echo "" >> macdodo.tmp
-	echo '"{impl}ImplAAFRoot.cpp" Ä "{dod}AAFRoot.dod" "{macros}implc.mac" "{macros}base.mac"' >> macdodo.tmp
-	echo '	''echo "{impl}ImplAAFRoot.cpp"' >> macdodo.tmp
-	echo '	''"{DODO}" -f "{macros}implc.mac" < "{dod}AAFRoot.dod" > "{impl}ImplAAFRoot.t07"'  >> macdodo.tmp
-	echo '	''SetFile -t TEXT -c CWIE "{impl}ImplAAFRoot.t07"'  >> macdodo.tmp
-	echo '	''Rename -y "{impl}ImplAAFRoot.t07" "{impl}ImplAAFRoot.cpp"'  >> macdodo.tmp
+	echo '"{impl}ImplAAFRoot.cpp" Ä "{dod}AAFRoot.implc"' >> macdodo.tmp
+	echo '	''copy_if_diff -p "{dod}AAFRoot.implc" "{impl}ImplAAFRoot.cpp"'  >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo '	AAF.all ¶' >> targets_all.tmp
+	echo 'AAF.all Ä "{dod}AAF.refh"' >> macdodo.tmp
+	echo '	"{dod}AAF.refh" ¶' >> generated_files.tmp
+	echo '	"{dod}AAF.refh" ¶' >> generated_refh.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo 'AAF.all Ä "{refh}AAF.h"' >> macdodo.tmp
+	echo '	"{refh}AAF.h" ¶' >> generated_files.tmp
+	echo '	"{refh}AAF.h" ¶' >> generated_targets.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo 'AAF.all Ä "{dod}AAF_i.refh"' >> macdodo.tmp
+	echo '	"{dod}AAF_i.refh" ¶' >> generated_files.tmp
+	echo '	"{dod}AAF_i.refh" ¶' >> generated_refh.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo 'AAF.all Ä "{refh}AAF_i.c"' >> macdodo.tmp
+	echo '	"{refh}AAF_i.c" ¶' >> generated_files.tmp
+	echo '	"{refh}AAF_i.c" ¶' >> generated_targets.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo '	AAFPlugin.all ¶' >> targets_all.tmp
+	echo 'AAFPlugin.all Ä "{dod}AAFPlugin.refh"' >> macdodo.tmp
+	echo '	"{dod}AAFPlugin.refh" ¶' >> generated_files.tmp
+	echo '	"{dod}AAFPlugin.refh" ¶' >> generated_refh.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo 'AAFPlugin.all Ä "{refh}AAFPlugin.h"' >> macdodo.tmp
+	echo '	"{refh}AAFPlugin.h" ¶' >> generated_files.tmp
+	echo '	"{refh}AAFPlugin.h" ¶' >> generated_targets.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo 'AAFPlugin.all Ä "{dod}AAFPlugin_i.refh"' >> macdodo.tmp
+	echo '	"{dod}AAFPlugin_i.refh" ¶' >> generated_files.tmp
+	echo '	"{dod}AAFPlugin_i.refh" ¶' >> generated_refh.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo 'AAFPlugin.all Ä "{refh}AAFPlugin_i.c"' >> macdodo.tmp
+	echo '	"{refh}AAFPlugin_i.c" ¶' >> generated_files.tmp
+	echo '	"{refh}AAFPlugin_i.c" ¶' >> generated_targets.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '	''AAFPrivate.all ¶' >> targets_all.tmp
 	echo 'AAFPrivate.all...'
-	echo 'AAFPrivate.all Ä "{refh}AAFPrivate.h" "{refh}AAFPrivate_i.c"' >> macdodo.tmp
+	echo 'AAFPrivate.all Ä "{dod}AAFPrivate.refh"' >> macdodo.tmp
+	echo '	"{dod}AAFPrivate.refh" ¶' >> generated_files.tmp
+	echo '	"{dod}AAFPrivate.refh" ¶' >> generated_refh.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo 'AAFPrivate.all Ä "{refh}AAFPrivate.h"' >> macdodo.tmp
+	echo '	"{refh}AAFPrivate.h" ¶' >> generated_files.tmp
 	echo '	"{refh}AAFPrivate.h" ¶' >> generated_targets.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo 'AAFPrivate.all Ä "{dod}AAFPrivate_i.refh"' >> macdodo.tmp
+	echo '	"{dod}AAFPrivate_i.refh" ¶' >> generated_files.tmp
+	echo '	"{dod}AAFPrivate_i.refh" ¶' >> generated_refh.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo 'AAFPrivate.all Ä "{refh}AAFPrivate_i.c"' >> macdodo.tmp
+	echo '	"{refh}AAFPrivate_i.c" ¶' >> generated_files.tmp
 	echo '	"{refh}AAFPrivate_i.c" ¶' >> generated_targets.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
@@ -203,7 +266,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 		#if "{imports}" ­ ""
 		#	echo '	imports '{imports}
 		#end
-		echo '	"{dod}'{base}'.exp" ¶' >> generated_targets.tmp
+		echo '	"{dod}'{base}'.exp" ¶' >> generated_files.tmp
 		echo '	"{dod}'{base}'.exp" ¶' >> generated_exp.tmp
 		#echo {base}'.all Ä "{dod}'{base}'.exp"' >> macdodo.tmp
 		echo "" >> macdodo.tmp
@@ -216,7 +279,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 		echo '# '{base}'.all composite target' >> macdodo.tmp
 		echo {base}'.all Ä "{frefh}'{base}.frefh'"' >> macdodo.tmp
 		echo "" >> macdodo.tmp
-		echo '	"{frefh}'{base}'.frefh" ¶' >> generated_targets.tmp
+		echo '	"{frefh}'{base}'.frefh" ¶' >> generated_files.tmp
 		echo '	"{frefh}'{base}'.frefh" ¶' >> generated_private_frefh.tmp
 		echo '"{frefh}'{base}'.frefh" Ä "{dod}'{base}'.dod" "{macros}frefh.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
 		echo '	''echo "{frefh}'{base}'.frefh"' >> macdodo.tmp
@@ -224,26 +287,40 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 		echo '	''Rename -y "{frefh}'{base}'.t09" "{frefh}'{base}'.frefh"'  >> macdodo.tmp
 		echo "" >> macdodo.tmp
 		echo "" >> macdodo.tmp
+		echo '	"{dod}'{base}'.comh" ¶' >> generated_files.tmp
+		echo '	"{dod}'{base}'.comh" ¶' >> generated_comh.tmp
+		echo {base}'.all Ä "{dod}'{base}'.comh"' >> macdodo.tmp
+		echo "" >> macdodo.tmp
+		echo '"{dod}'{base}'.comh" Ä "{dod}'{base}'.dod" "{macros}comh.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
+		echo '	''"{DODO}" -f "{macros}comh.mac" < "{dod}'{base}'.dod" > "{dod}'{base}'.t0A"'  >> macdodo.tmp
+		echo '	''SetFile -t TEXT -c CWIE "{dod}'{base}'.t0A"'  >> macdodo.tmp
+		echo '	''Rename -y "{dod}'{base}'.t0A" "{dod}'{base}'.comh"'  >> macdodo.tmp
+		echo "" >> macdodo.tmp
+		echo "" >> macdodo.tmp
+		echo '	"{comh}C'{base}'.h" ¶' >> generated_files.tmp
 		echo '	"{comh}C'{base}'.h" ¶' >> generated_targets.tmp
-		echo '	"{comh}C'{base}'.h" ¶' >> generated_comh.tmp
 		echo {base}'.all Ä "{comh}C'{base}'.h"' >> macdodo.tmp
 		echo "" >> macdodo.tmp
-		echo '"{comh}C'{base}'.h" Ä "{dod}'{base}'.dod" "{macros}comh.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
-		echo '	''echo "{comh}C'{base}'.h"' >> macdodo.tmp
-		echo '	''"{DODO}" -f "{macros}comh.mac" < "{dod}'{base}'.dod" > "{comh}C'{base}'.t0A"'  >> macdodo.tmp
-		echo '	''SetFile -t TEXT -c CWIE "{comh}C'{base}'.t0A"'  >> macdodo.tmp
-		echo '	''Rename -y "{comh}C'{base}'.t0A" "{comh}C'{base}'.h"'  >> macdodo.tmp
+		echo '"{comh}C'{base}'.h" Ä "{dod}'{base}'.comh"' >> macdodo.tmp
+		echo '	''copy_if_diff -p "{dod}'{base}'.comh" "{comh}C'{base}'.h"'  >> macdodo.tmp
 		echo "" >> macdodo.tmp
 		echo "" >> macdodo.tmp
+		echo '	"{dod}'{base}'.comc" ¶' >> generated_files.tmp
+		echo '	"{dod}'{base}'.comc" ¶' >> generated_comc.tmp
+		echo {base}'.all Ä "{dod}'{base}'.comc"' >> macdodo.tmp
+		echo "" >> macdodo.tmp
+		echo '"{dod}'{base}'.comc" Ä "{dod}'{base}'.dod" "{macros}comc.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
+		echo '	''"{DODO}" -f "{macros}comc.mac" < "{dod}'{base}'.dod" > "{dod}'{base}'.t0B"'  >> macdodo.tmp
+		echo '	''SetFile -t TEXT -c CWIE "{dod}'{base}'.t0B"'  >> macdodo.tmp
+		echo '	''Rename -y "{dod}'{base}'.t0B" "{dod}'{base}'.comc"'  >> macdodo.tmp
+		echo "" >> macdodo.tmp
+		echo "" >> macdodo.tmp
+		echo '	"{comc}C'{base}'.cpp" ¶' >> generated_files.tmp
 		echo '	"{comc}C'{base}'.cpp" ¶' >> generated_targets.tmp
-		echo '	"{comc}C'{base}'.cpp" ¶' >> generated_comc.tmp
 		echo {base}'.all Ä "{comc}C'{base}'.cpp"' >> macdodo.tmp
 		echo "" >> macdodo.tmp
-		echo '"{comc}C'{base}'.cpp" Ä "{dod}'{base}'.dod" "{macros}comc.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
-		echo '	''echo "{comc}C'{base}'.cpp"' >> macdodo.tmp
-		echo '	''"{DODO}" -f "{macros}comc.mac" < "{dod}'{base}'.dod" > "{comc}C'{base}'.t0B"'  >> macdodo.tmp
-		echo '	''SetFile -t TEXT -c CWIE "{comc}C'{base}'.t0B"'  >> macdodo.tmp
-		echo '	''Rename -y "{comc}C'{base}'.t0B" "{comc}C'{base}'.cpp"'  >> macdodo.tmp
+		echo '"{comc}C'{base}'.cpp" Ä "{dod}'{base}'.comc"' >> macdodo.tmp
+		echo '	''copy_if_diff -p "{dod}'{base}'.comc" "{comc}C'{base}'.cpp"'  >> macdodo.tmp
 		echo "" >> macdodo.tmp
 		echo "" >> macdodo.tmp
 		echo "" >> macdodo.tmp
@@ -265,7 +342,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 		#if "{imports}" ­ ""
 		#	echo '	imports '{imports}
 		#end
-		echo '	"{dod}'{base}'.exp" ¶' >> generated_targets.tmp
+		echo '	"{dod}'{base}'.exp" ¶' >> generated_files.tmp
 		echo '	"{dod}'{base}'.exp" ¶' >> generated_exp.tmp
 		#echo {base}'.all Ä "{dod}'{base}'.exp"' >> macdodo.tmp
 		echo "" >> macdodo.tmp
@@ -278,7 +355,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 		echo '# '{base}'.all composite target' >> macdodo.tmp
 		echo {base}'.all Ä "{frefh}'{base}.frefh'"' >> macdodo.tmp
 		echo "" >> macdodo.tmp
-		echo '	"{frefh}'{base}'.frefh" ¶' >> generated_targets.tmp
+		echo '	"{frefh}'{base}'.frefh" ¶' >> generated_files.tmp
 		echo '	"{frefh}'{base}'.frefh" ¶' >> generated_frefh.tmp
 		echo '"{frefh}'{base}'.frefh" Ä "{dod}'{base}'.dod" "{macros}frefh.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
 		echo '	''echo "{frefh}'{base}'.frefh"' >> macdodo.tmp
@@ -286,60 +363,96 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 		echo '	''Rename -y "{frefh}'{base}'.t0D" "{frefh}'{base}'.frefh"'  >> macdodo.tmp
 		echo "" >> macdodo.tmp
 		echo "" >> macdodo.tmp
+		echo '	"{dod}'{base}'.comh" ¶' >> generated_files.tmp
+		echo '	"{dod}'{base}'.comh" ¶' >> generated_comh.tmp
+		echo {base}'.all Ä "{dod}'{base}'.comh"' >> macdodo.tmp
+		echo "" >> macdodo.tmp
+		echo '"{dod}'{base}'.comh" Ä "{dod}'{base}'.dod" "{macros}comh.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
+		echo '	''"{DODO}" -f "{macros}comh.mac" < "{dod}'{base}'.dod" > "{dod}'{base}'.t0E"'  >> macdodo.tmp
+		echo '	''SetFile -t TEXT -c CWIE "{dod}'{base}'.t0E"'  >> macdodo.tmp
+		echo '	''Rename -y "{dod}'{base}'.t0E" "{dod}'{base}'.comh"'  >> macdodo.tmp
+		echo "" >> macdodo.tmp
+		echo "" >> macdodo.tmp
+		echo '	"{comh}C'{base}'.h" ¶' >> generated_files.tmp
 		echo '	"{comh}C'{base}'.h" ¶' >> generated_targets.tmp
-		echo '	"{comh}C'{base}'.h" ¶' >> generated_comh.tmp
 		echo {base}'.all Ä "{comh}C'{base}'.h"' >> macdodo.tmp
 		echo "" >> macdodo.tmp
-		echo '"{comh}C'{base}'.h" Ä "{dod}'{base}'.dod" "{macros}comh.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
-		echo '	''echo "{comh}C'{base}'.h"' >> macdodo.tmp
-		echo '	''"{DODO}" -f "{macros}comh.mac" < "{dod}'{base}'.dod" > "{comh}C'{base}'.t0E"'  >> macdodo.tmp
-		echo '	''SetFile -t TEXT -c CWIE "{comh}C'{base}'.t0E"'  >> macdodo.tmp
-		echo '	''Rename -y "{comh}C'{base}'.t0E" "{comh}C'{base}'.h"'  >> macdodo.tmp
+		echo '"{comh}C'{base}'.h" Ä "{dod}'{base}'.comh"' >> macdodo.tmp
+		echo '	''copy_if_diff -p "{dod}'{base}'.comh" "{comh}C'{base}'.h"'  >> macdodo.tmp
 		echo "" >> macdodo.tmp
 		echo "" >> macdodo.tmp
+		echo '	"{dod}'{base}'.comc" ¶' >> generated_files.tmp
+		echo '	"{dod}'{base}'.comc" ¶' >> generated_comc.tmp
+		echo {base}'.all Ä "{dod}'{base}'.comc"' >> macdodo.tmp
+		echo "" >> macdodo.tmp
+		echo '"{dod}'{base}'.comc" Ä "{dod}'{base}'.dod" "{macros}comc.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
+		echo '	''"{DODO}" -f "{macros}comc.mac" < "{dod}'{base}'.dod" > "{dod}'{base}'.t0F"'  >> macdodo.tmp
+		echo '	''SetFile -t TEXT -c CWIE "{dod}'{base}'.t0F"'  >> macdodo.tmp
+		echo '	''Rename -y "{dod}'{base}'.t0F" "{dod}'{base}'.comc"'  >> macdodo.tmp
+		echo "" >> macdodo.tmp
+		echo "" >> macdodo.tmp
+		echo '	"{comc}C'{base}'.cpp" ¶' >> generated_files.tmp
 		echo '	"{comc}C'{base}'.cpp" ¶' >> generated_targets.tmp
-		echo '	"{comc}C'{base}'.cpp" ¶' >> generated_comc.tmp
 		echo {base}'.all Ä "{comc}C'{base}'.cpp"' >> macdodo.tmp
 		echo "" >> macdodo.tmp
-		echo '"{comc}C'{base}'.cpp" Ä "{dod}'{base}'.dod" "{macros}comc.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
-		echo '	''echo "{comc}C'{base}'.cpp"' >> macdodo.tmp
-		echo '	''"{DODO}" -f "{macros}comc.mac" < "{dod}'{base}'.dod" > "{comc}C'{base}'.t0F"'  >> macdodo.tmp
-		echo '	''SetFile -t TEXT -c CWIE "{comc}C'{base}'.t0F"'  >> macdodo.tmp
-		echo '	''Rename -y "{comc}C'{base}'.t0F" "{comc}C'{base}'.cpp"'  >> macdodo.tmp
+		echo '"{comc}C'{base}'.cpp" Ä "{dod}'{base}'.comc"' >> macdodo.tmp
+		echo '	''copy_if_diff -p "{dod}'{base}'.comc" "{comc}C'{base}'.cpp"'  >> macdodo.tmp
+		echo "" >> macdodo.tmp
 		echo "" >> macdodo.tmp
 		if "{humanTyped}" == ""
 			echo "" >> macdodo.tmp
+			echo '	"{dod}'{base}'.comt" ¶' >> generated_files.tmp
+			echo '	"{dod}'{base}'.comt" ¶' >> generated_comt.tmp
+			echo {base}'.all Ä "{dod}'{base}'.comt"' >> macdodo.tmp
+			echo "" >> macdodo.tmp
+			echo '"{dod}'{base}'.comt" Ä "{dod}'{base}'.dod" "{macros}comt.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
+			echo '	''"{DODO}" -f "{macros}comt.mac" < "{dod}'{base}'.dod" > "{dod}'{base}'.t10"'  >> macdodo.tmp
+			echo '	''SetFile -t TEXT -c CWIE "{dod}'{base}'.t10"'  >> macdodo.tmp
+			echo '	''Rename -y "{dod}'{base}'.t10" "{dod}'{base}'.comt"'  >> macdodo.tmp
+			echo "" >> macdodo.tmp
+			echo "" >> macdodo.tmp
+			echo '	"{comt}C'{base}'Test.cpp" ¶' >> generated_files.tmp
 			echo '	"{comt}C'{base}'Test.cpp" ¶' >> generated_targets.tmp
-			echo '	"{comt}C'{base}'Test.cpp" ¶' >> generated_comt.tmp
 			echo {base}'.all Ä "{comt}C'{base}'Test.cpp"' >> macdodo.tmp
 			echo "" >> macdodo.tmp
-			echo '"{comt}C'{base}'Test.cpp" Ä "{dod}'{base}'.dod" "{macros}comt.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
-			echo '	''echo "{comt}C'{base}'Test.cpp"' >> macdodo.tmp
-			echo '	''"{DODO}" -f "{macros}comt.mac" < "{dod}'{base}'.dod" > "{comt}C'{base}'Test.t10"'  >> macdodo.tmp
-			echo '	''SetFile -t TEXT -c CWIE "{comt}C'{base}'Test.t10"'  >> macdodo.tmp
-			echo '	''Rename -y "{comt}C'{base}'Test.t10" "{comt}C'{base}'Test.cpp"'  >> macdodo.tmp
+			echo '"{comt}C'{base}'Test.cpp" Ä "{dod}'{base}'.comt"' >> macdodo.tmp
+			echo '	''copy_if_diff -p "{dod}'{base}'.comt" "{comt}C'{base}'Test.cpp"'  >> macdodo.tmp
 			echo "" >> macdodo.tmp
 			echo "" >> macdodo.tmp
+			echo '	"{dod}'{base}'.implh" ¶' >> generated_files.tmp
+			echo '	"{dod}'{base}'.implh" ¶' >> generated_impl.tmp
+			echo {base}'.all Ä "{dod}'{base}'.implh"' >> macdodo.tmp
+			echo "" >> macdodo.tmp
+			echo '"{dod}'{base}'.implh" Ä "{dod}'{base}'.dod" "{macros}implh.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
+			echo '	''"{DODO}" -f "{macros}implh.mac" < "{dod}'{base}'.dod" > "{dod}'{base}'.t11"'  >> macdodo.tmp
+			echo '	''SetFile -t TEXT -c CWIE "{dod}'{base}'.t11"'  >> macdodo.tmp
+			echo '	''Rename -y "{dod}'{base}'.t11" "{dod}'{base}'.implh"'  >> macdodo.tmp
+			echo "" >> macdodo.tmp
+			echo "" >> macdodo.tmp
+			echo '	"{impl}Impl'{base}'.h" ¶' >> generated_files.tmp
 			echo '	"{impl}Impl'{base}'.h" ¶' >> generated_targets.tmp
-			echo '	"{impl}Impl'{base}'.h" ¶' >> generated_impl.tmp
 			echo {base}'.all Ä "{impl}Impl'{base}'.h"' >> macdodo.tmp
 			echo "" >> macdodo.tmp
-			echo '"{impl}Impl'{base}'.h" Ä "{dod}'{base}'.dod" "{macros}implh.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
-			echo '	''echo "{impl}Impl'{base}'.h"' >> macdodo.tmp
-			echo '	''"{DODO}" -f "{macros}implh.mac" < "{dod}'{base}'.dod" > "{impl}Impl'{base}'.t11"'  >> macdodo.tmp
-			echo '	''SetFile -t TEXT -c CWIE "{impl}Impl'{base}'.t11"'  >> macdodo.tmp
-			echo '	''Rename -y "{impl}Impl'{base}'.t11" "{impl}Impl'{base}'.h"'  >> macdodo.tmp
+			echo '"{impl}Impl'{base}'.h" Ä "{dod}'{base}'.implh"' >> macdodo.tmp
+			echo '	''copy_if_diff -p "{dod}'{base}'.implh" "{impl}Impl'{base}'.h"'  >> macdodo.tmp
 			echo "" >> macdodo.tmp
 			echo "" >> macdodo.tmp
+			echo '	"{dod}'{base}'.implc" ¶' >> generated_files.tmp
+			echo '	"{dod}'{base}'.implc" ¶' >> generated_impl.tmp
+			echo {base}'.all Ä "{dod}'{base}'.implc"' >> macdodo.tmp
+			echo "" >> macdodo.tmp
+			echo '"{dod}'{base}'.implc" Ä "{dod}'{base}'.dod" "{macros}implc.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
+			echo '	''"{DODO}" -f "{macros}implc.mac" < "{dod}'{base}'.dod" > "{dod}'{base}'.t12"'  >> macdodo.tmp
+			echo '	''SetFile -t TEXT -c CWIE "{dod}'{base}'.t12"'  >> macdodo.tmp
+			echo '	''Rename -y "{dod}'{base}'.t12" "{dod}'{base}'.implc"'  >> macdodo.tmp
+			echo "" >> macdodo.tmp
+			echo "" >> macdodo.tmp
+			echo '	"{impl}Impl'{base}'.cpp" ¶' >> generated_files.tmp
 			echo '	"{impl}Impl'{base}'.cpp" ¶' >> generated_targets.tmp
-			echo '	"{impl}Impl'{base}'.cpp" ¶' >> generated_impl.tmp
 			echo {base}'.all Ä "{impl}Impl'{base}'.cpp"' >> macdodo.tmp
 			echo "" >> macdodo.tmp
-			echo '"{impl}Impl'{base}'.cpp" Ä "{dod}'{base}'.dod" "{macros}implc.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
-			echo '	''echo "{impl}Impl'{base}'.cpp"' >> macdodo.tmp
-			echo '	''"{DODO}" -f "{macros}implc.mac" < "{dod}'{base}'.dod" > "{impl}Impl'{base}'.t12"'  >> macdodo.tmp
-			echo '	''SetFile -t TEXT -c CWIE "{impl}Impl'{base}'.t12"'  >> macdodo.tmp
-			echo '	''Rename -y "{impl}Impl'{base}'.t12" "{impl}Impl'{base}'.cpp"'  >> macdodo.tmp
+			echo '"{impl}Impl'{base}'.cpp" Ä "{dod}'{base}'.implc"' >> macdodo.tmp
+			echo '	''copy_if_diff -p "{dod}'{base}'.implc" "{impl}Impl'{base}'.cpp"'  >> macdodo.tmp
 			echo "" >> macdodo.tmp
 		end
 		echo "" >> macdodo.tmp
@@ -357,7 +470,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 		#end
 		echo "" >> macdodo.tmp
 		echo "" >> macdodo.tmp
-		echo '	"{dod}'{base}'.exp" ¶' >> generated_targets.tmp
+		echo '	"{dod}'{base}'.exp" ¶' >> generated_files.tmp
 		echo '	"{dod}'{base}'.exp" ¶' >> generated_exp.tmp
 		#echo {base}'.all Ä "{dod}'{base}'.exp"' >> macdodo.tmp
 		echo "" >> macdodo.tmp
@@ -369,7 +482,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 		echo "" >> macdodo.tmp
 		echo {base}'.all Ä "{frefh}'{base}'.frefh"' >> macdodo.tmp
 		echo "" >> macdodo.tmp
-		echo '	"{frefh}'{base}'.frefh" ¶' >> generated_targets.tmp
+		echo '	"{frefh}'{base}'.frefh" ¶' >> generated_files.tmp
 		echo '	"{frefh}'{base}'.frefh" ¶' >> generated_frefh.tmp
 		echo '"{frefh}'{base}'.frefh" Ä "{dod}'{base}'.dod" "{macros}frefh.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
 		echo '	''echo "{frefh}'{base}'.frefh"' >> macdodo.tmp
@@ -383,18 +496,28 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo 'Making build rules and dependencies for Plugin interfaces...'
 	echo '	''AAFPluginTypes.all ¶' >> targets_all.tmp
 	echo '# AAFPluginTypes.all composite target' >> macdodo.tmp
+	echo 'AAFPluginTypes.all Ä "{dod}AAFPluginTypes.refh"' >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo '	"{dod}AAFPluginTypes.refh" ¶' >> generated_files.tmp
+	echo '	"{dod}AAFPluginTypes.refh" ¶' >> generated_refh.tmp
+	echo '"{dod}AAFPluginTypes.refh" Ä "{dod}AAFPluginTypes.dod" "{macros}refh.mac" "{macros}base.mac"' >> macdodo.tmp
+	echo '	''"{DODO}" -f "{macros}refh.mac" < "{dod}AAFPluginTypes.dod" > "{dod}AAFPluginTypes.t15"'  >> macdodo.tmp
+	echo '	''SetFile -t TEXT -c CWIE "{dod}AAFPluginTypes.t15"'  >> macdodo.tmp
+	echo '	''Rename -y "{dod}AAFPluginTypes.t15" "{dod}AAFPluginTypes.refh"'  >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
 	echo 'AAFPluginTypes.all Ä "{refh}AAFPluginTypes.h"' >> macdodo.tmp
 	echo "" >> macdodo.tmp
+	echo '	"{refh}AAFPluginTypes.h" ¶' >> generated_files.tmp
 	echo '	"{refh}AAFPluginTypes.h" ¶' >> generated_targets.tmp
-	echo '	"{refh}AAFPluginTypes.h" ¶' >> generated_refh.tmp
-	echo '"{refh}AAFPluginTypes.h" Ä "{dod}AAFPluginTypes.dod" "{macros}refh.mac" "{macros}base.mac"' >> macdodo.tmp
-	echo '	''echo "{refh}AAFPluginTypes.h"' >> macdodo.tmp
-	echo '	''"{DODO}" -f "{macros}refh.mac" < "{dod}AAFPluginTypes.dod" > "{refh}AAFPluginTypes.t15"'  >> macdodo.tmp
-	echo '	''SetFile -t TEXT -c CWIE "{refh}AAFPluginTypes.t15"'  >> macdodo.tmp
-	echo '	''Rename -y "{refh}AAFPluginTypes.t15" "{refh}AAFPluginTypes.h"'  >> macdodo.tmp
+	echo '"{refh}AAFPluginTypes.h" Ä "{dod}AAFPluginTypes.refh"' >> macdodo.tmp
+	echo '	''copy_if_diff -p "{dod}AAFPluginTypes.refh" "{refh}AAFPluginTypes.h"'  >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
-	echo '	"{refh}AAFPlugin.h" ¶' >> generated_refh.tmp
+	echo '	"{dod}AAFPlugin.refh" ¶' >> generated_files.tmp
+	echo '	"{dod}AAFPlugin.refh" ¶' >> generated_refh.tmp
+	echo '	"{refh}AAFPlugin.h" ¶' >> generated_files.tmp
+	echo '	"{refh}AAFPlugin.h" ¶' >> generated_targets.tmp
 	for base in {PLUGIN_OBJECTS}
 		echo '	'{base}'.all ¶' >> targets_all.tmp
 		echo {base}'.all...'
@@ -405,7 +528,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 		#end
 		echo "" >> macdodo.tmp
 		echo "" >> macdodo.tmp
-		echo '	"{dod}'{base}'.exp" ¶' >> generated_targets.tmp
+		echo '	"{dod}'{base}'.exp" ¶' >> generated_files.tmp
 		echo '	"{dod}'{base}'.exp" ¶' >> generated_exp.tmp
 		#echo {base}'.all Ä "{dod}'{base}'.exp"' >> macdodo.tmp
 		echo "" >> macdodo.tmp
@@ -417,7 +540,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 		echo "" >> macdodo.tmp
 		echo {base}'.all Ä "{frefh}'{base}'.frefh"' >> macdodo.tmp
 		echo "" >> macdodo.tmp
-		echo '	"{frefh}'{base}'.frefh" ¶' >> generated_targets.tmp
+		echo '	"{frefh}'{base}'.frefh" ¶' >> generated_files.tmp
 		echo '	"{frefh}'{base}'.frefh" ¶' >> plugin_frefh_targets.tmp
 		echo '"{frefh}'{base}'.frefh" Ä "{dod}'{base}'.dod" "{macros}frefh.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
 		echo '	''echo "{frefh}'{base}'.frefh"' >> macdodo.tmp
@@ -433,7 +556,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo '	AAFModule.all ¶' >> targets_all.tmp
 	echo 'AAFModule.all Ä "{frefh}AAFModule.frefh" "{comc}CAAFModule.cpp"' >> macdodo.tmp
 	echo "" >> macdodo.tmp
-	echo '	"{frefh}AAFModule.frefh" ¶' >> generated_targets.tmp
+	echo '	"{frefh}AAFModule.frefh" ¶' >> generated_files.tmp
 	echo '	"{frefh}AAFModule.frefh" ¶' >> generated_frefh.tmp
 	echo '"{frefh}AAFModule.frefh" Ä "{dod}AAFModule.dod" "{macros}frefh.mac" "{macros}base.mac"' >> macdodo.tmp
 	echo '	''echo "{frefh}AAFModule.frefh"' >> macdodo.tmp
@@ -441,132 +564,154 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo '	''Rename -y "{frefh}AAFModule.t18" "{frefh}AAFModule.frefh"'  >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp	
+	echo '	"{dod}AAFModule.comc" ¶' >> generated_files.tmp
+	echo '	"{dod}AAFModule.comc" ¶' >> generated_comc.tmp
+	echo '"{dod}AAFModule.comc" Ä "{dod}AAFModule.dod" "{macros}comc.mac" "{macros}base.mac"' >> macdodo.tmp
+	echo '	''"{DODO}" -f "{macros}comc.mac" < "{dod}AAFModule.dod" > "{dod}AAFModule.t19"'  >> macdodo.tmp
+	echo '	''SetFile -t TEXT -c CWIE "{dod}AAFModule.t19"'  >> macdodo.tmp
+	echo '	''Rename -y "{dod}AAFModule.t19" "{dod}AAFModule.comc"'  >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo '	"{comc}CAAFModule.cpp" ¶' >> generated_files.tmp
 	echo '	"{comc}CAAFModule.cpp" ¶' >> generated_targets.tmp
-	echo '	"{comc}CAAFModule.cpp" ¶' >> generated_comc.tmp
-	echo '"{comc}CAAFModule.cpp" Ä "{dod}AAFModule.dod" "{macros}comc.mac" "{macros}base.mac"' >> macdodo.tmp
-	echo '	''echo "{comc}CAAFModule.cpp"' >> macdodo.tmp
-	echo '	''"{DODO}" -f "{macros}comc.mac" < "{dod}AAFModule.dod" > "{comc}CAAFModule.t19"'  >> macdodo.tmp
-	echo '	''SetFile -t TEXT -c CWIE "{comc}CAAFModule.t19"'  >> macdodo.tmp
-	echo '	''Rename -y "{comc}CAAFModule.t19" "{comc}CAAFModule.cpp"'  >> macdodo.tmp
-	echo "" >> macdodo.tmp
-	echo "" >> macdodo.tmp
-	echo '	AAF.all ¶' >> targets_all.tmp
-	echo 'AAF.all Ä "{refh}AAF.h" "{refh}AAF_i.c"' >> macdodo.tmp
-	echo '	"{refh}AAF_i.c" ¶' >> generated_targets.tmp
-	echo '	"{refh}AAF.h" ¶' >> generated_targets.tmp
-	echo '	"{refh}AAF.h" ¶' >> generated_refh.tmp
-	echo "" >> macdodo.tmp
-	echo "" >> macdodo.tmp
-	echo '	AAFPlugin.all ¶' >> targets_all.tmp
-	echo 'AAFPlugin.all Ä "{refh}AAFPlugin.h" "{refh}AAFPlugin_i.c"' >> macdodo.tmp
-	echo '	"{refh}AAFPlugin.h" ¶' >> generated_targets.tmp
-	echo '	"{refh}AAFPlugin_i.c" ¶' >> generated_targets.tmp
+	echo '"{comc}CAAFModule.cpp" Ä "{dod}AAFModule.comc"' >> macdodo.tmp
+	echo '	''copy_if_diff -p "{dod}AAFModule.comc" "{comc}CAAFModule.cpp"'  >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '	AAFClassIDs.all ¶' >> targets_all.tmp
+	#
+	echo 'AAFClassIDs.all Ä "{dod}AAFClassIDs.implh" "{dod}AAFCLSIDs.comh" "{dod}AAFObjectTable.comh" "{dod}AAFObjectTable_i.comh"' >> macdodo.tmp
+	echo '	"{dod}AAFClassIDs.implh" ¶' >> generated_files.tmp
+	echo '	"{dod}AAFClassIDs.implh" ¶' >> generated_impl.tmp
+	echo '	"{dod}AAFCLSIDs.comh" ¶' >> generated_files.tmp
+	echo '	"{dod}AAFCLSIDs.comh" ¶' >> generated_comh.tmp
+	echo '	"{dod}AAFObjectTable.comh" ¶' >> generated_files.tmp
+	echo '	"{dod}AAFObjectTable.comh" ¶' >> generated_comh.tmp
+	echo '	"{dod}AAFObjectTable_i.comh" ¶' >> generated_files.tmp
+	echo '	"{dod}AAFObjectTable_i.comh" ¶' >> generated_comh.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	#
 	echo 'AAFClassIDs.all Ä "{impl}AAFClassIDs.h" "{comh}AAFCLSIDs.h" "{comh}AAFObjectTable.h" "{comh}AAFObjectTable_i.cpp"' >> macdodo.tmp
+	echo '	"{impl}AAFClassIDs.h" ¶' >> generated_files.tmp
 	echo '	"{impl}AAFClassIDs.h" ¶' >> generated_targets.tmp
+	echo '	"{comh}AAFCLSIDs.h" ¶' >> generated_files.tmp
 	echo '	"{comh}AAFCLSIDs.h" ¶' >> generated_targets.tmp
+	echo '	"{comh}AAFObjectTable.h" ¶' >> generated_files.tmp
 	echo '	"{comh}AAFObjectTable.h" ¶' >> generated_targets.tmp
+	echo '	"{comh}AAFObjectTable_i.cpp" ¶' >> generated_files.tmp
 	echo '	"{comh}AAFObjectTable_i.cpp" ¶' >> generated_targets.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
+	#
 	echo '#' >> macdodo.tmp
 	echo '#'Composite targets so to force proper build order of dodo generated files. >> macdodo.tmp
 	catenate targets_all.tmp >> macdodo.tmp
-	Delete -i -ay targets_all.tmp
+	rm -f targets_all.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '#' >> macdodo.tmp
 	echo '#'Generated targets >> macdodo.tmp
 	catenate generated_targets.tmp >> macdodo.tmp
-	Delete -i -ay generated_targets.tmp
+	rm -f generated_targets.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo '#' >> macdodo.tmp
+	echo '#'All Generated files >> macdodo.tmp
+	catenate generated_files.tmp >> macdodo.tmp
+	rm -f generated_files.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '# Generated exp files...' >> macdodo.tmp
 	catenate generated_exp.tmp >> macdodo.tmp
-	Delete -i -ay generated_exp.tmp
+	rm -f generated_exp.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '# Generated COM API DECLARE_INTERFACE Header files...' >> macdodo.tmp
 	catenate generated_refh.tmp >> macdodo.tmp
-	Delete -i -ay generated_refh.tmp
+	rm -f generated_refh.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '# Generated PRIVATE fractional COM API DECLARE_INTERFACE files used to build AAFPrivate.h...' >> macdodo.tmp
 	catenate generated_private_frefh.tmp >> macdodo.tmp
-	Delete -i -ay generated_private_frefh.tmp
+	rm -f generated_private_frefh.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '# Generated fractional COM API DECLARE_INTERFACE files used to build AAF.h...' >> macdodo.tmp
 	catenate generated_frefh.tmp >> macdodo.tmp
-	Delete -i -ay generated_frefh.tmp
+	rm -f generated_frefh.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '# Generated COM API CoClass Header files...' >> macdodo.tmp
 	catenate generated_comh.tmp >> macdodo.tmp
-	Delete -i -ay generated_comh.tmp
+	rm -f generated_comh.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '# Generated COM API CoClass Source files...' >> macdodo.tmp
 	catenate generated_comc.tmp >> macdodo.tmp
-	Delete -i -ay generated_comc.tmp
+	rm -f generated_comc.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '# Generated COM API CoClass Module Test files...' >> macdodo.tmp
 	catenate generated_comt.tmp >> macdodo.tmp
-	Delete -i -ay generated_comt.tmp
+	rm -f generated_comt.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '# Generated Impl class files...' >> macdodo.tmp
 	catenate generated_impl.tmp >> macdodo.tmp
-	Delete -i -ay generated_impl.tmp
+	rm -f generated_impl.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '# Generated fractional COM API DECLARE_INTERFACE files used to build AAFPlugin.h...' >> macdodo.tmp
 	catenate plugin_frefh_targets.tmp >> macdodo.tmp
-	Delete -i -ay plugin_frefh_targets.tmp
+	rm -f plugin_frefh_targets.tmp
+	echo "" >> macdodo.tmp
+	echo "" >> macdodo.tmp
+	echo '# Cleanup the dodo generated files that are not version controlled...' >> macdodo.tmp
+	echo 'clean Ä' >> macdodo.tmp
+	echo '	''for file in {GENERATED_EXP} {GENERATED_FREFH} {GENERATED_PRIVATE_FREFH} {PLUGIN_FREFH_TARGETS} {GENERATED_REFH} {GENERATED_COMH} {GENERATED_COMC} {GENERATED_COMT} {GENERATED_IMPL}' >> macdodo.tmp
+	echo '	''	rm -v -f "{file}"' >> macdodo.tmp
+	echo '	''end' >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '# Cleanup all of the dodo generated files...' >> macdodo.tmp
-	echo 'clean Ä' >> macdodo.tmp
-	echo '	''for file in {GENERATED_TARGETS}' >> macdodo.tmp
-	echo '	''	if "`exists -f "{file}"`"' >> macdodo.tmp
-	echo '	''		SetFile -a l "{file}"' >> macdodo.tmp
-	echo '	''		Delete -i -p -ay "{file}"' >> macdodo.tmp
-	echo '	''	end' >> macdodo.tmp
+	echo 'realclean Ä' >> macdodo.tmp
+	echo '	''for file in {GENERATED_FILES}' >> macdodo.tmp
+	echo '	''	rm -v -f "{file}"' >> macdodo.tmp
 	echo '	''end' >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '# Dependency for main targets' >> macdodo.tmp
-	echo 'dodofiles.txt Ä {DODO_TARGETS}' >> macdodo.tmp
+	echo 'dodofiles.txt Ä {GENERATED_TARGETS} {DODO_TARGETS}' >> macdodo.tmp
 	echo '	''directory {startingDirectory}' >> macdodo.tmp
-	echo '	''echo Dodo source generation completed: `date`'  >> macdodo.tmp
-	if "`exists -f macdodo.mak1`"
-		SetFile -a l macdodo.mak1
-		Delete -i -ay macdodo.mak1
-	end
-	rename macdodo.tmp macdodo.mak1
-	echo "Done with" macdodo.mak1 : `date`
+	copy_if_diff macdodo.tmp macdodo.mak1
+	rm -f macdodo.tmp
+
+cleantmp Ä
+	rm -f generated_comc.tmp
+	rm -f generated_comh.tmp
+	rm -f generated_comt.tmp
+	rm -f generated_exp.tmp
+	rm -f generated_frefh.tmp
+	rm -f generated_impl.tmp
+	rm -f generated_impl.tmp
+	rm -f generated_private_frefh.tmp
+	rm -f generated_files.tmp
+	rm -f generated_targets.tmp
+	rm -f macdodo.tmp
+	rm -f plugin_frefh_targets.tmp
+	rm -f targets_all.tmp
 
 
-clean Ä
-	Delete -i -ay macaafobjects.mk
-	if "`exists -f macdodo.mak1`"
-		SetFile -a l macdodo.mak1 ³ Dev:Null
-		Delete -i -ay macdodo.mak1
-	end
-	Delete -i -ay targets_all.tmp
-	Delete -i -ay generated_targets.tmp
-	Delete -i -ay generated_exp.tmp
-	Delete -i -ay generated_refh.tmp
-	Delete -i -ay generated_frefh.tmp
-	Delete -i -ay generated_comh.tmp
-	Delete -i -ay generated_comc.tmp
-	Delete -i -ay generated_comt.tmp
-	Delete -i -ay generated_impl.tmp
-	Delete -i -ay plugin_frefh_targets.tmp
+clean Ä cleantmp
+	rm -f macdodo.tmp
+	rm -f macdodo.mak1
+	make clean -f macaafobjects.make > macaafobjects.make.out
+	macaafobjects.make.out
 	
 
+realclean Ä clean	
+	rm macaafobjects.make.out
 

@@ -39,9 +39,22 @@ DBG_FLAGS = -g
 
 #------------------------------------------------------------------------------
 # Compiler flags
-# See the explanation of -G 0 in the gp_overflow(5) manpage.
+#
+# -no_auto_include	disables implicit inclusion of template 
+#			implementation files.
+# -prelink		template prelinker is on.
+# -xansi		enables ANSI/ISO C.
+# -G			see the explanation of -G 0 in 
+#			the gp_overflow(5) manpage.
 #------------------------------------------------------------------------------
 ADD_CFLAGS = -no_auto_include -prelink -xansi -G 0
+
+#------------------------------------------------------------------------------
+# Compiler flags
+# 
+# Make all char declarations to be signed char declarations.
+#------------------------------------------------------------------------------
+ADD_CFLAGS += -signed
 
 
 #------------------------------------------------------------------------------

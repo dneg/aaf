@@ -17,7 +17,7 @@ INCLUDES = -I../../../../ref-impl/include \
 
 
 .PHONY : all
-all : $(LIBDIR)/libAAFPersonnelExtension$(DLL) \
+all : $(BINDIR)/libAAFPersonnelExtension$(DLL) \
       $(BINDIR)/ComPersonnelPluginWrite$(EXE)
 
 
@@ -26,13 +26,13 @@ CXXFILES = AAFPersonnelExtension.cpp \
 	   CAAFPersonnelResource.cpp
 
 
-SUPOBJS = $(OBJDIR)/../../com-api/obj/com-dll/CAAFClassFactory$(OBJ) \
-	  $(OBJDIR)/../../com-api/obj/com-dll/CAAFServer$(OBJ) \
-	  $(OBJDIR)/../../com-api/obj/com-dll/CAAFUnknown$(OBJ) \
+SUPOBJS = $(AAFSDK)/com-api/$(AAFTARGETDIR)/CAAFClassFactory$(OBJ) \
+	  $(AAFSDK)/com-api/$(AAFTARGETDIR)/CAAFServer$(OBJ) \
+	  $(AAFSDK)/com-api/$(AAFTARGETDIR)/CAAFUnknown$(OBJ) \
 	  $(OBJDIR)/extensionUtils$(OBJ)
 
 
-$(LIBDIR)/libAAFPersonnelExtension$(DLL) : $(LIBDIR) $(OBJDIR) $(CXXOBJS)
+$(BINDIR)/libAAFPersonnelExtension$(DLL) : $(BINDIR) $(OBJDIR) $(CXXOBJS)
 	$(LD_DYN_LIB) $(SUPOBJS) $(CXXOBJS) -L$(LIBDIR) -o $@ -laaflib -laafiid
 
 
@@ -50,8 +50,14 @@ $(BINDIR)/ComPersonnelPluginWrite$(EXE) : $(BINDIR) $(OBJDIR) $(CXXOBJS2)
 clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(CXXOBJS2)
+	@$(RM) $(DEPS)
 	@$(RM) $(BINDIR)/ComPersonnelExtension$(EXE)
 	@$(RM) $(BINDIR)/ComPersonnelPluginWrite$(EXE)
+	@$(RMDIR) $(OBJDIR)/ii_files
+
+
+.PHONY : realclean
+realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk

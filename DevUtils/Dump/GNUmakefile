@@ -27,6 +27,11 @@ $(BINDIR)/dump$(EXE) : $(BINDIR) $(OBJDIR) $(CXXOBJS)
 clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(BINDIR)/dump$(EXE)
+	@$(RMDIR) $(OBJDIR)/ii_files
+
+
+.PHONY : realclean
+realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk

@@ -58,8 +58,14 @@ $(BINDIR)/dodo.test$(EXE) : $(OBJDIR) $(BINDIR) $(CXXOBJS)
 
 .PHONY : clean
 clean :
-	@$(RMDIR) $(BINDIR)/dodo
-	@$(RMDIR) $(OBJDIR)
+	@$(RM) $(DODO_APP_OBJS) $(DODO_TEST_OBJS)
+	@$(RM) $(DEPS)
+	@$(RM) $(BINDIR)/dodo$(EXE)
+	@$(RM) $(BINDIR)/dodo.test$(EXE)
+
+
+.PHONY : realclean
+realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk

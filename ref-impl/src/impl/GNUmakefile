@@ -32,8 +32,14 @@ $(LIBDIR)/libimpl$(LIB) : $(OBJDIR) $(LIBDIR) $(CXXOBJS)
 
 .PHONY : clean
 clean :
-	$(RMDIR) $(OBJDIR)/*
-	$(RM) $(LIBDIR)/libimpl$(LIB)
+	@$(RM) $(CXXOBJS)
+	@$(RM) $(DEPS)
+	@$(RM) $(LIBDIR)/libimpl$(LIB)
+	@$(RMDIR) $(OBJDIR)/ii_files
+
+
+.PHONY : realclean
+realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk

@@ -20,6 +20,11 @@ com :
 
 .PHONY : clean
 clean :
-	cd com && $(MAKE) clean
-	$(RMDIR) $(OBJDIR)/*
+	cd com && $(MAKE) GENDEPS=0 $@
+
+
+.PHONY : realclean
+realclean :
+	cd com && $(MAKE) GENDEPS=0 $@
+
 

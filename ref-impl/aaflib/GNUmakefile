@@ -26,8 +26,14 @@ $(LIBDIR)/libaaflib$(LIB) : $(OBJDIR) $(LIBDIR) $(CXXOBJS)
 
 .PHONY : clean
 clean:
-	$(RM) $(OBJDIR)/*$(OBJ)
-	$(RM) $(LIBDIR)/libaaflib$(LIB)
+	@$(RM) $(CXXOBJS)
+	@$(RM) $(DEPS)
+	@$(RM) $(LIBDIR)/libaaflib$(LIB)
+	@$(RMDIR) $(OBJDIR)/ii_files
+
+
+.PHONY : realclean
+realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk

@@ -24,8 +24,14 @@ $(BINDIR)/CreateSequence$(EXE) : $(BINDIR) $(OBJDIR) $(CXXOBJS)
 
 .PHONY : clean
 clean :
-	$(RM) $(CXXOBJS)
-	$(RM) $(BINDIR)/CreateSequence$(EXE)
+	@$(RM) $(CXXOBJS)
+	@$(RM) $(DEPS)
+	@$(RM) $(BINDIR)/CreateSequence$(EXE)
+	@$(RMDIR) $(OBJDIR)/ii_files
+
+
+.PHONY : realclean
+realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk

@@ -64,6 +64,7 @@
 # 27-JUL-2000 : transdel adding support for "aafext" plugin directory         #
 # 20-OCT-2000 : transdel added new platform type include                      #
 # 16-FEB-2001 : transdel added missing AAFExtEnum.h and AAFFileSignatures.h   #
+# 07-MAR-2001 : tjb copy OMF toolkit DLL once only.                           #
 ###############################################################################
 
 
@@ -461,11 +462,11 @@ $(AAFSDK_INCLUDE)\AAFClassDefUIDs.h : $(TOOLKIT_INCLUDE)\AAFClassDefUIDs.h
 $(AAFSDK_INCLUDE)\AAFCodecDefs.h : $(TOOLKIT_INCLUDE)\AAFCodecDefs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFCodecDefs.h $(AAFSDK_INCLUDE)\
 
-$(AAFSDK_INCLUDE)\AAFCOMPlatform.h : $(TOOLKIT_INCLUDE_REFAPI)\AAFCOMPlatform.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_REFAPI)\AAFCOMPlatform.h $(AAFSDK_INCLUDE)\
+$(AAFSDK_INCLUDE)\AAFCOMPlatform.h : $(TOOLKIT_INCLUDE)\AAFCOMPlatform.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFCOMPlatform.h $(AAFSDK_INCLUDE)\
 
-$(AAFSDK_INCLUDE)\AAFCOMPlatformTypes.h : $(TOOLKIT_INCLUDE_REFAPI)\AAFCOMPlatformTypes.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_REFAPI)\AAFCOMPlatformTypes.h $(AAFSDK_INCLUDE)\
+$(AAFSDK_INCLUDE)\AAFCOMPlatformTypes.h : $(TOOLKIT_INCLUDE)\AAFCOMPlatformTypes.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFCOMPlatformTypes.h $(AAFSDK_INCLUDE)\
 
 $(AAFSDK_INCLUDE)\AAFContainerDefs.h : $(TOOLKIT_INCLUDE)\AAFContainerDefs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFContainerDefs.h $(AAFSDK_INCLUDE)\
@@ -549,30 +550,30 @@ $(AAFSDK_INCLUDE)\AAFModuleTest.idl : $(TOOLKIT_INCLUDE_COMAPI)\AAFModuleTest.id
 $(AAFSDK_INCLUDE)\AAFPluginTypes.idl : $(TOOLKIT_INCLUDE_COMAPI)\AAFPluginTypes.idl
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFPluginTypes.idl $(AAFSDK_INCLUDE)\
 
-$(AAFSDK_INCLUDE)\AAFPlugin.idl : $(TOOLKIT_PLUGINS)\AAFPlugin.idl
-	$(CP) $(CP_OPTS) $(TOOLKIT_PLUGINS)\AAFPlugin.idl $(AAFSDK_INCLUDE)\
+$(AAFSDK_INCLUDE)\AAFPlugin.idl : $(TOOLKIT_INCLUDE_COMAPI)\AAFPlugin.idl
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFPlugin.idl $(AAFSDK_INCLUDE)\
 
 
 #
 # Dependency and build rules for the MIDL generated targets.
 #
-$(AAFSDK_INCLUDE)\AAFTypes.h : $(TOOLKIT_COMIDL)\AAFTypes.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_COMIDL)\AAFTypes.h $(AAFSDK_INCLUDE)\
+$(AAFSDK_INCLUDE)\AAFTypes.h : $(TOOLKIT_INCLUDE_COMAPI)\AAFTypes.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFTypes.h $(AAFSDK_INCLUDE)\
 
-$(AAFSDK_INCLUDE)\AAF.h : $(TOOLKIT_COMIDL)\AAF.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_COMIDL)\AAF.h $(AAFSDK_INCLUDE)\
+$(AAFSDK_INCLUDE)\AAF.h : $(TOOLKIT_INCLUDE_COMAPI)\AAF.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAF.h $(AAFSDK_INCLUDE)\
 
-$(AAFSDK_INCLUDE)\AAF_i.c : $(TOOLKIT_COMIDL)\AAF_i.c
-	$(CP) $(CP_OPTS) $(TOOLKIT_COMIDL)\AAF_i.c $(AAFSDK_INCLUDE)\
+$(AAFSDK_INCLUDE)\AAF_i.c : $(TOOLKIT_INCLUDE_COMAPI)\AAF_i.c
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAF_i.c $(AAFSDK_INCLUDE)\
 
-$(AAFSDK_INCLUDE)\AAFPluginTypes.h : $(TOOLKIT_COMIDL)\AAFPluginTypes.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_COMIDL)\AAFPluginTypes.h $(AAFSDK_INCLUDE)\
+$(AAFSDK_INCLUDE)\AAFPluginTypes.h : $(TOOLKIT_INCLUDE_COMAPI)\AAFPluginTypes.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFPluginTypes.h $(AAFSDK_INCLUDE)\
 
-$(AAFSDK_INCLUDE)\AAFPlugin.h : $(TOOLKIT_PLUGINS)\AAFPlugin.h
-	$(CP) $(CP_OPTS) $(TOOLKIT_PLUGINS)\AAFPlugin.h $(AAFSDK_INCLUDE)\
+$(AAFSDK_INCLUDE)\AAFPlugin.h : $(TOOLKIT_INCLUDE_COMAPI)\AAFPlugin.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFPlugin.h $(AAFSDK_INCLUDE)\
 
-$(AAFSDK_INCLUDE)\AAFPlugin_i.c : $(TOOLKIT_PLUGINS)\AAFPlugin_i.c
-	$(CP) $(CP_OPTS) $(TOOLKIT_PLUGINS)\AAFPlugin_i.c $(AAFSDK_INCLUDE)\
+$(AAFSDK_INCLUDE)\AAFPlugin_i.c : $(TOOLKIT_INCLUDE_COMAPI)\AAFPlugin_i.c
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFPlugin_i.c $(AAFSDK_INCLUDE)\
 
 
 #
@@ -608,7 +609,7 @@ $(AAFSDK_BIN_EXT)\aafpgapi.dll : $(TOOLKIT_TARGET_REFIMPL_EXT)\aafpgapi.dll
 	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL_EXT)\aafpgapi.dll $(AAFSDK_BIN_EXT)\
 
 $(AAFSDK_BIN)\omfToolkit.dll : $(OMF_LIBS)\$(OMF_DLL_NAME)
-	$(CP) $(CP_OPTS) $(OMF_LIBS)\$(OMF_DLL_NAME) $(AAFSDK_BIN)\
+	$(CP) $(CP_OPTS) $(OMF_LIBS)\$(OMF_DLL_NAME) $(AAFSDK_BIN)\omfToolkit.dll
 	
 
 #
