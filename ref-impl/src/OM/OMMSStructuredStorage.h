@@ -35,7 +35,7 @@
 //
 // 1) The standard implementation on Windows platforms
 //    for which OM_WINDOWS_SS is defined
-// 2) The implementation on Macintosh (pre OSX)
+// 2) The implementation on Macintosh
 //    for which OM_MACINTOSH_SS is defined
 // 3) The reference implementation
 //    for which OM_REFERENCE_SS is defined
@@ -43,6 +43,8 @@
 #if defined(OM_OS_WINDOWS)
 #define OM_WINDOWS_SS
 #elif defined(OM_OS_MACOS)
+#define OM_MACINTOSH_SS
+#elif defined(OM_OS_MACOSX)
 #define OM_MACINTOSH_SS
 #elif defined(OM_OS_UNIX)
 #define OM_REFERENCE_SS
@@ -55,6 +57,7 @@
 #include <objbase.h>
 #elif defined(OM_MACINTOSH_SS)
 #include "wintypes.h"
+#define NO_INCLUDES
 #include "macdef.h"
 #include "macpub.h"
 #include "compobj.h"

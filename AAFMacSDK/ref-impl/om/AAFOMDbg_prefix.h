@@ -22,6 +22,12 @@
 
 // Platform/compiler specific definitions
 //
+#if defined(__MACH__)
+
+#include "MacHeadersMach-O.h"
+
+#else
+
 #define __dest_os __mac_os
 
 #define _MSL_USING_NAMESPACE
@@ -36,6 +42,8 @@
 #endif
 
 #include "MacHeaders.h"
+
+#endif
 
 // Object Manager specific definitions
 //
