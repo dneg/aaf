@@ -31,27 +31,6 @@
 
 
 
-
-// ASSERT code copied from OM...
-#ifdef _DEBUG
-
-#define ASSERT(name, expression) \
-  (expression) \
-    ? (void)0  \
-    : reportAssertionFailure("Assertion",    name, #expression, \
-                             currentRoutineName, __FILE__, __LINE__)
-
-#define TRACE(routine) char* currentRoutineName = routine;
-
-#else
-
-#define ASSERT(name, expression)
-
-#define TRACE(routine)
-
-#endif
-
-
 //***********************************************************
 // Define function prototypes in a manner consistent with the 
 // ActiveX and OLE SDK's.
@@ -205,24 +184,39 @@ extern "C"{
 //
 AAFDLL * MakeAAFDLL();
 
-//
-// TBD: Decide where to declare these functions (AAF.h or AAFLIB.h ???)
-//
-STDAPI AAFLoad(const char * dllname);
-STDAPI AAFUnload();
 
 
-#ifdef _DEBUG
 //
 // Assertion code copied from OM...
 //
+
+#ifdef _DEBUG
+
 void reportAssertionFailure(char* kind,
                             char* name,
                             char* expressionString,
                             char* routine,
                             char* fileName,
                             size_t lineNumber);
+
+
+#define ASSERT(name, expression) \
+  (expression) \
+    ? (void)0  \
+    : reportAssertionFailure("Assertion",    name, #expression, \
+                             currentRoutineName, __FILE__, __LINE__)
+
+#define TRACE(routine) char* currentRoutineName = routine;
+
+#else
+
+#define ASSERT(name, expression)
+
+#define TRACE(routine)
+
 #endif /* _DEBUG */
+
+
 
 #ifdef __cplusplus
 }
