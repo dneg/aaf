@@ -487,6 +487,17 @@ bool OMProperty::isPresent(void) const
   return _isPresent;
 }
 
+  // @mfunc Is this <c OMProperty> void ?
+  //   @rdesc True if this <c OMProperty> is void, false otherwise.
+  //   @this const
+bool OMProperty::isVoid(void) const
+{
+  TRACE("OMProperty::isVoid");
+
+  // most descendants of OMProperty are never void
+  return true;
+}
+
   // @mfunc Remove this optional <c OMProperty>.
 void OMProperty::remove(void)
 {
