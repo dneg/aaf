@@ -1143,43 +1143,9 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 						  0, OMF2::OMColorSitingType,
 						  sizeof(cositing), (void *)&(cositing));
 
-#if 0
-				
-				
-				/* [out] */ aafColorSiting_t __RPC_FAR *pColorSiting) = 0;
-                
-				pCDCIDesc->GetBlackReferenceLevel( 
-				/* [out] */ aafUInt32 __RPC_FAR *pBlackReferenceLevel) = 0;
-                
-				pCDCIDesc->GetWhiteReferenceLevel( 
-				/* [out] */ aafUInt32 __RPC_FAR *pWhiteReferenceLevel) = 0;
-                
-				pCDCIDesc->GetColorRange( 
-				/* [out] */ aafUInt32 __RPC_FAR *pColorRange) = 0;
-				
-				pCDCIDesc->GetPaddingBits( 
-				/* [out] */ aafInt16 __RPC_FAR *pPaddingBits) = 0;
-
-	if (OMFError != OMF2::OM_ERR_NONE)
-		memset(&colorSiting, 0, sizeof(aafColorSiting_t));
-	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, gpGlobals->omCDCIBlackReferenceLevel, &blackReferenceLevel); 
-	if (OMFError != OMF2::OM_ERR_NONE)
-		blackReferenceLevel = 0;
-	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, gpGlobals->omCDCIWhiteReferenceLevel, &whiteReferenceLevel); 
-	if (OMFError != OMF2::OM_ERR_NONE)
-		whiteReferenceLevel = 0;
-	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, gpGlobals->omCDCIColorRange, &colorRange); 
-	if (OMFError != OMF2::OM_ERR_NONE)
-		colorRange = 0;
-	OMFError = OMF2::OMReadProp(OMFFileHdl, mediaDescriptor, gpGlobals->omCDCIPaddingBits, 
-						   zeroPos, OMF2::kSwabIfNeeded, OMF2::OMInt16,
-						   sizeof(paddingBits), &paddingBits); 
-	if (OMFError != OMF2::OM_ERR_NONE)
-		paddingBits = 0;
-#endif        			
-				if (gpGlobals->bVerboseMode)
-					printf("%sAdded a CDCI Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
-				goto cleanup;
+			if (gpGlobals->bVerboseMode)
+				printf("%sAdded a CDCI Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
+			goto cleanup;
 		}
 		rc = pEssenceDesc->QueryInterface(IID_IAAFObject, (void **)&pAAFObject);
 		if (SUCCEEDED(rc))
@@ -2957,37 +2923,28 @@ HRESULT Aaf2Omf::UpdateKeyFrameVVAL(IAAFControlPoint*		controlPoint,
 									OMF2::omfDDefObj_t		dataKind)
 {
 	// N^2 problem, we need to optimize this somehow
-	OMF2::omfInt32		numPoints, n, OMFBytesRead;
+	OMF2::omfInt32		/*numPoints, */n, OMFBytesRead;
 	aafUInt32			bytesRead;
-	OMF2::omfIterHdl_t	hdl;
 	OMF2::omfCntlPtObj_t ctlp;
-	bool				found = false;
 	OMF2::omfRational_t	ctlpTime;
 	aafDataBuffer_t		value;
+	bool				found = false;
 	OMFIPvtKFInfo_t		*omfKF;
 	aafRational_t		AAFTime;
 
 	moduleErrorTmp = AAFRESULT_SUCCESS;
-	checkOMF(OMF2::omfiVaryValueGetNumPoints(OMFFileHdl, vval, &numPoints));
-	checkOMF(OMF2::omfiIteratorAlloc(OMFFileHdl, &hdl));
 	value = new unsigned char[destValueLen];
-	for(n = 0; n < destValueLen; n++)
-		value[n] = 0;
-	for(n = 1; (n <= numPoints) && !found; n++)
+	ctlp = FindCTLPAtTime(vval, time);
+	if(ctlp != NULL)
 	{
-		checkOMF(OMF2::omfiVaryValueGetNextPoint(hdl, vval, NULL, &ctlp));
-		checkOMF(OMF2::omfsReadRational(OMFFileHdl, ctlp, OMF2::OMCTLPTime, &ctlpTime));
-		if(ctlpTime.numerator == time.numerator && 
-		   ctlpTime.denominator == time.denominator)
-		{
-			found = true;
-			// Assert NON-NULL!!!
-			checkOMF(OMF2::omfiControlPtGetInfo(OMFFileHdl, ctlp, &ctlpTime,
+		found = true;
+		for(n = 0; n < destValueLen; n++)
+			value[n] = 0;
+		// Assert ctlp NON-NULL!!!
+		checkOMF(OMF2::omfiControlPtGetInfo(OMFFileHdl, ctlp, &ctlpTime,
 												NULL, NULL, destValueLen,
 												&OMFBytesRead, value));
-		}
 	}
-	checkOMF(OMF2::omfiIteratorDispose(OMFFileHdl, hdl));
 
 	// Use the AAF parameter definition kind to fill in any new fields
 	// !!!Check the old cookie for validity
@@ -3006,7 +2963,6 @@ HRESULT Aaf2Omf::UpdateKeyFrameVVAL(IAAFControlPoint*		controlPoint,
 // and set up below
 	struct OMFIPvtKFInfo
 	{
-	long	    selected;			// Boolean would have struct alignment problems x-platform
 	char				enableKeyFlags;
 // userParamSize must ALWAYS be the last field of this structure.  It doesn't have to
 // be the last one written to the domain, but it must be the last one here.  userParamSize
@@ -3128,6 +3084,33 @@ cleanup:
 	return(moduleErrorTmp);
 }
 
+OMF2::omfSegObj_t Aaf2Omf::FindCTLPAtTime(OMF2::omfSegObj_t vval, OMF2::omfRational_t time)
+{
+	OMF2::omfInt32			numPoints;
+	OMF2::omfSegObj_t		result = NULL;
+	OMF2::omfCntlPtObj_t	ctlp;
+	OMF2::omfInt32			n;
+	OMF2::omfRational_t		ctlpTime;
+	OMF2::omfIterHdl_t		hdl;
+	bool					found = false;
 
+	checkOMF(OMF2::omfiVaryValueGetNumPoints(OMFFileHdl, vval, &numPoints));
+	checkOMF(OMF2::omfiIteratorAlloc(OMFFileHdl, &hdl));
+	for(n = 1; (n <= numPoints) && !found; n++)
+	{
+		checkOMF(OMF2::omfiVaryValueGetNextPoint(hdl, vval, NULL, &ctlp));
+		checkOMF(OMF2::omfsReadRational(OMFFileHdl, ctlp, OMF2::OMCTLPTime, &ctlpTime));
+		if(ctlpTime.numerator == time.numerator && 
+		   ctlpTime.denominator == time.denominator)
+		{
+			found = true;
+			result = ctlp;
+		}
+	}
+	checkOMF(OMF2::omfiIteratorDispose(OMFFileHdl, hdl));
+
+cleanup:
+	return result;
+}
 // OTher idea: Upon hitting ANY of the Avid private params (or level) find a VVAL
 // and assume that all VVALs containing AvidPrivate have identical times
