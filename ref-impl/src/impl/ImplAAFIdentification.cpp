@@ -17,6 +17,8 @@
 #include "ImplAAFIdentification.h"
 #endif
 
+#include "AAFTypes.h"
+
 #include <assert.h>
 
 
@@ -106,24 +108,36 @@ int ImplAAFIdentification::classId(void) const
   return CLSID_AAFIDENTIFICATION;
 }
 
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetCompanyName (aafString_t *  /*pCompanyName*/)
+static void stringPropertyToAAFString(aafString_t *aafString, OMStringProperty& stringProperty)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  const char* string = stringProperty;
+  aafString->length = stringProperty.length();
+  aafString->value = new aafWChar[aafString->length + 1];
+  mbstowcs(aafString->value, string, aafString->length);
+  aafString->value[aafString->length] = L'\0';
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFIdentification::GetCompanyName (aafString_t *  pCompanyName)
+{
+  stringPropertyToAAFString(pCompanyName, _companyName);
+  return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetProductName (aafString_t *  /*pProductName*/)
+    ImplAAFIdentification::GetProductName (aafString_t *  pProductName)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  stringPropertyToAAFString(pProductName, _productName);
+  return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetProductVersionString (aafString_t *  /*pProductVersionString*/)
+    ImplAAFIdentification::GetProductVersionString (aafString_t *  pProductVersionString)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  stringPropertyToAAFString(pProductVersionString, _productVersionString);
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -149,9 +163,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetPlatform (aafString_t *  /*pPlatform*/)
+    ImplAAFIdentification::GetPlatform (aafString_t *  pPlatform)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  stringPropertyToAAFString(pPlatform, _platform);
+  return AAFRESULT_SUCCESS;
 }
 
 
