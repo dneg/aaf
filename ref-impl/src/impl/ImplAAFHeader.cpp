@@ -606,7 +606,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT ImplAAFHeader::SetModified(void)		// To NOW
 {
-	aafTimeStamp_t	now;
+	aafTimeStamp_t	now = { 0 };
 
 	AAFGetDateTime(&now);
 	_lastModified = now;
