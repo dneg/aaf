@@ -54,6 +54,9 @@ public:
 	Initialize ();
 
   virtual AAFRESULT STDMETHODCALLTYPE
+	Open ();
+
+  virtual AAFRESULT STDMETHODCALLTYPE
 	OpenExistingRead (const aafCharacter * pFileName,
 					  aafUInt32 modeFlags);
 
@@ -79,6 +82,9 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
 	SaveAs (const aafCharacter * pFileName,
 			aafUInt32 modeFlags);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+	SaveCopyAs (ImplAAFFile * pDestFile);
 
   virtual AAFRESULT STDMETHODCALLTYPE
 	Revert ();

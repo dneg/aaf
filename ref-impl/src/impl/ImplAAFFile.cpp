@@ -539,6 +539,16 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 
 
 AAFRESULT STDMETHODCALLTYPE
+ImplAAFFile::Open ()
+{
+  if (_open)
+	return AAFRESULT_ALREADY_OPEN;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
 ImplAAFFile::Save ()
 {
 	if (! _initialized)
@@ -582,6 +592,15 @@ ImplAAFFile::Save ()
 	_head->SetModified();
 
 	return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFFile::SaveCopyAs (ImplAAFFile * pDestFile)
+{
+  if (! pDestFile)
+	return AAFRESULT_NULL_PARAM;
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
