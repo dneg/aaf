@@ -45,9 +45,8 @@ OMDataStreamProperty::~OMDataStreamProperty(void)
 }
 
   // @mfunc Save this <c OMDataStreamProperty>.
-  //   @parm Client context for callbacks.
   //   @this const
-void OMDataStreamProperty::save(void* /* clientContext */) const
+void OMDataStreamProperty::save(void) const
 {
   TRACE("OMDataStreamProperty::save");
 

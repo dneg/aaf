@@ -64,7 +64,7 @@ public:
   virtual ~OMWeakReferenceSetProperty(void);
 
     // @cmember Save this <c OMWeakReferenceSetProperty>.
-  virtual void save(void* clientContext) const;
+  virtual void save(void) const;
 
     // @cmember Close this <c OMWeakReferenceSetProperty>.
   virtual void close(void);

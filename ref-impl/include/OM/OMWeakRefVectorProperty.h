@@ -64,7 +64,7 @@ public:
   virtual ~OMWeakReferenceVectorProperty(void);
 
     // @cmember Save this <c OMWeakReferenceVectorProperty>.
-  virtual void save(void* clientContext) const;
+  virtual void save(void) const;
 
     // @cmember Close this <c OMWeakReferenceVectorProperty>.
   virtual void close(void);

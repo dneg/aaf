@@ -115,7 +115,7 @@ public:
     // @cmember Save all changes made to the contents of this
     //          <c OMFile>. It is not possible to <mf OMFile::save>
     //          read-only or transient files.
-  void save(void* clientContext);
+  void save(void* clientOnSaveContext = 0);
 
     // @cmember Save the entire contents of this <c OMFile> as well as
     //          any unsaved changes in the new file <p fileName>. The file
@@ -172,6 +172,8 @@ public:
 
   virtual bool persistent(void) const;
 
+  void* clientOnSaveContext(void);
+
 private:
   // @access Private members.
 
@@ -191,6 +193,9 @@ private:
   enum OMLoadMode _loadMode;
   wchar_t* _fileName;
   OMFileSignature _signature;
+
+  void* _clientOnSaveContext;
+
 };
 
 #endif

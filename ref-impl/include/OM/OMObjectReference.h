@@ -68,7 +68,7 @@ public:
   bool operator== (const OMObjectReference<ReferencedObject>& rhs) const;
 
     // @cmember Save this <c OMObjectReference>.
-  virtual void save(void* clientContext) const = 0;
+  virtual void save(void) const = 0;
 
     // @cmember Close this <c OMObjectReference>.
   virtual void close(void) = 0;
@@ -139,7 +139,7 @@ public:
   bool operator== (const OMStrongObjectReference<ReferencedObject>& rhs) const;
 
     // @cmember Save this <c OMStrongObjectReference>.
-  virtual void save(void* clientContext) const;
+  virtual void save(void) const;
 
     // @cmember Close this <c OMStrongObjectReference>.
   virtual void close(void);
@@ -231,7 +231,7 @@ public:
   bool operator== (const OMWeakObjectReference<ReferencedObject>& rhs) const;
 
     // @cmember Save this <c OMWeakObjectReference>.
-  virtual void save(void* clientContext) const;
+  virtual void save(void) const;
 
     // @cmember Close this <c OMWeakObjectReference>.
   virtual void close(void);
