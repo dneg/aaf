@@ -322,9 +322,8 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
-// Renamed to LookupEssenceData() in the COM API
 AAFRESULT
-    ImplAAFContentStorage::LookupEssence (aafMobID_constref fileMobID,
+    ImplAAFContentStorage::LookupEssenceData (aafMobID_constref fileMobID,
                            ImplAAFEssenceData **ppEssence)
 {
   if (! ppEssence)
