@@ -438,8 +438,6 @@ AAFRESULT STDMETHODCALLTYPE
 #endif
 }
 
-
-
 AAFRESULT ImplAAFContentStorage::LoadMobTables(void)
 {
 	size_t				mobTableSize;
@@ -478,54 +476,7 @@ AAFRESULT ImplAAFContentStorage::LoadMobTables(void)
 	}
 	XEND;
 
-	return (OM_ERR_NONE);
-}
-
-/************************
- * Function: BuildMediaCache (INTERNAL)
- *
- * 		This function is a callback from the openFile and createFile
- *		group of functions.  This callback exists in order to allow the
- *		media layer to be independant, and yet have information of its
- *		own in the opaque file handle.
- *
- * Argument Notes:
- *		<none>.
- *
- * ReturnValue:
- *		Error code (see below).
- *
- * Possible Errors:
- *		Standard errors (see top of file).
- */
-AAFRESULT ImplAAFContentStorage::BuildMediaCache(void)
-{
-#if FULL_TOOLKIT
-	aafInt32						siz, n, dataObjTableSize;
-	AAFObject *				obj;
-	aafUID_t					uid;
-	
-	XPROTECT(_file)
-	{
-		{
-		   siz = GetObjRefArrayLength(OMHEADMediaData);
-			dataObjTableSize = (siz < DEFAULT_NUM_DATAOBJ ? 
-									  DEFAULT_NUM_DATAOBJ : siz);
-			CHECK(NewUIDTable(_file, dataObjTableSize, &(_dataObjs)));
-			for(n = 1; n <= siz; n++)
-			  {
-				 CHECK(ReadNthObjRefArray(OMHEADMediaData, 
-													  &obj, n));
-				 CHECK(obj->ReadUID(OMMDATMobID, &uid));
-				 CHECK(TableAddUID(_dataObjs, uid,obj,kOmTableDupAddDup));
-			  }
-		 }
-	}
-	XEXCEPT
-	XEND
-#endif
-	
-	return(OM_ERR_NONE);
+	return (AAFRESULT_SUCCESS);
 }
 
 aafBool ImplAAFContentStorage::IsEssenceDataPresent(aafUID_t fileMobUid,	/* IN -- */ aafFileFormat_t fmt)
@@ -570,7 +521,7 @@ AAFRESULT ImplAAFContentStorage::AppendDataObject(aafUID_t mobID,      /* IN - M
 	XEND;
 #endif
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 AAFRESULT ImplAAFContentStorage::UnlinkMobID(aafUID_t mobID)
