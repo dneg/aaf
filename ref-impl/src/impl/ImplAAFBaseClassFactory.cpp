@@ -60,7 +60,6 @@
 #define CLSID_AAFContainerDefinition CLSID_AAFContainerDef
 #define CLSID_AAFPluggableDefinition CLSID_AAFPluggableDef
 
-#define CLSID_AAFGroup CLSID_AAFEffect
 //
 // Include the AAF macro invocations.
 #include "AAFMetaDictionary.h"
