@@ -87,6 +87,8 @@ public:
 
   OMIOStream& write(const OMByte* bytes, size_t byteCount);
 
+  OMIOStream& read(OMByte* bytes, size_t byteCount);
+
 protected:
 
   void write(const char* string);

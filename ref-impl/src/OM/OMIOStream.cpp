@@ -267,6 +267,13 @@ OMIOStream& OMIOStream::write(const OMByte* bytes, size_t byteCount)
   return *this;
 }
 
+OMIOStream& OMIOStream::read(OMByte* bytes, size_t byteCount)
+{
+  OMUInt32 actualByteCount;
+  _store->read(bytes, byteCount, actualByteCount);
+  return *this;
+}
+
 void OMIOStream::write(const char* string)
 {
   OMUInt32 size;
