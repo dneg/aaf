@@ -335,6 +335,70 @@ HRESULT STDMETHODCALLTYPE
   return hr;
 }
 
+HRESULT STDMETHODCALLTYPE
+    CAAFSourceReference::SetMonoSourceSlotIDs (aafUInt32  numberElements,
+        aafUInt32*  pMonoSourceSlotIDs)
+{
+  HRESULT hr;
+
+  ImplAAFSourceReference * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFSourceReference*> (pO);
+  assert (ptr);
+
+
+
+  hr = ptr->SetMonoSourceSlotIDs (numberElements,
+    pMonoSourceSlotIDs);
+
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFSourceReference::GetMonoSourceSlotIDs (aafUInt32  numberElements,
+        aafUInt32*  pMonoSourceSlotIDs)
+{
+  HRESULT hr;
+
+  ImplAAFSourceReference * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFSourceReference*> (pO);
+  assert (ptr);
+
+
+
+  hr = ptr->GetMonoSourceSlotIDs (numberElements,
+    pMonoSourceSlotIDs);
+
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFSourceReference::GetMonoSourceSlotIDsSize (aafUInt32 *  numberElements)
+{
+  HRESULT hr;
+
+  ImplAAFSourceReference * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFSourceReference*> (pO);
+  assert (ptr);
+
+
+  hr = ptr->GetMonoSourceSlotIDsSize (numberElements);
+
+  return hr;
+}
+
 
 //
 // 
