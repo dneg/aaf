@@ -654,6 +654,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFSegments.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFStorablePropVals.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFTaggedValues.cpp"
 # End Source File
 # Begin Source File
