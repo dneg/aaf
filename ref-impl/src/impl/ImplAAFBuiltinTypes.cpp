@@ -58,6 +58,10 @@
 #include "ImplAAFTypeDefInt.h"
 #endif
 
+#ifndef __ImplAAFTypeDefCharacter_h__
+#include "ImplAAFTypeDefCharacter.h"
+#endif
+
 #ifndef __ImplAAFTypeDefString_h__
 #include "ImplAAFTypeDefString.h"
 #endif
@@ -617,17 +621,17 @@ static AAFRESULT CreateNewCharacterType (const aafUID_t & idToCreate,
 	  // def we want to create.
 	  if (! memcmp (&idToCreate, &curCharacter->typeID, sizeof (aafUID_t)))
 		{		
+      assert(curCharacter->size == 2); // we only persist 2 byte unicode characters.
+
 		  // Yes, this is the one.
 		  // Create an impl typedefinteger object (as yet uninitialized)
-		  ImplAAFTypeDefInt * ptd = 0;
-		  hr = pDict->GetBuiltinDefs()->cdTypeDefInt()->
+		  ImplAAFTypeDefCharacter * ptd = 0;
+		  hr = pDict->GetBuiltinDefs()->cdTypeDefCharacter()->
 			CreateInstance ((ImplAAFObject**) &ptd);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (ptd);
 
-		  AAFRESULT hr = ptd->Initialize (curCharacter->typeID,
-										  curCharacter->size,
-										  kAAFFalse,
+		  AAFRESULT hr = ptd->pvtInitialize (curCharacter->typeID,
 										  curCharacter->typeName);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 
@@ -1058,14 +1062,14 @@ AAFRESULT ImplAAFBuiltinTypes::NewBuiltinTypeDef
 							ppCreatedTypeDef);
   if (AAFRESULT_SUCCEEDED (hr))	return hr;
 
-  hr = CreateNewStringType (idToCreate,
-							_dictionary,
-							ppCreatedTypeDef);
-  if (AAFRESULT_SUCCEEDED (hr))	return hr;
-
   hr = CreateNewCharacterType (idToCreate,
 							   _dictionary,
 							   ppCreatedTypeDef);
+  if (AAFRESULT_SUCCEEDED (hr))	return hr;
+
+  hr = CreateNewStringType (idToCreate,
+							_dictionary,
+							ppCreatedTypeDef);
   if (AAFRESULT_SUCCEEDED (hr))	return hr;
 
   hr = CreateNewIndirectType (idToCreate,

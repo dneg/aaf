@@ -966,22 +966,23 @@ typedef enum _eAAFTypeCategory_e
 {
   kAAFTypeCatUnknown       = 0,  // can only occur in damaged files
   kAAFTypeCatInt           = 1,  // any integral type
-  kAAFTypeCatStrongObjRef  = 2,  // strong object reference
-  kAAFTypeCatWeakObjRef    = 3,  // weak object reference
-  kAAFTypeCatRename        = 4,  // renamed type
-  kAAFTypeCatEnum          = 5,  // enumerated type
-  kAAFTypeCatFixedArray    = 6,  // fixed-size array
-  kAAFTypeCatVariableArray = 7,  // variably-sized array
-  kAAFTypeCatSet           = 8,  // set of strong object references or
+  kAAFTypeCatCharacter     = 2,  // any character type
+  kAAFTypeCatStrongObjRef  = 3,  // strong object reference
+  kAAFTypeCatWeakObjRef    = 4,  // weak object reference
+  kAAFTypeCatRename        = 5,  // renamed type
+  kAAFTypeCatEnum          = 6,  // enumerated type
+  kAAFTypeCatFixedArray    = 7,  // fixed-size array
+  kAAFTypeCatVariableArray = 8,  // variably-sized array
+  kAAFTypeCatSet           = 9,  // set of strong object references or
                                  // set of weak object references
-  kAAFTypeCatRecord        = 9,  // a structured type
-  kAAFTypeCatStream        = 10, // potentially huge amount of data
-  kAAFTypeCatString        = 11, // null-terminated variably-sized
-                                 // array
-  kAAFTypeCatExtEnum       = 12, // extendible enumerated type
-  kAAFTypeCatIndirect      = 13, // type must be determined at runtime
-  kAAFTypeCatOpaque        = 14, // type can be determined at runtime
-  kAAFTypeCatEncrypted     = 15  // type can be determined at runtime 
+  kAAFTypeCatRecord        = 10, // a structured type
+  kAAFTypeCatStream        = 11, // potentially huge amount of data
+  kAAFTypeCatString        = 12, // null-terminated variably-sized
+                                 // array of characters
+  kAAFTypeCatExtEnum       = 13, // extendible enumerated type
+  kAAFTypeCatIndirect      = 14, // type must be determined at runtime
+  kAAFTypeCatOpaque        = 15, // type can be determined at runtime
+  kAAFTypeCatEncrypted     = 16  // type can be determined at runtime 
                                  // but bits are encrypted
 } eAAFTypeCategory_e;
 

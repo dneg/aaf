@@ -102,6 +102,7 @@ HUMAN_TYPED_IMPL="\
 	AAFTimecodeStream \
 	AAFTimecodeStream12M \
 	AAFTypeDef \
+	AAFTypeDefCharacter \
 	AAFTypeDefIndirect \
 	AAFTypeDefInt \
 	AAFTypeDefRename \
