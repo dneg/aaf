@@ -29,6 +29,7 @@
 
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
@@ -543,17 +544,21 @@ static HRESULT ObjectReadTest ()
 }
 
 
-extern "C" HRESULT CAAFObject_test()
+extern "C" HRESULT CAAFObject_test(testMode_t mode);
+extern "C" HRESULT CAAFObject_test(testMode_t mode)
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 
   try
 	{
-	  hr = ObjectWriteTest ();
-	  if (FAILED(hr))
+		if(mode == kAAFUnitTestReadWrite)
 		{
-		  cerr << "CAAFObject_test...FAILED!" << endl;
-		  return hr;
+		  hr = ObjectWriteTest ();
+		  if (FAILED(hr))
+			{
+			  cerr << "CAAFObject_test...FAILED!" << endl;
+			  return hr;
+			}
 		}
 
 	  hr = ObjectReadTest ();

@@ -36,6 +36,7 @@
 #include <string.h>
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFDefUIDs.h"
 
 #include "CAAFBuiltinDefs.h"
@@ -119,7 +120,8 @@ struct HeaderTest
   
 };
 
-extern "C" HRESULT CAAFHeader_test()
+extern "C" HRESULT CAAFHeader_test(testMode_t mode);
+extern "C" HRESULT CAAFHeader_test(testMode_t mode)
 {
   HRESULT hr = AAFRESULT_SUCCESS;
   wchar_t *fileName = L"AAFHeaderTest.aaf";
@@ -127,7 +129,8 @@ extern "C" HRESULT CAAFHeader_test()
 
   try
   {
-    ht.createFile(fileName);
+	if(mode == kAAFUnitTestReadWrite)
+	   ht.createFile(fileName);
     ht.openFile(fileName);
   }
   catch (HRESULT& ehr)

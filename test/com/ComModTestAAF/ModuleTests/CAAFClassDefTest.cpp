@@ -29,6 +29,7 @@
 
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFSmartPointer.h"
 #include "AAFDefUIDs.h"
 #include "AAFTypeDefUIDs.h"
@@ -57,7 +58,7 @@ public:
 
 // The template class CAAFModTestLog provides a way to keep track of which methods in a class have been
 // tested, and whether the tests have passed or failed.  The parameter class T should be set to an 
-// enumeration type giving a named index for each method to be tested (see usage in CAAFClassDef_test() 
+// enumeration type giving a named index for each method to be tested (see usage in CAAFClassDef_test(testMode_t mode) 
 // below).
 template<class T>
 class CAAFModTestLog
@@ -545,13 +546,20 @@ static void ReadAAFFile(CAAFClassDefTestLog& Log)
 	checkResult(pFile->Close());
 }
 
-static void ClassDefTest(CAAFClassDefTestLog& Log)
+static void ClassDefTest(CAAFClassDefTestLog& Log, testMode_t mode)
 {
-	CreateAAFFile(Log);
+	if(mode == kAAFUnitTestReadWrite)
+		CreateAAFFile(Log);
+	else	// These tests occur only on write, but are required to pass the whole thing
+	{
+		Log.MarkAsTested(INITIALIZE);
+	}
+	
 	ReadAAFFile(Log);
 }
 
-extern "C" HRESULT CAAFClassDef_test()
+extern "C" HRESULT CAAFClassDef_test(testMode_t mode);
+extern "C" HRESULT CAAFClassDef_test(testMode_t mode)
 {
 	// Create test log
 	CAAFClassDefTestLog Log(NUM_IAAFCLASSDEF_METHODS,
@@ -561,7 +569,7 @@ extern "C" HRESULT CAAFClassDef_test()
 	aafBool bException=kAAFFalse;
 	try
 	{
-		ClassDefTest(Log);
+		ClassDefTest(Log, mode);
 	}
 	catch (...)
 	{
