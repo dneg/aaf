@@ -19,11 +19,11 @@ AD_HEAD
 \******************************************/
 AD_CLASS_BEGIN
 
-AD_CONSTRUCTOR4([in],AAFFile          ,file     ,File Handle,
-				[in],AAFDataDefinition,datadef  ,Data Definition object,
-				[in],aafLength_t    ,length   ,Length property value,
-				[in],aafSourceRef_t ,sourceRef,Source Reference,
-				This function creates a new source clip object with
+AD_XCONSTRUCTOR4([in],objIn,AAFFile          ,file     ,File Handle,
+				 [in],objIn,AAFDataDefinition,datadef  ,Data Definition object,
+				 [in],objPass,aafLength_t    ,length   ,Length property value,
+				 [in],objPass,aafSourceRef_t ,sourceRef,Source Reference,
+				 This function creates a new source clip object with
   // the given required properties.  Optional properties are added
   // with separate functions.)
 
