@@ -40,7 +40,7 @@
 
 OMStorable::OMStorable(void)
 : _persistentProperties(), _containingObject(0), _name(0),
-  _pathName(0), _containingProperty(0), _key(0), _store(0),
+  _pathName(0), _containingProperty(0), _store(0),
   _classFactory(0)
 {
   TRACE("OMStorable::OMStorable");
@@ -172,17 +172,13 @@ void OMStorable::clearContainingObject(void)
   // @mfunc Inform this <c OMStorable> that it is contained
   //        within the <c OMProperty> <p containingProperty>.
   //   @parm The containing <c OMProperty>.
-  //   @parm A key used to be used by this <c OMStorable> to identify
-  //         itself in future transactions with the given <c OMProperty>.
-void OMStorable::setContainingProperty(const OMProperty* containingProperty,
-                                       const size_t key)
+void OMStorable::setContainingProperty(const OMProperty* containingProperty)
 {
   TRACE("OMStorable::setContainingProperty");
   PRECONDITION("Object not already attached", _containingProperty == 0);
   PRECONDITION("Valid property", containingProperty != 0);
 
   _containingProperty = const_cast<OMProperty*>(containingProperty);
-  _key = key;
 
   POSTCONDITION("Object properly attached", _containingProperty != 0);
 }
