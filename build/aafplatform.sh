@@ -40,6 +40,10 @@ case "${MACHINE}:${OS}" in
     *86:Windows_NT)
 	echo Win
 	exit 0;;
+
+    "Power Macintosh:Darwin")
+	echo PPCDarwin
+	exit 0;;
 esac
 
 echo Unknown
