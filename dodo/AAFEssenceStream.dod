@@ -10,6 +10,20 @@ AAFRoot\
 AD_HEAD
 
 AD_IDL(//
+// The IAAFEssenceStream interface is an internal interface used by AAFEssenceAccess and
+// essence codecs to read the low-level representation of the essence.  There are multiple
+// classes implementing this interface\, each representing a different underlying container
+// holding the essence data.  The idea of \"container\" is separate from any formatting such
+// as WAVE or JPEG.  Examples of containers \(and therefore streams\)\, are essence embedded
+// in AAF files\, and essence in a file all by itself \(ex. a WAVE file\).
+//
+// Objects which support this interface must be created by methods in IAAFContainerDef\, since
+// the container definition is what is used to differentiate between the different streams.
+// If the stream needs a reference to data other than a file pointer \(ex. the AAFContainer
+// makes a stream which needs a reference to a structureed storage stream\) will have another
+// interface to support the additional behaviour.  For an AAF container\, the additional interface
+// is IAAFEssenceDataStream.
+//
 // NOTE: The SDK will init the representation of this object with the correct path
 // and open the underlying file before handing out an interface pointer.  Hence\,
 // there is no Open method on the stream.
@@ -148,7 +162,8 @@ AD_IDL(//
 // for these calls.
 //)
 
-AD_METHOD0(FlushCache, Ensure that all bits are written.
+AD_METHOD0(FlushCache, Ensure that all bits are written.  The caller of this interface
+	// is required to call FlushCache before releasing the stream.
 	// 
 	// This method should return only the following codes.  If more than one of
 	// the listed errors is in effect\\\, it should return the first one
