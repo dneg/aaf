@@ -53,6 +53,9 @@
 # 14-JUL-1999 : transdel Updated with new required SDK files.                 #
 # 05-OCT-1999 : transdel Updated with new required SDK files. And removed     #
 #               vestiges of registration code.                                #
+# 06-OCT-1999 : transdel Use copy instead of xcopy so that we can rename the  #
+#               files during the copy operation. Also, removed bin\debug      #
+#               directory from sdk.                                           #
 ###############################################################################
 
 
@@ -64,8 +67,10 @@ all : targets
 # Missing form common.mk
 # The command and options for standard copy operations.
 #
-CP = xcopy
-CP_OPTS = /r /i
+#CP = xcopy
+#CP_OPTS = /r /i
+CP = copy
+CP_OPTS = /v /b
 
 
 #
@@ -127,7 +132,6 @@ AAFSDK_CFG=$(AAFSDK)\config.mk
 # Directory structure for the AAF SDK
 #
 AAFSDK_BIN     = $(AAFSDK)\bin
-AAFSDK_DEBUG   = $(AAFSDK_BIN)\debug
 AAFSDK_HELP    = $(AAFSDK)\help
 AAFSDK_INCLUDE = $(AAFSDK)\include
 AAFSDK_LIB     = $(AAFSDK)\lib
@@ -163,9 +167,6 @@ TOOLKIT_TARGET_REFIMPL = $(TOOLKIT_RELEASE_REFIMPL)
 #
 TARGET_DIRS = \
 	$(AAFSDK_BIN) \
-!if "$(CFG)"=="FULL"
-	$(AAFSDK_DEBUG) \
-!endif
 	$(AAFSDK_HELP) \
 	$(AAFSDK_INCLUDE) \
 	$(AAFSDK_LIB)
@@ -258,7 +259,7 @@ RELEASE_DLL_FILES = \
 # Release dynamic link libraries.
 #
 DEBUG_DLL_FILES = \
-	$(AAFSDK_DEBUG)\aafcoapi.dll
+	$(AAFSDK_BIN)\aafcoapid.dll
 
 
 
@@ -277,13 +278,16 @@ TARGET_DLL_FILES = \
 
 
 #
-# Configuration files that need to be cleanup up.
+# Configuration files that need to be cleanup up from LASTCFG.
 #
 CONFIG_FILES_TO_REMOVE = \
-	$(RELEASE_LIB_FILES) \
+!if "$(CFG)"=="Release"
 	$(DEBUG_LIB_FILES) \
-	$(RELEASE_DLL_FILES) \
 	$(DEBUG_DLL_FILES)
+!elseif "$(CFG)"=="Debug"
+	$(RELEASE_LIB_FILES) \
+	$(RELEASE_DLL_FILES)
+!endif
 
 
 #
@@ -293,7 +297,10 @@ TARGET_FILES_TO_REMOVE = \
 	$(TARGET_H_FILES) \
 	$(TARGET_IDL_FILES) \
 	$(TARGET_MIDL_FILES) \
-	$(CONFIG_FILES_TO_REMOVE) \
+	$(RELEASE_LIB_FILES) \
+	$(DEBUG_LIB_FILES) \
+	$(RELEASE_DLL_FILES) \
+	$(DEBUG_DLL_FILES) \
 	$(AAFSDK_CFG)
 
 
@@ -302,7 +309,6 @@ TARGET_FILES_TO_REMOVE = \
 # Note: Order is important: must have child before parent directory.
 #
 TARGET_DIRS_TO_REMOVE = \
-	$(AAFSDK_DEBUG) \
 	$(AAFSDK_BIN) \
 	$(AAFSDK_HELP) \
 	$(AAFSDK_INCLUDE) \
@@ -332,7 +338,7 @@ targets : cleanconfigfiles
 !elseif "$(LASTCFG)"=="Release" && "$(CFG)"=="Debug" 
 targets : cleanconfigfiles
 !elseif "$(LASTCFG)"!="$(CFG)" && "$(LASTCFG)"!=""
-targets : cleanfiles
+targets : cleanconfigfiles
 !endif
 targets : $(SDK_TARGETS)
 targets : $(AAFSDK_CFG)
@@ -356,9 +362,6 @@ $(AAFSDK) :
 
 $(AAFSDK_BIN) : $(AAFSDK)
 	md $(AAFSDK_BIN)
-
-$(AAFSDK_DEBUG) : $(AAFSDK_BIN)
-	md $(AAFSDK_DEBUG)
 
 $(AAFSDK_HELP) : $(AAFSDK)
 	md $(AAFSDK_HELP)
@@ -500,8 +503,8 @@ $(AAFSDK_BIN)\aafcoapi.dll : $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.dll
 #
 # Dependency and build rules for the Debug DLL targets.
 #
-$(AAFSDK_DEBUG)\aafcoapi.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.dll
-	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.dll "$(AAFSDK_DEBUG)\"
+$(AAFSDK_BIN)\aafcoapid.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.dll
+	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.dll "$(AAFSDK_BIN)\AAFCOAPID.dll"
 
 
 
@@ -510,10 +513,12 @@ $(AAFSDK_DEBUG)\aafcoapi.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.dll
 # Clean out all files that are specific to a particular configuration.
 #
 cleanconfigfiles:
+!if "$(CONFIG_FILES_TO_REMOVE)" != ""
 	@for %%f in ( $(CONFIG_FILES_TO_REMOVE) ) do \
 	    @if exist %%f \
 		@echo $(RM) $(RM_OPTS) %%f & \
 	        $(RM) $(RM_OPTS) %%f
+!endif
 
 
 
