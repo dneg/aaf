@@ -104,6 +104,14 @@ public:
         (ImplAAFOperationDef ** OperationDef);
 	//@comm Replaces part of omfiEffectGetInfo
 
+  //****************
+  // SetOperationDefinition()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetOperationDefinition
+        // @parm [in] Effect definition object
+        (ImplAAFOperationDef * OperationDef);
+
 
   //****************
   // GetRender()
