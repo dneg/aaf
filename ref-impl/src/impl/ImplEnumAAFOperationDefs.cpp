@@ -96,6 +96,10 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(_enumObj->MyHeadObject(&head));
 			CHECK(head->GetDictionary (&dict));
 			CHECK(dict->LookupEffectDefinition(&value, ppEffectDef));
+			head->ReleaseReference();
+			head = NULL;
+			dict->ReleaseReference();
+			dict = NULL;
 		}
 		else if(_enumStrongProp != NULL)
 			_enumStrongProp->getValueAt(*ppEffectDef, _current);

@@ -138,7 +138,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceFileContainer::GetPluggableID (aafUID_t *uid)
 {
-	*uid = ContainerFile;		// UID of the PluggableDef
+	*uid = ContainerFile;		// UID of the DefObject
 	return AAFRESULT_SUCCESS;
 }
 
@@ -151,7 +151,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileContainer::GetPluggableDefinition (IAAFDictionary *dict, IAAFPluggableDef **def)
+    CAAFEssenceFileContainer::GetDefinitionObject (IAAFDictionary *dict, IAAFDefObject **def)
 {
 	aafUID_t			uid;
 	IAAFContainerDef	*container = NULL;
@@ -167,7 +167,7 @@ HRESULT STDMETHODCALLTYPE
 		CHECK(obj->Init(&uid, L"Raw file Container", L"Essence is in a non-container file."));
 		obj->Release();
 		obj = NULL;
-		CHECK(container->QueryInterface(IID_IAAFPluggableDef, (void **)def));
+		CHECK(container->QueryInterface(IID_IAAFDefObject, (void **)def));
 		container->Release();
 		container = NULL;
 	}
@@ -200,7 +200,7 @@ HRESULT STDMETHODCALLTYPE
 	IAAFLocator				*pLoc = NULL;
 	IAAFNetworkLocator		*pNetLoc = NULL;
 	IAAFDefObject			*defObject = NULL;
-	aafUID_t				category = AUID_AAFPluggableDefinition, manufacturer = MANUF_JEFFS_PLUGINS;
+	aafUID_t				category = AUID_AAFDefObject, manufacturer = MANUF_JEFFS_PLUGINS;
 	aafUID_t				plugID = EXAMPLE_FILE_PLUGIN;
 	
 	XPROTECT()

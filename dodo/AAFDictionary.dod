@@ -21,7 +21,8 @@ AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(EnumAAFDataDefs)
 AD_FORWARD_DECLARATION(AAFEffectDef)
 AD_FORWARD_DECLARATION(EnumAAFEffectDefs)
-AD_FORWARD_DECLARATION(EnumAAFPluggableDefs)
+AD_FORWARD_DECLARATION(EnumAAFCodecDefs)
+AD_FORWARD_DECLARATION(EnumAAFContainerDefs)
 AD_CLASS_UUID(B1A21399, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A21398, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
@@ -195,13 +196,31 @@ AD_XMETHOD1(GetParameterDefinitions,
 [out\,retval], objOut, EnumAAFParameterDefs, ppEnum, Definition Enumeration,
 Return an enumerator for aff parameter definitions.)
 
-AD_XMETHOD1(RegisterPluggableDefinition,
-[in], objIn, AAFPluggableDef, pPlugDef, Pluggable Definition Object,
-Add the pluggable definition object to the header's list of definitions.
-)
+AD_XMETHOD1(RegisterCodecDefinition,
+[in], objIn, AAFCodecDef, pParmDef, Parameter Definition Object,
+Add the effect definition object to the header's list of definitions.)
 
-AD_XMETHOD1(GetPluggableDefinitions,
-[out\,retval], objOut, EnumAAFPluggableDefs, ppEnum, Definition Enumeration,
-Return an enumerator for AAF pluggable definitions.)
+AD_XMETHOD2(LookupCodecDefinition,
+[in\,ref], objPass, aafUID_t *, parameterID, Parameter Unique ID,
+[out\,retval], objOut, AAFCodecDef, ppParmDef, Effect definition object,
+Return the parameter definition object with the given id.)
+
+AD_XMETHOD1(GetCodecDefinitions,
+[out\,retval], objOut, EnumAAFCodecDefs, ppEnum, Definition Enumeration,
+Return an enumerator for aff parameter definitions.)
+
+AD_XMETHOD1(RegisterContainerDefinition,
+[in], objIn, AAFContainerDef, pParmDef, Parameter Definition Object,
+Add the effect definition object to the header's list of definitions.)
+
+AD_XMETHOD2(LookupContainerDefinition,
+[in\,ref], objPass, aafUID_t *, parameterID, Parameter Unique ID,
+[out\,retval], objOut, AAFContainerDef, ppParmDef, Effect definition object,
+Return the parameter definition object with the given id.)
+
+AD_XMETHOD1(GetContainerDefinitions,
+[out\,retval], objOut, EnumAAFContainerDefs, ppEnum, Definition Enumeration,
+Return an enumerator for aff parameter definitions.)
+
 
 AD_XCLASS_END(Concrete, StoredObject)
