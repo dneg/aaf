@@ -42,6 +42,17 @@
 #startm AD_HEAD 00
 #endm
 
+
+#ccccccccccccccccccccccccccc
+#c
+#c AAFTypes support for IDL
+#c
+#c Arguments: none
+#c
+#startm AD_TYPES_HEAD 00
+#endm
+
+
 #ccccccccccccccccccccccccccc
 #c
 #c Types definitions should only be used by idl and c++ & impl headers
@@ -606,6 +617,7 @@ I.this-module * Impl.this-module::GetCOMParent ()
 #c Argument: method declaration
 #c
 #startm AD_OVERRIDE 01
+Impl%01-cpp(.this-module)
 #endm
 
 
