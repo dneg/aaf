@@ -647,7 +647,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 							check(pSequence->GetNumComponents (&numComponents));
 							printf("    Found Sequence on slot with %ld components\n",
 								numComponents);
-							printf("        It has length %ld\n", length);
+							printf("        It has length %lld\n", length);
 							check(pSequence->EnumComponents (&pCompIter));
 							while (pCompIter && AAFRESULT_SUCCESS == pCompIter->NextOne(&pComponent))
 							{
@@ -659,7 +659,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 									aafSourceRef_t		ref;
 
 									check(pSourceClip->GetSourceReference (&ref));
-									printf("        %ld) A length %ld source clip\n", item, length);
+									printf("        %ld) A length %lld source clip\n", item, length);
 									check(pSourceClip->ResolveRef(&pReferencedMob));
 									check(pReferencedMob->GetMobID(&mobID));
 									check(pReferencedMob->GetName (bufW, sizeof(bufW)));
@@ -690,7 +690,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 								hr = pComponent->QueryInterface(IID_IAAFFiller, (void **) &pFiller);
 								if(AAFRESULT_SUCCESS == hr)
 								{
-									printf("        %ld) A length %ld filler\n", item, length);
+									printf("        %ld) A length %lld filler\n", item, length);
 
 									pFiller->Release();
 									pFiller = NULL;
