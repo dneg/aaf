@@ -1,9 +1,9 @@
 #startm .this-module 0
-AAFDataDefinition\
+AAFDataDef\
 #endm
 #c
 #startm .parent-module 0
-AAFDefinitionObject\
+AAFDefObject\
 #endm
 AD_HEAD
 
