@@ -124,7 +124,7 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 }
 
 extern "C" HRESULT CEnumAAFLoadedPlugins_test(testMode_t );
-extern "C" HRESULT CEnumAAFLoadedPlugins_test(testMode_t /*mode*/)
+extern "C" HRESULT CEnumAAFLoadedPlugins_test(testMode_t mode)
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
 	IEnumAAFLoadedPlugins	*pEnum = NULL, *pCloneEnum = NULL;
@@ -140,12 +140,14 @@ extern "C" HRESULT CEnumAAFLoadedPlugins_test(testMode_t /*mode*/)
 
 	try
 	{
+		if(mode != kAAFUnitTestReadWrite)
+			return AAFRESULT_SUCCESS;		// Can't run this test read-only
+
 		// Remove the previous test file if any.
-		RemoveTestFile(pFileName);
-		
+		RemoveTestFile(pFileName);		
 		
 		// Create the AAF file
-		checkResult(OpenAAFFile(pFileName, kAAFMediaOpenAppend, /*&pSession,*/ &pFile, &pHeader));
+		checkResult(OpenAAFFile(pFileName, kAAFMediaOpenAppend, /*&pSession,*/ &pFile, &pHeader));			
 		bFileOpen = true;
 		
 		// Get the AAF Dictionary so that we can create valid AAF objects.

@@ -129,7 +129,7 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 }
 
 extern "C" HRESULT CAAFPluginManager_test(testMode_t );
-extern "C" HRESULT CAAFPluginManager_test(testMode_t /*mode*/)
+extern "C" HRESULT CAAFPluginManager_test(testMode_t mode)
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
 	IEnumAAFLoadedPlugins	*pEnum;
@@ -145,7 +145,9 @@ extern "C" HRESULT CAAFPluginManager_test(testMode_t /*mode*/)
 
 	try
 	{
-		
+		if(mode != kAAFUnitTestReadWrite)
+			return AAFRESULT_SUCCESS;			// Can't run this test read-only
+
 		// Remove the previous test file if any.
 		RemoveTestFile(pFileName);
 		
