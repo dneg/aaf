@@ -2004,13 +2004,16 @@ HRESULT CAAFEssenceAccess_test()
 		// point, this method returns some other result, that means it has been
 		// implemented and should be tested, in which case our test can only 
 		// return partial success.
-		if(hrSetTransformParameters!=AAFRESULT_NOT_IN_CURRENT_VERSION)
-		{
-			cout << "The following IAAFEssenceAccess methods have not been tested:" 
-			<< endl;  
-			cout << "     SetTransformParameters" << endl; 	
-			hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-		}
+		
+		if(hr == AAFRESULT_SUCCESS)
+			hr = AAFRESULT_NOT_IN_CURRENT_VERSION;
+//		if(hrSetTransformParameters!=AAFRESULT_NOT_IN_CURRENT_VERSION)
+//		{
+//			cout << "The following IAAFEssenceAccess methods have not been tested:" 
+//			<< endl;  
+//			cout << "     SetTransformParameters" << endl; 	
+//			hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+//		}
 	}
 
 	return(hr);
