@@ -23,6 +23,8 @@
 #include "ImplAAFSourceReference.h"
 #endif
 
+#include "AAFPropertyIDs.h"
+
 #include <assert.h>
 #include "AAFResult.h"
 
