@@ -1872,6 +1872,7 @@ AD_CLASS_END\
     /*%27*/ .%28-adornment%29 .%28-indirection %30);\
 #endm
 
+
 #ccccccccccccccccccccccccccc
 #c
 #c Inserts declaration for a function which takes seven arguments.

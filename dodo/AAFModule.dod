@@ -491,6 +491,7 @@ AD_XFUNCTION4(AAFCreateRawStorageDisk,
   //   mode\, or if neither new or existing is specified for the
   //   existence.)
 
+
 AD_XFUNCTION6(AAFCreateRawStorageCachedDisk,
 
 			  [in],
