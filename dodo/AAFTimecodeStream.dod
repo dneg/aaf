@@ -1,0 +1,64 @@
+#startm .this-module 0
+AAFTimecodeStream\
+#endm
+#c
+#startm .parent-module 0
+AAFSegment\
+#endm
+#c
+#import ./AAFSegment.exp
+#import ./AAFUnitTest.exp
+AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+AD_INCLUDE(AAFTypes)
+
+AD_CLASS_BEGIN
+
+/****/
+AD_METHOD2(GetPositionTimecode,
+[in],aafPosition_t,position,Zero based offset to set the timecode at,
+[out],aafTimecode_t *,timecode,Timecode [startFrame drop fps],
+Get the timecode fields at the given position.)
+
+/****/
+AD_METHOD2(SetPositionTimecode,
+[in],aafPosition_t,position,Zero-based offset to set the timecode at,
+[in],aafTimecode_t,timecode,Timecode [startFrame  drop  fps],
+Set the timecode fields for a given frame.  The frame index must within the length of the object.)
+
+AD_METHOD1(GetUserDataLength,
+[out],aafInt32*,length,Fixed length of the user data [userbits] in bytes,
+Gets the length of the user data for one frame.)
+
+AD_METHOD3(GetUserDataAtPosition,
+[in],aafPosition_t,position,Zero-based offset,
+[in],aafInt32,buflen,Length of the buffer,
+[out],void*,buffer,Passed in and filled with user data,
+Gets the user data [userbits] for a particular frame.)
+
+/****/
+AD_METHOD3(SetUserDataAtPosition,
+[in],aafPosition_t,position,Zero-based offset to set the userbits at,
+[in],aafInt32,buflen,Length of the buffer,
+[in],void*,buffer,user data for the given frame,
+Gets the user data [userbits] for a particular frame.)
+							 
+/****/
+AD_OVERRIDE(.method-SegmentOffsetToTC)
+AD_OVERRIDE(.method-SegmentTCToOffset)
+
+  //
+  // IAAFUnitTest interface method overrides
+  //
+AD_OVERRIDE(.method-Test)
+
+
+AD_CLASS_END
