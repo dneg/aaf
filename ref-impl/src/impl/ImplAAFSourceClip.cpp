@@ -166,7 +166,7 @@ AAFRESULT STDMETHODCALLTYPE
 		 * editrate) exist in track, etc.
 		 */
 
-		CHECK(GetRef(&sourceRef));
+		CHECK(GetSourceReference(&sourceRef));
 		CHECK(MyHeadObject(&head));
 		CHECK(head->LookupMob(&sourceRef.sourceID, mob));
 
@@ -185,7 +185,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 /*************************************************************************
- * Function: GetRef()
+ * Function: GetSourceReference()
  *
  * 		This function returns the 3 properties on a source Clip that
  *      make of the "source reference" (sourceID, sourceTrackID, and
@@ -200,7 +200,7 @@ AAFRESULT STDMETHODCALLTYPE
  *		Standard errors.
  *************************************************************************/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceClip::GetRef (aafSourceRef_t*	pSourceRef)
+    ImplAAFSourceClip::GetSourceReference (aafSourceRef_t*	pSourceRef)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 	aafUID_t	sourceID;
@@ -259,7 +259,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceClip::SetRef (aafSourceRef_t  sourceRef)
+    ImplAAFSourceClip::SetSourceReference (aafSourceRef_t  sourceRef)
 {
     aafInt32	tmp1xSourcePosition = 0;
 	aafInt16	tmp1xTrackNum = 0;
