@@ -64,7 +64,7 @@ AAFRDLIRESULT AAFLoadLibrary(const char* name, AAFLibraryHandle* pLibHandle)
   CFragConnectionID connectionID = 0;
 
  
-  if (NULL == name || NULL == pLibHandle || (NULL != name && 63 > strlen(name)))
+  if (NULL == name || NULL == pLibHandle || (NULL != name && 63 < strlen(name)))
     return AAFRESULT_NULL_PARAM;
   
   
@@ -113,7 +113,7 @@ AAFRDLIRESULT AAFFindSymbol(AAFLibraryHandle libHandle, const char* symbolName, 
   CFragSymbolClass  symClass;
 
   
-  if (NULL == libHandle || NULL == symbolName || NULL == pSymbol || (NULL != symbolName && 63 > strlen(symbolName)) )
+  if (NULL == libHandle || NULL == symbolName || NULL == pSymbol || (NULL != symbolName && 63 < strlen(symbolName)) )
     return AAFRESULT_NULL_PARAM;
 
   // Copy and convert the c null terminated string to a Str63.
