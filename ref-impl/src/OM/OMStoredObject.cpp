@@ -49,7 +49,7 @@
 #include <objbase.h>
 #endif
 
-const OMUInt32 currentVersion = 22;
+const OMUInt32 currentVersion = 23;
 
 const size_t indexHeaderSize = sizeof(OMByteOrder) +  // Byte order flag
                                sizeof(OMUInt32) +     // Version number
@@ -772,6 +772,11 @@ void OMStoredObject::save(const OMStoredVectorIndex* vector,
   OMUInt32 firstFreeKey = vector->firstFreeKey();
   writeToStream(vectorIndexStream, &firstFreeKey, sizeof(firstFreeKey));
 
+  // Write the last free key.
+  //
+  OMUInt32 lastFreeKey = vector->lastFreeKey();
+  writeToStream(vectorIndexStream, &lastFreeKey, sizeof(lastFreeKey));
+
   // For each element write the element name.
   //
   size_t context = 0;
@@ -816,6 +821,11 @@ void OMStoredObject::save(const OMStoredSetIndex* set,
   //
   OMUInt32 firstFreeKey = set->firstFreeKey();
   writeToStream(setIndexStream, &firstFreeKey, sizeof(firstFreeKey));
+
+  // Write the last free key.
+  //
+  OMUInt32 lastFreeKey = set->lastFreeKey();
+  writeToStream(setIndexStream, &lastFreeKey, sizeof(lastFreeKey));
 
   // Write the key pid.
   //
@@ -1014,6 +1024,11 @@ void OMStoredObject::restore(OMStoredVectorIndex*& vector,
   OMUInt32 firstFreeKey;
   readUInt32FromStream(vectorIndexStream, firstFreeKey, _reorderBytes);
 
+  // Read the last free key.
+  //
+  OMUInt32 lastFreeKey;
+  readUInt32FromStream(vectorIndexStream, lastFreeKey, _reorderBytes);
+
   // Create an index.
   //
   OMStoredVectorIndex* vectorIndex = new OMStoredVectorIndex(entries);
@@ -1022,6 +1037,10 @@ void OMStoredObject::restore(OMStoredVectorIndex*& vector,
   // Set the first free key.
   //
   vectorIndex->setFirstFreeKey(firstFreeKey);
+
+  // Set the last free key.
+  //
+  vectorIndex->setLastFreeKey(lastFreeKey);
 
   // Read the element names, placing them in the index.
   //
@@ -1068,6 +1087,11 @@ void OMStoredObject::restore(OMStoredSetIndex*& set,
   OMUInt32 firstFreeKey;
   readUInt32FromStream(setIndexStream, firstFreeKey, _reorderBytes);
 
+  // Read the last free key.
+  //
+  OMUInt32 lastFreeKey;
+  readUInt32FromStream(setIndexStream, lastFreeKey, _reorderBytes);
+
   // Read the key pid.
   //
   OMUInt32 keyPid;
@@ -1086,6 +1110,10 @@ void OMStoredObject::restore(OMStoredSetIndex*& set,
   // Set the first free key.
   //
   setIndex->setFirstFreeKey(firstFreeKey);
+
+  // Set the last free key.
+  //
+  setIndex->setLastFreeKey(lastFreeKey);
 
   // Read the element names, counts and keys, placing them in the index.
   //
