@@ -752,21 +752,33 @@ ImplAAFMasterMob::CreateEssence (aafSlotID_t		masterSlotID,
 								aafUID_t			fileFormat,
 								ImplAAFEssenceAccess **result)
 {
-	ImplAAFEssenceAccess	*access;
+	ImplAAFEssenceAccess	*access = NULL;
+
+  if (NULL == result)
+    return AAFRESULT_NULL_PARAM;
+
 
 	access = (ImplAAFEssenceAccess *)CreateImpl (CLSID_AAFEssenceAccess);
-	*result = access;
 
 	XPROTECT()
 	{
+    if (NULL == access)
+      RAISE(AAFRESULT_NOMEMORY);
+
 		if(destination != NULL)
 		{
 			CHECK(access->SetEssenceDestination(destination, fileFormat));
 		}
 		
 		CHECK(access->Create(this, masterSlotID, mediaKind, codecID, editRate, sampleRate, enable));
+	  
+    *result = access;
 	}
 	XEXCEPT
+  {
+		if (access)
+      access->ReleaseReference();
+  }
 	XEND;
 
 	return(AAFRESULT_SUCCESS);
@@ -795,19 +807,43 @@ AAFRESULT STDMETHODCALLTYPE
 							aafUID_t			fileFormat,
 							IAAFEssenceMultiAccess **result)
 {
-	ImplAAFEssenceAccess	*access;
+	ImplAAFEssenceAccess	*access = NULL;
 	IUnknown				*iUnk = NULL;
-	AAFRESULT				hr;
+  IAAFEssenceMultiAccess *pMultiAccess = NULL;
+  
+  if (NULL == result)
+    return AAFRESULT_NULL_PARAM;
 
 	access = (ImplAAFEssenceAccess *)CreateImpl (CLSID_AAFEssenceAccess);
-	iUnk = static_cast<IUnknown *> (access->GetContainer());
-	hr = iUnk->QueryInterface(IID_IAAFEssenceMultiAccess, (void **)result);
-	if(hr != AAFRESULT_SUCCESS)
-		return hr;
 
-	iUnk->Release();
-	iUnk = NULL;
-	return access->MultiCreate(this, codecID, arrayElemCount, mediaArray, Enable);
+	XPROTECT()
+	{
+    if (NULL == access)
+      RAISE(AAFRESULT_NOMEMORY);
+
+    // Return a IAAFEssenceMultiAccess interface to the new EssenceAccess
+    // object.
+	  iUnk = static_cast<IUnknown *> (access->GetContainer());
+    assert(NULL != iUnk);
+	  CHECK(iUnk->QueryInterface(IID_IAAFEssenceMultiAccess, (void **)&pMultiAccess));
+
+	  CHECK(access->MultiCreate(this, codecID, arrayElemCount, mediaArray, Enable));
+
+    *result = pMultiAccess;
+    pMultiAccess = NULL;
+    access->ReleaseReference();
+    access = NULL;
+	}
+	XEXCEPT
+  {
+    if (pMultiAccess)
+      pMultiAccess->Release();
+		if (access)
+      access->ReleaseReference();
+  }
+	XEND;
+
+	return(AAFRESULT_SUCCESS);
 }
 
 /****/
@@ -818,10 +854,27 @@ AAFRESULT STDMETHODCALLTYPE
                            aafUID_t essenceKind,
                            aafInt16 *numCh)
 {
-	ImplAAFEssenceAccess	*access;
+	ImplAAFEssenceAccess	*access = NULL;
+  
 
 	access = (ImplAAFEssenceAccess *)CreateImpl (CLSID_AAFEssenceAccess);
-	return access->GetNumChannels(this, slotID, essenceCrit, essenceKind, numCh);
+
+	XPROTECT()
+	{
+    if (NULL == access)
+      RAISE(AAFRESULT_NOMEMORY);
+
+	  CHECK(access->GetNumChannels(this, slotID, essenceCrit, essenceKind, numCh));
+    access->ReleaseReference();
+	}
+	XEXCEPT
+  {
+		if (access)
+      access->ReleaseReference();
+  }
+	XEND;
+
+	return(AAFRESULT_SUCCESS);
 }
 
 /****/
@@ -832,11 +885,30 @@ AAFRESULT STDMETHODCALLTYPE
                            aafCompressEnable_t  compEnable,
 							ImplAAFEssenceAccess **result)
 {
-	ImplAAFEssenceAccess	*access;
+	ImplAAFEssenceAccess	*access = NULL;
+
+  if (NULL == result)
+    return AAFRESULT_NULL_PARAM;
 
 	access = (ImplAAFEssenceAccess *)CreateImpl (CLSID_AAFEssenceAccess);
-	*result = access;
-	return access->Open(this, slotID, mediaCrit, openMode, compEnable);
+
+	XPROTECT()
+	{
+    if (NULL == access)
+      RAISE(AAFRESULT_NOMEMORY);
+
+	  CHECK(access->Open(this, slotID, mediaCrit, openMode, compEnable));
+    *result = access;
+    access = NULL;
+	}
+	XEXCEPT
+  {
+		if (access)
+      access->ReleaseReference();
+  }
+	XEND;
+
+	return(AAFRESULT_SUCCESS);
 }
 
 	//@comm If the essence is interleaved,
@@ -864,16 +936,40 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	ImplAAFEssenceAccess	*access;
 	IUnknown				*iUnk = NULL;
-	AAFRESULT				hr;
+  IAAFEssenceMultiAccess *pMultiAccess = NULL;
+  
+  if (NULL == result)
+    return AAFRESULT_NULL_PARAM;
 
 	access = (ImplAAFEssenceAccess *)CreateImpl (CLSID_AAFEssenceAccess);
-	iUnk = static_cast<IUnknown *> (access->GetContainer());
-	hr = iUnk->QueryInterface(IID_IAAFEssenceMultiAccess, (void **)result);
-	if(hr != AAFRESULT_SUCCESS)
-		return hr;
-	iUnk->Release();
-	iUnk = NULL;
-	return access->MultiOpen(this, slotID, mediaCrit, openMode, compEnable);
+
+	XPROTECT()
+	{
+    if (NULL == access)
+      RAISE(AAFRESULT_NOMEMORY);
+
+    // Return a IAAFEssenceMultiAccess interface to the new EssenceAccess
+    // object.
+	  iUnk = static_cast<IUnknown *> (access->GetContainer());
+	  CHECK(iUnk->QueryInterface(IID_IAAFEssenceMultiAccess, (void **)&pMultiAccess));
+
+	  CHECK(access->MultiOpen(this, slotID, mediaCrit, openMode, compEnable));
+
+    *result = pMultiAccess;
+    pMultiAccess = NULL;
+    access->ReleaseReference();
+    access = NULL;
+	}
+	XEXCEPT
+  {
+    if (pMultiAccess)
+      pMultiAccess->Release();
+		if (access)
+      access->ReleaseReference();
+  }
+	XEND;
+
+	return(AAFRESULT_SUCCESS);
 }
 
 	//@comm This routine
