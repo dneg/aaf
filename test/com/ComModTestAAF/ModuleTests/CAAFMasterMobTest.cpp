@@ -310,6 +310,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 				checkExpression (numReps == 1, AAFRESULT_TEST_FAILED);
 
 				pSlot->Release();
+				pSlot = NULL;
 				s++;
 			}
 
