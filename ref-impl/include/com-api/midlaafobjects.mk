@@ -132,7 +132,10 @@ AAFOBJECTS = \
 	AAFDataDefinition \
 	AAFDefinitionObject \
 	AAFDictionary \
+	AAFEdgecode \
 	AAFEffectDefinition \
+	AAFEffectInvocation \
+	AAFFiller \
 	AAFFile \
 	AAFFindSourceInfo \
 	AAFIdentification \
@@ -143,12 +146,21 @@ AAFOBJECTS = \
 	AAFMediaFileDescriptor \
 	AAFMediaFilmDescriptor \
 	AAFMediaTapeDescriptor \
+	AAFMob  \
+	AAFMobSlot \
 	AAFObject \
 	AAFObjectAttribute \
 	AAFParameter \
 	AAFParameterSlot \
 	AAFPropertyDefinition \
+	AAFPulldown \
+	AAFSegment \
+	AAFSequence \
+	AAFSourceClip \
+	AAFSourceReference \
 	AAFStringAttribute \
+	AAFTimecode \
+	AAFTimelineMobSlot \
 	AAFTypeDefinition \
 	AAFUnixLocator \
 	AAFVaryingValue \
@@ -163,6 +175,7 @@ AAFOBJECTS = \
 	EnumAAFIdentifications \
 	EnumAAFLocators \
 	EnumAAFMobComments \
+	EnumAAFParameterSlots \
 	EnumAAFPropertyDefinitions \
 	EnumAAFReferenceValues \
 	EnumAAFTypeDefinitions
