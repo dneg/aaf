@@ -752,7 +752,7 @@ public:
 public:
   // Declare this class to be storable.
   //
-  OMDECLARE_STORABLE(.this-module)
+  OMDECLARE_STORABLE(Impl.this-module)
 
   // Declare the module test method. The implementation of the will be be
   // in /test/Impl.this-moduleTest.cpp.

@@ -613,7 +613,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 extern "C" const aafClassID_t CLSID_.this-module;
 
-OMDEFINE_STORABLE(.this-module, CLSID_.this-module);
+OMDEFINE_STORABLE(Impl.this-module, CLSID_.this-module);
 #endm
 
 
