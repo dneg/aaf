@@ -66,8 +66,11 @@ public:
   //
   //********
   ImplAAFHeader ();
+
+protected:
   ~ImplAAFHeader ();
 
+public:
   OMDECLARE_STORABLE(ImplAAFHeader)
 
   //****************
@@ -164,6 +167,14 @@ public:
     RemoveMedia
 		// @parm [in] Media object to remove
         (ImplAAFMedia * pMedia);
+
+
+  //****************
+  // GetContentStorage()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetContentStorage
+        (ImplAAFContentStorage ** ppContentStorage);  //@parm [out,retval] The AAF ContentStorage
 
 
   //****************
@@ -267,8 +278,13 @@ AAFRESULT GetNumIdentifications (aafInt32 * /*pCount*/);
 AAFRESULT AddIdentificationObject (aafProductIdentification_t * /*pIdent*/);
 AAFRESULT BuildMediaCache(void);
 AAFRESULT LoadMobTables(void);
-ImplAAFContentStorage *GetContentStorage(void);
 
+private:
+	// These are private accessor methods.
+	ImplAAFContentStorage *GetContentStorage(void);
+	ImplAAFDictionary *GetDictionary(void);
+
+public:
 #if FULL_TOOLKIT
 AAFRESULT ReadToolkitRevision(aafProductVersion_t *revision);
 AAFRESULT WriteToolkitRevision(aafProductVersion_t revision);
