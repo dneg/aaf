@@ -37,7 +37,11 @@ class ImplEnumAAFMobSlots;
 
 class ImplEnumAAFMobComments;
 
+class ImplAAFFindSourceInfo;
 
+class ImplAAFScopeStack;
+
+class ImplAAFEffectInvocation;
 
 
 
@@ -353,6 +357,59 @@ AAFRESULT
 		aafSourceRef_t  ref,
         aafLength_t  srcRefLength);
 
+	virtual AAFRESULT InternalSearchSource(	
+    aafSlotID_t trackID,             /* IN */
+	aafPosition_t offset,             /* IN */
+	aafMobKind_t mobKind,             /* IN */
+	aafMediaCriteria_t *pMediaCrit,    /* IN */
+	aafEffectChoice_t *pEffectChoice,  /* IN */  /* NOTE: take this arg out? */
+	ImplAAFComponent **ppThisCpnt,           /* OUT */
+	ImplAAFFindSourceInfo **ppSourceInfo);  /* OUT */
+
+	virtual AAFRESULT FindTrackAndSegment(aafSlotID_t trackID,
+							 aafPosition_t offset,
+							 ImplAAFMobSlot **track,
+							 ImplAAFSegment **segment,
+							 aafRational_t *srcRate,
+							 aafPosition_t *diffPos);
+
+	virtual AAFRESULT MobFindLeaf(ImplAAFMobSlot *track,
+					 aafMediaCriteria_t *mediaCrit,
+					 aafEffectChoice_t *effectChoice,
+					 ImplAAFComponent *rootObj,
+					 aafPosition_t rootPos,
+					 aafLength_t rootLen,
+					 ImplAAFComponent	*prevObject,
+					 ImplAAFComponent *nextObject,
+					 ImplAAFScopeStack *scopeStack,
+					 aafPosition_t	currentObjPos,
+					 ImplAAFComponent **foundObj,
+					 aafLength_t *minLength,
+					 aafBool *foundTransition,
+					 ImplAAFEffectInvocation **effeObject,
+					 aafInt32	*nestDepth,
+					 aafPosition_t *diffPos);
+
+	virtual AAFRESULT FindNextMob(ImplAAFTimelineMobSlot *track, 
+					 ImplAAFSegment *segment,
+					 aafLength_t length,
+					 aafPosition_t diffPos,
+					 ImplAAFMob **retMob,
+					 aafSlotID_t *retTrackID,
+					 aafPosition_t *retPos,
+					 ImplAAFPulldown **pulldownObj,
+					 aafInt32 *pulldownPhase,
+					 aafLength_t *retLen);
+
+virtual AAFRESULT MobFindSource(
+					   aafSlotID_t trackID,
+					   aafPosition_t offset, /* offset in referenced units */
+					   aafLength_t length,   /* expected length of clip */
+					   aafMobKind_t mobKind,
+					   aafMediaCriteria_t *mediaCrit,
+					   aafEffectChoice_t *effectChoice,
+					   ImplAAFFindSourceInfo *sourceInfo,
+					   aafBool *foundSource);
 
 virtual AAFRESULT STDMETHODCALLTYPE
     GetMobKind (aafMobKind_t *pMobKind);
