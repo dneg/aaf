@@ -397,6 +397,19 @@ static size_t maxSignatureSize = signatureSize();
 //  0.23   : Remove high water mark from strong reference vector and
 //           strong reference set, replace with first free key and last
 //           free key.
+//  0.24   : Squeeze fields in the Object Manager meta-data as follows
+//
+//           OMPropertyId    32 -> 16
+//           OMPropertySize  32 -> 16
+//           OMPropertyCount 32 -> 16
+//           OMStoredForm    32 -> 16
+//           OMVersion       32 ->  8
+//           OMKeySize       32 ->  8
+//           OMByteOrder     16 ->  8
+//           OMPropertyTag   32 -> 16
+//
+//           Remove the offset filed field from stored property set index
+//           entries.
 //
 
 // The following may change at run time depending on the file format
@@ -409,7 +422,7 @@ char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const OMUInt32 HIGHVERSION = 23;
+const OMUInt32 HIGHVERSION = 24;
 
 // Output format requested
 //
@@ -477,10 +490,8 @@ static void dumpStorage(IStorage* storage,
                         int isRoot);
 static void read(IStream* stream, void* address, size_t size);
 static void read(IStream* stream, size_t offset, void* address, size_t size);
-#if !defined (__GNUC__)
 static void readUInt8(IStream* stream, OMUInt8* value);
 static void readUInt16(IStream* stream, OMUInt16* value, bool swapNeeded);
-#endif
 static void readUInt32(IStream* stream, OMUInt32* value, bool swapNeeded);
 static void swapUInt16(OMUInt16* value);
 static void swapUInt32(OMUInt32* value);
@@ -490,8 +501,12 @@ static void dumpIndexEntry(OMUInt32 i, IndexEntry* indexEntry);
 static void printIndex(IndexEntry* index, OMUInt32 entries);
 static void readIndexEntry(IStream* stream,
                            IndexEntry* entry,
-                           bool swapNeeded);
-static IndexEntry* readIndex(IStream* stream, OMUInt32 count, bool swapNeeded);
+                           bool swapNeeded,
+                           OMUInt32 version);
+static IndexEntry* readIndex(IStream* stream,
+                             OMUInt32 count,
+                             bool swapNeeded,
+                             OMUInt32 version);
 static bool isValid(const IndexEntry* index, const OMUInt32 entries);
 static size_t valueStreamSize(const IndexEntry* index, const OMUInt32 entries);
 static char* typeName(OMUInt32 type);
@@ -550,8 +565,13 @@ static SetIndexEntry* readSetIndex(IStream* stream,
 static WeakCollectionIndexEntry* readWeakCollectionIndex(IStream* stream,
                                                          OMUInt32 count,
                                                          bool swapNeeded);
+#if !defined (__GNUC__)
 static ByteOrder readByteOrder(IStream* stream);
-static void dumpObject(IStorage* storage, char* pathName, int isRoot);
+#endif
+static void dumpObject(IStorage* storage,
+                       char* pathName,
+                       int isRoot,
+                       OMUInt32 version);
 static OMUInt32 typeOf(IndexEntry* entry, OMUInt32 version);
 static void dumpContainedObjects(IStorage* storage,
                                  IStream* propertiesStream,
@@ -575,6 +595,7 @@ static void dumpProperties(IStorage* storage,
 static void openStorage(char* fileName, IStorage** storage);
 static void dumpFileHex(char* fileName);
 static void dumpFile(char* fileName);
+static OMUInt16 determineVersion(IStorage* storage);
 static void dumpFileProperties(char* fileName, const char* label);
 static FILE* wfopen(const wchar_t* fileName, const wchar_t* mode);
 static int readSignature(FILE* file,
@@ -1375,8 +1396,6 @@ void read(IStream* stream, size_t offset, void* address, size_t size)
   read(stream, address, size);
 }
 
-#if !defined(__GNUC__)
-
 void readUInt8(IStream* stream, OMUInt8* value)
 {
   read(stream, value, sizeof(OMUInt8));
@@ -1389,8 +1408,6 @@ void readUInt16(IStream* stream, OMUInt16* value, bool swapNeeded)
     swapUInt16(value);
   }
 }
-
-#endif
 
 void readUInt32(IStream* stream, OMUInt32* value, bool swapNeeded)
 {
@@ -1473,33 +1490,48 @@ void printIndex(IndexEntry* index, OMUInt32 entries)
   cout << endl;
 }
 
-void readIndexEntry(IStream* stream, IndexEntry* entry, bool swapNeeded)
+void readIndexEntry(IStream* stream,
+                    IndexEntry* entry,
+                    bool swapNeeded,
+                    OMUInt32 version)
 {
-  // Reading native index entries not yet supported.
-  // Instead read the entire index.
-  //
-  ASSERT("Swap needed", swapNeeded);
-  if (!swapNeeded) {
-    // NYI
+  IndexEntry newEntry;
+  if (version >= 23) {
+    OMUInt16 pid;
+    OMUInt16 type;
+    OMUInt16 length;
+    readUInt16(stream, &pid, swapNeeded);
+    readUInt16(stream, &type, swapNeeded);
+    readUInt16(stream, &length, swapNeeded);
+    newEntry._pid = pid;
+    newEntry._type = type;
+    newEntry._length = length;
+    newEntry._offset = 0;
   } else {
-    IndexEntry newEntry;
     readUInt32(stream, &newEntry._pid, swapNeeded);
     readUInt32(stream, &newEntry._type, swapNeeded);
     readUInt32(stream, &newEntry._offset, swapNeeded);
     readUInt32(stream, &newEntry._length, swapNeeded);
-    memcpy(entry, &newEntry, sizeof(IndexEntry));
   }
+  memcpy(entry, &newEntry, sizeof(IndexEntry));
 }
 
-IndexEntry* readIndex(IStream* stream, OMUInt32 count, bool swapNeeded)
+IndexEntry* readIndex(IStream* stream,
+                      OMUInt32 count,
+                      bool swapNeeded,
+                      OMUInt32 version)
 {
   IndexEntry* result = new IndexEntry[count];
   ASSERT("Successfully allocated index array", result != 0);
-  if (!swapNeeded) {
-    read(stream, result, sizeof(IndexEntry) * count);
-  } else {
-    for (OMUInt32 i = 0; i < count; i++) {
-      readIndexEntry(stream, &result[i], swapNeeded);
+  for (OMUInt32 i = 0; i < count; i++) {
+    readIndexEntry(stream, &result[i], swapNeeded, version);
+  }
+  if (version >= 23) {
+    // compute offsets for in memory index
+    OMUInt32 offset = 4 + (count * 6);
+    for (OMUInt32 j = 0; j < count; j++) {
+      result[j]._offset = offset;
+      offset = offset + result[j]._length;
     }
   }
   return result;
@@ -2057,7 +2089,7 @@ void dumpContainedObjects(IStorage* storage,
       }
       // dump the object
       //
-      dumpObject(subStorage, thisPathName, 0);
+      dumpObject(subStorage, thisPathName, 0, version);
 
       delete [] subStorageName;
       subStorageName = 0;
@@ -2160,7 +2192,7 @@ void dumpContainedObjects(IStorage* storage,
         }
         // dump the object
         //
-        dumpObject(subStorage, thisPathName, 0);
+        dumpObject(subStorage, thisPathName, 0, version);
 
         delete [] elementName;
         elementName = 0;
@@ -2227,7 +2259,19 @@ void dumpContainedObjects(IStorage* storage,
       OMUInt32 keyPid = 0;
       OMUInt32 keySize = 16;
 
-      if (version > 19) {
+      if (version > 23) {
+        // Read the key pid.
+        //
+        OMUInt16 pid;
+        readUInt16(subStream, &pid, swapNeeded);
+        keyPid = pid;
+
+        // Read the key size.
+        //
+        OMUInt8 size;
+        readUInt8(subStream, &size);
+        keySize = size;
+      } else if (version > 19) {
         // Read the key pid.
         //
         readUInt32(subStream, &keyPid, swapNeeded);
@@ -2315,7 +2359,7 @@ void dumpContainedObjects(IStorage* storage,
         }
         // dump the object
         //
-        dumpObject(subStorage, thisPathName, 0);
+        dumpObject(subStorage, thisPathName, 0, version);
 
         delete [] elementName;
         elementName = 0;
@@ -2374,12 +2418,27 @@ void dumpContainedObjects(IStorage* storage,
       readUInt32(subStream, &_count, swapNeeded);
 
       OMUInt32 _tag;
-      readUInt32(subStream, &_tag, swapNeeded);
-
       OMUInt32 keyPid = 0;
       OMUInt32 keySize = 16;
 
-      if (version > 19) {
+      if (version > 23) {
+        OMUInt16 tag;
+        readUInt16(subStream, &tag, swapNeeded);
+        _tag = tag;
+
+        // Read the key pid.
+        //
+        OMUInt16 pid;
+        readUInt16(subStream, &pid, swapNeeded);
+        keyPid = pid;
+
+        // Read the key size.
+        //
+        OMUInt8 size;
+        readUInt8(subStream, &size);
+        keySize = size;
+      } else if (version > 19) {
+        readUInt32(subStream, &_tag, swapNeeded);
         // Read the key pid.
         //
         readUInt32(subStream, &keyPid, swapNeeded);
@@ -2593,16 +2652,21 @@ void dumpProperties(IStorage* storage,
 
 ByteOrder fileByteOrder = unspecifiedEndian;
 
+#if !defined (__GNUC__)
 ByteOrder readByteOrder(IStream* stream)
 {
-  OMUInt16 byteOrder;
+  OMUInt8 byteOrder;
   read(stream, &byteOrder, sizeof(byteOrder));
 
   ByteOrder result;
 
-  if (byteOrder == littleEndian) {              // explicitly little endian
+  if (byteOrder == 'L') {              // explicitly little endian
     result = littleEndian;
-  } else if (byteOrder == bigEndian) {          // explicitly big endian
+  } else if (byteOrder == 'B') {          // explicitly big endian
+    result = bigEndian;
+  } else if (byteOrder == 'M') {
+    result = littleEndian;
+  } else if (byteOrder == 'I') {
     result = bigEndian;
   } else if ((byteOrder == 0x0001) || (byteOrder == 0x0000)) {
 
@@ -2650,8 +2714,12 @@ ByteOrder readByteOrder(IStream* stream)
   ASSERT("Valid result", (result == littleEndian) || (result == bigEndian));
   return result;
 }
+#endif
 
-void dumpObject(IStorage* storage, char* pathName, int isRoot)
+void dumpObject(IStorage* storage,
+                char* pathName,
+                int isRoot,
+                OMUInt32 version)
 {
   totalObjects = totalObjects + 1; // Count this object
 
@@ -2669,7 +2737,23 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
     fatalError("dumpObject", "Property index stream empty.");
   }
 
-  OMUInt16 _byteOrder = readByteOrder(stream);
+  OMUInt16 _byteOrder;
+  if (version >= 23) {
+    OMUInt8 byteOrder;
+    readUInt8(stream, &byteOrder);
+    ASSERT("Valid byte order", ((byteOrder == 'L') || (byteOrder == 'B')));
+    if (byteOrder == 'L') {
+      _byteOrder = littleEndian;
+    } else {
+      _byteOrder = bigEndian;
+    }
+  } else if (version > 1) {
+    OMUInt16 byteOrder;
+    readUInt16(stream, &byteOrder, false);
+    _byteOrder = byteOrder;
+  }
+  ASSERT("Valid byte order",
+                    (_byteOrder == littleEndian) || (_byteOrder == bigEndian));
 
   if (isRoot) {
     // The byte ordering of the root property index specifies the byte
@@ -2707,11 +2791,22 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
     swapNeeded = false;
   }
 
-  OMUInt32 _formatVersion;
-  readUInt32(stream, &_formatVersion, swapNeeded);
-
   OMUInt32 _entryCount;
-  readUInt32(stream, &_entryCount, swapNeeded);
+  if (version >= 23) {
+    OMUInt8 _formatVersion;
+    readUInt8(stream, &_formatVersion);
+
+    OMUInt16 entryCount;
+    readUInt16(stream, &entryCount, swapNeeded);
+    _entryCount = entryCount;
+  } else {
+    OMUInt32 _formatVersion;
+    readUInt32(stream, &_formatVersion, swapNeeded);
+
+    OMUInt32 entryCount;
+    readUInt32(stream, &entryCount, swapNeeded);
+    _entryCount = entryCount;
+  }
 
   // Compute the header size which is as follows ...
   //
@@ -2720,7 +2815,7 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
   //   _entryCount    4
   //
   size_t headSize;
-  if (_formatVersion < 2) {
+  if (version < 2) {
     headSize = 8;
   } else {
     headSize = 10;
@@ -2728,9 +2823,14 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
   
   // Check that the stream size is consistent with the entry count
   //
-  if (_formatVersion >= 21) {
+  if (version >= 21) {
     // stream must be at least big enough to contain the index
-    size_t expectedSize = headSize + (_entryCount * sizeof(IndexEntry));
+    size_t expectedSize;
+    if (version >= 24) {
+      expectedSize = 4 + (_entryCount * 6);
+    } else {
+      expectedSize = headSize + (_entryCount * sizeof(IndexEntry));
+    }
     if (indexStreamSize < expectedSize) {
       fatalError("dumpObject", "Property stream too small.");
     }
@@ -2747,19 +2847,19 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
     totalStreamBytes = totalStreamBytes + indexStreamSize;
   }
 
-  if ((isRoot) && (_formatVersion < 3)) {
+  if ((isRoot) && (version < 3)) {
     if (zFlag) {
       cout << programName
            << ": Warning : Specifying -x with format version "
-           << _formatVersion
+           << version
            << " is not supported." << endl;
     }
   }
 
-  if (_formatVersion > HIGHVERSION) {
+  if (version > HIGHVERSION) {
     cout << programName
          << ": Error : Unrecognized format version ("
-         << _formatVersion
+         << version
          << "). Highest recognized version is " << HIGHVERSION << "." << endl;
     exit(EXIT_FAILURE);
   }
@@ -2781,10 +2881,10 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
   cout << "Dump of property index" << endl
        << "( Byte order = " << byteOrder(_byteOrder)
        << " (" << endianity << ")"
-       << ", Version = " << _formatVersion
+       << ", Version = " << version
        << ", Number of entries = " << _entryCount << " )" << endl;
 
-  IndexEntry* index = readIndex(stream, _entryCount, swapNeeded);
+  IndexEntry* index = readIndex(stream, _entryCount, swapNeeded, version);
   printIndex(index, _entryCount);
 
   if (!isValid(index, _entryCount)) {
@@ -2796,7 +2896,7 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
                  stream,
                  index,
                  _entryCount,
-                 _formatVersion,
+                 version,
                  pathName,
                  isRoot,
                  swapNeeded);
@@ -2919,6 +3019,49 @@ void dumpFile(char* fileName)
   printStatistics();
 }
 
+OMUInt16 determineVersion(IStorage* storage)
+{
+  OMUInt16 result;
+  IStream* s = 0;
+  // Version >= 21 (or < 2)
+  HRESULT r = openStreamTry(storage, "properties", &s);
+  if (s == 0) {
+    // Version 2 - 20 (inclusive)
+    r = openStreamTry(storage, "property index", &s);
+  }
+
+  if (s != 0) {
+    OMUInt8 byteOrder;
+    OMUInt8 version;
+    read(s, &byteOrder, sizeof(byteOrder));
+    read(s, &version, sizeof(version));
+    if ((byteOrder != 'L') && (byteOrder != 'B')) {
+      OMUInt16 byteOrder;
+      OMUInt16 version;
+      
+      read(s, 0, &byteOrder, sizeof(byteOrder));
+      read(s, sizeof(byteOrder), &version, sizeof(version));
+ 
+      ASSERT("Valid byte order",
+                      (byteOrder == littleEndian) || (byteOrder == bigEndian));
+      if (byteOrder != hostByteOrder()) {
+	    swapUInt16(&version);
+	  }
+      result = version;
+    } else {
+      result = version;
+    }
+#if 0
+    cout << "Format version of root = " << version << endl;
+#endif
+    s->Release();
+  } else {
+    fatalError("determineVersion",
+               "Can't find property index of root object");
+  }
+  return result;
+}
+
 void dumpFileProperties(char* fileName, const char* label)
 {
   resetStatistics();
@@ -2930,34 +3073,10 @@ void dumpFileProperties(char* fileName, const char* label)
     fatalError("dumpFileProperties", "openStorage() failed.");
   }
 
-  IStream* s = 0;
-  // Version >= 21 (or < 2)
-  HRESULT r = openStreamTry(storage, "properties", &s);
-  if (s == 0) {
-    // Version 2 - 20 (inclusive)
-    r = openStreamTry(storage, "property index", &s);
-  }
+  OMUInt16 _version = determineVersion(storage);
 
-  OMUInt16 byteOrder;
-  OMUInt16 version;
-  if (s != 0) {
-    read(s, &byteOrder, sizeof(byteOrder));
-    read(s, &version, sizeof(version));
-    ASSERT("Valid byte order",
-                      (byteOrder == littleEndian) || (byteOrder == bigEndian));
-    if (byteOrder != hostByteOrder()) {
-      swapUInt16(&version);
-    }
-#if 0
-    cout << "Format version of root = " << version << endl;
-#endif
-    s->Release();
-  } else {
-    fatalError("dumpFileProperties",
-               "Can't find property index of root object");
-  }
-
-  if (version >= 21) {
+  ASSERT("Valid version", _version < 255);
+  if (_version >= 21) {
     _propertyIndexStreamName = "properties";
     _propertyValueStreamName = "properties";
   } else {
@@ -2969,7 +3088,7 @@ void dumpFileProperties(char* fileName, const char* label)
   cout << "Value = \"" <<  _propertyValueStreamName << "\"" << endl;
 #endif
   cout << label << endl;
-  dumpObject(storage, "/", 1);
+  dumpObject(storage, "/", 1, _version);
     
   // Releasing the last reference to the root storage closes the file.
   storage->Release();
