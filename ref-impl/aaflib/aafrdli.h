@@ -41,7 +41,7 @@
 typedef void * AAFLibraryHandle;
 typedef void * AAFSymbolAddr;
 typedef void * AAFUserData;
-typedef long AAFRDLIRESULT;
+typedef int AAFRDLIRESULT;
 
 
 

@@ -98,7 +98,7 @@ public:
 	const char* GetServerDirectory() const;
 
 protected:
-	long GetRegisterIndex(long index);
+	int GetRegisterIndex(int index);
 
 protected:
 	AAFComObjectInfo_t *_pObjectInfo;

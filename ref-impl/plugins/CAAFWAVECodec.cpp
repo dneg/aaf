@@ -1573,7 +1573,7 @@ AAFRESULT CAAFWaveCodec::CreateWAVEheader(aafUInt8		*buffer,
 		CHECK(fillSwappedWAVEData(&ptr, 2L, (void *) &numCh));
 	
 		if (_sampleRate.denominator != 0)
-			samplesPerSec = (long) FloatFromRational(_sampleRate);
+			samplesPerSec = (aafInt32) FloatFromRational(_sampleRate);
 		else
 			samplesPerSec = 0;
 		CHECK(fillSwappedWAVEData(&ptr, 4L, (void *) &samplesPerSec));

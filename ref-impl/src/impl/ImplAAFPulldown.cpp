@@ -326,7 +326,7 @@ AAFRESULT ImplAAFPulldown::GetRemFramesDrop(aafUInt32 maskBits,
 							aafUInt32 masksize,
 							aafInt32 *result)
 {
-  long remMask, maskBitsLeft;
+  int remMask, maskBitsLeft;
   aafInt32 ret;
   unsigned char phasePtr;
 
@@ -359,7 +359,7 @@ AAFRESULT ImplAAFPulldown::GetRemFramesDouble(aafUInt32 maskBits,
 							aafUInt32 masksize,
 							aafInt32 *result)
 {
-  long remMask, maskBitsLeft;
+  int remMask, maskBitsLeft;
   aafInt32 ret;
   aafUInt32 phasePtr;
 

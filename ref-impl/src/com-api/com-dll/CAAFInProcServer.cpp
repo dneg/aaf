@@ -70,7 +70,7 @@ static int CompareObjectInfo(const AAFComObjectInfo_t **elem1,
   const CLSID& clsid1 = *((**elem1).pCLSID);
   const CLSID& clsid2 = *((**elem2).pCLSID);
 
-  // Compare the unsigned long member
+  // Compare the unsigned int member
   if (clsid1.Data1 < clsid2.Data1)
     return -1;
   else if (clsid1.Data1 > clsid2.Data1)
@@ -242,7 +242,7 @@ HRESULT CAAFInProcServer::CanUnloadNow( )
 // Global table used by Register/UnregisterServer.
 typedef struct tagAAFRegEntry
 {
-  unsigned long flags;
+  unsigned int flags;
   LPCOLESTR pFormat;
 } AAFRegEntry;
 
@@ -371,15 +371,15 @@ static int FormatRegBuffer
 
 // Find the next valid index in the internal object table where
 // bRegister matches the entry in the table...
-const long kInvalidObjectIndex = -1;
+const int kInvalidObjectIndex = -1;
 
-long CAAFInProcServer::GetRegisterIndex(long index)
+int CAAFInProcServer::GetRegisterIndex(int index)
 {
-	long nextIndex = kInvalidObjectIndex; // termination signal
+	int nextIndex = kInvalidObjectIndex; // termination signal
 
 	if (index >= 0)
 	{
-		while ((index < (long)_objectCount) && _pObjectInfo[index].pCLSID)
+		while ((index < (int)_objectCount) && _pObjectInfo[index].pCLSID)
 		{
 			if (_pObjectInfo[index].bRegisterClass)
 			{

@@ -31,7 +31,7 @@
 
 // We need the following definition for a bool type since
 // the Win32 used BOOL as an int and ActiveX SDK, MacOLE use
-// unsigned long for OLEBOOL.
+// unsigned int for OLEBOOL.
 // NOTE: We may have to move this definition to AAFTypes.h.
 #if defined(_MAC) || defined(_MAC_) || defined(macintosh)
 #define AAFBOOL OLEBOOL
