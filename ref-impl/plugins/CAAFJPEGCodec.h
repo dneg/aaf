@@ -342,8 +342,8 @@ private:
 	void DumpSampleImage(const aafCompressionParams& param, JSAMPIMAGE rawSampleImage);
 
 	JSAMPIMAGE GetRawSampleImage(const aafCompressionParams& param); // throw HRESULT
-	void CopyDataToSampleImage(const aafCompressionParams& param, JSAMPIMAGE rawSampleImage); // throw HRESULT
-	void CopyDataFromSampleImage(JSAMPIMAGE rawSampleImage, aafCompressionParams& param); // throw HRESULT
+	aafUInt32 CopyDataToSampleImage(const aafCompressionParams& param, aafUInt32 startingOffset, JSAMPIMAGE rawSampleImage); // throw HRESULT
+	aafUInt32 CopyDataFromSampleImage(JSAMPIMAGE rawSampleImage, aafUInt32 startingOffset, aafCompressionParams& param); // throw HRESULT
 
 	// Compress a single image data from the given buffer. Return the actual
 	// number of bytes written.
