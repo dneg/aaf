@@ -26,7 +26,7 @@ AD_FORWARD_DECLARATION(EnumAAFPropertyValues)
 AD_CLASS_UUID(809c8ca5, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(809c8ca6, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_METHOD0(Initialize,
 		   Initializes a newly allocated\, empty IAAFTypeDefStruct-supporting
   // object.  This method must be called after allocation\, and before
@@ -84,4 +84,4 @@ AD_XMETHOD2(EnumPropertyValues,
   //
   // AAFRESULT_BAD_TYPE_CATEGORY
   //   - The given Property Value is not a kAAFTypeCategoryStruct.)
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)
