@@ -57,8 +57,8 @@ ImplAAFSequence::ImplAAFSequence ()
 
 ImplAAFSequence::~ImplAAFSequence ()
 {
-	size_t size = _components.getSize();
-	for (size_t i = 0; i < size; i++) {
+	size_t count = _components.count();
+	for (size_t i = 0; i < count; i++) {
 		ImplAAFComponent *pComp = _components.clearValueAt(i);
 
 		if (pComp) {
@@ -215,7 +215,7 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(sclpStatus);
 			// Get the previous component in the sequence to verify
 			// neighboring transitions and source clip lengths.
-			_components.getSize(numCpnts);
+			numCpnts = _components.count();
 			if (numCpnts)
 			{
 				ImplAAFComponent*	pPrevCpnt = NULL;
@@ -427,9 +427,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pNumCpnts) return AAFRESULT_NULL_PARAM;
 
-	size_t	numCpnts;
-
-	_components.getSize(numCpnts);
+	size_t	numCpnts = _components.count();
 	*pNumCpnts = numCpnts;
 
 	return AAFRESULT_SUCCESS;
@@ -600,7 +598,7 @@ ImplAAFSequence::SegmentTCToOffset (aafTimecode_t*		pTimecode,
 	segStart = 0;
 	CvtInt32toInt64(0, &junk);
 
-	_components.getSize(numCpnts);
+	numCpnts = _components.count();
 	for (index=0; index < numCpnts; index++)
 	{
 		ImplAAFSegment*	pSubSegment;
@@ -699,10 +697,9 @@ AAFRESULT
     ImplAAFSequence::GetNthComponent (aafUInt32 index, ImplAAFComponent** ppComponent)
 {
 	ImplAAFComponent*	obj;
-	size_t				numCpnts;
 	HRESULT				hr;
 
-	_components.getSize(numCpnts);
+	size_t numCpnts = _components.count();
 	if (index < numCpnts)
 	{
 		_components.getValueAt(obj, index);
@@ -748,10 +745,9 @@ AAFRESULT ImplAAFSequence::ChangeContainedReferences(aafMobID_constref from,
 AAFRESULT
     ImplAAFSequence::SetNthComponent (aafUInt32 index, ImplAAFComponent* pComponent)
 {
-	size_t				numCpnts;
 	HRESULT				hr;
 
-	_components.getSize(numCpnts);
+	size_t numCpnts = _components.count();
 	if (index < numCpnts)
 	{
 		_components.setValueAt(pComponent, index);
