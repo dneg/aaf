@@ -124,7 +124,7 @@ ImplAAFHeader::~ImplAAFHeader ()
 	//
 	size_t size = _identificationList.getSize();
 	for (size_t i = 0; i < size; i++) {
-		ImplAAFIdentification *pIdent = _identificationList.setValueAt(0, i);
+		ImplAAFIdentification *pIdent = _identificationList.clearValueAt(i);
 
 		if (pIdent) {
 		  pIdent->ReleaseReference();

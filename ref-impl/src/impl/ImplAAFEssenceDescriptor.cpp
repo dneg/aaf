@@ -64,7 +64,7 @@ ImplAAFEssenceDescriptor::~ImplAAFEssenceDescriptor ()
 	size_t size = _locators.getSize();
 	for (size_t i = 0; i < size; i++)
 	{
-		ImplAAFLocator *pLocator = _locators.setValueAt(0, i);
+		ImplAAFLocator *pLocator = _locators.clearValueAt(i);
 		if (pLocator)
 		{
 		  pLocator->ReleaseReference();
