@@ -662,6 +662,13 @@ OMDictionary* OMFile::dictionary(void) const
   return _root->dictionary();
 }
 
+const OMClassFactory* OMFile::classFactory(void) const
+{
+  TRACE("OMFile::classFactory");
+
+  return _classFactory;
+}
+
   // @mfunc Retrieve the <c OMPropertyTable> from this <c OMFile>.
   //   @rdesc The table of referenced properties.
 OMPropertyTable* OMFile::referencedProperties(void)
@@ -901,6 +908,7 @@ OMFile::OMFile(const wchar_t* fileName,
 : _root(0),
   _rootStore(store),
   _dictionary(dictionary),
+  _classFactory(factory),
   _referencedProperties(0),
   _mode(mode),
   _loadMode(loadMode),
@@ -949,6 +957,7 @@ OMFile::OMFile(const wchar_t* fileName,
 : _root(root),
   _rootStore(store),
   _dictionary(dictionary),
+  _classFactory(factory),
   _referencedProperties(0),
   _mode(mode),
   _loadMode(lazyLoad),
@@ -988,6 +997,7 @@ OMFile::OMFile(OMRawStorage* rawStorage,
 : _root(0),
   _rootStore(0),
   _dictionary(dictionary),
+  _classFactory(factory),
   _referencedProperties(0),
   _mode(mode),
   _loadMode(loadMode),
@@ -1028,6 +1038,7 @@ OMFile::OMFile(OMRawStorage* rawStorage,
 : _root(root),
   _rootStore(0),
   _dictionary(dictionary),
+  _classFactory(factory),
   _referencedProperties(0),
   _mode(mode),
   _loadMode(lazyLoad),

@@ -229,6 +229,8 @@ public:
 
   OMDictionary* dictionary(void) const;
 
+  const OMClassFactory* classFactory(void) const;
+
     // @cmember Retrieve the <c OMPropertyTable> from this <c OMFile>.
   OMPropertyTable* referencedProperties(void);
 
@@ -339,6 +341,7 @@ private:
   OMStoredObject* _rootStore;
 
   OMDictionary* _dictionary;
+  const OMClassFactory* _classFactory;
   OMPropertyTable* _referencedProperties;
 
   enum OMAccessMode _mode;
