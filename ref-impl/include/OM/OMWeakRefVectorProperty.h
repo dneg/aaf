@@ -185,7 +185,7 @@ public:
   virtual bool isVoid(void) const;
 
     // @cmember Remove this optional <c OMWeakReferenceVectorProperty>.
-  virtual void remove(void);
+  virtual void removeProperty(void);
 
   // Direct property access interface
 

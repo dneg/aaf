@@ -790,9 +790,9 @@ bool OMWeakReferenceVectorProperty<ReferencedObject>::isVoid(void) const
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable>.
 template <typename ReferencedObject>
-void OMWeakReferenceVectorProperty<ReferencedObject>::remove(void)
+void OMWeakReferenceVectorProperty<ReferencedObject>::removeProperty(void)
 {
-  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::remove");
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::removeProperty");
   PRECONDITION("Property is optional", isOptional());
   PRECONDITION("Optional property is present", isPresent());
   PRECONDITION("Property is void", isVoid());
