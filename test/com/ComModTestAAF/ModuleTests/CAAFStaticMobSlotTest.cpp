@@ -79,7 +79,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFHeader *        pHeader = NULL;
 	IAAFDictionary*  pDictionary = NULL;
 	IAAFMob						*pMob = NULL;
-	IAAFTimelineMobSlot		*newSlot = NULL;
+	IAAFMobSlot		*newSlot = NULL;
 	IAAFSegment		*seg = NULL;
 	IAAFSourceClip	*sclp = NULL;
 	IAAFComponent*		pComponent = NULL;
@@ -116,13 +116,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		CAAFBuiltinDefs defs (pDictionary);
 		
 		//Make the first mob
-		long	test;
-		aafRational_t	audioRate = { 44100, 1 };
-		
+		long	test;		
 		// Create a concrete subclass of Mob
 		checkResult(defs.cdMasterMob()->
-					CreateInstance(IID_IAAFMob, 
-								   (IUnknown **)&pMob));
+			CreateInstance(IID_IAAFMob, 
+			(IUnknown **)&pMob));
 		
 		checkResult(pMob->SetMobID(TEST_MobID));
 		checkResult(pMob->SetName(L"MOBTest"));
@@ -131,22 +129,22 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		for(test = 0; test < 5; test++)
 		{
 			checkResult(defs.cdSourceClip()->
-						CreateInstance(IID_IAAFSourceClip, 
-									   (IUnknown **)&sclp));
-		 checkResult(sclp->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
-		 checkResult(pComponent->SetDataDef(defs.ddPicture()));
-		pComponent->Release();
-		pComponent = NULL;
+				CreateInstance(IID_IAAFSourceClip, 
+				(IUnknown **)&sclp));
+			checkResult(sclp->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+			checkResult(pComponent->SetDataDef(defs.ddPicture()));
+			pComponent->Release();
+			pComponent = NULL;
 			
 			checkResult(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
 			
-			aafRational_t editRate = { 0, 1};
-			checkResult(pMob->AppendNewTimelineSlot (editRate,
-													 seg,
-													 test+1,
-													 slotNames[test],
-													 0,
-													 &newSlot));
+			checkResult(defs.cdStaticMobSlot()->
+				CreateInstance(IID_IAAFMobSlot, 
+				(IUnknown **)&newSlot));
+			checkResult(newSlot->SetSegment(seg));
+			checkResult(newSlot->SetSlotID(test+1));
+			checkResult(newSlot->SetName(slotNames[test]));
+			checkResult(pMob->AppendSlot(newSlot));
 			
 			newSlot->Release();
 			newSlot = NULL;
@@ -327,19 +325,19 @@ extern "C" HRESULT CAAFStaticMobSlot_test()
 	
 	// When all of the functionality of this class is tested, we can return success.
 	// When a method and its unit test have been implemented, remove it from the list.
-	if (SUCCEEDED(hr))
-	{
-		cout << "The following AAFStaticMobSlot tests have not been implemented:" << endl; 
-		cout << "     GetSegment" << endl; 
-		cout << "     GetNameBufLen" << endl; 
-		cout << "     GetPhysicalNum" << endl; 
-		cout << "     GetDataDef" << endl; 
-		cout << "     SetSegment" << endl; 
-		cout << "     SetName" << endl; 
-		cout << "     SetPhysicalNum" << endl; 
-		cout << "     SetSlotID" << endl; 
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-	}
+//	if (SUCCEEDED(hr))
+//	{
+//		cout << "The following AAFStaticMobSlot tests have not been implemented:" << endl; 
+//		cout << "     GetSegment" << endl; 
+//		cout << "     GetNameBufLen" << endl; 
+//		cout << "     GetPhysicalNum" << endl; 
+//		cout << "     GetDataDef" << endl; 
+//		cout << "     SetSegment" << endl; 
+//		cout << "     SetName" << endl; 
+//		cout << "     SetPhysicalNum" << endl; 
+//		cout << "     SetSlotID" << endl; 
+//		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+//	}
 	
 	return hr;
 }
