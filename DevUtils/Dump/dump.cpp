@@ -1630,6 +1630,13 @@ void dumpStorage(IStorage* storage,
       CoTaskMemFree(statstg.pwcsName);
     }
   } while (status == S_OK);
+
+  if (status != S_FALSE) {
+    // Loop was terminated by an error
+    if (!checkStatus(pathName, status)) {
+      fatalError("dumpStorage", "IEnumSTATSTG:Next() failed.");
+    }
+  }
 }
 
 void read(IStream* stream, void* address, size_t size)
@@ -2570,6 +2577,13 @@ void checkObject(IStorage* storage,
       CoTaskMemFree(statstg.pwcsName);
     }
   } while (status == S_OK);
+  if (status != S_FALSE) {
+    // Loop was terminated by an error
+    if (!checkStatus(pathName, status)) {
+      fatalError("checkObject", "IEnumSTATSTG:Next() failed.");
+    }
+  }
+  
   if (actualStorageCount != storageCount) {
     cerr << programName
          << ": Warning : Incorrect IStorage count for \"" << pathName
