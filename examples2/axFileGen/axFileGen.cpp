@@ -439,7 +439,7 @@ void RunCmd::Execute()
 	cout.flush();
 
     op->Execute( argList );
-	op->DecRef;
+	op->DecRef();
 
 	cout << "done" << endl;
 }
@@ -668,7 +668,6 @@ void FileCmd::ReadFile( const char* fileName )
 void FileCmd::CheckAllCommands()
 {
 	vector< vector< string > >::iterator lines_iter;
-	vector< string >::iterator iter;
 
 	// Probably have to reactivate the output code
 	// when the file parser is redone... so leave it.
@@ -798,7 +797,7 @@ void ProcessCommandLineArgs( int argc, char** argv )
 // Only use when the program is exiting.
 // Decrementing all the references will cause
 // the objects to self destruct.
-ClearInstanceRegistry()
+void ClearInstanceRegistry()
 {
 	using namespace std;
 	
