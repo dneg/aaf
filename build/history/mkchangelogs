@@ -38,6 +38,40 @@
 # Author : Tim Bingham " Tim_Bingham@avid.com
 #
 
+writeHeader ()
+{
+  echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">"
+  echo "<!-- -->"
+  echo "<!-- This file was generated on ${date} by user ${user} -->"
+  echo "<!-- on system ${computer} using ${TOOLNAME} -->"
+  echo "<!-- If you edit this file your changes may be lost. -->"
+  echo "<!-- -->"
+
+  echo "<html>"
+  echo "<head>"
+  echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">"
+  echo "<title>Index of cvs change logs</title>"
+  echo "</head>"
+  echo "<body>"
+  echo "<h1 align=center>$1</h1>"
+}
+
+startList ()
+{
+  echo "<ul>"
+}
+
+endList ()
+{
+  echo "</ul>"
+}
+
+writeFooter ()
+{
+  echo "</body>"
+  echo "</html>"
+}
+
 TOOLNAME=${0##*/}
 TOOLPATH=${0%/${TOOLNAME}}
 
@@ -145,21 +179,8 @@ computer=$(hostname)
 
 index=Changes-index.html
 
-echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">" > $index
-echo "<!-- -->" >> $index
-echo "<!-- This file was generated on ${date} by user ${user} -->" >> $index
-echo "<!-- on system ${computer} using ${TOOLNAME} -->" >> $index
-echo "<!-- If you edit this file your changes may be lost. -->" >> $index
-echo "<!-- -->" >> $index
-
-echo "<html>" >> $index
-echo "<head>" >> $index
-echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">" >> $index
-echo "<title>Index of cvs change logs</title>" >> $index
-echo "</head>" >> $index
-echo "<body>" >> $index
-echo "<h1 align=center>Index of cvs change logs</h1>" >> $index
-echo "<ul>" >> $index
+writeHeader "Index of cvs change logs" > $index
+startList >> $index
 
 let i=$n-1
 while [[ i -gt 0 ]]
@@ -175,6 +196,7 @@ do
  fi
  let i=$i-1
 done >> $index
-echo "</ul>" >> $index
-echo "</body>" >> $index
-echo "</html>" >> $index
+
+endList >> $index
+writeFooter >> $index
+
