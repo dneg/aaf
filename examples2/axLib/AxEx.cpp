@@ -52,15 +52,15 @@ AxEx::AxEx( const AxString& what )
     _what( AxStringUtil::wctomb( what ) )
 {}
 
-AxEx::~AxEx()
+AxEx::~AxEx() throw()
 {}
 	
-const wchar_t* AxEx::widewhat() const
+const wchar_t* AxEx::widewhat() const throw()
 {
 	return _widewhat.c_str();
 }
 
-const char* AxEx::what() const
+const char* AxEx::what() const throw()
 {
   return _what.c_str();
 }
@@ -118,15 +118,15 @@ AxExHResult::AxExHResult( HRESULT hr, const char* file, int line )
 	_what = AxStringUtil::wctomb( _widewhat );
 }
 
-AxExHResult::~AxExHResult()
+AxExHResult::~AxExHResult() throw()
 {}
 
-const wchar_t* AxExHResult::widewhat() const
+const wchar_t* AxExHResult::widewhat() const throw()
 {
 	return _widewhat.c_str();
 }
 
-const char* AxExHResult::what() const
+const char* AxExHResult::what() const throw()
 {
   return _what.c_str();
 }
@@ -153,7 +153,7 @@ AxExSmartPointer::AxExSmartPointer()
 :	AxEx( L"AAFSmartPointer assertion failed" )
 {}
 
-AxExSmartPointer::~AxExSmartPointer()
+AxExSmartPointer::~AxExSmartPointer() throw()
 {}
 
 //=---------------------------------------------------------------------=
@@ -162,5 +162,5 @@ AxExBadImp::AxExBadImp( const wchar_t* what )
 :	AxEx( what )
 {}
 
-AxExBadImp::~AxExBadImp()
+AxExBadImp::~AxExBadImp() throw()
 {}

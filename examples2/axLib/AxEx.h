@@ -43,14 +43,14 @@
 	}						       \
 }
 
-class AxEx : public exception {
+class AxEx : public std::exception {
 
 public:
 
 	AxEx();
 	AxEx( const wchar_t* what );
 	AxEx( const AxString& what );
-	virtual ~AxEx();
+	virtual ~AxEx() throw();
 	virtual const wchar_t* widewhat() const throw();
 	virtual const char* what() const throw();
 
@@ -67,7 +67,7 @@ public:
 	AxExHResult( HRESULT hr );
 	AxExHResult( HRESULT hr, const wchar_t* what );
 	AxExHResult( HRESULT hr, const char* file, int line );
-	virtual ~AxExHResult();
+	virtual ~AxExHResult() throw();
 	virtual const wchar_t* widewhat() const throw();
 	virtual const char* what() const throw();
 
@@ -88,7 +88,7 @@ class AxExSmartPointer : public AxEx {
 public:
 
 	AxExSmartPointer();
-	virtual ~AxExSmartPointer();
+	virtual ~AxExSmartPointer() throw();
 };
 
 class AxExBadImp : public AxEx {
@@ -96,7 +96,7 @@ class AxExBadImp : public AxEx {
 public:
 
 	AxExBadImp( const wchar_t* what );
-	virtual ~AxExBadImp();
+	virtual ~AxExBadImp() throw();
 };
 
 #endif
