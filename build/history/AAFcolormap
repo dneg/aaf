@@ -16,7 +16,7 @@
 
 # Colors
 
-color Lime-Green          CCFFCC
+color Pale-Green          CCFFCC
 color Pink                FFCCCC
 color Grey                CCCCCC
 color Pale-Blue           CCFFFF
@@ -27,7 +27,7 @@ color Green               00FF00
 
 # Components
 
-component Object-Manager Lime-Green
+component Object-Manager Pale-Green
   ref-impl/src/OM/
   ref-impl/include/OM/
   ref-impl/dtd/
