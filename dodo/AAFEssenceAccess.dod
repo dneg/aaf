@@ -1,4 +1,13 @@
-AD_INCLUDE_GUARD_HEAD(AAFCompositionMob)
+#startm .this-module 0
+AAFMediaStream\
+#endm
+#c
+#startm .parent-module 0
+AAFObject\
+#endm
+#c
+#import ./AAFUnitTest.exp
+
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
