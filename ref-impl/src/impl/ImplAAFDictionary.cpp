@@ -2091,11 +2091,11 @@ void ImplAAFDictionary::pvtInitObjectProperties
 
 const static aafUID_t * sCriticalTypes[] =
 {
-  &kAAFTypeID_ObjRef,
-  &kAAFTypeID_WCharString,
+//  &kAAFTypeID_ObjRef,
+  &kAAFTypeID_String,
   &kAAFTypeID_AUID,
   &kAAFTypeID_AUIDArray,
-  &kAAFTypeID_ObjRefArray,
+//  &kAAFTypeID_ObjRefArray,
 };
 
 
@@ -2178,6 +2178,7 @@ ImplAAFObjectSP ImplAAFDictionary::pvtObjFifo::GetNext (void)
   return result;
 }
 
+
 void ImplAAFDictionary::pvtObjFifo::Append (ImplAAFObject * obj)
 {
   assert (obj);
@@ -2186,4 +2187,15 @@ void ImplAAFDictionary::pvtObjFifo::Append (ImplAAFObject * obj)
 }
 
 
+void ImplAAFDictionary::pvtAttemptBuiltinSizeRegistration
+  (ImplAAFTypeDefEnum * ptde) const
+{
+  ImplAAFBuiltinTypes::RegisterExistingType (ptde);
+}
 
+
+void ImplAAFDictionary::pvtAttemptBuiltinSizeRegistration
+  (ImplAAFTypeDefRecord * ptdr) const
+{
+  ImplAAFBuiltinTypes::RegisterExistingType (ptdr);
+}
