@@ -13,6 +13,7 @@ AAFINFO=0
 AAFOMFTEST=0
 ALL=0
 PRINTPATH=0
+SANDBOX=0
 
 
 PrintHelp ()
@@ -29,6 +30,7 @@ PrintHelp ()
 	echo "-m  = ComModAAF"
 	echo "-p  = ComPropDirectDump"
 	echo "-t  = dump\n\n"
+	echo "-s  = update Sandbox.log with exit code results"
 	echo "-pp = Print PATH variable\n\n"
 }
 
@@ -59,6 +61,7 @@ do
 		-i ) AAFINFO=1;;
 		-a ) AAFOMFTEST=1;;
 		-pp ) PRINTPATH=1;;
+		-s ) SANDBOX=1;;
 		-h ) PrintHelp
 			 exit 1 ;;
 	esac
@@ -219,7 +222,7 @@ PrintExitCodes ()
 
 	print "\nPrinting $ExTarget Test Exit Codes:\n$RESULTS"
 
-	if [ SANDBOX -eq 0 ]; then
+	if [ SANDBOX -eq 1 ]; then
 		print "\nPrinting Test Exit Codes:\n$RESULTS" | tee -a D:/Views/SandBox.log
 	fi
 }
