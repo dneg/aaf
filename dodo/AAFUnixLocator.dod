@@ -6,7 +6,6 @@ AAFUnixLocator\
 AAFLocator\
 #endm
 #c
-#import ./AAFLocator.exp
 AD_HEAD
 /******************************************\
 *                                          *
@@ -16,6 +15,9 @@ AD_HEAD
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
+
+AD_CLASS_UUID(A5F642B1, 2B1C, 11d2, 80, 35, 00, 60, 08, 14, 3E, 6F)
+AD_DEFAULT_UUID(A5F642B2, 2B1C, 11d2, 80, 35, 00, 60, 08, 14, 3E, 6F)
 
 AD_CLASS_BEGIN
 
