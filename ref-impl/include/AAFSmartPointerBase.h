@@ -207,7 +207,6 @@ AAFSmartPointerBase<ReferencedType, RefCountType>::
 {
   if (_rep)
 	{
-	  aafUInt32 refCnt =
 	  release (_rep);
 	  _rep = 0;
 	}
