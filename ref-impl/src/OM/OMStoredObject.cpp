@@ -91,13 +91,13 @@ static void convert(wchar_t* wcName, size_t length, const wchar_t* name);
 
 static void formatError(DWORD errorCode);
 
-static int check(HRESULT resultCode);
+static void check(HRESULT resultCode);
 
-static int checkFile(HRESULT resultCode, const wchar_t* fileName);
+static void checkFile(HRESULT resultCode, const wchar_t* fileName);
 
-static int checkStream(HRESULT resultCode, const char* streamName);
+static void checkStream(HRESULT resultCode, const char* streamName);
 
-static int checkStorage(HRESULT resultCode, const char* storageName);
+static void checkStorage(HRESULT resultCode, const char* storageName);
 
 static void printError(const char* prefix, const char* type);
 
@@ -401,9 +401,7 @@ OMStoredObject* OMStoredObject::open(const wchar_t* fileName,
     0,
     0,
     &storage);
-  if (!checkFile(result, fileName)) {
-    exit(EXIT_FAILURE);
-  }
+  checkFile(result, fileName);
 
   OMStoredObject* newStoredObject = new OMStoredObject(storage);
   ASSERT("Valid heap pointer", newStoredObject != 0);
@@ -427,9 +425,7 @@ OMStoredObject* OMStoredObject::create(const wchar_t* fileName)
     STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_FAILIFTHERE,
     0,
     &storage);
-  if (!checkFile(result, fileName)) {
-    exit(EXIT_FAILURE);
-  }
+  checkFile(result, fileName);
 
   OMStoredObject* newStoredObject = new OMStoredObject(storage);
   ASSERT("Valid heap pointer", newStoredObject != 0);
@@ -568,9 +564,8 @@ OMUInt64 OMStoredObject::streamSize(IStream* stream) const
 
   STATSTG statstg;
   HRESULT status = stream->Stat(&statstg, STATFLAG_NONAME);
-  if (!check(status)) {
-    exit(EXIT_FAILURE);
-  }
+  check(status);
+
   OMUInt64 result = toOMUInt64(statstg.cbSize);
   return result;
 }
@@ -584,9 +579,7 @@ void OMStoredObject::streamSetSize(IStream* stream, const OMUInt64 newSize)
 
   ULARGE_INTEGER newStreamSize = fromOMUInt64(newSize);
   HRESULT status = stream->SetSize(newStreamSize);
-  if (!check(status)) {
-    exit(EXIT_FAILURE);
-  }
+  check(status);
 }
 
   // @mfunc Open a stream called <p streamName> contained within this
@@ -851,9 +844,7 @@ IStream* OMStoredObject::createStream(IStorage* storage,
     0,
     0,
     &stream);
-  if (!checkStream(resultCode, streamName)) {
-    exit(EXIT_FAILURE);
-  }
+  checkStream(resultCode, streamName);
 
   return stream;
 }
@@ -881,9 +872,7 @@ IStream* OMStoredObject::openStream(IStorage* storage, const char* streamName)
     mode,
     0,
     &stream);
-  if (!checkStream(resultCode, streamName)) {
-    exit(EXIT_FAILURE);
-  }
+  checkStream(resultCode, streamName);
 
   return stream;
   
@@ -936,9 +925,7 @@ IStorage* OMStoredObject::createStorage(IStorage* storage,
     0,
     0,
     &newStorage);
-  if (!checkStorage(resultCode, storageName)) {
-    exit(EXIT_FAILURE);
-  }
+  checkStorage(resultCode, storageName);
 
   return newStorage;
 }
@@ -971,9 +958,7 @@ IStorage* OMStoredObject::openStorage(IStorage* storage,
     0,
     0,
     &newStorage);
-  if (!checkStorage(resultCode, storageName)) {
-    exit(EXIT_FAILURE);
-  }
+  checkStorage(resultCode, storageName);
 
   return newStorage;
 }
@@ -1006,9 +991,8 @@ void OMStoredObject::writeToStream(IStream* stream, void* data, size_t size)
 
   unsigned long bytesWritten;
   HRESULT resultCode = stream->Write(data, size, &bytesWritten);
-  if (!check(resultCode)) {
-    exit(EXIT_FAILURE);
-  }
+  check(resultCode);
+
   ASSERT("Successful write", bytesWritten == size);
 }
 
@@ -1030,9 +1014,7 @@ void OMStoredObject::writeToStream(IStream* stream,
   PRECONDITION("Valid size", bytes > 0);
 
   HRESULT resultCode = stream->Write(data, bytes, &bytesWritten);
-  if (!check(resultCode)) {
-    exit(EXIT_FAILURE);
-  }
+  check(resultCode);
 }
 
   // @mfunc Read <p size> bytes from <p stream> into the buffer at
@@ -1049,9 +1031,8 @@ void OMStoredObject::readFromStream(IStream* stream, void* data, size_t size)
 
   unsigned long bytesRead;
   HRESULT result = stream->Read(data, size, &bytesRead);
-  if (!check(result)) {
-    exit(EXIT_FAILURE);
-  }
+  check(result);
+
   ASSERT("Successful read", bytesRead == size);
 }
 
@@ -1073,9 +1054,7 @@ void OMStoredObject::readFromStream(IStream* stream,
   PRECONDITION("Valid size", bytes > 0);
 
   HRESULT result = stream->Read(data, bytes, &bytesRead);
-  if (!check(result)) {
-    exit(EXIT_FAILURE);
-  }
+  check(result);
 }
 
   // @mfunc Read a UInt32 from <p stream> into <p i>. If
@@ -1123,10 +1102,7 @@ void OMStoredObject::setClass(IStorage* storage, const OMClassId& cid)
   GUID g;
   memcpy(&g, &cid, sizeof(GUID));
   HRESULT resultCode = storage->SetClass(g);
-  if (!check(resultCode)) {
-    exit(EXIT_FAILURE);
-  }
-
+  check(resultCode);
 }
 
 void OMStoredObject::getClass(IStorage* storage, OMClassId& cid)
@@ -1136,9 +1112,8 @@ void OMStoredObject::getClass(IStorage* storage, OMClassId& cid)
 
   STATSTG statstg;
   HRESULT result = storage->Stat(&statstg, STATFLAG_NONAME);
-  if (!check(result)) {
-    exit(EXIT_FAILURE);
-  }
+  check(result);
+
   memcpy(&cid, &statstg.clsid, sizeof(OMClassId));
 }
 
@@ -1158,9 +1133,8 @@ OMUInt64 OMStoredObject::streamPosition(IStream* stream) const
   LARGE_INTEGER zero = {0, 0};
   ULARGE_INTEGER position;
   HRESULT status = stream->Seek(zero, STREAM_SEEK_CUR, &position);
-  if (!check(status)) {
-    exit(EXIT_FAILURE);
-  }
+  check(status);
+
   result = toOMUInt64(position);
   return result;
 }
@@ -1182,9 +1156,7 @@ void OMStoredObject::streamSetPosition(IStream* stream, const OMUInt64 offset)
   LARGE_INTEGER position;
   memcpy(&position, &newPosition, sizeof(LARGE_INTEGER));
   HRESULT status = stream->Seek(position, STREAM_SEEK_SET, &oldPosition);
-  if (!check(status)) {
-    exit(EXIT_FAILURE);
-  }
+  check(status);
 }
 
 #if defined(_WIN32) && defined(UNICODE)
@@ -1205,7 +1177,7 @@ static void convert(wchar_t* wcName, size_t length, const char* name)
       << name
       << "\" to a wide character string."
       << endl;
-    exit(EXIT_FAILURE);  
+    // exit(EXIT_FAILURE); // tjb - error
   }
 }
 
@@ -1224,7 +1196,7 @@ static void convert(char* cName, size_t length, const wchar_t* name)
     cerr << getProgramName()
       << ": Error : Conversion failed."
       << endl;
-    exit(EXIT_FAILURE);  
+    // exit(EXIT_FAILURE); // tjb - error
   }
 }
 
@@ -1242,7 +1214,7 @@ static void convert(char* cName, size_t length, const char* name)
     cerr << getProgramName()
       << ": Error : Conversion failed."
       << endl;
-    exit(EXIT_FAILURE);  
+    // exit(EXIT_FAILURE); // tjb - error
   }
 }
 
@@ -1262,7 +1234,7 @@ static void convert(wchar_t* wcName, size_t length, const wchar_t* name)
     cerr << getProgramName()
       << ": Error : Conversion failed."
       << endl;
-    exit(EXIT_FAILURE);  
+    // exit(EXIT_FAILURE); // tjb - error
   }
 }
 
@@ -1299,7 +1271,7 @@ static void formatError(DWORD errorCode)
 #endif
 }
 
-static int check(HRESULT resultCode)
+static void check(HRESULT resultCode)
 {
   TRACE("check");
 
@@ -1308,13 +1280,11 @@ static int check(HRESULT resultCode)
   if (FAILED(resultCode)) {
     printError(getProgramName(), "Error");
     formatError(resultCode);
-    return FALSE;
-  } else {
-    return TRUE;
   }
+  ASSERT("Succeeded", SUCCEEDED(resultCode)); // tjb - error
 }
 
-static int checkFile(HRESULT resultCode, const wchar_t* fileName)
+static void checkFile(HRESULT resultCode, const wchar_t* fileName)
 {
   TRACE("checkFile");
   PRECONDITION("Valid file name", validWideString(fileName));
@@ -1325,13 +1295,11 @@ static int checkFile(HRESULT resultCode, const wchar_t* fileName)
     printError(getProgramName(), "File error");
     printName(fileName);
     formatError(resultCode);
-    return FALSE;
-  } else {
-    return TRUE;
   }
+  ASSERT("Succeeded", SUCCEEDED(resultCode)); // tjb - error
 }
 
-static int checkStream(HRESULT resultCode, const char* streamName)
+static void checkStream(HRESULT resultCode, const char* streamName)
 {
   TRACE("checkStream");
   PRECONDITION("Valid stream name", validString(streamName));
@@ -1342,14 +1310,12 @@ static int checkStream(HRESULT resultCode, const char* streamName)
     printError(getProgramName(), "Stream error");
     printName(streamName);
     formatError(resultCode);
-    return FALSE;
-  } else {
-    return TRUE;
   }
 
+  ASSERT("Succeeded", SUCCEEDED(resultCode)); // tjb - error
 }
 
-static int checkStorage(HRESULT resultCode, const char* storageName)
+static void checkStorage(HRESULT resultCode, const char* storageName)
 {
   TRACE("checkStorage");
   PRECONDITION("Valid storage name", validString(storageName));
@@ -1360,11 +1326,9 @@ static int checkStorage(HRESULT resultCode, const char* storageName)
     printError(getProgramName(), "Storage error");
     printName(storageName);
     formatError(resultCode);
-    return FALSE;
-  } else {
-    return TRUE;
   }
 
+  ASSERT("Succeeded", SUCCEEDED(resultCode)); // tjb - error
 }
 
 static void printError(const char* prefix, const char* type)
