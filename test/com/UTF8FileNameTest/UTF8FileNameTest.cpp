@@ -44,6 +44,9 @@ using namespace std;
 #include "AAFDefUIDs.h"
 #include "AAFFileMode.h"
 #include "AAFFileKinds.h"
+#include "AAFContainerDefs.h"
+#include "AAFCodecDefs.h"
+#include "AAFEssenceFormats.h"
 
 #include "CAAFBuiltinDefs.h"
 
@@ -154,12 +157,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName,
   return hr;
 }
 
-static HRESULT WriteAAFFile(IAAFFile* pFile)
+typedef IAAFSmartPointer<IAAFEssenceFormat> IAAFEssenceFormatSP;
+
+static HRESULT WriteAAFFile(IAAFFile* pFile, aafWChar *pExternalFilename)
 {
-  bool bFileOpen = true;
   IAAFHeader* pHeader = NULL;
   IAAFDictionary* pDictionary = NULL;
   IAAFMob *pMob = NULL;
+  IAAFMasterMob* pMasterMob = NULL;
   HRESULT hr = S_OK;
 
   try 
@@ -173,44 +178,75 @@ static HRESULT WriteAAFFile(IAAFFile* pFile)
     CAAFBuiltinDefs defs (pDictionary);
      
     // Create a Mob
-    checkResult(defs.cdMasterMob()->CreateInstance(IID_IAAFMob, 
-                                                   (IUnknown **)&pMob));
+    checkResult(defs.cdMasterMob()->
+					CreateInstance(IID_IAAFMasterMob, (IUnknown **)&pMasterMob));
+	checkResult(pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
     
-    // Initialize the Mob
+    // Initialize the Mob (these values are tested when the file is read)
     checkResult(pMob->SetMobID(TEST_MobID));
     checkResult(pMob->SetName(MOB_NAME_TEST));
 
     // Add the mob to the file
     checkResult(pHeader->AddMob(pMob));
 
-    // Save the file
+	// Test external essence which will create an external file via the Locator
+	IAAFEssenceAccess*	pEssenceAccess = NULL;
+	aafUID_t			testContainer = ContainerFile;
+	IAAFLocator			*pLocator = NULL;
+	aafRational_t		testRate = {48000, 1};
+	IAAFEssenceFormatSP	pFormat;
+
+
+	RemoveTestFile(pExternalFilename);		// avoid AAFRESULT_FILE_EXISTS
+
+	checkResult(defs.cdNetworkLocator()->CreateInstance(IID_IAAFLocator, (IUnknown **)&pLocator));
+	checkResult(pLocator->SetPath(pExternalFilename));
+	
+	checkResult(pMasterMob->CreateEssence(
+						1,
+						defs.ddSound(),
+						kAAFCodecWAVE,
+						testRate,
+						testRate,
+						kAAFCompressionDisable,
+						pLocator,
+						testContainer,
+						&pEssenceAccess));
+
+	aafUInt32 sampleBits = 8;
+	checkResult(pEssenceAccess->GetEmptyFileFormat(&pFormat));
+	checkResult(pFormat->AddFormatSpecifier(kAAFAudioSampleBits, sizeof(sampleBits), (aafUInt8 *)&sampleBits));
+	checkResult(pEssenceAccess->PutFileFormat(pFormat));
+
+	aafUInt8 audioBuf[] = { 0x01, 0x02, 0x03, 0x04 }, *dataPtr;
+	aafUInt32 samplesWritten, bytesWritten;
+
+	checkResult(pEssenceAccess->WriteSamples(
+						4,
+						sizeof(audioBuf),
+						dataPtr,
+						&samplesWritten,
+						&bytesWritten));
+
+	checkResult(pEssenceAccess->CompleteWrite());
+
+	if (pMasterMob)
+		pMasterMob->Release();
+
+	if (pMob)
+		pMob->Release();
+
+    // Save & close the file
     checkResult(pFile->Save());
-
-    // Close the file
     checkResult(pFile->Close());
-    bFileOpen = false;
+    checkResult(pFile->Release());
 
-  } catch (HRESULT& rResult) {
-    hr = rResult;
+	pEssenceAccess->Release();
   }
-
-  // Clean up
-  if (pMob)
-    pMob->Release();
-
-  if (pDictionary)
-    pDictionary->Release();
-
-  if (pHeader)
-    pHeader->Release();
-      
-  if (pFile) {
-    if (bFileOpen) {
-      // Save and close the file if an error left it open
-      pFile->Save();
-      pFile->Close();
-    }
-    pFile->Release();
+  catch (HRESULT& rResult)
+  {
+    hr = rResult;
+	cout << "*** WriteAAFFile: caught error hr=0x" << hex << hr << dec << endl;
   }
 
   return hr;
@@ -222,7 +258,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName,
 {
   IAAFRawStorage* pRawStorage = 0;
   IAAFFile* pFile = NULL;
-  bool bFileOpen = false;
   IAAFHeader* pHeader = NULL;
   IEnumAAFMobs* mobIter = NULL;
   IAAFMob* pMob = NULL;
@@ -259,28 +294,37 @@ static HRESULT ReadAAFFile(aafWChar * pFileName,
 			pRawStorage->Release();
 			checkResult(pFile->Open());
 		}
-    bFileOpen = true;
 
     // Get the header
     checkResult(pFile->GetHeader(&pHeader));
 
     // Expect to find a single Mob
     checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
-    checkExpression (1 == numMobs, AAFRESULT_TEST_FAILED);
+    checkExpression (2 == numMobs, AAFRESULT_TEST_FAILED);
 
     checkResult(pHeader->GetMobs (NULL, &mobIter));
-    for(n = 0; n < numMobs; n++) {
-      checkResult(mobIter->NextOne (&pMob));
-      checkResult(pMob->GetName (name, sizeof(name)));
-      checkResult(pMob->GetMobID (&mobID));
-      // Check that the properties are as we wrote them
-      checkExpression(wcscmp( name, MOB_NAME_TEST) == 0,
-                      AAFRESULT_TEST_FAILED);
-      checkExpression(memcmp(&mobID, &TEST_MobID, sizeof(mobID)) == 0,
-                      AAFRESULT_TEST_FAILED);
+    for(n = 0; n < numMobs; n++)
+	{
+		IAAFSourceMob				*pSourceMob = NULL;
 
-      pMob->Release();
-      pMob = NULL;
+		checkResult(mobIter->NextOne (&pMob));
+
+		// Is this a source mob?
+		if (AAFRESULT_SUCCEEDED(pMob->QueryInterface(IID_IAAFSourceMob, (void **)&pSourceMob)))
+		{
+			pSourceMob->Release();
+		}
+		else
+		{
+			// Check that the properties are as we wrote them to the MasterMob
+			checkResult(pMob->GetName (name, sizeof(name)));
+			checkExpression(wcscmp( name, MOB_NAME_TEST) == 0, AAFRESULT_TEST_FAILED);
+			checkResult(pMob->GetMobID (&mobID));
+			checkExpression(memcmp(&mobID, &TEST_MobID, sizeof(mobID)) == 0, AAFRESULT_TEST_FAILED);
+		}
+
+		pMob->Release();
+		pMob = NULL;
     }
 
     mobIter->Release();
@@ -290,10 +334,11 @@ static HRESULT ReadAAFFile(aafWChar * pFileName,
     checkExpression(kAAFRev1 == testRev, AAFRESULT_TEST_FAILED);
 
     checkResult(pFile->Close());
-    bFileOpen = false;
+    checkResult(pFile->Release());
 
   } catch (HRESULT& rResult) {
     hr = rResult;
+	cout << "*** ReadAAFFile: caught error hr=0x" << hex << hr << dec << endl;
   }
 
   // Clean up
@@ -306,14 +351,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName,
   if (pHeader)
     pHeader->Release();
       
-  if (pFile) {
-    if (bFileOpen) {
-      // Close the file if an error left it open
-      pFile->Close();
-    }
-    pFile->Release();
-  }
-
   return hr;
 }
 
@@ -327,30 +364,38 @@ struct {
   const aafUID_t* rkind;
   char* rtype;
 } fileinfo[] = {
-#ifdef OS_WINDOWS
-
   {
-    L"CFKT-Default-2.aaf",
+    L"CFKT-Default-4K.aaf",
 		true,
-		false,
-    &aafFileKindAafS4KBinary,
-    "SSS",
+		true,
+    &aafFileKindAaf4KBinary,
+    "4K",
     true,
-    &aafFileKindAafS4KBinary,
-    "SSS"
+    &aafFileKindAaf4KBinary,
+    "4K"
+  },
+  {
+    L"CFKT-Default-512.aaf",
+		true,
+		true,
+    &aafFileKindAaf512Binary,
+    "512",
+    true,
+    &aafFileKindAaf512Binary,
+    "512"
   },
   {
     L"CFKT-S512.aaf",
 		true,
 		true,
     &aafFileKindAafS512Binary,
-    "SSS",
+    "S512",
     true,
     &aafFileKindAafS512Binary,
-    "SSS"
+    "S512"
   },
   {
-    L"CFKT-S4k.aaf",
+    L"CFKT-S4K.aaf",
 		true,
 		true,
     &aafFileKindAafS4KBinary,
@@ -358,60 +403,18 @@ struct {
     true,
     &aafFileKindAafS4KBinary,
     "S4K"
-  },
-
-  {
-    L"CFKT-M4K.aaf",
-		true,
-		true,
-    &aafFileKindAafM4KBinary,
-    "M4K",
-    true,
-	&aafFileKindAafM4KBinary,
-	"M4K"
   }
-#else
-  {
-    L"CFKT-Default.aaf",
+#ifdef OS_WINDOWS
+  , {
+    L"CFKT-M512.aaf",
 		true,
 		true,
-    &aafFileKindAaf4KBinary,
-    "SSS",
+    &aafFileKindAafM512Binary,
+    "M512",
     true,
-    &aafFileKindAaf4KBinary,
-    "SSS"
+	&aafFileKindAafM512Binary,
+	"M512"
   },
-  {
-    L"CFKT-Default-2.aaf",
-		true,
-		false,
-    &aafFileKindAafS4KBinary,
-    "SSS",
-    true,
-    &aafFileKindAafS4KBinary,
-    "SSS"
-  },
-  {
-    L"CFKT-S512.aaf",
-		true,
-		true,
-    &aafFileKindAafS512Binary,
-    "SSS",
-    true,
-    &aafFileKindAafS512Binary,
-    "SSS"
-  },
-  {
-    L"CFKT-S4k.aaf",
-		true,
-		true,
-    &aafFileKindAafS4KBinary,
-    "S4K",
-    true,
-    &aafFileKindAafS4KBinary,
-    "S4K"
-  },
-
   {
     L"CFKT-M4K.aaf",
 		true,
@@ -419,65 +422,101 @@ struct {
     &aafFileKindAafM4KBinary,
     "M4K",
     true,
-	&aafFileKindAafM4KBinary,
-	"M4K"
+    &aafFileKindAafM4KBinary,
+    "M4K"
   }
 #endif
 };
 
-
-int main(void)
+// Make sure all of our required plugins have been registered.
+static void RegisterRequiredPlugins(void)
 {
+  HRESULT hr = S_OK;
+  IAAFPluginManager	*mgr = NULL;
+
+  // Load the plugin manager 
+  checkResult(AAFGetPluginManager(&mgr));
+
+  // Attempt load and register all of the plugins
+  // in the shared plugin directory.
+  checkResult(mgr->RegisterSharedPlugins());
+
+  if (mgr)
+    mgr->Release();
+}
+
+int main(int argc, char* argv[])
+{
+	bool simpleFileIO = false;
+
+	// By default all file I/O, including external essence, is tested with UTF-8 names
+	// -s arg will test only the simple file I/O operations using UTF-8 names which are:
+	//   AAFFileOpenNewModify() AAFCreateAAFFileOnRawStorage()
+	if (argc == 2 && (strcmp(argv[1], "-s") == 0))
+		simpleFileIO = true;
+
+
   try {
-		IAAFFile* pFile = 0;
-		wchar_t UnicodeFileName[30];
+	RegisterRequiredPlugins();
 
-		wcscpy(UnicodeFileName, L"zz12345z.aaf");
-		UnicodeFileName[2]=0x2200;
-		UnicodeFileName[3]=0x2297;
-		UnicodeFileName[4]=0x222F;
-		UnicodeFileName[5]=0x2282;
-		UnicodeFileName[6]=0x221e;
+	IAAFFile* pFile = 0;
+	wchar_t UnicodeFileName[30], UnicodeExtName[30];
 
+	wcscpy(UnicodeFileName, L"zz12345z.aaf");		// filename of AAF file
+	wcscpy(UnicodeExtName, L"zzexternal.aaf");		// filename of external essence
+	UnicodeFileName[2]=0x2200;
+	UnicodeFileName[3]=0x2297;
+	UnicodeFileName[4]=0x222F;
+	UnicodeFileName[5]=0x2282;
+	UnicodeFileName[6]=0x221e;
+	UnicodeExtName[2]=0x2200;
+	UnicodeExtName[3]=0x2297;
+	UnicodeExtName[4]=0x222F;
+	UnicodeExtName[5]=0x2282;
+	UnicodeExtName[6]=0x221e;
 
     for (int i = 0; i < sizeof(fileinfo)/sizeof(fileinfo[0]); i++)
-		{
-			UnicodeFileName[1]=i+'1'; //change the filename for each test, second character is incremented 1,2,3 etc.
-			CoutTestFile( UnicodeFileName );
-      // Create the file
+	{
+		// Increment second character of filename to give different names per iteration
+		UnicodeFileName[1]=i+'1';
+		UnicodeExtName[1]=i+'1';
+		CoutTestFile( UnicodeFileName );
+		// Create the file
 
-			cout << "  Creating " ;
-			if( fileinfo[i].createraw ) cout << "Raw ";
-			cout << fileinfo[i].type << endl;
-			checkResult(CreateAAFFile(UnicodeFileName, fileinfo[i].createraw, fileinfo[i].kind, &pFile));
+		cout << "  Creating " ;
+		if( fileinfo[i].createraw ) cout << "Raw ";
+		cout << fileinfo[i].type << endl;
+		checkResult(CreateAAFFile(UnicodeFileName, fileinfo[i].createraw, fileinfo[i].kind, &pFile));
 
-			// Write the file contents
-			cout << "  Writing" << endl;
-			checkResult(WriteAAFFile(pFile));
+		// Write the AAF file and the external essence file
+		cout << "  Writing" << endl;
+		if (simpleFileIO)
+			checkResult(WriteAAFFile(pFile, L"external.wav"));
+		else
+			checkResult(WriteAAFFile(pFile, UnicodeExtName));
 
+		// Check that we made an AAF file with the correct encoding
+		cout << "  Checking " << fileinfo[i].type << endl;
+		aafUID_t k = {0};
+		aafBool b = kAAFFalse;
 
-      // Check that we made an AAF file with the correct encoding
-      cout << "  Checking " << fileinfo[i].type << endl;
-      aafUID_t k = {0};
-      aafBool b = kAAFFalse;
+		checkResult(AAFFileIsAAFFile(UnicodeFileName, &k, &b));
+		if (!b) {
+			cerr << "Error : AAFFileIsAAFFile() reports file is not an AAF file." << endl;
+			throw AAFRESULT_TEST_FAILED;
+		}
 
-      checkResult(AAFFileIsAAFFile(UnicodeFileName, &k, &b));
-      if (!b) {
-        cerr << "Error : AAFFileIsAAFFile() reports file is not an AAF file."
-             << endl;
-        throw AAFRESULT_TEST_FAILED;
-      }
-
-      // Read the file
-        cout << "  Reading (default)" << endl;
-        checkResult(ReadAAFFile(UnicodeFileName));
-        cout << "  Reading Raw " << fileinfo[i].rtype << endl;
-        checkResult(ReadAAFFile(UnicodeFileName, true, fileinfo[i].rkind ));
-    }
+		// Read the file
+		cout << "  Reading (default)" << endl;
+		checkResult(ReadAAFFile(UnicodeFileName));
+		cout << "  Reading Raw " << fileinfo[i].rtype << endl;
+		checkResult(ReadAAFFile(UnicodeFileName, true, fileinfo[i].rkind ));
+	}
   }
 	catch(HRESULT& r)
 	{
     cerr << "Error : Caught HRESULT 0x" << hex << r << endl;
+	return 1;
   }
   return 0;
 }
