@@ -14,6 +14,10 @@
 #include "ImplAAFDataDef.h"
 #endif
 
+#ifndef __ImplAAFDefObject_h__
+#include "ImplAAFDefObject.h"
+#endif
+
 #ifndef __ImplAAFEffectDef_h__
 #include "ImplAAFEffectDef.h"
 #endif
@@ -48,6 +52,8 @@
 #endif
 
 #include "ImplAAFObjectCreation.h"
+#include "ImplAAFDictionary.h"
+#include "ImplAAFHeader.h"
 
 #include <assert.h>
 #include <string.h>
@@ -90,14 +96,24 @@ AAFRESULT STDMETHODCALLTYPE
 							 aafLength_t    length,
                              ImplAAFEffectDef* pEffectDef)
 {
-	HRESULT		rc = AAFRESULT_SUCCESS;
+	HRESULT					rc = AAFRESULT_SUCCESS;
+	ImplAAFSourceReference*	pSourceRef = NULL;
+	ImplAAFParameter*		pParms = NULL;
+	ImplAAFSegment*			pSeg = NULL;
+	ImplAAFHeader*			pHeader = NULL;
+	ImplAAFDictionary*		pDictionary = NULL;
+	ImplAAFEffectDef*		pOldEffectDef = NULL;
+	ImplAAFDefObject*		pDefObject = NULL;
+	aafUID_t				EffectDefAUID;
 
 	if (pDatadef == NULL || pEffectDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-//	rc = SetNewProps(length, pDatadef);
 	XPROTECT()
 	{
+		// Get the Header and the dictionary objects for this file.
+		CHECK(pEffectDef->MyHeadObject(&pHeader));
+		CHECK(pHeader->GetDictionary(&pDictionary));
 		CHECK(SetNewProps(length, pDatadef));
 		// ***********************************************************************
 		// ************************************************************************
@@ -105,9 +121,6 @@ AAFRESULT STDMETHODCALLTYPE
 		// fail inside the OM during initial development.
 		// Once optional properties are properly supported
 		// this setting instructions MUST BE REMOVED !!!
-		ImplAAFSourceReference*		pSourceRef = NULL;
-		ImplAAFParameter*			pParms = NULL;
-		ImplAAFSegment*				pSeg = NULL;
 														  
 		pSourceRef = (ImplAAFSourceReference *)CreateImpl(CLSID_AAFSourceReference);
 		if (pSourceRef == NULL)
@@ -122,12 +135,15 @@ AAFRESULT STDMETHODCALLTYPE
 		_parameters.appendValue(pParms);
 		pSourceRef->SetSourceID(*pDatadef);				
 		pSourceRef->SetSourceMobSlotID((aafSlotID_t)1); 
-//!!!		_bypassOverride = (aafUInt32)1;							
+		_bypassOverride = (aafUInt32)0;							
 		_rendering = pSourceRef;
-		// Here we have to find the effect definition auid from the 
-		// Effect definition object pointer we got as an input 
-		// EffectDef is NOT implemented yet - therefore:
-//!!!		_effectDefinition = kNullID;
+		// Lookup the effect definition's AUID
+		CHECK(pEffectDef->GetAUID(&EffectDefAUID));
+		// find out if this effectdef is already set
+		if (pDictionary->LookupEffectDefinition(&EffectDefAUID, &pOldEffectDef) == AAFRESULT_SUCCESS)
+			pOldEffectDef->ReleaseReference();
+		_effectDefinition = EffectDefAUID;
+		pEffectDef->AcquireReference();
 		// ************************************************************************
 		// ************************************************************************
 	}
@@ -144,12 +160,24 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFGroup::GetEffectDefinition (ImplAAFEffectDef **effectDef)
 {
+	ImplAAFHeader*		pHeader = NULL;
+	ImplAAFDictionary*	pDictionary = NULL;
+
 	if(effectDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-//!!!	*effectDef = _effectDefinition;
-//	return AAFRESULT_SUCCESS;
-	return AAFRESULT_NOT_IMPLEMENTED;
+	XPROTECT()
+	{
+		CHECK(MyHeadObject(&pHeader));
+		CHECK(pHeader->GetDictionary(&pDictionary));
+		CHECK(pDictionary->LookupEffectDefinition(&_effectDefinition, effectDef) == AAFRESULT_SUCCESS);
+		(*effectDef)->AcquireReference();
+	}
+	XEXCEPT
+	XEND;
+
+	return AAFRESULT_SUCCESS;
+
 }
 
 	//@comm Replaces part of omfiEffectGetInfo
@@ -195,11 +223,11 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFGroup::GetBypassOverride (aafArgIDType_t *bypassOverride)
+    ImplAAFGroup::GetBypassOverride (aafUInt32* pBypassOverride)
 {
-	if(bypassOverride == NULL)
+	if(pBypassOverride == NULL)
 		return AAFRESULT_NULL_PARAM;
-	*bypassOverride = _bypassOverride;
+	*pBypassOverride = _bypassOverride;
 
 	return AAFRESULT_SUCCESS;
 }
@@ -305,7 +333,7 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm Replaces omfiEffectSetFinalRender and omfiEffectSetWorkingRender
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFGroup::SetBypassOverride (aafArgIDType_t  bypassOverride)
+    ImplAAFGroup::SetBypassOverride (aafUInt32  bypassOverride)
 {
 	_bypassOverride = bypassOverride;
 
