@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2000 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -204,41 +204,6 @@ OMStoredObject* OMStoredObject::createModify(const wchar_t* fileName,
   newStoredObject->create(byteOrder);
 
   return newStoredObject;
-}
-
-OMStoredObject* OMStoredObject::openStoragePath(const char* storagePathName)
-{
-  TRACE("OMStoredObject::openStoragePath");
-  PRECONDITION("Valid stream path name", validString(storagePathName));
-  PRECONDITION("Path name is absolute", storagePathName[0] == '/');
-
-  char* path = new char[strlen(storagePathName) + 1];
-  ASSERT("Valid heap pointer", path != 0);
-  strcpy(path, storagePathName);
-  
-  char* element = path;
-  element++; // skip first '/'
-
-  OMStoredObject* storage = this;
-  OMStoredObject* result = 0;
-
-  char* end = strchr(element, '/');
-  
-  while (end != 0) {
-    *end = 0;
-    storage = storage->open(element);
-    ASSERT("Valid storage pointer", storage != 0);
-    element = ++end;
-    end = strchr(element, '/');
-  }
-
-  if ((element != 0) && (strlen(element) > 0)) {
-    result = storage->open(element);
-  } else {
-    result = storage;
-  }
-  
-  return result;
 }
 
   // @mfunc Save the <c OMPropertySet> <p properties> in this
