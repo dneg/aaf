@@ -29,6 +29,10 @@
 #ifndef OMDATATYPES_H
 #define OMDATATYPES_H
 
+// @module OMDataTypes | Host independent data type definitions used
+//         by the Object Manager.
+//   @mauthor Tim Bingham | tjb | Avid Technology, Inc.
+
 // Figure out the compiler and define a symbol of the
 // form COMPILER_<compiler name>_<processor>_<operating system>
 //
