@@ -28,7 +28,8 @@ CFLAGS = /nologo /Gi-
 OBJFILE = /Fo$*.${OBJ}
 EXEFLAG = /Fo
 
-SH_PREFIX = sh -c "
-SH_SUFFIX = "
+SH_PREFIX = 
+SH_SUFFIX = 
+SHELL = c:/mksnt/sh
 
 IDL = midl
