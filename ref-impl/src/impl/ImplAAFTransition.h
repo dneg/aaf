@@ -113,6 +113,8 @@ public:
   	virtual AAFRESULT ChangeContainedReferences(aafMobID_constref from,
 												aafMobID_constref to);
 
+	virtual AAFRESULT GetComponentType(implCompType_t* pType) {*pType = kTransition; return AAFRESULT_SUCCESS;}
+
 
 private:
 	OMStrongReferenceProperty<ImplAAFOperationGroup>	_operationGroup;
