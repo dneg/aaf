@@ -14,7 +14,6 @@ AD_INCLUDE(AAFTypes)
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFEffectDef)
 AD_FORWARD_DECLARATION(AAFParameter)
-AD_FORWARD_DECLARATION(AAFParameterSlot)
 AD_FORWARD_DECLARATION(EnumAAFEffectDefs)
 AD_FORWARD_DECLARATION(EnumAAFParameterDefs)
 AD_FORWARD_DECLARATION(AAFSegment)
@@ -92,11 +91,10 @@ AD_METHOD1(IsValidTranEffect,
 	[out], aafBool *, validTransition, TRUE if the effect is valid in a transition,
 	Verifies that the input effect object can be used in a transition.)
 
-AD_XMETHOD3(AddNewParameterSlot,
+AD_XMETHOD2(AddNewParameter,
 	[in], objPass, aafArgIDType_t, argID, Argument ID for the slot,
 	[in], objIn, AAFParameter, value, Parameter to place in effect slot,
-	[out], objOut, AAFParameterSlot, parmSlot, Parameter slot object,
-	creates a new parameter slot object\, inserts the
+	adds a new parameter object\, inserts the
 	// segment passed as the "value" argument to the new slot\, and
 	//adds the slot to the effect object.)
 	//@comm Replaces part of omfiEffectAddNewSlot
@@ -119,9 +117,8 @@ AD_METHOD1(SetBypassOverride,
 	This function sets the optional bypass override property on the given effect object.)
 	//@comm Replaces omfiEffectSetBypassOverride
 
-AD_XMETHOD3(GetParameterSlotByArgID,
+AD_XMETHOD2(GetParameterByArgID,
 		   [in], objPass, aafArgIDType_t, argID, Arg ID,
-		   [out], objOut, AAFParameterSlot, parameterSlot, Parameter slot object,
 		   [out], objOut, AAFParameter, parameter, Parameter object,
 		   Given an argID\, returns the corresponding parameter slot and parameter slot value.)
 
