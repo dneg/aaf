@@ -107,3 +107,4 @@ typedef struct _AafOmfGlobals
 void deleteFile( char* fileName );
 void IncIndentLevel( void );
 void DecIndentLevel( void );
+void AUIDtoString(aafUID_t *uid, char *buf);
