@@ -10,7 +10,6 @@ AAFSegment\
 AD_HEAD
 
 AD_INCLUDE(AAFTypes)
-AD_HEAD
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -19,6 +18,16 @@ AD_HEAD
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
+
+/*************************************************************************
+ * 
+ * @class AAFNestedScope | an AAFNestedScope object defines a scope that 
+ *			contains an ordered set of AAFSegments and produces the value
+ *			specified by the last AAFSegement in the ordered set.
+ *
+ * @base public | AAFSegment
+ *
+ *************************************************************************/
 
 AD_FORWARD_DECLARATION(AAFSegment)
 AD_FORWARD_DECLARATION(EnumAAFSegments)
