@@ -292,12 +292,14 @@ OMFileSignature OMFile::initializeSignature(const OMFileSignature& prototype)
   // @mfunc Save all changes made to the contents of this
   //        <c OMFile>. It is not possible to <mf OMFile::save>
   //        read-only or transient files.
-void OMFile::save(void)
+  //   @parm Client context for callbacks.
+void OMFile::save(void* clientContext)
 {
   TRACE("OMFile::save");
 
   if (_mode == modifyMode) {
-    _root->save();
+    _root->onSave(clientContext);
+    _root->save(clientContext);
   }
 }
 

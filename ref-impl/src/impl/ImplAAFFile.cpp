@@ -485,7 +485,7 @@ ImplAAFFile::Save ()
 	  dictSP->AssureClassPropertyTypes ();
 	  bool regWasEnabled = dictSP->SetEnableDefRegistration (false);
 
-	  _file->save();
+	  _file->save(0);
 
 	  dictSP->SetEnableDefRegistration (regWasEnabled);
 
