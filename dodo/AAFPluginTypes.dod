@@ -12,21 +12,42 @@ AD_TYPES_HEAD
 *                                          *
 \******************************************/
 
+AD_INCLUDE(AAFTypes)
+
 AD_TYPES_BEGIN(410ED8B1, 912B, 11D2, 80, 88, 00, 60, 08, 14, 3e, 6f)
 
-typedef enum
+typedef enum _aafDeinterleave_t
 {
-	deinterleave, leaveInterleaved
+	deinterleave,
+	leaveInterleaved
 } aafDeinterleave_t;
 
-typedef enum { kAAFCheckVerbose, kCheckQuiet } aafCheckVerbose_t;
-typedef enum { kAAFCheckPrintWarnings, kAAFCheckNoWarnings } aafCheckWarnings_t;
+typedef enum _aafCheckVerbose_t
+{
+	kAAFCheckVerbose, 
+	kCheckQuiet
+} aafCheckVerbose_t;
 
-typedef enum { kPluginLinked, kPluginCOM, kPluginCpp } aafPluginType_t;
+typedef enum _aafCheckWarnings_t 
+{
+	kAAFCheckPrintWarnings, 
+	kAAFCheckNoWarnings
+} aafCheckWarnings_t;
 
-typedef enum { kPluginRev1, kPluginCurrentRev=kPluginRev1 } aafPluginInterfaceRev_t;
+typedef enum _aafPluginType_t 
+{
+	kPluginLinked, 
+	kPluginCOM, 
+	kPluginCpp
+} aafPluginType_t;
 
-typedef struct 
+typedef enum _aafPluginInterfaceRev_t
+{
+	kPluginRev1,
+	kPluginCurrentRev=kPluginRev1
+} aafPluginInterfaceRev_t;
+
+typedef struct _aafPluginMetaInfo_t
 {
 	aafUID_t    			pluginID;					/* OUT */
 	aafPluginInterfaceRev_t	pluginInterfaceRevision;	/* IN/OUT */
@@ -37,7 +58,7 @@ typedef struct
 	aafProductVersion_t		minimumSDKRevision;
 } aafPluginMetaInfo_t;
 
-typedef struct 
+typedef struct _aafCodecSelectInfo_t
 {
 	aafBool         	hwAssisted;		/* OUT */
 	aafBool				isNative;		/* OUT */
@@ -46,7 +67,7 @@ typedef struct
 	aafUInt32			avgBitsPerSec;	/* OUT */
 } aafCodecSelectInfo_t;
 	
-typedef struct 
+typedef struct _aafCodecMetaInfo_t
 {
 	aafUID_t		    mdesClassID;		/* OUT */
 	aafUID_t			dataClassID;		/* OUT */
