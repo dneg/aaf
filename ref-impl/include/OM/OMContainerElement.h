@@ -270,9 +270,36 @@ public:
     // @cmember The unique key of this <c OMStrongReferenceSetElement>.
   void* identification(void) const;
 
+  // Special value for the reference count indicating that this
+  // <c OMStrongReferenceSetElement> is not reference counted.
+  //
+  enum {sticky = 0xffffffff};
+
     // @cmember The count of weak references to this
     //          <c OMStrongReferenceSetElement>.
   OMUInt32 referenceCount(void) const;
+
+    // @cmember Increase the count of weak references to this
+    //          <c OMStrongReferenceSetElement> by one. Return
+    //          the new value of the reference count.
+  OMUInt32 increaseReferenceCount(void);
+
+    // @cmember Decrease the count of weak references to this
+    //          <c OMStrongReferenceSetElement> by one. Return
+    //          the new value of the reference count.
+  OMUInt32 decreaseReferenceCount(void);
+
+    // @cmember Is this a sticky <c OMStrongReferenceSetElement>?
+    //          If so, this <c OMStrongReferenceSetElement> is always
+    //          persistent. If not, this <c OMStrongReferenceSetElement> is
+    //          only persistent if it has a non-zero <f referenceCount()>.
+  bool isSticky(void) const;
+
+    // @cmember Unstick this <c OMStrongReferenceSetElement>.
+  void clearSticky(void);
+
+    // @cmember Make this <c OMStrongReferenceSetElement> sticky.
+  void setSticky(void);
 
 private:
   // @access Private members.

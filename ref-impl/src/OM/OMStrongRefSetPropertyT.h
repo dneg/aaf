@@ -200,7 +200,12 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   UniqueIdentification key = object->identification();
   ASSERT("Valid identification", isValidIdentification(key));
 
-  SetElement newElement(this, name, localKey, 1/*tjb*/, &key, sizeof(key));
+  SetElement newElement(this,
+                        name,
+                        localKey,
+                        OMStrongReferenceSetElement::sticky,
+                        &key,
+                        sizeof(key));
   newElement.setValue(&key, object);
   _set.insert(key, newElement);
   setPresent();

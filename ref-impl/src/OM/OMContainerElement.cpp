@@ -141,7 +141,7 @@ OMStrongReferenceSetElement::OMStrongReferenceSetElement(void)
 : OMStrongReferenceVectorElement(),
   _identification(0),
   _identificationSize(0),
-  _referenceCount(0xffff /* sticky */)
+  _referenceCount(sticky)
 {
   TRACE("OMStrongReferenceSetElement::OMStrongReferenceSetElement");
 }
@@ -296,6 +296,69 @@ OMUInt32 OMStrongReferenceSetElement::referenceCount(void) const
   TRACE("OMStrongReferenceSetElement::referenceCount");
 
   return _referenceCount;
+}
+
+  // @mfunc Increase the count of weak references to this
+  //        <c OMStrongReferenceSetElement> by one. Return
+  //        the new value of the reference count.
+  //   @rdesc The new value of the reference count.
+OMUInt32 OMStrongReferenceSetElement::increaseReferenceCount(void)
+{
+  TRACE("OMStrongReferenceSetElement::increaseReferenceCount");
+
+  if (!isSticky()) {
+    ++_referenceCount;
+  }
+  return _referenceCount;
+}
+
+  // @mfunc Decrease the count of weak references to this
+  //        <c OMStrongReferenceSetElement> by one. Return
+  //        the new value of the reference count.
+  //   @rdesc The new value of the reference count.
+OMUInt32 OMStrongReferenceSetElement::decreaseReferenceCount(void)
+{
+  TRACE("OMStrongReferenceSetElement::decreaseReferenceCount");
+
+  if (!isSticky()) {
+    --_referenceCount;
+  }
+  return _referenceCount;
+}
+
+  // @mfunc Is this a sticky <c OMStrongReferenceSetElement>?
+  //        If so, this <c OMStrongReferenceSetElement> is always
+  //        persistent. If not, this <c OMStrongReferenceSetElement> is
+  //        only persistent if it has a non-zero <f referenceCount()>.
+  //   @rdesc True if this <c OMStrongReferenceSetElement> is sticky,
+  //          false otherwise.
+bool OMStrongReferenceSetElement::isSticky(void) const
+{
+  TRACE("OMStrongReferenceSetElement::isSticky");
+
+  bool result = false;
+  if (_referenceCount == sticky) {
+    result = true;
+  }
+  return result;
+}
+
+  // @mfunc Unstick this <c OMStrongReferenceSetElement>.
+void OMStrongReferenceSetElement::clearSticky(void)
+{
+  TRACE("OMStrongReferenceSetElement::clearSticky");
+
+  if (isSticky()) {
+    _referenceCount = 0;
+  }
+}
+
+  // @mfunc Make this <c OMStrongReferenceSetElement> sticky.
+void OMStrongReferenceSetElement::setSticky(void)
+{
+  TRACE("OMStrongReferenceSetElement::setSticky");
+
+  _referenceCount = sticky;
 }
 
 // class OMWeakReferenceVectorElement

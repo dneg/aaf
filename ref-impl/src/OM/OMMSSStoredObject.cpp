@@ -634,7 +634,15 @@ void OMMSSStoredObject::save(const OMStrongReferenceSet& set)
 
   // create a set index
   //
-  size_t count = set.count();
+  size_t count = 0;
+  OMContainerIterator<OMStrongReferenceSetElement>& iterator = *set.iterator();
+  while (++iterator) {
+    OMStrongReferenceSetElement& element = iterator.value();
+    // Count the elements that will be saved.
+    if (element.isSticky() || element.referenceCount() > 0) {
+      count = count + 1;
+    }
+  }
   OMKeySize keySize = set.keySize();
   OMPropertyId keyPropertyId = set.keyPropertyId();
   OMStoredSetIndex* index = new OMStoredSetIndex(count,
@@ -647,34 +655,42 @@ void OMMSSStoredObject::save(const OMStrongReferenceSet& set)
   // Iterate over the set saving each element. The index entries
   // are written in order of their unique keys.
   //
-  OMContainerIterator<OMStrongReferenceSetElement>& iterator = *set.iterator();
+  iterator.reset(OMBefore);
   while (++iterator) {
 
     OMStrongReferenceSetElement& element = iterator.value();
 
-    // enter into the index
-    //
-    void* key = element.identification();
-    index->insert(position,
-                  element.localKey(),
-                  element.referenceCount(),
-                  key);
+    // Save elements that are sticky or that are referenced.
+    if (element.isSticky() || element.referenceCount() > 0) {
+
+      // enter into the index
+      //
+      void* key = element.identification();
+      // Sticky reference counts were previously incorrectly persisted
+      // as 0x00000001 instead of 0xffffffff so we add 2 below for
+      // compatability.
+      OMUInt32 referenceCount = element.referenceCount() + 2;
+      index->insert(position,
+                    element.localKey(),
+                    referenceCount,
+                    key);
 
 #if defined(OM_DEBUG)
-    wchar_t* name = elementName(set.name(),
-                                set.propertyId(),
-                                element.localKey());
-    ASSERT("Consistent names", compareWideString(element.reference().name(),
-                                                 name) == 0);
-    delete [] name;
-    name = 0; // for BoundsChecker
+      wchar_t* name = elementName(set.name(),
+                                  set.propertyId(),
+                                  element.localKey());
+      ASSERT("Consistent names", compareWideString(element.reference().name(),
+                                                   name) == 0);
+      delete [] name;
+      name = 0; // for BoundsChecker
 #endif
 
-    // save the object
-    //
-    element.save();
+      // save the object
+      //
+      element.save();
 
-    position = position + 1;
+      position = position + 1;
+    }
   }
   delete &iterator;
   // save the set index
@@ -1090,11 +1106,14 @@ void OMMSSStoredObject::restore(OMStrongReferenceSet& set,
     // safely ignore the external one.
     //
     if (!set.contains(key)) {
+      // Sticky reference counts were previously incorrectly persisted
+      // as 0x00000001 instead of 0xffffffff so we subract 2 below for
+      // compatability.
       wchar_t* name = elementName(setName, setId, localKey);
       OMStrongReferenceSetElement element(&set,
                                           name,
                                           localKey,
-                                          count,
+                                          count - 2,
                                           key,
                                           keySize);
       element.restore();

@@ -599,6 +599,7 @@ static VectorIndexEntry* readVectorIndex(IStream* stream,
 static void dumpSetIndexEntry(OMUInt32 i,
                               SetIndexEntry* setIndexEntry,
                               bool printKey);
+static void printReferenceCount(OMUInt32 referenceCount);
 static void printSetIndex(SetIndexEntry* setIndex,
                           OMUInt32 count,
                           OMUInt32 highWaterMark,
@@ -2002,15 +2003,25 @@ void dumpSetIndexEntry(OMUInt32 i,
   cout << setw(8) << i
        << " : "
        << setw(10) << setIndexEntry->_elementName
-       << "     "
-       << setw(8) << setIndexEntry->_referenceCount
        << "     ";
+  printReferenceCount(setIndexEntry->_referenceCount);
+  cout << "     ";
   if (printKey) {
     printClsid(setIndexEntry->_key);
   } else {
     printClsid(nullCLSID);
   }
   cout << endl;
+}
+
+void printReferenceCount(OMUInt32 referenceCount)
+{
+  OMUInt32 count = referenceCount - 2;
+  if (count == 0xffffffff) {
+    cout << setw(8) << "sticky";
+  } else {
+    cout << setw(8) << count;
+  }
 }
 
 void printSetIndex(SetIndexEntry* setIndex,
@@ -2095,9 +2106,9 @@ void printSetIndex(SetIndexEntry* setIndex,
       cout << setw(8) << i
            << " : "
            << setw(10) << setIndex[i]._elementName
-           << "     "
-           << setw(8) << setIndex[i]._referenceCount
            << "     ";
+      printReferenceCount(setIndex[i]._referenceCount);
+      cout << "     ";
       cout << endl;
       cout << "  ";
       if (keySize == 32) {
