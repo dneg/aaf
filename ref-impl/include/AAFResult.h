@@ -343,7 +343,7 @@
     /* Expected symbol not exported from DLL. Need newer DLL. */
 
 
-#define AAFRESULT_MAXCODE                   MAKE_AAFHRESULT(0x0305)
+#define AAFRESULT_MAXCODE                   MAKE_AAFHRESULT(0x0401)
 
 
 #endif // ! __AAFResult_h__
