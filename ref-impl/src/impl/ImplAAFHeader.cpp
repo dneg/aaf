@@ -71,6 +71,10 @@
 #define DEFAULT_NUM_DATAKIND_DEFS	100
 #define DEFAULT_NUM_EFFECT_DEFS		100
 
+
+// This is temporary and will be replaced when sequence
+// factory method is available.
+extern "C" const aafClassID_t CLSID_AAFIdentification;
 extern "C" const aafClassID_t	CLSID_AAFContentStorage;
 
 ImplAAFHeader::ImplAAFHeader ()
@@ -337,6 +341,8 @@ AAFRESULT
     if (pIdent->platform == 0) {
       pIdent->platform = L"Windows NT";
     }
+
+#if 0
     identObj = new ImplAAFIdentification(
       pIdent->companyName,
       pIdent->productName,
@@ -348,6 +354,14 @@ AAFRESULT
       pIdent->platform
       // generation
       );
+#else
+    identObj = static_cast<ImplAAFIdentification *>(CreateImpl(CLSID_AAFIdentification));
+    if (NULL == identObj)
+      CHECK(AAFRESULT_NOMEMORY);
+    CHECK(identObj->SetCompanyName(pIdent->companyName));
+    CHECK(identObj->SetProductName(pIdent->productName));
+    CHECK(identObj->SetProductVersionString(pIdent->productVersionString));
+#endif
 
     _identificationList.appendValue(identObj);
  
