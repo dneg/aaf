@@ -240,7 +240,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::restore(
     OMUniqueObjectIdentification key = setIndex[i];
     SetElement newElement(this, key, _targetTag);
     newElement.restore();
-    _set.insert(newElement);
+    _set.insert(key, newElement);
    }
   delete [] setIndex;
   setPresent();
@@ -286,7 +286,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::insert(
   newElement.reference().setTargetTag(targetTag());
 #endif
   newElement.setValue(object);
-  _set.insert(newElement);
+  _set.insert(key, newElement);
   setPresent();
 
   POSTCONDITION("Object is present", containsValue(object));
