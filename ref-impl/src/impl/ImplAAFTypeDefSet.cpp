@@ -153,3 +153,17 @@ size_t ImplAAFTypeDefSet::NativeSize (void) const
 }
 
 
+bool ImplAAFTypeDefSet::IsAggregatable () const
+{ return false; }
+
+bool ImplAAFTypeDefSet::IsStreamable () const
+{ return false; }
+
+bool ImplAAFTypeDefSet::IsFixedArrayable () const
+{ return false; }
+
+bool ImplAAFTypeDefSet::IsVariableArrayable () const
+{ return false; }
+
+bool ImplAAFTypeDefSet::IsStringable () const
+{ return false; }

@@ -282,4 +282,17 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+bool ImplAAFTypeDefRename::IsAggregatable () const
+{ return BaseType()->IsAggregatable(); }
 
+bool ImplAAFTypeDefRename::IsStreamable () const
+{ return BaseType()->IsStreamable(); }
+
+bool ImplAAFTypeDefRename::IsFixedArrayable () const
+{ return BaseType()->IsFixedArrayable(); }
+
+bool ImplAAFTypeDefRename::IsVariableArrayable () const
+{ return BaseType()->IsVariableArrayable(); }
+
+bool ImplAAFTypeDefRename::IsStringable () const
+{ return BaseType()->IsStringable(); }
