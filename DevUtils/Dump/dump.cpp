@@ -511,6 +511,13 @@ static void readUInt16(IStream* stream, OMUInt16* value, bool swapNeeded);
 static void readUInt32(IStream* stream, OMUInt32* value, bool swapNeeded);
 static void swapUInt16(OMUInt16* value);
 static void swapUInt32(OMUInt32* value);
+static void readOMString(IStream* stream,
+                         OMCharacter* string,
+                         size_t characterCount,
+                         bool swapNeeded);
+static void printOMString(const OMCharacter* string);
+static void swapOMString(OMCharacter* string,
+                         size_t characterCount);
 static void readCLSID(IStream* stream, CLSID* value, bool swapNeeded);
 static void swapCLSID(CLSID* value);
 static void dumpIndexEntry(OMUInt32 i, IndexEntry* indexEntry);
@@ -613,6 +620,7 @@ static void dumpFileHex(char* fileName);
 static void dumpFile(char* fileName);
 static OMUInt16 determineVersion(IStorage* storage);
 static void dumpFileProperties(char* fileName, const char* label);
+static void dumpReferencedProperties(IStorage* root, OMUInt16 version);
 static FILE* wfopen(const wchar_t* fileName, const wchar_t* mode);
 static int readSignature(FILE* file,
                          unsigned char* signature,
@@ -1496,6 +1504,36 @@ void swapUInt32(OMUInt32* value)
   temp = p[1];
   p[1] = p[2];
   p[2] = temp;
+}
+
+void readOMString(IStream* stream,
+                  OMCharacter* string,
+                  size_t characterCount,
+                  bool swapNeeded)
+{
+  read(stream, string, characterCount * sizeof(OMCharacter));
+  if (swapNeeded) {
+    swapOMString(string, characterCount);
+  }
+}
+
+void printOMString(const OMCharacter* string)
+{
+  const OMCharacter* p = string;
+  while (*p != 0) {
+    OMCharacter c = *p;
+    char ch = c & 0xff;
+    cout << ch;
+    ++p;
+  }
+}
+
+void swapOMString(OMCharacter* string,
+                  size_t characterCount)
+{
+  for (size_t index = 0; index < characterCount; index++) {
+    swapUInt16(&string[index]);
+  }
 }
 
 static void readCLSID(IStream* stream, CLSID* value, bool swapNeeded)
@@ -3189,7 +3227,9 @@ void dumpFileProperties(char* fileName, const char* label)
 #endif
   cout << label << endl;
   dumpObject(storage, "/", 1, _version);
-    
+
+  dumpReferencedProperties(storage, _version);
+
   // Releasing the last reference to the root storage closes the file.
   storage->Release();
   storage = 0;
@@ -3197,6 +3237,81 @@ void dumpFileProperties(char* fileName, const char* label)
   totalFileBytes = fileSize(fileName);
   printStatistics();
 
+}
+
+static void dumpReferencedProperties(IStorage* root, OMUInt16 version)
+{
+  if (version > 18) {
+    IStream *stream = 0;
+    openStream(root, "referenced properties", &stream);
+    if (stream == 0) {
+      fatalError("dumpReferencedProperties", "openStream() failed.");
+    }
+    ByteOrder bo;
+    OMByte _byteOrder;
+    read(stream, 0, &_byteOrder, sizeof(_byteOrder));
+    ASSERT("Valid byte order", (_byteOrder == 'L') || (_byteOrder == 'B'));
+    if (_byteOrder == 'L') {
+      bo = littleEndian;
+    } else if (_byteOrder == 'B') {
+      bo = bigEndian;
+    }
+    bool swap;
+    char* endianity;
+    if (bo == hostByteOrder()) {
+      swap = false;
+      endianity = "native";
+	} else {
+      swap = true;
+      endianity = "foreign";
+    }
+    OMUInt16 nameCount;
+    readUInt16(stream, &nameCount, swap);
+    if ((version >= 19) && (version <= 25)) {
+      // version 19 - 25 "names" are 1-byte character strings
+    } else if (version == 26) {
+      // version 26 - 26 "names" are 2-byte character strings
+      OMUInt32 characterCount;
+      readUInt32(stream, &characterCount, swap);
+      OMCharacter* buffer = new OMCharacter[characterCount];
+      readOMString(stream, buffer, characterCount, swap);
+
+      OMCharacter** names = new OMCharacter*[nameCount];
+      OMCharacter* p = buffer;
+      size_t index;
+      for (index = 0; index < nameCount; index++) {
+        names[index] = p;
+        while (*p != 0) {
+         ++p;
+		}
+        ++p;
+      }
+
+      cout << endl;
+      cout << "Dump of Referenced Properties" << endl;
+      cout << "( Byte order = " << byteOrder(bo)
+           << " (" << endianity << ")";
+      cout << ", Number of entries = " << nameCount << " )" << endl;
+  
+      if (nameCount > 0) {
+        cout << setw(8) << "tag"
+             << "   "
+             << "name" << endl;
+      }
+
+      for (index = 0; index < nameCount; index++) {
+        cout << setw(8) << index << " : ";
+        printOMString(names[index]);
+        cout << endl;
+      }
+
+      delete [] names;
+      delete [] buffer;
+    } else if (version > 26) {
+      // version 27 -    "names" are 2-byte property ids
+    }
+    stream->Release();
+  }    // version  0 - 18 no referenced properties table
 }
 
 // Just like fopen() except for wchar_t* file names.
