@@ -45,7 +45,7 @@ public:
     // @cmember Constructor.
   OMContainerProperty(const OMPropertyId propertyId,
                       const OMStoredForm storedForm,
-                      const char* name);
+                      const wchar_t* name);
 
     // @cmember Destructor.
   virtual ~OMContainerProperty(void);
