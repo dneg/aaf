@@ -19,6 +19,7 @@
 #include <iostream.h>
 #include <assert.h>
 #include <string.h>
+#include <stdio.h>
 
 
 // Utility class to implement the test.
@@ -44,6 +45,8 @@ struct EssenceDataTest
   void cleanupReferences();
   void setBufferSize(aafUInt32 bufferSize);
   void check(HRESULT hr);
+  void checkExpression(bool expression, HRESULT hr);
+  const char * convert(const wchar_t* pwcName);
 
   // Shared member data:
   HRESULT _hr;
@@ -236,8 +239,7 @@ void EssenceDataTest::setBufferSize(aafUInt32 bufferSize)
   {
     _bufferSize = bufferSize;
     _buffer = static_cast<aafDataBuffer_t>(CoTaskMemAlloc(_bufferSize));
-    if (NULL == _buffer)
-      check(AAFRESULT_NOMEMORY);
+    checkExpression(NULL != _buffer, AAFRESULT_NOMEMORY);
   }
 }
 
@@ -247,8 +249,33 @@ inline void EssenceDataTest::check(HRESULT hr)
     throw hr;
 }
 
+inline void EssenceDataTest::checkExpression(bool expression, HRESULT hr)
+{
+  if (!expression)
+    throw hr;
+}
+
+
+// local conversion utility.
+const char * EssenceDataTest::convert(const wchar_t* pwcName)
+{
+  checkExpression(NULL != pwcName, E_INVALIDARG);
+  const size_t kBufferSize = 256;
+  static char ansiName[kBufferSize];
+
+  size_t convertedBytes = wcstombs(ansiName, pwcName, kBufferSize);
+  checkExpression(0 < convertedBytes, E_INVALIDARG);
+
+  return ansiName;
+}
+
+
+
 void EssenceDataTest::createFile(wchar_t *pFileName)
 {
+  // Delete the test file if it already exists.
+  remove(convert(pFileName));
+
   check(CoCreateInstance(CLSID_AAFFile,
                          NULL, 
                          CLSCTX_INPROC_SERVER, 
@@ -359,15 +386,13 @@ void EssenceDataTest::createEssenceData(IAAFSourceMob *pSourceMob)
   check(_pEssenceData->SetPosition(0));
   aafPosition_t dataPosition = 0;
   check(_pEssenceData->GetPosition(&dataPosition));
-  if (dataPosition != 0)
-    check(AAFRESULT_TEST_FAILED);
+  checkExpression(dataPosition == 0, AAFRESULT_TEST_FAILED);
 
   // Validate the current essence size.
   aafLength_t essenceSize = 0;
   aafLength_t expectedEssenceSize = sizeof(_smiley) + sizeof(_frowney);
   check(_pEssenceData->GetSize(&essenceSize));
-  if (essenceSize != expectedEssenceSize)
-    check(AAFRESULT_TEST_FAILED);
+  checkExpression(essenceSize == expectedEssenceSize, AAFRESULT_TEST_FAILED);
   
 
   readEssenceData(_pEssenceData, (aafDataBuffer_t)_smiley, sizeof(_smiley));
@@ -393,8 +418,7 @@ void EssenceDataTest::openEssenceData()
     aafLength_t essenceSize = 0;
     aafLength_t expectedEssenceSize = sizeof(_smiley) + sizeof(_frowney);
     check(_pEssenceData->GetSize(&essenceSize));
-    if (essenceSize != expectedEssenceSize)
-      check(AAFRESULT_TEST_FAILED);
+    checkExpression(essenceSize == expectedEssenceSize, AAFRESULT_TEST_FAILED);
 
     // Validate that the correct data can be read back.
     readEssenceData(_pEssenceData, (aafDataBuffer_t)_smiley, sizeof(_smiley));
@@ -410,11 +434,10 @@ void EssenceDataTest::openEssenceData()
     _pEssenceData->Release();
     _pEssenceData = NULL;
   }
+
   // It is ok to run out of objects.
-  if (AAFRESULT_NO_MORE_OBJECTS == _hr)
-    _hr = AAFRESULT_SUCCESS;
-  else
-    check(_hr);  
+  checkExpression (AAFRESULT_NO_MORE_OBJECTS == _hr, _hr);
+  _hr = AAFRESULT_SUCCESS;
 
   _pEnumEssenceData->Release();
   _pEnumEssenceData = NULL;
@@ -433,23 +456,30 @@ void EssenceDataTest::writeEssenceData(IAAFEssenceData *pEssenceData,
   aafPosition_t expectedPosition = 0;
   aafPosition_t dataPosition = 0;
   aafUInt32 bytesWritten = 0;
+  aafUInt32 offset = 0;
+
 
 
   // Save the starting position.
   check(pEssenceData->GetPosition(&startingPosition));
 
-  bytesWritten = 0;
-  check(pEssenceData->Write(dataSize, data, &bytesWritten));
-  // Make sure that we wrote the expected number of bytes.
-  if (bytesWritten != dataSize)
-    check(AAFRESULT_TEST_FAILED);
+  for (offset = 0; offset < dataSize; ++offset)
+  {   
+    // Reset the position to test SetPosition.
+    dataPosition = startingPosition + offset; 
+    check(pEssenceData->SetPosition(dataPosition));
 
-  // Make sure the position is supported correctly.
-  expectedPosition = startingPosition + dataSize;
-  dataPosition = 0;
-  check(pEssenceData->GetPosition(&dataPosition));
-  if (dataPosition != expectedPosition)
-    check(AAFRESULT_TEST_FAILED);
+    bytesWritten = 0;
+    check(pEssenceData->Write(dataSize - offset, data + offset, &bytesWritten));
+    // Make sure that we wrote the expected number of bytes.
+    checkExpression(bytesWritten == (dataSize - offset), AAFRESULT_TEST_FAILED);
+
+    // Make sure the position is supported correctly.
+    expectedPosition = startingPosition + dataSize;
+    dataPosition = 0;
+    check(pEssenceData->GetPosition(&dataPosition));
+    checkExpression(dataPosition == expectedPosition, AAFRESULT_TEST_FAILED);
+  }
 }
 
 void EssenceDataTest::readEssenceData(IAAFEssenceData *pEssenceData,
@@ -465,6 +495,7 @@ void EssenceDataTest::readEssenceData(IAAFEssenceData *pEssenceData,
   aafPosition_t expectedPosition = 0;
   aafPosition_t dataPosition = 0;
   aafUInt32 bytesRead = 0;
+  aafUInt32 offset = 0;
 
   
 
@@ -474,24 +505,28 @@ void EssenceDataTest::readEssenceData(IAAFEssenceData *pEssenceData,
   // Make sure the buffer is large enough to hold the data.
   setBufferSize(dataSize);
 
-  // Read dataSize bytes from the essence data.
-  bytesRead = 0;
-  check(pEssenceData->Read(dataSize, _buffer, &bytesRead));
-  // Make sure that we read the expected number of bytes.
-  if (bytesRead != dataSize)
-    check(AAFRESULT_TEST_FAILED);
+  for (offset = 0; offset < dataSize; ++offset)
+  {   
+    // Reset the position to test SetPosition.
+    dataPosition = startingPosition + offset; 
+    check(pEssenceData->SetPosition(dataPosition));
 
-  // Make sure the position is supported correctly.
-  expectedPosition = startingPosition + dataSize;
-  dataPosition = 0;
-  check(pEssenceData->GetPosition(&dataPosition));
-  if (dataPosition != expectedPosition)
-    check(AAFRESULT_TEST_FAILED);
+    // Read dataSize bytes from the essence data.
+    bytesRead = 0;
+    check(pEssenceData->Read(dataSize - offset, _buffer, &bytesRead));
+    // Make sure that we read the expected number of bytes.
+    checkExpression(bytesRead == (dataSize - offset), AAFRESULT_TEST_FAILED);
+
+    // Make sure the position is supported correctly.
+    expectedPosition = startingPosition + dataSize;
+    dataPosition = 0;
+    check(pEssenceData->GetPosition(&dataPosition));
+    checkExpression(dataPosition == expectedPosition, AAFRESULT_TEST_FAILED);
 
 
-  // Compare the bytes we read to the given input data.
-  // (this is assumed to match the original data written
-  // to the essence data)
-  if (0 != memcmp(data, (char *)_buffer, dataSize))
-    check(AAFRESULT_TEST_FAILED);
+    // Compare the bytes we read to the given input data.
+    // (this is assumed to match the original data written
+    // to the essence data)
+    checkExpression (0 == memcmp(data + offset, (char *)_buffer, dataSize - offset), AAFRESULT_TEST_FAILED);
+  }
 }
