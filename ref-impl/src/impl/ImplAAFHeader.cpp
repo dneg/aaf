@@ -569,8 +569,6 @@ AAFRESULT
 {
 	ImplAAFIdentification *		identObj;
 	aafProductIdentification_t	fiction;
-	aafBool						dummyIDNT = kAAFFalse;
-	aafProductVersion_t			dummyVersion;
 	
 	XPROTECT()
 	{		
@@ -583,7 +581,6 @@ AAFRESULT
 			fiction.platform = (aafWChar*)NULL;
 			fiction.productVersion = 0;
 			pIdent = &fiction;
-			dummyIDNT = kAAFTrue;
 		}
 		
 	XASSERT(pIdent != NULL, AAFRESULT_NEED_PRODUCT_IDENT);
@@ -615,7 +612,6 @@ AAFRESULT
 
     _identificationList.appendValue(identObj);
  
-    dummyVersion.major = 0;
 	}
 	XEXCEPT
 	{
