@@ -212,7 +212,7 @@ void ContentStorageTest::cleanupReferences()
 	
 	if (NULL != _buffer)
 	{
-		CoTaskMemFree(_buffer);
+		delete _buffer;
 		_buffer = NULL;
 	}
 	
@@ -278,7 +278,7 @@ void ContentStorageTest::setBufferSize(aafUInt32 bufferSize)
 	// Allocate the buffer.
 	if (NULL != _buffer && bufferSize > _bufferSize)
 	{
-		CoTaskMemFree(_buffer);
+		delete _buffer;
 		_buffer = NULL;
 	}
 	
@@ -286,7 +286,7 @@ void ContentStorageTest::setBufferSize(aafUInt32 bufferSize)
 	if (NULL == _buffer)
 	{
 		_bufferSize = bufferSize;
-		_buffer = static_cast<aafDataBuffer_t>(CoTaskMemAlloc(_bufferSize));
+		_buffer = (aafDataBuffer_t)new char[ _bufferSize ];
 		checkExpression(NULL != _buffer, AAFRESULT_NOMEMORY);
 	}
 }
