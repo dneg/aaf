@@ -217,7 +217,7 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 		// Restore the meta dictionary, it should be the same object
 		// as _metafactory
 		OMDictionary* mf = _file->dictionary();
-        assert(mf == _metafactory);
+		assert(mf == _metafactory);
 
 		// Make sure all definitions are present in the meta dictionary
 		ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
@@ -339,7 +339,7 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 		// Restore the meta dictionary, it should be the same object
 		// as _metafactory
 		OMDictionary* mf = _file->dictionary();
-        assert(mf == _metafactory);
+		assert(mf == _metafactory);
 
 		// Make sure all definitions are present in the meta dictionary
 		ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
@@ -517,7 +517,7 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		// Restore the meta dictionary, it should be the same object
 		// as _metafactory
 		OMDictionary* mf = _file->dictionary();
-        assert(mf == _metafactory);
+		assert(mf == _metafactory);
 
 		// Make sure all definitions are present in the meta dictionary
 		ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
@@ -859,7 +859,7 @@ ImplAAFFile::Open ()
 		// Restore the meta dictionary, it should be the same object
 		// as _metafactory
 		OMDictionary* mf = _file->dictionary();
-        assert(mf == _metafactory);
+		assert(mf == _metafactory);
 
 		// Make sure all definitions are present in the meta dictionary
 		ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
