@@ -595,6 +595,11 @@ AAFRESULT
 							   pIdent->productVersionString,
 							   pIdent->productID));
 
+	if (pIdent->productVersion)
+	  {
+		CHECK (identObj->SetProductVersion (*pIdent->productVersion));
+	  }
+
     _identificationList.appendValue(identObj);
  
     dummyVersion.major = 0;
