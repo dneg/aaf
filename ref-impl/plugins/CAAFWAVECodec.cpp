@@ -416,7 +416,7 @@ HRESULT STDMETHODCALLTYPE
 			CHECK(loadWAVEHeader());
 		}
 		pSelectInfo->willHandleMDES = kAAFTrue;
-#if PORT_BYTESEX_LITTLE_ENDIAN
+#if defined(PORT_BYTESEX_LITTLE_ENDIAN)
 		pSelectInfo->isNative = kAAFTrue;
 #else
 		pSelectInfo->isNative = kAAFFalse;
@@ -1512,7 +1512,7 @@ AAFRESULT CAAFWaveCodec::CreateWAVEheader(aafUInt8		*buffer,
 	aafInt16			bytesPerFrame;
 	aafInt16			pcm_format = 1;
 	aafUInt8			*ptr = buffer, *nextChunk;
-#if INCLUDE_BEXT
+#if defined(INCLUDE_BEXT)
 	aafUInt32			bextSize, headerSize, n;
 	char				bextDescription[256+1];
 	char				bextOriginator[32+1];
@@ -1529,7 +1529,7 @@ AAFRESULT CAAFWaveCodec::CreateWAVEheader(aafUInt8		*buffer,
 
 	XPROTECT()
 	{	
-#if INCLUDE_BEXT
+#if defined(INCLUDE_BEXT)
 		if(_sampleRate.denominator != 0)
 		{
 			sprintf(bextCodingHistory, "PCM: %s, %d bits, %g hz\r\n", (_numCh == 2 ? "stereo" : "mono"),
@@ -1591,7 +1591,7 @@ AAFRESULT CAAFWaveCodec::CreateWAVEheader(aafUInt8		*buffer,
 		ptr = buffer+ 4;
 		CHECK(fillSwappedWAVEData(&ptr, 4L, &len));	// Patch in
 
-#if INCLUDE_BEXT
+#if defined(INCLUDE_BEXT)
 		// Set up for the broadcast chunk
 		memset(bextDescription, 0, sizeof(bextDescription));
 		sprintf(bextDescription, "<tbd>");

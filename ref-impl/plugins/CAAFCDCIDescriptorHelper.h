@@ -57,7 +57,7 @@ class CAAFCDCIDescriptorHelper
 {
 public:
 	CAAFCDCIDescriptorHelper();
-	~CAAFCDCIDescriptorHelper();
+	virtual ~CAAFCDCIDescriptorHelper();
 	
 	// Initialize all of the internal interfaces required by the CDCI Codec.
 	// This method must be called before any other method (except Clear()).

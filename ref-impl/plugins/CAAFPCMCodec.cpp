@@ -601,7 +601,7 @@ HRESULT STDMETHODCALLTYPE
 		_stream->AddRef();
 	}
 	pSelectInfo->willHandleMDES = kAAFTrue;
-#if PORT_BYTESEX_LITTLE_ENDIAN
+#if defined(PORT_BYTESEX_LITTLE_ENDIAN)
 	pSelectInfo->isNative = kAAFTrue;
 #else
 	pSelectInfo->isNative = kAAFFalse;

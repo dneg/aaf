@@ -40,7 +40,7 @@ class CAAFJPEGDescriptorHelper
 {
 public:
 	CAAFJPEGDescriptorHelper();
-	~CAAFJPEGDescriptorHelper();
+	virtual ~CAAFJPEGDescriptorHelper();
 	
 	// Initialize all of the internal interfaces required by the JPEG Codec.
 	// This method must be called before any other method (except Clear()).

@@ -77,7 +77,6 @@ const aafUID_t AVID_JPEG_PLUGIN =
 
 static wchar_t *kManufURL = L"http://www.avid.com";
 static wchar_t *kDownloadURL = L"ftp://ftp.avid.com/pub/";
-static aafVersionType_t samplePluginVersion = { 0, 1 };
 
 static wchar_t *kManufName = L"Avid Technology, Inc.";
 static wchar_t *kManufRev = L"Rev 0.1";
@@ -880,7 +879,6 @@ CAAFJPEGCodec::Create (IAAFSourceMob *unk,
   aafCompressEnable_t compEnable)
 {
 	HRESULT hr = S_OK;
-	IAAFSourceMob			*fileMob = NULL;
 
 	
 	if (NULL == unk || NULL == stream )
@@ -1347,11 +1345,10 @@ HRESULT STDMETHODCALLTYPE
 						
 						// TODO: Allocate and use a "aligmentBuffer" so that all of the padding
 						// be written in a single write operation.
-						aafUInt32 i;
+						aafUInt32 i, tmp;
 						aafUInt8 ch = 0;
-						aafUInt32 bytesWritten;
 						for (i = 0; i < alignmentBytes; ++i)
-							checkResult(_stream->Write(1, &ch, &bytesWritten));
+							checkResult(_stream->Write(1, &ch, &tmp));
 					}
 					
 					// Update the return values.
@@ -2304,22 +2301,6 @@ static void GetFormatParam(
 }
 
 
-static void GetFormatParam(
-  const aafEssenceFormatData_t& param, 
-  aafInt32& num) // throw HRESULT
-{
-	if (param.size == 1)
-		num = param.operand.expInt8;
-	else if (param.size == 2)
-		num = param.operand.expInt16;
-	else if (param.size == 4)
-		num = param.operand.expInt32;
-	else
-		throw HRESULT(AAFRESULT_INVALID_PARM_SIZE);
-}
-
-
-		
 HRESULT STDMETHODCALLTYPE
     CAAFJPEGCodec::PutEssenceFormat (IAAFEssenceFormat * pFormat)
 {
@@ -3342,9 +3323,6 @@ aafUInt32 CAAFJPEGCodec::CopyDataToSampleImage(
 
 	SetupFor422(param.imageWidth, comp_pos, comp_offset, comp_width, comp_height);
 
-try
-{
-
 	for (ci = 0; ci < 3; ++ci)
 	{
 		offset = startingOffset + comp_pos[ci];
@@ -3360,11 +3338,6 @@ try
 			}
 		}
 	}
-}
-catch (...)
-{
-	offset = offset;
-}
 
 	DumpSampleImage(param, rawSampleImage);
 
@@ -3516,7 +3489,6 @@ HRESULT CAAFJPEGCodec::CompressImage(
 
 			// Compress the raw subsampled data one MCU row at a time.
 			aafUInt32 total_rows_with_MCU = param.imageHeight + (param.imageHeight % DCTSIZE);
-			aafUInt32 total_cols_with_MCU = param.imageWidth + (param.imageWidth % DCTSIZE);
 			aafUInt32 num_MCU_rows = 0;
 
 			/* Make sure that at least one iMCU row has been passed. */
@@ -3675,7 +3647,6 @@ HRESULT CAAFJPEGCodec::DecompressImage(
 
 			// Compress the raw subsampled data one MCU row at a time.
 			aafUInt32 total_rows_with_MCU = param.imageHeight + (param.imageHeight % DCTSIZE);
-			aafUInt32 total_cols_with_MCU = param.imageWidth + (param.imageWidth % DCTSIZE);
 			aafUInt32 num_MCU_rows = 0;
 
 			/* Make sure that at least one iMCU row has been passed. */
@@ -3795,7 +3766,7 @@ void CAAFJPEGCodec::AddNewCompressedSample()
 const char * kAAFJPEG_end = "AaFjPeGm";
 const char * kAAFJPEG_start = "aAfJpEgM";
 
-const int kAAFJPEG_MarkerSize = 8;
+const unsigned int kAAFJPEG_MarkerSize = 8;
 const int kAAFJPEG_MinTrailerSize = kAAFJPEG_MarkerSize * 2 + (sizeof(aafLength_t) * 2);
 
 typedef struct _AAFJPEG_Trailer  // written packed.
@@ -4058,11 +4029,11 @@ HRESULT CAAFJPEGCodec::ReadSampleIndex32(aafUInt16 fileByteOrder)
 		// Swap the index bytes if necessary.
 		if (fileByteOrder != _nativeByteOrder)
 		{
-			aafUInt32 index;
+			aafUInt32 i;
 
-			for (index = 0; index < count; ++index)
+			for (i = 0; i < count; ++i)
 			{
-				AAFByteSwap32((aafInt32 *)&tempBuf[index]);
+				AAFByteSwap32((aafInt32 *)&tempBuf[i]);
 			}
 		}
 
@@ -4275,8 +4246,6 @@ HRESULT CAAFJPEGCodec::InternalQueryInterface
     REFIID riid,
     void **ppvObj)
 {
-    HRESULT hr = S_OK;
-
     if (NULL == ppvObj)
         return E_INVALIDARG;
 

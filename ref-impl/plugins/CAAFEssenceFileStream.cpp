@@ -73,18 +73,16 @@ off_t ftello (FILE* fp)
 
 /*inline*/ bool AafPos2XopenOff(off_t *xopenOff, const aafPosition_t *aafPos)
 {
-  // For first version just assume that platform can perform conversion.
-  if (sizeof(off_t) < sizeof(aafPosition_t))
-  {
-    // The following test assumes 64 bit arithematic!
-    aafPosition_t trunPos = (AAFCONSTINT64(0x00000000FFFFFFFF) & *aafPos);
-    if (trunPos != *aafPos && AAFCONSTINT64(0xFFFFFFFFFFFFFFFF) != *aafPos)
-      return false;
+#if ! defined(_FILE_OFFSET_BITS) || _FILE_OFFSET_BITS < 64
+  // For platforms where off_t is not 64bits check that aafPosition_t (64bits)
+  // can be converted safely to a 32bit offset.
+  aafPosition_t trunPos = (AAFCONSTINT64(0x00000000FFFFFFFF) & *aafPos);
+  aafPosition_t negOne = AAFCONSTINT64(0xFFFFFFFFFFFFFFFF);
+  if (trunPos != *aafPos && negOne != *aafPos)
+    return false;
+#endif
 
-    *xopenOff = *aafPos;
-  }
-  else
-    *xopenOff = *aafPos;
+  *xopenOff = *aafPos;
 
   return true;
 }
@@ -92,7 +90,7 @@ off_t ftello (FILE* fp)
 
 /*inline*/ bool XopenOff2AafPos(aafPosition_t *aafPos, const off_t *xopenOff)
 {
-  // For first version just assume that platform an perform conversion.
+  // For first version just assume that platform can perform conversion.
   *aafPos = *xopenOff;
 
   return true;
@@ -225,7 +223,7 @@ HRESULT STDMETHODCALLTYPE
   if (NULL == _pPath)
     return AAFRESULT_NOMEMORY;
   size_t convertedBytes = wcstou8s( _pPath, _pwPath, byteCount);
-  if (-1 == convertedBytes)
+  if ((size_t)-1 == convertedBytes)
     return E_INVALIDARG;
 
   //
@@ -780,8 +778,6 @@ HRESULT CAAFEssenceFileStream::InternalQueryInterface
     REFIID riid,
     void **ppvObj)
 {
-    HRESULT hr = S_OK;
-
     if (NULL == ppvObj)
         return E_INVALIDARG;
 
