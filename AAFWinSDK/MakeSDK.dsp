@@ -39,7 +39,7 @@ CFG=MakeSDK - Win32 Debug
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
-# PROP Cmd_Line "NMAKE /nologo /f win32aafsdk.mak CFG=Release"
+# PROP Cmd_Line "NMAKE /f win32aafsdk.mak CFG=Release"
 # PROP Rebuild_Opt "/a"
 # PROP Target_File "MakeSDK"
 # PROP Bsc_Name "MakeSDK.bsc"
@@ -58,7 +58,7 @@ CFG=MakeSDK - Win32 Debug
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
-# PROP Cmd_Line "NMAKE /nologo /f win32aafsdk.mak CFG=Debug"
+# PROP Cmd_Line "NMAKE /f win32aafsdk.mak CFG=Debug"
 # PROP Rebuild_Opt "/a"
 # PROP Target_File "MakeSDK"
 # PROP Bsc_Name ""
