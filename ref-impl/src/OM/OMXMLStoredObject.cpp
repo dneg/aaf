@@ -114,6 +114,18 @@ OMByteOrder OMXMLStoredObject::byteOrder(void) const
   return unspecified;
 }
 
+void OMXMLStoredObject::save(OMFile& file)
+{
+  TRACE("OMXMLStoredObject::save(OMFile)");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
+void OMXMLStoredObject::save(OMStorable& object)
+{
+  TRACE("OMXMLStoredObject::save(OMFile)");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
   // @mfunc Save the <c OMStoredObjectIdentification> <p id>
   //        in this <c OMXMLStoredObject>.
   //   @parm The <t OMStoredObjectIdentification> to save.
