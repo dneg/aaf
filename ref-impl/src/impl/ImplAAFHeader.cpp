@@ -222,13 +222,13 @@ AAFRESULT STDMETHODCALLTYPE
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
-AAFRESULT STDMETHODCALLTYPE
+AAFRESULT 
     ImplAAFHeader::GetNumIdentifications (aafInt32 * /*pCount*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
-AAFRESULT STDMETHODCALLTYPE
+AAFRESULT 
     ImplAAFHeader::AddIdentificationObject (aafProductIdentification_t *pIdent)
 {
 	ImplAAFIdentification *		identObj;
@@ -241,11 +241,11 @@ AAFRESULT STDMETHODCALLTYPE
 	{		
 		if(pIdent == (aafProductIdentification_t *)NULL)
 		{
-			fiction.companyName = "Unknown";
-			fiction.productName = "Unknown";
-			fiction.productVersionString = (char *)NULL;
+			fiction.companyName = (unsigned char *)"Unknown";
+			fiction.productName = (unsigned char *)"Unknown";
+			fiction.productVersionString = (unsigned char *)NULL;
 			fiction.productID = -1;
-			fiction.platform = (char *)NULL;
+			fiction.platform = (unsigned char *)NULL;
 			fiction.productVersion.major = 0;
 			fiction.productVersion.minor = 0;
 			fiction.productVersion.tertiary = 0;
@@ -257,20 +257,20 @@ AAFRESULT STDMETHODCALLTYPE
 		
 	XASSERT(pIdent != NULL, OM_ERR_NEED_PRODUCT_IDENT);
     if (pIdent->productVersionString == 0) {
-      pIdent->productVersionString = "Unknown version";
+      pIdent->productVersionString = (unsigned char *)"Unknown version";
     }
     if (pIdent->platform == 0) {
-      pIdent->platform = "Windoze NT";
+      pIdent->platform = (unsigned char *)"Windoze NT";
     }
     identObj = new ImplAAFIdentification(
-      pIdent->companyName,
-      pIdent->productName,
+      (const char *)pIdent->companyName,
+      (const char *)pIdent->productName,
       &pIdent->productVersion,
-      pIdent->productVersionString,
+      (const char *)pIdent->productVersionString,
       // productID,
       _lastModified,
       &AAFToolkitVersion,
-      pIdent->platform
+      (const char *)pIdent->platform
       // generation
       );
 
