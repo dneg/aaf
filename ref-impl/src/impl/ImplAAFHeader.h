@@ -269,6 +269,20 @@ public:
     GetLastModified
         (aafTimeStamp_t *  pLastModified);  //@parm [out,retval] The modification date-time stamp
 
+	
+  //****************
+  // GetStoredByteOrder()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+  GetStoredByteOrder (eAAFByteOrder_t * pOrder);
+
+	
+  //****************
+  // GetNativeByteOrder()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+  GetNativeByteOrder (eAAFByteOrder_t * pOrder);
+
 public:
   // Interfaces visible inside the toolkit, but not exposed through the API
 
