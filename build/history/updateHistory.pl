@@ -56,7 +56,7 @@ print "Last    Time $lastTimeStamp\n";
 
 $lastTimeStamp = "-d\'\>$lastTimeStamp\'";
 print "$cvs2cl -l $lastTimeStamp\n";
-exec($cvs2cl, "-l", $lastTimeStamp) == 0 or die "Can't run cvs2cl";
+system($cvs2cl, "-l", $lastTimeStamp) == 0 or die "Can't run cvs2cl";
 
 	open(LOG, "ChangeLog");
 	(@logfile) = <LOG>;
