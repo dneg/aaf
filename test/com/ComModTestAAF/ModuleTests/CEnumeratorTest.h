@@ -117,7 +117,7 @@ void CEnumeratorTest<TEnum,TItem>::Run(testMode_t mode)
 	checkResult(pHeader->GetDictionary(&pDictionary));
 
 	// Get total number of items we should be able to enumerate
-	aafUInt32 iItemsCount=-1;
+	aafUInt32 iItemsCount = (aafUInt32)-1;
 	checkResult(CountItems(pDictionary,&iItemsCount));
 	
 	// Allocate array of AUIDs in which to store AUIDs of enumerated items

@@ -153,9 +153,7 @@ bool get_mob_by_name( IAAFSmartPointer<IAAFHeader> header,
     masmobret = masmob;
     return true;
   }
-  else {
-    return false;
-  }
+  return false;
 }
 
 //=---------------------------------------------------------------------=
@@ -167,9 +165,7 @@ bool get_mob_by_name( IAAFSmartPointer<IAAFHeader> header,
   if ( get_mob_by_name( header, name, 0, mob ) ) {
     return true;
   }
-  else {
-    return false;
-  }
+  return false;
 }
 
 //=---------------------------------------------------------------------=
