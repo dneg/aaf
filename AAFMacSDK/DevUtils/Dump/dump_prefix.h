@@ -20,6 +20,8 @@
 //
 //=---------------------------------------------------------------------=
 
+// Platform/compiler specific definitions
+//
 #define __dest_os __mac_os
 
 //#define CHECKMEMORYLEAKS // Uncomment this line to turn leak checking on
@@ -39,6 +41,8 @@
 // Define delegation callbacks...
 #define BOB_TEST
 
+// Dump specific definitions
+//
 // Use DataInput stuff instead of console
 //
 #define USE_DATAINPUT
