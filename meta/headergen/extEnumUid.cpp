@@ -25,6 +25,9 @@ static void doFile (const char * moduleName)
   assert (moduleName);
   printBeginGuard(moduleName, cout);
   printCopyright (cout);
+  cout << endl;
+  cout << "#include \"AAFTypes.h\"" << endl;
+  cout << endl;
 
   cout << "// AAF extensible enumeration member UIDs." << endl
        << "//" << endl << endl;

@@ -128,6 +128,9 @@ static void doFile(const char* moduleName)
   cout << "#include \"AAFTypes.h\"" << endl;
   cout << endl;
 
+  cout << "// AAF type definition UIDs." << endl
+       << "//" << endl << endl;
+
   // Some one is depending on this from the old way of implementing
   // the headers.
   cout << "#define TYPE_GUID_NAME(type) kAAFTypeID_##type" << endl;

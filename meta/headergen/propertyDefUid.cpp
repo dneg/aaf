@@ -28,6 +28,9 @@ static void doFile(const char* moduleName)
   cout << "#include \"AAFTypes.h\"" << endl;
   cout << endl;
 
+  cout << "// AAF property definition UIDs." << endl
+       << "//" << endl << endl;
+
   size_t i = 0;
   for (i = 0; i < sizeof(properties)/sizeof(properties[0]); i++){
     printDefinition("const aafUID_t",
