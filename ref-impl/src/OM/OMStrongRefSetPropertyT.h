@@ -32,8 +32,8 @@
 #define OMSTRONGREFSETPROPERTYT_H
 
 #include "OMAssertions.h"
-#include "OMStoredSetIndex.h"
 #include "OMStrongReferenceSetIter.h"
+#include "OMStoredObject.h"
 
   // @mfunc Constructor.
   //   @parm The property id.
