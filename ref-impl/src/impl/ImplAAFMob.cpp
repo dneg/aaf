@@ -1482,9 +1482,13 @@ AAFRESULT STDMETHODCALLTYPE
 	    	 CHECK( newMob->SetName( destMobName ) );
 		}
 
-		deepCopyTo( newStorable, 0 );
+		ImplAAFSmartPointer<ImplAAFHeader> spHeader;
+		CHECK( MyHeadObject( &spHeader ) );
+		CHECK( spHeader->AddMob(newMob) );
 
-			newMob->AcquireReference();
+		deepCopyTo( newMob, 0 );
+
+ 		newMob->AcquireReference();
 		*destMob = newMob;
 	}
 	XEXCEPT
