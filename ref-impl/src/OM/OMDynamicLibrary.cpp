@@ -33,7 +33,21 @@
 #include "OMOStream.h"
 #endif
 
+// Figure out which dynamic loader to use and define a symbol
+// of the form OM_USE_<loader>_LOADER. If no such symbol is defined
+// then dynamic loading is not supported.
+//
 #if defined(OM_OS_WINDOWS)
+#define OM_USE_WINDOWS_LOADER
+#elif defined(OM_OS_MACOS)
+#define OM_USE_CFM_LOADER
+#elif defined(OM_OS_UNIX) && !defined(__MACH__)
+#define OM_USE_UNIX_LOADER
+#elif defined(OM_OS_MACOSX)
+#define OM_USE_CFBUNDLE_LOADER
+#endif
+
+#if defined(OM_USE_WINDOWS_LOADER)
 
 #include <windows.h>
 
@@ -170,7 +184,7 @@ void OMWindowsDynamicLibrary::unload(void)
   }
 }
 
-#elif defined(OM_OS_MACOS)
+#elif defined(OM_USE_CFM_LOADER)
 
 #include <CodeFragments.h>
 
@@ -315,7 +329,7 @@ void OMMacOSDynamicLibrary::unload(void)
   }
 }
 
-#elif defined(OM_OS_UNIX)
+#elif defined(OM_USE_UNIX_LOADER)
 
 #include <dlfcn.h>
 
@@ -435,7 +449,7 @@ void OMUnixDynamicLibrary::unload(void)
   }
 }
 
-#elif defined(OM_OS_MACOSX)
+#elif defined(OM_USE_CFBUNDLE_LOADER)
 
 #include <CFBundle.h>
 
@@ -606,13 +620,13 @@ OMDynamicLibrary* OMDynamicLibrary::loadLibrary(const wchar_t* libraryName)
   PRECONDITION("Valid library name", validWideString(libraryName));
 
   OMDynamicLibrary* result = 0;
-#if defined(OM_OS_WINDOWS)
+#if defined(OM_USE_WINDOWS_LOADER)
   result = new OMWindowsDynamicLibrary(libraryName);
-#elif defined(OM_OS_MACOS)
+#elif defined(OM_USE_CFM_LOADER)
   result = new OMMacOSDynamicLibrary(libraryName);
-#elif defined(OM_OS_UNIX)
+#elif defined(OM_USE_UNIX_LOADER)
   result = new OMUnixDynamicLibrary(libraryName);
-#elif defined(OM_OS_MACOSX)
+#elif defined(OM_USE_CFBUNDLE_LOADER)
   result = new OMMacOSXDynamicLibrary(libraryName);
 #endif
   ASSERT("Valid heap pointer", result != 0);
