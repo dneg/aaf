@@ -31,10 +31,15 @@ class ImplAAFEffectDef;
 
 class ImplEnumAAFEffectDefs;
 
-class ImplAAFPluggableDef;
-
 class ImplEnumAAFPluggableDefs;
 
+class ImplAAFCodecDef;
+
+class ImplEnumAAFCodecDefs;
+
+class ImplEnumAAFContainerDefs;
+
+class ImplAAFContainerDef;
 
 #ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"
@@ -45,7 +50,9 @@ class ImplEnumAAFPluggableDefs;
 
 #include "ImplAAFClassDef.h"
 #include "ImplAAFEffectDef.h"
-#include "ImplAAFPluggableDef.h"
+#include "ImplAAFDefObject.h"
+#include "ImplAAFCodecDef.h"
+#include "ImplAAFContainerDef.h"
 #include "ImplAAFTypeDef.h"
 
 class ImplAAFDictionary :
@@ -227,21 +234,40 @@ public:
         (ImplEnumAAFParameterDefs ** ppEnum);
 
   //****************
-  // RegisterPluggableDefinitions()
+  // RegisterCodecDefinition()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    RegisterPluggableDefinition
+    RegisterCodecDefinition
         // @parm [in] Pluggable Definition
-        (ImplAAFPluggableDef * pPlugDef);
+        (ImplAAFCodecDef * pPlugDef);
 
   //****************
-  // GetPluggableDefinitions()
+  // RegisterCodecDefinition()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetPluggableDefinitions
-        // @parm [out,retval] Definition Enumeration
-        (ImplEnumAAFPluggableDefs ** ppEnum);
+   GetCodecDefinitions
+      // @parm [out,retval] Definition Enumeration
+      (ImplEnumAAFCodecDefs ** ppEnum);
 
+   	AAFRESULT LookupCodecDefinition(aafUID_t *containerID, ImplAAFCodecDef **result);
+
+	//****************
+  // RegisterContainerDefinition()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RegisterContainerDefinition
+        // @parm [in] Pluggable Definition
+        (ImplAAFContainerDef * pPlugDef);
+
+  //****************
+  // GetContainerDefinitions()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetContainerDefinitions
+        // @parm [out,retval] Definition Enumeration
+       (ImplEnumAAFContainerDefs ** ppEnum);
+
+    AAFRESULT LookupContainerDefinition(aafUID_t *containerID, ImplAAFContainerDef **result);
 
 public:
   // Declare this class to be storable.
@@ -258,13 +284,18 @@ public:
   // GetNumEssenceData()
   //
   virtual AAFRESULT
-    GetNumPluggableDefs
-        (aafUInt32 *  pNumPluggableDefs);  //@parm [out,retval] Total number of pluggable defs
+    GetNumCodecDefs
+        (aafUInt32 *  pNumCodecDefs);  //@parm [out,retval] Total number of pluggable defs
 
   virtual AAFRESULT
-    GetNthPluggableDef (aafInt32 index, ImplAAFPluggableDef **ppEnum);
+    GetNthCodecDef (aafInt32 index, ImplAAFCodecDef **ppEnum);
 
-  AAFRESULT LookupPluggableDef(aafUID_t *containerID, ImplAAFPluggableDef **result);
+  virtual AAFRESULT
+    GetNumContainerDefs
+        (aafUInt32 *  pNumContainerDefs);  //@parm [out,retval] Total number of pluggable defs
+
+  virtual AAFRESULT
+    GetNthContainerDef (aafInt32 index, ImplAAFContainerDef **ppEnum);
 
   AAFRESULT LookupPropDef (OMPropertyId opid,
 						   ImplAAFPropertyDef ** ppd);
@@ -275,7 +306,8 @@ private:
 private:
   ImplAAFBuiltins * _pBuiltins;
 
-    OMStrongReferenceVectorProperty<ImplAAFPluggableDef>	_pluginDefinitions;
+    OMStrongReferenceVectorProperty<ImplAAFCodecDef>		_codecDefinitions;
+    OMStrongReferenceVectorProperty<ImplAAFContainerDef>	_containerDefinitions;
     OMStrongReferenceVectorProperty<ImplAAFEffectDef>		_effectDefinitions;
     OMStrongReferenceVectorProperty<ImplAAFParameterDef>	_parameterDefinitions;
     OMStrongReferenceVectorProperty<ImplAAFTypeDef>			_typeDefinitions;
