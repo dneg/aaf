@@ -130,6 +130,7 @@ AUTO_GEN_IMPL = \
 # its name here and remove it from AUTO_GEN_COMTEST (below).
 # Do not add the 'Test' suffix here.
 HUMAN_TYPED_COMTEST = \
+	AAFMasterMob \
 	AAFMob \
 	AAFSourceClip \
 	AAFFile \
@@ -209,6 +210,5 @@ AUTO_GEN_COMTEST = \
 	AAFTimelineMobSlot \
 	AAFSourceReference \
 	AAFCompositionMob \
-	AAFMasterMob \
 	AAFSession \
 	EnumAAFMobSlots
