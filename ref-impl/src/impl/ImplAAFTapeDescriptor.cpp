@@ -302,6 +302,12 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTapeDescriptor::GetOwningMobKind (aafMobKind_t *pMobKind)
+{
+	*pMobKind = kTapeMob;		// Abstract superclass, only match "all"
+	return(AAFRESULT_SUCCESS);
+}
 
 extern "C" const aafClassID_t CLSID_AAFTapeDescriptor;
 
