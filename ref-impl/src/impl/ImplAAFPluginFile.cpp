@@ -44,7 +44,7 @@
 ImplAAFPluginFile::ImplAAFPluginFile(const char *name) :
   _refCount(1),
   _name(name),
-  _libHandle(NULL)
+  _libHandle(0)
 {
   ClearEntryPoints();
 }
@@ -53,7 +53,7 @@ ImplAAFPluginFile::ImplAAFPluginFile(const char *name) :
 ImplAAFPluginFile::~ImplAAFPluginFile()
 {
   delete[] const_cast<char *>(_name);
-  _name = NULL;
+  _name = 0;
 }
 
 
@@ -65,22 +65,22 @@ HRESULT ImplAAFPluginFile::CreatePluginFile(
   ImplAAFPluginFile** ppPluginFile)
 {
   HRESULT result = S_OK;
-  ImplAAFPluginFile* pPluginFile = NULL;
+  ImplAAFPluginFile* pPluginFile = 0;
 
 
-  if (NULL == name || NULL == ppPluginFile)
+  if (!name || !ppPluginFile)
     return AAFRESULT_NULL_PARAM;
 
   // copy the given name. this will be owned by the plugin file object.
   int len = strlen(name) + 1;
   char *name_copy = new char[len];
-  if (NULL == name_copy)
+  if (!name_copy)
     result = AAFRESULT_NOMEMORY;
   else
   {
     strcpy(name_copy, name);
     pPluginFile = new ImplAAFPluginFile(name_copy);
-    if (NULL == pPluginFile)
+    if (!pPluginFile)
       result = AAFRESULT_NOMEMORY;
     else
     {
@@ -89,7 +89,7 @@ HRESULT ImplAAFPluginFile::CreatePluginFile(
       if (AAFRESULT_SUCCEEDED(result))
       {
         *ppPluginFile = pPluginFile;
-        pPluginFile = NULL;
+        pPluginFile = 0;
       }      
     }
   }
@@ -143,10 +143,10 @@ aafUInt32 ImplAAFPluginFile::ReferenceCount() const
 
 void ImplAAFPluginFile::ClearEntryPoints()
 {
-  _pfnCanUnloadNow = NULL;
-  _pfnGetClassObject = NULL;
-  _pfnGetClassCount = NULL;
-  _pfnGetClassObjectID = NULL;
+  _pfnCanUnloadNow = 0;
+  _pfnGetClassObject = 0;
+  _pfnGetClassCount = 0;
+  _pfnGetClassObjectID = 0;
 }
 
 
@@ -208,14 +208,14 @@ HRESULT ImplAAFPluginFile::Unload()
 {
   HRESULT result = AAFRESULT_SUCCESS;
 
-  if (NULL != _libHandle)
+  if (_libHandle)
   {
     result = ::AAFUnloadLibrary((AAFLibraryHandle)_libHandle);
 
     if (AAFRESULT_SUCCEEDED(result))
     {
       ClearEntryPoints();
-      _libHandle = NULL;
+      _libHandle = 0;
     }
 
   }

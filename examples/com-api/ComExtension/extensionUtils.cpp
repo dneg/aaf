@@ -35,11 +35,9 @@
 
 #include "CAAFBuiltinDefs.h"
 
-#if defined(_MAC) || defined(macintosh)
-#include <wstring.h>
-#endif
-
 #include <iostream.h>
+#include <stdlib.h>
+#include <wchar.h>
 
 // utility function to set String property value
 static void SetStringProperty (IAAFObject * pObj,
@@ -652,8 +650,8 @@ HRESULT PersonnelResourceGetActorName (IAAFObject * pObj,
   } else return AAFRESULT_PROP_NOT_PRESENT;
 }
 
-
-
+// On Irix CC, this operator conflicts with ostream::<<(const wchar_t*)
+#ifndef __sgi
 //
 // Prints the given string.
 //
@@ -678,7 +676,7 @@ ostream& operator<< (ostream& s,
 
   return s;
 }
-
+#endif
 
 //
 // Returns true if the positions match; returns false otherwise.

@@ -38,6 +38,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifndef __sgi
+#define AAFPERSONNELEXTENSION_DLLNAME L"AAFPersonnelExtension.dll"
+#else
+#define AAFPERSONNELEXTENSION_DLLNAME L"libAAFPersonnelExtension.so"
+#endif
+
 //
 // This example code is intended to show how AAF may be extended to
 // store personnel information relating to the staff which worked on a
@@ -138,7 +144,8 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
   {
     // Load our plugin.
     check(AAFGetPluginManager(&pPluginManager));
-    rc = pPluginManager->RegisterPluginFile(L"AAFPersonnelExtension.dll");
+    cout << "AAFGetPluginManager() succeeded." << endl;
+    rc = pPluginManager->RegisterPluginFile(AAFPERSONNELEXTENSION_DLLNAME);
     if (AAFRESULT_PLUGIN_ALREADY_REGISTERED == rc)
       rc = S_OK;
     check (rc);

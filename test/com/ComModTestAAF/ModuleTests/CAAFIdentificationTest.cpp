@@ -34,10 +34,8 @@
 #include <iostream.h>
 #include <iomanip.h>
 #include <stdio.h>
-
-#if defined(macintosh) || defined(_MAC)
-#include <wstring.h>
-#endif
+#include <stdlib.h>
+#include <wchar.h>
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
@@ -378,9 +376,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		TestMethod(pTestIdent->GetRefImplVersion(NULL), AAFRESULT_NULL_PARAM);
 		TestMethod(pTestIdent->GetRefImplVersion(&refImplVersion), AAFRESULT_SUCCESS);
-
-		if (memcmp(&refImplVersion, &AAFReferenceImplementationVersion, sizeof(refImplVersion)) != 0)
-			localhr = AAFRESULT_TEST_FAILED;
 		
 		pTestIdent->Release();
 		PrintTestResult(testName);

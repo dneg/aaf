@@ -26,101 +26,104 @@
  ************************************************************************/
 
 
-// WARNING! WARNING! WARNING!
-// This is untested code. It has not even been compiled!
-// [trr:1999-04-20]
-// At this time the irix port has not been maintained for several months.
-// Even then it was using the MainWin environment.
-//
-// This code is provided as a template to the irix port engineer.
-//
-
+// Declare the public interface that must be implemented.
+#include "aaflib.h"
 
 //
 // Use include guard so that the file can be included in every 
 // platform build without causing any errors in the build.
 //
-#if defined(sgi)
+#if defined(__sgi)
 
 // Declare the public interface that must be implemented.
+
 #include "aafrdli.h"
-
-
 #include "AAFResult.h"
 
-
 #include <dlfcn.h>
-
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-
-
-AAFRDLIRESULT AAFLoadLibrary(const char* name, AAFLibraryHandle* pLibHandle)
+AAFRDLIRESULT AAFLoadLibrary(
+   const char* name,
+   AAFLibraryHandle* pLibHandle)
 {
-  if (NULL == name || NULL == pLibHandle)
-    return AAFRESULT_NULL_PARAM;
-
-  // Attempt to load the library.
-  *pLibHandle = ::dlopen(dllname, RTLD_LAZY);
-  if (NULL == *pLibHandle)
-  {
-    fprintf(stderr, "dlopen(\"%s\", RTLD_LAZY) failed.\n", dllname);
-    return -1; // Need an AAFRESULT
-  }
-	
-	return AAFRESULT_SUCCESS;
+   if (NULL == name || NULL == pLibHandle) {
+      return AAFRESULT_NULL_PARAM;
+   }
+  
+   // Attempt to load the library.
+   *pLibHandle = ::dlopen(name, RTLD_NOW );
+    
+   if (NULL == *pLibHandle) {
+      fprintf(stderr, "dlopen() failed for %s: <%s>\n", name, dlerror() );
+		return -1; // Need an AAFRESULT
+   }
+   else {
+   }	
+   
+   return AAFRESULT_SUCCESS;
 }
 
-AAFRDLIRESULT AAFUnloadLibrary(AAFLibraryHandle libHandle)
+AAFRDLIRESULT AAFUnloadLibrary(
+   AAFLibraryHandle libHandle)
 {
-  if (NULL == pLibHandle)
-    return AAFRESULT_NULL_PARAM;
-
-	::dlclose(libHandle)
-	
-	return AAFRESULT_SUCCESS;
+   if (NULL == libHandle) {
+      return AAFRESULT_NULL_PARAM;
+   }
+    
+   // FIXME - Calls ~CAAFInProcServer() when unloading libaffpgapi.so.
+	// ND'A, April 11, 2000.  
+	//   ::dlclose(libHandle);
+   return AAFRESULT_SUCCESS;
 }
 
-AAFRDLIRESULT AAFFindSymbol(AAFLibraryHandle libHandle, const char* symbolName, AAFSymbolAddr* pSymbol)
+AAFRDLIRESULT AAFFindSymbol(
+   AAFLibraryHandle libHandle,
+   const char* symbolName,
+   AAFSymbolAddr* pSymbol)
 {
-  if (NULL == libHandle || NULL == symbolName || NULL == pSymbol)
-    return AAFRESULT_NULL_PARAM;
-
-
-	*pSymbol = ::dlsym(libHandle, symbolName);
-  if (NULL == *pSymbol)
-  {
-    fprintf(stderr, "dlsym(\"%s\") failed.\n", fcnName[4]);
-    return -2; // Need an AAFRESULT
-  }
-
-	return AAFRESULT_SUCCESS;
+   if (NULL == libHandle || NULL == symbolName || NULL == pSymbol)
+      return AAFRESULT_NULL_PARAM;
+   
+   *pSymbol = ::dlsym(libHandle, symbolName );
+   
+   if (NULL == *pSymbol) {
+      fprintf(stderr, "dlsym(\"%s\") failed <%s>.\n", symbolName, dlerror());
+      return -2; // Need an AAFRESULT
+   }
+ 
+   return AAFRESULT_SUCCESS;
 }
-
-
 
 /* Limited set of platform independent directory searching functions.*/
-AAFRDLIRESULT AAFFindLibrary(const char* name, LPFNAAFTESTFILEPROC testProc, void *userData)
+AAFRDLIRESULT AAFFindLibrary(
+   const char* name,
+   LPFNAAFTESTFILEPROC testProc,
+   void *userData)
 {
-	// Default implementation will just continue to use a hard-coded list of shared libaries.
+   // Default implementation will just continue to use a hard-coded list
+	// of shared libaries.
+   
+   const char *pluginFileNames[] =  {
+		"libaafpgapi.so",
+		"libaafintp.so",
+      0
+   };
+   
+   AAFRDLIRESULT rc = AAFRESULT_SUCCESS;
+   
 
-	const char *pluginFileNames[] = 
-	{
-		"aafpgapi.so",
-		"aafintp.so",
-		NULL
-	};
-	AAFRDLIRESULT rc = AAFRESULT_SUCCESS;
-
-	if (NULL == name || NULL == testProc)
+	if (NULL == name || NULL == testProc) {
 		return AAFRESULT_NULL_PARAM;
+	}
+		
+	for (int i = 0; AAFRESULT_SUCCESS == rc && pluginFileNames[i]; ++i) {
+		rc = testProc("",pluginFileNames[i], false , userData);
+	}
 
-	for (int i = 0; AAFRESULT_SUCCESS == rc && pluginFileNames[i]; ++i)
-		rc = testProc(pluginFileNames[i], false /* not a directory */, userData);
-
-	return rc;
+   return rc;
 }
-
 
 #endif /* #if defined(sgi) */

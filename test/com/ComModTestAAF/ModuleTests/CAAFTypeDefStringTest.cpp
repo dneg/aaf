@@ -36,6 +36,8 @@
 #include <iostream.h>
 #include <stdio.h>
 #include <assert.h>
+#include <stdlib.h>
+#include <wchar.h>
 
 #include "CAAFBuiltinDefs.h"
 

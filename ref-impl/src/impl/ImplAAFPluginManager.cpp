@@ -45,11 +45,10 @@
 
 
 #include <assert.h>
+#include <stdlib.h>
 #include <string.h>
+#include <wchar.h>
 #include <iostream.h>
-#if defined(_MAC) || defined(macintosh)
-#include <wstring.h>
-#endif
 
 #include "AAFUtils.h"
 #include "AAFDefUIDs.h"
@@ -271,7 +270,7 @@ AAFTestLibraryProcData::AAFTestLibraryProcData(ImplAAFPluginManager *pluginMgr, 
 	memset(caseBuffer, 0, kCaseBufferSize);
 }
 
-static AAFRDLIRESULT testPluginProc(const char* path, const char* name, char isDirectory, void * userData)
+static AAFRDLIRESULT testPluginProc(const char *path, const char* name, char isDirectory, void * userData)
 {
   AAFRESULT rc = AAFRESULT_SUCCESS;
 	AAFTestLibraryProcData *pData = (AAFTestLibraryProcData *)userData;
