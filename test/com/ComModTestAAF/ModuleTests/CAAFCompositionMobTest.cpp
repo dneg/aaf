@@ -217,6 +217,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	if (pCompMob)
 		pCompMob->Release();
 
+	if (pMobIter)
+		pMobIter->Release();
 	return hr;
 }
 
