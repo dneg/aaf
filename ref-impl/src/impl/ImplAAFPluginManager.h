@@ -102,21 +102,3 @@ private:
 //	AAFEssenceCodec			*dispatch;
 //	aafCodecMetaInfo_t		metaInfo;
 //} codecTableEntry_t;
-
-#if FULL_TOOLKIT
-			class AAFEssenceCodec	*pluginRoutine,
-			aafPluginType_t			type);
-#endif
-
-
-
-#if FULL_TOOLKIT
-AAFRESULT EnumCodecs(
-			aafUID_t		dataDefinition,
-			aafFileRev_t	rev);
-
-AAFRESULT EnumCodecVarieties(
-			aafUID_t		codecID,
-			aafFileRev_t    setrev,
-			aafUID_t		dataDefinition);
-#endif
