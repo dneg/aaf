@@ -98,16 +98,6 @@ void OMStorable::close(void)
   POSTCONDITION("Closed", _store == 0);
 }
 
-  // @mfunc Restore the contents of an <c OMStorable> (of unknown
-  //        sub-class) from the stored representation <p s>.
-  //   @parm The <c OMStoredObject> from which to restore this
-  //   <c OMStorable>.
-void OMStorable::restoreContentsFrom(OMStoredObject& s)
-{
-  TRACE("OMStorable::restoreContentsFrom");
-  s.restore(_persistentProperties);
-}
-
   // @mfunc Restore an <c OMStorable> (of unknown sub-class) from
   //        the stored representation <p s>.
   //   @parm The <c OMStorable> that will contain (own) the newly
@@ -131,10 +121,12 @@ OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
   object->attach(containingObject, name);
   object->setStore(&s);
   f->objectDirectory()->insert(object->pathName(), object);
-  object->restoreContentsFrom(s);
+  object->restoreContents();
   return object;
 }
 
+  // @mfunc Restore the contents of an <c OMStorable> (of unknown
+  //        sub-class).
 void OMStorable::restoreContents(void)
 {
   TRACE("OMStorable::restoreContents");
