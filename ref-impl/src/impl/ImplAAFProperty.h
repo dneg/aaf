@@ -68,6 +68,9 @@ public:
 						OMProperty * pOMProp);
 
 
+  AAFRESULT pvtSetValue (ImplAAFPropertyValue * pValue);
+
+
 private:
   ImplAAFPropertyDef *   _pPropDef;
   ImplAAFPropertyValue * _pPropVal;

@@ -145,3 +145,20 @@ AAFRESULT STDMETHODCALLTYPE
   (*ppValue)->AcquireReference ();
   return AAFRESULT_SUCCESS;
 }
+
+
+
+AAFRESULT
+    ImplAAFProperty::pvtSetValue (
+      ImplAAFPropertyValue * pValue)
+{
+  if (!pValue)
+	return AAFRESULT_NULL_PARAM;
+
+  if (_pPropVal)
+	_pPropVal->ReleaseReference ();
+
+  _pPropVal = pValue;
+  _pPropVal->AcquireReference ();
+  return AAFRESULT_SUCCESS;
+}
