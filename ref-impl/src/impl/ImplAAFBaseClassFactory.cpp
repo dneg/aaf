@@ -10,6 +10,7 @@
 #include "OMFile.h"
 #include "OMClassFactory.h"
 #include "ImplAAFIdentification.h"
+#include "ImplAAFContentStorage.h"
 
 #include "ImplAAFObjectCreation.h"
 
@@ -74,6 +75,7 @@ extern "C" const aafClassID_t CLSID_AAFComponent;
 extern "C" const aafClassID_t CLSID_AAFMob;
 extern "C" const aafClassID_t CLSID_AAFSegment;
 extern "C" const aafClassID_t CLSID_AAFMobSlot;
+extern "C" const aafClassID_t CLSID_AAFContentStorage;
 extern "C" const aafClassID_t CLSID_AAFSourceReference;
 extern "C" const aafClassID_t CLSID_AAFSourceClip;
 
@@ -107,6 +109,7 @@ void OMContainer::OMLOpenContainer(OMLSession sessionData,
   registerClass(_file, CLSID_AAFMob);
   registerClass(_file, CLSID_AAFSegment);
   registerClass(_file, CLSID_AAFMobSlot);
+  registerClass(_file, CLSID_AAFContentStorage);
   registerClass(_file, CLSID_AAFSourceReference);
   registerClass(_file, CLSID_AAFSourceClip);
 

@@ -44,10 +44,6 @@ AD_METHOD1(GetName,
 [in\\\,out], aafString_t *, name, Mob Name,
 This method will copy the mob name into the given aafString_t.)
 
-AD_METHOD1(GetEditRate,
-[out\\\,retval], aafRational_t *, editRate, Edit rate property value,
-This method will get the edit rate for this mob.)
-
 AD_METHOD1(GetModTime,
 [out], aafTimeStamp_t *, lastModified, Modified Time,
 This method will return the modification time for this mob.)
@@ -61,10 +57,6 @@ AD_METHOD3(GetMobInfo,
 [out], aafTimeStamp_t *, lastModified, Modified Time,
 [out], aafTimeStamp_t *, creationTime, Creation Time,
 This method will all mob property information is a single call.)
-
-AD_METHOD1(GetNumTracks,
-[out], aafNumTracks_t *, numTracks, Number of tracks,
-This method returns the number of tracks contained by this mob.)
 
 AD_METHOD1(GetNumSlots,
 [out], aafNumSlots_t *, numSlots, Number of slots,
@@ -101,10 +93,6 @@ AD_METHOD1(SetName,
 [in\\\, ref], aafString_t *, name, Mob Name,
 This method sets the name property on a mob.)
 
-AD_METHOD1(SetEditRate,
-[in], aafRational_t, editRate, Edit rate property value,
-This method will set the edit rate for this mob.)
-
 // skip virtual aafErr_t Verify(char *buf, validateData_t *result);
 // What doe's this do?
 
@@ -115,19 +103,9 @@ This method returns false by default. This method must be overridden by
   // each subclass to return true for the the corresponding input mobKind.)
 
 
-AD_XMETHOD3(AppendNewSlot,
-[in], objPass, aafRational_t, editRate, Edit rate property value,
-[in], objIn, AAFSegment, segment, Segment to append as slot component,
-[out], objOut, AAFMobSlot, newSlot, Newly created slot,
-This method creates a new mob slot with the given property
-  // values\, and appends it to the input mob.  Since the Toolkit
-  // attempts to enforce bottom up creation of mobs\, the slot segment
-  // must be passed in as an argument.)
-
-AD_XMETHOD6(AppendNewTrack,
+AD_XMETHOD5(AppendNewSlot,
 [in], objPass, aafRational_t, editRate, Edit rate property value,
 [in], objIn, AAFSegment, segment, Segment to append as track component,
-[in], objPass, aafPosition_t, origin, Track Origin,
 [in], objPass, aafTrackID_t, trackID, The Track ID,
 [in], objPass, aafString_t *, trackName, Track Name \(optional\),
 [out], objOut, AAFMobSlot, newTrack, Newly created track,
