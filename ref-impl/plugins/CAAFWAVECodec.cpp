@@ -299,7 +299,7 @@ HRESULT STDMETHODCALLTYPE
 {
 	XPROTECT()
 	{
-		if(EqualAUID(&essenceKind, &DDEF_Audio))
+		if(EqualAUID(&essenceKind, &DDEF_Sound))
 		{
 			if(!_headerLoaded)
 			{
@@ -326,7 +326,7 @@ HRESULT STDMETHODCALLTYPE
         aafUID_t  essenceKind,
         aafLength_t *  pNumSamples)
 {
-	if(EqualAUID(&essenceKind, &DDEF_Audio))
+	if(EqualAUID(&essenceKind, &DDEF_Sound))
 	{
 		*pNumSamples = _sampleFrames;
 	}
