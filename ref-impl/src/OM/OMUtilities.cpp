@@ -241,9 +241,11 @@ void convertWideStringToString(char*  result,
   if (length > (resultSize - 1)) {
     length = resultSize - 1;
   }
-  size_t status = wcstou8s(result, string, resultSize);
+#if defined(OM_DEBUG)
+  size_t status =
+#endif
+  wcstou8s(result, string, resultSize);
   ASSERT("Successful conversion", status != (size_t)-1);
-  //result[length] = 0;
 }
 
 void convertStringToWideString(wchar_t* result,
@@ -257,10 +259,11 @@ void convertStringToWideString(wchar_t* result,
   if (length > (resultSize - 1)) {
     length = resultSize - 1;
   }
-  //size_t status  = mbstowcs(result, string, length);
-  size_t status  = u8stowcs(result, string, resultSize);
+#if defined(OM_DEBUG)
+  size_t status =
+#endif
+  u8stowcs(result, string, resultSize);
   ASSERT("Successful conversion", status != (size_t)-1);
-  //result[length] = 0;
 }
 
 char* convertWideString(const wchar_t* string)
@@ -271,8 +274,10 @@ char* convertWideString(const wchar_t* string)
   size_t length = lengthOfWideString(string);
   char* result = new char[length + 1];
   ASSERT("Valid heap pointer", result != 0);
-  //size_t status = wcstombs(result, string, length + 1);
-  size_t status = wcstou8s(result, string, length + 1);
+#if defined(OM_DEBUG)
+  size_t status =
+#endif
+  wcstou8s(result, string, length + 1);
   ASSERT("Successful conversion", status != (size_t)-1);
   return result;
 }
@@ -285,8 +290,10 @@ wchar_t* convertString(const char* string)
   size_t length = strlen(string);
   wchar_t* result = new wchar_t[length + 1];
   ASSERT("Valid heap pointer", result != 0);
-  //size_t status = mbstowcs(result, string, length + 1);
-  size_t status = u8stowcs(result, string, length + 1);
+#if defined(OM_DEBUG)
+  size_t status =
+#endif
+  u8stowcs(result, string, length + 1);
   ASSERT("Successful conversion", status != (size_t)-1);
   return result;
 }
@@ -806,7 +813,10 @@ int wremove(const wchar_t* fileName)
   } else {
 #endif
     char cFileName[FILENAME_MAX];
-    size_t status = wcstou8s(cFileName, fileName, FILENAME_MAX);
+#if defined(OM_DEBUG)
+    size_t status =
+#endif
+    wcstou8s(cFileName, fileName, FILENAME_MAX);
     ASSERT("Convert succeeded", status != (size_t)-1);
 
     result = remove(cFileName);

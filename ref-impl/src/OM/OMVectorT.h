@@ -473,7 +473,7 @@ size_t OMVector<Element>::indexOfValue(const Element value) const
 
   PRECONDITION("Value is present", containsValue(value));
 
-  size_t result;
+  size_t result = 0;
 
   for (size_t i = 0; i < _count; i++) {
     if (_vector[i] == value) {

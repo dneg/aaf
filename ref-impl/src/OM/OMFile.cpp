@@ -80,7 +80,10 @@ OMFile* OMFile::openExistingRead(const wchar_t* fileName,
   PRECONDITION("Valid dictionary", dictionary != 0);
 
   OMStoredObjectEncoding encoding;
-  bool result = isRecognized(fileName, encoding);
+#if defined(OM_DEBUG)
+  bool result =
+#endif
+  isRecognized(fileName, encoding);
   ASSERT("Recognized file", result); // tjb - error
   OMStoredObjectFactory* f = findFactory(encoding);
   ASSERT("Recognized file encoding", f != 0);
@@ -119,7 +122,10 @@ OMFile* OMFile::openExistingModify(const wchar_t* fileName,
   PRECONDITION("Valid dictionary", dictionary != 0);
 
   OMStoredObjectEncoding encoding;
-  bool result = isRecognized(fileName, encoding);
+#if defined(OM_DEBUG)
+  bool result =
+#endif
+  isRecognized(fileName, encoding);
   ASSERT("Recognized file", result); // tjb - error
   OMStoredObjectFactory* f = findFactory(encoding);
   ASSERT("Recognized file encoding", f != 0);
@@ -1238,7 +1244,10 @@ void OMFile::openRead(void)
 	// if client said DontCare, get from isRecognized(_rawStorage, _encoding)
 	if( nullOMStoredObjectEncoding == _encoding )
 	{
-		bool result = isRecognized(_rawStorage, _encoding);
+#if defined(OM_DEBUG)
+		bool result =
+#endif
+		isRecognized(_rawStorage, _encoding);
 		ASSERT("Recognized file", result);
 		factory = findFactory(_encoding);
 		ASSERT("Recognized file encoding", factory != 0);
@@ -1248,7 +1257,10 @@ void OMFile::openRead(void)
 		// else get exact:  findfactory->isRecognized(_rawStorage)
 		factory = findFactory(_encoding);
 		ASSERT("Recognized file encoding", factory != 0);
-		bool result = factory->isRecognized(_rawStorage);
+#if defined(OM_DEBUG)
+		bool result =
+#endif
+		factory->isRecognized(_rawStorage);
 		ASSERT("Recognized file", result);
 	}
 
@@ -1264,7 +1276,10 @@ void OMFile::openModify(void)
 	// if client said DontCare, get from isRecognized(_rawStorage, _encoding)
 	if( nullOMStoredObjectEncoding == _encoding )
 	{
-		bool result = isRecognized(_rawStorage, _encoding);
+#if defined(OM_DEBUG)
+		bool result =
+#endif
+		isRecognized(_rawStorage, _encoding);
 		ASSERT("Recognized file", result);
 		factory = findFactory(_encoding);
 		ASSERT("Recognized file encoding", factory != 0);
@@ -1274,7 +1289,10 @@ void OMFile::openModify(void)
 		// else get exact:  findfactory->isRecognized(_rawStorage)
 		factory = findFactory(_encoding);
 		ASSERT("Recognized file encoding", factory != 0);
-		bool result = factory->isRecognized(_rawStorage);
+#if defined(OM_DEBUG)
+		bool result =
+#endif
+		factory->isRecognized(_rawStorage);
 		ASSERT("Recognized file", result);
 	}
 

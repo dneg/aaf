@@ -38,7 +38,10 @@ OMPropertyDefinition* OMDictionary::find(const OMPropertyId propertyId)
   PRECONDITION("Valid property id", propertyId != 0);
 
   OMPropertyDefinition* result = 0;
-  bool status = _propertyDefinitions->find(propertyId, result);
+#if defined(OM_DEBUG)
+  bool status = 
+#endif
+  _propertyDefinitions->find(propertyId, result);
 
   POSTCONDITION("Property definition found", status);
   POSTCONDITION("Valid result", result != 0);
@@ -56,7 +59,10 @@ void OMDictionary::insert(const OMPropertyId propertyId,
   PRECONDITION("Definition not already present",
                                   !_propertyDefinitions->contains(propertyId));
 
-  bool status = _propertyDefinitions->insert(
+#if defined(OM_DEBUG)
+  bool status =
+#endif
+  _propertyDefinitions->insert(
                                 propertyId,
                                 const_cast<OMPropertyDefinition*>(definition));
 

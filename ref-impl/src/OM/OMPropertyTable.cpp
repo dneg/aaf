@@ -61,7 +61,7 @@ OMPropertyTag OMPropertyTable::insert(const OMPropertyId* propertyPath)
 
   PRECONDITION("Valid property path", validPropertyPath(propertyPath));
 
-  OMPropertyTag result;
+  OMPropertyTag result = nullOMPropertyTag;
   bool found = false;
   size_t elements = _vector.count();
   for (size_t i = 0; i < elements; i++) {

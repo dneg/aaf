@@ -100,7 +100,7 @@ OMMS_SSStoredObjectFactory::openFile (OMRawStorage* rawStorage,
   DWORD openMode;
   if (mode == OMFile::modifyMode) {
     openMode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
-  } else if (mode == OMFile::readOnlyMode) {
+  } else {
     openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_DENY_WRITE;
   }
 
@@ -217,7 +217,7 @@ OMMS_SSStoredObjectFactory::openFile (const wchar_t* fileName,
   DWORD openMode;
   if (mode == OMFile::modifyMode) {
     openMode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
-  } else if (mode == OMFile::readOnlyMode) {
+  } else {
     openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_DENY_WRITE;
   }
 

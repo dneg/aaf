@@ -184,7 +184,7 @@ OMSSIStorage::StgOpenStorageEx( const TCHAR FAR* in_filename,
 	StgMode openMode;
   	if (in_accessMode == OMFile::modifyMode) {
     	openMode = STG_RW;
-  	} else if (in_accessMode == OMFile::readOnlyMode) {
+  	} else {
     	openMode = STG_READ;
   	}
 	RootStorage* rootstorage = 0;
@@ -256,7 +256,7 @@ OMSSIStorage::StgOpenStorageInOMRawStorage(
 	StgMode openMode;
   	if (in_accessMode == OMFile::modifyMode) {
     	openMode = STG_RW;
-  	} else if (in_accessMode == OMFile::readOnlyMode) {
+  	} else {
     	openMode = STG_READ;
   	}
 	RootStorage* rootstorage = 0;

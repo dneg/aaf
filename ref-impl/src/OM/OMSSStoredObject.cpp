@@ -881,8 +881,10 @@ OMRootStorable* OMSSStoredObject::restore(OMFile& file)
 
   root->restoreContents();
 
+#if defined(OM_DEBUG)
   OMDictionary *metaDictionary = root->dictionary();
   ASSERT("Consistent dictionaries", metaDictionary == file.dictionary());
+#endif
   root->setClassFactory(file.classFactory());
 
   file.setLoadMode(savedLoadMode);
@@ -3032,11 +3034,13 @@ IStream* OMSSStoredObject::openStream(IStorage* storage,
   TRACE("OMSSStoredObject::openStream");
   PRECONDITION("Valid storage", storage != 0);
   PRECONDITION("Valid stream name", validWideString(streamName));
+  PRECONDITION("Valid mode", (_mode == OMFile::modifyMode) ||
+                             (_mode == OMFile::readOnlyMode));
 
   DWORD mode;
   if (_mode == OMFile::modifyMode) {
     mode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
-  } else if (_mode == OMFile::readOnlyMode) {
+  } else {
     mode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE;
   }
 
@@ -3138,7 +3142,7 @@ IStorage* OMSSStoredObject::openStorage(IStorage* storage,
   DWORD openMode;
   if (mode == OMFile::modifyMode) {
     openMode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
-  } else if (mode == OMFile::readOnlyMode) {
+  } else {
     openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE;
   }
 
@@ -3237,7 +3241,10 @@ static void convert(char* cName, size_t length, const wchar_t* name)
   PRECONDITION("Valid output buffer", cName != 0);
   PRECONDITION("Valid output buffer size", length > 0);
 
-  size_t status = wcstombs(cName, name, length);
+#if defined(OM_DEBUG)
+  size_t status =
+#endif
+  wcstombs(cName, name, length);
   ASSERT("wcstombs() succeeded", status != (size_t)-1);
 }
 

@@ -163,7 +163,10 @@ OMUInt64 OMStream::size(void)
 
   struct stat fileStat;
   fflush( _file );
-  OMInt64 status = fstat( fileno( _file ), &fileStat );
+#if defined(OM_DEBUG)
+  OMInt64 status =
+#endif
+  fstat( fileno( _file ), &fileStat );
   ASSERT( "Successful fstat", status == 0 );
   OMUInt64 result = fileStat.st_size;
 
@@ -249,7 +252,10 @@ void OMStream::setPosition(OMUInt64 newPosition)
 #else
 	// all POSIX 1003.1 compliant
 	off_t position = newPosition;
-	int status = fseeko( _file, position, SEEK_SET);
+#if defined(OM_DEBUG)
+	int status =
+#endif
+	fseeko( _file, position, SEEK_SET);
 #endif
 
 	ASSERT("Successful seek", status == 0);
@@ -287,7 +293,10 @@ void OMStream::synchronize(void)
   PRECONDITION("Stream is writable", isWritable());
   PRECONDITION("No error on stream", ferror(_file) == 0);
 
-  int status = fflush(_file);
+#if defined(OM_DEBUG)
+  int status =
+#endif
+  fflush(_file);
   ASSERT("Successful flush", status == 0);
 }
 
@@ -299,7 +308,10 @@ OMStream::~OMStream(void)
     synchronize();
   }
   ASSERT("No error on stream", ferror(_file) == 0);
-  int status = fclose(_file);
+#if defined(OM_DEBUG)
+  int status =
+#endif
+  fclose(_file);
   ASSERT("Successful close", status == 0);
   _file = 0;
 }

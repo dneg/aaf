@@ -188,7 +188,10 @@ void OMBufferedIStream::read(OMByte* bytes,
   PRECONDITION("Valid data buffer", bytes != 0);
   PRECONDITION("Valid size", byteCount > 0);
 
-  HRESULT status = _stream->Read(bytes, byteCount, &bytesRead);
+#if defined(OM_DEBUG)
+  HRESULT status = 
+#endif
+  _stream->Read(bytes, byteCount, &bytesRead);
   ASSERT("IStream::Read() succeeded", SUCCEEDED(status));
   ASSERT("Successful read", bytesRead == byteCount);
 }
@@ -202,7 +205,10 @@ void OMBufferedIStream::write(const OMByte* bytes,
   PRECONDITION("Valid data", bytes != 0);
   PRECONDITION("Valid size", byteCount > 0);
 
-  HRESULT status = _stream->Write(bytes, byteCount, &bytesWritten);
+#if defined(OM_DEBUG)
+  HRESULT status = 
+#endif
+  _stream->Write(bytes, byteCount, &bytesWritten);
   ASSERT("IStream::Write() succeeded", SUCCEEDED(status));
   ASSERT("Successful write", bytesWritten == byteCount);
 }
