@@ -88,7 +88,7 @@ SOURCE="..\..\..\ref-impl\src\impl\aafErr.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE=..\plugins\AAFPluginManager.cpp
+SOURCE="..\..\..\ref-impl\plugins\AAFPluginManager.cpp"
 # End Source File
 # Begin Source File
 
