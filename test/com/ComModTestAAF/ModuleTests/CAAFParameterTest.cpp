@@ -62,17 +62,26 @@ static void RemoveTestFile(const wchar_t* pFileName)
   }
 }
 
+
 // convenient error handlers.
-inline void checkResult(HRESULT r)
-{
-  if (FAILED(r))
-    throw r;
-}
-inline void checkExpression(bool expression, HRESULT r)
-{
-  if (!expression)
-    throw r;
-}
+#define checkResult(r)\
+do {\
+  if (FAILED(r))\
+  {\
+    cerr << "FILE:" << __FILE__ << " LINE:" << __LINE__ << " Error code = " << hex << r << dec << endl;\
+    throw (HRESULT)r;\
+  }\
+} while (false)
+
+#define checkExpression(expression, r)\
+do {\
+  if (!(expression))\
+  {\
+    cerr << "FILE:" << __FILE__ << " LINE:" << __LINE__ << " Expression failed = " << #expression << endl;\
+    throw (HRESULT)r;\
+  }\
+} while (false)
+
 
 #define TEST_NUM_INPUTS		1
 #define TEST_CATEGORY		L"Test Parameters"
@@ -160,9 +169,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafUID_t			effectID = kTestEffectID;
 	aafUID_t			parmID = kTestParmID;
 	aafRational_t		testLevel = kTestLevel;
-/*	long				test;
-*/
-	aafUID_t			testTypeID = kAAFTypeID_Int64;
 
 	try
 	{
@@ -188,7 +194,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		checkResult(pOperationDef->Initialize (effectID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
 		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
-		checkResult(pParamDef->Initialize (parmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
+
+    checkResult(pDictionary->LookupTypeDef (kAAFTypeID_Rational, &pTypeDef));
+    checkResult(pParamDef->Initialize (parmID, TEST_PARAM_NAME, TEST_PARAM_DESC, pTypeDef));
+		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 
 
@@ -201,7 +210,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// !!!Added circular definitions because we don't have optional properties
 		checkResult(pOperationDef->AppendDegradeToOperation (pOperationDef));
 
-		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
 
 
 		//Make the first mob
@@ -238,12 +246,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(defs.cdConstantValue()->
 						CreateInstance(IID_IAAFConstantValue, 
 									   (IUnknown **)&pConstValue));
-			checkResult(pConstValue->SetValue(sizeof(testLevel), (aafDataBuffer_t)&testLevel));
+			checkResult(pConstValue->Initialize (pParamDef, sizeof(testLevel), (aafDataBuffer_t)&testLevel));
 			checkResult(pConstValue->QueryInterface (IID_IAAFParameter, (void **)&pParm));
-			checkResult(pParm->SetParameterDefinition (pParamDef));
-			checkResult(pDictionary->LookupTypeDef (testTypeID, &pTypeDef));
-			checkResult(pParm->SetTypeDefinition (pTypeDef));
 			checkResult(pOperationGroup->AddParameter (pParm));
+
 			checkResult(pOperationGroup->AppendInputSegment (pFiller));
 			pFiller->Release();
 			pFiller = NULL;
@@ -283,8 +289,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			pSourceRef = NULL;
 			pSourceClip->Release();
 			pSourceClip = NULL;
-			pTypeDef->Release();
-			pTypeDef = NULL;
 		}
 
 		// Add the mob to the file.
@@ -413,7 +417,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			checkResult(pParameter->GetTypeDefinition (&pTypeDef));
 			checkResult(pTypeDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
 			checkResult(pDefObject->GetAUID (&testUID));
-			checkExpression(memcmp(&testUID, &kAAFTypeID_Int64, sizeof(testUID)) == 0, AAFRESULT_TEST_FAILED);
+			checkExpression(memcmp(&testUID, &kAAFTypeID_Rational, sizeof(testUID)) == 0, AAFRESULT_TEST_FAILED);
 			pDefObject->Release();
 			pDefObject = NULL;
 
@@ -515,19 +519,10 @@ extern "C" HRESULT CAAFParameter_test()
 	}
 	catch (...)
 	{
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
 		cerr << "CAAFParameter_test...Caught general C++ exception!" << endl; 
 	}
 
-	// When all of the functionality of this class is tested, we can return success.
-	// When a method and its unit test have been implemented, remove it from the list.
-//	if (SUCCEEDED(hr))
-//	{
-//		cout << "The following IAAFParameter methods have not been implemented:" << endl; 
-//		cout << "     GetValue" << endl; 
-//		cout << "     GetValueBufLen" << endl; 
-//		cout << "     SetValue" << endl; 
-//		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-//	}
 
 	return hr;
 }

@@ -178,8 +178,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFParameterDef, 
 								   (IUnknown **)&pParamDef));
 
+		checkResult(pParamDef->Initialize (TestParamUID1, TEST_PARAM_NAME1, TEST_PARAM_DESC1, defs.tdRational()));
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
-		checkResult(pParamDef->Initialize (TestParamUID1, TEST_PARAM_NAME1, TEST_PARAM_DESC1));
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 		checkResult(pOperationDef->AddParameterDef (pParamDef));
 		pParamDef->Release();
@@ -190,7 +190,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								   (IUnknown **)&pParamDef));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
-		checkResult(pParamDef->Initialize (TestParamUID2, TEST_PARAM_NAME2, TEST_PARAM_DESC2));
+		checkResult(pParamDef->Initialize (TestParamUID2, TEST_PARAM_NAME2, TEST_PARAM_DESC2, defs.tdRational()));
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 		checkResult(pOperationDef->AddParameterDef (pParamDef));
 		pParamDef->Release();

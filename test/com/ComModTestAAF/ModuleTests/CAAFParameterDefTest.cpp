@@ -174,7 +174,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		checkResult(pOperationDef->Initialize (effectID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
 		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
-		checkResult(pParamDef->Initialize (parmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
+
+ 		checkResult(pDictionary->LookupTypeDef (checkTypeID , &pTypeDef));
+    checkResult(pParamDef->Initialize (parmID, TEST_PARAM_NAME, TEST_PARAM_DESC, pTypeDef));
+		pTypeDef->Release();
+		pTypeDef = NULL;
+   
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 
 		checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
@@ -194,11 +199,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pOperationDef->AppendDegradeToOperation (pOperationDef));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
-		checkResult(pDictionary->LookupTypeDef (checkTypeID , &pTypeDef));
-		checkResult(pParamDef->SetTypeDef(pTypeDef));
-		pTypeDef->Release();
-		pTypeDef = NULL;
-		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
+
+    checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
 		checkResult(pDefObject->SetName (TEST_PARAM_NAME));
 		checkResult(pDefObject->SetDescription (TEST_PARAM_DESC));
 		pDefObject->Release();
@@ -301,7 +303,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkResult(pOperationDef->GetParameterDefs (&pParmDefEnum));
 		checkResult(pParmDefEnum->NextOne (&pParmDef));
 
-		checkResult(pParmDef->GetTypeDef(&pTypeDef));
+		checkResult(pParmDef->GetTypeDefinition(&pTypeDef));
 		checkResult(pTypeDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
 		checkResult(pDefObject->GetAUID(&testAUID));
 		checkExpression(memcmp(&testAUID, &checkTypeID, sizeof(testAUID)) == 0, AAFRESULT_TEST_FAILED);
@@ -386,7 +388,7 @@ extern "C" HRESULT CAAFParameterDef_test()
 //	{
 //		cout << "The following IAAFParameterDef methods have not been implemented:" << endl; 
 //		cout << "     SetTypeDef" << endl; 
-//		cout << "     GetTypeDef" << endl; 
+//		cout << "     GetTypeDefinition" << endl; 
 //		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 //	}
 

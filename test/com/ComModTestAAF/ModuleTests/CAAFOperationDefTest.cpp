@@ -169,7 +169,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  		checkResult(defs.cdParameterDef()->
 					CreateInstance(IID_IAAFParameterDef, 
 								   (IUnknown **)&pParamDef));
-		checkResult(pParamDef->Initialize (testParmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
+		checkResult(pParamDef->Initialize (testParmID, TEST_PARAM_NAME, TEST_PARAM_DESC, defs.tdRational()));
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 
 		for(index = 0; index < 3; index++)

@@ -192,12 +192,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFOperationDef, 
 								   (IUnknown **)&pOperationDef));
     
-		checkResult(defs.cdParameterDef()->
+		checkResult(pDictionary->LookupTypeDef (kAAFTypeID_Rational, &pTypeDef));
+
+    checkResult(defs.cdParameterDef()->
 					CreateInstance(IID_IAAFParameterDef, 
 								   (IUnknown **)&pParamDef));
-		checkResult(pParamDef->Initialize (parmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
+		checkResult(pParamDef->Initialize (parmID, TEST_PARAM_NAME, TEST_PARAM_DESC, pTypeDef));
 
-		checkResult(pDictionary->LookupTypeDef (kAAFTypeID_Rational, &pTypeDef));
 		checkResult(AAFGetPluginManager(&pMgr));
 		checkResult(pMgr->CreatePluginDefinition(LinearInterpolator, pDictionary, &pDefObject));
 		checkResult(pDefObject->QueryInterface(IID_IAAFInterpolationDef, (void **) &pInterpDef));
@@ -252,23 +253,19 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(defs.cdVaryingValue()->
 						CreateInstance(IID_IAAFVaryingValue, 
 									   (IUnknown **)&pVaryingValue));
-			checkResult(pVaryingValue->SetInterpolationDefinition(pInterpDef));
+      checkResult(pVaryingValue->Initialize (pParamDef, pInterpDef));
 
 			checkResult(defs.cdControlPoint()->
 						CreateInstance(IID_IAAFControlPoint, 
 									   (IUnknown **)&pControlPoint));
-			checkResult(pControlPoint->SetTime(startTime));
-			checkResult(pControlPoint->SetValue(sizeof(testLevel1), (aafDataBuffer_t)&testLevel1));
-			checkResult(pControlPoint->SetTypeDefinition (pTypeDef));
+      checkResult(pControlPoint->Initialize (pVaryingValue, startTime, sizeof(testLevel1), (aafDataBuffer_t)&testLevel1));
 			checkResult(pVaryingValue->AddControlPoint(pControlPoint));
 			pControlPoint->Release();
 			pControlPoint = NULL;
 			checkResult(defs.cdControlPoint()->
 						CreateInstance(IID_IAAFControlPoint, 
 									   (IUnknown **)&pControlPoint));
-			checkResult(pControlPoint->SetTypeDefinition (pTypeDef));
-			checkResult(pControlPoint->SetTime(endTime));
-			checkResult(pControlPoint->SetValue(sizeof(testLevel2), (aafDataBuffer_t)&testLevel2));
+      checkResult(pControlPoint->Initialize (pVaryingValue, endTime, sizeof(testLevel2), (aafDataBuffer_t)&testLevel2));
 			checkResult(pVaryingValue->AddControlPoint(pControlPoint));
 			pControlPoint->Release();
 			pControlPoint = NULL;
@@ -277,9 +274,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(defs.cdControlPoint()->
 						CreateInstance(IID_IAAFControlPoint, 
 									   (IUnknown **)&pControlPoint));
-			checkResult(pControlPoint->SetTypeDefinition (pTypeDef));
-			checkResult(pControlPoint->SetTime(endTime));
-			checkResult(pControlPoint->SetValue(sizeof(testLevel2), (aafDataBuffer_t)&testLevel2));
+      checkResult(pControlPoint->Initialize (pVaryingValue, endTime, sizeof(testLevel2), (aafDataBuffer_t)&testLevel2));
 			checkResult(pVaryingValue->AddControlPoint(pControlPoint));
 			pControlPoint->Release();
 			pControlPoint = NULL;
@@ -290,8 +285,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  			checkExpression(2 == numPoints, AAFRESULT_TEST_FAILED);
 
 			checkResult(pVaryingValue->QueryInterface (IID_IAAFParameter, (void **)&pParm));
-			checkResult(pParm->SetParameterDefinition (pParamDef));
- // !!!  ImplAAFParameter::SetTypeDefinition (ImplAAFTypeDef*  pTypeDef)
 			checkResult(pOperationGroup->AddParameter (pParm));
 			checkResult(pOperationGroup->AppendInputSegment (pFiller));
 			pFiller->Release();

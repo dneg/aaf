@@ -185,7 +185,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		checkResult(pOperationDef->Initialize (effectID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
 		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
-		checkResult(pParamDef->Initialize (parmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
+		checkResult(pParamDef->Initialize (parmID, TEST_PARAM_NAME, TEST_PARAM_DESC, defs.tdRational()));
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 
 
@@ -231,10 +231,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(defs.cdConstantValue()->
 						CreateInstance(IID_IAAFConstantValue, 
 									   (IUnknown **)&pConstValue));
+			checkResult(pConstValue->Initialize (pParamDef, sizeof(testLevel), (aafDataBuffer_t)&testLevel));
 			checkResult(pConstValue->SetValue(sizeof(testLevel), (aafDataBuffer_t)&testLevel));
-			checkResult(pConstValue->QueryInterface (IID_IAAFParameter, (void **)&pParm));
-			checkResult(pParm->SetParameterDefinition (pParamDef));
- // !!!  ImplAAFParameter::SetTypeDefinition (ImplAAFTypeDef*  pTypeDef)
+
+      checkResult(pConstValue->QueryInterface (IID_IAAFParameter, (void **)&pParm));
 			checkResult(pOperationGroup->AddParameter (pParm));
 			checkResult(pOperationGroup->AppendInputSegment (pFiller));
 			pFiller->Release();
