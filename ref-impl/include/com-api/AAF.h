@@ -901,6 +901,12 @@ typedef interface IAAFMob2 IAAFMob2;
 #endif 	/* __IAAFMob2_FWD_DEFINED__ */
 
 
+#ifndef __IAAFRGBADescriptor2_FWD_DEFINED__
+#define __IAAFRGBADescriptor2_FWD_DEFINED__
+typedef interface IAAFRGBADescriptor2 IAAFRGBADescriptor2;
+#endif 	/* __IAAFRGBADescriptor2_FWD_DEFINED__ */
+
+
 #ifndef __IAAFSearchSource_FWD_DEFINED__
 #define __IAAFSearchSource_FWD_DEFINED__
 typedef interface IAAFSearchSource IAAFSearchSource;
@@ -965,6 +971,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 // AAF Interfaces.
 //=--------------------------------------------------------------------------=
 //
+
 
 
 
@@ -33488,6 +33495,12 @@ EXTERN_C const IID IID_IAAFCDCIDescriptor2;
         virtual HRESULT STDMETHODCALLTYPE GetAlphaSamplingWidth( 
             /* [out] */ aafUInt32 __RPC_FAR *pAlphaSamplingWidth) = 0;
         
+        virtual HRESULT STDMETHODCALLTYPE SetReversedByteOrder( 
+            /* [in] */ aafBoolean_t reversedByteOrder) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetReversedByteOrder( 
+            /* [out] */ aafBoolean_t __RPC_FAR *pReversedByteOrder) = 0;
+        
     };
     
 #else 	/* C style interface */
@@ -33582,6 +33595,14 @@ EXTERN_C const IID IID_IAAFCDCIDescriptor2;
             IAAFCDCIDescriptor2 __RPC_FAR * This,
             /* [out] */ aafUInt32 __RPC_FAR *pAlphaSamplingWidth);
         
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetReversedByteOrder )( 
+            IAAFCDCIDescriptor2 __RPC_FAR * This,
+            /* [in] */ aafBoolean_t reversedByteOrder);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetReversedByteOrder )( 
+            IAAFCDCIDescriptor2 __RPC_FAR * This,
+            /* [out] */ aafBoolean_t __RPC_FAR *pReversedByteOrder);
+        
         END_INTERFACE
     } IAAFCDCIDescriptor2Vtbl;
 
@@ -33661,6 +33682,12 @@ EXTERN_C const IID IID_IAAFCDCIDescriptor2;
 
 #define IAAFCDCIDescriptor2_GetAlphaSamplingWidth(This,pAlphaSamplingWidth)	\
     (This)->lpVtbl -> GetAlphaSamplingWidth(This,pAlphaSamplingWidth)
+
+#define IAAFCDCIDescriptor2_SetReversedByteOrder(This,reversedByteOrder)	\
+    (This)->lpVtbl -> SetReversedByteOrder(This,reversedByteOrder)
+
+#define IAAFCDCIDescriptor2_GetReversedByteOrder(This,pReversedByteOrder)	\
+    (This)->lpVtbl -> GetReversedByteOrder(This,pReversedByteOrder)
 
 #endif /* COBJMACROS */
 
@@ -33890,6 +33917,30 @@ HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor2_GetAlphaSamplingWidth_Proxy(
 
 
 void __RPC_STUB IAAFCDCIDescriptor2_GetAlphaSamplingWidth_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor2_SetReversedByteOrder_Proxy( 
+    IAAFCDCIDescriptor2 __RPC_FAR * This,
+    /* [in] */ aafBoolean_t reversedByteOrder);
+
+
+void __RPC_STUB IAAFCDCIDescriptor2_SetReversedByteOrder_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor2_GetReversedByteOrder_Proxy( 
+    IAAFCDCIDescriptor2 __RPC_FAR * This,
+    /* [out] */ aafBoolean_t __RPC_FAR *pReversedByteOrder);
+
+
+void __RPC_STUB IAAFCDCIDescriptor2_GetReversedByteOrder_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -40429,6 +40480,510 @@ void __RPC_STUB IAAFMob2_AppendNewEventSlot_Stub(
 #endif 	/* __IAAFMob2_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFRGBADescriptor2_INTERFACE_DEFINED__
+#define __IAAFRGBADescriptor2_INTERFACE_DEFINED__
+
+/* interface IAAFRGBADescriptor2 */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFRGBADescriptor2;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("205c5aae-727a-46c3-8368-cd8b1d14fbdd")
+    IAAFRGBADescriptor2 : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE SetPixelLayout( 
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafRGBAComponent_t __RPC_FAR *PixelLayoutArray) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountPixelLayoutElements( 
+            /* [out] */ aafUInt32 __RPC_FAR *pResult) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPixelLayout( 
+            /* [in] */ aafUInt32 numberElements,
+            /* [size_is][out] */ aafRGBAComponent_t __RPC_FAR *PixelLayoutArray) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetPalette( 
+            /* [in] */ aafUInt32 numberElements,
+            /* [size_is][in] */ aafUInt8 __RPC_FAR *pPalette) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPalette( 
+            /* [in] */ aafUInt32 numberRecords,
+            /* [size_is][out] */ aafUInt8 __RPC_FAR *pPalette) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPaletteSize( 
+            /* [out] */ aafUInt32 __RPC_FAR *pNumberBytes) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountPaletteLayoutElements( 
+            /* [out] */ aafUInt32 __RPC_FAR *pResult) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetPaletteLayout( 
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafRGBAComponent_t __RPC_FAR *PaletteLayoutArray) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPaletteLayout( 
+            /* [in] */ aafUInt32 numberElements,
+            /* [size_is][out] */ aafRGBAComponent_t __RPC_FAR *PaletteLayoutArray) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetComponentMaxRef( 
+            /* [in] */ aafUInt32 componentMaxRef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetComponentMaxRef( 
+            /* [out] */ aafUInt32 __RPC_FAR *pComponentMaxRef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetComponentMinRef( 
+            /* [in] */ aafUInt32 componentMinRef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetComponentMinRef( 
+            /* [out] */ aafUInt32 __RPC_FAR *pComponentMinRef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetAlphaMaxRef( 
+            /* [in] */ aafUInt32 alphaMaxRef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetAlphaMaxRef( 
+            /* [out] */ aafUInt32 __RPC_FAR *pAlphaMaxRef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetAlphaMinRef( 
+            /* [in] */ aafUInt32 alphaMinRef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetAlphaMinRef( 
+            /* [out] */ aafUInt32 __RPC_FAR *pAlphaMinRef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetScanningDirection( 
+            /* [in] */ aafScanningDirection_t scanningDirection) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetScanningDirection( 
+            /* [out] */ aafScanningDirection_t __RPC_FAR *pScanningDirection) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFRGBADescriptor2Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPixelLayout )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafRGBAComponent_t __RPC_FAR *PixelLayoutArray);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountPixelLayoutElements )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pResult);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPixelLayout )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [in] */ aafUInt32 numberElements,
+            /* [size_is][out] */ aafRGBAComponent_t __RPC_FAR *PixelLayoutArray);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPalette )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [in] */ aafUInt32 numberElements,
+            /* [size_is][in] */ aafUInt8 __RPC_FAR *pPalette);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPalette )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [in] */ aafUInt32 numberRecords,
+            /* [size_is][out] */ aafUInt8 __RPC_FAR *pPalette);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPaletteSize )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pNumberBytes);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountPaletteLayoutElements )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pResult);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPaletteLayout )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafRGBAComponent_t __RPC_FAR *PaletteLayoutArray);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPaletteLayout )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [in] */ aafUInt32 numberElements,
+            /* [size_is][out] */ aafRGBAComponent_t __RPC_FAR *PaletteLayoutArray);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetComponentMaxRef )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [in] */ aafUInt32 componentMaxRef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetComponentMaxRef )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pComponentMaxRef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetComponentMinRef )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [in] */ aafUInt32 componentMinRef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetComponentMinRef )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pComponentMinRef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAlphaMaxRef )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [in] */ aafUInt32 alphaMaxRef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAlphaMaxRef )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pAlphaMaxRef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAlphaMinRef )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [in] */ aafUInt32 alphaMinRef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAlphaMinRef )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pAlphaMinRef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetScanningDirection )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [in] */ aafScanningDirection_t scanningDirection);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetScanningDirection )( 
+            IAAFRGBADescriptor2 __RPC_FAR * This,
+            /* [out] */ aafScanningDirection_t __RPC_FAR *pScanningDirection);
+        
+        END_INTERFACE
+    } IAAFRGBADescriptor2Vtbl;
+
+    interface IAAFRGBADescriptor2
+    {
+        CONST_VTBL struct IAAFRGBADescriptor2Vtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFRGBADescriptor2_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFRGBADescriptor2_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFRGBADescriptor2_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFRGBADescriptor2_SetPixelLayout(This,numberElements,PixelLayoutArray)	\
+    (This)->lpVtbl -> SetPixelLayout(This,numberElements,PixelLayoutArray)
+
+#define IAAFRGBADescriptor2_CountPixelLayoutElements(This,pResult)	\
+    (This)->lpVtbl -> CountPixelLayoutElements(This,pResult)
+
+#define IAAFRGBADescriptor2_GetPixelLayout(This,numberElements,PixelLayoutArray)	\
+    (This)->lpVtbl -> GetPixelLayout(This,numberElements,PixelLayoutArray)
+
+#define IAAFRGBADescriptor2_SetPalette(This,numberElements,pPalette)	\
+    (This)->lpVtbl -> SetPalette(This,numberElements,pPalette)
+
+#define IAAFRGBADescriptor2_GetPalette(This,numberRecords,pPalette)	\
+    (This)->lpVtbl -> GetPalette(This,numberRecords,pPalette)
+
+#define IAAFRGBADescriptor2_GetPaletteSize(This,pNumberBytes)	\
+    (This)->lpVtbl -> GetPaletteSize(This,pNumberBytes)
+
+#define IAAFRGBADescriptor2_CountPaletteLayoutElements(This,pResult)	\
+    (This)->lpVtbl -> CountPaletteLayoutElements(This,pResult)
+
+#define IAAFRGBADescriptor2_SetPaletteLayout(This,numberElements,PaletteLayoutArray)	\
+    (This)->lpVtbl -> SetPaletteLayout(This,numberElements,PaletteLayoutArray)
+
+#define IAAFRGBADescriptor2_GetPaletteLayout(This,numberElements,PaletteLayoutArray)	\
+    (This)->lpVtbl -> GetPaletteLayout(This,numberElements,PaletteLayoutArray)
+
+#define IAAFRGBADescriptor2_SetComponentMaxRef(This,componentMaxRef)	\
+    (This)->lpVtbl -> SetComponentMaxRef(This,componentMaxRef)
+
+#define IAAFRGBADescriptor2_GetComponentMaxRef(This,pComponentMaxRef)	\
+    (This)->lpVtbl -> GetComponentMaxRef(This,pComponentMaxRef)
+
+#define IAAFRGBADescriptor2_SetComponentMinRef(This,componentMinRef)	\
+    (This)->lpVtbl -> SetComponentMinRef(This,componentMinRef)
+
+#define IAAFRGBADescriptor2_GetComponentMinRef(This,pComponentMinRef)	\
+    (This)->lpVtbl -> GetComponentMinRef(This,pComponentMinRef)
+
+#define IAAFRGBADescriptor2_SetAlphaMaxRef(This,alphaMaxRef)	\
+    (This)->lpVtbl -> SetAlphaMaxRef(This,alphaMaxRef)
+
+#define IAAFRGBADescriptor2_GetAlphaMaxRef(This,pAlphaMaxRef)	\
+    (This)->lpVtbl -> GetAlphaMaxRef(This,pAlphaMaxRef)
+
+#define IAAFRGBADescriptor2_SetAlphaMinRef(This,alphaMinRef)	\
+    (This)->lpVtbl -> SetAlphaMinRef(This,alphaMinRef)
+
+#define IAAFRGBADescriptor2_GetAlphaMinRef(This,pAlphaMinRef)	\
+    (This)->lpVtbl -> GetAlphaMinRef(This,pAlphaMinRef)
+
+#define IAAFRGBADescriptor2_SetScanningDirection(This,scanningDirection)	\
+    (This)->lpVtbl -> SetScanningDirection(This,scanningDirection)
+
+#define IAAFRGBADescriptor2_GetScanningDirection(This,pScanningDirection)	\
+    (This)->lpVtbl -> GetScanningDirection(This,pScanningDirection)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_SetPixelLayout_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [in] */ aafUInt32 numberElements,
+    /* [in] */ aafRGBAComponent_t __RPC_FAR *PixelLayoutArray);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_SetPixelLayout_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_CountPixelLayoutElements_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pResult);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_CountPixelLayoutElements_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_GetPixelLayout_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [in] */ aafUInt32 numberElements,
+    /* [size_is][out] */ aafRGBAComponent_t __RPC_FAR *PixelLayoutArray);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_GetPixelLayout_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_SetPalette_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [in] */ aafUInt32 numberElements,
+    /* [size_is][in] */ aafUInt8 __RPC_FAR *pPalette);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_SetPalette_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_GetPalette_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [in] */ aafUInt32 numberRecords,
+    /* [size_is][out] */ aafUInt8 __RPC_FAR *pPalette);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_GetPalette_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_GetPaletteSize_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pNumberBytes);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_GetPaletteSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_CountPaletteLayoutElements_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pResult);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_CountPaletteLayoutElements_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_SetPaletteLayout_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [in] */ aafUInt32 numberElements,
+    /* [in] */ aafRGBAComponent_t __RPC_FAR *PaletteLayoutArray);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_SetPaletteLayout_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_GetPaletteLayout_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [in] */ aafUInt32 numberElements,
+    /* [size_is][out] */ aafRGBAComponent_t __RPC_FAR *PaletteLayoutArray);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_GetPaletteLayout_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_SetComponentMaxRef_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [in] */ aafUInt32 componentMaxRef);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_SetComponentMaxRef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_GetComponentMaxRef_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pComponentMaxRef);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_GetComponentMaxRef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_SetComponentMinRef_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [in] */ aafUInt32 componentMinRef);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_SetComponentMinRef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_GetComponentMinRef_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pComponentMinRef);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_GetComponentMinRef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_SetAlphaMaxRef_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [in] */ aafUInt32 alphaMaxRef);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_SetAlphaMaxRef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_GetAlphaMaxRef_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pAlphaMaxRef);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_GetAlphaMaxRef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_SetAlphaMinRef_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [in] */ aafUInt32 alphaMinRef);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_SetAlphaMinRef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_GetAlphaMinRef_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pAlphaMinRef);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_GetAlphaMinRef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_SetScanningDirection_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [in] */ aafScanningDirection_t scanningDirection);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_SetScanningDirection_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRGBADescriptor2_GetScanningDirection_Proxy( 
+    IAAFRGBADescriptor2 __RPC_FAR * This,
+    /* [out] */ aafScanningDirection_t __RPC_FAR *pScanningDirection);
+
+
+void __RPC_STUB IAAFRGBADescriptor2_GetScanningDirection_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFRGBADescriptor2_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFSearchSource_INTERFACE_DEFINED__
 #define __IAAFSearchSource_INTERFACE_DEFINED__
 
@@ -41287,7 +41842,7 @@ void __RPC_STUB IAAFTypeDefVariableArrayEx_InsertElement_Stub(
 #endif 	/* __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0225 */
+/* interface __MIDL_itf_AAF_0226 */
 /* [local] */ 
 
   //***********************************************************
@@ -41382,8 +41937,8 @@ STDAPI AAFGetLibraryPathName (
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0225_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0225_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0226_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0226_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
