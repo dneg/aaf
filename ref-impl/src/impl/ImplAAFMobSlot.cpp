@@ -30,6 +30,7 @@
 
 #include <assert.h>
 #include "AAFResult.h"
+#include "aafCvt.h"
 #include "aafErr.h"
 
 ImplAAFMobSlot::ImplAAFMobSlot ()
@@ -194,3 +195,61 @@ ImplAAFMobSlot::GetObjectClass(aafUID_t * pClass)
   return AAFRESULT_SUCCESS;
 }
 
+AAFRESULT ImplAAFMobSlot::FindSegment(aafPosition_t offset,
+										  ImplAAFSegment **segment,
+										  aafRational_t *srcRate,
+										  aafPosition_t *diffPos)
+{
+	ImplAAFSegment	*tmpSegment = NULL;
+	aafPosition_t begPos = CvtInt32toPosition(0, begPos);
+	aafBool					foundClip = AAFFalse;
+
+	if(diffPos == NULL || segment == NULL || srcRate == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	XPROTECT()
+	{
+		/* Initialize return parameters */
+		*diffPos = 0;
+		srcRate->numerator = 0;
+		srcRate->denominator = 1;
+		*segment = NULL;
+				
+		CHECK(GetSegment(&tmpSegment));
+				
+		CHECK(tmpSegment->FindSubSegment(offset, &begPos, segment, &foundClip));
+		if(!foundClip)
+			RAISE(AAFRESULT_TRAVERSAL_NOT_POSS);
+
+		/* Calculate diffPos - difference between requested offset and
+		* the beginning of clip that contains it. 
+		*/
+		*diffPos = offset;
+		
+	} /* XPROTECT */
+	XEXCEPT
+	{
+	}
+	XEND;
+	return(AAFRESULT_SUCCESS);
+}
+
+AAFRESULT ImplAAFMobSlot::ConvertToEditRate(aafPosition_t tmpPos,
+										aafRational_t destRate,
+										aafPosition_t *convertPos)
+{
+	if(convertPos == NULL )
+		return(AAFRESULT_NULL_PARAM);
+	*convertPos = tmpPos;		// if static (not time-based) slot, assume 1-1 mapping!!!
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT ImplAAFMobSlot::ConvertToMyRate(aafPosition_t tmpPos,
+										  ImplAAFMobSlot *srcSlot,
+										aafPosition_t *convertPos)
+{
+	if(convertPos == NULL )
+		return(AAFRESULT_NULL_PARAM);
+	*convertPos = tmpPos;		// if static (not time-based) slot, assume 1-1 mapping!!!
+	return AAFRESULT_SUCCESS;
+}
