@@ -250,6 +250,9 @@ AAFRESULT .this-module::test()
 #startm AD_COM_EXT_CLASS_END 01
 #endm
 
+#startm AD_COM_EXT2_CLASS_END 02
+#endm
+
 #startm AD_ROOT_CLASS_END 00
 #endm
 

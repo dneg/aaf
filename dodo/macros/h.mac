@@ -1037,6 +1037,18 @@ AD_CLASS_END\
 
 #ccccccccccccccccccccccccccc
 #c
+#c Ends a class definition for classes which support more than the
+#c primary COM interface.
+#c
+#c Arguments: additional interface name
+#c
+#startm AD_COM_EXT2_CLASS_END 02
+AD_CLASS_END\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Ends a class definition for AAFRoot
 #c
 #c Arguments: none
