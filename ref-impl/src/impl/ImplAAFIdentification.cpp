@@ -24,16 +24,11 @@
 #include <assert.h>
 
 
-ImplAAFIdentification::ImplAAFIdentification ()
-{}
-
-
 ImplAAFIdentification::~ImplAAFIdentification ()
 {}
 
 
-#if OM_PRESENT
-AAFIdentification::AAFIdentification(
+ImplAAFIdentification::ImplAAFIdentification(
                                      const char* companyName,
                                      const char* productName,
                                      const aafProductVersion_t* productVersion,
@@ -86,11 +81,10 @@ _platform(            PID_IDENTIFICATION_PLATFORM,             "platform")
 
 };
 
-int AAFIdentification::classId(void) const
+int ImplAAFIdentification::classId(void) const
 {
   return CLSID_AAFIDENTIFICATION;
 }
-#endif
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetCompanyName (aafString_t *  /*pCompanyName*/)
