@@ -85,6 +85,14 @@ public:
     //          the <c OMFile> in which this <c OMStorable> resides.
   const char* pathName(void) const;
 
+    // @cmember Find the <c OMStorable> named <p objectName> contained
+    //          within this <c OMStorable>.
+  OMStorable* find(const char* objectName) const;
+
+    // @cmember Find the <c OMProperty> named <p propertyName> contained
+    //          within this <c OMStorable>.
+  OMProperty* findProperty(const char* propertyName) const;
+
     // @cmember Is this <c OMStorable> the root of the object
     //          containment hierarchy.
   bool isRoot(void) const;
