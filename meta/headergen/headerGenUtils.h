@@ -28,7 +28,7 @@
 
 #include "AAFTypes.h"
 
-class ostream;
+#include <iostream.h>
 
 void printBeginGuard(const char* module, ostream& s);
 
