@@ -29,9 +29,8 @@
 
 #include <iostream.h>
 #include <stdio.h>
-#if defined(macintosh) || defined(_MAC)
-#include <wstring.h>
-#endif
+#include <stdlib.h>
+#include <wchar.h>
 #include "AAF.h"
 #include "AAFResult.h"
 #include "AAFSmartPointer.h"
@@ -317,7 +316,7 @@ static void ReadTypeDefRenameFile(aafWChar *pFilename)
 		(void**)&pWordMetaDefinition));
 	aafUInt32 iNameLen;
 	checkResult(pWordMetaDefinition->GetNameBufLen(&iNameLen));
-	checkExpression(iNameLen==2*(wcslen(gpAliasName)+1));
+	checkExpression(iNameLen==sizeof(wchar_t)*(wcslen(gpAliasName)+1));
 	aafWChar *pNameBuf=new aafWChar[iNameLen/sizeof(aafWChar)];
 	checkResult(pWordMetaDefinition->GetName(pNameBuf,iNameLen));
 	checkExpression(!wcscmp(pNameBuf,gpAliasName));

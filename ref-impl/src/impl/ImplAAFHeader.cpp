@@ -74,14 +74,7 @@ typedef ImplAAFSmartPointer<ImplEnumAAFIdentifications>
     ImplEnumAAFIdentificationsSP;
 
 #include <assert.h>
-
-#if defined(__MWERKS__)
-// Since the ansi standard does not define wcslen and the other wide
-// string functions are not normally placed in string.h along with the
-// single-byte string functions, as is done with VC++, CodeWarrior
-// places all of the "wide-string" functions in wstring.h.
-#include <wstring.h>
-#endif
+#include <wchar.h>
 
 #include "ImplAAFObjectCreation.h"
 

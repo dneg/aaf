@@ -45,7 +45,7 @@
 #include <string.h>
 #include "ImplAAFSourceClip.h"
 #include "aafErr.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 #include "aafCvt.h"
 #include "ImplAAFMobSlot.h"
 #include "ImplAAFMob.h"

@@ -34,7 +34,6 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
-
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
@@ -123,7 +122,7 @@ struct HeaderTest
 extern "C" HRESULT CAAFHeader_test()
 {
   HRESULT hr = AAFRESULT_SUCCESS;
-  wchar_t fileName[] = L"AAFHeaderTest.aaf";
+  wchar_t *fileName = L"AAFHeaderTest.aaf";
   HeaderTest ht;
 
   try
@@ -272,8 +271,9 @@ void HeaderTest::createFile(wchar_t *pFileName)
 {
   // Remove the previous test file if any.
   removeTestFile(pFileName);
-   
+
   check(AAFFileOpenNewModify(pFileName, 0, &_productInfo, &_pFile));
+
   _bFileOpen = true;
   check(_pFile->GetHeader(&_pHeader));
   
@@ -557,7 +557,7 @@ void HeaderTest::openMobs()
 	}
 
 	wchar_t mobName[128], expectedMobName[128];
-    aafUInt32 expectedMobNameLen = (formatMobName(srchItem, expectedMobName) + 1) * 2;
+    aafUInt32 expectedMobNameLen = (formatMobName(srchItem, expectedMobName) + 1) * sizeof(wchar_t);
 	aafUInt32 mobNameLen;
 	check(_pMob->GetNameBufLen(&mobNameLen));
 	if (mobNameLen != expectedMobNameLen)

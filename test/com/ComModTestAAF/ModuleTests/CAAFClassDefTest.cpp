@@ -36,9 +36,8 @@
 
 #include <iostream.h>
 #include <stdio.h>
-#if defined(macintosh) || defined(_MAC)
-#include <wstring.h>
-#endif
+#include <stdlib.h>
+#include <wchar.h>
 
 typedef IAAFSmartPointer<IAAFClassDef>             IAAFClassDefSP;
 typedef IAAFSmartPointer<IAAFDictionary>           IAAFDictionarySP;
@@ -315,7 +314,7 @@ static void VerifyAAFFile(CAAFClassDefTestLog& Log,IAAFFileSP pFile)
 	aafUInt32 iNameBufLen=-1;
 	if(pNewClass->GetNameBufLen(&iNameBufLen)!=S_OK)
 		Log.MarkTestFailed(GET_NAME_BUF_LEN);
-	if(iNameBufLen!=2*(wcslen(pNewClassName)+1))
+	if(iNameBufLen!=sizeof(wchar_t)*(wcslen(pNewClassName)+1))
 		Log.MarkTestFailed(GET_NAME_BUF_LEN);
 
 	aafCharacter pReturnedClassName[100];
