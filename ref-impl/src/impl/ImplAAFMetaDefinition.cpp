@@ -292,6 +292,9 @@ ImplAAFMetaDefinition::bootstrapTypeWeakReference(
     h = pDictionary->LookupTypeDef(id, &result);
     assert(h == 0);
     pDictionary->ReleaseReference();
+
+    // The return value is not reference-counted.
+    result->ReleaseReference();
   }
   assert(result);
   return result;
@@ -314,6 +317,9 @@ ImplAAFMetaDefinition::bootstrapTypeWeakReferenceVectorElement(
     h = pDictionary->LookupTypeDef(id, &result);
     assert(h == 0);
     pDictionary->ReleaseReference();
+
+    // The return value is not reference-counted.
+    result->ReleaseReference();
   }
   assert(result);
   return result;
@@ -335,6 +341,9 @@ ImplAAFMetaDefinition::bootstrapClassWeakReference(
     h = pDictionary->LookupClassDef(id, &result);
     assert(h == 0);
     pDictionary->ReleaseReference();
+
+    // The return value is not reference-counted.
+    result->ReleaseReference();
   }
   assert(result);
   return result;
