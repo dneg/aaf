@@ -39,6 +39,24 @@ class ImplAAFFile;
 
 #include "aafTable.h"
 
+#if OM_PRESENT
+#include "aafErr.h"
+#include "ImplAAFObject.h"
+#include "ImplAAFSession.h"
+#include "ImplAAFIdentification.h"
+
+#include "OMProperty.h"
+
+class AAFDataKind;
+class AAFEffectDef;
+
+const int CLSID_AAFHEADER = 43;
+
+const int PID_HEADER_BYTEORDER          = 0;
+const int PID_HEADER_LASTMODIFIED       = 1;
+const int PID_HEADER_IDENTIFICATIONLIST = 2;
+#endif
+
 class ImplAAFHeader : public ImplAAFObject
 {
 public:
@@ -220,20 +238,30 @@ AAFRESULT CreateTables(void);
 AAFRESULT UpdateFileCLSD(void);
 AAFRESULT CreateDatakindCache(void);
 #endif
+virtual int classId(void) const;
 
 private:
 		ImplAAFFile		*_file;
-		omTable_t       *_dataObjs;
-		omTable_t       *_datadefs;
-		omTable_t       *_effectDefs;
-		omTable_t       *_mobs;
+#if FULL_TOOLKIT
+		aafTable_t       *_dataObjs;
+		aafTable_t       *_datadefs;
+		aafTable_t       *_effectDefs;
+		aafTable_t       *_mobs;
+#endif
 
 		// Non-table instance variables
 		aafVersionType_t	_fileRev;
 		aafProductVersion_t	_toolkitRev;
-		aafInt16			_byteOrder;
-		aafTimeStamp_t		_lastModified;
 
+#if OM_PRESENT
+		// Persistent properties
+    //
+		OMFixedSizeProperty<aafInt16>                      _byteOrder;
+		OMFixedSizeProperty<aafTimeStamp_t>                _lastModified;
+    OMStrongReferenceVectorProperty<AAFIdentification> _identificationList;
+#else
+		aafInt16	_byteOrder;
+#endif
 };
 
 #endif // ! __ImplAAFHeader_h__
