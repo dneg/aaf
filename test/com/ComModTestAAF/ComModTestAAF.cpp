@@ -94,16 +94,6 @@ void formatError(DWORD errorCode)
 }
 #endif
 
-//
-// TEMPORARY
-// Provided to satisfy the linker. This routine needs to be in a
-// public utility file.
-// 
-aafBool	EqualAUID(const aafUID_t *uid1, const aafUID_t *uid2)
-{
-	return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? AAFTrue : AAFFalse);
-}
-
 
 
 //
