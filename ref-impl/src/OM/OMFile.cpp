@@ -10,14 +10,22 @@
 #define OM_CLASS_FACTORY_CAPACITY      (200)
 #define OM_OBJECT_DIRECTORY_CAPACITY  (5000)
 
-OMFile::OMFile(const char* name, const OMAccessMode mode)
-: _name(0), _root(0), _rootStoredObject(0), _classFactory(0),
+OMFile::OMFile(const OMAccessMode mode, OMStoredObject* store)
+: _root(0), _rootStoredObject(store), _classFactory(0),
   _objectDirectory(0), _mode(mode)
 {
   TRACE("OMFile::OMFile");
 
-  _name = new char[strlen(name) + 1];
-  strcpy(_name, name);
+  setName("/");
+}
+
+OMFile::OMFile(const OMAccessMode mode,
+               OMStoredObject* store,
+               OMStorable* root)
+: _root(root), _rootStoredObject(store), _classFactory(0),
+  _objectDirectory(0), _mode(mode)
+{
+  TRACE("OMFile::OMFile");
 
   setName("/");
 }
@@ -26,38 +34,36 @@ OMFile::~OMFile(void)
 {
   TRACE("OMFile::~OMFile");
 
-  delete _name;
-  _name = 0;
   delete _classFactory;
   _classFactory = 0;
   delete _objectDirectory;
   _objectDirectory = 0;
 }
 
-OMFile* OMFile::openRead(const char* fileName)
+OMFile* OMFile::openRead(const wchar_t* fileName)
 {
   TRACE("OMFile::openRead");
-  PRECONDITION("Valid file name", validString(fileName));
+  PRECONDITION("Valid file name", validWideString(fileName));
 
-  OMFile* newFile = new OMFile(fileName, readOnlyMode);
-  newFile->openRead();
+  OMStoredObject* store = OMStoredObject::openRead(fileName);
+  OMFile* newFile = new OMFile(readOnlyMode, store);
   return newFile;
 }
 
-OMFile* OMFile::openModify(const char* fileName)
+OMFile* OMFile::openModify(const wchar_t* fileName)
 {
   TRACE("OMFile::openModify");
-  PRECONDITION("Valid file name", validString(fileName));
+  PRECONDITION("Valid file name", validWideString(fileName));
 
-  OMFile* newFile = new OMFile(fileName, modifyMode);
-  newFile->openModify();
+  OMStoredObject* store = OMStoredObject::openModify(fileName);
+  OMFile* newFile = new OMFile(modifyMode, store);
   return newFile;
 }
 
-OMFile* OMFile::createWrite(const char* fileName, const OMStorable* root)
+OMFile* OMFile::createWrite(const wchar_t* fileName, OMStorable* root)
 {
   TRACE("OMFile::createWrite");
-  PRECONDITION("Valid file name", validString(fileName));
+  PRECONDITION("Valid file name", validWideString(fileName));
   PRECONDITION("Valid root", root != 0);
 
   // Not yet implemented.
@@ -66,41 +72,15 @@ OMFile* OMFile::createWrite(const char* fileName, const OMStorable* root)
 }
 
 
-OMFile* OMFile::createModify(const char* fileName, const OMStorable* root)
+OMFile* OMFile::createModify(const wchar_t* fileName, OMStorable* root)
 {
   TRACE("OMFile::createModify");
-  PRECONDITION("Valid file name", validString(fileName));
+  PRECONDITION("Valid file name", validWideString(fileName));
   PRECONDITION("Valid root", root != 0);
 
-  OMFile* newFile = new OMFile(fileName, modifyMode);
-  newFile->createModify(root);
+  OMStoredObject* store = OMStoredObject::createModify(fileName);
+  OMFile* newFile = new OMFile(modifyMode, store, root);
   return newFile;
-}
-
-void OMFile::openRead(void)
-{
-  TRACE("OMFile::openRead");
-  ASSERT("Valid mode", _mode == readOnlyMode);
-
-  _rootStoredObject = OMStoredObject::openRead(_name);
-}
-
-void OMFile::openModify(void)
-{
-  TRACE("OMFile::openModify");
-  ASSERT("Valid mode", _mode == modifyMode);
-
-  _rootStoredObject = OMStoredObject::openModify(_name);
-}
-
-void OMFile::createModify(const OMStorable* root)
-{
-  TRACE("File::createModify");
-  PRECONDITION("Valid root object", root != 0);
-  ASSERT("Mode is modify", _mode == modifyMode);
-
-  _root = const_cast<OMStorable*>(root);
-  _rootStoredObject = OMStoredObject::createModify(_name);
 }
 
 void OMFile::save(void)

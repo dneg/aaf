@@ -81,18 +81,18 @@ public:
   static AAFRESULT test();
 
 AAFRESULT Create(
-			aafDataBuffer_t		stream, 
+			aafWChar*		stream, 
 			ImplAAFSession *	session, 
 			aafFileRev_t		rev);
 AAFRESULT OpenRead(
-			aafDataBuffer_t		stream, 
+			aafWChar*		stream, 
 			ImplAAFSession *	session);
 AAFRESULT OpenModify(
-			aafDataBuffer_t		stream, 
+			aafWChar*		stream, 
 			ImplAAFSession *	session);
 private:
 
-	AAFRESULT InternOpenFile(aafDataBuffer_t stream, 
+	AAFRESULT InternOpenFile(aafWChar* stream, 
 								   ImplAAFSession * session,
 								   OMLContainerUseMode useMode, 
 								   openType_t type);

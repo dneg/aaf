@@ -198,7 +198,7 @@ ImplAAFFile::~ImplAAFFile ()
  *		OM_ERR_NOTAAFFILE - The file is not an AAF file.
  *		OM_ERR_BADOPEN - The file is an AAF file, but fails to open.
  */
-AAFRESULT ImplAAFFile::InternOpenFile(aafDataBuffer_t stream, 
+AAFRESULT ImplAAFFile::InternOpenFile(aafWChar* stream, 
 								   ImplAAFSession * session,
 								   OMLContainerUseMode useMode, 
 								   openType_t type)
@@ -233,10 +233,11 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafDataBuffer_t stream,
 
 		if (stream == NULL) 
 		  RAISE(OM_ERR_NULL_PARAM);
-		
+
+#if FULL_TOOLKIT		
 		myRefCon = createRefConForMyHandlers(session->GetContainerSession(), 
 											 (char *) stream, (GetUpdatingTargetType)NULL, this);
-#if FULL_TOOLKIT
+
 		aafCheckBentoRaiseError(this, OM_ERR_BADSESSIONMETA);
 #endif
 		
@@ -248,7 +249,7 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafDataBuffer_t stream,
 		session->ResetBentoError();
 #endif
 		_container = new OMContainer;
-		_container->OMLOpenContainer(session->GetContainerSession(), myRefCon, "AAF", 
+		_container->OMLOpenContainer(stream, session->GetContainerSession(), myRefCon, "AAF", 
 									useMode, _head);
 		if (_container == NULL)
 		{
@@ -341,7 +342,7 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafDataBuffer_t stream,
  *		Standard errors (see top of file).
  */
 AAFRESULT ImplAAFFile::Create(
-			aafDataBuffer_t		stream, 
+			aafWChar*		stream, 
 			ImplAAFSession		*session, 
 			aafFileRev_t		rev)
 {
@@ -368,10 +369,11 @@ AAFRESULT ImplAAFFile::Create(
 #endif
 		_setrev = rev;
 		_openType = kOmCreate;
-		
+
+#if FULL_TOOLKIT		
 		myRefCon = createRefConForMyHandlers(session->GetContainerSession(), 
 											 (char *) stream, (GetUpdatingTargetType)NULL, this);
-#if FULL_TOOLKIT
+
 		aafCheckBentoRaiseError(this, OM_ERR_BADSESSIONMETA);
 #endif
 		head = dynamic_cast<ImplAAFHeader*>(CreateImpl(CLSID_AAFHeader));
@@ -395,7 +397,7 @@ AAFRESULT ImplAAFFile::Create(
 #endif
 		
 		_container = new OMContainer;
-		_container->OMLOpenNewContainer(_head, session->GetContainerSession(), myRefCon,
+		_container->OMLOpenNewContainer(stream, _head, session->GetContainerSession(), myRefCon,
 												"AAF",
 												(OMLContainerUseMode) kOMLWriting,
 												1, 0, 0);
@@ -449,7 +451,7 @@ AAFRESULT ImplAAFFile::Create(
  *		OM_ERR_BADOPEN - The file is an AAF file, but fails to open.
  */
 AAFRESULT ImplAAFFile::OpenRead(
-			aafDataBuffer_t		stream, 
+			aafWChar*		stream, 
 			ImplAAFSession *	session)
 {
 	return (InternOpenFile(stream, session, (OMLContainerUseMode) 0, 
@@ -478,7 +480,7 @@ AAFRESULT ImplAAFFile::OpenRead(
  *		OM_ERR_BADOPEN - The file is an AAF file, but fails to open.
  */
 AAFRESULT ImplAAFFile::OpenModify(
-			aafDataBuffer_t		stream, 
+			aafWChar*		stream, 
 			ImplAAFSession *	session)
 {
 	aafInt32	numIdent;
