@@ -26,6 +26,8 @@
 
 #include "OMDataTypes.h"
 
+#include <stddef.h>
+
 class OMType;
 
   // @class Abstract base class used to define persistent properties
