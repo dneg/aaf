@@ -80,8 +80,42 @@ static void convert(wchar_t* wcName, size_t length, const wchar_t* name);
 static void check(HRESULT status);
 
 #if defined(OM_ENABLE_DEBUG)
+void OMMSSStoredObject::incrementOpenStreamCount(void)
+{
+  TRACE("OMMSSStoredObject::incrementOpenStreamCount");
+  _openStreams = _openStreams + 1;
+  if (_openStreams > _maxOpenStreams) {
+    _maxOpenStreams = _openStreams;
+  }
+}
+
+void OMMSSStoredObject::decrementOpenStreamCount(void)
+{
+  TRACE("OMMSSStoredObject::decrementOpenStreamCount");
+  PRECONDITION("Non zero count", _openStreams != 0);
+  _openStreams = _openStreams - 1;
+}
+
+void OMMSSStoredObject::incrementOpenStorageCount(void)
+{
+  TRACE("OMMSSStoredObject::incrementOpenStorageCount");
+  _openStorages = _openStorages + 1;
+  if (_openStorages > _maxOpenStorages) {
+    _maxOpenStorages = _openStorages;
+  }
+}
+
+void OMMSSStoredObject::decrementOpenStorageCount(void)
+{
+  TRACE("OMMSSStoredObject::decrementOpenStorageCount");
+  PRECONDITION("Non zero count", _openStorages != 0);
+  _openStorages = _openStorages - 1;
+}
+
 size_t OMMSSStoredObject::_openStorages = 0;
+size_t OMMSSStoredObject::_maxOpenStorages = 0;
 size_t OMMSSStoredObject::_openStreams = 0;
+size_t OMMSSStoredObject::_maxOpenStreams = 0;
 #endif
 
   // @mfunc Open the root <c OMMSSStoredObject> in the disk file
@@ -2477,7 +2511,7 @@ void OMMSSStoredObject::closeStream(IStream*& stream)
 #endif
   stream = 0;
 #if defined(OM_ENABLE_DEBUG)
-  _openStreams = _openStreams - 1;
+  decrementOpenStreamCount();
 #endif
 }
 
@@ -2651,7 +2685,7 @@ OMMSSStoredObject* OMMSSStoredObject::openFile(const wchar_t* fileName,
   check(status);
   ASSERT("StgOpenStorage() succeeded", SUCCEEDED(status));
 #if defined(OM_ENABLE_DEBUG)
-  _openStorages = _openStorages + 1;
+  incrementOpenStorageCount();
 #endif
 
   OMMSSStoredObject* newStoredObject = new OMMSSStoredObject(storage);
@@ -2678,7 +2712,7 @@ OMMSSStoredObject* OMMSSStoredObject::createFile(const wchar_t* fileName)
   check(status);
   ASSERT("StgCreateDocfile() succeeded", SUCCEEDED(status));
 #if defined(OM_ENABLE_DEBUG)
-  _openStorages = _openStorages + 1;
+  incrementOpenStorageCount();
 #endif
 
   OMMSSStoredObject* newStoredObject = new OMMSSStoredObject(storage);
@@ -2717,7 +2751,7 @@ OMMSSStoredObject* OMMSSStoredObject::openFile(OMRawStorage* rawStorage,
   check(status);
   ASSERT("StgOpenStorageOnILockBytes() succeeded", SUCCEEDED(status));
 #if defined(OM_ENABLE_DEBUG)
-  _openStorages = _openStorages + 1;
+  incrementOpenStorageCount();
 #endif
 
   iLockBytes->Release();
@@ -2745,7 +2779,7 @@ OMMSSStoredObject* OMMSSStoredObject::createFile(OMRawStorage* rawStorage)
   check(status);
   ASSERT("StgCreateDocfileOnILockBytes() succeeded", SUCCEEDED(status));
 #if defined(OM_ENABLE_DEBUG)
-  _openStorages = _openStorages + 1;
+  incrementOpenStorageCount();
 #endif
 
   iLockBytes->Release();
@@ -2927,7 +2961,7 @@ IStream* OMMSSStoredObject::createStream(IStorage* storage,
   check(status);
   ASSERT("IStorage::CreateStream() succeeded", SUCCEEDED(status));
 #if defined(OM_ENABLE_DEBUG)
-  _openStreams = _openStreams + 1;
+  incrementOpenStreamCount();
 #endif
 
   return stream;
@@ -2960,7 +2994,7 @@ IStream* OMMSSStoredObject::openStream(IStorage* storage,
   check(status);
   ASSERT("IStorage::OpenStream() succeeded", SUCCEEDED(status));
 #if defined(OM_ENABLE_DEBUG)
-  _openStreams = _openStreams + 1;
+  incrementOpenStreamCount();
 #endif
 
   return stream;
@@ -2991,7 +3025,7 @@ IStorage* OMMSSStoredObject::createStorage(IStorage* storage,
   check(status);
   ASSERT("IStorage::CreateStorage() succeeded", SUCCEEDED(status));
 #if defined(OM_ENABLE_DEBUG)
-  _openStorages = _openStorages + 1;
+  incrementOpenStorageCount();
 #endif
 
   return newStorage;
@@ -3028,7 +3062,7 @@ IStorage* OMMSSStoredObject::openStorage(IStorage* storage,
   check(status);
   ASSERT("IStorage::OpenStorage() succeeded", SUCCEEDED(status));
 #if defined(OM_ENABLE_DEBUG)
-  _openStorages = _openStorages + 1;
+  incrementOpenStorageCount();
 #endif
 
   return newStorage;
@@ -3047,7 +3081,7 @@ void OMMSSStoredObject::closeStorage(IStorage*& storage)
 #endif
   storage = 0;
 #if defined(OM_ENABLE_DEBUG)
-  _openStorages = _openStorages - 1;
+  decrementOpenStorageCount();
 #endif
 }
 

@@ -548,8 +548,15 @@ private:
   bool _reorderBytes;
 
 #if defined(OM_ENABLE_DEBUG)
+  static void incrementOpenStreamCount(void);
+  static void decrementOpenStreamCount(void);
+  static void incrementOpenStorageCount(void);
+  static void decrementOpenStorageCount(void);
+
   static size_t _openStorages;
+  static size_t _maxOpenStorages;
   static size_t _openStreams;
+  static size_t _maxOpenStreams;
 #endif
 };
 
