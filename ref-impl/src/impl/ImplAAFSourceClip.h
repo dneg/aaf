@@ -154,11 +154,11 @@ public:
 
   // Override from AAFSourceReference
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetSourceMobSlotID (/*[retval][out]*/ aafTrackID_t *  pMobSlotID);
+    GetSourceMobSlotID (/*[retval][out]*/ aafSlotID_t *  pMobSlotID);
 
   // Override from AAFSourceReference
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetSourceMobSlotID (/*[in]*/ aafTrackID_t   mobSlotID);
+    SetSourceMobSlotID (/*[in]*/ aafSlotID_t   mobSlotID);
 
 
 
