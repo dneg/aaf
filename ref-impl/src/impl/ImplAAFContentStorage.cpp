@@ -226,9 +226,6 @@ AAFRESULT STDMETHODCALLTYPE
 	if (NULL == pMob)
 		return AAFRESULT_NULL_PARAM;
 
-	if (pMob->attached ())
-	    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
-
 	XPROTECT()
 	{
 		CHECK(pMob->GetMobID(&mobID));
@@ -236,6 +233,9 @@ AAFRESULT STDMETHODCALLTYPE
 		// JeffB: Test is a throwaway, so don't bump the refcount
 		if(!_mobs.contains((*reinterpret_cast<const OMMaterialIdentification *>(&mobID))))
 		{
+			if (pMob->attached ())
+				return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+				
 			_mobs.appendValue(pMob);
 			// trr - We are saving a copy of pointer in _mobs so we need
 			// to bump its reference count.
@@ -393,9 +393,6 @@ AAFRESULT STDMETHODCALLTYPE
 	if (NULL == pEssenceData)
 		return AAFRESULT_NULL_PARAM;
 
-	if (pEssenceData->attached())
-		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
-
 	XPROTECT()
 	{
 		CHECK(pEssenceData->GetFileMobID(&mobID));
@@ -403,6 +400,9 @@ AAFRESULT STDMETHODCALLTYPE
 		// JeffB: Test is a throwaway, so don't bump the refcount
 		if(!_essenceData.contains((*reinterpret_cast<const OMMaterialIdentification *>(&mobID))))
 		{
+			if (pEssenceData->attached())
+				return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+				
 			_essenceData.appendValue(pEssenceData);
 			// trr - We are saving a copy of pointer in _mobs so we need
 			// to bump its reference count.
