@@ -253,7 +253,7 @@ template <class TypeDst>
 inline bool AxIsA( IUnknownSP sp, IAAFSmartPointer<TypeDst>& spDst )
 {
 	HRESULT hr;
-	TypeDst* dummy;
+	TypeDst* dummy = NULL;
 
 	hr = sp->QueryInterface( AxIID( dummy ),
 				 reinterpret_cast<void**>(&spDst) );
