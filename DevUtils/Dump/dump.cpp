@@ -86,19 +86,31 @@
 #error "Can't determine host operating system"
 #endif
 
-#if defined(_MAC) || defined(macintosh)
+// Determine which implementation of structured storage to use.
+//
+#if defined(OM_OS_WINDOWS)
+#define OM_WINDOWS_SS
+#elif defined(OM_OS_MACOS)
+#define OM_MACINTOSH_SS
+#elif defined(OM_OS_UNIX)
+#define OM_REFERENCE_SS
+#else
+#error "Don't know which implementation of structured storage to use."
+#endif
 
+// Include the structured storage headers. These are different
+// depending on the implementation.
+//
+#if defined(OM_WINDOWS_SS)
+#include <objbase.h>
+#elif defined(OM_MACINTOSH_SS)
 #include "wintypes.h"
 #include "compobj.h"
 #include "storage.h"
-
-// define standard guids
 #include <initguid.h>
 #include <coguid.h>
-#elif defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
+#elif defined(OM_REFERENCE_SS)
 #include "h/storage.h"
-#else
-#include <objbase.h>
 #endif
 
 #if defined(_WIN32) && defined(UNICODE)
@@ -1127,7 +1139,7 @@ void indent(int level)
   }
 }
 
-#if defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
+#if defined(OM_REFERENCE_SS)
 
 static const unsigned char guidMap[] =
 { 3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15 }; 
