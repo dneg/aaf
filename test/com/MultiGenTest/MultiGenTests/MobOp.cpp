@@ -282,4 +282,29 @@ void CountComments::RunTest( CmdState& state, int argc, char** argv )
 
 //====================================================================
 
+STANDARD_TEST_DECLARATION(CopyMob);
+StandardFactory<CopyMob> CopyMobFactory(
+  "CopyMob",
+  "Copy a mob.",
+  "mob_name copied_mob_name",
+  "Excercise the mob cloning code by cloning a mob with a single file.",
+  3, 3
+  );
+
+void CopyMob::RunTest( CmdState& state, int argc, char** argv )
+{
+  const char* name        = argv[1];
+  const char* copied_name = argv[2];
+
+  IAAFSmartPointer<IAAFMob> mob;
+  get_mob_throw_if_not_found( state, name, mob );
+
+  IAAFSmartPointer<IAAFMob> copiedMob;
+
+  auto_ptr<wchar_t> wcopiedName( ToWideString(copied_name) );
+  CHECK_HRESULT( mob->Copy( wcopiedName.get(), &copiedMob ) );
+}
+
+//====================================================================
+
 } // end of namespace
