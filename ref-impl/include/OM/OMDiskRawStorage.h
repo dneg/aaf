@@ -67,7 +67,7 @@ public:
   OMDiskRawStorage(FILE* file, OMFile::OMAccessMode accessMode);
 
     // @cmember Destructor.
-  ~OMDiskRawStorage(void);
+  virtual ~OMDiskRawStorage(void);
 
     // @cmember Attempt to read the number of bytes given by <p byteCount>
     //          from this <c OMDiskRawStorage> at <p offset> into the buffer
@@ -89,14 +89,14 @@ public:
     //          to be extended, however such extension can fail, causing
     //          <p bytesWritten> to be less than <p byteCount>.
   virtual void writeAt(OMUInt64 offset,
-                       OMByte* bytes,
+                       const OMByte* bytes,
                        OMUInt32 byteCount,
                        OMUInt32& bytesWritten);
 
-    // @cmember The current size of this <c OMDiskRawStorage>.
+    // @cmember The current size of this <c OMDiskRawStorage> in byres.
   virtual OMUInt64 size(void) const;
 
-    // @cmember Set the size of this <c OMDiskRawStorage> to <p newSize>.
+    // @cmember Set the size of this <c OMDiskRawStorage> to <p newSize> bytes.
     //          If <p newSize> is greater than <mf OMRawStorage::size>
     //          then this <c OMDiskRawStorage> is extended. If <p newSize>
     //          is less than <mf OMRawStorage::size> then this

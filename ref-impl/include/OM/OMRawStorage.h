@@ -78,16 +78,16 @@ public:
     //          to be extended, however such extension can fail, causing
     //          <p bytesWritten> to be less than <p byteCount>.
   virtual void writeAt(OMUInt64 offset,
-                       OMByte* bytes,
+                       const OMByte* bytes,
                        OMUInt32 byteCount,
                        OMUInt32& bytesWritten) = 0;
 
-    // @cmember The current size of this <c OMRawStorage>.
+    // @cmember The current size of this <c OMRawStorage> in bytes.
     //   @devnote This method does not make sense for <c OMRawStorage>
     //            implemented on a stream
   virtual OMUInt64 size(void) const = 0;
 
-    // @cmember Set the size of this <c OMRawStorage> to <p newSize>.
+    // @cmember Set the size of this <c OMRawStorage> to <p newSize> bytes.
     //          If <p newSize> is greater than <mf OMRawStorage::size>
     //          then this <c OMRawStorage> is extended. If <p newSize>
     //          is less than <mf OMRawStorage::size> then this

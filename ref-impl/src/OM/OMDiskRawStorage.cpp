@@ -85,12 +85,16 @@ OMDiskRawStorage::openNewModify(const wchar_t* fileName)
 OMDiskRawStorage::OMDiskRawStorage(FILE* file,
                                    OMFile::OMAccessMode accessMode)
 {
+  TRACE("OMDiskRawStorage::OMDiskRawStorage");
+
   // TBS
 }
 
   // @mfunc Destructor.
 OMDiskRawStorage::~OMDiskRawStorage(void)
 {
+  TRACE("OMDiskRawStorage::~OMDiskRawStorage");
+
   // TBS
 }
 
@@ -114,6 +118,8 @@ void OMDiskRawStorage::readAt(OMUInt64 offset,
                               OMUInt32& bytesRead) const
 {
   TRACE("OMDiskRawStorage::readAt");
+
+  // TBS
 }
 
   // @mfunc Attempt to write the number of bytes given by <p byteCount>
@@ -130,14 +136,16 @@ void OMDiskRawStorage::readAt(OMUInt64 offset,
   //   @devnote fseek takes a long int for offset this may not be sufficient
   //            for 64-bit offsets.
 void OMDiskRawStorage::writeAt(OMUInt64 offset,
-                               OMByte* bytes,
+                               const OMByte* bytes,
                                OMUInt32 byteCount,
                                OMUInt32& bytesWritten)
 {
   TRACE("OMDiskRawStorage::writeAt");
+
+  // TBS
 }
 
-  // @mfunc The current size of this <c OMDiskRawStorage>.
+  // @mfunc The current size of this <c OMDiskRawStorage> in bytes.
   //   @rdesc The current size of this <c OMDiskRawSrorage> in bytes.
   //   @this const
 OMUInt64 OMDiskRawStorage::size(void) const
@@ -148,7 +156,7 @@ OMUInt64 OMDiskRawStorage::size(void) const
   return 0;
 }
 
-  // @mfunc Set the size of this <c OMDiskRawStorage> to <p newSize>.
+  // @mfunc Set the size of this <c OMDiskRawStorage> to <p newSize> bytes.
   //        If <p newSize> is greater than <mf OMRawStorage::size>
   //        then this <c OMDiskRawStorage> is extended. If <p newSize>
   //        is less than <mf OMRawStorage::size> then this
@@ -158,4 +166,6 @@ OMUInt64 OMDiskRawStorage::size(void) const
 void OMDiskRawStorage::setSize(OMUInt64 newSize)
 {
   TRACE("OMDiskRawStorage::setSize");
+
+  // TBS
 }
