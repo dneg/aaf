@@ -66,7 +66,7 @@ public:
 private:
 
 	OMFixedSizeProperty<aafUID_t>				_parmDef;
-	OMFixedSizeProperty<aafUID_t>				_typeDef;
+//!!!	OMFixedSizeProperty<aafUID_t>				_typeDef;
 };
 
 #endif // ! __ImplAAFParameter_h__
