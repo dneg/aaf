@@ -978,7 +978,7 @@ void AdminMobGetNthPersonnel (IAAFDictionary * pDict,
     check (tda->GetElementValue (pva, index, &pvr));
 
     // Get the object contained in that property value
-    check (tdo->GetObject (pvr, personnelResource));
+    check (tdo->GetObject (pvr, IID_IAAFObject, (IUnknown **)personnelResource));
 
     pvr->Release();
     pvr=NULL;
