@@ -17,8 +17,8 @@ AD_IDL(//
 // These are kept in an ordered array\, with the first entry being the file
 // creator\, and the last entry being the last application to modify the file.
 //
-// The identification object is useful for technical support when dealing with
-// broken AAF files\, as it tells which applications \(and versions\) have touched
+// The identification object is useful for technical support when diagnosing problem
+// AAF files\, as it tells which applications \(and versions\) have touched
 // the file.   If a file has been modified by multiple applications\, then the
 // date and productID fields can be used to tell which changes to the
 // file were made by a particular application.
