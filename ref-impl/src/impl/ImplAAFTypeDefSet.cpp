@@ -746,3 +746,18 @@ void ImplAAFTypeDefSet::onRestore(void* clientContext) const
 {
   ImplAAFTypeDef::onRestore(clientContext);
 }
+
+// Method is called after associated class has been added to MetaDictionary.
+// If this method fails the class is removed from the MetaDictionary and the
+// registration method will fail.
+HRESULT ImplAAFTypeDefSet::CompleteClassRegistration(void)
+{
+  ImplAAFTypeDefSP pElementType;
+  AAFRESULT rc = GetElementType(&pElementType);
+  if (AAFRESULT_SUCCEEDED(rc))
+  {
+    rc = pElementType->CompleteClassRegistration();
+  }
+
+  return rc;
+}
