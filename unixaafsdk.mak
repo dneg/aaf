@@ -148,7 +148,9 @@ TOOLKIT_AAFLIB_DEBUG = $(AAFBUILDDIR)/aaflib/debug
 TOOLKIT_AAFLIB_RELEASE = $(AAFBUILDDIR)/aaflib
 TOOLKIT_AAFIID_DEBUG = $(AAFBUILDDIR)/aafiid/debug
 TOOLKIT_AAFIID_RELEASE = $(AAFBUILDDIR)/aafiid
-OMF_LIBS = $(AAFTOOLKIT)/OMF/IrixLibs
+ifeq ($(AAFPLATFORM), MipsIrix)
+    OMF_LIBS = $(AAFTOOLKIT)/OMF/IrixLibs
+endif
 OMF_DLL_NAME = libOMFI.a
 
 #
@@ -289,8 +291,12 @@ endif
 RELEASE_DLL_FILES = \
 	$(AAFSDK_BIN)/libcom-api$(DLL) \
 	$(AAFSDK_BIN_EXT)/libaafintp$(DLL) \
-	$(AAFSDK_BIN_EXT)/libaafpgapi$(DLL) \
+	$(AAFSDK_BIN_EXT)/libaafpgapi$(DLL)
+
+ifdef $(OMF_LIBS)
+RELEASE_DLL_FILES += \
 	$(AAFSDK_BIN)/$(OMF_DLL_NAME)
+endif
 
 #
 # Release dynamic link libraries.
@@ -298,8 +304,12 @@ RELEASE_DLL_FILES = \
 DEBUG_DLL_FILES = \
 	$(AAFSDK_BIN_DEBUG)/libcom-api$(DLL) \
 	$(AAFSDK_BIN_DEBUG_EXT)/libaafintp$(DLL) \
-	$(AAFSDK_BIN_DEBUG_EXT)/libaafpgapi$(DLL) \
+	$(AAFSDK_BIN_DEBUG_EXT)/libaafpgapi$(DLL)
+
+ifdef $(OMF_LIBS)
+DEBUG_DLL_FILES += \
 	$(AAFSDK_BIN_DEBUG)/$(OMF_DLL_NAME)
+endif
 
 
 #
@@ -581,9 +591,10 @@ $(AAFSDK_BIN)/libaafintp$(DLL) : $(TOOLKIT_REFIMPL_RELEASE_EXT)/libaafintp$(DLL)
 $(AAFSDK_BIN)/libaafpgapi$(DLL) : $(TOOLKIT_REFIMPL_RELEASE_EXT)/libaafpgapi$(DLL)
 	$(CP) $(CP_OPTS) $(TOOLKIT_REFIMPL_RELEASE_EXT)/libaafpgapi$(DLL) $@
 
+ifdef $(OMF_LIBS)
 $(AAFSDK_BIN)/$(OMF_DLL_NAME) :
 	$(CP) $(CP_OPTS) $(OMF_LIBS)/$(OMF_DLL_NAME) $@
-	
+endif	
 
 #
 # Dependency and build rules for the Debug DLL targets.
@@ -597,9 +608,10 @@ $(AAFSDK_BIN_DEBUG_EXT)/libaafintp$(DLL) : $(TOOLKIT_REFIMPL_DEBUG_EXT)/libaafin
 $(AAFSDK_BIN_DEBUG_EXT)/libaafpgapi$(DLL) : $(TOOLKIT_REFIMPL_DEBUG_EXT)/libaafpgapi$(DLL)
 	$(CP) $(CP_OPTS) $(TOOLKIT_REFIMPL_DEBUG_EXT)/libaafpgapi$(DLL) $@
 
+ifdef $(OMF_LIBS)
 $(AAFSDK_BIN_DEBUG)/$(OMF_DLL_NAME) :
 	$(CP) $(CP_OPTS) $(OMF_LIBS)/$(OMF_DLL_NAME) $@
-
+endif
 
 #
 # The cleanup rules for all targets created by this make file.
