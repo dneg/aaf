@@ -1,0 +1,24 @@
+#c/*************************************************\
+#c*													*
+#c* Advanced Authoring Format						*
+#c*													*
+#c* Copyright (c) 2000 Avid Technology, Inc.	    *
+#c*													*
+#c\*************************************************/
+#startm .this-module 0
+AAFStreamPropertyValue\
+#endm
+#c
+#startm .parent-module 0
+AAFPropertyValue\
+#endm
+#c
+AD_HEAD
+AD_IDL(//
+// Stub interface for an implementation class with no separate
+// published interface.)
+AD_CLASS_UUID(F06bb6e1, f0c1, 11d2, 84, 2c, 00, 60, 08, 32, ac, b8)
+
+AD_DEFAULT_UUID(F06bb6e2, f0c1, 11d2, 84, 2c, 00, 60, 08, 32, ac, b8)
+AD_XCLASS_BEGIN(Concrete, Transient)
+AD_XCLASS_END(Concrete, Transient)
