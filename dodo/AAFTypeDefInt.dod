@@ -6,13 +6,12 @@ AAFTypeDefInt\
 AAFTypeDef\
 #endm
 #c
+#import ./AAFTypeDef.exp
 AD_HEAD
 AD_IDL(//
 // This interface is used to define Integer types used in AAF persistent
 // objects.
-//
-AD_STD_COMMENT_IFC_HEADER
-AD_STD_COMMENT_IFC_STUB)
+AD_STD_COMMENT_IFC_HEADER)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_CLASS_UUID(809c8ca1, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 
@@ -46,14 +45,21 @@ AD_XMETHOD4(Initialize,
      Initializes this type def to be identified by the given guid\, to
   // have the given size in bytes\, and to be signed or unsigned.
   //
+  // The implementation of this method may only allow certain values
+  // for intSize.  It *will* allow at least 1\, 2\, 4\, and 8-byte
+  // integers; some implementations may allow more than that.
+  //
   // This method must be called after allocation\, and before
   // any other method can be called.
   //
   // Succeeds if:
   // - Initialize\(\) has not yet been called on this object.
-  //
+  // - intSize is a valid value.
   AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_ALREADY_INIT)
+  AD_STD_COMMENT_METH_ERR_ALREADY_INIT
+  //
+  // AAFRESULT_BAD_SIZE
+  //  - intSize is not a valid value.)
 
 
 AD_XMETHOD3(CreateValue,
@@ -84,17 +90,21 @@ AD_XMETHOD3(CreateValue,
   // the value is lsb-justified and sign-extended \(for signed\) or
   // zero-filled \(for unsigned\).
   //
+  // The implementation of this method may only allow certain values
+  // for valSize.  It *will* allow at least 1\, 2\, 4\, and 8-byte
+  // integers; some implementations may allow more than that.
+  //
   // Succeeds if:
   // - The pVal pointer is valid.
   // - The ppPropVal pointer is valid.
   // - valSize is no larger than GetSize\(\) for this typedef.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pVal or ppPropVal\)
   //
   // AAFRESULT_BAD_SIZE
-  //   - valSize is larger than GetSize\(\) for this typedef.)
+  //   - valSize is larger than GetSize\(\) for this typedef\, or
+  //     valSize is not a supported value.)
 
 
 AD_XMETHOD3(GetInteger,
@@ -104,17 +114,17 @@ AD_XMETHOD3(GetInteger,
 			pPropVal,
 			property value from which value is to be read,
 
-			[out\, size_is\(bufSize\)],
+			[out\, size_is\(valSize\)],
 			objPass,
 			aafMemPtr_t,
-			pBuf,
+			pVal,
 			buffer into which value is written,
 
 			[in],
 			objPass,
 			aafUInt32,
-			bufSize,
-			size of pBuf buffer in bytes,
+			valSize,
+			size of pVal buffer in bytes,
 
      Returns the integer value of this property.  The value
   // to set is passed through pVal.  The size of the pVal buffer is
@@ -122,17 +132,30 @@ AD_XMETHOD3(GetInteger,
   // the value is lsb-justified and sign-extended \(for signed\) or
   // zero-filled \(for unsigned\).
   //
+  // valSize may be smaller than GetSize\(\) for this typedef; if so\,
+  // the value is lsb-justified and sign-extended \(for signed\) or
+  // zero-filled \(for unsigned\).
+  //
+  // The implementation of this method may only allow certain values
+  // for valSize.  It *will* allow at least 1\, 2\, 4\, and 8-byte
+  // integers; some implementations may allow more than that.
+  //
   // Succeeds if:
   // - The pPropVal pointer is valid.
-  // - The pBuf pointer is valid.
-  // - bufSize indicates that pBuf is large enough to hold the value.
-  //
+  // - The pVal pointer is valid.
+  // - valSize indicates that pVal is large enough to hold the value.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or pBuf\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or pVal\)
   //
   // AAFRESULT_BAD_SIZE
-  //   - valSize is smaller than GetSize\(\) for this typedef.)
+  //   - valSize is smaller than GetSize\(\) for this typedef\, or
+  //     valSize is not a supported value.
+  //
+  // AAFRESULT_BAD_TYPE
+  //   - The type associated with pPropVal cannot be read as an
+  //     integral type\, or the int size of pPropVal is larger than the
+  //     int size of this type.)
 
 
 AD_XMETHOD3(SetInteger,
@@ -142,17 +165,17 @@ AD_XMETHOD3(SetInteger,
 			pPropVal,
 			property value from which value is to be read,
 
-			[in\, size_is\(bufSize\)],
+			[in\, size_is\(valSize\)],
 			objPass,
-			aafUInt8 *,
-			pBuf,
+			aafMemPtr_t,
+			pVal,
 			buffer from which value is read,
 
 			[in],
 			objPass,
 			aafUInt32,
-			bufSize,
-			size of pBuf buffer in bytes,
+			valSize,
+			size of pVal buffer in bytes,
 
      Sets this property value to the given integer value.  The value
   // to set is passed in pVal\, and the size of the value in pVal is
@@ -162,12 +185,11 @@ AD_XMETHOD3(SetInteger,
   //
   // Succeeds if:
   // - The pPropVal pointer is valid.
-  // - The pBuf pointer is valid.
-  // - bufSize indicates that pBuf is large enough to hold the value.
-  //
+  // - The pVal pointer is valid.
+  // - valSize indicates that pVal is large enough to hold the value.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or pBuf\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or pVal\)
   //
   // AAFRESULT_BAD_SIZE
   //   - valSize is larger than GetSize\(\) for this typedef.)
@@ -185,7 +207,6 @@ AD_XMETHOD1(GetSize,
   //
   // Succeeds if:
   // - The pSize pointer is valid.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pSize\))
@@ -203,8 +224,10 @@ AD_XMETHOD1(IsSigned,
   //
   // Succeeds if:
   // - The pSigned pointer is valid.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pSigned\))
+
+
+AD_OVERRIDE(.method-GetTypeCategory)
 AD_XCLASS_END(Concrete, StoredObject)

@@ -12,7 +12,6 @@ AD_IDL(//
 // in AAF persistent objects.  Values may be simple \(e.g. integer\)\,
 // structured \(e.g. aafTimecode_t\)\, other AAF persistent objects\,
 // media\, or arrays of other types.
-//
 AD_STD_COMMENT_IFC_HEADER
 AD_STD_COMMENT_IFC_STUB)
 AD_FORWARD_DECLARATION(AAFTypeDef)
@@ -36,7 +35,6 @@ AD_XMETHOD1(GetType,
   // Succeeds if:
   // - The ppTypeDef pointer is valid.
   // - The associated type definition can be found in the dictionary.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppTypeDef\))
 
@@ -60,7 +58,6 @@ AD_XMETHOD1(IsDefinedType,
   //
   // Succeeds if:
   // - The pIsDefined pointer is valid.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pIsDefined\))
 AD_XCLASS_END(Concrete, Transient)
