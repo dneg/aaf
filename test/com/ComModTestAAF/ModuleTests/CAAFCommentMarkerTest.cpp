@@ -17,16 +17,11 @@
 
 
 
-#include "CAAFCommentMarker.h"
-#include "CAAFCommentMarker.h"
-#ifndef __CAAFCommentMarker_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFCommentMarker::test()
+extern "C" HRESULT CAAFCommentMarker_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

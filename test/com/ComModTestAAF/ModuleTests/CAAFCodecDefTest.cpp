@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFCodecDef
 /***********************************************\
 *												*
 * Advanced Authoring Format						*
@@ -9,14 +9,7 @@
 *												*
 \***********************************************/
 
-#include "CAAFCodecDef.h"
-#include "CAAFCodecDef.h"
-#ifndef __CAAFCodecDef_h__
-#error - improperly defined include guard
-#endif
-
-// Temporarily necessary global declarations.
-extern "C" const CLSID CLSID_AAFCodecDef; // generated
+#include "AAF.h"
 
 
 #include <iostream.h>
@@ -201,7 +194,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 }
  
 
-HRESULT CAAFCodecDef::test()
+extern "C" HRESULT CAAFCodecDef_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"CodecDefTest.aaf";
@@ -214,7 +207,7 @@ HRESULT CAAFCodecDef::test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFCodecDef::test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFCodecDef_test...Caught general C++ exception!" << endl; 
 	}
 
 	// When all of the functionality of this class is tested, we can return success.

@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFSelector
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -11,9 +11,7 @@
 
 
 
-#ifndef __CAAFSelector_h__
-#include "CAAFSelector.h"
-#endif
+#include "AAF.h"
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
@@ -398,7 +396,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	return 	hr;
 }
 
-HRESULT CAAFSelector::test()
+extern "C" HRESULT CAAFSelector_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"AAFSelectorTest.aaf";
@@ -412,7 +410,7 @@ HRESULT CAAFSelector::test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFSelector::test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFSelector_test...Caught general C++ exception!" << endl; 
 	}
 
 	return hr;

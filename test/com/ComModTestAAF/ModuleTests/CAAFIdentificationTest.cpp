@@ -13,16 +13,11 @@
 
 
 
-#include "CAAFIdentification.h"
-#include "CAAFIdentification.h"
-#ifndef __CAAFIdentification_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFIdentification::test()
+extern "C" HRESULT CAAFIdentification_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFDigitalImageDescriptor
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -10,25 +10,14 @@
 \******************************************/
 
 
-
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
-
-
-
-
-#include "CAAFDigitalImageDescriptor.h"
-#include "CAAFDigitalImageDescriptor.h"
-#ifndef __CAAFDigitalImageDescriptor_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 #include <stdio.h>
 
 #include "AAFStoredObjectIDs.h"
+#include "AAFResult.h"
+
 
 // default test values
 #define kStoredHeightTestVal			248
@@ -365,7 +354,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	return hr;
 }
 
-HRESULT CAAFDigitalImageDescriptor::test()
+extern "C" HRESULT CAAFDigitalImageDescriptor_test()
 {
 	aafWChar*	pFileName = L"AAFDigitalImageDescTest.aaf";
 	HRESULT		hr = AAFRESULT_NOT_IMPLEMENTED;
@@ -378,7 +367,7 @@ HRESULT CAAFDigitalImageDescriptor::test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFDigitalImageDescriptor::test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFDigitalImageDescriptor_test...Caught general C++ exception!" << endl; 
 	}
 
 	return hr;

@@ -26,16 +26,11 @@
 
 
 
-#include "CAAFPluginManager.h"
-#include "CAAFPluginManager.h"
-#ifndef __CAAFPluginManager_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFPluginManager::test()
+extern "C" HRESULT CAAFPluginManager_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

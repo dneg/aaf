@@ -22,16 +22,11 @@
 
 
 
-#include "CAAFContentStorage.h"
-#include "CAAFContentStorage.h"
-#ifndef __CAAFContentStorage_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFContentStorage::test()
+extern "C" HRESULT CAAFContentStorage_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

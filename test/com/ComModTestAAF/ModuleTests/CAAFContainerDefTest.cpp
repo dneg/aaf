@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFContainerDef
 /***********************************************\
 *												*
 * Advanced Authoring Format						*
@@ -9,14 +9,8 @@
 *												*
 \***********************************************/
 
-#include "CAAFContainerDef.h"
-#include "CAAFContainerDef.h"
-#ifndef __CAAFContainerDef_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
-// Temporarily necessary global declarations.
-extern "C" const CLSID CLSID_AAFContainerDef; // generated
 
 #include <iostream.h>
 #include <stdlib.h>
@@ -215,7 +209,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 }
  
 
-HRESULT CAAFContainerDef::test()
+extern "C" HRESULT CAAFContainerDef_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"ContainerDefTest.aaf";
@@ -228,7 +222,7 @@ HRESULT CAAFContainerDef::test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFContainerDef::test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFContainerDef_test...Caught general C++ exception!" << endl; 
 	}
 
 	return hr;

@@ -15,16 +15,11 @@
 
 
 
-#include "CAAFGPITrigger.h"
-#include "CAAFGPITrigger.h"
-#ifndef __CAAFGPITrigger_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFGPITrigger::test()
+extern "C" HRESULT CAAFGPITrigger_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

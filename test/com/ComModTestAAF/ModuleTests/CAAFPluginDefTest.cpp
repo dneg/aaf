@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFPluginDescriptor
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -10,24 +10,14 @@
 \******************************************/
 
  
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
 
 
 
 
-#include "CAAFPluginDescriptor.h"
-#include "CAAFPluginDescriptor.h"
-#ifndef __CAAFPluginDescriptor_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 
-// Temporarily necessary global declarations.
-extern "C" const CLSID CLSID_AAFPluginDescriptor; // generated
-extern "C" const aafUID_t AUID_AAFPluggableDesc; // generated
 
 static wchar_t *manuf1URL = L"www.microsoft.com";
 static wchar_t *manuf2URL = L"www.avid.com";
@@ -403,7 +393,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 }
  
 
-HRESULT CAAFPluginDescriptor::test()
+extern "C" HRESULT CAAFPluginDescriptor_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"AAFPluginDescriptorTest.aaf";
@@ -416,7 +406,7 @@ HRESULT CAAFPluginDescriptor::test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFPluginDescriptor::test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFPluginDescriptor_test...Caught general C++ exception!" << endl; 
 	}
 
 	// When all of the functionality of this class is tested, we can return success.
