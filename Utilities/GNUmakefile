@@ -26,9 +26,11 @@
 .PHONY : all
 all : aafomf eli2aaf aafviewer
 
+# AafOmf depends upon OMF development libraries which are no longer distributed
+# with the SDK.  They are available from http://aafassociation.org/download/
 .PHONY : aafomf
 aafomf:
-	cd AafOmf && $(MAKE)
+	@if [ -e ../OMF/Include/omDefs.h ] ; then cd AafOmf && $(MAKE); else echo; echo "OMF libraries not present - AafOmf will not be built"; echo; fi
 
 .PHONY : eli2aaf
 eli2aaf:
