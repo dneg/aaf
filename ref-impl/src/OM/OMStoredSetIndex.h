@@ -41,7 +41,7 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMStoredSetIndex(size_t capacity);
+  OMStoredSetIndex(size_t capacity, OMUInt32 keyPid, OMUInt32 keySize);
 
     // @cmember Destructor.
   ~OMStoredSetIndex(void);
@@ -53,6 +53,10 @@ public:
     // @cmember Set the high water mark in the set of local keys assigned to
     //          this <c OMStoredSetIndex>.
   void setHighWaterMark(OMUInt32 highWaterMark);
+
+  size_t keySize(void) const;
+
+  OMPropertyId keyPropertyId(void) const;
 
     // @cmember Insert a new element in this <c OMStoredSetIndex>.
     //          The local key of an element is an integer.
@@ -67,7 +71,7 @@ public:
   void insert(size_t position,
               OMUInt32 localKey,
               OMUInt32 referenceCount,
-              const OMUniqueObjectIdentification& key);
+              void* key);
 
     // @cmember The number of elements in this <c OMStoredSetIndex>.
   size_t entries(void) const;
@@ -76,7 +80,7 @@ public:
   void iterate(size_t& context,
                OMUInt32& localKey,
                OMUInt32& referenceCount,
-               OMUniqueObjectIdentification& key) const;
+               void* key) const;
 
     // @cmember Is this <c OMStoredSetIndex> valid ?
   bool isValid(void) const;
@@ -86,9 +90,11 @@ private:
   OMUInt32 _highWaterMark;
   size_t _capacity;
   size_t _entries;
+  OMPropertyId _keyPropertyId; // Id of property that is the key
+  OMUInt32 _keySize; // The size of a key
   OMUInt32* _localKeys;
   OMUInt32* _referenceCounts;
-  OMUniqueObjectIdentification* _keys;
+  OMByte* _keys;
 };
 
 #endif

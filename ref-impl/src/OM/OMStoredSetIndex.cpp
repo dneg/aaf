@@ -31,8 +31,11 @@
 
   // @mfunc Constructor.
   //   @parm The capacity of this <c OMStoredSetIndex>.
-OMStoredSetIndex::OMStoredSetIndex(size_t capacity)
+OMStoredSetIndex::OMStoredSetIndex(size_t capacity,
+                                   OMUInt32 keyPid,
+                                   OMUInt32 keySize)
 : _highWaterMark(0), _capacity(capacity), _entries(0),
+  _keyPropertyId(keyPid), _keySize(keySize),
   _localKeys(0), _referenceCounts(0), _keys(0)
 {
   TRACE("OMStoredSetIndex::OMStoredSetIndex");
@@ -41,13 +44,13 @@ OMStoredSetIndex::OMStoredSetIndex(size_t capacity)
   ASSERT("Valid heap pointer", _localKeys != 0);
   _referenceCounts = new OMUInt32[_capacity];
   ASSERT("Valid heap pointer", _referenceCounts != 0);
-  _keys = new OMUniqueObjectIdentification[_capacity];
+  _keys = new OMByte[_capacity * _keySize];
   ASSERT("Valid heap pointer", _keys != 0);
 
   for (size_t i = 0; i < _capacity; i++) {
     _localKeys[i] = 0;
     _referenceCounts[i] = 0;
-    memset(&_keys[i], 0, sizeof(_keys[i]));
+    memset(&_keys[i * _keySize], 0, _keySize);
   }
 }
 
@@ -85,6 +88,16 @@ void OMStoredSetIndex::setHighWaterMark(OMUInt32 highWaterMark)
   _highWaterMark = highWaterMark;
 }
 
+size_t OMStoredSetIndex::keySize(void) const
+{
+  return _keySize;
+}
+
+OMPropertyId OMStoredSetIndex::keyPropertyId(void) const
+{
+  return _keyPropertyId;
+}
+
   // @mfunc Insert a new element in this <c OMStoredSetIndex>.
   //        The local key of an element is an integer.
   //        The local key is used to derive the name of the storage
@@ -103,13 +116,13 @@ void OMStoredSetIndex::insert(
                             size_t position,
                             OMUInt32 localKey,
                             OMUInt32 referenceCount,
-                            const OMUniqueObjectIdentification& key)
+                            void* key)
 {
   TRACE("OMStoredSetIndex::insert");
   PRECONDITION("Valid position", position < _capacity);
 
   _localKeys[position] = localKey;
-  _keys[position] = key;
+  memcpy(&_keys[position * _keySize], key, _keySize);
   _referenceCounts[position] = referenceCount;
   _entries = _entries + 1;
 }
@@ -134,14 +147,14 @@ size_t OMStoredSetIndex::entries(void) const
 void OMStoredSetIndex::iterate(size_t& context,
                                OMUInt32& localKey,
                                OMUInt32& referenceCount,
-                               OMUniqueObjectIdentification& key) const
+                               void* key) const
 {
   TRACE("OMStoredSetIndex::iterate");
   PRECONDITION("Valid context", context < _capacity);
 
   localKey = _localKeys[context];
   referenceCount = _referenceCounts[context];
-  key = _keys[context];
+  memcpy(key, &_keys[context * _keySize], _keySize);
   context = context + 1;
 }
 
