@@ -29,6 +29,10 @@
 #ifndef OMPORTABILITY_H
 #define OMPORTABILITY_H
 
+// @module OMPortability | Definitions supporting the portability
+//         of the Object Manager.
+//   @mauthor Tim Bingham | tjb | Avid Technology, Inc.
+
 // Contents TBS
 
 #endif

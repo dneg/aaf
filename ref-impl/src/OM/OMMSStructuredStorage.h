@@ -31,6 +31,10 @@
 
 #include "OMDataTypes.h"
 
+// @module OMMSStructuredStorage | Interface to various implementations
+//         of Microsoft Structured Storage.
+//   @mauthor Tim Bingham | tjb | Avid Technology, Inc.
+
 // Figure out which Microsoft supplied Structured Storage implementation
 // to use. Here there are three different implementations to consider.
 //
