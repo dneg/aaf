@@ -181,12 +181,12 @@ void AddImageEssence( AxMasterMob& masterMob,
 
 	// Write 2 frames.  Must write one sample at a time.
 
-    pair<aafUInt32,aafUInt32> written = 
+	AxEssenceAccess::WriteResult written = 
 			axEssenceAccess.WriteSamples( numSamples,
 						      numBytes,
 						      reinterpret_cast<aafDataBuffer_t>(pixels.get()) );
 		
-    if ( written.first != numSamples && written.second == numBytes ) {
+    if ( written.samplesWritten != numSamples && written.bytesWritten == numBytes ) {
 			throw AxEx( L"Image WriteSamples size mismatch" );
 	}
 
@@ -195,7 +195,7 @@ void AddImageEssence( AxMasterMob& masterMob,
 					      numBytes,
 					      reinterpret_cast<aafDataBuffer_t>(pixels.get()) );
 	
-	if ( written.first != numSamples && written.second == numBytes ) {
+	if ( written.samplesWritten != numSamples && written.bytesWritten == numBytes ) {
 		throw AxEx( L"Image WriteSamples size mismatch" );
 	}
 
@@ -286,12 +286,12 @@ void AddAudioEssence( AxMasterMob& masterMob, AxHeader& axHeader )
 	const int numSamples = 2 * rateHz / 25;  // 2 pal frames in duration.
 	aafUInt16 samples[numSamples];
 	
-	pair<aafUInt32,aafUInt32> written = 
+	AxEssenceAccess::WriteResult written = 
 		axEssenceAccess.WriteSamples( numSamples,
 					      sizeof(samples[0])*numSamples,
 					      reinterpret_cast<aafDataBuffer_t>(samples) );
 
-	if ( written.first != numSamples ) {
+	if ( written.samplesWritten != numSamples ) {
 		throw AxEx( L"Audio WriteSamples size mismatch" );
 	}
 
