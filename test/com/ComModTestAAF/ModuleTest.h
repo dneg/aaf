@@ -32,13 +32,7 @@ typedef enum unitTestMode
 {
 	kAAFUnitTestReadWrite, kAAFUnitTestReadOnly
 } testMode_t;
-#endif
 
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 
 
@@ -73,6 +67,5 @@ bool DR4TestSupported(aafProductVersion_constref toolkitVersion);
 bool RC1TestSupported(aafProductVersion_constref toolkitVersion);
 
 
-#ifdef __cplusplus
-}
-#endif
+
+#endif  // MODULE_TEST_COMMON_H
