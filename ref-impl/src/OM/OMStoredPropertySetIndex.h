@@ -25,7 +25,7 @@ public:
 
 protected:
     
-  OMStoredPropertySetIndex::IndexEntry* OMStoredPropertySetIndex::find(void) const;
+  OMStoredPropertySetIndex::IndexEntry* find(void) const;
     
 private:
     
