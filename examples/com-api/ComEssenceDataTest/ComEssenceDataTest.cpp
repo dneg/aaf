@@ -252,7 +252,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 									kSDKCompressionDisable));// Compress disabled
 
 	// write out the data (a smiley face)
-	check(pEssenceAccess->WriteRawData(	1,			// Number of Samples
+	check(pEssenceAccess->WriteRawData(	sizeof(smiley),			// Number of Samples
 										&smiley[0],	// THE Raw data
 										sizeof(smiley))); // buffer size
 
@@ -359,14 +359,14 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 											kSDKCompressionDisable));// Compress disabled
 
 				// Read the Raw Data
-				check(pEssenceAccess->ReadRawData(	1,					// Number of Salmples 
+				check(pEssenceAccess->ReadRawData(	sizeof(smiley),					// Number of Salmples 
 													sizeof(DataBuf),	// Maximum buffer size
 													DataBuf,			// Buffer for the data
 													&bytesRead,			// Actual number of bytes read
 													&samplesRead));		// Actual number of samples read
 
 				// Now compare the data read with the data we wrote when we created the file
-				if (1 != samplesRead)
+				if (sizeof(smiley) != samplesRead)
 				{
 					printf("***Wrong number of samples read ( was %ld , should be %ld)\n",
 						samplesRead, 1L);
@@ -454,14 +454,16 @@ main()
 	const char * pFileName = "EssenceTest .aaf";
 
 	IAAFEssencePlugin *codecManager = NULL;
-	aafInt32		numCodecs;
+//	aafInt32		numCodecs;
 
+	// This call to CoCreateInstance is here to allow the DLL to be quickly
+	// loaded for debug.  It now serves no other function.
 	CoCreateInstance(CLSID_AAFEssencePlugin,
                NULL, 
                CLSCTX_INPROC_SERVER, 
                IID_IAAFEssencePlugin, 
                (void **)&codecManager);
-	codecManager->NumCodecsMatching (DDEF_Audio, kAAFRev1, &numCodecs);
+//	codecManager->NumCodecsMatching (DDEF_Audio, kAAFRev1, &numCodecs);
 
 
 	printf("***Creating file %s\n", pFileName);
