@@ -199,17 +199,6 @@ void ImplAAFFile::InternalReleaseObjects()
 
 #if FULL_TOOLKIT
       }
-		  if (_BentoErrorRaised)
-			{
-				if(_BentoErrorNumber == CM_err_BadWrite)
-				{
-					RAISE(OM_ERR_CONTAINERWRITE);
-				}
-				else
-				{
-					RAISE(OM_ERR_BADCLOSE);
-				}
-			}
 #endif
 	  }
 	  _cookie = 0;
@@ -286,88 +275,34 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafWChar* stream,
 								   openType_t type)
 {
 	OMLRefCon        	myRefCon = NULL;
-#if FULL_TOOLKIT
-	aafErr_t      		status;
-	aafInt32			errnum;
-#endif
-	aafErr_t                finalStatus = OM_ERR_NONE;
+	aafErr_t			finalStatus = OM_ERR_NONE;
 
 	if (session == NULL)
 	  return(OM_ERR_BAD_SESSION);	
 
-#if FULL_TOOLKIT
-	if(!session->isValidSession())
-		  return(OM_ERR_BAD_SESSION);	
-#endif
-
-#if FULL_TOOLKIT
-	status = InitFileHandle(session, kAAFiMedia);
-	if (status != OM_ERR_NONE)
-		return (status);
-#endif
-
 	XPROTECT()
 	{
-#if FULL_TOOLKIT
-		clearBentoErrors();
-#endif
 		_openType = type;
 
 		if (stream == NULL) 
 		  RAISE(OM_ERR_NULL_PARAM);
-
-#if FULL_TOOLKIT		
-		myRefCon = createRefConForMyHandlers(session->GetContainerSession(), 
-											 (char *) stream, (GetUpdatingTargetType)NULL, this);
-
-		aafCheckBentoRaiseError(this, OM_ERR_BADSESSIONMETA);
-#endif
 		
 		/*
 		 * Open the container
 		 */
-#if FULL_TOOLKIT
-		_BentoErrorNumber = 0;
-		session->ResetBentoError();
-#endif
 		assert(NULL == _container);
 		_container = new OMContainer;
 		_container->OMLOpenContainer(stream, session->GetContainerSession(), myRefCon, "AAF", 
 									useMode, _head);
 		if (_container == NULL)
 		{
-#if FULL_TOOLKIT
-			if(_BentoErrorRaised)
-				errnum = _BentoErrorNumber;
-			else
-				errnum = session->GetBentoError();
-			if (errnum== CM_err_BadMagicBytes)
-			{
-				RAISE(OM_ERR_NOTAAFFILE);
-			}
-			else if(session->GetBentoError() == CM_err_GenericMessage)
-			{
-				RAISE(OM_ERR_FILE_NOT_FOUND);
-			}
-			else
-			{
-				RAISE(OM_ERR_BADOPEN);
-			}
-#endif
+			// Handle error returns from open HERE!!!
 		}
 		
-		/* We now use datakinds in the whole API, not just 2.x
+		CHECK(_head->LoadMobTables());
+/* We now use datakinds in the whole API, not just 2.x
 		 */
 #if FULL_TOOLKIT
-		_head->DatakindLookup(NODATAKIND, &_nilKind, &status);
-		CHECK(status);
-		_head->DatakindLookup(PICTUREKIND, &_pictureKind, &status);
-		CHECK(status);
-		_head->DatakindLookup(SOUNDKIND, &_soundKind, &status);
-		CHECK(status);
-
-		/* Register any other properties and types in the file in the cache */
-		CHECK(_head->UpdateLocalTypesProps(_container));
 		_session->HandleOpenCallback(this);
 #endif
 	}
@@ -398,9 +333,7 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafWChar* stream,
 		  /* Set to previous file or NULL */
 		  session->SetTopFile(_prevFile);
 		  _cookie = 0;
-//		  omOptFree(NULL, file);
 		}
- // 		file = NULL;
 	}
 	XEND;
 
@@ -430,9 +363,6 @@ AAFRESULT ImplAAFFile::Create(
 			aafFileRev_t		rev)
 {
 	OMLRefCon        myRefCon;
-#ifdef FULL_TOOLKIT
-	aafErr_t		status;
-#endif
 
 	XPROTECT()
 	{
@@ -442,49 +372,21 @@ AAFRESULT ImplAAFFile::Create(
 		if (session == NULL)
 		  RAISE(OM_ERR_BAD_SESSION);	
 
-#if FULL_TOOLKIT
-		if(!session->isValidSession())
-		  RAISE(OM_ERR_BAD_SESSION);	
-
-		CHECK(InitFileHandle(session, kAAFiMedia));	
-		clearBentoErrors();
-#endif
 		_setrev = rev;
 		_openType = kOmCreate;
 
-#if FULL_TOOLKIT		
-		myRefCon = createRefConForMyHandlers(session->GetContainerSession(), 
-											 (char *) stream, (GetUpdatingTargetType)NULL, this);
-
-		aafCheckBentoRaiseError(this, OM_ERR_BADSESSIONMETA);
-#endif
 		_head = dynamic_cast<ImplAAFHeader*>(CreateImpl(CLSID_AAFHeader));
 		if (_head == NULL)
 		  RAISE(OM_ERR_BADHEAD);
 
 		_head->AddIdentificationObject(session->GetDefaultIdent());
-#if FULL_TOOLKIT
-		aafCheckBentoRaiseError(this, OM_ERR_BADHEAD);
-	
-		//_head = head; // already set above.
-		/* We now use datakinds in the whole API, not just 2.x
-		 */
-		_head->DatakindLookup(NODATAKIND, &_nilKind, &status);
-		CHECK(status);
-		_head->DatakindLookup(PICTUREKIND, &_pictureKind, &status);
-		CHECK(status);
-		_head->DatakindLookup(SOUNDKIND, &_soundKind, &status);
-		CHECK(status);
-#endif
+		
 		assert(NULL == _container);
 		_container = new OMContainer;
 		_container->OMLOpenNewContainer(stream, _head, session->GetContainerSession(), myRefCon,
 												"AAF",
 												(OMLContainerUseMode) kOMLWriting,
 												1, 0, 0);
-#if FULL_TOOLKIT
-		aafCheckBentoRaiseError(this, OM_ERR_BADOPEN);
-#endif
 		if(_container == NULL)
 			RAISE(OM_ERR_BADOPEN);
 	
