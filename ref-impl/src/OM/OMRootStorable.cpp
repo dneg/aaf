@@ -74,7 +74,10 @@ void OMRootStorable::close(void)
 {
   TRACE("OMRootStorable::close");
 
-  OMStorable::close(); // call base class close() for now
+  _clientRoot->close();
+  _dictionary->close();
+
+  store()->close(*file());
 }
 
   // @mfunc Restore the contents of an <c OMRootStorable>.
