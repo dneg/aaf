@@ -218,3 +218,15 @@ extern "C" const aafClassID_t CLSID_AAFComponent;
 
 OMDEFINE_STORABLE(ImplAAFComponent, CLSID_AAFComponent);
 
+// Cheat!  We're using this object's CLSID instead of object class...
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFComponent::GetObjectClass(aafUID_t * pClass)
+{
+  if (! pClass)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  memcpy (pClass, &CLSID_AAFComponent, sizeof aafClassID_t);
+  return AAFRESULT_SUCCESS;
+}
+
