@@ -39,7 +39,6 @@ INCLUDES = -I../../include/ref-api \
 	   -I../../../include/platform \
 	   -I../impl \
 	   -I.. -I. \
-	   -I../../../ss-impl/ref/h \
 	   -I../../aaflib
 
 
