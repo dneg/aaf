@@ -82,6 +82,15 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefCharacter::SetCharacter (
+      ImplAAFPropertyValue * /*pCharacterValue*/,
+      aafCharacter  /*character*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
 // Override from AAFTypeDef
 AAFRESULT STDMETHODCALLTYPE
   ImplAAFTypeDefCharacter::GetTypeCategory (/*[out]*/ eAAFTypeCategory_t * pTid)
