@@ -145,10 +145,103 @@ public:
          // @parm [out, size_is(numberElements)] Array of up to 8 aafRGBAComponent_t indicating component type and size.
          aafRGBAComponent_t*  PaletteLayoutArray);
 
+  //****************
+  // SetComponentMaxRef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetComponentMaxRef
+        // @parm [in] Optional.
+        (aafUInt32  componentMaxRef);
+
+
+  //****************
+  // GetComponentMaxRef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetComponentMaxRef
+        // @parm [out] Optional.
+        (aafUInt32 *  pComponentMaxRef);
+
+
+  //****************
+  // SetComponentMinRef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetComponentMinRef
+        // @parm [in] Optional.
+        (aafUInt32  componentMinRef);
+
+
+  //****************
+  // GetComponentMinRef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetComponentMinRef
+        // @parm [out] Optional.
+        (aafUInt32 *  pComponentMinRef);
+
+
+  //****************
+  // SetAlphaMaxRef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetAlphaMaxRef
+        // @parm [in] Optional.
+        (aafUInt32  alphaMaxRef);
+
+
+  //****************
+  // GetAlphaMaxRef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetAlphaMaxRef
+        // @parm [out] Optional.
+        (aafUInt32 *  pAlphaMaxRef);
+
+
+  //****************
+  // SetAlphaMinRef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetAlphaMinRef
+        // @parm [in] Optional.
+        (aafUInt32  alphaMinRef);
+
+
+  //****************
+  // GetAlphaMinRef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetAlphaMinRef
+        // @parm [out] Optional.
+        (aafUInt32 *  pAlphaMinRef);
+
+  //****************
+  // SetScanningDirection()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetScanningDirection
+        // @parm [in] Optional
+        (aafScanningDirection_t  scanningDirection);
+
+
+  //****************
+  // GetScanningDirection()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetScanningDirection
+        // @parm [out] Optional.
+        (aafScanningDirection_t *  pScanningDirection);
+
 protected:
 	OMFixedSizeProperty<RGBComponentArray>	_pixelLayout;
 	OMVariableSizeProperty<aafUInt8>		_palette;
 	OMFixedSizeProperty<RGBComponentArray>	_paletteLayout;
+	OMFixedSizeProperty<aafUInt32>	_componentMaxRef;
+	OMFixedSizeProperty<aafUInt32>	_componentMinRef;
+	OMFixedSizeProperty<aafUInt32>	_alphaMaxRef;
+	OMFixedSizeProperty<aafUInt32>	_alphaMinRef;
+	OMFixedSizeProperty<aafScanningDirection_t>	_scanningDirection;
 };
 
 #endif // ! __ImplAAFRGBADescriptor_h__

@@ -189,6 +189,21 @@ public:
         // @parm [out] Optional.
         (aafUInt32 *  pAlphaSamplingWidth);
 
+  //****************
+  // SetReversedByteOrder()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetReversedByteOrder
+        // @parm [in] Optional.
+        (aafBoolean_t  reversedByteOrder);
+
+  //****************
+  // GetReversedByteOrder()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetReversedByteOrder
+        // @parm [out] Optional.
+        (aafBoolean_t *  pReversedByteOrder);
 
 protected:
 	OMFixedSizeProperty<aafInt32>			_componentWidth;
@@ -200,6 +215,7 @@ protected:
 	OMFixedSizeProperty<aafUInt32>			_colorRange;
 	OMFixedSizeProperty<aafInt16>			_paddingBits;
 	OMFixedSizeProperty<aafUInt32>			_alphaSamplingWidth;
+	OMFixedSizeProperty<aafBool>			_reversedByteOrder;
 };
 
 #endif // ! __ImplAAFCDCIDescriptor_h__

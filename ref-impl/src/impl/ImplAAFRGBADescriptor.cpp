@@ -45,7 +45,12 @@
 ImplAAFRGBADescriptor::ImplAAFRGBADescriptor ()
 :	_pixelLayout(PID_RGBADescriptor_PixelLayout,					L"PixelLayout"),
 	_palette(PID_RGBADescriptor_Palette,							L"Palette"),
-	_paletteLayout(PID_RGBADescriptor_PaletteLayout,				L"PaletteLayout")
+	_paletteLayout(PID_RGBADescriptor_PaletteLayout,				L"PaletteLayout"),
+	_componentMaxRef(PID_RGBADescriptor_ComponentMaxRef,				L"ComponentMaxRef"),
+	_componentMinRef(PID_RGBADescriptor_ComponentMinRef,				L"ComponentMinRef"),
+	_alphaMaxRef(PID_RGBADescriptor_AlphaMaxRef,				L"AlphaMaxRef"),
+	_alphaMinRef(PID_RGBADescriptor_AlphaMinRef,				L"AlphaMinRef"),
+	_scanningDirection(PID_RGBADescriptor_ScanningDirection,				L"ScanningDirection")
 {
 	RGBComponentArray	comp;
 	aafUInt16			n;
@@ -53,6 +58,11 @@ ImplAAFRGBADescriptor::ImplAAFRGBADescriptor ()
 	_persistentProperties.put(_pixelLayout.address());
 	_persistentProperties.put(_palette.address());
 	_persistentProperties.put(_paletteLayout.address());
+	_persistentProperties.put(_componentMaxRef.address());
+	_persistentProperties.put(_componentMinRef.address());
+	_persistentProperties.put(_alphaMaxRef.address());
+	_persistentProperties.put(_alphaMinRef.address());
+	_persistentProperties.put(_scanningDirection.address());
 
 	// Initialize Required properties
 	for(n = 0; n < MAX_NUM_RGBA_COMPS; n++)
@@ -244,4 +254,140 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFRGBADescriptor::SetComponentMaxRef (
+      aafUInt32  componentMaxRef)
+{
+	_componentMaxRef = componentMaxRef;
 
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFRGBADescriptor::GetComponentMaxRef (
+      aafUInt32 *  pComponentMaxRef)
+{
+	if (pComponentMaxRef == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	if (!_componentMaxRef.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pComponentMaxRef = _componentMaxRef;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFRGBADescriptor::SetComponentMinRef (
+      aafUInt32  componentMinRef)
+{
+	_componentMinRef = componentMinRef;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFRGBADescriptor::GetComponentMinRef (
+      aafUInt32 *  pComponentMinRef)
+{
+	if (pComponentMinRef == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	if (!_componentMinRef.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pComponentMinRef = _componentMinRef;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFRGBADescriptor::SetAlphaMaxRef (
+      aafUInt32  alphaMaxRef)
+{
+	_alphaMaxRef = alphaMaxRef;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFRGBADescriptor::GetAlphaMaxRef (
+      aafUInt32 *  pAlphaMaxRef)
+{
+	if (pAlphaMaxRef == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	if (!_alphaMaxRef.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pAlphaMaxRef = _alphaMaxRef;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFRGBADescriptor::SetAlphaMinRef (
+      aafUInt32  alphaMinRef)
+{
+	_alphaMinRef = alphaMinRef;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFRGBADescriptor::GetAlphaMinRef (
+      aafUInt32 *  pAlphaMinRef)
+{
+	if (pAlphaMinRef == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	if (!_alphaMinRef.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pAlphaMinRef = _alphaMinRef;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFRGBADescriptor::SetScanningDirection (
+      aafScanningDirection_t scanningDirection)
+{
+	_scanningDirection = scanningDirection;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFRGBADescriptor::GetScanningDirection (
+      aafScanningDirection_t *pScanningDirection)
+{
+	if (pScanningDirection == NULL)
+	  return AAFRESULT_NULL_PARAM;
+
+	if (!_scanningDirection.isPresent())
+	  return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pScanningDirection = _scanningDirection;
+
+	return AAFRESULT_SUCCESS;
+}

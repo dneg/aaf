@@ -60,8 +60,12 @@ using namespace std;
 #define kDisplayYOffsetTestVal			8
 #define kAlphaTransparencyTestVal		kAAFMaxValueTransparent
 #define kImageAlignmentFactorTestVal	0
-#define kGammaNumTestVal				7
-#define kGammaDenTestVal				8
+#define kComponentMaxRefTestVal		235
+#define kComponentMinRefTestVal		16
+#define kAlphaMaxRefTestVal		235
+#define kAlphaMinRefTestVal		16
+#define kScanningDirectionTestVal			kAAFScanningBottomToTopRightToLeft
+
 
 #define NUM_TEST_ELEMENTS	3
 aafRGBAComponent_t	testElements[NUM_TEST_ELEMENTS] = { {kAAFCompRed,8}, {kAAFCompGreen,8}, {kAAFCompBlue,8} };
@@ -74,8 +78,8 @@ static const 	aafMobID_t	TEST_MobID =
 0x13, 0x00, 0x00, 0x00,
 {0x37792fba, 0x0404, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
 
-static const aafUID_t kAAFTEST_Gamma =
-{ 0xf866a603, 0xf254, 0x4f71, { 0x8e, 0x5a, 0x93, 0x32, 0xae, 0x5d, 0x8b, 0x66 } };
+static const aafUID_t kGammaTestVal =
+{0x04010101, 0x0101, 0x0000, { 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01}};
 
 
 // Cross-platform utility to delete a file.
@@ -173,6 +177,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMob*	pMob = NULL;
 	IAAFDigitalImageDescriptor*	pDIDesc = NULL;
 	IAAFRGBADescriptor*	pRGBADesc = NULL;
+	IAAFRGBADescriptor2*	pRGBADesc2 = NULL;
 	IAAFEssenceDescriptor*	pEssDesc = NULL;
 	HRESULT			hr = AAFRESULT_SUCCESS;
 
@@ -227,13 +232,22 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pDIDesc->SetAlphaTransparency(kAlphaTransparencyTestVal));
     checkResult(pDIDesc->SetImageAlignmentFactor(kImageAlignmentFactorTestVal));
 
-   checkResult(pDIDesc->SetGamma(kAAFTEST_Gamma));
+   checkResult(pDIDesc->SetGamma(kGammaTestVal));
    
 
     checkResult(pRGBADesc->SetPixelLayout(NUM_TEST_ELEMENTS, testElements));
     checkResult(pRGBADesc->SetPalette(sizeof(bogusPalette), bogusPalette));
     checkResult(pRGBADesc->SetPaletteLayout(NUM_TEST_ELEMENTS, testElements2));
   
+    // Optional Properties accessed using IAAFRGBADescriptor2
+		checkResult(pRGBADesc->QueryInterface (IID_IAAFRGBADescriptor2, (void **)&pRGBADesc2));
+
+    checkResult(pRGBADesc2->SetComponentMaxRef(kComponentMaxRefTestVal));
+    checkResult(pRGBADesc2->SetComponentMinRef(kComponentMinRefTestVal));
+    checkResult(pRGBADesc2->SetAlphaMaxRef(kAlphaMaxRefTestVal));
+    checkResult(pRGBADesc2->SetAlphaMinRef(kAlphaMinRefTestVal));
+    checkResult(pRGBADesc2->SetScanningDirection(kScanningDirectionTestVal));
+
 	// Save the initialized descriptor with the source mob.
     checkResult(pDIDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc));
     checkResult(pSourceMob->SetEssenceDescriptor(pEssDesc));
@@ -252,6 +266,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   if (pDIDesc)
     pDIDesc->Release();
+
+  if (pRGBADesc2)
+    pRGBADesc2->Release();
 
   if (pRGBADesc)
     pRGBADesc->Release();
@@ -288,6 +305,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFEssenceDescriptor*	pEssDesc = NULL;
 	IAAFDigitalImageDescriptor*	pDIDesc = NULL;
 	IAAFRGBADescriptor*	pRGBADesc = NULL;
+	IAAFRGBADescriptor2*	pRGBADesc2 = NULL;
 	aafNumSlots_t	numMobs = 0;
 	HRESULT			hr = AAFRESULT_SUCCESS;
 	aafRGBAComponent_t	readElements[NUM_TEST_ELEMENTS];
@@ -327,6 +345,11 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	  aafInt32				VideoLineMap[kVideoLineMapMaxElement];
 	  aafUID_t				compression;
 	  aafUID_t				compTestVal;
+		aafUInt32				componentMaxRef;
+		aafUInt32				componentMinRef;
+		aafUInt32				alphaMaxRef;
+		aafUInt32				alphaMinRef;
+	  aafScanningDirection_t scanningDirection = kAAFScanningLeftToRightTopToBottom;
 
 	  memset(&compTestVal, 0, sizeof(aafUID_t));
 
@@ -376,7 +399,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
                     AAFRESULT_TEST_FAILED);
 
 		checkResult(pDIDesc->GetGamma(&gamma));
-		checkExpression(memcmp(&gamma,&kAAFTEST_Gamma, sizeof(kAAFTEST_Gamma))==0,AAFRESULT_TEST_FAILED);
+		checkExpression(memcmp(&gamma,&kGammaTestVal, sizeof(kGammaTestVal))==0,AAFRESULT_TEST_FAILED);
 
 		checkResult(pRGBADesc->CountPixelLayoutElements (&resultElements));
 		checkExpression(resultElements == NUM_TEST_ELEMENTS, AAFRESULT_TEST_FAILED);
@@ -409,6 +432,25 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			if(readElements[n].Size != testElements2[n].Size)
 				throw AAFRESULT_TEST_FAILED;
 		}
+
+    // Optional Properties accessed using IAAFRGBADescriptor2
+		checkResult(pRGBADesc->QueryInterface (IID_IAAFRGBADescriptor2, (void **)&pRGBADesc2));
+
+    checkResult(pRGBADesc2->GetComponentMaxRef(&componentMaxRef));
+		checkExpression(componentMaxRef == kComponentMaxRefTestVal, AAFRESULT_TEST_FAILED);
+
+    checkResult(pRGBADesc2->GetComponentMinRef(&componentMinRef));
+		checkExpression(componentMinRef == kComponentMinRefTestVal, AAFRESULT_TEST_FAILED);
+
+    checkResult(pRGBADesc2->GetAlphaMaxRef(&alphaMaxRef));
+		checkExpression(alphaMaxRef == kAlphaMaxRefTestVal, AAFRESULT_TEST_FAILED);
+
+    checkResult(pRGBADesc2->GetAlphaMinRef(&alphaMinRef));
+		checkExpression(alphaMinRef == kAlphaMinRefTestVal, AAFRESULT_TEST_FAILED);
+
+    checkResult(pRGBADesc2->GetScanningDirection(&scanningDirection));
+		checkExpression(scanningDirection == kScanningDirectionTestVal, AAFRESULT_TEST_FAILED);
+
   }
   catch (HRESULT& rResult)
   {
@@ -418,6 +460,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   // Cleanup and return
   if (pEssDesc)
     pEssDesc->Release();
+
+  if (pRGBADesc2)
+    pRGBADesc2->Release();
 
   if (pRGBADesc)
     pRGBADesc->Release();

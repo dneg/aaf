@@ -42,7 +42,8 @@ ImplAAFCDCIDescriptor::ImplAAFCDCIDescriptor ()
 	_whiteReferenceLevel(PID_CDCIDescriptor_WhiteReferenceLevel,	L"WhiteReferenceLevel"),
 	_colorRange(PID_CDCIDescriptor_ColorRange,	L"ColorRange"),
 	_paddingBits(PID_CDCIDescriptor_PaddingBits,	L"PaddingBits"),
-	_alphaSamplingWidth(PID_CDCIDescriptor_AlphaSamplingWidth,	L"AlphaSamplingWidth")
+	_alphaSamplingWidth(PID_CDCIDescriptor_AlphaSamplingWidth,	L"AlphaSamplingWidth"),
+	_reversedByteOrder(PID_CDCIDescriptor_ReversedByteOrder,	L"ReversedByteOrder")
 {
 	_persistentProperties.put(_componentWidth.address());
 	_persistentProperties.put(_horizontalSubsampling.address());
@@ -53,6 +54,7 @@ ImplAAFCDCIDescriptor::ImplAAFCDCIDescriptor ()
 	_persistentProperties.put(_colorRange.address());
 	_persistentProperties.put(_paddingBits.address());
 	_persistentProperties.put(_alphaSamplingWidth.address());
+	_persistentProperties.put(_reversedByteOrder.address());
 
 	// Initialize Required properties
 	_componentWidth = 8;	// valid values are 8, 10, and 16 ?
@@ -326,3 +328,27 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFCDCIDescriptor::SetReversedByteOrder (
+      aafBoolean_t  reversedByteOrder)
+{
+	_reversedByteOrder = reversedByteOrder;
+
+	return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFCDCIDescriptor::GetReversedByteOrder (
+      aafBoolean_t *  pReversedByteOrder)
+{
+	if (pReversedByteOrder == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	if(!_reversedByteOrder.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pReversedByteOrder = _reversedByteOrder;
+
+	return AAFRESULT_SUCCESS;
+}
