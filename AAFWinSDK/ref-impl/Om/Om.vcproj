@@ -146,6 +146,9 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMContainerProperty.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMDataSet.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMDataStream.cpp">
 			</File>
 			<File
@@ -153,6 +156,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMDataStreamProperty.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMDataVector.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMDefinition.cpp">
@@ -360,6 +366,9 @@
 			Name="Header Files"
 			Filter="h">
 			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMArrayPropertyT.h">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMArrayType.h">
 			</File>
 			<File
@@ -408,6 +417,15 @@
 				RelativePath="..\..\..\ref-impl\include\OM\OMContainerProperty.h">
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMDataContainer.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMDataContainerIterator.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMDataSet.h">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMDataStream.h">
 			</File>
 			<File
@@ -418,6 +436,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMDataTypes.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMDataVector.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMDefinition.h">
@@ -621,7 +642,13 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMSetIteratorT.h">
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMSetPropertyT.h">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMSetT.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMSetType.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMSingleton.h">
