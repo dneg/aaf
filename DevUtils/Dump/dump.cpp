@@ -63,11 +63,11 @@
 // Determine which implementation of structured storage to use.
 //
 #if defined(OM_OS_WINDOWS)
-#define OM_WINDOWS_SS
+#define OM_USE_WINDOWS_SS
 #elif defined(OM_OS_MACOS)
-#define OM_MACINTOSH_SS
+#define OM_USE_MACINTOSH_SS
 #elif defined(OM_OS_UNIX)
-#define OM_REFERENCE_SS
+#define OM_USE_REFERENCE_SS
 #else
 #error "Don't know which implementation of structured storage to use."
 #endif
@@ -75,9 +75,9 @@
 // Include the structured storage headers. These are different
 // depending on the implementation.
 //
-#if defined(OM_WINDOWS_SS)
+#if defined(OM_USE_WINDOWS_SS)
 #include <objbase.h>
-#elif defined(OM_MACINTOSH_SS)
+#elif defined(OM_USE_MACINTOSH_SS)
 #include "wintypes.h"
 #include "macdef.h"
 #include "macpub.h"
@@ -85,7 +85,7 @@
 #include "storage.h"
 #include "initguid.h"
 #include "coguid.h"
-#elif defined(OM_REFERENCE_SS)
+#elif defined(OM_USE_REFERENCE_SS)
 #include "h/storage.h"
 #endif
 
@@ -1165,7 +1165,7 @@ void indent(int level)
   }
 }
 
-#if defined(OM_REFERENCE_SS)
+#if defined(OM_USE_REFERENCE_SS)
 
 static const unsigned char guidMap[] =
 { 3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15 }; 
@@ -4147,14 +4147,14 @@ void ignore(OMUInt32 pid)
 
 void initializeCOM(void)
 {
-#if !defined(OM_REFERENCE_SS)
+#if !defined(OM_USE_REFERENCE_SS)
   CoInitialize(0);
 #endif
 }
 
 void finalizeCOM(void)
 {
-#if !defined(OM_REFERENCE_SS)
+#if !defined(OM_USE_REFERENCE_SS)
   CoUninitialize();
 #endif
 }
