@@ -990,6 +990,13 @@ public:
 private:
 
   void * _pContainer;
+  
+  bool   _isInitialized;
+
+
+protected:
+  bool isInitialized (void) const;
+  void setInitialized (void);
 };
 
 #endif // ! __Impl.this-module_h__

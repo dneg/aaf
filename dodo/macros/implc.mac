@@ -241,7 +241,8 @@ AD_CLASS_BEGIN\
 
 
 Impl.this-module::Impl.this-module ()
-: _pContainer (0)
+: _pContainer (0),
+  _isInitialized (false)
 {}
 
 
@@ -840,6 +841,19 @@ void * Impl.this-module::GetContainer ()
 {
   assert (_pContainer);
   return _pContainer;
+}
+
+
+bool Impl.this-module::isInitialized () const
+{
+  return _isInitialized;
+}
+
+
+void Impl.this-module::setInitialized ()
+{
+  _isInitialized = true;
+  assert (isInitialized());
 }
 #endm
 
