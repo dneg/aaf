@@ -1,8 +1,0 @@
-LIBRARY		axPlugin
-
-DESCRIPTION	'AAF Example Plugin Library'
-
-EXPORTS		DllCanUnloadNow private
-EXPORTS		DllGetClassObject private
-EXPORTS		AAFGetClassCount
-EXPORTS		AAFGetClassObjectID

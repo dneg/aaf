@@ -1,6 +1,0 @@
-# The dynamically loaded shared libraries required by an application.
-
-./bin/AAFCOAPI.dll
-./bin/aafext/AAFINTP.dll
-./bin/aafext/AAFPGAPI.dll
-
