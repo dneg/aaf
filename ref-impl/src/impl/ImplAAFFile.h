@@ -23,7 +23,7 @@
 // Forward declaration
 //
 class OMFile;
-class OMClassFactory;
+class ImplAAFDictionary;
 class ImplAAFFile;
 class ImplAAFHeader;
 class ImplAAFDataDef;
@@ -107,7 +107,7 @@ private:
 
   aafInt32			_cookie;
   OMFile			*_file;
-  OMClassFactory *_factory;
+  ImplAAFDictionary *_factory;
   aafInt16			_byteOrder;
   openType_t			_openType;
   ImplAAFHeader *   _head;		// Needed by Head object

@@ -17,7 +17,9 @@
 #include "ImplAAFHeader.h"
 #include "ImplAAFDataDef.h"
 
+#include "AAFStoredObjectIDs.h"
 #include "ImplAAFObjectCreation.h"
+
 
 #include <assert.h>
 
@@ -35,7 +37,6 @@ inline void checkExpression(bool test, AAFRESULT r)
 }
 
 
-extern "C" const aafClassID_t CLSID_AAFHeader;
 extern "C" const aafClassID_t CLSID_AAFDictionary;
 
 AAFRESULT STDMETHODCALLTYPE
@@ -47,7 +48,7 @@ ImplAAFFile::Initialize ()
 	}
 
 	// Create the class factory for base classes.
-	_factory = static_cast<ImplAAFDictionary *>(CreateImpl(CLSID_AAFDictionary));
+  _factory = ImplAAFDictionary::CreateDictionary();
 	if (NULL == _factory)
 		return AAFRESULT_NOMEMORY;
 	_initialized = AAFTrue;
@@ -266,13 +267,16 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 	try
 	{
 		// Create the header for the OM manager to use as the root
-		// for the file.
-		_head = dynamic_cast<ImplAAFHeader*>(CreateImpl(CLSID_AAFHeader));
+		// for the file. Use the OMClassFactory interface for this 
+    // object because the dictionary has not been associated with
+    // a header yet (Chicken 'n Egg problem).
+    const OMClassId& soid = *reinterpret_cast<const OMClassId *>(&AUID_AAFHeader);
+    _head = static_cast<ImplAAFHeader *>(_factory->create(soid));
 		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
 		
 		// Make sure the header is initialized with our previously created
 		// dictionary.
-		_head->SetDictionary(static_cast<ImplAAFDictionary *>(_factory));
+		_head->SetDictionary(_factory);
 
 		// Add the ident to the header.
 		checkResult(_head->AddIdentificationObject(&_ident));
@@ -347,13 +351,16 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 	try
 	{
 		// Create the header for the OM manager to use as the root
-		// for the file.
-		_head = dynamic_cast<ImplAAFHeader*>(CreateImpl(CLSID_AAFHeader));
+		// for the file. Use the OMClassFactory interface for this 
+    // object because the dictionary has not been associated with
+    // a header yet (Chicken 'n Egg problem).
+    const OMClassId& soid = *reinterpret_cast<const OMClassId *>(&AUID_AAFHeader);
+    _head = static_cast<ImplAAFHeader *>(_factory->create(soid));
 		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
 		
 		// Make sure the header is initialized with our previously created
 		// dictionary.
-		_head->SetDictionary(static_cast<ImplAAFDictionary *>(_factory));
+		_head->SetDictionary(_factory);
 
 		// Add the ident to the header.
 		checkResult(_head->AddIdentificationObject(&_ident));
@@ -497,10 +504,8 @@ ImplAAFFile::~ImplAAFFile ()
 	// cleanup the container.
 	if (_factory)
 	{
-		ImplAAFDictionary * pDictionary = dynamic_cast<ImplAAFDictionary *>(_factory);
-		assert(NULL != pDictionary);
-		pDictionary->ReleaseReference();
-		pDictionary = NULL;
+		_factory->ReleaseReference();
+		_factory = NULL;
 	}
 
 	// cleanup the OM File.
