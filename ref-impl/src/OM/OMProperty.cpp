@@ -39,6 +39,7 @@
 #include <memory.h>
 
 // class OMProperty
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMProperty
 
   // @mfunc Constructor.
   //   @parm The property id.
@@ -277,6 +278,7 @@ const wchar_t* OMProperty::storedName(void) const
 }
 
 // class OMSimpleProperty
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMSimpleProperty
 
   // @mfunc Constructor.
   //   @parm The property id.
