@@ -83,12 +83,33 @@ static aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2)
 #define SEG_LENGTH			30L
 #define FILL_LENGTH			10L
 
+static void     LogError(HRESULT errcode, int line, char *file)
+{
+  printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
+}
+
+static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */
+#define check(a)  \
+{ moduleErrorTmp = a; \
+	if (!SUCCEEDED(moduleErrorTmp)) \
+	{ \
+	    LogError(moduleErrorTmp, __LINE__, __FILE__);\
+		goto cleanup; \
+	} \
+}
+
+#define checkFatal(a)  \
+{ moduleErrorTmp = a; \
+  if (!SUCCEEDED(moduleErrorTmp)) \
+     exit(1);\
+}
+
 
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
-	IAAFMob*					pMob;	// Shared, don't Release.
+	IAAFMob*					pMob = NULL;
 	IAAFMob*					pCompMob = NULL;
 	IAAFEssenceDescriptor*		aDesc = NULL;
 	IAAFMasterMob*				pMasterMob = NULL;
@@ -103,14 +124,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSourceClip*				fileSclp = NULL;
 	IAAFSourceClip*				masterSclp = NULL;
 	IAAFSourceClip*				compSclp = NULL;
-	IAAFComponent*				compFill;
+	IAAFComponent*				compFill = NULL;
 	aafRational_t				videoRate = { 30000, 1001 };
 	aafUID_t					videoDef = DDEF_Video;
 	aafUID_t					tapeMobID, fileMobID, masterMobID;
 	aafTimecode_t				tapeTC = { 108000, kTcNonDrop, 30};
+	aafLength_t					fileLen = FILE1_LENGTH;
+	aafLength_t					fillLen = FILL_LENGTH;
+	aafLength_t					segLen = SEG_LENGTH;
 
 	aafProductIdentification_t	ProductInfo;
-	HRESULT						hr;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
 	ProductInfo.productName = L"Make AVR Example";
@@ -126,267 +149,171 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	// We assume the following functions have been tested and they do work
 	// The next 3 function calls create the AAF file
 /*	hr = pSession->SetDefaultIdentification(&ProductInfo);	*/
-	hr = CoCreateInstance(CLSID_AAFFile,
+	check(CoCreateInstance(CLSID_AAFFile,
                NULL, 
                CLSCTX_INPROC_SERVER, 
                IID_IAAFFile, 
-               (void **)&pFile);
+               (void **)&pFile));
 
-	hr = pFile->Initialize();
-	hr = pFile->OpenNewModify(pFileName, 0, &ProductInfo);
-  	hr = pFile->GetHeader(&pHeader);
+	check(pFile->Initialize());
+	check(pFile->OpenNewModify(pFileName, 0, &ProductInfo));
+  	check(pFile->GetHeader(&pHeader));
 
 	//Make the Tape MOB
-	hr = CoCreateInstance( CLSID_AAFSourceMob,
+	check(CoCreateInstance( CLSID_AAFSourceMob,
 						   NULL, 			  
 						   CLSCTX_INPROC_SERVER, 
 						   IID_IAAFSourceMob, 
-						   (void **)&pTapeMob);
-	if (AAFRESULT_SUCCESS == hr)
-	{
-		hr = CoCreateInstance( CLSID_AAFTapeDescriptor,
+						   (void **)&pTapeMob));
+	check(CoCreateInstance( CLSID_AAFTapeDescriptor,
 						   NULL, 			  
 						   CLSCTX_INPROC_SERVER, 
 						   IID_IAAFTapeDescriptor, 
-						   (void **)&pTapeDesc);
-	}
-
-	if (AAFRESULT_SUCCESS == hr)
-	{
-		hr = pTapeDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&aDesc);
-		if (AAFRESULT_SUCCESS == hr)
-			hr = pTapeMob->SetEssenceDescription(aDesc);
-		aDesc->Release();
-		aDesc = NULL;
-	}
+						   (void **)&pTapeDesc));
+	check(pTapeDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&aDesc));
+	check(pTapeMob->SetEssenceDescription(aDesc));
+	aDesc->Release();
+	aDesc = NULL;
 		
-	if (AAFRESULT_SUCCESS == hr)
-	{
-		pTapeMob->AppendTimecodeSlot (videoRate, 0, tapeTC, TAPE_LENGTH);
-	}
-
-	if (AAFRESULT_SUCCESS == hr)
-	{
-		hr = pTapeMob->AddNilReference (1,TAPE_LENGTH, &videoDef, videoRate);
-	}
-
-	if (AAFRESULT_SUCCESS == hr)
-	{
-		hr = pTapeMob->QueryInterface (IID_IAAFMob, (void **)&pMob);
-		if (AAFRESULT_SUCCESS == hr)
-			pMob->SetName (L"A Tape Mob");
-		if (AAFRESULT_SUCCESS == hr)
-			hr = pHeader->AppendMob(pMob);
-		if (AAFRESULT_SUCCESS == hr)
-			pMob->GetMobID (&tapeMobID);
-		pMob->Release();
-		pMob = NULL;
-	}
+	check(pTapeMob->AppendTimecodeSlot (videoRate, 0, tapeTC, TAPE_LENGTH));
+	check(pTapeMob->AddNilReference (1,TAPE_LENGTH, &videoDef, videoRate));
+	check(pTapeMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
+	check(pMob->SetName (L"A Tape Mob"));
+	check(pHeader->AppendMob(pMob));
+	check(pMob->GetMobID (&tapeMobID));
+	pMob->Release();
+	pMob = NULL;
 
 
 	// Make a FileMob
-	if (AAFRESULT_SUCCESS == hr)
-	{
-		hr = CoCreateInstance( CLSID_AAFSourceMob,
+	check(CoCreateInstance( CLSID_AAFSourceMob,
 						   NULL, 			  
 						   CLSCTX_INPROC_SERVER, 
 						   IID_IAAFSourceMob, 
-						   (void **)&pFileMob);
-	}
-
-	if (AAFRESULT_SUCCESS == hr)
-	{
-		hr = CoCreateInstance( CLSID_AAFFileDescriptor,
+						   (void **)&pFileMob));
+	check(CoCreateInstance( CLSID_AAFFileDescriptor,
 						   NULL, 			  
 						   CLSCTX_INPROC_SERVER, 
 						   IID_IAAFFileDescriptor, 
-						   (void **)&pFileDesc);
-	}
+						   (void **)&pFileDesc));
+	check(pFileDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&aDesc));
+	check(pFileMob->SetEssenceDescription(aDesc));
+	aDesc->Release();
+	aDesc = NULL;
+	pFileDesc->Release();
+	pFileDesc = NULL;
 
-	if (AAFRESULT_SUCCESS == hr)
-	{
-		hr = pFileDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&aDesc);
-		if (AAFRESULT_SUCCESS == hr)
-			hr = pFileMob->SetEssenceDescription(aDesc);
-		aDesc->Release();
-	}
-
-	if (AAFRESULT_SUCCESS == hr)
-	{
-		hr = CoCreateInstance( CLSID_AAFSourceClip,
+	check(CoCreateInstance( CLSID_AAFSourceClip,
 						   NULL, 
 						   CLSCTX_INPROC_SERVER, 
 						   IID_IAAFSourceClip, 
-						   (void **)&fileSclp);		
-	}
+						   (void **)&fileSclp));		
 
-	if (AAFRESULT_SUCCESS == hr)
-	{			
-		sourceRef.sourceID = tapeMobID;
-		sourceRef.sourceSlotID = 1;
-		sourceRef.startTime = 0;
-		hr = fileSclp->SetRef(sourceRef);
-		if (AAFRESULT_SUCCESS == hr)
-		{
-			aafLength_t	fileLen = FILE1_LENGTH;
-			hr = fileSclp->QueryInterface (IID_IAAFComponent, (void **)&aComponent);
-			if (AAFRESULT_SUCCESS == hr)
-				hr = aComponent->SetLength (&fileLen);
-			if (AAFRESULT_SUCCESS == hr)
-				hr = fileSclp->QueryInterface (IID_IAAFSegment, (void **)&seg);
-			if (AAFRESULT_SUCCESS == hr)
-				hr = pFileMob->QueryInterface (IID_IAAFMob, (void **)&pMob);
-			if (AAFRESULT_SUCCESS == hr)
-				hr = pMob->AppendNewSlot (seg, 1, slotName, &newSlot);
-			if (AAFRESULT_SUCCESS == hr)
-			{
-				aComponent->Release();
-				aComponent = NULL;
-				pMob->Release();
-				pMob = NULL;
-			}
-		}	
-	}
+	sourceRef.sourceID = tapeMobID;
+	sourceRef.sourceSlotID = 1;
+	sourceRef.startTime = 0;
+	check(fileSclp->SetRef(sourceRef));
 
-	if (AAFRESULT_SUCCESS == hr)
-	{
-		hr = pFileMob->QueryInterface (IID_IAAFMob, (void **)&pMob);
-		if (AAFRESULT_SUCCESS == hr)
-			pMob->GetMobID (&fileMobID);
-		if (AAFRESULT_SUCCESS == hr)
-			hr = pHeader->AppendMob(pMob);
-		pMob->Release();
-	}
+	check(fileSclp->QueryInterface (IID_IAAFComponent, (void **)&aComponent));
+	check(aComponent->SetLength (&fileLen));
+	check(fileSclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
+	check(pFileMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
+	check(pMob->AppendNewSlot (seg, 1, slotName, &newSlot));
+	aComponent->Release();
+	aComponent = NULL;
+	pMob->Release();
+	pMob = NULL;
+
+	check(pFileMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
+	check(pMob->GetMobID (&fileMobID));
+	check(pHeader->AppendMob(pMob));
+	pMob->Release();
+	pMob = NULL;
 
 	//Make the Master MOB
-	hr = CoCreateInstance( CLSID_AAFMasterMob,
+	check(CoCreateInstance( CLSID_AAFMasterMob,
 						   NULL, 			  
 						   CLSCTX_INPROC_SERVER, 
 						   IID_IAAFMasterMob, 
-						   (void **)&pMasterMob);
+						   (void **)&pMasterMob));
 
-
-	if (AAFRESULT_SUCCESS == hr)
-	{
-		hr = CoCreateInstance( CLSID_AAFSourceClip,
+	check(CoCreateInstance( CLSID_AAFSourceClip,
 						   NULL, 
 						   CLSCTX_INPROC_SERVER, 
 						   IID_IAAFSourceClip, 
-						   (void **)&masterSclp);		
-	}
+						   (void **)&masterSclp));		
 
-	if (AAFRESULT_SUCCESS == hr)
-	{			
-		sourceRef.sourceID = fileMobID;
-		sourceRef.sourceSlotID = 1;
-		sourceRef.startTime = 0;
-		hr = masterSclp->SetRef(sourceRef);
-		if (AAFRESULT_SUCCESS == hr)
-		{
-			aafLength_t	fileLen = FILE1_LENGTH;
-			hr = masterSclp->QueryInterface (IID_IAAFComponent, (void **)&aComponent);
-			if (AAFRESULT_SUCCESS == hr)
-				hr = aComponent->SetLength (&fileLen);
-			if (AAFRESULT_SUCCESS == hr)
-				hr = masterSclp->QueryInterface (IID_IAAFSegment, (void **)&seg);
-			if (AAFRESULT_SUCCESS == hr)
-				hr = pMob->AppendNewSlot (seg, 1, slotName, &newSlot);
-			if (AAFRESULT_SUCCESS == hr)
-			{
-				aComponent->Release();
-			}
-		}	
-	}
+	sourceRef.sourceID = fileMobID;
+	sourceRef.sourceSlotID = 1;
+	sourceRef.startTime = 0;
+	check(masterSclp->SetRef(sourceRef));
 
-	if (AAFRESULT_SUCCESS == hr)
-	{
-		hr = pMasterMob->QueryInterface (IID_IAAFMob, (void **)&pMob);
-		if (AAFRESULT_SUCCESS == hr)
-			pMob->GetMobID (&masterMobID);
-		if (AAFRESULT_SUCCESS == hr)
-			hr = pHeader->AppendMob(pMob);
-		pMob->Release();
-		pMob = NULL;
-	}
+	check(masterSclp->QueryInterface (IID_IAAFComponent, (void **)&aComponent));
+	check(aComponent->SetLength (&fileLen));
+	check(masterSclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
+	check(pMasterMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
+	check(pMob->AppendNewSlot (seg, 1, slotName, &newSlot));
+	aComponent->Release();
+
+	check(pMob->GetMobID (&masterMobID));
+	check(pHeader->AppendMob(pMob));
+	pMob->Release();
+	pMob = NULL;
 
 	// Create a Composition Mob
-	hr = CoCreateInstance( CLSID_AAFCompositionMob,
+	check(CoCreateInstance( CLSID_AAFCompositionMob,
 						   NULL, 			  
 						   CLSCTX_INPROC_SERVER, 
 						   IID_IAAFMob, 
-						   (void **)&pCompMob);
+						   (void **)&pCompMob));
 	// Create a sequence
-	hr = CoCreateInstance( CLSID_AAFSequence,
+	check(CoCreateInstance( CLSID_AAFSequence,
 				  NULL, 
 			   CLSCTX_INPROC_SERVER, 
 			   IID_IAAFSequence, 
-			   (void **)&pSequence);		
-	if (AAFRESULT_SUCCESS == hr)
-		hr = pSequence->QueryInterface (IID_IAAFSegment, (void **)&seg);
-	if (AAFRESULT_SUCCESS == hr)
-		hr = pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob);
-	if (AAFRESULT_SUCCESS == hr)
-		hr = pMob->AppendNewSlot (seg, 1, slotName, &newSlot);
+			   (void **)&pSequence));		
+	check(pSequence->QueryInterface (IID_IAAFSegment, (void **)&seg));
+	check(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
+	check(pMob->AppendNewSlot (seg, 1, slotName, &newSlot));
 
 	// Create a SourceClip
-	hr = CoCreateInstance( CLSID_AAFSourceClip,
+	check(CoCreateInstance( CLSID_AAFSourceClip,
 						   NULL, 
 						   CLSCTX_INPROC_SERVER, 
 						   IID_IAAFSourceClip, 
-						   (void **)&compSclp);		
- 	if (AAFRESULT_SUCCESS == hr)
-	{			
-		sourceRef.sourceID = masterMobID;
-		sourceRef.sourceSlotID = 1;
-		sourceRef.startTime = 0;
-		hr = compSclp->SetRef(sourceRef);
-		if (AAFRESULT_SUCCESS == hr)
-		{
-			hr = compSclp->QueryInterface (IID_IAAFComponent, (void **)&aComponent);
-			if (AAFRESULT_SUCCESS == hr)
-			{
-				aafLength_t	segLen = SEG_LENGTH;
+						   (void **)&compSclp));		
 
-				if (AAFRESULT_SUCCESS == hr)
-					hr = aComponent->SetLength (&segLen);
-				if (AAFRESULT_SUCCESS == hr)
-					hr = pSequence->AppendComponent (aComponent);
-				if (AAFRESULT_SUCCESS == hr)
-				{			
-					// Create a filler
-					hr = CoCreateInstance( CLSID_AAFFiller,
+	sourceRef.sourceID = masterMobID;
+	sourceRef.sourceSlotID = 1;
+	sourceRef.startTime = 0;
+	check(compSclp->SetRef(sourceRef));
+	check(compSclp->QueryInterface (IID_IAAFComponent, (void **)&aComponent));
+
+	check(aComponent->SetLength (&segLen));
+	check(pSequence->AppendComponent (aComponent));
+
+	// Create a filler
+	check(CoCreateInstance( CLSID_AAFFiller,
 									   NULL, 
 									   CLSCTX_INPROC_SERVER, 
 									   IID_IAAFComponent, 
-									   (void **)&compFill);		
-					if (AAFRESULT_SUCCESS == hr)
-					{
-						aafLength_t	fillLen = FILL_LENGTH;
+									   (void **)&compFill));		
 
-						if (AAFRESULT_SUCCESS == hr)
-							hr = compFill->SetLength (&fillLen);
-						if (AAFRESULT_SUCCESS == hr)
-							hr = pSequence->AppendComponent (compFill);
-					}
-				}
-				if (AAFRESULT_SUCCESS == hr)
-				{
-					seg->Release();
-					seg = NULL;
-					aComponent->Release();
-					aComponent = NULL;
-					pMob->Release();
-					pMob = NULL;
-					newSlot->Release();
-					newSlot = NULL;
-				}
-			}
-		}
-	}
+	check(compFill->SetLength (&fillLen));
+	check(pSequence->AppendComponent (compFill));
 
-	if (AAFRESULT_SUCCESS == hr)
-		hr = pHeader->AppendMob(pCompMob);
+	seg->Release();
+	seg = NULL;
+	aComponent->Release();
+	aComponent = NULL;
+	pMob->Release();
+	pMob = NULL;
+	newSlot->Release();
+	newSlot = NULL;
 
+	check(pHeader->AppendMob(pCompMob));
+
+cleanup:
 	// Cleanup and return
 	if (pFile) 
 	{
@@ -406,10 +333,46 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	if (seg)
 		seg->Release();
 
-//	if (sclp)
-//		sclp->Release();
+	if (pCompMob)
+		pCompMob->Release();
 
-	return hr;
+	if (aDesc)
+		aDesc->Release();
+
+	if (pMasterMob)
+		pMasterMob->Release();
+
+	if (pFileMob)
+		pFileMob->Release();
+
+	if (pTapeMob)
+		pTapeMob->Release();
+
+	if (pSequence)
+		pSequence->Release();
+
+	if (aComponent)
+		aComponent->Release();
+
+	if (pFileDesc)
+		pFileDesc->Release();
+
+	if (pTapeDesc)
+		pTapeDesc->Release();
+
+	if (fileSclp)
+		fileSclp->Release();
+
+	if (masterSclp)
+		masterSclp->Release();
+
+	if (compSclp)
+		compSclp->Release();
+
+	if (compFill)
+		compFill->Release();
+
+	return moduleErrorTmp;
 }
 
 static HRESULT ReadAAFFile(aafWChar * pFileName)
@@ -425,8 +388,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFSourceClip*				pSourceClip = NULL;
 	IAAFSequence*				pSequence = NULL;
 	IAAFComponent*				pComponent = NULL;
-	IEnumAAFComponents*			pCompIter;
-	IAAFFiller*					pFiller;
+	IEnumAAFComponents*			pCompIter = NULL;
+	IAAFFiller*					pFiller = NULL;
 
 	aafSearchCrit_t				criteria;
 	aafNumSlots_t				numMobs, numSlots;
@@ -438,214 +401,204 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafLength_t					length;
 
 	  
-	CoCreateInstance(CLSID_AAFFile,
+	check(CoCreateInstance(CLSID_AAFFile,
                NULL, 
                CLSCTX_INPROC_SERVER, 
                IID_IAAFFile, 
-               (void **)&pFile);
-//	check(hr); // display error message
-	if (SUCCEEDED(hr))
+               (void **)&pFile));
+	check(pFile->Initialize());
+	check(pFile->OpenExistingRead(pFileName, 0));
+	check(pFile->GetHeader(&pHeader));
+
+	// Here we check on the number of tape mobs and file mobs in the file
+	// If this was an importing application, then the file and tape mobs
+	// often get converted first so that the compositions come in qithout
+	// forward references.
+	// Get the total number of mobs in the file (should be four)
+	check(pHeader->GetNumMobs(kAllMob, &numMobs));
+	if (4 != numMobs )
 	{
-		// We assume the following functions have been tested and they do work
-		// The next 3 function calls open the AAF file
-/*		hr = pSession->SetDefaultIdentification(&ProductInfo); */
-		hr = pFile->Initialize();
-		hr = pFile->OpenExistingRead(pFileName, 0);
-	  	hr = pFile->GetHeader(&pHeader);
+		printf("***Wrong number of mobs in the file (was %ld should be %ld)\n",
+			numMobs, 4L);
+	}
 
-		// Here we check on the number of tape mobs and file mobs in the file
-		// If this was an importing application, then the file and tape mobs
-		// often get converted first so that the compositions come in qithout
-		// forward references.
-		// Get the total number of mobs in the file (should be four)
-		hr = pHeader->GetNumMobs(kAllMob, &numMobs);
-		if (4 != numMobs )
+	wprintf(L"--------\n");
+	// Get the number of tape mobs in the file (should be one)
+	check(pHeader->GetNumMobs(kTapeMob, &numTapeMobs));
+	if (1 == numTapeMobs )
+	{
+		printf("Found %ld Tape Mobs\n", numTapeMobs);
+		criteria.searchTag = kByMobKind;
+		criteria.tags.mobKind = kTapeMob;
+		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+		hr = pMobIter->NextOne(&pMob);
+		while(AAFRESULT_SUCCESS == hr && pMobIter != NULL)
 		{
-			printf("***Wrong number of mobs in the file (was %ld should be %ld)\n",
-				numMobs, 4L);
-		}
-
-		wprintf(L"--------\n");
-		// Get the number of tape mobs in the file (should be one)
-		hr = pHeader->GetNumMobs(kTapeMob, &numTapeMobs);
-		if (1 == numTapeMobs )
-		{
-			printf("Found %ld Tape Mobs\n", numTapeMobs);
-			criteria.searchTag = kByMobKind;
-			criteria.tags.mobKind = kTapeMob;
-			hr = pHeader->EnumAAFAllMobs(&criteria, &pMobIter);
+			check(pMob->GetMobID (&mobID));
+			check(pMob->GetName (namebuf, sizeof(namebuf)));
+			wprintf(L"    TapeName = %s (mobID %08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x)\n",
+				namebuf, mobID.Data1, mobID.Data2, mobID.Data3, mobID.Data4[0],
+				 mobID.Data4[1], mobID.Data4[2], mobID.Data4[3], mobID.Data4[4],
+				  mobID.Data4[5], mobID.Data4[6], mobID.Data4[7]);
 			hr = pMobIter->NextOne(&pMob);
-			while(AAFRESULT_SUCCESS == hr && pMobIter != NULL)
-			{
-				hr = pMob->GetMobID (&mobID);
-				hr = pMob->GetName (namebuf, sizeof(namebuf));
-				wprintf(L"    TapeName = %s (mobID %08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x)\n",
-					namebuf, mobID.Data1, mobID.Data2, mobID.Data3, mobID.Data4[0],
-					 mobID.Data4[1], mobID.Data4[2], mobID.Data4[3], mobID.Data4[4],
-					  mobID.Data4[5], mobID.Data4[6], mobID.Data4[7]);
-				hr = pMobIter->NextOne(&pMob);
-			}
 		}
-		else
-		{
-			printf("***Wrong number of tape mobs in the file (was %ld should be %ld)\n",
-				numTapeMobs, 1L);
-		}
+	}
+	else
+	{
+		printf("***Wrong number of tape mobs in the file (was %ld should be %ld)\n",
+			numTapeMobs, 1L);
+	}
 
 
-		wprintf(L"--------\n");
-		// Get the number of file mobs in the file (should be one)
-		hr = pHeader->GetNumMobs(kFileMob, &numFileMobs);
-		if (1 == numFileMobs )
+	wprintf(L"--------\n");
+	// Get the number of file mobs in the file (should be one)
+	check(pHeader->GetNumMobs(kFileMob, &numFileMobs));
+	if (1 == numFileMobs )
+	{
+		printf("Found %ld File Mobs\n", numFileMobs);
+		criteria.searchTag = kByMobKind;
+		criteria.tags.mobKind = kFileMob;
+		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+		hr = pMobIter->NextOne(&pMob);
+		while(AAFRESULT_SUCCESS == hr && pMobIter != NULL)
 		{
-			printf("Found %ld File Mobs\n", numFileMobs);
-			criteria.searchTag = kByMobKind;
-			criteria.tags.mobKind = kFileMob;
-			hr = pHeader->EnumAAFAllMobs(&criteria, &pMobIter);
+			check(pMob->GetMobID (&mobID));
+			wprintf(L"    (mobID %08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x)\n",
+				mobID.Data1, mobID.Data2, mobID.Data3, mobID.Data4[0],
+				 mobID.Data4[1], mobID.Data4[2], mobID.Data4[3], mobID.Data4[4],
+				  mobID.Data4[5], mobID.Data4[6], mobID.Data4[7]);
 			hr = pMobIter->NextOne(&pMob);
-			while(AAFRESULT_SUCCESS == hr && pMobIter != NULL)
-			{
-				hr = pMob->GetMobID (&mobID);
-				wprintf(L"    (mobID %08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x)\n",
-					mobID.Data1, mobID.Data2, mobID.Data3, mobID.Data4[0],
-					 mobID.Data4[1], mobID.Data4[2], mobID.Data4[3], mobID.Data4[4],
-					  mobID.Data4[5], mobID.Data4[6], mobID.Data4[7]);
-				hr = pMobIter->NextOne(&pMob);
-			}
 		}
-		else
-		{
-			printf("***Wrong number of file mobs in the file (was %ld should be %ld)\n",
-				numFileMobs, 1L);
-		}
+	}
+	else
+	{
+		printf("***Wrong number of file mobs in the file (was %ld should be %ld)\n",
+			numFileMobs, 1L);
+	}
 
-		wprintf(L"--------\n");
-		// Get the number of master mobs in the file (should be one)
-		hr = pHeader->GetNumMobs(kMasterMob, &numMasterMobs);
-		if (1 == numMasterMobs )
+	wprintf(L"--------\n");
+	// Get the number of master mobs in the file (should be one)
+	check(pHeader->GetNumMobs(kMasterMob, &numMasterMobs));
+	if (1 == numMasterMobs )
+	{
+		printf("Found %ld Master Mobs\n", numMasterMobs);
+		criteria.searchTag = kByMobKind;
+		criteria.tags.mobKind = kMasterMob;
+		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+		hr = pMobIter->NextOne(&pMob);
+		while(AAFRESULT_SUCCESS == hr && pMobIter != NULL)
 		{
-			printf("Found %ld Master Mobs\n", numMasterMobs);
-			criteria.searchTag = kByMobKind;
-			criteria.tags.mobKind = kMasterMob;
-			hr = pHeader->EnumAAFAllMobs(&criteria, &pMobIter);
+			check(pMob->GetMobID (&mobID));
+			wprintf(L"    (mobID %08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x)\n",
+				mobID.Data1, mobID.Data2, mobID.Data3, mobID.Data4[0],
+				 mobID.Data4[1], mobID.Data4[2], mobID.Data4[3], mobID.Data4[4],
+				  mobID.Data4[5], mobID.Data4[6], mobID.Data4[7]);
 			hr = pMobIter->NextOne(&pMob);
-			while(AAFRESULT_SUCCESS == hr && pMobIter != NULL)
-			{
-				hr = pMob->GetMobID (&mobID);
-				wprintf(L"    (mobID %08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x)\n",
-					mobID.Data1, mobID.Data2, mobID.Data3, mobID.Data4[0],
-					 mobID.Data4[1], mobID.Data4[2], mobID.Data4[3], mobID.Data4[4],
-					  mobID.Data4[5], mobID.Data4[6], mobID.Data4[7]);
-				hr = pMobIter->NextOne(&pMob);
-			}
 		}
-		else
-		{
-			printf("***Wrong number of master mobs in the file (was %ld should be %ld)\n",
-				numMasterMobs, 1L);
-		}
+	}
+	else
+	{
+		printf("***Wrong number of master mobs in the file (was %ld should be %ld)\n",
+			numMasterMobs, 1L);
+	}
 
-		wprintf(L"--------\n");
-		// Get the number of composition mobs in the file (should be one)
-		hr = pHeader->GetNumMobs(kCompMob, &numCompMobs);
-		if (1 == numCompMobs )
-		{
-			printf("Found %ld Composition Mobs\n", numCompMobs);
+	wprintf(L"--------\n");
+	// Get the number of composition mobs in the file (should be one)
+	hr = pHeader->GetNumMobs(kCompMob, &numCompMobs);
+	if (1 == numCompMobs )
+	{
+		printf("Found %ld Composition Mobs\n", numCompMobs);
 
-			// Enumerate over all Composition Mobs
-			criteria.searchTag = kByMobKind;
-			criteria.tags.mobKind = kCompMob;
-			hr = pHeader->EnumAAFAllMobs(&criteria, &pMobIter);
-			while (pMobIter && pMobIter->NextOne(&pMob) !=AAFRESULT_NO_MORE_MOBS)
+		// Enumerate over all Composition Mobs
+		criteria.searchTag = kByMobKind;
+		criteria.tags.mobKind = kCompMob;
+		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+		while (pMobIter && pMobIter->NextOne(&pMob) !=AAFRESULT_NO_MORE_MOBS)
+		{
+			check(pMob->GetMobID (&mobID));
+			wprintf(L"    (mobID %08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x)\n",
+				mobID.Data1, mobID.Data2, mobID.Data3, mobID.Data4[0],
+				 mobID.Data4[1], mobID.Data4[2], mobID.Data4[3], mobID.Data4[4],
+				  mobID.Data4[5], mobID.Data4[6], mobID.Data4[7]);
+			pMob->GetNumSlots(&numSlots);
+			if (1 == numSlots)
 			{
-				hr = pMob->GetMobID (&mobID);
-				wprintf(L"    (mobID %08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x)\n",
-					mobID.Data1, mobID.Data2, mobID.Data3, mobID.Data4[0],
-					 mobID.Data4[1], mobID.Data4[2], mobID.Data4[3], mobID.Data4[4],
-					  mobID.Data4[5], mobID.Data4[6], mobID.Data4[7]);
-
-				pMob->GetNumSlots(&numSlots);
-				if (1 == numSlots)
+				check(pMob->EnumAAFAllMobSlots(&pSlotIter));
+				while (pSlotIter && pSlotIter->NextOne(&pSlot) != AAFRESULT_NO_MORE_OBJECTS)
 				{
-					hr = pMob->EnumAAFAllMobSlots(&pSlotIter);
-					while (pSlotIter && pSlotIter->NextOne(&pSlot) != AAFRESULT_NO_MORE_OBJECTS)
+					check(pSlot->GetSegment(&pSegment));
+					check(pSegment->QueryInterface(IID_IAAFComponent, (void **) &pComponent));
+					check(pComponent->GetLength (&length));
+					wprintf(L"Slot length = %ld\n", length);
+
+					hr = pSegment->QueryInterface(IID_IAAFSourceClip, (void **) &pSourceClip);
+					if(AAFRESULT_SUCCESS == hr)
 					{
-						hr = pSlot->GetSegment(&pSegment);
-
-						hr = pSegment->QueryInterface(IID_IAAFComponent, (void **) &pComponent);
-						hr = pComponent->GetLength (&length);
-						wprintf(L"Slot length = %ld\n", length);
-
-						hr = pSegment->QueryInterface(IID_IAAFSourceClip, (void **) &pSourceClip);
+						wprintf(L"Found source clip on slot\n");
+						hr = pSourceClip->ResolveRef(&pReferencedMob);
+						if(hr == AAFRESULT_SUCCESS)
+						{
+							pReferencedMob->GetMobID(&mobID);
+							wprintf(L"    References mob (mobID %08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x)\n",
+								mobID.Data1, mobID.Data2, mobID.Data3, mobID.Data4[0],
+								mobID.Data4[1], mobID.Data4[2], mobID.Data4[3], mobID.Data4[4],
+								mobID.Data4[5], mobID.Data4[6], mobID.Data4[7]);
+						}
+					}
+					else
+					{
+						hr = pSegment->QueryInterface(IID_IAAFSequence, (void **) &pSequence);
 						if(AAFRESULT_SUCCESS == hr)
 						{
-							wprintf(L"Found source clip on slot\n");
-							hr = pSourceClip->ResolveRef(&pReferencedMob);
-							if(hr == AAFRESULT_SUCCESS)
+							aafInt32	numComponents;
+					
+							check(pSequence->GetNumComponents (&numComponents));
+							wprintf(L"Found Sequence on slot with %ld components\n",
+								numComponents);
+							check(pSequence->EnumComponents (&pCompIter));
+							while (pCompIter && pCompIter->NextOne(&pComponent) != AAFRESULT_NO_MORE_OBJECTS)
 							{
-								pReferencedMob->GetMobID(&mobID);
-								wprintf(L"    References mob (mobID %08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x)\n",
-									mobID.Data1, mobID.Data2, mobID.Data3, mobID.Data4[0],
-									mobID.Data4[1], mobID.Data4[2], mobID.Data4[3], mobID.Data4[4],
-									mobID.Data4[5], mobID.Data4[6], mobID.Data4[7]);
+								check(pComponent->GetLength (&length));
+								wprintf(L"   Component length = %ld\n", length);
+								hr = pComponent->QueryInterface(IID_IAAFSourceClip, (void **) &pSourceClip);
+								if(AAFRESULT_SUCCESS == hr)
+								{
+									wprintf(L"    It's asource clip\n");
+									check(pSourceClip->ResolveRef(&pReferencedMob));
+									pReferencedMob->GetMobID(&mobID);
+									wprintf(L"    Which references mob (mobID %08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x)\n",
+										mobID.Data1, mobID.Data2, mobID.Data3, mobID.Data4[0],
+										mobID.Data4[1], mobID.Data4[2], mobID.Data4[3], mobID.Data4[4],
+										mobID.Data4[5], mobID.Data4[6], mobID.Data4[7]);
+								}
+								hr = pComponent->QueryInterface(IID_IAAFFiller, (void **) &pFiller);
+								if(AAFRESULT_SUCCESS == hr)
+								{
+									wprintf(L"    It's filler\n");
+								}
 							}
 						}
 						else
 						{
-							hr = pSegment->QueryInterface(IID_IAAFSequence, (void **) &pSequence);
-							if(AAFRESULT_SUCCESS == hr)
-							{
-								aafInt32	numComponents;
-						
-								hr = pSequence->GetNumComponents (&numComponents);
-								wprintf(L"Found Sequence on slot with %ld components\n",
-									numComponents);
-								hr = pSequence->EnumComponents (&pCompIter);
-								while (pCompIter && pCompIter->NextOne(&pComponent) != AAFRESULT_NO_MORE_OBJECTS)
-								{
-									hr = pComponent->GetLength (&length);
-									wprintf(L"   Component length = %ld\n", length);
-									hr = pComponent->QueryInterface(IID_IAAFSourceClip, (void **) &pSourceClip);
-									if(AAFRESULT_SUCCESS == hr)
-									{
-										wprintf(L"    It's asource clip\n");
-										hr = pSourceClip->ResolveRef(&pReferencedMob);
-										if(hr == AAFRESULT_SUCCESS)
-										{
-											pReferencedMob->GetMobID(&mobID);
-											wprintf(L"    Which references mob (mobID %08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x)\n",
-												mobID.Data1, mobID.Data2, mobID.Data3, mobID.Data4[0],
-												mobID.Data4[1], mobID.Data4[2], mobID.Data4[3], mobID.Data4[4],
-												mobID.Data4[5], mobID.Data4[6], mobID.Data4[7]);
-										}
-									}
-									hr = pComponent->QueryInterface(IID_IAAFFiller, (void **) &pFiller);
-									if(AAFRESULT_SUCCESS == hr)
-									{
-										wprintf(L"    It's filler\n");
-									}
-								}
-							}
-							else
-							{
-								wprintf(L"Found unknown segment on slot\n");
-							}
+							wprintf(L"Found unknown segment on slot\n");
 						}
 					}
 				}
-				else
-				{
-					hr = AAFRESULT_TEST_FAILED;
-				}
+			}
+			else
+			{
+				printf("***Wrong number of slots in the composition mob (was %ld should be %ld)\n",
+					numSlots, 1L);
 			}
 		}
-		else
-		{
-			printf("***Wrong number of composition mobs in the file (was %ld should be %ld)\n",
-				numCompMobs, 1L);
-		}
+	}
+	else
+	{
+		printf("***Wrong number of composition mobs in the file (was %ld should be %ld)\n",
+			numCompMobs, 1L);
 	}
 
+cleanup:
 	// Cleanup and return
 	if (pFile) 
 	{
@@ -674,7 +627,22 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	if (pSlotIter)
 		pSlotIter->Release();
 
-	return hr;
+	if (pReferencedMob)
+		pReferencedMob->Release();
+
+	if (pSequence)
+		pSequence->Release();
+
+	if (pComponent)
+		pComponent->Release();
+
+	if (pCompIter)
+		pCompIter->Release();
+
+	if (pFiller)
+		pFiller->Release();
+
+	return moduleErrorTmp;
 }
 
 // simple helper class to initialize and cleanup COM library.
@@ -698,7 +666,7 @@ main()
   const char * pFileName = "CutsOnly .aaf";
 
   printf("***Creating file %s\n", pFileName);
-  CreateAAFFile(pwFileName);
+  checkFatal(CreateAAFFile(pwFileName));
   printf("***Re-opening file %s\n", pFileName);
   ReadAAFFile(pwFileName);
 
