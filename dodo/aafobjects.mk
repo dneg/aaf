@@ -124,6 +124,7 @@ HUMAN_TYPED_IMPL = \
 	AAFTypeDefInt \
 	AAFTypeDefRename \
 	AAFTypeDefEnum \
+	AAFTypeDefExtEnum \
 	AAFTypeDefFixedArray \
 	AAFTypeDefRecord \
 	AAFTypeDefStream \
