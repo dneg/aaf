@@ -171,7 +171,7 @@ typedef aafInt64		aafFrameOffset_t;
 typedef aafInt64		aafFrameLength_t;
 typedef aafUInt32   	aafSlotID_t;  
 
-typedef aafInt32   		aafNumSlots_t;
+typedef aafUInt32  		aafNumSlots_t;
 typedef struct _aafUID_t   aafClassID_t;
 typedef aafUInt8    	*aafDataValue_t;
 
