@@ -508,6 +508,7 @@ bool ImplAAFTypeDefIndirect::supportedActualType (ImplAAFTypeDef *pActualType, a
     }
 
     case kAAFTypeCatInt:
+    case kAAFTypeCatCharacter:
     case kAAFTypeCatEnum:
     case kAAFTypeCatRecord:
       return true;
