@@ -422,8 +422,9 @@ void ContentStorageTest::createFileMob(aafMobID_constref newMobID)
 	check(_pMob->SetMobID(newMobID));
 	check(_pMob->SetName(L"ContentStorageTest File Mob"));
 	
-	check(defs.cdFileDescriptor()->
-		  CreateInstance(IID_IAAFEssenceDescriptor, 
+	// instantiate a concrete subclass of FileDescriptor
+	check(defs.cdHTMLDescriptor()->
+		  CreateInstance(IID_IAAFFileDescriptor, 
 						 (IUnknown **)&_pFileDescriptor));
 	
 	check(_pFileDescriptor->QueryInterface (IID_IAAFEssenceDescriptor,

@@ -187,8 +187,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pMob->SetName(L"DigitalImageDescriptorTest"));
 
 
-    // Create a digitial image descriptor.
-    checkResult(defs.cdDigitalImageDescriptor()->
+    // Create a concrete subclass of DigitialImageDescriptor.
+    checkResult(defs.cdRGBADescriptor()->
 				CreateInstance(IID_IAAFDigitalImageDescriptor, 
 							   (IUnknown **)&pDIDesc));		
 
