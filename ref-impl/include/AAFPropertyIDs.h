@@ -39,7 +39,7 @@
 // Define the AAF_PROPERTY macros to create PID definitions.
 // Include the meta dictionary.
 //
-#define AAF_PROPERTY(name, id, tag, type, mandatory, container) \
+#define AAF_PROPERTY(name, id, tag, type, mandatory, uid, container) \
 const int PID_##container##_##name = tag;
 
 #include "AAFMetaDictionary.h"
