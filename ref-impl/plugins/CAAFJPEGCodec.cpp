@@ -40,7 +40,6 @@
 #include "AAFEssenceFormats.h"
 
 
-#include "jpegesdata.h"
 
 
 // {0DB382D1-3BAC-11d3-BFD6-00104BC9156D}
@@ -91,7 +90,7 @@ const aafRational_t DEFAULT_ASPECT_RATIO = {4, 3};
 inline void checkResult(AAFRESULT r)
 {
   if (AAFRESULT_SUCCESS != r)
-    throw r;
+    throw HRESULT(r);
 }
 
 inline void checkExpression(bool test, AAFRESULT r)
@@ -173,6 +172,12 @@ CAAFJPEGCodec::CAAFJPEGCodec (IUnknown * pControllingUnknown)
 	_padBytesPerRow = 0;
 	
 	_compression_IJG_Quality = 75; // good default quality.
+
+	_rawSampleImage = NULL; /* a 3-D sample array: top index is color */
+	_rawSampleArray = NULL;
+	_rawSampleImageBuffer = NULL; // ultimate buffer for _sampleImage.
+	_rawSampleImageBufferSize = 0;
+
 }
 
 
@@ -197,6 +202,27 @@ CAAFJPEGCodec::~CAAFJPEGCodec ()
 		delete [] _sampleIndex;
 		_sampleIndex = NULL;
 	}
+
+	// Cleanup the raw sample image buffer is one has been allocated.
+	if (NULL != _rawSampleImageBuffer)
+	{
+		delete [] _rawSampleImageBuffer;
+		_rawSampleImageBuffer = NULL;
+		_rawSampleImageBufferSize = 0;
+	}
+
+	if (NULL != _rawSampleArray)
+	{
+		delete [] _rawSampleArray;
+		_rawSampleArray = NULL;
+	}
+
+	if (NULL != _rawSampleImage)
+	{
+		delete [] _rawSampleImage;
+		_rawSampleImage = NULL;
+	}
+
 }
 
 
@@ -1034,7 +1060,7 @@ HRESULT STDMETHODCALLTYPE
 		{
 			// If we are being asked compress the given buffer then
 			// the we should have already calculated the size of a sample.
-//			checkExpression(_fileBytesPerSample != 0, AAFRESULT_ZERO_SAMPLESIZE);
+			checkExpression(_fileBytesPerSample != 0, AAFRESULT_ZERO_SAMPLESIZE);
 
 
 			/* Step 1: allocate and initialize JPEG compression object */
@@ -1057,6 +1083,7 @@ HRESULT STDMETHODCALLTYPE
 			// Get the dimensions of the image data to compress.
 			param.imageWidth = _imageWidth;
 			param.imageHeight = _imageHeight;
+			param.components = 3;
 //			param.imageHeight = (kSeparateFields == _frameLayout) ? (_imageHeight / 2) : _imageHeight;
 
 			param.colorSpace = _pixelFormat;
@@ -1070,7 +1097,16 @@ HRESULT STDMETHODCALLTYPE
 			param.quality = _compression_IJG_Quality; 
 
 			// Compute the number of bytes in a single row of pixel data.
-			param.rowBytes = (_imageWidth * 3) + _padBytesPerRow;
+			if (1 == _horizontalSubsampling)
+			{
+				param.rowBytes = (_imageWidth * param.components) + _padBytesPerRow;
+			}
+			else if (2 == _horizontalSubsampling)
+			{	// Add an extra byte if with is odd. NOTE: This will never
+				// happen with full 601 frame.
+				param.rowBytes = (_imageWidth * (param.components - 1)) + (_imageWidth % 2) + _padBytesPerRow;
+			}
+				
 
 			// Calculate the size of the sample data to be compressed.
 			param.bufferSize = param.rowBytes * param.imageHeight;
@@ -1107,8 +1143,18 @@ HRESULT STDMETHODCALLTYPE
 					resultBlock[0].bytesXfered += param.bufferSize;
 				}
 
-				// TODO:
 				// Add padding for _imageAlignmentFactor
+				if (0 < _imageAlignmentFactor)
+				{
+					aafUInt32 alignmentBytes = resultBlock[0].bytesXfered % _imageAlignmentFactor;
+
+					// TODO: Allocate and use a "aligmentBuffer" so that all of the padding
+					// for the can be written in a single write operation.
+					aafUInt32 i;
+					aafUInt8 ch = 0;
+					for (i = 0; i < alignmentBytes; ++i)
+						checkResult(_stream->Write(&ch, 1));
+				}
 
 				// Update the return values.
 				resultBlock[0].samplesXfered++;
@@ -1234,6 +1280,7 @@ HRESULT STDMETHODCALLTYPE
 			// Get the dimensions of the image data to compress.
 			param.imageWidth = _imageWidth;
 			param.imageHeight = (kSeparateFields == _frameLayout) ? (_imageHeight / 2) : _imageHeight;
+			param.components = 3;
 
 			param.colorSpace = _pixelFormat;
 			param.horizontalSubsampling = _horizontalSubsampling;
@@ -1384,6 +1431,12 @@ void CAAFJPEGCodec::UpdateCalculatedData(void)
 {
 	aafUInt32 numFields = 0;
 
+		// We currently only support 601 4-4-4 and 4-2-2.
+//	checkExpression((1 == _verticalSubsampling && 1 == _horizontalSubsampling) ||
+//								  (1 == _verticalSubsampling && 2 == _horizontalSubsampling && 
+//									 kColorSpaceYUV == _pixelFormat),
+//				          AAFRESULT_BADPIXFORM); // AAFRESULT_BADLAYOUT
+
 
 	switch (_frameLayout)
 	{
@@ -1527,14 +1580,10 @@ HRESULT STDMETHODCALLTYPE
 		checkExpression(_currentIndex >= _startingIndex, AAFRESULT_NOT_WRITEABLE);
 		checkAssertion(_currentIndex <= _writeIndex);
 
-//		// Make sure that we are already at the end of the stream.
-//		if (_currentIndex < _writeIndex)
-//			checkResult(Seek(_writeIndex));
-
 
 		// We should only be able to write to the end of the stream. This should be 
 		// enforced by the implementation of the IAAFEssenceStream. This is why we 
-		// compute the offset to the start of the from the position after the write 
+		// compute the offset to the start from the position after the write 
 		// operation just in case the seek position had to be reset to the end by the
 		// implementation of the IAAFEssenceStream.
 
@@ -1786,12 +1835,12 @@ HRESULT STDMETHODCALLTYPE
 				_videoLineMap[0] = param.operand.expVideoLineMap[0];
 				_videoLineMap[1] = param.operand.expVideoLineMap[1];
 			}
-			else if (EqualAUID(&kAAFPixelSize, &param.opcode))
-			{	// Validate the in-memory size.
-				checkExpression(param.size == sizeof(param.operand.expInt16), AAFRESULT_INVALID_PARM_SIZE);
-				// This is a calculated value!
-				//_bitsPerPixelAvg = param.operand.expInt16;
-			}
+//			else if (EqualAUID(&kAAFPixelSize, &param.opcode))
+//			{	// Validate the in-memory size.
+//				checkExpression(param.size == sizeof(param.operand.expInt16), AAFRESULT_INVALID_PARM_SIZE);
+//				// This is a calculated value!
+//				//_bitsPerPixelAvg = param.operand.expInt16;
+//			}
 			else if (EqualAUID(&kAAFStoredRect, &param.opcode))
 			{	// Validate the in-memory size.
 				checkExpression(param.size == sizeof(param.operand.expRect), AAFRESULT_INVALID_PARM_SIZE);
@@ -1884,6 +1933,10 @@ HRESULT STDMETHODCALLTYPE
 			
 			
 		} // for (i = 0...)
+
+		
+		if (horizontalSubsampling != _horizontalSubsampling)
+			_horizontalSubsampling = horizontalSubsampling;
 
 
 		UpdateCalculatedData();
@@ -2339,11 +2392,261 @@ HRESULT STDMETHODCALLTYPE
 }
 
 
+JSAMPIMAGE CAAFJPEGCodec::GetRawSampleImage(const aafCompressionParams& param) // throw HRESULT
+{
+	// We currently only support 601 and 4-2-2.
+	checkExpression(1 == param.verticalSubsampling && 2 == param.horizontalSubsampling &&
+									kColorSpaceYUV == param.colorSpace,
+				          AAFRESULT_BADPIXFORM); // AAFRESULT_BADLAYOUT
+
+	if (NULL == _rawSampleImage)
+	{
+		aafUInt32 comp_size[3], mcu_sample_width[3], mcu_sample_height[3], sub_width;
+		aafUInt32 comp_offset[3];
+		aafUInt32 ci, row, total_rows, offset;
+		JSAMPARRAY sampleArray;
+
+		// Allocate the top-level color component array to hold the 2-D array for each
+		// component.
+		_rawSampleImage = new JSAMPARRAY[3];
+		checkExpression(NULL != _rawSampleImage, AAFRESULT_NOMEMORY); // throw HRESULT!
+		for (ci = 0; ci < 3; ++ci)
+			_rawSampleImage[ci] = NULL;
+
+		// Compute the size of the Luminance component data array.
+		comp_offset[0] = 0;
+		mcu_sample_width[0]  = param.imageWidth + (param.imageWidth % DCTSIZE);
+		mcu_sample_height[0] = param.imageHeight + (param.imageHeight % DCTSIZE);
+		comp_size[0] = (mcu_sample_width[0] * mcu_sample_height[0]) * sizeof(JSAMPLE);
+
+		// Compute the size of the Cb component data array.
+		comp_offset[1] = comp_size[0];
+		sub_width = param.imageWidth / 2;
+		mcu_sample_width[1]  = sub_width + (sub_width % DCTSIZE);
+		mcu_sample_height[1] = mcu_sample_height[0];
+		comp_size[1] = (mcu_sample_width[1] * mcu_sample_height[1]) * sizeof(JSAMPLE);
+
+		// Compute the size of the Cr component data array.
+		comp_offset[2] = comp_size[0] + comp_size[1];
+		mcu_sample_width[2]  = mcu_sample_width[1];
+		mcu_sample_height[2] = mcu_sample_height[1];
+		comp_size[2] = comp_size[1];
+
+		
+		// Allocate the buffer for all of the raw sample row pointers.
+		total_rows = mcu_sample_height[0] + mcu_sample_height[1] + mcu_sample_height[2];
+		_rawSampleArray = new JSAMPROW[total_rows];
+		checkExpression(NULL != _rawSampleArray, AAFRESULT_NOMEMORY); // throw HRESULT!
+
+		// Clear out the array of pointers. We may only do this in the debug version...
+		for (row = 0; row < total_rows; ++row)
+			_rawSampleArray[row] = NULL;
+
+		// Assign the sample array pointer for each component from the raw sample array.
+		_rawSampleImage[0] = &_rawSampleArray[0];
+		_rawSampleImage[1] = &_rawSampleArray[mcu_sample_height[0]];
+		_rawSampleImage[2] = &_rawSampleArray[mcu_sample_height[0] + mcu_sample_height[1]];
+		
+
+		// Compute the total number of JSAMPLE's needed to hold the raw data.
+		_rawSampleImageBufferSize = comp_size[0] + comp_size[1] + comp_size[2];
+		
+		// Attempt to allocate the buffer.
+		_rawSampleImageBuffer = new JSAMPLE[_rawSampleImageBufferSize];
+		checkExpression(NULL != _rawSampleImageBuffer, AAFRESULT_NOMEMORY); // throw HRESULT!
+
+
+		// Now we need to initialize the elements of the JSAMPIMAGE with pointers
+		// into the allocated raw sample image buffer.
+		for (ci = 0; ci < 3; ++ci)
+		{
+			// Assign the array of row pointers. These will be assigned from offsets
+			// into the _rawSampleImageBuffer so they will NOT have to be deleted.
+
+			sampleArray = _rawSampleImage[ci];		
+			offset = comp_offset[ci];
+			
+			for (row = 0; row < mcu_sample_height[ci]; ++row)
+			{
+				sampleArray[row] = _rawSampleImageBuffer + offset;
+
+				// compute offset to the next row.
+				offset += mcu_sample_width[ci];
+			}
+		}
+	}
+
+	// Return the current buffer.
+	return _rawSampleImage;
+}
+
+// Mapping from 601-1 4-2-2):
+const int Y_POS = 1;
+const int Cb_POS = 0;
+const int Cr_POS = 2;
+
+const int Y_OFFSET = 2;
+const int Cb_OFFSET = 4;
+const int Cr_OFFSET = 4;
+
+void CAAFJPEGCodec::DumpSampleImage(
+	const aafCompressionParams& param, 
+	JSAMPIMAGE rawSampleImage)
+{
+	// We currently only support 601 and 4-2-2.
+	checkExpression(1 == param.verticalSubsampling && 2 == param.horizontalSubsampling &&
+									kColorSpaceYUV == param.colorSpace,
+				          AAFRESULT_BADPIXFORM); // AAFRESULT_BADLAYOUT
+#ifdef _DEBUG //_AAF_DUMP
+	
+	printf("static const aafUInt8 %s[][][] =\n{\n", "SampleImage");
+
+
+	aafUInt32 ci, row, col, comp_width[3];
+//	JSAMPARRAY output_array;
+//	JSAMPROW output_row;
+	int x;
+
+	comp_width[0] = param.imageWidth;
+	comp_width[2] = comp_width[1] = (param.imageWidth / 2);
+
+
+	for (ci = 0; ci < 3; ++ci)
+	{
+		printf("  { // Color component table %d\n    ", ci);
+
+		for (row = 0; row < param.imageHeight; ++row)
+		{
+			for (col = 0; col < comp_width[ci]; ++col)
+			{
+				x = (int)rawSampleImage[ci][row][col];
+				printf("0x%02X", x);
+				if (col < (comp_width[ci] - 1))
+					printf(",");
+			}
+
+			printf("\n    ");
+		}
+
+		if (ci < 2)
+			printf("\n  },\n");
+		else
+			printf("\n  }\n");
+
+		printf("\n");
+	}
+
+
+	printf("\n};\n");
+#endif // #ifdef _AAF_DUMP
+}
+
+
+static void SetupFor422(aafUInt32 imageWidth, aafUInt32 comp_pos[], aafUInt32 comp_offset[], aafUInt32 comp_width[])
+{
+	comp_pos[0] = Y_POS;
+	comp_pos[1] = Cb_POS;
+	comp_pos[2] = Cr_POS;
+
+	comp_offset[0] = Y_OFFSET;
+	comp_offset[1] = Cb_OFFSET;
+	comp_offset[2] = Cr_OFFSET;
+
+
+	comp_width[0] = imageWidth;
+	comp_width[2] = comp_width[1] = (imageWidth / 2);
+
+}
+
+void CAAFJPEGCodec::CopyDataToSampleImage(
+	const aafCompressionParams& param, 
+	JSAMPIMAGE rawSampleImage) // throw HRESULT
+{
+	// We currently only support 601 and 4-2-2.
+	checkExpression(1 == param.verticalSubsampling && 2 == param.horizontalSubsampling &&
+									kColorSpaceYUV == param.colorSpace,
+				          AAFRESULT_BADPIXFORM); // AAFRESULT_BADLAYOUT
+	
+	// Move the CbYCrY' elements from the interleaved compression buffer
+ 	// out into the separate color component images within the given raw sample
+	// image. This sample image is suitable for input to the jpeg_write_raw_data
+	// function of IJG 6(b).
+
+	// The following code was modelled on the IJG null_convert in jccolor.c:
+	aafUInt32 ci, row, offset, col, comp_pos[3], comp_offset[3], comp_width[3];
+	JSAMPARRAY output_array;
+	JSAMPROW output_row;
+
+	SetupFor422(param.imageWidth, comp_pos, comp_offset, comp_width);
+
+	for (ci = 0; ci < 3; ++ci)
+	{
+		offset = comp_pos[ci];
+		output_array = rawSampleImage[ci];
+
+		for (row = 0; row < param.imageHeight; ++row)
+		{
+			output_row = output_array[row];
+			
+			for (col = 0; col < comp_width[ci]; ++col)
+			{
+				output_row[col] = (JSAMPLE)param.buffer[offset];
+				offset += comp_offset[ci];
+			}
+		}
+	}
+
+//	DumpSampleImage(param, rawSampleImage);
+}
+
+void CAAFJPEGCodec::CopyDataFromSampleImage(
+	JSAMPIMAGE rawSampleImage, 
+	aafCompressionParams& param) // throw HRESULT
+{
+	// We currently only support 601 and 4-2-2.
+	checkExpression(1 == param.verticalSubsampling && 2 == param.horizontalSubsampling &&
+									kColorSpaceYUV == param.colorSpace,
+				          AAFRESULT_BADPIXFORM); // AAFRESULT_BADLAYOUT
+
+	DumpSampleImage(param, rawSampleImage);
+
+	// Move the CbYCrY' elements from the interleaved compression buffer
+ 	// out into the separate color component images within the given raw sample
+	// image. This sample image is suitable for input to the jpeg_write_raw_data
+	// function of IJG 6(b).
+
+	// The following code was modelled on the IJG null_convert in jccolor.c:
+	aafUInt32 ci, row, offset, col, comp_pos[3], comp_offset[3], comp_width[3];
+	JSAMPARRAY input_array;
+	JSAMPROW input_row;
+
+	SetupFor422(param.imageWidth, comp_pos, comp_offset, comp_width);
+
+	for (ci = 0; ci < 3; ++ci)
+	{
+		offset = comp_pos[ci];
+		input_array = rawSampleImage[ci];
+
+		for (row = 0; row < param.imageHeight; ++row)
+		{
+			input_row = input_array[row];
+			
+			for (col = 0; col < comp_width[ci]; ++col)
+			{
+				param.buffer[offset] = (aafUInt8)input_row[col];
+				offset += comp_offset[ci];
+			}
+		}
+	}
+}
+
 
 
 // Compress a single image data from the given buffer. Return the actual
 // number of bytes written.
-HRESULT CAAFJPEGCodec::CompressImage(const aafCompressionParams& param, struct jpeg_compress_struct& cinfo)
+HRESULT CAAFJPEGCodec::CompressImage(
+	const aafCompressionParams& param, 
+	struct jpeg_compress_struct& cinfo)
 {
 	HRESULT hr = S_OK;
 
@@ -2355,8 +2658,8 @@ HRESULT CAAFJPEGCodec::CompressImage(const aafCompressionParams& param, struct j
 	else if (param.bufferSize < (param.imageHeight * param.rowBytes))
 		return AAFRESULT_SMALLBUF;
 
-  /* More stuff */
-  JSAMPROW row_pointer[1];	/* pointer to JSAMPLE row[s] */
+	/* More stuff */
+	JSAMPROW row_pointer[1];	/* pointer to JSAMPLE row[s] */
 
 
 	try
@@ -2365,8 +2668,7 @@ HRESULT CAAFJPEGCodec::CompressImage(const aafCompressionParams& param, struct j
 		checkAssertion(NULL != _stream);
 
 		// This version only supports compression of RGB data
-		checkExpression(1 == param.horizontalSubsampling,
-		               AAFRESULT_BADPIXFORM);
+//		checkExpression(1 == param.horizontalSubsampling, AAFRESULT_BADPIXFORM);
 
 		// This should already have been calculated.
 		checkAssertion(0 < param.rowBytes);
@@ -2388,10 +2690,6 @@ HRESULT CAAFJPEGCodec::CompressImage(const aafCompressionParams& param, struct j
 			case kColorSpaceYCrCb:
 				cinfo.in_color_space = JCS_YCbCr;
 				break;
-			
-			case kColorSpaceCMYK:
-				cinfo.in_color_space = JCS_CMYK;
-				break;
 
 			default:
 				cinfo.in_color_space = JCS_RGB;
@@ -2410,33 +2708,69 @@ HRESULT CAAFJPEGCodec::CompressImage(const aafCompressionParams& param, struct j
 		jpeg_set_quality(&cinfo, param.quality, TRUE /* limit to baseline-JPEG values */);
 
 
-		/* Step 4: Start compressor */
-
-		/* TRUE ensures that we will write a complete interchange-JPEG file.
-		 * Pass TRUE unless you are very sure of what you're doing.
-		 */
-		jpeg_start_compress(&cinfo, TRUE);
-
-
-		/* Step 5: while (scan lines remain to be written) */
-		/*           jpeg_write_scanlines(...); */
-
-		/* Here we use the library's state variable cinfo.next_scanline as the
-		 * loop counter, so that we don't have to keep track ourselves.
-		 * To keep things simple, we pass one scanline per call; you can pass
-		 * more if you wish, though.
-		 */
-
-		while (cinfo.next_scanline < cinfo.image_height)
+		if (JCS_YCbCr == cinfo.in_color_space && 
+			  (1 != param.horizontalSubsampling || 1 != param.verticalSubsampling) )
 		{
-			/* jpeg_write_scanlines expects an array of pointers to scanlines.
-			 * Here the array is only one element long, but you could pass
-			 * more than one scanline at a time if that's more convenient.
-			 */
-			row_pointer[0] = & param.buffer[cinfo.next_scanline * param.rowBytes];
-			(void) jpeg_write_scanlines(&cinfo, row_pointer, 1);
-		}
+			// Notify the library that we are supplying raw YCbCr data.
+			cinfo.raw_data_in = TRUE; // this was set to FALSE by jpeg_set_defaults.
 
+			// Ensure that the sampling factors are correct.
+			cinfo.comp_info[0].h_samp_factor = param.horizontalSubsampling;
+			cinfo.comp_info[0].v_samp_factor = param.verticalSubsampling;
+
+
+			// Get the raw image buffer (allocate one if necessary).
+			JSAMPIMAGE rawImage = GetRawSampleImage(param); // may be out of memory.
+
+			// Now map the input interleaved image data into the rawImage buffer.
+			// NOTE: The interleaved format is 601 4-2-2 (SMPTE 259).
+			CopyDataToSampleImage(param, rawImage);
+
+
+			/* Step 4: Start compressor */
+
+			/* TRUE ensures that we will write a complete interchange-JPEG file.
+			 * Pass TRUE unless you are very sure of what you're doing.
+			 */
+			jpeg_start_compress(&cinfo, TRUE);
+
+
+			/* Step 5: Write the image data into the compressor */
+
+			// Compress the raw subsampled data one MCU row at a time.
+			aafUInt32 total_rows_with_MCU = param.imageHeight + param.imageHeight % DCTSIZE;
+			aafUInt32 num_MCU_rows = 0;
+			while (num_MCU_rows < total_rows_with_MCU)
+				num_MCU_rows += jpeg_write_raw_data(&cinfo, rawImage, DCTSIZE);
+		} 
+		else
+		{
+			/* Step 4: Start compressor */
+
+			/* TRUE ensures that we will write a complete interchange-JPEG file.
+			 * Pass TRUE unless you are very sure of what you're doing.
+			 */
+			jpeg_start_compress(&cinfo, TRUE);
+
+
+			/* Step 5: Write the image data into the compressor */
+
+			/* Here we use the library's state variable cinfo.next_scanline as the
+			 * loop counter, so that we don't have to keep track ourselves.
+			 * To keep things simple, we pass one scanline per call; you can pass
+			 * more if you wish, though.
+			 */
+
+			while (cinfo.next_scanline < cinfo.image_height)
+			{
+				/* jpeg_write_scanlines expects an array of pointers to scanlines.
+				 * Here the array is only one element long, but you could pass
+				 * more than one scanline at a time if that's more convenient.
+				 */
+				row_pointer[0] = & param.buffer[cinfo.next_scanline * param.rowBytes];
+				(void) jpeg_write_scanlines(&cinfo, row_pointer, 1);
+			}
+		}
 
 		/* Step 6: Finish compression */
 
@@ -2465,7 +2799,9 @@ HRESULT CAAFJPEGCodec::CompressImage(const aafCompressionParams& param, struct j
 // Decompress a single image from the current position in the stream returning
 // the image data in buffer and the actual number of bytes written. Note: bufLen must
 // be large enough to hold all of the decompressed data
-HRESULT CAAFJPEGCodec::DecompressImage(aafCompressionParams& param, struct jpeg_decompress_struct& cinfo)
+HRESULT CAAFJPEGCodec::DecompressImage(
+	aafCompressionParams& param, 
+	struct jpeg_decompress_struct& cinfo)
 {
 	HRESULT hr = S_OK;
 
@@ -2488,7 +2824,7 @@ HRESULT CAAFJPEGCodec::DecompressImage(aafCompressionParams& param, struct jpeg_
 		checkAssertion(NULL != _stream);
 
 		// This version only supports compression of RGB data
-		checkExpression(1 == _horizontalSubsampling, AAFRESULT_BADPIXFORM);
+//		checkExpression(1 == _horizontalSubsampling, AAFRESULT_BADPIXFORM);
 
 		
 		/* Step 3: read file parameters with jpeg_read_header() */
@@ -2510,10 +2846,6 @@ HRESULT CAAFJPEGCodec::DecompressImage(aafCompressionParams& param, struct jpeg_
 			case kColorSpaceYCrCb:
 				cinfo.out_color_space = JCS_YCbCr;
 				break;
-			
-			case kColorSpaceCMYK:
-				cinfo.out_color_space = JCS_CMYK;
-				break;
 
 			default:
 				cinfo.out_color_space = JCS_RGB;
@@ -2525,44 +2857,80 @@ HRESULT CAAFJPEGCodec::DecompressImage(aafCompressionParams& param, struct jpeg_
 		 */
 
 
-		/* Step 5: Start decompressor */
 
-		(void) jpeg_start_decompress(&cinfo);
-		/* We can ignore the return value since suspension is not possible
-		 * with the essence stream data source.
-		 */
-
- 
-		/* We may need to do some setup of our own at this point before reading
-		 * the data.  After jpeg_start_decompress() we have the correct scaled
-		 * output image dimensions available, as well as the output colormap
-		 * if we asked for color quantization.
-		 * In this example, we need to make sure the output work buffer is of the right size.
-		 */
-		checkExpression(((int)cinfo.output_height * param.rowBytes) == param.bufferSize,
-		                AAFRESULT_SMALLBUF); // cinfo.output_width
-
-		// Initialize the starting row pointer to the beginning of the buffer.
-		row_pointer[0] = &param.buffer[0];
-
-
-		/* Step 6: while (scan lines remain to be read) */
-		/*           jpeg_read_scanlines(...); */
-
-		/* Here we use the library's state variable cinfo.output_scanline as the
-		 * loop counter, so that we don't have to keep track ourselves.
-		 */
-		while (cinfo.output_scanline < cinfo.output_height)
+		if (JCS_YCbCr == cinfo.out_color_space && 
+			  (1 != param.horizontalSubsampling || 1 != param.verticalSubsampling) )
 		{
-			/* jpeg_read_scanlines expects an array of pointers to scanlines.
-			 * Here the array is only one element long, but you could ask for
-			 * more than one scanline at a time if that's more convenient.
+			// Notify the library that we are requresting raw YCbCr data.
+			cinfo.raw_data_out = TRUE; // this was set to FALSE by jpeg_set_defaults.
+
+			// Ensure that the sampling factors are correct.
+			cinfo.comp_info[0].h_samp_factor = param.horizontalSubsampling;
+			cinfo.comp_info[0].v_samp_factor = param.verticalSubsampling;
+
+
+			/* Step 5: Start decompressor */
+
+			(void) jpeg_start_decompress(&cinfo);
+			/* We can ignore the return value since suspension is not possible
+			 * with the essence stream data source.
 			 */
-			row_pointer[0] = & param.buffer[cinfo.output_scanline * param.rowBytes];
-			(void) jpeg_read_scanlines(&cinfo, row_pointer, 1);
+
+
+			// Get the raw image buffer (allocate one if necessary).
+			JSAMPIMAGE rawImage = GetRawSampleImage(param); // may be out of memory.
+
+			// Compress the raw subsampled data one MCU row at a time.
+			aafUInt32 total_rows_with_MCU = param.imageHeight + param.imageHeight % DCTSIZE;
+			aafUInt32 num_MCU_rows = 0;
+			while (num_MCU_rows < total_rows_with_MCU)
+				num_MCU_rows += jpeg_read_raw_data(&cinfo, rawImage, DCTSIZE);
+			
+
+			// Now map the output interleaved image data from the rawImage buffer.
+			// NOTE: The interleaved format is 601 4-2-2 (SMPTE 259).
+			CopyDataFromSampleImage(rawImage, param);
+		} 
+		else
+		{
+			/* Step 5: Start decompressor */
+
+			(void) jpeg_start_decompress(&cinfo);
+			/* We can ignore the return value since suspension is not possible
+			 * with the essence stream data source.
+			 */
+
+
+		 /* We may need to do some setup of our own at this point before reading
+			 * the data.  After jpeg_start_decompress() we have the correct scaled
+			 * output image dimensions available, as well as the output colormap
+			 * if we asked for color quantization.
+			 * In this example, we need to make sure the output work buffer is of the right size.
+			 */
+			checkExpression(((int)cinfo.output_height * param.rowBytes) == param.bufferSize,
+											AAFRESULT_SMALLBUF); // cinfo.output_width
+
+			// Initialize the starting row pointer to the beginning of the buffer.
+			row_pointer[0] = &param.buffer[0];
+
+
+			/* Step 6: while (scan lines remain to be read) */
+			/*           jpeg_read_scanlines(...); */
+
+			/* Here we use the library's state variable cinfo.output_scanline as the
+			 * loop counter, so that we don't have to keep track ourselves.
+			 */
+			while (cinfo.output_scanline < cinfo.output_height)
+			{
+				/* jpeg_read_scanlines expects an array of pointers to scanlines.
+				 * Here the array is only one element long, but you could ask for
+				 * more than one scanline at a time if that's more convenient.
+				 */
+				row_pointer[0] = & param.buffer[cinfo.output_scanline * param.rowBytes];
+				(void) jpeg_read_scanlines(&cinfo, row_pointer, 1);
+			}
+
 		}
-
-
 		/* Step 7: Finish decompression */
 
 		(void) jpeg_finish_decompress(&cinfo);
