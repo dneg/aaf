@@ -50,7 +50,7 @@ OMFile::~OMFile(void)
 
   delete _referencedProperties;
   _referencedProperties = 0;
-  delete _fileName;
+  delete [] _fileName;
   _fileName = 0;
 
   delete _rawStorage;
