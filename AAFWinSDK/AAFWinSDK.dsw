@@ -41,6 +41,12 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name comapi
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name COMIDL
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -148,6 +154,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name CppModTestAAF
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ComModTestAAF
     End Project Dependency
 }}}
 
