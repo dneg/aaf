@@ -480,7 +480,7 @@ static void convert(wchar_t* wcName, size_t length, const char* name);
 static void convert(char* cName, size_t length, const wchar_t* name);
 #endif
 static void convert(char* cName, size_t length, const char* name);
-#if defined (__sgi)
+#if defined (__sgi) || defined(_MAC) || defined(macintosh)
 static void convert(char* cName, size_t length, const OMCharacter* name);
 #endif
 static void convertName(char* cName,
@@ -1016,8 +1016,9 @@ void convert(char* cName, size_t length, const char* name)
   }
 }
 
-#if defined (__sgi)
-// For use when sizeof(wchar_t) != sizeof(OMCharacter)
+#if defined (__sgi) || defined(_MAC) || defined(macintosh)
+// For use when wchar_t and OMCharacter are incompatible.
+// e.g. when sizeof(wchar_t) != sizeof(OMCharacter)
 void convert(char* cName, size_t length, const OMCharacter* name)
 {
   for (size_t i = 0; i < length; i++) {
