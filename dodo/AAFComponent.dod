@@ -8,6 +8,7 @@ AAFObject\
 #c
 #import ./AAFUnitTest.exp
 #import ./AAFObject.exp
+AD_HEAD
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
