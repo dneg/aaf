@@ -225,26 +225,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	pFileDesc->Release();
 	pFileDesc = NULL;
 
-	check(CoCreateInstance( CLSID_AAFSourceClip,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFSourceClip, 
-						   (void **)&fileSclp));		
-
 	sourceRef.sourceID = tapeMobID;
 	sourceRef.sourceSlotID = 1;
 	sourceRef.startTime = 0;
-	check(fileSclp->SetRef(sourceRef));
-
-	check(fileSclp->QueryInterface (IID_IAAFComponent, (void **)&aComponent));
-	check(aComponent->SetLength (&fileLen));
-	check(fileSclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
-	check(pFileMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
-	check(pMob->AppendNewSlot (seg, 1, slotName, &newSlot));
-	aComponent->Release();
-	aComponent = NULL;
-	pMob->Release();
-	pMob = NULL;
+	check(pFileMob->NewPhysSourceRef (videoRate,
+                           1, &videoDef, sourceRef, fileLen));
 
 	check(pFileMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 	check(pMob->GetMobID (&fileMobID));
@@ -259,24 +244,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 						   IID_IAAFMasterMob, 
 						   (void **)&pMasterMob));
 
-	check(CoCreateInstance( CLSID_AAFSourceClip,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFSourceClip, 
-						   (void **)&masterSclp));		
-
 	sourceRef.sourceID = fileMobID;
 	sourceRef.sourceSlotID = 1;
 	sourceRef.startTime = 0;
-	check(masterSclp->SetRef(sourceRef));
-
-	check(masterSclp->QueryInterface (IID_IAAFComponent, (void **)&aComponent));
-	check(aComponent->SetLength (&fileLen));
-	check(masterSclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
+	check(pMasterMob->NewPhysSourceRef (videoRate, 1, &videoDef, sourceRef, fileLen));
 	check(pMasterMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
-	check(pMob->AppendNewSlot (seg, 1, slotName, &newSlot));
-	aComponent->Release();
-
 	check(pMob->GetMobID (&masterMobID));
 	check(pMob->SetName (L"A Master Mob"));
 	check(pHeader->AppendMob(pMob));
