@@ -217,6 +217,7 @@ class .this-module;
 
 #include "AAFTypes.h"
 
+
 class Impl.this-module
 {
 public:
@@ -227,6 +228,11 @@ public:
   Impl.this-module ();
   virtual ~Impl.this-module ();
 
+
+  // Reference Counting interface
+  virtual aafUInt32 AcquireRef();
+  virtual aafUInt32 ReleaseRef();
+  virtual aafUInt32 RefCount();
 #endm
 
 
