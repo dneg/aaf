@@ -60,6 +60,20 @@ ImplAAFTypeDefStrongObjRef::ImplAAFTypeDefStrongObjRef ()
 ImplAAFTypeDefStrongObjRef::~ImplAAFTypeDefStrongObjRef ()
 {}
 
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefStrongObjRef::Initialize (
+      const aafUID_t & id,
+      ImplAAFClassDef * pObjType,
+      const aafCharacter * pTypeName)
+{
+  if (! pObjType)  return AAFRESULT_NULL_PARAM;
+  if (! pTypeName)  return AAFRESULT_NULL_PARAM;
+
+  return pvtInitialize (id, pObjType, pTypeName);
+}
+
+
 // Override from AAFTypeDefObjectRef
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefStrongObjRef::pvtInitialize (
