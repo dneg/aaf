@@ -838,6 +838,19 @@ OMStrongReferenceVectorProperty<ReferencedObject>::removeObject(
   removeValue(p);
 }
 
+  // @mfunc Remove all objects from this <c OMStrongReferenceVectorProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+template <typename ReferencedObject>
+void OMStrongReferenceVectorProperty<ReferencedObject>::removeAllObjects(void)
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::removeAllObjects");
+
+  _vector.clear();
+  POSTCONDITION("All objects removed", count() == 0);
+}
+
   // @mfunc Create an <c OMReferenceContainerIterator> over this
   //        <c OMStrongReferenceVectorProperty>.
   //   @tcarg class | ReferencedObject | The type of the referenced

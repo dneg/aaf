@@ -205,6 +205,10 @@ public:
     //          <c OMStrongReferenceVectorProperty>.
   virtual void removeObject(const OMObject* object);
 
+    // @cmember Remove all objects from this
+    //          <c OMStrongReferenceVectorProperty>.
+  virtual void removeAllObjects(void);
+
     // @cmember Create an <c OMReferenceContainerIterator> over this
     //          <c OMStrongReferenceVectorProperty>.
   virtual OMReferenceContainerIterator* createIterator(void) const;

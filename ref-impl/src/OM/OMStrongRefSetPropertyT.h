@@ -745,6 +745,21 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   removeValue(p);
 }
 
+  // @mfunc Remove all objects from this <c OMStrongReferenceSetProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+template <typename UniqueIdentification, typename ReferencedObject>
+void OMStrongReferenceSetProperty<UniqueIdentification,
+                                  ReferencedObject>::removeAllObjects(void)
+{
+  TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
+                                     "ReferencedObject>::removeAllObjects");
+
+  _set.clear();
+  POSTCONDITION("All objects removed", count() == 0);
+}
+
   // @mfunc Create an <c OMReferenceContainerIterator> over this
   //        <c OMStrongReferenceSetProperty>.
   //   @tcarg class | ReferencedObject | The type of the referenced
