@@ -74,8 +74,8 @@ ImplAAFNestedScope::ImplAAFNestedScope ()
 ImplAAFNestedScope::~ImplAAFNestedScope ()
 {
 	// Release all of the slot(segments) pointers in the slot list.
-	size_t size = _slots.getSize();
-	for (size_t i = 0; i < size; i++)
+	size_t count = _slots.count();
+	for (size_t i = 0; i < count; i++)
 	{
 		ImplAAFSegment* pSegment = _slots.clearValueAt(i);
 
@@ -144,9 +144,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (NULL == pResult)
     return (AAFRESULT_NULL_PARAM);
 
-  size_t numSegments;
-
-	_slots.getSize(numSegments);
+	size_t numSegments = _slots.count();
 	
 	*pResult = numSegments;
 
@@ -232,7 +230,7 @@ AAFRESULT ImplAAFNestedScope::ChangeContainedReferences(aafMobID_constref from,
 	
 	XPROTECT()
 	{
-		size_t count = _slots.getSize();
+		size_t count = _slots.count();
 		for (size_t n = 0; n < count; n++)
 		{
 			ImplAAFSegment	*pSegment;

@@ -109,8 +109,8 @@ ImplAAFPluginDef::~ImplAAFPluginDef ()
 	}
 
 	// Release all of the other locator pointers.
-	size_t size = _locators.getSize();
-	for (size_t i = 0; i < size; i++)
+	size_t count = _locators.count();
+	for (size_t i = 0; i < count; i++)
 	{
 		ImplAAFLocator *pLocator = _locators.clearValueAt(i);
 		if (pLocator)
@@ -698,13 +698,12 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDef::CountLocators (
       aafUInt32 *pCount)
 {
-	size_t	siz;
 	if (! pCount)
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
 
-	_locators.getSize(siz);
+	size_t	siz = _locators.count();
 	*pCount = siz;
 	return(AAFRESULT_SUCCESS);
 }
@@ -910,13 +909,12 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT
     ImplAAFPluginDef::GetNumLocators (aafInt32 *pCount)
 {
-	size_t	siz;
 	if (! pCount)
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
 
-	_locators.getSize(siz);
+	size_t	siz = _locators.count();
 	*pCount = siz;
 	return(AAFRESULT_SUCCESS);
 }

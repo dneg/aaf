@@ -71,8 +71,8 @@ ImplAAFEssenceGroup::ImplAAFEssenceGroup ()
 
 ImplAAFEssenceGroup::~ImplAAFEssenceGroup ()
 {
-	size_t size = _choices.getSize();
-	for (size_t i = 0; i < size; i++) {
+	size_t count = _choices.count();
+	for (size_t i = 0; i < count; i++) {
 		ImplAAFSegment *pClip = _choices.clearValueAt(i);
 
 		if (pClip) {
@@ -246,9 +246,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceGroup::CountChoices (
       aafUInt32  *result)
 {
-	size_t	numClips;
-
-	_choices.getSize(numClips);
+	size_t	numClips = _choices.count();
 	*result = numClips;
 
 	return AAFRESULT_SUCCESS;

@@ -69,8 +69,8 @@ ImplAAFSelector::~ImplAAFSelector ()
 	  selected = 0;
 	}
 
-	size_t size = _alternates.getSize();
-	for (size_t i = 0; i < size; i++)
+	size_t count = _alternates.count();
+	for (size_t i = 0; i < count; i++)
 	{
 		ImplAAFSegment* pSegment = _alternates.clearValueAt(i);
 		if (pSegment)
@@ -196,7 +196,6 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFSelector::GetNumAlternateSegments (aafInt32* pNumSegments)
 {
 	HRESULT	hr = AAFRESULT_SUCCESS;
-	size_t	numSegments;
 
 	if (pNumSegments == NULL)
 	{
@@ -204,7 +203,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		_alternates.getSize(numSegments);
+		size_t	numSegments = _alternates.count();
 		*pNumSegments = numSegments;
 	}
 
@@ -286,10 +285,9 @@ AAFRESULT
     ImplAAFSelector::GetNthSegment (aafUInt32 index, ImplAAFSegment** ppSegment)
 {
 	ImplAAFSegment*	obj;
-	size_t			numSegments;
 	HRESULT			hr;
 
-	_alternates.getSize(numSegments);
+	size_t numSegments = _alternates.count();
 	if (index < numSegments)
 	{
 		_alternates.getValueAt(obj, index);
