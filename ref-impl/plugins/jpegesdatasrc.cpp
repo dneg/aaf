@@ -186,7 +186,7 @@ term_source (j_decompress_ptr cinfo)
  */
 
 GLOBAL(void)
-jpeg_essencstream_src (j_decompress_ptr cinfo, IAAFEssenceStream * infile)
+jpeg_essencestream_src (j_decompress_ptr cinfo, IAAFEssenceStream * infile)
 {
   my_src_ptr src;
 
