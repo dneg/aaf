@@ -188,4 +188,10 @@ const OMClassId nullOMClassId = {0};
 //
 typedef OMObjectIdentification OMFileSignature;
 
+// Property instance tags.
+//
+typedef OMUInt32 OMPropertyTag;
+
+const OMPropertyTag nullOMPropertyTag = ~(OMPropertyTag)0;
+
 #endif
