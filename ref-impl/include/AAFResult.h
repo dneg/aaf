@@ -283,8 +283,9 @@
 
 /* Property access error codes */
 #define AAFRESULT_BAD_SIZE                  MAKE_AAFHRESULT(0x0200)
+#define AAFRESULT_NOT_REGISTERED            MAKE_AAFHRESULT(0x0201)
 
-#define AAFRESULT_MAXCODE					MAKE_AAFHRESULT(0x0201)
+#define AAFRESULT_MAXCODE					MAKE_AAFHRESULT(0x0202)
 
 
 #endif // ! __AAFResult_h_
