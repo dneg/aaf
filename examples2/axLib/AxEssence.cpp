@@ -341,6 +341,26 @@ aafRational_t AxFileDescriptor::GetSampleRate()
 	return rate;
 }
 
+void AxFileDescriptor::SetCodecDef(IAAFCodecDefSP codec)
+{
+	CHECK_HRESULT(_spIaafFileDescriptor->SetCodecDef(codec));
+}
+
+void AxFileDescriptor::SetContainerFormat(IAAFContainerDefSP container)
+{
+	CHECK_HRESULT(_spIaafFileDescriptor->SetContainerFormat(container));
+}
+
+void AxFileDescriptor::SetLength(aafLength_t length)
+{
+	CHECK_HRESULT(_spIaafFileDescriptor->SetLength(length));
+}
+
+void AxFileDescriptor::SetSampleRate(aafRational_constref rate)
+{
+	CHECK_HRESULT(_spIaafFileDescriptor->SetSampleRate(rate));
+}
+
 //=---------------------------------------------------------------------=
 
 AxWAVEDescriptor::AxWAVEDescriptor( IAAFWAVEDescriptorSP sp )

@@ -226,6 +226,8 @@ public:
 						  aafLength_t len,
 						  IAAFDataDefSP spDataDef,
 						  const aafRational_t& editRate );
+	inline operator IAAFSourceMobSP ()
+	{ return _spIaafSourceMob; }
 
 private:
 	AxSourceMob();

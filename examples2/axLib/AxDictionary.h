@@ -38,6 +38,8 @@ public:
 	IAAFClassDefSP LookupClassDef( const aafUID_t& classId );
 	IAAFDataDefSP LookupDataDef( const aafUID_t& dataDefId );
 	IAAFOperationDefSP LookupOperationDef( const aafUID_t& opDefId );
+	IAAFContainerDefSP LookupContainerDef( const aafUID_t& contDefId );
+	IAAFCodecDefSP LookupCodecDef( const aafUID_t& codecDefId );
 
 	IEnumAAFClassDefsSP GetClassDefs();
 	IEnumAAFTypeDefsSP GetTypeDefs();
@@ -48,6 +50,8 @@ public:
 	void RegisterOpaqueTypeDef( IAAFTypeDefSP );
 
 	void RegisterOperationDef( IAAFOperationDefSP );
+
+	void RegisterCodecDef( IAAFCodecDefSP );
 
 	void RegisterKLVDataKey( const aafUID_t& uuid,
 				 IAAFTypeDefSP spTypeDef );

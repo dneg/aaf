@@ -108,6 +108,24 @@ IAAFOperationDefSP AxDictionary::LookupOperationDef( const aafUID_t& opDefId )
 	return spIaafOperationDef;
 }
 
+IAAFContainerDefSP AxDictionary::LookupContainerDef( const aafUID_t& contDefId )
+{
+	IAAFContainerDefSP spIaafContainerDef;
+
+	CHECK_HRESULT( _spIaafDictionary->LookupContainerDef( contDefId, &spIaafContainerDef ) );
+
+	return spIaafContainerDef;
+}
+
+IAAFCodecDefSP AxDictionary::LookupCodecDef( const aafUID_t& codecDefId )
+{
+	IAAFCodecDefSP spIaafCodecDef;
+
+	CHECK_HRESULT( _spIaafDictionary->LookupCodecDef( codecDefId, &spIaafCodecDef ) );
+
+	return spIaafCodecDef;
+}
+
 IEnumAAFClassDefsSP AxDictionary::GetClassDefs()
 {
 	IEnumAAFClassDefsSP spIEnumAAFClassDefs;
@@ -167,6 +185,11 @@ void AxDictionary::RegisterKLVDataKey( const aafUID_t& uuid,
 void AxDictionary::RegisterOperationDef( IAAFOperationDefSP spIaafOperationDef )
 {
 	CHECK_HRESULT( _spIaafDictionary->RegisterOperationDef( spIaafOperationDef ) );
+}
+
+void AxDictionary::RegisterCodecDef( IAAFCodecDefSP spIaafCodecDef)
+{
+	CHECK_HRESULT( _spIaafDictionary->RegisterCodecDef( spIaafCodecDef ) );
 }
 
 IUnknownSP AxDictionary::CreateInstance( const aafUID_t& auid,

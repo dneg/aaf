@@ -257,6 +257,10 @@ public:
 	~AxFileDescriptor();
 
 	aafRational_t GetSampleRate();
+	void SetCodecDef(IAAFCodecDefSP codec);
+	void SetContainerFormat(IAAFContainerDefSP container);
+	void SetLength(aafLength_t length);
+	void SetSampleRate(aafRational_constref rate);
 
 private:
 	AxFileDescriptor();
