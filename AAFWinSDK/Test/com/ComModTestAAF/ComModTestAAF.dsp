@@ -385,6 +385,10 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTransitionTest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefCharacterTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefEnumTest.cpp
 # End Source File
 # Begin Source File
