@@ -115,6 +115,7 @@ ImplAAFHeader::ImplAAFHeader ()
 	_toolkitRev.patchLevel = 0;
 //!!!	_byteOrder;
 //!!!	_lastModified;
+	_file = NULL;
 }
 
 

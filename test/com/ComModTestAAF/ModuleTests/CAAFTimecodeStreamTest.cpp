@@ -83,6 +83,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFTimelineMobSlot			*pNewSlot = NULL;
 	IAAFTimecodeStream			*pTimecodeStream = NULL;
 	IAAFSegment					*pSeg = NULL;
+	IAAFComponent*		pComponent = NULL;
 	
 	aafMobID_t					newMobID;
 	aafProductIdentification_t	ProductInfo;
@@ -133,6 +134,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(defs.cdTimecodeStream()->
 					CreateInstance(IID_IAAFTimecodeStream, 
 								   (IUnknown **)&pTimecodeStream));		
+		 checkResult(pTimecodeStream->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+		 checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		pComponent->Release();
+		pComponent = NULL;
 				
 		checkResult(pTimecodeStream->QueryInterface (IID_IAAFSegment, (void **)&pSeg));
 		aafRational_t editRate = { 0, 1};
@@ -173,6 +178,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	if (pMob)
 		pMob->Release();
 	
+	if (pComponent)
+		pComponent->Release();
+
 	if (pCompMob)
 		pCompMob->Release();
 	

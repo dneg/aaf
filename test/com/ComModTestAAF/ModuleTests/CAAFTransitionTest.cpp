@@ -287,6 +287,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(defs.cdFiller()->
 					CreateInstance(IID_IAAFSegment,
 								   (IUnknown **) &pEffectFiller));
+		 checkResult(pEffectFiller->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+		 checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		pComponent->Release();
+		pComponent = NULL;
 		checkResult(pOperationGroup->AppendInputSegment (pEffectFiller));
 		// release the filler
 		pEffectFiller->Release();
