@@ -19,7 +19,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFEdgecode \
 	AAFEffectDef \
 	AAFEffectInvocation \
-	AAFFindSourceInfo \
 	AAFIntegerAttribute \
 	AAFLocator \
 	AAFMacLocator \
@@ -84,6 +83,7 @@ HUMAN_TYPED_IMPL = \
 	AAFFile \
 	AAFFileDescriptor \
 	AAFFiller \
+	AAFFindSourceInfo \
 	AAFHeader \
 	AAFIdentification \
 	AAFMasterMob \
