@@ -165,6 +165,8 @@ do
   #echo $clog
   #echo $html
   #
+  title="Log of changes made between $ptag and $tag"
+  #
   # get the raw "cvs log" output
   #
   if [[ ! -f $log ]]
@@ -183,7 +185,7 @@ do
   # 
   if [[ ! -f $html ]]
   then
-    cat $clog | awk -v TAG1="$ptag" -v TAG2="$tag" -f ${TOOLPATH}/cl2html.awk ${cmfile} > $html
+    cat $clog | awk -v TITLE="$title" -f ${TOOLPATH}/cl2html.awk ${cmfile} > $html
   fi
   #
   # next tag
