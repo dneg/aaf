@@ -900,7 +900,8 @@ void wcsconvertURLtoFilepath(wchar_t *url, wchar_t *filepath)
 {
 	// Convert to char* for ease of processing.
 	// (wcsncasecmp and similiar are not available everywhere)
-	unsigned tlen = wcslen(url);
+	//unsigned tlen = wcslen(url);
+	unsigned tlen =wcsu8slen(url);
 	char *tmp = new char[tlen+1];		// +1 includes terminating '\0'
 	wcstou8s(tmp, url, tlen+1);
 
