@@ -64,17 +64,18 @@ ImplEnumAAFLoadedPlugins::~ImplEnumAAFLoadedPlugins ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFLoadedPlugins::NextOne (
-      ImplAAFPluginDef **ppAAFPluginDescriptor)
+      aafUID_t *ppAAFPluginID)
 {
 	XPROTECT()
 	{
 		if(_isFirst)
 		{
-			CHECK(_manager->GetFirstLoadedPlugin (&_tableIter, ppAAFPluginDescriptor));
+			CHECK(_manager->GetFirstLoadedPlugin (&_tableIter, ppAAFPluginID));
+			_isFirst = kAAFFalse;
 		}
 		else
 		{
-			CHECK(_manager->GetNextLoadedPlugin (&_tableIter, ppAAFPluginDescriptor));
+			CHECK(_manager->GetNextLoadedPlugin (&_tableIter, ppAAFPluginID));
 		}
 	}
 	XEXCEPT
@@ -87,10 +88,10 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFLoadedPlugins::Next (
       aafUInt32  count,
-      ImplAAFPluginDef **ppAAFPluginDesc,
+      aafUID_t *pAAFPluginID,
       aafUInt32 *pFetched)
 {
-	ImplAAFPluginDef**	ppDesc;
+	aafUID_t			*pDesc;
 	aafUInt32			numDesc;
 	HRESULT				hr;
 
@@ -98,10 +99,10 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 
 	// Point at the first component in the array.
-	ppDesc = ppAAFPluginDesc;
+	pDesc = pAAFPluginID;
 	for (numDesc = 0; numDesc < count; numDesc++)
 	{
-		hr = NextOne(ppDesc);
+		hr = NextOne(pDesc);
 		if (FAILED(hr))
 			break;
 
@@ -109,7 +110,7 @@ AAFRESULT STDMETHODCALLTYPE
 		// will increment off the end of the array when
 		// numSegments == count-1, but the for loop should
 		// prevent access to this location.
-		ppDesc++;
+		pDesc++;
 	}
 	
 	if (pFetched)
@@ -124,7 +125,7 @@ AAFRESULT STDMETHODCALLTYPE
       aafUInt32  count)
 {
 	aafUInt32	n;
-	ImplAAFPluginDef	*pJunk;
+	aafUID_t	pJunk;
 	
 	XPROTECT()
 	{
