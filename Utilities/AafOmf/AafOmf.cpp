@@ -39,122 +39,8 @@
 #include <stdlib.h>
 #include <iostream.h>
 
-// OMF Includes
-namespace OMF2
-{
-#include "omPublic.h"
-#include "omMedia.h"
-}
+#include "AafOmf.h"
 
-#include "AAFTypes.h"
-#include "AAFResult.h"
-#include "AAFDefUIDs.h"
-
-#if defined(_MAC) || defined(macintosh)
-#include <initguid.h> // define all of the AAF guids.
-#include "AAF.h"
-#else
-#include "AAF.h"
-// TODO: This should not be here, I added them for now to get a good link.
-const CLSID CLSID_AAFFile = { 0x9346ACD2, 0x2713, 0x11d2, { 0x80, 0x35, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
-
-#endif
-
-// Include the defintions for the AAF Stored Object identifiers.
-#define INIT_AUID
-#include "AAFStoredObjectIDs.h"
-
-
-#define FAILURE (2)
-
-// ============================================================================
-// char to wide char conversion function prototypes
-// ============================================================================
-static void convert(wchar_t* wcName, size_t length, const char* name);
-static void convert(char* cName, size_t length, const wchar_t* name);
-static void convert(char* cName, size_t length, const char* name);
-static void convert(wchar_t* wName, size_t length, const wchar_t* name);
-
-// ============================================================================
-// simple helper class to initialize and cleanup COM library.
-// ============================================================================
-struct CComInitialize
-{
-	CComInitialize()
-	{
-		CoInitialize(NULL);
-	}
-
-	~CComInitialize()
-	{
-		CoUninitialize();
-	}
-};
-
-// ============================================================================
-// simple helper class to run the main application.
-// ============================================================================
-class AafOmf
-{
-public:
-	AafOmf();
-	~AafOmf();
-
-public:
-	void Usage( void );
-	HRESULT GetUserInput(int argc, char* argv[]);
-	HRESULT OpenInputFile( void );
-	HRESULT OpenOutputFile( void );
-	aafBool IsOMFFile(char* pFileName);
-	HRESULT OMFFileOpen( char* pFileName );
-	HRESULT	TOCFileCreate( void ); 
-	void OMFFileClose( void );
-	HRESULT AAFFileOpen( char* pFileName );
-	HRESULT AAFDefinitionFileOpen( void );
-	void AAFFileClose(void );
-	HRESULT OMFFileRead( void );
-	HRESULT ConvertOMFHeader( void );
-	HRESULT ConvertOMFDataDefinitionObject( OMF2::omfObject_t obj);
-	HRESULT ConvertOMFClassDictionaryObject( OMF2::omfObject_t obj);
-	HRESULT ParseOMFMOBObject( OMF2::omfObject_t obj );
-	HRESULT ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob );
-	HRESULT ConvertOMFCompositionObject( OMF2::omfObject_t obj );
-	HRESULT ConvertOMFMasterMob( OMF2::omfObject_t obj );
-	HRESULT ConvertOMFSourceMob( OMF2::omfObject_t obj );
-	HRESULT ConvertOMFMobSlots( OMF2::omfObject_t obj, IAAFMob* pMob );
-
-	char*					pProgramName;
-
-private:
-	aafBool					bVerboseMode;
-	aafBool					bCreateTOCFile;
-	aafBool					bConvertAllObjects;
-	aafBool					bOMFFileOpen;
-	aafBool					bAAFFileOpen;
-	aafBool					bLogFile;
-	aafBool					bDefFile;
-	char					sInFileName[256];
-	char					sTOCFileName[256];
-	char					sDefinitionFileName[256];
-	char					sOutFileName[256];
-	char					sLogFileName[256];
-
-	// For Statistical summary
-	aafInt32				nNumOMFObjects;
-	aafInt32				nNumAAFObjects;
-	aafInt32				nNumOMFProperties;
-	aafInt32				nNumAAFProperties;
-	aafInt32				nNumUndefinedOMFObjects;
-	aafInt32				nNumUndefinedOMFProperties;
-
-    OMF2::omfSessionHdl_t	OMFSession;
-	OMF2::omfHdl_t			OMFFileHdl;
-	OMF2::omfFileRev_t		OMFFileRev;
-
-	IAAFFile*				pFile;
-	IAAFHeader*				pHeader;
-	IAAFDictionary*			pDictionary;
-};
 
 // ============================================================================
 // Global Variables and functions
@@ -1142,6 +1028,7 @@ HRESULT AafOmf::ConvertOMFMobSlots( OMF2::omfObject_t obj, IAAFMob* pMob )
 					rc = pDictionary->CreateInstance(&AUID_AAFSequence,
 													 IID_IAAFSequence,
 													 (IUnknown **)&pSequence);
+					ConvertOMFSequence(OMFSegment, pSequence);
 					pSequence->QueryInterface(IID_IAAFSegment, (void **)&pSegment);
 					convert(wcTrackName, sizeof(wcTrackName), sTrackName);
 					pMob->AppendNewSlot( pSegment, (aafSlotID_t)OMFTrackID, wcTrackName, &pMobSlot );
@@ -1160,6 +1047,22 @@ HRESULT AafOmf::ConvertOMFMobSlots( OMF2::omfObject_t obj, IAAFMob* pMob )
 
 	return rc;
 }
+// ============================================================================
+// ConvertOMFSequence
+//
+//			This function extracts all the properties of an OMF Sequence,
+//			sets the equivalent AAF properties 
+//			
+// Returns: AAFRESULT_SUCCESS if MOB object is converted succesfully
+//
+// ============================================================================
+HRESULT AafOmf::ConvertOMFSequence(OMF2::omfObject_t OMFSegment, IAAFSequence* pSequence)
+{
+	HRESULT					rc = AAFRESULT_SUCCESS;
+
+	return rc;
+}
+
 // ============================================================================
 // ConvertOMFMasterMob
 //
@@ -1182,6 +1085,8 @@ HRESULT AafOmf::ConvertOMFMasterMob(OMF2::omfObject_t obj )
 									 (IUnknown **)&pMasterMob);
 	if (AAFRESULT_SUCCESS == rc)
 	{
+		if (bVerboseMode)
+			cout<<"Created AAF Master Mob"<<endl;
 		rc = pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
 		if (AAFRESULT_SUCCESS == rc)
 		{
@@ -1221,6 +1126,9 @@ HRESULT AafOmf::ConvertOMFSourceMob(OMF2::omfObject_t obj )
 									 (IUnknown **)&pSourceMob);
 	if (AAFRESULT_SUCCESS == rc)
 	{
+		if (bVerboseMode)
+			cout<<"Created AAF Source Mob"<<endl;
+
 		rc = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
 		if (AAFRESULT_SUCCESS == rc)
 		{
