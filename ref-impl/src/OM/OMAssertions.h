@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2000 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -80,13 +80,13 @@ bool validString(const char* string);
   //   @rdesc True if the wchar_t string is valid, false otherwise.
 bool validWideString(const wchar_t* string);
 
-  // @func Is the given OMWideCharacter string valid ? Use
-  //       <f validOMWideString> in expressions passed to the
+  // @func Is the given OMCharacter string valid ? Use
+  //       <f validOMString> in expressions passed to the
   //       assertion macros <f PRECONDITION>, <f POSTCONDITION>
   //       and <f ASSERT>.
-  //   @parm The OMWideCharacter string to check for validity.
-  //   @rdesc True if the OMWideCharacter string is valid, false otherwise.
-bool validOMWideString(const OMWideCharacter* string);
+  //   @parm The OMCharacter string to check for validity.
+  //   @rdesc True if the OMCharacter string is valid, false otherwise.
+bool validOMString(const OMCharacter* string);
 
 #if defined(OM_ENABLE_TRACE)
 
