@@ -66,7 +66,7 @@ struct HeaderTest
 extern "C" HRESULT CAAFHeader_test()
 {
   HRESULT hr = AAFRESULT_SUCCESS;
-  wchar_t fileName[] = L"HeaderTest.aaf";
+  wchar_t fileName[] = L"AAFHeaderTest.aaf";
   HeaderTest ht;
 
   try
@@ -107,7 +107,7 @@ HeaderTest::HeaderTest():
   _pEssenceData(NULL)
 {
   _productInfo.companyName = L"AAF Developers Desk";
-  _productInfo.productName = L"Header Module Test";
+  _productInfo.productName = L"AAFHeader Test";
   _productInfo.productVersion.major = 1;
   _productInfo.productVersion.minor = 0;
   _productInfo.productVersion.tertiary = 0;
