@@ -3624,12 +3624,23 @@ static void dumpReferencedProperties(IStorage* root, OMUInt16 version)
   }    // version  0 - 18 no referenced properties table
 }
 
+// _wfopen() is in the W32 API on Windows 95, 98 and ME but with an
+// implementation that always fails. By default we use _wfopen() when
+// compiled on/for the W32 API, this can be overridden by defining
+// NO_W32_FOPEN.
+
+#if !defined(NO_W32_FOPEN)
+#if defined(_WIN32) || defined(WIN32)
+#define W32_WFOPEN
+#endif
+#endif
+
 // Just like fopen() except for wchar_t* file names.
 //
 FILE* wfopen(const wchar_t* fileName, const wchar_t* mode)
 {
   FILE* result = 0;
-#if defined(_WIN32) || defined(WIN32)
+#if defined(W32_WFOPEN)
   result = _wfopen(fileName, mode);
 #else
   char cFileName[FILENAME_MAX];

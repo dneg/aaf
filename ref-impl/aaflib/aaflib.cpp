@@ -403,6 +403,17 @@ static aafBool isRecognizedSignature(unsigned char* signature,
 
 static const size_t maxSignatureSize = 256; //signatureSize();
 
+// _wfopen() is in the W32 API on Windows 95, 98 and ME but with an
+// implementation that always fails. By default we use _wfopen() when
+// compiled on/for the W32 API, this can be overridden by defining
+// NO_W32_FOPEN.
+
+#if !defined(NO_W32_FOPEN)
+#if defined(OS_WINDOWS)
+#define W32_WFOPEN
+#endif
+#endif
+
 // Just like fopen() except for wchar_t* file names.
 //
 FILE* wfopen(const wchar_t* fileName, const wchar_t* mode)
@@ -412,7 +423,7 @@ FILE* wfopen(const wchar_t* fileName, const wchar_t* mode)
   ASSERT("Valid mode", mode != 0);
 
   FILE* result = 0;
-#if defined( OS_WINDOWS )
+#if defined(W32_WFOPEN)
   result = _wfopen(fileName, mode);
 #else
   char cFileName[FILENAME_MAX];
