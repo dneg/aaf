@@ -39,7 +39,7 @@
 #include "ImplAAFDictionary.h"
 
 ImplAAFParameterDef::ImplAAFParameterDef ()
-: _typeDef(			PID_ParameterDefinition_Type,					"Type", "/Dictionary/TypeDefinitions"),
+: _typeDef(			PID_ParameterDefinition_Type,					"Type", "/Dictionary/TypeDefinitions", PID_DefinitionObject_Identification),
   _displayUnits(	PID_ParameterDefinition_DisplayUnits,			"DisplayUnits")
 {
 	_persistentProperties.put(_typeDef.address());

@@ -131,15 +131,15 @@ extern "C" const aafClassID_t CLSID_EnumAAFPluginDescriptors;
 extern "C" const aafClassID_t CLSID_EnumAAFTypeDefs;
 
 ImplAAFDictionary::ImplAAFDictionary ()
-: _operationDefinitions(PID_Dictionary_OperationDefinitions, "OperationDefinitions"), 
-  _parameterDefinitions(PID_Dictionary_ParameterDefinitions, "ParameterDefinitions"),
-  _codecDefinitions(PID_Dictionary_CodecDefinitions, "CodecDefinitions"),
-  _containerDefinitions(PID_Dictionary_ContainerDefinitions, "ContainerDefinitions"),
-  _typeDefinitions      (PID_Dictionary_TypeDefinitions,      "TypeDefinitions"),
-  _classDefinitions      (PID_Dictionary_ClassDefinitions,    "ClassDefinitions"),
-  _interpolationDefinitions      (PID_Dictionary_InterpolationDefinitions,    "InterpolationDefinitions"),
-  _dataDefinitions      (PID_Dictionary_DataDefinitions,    "DataDefinitions"),
-  _pluginDefinitions      (PID_Dictionary_PluginDefinitions,    "PluginDefinitions"),
+: _operationDefinitions(PID_Dictionary_OperationDefinitions, "OperationDefinitions", PID_DefinitionObject_Identification), 
+  _parameterDefinitions(PID_Dictionary_ParameterDefinitions, "ParameterDefinitions", PID_DefinitionObject_Identification),
+  _codecDefinitions(PID_Dictionary_CodecDefinitions, "CodecDefinitions", PID_DefinitionObject_Identification),
+  _containerDefinitions(PID_Dictionary_ContainerDefinitions, "ContainerDefinitions", PID_DefinitionObject_Identification),
+  _typeDefinitions      (PID_Dictionary_TypeDefinitions,      "TypeDefinitions", PID_DefinitionObject_Identification),
+  _classDefinitions      (PID_Dictionary_ClassDefinitions,    "ClassDefinitions", PID_DefinitionObject_Identification),
+  _interpolationDefinitions      (PID_Dictionary_InterpolationDefinitions,    "InterpolationDefinitions", PID_DefinitionObject_Identification),
+  _dataDefinitions      (PID_Dictionary_DataDefinitions,    "DataDefinitions", PID_DefinitionObject_Identification),
+  _pluginDefinitions      (PID_Dictionary_PluginDefinitions,    "PluginDefinitions", PID_PluginDescriptor_Identification),
 	_opaqueTypeDefinitions (0),
   _pBuiltinClasses (0),
   _pBuiltinTypes (0),
@@ -168,7 +168,7 @@ ImplAAFDictionary::ImplAAFDictionary ()
 ImplAAFDictionary::~ImplAAFDictionary ()
 {
   // Release the _codecDefinitions
-	OMStrongReferenceSetIterator<ImplAAFCodecDef>codecDefinitions(_codecDefinitions);
+	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFCodecDef>codecDefinitions(_codecDefinitions);
 	while(++codecDefinitions)
 	{
 		ImplAAFCodecDef *pCodec = codecDefinitions.setValue(0);
@@ -179,7 +179,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		}
 	}
 
-	OMStrongReferenceSetIterator<ImplAAFContainerDef>containerDefinitions(_containerDefinitions);
+	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFContainerDef>containerDefinitions(_containerDefinitions);
 	while(++containerDefinitions)
 	{
 		ImplAAFContainerDef *pContainer = containerDefinitions.setValue(0);
@@ -190,7 +190,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		}
 	}
 
-	OMStrongReferenceSetIterator<ImplAAFTypeDef>typeDefinitions(_typeDefinitions);
+	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTypeDef>typeDefinitions(_typeDefinitions);
 	while(++typeDefinitions)
 	{
 		ImplAAFTypeDef *pType = typeDefinitions.setValue(0);
@@ -201,7 +201,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		}
 	}
 
-	OMStrongReferenceSetIterator<ImplAAFClassDef>classDefinitions(_classDefinitions);
+	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>classDefinitions(_classDefinitions);
 	while(++classDefinitions)
 	{
 		ImplAAFClassDef *pClass = classDefinitions.setValue(0);
@@ -212,7 +212,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		}
 	}
 
-	OMStrongReferenceSetIterator<ImplAAFOperationDef>operationDefinitions(_operationDefinitions);
+	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFOperationDef>operationDefinitions(_operationDefinitions);
 	while(++operationDefinitions)
 	{
 		ImplAAFOperationDef *pOp = operationDefinitions.setValue(0);
@@ -223,7 +223,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		}
 	}
 
-	OMStrongReferenceSetIterator<ImplAAFParameterDef>parameterDefinitions(_parameterDefinitions);
+	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFParameterDef>parameterDefinitions(_parameterDefinitions);
 	while(++parameterDefinitions)
 	{
 		ImplAAFParameterDef *pParm = parameterDefinitions.setValue(0);
@@ -234,7 +234,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		}
 	}
 
-	OMStrongReferenceSetIterator<ImplAAFInterpolationDef>interpolateDefinitions(_interpolationDefinitions);
+	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFInterpolationDef>interpolateDefinitions(_interpolationDefinitions);
 	while(++interpolateDefinitions)
 	{
 		ImplAAFInterpolationDef *pInterp = interpolateDefinitions.setValue(0);
@@ -245,7 +245,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		}
 	}
 
-	OMStrongReferenceSetIterator<ImplAAFPluginDescriptor>pluginDefinitions(_pluginDefinitions);
+	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFPluginDescriptor>pluginDefinitions(_pluginDefinitions);
 	while(++pluginDefinitions)
 	{
 		ImplAAFPluginDescriptor *pPlug = pluginDefinitions.setValue(0);
@@ -256,7 +256,7 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		}
 	}
 
-	OMStrongReferenceSetIterator<ImplAAFDataDef>dataDefinitions(_dataDefinitions);
+	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFDataDef>dataDefinitions(_dataDefinitions);
 	while(++dataDefinitions)
 	{
 		ImplAAFDataDef *pData = dataDefinitions.setValue(0);
@@ -787,8 +787,8 @@ AAFRESULT STDMETHODCALLTYPE
 	
   XPROTECT()
 	{
-		OMStrongReferenceSetIterator<ImplAAFClassDef>* iter = 
-			new OMStrongReferenceSetIterator<ImplAAFClassDef>(_classDefinitions);
+		OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>* iter = 
+			new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>(_classDefinitions);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
 		CHECK(theEnum->SetIterator(this, iter));
@@ -1102,8 +1102,8 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		OMStrongReferenceSetIterator<ImplAAFTypeDef>* iter = 
-			new OMStrongReferenceSetIterator<ImplAAFTypeDef>(_typeDefinitions);
+		OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTypeDef>* iter = 
+			new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTypeDef>(_typeDefinitions);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
 		CHECK(theEnum->SetIterator(this, iter));
@@ -1191,8 +1191,8 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		OMStrongReferenceSetIterator<ImplAAFTypeDef>* iter = 
-			new OMStrongReferenceSetIterator<ImplAAFTypeDef>(_typeDefinitions);
+		OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTypeDef>* iter = 
+			new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTypeDef>(_typeDefinitions);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
 		CHECK(theEnum->SetIterator(this, iter));
@@ -1310,8 +1310,8 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		OMStrongReferenceSetIterator<ImplAAFDataDef>* iter = 
-			new OMStrongReferenceSetIterator<ImplAAFDataDef>(_dataDefinitions);
+		OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFDataDef>* iter = 
+			new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFDataDef>(_dataDefinitions);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
 		CHECK(theEnum->SetIterator(this, iter));
@@ -1402,8 +1402,8 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		OMStrongReferenceSetIterator<ImplAAFOperationDef>* iter = 
-			new OMStrongReferenceSetIterator<ImplAAFOperationDef>(_operationDefinitions);
+		OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFOperationDef>* iter = 
+			new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFOperationDef>(_operationDefinitions);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
 		CHECK(theEnum->SetIterator(this, iter));
@@ -1495,8 +1495,8 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		OMStrongReferenceSetIterator<ImplAAFParameterDef>* iter = 
-			new OMStrongReferenceSetIterator<ImplAAFParameterDef>(_parameterDefinitions);
+		OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFParameterDef>* iter = 
+			new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFParameterDef>(_parameterDefinitions);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
 		CHECK(theEnum->SetIterator(this, iter));
@@ -1598,8 +1598,8 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		OMStrongReferenceSetIterator<ImplAAFCodecDef>* iter = 
-			new OMStrongReferenceSetIterator<ImplAAFCodecDef>(_codecDefinitions);
+		OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFCodecDef>* iter = 
+			new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFCodecDef>(_codecDefinitions);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
 		CHECK(theEnum->SetIterator(this, iter));
@@ -1701,8 +1701,8 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		OMStrongReferenceSetIterator<ImplAAFContainerDef>* iter = 
-			new OMStrongReferenceSetIterator<ImplAAFContainerDef>(_containerDefinitions);
+		OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFContainerDef>* iter = 
+			new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFContainerDef>(_containerDefinitions);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
 		CHECK(theEnum->SetIterator(this, iter));
@@ -1898,8 +1898,8 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		OMStrongReferenceSetIterator<ImplAAFInterpolationDef>* iter = 
-			new OMStrongReferenceSetIterator<ImplAAFInterpolationDef>(_interpolationDefinitions);
+		OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFInterpolationDef>* iter = 
+			new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFInterpolationDef>(_interpolationDefinitions);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
 		CHECK(theEnum->SetIterator(this, iter));
@@ -1988,8 +1988,8 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		OMStrongReferenceSetIterator<ImplAAFPluginDescriptor>* iter = 
-			new OMStrongReferenceSetIterator<ImplAAFPluginDescriptor>(_pluginDefinitions);
+		OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFPluginDescriptor>* iter = 
+			new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFPluginDescriptor>(_pluginDefinitions);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
 		CHECK(theEnum->SetIterator(this, iter));

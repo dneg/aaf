@@ -306,7 +306,7 @@ private:
   // OMWeakReferenceProperty<ImplAAFClassDef> _ParentClass;
   OMWeakReferenceProperty<ImplAAFClassDef>         _ParentClass;
 
-  OMStrongReferenceSetProperty<ImplAAFPropertyDef> _Properties;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFPropertyDef> _Properties;
 
   ImplAAFClassDef	*_BootstrapParent;
 

@@ -68,7 +68,7 @@ extern "C" const aafClassID_t CLSID_EnumAAFOperationDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
  
 ImplAAFOperationDef::ImplAAFOperationDef ()
-: _dataDef(	PID_OperationDefinition_DataDefinition,	"DataDefinition", "/Dictionary/DataDefinitions"),
+: _dataDef(	PID_OperationDefinition_DataDefinition,	"DataDefinition", "/Dictionary/DataDefinitions", PID_DefinitionObject_Identification),
   _isTimeWarp(		PID_OperationDefinition_IsTimeWarp,			"IsTimeWarp"),
   _degradeTo(		PID_OperationDefinition_DegradeTo,			"DegradeTo"),
   _category(		PID_OperationDefinition_Category,			"Category"),

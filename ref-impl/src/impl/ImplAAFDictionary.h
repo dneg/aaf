@@ -601,15 +601,15 @@ private:
   ImplAAFBuiltinTypes   * _pBuiltinTypes;
   ImplAAFBuiltinDefs    * _pBuiltinDefs;
 
-  OMStrongReferenceSetProperty<ImplAAFCodecDef>				_codecDefinitions;
-  OMStrongReferenceSetProperty<ImplAAFContainerDef>			_containerDefinitions;
-  OMStrongReferenceSetProperty<ImplAAFOperationDef>			_operationDefinitions;
-  OMStrongReferenceSetProperty<ImplAAFParameterDef>			_parameterDefinitions;
-  OMStrongReferenceSetProperty<ImplAAFTypeDef>				_typeDefinitions;
-  OMStrongReferenceSetProperty<ImplAAFClassDef>				_classDefinitions;
-  OMStrongReferenceSetProperty<ImplAAFInterpolationDef>		_interpolationDefinitions;
-  OMStrongReferenceSetProperty<ImplAAFDataDef>				_dataDefinitions;
-  OMStrongReferenceSetProperty<ImplAAFPluginDescriptor>		_pluginDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFCodecDef>				_codecDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFContainerDef>			_containerDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFOperationDef>			_operationDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFParameterDef>			_parameterDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFTypeDef>				_typeDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFClassDef>				_classDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFInterpolationDef>		_interpolationDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFDataDef>				_dataDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFPluginDescriptor>		_pluginDefinitions;
 
 	ImplAAFTypeDef **_opaqueTypeDefinitions;
 

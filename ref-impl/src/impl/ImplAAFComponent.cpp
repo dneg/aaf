@@ -52,7 +52,7 @@ typedef ImplAAFSmartPointer<ImplAAFDictionary> ImplAAFDictionarySP;
 typedef ImplAAFSmartPointer<ImplAAFDataDef>    ImplAAFDataDefSP;
 
 ImplAAFComponent::ImplAAFComponent ():
-	_dataDef(	PID_Component_DataDefinition,	"DataDefinition", "/Dictionary/DataDefinitions"),
+	_dataDef(	PID_Component_DataDefinition,	"DataDefinition", "/Dictionary/DataDefinitions", PID_DefinitionObject_Identification),
 	_length(	PID_Component_Length,	"Length")
 {
 	_persistentProperties.put(   _dataDef.address());

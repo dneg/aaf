@@ -87,9 +87,9 @@ extern "C" const aafClassID_t CLSID_EnumAAFParameters;
 const aafUID_t kNullID = {0};
 
 ImplAAFOperationGroup::ImplAAFOperationGroup ()
-: _operationDefinition( PID_OperationGroup_OperationDefinition, "OperationDefinition", "/Dictionary/OperationDefinitions"),
+: _operationDefinition( PID_OperationGroup_OperationDefinition, "OperationDefinition", "/Dictionary/OperationDefinitions", PID_DefinitionObject_Identification),
   _inputSegments( PID_OperationGroup_InputSegments, "InputSegments"),
-  _parameters( PID_OperationGroup_Parameters, "Parameters"),
+  _parameters( PID_OperationGroup_Parameters, "Parameters", PID_DefinitionObject_Identification),
   _bypassOverride( PID_OperationGroup_BypassOverride, "BypassOverride"),
   _rendering( PID_OperationGroup_Rendering, "Rendering")
 {
@@ -114,7 +114,7 @@ ImplAAFOperationGroup::~ImplAAFOperationGroup ()
 		  pSeg = 0;
 		}
 	}
-	OMStrongReferenceSetIterator<ImplAAFParameter>parameters(_parameters);
+	OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFParameter>parameters(_parameters);
 	while(++parameters)
 	{
 		ImplAAFParameter *pParm = parameters.setValue(0);
@@ -498,8 +498,8 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		OMStrongReferenceSetIterator<ImplAAFParameter>* iter = 
-			new OMStrongReferenceSetIterator<ImplAAFParameter>(_parameters);
+		OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFParameter>* iter = 
+			new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFParameter>(_parameters);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
 		CHECK(theEnum->SetIterator(this, iter));
