@@ -19,10 +19,15 @@ struct TextStream;
 
 struct MacroSet
 {
+  MacroSet ();
   //
-  // Default ctor, dtor, copy ctor, op= are OK
+  // ctor to properly init member data
   //
+  //********
 
+  //
+  // Default dtor, copy, op= are OK
+  //
 
   void Append
 	(const MacroDef & src);		// [in] macro to append
@@ -138,6 +143,11 @@ private:
 
 
   Vector<MacroDef> _macs;
+
+  char _nameInitials[257];
+  //
+  // Null-terminated list of first letters of all macro names
+
 };
 
 
