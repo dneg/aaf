@@ -197,6 +197,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	sourceRef.sourceID = fileMobID;
 	sourceRef.sourceSlotID = 1;
 	sourceRef.startTime = 0;
+	
+	check(pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
+	check(pMob->GetMobID(&masterMobID));
+	check(pMob->SetName(L"A Master Mob"));
+	check(pHeader->AppendMob(pMob));
+	pMob->Release();
+	pMob = NULL;
 
 cleanup:
 	// Cleanup and return
@@ -259,6 +266,7 @@ cleanup:
 
 	return moduleErrorTmp;
 }
+
 
 struct CComInitialize
 {
