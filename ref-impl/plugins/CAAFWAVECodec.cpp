@@ -20,31 +20,6 @@
 //{8D7B04B1-95E1-11d2-8089-006008143E6F}
 const CLSID CLSID_AAFWaveCodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 
-#if AS_PLUGIN
-// CLSID for AAFPlugin 
-// {3631F7A3-9121-11d2-8088-006008143e6f}
-const CLSID CLSID_AAFPlugin = { 0x3631F7A3, 0x9121, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-
-
-// Default Interface for AAFPlugin 
-// {3631F7A4-9121-11d2-8088-006008143e6f}
-const IID IID_IAAFPlugin = { 0x3631F7A4, 0x9121, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-
-// CLSID for AAFEssenceCodec 
-// {3631F7A1-9121-11d2-8088-006008143e6f}
-const CLSID CLSID_AAFEssenceCodec = { 0x3631F7A1, 0x9121, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-
-
-// Default Interface for AAFEssenceCodec 
-// {3631F7A2-9121-11d2-8088-006008143e6f}
-const IID IID_IAAFEssenceCodec = { 0x3631F7A2, 0x9121, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-#else
-extern const CLSID CLSID_AAFPlugin;
-extern const IID IID_IAAFPlugin;
-extern const CLSID CLSID_AAFEssenceCodec;
-extern const IID IID_IAAFEssenceCodec;
-#endif
-
 #if 0 //!!!
 CAAFPlugin::CAAFPlugin (IUnknown * pControllingUnknown, aafBool doInit)
   : CAAFUnknown(pControllingUnknown)
@@ -148,11 +123,11 @@ HRESULT STDMETHODCALLTYPE
     pInfo->dataClassID = LOCAL_AAFEssenceData;		//!!!Isn't this a subclas still?
 //!!!	aafUID_t    			pInfo->plugin.pluginID;					/* OUT */
 	pInfo->plugin.pluginInterfaceRevision = kPluginRev1;	/* IN/OUT */
-	pInfo->plugin.pluginCodeRevision = AAFReferenceImplementationVersion;
+	pInfo->plugin.pluginCodeRevision = AAFPluginImplementationVersion;
 	pInfo->plugin.minimumFileRevision = kAAFRev1;		/* OUT - (revs lower than this will be private */
 	pInfo->plugin.validMaximumFileRevision = AAFFalse;	/* OUT - Is there a maximum rev? */
 //	pInfo->plugin.maximumFileRevision;		/* OUT - (revs higher than this will be private */
-	pInfo->plugin.minimumSDKRevision = AAFReferenceImplementationVersion;
+	pInfo->plugin.minimumSDKRevision = AAFPluginImplementationVersion;
     pInfo->numVariants = 0;
     pInfo->numDataDefinitions = 1;
 
@@ -348,7 +323,7 @@ HRESULT CAAFWaveCodec::InternalQueryInterface
     }
 
     // Always delegate back to base implementation.
-    return CAAFRoot::InternalQueryInterface(riid, ppvObj);
+    return CAAFUnknown::InternalQueryInterface(riid, ppvObj);
 }
 
 //
