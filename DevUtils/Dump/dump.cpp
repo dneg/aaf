@@ -160,6 +160,17 @@ typedef unsigned char      OMUInt8;
 typedef unsigned short int OMUInt16;
 typedef unsigned long int  OMUInt32;
 
+typedef OMUInt8 OMByte;
+
+typedef struct {
+  OMUInt8 SMPTELabel[12];
+  OMUInt8 length;
+  OMUInt8 instanceHigh;
+  OMUInt8 instanceMid;
+  OMUInt8 instanceLow;
+  CLSID material;
+} UMID;
+
 // Structure of property index header
 //
 typedef struct {
@@ -378,6 +389,8 @@ static size_t maxSignatureSize = signatureSize();
 //           StrongReferenceVector (was a StrongReferenceSet).
 //  0.19   : Introduced singleton weak references, added
 //           "referenced properties".
+//   0.20  : Set of objects with unique identifiers other than GUIDs.
+//           Add keyPid and keySize to set index header.
 //
 
 // The following may change at run time depending on the file format
@@ -389,7 +402,7 @@ char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const OMUInt32 HIGHVERSION = 19;
+const OMUInt32 HIGHVERSION = 20;
 
 // Output format requested
 //
@@ -440,6 +453,8 @@ static void convertName(char* cName,
                         char** tag);
 static void indent(int level);
 static void printClsid(REFCLSID clsid);
+static void printRawKey(OMByte* key, size_t keySize);
+static void printUMID(UMID* umid);
 static void openStream(IStorage* storage,
                        const char* streamName,
                        IStream** stream);
@@ -488,16 +503,34 @@ static void dumpSetIndexEntry(OMUInt32 i,
                               SetIndexEntry* setIndexEntry);
 static void printSetIndex(SetIndexEntry* setIndex,
                           OMUInt32 count,
-                          OMUInt32 highWaterMark);
+                          OMUInt32 highWaterMark,
+                          OMUInt32 keyPid,
+                          OMUInt32 keySize,
+                          OMUInt32 version);
+static void printSetIndex(SetIndexEntry* setIndex,
+                          OMUInt32 count,
+                          OMUInt32 highWaterMark,
+                          OMUInt32 keyPid,
+                          OMUInt32 keySize,
+                          OMByte* keys);
 static void printWeakCollectionIndex(int containerType,
                                      WeakCollectionIndexEntry* collectionIndex,
                                      OMUInt32 count,
-                                     OMUInt32 tage);
+                                     OMUInt32 tag,
+                                     OMUInt32 keyPid,
+                                     OMUInt32 keySize,
+                                     OMUInt32 version);
 static void readSetIndexEntry(IStream* stream,
                               SetIndexEntry* entry,
                               bool swapNeeded);
 static SetIndexEntry* readSetIndex(IStream* stream,
                                    OMUInt32 count,
+                                   bool swapNeeded);
+static SetIndexEntry* readSetIndex(IStream* stream,
+                                   OMUInt32 count,
+                                   OMUInt32 keyPid,
+                                   OMUInt32 keySize,
+                                   OMByte** keys,
                                    bool swapNeeded);
 static WeakCollectionIndexEntry* readWeakCollectionIndex(IStream* stream,
                                                          OMUInt32 count,
@@ -986,7 +1019,42 @@ void printClsid(REFCLSID clsid)
   } else {
     strcpy(cs, "null");
   }
-  cout << cs << endl;
+  cout << cs;
+}
+
+void printRawKey(OMByte* key, size_t keySize)
+{
+  IOS_FMT_FLAGS savedFlags = cout.setf(ios::basefield);
+  char savedFill = cout.fill();
+
+  for (OMUInt32 j = 0; j < keySize; j++) {
+    cout << hex << setw(2) << setfill('0') << (int)key[j];
+  }
+  cout.setf(savedFlags, ios::basefield);
+  cout.fill(savedFill);
+}
+
+void printUMID(UMID* umid)
+{
+  IOS_FMT_FLAGS savedFlags = cout.setf(ios::basefield);
+  char savedFill = cout.fill();
+  cout << "{";
+  for (size_t i = 0; i < sizeof(umid->SMPTELabel); i++) {
+    cout << setfill('0') << setw(2) << hex << (int)umid->SMPTELabel[i];
+  }
+  cout << "-";
+  cout << setfill('0') << setw(2) << hex << (int)umid->length;
+  cout << "-";
+  cout << setfill('0') << setw(2) << hex << (int)umid->instanceHigh;
+  cout << "-";
+  cout << setfill('0') << setw(2) << hex << (int)umid->instanceMid;
+  cout << "-";
+  cout << setfill('0') << setw(2) << hex << (int)umid->instanceLow;
+  cout << "-";
+  printClsid(umid->material);
+  cout << "}";
+  cout.setf(savedFlags, ios::basefield);
+  cout.fill(savedFill);
 }
 
 void openStream(IStorage* storage, const char* streamName, IStream** stream)
@@ -1054,6 +1122,7 @@ void printStat(STATSTG* statstg, char* tag)
     indent(6);
     cout << "clsid  = ";
     printClsid(statstg->clsid);
+    cout << endl;
   }
 
   if ((statstg->type == STGTY_STREAM) || (statstg->type == STGTY_LOCKBYTES)) {
@@ -1601,7 +1670,8 @@ VectorIndexEntry* readVectorIndex(IStream* stream,
   return result;
 }
 
-void dumpSetIndexEntry(OMUInt32 i, SetIndexEntry* setIndexEntry)
+void dumpSetIndexEntry(OMUInt32 i,
+                       SetIndexEntry* setIndexEntry)
 {
   cout << setw(8) << i
        << " : "
@@ -1609,16 +1679,27 @@ void dumpSetIndexEntry(OMUInt32 i, SetIndexEntry* setIndexEntry)
        << "     "
        << setw(8) << setIndexEntry->_referenceCount
        << "     ";
-       printClsid(setIndexEntry->_key);
+  printClsid(setIndexEntry->_key);
+  cout << endl;
 }
 
 void printSetIndex(SetIndexEntry* setIndex,
-                      OMUInt32 count,
-                      OMUInt32 highWaterMark)
+                   OMUInt32 count,
+                   OMUInt32 highWaterMark,
+                   OMUInt32 keyPid,
+                   OMUInt32 keySize,
+                   OMUInt32 version)
 {
   cout << "Dump of set index" << endl;
-  cout << "( High water mark = " << highWaterMark
-       << ", Number of entries = " << count << " )" << endl;
+  if (version > 19) {
+    cout << "( High water mark = "   << highWaterMark
+         << ", Number of entries = " << count
+         << ", Key pid = "    << hex << keyPid
+         << ", Key size = "   << dec << keySize<< " )" << endl;
+  } else {
+    cout << "( High water mark = " << highWaterMark
+         << ", Number of entries = " << count << " )" << endl;
+  }
 
   if (count > 0) {
     cout << setw(8) << "ordinal"
@@ -1638,10 +1719,57 @@ void printSetIndex(SetIndexEntry* setIndex,
   }
 }
 
+void printSetIndex(SetIndexEntry* setIndex,
+                   OMUInt32 count,
+                   OMUInt32 highWaterMark,
+                   OMUInt32 keyPid,
+                   OMUInt32 keySize,
+                   OMByte* keys)
+{
+  cout << "Dump of set index" << endl;
+  cout << "( High water mark = "   << highWaterMark
+       << ", Number of entries = " << count
+       << ", Key pid = "    << hex << keyPid
+       << ", Key size = "   << dec << keySize<< " )" << endl;
+
+  if (count > 0) {
+    cout << setw(8) << "ordinal"
+         << "   "
+         << setw(10) << "local key"
+         << "   "
+         << setw(8) << "references"
+         << "     "
+         << setw(8) << "unique key"
+         << endl;
+
+    for (OMUInt32 i = 0; i < count; i++) {
+      cout << setw(8) << i
+           << " : "
+           << setw(10) << setIndex[i]._elementName
+           << "     "
+           << setw(8) << setIndex[i]._referenceCount
+           << "     ";
+      cout << endl;
+	  cout << "  ";
+      if (keySize == 32) {
+        printUMID((UMID*)&keys[i * keySize]);
+      } else {
+        printRawKey(&keys[i * keySize], keySize);
+      }
+      cout << endl;
+    }
+  } else {
+    cout << "empty" << endl;
+  }
+}
+
 void printWeakCollectionIndex(int containerType,
                               WeakCollectionIndexEntry* collectionIndex,
                               OMUInt32 count,
-                              OMUInt32 tag)
+                              OMUInt32 tag,
+                              OMUInt32 keyPid,
+                              OMUInt32 keySize,
+                              OMUInt32 version)
 {
   //TRACE("printWeakCollectionIndex");
   ASSERT("Valid container type",
@@ -1654,8 +1782,15 @@ void printWeakCollectionIndex(int containerType,
     cout << "Dump of vector index" << endl;
   }
 
-  cout << "( Tag = " << tag
-       << ", Number of entries = " << count << " )" << endl;
+  if (version > 19) {
+    cout << "( Tag = " << tag
+         << ", Number of entries = " << count
+         << ", Key pid = "    << hex << keyPid
+         << ", Key size = "   << dec << keySize<< " )" << endl;
+  } else {
+    cout << "( Tag = " << tag
+         << ", Number of entries = " << count << " )" << endl;
+  }
 
   if (count > 0) {
     cout << setw(8) << "ordinal"
@@ -1667,6 +1802,7 @@ void printWeakCollectionIndex(int containerType,
       cout << setw(8) << i;
       cout << " : ";
       printClsid(collectionIndex[i]._key);
+      cout << endl;
     }
   } else {
     cout << "empty" << endl;
@@ -1705,6 +1841,26 @@ SetIndexEntry* readSetIndex(IStream* stream,
     for (OMUInt32 i = 0; i < count; i++) {
       readSetIndexEntry(stream, &result[i], swapNeeded);
     }
+  }
+  return result;
+}
+
+SetIndexEntry* readSetIndex(IStream* stream,
+                            OMUInt32 count,
+                            OMUInt32 /* keyPid */,
+                            OMUInt32 keySize,
+                            OMByte** keys,
+                            bool swapNeeded)
+{
+  SetIndexEntry* result = new SetIndexEntry[count];
+  ASSERT("Successfully allocated set index array", result != 0);
+  *keys = new OMByte[count * keySize];
+  ASSERT("Successfully allocated key array", *keys != 0);
+  for (OMUInt32 i = 0; i < count; i++) {
+    readUInt32(stream, &result[i]._elementName, swapNeeded);
+    readUInt32(stream, &result[i]._referenceCount, swapNeeded);
+    memset(&result[i]._key, 0, sizeof(result[i]._key)); // Gak !!
+    read(stream, &((*keys)[i * keySize]), keySize);
   }
   return result;
 }
@@ -1976,18 +2132,49 @@ void dumpContainedObjects(IStorage* storage,
 
       OMUInt32 _count;
       readUInt32(subStream, &_count, swapNeeded);
-      
-      // Read the set index.
-      //
-      SetIndexEntry* setIndex = readSetIndex(subStream,
-                                                      _count,
-                                                      swapNeeded);
 
-      // dump the set index
-      //
-      cout << endl;
-      cout << thisPathName << endl;
-      printSetIndex(setIndex, _count, _highWaterMark);
+      OMUInt32 keyPid = 0;
+      OMUInt32 keySize = 16;
+
+      if (version > 19) {
+        // Read the key pid.
+        //
+        readUInt32(subStream, &keyPid, swapNeeded);
+
+        // Read the key size.
+        //
+        readUInt32(subStream, &keySize, swapNeeded);
+      }
+
+      SetIndexEntry* setIndex = 0;
+      if (keySize == 16) {
+        // Read the set index.
+        //
+        setIndex = readSetIndex(subStream, _count, swapNeeded);
+
+        // dump the set index
+        //
+        cout << endl;
+        cout << thisPathName << endl;
+        printSetIndex(setIndex, _count, _highWaterMark, keyPid, keySize, version);
+      } else {
+        // Read the set index.
+        //
+        OMByte*keys = 0;
+        setIndex = readSetIndex(subStream,
+                                _count,
+                                keyPid,
+                                keySize,
+                                &keys,
+                                swapNeeded);
+
+        // dump the set index
+        //
+        cout << endl;
+        cout << thisPathName << endl;
+        printSetIndex(setIndex, _count, _highWaterMark, keyPid, keySize, keys);
+        delete [] keys;
+      }
 
       // for each set index entry
       //
@@ -2084,7 +2271,20 @@ void dumpContainedObjects(IStorage* storage,
 
       OMUInt32 _tag;
       readUInt32(subStream, &_tag, swapNeeded);
-      
+
+      OMUInt32 keyPid = 0;
+      OMUInt32 keySize = 16;
+
+      if (version > 19) {
+        // Read the key pid.
+        //
+        readUInt32(subStream, &keyPid, swapNeeded);
+
+        // Read the key size.
+        //
+        readUInt32(subStream, &keySize, swapNeeded);
+      }
+
       // Read the index.
       //
       WeakCollectionIndexEntry* collectionIndex =
@@ -2096,7 +2296,7 @@ void dumpContainedObjects(IStorage* storage,
       //
       cout << endl;
       cout << thisPathName << endl;
-      printWeakCollectionIndex(containerType, collectionIndex, _count, _tag);
+      printWeakCollectionIndex(containerType, collectionIndex, _count, _tag, keyPid, keySize, version);
 
       delete [] setName;
       setName = 0;
