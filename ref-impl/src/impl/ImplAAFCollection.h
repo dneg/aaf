@@ -259,7 +259,7 @@ ImplAAFCollectionOMVector<T, PropElemType>::GetNthElement
 
   return AAFRESULT_SUCCESS;
 }
-#endif 0
+#endif //0
 
 
 #endif // ! __ImplAAFCollection_h__
