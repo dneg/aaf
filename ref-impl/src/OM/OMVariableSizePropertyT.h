@@ -270,7 +270,7 @@ void OMVariableSizeProperty<PropertyType>::restore(size_t externalSize)
     ASSERT("Valid heap pointer", _bits != 0);
     _size = externalSize;
   }
-  read(_propertyId, _storedForm, _bits, _size, externalSize);
+  read(externalSize);
 }
 
   // @mfunc The number of items in this this <c OMVariableSizeProperty>.

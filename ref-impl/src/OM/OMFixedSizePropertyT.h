@@ -144,7 +144,7 @@ void OMFixedSizeProperty<PropertyType>::restore(size_t externalSize)
 {
   TRACE("OMFixedSizeProperty<PropertyType>::restore");
 
-  read(_propertyId, _storedForm, _bits, _size, externalSize);
+  read(externalSize);
 }
 
 #endif
