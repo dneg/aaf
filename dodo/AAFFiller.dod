@@ -44,7 +44,8 @@ AD_XMETHOD2(Initialize,
 			Length Property Value,
 
 			This function will create a new filler object with the given
-  // property values.
+  // property values.  Length is specified in units of the edit rate
+  // of the containing timeline mob slot.
   // 
   // Succeeds if all of the following are true:
   // - this object has not yet been initialized.
