@@ -705,6 +705,12 @@ HRESULT CAAFEssenceFileStream::InternalQueryInterface
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
+    else if (riid == IID_IAAFPlugin) 
+    { 
+        *ppvObj = (IAAFPlugin *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
 
     // Always delegate back to base implementation.
     return CAAFUnknown::InternalQueryInterface(riid, ppvObj);
