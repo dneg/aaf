@@ -47,6 +47,8 @@
 #------------------------------------------------------------------------------
 include $(AAFBASE)/build/pdefs-i586Linux.mk
 
-PLATFORM_CFLAGS += -fPIC -DIA_64
+# -fPIC is necessary when building object code to be used in a shared library
+PLATFORM_CFLAGS += -fPIC
 
+# turn on k8 specific optimisations for Release builds
 REL_FLAGS += -march=k8
