@@ -752,14 +752,21 @@ HRESULT AAFDLL::IsAAFFile (
     aafBool *  pFileIsAAFFile)
 {
   TRACE("AAFDLL::IsAAFFile");
-  ASSERT("Valid dll callback function", _pfnIsAAFFile);
   // This function was previously implemented here but has now
   // been moved to the DLL. There was previously a stub in the
   // DLL that returned AAFRESULT_NOT_IMPLEMENTED (this stub
-  // was not previously called). If we call into the DLL now
-  // and the result is AAFRESULT_NOT_IMPLEMENTED we are using
-  // an old DLL. Turn the result into AAFRESULT_DLL_SYMBOL_NOT_FOUND.
+  // was not previously called). On Unix and Macintosh this stub
+  // is exported from old DLLs, on Windows the stub is not
+  // exported from old DLLs.
+  // If we can't find the symbol we're using an old DLL on Windows.
+  // If we can find the symbol and when we call into the DLL the
+  // result is AAFRESULT_NOT_IMPLEMENTED we are using an old DLL
+  // on Unix or Macintosh. In this case we turn the result into
+  // AAFRESULT_DLL_SYMBOL_NOT_FOUND.
   //
+  if (NULL == _pfnIsAAFFile)
+    return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+
   HRESULT hr = _pfnIsAAFFile( pFileName, pAAFFileKind, pFileIsAAFFile);
   if (hr == AAFRESULT_NOT_IMPLEMENTED)
     hr = AAFRESULT_DLL_SYMBOL_NOT_FOUND;
