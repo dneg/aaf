@@ -160,8 +160,8 @@ ImplAAFDictionary::ImplAAFDictionary ()
   _persistentProperties.put(_dataDefinitions.address());
   _persistentProperties.put(_pluginDefinitions.address());
 
-  _pBuiltinClasses = new ImplAAFBuiltinClasses (this);
   _pBuiltinTypes   = new ImplAAFBuiltinTypes (this);
+  _pBuiltinClasses = new ImplAAFBuiltinClasses (this);
 }
 
 
@@ -559,6 +559,14 @@ AAFRESULT ImplAAFDictionary::dictLookupClassDef (
 	return (result);
 }
 
+bool ImplAAFDictionary::PvtIsClassPresent (
+      const aafUID_t & classID)
+{
+  // NOTE: The following type cast is temporary. It should be removed as soon
+	// as the OM has a declarative sytax to include the type
+	// of the key used in the set. (trr:2000-FEB-26)
+	return(_classDefinitions.contains((*reinterpret_cast<const OMObjectIdentification *>(&classID))));
+}
 
 bool
 ImplAAFDictionary::IsAxiomaticClass (const aafUID_t &classID) const
@@ -603,8 +611,9 @@ AAFRESULT STDMETHODCALLTYPE
 	  // here's where we assure it's in the dictionary.
 	  if(_defRegistrationAllowed)
 	  {
-		  ImplAAFClassDef	*dictValue, *parent;
+		  ImplAAFClassDef	*parent;
 		  // These classes fail with doubly-opened storages
+#if 0
 		  if(memcmp(&classID, &kAAFClassID_ClassDefinition, sizeof(aafUID_t)) != 0
 		   && memcmp(&classID, &kAAFClassID_TypeDefinitionCharacter, sizeof(aafUID_t)) != 0
 		   && memcmp(&classID, &kAAFClassID_TypeDefinitionString, sizeof(aafUID_t)) != 0
@@ -613,9 +622,9 @@ AAFRESULT STDMETHODCALLTYPE
 		   && memcmp(&classID, &kAAFClassID_TypeDefinitionFixedArray, sizeof(aafUID_t)) != 0
 		   && memcmp(&classID, &kAAFClassID_TypeDefinitionInteger, sizeof(aafUID_t)) != 0
 		   )
+#endif
 		  {
-			  status = dictLookupClassDef(classID, &dictValue);
-			  if(status != AAFRESULT_SUCCESS || dictValue == NULL)
+			  if(!PvtIsClassPresent(classID))
 			  {
 				aafBool		isRoot;
 				aafUID_t	uid;
@@ -755,22 +764,13 @@ AAFRESULT STDMETHODCALLTYPE
     return hr;
 
   // Is this class already registered ?
-  ImplAAFClassDef * pExistingClassDef = NULL;
-  hr = dictLookupClassDef (newAUID, &pExistingClassDef);
-
-  if (hr != AAFRESULT_SUCCESS)
+  if (!PvtIsClassPresent(newAUID))
 	{
 	  // This class is not yet registered, add it to the dictionary.
 	  _classDefinitions.appendValue(pClassDef);
 	  pClassDef->AcquireReference();
 	}
-  else
-	{
-	  // This class is already registered, probably because it was
-	  // already in the persisted dictionary.
-	  pExistingClassDef->ReleaseReference();
-	  pExistingClassDef = 0;
-	}
+
   return(AAFRESULT_SUCCESS);
 }
 
@@ -838,9 +838,8 @@ AAFRESULT STDMETHODCALLTYPE
     return hr;
 
   // Is this type already registered ?
-  ImplAAFTypeDef * pExistingTypeDef = NULL;
-  hr = dictLookupTypeDef (newAUID, &pExistingTypeDef);
-
+  if (!PvtIsTypePresent(newAUID))
+  {
 //	if (AAFRESULT_FAILED(hr))
 //	{
 		// TBD:(transdel 2000-MAR-19) we also nee to check it the
@@ -854,7 +853,6 @@ AAFRESULT STDMETHODCALLTYPE
 //	}
 
 
-  if (hr != AAFRESULT_SUCCESS) {
     // This type is not yet registered, add it to the dictionary.
     _typeDefinitions.appendValue(pTypeDef);
     pTypeDef->AcquireReference();
@@ -863,16 +861,6 @@ AAFRESULT STDMETHODCALLTYPE
     // BobT 6/15/99: Remove ImplAAFDefObject::Get/SetDict() in favor of
 	// ImplAAFObject::GetDictionary().
 	// pTypeDef->SetDict(this);
-  } else {
-    // This type is already registered, probably because it was
-    // already in the persisted dictionary.
-    // Set up the (non-persistent) dictionary pointer.
-	//
-    // BobT 6/15/99: Remove ImplAAFDefObject::Get/SetDict() in favor of
-	// ImplAAFObject::GetDictionary().
-	// pExistingTypeDef->SetDict(this);
-    pExistingTypeDef->ReleaseReference();
-	pExistingTypeDef = 0;
   }
 
   return(AAFRESULT_SUCCESS);
@@ -907,6 +895,14 @@ AAFRESULT ImplAAFDictionary::dictLookupTypeDef (
 
 }
 
+bool ImplAAFDictionary::PvtIsTypePresent (
+      const aafUID_t & typeID)
+{
+  // NOTE: The following type cast is temporary. It should be removed as soon
+	// as the OM has a declarative sytax to include the type
+	// of the key used in the set. (trr:2000-FEB-26)
+	return(_typeDefinitions.contains((*reinterpret_cast<const OMObjectIdentification *>(&typeID))));
+}
 
 /*static*/
 const aafUID_t * ImplAAFDictionary::sAxiomaticTypeGuids[] = 
@@ -1011,7 +1007,8 @@ ImplAAFDictionary::pvtLookupAxiomaticTypeDef (const aafUID_t &typeID,
 			  // tmp).
 			  if (! _axiomaticTypes[i])
 				_axiomaticTypes[i] = tmp;
-			  assert (_axiomaticTypes[i]);
+
+			 assert (_axiomaticTypes[i]);
 			}
 		  assert (_axiomaticTypes[i]);
 		  assert (ppTypeDef);
@@ -1031,26 +1028,24 @@ AAFRESULT STDMETHODCALLTYPE
 {
   ImplAAFTypeDefSP			typeDef;
   AAFRESULT					status;
+//	aafUID_t				foundUID;
 
   if (! ppTypeDef) return AAFRESULT_NULL_PARAM;
 
   if (pvtLookupAxiomaticTypeDef (typeID, &typeDef))
-	{
-	  // Yes, this is an axiomatic type.  typeDef should be filled
-	  // in.  Assure that it's in the dictionary, and return it.
-
-	  // Future! here's where we assure it's in the dictionary.
-	  // if (! type-present-in-dictionary)
-	  // {
-	  //   put-it-into-the-dictionary();
-	  // }
-
+  {
+	  if(_defRegistrationAllowed && !PvtIsTypePresent(typeID))
+	  {
+		  status = RegisterTypeDef(typeDef);
+		  assert (AAFRESULT_SUCCEEDED (status));
+	  }
+	  
 	  assert (ppTypeDef);
 	  *ppTypeDef = typeDef;
 	  assert (*ppTypeDef);
 	  (*ppTypeDef)->AcquireReference ();
 	  return AAFRESULT_SUCCESS;
-	}
+  }
 
   // Not axiomatic.  Check to see if it's already in the dict.
   status = dictLookupTypeDef (typeID, ppTypeDef);
@@ -1077,10 +1072,13 @@ AAFRESULT STDMETHODCALLTYPE
 	  return AAFRESULT_NO_MORE_OBJECTS;
 	}
   // Yup, found it in builtins.  Register it.
-  assert (typeDef);
-  status = RegisterTypeDef (typeDef);
-  if (AAFRESULT_FAILED (status))
-	return status;
+  if(_defRegistrationAllowed)
+	 {
+	  assert (typeDef);
+	 status = RegisterTypeDef (typeDef);
+	 if (AAFRESULT_FAILED (status))
+		return status;
+  }
 		  
   assert (ppTypeDef);
   *ppTypeDef = typeDef;

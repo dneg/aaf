@@ -280,6 +280,7 @@ ImplAAFBuiltinClasses::ImplAAFBuiltinClasses (ImplAAFDictionary* dictionary)
 	_numAxPropsInited (false)
 {
   _axClassDefs = new ImplAAFClassDefSP[ksNumAxClasses];
+  dictionary->SetBuiltinClasses(this);
   instantiateProps ();
   instantiateClasses ();
 }
@@ -517,13 +518,14 @@ void ImplAAFBuiltinClasses::instantiateProps ()
 		  ImplAAFPropertyDef * propDef =
 			dynamic_cast<ImplAAFPropertyDef*>(obj);
 		  assert (propDef);
-		  
+
 		  AAFRESULT hr = propDef->pvtInitialize
 			(propInfo->id,
 			 propInfo->tag,
 			 propInfo->name,
 			 *propInfo->pTypeGuid,
 			 propInfo->mandatory ? kAAFFalse : kAAFTrue);
+
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  propDef->SetOMPropCreateFunc (propInfo->omPropCreateFunc);
 

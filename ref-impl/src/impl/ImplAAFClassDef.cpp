@@ -236,15 +236,13 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  // A dictionary has been identified; see if we're registered in
 	  // it.
-	  ImplAAFClassDefSP pClassDef;
 	  aafUID_t thisClassID;
 
 	  // get our class ID
 	  hr = GetAUID (&thisClassID);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 
-	  hr = pDict->dictLookupClassDef (thisClassID, &pClassDef);
-	  if (AAFRESULT_SUCCEEDED (hr))
+	  if (pDict->PvtIsClassPresent(thisClassID))
 		{
 		  // pClassDef is unused; we only want to know the result of
 		  // the lookup.

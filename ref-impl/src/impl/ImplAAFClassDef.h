@@ -167,12 +167,6 @@ public:
 
 public:
 
-  //
-  // Non-published methods
-  //
-	ImplAAFClassDef *
-		PvtGetParent ();
-
   //****************
   // SetParent()
   //

@@ -68,7 +68,7 @@ extern "C" const aafClassID_t CLSID_EnumAAFOperationDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
  
 ImplAAFOperationDef::ImplAAFOperationDef ()
-: _dataDef(			PID_OperationDefinition_DataDefinition,		"DataDefinition"),
+: _dataDef(	PID_OperationDefinition_DataDefinition,	"DataDefinition", "/Dictionary/DataDefinitions"),
   _isTimeWarp(		PID_OperationDefinition_IsTimeWarp,			"IsTimeWarp"),
   _degradeTo(		PID_OperationDefinition_DegradeTo,			"DegradeTo"),
   _category(		PID_OperationDefinition_Category,			"Category"),
@@ -128,11 +128,15 @@ AAFRESULT STDMETHODCALLTYPE
   if(! ppDataDef)
 	return AAFRESULT_NULL_PARAM;
 
-  AAFRESULT hr;
-  ImplAAFDictionarySP pDict;
-  hr = GetDictionary (&pDict);
-  if (AAFRESULT_FAILED (hr)) return hr;
-  return pDict->LookupDataDef (_dataDef, ppDataDef);
+   if(_dataDef.isVoid())
+		return AAFRESULT_OBJECT_NOT_FOUND;
+  ImplAAFDataDef *pDataDef = _dataDef;
+
+  *ppDataDef = pDataDef;
+  assert (*ppDataDef);
+  (*ppDataDef)->AcquireReference ();
+
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -143,13 +147,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pDataDef)
 	return AAFRESULT_NULL_PARAM;
 
-  AAFRESULT hr;
-  aafUID_t uid;
-  hr = pDataDef->GetAUID(&uid);
-  if (AAFRESULT_FAILED (hr))
-	return hr;
-
-  _dataDef = uid;
+  _dataDef = pDataDef;
 	
   return AAFRESULT_SUCCESS;
 }

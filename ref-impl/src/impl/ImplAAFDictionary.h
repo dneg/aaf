@@ -165,6 +165,7 @@ public:
          // @parm [out,retval] Type Definition Object
          ImplAAFTypeDef ** ppTypeDef);
 
+
   //****************
   // GetTypeDefs()
   //
@@ -550,6 +551,8 @@ public:
 	 // @parm [out,retval] Class Definition
 	 ImplAAFClassDef ** ppClassDef);
 
+bool PvtIsClassPresent (
+      const aafUID_t & classID);
 
   // Like LookupType(), except will only look at types currently
   // registered in this dictionary; will not attempt to look at
@@ -561,6 +564,8 @@ public:
 	 // @parm [out,retval] Type Definition Object
 	 ImplAAFTypeDef ** ppTypeDef);
 
+bool PvtIsTypePresent (
+      const aafUID_t & typeID);
 
   // Attempt to register the sizes of this type def if it is a
   // built-in type.  Currently implemented for Enum and Record
@@ -582,6 +587,7 @@ public:
   bool IsAxiomaticClass (const aafUID_t & classID) const;
 
   ImplAAFBuiltinDefs * GetBuiltinDefs ();
+  void SetBuiltinClasses(ImplAAFBuiltinClasses *pBuiltinClasses) { _pBuiltinClasses = pBuiltinClasses; };
 
 private:
 
