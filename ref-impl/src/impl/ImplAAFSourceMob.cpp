@@ -55,7 +55,7 @@ extern "C" const aafClassID_t	CLSID_AAFSequence;
 extern "C" const aafClassID_t	CLSID_AAFTimecode;
 
 ImplAAFSourceMob::ImplAAFSourceMob ()
-: _essenceDesc(        PID_SourceMob_MediaDescription,          "Media Description")
+: _essenceDesc(        PID_SourceMob_MediaDescription,          "MediaDescription")
 {
   _persistentProperties.put(_essenceDesc.address());
 }
