@@ -24,7 +24,10 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
-#if 0
+#if defined(_MAC) || defined(macintosh)
+
+#define WAVE_FORMAT_PCM 0x0001
+
 typedef struct tWAVEFORMATEX
 {
     WORD        wFormatTag;         /* format type */
@@ -36,6 +39,7 @@ typedef struct tWAVEFORMATEX
     WORD        cbSize;             /* the count in bytes of the size of */
 				    /* extra information (after cbSize) */
 } WAVEFORMATEX, *PWAVEFORMATEX;
+
 #endif
 
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
