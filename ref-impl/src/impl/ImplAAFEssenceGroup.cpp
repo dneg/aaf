@@ -484,7 +484,7 @@ AAFRESULT ImplAAFEssenceGroup::ValidateChoice(
 {
 	aafLength_t	groupLength, newLength;
 	ImplAAFDictionary	*pDict = NULL;
-	ImplAAFDataDef	*pDef = NULL;
+	//ImplAAFDataDef	*pDef = NULL;
 	aafBool			willConvert;
 
 	if(choice == NULL)
