@@ -24,6 +24,7 @@
 
 #include <AxDictionary.h>
 #include <AxEssence.h>
+#include <AxDefObject.h>
 
 namespace {
 

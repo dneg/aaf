@@ -107,6 +107,3 @@ private:
 	int _numChannels;
 
 };
-
-
-

@@ -27,6 +27,8 @@
 #include <AxDictionary.h>
 #include <AxPluginMgr.h>
 #include <AxEssence.h>
+#include <AxDefObject.h>
+#include <AxDefObject.h>
 #include <AxIterator.h>
 #include <AxMacMain.h>
 

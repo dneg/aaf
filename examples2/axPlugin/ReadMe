@@ -9,7 +9,7 @@ and AxImplNullEssenceCodec details.  Some minor edits.
 
 
 This is a simple example AAF plugin implementation.  Please refer to
-the AxPlug.pdf file for an overview (in UML format) of the code.  The
+the AxPlugin.pdf file for an overview (in UML format) of the code.  The
 AxPlugin code satisfies the basic requirements of an AFF plugin:
 
 i) A simple means to register all the components implemented by the

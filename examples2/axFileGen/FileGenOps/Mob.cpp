@@ -31,6 +31,7 @@
 #include <AxContentStorage.h>
 #include <AxIterator.h>
 #include <AxEssence.h>
+#include <AxDefObject.h>
 
 #include <AAFResult.h>
 

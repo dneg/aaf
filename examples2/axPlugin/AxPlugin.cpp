@@ -24,7 +24,6 @@
 
 #include "AxPluginRegistry.h"
 #include "CAxClassFactory.h"
-#include "CAxNullEssenceCodec.h"
 #include "CAxUnknown.h"
 
 bool AxPlugin::CanUnloadNow()

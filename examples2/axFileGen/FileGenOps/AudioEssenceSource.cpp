@@ -30,14 +30,15 @@
 
 namespace {
 
-// The tone generator can generate a single cycle and repeat it, or 
+// The tone generator can generate a single cycle and repeat it, or
 // generate every sample.  The single cycle approach is efficient, but
-// suffers as the tone frequency approaches the nyquist frequence because
-// we can only generate tones that are integer multiples of the
-// sample_freq/tone_freq.  The error introduced by this grows as the tone_freq
-// increases.  Since, in general we assume nothing about the sample frequency
-// or the tone frequency values, we choose the more accurate approach and
-// generate every sample at the expense of a bit of cpu time.
+// suffers as the tone frequency approaches the nyquist frequency
+// because we can only generate tones that are integer multiples of
+// the sample_freq/tone_freq.  The error introduced by this grows as
+// the tone_freq increases.  Since, in general we assume nothing about
+// the sample frequency or the tone frequency values, we choose the
+// more accurate approach and generate every sample at the expense of
+// a bit of cpu time.
 
 class ToneGenerator {
 public:
