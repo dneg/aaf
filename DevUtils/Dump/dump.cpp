@@ -3160,8 +3160,7 @@ void dumpProperties(IStorage* storage,
   if (version > 23) {
     size_t correctSize = expectedStreamSize + 4 + (entries * 6);
     if (actualStreamSize != correctSize) {
-      cerr << programName
-           << ": Warning : Incorrect property stream size." << endl;
+      warning("dumpProperties", "Incorrect property stream size.");
       warningCount = warningCount + 1;
       OMUInt16 bo = hostByteOrder();
       if (swapNeeded) {
