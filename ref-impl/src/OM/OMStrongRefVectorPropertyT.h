@@ -241,17 +241,8 @@ ReferencedObject*
                                                 const size_t index)
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::setValueAt");
-  PRECONDITION("Valid index", index <= count());
+  PRECONDITION("Valid index", index < count());
   PRECONDITION("Valid object", object != 0);
-
-  if (index == count()) {
-    // This is an append, make sure the new element is defined.
-    OMUInt32 localKey = nextLocalKey();
-    wchar_t* name = elementName(localKey);
-    VectorElement newElement(this, name, localKey);
-    _vector.append(newElement);
-    delete [] name;
-  }
 
   // Set the vector to contain the new object
   //
