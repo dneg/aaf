@@ -39,7 +39,7 @@ all : $(OBJDIR) $(AAFSDKBINDIR)/dump$(EXE)
 
 
 $(AAFSDKBINDIR)/dump$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) $(RPATH_OPT) -L$(AAFSDKLIBDIR) -o $@ \
+	$(LD) $(CXXOBJS) $(RPATH_OPT) -L$(AAFSDKLIBDIR) $(LIBCIO) -o $@ \
 	$(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIB)
 
 
