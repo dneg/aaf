@@ -2005,7 +2005,8 @@ AAFRESULT ImplAAFMob::FindNextMob(ImplAAFMobSlot *track,
 	aafBool					isMask = kAAFFalse, reverse = kAAFFalse;
 	aafSourceRef_t			sourceRef;
 	ImplAAFMob				*nextMob = NULL;
-  aafMobID_t				nullMobID = { 0 };		// Need "isNIL" utility
+	aafMobID_t			nullMobID = {{0,0,0,0,0,0,0,0,0,0,0,0},
+					0,0,0,0,{0,0,0,{0,0,0,0,0,0,0,0}}}; // Need "isNIL" utility
 	ImplAAFMobSlot 			*nextTrack = NULL;
 	aafSlotID_t				tmpTrackID, nextTrackID;
 	aafPosition_t			tmpPos, convertPos;

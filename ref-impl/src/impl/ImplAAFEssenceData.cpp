@@ -44,7 +44,8 @@
 #include "AAFResult.h"
 
 
-const aafMobID_t kNullMobID = {0};
+const aafMobID_t kNullMobID = {{0,0,0,0,0,0,0,0,0,0,0,0},0,0,0,0,
+	{0,0,0,{0,0,0,0,0,0,0,0}}};
 
 ImplAAFEssenceData::ImplAAFEssenceData () :
   _fileMobID(PID_EssenceData_MobID,	L"MobID"),

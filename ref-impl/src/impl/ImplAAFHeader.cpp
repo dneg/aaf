@@ -86,7 +86,7 @@ typedef ImplAAFSmartPointer<ImplEnumAAFIdentifications>
 
 extern "C" const aafClassID_t CLSID_EnumAAFIdentifications;
 
-const aafUID_t NIL_UID = { 0 };
+const aafUID_t NIL_UID = { 0,0,0,{0,0,0,0,0,0,0,0} };
 
 
 ImplAAFHeader::ImplAAFHeader ()
@@ -685,7 +685,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT ImplAAFHeader::SetModified(void)		// To NOW
 {
-	aafTimeStamp_t	now = { 0 };
+	aafTimeStamp_t	now = { {0,0,0}, {0,0,0,0} };
 
 	AAFGetDateTime(&now);
 	_lastModified = now;

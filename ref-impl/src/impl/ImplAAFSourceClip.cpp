@@ -298,7 +298,8 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceClip::SetSourceReference (aafSourceRef_t  sourceRef)
 {
 	AAFRESULT   aafError = AAFRESULT_SUCCESS;
-	static const aafMobID_t nullMobID = {0};
+	static const aafMobID_t nullMobID = {{0,0,0,0,0,0,0,0,0,0,0,0},0,0,0,0,
+					{0,0,0,{0,0,0,0,0,0,0,0}}};
 	
 	/* If MobID is NUL - make the rest of the fields 0 too. */
 	if(memcmp(&sourceRef.sourceID, &nullMobID, sizeof(sourceRef.sourceID)) == 0)
