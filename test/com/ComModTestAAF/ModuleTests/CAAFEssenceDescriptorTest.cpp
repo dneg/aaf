@@ -189,6 +189,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				localhr = AAFRESULT_TEST_FAILED;
 		}
 
+		// Make sure we can't add it again
+
+//		if (edesc->AppendLocator(pLocator) != AAFRESULT_OBJECT_ALREADY_ATTACHED)
+
+//			localhr = AAFRESULT_TEST_FAILED;
+
+
 		if (localhr == AAFRESULT_SUCCESS)
 			cout<< "	AppendLocator() ...		Passed"<< endl;
 		else
@@ -237,7 +244,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 /* InsertLocatorAt()	**************************************/
 		localhr = AAFRESULT_SUCCESS;
-		edesc->CountLocators(&numLocators);
+
+		// Make a locator to attach
+		checkResult(defs.cdLocator()->
+						CreateInstance(IID_IAAFLocator, 
+				   			(IUnknown **)&pLocator));			
+
 		// Verify that we can't remove an index value that is out of range
 		if (edesc->InsertLocatorAt(numLocators+1, pLocator) != AAFRESULT_BADINDEX)
 			localhr = AAFRESULT_TEST_FAILED;
@@ -245,10 +257,67 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Verify behavior when NULL is passed in
 		if (edesc->InsertLocatorAt(1, NULL) != AAFRESULT_NULL_PARAM)
 			localhr = AAFRESULT_TEST_FAILED;
-					
-		cout<< "	InsertLocatorAt() ...	Needs to be Implemented!"<< endl;
-		if (hr != AAFRESULT_TEST_FAILED)
-			hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+
+		edesc->CountLocators(&numLocators);
+
+		// Insert it
+		if (edesc->InsertLocatorAt(0, pLocator) != AAFRESULT_SUCCESS)
+			localhr = AAFRESULT_TEST_FAILED;
+		// Check it
+		edesc->GetLocatorAt(0, &pLocator2);
+		if (pLocator2 != pLocator)
+			localhr = AAFRESULT_TEST_FAILED;
+		// Count it	
+		edesc->CountLocators(&numLocators2);
+		if (numLocators2 != numLocators+1)
+			localhr = AAFRESULT_TEST_FAILED;
+			
+		edesc->CountLocators(&numLocators);
+		// Make a locator to attach in the middle
+		checkResult(defs.cdLocator()->
+						CreateInstance(IID_IAAFLocator, 
+				   			(IUnknown **)&pLocator));			
+		// Insert it
+		if (edesc->InsertLocatorAt(numLocators/2, pLocator) != AAFRESULT_SUCCESS)
+			localhr = AAFRESULT_TEST_FAILED;
+		// Check it
+		edesc->GetLocatorAt(numLocators/2, &pLocator2);
+		if (pLocator2 != pLocator)
+			localhr = AAFRESULT_TEST_FAILED;
+		// Count it	
+		edesc->CountLocators(&numLocators2);
+		if (numLocators2 != numLocators+1)
+			localhr = AAFRESULT_TEST_FAILED;
+
+		edesc->CountLocators(&numLocators);
+		// Make a locator to attach to the end
+		checkResult(defs.cdLocator()->
+						CreateInstance(IID_IAAFLocator, 
+				   			(IUnknown **)&pLocator));			
+		// Insert it.  note: its 0 based so the end is numLocators - 1
+		if (edesc->InsertLocatorAt(numLocators-1, pLocator) != AAFRESULT_SUCCESS)
+			localhr = AAFRESULT_TEST_FAILED;
+		// Check it
+		edesc->GetLocatorAt(numLocators-1, &pLocator2);
+		if (pLocator2 != pLocator)
+			localhr = AAFRESULT_TEST_FAILED;
+		// Count it	
+		edesc->CountLocators(&numLocators2);
+		if (numLocators2 != numLocators+1)
+			localhr = AAFRESULT_TEST_FAILED;
+			
+		// Make sure we can't add it again
+		if (edesc->InsertLocatorAt(numLocators+1, pLocator) != AAFRESULT_OBJECT_ALREADY_ATTACHED)
+			localhr = AAFRESULT_TEST_FAILED;
+
+		
+		if (localhr == AAFRESULT_SUCCESS)
+			cout<< "	InsertLocatorAt() ...	Passed"<< endl;
+		else
+		{
+			cout<< "	InsertLocatorAt() ...	FAILED"<< endl;
+			hr = AAFRESULT_TEST_FAILED;
+		}
 			
 			
 /* GetLocatorAt()	******************************************/
@@ -362,7 +431,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		if (numLocators2 != (numLocators - 1))
 			localhr = AAFRESULT_TEST_FAILED;
 		
-		edesc->GetLocatorAt(numLocators2/2, &pLocator2);
+		edesc->GetLocatorAt(numLocators/2, &pLocator2);
 		// Verify that the locators shifted properly
 		if (pLocator != pLocator2)
 			localhr = AAFRESULT_TEST_FAILED;
@@ -498,19 +567,21 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 			// Verify that there is now one locator
 			checkResult(pEdesc->CountLocators(&numLocators));
-		 	checkExpression(1 == numLocators, AAFRESULT_TEST_FAILED);
+		 	checkExpression(20 == numLocators, AAFRESULT_TEST_FAILED);
 		
 			checkResult(pEdesc->GetLocators(&pEnum));
 
 			// This should read the one real locator
-			checkResult(pEnum->NextOne(&pLocator));
+			for ( n=0; n<numLocators; n++)
+			{
+				checkResult(pEnum->NextOne(&pLocator));
 
-			// This should run off the end
-			pLocator->Release();
-			pLocator = NULL;
+				pLocator->Release();
+				pLocator = NULL;
+			}
 
-      // We had better not succeed or get an unknown failure.
-      checkExpression(AAFRESULT_NO_MORE_OBJECTS == pEnum->NextOne(&pLocator),
+     		// We had better not succeed or get an unknown failure.
+     		checkExpression(AAFRESULT_NO_MORE_OBJECTS == pEnum->NextOne(&pLocator),
                       AAFRESULT_TEST_FAILED);
 			
 
