@@ -3,6 +3,7 @@
 
 #include "OMPropertySet.h"
 #include "OMStorable.h"
+#include "OMStoredObject.h"
 
 OMDataStreamProperty::OMDataStreamProperty(const OMPropertyId propertyId,
                                            const char* name)
@@ -21,6 +22,8 @@ void OMDataStreamProperty::save(void) const
   TRACE("OMDataStreamProperty::save");
 
   OMStoredObject* store = _propertySet->container()->store();
+  ASSERT("Valid store", store != 0);
+
   // Use the property name as the stream name
   //
   const char* streamName = name();
@@ -38,17 +41,16 @@ void OMDataStreamProperty::save(void) const
   }
 }
 
-  // @mfunc Restore this <c OMDataStreamProperty> from the
-  //        <c OMStoredObject> <p s>, the size of the
+  // @mfunc Restore this <c OMDataStreamProperty>, the size of the
   //        <c OMDataStreamProperty> is <p size>.
-  //   @parm The <c OMStoredObject> from which to restore this
-  //         <c OMDataStreamProperty>.
   //   @parm The size of the <c OMDataStreamProperty>.
-void OMDataStreamProperty::restoreFrom(OMStoredObject& s, size_t size)
+void OMDataStreamProperty::restore(size_t size)
 {
-  TRACE("OMDataStreamProperty::restoreFrom");
+  TRACE("OMDataStreamProperty::restore");
 
   OMStoredObject* store = _propertySet->container()->store();
+  ASSERT("Valid store", store != 0);
+
   char* streamName = new char[size];
   ASSERT("Valid heap pointer", streamName != 0);
   store->read(_propertyId,
@@ -56,7 +58,7 @@ void OMDataStreamProperty::restoreFrom(OMStoredObject& s, size_t size)
               streamName,
               size);
   ASSERT("Consistent property size", size == strlen(streamName) + 1);
-  ASSERT("Consistent property name",strcmp(streamName, name()) == 0);
+  ASSERT("Consistent property name", strcmp(streamName, name()) == 0);
   delete [] streamName;
 
   open();
