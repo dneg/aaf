@@ -93,19 +93,12 @@ extern AafOmfGlobals* gpGlobals;
 // ============================================================================
 // Constructor
 // ============================================================================
-Omf2Aaf::Omf2Aaf() : pFile(NULL), pHeader(NULL), pDictionary(NULL),
-  pAAF(NULL), pOMF(NULL), pEffectTranslate(NULL)
+Omf2Aaf::Omf2Aaf( AAFDomainUtils *aafDomainUtils, OMFDomainUtils *omfDomainUtils, EffectTranslate *effectTranslate  ) : 
+pFile(NULL), pHeader(NULL), pDictionary(NULL), pAAF(aafDomainUtils), pOMF(omfDomainUtils), pEffectTranslate(effectTranslate)
 {
 	OMFSession = 0;
 	OMFFileHdl = 0;
 	OMFFileRev = OMF2::kOmfRev1x;
-	pAAF = new AAFDomainExtensionUtils;
-	pOMF = new OMFDomainExtensionUtils;
-#if AVID_SPECIAL
-	pEffectTranslate = new AvidEffectTranslate;
-#else
-	pEffectTranslate = new EffectTranslate;
-#endif
 }
 
 // ============================================================================
@@ -113,13 +106,6 @@ Omf2Aaf::Omf2Aaf() : pFile(NULL), pHeader(NULL), pDictionary(NULL),
 // ============================================================================
 Omf2Aaf::~Omf2Aaf()
 {
-	if (pEffectTranslate)
-		delete pEffectTranslate;
-	if (pOMF)
-		delete pOMF;
-	if (pAAF)
-		delete pAAF;
-
 	if (pHeader)
 		pHeader->Release();
 	if (pDictionary)
@@ -1000,7 +986,7 @@ void Omf2Aaf::ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob )
 		omfCheck = OMF2::omfiIteratorDispose(OMFFileHdl, OMFIterator);
 	}
 
-	((ExtendedOmf2Aaf*)this)->FinishUpMob(obj, pMob);
+	FinishUpMob(obj, pMob);
 	DecIndentLevel();
 
 	// auto_ptrs will delete [] allocated pointers here...
