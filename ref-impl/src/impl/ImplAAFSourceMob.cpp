@@ -42,8 +42,15 @@
 #include "aafresult.h"
 #include "ImplAAFObjectCreation.h"
 #include "AAFDefUIDs.h"
+#include "AAFUtils.h"
+#include "ImplEnumAAFMobSlots.h"
+#include "ImplAAFSequence.h"
+#include "ImplEnumAAFComponents.h"
+#include "ImplAAFTimecode.h"
 
 extern "C" const aafClassID_t	CLSID_AAFSourceClip;
+extern "C" const aafClassID_t	CLSID_AAFSequence;
+extern "C" const aafClassID_t	CLSID_AAFTimecode;
 
 ImplAAFSourceMob::ImplAAFSourceMob ()
 : _essenceDesc(         PID_SOURCEMOB_EDESC,          "essenceDescriptor")
@@ -139,124 +146,81 @@ AAFRESULT STDMETHODCALLTYPE
 // AddTimecodeClip()
 //
 AAFRESULT STDMETHODCALLTYPE
-   ImplAAFSourceMob::AddTimecodeClip (aafRational_t editrate,
+   ImplAAFSourceMob::AppendTimecodeClip (aafRational_t editrate,
                            aafInt32 slotID,
-                           aafTimecode_t startTC,
+						   aafTimecode_t startTC,
                            aafFrameLength_t length32)
 {
-#if FULL_TOOLKIT
 	ImplAAFSegment *slotComponent= NULL;
 	ImplAAFTimecode *tccp = NULL;
-	ImplAAFFiller *fill = NULL;
 	ImplAAFSegment *     aSubComponent = NULL;
 	ImplAAFSequence	*aSequ = NULL;
-	ImplAAFFiller *     filler1 = NULL, *filler2 = NULL;
-	aafInt32         zeroL = 0L, sub, numSub;
+	aafInt32         zeroL = 0L;
 	aafFrameLength_t maxLength;
-	aafClassID_t	tag;
-	ImplAAFDataKind *	timecodeKind = NULL;
-	ImplAAFObject		*tmp;
+	aafUID_t		 timecodeKind = DDEF_Timecode;
 	AAFRESULT			aafError = AAFRESULT_SUCCESS;
 	aafPosition_t	zeroPos;
-	aafLength_t		length, zeroLen, sequLen;
-	ImplAAFMobSlot *	newSlot = NULL;
-	aafBool			fullLength = FALSE;
-	aafProperty_t	sequProp;
-	
-	{
-		sequProp = OMSEQUComponents;
-	}
+	aafLength_t		length, zeroLen;
+	ImplAAFTimelineMobSlot *	newSlot = NULL, *mobSlot = NULL;
+	aafBool			fullLength = AAFFalse;
 
 	if(length32 == FULL_LENGTH)
 	  {
-		 fullLength = TRUE;
+		 fullLength = AAFTrue;
 		 length32 = 1;
 	  }
 	else
-	  fullLength = FALSE;
+	  fullLength = AAFFalse;
 	
 	CvtInt32toPosition(0, zeroPos);
 	CvtInt32toLength(0, zeroLen);
  	CvtInt32toLength(length32, length);
 
 	XPROTECT()
-	  {
-		 tccp = CreateImpl(CLSID_AAFTimecode);
-		 (_file, length, startTC);		 
-		 if (FindTimecodeSlot(&slotComponent) == AAFRESULT_SUCCESS)
-			{
-			  CHECK(slotComponent->GetClassID(tag));
-			  if (strcmp(tag, "SEQU") == 0)
-				 {
-					numSub = slotComponent->GetObjRefArrayLength(sequProp);
-					for (sub = numSub; sub >= 1; sub--)
-					  {
-						 CHECK(slotComponent->ReadNthObjRefArray(sequProp, &tmp, sub));
-						 aSubComponent = (ImplAAFSegment *)tmp;
-						 CHECK(aSubComponent->GetClassID(tag));
-						 if (strcmp(tag, "FILL") != 0)
-							{
+	{
+		tccp = (ImplAAFTimecode *)CreateImpl(CLSID_AAFTimecode);
+		tccp->InitTimecode(length, &startTC);		 
+ 		if (FindSlotBySlotID(slotID, (ImplAAFMobSlot **)&mobSlot) == AAFRESULT_SUCCESS)
+		{
+			CHECK(mobSlot->GetSegment(&slotComponent));	
+			
+			// For now, just release the old slot component and allocate a new sequence
+			//Need to release to old sequence!!!
+			aSequ = (ImplAAFSequence *)CreateImpl(CLSID_AAFSequence);
+			CHECK(aSequ->SetInitialValue(&timecodeKind));
+			CHECK(aSequ->AppendCpnt(tccp));
+		} /* FindTimecodeSlot */
+		else
+		{
+			aSequ = (ImplAAFSequence *)CreateImpl(CLSID_AAFSequence);
+			CHECK(aSequ->SetInitialValue(&timecodeKind));
+			CHECK(aSequ->AppendCpnt(tccp));
+			CHECK(AppendNewTimelineSlot(editrate, aSequ, slotID,
+										NULL, zeroPos, &newSlot));
+		}
 
-							  CHECK(slotComponent->WriteNthObjRefArray(sequProp, tccp, sub + 1));
-								  {
-									CHECK(slotComponent->GetLength(&sequLen));
-									AddInt64toInt64(length, &sequLen);
-									CHECK(slotComponent->WriteLength(OMCPNTLength, sequLen));
-								  }
-							  if (sub != numSub)	/* At least one FILL
-														 * found at the end */
-								 {
-									fill = CreateImpl(CLSID_AAFFiller);
-									(_file, timecodeKind, zeroLen);	
-									CHECK(slotComponent->WriteNthObjRefArray(sequProp, fill, sub + 2));
-								 }
-							  break;
-							}
-					  }
-				 }
-			  else
-				 RAISE(OM_ERR_NOT_IMPLEMENTED);
-			} /* FindTimecodeSlot */
-		 else
-			{
-			  aSequ = CreateImpl(CLSID_AAFSequence);
-			  (_file, timecodeKind);
-			  filler1 = CreateImpl(CLSID_AAFFiller);
-			  (_file, timecodeKind, zeroLen);	
-			  CHECK(aSequ->AppendCpnt(filler1));
-			  CHECK(aSequ->AppendCpnt(tccp));
-			  filler2 = CreateImpl(CLSID_AAFFiller);
-			  (_file, timecodeKind, zeroLen);	
-			  CHECK(aSequ->AppendCpnt(filler2));
-			  CHECK(AppendNewSlot(editrate, aSequ, zeroPos,
-										slotID, NULL, &newSlot));
-			}
+		 /* Release reference, so the useCount is decremented */
+		if (slotComponent)
+		{
+//!!!		slotComponent->ReleaseObject();	
+		}
 
-		 /* Release Bento reference, so the useCount is decremented */
-		 if (slotComponent)
-			{
-			  slotComponent->ReleaseObject();	
-			}
-
-		 if(fullLength)
-			{
-			  CHECK(PvtTimecodeToOffset(startTC.fps, 24, 0, 0, 0, 
+		if(fullLength)
+		{
+			CHECK(PvtTimecodeToOffset(startTC.fps, 24, 0, 0, 0, 
 											 startTC.drop, &maxLength));
-				 {
-					CvtInt32toLength(maxLength, length);
-					CHECK(tccp->WriteLength(OMCPNTLength, length) );
-					/* NOTE: What if the sequence already existed? */
-					CHECK(aSequ->WriteLength(OMCPNTLength, length) );
-				 }
+			{
+				CvtInt32toLength(maxLength, length);
+				CHECK(tccp->SetLength(&length) );
+				/* NOTE: What if the sequence already existed? */
+				CHECK(aSequ->SetLength(&length) );
 			}
-	  } /* XPROTECT */
+		}
+	} /* XPROTECT */
 	XEXCEPT
 	XEND;
 									
 	return (AAFRESULT_SUCCESS);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 
@@ -265,9 +229,9 @@ AAFRESULT STDMETHODCALLTYPE
 // AddEdgecodeClip()
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceMob::AddEdgecodeClip (aafRational_t  /*editrate*/,
+    ImplAAFSourceMob::AppendEdgecodeClip (aafRational_t  /*editrate*/,
                            aafInt32  /*slotID*/,
-                           aafFrameOffset_t  /*startEC*/,
+                          aafFrameOffset_t  /*startEC*/,
                            aafFrameLength_t  /*length32*/,
                            aafFilmType_t  /*filmKind*/,
                            aafEdgeType_t  /*codeFormat*/,
@@ -731,7 +695,12 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(GetEssenceDescription (&edesc));
-		CHECK(edesc->GetOwningMobKind(pMobKind));
+		if(edesc != NULL)
+		{
+			CHECK(edesc->GetOwningMobKind(pMobKind));
+		}
+		else
+			*pMobKind = kAllMob;
 	}
 	XEXCEPT
 	XEND;
@@ -749,14 +718,14 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 				aafLength_t			*tcSlotLen)
 {
 #if FULL_TOOLKIT
-	AAFSegment *		seg = NULL;
-	AAFIterate *	sequIter = NULL;
-	aafPosition_t	offset;
-	AAFRESULT		status = AAFRESULT_SUCCESS;
-	aafLength_t		zeroLen;
-	aafPosition_t	sequPos;
+	ImplAAFSegment *	seg = NULL;
+	AAFIterate *		sequIter = NULL;
+	aafPosition_t		offset;
+	AAFRESULT			status = AAFRESULT_SUCCESS;
+	aafLength_t			zeroLen;
+	aafPosition_t		sequPos;
 	
-	XPROTECT(_file)
+	XPROTECT()
 	{
 		CvtInt32toInt64(position, &offset);
 		CvtInt32toInt64(0, &zeroLen);
@@ -780,79 +749,8 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 	return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
-//************************
-// Function:  FindTimecodeSlot	(INTERNAL)
-//
-//    Search a slot group for the timecode slot, and return a TCCP object.
-//    This routine will search for the first nonzero length subcomponent
-//    of a SEQU, because MC5.0 has zero length filler clips and
-//    transitions on the timecode slots.  NULL is returned if there is
-//    not a valid timecode object present.
-//
-// Argument Notes:
-//		StuffNeededBeyondNotesInDefinition.labelNumber
-//
-// ReturnValue:
-//		Error code (see below).
-//
-// Possible Errors:
-// Standard errors (see top of file).
-//
-AAFRESULT ImplAAFSourceMob::FindTimecodeSlot(
-				ImplAAFSegment **result)
-{
-#if FULL_TOOLKIT
-	AAFSegment *			seg = NULL;
-	AAFIterate *		slotIter = NULL;
-	aafNumSlots_t		numSlots;
-	aafInt32				loop;
-	AAFMobSlot *		slot = NULL;
-	aafBool				found = FALSE;
-	AAFDataKind *      datakind = NULL;
-	AAFRESULT          tmpError = AAFRESULT_SUCCESS;
-	
-	XPROTECT(_file)
-	{
-		slotIter = CreateImpl(CLSID_AAFIterate(_file);
-		CHECK(GetNumSlots(&numSlots));
-		for (loop = 1; loop <= numSlots; loop++)
-		{
-			CHECK(slotIter->MobGetNextSlot(this, NULL, &slot));
-			CHECK(slot->GetSegment(&seg));
-			CHECK(seg->GetDatakind(&datakind));
-			if (datakind->IsTimecodeKind(kExactMatch, &tmpError))
-			  {
-				 *result = seg;
-				 found = TRUE;
-				 break;
-			  }
-			/* Release Bento reference, so the useCount is decremented */
-			if (slot)
-			  {
-				 slot->ReleaseObject();	
-				 slot = NULL;
-			  }
-		 } /* for */
-		delete slotIter;
-		slotIter = NULL;
-		if(!found)
-			RAISE(OM_ERR_NO_TIMECODE);
-	} /* XPROTECT */
-	XEXCEPT
-	{
-		if(XCODE() == OM_ERR_NO_MORE_OBJECTS)
-			RERAISE(OM_ERR_NO_TIMECODE);
-		if(slotIter != NULL)
-			delete slotIter;
-		*result = NULL;
-	}
-	XEND;
 
-	return(AAFRESULT_SUCCESS);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
+//!!! Need a routine to get timecode slotID from physical timecode track
 
 extern "C" const aafClassID_t CLSID_AAFSourceMob;
 
