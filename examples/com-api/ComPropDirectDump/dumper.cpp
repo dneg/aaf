@@ -66,6 +66,7 @@
 
 
 // handy smart pointer typedefs
+typedef IAAFSmartPointer<IUnknown>                 IUnknownSP;
 typedef IAAFSmartPointer<IAAFObject>               IAAFObjectSP;
 typedef IAAFSmartPointer<IAAFPropertyValue>        IAAFPropertyValueSP;
 typedef IAAFSmartPointer<IAAFProperty>             IAAFPropertySP;
@@ -248,6 +249,12 @@ static HRESULT dumpObject
  ostream & os
  );
 
+HRESULT dumpWeakObject(IUnknown * pContainer,
+           IAAFClassDef * pClassDef,
+				   IAAFDictionary * pDict,
+				   int indent,
+				   ostream & os);
+
 static HRESULT dumpPropertyValue
 (
  IAAFPropertyValueSP pPVal,
@@ -342,6 +349,86 @@ HRESULT dumpObject(IAAFObjectSP pContainer,
 	}
 	
 	return returnHr;
+}
+
+
+HRESULT dumpWeakObject(IUnknown * pContainer,
+           IAAFClassDef * pClassDef,
+           IAAFDictionary * pDict,
+           int indent,
+           ostream & os)
+{
+  HRESULT returnHr = AAFRESULT_SUCCESS;
+
+  IAAFObjectSP pObject;
+  IAAFMetaDefinitionSP pMetaDefinition;
+  IAAFPropertyDefSP pPDef;
+  IAAFPropertyValueSP pPVal;
+  char *mbBuf = NULL;
+  aafCharacter * classNameBuf = NULL;
+  
+  try
+  {  
+    //os << endl;
+    printIndent (indent, os);
+    os << "Weak Reference to Class: ";
+
+    aafUInt32 bufClassNameSize;
+    checkResult(pClassDef->GetNameBufLen (&bufClassNameSize));
+    classNameBuf = new aafCharacter[bufClassNameSize];
+    assert (classNameBuf);
+    checkResult(pClassDef->GetName(classNameBuf, bufClassNameSize));
+    mbBuf = make_mbstring(bufClassNameSize, classNameBuf); // create an ansi/asci
+    checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
+    os << mbBuf << "; ";
+    delete[] mbBuf;
+    mbBuf = NULL; // clear for safe error handling...
+    delete[] classNameBuf;
+    classNameBuf = NULL; // clear for safe error handling...
+
+    if (pContainer)
+    {
+      if (SUCCEEDED(pContainer->QueryInterface(IID_IAAFMetaDefinition, (void **)&pMetaDefinition)))
+      {
+        // Create a property value for the definition's auid
+        // so that it can be "dumped" the same as the identifier
+        // for weak references to objects.
+        aafUID_t auid;
+        IAAFTypeDefSP pType;
+        IAAFTypeDefRecordSP pRecordType;
+
+        checkResult(pMetaDefinition->GetAUID(&auid));
+        checkResult(pDict->LookupTypeDef(kAAFTypeID_AUID, &pType));
+        checkResult(pType->QueryInterface(IID_IAAFTypeDefRecord, (void **)&pRecordType));
+        checkResult(pRecordType->CreateValueFromStruct((aafMemPtr_t)&auid, sizeof(auid), &pPVal));
+      }
+      else if (SUCCEEDED(pContainer->QueryInterface(IID_IAAFObject, (void **)&pObject)))
+      {
+        checkResult(pClassDef->GetUniqueIdentifier(&pPDef));
+        checkResult(pObject->GetPropertyValue(pPDef, &pPVal));
+      }
+      else
+      {
+        os << "*** ERROR: Invalid weak reference! ***" << endl;
+        checkResult(AAFRESULT_INVALID_OBJ);
+      }
+
+      // Dump the unique identifier (to use as a cross reference).
+      //printIndent (indent, os);
+      os << "Unique Identifier; ";
+      checkResult (dumpPropertyValue (pPVal, pDict, indent+1, os));    
+    }
+  }
+  catch (HRESULT &caught)
+  {
+    os << endl << "*** dumpWeakObject: Caught hresult 0x" << hex << caught << "***" << endl;
+    returnHr = caught;
+
+    delete[] mbBuf;
+    delete[] classNameBuf;
+  }
+  
+  return returnHr;
 }
 
 
@@ -449,7 +536,6 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 				break;	
 			}
 			
-#if 0
 		case kAAFTypeCatWeakObjRef:
 			{
 				// weak object reference; only dump summary info (not
@@ -457,18 +543,26 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 				IAAFTypeDefObjectRefSP pTDO;
 				checkResult(pTD->QueryInterface(IID_IAAFTypeDefObjectRef,
 					(void**)&pTDO));
-				
-				IAAFObjectSP pObj;
-				checkResult(pTDO->GetObject(pPVal, &pObj));
+
+				os << "Value: weak reference to object:" << endl;
 				IAAFClassDefSP pClassDef;
-				checkResult(pObj->GetDefinition(&pClassDef));
+				checkResult(pTDO->GetObjectType(&pClassDef));
+				
+				IUnknownSP pUnk;
+				HRESULT wkResult = pTDO->GetObject(pPVal, IID_IUnknown, (IUnknown **)&pUnk);
+				if (AAFRESULT_NULLOBJECT == wkResult)
+				{
+					// This should be an error but the toolkit does NOT enforce this requirement!
+					os << "*** WARNING: Weak reference is NULL! ***" << endl;
+					wkResult = S_OK;
+				}
+				checkResult(wkResult);
 				
 				// Here is where you print the class def's name, etc. and any
 				// other summary info
-				
+				checkResult (dumpWeakObject (pUnk, pClassDef, pDict, indent+1, os));
 				break;	
 			}
-#endif // 0
 			
 		case kAAFTypeCatRename:
 			{
