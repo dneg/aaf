@@ -9,104 +9,79 @@ const char* prefix = "kAAFTypeID_";
 #define TYPE_GUID_NAME(type) #type
 
 #define AAF_TYPE_DEFINITION_INTEGER(name, id, size, signed) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_ENUMERATION(name, id, type) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_RECORD(name, id) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_VARYING_ARRAY(name, id, type) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_FIXED_ARRAY(name, id, type, count) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_RENAME(name, id, type) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_STRING(name, id, type) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_INDIRECT(name, id) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_OPAQUE(name, id) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION(name, id) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_CHARACTER(name, id) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_SET(name, id, type) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_STRONG_REFERENCE(name, id, type) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(name, id, type) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(name, id, type) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_WEAK_REFERENCE(name, id, type) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(name, id, type) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_WEAK_REFERENCE_VECTOR(name, id, type) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_STRONG_REFERENCE(name, id, type) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(name, id, type) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(name, id, type) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_WEAK_REFERENCE(name, id, type) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(name, id, type) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_WEAK_REFERENCE_VECTOR(name, id, type) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE_DEFINITION_STREAM(name, id) \
-{TYPE_GUID_NAME(name) \
-,id},
+{TYPE_GUID_NAME(name), id},
 
 #define AAF_TYPE(name) name
 #define AAF_REFERENCE_TYPE(type, target)      AAF_TYPE(target##type)
