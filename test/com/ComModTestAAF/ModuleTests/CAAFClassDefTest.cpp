@@ -47,6 +47,7 @@ typedef IAAFSmartPointer<IAAFHeader>               IAAFHeaderSP;
 typedef IAAFSmartPointer<IAAFPropertyDef>          IAAFPropertyDefSP;
 typedef IAAFSmartPointer<IAAFTypeDef>              IAAFTypeDefSP;
 typedef IAAFSmartPointer<IEnumAAFPropertyDefs>     IEnumAAFPropertyDefsSP;
+typedef IAAFSmartPointer<IAAFMetaDefinition>       IAAFMetaDefinitionSP;
 
 // Structure used internally by class CAAFModTestLog below
 class CAAFModTestLogEntry
@@ -215,6 +216,13 @@ static aafCharacter_constptr pNewClassName=L"New Class";
 static aafCharacter_constptr pNewPropertyName=L"New Property";
 static aafCharacter_constptr pOptionalPropertyName=L"Optional Property";
 
+
+// {CADEF284-6D3C-11d3-8449-00600832ACB8}
+static const aafUID_t ourPid2 = 
+{ 0xcadef284, 0x6d3c, 0x11d3, { 0x84, 0x49, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
+static aafCharacter_constptr kOptionalObjectPropertyName = L"Optional Object Property";
+
+
 // Use existing class AAFFiller as parent for the new class definition we will 
 // create
 static aafUID_t AUID_ParentClass=AUID_AAFFiller;
@@ -275,6 +283,7 @@ static void VerifyAAFFile(CAAFClassDefTestLog& Log,IAAFFileSP pFile)
 	checkExpression(pHeader!=0);
 	checkResult(pHeader->GetDictionary(&pDict));
 	checkExpression(pDict!=0);
+  
 
 	// Look up the new class we created
 	IAAFClassDefSP pNewClass;
@@ -390,10 +399,6 @@ static void CreateAAFFile(CAAFClassDefTestLog& Log)
 	aafUID_t ourPid1 = 
 	{ 0xcadef283, 0x6d3c, 0x11d3, { 0x84, 0x49, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
 
-	// {CADEF284-6D3C-11d3-8449-00600832ACB8}
-	aafUID_t ourPid2 = 
-	{ 0xcadef284, 0x6d3c, 0x11d3, { 0x84, 0x49, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
-
 	// {CADEF285-6D3C-11d3-8449-00600832ACB8}
 	aafUID_t ourPid3 = 
 	{ 0xcadef285, 0x6d3c, 0x11d3, { 0x84, 0x49, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
@@ -443,9 +448,13 @@ static void CreateAAFFile(CAAFClassDefTestLog& Log)
 	checkResult(pDict->LookupClassDef (AUID_AAFObject, &badClass2));
 	
 	IAAFPropertyDefSP propDef2;
-	if(badClass2->RegisterOptionalPropertyDef (ourPid2,L"Second prop",ptd,
-		&propDef2)!=AAFRESULT_NOT_EXTENDABLE)
-		Log.MarkTestFailed(REGISTER_OPTIONAL_PROPERTY_DEF);
+	// The following call will succeed on "some newer" toolkits.
+	HRESULT result = badClass2->RegisterOptionalPropertyDef (ourPid2, kOptionalObjectPropertyName, ptd,&propDef2);
+	if (FAILED(result))
+	{
+		if(result!=AAFRESULT_NOT_EXTENDABLE)
+			Log.MarkTestFailed(REGISTER_OPTIONAL_PROPERTY_DEF);
+	}
 
 	// Try to extend an AAFSequence.  Should succeed.
 	IAAFClassDefSP goodClass;
