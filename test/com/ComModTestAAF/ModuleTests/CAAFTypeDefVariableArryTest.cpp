@@ -64,7 +64,8 @@ typedef IAAFSmartPointer<IAAFMobSlot>           IAAFMobSlotSP;
 	
 //Variable Array
 #define									TEST_VA_NAME	L"VA type Name"
-static  aafUID_t						TEST_VA_TYPE_ID =  { 0x1464a4ae, 0x01a5, 0x11d4, { 0x80, 0x46, 0x8, 0x0, 0x36, 0x21, 0x8, 0x4 } };
+static  const aafUID_t						TEST_VA_TYPE_ID =
+{ 0x47240c2e, 0x19d, 0x11d4, { 0x8e, 0x3d, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x7c } };
 
 static const aafUInt32					TEST_VA_COUNT =  5;
 #define		 TEST_ELEM_t				aafInt16
@@ -75,14 +76,22 @@ aafUID_t  some_int_id = { 0x14b66cc6, 0x1a1, 0x11d4, { 0x80, 0x46, 0x8, 0x0, 0x3
 
 // Variable Array Property
 #define									TEST_PROP_NAME	L"VA Property Name"
-static  aafUID_t						TEST_PROP_ID = { 0x1464a4af, 0x01a5, 0x11d4, { 0x80, 0x46, 0x8, 0x0, 0x36, 0x21, 0x8, 0x4 } };
+static  const aafUID_t						TEST_PROP_ID =
+{ 0x47240c2f, 0x19d, 0x11d4, { 0x8e, 0x3d, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x7c } };
 
 // Mob id
-static  aafMobID_t						TEST_MobID = {0};
+static  aafMobID_t						TEST_MobID =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0xda5ab5f4, 0x0405, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
 
 // Slot id
 static const aafSlotID_t				TEST_SLOT_ID = 7;
 #define									TEST_SLOT_NAME	L"Slot containing our VA Segment"
+
+//Additional test stuff ...
+static const	aafUID_t  TEST_some_int_id =
+{ 0x47240c30, 0x19d, 0x11d4, { 0x8e, 0x3d, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x7c } };
 
 
 // i find this convenient to compare the IUNK's of two interfaces :
@@ -173,6 +182,7 @@ static HRESULT addVATypeToComponent(IAAFDictionary* const pDict)
 	IAAFTypeDefSP spTD;
 	checkResult(pDict->LookupTypeDef (TEST_VA_TYPE_ID, &spTD));
 	
+		
 	//	Register the Property
 	IAAFPropertyDefSP spPropDef;
 	checkResult(spSomeClass->RegisterOptionalPropertyDef (TEST_PROP_ID,
@@ -400,7 +410,7 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 	//first, create a new member, and add it to the array
 	IAAFTypeDefIntSP spNewInt;
 	checkResult(defs.cdTypeDefInt()->CreateInstance(IID_IAAFTypeDefInt, (IUnknown**)&spNewInt));
-	checkResult (spNewInt->Initialize (some_int_id, sizeof(TEST_ELEM_t), kAAFTrue, L"Some Int Name"));
+	checkResult (spNewInt->Initialize (TEST_some_int_id, sizeof(TEST_ELEM_t), kAAFTrue, L"Some Int Name"));
 	TEST_ELEM_t  new_int = -115;
 	IAAFPropertyValueSP spNewInt_PV;
 	checkResult(spNewInt->CreateValue ((aafMemPtr_t)&new_int, sizeof(new_int), &spNewInt_PV));
@@ -484,7 +494,6 @@ static HRESULT CreateAAFFile(aafWChar *  pFileName )
 			CreateInstance(IID_IAAFMob, 
 			(IUnknown **)&spMob));
 		
-		checkResult(CoCreateGuid((GUID *)&TEST_MobID)); // Could use a better/more accurate UID generator
 		checkResult(spMob->SetMobID(TEST_MobID));
 		checkResult(spMob->SetName(L"Some Mob"));
 		
