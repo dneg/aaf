@@ -84,5 +84,9 @@ LIB32=link.exe -lib
 
 SOURCE="..\..\..\ref-impl\aaflib\aaflib.cpp"
 # End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\aaflib\aaflibwin32.cpp"
+# End Source File
 # End Target
 # End Project
