@@ -93,7 +93,7 @@ class %01; \
 #c Argument: class name
 #c
 #startm AD_FORWARD_DECLARATION 01
-	class %01;
+class %01;
 #endm
 
 #ccccccccccccccccccccccccccc
@@ -125,6 +125,10 @@ class %01; \
 //@class    .this-module | Implementation class for .this-module
 #ifndef _.this-module_h_
 #define _.this-module_h_
+
+// Forward declaration for output stream used by the static test method:
+// .this-module::test.
+class ostream;
 #endm
 
 
@@ -625,6 +629,10 @@ public:
 #c Arguments: none
 #c
 #startm AD_CLASS_END 00
+public:
+  // Declare the module test method. The implementation of the will be be
+  // in /test/.this-moduleTest.cpp.
+  static AAFRESULT test(ostream& stream);
 };
 
 #endif // ! _.this-module_h_
@@ -638,6 +646,11 @@ public:
 #c Arguments: none
 #c
 #startm AD_ROOT_CLASS_END 00
+public:
+  // Declare the module test method. The implementation of the will be be
+  // in /test/.this-moduleTest.cpp.
+  static AAFRESULT test(ostream& stream);
+
 protected:
 
   Impl.this-module * GetRepObject ();

@@ -123,6 +123,10 @@ class Impl%01;
 //@class    .this-module | Implementation class for .this-module
 #ifndef _Impl.this-module_h_
 #define _Impl.this-module_h_
+
+// Forward declaration for output stream used by the static test method:
+// Impl.this-module::test.
+class ostream;
 #endm
 
 
@@ -584,6 +588,10 @@ public:
 #c Arguments: none
 #c
 #startm AD_CLASS_END 00
+public:
+  // Declare the module test method. The implementation of the will be be
+  // in /test/Impl.this-moduleTest.cpp.
+  static AAFRESULT test(ostream& stream);
 };
 
 #endif // ! _Impl.this-module_h_
@@ -598,6 +606,9 @@ public:
 #c
 #startm AD_ROOT_CLASS_END 00
 public:
+  // Declare the module test method. The implementation of the will be be
+  // in /test/Impl.this-moduleTest.cpp.
+  static AAFRESULT test(ostream& stream);
 
   void InitComParent (I.this-module * pComParent);
 
