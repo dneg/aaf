@@ -151,7 +151,7 @@ OMRawStorageLockBytes::LockRegion(ULARGE_INTEGER /* libOffset */,
 {
   TRACE("OMRawStorageLockBytes::LockRegion");
 
-  // TBS
+  // Function not supported.
   return E_FAIL;
 }
 
@@ -163,7 +163,7 @@ OMRawStorageLockBytes::UnlockRegion(ULARGE_INTEGER /* libOffset */,
 {
   TRACE("OMRawStorageLockBytes::UnlockRegion");
 
-  // TBS
+  // Function not supported.
   return E_FAIL;
 }
 
