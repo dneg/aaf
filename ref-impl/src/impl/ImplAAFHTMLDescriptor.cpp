@@ -31,6 +31,5 @@ ImplAAFHTMLDescriptor::~ImplAAFHTMLDescriptor ()
 
 
 
-OMDEFINE_STORABLE(ImplAAFHTMLDescriptor, AUID_AAFHTMLDescriptor);
 
 

@@ -31,6 +31,5 @@ ImplAAFTextClip::~ImplAAFTextClip ()
 
 
 
-OMDEFINE_STORABLE(ImplAAFTextClip, AUID_AAFTextClip);
 
 

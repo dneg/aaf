@@ -31,6 +31,5 @@ ImplAAFStaticMobSlot::~ImplAAFStaticMobSlot ()
 
 
 
-OMDEFINE_STORABLE(ImplAAFStaticMobSlot, AUID_AAFStaticMobSlot);
 
 
