@@ -31,11 +31,19 @@
 
 #include "AAFResult.h"
 #include "AAFStoredObjectIDs.h"
+#include "AAFTypeDefUIDs.h"
 
 #include <iostream.h>
 #include <assert.h>
 #include <stdio.h>
 
+#include "AAFSmartPointer.h"
+typedef IAAFSmartPointer<IAAFDictionary> IAAFDictionarySP;
+typedef IAAFSmartPointer<IAAFFile>       IAAFFileSP;
+typedef IAAFSmartPointer<IAAFHeader>     IAAFHeaderSP;
+typedef IAAFSmartPointer<IAAFTypeDef>    IAAFTypeDefSP;
+typedef IAAFSmartPointer<IAAFTypeDefInt> IAAFTypeDefIntSP;
+typedef IAAFSmartPointer<IUnknown>       IUnknownSP;
 
 // {C3930DD6-E603-11d2-842A-00600832ACB8}
 static aafUID_t TypeID_LocalInt32 = 
@@ -75,23 +83,23 @@ static HRESULT TestTypeDef ()
   ProductInfo.productID = NIL_UID;
   ProductInfo.platform = NULL;
 
-  IAAFFile* pFile = NULL;
+  IAAFFileSP pFile;
   RemoveTestFile (testFileName);
   hr = AAFFileOpenNewModify(testFileName, 0, &ProductInfo, &pFile);
   if (! SUCCEEDED (hr)) return hr;
 
-  IAAFHeader * pHeader = NULL;
+  IAAFHeaderSP pHeader;
   hr = pFile->GetHeader (&pHeader);
   if (! SUCCEEDED (hr)) return hr;
   assert (pHeader);
 
-  IAAFDictionary * pDict = NULL;
+  IAAFDictionarySP pDict;
   hr = pHeader->GetDictionary (&pDict);
   if (! SUCCEEDED (hr)) return hr;
   assert (pDict);
 
   // Let's try to do something interesting with a type definition
-  IAAFTypeDefInt * pTypeDefInt = NULL;
+  IAAFTypeDefIntSP pTypeDefInt;
   hr = pDict->CreateInstance (&AUID_AAFTypeDefInt,
 							  IID_IAAFTypeDefInt,
 							  (IUnknown **) &pTypeDefInt);
@@ -104,7 +112,7 @@ static HRESULT TestTypeDef ()
 								L"Local 32-bit int");
   if (! SUCCEEDED (hr)) return hr;
 
-  IAAFTypeDef * pTypeDef = NULL;
+  IAAFTypeDefSP pTypeDef;
   hr = pTypeDefInt->QueryInterface(IID_IAAFTypeDef, (void **)&pTypeDef);
   if (! SUCCEEDED (hr)) return hr;
   assert (pTypeDef);
@@ -125,16 +133,32 @@ static HRESULT TestTypeDef ()
   if (kAAFTypeCatInt != typeCat)
 	return AAFRESULT_TEST_FAILED;
 
+  // Test for RawAccessType().  It should be array of unsigned chars.
+  IAAFTypeDefSP pRawType;
+  hr = pTypeDef->RawAccessType (&pRawType);
+  if (! SUCCEEDED (hr)) return hr;
+
+  IUnknownSP    pUnkRawType;
+  hr = pRawType->QueryInterface(IID_IUnknown, (void **)&pUnkRawType);
+  if (! SUCCEEDED (hr)) return hr;
+
+  IAAFTypeDefSP pUInt8ArrayType;
+  hr = pDict->LookupType ((aafUID_t*) &kAAFTypeID_UInt8Array, &pUInt8ArrayType);
+  if (! SUCCEEDED (hr)) return hr;
+
+  IUnknownSP    pUnkUInt8Array;
+  hr = pUInt8ArrayType->QueryInterface(IID_IUnknown, (void **)&pUnkUInt8Array);
+  if (! SUCCEEDED (hr)) return hr;
+
+  if (pUnkUInt8Array != pUnkRawType)
+	return AAFRESULT_TEST_FAILED;
+
+
   // that's all we can test for.  Clean up.
-  pTypeDef->Release();
-  pTypeDefInt->Release();
-  pDict->Release();
-  pHeader->Release();
   hr = pFile->Save();
   if (! SUCCEEDED (hr)) return hr;
   hr = pFile->Close();
   if (! SUCCEEDED (hr)) return hr;
-  pFile->Release();
 
   return AAFRESULT_SUCCESS;
 }
@@ -154,22 +178,6 @@ extern "C" HRESULT CAAFTypeDef_test()
       cerr << "CAAFTypeDef_test...Caught general C++"
         " exception!" << endl; 
     }
-
-  // When all of the functionality of this class is tested, we can return success.
-  // When a method and its unit test have been implemented, remove it from the list.
-  if (SUCCEEDED(hr))
-	{
-	  cout << "The following AAFTypeDef methods have not been implemented:" << endl; 
-	  cout << "     RawAccessType - needs unit test" << endl;
-	  cout << "     GetMinVersion - needs unit test" << endl;
-	  cout << "     SetMinVersion - needs unit test" << endl;
-	  cout << "     GetMaxVersion - needs unit test" << endl;
-	  cout << "     SetMaxVersion - needs unit test" << endl;
-	  cout << "     GetSwapNeeded - needs unit test" << endl;
-	  cout << "     SetSwapNeeded - needs unit test" << endl;
-	  cout << "     GetRefValues  - needs unit test" << endl;
-	  hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-	}
 
   return hr;
 }
