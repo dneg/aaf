@@ -82,171 +82,6 @@ static aafProductIdentification_t TestProductID = {
 	&TestVersion					// productVersion
 	};
 
-#if 0
-static HRESULT ReadAAFContents(IAAFFile *pFile)
-{
-	IAAFHeader* pHeader = NULL;
-	IEnumAAFMobs* mobIter = NULL;
-	IAAFMob* pMob = NULL;
-	aafNumSlots_t numMobs, n;
-	aafWChar name[500];
-	aafMobID_t mobID;
-	aafFileRev_t testRev;
-	HRESULT hr = S_OK;
-
-	try
-	{
-		// Get the header
-		checkResult(pFile->GetHeader(&pHeader));
-
-		// Expect to find a single Mob
-		checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
-		checkExpression (1 == numMobs, AAFRESULT_TEST_FAILED);
-
-		checkResult(pHeader->GetMobs (NULL, &mobIter));
-		for(n = 0; n < numMobs; n++)
-		{
-			checkResult(mobIter->NextOne (&pMob));
-			checkResult(pMob->GetName (name, sizeof(name)));
-			checkResult(pMob->GetMobID (&mobID));
-			// Check that the properties are as we wrote them
-			checkExpression(wcscmp( name, MOB_NAME_TEST) == 0,
-                      AAFRESULT_TEST_FAILED);
-			checkExpression(memcmp(&mobID, &TEST_MobID, sizeof(mobID)) == 0,
-                      AAFRESULT_TEST_FAILED);
-
-			pMob->Release();
-			pMob = NULL;
-    	}
-
-		mobIter->Release();
-		mobIter = NULL;
-
-		checkResult(pFile->GetRevision(&testRev));
-		checkExpression(kAAFRev2 == testRev, AAFRESULT_TEST_FAILED);
-
-		checkResult(pFile->Close());
-	}
-	catch (HRESULT& rResult)
-	{
-		hr = rResult;
-		cout << "*** ReadAAFContents: caught error hr=0x" << hex << hr << dec << endl;
-	}
-
-	// Clean up
-	if (mobIter)
-		mobIter->Release();
-
-	if (pMob)
-		pMob->Release();
-
-	if (pHeader)
-		pHeader->Release();
-
-	printf("   ok   ");
-	return hr;
-}
-
-static HRESULT OpenAAFFile(const aafUID_t *written_kind, aafWChar * pFileName)
-{
-	IAAFFile* pFile = NULL;
-	HRESULT hr = S_OK;
-
-	try
-	{
-		for (int i = 0; read_api[i].api != APIunknown; i++)
-		{
-			// Determine the method to use to open the file
-			if (read_api[i].api == FileOpenExistingRead)
-			{
-				checkResult(AAFFileOpenExistingRead(pFileName, 0, &pFile));
-
-				checkResult(ReadAAFContents(pFile));
-			}
-			else if (read_api[i].api == FileOpenExistingModify)
-			{
-				checkResult(AAFFileOpenExistingModify(pFileName, 0, &TestProductID, &pFile));
-
-				checkResult(ReadAAFContents(pFile));
-			}
-			else if (read_api[i].api == RawStorage)
-			{
-				for (int j = 0; filekind[j].kind != NULL; j++)
-				{
-					HRESULT r = S_OK;
-	
-					IAAFRawStorage* pRawStorage = 0;
-					checkResult(AAFCreateRawStorageDisk(
-									pFileName,
-									kAAFFileExistence_existing,
-									kAAFFileAccess_read,
-									&pRawStorage));
-					r = AAFCreateAAFFileOnRawStorage (
-									pRawStorage,
-									kAAFFileExistence_existing,
-									kAAFFileAccess_read,
-									filekind[j].kind,
-									0,
-									0,
-									&pFile);
-					pRawStorage->Release();
-					if (r == AAFRESULT_FILEKIND_NOT_REGISTERED)
-					{
-						printf("    x   ");
-						continue;
-					}
-
-					// For RawStorage some combinations are designed not to work
-					// such as reading a 4K file using a 512 implementation
-					// or reading a 512 file using a 4K implementation.
-					if ((filekind[j].kind == &kAAFFileKind_Aaf512Binary ||
-						filekind[j].kind == &kAAFFileKind_AafS512Binary ||
-						filekind[j].kind == &kAAFFileKind_AafM512Binary ||
-						filekind[j].kind == &kAAFFileKind_AafG512Binary) &&
-							(
-							written_kind == &kAAFFileKind_Aaf4KBinary ||
-							written_kind == &kAAFFileKind_AafS4KBinary ||
-							written_kind == &kAAFFileKind_AafM4KBinary ||
-							written_kind == &kAAFFileKind_AafG4KBinary))
-					{
-						printf("   ic   ");
-						continue;
-					}
-					if ((filekind[j].kind == &kAAFFileKind_Aaf4KBinary ||
-						filekind[j].kind == &kAAFFileKind_AafS4KBinary ||
-						filekind[j].kind == &kAAFFileKind_AafM4KBinary ||
-						filekind[j].kind == &kAAFFileKind_AafG4KBinary) &&
-							(written_kind == NULL ||	// NULL (meaning NM default) is 512
-							written_kind == &kAAFFileKind_Aaf512Binary ||
-							written_kind == &kAAFFileKind_AafS512Binary ||
-							written_kind == &kAAFFileKind_AafM512Binary ||
-							written_kind == &kAAFFileKind_AafG512Binary))
-					{
-						printf("   ic   ");
-						continue;
-					}
-
-					checkResult(pFile->Open());
-
-					checkResult(ReadAAFContents(pFile));
-				}
-			}
-			else
-			{
-				printf(" *** Did not find valid api to open file %ls i=%d\n", pFileName, i);
-				checkExpression(false, AAFRESULT_TEST_FAILED);
-			}
-
-		}
-	}
-	catch (HRESULT& rResult)
-	{
-		hr = rResult;
-		cout << "*** OpenAAFFile: caught error hr=0x" << hex << hr << dec << endl;
-	}
-	return hr;
-}
-#endif
 
 static HRESULT CreateAAFFile(aafWChar *filename)
 {
@@ -453,13 +288,6 @@ static HRESULT ReadAAFFile(aafWChar *filename)
 	return hr;
 }
 
-// Usage
-//
-// OpenExistingModify [-l level] [input.aaf]
-//
-//		-l   "level" of modification to perform - lower values perform fewer changes
-//
-
 void printUsage(const char *progname)
 {
 	fprintf(stderr, "Usage:\n\t%s [options] [file_to_modify.aaf]\n", progname);
@@ -531,7 +359,7 @@ int main(int argc, char* argv[])
 		else
 		{
 			// So far, only appending Identification is supported
-			// for arbitrary files
+			// for files created outside this program.
 			checkResult(ModifyAAFFile(filename, 0));
 		}
 	}
