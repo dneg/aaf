@@ -1,5 +1,5 @@
-#ifndef __AAFCOMPlatform_h__
-#define __AAFCOMPlatform_h__
+#ifndef __AAFCOMPlatformTypes_h__
+#define __AAFCOMPlatformTypes_h__
 
 /******************************************\
 *                                          *
@@ -15,7 +15,9 @@
 // NOTE: This file may have to be modified to support other COM platforms.
 
 #if defined(_MAC) || defined(_MAC_) || defined(macintosh)
-  // Include file form ActiveX SDK for the Macintosh
+  // Include file form ActiveX SDK for the Macintosh. Otherwise the 
+  // OLE (2.08, 2.24) interfaces cannot be used since they use standard
+  // window's types and defines...
   #include <wintypes.h>
 #elif defined(WIN32) || defined(_WIN32)
   #include <wtypes.h>
@@ -25,5 +27,5 @@
 #endif
 
 
-#endif // __AAFCOMPlatform_h__
+#endif // __AAFCOMPlatformTypes_h__
 
