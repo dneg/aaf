@@ -20,6 +20,12 @@ AD_FORWARD_DECLARATION(EnumAAFReferenceValues)
 *                                          *
 \******************************************/
 
+
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+
+
 /*************************************************************************
  * 
  * @class AAFTypeDef | AAFTypeDef defines a property type.
