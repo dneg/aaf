@@ -1161,3 +1161,49 @@ AD_CLASS_END\
     // interface pointer requested in riid
     IUnknown ** ppvObject) PURE;
 #endm
+
+
+#ccccccccccccccccccccccccccc
+#c Begining of the module definitions
+#c
+#startm AD_MODULE_BEGIN 02
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c End of the module definitions
+#c
+#startm AD_MODULE_END 00
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a function which takes no arguments.
+#c
+#c Argument1: function name
+#c Argument2: function description
+#c
+#startm AD_FUNCTION0 02
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a function which takes four arguments.
+#c
+#c Macro Arg 01: function name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c
+#c Macro Arg 22: function description
+#c
+#startm AD_XFUNCTION4 22
+#endm

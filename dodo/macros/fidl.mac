@@ -1418,3 +1418,190 @@ AD_CLASS_END\
   //   - %01 arg is NULL.
   //\
 #endm
+
+
+#ccccccccccccccccccccccccccc
+#c Begining of the module definitions
+#c
+#startm AD_MODULE_BEGIN 02
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c End of the module definitions
+#c
+#startm AD_MODULE_END 00
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a function which takes no arguments.
+#c
+#c Argument1: function name
+#c Argument2: function description
+#c
+#startm AD_FUNCTION0 02
+  //***********************************************************
+  //
+  // %01()
+  //
+  // %02
+  //
+ 
+cpp_quote("STDAPI %01 ();")
+cpp_quote("")\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a function which takes one argument.
+#c
+#c Macro Arg 01: function name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c
+#c Macro Arg 07: function description
+#c
+#startm AD_XFUNCTION1 07
+  //***********************************************************
+  //
+  // %01()
+  //
+  // %07
+  // 
+  // STDAPI %01 (
+    //  %06
+    //  %02 .%03-adornment%04 .%03-indirection %05);
+
+cpp_quote("STDAPI %01 (.%03-adornment%04 .%03-indirection %05);")
+cpp_quote("")\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a function which takes two arguments.
+#c
+#c Macro Arg 01: function name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c
+#c Macro Arg 12: function description
+#c
+#startm AD_XFUNCTION2 12
+  //***********************************************************
+  //
+  // %01()
+  //
+  // %12
+  // 
+  // STDAPI %01 (
+    //  %06
+    //  %02 .%03-adornment%04 .%03-indirection %05,
+    //
+    //  %11
+    //  %07 .%08-adornment%09 .%08-indirection %10);
+
+cpp_quote("STDAPI %01 (")
+cpp_quote("          .%03-adornment%04 .%03-indirection %05,")
+cpp_quote("          .%08-adornment%09 .%08-indirection %10);")
+cpp_quote("")\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a function which takes three arguments.
+#c
+#c Macro Arg 01: function name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c
+#c Macro Arg 17: function description
+#c
+#startm AD_XFUNCTION3 17
+  //***********************************************************
+  //
+  // %01()
+  //
+  // %17
+  // 
+  // STDAPI %01 (
+    //  %06
+    //  %02 .%03-adornment%04 .%03-indirection %05,
+    //
+    //  %11
+    //  %07 .%08-adornment%09 .%08-indirection %10,
+    //
+    //  %16
+    //  %12 .%13-adornment%14 .%13-indirection %15);
+
+cpp_quote("STDAPI %01 (")
+cpp_quote("          .%03-adornment%04 .%03-indirection %05,")
+cpp_quote("          .%08-adornment%09 .%08-indirection %10,")
+cpp_quote("          .%13-adornment%14 .%13-indirection %15);")
+cpp_quote("")\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a function which takes four arguments.
+#c
+#c Macro Arg 01: function name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c
+#c Macro Arg 22: function description
+#c
+#startm AD_XFUNCTION4 22
+  //***********************************************************
+  //
+  // %01()
+  //
+  // %22
+  // 
+  // STDAPI %01 (
+    //  %06
+    //  %02 .%03-adornment%04 .%03-indirection %05,
+    //
+    //  %11
+    //  %07 .%08-adornment%09 .%08-indirection %10,
+    //
+    //  %16
+    //  %12 .%13-adornment%14 .%13-indirection %15,
+    //
+    //  %21
+    //  %17 .%18-adornment%19 .%18-indirection %20);
+
+cpp_quote("STDAPI %01 (")
+cpp_quote("          .%03-adornment%04 .%03-indirection %05,")
+cpp_quote("          .%08-adornment%09 .%08-indirection %10,")
+cpp_quote("          .%13-adornment%14 .%13-indirection %15,")
+cpp_quote("          .%18-adornment%19 .%18-indirection %20);")
+cpp_quote("")\
+#endm
