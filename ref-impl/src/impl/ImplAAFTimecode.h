@@ -71,14 +71,6 @@ public:
 	  /*[in]*/ aafRational_t *  pEditRate,
 	  /*[out]*/ aafFrameOffset_t *  pOffset);
 
-
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTimecode)
-
 public:
 	// Methods which are internal to the SDK
 virtual AAFRESULT OffsetToTimecodeClip(aafPosition_t offset, ImplAAFTimecode **result,

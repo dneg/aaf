@@ -71,13 +71,6 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
 	PackUserBits(aafUInt8 *unpackedBuffer, aafUInt32 unpackedBuflen,
 					aafUInt8 *packedBuffer, aafUInt32 packedBuflen);
-
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTimecodeStream12M)
 };
 
 #endif // ! __ImplAAFTimecodeStream12M_h__

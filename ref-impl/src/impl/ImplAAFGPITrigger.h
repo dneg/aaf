@@ -48,13 +48,6 @@ public:
         // @parm [in] the active state of the trigger
         (aafBool  ActiveState);
 
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFGPITrigger)
-
 protected:
   OMFixedSizeProperty<aafBool> _activeState;
 };

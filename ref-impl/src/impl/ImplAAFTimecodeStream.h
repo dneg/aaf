@@ -206,12 +206,6 @@ public:
 	PackUserBits(aafUInt8 *unpackedBuffer, aafUInt32 unpackedBuflen,
 					aafUInt8 *packedBuffer, aafUInt32 packedBuflen);
 
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTimecodeStream)
-
 private: 
   virtual AAFRESULT STDMETHODCALLTYPE
     Write(aafUInt32  bytes, aafDataBuffer_t  buffer, aafUInt32 *  bytesWritten);

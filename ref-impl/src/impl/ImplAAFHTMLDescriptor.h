@@ -35,16 +35,6 @@ public:
 
 protected:
   virtual ~ImplAAFHTMLDescriptor ();
-
-public:
-
-
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFHTMLDescriptor)
 };
 
 #endif // ! __ImplAAFHTMLDescriptor_h__

@@ -35,16 +35,6 @@ public:
 
 protected:
   virtual ~ImplAAFTextClip ();
-
-public:
-
-
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTextClip)
 };
 
 #endif // ! __ImplAAFTextClip_h__
