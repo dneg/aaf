@@ -32,7 +32,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFTimecodeStream \
 	AAFTimecodeStream12M \
 	AAFTypeDefSet \
-	AAFTypeDefRecord \
 	AAFUnixLocator \
 	AAFWAVEData \
 	AAFWindowsLocator
@@ -51,8 +50,7 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFObjects \
 	EnumAAFPropertyDefs \
 	EnumAAFPropertyValues \
-	EnumAAFReferenceValues \
-	EnumAAFTypeDefs 
+	EnumAAFReferenceValues
 
 
 # These are files which specify COM interfaces, but which are
@@ -132,6 +130,7 @@ HUMAN_TYPED_IMPL = \
 	AAFTypeDefRename \
 	AAFTypeDefEnum \
 	AAFTypeDefFixedArray \
+	AAFTypeDefRecord \
 	AAFTypeDefStream \
 	AAFTypeDefString \
 	AAFTypeDefStrongObjRef \
@@ -152,7 +151,8 @@ HUMAN_TYPED_IMPL = \
 	EnumAAFPluggableDefs \
 	EnumAAFPluginDescriptors \
 	EnumAAFPluginLocators \
-	EnumAAFSegments 
+	EnumAAFSegments \
+	EnumAAFTypeDefs 
 
 # The list of standard dodo targets.
 # AAFTypes have to be handled separately since no object is to be created.
