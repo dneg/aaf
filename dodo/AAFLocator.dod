@@ -6,12 +6,10 @@ AAFLocator\
 AAFObject\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFObject.exp
 
 //@doc
 AD_HEAD
-AD_INCLUDE(AAFString)
 
 /******************************************\
 *                                          *
@@ -38,9 +36,5 @@ AD_METHOD1(GetPath,
 AD_METHOD1(SetPath,
 		   [in],aafString_t*,pathBuf,,
 		   Sets a full file path.)
-
-
-AD_OVERRIDE(.method-Test)
-
 
 AD_CLASS_END
