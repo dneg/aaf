@@ -267,6 +267,7 @@ typedef OMMaterialIdentification OMUniqueMaterialIdentification;
 // File signatures
 //
 typedef OMObjectIdentification OMFileSignature;
+const OMFileSignature nullOMFileSignature = {0};
 
 // Property instance tags.
 //
