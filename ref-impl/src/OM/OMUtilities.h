@@ -1,7 +1,7 @@
 #ifndef OMUTILITIES_H
 #define OMUTILITIES_H
 
-#include "OMTypes.h"
+#include "OMDataTypes.h"
 
 #include <stddef.h>
 
