@@ -2259,9 +2259,9 @@ void dumpContainedObjects(IStorage* storage,
       size_t vectorIndexStreamSize = sizeOfStream(subStream, vectorIndexName);
       totalStreamBytes = totalStreamBytes + vectorIndexStreamSize;
 
-      OMUInt32 _count;
-      OMUInt32 _highWaterMark;
-      OMUInt32 _lowWaterMark;
+      OMUInt32 _count = 0;
+      OMUInt32 _highWaterMark = 0;
+      OMUInt32 _lowWaterMark = 0;
       if (version >= 22) {
         readUInt32(subStream, &_count, swapNeeded);
         readUInt32(subStream, &_highWaterMark, swapNeeded);
@@ -2376,9 +2376,9 @@ void dumpContainedObjects(IStorage* storage,
       size_t setIndexStreamSize = sizeOfStream(subStream, setIndexName);
       totalStreamBytes = totalStreamBytes + setIndexStreamSize;
 
-      OMUInt32 _count;
-      OMUInt32 _highWaterMark;
-      OMUInt32 _lowWaterMark;
+      OMUInt32 _count = 0;
+      OMUInt32 _highWaterMark = 0;
+      OMUInt32 _lowWaterMark = 0;
       if (version >= 22) {
         readUInt32(subStream, &_count, swapNeeded);
         readUInt32(subStream, &_highWaterMark, swapNeeded);
