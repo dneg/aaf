@@ -45,16 +45,19 @@ AD_XMETHOD3(Initialize,
 			friendly name of this type definition,
 
 			Initializes this type def to contain elements of the given type.
+  // Note that it is only possible to use certain types as the element
+  // type.  Those permissible types include:
+  // - AAFTypeDefInt
   //
   // This method must be called after allocation\, and before
   // any other method can be called.
   //
   // Succeeds if:
   // - Initialize\(\) has not yet been called on this object.
+  // - pID is a valid pointer.
   // - pTypeDef is a valid pointer.
-  // - pTermValue is a valid pointer.
   // - pTypeName is a valid pointer.
-  //
+  // - element type is permissible for use in a String.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pID\\\, pTypeDef\\\, or pTypeName\))
