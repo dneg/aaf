@@ -151,12 +151,12 @@ void			testUint64(void);
 aafErr_t TimecodeToString(
 	aafTimecode_t timeCode,   /* IN - Timecode Value */
 	aafInt32 strLen,          /* IN - Length of string to hold timecode */
-	aafString_t tcString);      /* IN/OUT - Pre-allocated buffer to hold
+	wchar_t *tcString);      /* IN/OUT - Pre-allocated buffer to hold
 				   *          timecode string
 				   */
 
 aafErr_t StringToTimecode(
-	aafString_t timecodeString, /* IN - Timecode String */
+	const wchar_t *timecodeString, /* IN - Timecode String */
 	aafRational_t frameRate,  /* IN - Frame Rate */
 	aafTimecode_t *timecode); /* OUT - Timecode Value */
 
