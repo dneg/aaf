@@ -7,6 +7,7 @@ OMStoredVectorIndex::OMStoredVectorIndex(size_t size)
   TRACE("OMStoredVectorIndex::OMStoredVectorIndex");
 
   _names = new OMUInt32[_size];
+  ASSERT("Valid heap pointer", _names != 0);
   for (size_t i = 0; i < _size; i++) {
     _names[i] = 0;
   }
