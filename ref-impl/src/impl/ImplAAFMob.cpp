@@ -685,22 +685,22 @@ AAFRESULT STDMETHODCALLTYPE
 			}
 			
 			*result = timecode;
-			if(slot = NULL)
+			if(slot != NULL)
 			{
 				slot->ReleaseReference();
 				slot = NULL;
 			}
-			if(pdwn = NULL)
+			if(pdwn != NULL)
 			{
 				pdwn->ReleaseReference();
 				pdwn = NULL;
 			}
-			if(pdwnInput = NULL)
+			if(pdwnInput != NULL)
 			{
 				pdwnInput->ReleaseReference();
 				pdwnInput = NULL;
 			}
-			if(iter = NULL)
+			if(iter != NULL)
 			{
 				iter->ReleaseReference();
 				iter = NULL;
@@ -709,13 +709,13 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XEXCEPT
 	{
-		if(iter = NULL)
+		if(iter != NULL)
 			iter->ReleaseReference();
-		if(slot = NULL)
+		if(slot != NULL)
 			slot->ReleaseReference();
-		if(pdwn = NULL)
+		if(pdwn != NULL)
 			pdwn->ReleaseReference();
-		if(pdwnInput = NULL)
+		if(pdwnInput != NULL)
 			pdwnInput->ReleaseReference();
 		return(XCODE());
 	}
