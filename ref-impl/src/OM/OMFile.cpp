@@ -55,7 +55,7 @@ OMFile::OMFile(const wchar_t* fileName,
                OMStoredObject* store,
                const OMClassFactory* factory,
                const OMLoadMode loadMode)
-: _root(0), _rootStoredObject(store), _classFactory(factory),
+: _root(0), _rootStoredObject(store),
   _objectDirectory(0), _referencedProperties(0), _mode(mode),
   _loadMode(loadMode), _fileName(0)
 {
@@ -63,6 +63,7 @@ OMFile::OMFile(const wchar_t* fileName,
 
   PRECONDITION("Valid file name", validWideString(fileName));
   _fileName = saveWideString(fileName);
+  setClassFactory(factory);
   readSignature(_fileName);
   setName("/");
 }
@@ -83,7 +84,7 @@ OMFile::OMFile(const wchar_t* fileName,
                OMStoredObject* store,
                const OMClassFactory* factory,
                OMStorable* root)
-: _root(root), _rootStoredObject(store), _classFactory(factory),
+: _root(root), _rootStoredObject(store),
   _objectDirectory(0), _referencedProperties(0), _mode(mode),
   _loadMode(lazyLoad), _fileName(0), _signature(signature)
 {
@@ -91,6 +92,7 @@ OMFile::OMFile(const wchar_t* fileName,
 
   PRECONDITION("Valid file name", validWideString(fileName));
   _fileName = saveWideString(fileName);
+  setClassFactory(factory);
   setName("<file>");
   _root->attach(this, "/");
   _root->setStore(rootStoredObject());
@@ -101,7 +103,6 @@ OMFile::~OMFile(void)
 {
   TRACE("OMFile::~OMFile");
 
-  _classFactory = 0;
   delete _objectDirectory;
   _objectDirectory = 0;
   delete _referencedProperties;
@@ -357,16 +358,6 @@ OMStoredObject* OMFile::rootStoredObject(void)
   TRACE("OMFile::rootStoredObject");
 
   return _rootStoredObject;
-}
-
-  // @mfunc Retrieve the <c OMClassFactory> from this <c OMFile>.
-  //   @rdesc The <c OMClassFactory> used to create objects in this file.
-  //   @this const
-const OMClassFactory* OMFile::classFactory(void) const
-{
-  TRACE("OMFile::classFactory");
-
-  return _classFactory;
 }
 
   // @mfunc Retrieve the <c OMPropertyTable> from this <c OMFile>.
