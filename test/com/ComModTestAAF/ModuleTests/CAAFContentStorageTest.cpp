@@ -81,7 +81,7 @@ struct ContentStorageTest
   aafProductIdentification_t _productInfo;
 	IAAFFile *_pFile;
 	bool _bFileOpen;
-	IAAFHeader *_pHeader;
+	IAAFContentStorage *_pStorage;
 	IAAFDictionary *_pDictionary;
 	
 	IAAFMob *_pMob;
@@ -174,7 +174,7 @@ ContentStorageTest::ContentStorageTest():
 _hr(AAFRESULT_SUCCESS),
 _pFile(NULL),
 _bFileOpen(false),
-_pHeader(NULL),
+_pStorage(NULL),
 _pDictionary(NULL),
 _pMob(NULL),
 _pSourceMob(NULL),
@@ -254,10 +254,10 @@ void ContentStorageTest::cleanupReferences()
 		_pDictionary = NULL;
 	}
 	
-	if (NULL != _pHeader)
+	if (NULL != _pStorage)
 	{
-		_pHeader->Release();
-		_pHeader = NULL;
+		_pStorage->Release();
+		_pStorage = NULL;
 	}
 	
 	if (NULL != _pFile)
@@ -317,13 +317,16 @@ const char * ContentStorageTest::convert(const wchar_t* pwcName)
 
 void ContentStorageTest::createFile(wchar_t *pFileName)
 {
-	// Delete the test file if it already exists.
+	IAAFHeader	*hdr;
+		
+		// Delete the test file if it already exists.
 	remove(convert(pFileName));
 	
 	check(AAFFileOpenNewModify(pFileName, 0, &_productInfo, &_pFile));
 	_bFileOpen = true;
-	check(_pFile->GetHeader(&_pHeader));
-	check(_pHeader->GetDictionary(&_pDictionary));
+	check(_pFile->GetHeader(&hdr));
+	check(hdr->GetDictionary(&_pDictionary));
+	check(hdr->GetContentStorage(&_pStorage));
 	
 	createFileMob(kTestMobID1);
 	createFileMob(kTestMobID2);
@@ -331,6 +334,8 @@ void ContentStorageTest::createFile(wchar_t *pFileName)
 	check(_pFile->Save());
 	
 	cleanupReferences();
+
+	hdr->Release();
 }
 
 void ContentStorageTest::openFile(wchar_t *pFileName)
@@ -338,29 +343,31 @@ void ContentStorageTest::openFile(wchar_t *pFileName)
 	aafUInt32		readNumEssenceData;
 	aafNumSlots_t	readNumMobs;
 	IAAFMob			*testMob = NULL;
+	IAAFHeader		*pHdr = NULL;
 	IEnumAAFMobs	*pEnum = NULL;
 	aafMobID_t		uid, readID;
 	aafBool			testBool;
 
 	check(AAFFileOpenExistingRead(pFileName, 0, &_pFile));
 	_bFileOpen = true;
-	check(_pFile->GetHeader(&_pHeader));
+	check(_pFile->GetHeader(&pHdr));
+	check(pHdr->GetContentStorage(&_pStorage));
 	
 	openEssenceData();
 
 	
-	check(_pHeader->CountEssenceData(&readNumEssenceData));
+	check(_pStorage->CountEssenceData(&readNumEssenceData));
 	checkExpression(2 == readNumEssenceData, AAFRESULT_TEST_FAILED);
 	/***/
 	uid = kTestMobID1;
-	check(_pHeader->LookupMob(uid, &testMob));
+	check(_pStorage->LookupMob(uid, &testMob));
 	check(testMob->GetMobID(&readID));
 	checkExpression(memcmp(&uid, &readID, sizeof(readID)) == 0, AAFRESULT_TEST_FAILED);
 	testMob->Release();
 	testMob = NULL;
 	/***/
 	uid = kTestMobID2;
-	check(_pHeader->LookupMob(uid, &testMob));
+	check(_pStorage->LookupMob(uid, &testMob));
 	check(testMob->GetMobID(&readID));
 	checkExpression(memcmp(&uid, &readID, sizeof(readID)) == 0, AAFRESULT_TEST_FAILED);
 	testMob->Release();
@@ -369,15 +376,15 @@ void ContentStorageTest::openFile(wchar_t *pFileName)
 	uid.material.Data1 = 0;	// Invalidate the mobID
 	uid.material.Data2 = 0;
 	uid.material.Data3 = 0;
-	checkExpression(_pHeader->LookupMob(uid, &testMob) != AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED);
+	checkExpression(_pStorage->LookupMob(uid, &testMob) != AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED);
 	/***/
-	check(_pHeader->CountMobs(kAAFFileMob, &readNumMobs));
+	check(_pStorage->CountMobs(kAAFFileMob, &readNumMobs));
 	checkExpression(2 == readNumMobs, AAFRESULT_TEST_FAILED);
-	check(_pHeader->CountMobs(kAAFMasterMob, &readNumMobs));
+	check(_pStorage->CountMobs(kAAFMasterMob, &readNumMobs));
 	checkExpression(0 == readNumMobs, AAFRESULT_TEST_FAILED);
 	/***/
 	uid = kTestMobID1;
-	check(_pHeader->GetMobs(NULL, &pEnum));		// !! Add tests for criteria
+	check(_pStorage->GetMobs(NULL, &pEnum));		// !! Add tests for criteria
 	check(pEnum->NextOne(&testMob));
 	check(testMob->GetMobID(&readID));
 	checkExpression(memcmp(&uid, &readID, sizeof(readID)) == 0, AAFRESULT_TEST_FAILED);
@@ -385,14 +392,14 @@ void ContentStorageTest::openFile(wchar_t *pFileName)
 	testMob = NULL;
 	/***/
 	uid = kTestMobID2;
-    check(_pHeader->IsEssenceDataPresent (uid, kAAFEssence, &testBool));
+    check(_pStorage->IsEssenceDataPresent (uid, kAAFEssence, &testBool));
 	checkExpression(kAAFTrue == testBool, AAFRESULT_TEST_FAILED);
 	/***/
 	uid = kTestMobID2;
  	uid.material.Data1 = 0;	// Invalidate the mobID
 	uid.material.Data2 = 0;
 	uid.material.Data3 = 0;
-	check(_pHeader->IsEssenceDataPresent (uid, kAAFEssence, &testBool));
+	check(_pStorage->IsEssenceDataPresent (uid, kAAFEssence, &testBool));
 	checkExpression(kAAFFalse == testBool, AAFRESULT_TEST_FAILED);
 
 	/***/
@@ -403,7 +410,7 @@ void ContentStorageTest::openFile(wchar_t *pFileName)
 
 void ContentStorageTest::createFileMob(aafMobID_constref newMobID)
 {
-	assert(_pFile && _pHeader && _pDictionary);
+	assert(_pFile && _pStorage && _pDictionary);
 	assert(NULL == _pSourceMob);
 	assert(NULL == _pMob);
 	assert(NULL == _pFileDescriptor);
@@ -431,7 +438,7 @@ void ContentStorageTest::createFileMob(aafMobID_constref newMobID)
 		(void **)&_pEssenceDescriptor));
 	check(_pSourceMob->SetEssenceDescriptor (_pEssenceDescriptor));
 	
-	check(_pHeader->AddMob(_pMob));
+	check(_pStorage->AddMob(_pMob));
 	
 	createEssenceData(_pSourceMob);
 	
@@ -451,7 +458,7 @@ void ContentStorageTest::createFileMob(aafMobID_constref newMobID)
 
 void ContentStorageTest::createEssenceData(IAAFSourceMob *pSourceMob)
 {
-	assert(_pFile && _pHeader && _pDictionary);
+	assert(_pFile && _pStorage && _pDictionary);
 	assert(pSourceMob);
 	assert(NULL == _pEssenceData);
 	
@@ -464,7 +471,7 @@ void ContentStorageTest::createEssenceData(IAAFSourceMob *pSourceMob)
 						 (IUnknown **)&_pEssenceData));
 	
 	check(_pEssenceData->SetFileMob(pSourceMob));
-	check(_pHeader->AddEssenceData(_pEssenceData));
+	check(_pStorage->AddEssenceData(_pEssenceData));
 	
 	writeEssenceData(_pEssenceData, (aafDataBuffer_t)_smiley, sizeof(_smiley));
 	writeEssenceData(_pEssenceData, (aafDataBuffer_t)_frowney, sizeof(_frowney));
@@ -491,13 +498,13 @@ void ContentStorageTest::createEssenceData(IAAFSourceMob *pSourceMob)
 
 void ContentStorageTest::openEssenceData()
 {
-	assert(_pFile && _pHeader);
+	assert(_pFile && _pStorage);
 	assert(NULL == _pEnumEssenceData);
 	assert(NULL == _pEssenceData);
 	assert(NULL == _pSourceMob);
 	
 	
-	check(_pHeader->EnumEssenceData(&_pEnumEssenceData));
+	check(_pStorage->EnumEssenceData(&_pEnumEssenceData));
 	while (AAFRESULT_SUCCESS == (_hr = _pEnumEssenceData->NextOne(&_pEssenceData)))
 	{
 		// Validate the essence.
