@@ -195,7 +195,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 //		checkResult(CoCreateGuid((GUID *)&newUID));
 //		checkResult(pMob->SetMobID(&newUID));
-		checkResult(pMob->SetName(L"GroupTest"));
+		checkResult(pMob->SetName(L"AAFEffectTest"));
 	  
 		// Add some slots
 		for(test = 0; test < 2; test++)
@@ -507,7 +507,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 HRESULT CAAFEffect::test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-	aafWChar * pFileName = L"GroupTest.aaf";
+	aafWChar * pFileName = L"AAFEffectTest.aaf";
 
 	try
 	{
