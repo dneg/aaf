@@ -71,6 +71,8 @@ using namespace std;
 #elif defined(__sgi) || defined(__linux__) || defined (__FreeBSD__) || \
       defined (__APPLE__) || defined(__CYGWIN__)
 #define OM_OS_UNIX
+#elif defined (sun)
+#define OM_OS_SOLARIS
 #else
 #error "Can't determine host operating system"
 #endif
@@ -85,6 +87,9 @@ using namespace std;
 #define OM_USE_WRAPPED_MACINTOSH_SS
 #elif defined(OM_OS_UNIX)
 #define OM_USE_REFERENCE_SS
+#elif defined(OM_OS_SOLARIS)
+#warning  "Dump not supported on Solaris"
+
 #else
 #error "Don't know which implementation of structured storage to use."
 #endif

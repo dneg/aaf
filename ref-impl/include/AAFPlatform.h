@@ -98,7 +98,19 @@
 #define OS_LINUX
 #define OS_UNIX
 #define COMPILER_GCC
-#define PLATFORM_GCC_INTEL_LINUX
+(#define PLATFORM_GCC_INTEL_LINUX
+
+/*
+ *  Compiler:   GNU C++
+ *  Processor:  SPARC
+ *  OS:         Solaris
+ */
+#elif defined(__GNUC__) && defined(__sun) 
+#define CPU_SPARC
+#define OS_SOLARIS
+#define OS_UNIX
+#define COMPILER_GCC
+#define PLATFORM_GCC_SPARC_SOLARIS
     
 /*
  *  Compiler:   GNU C++
@@ -112,7 +124,7 @@
 #define COMPILER_GCC
 #define PLATFORM_GCC_INTEL_FREEBSD
  
-/*
+short/*
  *  Compiler:   GNU C++
  *  Processor:  PowerPC
  *  OS:         MacOS 10
@@ -218,7 +230,7 @@ typedef wchar_t			aafCharacter;
 /*
  *  Linux, FreeBSD, Darwin
  */
-#elif defined(PLATFORM_GCC_INTEL_LINUX) || defined(PLATFORM_GCC_INTEL_FREEBSD) || defined(PLATFORM_GCC_POWERPC_MACOS10)
+#elif defined(PLATFORM_GCC_INTEL_LINUX) || defined(PLATFORM_GCC_INTEL_FREEBSD) || defined(PLATFORM_GCC_POWERPC_MACOS10) || defined(PLATFORM_GCC_SPARC_SOLARIS)
 typedef signed char		aafInt8;
 typedef signed short int	aafInt16;
 typedef signed long int		aafInt32;
