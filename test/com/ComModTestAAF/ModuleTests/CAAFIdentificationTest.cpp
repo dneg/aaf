@@ -43,7 +43,6 @@
 #include "CAAFBuiltinDefs.h"
 #include "AAFUtils.h"
 
-static aafUID_t		newUID;
 HRESULT				localhr = AAFRESULT_SUCCESS;
 HRESULT				hr = S_OK;
 
