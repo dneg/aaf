@@ -43,13 +43,6 @@ AAFTypeDefUIDs.h \
 SOURCE=./include
 DEST=../../ref-impl/include
 
-SDKS="\
-../../AAFMacSDK/include \
-../../AAFMipsIrixSDK/MIPSpro/include \
-../../AAFWinSDK/include \
-../../AAFi686LinuxSDK/g++/include \
-"
-
 FAILURE=1
 SUCCESS=0
 
@@ -116,41 +109,6 @@ do
       echo "File needs updating \"${DEST}/$h\"."
     fi
   fi
-done
-
-for h in $HEADERS
-do
-  for s in $SDKS
-  do
-    if [[ ! -f $s/$h ]]
-    then
-      if [[ $mode == "update" ]]
-      then
-        echo "Creating \"$s/$h\"."
-        cp ${SOURCE}/$h $s/$h
-      else
-        echo "Can't find \"$s/$h\"."
-      fi
-    fi
-  done
-done
-
-for h in $HEADERS
-do
-  for s in $SDKS
-  do
-    cmp -s $SOURCE/$h $s/$h
-    if [[ ${?} != 0 ]]
-    then
-      if [[ $mode == "update" ]]
-      then
-        echo "Updating \"$s/$h\"."
-        cp $SOURCE/$h $s/$h
-      else
-        echo "File needs updating \"$s/$h\"."
-      fi
-    fi
-  done
 done
 
 exit $SUCCESS
