@@ -98,6 +98,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pOperationGroup == NULL)
 		return AAFRESULT_NULL_PARAM;
 
+	if (pOperationGroup->attached())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
 	if (pDataDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 
@@ -165,6 +168,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pEffObj == NULL)
 		return AAFRESULT_NULL_PARAM;
 	
+	if (pEffObj->attached())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
 	if (_operationGroup)
 	  _operationGroup->ReleaseReference();
 	_operationGroup = 0;

@@ -93,14 +93,17 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMobSlot::SetSegment (ImplAAFSegment *value)
 {
+	if( value == NULL )
+	    return AAFRESULT_NULL_PARAM;
+
+	if( value->attached() )
+	    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
 	if (_segment)
 	  _segment->ReleaseReference();
-	_segment = 0;
 
 	_segment = value;
-
-	if (value)
-		value->AcquireReference();
+	_segment->AcquireReference();
 
 	return AAFRESULT_SUCCESS;
 }

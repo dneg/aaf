@@ -288,6 +288,9 @@ AAFRESULT STDMETHODCALLTYPE
   if(!pComponent)
 		return(AAFRESULT_NULL_PARAM);
 
+  if (pComponent->attached())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
   _components.prependValue(pComponent);
   pComponent->AcquireReference();
 
@@ -301,6 +304,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (!pComponent) 
     return AAFRESULT_NULL_PARAM;
+
+  if (pComponent->attached())
+    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
   aafUInt32 count;
   AAFRESULT ar;
@@ -392,6 +398,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if (!_components.containsValue(pComponent))
 	  return AAFRESULT_BADINDEX;
+
+	if (!pComponent->attached())
+	  return AAFRESULT_OBJECT_NOT_ATTACHED;
 
 	_components.removeValue(pComponent);
 	pComponent->ReleaseReference();
@@ -743,6 +752,9 @@ AAFRESULT
     ImplAAFSequence::SetNthComponent (aafUInt32 index, ImplAAFComponent* pComponent)
 {
 	HRESULT				hr;
+
+	if (pComponent->attached())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
 	size_t numCpnts = _components.count();
 	if (index < numCpnts)

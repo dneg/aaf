@@ -110,26 +110,25 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSelector::SetSelectedSegment (ImplAAFSegment* pSelSegment)
 {
-	HRESULT				hr = AAFRESULT_SUCCESS;
 	ImplAAFSegment*		pPrevSelected = NULL;
 
 	if (pSelSegment == NULL)
-	{
-		hr = AAFRESULT_NULL_PARAM;
-	}
-	else
-	{
-		pPrevSelected = _selected;
-		if (pPrevSelected)
-		{
-		  pPrevSelected->ReleaseReference();
-		  pPrevSelected = 0;
-		}
-		_selected = pSelSegment;
-		_selected->AcquireReference();
-	}
+		return AAFRESULT_NULL_PARAM;
 
-	return hr;
+	if (pSelSegment->attached())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
+	pPrevSelected = _selected;
+	if (pPrevSelected)
+	{
+	  pPrevSelected->ReleaseReference();
+	  pPrevSelected = 0;
+	}
+	_selected = pSelSegment;
+	_selected->AcquireReference();
+
+
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -161,6 +160,12 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSelector::RemoveAlternateSegment (ImplAAFSegment* pSegment)
 {
+	if (pSegment == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	if( !pSegment->attached() )
+		return AAFRESULT_SEGMENT_NOT_FOUND;
+
 	if (!_alternates.containsValue(pSegment))
 	  return AAFRESULT_SEGMENT_NOT_FOUND;
 

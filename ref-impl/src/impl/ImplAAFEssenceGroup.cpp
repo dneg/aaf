@@ -102,6 +102,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if (stillFrame == NULL)
 		return AAFRESULT_NULL_PARAM;
 	
+	if (stillFrame->attached())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
 	XPROTECT()
 	{
 		/* Verify that groups's datakind converts to still's datakind */
@@ -185,6 +188,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if(choice == NULL)
 		return(AAFRESULT_NULL_PARAM);
 	
+	if(choice->attached())
+		return(AAFRESULT_OBJECT_ALREADY_ATTACHED);
+
 	AAFRESULT ar=ValidateChoice(choice);
 	if(AAFRESULT_FAILED(ar))
 		return(ar);
@@ -202,6 +208,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if(choice == NULL)
 		return(AAFRESULT_NULL_PARAM);
 	
+	if(choice->attached())
+		return(AAFRESULT_OBJECT_ALREADY_ATTACHED);
+
 	AAFRESULT ar=ValidateChoice(choice);
 	if(AAFRESULT_FAILED(ar))
 		return(ar);
@@ -221,6 +230,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if(choice == NULL)
 	return(AAFRESULT_NULL_PARAM);
+
+  if(choice->attached())
+	return(AAFRESULT_OBJECT_ALREADY_ATTACHED);
 
   aafUInt32 count;
   AAFRESULT hr;

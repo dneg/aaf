@@ -95,6 +95,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pSegment == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
+	if(pSegment->attached())
+		return(AAFRESULT_OBJECT_ALREADY_ATTACHED);
+
 	_slots.appendValue(pSegment);
 	pSegment->AcquireReference();
 
@@ -107,6 +110,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(pSegment == NULL)
 		return(AAFRESULT_NULL_PARAM);
+
+	if(pSegment->attached())
+		return(AAFRESULT_OBJECT_ALREADY_ATTACHED);
 
 	_slots.prependValue(pSegment);
 	pSegment->AcquireReference();
@@ -121,6 +127,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if(pSegment == NULL)
 	return(AAFRESULT_NULL_PARAM);
+
+  if(pSegment->attached())
+	return(AAFRESULT_OBJECT_ALREADY_ATTACHED);
 
   aafUInt32 count;
   AAFRESULT hr;

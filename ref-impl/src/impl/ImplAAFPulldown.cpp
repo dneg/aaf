@@ -89,6 +89,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pInputSegment == NULL)
 		return AAFRESULT_NULL_PARAM;
 
+	if (pInputSegment->attached())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
 	ImplAAFSegment *pOldSeg = _inputSegment;
 	if (pOldSeg)
 	  pOldSeg->ReleaseReference();

@@ -327,6 +327,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pManufacturerInfo == NULL)
 		return AAFRESULT_NULL_PARAM;
 
+	if (pManufacturerInfo->attached())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
 	if (_manufacturerURL.isPresent ())
 	  {
 		ImplAAFNetworkLocator *pOldLoc = _manufacturerURL;
@@ -717,6 +720,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pLocator == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
+	if(pLocator->attached())
+		return(AAFRESULT_OBJECT_ALREADY_ATTACHED);
+
 	_locators.appendValue(pLocator);
 	pLocator->AcquireReference();
 
@@ -731,6 +737,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(pLocator == NULL)
 		return(AAFRESULT_NULL_PARAM);
+
+	if(pLocator->attached())
+		return(AAFRESULT_OBJECT_ALREADY_ATTACHED);
 
 	_locators.prependValue(pLocator);
 	pLocator->AcquireReference();
@@ -747,6 +756,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(pLocator == NULL)
 		return(AAFRESULT_NULL_PARAM);
+
+	if(pLocator->attached())
+		return(AAFRESULT_OBJECT_ALREADY_ATTACHED);
 
 	aafUInt32 count;
 	AAFRESULT ar;

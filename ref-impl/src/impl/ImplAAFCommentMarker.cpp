@@ -87,6 +87,12 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFCommentMarker::SetAnnotation (
       ImplAAFSourceReference * pAnnotation)
 {
+	if( pAnnotation == NULL )
+		return AAFRESULT_NULL_PARAM;
+
+	if( pAnnotation->attached() )
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
 	ImplAAFSourceReference *oldValue = _annotation.clearValue();
 	if (oldValue)
 	  {
