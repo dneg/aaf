@@ -164,7 +164,7 @@ public:
     //          <c OMStrongReferenceVectorProperty> so that it
     //          can contain at least <p capacity> <p ReferencedObject>s
     //          without having to be resized.
-  void grow(const size_t capacity);
+  virtual void grow(const size_t capacity);
 
   // Optional property interface
 
