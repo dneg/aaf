@@ -2443,8 +2443,7 @@ ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, const aafUID_t & code
 		
 		while(descEnum->NextOne(&pluginDesc) == AAFRESULT_SUCCESS)
 		{
-			CHECK(pluginDesc->QueryInterface(IID_IAAFDefObject, (void **)&defInterface));
-			CHECK(defInterface->GetAUID(&testAUID));
+			CHECK(pluginDesc->GetAUID(&testAUID));
 			if(EqualAUID(&testAUID, &currentPlugDesc))
 			{
 				found = AAFTrue;
@@ -2454,8 +2453,6 @@ ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, const aafUID_t & code
 					*ppPluginDesc = pluginDesc;
 				}
 			}
-			defInterface->Release();
-			defInterface = NULL;
 			pluginDesc->Release();
 			pluginDesc = NULL;
 		}
