@@ -118,6 +118,14 @@ void OMProperty::close(void)
   // nothing to do for most descendants of OMProperty
 }
 
+  // @mfunc Detach this <c OMProperty>.
+void OMProperty::detach(void)
+{
+  TRACE("OMProperty::detach");
+
+  // nothing to do for most descendants of OMProperty
+}
+
   // @mfunc The <c OMPropertyDefinition> defining this <c OMProperty>.
   //   @rdesc The defining <c OMPropertyDefinition>.
   //   @this const 
