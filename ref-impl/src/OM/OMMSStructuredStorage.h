@@ -31,22 +31,45 @@
 
 #include "OMDataTypes.h"
 
-#if defined(_MAC) || defined(macintosh)
-#include "wintypes.h"
-#include <storage.h>
+// Figure out which Microsoft supplied Structured Storage implementation
+// to use. Here there are three different implementations to consider.
+//
+// 1) The standard implementation on Windows platforms
+//    for which USE_WINDOWS_SS is defined
+// 2) The implementation on Macintosh (pre OSX)
+//    for which USE_MACINTOSH_SS is defined
+// 3) The reference implementation
+//    for which USE_REFERENCE_SS is defined
+//
+#if defined(_WIN32)
+#define USE_WINDOWS_SS
+#elif defined(_MAC) || defined(macintosh)
+#define USE_MACINTOSH_SS
 #elif defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
-#include "storage.h"
-#else
-#include <objbase.h>
+#define USE_REFERENCE_SS
 #endif
 
-#if defined(_MAC) || defined(macintosh) || \
-    defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
+// Each Microsoft supplied Structured Storage implementation requires
+// us to include different header files.
+// 
+#if defined(USE_WINDOWS_SS)
+#include <objbase.h>
+#elif defined(USE_MACINTOSH_SS)
+#include "wintypes.h"
+#include <storage.h>
+#elif defined (USE_REFERENCE_SS)
+#include "storage.h"
+#else
+#error "Don't know which structured storage implementation to use."
+#endif
 
-// The Macintosh and Unix (SS reference implementation) declarations
+#if defined(USE_MACINTOSH_SS) || defined(USE_REFERENCE_SS)
+
+// The Macintosh and reference implementation declarations
 // for LARGE_INTEGER and ULARGE_INTEGER don't have a QuadPart.
 // On Macintosh this is probably because the HighPart and LowPart
 // components on that platform are not in the natural platform order.
+// Here we hide these differences behind a couple of functions.
 
 static inline OMUInt64 toOMUInt64(const ULARGE_INTEGER &x)
 {
