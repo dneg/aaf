@@ -1339,7 +1339,7 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 
 	if (pPlugDef->attached())
-		return AAFRESULT_OBJECT_NOT_FOUND;
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
 	_containerDefinitions.appendValue(pPlugDef);
 	// trr - We are saving a copy of pointer in _pluginDefinitions
