@@ -26,28 +26,20 @@ AD_FORWARD_DECLARATION(EnumAAFControlCodeDefinition)
 *                                          *
 \******************************************/
 
-/*************************************************************************
- * 
- * @Property AAFPropertyDefinition | AAFPropertyDefinition describes 
- *				properties allowed for a class.
- *
- * @base public | AAFDefinitionObject
- *
- *************************************************************************/
 AD_CLASS_UUID(14035d92, 1ff5, 11d2, bf, 97, 00, 60, 97, 11, 62, 12) 
 
 AD_DEFAULT_UUID(14035d91, 1ff5, 11d2, bf, 97, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
 AD_METHOD1(GetAUID,
-		   [retval][out],
+		   [out\\\,retval],
 		   aafUID_t *,
 		   pAuid,
 		   Pointer to an AUID reference,
 		   Gets the AUID for this object.)
 
 AD_METHOD1(GetEffectName,
-		   [retval][out],
+		   [out\\\,retval],
 		   aafString_t *,
 		   pstrName,
 		   Pointer to effect's name,
@@ -61,7 +53,7 @@ AD_METHOD1(SetEffectName,
 		   Sets the description of this effect definition.)
 
 AD_METHOD1(GetDescription,
-		   [retval][out],
+		   [out\\\,retval],
 		   aafString_t *,
 		   pstrDescription,
 		   Pointer to description,
@@ -75,7 +67,7 @@ AD_METHOD1(SetDescription,
 		   Sets the description of the effect definition.)
 
 AD_METHOD1(IsTimeWarp,
-		   [retval][out],
+		   [out\\\,retval],
 		   aafBool *,
 		   bIsTimeWarp,
 		   pointer to the return value, 
@@ -113,7 +105,7 @@ AD_XMETHOD1(GetDegradeToEffects,
 			Return an enumerator for aaf effect definitions.)
 
 AD_METHOD1(GetManufacturerAUID,
-		   [retval][out],
+		   [out\\\,retval],
 		   aafUID_t *,
 		   pManufacturerAuid,
 		   Pointer to an AUID reference,
@@ -145,13 +137,13 @@ AD_XMETHOD1(RemovePluginLocator,
 AD_XMETHOD1(GetPluginLocators,
 			[out\,retval], 
 			objOut,
-			EnumAAFPluginLocator,
+			EnumAAFPluginLocators,
 			ppEnum, 
 			Plugin Locator Enumeration,
 			Return an enumerator for aaf plugin locator.)
 
 AD_METHOD1(GetCategory,
-		   [retval][out],
+		   [out\\\,retval],
 		   aafString_t *,
 		   pstrCategory,
 		   Pointer to Category,
@@ -165,7 +157,7 @@ AD_METHOD1(SetCategory,
 		   Sets the category of the effect definition. Category is a name that describes  a group of effects.)
 
 AD_METHOD1(GetNumberInputs,
-		   [retval][out],
+		   [out\\\,retval],
 		   aafInt32 *,
 		   pNumberInputs,
 		   Pointer to Number of Inputs,
@@ -179,7 +171,7 @@ AD_METHOD1(SetNumberInputs,
 		   Sets the Number of input media segments.)
 
 AD_METHOD1(GetBypass,
-		   [retval][out],
+		   [out\\\,retval],
 		   aafUInt32 *,
 		   pBypass,
 		   Pointer to a Bypass media segment index ,
@@ -211,7 +203,7 @@ AD_XMETHOD1(RemoveControlCodeDefs,
 AD_XMETHOD1(GetPluginLocators,
 			[out\,retval], 
 			objOut,
-			EnumAAFControlCodeDefinition,
+			EnumAAFControlCodeDefinitions,
 			ppEnum, 
 			ControlCode definition enumeration,
 			Return an enumerator for aaf control code definition.)

@@ -21,7 +21,7 @@ AD_INCLUDE(AAFTypes)
 
 /*************************************************************************
  * 
- * @class AAFDefinitionObject | AAFDefinitionObject is an abstract class
+ * @module AAFDefinitionObject | AAFDefinitionObject is an abstract class
  *		  that defines an item to be referenced in the AAF file. 
  *		  AAFDefinitionObject specifies the AUID unique identifier.
  *
