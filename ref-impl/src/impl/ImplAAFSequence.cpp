@@ -152,7 +152,7 @@ AAFRESULT STDMETHODCALLTYPE
 //     (owned by) another object.
 //
 // AAFRESULT_EVENT_SEMANTICS
-//   - Attempted to append and event to a non-event sequence or vice versa.
+//   - Attempted to append an event to a non-event sequence or vice versa.
 //	 - Attempted to append an event but an event type mismatched was found.
 //   - Attempted to append an event that did not repect ordering conventions.
 //
@@ -161,10 +161,8 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSequence::AppendComponent (ImplAAFComponent* pComponent)
 {
-	aafLength_t		sequLen;
 	ImplAAFDataDefSP sequDataDef, cpntDataDef;
 	aafBool			isPrevTran = kAAFFalse, willConvert;
-	AAFRESULT		status;
 
 	if (pComponent == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -185,14 +183,6 @@ AAFRESULT STDMETHODCALLTYPE
 		}
 		else
 			SetDataDef(cpntDataDef);
-		
-		status = GetLength(&sequLen);
-		if(status == AAFRESULT_PROP_NOT_PRESENT /*AAFRESULT_BAD_PROP ???*/)
-			sequLen = 0;
-		else
-		{
-			CHECK(status);
-		}
 		
 
 		// Three distinct cases to handle here:
@@ -1015,7 +1005,7 @@ AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFEvent* pEvent )
 {
 	// If the sequence has no length property, then one is always
 	// created.
-	// If pEvent has not length property, then a default length of zero
+	// If pEvent has no length property, then a default length of zero
 	// is used.
 
 	AAFRESULT status;
@@ -1140,16 +1130,16 @@ AAFRESULT ImplAAFSequence::CheckLengthSemantics( ImplAAFComponent* pComponentNex
 
 AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFComponent* pComponent )
 {
-	// If pComponent has not length, then generate an error.  A component 
-	// in a non-event sequence must always have a length.
-	//	
+	// First get the length of pComponent.  It must have a length property.
+	// AAFRESULT_PPROP_NOT_PRESENT is not toloerated.
+	// 
 	// Now, assuming pComponent has a length:
 	//
-	// If this sequence has no length property, use a default
-	// sequence length of zero, and update the sequence length.
+	// If this sequence has no length property (as is the case when the first
+	// component is added, use a default sequence length of zero, and update the
+	// sequence length.
 	//
-	// If this sequence has a length,  then update the
-	// this sequence's length.
+	// If this sequence has a length,  then update this sequence's length.
 	//
 	// If the component is a transition subtract its length, else, add its length.
 	
@@ -1158,7 +1148,7 @@ AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFComponent* pComponent )
 	aafLength_t compLength = 0;
 	status = pComponent->GetLength( &compLength );
 	if ( AAFRESULT_SUCCESS != status ) {
-		return AAFRESULT_PROP_NOT_PRESENT;
+		return status;
 	}
 
 
@@ -1180,9 +1170,6 @@ AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFComponent* pComponent )
 	if ( AAFRESULT_SUCCESS != status ) {
 		return status;
 	}
-
-
-
 
 	return AAFRESULT_SUCCESS;
 }
