@@ -76,7 +76,7 @@ function rowcolor(files) {
   split(files, fns, ",");
   ff = fns[1];
 #  printf("<!--[%s]-->\n", ff);
-  /* Get directory of file */
+  /* Match directory of file to a color */
   if (match(ff, "ref-impl/src/OM")) {
     result = "#CCFFCC";
   } else if (match(ff, "ref-impl/include/OM")) {
