@@ -88,6 +88,10 @@ void OMStorable::save(void) const
   // Storage built in limit on the number of open storage elements
   // (IStorages and IStreams) caused by use of a fixed size internal
   // heap.
+  // We take care to close _store here only if it was opened above.
+  // We don't want to close any IStreams (or their enclosing IStorages)
+  // that were opened on demand as closing them would lose important
+  // state information, such as the current seek position.
   //
   if (opened) {
     ASSERT("Valid store", _store != 0);
@@ -169,6 +173,10 @@ void OMStorable::restoreContents(void)
   // Storage built in limit on the number of open storage elements
   // (IStorages and IStreams) caused by use of a fixed size internal
   // heap.
+  // We take care to close _store here only if it was opened above.
+  // We don't want to close any IStreams (or their enclosing IStorages)
+  // that were opened on demand as closing them would lose important
+  // state information, such as the current seek position.
   //
   if (opened) {
     ASSERT("Valid store", _store != 0);
