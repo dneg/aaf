@@ -268,8 +268,8 @@ HRESULT CAAFSourceMob::test()
   try
 	{
 		hr = CreateAAFFile(	pFileName );
-
-		hr = ReadAAFFile( pFileName );
+		if(hr == AAFRESULT_SUCCESS)
+			hr = ReadAAFFile( pFileName );
 	}
   catch (...)
 	{
@@ -281,5 +281,9 @@ HRESULT CAAFSourceMob::test()
   if (pObject)
 	pObject->Release();
 
-  return hr;
+	// When all of the functionality of this class is tested, we can return success
+	if(hr == AAF_RESULT_SUCCESS)
+		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+	  
+	return hr;
 }
