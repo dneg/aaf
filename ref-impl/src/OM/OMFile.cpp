@@ -37,6 +37,8 @@
 #include "OMUniqueObjectIdentType.h"
 #include "OMSetIterator.h"
 
+#include "OMDiskRawStorage.h"
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -119,16 +121,31 @@ OMFile* OMFile::openExistingModify(const wchar_t* fileName,
   ASSERT("Recognized file", result); // tjb - error
   OMStoredObjectFactory* f = findFactory(encoding);
   ASSERT("Recognized file encoding", f != 0);
-  OMStoredObject* store = f->openModify(fileName);
-  OMFile* newFile = new OMFile(fileName,
-                               clientOnRestoreContext,
-                               encoding,
-                               modifyMode,
-                               store,
-                               factory,
-                               dictionary,
-                               loadMode);
-  ASSERT("Valid heap pointer", newFile != 0);
+
+  OMFile* newFile = 0;
+  if (compatibleNamedFile(modifyMode, encoding)) {
+    OMStoredObject* store = f->openModify(fileName);
+    newFile = new OMFile(fileName,
+                         clientOnRestoreContext,
+                         encoding,
+                         modifyMode,
+                         store,
+                         factory,
+                         dictionary,
+                         loadMode);
+    ASSERT("Valid heap pointer", newFile != 0);
+  } else {
+    OMRawStorage* rawStorage = OMDiskRawStorage::openExistingModify(fileName);
+    ASSERT("Valid raw storage", rawStorage != 0);
+    newFile = new OMFile(rawStorage,
+                         clientOnRestoreContext,
+                         modifyMode,
+                         factory,
+                         dictionary,
+                         loadMode);
+    ASSERT("Valid heap pointer", newFile != 0);
+    newFile->open();
+  }
   POSTCONDITION("File is open", newFile->isOpen());
   return newFile;
 }
@@ -163,23 +180,41 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
                     ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
   PRECONDITION("Valid client root", clientRoot != 0);
   PRECONDITION("Valid dictionary ", dictionary != 0);
-  PRECONDITION("Createable", compatibleNamedFile(modifyMode, encoding));
 
-  OMStoredObjectFactory* f = findFactory(encoding);
-  ASSERT("Recognized file encoding", f != 0);
-  OMStoredObject* store = f->createModify(fileName, byteOrder);
-  OMRootStorable* root = new OMRootStorable(clientRoot, dictionary);
-  ASSERT("Valid heap pointer", root != 0);
+  OMFile* newFile = 0;
+  if (compatibleNamedFile(modifyMode, encoding)) {
+    OMStoredObjectFactory* f = findFactory(encoding);
+    ASSERT("Recognized file encoding", f != 0);
+    OMStoredObject* store = f->createModify(fileName, byteOrder);
+    OMRootStorable* root = new OMRootStorable(clientRoot, dictionary);
+    ASSERT("Valid heap pointer", root != 0);
 
-  OMFile* newFile = new OMFile(fileName,
-                               clientOnRestoreContext,
-                               encoding,
-                               modifyMode,
-                               store,
-                               factory,
-                               dictionary,
-                               root);
-  ASSERT("Valid heap pointer", newFile != 0);
+    newFile = new OMFile(fileName,
+                         clientOnRestoreContext,
+                         encoding,
+                         modifyMode,
+                         store,
+                         factory,
+                         dictionary,
+                         root);
+    ASSERT("Valid heap pointer", newFile != 0);
+  } else {
+    OMRootStorable* root = new OMRootStorable(clientRoot, dictionary);
+    ASSERT("Valid heap pointer", root != 0);
+
+    OMRawStorage* rawStorage = OMDiskRawStorage::openNewModify(fileName);
+    ASSERT("Valid raw storage", rawStorage != 0);
+    newFile = new OMFile(rawStorage,
+                         clientOnRestoreContext,
+                         encoding,
+                         modifyMode,
+                         factory,
+                         dictionary,
+                         root,
+                         byteOrder);
+    ASSERT("Valid heap pointer", newFile != 0);
+    newFile->open();
+  }
   POSTCONDITION("File is open", newFile->isOpen());
   return newFile;
 }
