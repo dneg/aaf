@@ -85,26 +85,29 @@ AD_METHOD1(SetIsTimeWarp,
 		   is timewarp value, 
 		   Sets the IsTimeWarp boolean.)
 
-AD_METHOD1(AppendDegradeToEffects,
-		   [in\,ref],
-		   AD_AAFTYPES\(AAFEffectDefinition\) *,
-		   pEffectDefinition, 
-		   Degrade To Effect Definition Object,
-		   Add the effect definition object to the DegradeTo list of definitions.)
+AD_XMETHOD1(AppendDegradeToEffects,
+			[in\,ref],
+			objIn,
+			AAFEffectDefinition,
+			pEffectDefinition, 
+			Degrade To Effect Definition Object,
+			Add the effect definition object to the DegradeTo list of definitions.)
 
-AD_METHOD1(RemoveDegradeToEffects,
-		   [in\,ref], 
-		   AD_AAFTYPES\(AAFEffectDefinition\) *,
-		   pEffectDefinition, 
-		   Degrade To Effect Definition Object,
-		   Remove the effect definition object from the DegradeTo list of definitions.)
+AD_XMETHOD1(RemoveDegradeToEffects,
+			[in\,ref], 
+			objIn,
+			AAFEffectDefinition,
+			pEffectDefinition, 
+			Degrade To Effect Definition Object,
+			Remove the effect definition object from the DegradeTo list of definitions.)
 
-AD_METHOD1(GetDegradeToEffects,
-		   [out\,retval], 
-		   AD_AAFTYPES\(EnumAAFEffectDefinitions\) **,
-		   ppEnum, 
-		   Effect Definition Enumeration,
-		   Return an enumerator for aaf effect definitions.)
+AD_XMETHOD1(GetDegradeToEffects,
+			[out\,retval], 
+			objOut,
+			EnumAAFEffectDefinitions,
+			ppEnum, 
+			Effect Definition Enumeration,
+			Return an enumerator for aaf effect definitions.)
 
 AD_METHOD1(GetManufacturerAUID,
 		   [retval][out],
@@ -120,26 +123,29 @@ AD_METHOD1(SetManufacturerAUID,
 		   an AUID reference,
 		   Sets the Manufacturer AUID for this effect definition.)
 
-AD_METHOD1(AppendPluginLocator,
-		   [in\,ref],
-		   AD_AAFTYPES\(AAFLocator\) *,
-		   pAAFLocator, 
-		   Plugin AAF Locator Object,
-		   Add the effect definition object to the Plugin Locator list. )
+AD_XMETHOD1(AppendPluginLocator,
+			[in\,ref],
+			objIn,
+			AAFLocator,
+			pAAFLocator, 
+			Plugin AAF Locator Object,
+			Add the effect definition object to the Plugin Locator list. )
 
-AD_METHOD1(RemovePluginLocator,
-		   [in\,ref], 
-		   AD_AAFTYPES\(AAFLocator\) *,
-		   pAAFLocator, 
-		   Plugin AAF Locator Object,
-		   Add the effect definition object to the Plugin Locator list. )
+AD_XMETHOD1(RemovePluginLocator,
+			[in\,ref], 
+			objIn,
+			AAFLocator,
+			pAAFLocator, 
+			Plugin AAF Locator Object,
+			Add the effect definition object to the Plugin Locator list. )
 
-AD_METHOD1(GetPluginLocators,
-		   [out\,retval], 
-		   AD_AAFTYPES\(EnumAAFPluginLocator\) **,
-		   ppEnum, 
-		   Plugin Locator Enumeration,
-		   Return an enumerator for aaf plugin locator.)
+AD_XMETHOD1(GetPluginLocators,
+			[out\,retval], 
+			objOut,
+			EnumAAFPluginLocator,
+			ppEnum, 
+			Plugin Locator Enumeration,
+			Return an enumerator for aaf plugin locator.)
 
 AD_METHOD1(GetCategory,
 		   [retval][out],
@@ -183,26 +189,29 @@ AD_METHOD1(SetBypass,
 		   Bypass media segment index,
 		   Sets the media segment index.)
 
-AD_METHOD1(AppendControlCodeDefs,
-		   [in\,ref],
-		   AD_AAFTYPES\(AAFControlCodeDefinition\) *,
-		   pAAFControlCodeDef, 
-		   Control Code definition Object,
-		   Add the Control Code Definition object to the list. )
+AD_XMETHOD1(AppendControlCodeDefs,
+			[in\,ref],
+			objIn,
+			AAFControlCodeDefinition,
+			pAAFControlCodeDef, 
+			Control Code definition Object,
+			Add the Control Code Definition object to the list. )
 
-AD_METHOD1(RemoveControlCodeDefs,
-		   [in\,ref], 
-		   AD_AAFTYPES\(AAFControlCodeDefinition\) *,
-		   pAAFControlCodeDef, 
-		   Control Code definition Object,
-		   Remove the Control Code Definition object from the list. )
+AD_XMETHOD1(RemoveControlCodeDefs,
+			[in\,ref], 
+			objIn,
+			AAFControlCodeDefinition,
+			pAAFControlCodeDef, 
+			Control Code definition Object,
+			Remove the Control Code Definition object from the list. )
 
-AD_METHOD1(GetPluginLocators,
-		   [out\,retval], 
-		   AD_AAFTYPES\(EnumAAFControlCodeDefinition\) **,
-		   ppEnum, 
-		   ControlCode definition enumeration,
-		   Return an enumerator for aaf control code definition.)
+AD_XMETHOD1(GetPluginLocators,
+			[out\,retval], 
+			objOut,
+			EnumAAFControlCodeDefinition,
+			ppEnum, 
+			ControlCode definition enumeration,
+			Return an enumerator for aaf control code definition.)
 
 AD_OVERRIDE(.method-Test)
 
