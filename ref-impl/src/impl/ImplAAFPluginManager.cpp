@@ -16,6 +16,7 @@
 #endif
 
 #include "ImplAAFContext.h"
+#include "ImplAAFDictionary.h"
 
 #include <assert.h>
 #include <string.h>
@@ -35,6 +36,7 @@ extern "C" const IID IID_IAAFEssenceDataStream = {0xCDDB6AB1,0x98DC,0x11d2,{0x80
 
 const CLSID CLSID_AAFWaveCodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 const CLSID CLSID_AAFEssenceFileContainer = { 0xa7337030, 0xc103, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+const CLSID CLSID_AAFBasicInterp = { 0x5B6C85A1, 0x0EDE, 0x11d3, { 0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 extern "C" const aafClassID_t CLSID_EnumAAFLoadedPlugins;
 
 ImplAAFPluginManager::ImplAAFPluginManager () :
@@ -95,6 +97,7 @@ AAFRESULT ImplAAFPluginManager::Init(void)
 		//	RegisterPlugin()
 		CHECK(RegisterPlugin(CLSID_AAFEssenceFileContainer));
 		CHECK(RegisterPlugin(CLSID_AAFWaveCodec));
+		CHECK(RegisterPlugin(CLSID_AAFBasicInterp));
 	}
 	XEXCEPT
 	XEND
@@ -236,3 +239,58 @@ AAFRESULT
 	return status;
 }
 
+AAFRESULT
+    ImplAAFPluginManager::CreatePluginDefinition (aafUID_t  pluginDefID,
+        ImplAAFDictionary * pDictionary,
+        IAAFDefObject	** ppPluginDef)
+{
+	IAAFPlugin				*plugin = NULL;
+	IAAFPluginDescriptor	*desc = NULL;
+	IUnknown				*iUnk = NULL;
+	IAAFDictionary			*iDictionary = NULL;
+	aafInt32				n, count;
+	aafUID_t				testID;
+	aafBool					found;
+
+	XPROTECT()
+	{
+		iUnk = static_cast<IUnknown *> (pDictionary->GetContainer());
+		CHECK(iUnk->QueryInterface(IID_IAAFDictionary, (void **)&iDictionary));
+		iUnk->Release();
+		iUnk = NULL;
+		CHECK(GetPluginInstance(pluginDefID, &plugin));
+		CHECK(plugin->GetNumDefinitions (&count));
+		found = AAFFalse;
+		for(n = 0; n < count && !found; n++)
+		{
+			CHECK(plugin->GetIndexedDefinitionID (n, &testID));
+			if(EqualAUID(&pluginDefID, &testID))
+			{
+				CHECK(plugin->GetIndexedDefinitionObject(n, iDictionary, ppPluginDef));
+				CHECK(plugin->CreateDescriptor(iDictionary, &desc));
+				CHECK((*ppPluginDef)->AppendPluginDescriptor (desc));
+
+				desc->Release();
+				desc = NULL;
+				found = AAFTrue;
+			}
+		}
+		//!!!Assert found
+		plugin->Release();
+		plugin = NULL;
+	}
+	XEXCEPT
+	{
+		if(plugin)
+			plugin->Release();
+		if(desc)
+			desc->Release();
+		if(iUnk)
+			iUnk->Release();
+		if(iDictionary)
+			iDictionary->Release();
+	}
+	XEND;
+
+	return AAFRESULT_SUCCESS;
+}
