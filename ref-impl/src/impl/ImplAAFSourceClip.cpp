@@ -126,14 +126,14 @@ AAFRESULT STDMETHODCALLTYPE
 
   // Override from AAFSourceReference
   AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceClip::GetSourceMobSlotID (/*[retval][out]*/ aafTrackID_t *  /*pMobSlotID*/)
+    ImplAAFSourceClip::GetSourceMobSlotID (/*[retval][out]*/ aafSlotID_t *  /*pMobSlotID*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }
 
   // Override from AAFSourceReference
   AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceClip::SetSourceMobSlotID (/*[in]*/ aafTrackID_t   /*mobSlotID*/)
+    ImplAAFSourceClip::SetSourceMobSlotID (/*[in]*/ aafSlotID_t   /*mobSlotID*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }
