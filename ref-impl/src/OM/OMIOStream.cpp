@@ -260,6 +260,13 @@ OMIOStream& OMIOStream::setw(int n)
   return *this;
 }
 
+OMIOStream& OMIOStream::write(const OMByte* bytes, size_t byteCount)
+{
+  OMUInt32 actualByteCount;
+  _store->write(bytes, byteCount, actualByteCount);
+  return *this;
+}
+
 void OMIOStream::write(const char* string)
 {
   OMUInt32 size;
