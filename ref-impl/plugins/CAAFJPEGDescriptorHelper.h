@@ -95,10 +95,10 @@ public:
 	STDMETHOD (GetImageAspectRatio) (aafRational_t *  pImageAspectRatio);
 	STDMETHOD (SetAlphaTransparency) (aafAlphaTransparency_t  AlphaTransparency);
 	STDMETHOD (GetAlphaTransparency) (aafAlphaTransparency_t *  pAlphaTransparency);
-	STDMETHOD (SetGamma) (aafRational_t  Gamma);
-	STDMETHOD (GetGamma) (aafRational_t *  pGamma);
-	STDMETHOD (SetImageAlignmentFactor) (aafInt32  ImageAlignmentFactor);
-	STDMETHOD (GetImageAlignmentFactor) (aafInt32 *  pImageAlignmentFactor);
+	STDMETHOD (SetGamma) (aafUID_t  Gamma);
+	STDMETHOD (GetGamma) (aafUID_t *  pGamma);
+	STDMETHOD (SetImageAlignmentFactor) (aafUInt32  ImageAlignmentFactor);
+	STDMETHOD (GetImageAlignmentFactor) (aafUInt32 *  pImageAlignmentFactor);
 	//
 	// CDCIDescriptor methods:
 	//
