@@ -82,7 +82,7 @@ public:
 
 public:
 
-	virtual AAFRESULT NumRepresentations(aafInt32 *  pCount);
+	virtual AAFRESULT NumRepresentations(aafUInt32 *  pCount);
 
 	virtual AAFRESULT AccumulateLength(aafLength_t *length);
 
