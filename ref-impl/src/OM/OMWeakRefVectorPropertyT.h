@@ -557,7 +557,7 @@ size_t OMWeakReferenceVectorProperty<ReferencedObject>::indexOfValue(
   PRECONDITION("Valid object", object != 0);
   PRECONDITION("Object is present", containsValue(object));
 
-  size_t result;
+  size_t result = 0;
 
   VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
