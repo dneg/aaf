@@ -147,7 +147,7 @@ typedef char OMCHAR;
 #endif
 #endif
 
-// TRR:2000-JAN-24: Added the following conditional code support 
+// TRR:2000-JAN-24: Added the following conditional code support
 // CodeWarrior Pro 5 MSL changes.
 #if defined(__MWERKS__)
 #if defined(__MSL_CPP__) && (__MSL_CPP__ >= 0x5300)
@@ -254,22 +254,22 @@ const char* const closeArrayKeySymbol = "}";
 
 // The file kind for structured storage binary AAF files.
 //
-const CLSID aafFileKindAafSSBinary = 
+const CLSID aafFileKindAafSSBinary =
 {0x42464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
 // The file kind for structured storage binary MXF files.
 //
-const CLSID aafFileKindMxfSSBinary = 
+const CLSID aafFileKindMxfSSBinary =
 {0x4246584d, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
 // The file kind for XML text AAF files.
 //
-const CLSID aafFileKindAafXmlText = 
+const CLSID aafFileKindAafXmlText =
 {0x58464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
 // The file kind for XML text MXF files.
 //
-const CLSID aafFileKindMxfXmlText = 
+const CLSID aafFileKindMxfXmlText =
 {0x5846584d, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
 // The signature for structured storage binary AAF files. This includes
@@ -821,7 +821,7 @@ private:
   enum {BYTESPERLINE  = 16}; // Number of dumped bytes to put on a line.
   enum {SEPARATION    =  3}; // Separation between hex and ASCII dumps.
   enum {BYTESIZE      =  3}; // Output chars used for a byte dumped in hex.
-  enum {LEADINGSPACES =  4}; // Separation between address and hex dump. 
+  enum {LEADINGSPACES =  4}; // Separation between address and hex dump.
 
   unsigned char* _buffer;
   int _count;
@@ -868,32 +868,32 @@ void Dumper::output(void)
 {
   int width = 8;
   int i;
-  
+
   cout << setw(width) << _line * BYTESPERLINE;
   spaces(LEADINGSPACES);
   _line++;
-  
+
   ios_base_fmtflags savedFlags = cout.setf(ios::basefield);
   char savedFill = cout.fill();
-  
+
   for (i = 0; i < _count; i++) {
     cout << hex << setw(2) << setfill('0') << (int)_buffer[i] << " ";
   }
-  
+
   cout.setf(savedFlags, ios::basefield);
   cout.fill(savedFill);
-  
+
   for (i = _count; i < BYTESPERLINE; i++) {
     spaces(BYTESIZE);
   }
-  
+
   spaces(SEPARATION);
-  
+
   for (i = 0; i < _count; i++) {
     int c = (unsigned char)_buffer[i];
     cout << map(c);
   }
-  
+
   cout << endl;
 }
 
@@ -905,9 +905,9 @@ void Dumper::spaces(int n)
 }
 
 void Dumper::print(unsigned char ch)
-{ 
+{
   _buffer[_count++] = ch;
-  
+
   if ( _count == BYTESPERLINE) {
     output();
     _count = 0;
@@ -1270,15 +1270,15 @@ void indent(int level)
 #if defined(OM_USE_REFERENCE_SS)
 
 static const unsigned char idMapLittle[] =
-{ 3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15 }; 
+{ 3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15 };
 static const unsigned char idMapBig[] =
-{ 0, 1, 2, 3, '-', 4, 5, '-', 6, 7, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15 }; 
+{ 0, 1, 2, 3, '-', 4, 5, '-', 6, 7, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15 };
 static const unsigned char* guidMap;
-static const wchar_t digits[] = L"0123456789ABCDEF"; 
+static const wchar_t digits[] = L"0123456789ABCDEF";
 
-#define GUIDSTRMAX 38 
+#define GUIDSTRMAX 38
 
-int StringFromGUID2(const GUID& guid, OMCHAR* buffer, int bufferSize) 
+int StringFromGUID2(const GUID& guid, OMCHAR* buffer, int bufferSize)
 {
   if (hostByteOrder() == littleEndian) {
     guidMap = &idMapLittle[0];
@@ -1288,22 +1288,22 @@ int StringFromGUID2(const GUID& guid, OMCHAR* buffer, int bufferSize)
   const unsigned char* ip = (const unsigned char*) &guid; // input pointer
   OMCHAR* op = buffer;                                    // output pointer
 
-  *op++ = L'{'; 
- 
-  for (size_t i = 0; i < sizeof(idMapLittle); i++) { 
+  *op++ = L'{';
 
-    if (guidMap[i] == '-') { 
-      *op++ = L'-'; 
-    } else { 
-      *op++ = digits[ (ip[guidMap[i]] & 0xF0) >> 4 ]; 
-      *op++ = digits[ (ip[guidMap[i]] & 0x0F) ]; 
-    } 
-  } 
-  *op++ = L'}'; 
-  *op = L'\0'; 
- 
-  return GUIDSTRMAX; 
-} 
+  for (size_t i = 0; i < sizeof(idMapLittle); i++) {
+
+    if (guidMap[i] == '-') {
+      *op++ = L'-';
+    } else {
+      *op++ = digits[ (ip[guidMap[i]] & 0xF0) >> 4 ];
+      *op++ = digits[ (ip[guidMap[i]] & 0x0F) ];
+    }
+  }
+  *op++ = L'}';
+  *op = L'\0';
+
+  return GUIDSTRMAX;
+}
 
 #endif
 
@@ -1421,28 +1421,28 @@ void printStat(STATSTG* statstg, char* tag)
 {
   indent(4);
   switch (statstg->type) {
-    
+
   case STGTY_STORAGE:
     cout << "storage";
     break;
-    
+
   case STGTY_STREAM:
     cout << "stream";
     break;
-    
+
   case STGTY_LOCKBYTES:
     cout << "lock bytes";
     break;
-    
+
   case STGTY_PROPERTY:
     cout << "property";
     break;
-    
+
   default:
     cout << "unknown";
     break;
   }
-  
+
   cout << " (" << tag << ")" << endl;
 
   if (statstg->type == STGTY_STORAGE) {
@@ -1458,7 +1458,7 @@ void printStat(STATSTG* statstg, char* tag)
       warning("printStat", "Large streams not handled.");
       byteCount = (size_t)-1;
     }
-    
+
     indent(6);
     cout << "size   = " << byteCount << " bytes." << endl;
   }
@@ -1516,7 +1516,7 @@ void dumpStream(IStream* stream, STATSTG* statstg, char* pathName)
     byteCount = (size_t)-1;
   }
   totalStreamBytes = totalStreamBytes + byteCount;
-  
+
   for (unsigned long int i = 0; i < byteCount; i++) {
     result = stream->Read(&ch, 1, &bytesRead);
     if (!checkStatus(pathName, result)) {
@@ -1527,7 +1527,7 @@ void dumpStream(IStream* stream, STATSTG* statstg, char* pathName)
     }
     dumper.print(ch);
   }
-  
+
   dumper.flush();
 
 }
@@ -1577,17 +1577,17 @@ void dumpStorage(IStorage* storage,
   if (!checkStatus(pathName, result)) {
     fatalError("dumpStorage", "IStorage::EnumElements() failed.");
   }
-  
+
   result = enumerator->Reset();
   if (!checkStatus(pathName, result)) {
     fatalError("dumpStorage", "IStorage::Reset() failed.");
   }
-  
+
   do {
     STATSTG statstg;
     status = enumerator->Next(1, &statstg, NULL);
     if (status == S_OK) {
-      
+
       switch (statstg.type) {
 
       case STGTY_STORAGE:
@@ -1638,7 +1638,7 @@ void dumpStorage(IStorage* storage,
         // FIXME printName(statstg.pwcsName);
         break;
       }
-      
+
       // Having called EnumElements()/Next() we are responsible for
       // freeing statstg.pwcsName.
       //
@@ -1664,7 +1664,7 @@ void read(IStream* stream, void* address, size_t size)
   if (bytesRead != size) {
     fatalError("read", "IStream::Read() read wrong number of bytes.");
   }
-  
+
 }
 
 void read(IStream* stream, size_t offset, void* address, size_t size)
@@ -1773,9 +1773,9 @@ void printPidString(const OMPropertyId* string)
 
   const OMPropertyId* p = string;
   while (*p != 0) {
-  
+
     cout << hex << setw(4) << setfill('0') << *p << " ";
-  
+
     ++p;
   }
   cout.setf(savedFlags, ios::basefield);
@@ -1971,7 +1971,7 @@ bool isValid(const IndexEntry* index,
         reportBadIndexEntry(i, &index[i], clsid, path);
         warning("isValid", "Property set index entries overlap.");
         result = false;
-        break; 
+        break;
       } else {
         // this entry is valid
         previousOffset = currentOffset;
@@ -1998,13 +1998,13 @@ size_t valueStreamSize(const IndexEntry* index, const OMUInt32 entries)
 char* typeName(OMUInt32 type)
 {
   char * result;
-  
+
   switch (type) {
-    
+
   case SF_DATA:
     result = "data";
     break;
-    
+
   case SF_DATA_STREAM:
     result = "data stream";
     break;
@@ -2012,7 +2012,7 @@ char* typeName(OMUInt32 type)
   case SF_STRONG_OBJECT_REFERENCE:
     result = "strong object reference";
     break;
-    
+
   case SF_STRONG_OBJECT_REFERENCE_VECTOR:
     result = "strong object reference vector";
     break;
@@ -2020,7 +2020,7 @@ char* typeName(OMUInt32 type)
   case SF_STRONG_OBJECT_REFERENCE_SET:
     result = "strong object reference set";
     break;
-    
+
   case SF_WEAK_OBJECT_REFERENCE:
     result = "weak object reference";
     break;
@@ -2051,7 +2051,7 @@ char* typeName(OMUInt32 type)
   }
 
   return result;
-  
+
 }
 
 void openStorage(IStorage* parentStorage,
@@ -2443,7 +2443,7 @@ OMUInt32 typeOf(IndexEntry* entry, OMUInt32 version)
   } else {
     switch (entry->_type) {
       case OLD_TID_DATA:
-        result = SF_DATA; 
+        result = SF_DATA;
         break;
       case OLD_TID_STRONG_OBJECT_REFERENCE:
         result = SF_STRONG_OBJECT_REFERENCE;
@@ -2516,7 +2516,7 @@ void checkObject(IStorage* storage,
                  OMUInt32 entries,
                  OMUInt32 version,
                  char* pathName,
-                 int isRoot, 
+                 int isRoot,
                  bool swapNeeded)
 {
   // Count expected storages and streams
@@ -2568,12 +2568,12 @@ void checkObject(IStorage* storage,
   if (!checkStatus(pathName, result)) {
     fatalError("checkObject", "IStorage::EnumElements() failed.");
   }
-  
+
   result = enumerator->Reset();
   if (!checkStatus(pathName, result)) {
     fatalError("checkObject", "IStorage::Reset() failed.");
   }
-  
+
   OMUInt32 actualStorageCount = 0;
   OMUInt32 actualStreamCount = 0;
   do {
@@ -2598,7 +2598,7 @@ void checkObject(IStorage* storage,
       fatalError("checkObject", "IEnumSTATSTG:Next() failed.");
     }
   }
-  
+
   if (actualStorageCount != storageCount) {
     cerr << programName
          << ": Warning : Incorrect IStorage count for \"" << pathName
@@ -2640,7 +2640,7 @@ void dumpContainedObjects(IStorage* storage,
 
     int containerType = typeOf(&index[i], version);
     switch (containerType) {
-      
+
     case SF_DATA:
       // value is dumped when the property value stream is dumped
       break;
@@ -2660,7 +2660,7 @@ void dumpContainedObjects(IStorage* storage,
                                      nameLength,
                                      version,
                                      swapNeeded);
-      
+
       // Compute the pathname for this stream
       //
       char* thisPathName = makePathName(pathName, subStreamName, isRoot);
@@ -2689,7 +2689,7 @@ void dumpContainedObjects(IStorage* storage,
                                       index[i]._length,
                                       version,
                                       swapNeeded);
-      
+
       // Compute the pathname for this object
       //
       char* thisPathName = makePathName(pathName, subStorageName, isRoot);
@@ -2781,10 +2781,10 @@ void dumpContainedObjects(IStorage* storage,
         char* elementName = new char[strlen(vectorName) + 1 + 1];
         strcpy(elementName, vectorName);
         strcat(elementName, _openArrayKeySymbol);
-        
+
         char number[256];
         sprintf(number, "%lx", vectorIndex[entry]._elementName);
-        
+
         size_t size = strlen(elementName) + strlen(number) + 1 + 1;
         char* subStorageName = new char[size];
         strcpy(subStorageName, elementName);
@@ -2794,7 +2794,7 @@ void dumpContainedObjects(IStorage* storage,
         // Compute the path name for this element
         //
         char* elementPathName = makePathName(pathName, subStorageName, isRoot);
-        
+
         // open the storage
         //
         IStorage* subStorage = 0;
@@ -2953,10 +2953,10 @@ void dumpContainedObjects(IStorage* storage,
         char* elementName = new char[strlen(setName) + 1 + 1];
         strcpy(elementName, setName);
         strcat(elementName, _openArrayKeySymbol);
-        
+
         char number[256];
         sprintf(number, "%lx", setIndex[entry]._elementName);
-        
+
         size_t size = strlen(elementName) + strlen(number) + 1 + 1;
         char* subStorageName = new char[size];
         strcpy(subStorageName, elementName);
@@ -2966,7 +2966,7 @@ void dumpContainedObjects(IStorage* storage,
         // Compute the path name for this element
         //
         char* elementPathName = makePathName(pathName, subStorageName, isRoot);
-        
+
         // open the storage
         //
         IStorage* subStorage = 0;
@@ -3318,7 +3318,7 @@ void dumpProperties(IStorage* storage,
     }
     dumper.flush();
   }
-  
+
   dumpContainedObjects(storage,
                        stream,
                        index,
@@ -3440,7 +3440,7 @@ void dumpObject(IStorage* storage,
   } else {
     headSize = 10;
   }
-  
+
   // Check that the stream size is consistent with the entry count
   //
   if (version >= 21) {
@@ -3547,18 +3547,18 @@ void openStorage(char* fileName, IStorage** storage)
   HRESULT result;
   OMCHAR wcFileName[256];
   convert(wcFileName, 256, fileName);
-  
+
   result = StgIsStorageFile(wcFileName);
-  
+
   switch (result) {
-    
+
   case STG_E_INVALIDNAME:
     cerr << programName << ": Error: "
          << "\"" << fileName << "\" is not a valid file name."
          << endl;
     exit(EXIT_FAILURE);
     break;
-    
+
   case STG_E_FILENOTFOUND:
     cerr << programName <<": Error: "
          << "File \"" << fileName << "\" not found."
@@ -3571,18 +3571,18 @@ void openStorage(char* fileName, IStorage** storage)
          << endl;
     exit(EXIT_FAILURE);
     break;
-    
+
   }
-  
+
   if (!checkStatus(fileName, result)) {
     fatalError("openStorage", "StgIsStorageFile() failed.");
   }
-  
+
   if (result != S_OK) {
     cout << "\"" << fileName << "\" is NOT a structured storage file." << endl;
     exit(EXIT_FAILURE);
   }
-  
+
   result = StgOpenStorage(
     wcFileName,
     NULL,
@@ -3597,21 +3597,21 @@ void openStorage(char* fileName, IStorage** storage)
 }
 
 void dumpFileHex(char* fileName)
-{ 
+{
   FILE* infile;
   int ch;
   unsigned long byteCount = 0;
 
   infile = fopen(fileName, "rb");
   if (infile != NULL) {
-    cout << "Hex dump." << endl;  
+    cout << "Hex dump." << endl;
     while((ch = fgetc(infile)) != EOF) {
       if ((lFlag) && (++byteCount > lLimit)) {
         break;
       }
       dumper.print((char)ch);
     }
- 
+
     dumper.flush();
     fclose(infile);
   } else {
@@ -3644,14 +3644,14 @@ void dumpFile(char* fileName)
     fatalError("dumpFile", "IStorage::Stat() failed.");
   }
 
-  cout << "Raw dump." << endl;  
+  cout << "Raw dump." << endl;
   dumpStorage(storage, &statstg, "/", 1);
-  
+
   // Having called Stat() specifying STATFLAG_DEFAULT
   // we are responsible for freeing statstg.pwcsName.
   //
   CoTaskMemFree(statstg.pwcsName);
-    
+
   // Releasing the last reference to the root storage closes the file.
   storage->Release();
   storage = 0;
@@ -3680,10 +3680,10 @@ OMUInt16 determineVersion(IStorage* storage)
     if ((byteOrder != 'L') && (byteOrder != 'B')) {
       OMUInt16 byteOrder;
       OMUInt16 version;
-      
+
       read(s, 0, &byteOrder, sizeof(byteOrder));
       read(s, sizeof(byteOrder), &version, sizeof(version));
- 
+
       ASSERT("Valid byte order",
                       (byteOrder == littleEndian) || (byteOrder == bigEndian));
       if (byteOrder != hostByteOrder()) {
@@ -3887,7 +3887,7 @@ static void dumpReferencedProperties(IStorage* root, OMUInt16 version)
       cout << "( Byte order = " << byteOrder(bo)
            << " (" << endianity << ")";
       cout << ", Number of entries = " << nameCount << " )" << endl;
-  
+
       if (nameCount > 0) {
         cout << setw(8) << "tag"
              << "   "
@@ -3925,7 +3925,7 @@ static void dumpReferencedProperties(IStorage* root, OMUInt16 version)
       cout << "( Byte order = " << byteOrder(bo)
            << " (" << endianity << ")";
       cout << ", Number of entries = " << nameCount << " )" << endl;
-  
+
       if (nameCount > 0) {
         cout << setw(8) << "tag"
              << "   "
@@ -4551,7 +4551,7 @@ int main(int argumentCount, char* argumentVector[])
     usage();
     exit(EXIT_FAILURE);
   }
-  
+
   switch (option) {
   case hexadecimal:
     for (i = flagCount + 1; i < argumentCount; i++) {
