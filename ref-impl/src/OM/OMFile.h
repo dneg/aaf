@@ -158,11 +158,14 @@ public:
   void saveFile(void* clientOnSaveContext = 0);
 
     // @cmember Save the entire contents of this <c OMFile> as well as
-    //          any unsaved changes in the new file <p fileName>. The file
-    //          must not already exist. <mf OMFile::saveAs> may be called
+    //          any unsaved changes in the new file <p destFile>. <p destFile>
+    //          must be open, writeable and not yet contain any objects.
+    //          <mf OMFile::saveAsFile> may be called
     //          for files opened in modify mode and for files opened in
     //          read-only and transient modes.
-  void saveAs(const wchar_t* fileName) const;
+  void saveAsFile(OMFile* destFile) const;
+
+  void saveCopyAs(OMFile* destFile) const;
 
     // @cmember Discard all changes made to this <c OMFile> since the
     //          last <mf OMFile::save> or <mf OMFile::open>.

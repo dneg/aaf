@@ -368,17 +368,27 @@ void OMFile::saveFile(void* clientOnSaveContext)
 }
 
   // @mfunc Save the entire contents of this <c OMFile> as well as
-  //        any unsaved changes in the new file <p fileName>. The file
-  //        must not already exist. <mf OMFile::saveAs> may be called
+  //        any unsaved changes in the new file <p destFile>. <p destFile>
+  //        must be open, writeable and not yet contain any objects.
+  //        <mf OMFile::saveAsFile> may be called
   //        for files opened in modify mode and for files opened in
   //        read-only and transient modes.
-  //   @parm const wchar_t* | fileName | The name of the file to open.
+  //   @parm OMFile* | destFile | The destination file.
   //   @this const
-void OMFile::saveAs(const wchar_t* ANAME(fileName)) const
+void OMFile::saveAsFile(OMFile* ANAME(destFile)) const
 {
-  TRACE("OMFile::saveAs");
+  TRACE("OMFile::saveAsFile");
 
-  PRECONDITION("Valid file name", validWideString(fileName));
+  PRECONDITION("Valid file", destFile != 0);
+
+  ASSERT("Unimplemented code not reached", false);
+}
+
+void OMFile::saveCopyAs(OMFile* ANAME(destFile)) const
+{
+  TRACE("OMFile::saveCopyAs");
+
+  PRECONDITION("Valid file", destFile != 0);
 
   ASSERT("Unimplemented code not reached", false);
 }
