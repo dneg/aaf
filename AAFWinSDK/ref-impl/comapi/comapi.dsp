@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GR /GX /O2 /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/Om" /I "../../../ref-impl/include/OM" /I "../../../ref-impl/src/com-api/com-dll" /I "./" /D "NDEBUG" /D "_WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "BOB_TEST" /D "AAF_MODULE_TEST" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GR /GX /O2 /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/Om" /I "../../../ref-impl/include/OM" /I "../../../ref-impl/src/com-api/com-dll" /I "../include/comidl" /D "NDEBUG" /D "_WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "BOB_TEST" /D "AAF_MODULE_TEST" /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -72,7 +72,7 @@ PostBuild_Cmds=regsvr32 /s Release/AAFCOAPI.dll
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GR /GX /Zi /Od /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/Om" /I "../../../ref-impl/include/OM" /I "../../../ref-impl/src/com-api/com-dll" /I "./" /D "_DEBUG" /D "OM_ENABLE_DEBUG" /D "_WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "BOB_TEST" /D "AAF_MODULE_TEST" /FR /YX /FD /c
+# ADD CPP /nologo /MTd /W3 /Gm /GR /GX /Zi /Od /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/Om" /I "../../../ref-impl/include/OM" /I "../../../ref-impl/src/com-api/com-dll" /I "../include/comidl" /D "_DEBUG" /D "OM_ENABLE_DEBUG" /D "_WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "BOB_TEST" /D "AAF_MODULE_TEST" /FR /YX /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -97,39 +97,6 @@ PostBuild_Cmds=regsvr32 /s Debug/AAFCOAPI.dll
 # Name "comapi - Win32 Debug"
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\include\com-api\AAF.idl"
-
-!IF  "$(CFG)" == "comapi - Win32 Release"
-
-# Begin Custom Build
-InputDir="\coresw\AAF-toolkit\ref-impl\include\com-api"
-ProjDir=.
-InputPath=..\..\..\ref-impl\include\com-api\AAF.idl
-InputName=AAF
-
-"$(ProjDir)\$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	midl $(InputPath) -I $(InputDir)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "comapi - Win32 Debug"
-
-# Begin Custom Build
-InputDir="\coresw\AAF-toolkit\ref-impl\include\com-api"
-ProjDir=.
-InputPath=..\..\..\ref-impl\include\com-api\AAF.idl
-InputName=AAF
-
-"$(ProjDir)\$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	midl $(InputPath) -I $(InputDir)
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\com-dll\AAFCOM.cpp"
 # End Source File
 # Begin Source File
@@ -146,73 +113,7 @@ SOURCE="..\..\..\ref-impl\src\com-api\com-dll\AAFCOMPlatformTypes.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\include\com-api\AAFModuleTest.idl"
-
-!IF  "$(CFG)" == "comapi - Win32 Release"
-
-# Begin Custom Build
-InputDir="\coresw\AAF-toolkit\ref-impl\include\com-api"
-ProjDir=.
-InputPath=..\..\..\ref-impl\include\com-api\AAFModuleTest.idl
-InputName=AAFModuleTest
-
-"$(ProjDir)\$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	midl $(InputPath) -I $(InputDir)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "comapi - Win32 Debug"
-
-# Begin Custom Build
-InputDir="\coresw\AAF-toolkit\ref-impl\include\com-api"
-ProjDir=.
-InputPath=..\..\..\ref-impl\include\com-api\AAFModuleTest.idl
-InputName=AAFModuleTest
-
-"$(ProjDir)\$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	midl $(InputPath) -I $(InputDir)
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\com-dll\AAFObjectCreation.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\include\com-api\AAFTypes.idl"
-
-!IF  "$(CFG)" == "comapi - Win32 Release"
-
-# Begin Custom Build
-InputDir="\coresw\AAF-toolkit\ref-impl\include\com-api"
-ProjDir=.
-InputPath=..\..\..\ref-impl\include\com-api\AAFTypes.idl
-InputName=AAFTypes
-
-"$(ProjDir)\$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	midl $(InputPath) -I $(InputDir)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "comapi - Win32 Debug"
-
-# Begin Custom Build
-InputDir="\coresw\AAF-toolkit\ref-impl\include\com-api"
-ProjDir=.
-InputPath=..\..\..\ref-impl\include\com-api\AAFTypes.idl
-InputName=AAFTypes
-
-"$(ProjDir)\$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	midl $(InputPath) -I $(InputDir)
-
-# End Custom Build
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
