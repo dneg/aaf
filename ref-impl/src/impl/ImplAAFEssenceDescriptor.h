@@ -120,6 +120,9 @@ public:
 	virtual AAFRESULT STDMETHODCALLTYPE
 		GetOwningMobKind (aafMobKind_t *pMobKind);
 
+	virtual AAFRESULT
+		GetNthLocator (aafInt32 index, ImplAAFLocator **ppLocator);
+
 private:
     OMStrongReferenceVectorProperty<ImplAAFLocator> _locators;
 };
