@@ -78,6 +78,15 @@ public:
 
 
   //****************
+  // IsUniqueIdentifier()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetIsUniqueIdentifier
+      (// @parm [out] pointer to the result
+       aafBool * pIsUniqueIdentifier) const;
+
+
+  //****************
   // GetDefaultValue()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -118,7 +127,10 @@ public:
 	    const aafUID_t & typeID,
 
         // @parm [in] Is this property optional? (mandatory, if not)
-		aafBool isOptional);
+		  aafBoolean_t isOptional,
+
+        // @parm [in] Is this property a unique identifier
+		  aafBoolean_t isUniqueIdentifier);
 
 
 
@@ -152,6 +164,8 @@ private:
   OMFixedSizeProperty<OMPropertyId>          _pid;
 
   OMVariableSizeProperty<aafUInt8>			 _DefaultValue;
+
+  OMFixedSizeProperty<aafBool>               _IsUniqueIdentifier;
 
   ImplAAFTypeDef *                           _cachedType;
 
