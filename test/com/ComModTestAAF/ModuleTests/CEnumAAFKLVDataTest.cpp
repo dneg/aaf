@@ -175,7 +175,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		//Make the first mob
 	  long	test;
-	  aafRational_t	audioRate = { 44100, 1 };
 
 	  // Create a concrete subclass of Mob
 	  checkResult(defs.cdMasterMob()->
@@ -287,22 +286,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFTypeDef*		pBaseType = NULL;
 
   IAAFMobSlot		*slot = NULL;
-  aafProductIdentification_t	ProductInfo;
   aafNumSlots_t	numMobs, n, slt;
   aafUInt32		numKLV, com;
   HRESULT						hr = S_OK;
-
-  aafProductVersion_t v;
-  v.major = 1;
-  v.minor = 0;
-  v.tertiary = 0;
-  v.patchLevel = 0;
-  v.type = kAAFVersionUnknown;
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"EnumAAFKLVData Test";
-  ProductInfo.productVersion = &v;
-  ProductInfo.productVersionString = NULL;
-  ProductInfo.platform = NULL;
 
   try
   {

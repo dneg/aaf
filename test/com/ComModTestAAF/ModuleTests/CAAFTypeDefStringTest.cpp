@@ -256,8 +256,6 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 {
 	//CAAFBuiltinDefs defs (pDict);
 	
-	HRESULT hr = 0;
-	
 	/////////////////////////////////////////
 	//  Check the MOb stuff 
 	IAAFMobSP spMob;
@@ -499,8 +497,6 @@ static HRESULT  ReadAAFFile(aafWChar *  pFileName )
 	IAAFHeader * pHeader = NULL;
 	IAAFDictionary * pDict = NULL;
 	aafBoolean_t  bFileOpen = kAAFFalse;
-	
-	IEnumAAFMobs*				pMobIter = NULL;
 	
 	try
 	{
