@@ -103,14 +103,14 @@ static void registerClass(OMFile* file, const aafClassID_t& classId)
 }
 
 // Open a file
-void OMContainer::OMLOpenContainer(OMLSession sessionData,
+void OMContainer::OMLOpenContainer(aafWChar* stream,
+                                 OMLSession sessionData,
                                  OMLRefCon attributes,
                                  OMLconst_OMLGlobalName typeName, 
                                  OMLContainerUseMode useFlags,
                                  ImplAAFHeader*& header)
 {
-  char *pathname = GetFileName(attributes);
-  _file = OMFile::openRead(pathname);
+  _file = OMFile::openRead(stream);
 
   registerClass(_file, CLSID_AAFCompositionMob);
   registerClass(_file, CLSID_AAFHeader);
@@ -143,7 +143,8 @@ void OMContainer::OMLSetContainerVersion1(void)
 }
 
 //Create a file
-void OMContainer::OMLOpenNewContainer(ImplAAFHeader* head,
+void OMContainer::OMLOpenNewContainer(aafWChar* stream,
+                                  ImplAAFHeader* head,
                                   OMLSession sessionData,
                                   OMLRefCon attributes,
                                   OMLconst_OMLGlobalName typeName, 
@@ -151,8 +152,7 @@ void OMContainer::OMLOpenNewContainer(ImplAAFHeader* head,
                                   OMLGeneration generation,
                                   OMLContainerFlags containerFlags, ...)
 {
-  char *pathname = GetFileName(attributes);
-  _file = OMFile::createModify(pathname, head);
+  _file = OMFile::createModify(stream, head);
 }
 
 // OML Revision number
