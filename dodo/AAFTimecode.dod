@@ -17,11 +17,12 @@ AD_HEAD
 *                                          *
 \******************************************/
 
-AD_INCLUDE(AAFTypes)
+AD_CLASS_UUID(92B88036, 2B2B, 11d2, BF, 7E, 00, 10, 4B, C9, 15, 6D)
 
+AD_DEFAULT_UUID(92B88035, 2B2B, 11d2, BF, 7E, 00, 10, 4B, C9, 15, 6D)
 AD_CLASS_BEGIN
 
-AD_CONSTRUCTOR2(
+AD_METHOD2(InitTimecode,
 [in],aafLength_t,length,Length Property Value,
 [in],aafTimecode_t,timecode,Timecode Value \\\(startFrame\\\, drop\\\, fps\\\),
 Constructor taking initial values.)
@@ -33,7 +34,7 @@ Get the timecode fields.)
 
 /****/
 AD_METHOD1(SetTimecode,
-[out],aafTimecode_t,timecode,Timecode \\\(startFrame\\\, drop\\\, fps\\\),
+[in],aafTimecode_t,timecode,Timecode \\\(startFrame\\\, drop\\\, fps\\\),
 Set the timecode fields.)
 
 /****/
