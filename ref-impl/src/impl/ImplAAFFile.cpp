@@ -1117,9 +1117,10 @@ ImplAAFFile::Open ()
 		  HRESULT hr = _head->GetDictionary(&dictionary);
 		  if (hr != AAFRESULT_SUCCESS)
 			return hr;
+		  _factory->SetEnableDefRegistration (regWasEnabled);
+		  dictionary->InitBuiltins();
 		  dictionary->ReleaseReference ();
 		  dictionary = 0;
-		  _factory->SetEnableDefRegistration (regWasEnabled);
 
 		  if (IsWriteable())
 			{
