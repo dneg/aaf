@@ -230,7 +230,7 @@ typedef wchar_t			aafCharacter;
 /*
  *  Linux, FreeBSD, Darwin
  */
-#elif defined(PLATFORM_GCC_INTEL_LINUX) || defined(PLATFORM_GCC_INTEL_FREEBSD) || defined(PLATFORM_GCC_POWERPC_MACOS10)
+#elif defined(PLATFORM_GCC_INTEL_LINUX) || defined(PLATFORM_GCC_INTEL_FREEBSD) || defined(PLATFORM_GCC_POWERPC_MACOS10) || defined(PLATFORM_GCC_SPARC_SOLARIS)
 typedef signed char		aafInt8;
 typedef signed short int	aafInt16;
 typedef signed long int		aafInt32;
