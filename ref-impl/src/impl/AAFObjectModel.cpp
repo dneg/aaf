@@ -1522,12 +1522,16 @@ void AAFObjectModel::InitializePrivateClassDefinitions(void)
 
 void AAFObjectModel::InitializeAxiomaticDefinitions(void)
 {
-  // We know that the class definition for all class definitions is
-  // axiomatic. This should also make property definitions axiomatic
-  // and all associated type definitions.
-  findClassDefinition(&AUID_AAFClassDefinition)->makeAxiomatic();
-  findClassDefinition(&AUID_AAFPropertyDefinition)->makeAxiomatic();
-
+  // Make *all* class definitions axiomatic so that the set of class
+  // definitions returned by ImplAAFDictionary::GetClassDefs() matches
+  // the set of class definitions supported by LookupClassDef() -
+  // which is, of course, all class definitions.
+  // This resolves bug 630436.  The change was introduced at revision
+  // 1.13.
+  unsigned int i;
+  for (i = 0; i < countClassDefinitions(); i++) {
+    classDefinitionAt(i)->makeAxiomatic();
+  }
 
   // There really should only be 8 instances of TypeDefinitionInteger.
   // Forse all of them to be aximatic.
@@ -1546,21 +1550,6 @@ void AAFObjectModel::InitializeAxiomaticDefinitions(void)
   findTypeDefinition(&kAAFTypeID_Stream)->makeAxiomatic();
   findTypeDefinition(&kAAFTypeID_Indirect)->makeAxiomatic();
   findTypeDefinition(&kAAFTypeID_Opaque)->makeAxiomatic();
-
-
-  // There is only one meta dictionary and it must be internally
-  // created.
-  findClassDefinition(&AUID_AAFMetaDictionary)->makeAxiomatic();
-
-
-  // Add the following two classes since the we still have the 
-  // type, class and property definitions stored in the AAF dictionary.
-  // When we move type, class and property definitions to another
-  // object "above" header we can remove the following two classes
-  // then their dependent property, type and class definitions.
-  // (transdel 2000-MAR-27)
-  //findClassDefinition(&AUID_AAFHeader)->makeAxiomatic();
-  //findClassDefinition(&AUID_AAFDictionary)->makeAxiomatic();
 }
 
 
