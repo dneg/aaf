@@ -55,8 +55,10 @@ ImplAAFFile::~ImplAAFFile ()
 				  this, OM_ERR_MEDIA_CANNOT_CLOSE);
 #endif
   
-  XPROTECT(this)
+#if FULL_TOOLKIT
+  XPROTECT()
 	{
+#endif
 #if FULL_TOOLKIT
 	  if (_closeMediaProc != NULL)
 		{
@@ -135,11 +137,13 @@ ImplAAFFile::~ImplAAFFile ()
 #endif
 	  }
 	  _cookie = 0;
-	}
+#if FULL_TOOLKIT
+  }
   XEXCEPT
   {
   }
 	XEND
+#endif
 
 ///	  omOptFree(NULL, file);
 
@@ -201,8 +205,11 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafDataBuffer_t stream,
 								   openType_t type)
 {
 	OMLRefCon        	myRefCon = NULL;
-	aafErr_t      		status, finalStatus = OM_ERR_NONE;
+#if FULL_TOOLKIT
+	aafErr_t      		status;
 	aafInt32			errnum;
+#endif
+	aafErr_t      		finalStatus = OM_ERR_NONE;
 
 	if (session == NULL)
 	  return(OM_ERR_BAD_SESSION);	
@@ -218,7 +225,7 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafDataBuffer_t stream,
 		return (status);
 #endif
 
-	XPROTECT(this)
+	XPROTECT()
 	{
 #if FULL_TOOLKIT
 		clearBentoErrors();
@@ -341,9 +348,11 @@ AAFRESULT ImplAAFFile::Create(
 {
 	OMLRefCon        myRefCon;
 	ImplAAFHeader *     head;
+#if FULL_TOOLKIT
 	aafErr_t		status;
+#endif
 
-	XPROTECT((ImplAAFFile*)NULL)
+	XPROTECT()
 	{
 		if (stream == NULL) 
 		  RAISE(OM_ERR_NULL_PARAM);
@@ -475,7 +484,7 @@ AAFRESULT ImplAAFFile::OpenModify(
 {
 	aafInt32	numIdent;
 	
-	XPROTECT((ImplAAFFile*)NULL)
+	XPROTECT()
 	{
 		CHECK(InternOpenFile(stream, session,
 				 (OMLContainerUseMode) kOMLReuseFreeSpace, kOmModify));
