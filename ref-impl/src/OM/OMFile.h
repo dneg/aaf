@@ -25,7 +25,7 @@
 *
 ************************************************************************/
 
-// @doc OMINTERNAL
+// @doc OMEXTERNAL
 #ifndef OMFILE_H
 #define OMFILE_H
 
@@ -152,18 +152,15 @@ public:
   OMStoredObject* rootStoredObject(void);
 
     // @cmember Retrieve the <c OMClassFactory> from this <c OMFile>.
-    //   @this const
   const OMClassFactory* classFactory(void) const;
 
     // @cmember Retrieve the <c OMObjectDirectory> from this <c OMFile>.
   OMObjectDirectory* objectDirectory(void);
 
     // @cmember The byte order of this <c OMFile>.
-    //   @this const
   OMByteOrder byteOrder(void) const;
 
     // @cmember The loading mode (eager or lazy) of this <c OMFile>.
-    //   @this const
   OMLoadMode loadMode(void) const;
 
   // OMStorable overrides.
