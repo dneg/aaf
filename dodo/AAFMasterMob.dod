@@ -11,6 +11,12 @@ AAFMob\
 #import ./AAFMobPrivate.exp
 #import ./AAFSearchSource.exp
 AD_HEAD
+AD_IDL(//
+// This interface provides access to Source Mobs and Essence data
+// objects for a Master Mob object.  The Master Mob object is used
+// to provide a level of indirection for accessing Source Mobs from
+// Composition Mobs.
+//)
 AD_FORWARD_DECLARATION(AAFSourceClip)
 AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_FORWARD_DECLARATION(AAFComponent)
