@@ -13,13 +13,7 @@
 #include "OMStorable.h"
 #include "ImplAAFDigitalImageDescriptor.h"
 
-const int PID_CDCI_DESC_COMPPONENTWIDTH			= 40;
-const int PID_CDCI_DESC_HORIZONTALSUBSAMPLING	= 41;
-const int PID_CDCI_DESC_COLORSITING				= 42;
-const int PID_CDCI_DESC_BLACKREFERENCELEVEL		= 43;
-const int PID_CDCI_DESC_WHITEREFERENCELEVEL		= 44;
-const int PID_CDCI_DESC_COLORRANGE				= 45;
-const int PID_CDCI_DESC_PADDINGBITS				= 46;
+#include "AAFPropertyIDs.h"
 
 class ImplAAFCDCIDescriptor : public ImplAAFDigitalImageDescriptor
 {
