@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -461,18 +461,22 @@ void ImplAAFBuiltinClasses::instantiateProps ()
 		{
 #if !defined(NDEBUG) && USE_AAFOBJECT_MODEL
 
-    // Check that all of the current manual table entries are in the automatically generated
-    // set.
-    ImplAAFPropertyDef *pAxiomaticProperty = metaDictionary()->findAxiomaticPropertyDefinition(propInfo->id);
-    assert (pAxiomaticProperty);
+		  // Check that all of the current manual table entries are in the
+		  // automatically generated set.
+		  ImplAAFPropertyDef *pAxiomaticProperty =
+			metaDictionary()->findAxiomaticPropertyDefinition(propInfo->id);
+		  assert (pAxiomaticProperty);
 
-    ImplAAFTypeDef *pAxiomaticType = metaDictionary()->findAxiomaticTypeDefinition(*propInfo->pTypeGuid);
-    assert (pAxiomaticType);
+		  ImplAAFTypeDef *pAxiomaticType =
+			metaDictionary()->
+			findAxiomaticTypeDefinition(*propInfo->pTypeGuid);
+		  assert (pAxiomaticType);
 #endif
 
 #if 1
 		  ImplAAFMetaDefinition * obj = 
-                        (_dictionary->metaDictionary())->pvtCreateMetaDefinition(AUID_AAFPropertyDef);
+			(_dictionary->metaDictionary())->
+			pvtCreateMetaDefinition(AUID_AAFPropertyDef);
 #else // #if 1
 		  ImplAAFObject * obj =
 			_dictionary->pvtInstantiate (AUID_AAFPropertyDef);
@@ -482,14 +486,15 @@ void ImplAAFBuiltinClasses::instantiateProps ()
 			dynamic_cast<ImplAAFPropertyDef*>(obj);
 		  assert (propDef);
 
-//		  ImplAAFTypeDef	*pTypeDef;
-			AAFRESULT hr;
+		  //		  ImplAAFTypeDef	*pTypeDef;
+		  AAFRESULT hr;
 
-//		hr = _dictionary->pvtLookupAxiomaticTypeDef (*propInfo->pTypeGuid, &pTypeDef);
-//		  assert (AAFRESULT_SUCCEEDED (hr));
-//			assert (pTypeDef);
+		  // hr = _dictionary->
+		  //   pvtLookupAxiomaticTypeDef (*propInfo->pTypeGuid, &pTypeDef);
+		  //		  assert (AAFRESULT_SUCCEEDED (hr));
+		  //			assert (pTypeDef);
 
-			hr = propDef->pvtInitialize
+		  hr = propDef->pvtInitialize
 			(propInfo->id,
 			 propInfo->tag,
 			 propInfo->name,
@@ -512,8 +517,11 @@ void ImplAAFBuiltinClasses::instantiateProps ()
 		  propIdx++;
 		  propInfo = propInfo->nextProp;
 		}
-	}  
+	}
 
+  const ClassTblEntry * const pClassForPropDef =
+	lookupClassEntry (AUID_AAFPropertyDef);
+  assert (pClassForPropDef);
 
   assert (propIdx == numProps);
   for (propIdx = 0; propIdx < numProps; propIdx++)
@@ -521,16 +529,24 @@ void ImplAAFBuiltinClasses::instantiateProps ()
 	  OMPropertySet * ps = _axPropDefs[propIdx].pPropDef->propertySet();
 	  assert (ps);
 	  size_t numOmProps = ps->count ();
-	  size_t context = 0;
-	  while (numOmProps--)
+	  
+	  const ClassTblEntry * pClass = 0;
+	  for (pClass = pClassForPropDef; pClass; pClass = pClass->pParent)
 		{
-		  OMProperty * p = 0;
-		  ps->iterate (context, p);
-		  assert (p);
-		  ImplAAFPropertyDef * pd = lookupAxProp (p->propertyId());
-		  assert (pd);
-		  p->initialize (pd);
+		  const PropTblEntry * pProp = 0;
+		  for (pProp = pClass->pProperties; pProp; pProp = pProp->nextProp)
+			{
+			  assert (pProp);
+			  OMProperty * p = ps->get (pProp->tag);
+			  assert (p);
+			  ImplAAFPropertyDef * pd = lookupAxProp (pProp->tag);
+			  assert (pd);
+			  p->initialize (pd);
+			  numOmProps--;
+			}
+		  assert (pClass != pClass->pParent);
 		}
+	  assert (0 == numOmProps);
 	}
 }
 
@@ -634,22 +650,34 @@ void ImplAAFBuiltinClasses::FinishInitClasses ()
 	{
 	  const ClassTblEntry * cte = lookupClassEntry(*sAxClassIDs[classIdx]);
 
-
 	  ImplAAFClassDef * pcd = _axClassDefs[classIdx];
 	  assert (pcd);
 	  OMPropertySet * ps = pcd->propertySet();
 	  assert (ps);
 	  size_t numOmProps = ps->count ();
-	  size_t context = 0;
-	  while (numOmProps--)
+
+	  const ClassTblEntry * const pClassForClassDef =
+		lookupClassEntry (AUID_AAFClassDef);
+	  assert (pClassForClassDef);
+
+	  const ClassTblEntry * pClass = 0;
+	  for (pClass = pClassForClassDef; pClass; pClass = pClass->pParent)
 		{
-		  OMProperty * p = 0;
-		  ps->iterate (context, p);
-		  assert (p);
-		  ImplAAFPropertyDef * pd = lookupAxProp (p->propertyId());
-		  assert (pd);
-		  p->initialize (pd);
+		  const PropTblEntry * pProp = 0;
+		  for (pProp = pClass->pProperties; pProp; pProp = pProp->nextProp)
+			{
+			  assert (pProp);
+			  OMProperty * p = ps->get (pProp->tag);
+			  assert (p);
+			  ImplAAFPropertyDef * pd = lookupAxProp (pProp->tag);
+			  assert (pd);
+			  p->initialize (pd);
+			  numOmProps--;
+			}
+		  assert (pClass != pClass->pParent);
 		}
+	  assert (0 == numOmProps);
+	  
 	}
 }
 
@@ -824,7 +852,7 @@ bool ImplAAFBuiltinClasses::sInitBuiltins ()
 			{
 			  // 'parent' is parent of 'this'
 			  sBuiltinClassTable[thisIdx].pParent =
-				&sBuiltinClassTable[thisIdx];
+				&sBuiltinClassTable[parentIdx];
 			  break; // out of 'parent' loop
 			}
 		}
