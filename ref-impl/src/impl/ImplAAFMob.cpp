@@ -43,6 +43,9 @@
 #include "ImplAAFContentStorage.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFTimelineMobSlot.h"
+#include "ImplAAFSourceClip.h"
+#include "ImplAAFSequence.h"
+
 
 #include <assert.h>
 #include "AAFResult.h"
@@ -52,6 +55,7 @@
 extern "C" const aafClassID_t CLSID_AAFMobSlot;
 extern "C" const aafClassID_t CLSID_AAFTimelineMobSlot;
 extern "C" const aafClassID_t CLSID_EnumAAFMobSlots;
+extern "C" const aafClassID_t CLSID_AAFSourceClip;
 
 ImplAAFMob::ImplAAFMob ()
 : _mobID(			PID_MOB_MOBID,			"MobID"),
@@ -1246,6 +1250,84 @@ AAFRESULT
 	*ppMobSlot = obj;
 
 	return rc;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMob::AddPhysSourceRef (aafAppendOption_t  addType,
+							aafRational_t  editrate,
+                           aafSlotID_t  aMobSlot,
+                           aafUID_t *pEssenceKind,
+							aafSourceRef_t  ref,
+                           aafLength_t  srcRefLength)
+{
+	ImplAAFComponent		*cpnt = NULL;
+	ImplAAFSegment			*slotSeg = NULL;
+	AAFRESULT				status = AAFRESULT_SUCCESS;
+	aafSlotID_t				tmpSlotID;
+	ImplAAFSourceClip		*sclp = NULL;
+	ImplAAFSequence			*sequence = NULL;
+	ImplAAFMobSlot			*slot = NULL;
+	ImplAAFTimelineMobSlot	*newSlot = NULL;
+	ImplEnumAAFComponents	*compEnum = NULL;
+	aafPosition_t			zeroPos;
+
+	XPROTECT()
+	{
+		CvtInt32toInt64(0, &zeroPos);
+		sclp = (ImplAAFSourceClip *)CreateImpl(CLSID_AAFSourceClip);
+		sclp->InitializeSourceClip(pEssenceKind, &srcRefLength, ref);
+				
+		status = FindSlotBySlotID(aMobSlot, &slot);
+		if (status == AAFRESULT_SUCCESS)
+		{
+			CHECK(slot->GetSlotID(&tmpSlotID));
+			if(addType == kAAFForceOverwrite)
+			{
+				CHECK(slot->SetSegment(sclp));
+			}
+			else if(addType == kAAFAppend)
+			{
+				CHECK(slot->GetSegment(&slotSeg));
+				if(slotSeg != NULL)
+				{
+					CHECK(slotSeg->GenerateSequence(&sequence));
+					CHECK(sequence->AppendComponent (sclp));
+
+					sequence->ReleaseReference();
+					sequence = NULL;
+					slotSeg->ReleaseReference();
+					slotSeg = NULL;
+				}
+			}
+			//!!! else return an error
+		}
+		else
+		{
+				CHECK(AppendNewTimelineSlot(editrate, sclp,
+								aMobSlot, L"ASlot", zeroPos, &newSlot) );
+			newSlot->ReleaseReference();
+			newSlot = NULL;
+		}
+
+		sclp->ReleaseReference();
+		sclp = NULL;
+	} /* XPROTECT */
+	XEXCEPT
+	{
+		if(sequence != NULL)
+			sequence->ReleaseReference();
+		if(sclp != NULL)
+			sclp->ReleaseReference();
+		if(slot != NULL)
+			slot->ReleaseReference();
+		if(slotSeg != NULL)
+			slotSeg->ReleaseReference();
+		if(cpnt != NULL)
+			cpnt->ReleaseReference();
+	}
+	XEND;
+
+	return (AAFRESULT_SUCCESS);
 }
 
 extern "C" const aafClassID_t CLSID_AAFMob;
