@@ -103,7 +103,7 @@ OMFile* OMFile::openExistingModify(const wchar_t* fileName,
   //   @rdesc The newly created <c OMFile>.
 OMFile* OMFile::openNewWrite(const wchar_t* fileName,
                             const OMClassFactory* factory,
-                            const OMByteOrder byteOrder,
+                            const OMByteOrder /*byteOrder*/,
                             OMStorable* root)
 {
   TRACE("OMFile::openNewWrite");
@@ -154,7 +154,7 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
   //   @parm The root <c OMStorable> in the newly created file.
   //   @rdesc The newly created <c OMFile>.
 OMFile* OMFile::openNewTransient(const OMClassFactory* factory,
-                                 const OMByteOrder byteOrder,
+                                 const OMByteOrder /*byteOrder*/,
                                  OMStorable* root)
 {
   TRACE("OMFile::openNewTransient");

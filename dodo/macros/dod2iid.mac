@@ -419,3 +419,12 @@ const IID IID_I.this-module = {0x%01,0x%02,0x%03,{0x%04,0x%05,0x%06,0x%07,0x%08,
 #c
 #startm AD_XFUNCTION4 22
 #endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c macro for things which are not to be exported.
+#c
+#startm AD_NO_EXPORT 01
+%01\
+#endm
