@@ -296,14 +296,15 @@ extern "C"
   void CAAFTypeDefSet_Read(IAAFHeader* pHeader, IAAFDictionary* pDictionary);
 } 
 
-extern "C" HRESULT CAAFTypeDefSet_test(testMode_t /*mode*/)
+extern "C" HRESULT CAAFTypeDefSet_test(testMode_t mode)
 {
   HRESULT hr = S_OK;
   aafCharacter_constptr pFileName = L"AAFTypeDefSetTest.aaf";
   
   try
   {
-    CAAFTypeDefSet_Create(pFileName);
+    if(mode == kAAFUnitTestReadWrite)
+		CAAFTypeDefSet_Create(pFileName);
     CAAFTypeDefSet_Open(pFileName);
   }
   catch (HRESULT& rhr)
