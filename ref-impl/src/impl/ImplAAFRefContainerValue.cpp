@@ -103,14 +103,7 @@ OMReferenceContainer* ImplAAFRefContainerValue::referenceContainer(void) const
   OMProperty* p = property();
   OMContainerProperty* cp = dynamic_cast<OMContainerProperty*>(p);
   assert(cp != 0);
-  // Perhaps the following nastiness should be hidden inside
-  // the Object Manager - tjb
-  OMReferenceContainer* result = 0;
-
-  result = dynamic_cast<OMReferenceSetProperty*>(cp);
-  if (result == 0)
-    result = dynamic_cast<OMReferenceVectorProperty*>(cp);
-
+  OMReferenceContainer* result = cp->referenceContainer();
   assert(result != 0);
   return result;
 }
