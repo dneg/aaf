@@ -576,23 +576,40 @@ static HRESULT TestTypeDefInt ()
 	  caughtHr = rResult;
 	}
 
-  ptds8->Release();
-  ptds16->Release();
-  ptds32->Release();
-  ptds64->Release();
-  ptdu8->Release();
-  ptdu16->Release();
-  ptdu32->Release();
-  ptdu64->Release();
-  pDict->Release();
-  pHeader->Release();
-  hr = pFile->Save();
-  if (! SUCCEEDED (hr)) return hr;
-  hr = pFile->Close();
-  if (! SUCCEEDED (hr)) return hr;
-  pFile->Release();
+  if (ptds8)
+    ptds8->Release();
+  if (ptds16)
+    ptds16->Release();
+  if (ptds32)
+    ptds32->Release();
+  if (ptds64)
+    ptds64->Release();
+  if (ptdu8)
+    ptdu8->Release();
+  if (ptdu16)
+    ptdu16->Release();
+  if (ptdu32)
+  	ptdu32->Release();
+  if (ptdu64)
+  	ptdu64->Release();
+  if (pDict)
+    pDict->Release();
+  if (pHeader)
+  	pHeader->Release();
+  if (pFile)
+  {
+	hr = pFile->Save();
+	if (! SUCCEEDED (hr))
+	{  
+	  pFile->Release();
+	  return hr;
+	}
+	hr = pFile->Close();
+	pFile->Release();
+  }
 
-  return AAFRESULT_SUCCESS;
+  
+  return (caughtHr != AAFRESULT_SUCCESS) ? caughtHr : hr;
 }
 
 

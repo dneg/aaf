@@ -57,7 +57,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFDictionary*  pDictionary = NULL;
 	IAAFSourceMob	*pSourceMob = NULL;
 	IAAFMob			*pMob = NULL;
-	IAAFEssenceDescriptor *edesc;
+	IAAFEssenceDescriptor *edesc = NULL;
 	aafProductIdentification_t	ProductInfo;
 	aafUID_t					newUID;
 	HRESULT						hr = S_OK;
