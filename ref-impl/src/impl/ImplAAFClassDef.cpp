@@ -140,8 +140,10 @@ AAFRESULT STDMETHODCALLTYPE
       const ImplAAFClassDef * pParentClass,
       const aafCharacter * pClassName)
 {
-	ImplAAFClassDef	*oldParent;
+//	ImplAAFClassDef	*oldParent;
 	if (!pClassName) return AAFRESULT_NULL_PARAM;	
+  if (pParentClass && !pParentClass->attached())
+    return AAFRESULT_OBJECT_NOT_ATTACHED;	
 	
 	HRESULT hr;
 	hr = SetName (pClassName);
@@ -150,18 +152,7 @@ AAFRESULT STDMETHODCALLTYPE
 	hr = SetAUID (classID);
 	if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 	
-	// find out if this OperationDef is already set
-	if(!_ParentClass.isVoid())
-	{
-		oldParent = _ParentClass;
-		if (oldParent != 0)
-			oldParent->ReleaseReference();
-	}
-	if(pParentClass)
-	{
-		pParentClass->AcquireReference();
-		_ParentClass = pParentClass;
-	}
+	_ParentClass = pParentClass;
 	
 	return AAFRESULT_SUCCESS;
 }
