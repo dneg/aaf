@@ -321,7 +321,6 @@ aafUInt32 PersonnelRecordGetNameBufLen (IAAFObject * pObj)
   check (tds->GetCount (pv, &numChars));
 
   // Add 1 for null terminator.
-  return numChars + 1;
   cd->Release();
   cd=NULL;
   pd->Release();
@@ -332,6 +331,7 @@ aafUInt32 PersonnelRecordGetNameBufLen (IAAFObject * pObj)
   td=NULL;
   tds->Release();
   tds=NULL;
+  return numChars + 1;
 }
 
 
