@@ -62,8 +62,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMob*					pMob = NULL;
 	IAAFMobSlot*				pNewSlot = NULL;
 	IAAFTransition*				pTransition = NULL;
-	IAAFGroup*					pGroup = NULL;
-	IAAFGroup*					pGroupCopy = NULL;
+	IAAFEffect*					pEffect = NULL;
+	IAAFEffect*					pEffectCopy = NULL;
 	IAAFSegment*				pSegment = NULL;
 	IAAFComponent*				pComponent = NULL;
 	IAAFFiller*					pFiller = NULL;
@@ -176,12 +176,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 												IID_IAAFEffectDef,
 												(IUnknown **)&pEffectDef));
 		// Create an empty Effect object !!
-		checkResult(pDictionary->CreateInstance(&AUID_AAFGroup,
-												IID_IAAFGroup,
-												(IUnknown **)&pGroup));
+		checkResult(pDictionary->CreateInstance(&AUID_AAFEffect,
+												IID_IAAFEffect,
+												(IUnknown **)&pEffect));
 
-		checkResult(pTransition->Create (&datadef, transitionLength, cutPoint, pGroup));
-		checkResult(pGroup->Initialize(&datadef, transitionLength, pEffectDef));
+		checkResult(pTransition->Create (&datadef, transitionLength, cutPoint, pEffect));
+		checkResult(pEffect->Initialize(&datadef, transitionLength, pEffectDef));
 		checkResult(pTransition->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
 
 		// now append the transition
@@ -228,8 +228,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pEffectDef->Release();
 
 
-	if (pGroup)
-		pGroup->Release();
+	if (pEffect)
+		pEffect->Release();
 
 	if (pMob)
 		pMob->Release();
@@ -277,7 +277,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFTransition*				pTransition = NULL;
 	IAAFComponent*				pComponent = NULL;
 	IAAFFiller*					pFiller = NULL;
-	IAAFGroup*					pGroup = NULL;
+	IAAFEffect*					pEffect = NULL;
 	IEnumAAFComponents*			pCompIter = NULL;
 //	aafUID_t					datadef ;
 	aafLength_t					transitionLength;
@@ -337,7 +337,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 						// This is the transition 
 						checkResult(pTransition->GetCutPoint (&cutPoint));
 						checkResult(pComponent->GetLength(&transitionLength));
-						checkResult(pTransition->GetEffect(&pGroup));
+						checkResult(pTransition->GetEffect(&pEffect));
 						// Check results !!
 						checkExpression(cutPoint == 0, AAFRESULT_TEST_FAILED);
 						checkExpression(transitionLength == 100, AAFRESULT_TEST_FAILED);
@@ -364,8 +364,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	if (pTransition)
 		pTransition->Release();
 
-	if (pGroup)
-		pGroup->Release();
+	if (pEffect)
+		pEffect->Release();
 
 	if (pComponent)
 		pComponent->Release();
