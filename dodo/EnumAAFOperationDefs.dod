@@ -1,5 +1,5 @@
 #startm .this-module 0
-EnumAAFEffectDefs\
+EnumAAFOperationDefs\
 #endm
 #startm .parent-module 0
 AAFRoot\
@@ -21,7 +21,7 @@ AD_HEAD
 \***********************************************/
 
 
-AD_FORWARD_DECLARATION(AAFEffectDef)
+AD_FORWARD_DECLARATION(AAFOperationDef)
 
 
 AD_CLASS_UUID(92B88022, 2B2B, 11D2, BF, 7E, 00, 10, 4B, C9, 15, 6D)
@@ -32,20 +32,20 @@ AD_XCLASS_BEGIN(Concrete, Transient)
 AD_XMETHOD1(NextOne,
 			[out\,retval],
 			objOut,
-			AAFEffectDef,
-			ppEffectDef,
-			The Next EffectDefinition,
+			AAFOperationDef,
+			ppOperationDef,
+			The Next OperationDefinition,
 			Enumerates to the next element in the enumerators list. The caller is responsible for 
   // properly releasing the returned pointer when it is no longer needed.
   // @comm This is a just simplified version of the Next method. )
 
 AD_XMETHOD3(Next,
-			[in], objPass, aafUInt32, count, number of effect definitions requested,
+			[in], objPass, aafUInt32, count, number of operation definitions requested,
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
-			objOut, AAFEffectDef, ppEffectDefs, array to receive effect definitions,
+			objOut, AAFOperationDef, ppOperationDefs, array to receive operation definitions,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
-			number of actual EffectDefs fetched into ppEffectDefs array,
-			Enumerates the next count elements \(AAFEffectDef pointers\) in 
+			number of actual EffectDefs fetched into ppOperationDefs array,
+			Enumerates the next count elements \(AAFOperationDef pointers\) in 
   // the enumerator's list\, returning them in the given array along with the actual 
   // number of enumerated elements in pcFetched. The caller is responsible for 
   // properly releasing the returned pointers.)
@@ -53,7 +53,7 @@ AD_XMETHOD3(Next,
 AD_METHOD1(Skip,
 		   [in], aafUInt32, count, Number of elements to skip,
 		   Instructs the enumerator to skip the next count elements in the enumeration so that 
-  // the next call to EnumAAFEffectDefs::Next will not return 
+  // the next call to EnumAAFOperationDefs::Next will not return 
   // those elements.)
 
 AD_METHOD0(Reset,
@@ -65,10 +65,10 @@ Instructs the enumerator to position itself at the beginning of the list of elem
 AD_XMETHOD1(Clone,
 			[out\,retval],
 			objOut,
-			EnumAAFEffectDefs,
+			EnumAAFOperationDefs,
 			ppEnum,
 			new enumeration,
-			Creates another effect definition enumerator with the same state as the current 
+			Creates another operation definition enumerator with the same state as the current 
   // enumerator to iterate over the same list. This method makes it possible to 
   // record a point in the enumeration sequence in order to return to that point 
   // at a later time.
