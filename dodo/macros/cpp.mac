@@ -222,6 +222,18 @@ AD_CLASS_BEGIN\
 
 #ccccccccccccccccccccccccccc
 #c
+#c Ends a class definition for classes which support more than the
+#c primary COM interface.
+#c
+#c Arguments: additional interface name
+#c
+#startm AD_COM_EXT2_CLASS_BEGIN 02
+AD_CLASS_BEGIN\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Starts a class definition with no parent class
 #c
 #c Arguments: none
