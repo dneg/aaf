@@ -670,7 +670,7 @@ const aafUID_t kAAFPropID_SoundDescriptor_DialNorm =
 {0x04020701, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05}};
 
 //{04020402-0000-0000-060e-2b3401010102}
-const aafUID_t kAAFPropID_SoundDescriptor_SoundCompression =
+const aafUID_t kAAFPropID_SoundDescriptor_Compression =
 {0x04020402, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
 
 //{04020302-0100-0000-060e-2b3401010105}
@@ -950,7 +950,7 @@ const aafUID_t kAAFPropID_CompositionMob_DefFadeEditUnit =
 {0x05300403, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
 
 //{06010104-010a-0000-060e-2b3401010108}
-const aafUID_t kAAFPropID_CompositionMob_CompositionRendering =
+const aafUID_t kAAFPropID_CompositionMob_Rendering =
 {0x06010104, 0x010a, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x08}};
 
 //{06010104-0203-0000-060e-2b3401010102}

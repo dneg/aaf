@@ -48,7 +48,7 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Fri Jul  2 17:07:36 BST 2004
+// This file was generated on Mon Jul  5 15:23:18 BST 2004
 // by user phil on system pilot16.
 //
 // Key to macros.
@@ -2988,7 +2988,7 @@ AAF_CLASS(SoundDescriptor,
     false,
     false,
     SoundDescriptor)
-  AAF_PROPERTY(SoundCompression,
+  AAF_PROPERTY(Compression,
     // {04020402-0000-0000-060E-2B3401010102}
     AAF_LITERAL_AUID(0x04020402,
       0x0000, 0x0000,
@@ -4030,7 +4030,7 @@ AAF_CLASS(CompositionMob,
     false,
     false,
     CompositionMob)
-  AAF_PROPERTY(CompositionRendering,
+  AAF_PROPERTY(Rendering,
     // {06010104-010A-0000-060E-2B3401010108}
     AAF_LITERAL_AUID(0x06010104,
       0x010A, 0x0000,
