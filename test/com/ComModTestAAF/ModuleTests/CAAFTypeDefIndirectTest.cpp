@@ -458,7 +458,7 @@ static void ValidatePropertyValue(IAAFDictionary *pDictionary,
           (aafDataBuffer_t)pActualData);
   checkExpression(!memcmp(pActualData,pExpectedData,expectedDataSize),
 	  AAFRESULT_TEST_FAILED);
-  delete(pActualData);
+  delete [] pActualData;
 }
 
 static void ValidateTestPropertyValues(IAAFDictionary *pDictionary,
@@ -531,7 +531,7 @@ static void ValidateTestPropertyValues(IAAFDictionary *pDictionary,
 	  count*sizeof(aafCharacter)));
 	checkExpression(memcmp(pString,kSequenceAnnotation1,count*sizeof(aafCharacter))
 	  ==0,AAFRESULT_TEST_FAILED);
-	delete(pString);
+	delete [] pString;
   }
 
   // Validate UInt8 array property value via GetActualValue()
@@ -552,7 +552,7 @@ static void ValidateTestPropertyValues(IAAFDictionary *pDictionary,
 	  count*sizeof(aafUInt8)));
 	checkExpression(memcmp(pArray,kSequenceAnnotation2,count*sizeof(aafUInt8))==0,
 	  AAFRESULT_TEST_FAILED);
-	delete(pArray);
+	delete [] pArray;
   }
 
   // Validate property value of renamed type via GetActualValue()

@@ -322,7 +322,7 @@ static void ReadTypeDefRenameFile(aafWChar *pFilename)
 	aafWChar *pNameBuf=new aafWChar[iNameLen/sizeof(aafWChar)];
 	checkResult(pWordMetaDefinition->GetName(pNameBuf,iNameLen));
 	checkExpression(!wcscmp(pNameBuf,gpAliasName));
-	delete(pNameBuf);
+	delete [] pNameBuf;
 
 	// Look up definition of known base type (UInt16)
 	IAAFTypeDefSP pUInt16TypeDef;

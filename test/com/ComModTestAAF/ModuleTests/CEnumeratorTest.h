@@ -222,7 +222,7 @@ void CEnumeratorTest<TEnum,TItem>::Run(testMode_t mode)
 			}
 		}
 		checkExpression(iEnumeratedItems==iItemsCount);
-		delete(ppCurItems);
+		delete [] ppCurItems;
 	}
 
 	for(aafUInt32 iSkipSize=1;iSkipSize<=iItemsCount-1;iSkipSize++)
@@ -284,7 +284,7 @@ void CEnumeratorTest<TEnum,TItem>::Run(testMode_t mode)
 		checkExpression(pClone->NextOne(&pCurItem)==AAFRESULT_NO_MORE_OBJECTS);
 	}
 	
-	delete(pEnumeratedAUIDs);
+	delete [] pEnumeratedAUIDs;
 
 	pFile->Save();
 	pFile->Close();

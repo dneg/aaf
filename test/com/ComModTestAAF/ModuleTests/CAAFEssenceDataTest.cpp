@@ -211,7 +211,7 @@ void EssenceDataTest::cleanupReferences()
 
   if (NULL != _buffer)
   {
-    delete _buffer;
+    delete [] _buffer;
     _buffer = NULL;
   }
 
@@ -277,7 +277,7 @@ void EssenceDataTest::setBufferSize(aafUInt32 bufferSize)
   // Allocate the buffer.
   if (NULL != _buffer && bufferSize > _bufferSize)
   {
-    delete _buffer;
+    delete [] _buffer;
     _buffer = NULL;
   }
 

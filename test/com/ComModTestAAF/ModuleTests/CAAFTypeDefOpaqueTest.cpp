@@ -274,7 +274,7 @@ static void CreateTypeDefOpaqueFile(aafWChar *pFilename)
 	checkResult(pTypeDefOpaque->CreateValueFromHandle(pHandle,handleBufLen,
 		&pCreatedOpaquePropertyValue));
 	// No longer need this handle
-	delete(pHandle);
+	delete [] pHandle;
 
 	// Verify opaque data
 	aafDataBuffer_t pOpaqueData;
@@ -284,7 +284,7 @@ static void CreateTypeDefOpaqueFile(aafWChar *pFilename)
 	checkExpression(opaqueDataLen==sizeof(testInitialOpaqueData));
 	checkExpression(!memcmp(testInitialOpaqueData,pOpaqueData,
 		sizeof(testInitialOpaqueData)));
-	delete(pOpaqueData);
+	delete [] pOpaqueData;
 
 	// Create an new opaque property, get a handle from it, and use this
 	// to set the handle of our created property via SetHandle()
@@ -300,7 +300,7 @@ static void CreateTypeDefOpaqueFile(aafWChar *pFilename)
 	checkResult(pTypeDefOpaque->SetHandle(pCreatedOpaquePropertyValue,
 		newHandleBufLen,pNewHandle));
 	// no longer need this handle
-	delete(pNewHandle);
+	delete [] pNewHandle;
 
 	// Verify new opaque data
 	GetDataFromOpaquePropertyValue(pDictionary,pOpaquePropertyValue,
@@ -308,7 +308,7 @@ static void CreateTypeDefOpaqueFile(aafWChar *pFilename)
 	checkExpression(opaqueDataLen==sizeof(testSavedOpaqueData));
 	checkExpression(!memcmp(testSavedOpaqueData,pOpaqueData,
 		sizeof(testSavedOpaqueData)));
-	delete(pOpaqueData);
+	delete [] pOpaqueData;
 
 	// Add an optional opaque property to AAFSequence.
 	IAAFClassDefSP pSequenceClassDef;
@@ -417,7 +417,7 @@ static void ReadTypeDefOpaqueFile(aafWChar *pFilename)
 	checkExpression(opaqueDataLen==sizeof(testSavedOpaqueData));
 	checkExpression(!memcmp(testSavedOpaqueData,pOpaqueData,
 		sizeof(testSavedOpaqueData)));
-	delete(pOpaqueData);
+	delete [] pOpaqueData;
 
 	pFile->Close();
 }
