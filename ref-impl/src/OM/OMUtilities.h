@@ -71,6 +71,23 @@ wchar_t* copyWideString(wchar_t* destination,
                         const wchar_t* source,
                         const size_t length);
 
+  // @func Concatenate wide character strings. Same as strncat(), but for wide
+  //       characters. Append up to <p length> characters from <p source>
+  //       to the end of <p destination>. If the null character that terminates
+  //       <p source> is encountered before <p length> characters have been
+  //       copied, then the null character is copied but no more. If no null
+  //       character appears among the first <p length> characters of
+  //       <p source>, then the first <p length> characters are copied and a
+  //       null character is supplied to terminate <p destination>, that is,
+  //       <p length> + 1 characters in all are written.  
+  //   @parm The destination buffer.
+  //   @parm The wide character string to copy.
+  //   @parm The number of characters to copy.
+  //   @rdesc The resulting wide character string.
+wchar_t* concatenateWideString(wchar_t* destination,
+                               const wchar_t* source,
+                               const size_t length);
+
   // @func Save a wide character string. Same as saveString() but for wide
   //       characters.
   //   @parm The wide character string to save.
@@ -80,6 +97,30 @@ wchar_t* saveWideString(const wchar_t* string);
 int compareWideString(const wchar_t* string1, const wchar_t* string2);
 
 char* convertWideString(const wchar_t* string);
+
+  // @func The number of characters needed to represent <p i> as a
+  //       hexadecimal string without leading zeros.
+  //   @parm A non-zero unsigned integer.
+  //   @rdesc The number of characters.
+size_t stringSize(OMUInt32 i);
+
+  // @func Convert <p i> hexadecimal string without leading zeros.
+  //   @parm A non-zero unsigned integer.
+  //   @parm The resulting string.
+  //   @parm The size, in characters, of the result buffer.
+void toWideString(OMUInt32 i, wchar_t* result, size_t resultSize);
+
+   // @func Squeeze a string to fit within a given size, omitting characters
+   //       from the center if necessary.
+  //   @parm The string to be squeezed.
+  //   @parm The length of the string to be squeezed.
+  //   @parm The resulting string.
+  //   @parm The size, in characters, of the result buffer.
+  //   @rdesc The size, in characters, of the resulting string.
+size_t squeezeWideString(const wchar_t* clearName,
+                         size_t clearNameSize,
+                         wchar_t* squeezedName,
+                         size_t squeezedNameSize);
 
   // @func Save a character string.
   //   @parm The character string to save.

@@ -113,6 +113,29 @@ wchar_t* copyWideString(wchar_t* destination,
   return destination;
 }
 
+wchar_t* concatenateWideString(wchar_t* destination,
+                               const wchar_t* source,
+                               const size_t length)
+{
+  TRACE("concatenateWideString");
+
+  PRECONDITION("Valid destination", validWideString(destination));
+  PRECONDITION("Valid source", validWideString(source));
+  PRECONDITION("Valid length", length > 0); // Different to strncat()
+
+  wchar_t* d = destination;
+  while (*d != 0) {
+    ++d;
+  }
+
+  const wchar_t* s = source;
+  for (size_t i = 0; ((i < length) && (*s != 0)); i++) {
+    *d++ = *s++;
+  }
+  *d = 0;
+  return destination;
+}
+
 wchar_t* saveWideString(const wchar_t* string)
 {
   TRACE("saveWideString");
@@ -164,6 +187,7 @@ char* convertWideString(const wchar_t* string)
   char* result = new char[length + 1];
   ASSERT("Valid heap pointer", result != 0);
   size_t status = wcstombs(result, string, length + 1);
+  ASSERT("Successful conversion", status != (size_t)-1);
   return result;
 }
 
@@ -176,6 +200,93 @@ char* saveString(const char* string)
   char* result = new char[length];
   ASSERT("Valid heap pointer", result != 0);
   strcpy(result, string);
+  return result;
+}
+
+size_t stringSize(OMUInt32 i)
+{
+  TRACE("stringSize");
+
+  PRECONDITION("Valid integer", i > 0);
+
+  size_t result = 8;
+  int nibble;
+  while ((nibble = ((i & 0xf0000000) >> 28)) == 0) {
+    ASSERT("Valid result", result != 0);
+    result = result - 1;
+    i = i << 4;
+  }
+  return result;
+}
+
+void toWideString(OMUInt32 i, wchar_t* result, size_t resultSize)
+{
+  TRACE("toWideString");
+
+  PRECONDITION("Valid integer", i > 0);
+  PRECONDITION("Valid result buffer", result != 0);
+  PRECONDITION("Output string large enough", resultSize >= stringSize(i));
+
+  // Skip leading zeros
+  //
+  size_t digits = 8;
+  int nibble;
+  while ((nibble = ((i & 0xf0000000) >> 28)) == 0) {
+    ASSERT("Valid digits", digits > 0);
+    digits = digits - 1;
+    i = i << 4;
+  }
+
+  // Convert remaining digits to hex characters
+  //
+  wchar_t* hexDigits = L"0123456789abcdef";
+  wchar_t* p = result;
+  while (digits > 0) {
+    ASSERT("Valid nibble", ((nibble >= 0) && (nibble <= 15)));
+    *p++ = hexDigits[nibble];
+    i = i << 4;
+    nibble = ((i & 0xf0000000) >> 28);
+    ASSERT("Valid digits", digits > 0);
+    digits = digits - 1;
+  }
+  *p = 0;
+}
+
+size_t squeezeWideString(const wchar_t* clearName,
+                         size_t clearNameSize,
+                         wchar_t* squeezedName,
+                         size_t squeezedNameSize)
+{
+  TRACE("squeezeWideString");
+
+  PRECONDITION("Valid input name", validWideString(clearName));
+  PRECONDITION("Valid input name size", clearNameSize > 0);
+  PRECONDITION("Valid result buffer", squeezedName != 0);
+  PRECONDITION("Valid result buffer size", squeezedNameSize > 0);
+
+  size_t result;
+  if (clearNameSize <= squeezedNameSize) {
+    // It fits, just copy
+    copyWideString(squeezedName, clearName, clearNameSize + 1);
+    result = clearNameSize;
+  } else {
+    // Too big, squeeze it
+    wchar_t ch;
+    size_t half = squeezedNameSize / 2;
+    for (size_t i = 0; i < squeezedNameSize; i++) {
+      if (i < half) {         // Copy from bottom half
+        ch = clearName[i];
+      } else if (i == half) { // Show characters omitted
+        ch = L'-';
+      } else {                // Copy from top half
+        ch = clearName[clearNameSize - (squeezedNameSize - i)];
+      }
+      ASSERT("Valid character", ch != 0);
+      squeezedName[i] = ch;
+    }
+    squeezedName[squeezedNameSize] = 0;
+    result = squeezedNameSize;
+  }
   return result;
 }
 
