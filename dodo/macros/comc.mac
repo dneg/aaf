@@ -85,6 +85,7 @@
 #include "C.this-module.h"
 #include "Impl.this-module.h"
 #include "AAFResult.h"
+#include "CAAFEnumValidation.h"
 
 class OMAssertionViolation;
 
@@ -1738,6 +1739,23 @@ EXTERN_C const CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05,
 
 #ccccccccccccccccccccccccccc
 #c
+#c #define .enumIn-setup(T, externArg, aux)
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c arg3 = aux argument
+#c
+#startm .enumIn-setup 03
+  //
+  // set up for %02
+  //
+  if (! Is_%01_Valid(%02))
+    return AAFRESULT_INVALID_ENUM_VALUE;
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c #define .objInArray-setup(T, externArg, aux)
 #c
 #c arg1 = unadorned type
@@ -1916,6 +1934,17 @@ internal%01\
 
 #ccccccccccccccccccccccccccc
 #c
+#c #define .enumIn-internalname(externArg)    (internArg)
+#c
+#c arg1 = external arg name
+#c
+#startm .enumIn-internalname 01
+%01\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c #define .objInArray-internalname(externArg)    (internArg)
 #c
 #c arg1 = external arg name
@@ -1969,6 +1998,18 @@ pinternal%01\
   //
   // no cleanup necessary for %02
   //
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .enumIn-cleanup(T, externArg, aux)      /* nothing */
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c
+#startm .enumIn-cleanup 03
+\
 #endm
 
 
