@@ -155,6 +155,7 @@ void C.this-module::InitRep (Impl.this-module * newRep)
 {
 #ifdef BOB_TEST
   assert (newRep);
+  assert (!_rep);
   _rep = newRep;
   newRep->InitContainer (this);
   // The InitContainer method holds onto a reference to this COM object. Since
