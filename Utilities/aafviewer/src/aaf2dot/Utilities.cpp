@@ -519,7 +519,7 @@ ProcessRecordString( string s )
       {
 	 ret.erase( index, 1 );
 	 ret.insert( index, "\\n" );
-	 index += 2;
+	 index += 1;
       }
       // escape special characters in quotes
       else if ( ret[ index ] == '"' ||
@@ -582,7 +582,7 @@ LimitAttributeSize( string attribute, int maxLength, int maxWidth )
 	 if (escape)
 	 {
 	    index++;
-	    if (index < retAttribute.size())
+	    if (index < (int)retAttribute.size())
 	    {
 	       retAttribute.insert(index,"\\n");
 	    }
