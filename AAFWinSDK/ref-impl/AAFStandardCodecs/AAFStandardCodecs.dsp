@@ -131,6 +131,14 @@ SOURCE="..\..\..\ref-impl\plugins\CAAFEssenceDataStream.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\plugins\CAAFEssenceFileContainer.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\plugins\CAAFEssenceFileStream.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFInProcServer.cpp"
 # End Source File
 # Begin Source File
