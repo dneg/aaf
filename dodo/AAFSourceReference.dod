@@ -47,15 +47,7 @@ AD_METHOD1(SetSourceMobSlotID,
 		   Sets the mob slot ID using the mobSlotID argument.)
 
 
-  //
-  // IAAFUnitTest interface method overrides
-  //
-.method-Test
-
-
-  //
-  // AAFSegment method overrides
-  //
+AAF_OVERRIDE(.method-Test)
 
 
 AD_CLASS_END

@@ -18,22 +18,25 @@ AAFObject\
 *                                          *
 \******************************************/
 
-AD_CLASS_BEGIN()
+AD_CLASS_BEGIN
 
-/****/
-AD_METHOD1(GetType,[out],AUID*,type,, Returns the AUID of the locator.)
-	//@comm Replaces part of omfmLocatorGetInfo
-/****/
-AD_METHOD1(GetPath,[in],AAFString,pathBuf, Pass in a string object which will be filled in, Return a full file path if available.)
+AD_METHOD1(GetType,
+		   [out],AUID_t*,type,,
+		   Returns the AUID of the locator.)
 	//@comm Replaces part of omfmLocatorGetInfo
 
-/****/
-AD_METHOD1(SetPath,[in],AAFString*,pathBuf,, Sets a full file path.)
+AD_GETOBJ_METHOD1(GetPath,
+				  [in],AAFString,pathBuf,
+				  Pass in a string object which will be filled in,
+				  Return a full file path if available.)
+	//@comm Replaces part of omfmLocatorGetInfo
 
-  //
-  // IAAFUnitTest interface method overrides
-  //
-.method-Test
+AD_SETOBJ_METHOD1(SetPath,
+		   [in],AAFString,pathBuf,,
+		   Sets a full file path.)
+
+
+AD_OVERRIDE(.method-Test)
 
 
 AD_CLASS_END

@@ -19,24 +19,20 @@ AAFObject\
 
 #include "myVector.h"
 
-AD_CLASS_BEGIN()
-/****/
+AD_CLASS_BEGIN
+
 AD_METHOD1(GetNumLocators,
-[out],aafInt32 *,count,,
-Return the number of locators attached to this media descriptor.)
-//@comm The number of locators may be zero if the media is in the current file.
+		   [out],aafInt32 *,count,,
+		   Return the number of locators attached to this media descriptor.)
+  //@comm The number of locators may be zero if the media is in the current file.
 
-/****/
 AD_METHOD2(GetNthLocator,
-[in],aafInt32,index,A 1-based index,
-[out],AAFLocator,result,Returns a reference to the object,
-Gets a particular locator from this media descriptor.)
-//@comm The number of locators may be zero if the media is in the current file.
+		   [in],aafInt32,index,A 1-based index,
+		   [out],AAFLocator,result,Returns a reference to the object,
+		   Gets a particular locator from this media descriptor.)
+  //@comm The number of locators may be zero if the media is in the current file.
 
-  //
-  // IAAFUnitTest interface method overrides
-  //
-.method-Test
+AD_OVERRIDE(.method-Test)
 
 
 AD_CLASS_END
