@@ -11,7 +11,7 @@
 #include "ImplAAFFile.h"
 
 #include "OMFile.h"
-#include "ImplAAFBaseClassFactory.h"
+#include "ImplAAFClassFactory.h"
 
 #include "ImplAAFSession.h"
 #include "ImplAAFHeader.h"
@@ -46,7 +46,7 @@ ImplAAFFile::Initialize ()
 	}
 
 	// Create the class factory for base classes.
-	_classFactory = new ImplAAFBaseClassFactory;
+	_classFactory = new ImplAAFClassFactory;
 	if (NULL == _classFactory)
 		return AAFRESULT_NOMEMORY;
 
