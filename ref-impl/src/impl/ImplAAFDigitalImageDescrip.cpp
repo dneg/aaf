@@ -93,20 +93,6 @@ ImplAAFDigitalImageDescriptor::ImplAAFDigitalImageDescriptor ()
 	videoLineMap[0] = 0;
 	videoLineMap[1] = 1;
 	_videoLineMap.setValue(videoLineMap, 2*sizeof(aafInt32));
-	// Initialize Optional properties
-
-	_compression = kAAFNoCodec;
-	_sampledHeight = 0;
-	_sampledWidth = 0;
-	_sampledXOffset = 0;
-	_sampledYOffset = 0;
-	_displayHeight = 0;
-	_displayWidth = 0;
-	_displayXOffset = 0;
-	_displayYOffset = 0;
-	_alphaTransparency = kAAFMinValueTransparent;
-	_gamma = zeroID;
-	_imageAlignmentFactor = 0;
 }
 
 
@@ -228,7 +214,10 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDigitalImageDescriptor::GetCompression (aafUID_t* pCompression)
 {
 	if (pCompression == NULL)
-		return AAFRESULT_NULL_PARAM;
+	  return AAFRESULT_NULL_PARAM;
+
+	if (!_compression.isPresent())
+	  return AAFRESULT_PROP_NOT_PRESENT;
 
 	*pCompression = _compression;
 
