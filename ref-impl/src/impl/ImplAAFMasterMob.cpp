@@ -91,16 +91,13 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(pSegment->GetLength(&slotLength));
 		CHECK(pSegment->GetDataDef(&DataDef));
 
+		pSegment->ReleaseRef();
+		pMobSlot->ReleaseRef();
+		
 		// Make sure the slot contains the expected media type.
 		if (memcmp(&DataDef, pDataDef, sizeof(aafUID_t)) != 0)
 			return AAFRESULT_INVALID_DATAKIND;
 
-		// TODO: Release segment and mob slot
-		//if (pSegment)
-		//	pSegment->ReleaseObject();
-		//if (pMobSlot)
-		//	pMobSlot->ReleaseObject();
-		
 		CvtInt32toPosition(0, zeroPos);
 
 		ref.sourceID = fileMobID;
@@ -112,15 +109,11 @@ AAFRESULT STDMETHODCALLTYPE
 		{
 			ImplAAFMobSlot	*pNewSlot = NULL;
 
-			pSrcClip->InitializeSourceClip(pDataDef, &slotLength, ref);
+			CHECK(pSrcClip->InitializeSourceClip(pDataDef, &slotLength, ref));
 			CHECK(AppendNewSlot(pSrcClip, slotID, pSlotName, &pNewSlot));
 
-			// TODO: Release the new slot
-			//if (pNewSlot)
-			//	pNewSlot->ReleaseObject();
-
-			// TODO: Release source clip
-			//	pSrcClip->ReleaseObject();
+			pNewSlot->ReleaseRef();
+			pSrcClip->ReleaseRef();
 		}
 
 	} /* XPROTECT */
@@ -307,12 +300,8 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(FindSlotBySlotID(slotID, &pSlot));
 		CHECK(pSlot->GetSegment(&pSegment));
 		CHECK(pSegment->NumRepresentations(pNumReps));
-
-		// TODO: Release reference to segment and slot
-		//if (pSegment)
-		//	pSegment->ReleaseObject();
-		//if (pSlot)
-		//	pSlot->ReleaseObject();
+		pSegment->ReleaseRef();
+		pSlot->ReleaseRef();
 	}
 	XEXCEPT
 	XEND
