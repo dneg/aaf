@@ -166,6 +166,62 @@ AD_XMETHOD1(GetHorizontalSubsampling,
   //   - pHorizontalSubsampling arg is NULL.)
 
 
+AD_XMETHOD1(SetVerticalSubsampling,
+			[in],
+				objPass,
+				aafUInt32,
+				VerticalSubsampling,
+				Integer value.,
+			Sets the VerticalSubsampling property.  Specifies the ratio of
+  // luminance sampling to chrominance sampling in the vertical direction.
+  // For 4:2:2 video\, the value is 2\, which means that there are twice as
+  // many luminance values as there are color-difference values.
+  // Another typical value is 1; however other values are permitted by
+  // the reference implementation.
+  //
+  // If this method fails\, the VerticalSubsampling property will
+  // not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.)
+
+
+AD_XMETHOD1(GetVerticalSubsampling,
+			[out],
+				objPass,
+				aafUInt32 *,
+				pVerticalSubsampling,
+				Address to store the integer value.,
+			Gets the VerticalSubsampling property.  Specifies the ratio of
+  // luminance sampling to chrominance sampling in the vertical
+  // direction.  For 4:2:2 video\, the value is 2\, which means that
+  // there are twice as many luminance values as there are
+  // color-difference values.  Another typical value is 1; however
+  // other values are permitted by the reference implementation.
+  //
+  // Succeeds if all of the following are true:
+  // - pVerticalSubsampling is a valid pointer.
+  // 
+  // If this method fails\, *pVerticalSubsampling will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pVerticalSubsampling arg is NULL.)
+
+
 AD_XMETHOD1(SetColorSiting,
 			[in],
 				enumIn,
