@@ -59,14 +59,13 @@ public:
     // @cmember Restore the class id of this <c OMStoredObject>.
   void restore(OMClassId& cid);
 
-    // @cmember Save the <c OMProperty> <p p> in this <c OMStoredObject>.
-  void save(OMProperty* p);
+    // @cmember Save the <c OMPropertSet> <p p properties> in this
+    //          <c OMStoredObject>.
+  void save(const OMPropertySet& properties);
 
     // @cmember Restore the <c OMPropertySet> <p properties> into
     //          this <c OMStoredObject>.
   void restore(OMPropertySet& properties);
-
-  void saveIndex(void);
 
     // @cmember Save the <c OMStoredVectorIndex> <p vector> in this
     //          <c OMStoredObject>, the vector is named <p vectorName>.
