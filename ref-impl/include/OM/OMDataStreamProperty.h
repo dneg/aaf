@@ -61,7 +61,7 @@ public:
 
     // @cmember The size, in bytes, of the data in this
     //          <c OMDataStreamProperty>.
-  OMUInt64 size(void) const;
+  virtual OMUInt64 size(void) const;
 
     // @cmember Set the size, in bytes, of the data in this
     //          <c OMDataStreamProperty>.
@@ -73,7 +73,7 @@ public:
 
     // @cmember Set the current position for <f read()> and <f write()>, as an
     //          offset in bytes from the begining of the data stream.
-  void setPosition(const OMUInt64 offset) const;
+  virtual void setPosition(const OMUInt64 offset) const;
 
   // Raw access interface - these functions do not use the OMType interface
 
@@ -81,9 +81,9 @@ public:
     //          from the data stream into the buffer at address
     //          <p buffer>. The actual number of bytes read is returned
     //          in <p bytesRead>.
-  void read(OMByte* buffer,
-            const OMUInt32 bytes,
-            OMUInt32& bytesRead) const;
+  virtual void read(OMByte* buffer,
+                    const OMUInt32 bytes,
+                    OMUInt32& bytesRead) const;
 
     // @cmember Attempt to write the number of bytes given by <p bytes>
     //          to the data stream from the buffer at address
