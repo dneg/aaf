@@ -112,6 +112,8 @@ public:
 	void SetTopFile(ImplAAFFile *file);
 	OMLSession	GetContainerSession(void);
 	aafProductIdentification_t *GetDefaultIdent(void);
+void InitPluginManager (void);
+class AAFPluginManager *GetPluginManager (void);
 
 private:
 
@@ -127,6 +129,8 @@ private:
 
   ImplAAFFile	*_topFile;
   aafProductIdentification_t	*_defaultIdent;
+  class AAFPluginManager		*_plugins;
+
 };
 
 #endif // ! __ImplAAFSession_h__
