@@ -1,5 +1,3 @@
-// @doc INTERNAL
-// @com This file implements the module test for CAAFHeader.
 //=---------------------------------------------------------------------=
 //
 // $Id$ $Name$
