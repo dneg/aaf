@@ -21,6 +21,23 @@
 
 #ccccccccccccccccccccccccccc
 #c
+#c Pass through argument if for idl otherwise omit it.
+#c 
+#c This macro is generally used to specify IDL options that would
+#c make since to emit to c++.
+#c To allow proper marshalling code generation of a struct: |
+#c typedef struct
+#c {
+#c     aafInt32 length;
+#c     AD_IDL([length_is(length)]) aafWchar *str;
+#c } aafString_t;
+#c
+#startm AD_IDL 01
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Includes another file.
 #c
 #c Argument: Base filename
@@ -39,6 +56,15 @@
 #c Arguments: none
 #c
 #startm AD_HEAD 00
+/******************************************\\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\\******************************************/
+
 #include "C.this-module.h"
 #include "Impl.this-module.h"
 
@@ -87,6 +113,17 @@ C.this-module::~C.this-module ()
 //  assert (rep);
 //  delete rep;
 }
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Starts a class definition
+#c
+#c Arguments: none
+#c
+#startm AD_COM_EXT_CLASS_BEGIN 01
+AD_CLASS_BEGIN\
 #endm
 
 
@@ -193,7 +230,7 @@ HRESULT STDMETHODCALLTYPE
   assert (ptr);
   return ptr->%01();
 #else
-    return HRESULT_NOT_IMPLEMENTED;
+  return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -232,7 +269,7 @@ HRESULT STDMETHODCALLTYPE
 .%03-cleanup(%04, %05)
   return hr;
 #else
-    return HRESULT_NOT_IMPLEMENTED;
+  return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -276,7 +313,7 @@ HRESULT STDMETHODCALLTYPE
 .%08-cleanup(%09, %10)
   return hr;
 #else
-    return HRESULT_NOT_IMPLEMENTED;
+  return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -325,7 +362,7 @@ HRESULT STDMETHODCALLTYPE
 .%13-cleanup(%14, %15)
   return hr;
 #else
-    return HRESULT_NOT_IMPLEMENTED;
+  return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -379,7 +416,7 @@ HRESULT STDMETHODCALLTYPE
 .%18-cleanup(%19, %20)
   return hr;
 #else
-    return HRESULT_NOT_IMPLEMENTED;
+  return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -438,7 +475,7 @@ HRESULT STDMETHODCALLTYPE
 .%23-cleanup(%24, %25)
   return hr;
 #else
-    return HRESULT_NOT_IMPLEMENTED;
+  return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -502,7 +539,7 @@ HRESULT STDMETHODCALLTYPE
 .%28-cleanup(%29, %30)
   return hr;
 #else
-    return HRESULT_NOT_IMPLEMENTED;
+  return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -571,7 +608,7 @@ HRESULT STDMETHODCALLTYPE
 .%33-cleanup(%34, %35)
   return hr;
 #else
-    return HRESULT_NOT_IMPLEMENTED;
+  return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -645,7 +682,7 @@ HRESULT STDMETHODCALLTYPE
 .%38-cleanup(%39, %40)
   return hr;
 #else
-    return HRESULT_NOT_IMPLEMENTED;
+  return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -724,7 +761,7 @@ HRESULT STDMETHODCALLTYPE
 .%43-cleanup(%44, %45)
   return hr;
 #else
-    return HRESULT_NOT_IMPLEMENTED;
+  return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -808,7 +845,7 @@ HRESULT STDMETHODCALLTYPE
 .%48-cleanup(%49, %50)
   return hr;
 #else
-    return HRESULT_NOT_IMPLEMENTED;
+  return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -897,7 +934,7 @@ HRESULT STDMETHODCALLTYPE
 .%53-cleanup(%54, %55)
   return hr;
 #else
-    return HRESULT_NOT_IMPLEMENTED;
+  return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -1025,6 +1062,17 @@ AAF_DEFINE_FACTORY(.this-module)
 #c Argument: method declaration
 #c
 #startm AD_OVERRIDE 01
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Specifies a method in a separate COM interface.
+#c
+#c Argument: method declaration
+#c
+#startm AD_COM_METH 01
+%01-com-meth-comc(.this-module)
 #endm
 
 
@@ -1464,4 +1512,14 @@ I\
 
 #startm .objOut-adornment 00
 I\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Hack to quote the .this-module macro and keep it out of export
+#c files.  Do not define this macro in exp.mac!!!
+#c
+#startm AD_EXPORT_THIS_MODULE 00
+.this-module\
 #endm
