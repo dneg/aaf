@@ -95,6 +95,7 @@ function createColorMap() {
   map["ref-impl/doc/"]             = "#CCFFFF";
   map["LEGAL/"]                    = "#CCFFFF";
   map["doc/"]                      = "#CCFFFF";
+  map["meta/"]                     = "#CCFFFF";
 
   /* Purple */
   map["test/"]                     = "#FFCCFF";
@@ -105,6 +106,9 @@ function createColorMap() {
   map["DevUtils/"]                 = "#FFFFCC";
   map["Utilities/"]                = "#FFFFCC";
   map["OMF/"]                      = "#FFFFCC";
+
+  /* Blue */
+  map["build/"]                    = "#CCCCFF";
 }
 
 function rowcolor(files) {
