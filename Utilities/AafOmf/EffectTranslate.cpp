@@ -476,6 +476,18 @@ aafInt32 GetMCKeyframeSlotID(aafUID_t& uid)
 	return result;
 }
 
+aafInt32 GetMCGlobalSlotID(aafUID_t& uid)
+{
+	aafInt32	result;
+	
+	if(isMCPrivateEffect(uid))
+		result = OMF2_EFFE_ALLOTHERS_GLOBAL_SLOT;
+	else
+		result = OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_GLOBAL_SLOT;
+
+	return result;
+}
+
 bool isMCPrivateEffect(aafUID_t& uid)
 {
 	long	n, numEntries = sizeof(xlateTable)/sizeof(effectXlate_t);

@@ -58,6 +58,7 @@ IAAFParameterDef *CreateParameterDefinition(IAAFDictionary *dict, aafUID_t parmD
 IAAFTypeDef *CreateTypeDefinition(IAAFDictionary *dict, aafUID_t typeDefID);
 bool EffectCapabilityPresent(aafUID_t &effectUID, aafUInt32 capabilityMask);
 aafInt32 GetMCKeyframeSlotID(aafUID_t& uid);
+aafInt32 GetMCGlobalSlotID(aafUID_t& uid);
 bool isMCPrivateEffect(aafUID_t& uid);
 
 // Media composer effect IDs
