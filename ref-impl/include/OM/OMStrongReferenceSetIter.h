@@ -58,7 +58,7 @@ public:
     //          direction (decreasing <p Key>s).
   OMStrongReferenceSetIterator(
                      const OMStrongReferenceSetProperty<ReferencedObject>& set,
-                     OMIteratorPosition initialPosition);
+                     OMIteratorPosition initialPosition = OMBefore);
 
     // @cmember Destroy this <c OMStrongReferenceSetIterator>.
   virtual ~OMStrongReferenceSetIterator(void);
@@ -75,7 +75,7 @@ public:
     //          <c OMStrongReferenceSetIterator> is made ready to traverse the
     //          associated <c OMStrongReferenceSetProperty> in the reverse
     //          direction (decreasing <p Key>s).
-   virtual void reset(OMIteratorPosition initialPosition);
+   virtual void reset(OMIteratorPosition initialPosition = OMBefore);
 
     // @cmember Is this <c OMStrongReferenceSetIterator> positioned before
     //          the first <p ReferencedObject> ?

@@ -58,7 +58,7 @@ public:
     //          reverse direction (decreasing indexes).
   OMStrongReferenceVectorIterator(
                const OMStrongReferenceVectorProperty<ReferencedObject>& vector,
-               OMIteratorPosition initialPosition);
+               OMIteratorPosition initialPosition = OMBefore);
 
     // @cmember Destroy this <c OMStrongReferenceVectorIterator>.
   virtual ~OMStrongReferenceVectorIterator(void);
@@ -75,7 +75,7 @@ public:
     //          <c OMStrongReferenceVectorIterator> is made ready to traverse
     //          the associated <c OMStrongReferenceVectorProperty> in the
     //          reverse direction (decreasing indexes).
-   virtual void reset(OMIteratorPosition initialPosition);
+   virtual void reset(OMIteratorPosition initialPosition = OMBefore);
 
     // @cmember Is this <c OMStrongReferenceVectorIterator> positioned before
     //          the first <p ReferencedObject> ?
