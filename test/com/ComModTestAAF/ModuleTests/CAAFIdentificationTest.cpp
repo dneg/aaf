@@ -106,16 +106,19 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFDictionary				*pDictionary = NULL;
 	IAAFIdentification			*pIdent = NULL;
 	IAAFIdentification			*pTestIdent = NULL;
-	aafProductIdentification_t	ProductInfo;
 	aafUInt32					readNumIdents;
 	char 						testName[35];
 	aafCharacter 				*myBuffer;
 	aafUInt32 					bufSize = 0;
 	aafUInt32 					bufSize2 = 0;
+
+	aafProductIdentification_t	ProductInfo;
+  memset(&ProductInfo, 0, sizeof(ProductInfo));
 	ProductInfo.companyName = COMPANY_NAME;
 	ProductInfo.productName = PRODUCT_NAME;
 	ProductInfo.productVersionString = TEST_VERSION;
 	ProductInfo.productID = UnitTestProductID;
+	ProductInfo.productVersion = &testVersion;
 	hr = S_OK;
 
 	try 
