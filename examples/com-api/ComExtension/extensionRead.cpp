@@ -73,8 +73,8 @@ bool extensionRead (const aafCharacter * filename)
   pcd->Release();
   pcd=NULL;
 
-  cout << "Verifying PersonnelMob class has been registered." << endl;
-  check (pDict->LookupClass (kClassID_PersonnelMob, &pcd));
+  cout << "Verifying AdminMob class has been registered." << endl;
+  check (pDict->LookupClass (kClassID_AdminMob, &pcd));
   pcd->Release();
   pcd=NULL;
 
@@ -108,7 +108,7 @@ bool extensionRead (const aafCharacter * filename)
 	check (pObject->GetDefinition(&pMobCD));
 	pObject->Release();
 	pObject=NULL;
-	if (classDefinitionIsA(pMobCD, kClassID_PersonnelMob))
+	if (classDefinitionIsA(pMobCD, kClassID_AdminMob))
 	{
 		foundAdmin = true;
 	} else
