@@ -51,81 +51,292 @@ AD_XMETHOD3(Initialize,
 	//@comm  To add renderings, call SetRender.
 
 AD_XMETHOD1(GetEffectDefinition,
-			[out], objOut, AAFEffectDef, effectDef, Effect definition object,
+			[out], objOut, AAFEffectDef, ppEffectDef, Effect definition object,
 		   Returns the effect definition for this invocation.)
-	//@comm Replaces part of omfiEffectGetInfo
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEffectDef pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEffectDef.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - This property does not exist in the file.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEffectDef arg is NULL.)
 
 
 AD_XMETHOD1(GetRender,
-			[out], objOut, AAFSegment, segment, Final rendering segment,
-			Returns the segment that represents the optional rendering on an effect object.)
-	//@comm If this property does not exist the error
-	// OM_ERR_PROP_NOT_PRESENT will be returned.
-	//@comm Working and final renderings are handled by using
-	// a media group as the segment.
-	//@comm Replaces omfiEffectGetFinalRender and omfiEffectGetWorkingRender
+			[out], objOut, AAFSourceReference, ppSourceRef, Final rendering segment,
+			Returns the segment that represents the optional rendering on an effect object.
+  // Working and final renderings are handled by using
+  // an IAAFEssenceGroup as the segment.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppSourceRef pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppSourceRef.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - This property does not exist in the file.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppSourceRef arg is NULL.)
 
 AD_METHOD1(IsATimeWarp,
-		   [out], aafBool **, sourceClip, Working rendering source clip,
-		   This boolean function returns whether or not an effect is a timewarp effect.)
-	//@comm Replaces omfiEffectIsATimeWarp
-
+		   [out\\\,retval], aafBool *, pIsTimeWarp, Returned boolean value,
+		   This boolean function returns whether or not an effect is a timewarp effect.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pIsTimeWarp pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pIsTimeWarp.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pIsTimeWarp arg is NULL.)
 
 AD_METHOD1(GetBypassOverride,
-	[out], aafArgIDType_t *, bypassOverride, Bypass override property value,
-	Returns the optional bypass override propertyvalue from the input effect object.)
-	//@comm If the property does not exist, the error OM_ERR_PROP_NOT_PRESENT will be returned.)
-	//@comm Replaces omfiEffectGetBypassOverride
+	[out], aafArgIDType_t *, pBypassOverride, Bypass override property value,
+	Returns the optional bypass override propertyvalue from the input effect object.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pBypassOverride pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pBypassOverride.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - This property does not exist in the file.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pBypassOverride arg is NULL.)
 
 AD_METHOD1(GetNumSourceSegments,
-	[out], aafInt32 *, numSources, Number of source media segments in the effect,
-	Returns the number of media sources to the effect. )
-	//@comm Replaces omfiEffectGetNumSlots
-
-
-AD_METHOD1(GetNumParameters,
-	[out], aafInt32 *, numParameters, Number of parameter slots in the effect,
-	Returns the number of parameters in the effect.)
-	//@comm Replaces omfiEffectGetNumSlots
+	[out], aafInt32 *, pNumSources, Number of source media segments in the effect,
+	Returns the number of media sources to the effect.
+  //
+  // Succeeds if all of the following are true:
+  // - the pNumSources pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pNumSources.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumSources arg is NULL.)
 
 AD_METHOD1(IsValidTranEffect,
-	[out], aafBool *, validTransition, TRUE if the effect is valid in a transition,
-	Verifies that the input effect object can be used in a transition.)
+	[out], aafBool *, pValidTransition, TRUE if the effect is valid in a transition,
+	Verifies that the input effect object can be used in a transition.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pValidTransition pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pValidTransition.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pValidTransition arg is NULL.)
 
-AD_XMETHOD2(AddNewParameter,
-	[in], objPass, aafArgIDType_t, argID, Argument ID for the slot,
-	[in], objIn, AAFParameter, value, Parameter to place in effect slot,
-	adds a new parameter object\, inserts the
-	// segment passed as the "value" argument to the new slot\, and
-	//adds the slot to the effect object.)
-	//@comm Replaces part of omfiEffectAddNewSlot
+AD_METHOD1(GetNumParameters,
+	[out], aafInt32 *, pNumParameters, Number of parameter slots in the effect,
+	Returns the number of parameters in the effect.
+  //
+  // Succeeds if all of the following are true:
+  // - the pNumParameters pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pNumParameters.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumParameters arg is NULL.)
+
+
+AD_XMETHOD1(AddNewParameter,
+	[in], objIn, AAFParameter, pValue, Parameter to place in effect slot,
+	Adds a new parameter object.
+  // Succeeds if all of the following are true:
+  // - the pValue pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_DUPLICATE_PARAMETER
+  //   - The given argID is already present.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pValue arg is NULL.)
 
 AD_XMETHOD2(AddNewInputSegment,
 	[in], objPass, aafInt32, index, Index \(1-based\) of the input segment,
-	[in], objIn, AAFSegment, value, Segment to place in effect,
-	Adds another input segment to an effect at the given index.)
-	//@comm Replaces part of omfiEffectAddNewSlot
+	[in], objIn, AAFSegment, pSegment, Segment to place in effect,
+	Adds another input segment to an effect at the given index.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pSegment pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_DUPLICATE_INDEX
+  //   - The given index value is already present.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pSegment arg is NULL.)
 
 AD_XMETHOD1(SetRender,
-	[in], objIn, AAFSegment, segment, A segment containing a representation of the rendering,
+	[in], objIn, AAFSourceReference, ppSourceRef, A segment containing a representation of the rendering,
 	This function sets the final rendering for the given effect
 	//    to the input source clip.  Multiple renderings may exist if the
 	//    source clip refers to a master mob that contains a media group.)
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppSourceRef pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppSourceRef.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppSourceRef arg is NULL.)
 	//@comm Replaces omfiEffectSetFinalRender and omfiEffectSetWorkingRender
 
 AD_METHOD1(SetBypassOverride,
 	[in], aafArgIDType_t, bypassOverride, Bypass override,
 	This function sets the optional bypass override property on the given effect object.)
-	//@comm Replaces omfiEffectSetBypassOverride
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.)
 
 AD_XMETHOD2(GetParameterByArgID,
 		   [in], objPass, aafArgIDType_t, argID, Arg ID,
-		   [out], objOut, AAFParameter, parameter, Parameter object,
-		   Given an argID\, returns the corresponding parameter slot and parameter slot value.)
+		   [out], objOut, AAFParameter, ppParameter, Parameter object,
+		   Given an argID\, returns the corresponding parameter slot and parameter slot value.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppParameter pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppParameter.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_MISSING_PARAMETER
+  //   - The given argID is not present.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppParameter arg is NULL.)
+
 
 AD_XMETHOD2(GetIndexedInputSegment,
 		   [in], objPass, aafInt32, index, 1-based index into the effet inputs,
-		   [out], objOut, AAFSegment, inputSegment, Input segment,
-		   Given an index\, returns the corresponding input segment.)
+		   [out], objOut, AAFSegment, ppInputSegment, Input segment,
+		   Given an index\, returns the corresponding input segment.
+  // Working and final renderings are handled by using
+  // an IAAFEssenceGroup as the segment.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppInputSegment pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppInputSegment.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_MISSING_INDEX
+  //   - The given index value is not present.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppInputSegment arg is NULL.)
 
 AD_XCLASS_END(Concrete, StoredObject)
