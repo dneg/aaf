@@ -55,6 +55,16 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTimelineMobSlot::SetEditRate (aafRational_t *editRate)
+{
+	if (editRate == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	_editRate = *editRate;
+	return AAFRESULT_SUCCESS;
+}
+
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTimelineMobSlot::GetOrigin (aafPosition_t *origin)
@@ -63,6 +73,14 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 
 	*origin = _origin;
+
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTimelineMobSlot::SetOrigin (aafPosition_t origin)
+{
+	_origin = origin;
 
 	return AAFRESULT_SUCCESS;
 }
@@ -189,4 +207,8 @@ AAFRESULT  ImplAAFTimelineMobSlot::
 }
 
 
+
+extern "C" const aafClassID_t CLSID_AAFTimelineMobSlot;
+
+OMDEFINE_STORABLE(ImplAAFTimelineMobSlot, CLSID_AAFTimelineMobSlot);
 
