@@ -215,10 +215,11 @@ OMXMLStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
   size_t bufferSize = strlen(signature) + 1;
   char* buffer = new char[bufferSize];
   ASSERT("Valid heap pointer", buffer != 0);
-  readSignature(rawStorage, buffer, bufferSize);
-  bool result = false;
-  if (strcmp(signature, buffer) == 0) {
-    result = true;
+  bool result = readSignature(rawStorage, buffer, bufferSize);
+  if (result) {
+    if (strcmp(signature, buffer) != 0) {
+      result = false;
+    }
   }
   delete [] buffer;
   rawStorage->setPosition(0);
@@ -282,21 +283,30 @@ void OMXMLStoredObjectFactory::close(OMRawStorage* /* rawStorage */,
   //   @parm TBS
   //   @parm TBS
   //   @parm TBS
-void OMXMLStoredObjectFactory::readSignature(OMRawStorage* rawStorage,
+bool OMXMLStoredObjectFactory::readSignature(OMRawStorage* rawStorage,
                                              char* signature,
                                              size_t signatureSize)
 {
   TRACE("OMXMLStoredObjectFactory::readSignature");
   size_t index = 0;
   while (index < signatureSize - 1) {
-    char ch;
-    OMUInt32 x;
-    rawStorage->read(reinterpret_cast<OMByte*>(&ch), 1, x);
-    int c =  static_cast<unsigned char>(ch);
-
+    unsigned char ch;
+    OMUInt32 bytesRead;
+    rawStorage->read(reinterpret_cast<OMByte*>(&ch), 1, bytesRead);
+    if (bytesRead != 1) {
+      break;
+    }
+    int c = ch;
     if (isprint(c)) {
       signature[index++] = toupper(ch);
     }
   }
+  bool result;
+  if (index == (signatureSize - 1)) {
   signature[index] = 0;
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
 }
