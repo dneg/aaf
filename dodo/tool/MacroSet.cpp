@@ -110,10 +110,38 @@ void MacroSet::import
   unsigned int i = 0;
 
 #if defined(macintosh)
+  // Path separator should start with a ':' on the mac.
   filename[0] = ':';
-#endif
-
   for (i = 1; i < sizeof (filename); )
+  {
+    char c;
+    bool stat;
+    stat = input.Consume (c);
+    if (! stat)
+    {
+      err_exit ("Expecting end of line after filename.", input);
+    }
+    assert (c);
+    if ('\n' == c)
+    {
+      filename[i] = '\0';
+      break;
+    }
+    else if ('\/' == c)
+    {
+      if (2 == i && '.' == filename[1])
+      {
+  	i = 0; // reset and skip over the first "./"
+  	continue;
+      }
+      // On the mac we need to begin with a partial path.
+      c = ':';
+    }
+    filename[i] = c;
+    i++;
+  }
+#else
+  for (i = 0; i < sizeof (filename); i++)
 	{
 	  char c;
 	  bool stat;
@@ -128,21 +156,9 @@ void MacroSet::import
 		  filename[i] = '\0';
 		  break;
 		}
-#if defined(macintosh)
-  	  else if ('\/' == c)
-  	    {
-  	      if (2 == i && '.' == filename[1])
-  	      {
-  	        i = 0; // reset and skip over the first "./"
-  	        continue;
-  	      }
-          // On the mac we need to begin with a partial path.
-          c = ':';
-        }
-#endif
 	  filename[i] = c;
-	  i++;
 	}
+#endif
   if (sizeof (filename) == i)
 	{
 	  err_exit ("Filename too long.", input);
