@@ -207,7 +207,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		hr = mobIter->NextOne (&aMob);
 		if (AAFRESULT_SUCCESS != hr)
 			return hr;
-		hr = aMob->GetName (name);
+		hr = aMob->GetName (name, sizeof(name));
 		if (AAFRESULT_SUCCESS != hr)
 			return hr;
 		hr = aMob->GetMobID (&mobID);
