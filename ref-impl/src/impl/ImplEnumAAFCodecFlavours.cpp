@@ -89,7 +89,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUInt32			numDefs;
 	HRESULT				hr;
 
-	if ((!pFetched && count != 1) || (!pFetched && count == 1))
+	if ((!pFetched && count != 1) || (pFetched && count == 1))
 		return E_INVALIDARG;
 
 	// Point at the first component in the array.
