@@ -56,14 +56,14 @@ OMObjectDirectory::~OMObjectDirectory(void)
   _table = 0;
 }
 
-bool OMObjectDirectory::lookup(const char* name, const OMStorable*& p) const
+bool OMObjectDirectory::lookup(const wchar_t* name, const OMStorable*& p) const
 {
   TRACE("OMObjectDirectory::lookup");
-  PRECONDITION("Valid name to look up", validString(name));
+  PRECONDITION("Valid name to look up", validWideString(name));
   bool result = false;
   
   for (int i = 0; i < _current; i++) {
-    int status = strcmp(name, _table[i]._name);
+    int status = compareWideString(name, _table[i]._name);
     if (status == 0) {
       result = true;
       p = _table[i]._object;
@@ -73,12 +73,12 @@ bool OMObjectDirectory::lookup(const char* name, const OMStorable*& p) const
   return result;
 }
 
-void OMObjectDirectory::insert(const char* name, const OMStorable* p)
+void OMObjectDirectory::insert(const wchar_t* name, const OMStorable* p)
 {
   TRACE("OMObjectDirectory::insert");
 
   if (_current < _capacity) {
-    char* n = saveString(name);
+    wchar_t* n = saveWideString(name);
     _table[_current]._object = const_cast<OMStorable *>(p);
     _table[_current]._name = n;
     _current++;

@@ -30,6 +30,7 @@
 #define OMOBJECTDIRECTORY_H
 
 #include "OMPortability.h"
+#include <stddef.h>
 
 class OMStorable;
 
@@ -44,11 +45,11 @@ public:
 
   //
   //
-  bool lookup(const char* name, const OMStorable*& p) const;
+  bool lookup(const wchar_t* name, const OMStorable*& p) const;
 
   //
   //
-  void insert(const char* name, const OMStorable* p);
+  void insert(const wchar_t* name, const OMStorable* p);
 
   // Count of valid entries.
   //
@@ -60,7 +61,7 @@ private:
 
   struct TableEntry {
     OMStorable* _object;
-  char* _name;
+    wchar_t* _name;
   };
   int _capacity;        // Number of potential entries.
   int _current;         // Index of first unoccupied entry.
