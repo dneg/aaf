@@ -87,8 +87,8 @@ public:
     //   @this const
   bool isPresent(void) const;
 
-    // @cmember Remove this optional property.
-  void remove(void);
+    // @cmember Remove this optional <c OMProperty>.
+  virtual void remove(void);
 
   // Direct property access interface
 
@@ -272,6 +272,11 @@ public:
     //          <c OMStrongReferenceProperty> must no longer attempt
     //          to access the <c OMStorable> with the given <p key>.
   virtual void detach(const OMStorable* object, const size_t key);
+
+  // Optional property interface
+
+    // @cmember Remove this optional <c OMStrongReferenceProperty>.
+  virtual void remove(void);
 
 protected:
   // @access Protected members.
@@ -582,6 +587,11 @@ public:
     //          This <c OMStrongReferenceVectorProperty> must no longer
     //          attempt to access the <c OMStorable> with the given <p key>.
   virtual void detach(const OMStorable* object, const size_t key);
+
+  // Optional property interface
+
+    // @cmember Remove this optional <c OMStrongReferenceVectorProperty>.
+  virtual void remove(void);
 
   // Direct property access interface
 
