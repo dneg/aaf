@@ -219,7 +219,7 @@ AD_XMETHOD4(SetFade,
 
   // This function sets the optional fade properties on this source
   // clip object.  The fade properties only apply to a source clip of
-  // datakind \(or convertible to a datakind\) of type Sound. All
+  // data definition \(or convertible to a data definition\) of type Sound. All
   // arguments should be specified.  Length units are specified by the
   // containing mob slot's edit rate.
   // 
