@@ -51,41 +51,38 @@ extern "C" const aafClassID_t CLSID_EnumAAFEssenceData;
 
 
 ImplEnumAAFEssenceData::ImplEnumAAFEssenceData ()
+: _enumObj(0), _iterator(0)
 {
-  _current = 0;
-  _contentStorage = NULL;
 }
 
 
 ImplEnumAAFEssenceData::~ImplEnumAAFEssenceData ()
 {
-  if (_contentStorage)
-  {
-    _contentStorage->ReleaseReference();
-    _contentStorage = NULL;
-  }
+	if (_enumObj)
+		_enumObj->ReleaseReference();
+
+	_enumObj = NULL;
+
+	delete _iterator;
+	_iterator = 0;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFEssenceData::NextOne (ImplAAFEssenceData ** ppEssenceData)
 {
-  AAFRESULT hr = AAFRESULT_SUCCESS;
-  aafUInt32 cur = _current, siz = 0;
-
-  hr = _contentStorage->CountEssenceData (&siz);
-  if (AAFRESULT_SUCCESS == hr)
-  {    
-    if (cur < siz)
-    {
-      hr = _contentStorage->GetNthEssenceData (cur, ppEssenceData);
-      if (AAFRESULT_SUCCESS == hr)
-        _current = ++cur;
-    }
-		else
-			return AAFRESULT_NO_MORE_OBJECTS;
-  }
-  return hr;
+	AAFRESULT ar = AAFRESULT_NO_MORE_OBJECTS;
+	
+	if (_iterator->before() || _iterator->valid())
+	{
+		if (++(*_iterator))
+		{
+			*ppEssenceData = _iterator->value();
+			(*ppEssenceData)->AcquireReference();
+			ar = AAFRESULT_SUCCESS;
+		}
+	}
+	return ar;
 }
 
 
@@ -94,103 +91,108 @@ AAFRESULT STDMETHODCALLTYPE
                            ImplAAFEssenceData ** ppEssenceData,
                            aafUInt32 *  pFetched)
 {
-	aafUInt32		numEssenceData = 0;
-	AAFRESULT		result = AAFRESULT_SUCCESS;
+	ImplAAFEssenceData**	ppDef;
+	aafUInt32				numDefs;
+	HRESULT					hr;
 
-	if ((pFetched == NULL) || (NULL == ppEssenceData))
-		return AAFRESULT_NULL_PARAM;
+	if ((pFetched == NULL && count != 1) || (pFetched != NULL && count == 1))
+		return E_INVALIDARG;
 
-	for (numEssenceData = 0; numEssenceData < count; numEssenceData++)
+	// Point at the first component in the array.
+	ppDef = ppEssenceData;
+	for (numDefs = 0; numDefs < count; numDefs++)
 	{
-		result = NextOne(&ppEssenceData[numEssenceData]);
-		if (AAFRESULT_SUCCESS != result)
+		hr = NextOne(&ppDef[numDefs]);
+		if (FAILED(hr))
 			break;
 	}
 	
-	*pFetched = numEssenceData;
+	if (pFetched)
+		*pFetched = numDefs;
 
-	return result;
+	return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFEssenceData::Skip (aafUInt32  count)
 {
-  AAFRESULT result = AAFRESULT_SUCCESS;
-  aafUInt32 newCurrent = _current + count;
-  aafUInt32 siz = 0;
+	AAFRESULT	ar = AAFRESULT_SUCCESS;
+	aafUInt32	n;
+	
+	for(n = 1; n <= count; n++)
+	{
+		// Defined behavior of skip is to NOT advance at all if it would push us off of the end
+		if(!++(*_iterator))
+		{
+			// Off the end, decrement n and iterator back to the starting position
+			while(n >= 1)
+			{
+				--(*_iterator);
+				n--;
+			}
+			ar = AAFRESULT_NO_MORE_OBJECTS;
+			break;
+		}
+	}
 
-  result = _contentStorage->CountEssenceData(&siz);
-  if (AAFRESULT_SUCCESS == result)
-  {
-    if (newCurrent < siz)
-      _current = newCurrent;
-    else
-      result = AAFRESULT_NO_MORE_OBJECTS;
-  }
-
-  return result;
+	return ar;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFEssenceData::Reset ()
 {
-  _current = 0;
-  return AAFRESULT_SUCCESS;
+	AAFRESULT ar = AAFRESULT_SUCCESS;
+	_iterator->reset();
+	return ar;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFEssenceData::Clone (ImplEnumAAFEssenceData ** ppEnum)
 {
-	if (NULL == ppEnum)
-		return AAFRESULT_NULL_PARAM;
-	*ppEnum = 0;
-	
-	ImplEnumAAFEssenceData *theEnum = (ImplEnumAAFEssenceData *)CreateImpl (CLSID_EnumAAFEssenceData);
-	
-	XPROTECT()
+	AAFRESULT				ar = AAFRESULT_SUCCESS;
+	ImplEnumAAFEssenceData	*result;
+
+	result = (ImplEnumAAFEssenceData *)CreateImpl(CLSID_EnumAAFEssenceData);
+	if (result == NULL)
+		return E_FAIL;
+
+    ar = result->SetIterator(_enumObj,_iterator->copy());
+	if (SUCCEEDED(ar))
 	{
-		CHECK(theEnum->SetContentStorage(_contentStorage));
-		CHECK(theEnum->Reset());
-		CHECK(theEnum->Skip(_current));
-		*ppEnum = theEnum;
+		*ppEnum = result;
 	}
-	XEXCEPT
+	else
 	{
-		if (theEnum)
-		  theEnum->ReleaseReference();
-		theEnum = 0;
-		return(XCODE());
+	  result->ReleaseReference();
+	  result = 0;
+	  *ppEnum = NULL;
 	}
-	XEND;
 	
-	return(AAFRESULT_SUCCESS);
+	return ar;
 }
 
-
-
-//Internal
-AAFRESULT
-    ImplEnumAAFEssenceData::SetContentStorage(ImplAAFContentStorage *pContentStorage)
+AAFRESULT STDMETHODCALLTYPE
+    ImplEnumAAFEssenceData::SetIterator(
+                        ImplAAFObject *pObj,
+                        OMReferenceContainerIterator<ImplAAFEssenceData>* iterator)
 {
-  if (_contentStorage)
-    _contentStorage->ReleaseReference();
-  _contentStorage = 0;
-
-  _contentStorage = pContentStorage;
-
-  if (pContentStorage)
-    pContentStorage->AcquireReference();
-
-  return AAFRESULT_SUCCESS;
+	AAFRESULT ar = AAFRESULT_SUCCESS;
+	
+	if (_enumObj)
+		_enumObj->ReleaseReference();
+	_enumObj = 0;
+	
+	_enumObj = pObj;
+	if (pObj)
+		pObj->AcquireReference();
+	
+	delete _iterator;
+	_iterator = iterator;
+	return ar;
 }
-
-
-
-
-
 
 
 

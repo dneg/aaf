@@ -105,7 +105,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pFetched)
 		*pFetched = numDefs;
 
-	return hr;
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -121,14 +121,13 @@ AAFRESULT STDMETHODCALLTYPE
 		// Defined behavior of skip is to NOT advance at all if it would push us off of the end
 		if(!++(*_iterator))
 		{
-			// Off the end, increment 'n' to match the iterator, then
-			// decrement both back to the starting position
-			n++;
+			// Off the end, decrement n and iterator back to the starting position
 			while(n >= 1)
 			{
 				--(*_iterator);
 				n--;
 			}
+			ar = AAFRESULT_NO_MORE_OBJECTS;
 			break;
 		}
 	}

@@ -33,8 +33,7 @@
  ************************************************************************/
 
 class ImplAAFEssenceData;
-class ImplAAFContentStorage;
-
+class ImplAAFObject;
 
 
 
@@ -43,7 +42,10 @@ class ImplAAFContentStorage;
 #ifndef __ImplAAFRoot_h__
 #include "ImplAAFRoot.h"
 #endif
+#include "ImplAAFContentStorage.h"
 
+
+#include "OMReferenceContainerIter.h"
 
 class ImplEnumAAFEssenceData : public ImplAAFRoot
 {
@@ -106,11 +108,13 @@ public:
 
 public:
 // Internal to the toolkit
-AAFRESULT SetContentStorage(ImplAAFContentStorage *pContentStorage);
+  virtual AAFRESULT STDMETHODCALLTYPE
+	  SetIterator(ImplAAFObject *pObj,
+				OMReferenceContainerIterator<ImplAAFEssenceData>* iterator);
 
 private:
-	aafUInt32 _current;
-	ImplAAFContentStorage *_contentStorage;
+	ImplAAFObject*	_enumObj;
+	OMReferenceContainerIterator<ImplAAFEssenceData>*	_iterator;
 };
 
 #endif // ! __ImplEnumAAFEssenceData_h__

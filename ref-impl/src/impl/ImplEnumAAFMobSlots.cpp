@@ -113,7 +113,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pFetched)
 		*pFetched = numSlots;
 
-	return hr;
+	return AAFRESULT_SUCCESS;
 }
 
 

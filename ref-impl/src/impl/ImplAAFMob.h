@@ -46,6 +46,8 @@
 #include "ImplEnumAAFTaggedValues.h"
 #endif
 
+#include "OMDataTypes.h"
+
 class ImplAAFSegment;
 
 class ImplAAFMobSlot;
@@ -433,6 +435,7 @@ virtual AAFRESULT STDMETHODCALLTYPE
 
   // SDK Internal
   virtual AAFRESULT ReconcileMobLength(void);
+  virtual const OMMaterialIdentification& identification(void) const;
 
 	protected:
 	OMFixedSizeProperty<aafMobID_t>		_mobID;

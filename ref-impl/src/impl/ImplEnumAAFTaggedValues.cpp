@@ -118,7 +118,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pFetched)
 		*pFetched = numValues;
 
-	return hr;
+	return AAFRESULT_SUCCESS;
 }
 
 

@@ -46,6 +46,8 @@ class ImplAAFMob;
 
 #include "ImplAAFContentStorage.h"
 
+#include "OMReferenceContainerIter.h"
+
 class ImplEnumAAFMobs : public ImplAAFRoot
 {
 public:
@@ -100,14 +102,15 @@ public:
 public:
 // Internal to the toolkit
 AAFRESULT
-    SetContentStorage(ImplAAFContentStorage *pCStore);
-AAFRESULT
     SetCriteria(aafSearchCrit_t *pCriteria);
+  virtual AAFRESULT STDMETHODCALLTYPE
+	  SetIterator(ImplAAFObject *pObj,
+				OMReferenceContainerIterator<ImplAAFMob>* iterator);
 
 private:
-	aafUInt32				_current;
-	ImplAAFContentStorage	*_cStorage;
 	aafSearchCrit_t			_criteria;
+	ImplAAFObject*	_enumObj;
+	OMReferenceContainerIterator<ImplAAFMob>*	_iterator;
 };
 
 #endif // ! __ImplEnumAAFMobs_h__

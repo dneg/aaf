@@ -107,7 +107,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pFetched)
 		*pFetched = numDefs;
 
-	return hr;
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -125,14 +125,13 @@ AAFRESULT STDMETHODCALLTYPE
 		offEnd = ++(*_iterator);
 		if(!offEnd)
 		{
-			// Off the end, increment 'n' to match the iterator, then
-			// decrement both back to the starting position
-			n++;
+			// Off the end, decrement n and iterator back to the starting position
 			while(n >= 1)
 			{
 				--(*_iterator);
 				n--;
 			}
+			ar = AAFRESULT_NO_MORE_OBJECTS;
 			break;
 		}
 	}
