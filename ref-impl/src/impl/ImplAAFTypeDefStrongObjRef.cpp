@@ -156,7 +156,7 @@ ImplAAFTypeDefStrongObjRef::GetObject (ImplAAFPropertyValue * pPropVal,
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefStrongObjRef::GetObjectType (ImplAAFClassDef ** ppObjType) const
+    ImplAAFTypeDefStrongObjRef::GetObjectType (ImplAAFClassDef ** ppObjType)
 {
   if (! ppObjType) return AAFRESULT_NULL_PARAM;
 
@@ -175,10 +175,8 @@ AAFRESULT STDMETHODCALLTYPE
 		return hr;
 	  assert (pDict);
 
-	  ImplAAFTypeDefStrongObjRef * pNonConstThis =
-		  (ImplAAFTypeDefStrongObjRef*) this;
 	  aafUID_t id = _referencedType;
-	  hr = pDict->LookupClass (&id, &pNonConstThis->_cachedObjType);
+	  hr = pDict->LookupClass (&id, &_cachedObjType);
 	  if (AAFRESULT_FAILED(hr))
 		return hr;
 	  assert (_cachedObjType);
