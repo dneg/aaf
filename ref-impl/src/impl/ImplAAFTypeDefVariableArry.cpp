@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2000 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying 
 * documentation, and to distribute and sublicense application software
@@ -42,6 +42,15 @@
 #include "ImplAAFTypeDefWeakObjRef.h"
 #endif
 
+#ifndef __ImplAAFStrongRefArrayValue_h__
+#include "ImplAAFStrongRefArrayValue.h"
+#endif
+
+#ifndef __ImplAAFWeakRefArrayValue_h__
+#include "ImplAAFWeakRefArrayValue.h"
+#endif
+
+
 #ifndef __ImplAAFHeader_h_
 #include "ImplAAFHeader.h"
 #endif
@@ -55,6 +64,8 @@
 #include <string.h>
 
 extern "C" const aafClassID_t CLSID_AAFPropValData;
+extern "C" const aafClassID_t CLSID_AAFStrongRefArrayValue;
+extern "C" const aafClassID_t CLSID_AAFWeakRefArrayValue;
 
 
 ImplAAFTypeDefVariableArray::ImplAAFTypeDefVariableArray ()
@@ -137,6 +148,13 @@ ImplAAFTypeDefVariableArray::GetCount (
 	
 	if (! pPropVal) return AAFRESULT_NULL_PARAM;
 	if (! pCount) return AAFRESULT_NULL_PARAM;
+	
+  ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pPropVal);
+  if (NULL != pRefArray)
+  {
+    return pRefArray->Count(pCount);
+  }
+
 	// Bobt semi-hack: need non-const this in order to call
 	// non-const GetType. We know we aren't mangling it, so it
 	// technically is OK...
@@ -187,6 +205,12 @@ ImplAAFTypeDefVariableArray::AppendElement
 	
 	AAFRESULT hr;
 	
+  ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pInPropVal);
+  if (NULL != pRefArray)
+  {
+    return pRefArray->AppendElement(pMemberPropVal);
+  }
+
 	ImplAAFPropValData* inPvd =
 		dynamic_cast<ImplAAFPropValData*> (pInPropVal);
 	assert (inPvd);
@@ -282,6 +306,17 @@ ImplAAFTypeDefVariableArray::GetElements (
 										  ImplAAFPropertyValue *pInPropVal,
 										  ImplEnumAAFPropertyValues **ppEnum)
 {
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  if (NULL == pInPropVal || NULL == ppEnum)
+	  return AAFRESULT_NULL_PARAM;
+  *ppEnum = NULL;
+  
+  ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pInPropVal);
+  if (NULL != pRefArray)
+  {
+    return pRefArray->GetElements(ppEnum);
+  }
+
 	return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
@@ -557,6 +592,95 @@ ImplAAFTypeDefVariableArray::RawAccessType (
 }
 
 
+// Allocate and initialize the correct subclass of ImplAAFPropertyValue 
+// for the given OMProperty.
+AAFRESULT STDMETHODCALLTYPE
+  ImplAAFTypeDefVariableArray::CreatePropertyValue(
+    OMProperty *property,
+    ImplAAFPropertyValue ** ppPropertyValue ) const
+{
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  assert (property && ppPropertyValue);
+  if (NULL == property || NULL == ppPropertyValue)
+    return AAFRESULT_NULL_PARAM;
+  *ppPropertyValue = NULL; // initialize out parameter
+  
+  OMReferenceVectorProperty* pReferenceVectorProperty = dynamic_cast<OMReferenceVectorProperty*>(property);
+  if (NULL != pReferenceVectorProperty)
+  {
+    assert (property->definition());
+    if (NULL == property->definition())
+      return AAFRESULT_INVALID_PARAM;
+    const OMType *type = property->definition()->type();
+    assert (type);
+    ImplAAFTypeDefVariableArray *ptd = const_cast<ImplAAFTypeDefVariableArray *>
+                            (dynamic_cast<const ImplAAFTypeDefVariableArray *>(type));
+    assert (ptd);
+    if (NULL == ptd)
+      return AAFRESULT_INVALID_PARAM;
+      
+    ImplAAFTypeDefSP pElementType;
+    result = GetType(&pElementType);
+    if (AAFRESULT_FAILED(result))
+      return result;
+      
+    if (dynamic_cast<ImplAAFTypeDefStrongObjRef*>((ImplAAFTypeDef*) pElementType))
+    {
+      // element is strong ref
+      ImplAAFStrongRefArrayValue* pStrongRefArray = NULL;
+      pStrongRefArray = (ImplAAFStrongRefArrayValue*) CreateImpl (CLSID_AAFStrongRefArrayValue);
+      if (!pStrongRefArray) 
+        return AAFRESULT_NOMEMORY;
+      result = pStrongRefArray->Initialize(this, property, false /* !fixed */);
+      if (AAFRESULT_SUCCEEDED(result))
+      {
+        *ppPropertyValue = pStrongRefArray;
+      }
+      else
+      {
+        pStrongRefArray->ReleaseReference();
+      }
+    }
+    else if (dynamic_cast<ImplAAFTypeDefWeakObjRef*>((ImplAAFTypeDef*) pElementType))
+    {
+      // element is weak ref
+      ImplAAFWeakRefArrayValue* pWeakRefArray = NULL;
+      pWeakRefArray = (ImplAAFWeakRefArrayValue*) CreateImpl (CLSID_AAFWeakRefArrayValue);
+      if (!pWeakRefArray) 
+        return AAFRESULT_NOMEMORY;
+      result = pWeakRefArray->Initialize(this, property, false /* !fixed */);
+      if (AAFRESULT_SUCCEEDED(result))
+      {
+        *ppPropertyValue = pWeakRefArray;
+      }
+      else
+      {
+        pWeakRefArray->ReleaseReference();
+      }
+    }
+    else
+    { 
+//      assert (NULL != *ppPropertyValue);     
+//      return AAFRESULT_INVALID_PARAM;
+
+      // TEMPORARY HACK!
+      // Weak reference arrays are still implemented as an array of records!
+      
+      // If the property is not a reference vector then use the "old" method
+      // for creating a variable array property value.
+      result = ImplAAFTypeDef::CreatePropertyValue(property, ppPropertyValue);
+    }
+  }
+  else
+  {
+    // If the property is not a reference vector then use the "old" method
+    // for creating a variable array property value.
+    result = ImplAAFTypeDef::CreatePropertyValue(property, ppPropertyValue);
+  }
+  return result;
+}
+
+
 bool ImplAAFTypeDefVariableArray::IsAggregatable () const
 { return false; }
 
@@ -617,6 +741,12 @@ ImplAAFTypeDefVariableArray::PrependElement(
 	
 	AAFRESULT hr;
 	
+  ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pInPropVal);
+  if (NULL != pRefArray)
+  {
+    return pRefArray->PrependElement(pMemberPropVal);
+  }
+
 	ImplAAFPropValData* inPvd =
 		dynamic_cast<ImplAAFPropValData*> (pInPropVal);	
 	if (!inPvd)
@@ -680,6 +810,12 @@ ImplAAFTypeDefVariableArray::RemoveElement(
 	if (!pInPropVal)
 		return AAFRESULT_NULL_PARAM;
 	
+  ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pInPropVal);
+  if (NULL != pRefArray)
+  {
+    return pRefArray->RemoveObjectAt(index);
+  }
+
 	HRESULT hr = 0;
 	aafUInt32  count;
 	hr = GetCount (pInPropVal, &count);
@@ -756,6 +892,12 @@ ImplAAFTypeDefVariableArray::InsertElement(
 		return AAFRESULT_NULL_PARAM;
 	
 	
+  ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pInPropVal);
+  if (NULL != pRefArray)
+  {
+    return pRefArray->InsertElementAt(pMemberPropVal, index);
+  }
+
 	//CASE 1 -- if the Insert is at "0" postition - this implies a prepend, 
 	//			SO - delegate to PrependElement() routine
 	if (index == 0)
