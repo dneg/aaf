@@ -696,15 +696,6 @@ AAFRESULT ImplAAFTypeDefWeakObjRef::SyncTargetPidsFromTargetSet(void)
 }
 
 
-
-
-// Synchronize the TargetSet property from the current targetPids OM pid array.
-AAFRESULT ImplAAFTypeDefWeakObjRef::SyncTargetSetFromTargetPids(void)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
 aafBool ImplAAFTypeDefWeakObjRef::IsFixedSize (void) const
 {
   return kAAFTrue;
