@@ -145,6 +145,7 @@ HUMAN_TYPED_IMPL = \
 	EnumAAFLocators \
 	EnumAAFMobSlots \
 	EnumAAFMobs \
+	EnumAAFPluggableDefs \
 	EnumAAFPluginDescriptors \
 	EnumAAFPluginLocators \
 	EnumAAFSegments 
