@@ -87,35 +87,46 @@ static void doFile (const char * moduleName, const char * prefix)
 							instances[i].identification,
 							cout);
 
-			printDefinition("const aafCharacter*",
-							prefix,
-							instances[i].name,
-							"_Name",
-							instances[i].name,
-							cout);
-
-			if( strlen(instances[i].desc) )
-			printDefinition("const aafCharacter*",
-							prefix,
-							instances[i].name,
-							"_Desc",
-							instances[i].desc,
-							cout);
-
-			if( strlen(instances[i].alias) )
+			if( false )
 			{
-				cout << endl;
-				printAlias(	"const aafUID_t",
-							instances[i].alias,
-							prefix,
-							instances[i].name,
-							"",
-							cout);
+				// Name, Desc only wanted for registration code
+				printDefinition("const aafCharacter*",
+								prefix,
+								instances[i].name,
+								"_Name",
+								instances[i].name,
+								cout);
+
+				if( strlen(instances[i].desc) )
+				printDefinition("const aafCharacter*",
+								prefix,
+								instances[i].name,
+								"_Desc",
+								instances[i].desc,
+								cout);
 			}
+
 			cout << endl;
 		}
 	}
  
+	cout << "// AAF " << moduleName << " legacy aliases" << endl
+		 << "//" << endl << endl;
+
+	for( i=0; instances[i].cls; i++ )
+	{
+		if( 0==strcmp( instances[i].cls, moduleName ) )
+		{
+			if( strlen(instances[i].alias) )
+					printAlias(	"const aafUID_t",
+								instances[i].alias,
+								prefix,
+								instances[i].name,
+								"",
+								cout);
+		}
+	}
+
   printEndGuard(moduleName, cout);
 }
 
