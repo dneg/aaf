@@ -88,7 +88,7 @@ AAFRESULT ImplAAFSegment::OffsetToTimecodeClip(aafPosition_t offset,
 											   ImplAAFTimecode **result,
 											   aafPosition_t *tcStartPos)
 {
-	result = NULL;
+	*result = (ImplAAFTimecode*) NULL;
 	CvtInt32toInt64(0, tcStartPos);
 	return(AAFRESULT_SUCCESS);
 }
