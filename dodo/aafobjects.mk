@@ -52,13 +52,15 @@ AAFPERSISTENTOBJECTS = \
 	AAFTimecodeStream \
 	AAFTimecodeStream12M \
 	AAFTypeDef \
-	AAFTypeDefArray \
 	AAFTypeDefInt \
-	AAFTypeDefEssence \
-	AAFTypeDefObject \
-	AAFTypeDefObjectVector \
-	AAFTypeDefStruct \
-	AAFTypeDefUInt \
+	AAFTypeDefRename \
+	AAFTypeDefEnum \
+	AAFTypeDefFixedArray \
+	AAFTypeDefVariableArray \
+	AAFTypeDefStream \
+	AAFTypeDefString \
+	AAFTypeDefObjectRef \
+	AAFTypeDefComposite \
 	AAFUnixLocator \
 	AAFVaryingValue \
 	AAFWAVEData \
@@ -80,8 +82,8 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFObjects \
 	EnumAAFParameterDefs \
 	EnumAAFPropertyDefs \
-	EnumAAFProperties \
 	EnumAAFPropertyValues \
+	EnumAAFProperties \
 	EnumAAFReferenceValues \
 	EnumAAFSegments \
 	EnumAAFTypeDefs 
