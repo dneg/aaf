@@ -49,7 +49,7 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Thu May 25 09:07:07 EDT 2000
+// This file was generated on Sun Jun 18 12:15:20 EDT 2000
 // by user transdel on system TRANSDEL.
 //
 // Key to macros.
@@ -1108,7 +1108,7 @@ AAF_CLASS(TimecodeStream,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x1602,
-    AAF_TYPE(DataStream),
+    AAF_TYPE(Stream),
     true,
     false,
     TimecodeStream)
@@ -1844,7 +1844,7 @@ AAF_CLASS(EssenceData,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x2702,
-    AAF_TYPE(DataStream),
+    AAF_TYPE(Stream),
     true,
     false,
     EssenceData)
@@ -1853,7 +1853,7 @@ AAF_CLASS(EssenceData,
       0x0100, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x2b01,
-    AAF_TYPE(DataStream),
+    AAF_TYPE(Stream),
     false,
     false,
     EssenceData)
@@ -3319,15 +3319,6 @@ AAF_CLASS(TypeDefinitionStream,
     0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
   TypeDefinition,
   true)
-  AAF_PROPERTY(ElementType,
-    AAF_LITERAL_AUID(0x06010107,
-      0x1000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
-    0x5a01,
-    AAF_REFERENCE_TYPE(WeakReference, TypeDefinition),
-    true,
-    false,
-    TypeDefinitionStream)
 AAF_CLASS_END(TypeDefinitionStream)
 AAF_CLASS_SEPARATOR()
 
@@ -4166,9 +4157,9 @@ AAF_TYPE_DEFINITION_CHARACTER(Character,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01))
 AAF_TYPE_SEPARATOR()
 
-// DataStream
+// Stream
 //
-AAF_TYPE_DEFINITION_STREAM(DataStream, 
+AAF_TYPE_DEFINITION_STREAM(Stream, 
   AAF_LITERAL_AUID(0x04100200,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01))

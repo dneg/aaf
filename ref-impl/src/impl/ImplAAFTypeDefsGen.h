@@ -700,4 +700,39 @@ static TypeExtEnumeration * s_AAFAllTypeExtEnumerations [] = {
 //
 
 
+
+
+//
+// pass 33: For stream types (transdel:2000-JUN-13)
+//
+struct TypeStream
+{
+  TypeStream(aafUID_constptr id,
+             const wchar_t * name) :
+    typeID(id),
+    typeName(name)
+  {}
+
+  
+  aafUID_constptr typeID;
+  const wchar_t * typeName;
+};
+
+#define MY_TYPE_ID(name) &kAAFTypeID_##name
+#define MY_TYPE_NAME(name) L###name
+
+
+#define AAF_TYPE_TABLE_BEGIN()   \
+static TypeStream s_AAFAllTypeStreams [] = \
+{
+#define AAF_TYPE_DEFINITION_STREAM(name, id) \
+  TypeStream(MY_TYPE_ID(name), MY_TYPE_NAME(name)),
+#define AAF_TYPE_TABLE_END() \
+};
+
+#include "AAFMetaDictionary.h"
+
+#undef MY_TYPE_ID
+#undef MY_TYPE_NAME
+
 #endif // ! __ImplAAFTypeDefsGen_h__
