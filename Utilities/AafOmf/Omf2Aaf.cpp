@@ -1413,7 +1413,7 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 											  IID_IAAFTransition,
 											  (IUnknown **) &pTransition);
 
-			rc = pDictionary->CreateInstance(&AUID_AAFGroup,
+			rc = pDictionary->CreateInstance(&AUID_AAFEffect,
 											  IID_IAAFEffect,
 											  (IUnknown **) &pEffect);
 
