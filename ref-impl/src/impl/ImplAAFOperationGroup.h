@@ -31,27 +31,7 @@ class ImplEnumAAFParameterDefs;
 
 class ImplAAFSegment;
 
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
-
-
-
-
-
-
+class ImplAAFSourceReference;
 
 #ifndef __ImplAAFSegment_h__
 #include "ImplAAFSegment.h"
@@ -78,8 +58,9 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
-        (// @parm [in] Data definition object
-         ImplAAFDataDef * datadef,
+        (// @parm [in] Data Definition Object
+         aafUID_t * pDatadef,
+
 
          // @parm [in] Length property value
          aafLength_t  length,
@@ -234,6 +215,13 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFGroupTest.cpp.
   static AAFRESULT test();
+
+private:
+	OMFixedSizeProperty<aafUID_t>						_effectDefinition;
+	OMStrongReferenceVectorProperty<ImplAAFSegment>		_inputSegments;
+	OMStrongReferenceVectorProperty<ImplAAFParameter>	_parameters;
+	OMFixedSizeProperty<aafUInt32>						_bypassOverride;
+	OMStrongReferenceProperty<ImplAAFSourceReference>	_rendering;
 };
 
 #endif // ! __ImplAAFGroup_h__
