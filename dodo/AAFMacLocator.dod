@@ -1,0 +1,55 @@
+#startm .this-module 0
+AAFMacLocator\
+#endm
+#c
+#startm .parent-module 0
+AAFLocator\
+#endm
+#c
+#import ./AAFUnitTest.exp
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+AD_CLASS_BEGIN()
+
+/****/
+AD_METHOD1(GetVolumeName,
+[out],AAFString*,volname,Pass in a string, which will be filled in,
+Get the volume name from a Mac locator.)
+
+/****/
+AD_METHOD1(GetVRef,
+[out],aafInt16*,vRef,,
+Get the volume reference number from a Mac locator.)
+	//@comm Present on Macs only.
+	
+/****/
+AD_METHOD1(GetDirID,
+[out],aafInt32*,DirID,,
+Get the DirID from a Mac locator.)
+	//@comm Replaces part of omfmMacLocatorGetInfo
+	
+/****/
+AD_METHOD2(SetVolumeName,
+[out],AAFString*,volname,pass in a reference to a string object,
+Set the volume name for a Mac locator.)
+
+/****/
+AD_METHOD2(SetDirID,
+[out],aafInt32,DirID,,
+Set the DirID for a Mac locator.)
+
+  //
+  // IAAFUnitTest interface method overrides
+  //
+.method-Test
+
+
+AD_CLASS_END
