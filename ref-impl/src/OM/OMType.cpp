@@ -117,3 +117,31 @@ void OMType::contract(OMByte* inputBytes,
     memcpy(op, ip, outputBytesSize);
   }
 }
+
+  // @mfunc Copy the value decribed by <p inputBytes> and <p bytesSize>
+  //        into the buffer described by <p outputBytes> and
+  //        <p bytesSize>. This static function is provided to aid
+  //        Object Manager clients in providing suitable implementations
+  //        of the virtual functions in this class. In particular,
+  //        Object Manager clients may wish to use this function when
+  //        implementing <mf OMType::internalize> and
+  //        <mf OMType::externalize>.
+  //   @parm The buffer containing the input bytes.
+  //   @parm The buffer to receive the output bytes.
+  //   @parm The size of the input and output buffers.
+void OMType::copy(OMByte* inputBytes,
+                  OMByte* outputBytes,
+                  size_t bytesSize)
+{
+  TRACE("OMType::copy");
+  PRECONDITION("Valid input bytes", inputBytes != 0);
+  PRECONDITION("Valid output bytes", outputBytes != 0);
+  PRECONDITION("Valid buffer size", bytesSize > 0);
+
+  OMByte* ip = inputBytes;
+  OMByte* op = outputBytes;
+
+  for (size_t i = 0; i < bytesSize; i++) {
+    *op++ = *ip++;
+  }
+}
