@@ -634,7 +634,7 @@ aafErr_t PvtOffsetToTimecode(
 {
   frameTbl_t info;
   aafUInt32		frames_day;
-  aafInt32 min10, min1;
+  aafFrameOffset_t min10, min1;
   aafBool frame_dropped;
 
   info = GetFrameInfo(frameRate);
