@@ -607,8 +607,8 @@ void ImplAAFTypeDefInt::internalize(OMByte* externalBytes,
   assert (externalBytes);
   assert (internalBytes);
   // assert (internalBytesSize == externalBytesSize);
-  const size_t thisNativeSize = NativeSize ();
-  assert (internalBytesSize == thisNativeSize);
+  // const size_t thisNativeSize = NativeSize ();
+  // assert (internalBytesSize == thisNativeSize);
 
   if (externalBytesSize > internalBytesSize)
 	{
