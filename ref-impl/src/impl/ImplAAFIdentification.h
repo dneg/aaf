@@ -249,10 +249,10 @@ private:
   OMFixedSizeProperty<aafProductVersion_t>	_productVersion;
   OMWideStringProperty                      _productVersionString;
   OMFixedSizeProperty<aafUID_t>             _productId;
-  OMFixedSizeProperty<aafTimeStamp_t>        _date;
+  OMFixedSizeProperty<aafTimeStamp_t>       _date;
   OMFixedSizeProperty<aafProductVersion_t>	_toolkitVersion;
-  OMWideStringProperty                        _platform;
-  // FixedSizeProperty<AUID>                 _generation;
+  OMWideStringProperty                      _platform;
+  OMFixedSizeProperty<aafUID_t>             _generation;
 };
 
 #endif // ! __ImplAAFIdentification_h__
