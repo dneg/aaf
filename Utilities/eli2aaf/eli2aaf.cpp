@@ -801,7 +801,7 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 		// This set will be used to create one MasterMob + SourceClip + EssenceData
 		// for each unique DV file
 		map<string, aafMobID_t> mobID_by_dvfile;
-		for (int i = 0; i < dvfile_by_idx.size(); i++)
+		for (size_t i = 0; i < dvfile_by_idx.size(); i++)
 		{
 			mobID_by_dvfile[ dvfile_by_idx[i] ] = zerouid;
 		}
@@ -856,7 +856,7 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 		ctlslotA2.SetSegment(sequenceA2);
 
 		// Loop over the clips, appending SourceClips to the sequence
-		for (int i = 0; i < start_by_idx.size(); i++)
+		for (size_t i = 0; i < start_by_idx.size(); i++)
 		{
 			// In ELI format, the end index is last included frame,
 			// so add 1 when calculating the length
