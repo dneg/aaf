@@ -523,7 +523,7 @@ AD_XCONSTRUCTOR4(%01, objPass, %02, %03, %04,
 AD_XMETHOD2(Get%01,
 			[out\\, string\\, size_is\\(bufSize\\)],
 			objPass,
-			wchar_t *,
+			aafCharacter *,
 			p%01,
 			buffer into which %01 is to be written,
 
