@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -272,10 +272,13 @@ AAFRESULT STDMETHODCALLTYPE
  {
 	 AAFRESULT aafError = AAFRESULT_SUCCESS;
 	 
-	 ImplAAFDataDef	*dataDef;
+	 ImplAAFDataDefSP dataDef;
 	 aafBool		isSound;
 	 
-	 GetDataDef (&dataDef);
+	 aafError = GetDataDef (&dataDef);
+	if (AAFRESULT_FAILED(aafError))
+		return aafError;
+
 	 dataDef->IsSoundKind(&isSound);
 	 if(isSound)
 	 {
