@@ -5,7 +5,8 @@ usage()
 	echo `basename $0` exit_status count arguments ...
 	echo Repeat a command \"count\" times or until the exit status
 	echo of the command is  \"exit_status\".  If \"count\" is reached,
-	echo the last exist status of the command is returned.
+	echo the last exist status of the command is returned.  The script
+	echo sleeps for 1 second between retries.
 	exit 1;
 }
 
@@ -34,6 +35,7 @@ do
 	if [ $STATUS -eq $EXIT_STATUS ]; then
 		exit $EXIT_STATUS;
 	fi
+	sleep 1
 	let I++
 done
 
