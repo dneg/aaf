@@ -625,7 +625,7 @@ AAFRESULT aafMobIDFromMajorMinor(
 #include <Events.h>
 #include <time.h>
 
-static void pvtMacCreateAuid(aafUID_t  *pauid)
+static void pvtMacCreateGuid(GUID  *pguid)
 {
   // {1994bd00-69de-11d2-b6bc-fcab70ff7331}
   static GUID sTemplate = 
@@ -635,18 +635,18 @@ static void pvtMacCreateAuid(aafUID_t  *pauid)
 		{ 0xb6, 0xbc, 0xfc, 0xab, 0x70, 0xff, 0x73, 0x31 } };
   static bool sInitializedTemplate = false;
   
-  assert (pauid)
+  assert (pguid);
   if (!sInitializedTemplate)
   {
     time_t timer = time(NULL);
-    UInt32 ticks = TickCount();
+    aafUInt32 ticks = TickCount();
     sTemplate.Data1 += timer + ticks;
     sInitializedTemplate = true;
   }
   
   // Just bump the first member of the guid to emulate GUIDGEN behavior.
   ++sTemplate.Data1;
-  *pauid = sTemplate;
+  *pguid = sTemplate;
 }
 #endif
 
@@ -656,15 +656,15 @@ AAFRESULT aafAUIDNew(aafUID_t * auid)
 {
   if (! auid)
 	 return AAFRESULT_NULL_PARAM;
-#if defined(_MAC) || defined(macintosh)
-  pvtMacCreateAuid (auid);
-#else
   GUID guid;
+#if defined(_MAC) || defined(macintosh)
+  pvtMacCreateGuid (&guid);
+#else
   HRESULT hr = CoCreateGuid (&guid);
   if (FAILED (hr))
 	 return hr;
-  memcpy (auid, &guid, sizeof (guid));
 #endif
+  memcpy (auid, &guid, sizeof (guid));
   return AAFRESULT_SUCCESS;
 }
 
