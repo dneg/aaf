@@ -212,10 +212,10 @@ void printStackTrace(OMOStream& s)
         s << (void*)stackFrame.AddrPC.Offset << " ";
 
         char buffer[sizeof(IMAGEHLP_SYMBOL) + 1024];
+        memset(buffer, 0, sizeof(buffer));
         PIMAGEHLP_SYMBOL sym = (PIMAGEHLP_SYMBOL) buffer;
-        memset(sym, 0, sizeof(IMAGEHLP_SYMBOL));
-        sym->SizeOfStruct = sizeof(IMAGEHLP_SYMBOL);
-        sym->MaxNameLength = 1024 - sizeof(IMAGEHLP_SYMBOL) - 1;
+        sym->SizeOfStruct = sizeof(buffer);
+        sym->MaxNameLength = 1024;
         DWORD disp;
         DWORD address = stackFrame.AddrPC.Offset;
         BOOL symStatus = _SymGetSymFromAddr(
