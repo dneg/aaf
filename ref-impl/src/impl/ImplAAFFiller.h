@@ -56,7 +56,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Create
 	    (// @parm [in] Data Definition Object
-         ImplAAFDataDef * datadef,
+         aafUID_t * pDataDef,
 
 		 // @parm [in] Length Property Value
 		 aafLength_t  length);
@@ -64,6 +64,13 @@ public:
 
 
 public:
+
+	virtual AAFRESULT TraverseToClip( aafLength_t length,
+									  ImplAAFSegment **sclp,
+									  ImplAAFPulldown **pulldownObj,
+									  aafInt32 *pulldownPhase,
+									  aafLength_t *sclpLen,
+									  aafBool *isMask);
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFFiller)
