@@ -444,4 +444,12 @@ AD_XMETHOD1(GetEssenceFormatList,
 			An essence format with all valid parameter names filled in,
 			Returns an essence format object specifying which parameters may be set with the current codec.)
 
+AD_XMETHOD1(GetEssenceDescriptorID,
+			[out],
+			objPass,
+			aafUID_t *,
+			pDescriptorID,
+			The stored object AUID of the essence descriptor,
+			Returns the stored object AUID of the essence descriptor associated with this codec.)
+
 AD_XCLASS_END(Abstract, Transient)
