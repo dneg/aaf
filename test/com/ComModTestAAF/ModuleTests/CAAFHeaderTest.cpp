@@ -632,7 +632,7 @@ void HeaderTest::createFileMob(int itemNumber)
 #define SZ_ESSENCE 512
 void HeaderTest::createEssenceData(IAAFSourceMob *pSourceMob)
 {
-	char buff[500];
+	char buff[SZ_ESSENCE];
 	aafUInt32 bytesWritten;
 	for(int i=0;i<SZ_ESSENCE;i++)
 		buff[i]=(char)i;
