@@ -86,7 +86,7 @@ protected:
 //      Notes:      B-flat,C-sharp
 //
 //-----------------------------------------------------------------------
-const CBDIRPAD = DIRENTRYSIZE - sizeof(SPreDirEntry);
+const int CBDIRPAD = DIRENTRYSIZE - sizeof(SPreDirEntry);
 
 //  DirEntry bit flags are used for the following private state
 
@@ -162,6 +162,7 @@ class CDirSect
 public:
     SCODE  Init(USHORT cbSector);
 
+    inline CDirEntry& GetAdeEntry( ULONG index );
     inline CDirEntry*  GetEntry(DIROFFSET iEntry);
     inline void ByteSwap(USHORT cbSector);
     
@@ -179,6 +180,15 @@ private:
 #endif
 
 };
+
+inline CDirEntry& CDirSect::GetAdeEntry( ULONG index )
+{
+   int size = sizeof(CDirSect);
+   if ( size%sizeof(int) != 0 ) {
+      size += sizeof(int) - size;
+   }
+   return ( (CDirEntry*)( ((BYTE*)this ) + size ) )[index]; 
+}
 
 //+-------------------------------------------------------------------------
 //
@@ -274,7 +284,6 @@ public:
     inline SCODE  GetName(const SID sid, CDfName *pdfn);
     inline SCODE  GetStart(const SID sid, SECT * psect);
     inline SCODE  GetSize(const SID sid, ULONG *pulSize);
-
     inline SCODE  GetChild(const SID sid, SID *psid);
     inline SCODE  GetFlags(const SID sid, MSENTRYFLAGS *pmse);
     inline SCODE  GetClassId(const SID sid, GUID *pcls);
