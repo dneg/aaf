@@ -127,6 +127,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		  seg->Release();
       seg = NULL;
+
+      sclp->Release();
+      sclp = NULL;
 	  }
 
     // Add the mob to the file.
@@ -141,6 +144,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   // Cleanup and return
   if (newSlot)
     newSlot->Release();
+
+  if (seg)
+    seg->Release();
 
   if (sclp)
     sclp->Release();
@@ -157,11 +163,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   if (pFile)
   {  // Close file
     if (bFileOpen)
-	{
-		pFile->Save();
-		pFile->Close();
-	}
-     pFile->Release();
+	  {
+		  pFile->Save();
+		  pFile->Close();
+	  }
+    pFile->Release();
   }
 
   return hr;

@@ -287,6 +287,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	if (pSourceMob)
 		pSourceMob->Release();
 
+	if (pDictionary)
+		pDictionary->Release();
+
 	if (pHeader)
 		pHeader->Release();
 
@@ -356,17 +359,20 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	
   
 	// Cleanup and return
-	if (pEssDesc)
-		pEssDesc->Release();
-
 	if (pAIFCDesc)
 		pAIFCDesc->Release();
+
+  if (pEssDesc)
+		pEssDesc->Release();
+
+	if (pSourceMob)
+		pSourceMob->Release();
 
 	if (pMob)
 		pMob->Release();
 
-	if (pSourceMob)
-		pSourceMob->Release();
+	if (pMobIter)
+		pMobIter->Release();
 
 	if (pHeader)
 		pHeader->Release();
