@@ -292,6 +292,41 @@ AD_XMETHOD4(GetNumChannels,
 	// AAFRESULT_NULL_PARAM
 	//   - pNumChannels is null.)
 
+AD_XMETHOD3(GetSelectInfo,
+			[in],
+			objIn,
+			AAFSourceMob,
+			fileMob,
+			Get the number of processable channels on this file mob,
+			[in],
+			objIn,
+			AAFEssenceStream,
+			stream,
+			Here is an essence stream with the data,
+			[out],
+			objPass,
+			aafSelectInfo_t *,
+			pSelectInfo,
+			Information required to select by media criteria,
+			Returns a block of information required to select essence by criteria.  The SDK
+	// will use this criteria to find the best essence to fit requirements of size or speed.
+	//
+	// The AAFEssenceStream is owned by IAAFEssenceAccess\, and
+	// therefore should not AddRef\(\) it.  The codec may seek and read the supplied
+	// open stream as much as required to determine the number of channels\, but should
+	// not assume that the Open method on the codec has been called \(ie: it must parse
+	// any header itself\).
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pSelectInfo is null.)
+
 
 AD_XMETHOD7(ValidateEssence,
 			[in],
