@@ -41,11 +41,11 @@ class ConfigManager {
     //directories
     static File m_TmpDir=new File("tmp");
     static File m_PrjDir=new File("graphs");
-    static File m_DotPath=new File("C:\\Tools\\ATT\\Graphviz\\bin\\dot.exe");
-    static File m_NeatoPath=new File("C:\\Tools\\ATT\\Graphviz\\bin\\neato.exe");
-    static File m_GraphVizFontDir=new File("C:\\Tools\\ATT\\Graphviz");
-    static File m_Aaf2DotPath=new File( "C:\\Tools\\AAF\\aaf2dot.exe" );
-    static File m_AafMeta2DotPath=new File( "C:\\Tools\\AAF\\aafmeta2dot.exe" );
+    static File m_DotPath=new File("C:\\Program Files\\ATT\\Graphviz\\bin\\dot.exe");
+    static File m_NeatoPath=new File("C:\\Program Files\\ATT\\Graphviz\\bin\\neato.exe");
+    static File m_GraphVizFontDir=new File("C:\\Program Files\\ATT\\Graphviz");
+    static File m_Aaf2DotPath=new File( "aaf2dot.exe" );
+    static File m_AafMeta2DotPath=new File( "aafmeta2dot.exe" );
     static File m_LastDir=null;
     static File m_LastExportDir=null;
 
@@ -60,7 +60,16 @@ class ConfigManager {
 
     ConfigManager(AAFViewer app){
 	application=app;
-	cfgFile=new File(System.getProperty("user.home")+"/"+PREFS_FILE_NAME);
+	// first try current directory for config file
+	// then try the home directory
+	// if not in either than the config file (after save) will be placed in the current directory
+	cfgFile = new File( PREFS_FILE_NAME );
+	if (!cfgFile.exists()) {
+	   cfgFile=new File(System.getProperty("user.home")+"/"+PREFS_FILE_NAME);
+	   if (!cfgFile.exists()) {
+	      cfgFile = new File( PREFS_FILE_NAME );
+	   }
+	}
     }
 
     /*load user prefs from config file (in theory, if the file cannot be found,
@@ -116,7 +125,7 @@ class ConfigManager {
 		ex.printStackTrace();
 	    }
 	}
-	else {System.out.println("No Preferences File Found in : "+System.getProperty("user.home"));}
+	else {System.out.println("No Preferences File Found in current directory or "+System.getProperty("user.home"));}
      }
 
     /*save user prefs to config file*/
