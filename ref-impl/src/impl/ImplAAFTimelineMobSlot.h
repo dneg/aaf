@@ -1,4 +1,3 @@
-
 //@doc
 //@class    AAFTimelineMobSlot | Implementation class for AAFTimelineMobSlot
 #ifndef __ImplAAFTimelineMobSlot_h__
@@ -47,6 +46,11 @@ public:
   ~ImplAAFTimelineMobSlot ();
 
   OMDECLARE_STORABLE(ImplAAFMobSlot)
+
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+	Initialize ();
+
 
   //****************
   // GetEditRate()
