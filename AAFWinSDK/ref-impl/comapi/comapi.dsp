@@ -39,6 +39,7 @@ RSC=rc.exe
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
 # ADD CPP /nologo /W3 /GR /GX /O2 /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/Om" /I "../../../ref-impl/include/OM" /I "../../../ref-impl/src/com-api/com-dll" /I "./" /D "NDEBUG" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "_WIN32" /D "BOB_TEST" /YX /FD /c
@@ -51,7 +52,11 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386 /out:"Release/AAFCOAPI.dll"
+# Begin Special Build Tool
+SOURCE=$(InputPath)
+PostBuild_Cmds= regsvr32 /s Release/AAFCOAPI.dll
+# End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "comapi - Win32 Debug"
 
@@ -67,7 +72,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /W3 /Gm /GR /GX /Zi /Od /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/Om" /I "../../../ref-impl/include/OM" /I "../../../ref-impl/src/com-api/com-dll" /I "./" /D "_WIN32" /D "_WINDOWS" /D "_DEBUG" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "BOB_TEST" /D "OM_ENABLE_DEBUG" /YX /FD /c
+# ADD CPP /nologo /W3 /Gm /GR /GX /Zi /Od /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/Om" /I "../../../ref-impl/include/OM" /I "../../../ref-impl/src/com-api/com-dll" /I "./" /D "_WIN32" /D "_WINDOWS" /D "_DEBUG" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "BOB_TEST" /D "OM_ENABLE_DEBUG" /FR /YX /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -77,7 +82,11 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"Debug/AAFCOPI.dll" /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"Debug/AAFCOAPI.dll" /pdbtype:sept
+# Begin Special Build Tool
+SOURCE=$(InputPath)
+PostBuild_Cmds= regsvr32 /s Debug/AAFCOAPI.dll
+# End Special Build Tool
 
 !ENDIF 
 
@@ -92,7 +101,7 @@ SOURCE="..\..\..\ref-impl\include\com-api\AAF.idl"
 !IF  "$(CFG)" == "comapi - Win32 Release"
 
 # Begin Custom Build
-InputDir="\AAFSources\coresw\AAF-toolkit\ref-impl\include\com-api"
+InputDir="\coresw\AAF-toolkit\ref-impl\include\com-api"
 ProjDir=.
 InputPath=..\..\..\ref-impl\include\com-api\AAF.idl
 InputName=AAF
@@ -105,7 +114,7 @@ InputName=AAF
 !ELSEIF  "$(CFG)" == "comapi - Win32 Debug"
 
 # Begin Custom Build
-InputDir="\AAFSources\coresw\AAF-toolkit\ref-impl\include\com-api"
+InputDir="\coresw\AAF-toolkit\ref-impl\include\com-api"
 ProjDir=.
 InputPath=..\..\..\ref-impl\include\com-api\AAF.idl
 InputName=AAF
@@ -143,7 +152,7 @@ SOURCE="..\..\..\ref-impl\include\com-api\AAFModuleTest.idl"
 !ELSEIF  "$(CFG)" == "comapi - Win32 Debug"
 
 # Begin Custom Build
-InputDir="\AAFSources\coresw\AAF-toolkit\ref-impl\include\com-api"
+InputDir="\coresw\AAF-toolkit\ref-impl\include\com-api"
 ProjDir=.
 InputPath=..\..\..\ref-impl\include\com-api\AAFModuleTest.idl
 InputName=AAFModuleTest
@@ -167,7 +176,7 @@ SOURCE="..\..\..\ref-impl\include\com-api\AAFTypes.idl"
 !IF  "$(CFG)" == "comapi - Win32 Release"
 
 # Begin Custom Build
-InputDir="\AAFSources\coresw\AAF-toolkit\ref-impl\include\com-api"
+InputDir="\coresw\AAF-toolkit\ref-impl\include\com-api"
 ProjDir=.
 InputPath=..\..\..\ref-impl\include\com-api\AAFTypes.idl
 InputName=AAFTypes
@@ -180,7 +189,7 @@ InputName=AAFTypes
 !ELSEIF  "$(CFG)" == "comapi - Win32 Debug"
 
 # Begin Custom Build
-InputDir="\AAFSources\coresw\AAF-toolkit\ref-impl\include\com-api"
+InputDir="\coresw\AAF-toolkit\ref-impl\include\com-api"
 ProjDir=.
 InputPath=..\..\..\ref-impl\include\com-api\AAFTypes.idl
 InputName=AAFTypes
