@@ -239,19 +239,19 @@ void GetStringValue (IAAFObject * pObj,
 bool classDefinitionIsA ( IAAFClassDef *pClassDefQuery,
 							   aafUID_constref targetAUID)
 {
-	IAAFDefObject *pDefObject = NULL;
+	IAAFMetaDefinition *pMetaDefinition = NULL;
 	IAAFClassDef *pParentClass=NULL;
 	bool classMatch=false;
 
 
   try
   {
-	  check(pClassDefQuery->QueryInterface(IID_IAAFDefObject,(void **)&pDefObject));
+	  check(pClassDefQuery->QueryInterface(IID_IAAFMetaDefinition,(void **)&pMetaDefinition));
 
     aafUID_t testAUID;
-	  check(pDefObject->GetAUID(&testAUID));
-	  pDefObject->Release();
-	  pDefObject=NULL;
+	  check(pMetaDefinition->GetAUID(&testAUID));
+	  pMetaDefinition->Release();
+	  pMetaDefinition=NULL;
 
 
     if (!memcmp (&testAUID, &targetAUID, sizeof (aafUID_t)))
@@ -275,8 +275,8 @@ bool classDefinitionIsA ( IAAFClassDef *pClassDefQuery,
     // cleanup after error...
     if (pParentClass)
       pParentClass->Release();
-    if (pDefObject)
-      pDefObject->Release();
+    if (pMetaDefinition)
+      pMetaDefinition->Release();
 
     throw;
   }
