@@ -8,6 +8,7 @@
 
 class OMStoredObject;
 class OMFile;
+class OMClassFactory;
 
 // @class Abstract base class for all objects that may be stored by
 //        the Object Manager.
@@ -90,6 +91,14 @@ public:
     // @cmember This object's property set.
   virtual OMPropertySet* propertySet(void);
 
+    // @cmember The <c OMClassFactory> that created this object.
+    //   @this const
+  OMClassFactory* classFactory(void) const;
+
+    // @cmember Inform this <c OMStorable> of the <c OMClassFactory>
+    //          that was used to create it.
+  void setClassFactory(const OMClassFactory* classFactory);
+
 private:
   // @access Private members.
 
@@ -121,6 +130,7 @@ private:
   size_t _key;
 
   OMStoredObject* _store;
+  const OMClassFactory* _classFactory;
 
 };
 
