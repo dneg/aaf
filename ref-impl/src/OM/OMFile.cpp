@@ -59,7 +59,7 @@ OMFile::OMFile(const wchar_t* fileName,
                const OMClassFactory* factory,
                OMDictionary* dictionary,
                const OMLoadMode loadMode)
-: _root(0), _rootStoredObject(store),
+: _root(0), _rootStore(store),
   _dictionary(dictionary),
   _objectDirectory(0), _referencedProperties(0), _mode(mode),
   _loadMode(loadMode), _fileName(0),
@@ -92,7 +92,7 @@ OMFile::OMFile(const wchar_t* fileName,
                const OMClassFactory* factory,
                OMDictionary* dictionary,
                OMStorable* root)
-: _root(root), _rootStoredObject(store),
+: _root(root), _rootStore(store),
   _dictionary(dictionary),
   _objectDirectory(0), _referencedProperties(0), _mode(mode),
   _loadMode(lazyLoad), _fileName(0), _signature(signature),
@@ -105,7 +105,7 @@ OMFile::OMFile(const wchar_t* fileName,
   setClassFactory(factory);
   setName(L"<file>");
   _root->attach(this, L"/");
-  _root->setStore(_rootStoredObject);
+  _root->setStore(_rootStore);
 }
 
   // @mfunc Destructor.
@@ -260,7 +260,7 @@ void OMFile::save(void* clientOnSaveContext)
     _clientOnSaveContext = clientOnSaveContext;
     _root->onSave(_clientOnSaveContext);
     _root->save();
-    _rootStoredObject->save(referencedProperties());
+    _rootStore->save(referencedProperties());
   }
 }
 
@@ -294,14 +294,14 @@ OMStorable* OMFile::restore(void)
 {
   TRACE("OMFile::restore");
 
-  _rootStoredObject->restore(_referencedProperties);
+  _rootStore->restore(_referencedProperties);
   OMClassId id;
-  _rootStoredObject->restore(id);
+  _rootStore->restore(id);
   if (id == OMRootStorable::_rootClassId) {
     ASSERT("Valid dictionary", _dictionary != 0);
     _root = new OMRootStorable();
     _root->attach(this, L"/");
-    _root->setStore(_rootStoredObject);
+    _root->setStore(_rootStore);
     _root->setClassFactory(_dictionary);
 
     _root->restoreContents();
@@ -310,7 +310,7 @@ OMStorable* OMFile::restore(void)
     ASSERT("Consistent dictionaries", metaDictionary == _dictionary);
     _root->setClassFactory(classFactory());
   } else {
-    _root = OMStorable::restoreFrom(this, L"/", *_rootStoredObject);
+    _root = OMStorable::restoreFrom(this, L"/", *_rootStore);
   }
   return root();
 }
@@ -386,8 +386,8 @@ OMByteOrder OMFile::byteOrder(void) const
 {
   TRACE("OMFile::byteOrder");
 
-  ASSERT("Valid root", _rootStoredObject != 0);
-  return _rootStoredObject->byteOrder();
+  ASSERT("Valid root", _rootStore != 0);
+  return _rootStore->byteOrder();
 }
 
   // @mfunc The loading mode (eager or lazy) of this <c OMFile>.
