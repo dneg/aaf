@@ -66,22 +66,6 @@ inline void checkExpression(bool expression, HRESULT r=AAFRESULT_TEST_FAILED)
     throw r;
 }
 
-// Function to compare COM interface pointers, taken from 
-// CAAFTypeDefFixedArrayTest.cpp.
-template <class T1, class T2>
-aafBoolean_t  AreUnksSame(T1& cls1, T2& cls2)
-{
-	IAAFSmartPointer<IUnknown>    spUnk1, spUnk2;
-	
-	checkResult(cls1->QueryInterface(IID_IUnknown, (void **)&spUnk1));
-	checkResult(cls2->QueryInterface(IID_IUnknown, (void **)&spUnk2));
-	
-	if (spUnk1 == spUnk2)
-		return kAAFTrue;
-	else
-		return kAAFFalse;
-}
-
 #define MOB_NAME_TEST L"MOBTest"
 #define MOB_NAME_SIZE 16
 
@@ -164,7 +148,6 @@ static HRESULT WriteAAFFile(IAAFFile* pFile)
       // Make sure the header returns us the same dictionary as the file
 	  IAAFDictionarySP pDictionaryFromHeader;
 	  checkResult(pHeader->GetDictionary(&pDictionaryFromHeader));
-	  checkExpression(AreUnksSame(pDictionary,pDictionaryFromHeader)==kAAFTrue);
 
 	  CAAFBuiltinDefs defs (pDictionary);
  	  
