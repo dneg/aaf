@@ -23,10 +23,6 @@ AD_IDL(//
 // AAFRESULT_NOMEMORY
 //   - insufficient system memory is available to perform the
 //     operation.
-//
-// AAFRESULT_NOT_INITIALIZED
-//   - This object has not yet had Initialize\(\) called on it through
-//     this object's primary interface.
 //)
 AD_FORWARD_DECLARATION(AAFSourceClip)
 AD_FORWARD_DECLARATION(AAFSourceMob)
@@ -37,6 +33,25 @@ AD_CLASS_UUID(b1a21373, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 
 AD_DEFAULT_UUID(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 AD_CLASS_BEGIN
+AD_METHOD0(Initialize,
+		   Initializes a newly allocated\, empty IAAFMasterMob-supporting
+  // object.  This method must be called after allocation\, and before
+  // any other method can be called.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has not yet been called on this object.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_ALREADY_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.)
+
+
 AD_XMETHOD5(AddMasterSlot,
 			[in],
 			  objPass,
@@ -210,7 +225,7 @@ AD_XMETHOD2(GetNumRepresentations,
 			  aafNumSlots_t *,
 			  pNumReps,
 			  number of representations,
-  // This function returns the number of media representations
+			This function returns the number of media representations
   // available for the specified SlotID on a specified Master
   // Mob. This function is meant to work with
   // GetRepresentationSourceClip\, so that you can iterate through
@@ -222,7 +237,7 @@ AD_XMETHOD2(GetNumRepresentations,
   // Succeeds if all of the following are true:
   // - the pNumReps pointer is valid.
   //
-  // If this method fails nothing will be written to *pLen.
+  // If this method fails nothing will be written to *pNumReps.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -235,7 +250,7 @@ AD_XMETHOD2(GetNumRepresentations,
   //   - pNumReps arg is NULL.
   //
   // AAFRESULT_SLOT_NOTFOUND
-  //   - The specified Master Slot was not found.)
+  //   - The Master Slot specified by slotID was not found.)
 
 
 AD_XMETHOD3(GetRepresentationSourceClip,
@@ -350,6 +365,7 @@ AD_XMETHOD3(GetCriteriaSourceClip,
   // AAFRESULT_SLOT_NOTFOUND
   //   - The specified Master Slot was not found.)
 
+
 AD_XMETHOD5(AppendPhysSourceRef,
 			[in],
 			  objPass,
@@ -362,8 +378,8 @@ AD_XMETHOD5(AppendPhysSourceRef,
 			  aMobSlot,
 			  SlotID of slot to contain reference,
 			[in],
-				objPass,
-				aafUID_t *,
+			  objPass,
+			  aafUID_t *,
 			  pEssenceKind,
 			Data kind of slot to contain reference.  Requires a data kind
 	// valid for a essence stream.  Valid data kinds are:
@@ -379,12 +395,12 @@ AD_XMETHOD5(AppendPhysSourceRef,
 			  aafLength_t,
 			  srcRefLength,
 			  Length of the Source Clip,
-  // Connects the specified Source Mob with the physical Source Mob
-  // that describes the previous generation of essence.  If a physical
-  // Source Mob\, such as a File Source Mob or tape Source Mob\,
-  // references another physical Source Mob as its ancestor\, with
-  // no pulldown\, then this function makes the connection between the
-  // two.
+			Connects this Source Mob with the physical Source Mob that
+  // describes the previous generation of essence\, appending it to
+  // existing Mob data.  If a physical Source Mob\, such as a File
+  // Source Mob or tape Source Mob\, references another physical
+  // Source Mob as its ancestor\, with no pulldown\, then this
+  // function makes the connection between the two.
   //
   // Functionally\, this is a helper function to create a slot with an
   // AAFSourceClip referencing a particular piece of media.  This
@@ -410,6 +426,7 @@ AD_XMETHOD5(AppendPhysSourceRef,
   //   - either pEssenceKind or pSourceRefObj is null.
   //
   // \(other codes here.\))
+
 
 AD_XMETHOD5(NewPhysSourceRef,
 			[in],
@@ -440,12 +457,12 @@ AD_XMETHOD5(NewPhysSourceRef,
 			  aafLength_t,
 			  srcRefLength,
 			  Length of the Source Clip,
-  // Connects the specified Source Mob with the physical Source Mob
-  // that describes the previous generation of essence.  If a physical
-  // Source Mob\, such as a File Source Mob or tape Source Mob\,
-  // references another physical Source Mob as its ancestor\, with
-  // no pulldown\, then this function makes the connection between the
-  // two.
+			Connects this Source Mob with the physical Source Mob that
+  // describes the previous generation of essence\, replacing any
+  // existing Mob data.  If a physical Source Mob\, such as a File
+  // Source Mob or tape Source Mob\, references another physical
+  // Source Mob as its ancestor\, with no pulldown\, then this
+  // function makes the connection between the two.
   //
   // Functionally\, this is a helper function to create a slot with an
   // AAFSourceClip referencing a particular piece of media.  This
@@ -471,6 +488,5 @@ AD_XMETHOD5(NewPhysSourceRef,
   //   - either pEssenceKind or pSourceRefObj is null.
   //
   // \(other codes here.\))
-
 AD_COM_METH(.method-SearchSource)
 AD_CLASS_END
