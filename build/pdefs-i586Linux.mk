@@ -103,7 +103,7 @@ endif
 
 # For GNU/Linux the UUID library is provided by e2fsprogs
 ifndef UUIDLIB
-    UUIDLIB_PATH := $(shell for f in /usr/local/lib /usr/lib /lib; do test -e $$f/libuuid.a && echo $$f && break; done)
+    UUIDLIB_PATH := $(shell for f in /usr/local/lib /usr/lib /lib /usr/lib64 /lib64; do test -e $$f/libuuid.a && echo $$f && break; done)
     ifeq "$(UUIDLIB_PATH)" ""
         $(error Required library libuuid.a not found - install the e2fsprogs development libraries)
     endif
