@@ -188,7 +188,7 @@ CAAFAIFCCodec::CreateDescriptor (IAAFDictionary *dict, IAAFPluginDef **descPtr)
 		desc->AddRef();
 		CHECK(desc->Initialize(JEFFS_AIFC_PLUGIN, L"Example AIFC Codec", L"Handles AIFC data."));
 		
-		CHECK(desc->SetCategoryClass(AUID_AAFDefObject));
+		CHECK(desc->SetCategoryClass(AUID_AAFCodecDef));
 		CHECK(desc->SetPluginVersionString(manufRev));
 		CHECK(dict->LookupClassDef(AUID_AAFNetworkLocator, &pcd));
 		CHECK(pcd->CreateInstance(IID_IAAFLocator, 
