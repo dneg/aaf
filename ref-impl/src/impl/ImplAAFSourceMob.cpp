@@ -133,13 +133,19 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pEdes == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	if (pEdes->attached())
-		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
 	ImplAAFEssenceDescriptor *pOldEdes = _essenceDesc;
 	if (pOldEdes)
+	{
+	  if (pOldEdes == pEdes)
+      return AAFRESULT_SUCCESS;
+	  
 	  pOldEdes->ReleaseReference();
-	pOldEdes = 0;
+	  pOldEdes = 0;
+	}
+
+	if (pEdes->attached())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
 	_essenceDesc = pEdes;
 	
