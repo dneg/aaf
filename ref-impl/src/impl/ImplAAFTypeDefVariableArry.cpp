@@ -506,7 +506,19 @@ OMProperty * ImplAAFTypeDefVariableArray::pvtCreateOMPropertyMBS
 	{
 	  // We don't support variable arrays of variably-sized properties.
 	  assert (ptd->IsFixedSize());
-	  aafUInt32 elemSize = ptd->NativeSize ();
+
+	  // aafUInt32 elemSize = ptd->NativeSize ();
+	  // BobT, 2000-02-14: Hack to handle unpersisting objects which have
+	  // properties of client-defined types which have not yet had
+	  // their types registered.
+	  //
+	  // Was: aafUInt32 elemSize = ptd->NativeSize ();
+	  //
+	  aafUInt32 elemSize;
+	  if (ptd->IsRegistered())
+		elemSize = ptd->NativeSize ();
+	  else
+		elemSize = ptd->PropValSize ();
 
 	  // But even though elems are fixed size, the variable array is
 	  // of variable size.  Specify a size of one element.
