@@ -40,14 +40,7 @@
 
 #include <iostream.h>
 
-#if defined(_MAC) || defined(macintosh)
-#include "wintypes.h"
-#include <storage.h>
-#elif defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
-#include "storage.h"
-#else
-#include <objbase.h>
-#endif
+#include "OMMSStructuredStorage.h"
 
 const OMVersion currentVersion = 32;
 
