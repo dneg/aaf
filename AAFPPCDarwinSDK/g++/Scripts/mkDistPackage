@@ -91,6 +91,7 @@ EOF
 	-d $PWD/Dist/res/Description.plist \
 	-r $PWD/Dist/res
 
+pushd Dist
 tar czvf $DIST_FILE_NAME.tar.gz ./$filename
-
+popd
 rm -rf Dist/res
