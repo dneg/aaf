@@ -101,6 +101,6 @@ void OMDictionary::initialize(void)
 
 void OMDictionary::finalize(void)
 {
-  TRACE("OMDictionary::initialize");
+  TRACE("OMDictionary::finalize");
   ASSERT("Unimplemented code not reached", false);
 }
