@@ -26,7 +26,6 @@
  ************************************************************************/
 
 
-
 //
 // Use include guard so that the file can be included in every 
 // platform build without causing any errors in the build.
@@ -182,7 +181,7 @@ AAFRDLIRESULT AAFFindLibrary(const char* name, LPFNAAFTESTFILEPROC testProc, voi
     }
     
     // Save our directory id.
-    short dirID = cInfo.dirInfo.ioDrDirID;
+    long dirID = cInfo.dirInfo.ioDrDirID;
 
     // Walk through the files and folders in the given folder.
     memset(&cInfo, 0, sizeof(cInfo));
