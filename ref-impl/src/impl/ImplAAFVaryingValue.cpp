@@ -186,9 +186,40 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFVaryingValue::GetValueBufLen (
-      aafInt32 *  /*pLen*/)
+      aafInt32 *pLen)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplEnumAAFControlPoints	*theEnum = NULL;
+	ImplAAFControlPoint			*point = NULL;
+	aafUInt32					oneSize, largest = 0;
+
+	if(pLen == NULL)
+		return AAFRESULT_NULL_PARAM;
+	
+	XPROTECT()
+	{
+		CHECK(GetControlPoints(&theEnum));
+		while(theEnum->NextOne(&point) == AAFRESULT_SUCCESS)
+		{
+			CHECK(point->GetValueBufLen (&oneSize));
+			if(oneSize > largest)
+				largest = oneSize;
+			point->ReleaseReference();
+			point = NULL;
+		}
+		theEnum->ReleaseReference();
+		theEnum = NULL;
+		*pLen = largest;
+	}
+	XEXCEPT
+	{
+		if(point)
+			point->ReleaseReference();
+		if(theEnum)
+			theEnum->ReleaseReference();
+	}
+	XEND;
+
+	return AAFRESULT_SUCCESS;
 }
 
 
