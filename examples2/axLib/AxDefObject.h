@@ -60,6 +60,9 @@ public:
 			 const AxString& name,
 			 const AxString& desc );
 
+	inline operator IAAFContainerDefSP ()
+	{ return _spIaafContainerDef; }
+
 private:
 	IAAFContainerDefSP _spIaafContainerDef;
 };
@@ -74,6 +77,9 @@ public:
 	void Initialize( const aafUID_t& uid,
 			 const AxString& name,
 			 const AxString& desc );
+
+	inline operator IAAFInterpolationDefSP ()
+	{ return _spIaafInterpolationDef; }
 
 private:
 	IAAFInterpolationDefSP _spIaafInterpolationDef;
@@ -90,6 +96,9 @@ public:
 			 const AxString& name,
 			 const AxString& desc,
 			 IAAFTypeDefSP spIaafTypeDef );
+
+	inline operator IAAFParameterDefSP ()
+	{ return _spIaafParameterDef; }
 
 private:
 	IAAFParameterDefSP _spIaafParameterDef;
@@ -114,6 +123,9 @@ public:
 	void SetIsAccelerated( bool isAccel );
 	void SetSupportsAuthentication( bool supportsAuth );
 	void SetManufacturerInfo( IAAFNetworkLocatorSP manuInfo );
+
+	inline operator IAAFPluginDefSP ()
+	{ return _spIaafPluginDef; }
 
 private:
 	IAAFPluginDefSP _spIaafPluginDef;
@@ -144,6 +156,9 @@ public:
 	aafBoolean_t AreThereFlavours();
 
 	IEnumAAFCodecFlavoursSP EnumCodecFlavours();
+
+	inline operator IAAFCodecDefSP ()
+	{ return _spIaafCodecDef; }
 
 private:
 	AxCodecDef();
