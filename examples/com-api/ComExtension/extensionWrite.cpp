@@ -208,6 +208,8 @@ static void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
 									ptd_String,
 									AAFFalse,	// mandatory
 									&pd_unused));
+  pd_unused->Release();
+  pd_unused=NULL;
 
   // Add the Role property to the PersonnelRecord class defintion.
   // The type of the Role property is eRole (an extensible enumeration
@@ -609,6 +611,8 @@ static void AppendResource (IAAFDictionary * pDict,
   pd=NULL;
   pva->Release();
   pva=NULL;
+  tdpv->Release();
+  tdpv=NULL;
   tda->Release();
   tda=NULL;
 
