@@ -56,6 +56,10 @@
 # 06-OCT-1999 : transdel Use copy instead of xcopy so that we can rename the  #
 #               files during the copy operation. Also, removed bin\debug      #
 #               directory from sdk. Also added support for nmake /a option.   #
+# 12-OCT-1999 : transdel Fixed problems with CONFIG_FILES_TO_REMOVE macro for #
+#               switching between configurations. The debug versions of the   #
+#               dlls were not always replaced with release versions for the   #
+#               release and "FULL" builds of the sdk.                         #
 ###############################################################################
 
 
@@ -297,11 +301,16 @@ TARGET_DLL_FILES = \
 #
 CONFIG_FILES_TO_REMOVE = \
 !if "$(CFG)"=="Release"
-#	$(DEBUG_LIB_FILES) \
+!if "$(LASTCFG)"=="Debug"
+	$(RELEASE_DLL_FILES)\
+!endif
 	$(DEBUG_DLL_FILES)
 !elseif "$(CFG)"=="Debug"
-#	$(RELEASE_LIB_FILES) \
-	$(DEBUG_DLL_FILES) \
+!if "$(LASTCFG)"=="Release" || "$(LASTCFG)"=="FULL"
+	$(RELEASE_DLL_FILES) \
+!endif
+	$(DEBUG_DLL_FILES)
+!elseif "$(LASTCFG)"=="Debug"
 	$(RELEASE_DLL_FILES)
 !endif
 
