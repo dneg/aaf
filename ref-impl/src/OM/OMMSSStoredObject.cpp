@@ -797,11 +797,11 @@ void OMMSSStoredObject::save(const OMPropertyTable* table)
 
   // byte order
   ASSERT("Index in native byte order", _byteOrder == hostByteOrder());
-  writeToStream(stream, &_byteOrder, sizeof(_byteOrder));
+  writeUInt8ToStream(stream, _byteOrder);
 
   // count of paths
   OMPropertyCount count = table->count();
-  writeToStream(stream, &count, sizeof(count));
+  writeUInt16ToStream(stream, count, _reorderBytes);
 
   // count of property ids
   OMUInt32 pidCount = 0;
@@ -809,7 +809,7 @@ void OMMSSStoredObject::save(const OMPropertyTable* table)
     OMUInt32 length = lengthOfPropertyPath(table->valueAt(i));
     pidCount = pidCount + length + 1;
   }
-  writeToStream(stream, &pidCount, sizeof(pidCount));
+  writeUInt32ToStream(stream, pidCount, _reorderBytes);
 
   // sequence of null terminated pids
   for (size_t j = 0; j < count; j++) {
@@ -819,9 +819,12 @@ void OMMSSStoredObject::save(const OMPropertyTable* table)
     OMPropertyId* externalName = new OMPropertyId[pidCount];
     ASSERT("Valid heap pointer", externalName != 0);
     externalizeUInt16Array(internalName, externalName, pidCount);
+    if (_reorderBytes) {
+      reorderUInt16Array(externalName, pidCount);
+    }
     writeToStream(stream, (void*)externalName, byteCount);
-    const OMPropertyId null = 0;
-    writeToStream(stream, (void*)&null, sizeof(null));
+    OMPropertyId null = 0;
+    writeUInt16ToStream(stream, null, _reorderBytes);
     delete [] externalName;
   }
 
@@ -1377,17 +1380,17 @@ void OMMSSStoredObject::save(const OMStoredVectorIndex* vector,
   // Write the count of elements.
   //
   OMUInt32 entries = vector->entries();
-  writeToStream(vectorIndexStream, &entries, sizeof(entries));
+  writeUInt32ToStream(vectorIndexStream, entries, _reorderBytes);
 
   // Write the first free key.
   //
   OMUInt32 firstFreeKey = vector->firstFreeKey();
-  writeToStream(vectorIndexStream, &firstFreeKey, sizeof(firstFreeKey));
+  writeUInt32ToStream(vectorIndexStream, firstFreeKey, _reorderBytes);
 
   // Write the last free key.
   //
   OMUInt32 lastFreeKey = vector->lastFreeKey();
-  writeToStream(vectorIndexStream, &lastFreeKey, sizeof(lastFreeKey));
+  writeUInt32ToStream(vectorIndexStream, lastFreeKey, _reorderBytes);
 
   // For each element write the element name.
   //
@@ -1395,7 +1398,7 @@ void OMMSSStoredObject::save(const OMStoredVectorIndex* vector,
   OMUInt32 name;
   for (size_t i = 0; i < entries; i++) {
     vector->iterate(context, name);
-    writeToStream(vectorIndexStream, &name, sizeof(name));
+    writeUInt32ToStream(vectorIndexStream, name, _reorderBytes);
   }
 
   // Close the stream.
@@ -1427,27 +1430,27 @@ void OMMSSStoredObject::save(const OMStoredSetIndex* set,
   // Write the count of elements.
   //
   OMUInt32 entries = set->entries();
-  writeToStream(setIndexStream, &entries, sizeof(entries));
+  writeUInt32ToStream(setIndexStream, entries, _reorderBytes);
 
   // Write the first free key.
   //
   OMUInt32 firstFreeKey = set->firstFreeKey();
-  writeToStream(setIndexStream, &firstFreeKey, sizeof(firstFreeKey));
+  writeUInt32ToStream(setIndexStream, firstFreeKey, _reorderBytes);
 
   // Write the last free key.
   //
   OMUInt32 lastFreeKey = set->lastFreeKey();
-  writeToStream(setIndexStream, &lastFreeKey, sizeof(lastFreeKey));
+  writeUInt32ToStream(setIndexStream, lastFreeKey, _reorderBytes);
 
   // Write the key pid.
   //
   OMPropertyId pid = set->keyPropertyId();
-  writeToStream(setIndexStream, &pid, sizeof(pid));
+  writeUInt16ToStream(setIndexStream, pid, _reorderBytes);
 
   // Write the key size.
   //
   OMKeySize keySize = set->keySize();
-  writeToStream(setIndexStream, &keySize, sizeof(keySize));
+  writeUInt8ToStream(setIndexStream, keySize);
 
   // For each element write the element name, reference count and key.
   //
@@ -1458,9 +1461,23 @@ void OMMSSStoredObject::save(const OMStoredSetIndex* set,
   ASSERT("Valid heap pointer", key != 0);
   for (size_t i = 0; i < entries; i++) {
     set->iterate(context, name, count, key);
-    writeToStream(setIndexStream, &name, sizeof(name));
-    writeToStream(setIndexStream, &count, sizeof(count));
-    writeToStream(setIndexStream, key, keySize);
+    writeUInt32ToStream(setIndexStream, name, _reorderBytes);
+    writeUInt32ToStream(setIndexStream, count, _reorderBytes);
+    // tjb - The following ought to be done via the key type and not
+    // via the key size
+    if (keySize == 16) {
+      OMUniqueObjectIdentification* k =
+                          reinterpret_cast<OMUniqueObjectIdentification*>(key);
+      writeUniqueObjectIdentificationToStream(setIndexStream,
+                                              *k,
+                                              _reorderBytes);
+    } else if (keySize == 32) {
+      OMUniqueMaterialIdentification* k =
+                        reinterpret_cast<OMUniqueMaterialIdentification*>(key);
+      writeUniqueMaterialIdentificationToStream(setIndexStream,
+                                                *k,
+                                                _reorderBytes);
+    }
   }
 
   // Close the stream.
@@ -1534,24 +1551,31 @@ void OMMSSStoredObject::save(const wchar_t* collectionName,
   // Write the count of elements.
   //
   OMUInt32 entries = count;
-  writeToStream(indexStream, &entries, sizeof(entries));
+  writeUInt32ToStream(indexStream, entries, _reorderBytes);
 
   // Write the tag.
   //
-  writeToStream(indexStream, &tag, sizeof(tag));
+  writeUInt16ToStream(indexStream, tag, _reorderBytes);
 
   // Write the key pid.
   //
-  writeToStream(indexStream, &keyPropertyId, sizeof(keyPropertyId));
+  writeUInt16ToStream(indexStream, keyPropertyId, _reorderBytes);
 
   // Write key size.
   //
   OMKeySize keySize = sizeof(OMUniqueObjectIdentification);
-  writeToStream(indexStream, &keySize, sizeof(keySize));
+  writeUInt8ToStream(indexStream, keySize);
 
   if (count > 0) {
     // For each element write the element unique identifier
     //
+    if (_reorderBytes) {
+      for (OMUInt32 i = 0; i < entries; i++) {
+        OMUniqueObjectIdentification* k =
+                          const_cast<OMUniqueObjectIdentification*>(&index[i]);
+        reorderUniqueObjectIdentification(*k);
+       }
+    }
     writeToStream(indexStream,
                   (void *)index,
                   count * sizeof(OMUniqueObjectIdentification));
@@ -1573,7 +1597,7 @@ void OMMSSStoredObject::saveStream(OMPropertyId pid,
 
   // Byte order
   //
-  writeToStream(_properties, &byteOrder, sizeof(byteOrder));
+  writeUInt8ToStream(_properties, byteOrder);
 
   // Name
   //
@@ -1582,6 +1606,9 @@ void OMMSSStoredObject::saveStream(OMPropertyId pid,
   ASSERT("Valid heap pointer", buffer != 0);
   externalizeString(name, buffer, characterCount);
   ASSERT("Native byte order", _byteOrder == hostByteOrder());
+  if (_reorderBytes) {
+    reorderString(buffer, characterCount);
+  }
   size_t byteCount = characterCount * sizeof(OMCharacter);
   writeToStream(_properties, buffer, byteCount);
   delete [] buffer;
@@ -1719,6 +1746,8 @@ void OMMSSStoredObject::restore(OMStoredSetIndex*& set,
     readUInt32FromStream(setIndexStream, name, _reorderBytes);
     OMUInt32 count;
     readUInt32FromStream(setIndexStream, count, _reorderBytes);
+    // tjb - The following ought to be done via the key type and not
+    // via the key size
     if (keySize == 16) {
       OMUniqueObjectIdentification key;
       readUniqueObjectIdentificationFromStream(setIndexStream,
@@ -2500,6 +2529,9 @@ void OMMSSStoredObject::writeName(OMPropertyId pid,
   ASSERT("Valid heap pointer", buffer != 0);
   externalizeString(name, buffer, characterCount);
   ASSERT("Native byte order", _byteOrder == hostByteOrder());
+  if (_reorderBytes) {
+    reorderString(buffer, characterCount);
+  }
   size_t byteCount = characterCount * sizeof(OMCharacter);
   write(pid, storedForm, buffer, byteCount);
   delete [] buffer;
@@ -2733,6 +2765,11 @@ void OMMSSStoredObject::create(const OMByteOrder byteOrder)
   PRECONDITION("Not already open", !_open);
 
   _byteOrder = byteOrder;
+  if (_byteOrder == hostByteOrder()) {
+    _reorderBytes = false;
+  } else {
+    _reorderBytes = true;
+  }
   _mode = OMFile::modifyMode;
   _properties = createStream(_storage, propertyStreamName);
   _open = true;
