@@ -30,23 +30,24 @@ typedef signed long SINT4;
 
 
 #ifdef DEBUG
-#define ASSERT(x) if ((x)) {} else { _AssertProc((char*)#x, (char*)__FILE__, __LINE__); }
-extern void _AssertProc(char* cond, char* file, SINT4 line);
+#define ASSERT(x) if ((x)) {} else { AssertProc((char*)"#x", (char*)__FILE__, __LINE__); }
+extern void AssertProc(char* cond, char* file, SINT4 line);
 #else /* DEBUG */
 #define ASSERT(x)
 #endif /* DEBUG */
 
-#ifdef OM_DEBUG
-//we must use Schemasofts debug malloc routines under debug or
+#ifdef SS_DEBUG
+//we must use Schemasofts debug malloc routines under schemasoft debug builds or
 // the heap corruption tests will fail
+//This will only be needed for devleopers who have access to the  schemasoft code
 #define ss_malloc dbgMalloc
 
 void * dbgMalloc(size_t cb);
 
 
-#else   /* OM_DEBUG */
+#else   /* SS_DEBUG */
 #define ss_malloc  malloc
-#endif   /* OM_DEBUG */
+#endif   /* SS_DEBUG */
 
 extern "C" {
 
@@ -58,7 +59,7 @@ size_t SsrwOMRawFread(
 {
     ASSERT(in_pIS != NULL);
     ASSERT(in_pv != NULL);
-    ASSERT(in_pIS->m_src.m_omr.m_pRaw != NULL);
+    ASSERT(in_pIS->m_pSrc != NULL);
 
 		OMUInt32 ret = 0;
 
@@ -76,7 +77,7 @@ size_t SsrwOMRawFwrite(
 {
     ASSERT(in_pIS != NULL);
     ASSERT(in_pv != NULL);
-    ASSERT(in_pIS->m_src.m_omr.m_pRaw != NULL);
+    ASSERT(in_pIS->m_pSrc != NULL);
 
 		OMUInt32 ret = 0;
 
@@ -90,7 +91,7 @@ int SsrwOMRawFclose(
     SSRWIS* in_pIS)
 {
     ASSERT(in_pIS != NULL);
-    ASSERT(in_pIS->m_src.m_omr.m_pRaw != NULL);
+    ASSERT(in_pIS->m_pSrc != NULL);
 
     ( static_cast<OMRawStorage *>(in_pIS->m_pSrc))->synchronize();
 
@@ -103,7 +104,7 @@ int SsrwOMRawFseek(
     int     in_nWhence)
 {
     ASSERT(in_pIS != NULL);
-    ASSERT(in_pIS->m_src.m_omr.m_pRaw != NULL);
+    ASSERT(in_pIS->m_pSrc != NULL);
 
 		OMInt64 dest = in_llOffset;
 
