@@ -96,7 +96,7 @@
 #c
 #startm AD_FORWARD_DECLARATION 01
 #ifndef _%01_h_
-#include "%01.h";
+#include "%01.h"
 #endif
 #endm
 
@@ -1059,8 +1059,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 11: method description
 #c
 #startm AD_XCONSTRUCTOR2 11
-AAFRESULT STDMETHODCALLTYPE
-    .this-module::.this-module (%03 .%02-indirection %04,
+.this-module::.this-module (%03 .%02-indirection %04,
 								%08 .%07-indirection %09)
 {
 #ifdef BOB_TEST
@@ -1096,8 +1095,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 16: method description
 #c
 #startm AD_XCONSTRUCTOR3 16
-AAFRESULT STDMETHODCALLTYPE
-    .this-module::.this-module (%03 .%02-indirection %04,
+.this-module::.this-module (%03 .%02-indirection %04,
 								%08 .%07-indirection %09,
 								%13 .%12-indirection %14)
 {
@@ -1138,8 +1136,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 21: method description
 #c
 #startm AD_XCONSTRUCTOR4 21
-AAFRESULT STDMETHODCALLTYPE
-    .this-module::.this-module (%03 .%02-indirection %04,
+.this-module::.this-module (%03 .%02-indirection %04,
 								%08 .%07-indirection %09,
 								%13 .%12-indirection %14,
 								%18 .%17-indirection %19)
