@@ -836,13 +836,13 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 		{
 			// It is a AIFC file descriptor
 			OMF2::omfObject_t	mediaDescriptor;
-			aafDataValue_t*		pSummary;
+			aafDataValue_t		pSummary;
 			aafUInt32			summarySize = 0;
 
 			// retrieve AIFC descriptor properties
 			rc = pAifcDesc->GetSummaryBufferSize(&summarySize);
 			UTLMemoryAlloc(summarySize, (void **)&pSummary);
-			rc = pAifcDesc->GetSummary(summarySize, *pSummary);
+			rc = pAifcDesc->GetSummary(summarySize, pSummary);
 			
 			rc = OMF2::omfmFileMobNew(OMFFileHdl, pMobName, rate, CODEC_AIFC_AUDIO, pOMFSourceMob);
 			rc = OMF2::omfiMobSetIdentity(OMFFileHdl, *pOMFSourceMob, OMFMobID);
@@ -1042,6 +1042,10 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 	IAAFTransition*			pTransition = NULL;
 	IAAFSelector*			pSelector = NULL;
 	IAAFGroup*				pEffect = NULL;
+	IAAFEffectDef*			pEffectDef = NULL;
+	IAAFParameterDef*		pParameterDef = NULL;
+	IAAFDefObject*			pDefObject = NULL;
+
 	aafUID_t				datadef;
 	aafLength_t				length;
 
@@ -1182,12 +1186,13 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 
 		aafPosition_t	cutPoint;
 
-		pTransition->GetCutPoint(&cutPoint);
-		pTransition->GetEffect(&pEffect);
 		if (gpGlobals->bVerboseMode)
 		{
 			UTLstdprintf("%sProcessing Transition of length: %ld\n ", gpGlobals->indentLeader, (int)length);
 		}
+		pTransition->GetCutPoint(&cutPoint);
+		rc = pTransition->GetEffect(&pEffect);
+		rc = pEffect->GetEffectDefinition(&pEffectDef);
 		// At this time (4/99) effects are not implemented therefore we 
 		// will have to create an Effect from thin air.(hack it !!)
 		strcpy(effectID, "omfi:effect:VideoDissolve");
