@@ -440,7 +440,9 @@ static HRESULT RegisterRequiredPlugins(void)
 
 void printUsage(const char *progname)
 {
-	cout << "Usage : " << progname << " [-legacyDV] [-ntsc] [-rawDV|-rawYUY2|-rawUYVY] [filename]" << endl;
+	cout << "Usage : " << progname << " [-legacyDV] [-ntsc] [-rawDV|-rawYUY2|-rawUYVY input_filename]" << endl;
+	cout << endl;
+	cout << "\tWith no arguments creates ExportDV.aaf containing 10 DV frames" << endl;
 	cout << endl;
 	cout << "\t-legacyDV use the legacy Compression ID and 6 extended properties found in legacy software" << endl;
 	cout << "\t-ntsc     treat input as 525 lines 60Hz video instead of default 626 lines 50Hz" << endl;
@@ -520,7 +522,7 @@ extern int main(int argc, char *argv[])
 
 		if (inpFormat == NONE)
 		{
-			cout << "Input format not specified " << endl;
+			cout << "Input format not specified" << endl;
 			printUsage(argv[0]);
 			return 1;
 		}
@@ -530,12 +532,22 @@ extern int main(int argc, char *argv[])
 			return 1;
 		}
 	}
+	else
+	{
+		if (inpFormat != NONE)		// provided format but no filename
+		{
+			cout << "Input file not specified" << endl;
+			printUsage(argv[0]);
+			return 1;
+		}
+	}
+
 	// Make sure all of our required plugins have been registered.
 	checkFatal(RegisterRequiredPlugins());
 
 	checkFatal(CreateAAFFile(pwFileName, compressionEnable));
 
-	printf("DONE\n\n");
+	printf("DONE\n");
 
 	return(0);
 }
