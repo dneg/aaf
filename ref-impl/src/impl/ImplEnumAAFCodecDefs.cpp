@@ -65,7 +65,8 @@ AAFRESULT STDMETHODCALLTYPE
 		_enumStrongProp->getSize(siz);
 		numElem = siz;
 	}
-	//!!!Else assert
+	else
+		return(AAFRESULT_INCONSISTANCY);
 
 	if(ppCodecDef == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -86,7 +87,8 @@ AAFRESULT STDMETHODCALLTYPE
 		}
 		else if(_enumStrongProp != NULL)
 			_enumStrongProp->getValueAt(*ppCodecDef, _current);
-		//!!!Else assert
+		else
+			RAISE(AAFRESULT_INCONSISTANCY);
 		(*ppCodecDef)->AcquireReference();
 		_current++;
 		if (head) {
@@ -162,7 +164,8 @@ AAFRESULT STDMETHODCALLTYPE
 		_enumStrongProp->getSize(siz);
 		numElem = siz;
 	}
-	//!!!Else assert
+	else
+		return(AAFRESULT_INCONSISTANCY);
 
 	newCurrent = _current + count;
 
@@ -203,7 +206,9 @@ AAFRESULT STDMETHODCALLTYPE
 		hr = result->SetEnumProperty(_enumObj, _enumProp);
 	else if(_enumStrongProp != NULL)
 		hr = result->SetEnumStrongProperty(_enumObj, _enumStrongProp);
-	// !!!Else assert
+	else
+		return(AAFRESULT_INCONSISTANCY);
+
 	if (SUCCEEDED(hr))
 	{
 		result->_current = _current;

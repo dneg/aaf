@@ -524,20 +524,20 @@ private:
 	OMWideStringProperty          _description;
 	OMFixedSizeProperty<aafUID_t> _identification;
 	OMFixedSizeProperty<aafUID_t>					_categoryClass;
-	OMFixedSizeProperty<aafVersionType_t>			_pluginVersion;	//!!!StructuredProperty?
+	OMFixedSizeProperty<aafVersionType_t>			_pluginVersion;
 	OMWideStringProperty                            _pluginVersionString;
 	OMWideStringProperty                            _pluginManufacturerName;
 	OMStrongReferenceProperty<ImplAAFNetworkLocator> _manufacturerURL;
 	OMFixedSizeProperty<aafUID_t>					_pluginManufacturerID;
 	OMFixedSizeProperty<aafUID_t>					_platform;
-	OMFixedSizeProperty<aafVersionType_t>			_minPlatformVersion;	//!!!StructuredProperty?
-	OMFixedSizeProperty<aafVersionType_t>			_maxPlatformVersion;	//!!!StructuredProperty?
+	OMFixedSizeProperty<aafVersionType_t>			_minPlatformVersion;
+	OMFixedSizeProperty<aafVersionType_t>			_maxPlatformVersion;
 	OMFixedSizeProperty<aafUID_t>					_engine;
-	OMFixedSizeProperty<aafVersionType_t>			_minEngineVersion;	//!!!StructuredProperty?
-	OMFixedSizeProperty<aafVersionType_t>			_maxEngineVersion;	//!!!StructuredProperty?
+	OMFixedSizeProperty<aafVersionType_t>			_minEngineVersion;
+	OMFixedSizeProperty<aafVersionType_t>			_maxEngineVersion;
 	OMFixedSizeProperty<aafUID_t>					_pluginAPI;
-	OMFixedSizeProperty<aafVersionType_t>			_minPluginAPIVersion;	//!!!StructuredProperty?
-	OMFixedSizeProperty<aafVersionType_t>			_maxPluginAPIVersion;	//!!!StructuredProperty?
+	OMFixedSizeProperty<aafVersionType_t>			_minPluginAPIVersion;
+	OMFixedSizeProperty<aafVersionType_t>			_maxPluginAPIVersion;
 	OMFixedSizeProperty<aafBool>					_softwareOnly;
 	OMFixedSizeProperty<aafBool>					_accelerator;
     OMStrongReferenceVectorProperty<ImplAAFLocator> _locators;

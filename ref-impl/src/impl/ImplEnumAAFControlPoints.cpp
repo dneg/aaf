@@ -50,7 +50,6 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFControlPoint **ppControlPoint)
 {
 	aafUInt32			numElem;
-	aafUID_t			value;
 	ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
 	size_t	siz;
@@ -163,7 +162,6 @@ AAFRESULT STDMETHODCALLTYPE
 		return E_FAIL;
 
 	hr = result->SetEnumStrongProperty(_enumObj, _enumStrongProp);
-	// !!!Else assert
 	if (SUCCEEDED(hr))
 	{
 		result->_current = _current;
