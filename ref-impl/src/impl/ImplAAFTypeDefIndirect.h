@@ -99,6 +99,28 @@ public:
          ImplAAFPropertyValue ** ppOutPropVal);
 
   //****************
+  // GetActualSize()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetActualSize
+        (// @parm [in] indirect property value to read
+         ImplAAFPropertyValue * pPropVal,
+         
+         // @parm [out] actual data size
+         aafUInt32 * dataSize);
+
+  //****************
+  // GetActualType()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetActualType
+        (// @parm [in] indirect property value to read
+         ImplAAFPropertyValue * pPropVal,
+         
+         // @parm [out] actual data type
+         ImplAAFTypeDef ** ppActualType);
+
+  //****************
   // GetActualData()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -219,7 +241,9 @@ private:
   // actual type can be used in an indirect type property.
   bool supportedActualType (ImplAAFTypeDef *pActualType, aafUInt32 level = 0);
 
-  
+  // Find the actual type definition from the dictionary.
+  AAFRESULT LookupActualType (aafUID_constref typeID, ImplAAFTypeDef ** ppActualType) const;
+
 	// Utility to extract common information from the given indirect value.
   AAFRESULT GetIndirectValueInfo (
       ImplAAFPropertyValue * pIndirectValue,
