@@ -153,8 +153,12 @@ HRESULT Omf2Aaf::OpenOutputFile ()
 	
 	if (gpGlobals->bDeleteOutput)
 	{
-		UTLstdprintf("Previous file: %s will be overwritten\n", gpGlobals->sOutFileName);
-		deleteFile(gpGlobals->sOutFileName);
+		rc = deleteFile(gpGlobals->sOutFileName);
+		if (rc == AAFRESULT_SUCCESS)
+			UTLstdprintf("Output file: %s will be overwritten\n", gpGlobals->sOutFileName);
+		else
+			UTLstdprintf("Output file: %s will be created\n", gpGlobals->sOutFileName);
+
 	}
 
 	rc = AAFFileOpen(gpGlobals->sOutFileName);
@@ -623,8 +627,6 @@ HRESULT Omf2Aaf::ConvertOMFDataDefinitionObject( OMF2::omfObject_t obj )
     aafWChar*				pwCategory = NULL;
     aafWChar*				pwDesc = NULL;
     aafWChar*				pwName = NULL;
-	IAAFOperationDef*			pEffectDef = NULL;
-	IAAFParameterDef*		pParameterDef = NULL;
 
 	char					id[5];
 
@@ -645,12 +647,12 @@ HRESULT Omf2Aaf::ConvertOMFDataDefinitionObject( OMF2::omfObject_t obj )
 		id[4] = '\0';
 		UTLstdprintf("%sProcessing: %s Data Definition\n", gpGlobals->indentLeader, id );
 	}
-	if (strcmp(id, "EDEF") == 0)
-	{
-		IAAFOperationDef*	pEffectDef = NULL;
-		rc = ConvertOMFEffectDefinition(obj, NULL, &pEffectDef);
-		pEffectDef->Release();
-	}
+//	if (strcmp(id, "EDEF") == 0)
+//	{
+//		IAAFOperationDef*	pEffectDef = NULL;
+//		rc = ConvertOMFEffectDefinition(obj, NULL, &pEffectDef);
+//		pEffectDef->Release();
+//	}
 	DecIndentLevel();
 	return rc;
 }
@@ -980,11 +982,13 @@ HRESULT Omf2Aaf::ConvertUniqueNameToAUID(OMF2::omfUniqueName_t datakindName,
 		*pDatadef = kAAFEffectMonoAudioPan;
 	else if(strcmp(datakindName, "omfi:effect:MonoAudioGain") == 0)
 		*pDatadef = kAAFEffectMonoAudioGain;
+	else if(strcmp(datakindName, "omfi:effect:MonoAudioMixdown") == 0)
+		*pDatadef = kAAFEffectMonoAudioMixdown;
 	else if(strcmp(datakindName, "omfi:effect:StereoAudioGain") == 0)
 		*pDatadef = kAAFEffectStereoAudioGain;
 	else
 	{
-		UTLstdprintf("Unknown name :%s Found in sequence\n", datakindName);
+		UTLstdprintf("Unknown name = %s Found \n", datakindName);
 		*pDatadef = kAAFOperationUnknown;
 	}
 
@@ -1607,7 +1611,9 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 						// Get SMPTE Vide Wipe Info and 
 						// Create a SMPTE Video Wipe Effect !!
 						OMF2::omfInt32	wipeNumber = 0;
-						OMFError = OMF2::omfeSMPTEVideoWipeGetInfo(OMFFileHdl, OMFSegment, NULL, NULL, NULL, NULL, &wipeNumber, NULL);
+						OMF2::omfWipeArgs_t wipeControls;
+
+						OMFError = OMF2::omfeSMPTEVideoWipeGetInfo(OMFFileHdl, OMFSegment, NULL, NULL, NULL, NULL, &wipeNumber, &wipeControls);
 						if (gpGlobals->bVerboseMode)
 						{
 							UTLstdprintf("%sReplacing 1.x Transition with a SMPTE Video Wipe Effect!\n ", gpGlobals->indentLeader);
@@ -2659,9 +2665,8 @@ HRESULT Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 	OMF2::omfInt32			bytesRead;
 	void *					pCPBuffer = NULL;
 
-	IAAFParameter*			pParameter = NULL;
 	IAAFControlPoint*		pControlPoint = NULL;
-	aafUID_t				datadef;
+//	aafUID_t				datadef;
 	aafRational_t			AAFCPTime;
 	aafEditHint_t			AAFCPEditHint;
 	aafUInt32				valueSize;
@@ -2696,6 +2701,7 @@ HRESULT Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 				pControlPoint->SetEditHint(AAFCPEditHint);
 				pControlPoint->SetValue((aafUInt32)valueSize, (unsigned char *)pCPBuffer);
 				pVaryingValue->AppendPoint(pControlPoint);
+
 			}
 			if (pCPBuffer)
 				UTLMemoryFree(pCPBuffer);
@@ -2706,8 +2712,6 @@ HRESULT Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 		OMF2::omfiIteratorDispose(OMFFileHdl, OMFIterator);
 	}
 
-	if (pParameter)
-		pParameter->Release();
 	DecIndentLevel();
 	return rc;
 
@@ -2898,6 +2902,8 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 	OMF2::omfUInt32			mask = 0;
 	OMF2::omfFxFrameMaskDirection_t addOrDrop = OMF2::kOmfFxFrameMaskDirNone;
 	OMF2::omfArgIDType_t	bypassOverride;
+	OMF2::omfInt32			wipeNumber;
+	OMF2::omfWipeArgs_t		wipeArgs;
 
 	IAAFOperationDef*		pEffectDef = NULL;
 	IAAFComponent*			pEffectSegment = NULL;
@@ -2905,6 +2911,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 	IAAFSourceReference*	pSourceRef= NULL;
 	IAAFSegment*			pSegment = NULL;
 	IAAFParameter*			pParameter = NULL;
+	IAAFParameterDef*		pParameterDef = NULL;
 
 	aafUID_t				effectAUID ;
 	aafUID_t				effectDefAUID ;
@@ -2925,6 +2932,10 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 		OMFError = OMF2::omfiEffectGetBypassOverride(OMFFileHdl, effect, &bypassOverride);
 		if (OMF2::OM_ERR_PROP_NOT_PRESENT == OMFError)
 			bypassOverride = 0;
+		// Get the AAF Effect definition interface pointer !!
+		ConvertUniqueNameToAUID(effectID, &effectDefAUID);
+		ConvertOMFDatakind(effectDatakind, &effectAUID);
+		rc = ConvertOMFEffectDefinition(effectDef, NULL, &pEffectDef);
 		if (strcmp(effectID, "omfi:effect:VideoSpeedControl") == 0)
 		{
 			OMFError = OMF2::omfeVideoSpeedControlGetInfo(OMFFileHdl, effect, &effectLength, &inputSegmentA, &speedRatio, &phaseOffset);
@@ -3013,9 +3024,6 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 						{
 							rc = ConvertOMFConstValue(levelSegment, pConstantValue);
 							rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-							pEffect->AddNewParameter(pParameter);
-							pParameter->Release();
-							pParameter = NULL;
 							pConstantValue->Release();
 							pConstantValue = NULL;
 						}
@@ -3029,21 +3037,60 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 						{
 							rc = ConvertOMFVaryingValue(levelSegment, pVaryingValue);
 							rc = pVaryingValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-							pEffect->AddNewParameter(pParameter);
-							pParameter->Release();
-							pParameter = NULL;
 							pVaryingValue->Release();
 							pVaryingValue = NULL;
 						}
 					}
+					rc = GetParameterDefinition((aafUID_t *)&kAAFParameterDefLevel, NULL, 
+												L"Level", 
+												L"Level, equal to mix ratio of B/A. Range is 0 to 1. The formula  P = (Level*B)+((1-Level)*A)",
+												L" ",
+												&pParameterDef);
+					pParameter->SetParameterDefinition(pParameterDef);
+					pEffect->AddNewParameter(pParameter);
+					pEffectDef->AddParameterDefs(pParameterDef);
+					pParameterDef->Release();
+					pParameterDef = NULL;
+					pParameter->Release();
+					pParameter = NULL;
 				}
 			}
 		}
 		else if (strcmp(effectID, "omfi:effect:SMPTEVideoWipe") == 0)
 		{
-			OMFError = OMF2::omfeSMPTEVideoWipeGetInfo(OMFFileHdl, effect, &effectLength, &inputSegmentA, &inputSegmentB, &levelSegment, NULL, NULL);
+			wipeNumber = 0;
+			memset(&wipeArgs, 0, sizeof(wipeArgs));
+			OMFError = OMF2::omfeSMPTEVideoWipeGetInfo(OMFFileHdl, effect, &effectLength, &inputSegmentA, &inputSegmentB, &levelSegment, &wipeNumber, &wipeArgs);
 			if(OMF2::OM_ERR_NONE == OMFError)
 			{
+				if (wipeNumber)
+				{
+					IAAFConstantValue* pConstantValue = NULL;
+		
+					rc = pDictionary->CreateInstance(&AUID_AAFConstantValue, IID_IAAFConstantValue, (IUnknown **)&pConstantValue);
+					if (SUCCEEDED(rc))
+					{
+						pConstantValue->SetValue(sizeof(wipeNumber), (unsigned char *)&wipeNumber);
+					}
+					rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
+					rc = GetParameterDefinition((aafUID_t *)&kAAFParameterDefSMPTEWipeNumber, NULL, 
+												L"Wipe Number", 
+												L"SMPTE Wipe Number. No Default",
+												L" ",
+												&pParameterDef);
+					pParameter->SetParameterDefinition(pParameterDef);
+					pEffect->AddNewParameter(pParameter);
+					pEffectDef->AddParameterDefs(pParameterDef);
+
+					pConstantValue->Release();
+					pConstantValue = NULL;
+
+					pParameterDef->Release();
+					pParameterDef = NULL;
+
+					pParameter->Release();
+					pParameter = NULL;
+				}
 				if (inputSegmentA)
 				{
 					rc = ProcessOMFComponent(inputSegmentA, &pEffectSegment);
@@ -3075,9 +3122,6 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 						{
 							rc = ConvertOMFConstValue(levelSegment, pConstantValue);
 							rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-							pEffect->AddNewParameter(pParameter);
-							pParameter->Release();
-							pParameter = NULL;
 							pConstantValue->Release();
 							pConstantValue = NULL;
 						}
@@ -3091,13 +3135,22 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 						{
 							rc = ConvertOMFVaryingValue(levelSegment, pVaryingValue);
 							rc = pVaryingValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-							pEffect->AddNewParameter(pParameter);
-							pParameter->Release();
-							pParameter = NULL;
 							pVaryingValue->Release();
 							pVaryingValue = NULL;
 						}
 					}
+					rc = GetParameterDefinition((aafUID_t *)&kAAFParameterDefLevel, NULL, 
+												L"Level", 
+												L"Level, equal to mix ratio of B/A. Range is 0 to 1. The formula  P = (Level*B)+((1-Level)*A)",
+												L" ",
+												&pParameterDef);
+					pParameter->SetParameterDefinition(pParameterDef);
+					pEffect->AddNewParameter(pParameter);
+					pEffectDef->AddParameterDefs(pParameterDef);
+					pParameterDef->Release();
+					pParameterDef = NULL;
+					pParameter->Release();
+					pParameter = NULL;
 				}
 			}
 		}
@@ -3138,29 +3191,35 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 						{
 							rc = ConvertOMFConstValue(levelSegment, pConstantValue);
 							rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-							pEffect->AddNewParameter(pParameter);
-							pParameter->Release();
-							pParameter = NULL;
 							pConstantValue->Release();
 							pConstantValue = NULL;
 						}
 					}
 					else if (OMF2::omfiIsAVaryValue(OMFFileHdl, levelSegment, &OMFError))
 					{
-						IAAFVaryingValue* pVaryingValue = NULL;
+						IAAFVaryingValue*	pVaryingValue = NULL;
 
 						rc = pDictionary->CreateInstance(&AUID_AAFVaryingValue, IID_IAAFVaryingValue, (IUnknown **)&pVaryingValue);
 						if (SUCCEEDED(rc))
 						{
 							rc = ConvertOMFVaryingValue(levelSegment, pVaryingValue);
 							rc = pVaryingValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
-							pEffect->AddNewParameter(pParameter);
-							pParameter->Release();
-							pParameter = NULL;
 							pVaryingValue->Release();
 							pVaryingValue = NULL;
 						}
 					}
+					rc = GetParameterDefinition((aafUID_t *)&kAAFParameterDefLevel, NULL, 
+												L"Level", 
+												L"Level, equal to mix ratio of B/A. Range is 0 to 1. The formula  P = (Level*B)+((1-Level)*A)",
+												L" ",
+												&pParameterDef);
+					pParameter->SetParameterDefinition(pParameterDef);
+					pEffect->AddNewParameter(pParameter);
+					pEffectDef->AddParameterDefs(pParameterDef);
+					pParameterDef->Release();
+					pParameterDef = NULL;
+					pParameter->Release();
+					pParameter = NULL;
 				}
 			}
 		}
@@ -3201,9 +3260,6 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 
 	if (OMF2::OM_ERR_NONE == OMFError )
 	{
-		ConvertUniqueNameToAUID(effectID, &effectDefAUID);
-		ConvertOMFDatakind(effectDatakind, &effectAUID);
-		rc = pDictionary->LookupOperationDefinition(&effectDefAUID, &pEffectDef);
 		pEffect->Initialize(&effectAUID, (aafLength_t)effectLength, pEffectDef);
 		pEffect->SetBypassOverride(bypassOverride);
 
@@ -3277,6 +3333,8 @@ HRESULT Omf2Aaf::ConvertOMFEffectDefinition(OMF2::omfDDefObj_t	effectDef,
 	aafWChar*				pwDesc = NULL;
 	aafWChar*				pwName = NULL;
 	aafUID_t				effectDefAUID ;
+	aafUID_t				effectDataDef;
+
 	IAAFDefObject*			pDefObject = NULL;
 
 	rc = OMF2::omfiEffectDefGetInfo(OMFFileHdl,
@@ -3296,7 +3354,7 @@ HRESULT Omf2Aaf::ConvertOMFEffectDefinition(OMF2::omfDDefObj_t	effectDef,
 		// Look in the dictionary to find if the effect Definition exists
 		// if it exists use it.
 		rc = pDictionary->LookupOperationDefinition(&effectDefAUID, ppEffectDef);
-		if (AAFRESULT_SUCCESS != rc)
+		if (FAILED(rc))
 		{
 			pDictionary->CreateInstance(&AUID_AAFOperationDef, IID_IAAFOperationDef, (IUnknown **) ppEffectDef);
 
@@ -3310,15 +3368,73 @@ HRESULT Omf2Aaf::ConvertOMFEffectDefinition(OMF2::omfDDefObj_t	effectDef,
 			(*ppEffectDef)->SetBypass((aafUInt32 )bypassOverride);
 			// Set degradeTo to itself for now because we do not have optional properties !!!
 			(*ppEffectDef)->AppendDegradeToOperations(*ppEffectDef);
-			if (memcmp((const void *)&effectDefAUID, (const void*)&kAAFEffectVideoDissolve, sizeof(aafUID_t)) == 0)
+			//
+			// Number of Inputs and data def depends on the type of effect 
+			//
+
+			if ((strcmp(effectID, "omfi:effect:SimpleMonoAudioDissolve") == 0) ||
+				(strcmp(effectID, "omfi:effect:MonoAudioDissolve") == 0) )
+			{
 				(*ppEffectDef)->SetNumberInputs((aafInt32)2);
+				effectDataDef = DDEF_Sound;
+			}
+			else if (strcmp(effectID, "omfi:effect:MonoAudioGain") == 0)
+			{
+				(*ppEffectDef)->SetNumberInputs((aafInt32)1);
+				effectDataDef = DDEF_Sound;
+			}
+			else if (strcmp(effectID, "omfi:effect:MonoAudioMixdown") == 0)
+			{
+				(*ppEffectDef)->SetNumberInputs((aafInt32)-1);
+				effectDataDef = DDEF_Sound;
+			}
+			else if (strcmp(effectID, "omfi:effect:MonoAudioPan") == 0)
+			{
+				(*ppEffectDef)->SetNumberInputs((aafInt32)1);
+				effectDataDef = DDEF_Sound;
+			}
+			else if (strcmp(effectID, "omfi:effect:SMPTEVideoWipe") == 0)
+			{	
+				(*ppEffectDef)->SetNumberInputs((aafInt32)2);
+				effectDataDef = DDEF_Picture;
+			}
+			else if ((strcmp(effectID, "omfi:effect:SimpleVideoDissolve") == 0) ||
+					 (strcmp(effectID, "omfi:effect:VideoDissolve") == 0) )
+			{
+				(*ppEffectDef)->SetNumberInputs((aafInt32)2);
+				effectDataDef = DDEF_PictureWithMatte;
+			}
+			else if (strcmp(effectID, "omfi:effect:VideoFadeToBlack") == 0)
+			{
+				(*ppEffectDef)->SetNumberInputs((aafInt32)1);
+				effectDataDef = DDEF_PictureWithMatte;
+			}
+			else if (strcmp(effectID, "omfi:effect:VideoFrameMask") == 0)
+			{
+				(*ppEffectDef)->SetNumberInputs((aafInt32)1);
+				effectDataDef = DDEF_PictureWithMatte;
+			}
+			else if (strcmp(effectID, "omfi:effect:VideoRepeat") == 0)
+			{
+				(*ppEffectDef)->SetNumberInputs((aafInt32)1);
+				effectDataDef = DDEF_PictureWithMatte;
+			}
+			else if (strcmp(effectID, "omfi:effect:VideoSpeedControl") == 0)
+			{
+				(*ppEffectDef)->SetNumberInputs((aafInt32)1);
+				effectDataDef = DDEF_PictureWithMatte;
+			}
 			else
-				(*ppEffectDef)->SetNumberInputs((aafInt32)0);
-			CreateParameterDefinition(*ppEffectDef);
-			rc = AAFRESULT_SUCCESS;
+			{
+				(*ppEffectDef)->SetNumberInputs((aafInt32)-1);
+				effectDataDef = DDEF_Picture;
+			}
+			if (pEffectAUID != NULL)
+				rc = (*ppEffectDef)->SetDataDefinitionID(pEffectAUID); 
+			else
+				rc = (*ppEffectDef)->SetDataDefinitionID(&effectDataDef);
+
 		}
-		if (pEffectAUID != NULL)
-			(*ppEffectDef)->SetDataDefinitionID(pEffectAUID); 
 
 	}
 	if (pwName)
@@ -3334,58 +3450,59 @@ HRESULT Omf2Aaf::ConvertOMFEffectDefinition(OMF2::omfDDefObj_t	effectDef,
 	return rc;
 }
 // ============================================================================
-// CreateParameterDefinition
+// GetParameterDefinition
 //
-//			This function Creates and sets the properties for a Paramter 
-//			Definition object.
-//			
-// Returns: None
+//			This function Creates, if necessary, a Parameter Definition object.
+//			Sets its property and returns its to the caller.  
+//	
+//			It is the responsibility of the calling function to release the 
+//			interface when finished.
+//
+// Returns: 
 //
 // ============================================================================
-void Omf2Aaf::CreateParameterDefinition(IAAFOperationDef*	pEffectDef)
+HRESULT Omf2Aaf::GetParameterDefinition(aafUID_t* pDefUID, 
+										IAAFTypeDef* pTypeDef,
+										aafWChar* pwName, 
+										aafWChar* pwDesc, 
+										aafWChar* pwDisplayUnits,
+										IAAFParameterDef** ppParameterDef)
 {
 	HRESULT				rc = AAFRESULT_SUCCESS;
 
-//	aafUID_t			typeDefinition;
-    aafWChar*			pwCategory = NULL;
-	aafWChar*			pwDesc = NULL;
-	aafWChar*			pwName = NULL;
-	aafUID_t			parameterDefAUID ;
-	aafUInt32			bufferLength;
-	aafWChar*			pwDisplayUnits = NULL;
-	IAAFParameterDef*	pParameterDef = NULL;
 	IAAFDefObject*		pDefObject = NULL;
+//	IAAFTypeDef*		ptmpTypeDef = NULL;
+	IAAFParameterDef*	ptmpParameterDef = NULL;
 
-	// We are going to use the effect definitions def object values 
-	// since OMF does NOT have a Parameter definition object !
-	pEffectDef->QueryInterface(IID_IAAFDefObject, (void **)&pDefObject);
-	pDefObject->GetAUID(&parameterDefAUID);
-	pDefObject->GetNameBufLen(&bufferLength);
-	UTLMemoryAlloc(bufferLength, (void **)&pwName);
-	pDefObject->GetName(pwName, bufferLength);
-	pDefObject->GetDescriptionBufLen(&bufferLength);
-	UTLMemoryAlloc(bufferLength, (void **)&pwDesc);
-	pDefObject->GetDescription(pwDesc, bufferLength);
-	pDefObject->Release();
-	pDefObject = NULL;
-	rc = pDictionary->CreateInstance(&AUID_AAFParameterDef, IID_IAAFParameterDef, (IUnknown **) &pParameterDef);
-	if (AAFRESULT_SUCCESS == rc)
+	// Verify that we did not got any NULL pointers
+//	if ( (pDefUID == NULL) || (pTypeDef == NULL) || 
+	if ( (pDefUID == NULL) ||  
+		 (pwName == NULL) || (pwDesc == NULL) ||
+		 (pwDisplayUnits == NULL) || (ppParameterDef == NULL))
+		 return AAFRESULT_NULL_PARAM;
+
+	// First verify if the Parameter Def exists already !
+	rc = pDictionary->LookupParameterDefinition( pDefUID, &ptmpParameterDef);
+	if (FAILED(rc))
 	{
-		pParameterDef->QueryInterface(IID_IAAFDefObject, (void **)&pDefObject);
-		pDefObject->Init(&parameterDefAUID, pwName, pwDesc);
+		// Create a new Parameter definition
+		pDictionary->CreateInstance(&AUID_AAFParameterDef, IID_IAAFParameterDef, (IUnknown **) &ptmpParameterDef);
+		ptmpParameterDef->QueryInterface(IID_IAAFDefObject, (void **)&pDefObject);
+		pDefObject->Init(pDefUID, pwName, pwDesc);
+		ptmpParameterDef->SetDisplayUnits(pwDisplayUnits);
+//		ptmpParameterDef->SetTypeDef(pTypeDef);
+		rc = pDictionary->RegisterParameterDefinition(ptmpParameterDef);
+	}
+
+	*ppParameterDef = ptmpParameterDef;
+
+	// Cleanup
+	if (pDefObject)
+	{
 		pDefObject->Release();
 		pDefObject = NULL;
-		pDictionary->RegisterParameterDefinition(pParameterDef);
-		UTLStrAToStrW("Not Specified", &pwDisplayUnits);
-		pParameterDef->SetDisplayUnits(pwDisplayUnits);
-		UTLMemoryFree(pwDisplayUnits);
 	}
-	pEffectDef->AddParameterDefs(pParameterDef);
 
-	pParameterDef->Release();
-	if (pwName)
-		UTLMemoryFree(pwName);
-	if (pwDesc)
-		UTLMemoryFree(pwDesc);
+	return rc;
 }
 										
