@@ -89,6 +89,10 @@ public:
     //          positioned on a <p ReferencedObject> ?
   virtual bool valid(void) const;
 
+    // @cmember The number of <p ReferencedObject>s in the associated
+    //          <c OMStrongReferenceSetProperty>.
+  virtual size_t count(void) const;
+
     // @cmember Advance this <c OMStrongReferenceSetIterator> to the next
     //          <p ReferencedObject>, if any.
     //          If the end of the associated

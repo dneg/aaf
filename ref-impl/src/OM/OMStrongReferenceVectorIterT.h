@@ -123,6 +123,17 @@ bool OMStrongReferenceVectorIterator<ReferencedObject>::valid(void) const
   return _iterator.valid();
 }
 
+  // @mfunc The number of <p ReferencedObject>s in the associated
+  //        <c OMStrongReferenceVectorProperty>.
+  //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @rdesc The number of <p ReferencedObject>s
+  //   @this const
+template <typename ReferencedObject>
+size_t OMStrongReferenceVectorIterator<ReferencedObject>::count(void) const
+{
+  return _iterator.count();
+}
+
   // @mfunc Advance this <c OMStrongReferenceVectorIterator> to the next
   //        <p ReferencedObject>, if any.
   //        If the end of the associated
