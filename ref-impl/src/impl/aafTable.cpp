@@ -148,7 +148,7 @@ aafErr_t NewTable(
 }	
 
 /* Called once for each entry, used to dispose only memory referenced by the entry */
-aafErr_t aaffsSetTableDispose(aafTable_t *table, aafTblDisposeProc proc)
+aafErr_t SetTableDispose(aafTable_t *table, aafTblDisposeProc proc)
 {
 	XPROTECT()
 	{
