@@ -24,19 +24,26 @@ run:
 
 .SUFFIXES: .cpp .h .comc .comcx .comh .dod .exp .idl .fidl .implc .implh .comt .cppt .refh .frefh
 
-# This file contains the list of all of the targets to be built...								   
+# This file contains the list of all of the targets to be built...
 include targets.mk
 include aafobjects.mk
 
 
 INCLUDE_DIR = ../ref-impl/include
+IMPL_DIR = ../ref-impl/src/impl
+UUID_DIR = ../ref-impl/include/ref-api
+COMAPI_DIR = ../ref-impl/src/com-api
 
 targets: $(DODO_TARGETS)
 targets: $(PLUGIN_TARGETS)
 targets: $(INCLUDE_DIR)/com-api/AAF.idl
 targets: $(PLUGIN_DIR)/AAFPlugin.idl
 targets: $(INCLUDE_DIR)/ref-api/AAF.h
+targets: $(UUID_DIR)/AAF_i.c
 targets: $(INCLUDE_DIR)/ref-api/AAFPlugin.h
+targets: $(UUID_DIR)/AAFPlugin_i.c
+targets: $(COMAPI_DIR)/AAFCLSIDs.h
+targets: $(IMPL_DIR)/AAFClassIDs.h
 
 
 $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
@@ -45,6 +52,9 @@ $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
 	@ ( echo "cpp_quote(\"//=--------------------------------------------------------------------------=\")" ; \
 	    echo "cpp_quote(\"// (C) Copyright 1998 Avid Technology.\")" ; \
 	    echo "cpp_quote(\"// (C) Copyright 1998 Microsoft Corporation.\")" ; \
+	    echo "cpp_quote(\"//\")" ; \
+	    echo "cpp_quote(\"// This file was GENERATED for the AAF SDK on \")" ; \
+	    echo "cpp_quote(\"//  `date`\")" ; \
 	    echo "cpp_quote(\"//\")" ; \
 	    echo "cpp_quote(\"// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF\")" ; \
 	    echo "cpp_quote(\"// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO\")" ; \
@@ -75,6 +85,9 @@ $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
 	    	echo ""; \
 	    	cat $$class.fidl; \
 	    done ; \
+	    echo "" ; \
+	    echo "cpp_quote(\"EXTERN_C const CLSID CLSID_AAFFile;\")" ; \
+	    echo "" ; \
 	) > $(INCLUDE_DIR)/com-api/AAF.idl
 	chmod -w $(INCLUDE_DIR)/com-api/AAF.idl
 
@@ -84,6 +97,9 @@ $(PLUGIN_DIR)/AAFPlugin.idl : $(PLUGIN_FIDL_TARGETS)
 	@ ( echo "cpp_quote(\"//=--------------------------------------------------------------------------=\")" ; \
 	    echo "cpp_quote(\"// (C) Copyright 1998 Avid Technology.\")" ; \
 	    echo "cpp_quote(\"// (C) Copyright 1998 Microsoft Corporation.\")" ; \
+	    echo "cpp_quote(\"//\")" ; \
+	    echo "cpp_quote(\"// This file was GENERATED for the AAF SDK on \")" ; \
+	    echo "cpp_quote(\"//  `date`\")" ; \
 	    echo "cpp_quote(\"//\")" ; \
 	    echo "cpp_quote(\"// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF\")" ; \
 	    echo "cpp_quote(\"// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO\")" ; \
@@ -128,6 +144,9 @@ $(INCLUDE_DIR)/ref-api/AAF.h : $(FREFH_TARGETS)
 	    echo "// (C) Copyright 1998 Avid Technology." ; \
 	    echo "// (C) Copyright 1998 Microsoft Corporation." ; \
 	    echo "//" ; \
+	    echo "// This file was GENERATED for the AAF SDK on " ; \
+	    echo "//  "`date` ; \
+	    echo "//" ; \
 	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
 	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
 	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
@@ -163,6 +182,8 @@ $(INCLUDE_DIR)/ref-api/AAF.h : $(FREFH_TARGETS)
 	    	cat $$class.frefh; \
 	    done ; \
 	    echo "" ; \
+	    echo "EXTERN_C const CLSID CLSID_AAFFile;" ; \
+	    echo "" ; \
 	    echo \#endif // __AAF_h__ ; \
 	) > $(INCLUDE_DIR)/ref-api/AAF.h
 	chmod -w $(INCLUDE_DIR)/ref-api/AAF.h
@@ -174,6 +195,9 @@ $(INCLUDE_DIR)/ref-api/AAFPlugin.h : $(PLUGIN_FREFH_TARGETS)
 	@ ( echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "// (C) Copyright 1998 Avid Technology." ; \
 	    echo "// (C) Copyright 1998 Microsoft Corporation." ; \
+	    echo "//" ; \
+	    echo "// This file was GENERATED for the AAF SDK on " ; \
+	    echo "//  "`date` ; \
 	    echo "//" ; \
 	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
 	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
@@ -217,6 +241,191 @@ $(INCLUDE_DIR)/ref-api/AAFPlugin.h : $(PLUGIN_FREFH_TARGETS)
 	    echo \#endif // __AAFPlugin_h__ ; \
 	) > $(INCLUDE_DIR)/ref-api/AAFPlugin.h
 	chmod -w $(INCLUDE_DIR)/ref-api/AAFPlugin.h
+
+
+$(UUID_DIR)/AAF_i.c : aafobjects.mk dod2iid.awk
+	@ echo Generating reference AAF_i.c...
+	$(RM) -f $(UUID_DIR)/AAF_i.c
+	@ ( echo "/* this file contains the actual definitions of */" ; \
+	    echo "/* the IIDs and CLSIDs */" ; \
+	    echo "" ; \
+	    echo "/* link this file in with the server and any clients */" ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "// (C) Copyright 1998 Avid Technology." ; \
+	    echo "// (C) Copyright 1998 Microsoft Corporation." ; \
+	    echo "//" ; \
+	    echo "// This file was GENERATED for the AAF SDK on " ; \
+	    echo "//  "`date` ; \
+	    echo "//" ; \
+	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
+	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
+	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
+	    echo "// PARTICULAR PURPOSE." ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "// Definitions for all of the public IID needed by an AAF SDK client" ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "//" ; \
+	    echo "" ; \
+	    echo \#ifdef __cplusplus ; \
+	    echo "extern \"C\"{" ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    echo "" ; \
+	    echo \#ifndef __IID_DEFINED__ ; \
+	    echo \#define __IID_DEFINED__ ; \
+	    echo "" ; \
+	    echo "typedef struct _IID" ; \
+	    echo "{" ; \
+	    echo "    unsigned long x;" ; \
+	    echo "    unsigned short s1;" ; \
+	    echo "    unsigned short s2;" ; \
+	    echo "    unsigned char  c[8];" ; \
+	    echo "} IID;" ; \
+	    echo "" ; \
+	    echo \#endif "// __IID_DEFINED__" ; \
+	    echo "" ; \
+	    echo \#ifndef CLSID_DEFINED ; \
+	    echo \#define CLSID_DEFINED ; \
+	    echo "typedef IID CLSID;" ; \
+	    echo \#endif "// CLSID_DEFINED" ; \
+	    echo "" ; \
+	    for class in $(AAFOBJECTS) $(AAFCOMINTERFACESONLY) ; do \
+	    	awk -f dod2iid.awk C=$$class $$class.dod ; \
+	    done ; \
+	    echo \#ifdef __cplusplus ; \
+	    echo "}" ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	) > $(UUID_DIR)/AAF_i.c
+	chmod -w $(UUID_DIR)/AAF_i.c
+
+
+$(UUID_DIR)/AAFPlugin_i.c : aafobjects.mk dod2iid.awk
+	@ echo Generating reference AAFPlugin_i.c...
+	$(RM) -f $(UUID_DIR)/AAFPlugin_i.c
+	@ ( echo "/* this file contains the actual definitions of */" ; \
+	    echo "/* the IIDs and CLSIDs */" ; \
+	    echo "" ; \
+	    echo "/* link this file in with the server and any clients */" ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "// (C) Copyright 1998 Avid Technology." ; \
+	    echo "// (C) Copyright 1998 Microsoft Corporation." ; \
+	    echo "//" ; \
+	    echo "// This file was GENERATED for the AAF SDK on " ; \
+	    echo "//  "`date` ; \
+	    echo "//" ; \
+	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
+	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
+	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
+	    echo "// PARTICULAR PURPOSE." ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "// Definitions for all public IID's needed by an AAF SDK Plugin author" ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "//" ; \
+	    echo "" ; \
+	    echo \#ifdef __cplusplus ; \
+	    echo "extern \"C\"{" ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    echo "" ; \
+	    echo \#ifndef __IID_DEFINED__ ; \
+	    echo \#define __IID_DEFINED__ ; \
+	    echo "" ; \
+	    echo "typedef struct _IID" ; \
+	    echo "{" ; \
+	    echo "    unsigned long x;" ; \
+	    echo "    unsigned short s1;" ; \
+	    echo "    unsigned short s2;" ; \
+	    echo "    unsigned char  c[8];" ; \
+	    echo "} IID;" ; \
+	    echo "" ; \
+	    echo \#endif "// __IID_DEFINED__" ; \
+	    echo "" ; \
+	    echo \#ifndef CLSID_DEFINED ; \
+	    echo \#define CLSID_DEFINED ; \
+	    echo "typedef IID CLSID;" ; \
+	    echo \#endif "// CLSID_DEFINED" ; \
+	    echo "" ; \
+	    for class in $(PLUGIN_OBJECTS) ; do \
+	    	awk -f dod2iid.awk C=$$class $$class.dod ; \
+	    done ; \
+	    echo \#ifdef __cplusplus ; \
+	    echo "}" ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	) > $(UUID_DIR)/AAFPlugin_i.c
+	chmod -w $(UUID_DIR)/AAFPlugin_i.c
+
+
+$(IMPL_DIR)/AAFClassIDs.h : aafobjects.mk
+	@ echo Generating reference AAFClassIDs.h...
+	$(RM) -f $(IMPL_DIR)/AAFClassIDs.h
+	@ ( echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "// (C) Copyright 1998 Avid Technology." ; \
+	    echo "// (C) Copyright 1998 Microsoft Corporation." ; \
+	    echo "//" ; \
+	    echo "// This file was GENERATED for the AAF SDK on " ; \
+	    echo "//  "`date` ; \
+	    echo "//" ; \
+	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
+	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
+	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
+	    echo "// PARTICULAR PURPOSE." ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "// Declarations for all of the private AAF code class ids" ; \
+	    echo "// This file is private to the AAF Reference Implementation." ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "//" ; \
+	    echo \#ifndef __AAFClassIDs_h__ ; \
+	    echo \#define __AAFClassIDs_h__ ; \
+	    echo "" ; \
+	    echo \#ifndef __AAFTypes_h__ ; \
+	    echo \#include \"AAFTypes.h\" ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    echo "" ; \
+	    for class in $(AAFOBJECTS) AAFModuleTest ; do \
+	    	echo "extern \"C\" const aafClassID_t CLSID_$$class;"; \
+	    done ; \
+	    echo "" ; \
+	    echo \#endif // __AAFClassIDs_h__ ; \
+	) > $(IMPL_DIR)/AAFClassIDs.h
+	chmod -w $(IMPL_DIR)/AAFClassIDs.h
+
+
+$(COMAPI_DIR)/AAFCLSIDs.h : aafobjects.mk
+	@ echo Generating reference AAFCLSIDs.h...
+	$(RM) -f $(COMAPI_DIR)/AAFCLSIDs.h
+	@ ( echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "// (C) Copyright 1998 Avid Technology." ; \
+	    echo "// (C) Copyright 1998 Microsoft Corporation." ; \
+	    echo "//" ; \
+	    echo "// This file was GENERATED for the AAF SDK on " ; \
+	    echo "//  "`date` ; \
+	    echo "//" ; \
+	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
+	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
+	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
+	    echo "// PARTICULAR PURPOSE." ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "// Declarations for all of the private AAF code class ids" ; \
+	    echo "// This file is private to the AAF Reference Implementation." ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "//" ; \
+	    echo \#ifndef __AAFCLSIDs_h__ ; \
+	    echo \#define __AAFCLSIDs_h__ ; \
+	    echo "" ; \
+	    echo \#ifndef __AAFCOMPlatformTypes_h__ ; \
+	    echo \#include \"AAFCOMPlatformTypes.h\" ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    for class in $(AAFOBJECTS) AAFModuleTest ; do \
+	    	echo "EXTERN_C const CLSID CLSID_$$class;"; \
+	    done ; \
+	    echo "" ; \
+	    echo \#endif // __AAFCLSIDs_h__ ; \
+	) > $(COMAPI_DIR)/AAFCLSIDs.h
+	chmod -w $(COMAPI_DIR)/AAFCLSIDs.h
 
 
 SRC_DIR = ../ref-impl/src
@@ -358,6 +567,10 @@ clean:
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFModuleTest.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFPluginTypes.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFPlugin.h
+	$(RM) -f $(IMPL_DIR)/AAFClassIDs.h
+	$(RM) -f $(UUID_DIR)/AAF_i.c
+	$(RM) -f $(UUID_DIR)/AAFPlugin_i.c
+	$(RM) -f $(COMAPI_DIR)/AAFCLSIDs.h
 	@for file in $(AUTO_GEN_IMPL) ; do \
 		echo $(RM) -f $(SRC_DIR)/impl/Impl$$file.cpp ; \
 		$(RM) -f $(SRC_DIR)/impl/Impl$$file.cpp ; \
