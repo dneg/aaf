@@ -3115,6 +3115,7 @@ AAFRESULT STDMETHODCALLTYPE
 		else 
 		{
 			OMVectorIterator<aafAccessor_t> i(_codecList, OMBefore);
+			++i;
 			while (!i.after()) 
 			{
 				CHECK(i.value().codec->PutEssenceFormat(iFormat));	// COM Dependency
