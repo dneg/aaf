@@ -1,6 +1,3 @@
-// @com Executable test program by Chris Morgan, intern for Avid Technology, Tewksbury 
-// @com This is used for scalability testing of AAF code.  Last modified on 7/23/99.
-
 //=---------------------------------------------------------------------=
 //
 // The contents of this file are subject to the AAF SDK Public
@@ -22,6 +19,9 @@
 // All rights reserved.
 //
 //=---------------------------------------------------------------------=
+
+// @com Executable test program by Chris Morgan, intern for Avid Technology, Tewksbury 
+// @com This is used for scalability testing of AAF code.  Last modified on 7/23/99.
 
 #include <stdio.h>
 #include <string.h>
@@ -75,7 +75,7 @@ static aafSourceRef_t sourceRef;
 #define TEST_PATH	L"AnotherFile.aaf"
 
 #define assert(b, msg) \
-  if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
+  if (!(b)) {fprintf(stderr, "ASSERT: %s\n", msg); exit(1);}
 
 static void     LogError(HRESULT errcode, int line, char *file)
 {
@@ -108,7 +108,7 @@ static HRESULT convert(char* cName, size_t length, const wchar_t* name)
 
   size_t status = wcstombs(cName, name, length);
   if (status == (size_t)-1) {
-    fprintf(stderr, ": Error : Conversion failed.\n\n");
+    fprintf(stderr, ": Error : Conversion failed.\n");
     return -1; 
   }
   else
@@ -559,7 +559,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	pFile->Release();
 	pFile=NULL;
 #if USE_TIMER_LIB
-	printf("Open time = %ld\n\n", elapsedtime);
+	printf("Open time = %ld\n", elapsedtime);
 #endif
 cleanup:
 	if (pFile)
@@ -575,7 +575,7 @@ void usage(void)
 {
 	printf("Usage:\n Createsequence.exe <Number of components in file> <file name>.aaf \n");
 	printf(" NB: Number is required to be integer greater than zero.\n");
-	printf(" If only the number is given, the filename defaults to <number>.aaf\n\n");
+	printf(" If only the number is given, the filename defaults to <number>.aaf\n");
 }
 
 //  Main adapted to use command-line arguments with argument checking
@@ -598,7 +598,7 @@ int main(int argumentCount, char *argumentVector[])
 	//  Testing for correct second argument
 	if ((end != expectedEnd) || (N < 1))
 	{ 
-		printf("The first argument was of the incorrect form. [%s]\n\n",argumentVector[1]);
+		printf("The first argument was of the incorrect form. [%s]\n",argumentVector[1]);
 		usage();
 		return 0;
 	}
@@ -629,7 +629,7 @@ int main(int argumentCount, char *argumentVector[])
 	aafWChar * pwFileName = FileNameBuffer;
 
 	//  Give a nice output here too...
-	printf("Creating file %s with %ld components...\n\n",niceFileName,N);
+	printf("Creating file %s with %ld components...\n",niceFileName,N);
 	checkFatal(CreateAAFFile(pwFileName, N));
 	
 	// Open the file and gather statistics
