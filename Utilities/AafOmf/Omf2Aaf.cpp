@@ -850,58 +850,7 @@ HRESULT Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_
 	return rc;
 }
 
-// ============================================================================
-// ConvertUniqueNameToAUID
-//
-//			This function converts an OMF uinique name or id into an AAF datadef. 
-//			
-// Returns: AAFRESULT_SUCCESS if datakind is converted succesfully
-//
-// ============================================================================
-#if 0
-HRESULT Omf2Aaf::ConvertUniqueNameToAUID(OMF2::omfUniqueName_t datakindName,
-										 aafUID_t* pEffectdef)
-{
-	HRESULT					rc = AAFRESULT_SUCCESS;
 
-	if (strcmp(datakindName, "omfi:effect:VideoDissolve")== 0)
-		*pEffectdef = kAAFEffectVideoDissolve;
-	else if (strcmp(datakindName, "omfi:effect:SimpleVideoDissolve")== 0)
-		*pEffectdef = kAAFEffectVideoDissolve;
-	else if (strcmp(datakindName, "omfi:effect:MonoAudioDissolve") == 0)
-		*pEffectdef = kAAFEffectMonoAudioDissolve;
-	else if (strcmp(datakindName, "omfi:effect:SimpleMonoAudioDissolve") == 0)
-		*pEffectdef = kAAFEffectMonoAudioDissolve;
-	else if(strcmp(datakindName, "omfi:effect:StereoAudioDissolve") == 0)
-		*pEffectdef = kAAFEffectStereoAudioDissolve;
-	else if(strcmp(datakindName, "omfi:effect:SimpleStereoAudioDissolve") == 0)
-		*pEffectdef = kAAFEffectStereoAudioDissolve;
-	else if(strcmp(datakindName, "omfi:effect:SimpleStereoAudioDissoolve") == 0)
-		*pDatadef = kAAFEffectStereoAudioDissolve;
-	else if(strcmp(datakindName, "omfi:effect:VideoFadeToBlack") == 0)
-		*pDatadef = kAAFEffectVideoFadeToBlack;
-	else if(strcmp(datakindName, "omfi:effect:SMPTEVideoWipe") == 0)
-		*pDatadef = kAAFEffectSMPTEVideoWipe;
-	else if(strcmp(datakindName, "omfi:effect:VideoSpeedControl") == 0)
-		*pDatadef = kAAFEffectVideoSpeedControl;
-	else if(strcmp(datakindName, "omfi:effect:VideoRepeat") == 0)
-		*pDatadef = kAAFEffectVideoRepeat;
-	else if(strcmp(datakindName, "omfi:effect:VideoFrameMask") == 0)
-		*pDatadef = kAAFEffectVideoFrameToMask;
-	else if(strcmp(datakindName, "omfi:effect:MonoAudioPan") == 0)
-		*pDatadef = kAAFEffectMonoAudioPan;
-	else if(strcmp(datakindName, "omfi:effect:MonoAudioGain") == 0)
-		*pDatadef = kAAFEffectMonoAudioGain;
-	else if(strcmp(datakindName, "omfi:effect:MonoAudioMixdown") == 0)
-		*pDatadef = kAAFEffectMonoAudioMixdown;
-	else if(strcmp(datakindName, "omfi:effect:StereoAudioGain") == 0)
-		*pDatadef = kAAFEffectStereoAudioGain;
-	else
-		*pDatadef = kAAFOperationUnknown;
-
-	return rc;
-}
-#endif
 
 // ============================================================================
 // ConvertOMFDatakind
@@ -3887,27 +3836,6 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 		}
 	 
 	}
-#if 0
-	else if (OMF2::OM_ERR_PROP_NOT_PRESENT == OMFError)
-	{
-		// we need to add this code here until optional arguments are implemented !!!
-		IAAFSourceReference*	pNULLSourceRef= NULL;
-		IAAFSourceClip*			pNULLSourceClip = NULL;
-		aafSourceRef_t			sourceRef;
-
-		rc = pDictionary->CreateInstance(AUID_AAFSourceClip, IID_IAAFSourceClip, (IUnknown **)&pNULLSourceClip);
-		sourceRef.sourceID = zeroID;
-		sourceRef.sourceSlotID = 0;
-		sourceRef.startTime = 0;
-		pNULLSourceClip->Initialize (effectAUID, effectLength, sourceRef);
-		pNULLSourceClip->QueryInterface (IID_IAAFSourceReference, (void **)&pNULLSourceRef);
-		pEffect->SetRender(pNULLSourceRef);
-		pNULLSourceRef->Release();
-		pNULLSourceRef = NULL;
-		pNULLSourceClip->Release();
-		pNULLSourceClip = NULL;
-	}
-#endif
 
 	if (pEffectDef)
 		pEffectDef->Release();
@@ -4150,7 +4078,7 @@ HRESULT Omf2Aaf::GetAAFOperationDefinition(OMF2::omfUniqueName_t effectID,
 		(*ppEffectDef)->SetCategory(pwName);
 		(*ppEffectDef)->SetBypass((aafUInt32 )bypassOverride);
 		// Set degradeTo to itself for now because we do not have optional properties !!!
-		(*ppEffectDef)->AppendDegradeToOperations(*ppEffectDef);
+//		(*ppEffectDef)->AppendDegradeToOperations(*ppEffectDef);
 		(*ppEffectDef)->SetNumberInputs(numberInputs);
 		(*ppEffectDef)->SetDataDefinitionID(defDataDef); 
 
