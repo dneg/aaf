@@ -31,11 +31,15 @@ AAFBASE ?= ../../..
 # Common definitions
 include $(AAFBASE)/build/common.mk
 
-# Turn off error-on-warning behaviour for this directory
-# Workaround for "defined but not used" warnings in AAFMetaDictionary.h
-# FIXME: remove this once AAFMetaDictionary.h generation is fixed
+# Turn off error-on-warning behaviour for this directory for AAFTARGET=Release
+# Workaround for Release build gcc warnings of "unused variable ..."
+# FIXME: remove this once OMStrongRefSetPropertyT.h, ImplAAFBuiltinTypes.cpp,
+# FIXME: ImplAAFClassDef.cpp, ImplAAFDataDef.cpp, ImplAAFDictionary.cpp etc
+# FIXME: are fixed to avoid the warning
 ifeq ($(CC),g++)
+ifeq ($(AAFTARGET), Release)
   ADD_CFLAGS += -Wno-error
+endif
 endif
 
 # Include directories
