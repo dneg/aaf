@@ -32,16 +32,23 @@ targets.mk : aafobjects.mk
 	@ echo '' >> targets.tmp
 	@ echo '' >> targets.tmp
 	@ echo FIDL_TARGETS = \\\c >> targets.tmp 
-	@ for base in $(AAFOBJECTS) ;  do \
+	@ for base in $(AAFOBJECTS) $(AAFCOMINTERFACESONLY) ;  do \
 		echo '\' >> targets.tmp ; \
 		echo '	'$$base.fidl \\\c>> targets.tmp ; \
 	  done
 	@ echo '' >> targets.tmp
 	@ echo '' >> targets.tmp
 	@ echo FREFH_TARGETS = \\\c >> targets.tmp 
-	@ for base in $(AAFOBJECTS) ;  do \
+	@ for base in $(AAFOBJECTS) $(AAFCOMINTERFACESONLY) ;  do \
 		echo '\' >> targets.tmp ; \
 		echo '	'$$base.frefh \\\c>> targets.tmp ; \
+	  done
+	@ echo '' >> targets.tmp
+	@ echo '' >> targets.tmp
+	@ echo COM_IFC_ONLY_TARGETS = \\\c >> targets.tmp 
+	@ for base in $(AAFCOMINTERFACESONLY) ;  do \
+		echo '\' >> targets.tmp ; \
+		echo '	'$$base.all \\\c>> targets.tmp ; \
 	  done
 	@ echo '' >> targets.tmp
 	@ mv targets.tmp targets.mk
