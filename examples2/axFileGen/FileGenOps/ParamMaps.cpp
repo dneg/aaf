@@ -22,7 +22,7 @@
 
 //=---------------------------------------------------------------------=
 
-#if defined(OS_WINDOWS)
+#ifdef WIN32
 #pragma warning(disable:4660)
 // "template-class specialization 'ParamMap<struct _aafUID_t,class _ContainerDefsTag>'
 // is already instantiated"  etc for the other instances.
