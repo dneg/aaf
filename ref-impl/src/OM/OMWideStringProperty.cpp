@@ -38,7 +38,6 @@ OMWideStringProperty::OMWideStringProperty(const OMPropertyId propertyId,
 : OMCharacterStringProperty<wchar_t>(propertyId, name)
 {
   TRACE("OMWideStringProperty::OMWideStringProperty");
-  PRECONDITION("Valid name", validString(name));
 }
 
   // @mfunc Destructor.
