@@ -859,6 +859,8 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(codecDef->GetAUID(&codecID));
 		codecDef->ReleaseReference();
 		codecDef = NULL;
+
+		_codecID = codecID;
 	
 		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
 		CHECK(plugins->CreateInstanceFromDefinition(
