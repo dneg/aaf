@@ -61,10 +61,13 @@
 #include "AAFUtils.h"
 #include "aafCvt.h"
 #include "AAFResult.h"
+#include "AAFSDKBuild.h"
 
 
+extern const char AAFReferenceImplementationIdent[];
 
-const aafProductVersion_t AAFReferenceImplementationVersion = {1, 0, 0, 5, kAAFVersionBeta};
+const char AAFReferenceImplementationIdent[] = "@(#) " AAF_SDK_RELEASE; // for Linux and Irix
+const aafProductVersion_t AAFReferenceImplementationVersion = {AAF_MAJOR_VERSION, AAF_MINOR_VERSION, AAF_MAINT_RELEASE, AAF_BUILD_NUMBER, AAF_RELEASE_STAGE};
 
 
 
