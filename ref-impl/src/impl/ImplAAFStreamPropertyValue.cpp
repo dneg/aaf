@@ -57,10 +57,6 @@ ImplAAFStreamPropertyValue::~ImplAAFStreamPropertyValue ()
 
 
 
-
-
-
-
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFStreamPropertyValue::GetSize (
       aafInt64 *  pSize)
@@ -83,7 +79,7 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_NOT_INITIALIZED;
   if (0 > newSize) // TEMP: need unsigned aafUInt64!
     return AAFRESULT_INVALID_PARAM;
-  
+
   // *** Structured Storage PATCH! *** transdel:2000-JUN-20
   // Save the old position so that we can detect whether
   // or not the stream is being truncated.
@@ -151,6 +147,10 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_NOT_INITIALIZED;
   if (NULL == pData || NULL == bytesRead)
     return AAFRESULT_NULL_PARAM;
+
+  // Cannot read from an optional property unless it is present.
+  if (_streamProperty->isOptional() && !_streamProperty->isPresent())
+    return AAFRESULT_PROP_NOT_PRESENT;
     
   // Read the bytes from the data stream.
   _streamProperty->read(pData, dataSize, *bytesRead);
@@ -197,7 +197,7 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_NOT_INITIALIZED;
   if (NULL == pData)
     return AAFRESULT_NULL_PARAM;
-      
+
   // Set the position to the size of the stream.
   _streamProperty->setPosition(_streamProperty->size());
        
@@ -259,7 +259,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFStreamPropertyValue::SetStoredByteOrder (
       eAAFByteOrder_t  byteOrder)
-{
+{      
   // Cannot set the byte order if there is an existing byte order.
   if (_streamProperty->hasByteOrder())
     return AAFRESULT_INVALID_BYTEORDER;
@@ -279,7 +279,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFStreamPropertyValue::ClearStoredByteOrder (void)
-{
+{      
   // Cannot clear the byte order if it has never been set.
   if (!_streamProperty->hasByteOrder())
     return AAFRESULT_NOBYTEORDER;
@@ -326,6 +326,10 @@ AAFRESULT STDMETHODCALLTYPE
   assert (0 < externalElementSize);
   if (0 == externalElementSize)
      return AAFRESULT_INVALID_PARAM; 
+
+  // Cannot read from an optional property unless it is present.
+  if (_streamProperty->isOptional() && !_streamProperty->isPresent())
+    return AAFRESULT_PROP_NOT_PRESENT;
   
   // Read the elements from the data stream.
   OMUInt32 elementsRead;
@@ -465,6 +469,20 @@ AAFRESULT ImplAAFStreamPropertyValue::Initialize (
   assert (streamProperty);
   if (NULL == streamProperty)
     return AAFRESULT_INVALID_PARAM;
+  
+  // Make sure the stream is valid and attached to a persisted storable.
+  const OMPropertySet *propertySet = streamProperty->propertySet();
+  assert(propertySet);
+  if (!propertySet)
+    return AAFRESULT_INVALID_PARAM;
+  OMStorable * container = propertySet->container();
+  assert(container);
+  if (!container)
+    return AAFRESULT_INVALID_PARAM;
+
+  // Cannot access the data property if it is NOT associated with a file.
+  if (!container->persistent())
+    return AAFRESULT_OBJECT_NOT_PERSISTENT;
 
   result = ImplAAFPropertyValue::Initialize(streamType, streamProperty);
   if (AAFRESULT_SUCCEEDED(result))
