@@ -24,7 +24,7 @@
 
 
 .PHONY : all
-all : aafextract aafomf eli2aaf aafviewer
+all : aafextract aafomf eli2aaf aafviewer aafdump
 
 # AafOmf depends upon OMF development libraries which are no longer distributed
 # with the SDK.  They are available from http://aafassociation.org/download/
@@ -45,6 +45,10 @@ aafviewer:
 	cd aafviewer/src/aaf2dot && $(MAKE)
 	cd aafviewer/src/aafmeta2dot && $(MAKE)
 
+.PHONY : aafdump
+aafdump:
+	cd aafdump && $(MAKE)
+
 .PHONY : clean
 clean :
 	cd AafOmf && $(MAKE) GENDEPS=0 $@
@@ -52,6 +56,7 @@ clean :
 	cd eli2aaf && $(MAKE) GENDEPS=0 $@
 	cd aafviewer/src/aaf2dot && $(MAKE) GENDEPS=0 $@
 	cd aafviewer/src/aafmeta2dot && $(MAKE) GENDEPS=0 $@
+	cd aafdump && $(MAKE) GENDEPS=0 $@
 
 .PHONY : realclean
 realclean :
@@ -60,3 +65,5 @@ realclean :
 	cd eli2aaf && $(MAKE) GENDEPS=0 $@
 	cd aafviewer/src/aaf2dot && $(MAKE) GENDEPS=0 $@
 	cd aafviewer/src/aafmeta2dot && $(MAKE) GENDEPS=0 $@
+	cd aafdump && $(MAKE) GENDEPS=0 $@
+
