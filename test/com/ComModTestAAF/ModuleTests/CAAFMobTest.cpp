@@ -1060,8 +1060,6 @@ extern "C" HRESULT CAAFMob_test(testMode_t mode)
 	{
 		cout << "The following AAFMob methods have not been implemented:" << endl; 
 		cout << "     OffsetToMobTimecode - Implementation not complete - NOT_IN_CURRENT_VERSION" << endl; 
-		cout << "     CloneExternal - NOT_IN_CURRENT_VERSION" << endl; 
-		cout << "     Copy - NOT_IN_CURRENT_VERSION" << endl; 
 		hr = AAFRESULT_NOT_IN_CURRENT_VERSION;
 	}
 
