@@ -104,7 +104,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
-	if (fadelength > 0) 
+	if (fadeLength > 0) 
 	{
 		_defaultFadeLen = fadeLength;
 		_defaultFadeType = fadeType;

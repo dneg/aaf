@@ -37,7 +37,7 @@
 // Persistent Property IDs
 
 const int PID_SOURCEREFERENCE_SOURCEID		= 2;
-const int PID_SOURCEREFERENCE_SRCMOBSLOTID	= 3;
+const int PID_SOURCEREFERENCE_SOURCEMOBSLOTID	= 3;
 
 class ImplAAFSourceReference : public ImplAAFSegment
 {
