@@ -67,17 +67,8 @@ const CLSID CLSID_AAFFile = { 0x9346ACD2, 0x2713, 0x11d2, { 0x80, 0x35, 0x00, 0x
 #include "AAFStoredObjectIDs.h"
 
 
-#define FAILURE (2)
-
 const int MAX_INDENT = 8;
 
-// ============================================================================
-// char to wide char conversion function prototypes
-// ============================================================================
-static void convert(wchar_t* wcName, size_t length, const char* name);
-static void convert(char* cName, size_t length, const wchar_t* name);
-static void convert(char* cName, size_t length, const char* name);
-static void convert(wchar_t* wName, size_t length, const wchar_t* name);
 
 // ============================================================================
 // simple helper class to initialize and cleanup COM library.
@@ -132,6 +123,7 @@ public:
 	HRESULT TraverseOMFSequence( OMF2::omfObject_t obj, IAAFSequence* pSequence );
 	HRESULT	ConvertOMFSequence( OMF2::omfObject_t sequence, IAAFSequence* pSequence);
 	HRESULT ConvertOMFComponentProperties(OMF2::omfObject_t sequence, IAAFComponent* pComponent);
+	HRESULT ConvertOMFTransition(OMF2::omfObject_t transition, IAAFTransition* pTransition);
 
 	char*					pProgramName;
 
