@@ -51,10 +51,10 @@ public:
 
 
   //****************
-  // Create()
+  // Initialize()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    Create
+    Initialize
 	    (// @parm [in] Data Definition Object
          aafUID_t * pDataDef,
 

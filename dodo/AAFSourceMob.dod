@@ -6,9 +6,9 @@ AAFSourceMob\
 AAFMob\
 #endm
 #c
-#import ./AAFObject.exp
-#import ./AAFComponent.exp
-#import ./AAFMob.exp
+#c #import ./AAFObject.exp
+#c #import ./AAFComponent.exp
+#c #import ./AAFMob.exp
 #import ./AAFSearchSource.exp
 AD_HEAD
 AD_IDL(//

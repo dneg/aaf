@@ -55,10 +55,10 @@ public:
 
   //@access Public Members
   //****************
-  // SetInitialValues()
+  // Initialize()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetInitialValues
+    Initialize
 	    (// @parm [in] Mob name [optional]
          aafWChar *  name);
   //@rdesc Error code [see below].

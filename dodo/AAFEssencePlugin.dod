@@ -5,7 +5,7 @@ AAFEssencePlugin\
 AAFRoot\
 #endm
 #c
-#import ./AAFObject.exp
+#c #import ./AAFObject.exp
 #import ./AAFEndian.exp
 AD_HEAD
 /******************************************\

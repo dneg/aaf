@@ -17,15 +17,22 @@ PTFM_SUFX = 86
 OBJ = o${PTFM_SUFX}
 AAF_LIB = a${PTFM_SUFX}
 EXE = x${PTFM_SUFX}
+
 CC = gcc
 LD = gcc
-LFLAGS = -lstdc++
+AAF_CMD_LINK = ld
+
+AAF_LINK_FLAGS = -r
+AAF_LINK_OUTPUT_FLAG = -o
+LFLAGS = -lg++
 CFLAGS = -Wall -Werror
 ARFLAGS = -c -q
 OBJFILE = -o $*.${OBJ}
 EXEFILE = -o unittest.${EXE}
 CP = cp
+MAKE_SUFFIX = .gmake
 
+UNICODE = 1
 SH_PREFIX = 
 SH_SUFFIX =
 

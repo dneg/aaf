@@ -25,7 +25,7 @@
 
 
 #include "AAFStoredObjectIDs.h"
-#include "AAFPropertyIds.h"
+#include "AAFPropertyIDs.h"
 
 #ifndef __ImplAAFEdgecode_h__
 #include "ImplAAFEdgecode.h"
@@ -38,7 +38,7 @@
 #include "AAFResult.h"
 #include "aafErr.h"
 #include "aafCvt.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 #include "AAFDefUIDs.h"
 
 

@@ -6,9 +6,8 @@ AAFTransition\
 AAFComponent\
 #endm
 #c
-#import ./AAFComponent.exp
+#c #import ./AAFComponent.exp
 AD_HEAD
-
 AD_INCLUDE(AAFTypes)
 AD_FORWARD_DECLARATION(AAFEffect)
 AD_FORWARD_DECLARATION(AAFDataDef)

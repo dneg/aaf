@@ -42,7 +42,7 @@ ImplAAFCompositionMob::~ImplAAFCompositionMob ()
 
   //@access Public Members
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFCompositionMob::SetInitialValues (aafWChar	*pName)
+    ImplAAFCompositionMob::Initialize (aafWChar	*pName)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 	if (pName == NULL)

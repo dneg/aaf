@@ -6,7 +6,7 @@ AAFRGBADescriptor\
 AAFDigitalImageDescriptor\
 #endm
 #c
-#import ./AAFDigitalImageDescriptor.exp
+#c #import ./AAFDigitalImageDescriptor.exp
 AD_HEAD
 
 

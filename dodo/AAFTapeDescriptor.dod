@@ -6,7 +6,7 @@ AAFTapeDescriptor\
 AAFEssenceDescriptor\
 #endm
 #c
-#import ./AAFEssenceDescriptor.exp
+#c #import ./AAFEssenceDescriptor.exp
 AD_HEAD
 AD_INCLUDE(AAFTypes)
 AD_IDL(//

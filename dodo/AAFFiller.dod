@@ -6,7 +6,7 @@ AAFFiller\
 AAFSegment\
 #endm
 #c
-#import ./AAFSegment.exp
+#c #import ./AAFSegment.exp
 AD_HEAD
 AD_IDL(//
 // The IAAFFiller interface is supported by objects which serve as

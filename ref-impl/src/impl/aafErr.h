@@ -32,7 +32,7 @@
 #endif
 
 #include "AAFTypes.h"
-#include "aafresult.h"
+#include "AAFResult.h"
 
 class AAFFile;
 

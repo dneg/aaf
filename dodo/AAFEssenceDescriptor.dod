@@ -6,7 +6,7 @@ AAFEssenceDescriptor\
 AAFObject\
 #endm
 #c
-#import ./AAFObject.exp
+#c #import ./AAFObject.exp
 AD_HEAD
 AD_IDL(//
 // The IAAFEssenceDescriptor interface is implemented by objects which

@@ -6,7 +6,7 @@ AAFSelector\
 AAFSegment\
 #endm
 #c
-#import ./AAFSegment.exp
+#c #import ./AAFSegment.exp
 AD_HEAD
 AD_IDL(//
 // The IAAFSelector interface is implemented by objects that specify a

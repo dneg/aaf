@@ -6,7 +6,7 @@ AAFTextLocator\
 AAFLocator\
 #endm
 #c
-#import ./AAFLocator.exp
+#c #import ./AAFLocator.exp
 AD_HEAD
 
 

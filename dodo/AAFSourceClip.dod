@@ -9,27 +9,28 @@ AAFSourceReference\
 #import ./AAFSourceReference.exp
 AD_HEAD
 AD_IDL(//
-// The SourceClip class represents the content data and identifies the 
-// source of the content data.
-// SourceClip is a subclass of SourceReference.
-// This interface is used with AAFSourceClip objects.
+// The IAAFSourceClip interface is implemented by objects that
+// represent the content data and identify the source of the content
+// data.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
+// AAFRESULT_NOT_INITIALIZED
+//   - This object has not yet had Initialize\(\) called on it through
+//     this object's primary interface.
 //)
-
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFMob)
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
 AD_CLASS_UUID(38e6f8a5, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
+
 AD_DEFAULT_UUID(38e6f8a7, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 AD_CLASS_BEGIN
-
 AD_XMETHOD3(InitializeSourceClip,
 			[in],
 				objPass,
@@ -44,7 +45,8 @@ AD_XMETHOD3(InitializeSourceClip,
 			[in],
 				objPass,
 				aafSourceRef_t,
-				sourceRef,Source Reference,
+				sourceRef,
+				Source Reference,
 			This method initializes a source clip object with
   // the given properties.  Only required properties are set.
   // Optional properties are added with separate functions.
@@ -59,63 +61,175 @@ AD_XMETHOD3(InitializeSourceClip,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - any arg is NULL.
-)
+  //   - any arg is NULL.)
 
-AD_METHOD6(GetFade,
-		   [out],aafInt32 *     ,fadeInLen     ,Fade In Length,
-		   [out],aafFadeType_t *,fadeInType    ,Fade In Type,
-		   [out],aafBool *      ,fadeInPresent ,Fade In Type,
-		   [out],aafInt32 *     ,fadeOutLen    ,Fade Out Length,
-		   [out],aafFadeType_t *,fadeOutType   ,Fade Out Type,
-		   [out],aafBool *      ,fadeOutPresent,Fade In Type,
-		   This function returns the optional fade information from a
-  // source clip.  This function only applies to audio source clips.)
+
+AD_XMETHOD6(GetFade,
+			[out],
+			objPass,
+			aafInt32 *,
+			pFadeInLen,
+			Fade In Length,
+
+			[out],
+			objPass,
+			aafFadeType_t *,
+			pFadeInType,
+			Fade In Type,
+
+			[out],
+			objPass,
+			aafBool *,
+			pFadeInPresent,
+			Fade In Type,
+
+			[out],
+			objPass,
+			aafInt32 *,
+			pFadeOutLen,
+			Fade Out Length,
+
+			[out],
+			objPass,
+			aafFadeType_t *,
+			pFadeOutType,
+			Fade Out Type,
+
+			[out],
+			objPass,
+			aafBool *,
+			pFadeOutPresent,
+			Fade In Type,
+
+			This function returns the optional fade information from a
+  // source clip.  This function only applies to audio source clips.
+  //
+  // Succeeds if all of the following are true:
+  // - the all argument pointers are valid.
+  // 
+  // If this method fails nothing will be written to any of the
+  // locations specified by the arguments.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - any argument is NULL.)
+
 
 AD_XMETHOD1(ResolveRef,
-			[out],objOut,AAFMob,mob,Referenced mob,
+			[out],
+			objOut,
+			AAFMob,
+			ppMob,
+			Referenced mob,
+
 			Given a source clip object\, this function returns a pointer
-  // to the mob that it references.  If this mob does not exist\, the
-  // error OM_ERR_MOB_NOT_FOUND is returned.)
+  // to the mob that it references.
+  //
+  // Succeeds if all of the following are true:
+  // - the ppMob pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppMob.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppMob arg is NULL.
+  //
+  // AAFRESULT_MOB_NOT_FOUND
+  //   - this mob does not exist.)
 
-AD_METHOD1(GetRef,
-		   [out],aafSourceRef_t *,sourceRef,Source Reference,
-		   This function returns the 3 properties on a source Clip
-  // that make up the "source reference" \\\(sourceID\\\, sourceTrackID\\\, and
-  // startTime\\\).)
 
-AD_METHOD4(SetFade,
+AD_XMETHOD1(GetRef,
+			[out],
+			objPass,
+			aafSourceRef_t *,
+			pSourceRef,
+			Source Reference,
+
+  // This function returns the 3 properties on a source Clip that make
+  // up the "source reference" \(sourceID\, sourceTrackID\, and
+  // startTime\).
+  //
+  // Succeeds if all of the following are true:
+  // - the pSourceRef pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pSourceRef.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pSourceRef arg is NULL.)
+
+
+AD_XMETHOD4(SetFade,
 		   [in],
+		   		objPass,
 				aafInt32,
 				fadeInLen,
 				Fade In Length,
 		   [in],
+		   		objPass,
 				aafFadeType_t,
 				fadeInType,
 				Fade In Type,
 		   [in],
+		   		objPass,
 				aafInt32,
 				fadeOutLen,
 				Fade Out Length,
 		   [in],
+		   		objPass,
 				aafFadeType_t,
 				fadeOutType,
 				Fade Out Type,
+
 				This function sets the optional fade properties on the
   // input source clip object.  The fade properties only apply to a
-  // source clip of datakind \\\(or convertible to a datakind\\\) of type
-  // Sound. All arguments should be specified.)
+  // source clip of datakind \(or convertible to a datakind\) of type
+  // Sound. All arguments should be specified.
+  // 
+  // Always succeeds.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\))
+
 
 AD_METHOD1(SetRef,
 		   [in],
 				aafSourceRef_t,
 				sourceRef,
 				Source Reference,
+
 				This function sets the 3 properties on a source Clip that
   // make up the "source reference" \\\(sourceID\\\, sourceTrackID\\\, and
-  // startTime\\\).)
-
-
-
-
+  // startTime\\\).
+  // 
+  // Always succeeds.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\))
 AD_CLASS_END

@@ -6,7 +6,7 @@ AAFCompositionMob\
 AAFMob\
 #endm
 #c
-#import ./AAFMob.exp
+#c #import ./AAFMob.exp
 AD_HEAD
 AD_IDL(//
 // The IAAFCompositionMob interface is implemented on objects which

@@ -3,9 +3,24 @@ AAFSearchSource\
 #endm
 #c
 AD_HEAD
+AD_IDL(//
+// The IAAFSearchSource interface is used to return source information
+// for some mob slots.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
+// AAFRESULT_NOT_INITIALIZED
+//   - This object has not yet had Initialize\(\) called on it through
+//     this object's primary interface.
+//)
 AD_DEFAULT_UUID(332CBDD0, 5425, 11D2, AA, 7A, 10, 00, 3D, 00, 00, 00)
 AD_CLASS_BEGIN
-
 AD_XMETHOD7(SearchSource,
 			[in],
 			  objPass,

@@ -6,7 +6,7 @@ AAFTimelineMobSlot\
 AAFMobSlot\
 #endm
 #c
-#import ./AAFMobSlot.exp
+#c #import ./AAFMobSlot.exp
 AD_HEAD
 AD_IDL(//
 // The IAAFTimelineMobSlot interface is implemented by objects which

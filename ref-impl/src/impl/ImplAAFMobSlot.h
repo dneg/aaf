@@ -84,10 +84,10 @@ public:
 		aafInt32	bufsize);	//@parm [in] length of the buffer provided to hold the slot name
 
   //****************
-  // GetNameLength()
+  // GetNameBufLen()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetNameLength
+    GetNameBufLen
 		(aafInt32	*bufsize);	//@parm [in] length of the buffer provided to hold the slot name
 							// including the terminator
 

@@ -6,7 +6,7 @@ AAFCDCIDescriptor\
 AAFDigitalImageDescriptor\
 #endm
 #c
-#import ./AAFDigitalImageDescriptor.exp
+#c #import ./AAFDigitalImageDescriptor.exp
 AD_HEAD
 AD_IDL(//
 // The IAAFCDCIDescriptor interface is implemented by objects which

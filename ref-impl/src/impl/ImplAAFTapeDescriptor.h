@@ -77,10 +77,10 @@ public:
 		 // @parm [in] Length of the buffer to hold the Manufacturers name
 		 aafInt32  buflen);
   //****************
-  // GetManufacturerNameLen()
+  // GetTapeManBufLen()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetManufacturerNameLen
+    GetTapeManBufLen
 		// @parm [out] Manufacturers Name length
         (aafInt32 *  pLen);
   //****************
@@ -101,10 +101,10 @@ public:
 		 // @parm [in] Length of the buffer to hold the Manufacturers Brand name
 		 aafInt32  buflen);
   //****************
-  // GetTapeModelLen()
+  // GetTapeModelBufLen()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetTapeModelLen
+    GetTapeModelBufLen
 		// @parm [out] Model length
         (aafInt32 *  pLen);
 

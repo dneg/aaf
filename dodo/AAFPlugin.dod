@@ -6,7 +6,7 @@ AAFPlugin\
 AAFRoot\
 #endm
 #c
-#import ./AAFObject.exp
+#c #import ./AAFObject.exp
 AD_HEAD
 
 AD_FORWARD_DECLARATION(AAFEssenceStream)

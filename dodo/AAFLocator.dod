@@ -6,7 +6,7 @@ AAFLocator\
 AAFObject\
 #endm
 #c
-#import ./AAFObject.exp
+#c #import ./AAFObject.exp
 AD_HEAD
 AD_IDL(//
 // The IAAFLocator interface is implemented by objects that provide
