@@ -81,7 +81,7 @@ static void printIdentification(IAAFIdentification* pIdent)
 	wprintf(L"Platform             = \"%s\"\n", platform.value);
 }
 
-static void ReadAAFFile(unsigned char * pFileName)
+static void ReadAAFFile(aafWChar * pFileName)
 {
 	IAAFSession *				pSession = NULL;
 	IAAFFile *					pFile = NULL;
@@ -126,7 +126,7 @@ static void ReadAAFFile(unsigned char * pFileName)
 	if (pSession) pSession->Release();
 }
 
-static void CreateAAFFile(unsigned char * pFileName)
+static void CreateAAFFile(aafWChar * pFileName)
 {
 	IAAFSession *				pSession = NULL;
 	IAAFFile *					pFile = NULL;
@@ -178,7 +178,7 @@ struct CComInitialize
 main()
 {
 	CComInitialize comInit;
-	unsigned char * pFileName = (unsigned char *)"Foo.aaf";
+	aafWChar * pFileName = L"Foo.aaf";
 
   	wprintf(L"***Creating file %s\n", pFileName);
 	CreateAAFFile(pFileName);

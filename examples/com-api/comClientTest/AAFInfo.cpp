@@ -81,7 +81,7 @@ static void printIdentification(IAAFIdentification* pIdent)
 	wprintf(L"Platform             = \"%s\"\n", platform.value);
 }
 
-static void ReadAAFFile(unsigned char * pFileName)
+static void ReadAAFFile(aafWChar * pFileName)
 {
 	IAAFSession *				pSession = NULL;
 	IAAFFile *					pFile = NULL;
@@ -144,7 +144,7 @@ main()
 {
 	CComInitialize comInit;
 
-	ReadAAFFile((unsigned char *)"Foo.aaf");
+	ReadAAFFile(L"Foo.aaf");
 
 	fprintf(stdout, "Done\n");
 
