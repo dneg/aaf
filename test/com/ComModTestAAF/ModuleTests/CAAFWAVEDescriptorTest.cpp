@@ -21,6 +21,9 @@
 #endif
 
 #include <iostream.h>
+#include <stdio.h>
+
+#include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
@@ -40,7 +43,81 @@ typedef struct tWAVEFORMATEX
 				    /* extra information (after cbSize) */
 } WAVEFORMATEX, *PWAVEFORMATEX;
 
+
 #endif
+
+
+
+#if defined(_WIN32) || defined(WIN32)
+  // Wave data does not have to be swapped on Windows platforms.
+  #define SWAPSUMMARY(summary)
+#else
+  // Assume all other platforms are big-endian.
+  // this will change when we adapt the sdk to
+  // other platforms...
+
+  // Simple utilities to swap bytes.
+  static void SwapBytes(void *buffer, size_t count)
+  {
+    unsigned char *pBuffer = (unsigned char *)buffer;
+    unsigned char tmp;
+    int front = 0;
+    int back = count - 1;
+  
+    for (front = 0, back = count - 1; front < back; ++front, --back)
+    {
+      tmp = pBuffer[front];
+      pBuffer[front] = pBuffer[back];
+      pBuffer[back] = tmp;
+    }
+  }
+
+  static void SwapSummary(WAVEFORMATEX&	summary)
+  {
+    SwapBytes(&summary.wFormatTag, sizeof(summary.wFormatTag));
+    SwapBytes(&summary.nChannels, sizeof(summary.nChannels));
+    SwapBytes(&summary.nSamplesPerSec, sizeof(summary.nSamplesPerSec));
+    SwapBytes(&summary.nAvgBytesPerSec, sizeof(summary.nAvgBytesPerSec));
+    SwapBytes(&summary.nBlockAlign, sizeof(summary.nBlockAlign));
+    SwapBytes(&summary.wBitsPerSample, sizeof(summary.wBitsPerSample));
+    SwapBytes(&summary.cbSize, sizeof(summary.cbSize));
+
+    // Ignore extra information for now trr: 1999-02-19
+  }
+
+  #define SWAPSUMMARY(summary) SwapSummary(summery);
+#endif
+
+
+
+
+
+// Cross-platform utility to delete a file.
+static void RemoveTestFile(const wchar_t* pFileName)
+{
+  const size_t kMaxFileName = 512;
+  char cFileName[kMaxFileName];
+
+  size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
+  if (status != (size_t)-1)
+  { // delete the file.
+    remove(cFileName);
+  }
+}
+
+// convenient error handlers.
+inline void checkResult(HRESULT r)
+{
+  if (FAILED(r))
+    throw r;
+}
+inline void checkExpression(bool expression, HRESULT r)
+{
+  if (!expression)
+    throw r;
+}
+
+
 
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
 						   aafMediaOpenMode_t	mode,
@@ -51,7 +128,7 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	HRESULT						hr = AAFRESULT_SUCCESS;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"Make AVR Example";
+	ProductInfo.productName = L"AAFWAVEDescriptor Test";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -109,84 +186,82 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
 	IAAFFile*		pFile = NULL;
 	IAAFHeader*		pHeader = NULL;
+  IAAFDictionary*  pDictionary = NULL;
 	IAAFSourceMob*	pSourceMob = NULL;
+	IAAFMob*	pMob = NULL;
+  IAAFWAVEDescriptor*	pWAVEDesc = NULL;
+  IAAFEssenceDescriptor*	pEssDesc = NULL;
 	aafUID_t		newUID;
 	HRESULT			hr = AAFRESULT_SUCCESS;
 
-	// Create the AAF file
-	hr = OpenAAFFile(pFileName, kMediaOpenAppend, &pFile, &pHeader);
-	if (FAILED(hr))
-		return hr;
 
-	// Create a source mob
-	hr = CoCreateInstance(CLSID_AAFSourceMob,
-						NULL, 
-						CLSCTX_INPROC_SERVER, 
-						IID_IAAFSourceMob, 
-						(void **)&pSourceMob);
-	if (SUCCEEDED(hr))
-	{
-		IAAFMob*	pMob = NULL;
+  try
+  {
+    // Remove the previous test file if any.
+    RemoveTestFile(pFileName);
 
-		hr = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
-		if (SUCCEEDED(hr))
-		{
-			IAAFWAVEDescriptor*	pWAVEDesc = NULL;
 
-			CoCreateGuid((GUID *)&newUID);
-			pMob->SetMobID(&newUID);
-			pMob->SetName(L"WAVEDescriptorTest");
-			hr = CoCreateInstance(CLSID_AAFWAVEDescriptor,
-									NULL, 
-									CLSCTX_INPROC_SERVER, 
-									IID_IAAFWAVEDescriptor, 
-									(void **)&pWAVEDesc);		
-			if (SUCCEEDED(hr))
-			{
-				IAAFEssenceDescriptor*	pEssDesc = NULL;
-				WAVEFORMATEX			summary;
+	  // Create the AAF file
+	  checkResult(OpenAAFFile(pFileName, kMediaOpenAppend, &pFile, &pHeader));
 
-				summary.cbSize = sizeof(WAVEFORMATEX);
-				summary.wFormatTag = WAVE_FORMAT_PCM;
-				summary.wBitsPerSample = 16;
-				summary.nAvgBytesPerSec = 88200;
-				summary.nChannels = 1;
-				summary.nBlockAlign = 2;
-				summary.nSamplesPerSec = 44100;
+    // Get the AAF Dictionary so that we can create valid AAF objects.
+    checkResult(pHeader->GetDictionary(&pDictionary));
+ 		
+	  // Create a source mob
+		checkResult(pDictionary->CreateInstance(&AUID_AAFSourceMob,
+							IID_IAAFSourceMob, 
+							(IUnknown **)&pSourceMob));
+		checkResult(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 
-				// NOTE: The elements in the summary structure need to be byte swapped
-				//       on Big Endian system (i.e. the MAC).
+		checkResult(CoCreateGuid((GUID *)&newUID));
+		checkResult(pMob->SetMobID(&newUID));
+		checkResult(pMob->SetName(L"WAVEDescriptorTest"));
+		checkResult(pDictionary->CreateInstance(&AUID_AAFWAVEDescriptor,
+									  IID_IAAFWAVEDescriptor, 
+									  (IUnknown **)&pWAVEDesc));		
 
-				hr = pWAVEDesc->SetSummary(sizeof(WAVEFORMATEX), (aafDataValue_t)&summary);
-				if (SUCCEEDED(hr))
-				{
-					hr = pWAVEDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc);
-					if (SUCCEEDED(hr))
-					{
-						hr = pSourceMob->SetEssenceDescriptor(pEssDesc);
-						if (SUCCEEDED(hr))
-						{
-						}
-						pEssDesc->Release();
-						pEssDesc = NULL;
-					}
-				}
-				pWAVEDesc->Release();
-				pWAVEDesc = NULL;
-			}
+		WAVEFORMATEX			summary;
 
-			// Add the MOB to the file
-			if (SUCCEEDED(hr))
-				hr = pHeader->AppendMob(pMob);
+		summary.cbSize = sizeof(WAVEFORMATEX);
+		summary.wFormatTag = WAVE_FORMAT_PCM;
+		summary.wBitsPerSample = 16;
+		summary.nAvgBytesPerSec = 88200;
+		summary.nChannels = 1;
+		summary.nBlockAlign = 2;
+		summary.nSamplesPerSec = 44100;
 
-			pMob->Release();
-			pMob = NULL;
-		}
-		pSourceMob->Release();
-		pSourceMob = NULL;
+		// NOTE: The elements in the summary structure need to be byte swapped
+		//       on Big Endian system (i.e. the MAC).
+    SWAPSUMMARY(summary)
+		checkResult(pWAVEDesc->SetSummary(sizeof(WAVEFORMATEX), (aafDataValue_t)&summary));
+
+    checkResult(pWAVEDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc));
+		checkResult(pSourceMob->SetEssenceDescriptor(pEssDesc));
+
+		// Add the MOB to the file
+		checkResult(pHeader->AppendMob(pMob));
 	}
+  catch (HRESULT& rResult)
+  {
+    hr = rResult;
+  }
+	
+  
+  // Cleanup and return
+  if (pEssDesc)
+    pEssDesc->Release();
 
-	if (pHeader) pHeader->Release();
+  if (pWAVEDesc)
+    pWAVEDesc->Release();
+
+  if (pMob)
+    pMob->Release();
+
+  if (pSourceMob)
+    pSourceMob->Release();
+
+	if (pHeader)
+    pHeader->Release();
 
 	if (pFile)
 	{
@@ -202,98 +277,75 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFFile*		pFile = NULL;
 	IAAFHeader*		pHeader = NULL;
 	IEnumAAFMobs*	pMobIter = NULL;
+	IAAFMob*	pMob = NULL;
+	IAAFSourceMob*	pSourceMob = NULL;
+	IAAFEssenceDescriptor*	pEssDesc = NULL;
+	IAAFWAVEDescriptor*	pWAVEDesc = NULL;
 	aafNumSlots_t	numMobs = 0;
 	HRESULT			hr = AAFRESULT_SUCCESS;
 
-	// Open the AAF file
-	hr = OpenAAFFile(pFileName, kMediaOpenReadOnly, &pFile, &pHeader);
-	if (FAILED(hr))
-		return hr;
 
-	hr = pHeader->GetNumMobs(kAllMob, &numMobs);
-	if (1 != numMobs)
-	{
-		hr = AAFRESULT_TEST_FAILED;
-		goto Cleanup;
+  try
+  {
+	  // Open the AAF file
+	  checkResult(OpenAAFFile(pFileName, kMediaOpenReadOnly, &pFile, &pHeader));
+
+	  checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
+	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
+
+	  checkResult(pHeader->EnumAAFAllMobs(NULL, &pMobIter));
+		checkResult(pMobIter->NextOne(&pMob));
+		checkResult(pMob->QueryInterface(IID_IAAFSourceMob, (void **)&pSourceMob));
+		
+    // Back into testing mode
+		checkResult(pSourceMob->GetEssenceDescriptor(&pEssDesc));
+		
+    // if there is an Essence Descriptor then it MUST be an (essence) WAVE Descriptor
+		checkResult(pEssDesc->QueryInterface(IID_IAAFWAVEDescriptor, (void **) &pWAVEDesc));
+
+    WAVEFORMATEX	summary;
+    aafUInt32		size = 0;
+
+		checkResult(pWAVEDesc->GetSummaryBufferSize(&size));
+		checkExpression(size == sizeof(WAVEFORMATEX), AAFRESULT_TEST_FAILED);
+
+
+    checkResult(pWAVEDesc->GetSummary(size, (aafDataValue_t)&summary));
+
+    // NOTE: The elements in the summary structure need to be byte swapped
+		//       on Big Endian system (i.e. the MAC).
+    SWAPSUMMARY(summary)
+
+		checkExpression(summary.cbSize == sizeof(WAVEFORMATEX)	&&
+									summary.wFormatTag == WAVE_FORMAT_PCM	&&
+									summary.wBitsPerSample == 16			&&
+									summary.nAvgBytesPerSec == 88200		&&
+									summary.nChannels == 1					&&
+									summary.nBlockAlign == 2				&&
+									summary.nSamplesPerSec == 44100,
+                  AAFRESULT_TEST_FAILED);
 	}
+  catch (HRESULT& rResult)
+  {
+    hr = rResult;
+  }
+	
+  
+  // Cleanup and return
+  if (pEssDesc)
+    pEssDesc->Release();
 
-	hr = pHeader->EnumAAFAllMobs(NULL, &pMobIter);
-	if (SUCCEEDED(hr))
-	{
-		IAAFMob*	pMob = NULL;
+  if (pWAVEDesc)
+    pWAVEDesc->Release();
 
-		hr = pMobIter->NextOne(&pMob);
-		if (SUCCEEDED(hr))
-		{
-			IAAFSourceMob*	pSourceMob = NULL;
+  if (pMob)
+    pMob->Release();
 
-			hr = pMob->QueryInterface(IID_IAAFSourceMob, (void **)&pSourceMob);
-			if (SUCCEEDED(hr))
-			{					 
-				IAAFEssenceDescriptor*	pEssDesc = NULL;
+  if (pSourceMob)
+    pSourceMob->Release();
 
-				// Back into testing mode
-				hr = pSourceMob->GetEssenceDescriptor(&pEssDesc);
-				if (SUCCEEDED(hr))
-				{
-					IAAFWAVEDescriptor*	pWAVEDesc = NULL;
-
-					// if there is an Essence Descriptor then it MUST be an (essence) WAVE Descriptor
-					hr = pEssDesc->QueryInterface(IID_IAAFWAVEDescriptor, (void **) &pWAVEDesc);
-					if (SUCCEEDED(hr))
-					{
-						WAVEFORMATEX	summary;
-						aafUInt32		size = 0;
-
-						pWAVEDesc->GetSummaryBufferSize(&size);
-						if (size == sizeof(WAVEFORMATEX))
-						{
-							hr = pWAVEDesc->GetSummary(size, (aafDataValue_t)&summary);
-							if (SUCCEEDED(hr))
-							{
-								// NOTE: The elements in the summary structure need to be byte swapped
-								//       on Big Endian system (i.e. the MAC).
-
-								if (summary.cbSize != sizeof(WAVEFORMATEX)	||
-									summary.wFormatTag != WAVE_FORMAT_PCM	||
-									summary.wBitsPerSample != 16			||
-									summary.nAvgBytesPerSec != 88200		||
-									summary.nChannels != 1					||
-									summary.nBlockAlign != 2				||
-									summary.nSamplesPerSec != 44100)
-								{
-									hr = AAFRESULT_TEST_FAILED;
-								}
-							}
-						}
-						else
-						{
-							hr = AAFRESULT_TEST_FAILED;
-						}
-
-						pWAVEDesc->Release();
-						pWAVEDesc = NULL;
-					}
-					pEssDesc->Release();
-					pEssDesc = NULL;
-				}
-				else
-				{
-					hr = AAFRESULT_TEST_FAILED;
-				}
-				pSourceMob->Release();
-				pSourceMob = NULL;
-			}
-			pMob->Release();
-			pMob = NULL;
-		}
-		pMobIter->Release();
-		pMobIter = NULL;
-	}
-
-Cleanup:
-
-	if (pHeader) pHeader->Release();
+	if (pHeader)
+    pHeader->Release();
 
 	if (pFile)
 	{
