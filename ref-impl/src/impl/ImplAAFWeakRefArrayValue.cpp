@@ -64,6 +64,22 @@ ImplAAFWeakRefArrayValue::~ImplAAFWeakRefArrayValue ()
 
 
 
+AAFRESULT ImplAAFWeakRefArrayValue::Initialize (
+	  const ImplAAFTypeDefArray *containerType,
+	  bool fixed)
+{
+  AAFRESULT result = AAFRESULT_SUCCESS;
+
+  result = ImplAAFRefArrayValue::Initialize(containerType, fixed);
+  
+  if (AAFRESULT_SUCCEEDED(result))
+  {
+    // This instance is now fully initialized.
+    setInitialized();
+  }
+  
+  return result;
+}
 
 
 AAFRESULT ImplAAFWeakRefArrayValue::Initialize (
