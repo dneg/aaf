@@ -106,6 +106,10 @@ public:
     //          is <p size> bytes in size.
   virtual void setBits(const OMByte* bits, size_t size);
 
+protected:
+
+  virtual const wchar_t* storedName(void) const;
+
 private:
 
   void open(void);

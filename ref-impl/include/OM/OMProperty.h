@@ -174,12 +174,15 @@ protected:
     //          Read (and check) the property name.
   void restoreName(size_t size);
 
+  virtual const wchar_t* storedName(void) const;
+
   OMPropertyId _propertyId;
   OMStoredForm _storedForm;
+  wchar_t* _storedName;
+  const wchar_t* _name;
 
 private:
 
-  const wchar_t* _name;
   char* _cName;
   const OMPropertySet* _propertySet; // The PropertySet that contains
                                      // this property
