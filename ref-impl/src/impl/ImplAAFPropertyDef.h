@@ -43,7 +43,7 @@ class ImplAAFTypeDef;
 
 typedef OMProperty* (*ImplAAFOMPropertyCreateFunc_t)
   (OMPropertyId pid,
-   const char * name);
+   const wchar_t * name);
 
 class ImplAAFPropertyDef : public ImplAAFMetaDefinition,
 						   public OMPropertyDefinition
@@ -143,7 +143,7 @@ public:
   // Overrides from OMPropertyDefinition
   //
   const OMType* type(void) const;
-  const char* name(void) const;
+  const wchar_t* name(void) const;
   OMPropertyId localIdentification(void) const;
   bool isOptional(void) const;
 
@@ -170,7 +170,7 @@ private:
 
   ImplAAFTypeDef *                           _cachedType;
 
-  char * _bname;  // name in byte-sized characters
+  wchar_t * _wname;  // name in wide characters
 
   ImplAAFOMPropertyCreateFunc_t              _OMPropCreateFunc;
 
