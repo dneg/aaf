@@ -92,8 +92,6 @@ HRESULT STDMETHODCALLTYPE
 	{
 		if(interpDef != NULL)
 			interpDef->Release();
-		if(obj != NULL)
-			obj->Release();
 	}
 	XEND
 
@@ -234,6 +232,7 @@ HRESULT STDMETHODCALLTYPE
 	if(pTypeDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 	_typeDef = pTypeDef;
+	pTypeDef->AddRef();
 	return AAFRESULT_SUCCESS;
 }
 
@@ -253,7 +252,10 @@ HRESULT STDMETHODCALLTYPE
 {
 	if(pParameter == NULL)
 		return AAFRESULT_NULL_PARAM;
+	if(_parameter != NULL)
+		_parameter->Release();
 	_parameter = pParameter;
+	pParameter->AddRef();
 	return AAFRESULT_SUCCESS;
 }
 
@@ -318,7 +320,6 @@ HRESULT STDMETHODCALLTYPE
 			pDef->Release();
 	}
 	XEND;
-
 	return(AAFRESULT_SUCCESS);
 }
 
@@ -342,11 +343,8 @@ HRESULT CAAFBasicInterp::FindBoundValues(aafRational_t point,
 {
 	IAAFConstValue			*pConstValue = NULL;
 	IAAFVaryingValue		*pVaryingValue = NULL;
-	IAAFControlPoint		*pLowerPoint = NULL;
-	IAAFControlPoint		*pUpperPoint = NULL;
-	IAAFControlPoint		*pTestPoint = NULL;
-	IAAFControlPoint		*pPrevPoint = NULL;
 	IEnumAAFControlPoints	*theEnum = NULL;
+	IAAFControlPoint		*testPoint = NULL, *prevPoint = NULL;
 	aafBool					found;
 	AAFRational				inputTime, prevTime, zero(0,1);
 
@@ -371,7 +369,6 @@ HRESULT CAAFBasicInterp::FindBoundValues(aafRational_t point,
 		else if(_parameter->QueryInterface(IID_IAAFVaryingValue, (void **)&pVaryingValue) == AAFRESULT_SUCCESS)
 		{
 			aafUInt32			count;
-			IAAFControlPoint	*testPoint, *prevPoint;
 			AAFRational			testTime;
 
 			prevTime = zero;
@@ -398,6 +395,8 @@ HRESULT CAAFBasicInterp::FindBoundValues(aafRational_t point,
 					testPoint = NULL;
 				}
 			}
+			theEnum->Release();
+			theEnum = NULL;
 			
 			//!!!Assert if prevPoint and testPoint are both NULL
 			if(prevPoint != NULL && testPoint != NULL)		// Real interpolation
@@ -446,14 +445,6 @@ HRESULT CAAFBasicInterp::FindBoundValues(aafRational_t point,
 			pVaryingValue->Release();
 		if(theEnum)
 			theEnum->Release();
-		if(pLowerPoint)
-			pLowerPoint->Release();
-		if(pUpperPoint)
-			pUpperPoint->Release();
-		if(pTestPoint)
-			pTestPoint->Release();
-		if(pPrevPoint)
-			pPrevPoint->Release();
 	}
 	XEND;
 
