@@ -143,7 +143,7 @@ static const aafUID_t kMobID_Personnel =
 // For local in-memory use, we'll define the following typedef for
 // handy manipulation of eRole extensible enumerations.
 //
-typedef aafUID_t  eRole;
+typedef aafUID_t  eJobFunction, eRole;  // eRole being replaced by eJobFunction
 
 // Contract ID type
 typedef aafUInt32 contractID_t;
@@ -162,6 +162,8 @@ struct PersonnelResource
   contractID_t cid;
 };
 
+bool classDefinitionIsA ( IAAFClassDef *pClassDefQuery,
+							   const aafUID_t targetAUID);
 
 //
 // Returns true if the roles match; returns false otherwise.
