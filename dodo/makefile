@@ -69,14 +69,14 @@ targets.mk : aafobjects.mk
 depend.mk : aafobjects.mk
 	$(SH_PREFIX) $(MAKE) -f dododepend.mak $(SH_SUFFIX)
 
-depend :
-	$(SH_PREFIX) $(MAKE) -f dodotargets.mak $(SH_SUFFIX)
-	$(SH_PREFIX) $(MAKE) -f dododepend.mak $(SH_SUFFIX)
+depend : targets.mk depend.mk
 
 clean:
 	$(SH_PREFIX) cd tool ; $(MAKE) clean $(SH_SUFFIX)
 	$(SH_PREFIX) $(MAKE) -f dodotargets.mak clean $(SH_SUFFIX)
 	$(SH_PREFIX) $(MAKE) -f dododepend.mak clean $(SH_SUFFIX)
+	$(SH_PREFIX) touch targets.mk $(SH_SUFFIX)
+	$(SH_PREFIX) touch depend.mk $(SH_SUFFIX)
 	$(SH_PREFIX) $(MAKE) -f maketargets.mak clean $(SH_SUFFIX)
 
 
