@@ -248,8 +248,6 @@ void OMWeakReferenceProperty<ReferencedObject>::save(void) const
 
   PRECONDITION("Non-void weak reference", !_reference.isVoid());
 
-  OMPropertyTag tag = targetTag();
-
   store()->save(*this);
 }
 
