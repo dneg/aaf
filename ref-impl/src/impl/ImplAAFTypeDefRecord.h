@@ -331,6 +331,8 @@ private:
   aafBool            _propValSizeIsCached;
   aafBool            _registrationAttempted;
 
+  aafBool            _defaultRegistrationUsed;
+
 public:
 
   // overrides from ImplAAFTypeDef
