@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CEnumAAFOperationDefs
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -30,9 +30,9 @@
 
 
 
-#include "CEnumAAFEffectDefs.h"
-#include "CEnumAAFEffectDefs.h"
-#ifndef __CEnumAAFEffectDefs_h__
+#include "CEnumAAFOperationDefs.h"
+#include "CEnumAAFOperationDefs.h"
+#ifndef __CEnumAAFOperationDefs_h__
 #error - improperly defined include guard
 #endif
 
@@ -40,28 +40,28 @@
 #include <iostream.h>
 
 // Temporarily necessary global declarations.
-extern "C" const CLSID CLSID_EnumAAFEffectDefs; // generated
+extern "C" const CLSID CLSID_EnumAAFOperationDefs; // generated
 
 
-HRESULT CEnumAAFEffectDefs::test()
+HRESULT CEnumAAFOperationDefs::test()
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-  IEnumAAFEffectDefs *pObject = NULL;
+  IEnumAAFOperationDefs *pObject = NULL;
 
   try
     {
-      // Attempt to create an EnumAAFEffectDefs.
+      // Attempt to create an EnumAAFOperationDefs.
       hr =  CoCreateInstance(
-                             CLSID_EnumAAFEffectDefs,
+                             CLSID_EnumAAFOperationDefs,
                              NULL, 
                              CLSCTX_INPROC_SERVER, 
-                             IID_IEnumAAFEffectDefs, (void **)&pObject);
+                             IID_IEnumAAFOperationDefs, (void **)&pObject);
       if (FAILED(hr))
         {
-          cerr << "CEnumAAFEffectDefs::test...FAILED!";
+          cerr << "CEnumAAFOperationDefs::test...FAILED!";
           cerr << hr;
-          cerr << "\tCoCreateInstance(&CLSID_EnumAAFEffectDefs, NULL,"
-            " CLSCTX_INPROC_SERVER, &IID_IEnumAAFEffectDefs, ...);" <<
+          cerr << "\tCoCreateInstance(&CLSID_EnumAAFOperationDefs, NULL,"
+            " CLSCTX_INPROC_SERVER, &IID_IEnumAAFOperationDefs, ...);" <<
               endl;
           return hr;
         }
@@ -75,7 +75,7 @@ HRESULT CEnumAAFEffectDefs::test()
     }
   catch (...)
     {
-      cerr << "CEnumAAFEffectDefs::test...Caught general C++"
+      cerr << "CEnumAAFOperationDefs::test...Caught general C++"
         " exception!" << endl; 
     }
 
