@@ -250,6 +250,8 @@ public:
     //          The value is a pointer to the <c ReferencedObject>.
   virtual ReferencedObject* setValue(const ReferencedObject* value);
 
+  void setTargetTag(OMPropertyTag targetTag);
+
   const OMUniqueObjectIdentification& identification(void) const;
 
 private:
