@@ -162,7 +162,8 @@ public:
                            OMFileEncoding& encoding);
 
      // @cmember Is <p signature> recognized ?
-     //          If so, the result is true, and the encoding in <p encoding>.
+     //          If so, the result is true, and the encoding is
+     //          returned in <p encoding>.
   static bool isRecognized(const OMFileSignature& signature,
                            OMFileEncoding& encoding);
 

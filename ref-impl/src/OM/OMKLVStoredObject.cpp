@@ -120,7 +120,7 @@ bool OMKLVStoredObject::isRecognized(OMRawStorage* ANAME(rawStorage),
 }
 
   // @mfunc Is <p signature> recognized ?
-  //        If so, the result is true, and the encoding in <p encoding>.
+  //        If so, the result is true.
   //   @parm The signature to check.
   //   @rdesc True if the signature is recognized, false otherwise.
 bool OMKLVStoredObject::isRecognized(const OMFileSignature& /* signature */)

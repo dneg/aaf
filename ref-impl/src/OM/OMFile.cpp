@@ -428,7 +428,8 @@ bool OMFile::isRecognized(OMRawStorage* rawStorage,
 }
 
   // @mfunc Is <p signature> recognized ?
-  //        If so, the result is true, and the encoding in <p encoding>.
+  //        If so, the result is true, and the encoding is
+  //        returned in <p encoding>.
   //   @parm If recognized, the encoding.
   //   @rdesc True if the signature is recognized, false otherwise.
 bool OMFile::isRecognized(const OMFileSignature& signature,
