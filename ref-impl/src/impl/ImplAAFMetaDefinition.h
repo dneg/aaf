@@ -37,7 +37,11 @@
 
 class ImplAAFDictionary;
 class ImplAAFClassDef;
-
+class ImplAAFTypeDef;
+template <typename ReferencedObject>
+class OMWeakReferenceProperty;
+template <typename ReferencedObject>
+class OMWeakReferenceVectorProperty;
 
 class ImplAAFMetaDefinition : 
   public ImplAAFStorable
@@ -134,6 +138,15 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE 
     GetDictionary(ImplAAFDictionary **ppDictionary) const;
 
+  ImplAAFTypeDef* bootstrapTypeWeakReference(
+               const OMWeakReferenceProperty<ImplAAFTypeDef>& reference) const;
+
+  ImplAAFTypeDef* bootstrapTypeWeakReferenceVectorElement(
+                   const OMWeakReferenceVectorProperty<ImplAAFTypeDef>& vector,
+                   aafUInt32 index) const;
+
+  ImplAAFClassDef* bootstrapClassWeakReference(
+              const OMWeakReferenceProperty<ImplAAFClassDef>& reference) const;
 
 protected:
   // Associate the existing OMProperties with corresponding property definitions from

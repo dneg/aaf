@@ -263,6 +263,69 @@ ImplAAFMetaDefinition::GetDictionary(ImplAAFDictionary **ppDictionary) const
 }
 
 
+ImplAAFTypeDef*
+ImplAAFMetaDefinition::bootstrapTypeWeakReference(
+                const OMWeakReferenceProperty<ImplAAFTypeDef>& reference) const
+{
+  ImplAAFTypeDef* result = 0;
+  if (reference.isResolved() || reference.isResolvable()) {
+    result = reference;
+  } else {
+    const aafUID_t id = *reinterpret_cast<const aafUID_t*>(&reference.identification());
+
+    ImplAAFDictionary* pDictionary = 0;
+    HRESULT h = GetDictionary(&pDictionary);
+    assert(h == 0);
+    h = pDictionary->LookupTypeDef(id, &result);
+    assert(h == 0);
+    pDictionary->ReleaseReference();
+  }
+  assert(result);
+  return result;
+}
+
+ImplAAFTypeDef*
+ImplAAFMetaDefinition::bootstrapTypeWeakReferenceVectorElement(
+                   const OMWeakReferenceVectorProperty<ImplAAFTypeDef>& vector,
+                   aafUInt32 index) const
+{
+  ImplAAFTypeDef* result = 0;
+  if (vector.isResolved(index) || vector.isResolvable(index)) {
+    vector.getValueAt(result, index);
+  } else {
+    const aafUID_t id = *reinterpret_cast<const aafUID_t*>(&vector.identification(index));
+
+    ImplAAFDictionary* pDictionary = 0;
+    HRESULT h = GetDictionary(&pDictionary);
+    assert(h == 0);
+    h = pDictionary->LookupTypeDef(id, &result);
+    assert(h == 0);
+    pDictionary->ReleaseReference();
+  }
+  assert(result);
+  return result;
+}
+
+ImplAAFClassDef*
+ImplAAFMetaDefinition::bootstrapClassWeakReference(
+               const OMWeakReferenceProperty<ImplAAFClassDef>& reference) const
+{
+  ImplAAFClassDef* result = 0;
+  if (reference.isResolved() || reference.isResolvable()) {
+    result = reference;
+  } else {
+    const aafUID_t id = *reinterpret_cast<const aafUID_t*>(&reference.identification());
+
+    ImplAAFDictionary* pDictionary = 0;
+    HRESULT h = GetDictionary(&pDictionary);
+    assert(h == 0);
+    h = pDictionary->LookupClassDef(id, &result);
+    assert(h == 0);
+    pDictionary->ReleaseReference();
+  }
+  assert(result);
+  return result;
+}
 
 // Associate the existing OMProperties with corresponding property definitions from
 // the given class definition. NOTE: This call is recursive, it calls itself again
