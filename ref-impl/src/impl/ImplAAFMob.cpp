@@ -172,7 +172,7 @@ ImplAAFMob::GetNameBufLen
 {
 	if(pSize == NULL)
 		return(AAFRESULT_NULL_PARAM);
-	*pSize = _name.length()+1;
+	*pSize = _name.size();
 	return(AAFRESULT_SUCCESS); 
 }
 
