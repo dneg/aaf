@@ -114,7 +114,7 @@ public:
 };
 
   // @class Elements of Object Manager reference containers.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference 
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.

@@ -193,7 +193,7 @@ OMSetElement<UniqueIdentification, ReferencedObject>::~OMSetElement(void)
 
   // @mfunc Assignment.
   //        This operator provides value semantics for <c OMSet>.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced object.
   //   @parm The <c OMSetElement> to be assigned.
@@ -249,7 +249,7 @@ OMSetElement<UniqueIdentification, ReferencedObject>::identification(
 // class OMContainerElement<ObjectReference, ReferencedObject>
 
   // @mfunc Constructor.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
@@ -262,7 +262,7 @@ OMContainerElement<ObjectReference, ReferencedObject>::OMContainerElement(void)
 }
 
   // @mfunc Constructor.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
@@ -277,7 +277,7 @@ OMContainerElement<ObjectReference, ReferencedObject>::OMContainerElement(
 }
 
   // @mfunc Copy constructor.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
@@ -292,7 +292,7 @@ OMContainerElement<ObjectReference, ReferencedObject>::OMContainerElement(
 }
 
   // @mfunc Destructor.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
@@ -307,7 +307,7 @@ OMContainerElement<ObjectReference, ReferencedObject>::~OMContainerElement(
   // @mfunc Assignment.
   //        This operator provides value semantics for <c OMContainer>.
   //        This operator does not provide assignment of object references.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
@@ -331,7 +331,7 @@ OMContainerElement<ObjectReference, ReferencedObject>::operator= (
   // @mfunc Equality.
   //        This operator provides value semantics for <c OMContainer>.
   //        This operator does not provide equality of object references.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
@@ -353,7 +353,7 @@ bool OMContainerElement<ObjectReference, ReferencedObject>::operator== (
 }
 
   // @mfunc The contained ObjectReference.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
@@ -368,7 +368,7 @@ OMContainerElement<ObjectReference, ReferencedObject>::reference(void)
 }
 
   // @mfunc Set the contained ObjectReference.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
@@ -384,7 +384,7 @@ OMContainerElement<ObjectReference, ReferencedObject>::setReference(
 }
 
   // @mfunc Save this <c OMContainerElement>.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
@@ -398,7 +398,7 @@ void OMContainerElement<ObjectReference, ReferencedObject>::save(void)
 }
 
   // @mfunc Close this <c OMContainerElement>.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
@@ -412,7 +412,7 @@ void OMContainerElement<ObjectReference, ReferencedObject>::close(void)
 }
 
   // @mfunc Detach this <c OMContainerElement>.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
@@ -426,7 +426,7 @@ void OMContainerElement<ObjectReference, ReferencedObject>::detach(void)
 }
 
   // @mfunc Restore this <c OMContainerElement>.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
@@ -440,7 +440,7 @@ void OMContainerElement<ObjectReference, ReferencedObject>::restore(void)
 }
 
   // @mfunc Get the value of this <c OMContainerElement>.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
@@ -457,7 +457,7 @@ OMContainerElement<ObjectReference, ReferencedObject>::getValue(void) const
 }
 
   // @mfunc Set the value of this <c OMContainerElement>.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
@@ -477,7 +477,7 @@ OMContainerElement<ObjectReference, ReferencedObject>::setValue(
   // @mfunc The value of this <c OMContainerElement> as a pointer.
   //        This function provides low-level access. If the object exits
   //        but has not yet been loaded then the value returned is 0.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
@@ -691,7 +691,7 @@ OMStrongReferenceSetElement<UniqueIdentification, ReferencedObject>::
   // @mfunc Assignment.
   //        This operator provides value semantics for <c OMSet>.
   //        This operator does not provide assignment of object references.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
@@ -851,7 +851,7 @@ OMWeakReferenceVectorElement<ReferencedObject>::
   // @mfunc Assignment.
   //        This operator provides value semantics for <c OMVector>.
   //        This operator does not provide assignment of object references.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
@@ -968,7 +968,7 @@ OMWeakReferenceSetElement<ReferencedObject>::~OMWeakReferenceSetElement(void)
   // @mfunc Assignment.
   //        This operator provides value semantics for <c OMSet>.
   //        This operator does not provide assignment of object references.
-  //   @tcarg class | ObjectReference  | The type of the contained object
+  //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
