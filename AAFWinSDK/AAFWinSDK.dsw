@@ -1,0 +1,134 @@
+Microsoft Developer Studio Workspace File, Format Version 5.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "CppAAFInfo"=".\examples\cpp-api\CppAAFInfo\CppAAFInfo.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name cppapi
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "CppTestAAF"=".\examples\cpp-api\CppTestAAF\CppTestAAF.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name cppapi
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Everything"=".\Everything\Everything.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name comapi
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name cppapi
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Impl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name OM
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name CppAAFInfo
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name CppTestAAF
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Impl"=".\ref-impl\Impl\Impl.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name OM
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "OM"=".\ref-impl\OM\Om.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "comapi"=".\ref-impl\comapi\comapi.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name Impl
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "cppapi"=".\ref-impl\cppapi\cppapi.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name Impl
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+
