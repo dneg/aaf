@@ -63,11 +63,10 @@ AAFRESULT aafMobIDFromMajorMinor(
 #include "AafOmf.h"
 #include "omf2aaf.h"
 
-// TODO: This should not be here, I added them for now to get a good link.
-const CLSID CLSID_AAFFile = { 0x9346ACD2, 0x2713, 0x11d2, { 0x80, 0x35, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
-// Include the defintions for the AAF Stored Object identifiers.
-#define INIT_AUID
+
+// Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
 #include "AAFStoredObjectIDs.h"
+
 
 extern AafOmfGlobals* gpGlobals;
 // ============================================================================
