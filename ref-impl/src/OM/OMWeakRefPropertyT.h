@@ -34,10 +34,12 @@
 template<typename ReferencedObject>
 OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
                                                  const OMPropertyId propertyId,
-                                                 const char* name)
+                                                 const char* name,
+                                                 const char* targetName)
 : OMReferenceProperty<ReferencedObject>(propertyId,
                                         SF_WEAK_OBJECT_REFERENCE,
-                                        name), _reference(this, name)
+                                        name), _reference(this, name),
+  _targetTag(0), _targetName(saveString(targetName)), _targetSet(0)
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty");
 }
