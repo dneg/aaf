@@ -6,7 +6,6 @@ AAFClassDefinition\
 AAFDefinitionObject\
 #endm
 #c
-#import ./AAFUnitTest.exp
 AD_HEAD
 
 AD_INCLUDE(AAFTypes)
@@ -79,7 +78,4 @@ AD_XMETHOD1(GetPropertyDefinitions,
 		    Property Definition enumeration,
 		    Returns an enumerator for aaf property definitions.)
 		    		
-
-AD_OVERRIDE(.method-Test)
-
 AD_CLASS_END
