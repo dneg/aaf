@@ -74,6 +74,12 @@ static const aafMobID_t  _mobID[gMaxMobCount] =
 	
 }; //end mobid block
 
+inline void checkhr(HRESULT expression, HRESULT r)
+{
+  if (expression != r)
+    throw r;
+}
+
 // Utility class to implement the test.
 struct HeaderTest
 {
@@ -108,6 +114,8 @@ struct HeaderTest
   IAAFFileDescriptor *_pFileDescriptor;
   IEnumAAFEssenceData *_pEnumEssenceData;
   IAAFEssenceData *_pEssenceData;
+  IAAFIdentification *_pIdent;
+  IEnumAAFIdentifications *_pEnumIdent;
   
 };
 
@@ -134,23 +142,6 @@ extern "C" HRESULT CAAFHeader_test()
   }
 
   // Cleanup our object if it exists.
-
-  // When all of the functionality of this class is tested, we can return success.
-	// When a method and its unit test have been implemented, remove it from the list.
-	if (SUCCEEDED(hr))
-	{
-		cout << "The following AAFHeader methods have not been implemented:" << endl; 
-		cout << "     LookupMob" << endl; 
-		cout << "     IsEssenceDataPresent - needs unit test" << endl; 
-		cout << "     GetLastIdentification" << endl; 
-		cout << "     GetIdentificationByGen - needs unit test" << endl; 
-		cout << "     GetNumIdents - needs unit test" << endl; 
-		cout << "     EnumAAFIdents - needs unit test" << endl; 
-		cout << "     GetRefImplVersion - needs unit test" << endl; 
-		cout << "     GetFileRevision - needs unit test" << endl; 
-		cout << "     GetLastModified - needs unit test" << endl; 
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-	}
 
   return hr;
 }
@@ -284,7 +275,90 @@ void HeaderTest::createFile(wchar_t *pFileName)
   check(AAFFileOpenNewModify(pFileName, 0, &_productInfo, &_pFile));
   _bFileOpen = true;
   check(_pFile->GetHeader(&_pHeader));
+  
+
+  // GetDictionary
+  checkhr(_pHeader->GetDictionary(NULL), AAFRESULT_NULL_PARAM);
   check(_pHeader->GetDictionary(&_pDictionary));
+  
+  CAAFBuiltinDefs defs (_pDictionary);
+
+  // GetRefImplVersion  
+  aafProductVersion_t	productVerison;
+  checkhr(_pHeader->GetRefImplVersion(NULL), AAFRESULT_NULL_PARAM);
+  check(_pHeader->GetRefImplVersion(&productVerison));
+
+  // GetFileRevision  
+  aafVersionType_t	fileVersion;
+  checkhr(_pHeader->GetFileRevision(NULL), AAFRESULT_NULL_PARAM);
+  check(_pHeader->GetFileRevision(&fileVersion));
+
+  // GetLastModified  
+  aafTimeStamp_t	timeStamp;
+  checkhr(_pHeader->GetLastModified(NULL), AAFRESULT_NULL_PARAM);
+  check(_pHeader->GetLastModified(&timeStamp));
+
+  // CountIdentifications
+  aafUInt32	numIdents = NULL;
+  checkhr(_pHeader->CountIdentifications(NULL), AAFRESULT_NULL_PARAM);
+  check(_pHeader->CountIdentifications(&numIdents));
+  checkhr(1 == numIdents, true);
+  
+  // GetLastIdentification
+  checkhr(_pHeader->GetLastIdentification(NULL), AAFRESULT_NULL_PARAM);
+  check(_pHeader->GetLastIdentification(&_pIdent));
+  _pIdent->Release();
+  
+  // AppendIdentification
+  check(defs.cdIdentification()->
+		CreateInstance(IID_IAAFIdentification, 
+					   (IUnknown **)&_pIdent));
+
+  checkhr(_pHeader->AppendIdentification(NULL), AAFRESULT_NULL_PARAM);
+  check(_pHeader->AppendIdentification(_pIdent));
+  check(_pHeader->CountIdentifications(&numIdents));
+  checkhr(2 == numIdents, true);  
+  _pIdent->Release();
+
+  // GetIdentificationAt
+  checkhr(_pHeader->GetIdentificationAt(0, NULL), AAFRESULT_NULL_PARAM);
+  checkhr(_pHeader->GetIdentificationAt(numIdents, &_pIdent), AAFRESULT_BADINDEX);
+  check(_pHeader->GetIdentificationAt(0, &_pIdent));
+  _pIdent->Release();
+  check(_pHeader->GetIdentificationAt(1, &_pIdent));
+  _pIdent->Release();
+
+  // GetIdentifications
+  checkhr(_pHeader->GetIdentifications(NULL), AAFRESULT_NULL_PARAM);
+  check(_pHeader->GetIdentifications(&_pEnumIdent));
+  _pEnumIdent->Release();
+
+  aafUID_t generation;
+  IAAFObject *pObject = NULL;
+  
+  // {2865256E-0BEC-11d4-A3FA-0004AC96A937} - guaranteed to *not* match any existing generations
+  static const aafUID_t fakeGeneration = 
+  	{ 0x2865256e, 0xbec, 0x11d4, { 0xa3, 0xfa, 0x0, 0x4, 0xac, 0x96, 0xa9, 0x37 } };
+
+  // LookupIdentification
+  checkhr(_pHeader->LookupIdentification(generation, NULL), AAFRESULT_NULL_PARAM);
+  checkhr(_pHeader->LookupIdentification(fakeGeneration, &_pIdent), AAFRESULT_OBJECT_NOT_FOUND);
+
+  check(_pHeader->QueryInterface (IID_IAAFObject, (void **)&pObject));
+  check(pObject->EnableGenerationTracking());  
+  check(pObject->GetGenerationAUID(&generation));
+  check(_pHeader->LookupIdentification(generation, &_pIdent));
+  _pIdent->Release();
+  pObject->Release();
+
+  // IsEssenceDataPresent
+  aafBool 	pResult = true;
+  checkhr(_pHeader->IsEssenceDataPresent(_mobID[0], kAAFEssence, NULL), AAFRESULT_NULL_PARAM);  
+  checkhr(_pHeader->IsEssenceDataPresent(_mobID[0], 2, &pResult), AAFRESULT_INVALID_ENUM_VALUE);  
+  check(_pHeader->IsEssenceDataPresent(_mobID[0], kAAFForeignMedia, &pResult));
+  if (pResult) check(AAFRESULT_TEST_FAILED);  
+  check(_pHeader->IsEssenceDataPresent(_mobID[0], kAAFEssence, &pResult));  
+  if (pResult) check(AAFRESULT_TEST_FAILED);  
 
   for (aafUInt32 item = 0; item < gMaxMobCount; ++item)
     createFileMob(item);
@@ -357,6 +431,17 @@ void HeaderTest::createFileMob(int itemNumber)
                                           (void **)&_pEssenceDescriptor));
   check(_pSourceMob->SetEssenceDescriptor (_pEssenceDescriptor));
 
+  // AddMob
+  checkhr(_pHeader->AddMob(NULL), AAFRESULT_NULL_PARAM);
+  check(_pHeader->AddMob(_pMob));
+  checkhr(_pHeader->AddMob(_pMob), AAFRESULT_DUPLICATE_MOBID);
+  
+  // RemoveMob
+  checkhr(_pHeader->RemoveMob(NULL), AAFRESULT_NULL_PARAM);
+  check(_pHeader->RemoveMob(_pMob));
+  checkhr(_pHeader->RemoveMob(_pMob), AAFRESULT_MOB_NOT_FOUND);
+  
+  // Add it again, for real this time
   check(_pHeader->AddMob(_pMob));
 
   createEssenceData(_pSourceMob);
@@ -389,6 +474,17 @@ void HeaderTest::createEssenceData(IAAFSourceMob *pSourceMob)
 					   (IUnknown **)&_pEssenceData));
 
   check(_pEssenceData->SetFileMob(pSourceMob));
+  // AddEssenceData
+  checkhr(_pHeader->AddEssenceData(NULL), AAFRESULT_NULL_PARAM);  
+  check(_pHeader->AddEssenceData(_pEssenceData));
+  checkhr(_pHeader->AddEssenceData(_pEssenceData), AAFRESULT_DUPLICATE_MOBID);  
+
+  // RemoveEssenceData
+  checkhr(_pHeader->RemoveEssenceData(NULL), AAFRESULT_NULL_PARAM);  
+  check(_pHeader->RemoveEssenceData(_pEssenceData));
+  checkhr(_pHeader->RemoveEssenceData(_pEssenceData), AAFRESULT_ESSENCE_NOT_FOUND);  
+
+  // Add it for real this time
   check(_pHeader->AddEssenceData(_pEssenceData));
   
   _pEssenceData->Release();
@@ -406,11 +502,16 @@ void HeaderTest::openMobs()
   assert(NULL == _pSourceMob);
 
 
+  // CountMobs
   aafNumSlots_t mobCount = 0;
+  checkhr(_pHeader->CountMobs(kAAFAllMob, NULL), AAFRESULT_NULL_PARAM);
+  checkhr(_pHeader->CountMobs(-1, NULL), AAFRESULT_INVALID_ENUM_VALUE);
   check(_pHeader->CountMobs(kAAFAllMob, &mobCount));
   if (gMaxMobCount != mobCount)
     check(AAFRESULT_TEST_FAILED);
  
+  // GetMobs
+  checkhr(_pHeader->GetMobs(NULL, NULL), AAFRESULT_NULL_PARAM);
   check(_pHeader->GetMobs(NULL, &_pEnumMobs));
   for (aafUInt32 item = 0; item < mobCount; ++item)
   {
@@ -452,6 +553,16 @@ void HeaderTest::openMobs()
     _pMob = NULL;
   }
 
+  // LookupMob
+  static const aafMobID_t  _badMobID = 	{{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
+											0xFF, 0xFF, 0xFF, 0xFF,
+										{0xFFFFFFFF, 0xFFFF, 0xFFFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+										
+
+  checkhr(_pHeader->LookupMob(_mobID[0], NULL), AAFRESULT_NULL_PARAM);
+  checkhr(_pHeader->LookupMob(_badMobID, &_pMob), AAFRESULT_MOB_NOT_FOUND);
+  check(_pHeader->LookupMob(_mobID[0], &_pMob));
+
 
   _pEnumMobs->Release();
   _pEnumMobs = NULL;
@@ -464,11 +575,23 @@ void HeaderTest::openEssenceData()
   assert(NULL == _pEssenceData);
   assert(NULL == _pSourceMob);
 
+  // IsEssenceDataPresent
+  aafBool 	pResult = false;
+  check(_pHeader->IsEssenceDataPresent(_mobID[0], kAAFForeignMedia, &pResult));
+  if (pResult == false) check(AAFRESULT_TEST_FAILED);  
+  check(_pHeader->IsEssenceDataPresent(_mobID[0], kAAFEssence, &pResult));  
+  if (pResult == false) check(AAFRESULT_TEST_FAILED);  
+
+
+  // CountEssenceData
+  checkhr(_pHeader->CountEssenceData(NULL), AAFRESULT_NULL_PARAM);  
   aafUInt32 essenceDataCount = 0;
   check(_pHeader->CountEssenceData(&essenceDataCount));
   if (gMaxMobCount != essenceDataCount)
     check(AAFRESULT_TEST_FAILED);
  
+  // EnumEssenceData
+  checkhr(_pHeader->EnumEssenceData(NULL), AAFRESULT_NULL_PARAM);   
   check(_pHeader->EnumEssenceData(&_pEnumEssenceData));
   for (aafUInt32 item = 0; item < essenceDataCount; ++item)
   {
