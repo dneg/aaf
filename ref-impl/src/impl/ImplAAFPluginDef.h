@@ -31,7 +31,6 @@
  *
  ************************************************************************/
 
-class ImplAAFPluggableCode;
 
 class ImplEnumAAFPluginLocators;
 
@@ -470,15 +469,6 @@ public:
     SetSupportsAuthentication
         // @parm [in] The SupportsAuthentication flag
         (aafBool  SupportsAuthentication);
-
-
-  //****************
-  // GetPluggableCode()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetPluggableCode
-        // @parm [out] An interface pointer to the pluggable code object
-        (ImplAAFPluggableCode ** pCode);
 
 
   //****************
