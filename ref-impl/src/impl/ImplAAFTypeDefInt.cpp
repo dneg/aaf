@@ -17,14 +17,14 @@
 #include "ImplAAFObjectCreation.h"
 #include "AAFClassIDs.h"
 
-#ifndef __ImplAAFPropertyValue_h__
-#include "ImplAAFPropertyValue.h"
+#ifndef __ImplAAFPropValData_h__
+#include "ImplAAFPropValData.h"
 #endif
 
 #include <assert.h>
 #include <string.h>
 
-extern "C" const aafClassID_t CLSID_AAFPropertyValue;
+extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 // Internal utilities to sign-extend or zero-fill.  Current
 // implementations only allow integer sizes of 1, 2, 4, and 8 bytes.
@@ -36,7 +36,7 @@ extern "C" const aafClassID_t CLSID_AAFPropertyValue;
 // requires that in/outValSize are supported values from the set {1,
 // 2, 4, 8} bytes.
 //
-static void pvtSignExtend (aafMemPtr_t inVal,
+static void pvtSignExtend (const aafMemPtr_t inVal,
 						   aafUInt32   inValSize,
 						   aafMemPtr_t outVal,
 						   aafUInt32   outValSize)
@@ -56,7 +56,7 @@ static void pvtSignExtend (aafMemPtr_t inVal,
 		  (8 == outValSize));
   if (inValSize == outValSize)
 	{
-	  memcpy (inVal, outVal, inValSize);
+	  memcpy (outVal, inVal, inValSize);
 	}
   else
 	{
@@ -109,7 +109,7 @@ static void pvtSignExtend (aafMemPtr_t inVal,
 // requires that in/outValSize are supported values from the set {1,
 // 2, 4, 8} bytes.
 //
-static void pvtZeroFill (aafMemPtr_t inVal,
+static void pvtZeroFill (const aafMemPtr_t inVal,
 						   aafUInt32   inValSize,
 						   aafMemPtr_t outVal,
 						   aafUInt32   outValSize)
@@ -129,7 +129,7 @@ static void pvtZeroFill (aafMemPtr_t inVal,
 		  (8 == outValSize));
   if (inValSize == outValSize)
 	{
-	  memcpy (inVal, outVal, inValSize);
+	  memcpy (outVal, inVal, inValSize);
 	}
   else
 	{
@@ -272,8 +272,8 @@ AAFRESULT STDMETHODCALLTYPE
 	  pvtZeroFill (pVal, valSize, valBuf, _size);
 	}
 
-  ImplAAFPropertyValue * pv = NULL;
-  pv = (ImplAAFPropertyValue *)CreateImpl(CLSID_AAFPropertyValue);
+  ImplAAFPropValData * pv = NULL;
+  pv = (ImplAAFPropValData *)CreateImpl(CLSID_AAFPropValData);
   if (! pv)
 	{
 	  return AAFRESULT_NOMEMORY;
@@ -322,10 +322,14 @@ AAFRESULT STDMETHODCALLTYPE
 	  return AAFRESULT_BAD_SIZE;
 	}
 
+  ImplAAFPropValData * pvd = NULL;
+  pvd = dynamic_cast<ImplAAFPropValData*>(pPropVal);
+  if (!pvd) return AAFRESULT_BAD_TYPE;
+
   // get the property value's embedded type
   ImplAAFTypeDef * pPropType;
   AAFRESULT hr;
-  hr = pPropVal->GetType (&pPropType);
+  hr = pvd->GetType (&pPropType);
   if (! AAFRESULT_SUCCEEDED (hr))
 	{
 	  return hr;
@@ -352,7 +356,7 @@ AAFRESULT STDMETHODCALLTYPE
   // sign-extend or zero-fill the value.
   aafUInt8 valBuf[8];
   aafUInt32 bitsSize = 0;
-  hr = pPropVal->GetBitsSize(&bitsSize);
+  hr = pvd->GetBitsSize(&bitsSize);
   if (! AAFRESULT_SUCCEEDED (hr))
 	{
 	  return hr;
@@ -368,20 +372,20 @@ AAFRESULT STDMETHODCALLTYPE
 		  (8 == bitsSize));
   assert (bitsSize <= sizeof (valBuf));  // I know, redundant test...
   aafMemPtr_t pBits = NULL;
-  hr = pPropVal->GetBits (&pBits);
+  hr = pvd->GetBits (&pBits);
   if (AAFRESULT_FAILED(hr)) return hr;
   assert (pBits);
 
-  memcpy (pBits, valBuf, bitsSize);
+  memcpy (valBuf, pBits, bitsSize);
 
   // BTW, we know that valsize >= bitsSize (from tests above)
   if (_isSigned != 0)
 	{
-	  pvtSignExtend (valBuf, bitsSize, pVal, valSize);
+	  pvtSignExtend (pBits, bitsSize, pVal, valSize);
 	}
   else
 	{
-	  pvtZeroFill (valBuf, bitsSize, pVal, valSize);
+	  pvtZeroFill (pBits, bitsSize, pVal, valSize);
 	}
   return AAFRESULT_SUCCESS;
 }
@@ -407,10 +411,14 @@ AAFRESULT STDMETHODCALLTYPE
 	  return AAFRESULT_BAD_SIZE;
 	}
 
+  ImplAAFPropValData * pvd = NULL;
+  pvd = dynamic_cast<ImplAAFPropValData*>(pPropVal);
+  if (!pvd) return AAFRESULT_BAD_TYPE;
+
   // get the property value's embedded type
   ImplAAFTypeDef * pPropType;
   AAFRESULT hr;
-  hr = pPropVal->GetType (&pPropType);
+  hr = pvd->GetType (&pPropType);
   if (! AAFRESULT_SUCCEEDED (hr))
 	{
 	  return hr;
@@ -447,10 +455,9 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 
   aafMemPtr_t pBits = NULL;
-  hr = pPropVal->AllocateBits (_size, &pBits);
+  hr = pvd->AllocateBits (_size, &pBits);
   if (! AAFRESULT_SUCCEEDED (hr))
 	{
-	  pPropVal->ReleaseReference ();
 	  return hr;
 	}
   assert (pBits);
