@@ -249,6 +249,8 @@ private:
     //
   void flush(void);
 
+  static wchar_t* temporaryFileName(const OMDataStream& stream);
+
   static char _table[128];
 
   char map(int c);
