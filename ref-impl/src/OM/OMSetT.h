@@ -59,6 +59,8 @@ void OMSet<Key, Element>::insert(const Element value)
   PRECONDITION("Element not present", !_tree.contains(value.identification()));
 
   _tree.insert(value.identification(), value);
+
+  POSTCONDITION("Element present", _tree.contains(value.identification()));
 }
 
   // @mfunc Does this <c OMSet> contain <p value> ?
