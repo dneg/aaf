@@ -192,10 +192,10 @@ void OMXMLStoredObject::save(OMStorable& object)
   _stream << indent;
   _stream << beginl;
   const wchar_t* name = 0;
-  const OMClassDefinition* definition = object.definition();
 #if 1
   name = L"Unknown";
 #else
+  const OMClassDefinition* definition = object.definition();
   if (definition != 0) {
     ASSERT("Valid definition", definition != 0);
     name = definition->name();
