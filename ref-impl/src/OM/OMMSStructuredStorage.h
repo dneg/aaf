@@ -57,7 +57,7 @@
 #include "wintypes.h"
 #include <storage.h>
 #elif defined (USE_REFERENCE_SS)
-#include "storage.h"
+#include "h/storage.h"
 #else
 #error "Don't know which structured storage implementation to use."
 #endif

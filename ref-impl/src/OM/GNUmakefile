@@ -32,7 +32,7 @@ include $(AAFBASE)/build/common.mk
 
 INCLUDES = -I. \
 	   -I../../include/OM \
-	   -I$(AAFBASE)/ss-impl/ref/h
+	   -I$(AAFBASE)/ss-impl/ref
 
 
 .PHONY : all
