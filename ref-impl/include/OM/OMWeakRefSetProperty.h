@@ -174,7 +174,6 @@ private:
   OMSet<OMUniqueObjectIdentification, SetElement> _set;
   OMPropertyTag _targetTag;
   char* _targetName;
-  OMStrongReferenceSetProperty<ReferencedObject>* _targetSet;
 
   friend class OMWeakReferenceSetIterator<ReferencedObject>;
 

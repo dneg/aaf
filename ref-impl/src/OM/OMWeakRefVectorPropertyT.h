@@ -48,8 +48,7 @@ OMWeakReferenceVectorProperty<ReferencedObject>::
                                         SF_WEAK_OBJECT_REFERENCE_VECTOR,
                                         name),
   _targetTag(nullOMPropertyTag),
-  _targetName(saveString(targetName)),
-  _targetSet(0)
+  _targetName(saveString(targetName))
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::"
                                               "OMWeakReferenceVectorProperty");

@@ -206,7 +206,6 @@ private:
   OMVector<VectorElement> _vector;
   OMPropertyTag _targetTag;
   char* _targetName;
-  OMStrongReferenceSetProperty<ReferencedObject>* _targetSet;
 
   friend class OMWeakReferenceVectorIterator<ReferencedObject>;
 

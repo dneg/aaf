@@ -47,8 +47,7 @@ OMWeakReferenceSetProperty<ReferencedObject>::
                                         SF_WEAK_OBJECT_REFERENCE_SET,
                                         name),
   _targetTag(nullOMPropertyTag),
-  _targetName(saveString(targetName)),
-  _targetSet(0)
+  _targetName(saveString(targetName))
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::"
                                                  "OMWeakReferenceSetProperty");
