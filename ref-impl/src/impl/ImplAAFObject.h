@@ -70,7 +70,7 @@ public:
 		 aafBool*  Result);  //@parm [out] 
 
   // tjb - this is temporary and should be removed
-  const OMClassId& classId(void) const
+  virtual const OMClassId& classId(void) const
   {
     // This function must be overidden by subclasses. It is pure
     // virtual on OMStorable. It is defined here since some dodo
