@@ -101,8 +101,13 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(ppDef == NULL)
 		return(AAFRESULT_NULL_PARAM);
+
+	if (!_codecDef.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;	
+
 	*ppDef = _codecDef;
 	assert (*ppDef);
+
   if (*ppDef)
 	 (*ppDef)->AcquireReference ();
 	return AAFRESULT_SUCCESS;
