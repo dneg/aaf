@@ -237,7 +237,12 @@ public:
         // @parm [out, retval] Total number of type definition objects
         (aafUInt32 * pResult);
 
-  //****************
+	virtual AAFRESULT STDMETHODCALLTYPE
+		RegisterKLVDataKey (
+			aafUID_t keyUID, 
+			ImplAAFTypeDef *underlyingType);
+
+	  //****************
   // RegisterDataDef()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
