@@ -36,7 +36,6 @@ using namespace std;
 #include <string.h>
 
 #include "AAFStoredObjectIDs.h"
-//#include "aafCvt.h"
 #include "AAFResult.h"
 #include "ModuleTest.h"
 #include "AAFDefUIDs.h"

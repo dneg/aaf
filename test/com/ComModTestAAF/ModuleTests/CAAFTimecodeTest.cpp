@@ -33,7 +33,6 @@ using namespace std;
 #include <stdlib.h>
 
 #include "AAFStoredObjectIDs.h"
-//#include "aafCvt.h"
 #include "AAFResult.h"
 #include "ModuleTest.h"
 #include "AAFDefUIDs.h"
@@ -90,7 +89,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafLength_t					zero;
 	aafTimecode_t				startTC;
 
-//	CvtInt32toLength(0, zero);
     zero = 0;
 	aafProductVersion_t v;
 	v.major = 1;

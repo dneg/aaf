@@ -46,15 +46,6 @@ using namespace std;
 
 #include "CAAFBuiltinDefs.h"
 
-//#include "AAFUtils.h"
-//AAFRESULT aafMobIDNew(aafUID_t *mobID);
-//AAFRESULT aafMobIDFromMajorMinor(
-//        aafUInt32	major,
-//		aafUInt32	minor,
-//		aafUID_t *mobID);     /* OUT - Newly created Mob ID */
-
-//#include "aafCvt.h"
-
 #include "AAFDomainUtils.h"
 #include "OMFDomainUtils.h"
 #if AVID_SPECIAL
