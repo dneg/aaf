@@ -7,24 +7,27 @@
 *                                          *
 \******************************************/
 
-
-
-
-
-
-
-#include "AAFStoredObjectIDs.h"
-
 #ifndef __ImplAAFEvent_h__
 #include "ImplAAFEvent.h"
 #endif
+
+
+#include "AAFStoredObjectIDs.h"
+#include "AAFPropertyIDs.h"
+#include <AAFResult.h>
+
 
 #include <assert.h>
 #include <string.h>
 
 
-ImplAAFEvent::ImplAAFEvent ()
-{}
+ImplAAFEvent::ImplAAFEvent ():
+  _position(PID_Event_Position, "Position"),
+  _comment(PID_Event_Comment, "Comment")
+{
+  _persistentProperties.put(_position.address());
+  _persistentProperties.put(_comment.address());
+}
 
 
 ImplAAFEvent::~ImplAAFEvent ()
@@ -33,45 +36,69 @@ ImplAAFEvent::~ImplAAFEvent ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEvent::GetPosition (
-      aafPosition_t *  /*pPosition*/)
+      aafPosition_t *  pPosition)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (NULL == pPosition)
+    return AAFRESULT_NULL_PARAM;
+
+  *pPosition = _position;
+  return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEvent::SetPosition (
-      aafPosition_t  /*Position*/)
+      aafPosition_t  Position)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  // Why is the argument pass-by-value?
+  _position = Position;
+
+  return AAFRESULT_SUCCESS;
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEvent::SetComment (
-      wchar_t *  /*pComment*/)
+      wchar_t *  pComment)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (NULL == pComment)
+    return (AAFRESULT_NULL_PARAM);
+
+  _comment = pComment;
+
+  return (AAFRESULT_SUCCESS);
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEvent::GetComment (
-      wchar_t *  /*pComment*/,
-      aafUInt32  /*bufSize*/)
+      wchar_t *  pComment,
+      aafUInt32  bufSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (NULL == pComment)
+    return(AAFRESULT_NULL_PARAM);
+
+  bool stat = _comment.copyToBuffer(pComment, bufSize);
+  if (!stat)
+    return AAFRESULT_SMALLBUF;
+
+  return (AAFRESULT_SUCCESS); 
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEvent::GetCommentBufLen (
-      aafUInt32 *  /*pBufSize*/)
+      aafUInt32 *  pBufSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (NULL == pBufSize)
+    return (AAFRESULT_NULL_PARAM);
+  
+  *pBufSize = _comment.size();
+
+  return (AAFRESULT_SUCCESS); 
 }
 
 
