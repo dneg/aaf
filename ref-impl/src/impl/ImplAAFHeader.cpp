@@ -95,7 +95,8 @@ ImplAAFHeader::ImplAAFHeader ()
   _identificationList(PID_Header_IdentificationList, "IdentificationList"),
   _contentStorage(		PID_Header_Content,	"Content"),
   _dictionary(PID_Header_Dictionary,	"Dictionary"),
-  _fileRev(PID_Header_Version,		"Version")
+  _fileRev(PID_Header_Version,		"Version"),
+  _objectModelVersion(PID_Header_ObjectModelVersion, "ObjectModelVersion")
 {
   _persistentProperties.put(_byteOrder.address());
   _persistentProperties.put(_lastModified.address());
@@ -103,6 +104,7 @@ ImplAAFHeader::ImplAAFHeader ()
   _persistentProperties.put(_contentStorage.address());
   _persistentProperties.put(_dictionary.address());
   _persistentProperties.put(_fileRev.address());
+  _persistentProperties.put(_objectModelVersion.address());
 
   //!!!	_head = this;
 //	file->InternalSetHead(this);
@@ -731,3 +733,22 @@ ImplAAFDictionary *ImplAAFHeader::GetDictionary() const
   return(result);
 }
 
+
+bool ImplAAFHeader::IsObjectModelVersionPresent () const
+{
+  return _objectModelVersion.isPresent ();
+}
+
+
+aafUInt32 ImplAAFHeader::GetObjectModelVersion () const
+{
+  assert (IsObjectModelVersionPresent());
+  return _objectModelVersion;
+}
+
+
+void ImplAAFHeader::SetObjectModelVersion (aafUInt32 version)
+{
+  _objectModelVersion = version;
+  assert (IsObjectModelVersionPresent());
+}
