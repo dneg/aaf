@@ -69,11 +69,9 @@ AAFRESULT STDMETHODCALLTYPE
 
   HRESULT hr;
 
-  hr = SetName (pTypeName);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-
-  hr = SetAUID (id);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+  hr = ImplAAFMetaDefinition::Initialize(id, pTypeName, NULL);
+	if (AAFRESULT_FAILED (hr))
+    return hr;
 
   aafUID_t baseId;
   assert (pBaseType);
