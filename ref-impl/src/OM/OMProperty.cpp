@@ -55,6 +55,7 @@ const OMPropertyId OMProperty::propertyId(void) const
 void OMProperty::setPropertySet(const OMPropertySet* propertySet)
 {
   TRACE("OMProperty::setPropertySet");
+  PRECONDITION("Valid property set", propertySet != 0);
 
   _propertySet = propertySet;
 }
@@ -135,14 +136,17 @@ size_t OMSimpleProperty::size(void) const
 void OMSimpleProperty::get(void* value, size_t valueSize) const
 {
   TRACE("OMSimpleProperty::get");
-
+  PRECONDITION("Valid data buffer", value != 0);
   PRECONDITION("Valid size", valueSize >= _size);
+
   memcpy(value, _bits, _size);
 }
 
 void OMSimpleProperty::set(const void* value, size_t valueSize) 
 {
   TRACE("OMSimpleProperty::set");
+  PRECONDITION("Valid data buffer", value != 0);
+  PRECONDITION("Valid size", valueSize > 0);
 
   if (valueSize != _size) {
     delete [] _bits;
@@ -185,6 +189,7 @@ OMCollectionProperty::OMCollectionProperty(const OMPropertyId propertyId,
 : OMProperty(propertyId, type, name)
 {
   TRACE("OMCollectionProperty::OMCollectionProperty");
+  PRECONDITION("Valid name", validString(name));
 }
 
 OMCollectionProperty::~OMCollectionProperty(void)
@@ -199,6 +204,7 @@ OMStringProperty::OMStringProperty(const OMPropertyId propertyId,
 : OMCharacterStringProperty<char>(propertyId, name)
 {
   TRACE("OMStringProperty::OMStringProperty");
+  PRECONDITION("Valid name", validString(name));
 }
 
 OMStringProperty::~OMStringProperty(void)
@@ -209,6 +215,7 @@ OMStringProperty::~OMStringProperty(void)
 OMStringProperty& OMStringProperty::operator = (const char* value)
 {
   TRACE("OMStringProperty::operator =");
+  PRECONDITION("Valid value", value != 0);
 
   assign(value);
   return *this;
@@ -221,6 +228,7 @@ OMWideStringProperty::OMWideStringProperty(const OMPropertyId propertyId,
 : OMCharacterStringProperty<wchar_t>(propertyId, name)
 {
   TRACE("OMWideStringProperty::OMWideStringProperty");
+  PRECONDITION("Valid name", validString(name));
 }
 
 OMWideStringProperty::~OMWideStringProperty(void)
@@ -231,6 +239,7 @@ OMWideStringProperty::~OMWideStringProperty(void)
 OMWideStringProperty& OMWideStringProperty::operator = (const wchar_t* value)
 {
   TRACE("OMWideStringProperty::operator =");
+  PRECONDITION("Valid string", validWideString(value));
 
   assign(value);
   return *this;
