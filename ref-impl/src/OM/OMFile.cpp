@@ -563,7 +563,11 @@ void OMFile::close(void)
 
   _root->close();
   if (_mode == modifyMode) {
-    writeSignature(_fileName, _signature);
+    if (_rawStorage != 0 ) {
+      writeSignature(_rawStorage, _signature);
+    } else {
+      writeSignature(_fileName, _signature);
+    }
   }
   _root->detach();
   delete _root;
