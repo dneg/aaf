@@ -30,8 +30,9 @@ ImplAAFPropertyValue::ImplAAFPropertyValue ()
 
 ImplAAFPropertyValue::~ImplAAFPropertyValue ()
 {
-  if (_pType)
-	_pType->ReleaseReference ();
+  // BobT: type is not to be reference counted.
+  // if (_pType)
+  //  _pType->ReleaseReference ();
 }
 
 
@@ -43,7 +44,8 @@ AAFRESULT ImplAAFPropertyValue::SetType (
   assert (! _pType);
 
   _pType = pType;
-  _pType->AcquireReference ();
+  // BobT: type is not to be reference counted.
+  // _pType->AcquireReference ();
   return AAFRESULT_SUCCESS;
 }
 
