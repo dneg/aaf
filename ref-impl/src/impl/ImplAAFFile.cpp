@@ -449,8 +449,6 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 {
-	ImplAAFContentStorage	*pCStore = NULL;
-	AAFRESULT stat = AAFRESULT_SUCCESS;
 
 	if (! _initialized)
 		return AAFRESULT_NOT_INITIALIZED;
@@ -461,79 +459,7 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 	if (! pIdent)
 		return AAFRESULT_NULL_PARAM;
 
-
-
-	try
-	{
-		// Create the header for the OM manager to use as the root
-		// for the file. Use the OMClassFactory interface for this 
-    // object because the dictionary has not been associated with
-    // a header yet (Chicken 'n Egg problem).
-    const OMClassId& soid = *reinterpret_cast<const OMClassId *>(&AUID_AAFHeader);
-    _head = static_cast<ImplAAFHeader *>(_factory->create(soid));
-		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
-		
-		// Make sure the header is initialized with our previously created
-		// dictionary.
-		_head->SetDictionary(_factory);
-
-		// Add the ident to the header.
-		checkResult(_head->AddIdentificationObject(pIdent));
-		  
-		// Set the byte order
-		OMByteOrder byteOrder = hostByteOrder();
-		if (byteOrder == littleEndian) {
-			_byteOrder = 0x4949; // 'II'
-		} else { // bigEndian
-			_byteOrder = 0x4d4d; // 'MM'
-		}
-		_head->SetByteOrder(_byteOrder);
-
-		//JeffB!!! We must decide whether def-only files have a content storage
-		checkResult(_head->GetContentStorage(&pCStore));
-		pCStore->ReleaseReference(); // need to release this pointer!
-		pCStore = 0;
-
-		// Attempt to create the file.
-
-		_file = OMFile::openNewTransient(_factory, byteOrder, _head);
-		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
-
-		// Now that the file is open and the header has been
-		// restored, complete the initialization of the
-		// dictionary. We obtain the dictionary via the header
-		// to give the persistence mechanism a chance to work.
-		ImplAAFDictionary* dictionary = 0;
-		HRESULT hr = _head->GetDictionary(&dictionary);
-		if (hr != AAFRESULT_SUCCESS)
-		  return hr;
-		dictionary->InitBuiltins();
-		dictionary->ReleaseReference();
-		dictionary = 0;
-
-		_open = kAAFTrue;
-		_openType = kOmTransient;
-		GetRevision(&_setrev);
-	}
-	catch (AAFRESULT &rc)
-	{
-		stat = rc;
-
-		// Cleanup after failure.
-		if (_file)
-		{
-			_file->close();
-			_file = 0;
-		}
-
-		if (NULL == _head)
-		{
-			_head->ReleaseReference();
-			_head = 0;
-		}
-	}
-
-	return stat;
+	return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 

@@ -165,39 +165,6 @@ OMFile* OMFile::openExistingModify(const wchar_t* fileName,
   return newFile;
 }
 
-  // @mfunc Open a new <c OMFile> for write-only access, the
-  //        <c OMFile> is named <p fileName>, use the <c OMClassFactory>
-  //        <p factory> to create the objects. The file must not already
-  //        exist. The byte ordering on the newly created file is given
-  //        by <p byteOrder>. The root <c OMStorable> in the newly
-  //        created file is given by <p root>.
-  //   @parm const wchar_t* | fileName | The name of the file to create.
-  //   @parm const OMClassFactory* | factory | The factory to use for creating
-  //         objects.
-  //   @parm const OMByteOrder | byteOrder | The byte order to use for the
-  //         newly created file.
-  //   @parm OMStorable* | signature | The root <c OMStorable> in the newly
-  //         created file.
-  //   @rdesc The newly created <c OMFile>.
-OMFile* OMFile::openNewWrite(const wchar_t* ANAME(fileName),
-                             const OMClassFactory* ANAME(factory),
-                             const OMByteOrder ANAME(byteOrder),
-                             OMStorable* ANAME(root),
-                             const OMFileSignature& ANAME(signature))
-{
-  TRACE("OMFile::openNewWrite");
-  PRECONDITION("Valid file name", validWideString(fileName));
-  PRECONDITION("Valid class factory", factory != 0);
-  PRECONDITION("Valid byte order",
-                    ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
-  PRECONDITION("Valid root", root != 0);
-  PRECONDITION("Valid signature", validSignature(signature));
-
-  // Not yet implemented.
-  //
-  return 0;
-}
-
   // @mfunc Open a new <c OMFile> for modify access, the
   //        <c OMFile> is named <p fileName>, use the <c OMClassFactory>
   //        <p factory> to create the objects. The file must not already
@@ -232,35 +199,6 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
                                root);
   ASSERT("Valid heap pointer", newFile != 0);
   return newFile;
-}
-
-  // @mfunc Open a new transient <c OMFile> for modify access, the
-  //        <c OMFile> is not named, use the <c OMClassFactory>
-  //        <p factory> to create the objects.
-  //        The byte ordering on the newly created file is given
-  //        by <p byteOrder>. The root <c OMStorable> in the newly
-  //        created file is given by <p root>.
-  //   @parm const OMClassFactory* | factory | The factory to use for creating
-  //         objects.
-  //   @parm const OMByteOrder | byteOrder| The byte order to use for the
-  //         newly created file.
-  //   @parm OMStorable* | root | The root <c OMStorable> in the newly created
-  //         file.
-  //   @rdesc The newly created <c OMFile>.
-OMFile* OMFile::openNewTransient(const OMClassFactory* ANAME(factory),
-                                 const OMByteOrder ANAME(byteOrder),
-                                 OMStorable* ANAME(root))
-{
-  TRACE("OMFile::openNewTransient");
-  PRECONDITION("Valid class factory", factory != 0);
-  PRECONDITION("Valid byte order",
-                    ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
-  PRECONDITION("Valid root", root != 0);
-
-  // Not yet implemented.
-  //
-  ASSERT("Unimplemented code not reached", false);
-  return 0;
 }
 
    // @mfunc Is <p signature> a valid signature for an <c OMFile> ?
