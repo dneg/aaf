@@ -2122,7 +2122,7 @@ void OMMSSStoredObject::writeToStream(IStream* stream,
   ASSERT("IStream::Write() succeeded", SUCCEEDED(status));
 }
 
-  // @mfunc Read an OMUInt8 from <p stream> into <p i>. If
+  // @mfunc Read an OMUInt8 from <p stream> into <p i>.
   //   @parm The stream from which to read.
   //   @parm The resulting OMUInt8.
 void OMMSSStoredObject::readUInt8FromStream(IStream* stream,
