@@ -291,6 +291,7 @@ AAFRESULT LoadMobTables(void);
 AAFRESULT SetModified(void);		// To NOW
 
   void SetByteOrder(const aafInt16 byteOrder);
+  void SetDictionary(ImplAAFDictionary *pDictionary);
 
 private:
 	// These are private accessor methods.
