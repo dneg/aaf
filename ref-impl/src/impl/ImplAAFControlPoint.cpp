@@ -85,10 +85,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if (!_hint.isPresent())
 		return AAFRESULT_PROP_NOT_PRESENT;
 	
-	aafUInt16	intHint;
-		
-	intHint = _hint;
-	*pEditHint = (aafEditHint_t)intHint;
+	*pEditHint = _hint;
 	return AAFRESULT_SUCCESS;
 }
 
