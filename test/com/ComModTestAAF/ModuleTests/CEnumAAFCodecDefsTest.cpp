@@ -126,7 +126,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFFile*			pFile = NULL;
 	IAAFHeader *		pHeader = NULL;
 	IAAFDictionary*		pDictionary = NULL;
-	IAAFDefObject*		pDef = NULL;
 	IAAFCodecDef*	pCodecDef = NULL;
 	bool				bFileOpen = false;
 	HRESULT				hr = S_OK;
@@ -152,26 +151,19 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				CreateInstance(IID_IAAFCodecDef, 
 							   (IUnknown **)&pCodecDef));
     
-	checkResult(pCodecDef->QueryInterface (IID_IAAFDefObject,
-                                          (void **)&pDef));
-
 	checkResult(pCodecDef->AddEssenceKind (defs.ddMatte()));
 	uid = NoCodec;
-	checkResult(pDef->Initialize (uid, sName1, sDescription1));
+	checkResult(pCodecDef->Initialize (uid, sName1, sDescription1));
 	checkResult(pDictionary->RegisterCodecDef(pCodecDef));
-	pDef->Release();
-	pDef = NULL;
 	pCodecDef->Release();
 	pCodecDef = NULL;
 	checkResult(defs.cdCodecDef()->
 				CreateInstance(IID_IAAFCodecDef, 
 							   (IUnknown **)&pCodecDef));
     
-	checkResult(pCodecDef->QueryInterface (IID_IAAFDefObject,
-                                          (void **)&pDef));
 	checkResult(pCodecDef->AddEssenceKind (defs.ddMatte()));
 	uid = NoCodec;
-	checkResult(pDef->Initialize (uid, sName2, sDescription2));
+	checkResult(pCodecDef->Initialize (uid, sName2, sDescription2));
 
 	checkResult(pDictionary->RegisterCodecDef(pCodecDef));
   }
@@ -182,9 +174,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
   // Cleanup and return
-  if (pDef)
-    pDef->Release();
-
   if (pCodecDef)
     pCodecDef->Release();
 
