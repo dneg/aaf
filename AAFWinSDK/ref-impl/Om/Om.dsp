@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GR /GX /O2 /I "../ref-impl/src/Om" /I "../../" /I "./../ref-impl/src/OM" /I "../../ref-impl/include/Om" /I "../../ref-impl/include/cpp-api/" /I "../../../ref-impl/src/OM" /I "../../../ref-impl/include/cpp-api/" /I "../../../ref-impl/include/Om" /D "NDEBUG" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "_WIN32" /D "BOB_TEST" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GR /GX /O2 /I "../ref-impl/src/Om" /I "../../" /I "./../ref-impl/src/OM" /I "../../ref-impl/include/Om" /I "../../ref-impl/include/cpp-api/" /I "../../../ref-impl/src/OM" /I "../../../ref-impl/include/cpp-api/" /I "../../../ref-impl/include/Om" /D "NDEBUG" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "_WIN32" /D "BOB_TEST" /YX /FD /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /GR /GX /Z7 /Od /I "../../../ref-impl/src/OM" /I "../../../ref-impl/include/cpp-api/" /I "../../../ref-impl/include/Om" /D "_WIN32" /D "_WINDOWS" /D "_DEBUG" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "BOB_TEST" /D "OM_ENABLE_DEBUG" /FR /YX /FD /c
+# ADD CPP /nologo /MDd /W3 /GR /GX /Z7 /Od /I "../../../ref-impl/src/OM" /I "../../../ref-impl/include/cpp-api/" /I "../../../ref-impl/include/Om" /D "_WIN32" /D "_WINDOWS" /D "_DEBUG" /D "UNICODE" /D "_UNICODE" /D "WIN32" /D "BOB_TEST" /D "OM_ENABLE_DEBUG" /FR /YX /FD /c
 # SUBTRACT CPP /X
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
