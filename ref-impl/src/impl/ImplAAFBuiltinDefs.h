@@ -104,9 +104,7 @@ private: \
    TYPE_DEF_METHOD_DECL(td##name, kAAFTypeID_##name)
 
 
-class ImplAAFBuiltinDefs
-{
-private:
+
   // Private dumb pointer template to make default pointer
   // declarations be initialized to zero.  No reference counting done
   // here.
@@ -122,6 +120,12 @@ private:
   private:
 	T * _rep;
   };
+
+
+
+class ImplAAFBuiltinDefs
+{
+private:
 
 
 public:
