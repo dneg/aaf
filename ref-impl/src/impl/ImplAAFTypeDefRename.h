@@ -9,12 +9,8 @@
 * Advanced Authoring Format                *
 *                                          *
 * Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
-
-
-
 
 
 
@@ -58,7 +54,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetBaseType
         // @parm [out] type definition for which this is an alias
-        (ImplAAFTypeDef ** ppBaseType);
+        (ImplAAFTypeDef ** ppBaseType) const;
 
 
   //****************
@@ -101,16 +97,41 @@ public:
                            OMByteOrder byteOrder) const;
 
 
+  // overrides from ImplAAFTypeDef
+  //
+  virtual aafBool IsFixedSize (void) const;
+  virtual size_t PropValSize (void) const;
+  aafBool IsRegistered (void) const;
+  size_t NativeSize (void) const;
+
+  // Override this one, not the ...MBS() one...
+  OMProperty * 
+    pvtCreateOMProperty (OMPropertyId pid,
+						 const aafCharacter * name) const;
+
 public:
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFTypeDefRename)
 
 private:
+  ImplAAFTypeDefSP BaseType () const;
+
   // OMWeakReferenceProperty<ImplAAFTypeDef> _RenamedType;
   OMFixedSizeProperty<aafUID_t>           _RenamedType;
+
+  ImplAAFTypeDefSP _cachedBaseType;
 };
 
+//
+// smart pointer
+//
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplAAFTypeDefRename> ImplAAFTypeDefRenameSP;
+
 #endif // ! __ImplAAFTypeDefRename_h__
-
-
