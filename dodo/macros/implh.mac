@@ -235,9 +235,9 @@ public:
 
 
   // Reference Counting interface
-  virtual aafUInt32 AcquireRef();
-  virtual aafUInt32 ReleaseRef();
-  virtual aafUInt32 RefCount();
+  virtual aafUInt32 AcquireReference() const;
+  virtual aafUInt32 ReleaseReference();
+  virtual aafUInt32 ReferenceCount() const;
 #endm
 
 

@@ -300,13 +300,13 @@ inline long InterlockedDecrement(
 
 
 // Increment the object reference count.
-aafUInt32 .this-module::AcquireRef()
-{
-  return InterlockedIncrement(reinterpret_cast<long *>(&_refCount));
+aafUInt32 .this-module::AcquireReference() const
+{ // inforce conceptual 'constness'
+  return InterlockedIncrement(reinterpret_cast<long *>(&(const_cast<.this-module *>(this)->_refCount)));
 }
 
 // Decrement the object reference count and delete the container.
-aafUInt32 .this-module::ReleaseRef()
+aafUInt32 .this-module::ReleaseReference()
 {
   long count = InterlockedDecrement(reinterpret_cast<long *>(&_refCount));
 #if defined(DELETE_LAST_REFERENCE)
@@ -323,7 +323,7 @@ aafUInt32 .this-module::ReleaseRef()
 }
 
 // Just return the count. (this could be inline in the header...)
-aafUInt32 .this-module::RefCount()
+aafUInt32 .this-module::ReferenceCount() const
 {
   return _refCount;
 }
