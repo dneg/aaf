@@ -129,7 +129,7 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 	try
 	{
 		// Ask the OM to open the file.
-		_file = OMFile::openExistingRead(pFileName, _factory, OMFile::lazyLoad);
+		_file = OMFile::openExistingRead(pFileName, _factory, 0, OMFile::lazyLoad);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
         // Check the file's signature.
@@ -239,7 +239,7 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 	try 
 	{
 		// Ask the OM to open the file.
-		_file = OMFile::openExistingModify(pFileName, _factory, OMFile::lazyLoad);
+		_file = OMFile::openExistingModify(pFileName, _factory, 0, OMFile::lazyLoad);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Get the byte order
@@ -400,7 +400,7 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 
 		// Attempt to create the file.
 		const OMFileSignature aafFileSignature  = *reinterpret_cast<const OMFileSignature *>(&aafFileSignatureGUID);
-		_file = OMFile::openNewModify(pFileName, _factory, byteOrder, _head, aafFileSignature);
+		_file = OMFile::openNewModify(pFileName, _factory, 0, byteOrder, _head, aafFileSignature);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Now that the file is open and the header has been
