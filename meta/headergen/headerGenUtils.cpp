@@ -48,7 +48,9 @@ void printEndGuard(const char* moduleName, ostream& s)
   s << "#endif // ! __" << moduleName << "_h__" << endl;
 }
 
-void printCopyright (ostream & s)
+void printCopyright (ostream & s) { printCopyright("Avid Technology", s); }
+
+void printCopyright (const char* originator, ostream & s)
 {
   s <<
 "//=---------------------------------------------------------------------=\n"
@@ -72,7 +74,8 @@ void printCopyright (ostream & s)
 "// AAF Association.\n"
 "//\n"
 "// The Initial Developer of the Original Code of this file and the\n"
-"// Licensor of the AAF Association is Avid Technology.\n"
+"// Licensor of the AAF Association is " 
+<< originator << ".\n"
 "// All rights reserved.\n"
 "//\n"
 "//=---------------------------------------------------------------------=\n";
@@ -84,7 +87,7 @@ static void usage (const char * progname)
 {
   assert (progname);
 
-  cerr << "usage: " << progname << "moduleName" << endl;
+  cerr << "usage: " << progname << "moduleName [prefix]" << endl;
 }
 
 
@@ -99,6 +102,22 @@ void validateArgs (int argc, char** argv, char*& moduleName)
 
   moduleName = argv[1];
 }
+
+void validateArgs(int argc, char** argv, char*& moduleName, char*& prefix)
+{
+  const char * progname = argv[0];
+
+  if (argc < 2) {
+    usage (progname);
+    exit (1);
+  }
+
+  moduleName = argv[1];
+
+  if( argc < 3 ) prefix = "";
+  else prefix = argv[2];
+}
+
 
 // print a GUID like this -
 //{0x0D010101, 0x0101, 0x0100,
@@ -183,6 +202,24 @@ void printDefinition(const char* type,
   s.setf(ios::uppercase);
   s << setw(4) << identifier << ";" << endl;
 }
+
+void printDefinition(const char* type,
+                     const char* prefix,
+                     const char* name,
+                     const char* suffix,
+                     const char* string,
+                     ostream& s)
+{
+  s << type;
+  s << " ";
+  s << prefix;
+  s << name;
+  s << suffix;
+  s << " = L\"";
+  s << string << "\";" << endl;
+}
+
+
 
 // print a macro invocation like this -
 // DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8);
