@@ -67,19 +67,21 @@ AD_CPP_QUOTE(#ifndef NULL)
 AD_CPP_QUOTE(#define NULL \(\(void *\)0L\))
 AD_CPP_QUOTE(#endif)
 
-typedef enum _aafBool
+typedef aafInt32 aafBoolean_t;
+typedef enum _aafBoolean_e
 {
   AAFFalse = 0,
   AAFTrue = 1
-} aafBool;
+} aafBoolean_e;
 
 AD_CPP_QUOTE(#ifndef MAX_NUM_RGBA_COMPS)
 AD_CPP_QUOTE(#define MAX_NUM_RGBA_COMPS 8 /* limit on the size of component arrays */)
 AD_CPP_QUOTE(#if 0)
-typedef enum _aafMAX_NUM_RGBA_COMPS
+typedef aafInt32 aafMAX_NUM_RGBA_COMPS;
+typedef enum _aafMAX_NUM_RGBA_COMPS_e
 {
   MAX_NUM_RGBA_COMPS = 8
-} aafMAX_NUM_RGBA_COMPS;
+} aafMAX_NUM_RGBA_COMPS_e;
 AD_CPP_QUOTE(#endif)
 AD_CPP_QUOTE(#endif)
 
@@ -200,55 +202,63 @@ AD_CPP_QUOTE(\ * Enumerated AAFI types.)
 AD_CPP_QUOTE(\ *)
 AD_CPP_QUOTE(\ *************************************************************/)
 
-typedef enum _aafFileRev_t
+typedef aafInt32 aafFileRev_t;
+typedef enum _aafFileRev_e
 {
   kAAFRev1 = 0
-} aafFileRev_t;
+} aafFileRev_e;
 
-typedef enum _aafMediaOpenMode_t
+typedef aafInt32 aafMediaOpenMode_t;
+typedef enum _aafMediaOpenMode_e
 {
 	kMediaOpenReadOnly = 0, 
 	kMediaOpenAppend = 1
-} aafMediaOpenMode_t;
+} aafMediaOpenMode_e;
 	
-typedef enum _aafFieldDom_t
+typedef aafInt32 aafFieldDom_t;
+typedef enum _aafFieldDom_e
 {
 	kDominantField1 = 0, 
 	kDominantField2 = 1, 
 	kNoDominant = 2
-} aafFieldDom_t;
+} aafFieldDom_e;
 
-typedef enum _aafFieldTop_t
+typedef aafInt32 aafFieldTop_t;
+typedef enum _aafFieldTop_e
 {
 	kTopField1 = 0, 
 	kTopField2 = 1, 
 	kTopFieldNone = 2
-} aafFieldTop_t;
+} aafFieldTop_e;
 
-typedef enum _aafAlphaTransparency_t
+typedef aafInt32 aafAlphaTransparency_t;
+typedef enum _aafAlphaTransparency_e
 {
 	kMinValueTransparent = 0,
 	kMaxValueTransparent = 1
-} aafAlphaTransparency_t;
+} aafAlphaTransparency_e;
 
-typedef enum _aafPixelFormat_t
+typedef aafInt32 aafPixelFormat_t;
+typedef enum _aafPixelFormat_e
 {
 	kAAFPixNone = 0, 
 	kAAFPixRGBA = 1, 
 	kAAFPixYUV = 2
-} aafPixelFormat_t;
+} aafPixelFormat_e;
 
+
+typedef aafInt32 aafJPEGcomponent_t;
 AD_CPP_QUOTE(#if 0)
-typedef enum _aafJPEGcomponent_t
+typedef enum _aafJPEGcomponent_e
 {
 	kJcLuminance = 0, 
 	kJcChrominance = 1, 
 	kJcLuminanceFP16 = 2, 
 	kJcChrominanceFP16 = 3
-} aafJPEGcomponent_t;
+} aafJPEGcomponent_e;
 AD_CPP_QUOTE(#endif)
 
-AD_CPP_QUOTE(typedef enum _aafJPEGcomponent_t)
+AD_CPP_QUOTE(typedef enum _aafJPEGcomponent_e)
 AD_CPP_QUOTE({)
 AD_CPP_QUOTE(	kJcLuminance = 0\,) 
 AD_CPP_QUOTE(	kJcChrominance = 1)
@@ -256,87 +266,99 @@ AD_CPP_QUOTE(#if ! STANDARD_JPEG_Q)
 AD_CPP_QUOTE(	\, kJcLuminanceFP16 = 2\,) 
 AD_CPP_QUOTE(	kJcChrominanceFP16 = 3)
 AD_CPP_QUOTE(#endif)
-AD_CPP_QUOTE(} aafJPEGcomponent_t;)
+AD_CPP_QUOTE(} aafJPEGcomponent_e;)
 
-typedef enum _aafCompressEnable_t
+typedef aafInt32 aafCompressEnable_t;
+typedef enum _aafCompressEnable_e
 {
 	kSDKCompressionEnable = 0, 
 	kSDKCompressionDisable = 1
-} aafCompressEnable_t;
+} aafCompressEnable_e;
 
-typedef enum _aafFileFormat_t
+typedef aafInt32 aafFileFormat_t;
+typedef enum _aafFileFormat_e
 {
 	kAAFiMedia = 0, 
 	kForeignMedia = 1
-} aafFileFormat_t;
+} aafFileFormat_e;
 
-typedef enum _aafDropType_t
+typedef aafInt32 aafDropType_t;
+typedef enum _aafDropType_e
 {
 	kTcNonDrop = 0, 
 	kTcDrop = 1
-} aafDropType_t;
+} aafDropType_e;
 
-typedef enum _aafFrameLayout_t
+typedef aafInt32 aafFrameLayout_t;
+typedef enum _aafFrameLayout_e
 {
 	kFullFrame = 0, 
 	kSeparateFields = 1, 
 	kOneField = 2, 
 	kMixedFields = 3
-} aafFrameLayout_t;
+} aafFrameLayout_e;
 	
-typedef enum _aafColorSiting_t
+typedef aafInt32 aafColorSiting_t;
+typedef enum _aafColorSiting_e
 {
 	kCoSiting = 0, 
 	kAveraging = 1, 
 	kThreeTap = 2
-} aafColorSiting_t;
+} aafColorSiting_e;
 	
-typedef enum _aafPropertyOpt_t
+typedef aafInt32 aafPropertyOpt_t;
+typedef enum _aafPropertyOpt_e
 {
 	kPropRequired = 0,
 	kPropOptional = 1
-} aafPropertyOpt_t;
+} aafPropertyOpt_e;
 
-typedef enum _AAFDataDefinitionMatch_t
+typedef aafInt32 AAFDataDefinitionMatch_t;
+typedef enum _AAFDataDefinitionMatch_e
 {
 	kExactMatch = 0,
 	kConvertTo = 1,
 	kConvertFrom = 2
-} AAFDataDefinitionMatch_t;
+} AAFDataDefinitionMatch_e;
 	  
-typedef enum _aafAppendOption_t
+typedef aafInt32 aafAppendOption_t;
+typedef enum _aafAppendOption_e
 {
 	kAAFAppend = 0,
 	kAAFForceOverwrite = 1
-} aafAppendOption_t;
+} aafAppendOption_e;
 
-typedef enum _aafReferenceType_t
+typedef aafInt32 aafReferenceType_t;
+typedef enum _aafReferenceType_e
 {
 	kRefLimitMinimum = 0,
 	kRefLimitMaximum = 1,
 	kRefMinimum = 2,
 	kRefMaximum = 3,
 	kRefEnumvalue = 4
-} aafReferenceType_t;
+} aafReferenceType_e;
 
-typedef enum _aafSwapNeeded_t
+typedef aafInt32 aafSwapNeeded_t;
+typedef enum _aafSwapNeeded_e
 {
 	kAAFSwapIfNeeded = 0,
 	kAAFNeverSwap = 1
-} aafSwapNeeded_t;
+} aafSwapNeeded_e;
 
-typedef enum _aafTimecodeSourceType_t
+typedef aafInt32 aafTimecodeSourceType_t;
+typedef enum _aafTimecodeSourceType_e
 {
 	kAAFTimecodeLTC = 0,
 	kAAFTimecodeVITC = 1
-} aafTimecodeSourceType_t;
+} aafTimecodeSourceType_e;
 
 AD_CPP_QUOTE(/************************************************************)
 AD_CPP_QUOTE(\ *)
 AD_CPP_QUOTE(\ * Mob specific data types)
 AD_CPP_QUOTE(\ *)
 AD_CPP_QUOTE(\ *************************************************************/)
-typedef enum _aafMobKind_t
+typedef aafInt32 aafMobKind_t;
+typedef enum _aafMobKind_e
 {
 	kCompMob = 0, 
 	kMasterMob = 1, 
@@ -345,9 +367,10 @@ typedef enum _aafMobKind_t
 	kFilmMob = 4,
 	kPrimaryMob = 5, 
 	kAllMob = 6
-} aafMobKind_t;
+} aafMobKind_e;
 
-typedef enum _aafOperationChoice_t
+typedef aafInt32 aafOperationChoice_t;
+typedef enum _aafOperationChoice_e
 {
   kFindNull = 0,
   kFindIncoming = 1,
@@ -361,44 +384,50 @@ typedef enum _aafOperationChoice_t
   kFindOperationSrc6 = 9,
   kFindOperationSrc7 = 10,
   kFindOperationSrc8 = 11
-} aafOperationChoice_t;
+} aafOperationChoice_e;
 
-typedef enum _aafDepend_t
+typedef aafInt32 aafDepend_t;
+typedef enum _aafDepend_e
 {
 	kNoFollowDepend = 0, 
 	kFollowDepend = 1
-} aafDepend_t;
+} aafDepend_e;
 
-typedef enum _aafIncMedia_t
+typedef aafInt32 aafIncMedia_t;
+typedef enum _aafIncMedia_e
 {
 	kNoIncludeMedia = 0,
 	kIncludeMedia = 1
-} aafIncMedia_t;
+} aafIncMedia_e;
 
 AD_CPP_QUOTE(/* aafIndexType_t: describes the types of HEAD indices */)
-typedef enum _aafIndexType_t
+typedef aafInt32 aafIndexType_t;
+typedef enum _aafIndexType_e
 {
 	kCompMobIndex = 0,
 	kSourceMobIndex = 1,
 	kMediaIndex = 2,
 	kPrimaryMobIndex = 3
-} aafIndexType_t;
+} aafIndexType_e;
 
 AD_CPP_QUOTE(/* aafFadeType_t: describes values for SCLP fadein and fadeout types  */)
-typedef enum _aafFadeType_t
+typedef aafInt32 aafFadeType_t;
+typedef enum _aafFadeType_e
 {
 	kFadeNone = 0,
 	kFadeLinearAmp = 1,
 	kFadeLinearPower = 2
-} aafFadeType_t;
+} aafFadeType_e;
 
-typedef enum _aafAudioSampleType_t
+typedef aafInt32 aafAudioSampleType_t;
+typedef enum _aafAudioSampleType_e
 {
 	kAAFOffsetBinary = 0,
 	kAAFSignedMagnitude = 1
-} aafAudioSampleType_t;
+} aafAudioSampleType_e;
 	
-typedef enum _aafTapeCaseType_t
+typedef aafInt32 aafTapeCaseType_t;
+typedef enum _aafTapeCaseType_e
 {
 	kTapeCaseNull = 0,
 	kThreeFourthInchVideoTape = 1,
@@ -408,17 +437,19 @@ typedef enum _aafTapeCaseType_t
 	kCompactCassette = 5,
 	kDATCartridge = 6,
 	kNagraAudioTape = 7
-} aafTapeCaseType_t;
+} aafTapeCaseType_e;
 
-typedef enum _aafVideoSignalType_t
+typedef aafInt32 aafVideoSignalType_t;
+typedef enum _aafVideoSignalType_e
 {
 	kVideoSignalNull = 0,
 	kNTSCSignal = 1,
 	kPALSignal = 2,
 	kSECAMSignal = 3
-} aafVideoSignalType_t;
+} aafVideoSignalType_e;
 
-typedef enum _aafTapeFormatType_t
+typedef aafInt32 aafTapeFormatType_t;
+typedef enum _aafTapeFormatType_e
 {
 	kTapeFormatNull = 0,
 	kBetacamFormat = 1,
@@ -427,31 +458,34 @@ typedef enum _aafTapeFormatType_t
 	kSVHSFormat = 4,
 	k8mmFormat = 5,
 	kHi8Format = 6
-} aafTapeFormatType_t;
+} aafTapeFormatType_e;
 
-typedef enum _aafAttributeKind_t
+typedef aafInt32 aafAttributeKind_t;
+typedef enum _aafAttributeKind_e
 {
 	kAAFNullAttribute = 0,
 	kAAFIntegerAttribute = 1,
 	kAAFStringAttribute = 2,
 	kAAFObjectAttribute = 3
-} aafAttributeKind_t;
+} aafAttributeKind_e;
 	
-typedef enum _aafPulldownKind_t
+typedef aafInt32 aafPulldownKind_t;
+typedef enum _aafPulldownKind_e
 {
 	kAAFTwoThreePD = 0,
 	kAAFPALPD = 1,
 	kAAFOneToOneNTSC = 2,
 	kAAFOneToOnePAL = 3
-} aafPulldownKind_t;
+} aafPulldownKind_e;
 
 typedef aafInt32	aafPhaseFrame_t;
 
-typedef enum _aafPulldownDir_t
+typedef aafInt32 aafPulldownDir_t;
+typedef enum _aafPulldownDir_e
 {
 	kAAFTapeToFilmSpeed = 0,
 	kAAFFilmToTapeSpeed = 1
-}	aafPulldownDir_t;
+}	aafPulldownDir_e;
 
 typedef struct _aafMobComment_t
 {
@@ -459,7 +493,8 @@ typedef struct _aafMobComment_t
 	aafString_t comment;
 } aafMobComment_t;
 
-typedef enum _aafRGBAComponentKind_t
+typedef aafInt32 aafRGBAComponentKind_t;
+typedef enum _aafRGBAComponentKind_e
 {
 	kCompNone = 0x30,
 	kCompAlpha = 0x41,
@@ -468,7 +503,7 @@ typedef enum _aafRGBAComponentKind_t
 	kCompGreen = 0x47,
 	kCompPalette = 0x50,
 	kCompRed = 0x52
-}	aafRGBAComponentKind_t;
+} aafRGBAComponentKind_e;
 
 typedef struct _aafRGBAComponent_t
 {
@@ -483,22 +518,25 @@ AD_CPP_QUOTE(\ *)
 AD_CPP_QUOTE(\ * Operation Group Types)
 AD_CPP_QUOTE(\ *)
 AD_CPP_QUOTE(\ *************************************************************/)	  
-typedef enum _aafInterpKind_t
+typedef aafInt32 aafInterpKind_t;
+typedef enum _aafInterpKind_e
 {
 	kConstInterp = 1, 
 	kLinearInterp = 2
-} aafInterpKind_t;
+} aafInterpKind_e;
 
-typedef enum _aafEditHint_t
+typedef aafInt32 aafEditHint_t;
+typedef enum _aafEditHint_e
 {
     kNoEditHint = 0, 
 	kProportional = 1, 
 	kRelativeLeft = 2, 
 	kRelativeRight = 3, 
 	kRelativeFixed = 4
-} aafEditHint_t;
+} aafEditHint_e;
 
-typedef enum _aafProductReleaseType_t
+typedef aafInt32 aafProductReleaseType_t;
+typedef enum _aafProductReleaseType_e
 {
 	kVersionUnknown = 0, 
 	kVersionReleased = 1, 
@@ -506,7 +544,7 @@ typedef enum _aafProductReleaseType_t
 	kVersionPatched = 3, 
 	kVersionBeta = 4, 
 	kVersionPrivateBuild = 5
-} aafProductReleaseType_t;
+} aafProductReleaseType_e;
 
 AD_CPP_QUOTE(\/************************************************************)
 AD_CPP_QUOTE(\ *)
@@ -638,25 +676,28 @@ typedef struct _aafmMultiCreate_t
 } aafmMultiCreate_t;
 
 AD_CPP_QUOTE(/* Typedefs specific to edgecode and timecode */)
-typedef enum _aafEdgeType_t
+typedef aafInt32 aafEdgeType_t;
+typedef enum _aafEdgeType_e
 {
 	kEtNull = 0, 
 	kEtKeycode = 1, 
 	kEtEdgenum4 = 2, 
 	kEtEdgenum5 = 3,
 	kEtHeaderSize = 8
-} aafEdgeType_t;
+} aafEdgeType_e;
 
-typedef enum _aafFilmType_t
+typedef aafInt32 aafFilmType_t;
+typedef enum _aafFilmType_e
 {
 	kFtNull = 0, 
 	kFt35MM = 1, 
 	kFt16MM = 2, 
 	kFt8MM = 3, 
 	kFt65MM = 4
-} aafFilmType_t;
+} aafFilmType_e;
 
-typedef enum _aafDirectionCode_t
+typedef aafInt32 aafDirectionCode_t;
+typedef enum _aafDirectionCode_e
 {
     kDirCodeRight = 0, 
 	kDirCodeUpperRight = 1, 
@@ -666,9 +707,10 @@ typedef enum _aafDirectionCode_t
 	kDirCodeLowerLeft = 5, 
 	kDirCodeDown = 6, 
 	kDirCodeLowerRight = 7
-} aafDirectionCode_t;
+} aafDirectionCode_e;
 
-typedef enum _aafColorSpace_t
+typedef aafInt32 aafColorSpace_t;
+typedef enum _aafColorSpace_e
 {
      kColorSpaceRGB = 0, 
 	 kColorSpaceYUV = 1, 
@@ -678,7 +720,7 @@ typedef enum _aafColorSpace_t
 	 kColorSpaceYCrCb = 5, 
 	 kColorSpaceYDrDb = 6, 
 	 kColorSpaceCMYK = 7
-} aafColorSpace_t;
+} aafColorSpace_e;
 
 typedef struct _aafTimecode_t
 {
@@ -711,7 +753,7 @@ typedef struct _aafDefaultFade_t
 	aafLength_t		fadeLength;
 	aafFadeType_t	fadeType;
 	aafRational_t	fadeEditUnit;
-	aafBool			valid;				/* Are the above fields valid? */
+	aafBoolean_t	valid;		/* Are the above fields valid? */
 } aafDefaultFade_t;	
 
 AD_CPP_QUOTE(\/************************************************************)
@@ -723,14 +765,15 @@ AD_CPP_QUOTE(\ *************************************************************/)
 //                                     AD_AAFTYPES(AAFObject) * mdes, 
 //                                     aafCodecID_t codecID);
 
-typedef enum _aafCriteriaType_t
+typedef aafInt32 aafCriteriaType_t;
+typedef enum _aafCriteriaType_e
 {
 	kAAFAnyRepresentation = 0,
 	kAAFFastestRepresentation = 1,
 	kAAFBestFidelityRepresentation = 2,
 	kAAFSmallestRepresentation = 3 //, Jeff may add this one back.
 //	kAAFUseRepresentationProc = 4
-} aafCriteriaType_t;
+} aafCriteriaType_e;
 
 typedef struct _aafMediaCriteria_t
 {
@@ -744,7 +787,8 @@ AD_CPP_QUOTE(\ * Data Types for Search Criteria and Iterators)
 AD_CPP_QUOTE(\ *)
 AD_CPP_QUOTE(\ *************************************************************/)
 
-typedef enum _aafSearchTag_t
+typedef aafInt32 aafSearchTag_t;
+typedef enum _aafSearchTag_e
 {
 	kNoSearch = 0, 
 	kByMobID = 1, 
@@ -753,7 +797,7 @@ typedef enum _aafSearchTag_t
 	kByClass = 4, 
 	kByDataDef = 5,
 	kByMediaCrit = 6
-} aafSearchTag_t;
+} aafSearchTag_e;
 
 
 AD_CPP_QUOTE(#if 0)
@@ -797,7 +841,8 @@ AD_CPP_QUOTE(} aafSearchCrit_t;)
 
 
 
-typedef enum _aafDefinitionKind_t
+typedef aafInt32 aafDefinitionKind_t;
+typedef enum _aafDefinitionKind_e
 {
 	kAAFClassDefinition	    = 1,
 	kAAFPropertyDefinition  = 2,
@@ -805,15 +850,16 @@ typedef enum _aafDefinitionKind_t
 	kAAFDataDefinition      = 8,
 	kAAFOperationDefinition    = 16,
 	kAAFAllDefinitions      = -1
-} aafDefinitionKind_t;
+} aafDefinitionKind_e;
 
-typedef enum _aafDefinitionCritType_t
+typedef aafInt32 aafDefinitionCritType_t;
+typedef enum _aafDefinitionCritType_e
 {
 	kNoDefSearch = 0, 
 	kByDefKind = 1, 
 	kByDefName = 2, 
 	kByDefClass  = 3
-} aafDefinitionCritType_t;
+} aafDefinitionCritType_e;
 
 typedef struct _aafDefinitionCrit_t
 {
@@ -826,13 +872,14 @@ typedef struct _aafDefinitionCrit_t
 	} tags;
 } aafDefinitionCrit_t;
 
-typedef enum _aafIdentificationCritType_t
+typedef aafInt32 aafIdentificationCritType_t;
+typedef enum _aafIdentificationCritType_e
 {
 	kNoIdSearch = 0, 
 	kByIdProductID = 1, 
 	kByIdGeneration = 2, 
 	kByIdRefImplVersion = 3
-} aafIdentificationCritType_t;
+} aafIdentificationCritType_e;
 
 typedef struct _aafIdentificationCrit_t
 {
@@ -852,7 +899,8 @@ AD_CPP_QUOTE(\ * Data Types for Searching the Class Dictionary)
 AD_CPP_QUOTE(\ *)
 AD_CPP_QUOTE(\ *************************************************************/) 
 
-typedef enum _aafSearchDictionaryTag_t
+typedef aafInt32 aafSearchDictionaryTag_t;
+typedef enum _aafSearchDictionaryTag_e
 {
 	kAllClasses = 0,       // selects all classes in the given class dictionary.
 	kByClassID = 1,	       // selects the class with the given class id.
@@ -860,14 +908,15 @@ typedef enum _aafSearchDictionaryTag_t
 	kByPropertyID = 3,     // selects all classes that contain the given property id.
 	kByTypeID = 4,         // selects all classes that contain properties with the given type id.
 	kByClassName = 5       // selects all classes with the given name
-} aafSearchDictionaryTag_t;
+} aafSearchDictionaryTag_e;
 
 
 //********
 //
 // Enum indicating data "Endian-ness"
 // 
-typedef enum _eAAFByteOrder_t
+typedef aafInt32 eAAFByteOrder_t;
+typedef enum _eAAFByteOrder_e
 {
   //
   // Little Endian (e.g. Intel byte order)
@@ -879,7 +928,7 @@ typedef enum _eAAFByteOrder_t
   //
   kByteOrderBig	= 1
 
-} eAAFByteOrder_t;
+} eAAFByteOrder_e;
 
 
 AD_CPP_QUOTE(#if 0)
@@ -927,7 +976,8 @@ AD_CPP_QUOTE(} aafSearchDictionaryCrit_t;)
 
 
 
-typedef enum _eAAFTypeCategory_t
+typedef aafInt32 eAAFTypeCategory_t;
+typedef enum _eAAFTypeCategory_e
 {
   kAAFTypeCatUnknown       = 0,  // can only occur in damaged files
   kAAFTypeCatInt           = 1,  // any integral type
@@ -942,11 +992,11 @@ typedef enum _eAAFTypeCategory_t
   kAAFTypeCatString        = 10, // null-terminated variably-sized
 								 // array
   kAAFTypeCatExtEnum       = 11  // extendible enumerated type
-} eAAFTypeCategory_t;
+} eAAFTypeCategory_e;
 
 
 // typedefs to make things more consistent
-typedef aafBool                 aafBoolean_t;
+typedef aafBoolean_t            aafBool;
 typedef aafColorSiting_t        aafColorSitingType_t;
 typedef aafEditHint_t           aafEditHintType_t;
 typedef aafFrameLayout_t        aafLayoutType_t;
