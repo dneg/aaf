@@ -87,7 +87,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	if (AAFRESULT_SUCCESS != hr)
 		return hr;
 	
-	hr = pCompMob->SetInitialValues(L"COMPMOB01", AAFFalse);
+	hr = pCompMob->SetInitialValues(L"COMPMOB01");
 	if (AAFRESULT_SUCCESS != hr)
 		return hr;
 
