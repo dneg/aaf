@@ -472,13 +472,27 @@ AD_XFUNCTION4(AAFCreateRawStorageDisk,
   //   existence.)
 
 
-AD_XFUNCTION5(AAFCreateAAFFileOnRawStorage,
+AD_XFUNCTION7(AAFCreateAAFFileOnRawStorage,
 
 			  [in],
 			  objPass,
 			  IAAFRawStorage *,
 			  pRawStorage,
 			  storage to be associated with this file,
+
+			  [in],
+			  objPass,
+			  aafFileExistence_t,
+			  existence,
+			  Governs whether storage is on pre-existing data\, or is
+    //  newly created.,
+
+			  [in],
+			  objPass,
+			  aafFileAccess_t,
+			  access,
+			  Governs whether stream may be read from and/or written
+    //  to.,
 
 			  [in],
 			  objPass,
@@ -509,13 +523,46 @@ AD_XFUNCTION5(AAFCreateAAFFileOnRawStorage,
   // actually an IAAFRandomRawStorage\, the created file will be an
   // IAAFRandomFile.
   //
+  // Note that AAF files based on Binary Structured Storage will
+  // require the underlying IAAFRawStorage to be at least readable\,
+  // even in the case of write-only AAF files.
+  //
+  // Note also that only the following combinations of access and
+  // existence are legal:
+  //
+  // existence   access   Legal?
+  // ---------   ------   ------
+  // existing    read     yes
+  // existing    write    no
+  // existing    modify   yes
+  //   new       read     no
+  //   new       write    yes
+  //   new       modify   yes
+  //
   // This method will succeed if the following are true:
   // - The pRawStorage pointer is valid.
   // - The ppNewFile pointer is valid.
-  // - The specified raw storage is readable\, writeable\, or both.
+  // - The accessibility of the specified raw storage matches that of
+  //   the desired AAF File; additionally\, if the file kind is
+  //   Structured Storage Binary\, the raw storage is also required to
+  //   be at least readable. 
+  // - A legal combination of existence and access flags is given.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pRawStorage or ppNewFile\)
   //
+  // AAFRESULT_NOT_READABLE
+  // - The access parameter specifies readability or if this file is
+  //   Binary Structured Storage\, but the specified raw storage is
+  //   not readable.
+  //
+  // AAFRESULT_NOT_WRITEABLE
+  // - The access parameter specifies writeability but the specified
+  //   raw storage is not writeable.
+  //
+  // AAFRESULT_NULL_PARAM
+  // - existence is new\, and pFileKind is NULL.
+  //
   // AAFRESULT_INVALID_PARAM
-  // - The specified raw storage is neither readable nor writeable.)
+  // - The access or existence parameters are not set to a legal
+  //   combination of values.)
 AD_MODULE_END
