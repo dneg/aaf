@@ -569,6 +569,8 @@ void OMFile::close(void)
       writeSignature(_fileName, _signature);
     }
   }
+  delete _rawStorage;
+  _rawStorage = 0;
   _root->detach();
   delete _root;
   _root = 0;
