@@ -263,13 +263,7 @@ void OMVariableSizeProperty<PropertyType>::restore(size_t externalSize)
 {
   TRACE("OMVariableSizeProperty<PropertyType>::restore");
 
-  if (externalSize != _size) {
-    delete [] _bits;
-    _bits = 0;  // for BoundsChecker
-    _bits = new unsigned char[externalSize];
-    ASSERT("Valid heap pointer", _bits != 0);
-    _size = externalSize;
-  }
+  setSize(externalSize);
   read(externalSize);
 }
 
