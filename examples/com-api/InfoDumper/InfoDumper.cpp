@@ -2905,6 +2905,20 @@ int main(int argc, char* argv[])
 	    usage (argv[0]);
 	    exit (0);
 	  }
+	// Load the AAF library explicity to catch the common error
+	// that the AAF DLL is not in the user's path, otherwise this
+	// error looks like an error opening the file.
+	//
+	HRESULT hr = AAFLoad(0);
+	if (!AAFRESULT_SUCCEEDED(hr))
+	  {
+	    cerr << "Failed to load the AAF DLL."
+                 << endl;
+	    cerr << "Is the $PATH environment variable set correctly ?"
+                 << endl;
+	    exit(1);
+	  }
+
 	// Last argument should be input aaf filename
 	infilename = argv[argc-1];
 	aafCharacter pwFileName[260];
