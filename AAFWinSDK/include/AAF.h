@@ -31232,6 +31232,13 @@ STDAPI AAFFileOpenNewModify (
           aafProductIdentification_t *  pIdent,
           IAAFFile ** ppFile);
 
+STDAPI AAFFileOpenNewModifyEx (
+          aafCharacter_constptr  pFileName,
+          aafUID_constptr  pFileKind,
+          aafUInt32  modeFlags,
+          aafProductIdentification_t *  pIdent,
+          IAAFFile ** ppFile);
+
 STDAPI AAFFileOpenTransient (
           aafProductIdentification_t *  pIdent,
           IAAFFile ** ppFile);
@@ -31240,6 +31247,11 @@ STDAPI AAFFileIsAAFFile (
           aafCharacter_constptr  pFileName,
           aafUID_t *  pAAFFileKind,
           aafBool *  pFileIsAAFFile);
+
+STDAPI AAFRawStorageIsAAFFile (
+          IAAFRawStorage *  pRawStorage,
+          aafUID_t *  pAAFFileKind,
+          aafBool *  pRawStorageIsAAFFile);
 
 STDAPI AAFGetPluginManager (IAAFPluginManager ** ppPluginManager);
 
