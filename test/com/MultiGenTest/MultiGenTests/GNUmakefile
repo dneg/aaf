@@ -24,6 +24,11 @@ PACKAGE = MultiGenTest
 
 AAFBASE ?= ../../../..
 
+ifeq ($(shell uname), IRIX)
+# Warnings turned off:
+# 1107 - signed bit field has length of 1 bit in various stl files
+MODULE_PLATFORM_CFLAGS = -LANG:std -woff 1107
+endif
 
 # Common definitions
 include $(AAFBASE)/build/common.mk
