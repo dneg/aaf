@@ -83,7 +83,8 @@ public:
   static OMFile* openNewWrite(const wchar_t* fileName,
                               const OMClassFactory* factory,
                               const OMByteOrder byteOrder,
-                              OMStorable* root);
+                              OMStorable* root,
+                              const OMFileSignature& signature);
 
     // @cmember Open a new <c OMFile> for modify access, the
     //          <c OMFile> is named <p fileName>, use the <c OMClassFactory>
@@ -94,7 +95,8 @@ public:
   static OMFile* openNewModify(const wchar_t* fileName,
                                const OMClassFactory* factory,
                                const OMByteOrder byteOrder,
-                               OMStorable* root);
+                               OMStorable* root,
+                               const OMFileSignature& signature);
 
     // @cmember Open a new transient <c OMFile> for modify access, the
     //          <c OMFile> is not named, use the <c OMClassFactory>
@@ -106,16 +108,28 @@ public:
                                   const OMByteOrder byteOrder,
                                   OMStorable* root);
 
+     // @cmember Is <p signature> a valid signature for an <c OMFile> ?
+  static bool validSignature(const OMFileSignature& signature);
+
+    // @cmember Initialize the Object Manager specific parts
+    //          (Data2 and Data3) of the OMFileSignature <p prototype>.
+  static OMFileSignature initializeSignature(const OMFileSignature& prototype);
+
   // @access Public members.
 
-    // @cmember Constructor.
-  OMFile(const OMAccessMode mode,
+    // @cmember Constructor. Create an <c OMFile> object representing
+    //          an existing external file.
+  OMFile(const wchar_t* fileName,
+         const OMAccessMode mode,
          OMStoredObject* store,
          const OMClassFactory* factory,
          const OMLoadMode loadMode);
 
-    // @cmember Constructor.
-  OMFile(const OMAccessMode mode,
+    // @cmember Constructor. Create an <c OMFile> object representing
+    //          a new external file.
+  OMFile(const wchar_t* fileName,
+         OMFileSignature signature,
+         const OMAccessMode mode,
          OMStoredObject* store,
          const OMClassFactory* factory,
          OMStorable* root);
@@ -163,6 +177,12 @@ public:
     // @cmember The loading mode (eager or lazy) of this <c OMFile>.
   OMLoadMode loadMode(void) const;
 
+    // @cmember Is this file recognized by the Object Manager ?
+  bool isOMFile(void) const;
+
+    // @cmember The signature of this <c OMFile>.
+  OMFileSignature signature(void) const;
+
   // OMStorable overrides.
   //
   virtual const OMClassId& classId(void) const;
@@ -174,6 +194,13 @@ public:
   virtual bool persistent(void) const;
 
 private:
+  // @access Private members.
+
+    // @cmember Write the signature to the given file.
+  void writeSignature(const wchar_t* fileName);
+
+    // @cmember Read the signature from the given file.
+  void readSignature(const wchar_t* fileName);
 
   OMStorable* _root;
   OMStoredObject* _rootStoredObject;
@@ -183,6 +210,8 @@ private:
 
   enum OMAccessMode _mode;
   enum OMLoadMode _loadMode;
+  wchar_t* _fileName;
+  OMFileSignature _signature;
 };
 
 #endif
