@@ -64,7 +64,7 @@ protected:
 
 #define OMDECLARE_STORABLE(className)                           \
 public:                                                         \
-  virtual const OMClassId& Impl##className::classId(void) const \
+  virtual const OMClassId& classId(void) const                  \
     {                                                           \
       return *_classId;                                         \
     }                                                           \
