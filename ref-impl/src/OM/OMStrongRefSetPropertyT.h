@@ -594,10 +594,10 @@ OMStrongReferenceSetProperty<UniqueIdentification,
 template <typename UniqueIdentification, typename ReferencedObject>
 void
 OMStrongReferenceSetProperty<UniqueIdentification,
-                             ReferencedObject>::remove(void)
+                             ReferencedObject>::removeProperty(void)
 {
   TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
-                                     "ReferencedObject>::remove");
+                                     "ReferencedObject>::removeProperty");
 
   PRECONDITION("Property is optional", isOptional());
   PRECONDITION("Optional property is present", isPresent());

@@ -96,7 +96,7 @@ public:
   virtual bool isVoid(void) const;
 
     // @cmember Remove this optional <c OMStrongReferenceProperty>.
-  virtual void remove(void);
+  virtual void removeProperty(void);
 
     // @cmember Get the raw bits of this <c OMStrongReferenceProperty>. The
     //          raw bits are copied to the buffer at address <p bits>

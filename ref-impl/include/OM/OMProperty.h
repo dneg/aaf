@@ -118,7 +118,7 @@ public:
   bool isPresent(void) const;
 
     // @cmember Remove this optional <c OMProperty>.
-  virtual void remove(void);
+  virtual void removeProperty(void);
 
   // Direct property access interface
 
