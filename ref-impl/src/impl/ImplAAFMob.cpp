@@ -787,7 +787,8 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::FindSlotBySlotID (aafSlotID_t	slotID,
                            ImplAAFMobSlot **destSlot)
 {
-	aafInt32		loop, numSlots;
+	aafUInt32		loop;
+	aafNumSlots_t	numSlots;
 	ImplAAFMobSlot	*tmpSlot = NULL;
 	aafSlotID_t	tmpSlotID;
 	aafBool			foundSlot = AAFFalse;
