@@ -56,6 +56,10 @@
 #include "ImplEnumAAFContainerDefs.h"
 #endif
 
+#ifndef __ImplEnumAAFInterpolationDefs_h__
+#include "ImplEnumAAFInterpolationDefs.h"
+#endif
+
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
@@ -86,6 +90,7 @@ extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFTypeDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFCodecDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFContainerDefs;
+extern "C" const aafClassID_t CLSID_EnumAAFInterpolationDefs;
 
 extern aafUID_t gTypeID_AUID;
 extern aafUID_t gTypeID_UInt8;
@@ -111,6 +116,7 @@ ImplAAFDictionary::ImplAAFDictionary ()
   _containerDefinitions(PID_Dictionary_ContainerDefinitions, "ContainerDefinitions"),
   _typeDefinitions      (PID_Dictionary_TypeDefinitions,      "TypeDefinitions"),
   _classDefinitions      (PID_Dictionary_ClassDefinitions,    "ClassDefinitions"),
+  _interpolationDefinitions      (PID_Dictionary_InterpolationDefinitions,    "InterpolationDefinitions"),
   _pBuiltins (0)
 {
   _persistentProperties.put (_operationDefinitions.address());
@@ -119,6 +125,7 @@ ImplAAFDictionary::ImplAAFDictionary ()
   _persistentProperties.put (_classDefinitions.address());
   _persistentProperties.put(_codecDefinitions.address());
   _persistentProperties.put(_containerDefinitions.address());
+  _persistentProperties.put(_interpolationDefinitions.address());
 }
 
 
@@ -954,5 +961,99 @@ ImplAAFDictionary::LookupPropDef (OMPropertyId opid,
   return _pBuiltins->LookupPropDef (this, opid, ppd);
 }
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::RegisterInterpolationDefinition (
+      ImplAAFInterpolationDef *pInterpolationDef)
+{
+	if (NULL == pInterpolationDef)
+		return AAFRESULT_NULL_PARAM;
+	
+	_interpolationDefinitions.appendValue(pInterpolationDef);
+	// trr - We are saving a copy of pointer in _pluginDefinitions
+	// so we need to bump its reference count.
+	pInterpolationDef->AcquireReference();
+	
+	return(AAFRESULT_SUCCESS);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::LookupInterpolationDefinition (
+      aafUID_t *pInterpolationID,
+      ImplAAFInterpolationDef **ppInterpolationDef)
+{
+	ImplEnumAAFInterpolationDefs		*InterpolationEnum = NULL;
+	ImplAAFInterpolationDef			*InterpolationDef = NULL;
+	aafBool						defFound;
+	AAFRESULT					status;
+	aafUID_t					testAUID;
+
+	XPROTECT()
+	{
+		CHECK(GetInterpolationDefinitions (&InterpolationEnum));
+		status = InterpolationEnum->NextOne (&InterpolationDef);
+		defFound = AAFFalse;
+		while(status == AAFRESULT_SUCCESS && !defFound)
+		{
+			CHECK(InterpolationDef->GetAUID (&testAUID));
+			if(EqualAUID(pInterpolationID, &testAUID))
+			{
+				defFound = AAFTrue;
+				*ppInterpolationDef = InterpolationDef;
+				InterpolationDef->AcquireReference();
+				break;
+			}
+			InterpolationDef->ReleaseReference();
+			InterpolationDef = NULL;
+			status = InterpolationEnum->NextOne (&InterpolationDef);
+		}
+		if(InterpolationDef != NULL)
+		{
+			InterpolationDef->ReleaseReference();
+			InterpolationDef = NULL;
+		}
+		InterpolationEnum->ReleaseReference();
+		InterpolationEnum = NULL;
+		if(!defFound)
+			 RAISE(AAFRESULT_NO_MORE_OBJECTS);
+	}
+	XEXCEPT
+	{
+		if(InterpolationEnum != NULL)
+			InterpolationEnum->ReleaseReference();
+		if(InterpolationDef != NULL)
+			InterpolationDef->ReleaseReference();
+	}
+	XEND
+	
+	return(AAFRESULT_SUCCESS);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::GetInterpolationDefinitions (
+      ImplEnumAAFInterpolationDefs **ppEnum)
+{
+	if (NULL == ppEnum)
+		return AAFRESULT_NULL_PARAM;
+	*ppEnum = 0;
+	
+	ImplEnumAAFInterpolationDefs *theEnum = (ImplEnumAAFInterpolationDefs *)CreateImpl (CLSID_EnumAAFInterpolationDefs);
+	
+	XPROTECT()
+	{
+		CHECK(theEnum->SetEnumStrongProperty(this, &_interpolationDefinitions));
+		*ppEnum = theEnum;
+	}
+	XEXCEPT
+	{
+		if (theEnum)
+			theEnum->ReleaseReference();
+		return(XCODE());
+	}
+	XEND;
+	
+	return(AAFRESULT_SUCCESS);
+}
 
 OMDEFINE_STORABLE(ImplAAFDictionary, AUID_AAFDictionary);
