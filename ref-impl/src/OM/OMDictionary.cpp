@@ -99,7 +99,7 @@ bool OMDictionary::contains(const OMPropertyId propertyId)
   return result;
 }
 
-struct {
+struct _properties_t {
   OMPropertyId _pid;
   wchar_t* _name;
 } _properties[] = {
