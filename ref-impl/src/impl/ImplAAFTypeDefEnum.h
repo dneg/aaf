@@ -3,7 +3,6 @@
 #ifndef __ImplAAFTypeDefEnum_h__
 #define __ImplAAFTypeDefEnum_h__
 
-
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -12,10 +11,6 @@
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
-
-
-
-
 
 
 #ifndef __ImplAAFTypeDef_h__
@@ -50,14 +45,17 @@ public:
 
          // @parm [in, size_is(numElems)] array of element values to be represented in this enumerated
     // type
-         aafInt32*  pElementValues,
+         aafInt64 * pElementValues,
 
          // @parm [in, size_is(numElems)] array of element names to be represented in this enumerated
     // type
          aafString_t *  pElementNames,
 
          // @parm [in] number of members in pElementValues and pElementNames arrays
-         aafUInt32  numElems);
+         aafUInt32  numElems,
+
+         // @parm [in] friendly name of this type definition
+         wchar_t *  pTypeName);
 
 
   //****************
@@ -82,12 +80,13 @@ public:
   // GetElementValues()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetElementValues
-        (// @parm [out, size_is(numElems)] array to hold values
-         aafUInt32 *  pValues,
+    GetElementValue
+        (// @parm [in] index of element to retrieve
+         aafUInt32 index,
 
-         // @parm [in] number of elements in the pValues array
-         aafUInt32  numElems);
+         // @parm [out] requested value
+         aafInt64 * pOutValue);
+
 
 
   //****************
@@ -123,7 +122,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetNameFromInteger
         (// @parm [in] value of element to get
-         aafInt32  value,
+         aafInt64  value,
 
          // @parm [out, size_is(bufSize), string] buffer into which the element name is written
          wchar_t *  pName,
@@ -138,7 +137,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetNameBufLenFromInteger
         (// @parm [in] value of element to get
-         aafInt32  value,
+         aafInt64  value,
 
          // @parm [out] required buffer length, in bytes
          aafUInt32 *  pLen);
@@ -153,7 +152,7 @@ public:
          ImplAAFPropertyValue * pPropValIn,
 
          // @parm [out] value of the enum represented by the given input property value
-         aafInt32 *  pValueOut);
+         aafInt64 *  pValueOut);
 
 
   //****************
@@ -165,7 +164,7 @@ public:
          ImplAAFPropertyValue * pPropValToSet,
 
          // @parm [in] new value of the enum represented by the given property value
-         aafInt32  valueIn);
+         aafInt64  valueIn);
 
 
   // Override from AAFTypeDef
@@ -174,16 +173,34 @@ public:
 
 
 
+private:
+  // OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
+  OMFixedSizeProperty<aafUID_t>   _ElementType;
+
+  // names of elements in this record; stored as single wchar_t array
+  // with embedded nulls
+  OMVariableSizeProperty<wchar_t> _ElementNames;
+
+  // array of values for elements.
+  OMVariableSizeProperty<aafInt64> _ElementValues;
+
+
+  //
+  // private methods
+  //
+  AAFRESULT STDMETHODCALLTYPE
+    GetElementNameBufLen (aafUInt32  index,
+						  aafUInt32 * pLen);
+
+  AAFRESULT STDMETHODCALLTYPE
+    GetElementName (aafUInt32 index,
+					wchar_t * pName,
+					aafUInt32  bufSize);
+
 public:
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFTypeDefEnum)
-
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFTypeDefEnumTest.cpp.
-  static AAFRESULT test();
 };
 
 #endif // ! __ImplAAFTypeDefEnum_h__
-
-
