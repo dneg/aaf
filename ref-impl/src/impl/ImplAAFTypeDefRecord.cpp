@@ -62,9 +62,38 @@ ImplAAFTypeDefRecord::~ImplAAFTypeDefRecord ()
 }
 
 
+void ImplAAFTypeDefRecord::pvtInitInternalSizes (void) const
+{
+  if (_internalSizes)
+	return;
+
+  ImplAAFTypeDefRecord * pNonConstThis =
+	  (ImplAAFTypeDefRecord*) this;
+  AAFRESULT hr;
+  aafUInt32 count = 0;
+  hr = GetCount(&count);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  pNonConstThis->_internalSizes = new aafUInt32[count];
+  assert(_internalSizes);
+
+  aafUInt32 i;
+
+  for (i = 0; i < count; i++)
+	{
+	  ImplAAFTypeDef * ptd = 0;
+	  hr = pNonConstThis->GetMemberType (i, &ptd);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  assert (ptd);
+	  _internalSizes[i] = ptd->PropValSize ();
+	  ptd->ReleaseReference ();
+	}
+}
+
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefRecord::Initialize (
-      aafUID_t * pID,
+      const aafUID_t * pID,
       ImplAAFTypeDef ** ppMemberTypes,
       aafString_t * pMemberNames,
       aafUInt32 numMembers,
@@ -80,9 +109,6 @@ AAFRESULT STDMETHODCALLTYPE
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
   hr = SetAUID (pID);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-
-  _internalSizes = new aafUInt32[numMembers];
-  if (! _internalSizes) return AAFRESULT_NOMEMORY;
 
   aafUInt32 i;
   aafUInt32 totalNameSize = 0;
@@ -112,8 +138,6 @@ AAFRESULT STDMETHODCALLTYPE
 	  AAFRESULT hr = ppMemberTypes[i]->GetAUID(&typeUID);
 	  assert (AAFRESULT_SUCCEEDED(hr));
 	  buf[i] = typeUID;
-
-	  _internalSizes[i] = ppMemberTypes[i]->PropValSize ();
 
 	  assert (pMemberNames[i]);
 	  wcscpy(tmpNamePtr, pMemberNames[i]);
@@ -678,6 +702,7 @@ AAFRESULT STDMETHODCALLTYPE
   _registeredOffsets = new aafUInt32[numMembers];
   if (! _registeredOffsets) return AAFRESULT_NOMEMORY;
 
+  pvtInitInternalSizes ();
   assert (_internalSizes);
 
   for (aafUInt32 i = 0; i < numMembers; i++)
@@ -773,6 +798,7 @@ void ImplAAFTypeDefRecord::externalize(OMByte* internalBytes,
   aafInt32 internalNumBytesLeft = internalBytesSize;
   aafInt32 externalNumBytesLeft = externalBytesSize;
 
+  pvtInitInternalSizes ();
   assert (_internalSizes);
   for (member = 0; member < numMembers; member++)
 	{
@@ -799,7 +825,10 @@ void ImplAAFTypeDefRecord::externalize(OMByte* internalBytes,
 size_t ImplAAFTypeDefRecord::internalSize(OMByte* /*externalBytes*/,
 										  size_t /*externalBytesSize*/) const
 {
-  return NativeSize ();
+  if (IsRegistered ())
+	return NativeSize ();
+  else
+	return PropValSize ();
 }
 
 
@@ -825,6 +854,8 @@ void ImplAAFTypeDefRecord::internalize(OMByte* externalBytes,
   aafInt32 internalNumBytesLeft = internalBytesSize;
   aafInt32 externalNumBytesLeft = externalBytesSize;
 
+  pvtInitInternalSizes ();
+  assert (_internalSizes);
   for (member = 0; member < numMembers; member++)
 	{
 	  hr = pNonConstThis->GetMemberType (member, &ptdm);

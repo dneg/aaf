@@ -94,7 +94,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFTypeDefFixedArray::Initialize (
-      aafUID_t *  pID,
+      const aafUID_t *  pID,
       ImplAAFTypeDef * pTypeDef,
       aafUInt32  nElements,
       wchar_t *  pTypeName)
@@ -191,7 +191,13 @@ void ImplAAFTypeDefFixedArray::reorder(OMByte* externalBytes,
 size_t ImplAAFTypeDefFixedArray::externalSize(OMByte* /*internalBytes*/,
 											  size_t /*internalBytesSize*/) const
 {
-  return PropValSize();
+  ImplAAFTypeDefFixedArray * pNonConstThis =
+	(ImplAAFTypeDefFixedArray *) this;
+
+  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
+  size_t result = _ElementCount * ptd->externalSize (0, 0);
+  ptd->ReleaseReference ();
+  return result;
 }
 
 
@@ -218,7 +224,7 @@ void ImplAAFTypeDefFixedArray::externalize(OMByte* internalBytes,
 	  ptd->externalize (internalBytes,
 						internalSize,
 						externalBytes,
-						externalBytesSize,
+						externalSize,
 						byteOrder);
 	  internalBytes += internalSize;
 	  externalBytes += externalSize;
@@ -234,7 +240,13 @@ void ImplAAFTypeDefFixedArray::externalize(OMByte* internalBytes,
 size_t ImplAAFTypeDefFixedArray::internalSize(OMByte* /*externalBytes*/,
 											  size_t /*externalBytesSize*/) const
 {
-  return NativeSize ();
+  ImplAAFTypeDefFixedArray * pNonConstThis =
+	(ImplAAFTypeDefFixedArray *) this;
+
+  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
+  size_t result = _ElementCount * ptd->internalSize (0, 0);
+  ptd->ReleaseReference ();
+  return result;
 }
 
 
@@ -251,22 +263,22 @@ void ImplAAFTypeDefFixedArray::internalize(OMByte* externalBytes,
 	(ImplAAFTypeDefFixedArray *) this;
 
   ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
-  aafUInt32 internalSize = ptd->NativeSize ();
-  aafUInt32 externalSize = ptd->PropValSize ();
+  aafUInt32 internalElemSize = ptd->internalSize (0, 0);
+  aafUInt32 externalElemSize = ptd->externalSize (0, 0);
   aafInt32 internalBytesLeft = internalBytesSize;
   aafInt32 externalBytesLeft = externalBytesSize;
 
   for (elem = 0; elem < numElems; elem++)
 	{
 	  ptd->internalize (externalBytes,
-						externalBytesSize,
+						externalElemSize,
 						internalBytes,
-						internalSize,
+						internalElemSize,
 						byteOrder);
-	  internalBytes += internalSize;
-	  externalBytes += externalSize;
-	  internalBytesLeft -= internalSize;
-	  externalBytesLeft -= externalSize;
+	  internalBytes += internalElemSize;
+	  externalBytes += externalElemSize;
+	  internalBytesLeft -= internalElemSize;
+	  externalBytesLeft -= externalElemSize;
 	  assert (internalBytesLeft >= 0);
 	  assert (externalBytesLeft >= 0);
 	}

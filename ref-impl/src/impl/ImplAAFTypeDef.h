@@ -111,10 +111,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFTypeDef)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFTypeDefTest.cpp.
-  static AAFRESULT test();
-
   //
   // non-published methods
   //
