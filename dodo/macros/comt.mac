@@ -47,16 +47,11 @@
 #c Arguments: none
 #c
 #startm AD_CLASS_BEGIN 00
-#include "C.this-module.h"
-#include "C.this-module.h"
-#ifndef __C.this-module_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT C.this-module::test()
+extern "C" HRESULT C.this-module_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }\
@@ -82,16 +77,11 @@ AD_CLASS_BEGIN\
 #c Arguments: none
 #c
 #startm AD_ROOT_CLASS_BEGIN 00
-#include "C.this-module.h"
-#include "C.this-module.h"
-#ifndef __C.this-module_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT C.this-module::test()
+extern "C" HRESULT C.this-module_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }\

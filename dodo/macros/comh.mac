@@ -945,11 +945,13 @@ public:
   AAF_DECLARE_CONCRETE();
   //
   //********
-
-  // Declare the module test method. The implementation of the will be be
-  // in /test/C.this-moduleTest.cpp.
-  static HRESULT test();
 };
+
+
+// Declare the module test function. The implementation of the will be be
+// in /test/C.this-moduleTest.cpp.
+extern "C" HRESULT C.this-module_test();
+
 
 #endif // ! __C.this-module_h__
 #endm
@@ -993,10 +995,6 @@ public:
   //
   //********
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/C.this-moduleTest.cpp.
-  static HRESULT test();
-
   //
   // Return private implementation pointer for delegation.
   // NOTE: This is NOT the pointer to the COM object's implementation
@@ -1015,6 +1013,12 @@ private:
   Impl.this-module * _rep;
 
 };
+
+
+// Declare the module test function. The implementation of the will be be
+// in /test/C.this-moduleTest.cpp.
+extern "C" HRESULT C.this-module_test();
+
 
 #endif // ! __C.this-module_h__
 #endm
