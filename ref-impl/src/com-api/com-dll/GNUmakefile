@@ -28,13 +28,6 @@ AAFBASE ?= ../../../..
 # Common definitions
 include $(AAFBASE)/build/common.mk
 
-# Turn off error-on-warning behaviour for this directory
-# Short term workaround for invalid use of offsetof macro in CAAFUnknown.cpp
-# FIXME: remove this once CAAFUnknown.cpp is fixed
-ifeq ($(CC),g++)
-  ADD_CFLAGS += -Wno-error
-endif
-
 # Include directories
 INCLUDES = -I../../../include/ref-api \
 	   -I../../../include/OM \
