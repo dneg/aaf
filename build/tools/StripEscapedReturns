@@ -24,7 +24,7 @@
 # from stdin and writes the result to stdout.
 #
 # Stripping escaped returns makes it easier to filter known good
-# commands from make files that include commands that are split over
+# commands from make file logs that include commands that are split over
 # several lines using escaped returns.
 
 while ( <STDIN> ) {
