@@ -83,6 +83,7 @@ struct ContentStorageTest
   aafProductIdentification_t _productInfo;
 	IAAFFile *_pFile;
 	bool _bFileOpen;
+	IAAFHeader *_pHeader;
 	IAAFContentStorage *_pStorage;
 	IAAFDictionary *_pDictionary;
 	
@@ -212,7 +213,7 @@ void ContentStorageTest::cleanupReferences()
 	
 	if (NULL != _buffer)
 	{
-		delete _buffer;
+		delete [] _buffer;
 		_buffer = NULL;
 	}
 	
@@ -264,6 +265,12 @@ void ContentStorageTest::cleanupReferences()
 		_pStorage = NULL;
 	}
 	
+	if (NULL != _pHeader)
+	{
+		_pHeader->Release();
+		_pHeader = NULL;
+	}
+	
 	if (NULL != _pFile)
 	{
 		if (_bFileOpen)
@@ -278,7 +285,7 @@ void ContentStorageTest::setBufferSize(aafUInt32 bufferSize)
 	// Allocate the buffer.
 	if (NULL != _buffer && bufferSize > _bufferSize)
 	{
-		delete _buffer;
+		delete [] _buffer;
 		_buffer = NULL;
 	}
 	
@@ -320,16 +327,14 @@ const char * ContentStorageTest::convert(const wchar_t* pwcName)
 
 void ContentStorageTest::createFile(wchar_t *pFileName)
 {
-	IAAFHeader	*hdr;
-		
 		// Delete the test file if it already exists.
 	remove(convert(pFileName));
 	
 	check(AAFFileOpenNewModify(pFileName, 0, &_productInfo, &_pFile));
 	_bFileOpen = true;
-	check(_pFile->GetHeader(&hdr));
-	check(hdr->GetDictionary(&_pDictionary));
-	check(hdr->GetContentStorage(&_pStorage));
+	check(_pFile->GetHeader(&_pHeader));
+	check(_pHeader->GetDictionary(&_pDictionary));
+	check(_pHeader->GetContentStorage(&_pStorage));
 	
 	createFileMob(kTestMobID1);
 	createFileMob(kTestMobID2);
@@ -337,8 +342,6 @@ void ContentStorageTest::createFile(wchar_t *pFileName)
 	check(_pFile->Save());
 	
 	cleanupReferences();
-
-	hdr->Release();
 }
 
 void ContentStorageTest::openFile(wchar_t *pFileName)
@@ -346,15 +349,14 @@ void ContentStorageTest::openFile(wchar_t *pFileName)
 	aafUInt32		readNumEssenceData;
 	aafNumSlots_t	readNumMobs;
 	IAAFMob			*testMob = NULL;
-	IAAFHeader		*pHdr = NULL;
 	IEnumAAFMobs	*pEnum = NULL;
 	aafMobID_t		uid, readID;
 	aafBool			testBool;
 
 	check(AAFFileOpenExistingRead(pFileName, 0, &_pFile));
 	_bFileOpen = true;
-	check(_pFile->GetHeader(&pHdr));
-	check(pHdr->GetContentStorage(&_pStorage));
+	check(_pFile->GetHeader(&_pHeader));
+	check(_pHeader->GetContentStorage(&_pStorage));
 	
 	openEssenceData();
 
