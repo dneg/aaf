@@ -180,6 +180,20 @@ public:
     //          <c OMStrongReferenceSetProperty>.
   virtual OMReferenceContainerIterator* createIterator(void) const;
 
+    // @cmember Remove the <c OMObject> identified by <p identification>
+    //          from this <c OMStrongReferenceSetProperty>.
+  virtual OMObject* remove(void* identification);
+
+    // @cmember Does this <c OMStrongReferenceSetProperty> contain an
+    //          <c OMObject> identified by <p identification> ?
+  virtual bool contains(void* identification) const;
+
+    // @cmember Find the <c OMObject> in this <c OMStrongReferenceSetProperty>
+    //          identified by <p identification>.  If the object is found
+    //          it is returned in <p object> and the result is < e bool.true>.
+    //          If the object is not found the result is <e bool.false>.
+  virtual bool findObject(void* identification, OMObject*& object) const;
+
   bool isValidIdentification(UniqueIdentification& id) const;
 
 private:
