@@ -311,5 +311,148 @@ OMReferenceSet<UniqueIdentification, ReferencedObject>::isValidIdentification(
   return result;
 }
 
+  // @mfunc Insert <p object> into this <c OMReferenceSet>.
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
+  //   @tcarg class | ReferencedObject | The type of the referenced objects.
+  //   @parm TBS
+template <typename UniqueIdentification, typename ReferencedObject>
+void
+OMReferenceSet<UniqueIdentification, ReferencedObject>::insertObject(
+                                                        const OMObject* object)
+{
+  TRACE("OMReferenceSet<UniqueIdentification, ReferencedObject>::"
+                                                               "insertObject");
+
+  // tjb TBS
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Does this <c OMReferenceSet> contain <p object> ?
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
+  //   @tcarg class | ReferencedObject | The type of the referenced objects.
+  //   @parm TBS
+  //   @rdesc TBS
+template <typename UniqueIdentification, typename ReferencedObject>
+bool
+OMReferenceSet<UniqueIdentification, ReferencedObject>::containsObject(
+                                                  const OMObject* object) const
+{
+  TRACE("OMReferenceSet<UniqueIdentification, ReferencedObject>::"
+                                                             "containsObject");
+
+  ASSERT("Unimplemented code not reached", false);
+  return false; // tjb TBS
+}
+
+  // @mfunc Remove <p object> from this <c OMReferenceSet>.
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
+  //   @tcarg class | ReferencedObject | The type of the referenced objects.
+  //   @parm TBS
+template <typename UniqueIdentification, typename ReferencedObject>
+void
+OMReferenceSet<UniqueIdentification, ReferencedObject>::removeObject(
+                                                        const OMObject* object)
+{
+  TRACE("OMReferenceSet<UniqueIdentification, ReferencedObject>::"
+                                                               "removeObject");
+
+  // tjb TBS
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Remove all objects from this <c OMReferenceSet>.
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
+  //   @tcarg class | ReferencedObject | The type of the referenced objects.
+template <typename UniqueIdentification, typename ReferencedObject>
+void
+OMReferenceSet<UniqueIdentification, ReferencedObject>::removeAllObjects(void)
+{
+  TRACE("OMReferenceSet<UniqueIdentification, ReferencedObject>::"
+                                                           "removeAllObjects");
+
+  // tjb TBS
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Create an <c OMReferenceContainerIterator> over this
+  //        <c OMReferenceSet>.
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
+  //   @tcarg class | ReferencedObject | The type of the referenced objects.
+  //   @rdesc TBS
+template <typename UniqueIdentification, typename ReferencedObject>
+OMReferenceContainerIterator*
+OMReferenceSet<UniqueIdentification, ReferencedObject>::createIterator(
+                                                                    void) const
+{
+  TRACE("OMReferenceSet<UniqueIdentification, ReferencedObject>::"
+                                                              "creatIterator");
+
+  ASSERT("Unimplemented code not reached", false);
+  return 0; // tjb TBS
+}
+
+  // @mfunc Remove the <c OMObject> identified by <p identification>
+  //        from this <c OMReferenceSet>.
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
+  //   @tcarg class | ReferencedObject | The type of the referenced objects.
+  //   @parm TBS
+  //   @rdesc TBS
+template <typename UniqueIdentification, typename ReferencedObject>
+OMObject*
+OMReferenceSet<UniqueIdentification, ReferencedObject>::remove(
+                                                          void* identification)
+{
+  TRACE("OMReferenceSet<UniqueIdentification, ReferencedObject>::remove");
+
+  ASSERT("Unimplemented code not reached", false);
+  return 0; // tjb TBS
+}
+
+  // @mfunc Does this <c OMReferenceSet> contain an
+  //        <c OMObject> identified by <p identification> ?
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
+  //   @tcarg class | ReferencedObject | The type of the referenced objects.
+  //   @parm TBS
+  //   @rdesc TBS
+template <typename UniqueIdentification, typename ReferencedObject>
+bool
+OMReferenceSet<UniqueIdentification, ReferencedObject>::contains(
+                                                    void* identification) const
+{
+  TRACE("OMReferenceSet<UniqueIdentification, ReferencedObject>::contains");
+
+  ASSERT("Unimplemented code not reached", false);
+  return false; // tjb TBS
+}
+
+  // @mfunc Find the <c OMObject> in this <c OMReferenceSet>
+  //        identified by <p identification>.  If the object is found
+  //        it is returned in <p object> and the result is < e bool.true>.
+  //        If the object is not found the result is <e bool.false>.
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
+  //   @tcarg class | ReferencedObject | The type of the referenced objects.
+  //   @parm TBS
+  //   @parm TBS
+  //   @rdesc TBS
+template <typename UniqueIdentification, typename ReferencedObject>
+bool
+OMReferenceSet<UniqueIdentification, ReferencedObject>::findObject(
+                                                       void* identification,
+                                                       OMObject*& object) const
+{
+  TRACE("OMReferenceSet<UniqueIdentification, ReferencedObject>::findObject");
+
+  ASSERT("Unimplemented code not reached", false);
+  return false; // tjb TBS
+}
+
 #endif
 
