@@ -306,6 +306,10 @@ public:
 private:
   // @access Private members.
 
+  void initialize(OMUInt32 referenceCount,
+                  void* identification,
+                  size_t identificationSize);
+
   // Special value for the reference count indicating that this
   // <c OMStrongReferenceSetElement> is not reference counted.
   //

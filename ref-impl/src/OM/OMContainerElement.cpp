@@ -138,12 +138,10 @@ OMUInt32 OMStrongReferenceVectorElement::localKey(void) const
 
   // @mfunc Constructor.
 OMStrongReferenceSetElement::OMStrongReferenceSetElement(void)
-: OMStrongReferenceVectorElement(),
-  _identification(0),
-  _identificationSize(0),
-  _referenceCount(sticky)
+: OMStrongReferenceVectorElement()
 {
   TRACE("OMStrongReferenceSetElement::OMStrongReferenceSetElement");
+  initialize(sticky, 0, 0);
 }
 
   // @mfunc Constructor.
@@ -160,16 +158,11 @@ OMStrongReferenceSetElement::OMStrongReferenceSetElement(
                                                      OMUInt32 localKey,
                                                      void* identification,
                                                      size_t identificationSize)
-: OMStrongReferenceVectorElement(property, name, localKey),
-  _identification(0),
-  _identificationSize(identificationSize),
-  _referenceCount(sticky)
+: OMStrongReferenceVectorElement(property, name, localKey)
 {
   TRACE("OMStrongReferenceSetElement::OMStrongReferenceSetElement");
 
-  _identification = new OMByte[identificationSize];
-  ASSERT("Valid heap pointer", _identification != 0);
-  memcpy(_identification, identification, _identificationSize);
+  initialize(sticky, identification, identificationSize);
 }
 
   // @mfunc Constructor.
@@ -194,9 +187,7 @@ OMStrongReferenceSetElement::OMStrongReferenceSetElement(
 {
   TRACE("OMStrongReferenceSetElement::OMStrongReferenceSetElement");
 
-  _identification = new OMByte[identificationSize];
-  ASSERT("Valid heap pointer", _identification != 0);
-  memcpy(_identification, identification, _identificationSize);
+  initialize(referenceCount, identification, identificationSize);
 }
 
   // @mfunc Copy constructor.
@@ -385,6 +376,22 @@ void OMStrongReferenceSetElement::setSticky(void)
   TRACE("OMStrongReferenceSetElement::setSticky");
 
   _referenceCount = sticky;
+}
+
+void OMStrongReferenceSetElement::initialize(OMUInt32 referenceCount,
+                                             void* identification,
+                                             size_t identificationSize)
+{
+  TRACE("OMStrongReferenceSetElement::initialize");
+
+  _referenceCount = referenceCount;
+  _identification = 0;
+  _identificationSize = identificationSize;
+  if (identification != 0 ) {
+    _identification = new OMByte[identificationSize];
+    ASSERT("Valid heap pointer", _identification != 0);
+    memcpy(_identification, identification, _identificationSize);
+  }
 }
 
 // class OMWeakReferenceVectorElement
