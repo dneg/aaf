@@ -29,14 +29,18 @@
 #include "OMRawStorageLockBytes.h"
 
 #include "OMAssertions.h"
+#include "OMMSStructuredStorage.h"
+
+#include "OMRawStorage.h"
+
 HRESULT STDMETHODCALLTYPE
 OMRawStorageLockBytes::QueryInterface(REFIID riid,
                                       void** ppvObject)
 {
   TRACE("OMRawStorageLockBytes::QueryInterface");
 
-  // TBS
-  return E_FAIL;
+  *ppvObject = 0;
+  return E_NOINTERFACE;
 }
 
 ULONG STDMETHODCALLTYPE
@@ -44,8 +48,8 @@ OMRawStorageLockBytes::AddRef(void)
 {
   TRACE("OMRawStorageLockBytes::AddRef");
 
-  // TBS
-  return 0;
+  ++_referenceCount;
+  return _referenceCount;
 }
 
 ULONG STDMETHODCALLTYPE
@@ -53,16 +57,22 @@ OMRawStorageLockBytes::Release(void)
 {
   TRACE("OMRawStorageLockBytes::Release");
 
-  // TBS
-  return 0;
+  _referenceCount--;
+  if (_referenceCount == 0) {
+    delete this;
+  }
+  return _referenceCount;
 }
 
   // @mfunc Constructor.
 OMRawStorageLockBytes::OMRawStorageLockBytes(OMRawStorage* rawStorage)
+: _rawStorage(rawStorage),
+  _referenceCount(1)
 {
   TRACE("OMRawStorageLockBytes::OMRawStorageLockBytes");
 
-  // TBS
+  PRECONDITION("Valid raw storage", _rawStorage != 0);
+  PRECONDITION("Valid reference count", _referenceCount == 1);
 }
 
   // @mfunc Destructor.
@@ -70,7 +80,10 @@ OMRawStorageLockBytes::~OMRawStorageLockBytes(void)
 {
   TRACE("OMRawStorageLockBytes::~OMRawStorageLockBytes");
 
-  // TBS
+  PRECONDITION("Valid reference count", _referenceCount == 0);
+
+  delete _rawStorage;
+  _rawStorage = 0;
 }
 
   // @mfunc Read bytes (see Microsoft documentation for details).
@@ -82,8 +95,13 @@ OMRawStorageLockBytes::ReadAt(ULARGE_INTEGER ulOffset,
 {
   TRACE("OMRawStorageLockBytes::ReadAt");
 
-  // TBS
-  return E_FAIL;
+  _rawStorage->setPosition(toOMUInt64(ulOffset));
+  OMUInt32 bytesRead = 0;
+  _rawStorage->read(static_cast<OMByte*>(pv),
+                    cb,
+                    bytesRead);
+  *pcbRead = bytesRead;
+  return NOERROR;
 }
 
   // @mfunc Write bytes (see Microsoft documentation for details).
@@ -95,8 +113,13 @@ OMRawStorageLockBytes::WriteAt(ULARGE_INTEGER ulOffset,
 {
   TRACE("OMRawStorageLockBytes::WriteAt");
 
-  // TBS
-  return E_FAIL;
+  _rawStorage->setPosition(toOMUInt64(ulOffset));
+  OMUInt32 bytesWritten = 0;
+  _rawStorage->write(static_cast<const OMByte*>(pv),
+                     cb,
+                     bytesWritten);
+  *pcbWritten = bytesWritten;
+  return NOERROR;
 }
 
   // @mfunc Flush any buffered bytes (see Microsoft documentation
@@ -107,7 +130,7 @@ OMRawStorageLockBytes::Flush(void)
   TRACE("OMRawStorageLockBytes::Flush");
 
   // TBS
-  return E_FAIL;
+  return NOERROR;
 }
 
   // @mfunc Set the size, either grow or shrink (see Microsoft
@@ -117,8 +140,8 @@ OMRawStorageLockBytes::SetSize(ULARGE_INTEGER cb)
 {
   TRACE("OMRawStorageLockBytes::SetSize");
 
-  // TBS
-  return E_FAIL;
+  _rawStorage->setSize(toOMUInt64(cb));
+  return NOERROR;
 }
 
   // @mfunc See Microsoft documentation for details.
@@ -153,5 +176,6 @@ OMRawStorageLockBytes::Stat(STATSTG *pstatstg,
   TRACE("OMRawStorageLockBytes::Stat");
 
   // TBS
-  return E_FAIL;
+  memset(pstatstg, 0, sizeof(STATSTG));
+  return NOERROR;
 }

@@ -136,6 +136,27 @@ public:
     //          precondition - isPositionable()
   virtual void setPosition(OMUInt64 newPosition);
 
+protected:
+  // @access Protected members.
+
+  virtual void read(FILE* file,
+                    OMByte* bytes,
+                    OMUInt32 byteCount,
+                    OMUInt32& bytesRead) const;
+
+  virtual void write(FILE* file,
+                     const OMByte* bytes,
+                     OMUInt32 byteCount,
+                     OMUInt32& bytesWritten);
+
+  virtual OMUInt64 size(FILE* file) const;
+
+  virtual void setSize(FILE* file, OMUInt64 newSize);
+
+  virtual OMUInt64 position(FILE* file) const;
+
+  virtual void setPosition(FILE* file, OMUInt64 newPosition);
+
 private:
   // @access Private members.
 

@@ -31,6 +31,7 @@
 
 #include "OMRawStorage.h"
 #include "OMFile.h"
+#include "OMVector.h"
 
 #include <stdio.h>
 
@@ -128,7 +129,22 @@ public:
 private:
   // @access Private members.
 
-  // NYI
+    // @cmember Write a page or partial page.
+  virtual void write(size_t page,
+                     size_t offset,
+                     size_t byteCount,
+                     const OMByte* source);
+
+    // @cmember Read a page or partial page.
+  virtual void read(size_t page,
+                    size_t offset,
+                    size_t byteCount,
+                    OMByte* destination) const;
+
+  OMVector<OMByte*> _pageVector;
+  size_t _pageSize;
+  OMUInt64 _size;
+  OMUInt64 _position;
 };
 
 #endif
