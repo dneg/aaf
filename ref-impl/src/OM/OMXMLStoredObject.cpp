@@ -366,7 +366,6 @@ void OMXMLStoredObject::save(const OMDataVector& property)
 
 void OMXMLStoredObject::save(const OMDataSet& property)
 {
-#if 0 // tjb - Not yet
   TRACE("OMXMLStoredObject::save(OMDataSet)");
   const OMType* propertyType = property.type();
   ASSERT("Valid property type", propertyType != 0);
@@ -421,7 +420,6 @@ void OMXMLStoredObject::save(const OMDataSet& property)
   _stream << beginl;
   _stream << "</data-set>" << endl;
   _stream << outdent;
-#endif
 }
 
   // @mfunc Save the <c OMStrongReference> <p singleton> in this

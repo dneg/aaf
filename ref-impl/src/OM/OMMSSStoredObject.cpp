@@ -453,7 +453,6 @@ void OMMSSStoredObject::save(const OMDataVector& property)
 
 void OMMSSStoredObject::save(const OMDataSet& property)
 {
-#if 0 // tjb - Not yet
   TRACE("OMMSSStoredObject::save(OMDataSet)");
 
   // Save as if this were an OMSimpleProperty
@@ -507,7 +506,6 @@ void OMMSSStoredObject::save(const OMDataSet& property)
   }
   delete it;
   delete [] buffer;
-#endif
 }
 
   // @mfunc Save the <c OMStrongReference> <p singleton> in this
@@ -1024,7 +1022,6 @@ void OMMSSStoredObject::restore(OMSimpleProperty& property,
 void OMMSSStoredObject::restore(OMDataVector& property,
                                  size_t externalSize)
 {
-#if 0 // tjb - Not yet
   TRACE("OMMSSStoredObject::restore");
 
   const OMType* propertyType = property.type();
@@ -1065,13 +1062,11 @@ void OMMSSStoredObject::restore(OMDataVector& property,
     property.appendValue(value);
   }
   delete [] buffer;
-#endif
 }
 
 void OMMSSStoredObject::restore(OMDataSet& property,
                                 size_t externalSize)
 {
-#if 0 // tjb - Not yet
   TRACE("OMMSSStoredObject::restore(OMDataSet)");
 
   const OMType* propertyType = property.type();
@@ -1112,7 +1107,6 @@ void OMMSSStoredObject::restore(OMDataSet& property,
     property.insert(value);
   }
   delete [] buffer;
-#endif
 }
 
   // @mfunc Restore the <c OMStrongReference> <p singleton> into this

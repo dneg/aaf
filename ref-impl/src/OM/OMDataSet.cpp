@@ -46,17 +46,13 @@ OMDataSet::~OMDataSet(void)
 void OMDataSet::save(void) const
 {
   TRACE("OMDataSet::save");
-#if 0 // tjb - Not yet
   store()->save(*this);
-#endif
 }
 
 void OMDataSet::restore(size_t externalSize)
 {
   TRACE("OMDataSet::restore");
-#if 0 // tjb - Not yet
   // tjb -- resize ?
   store()->restore(*this, externalSize);
   setPresent();
-#endif
 }
