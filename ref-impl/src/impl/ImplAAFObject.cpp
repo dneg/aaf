@@ -300,7 +300,6 @@ AAFRESULT ImplPropertyCollection::Initialize
 )
 {
   ImplAAFPropertyDefSP pPropDef;
-  AAFRESULT rReturned = AAFRESULT_SUCCESS;
 
   // make sure we haven't called this before
   assert (0 == _properties.count());
@@ -319,7 +318,6 @@ AAFRESULT ImplPropertyCollection::Initialize
   if (AAFRESULT_FAILED(ar)) return ar;
   assert (pClassDef);
 
-  OMProperty * pOmProp = NULL;
   while (1)
 	{
 	  ImplEnumAAFPropertyDefsSP pPropEnum;
@@ -1209,7 +1207,7 @@ const OMClassId& ImplAAFObject::classId(void) const
 {
   const aafUID_t null_uid = { 0 };
   assert (! EqualAUID (&_soid, &null_uid));
-  return *reinterpret_cast<const OMClassId* const>(&_soid);
+  return *reinterpret_cast<const OMClassId*>(&_soid);
 }
 
 
