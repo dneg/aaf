@@ -27,7 +27,11 @@
 
 #if defined(OM_STACK_TRACE_ON_ASSERT)
 
+#include "OMPortability.h"
 #include "OMOStream.h"
+
+#if defined(OM_OS_WINDOWS)
+
 #include "OMUtilities.h"
 #include "OMAssertions.h"
 
@@ -284,6 +288,15 @@ void printStackTrace(OMOStream& s)
   s << "End of symbolic stack trace." << endl;
 
 }
+
+#else
+
+void printStackTrace(OMOStream& s)
+{
+  s << "Stack trace not available." << endl;
+}
+
+#endif
 
 #else
 
