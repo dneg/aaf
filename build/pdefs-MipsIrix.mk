@@ -71,13 +71,17 @@ include $(AAFBASE)/build/cdefs-$(COMPILER).mk
 #------------------------------------------------------------------------------
 PLATFORM_CFLAGS = -Dsgi $(MODULE_PLATFORM_CFLAGS)
 
+# iostream support on Irix is provided by libCio
+# Include this as part of the link command.
+LIBCIO = -lCio
+
 #------------------------------------------------------------------------------
 # Linker command and options
 #------------------------------------------------------------------------------
 RPATH_OPT = $(XL)-rpath $(XL)$(RPATH)
 
 # Command to link executable.
-LD = $(CC) $(XL)-wall $(MODULE_PLATFORM_LDLAGS)
+LD = $(CC) $(XL)-wall $(MODULE_PLATFORM_LDFLAGS)
 
 # Command to link static library
 ifndef LD_STAT_LIB
