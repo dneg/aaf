@@ -88,6 +88,13 @@ function printHeader() {
 <!-- If you edit this file your changes may be lost. -->\n\
 <!-- -->\n\
 <TABLE>\n");
+  printf("\
+<TR>\n\
+  <TH>Date</TH>\n\
+  <TH>Developer</TH>\n\
+  <TH>Files</TH>\n\
+  <TH>Checkin comment</TH>\n\
+</TR>\n");
 }
 
 function printRow(date, name, files, comments, color) {
