@@ -72,7 +72,7 @@ public:
   // Shared interface with OMObjectReference.
 
     // @cmember Save this <c OMContainerElement>.
-  void save(void* clientContext);
+  void save(void);
 
     // @cmember Close this <c OMContainerElement>.
   void close(void);

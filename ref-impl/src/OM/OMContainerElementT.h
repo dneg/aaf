@@ -138,14 +138,12 @@ bool OMContainerElement<ObjectReference, ReferencedObject>::operator== (
   //          reference 
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
-  //   @parm Client context for callbacks.
 template <typename ObjectReference, typename ReferencedObject>
-void OMContainerElement<ObjectReference, ReferencedObject>::save(
-                                                           void* clientContext)
+void OMContainerElement<ObjectReference, ReferencedObject>::save(void)
 {
   TRACE("OMContainerElement<ObjectReference, ReferencedObject>::save");
 
-  _reference.save(clientContext);
+  _reference.save();
 }
 
   // @mfunc Close this <c OMContainerElement>.
