@@ -111,10 +111,6 @@ public:
      // @cmember Is <p signature> a valid signature for an <c OMFile> ?
   static bool validSignature(const OMFileSignature& signature);
 
-    // @cmember Initialize the Object Manager specific parts
-    //          (Data2 and Data3) of the OMFileSignature <p prototype>.
-  static OMFileSignature initializeSignature(const OMFileSignature& prototype);
-
   // @access Public members.
 
     // @cmember Constructor. Create an <c OMFile> object representing
