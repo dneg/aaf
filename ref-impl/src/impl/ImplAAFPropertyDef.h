@@ -149,7 +149,7 @@ public:
   //
   const OMType* type(void) const;
   const char* name(void) const;
-  OMPropertyId identification(void) const;
+  OMPropertyId localIdentification(void) const;
   bool isOptional(void) const;
 
   // Allocates and returns an OMProperty which can represent this
