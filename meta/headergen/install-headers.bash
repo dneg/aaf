@@ -47,8 +47,17 @@ AAFOPDefs.h \
 AAFKLVDataDefs.h \
 AAFTaggedValueDefs.h \
 AAFPluginDefs.h \
+AAFCodecDefs.h \
 AAFCompressionDefs.h \
 "
+
+# Oliver - 050319 - anticipate:
+
+# AAFPluginExtEnum.h
+# AAFCodecFlavours.h
+# AAFEssenceFormats.h
+# AAFEnumerations.h
+
 
 SOURCE=./include
 DEST=../../ref-impl/include
