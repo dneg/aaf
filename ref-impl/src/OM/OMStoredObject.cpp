@@ -48,6 +48,7 @@
 #include "OMStrongReferenceSet.h"
 #include "OMStrongReferenceVector.h"
 #include "OMWeakReference.h"
+#include "OMWeakReferenceSet.h"
 #include "OMWeakReferenceVector.h"
 
 #include "OMAssertions.h"
@@ -557,10 +558,54 @@ void OMStoredObject::save(const OMWeakReferenceVector& vector)
   // @mfunc Save the <c OMWeakReferenceSet> <p set> in this
   //        <c OMStoredObject>.
   //   @parm TBS
-void OMStoredObject::save(const OMWeakReferenceSet& /* set */)
+void OMStoredObject::save(const OMWeakReferenceSet& set)
 {
   TRACE("OMStoredObject::save");
-  ASSERT("Unimplemented code not reached", false);
+
+  OMPropertyTag tag = set.targetTag();
+
+  // create a set index
+  //
+  size_t count = set.count();
+  OMUniqueObjectIdentification* index = 0;
+  if (count > 0) {
+    index = new OMUniqueObjectIdentification[count];
+    ASSERT("Valid heap pointer", index != 0);
+  }
+  size_t position = 0;
+
+  // Iterate over the set saving each element. The index entries
+  // are written in order of their unique keys.
+  //
+  OMContainerIterator<OMWeakReferenceSetElement>& iterator = *set.iterator();
+  while (++iterator) {
+
+    OMWeakReferenceSetElement& element = iterator.value();
+
+    // enter into the index
+    //
+    index[position] = element.identification();
+
+    // save the object
+    //
+    element.save();
+
+    position = position + 1;
+  }
+  delete &iterator;
+
+  // save the set index
+  //
+  wchar_t* name = collectionName(set.name(), set.propertyId());
+  save(name, index, count, tag, set.keyPropertyId());
+  delete [] index;
+
+  // make an entry in the property index
+  //
+  saveName(set, name);
+  delete [] name;
+
+  set.clearTargetTag();
 }
 
   // @mfunc Save the <c OMPropertyTable> <p table> in this
@@ -901,11 +946,42 @@ void OMStoredObject::restore(OMWeakReferenceVector& vector,
   //        <c OMStoredObject>.
   //   @parm TBS
   //   @parm TBS
-void OMStoredObject::restore(OMWeakReferenceSet& /* set */,
-                             size_t /* externalSize */)
+void OMStoredObject::restore(OMWeakReferenceSet& set,
+                             size_t externalSize)
 {
   TRACE("OMStoredObject::restore");
-  ASSERT("Unimplemented code not reached", false);
+
+  // restore the index
+  //
+  OMUniqueObjectIdentification* setIndex = 0;
+  size_t entries;
+  OMPropertyTag tag;
+  OMPropertyId keyPropertyId;
+  wchar_t* name = collectionName(set.name(), set.propertyId());
+  restore(name, setIndex, entries, tag, keyPropertyId);
+  restoreName(set, name, externalSize);
+  delete [] name;
+
+  ASSERT("Valid set index", IMPLIES(entries != 0, setIndex != 0));
+  ASSERT("Valid set index", IMPLIES(entries == 0, setIndex == 0));
+  ASSERT("Consistent key property ids", keyPropertyId == set.keyPropertyId());
+  set.setTargetTag(tag);
+
+  // Iterate over the index restoring the elements of the set.
+  // Since the index entries are stored on disk in order of their
+  // unique keys this loop is the worst cast order of insertion. This
+  // code will eventually be replaced by code that inserts the keys in
+  // "binary search" order. That is the middle key is inserted first
+  // then (recursively) all the keys below the middle key followed by
+  // (recursively) all the keys above the middle key.
+  //
+  for (size_t i = 0; i < entries; i++) {
+    OMUniqueObjectIdentification key = setIndex[i];
+    OMWeakReferenceSetElement element(&set, key, tag);
+    element.restore();
+    set.insert(&key, element);
+   }
+  delete [] setIndex;
 }
 
   // @mfunc Restore the <c OMPropertyTable> in this <c OMStoredObject>.
