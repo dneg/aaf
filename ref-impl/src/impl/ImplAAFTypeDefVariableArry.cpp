@@ -392,6 +392,3 @@ OMProperty * ImplAAFTypeDefVariableArray::pvtCreateOMPropertyMBS
   assert (result);
   return result;
 }
-
-
-OMDEFINE_STORABLE(ImplAAFTypeDefVariableArray, AUID_AAFTypeDefVariableArray);
