@@ -76,8 +76,8 @@ public:
 	virtual AAFRESULT STDMETHODCALLTYPE
 		SetComponent(ImplAAFComponent *cpnt);
 
-	virtual AAFRESULT STDMETHODCALLTYPE
-		Duplicate(ImplAAFFindSourceInfo *info);
+	//	virtual AAFRESULT STDMETHODCALLTYPE
+	//		Duplicate(ImplAAFFindSourceInfo *info);
 	virtual AAFRESULT STDMETHODCALLTYPE
 		Clear(void);
 	virtual AAFRESULT STDMETHODCALLTYPE
