@@ -976,6 +976,7 @@ void OMStoredObject::saveStream(OMPropertyId pid,
   ASSERT("Native byte order", _byteOrder == hostByteOrder());
   size_t byteCount = characterCount * sizeof(OMCharacter);
   writeToStream(_properties, buffer, byteCount);
+  delete [] buffer;
 
   // Index entry.
   //
