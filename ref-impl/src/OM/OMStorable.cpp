@@ -604,3 +604,22 @@ const OMStorable* OMStorable::container(void) const
 {
   return _container;
 }
+
+OMPropertyId OMStorable::destinationId(const OMStorable* destination,
+                                       const OMProperty* property)
+{
+  TRACE("OMStorable::destinationId");
+
+  PRECONDITION("Valid destination", destination != 0);
+  PRECONDITION("Valid property", property != 0);
+
+  const OMPropertyDefinition* srcPropDef = property->definition();
+  ASSERT("Valid property definition", srcPropDef != 0);
+  OMUniqueObjectIdentification id = srcPropDef->uniqueIdentification();
+  const OMClassDefinition* dstClassDef = destination->definition();
+  ASSERT("Valid class definition", dstClassDef != 0);
+  const OMPropertyDefinition* dstPropDef = dstClassDef->propertyDefinition(id);
+  ASSERT("Valid property definition", dstPropDef != 0);
+  OMPropertyId result = dstPropDef->localIdentification();
+  return result;
+}
