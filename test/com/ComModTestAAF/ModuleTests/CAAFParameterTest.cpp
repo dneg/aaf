@@ -27,16 +27,11 @@
  
 
 
-#include "CAAFParameter.h"
-#include "CAAFParameter.h"
-#ifndef __CAAFParameter_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFParameter::test()
+extern "C" HRESULT CAAFParameter_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

@@ -11,11 +11,7 @@
 
 
 
-#include "CAAFVaryingValue.h"
-#include "CAAFVaryingValue.h"
-#ifndef __CAAFVaryingValue_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
 
 #include <iostream.h>
@@ -631,7 +627,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 }
  
 
-HRESULT CAAFVaryingValue::test()
+extern "C" HRESULT CAAFVaryingValue_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"AAFVaryingValueTest.aaf";
@@ -644,7 +640,7 @@ HRESULT CAAFVaryingValue::test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFVaryingValue::test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFVaryingValue_test...Caught general C++ exception!" << endl; 
 	}
 
 	// When all of the functionality of this class is tested, we can return success.

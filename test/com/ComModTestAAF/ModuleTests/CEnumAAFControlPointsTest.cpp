@@ -24,16 +24,11 @@
 
 
 
-#include "CEnumAAFControlPoints.h"
-#include "CEnumAAFControlPoints.h"
-#ifndef __CEnumAAFControlPoints_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CEnumAAFControlPoints::test()
+extern "C" HRESULT CEnumAAFControlPoints_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

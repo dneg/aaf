@@ -13,16 +13,11 @@
 
 
 
-#include "CAAFSegment.h"
-#include "CAAFSegment.h"
-#ifndef __CAAFSegment_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFSegment::test()
+extern "C" HRESULT CAAFSegment_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

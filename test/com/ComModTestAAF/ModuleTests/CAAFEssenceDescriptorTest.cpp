@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFEssenceDescriptor
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -9,11 +9,7 @@
 *                                          *
 \******************************************/
 
-#include "CAAFEssenceDescriptor.h"
-#include "CAAFEssenceDescriptor.h"
-#ifndef __CAAFEssenceDescriptor_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 #include <stdio.h>
@@ -298,7 +294,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	return hr;
 }
  
-HRESULT CAAFEssenceDescriptor::test()
+extern "C" HRESULT CAAFEssenceDescriptor_test()
 {
   HRESULT hr = AAFRESULT_SUCCESS;
   aafWChar * pFileName = L"EssenceDescTest.aaf";
@@ -311,7 +307,7 @@ HRESULT CAAFEssenceDescriptor::test()
 	}
   catch (...)
 	{
-	  cerr << "CAAFEssenceDescriptor::test...Caught general C++"
+	  cerr << "CAAFEssenceDescriptor_test...Caught general C++"
 		" exception!" << endl; 
 	}
 

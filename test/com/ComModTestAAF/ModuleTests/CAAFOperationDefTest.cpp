@@ -10,14 +10,7 @@
 *												*
 \************************************************/
 
-#include "CAAFOperationDef.h"
-#include "CAAFOperationDef.h"
-#ifndef __CAAFOperationDef_h__
-#error - improperly defined include guard
-#endif
-
-// Temporarily necessary global declarations.
-extern "C" const CLSID CLSID_AAFOperationDef; // generated
+#include "AAF.h"
 
 
 #include <iostream.h>
@@ -357,7 +350,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 }
  
 
-HRESULT CAAFOperationDef::test()
+extern "C" HRESULT CAAFOperationDef_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"OperationDefTest.aaf";
@@ -370,7 +363,7 @@ HRESULT CAAFOperationDef::test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFOperationDef::test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFOperationDef_test...Caught general C++ exception!" << endl; 
 	}
 
 	// When all of the functionality of this class is tested, we can return success.

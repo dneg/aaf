@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFFile
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -11,9 +11,7 @@
 
 
 
-#ifndef __CAAFFile_h__
-#include "CAAFFile.h"
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 #include <stdio.h>
@@ -225,7 +223,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	return hr;
 }
 
-HRESULT CAAFFile::test()
+extern "C" HRESULT CAAFFile_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
  	aafWChar * pFileName = L"FileTest.aaf";
@@ -238,7 +236,7 @@ HRESULT CAAFFile::test()
 	}
 	catch (...)
 	{
-	  cerr << "CAAFMob::test...Caught general C++"
+	  cerr << "CAAFMob_test...Caught general C++"
 		" exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}

@@ -10,14 +10,7 @@
 *												*
 \************************************************/
 
-#include "CAAFParameterDef.h"
-#include "CAAFParameterDef.h"
-#ifndef __CAAFParameterDef_h__
-#error - improperly defined include guard
-#endif
-
-// Temporarily necessary global declarations.
-extern "C" const CLSID CLSID_AAFParameterDef; // generated
+#include "AAF.h"
 
 
 #include <iostream.h>
@@ -308,7 +301,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 }
  
 
-HRESULT CAAFParameterDef::test()
+extern "C" HRESULT CAAFParameterDef_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"ParameterDefTest.aaf";
@@ -321,7 +314,7 @@ HRESULT CAAFParameterDef::test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFParameterDef::test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFParameterDef_test...Caught general C++ exception!" << endl; 
 	}
 
 	// When all of the functionality of this class is tested, we can return success.

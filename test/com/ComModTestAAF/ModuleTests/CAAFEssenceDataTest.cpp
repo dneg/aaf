@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFEssenceData
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -10,11 +10,7 @@
 \******************************************/
 
 
-#include "CAAFEssenceData.h"
-#include "CAAFEssenceData.h"
-#ifndef __CAAFEssenceData_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 #include <assert.h>
@@ -22,6 +18,7 @@
 #include <stdio.h>
 
 #include "AAFStoredObjectIDs.h"
+#include "AAFResult.h"
 
 
 // Utility class to implement the test.
@@ -71,7 +68,7 @@ struct EssenceDataTest
   static const char _frowney[];
 };
 
-HRESULT CAAFEssenceData::test()
+extern "C" HRESULT CAAFEssenceData_test()
 {
   HRESULT hr = AAFRESULT_SUCCESS;
   wchar_t fileName[] = L"EssenceDataTest.aaf";
@@ -84,12 +81,12 @@ HRESULT CAAFEssenceData::test()
   }
   catch (HRESULT& ehr)
   {
-    // thrown by EssenceDataTest::check() method.
+    // thrown by EssenceDataTest_check() method.
     hr = ehr;
   }
   catch (...)
   {
-    cerr << "CAAFEssenceData::test...Caught general C++"
+    cerr << "CAAFEssenceData_test...Caught general C++"
     " exception!" << endl; 
   }
 

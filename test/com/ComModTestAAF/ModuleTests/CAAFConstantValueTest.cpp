@@ -10,11 +10,7 @@
 \***********************************************/
 
 
-#include "CAAFConstantValue.h"
-#include "CAAFConstantValue.h"
-#ifndef __CAAFConstantValue_h__
-#error - improperly defined include guard
-#endif
+#include "AAF.h"
 
 
 #include <iostream.h>
@@ -28,8 +24,6 @@
 #include "AAFDefUIDs.h"
 #include "aafUtils.h"
 
-// Temporarily necessary global declarations.
-extern "C" const CLSID CLSID_AAFConstantValue; // generated
 
 static aafUID_t	zeroID = { 0 };
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
@@ -531,7 +525,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 }
  
 
-HRESULT CAAFConstantValue::test()
+extern "C" HRESULT CAAFConstantValue_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"AAFConstantValueTest.aaf";
@@ -544,7 +538,7 @@ HRESULT CAAFConstantValue::test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFConstantValue::test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFConstantValue_test...Caught general C++ exception!" << endl; 
 	}
 
 	// When all of the functionality of this class is tested, we can return success.
