@@ -536,6 +536,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 #else // #if USE_NEW_OBJECT_CREATION
 
+  if (! pClassDef->pvtIsConcrete ())
+	return AAFRESULT_ABSTRACT_CLASS;
+
   *ppvObject = CreateAndInit (pClassDef);
 
   if (NULL == *ppvObject)

@@ -72,7 +72,10 @@ public:
 		ImplAAFClassDef * pParentClass,
 
 		// Human-legible name
-		const aafCharacter * pClassName);
+		const aafCharacter * pClassName,
+
+		// Can objects of this class be instantiated
+		aafBool isConcrete);
 
 
   //****************
@@ -172,6 +175,13 @@ public:
         (aafBool* isRootClass);
 
   //****************
+  // IsConcrete()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    IsConcrete
+        (aafBool* pResult);
+
+  //****************
   // IsUniquelyIdentified
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -221,8 +231,14 @@ public:
 		const ImplAAFClassDef * pParentClassId,
 
 		// Human-legible name
-		const aafCharacter * pClassName);
+		const aafCharacter * pClassName,
 
+		// Can objects of this class be instantiated
+		aafBool isConcrete);
+
+
+  // Returns true if this class can be instantiated.
+  aafBool pvtIsConcrete () const;
 
   // Private method to unconditionally register a property def (ignoring
   // whether or not property is optional or not, or if this class has
@@ -335,6 +351,8 @@ private:
   OMWeakReferenceProperty<ImplAAFClassDef>         _ParentClass;
 
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFPropertyDef> _Properties;
+
+  OMFixedSizeProperty<aafBool> _IsConcrete;
 
   ImplAAFClassDef	*_BootstrapParent;
 

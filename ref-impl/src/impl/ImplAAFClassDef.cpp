@@ -90,11 +90,13 @@ extern "C" const aafClassID_t CLSID_AAFObject;
 ImplAAFClassDef::ImplAAFClassDef ()
   : _ParentClass  ( PID_ClassDefinition_ParentClass,  "ParentClass", "/Dictionary/ClassDefinitions", PID_MetaDefinition_Identification),
 	_Properties   ( PID_ClassDefinition_Properties,   "Properties", PID_MetaDefinition_Identification),
+	_IsConcrete   ( PID_ClassDefinition_IsConcrete,   "IsConcrete"),
 	_propTypesLoaded (false),
 	_BootstrapParent(0)
 {
   _persistentProperties.put(_ParentClass.address());
   _persistentProperties.put(_Properties.address());
+  _persistentProperties.put(_IsConcrete.address());
 }
 
 
@@ -122,11 +124,12 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::Initialize (
       const aafUID_t & classID,
       ImplAAFClassDef * pParentClass,
-      const aafCharacter * pClassName)
+      const aafCharacter * pClassName,
+	  aafBool isConcrete)
 {
   if (!pClassName) return AAFRESULT_NULL_PARAM;
 
-  return pvtInitialize (classID, pParentClass, pClassName);
+  return pvtInitialize (classID, pParentClass, pClassName, isConcrete);
 }
 
 
@@ -134,21 +137,28 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::pvtInitialize (
       const aafUID_t & classID,
       const ImplAAFClassDef * pParentClass,
-      const aafCharacter * pClassName)
+      const aafCharacter * pClassName,
+	  aafBool isConcrete)
 {
 //	ImplAAFClassDef	*oldParent;
-	if (!pClassName) return AAFRESULT_NULL_PARAM;	
+  if (!pClassName) return AAFRESULT_NULL_PARAM;	
   if (pParentClass && !pParentClass->attached())
     return AAFRESULT_OBJECT_NOT_ATTACHED;	
 	
-	HRESULT hr;
+  HRESULT hr;
   hr = ImplAAFMetaDefinition::Initialize(classID, pClassName, NULL);
-	if (AAFRESULT_FAILED (hr))
+  if (AAFRESULT_FAILED (hr))
     return hr;
 	
-	_ParentClass = pParentClass;
-	
-	return AAFRESULT_SUCCESS;
+  _ParentClass = pParentClass;
+  _IsConcrete = isConcrete;
+  return AAFRESULT_SUCCESS;
+}
+
+
+aafBool ImplAAFClassDef::pvtIsConcrete () const
+{
+  return _IsConcrete;
 }
 
 
@@ -488,6 +498,16 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFClassDef::IsConcrete (
+      aafBool * pResult)
+{
+	if (! pResult) return AAFRESULT_NULL_PARAM;
+	*pResult = pvtIsConcrete ();
+	return AAFRESULT_SUCCESS;
+}
+
+
 // Check that this class or any parent class is already uniquely
 // identified.
 AAFRESULT STDMETHODCALLTYPE
@@ -614,6 +634,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! ppObject)
 	return AAFRESULT_NULL_PARAM;
+
+  if (! pvtIsConcrete ())
+	return AAFRESULT_ABSTRACT_CLASS;
 
   AAFRESULT hr;
   ImplAAFDictionarySP pDict;

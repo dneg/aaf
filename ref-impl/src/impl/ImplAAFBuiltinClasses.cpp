@@ -68,7 +68,7 @@ ImplAAFBuiltinClasses::sBuiltinClassTable[] = \
 {
 
 #define AAF_CLASS(name, id, parent, concrete) \
-  { &AUID_AAF##name, L"" L# name L"", &AUID_AAF##parent, 0, 0 },
+  { &AUID_AAF##name, L"" L# name L"", &AUID_AAF##parent, 0, 0, concrete },
 
 #define AAF_TABLE_END() \
 };
@@ -380,7 +380,8 @@ ImplAAFBuiltinClasses::InitBuiltinClassDef (const aafUID_t & rClassID,
 				parent = pClass;	// Hit an object whose parent is NULL, end the recursion.
 			hr = pClass->pvtInitialize (*sBuiltinClassTable[i].pThisId,
 										parent,
-										sBuiltinClassTable[i].pName);
+										sBuiltinClassTable[i].pName,
+										sBuiltinClassTable[i].isConcrete);
 			if (AAFRESULT_FAILED (hr))
 				{
 				  status = hr;
@@ -605,7 +606,8 @@ void ImplAAFBuiltinClasses::instantiateClasses ()
 	  AAFRESULT hr;
 	  hr = _axClassDefs[classIdx]->pvtInitialize (*cte->pThisId,
 												  NULL,	// Make NULL & fill in later
-												  cte->pName);
+												  cte->pName,
+												  cte->isConcrete);
 	  assert (AAFRESULT_SUCCEEDED (hr));
   }
   for (classIdx = 0; classIdx < ksNumAxClasses; classIdx++)
