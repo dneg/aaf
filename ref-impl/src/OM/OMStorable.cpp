@@ -43,6 +43,7 @@ OMStorable::OMStorable(void)
   _name(0),
   _pathName(0),
   _store(0),
+  _exists(false),
   _classFactory(0),
   _definition(0)
 {
@@ -120,6 +121,7 @@ void OMStorable::save(void) const
     delete _store;
     nonConstThis->_store = 0;
   }
+  nonConstThis->_exists = true;
 }
 
   // @mfunc Close this <c OMStorable>.
@@ -142,6 +144,7 @@ void OMStorable::close(void)
     delete _store;
     _store = 0;
   } // else silently ignore unsaved object
+  _exists = false;
 
   POSTCONDITION("Closed", _store == 0);
 }
@@ -185,28 +188,18 @@ void OMStorable::restoreContents(void)
 {
   TRACE("OMStorable::restoreContents");
 
-  bool opened = false;
-  if (_store == 0 ) {
-    opened = true;
-  }
-
   store()->restore(_persistentProperties);
 
   // Temporary brute force solution to the Microsoft Structured
   // Storage built in limit on the number of open storage elements
   // (IStorages and IStreams) caused by use of a fixed size internal
   // heap.
-  // We take care to close _store here only if it was opened above.
-  // We don't want to close any IStreams (or their enclosing IStorages)
-  // that were opened on demand as closing them would lose important
-  // state information, such as the current seek position.
   //
-  if (opened) {
-    ASSERT("Valid store", _store != 0);
-    _store->close();
-    delete _store;
-    _store = 0;
-  }
+  ASSERT("Valid store", _store != 0);
+  _store->close();
+  delete _store;
+  _store = 0;
+  _exists = true;
 }
 
   // @mfunc Attach this <c OMStorable>.
@@ -253,6 +246,7 @@ void OMStorable::detach(void)
   _pathName = 0;
   delete [] _name;
   _name = 0;
+  _exists = false;
 
   PRECONDITION("Detached", !attached());
 }
@@ -386,7 +380,11 @@ OMStoredObject* OMStorable::store(void) const
     const OMStorable* container = _container;
     ASSERT("Valid container", container != 0);
     OMStorable* nonConstThis = const_cast<OMStorable*>(this);
-    nonConstThis->_store = container->store()->create(name());
+    if (_exists) {
+      nonConstThis->_store = container->store()->open(name());
+    } else {
+      nonConstThis->_store = container->store()->create(name());
+    }
   }
   POSTCONDITION("Valid store", _store != 0);
   return _store;

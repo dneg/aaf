@@ -168,6 +168,7 @@ private:
   void create(void);
 
   OMStoredStream* _stream;
+  bool _exists; // true means an accessible persisted representation exists
   OMByteOrder _byteOrder;
 
     // OMDataStreamProperty can't be assigned - declare but don't define

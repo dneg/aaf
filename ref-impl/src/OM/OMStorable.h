@@ -221,6 +221,7 @@ private:
   wchar_t* _pathName;
 
   OMStoredObject* _store;
+  bool _exists; // true means an accessible persisted representation exists
   const OMClassFactory* _classFactory;
   const OMClassDefinition* _definition;
 

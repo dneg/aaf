@@ -38,6 +38,7 @@ OMDataStreamProperty::OMDataStreamProperty(const OMPropertyId propertyId,
                                            const wchar_t* name)
 : OMDataStream(propertyId, name),
   _stream(0),
+  _exists(false),
   _byteOrder(unspecified)
 {
 }
@@ -62,10 +63,11 @@ void OMDataStreamProperty::save(void) const
   // The stream has never been written to but we want the stream to
   // exist in the file, create it.
   //
-  if (_stream == 0) {
-    OMDataStreamProperty* p = const_cast<OMDataStreamProperty*>(this);
+  OMDataStreamProperty* p = const_cast<OMDataStreamProperty*>(this);
+  if (!_exists) {
     p->create();
   }
+  p->_exists = true;
 }
 
   // @mfunc The number of objects contained within this
@@ -88,8 +90,10 @@ void OMDataStreamProperty::restore(size_t externalSize)
   store()->restore(*this, externalSize);
   open();
   setPresent();
-
-  POSTCONDITION("Properly opened stream", _stream != 0);
+  _exists = true;
+  _stream->close();
+  delete _stream;
+  _stream = 0;
 }
 
   // @mfunc The size, in bytes, of the data in this
@@ -154,7 +158,12 @@ OMStoredStream* OMDataStreamProperty::stream(void) const
   TRACE("OMDataStreamProperty::stream");
   if (_stream == 0) {
     OMDataStreamProperty* p = const_cast<OMDataStreamProperty*>(this);
-    p->create();
+    if (_exists) {
+      p->open();
+    } else {
+      p->create();
+      p->_exists = true;
+    }
   }
   ASSERT("Valid stream", _stream != 0);
   return _stream;
@@ -183,11 +192,14 @@ void OMDataStreamProperty::create(void)
 void OMDataStreamProperty::close(void)
 {
   TRACE("OMDataStreamProperty::close");
-  PRECONDITION("Stream not already closed", _stream != 0);
 
-  _stream->close();
-  delete _stream;
-  _stream = 0;
+  if (_stream != 0) {
+    _stream->close();
+    delete _stream;
+    _stream = 0;
+  }
+
+  _exists = false;
 
   POSTCONDITION("Stream closed", _stream == 0);
 }

@@ -911,6 +911,7 @@ void OMMSSStoredObject::restore(OMPropertySet& properties)
   TRACE("OMMSSStoredObject::restore");
   PRECONDITION("Already open", _open);
 
+  _index = restore();
   size_t entries = _index->entries();
 
   OMPropertyId propertyId;
@@ -2822,7 +2823,6 @@ void OMMSSStoredObject::open(const OMFile::OMAccessMode mode)
   _mode = mode;
   _properties = openStream(_storage, propertyStreamName);
   _open = true;
-  _index = restore();
 }
 
 void OMMSSStoredObject::save(OMStoredPropertySetIndex* index)
