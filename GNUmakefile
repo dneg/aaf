@@ -1,10 +1,6 @@
 
 .PHONY : all
-all : ss-impl ref-impl examples devutils utilities test
-
-.PHONY : ss-impl
-ss-impl :
-	cd ss-impl/ref && $(MAKE)
+all : ref-impl examples devutils utilities test
 
 .PHONY : ref-impl
 ref-impl :
@@ -27,13 +23,11 @@ test :
 	cd test && $(MAKE)
 
 .PHONY : check
-check : ss-impl ref-impl
-	cd ss-impl/ref && $(MAKE) check
+check : ref-impl
 	cd test/com/ComModTestAAF && $(MAKE) check
 
 .PHONY : clean
 clean :
-	cd ss-impl/ref && $(MAKE) clean
 	cd ref-impl && $(MAKE) clean
 	cd DevUtils && $(MAKE) clean
 	cd Utilities && $(MAKE) clean
