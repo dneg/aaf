@@ -23,10 +23,10 @@
 .PHONY : all
 all :
 	cd uuid_gen && $(MAKE)
+	cd aaflib && $(MAKE)
 	cd src && $(MAKE)
 	cd uuid_gen && $(MAKE)
 	cd aafiid && $(MAKE)
-	cd aaflib && $(MAKE)
 	cd libjpeg && $(MAKE)
 	cd plugins && $(MAKE)
 
