@@ -62,7 +62,7 @@ struct EnumEssenceDataTest
 extern "C" HRESULT CEnumAAFEssenceData_test()
 {
   HRESULT hr = AAFRESULT_SUCCESS;
-  wchar_t fileName[] = L"EnumEssenceDataTest.aaf";
+  wchar_t fileName[] = L"EnumAAFEssenceDataTest.aaf";
   EnumEssenceDataTest edt;
 
   try
@@ -104,7 +104,7 @@ EnumEssenceDataTest::EnumEssenceDataTest():
   _pEssenceData(NULL)
 {
   _productInfo.companyName = L"AAF Developers Desk";
-  _productInfo.productName = L"EnumEssenceData Module Test";
+  _productInfo.productName = L"EnumAAFEssenceData Module Test";
   _productInfo.productVersion.major = 1;
   _productInfo.productVersion.minor = 0;
   _productInfo.productVersion.tertiary = 0;

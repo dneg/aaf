@@ -68,7 +68,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 //	aafUID_t					ddef = DDEF_Sound;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFEssenceDescriptor Test";
+	ProductInfo.productName = L"EnumAAFLocators Test";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -203,7 +203,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafUInt32			resultCount;
 
 	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-	ProductInfo.productName = L"Make AVR Example. NOT!";
+	ProductInfo.productName = L"EnumAAFLocators Test. NOT!";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;

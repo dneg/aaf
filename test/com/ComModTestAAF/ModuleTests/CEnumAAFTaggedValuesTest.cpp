@@ -66,7 +66,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	HRESULT						hr = S_OK;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFEnumTaggedValues Test";
+	ProductInfo.productName = L"EnumAAFTaggedValues Test";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -192,7 +192,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafWChar		Value[64];
 
 	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFMob Test";
+	ProductInfo.productName = L"EnumAAFTaggedValues Test";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
