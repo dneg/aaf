@@ -891,8 +891,6 @@ void OMStoredObject::save(OMPropertyId propertyId,
 }
 
   // @mfunc Save a collection (vector/set) of weak references.
-  //   @parm The property id.
-  //   @parm The property type.
   //   @parm The name of the collection.
   //   @parm The unique identifications of the targets.
   //   @parm Count of targets.
@@ -900,9 +898,7 @@ void OMStoredObject::save(OMPropertyId propertyId,
   //         targets reside.
   //   @parm The id of the property whose value is the unique
   //         identifier of objects in the target set.
-void OMStoredObject::save(OMPropertyId propertyId,
-                          OMStoredForm storedForm,
-                          const char* collectionName,
+void OMStoredObject::save(const char* collectionName,
                           const OMUniqueObjectIdentification* index,
                           size_t count,
                           OMPropertyTag tag,
@@ -1223,8 +1219,6 @@ void OMStoredObject::restore(OMPropertyId propertyId,
 }
 
   // @mfunc Restore a collection (vector/set) of weak references.
-  //   @parm The property id.
-  //   @parm The property type.
   //   @parm The name of the collection.
   //   @parm The unique identifications of the targets.
   //   @parm Count of targets.
@@ -1232,10 +1226,7 @@ void OMStoredObject::restore(OMPropertyId propertyId,
   //         targets reside.
   //   @parm The id of the property whose value is the unique
   //         identifier of objects in the target set.
-void OMStoredObject::restore(OMPropertyId propertyId,
-                             OMStoredForm storedForm,
-                             const char* collectionName,
-                             size_t nameSize,
+void OMStoredObject::restore(const char* collectionName,
                              const OMUniqueObjectIdentification*& index,
                              size_t &count,
                              OMPropertyTag& tag,
