@@ -85,23 +85,24 @@ AAFCOMINTERFACESONLY = \
 # its name here and remove it from either list above where it occurs.
 # Do not add the 'Impl'prefix here.
 HUMAN_TYPED_IMPL = \
-	AAFFile \
-	AAFHeader \
-	AAFIdentification \
-	AAFObject \
 	AAFComponent \
 	AAFEssenceDescriptor \
+	AAFFile \
 	AAFFileDescriptor \
+	AAFHeader \
+	AAFIdentification \
 	AAFMob  \
-	AAFSegment \
-	AAFSourceMob \
 	AAFMobSlot \
-	AAFTimelineMobSlot \
-	AAFSourceReference \
-	AAFSourceClip \
+	AAFNetworkLocator \
+	AAFObject \
+	AAFSegment \
 	AAFSession \
-	EnumAAFMobs \
-	EnumAAFMobSlots
+	AAFSourceClip \
+	AAFSourceMob \
+	AAFSourceReference \
+	AAFTimelineMobSlot \
+	EnumAAFMobSlots \
+	EnumAAFMobs
 
 # The list of standard dodo targets.
 # AAFTypes have to be handled separately since no object is to be created.
@@ -158,6 +159,7 @@ AUTO_GEN_COMTEST = \
 	AAFMediaGroup \
 	AAFMediaTapeDescriptor \
 	AAFNestedScope \
+	AAFNetworkLocator \
 	AAFObjectAttribute \
 	AAFParameter \
 	AAFParameterSlot \
