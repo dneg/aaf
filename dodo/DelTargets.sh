@@ -4,7 +4,7 @@
 #                                               #
 #################################################
 
-for file in ${AAFOBJECTS} ; do \
+for file in ${PRIVATE_AAFOBJECTS} ${AAFOBJECTS} ; do \
 	echo rm -f ${SRC_DIR}/com-api/C$file.h ; \
 	rm -f ${SRC_DIR}/com-api/C$file.h ; \
 	echo rm -f ${SRC_DIR}/com-api/C$file.cpp ; \
