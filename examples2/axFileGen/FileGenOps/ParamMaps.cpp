@@ -469,6 +469,18 @@ ParamMap< aafUID_t, _OperationDefTag >::ParamMap()
 template class ParamMap< aafUID_t, _OperationDefTag >;
 
 //=---------------------------------------------------------------------=
+
+ParamMap< aafIncMedia_t, aafIncMedia_e >::ParamMap()
+{
+	_map[ L"kAAFNoIncludeMedia" ] = kAAFNoIncludeMedia;
+	_map[ L"NoIncludeMedia" ]     = kAAFNoIncludeMedia;
+
+	_map[ L"kAAFIncludeMedia" ]       = kAAFIncludeMedia;
+	_map[ L"IncludeMedia" ]       = kAAFIncludeMedia;
+}
+
+template class ParamMap< aafIncMedia_t, aafIncMedia_e >;
+
 //=---------------------------------------------------------------------=
 
 #if 0
@@ -493,6 +505,7 @@ ParamMap< Type, _TemplateTag >::ParamMap()
 }
 
 template class ParamMap< Type, _TemplateTag >;
+
 
 #endif
 

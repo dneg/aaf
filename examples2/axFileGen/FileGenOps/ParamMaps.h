@@ -86,3 +86,4 @@ typedef ParamMap< aafColorSpace_t,      aafColorSpace_e      >  ColorSpaceParams
 typedef ParamMap< aafPixelFormat_t,     aafPixelFormat_e     >  PixelFormatParams;
 typedef ParamMap< aafDropType_t,        aafDropType_e        >  DropTypeParams;
 typedef ParamMap< aafBoolean_t,         aafBoolean_e         >  BooleanParams;
+typedef ParamMap< aafIncMedia_t,        aafIncMedia_e        >  IncMediaParams;
