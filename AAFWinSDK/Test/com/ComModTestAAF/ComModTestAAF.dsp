@@ -249,10 +249,6 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMetaDefinitionTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMetaDictionaryTest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMobSlotTest.cpp
 # End Source File
 # Begin Source File
@@ -313,10 +309,6 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPropertyValueTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPropValDataTest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPulldownTest.cpp
 # End Source File
 # Begin Source File
@@ -354,10 +346,6 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFSourceReferenceTest.cp
 # Begin Source File
 
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFStaticMobSlotTest.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFStreamPropertyValueTest.cpp
 # End Source File
 # Begin Source File
 
