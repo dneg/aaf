@@ -57,13 +57,13 @@ checkDirectories Ä
 		NewFolder "{incl}"
 	end
 	Set Exit 0						# don't exit early
-	backup -from {aaf}ref-impl:include: -to {aaf}AAFMacSDK:include: -check from -a > makesdk.tmp
-	backup -from {aaf}ref-impl:include:ref-api -to {aaf}AAFMacSDK:include: -check from -a | StreamEdit -e '/Prvate/ Delete' >>  makesdk.tmp
+	backup -from "{aaf}ref-impl:include:" -to "{aaf}AAFMacSDK:include:" -check from -a > makesdk.tmp
+	backup -from "{aaf}ref-impl:include:ref-api:" -to "{aaf}AAFMacSDK:include:" -check from -a | StreamEdit -e '/Prvate/ Delete' >>  makesdk.tmp
 	Set Exit 1
 	if `count -c makesdk.tmp` ­ 0
 		execute makesdk.tmp
 		if "`Search -e 'Duplicate' makesdk.tmp`"		
-			for item in `files -f -o -s {aaf}AAFMacSDK:include:`
+			for item in `files -f -o -s "{aaf}AAFMacSDK:include:"`
 				if "`Search "{item}" makesdk.tmp`"	
 					SetFile -c CWIE -a l "{item}"
 					OrphanFiles "{item}"
@@ -74,19 +74,19 @@ checkDirectories Ä
 	# Create build directories so that CodeWarrior will not
 	# produce any warnings about missing access paths when a 
 	# project is opened.
-	if "" == "`exists -d {aaf}AAFMacSDK:bin:aafext:`"
+	if "" == "`exists -d "{aaf}AAFMacSDK:bin:aafext:"`"
 		NewFolder "{aaf}AAFMacSDK:bin:aafext:"
 	end
-	if "" == "`exists -d {aaf}AAFMacSDK:bin:debug:`"
+	if "" == "`exists -d "{aaf}AAFMacSDK:bin:debug:"`"
 		NewFolder "{aaf}AAFMacSDK:bin:debug:"
 	end
-	if "" == "`exists -d {aaf}AAFMacSDK:bin:debug:aafext:`"
+	if "" == "`exists -d "{aaf}AAFMacSDK:bin:debug:aafext:"`"
 		NewFolder "{aaf}AAFMacSDK:bin:debug:aafext:"
 	end
-	if "" == "`exists -d {aaf}AAFMacSDK:lib:`"
+	if "" == "`exists -d "{aaf}AAFMacSDK:lib:"`"
 		NewFolder "{aaf}AAFMacSDK:lib:"
 	end
-	if "" == "`exists -d {aaf}AAFMacSDK:lib:debug`"
+	if "" == "`exists -d "{aaf}AAFMacSDK:lib:debug:"`"
 		NewFolder "{aaf}AAFMacSDK:lib:debug"
 	end
 
