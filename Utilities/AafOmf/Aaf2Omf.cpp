@@ -2114,7 +2114,7 @@ void Aaf2Omf::ConvertEssenceDataObject( IAAFEssenceData* pEssenceData)
 			goto CopyMedia;
 	}
 	
-	if (SUCCEEDED(pEssenceData->QueryInterface(IID_IAAFWAVEDescriptor, (void **)&pWAVEDesc)))
+	if (SUCCEEDED(pEssenceDesc->QueryInterface(IID_IAAFWAVEDescriptor, (void **)&pWAVEDesc)))
 	{
 		//Convert WAVE Essence data
 		idProperty = OMF2::OMWAVEData;
@@ -2137,7 +2137,7 @@ void Aaf2Omf::ConvertEssenceDataObject( IAAFEssenceData* pEssenceData)
 	}
 	
 	//!!!Need to check "compression" flag to determine if really JPEG
-	if (SUCCEEDED(pEssenceData->QueryInterface(IID_IAAFCDCIDescriptor, (void **)&pJPEGDesc)))
+	if (SUCCEEDED(pEssenceDesc->QueryInterface(IID_IAAFCDCIDescriptor, (void **)&pJPEGDesc)))
 	{
 		//Convert JPEG Essence data
 		idProperty = OMF2::OMIDATImageData;
@@ -2160,7 +2160,7 @@ void Aaf2Omf::ConvertEssenceDataObject( IAAFEssenceData* pEssenceData)
 	}
 	
 	// Media type not supported or invalid
-	rc = pEssenceData->QueryInterface(IID_IAAFObject, (void **)&pAAFObject);
+	rc = pEssenceDesc->QueryInterface(IID_IAAFObject, (void **)&pAAFObject);
 	
 	{
 		aafUID_t	ObjClass;
