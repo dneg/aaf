@@ -22,19 +22,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../../ref-impl/src/OM,../../../ref-impl/include/Om"
-				PreprocessorDefinitions="_DEBUG;OM_DEBUG;OM_STACK_TRACE_ON_ASSERT;_WIN32;WIN32;OM_USESTORAGE_EX;_WINDOWS;UNICODE"
+				PreprocessorDefinitions="_DEBUG;OM_DEBUG;OM_STACK_TRACE_ON_ASSERT;_WIN32;WIN32;_WINDOWS;UNICODE"
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Debug/Om.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
 				BrowseInformation="1"
 				WarningLevel="3"
-				WarnAsError="TRUE"
+				WarnAsError="FALSE"
 				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="1"
+				DebugInformationFormat="3"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
@@ -80,7 +80,7 @@
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Release/Om.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
@@ -1043,19 +1043,64 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\src\Om\OMSSSStoredObject.cpp">
+				RelativePath="..\..\..\ref-impl\src\OM\OMSSSStoredObject.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						WarnAsError="FALSE"/>
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BrowseInformation="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\src\Om\OMSSSStoredObjectFactory.cpp">
+				RelativePath="..\..\..\ref-impl\src\OM\OMSSSStoredObjectFactory.cpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BrowseInformation="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\src\Om\OMSSSStoredStream.cpp">
+				RelativePath="..\..\..\ref-impl\src\OM\OMSSSStoredStream.cpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BrowseInformation="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMStackTrace.cpp">
@@ -1804,9 +1849,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMSingletonT.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\src\Om\OMSSSStructuredStorage.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMStackTrace.h">

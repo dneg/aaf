@@ -22,18 +22,20 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\include,..\..\..\..\examples\com-api\ComExtension,..\..\..\..\ref-impl\src\com-api\com-dll,../../../../Utilities/Include"
+				AdditionalIncludeDirectories="..\..\..\include,..\..\..\..\examples\com-api\ComExtension,..\..\..\..\ref-impl\src\com-api\com-dll,../../../../ref-impl\src\com-api"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
 				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Release/ComPersonnelExtension.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="0"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
@@ -88,18 +90,20 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include,..\..\..\..\examples\com-api\ComExtension,..\..\..\..\ref-impl\src\com-api\com-dll,../../../../Utilities/Include"
+				AdditionalIncludeDirectories="..\..\..\include,..\..\..\..\examples\com-api\ComExtension,..\..\..\..\ref-impl\src\com-api\com-dll,../../../../ref-impl\src\com-api"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Debug/ComPersonnelExtension.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
+				WarnAsError="FALSE"
 				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>

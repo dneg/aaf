@@ -119,7 +119,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InfoDumper", "examples\com-
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MakeSDK", "MakeSDK.vcproj", "{124089BF-E2CF-4F06-BBFE-C84096ADB24E}"
 	ProjectSection(ProjectDependencies) = postProject
-		{6191EF0A-5599-4F2C-B999-C2513EDAF551} = {6191EF0A-5599-4F2C-B999-C2513EDAF551}
 		{77497C54-F4C0-4174-BD93-786D2A46CEEE} = {77497C54-F4C0-4174-BD93-786D2A46CEEE}
 		{9EF88EA7-58CB-4A06-A0B1-FCDD68D4252E} = {9EF88EA7-58CB-4A06-A0B1-FCDD68D4252E}
 	EndProjectSection
@@ -186,11 +185,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AAFConverterLib", "Utilitie
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AAFBasicInterpolators", "ref-impl\AAFBasicInterpolators\AAFBasicInterpolators.vcproj", "{6191EF0A-5599-4F2C-B999-C2513EDAF551}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MetadataExample", "examples\com-api\MetadataExample\MetadataExample.vcproj", "{BE9DF39A-53B5-43C5-8174-3F766C60FB56}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MetadataExample", "examples\com-api\MetadataExample\MetadataExample.vcproj", "{BE9DF39A-53B5-43C5-8174-3F766C60FB56}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AAFBasicInterpolators", "ref-impl\AAFBasicInterpolators\AAFBasicInterpolators.vcproj", "{92984178-CE57-4660-A8F8-198458C0E5B6}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -332,14 +331,14 @@ Global
 		{CFA3E88C-A64E-43EC-9470-D5FFA60BF82A}.Debug.Build.0 = Debug|Win32
 		{CFA3E88C-A64E-43EC-9470-D5FFA60BF82A}.Release.ActiveCfg = Release|Win32
 		{CFA3E88C-A64E-43EC-9470-D5FFA60BF82A}.Release.Build.0 = Release|Win32
-		{6191EF0A-5599-4F2C-B999-C2513EDAF551}.Debug.ActiveCfg = Debug|Win32
-		{6191EF0A-5599-4F2C-B999-C2513EDAF551}.Debug.Build.0 = Debug|Win32
-		{6191EF0A-5599-4F2C-B999-C2513EDAF551}.Release.ActiveCfg = Release|Win32
-		{6191EF0A-5599-4F2C-B999-C2513EDAF551}.Release.Build.0 = Release|Win32
 		{BE9DF39A-53B5-43C5-8174-3F766C60FB56}.Debug.ActiveCfg = Debug|Win32
 		{BE9DF39A-53B5-43C5-8174-3F766C60FB56}.Debug.Build.0 = Debug|Win32
 		{BE9DF39A-53B5-43C5-8174-3F766C60FB56}.Release.ActiveCfg = Release|Win32
 		{BE9DF39A-53B5-43C5-8174-3F766C60FB56}.Release.Build.0 = Release|Win32
+		{92984178-CE57-4660-A8F8-198458C0E5B6}.Debug.ActiveCfg = Debug|Win32
+		{92984178-CE57-4660-A8F8-198458C0E5B6}.Debug.Build.0 = Debug|Win32
+		{92984178-CE57-4660-A8F8-198458C0E5B6}.Release.ActiveCfg = Release|Win32
+		{92984178-CE57-4660-A8F8-198458C0E5B6}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

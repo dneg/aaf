@@ -28,27 +28,28 @@
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="3"
-				PrecompiledHeaderThrough="stdafx.h"
-				PrecompiledHeaderFile=".\Release/comapi.pch"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough=""
+				PrecompiledHeaderFile=""
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
-				WarnAsError="FALSE"
+				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="0"
 				CompileAs="0"
 				ForcedIncludeFiles="stdafx.h"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="AAF.lib AAFIID.lib ssrw_c.lib "
+				AdditionalDependencies="ssrw_c.lib"
 				OutputFile="../../Release/RefImpl/AAFCOAPI.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;C:\dev\AAF\sss-impl\release&quot;;C:\dev\AAF\AAFWinSDK\lib"
-				IgnoreDefaultLibraryNames=""
+				AdditionalLibraryDirectories="../../sss-impl"
+				IgnoreDefaultLibraryNames="libc.lib,libcmt.lib,libcd.lib,libcmtd.lib,msvcrtd.lib"
 				ModuleDefinitionFile="..\..\..\ref-impl\src\com-api\com-dll\AAFCOM.DEF"
 				ProgramDatabaseFile=".\../../Release/RefImpl/AAFCOAPI.pdb"
 				SubSystem="2"
@@ -96,30 +97,30 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="../../../ref-impl/src/com-api,../../../ref-impl/plugins,../../../ref-impl/include/com-api/,../../../ref-impl/src/impl,../../../ref-impl/src/Om,../../../ref-impl/include/OM,../../../ref-impl/src/com-api/com-dll,../../../ref-impl/include"
 				PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;WIN32;WIN32_LEAN_AND_MEAN"
+				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="3"
-				PrecompiledHeaderThrough="stdafx.h"
-				PrecompiledHeaderFile=".\Debug/comapi.pch"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough=""
+				PrecompiledHeaderFile=""
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
-				WarnAsError="TRUE"
+				WarnAsError="FALSE"
 				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 				CompileAs="0"
-				ForcedIncludeFiles="stdafx.h"/>
+				ForcedIncludeFiles=""/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="AAFD.lib AAFIIDD.lib ssrw_c.lib "
+				AdditionalDependencies="ssrw_c.lib"
 				OutputFile="../../Debug/RefImpl/AAFCOAPI.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;C:\dev\AAF\sss-impl\Debug&quot;;C:\dev\AAF\AAFWinSDK\lib"
-				IgnoreAllDefaultLibraries="FALSE"
+				AdditionalLibraryDirectories="../../sss-impl"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile="..\..\..\ref-impl\src\com-api\com-dll\AAFCOM.DEF"
 				GenerateDebugInformation="TRUE"
@@ -178,6 +179,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -202,6 +204,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -212,14 +215,14 @@
 				<Tool
 					Name="VCResourceCompilerTool"
 					PreprocessorDefinitions="NDEBUG;$(NoInherit)"
-					AdditionalIncludeDirectories="\dev\AAF\AAFWinSDK\include"/>
+					AdditionalIncludeDirectories="\dev\AAF_Rosebud\AAF\AAFWinSDK\include"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
 					Name="VCResourceCompilerTool"
 					PreprocessorDefinitions="_DEBUG;$(NoInherit)"
-					AdditionalIncludeDirectories="\dev\AAF\AAFWinSDK\include"/>
+					AdditionalIncludeDirectories="\dev\AAF_Rosebud\AAF\AAFWinSDK\include"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -240,7 +243,19 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFAuxiliaryDescriptor.cpp">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+					PrecompiledHeaderThrough=""
+					PrecompiledHeaderFile=""/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -261,6 +276,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -282,6 +298,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -303,6 +320,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -324,6 +342,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -345,6 +364,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -366,6 +386,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -387,6 +408,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -408,6 +430,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -429,6 +452,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -450,6 +474,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -471,6 +496,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -492,6 +518,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -513,6 +540,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -534,6 +562,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -555,6 +584,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -576,6 +606,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -597,6 +628,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -618,6 +650,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories="../../../ref-impl/plugins/"
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -639,6 +672,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -660,6 +694,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories="../../../ref-impl/plugins/"
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -681,6 +716,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -702,6 +738,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -723,6 +760,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -744,6 +782,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -765,6 +804,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -786,6 +826,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -807,6 +848,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -828,6 +870,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -849,6 +892,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -870,6 +914,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -891,6 +936,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -912,6 +958,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -933,6 +980,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -954,6 +1002,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -975,6 +1024,29 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
+					ForcedIncludeFiles=""/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFImportDescriptor.cpp">
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					ForcedIncludeFiles=""/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -996,6 +1068,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1017,6 +1090,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1038,7 +1112,17 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFKLVDataDefinition.cpp">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -1059,6 +1143,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1080,6 +1165,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1101,6 +1187,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1122,6 +1209,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1143,6 +1231,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1164,6 +1253,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1185,6 +1275,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1206,6 +1297,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1227,6 +1319,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1248,6 +1341,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1269,6 +1363,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1290,6 +1385,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1311,6 +1407,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1332,6 +1429,51 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
+					ForcedIncludeFiles=""/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFPCMDescriptor.cpp">
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					ForcedIncludeFiles=""/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
+					ForcedIncludeFiles=""/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFPhysicalDescriptor.cpp">
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					ForcedIncludeFiles=""/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1353,6 +1495,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1374,6 +1517,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1395,6 +1539,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1416,6 +1561,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1437,6 +1583,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1458,6 +1605,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1479,6 +1627,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1500,6 +1649,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1521,6 +1671,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1542,7 +1693,17 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFRecordingDescriptor.cpp">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -1563,6 +1724,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1584,6 +1746,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1605,6 +1768,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1626,6 +1790,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1647,6 +1812,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1668,6 +1834,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1689,6 +1856,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1710,6 +1878,29 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
+					ForcedIncludeFiles=""/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFSoundDescriptor.cpp">
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					ForcedIncludeFiles=""/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1731,6 +1922,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1752,6 +1944,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1773,6 +1966,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1794,6 +1988,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1815,6 +2010,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1836,6 +2032,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1857,6 +2054,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1878,6 +2076,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1899,7 +2098,17 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTaggedValueDefinition.cpp">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -1920,6 +2129,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1941,6 +2151,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1962,6 +2173,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -1983,6 +2195,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2004,6 +2217,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2025,6 +2239,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2046,6 +2261,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2067,6 +2283,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2088,6 +2305,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2109,6 +2327,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2130,6 +2349,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2151,6 +2371,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2172,6 +2393,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2193,6 +2415,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2214,6 +2437,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2235,6 +2459,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2256,6 +2481,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2277,6 +2503,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2298,6 +2525,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2319,6 +2547,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2340,6 +2569,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2361,6 +2591,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2382,6 +2613,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2403,6 +2635,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2424,6 +2657,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2445,6 +2679,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2466,6 +2701,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2487,6 +2723,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2508,6 +2745,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2529,6 +2767,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2550,6 +2789,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2571,6 +2811,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2592,6 +2833,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2613,6 +2855,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2634,6 +2877,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2655,6 +2899,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2676,6 +2921,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2697,6 +2943,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2718,6 +2965,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2739,6 +2987,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2760,6 +3009,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2781,6 +3031,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2802,7 +3053,17 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFKLVDataDefs.cpp">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -2823,6 +3084,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2844,6 +3106,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2865,6 +3128,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2886,6 +3150,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2907,6 +3172,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2928,6 +3194,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2949,6 +3216,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2970,6 +3238,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -2991,6 +3260,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -3012,6 +3282,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -3033,6 +3304,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -3054,6 +3326,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -3075,6 +3348,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -3096,7 +3370,17 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFTaggedValueDefs.cpp">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -3117,6 +3401,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>
@@ -3138,29 +3423,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="stdafx.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="1"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="1"
+					UsePrecompiledHeader="0"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
 		</File>

@@ -22,22 +22,22 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\include,../../../../ref-impl/src/impl,..\..\..\..\ref-impl\src\com-api,../../../../Utilities/Include,..\..\..\..\test\com\commodtestaaf"
+				AdditionalIncludeDirectories="..\..\..\include,../../../../ref-impl/src/impl,..\..\..\..\ref-impl\src\com-api,..\..\..\..\test\com\commodtestaaf"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;UNICODE"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="3"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough="stdafx.h"
 				PrecompiledHeaderFile=".\Release/ComModTestAAF.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
-				WarnAsError="FALSE"
+				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="3"
+				DebugInformationFormat="0"
 				CompileAs="0"
 				ForcedIncludeFiles="stdafx.h"/>
 			<Tool
@@ -49,7 +49,7 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"
-				IgnoreDefaultLibraryNames=""
+				IgnoreDefaultLibraryNames="libc.lib,libcmt.lib,libcd.lib,libcmtd.lib,msvcrtd.lib"
 				ProgramDatabaseFile=".\Release/COMMODAAF.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
@@ -89,11 +89,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include,..\..\..\..\Utilities\Include,../../../../ref-impl/src/impl,..\..\..\..\ref-impl\src\com-api,..\..\..\..\test\com\commodtestaaf"
+				AdditionalIncludeDirectories="..\..\..\include,../../../../ref-impl/src/impl,..\..\..\..\ref-impl\src\com-api,..\..\..\..\test\com\commodtestaaf"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;UNICODE"
+				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="3"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough="stdafx.h"
 				PrecompiledHeaderFile=".\Debug/ComModTestAAF.pch"
 				AssemblerListingLocation=".\Debug/"
@@ -102,9 +103,9 @@
 				WarningLevel="3"
 				WarnAsError="FALSE"
 				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 				CompileAs="0"
-				ForcedIncludeFiles="stdafx.h"/>
+				ForcedIncludeFiles=""/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -171,6 +172,9 @@
 						PreprocessorDefinitions=""
 						ForcedIncludeFiles=""/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFAuxiliaryDescriptorTest.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFCDCIDescriptorTest.cpp">
@@ -845,6 +849,27 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFImportDescriptorTest.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						ForcedIncludeFiles=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						ForcedIncludeFiles=""/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFInterpolationDefTest.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -864,6 +889,9 @@
 						PreprocessorDefinitions=""
 						ForcedIncludeFiles=""/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFKLVDataDefTest.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFKLVDataTest.cpp">
@@ -1160,6 +1188,48 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPCMDescriptorTest.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						ForcedIncludeFiles=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						ForcedIncludeFiles=""/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPhysicalDescriptorTest.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						ForcedIncludeFiles=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						ForcedIncludeFiles=""/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPluginDefTest.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1349,6 +1419,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFRecordingDescriptorTest.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFRGBADescriptorTest.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1475,6 +1548,27 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFSoundDescriptorTest.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						ForcedIncludeFiles=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						ForcedIncludeFiles=""/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFSourceClipTest.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1557,6 +1651,9 @@
 						PreprocessorDefinitions=""
 						ForcedIncludeFiles=""/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTaggedValueDefTest.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTaggedValueTest.cpp">
@@ -2357,6 +2454,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFKLVDataDefsTest.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFKLVDataTest.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -2651,6 +2751,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFTaggedValueDefsTest.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFTaggedValuesTest.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -2779,6 +2882,9 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath="..\..\..\..\test\com\ComModTestAAF\CAAFModuleTest.h">
+		</File>
+		<File
 			RelativePath="..\..\..\..\test\com\ComModTestAAF\ComModTestAAF.cpp">
 			<FileConfiguration
 				Name="Release|Win32">
@@ -2819,6 +2925,9 @@
 					PreprocessorDefinitions=""
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTest.h">
 		</File>
 		<File
 			RelativePath="stdafx.cpp">

@@ -3,7 +3,6 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="AAFIID"
-	ProjectGUID="{3CFC494D-6B4D-4368-928B-97DD4F0C0782}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -26,15 +25,15 @@
 				PreprocessorDefinitions="_DEBUG;WIN32;UNICODE;_LIB"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Debug/AAFIID.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
-				WarnAsError="TRUE"
+				WarnAsError="FALSE"
 				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="1"
+				DebugInformationFormat="3"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
@@ -78,7 +77,7 @@
 				AdditionalIncludeDirectories="..\..\..\ref-impl\include,..\..\..\ref-impl\include\com-api"
 				PreprocessorDefinitions="NDEBUG;WIN32;UNICODE;_LIB"
 				StringPooling="TRUE"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\Release/AAFIID.pch"
@@ -129,8 +128,7 @@
 					Optimization="0"
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions=""
-					BasicRuntimeChecks="3"
-					RuntimeLibrary="1"/>
+					BasicRuntimeChecks="3"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
@@ -138,8 +136,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="2"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					RuntimeLibrary="0"/>
+					PreprocessorDefinitions=""/>
 			</FileConfiguration>
 		</File>
 	</Files>

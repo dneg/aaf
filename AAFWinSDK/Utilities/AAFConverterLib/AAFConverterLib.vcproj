@@ -3,7 +3,6 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="AAFConverterLib"
-	ProjectGUID="{CFA3E88C-A64E-43EC-9470-D5FFA60BF82A}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -23,10 +22,10 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\include,..\..\..\OMF\include,..\..\..\OMF\portinc,..\..\..\Utilities/Include"
+				AdditionalIncludeDirectories="..\..\include,..\..\..\OMF\include,..\..\..\OMF\portinc,..\..\..\ref-impl\src\com-api"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;UNICODE;NO_CONTAINER_EXPORTS"
 				StringPooling="TRUE"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\Release/AAFConverterLib.pch"
@@ -34,7 +33,7 @@
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
-				WarnAsError="FALSE"
+				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
 				CompileAs="0"/>
 			<Tool
@@ -75,11 +74,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\include,..\..\..\OMF\include,..\..\..\OMF\portinc,..\..\..\Utilities/Include"
+				AdditionalIncludeDirectories="..\..\include,..\..\..\OMF\include,..\..\..\OMF\portinc,..\..\..\ref-impl\src\com-api"
 				PreprocessorDefinitions="WIN32;_DEBUG;_MBCS;_LIB;UNICODE;NO_CONTAINER_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Debug/AAFConverterLib.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
@@ -87,7 +86,7 @@
 				WarningLevel="3"
 				WarnAsError="FALSE"
 				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
