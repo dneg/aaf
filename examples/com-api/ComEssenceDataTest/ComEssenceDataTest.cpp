@@ -98,25 +98,6 @@ const CLSID CLSID_AAFWAVECodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x0
 // thru out the whole program.
 
 static aafSourceRef_t sourceRef; 
-/*
-static unsigned char smiley[] =        // 16x16 smiley face 
-  "      ****      "
-  "    ********    "
-  "   **********   "
-  "  ************  "
-  " ***  ****  *** "
-  " ***  ****  *** "
-  "****************"
-  "****************"
-  "****************"
-  "****************"
-  " ** ******** ** "
-  " *** ****** *** "
-  "  ***  **  ***  "
-  "   ****  ****   "
-  "    ********    "
-  "      ****      ";
-*/
 
 static aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2)
 {
