@@ -216,7 +216,9 @@ typedef	struct
 	unsigned char		Lvl2Ypos;
 	} OMFIPvtFixedRect;
 
+#if defined (_MSC_VER)      // Microsoft Visual C++
 #pragma pack(1)
+#endif
 struct OMFIPvtKFInfo
 	{
 	long		cookie;
@@ -275,7 +277,9 @@ typedef struct
 	unsigned char		isReversed;
 	unsigned char		ScalesDetached;
 	} OMFIPvtGlobalInfo_t;
+#if defined (_MSC_VER)      // Microsoft Visual C++
 #pragma pack()
+#endif
 
 typedef struct
 {

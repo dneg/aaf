@@ -77,7 +77,7 @@ int deleteFile(char* fileName)
 
 }
 
-char* baseName(char* fullName)
+static char* baseName(char* fullName)
 {
 	char* result;
 #if defined(WIN32)
@@ -158,7 +158,7 @@ AAFRESULT aafMobIDFromMajorMinor(
 //		Allocates memory and intializes the global variables
 //
 // ============================================================================
-HRESULT InitGlobalVars( void )
+static HRESULT InitGlobalVars( void )
 {
 	gpGlobals = new AafOmfGlobals;
 	if (gpGlobals == NULL)
@@ -204,7 +204,7 @@ HRESULT InitGlobalVars( void )
 //		Displays short help text with the program arguments.
 //
 // ============================================================================
-void Usage( void )
+static void Usage( void )
 {
 	printf("\n*******************\n\n");
 	printf("%s : OMF/AAF file conversion Version 0.01.00\n\n", gpGlobals->pProgramName);
@@ -266,7 +266,7 @@ void DecIndentLevel(void)
 //		Displays summary of execution at the end of the run.
 //
 // ============================================================================
-void DisplaySummary( void )
+static void DisplaySummary( void )
 {
 	printf("\n*******************\n\n");
 	printf("%s Summary for the file :%s\n\n",gpGlobals->pProgramName, gpGlobals->sOutFileName);
@@ -285,7 +285,7 @@ void DisplaySummary( void )
 //		Parse program arguments and extract names of OMF and AAF files.
 //
 // ============================================================================
-HRESULT GetUserInput(int argc, char* argv[])
+static HRESULT GetUserInput(int argc, char* argv[])
 {
 	HRESULT			rc = AAFRESULT_SUCCESS;
 	aafInt32		nFileCount = 0;
