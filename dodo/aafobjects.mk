@@ -34,7 +34,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFPropertyDef \
 	AAFReferenceValue \
 	AAFScopeReference \
-	AAFSequence \
 	AAFStringAttribute \
 	AAFTimecodeStream \
 	AAFTimecodeStream12M \
@@ -93,6 +92,7 @@ HUMAN_TYPED_IMPL = \
 	AAFNetworkLocator \
 	AAFObject \
 	AAFSegment \
+	AAFSequence \
 	AAFSession \
 	AAFSourceClip \
 	AAFSourceMob \
