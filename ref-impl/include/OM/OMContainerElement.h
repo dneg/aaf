@@ -148,6 +148,12 @@ public:
   bool operator== (
        const OMContainerElement<ObjectReference, ReferencedObject>& rhs) const;
 
+    // @cmember The contained ObjectReference.
+  ObjectReference& reference(void);
+
+    // @cmember Set the contained ObjectReference.
+  void setReference(const ObjectReference& reference);
+
   // Shared interface with OMObjectReference.
 
     // @cmember Save this <c OMContainerElement>.

@@ -352,6 +352,37 @@ bool OMContainerElement<ObjectReference, ReferencedObject>::operator== (
   return result;
 }
 
+  // @mfunc The contained ObjectReference.
+  //   @tcarg class | ObjectReference  | The type of the contained object
+  //          reference 
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @rdesc The contained <p ObjectReference>.
+template <typename ObjectReference, typename ReferencedObject>
+ObjectReference&
+OMContainerElement<ObjectReference, ReferencedObject>::reference(void)
+{
+  TRACE("OMContainerElement<ObjectReference, ReferencedObject>::reference");
+
+  return _reference;
+}
+
+  // @mfunc Set the contained ObjectReference.
+  //   @tcarg class | ObjectReference  | The type of the contained object
+  //          reference 
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @parm The new contained <p ObjectReference>.
+template <typename ObjectReference, typename ReferencedObject>
+void
+OMContainerElement<ObjectReference, ReferencedObject>::setReference(
+                                              const ObjectReference& reference)
+{
+  TRACE("OMContainerElement<ObjectReference, ReferencedObject>::setReference");
+
+  _reference = reference;
+}
+
   // @mfunc Save this <c OMContainerElement>.
   //   @tcarg class | ObjectReference  | The type of the contained object
   //          reference 
@@ -361,6 +392,7 @@ template <typename ObjectReference, typename ReferencedObject>
 void OMContainerElement<ObjectReference, ReferencedObject>::save(void)
 {
   TRACE("OMContainerElement<ObjectReference, ReferencedObject>::save");
+  OBSOLETE("OMContainerElement<ObjectReference, ReferencedObject>::reference");
 
   _reference.save();
 }
@@ -374,6 +406,7 @@ template <typename ObjectReference, typename ReferencedObject>
 void OMContainerElement<ObjectReference, ReferencedObject>::close(void)
 {
   TRACE("OMContainerElement<ObjectReference, ReferencedObject>::close");
+  OBSOLETE("OMContainerElement<ObjectReference, ReferencedObject>::reference");
 
   _reference.close();
 }
@@ -387,6 +420,7 @@ template <typename ObjectReference, typename ReferencedObject>
 void OMContainerElement<ObjectReference, ReferencedObject>::detach(void)
 {
   TRACE("OMContainerElement<ObjectReference, ReferencedObject>::detach");
+  OBSOLETE("OMContainerElement<ObjectReference, ReferencedObject>::reference");
 
   _reference.detach();
 }
@@ -400,6 +434,7 @@ template <typename ObjectReference, typename ReferencedObject>
 void OMContainerElement<ObjectReference, ReferencedObject>::restore(void)
 {
   TRACE("OMContainerElement<ObjectReference, ReferencedObject>::restore");
+  OBSOLETE("OMContainerElement<ObjectReference, ReferencedObject>::reference");
 
   _reference.restore();
 }
@@ -416,6 +451,7 @@ ReferencedObject*
 OMContainerElement<ObjectReference, ReferencedObject>::getValue(void) const
 {
   TRACE("OMContainerElement<ObjectReference, ReferencedObject>::getValue");
+  OBSOLETE("OMContainerElement<ObjectReference, ReferencedObject>::reference");
 
   return _reference.getValue();
 }
@@ -433,6 +469,7 @@ OMContainerElement<ObjectReference, ReferencedObject>::setValue(
                                                  const ReferencedObject* value)
 {
   TRACE("OMContainerElement<ObjectReference, ReferencedObject>::setValue");
+  OBSOLETE("OMContainerElement<ObjectReference, ReferencedObject>::reference");
 
   return _reference.setValue(value);
 }
@@ -450,10 +487,10 @@ ReferencedObject*
 OMContainerElement<ObjectReference, ReferencedObject>::pointer(void) const
 {
   TRACE("OMContainerElement<ObjectReference, ReferencedObject>::pointer");
+  OBSOLETE("OMContainerElement<ObjectReference, ReferencedObject>::reference");
 
   return _reference.pointer();
 }
-
 
 // class OMStrongReferenceVectorElement<ReferencedObject>
 
