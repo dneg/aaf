@@ -57,6 +57,8 @@ ImplAAFPropertyDef::ImplAAFPropertyDef ()
   : _Type(PID_PropertyDefinition_Type, "Type"),
     _IsOptional(PID_PropertyDefinition_IsOptional, "IsOptional"),
     _pid(PID_PropertyDefinition_LocalIdentification, "LocalIdentification"),
+    _IsSearchable(PID_PropertyDefinition_IsSearchable, "IsSearchable"),
+    _DefaultValue(PID_PropertyDefinition_DefaultValue, "DefaultValue"),
 	_cachedType (0),  // BobT: don't reference count the cached type!
 	_bname (0),
 	_OMPropCreateFunc (0)
@@ -64,6 +66,8 @@ ImplAAFPropertyDef::ImplAAFPropertyDef ()
   _persistentProperties.put (_Type.address());
   _persistentProperties.put (_IsOptional.address());
   _persistentProperties.put (_pid.address());
+  _persistentProperties.put (_IsSearchable.address());
+  _persistentProperties.put (_DefaultValue.address());
 }
 
 
