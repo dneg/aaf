@@ -23,7 +23,7 @@
 #include "AxSmartPointer.h"
 #include "AxBaseObj.h"
 
-class AxFile : AxBaseObj {
+class AxFile : public AxBaseObj {
 
  public:
 
@@ -82,7 +82,7 @@ class AxFile : AxBaseObj {
 std::wostream& operator<<( std::wostream& os, const AxFile& file );
 
 
-class AxRandomFile : AxFile {
+class AxRandomFile : public AxFile {
 public:
 	AxRandomFile( IAAFRandomFileSP spIaafRandomFile );
 	virtual ~AxRandomFile();
