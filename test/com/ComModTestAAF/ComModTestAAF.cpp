@@ -42,6 +42,8 @@ using namespace std;
 #include "AAFTypes.h"
 #endif
 
+#include "AAFResult.h"
+
 
 #if defined( OS_WINDOWS )
 #include <winbase.h>
@@ -77,11 +79,6 @@ using namespace std;
 #include "ModuleTest.h"
 
 
-typedef AAFRESULT (*AAFModuleTestProc)();
-
-
-#define SUCCESS (0)
-#define FAILURE (-1)
 
 // routine copied from Tim Bingham's test program...
 static void formatError(DWORD errorCode)
@@ -182,7 +179,7 @@ public:
 
 int main(int argc, char* argv[])
 {
-  int result = SUCCESS;
+  int result = AAFRESULT_SUCCESS;
   int  startArg = 1;
   testMode_t  testMode = kAAFUnitTestReadWrite;
   bool skipTests = false;
@@ -255,11 +252,17 @@ int main(int argc, char* argv[])
   }
   catch (...)
   {
-    result = FAILURE;
+    result = AAFRESULT_TEST_FAILED;
   }
   
 
-  return result;
+  // Translate AAFRESULTs into an exit status.
+  // Only the 8 least significant bits are available to a waiting parent
+  // (see IEEE Std 1003.1) and by convention the 8th bit (values over 127)
+  // is reserved to indicate core dumped (GNU C Library manual 25.6.2).
+
+  if (result == AAFRESULT_SUCCESS)
+  	return 0;
+  else
+    return 1;		// Test failed or test could not run
 }
-
-
