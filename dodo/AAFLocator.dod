@@ -11,6 +11,8 @@ AAFObject\
 
 //@doc
 AD_HEAD
+AD_INCLUDE(AAFString)
+
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
