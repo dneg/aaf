@@ -32,7 +32,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <iostream.h>
-
+#include <memory>
 
 namespace OMF2
 {
@@ -44,7 +44,7 @@ namespace OMF2
 
 
 #include "AafOmf.h"
-
+#include "AutoRelease.h"
 #include "AAFDomainUtils.h"
 #include "OMFDomainUtils.h"
 #if AVID_SPECIAL
@@ -99,8 +99,6 @@ Aaf2Omf::~Aaf2Omf()
 // ============================================================================
 void Aaf2Omf::ConvertFile ()
 {
-	AAFCheck		rc;
-
 	OpenInputFile();
 	OpenOutputFile();
 	pAAF->SetDictionary(pDictionary);
@@ -126,6 +124,7 @@ void Aaf2Omf::ConvertFile ()
 void Aaf2Omf::ConvertMobIDtoUID(aafMobID_constptr pMobID, 
 							   OMF2::omfUID_t* pOMFMobID)
 {
+	
 	struct SMPTELabel		// Change to match GUID to ensure correct byte swapping
 	{
 		aafUInt32	MobIDMajor;
@@ -140,18 +139,35 @@ void Aaf2Omf::ConvertMobIDtoUID(aafMobID_constptr pMobID,
 		aafUInt8	MobIDPrefixLow;
 		aafUInt8	MobIDPrefixHigh;
 	};
-	union label
+
+	struct AMobID
+	{
+		aafUInt8 SMPTELabel[12];		// 12-bytes of label prefix
+		aafUInt8 length;
+		aafUInt8 instanceHigh;
+		aafUInt8 instanceMid;
+		aafUInt8 instanceLow;
+		struct SMPTELabel	material;
+	};
+	union MobIDOverlay
 	{
 		aafMobID_t			mobID;
-		struct SMPTELabel	smpte;
+		struct AMobID	AMobID;
 	};
 
-	union label aLabel;
-	memcpy((void *)&aLabel.mobID, pMobID, sizeof(aLabel.mobID));
+	union MobIDOverlay aLabel;
+	memcpy((void *)&aLabel.AMobID, pMobID, sizeof(aLabel.AMobID));
 
-	pOMFMobID->prefix = (aLabel.smpte.MobIDPrefixHigh << 8L) | aLabel.smpte.MobIDPrefixLow;
-	pOMFMobID->major = aLabel.smpte.MobIDMajor;
-	pOMFMobID->minor = (aLabel.smpte.MobIDMinorHigh << 16L) | aLabel.smpte.MobIDMinorLow;
+	pOMFMobID->prefix = (aLabel.AMobID.material.MobIDPrefixHigh << 8L) | 
+		                 aLabel.AMobID.material.MobIDPrefixLow;
+	pOMFMobID->major = aLabel.AMobID.material.MobIDMajor;
+	pOMFMobID->minor = (aLabel.AMobID.material.MobIDMinorHigh << 16L) | 
+		                aLabel.AMobID.material.MobIDMinorLow;
+	
+	gpGlobals->pLogger->Log( kLogInfo, "Converterting MobID to UID...\n" );
+	gpGlobals->pLogger->Log( kLogInfo, "prefix: %ld\n", (long) pOMFMobID->prefix );
+	gpGlobals->pLogger->Log( kLogInfo, "major: %ld\n", (long) pOMFMobID->major );
+	gpGlobals->pLogger->Log( kLogInfo, "minor: %ld\n", (long) pOMFMobID->minor );
 }
 // ============================================================================
 // OpenInputFile
@@ -163,42 +179,27 @@ void Aaf2Omf::ConvertMobIDtoUID(aafMobID_constptr pMobID,
 void Aaf2Omf::OpenInputFile ()
 {
 	AAFCheck					rc;
-	aafWChar*					pwFileName = NULL;
-	IAAFIdentification*			pIdent = NULL;
 
 	// convert file name to Wide char
-	pwFileName = new wchar_t[strlen(gpGlobals->sInFileName)+1];
+	std::auto_ptr<wchar_t> pwFile( new wchar_t[strlen(gpGlobals->sInFileName)+1] );
+	aafWChar*	pwFileName = pwFile.get();
 	mbstowcs(pwFileName, gpGlobals->sInFileName, strlen(gpGlobals->sInFileName)+1);
 
-
-	if (FAILED(AAFFileOpenExistingRead(pwFileName, 0, &pFile)))
+	try
 	{
-		delete [] pwFileName;
-		return;
+		rc =  AAFFileOpenExistingRead(pwFileName, 0, &pFile);
+		rc =  pFile->GetHeader(&pHeader);
+		rc =  pHeader->GetDictionary(&pDictionary);
+		pAAF->RegisterAAFProperties(pDictionary);
 	}
-
-	if (FAILED(pFile->GetHeader(&pHeader)))
+	catch( ExceptionBase )
 	{
-		delete [] pwFileName;
-		return;
+		throw;
 	}
-
-	if (FAILED(pHeader->GetDictionary(&pDictionary)))
-	{
-		delete [] pwFileName;
-		return;
-	}
-	if (gpGlobals->bVerboseMode)
-	{
-		printf("AAF File: %s opened succesfully\n", gpGlobals->sInFileName);
-//		printf("          File Revision %s \n", szFileVersion);
-	}
-
-	pAAF->RegisterAAFProperties(pDictionary);
-
+	gpGlobals->pLogger->Log( kLogInfo, "AAF file \"%s\" opened succesfully.\n", gpGlobals->sInFileName);
 	gpGlobals->bAAFFileOpen = kAAFTrue;
-	delete [] pwFileName;
 }
+
 // ============================================================================
 // OpenOutputFile
 //			This function creates the output file.
@@ -213,18 +214,27 @@ void Aaf2Omf::OpenOutputFile ()
 	OMF2::omfProductIdentification_t	OMFProductInfo;
 	char*								pszCompanyName = NULL;
 	char*								pszProductName = NULL;
-    char*								pszProductVersionString = NULL;
-    char*								pszPlatform;
-	char*								src;
+ 	char*								pszProductVersionString = NULL;
+ 	char*								pszPlatform;
+	char								src[] = "<Not Specified>";
 	
 	IAAFIdentification*					pIdent = NULL;
 	aafWChar*							pwCompanyName = NULL;
 	aafWChar*							pwProductName = NULL;
-    aafWChar*							pwProductVersionString = NULL;
-    aafWChar*							pwPlatform;
+ 	aafWChar*							pwProductVersionString = NULL;
+ 	aafWChar*							pwPlatform;
 	aafUInt32							textSize = 0;
 	aafProductVersion_t					productVersion;
 	
+	std::auto_ptr<char>		APpszCompanyName( NULL );
+	std::auto_ptr<char>		APpszProductName( NULL );
+    std::auto_ptr<char>		APpszProductVersionString( NULL );
+    std::auto_ptr<char>		APpszPlatform( NULL );
+	std::auto_ptr<wchar_t>	APpwCompanyName( NULL ); 
+	std::auto_ptr<wchar_t>	APpwProductName( NULL );
+	std::auto_ptr<wchar_t>	APpwProductVersionString( NULL );
+	std::auto_ptr<wchar_t>	APpwPlatform( NULL );
+
 	try
 	{
 		if (strlen(gpGlobals->sOutFileName) == 0)
@@ -232,77 +242,88 @@ void Aaf2Omf::OpenOutputFile ()
 			char*	pExt;
 			strcpy(gpGlobals->sOutFileName, gpGlobals->sInFileName);
 			pExt= strrchr(gpGlobals->sOutFileName, '.');
-			strcpy(pExt,".omf");
+			if( pExt != NULL )
+				strcpy(pExt,".omf");
+			else
+				strcat( gpGlobals->sOutFileName, ".omf" );
 		}
 		
 		if (gpGlobals->bDeleteOutput)
 		{
 			HRESULT	testRC;
 			testRC = deleteFile(gpGlobals->sOutFileName);
-			if (testRC == AAFRESULT_SUCCESS)
-				printf("Output file: %s will be overwritten\n", gpGlobals->sOutFileName);
-			else
-				printf("Output file: %s will be created\n", gpGlobals->sOutFileName);
+			gpGlobals->pLogger->Log( kLogInfo, "Output file: %s will be %s\n", gpGlobals->sOutFileName, 
+				testRC == AAFRESULT_SUCCESS ? "overwritten" : "created");
 		}
 		// Retrieve AAF file's last identification
 		rc = pHeader->GetLastIdentification(&pIdent);
+		AutoRelease<IAAFIdentification> ARIdent(  pIdent );
 		pIdent->GetCompanyNameBufLen(&textSize);
+
 		if (textSize > 0)
 		{
-			pwCompanyName = (wchar_t *)new wchar_t[textSize];
+			APpwCompanyName = std::auto_ptr<wchar_t>( new wchar_t[textSize] );
+			pwCompanyName = APpwCompanyName.get();
 			pIdent->GetCompanyName(pwCompanyName, textSize);
-			pszCompanyName = (char *)new char[textSize/sizeof(wchar_t)];
+			APpszCompanyName = std::auto_ptr<char>( new char[textSize/sizeof(wchar_t)] );
+			pszCompanyName = APpszCompanyName.get();
 			wcstombs(pszCompanyName, pwCompanyName, textSize/sizeof(wchar_t));
 		}
 		else
 		{
-			src = "<Not Specified>";
-			pszCompanyName = (char *)new char[strlen(src)+1];
+			APpszCompanyName = std::auto_ptr<char> ( new char[ sizeof( src ) ] );
+			pszCompanyName = APpszCompanyName.get();
 			strcpy(pszCompanyName, src);
 		}
 		
 		pIdent->GetProductNameBufLen(&textSize);
 		if (textSize > 0)
 		{
-			pwProductName = (wchar_t *)new wchar_t[textSize];
+			APpwProductName = std::auto_ptr<wchar_t>( new wchar_t[textSize] );
+			pwProductName = APpwProductName.get();
 			pIdent->GetProductName(pwProductName, textSize);
-			pszProductName = (char *)new char[textSize/sizeof(wchar_t)];
+			APpszProductName = std::auto_ptr<char >( new char[textSize/sizeof(wchar_t)] );
+			pszProductName = APpszProductName.get();
 			wcstombs(pszProductName, pwProductName, textSize/sizeof(wchar_t));
 		}
 		else
 		{
-			src = "<Not Specified>";
-			pszProductName = (char *)new char[strlen(src)+1];
+			APpszProductName = std::auto_ptr<char> ( new char[ sizeof( src ) ] );
+			pszProductName =  APpszProductName.get();
 			strcpy(pszProductName, src);
 		}
 		
 		pIdent->GetProductVersionStringBufLen(&textSize);
 		if (textSize > 0)
 		{
-			pwProductVersionString = (wchar_t *)new wchar_t[textSize];
+			APpwProductVersionString = std::auto_ptr<wchar_t>( new wchar_t[textSize] );
+			pwProductVersionString = APpwProductVersionString.get();
 			pIdent->GetProductVersionString(pwProductVersionString, textSize);
-			pszProductVersionString = (char *)new char[textSize/sizeof(wchar_t)];
+			APpszProductVersionString = std::auto_ptr<char >( new char[textSize/sizeof(wchar_t)] );
+			pszProductVersionString = APpszProductVersionString.get();
 			wcstombs(pszProductVersionString, pwProductVersionString, textSize/sizeof(wchar_t));
 		}
 		else
 		{
-			src = "<Not Specified>";
-			pszProductVersionString = (char *)new char[strlen(src)+1];
+			APpszProductVersionString = std::auto_ptr<char >( new char[sizeof( src ) ] );
+			pszProductVersionString = APpszProductVersionString.get();
 			strcpy(pszProductVersionString, src);
 		}
 		
 		pIdent->GetPlatformBufLen(&textSize);
 		if (textSize > 0)
 		{
-			pwPlatform = (wchar_t *)new wchar_t[textSize/sizeof(wchar_t)];
+			APpwPlatform = std::auto_ptr<wchar_t >( new wchar_t[textSize/sizeof(wchar_t)] );
+			pwPlatform = APpwPlatform.get();
 			pIdent->GetPlatform(pwPlatform, textSize);
-			pszPlatform = (char *)new char[textSize/sizeof(wchar_t)];
+			APpszPlatform = std::auto_ptr<char >(new char[textSize/sizeof(wchar_t)]);
+			pszPlatform = APpszPlatform.get();
 			wcstombs(pszPlatform, pwPlatform, textSize/sizeof(wchar_t));
 		}
 		else
 		{
-			src = "<Not Specified>";
-			pszPlatform = (char *)new char[strlen(src)+1];
+			APpszPlatform = std::auto_ptr<char >(new char[sizeof(src)] );
+			pszPlatform = APpszPlatform.get();
 			strcpy(pszPlatform, src);
 		}
 		
@@ -320,99 +341,34 @@ void Aaf2Omf::OpenOutputFile ()
 		OMFProductInfo.productID = 42; // Comes from OMF !!!
 		OMFProductInfo.productVersion.type = (OMF2::omfProductReleaseType_t)productVersion.type;
 		
-		if (OMF2::omfsBeginSession(&OMFProductInfo, &OMFSession) != OMF2::OM_ERR_NONE )
-		{
-			rc = AAFRESULT_BADOPEN;
-			goto cleanup;
-		}
+		OMFError = OMF2::omfsBeginSession(&OMFProductInfo, &OMFSession);
 		
 		RegisterCodecProperties(gpGlobals, OMFSession);
 		pOMF->RegisterOMFProperties(gpGlobals, OMFSession);
 		
 		bSessionStarted = kAAFTrue;
-		if (OMF2::omfmInit(OMFSession) != OMF2::OM_ERR_NONE )
-		{
-			OMF2::omfsEndSession(OMFSession);
-			rc = AAFRESULT_BAD_SESSION;
-			goto cleanup;
-		}
+		OMFError = OMF2::omfmInit(OMFSession);
 		
 		
-		//	OMFError = omfmRegisterCodec(OMFSession, OMF2::omfCodecAvJPED, OMF2::kOMFRegisterLinked);
-		
-		if (OMF2::omfsCreateFile((OMF2::fileHandleType)gpGlobals->sOutFileName, OMFSession, OMF2::kOmfRev2x, &OMFFileHdl) != OMF2::OM_ERR_NONE )
-		{
-			rc = AAFRESULT_BADOPEN;
-			goto cleanup;
-		}
-		
+		OMFError = OMF2::omfsCreateFile((OMF2::fileHandleType)gpGlobals->sOutFileName, OMFSession, OMF2::kOmfRev2x, &OMFFileHdl);
 		
 		gpGlobals->bOMFFileOpen = kAAFTrue;
 		// Clean up and exit 
 	}
-	catch(...)
+	catch( ExceptionBase  )
 	{
-		if (pIdent)
-			pIdent->Release();
-		
-		if (pwCompanyName)
-			delete [] pwCompanyName;
-		
-		if (pszCompanyName)
-			delete [] pszCompanyName;
-		
-		if (pwProductName)
-			delete [] pwProductName;
-		
-		if (pszProductName)
-			delete [] pszProductName;
-		
-		if (pwPlatform)
-			delete [] pwPlatform;
-		
-		if (pszPlatform)
-			delete [] pszPlatform;
-		
-		if (pwProductVersionString)
-			delete [] pwProductVersionString;
-		
-		if (pszProductVersionString)
-			delete [] pszProductVersionString;
-		
-		printf("File: %s could NOT be created\n", gpGlobals->sOutFileName);
+		if( bSessionStarted == kAAFTrue )
+		{
+			OMF2::omfsEndSession(OMFSession);
+		}
+
+		gpGlobals->pLogger->Log( kLogError, "File: %s could NOT be created\n", 
+			gpGlobals->sOutFileName );
+		throw;
 	}
-cleanup:
-	if (pIdent)
-		pIdent->Release();
 	
-	if (pwCompanyName)
-		delete [] pwCompanyName;
-	
-	if (pszCompanyName)
-		delete [] pszCompanyName;
-	
-	if (pwProductName)
-		delete [] pwProductName;
-	
-	if (pszProductName)
-		delete [] pszProductName;
-	
-	if (pwPlatform)
-		delete [] pwPlatform;
-	
-	if (pszPlatform)
-		delete [] pszPlatform;
-	
-	if (pwProductVersionString)
-		delete [] pwProductVersionString;
-	
-	if (pszProductVersionString)
-		delete [] pszProductVersionString;
-	
-	if (gpGlobals->bVerboseMode)
-	{
-		printf("OMF file: %s created succesfully\n", gpGlobals->sOutFileName);
-	}
+	gpGlobals->pLogger->Log( kLogInfo, "OMF file: %s created succesfully\n", 
+			gpGlobals->sOutFileName);
 }
 
 // ============================================================================
@@ -771,11 +727,11 @@ void Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 		char*				pszManufacturer = NULL;
 		aafWChar*			pwModel = NULL;
 		char*				pszModel = NULL;
-		aafUInt32			textSize;
-		aafTapeCaseType_t	formFactor;
-		aafTapeFormatType_t	tapeFormat;
-		aafLength_t			tapeLength;
-		aafVideoSignalType_t videoSignal;
+		aafUInt32			textSize = 0;
+		aafTapeCaseType_t	formFactor = kAAFTapeCaseNull;
+		aafTapeFormatType_t	tapeFormat = kAAFTapeFormatNull;
+		aafLength_t			tapeLength = 0;
+		aafVideoSignalType_t videoSignal = kAAFVideoSignalNull;
 		
 		OMFError = OMF2::omfmTapeMobNew(OMFFileHdl, pMobName, pOMFSourceMob);
 		
@@ -1346,8 +1302,8 @@ void Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 		aafSourceRef_t			ref;
 		OMF2::omfSourceRef_t	OMFSourceRef;
 		aafFadeType_t			fadeInType, fadeOutType;
-		aafLength_t				fadeInLen, fadeOutLen;
-		aafBool					fadeInPresent, fadeOutPresent;
+		aafLength_t				fadeInLen = 0, fadeOutLen = 0;
+		aafBool					fadeInPresent = kAAFFalse, fadeOutPresent = kAAFFalse;
 		
 		if (gpGlobals->bVerboseMode)
 		{
@@ -1370,7 +1326,7 @@ void Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 			(OMF2::omfLength_t)length,
 			OMFSourceRef,
 			pOMFSegment);
-		if (fadeInPresent || fadeOutPresent)
+		if ( (fadeInPresent && fadeInLen > 0) || (fadeOutPresent && fadeOutLen > 0) )
 		{
 			// Some 'magic' required to get types to match
 			OMF2::omfInt32 fadeInLen32 = (OMF2::omfInt32) fadeInLen;
