@@ -51,6 +51,24 @@ public:
   
 protected:
   virtual ~ImplAAFWeakRefSetValue ();
+
+  
+  //
+  // ImplAAFRefContainer overrides
+  //
+  
+public:
+  // Return the type of object references in the container.
+  virtual ImplAAFTypeDefObjectRef * GetElementType(void) const; // the result is NOT reference counted.
+  
+protected:
+  // Perform specialized validation for an object before it is added
+  // to a container.
+  virtual AAFRESULT ValidateNewObject(ImplAAFStorable *pNewObject) const;
+  
+  // Perform any specialized cleanup of any object after it has been removed
+  // from the container.
+  virtual bool usesReferenceCounting(void) const;
   
 public:
   // non-published method to initialize this object.

@@ -39,7 +39,6 @@
 
 class ImplAAFTypeDefStrongObjRef;
 
-
 class ImplAAFStrongRefValue : public ImplAAFRefValue
 {
 public:
@@ -55,9 +54,17 @@ protected:
   
 public:
   // non-published method to initialize this object.
+  // Initialize an instance from a type definition. This is the "old-style"
+  // "non-direct" access initialization method. 
+  AAFRESULT Initialize (const ImplAAFTypeDefStrongObjRef *referenceType);
+
+  // non-published method to initialize this object.
   // NOTE: The given property's type must be a reference type.
   AAFRESULT Initialize (const ImplAAFTypeDefStrongObjRef *referenceType,
                         OMProperty *property);
+
+  virtual AAFRESULT STDMETHODCALLTYPE GetObject(ImplAAFStorable **ppObject) const;
+  virtual AAFRESULT STDMETHODCALLTYPE SetObject(ImplAAFStorable *pObject);
 
   virtual AAFRESULT STDMETHODCALLTYPE WriteTo(OMProperty* pOmProp);
 };

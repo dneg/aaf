@@ -32,24 +32,23 @@
  ************************************************************************/
 
 
+class OMObject;
+class OMStorable;
 class ImplAAFRoot;
+class ImplAAFStorable;
 
 #ifndef __ImplAAFPropertyValue_h__
 #include "ImplAAFPropertyValue.h"
 #endif
 
-#ifndef __ImplAAFPropValData_h__
-#include "ImplAAFPropValData.h"
-#endif
 
 class ImplAAFTypeDefObjectRef;
 
 class OMProperty;
-//class OMReferenceProperty; // TBD: the base class for singleton references
+class OMReferenceProperty; // The base class for singleton references
 
 
-//class ImplAAFRefValue : public ImplAAFPropertyValue // TBD:
-class ImplAAFRefValue : public ImplAAFPropValData
+class ImplAAFRefValue : public ImplAAFPropertyValue
 {
 public:
 
@@ -61,17 +60,39 @@ protected:
   ImplAAFRefValue ();
   virtual ~ImplAAFRefValue ();
 
+
+  // non-published method to initialize this object.
+  // Initialize an instance from a type definition. This is the "old-style"
+  // "non-direct" access initialization method. 
+  AAFRESULT Initialize (const ImplAAFTypeDefObjectRef *referenceType);
+
   // non-published method to initialize this object.
   // NOTE: The given property's type must be a reference type.
   AAFRESULT Initialize (const ImplAAFTypeDefObjectRef *referenceType,
                         OMProperty *property);
   
   // Return the propertyType as a referenceType.
-  const ImplAAFTypeDefObjectRef *referenceType(void) const;             
+  const ImplAAFTypeDefObjectRef *referenceType(void) const;
+  
+  // Return the instance's property as a reference property.
+  OMReferenceProperty * referenceProperty(void) const;
+  
+  void SetLocalObject(ImplAAFStorable * localObject); // reference counted
+  ImplAAFStorable * GetLocalObject(void) const; // not reference counted
   
 public:
+  virtual AAFRESULT STDMETHODCALLTYPE GetObject(ImplAAFStorable **ppObject) const = 0;
+  virtual AAFRESULT STDMETHODCALLTYPE SetObject(ImplAAFStorable *pObject) = 0;
 
   virtual AAFRESULT STDMETHODCALLTYPE WriteTo(OMProperty* pOmProp);
+  
+  // Conversion utilities
+  static ImplAAFStorable * ConvertOMObjectToRoot(OMObject *object);
+  static ImplAAFStorable * ConvertRootToOMStorable(ImplAAFRoot *object);
+
+private:
+  ImplAAFStorable *_localObject; // Should be NULL if there is an associated property.
+
 };
 
 //

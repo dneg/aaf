@@ -38,6 +38,8 @@
 #endif
 
 class ImplAAFTypeDefSet;
+class ImplAAFTypeDefRecord;
+class OMReferenceSetProperty;
 
 
 class ImplAAFRefSetValue : public ImplAAFRefContainerValue
@@ -56,10 +58,54 @@ protected:
   // NOTE: The given property's type must be a reference type.
   AAFRESULT Initialize (const ImplAAFTypeDefSet *containerType,
                         OMProperty *property);
+  
+  // Retrieve the property as an OMReferenceSetProperty.
+  OMReferenceSetProperty * referenceSetProperty(void) const;
 
 public:
 
   virtual AAFRESULT STDMETHODCALLTYPE WriteTo(OMProperty* pOmProp);
+
+
+  // Remove the object identified by identification from the 
+  // reference set.
+  virtual AAFRESULT STDMETHODCALLTYPE 
+    Remove(void* identification);
+
+  // Does the reference set contain an object identified
+  // by identification?
+  virtual AAFRESULT STDMETHODCALLTYPE 
+    Contains(void* identification,
+             aafBoolean_t* pResult) const;
+
+  // Find the object in the reference set property identified by 
+  // identification.  If the object is found it is returned in object.
+  // If the object is not found the result is false.
+  virtual AAFRESULT STDMETHODCALLTYPE 
+    FindObject(void* identification,
+               ImplAAFStorable **pObject,
+               aafBoolean_t* pResult) const;
+
+  
+  // Find the element associated with the given key.
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupElement(ImplAAFPropertyValue * pKey,
+                  ImplAAFPropertyValue ** ppElementPropertyValue);
+
+  // Test for containment by key.
+  virtual AAFRESULT STDMETHODCALLTYPE
+    ContainsKey(ImplAAFPropertyValue * pKey,
+                aafBoolean_t*  pContainsKey);
+
+private:  
+  // Load the key (if valid) into the _keyBuffer
+  void LoadKey(ImplAAFPropertyValue * pKey,
+               AAFRESULT& result);
+
+private:
+  ImplAAFTypeDefRecord* _uidType; // cached type for the unique identifier property.
+  aafUInt8* _keyBuffer;
+  aafUInt32 _keyBufferSize;
 };
 
 //

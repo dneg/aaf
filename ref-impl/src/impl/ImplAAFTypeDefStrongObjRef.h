@@ -115,6 +115,12 @@ public:
     pvtCreateOMProperty (OMPropertyId pid,
 							const wchar_t * name) const;
 
+  // Allocate and initialize the correct subclass of ImplAAFPropertyValue 
+  // for the given OMProperty.
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreatePropertyValue(OMProperty *property, 
+                        ImplAAFPropertyValue ** pPropertyValue) const;
+
 
 
   // override from OMStorable.
