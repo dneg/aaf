@@ -628,6 +628,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFSegments.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFStorablePropVals.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFTaggedValues.cpp"
 # End Source File
 # Begin Source File
