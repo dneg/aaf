@@ -65,6 +65,8 @@
 #define DEFAULT_NUM_DATAKIND_DEFS	100
 #define DEFAULT_NUM_EFFECT_DEFS		100
 
+extern "C" const aafClassID_t CLSID_EnumAAFIdentifications;
+
 
 
 ImplAAFHeader::ImplAAFHeader ()
@@ -159,29 +161,6 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(cstore->GetNumMobs(mobKind, pNumMobs));
 	}
 	XEXCEPT
-	XEND
-
-	return AAFRESULT_SUCCESS;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::EnumAAFPrimaryMobs (ImplEnumAAFMobs **ppEnum)
-{
-    ImplAAFContentStorage *cstore = NULL;
-
-    if (! ppEnum)
-	  {
-		return AAFRESULT_NULL_PARAM;
-	  }
-	XPROTECT()
-	{
-		cstore = GetContentStorage();		// Does not AddRef
-		CHECK(cstore->GetPrimaryMobs(ppEnum));
-	}
-	XEXCEPT
-	{
-	}
 	XEND
 
 	return AAFRESULT_SUCCESS;
@@ -449,22 +428,41 @@ AAFRESULT STDMETHODCALLTYPE
 ImplAAFHeader::GetNumIdents
 (aafUInt32 *  pNumIdents)
 {
-    if (! pNumIdents)
-	  {
+ 	size_t	siz;
+	if (! pNumIdents)
+	{
 		return AAFRESULT_NULL_PARAM;
-	  }
-	return AAFRESULT_NOT_IMPLEMENTED;
+	}
+		
+	_identificationList.getSize(siz);
+	*pNumIdents = siz;
+	return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::EnumAAFIdents (ImplEnumAAFIdentifications ** ppEnum)
 {
-  if (! ppEnum)
+	if (NULL == ppEnum)
+		return AAFRESULT_NULL_PARAM;
+	*ppEnum = 0;
+	
+	ImplEnumAAFIdentifications *theEnum = (ImplEnumAAFIdentifications *)CreateImpl (CLSID_EnumAAFIdentifications);
+	
+	XPROTECT()
 	{
-	  return AAFRESULT_NULL_PARAM;
+		CHECK(theEnum->SetEnumStrongProperty(this, &_identificationList));
+		*ppEnum = theEnum;
 	}
-  return AAFRESULT_NOT_IMPLEMENTED;
+	XEXCEPT
+	{
+		if (theEnum)
+			theEnum->ReleaseReference();
+		return(XCODE());
+	}
+	XEND;
+	
+	return(AAFRESULT_SUCCESS);
 }
 
 AAFRESULT 
