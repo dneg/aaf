@@ -44,7 +44,8 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFObjects \
 	EnumAAFPropertyDefs \
 	EnumAAFPropertyValues \
-	EnumAAFReferenceValues
+	EnumAAFReferenceValues \
+	EnumAAFTaggedValues 
 
 
 # These are files which specify COM interfaces, but which are
