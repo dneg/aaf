@@ -34,10 +34,6 @@
 #define LINKAGE __stdcall
 wchar_t* ssLibraryName = L"ole32.dll";
 wchar_t* coLibraryName = L"ole32.dll";
-#elif defined(OM_OS_MACOSX)
-#define LINKAGE
-wchar_t* ssLibraryName = L"Microsoft Structured Storage"; // tjb FIXME for OSX
-wchar_t* coLibraryName = L"Microsoft Component Library"; // tjb FIXME for OSX
 #elif defined(OM_OS_UNIX)
 #define LINKAGE
 wchar_t* ssLibraryName = L"librefstg.so";

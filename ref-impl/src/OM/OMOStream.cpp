@@ -197,41 +197,6 @@ static void debugPrint(const char* string)
   OutputDebugString(s);
 }
 
-#elif defined(OM_OS_MACOSX)
-
-#include <MacTypes.h>
-
-static char buffer[256];
-static size_t current = 0;
-
-static void debugFlush(void)
-{
-  unsigned char p[256];
-  copyCToPString(p, current + 1, buffer);
-  DebugStr(p);
-  current = 0;
-}
-
-static void debugPrint(const char c)
-{
-  if (current == sizeof(buffer)) {
-    debugFlush();
-    buffer[current++] = c;
-  } else if (c == '\n') {
-    debugFlush();
-  } else {
-    buffer[current++] = c;
-  }
-}
-
-static void debugPrint(const char* string)
-{
-  size_t i = 0;
-  while (string[i] != 0) {
-    debugPrint(string[i++]);
-  }
-}
-
 #endif
 
 OMOStream& OMOStream::put(const char* string)
