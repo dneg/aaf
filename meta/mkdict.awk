@@ -474,6 +474,18 @@ BEGIN {
   printf("//\n");
   printf("//   Separate one AAF type definition from another.\n");
   printf("//\n");
+  printf("// AAF_ALIAS_TABLE_BEGIN()\n");
+  printf("//\n");
+  printf("//   Begin a table of AAF alias definitions.\n");
+  printf("//\n");
+  printf("// AAF_ALIAS_TABLE_END()\n");
+  printf("//\n");
+  printf("//   End a table of AAF alias definitions.\n");
+  printf("//\n");
+  printf("// AAF_ALIAS_SEPARATOR()\n");
+  printf("//\n");
+  printf("//   Separate one AAF alias from another.\n");
+  printf("//\n");
   printf("// AAF_CLASS_ALIAS(name, alias)\n");
   printf("//\n");
   printf("//     name      = class name\n");
@@ -647,6 +659,18 @@ BEGIN {
   printf("\n");
   printf("#ifndef AAF_TYPE_SEPARATOR\n");
   printf("#define AAF_TYPE_SEPARATOR()\n");
+  printf("#endif\n");
+  printf("\n");
+  printf("#ifndef AAF_ALIAS_TABLE_BEGIN\n");
+  printf("#define AAF_ALIAS_TABLE_BEGIN()\n");
+  printf("#endif\n");
+  printf("\n");
+  printf("#ifndef AAF_ALIAS_TABLE_END\n");
+  printf("#define AAF_ALIAS_TABLE_END()\n");
+  printf("#endif\n");
+  printf("\n");
+  printf("#ifndef AAF_ALIAS_SEPARATOR\n");
+  printf("#define AAF_ALIAS_SEPARATOR()\n");
   printf("#endif\n");
   printf("\n");
   printf("#ifndef AAF_CLASS_ALIAS\n");
@@ -858,7 +882,12 @@ BEGIN {
         printf("\n");
         printf("// Aliases\n");
         printf("//\n");
+        printf("\n");
+        printf("AAF_ALIAS_TABLE_BEGIN()\n");
+        printf("\n");
         firstAlias = 0;
+      } else {
+        printf("AAF_ALIAS_SEPARATOR()\n");
       }
       aname = $elementNameC;
       aalias = $aliasC;
@@ -945,6 +974,9 @@ BEGIN {
 
 END {
   if (errors == 0 ){
+    printf("\n");
+    printf("AAF_ALIAS_TABLE_END()\n");
+    printf("\n");
     printf("// Undefine all macros\n");
     printf("//\n");
     printf("#undef AAF_TABLE_BEGIN\n");
@@ -1026,6 +1058,12 @@ END {
     printf("#undef AAF_TYPE_DEFINITION_STREAM\n");
     printf("\n");
     printf("#undef AAF_TYPE_SEPARATOR\n");
+    printf("\n");
+    printf("#undef AAF_ALIAS_TABLE_BEGIN\n");
+    printf("\n");
+    printf("#undef AAF_ALIAS_TABLE_END\n");
+    printf("\n");
+    printf("#undef AAF_ALIAS_SEPARATOR\n");
     printf("\n");
     printf("#undef AAF_CLASS_ALIAS\n");
     printf("\n");
