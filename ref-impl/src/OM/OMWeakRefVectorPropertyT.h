@@ -74,7 +74,7 @@ OMWeakReferenceVectorProperty<ReferencedObject>::OMWeakReferenceVectorProperty(
                                              const OMPropertyId propertyId,
                                              const wchar_t* name,
                                              const OMPropertyId keyPropertyId,
-                                             const wchar_t* targetPropertyPath)
+                                             const OMPropertyId* targetPropertyPath)
 : OMReferenceVectorProperty(propertyId,
                             SF_WEAK_OBJECT_REFERENCE_VECTOR,
                             name),
