@@ -40,8 +40,9 @@
 
 OMDataStreamProperty::OMDataStreamProperty(const OMPropertyId propertyId,
                                            const wchar_t* name)
-  : OMProperty(propertyId, SF_DATA_STREAM, name),_stream(0),
-    _byteOrder(unspecified)
+: OMDataStream(propertyId, name),
+  _stream(0),
+  _byteOrder(unspecified)
 {
 }
 
@@ -473,6 +474,20 @@ void OMDataStreamProperty::clearByteOrder(void)
   _byteOrder = unspecified;
 
   POSTCONDITION("Byte order properly cleared", !hasByteOrder());
+}
+
+OMByteOrder OMDataStreamProperty::storedByteOrder(void) const
+{
+  TRACE("OMDataStreamProperty::storedByteOrder");
+
+  return _byteOrder;
+}
+
+void OMDataStreamProperty::setStoredByteOrder(OMByteOrder byteOrder)
+{
+  TRACE("OMDataStreamProperty::setStoredByteOrder");
+
+  _byteOrder = byteOrder;
 }
 
 const wchar_t* OMDataStreamProperty::storedName(void) const
