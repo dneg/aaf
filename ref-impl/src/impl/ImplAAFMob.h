@@ -61,7 +61,6 @@ public:
   ImplAAFMob ();
   ~ImplAAFMob ();
 
-  OMDECLARE_STORABLE(ImplAAFMob)
 
   //****************
   // GetMobID()

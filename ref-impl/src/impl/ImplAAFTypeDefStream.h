@@ -159,11 +159,6 @@ public:
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
 						   */
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTypeDefStream)
 };
 
 #endif // ! __ImplAAFTypeDefStream_h__
