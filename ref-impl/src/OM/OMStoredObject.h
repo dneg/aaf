@@ -154,7 +154,7 @@ public:
 
     // @cmember Restore a collection (vector/set) of weak references.
   void restore(const wchar_t* collectionName,
-               const OMUniqueObjectIdentification*& index,
+               OMUniqueObjectIdentification*& index,
                size_t &count,
                OMPropertyTag& tag,
                OMPropertyId& keyPropertyId);
