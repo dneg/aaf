@@ -82,6 +82,7 @@ static aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2)
 #define FILE1_LENGTH		60L * 30L
 #define SEG_LENGTH			30L
 #define FILL_LENGTH			10L
+#define TEST_PATH	L"AnotherFile.aaf"
 
 static void     LogError(HRESULT errcode, int line, char *file)
 {
@@ -102,6 +103,14 @@ static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */
 { moduleErrorTmp = a; \
   if (!SUCCEEDED(moduleErrorTmp)) \
      exit(1);\
+}
+
+static void AUIDtoString(aafUID_t *uid, aafWChar *buf)
+{
+	wsprintf(buf, L"%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x",
+			uid->Data1, uid->Data2, uid->Data3, uid->Data4[0],
+			uid->Data4[1], uid->Data4[2], uid->Data4[3], uid->Data4[4],
+			uid->Data4[5], uid->Data4[6], uid->Data4[7]);
 }
 
 
@@ -125,6 +134,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSourceClip*				masterSclp = NULL;
 	IAAFSourceClip*				compSclp = NULL;
 	IAAFComponent*				compFill = NULL;
+	IAAFLocator*				pLocator;
+	IAAFNetworkLocator*			pNetLocator;
 	aafRational_t				videoRate = { 30000, 1001 };
 	aafUID_t					videoDef = DDEF_Video;
 	aafUID_t					tapeMobID, fileMobID, masterMobID;
@@ -197,6 +208,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 						   IID_IAAFFileDescriptor, 
 						   (void **)&pFileDesc));
 	check(pFileDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&aDesc));
+
+	// Make a locator, and attach it to the EssenceDescriptor
+	check(CoCreateInstance(CLSID_AAFNetworkLocator,
+							NULL, 
+							CLSCTX_INPROC_SERVER, 
+							IID_IAAFNetworkLocator, 
+							(void **)&pNetLocator));		
+	check(pNetLocator->QueryInterface (IID_IAAFLocator, (void **)&pLocator));
+	check(pLocator->SetPath (TEST_PATH));	
+	check(aDesc->AppendLocator(pLocator));
+
 	check(pFileMob->SetEssenceDescription(aDesc));
 	aDesc->Release();
 	aDesc = NULL;
@@ -256,6 +278,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aComponent->Release();
 
 	check(pMob->GetMobID (&masterMobID));
+	check(pMob->SetName (L"A Master Mob"));
 	check(pHeader->AppendMob(pMob));
 	pMob->Release();
 	pMob = NULL;
@@ -372,6 +395,13 @@ cleanup:
 	if (compFill)
 		compFill->Release();
 
+	if (pLocator)
+		pLocator->Release();
+
+	if (pNetLocator)
+		pNetLocator->Release();
+
+	
 	return moduleErrorTmp;
 }
 
@@ -389,7 +419,11 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFSequence*				pSequence = NULL;
 	IAAFComponent*				pComponent = NULL;
 	IEnumAAFComponents*			pCompIter = NULL;
+	IEnumAAFLocators*			pLocEnum = NULL;
+	IAAFLocator*				pLocator = NULL;
 	IAAFFiller*					pFiller = NULL;
+	IAAFEssenceDescriptor*		pEdesc = NULL;
+	IAAFSourceMob*				pSourceMob = NULL;
 
 	aafSearchCrit_t				criteria;
 	aafNumSlots_t				numMobs, numSlots;
@@ -434,12 +468,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		hr = pMobIter->NextOne(&pMob);
 		while(AAFRESULT_SUCCESS == hr && pMobIter != NULL)
 		{
+			aafWChar	buf[256];
+
 			check(pMob->GetMobID (&mobID));
 			check(pMob->GetName (namebuf, sizeof(namebuf)));
-			wprintf(L"    TapeName = %s (mobID %08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x)\n",
-				namebuf, mobID.Data1, mobID.Data2, mobID.Data3, mobID.Data4[0],
-				 mobID.Data4[1], mobID.Data4[2], mobID.Data4[3], mobID.Data4[4],
-				  mobID.Data4[5], mobID.Data4[6], mobID.Data4[7]);
+			AUIDtoString(&mobID, buf);
+			wprintf(L"    TapeName = '%s'\n", namebuf);
+			wprintf(L"        (mobID %s)\n", buf);
 			hr = pMobIter->NextOne(&pMob);
 		}
 	}
@@ -462,11 +497,25 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		hr = pMobIter->NextOne(&pMob);
 		while(AAFRESULT_SUCCESS == hr && pMobIter != NULL)
 		{
+			aafWChar	buf[256];
+
 			check(pMob->GetMobID (&mobID));
-			wprintf(L"    (mobID %08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x)\n",
-				mobID.Data1, mobID.Data2, mobID.Data3, mobID.Data4[0],
-				 mobID.Data4[1], mobID.Data4[2], mobID.Data4[3], mobID.Data4[4],
-				  mobID.Data4[5], mobID.Data4[6], mobID.Data4[7]);
+			AUIDtoString(&mobID, buf);
+			wprintf(L"    (mobID %s)\n", buf);
+
+			check(pMob->QueryInterface (IID_IAAFSourceMob, (void **)&pSourceMob));
+			check(pSourceMob->GetEssenceDescription (&pEdesc));
+			check(pEdesc->EnumAAFAllLocators(&pLocEnum));
+
+			// This should read the one real locator
+			if(pLocEnum->NextOne(&pLocator) == AAFRESULT_SUCCESS)
+			{
+				check(pLocator->GetPath (buf, sizeof(buf)));
+				wprintf(L"        There is one locator pointing to '%s'\n", buf);
+			}
+			else
+				wprintf(L"        There are no locators on this file mob.\n");
+
 			hr = pMobIter->NextOne(&pMob);
 		}
 	}
@@ -488,11 +537,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		hr = pMobIter->NextOne(&pMob);
 		while(AAFRESULT_SUCCESS == hr && pMobIter != NULL)
 		{
+			aafWChar	buf[256];
+
 			check(pMob->GetMobID (&mobID));
-			wprintf(L"    (mobID %08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x)\n",
-				mobID.Data1, mobID.Data2, mobID.Data3, mobID.Data4[0],
-				 mobID.Data4[1], mobID.Data4[2], mobID.Data4[3], mobID.Data4[4],
-				  mobID.Data4[5], mobID.Data4[6], mobID.Data4[7]);
+			check(pMob->GetName (namebuf, sizeof(namebuf)));
+			AUIDtoString(&mobID, buf);
+			wprintf(L"    MasterMob Name = '%s'\n", namebuf);
+			wprintf(L"        (mobID %s)\n", buf);
 			hr = pMobIter->NextOne(&pMob);
 		}
 	}
@@ -515,11 +566,11 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
 		while (pMobIter && pMobIter->NextOne(&pMob) !=AAFRESULT_NO_MORE_MOBS)
 		{
+			aafWChar	buf[256];
+
 			check(pMob->GetMobID (&mobID));
-			wprintf(L"    (mobID %08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x)\n",
-				mobID.Data1, mobID.Data2, mobID.Data3, mobID.Data4[0],
-				 mobID.Data4[1], mobID.Data4[2], mobID.Data4[3], mobID.Data4[4],
-				  mobID.Data4[5], mobID.Data4[6], mobID.Data4[7]);
+			AUIDtoString(&mobID, buf);
+			wprintf(L"    (mobID %s)\n", buf);
 			pMob->GetNumSlots(&numSlots);
 			if (1 == numSlots)
 			{
@@ -529,20 +580,22 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 					check(pSlot->GetSegment(&pSegment));
 					check(pSegment->QueryInterface(IID_IAAFComponent, (void **) &pComponent));
 					check(pComponent->GetLength (&length));
-					wprintf(L"Slot length = %ld\n", length);
 
 					hr = pSegment->QueryInterface(IID_IAAFSourceClip, (void **) &pSourceClip);
 					if(AAFRESULT_SUCCESS == hr)
 					{
-						wprintf(L"Found source clip on slot\n");
+						wprintf(L"    Found source clip on slot\n");
+						wprintf(L"        It has length %ld\n", length);
 						hr = pSourceClip->ResolveRef(&pReferencedMob);
 						if(hr == AAFRESULT_SUCCESS)
 						{
-							pReferencedMob->GetMobID(&mobID);
-							wprintf(L"    References mob (mobID %08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x)\n",
-								mobID.Data1, mobID.Data2, mobID.Data3, mobID.Data4[0],
-								mobID.Data4[1], mobID.Data4[2], mobID.Data4[3], mobID.Data4[4],
-								mobID.Data4[5], mobID.Data4[6], mobID.Data4[7]);
+							aafWChar	buf[256];
+
+							check(pReferencedMob->GetMobID(&mobID));
+							check(pReferencedMob->GetName (namebuf, sizeof(namebuf)));
+							AUIDtoString(&mobID, buf);
+							wprintf(L"        References mob = '%s'\n", namebuf);
+							wprintf(L"            (mobID %s)\n", buf);
 						}
 					}
 					else
@@ -550,37 +603,40 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 						hr = pSegment->QueryInterface(IID_IAAFSequence, (void **) &pSequence);
 						if(AAFRESULT_SUCCESS == hr)
 						{
-							aafInt32	numComponents;
+							aafInt32	numComponents, item = 0;
 					
 							check(pSequence->GetNumComponents (&numComponents));
-							wprintf(L"Found Sequence on slot with %ld components\n",
+							wprintf(L"    Found Sequence on slot with %ld components\n",
 								numComponents);
+							wprintf(L"        It has length %ld\n", length);
 							check(pSequence->EnumComponents (&pCompIter));
 							while (pCompIter && pCompIter->NextOne(&pComponent) != AAFRESULT_NO_MORE_OBJECTS)
 							{
+								item++;
 								check(pComponent->GetLength (&length));
-								wprintf(L"   Component length = %ld\n", length);
 								hr = pComponent->QueryInterface(IID_IAAFSourceClip, (void **) &pSourceClip);
 								if(AAFRESULT_SUCCESS == hr)
 								{
-									wprintf(L"    It's asource clip\n");
+									aafWChar	buf[256];
+
+									wprintf(L"        %ld) A length %ld source clip\n", item, length);
 									check(pSourceClip->ResolveRef(&pReferencedMob));
-									pReferencedMob->GetMobID(&mobID);
-									wprintf(L"    Which references mob (mobID %08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x)\n",
-										mobID.Data1, mobID.Data2, mobID.Data3, mobID.Data4[0],
-										mobID.Data4[1], mobID.Data4[2], mobID.Data4[3], mobID.Data4[4],
-										mobID.Data4[5], mobID.Data4[6], mobID.Data4[7]);
+									check(pReferencedMob->GetMobID(&mobID));
+									check(pReferencedMob->GetName (namebuf, sizeof(namebuf)));
+									AUIDtoString(&mobID, buf);
+									wprintf(L"            References mob = '%s'\n", namebuf);
+									wprintf(L"                (mobID %s)\n", buf);
 								}
 								hr = pComponent->QueryInterface(IID_IAAFFiller, (void **) &pFiller);
 								if(AAFRESULT_SUCCESS == hr)
 								{
-									wprintf(L"    It's filler\n");
+									wprintf(L"        %ld) A length %ld filler\n", item, length);
 								}
 							}
 						}
 						else
 						{
-							wprintf(L"Found unknown segment on slot\n");
+							wprintf(L"    Found unknown segment on slot\n");
 						}
 					}
 				}
@@ -642,6 +698,18 @@ cleanup:
 	if (pFiller)
 		pFiller->Release();
 
+	if(pLocEnum)
+		pLocEnum->Release();
+	
+	if(pLocator)
+		pLocator->Release();
+	
+	if(pEdesc)
+		pEdesc->Release();
+	
+	if(pSourceMob)
+		pSourceMob->Release();
+	
 	return moduleErrorTmp;
 }
 
