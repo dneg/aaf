@@ -236,10 +236,7 @@ AD_CLASS_BEGIN\
 #endif
 
 #include <assert.h>
-
-#ifdef _DEBUG
 #include <iostream.h>
-#endif
 
 #if defined(WIN32)
 // Include declarations for InterlockedIncrement() and InterlockcedDecrment().
@@ -265,7 +262,7 @@ AD_CLASS_BEGIN\
 
 .this-module::~.this-module ()
 {
-#ifdef _DEBUG
+#if defined(DELETE_LAST_REFERENCE)
   // The following code will be removed when the constructor and destructor
   // have been protected and there is a factory method available for each
   // api class.
@@ -312,7 +309,7 @@ aafUInt32 .this-module::AcquireRef()
 aafUInt32 .this-module::ReleaseRef()
 {
   long count = InterlockedDecrement(reinterpret_cast<long *>(&_refCount));
-#if 0
+#if defined(DELETE_LAST_REFERENCE)
   if (0 == count)
     delete this;
 #else
