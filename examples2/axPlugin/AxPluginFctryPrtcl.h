@@ -39,7 +39,7 @@ public:
 	// True if clsid matches the id of this instance.
 	virtual bool IsClassId( const CLSID& clsid ) = 0;
 
-	// Create a factory instance, but return it as an IUnkown.
+	// Create a factory instance, but return it as an IUnknown.
 	virtual HRESULT CreateClassObject( IUnknown** ppv ) = 0;
 };
 

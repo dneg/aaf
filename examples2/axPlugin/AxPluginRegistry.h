@@ -32,8 +32,8 @@ class AxPluginFctryPrtcl;
 // library.
 //
 // All components implemented by a single library are responsible for
-// registering an implementatino of AxPluginFctryPrtcl with the
-// registry at init time (i.e. when the library is loaded.
+// registering an implementation of AxPluginFctryPrtcl with the
+// registry at init time (i.e. when the library is loaded).
 //
 // To avoid memory leaks, component implementors should be sure to
 // call RemoveFactory() at fini time (i.e., when the library is unloaded).
@@ -58,9 +58,9 @@ public:
 	static AxPluginRegistry& GetInstance();
 		
 	// Add and remove AxPluginFctryPrtcl implementations.   Obviously,
-	// the clsid passed to RemoveFactory must match the CLSID of the
+	// the CLSID passed to RemoveFactory must match the CLSID of the
 	// factory object you wish to remove.
-	// clsid uniqueness is enfornced by an assertion.
+	// CLSID uniqueness is enforced by an assertion.
 	void AddFactory( std::auto_ptr<AxPluginFctryPrtcl> factory );
 	void RemoveFactory( const CLSID& clsid ); 
 
@@ -87,8 +87,8 @@ private:
 	// Returns null if not found
 	std::vector<AxPluginFctryPrtcl*>::iterator Find( const CLSID& clsid );
 
-	// The registery will de-initialize (i.e. "Fini") automatically when the
-	// the last factory object is removed.
+	// The registry will de-initialize itself (i.e. "Fini") automatically when
+	// the the last factory object is removed.
 	void Fini();
 		
 	std::vector<AxPluginFctryPrtcl*> _factoryV;

@@ -30,10 +30,10 @@
 
 //
 // This is an implementation of AxPluginFctryPrtcl that can by
-// used with (registered with) AxPluginRegistry.
+// used with (i.e., registered with) AxPluginRegistry.
 //
-// It is used by AxPluginRegistry to create an instance of COM component's
-// factory object in response to a call the libraries DllGetClassObject()
+// It is used by AxPluginRegistry to create an instance of a COM component's
+// factory object in response to a call the library's DllGetClassObject()
 // entry point.
 //
 // It is intended that the template be instandiated on the underlying COM

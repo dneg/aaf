@@ -65,7 +65,7 @@ private:
 // CAxClassFactory implements IClassFactory for the template class
 // ComObjectType.  ComObjectType should be derived from CAxUnkown.
 //
-// The CAxClassFactoryCounters is used to implement an CAxClassFactory<>
+// The CAxClassFactoryCounters is used to implement a CAxClassFactory<>
 // instance count, and to implement the LockServer() method.
 
 template <class ComObjectType>
@@ -122,7 +122,7 @@ public:
 		  // Note the appropriate return value is (according
 		  // the "Inside COM", Dale Rogerson) is
 		  // CLASS_E_NOAGGREGATION.  This is not currently
-		  // defined in AAFCOMPlatformTypes, so we stick with
+		  // defined in AAFCOMPlatformTypes.h, so we stick with
 		  // E_INVALIDARG;
 		  return E_INVALIDARG;
 		}

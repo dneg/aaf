@@ -20,7 +20,7 @@
 
 #include "AAFCOMPlatformTypes.h"
 
-// This file implement the four basic entry points required by the AAF
+// This file implements the four basic entry points required by the AAF
 // SDK.  The SDK will look for these four symbols when it loads the
 // library:
 //
@@ -29,7 +29,7 @@
 //    AAFGetClassCount
 //    AAFGetClassObjectID
 //
-// Platforms independent implementations of these four routines are
+// Platform independent implementations of these four routines are
 // provded here.
 //
 // If platform specific library (.dll or .so) entry points must be

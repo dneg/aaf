@@ -57,7 +57,7 @@ const aafUID_t kAAFCodecNull =
 namespace {
 
 // NullEssenceCodecRegister is a simple class that registers
-// the CAxNullEssenceCodec  in its constructor, and removes
+// the CAxNullEssenceCodec in its constructor, and removes
 // the component from the registry in its destructor.
 // A static global instance of the class performs this work when
 // the library is loaded, and unloaded.
@@ -162,7 +162,7 @@ HRESULT STDMETHODCALLTYPE CAxNullEssenceCodec::GetIndexedDefinitionObject(
 {
 	TRACE
 
-	// Try block becaue the smart pointer code could through an exception.
+	// Try block because the smart pointer code could throw an exception.
 
 	try {
 	
@@ -174,7 +174,7 @@ HRESULT STDMETHODCALLTYPE CAxNullEssenceCodec::GetIndexedDefinitionObject(
 			return AAFRESULT_NULL_PARAM;
 		}
 	
-		// For the moment, hard coded support for on codec definition.
+		// For the moment, hard coded support for one codec definition.
 		if ( _numSupportedDefinitions != 1 ||
 			index != 0 ) {
 			return AAFRESULT_BADINDEX;
@@ -204,7 +204,7 @@ HRESULT STDMETHODCALLTYPE CAxNullEssenceCodec::GetIndexedDefinitionObject(
 		CHECK_HRESULT( dict->LookupDataDef( DDEF_Picture, &dataDef ) );
 		CHECK_HRESULT( codecDef-> AddEssenceKind( dataDef ) );
 
-		// Finally get a IAAFDefObject pointer to return to the caller.
+		// Finally get an IAAFDefObject pointer to return to the caller.
 		CHECK_HRESULT( codecDef->QueryInterface( IID_IAAFDefObject,
 												 reinterpret_cast<void**>(def) ) );
 

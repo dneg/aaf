@@ -18,18 +18,18 @@
 
 // Credits:
 //
-// The CAxUnknown implementation is a slighly modified version
+// The CAxUnknown implementation is a slightly modified version
 // of the IUnknown implementation presented in:
 // "Inside COM", Dale Rogerson, Microsoft Press
 //
 // The CAxUnknown class methods have been defined using the AAF SDK
 // STDMETHODCALLTYPE macro, and the windows specific InterlockedDecrement and
-// InterlockedIncrement call are not used.  Other than that, it is
+// InterlockedIncrement calls are not used.  Other than that, it is
 // identical to the code presented in the "Inside COM" book.
 //
 // Concerning the non-use of Interlocked{Decrement,Increment} calls by this code:
 // these Windows functions (macros?..) provide thread safe access to the static instance
-// count, and per object referenct count.  The AAF SDK, is not thread safe hence an AAF 
+// count, and per object reference count.  The AAF SDK, is not thread safe hence an AAF 
 // plugin COM object should never be accessed by multiple threads. Hence, there is no need
 // to introduce platform dependent atomic counter access code.
 
@@ -43,7 +43,7 @@
 ///////////////////////////////////////////////////////////
 //
 // Count of active objects
-//   - Use to determine if we can unload the DLL.
+//   - Used to determine if we can unload the DLL.
 //
 long CAxUnknown::s_cActiveComponents = 0 ;
 

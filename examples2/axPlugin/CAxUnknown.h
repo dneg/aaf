@@ -45,8 +45,8 @@
 //  of COM object aggregation.  Classes that derive from CAxUnkown
 //  must provide an implementation of IUnknown that delagates calls
 //  to the aggregating (i.e. "outer") object if it exists.  At the
-//  save time, CAxUnkown must provide the outer object with an indepent
-//  implementation of IUnknown that does not delegate to the out object.
+//  same time, CAxUnkown must provide the outer object with an independent
+//  implementation of IUnknown that does not delegate to the outer object.
 //  This is the purpose of INondelegatingUnknown.  Insofar as the vtable
 //  (and the COM binary interface specification) is concerned,
 //  INondelgatingUnkonw is identical to IUnkown.  Hence,
@@ -67,7 +67,7 @@
 //          // IUnkown methods provided by the following macro
 //          CAXUNKNOWN_DECLARE_IUNKNOWN_METHODS
 //		
-//          // IAnInterface method declaration follow...
+//          // IAnInterface method declarations follow...
 //		    .
 //		    .
 //		    .

@@ -53,7 +53,7 @@ void AxPluginRegistry::Fini()
 
 std::vector<AxPluginFctryPrtcl*>::iterator AxPluginRegistry::Find( const CLSID& clsid )
 {
-	// First, search for rclsid.
+	// Simple linear search for rclsid.
 	std::vector<AxPluginFctryPrtcl*>::iterator iter;
 	for( iter = _factoryV.begin(); iter != _factoryV.end(); ++iter ) {
 		if ( (*iter)->IsClassId( clsid ) ) {
