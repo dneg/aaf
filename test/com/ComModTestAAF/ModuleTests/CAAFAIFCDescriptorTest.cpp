@@ -377,7 +377,11 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	
 		// NOTE: The elements in the summary structure need to be byte swapped
 		//       on Big Endian system (i.e. the MAC).
-		SWAPSUMMARY(summary)
+	// Result depends upon format of the file AND the current machine, not just the current machine.
+		if(summary.formChunk.ckID[0] != 'F')
+		{
+			SwapSummary(summary);
+		}
 
 		checkExpression((strncmp(summary.commChunk.ckID, "COMM", 4) == 0) &&
 						(strncmp(summary.formChunk.ckID, "FORM", 4) == 0) &&
