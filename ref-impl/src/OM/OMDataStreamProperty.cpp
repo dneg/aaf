@@ -52,11 +52,7 @@ void OMDataStreamProperty::save(void) const
 
   // Use the property name as the stream name
   //
-  const char* streamName = name();
-  store()->write(_propertyId,
-                 _storedForm,
-                 (void*)streamName,
-                 strlen(streamName) + 1);
+  saveName();
 
   // The stream has never been written to but we want the stream to
   // exist in the file, create it.
@@ -74,15 +70,7 @@ void OMDataStreamProperty::restore(size_t size)
 {
   TRACE("OMDataStreamProperty::restore");
 
-  char* streamName = new char[size];
-  ASSERT("Valid heap pointer", streamName != 0);
-  store()->read(_propertyId,
-                _storedForm,
-                streamName,
-                size);
-  ASSERT("Consistent property size", size == strlen(streamName) + 1);
-  ASSERT("Consistent property name", strcmp(streamName, name()) == 0);
-  delete [] streamName;
+  restoreName(size);
 
   open();
   setPresent();
