@@ -410,10 +410,9 @@ AD_XMETHOD2(LookupIdentification,
   // the *ppIdentification argument.  The returned identification is
   // AddRef\(\)ed before it is returned.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the ppIdentification pointer is valid.
+  // - the given generation was found.
   // 
   // If this method fails no state will be changed.
   // 
@@ -425,7 +424,10 @@ AD_XMETHOD2(LookupIdentification,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - ppIdentification is null.)
+  //   - ppIdentification is null.
+  //
+  // AAFRESULT_OBJECT_NOT_FOUND
+  //   - the given generation was not found..)
 
 
 AD_XMETHOD1(CountIdentifications,
