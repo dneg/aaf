@@ -74,7 +74,9 @@ public:
   // this weak reference.  The AUIDs indicate the containment path to
   // the target property, starting at the root Header object.  For
   // example, if the containment hierarchy is:
+  //
   // Header->A->B->C
+  //
   // then the first AUID corresponds to the Header's property which
   // contains Object A; the second AUID corresponds to Object A's
   // property which contains Object B; and the third AUID corresponds

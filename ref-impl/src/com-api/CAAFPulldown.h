@@ -179,7 +179,8 @@ public:
   // GetPulldownDirection()
   //
   // Returns the pulldownDirection field of this pulldown through the
-  // *pPulldownDirection argument.  The valid pulldown directions are:
+  // *pPulldownDirection argument.  The valid
+  // pulldown directions are:
   //    kVideoToFilmSpeed -- The input segment is at videoSpeed, and
   //                         the pulldown object is on a mob slot at
   //                         film edit rate.

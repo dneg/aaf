@@ -62,7 +62,7 @@ public:
   //
   // GetTypeCategory()
   //
-  // Returns the type category to which this type definition	belongs.
+  // Returns the type category to which this type definition belongs.
   // 
   // Succeeds if:
   // - The pTid argument is valid

@@ -70,13 +70,14 @@ public:
   // Sets the layout and structure of the components in a single pixel.
   // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
   // from the set:
-  //   	kAAFCompNone
-  // 	kAAFCompAlpha
-  // 	kAAFCompBlue
-  // 	kAAFCompFill
-  // 	kAAFCompGreen
-  // 	kAAFCompPalette
-  // 	kAAFCompRed
+  //   	- kAAFCompNone
+  // 	- kAAFCompAlpha
+  // 	- kAAFCompBlue
+  // 	- kAAFCompFill
+  // 	- kAAFCompGreen
+  // 	- kAAFCompPalette
+  // 	- kAAFCompRed
+  //
   // The 'Size' field of the struct is the component size in bits.
   // 
   // If you set less than 8 entries, the remaining entries will be padded with kAAFCompNone and a size of zero.
@@ -130,13 +131,13 @@ public:
   // Gets the layout and structure of the components in a single pixel.
   // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
   // from the set:
-  //   	kAAFCompNone
-  // 	kAAFCompAlpha
-  // 	kAAFCompBlue
-  // 	kAAFCompFill
-  // 	kAAFCompGreen
-  // 	kAAFCompPalette
-  // 	kAAFCompRed
+  //   	- kAAFCompNone
+  // 	- kAAFCompAlpha
+  // 	- kAAFCompBlue
+  // 	- kAAFCompFill
+  // 	- kAAFCompGreen
+  // 	- kAAFCompPalette
+  // 	- kAAFCompRed
   //
   // The 'Size' field of the struct is the component size in bits.
   // 
@@ -288,13 +289,14 @@ public:
   // Sets the layout and structure of the components in a single pixel.
   // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
   // from the set:
-  //   	kAAFCompNone
-  // 	kAAFCompAlpha
-  // 	kAAFCompBlue
-  // 	kAAFCompFill
-  // 	kAAFCompGreen
-  // 	kAAFCompPalette
-  // 	kAAFCompRed
+  //   	- kAAFCompNone
+  // 	- kAAFCompAlpha
+  // 	- kAAFCompBlue
+  // 	- kAAFCompFill
+  // 	- kAAFCompGreen
+  // 	- kAAFCompPalette
+  // 	- kAAFCompRed
+  //
   // The 'Size' field of the struct is the component size in bits.
   // 
   // If you set less than 8 entries, the remaining entries will be padded with kAAFCompNone and a size of zero.
@@ -318,13 +320,13 @@ public:
   //
   // // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
   // from the set:
-  //   	kAAFCompNone
-  // 	kAAFCompAlpha
-  // 	kAAFCompBlue
-  // 	kAAFCompFill
-  // 	kAAFCompGreen
-  // 	kAAFCompPalette
-  // 	kAAFCompRed
+  //   	- kAAFCompNone
+  // 	- kAAFCompAlpha
+  // 	- kAAFCompBlue
+  // 	- kAAFCompFill
+  // 	- kAAFCompGreen
+  // 	- kAAFCompPalette
+  // 	- kAAFCompRed
   //
   // The 'Size' field of the struct is the component size in bits.
   // 

@@ -12149,6 +12149,7 @@ DECLARE_INTERFACE_(IAAFKLVData, IUnknown)
   //
   // AAFRESULT_NULL_PARAM
   //   - pTypeDef or pValue arg is NULL.
+  //
   // AAFRESULT_NOT_VALID_KEY
   //   - The  given key must not resolve to a builtin type.  For most purposes, use
   //     IAAFTypeDefRename to rename an existing type.
@@ -16704,7 +16705,8 @@ DECLARE_INTERFACE_(IAAFPulldown, IUnknown)
   // GetPulldownDirection()
   //
   // Returns the pulldownDirection field of this pulldown through the
-  // *pPulldownDirection argument.  The valid pulldown directions are:
+  // *pPulldownDirection argument.  The valid
+  // pulldown directions are:
   //    kVideoToFilmSpeed -- The input segment is at videoSpeed, and
   //                         the pulldown object is on a mob slot at
   //                         film edit rate.
@@ -16882,13 +16884,14 @@ DECLARE_INTERFACE_(IAAFRGBADescriptor, IUnknown)
   // Sets the layout and structure of the components in a single pixel.
   // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
   // from the set:
-  //   	kAAFCompNone
-  // 	kAAFCompAlpha
-  // 	kAAFCompBlue
-  // 	kAAFCompFill
-  // 	kAAFCompGreen
-  // 	kAAFCompPalette
-  // 	kAAFCompRed
+  //   	- kAAFCompNone
+  // 	- kAAFCompAlpha
+  // 	- kAAFCompBlue
+  // 	- kAAFCompFill
+  // 	- kAAFCompGreen
+  // 	- kAAFCompPalette
+  // 	- kAAFCompRed
+  //
   // The 'Size' field of the struct is the component size in bits.
   // 
   // If you set less than 8 entries, the remaining entries will be padded with kAAFCompNone and a size of zero.
@@ -16942,13 +16945,13 @@ DECLARE_INTERFACE_(IAAFRGBADescriptor, IUnknown)
   // Gets the layout and structure of the components in a single pixel.
   // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
   // from the set:
-  //   	kAAFCompNone
-  // 	kAAFCompAlpha
-  // 	kAAFCompBlue
-  // 	kAAFCompFill
-  // 	kAAFCompGreen
-  // 	kAAFCompPalette
-  // 	kAAFCompRed
+  //   	- kAAFCompNone
+  // 	- kAAFCompAlpha
+  // 	- kAAFCompBlue
+  // 	- kAAFCompFill
+  // 	- kAAFCompGreen
+  // 	- kAAFCompPalette
+  // 	- kAAFCompRed
   //
   // The 'Size' field of the struct is the component size in bits.
   // 
@@ -17100,13 +17103,14 @@ DECLARE_INTERFACE_(IAAFRGBADescriptor, IUnknown)
   // Sets the layout and structure of the components in a single pixel.
   // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
   // from the set:
-  //   	kAAFCompNone
-  // 	kAAFCompAlpha
-  // 	kAAFCompBlue
-  // 	kAAFCompFill
-  // 	kAAFCompGreen
-  // 	kAAFCompPalette
-  // 	kAAFCompRed
+  //   	- kAAFCompNone
+  // 	- kAAFCompAlpha
+  // 	- kAAFCompBlue
+  // 	- kAAFCompFill
+  // 	- kAAFCompGreen
+  // 	- kAAFCompPalette
+  // 	- kAAFCompRed
+  //
   // The 'Size' field of the struct is the component size in bits.
   // 
   // If you set less than 8 entries, the remaining entries will be padded with kAAFCompNone and a size of zero.
@@ -17130,13 +17134,13 @@ DECLARE_INTERFACE_(IAAFRGBADescriptor, IUnknown)
   //
   // // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
   // from the set:
-  //   	kAAFCompNone
-  // 	kAAFCompAlpha
-  // 	kAAFCompBlue
-  // 	kAAFCompFill
-  // 	kAAFCompGreen
-  // 	kAAFCompPalette
-  // 	kAAFCompRed
+  //   	- kAAFCompNone
+  // 	- kAAFCompAlpha
+  // 	- kAAFCompBlue
+  // 	- kAAFCompFill
+  // 	- kAAFCompGreen
+  // 	- kAAFCompPalette
+  // 	- kAAFCompRed
   //
   // The 'Size' field of the struct is the component size in bits.
   // 
@@ -18555,7 +18559,7 @@ DECLARE_INTERFACE_(IAAFSourceMob, IUnknown)
   //
   // AAFRESULT_FILMDESC_ONLY
   //   - Valid only for AAFSourceMob referencing an AAFFilmDescriptor
-  //   as EssenceDescriptor.
+  //     as EssenceDescriptor.
   //
   STDMETHOD(AppendEdgecodeSlot) (THIS_
     // Edit rate of the Edgecode slot
@@ -18570,15 +18574,17 @@ DECLARE_INTERFACE_(IAAFSourceMob, IUnknown)
     // Length of the Edgecode component in the slot
     /*[in]*/ aafFrameLength_t  length32,
 
-    // The film kind.  Can be one of:
-	// - kFtNull
+    // The film kind.
+    // Can be one of:
+    // - kFtNull
     // - kFt35MM
     // - kFt16MM
     // - kFt8MM
     // - kFt65MM
     /*[in]*/ aafFilmType_t  filmKind,
 
-    // The code format.  Can be one of:
+    // The code format.
+    // Can be one of:
     // - kEtNull
     // - kEtKeycode
     // - kEtEdgenum4
@@ -18801,7 +18807,7 @@ DECLARE_INTERFACE_(IAAFSourceMob, IUnknown)
     /*[in]*/ aafSlotID_t  aMobSlot,
 
     // Data kind of slot to contain reference.  Requires a data kind
-	// valid for a essence stream.  Valid data kinds are:
+    // valid for a essence stream.  Valid data kinds are:
     // - Picture
     // - Sound
     /*[in]*/ IAAFDataDef * pEssenceKind,
@@ -18813,7 +18819,7 @@ DECLARE_INTERFACE_(IAAFSourceMob, IUnknown)
     /*[in]*/ aafLength_t  srcRefLength,
 
     // Method of conversion.  Possible values are:
-    // - kAAFTwoThreePD   	-- Normal NTSC-20fps pulldown
+    // - kAAFTwoThreePD	    -- Normal NTSC-20fps pulldown
     // - kAAFPALPD
     // - kAAFOneToOneNTSC   -- NTSC recorded as 1 frame == 1 film frame.
     // - kAAFOneToOnePAL    -- PAL recorded as 1 frame == 1 film frame.
@@ -18823,9 +18829,10 @@ DECLARE_INTERFACE_(IAAFSourceMob, IUnknown)
     /*[in]*/ aafPhaseFrame_t  phaseFrame,
 
     // Direction of the pulldown conversion. Possible values are:
-    //	- kAAFTapeToFilmSpeed -- Used to link a file descriptor with a
+    //
+    //  - kAAFTapeToFilmSpeed -- Used to link a file descriptor with a
     //							 tape descriptor.
-    //	- kAAFFilmToTapeSpeed -- Used to link a tape descriptor with a
+    //  - kAAFFilmToTapeSpeed -- Used to link a tape descriptor with a
     //							 film descriptor.
     /*[in]*/ aafPulldownDir_t  direction) PURE;
 
@@ -21042,7 +21049,7 @@ DECLARE_INTERFACE_(IAAFTypeDef, IUnknown)
   //
   // GetTypeCategory()
   //
-  // Returns the type category to which this type definition	belongs.
+  // Returns the type category to which this type definition belongs.
   // 
   // Succeeds if:
   // - The pTid argument is valid
@@ -25177,6 +25184,7 @@ DECLARE_INTERFACE_(IAAFTypeDefString, IUnknown)
   // Initializes this type def to contain elements of the given type.
   // Note that it is only possible to use certain types as the element
   // type.  Those permissible types include:
+  //
   // - AAFTypeDefInt
   //
   // This method must be called after allocation, and before
@@ -25561,7 +25569,9 @@ DECLARE_INTERFACE_(IAAFTypeDefWeakObjRef, IUnknown)
   // this weak reference.  The AUIDs indicate the containment path to
   // the target property, starting at the root Header object.  For
   // example, if the containment hierarchy is:
+  //
   // Header->A->B->C
+  //
   // then the first AUID corresponds to the Header's property which
   // contains Object A; the second AUID corresponds to Object A's
   // property which contains Object B; and the third AUID corresponds
@@ -32369,13 +32379,14 @@ DECLARE_INTERFACE_(IAAFEssenceMultiAccess, IUnknown)
     // number of elements in the array of transfer operations
     /*[in]*/ aafUInt16  arrayElemCount,
 
-    // points to an array of transfer parameters.  All fields in this
+    // Points to an array of transfer parameters.  All fields in this
     // array except for bytesXferred must be set up before doing the
     // transfer.  Some of the fields in the xferArray structure are
     // status results like bytesXferred and samplesXferred.
     //
     // The multiXfer_t structure has the following fields, which
-	// specify one channel of data: 
+    // specify one channel of data: 
+    //
     //   essenceDef    [IN] -- The essence type definition
     //   physical      [IN] -- The physical input-output channel
     //   numSamples    [IN] -- The number of samples to transfer
@@ -32383,8 +32394,9 @@ DECLARE_INTERFACE_(IAAFEssenceMultiAccess, IUnknown)
     //   buffer        [IN] -- The buffer for this
     /*[in,size_is(arrayElemCount)]*/ aafmMultiXfer_t *  xferArray,
 
-    // put results into this array.  It has the following fields,
+    // Put results into this array.  It has the following fields,
     // which return result for one channel of data:
+    //
     //   bytesXfered   [OUT] -- The total number of bytes transferred
     //   samplesXfered [OUT] -- The total number of samples transferred
     /*[out,size_is(arrayElemCount)]*/ aafmMultiResult_t *  resultArray) PURE;
@@ -32397,7 +32409,8 @@ DECLARE_INTERFACE_(IAAFEssenceMultiAccess, IUnknown)
   // Reads one or more channels from an interleaved data stream.
   // Possible Errors:
   //
-  // Standard errors (see top of file).
+  //   Standard errors (see top of file).
+  //
   //   AAFRESULT_END_OF_ESSENCE -- Hit the end of the essence (like
   //                               EOF) while reading.
   //
@@ -32407,24 +32420,26 @@ DECLARE_INTERFACE_(IAAFEssenceMultiAccess, IUnknown)
 
     // Points to an array of transfer parameters.  All fields in this
     // array except for bytesXferred must be set up before doing the
-	// transfer.  Some of the fields in the xferArray structure are
-	// status results like bytesXferred and samplesXferred.
+    // transfer.  Some of the fields in the xferArray structure are
+    // status results like bytesXferred and samplesXferred.
     //
     // The multiXfer_t structure has the following fields, which
-	// specify one channel of data:
-    // essenceDef  [IN] -- The essence type definition
-    // physical    [IN] -- The physical input-output channel
-    // numSamples  [IN] -- The number of samples to transfer
-    // buflen      [IN] -- The size of the buffer
-    // buffer      [IN] -- The buffer for this
+    // specify one channel of data:
+    //
+    //     - essenceDef  [IN] -- The essence type definition
+    //     - physical    [IN] -- The physical input-output channel
+    //     - numSamples  [IN] -- The number of samples to transfer
+    //     - buflen      [IN] -- The size of the buffer
+    //     - buffer      [IN] -- The buffer for this
     /*[in, size_is(elemCount)]*/ aafmMultiXfer_t *  xferArray,
 
     // Results go into this array.
     //
     // The aafmMultiResult_t structure has the following fields,
-	// which return result for one channel of data: 
-    // bytesXfered   [OUT] -- The total number of bytes transferred
-    // samplesXfered [OUT] -- The total number of samples transferred
+    // which return result for one channel of data: 
+    //
+    //     - bytesXfered   [OUT] -- The total number of bytes transferred
+    //     - samplesXfered [OUT] -- The total number of samples transferred
     /*[out, size_is(elemCount)]*/ aafmMultiResult_t *  resultArray) PURE;
 
   END_INTERFACE

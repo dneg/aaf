@@ -288,7 +288,7 @@ public:
   //
   // AAFRESULT_FILMDESC_ONLY
   //   - Valid only for AAFSourceMob referencing an AAFFilmDescriptor
-  //   as EssenceDescriptor.
+  //     as EssenceDescriptor.
   //
   STDMETHOD (AppendEdgecodeSlot) (
     // Edit rate of the Edgecode slot
@@ -303,15 +303,17 @@ public:
     // Length of the Edgecode component in the slot
     /*[in]*/ aafFrameLength_t  length32,
 
-    // The film kind.  Can be one of:
-	// - kFtNull
+    // The film kind.
+    // Can be one of:
+    // - kFtNull
     // - kFt35MM
     // - kFt16MM
     // - kFt8MM
     // - kFt65MM
     /*[in]*/ aafFilmType_t  filmKind,
 
-    // The code format.  Can be one of:
+    // The code format.
+    // Can be one of:
     // - kEtNull
     // - kEtKeycode
     // - kEtEdgenum4
@@ -534,7 +536,7 @@ public:
     /*[in]*/ aafSlotID_t  aMobSlot,
 
     // Data kind of slot to contain reference.  Requires a data kind
-	// valid for a essence stream.  Valid data kinds are:
+    // valid for a essence stream.  Valid data kinds are:
     // - Picture
     // - Sound
     /*[in]*/ IAAFDataDef * pEssenceKind,
@@ -546,7 +548,7 @@ public:
     /*[in]*/ aafLength_t  srcRefLength,
 
     // Method of conversion.  Possible values are:
-    // - kAAFTwoThreePD   	-- Normal NTSC-20fps pulldown
+    // - kAAFTwoThreePD	    -- Normal NTSC-20fps pulldown
     // - kAAFPALPD
     // - kAAFOneToOneNTSC   -- NTSC recorded as 1 frame == 1 film frame.
     // - kAAFOneToOnePAL    -- PAL recorded as 1 frame == 1 film frame.
@@ -556,9 +558,10 @@ public:
     /*[in]*/ aafPhaseFrame_t  phaseFrame,
 
     // Direction of the pulldown conversion. Possible values are:
-    //	- kAAFTapeToFilmSpeed -- Used to link a file descriptor with a
+    //
+    //  - kAAFTapeToFilmSpeed -- Used to link a file descriptor with a
     //							 tape descriptor.
-    //	- kAAFFilmToTapeSpeed -- Used to link a tape descriptor with a
+    //  - kAAFFilmToTapeSpeed -- Used to link a tape descriptor with a
     //							 film descriptor.
     /*[in]*/ aafPulldownDir_t  direction);
   //***********************************************************

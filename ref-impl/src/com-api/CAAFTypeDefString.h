@@ -66,6 +66,7 @@ public:
   // Initializes this type def to contain elements of the given type.
   // Note that it is only possible to use certain types as the element
   // type.  Those permissible types include:
+  //
   // - AAFTypeDefInt
   //
   // This method must be called after allocation, and before

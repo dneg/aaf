@@ -88,6 +88,7 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pTypeDef or pValue arg is NULL.
+  //
   // AAFRESULT_NOT_VALID_KEY
   //   - The  given key must not resolve to a builtin type.  For most purposes, use
   //     IAAFTypeDefRename to rename an existing type.
