@@ -50,11 +50,10 @@ typedef IAAFSmartPointer<IAAFTypeDef>               IAAFTypeDefSP;
 typedef IAAFSmartPointer<IAAFTypeDefWeakObjRef>     IAAFTypeDefWeakObjRefSP;
 
 
-
 #include <iostream.h>
 #include <stdio.h>
 #include <assert.h>
-
+#include <stdlib.h>
 
 
 // Weak references may not be in v1.0...

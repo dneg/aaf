@@ -40,6 +40,7 @@
 
 #include <iostream.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 // Temporarily necessary global declarations.
 extern "C" const CLSID CLSID_AAFNestedScope; // generated

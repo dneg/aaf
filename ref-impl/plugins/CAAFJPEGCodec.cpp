@@ -27,14 +27,15 @@
 #include "CAAFJPEGCodec.h"
 
 #include <assert.h>
+#include <string.h>
 #include "AAFResult.h"
 
 #include "AAF.h"
 
-#include "aafUtils.h"
+#include "AAFUtils.h"
 #include "aafCvt.h"
-#include "aafDataDefs.h"
-#include "aafDefUIDs.h"
+#include "AAFDataDefs.h"
+#include "AAFDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFCodecDefs.h"
 #include "AAFEssenceFormats.h"
@@ -3758,6 +3759,10 @@ HRESULT CAAFJPEGCodec::WriteSampleIndex()
 
 // What interfaces does this plugin support
 // Override of CAAFUnknown method.
+inline int EQUAL_UID(const GUID & a, const GUID & b)
+{
+  return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
+}
 HRESULT CAAFJPEGCodec::InternalQueryInterface
 (
     REFIID riid,
@@ -3769,14 +3774,14 @@ HRESULT CAAFJPEGCodec::InternalQueryInterface
         return E_INVALIDARG;
 
     // We support the IAAFEssenceCodec interface 
-    if (riid == IID_IAAFEssenceCodec) 
+    if (EQUAL_UID(riid,IID_IAAFEssenceCodec)) 
     { 
         *ppvObj = (IAAFEssenceCodec *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
 		// and the IAAFPlugin interface.
-    else if (riid == IID_IAAFPlugin) 
+    else if (EQUAL_UID(riid,IID_IAAFPlugin)) 
     { 
         *ppvObj = (IAAFPlugin *)this; 
         ((IUnknown *)*ppvObj)->AddRef();

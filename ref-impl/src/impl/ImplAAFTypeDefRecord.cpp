@@ -47,10 +47,7 @@
 
 #include <assert.h>
 #include <string.h>
-
-#if defined(macintosh) || defined(_MAC)
-#include <wstring.h>
-#endif
+#include <wchar.h>
 
 extern "C" const aafClassID_t CLSID_AAFPropValData;
 

@@ -27,6 +27,7 @@
 #include "CAAFWAVECodec.h"
 
 #include <assert.h>
+#include <string.h>
 #include "AAFResult.h"
 
 #include "AAF.h"
@@ -34,10 +35,10 @@
 //#include "CAAFEssenceFormat.h"
 //#include "ImplAAFEssenceFormat.h"
 #include "aafErr.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 #include "aafCvt.h"
-#include "aafDataDefs.h"
-#include "aafDefUIDs.h"
+#include "AAFDataDefs.h"
+#include "AAFDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFCodecDefs.h"
 #include "AAFEssenceFormats.h"
@@ -1790,6 +1791,10 @@ static void SplitBuffers(void *original, aafUInt32 srcSamples, aafUInt16 sampleS
 //
 // 
 // 
+inline int EQUAL_UID(const GUID & a, const GUID & b)
+{
+  return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
+}
 HRESULT CAAFWaveCodec::InternalQueryInterface
 (
     REFIID riid,
@@ -1800,19 +1805,19 @@ HRESULT CAAFWaveCodec::InternalQueryInterface
     if (NULL == ppvObj)
         return E_INVALIDARG;
 
-    if (riid == IID_IAAFMultiEssenceCodec) 
+    if (EQUAL_UID(riid,IID_IAAFMultiEssenceCodec)) 
     { 
         *ppvObj = (IAAFMultiEssenceCodec *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
-    else if (riid == IID_IAAFEssenceCodec) 
+    else if (EQUAL_UID(riid,IID_IAAFEssenceCodec)) 
     { 
         *ppvObj = (IAAFEssenceCodec *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
-    else if (riid == IID_IAAFPlugin) 
+    else if (EQUAL_UID(riid,IID_IAAFPlugin)) 
     { 
         *ppvObj = (IAAFPlugin *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
