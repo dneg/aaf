@@ -106,13 +106,7 @@ static inline ULARGE_INTEGER fromOMUInt64(const OMUInt64& x)
   typedef char OMCHAR;
 #endif
 
-#if defined(_WIN32) && defined(UNICODE)
-static void convert(wchar_t* wcName, size_t length, const char* name);
-#endif
-
 static void convert(char* cName, size_t length, const wchar_t* name);
-
-static void convert(char* cName, size_t length, const char* name);
 
 #if defined(_WIN32) && defined(UNICODE)
 static void convert(wchar_t* wcName, size_t length, const wchar_t* name);
@@ -222,7 +216,6 @@ void OMStoredObject::save(const OMPropertySet& properties)
 
   size_t count = properties.count();
   delete _index;
-  _index = 0; // for BoundsChecker
   _index = new OMStoredPropertySetIndex(count);
   ASSERT("Valid heap pointer", _index != 0);
   size_t countPresent = properties.countPresent();
@@ -2010,30 +2003,6 @@ void OMStoredObject::streamSetPosition(IStream* stream, const OMUInt64 offset)
   check(status);
 }
 
-#if defined(_WIN32) && defined(UNICODE)
-
-static void convert(wchar_t* wcName, size_t length, const char* name)
-{
-  TRACE("convert");
-  PRECONDITION("Valid input name", validString(name));
-  PRECONDITION("Valid output buffer", wcName != 0);
-  PRECONDITION("Valid output buffer size", length > 0);
-  
-  ASSERT("Valid program name", validString(getProgramName()));
-
-  size_t status = mbstowcs(wcName, name, length);
-  if (status == (size_t)-1) {
-    cerr << getProgramName()
-      << "Error : Failed to convert \""
-      << name
-      << "\" to a wide character string."
-      << endl;
-    // exit(EXIT_FAILURE); // tjb - error
-  }
-}
-
-#endif
-
 static void convert(char* cName, size_t length, const wchar_t* name)
 {
   TRACE("convert");
@@ -2044,24 +2013,6 @@ static void convert(char* cName, size_t length, const wchar_t* name)
 
   size_t status = wcstombs(cName, name, length);
   if (status == (size_t)-1) {
-    cerr << getProgramName()
-      << ": Error : Conversion failed."
-      << endl;
-    // exit(EXIT_FAILURE); // tjb - error
-  }
-}
-
-static void convert(char* cName, size_t length, const char* name)
-{
-  TRACE("convert");
-  PRECONDITION("Valid input name", validString(name));
-  PRECONDITION("Valid output buffer", cName != 0);
-  PRECONDITION("Valid output buffer size", length > 0);
-
-  size_t sourceLength = strlen(name);
-  if (sourceLength + 1 < length) {
-    strncpy(cName, name, sourceLength + 1);
-  } else {
     cerr << getProgramName()
       << ": Error : Conversion failed."
       << endl;
