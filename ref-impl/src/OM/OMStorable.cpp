@@ -166,6 +166,7 @@ OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
   OMStorable* object = classFactory->create(cid);
   ASSERT("Registered class id", object != 0);
   ASSERT("Valid class factory", classFactory == object->classFactory());
+//ASSERT("Valid class definition", object->definition() != 0);
   // Attach the object.
   object->attach(containingObject, name);
   object->setStore(&s);
@@ -513,15 +514,41 @@ void OMStorable::setClassFactory(const OMClassFactory* classFactory)
 OMStorable* OMStorable::shallowCopy(void) const
 {
   TRACE("OMStorable::shallowCopy");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  return 0;
+  const OMStoredObjectIdentification& id = classId();
+  OMStorable* object = classFactory()->create(id);
+  ASSERT("Registered class id", object != 0);
+  ASSERT("Valid class factory", object->classFactory() != 0);
+//ASSERT("Valid class definition", object->definition() != 0);
+
+  OMPropertySetIterator iterator(_persistentProperties, OMBefore);
+  while (++iterator) {
+    OMProperty* source = iterator.property();
+    ASSERT("Valid property", source != 0);
+    if (!source->isOptional() || source->isPresent()) {
+      OMPropertyId pid = source->propertyId();
+      OMProperty* dest = object->propertySet()->get(pid);
+      source->shallowCopyTo(dest);
+    }
+  }
+
+  POSTCONDITION("Valid result", object != 0);
+  return object;
 }
 
-void OMStorable::deepCopyTo(OMStorable* /* destination */,
-                            void* /* clientContext */) const
+void OMStorable::deepCopyTo(OMStorable* destination,
+                            void* clientContext) const
 {
   TRACE("OMStorable::deepCopyTo");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  OMPropertySetIterator iterator(_persistentProperties, OMBefore);
+  while (++iterator) {
+    OMProperty* source = iterator.property();
+    ASSERT("Valid property", source != 0);
+    if (!source->isOptional() || source->isPresent()) {
+      OMPropertyId pid = source->propertyId();
+      OMProperty* dest = destination->propertySet()->get(pid);
+      source->deepCopyTo(dest, clientContext);
+    }
+  }
 }
 
   // @mfunc Inform this <c OMStorable> that it is about to be saved.
