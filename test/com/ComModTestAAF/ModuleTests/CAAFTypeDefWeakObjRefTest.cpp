@@ -42,6 +42,7 @@
 typedef IAAFSmartPointer<IUnknown>                  IUnknownSP;
 typedef IAAFSmartPointer<IAAFFile>                  IAAFFileSP;
 typedef IAAFSmartPointer<IAAFHeader>                IAAFHeaderSP;
+typedef IAAFSmartPointer<IAAFIdentification>        IAAFIdentificationSP;
 typedef IAAFSmartPointer<IAAFDictionary>            IAAFDictionarySP;
 typedef IAAFSmartPointer<IAAFObject>                IAAFObjectSP;
 typedef IAAFSmartPointer<IAAFClassDef>              IAAFClassDefSP;
@@ -55,18 +56,13 @@ typedef IAAFSmartPointer<IAAFFiller>                IAAFFillerSP;
 typedef IAAFSmartPointer<IAAFComponent>             IAAFComponentSP;
 typedef IAAFSmartPointer<IAAFSegment>               IAAFSegmentSP;
 typedef IAAFSmartPointer<IAAFTimelineMobSlot>       IAAFTimelineMobSlotSP;
-
+typedef IAAFSmartPointer<IAAFMobSlot>               IAAFMobSlotSP;
+typedef IAAFSmartPointer<IAAFTypeDefObjectRef>      IAAFTypeDefObjectRefSP;
 
 #include <iostream.h>
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
-
-
-// Weak references may not be in v1.0...
-#ifndef ENABLE_WEAK_REFERENCES
-#define ENABLE_WEAK_REFERENCES 1
-#endif
 
 
 // Required function prototypes
@@ -80,24 +76,23 @@ extern "C"
 
   // Open the test file read only and validate the data.
   void CAAFTypeDefWeakObjRef_read (aafCharacter_constptr pFileName); // throw HRESULT
+  
+  void CAAFTypeDefWeakObjRef_verify (IAAFHeader * pHeader); // throw HRESULT
 }
 
 
 extern "C" HRESULT CAAFTypeDefWeakObjRef_test(testMode_t);
 extern "C" HRESULT CAAFTypeDefWeakObjRef_test(testMode_t mode)
 {
-#if ENABLE_WEAK_REFERENCES
-
   HRESULT result = AAFRESULT_SUCCESS;
   aafCharacter_constptr wFileName = L"AAFTypeDefWeakObjRefTest.aaf";
-  //  const char *aFileName = "AAFTypeDefWeakObjRefTest.aaf";
 
   try
   {
     // Run through a basic set of tests. Create the file, 
     // and then read and validate the new file.
-     if(mode == kAAFUnitTestReadWrite)
-    		CAAFTypeDefWeakObjRef_create (wFileName);
+    if(mode == kAAFUnitTestReadWrite)
+      CAAFTypeDefWeakObjRef_create (wFileName);
     CAAFTypeDefWeakObjRef_read (wFileName);
   }
   catch (HRESULT &rhr)
@@ -105,23 +100,7 @@ extern "C" HRESULT CAAFTypeDefWeakObjRef_test(testMode_t mode)
     result = rhr;
   }
 
-  if (SUCCEEDED (result))
-  {
-    cout << "The following IAAFTypeWeakObjRef methods have not been tested yet:" << endl;
-//    cout << "     Initialize" << endl;
-    cout << "     GetObjectType" << endl;
-    cout << "     GetObject" << endl;
-    cout << "     SetObject" << endl;
-    cout << "     CreateValue" << endl;
-    result = AAFRESULT_TEST_PARTIAL_SUCCESS;
-  }
   return result;
-
-#else // #if ENABLE_WEAK_REFERENCES
-    
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-    
-#endif // #else // #if ENABLE_WEAK_REFERENCES
 }
 
 
@@ -143,6 +122,7 @@ static const 	aafMobID_t	TEST_MobID =
 0x13, 0x00, 0x00, 0x00,
 {0xc68dee89, 0x0405, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
 
+static const aafSlotID_t TEST_SlotID = 1;
 
 #if 1 //#ifndef _DEBUG
 // convenient error handlers.
@@ -196,7 +176,116 @@ static void RemoveTestFile(const wchar_t* pFileName)
   }
 }
 
+static bool EqualObjects(IUnknown *pObj1, IUnknown *pObj2) // throw HRESULT
+{
+  checkExpression(NULL != pObj1 && NULL != pObj2, AAFRESULT_NULL_PARAM);
 
+  IUnknownSP pUnk1, pUnk2;  
+  checkResult(pObj1->QueryInterface(IID_IUnknown, (void **)&pUnk1));
+  checkResult(pObj2->QueryInterface(IID_IUnknown, (void **)&pUnk2));
+  if ((IUnknown *)pUnk1 == (IUnknown *)pUnk2)
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+
+static void CreateWeakReference(
+  IAAFFiller * pFiller,
+  IAAFTypeDef * pTargetType)
+{
+  IAAFObjectSP pObject;
+  checkResult(pFiller->QueryInterface(IID_IAAFObject, (void **)&pObject));
+
+  IAAFClassDefSP pClassDef;
+  checkResult(pObject->GetDefinition(&pClassDef));
+  IAAFPropertyDefSP pWeakRefPropertyDef;
+  checkResult(pClassDef->LookupPropertyDef(kAAFPropID_TestWeakReferenceToType, &pWeakRefPropertyDef));
+  
+  // Make sure the property's type definition is in fact a weak reference.
+  IAAFTypeDefSP pPropertyType;
+  checkResult(pWeakRefPropertyDef->GetTypeDef(&pPropertyType));
+  IAAFTypeDefWeakObjRefSP pWeakReferenceType;
+  checkResult(pPropertyType->QueryInterface(IID_IAAFTypeDefWeakObjRef, (void **)&pWeakReferenceType));
+
+  // Create the weak reference property value.  
+  IAAFTypeDefObjectRefSP pObjectReferenceType;
+  checkResult(pWeakReferenceType->QueryInterface(IID_IAAFTypeDefObjectRef, (void **)&pObjectReferenceType));
+  IAAFPropertyValueSP pWeakReferenceValue;
+  checkResult(pObjectReferenceType->CreateValue(pTargetType, &pWeakReferenceValue));
+  
+  // Install the new weak reference value into the filler object.
+  checkResult(pObject->SetPropertyValue(pWeakRefPropertyDef, pWeakReferenceValue));
+}
+
+static void ChangeWeakReference(
+  IAAFFiller * pFiller,
+  IAAFTypeDef * pTargetType)
+{
+  IAAFObjectSP pObject;
+  checkResult(pFiller->QueryInterface(IID_IAAFObject, (void **)&pObject));
+
+  IAAFClassDefSP pClassDef;
+  checkResult(pObject->GetDefinition(&pClassDef));
+  IAAFPropertyDefSP pWeakRefPropertyDef;
+  checkResult(pClassDef->LookupPropertyDef(kAAFPropID_TestWeakReferenceToType, &pWeakRefPropertyDef));
+  
+  // Get weak reference value from the filler object.
+  IAAFPropertyValueSP pWeakReferenceValue;
+  checkResult(pObject->GetPropertyValue(pWeakRefPropertyDef, &pWeakReferenceValue));
+
+  // Make sure the value's type definition is in fact a weak reference.
+  IAAFTypeDefSP pPropertyType;
+  checkResult(pWeakReferenceValue->GetType(&pPropertyType));
+  IAAFTypeDefWeakObjRefSP pWeakReferenceType;
+  checkResult(pPropertyType->QueryInterface(IID_IAAFTypeDefWeakObjRef, (void **)&pWeakReferenceType));
+
+  // Create the weak reference property value.  
+  IAAFTypeDefObjectRefSP pObjectReferenceType;
+  checkResult(pWeakReferenceType->QueryInterface(IID_IAAFTypeDefObjectRef, (void **)&pObjectReferenceType));
+  
+  // Make sure the target of the weak reference is a type definition.
+  checkResult(pObjectReferenceType->SetObject(pWeakReferenceValue, pTargetType));
+}
+
+static void CheckWeakReference(
+  IAAFFiller * pFiller,
+  IAAFTypeDef * pTargetType)
+{
+  IAAFObjectSP pObject;
+  checkResult(pFiller->QueryInterface(IID_IAAFObject, (void **)&pObject));
+
+  IAAFClassDefSP pClassDef;
+  checkResult(pObject->GetDefinition(&pClassDef));
+  IAAFPropertyDefSP pWeakRefPropertyDef;
+  checkResult(pClassDef->LookupPropertyDef(kAAFPropID_TestWeakReferenceToType, &pWeakRefPropertyDef));
+  
+  // Get weak reference value from the filler object.
+  IAAFPropertyValueSP pWeakReferenceValue;
+  checkResult(pObject->GetPropertyValue(pWeakRefPropertyDef, &pWeakReferenceValue));
+
+  // Make sure the value's type definition is in fact a weak reference.
+  IAAFTypeDefSP pPropertyType;
+  checkResult(pWeakReferenceValue->GetType(&pPropertyType));
+  IAAFTypeDefWeakObjRefSP pWeakReferenceType;
+  checkResult(pPropertyType->QueryInterface(IID_IAAFTypeDefWeakObjRef, (void **)&pWeakReferenceType));
+
+  // Create the weak reference property value.  
+  IAAFTypeDefObjectRefSP pObjectReferenceType;
+  checkResult(pWeakReferenceType->QueryInterface(IID_IAAFTypeDefObjectRef, (void **)&pObjectReferenceType));
+  
+  // Make sure the target of the weak reference is a type definition.
+  IAAFTypeDefSP pFoundTargetType;
+  checkResult(pObjectReferenceType->GetObject(pWeakReferenceValue, IID_IAAFTypeDef, (IUnknown **)&pFoundTargetType));
+  
+  // Verify that the object that was the target of the weak reference was the
+  // type that we were expecting.
+  checkExpression(EqualObjects(pFoundTargetType, pTargetType), AAFRESULT_TEST_FAILED);
+}
 
 
 // Create the test file.
@@ -230,53 +319,60 @@ void CAAFTypeDefWeakObjRef_create (aafCharacter_constptr pFileName) // throw HRE
     IAAFHeaderSP pHeader;
     checkResult (pFile->GetHeader (&pHeader));
     
+    aafProductVersion_t toolkitVersion;
+    checkResult(GetAAFVersions(pHeader, &toolkitVersion, NULL));
+    bool weakReferencesSupported = WeakReferencesSupported(toolkitVersion);
+    
     IAAFDictionarySP pDictionary;
     checkResult (pHeader->GetDictionary (&pDictionary));
     
     CAAFBuiltinDefs defs (pDictionary);
    
-    // Create a Mob
-    IAAFTypeDefWeakObjRefSP pWeakObjRef;
-    checkResult(pDictionary->CreateMetaInstance(AUID_AAFTypeDefWeakObjRef,
-                                                IID_IAAFTypeDefWeakObjRef,
-                                                (IUnknown **)&pWeakObjRef));
-    
-    // Find the class definition for all type definitions.
-    IAAFClassDefSP pClassDef;
-    checkResult(pDictionary->LookupClassDef(AUID_AAFTypeDef, &pClassDef));
-    
+    if (weakReferencesSupported)
+    {
+      // Create a Weak reference to a type definition.
+      IAAFTypeDefWeakObjRefSP pWeakObjRef;
+      checkResult(pDictionary->CreateMetaInstance(AUID_AAFTypeDefWeakObjRef,
+                                                  IID_IAAFTypeDefWeakObjRef,
+                                                  (IUnknown **)&pWeakObjRef));
+      
+      // Find the class definition for all type definitions.
+      IAAFClassDefSP pClassDef;
+      checkResult(pDictionary->LookupClassDef(AUID_AAFTypeDef, &pClassDef));
+      
 
-	  aafUID_t targetSet[2];
-    targetSet[0] = kAAFPropID_Root_MetaDictionary;
-    targetSet[1] = kAAFPropID_MetaDictionary_TypeDefinitions;
-    checkResult(pWeakObjRef->Initialize(kAAFTypeID_TestWeakReferenceToType,
-                                        pClassDef,
-                                        kMyWeakReferenceToTypeDefinitionName,
-                                        sizeof(targetSet)/sizeof(aafUID_t),
-                                        targetSet));
+  	  aafUID_t targetSet[2];
+      targetSet[0] = kAAFPropID_Root_MetaDictionary;
+      targetSet[1] = kAAFPropID_MetaDictionary_TypeDefinitions;
+      checkResult(pWeakObjRef->Initialize(kAAFTypeID_TestWeakReferenceToType,
+                                          pClassDef,
+                                          kMyWeakReferenceToTypeDefinitionName,
+                                          sizeof(targetSet)/sizeof(aafUID_t),
+                                          targetSet));
 
-    // Validate that we make the correct "type" by inspecting the type category.
-    IAAFTypeDefSP pTypeDef;
-    checkResult(pWeakObjRef->QueryInterface(IID_IAAFTypeDef, (void **)&pTypeDef));
+      // Validate that we make the correct "type" by inspecting the type category.
+      IAAFTypeDefSP pTypeDef;
+      checkResult(pWeakObjRef->QueryInterface(IID_IAAFTypeDef, (void **)&pTypeDef));
 
-    eAAFTypeCategory_t category;
-    checkResult(pTypeDef->GetTypeCategory(&category));
-    checkExpression(kAAFTypeCatWeakObjRef == category, AAFRESULT_TEST_FAILED);
+      eAAFTypeCategory_t category;
+      checkResult(pTypeDef->GetTypeCategory(&category));
+      checkExpression(kAAFTypeCatWeakObjRef == category, AAFRESULT_TEST_FAILED);
 
 
-  	// Add the new type to the dictionary.
-  	checkResult(pDictionary->RegisterTypeDef(pTypeDef));
-  	
-  	
-  	// Now add a new optional weak reference property to an existing class.
-  	IAAFClassDefSP pFillerClass;
-  	IAAFPropertyDefSP pTypePropertyDef;  	
-    checkResult(pDictionary->LookupClassDef(AUID_AAFComponent, &pFillerClass));   
-    checkResult(pFillerClass->RegisterOptionalPropertyDef(
-      kAAFPropID_TestWeakReferenceToType,
-      kMyWeakReferenceToTypeDefinitionPropertyName,
-      pTypeDef,
-      &pTypePropertyDef));
+    	// Add the new type to the dictionary.
+    	checkResult(pDictionary->RegisterTypeDef(pTypeDef));
+    	
+    	
+    	// Now add a new optional weak reference property to an existing class.
+    	IAAFClassDefSP pFillerClass;
+      IAAFPropertyDefSP pWeakRefPropertyDef;  	
+      checkResult(pDictionary->LookupClassDef(AUID_AAFComponent, &pFillerClass));   
+      checkResult(pFillerClass->RegisterOptionalPropertyDef(
+        kAAFPropID_TestWeakReferenceToType,
+        kMyWeakReferenceToTypeDefinitionPropertyName,
+        pTypeDef,
+        &pWeakRefPropertyDef));      
+    }
   
 
 
@@ -306,6 +402,17 @@ void CAAFTypeDefWeakObjRef_create (aafCharacter_constptr pFileName) // throw HRE
 	  checkResult (pFiller2->Initialize (defs.ddPicture(), 32));
 
 
+    if (weakReferencesSupported)
+    {
+      // Try adding a weak reference before filler is attached to the file.
+      CreateWeakReference(pFiller1, defs.tdInt64());
+      CheckWeakReference(pFiller1, defs.tdInt64());
+      
+      ChangeWeakReference(pFiller1, defs.tdString());
+      CreateWeakReference(pFiller2, defs.tdInt32()); 	
+    }
+
+
     //
     // Add the initialized fillers to the sequence.
     //
@@ -326,12 +433,21 @@ void CAAFTypeDefWeakObjRef_create (aafCharacter_constptr pFileName) // throw HRE
    	aafCharacter_constptr pSlotName = L"Slot 1";
    	aafPosition_t  origin = 0;
    	IAAFTimelineMobSlotSP pNewSlot;
-   	checkResult(pMob->AppendNewTimelineSlot(editRate, pSegment, 1, pSlotName, origin, &pNewSlot));
+   	checkResult(pMob->AppendNewTimelineSlot(editRate, pSegment, TEST_SlotID, pSlotName, origin, &pNewSlot));
 
     //
     // Add to the set of mobs in the file.
     //
     checkResult(pHeader->AddMob(pMob));
+
+//    if (weakReferencesSupported)
+//    {
+//      // Try adding a weak reference after filler is attached to the file.
+//      CreateWeakReference(pFiller2, defs.tdInt32());  	
+//    }
+
+    // Verify the data before the save.
+    CAAFTypeDefWeakObjRef_verify (pHeader);
 
     checkResult(pFile->Save());
     checkResult(pFile->Close());
@@ -356,21 +472,115 @@ void CAAFTypeDefWeakObjRef_read (aafCharacter_constptr pFileName) // throw HRESU
 {
   IAAFFileSP pFile;
   IAAFHeaderSP pHeader;
-  IAAFDictionarySP pDictionary;
-  IAAFTypeDefWeakObjRefSP pWeakReference;
-  IAAFPropertyValueSP pPropertyValue;
 
-  checkResult (AAFFileOpenExistingRead(pFileName, 0, &pFile));
-  checkResult (pFile->GetHeader (&pHeader));
-  checkResult (pHeader->GetDictionary (&pDictionary));
+  try
+  {
+    checkResult (AAFFileOpenExistingRead(pFileName, 0, &pFile));
+    checkResult (pFile->GetHeader (&pHeader));
+    
+    CAAFTypeDefWeakObjRef_verify (pHeader);
 
-  CAAFBuiltinDefs defs (pDictionary);
-  
-
-  checkResult(pFile->Close());
+    checkResult(pFile->Close());
+  }
+  catch (...)
+  {
+     pFile->Close();  
+     throw;
+  }
 }
 
 
+
+void CAAFTypeDefWeakObjRef_verify (IAAFHeader * pHeader)
+{
+  IAAFDictionarySP pDictionary;
+  IAAFPropertyDefSP pWeakRefPropertyDef;
+
+  checkResult (pHeader->GetDictionary (&pDictionary));
+  CAAFBuiltinDefs defs (pDictionary);
+  
+  // Determine if it is okay to ready/validate weak references from the
+  // test file with the current version of the AAF.
+  bool weakReferencesSupported = false;
+  aafProductVersion_t toolkitVersion, fileToolkitVersion;
+  checkResult(GetAAFVersions(pHeader, &toolkitVersion, &fileToolkitVersion));
+  if (WeakReferencesSupported(toolkitVersion) && WeakReferencesSupported(fileToolkitVersion))
+  {
+    weakReferencesSupported = true;
+  } 
+
+
+ 
+  if (weakReferencesSupported)
+  {    
+    //
+    // Find and validate the new weak reference.
+    IAAFTypeDefSP pType;
+    checkResult(pDictionary->LookupTypeDef (kAAFTypeID_TestWeakReferenceToType, &pType));
+    eAAFTypeCategory_t category;
+    checkResult(pType->GetTypeCategory(&category));
+    checkExpression(kAAFTypeCatWeakObjRef == category, AAFRESULT_TEST_FAILED);
+
+    IAAFTypeDefWeakObjRefSP pWeakReferenceType;
+  	checkResult(pType->QueryInterface(IID_IAAFTypeDefWeakObjRef, (void **)&pWeakReferenceType));
+  	
+  	checkResult(defs.cdFiller()->LookupPropertyDef(kAAFPropID_TestWeakReferenceToType, &pWeakRefPropertyDef));
+  	
+  	// Validate the property's type
+  	checkResult(pWeakRefPropertyDef->GetTypeDef(&pType));
+    checkExpression(EqualObjects(pType, pWeakReferenceType), AAFRESULT_TEST_FAILED);
+    
+    // Use GetObjectType to make sure that the target class definitions are
+    // the same.
+    IAAFTypeDefObjectRefSP pObjectReferenceType;
+    checkResult(pWeakReferenceType->QueryInterface(IID_IAAFTypeDefObjectRef, (void **)&pObjectReferenceType));
+
+    IAAFClassDefSP pReferencedObjectClass;
+    checkResult(pObjectReferenceType->GetObjectType(&pReferencedObjectClass));
+
+    // Find the class definition for all type definitions.
+    IAAFClassDefSP pTypeDefClass;
+    checkResult(pDictionary->LookupClassDef(AUID_AAFTypeDef, &pTypeDefClass));
+    checkExpression(EqualObjects(pReferencedObjectClass, pTypeDefClass), AAFRESULT_TEST_FAILED);
+
+
+    //
+    // Find our composition mob.
+    IAAFMobSP pMob;
+    checkResult(pHeader->LookupMob(TEST_MobID, &pMob));
+    
+    IAAFMobSlotSP pSlot;
+    checkResult(pMob->LookupSlot(TEST_SlotID, &pSlot));
+    
+    IAAFSegmentSP pSegment;
+    checkResult(pSlot->GetSegment(&pSegment));
+    
+    IAAFSequenceSP pSequence;
+    checkResult(pSegment->QueryInterface(IID_IAAFSequence, (void **)&pSequence));	
+    
+    aafUInt32 elementCount;
+    checkResult(pSequence->CountComponents(&elementCount));
+    checkExpression(2 == elementCount, AAFRESULT_TEST_FAILED);
+    
+    IAAFComponentSP pComp1;
+    checkResult(pSequence->GetComponentAt(0, &pComp1));
+    IAAFFillerSP pFiller1;
+    checkResult(pComp1->QueryInterface(IID_IAAFFiller, (void **)&pFiller1));
+    
+    IAAFComponentSP pComp2;
+    checkResult(pSequence->GetComponentAt(1, &pComp2));
+    IAAFFillerSP pFiller2;
+    checkResult(pComp2->QueryInterface(IID_IAAFFiller, (void **)&pFiller2));
+    
+    CheckWeakReference(pFiller1, defs.tdString());  	
+    CheckWeakReference(pFiller2, defs.tdInt32());  	
+  }
+  else if (!WeakReferencesSupported(toolkitVersion))
+  {
+    // This version does not support reading weak references.
+	  throw AAFRESULT_NOT_IN_CURRENT_VERSION;
+	}
+}
 
 
 
