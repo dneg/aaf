@@ -332,8 +332,6 @@ void OMProperty::clearPresent(void)
   _isPresent = false;
 }
 
-// @doc OMINTERNAL
-
 // class OMSimpleProperty
 
 OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
