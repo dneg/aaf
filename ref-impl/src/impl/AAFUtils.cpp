@@ -27,100 +27,6 @@
 
 
 /*
- * Name: omAcces.c
- *
- * Function: The main API file for media layer operations.
- *
- * Audience: Clients writing or reading AAF media data.
- *
- * Public Functions:
- *		AAFMalloc()
- *			Allocate this many bytes
- *		AAFFree()
- *			Free up this buffer
- *		IsPropertyPresent()
- *			Test if a given property is present in a file.
- *		IsTypeOf()
- *			Test if an object is a member of the given class, or
- *			one of its subclasses.
- *		omfsClassFindSuperClass()
- *			Given a pointer to a classID, returns the superclass ID
- *			and a boolean indicating if a superclass was found.
- *		GetByteOrder()
- *			Return the byte ordering of a particular object in the file. 
- *		omfsPutByteOrder()
- *			Sets the byte ordering of a particular object in the file.
- *		omfsFileGetDefaultByteOrder()
- *			Returns the default byte ordering from the given file.
- *		omfsFileSetDefaultByteOrder()
- *			Sets the default byte ordering from the given file.
- *		GetHeadObject()
- *			Given an opaque file handle, return the head object for
- *			that file.
- *		omfsObjectNew()
- *			Create a new object of a given classID in the given file.
- *		omfsSetProgressCallback()
- *			Sets a callback which will be called at intervals
- *			during long operations, in order to allow your application
- *			to pin a watch cursor, move a thermometer, etc...
- *    GetNextProperty()
- *    GetPropertyName()
- *    omfiGetPropertyTypename()
- *    GetNextObject()
- *
- * Public functions used to extend the toolkit API:
- *	(Used to write wrapper functions for new types and properties)
- *
- *		NewClass()
- *			Add a new class to the class definition table.
- *		omfsRegisterType()
- *			Add a new type to the type definition table.  This function takes an explicit
- *			omType_t, and should be called for required & registered types
- *			which are not registered by a media codec.
- *		omfsRegisterProp()
- *			Register a aafProperty code, supplying a name, class, type, and an enum
- *			value indicating which revisions the field is valid for.  This function takes
- *			an explicit aafProperty_t, and should be called for required & registered
- *			properties which are not registered by a media codec.
- *		omfsRegisterDynamicType()
- *			Register a type with a dynamic type code.  This function should be called when
- *			registering a private type, or when a codec requires a type.  The type code used
- *			to refer to the type is returned from this function, and must be saved in a variable
- *			in the client application, or in the persistant data block of a codec.
- *		omfsRegisterDynamicProp()
- *			Register a type with a dynamic property code.  This function should be called when
- *			registering a private property, or when a codec requires a property.  The type code used
- *			to refer to the property is returned from this function, and must be saved in a variable
- *			in the client application, or in the persistant data block of a codec.
- *		OMReadProp()
- *			Internal function to read the given property from the file, and apply
- *			semantic error checking to the input parameters and the result.
- *		OMWriteProp()
- *			Internal function to write the given property to the file, and apply
- *			semantic error checking to the input parameters.
- *		OMIsPropertyContiguous()
- *			Tell if a property is contigous in the file.   This function
- *			is usually applied to media data, when the application wishes
- *			to read the data directly, without the toolkit.
- *		GetArrayLength()
- *			Get the number of elements in an arrayed AAF object.
- *		OMPutNthPropHdr()
- *			Set an indexed elements value in an arrayed AAF object.
- *		OMGetNthPropHdr()
- *			Get an indexed elements value from an arrayed AAF object.
- *		OMReadBaseProp()
- *			Version of OMReadProp which byte-swaps when needed and always reads
- *			from an offset of 0.
- *		OMWriteBaseProp()
- *			Version of OMWriteProp which always reads from an offset of 0.
- *		OMLengthProp()
- *			Internal function to find the length of the given property.
- *		GetReferencedObject()
- *		GetReferenceData()
- *		OMRemoveNthArrayProp()
- *		omfsFileGetValueAlignment()
- *		omfsFileSetValueAlignment()
- *
  * All functions can return the following error codes if the following
  * argument values are NULL:
  *		AAFRESULT_NULL_FHDL -- aafHdl_t was NULL.
@@ -136,18 +42,17 @@
  *		AAFRESULT_DATA_OUT_SEMANTIC -- Failed a semantic check on an output data
  */
 
-//#include "masterhd.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
-
-#if PORT_SYS_MAC
-#include <memory.h>		/* For AAFMalloc() and AAFFree() */
-#include <OSUtils.h>
-#endif
-
 #include <time.h>
+#include <math.h>
+
+#if defined (_MAC) || defined(macintosh)
+#include <OSUtils.h>
+#include <events.h>
+#endif
 
 #if defined (__sgi) || defined (__FreeBSD__)
   #include <sys/time.h>
@@ -156,32 +61,16 @@
   #include <sys/times.h>
 #endif
 
-//#include "omPublic.h"
-//#include "omPvt.h" 
-//#include "Container.h"
 #include "AAFTypes.h"
 #include "AAFUtils.h"
 #include "aafCvt.h"
 #include "AAFResult.h"
-#ifdef __sgi
-// For CoCreateGuid()
-#include "AAFCOMPlatform.h"
-#endif
-
-/* Moved math.h down here to make NEXT's compiler happy */
-#include <math.h>
 
 
-#ifdef min
-#undef min
-#endif
-#ifdef max
-#undef max
-#endif
-
-static aafBool  InitCalled = kAAFFalse;
 
 const aafProductVersion_t AAFReferenceImplementationVersion = {1, 0, 0, 1, kAAFVersionBeta};
+
+
 
 AAFByteOrder GetNativeByteOrder(void)
 {
@@ -226,17 +115,12 @@ aafBool aafIsEqualGUID( const GUID& guid1, const GUID& guid2 )
 }
 
 
-static aafInt32 powi(
-			aafInt32	base,
-			aafInt32	exponent);
-
-
 /************************
  * Function: AAFGetDateTime			(INTERNAL)
  *
  * 	Returns the number of seconds since the standard root date
- *		for the current machine.  The date returned here will be converted
- *		to the canonical date format in the date write routine.
+ *		for the current machine.  The date returned here will be 
+ *		converted the canonical date format in the date write routine.
  *
  * Argument Notes:
  *		Time - is NATIVE format.  That is relative to 1/1/1904 for the
@@ -264,6 +148,8 @@ void AAFGetDateTime(aafTimeStamp_t *ts)
 	ts->time.second = ansitime->tm_sec;
 	ts->time.fraction = 0;            // not implemented yet!
 }
+
+
 
 aafErr_t AAFConvertEditRate(
 	aafRational_t srcRate,        /* IN - Source Edit Rate */
@@ -355,6 +241,46 @@ double FloatFromRational(
 
 
 /************************
+ * Function: powi		(INTERNAL)
+ *
+ * 	Return base ^ exponent.
+ *
+ * Argument Notes:
+ * 	<none>
+ *
+ * ReturnValue:
+ *		The result.
+ *
+ * Possible Errors:
+ *		<none>.
+ */
+static aafInt32 powi(
+			aafInt32	base,
+			aafInt32	exponent)
+{
+	aafInt32           result = 1;
+	aafInt32           i = exponent;
+
+	if (exponent == 0)
+		return (1);
+	else if (exponent > 0)
+	{
+		while (i--)
+			result *= base;
+		return (result);
+	}
+	else
+	{
+		/* negative exponent not good for integer
+		 * exponentiation
+		 */
+		return (0);
+	}
+}
+
+
+
+/************************
  * Function: RationalFromFloat (INTERNAL)
  *
  * 	Translate a floating point number into the nearest rational
@@ -395,82 +321,10 @@ aafRational_t RationalFromFloat(
 	return (rate);
 }
 
-/************************
- * Function: powi		(INTERNAL)
- *
- * 	Return base ^ exponent.
- *
- * Argument Notes:
- * 	<none>
- *
- * ReturnValue:
- *		The result.
- *
- * Possible Errors:
- *		<none>.
- */
-static aafInt32 powi(
-			aafInt32	base,
-			aafInt32	exponent)
-{
-	aafInt32           result = 1;
-	aafInt32           i = exponent;
 
-	if (exponent == 0)
-		return (1);
-	else if (exponent > 0)
-	{
-		while (i--)
-			result *= base;
-		return (result);
-	}
-	else
-	{
-		/* negative exponent not good for integer
-		 * exponentiation
-		 */
-		return (0);
-	}
-}
-
-#if defined(_MAC) || defined(macintosh)
-#include <OSUtils.h>
-#include <events.h>
-#elif defined(_WIN32)
-#include <time.h>
-#define HZ CLK_TCK
-#elif defined (__sgi) || defined (__FreeBSD__)
-#include <time.h>
-#ifdef CLK_TCK
-#define HZ CLK_TCK
-#else
-#define HZ CLOCKS_PER_SEC
-#endif
-#endif
-
-/*
- * Doug Cooper - 04-04-96
- * Added proper includes for NeXTStep to define HZ:
- */
-//#ifdef NEXT
-//#include <architecture/ARCH_INCLUDE.h>
-//#import ARCH_INCLUDE(bsd/, param.h)
-//#endif
-
-//#if defined(PORTKEY_OS_UNIX) || defined(PORTKEY_OS_ULTRIX)
-//#if PORT_INC_NEEDS_SYSTIME
-//#include <sys/time.h>
-//#include <sys/times.h>
-//#endif
-//#include <sys/param.h>
-//#endif
-//
-//#ifdef sun
-//#include <sys/resource.h>
-//#endif
 
 /*************************************************************************
- * Function: omfiMobIDNew()
+ * Function: aafMobIDNew()
  *
  *      This function can be used to create a new mob ID.  The mob ID
  *      consists of the company specific prefix specified when 
@@ -505,85 +359,100 @@ struct SMPTELabel
 };
 
 
-
 struct OMFMobID
 {
-    aafUInt8			SMPTELabel[12];		// 12-bytes of label prefix
-	aafUInt8			length;
-    aafUInt8			instanceHigh;
-    aafUInt8			instanceMid;
-    aafUInt8			instanceLow;
+    	aafUInt8		SMPTELabel[12];	// 12-bytes of label prefix
+	aafUInt8		length;
+	aafUInt8		instanceHigh;
+	aafUInt8		instanceMid;
+	aafUInt8		instanceLow;
 	struct SMPTELabel	material;
 };
 
+
 union MobIDOverlay
 {
-	aafMobID_t			mobID;
+	aafMobID_t		mobID;
 	struct OMFMobID		OMFMobID;
 };
+
+
+aafUInt32 aafGetTickCount()
+{
+    aafUInt32		ticks = 0;
+
+
+#if defined(_WIN32)
+
+    ticks = (aafUInt32)GetTickCount();
+
+
+#elif defined (_MAC) || defined(macintosh)
+
+    ticks = (aafUInt32)TickCount();
+
+#else
+
+    struct tms		tms_buf;
+    ticks = (aafUInt32)times( &tms_buf );
+
+#endif    // _WIN32
+
+
+    return ticks;
+}
+
 
 AAFRESULT aafMobIDNew(
         aafMobID_t *mobID)     /* OUT - Newly created Mob ID */
 {
-	aafUInt32	major, minor;
-	static aafUInt32 last_part2 = 0;		// Get rid of this!!!
-//#ifdef sun
-//	struct rusage rusage_struct;
-//	int status;
-//#endif
-	aafTimeStamp_t	timestamp;
-	
-	AAFGetDateTime(&timestamp);
-	// major = (aafUInt32)timestamp.TimeVal;	// Will truncate
-	assert (sizeof (aafTimeStruct_t) == sizeof (aafUInt32));
-	union
-	{
-	  aafTimeStruct_t time;
-	  aafUInt32       seconds;
-	} time_to_int;
-	time_to_int.time = timestamp.time;
-	major = time_to_int.seconds;
+    aafUInt32		major, minor;
+    static aafUInt32	last_part2 = 0;		// Get rid of this!!!
+    aafTimeStamp_t	timestamp;
 
-#if defined(_MAC) || defined(macintosh)
-	minor = TickCount();
-#else
-#ifdef _WIN32
-	minor = ((unsigned long)(time(NULL)*60/CLK_TCK));
-#else 
-//#if defined(sun)
-//	status = getrusage(RUSAGE_SELF, &rusage_struct);
-//
-//	/* On the Sun, add system and user time */
-//	minor = rusage_struct.ru_utime.tv_sec*60 + 
-//	      rusage_struct.ru_utime.tv_usec*60/1000000 +
-//		  rusage_struct.ru_stime.tv_sec*60 +
-//		  rusage_struct.ru_stime.tv_usec*60/1000000;
-//#else
-	{
-	  static struct tms timebuf;
-	  minor = ((unsigned long)(times(&timebuf)*60/HZ));
-	}	
-//#endif
-#endif
-#endif
 
-	if (last_part2 >= minor)
-	  minor = last_part2 + 1;
-		
-	last_part2 = minor;
+    //
+    // Get the time since the standard root date
+    //
+    AAFGetDateTime(&timestamp);
+    assert (sizeof (aafTimeStruct_t) == sizeof (aafUInt32));
+    union
+    {
+	aafTimeStruct_t time;
+	aafUInt32       seconds;
+    } time_to_int;
+    time_to_int.time = timestamp.time;
+    major = time_to_int.seconds;
 
-	return(aafMobIDFromMajorMinor(42, major, minor, 4, mobID));		// !!!All toolkit generated, all data
+
+    //
+    // Get the time since the system start-up.
+    //
+    minor = aafGetTickCount();
+    assert( minor != 0 && minor != (aafUInt32)-1 );
+
+
+    if (last_part2 >= minor)
+	minor = last_part2 + 1;
+    	
+    last_part2 = minor;
+
+
+    return(aafMobIDFromMajorMinor( 42, major, minor, 4, mobID ));
 }
+
+
 
 AAFRESULT aafMobIDFromMajorMinor(
         aafUInt32	prefix,
         aafUInt32	major,
-		aafUInt32	minor,
-		aafUInt8	UMIDType,
-		aafMobID_t *mobID)     /* OUT - Newly created Mob ID */
+	aafUInt32	minor,
+	aafUInt8	UMIDType,
+	aafMobID_t	*mobID)     /* OUT - Newly created Mob ID */
 {
-	union MobIDOverlay		aLabel;
-	
+    union MobIDOverlay			aLabel;
+
+
     aLabel.OMFMobID.SMPTELabel[0]	= 0x06;
     aLabel.OMFMobID.SMPTELabel[1]	= 0x0C;
     aLabel.OMFMobID.SMPTELabel[2]	= 0x2B;
@@ -596,79 +465,77 @@ AAFRESULT aafMobIDFromMajorMinor(
     aLabel.OMFMobID.SMPTELabel[9]	= UMIDType;
     aLabel.OMFMobID.SMPTELabel[10]	= 0x10;			// Still Open
     aLabel.OMFMobID.SMPTELabel[11]	= 0x00;
-	aLabel.OMFMobID.length			= 0x13;
-    aLabel.OMFMobID.instanceHigh		= 0x00;
+    aLabel.OMFMobID.length		= 0x13;
+    aLabel.OMFMobID.instanceHigh	= 0x00;
     aLabel.OMFMobID.instanceMid		= 0x00;
-	aLabel.OMFMobID.instanceLow		= 0x00;
-	aLabel.OMFMobID.material.oid				= 0x06;
-	aLabel.OMFMobID.material.size				= 0x0E;
-	aLabel.OMFMobID.material.ulcode			= 0x2B;
-	aLabel.OMFMobID.material.SMPTE				= 0x34;
-	aLabel.OMFMobID.material.Registry			= 0x7F;
-	aLabel.OMFMobID.material.unused			= 0x7F;
-	aLabel.OMFMobID.material.MobIDPrefixHigh	= (aafUInt8)((prefix >> 7L) | 0x80);
-	aLabel.OMFMobID.material.MobIDPrefixLow	= (aafUInt8)(prefix & 0x7F);
+    aLabel.OMFMobID.instanceLow		= 0x00;
 
-	aLabel.OMFMobID.material.MobIDMajor		= major;
-	aLabel.OMFMobID.material.MobIDMinorLow		= (aafUInt16)(minor & 0xFFFF);
-	aLabel.OMFMobID.material.MobIDMinorHigh	=  (aafUInt16)((minor >> 16L) & 0xFFFF);
+    aLabel.OMFMobID.material.oid		= 0x06;
+    aLabel.OMFMobID.material.size		= 0x0E;
+    aLabel.OMFMobID.material.ulcode		= 0x2B;
+    aLabel.OMFMobID.material.SMPTE		= 0x34;
+    aLabel.OMFMobID.material.Registry		= 0x7F;
+    aLabel.OMFMobID.material.unused		= 0x7F;
+    aLabel.OMFMobID.material.MobIDPrefixHigh	= 
+	(aafUInt8)((prefix >> 7L) | 0x80);
+    aLabel.OMFMobID.material.MobIDPrefixLow	= (aafUInt8)(prefix & 0x7F);
+    aLabel.OMFMobID.material.MobIDMajor		= major;
+    aLabel.OMFMobID.material.MobIDMinorLow	= (aafUInt16)(minor & 0xFFFF);
+    aLabel.OMFMobID.material.MobIDMinorHigh	= 
+	(aafUInt16)((minor >> 16L) & 0xFFFF);
 
-	*mobID = (aafMobID_t)aLabel.mobID;
-	return(AAFRESULT_SUCCESS);
+    *mobID = (aafMobID_t)aLabel.mobID;
+
+
+    return(AAFRESULT_SUCCESS);
 }
 
-#if defined(_MAC) || defined(macintosh)
-// For some reason the CoCreateGuid() function is not implemented in the 
-// Microsoft Component Library...so we define something that should be
-// fairly unique on the mac.
 
-#if defined(_MAC) || defined(macintosh)
-#include <Events.h>
-#endif
-#include <time.h>
-
-static void pvtMacCreateGuid(GUID  *pguid)
+void aafCreateGUID( GUID *p_guid )
 {
-  // {1994bd00-69de-11d2-b6bc-fcab70ff7331}
-  static GUID sTemplate = 
-    { 0x1994bd00,
-		0x69de,
-		0x11d2,
-		{ 0xb6, 0xbc, 0xfc, 0xab, 0x70, 0xff, 0x73, 0x31 } };
-  static bool sInitializedTemplate = false;
-  
-  assert (pguid);
-  if (!sInitializedTemplate)
-  {
-    time_t timer = time(NULL);
-    aafUInt32 ticks = TickCount();
-    sTemplate.Data1 += timer + ticks;
-    sInitializedTemplate = true;
-  }
-  
-  // Just bump the first member of the guid to emulate GUIDGEN behavior.
-  ++sTemplate.Data1;
-  *pguid = sTemplate;
+#ifdef _WIN32
+
+    assert( p_guid );
+    CoCreateGuid( p_guid );
+
+#else
+
+    // {1994bd00-69de-11d2-b6bc-fcab70ff7331}
+    static GUID	sTemplate = { 0x1994bd00,  0x69de,  0x11d2,
+			{ 0xb6, 0xbc, 0xfc, 0xab, 0x70, 0xff, 0x73, 0x31 } };
+    static int	sInitializedTemplate = 0;
+
+
+    assert( p_guid );
+
+    if( !sInitializedTemplate )
+    {
+	aafUInt32	ticks = aafGetTickCount();
+
+	time_t		timer = time( NULL );
+	sTemplate.Data1 += timer + ticks;
+	sInitializedTemplate = 1;
+    }
+
+    // Just bump the first member of the guid to emulate GUIDGEN behavior.
+    ++sTemplate.Data1;
+    *p_guid = sTemplate;
+
+#endif    // _WIN32
 }
-#endif
+
 
 
 // Initializes a new auid
-AAFRESULT aafAUIDNew(aafUID_t * auid)
+AAFRESULT aafAUIDNew( aafUID_t* p_auid )
 {
-  if (! auid)
-	 return AAFRESULT_NULL_PARAM;
-  GUID guid;
-#if defined(_MAC) || defined(macintosh)
-  pvtMacCreateGuid (&guid);
-#else
-  HRESULT hr = CoCreateGuid (&guid);
-  if (FAILED (hr))
-	 return hr;
-#endif
-  memcpy (auid, &guid, sizeof (guid));
-  return AAFRESULT_SUCCESS;
+    if( !p_auid )
+	return AAFRESULT_NULL_PARAM;
+
+    aafCreateGUID( (GUID*)p_auid );
+    return AAFRESULT_SUCCESS;
 }
+
 
 
 typedef struct
