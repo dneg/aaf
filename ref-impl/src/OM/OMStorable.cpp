@@ -33,6 +33,7 @@
 #include "OMObjectDirectory.h"
 #include "OMDataTypes.h"
 #include "OMProperty.h"
+#include "OMPropertySetIterator.h"
 #include "OMUtilities.h"
 
 #include "OMAssertions.h"
@@ -99,11 +100,9 @@ void OMStorable::close(void)
   PRECONDITION("Object is persistent", persistent());
 
   if (_store != 0) {
-    size_t context = 0;
-    for (size_t i = 0; i < _persistentProperties.count(); i++)
-    {
-      OMProperty* p = 0;
-      _persistentProperties.iterate(context, p);
+    OMPropertySetIterator iterator(_persistentProperties, OMBefore);
+    while (++iterator) {
+      OMProperty* p = iterator.property();
       ASSERT("Valid property", p != 0);
       if (!p->isOptional() || p->isPresent()) {
         p->close();
@@ -194,11 +193,9 @@ void OMStorable::detach(void)
   TRACE("OMStorable::detach");
 
   if (_store != 0) {
-    size_t context = 0;
-    for (size_t i = 0; i < _persistentProperties.count(); i++)
-    {
-      OMProperty* p = 0;
-      _persistentProperties.iterate(context, p);
+    OMPropertySetIterator iterator(_persistentProperties, OMBefore);
+    while (++iterator) {
+      OMProperty* p = iterator.property();
       ASSERT("Valid property", p != 0);
       p->detach();
     }
