@@ -832,8 +832,7 @@ size_t ImplAAFTypeDefRecord::PropValSize (void) const
 
   for (aafUInt32 i = 0; i < count; i++)
 	{
-	  ImplAAFTypeDef * pMemType;
-	  pMemType = 0;
+	  ImplAAFTypeDefSP pMemType;
 	  // Bobt semi-hack: need non-const this in order to call
 	  // non-const GetMemberType. We know we aren't mangling it, so it
 	  // technically is OK...
