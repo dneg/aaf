@@ -101,6 +101,7 @@ public:
   //
   static ImplAAFMetaDictionary *CreateMetaDictionary(void);
 
+  virtual bool isRegistered(const OMClassId& classId) const;
 
   //
   // Create an instance of the appropriate derived class, given the

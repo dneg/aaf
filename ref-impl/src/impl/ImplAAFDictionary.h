@@ -91,6 +91,9 @@ protected:
   virtual ~ImplAAFDictionary ();
 
 public:
+
+  virtual bool isRegistered(const OMClassId& classId) const;
+
   // Create an instance of the appropriate derived class, given the
   // class id.  Initializes the OM properties.
   // 

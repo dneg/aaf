@@ -198,7 +198,10 @@ ImplAAFMetaDictionary *ImplAAFMetaDictionary::CreateMetaDictionary(void)
 }
 
 
-
+bool ImplAAFMetaDictionary::isRegistered(const OMClassId& /* classId */) const
+{
+  return false; // tjb - stub
+}
 
 //
 // Create an instance of the appropriate derived class, given the class id.

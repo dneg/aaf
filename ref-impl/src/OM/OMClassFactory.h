@@ -39,6 +39,9 @@ public:
     //@cmember Destructor.
   virtual ~OMClassFactory(void) {}
 
+    // @cmember Is the given class id registered ?
+  virtual bool isRegistered(const OMClassId& classId) const = 0;
+
     // @cmember Create an instance of the appropriate derived class,
     //          given the class id.
   virtual OMStorable* create(const OMClassId& classId) const = 0;
