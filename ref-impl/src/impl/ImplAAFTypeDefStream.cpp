@@ -61,7 +61,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefStream::AppendElements (
       ImplAAFPropertyValue * /*pInPropVal*/,
-      ImplAAFPropertyValue * /*pMemberPropVals*/,
+      ImplAAFPropertyValue ** /*ppMemberPropVals*/,
       aafUInt32  /*numElements*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
