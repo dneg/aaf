@@ -88,7 +88,7 @@ class FileStreamLogger : public StreamLogger
 public:
 	FileStreamLogger(	const char *fileName, const char *mode = "w", 
 						unsigned level = 0, bool isMask = false );
-	virtual FileStreamLogger::~FileStreamLogger(void) ;
+	virtual ~FileStreamLogger(void) ;
 	class LogStreamNULL 
 	{ 
 	public:
