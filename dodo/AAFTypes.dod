@@ -586,14 +586,15 @@ typedef struct  _aafMobID_t
 }	aafMobID_t;
 
 
+
 typedef struct _aafProductIdentification_t
 {
-	aafCharacter			*companyName;
-	aafCharacter			*productName;
-	aafCharacter			*productVersionString;
-	aafUID_t				productID;
-	aafCharacter			*platform;
-	aafProductVersion_t	productVersion;
+	aafCharacter *             companyName;
+	aafCharacter *             productName;
+	aafCharacter *             productVersionString;
+	aafUID_t                   productID;
+    aafCharacter *             platform;        // optional
+    aafProductVersion_t *      productVersion;  // optional
 } aafProductIdentification_t;
 
 AD_CPP_QUOTE(extern const aafProductVersion_t AAFReferenceImplementationVersion;)
@@ -1060,6 +1061,7 @@ AD_CPP_QUOTE(#if 0)
   typedef aafCharacter *                 aafCharacter_constptr;
   typedef aafMediaCriteria_t *           aafMediaCriteria_constptr;
   typedef aafOperationChoice_t *         aafOperationChoice_constptr;
+  typedef aafProductVersion_t *          aafProductVersion_constptr;
   typedef aafSearchCrit_t *              aafSearchCrit_constptr;
   typedef aafUID_t *                     aafUID_constptr;
   typedef aafMobID_t *                   aafMobID_constptr;
@@ -1111,6 +1113,7 @@ AD_CPP_QUOTE(#endif // !__cplusplus)
 AD_CPP_QUOTE(  #define aafCharacter_constptr         const aafCharacter *)
 AD_CPP_QUOTE(  #define aafMediaCriteria_constptr     const aafMediaCriteria_t *)
 AD_CPP_QUOTE(  #define aafOperationChoice_constptr   const aafOperationChoice_t *)
+AD_CPP_QUOTE(  #define aafProductVersion_constptr    const aafProductVersion_t *)
 AD_CPP_QUOTE(  #define aafSearchCrit_constptr        const aafSearchCrit_t *)
 AD_CPP_QUOTE(  #define aafUID_constptr               const aafUID_t *)
 AD_CPP_QUOTE(  #define aafMobID_constptr             const aafMobID_t *)
