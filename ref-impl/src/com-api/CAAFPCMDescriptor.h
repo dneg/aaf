@@ -90,7 +90,7 @@ public:
   //
   // SetBlockAlign()
   //
-  // // Sets the number of bytes used to store one sample of all channels.
+  // Sets the number of bytes used to store one sample of all channels.
   // This property is required.
   // 
   // Succeeds if all of the following are true:
@@ -116,7 +116,7 @@ public:
   //
   // GetBlockAlign()
   //
-  // // Gets the number of bytes used to store one sample of all channels.
+  // Gets the number of bytes used to store one sample of all channels.
   // This property is required.
   // 
   // Succeeds if all of the following are true:
@@ -145,7 +145,7 @@ public:
   //
   // SetSequenceOffset()
   //
-  // // Sets the frame number of the beginning of the essence data
+  // Sets the frame number of the beginning of the essence data
   // within a five-frame sequence. This property is optional.
   // 
   // Succeeds if all of the following are true:
@@ -172,7 +172,7 @@ public:
   //
   // GetSequenceOffset()
   //
-  // // Gets the frame number of the beginning of the essence data
+  // Gets the frame number of the beginning of the essence data
   // within a five-frame sequence. This property is optional.
   // 
   // Succeeds if all of the following are true:
@@ -206,8 +206,8 @@ public:
   //
   // SetAverageBPS()
   //
-  // // Sets the average bytes per second of the essence stream.
-  // This property is optional.
+  // Sets the average bytes per second of the essence stream.
+  // This property is required.
   // 
   // Succeeds if all of the following are true:
   // - the object is initialized.
@@ -232,8 +232,8 @@ public:
   //
   // GetAverageBPS()
   //
-  // // Gets the average bytes per second of the essence stream.
-  // This property is optional.
+  // Gets the average bytes per second of the essence stream.
+  // This property is required.
   // 
   // Succeeds if all of the following are true:
   // - the object is initialized.
@@ -302,7 +302,7 @@ public:
   //
   // SetPeakEnvelopeVersion()
   //
-  // // Sets the version of the peak envelope data.
+  // Sets the version of the peak envelope data.
   // 
   // Succeeds if all of the following are true:
   // - the object is initialized.
@@ -326,7 +326,7 @@ public:
   //
   // GetPeakEnvelopeVersion()
   //
-  // // Gets the version of the peak envelope data.
+  // Gets the version of the peak envelope data.
   // This property is optional.
   // 
   // Succeeds if all of the following are true:
@@ -359,7 +359,7 @@ public:
   //
   // SetPeakEnvelopeFormat()
   //
-  // // Sets the format of the peak point.
+  // Sets the format of the peak point.
   // 
   // Succeeds if all of the following are true:
   // - the object is initialized.
@@ -383,7 +383,7 @@ public:
   //
   // GetPeakEnvelopeFormat()
   //
-  // // Gets the format of the peak point.
+  // Gets the format of the peak point.
   // This property is optional.
   // 
   // Succeeds if all of the following are true:
@@ -416,7 +416,7 @@ public:
   //
   // SetPointsPerPeakValue()
   //
-  // // Sets the number of peak points per peak value.
+  // Sets the number of peak points per peak value.
   // 
   // Succeeds if all of the following are true:
   // - the object is initialized.
@@ -441,7 +441,7 @@ public:
   //
   // GetPointsPerPeakValue()
   //
-  // // Gets the number of peak points per peak value.
+  // Gets the number of peak points per peak value.
   // This property is optional.
   // 
   // Succeeds if all of the following are true:
@@ -474,7 +474,7 @@ public:
   //
   // SetPeakEnvelopeBlockSize()
   //
-  // // Sets the number of audio samples used to generate each peak frame.
+  // Sets the number of audio samples used to generate each peak frame.
   // 
   // Succeeds if all of the following are true:
   // - the object is initialized.
@@ -499,7 +499,7 @@ public:
   //
   // GetPeakEnvelopeBlockSize()
   //
-  // // Gets the number of audio samples used to generate each peak frame.
+  // Gets the number of audio samples used to generate each peak frame.
   // This property is optional.
   // 
   // Succeeds if all of the following are true:
@@ -532,7 +532,7 @@ public:
   //
   // SetPeakChannelCount()
   //
-  // // Sets the number of peak channels.
+  // Sets the number of peak channels.
   // 
   // Succeeds if all of the following are true:
   // - the object is initialized.
@@ -556,7 +556,7 @@ public:
   //
   // GetPeakChannelCount()
   //
-  // // Gets the number of peak channels.
+  // Gets the number of peak channels.
   // This property is optional.
   // 
   // Succeeds if all of the following are true:
@@ -589,7 +589,7 @@ public:
   //
   // SetPeakFrameCount()
   //
-  // // Sets the number of peak frames.
+  // Sets the number of peak frames.
   // 
   // Succeeds if all of the following are true:
   // - the object is initialized.
@@ -613,7 +613,7 @@ public:
   //
   // GetPeakFrameCount()
   //
-  // // Gets the number of peak frames.
+  // Gets the number of peak frames.
   // This property is optional.
   // 
   // Succeeds if all of the following are true:
@@ -646,7 +646,7 @@ public:
   //
   // SetPeakOfPeaksPosition()
   //
-  // // Sets the offset to the first audio sample whose absolute
+  // Sets the offset to the first audio sample whose absolute
   // value is the maximum value of the entire audio file.
   // 
   // Succeeds if all of the following are true:
@@ -672,7 +672,7 @@ public:
   //
   // GetPeakOfPeaksPosition()
   //
-  // // Gets the offset to the first audio sample whose absolute
+  // Gets the offset to the first audio sample whose absolute
   // value is the maximum value of the entire audio file.
   // This property is optional.
   // 
@@ -706,7 +706,7 @@ public:
   //
   // SetPeakEnvelopeTimestamp()
   //
-  // // Sets the time stamp of the creation of the peak data.
+  // Sets the time stamp of the creation of the peak data.
   // 
   // Succeeds if all of the following are true:
   // - the object is initialized.
@@ -730,7 +730,7 @@ public:
   //
   // GetPeakEnvelopeTimestamp()
   //
-  // // Gets the time stamp of the creation of the peak data.
+  // Gets the time stamp of the creation of the peak data.
   // This property is optional.
   // 
   // Succeeds if all of the following are true:
@@ -763,7 +763,7 @@ public:
   //
   // SetPeakEnvelopeDataPosition()
   //
-  // // Sets the offset from the beginning of peak envelope data.
+  // Sets the offset from the beginning of peak envelope data.
   // 
   // Succeeds if all of the following are true:
   // - the object is initialized.
@@ -791,7 +791,7 @@ public:
   //
   // GetPeakEnvelopeDataPosition()
   //
-  // // Gets the offset from the beginning of peak envelope data.
+  // Gets the offset from the beginning of peak envelope data.
   // 
   // Succeeds if all of the following are true:
   // - the object is initialized.
@@ -826,7 +826,7 @@ public:
   //
   // GetPeakEnvelopeDataSize()
   //
-  // // Gets the size of peak envelope data.
+  // Gets the size of peak envelope data.
   // PeakEnvelopeData is optional property.
   // 
   // Succeeds if all of the following are true:
@@ -863,7 +863,7 @@ public:
   //
   // WritePeakEnvelopeData()
   //
-  // // Write the specified bytes to the peak envelope data stream.
+  // Write the specified bytes to the peak envelope data stream.
   // 
   // Succeeds if all of the following are true:
   // - the number of bytes to write is non-zero.
@@ -913,7 +913,7 @@ public:
   //
   // ReadPeakEnvelopeData()
   //
-  // // Read the specified number of bytes from the peak envelope data
+  // Read the specified number of bytes from the peak envelope data
   // stream into buffer.
   // 
   // Succeeds if all of the following are true:
