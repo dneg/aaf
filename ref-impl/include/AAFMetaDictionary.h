@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Wed Feb 24 16:21:34 EST 1999
+// This file was generated on Thu Feb 25 11:55:20 EST 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -1457,7 +1457,7 @@ AAF_PROPERTY(Gamma,
     0x1000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   0x2e10,
-  Int32,
+  Rational,
   false,
   DigitalImageDescriptor)
 AAF_PROPERTY(ImageAlignmentFactor,
@@ -1465,7 +1465,7 @@ AAF_PROPERTY(ImageAlignmentFactor,
     0x1100, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   0x2e11,
-  Rational,
+  UInt32,
   false,
   DigitalImageDescriptor)
 AAF_CLASS_END(DigitalImageDescriptor)
