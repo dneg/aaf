@@ -130,7 +130,7 @@ AAFRESULT STDMETHODCALLTYPE
 //			def->ReleaseReference();
 
 		_interpolation = newUID;
-		pDef->AcquireReference();
+//		pDef->AcquireReference();
 		head->ReleaseReference();
 		head = NULL;
 		dict->ReleaseReference();
@@ -165,7 +165,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(head->GetDictionary(&dict));
 		interpID = _interpolation;
 		CHECK(dict->LookupInterpolationDefinition(&interpID, ppDef));
-		(*ppDef)->AcquireReference();
+//		(*ppDef)->AcquireReference();
 		head->ReleaseReference();
 		head = NULL;
 		dict->ReleaseReference();
@@ -199,10 +199,10 @@ AAFRESULT STDMETHODCALLTYPE
       aafDataBuffer_t  pValue,
       aafInt32*  bytesRead)
 {
-	ImplAAFInterpolationDef		*interpDef;
+	ImplAAFInterpolationDef		*interpDef = NULL;
 	aafUID_t					interpID;
 	IAAFPlugin					*plugin = NULL;
-	ImplAAFPluginManager		*mgr;
+	ImplAAFPluginManager		*mgr = NULL;
 	IAAFInterpolator			*iInterp = NULL;
 	IAAFParameter				*iParm = NULL;
 	IUnknown					*iUnk = NULL;
@@ -218,27 +218,30 @@ AAFRESULT STDMETHODCALLTYPE
 		/**/
 		iUnk = static_cast<IUnknown *> (this->GetContainer());
 		CHECK(iUnk->QueryInterface(IID_IAAFParameter, (void **)&iParm));
-		iUnk->Release();
-		iUnk = NULL;
 		CHECK(iInterp->SetParameter(iParm));
 		CHECK(GetTypeDef(&intDef));
+
 		iUnk = static_cast<IUnknown *> (intDef->GetContainer());
 		CHECK(iUnk->QueryInterface(IID_IAAFTypeDef, (void **)&iTypeDef));
-		iUnk->Release();
-		iUnk = NULL;
 		CHECK(iInterp->SetTypeDefinition(iTypeDef));
 		/**/
 		CHECK(iInterp->InterpolateOne(&inputValue, valueSize, pValue, (aafUInt32 *)bytesRead));
+
+		iTypeDef->Release();
+		iTypeDef = NULL;
+
+		intDef->ReleaseReference();
+		intDef = NULL;
+		iParm->Release();
+		iParm = NULL;
 		plugin->Release();
 		plugin = NULL;
 		iInterp->Release();
 		iInterp = NULL;
-		iUnk->Release();
-		iUnk = NULL;
-		iParm->Release();
-		iParm = NULL;
-		iTypeDef->Release();
-		iTypeDef = NULL;
+		mgr->ReleaseReference();
+		mgr = NULL;
+		interpDef->ReleaseReference();
+		interpDef = NULL;
 	}
 	XEXCEPT
 	{
@@ -250,39 +253,12 @@ AAFRESULT STDMETHODCALLTYPE
 			iInterp->Release();
 		if(iParm)
 			iParm->Release();
+		if(mgr)
+			mgr->ReleaseReference();
 	}
 	XEND;
 	
 	return AAFRESULT_SUCCESS;
-
-#if 0
-	STDMETHOD ()(
-    /* [in] */ IAAFParameter * pParameter);
-  STDMETHOD (GetNumDefinitions)(aafInt32 *pDefCount);
-  STDMETHOD (GetIndexedDefinitionID)(aafInt32 index, aafUID_t *result);
-  STDMETHOD (GetPluginDescriptorID)(aafUID_t *result);
-  STDMETHOD (GetIndexedDefinitionObject)(aafInt32 index, IAAFDictionary *dict, IAAFDefObject **def);
-  STDMETHOD (CreateDescriptor)(IAAFDictionary *dict, IAAFPluginDescriptor **desc);
-
-  STDMETHOD (GetNumTypesSupported)(
-    /* [out] */aafInt32*  pCount);
-  STDMETHOD (GetIndexedSupportedType)(
-    /* [in] */ aafInt32  index,
-    /* [out] */IAAFTypeDef ** ppType);
-  STDMETHOD (GetTypeDefinition)(
-    /* [out] */IAAFTypeDef ** ppTypeDef);
-  STDMETHOD (SetTypeDefinition)(
-    /* [in] */ IAAFTypeDef * pTypeDef);
-  STDMETHOD (GetParameter)(
-    /* [out] */IAAFParameter ** ppParameter);
-  STDMETHOD (InterpolateMany)(
-	/* [in] */ aafRational_t *  pStartInputValue,
-    /* [in] */ aafRational_t *  pInputStep,
-    /* [in] */ aafInt32  pGenerateCount,
-    /* [out] */aafMemPtr_t pOutputValue,
-    /* [out] */aafUInt32 *  ppResultCount);
-
-#endif
 }
 
 
@@ -298,7 +274,7 @@ ImplAAFVaryingValue::GetTypeDef(ImplAAFTypeDef **ppTypeDef)
 	if (obj)
 	{
 		obj->GetTypeDefinition(ppTypeDef);
-		obj->AcquireReference();
+//		obj->AcquireReference();
 	}
 	else
 		return AAFRESULT_NO_MORE_OBJECTS; // AAFRESULT_BADINDEX ???

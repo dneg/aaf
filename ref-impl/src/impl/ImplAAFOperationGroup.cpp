@@ -88,7 +88,33 @@ ImplAAFOperationGroup::ImplAAFOperationGroup ()
 
 
 ImplAAFOperationGroup::~ImplAAFOperationGroup ()
-{}
+{
+	// Release all of the mob slot pointers.
+	size_t size = _inputSegments.getSize();
+	for (size_t i = 0; i < size; i++)
+	{
+		ImplAAFSegment *pSeg = _inputSegments.setValueAt(0, i);
+		if (pSeg)
+		{
+			pSeg->ReleaseReference();
+		}
+	}
+	// Release all of the mob slot pointers.
+	size_t size2 = _parameters.getSize();
+	for (size_t j = 0; j < size2; j++)
+	{
+		ImplAAFParameter *pParm = _parameters.setValueAt(0, j);
+		if (pParm)
+		{
+			pParm->ReleaseReference();
+		}
+	}
+	ImplAAFSourceReference *ref = _rendering.setValue(0);
+	if (ref)
+	{
+		ref->ReleaseReference();
+	}
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -124,7 +150,7 @@ AAFRESULT STDMETHODCALLTYPE
 //		if (pDictionary->LookupOperationDefinition(&OperationDefAUID, &pOldOperationDef) == AAFRESULT_SUCCESS)
 //			pOldOperationDef->ReleaseReference();
 		_operationDefinition = OperationDefAUID;
-		pOperationDef->AcquireReference();
+//		pOperationDef->AcquireReference();
 		pDictionary->ReleaseReference();
 	}
 	XEXCEPT
@@ -159,6 +185,8 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(MyHeadObject(&head));
 		CHECK(head->GetDictionary(&dict));
 		CHECK(dict->LookupOperationDefinition(&defUID, OperationDef));
+		dict->ReleaseReference();
+		head->ReleaseReference();
 	}
 	XEXCEPT
 	{
@@ -195,7 +223,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationGroup::IsATimeWarp (aafBool *isTimeWarp)
 {
-	ImplAAFOperationDef	*def;
+	ImplAAFOperationDef	*def = NULL;
 	
 	XPROTECT()
 	{
@@ -203,8 +231,14 @@ AAFRESULT STDMETHODCALLTYPE
 			RAISE(AAFRESULT_NULL_PARAM);
 		CHECK(GetOperationDefinition(&def));
 		CHECK(def->IsTimeWarp (isTimeWarp));
+		def->ReleaseReference();
+		def = NULL;
 	}
 	XEXCEPT
+	{
+		if(def)
+				def->ReleaseReference();
+	}
 	XEND
 
 	return AAFRESULT_SUCCESS;
@@ -262,7 +296,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationGroup::IsValidTranOperation (aafBool * validTransition)
 {
-	ImplAAFOperationDef	*def;
+	ImplAAFOperationDef	*def = NULL;
 	aafInt32			numInputs;
 	
 	XPROTECT()
@@ -273,9 +307,15 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(def->GetNumberInputs (&numInputs));
 		*validTransition = (numInputs == 2 ? AAFTrue : AAFFalse);
 		//!!!Must also have a "level" parameter (Need definition for this!)
+		def->ReleaseReference();
+		def = NULL;
 	}
 	XEXCEPT
-	XEND
+	{
+		if(def)
+				def->ReleaseReference();
+	}
+	XEND;
 
 	return AAFRESULT_SUCCESS;
 }
@@ -352,12 +392,15 @@ AAFRESULT STDMETHODCALLTYPE
 			{
 				CHECK(parm->GetParameterDefinition (&parmDef));	
 				CHECK(parmDef->GetAUID(&testAUID));
+				parmDef->ReleaseReference();
+				parmDef = NULL;
 				if(EqualAUID(&testAUID, &argID))
 				{
 					parm->AcquireReference();
 					*ppParameter = parm;
 					break;
 				}
+
 			}
 		}
 	}
