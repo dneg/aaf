@@ -305,6 +305,11 @@ void* OMStrongReferenceSetElement::identification(void) const
   return _identification;
 }
 
+void OMStrongReferenceSetElement::enableReferenceCounting(void)
+{
+  _initialReferenceCount = 0;
+}
+
   // @mfunc The count of weak references to this
   //        <c OMStrongReferenceSetElement>.
   //   @rdesc The count of weak references.

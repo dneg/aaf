@@ -277,6 +277,8 @@ public:
     // @cmember The unique key of this <c OMStrongReferenceSetElement>.
   void* identification(void) const;
 
+  static void enableReferenceCounting(void);
+
     // @cmember The count of weak references to this
     //          <c OMStrongReferenceSetElement>.
   OMUInt32 referenceCount(void) const;
