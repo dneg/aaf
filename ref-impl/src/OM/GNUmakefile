@@ -37,6 +37,11 @@ endif
 # Common definitions
 include $(AAFBASE)/build/common.mk
 
+# Remove OMMSSStoredObject.o fomr CXXOBJS list sine MIPSpro introduces
+# unusal linking behavior when this unused source file is built.
+ifeq ($(COMPILER),MIPSpro)
+CXXOBJS:=$(filter-out %/OMMSSStoredObject.o,$(CXXOBJS))
+endif
 
 INCLUDES = -I. \
 	   -I../../include/OM \
