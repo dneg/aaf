@@ -135,29 +135,68 @@ public:
         (aafUInt32 *  descriptionLen);  //@parm [in,out] Definition description length
 
   //****************
-  // AppendPluginDescriptor()
+  // AppendPluginDef()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AppendPluginDescriptor
-        // @parm [in] PluginDescriptor to append
-        (ImplAAFPluginDescriptor * pPluginDescriptor);
+    AppendPluginDef
+        // @parm [in] PluginDef to append
+        (ImplAAFPluginDescriptor * pPluginDef);
 
 
   //****************
-  // PrependPluginDescriptor()
+  // PrependPluginDef()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    PrependPluginDescriptor
-        // @parm [in] PluginDescriptor to append
-        (ImplAAFPluginDescriptor * pPluginDescriptor);
+    PrependPluginDef
+        // @parm [in] PluginDef to append
+        (ImplAAFPluginDescriptor * pPluginDef);
 
   //****************
-  // EnumPluginDescriptors()
+  // GetPluginDefs()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    EnumPluginDescriptors
-        // @parm [out, retval] AAFPluginDescriptor Enumeration
+    GetPluginDefs
+        // @parm [out, retval] AAFPluginDef Enumeration
         (ImplEnumAAFPluginDescriptors ** ppEnum);
+
+  //****************
+  // CountPluginDefs()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CountPluginDefs
+        // @parm [out, retval] Total number of plugin descriptor objects
+        (aafUInt32 * pResult);
+
+  //****************
+  // InsertPluginDefAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    InsertPluginDefAt
+         // @parm [in] Index where plugin descriptor is to be inserted
+        (aafUInt32 index,
+
+		 // @parm [in] Plugin descriptor to insert
+		 ImplAAFPluginDescriptor * pPluginDef);
+
+  //****************
+  // GetPluginDefAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetPluginDefAt
+         // @parm [in] Index of plugin descriptor to retrieve
+        (aafUInt32 index,
+
+		 // @parm [out] Retrieved plugin descriptor
+		 ImplAAFPluginDescriptor ** ppPluginDef);
+
+  //****************
+  // RemovePluginDefAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemovePluginDefAt
+         // @parm [in] Index of plugin descriptor to be removed
+        (aafUInt32 index);
+
 
 private:
   // friendly name of this definition
