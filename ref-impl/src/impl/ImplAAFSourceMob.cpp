@@ -42,6 +42,7 @@
 #include "aafErr.h"
 #include "AAFResult.h"
 #include "ImplAAFDictionary.h"
+#include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 #include "AAFUtils.h"
 #include "ImplEnumAAFMobSlots.h"

@@ -12,7 +12,7 @@
 #include "AAF.h"
 #include "AAFResult.h"
 #include "AAFStoredObjectIDs.h"
-#include "AAFDefUIDs.h"
+#include "AAFDataDefs.h"
 
 #include <iostream.h>
 #include <stdio.h>
