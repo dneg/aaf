@@ -15,33 +15,6 @@ AAFRoot\
 AD_HEAD
 AD_IDL(//
 // This interface is used with an object representing an AAF file.
-// An object supporting IAAFFile may be in one of the following
-// states:
-//
-// 1\) Open for Reading with AAFFileOpenExistingRead.  This file 
-//    object is associated with a filesystem file from which
-//    information is only to be read.
-//
-// 2\) Open for Modification with AAFFileOpenExistingModify or 
-//    AAFFileOpenNewModify.  This file object is associated with a
-//    filesystem file\, potentially containing data which is to be
-//    modified.
-//
-// 3\) Open as a Transient File with AAFFileOpenTransient.  This file
-//    object is not associated with any filesystem file\, but it may 
-//    still be used to contain AAF objects.
-//
-// 4\) Closed.  This file object is neither transient nor is it
-//    associated with any filesystem entities.
-//
-// When created and Initialize\(\)d\, objects implementing this
-// interface are initially in the Closed state.
-//
-// In general an IAAFFile-implementing object may not be transitioned
-// directly from one Open state to another; it must first be put
-// through the Closed state.  The exception is a Transient file\,
-// which may be transitioned directly from Transient to Open for
-// Modification via the SaveAs\(\) method.
 //
 // Any filesystem file can be opened for reading by multiple
 // IAAFFile-supporting objects.
@@ -52,21 +25,6 @@ AD_IDL(//
 // method will succeed and all referenced objects will be put into a
 // Detached state in which may cause any methods on such objects to
 // fail with the error status of AAFRESULT_NOT_IN_FILE.
-//
-// The Revert feature allows any unsaved changes to be discarded. The
-// state of this object and all contained objects will return to that
-// when it was last saved or opened\, whichever is most recent.  Note
-// that Revert will only succeed if this object was opened as
-// Revertable.  If it was not opened as Revertable\, then the
-// implementation reserves the right to optimize memory usage by
-// potentially writing the state of "dirty" objects to the file
-// automatically at any time.  The disadvantage of using Revertable
-// mode is that all unsaved changes must be kept in memory and cannot
-// be dumped to disk until explicitly commanded.  Note that transient
-// files are never considered Revertable.
-//
-// Note also that changes to essence\, even on a file marked
-// Revertable\, must be committed to disk and cannot be reverted.
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
@@ -81,29 +39,13 @@ AD_CLASS_UUID(9346ACD2, 2713, 11d2, 80, 35, 00, 60, 08, 14, 3E, 6F)
 
 AD_DEFAULT_UUID(9346ACD3, 2713, 11d2, 80, 35, 00, 60, 08, 14, 3E, 6F)
 AD_XCLASS_BEGIN(Concrete, Transient)
-
-AD_METHOD0(Close,
-		   Dissociates this IAAFFile-supporting object from its
-  // currently-associated filesystem file\, closing that filesystem
-  // file in the process.  Any AAF objects which were contained within
-  // this object will then no longer be available to the client.
-  //
-  // If the client is maintaining any references to any objects which
-  // are contained in this object\, those objects will be marked as
-  // dissociated\, and methods on them will fail.
-  //
-  // If this file is Revertable and there are unsaved changes\, this
-  // method will fail.  The client may remedy the situaion by calling
-  // one of Save\(\)\, SaveAs\(\)\, or Revert\(\) before calling
-  // Close\(\).
-  //
-  // If this file is not Revertable\, any unsaved changes will be
-  // written to the file before the Close operation is complete.
+AD_METHOD0(Open,
+     Associates this IAAFFile-supporting object with the storage to
+  // which it is to be associated.  It will then be possible to access
+  // objects within this file.
   //
   // This method will succeed only if all of the following are true:
-  // - This object is currently associated with a filesystem file.
-  // - This file is not revertable\, or if it is revertable there are
-  //   no unsaved changes.
+  // - This object has not already been opened.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -112,114 +54,27 @@ AD_METHOD0(Close,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NOT_OPEN
-  //   - This object is not already associated with any filesystem
-  //     file.
-  //
-  // AAFRESULT_UNSAVED_CHANGES
-  //   - This file is Revertable\, and there are unsaved changes.)
+  // AAFRESULT_ALREADY_OPEN
+  //   - This object has already been Open\(\)ed.)
 
 
-AD_METHOD0(Save,
-		   If this IAAFFile-supporting object is associated with a
-  // filesystem file for writing or modification\, all unsaved changes
-  // made to the contents of this object are saved to that filesystem
-  // file.
-  //
-  // This method will succeed only if all of the following are true:
-  // - This object has already been Initialize\(\)d.
-  // - This object is currently associated with a filesystem file for
-  //   writing or modification.
-  // - Sufficient space remains in the filesystem for the data to be
-  //   written.
-  //
-  // Note: This method guarantees that upon return\, the filesystem
-  // file will always be left in a consistent and valid state.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NOT_OPEN
-  //   - This object is not associated with an open filesystem file.
-  //
-  // AAFRESULT_WRONG_OPENMODE
-  //   - This object is not open for writing or modification.
-  //
-  // AAFRESULT_INSUFFICIENT_SPACE
-  //   - There is insufficient space in the filesystem to save the
-  //     contents of this object.)
-
-
-AD_XMETHOD2(SaveAs,
-
-			[in\, string],
-			objPass,
-			aafCharacter_constptr,
-			pFileName,
-			Null-terminated string containing name of filesystem file to
-	// which this file is to be saved.  Filename must be in a form
-	// that would be acceptable to StgOpenStorage\(\) for this
-	// platform.,
+AD_XMETHOD1(SaveCopyAs,
 
 			[in],
-			objPass,
-			aafUInt32,
-			modeFlags,
-			File open mode flags for new filesystem file.  May be any of
-	// the following ORed together.  All other bits must be set to
-	// zero.
-    //  - kAAFFileModeUnbuffered - to indicate unbuffered mode.
-	//    Default is buffered.
-    //  - kAAFFileModeRevertable - to indicate that Revert is possible
-	//    on this file \(for all changes except those to essence\).,
+			objIn,
+			AAFFile,
+			pDestFile,
+			File to recieve contents,
 
-			Saves this IAAFFile-supporting object into a newly-created
-  // filesystem file.  This object will then be associated with the
-  // new filesystem file.
-  //
-  // If the old file was opened as Revertable\, any unsaved changes
-  // will not be saved to old file before it is closed.  If the old
-  // file was not opened as revertable\, all unsaved changes to that
-  // old file will be saved before it is closed.  In either case\, the
-  // old file will be closed\, and all changes will be saved to the
-  // new file.
-  //
-  // Note: This method guarantees that upon return\, both the old and
-  // the new filesystem files will always be left in a consistent and
-  // valid state.
-  // 
-  // Does the following:
-  // - Creates a new file in the filesystem with the given name.
-  // - Opens the filesystem file for reading and writing.
-  // - Associates this object with that filesystem file.
-  // - Copies the contents of this object into the new file.
-  // - Closes the old filesystem file.
-  // - This AAFFile object then can be used to refer to all AAF
-  //   objects contained within the file.
+     Copies the contents of this file to *pDestFile.  Requires that
+  // *pDestFile be open\, writeable or modifiable\, and not yet
+  // contain any objects.
   //
   // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if:
-  // - This object has already been Initialize\(\)d.
   // - This object is currently open.
-  // - The pFileName argument is valid.
-  // - Only valid flags have been specified.
-  // - A valid combination of flags has been specified.
-  // - The named file does not exist in the filesystem.
-  // - The named filesystem file is readable.
   // - The named filesystem file is writable.
-  // - There is sufficient space in the filesystem to create and write
-  //   the file.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -227,80 +82,12 @@ AD_XMETHOD2(SaveAs,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NOT_OPEN
   //   - This object is not open.
   //
-  // AAFRESULT_NULL_PARAM
-  //   - pFileName pointer argument is NULL.
-  //
-  // AAFRESULT_BAD_FLAGS
-  //   - one or more illegal flags were specified.
-  //
-  // AAFRESULT_BAD_FLAG_COMBINATION
-  //   - illegal combination of flags was specified.
-  //
-  // AAFRESULT_FILE_EXISTS
-  //   - The named file already exists in the filesystem.
-  //
-  // AAFRESULT_NOT_READABLE
-  //   - The named file cannot be read.
-  //
   // AAFRESULT_NOT_WRITEABLE
-  //   - The named file cannot be written.
-  //
-  // AAFRESULT_INSUFFICIENT_SPACE
-  //   - There is insufficient space in the filesystem to create this
-  //     file or write its contents.)
-
-
-AD_METHOD0(Revert,
-		   If this IAAFFile-supporting object is associated with a
-  // filesystem file for reading or modification\, all unsaved changes
-  // made to the contents of this object are discarded and the
-  // contents are brought back to reflect the state of the filesystem
-  // file.
-  //
-  // This will only work if this file was opened as revertable and is
-  // not a transient file.
-  //
-  // Any changes to essence are not revertable.
-  //
-  // NOTE! Stub only.   Implementation not yet added.
-  //
-  // This method will succeed only if all of the following are true:
-  // - This object has already been Initialize\(\)d.
-  // - This object is currently associated with a filesystem file for
-  //   reading or modification.
-  // - Any unsaved changes do not involve unrevertable essence
-  //   changes.
-  // - This object is revertable and is not transient.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NOT_OPEN
-  //   - This object is not associated with an open filesystem file.
-  //
-  // AAFRESULT_WRONG_OPENMODE
-  //   - This object is not open for reading or modification.
-  //
-  // AAFRESULT_MEDIA_NOT_REVERTABLE
-  //   - This object is revertable and changes were made to essence
-  //     which do not allow this object to be reverted.
-  //
-  // AAFRESULT_NOT_REVERTABLE
-  //   - This object is not revertable.)
+  //   - The named file cannot be written.)
 
 
 AD_XMETHOD1(GetHeader,
@@ -362,4 +149,58 @@ AD_XMETHOD1(GetRevision,
   //
   // AAFRESULT_NULL_PARAM
   //   - the revision pointer arg is NULL.)
+
+
+AD_METHOD0(Save,
+     If this IAAFFile-supporting object is open\, all unsaved changes
+  // made to the contents of this object are saved.
+  //
+  // This method will succeed only if all of the following are true:
+  // - This object is currently open.
+  // - Sufficient space remains in the storage for the data to be
+  //   written.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_OPEN
+  //   - This object is not open.
+  //
+  // AAFRESULT_WRONG_OPENMODE
+  //   - This object is not open for writing or modification.
+  //
+  // AAFRESULT_INSUFFICIENT_SPACE
+  //   - There is insufficient space in the storage to save the
+  //     contents of this object.)
+
+
+AD_METHOD0(Close,
+     Dissociates this IAAFFile-supporting object from its
+  // currently-associated storage.  Any AAF objects which were
+  // contained within this object will then no longer be available to
+  // the client.
+  //
+  // If the client is maintaining any references to any objects which
+  // are contained in this object\, those objects will be marked as
+  // dissociated\, and methods on them will fail.
+  //
+  // Any unsaved changes will be written to the file before the Close
+  // operation is complete.
+  //
+  // This method will succeed only if all of the following are true:
+  // - This object is currently open.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_OPEN
+  //   - This object is not already open.)
 AD_XCLASS_END(Concrete, Transient)
