@@ -40,19 +40,10 @@ class OMContainer {
 public:
   // @access Public members.
 
-    // @cmember Insert <p value> into this <c OMContainer>.
-  virtual void insert(const Element value) = 0;
-
-    // @cmember Does this <c OMContainer> contain <p value> ?
-  virtual bool containsValue(const Element value) const = 0;
-
     // @cmember The number of elements in this <c OMContainer>.
     //          <mf OMContainer::count> returns the actual number
     //          of elements in the <c OMContainer>.
   virtual size_t count(void) const = 0;
-
-    // @cmember Remove <p value> from this <c OMContainer>.
-  virtual void removeValue(const Element value) = 0;
 
 };
 
