@@ -482,7 +482,7 @@ void OMDataStreamProperty::shallowCopyTo(OMProperty* /* destination */) const
 }
 
 void OMDataStreamProperty::deepCopyTo(OMProperty* destination,
-                                      void* clientContext) const
+                                      void* /* clientContext */) const
 {
   TRACE("OMDataStreamProperty::deepCopyTo");
   PRECONDITION("Valid destination", destination != 0);
