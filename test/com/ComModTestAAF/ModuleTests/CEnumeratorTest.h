@@ -33,6 +33,7 @@
 #include "AAFResult.h"
 #include "AAFSmartPointer.h"
 #include "CAAFBuiltinDefs.h"
+#include "AAFDefUIDs.h"
 
 #include <stdlib.h>
 
@@ -91,6 +92,7 @@ void CEnumeratorTest<TEnum,TItem>::Run()
 	ProductInfo.productName = L"AAF Enumerator Test";
 	ProductInfo.productVersion = &v;
 	ProductInfo.productVersionString = NULL;
+	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.platform = NULL;
 
 	// Remove the previous test file, if any.
