@@ -103,10 +103,6 @@ public:
 	virtual AAFRESULT GenerateSequence(ImplAAFSequence **seq);
 
 	virtual AAFRESULT GetComponentType(implCompType_t* pType) {*pType = kSegment; return AAFRESULT_SUCCESS;}
-
-	// Declare the module test method. The implementation of the will be be
-	// in /test/ImplAAFSegmentTest.cpp.
-	static AAFRESULT test();
 };
 
 #endif // ! __ImplAAFSegment_h__
