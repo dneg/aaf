@@ -31,9 +31,12 @@
 
 
 ImplAAFTimelineMobSlot::ImplAAFTimelineMobSlot ():
-	_editRate(	PID_TIMELINEMOBSLOT_EDITRATE,	"EditRate")
+	_editRate(	PID_TIMELINEMOBSLOT_EDITRATE,	"EditRate"),
+	_origin(	PID_TIMELINEMOBSLOT_ORIGIN,		"Origin")
+
 {
 	_persistentProperties.put( _editRate.address());
+	_persistentProperties.put( _origin.address());
 
 }
 
@@ -55,20 +58,9 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFTimelineMobSlot::GetOrigin (aafPosition_t *origin)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
-	ImplAAFSegment * tmpSegment = (ImplAAFSegment*) NULL;
 
 	assert(origin != NULL);
-
-	XPROTECT( )
-	  {
-		CHECK(GetTrackDesc(0, (aafString_t*) NULL, origin, (unsigned long*) NULL));
-	  }
-
-	XEXCEPT
-	  {
-		return(XCODE());
-	  }
-	XEND;
+	*origin = _origin;
 
 	return aafError;
 }
