@@ -697,7 +697,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::removeProperty(void)
   //   @rdesc The size of the raw bits of this
   //          <c OMStrongReferenceVectorProperty> in bytes.
   //   @this const
-template<typename ReferencedObject>
+template <typename ReferencedObject>
 size_t OMStrongReferenceVectorProperty<ReferencedObject>::bitsSize(void) const
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::bitsSize");
@@ -715,7 +715,7 @@ size_t OMStrongReferenceVectorProperty<ReferencedObject>::bitsSize(void) const
   //   @parm The address of the buffer into which the raw bits are copied.
   //   @parm size_t | size | The size of the buffer.
   //   @this const
-template<typename ReferencedObject>
+template <typename ReferencedObject>
 void OMStrongReferenceVectorProperty<ReferencedObject>::getBits(
                                                       OMByte* bits,
                                                       size_t ANAME(size)) const
@@ -746,7 +746,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::getBits(
   //          <c OMStorable>.
   //   @parm The address of the buffer from which the raw bits are copied.
   //   @parm The size of the buffer.
-template<typename ReferencedObject>
+template <typename ReferencedObject>
 void OMStrongReferenceVectorProperty<ReferencedObject>::setBits(
                                                             const OMByte* bits,
                                                             size_t size)

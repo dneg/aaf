@@ -247,7 +247,7 @@ void OMStrongReferenceProperty<ReferencedObject>::restore(size_t externalSize)
   //   @rdesc True if this <c OMStrongReferenceProperty> is void, false
   //          otherwise
   //   @this const
-template<typename ReferencedObject>
+template <typename ReferencedObject>
 bool OMStrongReferenceProperty<ReferencedObject>::isVoid(void) const
 {
   TRACE("OMStrongReferenceProperty<ReferencedObject>::isVoid");
@@ -267,7 +267,7 @@ bool OMStrongReferenceProperty<ReferencedObject>::isVoid(void) const
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable>.
-template<typename ReferencedObject>
+template <typename ReferencedObject>
 void OMStrongReferenceProperty<ReferencedObject>::removeProperty(void)
 {
   TRACE("OMStrongReferenceProperty<ReferencedObject>::removeProperty");
@@ -286,7 +286,7 @@ void OMStrongReferenceProperty<ReferencedObject>::removeProperty(void)
   //   @parm The address of the buffer into which the raw bits are copied.
   //   @parm size_t | size | The size of the buffer.
   //   @this const
-template<typename ReferencedObject>
+template <typename ReferencedObject>
 void OMStrongReferenceProperty<ReferencedObject>::getBits(
                                                       OMByte* bits,
                                                       size_t ANAME(size)) const
@@ -312,7 +312,7 @@ void OMStrongReferenceProperty<ReferencedObject>::getBits(
   //          object. This type must be a descendant of <c OMStorable>.
   //   @parm The address of the buffer into which the raw bits are copied.
   //   @parm size_t | size | The size of the buffer.
-template<typename ReferencedObject>
+template <typename ReferencedObject>
 void OMStrongReferenceProperty<ReferencedObject>::setBits(const OMByte* bits,
                                                           size_t ANAME(size))
 {
@@ -332,7 +332,7 @@ void OMStrongReferenceProperty<ReferencedObject>::setBits(const OMByte* bits,
   //          <c OMStorable>.
   //   @rdesc A pointer to an <c OMObject>.
   //   @this const
-template<typename ReferencedObject>
+template <typename ReferencedObject>
 OMObject*
 OMStrongReferenceProperty<ReferencedObject>::getObject(void) const
 {
@@ -372,7 +372,7 @@ OMObject* OMStrongReferenceProperty<ReferencedObject>::setObject(
   //   @rdesc The <c OMStorable> represented by this
   //          <c OMStrongReferenceProperty>
   //   @this const
-template<typename ReferencedObject>
+template <typename ReferencedObject>
 OMStorable* OMStrongReferenceProperty<ReferencedObject>::storable(void) const
 {
   TRACE("OMStrongReferenceProperty<ReferencedObject>::storable");
