@@ -103,6 +103,7 @@ BEGIN {
   SLO15C=17
   #
   elementNameC=18
+  aliasC=19
   typeNameC=30
   kindC=31
   qualifC=32
@@ -473,6 +474,12 @@ BEGIN {
   printf("//\n");
   printf("//   Separate one AAF type definition from another.\n");
   printf("//\n");
+  printf("// AAF_CLASS_ALIAS(name, alias)\n");
+  printf("//\n");
+  printf("//     name      = class name\n");
+  printf("//     alias     = another, usually shorter, name by which the\n");
+  printf("//                 class is also known\n");
+  printf("//\n");
   printf("// AAF_LITERAL_AUID(l, w1, w2,  b1, b2, b3, b4, b5, b6, b7, b8)\n");
   printf("//\n");
   printf("//   Define an AUID.\n");
@@ -642,6 +649,10 @@ BEGIN {
   printf("#define AAF_TYPE_SEPARATOR()\n");
   printf("#endif\n");
   printf("\n");
+  printf("#ifndef AAF_CLASS_ALIAS\n");
+  printf("#define AAF_CLASS_ALIAS(name, alias)\n");
+  printf("#endif\n");
+  printf("\n");
   printf("#ifndef AAF_LITERAL_AUID\n");
   printf("#define AAF_LITERAL_AUID(l, w1, w2,  b1, b2, b3, b4, b5, b6, b7, b8) \\\n");
   printf("                        {l, w1, w2, {b1, b2, b3, b4, b5, b6, b7, b8}}\n");
@@ -655,6 +666,7 @@ BEGIN {
   # Initialize global variables.
   #
   firstType = 1;
+  firstAlias = 1;
 }
 
 /^#/ {
@@ -829,7 +841,17 @@ BEGIN {
         printf("  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(%s, %s,\n    AAF_REFERENCE_TYPE_NAME(%s, %s))\n", memberName, $parentC, typeName, targetType);
       } else {
         # error, what is this a member of ?
-      }     
+      }
+    } else if ($typeNameC == "alias") {
+      if (firstAlias) {
+        printf("\n");
+        printf("// Aliases\n");
+        printf("//\n");
+        firstAlias = 0;
+      }
+      aname = $elementNameC;
+      aalias = $aliasC;
+      printf("AAF_CLASS_ALIAS(%s, %s)\n", aname, aalias); 
     } else { # this item is a property
       type = $typeNameC;
       if (type == "Array of Int32") {
@@ -1005,6 +1027,8 @@ END {
     printf("#undef AAF_TYPE_DEFINITION_STREAM\n");
     printf("\n");
     printf("#undef AAF_TYPE_SEPARATOR\n");
+    printf("\n");
+    printf("#undef AAF_CLASS_ALIAS\n");
     printf("\n");
     printf("#undef AAF_LITERAL_AUID\n");
     printf("\n");
