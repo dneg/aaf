@@ -480,12 +480,12 @@ AD_XCONSTRUCTOR4(%01, objPass, %02, %03, %04,
 
 
 #startm .objInArray-indirection 00
-*\
+**\
 #endm
 
 
 #startm .objInArrayCustom-indirection 00
-*\
+**\
 #endm
 
 
