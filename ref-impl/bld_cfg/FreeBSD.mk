@@ -21,6 +21,7 @@ CC = gcc
 LD = gcc
 LFLAGS = -lstdc++
 CFLAGS = -Wall -Werror
+ARFLAGS = -c -q
 OBJFILE = -o $*.${OBJ}
 EXEFILE = -o unittest.${EXE}
 
