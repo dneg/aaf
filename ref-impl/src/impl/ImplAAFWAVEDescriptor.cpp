@@ -33,6 +33,13 @@ ImplAAFWAVEDescriptor::~ImplAAFWAVEDescriptor ()
 }
 
 AAFRESULT STDMETHODCALLTYPE
+ImplAAFWAVEDescriptor::Initialize ()
+{
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
     ImplAAFWAVEDescriptor::GetSummary (aafUInt32 size, aafDataValue_t pSummary)
 {
 	if(pSummary == NULL)
