@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -174,9 +174,7 @@ OMOStream& OMOStream::putLine(void)
 
 #else
 
-// Diagnostic output to debugger (currently Windows only)
-
-#include <windows.h>
+// Diagnostic output to debugger
 
 #include <iostream.h>
 #if defined(OM_OS_WINDOWS)
@@ -187,12 +185,53 @@ OMOStream& OMOStream::putLine(void)
 
 #include "OMUtilities.h"
 
+#if defined (OM_OS_WINDOWS)
+
+#include <windows.h>
+
 static void debugPrint(const char* string)
 {
   wchar_t s[256];
   convertStringToWideString(s, string, sizeof(s)/sizeof(s[0]));
   OutputDebugString(s);
 }
+
+#elif defined(OM_OS_MACOS) || defined(OM_OS_MACOSX)
+
+#include <MacTypes.h>
+
+static char buffer[256];
+static size_t current = 0;
+
+static void debugFlush(void)
+{
+  unsigned char p[256];
+  copyCToPString(p, current + 1, buffer);
+  DebugStr(p);
+  current = 0;
+}
+
+static void debugPrint(const char c)
+{
+  if (current == sizeof(buffer)) {
+    debugFlush();
+    buffer[current++] = c;
+  } else if (c == '\n') {
+    debugFlush();
+  } else {
+    buffer[current++] = c;
+  }
+}
+
+static void debugPrint(const char* string)
+{
+  size_t i = 0;
+  while (string[i] != 0) {
+    debugPrint(string[i++]);
+  }
+}
+
+#endif
 
 OMOStream& OMOStream::put(const char* string)
 {
