@@ -162,9 +162,6 @@ public:
     // @cmember Retrieve the root <c OMStoredObject> from this <c OMFile>.
   OMStoredObject* rootStoredObject(void);
 
-    // @cmember Retrieve the <c OMClassFactory> from this <c OMFile>.
-  const OMClassFactory* classFactory(void) const;
-
     // @cmember Retrieve the <c OMPropertyTable> from this <c OMFile>.
   OMPropertyTable* referencedProperties(void);
 
@@ -209,7 +206,6 @@ private:
   OMStorable* _root;
   OMStoredObject* _rootStoredObject;
   
-  const OMClassFactory* _classFactory;
   OMObjectDirectory* _objectDirectory;
   OMPropertyTable* _referencedProperties;
 
