@@ -965,6 +965,7 @@ OMFile::OMFile(const wchar_t* fileName,
   ASSERT("No root object", _root == 0);
   _root = restoreRoot();
   _isOpen = true;
+  POSTCONDITION("File is open", _isOpen);
 }
 
   // @mfunc Constructor. Create an <c OMFile> object representing
@@ -1015,6 +1016,7 @@ OMFile::OMFile(const wchar_t* fileName,
   _root->attach(this, L"/");
   _root->setStore(_rootStore);
   _isOpen = true;
+  POSTCONDITION("File is open", _isOpen);
 }
 
   // @mfunc Constructor. Create an <c OMFile> object representing
@@ -1054,6 +1056,7 @@ OMFile::OMFile(OMRawStorage* rawStorage,
 
   setClassFactory(factory);
   setName(L"/");
+  POSTCONDITION("File not yet open", !_isOpen);
 }
 
   // @mfunc Constructor. Create an <c OMFile> object representing
@@ -1097,6 +1100,7 @@ OMFile::OMFile(OMRawStorage* rawStorage,
   setClassFactory(factory);
   setName(L"<file>");
   _root->attach(this, L"/");
+  POSTCONDITION("File not yet open", !_isOpen);
 }
 
   // @mfunc Read the signature from the given file.
