@@ -62,6 +62,7 @@ void OMDataStreamProperty::restore(size_t size)
   delete [] streamName;
 
   open();
+  setPresent();
 
   POSTCONDITION("Properly opened stream", _stream != 0);
 }
