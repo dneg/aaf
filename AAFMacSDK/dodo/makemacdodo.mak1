@@ -212,9 +212,9 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo "" >> macdodo.tmp
 	echo '	''AAFPrivate.all ¶' >> targets_all.tmp
 	echo 'AAFPrivate.all...'
-	echo 'AAFPrivate.all Ä "{comh}AAFPrivate.h" "{comh}AAFPrivate_i.c"' >> macdodo.tmp
-	echo '	"{comh}AAFPrivate.h" ¶' >> generated_targets.tmp
-	echo '	"{comh}AAFPrivate_i.c" ¶' >> generated_targets.tmp
+	echo 'AAFPrivate.all Ä "{refh}AAFPrivate.h" "{refh}AAFPrivate_i.c"' >> macdodo.tmp
+	echo '	"{refh}AAFPrivate.h" ¶' >> generated_targets.tmp
+	echo '	"{refh}AAFPrivate_i.c" ¶' >> generated_targets.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	for base in {PRIVATE_AAFOBJECTS}
