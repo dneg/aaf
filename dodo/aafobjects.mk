@@ -87,7 +87,6 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFMobComments \
 	EnumAAFObjects \
 	EnumAAFParameterDefs \
-	EnumAAFPluginDescriptors \
 	EnumAAFPluginLocators \
 	EnumAAFPropertyDefs \
 	EnumAAFPropertyValues \
@@ -147,7 +146,8 @@ HUMAN_TYPED_IMPL = \
 	EnumAAFEssenceData \
 	EnumAAFLocators \
 	EnumAAFMobSlots \
-	EnumAAFMobs
+	EnumAAFMobs \
+	EnumAAFPluginDescriptors
 
 # The list of standard dodo targets.
 # AAFTypes have to be handled separately since no object is to be created.
