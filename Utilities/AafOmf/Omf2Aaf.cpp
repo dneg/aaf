@@ -966,6 +966,7 @@ void Omf2Aaf::ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob )
 	OMFCheck omfCheck = OMF2::omfiMobGetNumComments(OMFFileHdl, obj, &numComments);
 	if (numComments > 0)
 	{
+		gpGlobals->pLogger->Log( kLogInfo, "Processing %ld comments...\n",  (long) numComments );
 		// Allocate the iterator
 		OMF2::omfIterHdl_t		OMFIterator;
 		omfCheck = OMF2::omfiIteratorAlloc(OMFFileHdl, &OMFIterator);
@@ -975,13 +976,24 @@ void Omf2Aaf::ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob )
 		for (times = 0; times < numComments; times++)
 		{
 			omfCheck = OMF2::omfiMobGetNextComment(OMFIterator, obj, sizeof(sCommentName), sCommentName, sizeof(sCommentValue), sCommentValue);
-			std::auto_ptr<wchar_t>pwcomment( new wchar_t[strlen(sCommentName)+1] );
-			aafWChar *pwCommentName = pwcomment.get();
-			mbstowcs(pwCommentName, sCommentName, strlen(sCommentName)+1);
-			std::auto_ptr<wchar_t>pwcommentval( new wchar_t[strlen(sCommentValue)+1] );
-			aafWChar* pwCommentValue = pwcommentval.get();
-			mbstowcs(pwCommentValue, sCommentValue, strlen(sCommentValue)+1);
-			aafCheck = pMob->AppendComment(pwCommentName, pwCommentValue);
+			int nameLen = strlen( sCommentName );
+			if( nameLen > 0 )
+			{
+				std::auto_ptr<wchar_t>pwcomment( new wchar_t[ nameLen + 1 ] );
+				aafWChar *pwCommentName = pwcomment.get();
+				mbstowcs(pwCommentName, sCommentName, nameLen + 1);
+				int textLen = strlen(sCommentValue);
+				std::auto_ptr<wchar_t>pwcommentval( new wchar_t[ textLen + 1 ] );
+				aafWChar* pwCommentValue = pwcommentval.get();
+				mbstowcs(pwCommentValue, sCommentValue, textLen + 1);
+				aafCheck = pMob->AppendComment(pwCommentName, pwCommentValue);
+				gpGlobals->pLogger->Log( kLogInfo, "Comment \"%s\" of length %ld was converted.\n", sCommentName, textLen );
+				gpGlobals->pLogger->Log( kLogInfo, "Comment value = \"%s\".\n", sCommentValue );
+			}
+			else
+			{
+				gpGlobals->pLogger->Log( kLogError, "Zero length comment name encountered. Comment not converted.\n" );
+			}
 		}
 
 		// Release the iterator
