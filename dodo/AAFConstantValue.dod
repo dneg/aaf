@@ -3,7 +3,7 @@ AAFConstantValue\
 #endm
 #c
 #startm .parent-module 0
-AAFSegment\
+AAFParameter\
 #endm
 #c
 #import ./AAFUnitTest.exp
@@ -46,7 +46,7 @@ The data value is returned in a preallocated buffer of size valueSize.)
 /****/
 AD_METHOD2(SetValue,
 [in],aafInt32,valueSize, Size of preallocated buffer,
-[in],void *,value, buffer containing value
+[in],void *,value, buffer containing value,
 The data value is set from a buffer of size valueSize.)
 
 // Internal
