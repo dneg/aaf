@@ -1094,7 +1094,13 @@ static HRESULT CreateVideoAAFFile(
 				xfer.buffer = writeBuffer;
 				result.bytesXfered = 0;
 				
-				checkResult(pMultiEssence->WriteMultiSamples(STD_SAMPLE_COUNT, &xfer, &result));
+				HRESULT r = pMultiEssence->WriteMultiSamples(STD_SAMPLE_COUNT, &xfer, &result);
+				if (r == AAFRESULT_INVALID_OP_CODEC)
+				  {
+					hr = r;
+					break;
+				  }
+				checkResult(r);
 
 				pMultiEssence->Release();
 				pMultiEssence = NULL;
