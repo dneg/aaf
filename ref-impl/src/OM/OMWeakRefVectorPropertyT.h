@@ -577,7 +577,7 @@ OMWeakReferenceVectorProperty<ReferencedObject>::removeAt(const size_t index)
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::removeAt");
   PRECONDITION("Valid index", index <= count());
 
-  ReferencedObject* result = setValueAt(0, index);
+  ReferencedObject* result = clearValueAt(index);
   _vector.removeAt(index);
   return result;
 }
