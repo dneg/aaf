@@ -1,5 +1,4 @@
-// @doc
-
+// @doc OMEXTERNAL
 #include "OMProperty.h"
 
 #include "OMStorable.h"
@@ -8,13 +7,15 @@
 
 // class OMProperty
 
-OMProperty::OMProperty(int pid, const char* name)
-: _pid(pid), _type(TID_NONE), _name(name)
+OMProperty::OMProperty(const OMPropertyId propertyId, const char* name)
+: _propertyId(propertyId), _type(TID_NONE), _name(name)
 {
 }
 
-OMProperty::OMProperty(int pid, const int type, const char* name)
-: _pid(pid), _type(type), _name(name)
+OMProperty::OMProperty(const OMPropertyId propertyId,
+                       const int type,
+                       const char* name)
+: _propertyId(propertyId), _type(type), _name(name)
 {
 }
 
@@ -33,37 +34,47 @@ const char* OMProperty::name(void) const
   // @mfunc The property id of this <c OMProperty>.
   //   @rdesc The property id.
   //   @this const
-int OMProperty::pid(void) const
+const OMPropertyId OMProperty::propertyId(void) const
 {
-  return _pid;
+  return _propertyId;
 }
 
-  // @mfunc Inform this <c OMProperty> that it is a property of
-  //        the <c OMStorable> object <p containingObject>.
-  //   @parm The <c OMStorable> object of which this <c OMProperty> is
-  //   a property.
-void OMProperty::setContainingObject(const OMStorable* containingObject)
+  // @mfunc Inform this <c OMProperty> that it is a member of
+  //        the <c OMPropertySet> <p propertySet>.
+  //   @parm The <c OMPropertySet> of which this <c OMProperty> is
+  //   a member.
+void OMProperty::setPropertySet(const OMPropertySet* propertySet)
 {
-  _containingObject = containingObject;
+  _propertySet = propertySet;
 }
 
   // @mfunc The address of this <c OMProperty> object. This function
-  //        is defined so that descendants may override "operator &".
+  //        is defined so that descendants may override "operator &" to
+  //        obtain the address of the contained property value. This
+  //        function can then be used to obtain the address of this
+  //        <c OMProperty>.
   //   @rdesc The address of this <c OMProperty>.
 OMProperty* OMProperty::address(void)
 {
   return this;
 }
 
+// @doc OMINTERNAL
+
 // class OMSimpleProperty
 
-OMSimpleProperty::OMSimpleProperty(int pid, const char* name)
-: OMProperty(pid, name), _size(0), _bits(0)
+OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
+                                   const char* name)
+: OMProperty(propertyId, name), _size(0), _bits(0)
 {
 }
 
-OMSimpleProperty::OMSimpleProperty(int pid, const char* name, size_t valueSize)
-: OMProperty(pid, name), _size(valueSize), _bits(new unsigned char[valueSize])
+OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
+                                   const char* name,
+                                   size_t valueSize)
+: OMProperty(propertyId, name),
+  _size(valueSize),
+  _bits(new unsigned char[valueSize])
 {
   PRECONDITION("Valid size", (valueSize > 0));
 
@@ -102,16 +113,16 @@ void OMSimpleProperty::set(const void* value, size_t valueSize)
 
 void OMSimpleProperty::saveTo(OMStoredObject& s) const
 {
-  s.write(_pid, _type, _bits, _size);
+  s.write(_propertyId, _type, _bits, _size);
 }
 
 
 // class OMCollectionProperty
 
-OMCollectionProperty::OMCollectionProperty(int pid,
+OMCollectionProperty::OMCollectionProperty(const OMPropertyId propertyId,
                                            const int type,
                                            const char* name)
-: OMProperty(pid, type, name)
+: OMProperty(propertyId, type, name)
 {
 }
 
@@ -121,8 +132,9 @@ OMCollectionProperty::~OMCollectionProperty(void)
 
 // class OMStringProperty
 
-OMStringProperty::OMStringProperty(int pid, const char* name)
-: OMCharacterStringProperty<char>(pid, name)
+OMStringProperty::OMStringProperty(const OMPropertyId propertyId,
+                                   const char* name)
+: OMCharacterStringProperty<char>(propertyId, name)
 {
 }
 
@@ -138,8 +150,9 @@ OMStringProperty& OMStringProperty::operator = (const char* value)
 
 // class OMWideStringProperty
 
-OMWideStringProperty::OMWideStringProperty(int pid, const char* name)
-: OMCharacterStringProperty<wchar_t>(pid, name)
+OMWideStringProperty::OMWideStringProperty(const OMPropertyId propertyId,
+                                           const char* name)
+: OMCharacterStringProperty<wchar_t>(propertyId, name)
 {
 }
 
