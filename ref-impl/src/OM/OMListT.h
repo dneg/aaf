@@ -28,6 +28,7 @@
 #define OMLISTT_H
 
 #include "OMAssertions.h"
+#include "OMContainerIterator.h"
 
 // This implementation was taken from [1].
 //

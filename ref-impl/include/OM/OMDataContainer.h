@@ -25,6 +25,8 @@
 #ifndef OMDATACONTAINER_H
 #define OMDATACONTAINER_H
 
+#include <stddef.h>
+
 class OMDataContainerIterator;
 
   // @class Abstract base class for data (i.e. non-object) containers.
