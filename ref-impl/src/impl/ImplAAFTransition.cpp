@@ -67,7 +67,13 @@ _cutPoint( PID_Transition_CutPoint, "Cut Point")
 
 
 ImplAAFTransition::~ImplAAFTransition ()
-{}
+{
+	if (_effect)
+	{
+		_effect->ReleaseReference();
+		_effect = NULL;
+	}
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -85,7 +91,12 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		CHECK(SetNewProps(length, pDatadef));
 		_cutPoint = cutPoint;
+		if (_effect)
+			_effect->ReleaseReference();
 		_effect = pEffect;
+		if (pEffect)
+			pEffect->AcquireReference();
+
 	}
 	XEXCEPT
 	XEND;
@@ -115,6 +126,9 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 
 	*ppEffObj = _effect;
+	if (*ppEffObj)
+		(*ppEffObj)->AcquireReference();
+
 	return AAFRESULT_SUCCESS; 
 }
 
