@@ -13,6 +13,9 @@ const bool true = 1;
 
 #endif
 
+typedef unsigned long DWORD;
+typedef long HRESULT;
+
 #elif defined (__MWERKS__)  // CodeWarrior
 
 #include <stdlib.h> // for size_t
