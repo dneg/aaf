@@ -54,6 +54,7 @@ $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
 	@ $(ECHO) Generating AAF.idl...
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAF.idl
 	$(CP)  aafobjects.mk tmp.sh
+	$(CHMOD) a+w tmp.sh
 	$(CAT) GenAAFIdl.sh >> tmp.sh
 	$(SH) tmp.sh > $(INCLUDE_DIR)/com-api/AAF.idl
 	$(RM) tmp.sh
@@ -64,6 +65,7 @@ $(PLUGIN_DIR)/AAFPlugin.idl : $(PLUGIN_FIDL_TARGETS)
 	@ $(ECHO) Generating Plugin.idl...
 	$(RM) -f $(PLUGIN_DIR)/AAFPlugin.idl
 	$(CP)  aafobjects.mk tmp.sh
+	$(CHMOD) a+w tmp.sh
 	$(CAT) GenPluginIdl.sh >> tmp.sh
 	$(SH) tmp.sh > $(PLUGIN_DIR)/AAFPlugin.idl
 	$(RM) tmp.sh
@@ -74,6 +76,7 @@ $(INCLUDE_DIR)/ref-api/AAF.h : $(FREFH_TARGETS)
 	@ $(ECHO) Generating reference AAF.h...
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAF.h
 	$(CP)  aafobjects.mk tmp.sh
+	$(CHMOD) a+w tmp.sh
 	$(CAT) GenAafh.sh >> tmp.sh
 	$(SH) tmp.sh > $(INCLUDE_DIR)/ref-api/AAF.h
 	$(RM) tmp.sh
@@ -84,6 +87,7 @@ $(INCLUDE_DIR)/ref-api/AAFPlugin.h : $(PLUGIN_FREFH_TARGETS)
 	@ $(ECHO) Generating reference AAFPlugin.h...
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFPlugin.h
 	$(CP) aafobjects.mk tmp.sh
+	$(CHMOD) a+w tmp.sh
 	$(CAT) GenPluginh.sh >> tmp.sh
 	$(SH) tmp.sh > $(INCLUDE_DIR)/ref-api/AAFPlugin.h
 	$(RM) tmp.sh
@@ -94,6 +98,7 @@ $(UUID_DIR)/AAF_i.c : aafobjects.mk dod2iid.awk
 	@ $(ECHO) Generating reference AAF_i.c...
 	$(RM) -f $(UUID_DIR)/AAF_i.c
 	$(CP)  aafobjects.mk tmp.sh
+	$(CHMOD) a+w tmp.sh
 	$(CAT) GenAaf_i.sh >> tmp.sh
 	$(SH) tmp.sh > $(UUID_DIR)/AAF_i.c
 	$(RM) tmp.sh
@@ -104,6 +109,7 @@ $(UUID_DIR)/AAFPlugin_i.c : aafobjects.mk dod2iid.awk
 	@ $(ECHO) Generating reference AAFPlugin_i.c...
 	$(RM) -f $(UUID_DIR)/AAFPlugin_i.c
 	$(CP)  aafobjects.mk tmp.sh
+	$(CHMOD) a+w tmp.sh
 	$(CAT) GenPlugin_i.sh >> tmp.sh
 	$(SH) tmp.sh > $(UUID_DIR)/AAFPlugin_i.c
 	$(RM) tmp.sh
@@ -114,6 +120,7 @@ $(UUID_DIR)/AAFRoot_i.c : aafobjects.mk dod2iid.awk
 	@ $(ECHO) Generating reference AAFRoot_i.c...
 	$(RM) -f $(UUID_DIR)/AAFRoot_i.c
 	$(CP)  aafobjects.mk tmp.sh
+	$(CHMOD) a+w tmp.sh
 	$(CAT) GenRoot_i.sh >> tmp.sh
 	$(SH) tmp.sh > $(UUID_DIR)/AAFRoot_i.c
 	$(RM) tmp.sh
@@ -124,6 +131,7 @@ $(IMPL_DIR)/AAFClassIDs.h : aafobjects.mk
 	@ $(ECHO) Generating reference AAFClassIDs.h...
 	$(RM) -f $(IMPL_DIR)/AAFClassIDs.h
 	$(CP)  aafobjects.mk tmp.sh
+	$(CHMOD) a+w tmp.sh
 	$(CAT) GenClassIDs.sh >> tmp.sh
 	$(SH) tmp.sh > $(IMPL_DIR)/AAFClassIDs.h
 	$(RM) tmp.sh
@@ -134,6 +142,7 @@ $(COMAPI_DIR)/AAFCLSIDs.h : aafobjects.mk
 	@ $(ECHO) Generating reference AAFCLSIDs.h...
 	$(RM) -f $(COMAPI_DIR)/AAFCLSIDs.h
 	$(CP)  aafobjects.mk tmp.sh
+	$(CHMOD) a+w tmp.sh
 	$(CAT) GenCLSIDs.sh >> tmp.sh
 	$(SH) tmp.sh > $(COMAPI_DIR)/AAFCLSIDs.h
 	$(RM) tmp.sh
@@ -144,6 +153,7 @@ $(COMAPI_DIR)/AAFObjectTable.h : aafobjects.mk
 	@ $(ECHO) Generating reference AAFObjectTable.h...
 	@ $(RM) -f $(COMAPI_DIR)/AAFObjectTable.tmp
 	$(CP)  aafobjects.mk tmp.sh
+	$(CHMOD) a+w tmp.sh
 	$(CAT) GenObjectTable.sh >> tmp.sh
 	$(SH) tmp.sh > $(COMAPI_DIR)/AAFObjectTable.tmp
 	$(RM) tmp.sh
@@ -156,6 +166,7 @@ $(COMAPI_DIR)/AAFObjectTable_i.cpp : aafobjects.mk
 	@ $(ECHO) Generating reference AAFObjectTable_i.cpp...
 	@ $(RM) -f $(COMAPI_DIR)/AAFObjectTable_i.tmp
 	$(CP)  aafobjects.mk tmp.sh
+	$(CHMOD) a+w tmp.sh
 	$(CAT) GenObjectTable_i.sh >> tmp.sh
 	$(SH) tmp.sh > $(COMAPI_DIR)/AAFObjectTable_i.tmp
 	$(RM) tmp.sh
@@ -302,6 +313,7 @@ clean:
 	$(RM) -f $(COMAPI_DIR)/AAFObjectTable.h
 	$(RM) -f $(COMAPI_DIR)/AAFObjectTable_i.cpp
 	$(CP)  aafobjects.mk tmp.sh
+	$(CHMOD) a+w tmp.sh
 	$(CAT) DelTargets.sh >> tmp.sh
 	$(SH) tmp.sh
 	$(RM) tmp.sh
