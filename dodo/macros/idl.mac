@@ -18,12 +18,29 @@
 
 #ccccccccccccccccccccccccccc
 #c
+#c Pass through argument if for idl otherwise just comment the arg.
+#c 
+#c This macro is generally used to specify IDL options that would
+#c make since to emit to c++.
+#c To allow proper marshalling code generation of a struct: |
+#c typedef struct
+#c {
+#c     aafInt32 length;
+#c     AD_IDL([length_is(length)]) aafWchar *str;
+#c } aafString_t;
+#c
+#startm AD_IDL 01
+%01\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Includes another file.
 #c
 #c Argument: Base filename
 #c
 #startm AD_INCLUDE 01
-import "%01.idl";
 #endm
 
 
@@ -44,8 +61,6 @@ import "%01.idl";
 #c Arguments: none
 #c
 #startm AD_CLASS_BEGIN 00
-#import "Unknown.idl"
-
 interface I.this-module : IUnknown
 {
 #endm
@@ -87,6 +102,7 @@ AD_CLASS_BEGIN
 #c
 #startm AD_TYPES_BEGIN 11
 [
+	object,
 	uuid(%01-%02-%03-%04%05-%06%07%08%09%10%11),
 	pointer_default(unique)
 ]
@@ -119,7 +135,7 @@ interface I.this-module
 #c
 #startm AD_METHOD0 02
   // %02
-  AAFRESULT %01 ();
+  HRESULT %01 ();\
 #endm
 
 
@@ -136,8 +152,8 @@ interface I.this-module
 #c
 #startm AD_METHOD1 06
   // %06
-  AAFRESULT %01 (
-	%02 %03 %04);
+  HRESULT %01 (
+	%02 %03 %04);\
 #endm
 
 
@@ -158,9 +174,9 @@ interface I.this-module
 #c
 #startm AD_METHOD2 10
   // %10
-  AAFRESULT %01 (
+  HRESULT %01 (
 	%02 %03 %04, 
-	%06 %07 %08);
+	%06 %07 %08);\
 #endm
 
 
@@ -185,10 +201,10 @@ interface I.this-module
 #c
 #startm AD_METHOD3 14
   // %14
-  AAFRESULT %01 (
+  HRESULT %01 (
 	%02 %03 %04, 
 	%06 %07 %08, 
-	%10 %11 %12);
+	%10 %11 %12);\
 #endm
 
 
@@ -217,11 +233,11 @@ interface I.this-module
 #c
 #startm AD_METHOD4 18
   // %18
-  AAFRESULT %01 (
+  HRESULT %01 (
 	%02 %03 %04, 
 	%06 %07 %08, 
 	%10 %11 %12, 
-	%14 %15 %16);
+	%14 %15 %16);\
 #endm
 
 
@@ -254,12 +270,12 @@ interface I.this-module
 #c
 #startm AD_METHOD5 22
   // %22
-  AAFRESULT %01 (
+  HRESULT %01 (
 	%02 %03 %04, 
 	%06 %07 %08, 
 	%10 %11 %12, 
 	%14 %15 %16, 
-	%18 %19 %20);
+	%18 %19 %20);\
 #endm
 
 
@@ -296,13 +312,13 @@ interface I.this-module
 #c
 #startm AD_METHOD6 26
   // %26
-  AAFRESULT %01 (
+  HRESULT %01 (
 	%02 %03 %04, 
 	%06 %07 %08, 
 	%10 %11 %12, 
 	%14 %15 %16, 
 	%18 %19 %20, 
-	%22 %23 %24);
+	%22 %23 %24);\
 #endm
 
 
@@ -345,14 +361,14 @@ interface I.this-module
 #c
 #startm AD_METHOD7 30
   // %30
-  AAFRESULT %01 (
+  HRESULT %01 (
 	%02 %03 %04, 
 	%06 %07 %08, 
 	%10 %11 %12, 
 	%14 %15 %16, 
 	%18 %19 %20, 
 	%22 %23 %24,
-	%26 %27 %28);
+	%26 %27 %28);\
 #endm
 
 
@@ -399,7 +415,7 @@ interface I.this-module
 #c
 #startm AD_METHOD8 34
   // %34
-  AAFRESULT %01 (
+  HRESULT %01 (
 	%02 %03 %04, 
 	%06 %07 %08, 
 	%10 %11 %12, 
@@ -407,7 +423,7 @@ interface I.this-module
 	%18 %19 %20, 
 	%22 %23 %24,
 	%26 %27 %28,
-	%30 %31 %32);
+	%30 %31 %32);\
 #endm
 
 
@@ -456,7 +472,7 @@ interface I.this-module
 #c
 #startm AD_METHOD9 38
   // %38
-  AAFRESULT %01 (
+  HRESULT %01 (
 	%02 %03 %04, 
 	%06 %07 %08, 
 	%10 %11 %12, 
@@ -465,7 +481,7 @@ interface I.this-module
 	%22 %23 %24,
 	%26 %27 %28,
 	%30 %31 %32,
-	%34 %35 %36);
+	%34 %35 %36);\
 #endm
 
 
@@ -518,7 +534,7 @@ interface I.this-module
 #c
 #startm AD_METHOD_10 42
   // %42
-  AAFRESULT %01 (
+  HRESULT %01 (
 	%02 %03 %04, 
 	%06 %07 %08, 
 	%10 %11 %12, 
@@ -528,7 +544,7 @@ interface I.this-module
 	%26 %27 %28,
 	%30 %31 %32,
 	%34 %35 %36,
-	%38 %39 %40);
+	%38 %39 %40);\
 #endm
 
 
@@ -585,7 +601,7 @@ interface I.this-module
 #c
 #startm AD_METHOD_11 46
   // %46
-  AAFRESULT %01 (
+  HRESULT %01 (
 	%02 %03 %04, 
 	%06 %07 %08, 
 	%10 %11 %12, 
@@ -596,7 +612,7 @@ interface I.this-module
 	%30 %31 %32,
 	%34 %35 %36,
 	%38 %39 %40,
-	%42 %43 %44);
+	%42 %43 %44);\
 #endm
 
 #ccccccccccccccccccccccccccc
@@ -608,7 +624,7 @@ interface I.this-module
 #c TomR:980713: Added
 #c
 #startm AD_FORWARD_DECLARATION 01
-interface I%01; \
+interface I%01;\
 #endm
 
 
@@ -637,11 +653,10 @@ interface I%01; \
 #c
 #startm AD_DEFAULT_UUID 11
 [
-	object,
 	uuid(%01-%02-%03-%04%05-%06%07%08%09%10%11),
 	helpstring("I.this-module Interface"),
 	pointer_default(unique)
-]
+]\
 #endm
 
 
@@ -685,8 +700,8 @@ interface I%01; \
   // NOTE: This is NOT the pointer to the COM object's implementation
   // object!
   //
-  void * GetImplRep();
-}
+  HRESULT GetImplRep(void **);
+}\
 #endm
 
 
@@ -702,8 +717,8 @@ interface I%01; \
   // NOTE: This is NOT the pointer to the COM object's implementation
   // object!
   //
-  void * GetImplRep();
-}
+  HRESULT GetImplRep(void **);
+}\
 #endm
 
 
@@ -817,8 +832,8 @@ interface I%01; \
 #c
 #startm AD_GETOBJ_METHOD1 06
   // %06
-  AAFRESULT %01 (
-	%02 %03 ** I%04);
+  HRESULT %01 (
+	%02 %03 ** I%04);\
 #endm
 
 
@@ -838,8 +853,8 @@ interface I%01; \
 #c
 #startm AD_SETOBJ_METHOD1 06
   // %06
-  AAFRESULT %01 (
-	%02 %03 * I%04);
+  HRESULT %01 (
+	%02 %03 * I%04);\
 #endm
 
 
