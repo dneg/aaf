@@ -17,7 +17,11 @@ AD_IDL(//
 //
 // AAFRESULT_NOT_INITIALIZED
 //   - This object has not yet had Initialize\(\) called on it through
-//     this object's primary interface.
+//     this object's primary interface.  Note that IAAFSearchSource is
+//     not a primary interface for a concrete class\, so it is not
+//     appropriate for the Initialize\(\) method to exist in this
+//     interface.  The Initialize\(\) method is available through the
+//     concrete object's primary interface.
 //)
 AD_DEFAULT_UUID(332CBDD0, 5425, 11D2, AA, 7A, 10, 00, 3D, 00, 00, 00)
 AD_CLASS_BEGIN
@@ -65,9 +69,8 @@ AD_XMETHOD6(SearchSource,
   // before they are returned.
   //
   // Succeeds if all of the following are true:
-  //    ppSourceInfo is non-NULL
-  //	a Mob of the requested kind is found
-  // \(other conditions here\)
+  // - ppSourceInfo is non-NULL
+  // - a Mob of the requested kind is found
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -80,10 +83,9 @@ AD_XMETHOD6(SearchSource,
   //   - ppCpnt is null.
   //
   // OM_ERR_INVALID_MOBTYPE
-  //	- The enumerator is out of range \(bad cast\, or writing toolkit newer than reader\)
+  //	- The enumerator is out of range \(bad cast\, or writing
+  //      toolkit newer than reader\)
   //
   // OM_ERR_TRAVERSAL_NOT_POSS
-  //	- Can not find a mob of the given kind. 
-  //
-  // \(other codes here.\))
+  //	- Can not find a mob of the given kind.)
 AD_CLASS_END
