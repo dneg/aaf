@@ -324,7 +324,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	}
 
 	// Make sure we are at the end.
-	if (mobIter->Skip(i+1) != AAFRESULT_NO_MORE_OBJECTS)
+	if (mobIter->Skip(numMobs+1) != AAFRESULT_NO_MORE_OBJECTS)
 			localhr = AAFRESULT_TEST_FAILED;
 			
 	if (SUCCEEDED(localhr))
@@ -362,9 +362,11 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	}
 			
 	// Make sure we are at the end
-	if (mobIter->Next(1, &aMob, &numFetched) != AAFRESULT_NO_MORE_OBJECTS)
+	if (mobIter->Next(1, &aMob, &numFetched) != AAFRESULT_SUCCESS)
 		localhr = AAFRESULT_TEST_FAILED;
-					
+	if(numFetched != 0)
+		localhr = AAFRESULT_TEST_FAILED;
+		
 	// Test the Next method filling out an array of Mobs
 	numFetched = 0;
 	mobIter->Reset();
@@ -429,8 +431,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	if (mobIter->Next(1, NULL, &numFetched) != AAFRESULT_NULL_PARAM)
 		localhr = AAFRESULT_TEST_FAILED;
 
-	// Make sure it returns AAFRESULT_NULL_PARAM	
-	if (mobIter->Next(1, mobArray, NULL) != AAFRESULT_NULL_PARAM)
+	// Make sure it returns E_INVALIDARG	
+	if (mobIter->Next(1, mobArray, &numFetched) != AAFRESULT_SUCCESS)
 		localhr = AAFRESULT_TEST_FAILED;
 
 	if (SUCCEEDED(localhr))
@@ -558,7 +560,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		if (cloneMobIter->Next(1, NULL, &numFetched) != AAFRESULT_NULL_PARAM)
 			localhr = AAFRESULT_TEST_FAILED;
 	
-		if (cloneMobIter->Next(1, mobArray, NULL) != AAFRESULT_NULL_PARAM)
+		if (cloneMobIter->Next(1, mobArray, &numFetched) != AAFRESULT_SUCCESS)
 			localhr = AAFRESULT_TEST_FAILED;
 
 		cloneMobIter->Release();
@@ -624,7 +626,7 @@ extern "C" HRESULT CEnumAAFMobs_test()
 	}
   catch (...)
 	{
-	  cerr << "CAAFSourceMob_test...Caught general C++"
+	  cerr << "CEnumAAFMobs_test...Caught general C++"
 		" exception!" << endl; 
 	}
 
