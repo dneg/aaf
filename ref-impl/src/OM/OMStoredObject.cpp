@@ -899,6 +899,62 @@ void OMStoredObject::save(OMPropertyId propertyId,
   write(propertyId, type, (void *)buffer, size); 
 }
 
+  // @mfunc Save a collection (vector/set) of weak references.
+  //   @parm The property id.
+  //   @parm The property type.
+  //   @parm The name of the collection.
+  //   @parm The unique identifications of the targets.
+  //   @parm Count of targets.
+  //   @parm A tag identifying the collection in which each of the
+  //         targets reside.
+void OMStoredObject::save(OMPropertyId propertyId,
+                          int type,
+                          const char* collectionName,
+                          const OMUniqueObjectIdentification* index,
+                          size_t count,
+                          OMPropertyTag tag)
+{
+  TRACE("OMStoredObject::save");
+
+  PRECONDITION("Valid index", IMPLIES(count != 0, index!= 0));
+  PRECONDITION("Valid index", IMPLIES(count == 0, index== 0));
+  PRECONDITION("Valid collection name", validString(collectionName));
+
+  // Write the index entry
+  write(propertyId, type, (void *)collectionName, strlen(collectionName) + 1); 
+
+  // Calculate the stream name for the index.
+  //
+  char* indexName = setIndexStreamName(collectionName);
+
+  // Create the stream.
+  //
+  IStream* indexStream = createStream(_storage, indexName);
+
+  // Write the count of elements.
+  //
+  OMUInt32 entries = count;
+  writeToStream(indexStream, &entries, sizeof(entries));
+
+  // Write the tag.
+  //
+  writeToStream(indexStream, &tag, sizeof(tag));
+
+  if (count > 0) {
+    // For each element write the element unique identifier
+    //
+    writeToStream(indexStream,
+                  (void *)index,
+                  count * sizeof(OMUniqueObjectIdentification));
+  }
+
+  // Close the stream.
+  //
+  closeStream(indexStream);
+
+  delete [] indexName;
+}
+
   // @mfunc Restore the vector named <p vectorName> into this
   //        <c OMStoredObject>.
   //   @parm The name of the vector.
@@ -990,7 +1046,7 @@ void OMStoredObject::restore(OMStoredSetIndex*& set,
   //
   setIndex->setHighWaterMark(highWaterMark);
 
-  // Read the element names, counts amd keys, placing them in the index.
+  // Read the element names, counts and keys, placing them in the index.
   //
   for (size_t i = 0; i < entries; i++) {
     OMUInt32 name;
@@ -1112,8 +1168,74 @@ void OMStoredObject::restore(OMPropertyId propertyId,
 
   if (byteOrder() != hostByteOrder()) {
 	reorderUniqueObjectIdentification(id);
-	reorderUInt32(tag);
+	reorderUInt32(tag); // assumes sizeof(tag) == 4
   }
+}
+
+  // @mfunc Restore a collection (vector/set) of weak references.
+  //   @parm The property id.
+  //   @parm The property type.
+  //   @parm The name of the collection.
+  //   @parm The unique identifications of the targets.
+  //   @parm Count of targets.
+  //   @parm A tag identifying the collection in which each of the
+  //         targets reside.
+void OMStoredObject::restore(OMPropertyId propertyId,
+                             int type,
+                             char*& collectionName,
+                             size_t nameSize,
+                             const OMUniqueObjectIdentification*& index,
+                             size_t &count,
+                             OMPropertyTag& tag)
+{
+  TRACE("OMStoredObject::restore");
+  
+  read(propertyId, type, collectionName, nameSize);
+
+  // Calculate the stream name for the index.
+  //
+  char* indexName = setIndexStreamName(collectionName);
+
+  // Open the stream.
+  //
+  IStream* indexStream = openStream(_storage, indexName);
+
+  // Read the count of elements.
+  //
+  OMUInt32 entries;
+  readUInt32FromStream(indexStream, entries, _reorderBytes);
+  count = entries;
+
+  // Read the tag. assumes sizeof(tag) == 4
+  //
+  readUInt32FromStream(indexStream, tag, _reorderBytes);
+
+  // Create an index.
+  //
+  OMUniqueObjectIdentification* collectionIndex = 0;
+  if (entries > 0) {
+    collectionIndex = new OMUniqueObjectIdentification[entries];
+    ASSERT("Valid heap pointer", collectionIndex != 0);
+
+    // Read the element keys, placing them in the index.
+    //
+    readFromStream(indexStream,
+                   collectionIndex,
+                   entries * sizeof(OMUniqueObjectIdentification));
+    if (_reorderBytes) {
+      for (size_t i = 0; i < entries; i++) {
+        reorderUniqueObjectIdentification(collectionIndex[i]);
+      }
+    }
+  }
+
+  // Close the stream.
+  //
+  closeStream(indexStream);
+
+  delete [] indexName;
+
+  index = collectionIndex;
 }
 
 IStream* OMStoredObject::createStream(IStorage* storage,
