@@ -10,26 +10,6 @@
 \******************************************/
 
 
-
-
-typedef struct _aafTypeDefEnumElementPair_t
-{
-  [string, size_is(nameSize)] wchar_t * pName;
-  IAAFPropertyValue * pValue;
-  aafUInt32 nameSize;
-} aafTypeDefEnumElementPair_t;
-
-
-
-
-
-
-
-
-
-
-
-
 #include "CAAFTypeDefEnum.h"
 #include "CAAFTypeDefEnum.h"
 #ifndef __CAAFTypeDefEnum_h__
