@@ -226,7 +226,7 @@ static aafProductVersion_t TestVersion = { 1, 1, 0, 0, kAAFVersionUnknown };
 static aafProductIdentification_t TestProductID;
 
 static HRESULT CreateAAFFileEssenceData(aafWChar *pFileName, bool useRawStorage,
-									int frame_limit,
+									aafLength_t frame_limit,
 									aafLength_t *p_totalbytes)
 {
 	TestProductID.companyName = L"AAF Association";
@@ -328,7 +328,7 @@ static HRESULT CreateAAFFileEssenceData(aafWChar *pFileName, bool useRawStorage,
 		check(pHeader->AddEssenceData(pEssenceData));
 
 		*p_totalbytes = 0;
-		for (int i = 0; i < frame_limit; i++)
+		for (aafLength_t i = 0; i < frame_limit; i++)
 		{
 			check(pEssenceData->Write(
 									sizeof(compressedDV_25_625),
@@ -337,12 +337,12 @@ static HRESULT CreateAAFFileEssenceData(aafWChar *pFileName, bool useRawStorage,
 			*p_totalbytes += bytesWritten;
 			if (verbose && (i+1) % 25 == 0)
 			{
-				printf("  %6d frames %6.2f%%\r", i+1, (i+1) * 100.0 / frame_limit);
+				printf("  %6"AAFFMT64"d frames %6.2f%%\r", i+1, (i+1) * 100.0 / frame_limit);
 				fflush(stdout);
 			}
 		}
 		if (verbose)
-			printf("  %6d frames %6.2f%%  bytes=%"AAFFMT64"d\n",
+			printf("  %6"AAFFMT64"d frames %6.2f%%  bytes=%"AAFFMT64"d\n",
 					frame_limit, frame_limit * 100.0 / frame_limit, *p_totalbytes);
 		pEssenceData->Release();
 
@@ -372,7 +372,7 @@ static HRESULT CreateAAFFileEssenceData(aafWChar *pFileName, bool useRawStorage,
 	return hr;
 }
 
-static HRESULT ReadAAFFileEssenceData(aafWChar *pFileName, int frame_limit, aafLength_t bytes)
+static HRESULT ReadAAFFileEssenceData(aafWChar *pFileName, aafLength_t frame_limit, aafLength_t bytes)
 {
 	HRESULT			hr = S_OK;
 	char cFileName[FILENAME_MAX];
