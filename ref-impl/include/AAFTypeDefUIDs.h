@@ -57,7 +57,7 @@
   const aafUID_t TYPE_GUID_NAME(name) = id;
 #define AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION(name, id) \
   const aafUID_t TYPE_GUID_NAME(name) = id;
-#define AAF_TYPE_DEFINITION_CHARACTER(name, id, size) \
+#define AAF_TYPE_DEFINITION_CHARACTER(name, id) \
   const aafUID_t TYPE_GUID_NAME(name) = id;
 #define AAF_TYPE_DEFINITION_SET(name, id, type) \
   const aafUID_t TYPE_GUID_NAME(name) = id;
