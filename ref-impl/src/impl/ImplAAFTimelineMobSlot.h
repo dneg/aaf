@@ -79,6 +79,19 @@ public:
         (aafPosition_t  value);  //@parm [in] Origin property value
 
 public:
+// Internal to the SDK, but available to other SDK internal code.
+virtual AAFRESULT FindSegment(aafPosition_t offset,
+										  ImplAAFSegment **segment,
+										  aafRational_t *srcRate,
+										  aafPosition_t *diffPos);
+  virtual AAFRESULT ConvertToEditRate(aafPosition_t tmpPos,
+										aafRational_t destRate,
+										aafPosition_t *convertPos);
+  virtual AAFRESULT ConvertToMyRate(aafPosition_t tmpPos,
+										  ImplAAFMobSlot *srcSlot,
+										aafPosition_t *convertPos);
+
+public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFTimelineMobSlotTest.cpp.
 	static AAFRESULT test();
