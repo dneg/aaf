@@ -3832,8 +3832,8 @@ HRESULT CAAFJPEGCodec::ReadNumberOfSamples(
 		checkResult(stream->Seek(offset));
 		checkResult(stream->Read(kAAFJPEG_MarkerSize, trailer.endMarker, &bytesRead));
 		checkAssertion(kAAFJPEG_MarkerSize == bytesRead);
-		checkExpression(0 == memcmp(kAAFJPEG_end, trailer.endMarker, kAAFJPEG_MarkerSize),
-			              AAFRESULT_NOFRAMEINDEX);
+		if (0 != memcmp(kAAFJPEG_end, trailer.endMarker, kAAFJPEG_MarkerSize))
+		  return AAFRESULT_NOFRAMEINDEX;
 		
 		// Read the 8 bytes size of the trailer. This is always in big-endian just like 
 		// the JPEG stream...
