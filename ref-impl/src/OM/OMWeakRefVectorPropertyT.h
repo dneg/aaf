@@ -209,7 +209,7 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::restore(
 
   // restore the index
   //
-  OMUniqueObjectIdentification* vectorIndex = 0;
+  const OMUniqueObjectIdentification* vectorIndex = 0;
   size_t entries;
   OMPropertyTag tag;
   OMPropertyId keyPropertyId;
