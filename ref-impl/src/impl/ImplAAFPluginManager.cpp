@@ -147,7 +147,7 @@ typedef struct _AAFTestLibraryProcData
 } AAFTestLibraryProcData;
 
 
-STDAPI_(AAFRDLIRESULT) testLibraryProc(const char* name, char isDirectory, void * userData)
+AAFRDLIRESULT testLibraryProc(const char* name, char isDirectory, void * userData)
 {
 	AAFTestLibraryProcData *pData = (AAFTestLibraryProcData *)userData;
 	assert(pData && pData->plugins && pData->pluginFiles && pData->currentLibraryPath);
