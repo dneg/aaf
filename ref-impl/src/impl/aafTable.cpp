@@ -18,14 +18,14 @@
  * SPECIAL, INCIDENTAL, INDIRECT, CONSEQUENTIAL OR OTHER DAMAGES OF
  * ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE, INCLUDING, 
- * WITHOUT  LIMITATION, DAMAGES RESULTING FROM LOSS OF USE,
+ * WITHOUT  LIMITATION, DAMAGES RESULTING FRaaf LOSS OF USE,
  * DATA OR PROFITS, AND WHETHER OR NOT ADVISED OF THE POSSIBILITY OF
  * DAMAGE, REGARDLESS OF THE THEORY OF LIABILITY.
  *
  ************************************************************************/
 
 /*
- * Name: omTable.c
+ * Name: aafTable.c
  *
  * Function: Internal functions which implement a hash table with extensions.
  *			This hash table implementation can be made to allow duplicate
@@ -45,10 +45,9 @@
 #include <ctype.h>
 #include <stdio.h>
 
-//#include "omPublic.h"
+//#include "aafPublic.h"
 #include "aafTable.h"
-#include "AAFFile.h"
-//#include "omPvt.h"
+#include "AAFResult.h"
 
 #define TABLE_COOKIE		0x5461626C
 #define TABLE_ITER_COOKIE	0x54424C49
@@ -71,21 +70,21 @@ struct aafTableLink
 	char				local[1];
 };
 
-struct omTable
+struct aafTable
 {
-	AAFFile *			file;			/* Optional: If set omOptMalloc/Free calls will optimize */
+	AAFFile *			file;			/* Optional: If set aafOptMalloc/Free calls will optimize */
 	aafInt32			cookie;
 	aafInt16			defaultSize;	/* default size of keys */
 	tableLink_t		**hashTable;
 	aafInt32			hashTableSize;
 	aafInt32			numItems;
 				
-	omTblMapProc		map;			/* the mapping function			*/
-	omTblCompareProc	compare;		/* the comparison function		*/
-	omTblDisposeProc	entryDispose;
+	aafTblMapProc		map;			/* the mapping function			*/
+	aafTblCompareProc	compare;		/* the comparison function		*/
+	aafTblDisposeProc	entryDispose;
 };
 	
-static aafErr_t DisposeList(omTable_t *table, aafBool itemsAlso);
+static aafErr_t DisposeList(aafTable_t *table, aafBool itemsAlso);
 
 /************************************************************************
  *
@@ -115,26 +114,26 @@ static aafErr_t DisposeList(omTable_t *table, aafBool itemsAlso);
 aafErr_t NewTable(
 			AAFFile * file,
 			aafInt16 initKeySize,
-			omTblMapProc myMap,
-			omTblCompareProc myCompare,
+			aafTblMapProc myMap,
+			aafTblCompareProc mycompare,
 			aafInt32 numBuckets,
-			omTable_t **resultPtr)
+			aafTable_t **resultPtr)
 {
-	omTable_t	*result;
+	aafTable_t	*result;
 	
-	XPROTECT(NULL)
+	XPROTECT()
 	{
-		result = (omTable_t *)file->omOptMalloc(sizeof(omTable_t));
-		XASSERT(result != NULL, OM_ERR_NOMEMORY);
+		result = new aafTable_t;
+		XASSERT(result != NULL, AAFRESULT_NOMEMORY);
 		
 		result->cookie = TABLE_COOKIE;
 		result->file = file;
 		result->map = myMap;
-		result->compare = myCompare;
+		result->compare = mycompare;
 		result->entryDispose = NULL;
 		result->defaultSize = initKeySize;
 		result->hashTableSize = numBuckets;
-		result->hashTable = (tableLink_t **)file->omOptMalloc(result->hashTableSize * sizeof(tableLink_t *));
+		result->hashTable = (tableLink_t **)new char[result->hashTableSize * sizeof(tableLink_t *)];
 		memset(result->hashTable, 0, result->hashTableSize * sizeof(tableLink_t *));
 		result->numItems = 0;
 	}
@@ -145,22 +144,22 @@ aafErr_t NewTable(
 	XEND
 
 	*resultPtr = result;
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }	
 
 /* Called once for each entry, used to dispose only memory referenced by the entry */
-aafErr_t omfsSetTableDispose(omTable_t *table, omTblDisposeProc proc)
+aafErr_t aaffsSetTableDispose(aafTable_t *table, aafTblDisposeProc proc)
 {
-	XPROTECT(NULL)
+	XPROTECT()
 	{
 		XASSERT((table != NULL) && (table->cookie == TABLE_COOKIE), 
-				OM_ERR_TABLE_BAD_HDL);
+				AAFRESULT_TABLE_BAD_HDL);
 		table->entryDispose = proc;
 	}
 	XEXCEPT
 	XEND
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 /************************
@@ -178,39 +177,39 @@ aafErr_t omfsSetTableDispose(omTable_t *table, omTblDisposeProc proc)
  *		Standard errors (see top of file).
  */
 aafErr_t TableAddValuePtr(
-			omTable_t *table,
+			aafTable_t *table,
 			void *key,
 			aafInt16 keyLen,
 			void *value,
-			omTableDuplicate_t dup)
+			aafTableDuplicate_t dup)
 {
 	tableLink_t		*entry, *srch;
   	aafInt32			hash;
 				
-	XPROTECT(NULL)
+	XPROTECT()
 	{
 		XASSERT((table != NULL) && (table->cookie == TABLE_COOKIE), 
-				OM_ERR_TABLE_BAD_HDL);
+				AAFRESULT_TABLE_BAD_HDL);
 		entry = NULL;
 	
 		if(keyLen == USE_DEFAULT)
 			keyLen = table->defaultSize;
-		if((dup == kOmTableDupError) && TableIncludesKey(table, key))
-			return(OM_ERR_TABLE_DUP_KEY);
+		if((dup == kAafTableDupError) && TableIncludesKey(table, key))
+			return(AAFRESULT_TABLE_DUP_KEY);
 	
-		if((dup == kOmTableDupReplace) && TableIncludesKey(table, key))
+		if((dup == kAafTableDupReplace) && TableIncludesKey(table, key))
 		{
 			CHECK(TableRemove(table, key));
 		}
 			
-		entry = (tableLink_t *)table->file->omOptMalloc(keyLen + sizeof(tableLink_t) - 1);
-		XASSERT(entry != NULL, OM_ERR_NOMEMORY);
+		entry = (tableLink_t *)new char[keyLen + sizeof(tableLink_t) - 1];
+		XASSERT(entry != NULL, AAFRESULT_NOMEMORY);
 	
 		hash = _lookup(table,key);
 		entry->type = valueIsPtr;
 		entry->dup = NULL;
 		/* Add to the head of the dup list for that key */
-		if(dup == kOmTableDupAddDup)
+		if(dup == kAafTableDupAddDup)
 		{
 			srch = table->hashTable[hash];
 			while(srch != NULL)
@@ -240,7 +239,7 @@ aafErr_t TableAddValuePtr(
 	}
 	XEND
 
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 /************************
@@ -258,40 +257,40 @@ aafErr_t TableAddValuePtr(
  *		Standard errors (see top of file).
  */
 aafErr_t TableAddValueBlock(
-			omTable_t *table,
+			aafTable_t *table,
 			void *key,
 			short keyLen,
 			void *value,
 			aafInt32 valueLen,
-			omTableDuplicate_t dup)
+			aafTableDuplicate_t dup)
 {
 	tableLink_t		*entry, *srch;
   	aafInt32			hash;
 				
-	XPROTECT(NULL)
+	XPROTECT()
 	{
 		XASSERT((table != NULL) && (table->cookie == TABLE_COOKIE), 
-				OM_ERR_TABLE_BAD_HDL);
+				AAFRESULT_TABLE_BAD_HDL);
 		entry = NULL;
 	
 		if(keyLen == USE_DEFAULT)
 			keyLen = table->defaultSize;
 	
-		if((dup == kOmTableDupError) && TableIncludesKey(table, key))
-			return(OM_ERR_TABLE_DUP_KEY);
+		if((dup == kAafTableDupError) && TableIncludesKey(table, key))
+			return(AAFRESULT_TABLE_DUP_KEY);
 
-		if((dup == kOmTableDupReplace) && TableIncludesKey(table, key))
+		if((dup == kAafTableDupReplace) && TableIncludesKey(table, key))
 			CHECK(TableRemove(table, key));
 	
-		entry = (tableLink_t *)table->file->omOptMalloc(keyLen + valueLen + sizeof(tableLink_t) - 1);
+		entry = (tableLink_t *)new char [keyLen + valueLen + sizeof(tableLink_t) - 1];
 		if(entry == NULL)
-			return(OM_ERR_NOMEMORY);
+			return(AAFRESULT_NOMEMORY);
 		hash = _lookup(table,key);
 		entry->type = valueIsBlock;
 		entry->dup = NULL;
 		/* Add to the head of the dup list for that key */
 		
-		if(dup == kOmTableDupAddDup)
+		if(dup == kAafTableDupAddDup)
 		{
 			srch = table->hashTable[hash];
 			while(srch != NULL)
@@ -322,7 +321,7 @@ aafErr_t TableAddValueBlock(
 	}
 	XEND
 
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 /************************
@@ -340,18 +339,18 @@ aafErr_t TableAddValueBlock(
  *		Standard errors (see top of file).
  */
 aafErr_t TableRemove(
-			omTable_t *table,
+			aafTable_t *table,
 			void *key)
 {
 	aafInt32		index;
 	tableLink_t		*entry, *prevEntry = NULL;
 	char		    *tmpMem;
 	
-	XPROTECT(NULL)
+	XPROTECT()
 	{
 	  XASSERT((table != NULL) && (table->cookie == TABLE_COOKIE), 
-		  OM_ERR_TABLE_BAD_HDL);
-	  XASSERT(table->compare != NULL, OM_ERR_TABLE_MISSING_COMPARE);
+		  AAFRESULT_TABLE_BAD_HDL);
+	  XASSERT(table->compare != NULL, AAFRESULT_TABLE_MISSING_COMPARE);
 	
 	  index = _lookup(table, key);	
 	  entry = table->hashTable[index];
@@ -375,21 +374,21 @@ aafErr_t TableRemove(
 					{
 					  (*table->entryDispose)(entry->data);
 					  if(entry->data != NULL)
-						table->file->omOptFree(entry->data);
+						delete entry->data;
 					}
 				  else
 					{
-					  tmpMem = (char *)table->file->omOptMalloc(entry->valueLen);
+					  tmpMem = (char *)new char[entry->valueLen];
 						
 					  /* Force data alignment */
 					  memcpy(tmpMem, entry->local+
 							 entry->keyLen, entry->valueLen);
 					  (*table->entryDispose)(tmpMem);
-					  table->file->omOptFree(tmpMem);
+					  delete tmpMem;
 					}
 				}
 
-			  table->file->omOptFree(entry);
+			  delete entry;
 
 			  table->numItems--;
 			  entry = NULL;
@@ -407,7 +406,7 @@ aafErr_t TableRemove(
 	}
 	XEND
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 	
 /************************
@@ -425,7 +424,7 @@ aafErr_t TableRemove(
  *		Standard errors (see top of file).
  */
 aafBool TableIncludesKey(
-			omTable_t *table,
+			aafTable_t *table,
 			void *key)
 {
 	aafInt32		n;
@@ -433,18 +432,18 @@ aafBool TableIncludesKey(
 	aafBool		result;
 	
 	if((table == NULL) || (table->cookie != TABLE_COOKIE))
-		return(FALSE);
+		return(AAFFalse);
 	if(table->compare == NULL)
-		return(FALSE);
+		return(AAFFalse);
 
-	result = FALSE;
+	result = AAFFalse;
 	n = _lookup(table, key);
 	entry = table->hashTable[n];
 	while(entry != NULL)
 	{
 		if (table->compare( key, entry->local))
 		{
-			result = TRUE;
+			result = AAFTrue;
 			break;
 		}
 
@@ -469,7 +468,7 @@ aafBool TableIncludesKey(
  *		Standard errors (see top of file).
  */
 void *TableLookupPtr(
-			omTable_t *table,
+			aafTable_t *table,
 			void *key)
 {
 	aafInt32		n;
@@ -517,7 +516,7 @@ void *TableLookupPtr(
  *		Standard errors (see top of file).
  */
 aafErr_t TableLookupBlock(
-			omTable_t *table,
+			aafTable_t *table,
 			void *key,
 			aafInt32 valueLen,
 			void *valuePtr,
@@ -527,11 +526,11 @@ aafErr_t TableLookupBlock(
   tableLink_t	*entry;
 	
   if((table == NULL) || (table->cookie != TABLE_COOKIE))
-    return(OM_ERR_TABLE_BAD_HDL);
+    return(AAFRESULT_TABLE_BAD_HDL);
   if(table->compare == NULL)
-    return(OM_ERR_TABLE_MISSING_COMPARE);
+    return(AAFRESULT_TABLE_MISSING_COMPARE);
 
-  *found = FALSE;
+  *found = AAFFalse;
   n = _lookup(table, key);
   entry = table->hashTable[n];
   while((entry != NULL) && !(*found))
@@ -541,7 +540,7 @@ aafErr_t TableLookupBlock(
 	  if(entry->type == valueIsBlock)
 	    {
 	      memcpy(valuePtr, ((char *)entry->local)+entry->keyLen, valueLen);
-	      *found = TRUE;
+	      *found = AAFTrue;
 	    }
 	  /* 	result = entry->local+entry->keyLen;	*/
 	  break;
@@ -550,7 +549,7 @@ aafErr_t TableLookupBlock(
       entry = entry->link;
     }
 
-  return(OM_ERR_NONE);
+  return(AAFRESULT_SUCCESS);
 }
 
 /************************
@@ -568,15 +567,15 @@ aafErr_t TableLookupBlock(
  *		Standard errors (see top of file).
  */
 aafErr_t TableFirstEntry(
-			omTable_t *table,
-			omTableIterate_t *iter,
+			aafTable_t *table,
+			aafTableIterate_t *iter,
 			aafBool *found) 
 {
-  XPROTECT(NULL)
+  XPROTECT()
     {
       XASSERT((table != NULL) && (table->cookie == TABLE_COOKIE), 
-	      OM_ERR_TABLE_BAD_HDL);
-      XASSERT(iter != NULL, OM_ERR_TABLE_BAD_ITER);
+	      AAFRESULT_TABLE_BAD_HDL);
+      XASSERT(iter != NULL, AAFRESULT_TABLE_BAD_ITER);
       
       iter->cookie = TABLE_ITER_COOKIE;
       iter->table = table;
@@ -589,7 +588,7 @@ aafErr_t TableFirstEntry(
   XEXCEPT
   XEND
 	
-      return(OM_ERR_NONE);
+      return(AAFRESULT_SUCCESS);
 }
 
 /************************
@@ -607,16 +606,16 @@ aafErr_t TableFirstEntry(
  *		Standard errors (see top of file).
  */
 aafErr_t TableFirstEntryMatching(
-			omTable_t *table,
-			omTableIterate_t *iter,
+			aafTable_t *table,
+			aafTableIterate_t *iter,
 			void *key,
 			aafBool *found) 
 {
-	XPROTECT(NULL)
+	XPROTECT()
 	{
 		XASSERT((table != NULL) && (table->cookie == TABLE_COOKIE), 
-				OM_ERR_TABLE_BAD_HDL);
-		XASSERT(iter != NULL, OM_ERR_TABLE_BAD_ITER);
+				AAFRESULT_TABLE_BAD_HDL);
+		XASSERT(iter != NULL, AAFRESULT_TABLE_BAD_ITER);
 	
 		iter->cookie = TABLE_ITER_COOKIE;
 		iter->table = table;
@@ -629,7 +628,7 @@ aafErr_t TableFirstEntryMatching(
 	XEXCEPT
 	XEND
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 /************************
@@ -647,15 +646,15 @@ aafErr_t TableFirstEntryMatching(
  *		Standard errors (see top of file).
  */
 aafErr_t TableFirstEntryUnique(
-			omTable_t *table,
-			omTableIterate_t *iter,
+			aafTable_t *table,
+			aafTableIterate_t *iter,
 			aafBool *found) 
 {
-	XPROTECT(NULL)
+	XPROTECT()
 	{
 		XASSERT((table != NULL) && (table->cookie == TABLE_COOKIE), 
-				OM_ERR_TABLE_BAD_HDL);
-		XASSERT(iter != NULL, OM_ERR_TABLE_BAD_ITER);
+				AAFRESULT_TABLE_BAD_HDL);
+		XASSERT(iter != NULL, AAFRESULT_TABLE_BAD_ITER);
 	
 		iter->cookie = TABLE_ITER_COOKIE;
 		iter->table = table;
@@ -668,7 +667,7 @@ aafErr_t TableFirstEntryUnique(
 	XEXCEPT
 	XEND
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 /************************
@@ -686,22 +685,22 @@ aafErr_t TableFirstEntryUnique(
  *		Standard errors (see top of file).
  */
 aafErr_t TableNextEntry(
-			omTableIterate_t *iter,
+			aafTableIterate_t *iter,
 			aafBool *foundPtr) 
 {
-	omTable_t		*table;
+	aafTable_t		*table;
 	tableLink_t		*entry;
 	
-	XPROTECT(NULL)
+	XPROTECT()
 	{
-		XASSERT(foundPtr != NULL, OM_ERR_NULL_PARAM);
-		*foundPtr = FALSE;
+		XASSERT(foundPtr != NULL, AAFRESULT_NULL_PARAM);
+		*foundPtr = AAFFalse;
 	
 		table = iter->table;
 		XASSERT((table != NULL) && (table->cookie == TABLE_COOKIE), 
-				OM_ERR_TABLE_BAD_HDL);
+				AAFRESULT_TABLE_BAD_HDL);
 		XASSERT((iter != NULL) && (iter->cookie == TABLE_ITER_COOKIE), 
-				OM_ERR_TABLE_BAD_ITER);
+				AAFRESULT_TABLE_BAD_ITER);
 
 		if(iter->srch == kTableSrchMatch)
 		{
@@ -709,7 +708,7 @@ aafErr_t TableNextEntry(
 			{
 				entry = iter->nextEntry;
 				if (table->compare(iter->srchKey, entry->local))
-					*foundPtr = TRUE;
+					*foundPtr = AAFTrue;
 				iter->nextEntry = entry->link;
 			}
 		}
@@ -721,12 +720,12 @@ aafErr_t TableNextEntry(
 				{
 					entry = iter->nextEntry;
 					if (iter->srch == kTableSrchAny)
-						*foundPtr = TRUE;
+						*foundPtr = AAFTrue;
 					/* NOTE: entry->dup will be != NULL for every duplicate entry EXCEPT the
 					 *			last entry, satisfying the one of each unique requirement
 					 */
 					else if((iter->srch == kTableSrchUnique) && (entry->dup == NULL))
-						*foundPtr = TRUE;
+						*foundPtr = AAFTrue;
 					iter->nextEntry = entry->link;
 				}
 				if(!*foundPtr)
@@ -755,7 +754,7 @@ aafErr_t TableNextEntry(
 	}
 	XEND
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 /************************
@@ -773,17 +772,17 @@ aafErr_t TableNextEntry(
  *		Standard errors (see top of file).
  */
 aafInt32 TableNumEntriesMatching(
-			omTable_t *table,
+			aafTable_t *table,
 			void *key)
 {
 	aafInt32				numMatches;
 	aafBool				more;
-	omTableIterate_t	iter;
+	aafTableIterate_t	iter;
 	
-	XPROTECT(NULL)
+	XPROTECT()
 	{
 		XASSERT((table != NULL) && (table->cookie == TABLE_COOKIE), 
-				OM_ERR_TABLE_BAD_HDL);
+				AAFRESULT_TABLE_BAD_HDL);
 		numMatches = 0;
 		CHECK(TableFirstEntryMatching(table, &iter, key, &more));
 		while(more)
@@ -813,7 +812,7 @@ aafInt32 TableNumEntriesMatching(
  *		Standard errors (see top of file).
  */
 aafErr_t TableSearchDataValue(
-			omTable_t *table,
+			aafTable_t *table,
 			aafInt32 valueLen,
 			void *value,
 			aafInt32 keyLen,
@@ -821,14 +820,14 @@ aafErr_t TableSearchDataValue(
 			aafBool *foundPtr)
 {
 	aafBool				more;
-	omTableIterate_t	iter;
+	aafTableIterate_t	iter;
 	
-	XPROTECT(NULL)
+	XPROTECT()
 	{
-		XASSERT(foundPtr != NULL, OM_ERR_NULL_PARAM);
-		*foundPtr = FALSE;
+		XASSERT(foundPtr != NULL, AAFRESULT_NULL_PARAM);
+		*foundPtr = AAFFalse;
 		XASSERT((table != NULL) && (table->cookie == TABLE_COOKIE), 
-				OM_ERR_TABLE_BAD_HDL);
+				AAFRESULT_TABLE_BAD_HDL);
 	
 		CHECK(TableFirstEntry(table, &iter, &more));
 			
@@ -837,7 +836,7 @@ aafErr_t TableSearchDataValue(
 			if((valueLen == iter.valueLen) && 
 				(memcmp(value, iter.valuePtr, iter.valueLen) == 0))
 			{
-				*foundPtr = TRUE;
+				*foundPtr = AAFTrue;
 				memcpy(key, iter.key, keyLen);
 			}
 			CHECK(TableNextEntry(&iter, &more));
@@ -849,7 +848,7 @@ aafErr_t TableSearchDataValue(
 	}
 	XEND
 	
-	return(OM_ERR_NONE); 
+	return(AAFRESULT_SUCCESS); 
 }
 
 
@@ -868,23 +867,23 @@ aafErr_t TableSearchDataValue(
  *		Standard errors (see top of file).
  */
 aafErr_t TableDispose(
-			omTable_t *table)
+			aafTable_t *table)
 {
-	XPROTECT(NULL)
+	XPROTECT()
 	{
 		XASSERT((table != NULL) && (table->cookie == TABLE_COOKIE), 
-				OM_ERR_TABLE_BAD_HDL);
-		DisposeList(table, FALSE);
+				AAFRESULT_TABLE_BAD_HDL);
+		DisposeList(table, AAFFalse);
 	
 		if(table->hashTable != NULL)
-			table->file->omOptFree(table->hashTable);
+			delete table->hashTable;
 
-		table->file->omOptFree(table);
+		delete table;
 	}
 	XEXCEPT
 	XEND
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 /************************
@@ -902,12 +901,12 @@ aafErr_t TableDispose(
  *		Standard errors (see top of file).
  */
 aafErr_t TableDisposeAll(
-			omTable_t *table)
+			aafTable_t *table)
 {
 	aafErr_t	status;
 	
 	status = TableDisposeItems(table);
-	if(status == OM_ERR_NONE)
+	if(status == AAFRESULT_SUCCESS)
 		TableDispose(table);
 	
 	return(status);
@@ -928,18 +927,18 @@ aafErr_t TableDisposeAll(
  *		Standard errors (see top of file).
  */
 aafErr_t TableDisposeItems(
-			omTable_t *table)
+			aafTable_t *table)
 {
-	XPROTECT(NULL)
+	XPROTECT()
 	{
 		XASSERT((table != NULL) && (table->cookie == TABLE_COOKIE), 
-				OM_ERR_TABLE_BAD_HDL);
-		DisposeList(table, TRUE);
+				AAFRESULT_TABLE_BAD_HDL);
+		DisposeList(table, AAFTrue);
 	}
 	XEXCEPT
 	XEND
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 	
 /***************************************************/
@@ -961,17 +960,17 @@ aafErr_t TableDisposeItems(
  *		Standard errors (see top of file).
  */
 static aafErr_t DisposeList(
-			omTable_t *table,
+			aafTable_t *table,
 			aafBool itemsAlso)
 {
 	aafInt32		n;
 	tableLink_t	*entry, *entryNext;
 	char		*tmpMem;
 
-	XPROTECT(NULL)
+	XPROTECT()
 	{
 		XASSERT((table != NULL) && (table->cookie == TABLE_COOKIE), 
-			OM_ERR_TABLE_BAD_HDL);
+			AAFRESULT_TABLE_BAD_HDL);
 		for (n = 0; n < table->hashTableSize; n++)
 		{
 			entry = table->hashTable[n];
@@ -988,21 +987,21 @@ static aafErr_t DisposeList(
 				  {
 					(*table->entryDispose)(entry->data);
 					if(entry->data != NULL)
-					  table->file->omOptFree(entry->data);
+					  delete entry->data;
 				  }
 				  else
 				    {
-				      tmpMem = (char *)table->file->omOptMalloc(entry->valueLen);
+				      tmpMem = (char *)new char[entry->valueLen];
 						
 				      /* Force data alignment */
 				      memcpy(tmpMem, entry->local+
 					     entry->keyLen, entry->valueLen);
 				      (*table->entryDispose)(tmpMem);
-				      table->file->omOptFree(tmpMem);
+				      delete tmpMem;
 				    }
 				}
 	
-				table->file->omOptFree(entry);
+				delete entry;
 				entry = entryNext;
 			}
 			
@@ -1013,7 +1012,7 @@ static aafErr_t DisposeList(
 	XEXCEPT
 	XEND
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 /************************************************************************
@@ -1052,7 +1051,7 @@ static aafBool cmpSensitive( void *temp1, void *temp2)
 	char *a = (char *)temp1;
 	char *b = (char *)temp2;
 
-	return(strcmp(a, b) == 0 ? TRUE : FALSE);
+	return(strcmp(a, b) == 0 ? AAFTrue : AAFFalse);
 }
 	
 static aafBool cmpInsensitive( void *temp1, void *temp2)
@@ -1063,13 +1062,13 @@ static aafBool cmpInsensitive( void *temp1, void *temp2)
 	for ( ; (*a != '\0') && (*b != '\0'); a++, b++)
 	{	
         if (tolower(*a) != tolower (*b))
-			return (FALSE);
+			return (AAFFalse);
 	}
 
 	if ((*b != '\0') || (*a != '\0'))
-		return (FALSE);
+		return (AAFFalse);
 		
-	return (TRUE);
+	return (AAFTrue);
 }
 
 /************************
@@ -1089,14 +1088,14 @@ static aafBool cmpInsensitive( void *temp1, void *temp2)
 aafErr_t NewStringTable(
 			AAFFile * file,
 			aafBool caseSensistive,
-			omTblCompareProc myCompare,
+			aafTblCompareProc mycompare,
 			aafInt32 numBuckets,
-			omTable_t **resultPtr)
+			aafTable_t **resultPtr)
 {
-	if(myCompare == NULL)
-		myCompare = (caseSensistive ? cmpSensitive : cmpInsensitive);
+	if(mycompare == NULL)
+		mycompare = (caseSensistive ? cmpSensitive : cmpInsensitive);
 
-	return(NewTable(file, 0, StrMap, myCompare, numBuckets, resultPtr));
+	return(NewTable(file, 0, StrMap, mycompare, numBuckets, resultPtr));
 }	
 
 /************************
@@ -1114,10 +1113,10 @@ aafErr_t NewStringTable(
  *		Standard errors (see top of file).
  */
 aafErr_t TableAddString(
-			omTable_t *table,
+			aafTable_t *table,
 			char *key,
 			void *value,
-			omTableDuplicate_t dup)
+			aafTableDuplicate_t dup)
 {
   	aafInt16		keyLen;
 				
@@ -1140,11 +1139,11 @@ aafErr_t TableAddString(
  *		Standard errors (see top of file).
  */
 aafErr_t TableAddStringBlock(
-			omTable_t *table,
+			aafTable_t *table,
 			char *key,
 			void *value,
 			aafInt32 valueLen,
-			omTableDuplicate_t dup)
+			aafTableDuplicate_t dup)
 {
   aafInt16		keyLen;
 				
@@ -1163,21 +1162,23 @@ aafErr_t TableAddStringBlock(
  *
  * 		WhatIt(Internal)Does
  */
-#if FULL_TOOLKIT
 static aafInt32 MobMap(void *temp)
 {
   aafUID_t *key = (aafUID_t *)temp;
 
-  return(key->prefix+key->major+key->minor);
+//!!! Need to include in the hash
+//!!!  aafUInt8  Data4[8];
+  return(key->Data1+key->Data2+key->Data3);
 }
 
-static aafBool	MobCompare(void *temp1, void *temp2)
+static aafBool	Mobcompare(void *temp1, void *temp2)
 {
   aafUID_t *key1 = (aafUID_t *)temp1;
   aafUID_t *key2 = (aafUID_t *)temp2;
 
-  return( (key1->prefix == key2->prefix) && (key1->major == key2->major) &&
-	 (key1->minor == key2->minor) ? TRUE : FALSE);
+  return( (key1->Data1 == key2->Data1) && (key1->Data2 == key2->Data2) &&
+	 (key1->Data3 == key2->Data3) && (memcmp(key1->Data4, key2->Data4, 8) == 0)
+	 ? AAFTrue : AAFFalse);
 }
 
 /************************
@@ -1197,9 +1198,9 @@ static aafBool	MobCompare(void *temp1, void *temp2)
 aafErr_t NewUIDTable(
 			AAFFile * file,
 			 aafInt32 numBuckets,
-			 omTable_t **result)
+			 aafTable_t **result)
 {
-  return(NewTable(file, sizeof(aafUID_t), MobMap, MobCompare, numBuckets, 
+  return(NewTable(file, sizeof(aafUID_t), MobMap, Mobcompare, numBuckets, 
 		      result));
 }	
 
@@ -1218,10 +1219,10 @@ aafErr_t NewUIDTable(
  *		Standard errors (see top of file).
  */
 aafErr_t TableAddUID(
-			omTable_t *table,
+			aafTable_t *table,
 			aafUID_t key,
 			void *value,
-			omTableDuplicate_t dup)
+			aafTableDuplicate_t dup)
 {
   return(TableAddValuePtr(table, &key, sizeof(aafUID_t), value, dup));
 }
@@ -1241,7 +1242,7 @@ aafErr_t TableAddUID(
  *		Standard errors (see top of file).
  */
 aafErr_t TableRemoveUID(
-			omTable_t *table,
+			aafTable_t *table,
 			aafUID_t key)
 {
   return(TableRemove(table, &key));
@@ -1262,7 +1263,7 @@ aafErr_t TableRemoveUID(
  *		Standard errors (see top of file).
  */
 aafBool TableIncludesUID(
-			omTable_t *table,
+			aafTable_t *table,
 			aafUID_t key)
 {
   return(TableIncludesKey(table, &key));
@@ -1283,13 +1284,13 @@ aafBool TableIncludesUID(
  *		Standard errors (see top of file).
  */
 void *TableUIDLookupPtr(
-			omTable_t *table,
+			aafTable_t *table,
 			aafUID_t key)
 {
   return(TableLookupPtr(table, &key));
 }
-#endif
 
+#if FULL_TOOLKIT
 /************************************************************************
  *
  * ClassID Table Functions
@@ -1310,7 +1311,7 @@ static aafInt32 ClassIDMap(void *temp)
   return(key1);
 }
 
-static aafBool	ClassIDCompare(void *temp1, void *temp2)
+static aafBool	ClassIDcompare(void *temp1, void *temp2)
 {
   aafInt16	n;
   unsigned char		*src1 = (unsigned char *)temp1;
@@ -1320,9 +1321,9 @@ static aafBool	ClassIDCompare(void *temp1, void *temp2)
   for(n = 0; n <= 3; n++)
   {
   	if(src1[n] != src2[n])
-  		return(FALSE);
+  		return(AAFFalse);
   }
-  return(TRUE);
+  return(AAFTrue);
 }
 
 /************************
@@ -1342,9 +1343,9 @@ static aafBool	ClassIDCompare(void *temp1, void *temp2)
 aafErr_t NewClassIDTable(
 			AAFFile * file,
 			aafInt32 numBuckets,
-			omTable_t **result)
+			aafTable_t **result)
 {
-  return(NewTable(file, sizeof(aafClassID_t), ClassIDMap, ClassIDCompare, 
+  return(NewTable(file, sizeof(aafClassID_t), ClassIDMap, ClassIDcompare, 
 		      numBuckets, result));
 }	
 
@@ -1363,13 +1364,13 @@ aafErr_t NewClassIDTable(
  *		Standard errors (see top of file).
  */
 aafErr_t TableAddClassID(
-			omTable_t *table,
+			aafTable_t *table,
 			aafClassIDPtr_t key,
 			void *value,
 			aafInt32 valueLen)
 {
   return(TableAddValueBlock(table, key, sizeof(aafClassID_t), value, 
-				valueLen, kOmTableDupError));
+				valueLen, kaafTableDupError));
 }
 	
 /************************
@@ -1387,7 +1388,7 @@ aafErr_t TableAddClassID(
  *		Standard errors (see top of file).
  */
 aafErr_t TableClassIDLookup(
-			omTable_t *table,
+			aafTable_t *table,
 			aafClassIDPtr_t key,
 			aafInt32 valueLen,
 			void *valuePtr,
@@ -1395,6 +1396,7 @@ aafErr_t TableClassIDLookup(
 {
   return(TableLookupBlock(table, key, valueLen, valuePtr, found));
 }
+#endif
 
 /************************************************************************
  *
@@ -1414,12 +1416,12 @@ static aafInt32 TrackIDMap(void *temp)
   return(key1);
 }
 
-static aafBool	TrackIDCompare(void *temp1, void *temp2)
+static aafBool	TrackIDcompare(void *temp1, void *temp2)
 {
   aafInt32 key1 = *((aafInt32 *)temp1);
   aafInt32 key2 = *((aafInt32 *)temp2);
 
-  return( (key1 == key2) ? TRUE : FALSE);
+  return( (key1 == key2) ? AAFTrue : AAFFalse);
 }
 
 /************************
@@ -1439,9 +1441,9 @@ static aafBool	TrackIDCompare(void *temp1, void *temp2)
 aafErr_t NewTrackIDTable(
 			AAFFile * file,
 			aafInt32 numBuckets,
-			omTable_t **result)
+			aafTable_t **result)
 {
-  return(NewTable(file, sizeof(aafTrackID_t), TrackIDMap, TrackIDCompare, 
+  return(NewTable(file, sizeof(aafTrackID_t), TrackIDMap, TrackIDcompare, 
 		      numBuckets, result));
 }	
 
@@ -1460,13 +1462,13 @@ aafErr_t NewTrackIDTable(
  *		Standard errors (see top of file).
  */
 aafErr_t TableAddTrackID(
-			omTable_t *table,
+			aafTable_t *table,
 			aafTrackID_t key,
 			void *value,
 			aafInt32 valueLen)
 {
   return(TableAddValueBlock(table, &key, sizeof(aafTrackID_t), value, 
-				valueLen, kOmTableDupError));
+				valueLen, kAafTableDupError));
 }
 	
 /************************
@@ -1484,7 +1486,7 @@ aafErr_t TableAddTrackID(
  *		Standard errors (see top of file).
  */
 aafErr_t TableTrackIDLookup(
-			omTable_t *table,
+			aafTable_t *table,
 			aafTrackID_t key,
 			void *value,
 			aafInt32 valueLen,
@@ -1493,6 +1495,7 @@ aafErr_t TableTrackIDLookup(
   return(TableLookupBlock(table, &key, valueLen, value, found));
 }
 
+#if FULL_TOOLKIT
 /************************************************************************
  *
  * aafProperty_t Table Functions
@@ -1511,12 +1514,12 @@ static aafInt32 PropertyMap(void *temp)
   return((aafInt32)*key1);
 }
 
-static aafBool	PropertyCompare(void *temp1, void *temp2)
+static aafBool	Propertycompare(void *temp1, void *temp2)
 {
   aafProperty_t *key1 = (aafProperty_t *)temp1;
   aafProperty_t *key2 = (aafProperty_t *)temp2;
 
-  return( (*key1 == *key2) ? TRUE : FALSE);
+  return( (*key1 == *key2) ? AAFTrue : AAFFalse);
 }
 
 /************************
@@ -1536,13 +1539,12 @@ static aafBool	PropertyCompare(void *temp1, void *temp2)
 aafErr_t NewPropertyTable(
 			AAFFile * file,
 			aafInt32 numBuckets,
-			omTable_t **result)
+			aafTable_t **result)
 {
-  return(NewTable(file, sizeof(aafProperty_t), PropertyMap, PropertyCompare, 
+  return(NewTable(file, sizeof(aafProperty_t), PropertyMap, Propertycompare, 
 		      numBuckets, result));
 }	
 
-#if FULL_TOOLKIT
 /************************
  * name
  *
@@ -1558,11 +1560,11 @@ aafErr_t NewPropertyTable(
  *		Standard errors (see top of file).
  */
 aafErr_t TableAddProperty(
-			omTable_t *table,
+			aafTable_t *table,
 			aafProperty_t key,
 			void *value, 
 			aafInt32 valueLen,
-			omTableDuplicate_t dup)
+			aafTableDuplicate_t dup)
 {
   return(TableAddValueBlock(table, &key, sizeof(aafProperty_t), value, 
 				valueLen, dup));
@@ -1583,7 +1585,7 @@ aafErr_t TableAddProperty(
  *		Standard errors (see top of file).
  */
 aafErr_t TablePropertyLookup(
-			omTable_t *table,
+			aafTable_t *table,
 			aafProperty_t key,
 			aafInt32 valueLen,
 			void *valuePtr,
@@ -1610,14 +1612,13 @@ static aafInt32 TypeMap(void *temp)
   return((aafInt32)*key1);
 }
 
-static aafBool TypeCompare(void *temp1, void *temp2)
+static aafBool Typecompare(void *temp1, void *temp2)
 {
   aafType_t *key1 = (aafType_t *)temp1;
   aafType_t *key2 = (aafType_t *)temp2;
 
-  return( (*key1 == *key2) ? TRUE : FALSE);
+  return( (*key1 == *key2) ? AAFTrue : AAFFalse);
 }
-#endif
 
 /************************
  * name
@@ -1636,9 +1637,9 @@ static aafBool TypeCompare(void *temp1, void *temp2)
 aafErr_t NewTypeTable(
 			AAFFile * file,
 			aafInt32 numBuckets,
-			omTable_t **result)
+			aafTable_t **result)
 {
-  return(NewTable(file, sizeof(aafType_t), TypeMap, TypeCompare, numBuckets, 
+  return(NewTable(file, sizeof(aafType_t), TypeMap, Typecompare, numBuckets, 
 		      result));
 }	
 
@@ -1657,13 +1658,13 @@ aafErr_t NewTypeTable(
  *		Standard errors (see top of file).
  */
 aafErr_t TableAddType(
-			omTable_t *table,
+			aafTable_t *table,
 			aafType_t key,
 			void *value,
 			aafInt32 valueLen)
 {
   return(TableAddValueBlock(table, &key, sizeof(aafType_t), value, 
-				valueLen, kOmTableDupError));
+				valueLen, kaafTableDupError));
 }
 	
 /************************
@@ -1681,7 +1682,7 @@ aafErr_t TableAddType(
  *		Standard errors (see top of file).
  */
 aafErr_t TableTypeLookup(
-			omTable_t *table,
+			aafTable_t *table,
 			aafType_t key,
 			aafInt32 valueLen,
 			void *valuePtr,
@@ -1689,6 +1690,7 @@ aafErr_t TableTypeLookup(
 {
   return(TableLookupBlock(table, &key, valueLen, valuePtr, found));
 }
+#endif
 
 /************************************************************************
  *
@@ -1713,7 +1715,7 @@ aafErr_t TableTypeLookup(
 aafErr_t NewDefTable(
 			AAFFile * file,
 			aafInt32 numBuckets,
-			omTable_t **result)
+			aafTable_t **result)
 {
   return(NewTable(file, 0, StrMap, cmpSensitive, numBuckets, result));
 }	
@@ -1734,14 +1736,14 @@ aafErr_t NewDefTable(
  *		Standard errors (see top of file).
  */
 aafErr_t TableAddDef(
-			omTable_t *table,
+			aafTable_t *table,
 			aafUniqueName_t key,
 			void *value)
 {
   aafInt16 keyLen;
 
   keyLen = strlen(key)+1;
-  return(TableAddValuePtr(table, key, keyLen, value, kOmTableDupError));
+  return(TableAddValuePtr(table, key, keyLen, value, kaafTableDupError));
 }
 	
 /************************
@@ -1759,7 +1761,7 @@ aafErr_t TableAddDef(
  *		Standard errors (see top of file).
  */
 void *TableDefLookup(
-			omTable_t *table,
+			aafTable_t *table,
 			aafUniqueName_t key)
 {
   return(TableLookupPtr(table, key));
@@ -1781,23 +1783,23 @@ void *TableDefLookup(
  * Possible Errors:
  *		Standard errors (see top of file).
  */
-void testOmTable(void)
+void testaafTable(void)
 {
-  omTable_t			*test;
+  aafTable_t			*test;
   aafInt32				val, n;
   aafBool				found;
-  omTableIterate_t	iter;
+  aafTableIterate_t	iter;
   char				name[4];
   char				*keys[4] = { "foo", "bar", "baz", "foo" };
 	
-  printf("OMTable Tests\n");
+  printf("aafTable Tests\n");
 
   /******************************/
   printf("    Creating the test table\n");
-  NewStringTable(NULL, FALSE, NULL, 32, &test);
+  NewStringTable(NULL, AAFFalse, NULL, 32, &test);
   for(val = 0; val < 4; val++)
     TableAddStringBlock(test, keys[val], &val, sizeof(val), 
-			    kOmTableDupAddDup);
+			    kaafTableDupAddDup);
 
   /******************************/
   printf("    Testing TableIncludesKey\n");
@@ -1899,7 +1901,7 @@ void testOmTable(void)
   if(strcmp(name, "foo") != 0)
     printf("Failed key test #4\n");
   
-  printf("Finished OMTable tests\n");
+  printf("Finished aafTable tests\n");
 }
 #endif
 
