@@ -65,8 +65,10 @@ public:
     IsTypeOf
         (aafUID_t      aClass,   //@parm [in] AUID corresponding to a class
 		 aafBool*  Result);  //@parm [out] 
- 
 
+  // tjb - this is temporary and should be removed
+  int classId(void) const { return 0; }
+ 
 public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFObjectTest.cpp.
