@@ -386,11 +386,11 @@ AAFRESULT STDMETHODCALLTYPE
   // BTW, we know that valsize >= bitsSize (from tests above)
   if (_isSigned != 0)
 	{
-	  pvtSignExtend (pBits, bitsSize, pVal, valSize);
+	  pvtSignExtend (valBuf, bitsSize, pVal, valSize);
 	}
   else
 	{
-	  pvtZeroFill (pBits, bitsSize, pVal, valSize);
+	  pvtZeroFill (valBuf, bitsSize, pVal, valSize);
 	}
   return AAFRESULT_SUCCESS;
 }
@@ -466,7 +466,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  return hr;
 	}
   assert (pBits);
-  memcpy (pBits, valBuf, valSize);
+  memcpy (pBits, valBuf, _size);
 
   if (! AAFRESULT_SUCCEEDED (hr))
 	{
