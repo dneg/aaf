@@ -121,7 +121,6 @@ static void formatError(DWORD errorCode)
 static void checkResult(AAFRESULT resultCode)
 {
   TRACE("checkFile");
-  ASSERT("Valid program name", validString(getProgramName()));
 
   if (AAFRESULT_FAILED(resultCode)) {
     formatError(resultCode);
