@@ -11,6 +11,9 @@
 
 class ImplAAFFile;
 
+const int readMode = 0;
+const int writeMode = 1;
+
 /* Flags */
 #define kOMLWriting        0x0002U                 /* container was opened for writing   */
 #define kOMLReuseFreeSpace 0x0004U                 /* try to reuse freed space           */
@@ -140,6 +143,7 @@ void OMLGetValueInfo(OMLValue value, OMLObject *object, OMLProperty *property, O
 void SetHead(const ImplAAFHeader* head);
 
   private:
+    int _mode;
     const ImplAAFHeader* _head;
     OMFile* _file;
 };
