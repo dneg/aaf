@@ -107,8 +107,6 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	AAFRESULT	hr;
 
-  AAFRESULT stat = AAFRESULT_INTERNAL_ERROR;
-
 	switch (HorizontalSubsampling)
 	{
 	case 1:
@@ -129,8 +127,6 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::SetVerticalSubsampling (aafUInt32 VerticalSubsampling)
 {
 	AAFRESULT	hr;
-
-  AAFRESULT stat = AAFRESULT_INTERNAL_ERROR;
 
 	switch (VerticalSubsampling)
 	{

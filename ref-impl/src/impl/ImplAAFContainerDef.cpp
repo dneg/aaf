@@ -61,7 +61,6 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return pvtInitialize(id, pName, pDesc);
 	}
-	return AAFRESULT_SUCCESS;
 }
 
 

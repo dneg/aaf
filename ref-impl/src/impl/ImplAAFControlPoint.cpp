@@ -152,7 +152,6 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFControlPoint::GetValueBufLen (
       aafUInt32 * pLen)
 {
-  AAFRESULT result = AAFRESULT_SUCCESS;
 	if(pLen == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
