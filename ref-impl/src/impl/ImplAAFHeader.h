@@ -301,7 +301,8 @@ public:
   AAFRESULT SetToolkitRevisionCurrent(void);
   // AAFRESULT CountIdentifications (aafInt32 * /*pCount*/);
 
-  AAFRESULT AddIdentificationObject (aafProductIdentification_t * /*pIdent*/);
+  AAFRESULT AddIdentificationObject (aafProductIdentification_constptr
+									 /*pIdent*/);
   AAFRESULT SetModified(void);		// To NOW
 
   void SetByteOrder(const aafInt16 byteOrder);
