@@ -41,7 +41,7 @@ ARFLAGS = -r
 
 SH_PREFIX = 
 SH_SUFFIX = 
-SHELL = c:/mksnt/sh
+SHELL = c:/mksnt/sh.exe
 
 MIDL = midl
 MIDL_SYS_CFLAGS = /server none /client none
