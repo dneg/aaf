@@ -56,8 +56,9 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		SetName( pName );
-		SetPrimary( isPrimary );
+		aafError = SetName( pName );
+		if (aafError == AAFRESULT_SUCCESS)
+			aafError = SetPrimary( isPrimary );
 	}
 
 	return aafError;
