@@ -44,7 +44,8 @@ ImplAAFSourceClip::ImplAAFSourceClip ():
 	_fadeOutLen(	PID_SOURCECLIP_FADEOUTLEN,		"fadeOutLen"),
 	_fadeOutType(	PID_SOURCECLIP_FADEOUTTYPE,		"fadeOutType"),
 	_fadeOutPresent(PID_SOURCECLIP_FADEOUTPRESENT,	"fadeOutPresent"),
-	_startTime(		PID_SOURCECLIP_STARTTIME,		"startTime")
+	_startTime(		PID_SOURCECLIP_STARTTIME,		"startTime"),
+	_initialized(AAFFalse)
 {
 	_persistentProperties.put(		_fadeInLen.address());
 	_persistentProperties.put(		_fadeInType.address());
@@ -62,11 +63,17 @@ ImplAAFSourceClip::~ImplAAFSourceClip ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceClip::InitializeSourceClip(aafUID_t*		pDatadef,
-											aafLength_t*	pLength,
-											aafSourceRef_t	sourceRef)
+    ImplAAFSourceClip::Initialize(aafUID_t*		pDatadef,
+								  aafLength_t*	pLength,
+								  aafSourceRef_t	sourceRef)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
+	if (_initialized)
+	{
+		return AAFRESULT_ALREADY_INITIALIZED;
+	}
+	_initialized = AAFTrue;
+
 	if (pDatadef == NULL ||
 		pLength == NULL)
 	{
@@ -102,6 +109,11 @@ AAFRESULT STDMETHODCALLTYPE
                            aafBool			*fadeOutPresent)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	if (! _initialized)
+	{
+		return AAFRESULT_NOT_INITIALIZED;
+	}
 
 	if (fadeInLen == NULL ||
 		fadeInType == NULL ||
@@ -153,6 +165,11 @@ AAFRESULT STDMETHODCALLTYPE
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
 	*mob = NULL;
+
+	if (! _initialized)
+	{
+		return AAFRESULT_NOT_INITIALIZED;
+	}
 
 	XPROTECT()
 	  {
@@ -206,6 +223,11 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUID_t	sourceID;
 	aafSlotID_t slotID;
 
+	if (! _initialized)
+	{
+		return AAFRESULT_NOT_INITIALIZED;
+	}
+
 	XPROTECT()
 	{	
 		if (pSourceRef)
@@ -240,6 +262,11 @@ AAFRESULT STDMETHODCALLTYPE
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
+	if (! _initialized)
+	{
+		return AAFRESULT_NOT_INITIALIZED;
+	}
+
 	if (fadeInLen > 0)
 	{
 		_fadeInLen	= fadeInLen;
@@ -265,6 +292,10 @@ AAFRESULT STDMETHODCALLTYPE
 	aafInt16	tmp1xTrackNum = 0;
 	AAFRESULT   aafError = AAFRESULT_SUCCESS;
 	
+	if (! _initialized)
+	{
+		return AAFRESULT_NOT_INITIALIZED;
+	}
 
 	/* If UID is NUL - make the rest of the fields 0 too. */
 	if( (sourceRef.sourceID.Data1 == NilMOBID.Data1) && 
@@ -298,6 +329,11 @@ AAFRESULT ImplAAFSourceClip::TraverseToClip(aafLength_t length,
 											aafLength_t *sclpLen,
 											aafBool *isMask)
 {
+	if (! _initialized)
+	{
+		return AAFRESULT_NOT_INITIALIZED;
+	}
+
 	XPROTECT()
 	{
 		*sclp = this;
@@ -324,6 +360,11 @@ OMDEFINE_STORABLE(ImplAAFSourceClip, CLSID_AAFSourceClip);
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFSourceClip::GetObjectClass(aafUID_t * pClass)
 {
+  if (! _initialized)
+	{
+	  return AAFRESULT_NOT_INITIALIZED;
+	}
+
   if (! pClass)
 	{
 	  return AAFRESULT_NULL_PARAM;
