@@ -41,12 +41,19 @@
 #include "ImplAAFAuxiliaryDescriptor.h"
 #endif
 
+#include <AAFPropertyIDs.h>
+
 #include <assert.h>
 #include <string.h>
 
 
 ImplAAFAuxiliaryDescriptor::ImplAAFAuxiliaryDescriptor ()
-{}
+  : _mimeType( PID_AuxiliaryDescriptor_MimeType, L"MimeType" ),
+    _charSet( PID_AuxiliaryDescriptor_CharSet, L"CharSet" )
+{
+  _persistentProperties.put( _mimeType.address() );
+  _persistentProperties.put( _charSet.address() );
+}
 
 
 ImplAAFAuxiliaryDescriptor::~ImplAAFAuxiliaryDescriptor ()
@@ -55,63 +62,111 @@ ImplAAFAuxiliaryDescriptor::~ImplAAFAuxiliaryDescriptor ()
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFAuxiliaryDescriptor::Initialize ()
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFAuxiliaryDescriptor::SetMimeType (
-      aafCharacter_constptr  /*pMimeType*/)
+      aafCharacter_constptr pMimeType )
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return SetString( pMimeType, _mimeType );
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFAuxiliaryDescriptor::GetMimeType (
-      aafCharacter *  /*pMimeType*/,
-      aafUInt32  /*bufSize*/)
+      aafCharacter *  pMimeType,
+      aafUInt32  bufSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return GetString( pMimeType, bufSize, _mimeType );
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFAuxiliaryDescriptor::GetMimeTypeBufLen (
-      aafUInt32 *  /*pBufSize*/)
+      aafUInt32 *  pBufSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return GetStringBufLen( pBufSize, _mimeType );
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFAuxiliaryDescriptor::SetCharSet (
-      aafCharacter_constptr  /*pCharSet*/)
+      aafCharacter_constptr  pCharSet)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return SetString( pCharSet, _charSet );
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFAuxiliaryDescriptor::GetCharSet (
-      aafCharacter *  /*pCharSet*/,
-      aafUInt32  /*bufSize*/)
+      aafCharacter *  pCharSet,
+      aafUInt32  bufSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return GetString( pCharSet, bufSize, _charSet );
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFAuxiliaryDescriptor::GetCharSetBufLen (
-      aafUInt32 *  /*pBufSize*/)
+      aafUInt32 *  pBufSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return GetStringBufLen( pBufSize, _charSet );
 }
 
 
+// FIXME These are cut/paste/modify version of the the
+// ImplAAFMob::{Get,Set}Name.  The mob routines, and many others,
+// could be factored out and a variation of these routines used.
+
+AAFRESULT ImplAAFAuxiliaryDescriptor::SetString (aafCharacter_constptr  pString,
+						 OMWideStringProperty& theStoredString )
+{
+  if(pString == NULL)
+    return(AAFRESULT_NULL_PARAM);
+  
+  theStoredString = pString;
+  
+  return(AAFRESULT_SUCCESS); 
+}
+
+AAFRESULT ImplAAFAuxiliaryDescriptor::GetString( aafCharacter* pString, aafUInt32 bufSize,
+						 OMWideStringProperty& theStoredString )
+{
+  bool stat;
+  
+  if(pString == NULL)
+    return(AAFRESULT_NULL_PARAM);
+  
+  if(!theStoredString.isPresent())
+    return AAFRESULT_PROP_NOT_PRESENT;
+  else
+    stat = theStoredString.copyToBuffer(pString, bufSize);
+  
+  if (!stat) {
+    return AAFRESULT_SMALLBUF;
+  }
+  
+  return(AAFRESULT_SUCCESS); 
+  
+}
 
 
+AAFRESULT ImplAAFAuxiliaryDescriptor::GetStringBufLen( aafUInt32 *  pBufSize,
+						       OMWideStringProperty& theStoredString )
+{
+  if(pBufSize == NULL)
+    return(AAFRESULT_NULL_PARAM);
+  
+  if(!theStoredString.isPresent())
+    return AAFRESULT_PROP_NOT_PRESENT;
+  else {
+    *pBufSize = theStoredString.size();
+    return(AAFRESULT_SUCCESS); 
+  }
+}

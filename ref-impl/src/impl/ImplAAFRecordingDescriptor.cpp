@@ -55,7 +55,7 @@ ImplAAFRecordingDescriptor::~ImplAAFRecordingDescriptor ()
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFRecordingDescriptor::Initialize ()
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_SUCCESS;
 }
 
 

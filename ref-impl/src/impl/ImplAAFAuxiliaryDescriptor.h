@@ -30,24 +30,15 @@
 //=---------------------------------------------------------------------=
 
 
-
-
 #ifndef __AAFTypes_h__
 #include "AAFTypes.h"
 #endif
-
-
-
-
-
-
-
-
 
 #ifndef __ImplAAFPhysicalDescriptor_h__
 #include "ImplAAFPhysicalDescriptor.h"
 #endif
 
+#include "OMWideStringProperty.h"
 
 class ImplAAFAuxiliaryDescriptor : public ImplAAFPhysicalDescriptor
 {
@@ -127,6 +118,19 @@ public:
     GetCharSetBufLen
         // @parm [out] size of required buffer, in bytes
         (aafUInt32 *  pBufSize);
+
+ private:
+
+  // FIXME - These could be moved to their own file.
+  AAFRESULT SetString (aafCharacter_constptr  pCharSet,
+		       OMWideStringProperty& theStoredString );
+  AAFRESULT GetString( aafCharacter *  pCharSet, aafUInt32 bufSize,
+		       OMWideStringProperty& theStoredString );
+  AAFRESULT GetStringBufLen( aafUInt32 *  pBufSize,
+			     OMWideStringProperty& theStoredString );
+    
+  OMWideStringProperty _mimeType;
+  OMWideStringProperty _charSet;
 
 };
 
