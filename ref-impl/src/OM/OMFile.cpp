@@ -42,8 +42,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define OM_OBJECT_DIRECTORY_CAPACITY  (5000)
-
   // @mfunc Constructor. Create an <c OMFile> object representing
   //        an existing external file.
   //   @parm The name of this <c OMFile>.
@@ -613,10 +611,13 @@ OMObjectDirectory* OMFile::objectDirectory(void)
 {
   TRACE("OMFile::objectDirectory");
 
+#if defined(OM_ENABLE_DEBUG)
+  // Create the object directory on demand (debugging only) 
   if (_objectDirectory == 0) {
-    _objectDirectory = new OMObjectDirectory(OM_OBJECT_DIRECTORY_CAPACITY);
+    _objectDirectory = new OMObjectDirectory();
     ASSERT("Valid heap pointer", _objectDirectory != 0);
   }
+#endif
   return _objectDirectory;
 }
 
