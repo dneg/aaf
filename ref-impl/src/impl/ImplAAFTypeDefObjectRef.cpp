@@ -43,7 +43,6 @@
 
 #include "OMAssertions.h"
 
-#include <assert.h>
 #include <string.h>
 
 
@@ -134,8 +133,8 @@ void ImplAAFTypeDefObjectRef::externalize(OMByte* internalBytes,
   PRECONDITION("Valid internal byte size", internalBytesSize > 0);
   PRECONDITION("Valid external bytes", externalBytes != 0);
   PRECONDITION("Valid external byte size", externalBytesSize > 0);
+  PRECONDITION("Internal and external sizes are equal", externalBytesSize == internalBytesSize);
 
-  assert (externalBytesSize >= internalBytesSize);
   copy (internalBytes, externalBytes, internalBytesSize);
 }
 
@@ -158,8 +157,8 @@ void ImplAAFTypeDefObjectRef::internalize(OMByte* externalBytes,
   PRECONDITION("Valid external byte size", externalBytesSize > 0);
   PRECONDITION("Valid internal bytes", internalBytes != 0);
   PRECONDITION("Valid internal byte size", internalBytesSize > 0);
+  PRECONDITION("Internal and external sizes are equal", internalBytesSize == externalBytesSize);
 		           
-  assert (internalBytesSize >= externalBytesSize);
   copy (externalBytes, internalBytes, externalBytesSize);
 }
 
