@@ -161,6 +161,15 @@ ImplAAFTypeDefVariableArray::GetCount (
 	if (! pPropVal) return AAFRESULT_NULL_PARAM;
 	if (! pCount) return AAFRESULT_NULL_PARAM;
 	
+	// Get the property value's embedded type and 
+	// check if it's the same as the local type.
+	ImplAAFTypeDefSP	pInPropType;
+	if( AAFRESULT_FAILED( pPropVal->GetType( &pInPropType ) ) )
+		return AAFRESULT_BAD_TYPE;
+	assert (pInPropType);
+	if( (ImplAAFTypeDef *)pInPropType != (ImplAAFTypeDef *)this )
+		return AAFRESULT_BAD_TYPE;
+
   ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pPropVal);
   if (NULL != pRefArray)
   {
@@ -215,6 +224,15 @@ ImplAAFTypeDefVariableArray::AppendElement
 	if (!pMemberPropVal)
 		return AAFRESULT_NULL_PARAM;
 	
+	// Get the property value's embedded type and 
+	// check if it's the same as the local type.
+	ImplAAFTypeDefSP	pInPropType;
+	if( AAFRESULT_FAILED( pInPropVal->GetType( &pInPropType ) ) )
+		return AAFRESULT_BAD_TYPE;
+	assert (pInPropType);
+	if( (ImplAAFTypeDef *)pInPropType != this )
+		return AAFRESULT_BAD_TYPE;
+
 	AAFRESULT hr;
 	
   ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pInPropVal);
@@ -279,7 +297,7 @@ ImplAAFTypeDefVariableArray::AppendElement
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefVariableArray::ValidateInputParams (
 												  ImplAAFPropertyValue ** ppElementValues,
-												  aafUInt32  numElements)								  
+												  aafUInt32  numElements)
 {
 	//first call base impl.
 	HRESULT hr;
@@ -300,6 +318,16 @@ ImplAAFTypeDefVariableArray::GetElements (
 {
   if (NULL == pInPropVal || NULL == ppEnum)
 	  return AAFRESULT_NULL_PARAM;
+
+  // Get the property value's embedded type and 
+  // check if it's the same as the local type.
+  ImplAAFTypeDefSP	pInPropType;
+  if( AAFRESULT_FAILED( pInPropVal->GetType( &pInPropType ) )  )
+	return AAFRESULT_BAD_TYPE;
+  assert (pInPropType);
+  if( (ImplAAFTypeDef *)pInPropType != this )
+	return AAFRESULT_BAD_TYPE;
+
   *ppEnum = NULL;
   
   ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pInPropVal);
@@ -763,6 +791,15 @@ ImplAAFTypeDefVariableArray::PrependElement(
 	if (!pMemberPropVal)
 		return AAFRESULT_NULL_PARAM;
 	
+	// Get the property value's embedded type and 
+	// check if it's the same as the local type.
+	ImplAAFTypeDefSP	pInPropType;
+	if( AAFRESULT_FAILED( pInPropVal->GetType( &pInPropType ) ) )
+		return AAFRESULT_BAD_TYPE;
+	assert (pInPropType);
+	if( (ImplAAFTypeDef *)pInPropType != this )
+		return AAFRESULT_BAD_TYPE;
+
 	AAFRESULT hr;
 	
   ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pInPropVal);
@@ -834,6 +871,15 @@ ImplAAFTypeDefVariableArray::RemoveElement(
 	if (!pInPropVal)
 		return AAFRESULT_NULL_PARAM;
 	
+	// Get the property value's embedded type and 
+	// check if it's the same as the local type.
+	ImplAAFTypeDefSP	pInPropType;
+	if( AAFRESULT_FAILED( pInPropVal->GetType( &pInPropType ) ) )
+		return AAFRESULT_BAD_TYPE;
+	assert (pInPropType);
+	if( (ImplAAFTypeDef *)pInPropType != this )
+		return AAFRESULT_BAD_TYPE;
+
   ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pInPropVal);
   if (NULL != pRefArray)
   {
@@ -915,6 +961,14 @@ ImplAAFTypeDefVariableArray::InsertElement(
 	if (!pMemberPropVal)
 		return AAFRESULT_NULL_PARAM;
 	
+	// Get the property value's embedded type and 
+	// check if it's the same as the local type.
+	ImplAAFTypeDefSP	pInPropType;
+	if( AAFRESULT_FAILED( pInPropVal->GetType( &pInPropType ) ) )
+		return AAFRESULT_BAD_TYPE;
+	assert (pInPropType);
+	if( (ImplAAFTypeDef *)pInPropType != this )
+		return AAFRESULT_BAD_TYPE;
 		
 	//CASE 1 -- if the Insert is at "0" postition - this implies a prepend, 
 	//			SO - delegate to PrependElement() routine

@@ -249,6 +249,15 @@ ImplAAFTypeDefArray::CopyValuesIntoValue (
 	if (!*ppPropVal)
 		return AAFRESULT_NOT_INITIALIZED;
 	
+	// Get the property value's embedded type and 
+	// check if it's the same as the base type.
+	ImplAAFTypeDefSP	pIncomingType;
+	if( AAFRESULT_FAILED( (*ppPropVal)->GetType( &pIncomingType ) ) )
+		return AAFRESULT_BAD_TYPE;
+	assert (pIncomingType);
+	if( (ImplAAFTypeDef *)pIncomingType != this )
+		return AAFRESULT_BAD_TYPE;
+
 	// proceed ....
 	
 	//get pTargetData
@@ -442,6 +451,15 @@ ImplAAFTypeDefArray::GetElementValue (
 	if (! pInPropVal) return AAFRESULT_NULL_PARAM;
 	if (! ppOutPropVal) return AAFRESULT_NULL_PARAM;
 	
+	// Get the property value's embedded type and 
+	// check if it's the same as the base type.
+	ImplAAFTypeDefSP	pIncomingType;
+	if( AAFRESULT_FAILED( pInPropVal->GetType( &pIncomingType ) ) )
+		return AAFRESULT_BAD_TYPE;
+	assert (pIncomingType);
+	if( (ImplAAFTypeDef *)pIncomingType != this )
+		return AAFRESULT_BAD_TYPE;
+
   ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pInPropVal);
   if (NULL != pRefArray)
   {
@@ -509,9 +527,17 @@ ImplAAFTypeDefArray::GetCArray (
 	if (! IsRegistered ())
 		return AAFRESULT_NOT_REGISTERED;
 	
-	AAFRESULT hr;
+	// Get the property value's embedded type and 
+	// check if it's the same as the base type.
+	ImplAAFTypeDefSP	pIncomingType;
+	if( AAFRESULT_FAILED( pPropVal->GetType( &pIncomingType ) ) )
+		return AAFRESULT_BAD_TYPE;
+	assert (pIncomingType);
+	if( (ImplAAFTypeDef *)pIncomingType != this )
+		return AAFRESULT_BAD_TYPE;
+
 	ImplAAFTypeDefSP pBaseType;
-	hr = GetType (&pBaseType);
+	HRESULT hr = GetType (&pBaseType);
 	
 	assert (pBaseType->IsFixedSize ());
 	pBaseType->AttemptBuiltinRegistration ();
@@ -569,6 +595,15 @@ ImplAAFTypeDefArray::SetElementValue (
 	//Ensure our input pointers are valid
 	if (!pPropVal || !pMemberPropVal)
 		return AAFRESULT_NULL_PARAM;
+
+	// Get the property value's embedded type and 
+	// check if it's the same as the base type.
+	ImplAAFTypeDefSP	pIncomingType;
+	if( AAFRESULT_FAILED( pPropVal->GetType( &pIncomingType ) ) )
+		return AAFRESULT_BAD_TYPE;
+	assert (pIncomingType);
+	if( (ImplAAFTypeDef *)pIncomingType != this )
+		return AAFRESULT_BAD_TYPE;
 
   ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pPropVal);
   if (NULL != pRefArray)
@@ -667,6 +702,15 @@ ImplAAFTypeDefArray::SetCArray (
 	if (! IsRegistered ())
 		return AAFRESULT_NOT_REGISTERED;
 	
+	// Get the property value's embedded type and 
+	// check if it's the same as the base type.
+	ImplAAFTypeDefSP	pIncomingType;
+	if( AAFRESULT_FAILED( pPropVal->GetType( &pIncomingType ) ) )
+		return AAFRESULT_BAD_TYPE;
+	assert (pIncomingType);
+	if( (ImplAAFTypeDef *)pIncomingType != this )
+		return AAFRESULT_BAD_TYPE;
+
 	AAFRESULT hr;
 	ImplAAFTypeDefSP pBaseType;
 	hr = GetType (&pBaseType);
