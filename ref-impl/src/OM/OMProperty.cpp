@@ -178,12 +178,18 @@ void OMSimpleProperty::save(void) const
   s->write(_propertyId, _type, _bits, _size);
 }
 
-void OMSimpleProperty::restoreFrom(OMStoredObject& s, size_t size)
+  // @mfunc Restore this <c OMSimpleProperty>, the size of the
+  //        <c OMSimpleProperty> is <p size>.
+  //   @parm The size of the <c OMSimpleProperty>.
+void OMSimpleProperty::restore(size_t size)
 {
-  TRACE("OMSimpleProperty::restoreFrom");
+  TRACE("OMSimpleProperty::restore");
   ASSERT("Sizes match", size == _size);
 
-  s.read(_propertyId, _type, _bits, _size);
+  OMStoredObject* store = _propertySet->container()->store();
+  ASSERT("Valid store", store != 0);
+
+  store->read(_propertyId, _type, _bits, _size);
 }
 
   // @mfunc The size of the raw bits of this
