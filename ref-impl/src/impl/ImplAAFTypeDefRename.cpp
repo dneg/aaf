@@ -89,7 +89,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (! ppBaseType)
 	return AAFRESULT_NULL_PARAM;
 
-   if(_RenamedType.isVoid())
+  if(_RenamedType.isVoid())
 		return AAFRESULT_OBJECT_NOT_FOUND;
   ImplAAFTypeDef *pTypeDef = _RenamedType;
 
@@ -99,10 +99,8 @@ AAFRESULT STDMETHODCALLTYPE
   return AAFRESULT_SUCCESS;
 }
 
-
-
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefRename::GetValue (
+    ImplAAFTypeDefRename::GetBaseValue (
       ImplAAFPropertyValue * pInPropVal,
       ImplAAFPropertyValue ** ppOutPropVal)
 {
@@ -152,6 +150,48 @@ AAFRESULT STDMETHODCALLTYPE
   return AAFRESULT_SUCCESS;
 }
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefRename::GetValue (
+      ImplAAFPropertyValue * pInPropVal,
+      ImplAAFPropertyValue ** ppOutPropVal)
+{
+  if (! pInPropVal) return AAFRESULT_NULL_PARAM;
+  if (! ppOutPropVal) return AAFRESULT_NULL_PARAM;
+
+  aafUInt32 inBitsSize;
+  ImplAAFPropValDataSP pOutPVData;
+  ImplAAFPropValDataSP pvd;
+  AAFRESULT hr;
+
+  assert (pInPropVal);
+  pvd = dynamic_cast<ImplAAFPropValData*> (pInPropVal);
+  assert (pvd);
+
+  hr = pvd->GetBitsSize (&inBitsSize);
+  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+
+  pOutPVData = (ImplAAFPropValData *)CreateImpl(CLSID_AAFPropValData);
+  if (! pOutPVData) return AAFRESULT_NOMEMORY;
+
+  // SmartPointer operator= will automatically AddRef; CreateImpl *also* will 
+  // addref, so we've got one too many.  Put us back to normal.
+  pOutPVData->ReleaseReference ();
+
+  hr = pOutPVData->Initialize (this);
+  if (AAFRESULT_FAILED(hr)) return hr;
+
+  hr = pOutPVData->AllocateFromPropVal (pvd,
+										0,
+										inBitsSize,
+										NULL);
+  if (AAFRESULT_FAILED(hr)) return hr;
+
+  assert (ppOutPropVal);
+  *ppOutPropVal = pOutPVData;
+  (*ppOutPropVal)->AcquireReference ();
+  assert (*ppOutPropVal);
+  return AAFRESULT_SUCCESS;
+}
 
 ImplAAFTypeDefSP ImplAAFTypeDefRename::BaseType () const
 {
