@@ -360,6 +360,36 @@ Package=<4>
 
 ###############################################################################
 
+Project: "ExportDV"=".\examples\com-api\ExportDV\ExportDV.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MakeSDK
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "ExportPCM"=".\examples\com-api\ExportPCM\ExportPCM.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MakeSDK
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "ExportSimpleComposition"=".\examples\com-api\ExportSimpleComposition\ExportSimpleComposition.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -405,49 +435,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "InfoDumper"=".\examples\com-api\InfoDumper\InfoDumper.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "ExportDV"=".\examples\com-api\ExportDV\ExportDV.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name MakeSDK
-    End Project Dependency
-}}}
-
-###############################################################################
-
 Project: "ImportDV"=".\examples\com-api\ImportDV\ImportDV.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name MakeSDK
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "ExportPCM"=".\examples\com-api\ExportPCM\ExportPCM.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -473,6 +461,18 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name MakeSDK
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "InfoDumper"=".\examples\com-api\InfoDumper\InfoDumper.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################
@@ -647,6 +647,12 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name aafmeta2dot
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name aafdump
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name aafextract
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -701,6 +707,30 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name axLib
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "aafdump"=.\Utilities\aafdump\aafdump.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "aafextract"=.\Utilities\aafextract\aafextract.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################
