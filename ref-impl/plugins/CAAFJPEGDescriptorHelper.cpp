@@ -42,6 +42,10 @@
 
 const aafUID_t kAAFPropID_CDCIOffsetToFrameIndexes = { 0x9d15fca3, 0x54c5, 0x11d3, { 0xa0, 0x29, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 const aafUID_t kAAFPropID_DIDFrameIndexByteOrder = { 0xb57e925d, 0x170d, 0x11d4, { 0xa0, 0x8f, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+const aafUID_t kAAFPropID_DIDResolutionID = { 0xce2aca4d, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+const aafUID_t kAAFPropID_DIDFirstFrameOffset = { 0xce2aca4e, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+const aafUID_t kAAFPropID_DIDFrameSampleSize = { 0xce2aca50, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+
 
 // local function for simplifying error handling.
 inline void checkResult(AAFRESULT r)
@@ -784,9 +788,45 @@ HRESULT STDMETHODCALLTYPE
 	return hr;
 }
 
-// MediaComposer property extensions to AAFDigitalImageDescriptor.
-const aafUID_t kAAFPropID_DIDResolutionID = { 0xce2aca4d, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
-const aafUID_t kAAFPropID_DIDFrameSampleSize = { 0xce2aca50, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+HRESULT STDMETHODCALLTYPE
+    CAAFJPEGDescriptorHelper::GetResolutionID( aafInt32 *p_resid )
+{
+	IAAFClassDef		*pClassDef;
+	IAAFObject			*pObj;
+	IAAFPropertyDef		*pPropertyDef;
+	IAAFPropertyValue	*pPropValue;
+	IAAFTypeDef			*pTypeDef;
+	IAAFTypeDefInt		*pTypeDefInt;
+	aafInt32			val;
+
+	HRESULT				hr = S_OK;
+
+	checkAssertion(NULL != _dides);
+	checkAssertion(NULL != p_resid);
+	try
+	{
+		checkResult(_dides->QueryInterface(IID_IAAFObject, (void **)&pObj));
+		checkResult(pObj->GetDefinition (&pClassDef));
+		checkResult(pClassDef->LookupPropertyDef(kAAFPropID_DIDResolutionID, &pPropertyDef));
+		checkResult(pObj->GetPropertyValue (pPropertyDef, &pPropValue));
+		checkResult(pPropValue->GetType(&pTypeDef));
+		checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTypeDefInt));
+		checkResult(pTypeDefInt->GetInteger(pPropValue, (aafMemPtr_t) &val, sizeof (val)));
+		*p_resid  = val;
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+	return hr;
+}
 
 HRESULT STDMETHODCALLTYPE
     CAAFJPEGDescriptorHelper::SetResolutionID( aafInt32  resolutionID )
@@ -847,6 +887,94 @@ HRESULT STDMETHODCALLTYPE
 	    }
 
 	    // Set modified property value.
+	    checkResult( p_obj->SetPropertyValue( p_propdef, p_propval ) );
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+
+	// Cleanup
+	if( p_obj != NULL )
+	    p_obj->Release();
+	if( p_classdef != NULL )
+	    p_classdef->Release();
+	if( p_propdef != NULL )
+	    p_propdef->Release();
+	if( p_propval != NULL )
+	    p_propval->Release();
+	if( p_typedef != NULL )
+	    p_typedef->Release();
+	if( p_typedef_int != NULL )
+	    p_typedef_int->Release();
+
+
+	return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFJPEGDescriptorHelper::SetFirstFrameOffset( aafInt32  firstFrameOffset )
+{
+	HRESULT			hr = S_OK;
+	IAAFObject		*p_obj = NULL;
+	IAAFClassDef		*p_classdef = NULL;
+	IAAFPropertyDef		*p_propdef = NULL;
+	IAAFPropertyValue	*p_propval = NULL;
+	IAAFTypeDef		*p_typedef = NULL;
+	IAAFTypeDefInt		*p_typedef_int = NULL;
+
+
+	checkAssertion(NULL != _dides);
+
+	try
+	{
+	    checkResult( _dides->QueryInterface( IID_IAAFObject, 
+		(void**)&p_obj ) );
+
+	    checkResult( p_obj->GetDefinition( &p_classdef ) );
+
+	    checkResult( p_classdef->LookupPropertyDef( 
+		kAAFPropID_DIDFirstFrameOffset, &p_propdef));
+
+	    checkResult( p_propdef->GetTypeDef( &p_typedef ) );
+
+	    checkResult( p_typedef->QueryInterface( IID_IAAFTypeDefInt, 
+		(void**)&p_typedef_int ) );
+
+	    // Try to get prop value. If it doesn't exist, create it.
+	    hr = p_obj->GetPropertyValue( p_propdef, &p_propval );
+	    if( hr != AAFRESULT_SUCCESS )
+	    {
+		if( hr == AAFRESULT_PROP_NOT_PRESENT )
+		{
+		    checkResult( p_typedef_int->CreateValue( 
+			reinterpret_cast<aafMemPtr_t>(&firstFrameOffset), 
+			sizeof(firstFrameOffset), &p_propval ) );
+
+		    // At this point hr equals AAFRESULT_PROP_NOT_PRESENT.
+		    // Reset it.
+		    hr = AAFRESULT_SUCCESS;
+		}
+		else
+		    throw hr;
+	    }
+	    else
+	    {
+		// Property value exists, modify it.
+		checkResult( p_typedef_int->SetInteger( 
+		    p_propval, reinterpret_cast<aafMemPtr_t>(&firstFrameOffset), 
+		    sizeof(firstFrameOffset) ) );
+	    }
+
 	    checkResult( p_obj->SetPropertyValue( p_propdef, p_propval ) );
 	}
 	catch (HRESULT& rhr)
@@ -969,23 +1097,3 @@ HRESULT STDMETHODCALLTYPE
 
 
 
-HRESULT STDMETHODCALLTYPE CAAFJPEGDescriptorHelper::SetMCProps( 
-    aafInt32	resolutionID,
-    aafInt32	frameSampleSize )
-{
-    HRESULT		hr = S_OK;
-
-
-    hr = SetResolutionID( resolutionID );
-
-    if( hr == S_OK )
-	hr = SetFrameSampleSize( frameSampleSize );
-
-    // {EDB35391-6D30-11d3-A036-006094EB75CB}
-    aafUID_t AAF_CMPR_JFIF = { 0xedb35383, 0x6d30, 0x11d3, { 0xa0, 0x36, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
-
-    if( hr == S_OK )
-	hr = SetCompression( AAF_CMPR_JFIF );
-
-    return hr;
-}
