@@ -20,7 +20,7 @@ AD_HEAD
 *                                          *
 \******************************************/
 
-AD_INCLUDE(AAFTypes)
+AD_FORWARD_DECLARATION(AAFSourceClip)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types required by this module:
@@ -91,7 +91,7 @@ This function returns the number of media representations available for the
 AD_XMETHOD3(GetRepresentationSourceClip,
 [in], objPass, aafTrackID_t, trackID, TrackID.,
 [in], objPass, aafInt32, index, Index of requested representation.,
-[out], objOut, AAFSourceClip*, sourceClip, Source Clip that is the requested number representation within
+[out], objOut, AAFSourceClip, sourceClip, Source Clip that is the requested number representation within
   // the specified track of this Master Mob.,
 Returns the indexed media representation for the specified Master Mob\,
   // TrackID\, and index.
