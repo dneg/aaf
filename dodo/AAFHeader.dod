@@ -53,11 +53,11 @@ AD_XMETHOD2(GetMobs,
 Return an enumerator for mobs that will apply the criteria.)
 
 AD_XMETHOD1(AppendMob,
-[in\,ref], objIn, AAFMob, pMob, Mob to add header,
+[in], objIn, AAFMob, pMob, Mob to add header,
 Add the mob to the header.)
 
 AD_XMETHOD1(RemoveMob,
-[in\,ref], objIn, AAFMob, pMob, Mob to remove from header,
+[in], objIn, AAFMob, pMob, Mob to remove from header,
 Remove the given mob from the header.
   // @devnote based on omfiGetNumMobs.)
 
@@ -88,8 +88,7 @@ AD_XMETHOD2(GetIdentification,
 [out\,retval], objOut, AAFIdentification, ppIdentification, Indentification Object,
 Return the Identification that matches the given generation.)
 
-AD_XMETHOD2(GetIdentificationList,
-[in\,ref], objPass, aafIdentificationCritType_t *, pCriteria, Identification Criteria for enumeration,
+AD_XMETHOD1(GetIdentificationList,
 [out\,retval], objOut, EnumAAFIdentifications, ppEnum, Indentification Enumeration,
 Return an enumerator for all Identification the meet the given criteria.)
 
