@@ -9,6 +9,7 @@ AAFComponent\
 #import ./AAFUnitTest.exp
 #import ./AAFComponent.exp
 AD_HEAD
+AD_INCLUDE(AAFTypes)
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -24,47 +25,39 @@ class AAFSequence;
 
 AD_CLASS_BEGIN
 
-AD_CONSTRUCTOR2([in],AAFFile *,file, ,
-				[in],OMLObject,obj, ,
-				Creates one of these from a file and an object)
-
-AD_METHOD1(AccumulateLength,
-		   [in],omfLength_t *,length,,
-		   )
-
 AD_METHOD3(SegmentOffsetToTC,
-		   [in],omfPosition_t, offset,,
-		   [out],omfTimecode_t *,tc,,
+		   [in],aafPosition_t, offset,,
+		   [out],aafTimecode_t *,tc,,
 		   [out],aafBool *,found,,
 		   Converts the given offset to timecode.)
 
 AD_METHOD4(SegmentTCToOffset,
-		   [in],omfTimecode_t,tc,,
-		   [in],omfRational_t,editRate,,
-		   [out],omfFrameOffset_t *,offset,,
+		   [in],aafTimecode_t,tc,,
+		   [in],aafRational_t,editRate,,
+		   [out],aafFrameOffset_t *,offset,,
 		   [out],aafBool *,found,,
 		   )
 
 AD_METHOD4(FindSubSegment,
-		   [in],omfPosition_t,offset,,
-		   [out],omfPosition_t *,sequPosPtr,,
+		   [in],aafPosition_t,offset,,
+		   [out],aafPosition_t *,sequPosPtr,,
 		   [out],AAFSegment **,subseg,,
 		   [out],aafBool *,found,,
 		   )
 
 AD_METHOD6(TraverseToClip,
-		   [in],omfLength_t,length,,
+		   [in],aafLength_t,length,,
 		   [out],AAFSegment **,sclp,,
 		   [out],AAFPulldown **,pulldownObj,,
 		   [out],aafInt32 *,pulldownPhase,,
-		   [out],omfLength_t *,sclpLen,,
+		   [out],aafLength_t *,sclpLen,,
 		   [out],aafBool *,isMask,,
 		   )
 
 AD_METHOD3(OffsetToTimecodeClip,
-		   [in],omfPosition_t,offset,,
+		   [in],aafPosition_t,offset,,
 		   [out],AAFTimecode **,result,,
-		   [out],omfPosition_t *,tcStartPos,,
+		   [out],aafPosition_t *,tcStartPos,,
 		   )
 
 AD_METHOD1(NumRepresentations,
