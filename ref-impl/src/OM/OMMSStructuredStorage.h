@@ -133,6 +133,9 @@ static inline ULARGE_INTEGER fromOMUInt64(const OMUInt64& x)
 #define StgOpenStorage OMStgOpenStorage
 #define StgOpenStorageOnILockBytes OMStgOpenStorageOnILockBytes
 #define StgIsStorageFile OMStgIsStorageFile
+
+#define CoInitialize OMCoInitialize
+#define CoUninitialize OMCoUninitialize
 #endif
 
 OMInt32 OMStgCreateDocfile(const SSCHAR* pwcsName,
@@ -161,15 +164,6 @@ OMInt32 OMStgOpenStorageOnILockBytes(ILockBytes* plkbyt,
 
 OMInt32 OMStgIsStorageFile(const SSCHAR* pwcsName);
 
-// The following functions are not currently used -
-//
-// StgIsStorageILockBytes()
-// StgSetTimes()
-
-#if defined(OM_WINDOWS_SS) || defined(OM_MACINTOSH_SS)
-#define CoInitialize OMCoInitialize
-#define CoUninitialize OMCoUninitialize
-#endif
 
 OMInt32 OMCoInitialize(void* pvReserved);
 
