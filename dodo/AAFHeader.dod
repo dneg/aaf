@@ -342,6 +342,39 @@ AD_XMETHOD1(RemoveEssenceData,
   // AAFRESULT_ESSENCE_NOT_FOUND
   //   - the given EssenceData is not already contained.)
 
+AD_XMETHOD2(LookupEssenceData,
+			[in\, ref],
+			  objPass,
+			  aafMobID_constref,
+			  mobID,
+			  The Mob ID,
+			[out\,retval],
+			  objOut,
+			  AAFEssenceData,
+			  ppEssenceData,
+			  Matching EssenceData,
+     Looks up the EssenceData that matches the given mob id and puts it into
+  // the ppEssenceData argument.  The returned EssenceData interface is AddRef\(\)ed
+  // before it is returned.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEssenceData pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEssenceData.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEssenceData is null
+  //
+  // AAFRESULT_MOB_NOT_FOUND
+  //   - the requested EssenceData wasn't found.)
+
 AD_XMETHOD1(GetDictionary,
 			[out\, retval],
 			objOut,
