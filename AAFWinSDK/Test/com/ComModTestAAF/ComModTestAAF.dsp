@@ -571,6 +571,22 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFTaggedValuesTest.c
 
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFTypeDefsTest.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFImportDescriptorTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPhysicalDescriptorTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFSoundDescriptorTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPCMDescriptorTest.cpp
+# End Source File
 # End Group
 # Begin Group "AAF Libraries"
 
