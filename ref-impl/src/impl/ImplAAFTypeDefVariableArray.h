@@ -103,6 +103,21 @@ public:
         (// @parm [out] newly-created property empty value,
          ImplAAFPropertyValue ** ppPropVal);
 			 
+  //****************
+  // CreateValueFromValues() 
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreateValueFromValues
+        (// @parm [in, size_is(numElements)] array of property values for elements of array value which
+    // is to be created.
+         ImplAAFPropertyValue ** ppElementValues,
+
+         // @parm [in] size of pElementValues array.
+         aafUInt32  numElements,
+
+         // @parm [out] newly-created property value
+         ImplAAFPropertyValue ** ppPropVal);
+
 
   // Override from AAFTypeDef
   virtual AAFRESULT STDMETHODCALLTYPE

@@ -86,6 +86,22 @@ public:
     GetTypeCategory (/*[out]*/ eAAFTypeCategory_t *  pTid);
 
 
+  //****************
+  // CreateValueFromValues() 
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreateValueFromValues
+        (// @parm [in, size_is(numElements)] array of property values for elements of array value which
+    // is to be created.
+         ImplAAFPropertyValue ** ppElementValues,
+
+         // @parm [in] size of pElementValues array.
+         aafUInt32  numElements,
+
+         // @parm [out] newly-created property value
+         ImplAAFPropertyValue ** ppPropVal);
+
+
   //*************************************************************
   //
   // Overrides from OMType, via inheritace through ImplAAFTypeDef
