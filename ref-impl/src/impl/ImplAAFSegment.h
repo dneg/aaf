@@ -102,9 +102,6 @@ public:
 	virtual AAFRESULT GenerateSequence(ImplAAFSequence **seq);
 
 	virtual AAFRESULT GetComponentType(implCompType_t* pType) {*pType = kSegment; return AAFRESULT_SUCCESS;}
-
-	// OM deep copy notification
-	virtual void onCopy(void* clientContext) const;
 };
 
 #endif // ! __ImplAAFSegment_h__

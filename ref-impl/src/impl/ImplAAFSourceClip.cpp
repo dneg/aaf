@@ -361,10 +361,3 @@ void ImplAAFSourceClip::Accept(AAFComponentVisitor& visitor)
 {
 	visitor.VisitSourceClip(this);
 }
-
-
-
-void ImplAAFSourceClip::onCopy(void* clientContext) const
-{
-  ImplAAFSourceReference::onCopy(clientContext);
-}

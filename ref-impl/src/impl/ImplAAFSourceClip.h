@@ -144,9 +144,6 @@ public:
 	// with the specified visitor.
 	virtual void Accept(AAFComponentVisitor& visitor);
 
-	// OM deep copy notification
-	virtual void onCopy(void* clientContext) const;
-
 private:
 	OMFixedSizeProperty<aafLength_t>	_fadeInLength;
 	OMFixedSizeProperty<aafFadeType_t>	_fadeInType;
