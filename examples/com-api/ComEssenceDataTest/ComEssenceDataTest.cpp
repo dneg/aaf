@@ -756,32 +756,43 @@ main()
 	CComInitialize comInit;
 	aafWChar *		pwFileName = L"EssenceTest.aaf";
 	const char *	pFileName = "EssenceTest.aaf";
-	aafWChar *	rawData = L"EssenceTestRar.wav";
+	aafWChar *	rawData = L"EssenceTestRaw.wav";
+	aafWChar *	externalAAF = L"ExternalAAFEssence.aaf";
 	testDataFile_t	dataFile;
 
 	printf("***Creating file %s using writeRawData (Internal Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, NULL, testRawCalls));
 	printf("***Re-opening file %s using readRawData\n", pFileName);
 	ReadAAFFile(pwFileName, testRawCalls);
+	/**/
 	printf("***Creating file %s using WriteSamples (Internal Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, NULL, testStandardCalls));
 	printf("***Re-opening file %s using ReadSamples\n", pFileName);
 	ReadAAFFile(pwFileName, testStandardCalls);
+	/**/
 	printf("***Creating file %s using WriteMultiSamples (Internal Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, NULL, testMultiCalls));
 	printf("***Re-opening file %s using ReadMultiSamples\n", pFileName);
 	ReadAAFFile(pwFileName, testMultiCalls);
+	/**/
 	printf("***Creating file %s using WriteFractionalSample (Internal Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, NULL, testFractionalCalls));
 	printf("***Re-opening file %s using ReadFractionalSample\n", pFileName);
 	ReadAAFFile(pwFileName, testFractionalCalls);
+	/**/
 	dataFile.dataFilename = rawData;
 	dataFile.dataFormat = ContainerFile;
 	printf("***Creating file %s using WriteSamples (External Raw Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, &dataFile, testStandardCalls));
 	printf("***Re-opening file %s using ReadSamples\n", pFileName);
 	ReadAAFFile(pwFileName, testStandardCalls);
-
+	/**/
+	dataFile.dataFilename = externalAAF;
+	dataFile.dataFormat = ContainerAAF;
+	printf("***Creating file %s using WriteSamples (External AAF Media)\n", pFileName);
+	checkFatal(CreateAAFFile(pwFileName, &dataFile, testStandardCalls));
+	printf("***Re-opening file %s using ReadSamples\n", pFileName);
+	ReadAAFFile(pwFileName, testStandardCalls);
 
 	printf("Done\n");
 
