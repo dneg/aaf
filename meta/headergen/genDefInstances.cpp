@@ -34,11 +34,14 @@
 
 #include "headerGenUtils.h"
 
+#define AAF_SYMBOL(symbol, name, alias, desc) \
+           #symbol, alias
+
 #define AAF_INSTANCE_TABLE_BEGIN()			\
   {
 
 #define AAF_INSTANCE(cls, name, id, desc)	\
-    {#cls, #name, desc, id},
+    {#cls, name, desc, id},
 
 #define AAF_INSTANCE_TABLE_END()			\
     {0,0,0,{0}}								\
@@ -50,6 +53,7 @@
 struct inst_t {
   char* cls;
   char* name;
+  char* alias;
   char* desc;
   aafUID_t identification;
 };
@@ -83,7 +87,7 @@ static void doFile (const char * moduleName, const char * prefix)
 							instances[i].identification,
 							cout);
 
-			printDefinition("const aafCharacter",
+			printDefinition("const aafCharacter*",
 							prefix,
 							instances[i].name,
 							"_Name",
@@ -91,13 +95,23 @@ static void doFile (const char * moduleName, const char * prefix)
 							cout);
 
 			if( strlen(instances[i].desc) )
-			printDefinition("const aafCharacter",
+			printDefinition("const aafCharacter*",
 							prefix,
 							instances[i].name,
 							"_Desc",
 							instances[i].desc,
 							cout);
 
+			if( strlen(instances[i].alias) )
+			{
+				cout << endl;
+				printAlias(	"const aafUID_t",
+							instances[i].alias,
+							prefix,
+							instances[i].name,
+							"",
+							cout);
+			}
 			cout << endl;
 		}
 	}
