@@ -1881,9 +1881,9 @@ void OMMSSStoredObject::restore(OMPropertyId propertyId,
   memcpy(&id, p, sizeof(id));
 
   if (byteOrder() != hostByteOrder()) {
-    reorderUInt16(tag); // assumes sizeof(tag) == 2
+    reorderUInt16(tag);
     reorderUInt16(keyPropertyId);
-    //reorderUInt32(keySize);
+    // no need to reorder keySize
     reorderUniqueObjectIdentification(id);
   }
 }
@@ -1923,7 +1923,7 @@ void OMMSSStoredObject::restore(const wchar_t* collectionName,
   readUInt32FromStream(indexStream, entries, _reorderBytes);
   count = entries;
 
-  // Read the tag. assumes sizeof(tag) == 2
+  // Read the tag.
   //
   readUInt16FromStream(indexStream, tag, _reorderBytes);
 
