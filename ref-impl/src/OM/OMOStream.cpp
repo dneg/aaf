@@ -50,9 +50,17 @@ OMOStream& OMOStream::operator << (OMUInt32 i)
   return put(i);
 }
 
+  // @mfunc Insert a pointer in hex.
+  //   @parm The pointer to insert.
+  //   @rdesc The modified <c OMOStream>
+OMOStream& OMOStream::operator << (void* p)
+{
+  return put(p);
+}
+
   // @mfunc Put a new line.
   //   @rdesc The modified <c OMOStream>
- OMOStream& OMOStream::endLine(void)
+OMOStream& OMOStream::endLine(void)
 {
   return putLine();
 }
@@ -79,7 +87,7 @@ OMOStream& endl(OMOStream& s)
 OMOStream omlog;
 
 // @devnote If your platform doesn't have iostream.h you'll need to
-//          implement the following three functions differently.
+//          implement the following functions differently.
 
 #include <iostream.h>
 
@@ -103,6 +111,17 @@ OMOStream& OMOStream::put(OMUInt32 i)
   TRACE("OMOStream::put");
 
   cerr << dec << i;
+  return *this;
+}
+
+  // @mfunc Put a pointer in hex.
+  //   @parm The pointer to write.
+  //   @rdesc The modified <c OMOStream>
+OMOStream& OMOStream::put(void* p)
+{
+  TRACE("OMOStream::put");
+
+  cerr << p;
   return *this;
 }
 
