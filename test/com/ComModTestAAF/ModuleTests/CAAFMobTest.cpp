@@ -695,6 +695,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  const aafCharacter *copy_name = L"Name of Copied Mob";
 	  IAAFMobSP spCopiedMob;
 	  checkResult(pMob->Copy(copy_name, &spCopiedMob));
+	  checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
+	  checkExpression(numMobs == 2, AAFRESULT_TEST_FAILED);
+	  checkResult(pHeader->RemoveMob(spCopiedMob));
+	  checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
+	  checkExpression(numMobs == 1, AAFRESULT_TEST_FAILED);
 
 	  //try CloneExternal
 	  IAAFMobSP spClonedMob;
