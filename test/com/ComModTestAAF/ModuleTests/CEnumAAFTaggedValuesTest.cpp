@@ -268,9 +268,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  checkExpression(wcscmp(tag, TagNames[0])== 0, AAFRESULT_TEST_FAILED);
 		  checkExpression(wcscmp(Value, Comments[0])== 0, AAFRESULT_TEST_FAILED);
 		  pComment->Release();
-
+		  
 		
 		  pCommentIterator->Release();
+		  pCloneIterator->Release();
 			
 		  checkResult(aMob->GetNumSlots (&numSlots));
 		  checkExpression(5 == numSlots, AAFRESULT_TEST_FAILED);
