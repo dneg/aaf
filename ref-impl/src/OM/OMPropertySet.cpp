@@ -7,7 +7,7 @@
 #define OMPROPERTYSET_CHUNKSIZE (20)
 
 OMPropertySet::OMPropertySet(void)
-: _count(0), _capacity(OMPROPERTYSET_CHUNKSIZE), _container(0)
+: _propertySet(0), _capacity(OMPROPERTYSET_CHUNKSIZE), _count(0), _container(0)
 {
   TRACE("OMPropertySet::OMPropertySet");
   PRECONDITION("Valid Capacity", _capacity >= 0);
