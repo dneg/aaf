@@ -79,7 +79,7 @@
 
 void main ()
 {
-  const aafWChar * filename = L"foo";
+  const aafWChar * filename = L"extension.aaf";
 
   extensionWrite (filename);
 

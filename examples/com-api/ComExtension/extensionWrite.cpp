@@ -170,7 +170,7 @@ static void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
   check (pcd->AppendNewPropertyDef ((aafUID_t*) &kPropID_PersonnelResource_ContractID,
 									L"ContractID",
 									ptd_ui32,
-									AAFFalse,
+									AAFTrue,
 									&pd_unused));
 
   check (pDict->RegisterClass (pcd));
@@ -299,27 +299,43 @@ static void AppendResource (IAAFDictionary * pDict,
 
   PersonnelRecordSetInfo (pObj, info);
 
-  // append record to mob
+  // Create a property value corresponding to new object reference;
+  // first get a type def for that kind of obj ref, then create the
+  // prop val through the type def.
+  IAAFTypeDefSP td;
+  check (pDict->LookupType ((aafUID_t*) &kTypeID_PersonnelResourceStrongReference,
+							&td));
+  
+  IAAFTypeDefObjectRefSP tdo;
+  check (td->QueryInterface (IID_IAAFTypeDefObjectRef,
+							 (void **)&tdo));
+  IAAFPropertyValueSP pv;
+  check (tdo->CreateValue (pObj, &pv));
 
-  // Get existing size of array.
-  aafUInt32 oldSize = 
-	PersonnelMobGetArraySize (pMob);
-  // Make room in new array for new entry
-  aafUInt32 newSize = oldSize + 1;
-  IAAFObject ** personnelArray = 0;
-  personnelArray = new IAAFObject*[newSize];
-  assert (personnelArray);
-  aafUInt32 i;
-  for (i = 0; i < newSize; i++)
-	personnelArray[i] = 0;
+  // Append record to mob.
+  //
+  // First get the existing array-of-objects property value
+  IAAFObjectSP pMobObj;
+  check (pMob->QueryInterface (IID_IAAFObject,
+							   (void **)&pMobObj));
+  IAAFClassDefSP cd;
+  check (pMobObj->GetDefinition (&cd));
+  IAAFPropertyDefSP pd;
+  check (cd->LookupPropertyDef ((aafUID_t*) &kPropID_PersonnelMob_Personnel,
+								&pd));
+  IAAFPropertyValueSP pva;
+  check (pMobObj->GetPropertyValue (pd, &pva));
 
-  // get the existing array, if not empty.
-  if (oldSize)
-	PersonnelMobGetArray (pMob, personnelArray, oldSize);
-  // copy in our new one
-  personnelArray[newSize-1] = pObj;
-  // Write out the new array.
-  PersonnelMobSetArray (pMob, personnelArray, newSize);
+  // Now get a type def for the array of personnel, and append the new
+  // personnel prop val to it.
+  IAAFTypeDefSP tdpv;
+  check (pva->GetType (&tdpv));
+  IAAFTypeDefVariableArraySP tda;
+  check (tdpv->QueryInterface (IID_IAAFTypeDefVariableArray,
+							   (void **)&tda));
+  check (tda->AppendElement (pva, pv));
+  // There. It's appended.  Now set the property value.
+  check (pMobObj->SetPropertyValue (pd, pva));
 }
 
 
@@ -369,14 +385,12 @@ void extensionWrite (const aafCharacter * filename)
   CreatePersonnelMob (pDict, &pMob);
   check (pHead->AppendMob (pMob));
 
-  /*
   AppendResource (pDict, pMob,
 				  FormatResource (L"Peter Vechtor", kRole_Producer,    42));
   AppendResource (pDict, pMob,
 				  FormatResource (L"Oliver Morgan", kRole_FloorManager, 6 ));
   AppendResource (pDict, pMob,
 				  FormatResource (L"Tom Ohanian",   kRole_Editor));
-  */
 
   // save and exit.
   check (pFile->Save());
