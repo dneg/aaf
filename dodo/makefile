@@ -68,7 +68,9 @@ DODO_TARGETS = \
 	AAFUnixLocator.all \
 	AAFVaryingValue.all \
 	AAFWindowsLocator.all \
-	AAFMedia.all
+	AAFMedia.all \
+	AAFHeader.all \
+	AAFIdentification.all
 
 # Jeff hasn't finished with these yet
 #	AAFMediaTapeDescriptor.all \
@@ -722,3 +724,29 @@ AAFWindowsLocator.comc : AAFWindowsLocator.exp macros/comc.mac
 AAFWindowsLocator.comh : AAFWindowsLocator.exp macros/comh.mac
 AAFWindowsLocator.implc : AAFWindowsLocator.exp macros/implc.mac
 AAFWindowsLocator.implh : AAFWindowsLocator.exp macros/implh.mac
+
+AAFHeader.all : AAFHeader.cpp AAFHeader.h
+AAFHeader.all : AAFHeader.comc AAFHeader.comh
+AAFHeader.all : AAFHeader.exp AAFHeader.idl
+AAFHeader.all : AAFHeader.implc AAFHeader.implh
+AAFHeader.exp : AAFUnitTest.exp AAFLocator.exp macros/exp.mac
+AAFHeader.h : AAFHeader.exp macros/h.mac
+AAFHeader.cpp : AAFHeader.exp macros/cpp.mac
+AAFHeader.idl : AAFHeader.exp macros/idl.mac
+AAFHeader.comc : AAFHeader.exp macros/comc.mac
+AAFHeader.comh : AAFHeader.exp macros/comh.mac
+AAFHeader.implc : AAFHeader.exp macros/implc.mac
+AAFHeader.implh : AAFHeader.exp macros/implh.mac
+
+AAFIdentification.all : AAFIdentification.cpp AAFIdentification.h
+AAFIdentification.all : AAFIdentification.comc AAFIdentification.comh
+AAFIdentification.all : AAFIdentification.exp AAFIdentification.idl
+AAFIdentification.all : AAFIdentification.implc AAFIdentification.implh
+AAFIdentification.exp : AAFUnitTest.exp AAFLocator.exp macros/exp.mac
+AAFIdentification.h : AAFIdentification.exp macros/h.mac
+AAFIdentification.cpp : AAFIdentification.exp macros/cpp.mac
+AAFIdentification.idl : AAFIdentification.exp macros/idl.mac
+AAFIdentification.comc : AAFIdentification.exp macros/comc.mac
+AAFIdentification.comh : AAFIdentification.exp macros/comh.mac
+AAFIdentification.implc : AAFIdentification.exp macros/implc.mac
+AAFIdentification.implh : AAFIdentification.exp macros/implh.mac
