@@ -85,6 +85,25 @@ inline void checkExpression(bool expression, HRESULT r=AAFRESULT_TEST_FAILED)
 }
 
 
+static bool DR4TestSupported(aafProductVersion_constref toolkitVersion)
+{
+  bool result = true;
+   
+  if (kAAFVersionBeta == toolkitVersion.type)
+  {
+    if (1 == toolkitVersion.major && 
+        0 == toolkitVersion.minor && 
+        0 == toolkitVersion.tertiary && 
+        4 >= toolkitVersion.patchLevel)
+    {
+      result = false;
+    }
+  }
+  
+  return result;
+
+}
+
 
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
 						   aafMediaOpenMode_t	mode,
@@ -247,7 +266,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pFiller->Release();
 		pFiller = NULL;
 
-		if(testRev.major >= 1 && (testRev.minor > 0 || testRev.patchLevel > 3))
+		checkResult(GetAAFVersions(pHeader, &testRev, NULL));
+
+		if(DR4TestSupported(testRev))
 		{
 			// Prepend a new filler
 			checkResult(defs.cdFiller()->
@@ -370,8 +391,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkResult(pHeader->CountMobs(kAAFCompMob, &numMobs));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
-		aafProductVersion_t			testRev;
-       checkResult(pHeader->GetRefImplVersion(&testRev));
+		aafProductVersion_t testRev, testFileRev;
+		checkResult(GetAAFVersions(pHeader, &testRev, &testFileRev));
 
 	   // Enumerate over Composition MOBs
 		criteria.searchTag = kAAFByMobKind;
@@ -394,7 +415,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 				aafUInt32 numSegments;
 				checkResult(pNestedScope->CountSegments (&numSegments));
-				if(testRev.major >= 1 && (testRev.minor > 0 || testRev.patchLevel > 3))
+
+				if ( DR4TestSupported(testRev) && DR4TestSupported(testFileRev) )
 					expectedChoices = 2;
 				else
 					expectedChoices = 1;

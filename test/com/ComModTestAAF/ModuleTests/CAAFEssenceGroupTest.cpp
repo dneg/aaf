@@ -85,6 +85,25 @@ inline void checkExpression(bool expression, HRESULT r=AAFRESULT_TEST_FAILED)
     throw r;
 }
 
+static bool DR4TestSupported(aafProductVersion_constref toolkitVersion)
+{
+  bool result = true;
+   
+  if (kAAFVersionBeta == toolkitVersion.type)
+  {
+    if (1 == toolkitVersion.major && 
+        0 == toolkitVersion.minor && 
+        0 == toolkitVersion.tertiary && 
+        4 >= toolkitVersion.patchLevel)
+    {
+      result = false;
+    }
+  }
+  
+  return result;
+
+}
+
 #define SUBSEG_LENGTH	60
 
 static HRESULT CreateAAFFile(aafWChar * pFileName)
@@ -187,8 +206,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(essenceGroup->CountChoices(&numChoices));
 		checkExpression(1 == numChoices, AAFRESULT_TEST_FAILED);
 
-        checkResult(pHeader->GetRefImplVersion(&testRev));
-		if(testRev.major >= 1 && (testRev.minor > 0 || testRev.patchLevel > 3))
+		checkResult(GetAAFVersions(pHeader, &testRev, NULL));
+
+		if(DR4TestSupported(testRev))
 		{
 			// Add another source clip alternate
 			checkResult(defs.cdSourceClip()->
@@ -345,8 +365,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
     // We can't really do anthing in AAF without the header.
 		checkResult(pFile->GetHeader(&pHeader));
 
-		aafProductVersion_t			testRev;
-       checkResult(pHeader->GetRefImplVersion(&testRev));
+		aafProductVersion_t testRev, testFileRev;
+		checkResult(GetAAFVersions(pHeader, &testRev, &testFileRev));
 
 		// Get the number of mobs in the file (should be two)
 		checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
@@ -381,7 +401,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				/***/
 				checkResult(pEssenceGroup->CountChoices(&readNumChoices));
 
-				if(testRev.major >= 1 && (testRev.minor > 0 || testRev.patchLevel > 3))
+				if ( DR4TestSupported(testRev) && DR4TestSupported(testFileRev) )
 					expectedChoices = 2;
 				else
 					expectedChoices = 1;
