@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Tue Jun 15 14:45:21 EDT 1999
+// This file was generated on Wed Jun 16 10:22:22 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -1398,85 +1398,15 @@ AAF_PROPERTY(Data,
   DataStream,
   true,
   EssenceData)
-AAF_CLASS_END(EssenceData)
-AAF_CLASS_SEPARATOR()
-
-// AIFCData
-//
-AAF_CLASS(AIFCData,
-  AAF_LITERAL_AUID(0x06464100,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  EssenceData)
-AAF_CLASS_END(AIFCData)
-AAF_CLASS_SEPARATOR()
-
-// HTMLData
-//
-AAF_CLASS(HTMLData,
-  AAF_LITERAL_AUID(0x06464200,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  EssenceData)
-AAF_CLASS_END(HTMLData)
-AAF_CLASS_SEPARATOR()
-
-// ImageData
-//
-AAF_CLASS(ImageData,
-  AAF_LITERAL_AUID(0x06464300,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  EssenceData)
-AAF_CLASS_END(ImageData)
-AAF_CLASS_SEPARATOR()
-
-// JPEGImageData
-//
-AAF_CLASS(JPEGImageData,
-  AAF_LITERAL_AUID(0x06464341,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  ImageData)
-AAF_PROPERTY(FrameIndex,
-  AAF_LITERAL_AUID(0x06464341,
+AAF_PROPERTY(SampleIndex,
+  AAF_LITERAL_AUID(0x06460300,
     0x0100, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   0x2b01,
   PositionArray,
-  true,
-  JPEGImageData)
-AAF_CLASS_END(JPEGImageData)
-AAF_CLASS_SEPARATOR()
-
-// MIDIFileData
-//
-AAF_CLASS(MIDIFileData,
-  AAF_LITERAL_AUID(0x06464600,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  false,
   EssenceData)
-AAF_CLASS_END(MIDIFileData)
-AAF_CLASS_SEPARATOR()
-
-// TIFFData
-//
-AAF_CLASS(TIFFData,
-  AAF_LITERAL_AUID(0x06464400,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  EssenceData)
-AAF_CLASS_END(TIFFData)
-AAF_CLASS_SEPARATOR()
-
-// WAVEData
-//
-AAF_CLASS(WAVEData,
-  AAF_LITERAL_AUID(0x06464500,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  EssenceData)
-AAF_CLASS_END(WAVEData)
+AAF_CLASS_END(EssenceData)
 AAF_CLASS_SEPARATOR()
 
 // EssenceDescriptor
