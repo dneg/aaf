@@ -92,18 +92,22 @@ extern aafUID_t gTypeID_AUIDArray;
 extern aafUID_t gTypeID_UInt8Array;
 extern aafUID_t gTypeID_UInt8Array8;
 
+extern aafUID_t gClassID_Object;
+
 
 ImplAAFDictionary::ImplAAFDictionary ()
 : _pluginDefinitions    (PID_Dictionary_PluginDefinitions,    "PluginDefinitions"),
   _effectDefinitions    (PID_Dictionary_EffectDefinitions,    "EffectDefinitions"), 
   _parameterDefinitions (PID_Dictionary_ParameterDefinitions, "ParameterDefinitions"),
   _typeDefinitions      (PID_Dictionary_TypeDefinitions,      "TypeDefinitions"),
+  _classDefinitions      (PID_Dictionary_ClassDefinitions,    "ClassDefinitions"),
   _builtinsInited (AAFFalse)
 {
   _persistentProperties.put (_pluginDefinitions.address());
   _persistentProperties.put (_effectDefinitions.address());
   _persistentProperties.put (_parameterDefinitions.address());
   _persistentProperties.put (_typeDefinitions.address());
+  _persistentProperties.put (_classDefinitions.address());
 
   InitBuiltins();
 }
@@ -140,6 +144,26 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		if (pPlug)
 		{
 		  pPlug->ReleaseReference();
+		}
+	}
+
+	size_t typeDefSize = _typeDefinitions.getSize();
+	for (i = 0; i < typeDefSize; i++)
+	{
+		ImplAAFTypeDef *pType = _typeDefinitions.setValueAt(0, i);
+		if (pType)
+		{
+		  pType->ReleaseReference();
+		}
+	}
+
+	size_t classDefSize = _classDefinitions.getSize();
+	for (i = 0; i < classDefSize; i++)
+	{
+		ImplAAFClassDef *pClass = _classDefinitions.setValueAt(0, i);
+		if (pClass)
+		{
+		  pClass->ReleaseReference();
 		}
 	}
 }
@@ -264,10 +288,17 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterClass (
-      aafUID_t * /*pClassAUID*/,
-      ImplAAFClassDef * /*pClassDef*/)
+      ImplAAFClassDef * pClassDef)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (NULL == pClassDef)
+	return AAFRESULT_NULL_PARAM;
+	
+  _classDefinitions.appendValue(pClassDef);
+  pClassDef->AcquireReference();
+	
+  pClassDef->SetDict(this);
+
+  return(AAFRESULT_SUCCESS);
 }
 
 
@@ -720,7 +751,7 @@ AAFRESULT ImplAAFDictionary::LookupPluggableDef(aafUID_t *defID, ImplAAFPluggabl
 
 
 
-#define REGISTER_BUILTIN(func) \
+#define REGISTER_TYPE_BUILTIN(func) \
 { \
   ImplAAFTypeDef * pTD = 0; \
   AAFRESULT hr = func (&pTD); \
@@ -730,24 +761,36 @@ AAFRESULT ImplAAFDictionary::LookupPluggableDef(aafUID_t *defID, ImplAAFPluggabl
 }
 
 
+#define REGISTER_CLASS_BUILTIN(func) \
+{ \
+  ImplAAFClassDef * pCD = 0; \
+  AAFRESULT hr = func (&pCD); \
+  assert (AAFRESULT_SUCCEEDED(hr)); \
+  assert (pCD); \
+  RegisterClass (pCD); \
+}
+
+
 void ImplAAFDictionary::InitBuiltins()
 {
   if (_builtinsInited) return;
 
   // Put built-in types into dictionary.
-  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefAUID);
-  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefUInt8);
-  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefUInt16);
-  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefInt16);
-  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefUInt32);
-  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefInt32);
-  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefInt64);
-  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefObjRef);
-  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefObjRefArray);
-  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefAUIDArray);
-  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefUInt8Array);
-  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefUInt8Array8);
-  REGISTER_BUILTIN(ImplAAFBuiltins::TypeDefWCharString);
+  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefAUID);
+  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefUInt8);
+  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefUInt16);
+  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefInt16);
+  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefUInt32);
+  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefInt32);
+  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefInt64);
+  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefObjRef);
+  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefObjRefArray);
+  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefAUIDArray);
+  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefUInt8Array);
+  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefUInt8Array8);
+  REGISTER_TYPE_BUILTIN(ImplAAFBuiltins::TypeDefWCharString);
+
+  REGISTER_CLASS_BUILTIN(ImplAAFBuiltins::ClassDefObject);
 
   _builtinsInited = AAFTrue;
 }
