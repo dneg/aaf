@@ -59,6 +59,11 @@ IUnknownSP AxClassDef::CreateInstance( const IID& auid )
 	return spIUnknown;
 }
 
+AxString AxClassDef::GetName()
+{
+	return AxNameToString( _spIaafClassDef );
+}
+
 IAAFClassDefSP AxClassDef::GetParent()
 {
 	IAAFClassDefSP spClassDef;

@@ -68,6 +68,8 @@ public:
 		AxQueryInterface( CreateInstance( iid ), sp, iid );
 	}
 
+	AxString GetName();
+
 	IAAFClassDefSP GetParent();
 	aafBoolean_t IsConcrete();
 
