@@ -1003,7 +1003,7 @@ private:
 #c session by creating the first session object.
 #c
 #startm AD_BEGIN_SESSION 00
-static AAFRESULT
+static AAFRESULT STDMETHODCALLTYPE
     BeginSession (aafProductIdentification_t * pIdent,
         AAFSession ** ppSession);
 #endm
@@ -1015,6 +1015,6 @@ static AAFRESULT
 #c its contained objects in the cpp API.
 #c
 #startm AD_STATIC_CREATE 00
-static AAFRESULT
+static AAFRESULT STDMETHODCALLTYPE
     CreateObject (.this-module ** result);
 #endm
