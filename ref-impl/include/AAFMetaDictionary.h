@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Sun Apr  9 18:35:37 EDT 2000
-// by user tbingham on system TBINGHAMPC.
+// This file was generated on Mon Apr 10 07:34:17 EDT 2000
+// by user bedell on system JBEDELL2.
 //
 // Key to macros.
 //
@@ -1794,20 +1794,20 @@ AAF_CLASS(FileDescriptor,
     AAF_TYPE(Length),
     true,
     FileDescriptor)
-  AAF_PROPERTY(IsInContainer,
-    AAF_LITERAL_AUID(0x06474103,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x3003,
-    AAF_TYPE(Boolean),
-    true,
-    FileDescriptor)
   AAF_PROPERTY(ContainerFormat,
     AAF_LITERAL_AUID(0x06474104,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x3004,
     AAF_REFERENCE_TYPE(WeakReference, ContainerDefinition),
+    false,
+    FileDescriptor)
+  AAF_PROPERTY(CodecDefinition,
+    AAF_LITERAL_AUID(0x06474105,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+    0x3005,
+    AAF_REFERENCE_TYPE(WeakReference, CodecDefinition),
     false,
     FileDescriptor)
 AAF_CLASS_END(FileDescriptor)
@@ -2548,7 +2548,7 @@ AAF_CLASS(Mob,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x4406,
-    AAF_REFERENCE_TYPE(StrongReferenceSet, TaggedValue),
+    AAF_REFERENCE_TYPE(StrongReferenceVector, TaggedValue),
     false,
     Mob)
   AAF_PROPERTY(KLVData,
@@ -4581,6 +4581,16 @@ AAF_TYPE_DEFINITION_WEAK_REFERENCE(
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C),
   AAF_TYPE(PluginDefinition))
+AAF_TYPE_SEPARATOR()
+
+// WeakReference<CodecDefinition>
+//
+AAF_TYPE_DEFINITION_WEAK_REFERENCE(
+  AAF_REFERENCE_TYPE_NAME(WeakReference, CodecDefinition), 
+  AAF_LITERAL_AUID(0x0C0B030B,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C),
+  AAF_TYPE(CodecDefinition))
 AAF_TYPE_SEPARATOR()
 
 // WeakReferenceSet<DataDefinition>
