@@ -163,6 +163,8 @@ AAFRESULT STDMETHODCALLTYPE
 		fmt[bits48_55] = (fmt[bits48_55] & ~0xF0) | (((hours % 10) << 4L) & 0xF0);
 		fmt[bits56_63] = (fmt[bits56_63] & ~0xC0) | (((hours / 10) << 6L) & 0xC0);
 		fmt[bits8_15] = (fmt[bits8_15] & ~0x20)	| (tc->drop == kAAFTcDrop ? 0x20 : 0x00);
+		fmt[bits64_71] = (char)0x3F; // Synch "Word" 1
+		fmt[bits72_79] = (char)0xFD; // Synch "Word" 2
 		memcpy(buffer, (aafUInt8 *)&fmt, TC_ARRAY_SIZE);
 	}
 	XEXCEPT
@@ -214,6 +216,8 @@ AAFRESULT STDMETHODCALLTYPE
 	fmt[bits40_47] = (fmt[bits40_47] & ~0x0F) | (unpacked[2] & 0x0F);
 	fmt[bits48_55] = (fmt[bits48_55] & ~0x0F) | ((unpacked[3] >> 4L) & 0x0F);
 	fmt[bits56_63] = (fmt[bits56_63] & ~0x0F) | (unpacked[3] & 0x0F);
+	fmt[bits64_71] = (char)0x3F; // Synch "Word" 1
+	fmt[bits72_79] = (char)0xFD; // Synch "Word" 2
     memcpy(packed, (aafUInt8 *)&fmt, TC_ARRAY_SIZE);
 	
 	return AAFRESULT_SUCCESS;
