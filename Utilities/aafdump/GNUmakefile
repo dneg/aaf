@@ -39,11 +39,19 @@ INCLUDES = -I. \
 DEPS:=$(filter-out %/MStructuredStorage.d,$(DEPS))
 CXXOBJS:=$(filter-out %/MStructuredStorage.o,$(CXXOBJS))
 
+# avoids problem with gutils.h:104:30: "__OPTIMIZE__" is not defined
+ADD_CFLAGS += -Wno-undef
 
-ifndef LIBGSF_PATH
+# aafdump depends on the LIBGSF library for non-Windows builds.
+ifeq "$(LIBGSF_PATH)" ""
+GENDEPS = 0
+
 .PHONY : all
-else
+all :
+	@echo; echo "LIBGSF library not present - aafdump will not be built."; echo;
 
+else
+.PHONY : all
 all : $(OBJDIR) $(AAFSDKBINDIR)/aafdump$(EXE)
 
 $(AAFSDKBINDIR)/aafdump$(EXE) : $(CXXOBJS)
