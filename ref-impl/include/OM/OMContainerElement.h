@@ -198,7 +198,7 @@ public:
 
     // @cmember Constructor.
   OMStrongReferenceVectorElement(OMProperty* property,
-                                 const char* name,
+                                 const wchar_t* name,
                                  OMUInt32 localKey);
 
     // @cmember Copy constructor.
@@ -249,7 +249,7 @@ public:
 
     // @cmember Constructor.
   OMStrongReferenceSetElement(OMProperty* property,
-                              const char* name,
+                              const wchar_t* name,
                               OMUInt32 localKey,
                               OMUInt32 referenceCount,
                               UniqueIdentification identification);

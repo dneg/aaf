@@ -482,7 +482,7 @@ template <typename ReferencedObject>
 OMStrongReferenceVectorElement<ReferencedObject>::
                                                 OMStrongReferenceVectorElement(
                                                           OMProperty* property,
-                                                          const char* name,
+                                                          const wchar_t* name,
                                                           OMUInt32 localKey)
   : OMContainerElement<OMStrongObjectReference<ReferencedObject>,
                        ReferencedObject>(
@@ -611,7 +611,7 @@ template <typename UniqueIdentification, typename ReferencedObject>
 OMStrongReferenceSetElement<UniqueIdentification, ReferencedObject>::
                                                    OMStrongReferenceSetElement(
                                    OMProperty* property,
-                                   const char* name,
+                                   const wchar_t* name,
                                    OMUInt32 localKey,
                                    OMUInt32 referenceCount,
                                    UniqueIdentification identification)
