@@ -108,7 +108,7 @@ AD_METHOD7(AddEdgecodeClip,
   // kEtKeycode
   // kEtEdgenum4
   // kEtEdgenum5,
-		   [in\\\,ref], char *, header, The Edgecode's 8-byte header.,
+		   [in\\\,ref], aafEdgecodeHeader_t, header, The Edgecode's 8-byte header.,
 Adds an Edgecode track and Edgecode to the specified Source Mob.
   // @comm Adds an Edgecode track to a specified film Mob\\\, with a specified starting
   // edgecode\\\, length\\\, and edit rate. You must add a media track with a Source
