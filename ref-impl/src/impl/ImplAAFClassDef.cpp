@@ -34,9 +34,9 @@
 #include "ImplAAFPropertyDef.h"
 #endif
 
-#ifndef __ImplAAFDefObject_h__
-#include "ImplAAFDefObject.h"
-#endif
+//#ifndef __ImplAAFDefObject_h__
+//#include "ImplAAFDefObject.h"
+//#endif
 
 #ifndef __ImplAAFTypeDef_h__
 #include "ImplAAFTypeDef.h"
@@ -146,11 +146,9 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_OBJECT_NOT_ATTACHED;	
 	
 	HRESULT hr;
-	hr = SetName (pClassName);
-	if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-	
-	hr = SetAUID (classID);
-	if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+  hr = ImplAAFMetaDefinition::Initialize(classID, pClassName, NULL);
+	if (AAFRESULT_FAILED (hr))
+    return hr;
 	
 	_ParentClass = pParentClass;
 	

@@ -229,9 +229,11 @@ const /*static*/ aafUID_t * ImplAAFBuiltinClasses::sAxClassIDs[] =
 {
   &AUID_AAFHeader,
   &AUID_AAFDictionary,
+  &AUID_AAFMetaDictionary,
   &AUID_AAFClassDef,
   &AUID_AAFPropertyDef,
   &AUID_AAFDefObject,
+  &AUID_AAFMetaDefinition,
   &AUID_AAFTypeDef,
   &AUID_AAFTypeDefInt,
 
