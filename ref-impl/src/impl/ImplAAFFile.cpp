@@ -77,7 +77,11 @@ static const aafProductIdentification_t kNullIdent = { 0 };
 //    0 : Tue Jan 11 17:08:26 EST 2000
 //        Initial Release version.
 //
-static const aafUInt32 sCurrentAAFObjectModelVersion = 0;
+//    1 : Wed May 19 19:18:00 EST 2004
+//        AAF Version 1.1
+//
+static const aafUInt32 sCurrentAAFObjectModelVersion = 1;
+
 
 // FileKind from the point of view of the OM
 #define ENCODING(x) *reinterpret_cast<const OMStoredObjectEncoding*>(&x)
