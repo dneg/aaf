@@ -1,3 +1,5 @@
+#ifndef _AAF2OMF_
+#define _AAF2OMF_ 1
 /***********************************************************************
  *
  *              Copyright (c) 1998-1999 Avid Technology, Inc.
@@ -25,6 +27,7 @@
  *
  ************************************************************************/
 
+#include "EffectTranslate.h"
  /************************************************************************
  *
  * Aaf2Omf.h Describes structures and prototypes for the AAF to OMF part 
@@ -45,7 +48,7 @@ public:
 		
 	HRESULT ConvertFile( void );
 
-private:
+protected:
 	void ConvertAUIDtoUID(aafUID_t* pMobID, OMF2::omfUID_t* pOMFMobID);
 	HRESULT OpenOutputFile( void );
 	void CloseInputFile( void );
@@ -57,18 +60,23 @@ private:
 	HRESULT TraverseMob(IAAFMob* pMob, OMF2::omfMobObj_t* pOMFMob);
 	HRESULT ProcessComponent(IAAFComponent* pComponent, OMF2::omfObject_t* pOMFSegment);
 	HRESULT ConvertAAFDatadef(aafUID_t Datadef, OMF2::omfDDefObj_t* pDatakind);
-	HRESULT ConvertAAFTypeIDDatakind(aafUID_t, OMF2::omfDDefObj_t* pDatakind);
+	virtual HRESULT ConvertAAFTypeIDDatakind(aafUID_t, OMF2::omfDDefObj_t* pDatakind);
 	HRESULT TraverseSequence(IAAFSequence* pSequence, OMF2::omfObject_t* pOMFSequence );
 	HRESULT ConvertSelector(IAAFSelector* pSelector, OMF2::omfObject_t* pOMFSelector );
 	HRESULT ConvertLocator(IAAFEssenceDescriptor* pEssenceDesc, OMF2::omfMobObj_t*	pOMFSourceMob );
 	HRESULT ConvertEssenceDataObject(IAAFEssenceData* pEssenceData);
-	HRESULT ConvertEffects(IAAFOperationGroup* pEffect, OMF2::omfEffObj_t*	pOMFEffect);
-	HRESULT ConvertParameter(IAAFParameter* pParm, OMF2::omfSegObj_t pOMFEffect,
-		OMF2::omfInt32 slotNum, aafInt32 kdSlotNum, OMF2::omfLength_t effectLen);
-	HRESULT UpdateKeyFrameVVAL(IAAFControlPoint* controlPoint, aafUID_t& paramID, OMF2::omfSegObj_t vval, OMF2::omfRational_t time, aafInt32 destValueLen, OMF2::omfEditHint_t editHint, OMF2::omfDDefObj_t dataKind);
-	HRESULT GetMCKeyframeKind(OMF2::omfHdl_t file, OMF2::omfObject_t& dataKind);
-	OMF2::omfSegObj_t FindCTLPAtTime(OMF2::omfSegObj_t vval, OMF2::omfRational_t time);
-private:
+	virtual HRESULT ConvertEffects(IAAFOperationGroup* pEffect, OMF2::omfEffObj_t*	pOMFEffect);
+	virtual HRESULT ConvertParameter(IAAFParameter* pParm,
+		aafUID_t			&effectDefID,
+		OMF2::omfSegObj_t pOMFEffect,
+		OMF2::omfInt32 slotNum, OMF2::omfLength_t effectLen);
+	virtual void	FinishUpMob(IAAFMob* pMob, OMF2::omfMobObj_t pOMFMob) {};
+	OMF2::omfObject_t LocateSlot(OMF2::omfEffObj_t pOMFEffect, aafInt32 slotID);
+	virtual void ConvertValueBuf(aafUID_t &typeDefID,
+								aafDataBuffer_t srcValue, aafUInt32 srcValueLen,
+								aafDataBuffer_t *destValue, aafUInt32 *destValueLen,
+								bool *didAllocateNew);
+protected:
 
     OMF2::omfSessionHdl_t	OMFSession;
 	OMF2::omfHdl_t			OMFFileHdl;
@@ -76,4 +84,9 @@ private:
 	IAAFFile*				pFile;
 	IAAFHeader*				pHeader;
 	IAAFDictionary*			pDictionary;
+
+	AAFDomainUtils			*pAAF;
+	OMFDomainUtils			*pOMF;
+	EffectTranslate			*pEffectTranslate;
 };
+#endif

@@ -1,3 +1,5 @@
+#ifndef _AAF_OMF_
+#define _AAF_OMF_	1
 /***********************************************************************
  *
  *              Copyright (c) 1998-1999 Avid Technology, Inc.
@@ -49,6 +51,15 @@
 #include "AAFInterpolatorDefs.h"
 #include "AAFTypeDefUIDs.h"
 #include "StreamLogger.h"
+
+//#ifndef _INCLUDED_OMF2_
+//#define _INCLUDED_OMF2_
+//namespace OMF2
+//{
+//#include "omPublic.h"
+//#include "omMedia.h"
+//}
+//#endif
 
 const int MAX_INDENT = 8;
 const unsigned	kLogError = 0; 	// Error level.
@@ -130,16 +141,10 @@ AAFRESULT aafMobIDFromMajorMinor(
 		aafUInt32	minor,
 		aafUID_t *mobID);     /* OUT - Newly created Mob ID */
 void RegisterCodecProperties(AafOmfGlobals *globals, OMF2::omfSessionHdl_t OMFSession);
-void RegisterOMFMCPrivate(AafOmfGlobals *globals, OMF2::omfSessionHdl_t OMFSession);
-void RegisterAAFMCPrivate(IAAFDictionary * dict);
-HRESULT SetIntegerPropOnObject(IAAFObject* pObj, aafUID_t* pClassID, aafUID_t* pPropID, const aafUID_t* pIntTypeID,
-							   aafMemPtr_t pValue, aafUInt32 ValueSize, IAAFDictionary *dict);
-
-HRESULT GetIntegerPropFromObject(IAAFObject* pObj, const aafUID_t* pClassID, aafUID_t* pPropID,
-								 const aafUID_t* pIntTypeID, aafMemPtr_t pValue, aafUInt32 ValueSize, IAAFDictionary *dict);
 
 
 #define COMMON_ERR_BASE		(AAFRESULT)0xE0000000
 #define AAF2OMF_ERR_BASE	(AAFRESULT)0xE0001000
 #define OMF2AAF_ERR_BASE	(AAFRESULT)0xE0006000
 #define AAFRESULT_FILE_NOT_OMF (OMF2AAF_ERR_BASE + 1)
+#endif
