@@ -22,7 +22,6 @@
 // aafSlotID_t,
 
 
-#include "AAFPropertyIDs.h"
 
 #ifndef __ImplAAFMobSlot_h__
 #include "ImplAAFMobSlot.h"

@@ -11,6 +11,8 @@
 #include "ImplAAFCDCIDescriptor.h"
 #endif
 
+#include "AAFPropertyIDs.h"
+
 #include <assert.h>
 #include <string.h>
 
