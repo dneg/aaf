@@ -71,61 +71,6 @@ public:
         (ImplAAFTypeDef ** ppRawTypeDef);
 
 
-  //****************
-  // GetMinVersion()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetMinVersion
-        // @parm [out, retval] Pointer to the minimum version 
-        (aafVersionType_t *  pMinVersion);
-
-
-  //****************
-  // SetMinVersion()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetMinVersion
-        // @parm [in] Minimum AAF Version
-        (aafVersionType_t *  pMinVersion);
-
-
-  //****************
-  // GetMaxVersion()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetMaxVersion
-        // @parm [out, retval] Pointer to the maximum version 
-        (aafVersionType_t *  pMaxVersion);
-
-
-  //****************
-  // SetMaxVersion()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetMaxVersion
-        // @parm [in] Maximum AAF Version
-        (aafVersionType_t  MaxVersion);
-
-
-  //****************
-  // GetSwapNeeded()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetSwapNeeded
-        // @parm [out, retval] Specifies whether the bytes in this type need to be swapped
-        (aafSwapNeeded_t *  pSwapNeeded);
-
-
-  //****************
-  // SetSwapNeeded()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetSwapNeeded
-        // @parm [in] Specifies wheter the bytes in this type need to be swapped
-        (aafSwapNeeded_t  SwapNeeded);
-
-public:
-
   //
   // non-published methods
   //
@@ -187,10 +132,11 @@ public:
 							const char * name) const;
 
 
-public:
+  //
   // Pure virtual methods to assist in the composition of types.  Each
   // type must implement these, to assist other types in determining
   // if particular aggregations are legal.
+  //
 
   // Returns true if aggregates (that is, Record types) may be made
   // using this type as an element.
@@ -209,6 +155,13 @@ public:
 
   // Returns true if this type may be used as an element of a string.
   virtual bool IsStringable () const;
+
+protected:
+  // Helper function to return the raw type of UInt8Array (if
+  // applicable for the derived type)
+  virtual AAFRESULT STDMETHODCALLTYPE
+    pvtGetUInt8Array8Type
+        (ImplAAFTypeDef ** ppRawTypeDef);
 };
 
 //

@@ -26,11 +26,10 @@
  ************************************************************************/
 
 
-#include "AAFStoredObjectIDs.h"
-
-#ifndef __ImplAAFTypeDef_h__
 #include "ImplAAFTypeDef.h"
-#endif
+#include "ImplAAFDictionary.h"
+#include "AAFStoredObjectIDs.h"
+#include "AAFTypeDefUIDs.h"
 
 #include <assert.h>
 #include <string.h>
@@ -62,60 +61,6 @@ AAFRESULT STDMETHODCALLTYPE
 {
   // Should be implemented in derived class.
   return AAFRESULT_INTERNAL_ERROR;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDef::GetMinVersion (
-      aafVersionType_t *  /*pMinVersion*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDef::SetMinVersion (
-      aafVersionType_t *  /*pMinVersion*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDef::GetMaxVersion (
-      aafVersionType_t *  /*pMaxVersion*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDef::SetMaxVersion (
-      aafVersionType_t  /*MaxVersion*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDef::GetSwapNeeded (
-      aafSwapNeeded_t *  /*pSwapNeeded*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDef::SetSwapNeeded (
-      aafSwapNeeded_t  /*SwapNeeded*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
@@ -227,6 +172,22 @@ OMProperty * ImplAAFTypeDef::pvtCreateOMPropertyMBS
   assert (0);
   return 0; // not reached!
 }
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDef::pvtGetUInt8Array8Type (
+      ImplAAFTypeDef ** ppRawTypeDef)
+{
+  if (! ppRawTypeDef)
+	return AAFRESULT_NULL_PARAM;
+  
+  ImplAAFDictionarySP pDict;
+  AAFRESULT hr = GetDictionary(&pDict);
+  if (AAFRESULT_FAILED (hr)) return hr;
+  
+  return pDict->LookupType ((aafUID_t*) &kAAFTypeID_UInt8Array, ppRawTypeDef);
+}
+
 
 // These all should be pure virtual, but if we allow client extension
 // of behavior, clients may have to instantiate these.
