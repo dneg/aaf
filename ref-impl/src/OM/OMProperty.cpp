@@ -58,7 +58,7 @@ OMProperty::OMProperty(const OMPropertyId propertyId,
 {
   TRACE("OMProperty::OMProperty");
 
-  PRECONDITION("Valid name", validWideString(_name)); 
+  PRECONDITION("Valid name", validWideString(_name));
 }
 
   // @mfunc Temporary pseudo-constructor for clients which provide
@@ -107,7 +107,7 @@ void OMProperty::detach(void)
 
   // @mfunc The <c OMPropertyDefinition> defining this <c OMProperty>.
   //   @rdesc The defining <c OMPropertyDefinition>.
-  //   @this const 
+  //   @this const
 const OMPropertyDefinition* OMProperty::definition(void) const
 {
   TRACE("OMProperty::definition");
@@ -362,7 +362,7 @@ void OMSimpleProperty::write(void) const
   if (propertyType != 0) { // tjb - temporary, should be ASSERTION below
 
     ASSERT("Valid property type", propertyType != 0);
- 
+
     // Allocate buffer for property value
     size_t externalBytesSize = propertyType->externalSize(_bits,
                                                           _size);
@@ -375,7 +375,7 @@ void OMSimpleProperty::write(void) const
                               buffer,
                               externalBytesSize,
                               store()->byteOrder());
-  
+
     // Reorder property value
     if (store()->byteOrder() != hostByteOrder()) {
       propertyType->reorder(buffer, externalBytesSize);
@@ -462,7 +462,7 @@ void OMSimpleProperty::get(void* value, size_t ANAME(valueSize)) const
   //   @parm The address of the property value.
   //   @parm The size of the value.
   //   @this const
-void OMSimpleProperty::set(const void* value, size_t valueSize) 
+void OMSimpleProperty::set(const void* value, size_t valueSize)
 {
   TRACE("OMSimpleProperty::set");
   PRECONDITION("Valid data buffer", value != 0);
@@ -495,7 +495,7 @@ void OMSimpleProperty::restore(size_t externalSize)
   read(externalSize);
 }
 
-  // @mfunc Is this an optional property ? 
+  // @mfunc Is this an optional property ?
   //   @rdesc True if this property is optional, false otherwise.
   //   @this const
 bool OMProperty::isOptional(void) const
