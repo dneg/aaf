@@ -18,9 +18,9 @@ OMStorable::OMStorable(void)
 
 OMStorable::~OMStorable(void)
 {
-  delete _name;
+  delete [] _name;
   _name = 0;
-  delete _pathName;
+  delete [] _pathName;
   _pathName = 0;
 }
 
@@ -84,7 +84,7 @@ OMStorable* OMStorable::containingObject(void) const
 void OMStorable::setContainingObject(const OMStorable* containingObject)
 {
   _containingObject = containingObject;
-  delete _pathName;
+  delete [] _pathName;
   _pathName = 0;
 }
 
@@ -96,10 +96,10 @@ const char* OMStorable::name(void) const
 void OMStorable::setName(const char* name)
 {
   PRECONDITION("Valid name", validString(name));
-  delete _name;
+  delete [] _name;
   _name = new char[strlen(name) + 1];
   strcpy(_name, name);
-  delete _pathName;
+  delete [] _pathName;
   _pathName = 0;
 }
 
@@ -133,12 +133,15 @@ char* OMStorable::makePathName(void)
   // By definition the root object is the one with no container.
   // Check that the root object is called "/".
   //
-  ASSERT("Root object properly named", IMPLIES(containingObject() == 0, strcmp(name(), "/") == 0));
+  ASSERT("Root object properly named",
+                   IMPLIES(containingObject() == 0, strcmp(name(), "/") == 0));
 
   // Only the root object is called "/".
-  // Check that if the object is called "/" it is the root object (has no container).
+  // Check that if the object is called "/" it is the root object (has
+  // no container).
   //
-  ASSERT("Non-root object properly named", IMPLIES(strcmp(name(), "/") == 0, containingObject() == 0));
+  ASSERT("Non-root object properly named",
+                   IMPLIES(strcmp(name(), "/") == 0, containingObject() == 0));
   
   char* result = 0;
   OMStorable* cont = containingObject();
