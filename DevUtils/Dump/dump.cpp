@@ -202,6 +202,10 @@ const ByteOrder unspecifiedEndian = 0;
 const ByteOrder littleEndian      = 0x4949;
 const ByteOrder bigEndian         = 0x4d4d;
 
+const CLSID nullCLSID = {0,0,0, {0,0,0,0,0,0,0,0}};
+const UMID nullUMID   = {{0,0,0,0,0,0,0,0,0,0,0,0}, 0, 0, 0, 0,
+                         {0,0,0, {0,0,0,0,0,0,0,0}}};
+
 // Stream names and punctuation
 //
 const char* const propertiesStreamName = "properties";
@@ -557,7 +561,8 @@ static VectorIndexEntry* readVectorIndex(IStream* stream,
                                          OMUInt32 count,
                                          bool swapNeeded);
 static void dumpSetIndexEntry(OMUInt32 i,
-                              SetIndexEntry* setIndexEntry);
+                              SetIndexEntry* setIndexEntry,
+                              bool printKey);
 static void printSetIndex(SetIndexEntry* setIndex,
                           OMUInt32 count,
                           OMUInt32 highWaterMark,
@@ -1946,7 +1951,8 @@ VectorIndexEntry* readVectorIndex(IStream* stream,
 }
 
 void dumpSetIndexEntry(OMUInt32 i,
-                       SetIndexEntry* setIndexEntry)
+                       SetIndexEntry* setIndexEntry,
+                       bool printKey)
 {
   cout << setw(8) << i
        << " : "
@@ -1954,7 +1960,11 @@ void dumpSetIndexEntry(OMUInt32 i,
        << "     "
        << setw(8) << setIndexEntry->_referenceCount
        << "     ";
-  printClsid(setIndexEntry->_key);
+  if (printKey) {
+    printClsid(setIndexEntry->_key);
+  } else {
+    printClsid(nullCLSID);
+  }
   cout << endl;
 }
 
@@ -1996,7 +2006,7 @@ void printSetIndex(SetIndexEntry* setIndex,
          << endl;
 
     for (OMUInt32 i = 0; i < count; i++) {
-      dumpSetIndexEntry(i, &setIndex[i]);
+      dumpSetIndexEntry(i, &setIndex[i], !ignoring(keyPid));
     }
   } else {
     cout << "empty" << endl;
@@ -2046,7 +2056,11 @@ void printSetIndex(SetIndexEntry* setIndex,
       cout << endl;
 	  cout << "  ";
       if (keySize == 32) {
-        printUMID((const UMID&)keys[i * keySize]);
+        if (!ignoring(keyPid)) {
+          printUMID((const UMID&)keys[i * keySize]);
+        } else {
+          printUMID(nullUMID);
+        }
       } else {
         printRawKey(&keys[i * keySize], keySize);
       }
