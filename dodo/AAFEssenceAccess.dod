@@ -29,7 +29,6 @@ AD_HEAD
 //		AAFRESULT_NOMEMORY -- The system ran out of memory processing the method
 //		AAFRESULT_NULL_PARAM -- A NULL parameter was passed in which was required.
 
-AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_FORWARD_DECLARATION(AAFSourceClip)
 AD_FORWARD_DECLARATION(AAFEssenceFormat)
@@ -86,7 +85,7 @@ Writes partual samples of essence to a stream.)
 	
 /****/
 AD_XMETHOD2(GetLargestSampleSize,
-[in],objIn, AAFDataDef,mediaKind,and this essence type,
+[in],objPass, aafUID_t,mediaKind,and this essence type,
 [out],objPass, aafUInt32*,maxSize,the largest sample size,
 Returns the size in bytes of the largest sample for a given essence type.)
 	//@comm For uncompressed data, or the output of the software codec,
@@ -96,7 +95,7 @@ Returns the size in bytes of the largest sample for a given essence type.)
 
 /****/
 AD_XMETHOD3(GetSampleFrameSize,
-[in],objIn, AAFDataDef,mediaKind,and this essence type,
+[in],objPass, aafUID_t,mediaKind,and this essence type,
 [in],objPass, aafPosition_t,frameNum,for this [1-based] sample frame number,
 [out],objPass, aafLength_t*,frameSize,How big is the sample frame?,
 Returns the size in bytes of the given sample for a given essence type.)
@@ -121,7 +120,7 @@ Sets a series of format objects which will be used to describe the in-memory for
 	 
 /****/
 AD_XMETHOD2(GetSampleCount,
-[in],objIn, AAFDataDef,mediaKind,For this essence type,
+[in],objPass, aafUID_t,mediaKind,For this essence type,
 [out],objPass,aafLength_t *,result,find out how many samples are present,
 Returns the number of samples of the given essence type on the given essence stream.)
 	//@comm A video sample is one frame.
