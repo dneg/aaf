@@ -1042,9 +1042,6 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 	IAAFTransition*			pTransition = NULL;
 	IAAFSelector*			pSelector = NULL;
 	IAAFEffect*				pEffect = NULL;
-	IAAFEffectDef*			pEffectDef = NULL;
-	IAAFParameterDef*		pParameterDef = NULL;
-	IAAFDefObject*			pDefObject = NULL;
 
 	aafUID_t				datadef;
 	aafLength_t				length;
@@ -1181,8 +1178,6 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 	{
 		// component is a Transition
 		OMF2::omfEffObj_t	effect;
-		OMF2::omfEDefObj_t	effectDef;
-		OMF2::omfUniqueName_t effectID;
 
 		aafPosition_t	cutPoint;
 
@@ -1192,23 +1187,9 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 		}
 		pTransition->GetCutPoint(&cutPoint);
 		rc = pTransition->GetEffect(&pEffect);
-		rc = pEffect->GetEffectDefinition(&pEffectDef);
 		// At this time (4/99) effects are not implemented therefore we 
 		// will have to create an Effect from thin air.(hack it !!)
-		strcpy(effectID, "omfi:effect:VideoDissolve");
-		rc = OMF2::omfiEffectDefNew(OMFFileHdl,
-									effectID,
-									NULL,
-									NULL,
-									NULL,
-									(OMF2::omfBool)AAFFalse,
-									&effectDef);
-
-		rc = OMF2::omfiEffectNew(OMFFileHdl,
-								 OMFDatakind,
-								 (OMF2::omfLength_t)length,
-								 effectDef,
-								 &effect);
+		rc = ConvertEffects(pEffect, &effect);
 
 		rc = OMF2::omfiTransitionNew(OMFFileHdl,
 									 OMFDatakind,
@@ -1266,7 +1247,37 @@ Cleanup:
 	DecIndentLevel();
 	return rc;
 }
+// ============================================================================
+// GetUniqueNameFromAUID
+//
+//			This function converts an AAF datadef into an OMF unique name. 
+//			
+// Returns: AAFRESULT_SUCCESS if datakind is converted succesfully
+//			
+// NOTE :	the buffer passed to this routine should be big enough to accomodate
+//			the whole OMF name.!!
+// ============================================================================
+HRESULT Aaf2Omf::GetUniqueNameFromAUID(aafUID_t Datadef,
+									   OMF2::omfUniqueNamePtr_t UniqueName)
+{
+	HRESULT					rc = AAFRESULT_SUCCESS;
+	OMF2::omfBool			bFound;
+	char					szAUID[OMUNIQUENAME_SIZE];
 
+	if ( memcmp((char *)&Datadef, (char *)&kAAFEffectVideoDissolve, sizeof(aafUID_t)) == 0 )
+	{
+		strcpy(UniqueName, "omfi:effect:VideoDissolve");
+	}
+	else
+	{
+		AUIDtoString(&Datadef, szAUID);
+		UTLstdprintf("%sInvalid DataDef Found in sequence AUID : %s\n", gpGlobals->indentLeader, szAUID);
+		UTLerrprintf("%sInvalid DataDef Found in sequence AUID : %s\n", gpGlobals->indentLeader, szAUID);
+		rc = AAFRESULT_INVALID_DATADEF;
+	}
+
+	return rc;
+}
 // ============================================================================
 // ConvertAAFDatadef
 //
@@ -1302,6 +1313,16 @@ HRESULT Aaf2Omf::ConvertAAFDatadef(aafUID_t Datadef,
 	else if ( memcmp((char *)&Datadef, (char *)&DDEF_Edgecode, sizeof(aafUID_t)) == 0 )
 	{
 		strcpy(datakindName, "omfi:data:Edgecode");
+		bFound = OMF2::omfiDatakindLookup(OMFFileHdl, datakindName, pDatakind, (OMF2::omfErr_t *) &rc);
+	}
+	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectPictureWithMate, sizeof(aafUID_t)) == 0 )
+	{
+		strcpy(datakindName, "omfi:data:PictureWithMatte");
+		bFound = OMF2::omfiDatakindLookup(OMFFileHdl, datakindName, pDatakind, (OMF2::omfErr_t *) &rc);
+	}
+	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectVideoDissolve, sizeof(aafUID_t)) == 0 )
+	{
+		strcpy(datakindName, "omfi:effect:VideoDissolve");
 		bFound = OMF2::omfiDatakindLookup(OMFFileHdl, datakindName, pDatakind, (OMF2::omfErr_t *) &rc);
 	}
 	else
@@ -1380,6 +1401,7 @@ HRESULT Aaf2Omf::ConvertSelector(IAAFSelector* pSelector,
 	aafLength_t				length;
 	aafInt32				numAlternates;
 
+	IncIndentLevel();
 	pSelector->QueryInterface(IID_IAAFComponent, (void **)&pComponent);
 	pSelector->GetSelectedSegment(&pSegment);
 	pSelector->GetNumAlternateSegments(&numAlternates);
@@ -1404,7 +1426,6 @@ HRESULT Aaf2Omf::ConvertSelector(IAAFSelector* pSelector,
 			IAAFSegment*		pAltSegment = NULL;
 	
 			rc = pSelector->EnumAlternateSegments(&pEnumAlternates);
-			IncIndentLevel();
 			for (int i = 0; i< numAlternates;i++)
 			{
 				pEnumAlternates->NextOne(&pAltSegment);
@@ -1421,6 +1442,7 @@ HRESULT Aaf2Omf::ConvertSelector(IAAFSelector* pSelector,
 			pEnumAlternates->Release();
 		}
 	}
+	DecIndentLevel();
 	if (pSegment)
 		pSegment->Release();
 	return rc;
@@ -1709,4 +1731,135 @@ Cleanup:
 
 	return rc;
 
+}
+// ============================================================================
+// ConvertEffects
+//
+//			This function reads an OMF effect object, converts its properties
+//			to AAF, updates the AAF Effect object and, if necessary creates the 
+//			effect definition by Calling ConvertOMFEffectDefinition. 
+//			
+// Returns: AAFRESULT_SUCCESS if object is converted.
+//
+// ============================================================================
+HRESULT Aaf2Omf::ConvertEffects(IAAFEffect* pEffect,
+								OMF2::omfEffObj_t*	pOMFEffect)
+{
+	HRESULT					rc = AAFRESULT_SUCCESS;
+	OMF2::omfDDefObj_t		effectDatakind;
+	OMF2::omfLength_t		effectLength;
+	OMF2::omfEDefObj_t		effectDef;
+	OMF2::omfDDefObj_t		OMFdatakind;
+	OMF2::omfUniqueName_t	effectName;
+	OMF2::omfErr_t			OMFError;
+	OMF2::omfBool			bDefExists;
+
+	IAAFEffectDef*			pEffectDef = NULL;
+	IAAFParameterDef*		pParameterDef = NULL;
+	IAAFParameter*			pParameter = NULL;
+	IAAFDefObject*			pDefObject = NULL;
+	IAAFSegment*			pSegment = NULL;
+	IAAFSourceReference*	pSourceRef= NULL;
+	IAAFFiller*				pFiller = NULL;
+	IAAFComponent*			pComponent = NULL;
+	IAAFSourceClip*			pSourceClip = NULL;
+
+	aafUID_t				effectAUID;
+	aafUID_t				effectDefAUID;
+	aafUID_t				datadefAUID;
+	aafLength_t				length;
+	aafUInt32				bypassOverride;
+	aafUInt32				textSize;
+	aafBool					isATimeWarp;
+	aafInt32				numSources;
+	aafInt32				numParameters;
+	aafWChar*				pwDesc = NULL;
+	aafWChar*				pwName = NULL;
+
+	char*					pszName = NULL;
+	char*					pszDesc = NULL;
+
+
+	IncIndentLevel();
+
+	rc = pEffect->QueryInterface(IID_IAAFComponent, (void **)&pComponent);
+	if (SUCCEEDED(rc))
+	{
+		pComponent->GetLength(&length);
+		pComponent->GetDataDef(&effectAUID);
+		ConvertAAFDatadef(effectAUID, &effectDatakind);
+		pEffect->GetRender(&pSourceRef);
+		pEffect->IsATimeWarp(&isATimeWarp);
+		pEffect->GetNumSourceSegments(&numSources);
+		pEffect->GetNumParameters(&numParameters);
+		rc = pEffect->GetEffectDefinition(&pEffectDef);
+		pEffectDef->GetDataDefinitionID(&datadefAUID);
+		pEffectDef->GetBypass(&bypassOverride);
+		rc = pEffectDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject);
+		if (SUCCEEDED(rc))
+		{
+			pDefObject->GetAUID(&effectDefAUID);
+			pDefObject->GetNameBufLen(&textSize);
+			UTLMemoryAlloc(textSize, (void **) &pwName);
+			pDefObject->GetName(pwName, textSize);
+			UTLStrWToStrA(pwName, &pszName);
+			pDefObject->GetDescriptionBufLen(&textSize);
+			UTLMemoryAlloc(textSize, (void **)&pwDesc);
+			pDefObject->GetDescription(pwDesc, textSize);
+			UTLStrWToStrA(pwDesc, &pszDesc);
+		}
+//		else
+//		{
+//		}
+		if (gpGlobals->bVerboseMode)
+			UTLstdprintf("%sConverting Effect of length = %ld\n", gpGlobals->indentLeader, length);
+		GetUniqueNameFromAUID(effectDefAUID, effectName);
+		bDefExists = OMF2::omfiEffectDefLookup(OMFFileHdl, effectName, &effectDef, &OMFError);
+		if (OMFError == OMF2::OM_ERR_NONE && !bDefExists)
+		{
+			rc = OMF2::omfiEffectDefNew(OMFFileHdl,
+										effectName,
+										pszName,
+										pszDesc,
+										(OMF2::omfArgIDType_t *)&bypassOverride,
+										(OMF2::omfBool)isATimeWarp,
+										&effectDef);
+		}
+
+		rc = OMF2::omfiEffectNew(OMFFileHdl,
+								 effectDatakind,
+								 (OMF2::omfLength_t)length,
+								 effectDef,
+								 pOMFEffect);
+	}
+	DecIndentLevel();
+	if (pwName)
+		UTLMemoryFree(pwName);
+	if (pwDesc)
+		UTLMemoryFree(pwDesc);
+	if (pszName)
+		UTLMemoryFree(pszName);
+	if (pszDesc)
+		UTLMemoryFree(pszDesc);
+
+	if (pEffectDef)
+		pEffectDef->Release();
+	if (pParameterDef)
+		pParameterDef->Release();
+	if (pParameter)
+		pParameter->Release();
+	if (pDefObject)
+		pDefObject->Release();
+	if (pSegment)
+		pSegment->Release();
+	if (pSourceRef)
+		pSourceRef->Release();
+	if (pFiller)
+		pFiller->Release();
+	if (pComponent)
+		pComponent->Release();
+	if (pSourceClip)
+		pSourceClip->Release();
+
+	return rc;
 }
