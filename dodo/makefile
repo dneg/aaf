@@ -38,16 +38,20 @@ DODO_TARGETS = \
 	AAFEdgecode.all \
 	AAFEffectDefinition.all \
 	AAFEffectInvocation.all \
+	AAFFile.all \
 	AAFFiller.all \
+	AAFFindSourceInfo.all \
 	AAFHeader.all \
 	AAFIdentification.all \
 	AAFInt64.all \
 	AAFIntegerAttribute.all \
 	AAFLocator.all \
+	AAFMacLocator.all \
 	AAFMasterMob.all \
 	AAFMedia.all \
 	AAFMediaDescriptor.all \
 	AAFMediaFileDescriptor.all \
+	AAFMediaFilmDescriptor.all \
 	AAFMediaGroup.all  \
 	AAFMediaTapeDescriptor.all \
 	AAFMob.all  \
@@ -362,6 +366,19 @@ AAFEffectInvocation.comh : AAFEffectInvocation.exp macros/comh.mac macros/base.m
 AAFEffectInvocation.implc : AAFEffectInvocation.exp macros/implc.mac macros/base.mac
 AAFEffectInvocation.implh : AAFEffectInvocation.exp macros/implh.mac macros/base.mac
 
+AAFFile.all : AAFFile.cpp AAFFile.h
+AAFFile.all : AAFFile.comc AAFFile.comh
+AAFFile.all : AAFFile.exp AAFFile.idl
+AAFFile.all : AAFFile.implc AAFFile.implh
+AAFFile.exp : macros/exp.mac macros/base.mac
+AAFFile.h : AAFFile.exp macros/h.mac macros/base.mac
+AAFFile.cpp : AAFFile.exp macros/cpp.mac macros/base.mac
+AAFFile.idl : AAFFile.exp macros/idl.mac macros/base.mac
+AAFFile.comc : AAFFile.exp macros/comc.mac macros/base.mac
+AAFFile.comh : AAFFile.exp macros/comh.mac macros/base.mac
+AAFFile.implc : AAFFile.exp macros/implc.mac macros/base.mac
+AAFFile.implh : AAFFile.exp macros/implh.mac macros/base.mac
+
 AAFFiller.all : AAFFiller.cpp AAFFiller.h
 AAFFiller.all : AAFFiller.comc AAFFiller.comh
 AAFFiller.all : AAFFiller.exp AAFFiller.idl
@@ -374,6 +391,19 @@ AAFFiller.comc : AAFFiller.exp macros/comc.mac macros/base.mac
 AAFFiller.comh : AAFFiller.exp macros/comh.mac macros/base.mac
 AAFFiller.implc : AAFFiller.exp macros/implc.mac macros/base.mac
 AAFFiller.implh : AAFFiller.exp macros/implh.mac macros/base.mac
+
+AAFFindSourceInfo.all : AAFFindSourceInfo.cpp AAFFindSourceInfo.h
+AAFFindSourceInfo.all : AAFFindSourceInfo.comc AAFFindSourceInfo.comh
+AAFFindSourceInfo.all : AAFFindSourceInfo.exp AAFFindSourceInfo.idl
+AAFFindSourceInfo.all : AAFFindSourceInfo.implc AAFFindSourceInfo.implh
+AAFFindSourceInfo.exp : macros/exp.mac macros/base.mac
+AAFFindSourceInfo.h : AAFFindSourceInfo.exp macros/h.mac macros/base.mac
+AAFFindSourceInfo.cpp : AAFFindSourceInfo.exp macros/cpp.mac macros/base.mac
+AAFFindSourceInfo.idl : AAFFindSourceInfo.exp macros/idl.mac macros/base.mac
+AAFFindSourceInfo.comc : AAFFindSourceInfo.exp macros/comc.mac macros/base.mac
+AAFFindSourceInfo.comh : AAFFindSourceInfo.exp macros/comh.mac macros/base.mac
+AAFFindSourceInfo.implc : AAFFindSourceInfo.exp macros/implc.mac macros/base.mac
+AAFFindSourceInfo.implh : AAFFindSourceInfo.exp macros/implh.mac macros/base.mac
 
 AAFInt64.all : AAFInt64.cpp AAFInt64.h
 AAFInt64.all : AAFInt64.comc AAFInt64.comh
@@ -461,6 +491,19 @@ AAFMediaFileDescriptor.comc : AAFMediaFileDescriptor.exp macros/comc.mac macros/
 AAFMediaFileDescriptor.comh : AAFMediaFileDescriptor.exp macros/comh.mac macros/base.mac
 AAFMediaFileDescriptor.implc : AAFMediaFileDescriptor.exp macros/implc.mac macros/base.mac
 AAFMediaFileDescriptor.implh : AAFMediaFileDescriptor.exp macros/implh.mac macros/base.mac
+
+AAFMediaFilmDescriptor.all : AAFMediaFilmDescriptor.cpp AAFMediaFilmDescriptor.h
+AAFMediaFilmDescriptor.all : AAFMediaFilmDescriptor.comc AAFMediaFilmDescriptor.comh
+AAFMediaFilmDescriptor.all : AAFMediaFilmDescriptor.exp AAFMediaFilmDescriptor.idl
+AAFMediaFilmDescriptor.all : AAFMediaFilmDescriptor.implc AAFMediaFilmDescriptor.implh
+AAFMediaFilmDescriptor.exp : AAFUnitTest.exp AAFMediaDescriptor.exp macros/exp.mac macros/base.mac
+AAFMediaFilmDescriptor.h : AAFMediaFilmDescriptor.exp macros/h.mac macros/base.mac
+AAFMediaFilmDescriptor.cpp : AAFMediaFilmDescriptor.exp macros/cpp.mac macros/base.mac
+AAFMediaFilmDescriptor.idl : AAFMediaFilmDescriptor.exp macros/idl.mac macros/base.mac
+AAFMediaFilmDescriptor.comc : AAFMediaFilmDescriptor.exp macros/comc.mac macros/base.mac
+AAFMediaFilmDescriptor.comh : AAFMediaFilmDescriptor.exp macros/comh.mac macros/base.mac
+AAFMediaFilmDescriptor.implc : AAFMediaFilmDescriptor.exp macros/implc.mac macros/base.mac
+AAFMediaFilmDescriptor.implh : AAFMediaFilmDescriptor.exp macros/implh.mac macros/base.mac
 
 AAFMediaTapeDescriptor.all : AAFMediaTapeDescriptor.cpp AAFMediaTapeDescriptor.h
 AAFMediaTapeDescriptor.all : AAFMediaTapeDescriptor.comc AAFMediaTapeDescriptor.comh
