@@ -107,7 +107,7 @@ public:
   virtual ~OMReferenceProperty(void);
 
     // @cmember Set the value of this <c OMReferenceProperty>.
-  virtual void setValue(const ReferencedObject*& object);
+  virtual ReferencedObject* setValue(const ReferencedObject* object);
 
     // @cmember Get the value of this <c OMReferenceProperty>.
     //   @this const
@@ -180,7 +180,7 @@ public:
   virtual void getValue(ReferencedObject*& object) const;
 
     // @cmember Set the value of this <c OMStrongReferenceProperty>.
-  virtual void setValue(const ReferencedObject*& object);
+  virtual ReferencedObject* setValue(const ReferencedObject* object);
 
     // @cmember Assignment operator.
   OMStrongReferenceProperty<ReferencedObject>& operator =
@@ -253,7 +253,7 @@ public:
   virtual void getValue(ReferencedObject*& object) const;
 
     // @cmember set the value of this <c OMWeakReferenceProperty>.
-  virtual void setValue(const ReferencedObject*& object);
+  virtual ReferencedObject* setValue(const ReferencedObject* object);
 
     // @cmember Assignment operator.
   OMWeakReferenceProperty<ReferencedObject>& operator =
@@ -485,7 +485,8 @@ public:
     // @cmember Set the value of the <p OMReferencedObject> at
     //          position <p index> in this
     //          <c OMStrongReferenceVectorProperty>.
-  void setValueAt(const ReferencedObject* value, const size_t index);
+  ReferencedObject* setValueAt(const ReferencedObject* value,
+                               const size_t index);
 
     // @cmember Get the value of the <p OMReferencedObject> at
     //          position <p index> in this
