@@ -53,7 +53,12 @@
 #error - improperly defined include guard
 #endif
 
+
 #include <iostream.h>
+
+// Temporarily necessary global declarations.
+extern "C" const CLSID CLSID_.this-module; // generated
+
 
 HRESULT C.this-module::test()
 {
@@ -125,7 +130,12 @@ AD_CLASS_BEGIN\
 #error - improperly defined include guard
 #endif
 
+
 #include <iostream.h>
+
+// Temporarily necessary global declarations.
+extern "C" const CLSID CLSID_.this-module; // generated
+
 
 HRESULT C.this-module::test()
 {
