@@ -116,14 +116,17 @@ const bool true = 1;
 //
 
 // version 0.08 and above
-const int TID_DATA                           = 0;
-const int TID_DATA_STREAM                    = 1;
-const int TID_STRONG_OBJECT_REFERENCE        = 2;
-const int TID_STRONG_OBJECT_REFERENCE_VECTOR = 3;
-const int TID_STRONG_OBJECT_REFERENCE_SET    = 4;
-const int TID_WEAK_OBJECT_REFERENCE          = 5;
-const int TID_WEAK_OBJECT_REFERENCE_VECTOR   = 6;
-const int TID_WEAK_OBJECT_REFERENCE_SET      = 7;
+const int TID_DATA                                   =  0;
+const int TID_DATA_STREAM                            =  1;
+const int TID_STRONG_OBJECT_REFERENCE                =  2;
+const int TID_STRONG_OBJECT_REFERENCE_VECTOR         =  3;
+const int TID_STRONG_OBJECT_REFERENCE_SET            =  4;
+const int TID_WEAK_OBJECT_REFERENCE                  =  5;
+const int TID_WEAK_OBJECT_REFERENCE_VECTOR           =  6;
+const int TID_WEAK_OBJECT_REFERENCE_SET              =  7;
+const int TID_WEAK_OBJECT_REFERENCE_STORED_OBJECT_ID =  8;
+const int TID_UNIQUE_OBJECT_ID                       =  9;
+const int TID_OPAQUE_STREAM                          = 10;
 
 // version 0.07 and below
 const int OLD_TID_DATA                           = 0;
@@ -1294,6 +1297,18 @@ char* typeName(OMUInt32 type)
     result = "weak object reference set";
     break;
 
+  case TID_WEAK_OBJECT_REFERENCE_STORED_OBJECT_ID:
+    result = "stored object identification";
+    break;
+
+  case TID_UNIQUE_OBJECT_ID:
+    result = "unique object identification";
+    break;
+
+  case TID_OPAQUE_STREAM:
+    result = "opaque stream";
+    break;
+
   default:
     result = "unknown";
     break;
@@ -1608,6 +1623,12 @@ void dumpContainedObjects(IStorage* storage,
     case TID_WEAK_OBJECT_REFERENCE_VECTOR:
     case TID_WEAK_OBJECT_REFERENCE_SET:
       // value is dumped when the property value stream is dumped
+      break;
+
+    case TID_WEAK_OBJECT_REFERENCE_STORED_OBJECT_ID:
+    case TID_UNIQUE_OBJECT_ID:
+    case TID_OPAQUE_STREAM:
+      // TBS
       break;
 
     default:
