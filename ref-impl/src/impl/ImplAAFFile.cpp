@@ -141,7 +141,7 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 		bool regWasEnabled = _factory->SetEnableDefRegistration (false);
 		OMStorable* head = _file->restore();
 		_head = dynamic_cast<ImplAAFHeader *>(head);
-		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
+		_head->SetFile(this);
 		
 		// Check for file format version.
 		if (_head->IsObjectModelVersionPresent())

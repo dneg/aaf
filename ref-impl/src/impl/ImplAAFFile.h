@@ -97,7 +97,6 @@ public:
   ImplAAFFile ();
   virtual ~ImplAAFFile ();
 
-
 private:
 
   // Private state for this file.
