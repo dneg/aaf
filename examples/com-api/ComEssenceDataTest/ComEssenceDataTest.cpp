@@ -62,15 +62,10 @@
 #include "AAF.h"
 // TODO: This should not be here, I added them for now to get a good link.
 const CLSID CLSID_AAFFile = { 0x9346ACD2, 0x2713, 0x11d2, { 0x80, 0x35, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
-const CLSID CLSID_AAFEssenceAccess = { 0xaed97eb1, 0x2bc8, 0x11D2, { 0xbf, 0xaa, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
 
-const aafUID_t CLSID_AAFDefaultCodec = { 0xDC089C31, 0x9527, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 const CLSID CLSID_AAFEssencePlugin = { 0xAF98DE41, 0x952D, 0x11D2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+const CLSID CLSID_AAFEssenceFormat = { 0x34C2DC81, 0x904C, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
 #endif
-
-const CLSID CLSID_AAFWAVECodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-
-
 
 // Include the defintions for the AAF Stored Object identifiers.
 #define INIT_AUID
@@ -137,7 +132,9 @@ static void AUIDtoString(aafUID_t *uid, char *buf)
 			(int)uid->Data4[5], (int)uid->Data4[6], (int)uid->Data4[7]);
 }
 
-typedef enum { testRawCalls, testStandardCalls, testMultiCalls } testType_t;
+typedef enum { testRawCalls, testStandardCalls, testMultiCalls, testFractionalCalls } testType_t;
+
+#define SAMPLE_SIZE_BYTES	1
 
 static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
 {
@@ -148,7 +145,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
 	IAAFEssenceDescriptor*		aDesc = NULL;
 	IAAFMasterMob*				pMasterMob = NULL;
 	IAAFEssenceAccess*			pEssenceAccess = NULL;
-
+	IAAFEssenceFormat*			pFormat;
 /*	
 	//	This variables are needed if the Essence data is in a separate
 	//	data file.
@@ -165,6 +162,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
 	unsigned char				dataBuff[4096], *dataPtr;
 	size_t						bytesRead, dataLen;
 	aafInt32					bytesLeft;
+	aafUInt32					bytesWritten;
 
   
   // delete any previous test file before continuing...
@@ -279,6 +277,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
 			dataPtr = dataBuff;
 			dataLen = bytesRead;
 		}
+
+		// Tell the AAFEssenceAccess what the format is.
+		CoCreateInstance(CLSID_AAFEssenceFormat,
+               NULL, 
+               CLSCTX_INPROC_SERVER, 
+               IID_IAAFEssenceFormat, 
+               (void **)&pFormat);
+		aafInt32	sampleSize = 8;
+		check(pFormat->AddFormatSpecifier (kAAFAudioSampleBits, sizeof(sampleSize), (aafUInt8 *)&sampleSize));
+		check(pEssenceAccess->PutFileFormat (pFormat));
+		
 		// write out the data
 		if(testType == testRawCalls)
 		{
@@ -288,9 +297,28 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
 		}
 		else if(testType == testStandardCalls)
 		{
-			check(pEssenceAccess->WriteSamples(	dataLen,	//!!! hardcoded // Number of Samples
+			check(pEssenceAccess->WriteSamples(	dataLen,	//!!! hardcoded bytes/sample ==1// Number of Samples
 											dataPtr,	// THE Raw data
 											sizeof(dataBuff)));// buffer size
+		}
+		else if(testType == testFractionalCalls)
+		{
+			check(pEssenceAccess->WriteFractionalSample(
+											dataLen,			// number of bytes
+											dataPtr,			// THE data	
+											&bytesWritten));	// !!!Check this when it works
+		}
+		else if(testType == testMultiCalls)
+		{
+			aafmMultiXfer_t xfer;
+
+//!!!		xfer.subTrackNum = _channels[0].physicalOutChan;
+			xfer.numSamples = dataLen;	//!!! hardcoded bytes/sample ==1
+			xfer.buflen = sizeof(dataBuff);
+			xfer.buffer = dataPtr;
+			xfer.bytesXfered = 0;
+	
+			check(pEssenceAccess->WriteMultiSamples(1, &xfer));
 		}
 
 		// close essence data file
@@ -465,6 +493,25 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 														&samplesRead,		// Actual number of samples read
 														&AAFBytesRead));	// Actual number of bytes read
 					}
+					else if(testType == testFractionalCalls)
+					{
+						check(pEssenceAccess->ReadFractionalSample(dataLen,	// bytes to read
+														sizeof(AAFDataBuf),	// Maximum buffer size
+														AAFDataBuf,			// Buffer for the data
+														&AAFBytesRead));	// Actual number of bytes read
+					}
+					else if(testType == testMultiCalls)
+					{
+						aafmMultiXfer_t xfer;
+
+						xfer.numSamples = dataLen;	//!!! Hardcoded	// Number of Samples 
+						xfer.buflen = sizeof(AAFDataBuf);
+						xfer.buffer = AAFDataBuf;
+						xfer.bytesXfered = 0;
+						check(pEssenceAccess->ReadMultiSamples(1, &xfer));
+						samplesRead = xfer.samplesXfered;
+						AAFBytesRead = xfer.bytesXfered;
+					}
 
 					// Now compare the data read from the AAF file to the actual WAV file
 					if (dataLen != AAFBytesRead)
@@ -574,6 +621,14 @@ main()
 	checkFatal(CreateAAFFile(pwFileName, testStandardCalls));
 	printf("***Re-opening file %s using ReadSamples\n", pFileName);
 	ReadAAFFile(pwFileName, testStandardCalls);
+	printf("***Creating file %s using WriteMultiSamples\n", pFileName);
+	checkFatal(CreateAAFFile(pwFileName, testMultiCalls));
+	printf("***Re-opening file %s using ReadMultiSamples\n", pFileName);
+	ReadAAFFile(pwFileName, testMultiCalls);
+	printf("***Creating file %s using WriteFractionalSample\n", pFileName);
+	checkFatal(CreateAAFFile(pwFileName, testFractionalCalls));
+	printf("***Re-opening file %s using ReadFractionalSample\n", pFileName);
+	ReadAAFFile(pwFileName, testFractionalCalls);
 
 	printf("Done\n");
 
