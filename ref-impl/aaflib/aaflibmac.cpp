@@ -141,7 +141,7 @@ AAFRDLIRESULT AAFFindLibrary(const char* name, LPFNAAFTESTFILEPROC testProc, voi
       return AAFRESULT_NULL_PARAM;
 
     for (int i = 0; AAFRESULT_SUCCESS == rc && pluginFileNames[i]; ++i)
-      rc = testProc(pluginFileNames[i], false /* not a directory */, userData);
+      rc = testProc(pluginFileNames[i], pluginFileNames[i], false /* not a directory */, userData);
   }
   else
   {
@@ -170,7 +170,8 @@ AAFRDLIRESULT AAFFindLibrary(const char* name, LPFNAAFTESTFILEPROC testProc, voi
       
     // Allocate the smallest buffer possible.
     int nameLen = strlen(name);
-    char *path = new char[nameLen + 1 + sizeof(StrFileName)];
+    int pathLen = nameLen + 2 + sizeof(StrFileName);
+    char *path = new char[pathLen];
     if (NULL == path)
       return AAFRESULT_NOMEMORY;
     strcpy(path, name);
@@ -186,6 +187,7 @@ AAFRDLIRESULT AAFFindLibrary(const char* name, LPFNAAFTESTFILEPROC testProc, voi
     // Walk through the files and folders in the given folder.
     memset(&cInfo, 0, sizeof(cInfo));
     StrFileName fileName;
+    char cFileName[sizeof(StrFileName)];
     int index = 1;
     cInfo.dirInfo.ioNamePtr = fileName;
     cInfo.dirInfo.ioFDirIndex = index; 
@@ -195,19 +197,27 @@ AAFRDLIRESULT AAFFindLibrary(const char* name, LPFNAAFTESTFILEPROC testProc, voi
     
     while (noErr == rc)
     {
+      // Build the file/folder name.
+      memcpy(cFileName, &fileName[1], (int)fileName[0]);
+      cFileName[(int)fileName[0]] = 0;
+      
       // Build the full path name.
-      memcpy(&path[nameLen], &fileName[1], (int)fileName[0]);
-      path[nameLen + (int)fileName[0]] = 0;
+      strcpy(&path[nameLen], cFileName);
     
       isDirectory = AAFCInfoIsDirectory(cInfo);
       
       if (isDirectory)
-      {
-        rc = testProc(path, isDirectory, userData);
+      { 
+        // Make sure the directory path ends with a ":". This will guarantee that the
+        // testProc can call AAFFindLibrary recursively. The space for this character
+        // has already been accounted for in the calculation of pathLen above.
+        strcat(path, ":");
+        
+        rc = testProc(path, cFileName, isDirectory, userData);
       }
       else if (kCFragLibraryFileType == cInfo.hFileInfo.ioFlFndrInfo.fdType)
       {
-        rc = testProc(path, isDirectory, userData);
+        rc = testProc(path, cFileName, isDirectory, userData);
       }
       
       if (noErr != rc)

@@ -79,6 +79,8 @@ extern "C" const aafClassID_t CLSID_EnumAAFLoadedPlugins;
 // dependent entrypoint...
 extern "C" const char * AAFGetLibraryDirectory();
 extern "C" const char * AAFGetLibraryPath();
+extern "C" const char * AAFGetLibrarySharedDirectoryName();
+extern "C" const char * AAFGetLibraryPluginPrefix();
 
 
 // Comment base class for all table entry wrapper classes.
@@ -226,31 +228,94 @@ const CLSID CLSID_AAFEssenceDataStream =
 
 
 
-// Common structure used to share data with the following testLibraryProc
-typedef struct _AAFTestLibraryProcData
+// Common structure used to share data with the following registerSharedPluginsProc
+const size_t kCaseBufferSize = 260;
+class AAFTestLibraryProcData
 {
+public:
+  AAFTestLibraryProcData(ImplAAFPluginManager *pluginMgr, aafTable *files);
+  
 	ImplAAFPluginManager *plugins;
   aafTable_t	*pluginFiles;
 	const char* currentLibraryPath;
-} AAFTestLibraryProcData;
+	const char* pluginDirectory;
+	size_t pluginDirectorySize;
+	const char* pluginPrefix;
+	size_t pluginPrefixSize;
+	char caseBuffer[kCaseBufferSize];
+} ;
 
 
-static AAFRDLIRESULT testLibraryProc(const char* name, char isDirectory, void * userData)
+AAFTestLibraryProcData::AAFTestLibraryProcData(ImplAAFPluginManager *pluginMgr, aafTable *files) :
+  plugins(pluginMgr),
+  pluginFiles(files),
+  currentLibraryPath(NULL),
+  pluginDirectory(NULL),
+  pluginDirectorySize(0),
+  pluginPrefix(NULL),
+  pluginPrefixSize(0)
+{
+	currentLibraryPath = AAFGetLibraryPath();
+	assert(NULL != currentLibraryPath);
+
+	pluginDirectory = AAFGetLibrarySharedDirectoryName();
+	assert(NULL != pluginDirectory);
+	pluginDirectorySize = strlen(pluginDirectory);
+	assert(pluginDirectorySize <= kCaseBufferSize);
+	
+	pluginPrefix = AAFGetLibraryPluginPrefix();
+	assert(NULL != pluginPrefix);
+	pluginPrefixSize = strlen(pluginPrefix);
+	assert(pluginPrefixSize <= kCaseBufferSize);
+	
+	memset(caseBuffer, 0, kCaseBufferSize);
+}
+
+static AAFRDLIRESULT testPluginProc(const char* path, const char* name, char isDirectory, void * userData)
 {
   AAFRESULT rc = AAFRESULT_SUCCESS;
 	AAFTestLibraryProcData *pData = (AAFTestLibraryProcData *)userData;
-	assert(pData && pData->plugins && pData->pluginFiles && pData->currentLibraryPath);
+	assert(pData && pData->plugins && pData->pluginFiles && pData->currentLibraryPath && pData->pluginPrefix && pData->pluginPrefixSize);
 
   //
   // If the current name is not a directory and not equal to the 
-  // path this dll (the reference implementation dll) then
+  // path this dll (the reference implementation dll) and 
+  // the name begins with AAF or aaf then
   // attempt to register the file and any contained plugins.
   //
-	if (!isDirectory && 0 != strcmp(pData->currentLibraryPath, name))
-		rc = (pData->plugins)->RegisterPluginFile(name);
+  if (!isDirectory && (pData->pluginPrefixSize < strlen(name))) 
+  {
+    if ( 0 == strncmp(pData->caseBuffer, pData->pluginPrefix, pData->pluginPrefixSize)) 
+    { 
+      if ( 0 != strcmp(path, pData->currentLibraryPath) )
+        rc = (pData->plugins)->RegisterPluginFile(path);
+    }
+  }
 
-	// Ignore error results and continue processing plugins...
-	return 0;
+  // Ignore error results and continue processing plugins...
+  return 0;
+}
+
+static AAFRDLIRESULT registerSharedPluginsProc(const char* path, const char* name, char isDirectory, void * userData)
+{
+  AAFRESULT rc = AAFRESULT_SUCCESS;
+  AAFTestLibraryProcData *pData = (AAFTestLibraryProcData *)userData;
+  assert(pData && pData->plugins && pData->pluginFiles && pData->currentLibraryPath && pData->pluginDirectory);
+
+  //
+  // Current name is our aaf plugin directory then search for and attempt
+  // to load any contained plugins/extensions.
+  //
+  if (isDirectory && (0 == strcmp(pData->pluginDirectory, name))) // use case sensitive comparison for directory
+  {
+    for (size_t i = 0; i < pData->pluginPrefixSize; i++)
+      pData->caseBuffer[i] = tolower(name[i]);
+
+    rc = AAFFindLibrary(path, testPluginProc, userData);
+  }
+
+  // Ignore error results and continue processing plugins...
+  return 0;
 }
 
 
@@ -482,17 +547,19 @@ AAFRESULT ImplAAFPluginManager::MakeCodecFromEssenceDesc(
 }
 
 
-
 // Attempt to register all of the plugin files in the installation directory.
 AAFRESULT ImplAAFPluginManager::RegisterSharedPlugins(void)
 {
   // The current impelementation uses the directory that contains
   // the loaded and running AAF dll as the "installation directory".
   // This may change in a future version to some other directory.
-	const char* libraryDirectory = AAFGetLibraryDirectory();
-	assert(NULL != libraryDirectory);
+  const char* libraryDirectory = AAFGetLibraryDirectory();
+  assert(NULL != libraryDirectory);
 
-  return RegisterPluginDirectory(libraryDirectory);
+  // Setup common data needed by registerSharedPluginsProc callback.
+  AAFTestLibraryProcData testLibraryData(this, _pluginFiles);
+
+  return AAFFindLibrary(libraryDirectory, registerSharedPluginsProc, &testLibraryData);
 }
 
 
@@ -502,14 +569,10 @@ AAFRESULT ImplAAFPluginManager::RegisterPluginDirectory(const char *directoryNam
   if (NULL == directoryName)
     return AAFRESULT_NULL_PARAM;
 
-	// Setup common data needed by testLibraryProc callback.
-	AAFTestLibraryProcData testLibraryData;
-	testLibraryData.plugins = this;
-	testLibraryData.pluginFiles = _pluginFiles;
-	testLibraryData.currentLibraryPath = AAFGetLibraryPath();
-	assert(NULL != testLibraryData.currentLibraryPath);
+  // Setup common data needed by registerSharedPluginsProc callback.
+  AAFTestLibraryProcData testLibraryData(this, _pluginFiles);
 
-  return AAFFindLibrary(directoryName, testLibraryProc, &testLibraryData);
+  return AAFFindLibrary(directoryName, testPluginProc, &testLibraryData);
 }
 
 // Utility to create an ascii character string from a wide character string.
