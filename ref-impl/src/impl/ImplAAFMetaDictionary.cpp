@@ -1466,13 +1466,7 @@ AAFRESULT ImplAAFMetaDictionary::PvtSyncCommonClassDefs()
 
 AAFRESULT ImplAAFMetaDictionary::SyncMetaDictionaries()
 { 
-  AAFRESULT hr = AAFRESULT_SUCCESS;
-
-  if ( AAFRESULT_SUCCESS == (hr = PvtSyncCommonClassDefs()) ) {
-    // intentional noop
-  }
-
-  return hr;
+  return PvtSyncCommonClassDefs();
 }
 
 
