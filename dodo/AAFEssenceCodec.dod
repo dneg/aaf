@@ -174,7 +174,7 @@ AD_XMETHOD5(SemanticCheck,
 			// in the essence descriptor\, and any such values contained within
 			// the essence data)
 		
-AD_XMETHOD3(Create,
+AD_XMETHOD5(Create,
 			[in],
 			objIn,
 			Unknown,
@@ -190,6 +190,16 @@ AD_XMETHOD3(Create,
 			AAFEssenceStream,
 			stream,
 			Here is an essence stream with the raw data,
+			[in],
+			objPass,
+			aafInt32,
+			numParms,
+			Here are the number of create parameters,
+			[in],
+			objPass,
+			aafmMultiCreate_t *,
+			createParms,
+			Here are the create parameters,
 			Create a media data object\, and attach the correct type of
 			//EssenceDescriptor to the fileMob)
 
