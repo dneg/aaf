@@ -31,6 +31,7 @@
 #endif
 
 
+#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 
@@ -951,8 +952,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 static aafBool IsThisSCLP(
-						  AAFFile *file,    /* IN - File Handle */
-						  AAFObject *obj,  /* IN - Object to match */
+						  ImplAAFFile *file,    /* IN - File Handle */
+						  ImplAAFObject *obj,  /* IN - Object to match */
 						  void *data)       /* IN/OUT - Match Data */
 {
 #if FULL_TOOLKIT
@@ -976,8 +977,8 @@ static aafBool IsThisSCLP(
 }
 
 static AAFRESULT LocalChangeRef(
-						  AAFFile *file,    /* IN - File Handle */
-						  AAFObject *obj,  /* IN - Object to execute */
+						  ImplAAFFile *file,    /* IN - File Handle */
+						  ImplAAFObject *obj,  /* IN - Object to execute */
 						  aafInt32 level,   /* IN - Depth level */
 						  void *data)       /* IN/OUT - Execute data */
 {
@@ -1736,9 +1737,8 @@ AAFRESULT ImplAAFMob::ReconcileMobLength(void)
 	return(AAFRESULT_NOT_IMPLEMENTED);	// MUST call one of the subclasses
 }
 
-extern "C" const aafClassID_t CLSID_AAFMob;
 
-OMDEFINE_STORABLE(ImplAAFMob, CLSID_AAFMob);
+OMDEFINE_STORABLE(ImplAAFMob, AUID_AAFMob);
 
 
 

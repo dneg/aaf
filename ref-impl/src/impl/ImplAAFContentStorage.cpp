@@ -33,6 +33,7 @@
 #include "ImplAAFContentStorage.h"
 #endif
 
+#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 #include "ImplAAFObjectCreation.h"
@@ -40,8 +41,7 @@
 #define DEFAULT_NUM_MOBS				1000
 #define DEFAULT_NUM_DATAOBJ			200
 
-extern "C" const aafClassID_t	CLSID_AAFContentStorage;
-OMDEFINE_STORABLE(ImplAAFContentStorage, CLSID_AAFContentStorage);
+OMDEFINE_STORABLE(ImplAAFContentStorage, AUID_AAFContentStorage);
 
 extern "C" const aafClassID_t CLSID_EnumAAFMobs;
 extern "C" const aafClassID_t CLSID_EnumAAFEssenceData;
@@ -555,7 +555,7 @@ aafBool ImplAAFContentStorage::IsEssenceDataPresent(aafUID_t fileMobUid,	/* IN -
 
 
 AAFRESULT ImplAAFContentStorage::AppendDataObject(aafUID_t mobID,      /* IN - Mob ID */
-						  AAFObject *dataObj)    /* IN - Input Mob */ 
+						  ImplAAFObject *dataObj)    /* IN - Input Mob */ 
 {
 #if FULL_TOOLKIT
 	XPROTECT(_file)
