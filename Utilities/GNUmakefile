@@ -37,15 +37,18 @@ eli2aaf:
 .PHONY : aafviewer
 aafviewer:
 	cd aafviewer/src/aaf2dot && $(MAKE)
+	cd aafviewer/src/aafmeta2dot && $(MAKE)
 
 .PHONY : clean
 clean :
 	cd AafOmf && $(MAKE) GENDEPS=0 $@
 	cd eli2aaf && $(MAKE) GENDEPS=0 $@
 	cd aafviewer/src/aaf2dot && $(MAKE) GENDEPS=0 $@
+	cd aafviewer/src/aafmeta2dot && $(MAKE) GENDEPS=0 $@
 
 .PHONY : realclean
 realclean :
 	cd AafOmf && $(MAKE) GENDEPS=0 $@
 	cd eli2aaf && $(MAKE) GENDEPS=0 $@
 	cd aafviewer/src/aaf2dot && $(MAKE) GENDEPS=0 $@
+	cd aafviewer/src/aafmeta2dot && $(MAKE) GENDEPS=0 $@
