@@ -8,6 +8,7 @@ AAFSourceReference\
 #c
 #import ./AAFUnitTest.exp
 #import ./AAFSourceReference.exp
+AD_HEAD
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -18,75 +19,82 @@ AAFSourceReference\
 \******************************************/
 AD_CLASS_BEGIN
 
-AD_GETOBJ_METHOD1(GetStartTime,
-				  [retval][out],
-				  AAFPosition,
-				  pStartTime,
-				  Place to put start time,
-				  Gets the starting time and places it into the pStartTime argument.)
+AD_CONSTRUCTOR2([in],AAFFile *,file,File Handle,
+				[in],OMLObject,obj ,Object Manager???,
+				???)
 
-AD_SETOBJ_METHOD1(SetStartTime,
-				  [in],
-				  AAFPosition,
-				  startTime,
-				  start time to set,
-				  Sets the starting time using the startTime argument.)
+AD_CONSTRUCTOR4([in],AAFFile *,file,File Handle,
+				[in],AAFDataKind * ,datakind ,Datakind object,
+				[in],omfLength_t   ,length   ,Length property value,
+				[in],omfSourceRef_t,sourceRef,Source Reference,
+				This function creates a new source clip object with
+  // the given required properties.  Optional properties are added
+  // with separate functions.)
 
-AD_GETOBJ_METHOD1(GetFadeInLength,
-				  [retval][out],
-				  AAFLength,
-				  pFadeInLength,
-				  Place to put Fade In Length,
-				  Gets the fade in length and places it into the pFadeInLength argument.)
+AD_METHOD2(Init,
+		   [in],AAFFile *,file,File Handle,
+		   [in],OMLObject,obj,Object Manager???,
+		   Initializes a source clip.)
 
-AD_SETOBJ_METHOD1(SetFadeInLength,
-				  [in],
-				  AAFLength,
-				  fadeInLength,
-				  Fade In Length to set,
-				  Sets the fade in length using the fadeInLength argument.)
+AD_METHOD6(GetFade,
+		   [out],aafInt32 *     ,fadeInLen     ,Fade In Length,
+		   [out],omfFadeType_t *,fadeInType    ,Fade In Type,
+		   [out],aafBool *      ,fadeInPresent ,Fade In Type,
+		   [out],aafInt32 *     ,fadeOutLen    ,Fade Out Length,
+		   [out],omfFadeType_t *,fadeOutType   ,Fade Out Type,
+		   [out],aafBool *      ,fadeOutPresent,Fade In Type,
+		   This function returns the optional fade information from a
+  // source clip.  This function only applies to audio source clips.)
 
-AD_GETOBJ_METHOD1(GetFadeInType,
-				  [retval][out],
-				  AAFFadeType,
-				  pFadeInType,
-				  Place to put Fade In Type,
-				  Gets the fade in type and places it into the pFadeInType argument.)
+AD_METHOD1(ResolveRef,
+		   [out],AAFMob **,mob,Referenced mob,
+		   Given a source clip object\, this function returns a pointer
+  // to the mob that it references.  If this mob does not exist\, the
+  // error OM_ERR_MOB_NOT_FOUND is returned.)
 
-AD_SETOBJ_METHOD1(SetFadeInType,
-				  [in],
-				  AAFFadeType,
-				  fadeInType,
-				  Fade In Type to set,
-				  Sets the fade in type using the fadeInType argument.)
+AD_METHOD1(GetRef,
+		   [out],omfSourceRef_t *,sourceRef,Source Reference,
+		   This function returns the 3 properties on a source Clip
+  // that make up the "source reference" \(sourceID\, sourceTrackID\, and
+  // startTime\).)
 
-AD_GETOBJ_METHOD1(GetFadeOutLength,
-				  [retval][out],
-				  AAFLength,
-				  pFadeOutLength,
-				  Place to put Fade Out Length,
-				  Gets the fade out length and places it into the pFadeOutLength argument.)
+AD_METHOD4(SetFade,
+		   [in],aafInt32     ,fadeInLen  ,Fade In Length,
+		   [in],omfFadeType_t,fadeInType ,Fade In Type,
+		   [in],aafInt32     ,fadeOutLen ,Fade Out Length,
+		   [in],omfFadeType_t,fadeOutType,Fade Out Type,
+		   This function sets the optional fade properties on the
+  // input source clip object.  The fade properties only apply to a
+  // source clip of datakind \(or convertible to a datakind\) of type
+  // Sound. All arguments should be specified.)
 
-AD_SETOBJ_METHOD1(SetFadeOutLength,
-				  [in],
-				  AAFLength,
-				  fadeOutLength,
-				  Fade Out Length to set,
-				  Sets the fade out length using the fadeOutLength argument.)
+AD_METHOD1(SetRef,
+		   [in],omfSourceRef_t,sourceRef,Source Reference,
+		   This function sets the 3 properties on a source Clip that
+  // make up the "source reference" \(sourceID\, sourceTrackID\, and
+  // startTime\).)
 
-AD_GETOBJ_METHOD1(GetFadeOutType,
-				  [retval][out],
-				  AAFFadeType,
-				  pFadeOutType,
-				  Place to put Fade Out Type,
-				  Gets the fade out type and places it into the pFadeOutType argument.)
+AD_METHOD2(Verify,
+		   [out],char *,buf,,
+		   [out],validateData_t *,result,,
+		   )
 
-AD_SETOBJ_METHOD1(SetFadeOutType,
-				  [in],
-				  AAFFadeType,
-				  fadeOutType,
-				  Fade Out Type to set,
-				  Sets the fade out type using the fadeOutType argument.)
+AD_METHOD6(TraverseToClip,
+		   [in],omfLength_t   , length,,
+		   [out],AAFSegment ** ,sclp,,
+		   [out],AAFPulldown **,pulldownObj,,
+		   [out],aafInt32 *    ,pulldownPhase,,
+		   [out],omfLength_t * ,sclpLen,,
+		   [out],aafBool *,    isMask,,
+		   )
+
+AD_METHOD1(Load,
+		   [in],AAFFile *,file,,
+		   )
+
+AD_METHOD1(Save,
+		   [in],AAFFile *,file,,
+		   )
 
 AD_OVERRIDE(.method-Test)
 
