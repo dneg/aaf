@@ -947,12 +947,6 @@ public:
   //********
 };
 
-
-// Declare the module test function. The implementation of the will be be
-// in /test/C.this-moduleTest.cpp.
-extern "C" HRESULT C.this-module_test();
-
-
 #endif // ! __C.this-module_h__
 #endm
 
@@ -1013,11 +1007,6 @@ private:
   Impl.this-module * _rep;
 
 };
-
-
-// Declare the module test function. The implementation of the will be be
-// in /test/C.this-moduleTest.cpp.
-extern "C" HRESULT C.this-module_test();
 
 
 #endif // ! __C.this-module_h__
