@@ -3194,3 +3194,28 @@ static void check(HRESULT status)
     throw OMException(status);
   }
 }
+
+#if defined(OM_WINDOWS_SS) || defined(OM_MACINTOSH_SS)
+
+// Simple class to ensure COM initialization/uninitialization.
+
+class MSSInitializer {
+public:
+
+  MSSInitializer(void)
+  {
+    CoInitialize(0);
+  }
+
+  ~MSSInitializer(void)
+  {
+    CoUninitialize();
+  }
+
+};
+
+// Perform COM initialization during static initialization
+//
+static MSSInitializer _MSSInitializer;
+
+#endif
