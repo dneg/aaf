@@ -64,12 +64,36 @@ AD_XMETHOD2(GetCharacter,
 		pCharacter,
 		character that is read,
 
-     Gets a property value corresponding to the actual data. 
+     Gets a character from the property value. 
   // 
   // Succeeds if:
   // - Initialize\(\) has already been called on this object.
   // - The pCharacterValue pointer is valid.
   // - The ppActualPropertyValue pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  //
+  // AAFRESULT_ILLEGAL_VALUE
+  //   - pCharacterValue is not a valid character property value.
+  //)
+
+AD_XMETHOD2(SetCharacter,
+		[in],
+		objIn,
+		AAFPropertyValue,
+		pCharacterValue,
+		character property value to modify,
+
+		[in],
+		objPass,
+		aafCharacter,
+		character,
+		character that is written,
+
+     Sets a character into the given property value. 
+  // 
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - The pCharacterValue pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   //
   // AAFRESULT_ILLEGAL_VALUE
