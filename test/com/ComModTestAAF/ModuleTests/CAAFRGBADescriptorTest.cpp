@@ -305,7 +305,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	  checkResult(pEssDesc->QueryInterface(IID_IAAFRGBADescriptor, (void **) &pRGBADesc));
 
     // TODO: test for expected DigitalImage properties
-	  aafUInt32				val1, val2;
+	  aafUInt32				val1, val2, resultElements;
 	  aafInt32				val3, val4;
 	  aafFrameLayout_t		framelayout;
 	  aafAlphaTransparency_t	alphaTrans;
@@ -366,6 +366,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			              ratio.denominator == kGammaDenTestVal,
                     AAFRESULT_TEST_FAILED);
 
+		checkResult(pRGBADesc->CountPixelLayoutElements (&resultElements));
+		checkExpression(resultElements == NUM_TEST_ELEMENTS, AAFRESULT_TEST_FAILED);
+			
 		checkResult(pRGBADesc->GetPixelLayout(NUM_TEST_ELEMENTS, readElements));
 		for(n = 0; n < NUM_TEST_ELEMENTS; n++)
 		{
@@ -383,6 +386,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			if(readPalette[n] != bogusPalette[n])
 				throw AAFRESULT_TEST_FAILED;
 		}
+
+		checkResult(pRGBADesc->CountPaletteLayoutElements (&resultElements));
+		checkExpression(resultElements == NUM_TEST_ELEMENTS, AAFRESULT_TEST_FAILED);
 		checkResult(pRGBADesc->GetPaletteLayout(NUM_TEST_ELEMENTS, readElements));
 		for(n = 0; n < NUM_TEST_ELEMENTS; n++)
 		{
