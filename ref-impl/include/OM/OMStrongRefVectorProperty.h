@@ -29,10 +29,16 @@
 #ifndef OMSTRONGREFVECTORPROPERTY_H
 #define OMSTRONGREFVECTORPROPERTY_H
 
-#include "OMPropertyBase.h"
+#include "OMVector.h"
+#include "OMContainerElement.h"
 
-  // @class Persistent containers of strong reference (contained object)
-  //        properties supported by the Object Manager.
+template <typename ReferencedObject>
+class OMStrongReferenceVectorIterator;
+
+  // @class Persistent elastic sequential collections of strongly
+  //        referenced (contained) objects supported by the Object Manager.
+  //        Objects are accessible by index. The order of objects is
+  //        determined externally. Duplicate objects are allowed.
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable>.
@@ -60,6 +66,10 @@ public:
     //          <c OMStrongReferenceVectorProperty> is <p externalSize>.
   virtual void restore(size_t externalSize);
 
+    // @cmember The number of <p ReferencedObject>s in this
+    //          <c OMStrongReferenceVectorProperty>.
+  size_t count(void) const;
+
     // @cmember Get the size of this <c OMStrongReferenceVectorProperty>.
   void getSize(size_t& size) const;
 
@@ -80,6 +90,12 @@ public:
     // @cmember Append the given <p ReferencedObject> <p value> to
     //          this <c OMStrongReferenceVectorProperty>.
   void appendValue(const ReferencedObject*& value);
+
+    // @cmember Increase the capacity of this
+    //          <c OMStrongReferemceVectorProperty> so that it
+    //          can contain at least <p capacity> <p ReferencedObject>s
+    //          without having to be resized.
+  void grow(const size_t capacity);
 
   // Optional property interface
 
@@ -105,56 +121,13 @@ public:
     //          <p size> bytes in size.
   virtual void setBits(const OMByte* bits, size_t size);
 
-protected:
-  // @access Protected members.
-
-    // @cmember Load the persisted representation of the element of
-    //          this <c OMStrongReferenceVectorProperty> given by <p index>
-    //          into memory.
-  virtual void loadElement(const size_t index);
-
-    // @cmember Is the persisted representation of the element of this
-    //          <c OMStrongReferenceVectorProperty> given by <p index>
-    //          loaded ?
-  virtual bool isElementLoaded(const size_t index) const;
-
-    // @cmember Set the bit that indicates that the persisted
-    //          representation of the element of this
-    //          <c OMStrongReferenceVectorProperty> given by <p index>
-    //          is loaded.
-  virtual void setElementLoaded(const size_t index);
-
-    // @cmember Clear the bit that indicates that the persisted
-    //          representation of the element of this
-    //          <c OMStrongReferenceVectorProperty> given by <p index>
-    //          is loaded.
-  virtual void clearElementLoaded(const size_t index);
-
-    // @cmember The key of the element of this
-    //          <c OMStrongReferenceVectorProperty> given by <p index>.
-  virtual OMUInt32 elementKey(const size_t key) const;
-
-    // @cmember Set the key of the element of this
-    //          <c OMStrongReferenceVectorProperty> given by <p index>
-    //          to <p key>.
-  virtual void setElementKey(const size_t index, const OMUInt32 key);
-
 private:
 
-  void grow(size_t additionalElements);
+    // The vector of references.
+  OMVector<OMVectorElement<OMStrongObjectReference<ReferencedObject>,
+                           ReferencedObject> > _vector;
 
-  const ReferencedObject** _vector;
-  size_t _sizeOfVector; // Actual size
-  size_t _size;         // Number of elements in use
-
-    // _loaded[i] is false if a persisted representation of _vector[i]
-    // exists that has not yet been loaded, true otherwise.
-    //
-  bool* _loaded;
-
-    // _keys[i] is the key for _vector[i].
-    //
-  OMUInt32* _keys;
+  friend class OMStrongReferenceVectorIterator<ReferencedObject>;
 
 };
 
