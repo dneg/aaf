@@ -59,7 +59,6 @@ checkDirectories Ä
 	Set Exit 0						# don't exit early
 	backup -from "{aaf}ref-impl:include:" -to "{aaf}AAFMacSDK:include:" -check from -a > makesdk.tmp
 	backup -from "{aaf}ref-impl:include:ref-api:" -to "{aaf}AAFMacSDK:include:" -check from -a | StreamEdit -e '/Prvate/ Delete' >>  makesdk.tmp
-	Set Exit 1
 	if `count -c makesdk.tmp` ­ 0
 		execute makesdk.tmp
 		if "`Search -e 'Duplicate' makesdk.tmp`"		
@@ -71,6 +70,7 @@ checkDirectories Ä
 			end
 		end
 	end
+	Set Exit 1
 	# Create build directories so that CodeWarrior will not
 	# produce any warnings about missing access paths when a 
 	# project is opened.
