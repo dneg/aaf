@@ -11,6 +11,9 @@
 # that BLD_CFG_DIR already be set by the including makefile to point
 # to this directory.
 #
+# Some platforms (which do their own makedepend generation) may
+# require that DEPEND_INCLUDES and SOURCES be already defined.
+#
 
 .SUFFIXES: .o .o86 .oix .ont .obj .c .cpp .idl
 
@@ -37,6 +40,6 @@ baseclean:
 	${RM} -f *.a *.a86 *.aix *.ant *.lib
 	${RM} -f vc50.*
 	${RM} -f *~ .*~
-	${RM} -f makefile.bak makefile.dep makefile.dep.bak
+	${RM} -f .depend.mk*
 	${RM} -f .objects.*.txt .testobjs.*.txt
 	${RM} -f .cmake.state *.core core
