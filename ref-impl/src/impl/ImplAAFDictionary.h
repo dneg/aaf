@@ -419,6 +419,8 @@ public:
   // value of flag.  Default is enabled.
   bool SetEnableDefRegistration (bool isEnabled);
 
+  bool IsAxiomaticClass (const aafUID_t &classID) const;
+
 private:
 
   bool pvtLookupAxiomaticType (const aafUID_t &typeID,
