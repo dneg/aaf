@@ -16,6 +16,7 @@ const bool true = 1;
 #elif defined (__MWERKS__)  // CodeWarrior
 
 #include <stdlib.h> // for size_t
+#include <wtypes.h> // for wcslen() etc.
 
 #elif defined (__GNUC__)  // GNU C++
 
