@@ -34,8 +34,8 @@ class ImplEnumAAFPropertyValues;
 class ImplAAFPropertyValue;
 class ImplAAFTypeDef;
 
-#ifndef __ImplAAFDefObject_h__
-#include "ImplAAFDefObject.h"
+#ifndef __ImplAAFMetaDefinition_h__
+#include "ImplAAFMetaDefinition.h"
 #endif
 
 #include "OMPropertyDefinition.h"
@@ -44,7 +44,7 @@ typedef OMProperty* (*ImplAAFOMPropertyCreateFunc_t)
   (OMPropertyId pid,
    const char * name);
 
-class ImplAAFPropertyDef : public ImplAAFDefObject,
+class ImplAAFPropertyDef : public ImplAAFMetaDefinition,
 						   public OMPropertyDefinition
 {
 public:
