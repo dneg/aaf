@@ -151,7 +151,7 @@ OMUInt64 OMDataStreamProperty::position(void) const
 
   OMUInt64 result = store()->streamPosition(_stream);
 
-  POSTCONDITION("Valid position", (result >= 0) && (result <= size()));
+  POSTCONDITION("Valid position", result <= size());
   return result;
 }
 
