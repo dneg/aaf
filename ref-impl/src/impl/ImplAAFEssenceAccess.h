@@ -39,16 +39,28 @@ class ImplAAFSourceClip;
 
 class ImplAAFEssenceFormat;
 
+class ImplAAFEssenceStream;
 
+class ImplAAFFileDescriptor;
 
-
-
+class ImplAAFLocator;
 
 
 #ifndef __ImplAAFRoot_h__
 #include "ImplAAFRoot.h"
 #endif
 
+#include "AAFPlugin.h"
+
+typedef struct
+{
+	aafPosition_t	dataOffset;
+	aafUID_t		mediaKind;
+	aafInt32		trackID;
+	aafInt16		physicalOutChan;	/* 1->N */
+	aafRational_t	sampleRate;
+	aafLength_t		numSamples;
+}               aafSubChannel_t;
 
 class ImplAAFEssenceAccess : public ImplAAFRoot
 {
@@ -161,6 +173,15 @@ public:
 //@comm Replaces omfmVideoMediaCreate
 
 /****/
+  virtual AAFRESULT STDMETHODCALLTYPE
+	SetEssenceDestination(
+				ImplAAFLocator		*destination,
+				aafFileFormat_t		fileFormat);
+
+ //Sets which variety of the codec ID is to be used.)
+  virtual AAFRESULT STDMETHODCALLTYPE
+	SetEssenceCodecVariety(aafUID_t variety);
+
   //****************
   // Create()
   //
@@ -172,14 +193,12 @@ public:
          // @parm [in] 
          aafSlotID_t  masterSlotID,
 
-         // @parm [in] and this file mob
-         ImplAAFSourceMob * fileMob,
-
          // @parm [in] create essence of this type
-         ImplAAFDataDef * mediaKind,
+         aafUID_t	mediaKind,
 
-         // @parm [in] with this sample rate
-         aafRational_t  samplerate,
+ 		 aafUID_t			codecID,
+		 aafRational_t	editRate,
+		 aafRational_t	sampleRate,
 
          // @parm [in] optionally compressing it
          aafCompressEnable_t  Enable);
@@ -205,20 +224,10 @@ public:
         (// @parm [in] on this master mob
          ImplAAFMasterMob * masterMob,
 
-         // @parm [in] and this file mob create
-         ImplAAFSourceMob * fileMob,
-
-         // @parm [in] this many channels
-         aafInt16  arrayElemCount,
-
-         // @parm [in,ref,size_is(arrayElemCount)] using these definitions
-         aafmMultiCreate_t *  mediaArray,
-
-         // @parm [in] 
-         aafRational_t   editRate,
-
-         // @parm [in] optionally compressing it
-         aafCompressEnable_t  Enable);
+ 							aafUID_t codecID,
+                          aafInt16  /*arrayElemCount*/,
+                           aafmMultiCreate_t *  /*mediaArray*/,
+                           aafCompressEnable_t  /*Enable*/);
 	//@comm The essence handle from this call can be used with
 	// WriteDataSamples or WriteMultiSamples but NOT with 
 	// or WriteDataLines.
@@ -1105,6 +1114,19 @@ public:
   // Return this objects stored object class.
   virtual AAFRESULT STDMETHODCALLTYPE
     GetObjectClass(aafUID_t * pClass);
+private:
+	aafUID_t			_codecID;
+	aafUID_t			_variety;
+	ImplAAFLocator		*_destination;
+	aafFileFormat_t		_fileFormat;
+	ImplAAFSourceMob	*_fileMob;
+	aafInt32			_numChannels;
+	aafSubChannel_t		*_channels;
+	aafPosition_t		_dataStart;
+	ImplAAFMasterMob	*_masterMob;
+	ImplAAFFileDescriptor *_mdes;
+	IAAFEssenceCodec	*_codec;
+	IAAFEssenceStream	 *_stream;
 };
 
 #endif // ! __ImplAAFEssenceAccess_h__
