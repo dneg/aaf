@@ -241,7 +241,7 @@ ReferencedObject*
                                                 const size_t index)
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::setValueAt");
-  PRECONDITION("Valid index", (index >= 0) && (index <= count()));
+  PRECONDITION("Valid index", index <= count());
   
   if (index == count()) {
     // This is an append, make sure the new element is defined.
@@ -278,7 +278,7 @@ ReferencedObject* OMStrongReferenceVectorProperty<ReferencedObject>::valueAt(
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::valueAt");
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
-  PRECONDITION("Valid index", ((index >= 0) && (index < count())));
+  PRECONDITION("Valid index", index < count());
 
   VectorElement& element = _vector.getAt(index);
 
@@ -303,7 +303,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::getValueAt(
   OBSOLETE("OMStrongReferenceVectorProperty<ReferencedObject>::valueAt");
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
-  PRECONDITION("Valid index", ((index >= 0) && (index < count())));
+  PRECONDITION("Valid index", index < count());
 
   VectorElement& element = _vector.getAt(index);
 
@@ -400,7 +400,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::insertAt(
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::insertAt");
 
-  PRECONDITION("Valid index", (index >= 0) && (index <= count()));
+  PRECONDITION("Valid index", index <= count());
   
   OMUInt32 localKey = nextLocalKey();
   wchar_t* name = elementName(localKey);
@@ -477,7 +477,7 @@ ReferencedObject*
 OMStrongReferenceVectorProperty<ReferencedObject>::removeAt(const size_t index)
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::removeAt");
-  PRECONDITION("Valid index", (index >= 0) && (index <= count()));
+  PRECONDITION("Valid index", index <= count());
 
   ReferencedObject* result = setValueAt(0, index);
   _vector.removeAt(index);
