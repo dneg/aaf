@@ -28,7 +28,13 @@
 #include "extensionUtils.h"
 #include "AAF.h"
 #include <assert.h>
+
+#if defined(_MAC) || defined(macintosh)
+#include <wstring.h>
+#endif
+
 #include <iostream.h>
+
 
 
 //
