@@ -142,39 +142,13 @@ void OMStreamProperty<Element>::readElements(OMUInt32 elementCount,
   PRECONDITION("Valid buffer", elements != 0);
 
   const OMType* elementType = type(); // Temporary, _element_ type !
-  ASSERT("Valid element type", elementType != 0);
-
-  OMByte* bytes = reinterpret_cast<OMByte*>(elements);
-
-  // Allocate buffer for one element
-  size_t externalBytesSize = sizeof(Element);
-  OMByte* buffer = new OMByte[externalBytesSize];
-
-  for (size_t i = 0; i < elementCount; i++) {
-
-    // Read an element of the property value
-    OMUInt32 actualByteCount;
-    read(buffer, externalBytesSize, actualByteCount);
-    ASSERT("All bytes read", actualByteCount == externalBytesSize);
-
-    // Reorder an element of the property value
-    if (store()->byteOrder() != hostByteOrder()) {
-      elementType->reorder(buffer, sizeof(Element));
-    }
-
-    // Internalize an element of the property value
-    size_t requiredBytesSize = elementType->internalSize(buffer,
-                                                         externalBytesSize);
-    ASSERT("Internal element size equals external element size",
-                                         requiredBytesSize == sizeof(Element));
-
-    elementType->internalize(buffer,
-                             externalBytesSize,
-                             &bytes[i * sizeof(Element)],
-                             requiredBytesSize,
-                             hostByteOrder());
-  }
-  delete [] buffer;
+  OMUInt32 actualElementCount;
+  readTypedElements(elementType,
+                    sizeof(Element),
+                    (OMByte*)elements,
+                    elementCount,
+                    actualElementCount);
+  POSTCONDITION("All elements read", actualElementCount == elementCount);
 }
 
   // @mfunc Write <p elementCount> <p Element>s to the current position in
@@ -191,39 +165,14 @@ void OMStreamProperty<Element>::writeElements(OMUInt32 elementCount,
   PRECONDITION("Valid element count", elementCount > 0);
   PRECONDITION("Valid buffer", elements != 0);
 
-  const OMType* elementType = type();
-  ASSERT("Valid element type", elementType != 0);
-
-  const OMByte* bytes = reinterpret_cast<const OMByte*>(elements);
-
-  // Allocate buffer for one element
-  size_t externalBytesSize = elementType->externalSize(
-                                                    const_cast<OMByte*>(bytes),
-                                                    sizeof(Element));
-  ASSERT("Internal element size equals external element size",
-                                         externalBytesSize == sizeof(Element));
-  OMByte* buffer = new OMByte[externalBytesSize];
-
-  for (size_t i = 0; i < elementCount; i++) {
- 
-    // Externalize an element of the property value
-    elementType->externalize(const_cast<OMByte*>(&bytes[i * sizeof(Element)]),
-                             sizeof(Element),
-                             buffer,
-                             externalBytesSize,
-                             store()->byteOrder());
-
-    // Reorder an element of the property value
-    if (store()->byteOrder() != hostByteOrder()) {
-      elementType->reorder(buffer, externalBytesSize);
-    }
-
-    // Write an element of the property value
-    OMUInt32 actualByteCount;
-    write(buffer, externalBytesSize, actualByteCount);
-    ASSERT("All bytes written", actualByteCount == externalBytesSize);
-  }
-  delete [] buffer;
+  const OMType* elementType = type(); // Temporary, _element_ type !
+  OMUInt32 actualElementCount;
+  writeTypedElements(elementType,
+                     sizeof(Element),
+                     (OMByte*)elements,
+                     elementCount,
+                     actualElementCount);
+  POSTCONDITION("All elements written", actualElementCount == elementCount);
 }
 
   // @mfunc Read a single <p Element> from the current position in
