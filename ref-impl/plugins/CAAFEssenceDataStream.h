@@ -1,7 +1,7 @@
 //@doc
 //@class    AAFEssenceStream | Implementation class for AAFEssenceStream
-#ifndef __CAAFObjectStream_h__
-#define __CAAFObjectStream_h__
+#ifndef __CAAFEssenceDataStream_h__
+#define __CAAFEssenceDataStream_h__
 
 /******************************************\
 *                                          *
@@ -12,8 +12,8 @@
 *                                          *
 \******************************************/
 
-#ifndef __AAF_h__
-#include "AAF.h"
+#ifndef __AAFPlugin_h__
+#include "AAFPlugin.h"
 #endif
 
 
@@ -29,7 +29,9 @@
 #include "CAAFUnknown.h"
 #endif
 
-#include "AAFPlugin.h"
+// forward declaration
+interface IAAFEssenceData;
+
 
 EXTERN_C const CLSID CLSID_AAFEssenceDataStream;
 
@@ -119,6 +121,6 @@ private:
 	IAAFEssenceData		*_data;
 };
 
-#endif // ! __CAAFEssenceStream_h__
+#endif // ! __CAAFEssenceDataStream_h__
 
 
