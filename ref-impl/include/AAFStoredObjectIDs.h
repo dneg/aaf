@@ -59,13 +59,14 @@
 // Include the inside-out macro files that invokes the AAF_CLASS macros.
 #include "AAFMetaDictionary.h"
 
-// cleanup any defined macros.
+// cleanup defined macros.
 #undef AAF_TABLE_BEGIN
 #undef AAF_TABLE_END
 #undef AAF_CLASS
 #undef AAF_CLASS_END
 #undef AAF_CLASS_SEPARATOR
 #undef AAF_PROPERTY
-
+#undef AAF_TYPE
+#undef AAF_REFERENCE_TYPE
 
 #endif // __AAFStoredObjectIDs_h__
