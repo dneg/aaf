@@ -81,10 +81,77 @@ LIB32=link.exe -lib
 
 # Name "OM - Win32 Release"
 # Name "OM - Win32 Debug"
+# Begin Group "Source Files"
+
+# PROP Default_Filter "cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMAssertions.cpp"
 # End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMDataStreamProperty.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMFile.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMObjectDirectory.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMProperty.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMPropertySet.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMPropertyTable.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMRootStorable.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMStorable.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMStoredObject.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMStoredPropertySetIndex.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMStoredSetIndex.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMStoredVectorIndex.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMType.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMUtilities.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMWideStringProperty.cpp"
+# End Source File
+# End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter "h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMAssertions.h"
@@ -127,10 +194,6 @@ SOURCE="..\..\..\ref-impl\src\OM\OMContainerPropertyT.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMDataStreamProperty.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\include\OM\OMDataStreamProperty.h"
 # End Source File
 # Begin Source File
@@ -143,10 +206,6 @@ SOURCE="..\..\..\ref-impl\include\OM\OMDictionary.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMFile.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\OM\OMFile.h"
 # End Source File
 # Begin Source File
@@ -156,10 +215,6 @@ SOURCE="..\..\..\ref-impl\include\OM\OMFixedSizeProperty.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMFixedSizePropertyT.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\OMObjectDirectory.cpp"
 # End Source File
 # Begin Source File
 
@@ -179,10 +234,6 @@ SOURCE="..\..\..\ref-impl\src\OM\OMPortability.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMProperty.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\include\OM\OMProperty.h"
 # End Source File
 # Begin Source File
@@ -195,19 +246,11 @@ SOURCE="..\..\..\ref-impl\include\OM\OMPropertyDefinition.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMPropertySet.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\include\OM\OMPropertySet.h"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMPropertyT.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\OMPropertyTable.cpp"
 # End Source File
 # Begin Source File
 
@@ -267,10 +310,6 @@ SOURCE="..\..\..\ref-impl\src\OM\OMReferenceVectorT.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMRootStorable.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\OM\OMRootStorable.h"
 # End Source File
 # Begin Source File
@@ -291,15 +330,7 @@ SOURCE="..\..\..\ref-impl\src\OM\OMSetT.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMStorable.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\OM\OMStorable.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\OMStoredObject.cpp"
 # End Source File
 # Begin Source File
 
@@ -307,23 +338,11 @@ SOURCE="..\..\..\ref-impl\src\OM\OMStoredObject.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMStoredPropertySetIndex.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\OM\OMStoredPropertySetIndex.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMStoredSetIndex.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\OM\OMStoredSetIndex.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\OMStoredVectorIndex.cpp"
 # End Source File
 # Begin Source File
 
@@ -379,15 +398,7 @@ SOURCE="..\..\..\ref-impl\src\OM\OMStrongRefVectorPropertyT.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMType.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\include\OM\OMType.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\OMUtilities.cpp"
 # End Source File
 # Begin Source File
 
@@ -459,15 +470,12 @@ SOURCE="..\..\..\ref-impl\src\OM\OMWeakRefVectorPropertyT.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMWideStringProperty.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\include\OM\OMWideStringProperty.h"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMWideStringPropertyT.h"
 # End Source File
+# End Group
 # End Target
 # End Project
