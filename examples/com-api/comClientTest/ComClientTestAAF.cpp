@@ -116,7 +116,7 @@ static void ReadAAFFile(unsigned char * pFileName)
 
 	check(pHeader->GetLastIdentification(&pIdent));
 
-	fprintf(stdout, "LastIdentification\n");
+	wprintf(L"LastIdentification\n");
 	printIdentification(pIdent);
 
 	check(pFile->Close());
@@ -180,7 +180,7 @@ main()
 	CreateAAFFile((unsigned char *)"Foo.aaf");
 	ReadAAFFile((unsigned char *)"Foo.aaf");
 
-	fprintf(stdout, "Done\n");
+	wprintf(L"Done\n");
 
 
 	return(0);
