@@ -49,7 +49,7 @@
 #include <objbase.h>
 #endif
 
-const OMVersion currentVersion = 27;
+const OMVersion currentVersion = 28;
 
 const size_t indexHeaderSize = sizeof(OMByteOrder) +
                                sizeof(OMVersion) +
