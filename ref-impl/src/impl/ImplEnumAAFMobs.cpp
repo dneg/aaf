@@ -39,7 +39,13 @@ ImplEnumAAFMobs::ImplEnumAAFMobs ()
 
 
 ImplEnumAAFMobs::~ImplEnumAAFMobs ()
-{}
+{
+  if (_cStorage)
+  {
+    _cStorage->ReleaseReference();
+    _cStorage = NULL;
+  }
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -206,7 +212,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		theEnum->ReleaseRef();
+		theEnum->ReleaseReference();
 		*ppEnum = NULL;
 	}
 
@@ -217,7 +223,14 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT
     ImplEnumAAFMobs::SetContentStorage(ImplAAFContentStorage *pCStore)
 {
+  if (_cStorage)
+		_cStorage->ReleaseReference();
+
 	_cStorage = pCStore;
+
+  if (pCStore)
+		pCStore->AcquireReference();
+
 	return AAFRESULT_SUCCESS;
 }
 
