@@ -23,3 +23,12 @@ EXEFILE = -o unittest.${EXE}
 
 SH_PREFIX = 
 SH_SUFFIX =
+
+
+#
+# Some platforms (which do their own makedepend generation) may
+# require that DEPEND_INCLUDES and SOURCES be already defined in order
+# for depend.mk to function properly.  That should not be a problem if
+# Clearcase dependency checking is used.
+#
+include $(BLD_CFG_DIR)/depend.mk
