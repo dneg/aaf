@@ -17,7 +17,7 @@
 #include "ImplAAFContentStorage.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplEnumAAFMobSlots.h"
-
+#include "ImplAAFEssenceAccess.h"
 #include <assert.h>
 #include "AAFResult.h"
 #include "aafCvt.h"
@@ -26,6 +26,7 @@
 #include "AAFPropertyIDs.h"
 
 extern "C" const aafClassID_t CLSID_AAFSourceClip;
+extern "C" const aafClassID_t CLSID_AAFEssenceAccess;
 
 ImplAAFMasterMob::ImplAAFMasterMob ()
 {}
@@ -576,3 +577,123 @@ AAFRESULT ImplAAFMasterMob::ReconcileMobLength(void)
 	return (AAFRESULT_SUCCESS);
 }
 
+
+/****/
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFMasterMob::CreateEssence (aafSlotID_t		masterSlotID,
+								aafUID_t			mediaKind,
+								aafUID_t			codecID,
+								aafRational_t	editRate,
+								aafRational_t	sampleRate,
+								aafCompressEnable_t  enable,
+								ImplAAFLocator		*destination,
+								aafFileFormat_t		fileFormat,
+								ImplAAFEssenceAccess **result)
+{
+	ImplAAFEssenceAccess	*access;
+
+	access = (ImplAAFEssenceAccess *)CreateImpl (CLSID_AAFEssenceAccess);
+	*result = access;
+	return access->Create(this, masterSlotID, mediaKind, codecID, editRate, sampleRate, enable);
+}
+
+	//@comm Creates a single channel stream of essence.  Convenience functions
+	// exist to create audio or video essence, and a separate call
+	// (MultiCreate) exists to create interleaved audio and
+	// video data.
+	//@comm The essence handle from this call can be used with
+	// WriteDataSamples  and possibly WriteDataLines, but NOT with
+	// WriteMultiSamples.
+	//@comm If you are creating the essence, and then attaching it to a master
+	// mob, then the "masterMob" field may be left NULL.
+	// For video, the sampleRate should be the edit rate of the file mob.
+	// For audio, the sample rate should be the actual samples per second.
+	//@comm Replaces omfmMediaCreate
+	
+/****/
+AAFRESULT STDMETHODCALLTYPE
+   ImplAAFMasterMob::CreateMultiEssence (aafUID_t codecID,
+							aafInt16  arrayElemCount,
+							aafmMultiCreate_t *mediaArray,
+							aafCompressEnable_t Enable,
+							ImplAAFLocator		*destination,
+							aafFileFormat_t		fileFormat,
+							ImplAAFEssenceAccess **result)
+{
+	ImplAAFEssenceAccess	*access;
+
+	access = (ImplAAFEssenceAccess *)CreateImpl (CLSID_AAFEssenceAccess);
+	*result = access;
+	return access->MultiCreate(this, codecID, arrayElemCount, mediaArray, Enable);
+}
+
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMasterMob::GetNumChannels (
+                           aafSlotID_t  slotID,
+                           aafMediaCriteria_t *essenceCrit,
+                           ImplAAFDataDef *essenceKind,
+                           aafInt16 *numCh)
+{
+	ImplAAFEssenceAccess	*access;
+
+	access = (ImplAAFEssenceAccess *)CreateImpl (CLSID_AAFEssenceAccess);
+	return access->GetNumChannels(this, slotID, essenceCrit, essenceKind, numCh);
+}
+
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMasterMob::OpenEssence (aafSlotID_t  slotID,
+                           aafMediaCriteria_t*mediaCrit,
+                           aafMediaOpenMode_t  openMode,
+                           aafCompressEnable_t  compEnable,
+							ImplAAFEssenceAccess **result)
+{
+	ImplAAFEssenceAccess	*access;
+
+	access = (ImplAAFEssenceAccess *)CreateImpl (CLSID_AAFEssenceAccess);
+	*result = access;
+	return access->Open(this, slotID, mediaCrit, openMode, compEnable);
+}
+
+	//@comm If the essence is interleaved,
+	// then it will be di-interleaved when samples are read.  This routine
+	// follows the locator, and may call the locator failure callback if
+	// the essence can not be found.  If the failure callback finds the essence,
+	// then this routine will return normally.
+	//@comm The essence handle from this call can be used with
+	// ReadDataSamples  and possibly ReadDataLines, but NOT with
+	// ReadMultiSamples.
+	//@comm Possible Errors:
+	// 	Standard errors (see top of file).
+	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
+	//@comm NOTE: If a locator is followed, then essencePtr may reference ANOTHER file
+	// object, which must be closed on file close.
+	//@comm Replaces omfmMediaOpen*/
+	
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMasterMob::OpenMultiEssence (aafSlotID_t slotID,
+                           aafMediaCriteria_t*  mediaCrit,
+                           aafMediaOpenMode_t  openMode,
+                           aafCompressEnable_t  compEnable,
+							ImplAAFEssenceAccess **result)
+{
+	ImplAAFEssenceAccess	*access;
+
+	access = (ImplAAFEssenceAccess *)CreateImpl (CLSID_AAFEssenceAccess);
+	*result = access;
+	return access->MultiOpen(this, slotID, mediaCrit, openMode, compEnable);
+}
+
+	//@comm This routine
+	// follows the locator, and may call the locator failure callback if
+	// the essence can not be found.  If the failure callback finds the essence,
+	// then this routine will return normally.
+	//@comm The essence handle from this call can be used with
+	// WriteDataSamples or WriteMultiSamples but NOT with 
+	//  WriteDataLines.
+	//@comm Possible Errors:
+	// 	Standard errors (see top of file).
+	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
+	//@comm Replaces omfmMediaMultiOpen*/
