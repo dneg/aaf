@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Tue Jun  1 18:12:51 EDT 1999
+// This file was generated on Thu Jun  3 18:30:01 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
