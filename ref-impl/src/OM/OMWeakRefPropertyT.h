@@ -214,9 +214,6 @@ void OMWeakReferenceProperty<ReferencedObject>::restore(size_t externalSize)
   store()->restore(_propertyId, _storedForm, id, tag, keyPropertyId);
   ASSERT("Consistent key property ids", keyPropertyId == _keyPropertyId);
   _targetTag = tag;
-  ASSERT("Consistent target tag and name",
-  compareWideString(_targetName,
-                    file()->referencedProperties()->valueAt(_targetTag)) == 0);
   _reference = OMWeakObjectReference<ReferencedObject>(this, id, _targetTag);
   _reference.restore();
   setPresent();
