@@ -47,6 +47,7 @@ DODO_TARGETS = \
 	AAFMasterMob.all \
 	AAFMobSlot.all \
 	AAFParameter.all \
+	AAFReferenceValue.all \
 	AAFTimelineMobSlot.all \
 	AAFObjectAttribute.all \
 	AAFParameterSlot.all \
@@ -490,6 +491,19 @@ AAFParameterSlot.comc : AAFParameterSlot.exp macros/comc.mac
 AAFParameterSlot.comh : AAFParameterSlot.exp macros/comh.mac
 AAFParameterSlot.implc : AAFParameterSlot.exp macros/implc.mac
 AAFParameterSlot.implh : AAFParameterSlot.exp macros/implh.mac
+
+AAFReferenceValue.all : AAFReferenceValue.cpp AAFReferenceValue.h
+AAFReferenceValue.all : AAFReferenceValue.comc AAFReferenceValue.comh
+AAFReferenceValue.all : AAFReferenceValue.exp AAFReferenceValue.idl
+AAFReferenceValue.all : AAFReferenceValue.implc AAFReferenceValue.implh
+AAFReferenceValue.exp : AAFUnitTest.exp macros/exp.mac
+AAFReferenceValue.h : AAFReferenceValue.exp macros/h.mac
+AAFReferenceValue.cpp : AAFReferenceValue.exp macros/cpp.mac
+AAFReferenceValue.idl : AAFReferenceValue.exp macros/idl.mac
+AAFReferenceValue.comc : AAFReferenceValue.exp macros/comc.mac
+AAFReferenceValue.comh : AAFReferenceValue.exp macros/comh.mac
+AAFReferenceValue.implc : AAFReferenceValue.exp macros/implc.mac
+AAFReferenceValue.implh : AAFReferenceValue.exp macros/implh.mac
 
 AAFSegment.all : AAFSegment.cpp AAFSegment.h
 AAFSegment.all : AAFSegment.comc AAFSegment.comh
