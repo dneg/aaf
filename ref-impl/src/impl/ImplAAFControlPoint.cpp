@@ -167,11 +167,11 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(pTypeDef->GetAUID(&newUID));
 		CHECK(pTypeDef->MyHeadObject(&head));
 		CHECK(head->GetDictionary(&dict));
-		if(dict->LookupType(&newUID, &def) == AAFRESULT_SUCCESS)
-			def->ReleaseReference();
+//		if(dict->LookupType(&newUID, &def) == AAFRESULT_SUCCESS)
+//			def->ReleaseReference();
 
 		_type = newUID;
-		pTypeDef->AcquireReference();
+//		pTypeDef->AcquireReference();
 		head->ReleaseReference();
 		head = NULL;
 		dict->ReleaseReference();
@@ -207,7 +207,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(head->GetDictionary(&dict));
 		typeID = _type;
 		CHECK(dict->LookupType(&typeID, ppTypeDef));
-		(*ppTypeDef)->AcquireReference();
+//		(*ppTypeDef)->AcquireReference();
 		head->ReleaseReference();
 		head = NULL;
 		dict->ReleaseReference();
