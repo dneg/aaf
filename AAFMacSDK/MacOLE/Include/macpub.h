@@ -45,8 +45,8 @@
 #endif
 
 
-#ifndef __TYPES__
-#include <types.h>
+#ifndef __MACTYPES__
+#include <MacTypes.h>
 #endif
 
 #ifndef __QUICKDRAW__
