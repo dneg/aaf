@@ -436,7 +436,7 @@ static bool findPropertyDefinition(
 static bool findReferencedClassDefintion(
   ImplAAFTypeDef *pTypeDef, 
   ImplAAFClassDef **ppClassDef,
-  OMPropertyId &uniqueIdentifierPid,
+  OMPropertyId * uniqueIdentifierPid,
   eAAFTypeCategory_e expectedCategory = kAAFTypeCatUnknown)
 {
   eAAFTypeCategory_t category = kAAFTypeCatUnknown;
@@ -463,7 +463,8 @@ static bool findReferencedClassDefintion(
         }
         break;
       }
-      
+
+#if 0      
       case kAAFTypeCatVariableArray:
       {
         // The OM requires that the last property definition that defines the target of
@@ -489,7 +490,7 @@ static bool findReferencedClassDefintion(
         }
         break;
       }
-      
+#endif      
       
       case kAAFTypeCatSet:
       {          
@@ -527,11 +528,14 @@ static bool findReferencedClassDefintion(
           
         if (AAFRESULT_SUCCEEDED(pReferenceType->GetObjectType(ppClassDef)))
         {
+          if (NULL == uniqueIdentifierPid)
+            return true;
+        
           // Find the uniqueIdentifierPid from the last class definition.
           ImplAAFPropertyDefSP pPropertyDef;
           if (AAFRESULT_SUCCEEDED((*ppClassDef)->GetUniqueIdentifier(&pPropertyDef)))
           {
-            uniqueIdentifierPid = pPropertyDef->OmPid();
+            *uniqueIdentifierPid = pPropertyDef->OmPid();
             return true;
           }
           else
@@ -565,7 +569,7 @@ static bool findReferencedClassDefintion(
 static bool findReferencedClassDefintion(
   ImplAAFPropertyDef *pPropertyDef,
   ImplAAFClassDef **ppClassDef,
-  OMPropertyId &uniqueIdentifierPid,
+  OMPropertyId * uniqueIdentifierPid,
   eAAFTypeCategory_e expectedCategory = kAAFTypeCatUnknown)
 {
   AAFRESULT result;
@@ -654,9 +658,9 @@ AAFRESULT ImplAAFTypeDefWeakObjRef::SyncTargetPidsFromTargetSet(void)
         // The OM requires that the last property definition that defines the target of
         // a weak reference must be a set that contains a strong reference.
         if (index < lastIndex)
-          valid = findReferencedClassDefintion(pPropertyDef, &pClassDef, uniqueIdentifierPid, kAAFTypeCatStrongObjRef);
+          valid = findReferencedClassDefintion(pPropertyDef, &pClassDef, NULL, kAAFTypeCatStrongObjRef);
         else
-          valid = findReferencedClassDefintion(pPropertyDef, &pClassDef, uniqueIdentifierPid, kAAFTypeCatSet);
+          valid = findReferencedClassDefintion(pPropertyDef, &pClassDef, &uniqueIdentifierPid, kAAFTypeCatSet);
 
         // Find the next referenced class definition
         if (!valid)
