@@ -104,6 +104,7 @@ AAFRESULT ImplAAFObject::MyHeadObject
 		theHeader = dynamic_cast<ImplAAFHeader*>(theRoot);
 		if(theRoot == NULL)
 			RAISE(AAFRESULT_BADHEAD);
+		theHeader->AcquireReference();
 
 		*header = theHeader;
 	}
