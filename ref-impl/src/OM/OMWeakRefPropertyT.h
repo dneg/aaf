@@ -574,22 +574,59 @@ void OMWeakReferenceProperty<ReferencedObject>::shallowCopyTo(
   Property* dest = dynamic_cast<Property*>(destination);
   ASSERT("Destination is correct type", dest != 0);
   ASSERT("Valid destination", dest != this);
+  ASSERT("Valid source", (_targetName != 0) || (_targetPropertyPath != 0));
 
   dest->_reference = _reference;
   dest->_targetTag = nullOMPropertyTag;
   dest->_targetName = _targetName;
   delete [] dest->_targetPropertyPath;
-  dest->_targetPropertyPath = 0;
+  if (_targetPropertyPath != 0) {
+    // In the case of extension properties, pids from one file are not
+    // valid in another. However, the target of a weak reference cannot
+    // be contained in an extension property so here we copy the pids.
+    FORALL(i, lengthOfPropertyPath(_targetPropertyPath),
+      ASSERT("Predefined property", _targetPropertyPath[i] < 0x8000));
+    dest->_targetPropertyPath = savePropertyPath(_targetPropertyPath);
+  } else {
+    dest->_targetPropertyPath = 0;
+  }
   dest->_keyPropertyId = _keyPropertyId;
+  dest->setPresent();
 }
 
 template <typename ReferencedObject>
 void OMWeakReferenceProperty<ReferencedObject>::deepCopyTo(
-                                               OMProperty* /* destination */,
-                                               void* /* clientContext */) const
+                                                     OMProperty* destination,
+                                                     void* clientContext) const
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::deepCopyTo");
-  // Nothing to do - this is a deep copy
+  PRECONDITION( "Valid destination", destination != 0 );
+
+  OMStorable* source = _reference.getValue();
+  if (source != 0) {
+    // There's a referenced object, copy it
+    OMUniqueObjectIdentification id = reference().identification();
+
+    typedef OMWeakReferenceProperty<ReferencedObject> Property;
+    Property* wp = dynamic_cast<Property*>(destination);
+    ASSERT("Correct property type", wp != 0);
+
+    OMStrongReferenceSet* dest = wp->targetSet();
+    ASSERT("Destination is correct type", dest != 0);
+
+    if (!dest->contains(&id)) {
+      // Referenced object not already present, copy it
+      // and insert it in the target set
+      OMStorable* container = dest->container();
+      ASSERT("Valid container", container != 0);
+      OMClassFactory* factory = container->classFactory();
+      ASSERT("Valid class factory", factory != 0);
+      OMStorable* d = source->shallowCopy(factory);
+      dest->insertObject(d);
+      d->onCopy(clientContext);
+      source->deepCopyTo(d, clientContext);
+    }
+  }
 }
 
 #endif

@@ -1223,11 +1223,38 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::shallowCopyTo(
 
 template <typename ReferencedObject>
 void OMWeakReferenceVectorProperty<ReferencedObject>::deepCopyTo(
-                                               OMProperty* /* destination */,
-                                               void* /* clientContext */) const
+                                                     OMProperty* destination,
+                                                     void* clientContext) const
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::deepCopyTo");
-  // Nothing to do - this is a deep copy
+  PRECONDITION( "Valid destination", destination != 0 );
+
+  typedef OMWeakReferenceVectorProperty<ReferencedObject> Property;
+  Property* wp = dynamic_cast<Property*>(destination);
+  ASSERT("Correct property type", wp != 0);
+
+  OMStrongReferenceSet* dest = wp->targetSet();
+  ASSERT("Destination is correct type", dest != 0);
+
+  OMStorable* container = dest->container();
+  ASSERT("Valid container", container != 0);
+  OMClassFactory* factory = container->classFactory();
+  ASSERT("Valid class factory", factory != 0);
+
+  VectorIterator iterator(_vector, OMBefore);
+  while (++iterator) {
+    VectorElement& element = iterator.value();
+    OMStorable* source = element.getValue();
+    if (source != 0) {
+      OMUniqueObjectIdentification id = element.identification();
+      if (!dest->contains(&id)) {
+        OMStorable* d = source->shallowCopy(factory);
+        dest->insertObject(d);
+        d->onCopy(clientContext);
+        source->deepCopyTo(d, clientContext);
+      }
+    }
+  }
 }
 
 #endif
