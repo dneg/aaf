@@ -583,11 +583,6 @@ OMProperty * ImplAAFTypeDefSet::pvtCreateOMProperty
 	}
   else if (NULL != (pWeakRefType = dynamic_cast<ImplAAFTypeDefWeakObjRef*>((ImplAAFTypeDef*) ptd)))
 	{
-#if defined(USE_SIMPLEPROPERTY)
-	  // element is weak ref, hence implemented as AUID array.
-	  // Specify a size of one element.
-	  result = new OMSimpleProperty (pid, name, sizeof (aafUID_t));
-#else
     if (pWeakRefType->GetTargetPids())
     {
       
@@ -616,7 +611,6 @@ OMProperty * ImplAAFTypeDefSet::pvtCreateOMProperty
       }
     }
 
-#endif
   }
   else
   {
