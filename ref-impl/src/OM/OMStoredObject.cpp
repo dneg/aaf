@@ -179,7 +179,7 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
 {
   TRACE("OMStoredObject::save(OMStoredPropertySetIndex*)");
   PRECONDITION("Already open", _open);
-  PRECONDITION("Sorted index", index->isSorted());
+  PRECONDITION("Valid index", index->isValid());
   PRECONDITION("At start of index stream", streamPosition(_indexStream) == 0);
 
   // Write byte order flag.
@@ -258,7 +258,7 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
   
   streamSetPosition(_indexStream, 0);
   POSTCONDITION("At start of index stream", streamPosition(_indexStream) == 0);
-  POSTCONDITION("Sorted index", index->isSorted());
+  POSTCONDITION("Valid index", index->isValid());
   return index;
 }
 
