@@ -582,6 +582,7 @@ public:
 		GetNthLocator (aafInt32 index, ImplAAFLocator **ppLocator);
   //	virtual AAFRESULT
   //		 GetNumLocators (aafInt32 *  pCount);
+  virtual const OMUniqueObjectIdentification& identification(void) const;
 
 private:
 	OMWideStringProperty          _name;
