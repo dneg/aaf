@@ -552,7 +552,7 @@ cleanup:
 }
 
 
-main()
+int main()
 {
 	CComInitialize comInit;
 	CAAFInitialize aafInit;

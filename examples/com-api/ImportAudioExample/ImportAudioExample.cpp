@@ -569,7 +569,7 @@ void usage(void)
 //  Main adapted to use command-line arguments with argument checking
 //  NOTE:  defining [0] program name; [1] filename.aaf; 
 //  Specifying that use file ImportAudioExample.aaf as default
-main(int argumentCount, char* argumentVector[])
+int main(int argumentCount, char* argumentVector[])
 {
 	/* console window for mac */
 	#if defined(macintosh) || defined(_MAC)
