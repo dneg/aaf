@@ -48,13 +48,8 @@
 //
 // AAFMetaDict.csv 
 //
-<<<<<<< AAFMetaDictionary.h
 // This file was generated on Wed Mar 10 12:47:16 EST 2004
 // by user jpt on system warbler.localdomain.
-=======
-// This file was generated on Wed Feb 18 12:49:37 GMT 2004
-// by user phil on system pilot16.
->>>>>>> 1.106
 //
 // Key to macros.
 //
