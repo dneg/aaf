@@ -163,7 +163,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   if (pFile)
   {  // Close file
     if (bFileOpen)
-      pFile->Close();
+	{
+		pFile->Save();
+		pFile->Close();
+	}
      pFile->Release();
   }
 
