@@ -19,6 +19,7 @@ AD_IDL(//
 // This interface is used to access dictionary services in an AAF
 // file.
 AD_STD_COMMENT_IFC_HEADER)
+AD_FORWARD_DECLARATION(AAFMetaDefinition)
 AD_FORWARD_DECLARATION(AAFClassDef)
 AD_FORWARD_DECLARATION(EnumAAFClassDefs)
 AD_FORWARD_DECLARATION(AAFTypeDef)
@@ -40,6 +41,10 @@ AD_DEFAULT_UUID(B1A21398, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_DICTIONARY_FACTORY(CreateInstance,
 Creates a single uninitialized AAF object of the class associated 
+  // with a specified stored object id.)
+
+AD_DICTIONARY_METAFACTORY(CreateMetaInstance,
+Creates a single uninitialized AAF meta class or type associated 
   // with a specified stored object id.)
 
 
