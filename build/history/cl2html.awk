@@ -26,12 +26,13 @@ BEGIN {
     }
     if (match(fields[1], "/$")) {
       dir = fields[1];
-      files = fields[2];
+      files = trim(fields[2], 1);
     } else {
       dir = "";
       files = fields[1];
     }
     comments = "";
+
     printf("[dir      = \"%s\"]\n", dir);
     printf("[files    = \"%s\"]\n", files);
     printf("[comments = \"%s\"]\n", comments);
