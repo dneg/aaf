@@ -148,7 +148,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		CAAFBuiltinDefs defs (pDictionary);
     
 		checkResult(AAFGetPluginManager(&mgr));
-		checkResult(mgr->CreatePluginDefinition (CodecWave, pDictionary, &pDef));
+		checkResult(mgr->CreatePluginDefinition (kAAFCodecWAVE, pDictionary, &pDef));
 
 		checkResult(pDef->QueryInterface(IID_IAAFCodecDef, (void **)&pCodecDef));
 		checkResult(pCodecDef->AddEssenceKind (defs.ddSound()));
@@ -202,9 +202,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IEnumAAFCodecFlavours	*pEnum = NULL;
 	bool bFileOpen = false;
 	aafBool			testResult;
-	aafUID_t		codecID = CodecWave;
+	aafUID_t		codecID = kAAFCodecWAVE;
 	// aafUID_t		testMatte = DDEF_Matte;
-	aafUID_t		checkFlavour = NilCodecFlavour;
+	aafUID_t		checkFlavour = kAAFNilCodecFlavour;
 	aafUID_t		testFlavour;
 	HRESULT			hr = S_OK;
 
