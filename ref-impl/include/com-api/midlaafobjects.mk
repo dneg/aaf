@@ -127,5 +127,4 @@ AAFOBJECTS = \
 	AAFDataDefinition \
 	AAFDefinitionObject \
 	AAFLocator \
-	EnumAAFControlCodeDefinitions \
-
+	EnumAAFControlCodeDefinitions
