@@ -107,7 +107,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							(void **)&edesc);		
  	if (AAFRESULT_SUCCESS != hr)
 		return hr;
- 	hr = pSourceMob->SetEssenceDescription (edesc);
+ 	hr = pSourceMob->SetEssenceDescriptor (edesc);
  	if (AAFRESULT_SUCCESS != hr)
 		return hr;
 
