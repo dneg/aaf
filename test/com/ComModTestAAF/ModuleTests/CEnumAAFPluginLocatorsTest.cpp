@@ -48,8 +48,10 @@ static wchar_t *manuf2URL = L"www.avid.com";
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 #include "AAFClassDefUIDs.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 #include "AAFCodecDefs.h"
+
+#include "AAFWideString.h"
 
 #include "CAAFBuiltinDefs.h"
 
