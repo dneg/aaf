@@ -42,7 +42,8 @@ depend.mk : aafobjects.mk
 		echo $$base.all... ; \
 		echo "" >> depend.tmp ; \
 		echo $$base.all : $$base.cpp $$base.h $$base.cppt >> depend.tmp ; \
-		echo $$base.all : $$base.comc $$base.comh $$base.comt >> depend.tmp ; \
+		echo $$base.all : $$base.comc $$base.comh >> depend.tmp ; \
+		echo $$base.all : $$base.comt >> depend.tmp ; \
 		echo $$base.all : $$base.implc $$base.implh >> depend.tmp ; \
 		echo $$base.all : $$base.fidl >> depend.tmp ; \
 		echo $$base.all : $$base.frefh >> depend.tmp ; \
@@ -82,6 +83,11 @@ depend.mk : aafobjects.mk
 	@ echo "" >> depend.tmp
 	for file in $(HUMAN_TYPED_IMPL) ; do \
 		grep -v $$file\.impl depend.tmp > depend.tmp2 ; \
+		rm depend.tmp ; \
+		mv depend.tmp2 depend.tmp ; \
+      done
+	for file in $(HUMAN_TYPED_COMTEST) ; do \
+		grep -v $$file\.comt depend.tmp > depend.tmp2 ; \
 		rm depend.tmp ; \
 		mv depend.tmp2 depend.tmp ; \
       done
