@@ -11,9 +11,6 @@
 
 class ImplAAFFile;
 
-const int readMode = 0;
-const int writeMode = 1;
-
 /* Flags */
 #define kOMLWriting        0x0002U                 /* container was opened for writing   */
 #define kOMLReuseFreeSpace 0x0004U                 /* try to reuse freed space           */
@@ -80,6 +77,8 @@ typedef aafInt32   OMLErrorNbr;                     /* error handler error numbe
 class OMContainer
 {
 	public:
+                OMContainer(void);
+                ~OMContainer(void);
 		aafInt32 GetValueAlignment(void);
 		void SetValueAlignment(aafInt32 alignment);
 		aafInt16 GetDefaultByteOrder(void);
@@ -92,7 +91,8 @@ class OMContainer
                                          OMLContainerUseMode useFlags,
                                          ImplAAFHeader*& header);
 		void OMLSetContainerVersion1(void);
-		void OMLOpenNewContainer(OMLSession sessionData,
+		void OMLOpenNewContainer(ImplAAFHeader* head,
+                                          OMLSession sessionData,
                                           OMLRefCon attributes,
                                           OMLconst_OMLGlobalName typeName, 
                                           OMLContainerUseMode useFlags,
@@ -141,11 +141,7 @@ aafBool OMLIsProperty(ImplAAFObject *theObject);
 OMLProperty OMLGetNextObjectProperty(OMLObject theObject, OMLProperty currProperty);
 void OMLGetValueInfo(OMLValue value, OMLObject *object, OMLProperty *property, OMLType *type);
 
-void SetHead(const ImplAAFHeader* head);
-
   private:
-    int _mode;
-    const ImplAAFHeader* _head;
     OMFile* _file;
 };
 
