@@ -44,6 +44,7 @@ aafobjects.list : aafobjects.mk
 
 
 #targets: aafobjects.mk targets.mk depend.mk
+
 targets: 
 	$(SH_PREFIX) $(MAKE) -f maketargets.mak $(SH_SUFFIX)
 
@@ -51,7 +52,7 @@ targets:
 targets.mk : aafobjects.mk
 	$(SH_PREFIX) $(MAKE) -f dodotargets.mak $(SH_SUFFIX)
 
-depend.mk :
+depend.mk : aafobjects.mk
 	$(SH_PREFIX) $(MAKE) -f dododepend.mak $(SH_SUFFIX)
 
 depend :
