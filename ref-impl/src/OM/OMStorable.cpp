@@ -43,8 +43,11 @@
 #include <string.h>
 
 OMStorable::OMStorable(void)
-: _persistentProperties(), _container(0), _name(0),
-  _pathName(0), _store(0),
+: _persistentProperties(),
+  _container(0),
+  _name(0),
+  _pathName(0),
+  _store(0),
   _classFactory(0)
 {
   TRACE("OMStorable::OMStorable");
