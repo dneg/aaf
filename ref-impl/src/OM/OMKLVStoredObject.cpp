@@ -24,6 +24,7 @@
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMKLVStoredObject
 #include "OMKLVStoredObject.h"
 
+#include "OMUtilities.h"
 #include "OMRawStorage.h"
 
   // @mfunc Open the root <c OMKLVStoredObject> in the raw storage

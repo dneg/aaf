@@ -27,8 +27,6 @@
 
 #if defined (OM_DEBUG)
 
-#include <ctype.h>
-
 #include "OMOStream.h"
 #include "OMUtilities.h"
 
@@ -85,43 +83,6 @@ void handleAssertionViolation(void)
 #endif
 }
 
-bool validString(const char* string)
-{
-  bool result = true;
-
-  if (string == 0) {
-    // bad pointer
-    result = false;
-  } else {
-    size_t length = strlen(string);
-    if (length == 0) {
-      // bad length
-      result = false;
-    } else {
-      for (size_t i = 0; i < length; i++) {
-        int c = (unsigned char)string[i];
-        if (!isprint(c)) {
-          // bad character
-          result = false;
-          break;
-        }
-      }
-    }
-  }
-
-  return result;
-}
-
-bool validWideString(const wchar_t* string)
-{
-  return (string != 0) /* && (lengthOfWideString(string) > 0) */;
-}
-
-bool validOMString(const OMCharacter* string)
-{
-  return (string != 0) /* && (lengthOfOMString(string) > 0) */;
-}
-
 #if defined (OM_TRACE)
 
 void trace(const char* routineName)
@@ -139,25 +100,6 @@ void obsolete(const char* routineName, const char* newRoutineName)
         << routineName
         << "\" is obsolete. Please use \""
         << newRoutineName << "\" instead." << endl;
-}
-
-#endif
-
-#if defined(OM_DEBUG)
-
-void checkTypes(void)
-{
-  TRACE("checkTypes");
-
-  ASSERT("Correct size for OMInt8",   sizeof(OMInt8)   == 1);
-  ASSERT("Correct size for OMInt16",  sizeof(OMInt16)  == 2);
-  ASSERT("Correct size for OMInt32",  sizeof(OMInt32)  == 4);
-  ASSERT("Correct size for OMInt64",  sizeof(OMInt64)  == 8);
-
-  ASSERT("Correct size for OMUInt8",  sizeof(OMUInt8)  == 1);
-  ASSERT("Correct size for OMUInt16", sizeof(OMUInt16) == 2);
-  ASSERT("Correct size for OMUInt32", sizeof(OMUInt32) == 4);
-  ASSERT("Correct size for OMUInt64", sizeof(OMUInt64) == 8);
 }
 
 #endif

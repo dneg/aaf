@@ -31,6 +31,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 OMByteOrder hostByteOrder(void)
 {
@@ -418,6 +419,53 @@ size_t squeezeWideString(const wchar_t* clearName,
     result = squeezedNameSize;
   }
   return result;
+}
+
+bool validString(const char* string)
+{
+  bool result = true;
+
+  if (string == 0) {
+    // bad pointer
+    result = false;
+  } else {
+    size_t length = strlen(string);
+    if (length == 0) {
+      // bad length
+      result = false;
+    } else {
+      for (size_t i = 0; i < length; i++) {
+        int c = (unsigned char)string[i];
+        if (!isprint(c)) {
+          // bad character
+          result = false;
+          break;
+        }
+      }
+    }
+  }
+
+  return result;
+}
+
+bool validWideString(const wchar_t* string)
+{
+  return (string != 0) /* && (lengthOfWideString(string) > 0) */;
+}
+
+void checkTypes(void)
+{
+  TRACE("checkTypes");
+
+  ASSERT("Correct size for OMInt8",   sizeof(OMInt8)   == 1);
+  ASSERT("Correct size for OMInt16",  sizeof(OMInt16)  == 2);
+  ASSERT("Correct size for OMInt32",  sizeof(OMInt32)  == 4);
+  ASSERT("Correct size for OMInt64",  sizeof(OMInt64)  == 8);
+
+  ASSERT("Correct size for OMUInt8",  sizeof(OMUInt8)  == 1);
+  ASSERT("Correct size for OMUInt16", sizeof(OMUInt16) == 2);
+  ASSERT("Correct size for OMUInt32", sizeof(OMUInt32) == 4);
+  ASSERT("Correct size for OMUInt64", sizeof(OMUInt64) == 8);
 }
 
   // Manipulation of property paths (eventually these will be

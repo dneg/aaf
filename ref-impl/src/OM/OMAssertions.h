@@ -93,30 +93,6 @@ void assertionViolation(char* assertionKind,
 
 void handleAssertionViolation(void);
 
-  // @func Is the given string valid ? Use <f validString> in
-  //       expressions passed to the assertion macros
-  //       <f PRECONDITION>, <f POSTCONDITION> and <f ASSERT>.
-  //   @parm The string to check for validity.
-  //   @rdesc True if the string is valid, false otherwise.
-bool validString(const char* string);
-
-  // @func Is the given wchar_t string valid ? Use <f validWideString> in
-  //       expressions passed to the assertion macros
-  //       <f PRECONDITION>, <f POSTCONDITION> and <f ASSERT>.
-  //   @parm The wchar_t string to check for validity.
-  //   @rdesc True if the wchar_t string is valid, false otherwise.
-bool validWideString(const wchar_t* string);
-
-  // @func Is the given OMCharacter string valid ? Use
-  //       <f validOMString> in expressions passed to the
-  //       assertion macros <f PRECONDITION>, <f POSTCONDITION>
-  //       and <f ASSERT>.
-  //   @parm The OMCharacter string to check for validity.
-  //   @rdesc True if the OMCharacter string is valid, false otherwise.
-bool validOMString(const OMCharacter* string);
-
-void checkTypes(void);
-
 #if defined(OM_TRACE)
 
   // @func Output routine tracing information.

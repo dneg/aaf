@@ -26,6 +26,7 @@
 #include "OMObjectManager.h"
 
 #include "OMAssertions.h"
+#include "OMUtilities.h"
 #include "OMDictionary.h"
 #include "OMUniqueObjectIdentType.h"
 #include "OMIntegerType.h"

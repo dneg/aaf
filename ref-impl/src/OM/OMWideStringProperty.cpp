@@ -25,6 +25,7 @@
 
 #include "OMWideStringProperty.h"
 
+#include "OMUtilities.h"
 #include "OMAssertions.h"
 
   // @mfunc Constructor.
