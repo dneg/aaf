@@ -87,7 +87,7 @@ OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
 
 OMSimpleProperty::~OMSimpleProperty(void)
 {
-  delete _bits;
+  delete [] _bits;
 }
 
 size_t OMSimpleProperty::size(void) const
@@ -104,7 +104,7 @@ void OMSimpleProperty::get(void* value, size_t valueSize) const
 void OMSimpleProperty::set(const void* value, size_t valueSize) 
 {
   if (valueSize != _size) {
-    delete _bits;
+    delete [] _bits;
     _bits = new unsigned char[valueSize];
     _size = valueSize;
   }
