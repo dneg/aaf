@@ -37,6 +37,13 @@ targets.mk : aafobjects.mk
 		echo '	'$$base.fidl \\\c>> targets.tmp ; \
 	  done
 	@ echo '' >> targets.tmp
+	@ echo '' >> targets.tmp
+	@ echo FREFH_TARGETS = \\\c >> targets.tmp 
+	@ for base in $(AAFOBJECTS) ;  do \
+		echo '\' >> targets.tmp ; \
+		echo '	'$$base.frefh \\\c>> targets.tmp ; \
+	  done
+	@ echo '' >> targets.tmp
 	@ mv targets.tmp targets.mk
 	@ echo "Done with targets.mk."
 
