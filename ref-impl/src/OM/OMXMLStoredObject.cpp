@@ -37,7 +37,7 @@
 OMXMLStoredObject* OMXMLStoredObject::openRead(OMRawStorage* ANAME(rawStorage))
 {
   TRACE("OMXMLStoredObject::openRead");
-  PRECONDITION("Compatible raw storage", rawStorage->isReadable());
+  PRECONDITION("Compatible raw storage access mode", rawStorage->isReadable());
   ASSERT("Unimplemented code not reached", false); // tjb TBS
   return 0;
 }
@@ -50,8 +50,9 @@ OMXMLStoredObject* OMXMLStoredObject::openModify(
                                                OMRawStorage* ANAME(rawStorage))
 {
   TRACE("OMXMLStoredObject::openModify");
-  PRECONDITION("Compatible raw storage",
+  PRECONDITION("Compatible raw storage access mode",
                          rawStorage->isReadable() && rawStorage->isWritable());
+  PRECONDITION("Compatible raw storage", rawStorage->isPositionable());
   ASSERT("Unimplemented code not reached", false); // tjb TBS
   return 0;
 }
@@ -66,7 +67,7 @@ OMXMLStoredObject* OMXMLStoredObject::createWrite(OMRawStorage* rawStorage,
                                                   const OMByteOrder byteOrder)
 {
   TRACE("OMXMLStoredObject::createWrite");
-  PRECONDITION("Compatible raw storage", rawStorage->isWritable());
+  PRECONDITION("Compatible raw storage access mode", rawStorage->isWritable());
   OMXMLStoredObject* result = new OMXMLStoredObject(rawStorage, byteOrder);
   ASSERT("Valid heap pointer", result != 0);
   return result;
@@ -82,8 +83,9 @@ OMXMLStoredObject* OMXMLStoredObject::createModify(OMRawStorage* rawStorage,
                                                    const OMByteOrder byteOrder)
 {
   TRACE("OMXMLStoredObject::createModify");
-  PRECONDITION("Compatible raw storage",
+  PRECONDITION("Compatible raw storage access mode",
                          rawStorage->isReadable() && rawStorage->isWritable());
+  PRECONDITION("Compatible raw storage", rawStorage->isPositionable());
   OMXMLStoredObject* result = new OMXMLStoredObject(rawStorage, byteOrder);
   ASSERT("Valid heap pointer", result != 0);
   return result;
