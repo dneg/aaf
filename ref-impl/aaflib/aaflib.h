@@ -66,6 +66,11 @@ typedef STDAPICALLTYPE HRESULT (* LPFNAAFFILEISAAFFILE) (
     aafUID_t *  pAAFFileKind,
     aafBool *  pFileIsAAFFile);
 
+typedef STDAPICALLTYPE HRESULT (* LPFNAAFRAWSTORAGEISAAFFILE) (
+    IAAFRawStorage * pstorage,
+    aafUID_t *  pAAFFileKind,
+    aafBool *  pRawStorageIsAAFFile);
+
 typedef STDAPICALLTYPE HRESULT (* LPFNAAFGETPLUGINMANAGER)(
     IAAFPluginManager ** ppPluginManager);
 
@@ -126,6 +131,11 @@ typedef HRESULT (STDAPICALLTYPE * LPFNAAFFILEISAAFFILE) (
     const wchar_t * pFileName,
     aafUID_t *  pAAFFileKind,
     aafBool *  pFileIsAAFFile);
+
+typedef HRESULT (STDAPICALLTYPE * LPFNAAFRAWSTORAGEISAAFFILE) (
+	IAAFRawStorage * pstorage,
+    aafUID_t *  pAAFFileKind,
+    aafBool *  pRawStorageIsAAFFile);
 
 typedef HRESULT (STDAPICALLTYPE * LPFNAAFGETPLUGINMANAGER)(
     IAAFPluginManager ** ppPluginManager);
@@ -229,6 +239,11 @@ public:
     aafUID_t *  pAAFFileKind,
     aafBool *  pFileIsAAFFile);
 
+  HRESULT RawStorageIsAAFFile (
+    IAAFRawStorage * pStorage,
+    aafUID_t *  pAAFFileKind,
+    aafBool *  pRawStorageIsAAFFile);
+
   HRESULT GetPluginManager (
     IAAFPluginManager ** ppPluginManager);
   
@@ -279,6 +294,7 @@ protected:
   LPFNAAFFILEOPENNEWMODIFY         _pfnOpenNewModify;
   LPFNAAFFILEOPENTRANSIENT         _pfnOpenTransient;
   LPFNAAFFILEISAAFFILE             _pfnIsAAFFile;
+  LPFNAAFRAWSTORAGEISAAFFILE       _pfnRawStorageIsAAFFile;
   LPFNAAFGETPLUGINMANAGER          _pfnGetPluginManager;
   LPFNAAFCREATERAWSTORAGEMEMORY    _pfnCreateRawStorageMemory;
   LPFNAAFCREATERAWSTORAGEDISK      _pfnCreateRawStorageDisk;

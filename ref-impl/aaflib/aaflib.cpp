@@ -377,6 +377,40 @@ STDAPI AAFFileIsAAFFile (
   return hr;
 }
 
+//***********************************************************
+//
+// AAFRawStorageIsAAFFile()
+//
+//
+STDAPI AAFRawStorageIsAAFFile (
+    IAAFRawStorage * pStorage,
+    aafUID_t *  pAAFFileKind,
+    aafBool *  pRawStorageIsAAFFile)
+{
+  TRACE("AAFRawStorageIsAAFFile");
+  HRESULT hr = S_OK;
+  AAFDLL *pAAFDLL = NULL;
+
+  // Get the dll wrapper
+  hr = LoadIfNecessary(&pAAFDLL);
+  if (FAILED(hr))
+    return hr;
+  
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->RawStorageIsAAFFile(pStorage, pAAFFileKind, pRawStorageIsAAFFile);
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  return hr;
+}
+
 
 
 //***********************************************************
@@ -670,6 +704,9 @@ HRESULT AAFDLL::Load(const char *dllname)
   if (AAFRESULT_FAILED(rc))
     return rc;
 
+  rc = ::AAFFindSymbol(_libHandle, "AAFRawStorageIsAAFFile", (AAFSymbolAddr *)&_pfnRawStorageIsAAFFile);
+  // Ignore failure
+
   rc = ::AAFFindSymbol(_libHandle, "AAFGetPluginManager", (AAFSymbolAddr *)&_pfnGetPluginManager);
   if (AAFRESULT_FAILED(rc))
     return rc;
@@ -739,6 +776,7 @@ void AAFDLL::ClearEntrypoints()
   _pfnOpenNewModify = NULL;
   _pfnOpenTransient = NULL;
   _pfnIsAAFFile = 0;
+  _pfnRawStorageIsAAFFile = 0;
   _pfnGetPluginManager = NULL;
   _pfnCreateRawStorageMemory = 0;
   _pfnCreateRawStorageDisk = 0;
@@ -828,6 +866,21 @@ HRESULT AAFDLL::GetPluginManager (
   TRACE("AAFDLL::GetPluginManager");
   ASSERT("Valid dll callback function", _pfnGetPluginManager);
   return _pfnGetPluginManager(ppPluginManager);  
+}
+
+HRESULT AAFDLL::RawStorageIsAAFFile (
+    IAAFRawStorage * pStorage,
+    aafUID_t *  pAAFFileKind,
+    aafBool *  pRawStorageIsAAFFile)
+{
+  TRACE("AAFDLL::RawStorageIsAAFFile");
+  if (NULL == _pfnRawStorageIsAAFFile)
+    return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+
+  HRESULT hr = _pfnRawStorageIsAAFFile( pStorage, pAAFFileKind, pRawStorageIsAAFFile);
+  if (hr == AAFRESULT_NOT_IMPLEMENTED)
+    hr = AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+  return hr;
 }
 
 HRESULT AAFDLL::CreateRawStorageMemory (
