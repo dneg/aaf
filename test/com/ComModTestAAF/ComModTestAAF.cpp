@@ -31,6 +31,7 @@
 
 //
 #include <iostream.h>
+#include <fstream.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -60,6 +61,7 @@
 #include "dispatch.h"
 #include "wintypes.h"
 #include <olectl.h>
+#include <console.h> /* Mac command line window */
 #endif
 
 
@@ -69,10 +71,6 @@
 
 
 #include "CAAFModuleTest.h"
-
-#ifdef __powerc
-#include <console.h> /* Mac command line window */
-#endif
 
 #ifdef WIN32
 #include <winbase.h>
@@ -192,6 +190,10 @@ public:
 int main(int argc, char* argv[])
 {
 	int result = SUCCESS;
+	aafInt16	count = 0, 
+				i = 0;
+	char 		**myargv = NULL;
+
 
 	// Initialize com library for this process.
 	CComInitialize comInit;
@@ -206,14 +208,50 @@ int main(int argc, char* argv[])
 		CAAFInitialize aafInit;
 
 		// Make sure the shared plugins can be loaded and registered.
-    CAAFInitializePlugins aafInitPlugins;
+   		CAAFInitializePlugins aafInitPlugins;
 
-		/* console window for mac */
 
-		#ifdef __powerc
-		argc = ccommand(&argv);
+		#ifdef _MAC
+		/* Try to get input from file "COMMODAAF (PPC).inp" */
+		
+		/* try to open file for read */
+		ifstream ifCommandLine("COMMODAAF (PPC).inp");
+		
+		/* Test to make sure it is open.  If not it doesn't exist */
+		if (ifCommandLine.is_open()) {
+			char inputstr[100];
+			char *newstring = NULL;
+			char appname[] = "COMMODAAF (PPC)";
+
+			/* Determine the number of lines */
+			while (	ifCommandLine >> inputstr )
+				++count;
+				
+			/* Create the array of char pointers */
+			myargv = new char *[count+1];	
+			
+			/* Reset file pointer to beginning of file */
+			ifCommandLine.clear();
+			ifCommandLine.seekg(0);
+
+			argc = 0;
+			myargv[argc++] = appname;
+
+			/* Get Data */
+			while (	ifCommandLine >> inputstr )	{
+				newstring = new char [strlen(inputstr)+1];
+				strcpy(newstring, inputstr);
+				myargv[argc++] = newstring;
+			}
+			ifCommandLine.close();
+
+			argv = myargv;
+		}
+		else	{	
+			/* console window for mac */
+			argc = ccommand(&argv);
+		}
 		#endif
-
 
 		/* Check arguments to see if help was requested */
 
@@ -225,7 +263,9 @@ int main(int argc, char* argv[])
 			cout<< "No arguments --> To run all tests\n";
 			cout<< "Otherwise any AAF object class name can be typed\n";
 			cout<< "and that objects test method will be executed.\n";
-			cout<< "ex AAFSegment AAFTransition etc\n"<< endl;
+			cout<< "ex AAFSegment AAFTransition etc\n\n";
+			cout<< "Input can also be read in from a text.\n";
+			cout<< "Just name it \"COMMODAAF (PPC)\"" << endl;
 
 			return(0);
 		}
@@ -255,6 +295,15 @@ int main(int argc, char* argv[])
 				hr = AAFModuleTest.Test(reinterpret_cast<unsigned char *>(argv[module]));
 		}
 		
+		#ifdef _MAC
+		/* Clean Up - start at 1 because appname is hard coded */
+		for ( i=1; i<=count; ++i)
+			delete [] myargv[i];
+
+		if ( myargv != NULL ) 
+			delete [] myargv;
+		#endif
+
 		/* Get and Print finish time	*/
 		time_t e_time;
 		time(&e_time);
