@@ -50,6 +50,10 @@ AAFRESULT ImplAAFPluginManager::Init(void)
 	{
 		CHECK(NewUIDTable(NULL, 20, &_plugins));
 		CHECK(NewUIDTable(NULL, 20, &_codecDesc));
+		//!!! Here is where we should check the registry in a loop
+		// looking for plugins to load
+		// for each plugin found
+		//	RegisterPlugin()
 		CHECK(RegisterPlugin(CLSID_AAFEssenceFileContainer));
 		CHECK(RegisterPlugin(CLSID_AAFWaveCodec));
 	}
@@ -126,7 +130,7 @@ AAFRESULT ImplAAFPluginManager::RegisterPlugin(CLSID pluginClass)
                CLSCTX_INPROC_SERVER, 
                IID_IAAFPlugin, 
                (void **)&plugin));
-		CHECK(plugin->GetPluginID(&uid));
+		CHECK(plugin->GetPluggableID(&uid));
 		CHECK(TableAddUIDBlock(
 				_plugins,
 				uid,
