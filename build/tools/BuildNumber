@@ -242,14 +242,35 @@ if [ $BUMP_BUILD_NUMBER -eq 1 ]; then
     echo " "
 
     # Edit AAFSDKBuild.h
-    cp $AAFSDKBUILD_H /tmp/AAFSDKBuild.h.sav
+    cp $AAFSDKBUILD_H ~/tmp/AAFSDKBuild.h.sav
+    CPSTATUS=$?
+    if [ $CPSTATUS -ne 0 ]; then
+      echo cp failed with status $CPSTATUS
+      exit 1
+    fi
 
     sed s/define\ AAF_BUILD_NUMBER\ $HEADER_BUILD_NUMBER/define\ AAF_BUILD_NUMBER\ $NEXT_HEADER_BUILD_NUMBER/ \
-	< $AAFSDKBUILD_H | \
-       sed s/define\ AAF_CURRENT_YEAR\ \"$HEADER_CURRENT_YEAR\"/define\ AAF_CURRENT_YEAR\ \"$NEW_CURRENT_YEAR\"/ \
-	> /tmp/AAFSDKBuild.h
+	< $AAFSDKBUILD_H > ~/tmp/AAFSDKBuid.h.tmp
+    SEDSTATUS=$?
+    if [ $SEDSTATUS -ne 0 ]; then
+      echo first sed failed with status $SEDSTATUS
+      exit 1
+    fi
 
-    mv /tmp/AAFSDKBuild.h $AAFSDKBUILD_H
+    sed s/define\ AAF_CURRENT_YEAR\ \"$HEADER_CURRENT_YEAR\"/define\ AAF_CURRENT_YEAR\ \"$NEW_CURRENT_YEAR\"/ \
+	< ~/tmp/AAFSDKBuid.h.tmp > ~/tmp/AAFSDKBuild.h
+    SEDSTATUS=$?
+    if [ $SEDSTATUS -ne 0 ]; then
+      echo second sed failed with status $SEDSTATUS
+      exit 1
+    fi
+
+    mv ~/tmp/AAFSDKBuild.h $AAFSDKBUILD_H
+    MVSTATUS=$?
+    if [ $MVSTATUS -ne 0 ]; then
+      echo mv failed with status $MVSTATUS
+      exit 1
+    fi
 
     # Commit the modified file, and tag the tree.
     echo cvs commit -m \
