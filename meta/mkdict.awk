@@ -692,12 +692,12 @@ BEGIN {
         errors++;
       }
       # AAF_CLASS(name, id, parent)
-      guid = formatAUID($SLO00C, $SLO01C, $SLO02C, $SLO03C,
-                        $SLO04C, $SLO05C, $SLO06C, $SLO07C,
-                        $SLO08C, $SLO09C, $SLO10C, $SLO11C,
-                        $SLO12C, $SLO13C, $SLO14C, $SLO15C, "  ");
+      cguid = formatAUID($SLO00C, $SLO01C, $SLO02C, $SLO03C,
+                         $SLO04C, $SLO05C, $SLO06C, $SLO07C,
+                         $SLO08C, $SLO09C, $SLO10C, $SLO11C,
+                         $SLO12C, $SLO13C, $SLO14C, $SLO15C, "  ");
       printf("AAF_CLASS(%s,%s,\n  %s,\n  %s)\n",
-             $elementNameC, guid, parent, concrete);
+             $elementNameC, cguid, parent, concrete);
     } else if ($typeNameC == "type" ) {
       # a type
       if (firstType) {
@@ -724,10 +724,10 @@ BEGIN {
         printf("AAF_TYPE_SEPARATOR()\n");
       }
 #
-      guid = formatAUID($SLO00C, $SLO01C, $SLO02C, $SLO03C,
-                        $SLO04C, $SLO05C, $SLO06C, $SLO07C,
-                        $SLO08C, $SLO09C, $SLO10C, $SLO11C,
-                        $SLO12C, $SLO13C, $SLO14C, $SLO15C, "  ");
+      tguid = formatAUID($SLO00C, $SLO01C, $SLO02C, $SLO03C,
+                         $SLO04C, $SLO05C, $SLO06C, $SLO07C,
+                         $SLO08C, $SLO09C, $SLO10C, $SLO11C,
+                         $SLO12C, $SLO13C, $SLO14C, $SLO15C, "  ");
 #
       typeName = $elementNameC;
       parentTypeName = typeName;
@@ -742,61 +742,61 @@ BEGIN {
       kind = $kindC;
       qualif = $qualifC;
       if        (kind == "integer") {
-        printf("AAF_TYPE_DEFINITION_INTEGER(%s, %s, %s, %s)\n", typeName, guid, $qualifC, $elementTypeC);
+        printf("AAF_TYPE_DEFINITION_INTEGER(%s, %s, %s, %s)\n", typeName, tguid, $qualifC, $elementTypeC);
       } else if (kind == "enumeration" ) {
-        printf("AAF_TYPE_DEFINITION_ENUMERATION(%s, %s, AAF_TYPE(%s))\n", typeName, guid, $qualifC);
+        printf("AAF_TYPE_DEFINITION_ENUMERATION(%s, %s, AAF_TYPE(%s))\n", typeName, tguid, $qualifC);
       } else if (kind == "array") {
         elementType = $elementTypeC;
         if ($qualifC == "varying") {
-          printf("AAF_TYPE_DEFINITION_VARYING_ARRAY(%s, %s,\n  AAF_TYPE(%s))\n", typeName, guid, elementType);
+          printf("AAF_TYPE_DEFINITION_VARYING_ARRAY(%s, %s,\n  AAF_TYPE(%s))\n", typeName, tguid, elementType);
         } else if ($qualifC == "fixed") {
-          printf("AAF_TYPE_DEFINITION_FIXED_ARRAY(%s, %s,\n  AAF_TYPE(%s), %s)\n", typeName, guid, elementType, $isMandatoryC);
+          printf("AAF_TYPE_DEFINITION_FIXED_ARRAY(%s, %s,\n  AAF_TYPE(%s), %s)\n", typeName, tguid, elementType, $isMandatoryC);
         } else if ($qualifC == "strong") {
           # Special cases for strong reference vectors.
-            printf("AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, guid, elementType);
+            printf("AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, tguid, elementType);
         } else if ($qualifC == "weak") {
           # Special cases for weak reference vectors.
-            printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_VECTOR(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, guid, elementType);
+            printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_VECTOR(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, tguid, elementType);
         } else {
           typeError(typeName, qualifC);
           errors++;
         }
       } else if (kind == "record") {
-        printf("AAF_TYPE_DEFINITION_RECORD(%s, %s)\n", typeName, guid);
+        printf("AAF_TYPE_DEFINITION_RECORD(%s, %s)\n", typeName, tguid);
       } else if (kind == "rename") {
-        printf("AAF_TYPE_DEFINITION_RENAME(%s, %s, %s)\n", typeName, guid, $elementTypeC);
+        printf("AAF_TYPE_DEFINITION_RENAME(%s, %s, %s)\n", typeName, tguid, $elementTypeC);
       } else if (kind == "string") {
-        printf("AAF_TYPE_DEFINITION_STRING(%s, %s, %s)\n", typeName, guid, $elementTypeC);
+        printf("AAF_TYPE_DEFINITION_STRING(%s, %s, %s)\n", typeName, tguid, $elementTypeC);
       } else if (kind == "extendible") {
-        printf("AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION(%s, %s)\n", typeName, guid);
+        printf("AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION(%s, %s)\n", typeName, tguid);
       } else if (kind == "character") {
-        printf("AAF_TYPE_DEFINITION_CHARACTER(%s, %s)\n", typeName, guid);
+        printf("AAF_TYPE_DEFINITION_CHARACTER(%s, %s)\n", typeName, tguid);
       } else if (kind == "indirect") {
-        printf("AAF_TYPE_DEFINITION_INDIRECT(%s, %s)\n", typeName, guid);
+        printf("AAF_TYPE_DEFINITION_INDIRECT(%s, %s)\n", typeName, tguid);
       } else if (kind == "opaque") {
-        printf("AAF_TYPE_DEFINITION_OPAQUE(%s, %s)\n", typeName, guid);
+        printf("AAF_TYPE_DEFINITION_OPAQUE(%s, %s)\n", typeName, tguid);
       } else if (kind == "set") {
         elementType = $elementTypeC;
         # Special cases for strong/weak reference sets.
         if ($qualifC == "strong") {
-          printf("AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, guid, elementType);
+          printf("AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, tguid, elementType);
         } else if ($qualifC == "weak") {
-          printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, guid, elementType);
+          printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, tguid, elementType);
         } else { 
-          printf("AAF_TYPE_DEFINITION_SET(%s, %s,\n  AAF_TYPE(%s))\n", typeName, guid, elementType);
+          printf("AAF_TYPE_DEFINITION_SET(%s, %s,\n  AAF_TYPE(%s))\n", typeName, tguid, elementType);
         }
       } else if (kind == "reference") {
         targetType = $elementTypeC;
         if ($qualifC == "strong") {
-          printf("AAF_TYPE_DEFINITION_STRONG_REFERENCE(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, targetType, guid, targetType);
+          printf("AAF_TYPE_DEFINITION_STRONG_REFERENCE(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, targetType, tguid, targetType);
         } else if ($qualifC == "weak" ) {
-          printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, targetType, guid, targetType);
+          printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, targetType, tguid, targetType);
         } else {
           typeError(typeName, qualifC);
           errors++;
         }
       } else if (kind == "stream") {
-          printf("AAF_TYPE_DEFINITION_STREAM(%s, %s)\n", typeName, guid);
+          printf("AAF_TYPE_DEFINITION_STREAM(%s, %s)\n", typeName, tguid);
       } else {
         # better be another type
       }
@@ -891,11 +891,11 @@ BEGIN {
         uid = "false";
       }
       # AAF_PROPERTY(name, id, tag, type, mandatory, container)
-      guid = formatAUID($SLO00C, $SLO01C, $SLO02C, $SLO03C,
-                        $SLO04C, $SLO05C, $SLO06C, $SLO07C,
-                        $SLO08C, $SLO09C, $SLO10C, $SLO11C,
-                        $SLO12C, $SLO13C, $SLO14C, $SLO15C, "    ");
-      printf("  AAF_PROPERTY(%s,%s,\n    0x%s,\n    %s,\n    %s,\n    %s,\n    %s)\n", $elementNameC, guid, $pidC, type, mandatory, uid, class);
+      pguid = formatAUID($SLO00C, $SLO01C, $SLO02C, $SLO03C,
+                         $SLO04C, $SLO05C, $SLO06C, $SLO07C,
+                         $SLO08C, $SLO09C, $SLO10C, $SLO11C,
+                         $SLO12C, $SLO13C, $SLO14C, $SLO15C, "    ");
+      printf("  AAF_PROPERTY(%s,%s,\n    0x%s,\n    %s,\n    %s,\n    %s,\n    %s)\n", $elementNameC, pguid, $pidC, type, mandatory, uid, class);
     }
   }
 }
