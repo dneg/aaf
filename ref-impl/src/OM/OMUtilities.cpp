@@ -256,6 +256,19 @@ char* convertWideString(const wchar_t* string)
   return result;
 }
 
+wchar_t* convertString(const char* string)
+{
+  TRACE("convertString");
+
+  PRECONDITION("Valid string", validString(string));
+  size_t length = strlen(string);
+  wchar_t* result = new wchar_t[length + 1];
+  ASSERT("Valid heap pointer", result != 0);
+  size_t status = mbstowcs(result, string, length + 1);
+  ASSERT("Successful conversion", status != (size_t)-1);
+  return result;
+}
+
 wchar_t* findWideCharacter(const wchar_t* string, wchar_t character)
 {
   const wchar_t* p = string;

@@ -138,6 +138,8 @@ void convertStringToWideString(wchar_t* result,
 
 char* convertWideString(const wchar_t* string);
 
+wchar_t* convertString(const char* string);
+
 wchar_t* findWideCharacter(const wchar_t* string, wchar_t character);
 
 size_t countWideCharacter(const wchar_t* string, wchar_t character);
