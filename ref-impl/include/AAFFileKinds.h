@@ -98,7 +98,7 @@ const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical_Value;
 const aafUID_t aafFileKindAaf4KAlternate = aafFileKindPathalogical_Value;
 
 
-#elif defined( OS_MACOS10 )
+#elif defined( OS_DARWIN )
 // DEFAULT is Microsoft 512 (via Carbon lib(?). SchemaSoft not yet ported
 const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary_Value;
 const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafMSSBinary_Value;
