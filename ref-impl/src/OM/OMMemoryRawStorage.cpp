@@ -44,16 +44,6 @@ OMMemoryRawStorage::openNewModify(void)
   return result;
 }
 
-  // @mfunc Constructor.
-OMMemoryRawStorage::OMMemoryRawStorage(void)
-: _pageVector(),
-  _pageSize(4 * 1024),
-  _size(0),
-  _position(0)
-{
-  TRACE("OMMemoryRawStorage::OMMemoryRawStorage");
-}
-
   // @mfunc Destructor.
 OMMemoryRawStorage::~OMMemoryRawStorage(void)
 {
@@ -72,16 +62,6 @@ OMMemoryRawStorage::~OMMemoryRawStorage(void)
 bool OMMemoryRawStorage::isReadable(void) const
 {
   TRACE("OMMemoryRawStorage::isReadable");
-
-  return true;
-}
-
-  // @mfunc Is it possible to write to this <c OMMemoryRawStorage> ?
-  //  @rdesc True if this <c OMMemoryRawStorage> is writable, false otherwise.
-  //  @this const
-bool OMMemoryRawStorage::isWritable(void) const
-{
-  TRACE("OMMemoryRawStorage::isWritable");
 
   return true;
 }
@@ -172,6 +152,16 @@ void OMMemoryRawStorage::read(OMByte* bytes,
   }
   const_cast<OMMemoryRawStorage*>(this)->_position = _position + count;
   bytesRead = count;
+}
+
+  // @mfunc Is it possible to write to this <c OMMemoryRawStorage> ?
+  //  @rdesc True if this <c OMMemoryRawStorage> is writable, false otherwise.
+  //  @this const
+bool OMMemoryRawStorage::isWritable(void) const
+{
+  TRACE("OMMemoryRawStorage::isWritable");
+
+  return true;
 }
 
   // @mfunc Attempt to write the number of bytes given by <p byteCount>
@@ -390,6 +380,16 @@ void OMMemoryRawStorage::synchronize(void)
 {
   TRACE("OMMemoryRawStorage::synchronize");
   // nothing to do
+}
+
+  // @mfunc Constructor.
+OMMemoryRawStorage::OMMemoryRawStorage(void)
+: _pageVector(),
+  _pageSize(4 * 1024),
+  _size(0),
+  _position(0)
+{
+  TRACE("OMMemoryRawStorage::OMMemoryRawStorage");
 }
 
   // @mfunc Write a page or partial page.
