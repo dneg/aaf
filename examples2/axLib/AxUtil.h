@@ -80,6 +80,8 @@ public:
 
 	static AxString uid2Str(const aafUID_t & uid);
 
+	static AxString mobid2Str(const aafMobID_t & mobid);
+
 	static AxString mbtowc( const char* cstr ); 
 
 	static std::string wctomb( const AxString& s );

@@ -230,16 +230,63 @@ long AxStringUtil::strtol( const AxString& s )
 
 //=---------------------------------------------------------------------=
 
+// Returns a semi readable string representing a UID.  If people want to agree
+// a different format thats fine.  This is just a first attempt - do not assume that
+// the text format won't change in the future.
+// Would rather use iostreams but for wostringstream MSVC6 has a problem with the setw
+// manipulator.
 AxString AxStringUtil::uid2Str(const aafUID_t & uid)
 {
-	std::wostringstream uidtextstr;
-	uidtextstr << std::hex;
-	uidtextstr << uid.Data1 << L"-" << uid.Data2 << L"-" << uid.Data3 << L"-";
-	for(int i = 0; i < 8; ++i)
-	{
-		uidtextstr << static_cast<int>(uid.Data4[i]);
-	}
+	const int bufSize = 2 * 16 + 3 + 1; // 16 bytes as hex + 3 hyphens + null termination
+	char buf[bufSize];
+	int rc;
+	using namespace std;
 
-	return uidtextstr.str();
+	rc = sprintf( buf,
+				"%08x-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x", // UID
+				uid.Data1, uid.Data2, uid.Data3,
+				uid.Data4[0], uid.Data4[1], uid.Data4[2], uid.Data4[3],
+				uid.Data4[4], uid.Data4[5], uid.Data4[6], uid.Data4[7] );
+	if (rc != bufSize - 1)
+	{
+		throw AxEx( L"Error in uid2Str" );
+	}    
+	return mbtowc( buf );
 }
 
+//=---------------------------------------------------------------------=
+
+// Returns a semi readable string representing the Mob ID.  If people want to agree
+// a different format thats fine.  This is just a first attempt - do not assume that
+// the text format won't change in the future.
+// Would rather use iostreams but for wostringstream MSVC6 has a problem with the setw
+// manipulator.
+AxString AxStringUtil::mobid2Str(const aafMobID_t & mobID)
+{
+	const int bufSize = 64 + 4 + 1; // 32 bytes as hex + 4 hyphens + null termination
+	char buf[bufSize];
+	int rc;
+	using namespace std;
+
+	rc = sprintf( buf,
+				"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x" // SMPTE label
+				"%02x" // length
+				"%02x%02x%02x-" // instance high mid low
+				"%08x-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x", //material UID
+				mobID.SMPTELabel[0], mobID.SMPTELabel[1], mobID.SMPTELabel[2], 
+				mobID.SMPTELabel[3], mobID.SMPTELabel[4], mobID.SMPTELabel[5],
+				mobID.SMPTELabel[6], mobID.SMPTELabel[7], mobID.SMPTELabel[8],
+				mobID.SMPTELabel[9], mobID.SMPTELabel[10], mobID.SMPTELabel[11],
+				mobID.length,
+				mobID.instanceHigh, mobID.instanceMid, mobID.instanceLow,
+				mobID.material.Data1, mobID.material.Data2, mobID.material.Data3,
+				mobID.material.Data4[0], mobID.material.Data4[1],
+				mobID.material.Data4[2], mobID.material.Data4[3],
+				mobID.material.Data4[4], mobID.material.Data4[5], 
+				mobID.material.Data4[6], mobID.material.Data4[7] );
+	if (rc != bufSize - 1)
+	{
+		throw AxEx( L"Error in mobid2Str" );
+	}    
+	return mbtowc( buf );
+}
