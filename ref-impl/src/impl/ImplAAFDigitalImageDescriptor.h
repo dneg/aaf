@@ -139,7 +139,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetGamma
 		// @parm [in] Optional
-        (aafRational_t  Gamma);
+        (aafUID_t  Gamma);
 
   //****************
   // SetImageAlignmentFactor()
@@ -251,7 +251,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetGamma
 		// @parm [out] Optional.
-        (aafRational_t *  pGamma);
+        (aafUID_t *  pGamma);
 
   //****************
   // GetImageAlignmentFactor()
@@ -259,7 +259,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetImageAlignmentFactor
 		// @parm [out] Optional.
-        (aafInt32 *  pImageAlignmentFactor);
+        (aafUInt32 *  pImageAlignmentFactor);
 
 protected:
 	OMFixedSizeProperty<aafUID_t>				_compression;
@@ -276,8 +276,8 @@ protected:
 	OMFixedSizeProperty<aafFrameLayout_t>		_frameLayout;
 	OMVariableSizeProperty<aafInt32>			_videoLineMap;
 	OMFixedSizeProperty<aafRational_t>			_imageAspectRatio;
-	OMFixedSizeProperty<aafRational_t>			_alphaTransparency;
-	OMFixedSizeProperty<aafRational_t>			_gamma;
+	OMFixedSizeProperty<aafAlphaTransparency_t>	_alphaTransparency;
+	OMFixedSizeProperty<aafUID_t>				_gamma;
 	OMFixedSizeProperty<aafUInt32>				_imageAlignmentFactor;
 };
 
