@@ -44,8 +44,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Fri May 17 14:31:55 EDT 2002
-// by user tbingham on system TBINGHAMPC.
+// This file was generated on Fri May 17 15:14:08 EDT 2002
+// by user tjb on system tjb.avid.com.
 //
 // Key to macros.
 //
@@ -316,7 +316,6 @@
 //     name      = the name of the type
 //     id        = the auid used to identify the type [*]
 //     type      = the target type [*]
-//
 //
 // AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(name, id, type)
 //
