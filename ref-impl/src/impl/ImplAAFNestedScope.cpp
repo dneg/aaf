@@ -216,7 +216,6 @@ AAFRESULT STDMETHODCALLTYPE
 		if (*ppEnum)
 		  (*ppEnum)->ReleaseReference();
 		(*ppEnum) = 0;
-		return(XCODE());
 	}
 	XEND;
 
