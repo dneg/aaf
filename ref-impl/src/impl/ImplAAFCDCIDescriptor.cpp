@@ -11,6 +11,7 @@
 #include "ImplAAFCDCIDescriptor.h"
 #endif
 
+#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
@@ -232,20 +233,4 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
-extern "C" const aafClassID_t CLSID_AAFCDCIDescriptor;
-
-OMDEFINE_STORABLE(ImplAAFCDCIDescriptor, CLSID_AAFCDCIDescriptor);
-
-// Cheat!  We're using this object's CLSID instead of object class...
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFCDCIDescriptor::GetObjectClass(aafUID_t * pClass)
-{
-	if (! pClass)
-	{
-		return AAFRESULT_NULL_PARAM;
-	}
-	memcpy (pClass, &CLSID_AAFCDCIDescriptor, sizeof (aafClassID_t));
-	return AAFRESULT_SUCCESS;
-}
-
-
+OMDEFINE_STORABLE(ImplAAFCDCIDescriptor, AUID_AAFCDCIDescriptor);
