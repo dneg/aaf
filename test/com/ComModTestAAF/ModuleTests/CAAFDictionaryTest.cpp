@@ -227,6 +227,7 @@ static void RegisterNewClass (IAAFDictionary * pDictionary)
 											L"Odor",
 											ptd,
 											kAAFFalse,  // mandatory
+											kAAFFalse,  // not a unique identifer
 											0));
 
   // Register it in the dictionary.
