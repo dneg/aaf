@@ -55,7 +55,11 @@ ImplEnumAAFMobs::ImplEnumAAFMobs () : _enumObj(0), _iterator(0)
 
 ImplEnumAAFMobs::~ImplEnumAAFMobs ()
 {
-	_enumObj = 0;
+  if (0 != _enumObj)
+  {
+    _enumObj->ReleaseReference();
+	  _enumObj = 0;
+  }
 	delete _iterator;
 	_iterator = 0;
 }
