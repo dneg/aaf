@@ -1,0 +1,105 @@
+#startm .this-module 0
+AAFMediaFilmDescriptor\
+#endm
+#c
+#startm .parent-module 0
+AAFMediaDescriptor\
+#endm
+#c
+#import ./AAFUnitTest.exp
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+AD_CLASS_BEGIN()
+
+//@access Public Members
+
+/****/
+AD_METHOD1(SetFilmManufacturer,
+[in],AAFString *,name,,
+Sets the manufacturer name of the film stock [optional].)
+
+/****/
+AD_METHOD1(GetFilmManufacturer,
+[out],AAFString *,name,Pass in a string object,which will be erased and filled,
+Gets the optional manufacturer name of the film stock.)
+	//@comm Returns a zero-length string if the property was not present
+	
+/****/
+AD_METHOD1(SetFilmModel,
+[in],AAFString *,name,,
+Sets the model or brand of the film stock [optional].)
+
+/****/
+AD_METHOD1(GetFilmModel,
+[out],AAFString *,name,Pass in a string object,which will be erased and filled,
+Gets the optional model or brand of the film stock.)
+
+/****/
+AD_METHOD1(GetFilmFormat,
+[in],OMLObject,obj,,
+Constructor from persistant store.)
+aafErr_t GetFilmFormat(
+		  omfFilmType_t *filmFormat); /* OUT - Film Format 
+												*      (kFt35MM, kFt16MM, kFt8MM, kFt65MM)
+												*/
+
+/****/
+AD_METHOD1(GetFrameRate,
+[in],OMLObject,obj,,
+Constructor from persistant store.)
+aafErr_t GetFrameRate(
+		  omfUInt32 *frameRate);      /* OUT - Frame Rate */
+
+/****/
+AD_METHOD1(GetPerfPerFrame,
+[in],OMLObject,obj,,
+Constructor from persistant store.)
+aafErr_t GetPerfPerFrame(
+		  omfUInt8 *perfPerFrame);   /* OUT - Perforations per frame */
+
+/****/
+AD_METHOD1(GetFilmAspectRatio,
+[in],OMLObject,obj,,
+Constructor from persistant store.)
+aafErr_t GetFilmAspectRatio(
+		  omfRational_t *aspectRatio);/* OUT - Film Aspect Ratio  */
+
+/****/
+AD_METHOD1(SetFilmFormat,
+[in],OMLObject,obj,,
+Constructor from persistant store.)
+aafErr_t SetFilmFormat(
+		  omfFilmType_t filmFormat); /* IN - Film Format (optional) 
+												*      (kFt35MM, kFt16MM, kFt8MM, kFt65MM)
+												*/
+
+/****/
+AD_METHOD1(SetFrameRate,
+[in],OMLObject,obj,,
+Constructor from persistant store.)
+aafErr_t SetFrameRate(
+		  omfUInt32 frameRate);      /* IN - Frame Rate (optional) */
+
+/****/
+AD_METHOD1(SetPerfPerFrame,
+[in],OMLObject,obj,,
+Constructor from persistant store.)
+aafErr_t SetPerfPerFrame(
+		  omfUInt8 perfPerFrame);    /* IN - Perforations per frame
+												*      (optional)
+												*/
+
+/****/
+AD_METHOD1(SetFilmAspectRatio,
+[in],OMLObject,obj,,
+Constructor from persistant store.)
+aafErr_t SetFilmAspectRatio(
+		  omfRational_t aspectRatio);/* IN - Film Aspect Ratio (optional) */
