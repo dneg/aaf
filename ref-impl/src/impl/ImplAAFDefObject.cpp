@@ -38,6 +38,8 @@
 #include "ImplAAFObjectCreation.h"
 #include "aafErr.h"
 #include "ImplAAFPluginDescriptor.h"
+#include "aafUtils.h"
+#include "AAFDefUIDs.h"
 
 extern "C" const aafClassID_t CLSID_EnumAAFPluginDescriptors;
 
@@ -52,21 +54,12 @@ ImplAAFDefObject::ImplAAFDefObject ()
   _persistentProperties.put(_description.address());
   _persistentProperties.put(_identification.address());
   _persistentProperties.put(_descriptors.address());
+		(void)AppendPluginDescriptor (NULL);		// !!! TEMP Until optional properties
 }
 
 
 ImplAAFDefObject::~ImplAAFDefObject ()
 {
-	// Release all of the descriptor pointers.
-	size_t size = _descriptors.getSize();
-	for (size_t i = 0; i < size; i++)
-	{
-		ImplAAFPluginDescriptor *pDesc = _descriptors.setValueAt(0, i);
-		if (pDesc)
-		{
-			pDesc->ReleaseReference();
-		}
-	}
   if (_pDict)
 	{
 	  // BobT hack!!!  See comment in SetDict() below...
@@ -224,13 +217,47 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDefObject::AppendPluginDescriptor (
       ImplAAFPluginDescriptor *pPluginDescriptor)
 {
-	if(pPluginDescriptor == NULL)
-		return(AAFRESULT_NULL_PARAM);
+	aafUID_t	*tmp, newUID;
+	aafInt32	oldBufSize;
+	aafInt32	newBufSize;
 
-	_descriptors.appendValue(pPluginDescriptor);
-	pPluginDescriptor->AcquireReference();
+//!!!	if(pPluginDescriptor == NULL)
+//		return AAFRESULT_NULL_PARAM;
 
-	return(AAFRESULT_SUCCESS);
+	XPROTECT()
+	{
+		oldBufSize = _descriptors.size();
+		newBufSize = oldBufSize + sizeof(aafUID_t);
+		if(pPluginDescriptor == NULL)	//!!!
+			newUID = NilMOBID;			//!!!
+		else
+		{
+			CHECK(pPluginDescriptor->GetAUID(&newUID));
+		}
+		tmp = new aafUID_t[newBufSize];
+		if(tmp == NULL)
+			RAISE(AAFRESULT_NOMEMORY);
+		if(oldBufSize != 0)
+		{
+			_descriptors.copyToBuffer(tmp, oldBufSize);
+			if(EqualAUID(tmp, &NilMOBID))		//!!! Handle non-optional props
+			{									//!!!
+				oldBufSize = 0;					//!!!
+				newBufSize -= sizeof(aafUID_t);	//!!!
+			}									//!!!
+		}
+		tmp[oldBufSize/sizeof(aafUID_t)] = newUID;
+		_descriptors.setValue(tmp, newBufSize);
+		delete [] tmp;
+	}
+	XEXCEPT
+	{
+		if(tmp != NULL)
+			delete [] tmp;
+	}
+	XEND;
+
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -239,22 +266,38 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDefObject::PrependPluginDescriptor (
       ImplAAFPluginDescriptor *pPluginDescriptor)
 {
+	aafUID_t	*tmp = NULL, newUID;
+	aafInt32	oldBufSize;
+	aafInt32	newBufSize;
+	aafInt32	n;
+
 	if(pPluginDescriptor == NULL)
-		return(AAFRESULT_NULL_PARAM);
-
-	size_t					siz;
-	long					n;
-	ImplAAFPluginDescriptor	*obj = NULL;
-
-	_descriptors.getSize(siz);
-	for(n = siz-1; n >= 0; n--)
+		return AAFRESULT_NULL_PARAM;
+	
+	XPROTECT()
 	{
-		_descriptors.getValueAt(obj, n);
-		_descriptors.setValueAt(NULL, n);
-		_descriptors.setValueAt(obj, n+1);
+		oldBufSize = _descriptors.size();
+		newBufSize = oldBufSize + sizeof(aafUID_t);
+		CHECK(pPluginDescriptor->GetAUID(&newUID));
+		tmp = new aafUID_t[newBufSize];
+		if(tmp == NULL)
+			RAISE(AAFRESULT_NOMEMORY);
+		if(oldBufSize != 0)
+			_descriptors.copyToBuffer(tmp, oldBufSize);
+		for(n = oldBufSize/sizeof(aafUID_t); n >= 0; n--)
+		{
+			tmp[n+1] = tmp[n];
+		}
+		tmp[0] = newUID;
+		_descriptors.setValue(tmp, newBufSize);
+		delete [] tmp;
 	}
-	_descriptors.setValueAt(pPluginDescriptor, 0);
-	pPluginDescriptor->AcquireReference();
+	XEXCEPT
+	{
+		if(tmp != NULL)
+			delete [] tmp;
+	}
+	XEND;
 
 	return AAFRESULT_SUCCESS;
 }
@@ -264,58 +307,21 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDefObject::EnumPluginDescriptors (
       ImplEnumAAFPluginDescriptors **ppEnum)
 {
-	ImplEnumAAFPluginDescriptors		*theEnum = (ImplEnumAAFPluginDescriptors *)CreateImpl (CLSID_EnumAAFPluginDescriptors);
-		
-	XPROTECT()
-	{
-		CHECK(theEnum->SetDef(this));
-		CHECK(theEnum->Reset());
-		*ppEnum = theEnum;
-	}
-	XEXCEPT
-	{
-		if (theEnum)
-			theEnum->ReleaseReference();
-		return(XCODE());
-	}
-	XEND;
-	
+	if(ppEnum == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	*ppEnum = (ImplEnumAAFPluginDescriptors *)CreateImpl (CLSID_EnumAAFPluginDescriptors);
+	if(*ppEnum == NULL)
+		return(AAFRESULT_NOMEMORY);
+	(*ppEnum)->SetEnumProperty(this, &_descriptors);
+
 	return(AAFRESULT_SUCCESS);
 }
 
 
 
 // Internal to the toolkit functions
-AAFRESULT
-    ImplAAFDefObject::GetNthDescriptor (aafInt32 index, ImplAAFPluginDescriptor **ppDescriptor)
-{
-	if(ppDescriptor == NULL)
-		return(AAFRESULT_NULL_PARAM);
 
-	ImplAAFPluginDescriptor	*obj = NULL;
-	_descriptors.getValueAt(obj, index);
-	*ppDescriptor = obj;
-	if (obj)
-		obj->AcquireReference();
-	else
-		return AAFRESULT_NO_MORE_OBJECTS; // AAFRESULT_BADINDEX ???
-
-	return AAFRESULT_SUCCESS;
-}
-
-AAFRESULT
-    ImplAAFDefObject::GetNumDescriptors (aafInt32 *pCount)
-{
-	size_t	siz;
-	if (! pCount)
-	{
-		return AAFRESULT_NULL_PARAM;
-	}
-
-	_descriptors.getSize(siz);
-	*pCount = siz;
-	return(AAFRESULT_SUCCESS);
-}
 void ImplAAFDefObject::SetDict (ImplAAFDictionary * pDict)
 {
   _pDict = pDict;
