@@ -72,8 +72,8 @@ struct ContentStorageTest
 	
 	void cleanupReferences();
 	void setBufferSize(aafUInt32 bufferSize);
-	void check(HRESULT hr);
-	void checkExpression(bool expression, HRESULT hr);
+	inline void check(HRESULT hr);
+	inline void checkExpression(bool expression, HRESULT hr);
 	const char * convert(const wchar_t* pwcName);
 	
 	// Shared member data:
