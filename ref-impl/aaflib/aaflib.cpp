@@ -406,9 +406,9 @@ static const size_t maxSignatureSize = 256; //signatureSize();
 // _wfopen() is in the W32 API on Windows 95, 98 and ME but with an
 // implementation that always fails. By default we use _wfopen() when
 // compiled on/for the W32 API, this can be overridden by defining
-// NO_W32_FOPEN.
+// NO_W32_WFOPEN.
 
-#if !defined(NO_W32_FOPEN)
+#if !defined(NO_W32_WFOPEN)
 #if defined(OS_WINDOWS)
 #define W32_WFOPEN
 #endif
