@@ -8,9 +8,7 @@
 # Place the object root name is this list if it is a "persistent"
 # aaf object:
 AAFPERSISTENTOBJECTS = \
-	AAFLocator \
 	AAFMIDIFileDescriptor \
-	AAFPluggableCode \
 	AAFRGBADescriptor
 
 
@@ -50,7 +48,6 @@ HUMAN_TYPED_IMPL = \
 	AAFEssenceAccess \
 	AAFEssenceData \
 	AAFEssenceDescriptor \
-	AAFEssencePlugin \
 	AAFEvent \
 	AAFEventMobSlot \
 	AAFFile \
@@ -70,6 +67,7 @@ HUMAN_TYPED_IMPL = \
 	AAFIdentification \
 	AAFInterpolationDef \
 	AAFIntraFrameMarker \
+	AAFLocator \
 	AAFMasterMob \
 	AAFMob  \
 	AAFMobSlot \
@@ -78,6 +76,7 @@ HUMAN_TYPED_IMPL = \
 	AAFObject \
 	AAFParameter \
 	AAFParameterDef \
+	AAFPluggableCode \
 	AAFProperty \
 	AAFPropertyDef \
 	AAFPropertyValue \
