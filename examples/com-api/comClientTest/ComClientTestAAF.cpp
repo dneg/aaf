@@ -42,6 +42,12 @@ const CLSID CLSID_AAFSession = { 0xF0C10891, 0x3073, 0x11d2, { 0x80, 0x4A, 0x00,
 const CLSID CLSID_AAFMob =            { 0xB1A21375, 0x1A7D, 0x11d2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
 
 const CLSID CLSID_AAFSegment =        { 0x7a2f0571, 0x1ba3, 0x11D2, { 0xbf, 0xaa, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
+
+const CLSID CLSID_AAFSourceClip = { 0x38e6f8a5, 0x2a2c, 0x11d2, { 0x84, 0x11, 0x00, 0x60, 0x08, 0x32, 0xac, 0xb8 } };
+
+const CLSID CLSID_AAFSourceMob = { 0xB1A2137D, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
+
+const CLSID CLSID_AAFFileDescriptor = { 0xe58a8562, 0x2a3e, 0x11D2, { 0xbf, 0xa4, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
 #endif
 
 static void     FatalErrorCode(HRESULT errcode, int line, char *file)
@@ -127,6 +133,10 @@ static void ReadAAFFile(aafWChar * pFileName)
 	printf("Number of Mobs = %ld\n", numMobs);
 
 	IEnumAAFMobs *mobIter;
+	IAAFSourceMob	*smob;
+	IAAFEssenceDescriptor	*essenceDesc;
+	IAAFFileDescriptor		*fileDesc;
+
 //!!!	aafSearchCrit_t		criteria;
 //!!!	criteria.searchTag = kNoSearch;
     check(pHeader->EnumAAFAllMobs (NULL, &mobIter));
@@ -138,13 +148,26 @@ static void ReadAAFFile(aafWChar * pFileName)
 		IEnumAAFMobSlots	*slotIter;
 		IAAFMobSlot		*slot;
 		aafUID_t		mobID;
-		aafSlotID_t	trackID;
+		aafSlotID_t		trackID;
+		aafRational_t	rate;
 
 		check(mobIter->NextOne (&aMob));
 		check(aMob->GetName (name));
 		check(aMob->GetMobID (&mobID));
 		wprintf(L"Mob %ld: (ID %ld) is named '%s'\n", n, mobID.Data1, name);
-	    check(aMob->GetNumSlots (&numSlots));
+	    if(SUCCEEDED(aMob->QueryInterface (IID_IAAFSourceMob, (void **)&smob)))
+		{
+			check(smob->GetEssenceDescription(&essenceDesc));
+			if(SUCCEEDED(essenceDesc->QueryInterface (IID_IAAFFileDescriptor, (void **)&fileDesc)))
+			{
+				check(fileDesc->GetSampleRate(&rate));
+				wprintf(L"    It is a file source mob of sample rate %ld/%ld.\n",
+						rate.numerator, rate.denominator);
+			}
+			else
+				wprintf(L"    It is a source mob, but not a file source mob\n");
+		}
+		check(aMob->GetNumSlots (&numSlots));
 		printf("Found %ld slots\n", numSlots);
 		if(numSlots != 0)
 		{
@@ -208,28 +231,45 @@ static void CreateAAFFile(aafWChar * pFileName)
 	aafRational_t	editRate = { 2997, 100 };
 	IAAFMobSlot		*newSlot;
 	IAAFSegment		*seg;
+	IAAFSourceClip	*sclp;
+	IAAFSourceMob	*smob;
 	aafInt32		testSlot;
 	aafWChar		*slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
+	IAAFFileDescriptor	*fileDesc;
+	IAAFEssenceDescriptor *essenceDesc;
+	aafRational_t	audioRate = { 44100, 1 };
 
-	
 	for(test = 0; test < 5; test++)
 	{
- 		check(CoCreateInstance(CLSID_AAFMob,
+ 		// Create a source Mob with a FileDescriptor attached
+		check(CoCreateInstance(CLSID_AAFSourceMob,
 						   NULL, 
 						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFMob, 
-						   (void **)&pMob));
+						   IID_IAAFSourceMob, 
+						   (void **)&smob));
+		check(smob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 		newUID.Data1 = test;
 		check(pMob->SetMobID(&newUID));
 		check(pMob->SetName(names[test]));
 
-		for(testSlot = 0; testSlot < 3; testSlot++)
-		{
- 			check(CoCreateInstance(CLSID_AAFSegment,
+ 		check(CoCreateInstance(CLSID_AAFFileDescriptor,
 						   NULL, 
 						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFSegment, 
-						   (void **)&seg));		//!!!Temp, abstract superclass
+						   IID_IAAFFileDescriptor, 
+						   (void **)&fileDesc));
+		check(fileDesc->SetSampleRate(&audioRate));
+		check(fileDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&essenceDesc));
+		check(smob->SetEssenceDescription(essenceDesc));
+
+		// Add some slots
+		for(testSlot = 0; testSlot < 3; testSlot++)
+		{
+ 			check(CoCreateInstance(CLSID_AAFSourceClip,
+						   NULL, 
+						   CLSCTX_INPROC_SERVER, 
+						   IID_IAAFSourceClip, 
+						   (void **)&sclp));		//!!!Temp, abstract superclass
+			check(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
 			check(pMob->AppendNewSlot (seg, testSlot+1, slotNames[testSlot], &newSlot));
 //			seg->Release();
 //			newSlot->Release();
