@@ -74,7 +74,7 @@ ImplAAFMasterMob::Initialize ()
 //   - One or more of the following parameters are NULL pSourceMob,
 //     pDataDef, and pSlotName.
 //
-// AAFRESULT_INVALID_DATAKIND
+// AAFRESULT_INVALID_DATADEF
 //   - The data kind of the source MOB slot to be added to the Master
 //     Mob does not match what is specfied in pDataDef.
 //
@@ -123,7 +123,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 		// Make sure the slot contains the expected media type.
 		if (memcmp(&DataDef, pDataDef, sizeof(aafUID_t)) != 0)
-			RAISE(AAFRESULT_INVALID_DATAKIND);
+			RAISE(AAFRESULT_INVALID_DATADEF);
 
 		pMobSlot->ReleaseReference();
 		pMobSlot = NULL;
