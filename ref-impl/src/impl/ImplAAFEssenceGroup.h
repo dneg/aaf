@@ -91,7 +91,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     AppendChoice
         // @parm [in] Source clip to add as a choice 
-        (ImplAAFSourceClip * choice);
+        (ImplAAFSegment * choice);
 
 
   //****************
@@ -100,7 +100,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     PrependChoice
         // @parm [in] Source clip to add as a choice 
-        (ImplAAFSourceClip * choice);
+        (ImplAAFSegment * choice);
 
 
   //****************
@@ -112,7 +112,7 @@ public:
         (aafUInt32 index,
 
 		 // @parm [in] Source clip to add as a choice
-		 ImplAAFSourceClip * choice);
+		 ImplAAFSegment * choice);
 
 
   //****************
@@ -132,7 +132,7 @@ public:
          aafUInt32  index,
 
          // @parm [out] The representation at that index
-         ImplAAFSourceClip  ** result);
+         ImplAAFSegment  ** result);
 
 
   //****************
@@ -157,12 +157,12 @@ public:
 										ImplAAFOperationGroup **effeObject, aafInt32	*nestDepth,
 										ImplAAFComponent **foundObj, aafBool *foundTransition);
 
-	AAFRESULT GetCriteriaSourceClip(
+	AAFRESULT GetCriteriaSegment(
 			aafMediaCriteria_t *criteria,
-			ImplAAFSourceClip		**retSrcClip);
+			ImplAAFSegment		**retSrcClip);
 
 private:
-	OMStrongReferenceVectorProperty<ImplAAFSourceClip>	_choices;
+	OMStrongReferenceVectorProperty<ImplAAFSegment>	_choices;
 	OMStrongReferenceProperty<ImplAAFSourceClip>		_stillFrame;
 };	
 
