@@ -19,6 +19,29 @@
 
 #ccccccccccccccccccccccccccc
 #c
+#c Includes another file.
+#c
+#c Argument: Base filename
+#c
+#c Note: it is not necessary to expand it here, since it was already
+#c included in this module's header file.
+#c
+#startm AD_INCLUDE 01
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Goes at the head of the file.
+#c
+#c Arguments: none
+#c
+#startm AD_HEAD 00
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Starts a class definition
 #c
 #c Arguments: none
@@ -138,11 +161,11 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     C.this-module::%01 (%03 %04)
 {
-  C.this-module * ptr;
+  Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<C.this-module*> (pO);
+  ptr = static_cast<Impl.this-module*> (pO);
   assert (pO)
   return pO->%01 (%04);
 }
@@ -168,11 +191,11 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     C.this-module::%01 (%03 %04,%07 %08)
 {
-  C.this-module * ptr;
+  Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<C.this-module*> (pO);
+  ptr = static_cast<Impl.this-module*> (pO);
   assert (pO)
   return pO->%01 (%04,%08);
 }
@@ -202,11 +225,11 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     C.this-module::%01 (%03 %04,%07 %08,%10 %11)
 {
-  C.this-module * ptr;
+  Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<C.this-module*> (pO);
+  ptr = static_cast<Impl.this-module*> (pO);
   assert (pO)
   return pO->%01 (%04,%08,%11);
 }
@@ -240,11 +263,11 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     C.this-module::%01 (%03 %04,%07 %08,%10 %11,%15 %16)
 {
-  C.this-module * ptr;
+  Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<C.this-module*> (pO);
+  ptr = static_cast<Impl.this-module*> (pO);
   assert (pO)
   return pO->%01 (%04,%08,%11,%16);
 }
@@ -282,11 +305,11 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     C.this-module::%01 (%03 %04,%07 %08,%10 %11,%15 %16,%19 %20)
 {
-  C.this-module * ptr;
+  Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<C.this-module*> (pO);
+  ptr = static_cast<Impl.this-module*> (pO);
   assert (pO)
   return pO->%01 (%04,%08,%11,%16,%20);
 }
@@ -328,11 +351,11 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     C.this-module::%01 (%03 %04,%07 %08,%10 %11,%15 %16,%19 %20,%23 %24)
 {
-  C.this-module * ptr;
+  Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<C.this-module*> (pO);
+  ptr = static_cast<Impl.this-module*> (pO);
   assert (pO)
   return pO->%01 (%04,%08,%11,%16,%20,%24);
 }
@@ -396,11 +419,11 @@ C.this-module::C.this-module (%02 %03)
 #c Inserts declaration for a constructor which takes two arguments.
 #c Constructor name is assumed to be .this-module.
 #c
-#c Argument1: argument modifiers (e.g. [in])
+#c Argument1: argument1 modifiers (e.g. [in])
 #c Argument2: argument1 type
 #c Argument3: argument1 name
 #c Argument4: argument1 comment
-#c Argument5: argument modifiers (e.g. [in])
+#c Argument5: argument2 modifiers (e.g. [in])
 #c Argument6: argument2 type
 #c Argument7: argument2 name
 #c Argument8: argument2 comment
@@ -411,6 +434,75 @@ C.this-module::C.this-module (%02 %03, %06 %07)
 {
   Impl.this-module * ptr;
   ptr = new Impl.this-module (%03, %07);
+  assert (ptr);
+  InitRep (ptr);
+}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a constructor which takes three arguments.
+#c Constructor name is assumed to be .this-module.
+#c
+#c Argument1: argument1 modifiers (e.g. [in])
+#c Argument2: argument1 type
+#c Argument3: argument1 name
+#c Argument4: argument1 comment
+#c Argument5: argument2 modifiers (e.g. [in])
+#c Argument6: argument2 type
+#c Argument7: argument2 name
+#c Argument8: argument2 comment
+#c Argument9: argument3 modifiers (e.g. [in])
+#c Argument10: argument3 type
+#c Argument11: argument3 name
+#c Argument12: argument3 comment
+#c Argument13: constructor description
+#c
+#startm AD_CONSTRUCTOR3 13
+C.this-module::C.this-module (%02 %03,
+							  %06 %07,
+							  %10 %11)
+{
+  Impl.this-module * ptr;
+  ptr = new Impl.this-module (%03, %07, %11);
+  assert (ptr);
+  InitRep (ptr);
+}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a constructor which takes four arguments.
+#c Constructor name is assumed to be .this-module.
+#c
+#c Argument1: argument1 modifiers (e.g. [in])
+#c Argument2: argument1 type
+#c Argument3: argument1 name
+#c Argument4: argument1 comment
+#c Argument5: argument2 modifiers (e.g. [in])
+#c Argument6: argument2 type
+#c Argument7: argument2 name
+#c Argument8: argument2 comment
+#c Argument9: argument3 modifiers (e.g. [in])
+#c Argument10: argument3 type
+#c Argument11: argument3 name
+#c Argument12: argument3 comment
+#c Argument13: argument4 modifiers (e.g. [in])
+#c Argument14: argument4 type
+#c Argument15: argument4 name
+#c Argument16: argument4 comment
+#c Argument17: constructor description
+#c
+#startm AD_CONSTRUCTOR4 17
+C.this-module::C.this-module (%02 %03,
+							  %06 %07,
+							  %10 %11,
+							  %14 %15)
+{
+  Impl.this-module * ptr;
+  ptr = new Impl.this-module (%03, %07, %11, %15);
   assert (ptr);
   InitRep (ptr);
 }

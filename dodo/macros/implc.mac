@@ -19,6 +19,29 @@
 
 #ccccccccccccccccccccccccccc
 #c
+#c Includes another file.
+#c
+#c Argument: Base filename
+#c
+#c Note: it is not necessary to expand it here, since it was already
+#c included in this module's header file.
+#c
+#startm AD_INCLUDE 01
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Goes at the head of the file.
+#c
+#c Arguments: none
+#c
+#startm AD_HEAD 00
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Starts a class definition
 #c
 #c Arguments: none
@@ -26,6 +49,14 @@
 #startm AD_CLASS_BEGIN 00
 #ifndef _Impl.this-module_h_
 #include "Impl.this-module.h"
+#endif
+
+#ifndef _.this-module_h_
+#include ".this-module.h"
+#endif
+
+#ifndef _I.this-module_h_
+#include "I.this-module.h"
 #endif
 
 #include <assert.h>
@@ -374,6 +405,65 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_CONSTRUCTOR2 09
     .this-module::.this-module (%02 %03,%06 %07)
+{}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a constructor which takes three arguments.
+#c Constructor name is assumed to be .this-module.
+#c
+#c Argument1: argument1 modifiers (e.g. [in])
+#c Argument2: argument1 type
+#c Argument3: argument1 name
+#c Argument4: argument1 comment
+#c Argument5: argument2 modifiers (e.g. [in])
+#c Argument6: argument2 type
+#c Argument7: argument2 name
+#c Argument8: argument2 comment
+#c Argument9: argument3 modifiers (e.g. [in])
+#c Argument10: argument3 type
+#c Argument11: argument3 name
+#c Argument12: argument3 comment
+#c Argument13: constructor description
+#c
+#startm AD_CONSTRUCTOR3 13
+    .this-module::.this-module (%02 %03,
+								%06 %07,
+								%10 %11)
+{}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a constructor which takes four arguments.
+#c Constructor name is assumed to be .this-module.
+#c
+#c Argument1: argument1 modifiers (e.g. [in])
+#c Argument2: argument1 type
+#c Argument3: argument1 name
+#c Argument4: argument1 comment
+#c Argument5: argument2 modifiers (e.g. [in])
+#c Argument6: argument2 type
+#c Argument7: argument2 name
+#c Argument8: argument2 comment
+#c Argument9: argument3 modifiers (e.g. [in])
+#c Argument10: argument3 type
+#c Argument11: argument3 name
+#c Argument12: argument3 comment
+#c Argument13: argument4 modifiers (e.g. [in])
+#c Argument14: argument4 type
+#c Argument15: argument4 name
+#c Argument16: argument4 comment
+#c Argument17: constructor description
+#c
+#startm AD_CONSTRUCTOR4 17
+    .this-module::.this-module (%02 %03,
+								%06 %07,
+								%10 %11,
+								%14 %15)
 {}
 #endm
 

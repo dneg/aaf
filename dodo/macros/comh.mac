@@ -19,14 +19,38 @@
 
 #ccccccccccccccccccccccccccc
 #c
+#c Includes another file.
+#c
+#c Argument: Base filename
+#c
+#startm AD_INCLUDE 01
+#ifndef _%01_h_
+#include "%01.h"
+#endif
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Goes at the head of the file.
+#c
+#c Arguments: none
+#c
+#startm AD_HEAD 00
+//@doc
+//@class 	.this-module | Implementation class for .this-module
+#ifndef _C.this-module_h_
+#define _C.this-module_h_
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Starts a class definition
 #c
 #c Arguments: none
 #c
 #startm AD_CLASS_BEGIN 00
-#ifndef _C.this-module_h_
-#define _C.this-module_h_
-
 #ifndef _C.parent-module_h_
 #include "C.parent-module.h"
 #endif
@@ -61,9 +85,6 @@ class C.this-module
 #c Arguments: none
 #c
 #startm AD_ROOT_CLASS_BEGIN 00
-#ifndef _C.this-module_h_
-#define _C.this-module_h_
-
 #ifndef _I.this-module_h_
 #include "I.this-module.h"
 #endif
@@ -77,6 +98,7 @@ class Impl.this-module;
 class C.this-module
   : public I.this-module
 {
+public:
   C.this-module (AAFBool doInit = AAFTrue);
   ~C.this-module ();
   //
@@ -347,11 +369,11 @@ private:
 #c Inserts declaration for a constructor which takes two arguments.
 #c Constructor name is assumed to be .this-module.
 #c
-#c Argument1: argument modifiers (e.g. [in])
+#c Argument1: argument1 modifiers (e.g. [in])
 #c Argument2: argument1 type
 #c Argument3: argument1 name
 #c Argument4: argument1 comment
-#c Argument5: argument modifiers (e.g. [in])
+#c Argument5: argument2 modifiers (e.g. [in])
 #c Argument6: argument2 type
 #c Argument7: argument2 name
 #c Argument8: argument2 comment
@@ -359,6 +381,63 @@ private:
 #c
 #startm AD_CONSTRUCTOR2 09
     C.this-module (%02 %03,%06 %07);\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a constructor which takes three arguments.
+#c Constructor name is assumed to be .this-module.
+#c
+#c Argument1: argument1 modifiers (e.g. [in])
+#c Argument2: argument1 type
+#c Argument3: argument1 name
+#c Argument4: argument1 comment
+#c Argument5: argument2 modifiers (e.g. [in])
+#c Argument6: argument2 type
+#c Argument7: argument2 name
+#c Argument8: argument2 comment
+#c Argument9: argument3 modifiers (e.g. [in])
+#c Argument10: argument3 type
+#c Argument11: argument3 name
+#c Argument12: argument3 comment
+#c Argument13: constructor description
+#c
+#startm AD_CONSTRUCTOR3 13
+    C.this-module (%02 %03,
+				   %06 %07,
+				   %10 %11);\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a constructor which takes four arguments.
+#c Constructor name is assumed to be .this-module.
+#c
+#c Argument1: argument1 modifiers (e.g. [in])
+#c Argument2: argument1 type
+#c Argument3: argument1 name
+#c Argument4: argument1 comment
+#c Argument5: argument2 modifiers (e.g. [in])
+#c Argument6: argument2 type
+#c Argument7: argument2 name
+#c Argument8: argument2 comment
+#c Argument9: argument3 modifiers (e.g. [in])
+#c Argument10: argument3 type
+#c Argument11: argument3 name
+#c Argument12: argument3 comment
+#c Argument13: argument4 modifiers (e.g. [in])
+#c Argument14: argument4 type
+#c Argument15: argument4 name
+#c Argument16: argument4 comment
+#c Argument17: constructor description
+#c
+#startm AD_CONSTRUCTOR4 17
+    C.this-module (%02 %03,
+				   %06 %07,
+				   %10 %11,
+				   %14 %15);\
 #endm
 
 
