@@ -8,6 +8,27 @@ AAFComponent\
 #c
 #c #import ./AAFComponent.exp
 AD_HEAD
+AD_IDL(//
+// The IAAFTransition interface is implemented by objects describe a change or transition
+// from one piece of essence to another.  Transitions must exist in the context of a sequence\,
+// and must be surrounded on both sides by segments \(an object which has an IAAFSegment interface\).
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
+// AAFRESULT_NOT_INITIALIZED
+//   - This object has not yet had Initialize\(\) called on it through
+//     this object's primary interface.  Note that IAAFMob is a
+//     primary interface for an abstract class\, so it is not
+//     appropriate for the Initialize\(\) method to exist in this
+//     interface.  The Initialize\(\) method is available through the
+//     concrete object's primary interface.
+//)
 AD_INCLUDE(AAFTypes)
 AD_FORWARD_DECLARATION(AAFOperationGroup)
 AD_FORWARD_DECLARATION(AAFDataDef)
@@ -63,7 +84,7 @@ AD_XMETHOD1(SetOperationGroup,
 			[in],
 			objIn,
 			AAFOperationGroup,
-			effObj,
+			opgroup,
 			Operation group used by transition,
 			Sets the operation group associated with the transition.)
 
