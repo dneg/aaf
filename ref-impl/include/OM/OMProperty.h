@@ -7,14 +7,17 @@
 
 #include <stddef.h>
 
-const int TID_DATA                           = 0;
-const int TID_DATA_STREAM                    = 1;
-const int TID_STRONG_OBJECT_REFERENCE        = 2;
-const int TID_STRONG_OBJECT_REFERENCE_VECTOR = 3;
-const int TID_STRONG_OBJECT_REFERENCE_SET    = 4;
-const int TID_WEAK_OBJECT_REFERENCE          = 5;
-const int TID_WEAK_OBJECT_REFERENCE_VECTOR   = 6;
-const int TID_WEAK_OBJECT_REFERENCE_SET      = 7;
+// The following stored form values are used to denote the on-disk
+// representation of a given property.
+//
+const int SF_DATA                           = 0;
+const int SF_DATA_STREAM                    = 1;
+const int SF_STRONG_OBJECT_REFERENCE        = 2;
+const int SF_STRONG_OBJECT_REFERENCE_VECTOR = 3;
+const int SF_STRONG_OBJECT_REFERENCE_SET    = 4;
+const int SF_WEAK_OBJECT_REFERENCE          = 5;
+const int SF_WEAK_OBJECT_REFERENCE_VECTOR   = 6;
+const int SF_WEAK_OBJECT_REFERENCE_SET      = 7;
 
 
 class OMStoredObject;
@@ -28,7 +31,9 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMProperty(const OMPropertyId propertyId, const int type, const char* name);
+  OMProperty(const OMPropertyId propertyId,
+             const int storedForm,
+             const char* name);
 
     // @cmember Destructor.
   virtual ~OMProperty(void);
@@ -76,17 +81,13 @@ public:
     //          <p size> bytes in size.
   virtual void getBits(OMByte* bits, size_t size) const = 0;
 
-  // Temporary - get the type id of this OMProperty
-
-  int typeId(void) const;
-
 protected:
+
   int _propertyId;
-  int _type;
+  int _storedForm; // The on-disk representation used (one of the SF_* values)
   const char* _name;
-  // The PropertySet that contains this property
-  //
-  const OMPropertySet* _propertySet;
+  const OMPropertySet* _propertySet; // The PropertySet that contains
+                                     // this property
 };
 
 // @doc OMINTERNAL
@@ -103,7 +104,7 @@ public:
 
     // @cmember Constructor.
   OMReferenceProperty(const OMPropertyId propertyId,
-                      const int type,
+                      const int storedForm,
                       const char* name);
 
     // @cmember Destructor.
@@ -457,7 +458,7 @@ public:
 
     // @cmember Constructor.
   OMCollectionProperty(const OMPropertyId propertyId,
-                       const int type,
+                       const int storedForm,
                        const char* name);
 
     // @cmember Destructor.
