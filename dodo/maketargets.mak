@@ -55,7 +55,6 @@ $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAF.idl
 	@ ( echo "cpp_quote(\"//=--------------------------------------------------------------------------=\")" ; \
 	    echo "cpp_quote(\"// (C) Copyright 1998-1999 Avid Technology.\")" ; \
-	    echo "cpp_quote(\"// (C) Copyright 1998-1999 Microsoft Corporation.\")" ; \
 	    echo "cpp_quote(\"//\")" ; \
 	    echo "cpp_quote(\"// This file was GENERATED for the AAF SDK on \")" ; \
 	    echo "cpp_quote(\"//  `date`\")" ; \
@@ -102,7 +101,6 @@ $(PLUGIN_DIR)/AAFPlugin.idl : $(PLUGIN_FIDL_TARGETS)
 	$(RM) -f $(PLUGIN_DIR)/AAFPlugin.idl
 	@ ( echo "cpp_quote(\"//=--------------------------------------------------------------------------=\")" ; \
 	    echo "cpp_quote(\"// (C) Copyright 1998-1999 Avid Technology.\")" ; \
-	    echo "cpp_quote(\"// (C) Copyright 1998-1999 Microsoft Corporation.\")" ; \
 	    echo "cpp_quote(\"//\")" ; \
 	    echo "cpp_quote(\"// This file was GENERATED for the AAF SDK on \")" ; \
 	    echo "cpp_quote(\"//  `date`\")" ; \
@@ -148,7 +146,6 @@ $(INCLUDE_DIR)/ref-api/AAF.h : $(FREFH_TARGETS)
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAF.h
 	@ ( echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "// (C) Copyright 1998-1999 Avid Technology." ; \
-	    echo "// (C) Copyright 1998-1999 Microsoft Corporation." ; \
 	    echo "//" ; \
 	    echo "// This file was GENERATED for the AAF SDK on " ; \
 	    echo "//  "`date` ; \
@@ -202,7 +199,6 @@ $(INCLUDE_DIR)/ref-api/AAFPlugin.h : $(PLUGIN_FREFH_TARGETS)
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFPlugin.h
 	@ ( echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "// (C) Copyright 1998-1999 Avid Technology." ; \
-	    echo "// (C) Copyright 1998-1999 Microsoft Corporation." ; \
 	    echo "//" ; \
 	    echo "// This file was GENERATED for the AAF SDK on " ; \
 	    echo "//  "`date` ; \
@@ -256,7 +252,6 @@ $(UUID_DIR)/AAF_i.c : aafobjects.mk dod2iid.awk
 	    echo "/* link this file in with the server and any clients */" ; \
 	    echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "// (C) Copyright 1998-1999 Avid Technology." ; \
-	    echo "// (C) Copyright 1998-1999 Microsoft Corporation." ; \
 	    echo "//" ; \
 	    echo "// This file was GENERATED for the AAF SDK on " ; \
 	    echo "//  "`date` ; \
@@ -313,7 +308,6 @@ $(UUID_DIR)/AAFPlugin_i.c : aafobjects.mk dod2iid.awk
 	    echo "/* link this file in with the server and any clients */" ; \
 	    echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "// (C) Copyright 1998-1999 Avid Technology." ; \
-	    echo "// (C) Copyright 1998-1999 Microsoft Corporation." ; \
 	    echo "//" ; \
 	    echo "// This file was GENERATED for the AAF SDK on " ; \
 	    echo "//  "`date` ; \
@@ -370,7 +364,6 @@ $(UUID_DIR)/AAFRoot_i.c : aafobjects.mk dod2iid.awk
 	    echo "/* link this file in with the server and any clients */" ; \
 	    echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "// (C) Copyright 1998-1999 Avid Technology." ; \
-	    echo "// (C) Copyright 1998-1999 Microsoft Corporation." ; \
 	    echo "//" ; \
 	    echo "// This file was GENERATED for the AAF SDK on " ; \
 	    echo "//  "`date` ; \
@@ -423,7 +416,6 @@ $(IMPL_DIR)/AAFClassIDs.h : aafobjects.mk
 	$(RM) -f $(IMPL_DIR)/AAFClassIDs.h
 	@ ( echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "// (C) Copyright 1998-1999 Avid Technology." ; \
-	    echo "// (C) Copyright 1998-1999 Microsoft Corporation." ; \
 	    echo "//" ; \
 	    echo "// This file was GENERATED for the AAF SDK on " ; \
 	    echo "//  "`date` ; \
@@ -459,7 +451,6 @@ $(COMAPI_DIR)/AAFCLSIDs.h : aafobjects.mk
 	$(RM) -f $(COMAPI_DIR)/AAFCLSIDs.h
 	@ ( echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "// (C) Copyright 1998-1999 Avid Technology." ; \
-	    echo "// (C) Copyright 1998-1999 Microsoft Corporation." ; \
 	    echo "//" ; \
 	    echo "// This file was GENERATED for the AAF SDK on " ; \
 	    echo "//  "`date` ; \
@@ -494,7 +485,6 @@ $(COMAPI_DIR)/AAFObjectTable.h : aafobjects.mk
 	@ $(RM) -f $(COMAPI_DIR)/AAFObjectTable.tmp
 	@ ( echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "// (C) Copyright 1998-1999 Avid Technology." ; \
-	    echo "// (C) Copyright 1998-1999 Microsoft Corporation." ; \
 	    echo "//" ; \
 	    echo "// This file was GENERATED for the AAF SDK on " ; \
 	    echo "//  "`date` ; \
@@ -546,7 +536,6 @@ $(COMAPI_DIR)/AAFObjectTable_i.cpp : aafobjects.mk
 	@ $(RM) -f $(COMAPI_DIR)/AAFObjectTable_i.tmp
 	@ ( echo "//=--------------------------------------------------------------------------=" ; \
 	    echo "// (C) Copyright 1998-1999 Avid Technology." ; \
-	    echo "// (C) Copyright 1998-1999 Microsoft Corporation." ; \
 	    echo "//" ; \
 	    echo "// This file was GENERATED for the AAF SDK on " ; \
 	    echo "//  "`date` ; \
