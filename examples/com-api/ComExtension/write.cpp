@@ -94,5 +94,6 @@ void main ()
   else
 	{
 	  cout << "Succeeded." << endl;
+    exit (0);
 	}
 }
