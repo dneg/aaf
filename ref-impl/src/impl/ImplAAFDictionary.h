@@ -697,4 +697,24 @@ private:
 
 typedef ImplAAFSmartPointer<ImplAAFDictionary> ImplAAFDictionarySP;
 
+
+/*************************************************************************
+    aafLookupTypeDef()
+
+	This helper function searches for specified type definition in 
+	given object's dictionary.
+
+    Inputs:
+	p_holder	- definition object to look in.
+	p_typedef	- type definition to look for.
+
+    Returns:
+	kAAFTrue - type definition found in given objects dictionary.
+	kAAFFalse - type def is not in a dictionary.
+ *************************************************************************/
+aafBoolean_t aafLookupTypeDef( 
+    ImplAAFMetaDefinition	*p_holder,
+    ImplAAFTypeDef		*p_typedef );
+
+
 #endif // ! __ImplAAFDictionary_h__
