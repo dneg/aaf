@@ -558,6 +558,10 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool useRawStorage, bool
 	// Add Mobs to the Header
 	check(pHeader->AddMob(pMob));
 
+	// Get a pointer to samples data for WriteSamples
+	unsigned char *dataPtr;
+	dataPtr = video_buf;
+
 	// Prepare parameters based on codec selected
 	if (codec == kAAFCodecDef_PCM)
 	{
@@ -577,6 +581,16 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool useRawStorage, bool
 
 		samplesPerWrite = 1;		// write one video frame at a time
 		frameSize = (comp_enable ? UNC_PAL_FRAME_SIZE : DV_PAL_FRAME_SIZE);
+	}
+	else if (codec == kAAFCodecDef_WAVE)
+	{
+		media_kind = pSoundDef;
+		editRate = soundEditRate;
+		sampleRate = soundSampleRate;
+
+		samplesPerWrite = 1920;
+		frameSize = 1920;
+		dataPtr = (unsigned char*)uncompressedWAVE_Laser + 44;	// audio samples offset by WAVE header
 	}
 	else
 	{
@@ -604,10 +618,6 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool useRawStorage, bool
 	aafWChar codec_name[128] = L"";
 	check(pEssenceAccess->GetCodecName(sizeof(codec_name), codec_name));
 	printf("  using codec flavour \"%ls\"\n", codec_name);
-
-	// Get a pointer to video data for WriteSamples
-	unsigned char *dataPtr;
-	dataPtr = video_buf;
 
 	// Write the video samples
 	int total_samples = 0;

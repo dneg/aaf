@@ -53,6 +53,8 @@ using namespace std;
 // raw PCM samples start at offset 44
 #include "EssenceTestData.h"
 
+const aafUInt8 *frame_DV = compressedDV_25_625;
+
 typedef enum { NONE = 0, RawDV, RawUYVY, RawYUY2 } InputFormat;
 InputFormat inpFormat = NONE;
 
