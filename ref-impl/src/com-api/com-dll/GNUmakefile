@@ -35,9 +35,6 @@ INCLUDES = -I../../../include/ref-api \
 	   -I../test -I.. -I. -I../../impl
 
 
-CFLAGS += -DDONT_DELETE_LAST_REFERENCE
-
-
 .PHONY : all
 all : com-dll
 
