@@ -238,12 +238,6 @@ private:
 
 
   ImplAAFTypeDefSP BaseType (void) const;
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTypeDefEnum)
 };
 
 //
