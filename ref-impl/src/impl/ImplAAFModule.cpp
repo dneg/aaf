@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -48,12 +48,29 @@
 #include "ImplAAFPluginManager.h"
 #include "ImplAAFFile.h"
 #include "ImplAAFObjectCreation.h"
+#include "ImplAAFRandomRawStorage.h"
+
+#include "OMRawStorage.h"
+#include "OMDiskRawStorage.h"
+#include "OMMemoryRawStorage.h"
+
+#include "ImplAAFSmartPointer.h"
+
+typedef ImplAAFSmartPointer<ImplAAFFile> ImplAAFFileSP;
 
 extern "C" const aafClassID_t CLSID_AAFFile;
+extern "C" const aafClassID_t CLSID_AAFRandomFile;
+extern "C" const aafClassID_t CLSID_AAFRawStorage;
+extern "C" const aafClassID_t CLSID_AAFRandomRawStorage;
 
 #include <assert.h>
 
+#define USE_RAW_STORAGE 0
 
+#if USE_RAW_STORAGE
+#include "AAFFileKinds.h"
+#include "AAF.h"
+#endif
 
 
 //***********************************************************
@@ -149,6 +166,36 @@ STDAPI ImplAAFFileOpenExistingRead (
   // Pointer to buffer to receive pointer to new file.
   /*[out]*/ ImplAAFFile ** ppFile)
 {
+#if USE_RAW_STORAGE
+  IAAFRawStorage * pRawStg = 0;
+  AAFRESULT hr = AAFCreateRawStorageDisk
+	(pFileName,
+	 kAAFFileExistence_existing,
+	 kAAFFileAccess_read,
+	 &pRawStg);
+  if (AAFRESULT_SUCCEEDED (hr))
+	{
+	  hr = ImplAAFCreateAAFFileOnRawStorage
+		(pRawStg,
+		 &aafFileKindAafSSBinary,
+		 modeFlags,
+		 0,
+		 ppFile);
+	  if (AAFRESULT_SUCCEEDED (hr))
+		{
+		  assert (ppFile);
+		  assert (*ppFile);
+		  hr = (*ppFile)->Open ();
+		}
+	}
+  if (pRawStg)
+	{
+	  pRawStg->Release ();
+	}
+  return hr;
+
+#else // ! USE_RAW_STORAGE
+
   HRESULT hr = S_OK;
   ImplAAFFile * pFile = 0;
 
@@ -190,6 +237,8 @@ STDAPI ImplAAFFileOpenExistingRead (
   }
 
   return hr;
+
+#endif // USE_RAW_STORAGE
 }
 
 
@@ -270,6 +319,36 @@ STDAPI ImplAAFFileOpenExistingModify (
   // Pointer to buffer to receive pointer to new file.
   /*[out]*/ ImplAAFFile ** ppFile)
 {
+#if USE_RAW_STORAGE
+  IAAFRawStorage * pRawStg = 0;
+  AAFRESULT hr = AAFCreateRawStorageDisk
+	(pFileName,
+	 kAAFFileExistence_existing,
+	 kAAFFileAccess_modify,
+	 &pRawStg);
+  if (AAFRESULT_SUCCEEDED (hr))
+	{
+	  hr = ImplAAFCreateAAFFileOnRawStorage
+		(pRawStg,
+		 &aafFileKindAafSSBinary,
+		 modeFlags,
+		 pIdent,
+		 ppFile);
+	  if (AAFRESULT_SUCCEEDED (hr))
+		{
+		  assert (ppFile);
+		  assert (*ppFile);
+		  hr = (*ppFile)->Open ();
+		}
+	}
+  if (pRawStg)
+	{
+	  pRawStg->Release ();
+	}
+  return hr;
+
+#else // ! USE_RAW_STORAGE
+
   HRESULT hr = S_OK;
   ImplAAFFile * pFile = 0;
 
@@ -311,6 +390,7 @@ STDAPI ImplAAFFileOpenExistingModify (
   }
 
   return hr;
+#endif // USE_RAW_STORAGE
 }
 
 
@@ -382,6 +462,36 @@ STDAPI ImplAAFFileOpenNewModify (
   // Pointer to buffer to receive pointer to new file.
   /*[out]*/ ImplAAFFile ** ppFile)
 {
+#if USE_RAW_STORAGE
+  IAAFRawStorage * pRawStg;
+  AAFRESULT hr = AAFCreateRawStorageDisk
+	(pFileName,
+	 kAAFFileExistence_new,
+	 kAAFFileAccess_modify,
+	 &pRawStg);
+  if (AAFRESULT_SUCCEEDED (hr))
+	{
+	  hr = ImplAAFCreateAAFFileOnRawStorage
+		(pRawStg,
+		 &aafFileKindAafSSBinary,
+		 modeFlags,
+		 pIdent,
+		 ppFile);
+	  if (AAFRESULT_SUCCEEDED (hr))
+		{
+		  assert (ppFile);
+		  assert (*ppFile);
+		  hr = (*ppFile)->Open ();
+		}
+	}
+  if (pRawStg)
+	{
+	  pRawStg->Release ();
+	}
+  return hr;
+
+#else // ! USE_RAW_STORAGE
+
   HRESULT hr = S_OK;
   ImplAAFFile * pFile = 0;
 
@@ -423,6 +533,7 @@ STDAPI ImplAAFFileOpenNewModify (
   }
 
   return hr;
+#endif // USE_RAW_STORAGE
 }
 
 
@@ -469,6 +580,34 @@ STDAPI ImplAAFFileOpenTransient (
   // Pointer to buffer to receive pointer to new file.
   /*[out]*/ ImplAAFFile ** ppFile)
 {
+#if USE_RAW_STORAGE
+  IAAFRawStorage * pRawStg;
+  AAFRESULT hr = AAFCreateRawStorageMemory
+	(kAAFFileAccess_modify,
+	 &pRawStg);
+  if (AAFRESULT_SUCCEEDED (hr))
+	{
+	  hr = ImplAAFCreateAAFFileOnRawStorage
+		(pRawStg,
+		 &aafFileKindAafSSBinary,
+		 0,
+		 pIdent,
+		 ppFile);
+	  if (AAFRESULT_SUCCEEDED (hr))
+		{
+		  assert (ppFile);
+		  assert (*ppFile);
+		  hr = (*ppFile)->Open ();
+		}
+	}
+  if (pRawStg)
+	{
+	  pRawStg->Release ();
+	}
+  return hr;
+
+#else // ! USE_RAW_STORAGE
+
   HRESULT hr = S_OK;
 	const aafClassID_t& fileID = *reinterpret_cast<const aafClassID_t *>(&CLSID_AAFFile); 
   ImplAAFFile * pFile = 0;
@@ -511,6 +650,7 @@ STDAPI ImplAAFFileOpenTransient (
   }
 
   return hr;
+#endif // USE_RAW_STORAGE
 }
 
 //***********************************************************
@@ -568,3 +708,177 @@ STDAPI ImplAAFGetPluginManager (
 }
 
 
+STDAPI
+ImplAAFCreateRawStorageMemory
+  (aafFileAccess_e access,
+   ImplAAFRawStorage ** ppNewRawStorage)
+{
+  if (! ppNewRawStorage)
+	return AAFRESULT_NULL_PARAM;
+
+  OMRawStorage * stg = 0;
+  stg = OMMemoryRawStorage::openNewModify ();
+
+  assert (stg);
+  ImplAAFRawStorage * prs = 0;
+  if (stg->isPositionable ())
+	prs = static_cast<ImplAAFRawStorage *>
+	  (::CreateImpl(CLSID_AAFRandomRawStorage));
+  else
+	prs = static_cast<ImplAAFRawStorage *>
+	  (::CreateImpl(CLSID_AAFRawStorage));
+
+  if(!prs)
+	{
+	  delete stg;
+	  return AAFRESULT_NOMEMORY;
+	}
+
+  prs->Initialize (stg, access);
+
+  assert (ppNewRawStorage);
+  *ppNewRawStorage = prs;
+  return AAFRESULT_SUCCESS;
+}
+
+
+STDAPI
+ImplAAFCreateRawStorageDisk
+  (aafCharacter_constptr pFilename,
+   aafFileExistence_e existence,
+   aafFileAccess_e access,
+   ImplAAFRawStorage ** ppNewRawStorage)
+{
+  if (! pFilename)
+	return AAFRESULT_NULL_PARAM;
+
+  if (! ppNewRawStorage)
+	return AAFRESULT_NULL_PARAM;
+
+  OMRawStorage * stg = 0;
+
+  if (kAAFFileExistence_new == existence)
+	{
+	  switch (access)
+		{
+		case kAAFFileAccess_read:
+		  return AAFRESULT_WRONG_OPENMODE;		  
+		  break;
+		case kAAFFileAccess_write:
+		case kAAFFileAccess_modify:
+		  stg = OMDiskRawStorage::openNewModify (pFilename);
+		  break;
+		default:
+		  return AAFRESULT_WRONG_OPENMODE;		  
+		}
+	}
+  else if (kAAFFileExistence_existing == existence)
+	{
+	  switch (access)
+		{
+		case kAAFFileAccess_read:
+		  stg = OMDiskRawStorage::openExistingRead (pFilename);
+		  break;
+		case kAAFFileAccess_write:
+		case kAAFFileAccess_modify:
+		  stg = OMDiskRawStorage::openExistingModify (pFilename);
+		  break;
+		default:
+		  return AAFRESULT_WRONG_OPENMODE;		  
+		}
+	}
+  else
+	{
+	  return AAFRESULT_WRONG_OPENMODE;
+	}
+
+  assert (stg);
+  ImplAAFRawStorage * prs = 0;
+  if (stg->isPositionable ())
+	prs = static_cast<ImplAAFRawStorage *>
+	  (::CreateImpl(CLSID_AAFRandomRawStorage));
+  else
+	prs = static_cast<ImplAAFRawStorage *>
+	  (::CreateImpl(CLSID_AAFRawStorage));
+
+  if(!prs)
+	{
+	  delete stg;
+	  return AAFRESULT_NOMEMORY;
+	}
+
+  prs->Initialize (stg, access);
+
+  assert (ppNewRawStorage);
+  *ppNewRawStorage = prs;
+  return AAFRESULT_SUCCESS;
+}
+
+
+STDAPI
+ImplAAFCreateAAFFileOnRawStorage
+  (IAAFRawStorage * pRawStorage,
+   aafUID_constptr pFileKind,
+   aafUInt32 modeFlags,
+   aafProductIdentification_constptr pIdent,
+   ImplAAFFile ** ppNewFile)
+{
+  if (! pRawStorage)
+	return AAFRESULT_NULL_PARAM;
+
+  if (! ppNewFile)
+	return AAFRESULT_NULL_PARAM;
+
+  aafBoolean_t readable = kAAFFalse;
+  aafBoolean_t writeable = kAAFFalse;
+  pRawStorage->IsReadable (&readable);
+  pRawStorage->IsWriteable (&writeable);
+  if ((!readable) && (!writeable))
+	return AAFRESULT_INVALID_PARAM;
+
+  HRESULT hr = S_OK;
+  ImplAAFFileSP pFile;
+
+  // Create an instance of an uninitialized file object.  Check the
+  // raw storage to determine if this should be an AAFFile, or an
+  // AAFRandomFile.  If the RawStorage is a RandomRawStorage, create
+  // an AAFRandomFile.
+  IAAFRandomRawStorage * prrs = 0;
+  hr = pRawStorage->QueryInterface (IID_IAAFRandomRawStorage,
+									(void **) &prrs);
+  if (SUCCEEDED (hr))
+	pFile = static_cast<ImplAAFFile *>(::CreateImpl(CLSID_AAFRandomFile));
+  else
+	pFile = static_cast<ImplAAFFile *>(::CreateImpl(CLSID_AAFFile));
+
+  if (prrs)
+	{
+	  prrs->Release ();
+	  prrs = 0;
+	}
+
+  if(!pFile)
+	return AAFRESULT_NOMEMORY;
+
+  // Smart pointer had already incremented reference count, so bump it
+  // back down to 1 here...
+  pFile->ReleaseReference ();
+
+  // Make sure the file is initialized (not open yet...)
+  hr = pFile->Initialize();
+  if (SUCCEEDED(hr))
+	{
+	  // Attempt to open the file for modification.
+	  hr = pFile->CreateAAFFileOnRawStorage(pRawStorage,
+											pFileKind,
+											modeFlags,
+											pIdent);
+	  if (SUCCEEDED(hr))
+		{
+		  *ppNewFile = pFile;
+		  (*ppNewFile)->AcquireReference ();
+		}
+	}
+
+  return hr;
+}
