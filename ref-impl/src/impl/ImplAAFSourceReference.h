@@ -88,7 +88,7 @@ public:
 public:
   // Declare this class to be storable.
   //
-  OMDECLARE_STORABLE(ImplAAFSourceReference);
+  OMDECLARE_STORABLE(ImplAAFSourceReference)
 
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFSourceReferenceTest.cpp.
