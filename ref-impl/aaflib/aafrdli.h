@@ -38,14 +38,28 @@
 /* Opaque type for platform dependent data. */
 typedef void * AAFLibraryHandle;
 typedef void * AAFSymbolAddr;
+typedef void * AAFUserData;
 typedef long AAFRDLIRESULT;
 
-typedef struct _AAFLibInfo
-{
-	int nameBufferSize; /* input: size of nameBuffer */
-	char* nameBuffer;   /* input: pointer for path; outpout: contains path to library.*/
-	int actualNameSize; /* output: actual size of  */
-} AAFLibInfo;
+
+
+
+#if !defined(_MSC_VER)
+
+typedef AAFRDLIRESULT (* LPFNAAFTESTFILEPROC)(
+    const char* name,
+		char isDirectory,
+		void * userData);
+
+#else
+
+typedef AAFRDLIRESULT (__stdcall * LPFNAAFTESTFILEPROC)(
+    const char* name,
+		char isDirectory,
+		void * userData);
+
+#endif
+
 
 
 #ifdef __cplusplus
@@ -59,7 +73,7 @@ AAFRDLIRESULT AAFUnloadLibrary(AAFLibraryHandle libHandle);
 
 AAFRDLIRESULT AAFFindSymbol(AAFLibraryHandle libHandle, const char* symbolName, AAFSymbolAddr* pSymbol);
 
-AAFRDLIRESULT AAFGetLibraryInfo(AAFLibraryHandle libHandle, AAFLibInfo* pLibInfo);
+AAFRDLIRESULT AAFFindLibrary(const char* name, LPFNAAFTESTFILEPROC testProc, void *userData);
 
 
 #ifdef __cplusplus
