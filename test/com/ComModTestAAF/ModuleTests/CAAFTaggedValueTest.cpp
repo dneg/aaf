@@ -18,8 +18,17 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
+#include "AAFDataDefs.h"
 
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
+static const aafUID_t *	slotDDefs[5] = {&DDEF_Picture, &DDEF_Sound, &DDEF_Sound, &DDEF_Picture, &DDEF_Picture};
+static aafLength_t	slotsLength[5] = { 297, 44100, 44100, 44100, 44100};
+
+static aafInt32 fadeInLen  = 1000;
+static aafInt32 fadeOutLen = 2000;
+static aafFadeType_t fadeInType = kFadeLinearAmp;
+static aafFadeType_t fadeOutType = kFadeLinearPower;
+static aafSourceRef_t sourceRef; 
 static aafWChar* TagNames =  L"TAG01";
 static aafWChar* Comments =  L"Comment 1";	
 static aafWChar* AltComment = L"Alternate Comment";
@@ -56,12 +65,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFHeader *        pHeader = NULL;
 	IAAFDictionary*		pDictionary = NULL;
 	IAAFMob				*pMob = NULL;
+	IAAFMob*			pRMob = NULL;
+	IAAFMasterMob*		pReferencedMob = NULL;
 	IAAFCompositionMob* pCompMob = NULL;
 	IAAFMobSlot			*newSlot = NULL;
 	IAAFSegment			*seg = NULL;
 	IAAFSourceClip		*sclp = NULL;
 	aafProductIdentification_t	ProductInfo;
-	aafUID_t			newUID;
+	aafUID_t			newUID, referencedMobID;
 	HRESULT				hr = S_OK;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
@@ -95,7 +106,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		long	test;
 		aafRational_t	audioRate = { 44100, 1 };
 
-		// Create a Mob
+		// Create a  Composition Mob
 		checkResult(pDictionary->CreateInstance(&AUID_AAFCompositionMob,
 								  IID_IAAFCompositionMob, 
 								  (IUnknown **)&pCompMob));
@@ -110,15 +121,31 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  
 		checkResult(pMob->AppendComment(TagNames, AltComment));
 
+		// Create a master mob to be referenced
+		checkResult(pDictionary->CreateInstance(&AUID_AAFMasterMob,
+								 IID_IAAFMasterMob, 
+								 (IUnknown **)&pReferencedMob));
+
+		checkResult(pReferencedMob->QueryInterface(IID_IAAFMob, (void **)&pRMob));
+		checkResult(CoCreateGuid((GUID *)&referencedMobID));
+		checkResult(pRMob->SetMobID(&referencedMobID));
+		checkResult(pRMob->SetName(L"AAFTaggedValueTest::ReferencedMob"));
+
 		// Add some slots
 		for(test = 0; test < 5; test++)
 		{
  			checkResult(pDictionary->CreateInstance(&AUID_AAFSourceClip,
 								     IID_IAAFSourceClip, 
 								     (IUnknown **)&sclp));		
+			// Set the properties for the SourceClip
+			sourceRef.sourceID = referencedMobID;
+			sourceRef.sourceSlotID = 0;
+			sourceRef.startTime = 0;
+			checkResult(sclp->Initialize((aafUID_t *)slotDDefs[test], &slotsLength[test], sourceRef));
+			checkResult(sclp->SetFade( fadeInLen, fadeInType, fadeOutLen, fadeOutType));
 
 			checkResult(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
-
+			
 			checkResult(pMob->AppendNewSlot (seg, test+1, slotNames[test], &newSlot));
 
 			newSlot->Release();
@@ -133,6 +160,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		// Add the mob to the file.
 		checkResult(pHeader->AppendMob(pMob));
+		checkResult(pHeader->AppendMob(pRMob));
 	}
 	catch (HRESULT& rResult)
 	{
@@ -155,6 +183,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   if (pMob)
     pMob->Release();
+
+  if (pReferencedMob)
+	  pReferencedMob->Release();
+
+  if (pRMob)
+	  pRMob->Release();
 
   if (pDictionary)
     pDictionary->Release();
