@@ -37,7 +37,7 @@
 #define CLSID_AAFEffectDefinition CLSID_AAFEffectDef
 #define CLSID_AAFEssenceGroup CLSID_AAFMediaGroup
 #define CLSID_AAFFilmDescriptor CLSID_AAFMediaFilmDescriptor
-#define CLSID_AAFGroup CLSID_AAFGroup
+#define CLSID_AAFEffect CLSID_AAFEffect
 #define CLSID_AAFInterchangeObject CLSID_AAFObject
 #define CLSID_AAFJPEGImageData CLSID_AAFJPEGData
 #define CLSID_AAFMIDIFileData CLSID_AAFMIDIData
