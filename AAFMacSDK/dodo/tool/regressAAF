@@ -1,0 +1,236 @@
+
+set OLDEXIT Exit
+set Exit 0
+
+set CURRENTDIR "`directory`"
+
+
+set RESULTSDIR  "{CURRENTDIR}results:"
+set BASELINEDIR "{RESULTSDIR}baseline:"
+set LATESTDIR   "{RESULTSDIR}latest:"
+
+set OLDPRODUCTLIST ""
+set PRODUCTLIST ""
+set NEWPRODUCTLIST ""
+
+set ALLTESTS 1
+set LATEST 1
+set OUTPUTDIR "{LATESTDIR}"
+set BANNER "# Running latest regression tests against the baseline..."
+
+# Process all of the arguments
+loop
+	break if "{1}" == ""
+
+	if "-baseline" == "{1}"
+		set LATEST 0
+		set OUTPUTDIR "{BASELINEDIR}"
+		set BANNER "# Running baseline for regression tests..."
+	else if "-minimal" == "{1}"
+		set ALLTESTS 0
+	else
+			echo 'Unsupported parameter:"'"{1}"'"'
+			exit 1
+	end
+
+	# continue processing parameters
+	shift
+end
+
+
+if "" == "`exists -d "{RESULTSDIR}"`"
+	NewFolder "{RESULTSDIR}"
+end
+
+if "" == "`exists -d "{BASELINEDIR}"`"
+	NewFolder "{BASELINEDIR}"
+end
+
+if "" == "`exists -d "{LATESTDIR}"`"
+	NewFolder "{LATESTDIR}"
+end
+
+
+open "{OUTPUTDIR}output.log" -n
+echo "{BANNER}" > "{OUTPUTDIR}output.log"
+echo "" >> "{OUTPUTDIR}output.log"
+echo "" >> "{OUTPUTDIR}output.log"
+
+
+
+# Create list of files in the current directory that were produced by
+# running one or more of the module tests and examples.
+alias make_ProductList ¶
+	'(;'¶
+	'for item in `files -s`;'¶
+	'	if "{item}" =~/(Å)¨1.([a-zA-Z0-9_]Ç3È)¨2/;'¶
+	'		if (("{¨2}" == "aaf") || ("{¨2}" == "aif") || ("{¨2}" == "wav")) && (("{¨1}.{¨2}" != "Laser.wav") && ("{¨2}" != "log"));'¶
+	'			echo "{item}";'¶
+	'		end;'¶
+	'	end;'¶
+	'end;'¶
+	')'
+
+
+# Cleanup the current directory so that we can start the regression
+# tests without any left over product from a previous test or example
+echo "# Cleanup old product files" >> "{OUTPUTDIR}output.log"
+set PRODUCTLIST "`make_ProductList`"
+for item in {PRODUCTLIST}
+	rm -f "{item}"
+	#echo "{CURRENTDIR}{item} deleted." >> "{OUTPUTDIR}output.log"
+end
+#echo "" >> "{OUTPUTDIR}output.log"
+#echo "" >> "{OUTPUTDIR}output.log"
+
+
+echo "# Cleanup old results files" >> "{OUTPUTDIR}output.log"
+set OLDOUTPUTFILES "`files -f -r -s -o "{OUTPUTDIR}" | StreamEdit -e '/¶.log/ Delete'`"
+for item in {OLDOUTPUTFILES} 
+	rm -f "{item}"
+	#echo "'{item}' deleted." >> "{OUTPUTDIR}output.log"
+end
+echo "" >> "{OUTPUTDIR}output.log"
+echo "" >> "{OUTPUTDIR}output.log"
+
+
+
+
+# Macro arguments (variables)
+# OLDPRODUCTLIST
+
+# Create a list of the new product files created since the last 
+# call to make_AppProductList.
+#
+alias make_AppProductList ¶
+	'(;'¶
+	'for item in {PRODUCTLIST};'¶
+	'	set FOUND 0;'¶
+	'	for oldItem in {OLDPRODUCTLIST};'¶
+	'		if "{item}" == "{oldItem}";'¶
+	'			set FOUND 1;'¶
+	'			break;'¶
+	'		end;'¶
+	'	end;'¶
+	'	if !{FOUND};'¶
+	'		echo "{item}";'¶
+	'	end;'¶
+	'end;'¶
+	')'
+
+
+#
+# Macro arguments (variables)
+# APPNAME
+# BASENAME  (file produced by APPNAME without the .aaf extension
+#            this should allow this script to create files from the
+#            base name and still stay within the 31 character mac
+#            file name limit.)
+#
+
+
+alias runAppD ¶
+	'(;'¶
+	'echo "call runApp with APPNAME = {APPNAME}";'¶
+	')'
+
+# Alias "macro to run a test application.
+alias runApp ¶
+	'(;'¶
+	'set OLDPRODUCTLIST "`make_ProductList`";'¶
+	'do_app;'¶
+	'set PRODUCTLIST "`make_ProductList`";'¶
+	'set APPPRODUCTLIST "`make_AppProductList`";'¶
+	'echo "Files produced by {APPNAME}:";'¶
+	'for product in {APPPRODUCTLIST};'¶
+	'  echo " {product}";'¶
+	'end;'¶
+	'for product in {APPPRODUCTLIST};'¶
+	'  if "{product}" =~ /(Å)¨1.aaf/;'¶
+	'    set BASENAME "{¨1}";'¶
+	'    do_testfile;'¶
+	'  end;'¶
+	'end;'¶
+	'echo "";'¶
+	'echo "";'¶
+	')'
+
+alias do_app ¶
+	'(;'¶
+	'echo "# Running {APPNAME}";'¶
+	'ccommand "{APPNAME}";'¶
+	'echo "";'¶
+	'echo "";'¶
+	')'
+
+alias do_testfile ¶
+	'do_duplicate;'¶
+	'do_rdump;'¶
+	'do_diff'
+
+# save a copy of the source aaf file...
+alias do_duplicate 'duplicate -y "{BASENAME}.aaf" "{OUTPUTDIR}{BASENAME}.aaf"'
+
+# Run the filtered dump for the regression test.
+alias do_rdump 'rdump "{OUTPUTDIR}{BASENAME}.aaf" > "{OUTPUTDIR}{BASENAME}.txt"'
+
+alias do_warning 'echo "# WARNING: New {APPNAME}/{BASENAME}.aaf is different from the baseline."'
+
+# Test for change from baseline (if necessary)
+alias do_diff ¶
+	'if {LATEST};'¶
+	'	compare -n -v "{BASELINEDIR}{BASENAME}.txt" "{OUTPUTDIR}{BASENAME}.txt" > "{OUTPUTDIR}{BASENAME}.dif";'¶
+	'	if "`exists -f "{OUTPUTDIR}{BASENAME}.dif"`";'¶
+	'		if `count -l "{OUTPUTDIR}{BASENAME}.dif"` == 0;'¶
+	'			rm -f "{OUTPUTDIR}{BASENAME}.dif";'¶
+	'		else;'¶
+	'			do_warning;'¶
+	'			catenate "{OUTPUTDIR}{BASENAME}.dif";'¶
+	'			echo "";'¶
+	'			echo "";'¶
+	'		end;'¶
+	'	end;'¶
+	'end'
+
+
+
+
+set APPNAME "COMCLIENTAAF"
+runApp >> "{OUTPUTDIR}output.log"
+
+set APPNAME "COMCUTSONLYTESTAAF"
+runApp >> "{OUTPUTDIR}output.log"
+
+
+set APPNAME "COMESSENCEDATATEST"
+runApp >> "{OUTPUTDIR}output.log"
+
+# COMEXTENSIONWRITE cannot redirect stdout/stderr yet...
+#set APPNAME "COMEXTENSIONWRITE"
+#runApp >> "{OUTPUTDIR}output.log"
+
+set APPNAME "ExportSimpleComposition"
+runApp >> "{OUTPUTDIR}output.log"
+
+if {ALLTESTS}
+	set APPNAME "COMMODAAF (PPC)"
+	runApp >> "{OUTPUTDIR}output.log"
+end
+
+if {LATEST}
+	Search -q -e 'WARNING' "{OUTPUTDIR}output.log"
+end
+
+
+unalias do_duplicate
+unalias do_rdump
+unalias do_diff
+unalias do_warning
+unalias runApp
+unalias make_ProductList
+unalias make_AppProductList
+
+
+save "{OUTPUTDIR}output.log"
+
+set Exit {OLDEXIT}
