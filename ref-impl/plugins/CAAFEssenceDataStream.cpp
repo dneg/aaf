@@ -10,12 +10,11 @@
 #include "CAAFObjectStream.h"
 
 #include <assert.h>
+#include "AAFResult.h"
 
 const CLSID CLSID_AAFObjectStream = { 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 
-#if AS_PLUGIN
-
-
+#if 1
 // Default Interface for AAFObjectStream 
 // {83402902-9146-11d2-8088-006008143e6f}
 const IID IID_IAAFObjectStream = { 0x83402902, 0x9146, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
@@ -40,7 +39,7 @@ HRESULT STDMETHODCALLTYPE
     CAAFObjectStream::Write (aafDataBuffer_t  buffer,
         aafInt32  buflen)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
@@ -49,21 +48,20 @@ HRESULT STDMETHODCALLTYPE
         aafDataBuffer_t  buffer,
         aafUInt32 *  bytesRead)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 HRESULT STDMETHODCALLTYPE
     CAAFObjectStream::Seek (aafUInt32  byteOffset)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
-HRESULT STDMETHODCALLTYPE
-    CAAFObjectStream::SeekRelative (aafInt32  byteOffset)
+HRESULT STDMETHODCALLTYPE    CAAFObjectStream::SeekRelative (aafInt32  byteOffset)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
@@ -71,35 +69,35 @@ HRESULT STDMETHODCALLTYPE
     CAAFObjectStream::IsPosValid (aafUInt32  byteOffset,
         aafBool *  isValid)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 HRESULT STDMETHODCALLTYPE
     CAAFObjectStream::GetPosition (aafInt64 *  position)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 HRESULT STDMETHODCALLTYPE
     CAAFObjectStream::GetLength (aafInt64 *  position)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 HRESULT STDMETHODCALLTYPE
     CAAFObjectStream::omcFlushCache ()
 {
-  return HRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 HRESULT STDMETHODCALLTYPE
     CAAFObjectStream::SetCacheSize (aafInt32  itsSize)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
@@ -125,7 +123,7 @@ HRESULT CAAFObjectStream::InternalQueryInterface
     }
 
     // Always delegate back to base implementation.
-    return CAAFRoot::InternalQueryInterface(riid, ppvObj);
+    return CAAFUnknown::InternalQueryInterface(riid, ppvObj);
 }
 
 //
