@@ -184,6 +184,48 @@ typedef OMStoredObjectIdentification OMClassId;
 
 const OMClassId nullOMClassId = {0};
 
+// A UMID in all but name.
+//
+struct OMMaterialIdentification
+{
+  OMUInt8 SMPTELabel[12];
+  OMUInt8 length;
+  OMUInt8 instanceHigh;
+  OMUInt8 instanceMid;
+  OMUInt8 instanceLow;
+  OMObjectIdentification material;
+};
+
+// OMMaterialIdentification comparison operators.
+//
+inline bool operator == (const OMMaterialIdentification& lhs,
+                         const OMMaterialIdentification& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(OMMaterialIdentification)) == 0;
+}
+
+inline bool operator != (const OMMaterialIdentification& lhs,
+                         const OMMaterialIdentification& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(OMMaterialIdentification)) != 0;
+}
+
+inline bool operator < (const OMMaterialIdentification& lhs,
+                        const OMMaterialIdentification& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(OMMaterialIdentification)) < 0;
+}
+
+inline bool operator > (const OMMaterialIdentification& lhs,
+                        const OMMaterialIdentification& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(OMMaterialIdentification)) > 0;
+}
+
+// For uniquely identifying material instances.
+//
+typedef OMMaterialIdentification OMUniqueMaterialIdentification;
+
 // File signatures
 //
 typedef OMObjectIdentification OMFileSignature;
