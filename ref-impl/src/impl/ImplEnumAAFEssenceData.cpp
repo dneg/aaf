@@ -64,6 +64,8 @@ AAFRESULT STDMETHODCALLTYPE
       if (AAFRESULT_SUCCESS == hr)
         _current = ++cur;
     }
+		else
+			return AAFRESULT_NO_MORE_OBJECTS;
   }
   return hr;
 }
