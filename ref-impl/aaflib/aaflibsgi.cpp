@@ -107,11 +107,19 @@ AAFRDLIRESULT AAFFindLibrary(
    // Default implementation will just continue to use a hard-coded list
 	// of shared libaries.
    
+#if defined( OS_DARWIN )
+   const char *pluginFileNames[] =  {
+		"libaafpgapi.dylib",
+		"libaafintp.dylib",
+      0
+   };
+#else
    const char *pluginFileNames[] =  {
 		"libaafpgapi.so",
 		"libaafintp.so",
       0
    };
+#endif
    
    AAFRDLIRESULT rc = AAFRESULT_SUCCESS;
    
