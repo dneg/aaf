@@ -102,7 +102,7 @@ IAAFTypeDef *AAFDomainUtils::CreateTypeDefinition(IAAFDictionary *pDict, aafUID_
 	return typeDef;
 }
 
-void AAFDomainUtils::AAFAddOnePoint(IAAFDictionary *dict, aafRational_t percentTime, long buflen, void *buf, IAAFTypeDef *typeDef, IAAFVaryingValue *pVVal)
+void AAFDomainUtils::AAFAddOnePoint(IAAFDictionary *dict, aafRational_t percentTime, long buflen, void *buf, IAAFTypeDef * /* typeDef */, IAAFVaryingValue *pVVal)
 {
 	IAAFControlPoint	*pPoint = NULL;
 //	AAFRESULT			rc;
