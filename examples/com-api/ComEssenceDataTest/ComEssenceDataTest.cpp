@@ -1,41 +1,3 @@
-/***********************************************************************
- *
- *              Copyright (c) 1996 Avid Technology, Inc.
- *
- * Permission to use, copy and modify this software and to distribute
- * and sublicense application software incorporating this software for
- * any purpose is hereby granted, provided that (i) the above
- * copyright notice and this permission notice appear in all copies of
- * the software and related documentation, and (ii) the name Avid
- * Technology, Inc. may not be used in any advertising or publicity
- * relating to the software without the specific, prior written
- * permission of Avid Technology, Inc.
- *
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
- * IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT,
- * SPECIAL, INCIDENTAL, INDIRECT, CONSEQUENTIAL OR OTHER DAMAGES OF
- * ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF OR IN
- * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE, INCLUDING, 
- * WITHOUT  LIMITATION, DAMAGES RESULTING FROM LOSS OF USE,
- * DATA OR PROFITS, AND WHETHER OR NOT ADVISED OF THE POSSIBILITY OF
- * DAMAGE, REGARDLESS OF THE THEORY OF LIABILITY.
- *
- ************************************************************************/
-// @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
-
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -178,7 +140,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		aafInt32			n, numSpecifiers;
 		aafUID_t			essenceFormatCode, testContainer;
 	IAAFLocator	*pLocator;
-		  
   // delete any previous test file before continuing...
   char chFileName[1000];
   convert(chFileName, sizeof(chFileName), pFileName);
@@ -203,6 +164,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 
+#if 0
+	check(AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
+#else
 	check(CoCreateInstance(CLSID_AAFFile,
                NULL, 
                CLSCTX_INPROC_SERVER, 
@@ -212,6 +176,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	// Create and open new AAF File
 	check(pFile->Initialize());
 	check(pFile->OpenNewModify(pFileName, 0, &ProductInfo));
+#endif
 	check(pFile->GetHeader(&pHeader));
 
   // Get the AAF Dictionary so that we can create valid AAF objects.
@@ -281,6 +246,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 									pLocator,	// In current file
 									testContainer,	// In AAF Format
 									&pEssenceAccess));// Compress disabled
+#if 1
 
 		check(pEssenceAccess->GetFileFormatParameterList (&format));
 		check(format->NumFormatSpecifiers (&numSpecifiers));
@@ -332,9 +298,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 
 		// close essence data file
 		fclose(pWavFile);
+#endif
 
 		// Finish writing the destination
 		check(pEssenceAccess->CompleteWrite());
+
 	}
 	else
 	{
@@ -342,21 +310,28 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	}
 
 	// Release all unnecesary interfaces
-	if (pEssenceAccess)
-  {
-    pEssenceAccess->Release();
-	  pEssenceAccess= NULL;
-  }
 
-	pMasterMob->Release();
+#if 1
+	if(pMasterMob)
+		pMasterMob->Release();
 	pMasterMob = NULL;
-	pMob->Release();
+	if(pMob)
+		pMob->Release();
 	pMob = NULL;
 
-  pDictionary->Release();
-  pDictionary = NULL;
-	pHeader->Release();
+	if(pDictionary)
+		pDictionary->Release();
+	pDictionary = NULL;
+	if(pHeader)
+		pHeader->Release();
 	pHeader = NULL;
+#endif
+	if (pEssenceAccess)
+	{	
+		pEssenceAccess->Release();
+		pEssenceAccess= NULL;
+	}
+	//!!!DebugOnly
 	pFile->Save();
 	pFile->Close();
 	pFile->Release();
@@ -409,13 +384,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	aafUInt32					dataOffset, dataLen;
 	aafUInt16					bitsPerSample, numCh;
 
-	check(CoCreateInstance(CLSID_AAFFile,
-               NULL, 
-               CLSCTX_INPROC_SERVER, 
-               IID_IAAFFile, 
-                (void **)&pFile));
-	check(pFile->Initialize());
-	check(pFile->OpenExistingRead(pFileName, 0));
+	check(AAFFileOpenExistingRead ( pFileName, 0, &pFile));
 	check(pFile->GetHeader(&pHeader));
 
 	// Get the AAF Dictionary so that we can create valid AAF objects.
@@ -584,6 +553,11 @@ cleanup:
 	// Cleanup and return
 
 
+	if (pEssenceAccess)
+	{
+		pEssenceAccess->Release();
+		pEssenceAccess = NULL;
+	}
 	if (pDictionary)
 		pDictionary->Release();
 
@@ -750,6 +724,14 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 	return(AAFRESULT_SUCCESS);
 }
 
+void TestPluginManager(void)
+{
+	IAAFPluginManager	*mgr = NULL;
+
+//	check(AAFGetPluginManager(&mgr));
+cleanup:
+	return;
+}
 
 main()
 {
@@ -762,8 +744,10 @@ main()
 
 	printf("***Creating file %s using writeRawData (Internal Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, NULL, testRawCalls));
+#if 1	
 	printf("***Re-opening file %s using readRawData\n", pFileName);
 	ReadAAFFile(pwFileName, testRawCalls);
+
 	/**/
 	printf("***Creating file %s using WriteSamples (Internal Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, NULL, testStandardCalls));
@@ -793,6 +777,9 @@ main()
 	checkFatal(CreateAAFFile(pwFileName, &dataFile, testStandardCalls));
 	printf("***Re-opening file %s using ReadSamples\n", pFileName);
 	ReadAAFFile(pwFileName, testStandardCalls);
+#endif
+
+//	TestPluginManager();
 
 	printf("Done\n");
 
