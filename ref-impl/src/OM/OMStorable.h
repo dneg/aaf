@@ -17,6 +17,8 @@ public:
 
   OMStorable(void);
 
+  virtual ~OMStorable(void);
+
   virtual const OMClassId& classId(void) const = 0;
   
 // private:
@@ -49,6 +51,8 @@ private:
   //
   void restoreContentsFrom(OMStoredObject& s);
 
+  char* makePathName(void);
+
   OMStorable* containingObject(void) const;
 
   const char* name(void) const;
@@ -57,8 +61,8 @@ protected:
 
   OMPropertySet _persistentProperties;
   const OMStorable* _containingObject;
-  const char* _name;
-  const char* _pathName;
+  char* _name;
+  char* _pathName;
 
 };
 
