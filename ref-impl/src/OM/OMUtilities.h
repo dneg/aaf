@@ -207,7 +207,7 @@ void toString(const OMUInt8&i, char* is);
   // XXXX
 void toString(const OMUInt16&i, char* is);
 
-  // Convert an OMUInt23 to a hexadecimal string like this -
+  // Convert an OMUInt32 to a hexadecimal string like this -
   // XXXXXXXX
 void toString(const OMUInt32&i, char* is);
 
@@ -232,7 +232,7 @@ void fromString(OMUInt8& i, const char* is);
   // XXXX
 void fromString(OMUInt16& i, const char* is);
 
-  // Parse an OMUInt23 from a hexadecimal string like this -
+  // Parse an OMUInt32 from a hexadecimal string like this -
   // XXXXXXXX
 void fromString(OMUInt32& i, const char* is);
 
