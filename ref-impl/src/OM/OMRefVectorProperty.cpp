@@ -53,8 +53,10 @@ OMReferenceVectorProperty::~OMReferenceVectorProperty(void)
 }
 
   // @mfunc Convert to <c OMReferenceContainer>.
-  //   @rdesc TBS
+  //   @rdesc The <c OMReferenceContainer> interface implemented by
+  //          this <c OMReferenceVectorProperty>
 OMReferenceContainer* OMReferenceVectorProperty::referenceContainer(void)
 {
+  TRACE("OMReferenceVectorProperty::referenceContainer");
   return this;
 }

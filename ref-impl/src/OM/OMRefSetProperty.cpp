@@ -51,8 +51,10 @@ OMReferenceSetProperty::~OMReferenceSetProperty(void)
 }
 
   // @mfunc Convert to <c OMReferenceContainer>.
-  //   @rdesc TBS
+  //   @rdesc The <c OMReferenceContainer> interface implemented by
+  //          this <c OMReferenceSetProperty>
 OMReferenceContainer* OMReferenceSetProperty::referenceContainer(void)
 {
+  TRACE("OMReferenceSetProperty::referenceContainer");
   return this;
 }
