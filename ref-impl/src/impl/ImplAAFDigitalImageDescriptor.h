@@ -268,9 +268,9 @@ protected:
 	OMFixedSizeProperty<aafFrameLayout_t>		_frameLayout;
 	OMVariableSizeProperty<aafInt32>			_videoLineMap;
 	OMFixedSizeProperty<aafRational_t>			_imageAspectRatio;
-	OMFixedSizeProperty<aafAlphaTransparency_t>	_alphaTransparency;
+	OMFixedSizeProperty<aafRational_t>			_alphaTransparency;
 	OMFixedSizeProperty<aafRational_t>			_gamma;
-	OMFixedSizeProperty<aafInt32>				_imageAlignmentFactor;
+	OMFixedSizeProperty<aafUInt32>				_imageAlignmentFactor;
 };
 
 #endif // ! __ImplAAFDigitalImageDescriptor_h__

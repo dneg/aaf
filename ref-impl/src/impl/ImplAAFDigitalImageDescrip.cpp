@@ -51,11 +51,15 @@ ImplAAFDigitalImageDescriptor::ImplAAFDigitalImageDescriptor ()
 	_persistentProperties.put(_gamma.address());
 	_persistentProperties.put(_imageAlignmentFactor.address());
 
+	aafRational_t zero;
+	zero.numerator = 0;
+	zero.denominator = 1;
+	
 	// Initialize Required properties
 	_storedHeight = 0;
 	_storedWidth = 0;
 	//_frameLayout = kFullFrame;
-	//_imageAspectRatio = ;
+	_imageAspectRatio = zero;
 	//_videoLineMap =
 
 	// Initialize Optional properties
@@ -68,8 +72,8 @@ ImplAAFDigitalImageDescriptor::ImplAAFDigitalImageDescriptor ()
 	_displayWidth = 0;
 	_displayXOffset = 0;
 	_displayYOffset = 0;
-	_alphaTransparency = kMinValueTransparent;
-	//_gamma = 0;
+	_alphaTransparency = zero;
+	_gamma = zero;
 	_imageAlignmentFactor = 0;
 }
 
@@ -162,7 +166,24 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDigitalImageDescriptor::SetAlphaTransparency (aafAlphaTransparency_t AlphaTransparency)
 {
-	_alphaTransparency = AlphaTransparency;
+	if ((AlphaTransparency != kMinValueTransparent) && (AlphaTransparency != kMaxValueTransparent))
+	{
+		return AAFRESULT_INVALID_TRANSPARENCY;
+	}
+
+	aafRational_t transparency;
+
+	if (AlphaTransparency == kMinValueTransparent)
+	{
+		transparency.numerator = 0;
+		transparency.denominator = 1;
+	}
+	else
+	{
+		transparency.numerator = 1;
+		transparency.denominator = 1;
+	}
+	_alphaTransparency = transparency;
 
 	return AAFRESULT_SUCCESS;
 }
@@ -306,8 +327,17 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if (pAlphaTransparency == NULL)
 		return(AAFRESULT_NULL_PARAM);
+	
+	aafRational_t transparency = _alphaTransparency;
 
-	*pAlphaTransparency = _alphaTransparency;
+	if (transparency.numerator == 0)
+	{
+		*pAlphaTransparency = kMinValueTransparent;
+	}
+	else
+	{
+		*pAlphaTransparency = kMaxValueTransparent;
+	}
 
 	return AAFRESULT_SUCCESS;
 }
