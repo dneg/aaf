@@ -300,7 +300,7 @@ ReferencedObject*
   ReferencedObject* newObject = const_cast<ReferencedObject*>(_vector[index]);
   if (newObject != 0) {
     newObject->setContainingObject(_propertySet->container());
-    char* objectName = elementName(name(), index);
+    char* objectName = elementName(index);
     newObject->setName(objectName);
     delete [] objectName;
     objectName = 0;
@@ -450,7 +450,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::loadElement(
 
   //   compute the storage name for this element
   //
-  char* storageName = elementName(_propertyName, elementKey(index));
+  char* storageName = elementName(elementKey(index));
 
   // open the sub-storage
   //
