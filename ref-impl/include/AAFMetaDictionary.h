@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Mon May 22 20:53:31 EDT 2000
-// by user jgoldman on system JGOLDMANPC.
+// This file was generated on Tue May 23 18:22:56 EDT 2000
+// by user transdel on system TRANSDEL.
 //
 // Key to macros.
 //
@@ -652,7 +652,7 @@ AAF_CLASS(Event,
   false)
   AAF_PROPERTY(Position,
     AAF_LITERAL_AUID(0x07020103,
-      0x0301, 0x0000,
+      0x0303, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x0601,
     AAF_TYPE(Position),
@@ -2082,7 +2082,7 @@ AAF_CLASS(DigitalImageDescriptor,
     false,
     DigitalImageDescriptor)
   AAF_PROPERTY(AlphaTransparency,
-    AAF_LITERAL_AUID(0x05200101,
+    AAF_LITERAL_AUID(0x05200102,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x320f,
@@ -2426,6 +2426,15 @@ AAF_CLASS(FilmDescriptor,
     false,
     false,
     FilmDescriptor)
+  AAF_PROPERTY(FilmGaugeFormat,
+    AAF_LITERAL_AUID(0x04100103,
+      0x0104, 0x0100,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
+    0x3907,
+    AAF_TYPE(String),
+    false,
+    false,
+    FilmDescriptor)
   AAF_PROPERTY(FilmBatchNumber,
     AAF_LITERAL_AUID(0x04100103,
       0x0107, 0x0100,
@@ -2465,8 +2474,8 @@ AAF_CLASS(TapeDescriptor,
     false,
     TapeDescriptor)
   AAF_PROPERTY(TapeFormat,
-    AAF_LITERAL_AUID(0x04100101,
-      0x0501, 0x0000,
+    AAF_LITERAL_AUID(0x0D010101,
+      0x0101, 0x0100,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x3a03,
     AAF_TYPE(TapeFormatType),
@@ -2496,6 +2505,24 @@ AAF_CLASS(TapeDescriptor,
       0x0201, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x3a06,
+    AAF_TYPE(String),
+    false,
+    false,
+    TapeDescriptor)
+  AAF_PROPERTY(TapeBatchNumber,
+    AAF_LITERAL_AUID(0x04100101,
+      0x0601, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
+    0x3a07,
+    AAF_TYPE(String),
+    false,
+    false,
+    TapeDescriptor)
+  AAF_PROPERTY(TapeStock,
+    AAF_LITERAL_AUID(0x04100101,
+      0x0501, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
+    0x3a08,
     AAF_TYPE(String),
     false,
     false,
@@ -2549,7 +2576,7 @@ AAF_CLASS(Header,
     Header)
   AAF_PROPERTY(Version,
     AAF_LITERAL_AUID(0x03010201,
-      0x0200, 0x0000,
+      0x0500, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x3b05,
     AAF_TYPE(VersionType),
@@ -2567,7 +2594,7 @@ AAF_CLASS(Header,
     Header)
   AAF_PROPERTY(ObjectModelVersion,
     AAF_LITERAL_AUID(0x03010201,
-      0x0100, 0x0000,
+      0x0400, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x3b07,
     AAF_TYPE(UInt32),
@@ -2738,7 +2765,7 @@ AAF_CLASS(Mob,
     true,
     Mob)
   AAF_PROPERTY(Name,
-    AAF_LITERAL_AUID(0x01030202,
+    AAF_LITERAL_AUID(0x01030302,
       0x0100, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x01),
     0x4402,
