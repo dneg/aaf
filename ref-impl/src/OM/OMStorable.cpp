@@ -328,17 +328,7 @@ OMProperty* OMStorable::findProperty(OMPropertyId propertyId) const
 bool OMStorable::isRoot(void) const
 {
   TRACE("OMStorable::isRoot");
-  PRECONDITION("Valid containing object", container() != 0);
-  bool result;
-
-  // By definition the root object is the one contained directly
-  // within the file.
-  if (container() == file()) {
-    result = true;
-  } else {
-    result = false;
-  }
-  return result;
+  return false;
 }
 
   // @mfunc The stored representation of this <c OMStorable>.

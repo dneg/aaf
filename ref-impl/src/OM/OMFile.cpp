@@ -849,35 +849,6 @@ OMUInt64 OMFile::objectCount(void) const
   return _root->objectCount();
 }
 
-const OMClassId& OMFile::classId(void) const
-{
-  TRACE("OMFile::classId");
-
-  return nullOMClassId;
-}
-
-OMFile* OMFile::file(void) const
-{
-  TRACE("OMFile::file");
-
-  return const_cast<OMFile*>(this);
-}
-
-bool OMFile::inFile(void) const
-{
-  TRACE("OMFile::inFile");
-  return true;
-}
-
-bool OMFile::persistent(void) const
-{
-  TRACE("OMFile::persistent");
-
-  // Transient files NYI so by definition a file is persistent.
-  //
-  return true;
-}
-
 void* OMFile::clientOnSaveContext(void)
 {
   return _clientOnSaveContext;
@@ -928,8 +899,6 @@ OMFile::OMFile(const wchar_t* fileName,
   PRECONDITION("Valid file name", validWideString(fileName));
   PRECONDITION("Valid dictionary", _dictionary != 0);
   _fileName = saveWideString(fileName);
-  setClassFactory(factory);
-  setName(L"/");
   ASSERT("No root object", _root == 0);
   _root = restoreRoot();
   _isOpen = true;
@@ -978,8 +947,6 @@ OMFile::OMFile(const wchar_t* fileName,
   PRECONDITION("Valid root", _root != 0);
   PRECONDITION("Valid dictionary", _dictionary != 0);
   _fileName = saveWideString(fileName);
-  setClassFactory(factory);
-  setName(L"<file>");
   _root->attachToFile(this);
   _root->setStore(_rootStore);
   _isOpen = true;
@@ -1020,8 +987,6 @@ OMFile::OMFile(OMRawStorage* rawStorage,
                      rawStorage->isWritable()));
   PRECONDITION("Valid dictionary", _dictionary != 0);
 
-  setClassFactory(factory);
-  setName(L"/");
   POSTCONDITION("File not yet open", !_isOpen);
 }
 
@@ -1062,8 +1027,6 @@ OMFile::OMFile(OMRawStorage* rawStorage,
                      IMPLIES(((mode == modifyMode) || (mode == writeOnlyMode)),
                      rawStorage->isWritable()));
 
-  setClassFactory(factory);
-  setName(L"<file>");
   _root->attachToFile(this);
   POSTCONDITION("File not yet open", !_isOpen);
 }

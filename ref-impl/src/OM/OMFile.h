@@ -39,9 +39,8 @@ class OMRawStorage;
 class OMStoredObjectFactory;
 
   // @class Files supported by the Object Manager.
-  //   @base public | <c OMStorable>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-class OMFile : public OMStorable {
+class OMFile {
 public:
 
     // @cmember,menum File access modes.
@@ -265,16 +264,6 @@ public:
 
     // @cmember The number of objects in this <c OMFile>.
   OMUInt64 objectCount(void) const;
-
-  // OMStorable overrides.
-  //
-  virtual const OMClassId& classId(void) const;
-
-  virtual OMFile* file(void) const;
-
-  virtual bool inFile(void) const;
-
-  virtual bool persistent(void) const;
 
   void* clientOnSaveContext(void);
 
