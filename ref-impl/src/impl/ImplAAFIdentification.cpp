@@ -112,6 +112,18 @@ extern "C" const aafClassID_t CLSID_AAFIdentification;
 
 OMDEFINE_STORABLE(ImplAAFIdentification, CLSID_AAFIdentification);
 
+// Cheat!  We're using this object's CLSID instead of object class...
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFIdentification::GetObjectClass(aafUID_t * pClass)
+{
+  if (! pClass)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  memcpy (pClass, &CLSID_AAFIdentification, sizeof aafClassID_t);
+  return AAFRESULT_SUCCESS;
+}
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetCompanyName (aafWChar *  pName,
 										   aafInt32 bufSize)
