@@ -51,7 +51,6 @@ AAFNONPERSISTENTOBJECTS = \
 	AAFMedia \
 	EnumAAFAttributes \
 	EnumAAFClassDefs \
-	EnumAAFComponents \
 	EnumAAFControlCodeDefs \
 	EnumAAFControlPoints \
 	EnumAAFDataDefs \
@@ -100,6 +99,7 @@ HUMAN_TYPED_IMPL = \
 	AAFTimecode \
 	AAFTimelineMobSlot \
 	AAFTapeDescriptor \
+	EnumAAFComponents \
 	EnumAAFLocators \
 	EnumAAFMobSlots \
 	EnumAAFMobs
