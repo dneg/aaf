@@ -85,15 +85,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafProductIdentification_t	ProductInfo;
 	HRESULT						hr = S_OK;
 	aafUInt32					readNumIdents;
-	ProductInfo.companyName = L"";
-	ProductInfo.productName = L"";
-	ProductInfo.productVersionString = L"";
+	ProductInfo.companyName = COMPANY_NAME;
+	ProductInfo.productName = PRODUCT_NAME;
+	ProductInfo.productVersionString = TEST_VERSION;
+	ProductInfo.productID = UnitTestProductID;
+	ProductInfo.productVersion = &testVersion;
 
 	try 
 	{
 		// Remove the previous test file if any.
 		RemoveTestFile(pFileName);
-		
 		
 		// Create the file.
 		checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
@@ -105,11 +106,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pHeader->CountIdentifications(&readNumIdents));
 		checkExpression(1 == readNumIdents, AAFRESULT_TEST_FAILED);
 		checkResult(pHeader->GetLastIdentification (&pIdent));
-		checkResult(pIdent->Initialize(COMPANY_NAME,
-									   PRODUCT_NAME,
-									   TEST_VERSION,
-									   UnitTestProductID));
-		checkResult(pIdent->SetProductVersion(testVersion));
 		
 		// Attempt to save the file.
 		checkResult(pFile->Save());
@@ -234,7 +230,7 @@ extern "C" HRESULT CAAFIdentification_test()
 	catch (...)
 	{
 		cerr << "CAAFMob_test...Caught general C++"
-			" exception!" << endl; 
+			 << " exception!" << endl; 
 		hr = AAFRESULT_TEST_FAILED;
 	}
 	
