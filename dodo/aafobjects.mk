@@ -147,7 +147,6 @@ AUTO_GEN_IMPL = \
 # NOT into AAF.idl.
 
 PLUGIN_OBJECTS = \
-	AAFPluginTypes \
 	AAFRoot \
 	AAFEssenceFormat \
 	AAFPlugin \
