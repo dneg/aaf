@@ -34,7 +34,8 @@ public:
 	~AxDictionary();
 
 	bool isKnownTypeDef( const aafUID_t& typeId );
-	bool isKnownOperationDef( const aafUID_t& typeId );
+	bool isKnownOperationDef( const aafUID_t& opId );
+	bool isKnownParameterDef( const aafUID_t& paramId );
 	
 	void RegisterClassDef( IAAFClassDefSP spIaafClassDef );
 
@@ -54,11 +55,9 @@ public:
 	IEnumAAFParameterDefsSP GetParameterDefs();
 
 	void RegisterOpaqueTypeDef( IAAFTypeDefSP );
-
 	void RegisterOperationDef( IAAFOperationDefSP );
-
+	void RegisterParameterDef( IAAFParameterDefSP );
 	void RegisterCodecDef( IAAFCodecDefSP );
-
 	void RegisterKLVDataKey( const aafUID_t& uuid,
 				 IAAFTypeDefSP spTypeDef );
 
@@ -111,6 +110,18 @@ IAAFSmartPointer<Type> AxCreateInstance( AxDictionary& dict )
 {
 	Type* dummy = 0;
 
+	IUnknownSP spIUnknown = dict.CreateInstance( AxAUID(dummy), AxIID(dummy) );
+	IAAFSmartPointer<Type> sp;
+	AxQueryInterface( spIUnknown, sp );
+	return sp;
+}
+
+template <class Type>
+IAAFSmartPointer<Type> AxCreateInstance( IAAFDictionarySP spDict )
+{
+	Type* dummy = 0;
+	
+	AxDictionary dict(spDict);
 	IUnknownSP spIUnknown = dict.CreateInstance( AxAUID(dummy), AxIID(dummy) );
 	IAAFSmartPointer<Type> sp;
 	AxQueryInterface( spIUnknown, sp );

@@ -301,3 +301,38 @@ void AxOperationDef::SetBypass( aafUInt32 bypassTrack )
 {
 	CHECK_HRESULT( _spIaafOperationDef->SetBypass( bypassTrack ) );
 }
+
+IAAFDataDefSP AxOperationDef::GetDataDef()
+{
+  IAAFDataDefSP spDataDef;
+  CHECK_HRESULT( _spIaafOperationDef->GetDataDef( &spDataDef ) );
+  return spDataDef;
+}
+
+aafBoolean_t AxOperationDef::IsTimeWarp()
+{
+  aafBoolean_t isTimeWarp;
+  CHECK_HRESULT( _spIaafOperationDef->IsTimeWarp( &isTimeWarp ) );
+  return isTimeWarp;
+}
+
+aafUID_t AxOperationDef::GetCategory()
+{
+  aafUID_t uid;
+  CHECK_HRESULT( _spIaafOperationDef->GetCategory( &uid ) );
+  return uid;
+}
+
+aafInt32 AxOperationDef::GetNumberInputs()
+{
+  aafInt32 numInputs;
+  CHECK_HRESULT( _spIaafOperationDef->GetNumberInputs( &numInputs ) );
+  return numInputs;
+}
+
+aafUInt32 AxOperationDef::GetBypass()
+{
+  aafUInt32 bypass;
+  CHECK_HRESULT( _spIaafOperationDef->GetBypass( &bypass ) );
+  return bypass;
+}

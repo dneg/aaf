@@ -32,8 +32,6 @@ class AxParameter : public AxObject {
   AxParameter( IAAFParameterSP spIaafParameter );
   virtual ~AxParameter();
 
-  IAAFParameterDefSP GetParameterDefinition();
-  
   inline operator IAAFParameterSP ()
     { return _spIaafParameter; }
 
@@ -55,25 +53,6 @@ class AxConstantValue : public AxParameter {
   void Initialize( IAAFParameterDefSP spParameterDef,
 		   aafUInt32 valueSize,
 		   aafDataBuffer_t pValue );
-
-  void GetValue( aafUInt32 valueSize,
-		 aafDataBuffer_t pValue,
-		 aafUInt32* bytesRead );
-
-  template <typename ParamType>
-  void GetValue( ParamType& val )
-  {
-    ParamType tmp;
-    aafUInt32 bytesRead;
-    GetValue( sizeof(tmp), reinterpret_cast<aafDataBuffer_t>(&tmp), &bytesRead );
-    if ( sizeof(tmp) == bytesRead ) {
-      val = tmp;
-    }
-    else {
-      throw AxEx( L"size mismatch in AxConstantValue::GetValue()" );      
-    }
-  }
-
 
   inline operator IAAFConstantValueSP ()
     { return _spIaafConstantValue; }
