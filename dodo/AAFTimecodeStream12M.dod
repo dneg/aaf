@@ -1,0 +1,44 @@
+#startm .this-module 0
+AAFTimecodeStream12M\
+#endm
+#c
+#startm .parent-module 0
+AAFTimecodeStream\
+#endm
+#c
+#import ./AAFTimecodeStream.exp
+#import ./AAFSegment.exp
+#import ./AAFUnitTest.exp
+AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+AD_INCLUDE(AAFTypes)
+
+AD_CLASS_BEGIN
+
+/****/
+AD_OVERRIDE(.method-GetPositionTimecode)
+AD_OVERRIDE(.method-SetPositionTimecode)
+
+AD_OVERRIDE(.method-GetUserDataLength)
+AD_OVERRIDE(.method-GetUserDataAtPosition)
+AD_OVERRIDE(.method-SetUserDataAtPosition)
+
+/****/
+AD_OVERRIDE(.method-SegmentOffsetToTC)
+AD_OVERRIDE(.method-SegmentTCToOffset)
+
+  //
+  // IAAFUnitTest interface method overrides
+  //
+AD_OVERRIDE(.method-Test)
+
+
+AD_CLASS_END
