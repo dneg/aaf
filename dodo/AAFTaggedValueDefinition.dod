@@ -43,6 +43,23 @@ AD_DEFAULT_UUID(c358428a, bf73, 4558, bf, df, 48, 21, 60, 71, 98, 23)
 
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 
+AD_XMETHOD3(Initialize,
+		   [in\, ref],
+		   objPass,
+		   aafUID_constref,
+		   id,
+		   AUID for new DeObject,
+		   [in\, string],
+		   objPass,
+		   aafCharacter_constptr,
+		   pName,
+		   Name for new DefObject,
+		   [in\, string],
+		   objPass,
+		   aafCharacter_constptr,
+		   pDescription,
+		   Description for new DefObject,
+		   Init all fields of a definition object.)
 
 AD_XMETHOD1(AddParentProperty,
 	    [in],
