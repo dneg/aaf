@@ -76,17 +76,14 @@ void OMContainer::OMLOpenContainer(OMLSession sessionData,
                                  OMLContainerUseMode useFlags,
                                  ImplAAFHeader*& header)
 {
-	char *pathname;
-
   _mode = readMode;
-	pathname = GetFileName(attributes);
-  _file = new OMFile(pathname);
-  _file->open();
+	char *pathname = GetFileName(attributes);
+  _file = OMFile::open(pathname);
 
   OMFile::classFactory()->add(CLSID_AAFHEADER, makeHeader);
   OMFile::classFactory()->add(CLSID_AAFIDENTIFICATION, makeIdentification);
 
-  OMStorable* head = OMStorable::restoreFrom(_file, "head", _file->root());
+  OMStorable* head = OMStorable::restoreFrom(_file, "head", *(_file->root()));
   header = dynamic_cast<ImplAAFHeader *>(head);
 }
 
@@ -103,12 +100,9 @@ void OMContainer::OMLOpenNewContainer(OMLSession sessionData,
                                   OMLGeneration generation,
                                   OMLContainerFlags containerFlags, ...)
 {
-	char *pathname;
-
   _mode = writeMode;
-	pathname = GetFileName(attributes);
-	_file = new OMFile(pathname);
-  _file->create();
+	char *pathname = GetFileName(attributes);
+  _file = OMFile::create(pathname);
 }
 
 // OML Revision number
