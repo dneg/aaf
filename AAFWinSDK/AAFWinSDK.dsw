@@ -339,6 +339,36 @@ Package=<4>
 
 ###############################################################################
 
+Project: "ExportAudioExample"=".\examples\com-api\ExportAudioExample\ExportAudioExample.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MakeSDK
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "ExportSimpleComposition"=".\examples\com-api\ExportSimpleComposition\ExportSimpleComposition.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MakeSDK
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "FileDumper"=".\Utilities\FileDumper\FileDumper.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -409,6 +439,21 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name COMIDL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "ImportAudioExample"=".\examples\com-api\ImportAudioExample\ImportAudioExample.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MakeSDK
     End Project Dependency
 }}}
 
@@ -496,6 +541,15 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name ComPersonnelPluginWrite
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ExportAudioExample
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ExportSimpleComposition
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ImportAudioExample
     End Project Dependency
 }}}
 
