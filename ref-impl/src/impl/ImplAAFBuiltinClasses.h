@@ -170,6 +170,8 @@ private:
 
 
   // Returns the number of axiomatic properties.
+  aafUInt32 _numAxProps;
+  bool      _numAxPropsInited;
   aafUInt32 countAxProps () const;
 
   // Returns the axiomatic property definition corresponding to the

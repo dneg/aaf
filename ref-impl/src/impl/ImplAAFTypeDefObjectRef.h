@@ -65,13 +65,13 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
         (// @parm [in] auid to be used to identify this type
-         const aafUID_t *  pID,
+         const aafUID_t & id,
 
          // @parm [in] class def of objects permitted to be referenced
          ImplAAFClassDef * pObjType,
 
          // @parm [in, string] friendly name of this type definition
-         wchar_t *  pTypeName);
+         const aafCharacter * pTypeName);
 
 
   //****************
@@ -161,13 +161,13 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     pvtInitialize
         (// @parm [in] auid to be used to identify this type
-         const aafUID_t *  pID,
+         const aafUID_t & id,
 
          // @parm [in] class def of objects permitted to be referenced
-         const aafUID_t * pRefdObjID,
+         const aafUID_t & refdObjID,
 
          // @parm [in, string] friendly name of this type definition
-         wchar_t *  pTypeName);
+         const aafCharacter * pTypeName);
 
 public:
   // Overrides from ImplAAFTypeDef

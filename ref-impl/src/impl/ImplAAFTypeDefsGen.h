@@ -70,21 +70,21 @@ static TypeInteger s_AAFAllTypeIntegers [] = {
 // Define structs to describe each member of an enumeration typedef,
 // and to describe the entire enumeration typedef.
 //
-#define AAF_TYPE_TABLE_BEGIN()  \
-                                \
-struct TypeEnumerationMember    \
-{                               \
-  wchar_t *        memberName;  \
-  aafInt64         memberValue; \
-};                              \
-                                \
-struct TypeEnumeration          \
-{                               \
-  aafUID_t   typeID;            \
-  wchar_t *  typeName;          \
-  aafUID_t * elementType;       \
-  size_t     size;              \
-  TypeEnumerationMember ** members;  \
+#define AAF_TYPE_TABLE_BEGIN()             \
+                                           \
+struct TypeEnumerationMember               \
+{                                          \
+  wchar_t *        memberName;             \
+  aafInt64         memberValue;            \
+};                                         \
+                                           \
+struct TypeEnumeration                     \
+{                                          \
+  aafUID_t                 typeID;         \
+  const wchar_t *          typeName;       \
+  const aafUID_t *         pElementTypeId; \
+  size_t                   size;           \
+  TypeEnumerationMember ** members;        \
 };
 
 #define AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(name, value, parent) \
@@ -127,7 +127,7 @@ static const TypeEnumerationMember *s_TypeEnumerationMembers_##name[] = {
 static const TypeEnumeration s_TypeEnumeration_##name = \
 { id, \
   L#name, \
-  (aafUID_t *)& TYPE_GUID_NAME(type), \
+	/*(aafUID_t *)*/& TYPE_GUID_NAME(type), \
   sizeof (aaf##name##_t), \
   (TypeEnumerationMember **) s_TypeEnumerationMembers_##name, \
  };
@@ -170,22 +170,22 @@ static TypeEnumeration * s_AAFAllTypeEnumerations [] = {
 // Define structs to describe each member of a record typedef, and to
 // describe the entire record typedef.
 //
-#define AAF_TYPE_TABLE_BEGIN()  \
-                                \
-struct TypeRecordMember         \
-{                               \
-  aafUID_t *       memberType;  \
-  wchar_t *        memberName;  \
-  size_t           memberOffset; \
-  eAAFTypeCategory_t typeCat;   \
-};                              \
-                                \
-struct TypeRecord               \
-{                               \
-  aafUID_t   typeID;            \
-  wchar_t *  typeName;          \
-  size_t     size;              \
-  TypeRecordMember ** members;  \
+#define AAF_TYPE_TABLE_BEGIN()      \
+                                    \
+struct TypeRecordMember             \
+{                                   \
+  const aafUID_t *   pMemberTypeId; \
+  wchar_t *          memberName;    \
+  size_t             memberOffset;  \
+  eAAFTypeCategory_t typeCat;       \
+};                                  \
+                                    \
+struct TypeRecord                   \
+{                                   \
+  aafUID_t   typeID;                \
+  wchar_t *  typeName;              \
+  size_t     size;                  \
+  TypeRecordMember ** members;      \
 };
 
 #define AAF_TYPE_RECORD_MEMBER(recordName, memberType, memberName) \
@@ -268,10 +268,10 @@ static TypeRecord * s_AAFAllTypeRecords [] = {
 #define AAF_TYPE_TABLE_BEGIN()  \
 struct TypeVaryingArray         \
 {                               \
-  wchar_t *  typeName;          \
-  aafUID_t   typeId;            \
-  aafUID_t * baseType;          \
-  int       isValid;            \
+  const wchar_t *  typeName;    \
+  aafUID_t         typeId;      \
+  const aafUID_t * pBaseTypeId; \
+  int              isValid;     \
 };                              \
                                 \
 static TypeVaryingArray s_AAFAllTypeVaryingArrays [] = {
@@ -279,7 +279,7 @@ static TypeVaryingArray s_AAFAllTypeVaryingArrays [] = {
 #define AAF_TYPE(x) kAAFTypeID_##x
 
 #define AAF_TYPE_DEFINITION_VARYING_ARRAY(name, id, type) \
-  {L##"aaf" L#name, id, (aafUID_t *)& type, 1},
+  {L##"aaf" L#name, id, &type, 1},
 
 #define AAF_TYPE_TABLE_END()  \
 0 };
@@ -294,11 +294,11 @@ static TypeVaryingArray s_AAFAllTypeVaryingArrays [] = {
 #define AAF_TYPE_TABLE_BEGIN()  \
 struct TypeFixedArray           \
 {                               \
-  wchar_t *  typeName;          \
-  aafUID_t   typeId;            \
-  aafUID_t * baseType;          \
-  aafUInt32  count;             \
-  int       isValid;            \
+  const wchar_t *  typeName;    \
+  aafUID_t         typeId;      \
+  const aafUID_t * pBaseTypeId; \
+  aafUInt32        count;       \
+  int              isValid;     \
 };                              \
                                 \
 static TypeFixedArray s_AAFAllTypeFixedArrays [] = {
@@ -306,7 +306,7 @@ static TypeFixedArray s_AAFAllTypeFixedArrays [] = {
 #define AAF_TYPE(x) kAAFTypeID_##x
 
 #define AAF_TYPE_DEFINITION_FIXED_ARRAY(name, id, type, count) \
-  {L##"aaf" L#name, id, (aafUID_t *)& type, count, 1},
+  {L##"aaf" L#name, id, &type, count, 1},
 
 #define AAF_TYPE_TABLE_END()  \
 0 };
@@ -321,10 +321,10 @@ static TypeFixedArray s_AAFAllTypeFixedArrays [] = {
 #define AAF_TYPE_TABLE_BEGIN()  \
 struct TypeRename               \
 {                               \
-  wchar_t *  typeName;          \
-  aafUID_t   typeId;            \
-  aafUID_t * baseType;          \
-  int        isValid;           \
+  const wchar_t *  typeName;    \
+  aafUID_t         typeId;      \
+  const aafUID_t * pBaseTypeId; \
+  int              isValid;     \
 };                              \
                                 \
 static TypeRename s_AAFAllTypeRenames [] = {
@@ -347,10 +347,10 @@ static TypeRename s_AAFAllTypeRenames [] = {
 #define AAF_TYPE_TABLE_BEGIN()  \
 struct TypeString               \
 {                               \
-  wchar_t *  typeName;          \
-  aafUID_t   typeId;            \
-  aafUID_t * baseType;          \
-  int       isValid;            \
+  const wchar_t *  typeName;    \
+  aafUID_t         typeId;      \
+  const aafUID_t * pBaseTypeId; \
+  int              isValid;     \
 };                              \
                                 \
 static TypeString s_AAFAllTypeStrings [] = {
@@ -373,10 +373,10 @@ static TypeString s_AAFAllTypeStrings [] = {
 #define AAF_TYPE_TABLE_BEGIN()  \
 struct TypeCharacter            \
 {                               \
-  wchar_t * typeName;           \
-  aafUID_t  typeID;             \
-  aafUInt8  size;               \
-  int       isValid;            \
+  const wchar_t * typeName;     \
+  aafUID_t        typeID;       \
+  aafUInt8        size;         \
+  int             isValid;      \
 };                              \
                                 \
 static TypeCharacter s_AAFAllTypeCharacters [] = {
@@ -398,10 +398,10 @@ static TypeCharacter s_AAFAllTypeCharacters [] = {
 #define AAF_TYPE_TABLE_BEGIN()  \
 struct TypeStrongRef            \
 {                               \
-  wchar_t *  typeName;          \
-  aafUID_t   typeId;            \
-  aafUID_t * refdType;          \
-  int       isValid;            \
+  const wchar_t *  typeName;    \
+  aafUID_t         typeId;      \
+  const aafUID_t * pRefdTypeId; \
+  int              isValid;     \
 };                              \
                                 \
 static TypeStrongRef s_AAFAllTypeStrongRefs [] = {
@@ -427,10 +427,10 @@ static TypeStrongRef s_AAFAllTypeStrongRefs [] = {
 #define AAF_TYPE_TABLE_BEGIN()  \
 struct TypeStrongRefSet         \
 {                               \
-  wchar_t *  typeName;          \
-  aafUID_t   typeId;            \
-  aafUID_t * refdType;          \
-  int       isValid;            \
+  const wchar_t *  typeName;    \
+  aafUID_t         typeId;      \
+  const aafUID_t * pRefdTypeId; \
+  int              isValid;     \
 };                              \
                                 \
 static TypeStrongRefSet s_AAFAllTypeStrongRefSets [] = {
@@ -454,10 +454,10 @@ static TypeStrongRefSet s_AAFAllTypeStrongRefSets [] = {
 #define AAF_TYPE_TABLE_BEGIN()  \
 struct TypeStrongRefVector      \
 {                               \
-  wchar_t *  typeName;          \
-  aafUID_t   typeId;            \
-  aafUID_t * refdType;          \
-  int       isValid;            \
+  const wchar_t *  typeName;    \
+  aafUID_t         typeId;      \
+  const aafUID_t * pRefdTypeId; \
+  int              isValid;     \
 };                              \
                                 \
 static TypeStrongRefVector s_AAFAllTypeStrongRefVectors [] = {
@@ -481,10 +481,10 @@ static TypeStrongRefVector s_AAFAllTypeStrongRefVectors [] = {
 #define AAF_TYPE_TABLE_BEGIN()  \
 struct TypeWeakRef              \
 {                               \
-  wchar_t *  typeName;          \
-  aafUID_t   typeId;            \
-  aafUID_t * refdType;          \
-  int       isValid;            \
+  const wchar_t *  typeName;    \
+  aafUID_t         typeId;      \
+  const aafUID_t * pRefdTypeId; \
+  int              isValid;     \
 };                              \
                                 \
 static TypeWeakRef s_AAFAllTypeWeakRefs [] = {
@@ -509,10 +509,10 @@ static TypeWeakRef s_AAFAllTypeWeakRefs [] = {
 #define AAF_TYPE_TABLE_BEGIN()  \
 struct TypeWeakRefSet           \
 {                               \
-  wchar_t *  typeName;          \
-  aafUID_t   typeId;            \
-  aafUID_t * refdType;          \
-  int       isValid;            \
+  const wchar_t *  typeName;    \
+  aafUID_t         typeId;      \
+  const aafUID_t * pRefdTypeId; \
+  int              isValid;     \
 };                              \
                                 \
 static TypeWeakRefSet s_AAFAllTypeWeakRefSets [] = {
@@ -536,10 +536,10 @@ static TypeWeakRefSet s_AAFAllTypeWeakRefSets [] = {
 #define AAF_TYPE_TABLE_BEGIN()  \
 struct TypeWeakRefVector        \
 {                               \
-  wchar_t *  typeName;          \
-  aafUID_t   typeId;            \
-  aafUID_t * refdType;          \
-  int       isValid;            \
+  const wchar_t *  typeName;    \
+  aafUID_t         typeId;      \
+  const aafUID_t * pRefdTypeId; \
+  int              isValid;     \
 };                              \
                                 \
 static TypeWeakRefVector s_AAFAllTypeWeakRefVectors [] = {

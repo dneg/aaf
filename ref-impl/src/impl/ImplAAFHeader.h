@@ -89,7 +89,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     LookupMob
-        (aafUID_t *  mobID,   //@parm [in,ref] The Mob ID
+        (const aafUID_t & mobID,   //@parm [in,ref] The Mob ID
 		 ImplAAFMob ** ppMob);  //@parm [out,retval] Matching Mob
 
 
@@ -143,7 +143,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     IsEssenceDataPresent
         (// @parm [in] A Unique File Mob ID
-		 aafUID_t *  pFileMobID,
+		 const aafUID_t & fileMobID,
 
 		 // @parm [in] The Essence File Format
 		 aafFileFormat_t  fmt,
@@ -210,7 +210,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetIdentificationByGen
 	    (// @parm [in,ref] Unique Generation ID
-         aafUID_t *  pGeneration,
+         const aafUID_t & generation,
 
 		 // @parm [out,retval] Indentification Object
 		 ImplAAFIdentification ** ppIdentification);

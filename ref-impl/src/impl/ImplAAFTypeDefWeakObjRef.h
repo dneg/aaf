@@ -85,9 +85,9 @@ public:
   // Override from AAFTypeDefObjectRef
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
-        (const aafUID_t *  pID,
-         const aafUID_t * pRefdObjID,
-         wchar_t *  pTypeName);
+        (const aafUID_t & id,
+         const aafUID_t & refdObjID,
+         const aafCharacter * pTypeName);
   */
 
   // overrides from ImplAAFTypeDef

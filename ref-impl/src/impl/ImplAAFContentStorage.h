@@ -83,7 +83,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     LookupMob
-        (aafUID_t *  mobID,   //@parm [in,ref] The Mob ID
+        (const aafUID_t &  mobID,   //@parm [in,ref] The Mob ID
 		 ImplAAFMob ** ppMob);  //@parm [out,retval] Matching Mob
 
 
@@ -134,7 +134,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     IsEssenceDataPresent
         (// @parm [in] A Unique File Mob ID
-		 aafUID_t *  pFileMobID,
+		 const aafUID_t & fileMobID,
 
 		 // @parm [in] The Essence File Format
 		 aafFileFormat_t  fmt,
@@ -172,10 +172,10 @@ public:
 
 
 	// Interfaces visible inside the toolkit, but not exposed through the API
-	virtual AAFRESULT UnlinkMobID(aafUID_t mobID);
+	virtual AAFRESULT UnlinkMobID(const aafUID_t & mobID);
 
-	AAFRESULT LookupEssence (aafUID_t *pFileMobID, ImplAAFEssenceData **ppEssence);
-	AAFRESULT ChangeIndexedMobID (ImplAAFMob *pMob, aafUID_t *newID);
+	AAFRESULT LookupEssence (const aafUID_t & fileMobID, ImplAAFEssenceData **ppEssence);
+	AAFRESULT ChangeIndexedMobID (ImplAAFMob *pMob, const aafUID_t & newID);
 
 AAFRESULT
     GetNthMob (aafInt32 index, ImplAAFMob **ppEnum);

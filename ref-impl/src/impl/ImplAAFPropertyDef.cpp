@@ -77,26 +77,23 @@ ImplAAFPropertyDef::~ImplAAFPropertyDef ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPropertyDef::Initialize (
-      const aafUID_t * pPropertyAuid,
+      const aafUID_t & propertyAuid,
       OMPropertyId omPid,
       wchar_t * pPropName,
-	  const aafUID_t * pTypeId,
+	  const aafUID_t & typeId,
       aafBool isOptional)
 {
   AAFRESULT hr;
 
-  if (! pPropertyAuid)       return AAFRESULT_NULL_PARAM;
-  if (! pTypeId)  return AAFRESULT_NULL_PARAM;
   if (! pPropName) return AAFRESULT_NULL_PARAM;
 
-  hr = SetAUID (pPropertyAuid);
+  hr = SetAUID (propertyAuid);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
   hr = SetName (pPropName);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  assert (pTypeId);
-  _Type = *pTypeId;
+  _Type = typeId;
 
   _pid = omPid;
   _IsOptional = isOptional;
@@ -126,7 +123,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	  // Remember that _cachedType is *not* referenced counted!
 	  ImplAAFTypeDef * tmp = 0;
-	  hr = pDict->LookupType (&typeId, &tmp);
+	  hr = pDict->LookupType (typeId, &tmp);
 	  if (AAFRESULT_FAILED (hr))
 		return hr;
 	  assert (tmp);
