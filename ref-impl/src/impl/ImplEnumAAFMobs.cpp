@@ -71,6 +71,9 @@ AAFRESULT STDMETHODCALLTYPE
 	aafNumSlots_t	cur = _current, siz;
 	aafBool			found = kAAFFalse;
 
+	if (ppMob == NULL)
+		return AAFRESULT_NULL_PARAM;
+
     XPROTECT()
 	{
 		CHECK(_cStorage->CountMobs (kAAFAllMob, &siz));
@@ -106,7 +109,7 @@ AAFRESULT STDMETHODCALLTYPE
 		}
 	
 		if(!found)
-			RAISE(AAFRESULT_NO_MORE_MOBS);
+			RAISE(AAFRESULT_NO_MORE_OBJECTS);
 	}
 	XEXCEPT
 	XEND
@@ -121,14 +124,20 @@ AAFRESULT STDMETHODCALLTYPE
                            aafUInt32 *pFetched)
 {
 	ImplAAFMob**	ppMob;
-	aafUInt32		numMobs;
-	HRESULT			hr;
+	aafNumSlots_t	numMobs;
+	HRESULT			hr = AAFRESULT_SUCCESS;
 
-	if ((pFetched == NULL && count != 1) || (pFetched != NULL && count == 1))
-		return E_INVALIDARG;
+	if (pFetched == NULL || ppMobs == NULL)
+		return AAFRESULT_NULL_PARAM;
 
 	// Point at the first component in the array.
 	ppMob = ppMobs;
+
+	// Check our current position
+	_cStorage->CountMobs (kAAFAllMob, &numMobs);
+	if (numMobs == _current)
+		return AAFRESULT_NO_MORE_OBJECTS;
+	
 	for (numMobs = 0; numMobs < count; numMobs++)
 	{
 		hr = NextOne(ppMob);
@@ -142,10 +151,10 @@ AAFRESULT STDMETHODCALLTYPE
 		ppMob++;
 	}
 	
-	if (pFetched)
-		*pFetched = numMobs;
+	assert(pFetched);
+	*pFetched = numMobs;
 
-	return hr;
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -172,14 +181,14 @@ AAFRESULT STDMETHODCALLTYPE
 			return AAFRESULT_NOT_IN_CURRENT_VERSION;
 		}
 
-	if(newCurrent < siz)
+	if(newCurrent <= siz)
 	{
 		_current = newCurrent;
 		hr = AAFRESULT_SUCCESS;
 	}
 	else
 	{
-		hr = E_FAIL;
+		hr = AAFRESULT_NO_MORE_OBJECTS;
 	}
 
 	return hr;
