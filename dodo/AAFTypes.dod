@@ -196,6 +196,24 @@ typedef enum _aafPixelFormat_e
 } aafPixelFormat_e;
 
 
+typedef aafInt32 aafFileExistence_t;
+typedef enum _aafFileExistence_e
+{
+  kAAFFileExistence_new = 1,
+  kAAFFileExistence_existing = 2
+} aafFileExistence_e;
+
+
+typedef aafInt32 aafFileAccess_t;
+typedef enum _aafFileAccess_e
+{
+  kAAFFileAccess_none  = 0,
+  kAAFFileAccess_read  = 1 << 0,
+  kAAFFileAccess_write = 1 << 1,
+  kAAFFileAccess_modify = kAAFFileAccess_read | kAAFFileAccess_write
+} aafFileAccess_e;
+
+
 typedef aafInt32 aafJPEGcomponent_t;
 AD_CPP_QUOTE(#if 0)
 typedef enum _aafJPEGcomponent_e
@@ -1007,10 +1025,12 @@ AD_CPP_QUOTE(#if 0)
     typedef aafVersionType_t             aafVersionType_constref;
   #endif
 
+  typedef unsigned char *                aafMemConstPtr_t;
   typedef aafCharacter *                 aafCharacter_constptr;
   typedef aafMediaCriteria_t *           aafMediaCriteria_constptr;
   typedef aafOperationChoice_t *         aafOperationChoice_constptr;
   typedef aafProductVersion_t *          aafProductVersion_constptr;
+  typedef aafProductIdentification_t *   aafProductIdentification_constptr;
   typedef aafSearchCrit_t *              aafSearchCrit_constptr;
   typedef aafUID_t *                     aafUID_constptr;
   typedef aafMobID_t *                   aafMobID_constptr;
@@ -1059,10 +1079,12 @@ AD_CPP_QUOTE(  #define aafMobID_constref             const aafMobID_t * const)
 AD_CPP_QUOTE(  #define aafVersionType_constref       const aafVersionType_t * const)
 AD_CPP_QUOTE(#endif // !__cplusplus)
 
+AD_CPP_QUOTE(  #define aafMemConstPtr_t              const unsigned char *)
 AD_CPP_QUOTE(  #define aafCharacter_constptr         const aafCharacter *)
 AD_CPP_QUOTE(  #define aafMediaCriteria_constptr     const aafMediaCriteria_t *)
 AD_CPP_QUOTE(  #define aafOperationChoice_constptr   const aafOperationChoice_t *)
 AD_CPP_QUOTE(  #define aafProductVersion_constptr    const aafProductVersion_t *)
+AD_CPP_QUOTE(  #define aafProductIdentification_constptr const aafProductIdentification_t *)
 AD_CPP_QUOTE(  #define aafSearchCrit_constptr        const aafSearchCrit_t *)
 AD_CPP_QUOTE(  #define aafUID_constptr               const aafUID_t *)
 AD_CPP_QUOTE(  #define aafMobID_constptr             const aafMobID_t *)
