@@ -199,8 +199,11 @@ bool
 OMXMLStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
 {
   TRACE("OMXMLStoredObjectFactory::isRecognized");
-  const char* signature = "<?xml version=\"1.0\"?>"
-  "<?OM signature=\"{58464141-000d-4d4f-060e-2b34010101ff}\"?>";
+  char* signature = "<?XML VERSION=\"1.0\"?>"
+  "<?OM SIGNATURE=\"{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}\"?>";
+  char* p = strchr(signature, '{');
+  ASSERT("Found place holder", p != 0);
+  toString(encoding(), p);
   size_t bufferSize = strlen(signature) + 1;
   char* buffer = new char[bufferSize];
   ASSERT("Valid heap pointer", buffer != 0);
@@ -280,7 +283,7 @@ void OMXMLStoredObjectFactory::readSignature(OMRawStorage* rawStorage,
     rawStorage->read(reinterpret_cast<OMByte*>(&ch), 1, x);
     int c = ch;
     if (isprint(c)) {
-      signature[index++] = ch;
+      signature[index++] = toupper(ch);
     }
   }
   signature[index] = 0;
