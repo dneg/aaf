@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- *              Copyright (c) 1998-2000 Avid Technology, Inc.
+ *              Copyright (c) 1998-2001 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -45,6 +45,7 @@
 
 #include "AAFFileSignatures.h"
 #include "AAFFileMode.h"
+#include "AAFFileKinds.h"
 
 #include "ImplAAFSmartPointer.h"
 typedef ImplAAFSmartPointer<ImplAAFIdentification>
@@ -95,6 +96,10 @@ inline void checkExpression(bool test, AAFRESULT r)
     throw r;
 }
 
+inline int equalUID(const aafUID_t & a, const aafUID_t & b)
+{
+  return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
+}
 
 //
 // Returns true if all flags set are defined flags; returns false if
@@ -250,9 +255,6 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 		dictionary->InitBuiltins();
 		dictionary->ReleaseReference();
 		dictionary = 0;
-
-		_isOpen = kAAFTrue;
-		_openType = kOmRead;
 	}
 	catch (AAFRESULT &r)
 	{
@@ -378,9 +380,6 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 		}
 		// Now, always add the information from THIS application */
 		_head->AddIdentificationObject(pIdent);
-		
-		_isOpen = kAAFTrue;
-		_openType = kOmModify;
 	}
 	catch (AAFRESULT &rc)
 	{
@@ -436,13 +435,14 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 
 	try
 	{
-		// Create the header for the OM manager to use as the root
-		// for the file. Use the OMClassFactory interface for this 
-    // object because the dictionary has not been associated with
-    // a header yet (Chicken 'n Egg problem).
-    const OMClassId& soid = *reinterpret_cast<const OMClassId *>(&AUID_AAFHeader);
-    _head = static_cast<ImplAAFHeader *>(_factory->create(soid));
-		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
+	  // Create the header for the OM manager to use as the root
+	  // for the file. Use the OMClassFactory interface for this 
+	  // object because the dictionary has not been associated with
+	  // a header yet (Chicken 'n Egg problem).
+	  const OMClassId& soid =
+		*reinterpret_cast<const OMClassId *>(&AUID_AAFHeader);
+	  _head = static_cast<ImplAAFHeader *>(_factory->create(soid));
+	  checkExpression(NULL != _head, AAFRESULT_BADHEAD);
 		
 		// Make sure the header is initialized with our previously created
 		// dictionary.
@@ -497,7 +497,8 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		// restored, complete the initialization of the
 		// dictionary. We obtain the dictionary via the header
 		// to give the persistence mechanism a chance to work.
-		_factory->InitializeOMStorable (_factory->GetBuiltinDefs()->cdDictionary());
+		_factory->InitializeOMStorable
+		    (_factory->GetBuiltinDefs()->cdDictionary());
 		ImplAAFDictionary* dictionary = 0;
 		HRESULT hr = _head->GetDictionary(&dictionary);
 		if (hr != AAFRESULT_SUCCESS)
@@ -506,9 +507,6 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 
 		dictionary->ReleaseReference();
 		dictionary = 0;
-
-		_isOpen = kAAFTrue;
-		_openType = kOmCreate;
 		GetRevision(&_setrev);
 	}
 	catch (AAFRESULT &rc)
@@ -554,6 +552,8 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFFile::CreateAAFFileOnRawStorage
   (IAAFRawStorage * pRawStorage,
+   aafFileExistence_t existence,
+   aafFileAccess_t access,
    aafUID_constptr pFileKind,
    aafUInt32 modeFlags,
    aafProductIdentification_constptr pIdent)
@@ -573,43 +573,214 @@ ImplAAFFile::CreateAAFFileOnRawStorage
   if (modeFlags)
 	return AAFRESULT_NOT_IN_CURRENT_VERSION;
 	
-  // Create the OM storage...
-  assert (! _pOMStg);
-  _pOMStg = new ImplAAFOMRawStorage (pRawStorage);
-  assert (_pOMStg);
-
-  _isReadable = _pOMStg->isReadable();
-  _isWriteable = _pOMStg->isWritable();
-
-  if (pFileKind)
+  AAFRESULT hr;
+  aafBoolean_t b = kAAFFalse;
+  switch (access)
 	{
-	  _preOpenFileKindSet = kAAFTrue;
-	  _preOpenFileKind = *pFileKind;
-	}
-  else
-	{
-	  _preOpenFileKindSet = kAAFFalse;
-	  _preOpenFileKind = kNullFileKind;
-	}
-  if (pIdent)
-	{
-	  _preOpenIdentSet = kAAFTrue;
-	  _preOpenIdent = *pIdent;
-	}
-  else
-	{
-	  _preOpenIdentSet = kAAFFalse;
-	  _preOpenIdent = kNullIdent;
+	case kAAFFileAccess_read:
+	  if (kAAFFileExistence_new == existence)
+		return AAFRESULT_INVALID_PARAM;
+	  b = kAAFFalse;
+	  hr = pRawStorage->IsReadable (&b);
+	  if (kAAFFalse == b)
+		return AAFRESULT_NOT_READABLE;
+	  break;
+	case kAAFFileAccess_write:
+	  if (kAAFFileExistence_existing == existence)
+		return AAFRESULT_INVALID_PARAM;
+	  b = kAAFFalse;
+	  hr = pRawStorage->IsWriteable (&b);
+	  if (kAAFFalse == b)
+		return AAFRESULT_NOT_WRITEABLE;
+	  break;
+	case kAAFFileAccess_modify:
+	  b = kAAFFalse;
+	  hr = pRawStorage->IsWriteable (&b);
+	  if (kAAFFalse == b)
+		return AAFRESULT_NOT_WRITEABLE;
+	  b = kAAFFalse;
+	  hr = pRawStorage->IsReadable (&b);
+	  if (kAAFFalse == b)
+		return AAFRESULT_NOT_READABLE;
+	  break;
+	default:
+	  return AAFRESULT_INVALID_PARAM;
 	}
 
-  // Save the mode flags for now. They are not currently (2/4/1999)
-  // used by the OM to open the doc file. Why do we return an error
-  // if modeFlags != 0?
-  //
-  // Answer: because none of them are implemented yet.
-  _modeFlags = modeFlags;
+  switch (existence)
+	{
+	case kAAFFileExistence_new:
+	  if (! pFileKind)
+		return AAFRESULT_NULL_PARAM;
 
-  return AAFRESULT_SUCCESS;
+	  // Check to see if signature specifies Binary Structured
+	  // Storage; if so, raw storage must be at least readable, even
+	  // for write-only files.
+	  if (equalUID (*pFileKind, aafFileKindAafSSBinary))
+		{
+		  b = kAAFFalse;
+		  hr = pRawStorage->IsReadable (&b);
+		  if (kAAFFalse == b)
+			return AAFRESULT_NOT_READABLE;
+		}
+	  break;
+	case kAAFFileExistence_existing:
+	  break;
+	default:
+	  return AAFRESULT_INVALID_PARAM;
+	}
+
+  _access = access;
+  _existence = existence;
+
+  AAFRESULT stat = AAFRESULT_SUCCESS;
+  try
+	{
+	  // Create the OM storage...
+	  OMRawStorage * pOMStg =
+		new ImplAAFOMRawStorage (pRawStorage);
+	  assert (pOMStg);
+
+	  if (kAAFFileExistence_new == existence) // new
+		{
+		  if (! pIdent)
+			return AAFRESULT_NULL_PARAM;
+
+		  // Create the header for the OM manager to use as the root
+		  // for the file. Use the OMClassFactory interface for this
+		  // object because the dictionary has not been associated
+		  // with a header yet (Chicken 'n Egg problem).
+		  const OMClassId& soid =
+			*reinterpret_cast<const OMClassId *>(&AUID_AAFHeader);
+		  _head = static_cast<ImplAAFHeader *>(_factory->create(soid));
+		  checkExpression(NULL != _head, AAFRESULT_BADHEAD);
+		
+		  // Make sure the header is initialized with our previously
+		  // created dictionary.
+		  _head->SetDictionary(_factory);
+
+		  // Set the file format version.
+		  //
+		  // BobT Fri Jan 21 14:37:43 EST 2000: the default behavior
+		  // is that if the version isn't present, it's assumed to
+		  // Version 0.  Therefore if the current version is 0, don't
+		  // write out the property.  We do this so that hackers
+		  // examining written files won't know that a mechanism
+		  // exists to mark future incompatible versions, and so will
+		  // work harder to make any future changes compatible.
+		  if (sCurrentAAFObjectModelVersion)
+			{
+			  _head->SetObjectModelVersion
+				(sCurrentAAFObjectModelVersion);
+			}
+
+		  // Add the ident to the header.
+		  checkResult(_head->AddIdentificationObject(pIdent));
+		  
+		  // Set the byte order
+		  OMByteOrder byteOrder = hostByteOrder();
+		  if (byteOrder == littleEndian)
+			{
+			  _byteOrder = 0x4949; // 'II'
+			}
+		  else
+			{ // bigEndian
+			  _byteOrder = 0x4d4d; // 'MM'
+			}
+		  _head->SetByteOrder(_byteOrder);
+		  aafVersionType_t theVersion = { 1, 0 };
+		  _head->SetFileRevision (theVersion);
+
+		  //JeffB!!! We must decide whether def-only files have a
+		  //content storage
+		  ImplAAFContentStorage * pCStore = 0;
+		  checkResult(_head->GetContentStorage(&pCStore));
+		  pCStore->ReleaseReference(); // need to release this pointer!
+		  pCStore = 0;
+
+		  // Attempt to create the file.
+		  const OMFileSignature aafFileSignature =
+			*reinterpret_cast<const OMFileSignature *> (pFileKind);
+
+		  if (kAAFFileAccess_read == access)
+			{
+			  // Can't open an new file for read only.
+			  return AAFRESULT_INVALID_PARAM;
+			}
+		  if (kAAFFileAccess_modify == access)
+			{
+			  // NewModify
+			  if (! OMFile::compatibleRawStorage (pOMStg,
+												  OMFile::modifyMode,
+												  aafFileSignature))
+				return AAFRESULT_INVALID_PARAM;
+												  
+			  _file = OMFile::openNewModify (pOMStg,
+											 _factory,
+											 0,
+											 byteOrder,
+											 _head,
+											 aafFileSignature,
+											 _metafactory);
+			}
+		  else // write-only
+			{
+			  // NewWrite
+			  if (! OMFile::compatibleRawStorage (pOMStg,
+												  OMFile::writeOnlyMode,
+												  aafFileSignature))
+				return AAFRESULT_INVALID_PARAM;
+												  
+			  _file = OMFile::openNewWrite (pOMStg,
+											_factory,
+											0,
+											byteOrder,
+											_head,
+											aafFileSignature,
+											_metafactory);
+			}
+		}
+	  else if (kAAFFileExistence_existing == existence)
+		{
+		  if (kAAFFileAccess_write == access)
+			{
+			  // Can't open an existing file for write only.
+			  return AAFRESULT_INVALID_PARAM;
+			}
+		  if (kAAFFileAccess_modify == access)
+			{
+			  // ExistingModify
+			  if (! pIdent)
+				return AAFRESULT_NULL_PARAM;
+			  _preOpenIdent = *pIdent;
+
+			  _file = OMFile::openExistingModify (pOMStg,
+												  _factory,
+												  0,
+												  OMFile::lazyLoad,
+												  _metafactory);
+			}
+		  else // read-only
+			{
+			  // ExistingRead
+			  _file = OMFile::openExistingRead (pOMStg,
+												_factory,
+												0,
+												OMFile::lazyLoad,
+												_metafactory);
+			}
+		} // endif new/existing
+	  else
+		{
+		  return AAFRESULT_INVALID_PARAM;
+		}
+	}
+
+  catch (AAFRESULT &r)
+	{
+	  stat = r;
+	}
+  return stat;
 }
 
 
@@ -619,359 +790,114 @@ ImplAAFFile::Open ()
   if (IsOpen() || IsClosed())
 	return AAFRESULT_ALREADY_OPEN;
 
-  _isOpen = kAAFTrue;
+  if (! _file)
+	return AAFRESULT_NOT_INITIALIZED;
 
-  // Here we decide which of the pvtCreateXXX() methods to call.  The
-  // different possibilities:
-  //
-  // new
-  // existing
-  //
-  // read-only (R)
-  // modify (RW)
-  // write-only (W) (for streams only?)
-  //
-  // Let's chart them:
-  //
-  //               new                 existing
-  //               ---                 --------
-  // R           <none>              pvtCreateExistingRead
-  // W or RW     pvtCreateNewModify  pvtCreateExistingModify
-  //
-  // We can determine the {new,existing} criterion by asking the
-  // storage for its size.  Note that this only works for random raw
-  // storages.  If it's *not* a random raw storage, assume it's a
-  // stream and assume it's a new file (for write) and an existing one
-  // (for read).
-
-  // BobT: Note that for now we're saving versions of the _preOpenXXX
-  // data; this may no longer be necessary once OM support is
-  // implemented allowing the client to get the raw storage of a file
-  // which has not yet been opened.
-
-  if (IsWriteable())
-	{
-	  // Figure out if file exists already or not.  If it's not
-	  // positionable, assume it's on a stream and therefore a
-	  // writeable file on a stream is not pre-existing.
-	  aafBoolean_t existing = kAAFFalse;
-	  if (_pOMStg->isPositionable())
-		{
-		  if (0 != _pOMStg->size())
-			existing = kAAFTrue;
-		}
-	  if (existing)
-		{
-		  return pvtCreateExistingModify
-			(_preOpenIdentSet ?	&_preOpenIdent : 0);
-		}
-	  else
-		{
-		  return pvtCreateNewModify
-			(_preOpenFileKindSet ? &_preOpenFileKind : 0,
-			 _preOpenIdentSet ?	&_preOpenIdent : 0);
-		}
-	}
-  else if (IsReadable())
-	{
-	  // If we're here, it's not writeable, so it must be read-only.
-	  return pvtCreateExistingRead ();
-	}
-  else
-	return AAFRESULT_INVALID_PARAM;
-}
-
-
-AAFRESULT ImplAAFFile::pvtCreateExistingRead ()
-{
-	AAFRESULT stat = AAFRESULT_SUCCESS;
-
-	try
-	  {
-		assert (_pOMStg);
-
-		// Ask the OM to open the file.
-		_file = OMFile::openExistingRead(_pOMStg,
-										 _factory,
-										 0,
-										 OMFile::lazyLoad,
-										 _metafactory);
-		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
-		// Relinquish ownership of the storage to the OMFile object.
-		_pOMStg = 0;
-
-		_file->open ();
-
-        // Check the file's signature.
-        OMFileSignature sig = _file->signature();
-		const OMFileSignature aafFileSignature  =
-		  *reinterpret_cast<const OMFileSignature *>
-		  (&aafFileSignatureAafSSBinaryGUID);
-        checkExpression(sig == aafFileSignature, AAFRESULT_NOT_AAF_FILE);
-
-		// Get the byte order
-		OMByteOrder byteOrder = _file->byteOrder();
-		if (byteOrder == littleEndian)
-		  {
-			_byteOrder = 0x4949; // 'II'
-		  }
-		else
-		  { // bigEndian
-			_byteOrder = 0x4d4d; // 'MM'
-		  }
-
-		// Restore the header.
-		bool regWasEnabled = _factory->SetEnableDefRegistration (false);
-		OMStorable* head = _file->restore();
-		_head = dynamic_cast<ImplAAFHeader *>(head);
-		_head->SetFile(this);
-		
-		// Check for file format version.
-		if (_head->IsObjectModelVersionPresent())
-		  {
-			// If property isn't present, the default version is 0,
-			// which is always (supposed to be) legible.  If it is
-			// present, find out the version number to determine if
-			// the file is legible.
-			if (_head->GetObjectModelVersion() >
-				sCurrentAAFObjectModelVersion)
-			  {
-				// File version is higher than the version understood
-				// by this toolkit.  Therefore this file cannot be read.
-				return AAFRESULT_FILEREV_DIFF;
-			  }
-		  }
-
-		// Now that the file is open and the header has been
-		// restored, complete the initialization of the
-		// dictionary. We obtain the dictionary via the header
-		// to give the persistence mechanism a chance to work.
-		ImplAAFDictionary* dictionary = 0;
-		HRESULT hr = _head->GetDictionary(&dictionary);
-		if (hr != AAFRESULT_SUCCESS)
-		  return hr;
-		_factory->SetEnableDefRegistration (regWasEnabled);
-		dictionary->InitBuiltins();
-		dictionary->ReleaseReference();
-		dictionary = 0;
-
-		_openType = kOmRead;
-	}
-	catch (AAFRESULT &r)
-	{
-		stat = r;
-
-		// Cleanup after failure.
-		if (NULL == _head)
-		{
-			_head->ReleaseReference();
-			_head = 0;
-		}
-	}
-	
-	return stat;
-}
-
-
-AAFRESULT ImplAAFFile::pvtCreateExistingModify
-    (aafProductIdentification_constptr pIdent)
-{
   AAFRESULT stat = AAFRESULT_SUCCESS;
 
-  try 
+  try
 	{
-	  AAFRESULT hr;
-	  // Ask the OM to open the file.
-	  assert (_pOMStg);
-	  _file = OMFile::openExistingModify(_pOMStg,
-										 _factory,
-										 0,
-										 OMFile::lazyLoad,
-										 _metafactory); 
-	  checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
-	  // Relinquish ownership of the storage to the OMFile object.
-	  _pOMStg = 0;
 	  _file->open ();
+	  // _isOpen = kAAFTrue;
 
-	  // Get the byte order
-	  OMByteOrder byteOrder = _file->byteOrder();
-	  if (byteOrder == littleEndian)
+	  if (kAAFFileExistence_new == _existence) // new
 		{
-		  _byteOrder = 0x4949; // 'II'
+		  // Now that the file is open and the header has been
+		  // restored, complete the initialization of the
+		  // dictionary. We obtain the dictionary via the header
+		  // to give the persistence mechanism a chance to work.
+		  _factory->InitializeOMStorable
+		      (_factory->GetBuiltinDefs()->cdDictionary());
+		  ImplAAFDictionary* dictionary = 0;
+		  HRESULT hr = _head->GetDictionary(&dictionary);
+		  if (hr != AAFRESULT_SUCCESS)
+			return hr;
+		  dictionary->InitBuiltins();
+		  dictionary->ReleaseReference ();
+		  dictionary = 0;
+		}
+	  else if (kAAFFileExistence_existing == _existence) // existing
+		{
+		  // Check the file's signature.
+		  OMFileSignature sig = _file->signature();
+		  const OMFileSignature aafFileSignature  =
+			*reinterpret_cast<const OMFileSignature *>
+			(&aafFileSignatureAafSSBinaryGUID);
+		  checkExpression(sig == aafFileSignature, AAFRESULT_NOT_AAF_FILE);
+
+		  // Get the byte order
+		  OMByteOrder byteOrder = _file->byteOrder();
+		  if (byteOrder == littleEndian)
+			{
+			  _byteOrder = 0x4949; // 'II'
+			}
+		  else
+			{ // bigEndian
+			  _byteOrder = 0x4d4d; // 'MM'
+			}
+
+		  // Restore the header.
+		  bool regWasEnabled = _factory->SetEnableDefRegistration (false);
+		  OMStorable* head = _file->restore();
+		  _head = dynamic_cast<ImplAAFHeader *>(head);
+		  _head->SetFile(this);
+		
+		  // Check for file format version.
+		  if (_head->IsObjectModelVersionPresent())
+			{
+			  // If property isn't present, the default version is 0,
+			  // which is always (supposed to be) legible.  If it is
+			  // present, find out the version number to determine if
+			  // the file is legible.
+			  if (_head->GetObjectModelVersion() >
+				  sCurrentAAFObjectModelVersion)
+				{
+				  // File version is higher than the version
+				  // understood by this toolkit.  Therefore this file
+				  // cannot be read.
+				  return AAFRESULT_FILEREV_DIFF;
+				}
+			}
+		  // Now that the file is open and the header has been
+		  // restored, complete the initialization of the
+		  // dictionary. We obtain the dictionary via the header
+		  // to give the persistence mechanism a chance to work.
+		  ImplAAFDictionary* dictionary = 0;
+		  HRESULT hr = _head->GetDictionary(&dictionary);
+		  if (hr != AAFRESULT_SUCCESS)
+			return hr;
+		  dictionary->ReleaseReference ();
+		  dictionary = 0;
+		  _factory->SetEnableDefRegistration (regWasEnabled);
+
+		  if (IsWriteable())
+			{
+			  // NOTE: If modifying an existing file WITHOUT an IDNT
+			  // object, add a dummy IDNT object to indicate that this
+			  // program was not the creator.
+			  //
+			  aafUInt32	numIdent = 0;
+			  checkResult(_head->CountIdentifications(&numIdent));
+			  if(numIdent == 0)
+				{
+				  _head->AddIdentificationObject
+					((aafProductIdentification_t *)NULL);
+				}
+			  // Now, always add the information from THIS application
+			  _head->AddIdentificationObject(&_preOpenIdent);
+			}
 		}
 	  else
 		{
-		  // bigEndian
-		  _byteOrder = 0x4d4d; // 'MM'
+		  assert (0);
 		}
-
-	  // Restore the header.
-	  bool regWasEnabled = _factory->SetEnableDefRegistration (false);
-	  OMStorable* head = _file->restore();
-	  _head = dynamic_cast<ImplAAFHeader *>(head);
-	  checkExpression(NULL != _head, AAFRESULT_BADHEAD);
-	  // Check for file format version.
-	  if (_head->IsObjectModelVersionPresent())
-		{
-		  // If property isn't present, the default version is 0,
-		  // which is always (supposed to be) legible.  If it is
-		  // present, find out the version number to determine if
-		  // the file is legible.
-		  if (_head->GetObjectModelVersion() >
-			  sCurrentAAFObjectModelVersion)
-			{
-			  // File version is higher than the version understood
-			  // by this toolkit.  Therefore this file cannot be read.
-			  return AAFRESULT_FILEREV_DIFF;
-			}
-		}
-
-	  // Now that the file is open and the header has been
-	  // restored, complete the initialization of the
-	  // dictionary. We obtain the dictionary via the header
-	  // to give the persistence mechanism a chance to work.
-	  ImplAAFDictionary* dictionary = 0;
-	  hr = _head->GetDictionary(&dictionary);
-	  if (hr != AAFRESULT_SUCCESS)
-		return hr;
-	  _factory->SetEnableDefRegistration (regWasEnabled);
-	  dictionary->InitBuiltins();
-	  dictionary->ReleaseReference();
-	  dictionary = 0;
-
-	  checkResult(_head->SetToolkitRevisionCurrent());
-	  
-	  // NOTE: If modifying an existing file WITHOUT an IDNT object, add a
-	  // dummy IDNT object to indicate that this program was not the creator.
-	  //
-	  aafUInt32	numIdent = 0;
-	  checkResult(_head->CountIdentifications(&numIdent));
-	  if(numIdent == 0)
-		{
-		  _head->AddIdentificationObject((aafProductIdentification_t *)NULL);
-		}
-	  // Now, always add the information from THIS application */
-	  _head->AddIdentificationObject(pIdent);
 	}
-  catch (AAFRESULT &rc)
+
+  catch (AAFRESULT &r)
 	{
-	  stat = rc;
-
-	  if (NULL == _head)
-		{
-		  _head->ReleaseReference();
-		  _head = 0;
-		}
+	  stat = r;
 	}
-
   return stat;
-}
-
-
-AAFRESULT ImplAAFFile::pvtCreateNewModify
-    (aafUID_constptr pFileKind,
-	 aafProductIdentification_constptr pIdent)
-{
-	ImplAAFContentStorage	*pCStore = NULL;
-	AAFRESULT stat = AAFRESULT_SUCCESS;
-	aafVersionType_t		theVersion = { 1, 0 };
-
-	try
-	  {
-		// Create the header for the OM manager to use as the root
-		// for the file. Use the OMClassFactory interface for this 
-		// object because the dictionary has not been associated with
-		// a header yet (Chicken 'n Egg problem).
-		const OMClassId& soid =
-		  *reinterpret_cast<const OMClassId *>(&AUID_AAFHeader);
-		_head = static_cast<ImplAAFHeader *>(_factory->create(soid));
-		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
-		
-	  // Make sure the header is initialized with our previously created
-	  // dictionary.
-		_head->SetDictionary(_factory);
-
-		// Set the file format version.
-		//
-		// BobT Fri Jan 21 14:37:43 EST 2000: the default behavior is
-		// that if the version isn't present, it's assumed to Version
-		// 0.  Therefore if the current version is 0, don't write out
-		// the property.  We do this so that hackers examining written
-		// files won't know that a mechanism exists to mark future
-		// incompatible versions, and so will work harder to make any
-		// future changes compatible.
-		if (sCurrentAAFObjectModelVersion)
-		  {
-			_head->SetObjectModelVersion(sCurrentAAFObjectModelVersion);
-		  }
-
-		// Add the ident to the header.
-		checkResult(_head->AddIdentificationObject(pIdent));
-		  
-		// Set the byte order
-		OMByteOrder byteOrder = hostByteOrder();
-		if (byteOrder == littleEndian)
-		  {
-			_byteOrder = 0x4949; // 'II'
-		  }
-		else
-		  { // bigEndian
-			_byteOrder = 0x4d4d; // 'MM'
-		  }
-		_head->SetByteOrder(_byteOrder);
-		_head->SetFileRevision (theVersion);
-
-		//JeffB!!! We must decide whether def-only files have a content storage
-		checkResult(_head->GetContentStorage(&pCStore));
-		pCStore->ReleaseReference(); // need to release this pointer!
-		pCStore = 0;
-
-		// Attempt to create the file.
-		const OMFileSignature aafFileSignature =
-		  *reinterpret_cast<const OMFileSignature *> (pFileKind);
-		assert (_pOMStg);
-		_file = OMFile::openNewModify(_pOMStg,
-									  _factory,
-									  0,
-									  byteOrder,
-									  _head,
-									  aafFileSignature,
-									  _metafactory);
-		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
-		// Relinquish ownership of the storage to the OMFile object.
-		_pOMStg = 0;
-		_file->open ();
-
-		// Now that the file is open and the header has been
-		// restored, complete the initialization of the
-		// dictionary. We obtain the dictionary via the header
-		// to give the persistence mechanism a chance to work.
-		_factory->InitializeOMStorable (_factory->GetBuiltinDefs()->cdDictionary());
-		ImplAAFDictionary* dictionary = 0;
-		HRESULT hr = _head->GetDictionary(&dictionary);
-		if (hr != AAFRESULT_SUCCESS)
-		  return hr;
-		dictionary->InitBuiltins();
-
-		dictionary->ReleaseReference();
-		dictionary = 0;
-
-		_openType = kOmCreate;
-		GetRevision(&_setrev);
-	  }
-	catch (AAFRESULT &rc)
-	  {
-		stat = rc;
-
-		// Cleanup after failure.
-		if (NULL == _head)
-		  {
-			_head->ReleaseReference();
-			_head = 0;
-		  }
-	  }
-
-	return stat;
 }
 
 
@@ -991,7 +917,7 @@ ImplAAFFile::Save ()
 
 	// If any new modes are added then the following line will
 	// have to be updated.
-	if (kOmCreate == _openType || kOmModify == _openType) {
+	if (IsWriteable ()) {
 	  // Assure no registration of def objects in dictionary during
 	  // save operation
 	  ImplAAFDictionarySP dictSP;
@@ -1089,22 +1015,14 @@ ImplAAFFile::ImplAAFFile () :
 		_factory(NULL),
 		_metafactory(NULL),
 		_byteOrder(0),
-		_openType(kOmUndefined),
+		// _openType(kOmUndefined),
 		_head(NULL),
 		_semanticCheckEnable(kAAFFalse),
 		_initialized(kAAFFalse),
-		_isOpen(kAAFFalse)
-
-  ,
-  _preOpenFileKindSet (kAAFFalse),
-  _preOpenFileKind (kNullFileKind),
-  _preOpenIdentSet (kAAFFalse),
-  _preOpenIdent (kNullIdent),
-  _pOMStg (0),
-  _isClosed (false),
-  _isReadable (false),
-  _isWriteable (false)
-
+		// _isOpen(kAAFFalse),
+		_existence (0),
+		_access (kAAFFileAccess_none),
+		_preOpenIdent(kNullIdent)
 {
 }
 
@@ -1132,12 +1050,6 @@ ImplAAFFile::~ImplAAFFile ()
 		delete _file;
 		_file = NULL;
 	}
-
-	if (_pOMStg)
-	  {
-		delete _pOMStg;
-		_pOMStg = 0;
-	  }
 }
 
 void ImplAAFFile::InternalReleaseObjects()
@@ -1170,7 +1082,6 @@ ImplAAFFile::Close ()
 
 	// Close the OM file.
 	_file->close();
-	_isClosed = kAAFTrue;
 
 	// Whenever a file is created or opened a new container is
 	// created.  If we don't want to leak the container object
@@ -1192,7 +1103,7 @@ ImplAAFFile::Close ()
 	}
 
 	_cookie = 0;
-	_isOpen = kAAFFalse;
+	// _isOpen = kAAFFalse;
 	// BobT: don't set this, so we'll remember what open type this
 	// file had
 	// _openType = kOmUndefined;
@@ -1259,24 +1170,38 @@ OMFile * ImplAAFFile::omFile (void)
 
 
 bool ImplAAFFile::IsReadable () const
-{ return _isReadable; }
+{
+  assert (_file);
+  return _file->isReadable();
+}
 
 bool ImplAAFFile::IsWriteable () const
-{ return _isWriteable; }
+{
+  assert (_file);
+  return _file->isWritable();
+}
 
 bool ImplAAFFile::IsOpen () const
-{ return (0 != _isOpen); }
+{
+  if (!_file)
+	return false;
+  assert (_file);
+  return _file->isOpen();
+}
 
 bool ImplAAFFile::IsClosed () const
-{ return _isClosed; }
+{
+  if (!_file)
+	return false;
+  assert (_file);
+  return _file->isClosed();
+}
 
 OMRawStorage * ImplAAFFile::RawStorage ()
 {
   OMRawStorage * r = 0;
-  if (_pOMStg)
-	r = _pOMStg;
-  else if (_file)
-	r = _file->rawStorage ();
+  assert (_file);
+  r = _file->rawStorage ();
   assert (r);
   return r;
 }
