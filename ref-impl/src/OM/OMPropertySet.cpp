@@ -21,6 +21,8 @@ OMPropertySet::OMPropertySet(void)
 
 OMPropertySet::~OMPropertySet(void)
 {
+  TRACE("OMPropertySet::~OMPropertySet");
+
   delete [] _propertySet;
   _propertySet = 0;
 }
@@ -67,6 +69,7 @@ void OMPropertySet::put(OMProperty* property)
   element->_valid = true;
   element->_property->setPropertySet(this);
   _count++;
+
   POSTCONDITION("Property installed", contains(property->propertyId()));
   POSTCONDITION("Consistent property set",
                 property == find(property->propertyId())->_property);
@@ -84,6 +87,8 @@ void OMPropertySet::put(OMProperty* property)
   //   @this const
 void OMPropertySet::iterate(size_t& context, OMProperty*& property) const
 {
+  TRACE("OMPropertySet::iterate");
+
   OMPropertySetElement* element = 0;
   size_t start = context;
   size_t found = 0;
@@ -111,6 +116,8 @@ void OMPropertySet::iterate(size_t& context, OMProperty*& property) const
   //  @this const
 bool OMPropertySet::contains(const OMPropertyId propertyId) const
 {
+  TRACE("OMPropertySet::contains");
+
   OMPropertySetElement* element = find(propertyId);
   if (element != 0) {
     return true;
@@ -126,6 +133,7 @@ bool OMPropertySet::contains(const OMPropertyId propertyId) const
   //   @this const
 size_t OMPropertySet::count(void) const
 {
+  TRACE("OMPropertySet::count");
   POSTCONDITION("Valid count", ((_count >= 0) && (_count <= _capacity)));
   return _count;
 }
@@ -137,6 +145,12 @@ size_t OMPropertySet::count(void) const
   //   @parm The <c OMStorable> object that contains this <c OMPropertySet>.
 void OMPropertySet::setContainer(const OMStorable* container)
 {
+  TRACE("OMPropertySet::setContainer");
+  // The following assertion may need to be changed once we allow
+  // OMStorable::copy and OMStorable::move
+  //
+  PRECONDITION("No valid old container", _container == 0);
+  PRECONDITION("Valid new container", container != 0);
   _container = container;
   POSTCONDITION("Valid count", ((_count >= 0) && (_count <= _capacity)));
 }
@@ -148,18 +162,22 @@ void OMPropertySet::setContainer(const OMStorable* container)
   //   @this const
 OMStorable* OMPropertySet::container(void) const
 {
+  TRACE("OMPropertySet::container");
   return const_cast<OMStorable*>(_container);
 }
 
 bool OMPropertySet::equal(const OMPropertyId& propertyIda,
                           const OMPropertyId& propertyIdb)
 {
+  TRACE("OMPropertySet::equal");
   return propertyIda == propertyIdb;
 }
 
 OMPropertySet::OMPropertySetElement* OMPropertySet::find(
                                            const OMPropertyId propertyId) const
 {
+  TRACE("OMPropertySet::find");
+
   OMPropertySetElement* result = 0;
 
   for (size_t i = 0; i < _capacity; i++) {
@@ -175,6 +193,8 @@ OMPropertySet::OMPropertySetElement* OMPropertySet::find(
 
 OMPropertySet::OMPropertySetElement* OMPropertySet::find(void) const
 {
+  TRACE("OMPropertySet::find");
+
   OMPropertySetElement* result = 0;
 
   for (size_t i = 0; i < _capacity; i++) {
@@ -189,4 +209,5 @@ OMPropertySet::OMPropertySetElement* OMPropertySet::find(void) const
 
 void OMPropertySet::grow(const size_t additionalElements)
 {
+  TRACE("OMPropertySet::grow");
 }
