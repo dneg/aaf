@@ -82,6 +82,9 @@ void OMDataStreamProperty::save(void) const
   OMDataStreamProperty* p = const_cast<OMDataStreamProperty*>(this);
   if (!_exists) {
     p->create();
+	// Overcomes Schemasoft library SEGV when writing zero-length DataStream
+	// property
+    p->close();
   }
   if (hasStreamAccess()) {
     // Set the current position to the end of the stream
