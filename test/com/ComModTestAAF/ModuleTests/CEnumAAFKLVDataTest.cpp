@@ -190,7 +190,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(defs.cdKLVData()->
 					CreateInstance(IID_IAAFKLVData, 
 								   (IUnknown **)&pData));
-		checkResult(pDictionary->LookupTypeDef (kAAFTypeID_UInt8Array, &pBaseType));
 		checkResult(pData->Initialize(*(KLVTags[test]), sizeof(KLVfrowney), (unsigned char *)KLVData[test]));
 		checkResult(pMob->AppendKLVData (pData));
 		pData->Release();
