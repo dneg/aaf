@@ -435,12 +435,12 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if (ppResult == NULL)
 		return AAFRESULT_NULL_PARAM;
-
-	if (! _manufacturerURL.isPresent())
-	  {
-		return AAFRESULT_NO_ESSENCE_DESC;
-	  }
-
+	
+	if (!_manufacturerURL.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
+	}
+	
 	*ppResult = _manufacturerURL;
 	if (*ppResult)
 		(*ppResult)->AcquireReference();

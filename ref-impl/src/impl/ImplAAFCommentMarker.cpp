@@ -45,17 +45,20 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFCommentMarker::GetAnnotation (
       ImplAAFSourceReference ** ppAnnotation)
 {
-  if (NULL == ppAnnotation)
-    return (AAFRESULT_NULL_PARAM);
-
-  *ppAnnotation = _annotation;
-
-  if (*ppAnnotation)
-    (*ppAnnotation)->AcquireReference();
-  else
-    return (AAFRESULT_NULLOBJECT);
-
-  return AAFRESULT_SUCCESS;
+	if (NULL == ppAnnotation)
+		return (AAFRESULT_NULL_PARAM);
+	
+	if (!_annotation.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
+	*ppAnnotation = _annotation;
+	
+	if (*ppAnnotation)
+		(*ppAnnotation)->AcquireReference();
+	else
+		return (AAFRESULT_NULLOBJECT);
+	
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -63,16 +66,16 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFCommentMarker::SetAnnotation (
       ImplAAFSourceReference * pAnnotation)
 {
-  ImplAAFSourceReference *oldValue = _annotation.setValue(0);
-  if (oldValue)
-    oldValue->ReleaseReference();
-
-  _annotation = pAnnotation;
-
-  if (pAnnotation)
-    pAnnotation->AcquireReference();
-
-  return AAFRESULT_SUCCESS;
+	ImplAAFSourceReference *oldValue = _annotation.setValue(0);
+	if (oldValue)
+		oldValue->ReleaseReference();
+	
+	_annotation = pAnnotation;
+	
+	if (pAnnotation)
+		pAnnotation->AcquireReference();
+	
+	return AAFRESULT_SUCCESS;
 }
 
 
