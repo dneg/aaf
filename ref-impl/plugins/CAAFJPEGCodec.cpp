@@ -1827,6 +1827,17 @@ HRESULT STDMETHODCALLTYPE
 				
 				_imageAspectRatio = param.operand.expRational;
 			}
+			else if (EqualAUID(&kAAFPixelFormat, &param.opcode))
+			{	// Validate the in-memory size.
+				checkExpression(param.size == sizeof(param.operand.expColorSpace), AAFRESULT_INVALID_PARM_SIZE);
+
+				// Currently we only support the following pixel transformations.
+				checkExpression(kColorSpaceRGB == param.operand.expColorSpace ||
+					              kColorSpaceYUV == param.operand.expColorSpace,
+					              AAFRESULT_BADPIXFORM);
+
+				_pixelFormat = param.operand.expColorSpace;
+			}
 			else if (EqualAUID(&kAAFCDCICompWidth, &param.opcode))
 			{	// Validate the in-memory size.
 				checkExpression(param.size == sizeof(param.operand.expInt16), AAFRESULT_INVALID_PARM_SIZE);
@@ -1947,14 +1958,13 @@ HRESULT STDMETHODCALLTYPE
 			{	// Write out the current image dimentions for the default stored rectangle.
 				param.operand.expRect.xOffset = param.operand.expRect.yOffset = 0;
 				param.operand.expRect.xSize = _imageWidth;
-				param.operand.expRect.ySize = _imageWidth;
+				param.operand.expRect.ySize = _imageHeight;
 				checkResult(fmt->AddFormatSpecifier (kAAFStoredRect, sizeof(param.operand.expRect), (aafDataBuffer_t)&param.operand.expRect));
 			}
 			else if (EqualAUID(&kAAFSampledRect, &param.opcode))
 			{	// Write out the current sampled rectangle.
 				param.operand.expRect.xOffset = _sampledXOffset;
 				param.operand.expRect.yOffset = _sampledYOffset;
-				param.operand.expRect.ySize = _sampledHeight;
 				param.operand.expRect.xSize = _sampledWidth;
 				param.operand.expRect.ySize = _sampledHeight;
 				checkResult(fmt->AddFormatSpecifier (kAAFSampledRect, sizeof(param.operand.expRect), (aafDataBuffer_t)&param.operand.expRect));
@@ -1963,7 +1973,6 @@ HRESULT STDMETHODCALLTYPE
 			{	// Write out the current sampled rectangle.
 				param.operand.expRect.xOffset = _displayXOffset;
 				param.operand.expRect.yOffset = _displayYOffset;
-				param.operand.expRect.ySize = _displayHeight;
 				param.operand.expRect.xSize = _displayWidth;
 				param.operand.expRect.ySize = _displayHeight;
 				checkResult(fmt->AddFormatSpecifier (kAAFDisplayRect, sizeof(param.operand.expRect), (aafDataBuffer_t)&param.operand.expRect));
@@ -2356,7 +2365,7 @@ HRESULT CAAFJPEGCodec::CompressImage(const aafCompressionParams& param, struct j
 		checkAssertion(NULL != _stream);
 
 		// This version only supports compression of RGB data
-		checkExpression(kColorSpaceRGB == param.colorSpace && 1 == param.horizontalSubsampling,
+		checkExpression(1 == param.horizontalSubsampling,
 		               AAFRESULT_BADPIXFORM);
 
 		// This should already have been calculated.
@@ -2370,14 +2379,31 @@ HRESULT CAAFJPEGCodec::CompressImage(const aafCompressionParams& param, struct j
 		cinfo.image_width = param.imageWidth; 	/* image width and height, in pixels */
 		cinfo.image_height = param.imageHeight;
 		cinfo.input_components = 3;		/* # of color components per pixel */
-		cinfo.in_color_space = JCS_RGB; 	/* colorspace of input image */
+		cinfo.in_color_space = JCS_RGB; 	
+
+		/* colorspace of input image */
+		switch (param.colorSpace)
+		{
+			case kColorSpaceYUV:
+			case kColorSpaceYCrCb:
+				cinfo.in_color_space = JCS_YCbCr;
+				break;
+			
+			case kColorSpaceCMYK:
+				cinfo.in_color_space = JCS_CMYK;
+				break;
+
+			default:
+				cinfo.in_color_space = JCS_RGB;
+		}
 
 		/* Now use the library's routine to set default compression parameters.
 		 * (You must set at least cinfo.in_color_space before calling this,
 		 * since the defaults depend on the source color space.)
 		 */
 		jpeg_set_defaults(&cinfo);
-	
+
+
 		/* Now you can set any non-default parameters you wish to.
 		 * Here we just illustrate the use of quality (quantization table) scaling:
 		 */
@@ -2462,8 +2488,7 @@ HRESULT CAAFJPEGCodec::DecompressImage(aafCompressionParams& param, struct jpeg_
 		checkAssertion(NULL != _stream);
 
 		// This version only supports compression of RGB data
-		checkExpression(kColorSpaceRGB == _pixelFormat && 1 == _horizontalSubsampling,
-		               AAFRESULT_BADPIXFORM);
+		checkExpression(1 == _horizontalSubsampling, AAFRESULT_BADPIXFORM);
 
 		
 		/* Step 3: read file parameters with jpeg_read_header() */
@@ -2477,6 +2502,23 @@ HRESULT CAAFJPEGCodec::DecompressImage(aafCompressionParams& param, struct jpeg_
 
 
 		/* Step 4: set parameters for decompression */
+
+		// Set the output color space.
+		switch (param.colorSpace)
+		{
+			case kColorSpaceYUV:
+			case kColorSpaceYCrCb:
+				cinfo.out_color_space = JCS_YCbCr;
+				break;
+			
+			case kColorSpaceCMYK:
+				cinfo.out_color_space = JCS_CMYK;
+				break;
+
+			default:
+				cinfo.out_color_space = JCS_RGB;
+		}
+
 
 		/* In this example, we don't need to change any of the defaults set by
 		 * jpeg_read_header(), so we do nothing here.
