@@ -34,8 +34,6 @@
 
 #include "aafrdli.h"
 
-
-
 #include "AAFResult.h"
 
 #include <Files.h>
@@ -44,6 +42,10 @@
 #include <CodeFragments.h>
 #include <MacMemory.h>
 #include <Errors.h>
+
+#ifdef _DEBUG
+#include <TextUtils.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -292,8 +294,9 @@ AAFRDLIRESULT AAFLoadSharedLibrary(const char* name, AAFLibraryHandle* pLibHandl
   {
     result = err;
 #ifdef _DEBUG
-    p2cstr((unsigned char *)errMessage);
-    fprintf(stderr, "\nGetSharedLibrary(\"%s\"...); \n\tfailed with an error code = %d and errMessage:\"%s\"\n", name, hr, errMessage);
+    Str255 dstBuf;
+    CopyCStringToPascal( errMessage, dstBuf );
+    fprintf(stderr, "\nGetSharedLibrary(\"%s\"...); \n\tfailed with an error code = %d and errMessage:\"%s\"\n", name, hr, dstBuf);
     fflush(stderr);
 #endif
   }
@@ -389,8 +392,9 @@ AAFRDLIRESULT AAFFSpLoadLibraryFile(FSSpec *pSpec, AAFLibraryHandle* pLibHandle)
                   StrFileName errName;
                   memcpy(errName, &pSpec->name[1], pSpec->name[0]);
                   errName[pSpec->name[0]] = 0;
-                  p2cstr((unsigned char *)errMessage);
-                  fprintf(stderr, "\nGetDiskFragment(\"%s\"...); \n\tfailed with an error code = %d and errMessage:\"%s\"\n", errName, result, errMessage);
+                  Str255 dstBuf;
+                  CopyCStringToPascal( errMessage, dstBuf );
+                  fprintf(stderr, "\nGetDiskFragment(\"%s\"...); \n\tfailed with an error code = %d and errMessage:\"%s\"\n", errName, result, dstBuf );
                   fflush(stderr);
   #endif
                 }
