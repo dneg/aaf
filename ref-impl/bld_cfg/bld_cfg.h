@@ -55,9 +55,23 @@ AAF_BUILD_CONFIG_EXTERN_C_TRAILER
  */
 
 
-/* so far only the SGI compiler does _not_ have built-in bool */
-#if ! (__sgi)
+/*
+ * So far the following compilers don't have bool:
+ *  SGI
+ *  MS VC++ 4.2 or earlier (_MSC_VER == 1020 for 4.2)
+ */
+#if ! (__sgi || (_MSC_VER <= 1020))
   #define AAF_BUILD_CONFIG_BUILTIN_BOOL	1
+#endif
+
+/*
+ * However! some compilers which don't have bool have the infuriating
+ * characteristic that they still reserve the bool keyword.  Most
+ * notably, this occurs in MSVC++4.2.  Of course, all compilers which
+ * _do_ have bool also have the keyword reserved.
+ */
+#if ! (__sgi)
+  #define AAF_BUILD_CONFIG_BOOL_RESERVED 1
 #endif
 
 #if __cplusplus
