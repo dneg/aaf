@@ -233,14 +233,14 @@ public:
   static AAFRESULT test();
 
 private:
-  OMWideStringProperty                             _companyName;
-  OMWideStringProperty                             _productName;
-  // StructuredProperty<aafProductVersion_t> _productVersion;
-  OMWideStringProperty                             _productVersionString;
+  OMWideStringProperty                      _companyName;
+  OMWideStringProperty						_productName;
+  OMFixedSizeProperty<aafProductVersion_t>	_productVersion;
+  OMWideStringProperty                      _productVersionString;
   // FixedSizeProperty<AUID>                 _productId;
-  OMFixedSizeProperty<aafTimeStamp_t>          _date;
-  // StructuredProperty<aafProductVersion_t> _toolkitVersion;
-  OMWideStringProperty                             _platform;
+  OMFixedSizeProperty<aafTimeStamp_t>        _date;
+  OMFixedSizeProperty<aafProductVersion_t>	_toolkitVersion;
+  OMWideStringProperty                        _platform;
   // FixedSizeProperty<AUID>                 _generation;
 };
 
