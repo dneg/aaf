@@ -16,6 +16,10 @@
 #include "ImplAAFMobSlot.h"
 #endif
 
+#ifndef __ImplAAFTimelineMobSlot_h__
+#include "ImplAAFTimelineMobSlot.h"
+#endif
+
 const int PID_MOB_MOBID			= 0;
 const int PID_MOB_NAME			= 1;
 const int PID_MOB_CREATE_TIME	= 2;
@@ -76,8 +80,28 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetName
-        (aafString_t *  name);  //@parm [in,out] Mob Name
+        (aafWChar *  name);  //@parm [in,out] Mob Name
+ 
+  //****************
+  // GetNameLen()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetNameLen
+        (aafInt32 *  nameLen);  //@parm [in,out] Mob Name length
 
+  //****************
+  // AppendSlot()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    AppendSlot
+        (ImplAAFMobSlot *  pSlot);  //@parm [in,out] Mob Name length
+  //****************
+  // RemoveSlot()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveSlot
+        (ImplAAFMobSlot *  pSlot);  //@parm [in,out] Mob Name length
+   
   //****************
   // GetModTime()
   //
@@ -99,10 +123,10 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetMobInfo
-        (aafString_t *  name,   //@parm [in,out] Mob Name
-		 aafTimeStamp_t *  lastModified,   //@parm [out] Modified Time
-         aafTimeStamp_t *  creationTime);  //@parm [out] Creation Time
-
+        (aafTimeStamp_t *  lastModified,   //@parm [out] Modified Time
+         aafTimeStamp_t *  creationTime,  //@parm [out] Creation Time
+		 aafWChar *  name,   //@parm [in,out] Mob Name
+		 aafInt32  strSize);
 
   //****************
   // GetNumSlots()
@@ -119,7 +143,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetNewProps
         (aafBool  isMasterMob,   //@parm [in] Whether or not this is a Master Mob
-		 aafString_t *  name,   //@parm [in,ref] Mob Name (optional)
+		 aafWChar *  name,   //@parm [in,ref] Mob Name (optional)
          aafBool  isPrimary);  //@parm [in] Whether or not this is a primary mob
 
 
@@ -143,7 +167,7 @@ public:
   // SetIdentity()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetIdentity
+    SetMobID
         (aafUID_t *  mobID);  //@parm [in, ref] New Mob ID
 
 
@@ -152,7 +176,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetName
-        (aafString_t *  name);  //@parm [in, ref] Mob Name
+        (aafWChar *  name);  //@parm [in, ref] Mob Name
 
 
 // skip virtual aafErr_t Verify(char *buf, validateData_t *result);
@@ -173,18 +197,30 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     AppendNewSlot
+        (ImplAAFSegment * segment,   //@parm [in] Segment to append as slot component
+		 aafSlotID_t  slotID,   //@parm [in] The Slot ID
+         aafWChar *  slotName,   //@parm [in] Slot Name (optional)
+		 ImplAAFMobSlot ** newSlot);  //@parm [out] Newly created slot
+
+
+  //****************
+  // AppendNewSlot()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    AppendNewTimelineSlot
         (aafRational_t  editRate,   //@parm [in] Edit rate property value
-		 ImplAAFSegment * segment,   //@parm [in] Segment to append as track component
-		 aafTrackID_t  trackID,   //@parm [in] The Track ID
-         aafString_t *  trackName,   //@parm [in] Track Name (optional)
-		 ImplAAFMobSlot ** newTrack);  //@parm [out] Newly created track
+		 ImplAAFSegment * segment,   //@parm [in] Segment to append as slot component
+		 aafSlotID_t  slotID,   //@parm [in] The Slot ID
+         aafWChar *  slotName,   //@parm [in] Slot Name (optional)
+		 aafPosition_t  origin,
+		 ImplAAFTimelineMobSlot ** newSlot);  //@parm [out] Newly created slot
 
 
   //****************
   // GetAllMobSlots()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetAllMobSlots
+    EnumAAFAllMobSlots
         (ImplEnumAAFMobSlots ** ppEnum);  //@parm [out,retval] Mob Slot Enumeration
 
 
@@ -193,9 +229,15 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     AppendComment
-        (aafString_t *  category,   //@parm [in,ref] Comment heading
-		 aafString_t *  comment);  //@parm [in,ref] Comment value
+        (aafWChar *  category,   //@parm [in,ref] Comment heading
+		 aafWChar *  comment);  //@parm [in,ref] Comment value
 
+  //****************
+  // RemoveComment()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveComment
+        (aafMobComment_t *  comment);
 
   //****************
   // GetNumComments()
@@ -209,7 +251,7 @@ public:
   // GetComments()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetComments
+    EnumAAFAllMobComments
         (ImplEnumAAFMobComments ** ppEnum);  //@parm [out,retval] Mob Comments
 
 
@@ -219,18 +261,18 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     OffsetToMobTimecode
-        (ImplAAFSegment * tcTrackID,   //@parm [in] Current track
+        (ImplAAFSegment * tcSlotID,   //@parm [in] Current slot
 		 aafPosition_t *  offset,   //@parm [in,ref] Offset into segment
          aafTimecode_t *  result);  //@parm [out] The resulting timecode
 
 
   //****************
-  // FindTrackByTrackID()
+  // FindSlotBySlotID()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    FindTrackByTrackID
-        (aafTrackID_t  trackID,   //@parm [in] The requested track id
-		 ImplAAFMobSlot ** destTrack);  //@parm [out] The requested track
+    FindSlotBySlotID
+        (aafSlotID_t  slotID,   //@parm [in] The requested slot id
+		 ImplAAFMobSlot ** destSlot);  //@parm [out] The requested slot
 
 
 // trr: Does this method only work for AAFSourceMobs? If so we should probably move
@@ -240,8 +282,8 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     OffsetToTimecode
-        (aafTrackID_t*  trackID,   //@parm [in,ref] Track ID of the track in the input mob
-		 aafPosition_t *  offset,   //@parm [in] Offset into the given track
+        (aafSlotID_t*  slotID,   //@parm [in,ref] Slot ID of the slot in the input mob
+		 aafPosition_t *  offset,   //@parm [in] Offset into the given slot
          aafTimecode_t *  result);  //@parm [out] The resulting timecode
 
 
@@ -253,8 +295,8 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     TimecodeToOffset
         (aafTimecode_t  timecode,   //@parm [in] The timecode value
-		 aafTrackID_t  trackID,   //@parm [in] Track ID of track in source mob
-         aafFrameOffset_t *  result);  //@parm [out] Resulting offset in source track
+		 aafSlotID_t  slotID,   //@parm [in] Slot ID of slot in source mob
+         aafFrameOffset_t *  result);  //@parm [out] Resulting offset in source slot
 
 
 
@@ -264,7 +306,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     Copy
-        (aafString_t *  destMobName,   //@parm [in] Optional Input. The name to be assigned to the new copy of the Mob.
+        (aafWChar *  destMobName,   //@parm [in] Optional Input. The name to be assigned to the new copy of the Mob.
   // The destMobName argument is optional. Specify a NULL value if no desti-
   // nation Mob name is desired.
 		 ImplAAFMob ** destMob);  //@parm [out] Destination Mob
