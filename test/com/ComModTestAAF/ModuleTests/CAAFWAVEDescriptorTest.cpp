@@ -66,15 +66,6 @@ typedef struct tWAVEFORMATEX
 #endif
 
 
-
-#if defined(_WIN32) || defined(WIN32)
-  // Wave data does not have to be swapped on Windows platforms.
-  #define SWAPSUMMARY(summary)
-#else
-  // Assume all other platforms are big-endian.
-  // this will change when we adapt the sdk to
-  // other platforms...
-
   // Simple utilities to swap bytes.
   static void SwapBytes(void *buffer, size_t count)
   {
@@ -103,6 +94,15 @@ typedef struct tWAVEFORMATEX
 
     // Ignore extra information for now trr: 1999-02-19
   }
+
+#if defined(_WIN32) || defined(WIN32)
+  // Wave data does not have to be swapped on Windows platforms.
+  #define SWAPSUMMARY(summary)
+#else
+  // Assume all other platforms are big-endian.
+  // this will change when we adapt the sdk to
+  // other platforms...
+
 
   #define SWAPSUMMARY(summary) SwapSummary(summary);
 #endif
