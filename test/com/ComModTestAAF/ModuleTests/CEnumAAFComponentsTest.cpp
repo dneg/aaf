@@ -311,21 +311,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
     // Create the file.
-    checkResult(CoCreateInstance(CLSID_AAFFile,
-								 NULL, 
-								 CLSCTX_INPROC_SERVER, 
-								 IID_IAAFFile, 
-								 (void **)&pFile));
-		checkResult(pFile->Initialize());
-		checkResult(pFile->OpenNewModify(pFileName, 0, &ProductInfo));
+		checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
 	  bFileOpen = true;
   
     // We can't really do anthing in AAF without the header.
-	checkResult(pFile->GetHeader(&pHeader));
+	  checkResult(pFile->GetHeader(&pHeader));
 
     // Get the number of mobs to force creation of the content storage.
-	// This is temporary as the content storage should be created by
-	// the call to OpenNewModify above.
+	  // This is temporary as the content storage should be created by
+	  // the call to OpenNewModify above.
     aafNumSlots_t n;
     checkResult(pHeader->GetNumMobs(kAllMob, &n));
 
@@ -390,13 +384,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   try
   {
     // Open the file
-    checkResult(CoCreateInstance(CLSID_AAFFile,
-						     NULL, 
-						     CLSCTX_INPROC_SERVER, 
-						     IID_IAAFFile, 
-						     (void **)&pFile));
-    checkResult(pFile->Initialize());
-    checkResult(pFile->OpenExistingRead(pFileName, 0));
+    checkResult(AAFFileOpenExistingRead(pFileName, 0, &pFile));
 	  bFileOpen = true;
 
     // We can't really do anthing in AAF without the header.
