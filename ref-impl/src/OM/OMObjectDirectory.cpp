@@ -44,7 +44,7 @@ OMObjectDirectory::OMObjectDirectory(void)
 
   _table = new TableEntry[_capacity];
   ASSERT("Valid heap pointer", _table != 0);
-  for (int i = 0; i < _capacity; i++) {
+  for (size_t i = 0; i < _capacity; i++) {
     _table[i]._object = 0;
     _table[i]._name = 0;
   }
@@ -52,7 +52,7 @@ OMObjectDirectory::OMObjectDirectory(void)
 
 OMObjectDirectory::~OMObjectDirectory(void)
 {
-  for (int i = 0; i < _current; i++) {
+  for (size_t i = 0; i < _current; i++) {
     delete [] _table[i]._name;
   }
   delete [] _table;
@@ -65,7 +65,7 @@ bool OMObjectDirectory::lookup(const wchar_t* name, const OMStorable*& p) const
   PRECONDITION("Valid name to look up", validWideString(name));
   bool result = false;
 
-  for (int i = 0; i < _current; i++) {
+  for (size_t i = 0; i < _current; i++) {
     int status = compareWideString(name, _table[i]._name);
     if (status == 0) {
       result = true;
@@ -90,14 +90,14 @@ void OMObjectDirectory::insert(const wchar_t* name, const OMStorable* p)
   }
 }
 
-int OMObjectDirectory::count(void) const
+size_t OMObjectDirectory::count(void) const
 {
   return _current;
 }
 
 void OMObjectDirectory::dump(void) const
 {
-  for (int i = 0; i < _current; i++) {
+  for (size_t i = 0; i < _current; i++) {
     cout << i << " [" << _table[i]._object << "] \"";
     printWideString(_table[i]._name);
     cout << "\"" << endl;

@@ -52,7 +52,7 @@ public:
 
   // Count of valid entries.
   //
-  int count(void) const;
+  size_t count(void) const;
 
   void dump(void) const;
 
@@ -62,8 +62,8 @@ private:
     OMStorable* _object;
     wchar_t* _name;
   };
-  int _capacity;        // Number of potential entries.
-  int _current;         // Index of first unoccupied entry.
+  size_t _capacity;        // Number of potential entries.
+  size_t _current;         // Index of first unoccupied entry.
   TableEntry* _table;   // Dynamically allocated array.
 
 };
