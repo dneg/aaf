@@ -48,7 +48,6 @@
 
 
 
-
 #ifndef __CAAFObject_h__
 #include "CAAFObject.h"
 #endif
@@ -56,7 +55,6 @@
 
 class CAAFMob
   : public IAAFMob,
-    public IAAFMob2,
     public CAAFObject
 {
 protected:
@@ -1039,98 +1037,6 @@ public:
     // KLV data object to remove 
     /*[in]*/ IAAFKLVData * pData);
 
-
-
-
-  //***********************************************************
-  // METHOD NAME: AppendAttribute()
-  //
-  // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFMob2 | AppendAttribute |
-  // Append and attribute name/value pair to the attribute list. 
-  // @end
-  // 
-  STDMETHOD (AppendAttribute)
-   (
-    // @parm [in] aafCharacter_constptr | pName | The attribute name.
-    aafCharacter_constptr  pName,
-
-    // @parm [in] aafCharacter_constptr | pValue | The attribute value.
-    aafCharacter_constptr  pValue
-  );
-
-  //***********************************************************
-  // METHOD NAME: CountAttributes()
-  //
-  // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFMob2 | CountAttributes |
-  // Return the number of attributes contained by this mob 
-  // @end
-  // 
-  STDMETHOD (CountAttributes)
-   (
-    // @parm [out] aafUInt32* | pNumAttributes | Pointer to attribute count.
-    aafUInt32*  pNumAttributes
-  );
-
-  //***********************************************************
-  // METHOD NAME: GetAttributes()
-  //
-  // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFMob2 | GetAttributes |
-  // Return an attribute enumerator for this mob. 
-  // @end
-  // 
-  STDMETHOD (GetAttributes)
-   (
-    // @parm [out] EnumAAFTaggedValues | ppEnum | Pointer to the new enumerator object created by this method.
-    IEnumAAFTaggedValues ** ppEnum
-  );
-
-  //***********************************************************
-  // METHOD NAME: RemoveAttribute()
-  //
-  // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFMob2 | RemoveAttribute |
-  // Remove an attribute (tagged value).
-  // @end
-  // 
-  STDMETHOD (RemoveAttribute)
-   (
-    // @parm [in] AAFTaggedValue | pAttribute | Pointer to the tagged value attribute.
-    IAAFTaggedValue * pAttribute
-  );
-
-  //***********************************************************
-  // METHOD NAME: SetUsageCode()
-  //
-  // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFMob2 | SetUsageCode |
-  // Set this mob's usage code. 
-  // @end
-  // 
-  STDMETHOD (SetUsageCode)
-   (
-    // @parm [in] aafUID_constref | usageCode | The usage code value.
-    aafUID_constref  usageCode
-  );
-
-  //***********************************************************
-  // METHOD NAME: GetUsageCode()
-  //
-  // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFMob2 | GetUsageCode |
-  // Get this mob's usage code. 
-  // @end
-  // 
-  STDMETHOD (GetUsageCode)
-   (
-    // @parm [out] aafUID_t* | pUsageCode | Pointer to usage code.
-    aafUID_t*  pUsageCode
-  );
-
-
-
 protected:
   // 
   // Declare the QI that implements for the interfaces
@@ -1151,4 +1057,5 @@ public:
 };
 
 #endif // ! __CAAFMob_h__
+
 
