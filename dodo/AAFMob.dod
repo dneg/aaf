@@ -42,6 +42,9 @@ AD_FORWARD_DECLARATION(AAFTimelineMobSlot)
 AD_FORWARD_DECLARATION(AAFFile)
 AD_FORWARD_DECLARATION(EnumAAFMobSlots)
 AD_FORWARD_DECLARATION(EnumAAFTaggedValues)
+AD_FORWARD_DECLARATION(AAFKLVData)
+AD_FORWARD_DECLARATION(EnumAAFKLVData)
+
 AD_CLASS_UUID(B1A21375, 1A7D, 11d2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A21374, 1A7D, 11d2, BF, 78, 00, 10, 4B, C9, 15, 6D)
@@ -857,4 +860,110 @@ AD_XMETHOD2(Copy,
   //
   // AAFRESULT_NULL_PARAM
   //   - either pDestMobName or pDestMob arguments is NULL.)
+
+AD_XMETHOD1(AppendKLVData,
+			[in],
+			objIn,
+			AAFKLVData,
+			pData,
+			KLV object,
+
+			Appends a pre-existing KLV Data object to the specified
+  // Mob.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pKLV pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - the pData arg is NULL.)
+
+
+AD_XMETHOD1(CountKLVData,
+			[out],
+			objPass,
+			aafUInt32 *,
+			pNumData,
+			Number  of KLV data objects,
+
+			return total number of KLV data objects attached to this mob.
+  //
+  // Succeeds if all of the following are true:
+  // - the pNumData pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pNumComments.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumData arg is NULL.)
+
+
+AD_XMETHOD1(GetKLVData,
+			[out],
+			objOut,
+			EnumAAFKLVData,
+			ppEnum,
+			KLV data objects,
+
+			return the enumeration for all KLV data objects on this mob.  The returned
+  // enumerator is AddRef\(\)ed before it is returned.  The enumerator
+  // is implemented as a EnumAAFKLVData.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEnum.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.)
+
+
+AD_XMETHOD1(RemoveKLVData,
+			[in],
+			objIn,
+			AAFKLVData,
+			pData,
+			KLV data object to remove,
+
+  // Removes the given KLV data object from this mob.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pData pointer is valid.
+  // - the given KLV data object is present in the mob.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pData is null.
+  //
+  // AAFRESULT_OBJECT_NOT_FOUND
+  //   - the given KLV data object is not in this mob.)
 AD_XCLASS_END(Abstract, StoredObject)

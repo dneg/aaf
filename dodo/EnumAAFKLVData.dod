@@ -1,0 +1,24 @@
+#c/*************************************************\
+#c*													*
+#c* Advanced Authoring Format						*
+#c*													*
+#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
+#c*													*
+#c\*************************************************/
+#startm .this-module 0
+EnumAAFKLVData\
+#endm
+#startm .parent-module 0
+AAFRoot\
+#endm
+#c
+AD_HEAD
+AD_FORWARD_DECLARATION(AAFKLVData)
+AD_CLASS_UUID(46114415, 0676, 11d4, A3, 56, 00, 90, 27, DF, CA, 6A)
+
+AD_DEFAULT_UUID(46114416, 0676, 11d4, A3, 56, 00, 90, 27, DF, CA, 6A)
+AD_XCLASS_BEGIN(Concrete, Transient)
+AD_STD_METHOD_ENUMERATOR(KLVData,
+						 KLVData,
+						 KLV Data)
+AD_XCLASS_END(Concrete, Transient)
