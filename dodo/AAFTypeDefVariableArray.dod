@@ -20,6 +20,7 @@ AD_IDL(//
 // AAF persistent objects.
 AD_STD_COMMENT_IFC_HEADER)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
+AD_FORWARD_DECLARATION(EnumAAFPropertyValues)
 AD_CLASS_UUID(307e9e65, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(307e9e66, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
@@ -405,4 +406,30 @@ AD_XMETHOD3(SetCArray,
 
 
 AD_OVERRIDE(.method-GetTypeCategory)
+
+AD_XMETHOD2(GetElements,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			PSetPropVal,
+			property value to read,
+
+			[out],
+			objOut,
+			EnumAAFPropertyValues,
+			ppEnum,
+			enumerator across property values,
+
+     Returns an enumerator across elements in this set.
+  // 
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - The PSetPropVal pointer is valid.
+  // - The ppEnum pointer is valid.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either PSetPropVal or ppEnum\))
+
+
 AD_XCLASS_END(Concrete, StoredObject)
