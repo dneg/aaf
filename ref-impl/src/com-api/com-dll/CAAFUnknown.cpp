@@ -145,7 +145,7 @@ ULONG CAAFUnknown::CAAFPrivateUnknown::AddRef
 	void
 )
 {
-    return InterlockedIncrement(reinterpret_cast<long *>(&m_cRef));
+    return CAAFServer::InterlockedIncrement(&m_cRef);
 }
 
 //=--------------------------------------------------------------------------=
@@ -164,7 +164,7 @@ ULONG CAAFUnknown::CAAFPrivateUnknown::Release
     void
 )
 {
-    ULONG cRef = InterlockedDecrement(reinterpret_cast<long *>(&m_cRef));
+    ULONG cRef = CAAFServer::InterlockedDecrement(&m_cRef);
 
     if (0 == m_cRef)
         delete This();
@@ -191,7 +191,7 @@ ULONG CAAFUnknown::CAAFPrivateUnknown::Release
 //
 HRESULT CAAFUnknown::InternalQueryInterface
 (
-    REFIID  riid,			// @parm [in] interface they want
+    REFIID  /*riid*/,			// @parm [in] interface they want
     void  **ppvObjOut		// @parm [out] where they want to put the resulting object ptr.
 )
 {
