@@ -127,4 +127,20 @@ const aafUID_t kAAFSignature_Aaf512Binary = kAAFSignature_Aaf512Binary_Value;
 {0x0d010201, 0x0200, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x03, 0x02, 0x01, 0x01}};
 const aafUID_t kAAFSignature_Aaf4KBinary = kAAFSignature_Aaf4KBinary_Value;
 
+
+// Deprecated symbols, which may be removed in a future release
+const aafUID_t aafFileKindDontCare = kAAFFileKind_DontCare;
+const aafUID_t aafFileKindPathalogical = kAAFFileKind_Pathological;
+const aafUID_t aafFileKindAafMSSBinary = kAAFFileKind_AafM512Binary;
+const aafUID_t aafFileKindAafM4KBinary = kAAFFileKind_AafM4KBinary;
+const aafUID_t aafFileKindAafSSSBinary = kAAFFileKind_AafS512Binary;
+const aafUID_t aafFileKindAafS4KBinary = kAAFFileKind_AafS4KBinary;
+const aafUID_t aafFileKindAafXmlText = kAAFFileKind_AafXmlText;
+const aafUID_t aafFileKindMxfKlvBinary = kAAFFileKind_MxfKlvBinary;
+const aafUID_t aafFileKindAafSSBinary = kAAFFileKind_Aaf512Binary;
+const aafUID_t aafFileKindAaf4KBinary = kAAFFileKind_Aaf4KBinary;
+const aafUID_t aafSignature_Aaf_SSBinary = kAAFSignature_Aaf512Binary;
+const aafUID_t aafSignature_Aaf_SSBin_4K = kAAFSignature_Aaf4KBinary;
+
+
 #endif // ! __AAFFileKinds_h__
