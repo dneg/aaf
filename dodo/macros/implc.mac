@@ -574,6 +574,10 @@ AAFRESULT STDMETHODCALLTYPE
 #c Arguments: none
 #c
 #startm AD_CLASS_END 00
+
+extern "C" const aafClassID_t CLSID_.this-module;
+
+OMDEFINE_STORABLE(.this-module, CLSID_.this-module);
 #endm
 
 
