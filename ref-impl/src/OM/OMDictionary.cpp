@@ -71,7 +71,10 @@ OMPropertyDefinition* OMDictionary::remove(const OMPropertyId propertyId)
 {
   TRACE("OMDictionary::remove");
 
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Valid property id", propertyId != 0);
+  PRECONDITION("Definition present",
+                                    _propertyDefinitions.contains(propertyId));
+
   OMPropertyDefinition* result = 0;
   bool status = _propertyDefinitions.find(propertyId, result);
   ASSERT("Property definition found", status);
@@ -94,14 +97,37 @@ bool OMDictionary::contains(const OMPropertyId propertyId)
   return result;
 }
 
+struct {
+  OMPropertyId _pid;
+  wchar_t* _name;
+} _properties[] = {
+  {0x0001, L"MetaDictionary"},
+  {0x0002, L"Header"}
+};
+
 void OMDictionary::initialize(void)
 {
   TRACE("OMDictionary::initialize");
-  ASSERT("Unimplemented code not reached", false);
+
+  for (size_t i = 0; i < sizeof(_properties)/sizeof(_properties[0]); i++) {
+    OMPropertyDefinition* d =
+      new OMBuiltinPropertyDefinition (0,
+                                       _properties[i]._name,
+                                       _properties[i]._pid,
+                                       false);
+    ASSERT("Valid heap pointer", d != 0);
+    insert(d->localIdentification(), d);
+  }
 }
 
 void OMDictionary::finalize(void)
 {
   TRACE("OMDictionary::finalize");
-  ASSERT("Unimplemented code not reached", false);
+
+  for (size_t i = 0; i < sizeof(_properties)/sizeof(_properties[0]); i++) {
+    if (contains(_properties[i]._pid)) {
+      OMPropertyDefinition* d = remove(_properties[i]._pid);
+      delete d;
+    }
+  }
 }
