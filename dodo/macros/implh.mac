@@ -91,7 +91,7 @@ class Impl%01;
 #c Argument: class name
 #c
 #startm AD_FORWARD_DECLARATION 01
-class %01;
+class Impl%01;
 #endm
 
 #ccccccccccccccccccccccccccc
