@@ -33,7 +33,7 @@
 
 #include "AAFResult.h"
 #include "AAFFileKinds.h"
-#include "ImplAAFFileSignatures.h"
+#include "AAFFileSignatures.h"
 
 #include <stdio.h>
 #include <string.h>
