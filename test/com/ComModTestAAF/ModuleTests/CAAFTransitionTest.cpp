@@ -110,6 +110,12 @@ do {\
 const aafUID_t kTestEffectID = { 0xD15E7611, 0xFE40, 0x11d2, { 0x80, 0xA5, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
 const aafUID_t kTestParmID = { 0xC7265931, 0xFE57, 0x11d2, { 0x80, 0xA5, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
 
+static const 	aafMobID_t	TEST_MobID =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0x9c671b5c, 0x0405, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
+
+
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
 	IAAFFile *					pFile = NULL;
@@ -133,7 +139,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFParameterDef*			pParamDef = NULL;
 	IAAFConstantValue*			pConstantValue = NULL;
 	
-	aafMobID_t					newMobID;
 	aafProductIdentification_t	ProductInfo;
 	HRESULT						hr = S_OK;
 	aafLength_t					transitionLength;
@@ -212,8 +217,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pCompMob->Initialize(L"Transition Test"));
 		// Get a MOB interface
 		checkResult(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
-		checkResult(CoCreateGuid((GUID *)&newMobID));
-		checkResult(pMob->SetMobID(newMobID));
+		checkResult(pMob->SetMobID(TEST_MobID));
 
 		// Create a Sequence
 		checkResult(defs.cdSequence()->
