@@ -102,18 +102,80 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFMobs::Next (aafUInt32  /*count*/,
-                           ImplAAFMob ** /*ppMobs*/,
-                           aafUInt32 *  /*pFetched*/)
+    ImplEnumAAFMobs::Next (aafUInt32 count,
+                           ImplAAFMob **ppMobs,
+                           aafUInt32 *pFetched)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplAAFMob*		pMob;
+	aafUInt32		numMobs;
+	HRESULT			hr;
+
+	if ((pFetched == NULL && count != 1) || (pFetched != NULL && count == 1))
+		return E_INVALIDARG;
+
+	// Point at the first component in the array.
+	pMob = *ppMobs;
+	for (numMobs = 0; numMobs < count; numMobs++)
+	{
+		hr = NextOne(&pMob);
+		if (FAILED(hr))
+			break;
+
+		// Point at the next component in the array.  This
+		// will increment off the end of the array when
+		// numComps == count-1, but the for loop should
+		// prevent access to this location.
+		pMob++;
+	}
+	
+	if (pFetched)
+		*pFetched = numMobs;
+
+	return hr;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFMobs::Skip (aafUInt32  /*count*/)
+    ImplEnumAAFMobs::Skip (aafUInt32 count)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	AAFRESULT	hr;
+	aafInt32	newCurrent, siz;
+
+	newCurrent = _current + count;
+
+ 	switch(_criteria.searchTag)
+	{
+		case kNoSearch:
+			_cStorage->GetNumMobs(kAllMob, &siz);
+			break;
+
+		case kByMobKind:
+			_cStorage->GetNumMobs(_criteria.tags.mobKind, &siz);
+			break;
+
+		case kByMobID:
+		case kByName:
+//			aafString_t *name;
+		case kByClass:
+//			aafClassID_t objClass;	// shouldn't this be a pointer?
+		case kByDatakind:
+//			aafUID_t datadef;	// shouldn't this be a pointer?
+		case kByMediaCrit:
+//		aafCriteriaType_t mediaCrit;
+			return(AAFRESULT_NOT_IMPLEMENTED);
+		}
+
+	if(newCurrent < siz)
+	{
+		_current = newCurrent;
+		hr = AAFRESULT_SUCCESS;
+	}
+	else
+	{
+		hr = E_FAIL;
+	}
+
+	return hr;
 }
 
 
@@ -128,19 +190,27 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFMobs::Clone (ImplEnumAAFMobs **ppEnum)
 {
-	ImplEnumAAFMobs		*result;
-
-	result = (ImplEnumAAFMobs *)CreateImpl(CLSID_EnumAAFMobs);
-	if(result != NULL)
+	ImplEnumAAFMobs*	theEnum;
+	HRESULT				hr;
+	
+	theEnum = (ImplEnumAAFMobs *)CreateImpl(CLSID_EnumAAFMobs);
+	if (theEnum == NULL)
+		return E_FAIL;
+		
+	hr = theEnum->SetContentStorage(_cStorage);
+	if (SUCCEEDED(hr))
 	{
-		result->_current = _current;
-		result->_cStorage = _cStorage;
-		result->_criteria = _criteria;
-		*ppEnum = result;
-		return AAFRESULT_SUCCESS;
+		theEnum->Reset();
+		theEnum->Skip(_current);
+		*ppEnum = theEnum;
 	}
 	else
-		return AAFRESULT_NOMEMORY;
+	{
+		theEnum->ReleaseRef();
+		*ppEnum = NULL;
+	}
+
+	return hr;
 }
 
 //Internal
