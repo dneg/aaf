@@ -44,7 +44,7 @@ public:
   virtual ~OMWideStringProperty(void);
 
     // @cmember Assignment operator.
-  OMWideStringProperty& operator = (const wchar_t * value);
+  OMWideStringProperty& operator = (const wchar_t* value);
 
 };
 
