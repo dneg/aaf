@@ -2736,7 +2736,7 @@ void OMMSSStoredObject::externalizeUInt16Array(const OMUInt16* internalArray,
 * MS VC++ versions prior to version 7.0 do not define STGOPTIONS.
 */
 #ifdef OM_USE_STORAGE_EX
-#if _MSC_VER < 1300
+#ifndef STGOPTIONS_VERSION
 typedef void STGOPTIONS;
 #endif //_MSC_VER
 #endif //OM_USE_STORAGE_EX
