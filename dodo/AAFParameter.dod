@@ -53,7 +53,7 @@ AD_XMETHOD1(SetParameterDefinition,
 		   New parameter definition,
 			Sets the parameter definition property value on the input component object.
   // The length of an effect parameter is in the same edit units and has the
-  // same value as the IAAFGroup enclosing this parameter.
+  // same value as the IAAFEffect enclosing this parameter.
   // 
   // If this method fails no state will be changed.
   // 
@@ -73,7 +73,7 @@ AD_XMETHOD1(GetParameterDefinition,
 		   New parameter definition,
 			Places the parameter definition of the effect parameter into the
   // *ppParmDef argument.  The length of an effect parameter is in the same
-  // edit units and has the same value as the IAAFGroup enclosing this parameter.
+  // edit units and has the same value as the IAAFEffect enclosing this parameter.
   //
   // Succeeds if all of the following are true:
   // - the ppParmDef pointer is valid.
