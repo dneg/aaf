@@ -40,6 +40,9 @@ using namespace std;
 
 #include "CAAFBuiltinDefs.h"
 
+// Reference for TIFF data structures is Adobe's TIFF revision 6.0
+// http://partners.adobe.com/asn/developer/pdfs/tn/TIFF6.pdf
+
 #define	TIFF_VERSION	42
 
 #define	TIFF_BIGENDIAN		0x4d4d
@@ -49,14 +52,14 @@ typedef	struct
 {
 	unsigned short tiff_byteOrder;		
 	unsigned short tiff_identNumber;	
-	unsigned long  tiff_firstIFD;	/* byte offset to first directory */
+	unsigned int   tiff_firstIFD;	/* byte offset to first directory */
 } TIFFHeader;
 
 typedef	struct {
 	unsigned short tdir_tag;	/* see below */
 	unsigned short tdir_type;	/* data type; see below */
-	unsigned long  tdir_count;	/* number of items; length in spec */
-	unsigned long  tdir_offset;	/* byte offset to field data */
+	unsigned int   tdir_count;	/* number of items; length in spec */
+	unsigned int   tdir_offset;	/* byte offset to field data */
 } TIFFDirEntry;
 /*
  * Tag data type information.
