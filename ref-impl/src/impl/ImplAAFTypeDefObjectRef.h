@@ -164,7 +164,7 @@ public:
          const aafUID_t & id,
 
          // @parm [in] class def of objects permitted to be referenced
-         const aafUID_t & refdObjID,
+         const ImplAAFClassDef *pClassDef,
 
          // @parm [in, string] friendly name of this type definition
          const aafCharacter * pTypeName);

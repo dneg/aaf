@@ -103,11 +103,9 @@ public:
 
 
 private:
-  // OMWeakReferenceProperty<ImplAAFClassDef> _referencedType;
-  OMFixedSizeProperty<aafUID_t>           _referencedType;
+  OMWeakReferenceProperty<ImplAAFClassDef> _referencedType;
 
   ImplAAFTypeDefSP                     _cachedAuidType;
-  ImplAAFSmartPointer<ImplAAFClassDef> _cachedObjType;
 
   ImplAAFTypeDefSP BaseType (void) const;
 };

@@ -59,14 +59,9 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFClassDef * pObjType,
       const aafCharacter * pTypeName)
 {
-  AAFRESULT hr;
-  aafUID_t typeId;
-
   if (! pObjType)  return AAFRESULT_NULL_PARAM;
-  hr = pObjType->GetAUID(&typeId);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  return pvtInitialize (id, typeId, pTypeName);
+  return pvtInitialize (id, pObjType, pTypeName);
 }
 
 
@@ -74,7 +69,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefObjectRef::pvtInitialize (
       const aafUID_t & /*pID*/,
-      const aafUID_t & /*pRefdObjID*/,
+      const ImplAAFClassDef * /*pRefdObjID*/,
       const aafCharacter * /*pTypeName*/)
 {
   // This is a virtual function should be implemented in a derived class.
