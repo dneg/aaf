@@ -7,6 +7,22 @@ AAFSegment\
 #endm
 #c
 AD_HEAD
+AD_IDL(//
+// This interface is used with an object representing a reference to a segment
+// on another slot of this scope \(AAFNestedScope or AAFMob\) or an enclosing scope.
+// Scope references are specified in terms of a relative slot offset\, and the number of
+// scopes to skip outward.  For example a slot offset of 1 and a scope of 0 means to
+// look 1 track back in the current scope.  A slot offset of 1 and a scope of 1 means to look
+// one slot lower in the enslosing scope.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//)
 
 AD_INCLUDE(AAFTypes)
 /***********************************************\
@@ -18,36 +34,74 @@ AD_INCLUDE(AAFTypes)
 *												*
 \***********************************************/
 
-/*************************************************************************
- * 
- * @class AAFScopeReference | AAFScopeReference refers to a section in the 
- *			specified AAFNestedScope slo tor AAFMobSLot.
- *
- * @base public | AAFSegment
- *
- *************************************************************************/
 AD_CLASS_UUID(e44be454, 2099, 11d2, bf, 98, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(e44be453, 2099, 11d2, bf, 98, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 AD_METHOD2(Create,
-	[in],aafUInt32,RelativeScope, Number of nested scopes to pass to find the Nested Scope slot,
-	[in],aafUInt32, RelativeSlot, Number of slots that preced the slot containing the Scope Reference,
-	Constructs a Scope Reference object.)
+			[in],
+			aafUInt32,
+			RelativeScope,
+			Number of nested scopes to pass to find the Nested Scope slot,
+			[in],
+			aafUInt32,
+			RelativeSlot,
+			Number of slots to look backwards from the slot containing the Scope Reference,
+			Constructs a Scope Reference object.
+  // 
+  // If this method fails the length property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\))
 
 AD_METHOD1(GetRelativeScope,
 		   [retval][out],
 		   aafUInt32 *,
 		   pnRelativeScope,
 		   Pointer to a Relative Scope,
-		   Gets the number of nested scopes to pass to find the Nested Scope slot.)
+		   Gets the number of nested scopes to pass to find the Nested Scope slot.
+  //	
+  // Succeeds if all of the following are true:
+  // - the pnRelativeScope pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pnRelativeScope.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pnRelativeScope arg is NULL.)
 
 AD_METHOD1(GetRelativeSlot,
 		   [retval][out],
 		   aafUInt32 *,
 		   pnRelativeSlot,
 		   Pointer to a Relative Slot,
-		   Gets the number of f slots that preced the slot containing the Scope Reference.)
+		   Gets the number of slots that preced the slot containing the Scope Reference.
+  //	
+  // Succeeds if all of the following are true:
+  // - the pnRelativeScope pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pnRelativeSlot.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pnRelativeSlot arg is NULL.)
 
 AD_XCLASS_END(Concrete, StoredObject)
