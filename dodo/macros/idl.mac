@@ -783,12 +783,6 @@ import "%01.idl";
 #c Arguments: none
 #c
 #startm AD_CLASS_END 00
-  //
-  // Return private implementation pointer for delegation.
-  // NOTE: This is NOT the pointer to the COM object's implementation
-  // object!
-  //
-  [local] HRESULT GetImplRep([out, retval] void **);
 }\
 #endm
 
@@ -830,6 +824,14 @@ AD_CLASS_END\
   // object!
   //
   [local] HRESULT GetImplRep([out, retval] void **);
+
+  //
+  // Intialize class extensions. This method is called after the
+  // contained Impl object has been completely initialized. This
+  // allows the aggregated extension object access to all of the
+  // interfaces and property data of its controlling unknown.
+  //
+  [local] HRESULT InitializeExtension(REFCLSID clsid);
 }\
 #endm
 
