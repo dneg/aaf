@@ -70,9 +70,12 @@ AD_CPP_QUOTE(#endif // __MWERKS__)
 
 typedef aafInt32		AAFRESULT;
 
-
 AD_CPP_QUOTE(#ifndef NULL)
+AD_CPP_QUOTE(#ifdef __cplusplus)
 AD_CPP_QUOTE(#define NULL \(0L\))
+AD_CPP_QUOTE(#else)
+AD_CPP_QUOTE(#define NULL \(\(void *\)0L\))
+AD_CPP_QUOTE(#endif)
 AD_CPP_QUOTE(#endif)
 
 typedef aafInt32 aafBoolean_t;
