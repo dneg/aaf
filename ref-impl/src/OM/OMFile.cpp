@@ -893,8 +893,7 @@ OMUInt64 OMFile::objectCount(void) const
   PRECONDITION("Open", isOpen());
   PRECONDITION("Valid root", _root != 0);
 
-  ASSERT("Unimplemented code not reached.", false);
-  return 0;
+  return _root->objectCount();
 }
 
 const OMClassId& OMFile::classId(void) const
