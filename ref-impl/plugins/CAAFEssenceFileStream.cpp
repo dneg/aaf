@@ -41,16 +41,16 @@
 
 //
 // NOTE: The following two routines will have to be rewritten
-// if fpos_t is defined to be a structure or aafInt64 is a 
+// if fpos_t is defined to be a structure or aafPosition_t is a 
 // structure.
 //
-/*inline*/ bool AafPos2AnsiPos(fpos_t *ansiPos, const aafInt64 *aafPos)
+/*inline*/ bool AafPos2AnsiPos(fpos_t *ansiPos, const aafPosition_t *aafPos)
 {
   // For first version just assume that platform an perform conversion.
-  if (sizeof(fpos_t) < sizeof(aafInt64))
+  if (sizeof(fpos_t) < sizeof(aafPosition_t))
   {
     // The following test assumes 64 bit arithematic!
-    aafInt64 trunPos = (0x00000000FFFFFFFF & *aafPos);
+    aafPosition_t trunPos = (0x00000000FFFFFFFF & *aafPos);
     if (trunPos != *aafPos && 0xFFFFFFFFFFFFFFFF != *aafPos)
       return false;
 
@@ -63,7 +63,7 @@
 }
 
 
-/*inline*/ bool AnsiPos2AafPos(aafInt64 *aafPos, const fpos_t *ansiPos)
+/*inline*/ bool AnsiPos2AafPos(aafPosition_t *aafPos, const fpos_t *ansiPos)
 {
   // For first version just assume that platform an perform conversion.
   *aafPos = *ansiPos;
@@ -418,14 +418,16 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileStream::Write (aafDataBuffer_t  buffer,
-        aafInt32  buflen)
+    CAAFEssenceFileStream::Write (
+      aafUInt32 bytes,
+      aafDataBuffer_t  buffer,
+      aafUInt32 * bytesWritten)
 {
   if (NULL == _pFile) 
     return AAFRESULT_NOT_OPEN;
-  if (NULL == buffer)
+  if (NULL == buffer || NULL == bytesWritten)
     return E_INVALIDARG;
-  if (0 > buflen)
+  if (0 > bytes)
     return E_INVALIDARG;
   if (openRead == _streamMode)
     return AAFRESULT_NOT_WRITEABLE;
@@ -449,8 +451,8 @@ HRESULT STDMETHODCALLTYPE
   // Write the given data to the file at the current file
   // position.
   errno = 0;
-  size_t bytesWritten = fwrite(buffer, 1, buflen, _pFile);
-  if (bytesWritten != (size_t)buflen)
+  *bytesWritten = fwrite(buffer, 1, bytes, _pFile);
+  if (*bytesWritten != (size_t)bytes)
   { // What error code should we return?
     long err = errno;
 
@@ -508,7 +510,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileStream::Seek (aafInt64  byteOffset)
+    CAAFEssenceFileStream::Seek (aafPosition_t  byteOffset)
 {
   if (NULL == _pFile) 
     return AAFRESULT_NOT_OPEN;
@@ -558,7 +560,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileStream::IsPosValid (aafInt64  byteOffset,
+    CAAFEssenceFileStream::IsPosValid (aafPosition_t  byteOffset,
         aafBool *  isValid)
 {
   if (NULL == _pFile) 
@@ -570,7 +572,7 @@ HRESULT STDMETHODCALLTYPE
 
   if (0 < byteOffset)
   {
-    aafInt64 length = 0;
+    aafLength_t length = 0;
     HRESULT hr = GetLength(&length);
     if (AAFRESULT_SUCCESS != hr)
       return hr;
@@ -596,7 +598,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileStream::GetPosition (aafInt64 *  position)
+    CAAFEssenceFileStream::GetPosition (aafPosition_t *  position)
 {
   if (NULL == _pFile) 
     return AAFRESULT_NOT_OPEN;
@@ -631,7 +633,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileStream::GetLength (aafInt64 *  position)
+    CAAFEssenceFileStream::GetLength (aafLength_t *  position)
 {
   if (NULL == _pFile) 
     return AAFRESULT_NOT_OPEN;
@@ -675,7 +677,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileStream::SetCacheSize (aafInt32  itsSize)
+    CAAFEssenceFileStream::SetCacheSize (aafUInt32  itsSize)
 {
   // PRE-CONDITION
   // Ansi states that setvbuf should be called before the first read or write
