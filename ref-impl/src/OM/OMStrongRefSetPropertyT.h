@@ -82,53 +82,7 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
 
-  // create a set index
-  //
-  size_t count = _set.count();
-  size_t keySize = sizeof(UniqueIdentification);
-  ASSERT("Valid key size", keySize <= (OMKeySize)~0);
-  OMStoredSetIndex* index = new OMStoredSetIndex(
-                                              count,
-                                              _keyPropertyId,
-                                              static_cast<OMKeySize>(keySize));
-  ASSERT("Valid heap pointer", index != 0);
-  index->setFirstFreeKey(localKey());
-  size_t position = 0;
-
-  // Iterate over the set saving each element. The index entries
-  // are written in order of their unique keys.
-  //
-  SetIterator iterator(_set, OMBefore);
-  while (++iterator) {
-
-    SetElement& element = iterator.value();
-
-    // enter into the index
-    //
-    void* key = element.identification();
-    index->insert(position,
-                  element.localKey(),
-                  element.referenceCount(),
-                  key);
-
-    // save the object
-    //
-    element.save();
-
-    position = position + 1;
-
-  }
-
-  // save the set index
-  //
-  ASSERT("Valid set index", index->isValid());
-  store()->save(index, storedName());
-  delete index;
-
-  // make an entry in the property index
-  //
-  saveName();
-
+  store()->save(*this);
 }
 
   // @mfunc Close this <c OMStrongReferenceSetProperty>.
@@ -185,45 +139,7 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
                                      "ReferencedObject>::restore");
 
-  // get the name of the set index stream
-  //
-  restoreName(externalSize);
-
-  // restore the index
-  //
-  OMStoredSetIndex* setIndex = 0;
-  store()->restore(setIndex, storedName());
-  ASSERT("Valid set index", setIndex->isValid());
-  ASSERT("Consistent key sizes",
-                          setIndex->keySize() == sizeof(UniqueIdentification));
-  ASSERT("Consistent key property ids",
-                                  setIndex->keyPropertyId() == _keyPropertyId);
-  setLocalKey(setIndex->firstFreeKey());
-
-  // Iterate over the index restoring the elements of the set.
-  // Since the index entries are stored on disk in order of their
-  // unique keys this loop is the worst cast order of insertion. This
-  // code will eventually be replaced by code that inserts the keys in
-  // "binary search" order. That is the middle key is inserted first
-  // then (recursively) all the keys below the middle key followed by
-  // (recursively) all the keys above the middle key.
-  //
-  size_t entries = setIndex->entries();
-  size_t context = 0;
-  OMUInt32 localKey;
-  OMUInt32 count;
-  OMKeySize keySize = setIndex->keySize();
-  UniqueIdentification key;
-  for (size_t i = 0; i < entries; i++) {
-    setIndex->iterate(context, localKey, count, &key);
-    wchar_t* name = elementName(localKey);
-    SetElement newElement(this, name, localKey, count, &key, keySize);
-    newElement.restore();
-    _set.insert(key, newElement);
-    delete [] name;
-    name = 0; // for BoundsChecker
-  }
-  delete setIndex;
+  store()->restore(*this, externalSize);
   setPresent();
 }
 
