@@ -10,8 +10,6 @@
 #include "AAFModuleTest.h"
 #endif
 
-// Forward declaration for test method
-class ostream;
 
 class CAAFModuleTest : 
 	public IAAFModuleTest,
@@ -25,9 +23,8 @@ public:
 	// Declare the factory for this class.
 	AAF_DECLARE_CONCRETE();
 
-	// Declare the module test method. The implementation of the will be be
-	// in /test/CAAFObjectTest.cpp.
-	static HRESULT test(ostream& stream);
+	// Declare the module test method.
+	static HRESULT test();
 
 
 	// IAAFModuleTest methods
