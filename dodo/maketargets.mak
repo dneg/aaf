@@ -33,6 +33,7 @@ INCLUDE_DIR = ../ref-impl/include
 IMPL_DIR = ../ref-impl/src/impl
 UUID_DIR = ../ref-impl/include/ref-api
 COMAPI_DIR = ../ref-impl/src/com-api
+TEST_DIR = ../test/com
 
 targets: $(DODO_TARGETS)
 targets: $(PLUGIN_TARGETS)
@@ -632,8 +633,8 @@ SRC_DIR = ../ref-impl/src
 	./tool/$(DODO) -f macros/comt.mac < $*.dod > $*.tmp
 	mv $*.tmp $*.comt
 	chmod -w $*.comt
-	cp -f $*.comt $(SRC_DIR)/com-api/test/C$*Test.cpp
-	chmod -w $(SRC_DIR)/com-api/test/C$*Test.cpp
+	cp -f $*.comt $(TEST_DIR)/C$*Test.cpp
+	chmod -w $(TEST_DIR)/C$*Test.cpp
 
 .dod.implh :
 	$(RM) -f $*.implh ;
