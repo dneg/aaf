@@ -59,7 +59,7 @@ ImplAAFSequence::~ImplAAFSequence ()
 {
 	size_t size = _components.getSize();
 	for (size_t i = 0; i < size; i++) {
-		ImplAAFComponent *pComp = _components.setValueAt(0, i);
+		ImplAAFComponent *pComp = _components.clearValueAt(i);
 
 		if (pComp) {
 		  pComp->ReleaseReference();

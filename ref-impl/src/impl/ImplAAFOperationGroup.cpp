@@ -107,7 +107,7 @@ ImplAAFOperationGroup::~ImplAAFOperationGroup ()
 	size_t size = _inputSegments.getSize();
 	for (size_t i = 0; i < size; i++)
 	{
-		ImplAAFSegment *pSeg = _inputSegments.setValueAt(0, i);
+		ImplAAFSegment *pSeg = _inputSegments.clearValueAt(i);
 		if (pSeg)
 		{
 		  pSeg->ReleaseReference();

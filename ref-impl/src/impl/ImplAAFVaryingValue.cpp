@@ -71,7 +71,7 @@ ImplAAFVaryingValue::~ImplAAFVaryingValue ()
 	size_t size = _controlPoints.getSize();
 	for (size_t i = 0; i < size; i++)
 	{
-		ImplAAFControlPoint *pControl = _controlPoints.setValueAt(0, i);
+		ImplAAFControlPoint *pControl = _controlPoints.clearValueAt(i);
 		if (pControl)
 		{
 		  pControl->ReleaseReference();

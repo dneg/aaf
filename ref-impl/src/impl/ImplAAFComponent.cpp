@@ -76,7 +76,7 @@ ImplAAFComponent::~ImplAAFComponent ()
 		size_t size = _KLVData.count();
 		for (size_t j = 0; j < size; j++)
 		{
-			ImplAAFKLVData* pKLVData = _KLVData.setValueAt(0, j);
+			ImplAAFKLVData* pKLVData = _KLVData.clearValueAt(j);
 			if (pKLVData)
 			  pKLVData->ReleaseReference();
 			pKLVData = 0;
