@@ -49,8 +49,8 @@ extern "C" const aafClassID_t CLSID_AAFPropertyValue;
 
 
 ImplAAFTypeDefFixedArray::ImplAAFTypeDefFixedArray ()
-  : _ElementType  ( PID_TypeDefinitionFixedArray_ElementType,  "Element Type"),
-    _ElementCount ( PID_TypeDefinitionFixedArray_ElementCount, "Element Count")
+  : _ElementType  ( PID_TypeDefinitionFixedArray_ElementType,  "ElementType"),
+    _ElementCount ( PID_TypeDefinitionFixedArray_ElementCount, "ElementCount")
 {
   _persistentProperties.put(_ElementType.address());
   _persistentProperties.put(_ElementCount.address());
@@ -71,9 +71,6 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  ImplAAFTypeDefFixedArray * pNonConstThis =
 		  (ImplAAFTypeDefFixedArray *) this;
-
-	  // Make sure this is already done!
-	  // pNonConstThis->InitOMProperties ();
 
 	  ImplAAFDictionarySP pDict;
 
@@ -105,8 +102,27 @@ AAFRESULT STDMETHODCALLTYPE
       aafUInt32  nElements,
       wchar_t *  pTypeName)
 {
-  if (! pTypeName) return AAFRESULT_NULL_PARAM;
   if (! pTypeDef)  return AAFRESULT_NULL_PARAM;
+
+  aafUID_t id;
+  assert (pTypeDef);
+  AAFRESULT hr = pTypeDef->GetAUID(&id);
+  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+
+  return pvtInitialize (pID, &id, nElements, pTypeName);
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+   ImplAAFTypeDefFixedArray::pvtInitialize (
+      const aafUID_t *  pID,
+      const aafUID_t * pTypeId,
+      aafUInt32  nElements,
+      wchar_t *  pTypeName)
+{
+  if (! pTypeName) return AAFRESULT_NULL_PARAM;
+  if (! pTypeId)   return AAFRESULT_NULL_PARAM;
   if (! pID)       return AAFRESULT_NULL_PARAM;
 
   HRESULT hr;
@@ -117,12 +133,8 @@ AAFRESULT STDMETHODCALLTYPE
   hr = SetAUID (pID);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  aafUID_t id;
-  assert (pTypeDef);
-  hr = pTypeDef->GetAUID(&id);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-  _ElementType = id;
-
+  assert (pTypeId);
+  _ElementType = *pTypeId;
   _ElementCount = nElements;
 
   return AAFRESULT_SUCCESS;

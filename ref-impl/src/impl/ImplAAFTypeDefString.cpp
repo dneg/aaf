@@ -45,7 +45,7 @@
 
 
 ImplAAFTypeDefString::ImplAAFTypeDefString ()
-  : _ElementType  ( PID_TypeDefinitionString_ElementType,  "Element Type")
+  : _ElementType  ( PID_TypeDefinitionString_ElementType,  "ElementType")
 {
   _persistentProperties.put(_ElementType.address());
 }
@@ -60,8 +60,26 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDef * pTypeDef,
       wchar_t * pTypeName)
 {
-  if (! pTypeName) return AAFRESULT_NULL_PARAM;
   if (! pTypeDef)  return AAFRESULT_NULL_PARAM;
+
+  aafUID_t id;
+  assert (pTypeDef);
+  AAFRESULT hr = pTypeDef->GetAUID(&id);
+  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+
+  return pvtInitialize (pID, &id, pTypeName);
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefString::pvtInitialize (
+      const aafUID_t * pID,
+	  const aafUID_t * pTypeId,
+      wchar_t * pTypeName)
+{
+  if (! pTypeName) return AAFRESULT_NULL_PARAM;
+  if (! pTypeId)   return AAFRESULT_NULL_PARAM;
   if (! pID)       return AAFRESULT_NULL_PARAM;
 
   HRESULT hr;
@@ -71,11 +89,8 @@ AAFRESULT STDMETHODCALLTYPE
   hr = SetAUID (pID);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  aafUID_t id;
-  assert (pTypeDef);
-  hr = pTypeDef->GetAUID(&id);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-  _ElementType = id;
+  assert (pTypeId);
+  _ElementType = *pTypeId;
 
   return AAFRESULT_SUCCESS;
 }
