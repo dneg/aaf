@@ -9,6 +9,19 @@ AAFObject\
 #import ./AAFObject.exp
 #import ./AAFEndian.exp
 AD_HEAD
+AD_IDL(//
+// The IAAFHeader interface provides file-wide information and
+// indexes.  Each AAF file has one and only one instance of an object
+// which supports IAAFHeader.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//)
 AD_FORWARD_DECLARATION(AAFMob)
 AD_FORWARD_DECLARATION(AAFMedia)
 AD_FORWARD_DECLARATION(EnumAAFMobs)
@@ -82,31 +95,6 @@ AD_XMETHOD2(GetNumMobs,
   //
   // AAFRESULT_NULL_PARAM
   //   - pNumMobs is null.)
-
-
-AD_XMETHOD1(EnumAAFPrimaryMobs,
-			[out\, retval],
-			objOut,
-			EnumAAFMobs,
-			ppEnum,
-			Mob Enumeration,
-			Places an enumerator only for primary mobs into the *ppEnum
-  // argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppEnum pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEnum.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.)
 
 
 AD_XMETHOD2(EnumAAFAllMobs,
@@ -384,6 +372,31 @@ AD_XMETHOD2(GetIdentificationByGen,
   //   - either pGeneration or ppIdentification is null.)
 
 
+AD_XMETHOD1(GetNumIdents,
+			[out\, retval],
+			objPass,
+			aafUInt32 *,
+			pNumIdents,
+			Total number of identification objects,
+			Writes the number of identification objects into the
+  // *pNumIdents argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pNumIdents pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pNumIdents.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumIdents is null.)
+
+
 AD_XMETHOD1(EnumAAFIdents,
 			[out\,retval],
 			objOut,
@@ -464,7 +477,7 @@ AD_XMETHOD1(GetRefImplVersion,
 			aafProductVersion_t *,
 			pVersion,
 			The Reference Implementation Version,
-			Return the Reference Implementation Version property.
+			Return the version of this Reference Implementation.
   // 
   // Succeeds if all of the following are true:
   // - the pVersion pointer is valid.
@@ -531,7 +544,5 @@ AD_XMETHOD1(GetLastModified,
 
 
 AD_COM_METH(.method-GetStoredByteOrder)
-
-
 AD_COM_METH(.method-GetNativeByteOrder)
 AD_COM_EXT_CLASS_END(AAFEndian)
