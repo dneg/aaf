@@ -126,6 +126,82 @@ OMFile::OMFile(const wchar_t* fileName,
   _root->setStore(_rootStore);
 }
 
+  // @mfunc Constructor. Create an <c OMFile> object representing
+  //        an existing external file.
+OMFile::OMFile(OMRawStorage* rawStorage,
+               const OMFileEncoding encoding,
+               void* clientOnRestoreContext,
+               const OMAccessMode mode,
+               OMStoredObject* store,
+               const OMClassFactory* factory,
+               OMDictionary* dictionary,
+               const OMLoadMode loadMode)
+: _root(0),
+  _rootStore(store),
+  _dictionary(dictionary),
+  _objectDirectory(0),
+  _referencedProperties(0),
+  _mode(mode),
+  _loadMode(loadMode),
+  _fileName(0),
+//_signature(), // tjb
+  _clientOnSaveContext(0),
+  _clientOnRestoreContext(clientOnRestoreContext),
+  _encoding(encoding),
+  _rawStorage(rawStorage)
+{
+  TRACE("OMFile::OMFile");
+
+  PRECONDITION("Valid raw storage", _rawStorage != 0);
+  PRECONDITION("Consistent access modes",
+                     IMPLIES(((mode == modifyMode) || (mode == writeOnlyMode)),
+                     rawStorage->isWritable()));
+  PRECONDITION("Valid dictionary", _dictionary != 0);
+
+  setClassFactory(factory);
+  readSignature(_rawStorage, _signature);
+  setName(L"/");
+}
+
+  // @mfunc Constructor. Create an <c OMFile> object representing
+  //          a new external file.
+OMFile::OMFile(OMRawStorage* rawStorage,
+               const OMFileEncoding encoding,
+               void* clientOnRestoreContext,
+               OMFileSignature signature,
+               const OMAccessMode mode,
+               OMStoredObject* store,
+               const OMClassFactory* factory,
+               OMDictionary* dictionary,
+               OMRootStorable* root)
+: _root(root),
+  _rootStore(store),
+  _dictionary(dictionary),
+  _objectDirectory(0),
+  _referencedProperties(0),
+  _mode(mode),
+  _loadMode(lazyLoad),
+  _fileName(0),
+  _signature(signature),
+  _clientOnSaveContext(0),
+  _clientOnRestoreContext(clientOnRestoreContext),
+  _encoding(encoding),
+  _rawStorage(rawStorage)
+{
+  TRACE("OMFile::OMFile");
+
+  PRECONDITION("Valid dictionary", _dictionary != 0);
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Consistent access modes",
+                     IMPLIES(((mode == modifyMode) || (mode == writeOnlyMode)),
+                     rawStorage->isWritable()));
+
+  setClassFactory(factory);
+  setName(L"<file>");
+  _root->attach(this, L"/");
+  _root->setStore(_rootStore);
+}
+
   // @mfunc Destructor.
 OMFile::~OMFile(void)
 {
@@ -250,6 +326,43 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
   return newFile;
 }
 
+OMFile* OMFile::openExistingRead(OMRawStorage* rawStorage,
+                                 const OMClassFactory* factory,
+                                 void* clientOnRestoreContext,
+                                 const OMLoadMode loadMode,
+                                 OMDictionary* dictionary)
+{
+  TRACE("OMFile::openExistingRead");
+
+  // TBS
+  return 0;
+}
+
+OMFile* OMFile::openExistingModify(OMRawStorage* rawStorage,
+                                   const OMClassFactory* factory,
+                                   void* clientOnRestoreContext,
+                                   const OMLoadMode loadMode,
+                                   OMDictionary* dictionary)
+{
+  TRACE("OMFile::openExistingModify");
+
+  // TBS
+  return 0;
+}
+
+OMFile* OMFile::openNewModify(OMRawStorage* rawStorage,
+                              const OMClassFactory* factory,
+                              void* clientOnRestoreContext,
+                              const OMByteOrder byteOrder,
+                              OMStorable* clientRoot,
+                              const OMFileSignature& signature,
+                              OMDictionary* dictionary)
+{
+  TRACE("OMFile::openNewModify");
+
+  // TBS
+  return 0;
+}
    // @mfunc Is <p signature> a valid signature for an <c OMFile> ?
    //   @parm The signature to check.
    //   @rdesc True if <p signature> is a valid signature for an
