@@ -322,4 +322,23 @@ void OMStrongReferenceProperty<ReferencedObject>::setBits(const OMByte* bits,
   setValue(p);
 }
 
+  // @mfunc The value of this <c OMStrongReferenceProperty>
+  //        as an <c OMStorable>.
+  //   @rdesc The <c OMStorable> represented by this
+  //          <c OMStrongReferenceProperty>
+  //   @this const
+template<typename ReferencedObject>
+OMStorable* OMStrongReferenceProperty<ReferencedObject>::storable(void) const
+{
+  TRACE("OMStrongReferenceProperty<ReferencedObject>::storable");
+
+  ReferencedObject* pointer;
+  getValue(pointer);
+  OMStorable* result = 0;
+  if (pointer != 0) {
+    result = dynamic_cast<OMStorable*>(pointer);
+  }
+  return result;
+}
+
 #endif

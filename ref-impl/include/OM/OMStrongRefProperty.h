@@ -102,6 +102,10 @@ public:
     //          is <p size> bytes in size.
   virtual void setBits(const OMByte* bits, size_t size);
 
+    // @cmember The value of this <c OMStrongReferenceProperty>
+    //          as an <c OMStorable>.
+  virtual OMStorable* storable(void) const;
+
 private:
 
   OMStrongObjectReference<ReferencedObject> _reference;
