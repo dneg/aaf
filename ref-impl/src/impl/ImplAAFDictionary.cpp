@@ -358,6 +358,7 @@ AAFRESULT ImplAAFDictionary::LookupPluggableDef(aafUID_t *defID, ImplAAFPluggabl
 				defFound = AAFTrue;
 				*result = pluggable;
 				pluggable->AcquireReference();
+				break;
 			}
 			pluggable->ReleaseReference();
 			pluggable = NULL;
