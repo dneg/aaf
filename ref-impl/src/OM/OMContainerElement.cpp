@@ -494,7 +494,7 @@ OMStorable* OMWeakReferenceVectorElement::setValue(
 
   // @mfunc The unique key of this <c OMWeakReferenceVectorElement>.
   //   @rdesc  The unique key of this <c OMWeakReferenceVectorElement>.
-OMUniqueObjectIdentification
+const OMUniqueObjectIdentification&
 OMWeakReferenceVectorElement::identification(void) const
 {
   TRACE("OMWeakReferenceVectorElement::identification");
@@ -594,7 +594,7 @@ OMStorable* OMWeakReferenceSetElement::setValue(
 
   // @mfunc The unique key of this <c OMWeakReferenceSetElement>.
   //   @rdesc  The unique key of this <c OMWeakReferenceSetElement>.
-OMUniqueObjectIdentification
+const OMUniqueObjectIdentification&
 OMWeakReferenceSetElement::identification(void) const
 {
   TRACE("OMWeakReferenceSetElement::identification");

@@ -107,7 +107,7 @@ public:
                                       ReferencedObject>& rhs) const;
 
     // @cmember The unique key of this <c OMSetElement>.
-  UniqueIdentification identification(void) const;
+  const UniqueIdentification& identification(void) const;
 
 };
 
@@ -372,7 +372,7 @@ public:
                        const OMStorable* value);
 
     // @cmember The unique key of this <c OMWeakReferenceVectorElement>.
-  OMUniqueObjectIdentification identification(void) const;
+  const OMUniqueObjectIdentification& identification(void) const;
 
 };
 
@@ -413,7 +413,7 @@ public:
                        const OMStorable* value);
 
     // @cmember The unique key of this <c OMWeakReferenceSetElement>.
-  OMUniqueObjectIdentification identification(void) const;
+  const OMUniqueObjectIdentification& identification(void) const;
 
 };
 

@@ -234,7 +234,7 @@ bool OMSetElement<UniqueIdentification, ReferencedObject>::operator== (
   //   @tcarg class | ReferencedObject | The type of the referenced object.
   //   @rdesc  The unique key of this <c OMSetElement>.
 template <typename UniqueIdentification, typename ReferencedObject>
-UniqueIdentification
+const UniqueIdentification&
 OMSetElement<UniqueIdentification, ReferencedObject>::identification(
                                                                     void) const
 {
