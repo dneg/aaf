@@ -107,7 +107,7 @@ private:
 
   aafInt32			_cookie;
   OMFile			*_file;
-  ImplAAFDictionary *_dictionary;
+  ImplAAFDictionary *_factory;
   aafInt16			_byteOrder;
   openType_t			_openType;
   ImplAAFHeader *   _head;		// Needed by Head object

@@ -11,8 +11,9 @@
 
 #include "OMFile.h"
 #include "OMUtilities.h"
-#include "ImplAAFDictionary.h"
+#include "OMClassFactory.h"
 
+#include "ImplAAFDictionary.h"
 #include "ImplAAFHeader.h"
 #include "ImplAAFDataDef.h"
 
@@ -46,8 +47,8 @@ ImplAAFFile::Initialize ()
 	}
 
 	// Create the class factory for base classes.
-	_dictionary = static_cast<ImplAAFDictionary *>(CreateImpl(CLSID_AAFDictionary));
-	if (NULL == _dictionary)
+	_factory = static_cast<ImplAAFDictionary *>(CreateImpl(CLSID_AAFDictionary));
+	if (NULL == _factory)
 		return AAFRESULT_NOMEMORY;
 	_initialized = AAFTrue;
 
@@ -85,7 +86,7 @@ ImplAAFFile::OpenExistingRead (wchar_t * pFileName,
 	try
 	{
 		// Ask the OM to open the file.
-		_file = OMFile::openExistingRead(pFileName, _dictionary, OMFile::lazyLoad);
+		_file = OMFile::openExistingRead(pFileName, _factory, OMFile::lazyLoad);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Get the byte order
@@ -170,7 +171,7 @@ ImplAAFFile::OpenExistingModify (wchar_t * pFileName,
 	try 
 	{
 		// Ask the OM to open the file.
-		_file = OMFile::openExistingModify(pFileName, _dictionary, OMFile::lazyLoad);
+		_file = OMFile::openExistingModify(pFileName, _factory, OMFile::lazyLoad);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Get the byte order
@@ -271,7 +272,7 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 		
 		// Make sure the header is initialized with our previously created
 		// dictionary.
-		_head->SetDictionary(_dictionary);
+		_head->SetDictionary(_factory);
 
 		// Add the ident to the header.
 		checkResult(_head->AddIdentificationObject(&_ident));
@@ -285,7 +286,7 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 		pCStore->ReleaseReference(); // need to release this pointer!
 
 		// Attempt to create the file.
-		_file = OMFile::openNewModify(pFileName, _dictionary, _byteOrder, _head);
+		_file = OMFile::openNewModify(pFileName, _factory, _byteOrder, _head);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Now that the file is open and the header has been
@@ -352,7 +353,7 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 		
 		// Make sure the header is initialized with our previously created
 		// dictionary.
-		_head->SetDictionary(_dictionary);
+		_head->SetDictionary(_factory);
 
 		// Add the ident to the header.
 		checkResult(_head->AddIdentificationObject(&_ident));
@@ -366,7 +367,7 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 		pCStore->ReleaseReference(); // need to release this pointer!
 
 		// Attempt to create the file.
-		_file = OMFile::openNewTransient(_dictionary, _byteOrder, _head);
+		_file = OMFile::openNewTransient(_factory, _byteOrder, _head);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Now that the file is open and the header has been
@@ -473,7 +474,7 @@ ImplAAFFile::Revert ()
 ImplAAFFile::ImplAAFFile () :
 		_cookie(0),
 		_file(0),
-		_dictionary(NULL),
+		_factory(NULL),
 		_byteOrder(0),
 		_openType(kOmUndefined),
 		_head(NULL),
@@ -494,10 +495,10 @@ ImplAAFFile::~ImplAAFFile ()
 	InternalReleaseObjects();
 
 	// cleanup the container.
-	if (_dictionary)
+	if (_factory)
 	{
-		_dictionary->ReleaseReference();
-		_dictionary = NULL;
+		_factory->ReleaseReference();
+		_factory = NULL;
 	}
 
 	// cleanup the OM File.
