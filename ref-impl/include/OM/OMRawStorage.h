@@ -137,10 +137,10 @@ public:
     //          for network streams would return false. An implementation
     //          for fixed size contiguous memory files (avoiding copying)
     //          would return false.
-  virtual bool isSizeable(void) const = 0;
+  virtual bool isExtendible(void) const = 0;
 
     // @cmember The current size of this <c OMRawStorage> in bytes.
-    //          @precondition <f isSizeable()>
+    //          @precondition <f isExtendible()>
   virtual OMUInt64 size(void) const = 0;
 
     // @cmember Set the size of this <c OMRawStorage> to <p newSize> bytes.
@@ -150,7 +150,7 @@ public:
     //          <c OMRawStorage> is truncated. Truncation may also result
     //          in the current position for <f read()> and <f write()>
     //          being set to <mf OMRawStorage::size>.
-    //          @precondition <f isSizeable()>
+    //          @precondition <f isExtendible()>
     //   @devnote How is failure to extend indicated ?
   virtual void setSize(OMUInt64 newSize) = 0;
 

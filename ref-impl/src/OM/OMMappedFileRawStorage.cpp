@@ -217,16 +217,16 @@ void OMMappedFileRawStorage::writeAt(OMUInt64 /* position */,
   // @mfunc May this <c OMMappedFileRawStorage> be changed in size ?
   //   @rdesc Always <e bool.true>.
   //   @this const
-bool OMMappedFileRawStorage::isSizeable(void) const
+bool OMMappedFileRawStorage::isExtendible(void) const
 {
-  TRACE("OMMappedFileRawStorage::isSizeable");
+  TRACE("OMMappedFileRawStorage::isExtendible");
 
   ASSERT("Unimplemented code not reached", false); // tjb TBS
   return false;
 }
 
   // @mfunc The current size of this <c OMMappedFileRawStorage> in bytes.
-  //        precondition - isSizeable()
+  //        precondition - isExtendible()
   //   @rdesc The current size of this <c OMMappedFileRawStorage> in bytes.
   //   @this const
 OMUInt64 OMMappedFileRawStorage::size(void) const
@@ -246,7 +246,7 @@ OMUInt64 OMMappedFileRawStorage::size(void) const
   //        Truncation may also result in the current position for
   //        <f read()> and <f write()> being set to
   //        <mf OMMappedFileRawStorage::size>.
-  //        precondition - isSizeable()
+  //        precondition - isExtendible()
   //   @parm The new size of this <c OMMappedFileRawStorage> in bytes.
   //   @devnote There is no ISO/ANSI way of truncating a file in place.
 void OMMappedFileRawStorage::setSize(OMUInt64 /* newSize */)

@@ -135,10 +135,10 @@ public:
                        OMUInt32& bytesWritten);
 
     // @cmember May this <c OMMappedFileRawStorage> be changed in size ?
-  virtual bool isSizeable(void) const;
+  virtual bool isExtendible(void) const;
 
     // @cmember The current size of this <c OMMappedFileRawStorage> in bytes.
-    //          precondition - isSizeable()
+    //          precondition - isExtendible()
   virtual OMUInt64 size(void) const;
 
     // @cmember Set the size of this <c OMMappedFileRawStorage> to <p newSize>
@@ -150,7 +150,7 @@ public:
     //          Truncation may also result in the current position for
     //          <f read()> and <f write()> being set to
     //          <mf OMMappedFileRawStorage::size>.
-    //          precondition - isSizeable()
+    //          precondition - isExtendible()
   virtual void setSize(OMUInt64 newSize);
 
     // @cmember May the current position, for <f read()> and <f write()>,

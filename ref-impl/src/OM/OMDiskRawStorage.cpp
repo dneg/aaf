@@ -243,22 +243,22 @@ void OMDiskRawStorage::writeAt(OMUInt64 /* position */,
   // @mfunc May this <c OMDiskRawStorage> be changed in size ?
   //   @rdesc Always <e bool.true>.
   //   @this const
-bool OMDiskRawStorage::isSizeable(void) const
+bool OMDiskRawStorage::isExtendible(void) const
 {
-  TRACE("OMDiskRawStorage::isSizeable");
+  TRACE("OMDiskRawStorage::isExtendible");
 
   return true;
 }
 
   // @mfunc The current size of this <c OMDiskRawStorage> in bytes.
-  //        precondition - isSizeable()
+  //        precondition - isExtendible()
   //   @rdesc The current size of this <c OMDiskRawStorage> in bytes.
   //   @this const
 OMUInt64 OMDiskRawStorage::size(void) const
 {
   TRACE("OMDiskRawStorage::size");
 
-  PRECONDITION("Sizeable", isSizeable());
+  PRECONDITION("Extendible", isExtendible());
 
   OMUInt64 result = size(_file);
   return result;
@@ -271,14 +271,14 @@ OMUInt64 OMDiskRawStorage::size(void) const
   //        <c OMDiskRawStorage> is truncated. Truncation may also result
   //        in the current position for <f read()> and <f write()>
   //        being set to <mf OMDiskRawStorage::size>.
-  //        precondition - isSizeable()
+  //        precondition - isExtendible()
   //   @parm The new size of this <c OMDiskRawStorage> in bytes.
   //   @devnote There is no ISO/ANSI way of truncating a file in place.
 void OMDiskRawStorage::setSize(OMUInt64 newSize)
 {
   TRACE("OMDiskRawStorage::setSize");
 
-  PRECONDITION("Sizeable", isSizeable());
+  PRECONDITION("Extendible", isExtendible());
   PRECONDITION("Writable", isWritable());
 
   setSize(_file, newSize);
