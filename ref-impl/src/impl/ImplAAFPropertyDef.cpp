@@ -57,7 +57,6 @@ ImplAAFPropertyDef::ImplAAFPropertyDef ()
   : _Type(PID_PropertyDefinition_Type, L"Type"),
     _IsOptional(PID_PropertyDefinition_IsOptional, L"IsOptional"),
     _pid(PID_PropertyDefinition_LocalIdentification, L"LocalIdentification"),
-    _DefaultValue(PID_PropertyDefinition_DefaultValue, L"DefaultValue"),
     _IsUniqueIdentifier(PID_PropertyDefinition_IsUniqueIdentifier, L"IsUniqueIdentifier"),
 	_cachedType (0),  // BobT: don't reference count the cached type!
 	_wname (0),
@@ -66,7 +65,6 @@ ImplAAFPropertyDef::ImplAAFPropertyDef ()
   _persistentProperties.put (_Type.address());
   _persistentProperties.put (_IsOptional.address());
   _persistentProperties.put (_pid.address());
-  _persistentProperties.put (_DefaultValue.address());
   _persistentProperties.put (_IsUniqueIdentifier.address());
 }
 
@@ -224,24 +222,6 @@ AAFRESULT STDMETHODCALLTYPE
 
   return AAFRESULT_SUCCESS;
 }
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPropertyDef::GetDefaultValue (
-      ImplAAFPropertyValue ** /*ppDataValue*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPropertyDef::SetDefaultValue (
-      ImplAAFPropertyValue * /*pDataValue*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
 
 
 OMPropertyId ImplAAFPropertyDef::OmPid (void) const
