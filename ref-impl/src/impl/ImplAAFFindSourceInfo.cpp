@@ -17,7 +17,7 @@
 #include "aafCvt.h"
 #include "ImplAAFMob.h"
 #include "ImplAAFEffect.h"
-#include "aafdefuids.h"
+#include "AAFDefUIDs.h"
 
 ImplAAFFindSourceInfo::ImplAAFFindSourceInfo ()
 {
