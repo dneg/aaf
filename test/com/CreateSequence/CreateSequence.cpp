@@ -518,13 +518,15 @@ cleanup:
     moduleErrorTmp = UTLStartPeriod(&timerID);
 #else
     clock_t start = clock();
+    clock_t finish;
+    double duration;
 #endif
     pFile->Save();
 #if USE_TIMER_LIB
     moduleErrorTmp = UTLEndPeriod(timerID, &elapsedtime);
 #else
-    clock_t finish = clock();
-    double duration = ((double) (finish - start) / CLOCKS_PER_SEC);
+    finish = clock();
+    duration = ((double) (finish - start) / CLOCKS_PER_SEC);
 #endif
     pFile->Close();
     pFile->Release();
@@ -547,16 +549,25 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   aafUInt32 timerID, elapsedtime;
 
   moduleErrorTmp = UTLStartPeriod(&timerID);
+#else
+    clock_t start = clock();
+    clock_t finish;
+    double duration;
 #endif
   check(AAFFileOpenExistingRead ( pFileName, 0, &pFile));
 #if USE_TIMER_LIB
   moduleErrorTmp = UTLEndPeriod(timerID, &elapsedtime);
+#else
+    finish = clock();
+    duration = ((double) (finish - start) / CLOCKS_PER_SEC);
 #endif
   pFile->Close();
   pFile->Release();
   pFile=NULL;
 #if USE_TIMER_LIB
   printf("Open time = %ld\n", elapsedtime);
+#else
+  printf("Open time = %f seconds\n", duration);
 #endif
 cleanup:
   if (pFile) {
@@ -629,6 +640,8 @@ int main(int argumentCount, char *argumentVector[])
 
 #if USE_TIMER_LIB
   UTLInitTimers(1000);
+#else
+  // no initialization needed for clock()
 #endif
 
   aafWChar FileNameBuffer[MAX];
