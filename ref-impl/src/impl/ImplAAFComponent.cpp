@@ -175,12 +175,12 @@ AAFRESULT ImplAAFComponent::GetMinimumBounds(aafPosition_t rootPos, aafLength_t 
 											 ImplAAFMob *mob, ImplAAFMobSlot *track,
 											 aafMediaCriteria_t *mediaCrit,
 											 aafPosition_t currentObjPos,
-											 aafEffectChoice_t *effectChoice,
+											 aafOperationChoice_t *operationChoice,
 											 ImplAAFComponent	*prevObject,
 											 ImplAAFComponent *nextObject,
 											 ImplAAFScopeStack *scopeStack,
 											 aafPosition_t *diffPos, aafLength_t *minLength,
-											 ImplAAFEffect **effeObject, aafInt32	*nestDepth,
+											 ImplAAFOperationGroup **groupObject, aafInt32	*nestDepth,
 											 ImplAAFComponent **found, aafBool *foundTransition)
 {
 	aafLength_t	tmpMinLen;

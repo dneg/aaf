@@ -18,16 +18,16 @@
 #include "ImplAAFDefObject.h"
 #endif
 
-#ifndef __ImplAAFEffectDef_h__
-#include "ImplAAFEffectDef.h"
+#ifndef __ImplAAFOperationDef_h__
+#include "ImplAAFOperationDef.h"
 #endif
 
 #ifndef __ImplAAFParameter_h__
 #include "ImplAAFParameter.h"
 #endif
 
-#ifndef __ImplEnumAAFEffectDefs_h__
-#include "ImplEnumAAFEffectDefs.h"
+#ifndef __ImplEnumAAFOperationDefs_h__
+#include "ImplEnumAAFOperationDefs.h"
 #endif
 
 #ifndef __ImplEnumAAFParameterDefs_h__
@@ -47,8 +47,8 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIds.h"
 
-#ifndef __ImplAAFEffect_h__
-#include "ImplAAFEffect.h"
+#ifndef __ImplAAFOperationGroup_h__
+#include "ImplAAFOperationGroup.h"
 #endif
 
 #include "ImplAAFObjectCreation.h"
@@ -72,14 +72,14 @@ extern "C" const aafClassID_t CLSID_AAFSegment;
 
 const aafUID_t kNullID = {0};
 
-ImplAAFEffect::ImplAAFEffect ()
-: _effectDefinition( PID_Effect_EffectDefinition, "EffectDefinition"),
-  _inputSegments( PID_Effect_InputSegments, "InputSegments"),
-  _parameters( PID_Effect_Parameters, "Parameters"),
-  _bypassOverride( PID_Effect_BypassOverride, "BypassOverride"),
-  _rendering( PID_Effect_Rendering, "Rendering")
+ImplAAFOperationGroup::ImplAAFOperationGroup ()
+: _operationDefinition( PID_OperationGroup_OperationDefinition, "OperationDefinition"),
+  _inputSegments( PID_OperationGroup_InputSegments, "InputSegments"),
+  _parameters( PID_OperationGroup_Parameters, "Parameters"),
+  _bypassOverride( PID_OperationGroup_BypassOverride, "BypassOverride"),
+  _rendering( PID_OperationGroup_Rendering, "Rendering")
 {
-	_persistentProperties.put(_effectDefinition.address());
+	_persistentProperties.put(_operationDefinition.address());
 	_persistentProperties.put(_inputSegments.address());
 	_persistentProperties.put(_parameters.address());
 	_persistentProperties.put(_bypassOverride.address());
@@ -87,44 +87,44 @@ ImplAAFEffect::ImplAAFEffect ()
 }
 
 
-ImplAAFEffect::~ImplAAFEffect ()
+ImplAAFOperationGroup::~ImplAAFOperationGroup ()
 {}
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEffect::Initialize(aafUID_t*		pDatadef,
+    ImplAAFOperationGroup::Initialize(aafUID_t*		pDatadef,
 							 aafLength_t    length,
-                             ImplAAFEffectDef* pEffectDef)
+                             ImplAAFOperationDef* pOperationDef)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
 	ImplAAFHeader*			pHeader = NULL;
 	ImplAAFDictionary*		pDictionary = NULL;
-//	ImplAAFEffectDef*		pOldEffectDef = NULL;
-	aafUID_t				EffectDefAUID;
+//	ImplAAFOperationDef*		pOldOperationDef = NULL;
+	aafUID_t				OperationDefAUID;
 	aafUID_t	uid;
 
-	if (pDatadef == NULL || pEffectDef == NULL)
+	if (pDatadef == NULL || pOperationDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 
 	XPROTECT()
 	{
 		// Get the Header and the dictionary objects for this file.
-		CHECK(pEffectDef->MyHeadObject(&pHeader));
+		CHECK(pOperationDef->MyHeadObject(&pHeader));
 		CHECK(pHeader->GetDictionary(&pDictionary));
 		pHeader->ReleaseReference();
 		pHeader = NULL;
 
 		CHECK(SetNewProps(length, pDatadef));
-		CHECK(pEffectDef->GetAUID(&uid));
-		_effectDefinition = uid;
-		// Lookup the effect definition's AUID
-		CHECK(pEffectDef->GetAUID(&EffectDefAUID));
-		// find out if this effectdef is already set
+		CHECK(pOperationDef->GetAUID(&uid));
+		_operationDefinition = uid;
+		// Lookup the OperationGroup definition's AUID
+		CHECK(pOperationDef->GetAUID(&OperationDefAUID));
+		// find out if this OperationDef is already set
 // !!!JeffB: Not handling weak references as OM references yet.
-//		if (pDictionary->LookupEffectDefinition(&EffectDefAUID, &pOldEffectDef) == AAFRESULT_SUCCESS)
-//			pOldEffectDef->ReleaseReference();
-		_effectDefinition = EffectDefAUID;
-		pEffectDef->AcquireReference();
+//		if (pDictionary->LookupOperationDefinition(&OperationDefAUID, &pOldOperationDef) == AAFRESULT_SUCCESS)
+//			pOldOperationDef->ReleaseReference();
+		_operationDefinition = OperationDefAUID;
+		pOperationDef->AcquireReference();
 		pDictionary->ReleaseReference();
 	}
 	XEXCEPT
@@ -139,26 +139,26 @@ AAFRESULT STDMETHODCALLTYPE
 	return rc;
 }
 
-	//@comm  This function takes an already created effect definition object as an argument.
-	//@comm  To add slots to the effect, call AddNewSlot.
+	//@comm  This function takes an already created OperationGroup definition object as an argument.
+	//@comm  To add slots to the OperationGroup, call AddNewSlot.
 	//@comm  To add renderings, call SetRender.
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEffect::GetEffectDefinition (ImplAAFEffectDef **effectDef)
+    ImplAAFOperationGroup::GetOperationDefinition (ImplAAFOperationDef **OperationDef)
 {
 	aafUID_t			defUID;
 	ImplAAFDictionary	*dict = NULL;
 	ImplAAFHeader		*head = NULL;
 
-	if(effectDef == NULL)
+	if(OperationDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 
 	XPROTECT()
 	{
-		defUID = _effectDefinition;
+		defUID = _operationDefinition;
 		CHECK(MyHeadObject(&head));
 		CHECK(head->GetDictionary(&dict));
-		CHECK(dict->LookupEffectDefinition(&defUID, effectDef));
+		CHECK(dict->LookupOperationDefinition(&defUID, OperationDef));
 	}
 	XEXCEPT
 	{
@@ -172,11 +172,11 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
-	//@comm Replaces part of omfiEffectGetInfo
+	//@comm Replaces part of omfiOperationGroupGetInfo
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEffect::GetRender (ImplAAFSourceReference **sourceRef)
+    ImplAAFOperationGroup::GetRender (ImplAAFSourceReference **sourceRef)
 {
 	if(sourceRef == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -190,18 +190,18 @@ AAFRESULT STDMETHODCALLTYPE
 	// AAFRESULT_PROP_NOT_PRESENT will be returned.
 	//@comm Working and final renderings are handled by using
 	// a media group as the segment.
-	//@comm Replaces omfiEffectGetFinalRender and omfiEffectGetWorkingRender
+	//@comm Replaces omfiOperationGroupGetFinalRender and omfiOperationGroupGetWorkingRender
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEffect::IsATimeWarp (aafBool *isTimeWarp)
+    ImplAAFOperationGroup::IsATimeWarp (aafBool *isTimeWarp)
 {
-	ImplAAFEffectDef	*def;
+	ImplAAFOperationDef	*def;
 	
 	XPROTECT()
 	{
 		if(isTimeWarp == NULL)
 			RAISE(AAFRESULT_NULL_PARAM);
-		CHECK(GetEffectDefinition(&def));
+		CHECK(GetOperationDefinition(&def));
 		CHECK(def->IsTimeWarp (isTimeWarp));
 	}
 	XEXCEPT
@@ -210,11 +210,11 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
-	//@comm Replaces omfiEffectIsATimeWarp
+	//@comm Replaces omfiOperationGroupIsATimeWarp
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEffect::GetBypassOverride (aafUInt32* pBypassOverride)
+    ImplAAFOperationGroup::GetBypassOverride (aafUInt32* pBypassOverride)
 {
 	if(pBypassOverride == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -224,10 +224,10 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 	//@comm If the property does not exist, the error AAFRESULT_PROP_NOT_PRESENT will be returned.)
-	//@comm Replaces omfiEffectGetBypassOverride
+	//@comm Replaces omfiOperationGroupGetBypassOverride
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEffect::GetNumSourceSegments (aafInt32 *pNumSources)
+    ImplAAFOperationGroup::GetNumSourceSegments (aafInt32 *pNumSources)
 {
    size_t numSlots;
 
@@ -240,11 +240,11 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
-	//@comm Replaces omfiEffectGetNumSlots
+	//@comm Replaces omfiOperationGroupGetNumSlots
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEffect::GetNumParameters (aafInt32 * pNumParameters)
+    ImplAAFOperationGroup::GetNumParameters (aafInt32 * pNumParameters)
 {
    size_t numSlots;
 
@@ -257,19 +257,19 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
-	//@comm Replaces omfiEffectGetNumSlots
+	//@comm Replaces omfiOperationGroupGetNumSlots
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEffect::IsValidTranEffect (aafBool * validTransition)
+    ImplAAFOperationGroup::IsValidTranOperation (aafBool * validTransition)
 {
-	ImplAAFEffectDef	*def;
+	ImplAAFOperationDef	*def;
 	aafInt32			numInputs;
 	
 	XPROTECT()
 	{
 		if(validTransition == NULL)
 			RAISE(AAFRESULT_NULL_PARAM);
-		CHECK(GetEffectDefinition(&def));
+		CHECK(GetOperationDefinition(&def));
 		CHECK(def->GetNumberInputs (&numInputs));
 		*validTransition = (numInputs == 2 ? AAFTrue : AAFFalse);
 		//!!!Must also have a "level" parameter (Need definition for this!)
@@ -282,7 +282,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEffect::AddNewParameter (ImplAAFParameter *pValue)
+    ImplAAFOperationGroup::AddNewParameter (ImplAAFParameter *pValue)
 {
 	if(pValue == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -293,10 +293,10 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
-	//@comm Replaces part of omfiEffectAddNewSlot
+	//@comm Replaces part of omfiOperationGroupAddNewSlot
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEffect::AppendNewInputSegment (ImplAAFSegment * value)
+    ImplAAFOperationGroup::AppendNewInputSegment (ImplAAFSegment * value)
 {
 	_inputSegments.appendValue(value);
 	value->AcquireReference();
@@ -304,10 +304,10 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
-	//@comm Replaces part of omfiEffectAddNewSlot
+	//@comm Replaces part of omfiOperationGroupAddNewSlot
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEffect::SetRender (ImplAAFSourceReference *sourceRef)
+    ImplAAFOperationGroup::SetRender (ImplAAFSourceReference *sourceRef)
 {
 	if(sourceRef == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -318,20 +318,20 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
-	//@comm Replaces omfiEffectSetFinalRender and omfiEffectSetWorkingRender
+	//@comm Replaces omfiOperationGroupSetFinalRender and omfiOperationGroupSetWorkingRender
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEffect::SetBypassOverride (aafUInt32  bypassOverride)
+    ImplAAFOperationGroup::SetBypassOverride (aafUInt32  bypassOverride)
 {
 	_bypassOverride = bypassOverride;
 
 	return AAFRESULT_SUCCESS;
 }
 
-	//@comm Replaces omfiEffectSetBypassOverride
+	//@comm Replaces omfiOperationGroupSetBypassOverride
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEffect::GetParameterByArgID (aafArgIDType_t  argID,
+    ImplAAFOperationGroup::GetParameterByArgID (aafArgIDType_t  argID,
                            ImplAAFParameter ** ppParameter)
 {
 	ImplAAFParameter	*parm = NULL;
@@ -375,7 +375,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEffect::GetIndexedInputSegment (aafInt32  index,
+    ImplAAFOperationGroup::GetIndexedInputSegment (aafInt32  index,
                            ImplAAFSegment ** ppInputSegment)
 {
 	ImplAAFSegment	*obj;
@@ -397,6 +397,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
-OMDEFINE_STORABLE(ImplAAFEffect, AUID_AAFEffect);
+OMDEFINE_STORABLE(ImplAAFOperationGroup, AUID_AAFOperationGroup);
 
 

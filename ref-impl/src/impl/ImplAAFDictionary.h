@@ -27,9 +27,9 @@ class ImplAAFDataDef;
 
 class ImplEnumAAFDataDefs;
 
-class ImplAAFEffectDef;
+class ImplAAFOperationDef;
 
-class ImplEnumAAFEffectDefs;
+class ImplEnumAAFOperationDefs;
 
 class ImplEnumAAFPluggableDefs;
 
@@ -49,7 +49,7 @@ class ImplAAFContainerDef;
 
 
 #include "ImplAAFClassDef.h"
-#include "ImplAAFEffectDef.h"
+#include "ImplAAFOperationDef.h"
 #include "ImplAAFDefObject.h"
 #include "ImplAAFCodecDef.h"
 #include "ImplAAFContainerDef.h"
@@ -180,31 +180,31 @@ public:
 
 
   //****************
-  // RegisterEffectDefinition()
+  // RegisterOperationDefinition()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    RegisterEffectDefinition
+    RegisterOperationDefinition
         // @parm [in] Effect Definition Object
-        (ImplAAFEffectDef * pEffectDef);
+        (ImplAAFOperationDef * pOperationDef);
 
   //****************
-  // LookupEffectDefinition()
+  // LookupOperationDefinition()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    LookupEffectDefinition
+    LookupOperationDefinition
         (// @parm [in,ref] Effect Unique ID
          aafUID_t *  effectID,
 
          // @parm [out,retval] Effect definition object
-         ImplAAFEffectDef ** ppEffectDef);
+         ImplAAFOperationDef ** ppOperationDef);
 
   //****************
-  // GetEffectDefinitions()
+  // GetOperationDefinitions()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetEffectDefinitions
+    GetOperationDefinitions
         // @parm [out,retval] Definition Enumeration
-        (ImplEnumAAFEffectDefs ** ppEnum);
+        (ImplEnumAAFOperationDefs ** ppEnum);
 
   //****************
   // RegisterParameterDefinition()
@@ -308,7 +308,7 @@ private:
 
     OMStrongReferenceVectorProperty<ImplAAFCodecDef>		_codecDefinitions;
     OMStrongReferenceVectorProperty<ImplAAFContainerDef>	_containerDefinitions;
-    OMStrongReferenceVectorProperty<ImplAAFEffectDef>		_effectDefinitions;
+    OMStrongReferenceVectorProperty<ImplAAFOperationDef>	_operationDefinitions;
     OMStrongReferenceVectorProperty<ImplAAFParameterDef>	_parameterDefinitions;
     OMStrongReferenceVectorProperty<ImplAAFTypeDef>			_typeDefinitions;
     OMStrongReferenceVectorProperty<ImplAAFClassDef>		_classDefinitions;
