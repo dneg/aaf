@@ -665,6 +665,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT ImplAAFObject::InitProperties ()
 {
+  try {
+
   if (! _pProperties)
 	{
 	  _pProperties = new ImplPropertyCollection;
@@ -675,6 +677,19 @@ AAFRESULT ImplAAFObject::InitProperties ()
 	  AAFRESULT ar = _pProperties->Initialize (this, ps);
 	  if (AAFRESULT_FAILED (ar)) return ar;
 	}
+
+  }
+
+  catch (...) {
+	  // clean up and rethrow
+	  if ( _pProperties ) {
+		delete _pProperties;
+		_pProperties = 0;
+	  }
+	  throw;
+  }
+  
+  
   assert (_pProperties);
   return AAFRESULT_SUCCESS;
 }
