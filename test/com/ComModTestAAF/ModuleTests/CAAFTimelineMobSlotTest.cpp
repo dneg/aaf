@@ -26,11 +26,11 @@
 
 #include "AAF.h"
 
-#if !defined( COMPILER_MSC )
-#define __STDC_CONSTANT_MACROS // enables INT64_C macro in stdint.h
-#include <inttypes.h>
-#else
+#if defined( _MSC_VER )
 #define INT64_C(c) c
+#else
+#define __STDC_CONSTANT_MACROS		// needed in C++ to enable macros like INT64_C
+#include <inttypes.h>				// provides INT64_C macro
 #endif
 
 
