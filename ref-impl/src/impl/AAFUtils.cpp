@@ -492,14 +492,16 @@ static aafInt32 powi(
 struct SMPTELabel
 {
 	aafUInt32	MobIDMajor;
-	aafUInt32	MobIDMinor;
+	aafUInt16	MobIDMinorLow;
+	aafUInt16	MobIDMinorHigh;
 	aafUInt8	oid;
 	aafUInt8	size;
 	aafUInt8	ulcode;
 	aafUInt8	SMPTE;
 	aafUInt8	Registry;
 	aafUInt8	unused;
-	aafUInt16	MobIDPrefix;
+	aafUInt8	MobIDPrefixLow;
+	aafUInt8	MobIDPrefixHigh;
 };
 
 union label
@@ -574,10 +576,12 @@ AAFRESULT aafMobIDFromMajorMinor(
 	aLabel.smpte.SMPTE = 0x34;
 	aLabel.smpte.Registry = 0x02;
 	aLabel.smpte.unused = 0;
-	aLabel.smpte.MobIDPrefix = 42;		// Means its an OMF Uid
+	aLabel.smpte.MobIDPrefixLow = 42;		// Means its an OMF Uid
+	aLabel.smpte.MobIDPrefixHigh = 0;		// Means its an OMF Uid
 
 	aLabel.smpte.MobIDMajor = major;
-	aLabel.smpte.MobIDMinor = minor;
+	aLabel.smpte.MobIDMinorLow = (aafUInt16)(minor & 0xFFFF);
+	aLabel.smpte.MobIDMinorHigh =  (aafUInt16)((minor >> 16L) & 0xFFFF);
 
 	*mobID = aLabel.mobID;
 	return(AAFRESULT_SUCCESS);
