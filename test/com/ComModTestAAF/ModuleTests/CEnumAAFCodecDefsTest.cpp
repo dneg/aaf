@@ -160,7 +160,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							   (IUnknown **)&pCodecDef));
     
 	checkResult(pCodecDef->AddEssenceKind (defs.ddMatte()));
-	uid = NoCodec;
+	uid = kAAFNoCodec;
 	checkResult(pCodecDef->Initialize (uid, sName1, sDescription1));
 	checkResult(pDictionary->LookupClassDef(kAAFClassID_EssenceDescriptor, &pClass));
 	checkResult(pCodecDef->SetFileDescriptorClass (pClass));
