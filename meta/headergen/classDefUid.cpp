@@ -61,7 +61,7 @@ static void doFile (const char * moduleName)
     cout << "#define " << prefix;
     printName(aliases[i].alias, width, cout);
     cout << " " << prefix;
-    printName(aliases[i].name, width, cout);
+    printName(aliases[i].name, 0, cout);
     cout << endl;
   }
   cout << endl;
