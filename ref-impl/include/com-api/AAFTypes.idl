@@ -59,7 +59,6 @@ typedef unsigned int		aafUInt32;
 
 typedef hyper			aafInt64;
 typedef unsigned hyper		aafUInt64;
-#define AAF_INT64_NATIVE	1
 
 typedef wchar_t			aafWChar;
 typedef wchar_t			aafCharacter;
@@ -72,18 +71,6 @@ cpp_quote("#else")
 cpp_quote("#include \"AAFPlatform.h\"")
 
 cpp_quote("#endif  // #if 0") 
-
-
-cpp_quote("// Add compatibility with 32/64 conversion routines.") 
-cpp_quote("#undef PORT_USE_NATIVE64") 
-cpp_quote("#undef PORTKEY_INT64_TYPE") 
-cpp_quote("#if AAF_INT64_NATIVE") 
-cpp_quote("#define PORT_USE_NATIVE64 1") 
-cpp_quote("#define PORTKEY_INT64_TYPE aafInt64") 
-cpp_quote("#else") 
-cpp_quote("#define PORT_USE_NATIVE64 0") 
-cpp_quote("#define PORTKEY_INT64_TYPE aafInt64") 
-cpp_quote("#endif") 
 
 
 typedef unsigned char * aafMemPtr_t;

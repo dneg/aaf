@@ -184,12 +184,6 @@
  *
  ***************************************************************/
     
-/* Reset definition */
-#ifdef AAF_INT64_NATIVE
-#undef AAF_INT64_NATIVE
-#endif 
-
-
 /*
  *  MS Windows
  */
@@ -204,7 +198,6 @@ typedef unsigned long int	aafUInt32;
 
 typedef __int64				aafInt64;
 typedef unsigned __int64	aafUInt64;
-#define AAF_INT64_NATIVE	1
 
 typedef wchar_t			aafWChar;
 typedef wchar_t			aafCharacter;
@@ -230,25 +223,9 @@ typedef uint8_t			aafUInt8;
 typedef uint16_t		aafUInt16;
 typedef uint32_t		aafUInt32;
 typedef uint64_t		aafUInt64;
-#define AAF_INT64_NATIVE	1
 
 typedef wchar_t			aafWChar;
 typedef wchar_t			aafCharacter;
-
-#endif
-
-
-/*
- *  Default definitions of 64-bit types
- */
-#ifndef AAF_INT64_NATIVE
-/* Treated as an integer, defined as array of 4 shorts if needed */
-typedef struct _aafInt64_t
-{
-	aafUInt16       words[4];
-} aafInt64;
-typedef aafInt64_t              aafUInt64;
-#define AAF_INT64_NATIVE        0
 
 #endif
 
