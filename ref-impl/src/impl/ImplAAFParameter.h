@@ -71,6 +71,8 @@ public:
     GetTypeDefinition (
       ImplAAFTypeDef **ppTypeDef);
 
+    virtual const OMUniqueObjectIdentification& identification(void) const;
+
 private:
 
 	OMFixedSizeProperty<aafUID_t>				_parmDef;
