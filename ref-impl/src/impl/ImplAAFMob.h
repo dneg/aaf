@@ -80,8 +80,8 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetName
-        (aafWChar *  name);  //@parm [in,out] Mob Name
- 
+        (aafWChar *  name,  //@parm [in] Mob Name
+		aafInt32 bufSize);	  //@parm [in] size of the buffer required to hold Mob Name + terminator
   //****************
   // GetNameLen()
   //
@@ -351,7 +351,7 @@ AAFRESULT
 
 	protected:
 	OMFixedSizeProperty<aafUID_t>		_mobID;
-	OMStringProperty					_name;
+	OMWideStringProperty				_name;
 //!!! Creation time and last modified should be OMStructuredProperty
 	OMFixedSizeProperty<aafTimeStamp_t>	_creationTime;
 	OMFixedSizeProperty<aafTimeStamp_t>	_lastModified;
