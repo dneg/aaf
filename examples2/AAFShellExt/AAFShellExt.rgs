@@ -1,0 +1,11 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		{b975b80a-71b8-4981-88c7-a7ecbdacc47d} = s 'AAFShellExt'
+		'AAFShellExt.DLL'
+		{
+			val AppID = s '{b975b80a-71b8-4981-88c7-a7ecbdacc47d}'
+		}
+	}
+}

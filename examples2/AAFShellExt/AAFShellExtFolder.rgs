@@ -1,0 +1,48 @@
+HKCR
+{
+	'.aaf' = s 'CLSID\\{f9c7572a-6ed7-4368-a90a-c1ca993601e5}'
+
+	NoRemove CLSID
+	{
+		ForceRemove {f9c7572a-6ed7-4368-a90a-c1ca993601e5} = s 'AAF Browser'
+		{
+		'shell'
+		{
+			'open'
+			{
+				'command' = s 'explorer /e,/root,{f9c7572a-6ed7-4368-a90a-c1ca993601e5},%%1'
+			}
+		}
+            DefaultIcon = s '%MODULE%,0'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{8f3b7320-447c-45ef-a044-aaa8002882bc}'
+            ShellFolder
+			val InfoTip = s 'AAF file browser.'
+		}
+	}
+}
+HKLM
+{
+    NoRemove Software
+    {
+        NoRemove Microsoft
+        {
+            NoRemove Windows
+            {
+                NoRemove CurrentVersion
+                {
+                    NoRemove 'Shell Extensions'
+                    {
+                        NoRemove 'Approved'
+                        {
+                            val '{f9c7572a-6ed7-4368-a90a-c1ca993601e5}' = s 'AAF Browser'
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

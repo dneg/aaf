@@ -1,0 +1,25 @@
+HKCR
+{
+	AAFShellExt.AAFShellExtIcon.1 = s 'AAFShellExtIcon Class'
+	{
+		CLSID = s '{572e9fc4-026e-4fe7-8230-a816bf7ac943}'
+	}
+	AAFShellExt.AAFShellExtIcon = s 'AAFShellExtIcon Class'
+	{
+		CLSID = s '{572e9fc4-026e-4fe7-8230-a816bf7ac943}'
+		CurVer = s 'AAFShellExt.AAFShellExtIcon.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {572e9fc4-026e-4fe7-8230-a816bf7ac943} = s 'AAFShellExtIcon Class'
+		{
+			ProgID = s 'AAFShellExt.AAFShellExtIcon.1'
+			VersionIndependentProgID = s 'AAFShellExt.AAFShellExtIcon'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{8f3b7320-447c-45ef-a044-aaa8002882bc}'
+		}
+	}
+}

@@ -1,0 +1,108 @@
+
+	// AAFShellExt.idl : IDL source for AAFShellExt.dll
+//
+// This file will be processed by the MIDL tool to
+// produce the type library (AAFShellExt.tlb) and marshalling code.
+import "oaidl.idl";
+import "ocidl.idl";
+	[
+		object,
+		uuid(33052261-13a8-4746-9051-44c7d3c32acc),
+	
+		helpstring("IAAFShellExtFolder Interface"),
+		pointer_default(unique)
+	]
+	interface IAAFShellExtFolder : IUnknown
+	{
+	};
+	[
+		object,
+		uuid(2eacf835-8a20-4fe1-9942-5dfb98228896),
+	
+		helpstring("IAAFShellExtView Interface"),
+		pointer_default(unique)
+	]
+	interface IAAFShellExtView : IUnknown
+	{
+	};
+	[
+		object,
+		uuid(254edef0-d96d-4ab7-a6c8-b13fe761b563),
+		dual,
+		helpstring("IAAFShellExtIDLIST Interface"),
+		pointer_default(unique)
+	]
+	interface IAAFShellExtIDLIST : IUnknown
+	{
+	};
+	[
+		object,
+		uuid(4752cdd1-479a-4c15-b5da-44ed9051724b),
+	
+		helpstring("IAAFShellExtIcon Interface"),
+		pointer_default(unique)
+	]
+	interface IAAFShellExtIcon : IUnknown
+	{
+	};
+	[
+		object,
+		uuid(86825b55-01be-49e4-862e-4f1c3c0548ee),
+	
+		helpstring("IAAFShellExtContextMenu Interface"),
+		pointer_default(unique)
+	]
+	interface IAAFShellExtContextMenu : IUnknown
+	{
+	};
+[
+	uuid(8f3b7320-447c-45ef-a044-aaa8002882bc),
+	version(1.0),
+	helpstring("AAFShellExt 1.0 Type Library")
+]
+library AAFShellExtLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+	[
+		uuid(f9c7572a-6ed7-4368-a90a-c1ca993601e5),
+		helpstring("AAFShellExtFolder Class")
+	]
+	coclass AAFShellExtFolder
+	{
+		[default] interface IAAFShellExtFolder;
+	};
+	[
+		uuid(38d0f1aa-d10f-4bfc-b4c0-925c7470dc4f),
+		helpstring("AAFShellExtView Class")
+	]
+	coclass AAFShellExtView
+	{
+		[default] interface IAAFShellExtView;
+	};
+	[
+		uuid(98812278-34f8-40e0-b5f1-1d7bc93105a9),
+		helpstring("AAFShellExtIDLIST Class")
+	]
+	coclass AAFShellExtIDLIST
+	{
+		[default] interface IAAFShellExtIDLIST;
+	};
+	[
+		uuid(572e9fc4-026e-4fe7-8230-a816bf7ac943),
+		helpstring("AAFShellExtIcon Class")
+	]
+	coclass AAFShellExtIcon
+	{
+		[default] interface IAAFShellExtIcon;
+	};
+	[
+		uuid(499e0659-de4c-4801-b1f1-65203ea2875b),
+		helpstring("RegContextMenu Class")
+	]
+	coclass AAFShellExtContextMenu
+	{
+		[default] interface IAAFShellExtContextMenu;
+	};
+};
+

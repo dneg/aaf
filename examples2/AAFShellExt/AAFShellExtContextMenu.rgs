@@ -1,0 +1,25 @@
+HKCR
+{
+	AAFShellExt.AAFShellExtContextMenu.1 = s 'AAFShellExtContextMenu Class'
+	{
+		CLSID = s '{499e0659-de4c-4801-b1f1-65203ea2875b}'
+	}
+	AAFShellExt.AAFShellExtContextMenu = s 'AAFShellExtContextMenu Class'
+	{
+		CLSID = s '{499e0659-de4c-4801-b1f1-65203ea2875b}'
+		CurVer = s 'AAFShellExt.AAFShellExtContextMenu.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {499e0659-de4c-4801-b1f1-65203ea2875b} = s 'AAFShellExtContextMenu Class'
+		{
+			ProgID = s 'AAFShellExt.AAFShellExtContextMenu.1'
+			VersionIndependentProgID = s 'AAFShellExt.AAFShellExtContextMenu'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{86825b55-01be-49e4-862e-4f1c3c0548ee}'
+		}
+	}
+}
