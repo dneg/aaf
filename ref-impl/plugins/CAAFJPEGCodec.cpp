@@ -1190,7 +1190,7 @@ cplusplus_error_exit (j_common_ptr cinfo)
   (*cinfo->err->output_message) (cinfo);
 
   /* Return control to catch block in main compress or decompress routine. */
-  throw HRESULT(cinfo->err);
+  throw cinfo->err;
 }
 
 HRESULT STDMETHODCALLTYPE
