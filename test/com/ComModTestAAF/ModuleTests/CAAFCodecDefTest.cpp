@@ -20,6 +20,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
+#include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 
 // Cross-platform utility to delete a file.
@@ -92,41 +93,55 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
 	IAAFFile*		pFile = NULL;
-  IAAFHeader *        pHeader = NULL;
-  IAAFDictionary*  pDictionary = NULL;
-  IAAFCodecDef*	pPlugDef;
-  bool bFileOpen = false;
+	IAAFHeader *        pHeader = NULL;
+	IAAFDictionary*  pDictionary = NULL;
+	IAAFCodecDef*	pPlugDef = NULL;
+	IAAFDefObject	*pDef = NULL;
+	IAAFDataDef		*pDataDef = NULL;
+	bool bFileOpen = false;
 	HRESULT			hr = S_OK;
+	aafUID_t		uid;
 /*	long			test;
 */
 
-  try
-  {
-    // Remove the previous test file if any.
-    RemoveTestFile(pFileName);
+	try
+	{
+		// Remove the previous test file if any.
+		RemoveTestFile(pFileName);
 
 
-	  // Create the AAF file
-	  checkResult(OpenAAFFile(pFileName, kMediaOpenAppend, /*&pSession,*/ &pFile, &pHeader));
-    bFileOpen = true;
+		// Create the AAF file
+		checkResult(OpenAAFFile(pFileName, kMediaOpenAppend, /*&pSession,*/ &pFile, &pHeader));
+		bFileOpen = true;
 
-    // Get the AAF Dictionary so that we can create valid AAF objects.
-    checkResult(pHeader->GetDictionary(&pDictionary));
+		// Get the AAF Dictionary so that we can create valid AAF objects.
+		checkResult(pHeader->GetDictionary(&pDictionary));
     
-	  checkResult(pDictionary->CreateInstance(&AUID_AAFCodecDef,
+		checkResult(pDictionary->CreateInstance(&AUID_AAFCodecDef,
 							  IID_IAAFCodecDef, 
 							  (IUnknown **)&pPlugDef));
     
+		checkResult(pPlugDef->QueryInterface(IID_IAAFDefObject, (void **) &pDef));
+		uid = NoCodec;
+		checkResult(pDef->Init (&uid, L"TestCodec", L"TestCodecDescription"));
 
-	  checkResult(pDictionary->RegisterCodecDefinition(pPlugDef));
-  }
-  catch (HRESULT& rResult)
-  {
-    hr = rResult;
-  }
+		uid = DDEF_Matte;
+		checkResult(pPlugDef->AppendEssenceKind (&uid));
+		checkResult(pDictionary->RegisterCodecDefinition(pPlugDef));
+	}
+	catch (HRESULT& rResult)
+	{
+		hr = rResult;
+	}
 
 
   // Cleanup and return
+  if (pDef)
+    pDef->Release();
+
+  if (pDataDef)
+    pDataDef->Release();
+
   if (pPlugDef)
     pPlugDef->Release();
 
@@ -154,8 +169,12 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFFile*		pFile = NULL;
 	IAAFHeader*		pHeader = NULL;
 	IAAFDictionary*  pDictionary = NULL;
-//!!!	IEnumAAFPluggableDefs *pPlug = NULL;
-  bool bFileOpen = false;
+	IAAFCodecDef	*pCodec = NULL;
+	IAAFDataDef		*pDataDef = NULL;
+	bool bFileOpen = false;
+	aafBool			testResult;
+	aafUID_t		codecID = NoCodec;
+	aafUID_t		testMatte = DDEF_Matte, testPicture = DDEF_Picture;
 	HRESULT			hr = S_OK;
 
 	try
@@ -165,8 +184,12 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		bFileOpen = true;
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
-	
-//!!!	  checkResult(pDictionary->GetPluggableDefinitions(&pPlug));
+		checkResult(pDictionary->LookupCodecDefinition(&codecID, &pCodec));
+
+		checkResult(pCodec->IsEssenceKindSupported (&testMatte, &testResult));
+		checkExpression (testResult == AAFTrue, AAFRESULT_TEST_FAILED);
+		checkResult(pCodec->IsEssenceKindSupported (&testPicture, &testResult));
+		checkExpression (testResult == AAFFalse, AAFRESULT_TEST_FAILED);
 	}
 	catch (HRESULT& rResult)
 	{
@@ -177,6 +200,10 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 //!!!	if (pPlug)
 //!!!		pPlug->Release();
 
+	if (pDataDef)
+		pDataDef->Release();
+	if (pCodec)
+		pCodec->Release();
 	if (pDictionary)
 		pDictionary->Release();
 
@@ -215,8 +242,6 @@ extern "C" HRESULT CAAFCodecDef_test()
 	if (SUCCEEDED(hr))
 	{
 		cout << "The following IAAFCodecDef methods have not been implemented:" << endl; 
-		cout << "     IsEssenceKindSupported" << endl; 
-		cout << "     AppendEssenceKind" << endl; 
 		cout << "     AreThereFlavours" << endl; 
 		cout << "     GetFileDescriptorClass" << endl; 
 		cout << "     SetFileDescriptorClass" << endl; 
