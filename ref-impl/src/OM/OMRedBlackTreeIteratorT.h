@@ -207,7 +207,7 @@ bool OMRedBlackTreeIterator<Key, Value>::operator++()
   POSTCONDITION("Consistent result", IMPLIES( result,  this->valid()));
   POSTCONDITION("Consistent result", IMPLIES(!result, !this->valid()));
   POSTCONDITION("Valid result",
-               IMPLIES(this->valid(), (_current != 0) && (_current != _tree->_nil)));
+         IMPLIES(this->valid(), (_current != 0) && (_current != _tree->_nil)));
   return result;
 }
 
@@ -261,7 +261,7 @@ bool OMRedBlackTreeIterator<Key, Value>::operator--()
   POSTCONDITION("Consistent result", IMPLIES( result,  this->valid()));
   POSTCONDITION("Consistent result", IMPLIES(!result, !this->valid()));
   POSTCONDITION("Valid result",
-               IMPLIES(this->valid(), (_current != 0) && (_current != _tree->_nil)));
+         IMPLIES(this->valid(), (_current != 0) && (_current != _tree->_nil)));
   return result;
 }
 
