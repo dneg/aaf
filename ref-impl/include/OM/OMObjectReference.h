@@ -102,11 +102,8 @@ protected:
 };
 
   // @class Persistent strong references to persistent objects.
-  //   @tcarg class | ReferencedObject | The type of the referenced
-  //          object. This type must be a descendant of <c OMStorable>.
   //   @base public | <c OMObjectReference>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-template <typename ReferencedObject>
 class OMStrongObjectReference : public OMObjectReference {
 public:
   // @access Public members.
@@ -129,13 +126,12 @@ public:
     // @cmember Assignment.
     //          This operator provides value semantics for <c OMContainer>.
     //          This operator does not provide assignment of object references.
-  OMStrongObjectReference<ReferencedObject>& operator=
-                        (const OMStrongObjectReference<ReferencedObject>& rhs);
+  OMStrongObjectReference& operator= (const OMStrongObjectReference& rhs);
 
     // @cmember Equality.
     //          This operator provides value semantics for <c OMContainer>.
     //          This operator does not provide equality of object references.
-  bool operator== (const OMStrongObjectReference<ReferencedObject>& rhs) const;
+  bool operator== (const OMStrongObjectReference& rhs) const;
 
     // @cmember Save this <c OMStrongObjectReference>.
   virtual void save(void) const;
