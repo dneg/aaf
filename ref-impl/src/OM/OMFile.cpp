@@ -720,6 +720,13 @@ OMFile::OMLoadMode OMFile::loadMode(void) const
   return _loadMode;
 }
 
+void OMFile::setLoadMode(OMLoadMode mode)
+{
+  TRACE("OMFile::setLoadMode");
+
+  _loadMode = mode;
+}
+
   // @mfunc The access mode of this <c OMFile>.
   //   @rdesc The access mode of this <c OMFile>. 
   //   @this const

@@ -243,6 +243,8 @@ public:
     // @cmember The loading mode (eager or lazy) of this <c OMFile>.
   OMLoadMode loadMode(void) const;
 
+  void setLoadMode(OMLoadMode mode);
+
     // @cmember The access mode of this <c OMFile>.
   OMAccessMode accessMode(void) const;
 
