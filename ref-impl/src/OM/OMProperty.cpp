@@ -22,6 +22,8 @@
 
 // @doc OMEXTERNAL
 
+// define OM_PERMIT_ZERO_LENGTH to eliminate debug check for zero-length properties on read
+
 #include "OMProperty.h"
 
 #include "OMAssertions.h"
@@ -280,7 +282,10 @@ OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
   _bits(0)
 {
   TRACE("OMSimpleProperty::OMSimpleProperty");
+
+#ifdef OM_PERMIT_ZERO_LENGTH
   PRECONDITION("Valid size", (valueSize > 0));
+#endif
 
   setSize(valueSize);
   for (size_t i = 0; i < _size; i++) {
@@ -324,7 +329,9 @@ void OMSimpleProperty::setSize(size_t newSize)
 {
   TRACE("OMSimpleProperty::setSize");
 
+#ifdef OM_PERMIT_ZERO_LENGTH
   PRECONDITION("Valid size", newSize > 0);
+#endif
 
   if (newSize != _size) {
     delete [] _bits;
@@ -377,8 +384,10 @@ void OMSimpleProperty::get(void* value, size_t ANAME(valueSize)) const
   TRACE("OMSimpleProperty::get");
   PRECONDITION("Valid data buffer", value != 0);
   PRECONDITION("Valid size", valueSize >= _size);
-  PRECONDITION("Optional property is present",
-                                           IMPLIES(isOptional(), isPresent()));
+
+
+	PRECONDITION("Optional property is present",IMPLIES(isOptional(), isPresent()));
+
 
   memcpy(value, _bits, _size);
 }
@@ -509,8 +518,11 @@ OMByte* OMSimpleProperty::bits(void) const
 void OMSimpleProperty::getBits(OMByte* bits, size_t ANAME(bitsSize)) const
 {
   TRACE("OMSimpleProperty::getBits");
-  PRECONDITION("Optional property is present",
-                                           IMPLIES(isOptional(), isPresent()));
+
+
+	PRECONDITION("Optional property is present",IMPLIES(isOptional(), isPresent()));
+
+
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", bitsSize >= _size);
 

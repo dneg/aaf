@@ -25,6 +25,8 @@ export PACKAGE
 
 AAFBASE ?= ../../..
 
+CFLAGS =  -DOM_PERMIT_ZERO_LENGTH
+
 ifeq ($(shell uname), IRIX)
 # Warnings turned off:
 # 1107 - signed bit field has length of 1 bit in various stl files

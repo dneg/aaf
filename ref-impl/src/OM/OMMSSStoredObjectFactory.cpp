@@ -103,7 +103,10 @@ OMMSSStoredObjectFactory::createWrite(OMRawStorage* rawStorage,
                                       const OMByteOrder byteOrder)
 {
   TRACE("OMMSSStoredObjectFactory::createWrite");
-  return OMMSSStoredObject::createWrite(rawStorage, byteOrder);
+  ASSERT("Unimplemented code not reached", false);
+  // MSS writable files must also be readable
+  // return OMMSSStoredObject::createWrite(rawStorage, byteOrder, signature());
+  return 0;
 }
 
   // @mfunc Create a new root <c OMMSSStoredObject> in the raw storage
@@ -117,8 +120,9 @@ OMMSSStoredObjectFactory::createModify(OMRawStorage* rawStorage,
                                        const OMByteOrder byteOrder)
 {
   TRACE("OMMSSStoredObjectFactory::createModify");
-  return OMMSSStoredObject::createModify(rawStorage, byteOrder);
+  return OMMSSStoredObject::createModify(rawStorage, byteOrder, signature());
 }
+
 
   // @mfunc Open the root <c OMMSSStoredObject> in the disk file
   //        <p fileName> for reading only.
@@ -157,8 +161,8 @@ OMStoredObject*
 OMMSSStoredObjectFactory::createModify(const wchar_t* fileName,
                                        const OMByteOrder byteOrder)
 {
-  TRACE("OMMSSStoredObjectFactory::creatModify");
-  return OMMSSStoredObject::createModify(fileName, byteOrder);
+  TRACE("OMMSSStoredObjectFactory::createModify");
+  return OMMSSStoredObject::createModify(fileName, byteOrder, signature());
 }
 
   // @mfunc Create a new root <c OMMSSStoredObject> in the disk file
@@ -175,7 +179,7 @@ OMMSSStoredObjectFactory::createWrite(const wchar_t* /* fileName */,
   TRACE("OMMSSStoredObjectFactory::creatWrite");
   ASSERT("Unimplemented code not reached", false);
   // MSS writable files must also be readable
-//return OMMSSStoredObject::createWrite(fileName, byteOrder);
+	// return OMMSSStoredObject::createWrite(fileName, byteOrder, signature());
   return 0;
 }
 

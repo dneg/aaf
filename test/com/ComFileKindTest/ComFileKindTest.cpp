@@ -347,7 +347,7 @@ struct {
     "SSS"
   },
   {
-    L"CFKT-MSS.aaf",
+    L"CFKT-S4k.aaf",
 		true,
 		true,
     &aafFileKindAafS4KBinary,
@@ -357,15 +357,35 @@ struct {
     "S4K"
   },
   {
-    L"CFKT-MSS.aaf",
+    L"CFKT-M4K.aaf",
 		true,
 		true,
-    &aafFileKindAafMSSBinary,
-    "MSS",
+    &aafFileKindAafM4KBinary,
+    "M4K",
     true,
-    &aafFileKindAafSSSBinary,
-    "SSS"
+	&aafFileKindAafM4KBinary,
+	"M4K"
   },
+	{
+		L"CFKT-M4K.aaf",
+			true,
+			true,
+			&aafFileKindAafM4KBinary,
+			"M4K",
+			true,
+			&aafFileKindAafS4KBinary,
+			"S4K"
+	},
+	{
+		L"CFKT-S4K.aaf",
+			true,
+			true,
+			&aafFileKindAafS4KBinary,
+			"S4K",
+			true,
+			&aafFileKindAafM4KBinary,
+			"M4K"
+	},
   {
     L"CFKT-SSS.aaf",
 		true,

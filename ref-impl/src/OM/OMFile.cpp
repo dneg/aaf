@@ -351,21 +351,18 @@ OMFile* OMFile::openNewWrite(OMRawStorage* rawStorage,
                              OMDictionary* dictionary)
 {
   TRACE("OMFile::openNewWrite");
-
   PRECONDITION("Valid raw storage", rawStorage != 0);
   PRECONDITION("Compatible access mode",
-                                        compatible(rawStorage, writeOnlyMode));
+                compatible(rawStorage, writeOnlyMode));
   PRECONDITION("Creatable",
-                    compatibleRawStorage(rawStorage, writeOnlyMode, encoding));
+				compatibleRawStorage(rawStorage, writeOnlyMode, encoding));
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid byte order",
                     ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
   PRECONDITION("Valid client root", clientRoot != 0);
   PRECONDITION("Valid dictionary ", dictionary != 0);
-
   OMRootStorable* root = new OMRootStorable(clientRoot, dictionary);
   ASSERT("Valid heap pointer", root != 0);
-
   OMFile* newFile = new OMFile(rawStorage,
                                clientOnRestoreContext,
                                encoding,

@@ -24,6 +24,8 @@
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMMSSStoredObject
 // @author Oliver Morgan | wol | Metaglue Corporation | OMSSSStoredObject
 
+// define OM_PERMIT_ZERO_LENGTH to eliminate debug check for zero-length properties on read
+
 #include "OMSSSStoredObject.h"
 
 #include "OMStoredPropertySetIndex.h"
@@ -404,7 +406,17 @@ void OMSSSStoredObject::save(const OMPropertySet& properties)
 #else
   PRECONDITION("Already open", _open);
 #endif
-  PRECONDITION("At start of value stream", streamPosition(_properties) == 0);
+
+#ifdef _DEBUG
+	// to permit verification of SSS behavior
+	OMUInt64 wol = streamPosition(_properties);
+	OMUInt64 wol2 = _offset;
+	if( wol || wol2 )
+	{
+		size_t c = properties.count();
+	}
+#endif
+		
   PRECONDITION("At start of value stream", _offset == 0);
 
   size_t count = properties.countPresent();
@@ -2046,7 +2058,10 @@ void OMSSSStoredObject::read(OMPropertyId ANAME(propertyId),
 {
   TRACE("OMSSSStoredObject::read");
   PRECONDITION("Valid data", start != 0);
-  PRECONDITION("Valid size", size > 0);
+
+#ifndef OM_PERMIT_ZERO_LENGTH
+    PRECONDITION("Valid size", size > 0);
+#endif
 
 #if defined(OM_DEBUG)
   // Consistency check - look up propertyId in _index and check that
@@ -2116,7 +2131,10 @@ void OMSSSStoredObject::readFromStream(Stream* stream,
   TRACE("OMSSSStoredObject::readFromStream");
   PRECONDITION("Valid stream", stream != 0);
   PRECONDITION("Valid data buffer", data != 0);
-  PRECONDITION("Valid size", size > 0);
+
+#ifndef OM_PERMIT_ZERO_LENGTH
+    PRECONDITION("Valid size", size > 0);
+#endif
 
   unsigned long bytesRead = size;
   sresult status = streamRead( stream, data, &bytesRead);
@@ -2140,8 +2158,10 @@ void OMSSSStoredObject::readFromStream(Stream* stream,
   TRACE("OMSSSStoredObject::readFromStream");
   PRECONDITION("Valid stream", stream != 0);
   PRECONDITION("Valid data buffer", data != 0);
-  PRECONDITION("Valid size", bytes > 0);
 
+#ifndef OM_PERMIT_ZERO_LENGTH
+    PRECONDITION("Valid size", bytes > 0);
+#endif
 
 	bytesRead = bytes;
   sresult status = streamRead( stream, data, &bytesRead);
@@ -2605,8 +2625,23 @@ void OMSSSStoredObject::closeStream(Stream*& stream)
   TRACE("OMSSSStoredObject::closeStream");
   PRECONDITION("Valid stream", stream != 0);
 
+	sresult status = SSTG_OK;
+
+	// save position for later test
+	OMUInt64 p = streamPosition( stream );
+
+	// seek to the end of the stream
+	// SchemaSoft resizes the stream upon close
+	status = streamSeek64( stream, 0, STG_END );
+
+	// test position
+	OMUInt64 sz = streamPosition( stream );
+
+	if( p != sz )
+		OMUInt64 err = sz-p;
+		
 #if defined(OM_DEBUG)
-  sresult status = ::closeStream( &stream );
+  status = ::closeStream( &stream );
   ASSERT("Reference count is 0.", status == 0);
 #else
   ::closeStream( &stream );
@@ -3107,15 +3142,26 @@ Stream* OMSSSStoredObject::createStream(Storage* storage,
   SSCHAR omStreamName[256];
   convert(omStreamName, 256, streamName);
 
-  sresult status = ::createStream(
-		storage,
-    omStreamName,
-    &stream);
-  checkStatus(status);
-  ASSERT("SSLib::CreateStream() succeeded", SUCCEEDED(status));
+	// if( the stream already exists i.e. can be opened ) seek to zero
+
+  sresult status = SSTG_OK;
+
+	if( SSTG_OK==::openStream( storage, omStreamName, &stream) )
+	{
+		status = ::streamSeek( stream, 0L, STG_START );
+		ASSERT("SSLib::CreateStream() reopen succeeded", SUCCEEDED(status));
+	}
+	else if( SSTG_OK==::createStream( storage, omStreamName, &stream) )
+	{
+		//Note that the assert below as currently wrtten will always succeed
+		//ASSERT("SSLib::CreateStream() succeeded", SUCCEEDED(status));
+	}
+
 #if defined(OM_DEBUG)
-  incrementOpenStreamCount();
+	incrementOpenStreamCount();
 #endif
+
+
 
 	/* to avoid a SSS bug, fixed by SchemaSoft in 3.01 
 	OMByte null = 0;
@@ -3223,14 +3269,21 @@ Storage* OMSSSStoredObject::createStorage(Storage* storage,
   SSCHAR omStorageName[256];
   convert(omStorageName, 256, storageName);
 
-  sresult status = ::createStorage(
-		storage,
-    omStorageName,
-    &newStorage);
-  checkStatus(status);
-  ASSERT("SSLib ::CreateStorage() succeeded", SUCCEEDED(status));
+  sresult status = SSTG_OK;
+
+	// if the storage already exists, reopen
+  if( SSTG_OK==::openStorage( storage, omStorageName, &newStorage) )
+	{
+		//next line always succeeds so removed
+		//ASSERT("SSLib::CreateStorage() reopen succeeded", SUCCEEDED(status));
+	}
+	else if( SSTG_OK==::createStorage( storage, omStorageName, &newStorage) )
+	{
+		//ASSERT("SSLib::CreateStorage() succeeded", SUCCEEDED(status));
+	}
+
 #if defined(OM_DEBUG)
-  incrementOpenStorageCount();
+		 incrementOpenStorageCount();
 #endif
 
   return newStorage;
