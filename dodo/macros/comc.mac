@@ -158,10 +158,6 @@ void C.this-module::InitRep (Impl.this-module * newRep)
   assert (!_rep);
   _rep = newRep;
   newRep->InitContainer (this);
-  // The InitContainer method holds onto a reference to this COM object. Since
-  // the impl classes do NOT know about COM reference counting we need to 
-  // increment the reference count here.
-  AddRef(); 
 #endif
 }
 
@@ -1404,6 +1400,7 @@ const CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05, 0x%06, 0
 	  assert (iObj);
 	  hStat = iObj->GetImplRep((void **)&arg);
 	  assert (SUCCEEDED (hStat));
+    iObj->Release(); // we are through with this interface pointer.
 	  internal%02 = static_cast<Impl%01*>(arg);
 	  assert (internal%02);
     }
@@ -1429,7 +1426,7 @@ const CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05, 0x%06, 0
 #c arg2 = external arg name
 #c
 #startm .objOut-setup 02
-  Impl%01 * internal%02;
+  Impl%01 * internal%02 = NULL;
   Impl%01 ** pinternal%02 = NULL;
   if (%02)
     {
@@ -1509,12 +1506,15 @@ pinternal%01\
 		pUnknown = static_cast<IUnknown *> (internal%02->GetContainer());
 		hStat = pUnknown->QueryInterface(IID_I%01, (void **)%02);
 		assert (SUCCEEDED (hStat));
-		pUnknown->Release();
+		//pUnknown->Release();
+    internal%02->ReleaseRef(); // We are through with this pointer.
 	}
 	else
 	{
 		*%02 = NULL;
 	}
+
+
 #endm
 
 #ccccccccccccccccccccccccccc
