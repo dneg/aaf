@@ -545,7 +545,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   pFile->Release();
   pFile=NULL;
 
+#if 0
   printf("Open time = %f seconds\n", duration);
+#endif
 
 cleanup:
   if (pFile) {
