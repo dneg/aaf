@@ -18,7 +18,7 @@ class OMStoredVectorIndex;
   // @class In-memory representation of a persistent object.
 class OMStoredObject {
 public:
-  // @access Public Members
+  // @access Public members.
 
     // @cmember Constructor.
   OMStoredObject(IStorage* s);
