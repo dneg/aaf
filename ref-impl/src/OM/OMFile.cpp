@@ -36,6 +36,7 @@
 #include "OMUtilities.h"
 #include "OMDictionary.h"
 #include "OMRootStorable.h"
+#include "OMRawStorage.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -68,7 +69,9 @@ OMFile::OMFile(const wchar_t* fileName,
   _loadMode(loadMode),
   _fileName(0),
   _clientOnSaveContext(0),
-  _clientOnRestoreContext(clientOnRestoreContext)
+  _clientOnRestoreContext(clientOnRestoreContext),
+  _encoding(MSSBinaryEncoding),
+  _rawStorage(0)
 {
   TRACE("OMFile::OMFile");
 
@@ -108,7 +111,9 @@ OMFile::OMFile(const wchar_t* fileName,
   _fileName(0),
   _signature(signature),
   _clientOnSaveContext(0),
-  _clientOnRestoreContext(clientOnRestoreContext)
+  _clientOnRestoreContext(clientOnRestoreContext),
+  _encoding(MSSBinaryEncoding),
+  _rawStorage(0)
 {
   TRACE("OMFile::OMFile");
 
@@ -432,6 +437,25 @@ bool OMFile::isOMFile(void) const
 OMFileSignature OMFile::signature(void) const
 {
   return _signature;
+}
+
+  // @mfunc The encoding of this <c OMFile>.
+  //   @rdesc The encoding of the <c OMFile>.
+OMFile::OMFileEncoding OMFile::encoding(void) const
+{
+  TRACE("OMFile::encoding");
+
+  return _encoding;
+}
+
+  // @mfunc The raw storage on which this <c OMFile> is stored.
+  //   @rdesc The raw storage on which the raw bytes of
+  //          this < c OMFile> reside.
+OMRawStorage* OMFile::rawStorage(void) const
+{
+  TRACE("OMFile::rawStorage");
+
+  return _rawStorage;
 }
 
   // @mfunc Find the property instance in this <c OMFile>
