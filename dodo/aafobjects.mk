@@ -9,7 +9,6 @@
 # aaf object:
 AAFPERSISTENTOBJECTS = \
 	AAFAttribute \
-	AAFAttributeArray \
 	AAFClassDefinition \
 	AAFDictionary \
 	AAFComponent \
@@ -89,25 +88,11 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFTypeDefinitions 
 
 
-
-
-
-
-# Why are these objects being dodo'd?
-AAFUTILS = \
-	AAFUInt64 \
-	AAFString \
-	AAFInt64
-
-
-
 # The list of standard dodo targets.
 # AAFTypes have to be handled separately since no object is to be created.
 DODO_TARGET_NAMES = \
 	$(AAFPERSISTENTOBJECTS) \
-	$(AAFNONPERSISTENTOBJECTS) \
-	AAFUnitTest
-		 
+	$(AAFNONPERSISTENTOBJECTS)
 
 
 # Build the list of all objects that need to be built into the COM DLL
