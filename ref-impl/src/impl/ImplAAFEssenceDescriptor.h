@@ -42,8 +42,7 @@ class ImplEnumAAFLocators;
 
 #include "OMProperty.h"
 
-const int PID_ESSENCE_DESC_LOCATORS      = 0;
-
+#include "AAFPropertyIDs.h"
 
 class ImplAAFEssenceDescriptor : public ImplAAFObject
 {

@@ -33,7 +33,7 @@ class ImplEnumAAFComponents;
 #endif
 
 
-const int PID_SEQUENCE_COMPONENTS	= 30;
+#include "AAFPropertyIDs.h"
 
 class ImplAAFSequence : public ImplAAFSegment
 {
