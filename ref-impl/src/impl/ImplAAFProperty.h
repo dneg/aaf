@@ -63,6 +63,16 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFPropertyTest.cpp.
   static AAFRESULT test();
+
+  //
+  // non-published initialization method
+  //
+  AAFRESULT Initialize (ImplAAFPropertyDef * pPropDef);
+
+
+private:
+  ImplAAFPropertyDef *   _pPropDef;
+  ImplAAFPropertyValue * _pPropVal;
 };
 
 #endif // ! __ImplAAFProperty_h__
