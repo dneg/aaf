@@ -12,25 +12,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name classDefUids
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name extEnumUid
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name propertyDefUid
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name propertyId
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name storedObjectUid
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name typeDefUid
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name headerGenUtils
+    Project_Dep_Name generate
     End Project Dependency
 }}}
 
@@ -76,6 +58,42 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name headerGenUtils
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "generate"=".\generate\generate.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name classDefUids
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name extEnumUid
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name genDefInstances
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name headerGenUtils
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name propertyDefUid
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name propertyId
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name storedObjectUid
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name typeDefUid
     End Project Dependency
 }}}
 
