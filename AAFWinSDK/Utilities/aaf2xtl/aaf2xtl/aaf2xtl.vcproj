@@ -34,7 +34,7 @@
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
@@ -108,7 +108,7 @@
 				OutputFile=".\Release/aaf2xtl.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="../aiflib/Release;../aif2xtllib/Release;../aifsantefelib/Release;../../AAF/examples2/axLib/Release;../../AAF/AAFWinSDK/Release/Refimpl;../../AAF/AAFWinSDK/lib"
+				AdditionalLibraryDirectories="../aiflib/Release;../aif2xtllib/Release;../aifsantefelib/Release;../../../../examples2/axLib/Release;../..//Release/Refimpl;../../../lib"
 				ProgramDatabaseFile=".\Release/aaf2xtl.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
