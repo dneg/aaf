@@ -367,7 +367,7 @@ bool OMProperty::isPresent(void) const
   return _isPresent;
 }
 
-  // @mfunc Remove this optional property.
+  // @mfunc Remove this optional <c OMProperty>.
 void OMProperty::remove(void)
 {
   TRACE("OMProperty::remove");
