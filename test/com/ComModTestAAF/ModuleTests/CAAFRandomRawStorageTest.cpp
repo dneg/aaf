@@ -297,7 +297,7 @@ static HRESULT localOpenFileMemStgWrite
   // Create a mem raw storage.
   IAAFRawStorageSP pStg;
   checkResult
-	(AAFCreateRawStorageMemory (kAAFFileAccess_write,
+	(AAFCreateRawStorageMemory (kAAFFileAccess_modify,
 								&pStg));
 
   // create the file and open it.
