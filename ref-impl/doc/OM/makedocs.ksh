@@ -1,5 +1,6 @@
 #
-AUTODUCK="c:/program files/autoduck/autoduck.exe"
+ADROOT="c:/program files/autoduck"
+AUTODUCK="${ADROOT}/autoduck.exe"
 #
 FLAGS="OMEXTERNAL | OMINTERNAL"
 #
