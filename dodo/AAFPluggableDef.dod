@@ -22,6 +22,8 @@ AD_IDL(//
 //)
 
 AD_FORWARD_DECLARATION(AAFDefObject)
+AD_FORWARD_DECLARATION(EnumAAFPluginDescriptors)
+AD_FORWARD_DECLARATION(EnumAAFCodecFlavours)
 
 /******************************************\
 *                                          *
@@ -32,7 +34,8 @@ AD_FORWARD_DECLARATION(AAFDefObject)
 *                                          *
 \******************************************/
 
- 
+
+
 /***********************************************\
 *	Stub only.   Implementation not yet added	*
 \***********************************************/
