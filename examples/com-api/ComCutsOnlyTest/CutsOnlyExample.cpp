@@ -45,7 +45,7 @@
 // Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
 #include "AAFStoredObjectIDs.h"
 
-#if defined(macintosh) || defined(_MAC)
+#if defined( OS_MACOS )
 #include "DataInput.h"
 #endif
 
@@ -55,7 +55,7 @@
 //
 // NOTE: If your compiler does not support 64 bit integers then this example will NOT
 // print out the correct lengths.
-#ifdef _MSC_VER
+#if defined( COMPILER_MSC )
 #define L64 "I64"
 #else
 #define L64 "ll"
