@@ -90,6 +90,12 @@ void OMDataStreamProperty::restore(size_t externalSize)
   store()->restore(*this, externalSize);
   open();
   setPresent();
+
+  // Temporary brute force solution to the Microsoft Structured
+  // Storage built in limit on the number of open storage elements
+  // (IStorages and IStreams) caused by use of a fixed size internal
+  // heap.
+  //
   _exists = true;
   _stream->close();
   delete _stream;
