@@ -16,12 +16,6 @@
 *                                          *
 \******************************************/
 
-
-/***********************************************\
-*  Stub only.   Implementation not yet added    *
-\***********************************************/
-
-
 #ifndef __ImplAAFDataDef_h__
 #include "ImplAAFDataDef.h"
 #endif
@@ -54,9 +48,34 @@
 #include <assert.h>
 #include <string.h>
 
+#include "AAFPlugin.h"
+#include "AAFPluginManager.h"
+#include "aafUtils.h"
+#include "aafCvt.h"
+#include "aafUtils.h"
+#include "ImplAAFHeader.h"
+#include "ImplAAFSourceMob.h"
+#include "ImplAAFFileDescriptor.h"
+#include "aafdefuids.h"
+#include "ImplAAFObjectCreation.h"
+#include "ImplAAFSession.h"
+
+#define DEFAULT_FILE_SLOT	1
+
+extern "C" const aafClassID_t CLSID_AAFSourceMob;
+extern "C" const aafClassID_t CLSID_AAFEssenceData;
+extern "C" const CLSID CLSID_AAFEssenceStream = { 0x66FE33B1, 0x946D, 0x11D2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+extern "C" const IID IID_IAAFEssenceStream = { 0x66FE33B2, 0x946D, 0x11D2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+extern "C" const CLSID CLSID_AAFEssenceCodec = { 0x74867B41, 0x946E, 0x11D2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+extern "C" const IID IID_IAAFEssenceCodec = { 0x74867B42, 0x946E, 0x11D2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 
 ImplAAFEssenceAccess::ImplAAFEssenceAccess ()
-{}
+{
+	_destination = NULL;
+	_fileFormat = kAAFiMedia;
+	_codecID = NoCodec;
+	_variety = NilCodecVariety;
+}
 
 
 ImplAAFEssenceAccess::~ImplAAFEssenceAccess ()
@@ -223,6 +242,23 @@ AAFRESULT STDMETHODCALLTYPE
 #endif
 }
 
+AAFRESULT ImplAAFEssenceAccess::SetEssenceDestination(
+				ImplAAFLocator		*destination,
+				aafFileFormat_t		fileFormat)
+{
+	_destination = destination;
+	_fileFormat = fileFormat;
+	return AAFRESULT_SUCCESS;
+}
+
+ //Sets which variety of the codec ID is to be used.)
+AAFRESULT ImplAAFEssenceAccess::SetEssenceCodecVariety(aafUID_t variety)
+{
+	_variety = variety;
+	return AAFRESULT_SUCCESS;
+}
+
+
 //@comm Creates a single stream of video essence.  A separate call
 // (MediaMultiCreate) exists to create interleaved audio and
 // video data.
@@ -244,173 +280,146 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-   ImplAAFEssenceAccess::Create (ImplAAFMasterMob * /*masterMob*/,
-                           aafSlotID_t  /*masterSlotID*/,
-                           ImplAAFSourceMob * /*fileMob*/,
-                           ImplAAFDataDef * /*mediaKind*/,
-                           aafRational_t  /*samplerate*/,
-                           aafCompressEnable_t  /*Enable*/)
+ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
+							  aafSlotID_t		masterSlotID,
+							  aafUID_t			mediaKind,
+							  aafUID_t			codecID,
+							  aafRational_t	editRate,
+							  aafRational_t	sampleRate,
+							  aafCompressEnable_t  enable)
 {
-#if FULL_TOOLKIT
-	aafUID_t        uid;
-	aafTimeStamp_t  create_timestamp;
-	aafCodecMetaInfo_t info;
-	aafLength_t		oneLength = CvtInt32toLength(1, oneLength);
-	char 			codecIDString[OMUNIQUENAME_SIZE]; /* reasonable enough */
-	aafCodecID_t	codecID;
-	aafBool			found;
-	aafErr_t       aafError = OM_ERR_NONE;
-	AAFMob			*mobPtr;
-	char			*variety;
-	AAFMobSlot *		tmpTrack;
-	AAFHeader		*head;
+	aafUID_t			fileMobUID, audioDDEF = DDEF_Audio;
+	aafLength_t			oneLength = CvtInt32toLength(1, oneLength);
+	aafBool				found;
+	AAFRESULT			aafError = OM_ERR_NONE;
+	ImplAAFSourceMob	*fileMob;
+	ImplAAFMobSlot		*tmpSlot;
+	ImplAAFHeader		*head;
+	AAFPluginManager	*plugins;
+	aafCodecMetaInfo_t	metaInfo;
+	ImplAAFEssenceDescriptor *mdes;
+	ImplAAFEssenceData	*dataObj;
 	
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	if(_mainFile->isAAFMedia())
+	XPROTECT()
 	{
-		aafAssert(fileMob != NULL, _mainFile, OM_ERR_INVALID_FILE_MOB);
-	}
-
-	XPROTECT(_mainFile)
-	{
+		// Can't put raw media inside of an AAF File
+		if(_destination == NULL && _fileFormat != kAAFiMedia)
+			RAISE(AAFRESULT_WRONG_MEDIATYPE);
+		
 		/* Initialize the basic fields of the media handle
-		 */
-		_mainFile->GetHeadObject(&head);
-		CHECK(InitMediaHandle( fileMob));
+		*/
+		masterMob->MyHeadObject(&head);
+		fileMob = (ImplAAFSourceMob *)CreateImpl(CLSID_AAFSourceMob);
+		CHECK(masterMob->AddMasterSlot (&mediaKind, DEFAULT_FILE_SLOT, fileMob, masterSlotID, NULL));
+		CHECK(fileMob->GetMobID(&fileMobUID));
+		
+		//!!!		CHECK(InitMediaHandle( fileMob));
 		_masterMob = masterMob;
 		_fileMob = fileMob;
-		_compEnable = enable;
-		_dataFile = _mainFile;
-		_channels = (aafSubChannel_t *) _mainFile->omOptMalloc(sizeof(aafSubChannel_t));
+		_channels = (aafSubChannel_t *) new aafSubChannel_t[1];
 		XASSERT((_channels != NULL), OM_ERR_NOMEMORY);
-		_numChannels = 1;
+		_numChannels = 1;		 
+		CvtInt32toPosition(0, _dataStart);
 		CvtInt32toLength(0, _channels[0].numSamples);
 		_channels[0].dataOffset = _dataStart;
 		_channels[0].mediaKind = mediaKind;
-		_channels[0].trackID = masterTrackID;
+		_channels[0].trackID = masterSlotID;
 		_channels[0].physicalOutChan = 1;
-		_channels[0].sampleRate = samplerate;
+		_channels[0].sampleRate = sampleRate;
 		CvtInt32toLength(0, _channels[0].numSamples);
-		_openType = kAAFCreated;
-		_masterTrackID = masterTrackID;
 		
-		if(_mainFile->isAAFMedia())
+		//!!! Handle tje other cases of destination and format (raw, no locator not allowed)
+		//	_destination = NULL;
+		//	_fileFormat = kAAFiMedia;
+		
+		/* Initialize the fields which are derived from information in
+		* the file mob or media descriptor.
+		*/
+		CHECK(fileMob->GetEssenceDescriptor((ImplAAFEssenceDescriptor **)&_mdes));
+		CHECK(_mdes->SetSampleRate(&sampleRate));
+		
+		/* RPS-- don't use the 'best codec' method on WRITE. Instead,  */
+		/*   the toolkit now stores the codec ID in omfmFileMobNew()   */
+		/*   The string must be in the descriptor, assert as such.     */
+		/* JeffB -- This doesn't work when adding media to a cloned File Mob */
+		/* made by someone other than the toolkit.  So if the special string */
+		/* isn't there, find the best codec to handle the media descriptor */
+		/* */
+		
+		_codecID = codecID;
+		if(!EqualAUID(&codecID, &NoCodec))
 		{
-			/* Initialize the fields which are derived from information in
-			 * the file mob or media descriptor.
-			 */
-			CHECK(fileMob->GetMediaDescription(&_mdes));
-	
-			CHECK(_mdes->WriteRational(OMMDFLSampleRate,
-												samplerate));
+			plugins = ImplAAFSession::GetInstance()->GetPluginManager();
+			CHECK(plugins->GetCodecInstance(_codecID, _variety, &_codec));
 			
-			/* RPS-- don't use the 'best codec' method on WRITE. Instead,  */
-			/*   the toolkit now stores the codec ID in omfmFileMobNew()   */
-			/*   The string must be in the descriptor, assert as such.     */
-			/* JeffB -- This doesn't work when adding media to a cloned File Mob */
-			/* made by someone other than the toolkit.  So if the special string */
-			/* isn't there, find the best codec to handle the media descriptor */
-			/* */
-	
-			if(_mdes->ReadString(OMMDESCodecID, codecIDString, 
-										OMUNIQUENAME_SIZE) == OM_ERR_NONE)
+			/* RPS-- back to your regularly scheduled program              */
+			
+			/* JEFF!! Changed masterSlotID to be 1 when creating mono 
+			* audio media, so file mob track will be labeled correctly */
+			if (EqualAUID(&mediaKind, &audioDDEF));
+			masterSlotID = 1;
+			
+			/* JeffB: Handle the case where an existing file=>tape mob connection exists
+			*/
 			{
-				variety = strchr(codecIDString, ':');
-				if(variety != NULL)
+				//!!!Find the header of the file mob, look up the mobID
+				aafError = head->LookupMob(&fileMobUID, (ImplAAFMob **)&fileMob);
+				if((aafError != OM_ERR_NONE) || (fileMob == NULL))
 				{
-					*variety = '\0';
-					variety++;			/* Skip over the separator */
-					_codecVariety = (char *)_mainFile->omOptMalloc(strlen(variety)+1);
-					strcpy(_codecVariety, variety);
+					RAISE(AAFRESULT_MISSING_MOBID);
 				}
-				codecID = (aafCodecID_t)codecIDString;
-				TableLookupBlock(_mainFile->_session->_codecID, codecID, 
-									 sizeof(_pvt->codecInfo), &_pvt->codecInfo, &found);
-									 
-				if(!found)
+				if(fileMob->FindSlotBySlotID(masterSlotID, &tmpSlot) == AAFRESULT_SLOT_NOT_FOUND)
 				{
-					RAISE(OM_ERR_CODEC_INVALID);
+					CHECK(fileMob->AddNilReference(masterSlotID, 
+						oneLength, &mediaKind, editRate));
 				}
+				CHECK(fileMob->FindSlotBySlotID(masterSlotID, &tmpSlot));
+				CHECK(tmpSlot->SetPhysicalNum(masterSlotID));
 			}
-			else
-			{
-				CHECK(_mdes->FindCodecForMedia(&_pvt->codecInfo));
-			}
+			
+			CHECK(_codec->GetMetaInfo(&metaInfo));
+			mdes = (ImplAAFEssenceDescriptor *)CreateImpl(metaInfo.mdesClassID);
+			CHECK(fileMob->SetEssenceDescriptor(mdes));
+			
+			//!!!Later use  dataClassID instead of hardwiring
+			dataObj = (ImplAAFEssenceData *)CreateImpl(CLSID_AAFEssenceData);
 		}
 		else
 		{
-			codecID = _mainFile->_rawCodecID;
-			TableLookupBlock(_mainFile->_session->_codecID, codecID, 
-							 sizeof(_pvt->codecInfo), &_pvt->codecInfo, &found);
+			_codec = NULL;
 		}
 		
-		if(_mainFile->isAAFMedia())
+		
+		//!!! Change to use the corrent Subclass
+		CoCreateInstance(CLSID_AAFEssenceStream,
+			NULL, 
+			CLSCTX_INPROC_SERVER, 
+			IID_IAAFEssenceStream, 
+			(void **)&_stream);
+		
+		// We now have a valid media handle, so tell the world so.  Then 
+		// fill in some of the more optional fields.
+		//	
+		CHECK(head->SetModified());		// To NOW
+		
+		// do this now, delay may mess up data contiguity
+		//
+		CHECK(dataObj->SetFileMob(fileMob));
+		CHECK(head->AppendEssenceData(dataObj));
+		
+		// Call the codec to create the actual media.
+		//
+		if(_codec != NULL)
 		{
-			/* RPS-- back to your regularly scheduled program              */
-
-		  /* JEFF!! Changed masterTrackID to be 1 when creating mono 
-			* audio media, so file mob track will be labeled correctly */
-		  if (mediaKind->IsSoundKind(kExactMatch, &aafError))
-			 masterTrackID = 1;
-
-		  CHECK(fileMob->ReadUID(OMMOBJMobID, &uid));
-		  /* JeffB: Handle the case where an existing file=>tape mob connection exists
-			*/
-		  {
-			aafError = _mainFile->LookupMob(uid, &mobPtr);
-			if((aafError != OM_ERR_NONE) || (mobPtr == NULL))
-			  	{
-					RAISE(OM_ERR_MISSING_MOBID);
-			  	}
-			  	if(fileMob->FindTrackByTrackID(masterTrackID, &tmpTrack) == OM_ERR_TRACK_NOT_FOUND)
-			  	{
-			  		aafRational_t	createEditRate;
-			  		
-					mobPtr->GetCreateEditRate(&createEditRate);
-					CHECK(fileMob->AddNilReference(masterTrackID, 
-													 oneLength, mediaKind, createEditRate));
-				}
-				CHECK(fileMob->FindTrackByTrackID(masterTrackID, &tmpTrack));
-				CHECK(tmpTrack->SetPhysicalNum(masterTrackID));
-			 }
-			
-			CHECK(_codec->codecGetMetaInfo(_mainFile->_session, &_pvt->codecInfo,_codecVariety,NULL, 0,
-									&info));
-			_dataObj = AAFNewClassFromClassID(_mainFile, info.dataClassID, NULL);
+			CHECK(_codec->Create(fileMobUID, _variety, _stream));
+			CHECK(_codec->SetCompression(enable));
+			//!!! 			SetVideoLineMap(16, kTopFieldNone);
 		}
-			
-		/* We now have a valid media handle, so tell the world so.  Then 
-		 * fill in some of the more optional fields.
-		 */	
-		if(_mainFile->isAAFMedia())
-		{
-			AAFGetDateTime(&create_timestamp);
-		
-			  {
-				 CHECK(head->WriteTimeStamp(OMHEADLastModified, create_timestamp));
-			  }
-		
-			/* do this now, delay may mess up data contiguity
-			 */
-			CHECK(_dataObj->WriteUID(OMMDATMobID, uid));
-			CHECK(head->AppendObjRefArray(OMHEADMediaData, _dataObj));
-			
-			CHECK(head->AppendDataObject(uid, _dataObj));
-		}
-			
-		/* Call the codec to create the actual media.
-		 */
-		CHECK(_codec->codecCreate(this));
-  		SetVideoLineMap(16, kTopFieldNone);
 	}
 	XEXCEPT
 	XEND
-
-	return (OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+		
+	return (AAFRESULT_SUCCESS);
 }
 
 	//@comm Creates a single channel stream of essence.  Convenience functions
@@ -429,10 +438,9 @@ AAFRESULT STDMETHODCALLTYPE
 /****/
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFEssenceAccess::MultiCreate (ImplAAFMasterMob * /*masterMob*/,
-                           ImplAAFSourceMob * /*fileMob*/,
-                           aafInt16  /*arrayElemCount*/,
+							aafUID_t codecID,
+                          aafInt16  /*arrayElemCount*/,
                            aafmMultiCreate_t *  /*mediaArray*/,
-                           aafRational_t   /*editRate*/,
                            aafCompressEnable_t  /*Enable*/)
 {
 #if FULL_TOOLKIT
