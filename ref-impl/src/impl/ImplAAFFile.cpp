@@ -39,6 +39,7 @@
 #endif
 #include "OMSS_SSStoredObjectFactory.h"
 #include "OMXMLStoredObjectFactory.h"
+#include "OMXMLPStoredObjectFactory.h"
 #include "OMKLVStoredObjectFactory.h"
 
 #include "ImplAAFDataDef.h"
@@ -1537,6 +1538,7 @@ OMRawStorage * ImplAAFFile::RawStorage ()
 #define AAFS4KEncoding ENCODING(kAAFFileKind_AafS4KBinary)
 #define AAFM4KEncoding ENCODING(kAAFFileKind_AafM4KBinary)
 #define AAFG4KEncoding ENCODING(kAAFFileKind_AafG4KBinary)
+#define AAFXMLPrototypeEncoding ENCODING(kAAFFileKind_AafXmlTextPrototype)
 
 // these are only prototype
 #define AAFXMLEncoding ENCODING(kAAFFileKind_AafXmlText)
@@ -1545,6 +1547,7 @@ OMRawStorage * ImplAAFFile::RawStorage ()
 // signatures from the point of view of the OM
 #define Signature_SSBin_512 ENCODING(kAAFSignature_Aaf512Binary)
 #define Signature_SSBin_4K ENCODING(kAAFSignature_Aaf4KBinary)
+#define Signature_XMLPrototype ENCODING(kAAFSignature_AafXmlTextPrototype)
 
 void ImplAAFFile::registerFactories(void)
 {
@@ -1576,6 +1579,11 @@ void ImplAAFFile::registerFactories(void)
                                                        Signature_SSBin_4K,
                                                        L"AAF-M4K",
                                                        L"AAF Microsoft 4K"));
+	OMFile::registerFactory(AAFXMLPrototypeEncoding,
+                          new OMXMLPStoredObjectFactory(AAFXMLPrototypeEncoding,
+                                                       Signature_XMLPrototype,
+                                                       L"AAF-XML",
+                                                       L"AAF XML prototype"));
 
 #elif defined( OS_UNIX )
 
@@ -1596,6 +1604,12 @@ void ImplAAFFile::registerFactories(void)
                                                        Signature_SSBin_4K,
                                                        L"AAF-G4K",
                                                        L"AAF GSF 4K"));
+	OMFile::registerFactory(AAFXMLPrototypeEncoding,
+                          new OMXMLPStoredObjectFactory(AAFXMLPrototypeEncoding,
+                                                       Signature_XMLPrototype,
+                                                       L"AAF-XML",
+                                                       L"AAF XML prototype"));
+
 #else
 
 // The Schemasoft precompiled library is only available on these platforms
@@ -1615,6 +1629,12 @@ void ImplAAFFile::registerFactories(void)
                                                        Signature_SSBin_4K,
                                                        L"AAF-S4K",
                                                        L"AAF Schemasoft 4K"));
+	OMFile::registerFactory(AAFXMLPrototypeEncoding,
+                          new OMXMLPStoredObjectFactory(AAFXMLPrototypeEncoding,
+                                                       Signature_XMLPrototype,
+                                                       L"AAF-XML",
+                                                       L"AAF XML prototype"));
+
 #else
 #error No SS implementation available on platform
 #endif // list of SchemaSoft library platforms
