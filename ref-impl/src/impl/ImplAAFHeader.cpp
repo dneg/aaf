@@ -600,17 +600,6 @@ AAFRESULT
 }
 
 
-AAFRESULT 
-    ImplAAFHeader::RemoveIdentification (ImplAAFIdentification * pIdent)
-{
-  if (! pIdent)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-}
-
-
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::GetRefImplVersion (aafProductVersion_t *pToolkitVersion)
 {

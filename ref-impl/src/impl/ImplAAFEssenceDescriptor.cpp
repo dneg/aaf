@@ -154,39 +154,43 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceDescriptor::GetLocatorAt (aafUInt32 index,
 											ImplAAFLocator ** ppLocator)
 {
-  if (! ppLocator) return AAFRESULT_NULL_PARAM;
-
-  aafUInt32 count;
-  AAFRESULT hr;
-  hr = CountLocators (&count);
-  if (AAFRESULT_FAILED (hr)) return hr;
-
-  if (index >= count)
-	return AAFRESULT_BADINDEX;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (! ppLocator) return AAFRESULT_NULL_PARAM;
+	
+	aafUInt32 count;
+	AAFRESULT hr;
+	hr = CountLocators (&count);
+	if (AAFRESULT_FAILED (hr)) return hr;
+	
+	if (index >= count)
+		return AAFRESULT_BADINDEX;
+	
+	_locators.getValueAt(*ppLocator, index);
+	return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceDescriptor::RemoveLocatorAt (aafUInt32 index)
 {
-  aafUInt32 count;
-  AAFRESULT hr;
-  hr = CountLocators (&count);
-  if (AAFRESULT_FAILED (hr)) return hr;
-
-  if (index >= count)
-	return AAFRESULT_BADINDEX;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
+	aafUInt32 count;
+	AAFRESULT hr;
+	hr = CountLocators (&count);
+	if (AAFRESULT_FAILED (hr)) return hr;
+	
+	if (index >= count)
+		return AAFRESULT_BADINDEX;
+	
+	_locators.removeAt(index);
+	return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceDescriptor::RemoveLocator (ImplAAFLocator * /*pLocator*/)
+    ImplAAFEssenceDescriptor::RemoveLocator (ImplAAFLocator *pLocator)
 {
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+	if (! pLocator) return AAFRESULT_NULL_PARAM;
+	_locators.removeValue(pLocator);
+	return AAFRESULT_SUCCESS;
 }
 
 
