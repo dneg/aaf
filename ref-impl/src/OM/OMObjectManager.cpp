@@ -30,7 +30,6 @@
 #include "OMDictionary.h"
 #include "OMUniqueObjectIdentType.h"
 #include "OMIntegerType.h"
-#include "OMMSStructuredStorage.h"
 
 void OMObjectManager::initialize(void)
 {
