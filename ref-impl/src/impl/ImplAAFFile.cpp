@@ -272,7 +272,7 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 		
 		// Make sure the header is initialized with our previously created
 		// dictionary.
-		_head->SetDictionary(_factory);
+		_head->SetDictionary(static_cast<ImplAAFDictionary *>(_factory));
 
 		// Add the ident to the header.
 		checkResult(_head->AddIdentificationObject(&_ident));
@@ -353,7 +353,7 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 		
 		// Make sure the header is initialized with our previously created
 		// dictionary.
-		_head->SetDictionary(_factory);
+		_head->SetDictionary(static_cast<ImplAAFDictionary *>(_factory));
 
 		// Add the ident to the header.
 		checkResult(_head->AddIdentificationObject(&_ident));
@@ -497,8 +497,10 @@ ImplAAFFile::~ImplAAFFile ()
 	// cleanup the container.
 	if (_factory)
 	{
-		_factory->ReleaseReference();
-		_factory = NULL;
+		ImplAAFDictionary * pDictionary = dynamic_cast<ImplAAFDictionary *>(_factory);
+		assert(NULL != pDictionary);
+		pDictionary->ReleaseReference();
+		pDictionary = NULL;
 	}
 
 	// cleanup the OM File.
