@@ -187,6 +187,33 @@ void OMMappedFileRawStorage::write(const OMByte* /* bytes */,
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
+  // @mfunc Attempt to write the number of bytes given by <p byteCount>
+  //        to offset <p position> in this <c OMMappedFileRawStorage>
+  //        from the buffer at address <p bytes>.
+  //        The actual number of bytes written is returned in
+  //        <p bytesWritten>.
+  //        Writing to positions greater than
+  //        <mf OMMappedFileRawStorage::size> causes this
+  //        <c OMMappedFileRawStorage> to be extended, however such
+  //        extension can fail, causing <p bytesWritten> to be less
+  //        than <p byteCount>.
+  //   @parm TBS
+  //   @parm The buffer from which the bytes are to be written.
+  //   @parm The number of bytes to write.
+  //   @parm The actual number of bytes written.
+void OMMappedFileRawStorage::writeAt(OMUInt64 /* position */,
+                                     const OMByte* /* bytes */,
+                                     OMUInt32 /* byteCount */,
+                                     OMUInt32& /* bytesWritten */)
+{
+  TRACE("OMMappedFileRawStorage::writeAt");
+
+  PRECONDITION("Writable", isWritable());
+  PRECONDITION("Readable", isPositionable());
+
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
   // @mfunc May this <c OMMappedFileRawStorage> be changed in size ?
   //   @rdesc Always <e bool.true>.
   //   @this const

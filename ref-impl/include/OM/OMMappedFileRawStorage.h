@@ -117,6 +117,23 @@ public:
                      OMUInt32 byteCount,
                      OMUInt32& bytesWritten);
 
+    // @cmember Attempt to write the number of bytes given by <p byteCount>
+    //          to offset <p position> in this <c OMMappedFileRawStorage>
+    //          from the buffer at address <p bytes>.
+    //          The actual number of bytes written is returned in
+    //          <p bytesWritten>.
+    //          Writing to positions greater than
+    //          <mf OMMappedFileRawStorage::size> causes this
+    //          <c OMMappedFileRawStorage> to be extended, however such
+    //          extension can fail, causing <p bytesWritten> to be less than
+    //          <p byteCount>.
+    //          @precondition <f isWritable()> && <f isPositionable()>
+    //   @devnote How is failure to extend indicated ?
+  virtual void writeAt(OMUInt64 position,
+                       const OMByte* bytes,
+                       OMUInt32 byteCount,
+                       OMUInt32& bytesWritten);
+
     // @cmember May this <c OMMappedFileRawStorage> be changed in size ?
   virtual bool isSizeable(void) const;
 
