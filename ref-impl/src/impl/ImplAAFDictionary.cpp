@@ -221,11 +221,11 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		  pOps = 0;
 		}
 	}
-  size_t parmDefSize = _parameterDefinitions.getSize();
-  for (i = 0; i < parmDefSize; i++)
+	OMStrongReferenceSetIterator<ImplAAFParameterDef>parameterDefinitions(_parameterDefinitions);
+	while(++parameterDefinitions)
 	{
-	  ImplAAFParameterDef *pParm = _parameterDefinitions.setValueAt(0, i);
-	  if (pParm)
+		ImplAAFParameterDef *pParm = parameterDefinitions.setValue(0);
+		if (pParm)
 		{
 		  pParm->ReleaseReference();
 		  pParm = 0;
@@ -253,17 +253,16 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		}
 	}
 
-	size_t dataDefSize = _dataDefinitions.getSize();
-  for (i = 0; i < dataDefSize; i++)
+	OMStrongReferenceSetIterator<ImplAAFDataDef>dataDefinitions(_dataDefinitions);
+	while(++dataDefinitions)
 	{
-	  ImplAAFDataDef *pOps = _dataDefinitions.setValueAt(0, i);
-	  if (pOps)
+		ImplAAFDataDef *pData = dataDefinitions.setValue(0);
+		if (pData)
 		{
-		  pOps->ReleaseReference();
-		  pOps = 0;
+		  pData->ReleaseReference();
+		  pData = 0;
 		}
 	}
-
 
   assert (_pBuiltinClasses);
   delete _pBuiltinClasses;
@@ -554,7 +553,7 @@ AAFRESULT ImplAAFDictionary::dictLookupClassDef (
 	  CHECK(GetClassDefs (&classEnum));
 	  status = classEnum->NextOne (&classDef);
 	  defFound = kAAFFalse;
-	  while(status == AAFRESULT_SUCCESS && !defFound)
+		while(status == AAFRESULT_SUCCESS && (classDef != NULL) && !defFound)
 		{
 		  CHECK(classDef->GetAUID (&testAUID));
 		  if(EqualAUID(&classID, &testAUID))
@@ -869,7 +868,7 @@ AAFRESULT ImplAAFDictionary::dictLookupTypeDef (
 	  CHECK(GetTypeDefs (&typeEnum));
 	  status = typeEnum->NextOne (&typeDef);
 	  defFound = kAAFFalse;
-	  while(status == AAFRESULT_SUCCESS && !defFound)
+		while(status == AAFRESULT_SUCCESS && (typeDef != NULL) && !defFound)
 		{
 		  CHECK(typeDef->GetAUID (&testAUID));
 		  if(EqualAUID(&typeID, &testAUID))
@@ -1207,7 +1206,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(GetDataDefs (&dataEnum));
 		status = dataEnum->NextOne (&dataDef);
 		defFound = kAAFFalse;
-		while(status == AAFRESULT_SUCCESS && !defFound)
+		while(status == AAFRESULT_SUCCESS && (dataDef != NULL) && !defFound)
 		{
 			CHECK(dataDef->GetAUID (&testAUID));
 			if(EqualAUID(&dataDefinitionID, &testAUID))
@@ -1262,7 +1261,11 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		CHECK(theEnum->SetEnumStrongProperty(this, &_dataDefinitions));
+		OMStrongReferenceSetIterator<ImplAAFDataDef>* iter = 
+			new OMStrongReferenceSetIterator<ImplAAFDataDef>(_dataDefinitions);
+		if(iter == 0)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(theEnum->SetIterator(this, iter));
 		*ppEnum = theEnum;
 	}
 	XEXCEPT
@@ -1327,7 +1330,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(GetOperationDefs (&effectEnum));
 		status = effectEnum->NextOne (&effectDef);
 		defFound = kAAFFalse;
-		while(status == AAFRESULT_SUCCESS && !defFound)
+		while(status == AAFRESULT_SUCCESS && (effectDef != NULL) && !defFound)
 		{
 			CHECK(effectDef->GetAUID (&testAUID));
 			if(EqualAUID(&effectID, &testAUID))
@@ -1445,7 +1448,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(GetParameterDefs (&parameterEnum));
 		status = parameterEnum->NextOne (&parameterDef);
 		defFound = kAAFFalse;
-		while(status == AAFRESULT_SUCCESS && !defFound)
+		while(status == AAFRESULT_SUCCESS && (parameterDef != NULL) && !defFound)
 		{
 			CHECK(parameterDef->GetAUID (&testAUID));
 			if(EqualAUID(&parameterID, &testAUID))
@@ -1500,7 +1503,11 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		CHECK(theEnum->SetEnumStrongProperty(this, &_parameterDefinitions));
+		OMStrongReferenceSetIterator<ImplAAFParameterDef>* iter = 
+			new OMStrongReferenceSetIterator<ImplAAFParameterDef>(_parameterDefinitions);
+		if(iter == 0)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(theEnum->SetIterator(this, iter));
 		*ppEnum = theEnum;
 	}
 	XEXCEPT
@@ -1576,7 +1583,7 @@ AAFRESULT ImplAAFDictionary::LookupCodecDef
 		CHECK(GetCodecDefs (&codecEnum));
 		status = codecEnum->NextOne (&codecDef);
 		defFound = kAAFFalse;
-		while(status == AAFRESULT_SUCCESS && !defFound)
+		while(status == AAFRESULT_SUCCESS && (codecDef != NULL) && !defFound)
 		{
 			CHECK(codecDef->GetAUID (&testAUID));
 			if(EqualAUID(&defID, &testAUID))
@@ -1703,7 +1710,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  CHECK(GetContainerDefs (&containerEnum));
 	  status = containerEnum->NextOne (&containerDef);
 	  defFound = kAAFFalse;
-	  while(status == AAFRESULT_SUCCESS && !defFound)
+		while(status == AAFRESULT_SUCCESS && (containerDef != NULL) && !defFound)
 		{
 		  CHECK(containerDef->GetAUID (&testAUID));
 		  if(EqualAUID(&defID, &testAUID))
@@ -1946,7 +1953,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(GetInterpolationDefs (&InterpolationEnum));
 		status = InterpolationEnum->NextOne (&InterpolationDef);
 		defFound = kAAFFalse;
-		while(status == AAFRESULT_SUCCESS && !defFound)
+		while(status == AAFRESULT_SUCCESS && (InterpolationDef != NULL) && !defFound)
 		{
 			CHECK(InterpolationDef->GetAUID (&testAUID));
 			if(EqualAUID(&interpolationID, &testAUID))
@@ -2064,7 +2071,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(GetPluginDefs (&pEnum));
 		status = pEnum->NextOne (&pDesc);
 		defFound = kAAFFalse;
-		while(status == AAFRESULT_SUCCESS && !defFound)
+		while(status == AAFRESULT_SUCCESS && (pDesc != NULL) && !defFound)
 		{
 			CHECK(pDesc->GetAUID (&testAUID));
 			if(EqualAUID(&interpolationID, &testAUID))
