@@ -761,14 +761,17 @@ AAFRESULT STDMETHODCALLTYPE
 		return(AAFRESULT_NULL_PARAM);
 
 	aafUInt32 count;
-	AAFRESULT hr;
-	hr = CountLocators (&count);
-	if (AAFRESULT_FAILED (hr)) return hr;
+	AAFRESULT ar;
+	ar = CountLocators (&count);
+	if (AAFRESULT_FAILED (ar)) return ar;
 
 	if (index > count)
 	  return AAFRESULT_BADINDEX;
 
-	return AAFRESULT_NOT_IN_CURRENT_VERSION;
+	_locators.insertAt(pLocator,index);
+	pLocator->AcquireReference();
+	
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -789,7 +792,14 @@ AAFRESULT STDMETHODCALLTYPE
 	if (index >= count)
 	  return AAFRESULT_BADINDEX;
 
-	return AAFRESULT_NOT_IN_CURRENT_VERSION;
+	ImplAAFLocator *pLocator;
+	_locators.getValueAt(pLocator,index);
+
+	assert(pLocator);
+	pLocator->AcquireReference();
+	(*ppLocator)=pLocator;
+
+	return AAFRESULT_SUCCESS;
 }
 
 
