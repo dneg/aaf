@@ -4,7 +4,7 @@
 #                                          #
 ############################################
 
-all : tool targets
+all : dodo-app targets
 
 BLD_CFG_DIR = ../ref-impl/bld_cfg
 
@@ -12,7 +12,7 @@ include $(BLD_CFG_DIR)/common.mk
 
 DODO = dodo.$(EXE)
 
-tool:
+dodo-app:
 	$(SH_PREFIX) cd tool ;  $(MAKE) $(SH_SUFFIX)
 
 test_only:
@@ -24,13 +24,18 @@ run:
 .SUFFIXES: .cpp .h .comc .comh .dod .exp .idl
 
 DODO_TARGETS = \
+	AAFComponent.all \
+	AAFCompositionMob.all \
+	AAFObject.all \
 	AAFSourceClip.all \
 	AAFSourceReference.all \
-	AAFComponent.all \
-	AAFUnitTest.all \
-	AAFCompositionMob.all
+	AAFUnitTest.all
 
 targets: $(DODO_TARGETS)
+
+SRC_DIR = ../ref-impl/src
+
+INCLUDE_DIR = ../ref-impl/include
 
 .dod.exp :
 	$(SH_PREFIX) $(RM) -f $*.exp $(SH_SUFFIX)
@@ -41,28 +46,31 @@ targets: $(DODO_TARGETS)
 	$(SH_PREFIX) $(RM) -f $*.h $(SH_SUFFIX)
 	$(SH_PREFIX) ./tool/$(DODO) -f macros/h.mac < $*.dod > $*.tmp $(SH_SUFFIX)
 	$(SH_PREFIX) mv $*.tmp $*.h $(SH_SUFFIX)
+	$(SH_PREFIX) cp $*.h $(INCLUDE_DIR) $(SH_SUFFIX)
 
 .dod.comh :
 	$(SH_PREFIX) $(RM) -f $*.comh $(SH_SUFFIX)
 	$(SH_PREFIX) ./tool/$(DODO) -f macros/comh.mac < $*.dod > $*.tmp $(SH_SUFFIX)
 	$(SH_PREFIX) mv $*.tmp $*.comh $(SH_SUFFIX)
-	$(SH_PREFIX) cp $*.comh C$*.h $(SH_SUFFIX)
+	$(SH_PREFIX) cp $*.comh $(SRC_DIR)/com-impl/C$*.h $(SH_SUFFIX)
 
 .dod.comc :
 	$(SH_PREFIX) $(RM) -f $*.comc $(SH_SUFFIX)
 	$(SH_PREFIX) ./tool/$(DODO) -f macros/comc.mac < $*.dod > $*.tmp $(SH_SUFFIX)
 	$(SH_PREFIX) mv $*.tmp $*.comc $(SH_SUFFIX)
-	$(SH_PREFIX) cp $*.comc C$*.cpp $(SH_SUFFIX)
+	$(SH_PREFIX) cp $*.comc $(SRC_DIR)/com-impl/C$*.cpp $(SH_SUFFIX)
 
 .dod.cpp :
 	$(SH_PREFIX) $(RM) -f $*.cpp $(SH_SUFFIX)
 	$(SH_PREFIX) ./tool/$(DODO) -f macros/cpp.mac < $*.dod > $*.tmp $(SH_SUFFIX)
 	$(SH_PREFIX) mv $*.tmp $*.cpp $(SH_SUFFIX)
+	$(SH_PREFIX) cp $*.cpp $(SRC_DIR)/cpp-impl $(SH_SUFFIX)
 
 .dod.idl :
 	$(SH_PREFIX) $(RM) -f $*.idl $(SH_SUFFIX)
 	$(SH_PREFIX) ./tool/$(DODO) -f macros/idl.mac < $*.dod > $*.tmp $(SH_SUFFIX)
 	$(SH_PREFIX) mv $*.tmp $*.idl $(SH_SUFFIX)
+	$(SH_PREFIX) cp $*.idl $(INCLUDE_DIR) $(SH_SUFFIX)
 
 clean:
 	$(SH_PREFIX) cd tool ; $(MAKE) clean $(SH_SUFFIX)
@@ -117,3 +125,13 @@ AAFCompositionMob.cpp : AAFCompositionMob.exp macros/cpp.mac
 AAFCompositionMob.idl : AAFCompositionMob.exp macros/idl.mac
 AAFCompositionMob.comc : AAFCompositionMob.exp macros/comc.mac
 AAFCompositionMob.comh : AAFCompositionMob.exp macros/comh.mac
+
+AAFObject.all : AAFObject.cpp AAFObject.h
+AAFObject.all : AAFObject.comc AAFObject.comh
+AAFObject.all : AAFObject.exp AAFObject.idl
+AAFObject.exp : AAFUnitTest.exp macros/exp.mac
+AAFObject.h : AAFObject.exp macros/h.mac
+AAFObject.cpp : AAFObject.exp macros/cpp.mac
+AAFObject.idl : AAFObject.exp macros/idl.mac
+AAFObject.comc : AAFObject.exp macros/comc.mac
+AAFObject.comh : AAFObject.exp macros/comh.mac
