@@ -13,6 +13,13 @@ BEGIN {
   printf("//\n");
   printf("// Meta definition of the AAF object model.\n");
   printf("//\n");
+  printf("// This file contains invocations of the macros described below.\n");
+  printf("//\n");
+  printf("// To use this file - \n");
+  printf("//   1) #define the macros to suit your usage\n");
+  printf("//   2) #include this file\n");
+  printf("//   3) #undef the macros\n");
+  printf("//\n");
   printf("// This is an automatically generated file.\n");
   printf("//\n");
   printf("// If you edit this file your changes will be lost\n");
@@ -72,9 +79,10 @@ BEGIN {
   printf("// Helper definitions\n");
   printf("//\n");
   printf("#define AAF_LITERAL_AUID(l , w1, w2,  b1, b2, b3 , b4, b5, b6, b7, b8) \\\n");
-  printf("                        {l , w1, w2, {b1, b2, b3 , b4, b5, b6, b7, b8}}");
+  printf("                        {l , w1, w2, {b1, b2, b3 , b4, b5, b6, b7, b8}}\n");
   printf("\n");
-
+  printf("// AAF Object model\n");
+  printf("//\n");
   #
   # Initialize global variables.
   #
