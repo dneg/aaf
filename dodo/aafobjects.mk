@@ -143,7 +143,12 @@ HUMAN_TYPED_IMPL="\
 	EnumAAFPluginLocators \
 	EnumAAFSegments \
 	EnumAAFTaggedValues \
-	EnumAAFTypeDefs "
+	EnumAAFTypeDefs \
+	AAFRawStorage \
+	AAFRandomRawStorage \
+	AAFGetFileBits \
+	AAFSetFileBits \
+	AAFRandomFile "
 
 # Defered interfaces
 #	AAFIntraFrameMarker \
