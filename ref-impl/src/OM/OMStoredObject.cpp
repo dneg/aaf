@@ -250,6 +250,9 @@ void OMStoredObject::save(const OMPropertySet& properties, void* clientContext)
 {
   TRACE("OMStoredObject::save(OMPropertySet)");
   PRECONDITION("Already open", _open);
+  PRECONDITION("At start of value stream",
+                                       streamPosition(_propertiesStream) == 0);
+  PRECONDITION("At start of value stream", _offset == 0);
 
   size_t count = properties.count();
   delete _index;
@@ -271,6 +274,11 @@ void OMStoredObject::save(const OMPropertySet& properties, void* clientContext)
   save(_index);
   delete _index;
   _index = 0;
+  _offset = 0;
+  streamSetPosition(_propertiesStream, 0);
+  POSTCONDITION("At start of properties stream",
+                                       streamPosition(_propertiesStream) == 0);
+  POSTCONDITION("At start of value stream", _offset == 0);
 }
 
 void OMStoredObject::save(OMStoredPropertySetIndex* index)
@@ -278,8 +286,8 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
   TRACE("OMStoredObject::save(OMStoredPropertySetIndex*)");
   PRECONDITION("Already open", _open);
   PRECONDITION("Valid index", index != 0);
-  PRECONDITION("Valid index", index->isValid());
   PRECONDITION("At start of index stream", streamPosition(_indexStream) == 0);
+  PRECONDITION("Valid index", index->isValid());
 
   // The number of entries in the index.
   //
@@ -386,7 +394,7 @@ void OMStoredObject::restore(OMPropertySet& properties)
   TRACE("OMStoredObject::restore");
   PRECONDITION("Already open", _open);
   PRECONDITION("At start of properties stream",
-               streamPosition(_propertiesStream) == 0);
+                                       streamPosition(_propertiesStream) == 0);
 
   size_t entries = _index->entries();
   
@@ -407,7 +415,7 @@ void OMStoredObject::restore(OMPropertySet& properties)
 #endif
   streamSetPosition(_propertiesStream, 0);
   POSTCONDITION("At start of properties stream",
-                streamPosition(_propertiesStream) == 0);
+                                       streamPosition(_propertiesStream) == 0);
 }
 
 OMStoredObject* OMStoredObject::open(const wchar_t* fileName,
