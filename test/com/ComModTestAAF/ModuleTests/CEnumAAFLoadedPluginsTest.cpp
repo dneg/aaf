@@ -32,12 +32,12 @@
 
 #include <iostream.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "AAF.h"
 #include "AAFResult.h"
 #include "ModuleTest.h"
 #include "AAFStoredObjectIDs.h"
-#include "AAFUtils.h"
 #include "AAFDefUIDs.h"
 
 // Cross-platform utility to delete a file.
