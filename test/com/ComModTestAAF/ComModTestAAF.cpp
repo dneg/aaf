@@ -47,7 +47,7 @@
 // Make sure we have defined IID_IUnknown and IID_IClassFactory.
 #include <initguid.h>
 #include <coguid.h>	
-
+#include "DataInput.h"
 
 #if !defined(CDECL) && defined(_MSC_VER)
 #define CDECL	_cdecl
@@ -212,45 +212,8 @@ int main(int argc, char* argv[])
 
 
 		#ifdef _MAC
-		/* Try to get input from file "COMMODAAF (PPC).inp" */
-		
-		/* try to open file for read */
-		ifstream ifCommandLine("COMMODAAF (PPC).inp");
-		
-		/* Test to make sure it is open.  If not it doesn't exist */
-		if (ifCommandLine.is_open()) {
-			char inputstr[100];
-			char *newstring = NULL;
-			char appname[] = "COMMODAAF (PPC)";
-
-			/* Determine the number of lines */
-			while (	ifCommandLine >> inputstr )
-				++count;
-				
-			/* Create the array of char pointers */
-			myargv = new char *[count+1];	
-			
-			/* Reset file pointer to beginning of file */
-			ifCommandLine.clear();
-			ifCommandLine.seekg(0);
-
-			argc = 0;
-			myargv[argc++] = appname;
-
-			/* Get Data */
-			while (	ifCommandLine >> inputstr )	{
-				newstring = new char [strlen(inputstr)+1];
-				strcpy(newstring, inputstr);
-				myargv[argc++] = newstring;
-			}
-			ifCommandLine.close();
-
-			argv = myargv;
-		}
-		else	{	
-			/* console window for mac */
-			argc = ccommand(&argv);
-		}
+			char dataFile[] = "COMMODAAF (PPC).inp";
+			getInputData(&argc, argv, dataFile);
 		#endif
 
 		/* Check arguments to see if help was requested */
@@ -296,12 +259,7 @@ int main(int argc, char* argv[])
 		}
 		
 		#ifdef _MAC
-		/* Clean Up - start at 1 because appname is hard coded */
-		for ( i=1; i<=count; ++i)
-			delete [] myargv[i];
-
-		if ( myargv != NULL ) 
-			delete [] myargv;
+			cleanUpInputData(argc, argv);
 		#endif
 
 		/* Get and Print finish time	*/
