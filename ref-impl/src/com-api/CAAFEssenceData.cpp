@@ -68,7 +68,6 @@ CAAFEssenceData::~CAAFEssenceData ()
 }
 
 
-
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceData::Initialize (IAAFSourceMob * pFileMob)
 {
@@ -611,6 +610,114 @@ HRESULT STDMETHODCALLTYPE
 }
 
 
+HRESULT STDMETHODCALLTYPE
+    CAAFEssenceData::WriteSampleIndex (aafUInt32  bytes,
+        aafDataBuffer_t  buffer,
+        aafUInt32 *  bytesWritten)
+{
+  HRESULT hr;
+
+  ImplAAFEssenceData * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFEssenceData*> (pO);
+  assert (ptr);
+
+
+
+
+  hr = ptr->WriteSampleIndex (bytes,
+    buffer,
+    bytesWritten);
+
+
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFEssenceData::ReadSampleIndex (aafUInt32  bytes,
+        aafDataBuffer_t  buffer,
+        aafUInt32 *  bytesRead)
+{
+  HRESULT hr;
+
+  ImplAAFEssenceData * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFEssenceData*> (pO);
+  assert (ptr);
+
+
+
+
+  hr = ptr->ReadSampleIndex (bytes,
+    buffer,
+    bytesRead);
+
+
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFEssenceData::SetSampleIndexPosition (aafPosition_t  offset)
+{
+  HRESULT hr;
+
+  ImplAAFEssenceData * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFEssenceData*> (pO);
+  assert (ptr);
+
+
+  hr = ptr->SetSampleIndexPosition (offset);
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFEssenceData::GetSampleIndexPosition (aafPosition_t*  pOffset)
+{
+  HRESULT hr;
+
+  ImplAAFEssenceData * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFEssenceData*> (pO);
+  assert (ptr);
+
+
+  hr = ptr->GetSampleIndexPosition (pOffset);
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFEssenceData::GetSampleIndexSize (aafLength_t *  pSize )
+{
+  HRESULT hr;
+
+  ImplAAFEssenceData * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFEssenceData*> (pO);
+  assert (ptr);
+
+
+  hr = ptr->GetSampleIndexSize (pSize );
+
+  return hr;
+}
+
 //
 // 
 // 
@@ -623,6 +730,8 @@ HRESULT CAAFEssenceData::InternalQueryInterface
     REFIID riid,
     void **ppvObj)
 {
+    HRESULT hr = S_OK;
+
     if (NULL == ppvObj)
         return E_INVALIDARG;
 
@@ -630,6 +739,13 @@ HRESULT CAAFEssenceData::InternalQueryInterface
     if (EQUAL_UID(riid,IID_IAAFEssenceData)) 
     { 
         *ppvObj = (IAAFEssenceData *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+
+    if (EQUAL_UID(riid,IID_IAAFEssenceDataEx)) 
+    { 
+        *ppvObj = (IAAFEssenceDataEx *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
@@ -642,4 +758,3 @@ HRESULT CAAFEssenceData::InternalQueryInterface
 // Define the contrete object support implementation.
 // 
 AAF_DEFINE_FACTORY(AAFEssenceData)
-

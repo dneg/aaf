@@ -48,6 +48,7 @@
 
 class CAAFEssenceData
   : public IAAFEssenceData,
+    public IAAFEssenceDataEx,
     public CAAFObject
 {
 protected:
@@ -60,7 +61,6 @@ protected:
   virtual ~CAAFEssenceData ();
 
 public:
-
 
 
   //***********************************************************
@@ -226,6 +226,88 @@ public:
     // the file mob id associated with essence 
     /*[out]*/ aafMobID_t *  pFileMobID);
 
+  //***********************************************************
+  // METHOD NAME: WriteSampleIndex()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFEssenceDataEx | WriteSampleIndex |
+  // Write pre-interleaved data to a sample index stream.
+  // @end
+  // 
+  STDMETHOD (WriteSampleIndex)
+   (
+    // @parm [in] aafUInt32 | bytes | write this many bytes to the sample index stream
+    aafUInt32  bytes,
+
+    // @parm [out, size_is(bytes)] aafDataBuffer_t | buffer | here is the buffer
+    aafDataBuffer_t  buffer,
+
+    // @parm [out,ref] aafUInt32 * | bytesWritten | 
+    aafUInt32 *  bytesWritten
+  );
+
+  //***********************************************************
+  // METHOD NAME: ReadSampleIndex()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFEssenceDataEx | ReadSampleIndex |
+  // Read pre-interleaved data from a sample index stream.
+  // @end
+  // 
+  STDMETHOD (ReadSampleIndex)
+   (
+    // @parm [in] aafUInt32 | bytes | read this many bytes from the sample index stream
+    aafUInt32  bytes,
+
+    // @parm [out, size_is(bytes), length_is(*bytesRead)] aafDataBuffer_t | buffer | here is the buffer
+    aafDataBuffer_t  buffer,
+
+    // @parm [out,ref] aafUInt32 * | bytesRead | 
+    aafUInt32 *  bytesRead
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetSampleIndexPosition()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFEssenceDataEx | SetSampleIndexPosition |
+  // Seek to absolute position within the sample index data.
+  // @end
+  // 
+  STDMETHOD (SetSampleIndexPosition)
+   (
+    // @parm [in] aafPosition_t | offset | offset from beginning of sample index
+    aafPosition_t  offset
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetSampleIndexPosition()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFEssenceDataEx | GetSampleIndexPosition |
+  // Get the absolute position within the sample index data.
+  // @end
+  // 
+  STDMETHOD (GetSampleIndexPosition)
+   (
+    // @parm [out] aafPosition_t* | pOffset | offset from beginning of sample index
+    aafPosition_t*  pOffset
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetSampleIndexSize()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFEssenceDataEx | GetSampleIndexSize |
+  // Return the total size of the sample index data.
+  // @end
+  // 
+  STDMETHOD (GetSampleIndexSize)
+   (
+    // @parm [out] aafLength_t * | pSize  | size of sample index data
+    aafLength_t *  pSize 
+  );
+
 
 protected:
   // 
@@ -247,5 +329,4 @@ public:
 };
 
 #endif // ! __CAAFEssenceData_h__
-
 

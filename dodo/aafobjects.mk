@@ -35,6 +35,7 @@ AAFNONPERSISTENTOBJECTS="\
 AAFCOMINTERFACESONLY="\
 	AAFEndian \
 	AAFSearchSource \
+	AAFEssenceDataEx \
 	AAFEssenceMultiAccess \
 	AAFTypeDefVariableArrayEx \
 	AAFMasterMobEx "

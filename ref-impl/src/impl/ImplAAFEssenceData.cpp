@@ -48,11 +48,13 @@ const aafMobID_t kNullMobID = {0};
 
 ImplAAFEssenceData::ImplAAFEssenceData () :
   _fileMobID(PID_EssenceData_MobID,	L"MobID"),
-  _mediaData(PID_EssenceData_Data,	L"Data")
+  _mediaData(PID_EssenceData_Data,	L"Data"),
+  _indexData(PID_EssenceData_SampleIndex,	L"SampleIndex")
 {
   // Add the properties into the property set.
   _persistentProperties.put(_fileMobID.address());
   _persistentProperties.put(_mediaData.address());
+  _persistentProperties.put(_indexData.address());
 
   // Initial default property values.
   _fileMobID = kNullMobID;
@@ -158,6 +160,93 @@ AAFRESULT STDMETHODCALLTYPE
   return AAFRESULT_SUCCESS;
 }
 
+/****/
+ AAFRESULT STDMETHODCALLTYPE
+   ImplAAFEssenceData::WriteSampleIndex (aafUInt32  bytes,
+                           aafDataBuffer_t buffer,
+                           aafUInt32 *bytesWritten)
+{
+  if (NULL == buffer || NULL == bytesWritten)
+    return AAFRESULT_NULL_PARAM;
+  // Cannot access the data property if it is NOT associated with a file.
+  if (!persistent())
+    return AAFRESULT_OBJECT_NOT_PERSISTENT;
+  
+  _indexData.write(buffer, bytes, *bytesWritten);
+  if (0 < bytes && 0 == *bytesWritten)
+    return AAFRESULT_CONTAINERWRITE;
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+/****/
+ AAFRESULT STDMETHODCALLTYPE
+   ImplAAFEssenceData::ReadSampleIndex (aafUInt32  bytes,
+                           aafDataBuffer_t  buffer,
+                           aafUInt32 *bytesRead)
+{
+  if (NULL == buffer || NULL == bytesRead)
+    return AAFRESULT_NULL_PARAM;
+  // Cannot access the data property if it is NOT associated with a file.
+  if (!persistent())
+    return AAFRESULT_OBJECT_NOT_PERSISTENT;
+  
+  _indexData.read(buffer, bytes, *bytesRead);
+  if (0 < bytes && 0 == *bytesRead)
+    return AAFRESULT_END_OF_DATA;
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceData::SetSampleIndexPosition (aafPosition_t  offset)
+{
+  // Cannot access the data property if it is NOT associated with a file.
+  if (!persistent())
+    return AAFRESULT_OBJECT_NOT_PERSISTENT;
+
+  OMUInt64 tmpOffset = offset;
+  _indexData.setPosition(tmpOffset);
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceData::GetSampleIndexPosition (aafPosition_t  *pOffset)
+{
+  if (NULL == pOffset)
+    return AAFRESULT_NULL_PARAM;
+  // Cannot access the data property if it is NOT associated with a file.
+  if (!persistent())
+    return AAFRESULT_OBJECT_NOT_PERSISTENT;
+
+  OMUInt64 tmpOffset;
+  tmpOffset = _indexData.position();
+  *pOffset = tmpOffset;
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceData::GetSampleIndexSize (aafLength_t *pSize)
+{
+  if (NULL == pSize)
+    return AAFRESULT_NULL_PARAM;
+  // Cannot access the data property if it is NOT associated with a file.
+  if (!persistent())
+    return AAFRESULT_OBJECT_NOT_PERSISTENT;
+
+  *pSize = _indexData.size();
+
+  return AAFRESULT_SUCCESS;
+}
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
