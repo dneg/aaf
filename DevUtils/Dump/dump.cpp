@@ -103,9 +103,9 @@ using namespace std;
 #include "initguid.h"
 #include "coguid.h"
 #elif defined(OM_USE_WRAPPED_MACINTOSH_SS)
+#include "macpub.h"
 #include "wintypes.h"
 #include "macdef.h"
-#include "macpub.h"
 #include "compobj.h"
 #include "storage.h"
 #include "initguid.h"
