@@ -25,12 +25,8 @@ typedef enum
 //
 // Forward declaration
 //
-struct IAAFFile;
-class AAFFile;
-struct IAAFMedia;
-class AAFMedia;
+class ImplAAFFile;
 class ImplAAFHeader;
-struct IAAFSession;
 class ImplAAFSession;
 class ImplAAFDataDef;
 
@@ -88,9 +84,6 @@ public:
   //********
   ImplAAFFile ();
   virtual ~ImplAAFFile ();
-#if 0
-  OMDECLARE_STORABLE(ImplAAFFile)
-#endif
 
 
 public:

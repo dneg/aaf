@@ -10,7 +10,6 @@
 
 
 
-#include "Container.h"
 
 
 #ifndef __ImplAAFFile_h__
@@ -720,11 +719,3 @@ AAFRESULT ImplAAFFile::OpenModify(aafWChar*		stream,
   
   return (OM_ERR_NONE);
 }
-
-
-
-#if 0
-extern "C" const aafClassID_t CLSID_AAFFile;
-
-OMDEFINE_STORABLE(ImplAAFFile, CLSID_AAFFile);
-#endif
