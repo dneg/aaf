@@ -57,7 +57,7 @@ ImplAAFFile::~ImplAAFFile ()
 #if MAYNEEDTHIS
   if (0 != _session)
   {
-    _session->ReleaseRef();
+    _session->ReleaseReference();
     _session = 0;
   }
 #endif //MAYNEEDTHIS
@@ -67,19 +67,19 @@ void ImplAAFFile::InternalReleaseObjects()
 {
   if (0 != _soundKind)
   {
-    _soundKind->ReleaseRef();
+    _soundKind->ReleaseReference();
     _soundKind = 0;
   }
 
   if (0 != _pictureKind)
   {
-    _pictureKind->ReleaseRef();
+    _pictureKind->ReleaseReference();
     _pictureKind = 0;
   }
 
   if (0 != _nilKind)
   {
-    _nilKind->ReleaseRef();
+    _nilKind->ReleaseReference();
     _nilKind = 0;
   }
 
