@@ -242,7 +242,7 @@ RunMainScript ()
 		VerifyFiles "AAFSequenceTest.aaf"
 
 		PrintSeparator "AafOmf Convertor Test 2 -  OMF -> AAF"
-		cp D:/views/Complx2x.omf .
+		cp ../../Utilities/AafOmf/Debug/Complx2x.omf .
 		AafOmf Complx2x.omf
 		CheckExitCode $? "AafOmf Convertor Test 2 -  OMF -> AAF"
 
