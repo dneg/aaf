@@ -9,10 +9,10 @@ AD_HEAD
 AD_IDL(//
 // This interface is used to enumerate over the AAFObjects contained
 // in a collection.
-//)
+//
 /***********************************************\
 *	Stub only.   Implementation not yet added	*
-\***********************************************/
+\***********************************************/)
 AD_FORWARD_DECLARATION(AAFObject)
 AD_CLASS_UUID(809c8cab, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 

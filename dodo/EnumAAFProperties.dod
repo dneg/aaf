@@ -6,9 +6,21 @@ EnumAAFProperties\
 AAFRoot\
 #endm
 #c
+AD_IDL(//
+// This interface is used to enumerate over the AAFProperties
+// contained in a collection.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
 /***********************************************\
 *	Stub only.   Implementation not yet added	*
-\***********************************************/
+\***********************************************/)
 AD_HEAD
 AD_FORWARD_DECLARATION(AAFProperty)
 AD_CLASS_UUID(BE316DB1, 7E73, 11D2, 84, 1D, 00, 60, 08, 32, AC, B8)
@@ -109,15 +121,15 @@ AD_METHOD1(Skip,
 
 
 AD_METHOD0(Reset,
-		   Instructs the enumerator to position itself at the beginning of the list of elements.
-  //
-  // There is no guarantee that the same set of elements will be enumerated on 
-  // each pass through the list\, nor will the elements necessarily be enumerated in 
-  // the same order. The exact behavior depends on the collection being enumerated.
+		   Instructs the enumerator to position itself at the beginning of
+  // the list of elements.
+  // 
+  // Always succeeds.
+  // 
+  // This method will return the following code:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //)
+  //   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(Clone,
