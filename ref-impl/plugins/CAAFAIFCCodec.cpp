@@ -622,7 +622,7 @@ CAAFAIFCCodec::WriteBlocks (aafDeinterleave_t  inter,
 				CHECK(_stream->Write(fileBytes, xfer->buffer, &bytesWritten));
 				
 				resultBlock->bytesXfered = xfer->numSamples * _bytesPerFrame;
-				resultBlock->samplesXfered += xfer->numSamples / _bytesPerFrame;
+				resultBlock->samplesXfered += xfer->numSamples;
 			}
 		}
 		else if(_numCh == 1)
@@ -640,7 +640,7 @@ CAAFAIFCCodec::WriteBlocks (aafDeinterleave_t  inter,
 				
 				
 				result->bytesXfered = xfer->numSamples * _bytesPerFrame;
-				result->samplesXfered += xfer->numSamples / _bytesPerFrame;
+				result->samplesXfered += xfer->numSamples;
 			}
 		}
 		else
@@ -959,7 +959,8 @@ CAAFAIFCCodec::Seek (aafPosition_t  sampleFrame)
 HRESULT STDMETHODCALLTYPE
 CAAFAIFCCodec::CompleteWrite (IAAFSourceMob *fileMob)
 {
-	aafInt64	byteLen, sampleLen;
+	aafInt64		sampleLen;
+	aafUInt32		AIFCDataLen;
 	IAAFEssenceDescriptor	*essenceDesc = NULL;
 	IAAFFileDescriptor		*fileDesc = NULL;
 	IAAFAIFCDescriptor		*AIFCDesc = NULL;
@@ -967,17 +968,20 @@ CAAFAIFCCodec::CompleteWrite (IAAFSourceMob *fileMob)
 	
 	XPROTECT()
 	{
-		CHECK(_stream->GetLength (&byteLen));
-		sampleLen = byteLen / _bytesPerFrame;
+		if(!_readOnly && _sampleDataHeaderWritten)
+			CHECK(CreateAudioDataEnd());	// Don't do this for raw calls?
+		//		_stream = NULL;
+		
+
+		CHECK(_stream->Seek(_dataSizeOffset));
+		CHECK(GetAIFCData(sizeof(AIFCDataLen), &AIFCDataLen));	// Read the AIFC data length
+		sampleLen = AIFCDataLen / _bytesPerFrame;
 		CHECK(_mdes->QueryInterface(IID_IAAFFileDescriptor, (void **)&fileDesc));
 		CHECK(fileDesc->SetLength(sampleLen));
 		fileDesc->Release();
 		fileDesc = NULL;
 		
-		if(!_readOnly && _sampleDataHeaderWritten)
-			CHECK(CreateAudioDataEnd());	// Don't do this for raw calls?
-		//		_stream = NULL;
-		
+
 		if(_interleaveBuf != NULL)
 			delete _interleaveBuf;
 		
