@@ -209,9 +209,9 @@ OMMSSStoredObjectFactory::isRecognized(const wchar_t* fileName)
             size_t size = sizeof(OMUniqueObjectIdentification);
             OMUniqueObjectIdentificationType::instance()->reorder(s, size);
           }
-          // If we created this file we wrote a signature whose value is the
-          // encoding. Do they match ?
-          if (sig == encoding()) {
+          // If we created this file we wrote a signature
+          // Do they match ?
+          if (sig == signature()) {
             result = true;
           }
         }
@@ -248,9 +248,9 @@ OMMSSStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
           size_t size = sizeof(OMUniqueObjectIdentification);
           OMUniqueObjectIdentificationType::instance()->reorder(s, size);
         }
-        // If we created this file we wrote a signature whose value is the
-        // encoding. Do they match ?
-        if (sig == encoding()) {
+        // If we created this file we wrote a signature 
+        // Do they match ?
+        if (sig == signature()) {
           result = true;
         }
       }
@@ -312,7 +312,6 @@ void OMMSSStoredObjectFactory::close(const wchar_t* fileName,
   TRACE("OMMSSStoredObjectFactory::close");
 
   if (isWritable) {
-    // The encoding is used as the signature.
     writeSignature(fileName, signature());
   }
 }
@@ -326,7 +325,6 @@ void OMMSSStoredObjectFactory::close(OMRawStorage* rawStorage,
   TRACE("OMMSSStoredObjectFactory::close");
 
   if (isWritable) {
-    // The encoding is used as the signature.
     writeSignature(rawStorage, signature());
   }
 }
