@@ -73,17 +73,13 @@
 
 
 ImplAAFHeader::ImplAAFHeader ()
-#if OM_PRESENT
 : _byteOrder(         PID_HEADER_BYTEORDER,          "byteOrder"),
   _lastModified(      PID_HEADER_LASTMODIFIED,       "lastModified"),
   _identificationList(PID_HEADER_IDENTIFICATIONLIST, "identificationList")
-#endif
 {
-#if OM_PRESENT
   _persistentProperties.put(_byteOrder.address());
   _persistentProperties.put(_lastModified.address());
   _persistentProperties.put(_identificationList.address());
-#endif
 
   //!!!	_head = this;
 //	file->InternalSetHead(this);
@@ -235,7 +231,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::AddIdentificationObject (aafProductIdentification_t *pIdent)
 {
-	AAFIdentification *			identObj;
+	ImplAAFIdentification *		identObj;
 	aafProductIdentification_t	fiction;
 	aafBool						dummyIDNT = AAFFalse;
 	aafProductVersion_t			dummyVersion;
@@ -259,30 +255,28 @@ AAFRESULT STDMETHODCALLTYPE
 			dummyIDNT = AAFTrue;
 		}
 		
-#if OM_PRESENT
-		XASSERT(pIdent != NULL, OM_ERR_NEED_PRODUCT_IDENT);
-    if (identPtr->productVersionString == 0) {
-      identPtr->productVersionString = "Unknown version";
+	XASSERT(pIdent != NULL, OM_ERR_NEED_PRODUCT_IDENT);
+    if (pIdent->productVersionString == 0) {
+      pIdent->productVersionString = "Unknown version";
     }
-    if (identPtr->platform == 0) {
-      identPtr->platform = "Windoze NT";
+    if (pIdent->platform == 0) {
+      pIdent->platform = "Windoze NT";
     }
-    identObj = new AAFIdentification(
-      identPtr->companyName,
-      identPtr->productName,
-      &identPtr->productVersion,
-      identPtr->productVersionString,
+    identObj = new ImplAAFIdentification(
+      pIdent->companyName,
+      pIdent->productName,
+      &pIdent->productVersion,
+      pIdent->productVersionString,
       // productID,
       _lastModified,
       &AAFToolkitVersion,
-      identPtr->platform
+      pIdent->platform
       // generation
       );
 
     _identificationList.appendValue(identObj);
  
     dummyVersion.major = 0;
-#endif
 	}
 	XEXCEPT
 	{
@@ -498,9 +492,7 @@ AAFRESULT ImplAAFHeader::IsValidHeadObject(void)
 #endif
 }
 
-#if OM_PRESENT
-int AAFHeader::classId(void) const
+int ImplAAFHeader::classId(void) const
 {
   return CLSID_AAFHEADER;
 }
-#endif
