@@ -21,47 +21,47 @@ public:
     //          <c OMFile> is named <p fileName>, use the <c OMClassFactory>
     //          <p factory> to create the objects. The file must already
     //          exist.
-  static OMFile* openRead(const wchar_t* fileName,
-                          const OMClassFactory* factory);
+  static OMFile* openExistingRead(const wchar_t* fileName,
+                                  const OMClassFactory* factory);
 
     // @cmember Open an existing <c OMFile> for modify access, the
     //          <c OMFile> is named <p fileName>, use the <c OMClassFactory>
     //          <p factory> to create the objects. The file must already
     //          exist.
-  static OMFile* openModify(const wchar_t* fileName,
-                            const OMClassFactory* factory);
+  static OMFile* openExistingModify(const wchar_t* fileName,
+                                    const OMClassFactory* factory);
 
-    // @cmember Create a new <c OMFile> for write-only access, the
+    // @cmember Open a new <c OMFile> for write-only access, the
     //          <c OMFile> is named <p fileName>, use the <c OMClassFactory>
     //          <p factory> to create the objects. The file must not already
     //          exist. The byte ordering on the newly created file is given
     //          by <p byteOrder>. The root <c OMStorable> in the newly
     //          created file is given by <p root>.
-  static OMFile* createWrite(const wchar_t* fileName,
-                             const OMClassFactory* factory,
-                             const OMByteOrder byteOrder,
-                             OMStorable* root);
-
-    // @cmember Create a new <c OMFile> for modify access, the
-    //          <c OMFile> is named <p fileName>, use the <c OMClassFactory>
-    //          <p factory> to create the objects. The file must not already
-    //          exist. The byte ordering on the newly created file is given
-    //          by <p byteOrder>. The root <c OMStorable> in the newly
-    //          created file is given by <p root>.
-  static OMFile* createModify(const wchar_t* fileName,
+  static OMFile* openNewWrite(const wchar_t* fileName,
                               const OMClassFactory* factory,
                               const OMByteOrder byteOrder,
                               OMStorable* root);
 
-    // @cmember Create a transient <c OMFile> for modify access, the
+    // @cmember Open a new <c OMFile> for modify access, the
+    //          <c OMFile> is named <p fileName>, use the <c OMClassFactory>
+    //          <p factory> to create the objects. The file must not already
+    //          exist. The byte ordering on the newly created file is given
+    //          by <p byteOrder>. The root <c OMStorable> in the newly
+    //          created file is given by <p root>.
+  static OMFile* openNewModify(const wchar_t* fileName,
+                               const OMClassFactory* factory,
+                               const OMByteOrder byteOrder,
+                               OMStorable* root);
+
+    // @cmember Open a new transient <c OMFile> for modify access, the
     //          <c OMFile> is not named, use the <c OMClassFactory>
     //          <p factory> to create the objects.
     //          The byte ordering on the newly created file is given
     //          by <p byteOrder>. The root <c OMStorable> in the newly
     //          created file is given by <p root>.
-  static OMFile* createTransient(const OMClassFactory* factory,
-                                 const OMByteOrder byteOrder,
-                                 OMStorable* root);
+  static OMFile* openNewTransient(const OMClassFactory* factory,
+                                  const OMByteOrder byteOrder,
+                                  OMStorable* root);
 
   // @access Public members.
 
@@ -83,6 +83,13 @@ public:
     //          <c OMFile>. It is not possible to <mf OMFile::save>
     //          read-only or transient files.
   void save(void);
+
+    // @cmember Save the entire contents of this <c OMFile> as well as
+    //          any unsaved changes in the new file <p fileName>. The file
+    //          must not already exist. <mf OMFile::saveAs> may be called
+    //          for files opened in modify mode and for files opened in
+    //          read-only and transient modes.
+  void saveAs(const wchar_t* fileName) const;
 
     // @cmember Discard all changes made to this <c OMFile> since the
     //          last <mf OMFile::save> or <mf OMFile::open>.
