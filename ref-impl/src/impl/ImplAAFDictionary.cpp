@@ -84,6 +84,7 @@
 #include "aafErr.h"
 #include "AAFUtils.h"
 
+
 extern "C" const aafClassID_t CLSID_EnumAAFDefObjects;
 extern "C" const aafClassID_t CLSID_EnumAAFOperationDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
@@ -244,6 +245,27 @@ static ImplAAFObject* CreateBaseClassInstance(const aafUID_t* pAUID)
 }
 
 
+// Factory method for creating a Dictionary.
+ImplAAFDictionary *ImplAAFDictionary::CreateDictionary(void)
+{
+  // Create a dictionary.
+  ImplAAFDictionary * pDictionary = NULL;
+  
+  
+  pDictionary = static_cast<ImplAAFDictionary *>(::CreateBaseClassInstance(&AUID_AAFDictionary));
+  assert(NULL != pDictionary);
+  if (NULL != pDictionary)
+  {
+    // If we created a dictionary then give it a reference to a factory
+    // (dictionary) to satisfy the OMStorable class invariant: Every OMStorabe
+    // must have a reference to a factory. Since the dictionary is not created
+    // by the OMClassFactory interface we just set the factory to "itself".
+    //
+    pDictionary->setClassFactory(pDictionary);
+  }
+  
+  return pDictionary;
+}
 
 
 //
@@ -256,20 +278,21 @@ OMStorable* ImplAAFDictionary::create(const OMClassId& classId) const
   OMStorable *result = 0;
 
   // Is this a request to create the dictionary?
-  if (memcmp(pAUID, &AUID_AAFDictionary, sizeof(aafUID_t)) == 0) {
-    // The result is just this instance.
+  if (memcmp(pAUID, &AUID_AAFDictionary, sizeof(aafUID_t)) == 0)
+  { // The result is just this instance.
     result = const_cast<ImplAAFDictionary*>(this);
     // Bump the reference count.
     AcquireReference();
-  } else {
-
-    // Create an instance of the class corresponsing to the given
+  } 
+  else
+  { // Create an instance of the class corresponsing to the given
     // stored object id.
 
     // Try the built-in dictionary first.
     //
     result = ::CreateBaseClassInstance(pAUID);
-    if (result == 0) {
+    if (result == 0)
+    {
       // Not in the built-in dictionary, try the current dictionary.
       // TBD
       //
@@ -279,9 +302,11 @@ OMStorable* ImplAAFDictionary::create(const OMClassId& classId) const
   // If we created an object then give it a reference to the factory
   // (dictionary) that was used to created it.
   //
-  if (result != 0) {
+  if (NULL != result && ((ImplAAFDictionary *)result != this))
+  {
     result->setClassFactory(this);
   }
+
   return result;
 }
 
@@ -313,6 +338,22 @@ AAFRESULT STDMETHODCALLTYPE
   else
     return AAFRESULT_SUCCESS;
 }
+
+
+// internal utility factory method to create an ImplAAFObject given an auid.
+// This method was created to make it simpler to replace calls to "Deprecated"
+// call to CreateImpl which should only be used for instanciating transient
+// non-ImplAAFObject classes such as an enumerator.
+ImplAAFObject *ImplAAFDictionary::CreateImplObject(const aafUID_t& auid)
+{
+  ImplAAFObject *pObject = NULL;
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  
+  result = CreateInstance(const_cast<aafUID_t *>(&auid), &pObject);
+  assert(AAFRESULT_SUCCEEDED(result));
+  return pObject;
+}
+
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -957,7 +998,7 @@ void ImplAAFDictionary::InitBuiltins()
 {
   if (_pBuiltins) return;
 
-  _pBuiltins = new ImplAAFBuiltins;
+  _pBuiltins = new ImplAAFBuiltins(this);
   assert (_pBuiltins);
 
   // Put built-in types into dictionary.
@@ -984,7 +1025,7 @@ ImplAAFDictionary::LookupPropDef (OMPropertyId opid,
 {
   InitBuiltins ();
   assert (_pBuiltins);
-  return _pBuiltins->LookupPropDef (this, opid, ppd);
+  return _pBuiltins->LookupPropDef (opid, ppd);
 }
 
 AAFRESULT STDMETHODCALLTYPE
