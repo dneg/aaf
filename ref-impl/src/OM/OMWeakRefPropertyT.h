@@ -210,7 +210,8 @@ void OMWeakReferenceProperty<ReferencedObject>::restore(size_t externalSize)
 
   OMUniqueObjectIdentification id;
   OMPropertyTag tag;
-  ASSERT("Sizes match", (sizeof(tag) + sizeof(OMPropertyId) + sizeof(OMUInt32) + sizeof(id)) == externalSize);
+  ASSERT("Sizes match", (sizeof(tag) + sizeof(OMPropertyId) +
+                         sizeof(OMKeySize) + sizeof(id)) == externalSize);
   OMPropertyId keyPropertyId;
   store->restore(_propertyId, _storedForm, id, tag, keyPropertyId);
   ASSERT("Consistent key property ids", keyPropertyId == _keyPropertyId);
