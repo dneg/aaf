@@ -20,6 +20,10 @@
 #
 ###############################################################################
 
+# This script simply filters known good messages from a Linux "make
+# everything" log.  Any text that makes it through the filter is
+# considered an error.
+
 StripEscapedReturns | \
 grep -v ^g++        | \
 grep -v ^ar         | \

@@ -20,10 +20,63 @@
 #
 ###############################################################################
 
+short_usage()
+{
+    echo "Usage `basename $0` [-basedir] [-bump] [-update| [-nocvsco] [-nocvslog] [-nobuild] [-h|-help]"
+}
+
 usage()
 {
-echo Usage
-exit 0;
+    short_usage
+    #    0         1         2         3         4         5         6         7
+    #    01234567890123456789012345678901234567890123456789012345678901234567890123456789
+    echo ""
+    echo "-basedir directory"
+    echo "	Set the directory where the cvs checkout command will write the\n"
+    echo "	AAF directory, or where it already exists. The default value is the"
+    echo "	current working directory."
+    echo ""
+    echo "-bump"
+    echo "	Bump the build number (i.e. increment it). This is implemented using"
+    echo "	the BuildNumber script."
+    echo ""
+    echo "-update"
+    echo "	Update an existing cvs sandbox rather than performing a checkout."
+    echo ""
+    echo "-nocvsco"
+    echo "	Don't run a cvs checkout (or update) command.  This assumes an AAF"
+    echo "	source tree exists in the base directory."
+    echo ""
+    echo "-nocvslog"
+    echo "	Skip the cvs log command required used to determine the age of the"
+    echo "	most recent build tag.  If this option is specified, the result of"
+    echo "	a previous cvs log command is used.  This is of very limited utility"
+    echo "	under normal circumstances."
+    echo ""
+    echo "-nobuild"
+    echo "	Do not build the source tree (i.e. execute make).  Subsequent make log"
+    echo "	filtering is still performed, hence, a previous make log should exist."
+    echo "	This is of limited utility under normal circumstances.  One use is as an"
+    echo "	an means to experiment with the FilterLog_{i686Linux,*} scripts."
+    echo ""
+
+    echo "`basename $0` automates the following build processing operations:"
+    echo ""
+    echo "1. Checkout or update the AAF source tree using CVS."
+    echo "2. Optionally bump the build number. (Edit AAFSDKBuild.h and tag the tree.)"
+    echo "3. Determine and report the most recent build tag, the date the tag was"
+    echo "   applied, and the current date."
+    echo "4. Run \"make everything\" and log the results."
+    echo "5. Filter the make log to identify unexpected build log messages"
+    echo "   (i.e. errors)."
+    echo "6. Generate a build report and copy this to aaf.sourceforge.net."
+    echo ""
+    echo "If CVSROOT is not set, then it is assigned the default value:"
+    echo ""
+    echo "      :pserver:anonymous@cvs.aaf.sourceforge.net:/cvsroot/aaf"
+    echo
+
+    exit 1;
 }
 
 CVS_RUN_CO_COMMAND=1
@@ -37,15 +90,15 @@ until [ $# == 0 ]
 do
 
 	case $1 in
+		-basedir  ) BASE_DIR=$2 ; shift ;;
+		-bump     ) BUMP_BUILD_TAG=1 ;;
 		-update   ) CVS_UPDATE_ONLY=1 ;;
 		-nocvsco  ) CVS_RUN_CO_COMMAND=0 ;;
 		-nocvslog ) CVS_RUN_LOG_COMMAND=0 ;;
 		-nobuild  ) BUILD_RUN_COMMAND=0 ;;
-		-basedir  ) BASE_DIR=$2 ; shift ;;
-		-bump     ) BUMP_BUILD_TAG=1 ;;
 		-h        ) usage ;;
 		-help     ) usage ;;
-		*	  ) echo Unrecognized option $1 ; exit 1 ;;
+		*	  ) echo Unrecognized option $1 ; short_usage; exit 1 ;;
 	esac
 
 	shift

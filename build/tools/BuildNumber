@@ -22,7 +22,7 @@
 
 short_usage()
 {
-        echo "usage: $0 [-basedir directory] [-bump] [-h|-help]"
+        echo "usage: `basename $0` [-basedir directory] [-bump] [-h|-help]"
 }
 
 usage()

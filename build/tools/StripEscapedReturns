@@ -20,6 +20,13 @@
 #
 ###############################################################################
 
+# This script strips escaped returns such as is found at the end of this line \
+# from stdin and writes the result to stdout.
+#
+# Stripping escaped returns makes it easier to filter known good
+# commands from make files that include commands that are split over
+# several lines using escaped returns.
+
 while ( <STDIN> ) {
 	s/\\\n/ /gi ; # replace escaped returns with a space
 	print $_;
