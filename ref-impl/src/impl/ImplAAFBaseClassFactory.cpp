@@ -14,6 +14,15 @@
 
 #include "ImplAAFObjectCreation.h"
 
+OMContainer::OMContainer(void)
+  : _file(0)
+{
+}
+
+OMContainer::~OMContainer(void)
+{
+}
+
 // Later: These two functions set a global alignment in the
 //file for writing properties.  Used only for media data
 aafInt32 OMContainer::GetValueAlignment(void)
@@ -41,9 +50,7 @@ void OMContainer::SetDefaultByteOrder(aafInt16 byteOrder)
 // Close and save the file
 void OMContainer::OMLCloseContainer(void)
 {
-  if (_mode == writeMode) {
-    *_file << *_head;
-  }
+  _file->save();
   _file->close();
 }
 
@@ -100,7 +107,6 @@ void OMContainer::OMLOpenContainer(OMLSession sessionData,
                                  OMLContainerUseMode useFlags,
                                  ImplAAFHeader*& header)
 {
-  _mode = readMode;
   char *pathname = GetFileName(attributes);
   _file = OMFile::openRead(pathname);
 
@@ -123,7 +129,7 @@ void OMContainer::OMLOpenContainer(OMLSession sessionData,
   registerClass(_file, CLSID_AAFSourceMob);
   registerClass(_file, CLSID_AAFNetworkLocator);
 
-  OMStorable* head = OMStorable::restoreFrom(_file, "head", *(_file->root()));
+  OMStorable* head = _file->restore();
   header = dynamic_cast<ImplAAFHeader *>(head);
 }
 
@@ -133,16 +139,16 @@ void OMContainer::OMLSetContainerVersion1(void)
 }
 
 //Create a file
-void OMContainer::OMLOpenNewContainer(OMLSession sessionData,
+void OMContainer::OMLOpenNewContainer(ImplAAFHeader* head,
+                                  OMLSession sessionData,
                                   OMLRefCon attributes,
                                   OMLconst_OMLGlobalName typeName, 
                                   OMLContainerUseMode useFlags,
                                   OMLGeneration generation,
                                   OMLContainerFlags containerFlags, ...)
 {
-  _mode = writeMode;
   char *pathname = GetFileName(attributes);
-  _file = OMFile::createModify(pathname);
+  _file = OMFile::createModify(pathname, head);
 }
 
 // OML Revision number
@@ -363,13 +369,6 @@ void OMContainer::GetSegmentSizeLen(OMLObject	object,
 {
 }
 
-#if FULL_TOOLKIT
-void OMContainer::SetHead(const AAFHeader* head)
-{
-  _head = head;
-}
-#endif
-
 /*****/
 // Called once at program start for your real globals
 OMLSession OMLStartSession(OMLMetaHandler metaHandler, OMLRefCon sessionRefCon)
@@ -409,8 +408,4 @@ OMLErrorString OMLVGetErrorString(OMLErrorString errorString, OMLSize32 maxLengt
 	return(0);
 }
 
-void OMContainer::SetHead(const ImplAAFHeader* head)
-{
-  _head = head;
-}
 
