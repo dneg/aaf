@@ -51,7 +51,7 @@ Instructs the enumerator to position itself at the beginning of the list of elem
   // the same order. The exact behavior depends on the collection being enumerated.)
 
 AD_XMETHOD1(Clone,
-			[out\,retval], objOut, EnumAAFDataDefinition, ppEnum, new enumeration,
+			[out\,retval], objOut, EnumAAFDataDefinitions, ppEnum, new enumeration,
 			Creates another data definition enumerator with the same state as the current 
   // enumerator to iterate over the same list. This method makes it possible to 
   // record a point in the enumeration sequence in order to return to that point 
