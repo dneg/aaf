@@ -36,7 +36,7 @@
 template<typename CharacterType>
 OMCharacterStringProperty<CharacterType>::OMCharacterStringProperty(
                                                  const OMPropertyId propertyId,
-                                                 const char* name)
+                                                 const wchar_t* name)
 : OMVariableSizeProperty<CharacterType>(propertyId, name)
 {
   TRACE("OMCharacterStringProperty<CharacterType>::OMCharacterStringProperty");
