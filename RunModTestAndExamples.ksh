@@ -242,6 +242,8 @@ RunMainScript ()
 		PrintSeparator "AafOmf Convertor Test 1 -  AAF -> OMF"
 		cd Utilities
 		cp ../Test/AAFSequenceTest.aaf .
+		cp ../../Omf/omfToolkit.dll .
+		cp ../../Omf/omfToolkitd.dll .
 		AafOmf -omf AAFSequenceTest.aaf
 		CheckExitCode $? "AafOmf Convertor Test 1 -  AAF -> OMF"
 
