@@ -268,7 +268,9 @@ sizeof (ImplAAFBuiltinClasses::sAxClassIDs) / sizeof (ImplAAFBuiltinClasses::sAx
 ImplAAFBuiltinClasses::ImplAAFBuiltinClasses (ImplAAFDictionary* dictionary)
   : _dictionary (dictionary),
 	_axClassDefs (0),
-	_axPropDefs (0)
+	_axPropDefs (0),
+	_numAxProps (0),
+	_numAxPropsInited (false)
 {
   _axClassDefs = new ImplAAFClassDefSP[ksNumAxClasses];
   instantiateProps ();
@@ -304,7 +306,7 @@ ImplAAFBuiltinClasses::NewBuiltinClassDef (const aafUID_t & rClassID,
 		{
 		  // We've found the desired class in our table.
 		  ImplAAFClassDef * pcd = (ImplAAFClassDef*)
-			_dictionary->pvtInstantiate(&AUID_AAFClassDef);
+			_dictionary->pvtInstantiate(AUID_AAFClassDef);
 		  assert (pcd);
 		  pcd->InitOMProperties ();
 
@@ -345,7 +347,7 @@ ImplAAFBuiltinClasses::InitBuiltinClassDef (const aafUID_t & rClassID,
 	  if (EqualAUID (sBuiltinClassTable[i].pThisId, &rClassID))
 		{
 		  AAFRESULT hr;
-		  hr = pClass->pvtInitialize (sBuiltinClassTable[i].pThisId,
+		  hr = pClass->pvtInitialize (*sBuiltinClassTable[i].pThisId,
 									  sBuiltinClassTable[i].pParentId,
 									  sBuiltinClassTable[i].pName);
 
@@ -386,20 +388,29 @@ AAFRESULT ImplAAFBuiltinClasses::LookupOmPid
 
 aafUInt32 ImplAAFBuiltinClasses::countAxProps () const
 {
-  aafUInt32 numProps = 0;
-  aafUInt32 classIdx;
-  for (classIdx = 0; classIdx < ksNumAxClasses; classIdx++)
-	{
-	  for (aafUInt32 i = 0;
-		   i < ksNumPropDefs;
-		   i++)
+  if (!_numAxPropsInited)
+	{	
+	  aafUInt32 numProps = 0;
+	  aafUInt32 classIdx;
+	  for (classIdx = 0; classIdx < ksNumAxClasses; classIdx++)
 		{
-		  if (EqualAUID (sBuiltinPropTable[i].pOwnerClassGuid,
-						 sAxClassIDs[classIdx]))
-			numProps++;
+		  for (aafUInt32 i = 0;
+			   i < ksNumPropDefs;
+			   i++)
+			{
+			  if (EqualAUID (sBuiltinPropTable[i].pOwnerClassGuid,
+							 sAxClassIDs[classIdx]))
+				numProps++;
+			}
 		}
+	  // Preserve logical const-ness even though this method is
+	  // bitwise non-const.
+	  ImplAAFBuiltinClasses * pNonConstThis =
+		(ImplAAFBuiltinClasses *) this;
+	  pNonConstThis->_numAxProps = numProps;
+	  pNonConstThis->_numAxPropsInited = true;
 	}
-  return numProps;
+  return _numAxProps;
 }
 
 
@@ -467,16 +478,16 @@ void ImplAAFBuiltinClasses::instantiateProps ()
 	  while (propInfo)
 		{
 		  ImplAAFObject * obj =
-			_dictionary->pvtInstantiate (&AUID_AAFPropertyDef);
+			_dictionary->pvtInstantiate (AUID_AAFPropertyDef);
 		  assert (obj);
 		  ImplAAFPropertyDef * propDef = dynamic_cast<ImplAAFPropertyDef*>(obj);
 		  assert (propDef);
 		  
 		  AAFRESULT hr = propDef->Initialize
-			(&propInfo->id,
+			(propInfo->id,
 			 propInfo->tag,
 			 propInfo->name,
-			 propInfo->pTypeGuid,
+			 *propInfo->pTypeGuid,
 			 propInfo->mandatory ? AAFFalse : AAFTrue);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  propDef->SetOMPropCreateFunc (propInfo->omPropCreateFunc);
@@ -522,7 +533,7 @@ void ImplAAFBuiltinClasses::instantiateClasses ()
   for (classIdx = 0; classIdx < ksNumAxClasses; classIdx++)
 	{
 	  // instantiate the class def object
-	  ImplAAFObject * tmp = _dictionary->pvtInstantiate (&AUID_AAFClassDef);
+	  ImplAAFObject * tmp = _dictionary->pvtInstantiate (AUID_AAFClassDef);
 	  assert (tmp);
 	  _axClassDefs[classIdx] = dynamic_cast<ImplAAFClassDef*>(tmp);
 	  assert (_axClassDefs[classIdx]);
@@ -534,7 +545,7 @@ void ImplAAFBuiltinClasses::instantiateClasses ()
 	  assert (cte);
 
 	  AAFRESULT hr;
-	  hr = _axClassDefs[classIdx]->pvtInitialize (cte->pThisId,
+	  hr = _axClassDefs[classIdx]->pvtInitialize (*cte->pThisId,
 												  cte->pParentId,
 												  cte->pName);
 	  assert (AAFRESULT_SUCCEEDED (hr));
@@ -635,9 +646,9 @@ void ImplAAFBuiltinClasses::RegisterBuiltinProperties
 
 			  ImplAAFPropertyDef * pd = 0;
 			  hr = pClassDef->pvtAppendPropertyDef
-				((aafUID_t *) &sBuiltinPropTable[i].id,
+				(sBuiltinPropTable[i].id,
 				 sBuiltinPropTable[i].name,
-				 sBuiltinPropTable[i].pTypeGuid,
+				 *sBuiltinPropTable[i].pTypeGuid,
 				 sBuiltinPropTable[i].mandatory ? AAFFalse : AAFTrue,
 				 &pd);
 			  assert (AAFRESULT_SUCCEEDED (hr));
@@ -816,7 +827,7 @@ void ImplAAFBuiltinClasses::AssurePropertyTypes ()
 	  AAFRESULT hr;
 	  assert (_dictionary);
 	  pcd = 0;
-	  hr = _dictionary->LookupClass (sAxClassIDs[i], &pcd);
+	  hr = _dictionary->LookupClass (*sAxClassIDs[i], &pcd);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  assert (pcd);
 	  pcd->AssurePropertyTypesLoaded ();
