@@ -39,6 +39,7 @@
 ImplAAFCDCIDescriptor::ImplAAFCDCIDescriptor ()
 :	_componentWidth(PID_CDCIDescriptor_ComponentWidth,	"ComponentWidth"),
 	_horizontalSubsampling(PID_CDCIDescriptor_HorizontalSubsampling,	"HorizontalSubsampling"),
+	_verticalSubsampling(PID_CDCIDescriptor_VerticalSubsampling,	"VerticalSubsampling"),
 	_colorSiting(PID_CDCIDescriptor_ColorSiting,	"ColorSiting"),
 	_blackReferenceLevel(PID_CDCIDescriptor_BlackReferenceLevel,	"BlackReferenceLevel"),
 	_whiteReferenceLevel(PID_CDCIDescriptor_WhiteReferenceLevel,	"WhiteReferenceLevel"),
@@ -47,6 +48,7 @@ ImplAAFCDCIDescriptor::ImplAAFCDCIDescriptor ()
 {
 	_persistentProperties.put(_componentWidth.address());
 	_persistentProperties.put(_horizontalSubsampling.address());
+	_persistentProperties.put(_verticalSubsampling.address());
 	_persistentProperties.put(_colorSiting.address());
 	_persistentProperties.put(_blackReferenceLevel.address());
 	_persistentProperties.put(_whiteReferenceLevel.address());
@@ -56,6 +58,7 @@ ImplAAFCDCIDescriptor::ImplAAFCDCIDescriptor ()
 	// Initialize Required properties
 	_componentWidth = 8;	// valid values are 8, 10, and 16 ?
 	_horizontalSubsampling = 1; // valid values are 1 and 2?
+	_verticalSubsampling = 1; // valid values are 1 and 2?
 
 	// Initialize Optional properties
 	_colorSiting = kAAFCoSiting;
@@ -98,6 +101,7 @@ ImplAAFCDCIDescriptor::Initialize ()
 }
 
 
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::SetHorizontalSubsampling (aafUInt32 HorizontalSubsampling)
 {
@@ -110,6 +114,29 @@ AAFRESULT STDMETHODCALLTYPE
 	case 1:
 	case 2:
 		_horizontalSubsampling = HorizontalSubsampling;
+		hr = AAFRESULT_SUCCESS;
+		break;
+
+	default:
+		hr = AAFRESULT_BAD_PROP;
+	}
+
+	return hr;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFCDCIDescriptor::SetVerticalSubsampling (aafUInt32 VerticalSubsampling)
+{
+	AAFRESULT	hr;
+
+  AAFRESULT stat = AAFRESULT_INTERNAL_ERROR;
+
+	switch (VerticalSubsampling)
+	{
+	case 1:
+	case 2:
+		_verticalSubsampling = VerticalSubsampling;
 		hr = AAFRESULT_SUCCESS;
 		break;
 
@@ -185,6 +212,17 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 
 	*pHorizontalSubsampling = _horizontalSubsampling;
+
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFCDCIDescriptor::GetVerticalSubsampling (aafUInt32* pVerticalSubsampling)
+{
+	if (pVerticalSubsampling == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	*pVerticalSubsampling = _verticalSubsampling;
 
 	return AAFRESULT_SUCCESS;
 }
