@@ -109,7 +109,9 @@ AD_XMETHOD2(EnumAAFAllMobs,
 			  ppEnum,
 			  Mob Enumeration,
 			Places an enumerator for mobs that apply to the criteria into the
-  // *ppEnum argument.  If pSearchCriteria is null\, all mobs are returned.
+  // *ppEnum argument.  If pSearchCriteria is null\, all mobs are returned.   The
+  // searchTag field of pSearchCriteria\, and exactly ONE of the fields in the union
+  // \(tags.mobID\, tags.name\, etc. \) must be set.
   // 
   // Succeeds if all of the following are true:
   // - the ppEnum pointer is valid.
@@ -261,6 +263,10 @@ AD_XMETHOD1(AppendMedia,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_DUPLICATE_MOBID
+  //   - The given mob has already been added.  The validation is done by comparing
+  //		mobIDs\, which should be unique.
+  //
   // AAFRESULT_NULL_PARAM
   //   - pMedia is null.)
 
@@ -285,6 +291,9 @@ AD_XMETHOD1(RemoveMedia,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_MOB_NOT_FOUND
+  //   - The mob is not in the current file.
   //
   // AAFRESULT_NULL_PARAM
   //   - pMedia is null.)
