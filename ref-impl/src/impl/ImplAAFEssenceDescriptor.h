@@ -115,6 +115,10 @@ public:
   // in /test/ImplAAFEssenceDescriptorTest.cpp.
   static AAFRESULT test();
 
+  // Return this object's stored object class.
+  virtual AAFRESULT STDMETHODCALLTYPE
+	GetObjectClass(aafUID_t * pClass);
+
 public:
 	// Functions internal to the toolkit
 	virtual AAFRESULT STDMETHODCALLTYPE
