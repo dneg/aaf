@@ -252,6 +252,23 @@ void OMStrongReferenceSetProperty<ReferencedObject>::insert(
   //POSTCONDITION("Optional property is present", isPresent());
 }
 
+  // @mfunc Append the given <p ReferencedObject> <p value> to
+  //        this <c OMStrongReferenceSetProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm A pointer to a <p ReferencedObject> by reference.
+template <typename ReferencedObject>
+void OMStrongReferenceSetProperty<ReferencedObject>::appendValue(
+                                                const ReferencedObject*& value)
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::appendValue");
+  PRECONDITION("Valid object", object != 0);
+
+  OBSOLETE("OMStrongReferenceSetProperty<ReferencedObject>::insert");
+  insert(object);
+}
+
   // @mfunc Remove this optional <c OMStrongReferenceSetProperty>.
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of

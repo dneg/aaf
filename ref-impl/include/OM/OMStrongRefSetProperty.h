@@ -77,6 +77,10 @@ public:
 
   void insert(const ReferencedObject* object);
 
+    // @cmember Append the given <p ReferencedObject> <p value> to
+    //          this <c OMStrongReferenceSetProperty>.
+  void appendValue(const ReferencedObject*& value);
+
   // Optional property interface
 
     // @cmember Remove this optional <c OMStrongReferenceSetProperty>.
