@@ -106,6 +106,7 @@ const static aafUID_t NULL2_AUID = { 0 };
 #define AUID_AAFUNIXLocator AUID_AAFUnixLocator
 #define AUID_AAFCodecDefinition AUID_AAFCodecDef
 #define AUID_AAFContainerDefinition AUID_AAFContainerDef
+#define AUID_AAFPluginDefinition AUID_AAFPluginDef
 #define AUID_AAFPluggableDefinition AUID_AAFPluggableDef
 
 #include "AAFMetaDictionary.h"
@@ -242,7 +243,7 @@ const /*static*/ aafUID_t * ImplAAFBuiltinClasses::sAxClassIDs[] =
   &AUID_AAFParameterDef,
   &AUID_AAFIdentification,
   &AUID_AAFContentStorage,
-  &AUID_AAFPluginDescriptor,
+  &AUID_AAFPluginDef,
 
   &AUID_AAFTypeDefRecord,
   &AUID_AAFTypeDefVariableArray,
