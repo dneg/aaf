@@ -36,4 +36,8 @@ void printDefinition(const char* type,
                      int identifier,
                      ostream& s);
 
+void printName(const char* name,
+               size_t width,
+               ostream& s);
+
 #endif // ! __headerGenUtils_h__

@@ -129,11 +129,7 @@ void printDefinition(const char* type,
   s << type;
   s << " ";
   s << prefix;
-  s << name;
-  size_t actualWidth = strlen(name);
-  for (size_t i = actualWidth; i < width; i++) {
-    s << " ";
-  }
+  printName(name, width, s);
   s << " =" << endl;
   print(identifier, cout);
   s << ";" << endl << endl;
@@ -149,15 +145,22 @@ void printDefinition(const char* type,
   s << type;
   s << " ";
   s << prefix;
-  s << name;
-  size_t actualWidth = strlen(name);
-  for (size_t i = actualWidth; i < width; i++) {
-    s << " ";
-  }
+  printName(name, width, s);
   s << " = ";
   s.flags(ios::right);
   s.fill('0');
   s << "0x" << hex;
   s.setf(ios::uppercase);
   s << setw(4) << identifier << ";" << endl;
+}
+
+void printName(const char* name,
+               size_t width,
+               ostream& s)
+{
+  s << name;
+  size_t actualWidth = strlen(name);
+  for (size_t i = actualWidth; i < width; i++) {
+    s << " ";
+  }
 }
