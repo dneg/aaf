@@ -277,7 +277,7 @@ AAFRESULT ImplAAFPulldown::MapOffset(aafPosition_t offset,
 			  if (maskBits)
 				{
 				  revolutions = abs(offset32) / masksize;
-				  remainder = offset32 % masksize;
+				  remainder = (char)(offset32 % masksize);
 				  if(srcPhase != NULL)
 				  	*srcPhase = remainder;
 				  
@@ -296,7 +296,7 @@ AAFRESULT ImplAAFPulldown::MapOffset(aafPosition_t offset,
 			  if (maskBits)
 				{
 				  revolutions = abs(offset32) / maskones;
-				  remainder = offset32 % maskones;
+				  remainder = (char)(offset32 % maskones);
 				  if(srcPhase != NULL)
 				  	*srcPhase = remainder;
 

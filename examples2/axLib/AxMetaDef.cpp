@@ -342,7 +342,6 @@ IEnumAAFPropertyValuesSP AxTypeDefFixedArray::GetElements( IAAFPropertyValueSP& 
 {
 	IEnumAAFPropertyValuesSP spEnum;
 
-	// Doesn't work!  Returns  AAFRESULT_NOT_IN_CURRENT_VERSION
 	CHECK_HRESULT( _spIaafTypeDefFixedArray->GetElements( spPropVal, &spEnum ) );
 
 	return spEnum;
@@ -498,7 +497,10 @@ IAAFTypeDefSP AxTypeDefSet::GetElementType()
 	return spIaafTypeDef;
 }
 
-
+IAAFTypeDefSP AxTypeDefSet::GetType()
+{
+	return GetElementType();
+}
 
 //=---------------------------------------------------------------------=
 
@@ -725,4 +727,9 @@ aafUID_t AxTypeDefExtEnum::GetElementValue( aafUInt32 index )
 	return auid;
 }
 
-
+AxString AxTypeDefExtEnum::GetNameFromValue( IAAFPropertyValueSP spVal )
+{
+  AxString name;
+  AX_ANY_TO_STRING_ONEARG( name, _spIaafTypeDefExtEnum, GetNameBufLenFromValue, GetNameFromValue, spVal )
+  return name;
+}

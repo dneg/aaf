@@ -35,6 +35,9 @@ typedef enum unitTestMode
 
 
 
+#ifdef _cplusplus
+extern "C" {
+#endif
 
 //
 // Feature support
@@ -66,7 +69,9 @@ bool DR4TestSupported(aafProductVersion_constref toolkitVersion);
 // Return true is greater than DR4 (a.k.a. RC1)
 bool RC1TestSupported(aafProductVersion_constref toolkitVersion);
 
-
+#ifdef _cplusplus
+}
+#endif
 
 //
 // Comparison operators

@@ -31,24 +31,20 @@
 //   The same numbers are used to label the binary DLL in platform specific ways
 //   so that you can work out what version of the DLL you have from the 'outside'.
 //
-//   The only  slight problem is that the (classic) Macintosh resource compiler 
-//   for AAFMacSDK/include/AAFVersion.r can't handle macro parameters
-//   or the stringify # stuff below
-//
 //   If you want to roll a new version, edit the numbers below then call the perl script
 //   ../../build/newbuild.pl which will bump the build number, update the Mac resource and
 //   set a CVS tag for the new build number
 
 
 #define AAF_MAJOR_VERSION 1
-#define AAF_MINOR_VERSION 0
-#define AAF_MAINT_RELEASE 1
+#define AAF_MINOR_VERSION 1
+#define AAF_MAINT_RELEASE 0
 
 #define AAF_RELEASE_STAGE kAAFVersionReleased
  
 // these next two lines are monitored/incremented by newbuild.pl
 
-#define AAF_BUILD_NUMBER 542
+#define AAF_PATCH_LEVEL 0
 #define AAF_CURRENT_YEAR "2004"
 
 //   The lines below shouldn't normally need to be modified
@@ -65,24 +61,16 @@
 
 #define stringify(num) # num
 
-#define AAF_SDK_RELEASEZZ(majorNUM, minorNUM, maintNUM, buildNUM) AAF_PRODUCT_NAME " " stringify(majorNUM) "." stringify(minorNUM) "." stringify(maintNUM) " build " stringify(buildNUM)
+#define AAF_SDK_RELEASEZZ(majorNUM, minorNUM, maintNUM, patchNUM) AAF_PRODUCT_NAME " " stringify(majorNUM) "." stringify(minorNUM) "." stringify(maintNUM) " patch " stringify(patchNUM)
 
-#define AAF_SDK_VERSIONZZ(majorNUM, minorNUM, maintNUM, buildNUM) stringify(majorNUM) "." stringify(minorNUM) "." stringify(maintNUM) " build " stringify(buildNUM)
+#define AAF_SDK_VERSIONZZ(majorNUM, minorNUM, maintNUM, patchNUM) stringify(majorNUM) "." stringify(minorNUM) "." stringify(maintNUM) " patch " stringify(patchNUM)
 
-#define AAF_FILE_VERSIONZZ(majorNUM, minorNUM, maintNUM, buildNUM) stringify(majorNUM) "." stringify(minorNUM) "." stringify(maintNUM) "." stringify(buildNUM)
+#define AAF_FILE_VERSIONZZ(majorNUM, minorNUM, maintNUM, patchNUM) stringify(majorNUM) "." stringify(minorNUM) "." stringify(maintNUM) "." stringify(patchNUM)
 
-#define AAF_SDK_RELEASE AAF_SDK_RELEASEZZ( AAF_MAJOR_VERSION, AAF_MINOR_VERSION, AAF_MAINT_RELEASE, AAF_BUILD_NUMBER)
+#define AAF_SDK_RELEASE AAF_SDK_RELEASEZZ( AAF_MAJOR_VERSION, AAF_MINOR_VERSION, AAF_MAINT_RELEASE, AAF_PATCH_LEVEL)
 
-#define AAF_FILE_VERSION AAF_FILE_VERSIONZZ( AAF_MAJOR_VERSION, AAF_MINOR_VERSION, AAF_MAINT_RELEASE, AAF_BUILD_NUMBER)
+#define AAF_FILE_VERSION AAF_FILE_VERSIONZZ( AAF_MAJOR_VERSION, AAF_MINOR_VERSION, AAF_MAINT_RELEASE, AAF_PATCH_LEVEL)
 
-#define AAF_SDK_VERSION AAF_SDK_VERSIONZZ( AAF_MAJOR_VERSION, AAF_MINOR_VERSION, AAF_MAINT_RELEASE, AAF_BUILD_NUMBER)
-
-//  Mac rez stuff
-
-#define AAF_LONG_VERSION_STRING " " AAF_COPYRIGHT_STRING " Licensor of the AAF Association, www.AAFassociation.org"
-
-//  this next line will be updated to synchronise it with the numbers above by newbuild.pl
-
-#define AAF_SHORT_VERSION_STRING "1.0.1 build 504"
+#define AAF_SDK_VERSION AAF_SDK_VERSIONZZ( AAF_MAJOR_VERSION, AAF_MINOR_VERSION, AAF_MAINT_RELEASE, AAF_PATCH_LEVEL)
 
 #endif

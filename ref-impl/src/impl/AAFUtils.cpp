@@ -45,6 +45,7 @@
 #include <assert.h>
 #include <time.h>
 #include <math.h>
+#include <wchar.h>
 
 #include "AAFTypes.h"
 
@@ -69,7 +70,7 @@
 extern const char AAFReferenceImplementationIdent[];
 
 const char AAFReferenceImplementationIdent[] = "@(#) " AAF_SDK_RELEASE; // for Linux and Irix
-const aafProductVersion_t AAFReferenceImplementationVersion = {AAF_MAJOR_VERSION, AAF_MINOR_VERSION, AAF_MAINT_RELEASE, AAF_BUILD_NUMBER, AAF_RELEASE_STAGE};
+const aafProductVersion_t AAFReferenceImplementationVersion = {AAF_MAJOR_VERSION, AAF_MINOR_VERSION, AAF_MAINT_RELEASE, AAF_PATCH_LEVEL, AAF_RELEASE_STAGE};
 
 
 
@@ -798,6 +799,195 @@ void AAFByteSwap64(
 	cp[4] = cp[3];
 	cp[3] = t;
 }
+
+/*
+ *	Routines to support the URL and URI utility functions.
+ */
+
+// These routines rely upon URLs as defined in RFC 1738:
+//
+// <scheme>:<scheme-specific-part>
+// ; the scheme is in lower case; interpreters should use case-ignore
+//	scheme		= 1*[ lowalpha | digit | "+" | "-" | "." ]
+//
+// For file scheme:
+//	fileurl		= "file://" [ host | "localhost" ] "/" fpath
+//
+// NB. ':' is acceptable unescaped in the fpath component
+
+#ifdef _MSC_VER			// MS VC++ dosen't provide POSIX strcasecmp
+#define strncasecmp(s1, s2, n) strnicmp(s1, s2, n)
+#endif
+
+static bool acceptable_pchar(unsigned char c)
+{
+	static const unsigned char isAcceptable[96] =
+	/*	0x0 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xA 0xB 0xC 0xD 0xE 0xF */
+	{
+	    0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0xF,0xE,0x0,0xF,0xF,0xC, /* 2x  !"#$%&'()*+,-./   */
+	    0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0x8,0x0,0x0,0x0,0x0,0x0, /* 3x 0123456789:;<=>?   */
+	    0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF, /* 4x @ABCDEFGHIJKLMNO   */
+	    0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0x0,0x0,0x0,0x0,0xF, /* 5x PQRSTUVWXYZ[\]^_   */
+	    0x0,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF, /* 6x `abcdefghijklmno   */
+	    0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0x0,0x0,0x0,0x0,0x0  /* 7x pqrstuvwxyz{\}~DEL */
+	};
+
+	return (c >= 32 && c < 128 && isAcceptable[c - 32]);
+}
+
+static void escapeURI(const char *str, char *result)
+{
+	const char	*p, hex[] = "0123456789ABCDEF";
+    char		*q;
+
+    if (!str || !result)
+		return;
+
+    for (q = result, p = str; *p; p++)
+	{
+    	unsigned char a = *p;
+		if (!acceptable_pchar(a))
+		{
+		    *q++ = '%';
+		    *q++ = hex[a >> 4];
+		    *q++ = hex[a & 15];
+		}
+		else
+			*q++ = *p;
+    }
+    *q++ = '\0';
+}
+
+static char asciiHexToChar (char c)
+{
+    return  c >= '0' && c <= '9' ?  c - '0' 
+    	    : c >= 'A' && c <= 'F'? c - 'A' + 10
+    	    : c - 'a' + 10;	/* accept lowercase letters too */
+}
+
+static void unescapeURI(char *str)
+{
+    char *p = str;
+    char *q = str;
+
+    while (*p)
+	{
+        if (*p == '%')		// URI hex escape char
+		{
+			p++;
+			if (*p)
+				*q = asciiHexToChar(*p++) * 16;
+			if (*p)
+				*q = *q + asciiHexToChar(*p);
+			p++;
+			q++;
+		}
+		else
+		    *q++ = *p++; 
+    }
+    *q++ = 0;
+}
+
+/************************
+ * Function: wcsconvertURLtoFilepath
+ *
+ *	Converts a file scheme URL into an absolute filepath.  An invalid URL is
+ *	returned unmodified.
+ *
+ * Argument Notes:
+ *		filepath must have space allocated by the caller
+ *
+ * ReturnValue:
+ *		void
+ *
+ * Possible Errors:
+ *		none
+ */
+void wcsconvertURLtoFilepath(wchar_t *url, wchar_t *filepath)
+{
+	// Convert to char* for ease of processing.
+	// (wcsncasecmp and similiar are not available everywhere)
+	unsigned tlen = wcslen(url);
+	char *tmp = new char[tlen+1];		// +1 includes terminating '\0'
+	wcstombs(tmp, url, tlen+1);
+
+	// If no file scheme is found, assume a simple filepath and not a URI.
+	// Note that other schemes such as http and ftp are not supported.
+	if (strncasecmp(tmp, "file://", strlen("file://")) != 0)
+	{
+		wcscpy(filepath, url);
+		delete [] tmp;
+		return;
+	}
+
+	// Skip over the file://[host]/ to point to the fpath.
+	char *fpath = tmp + strlen("file://");
+	while (*fpath && *fpath != '/')
+		fpath++;
+
+#ifdef _WIN32
+	// WIN32 filepaths must start with a drive letter, so remove the
+	// initial '/' from the URL.
+	if (*fpath == '/')
+		fpath++;
+#endif
+
+	unescapeURI(fpath);
+
+	mbstowcs(filepath, fpath, strlen(fpath)+1);		// convert back to wcs
+	delete [] tmp;
+}
+
+/************************
+ * Function: wcsconvertFilepathtoURL
+ *
+ *	Converts an absolute filepath into a file scheme URL.
+ *
+ * Argument Notes:
+ *		url must have space allocated by the caller
+ *
+ * ReturnValue:
+ *		void
+ *
+ * Possible Errors:
+ *		none
+ */
+void wcsconvertFilepathtoURL(wchar_t *filepath, wchar_t *url)
+{
+	// convert to char* for ease of processing
+	int tlen = wcslen(filepath);
+	char *tmp = new char[tlen+1];		// +1 includes terminating '\0'
+	wcstombs(tmp, filepath, tlen+1);
+
+#ifdef _WIN32
+	// On WIN32 backslash is the directory separator, not a regular filename
+	// character like under Unix or in a URL.  So convert them to the URL
+	// directory separator, forward slash '/', to preserve the hierarchy.
+	char *p = tmp;
+	while (*p)
+	{
+		if (*p == '\\')
+			*p = '/';
+		p++;
+	}
+#endif
+	// worst case: every char must be hex-escaped - therefore multiply by 3
+	char *escaped = new char[tlen*3+1];
+	escapeURI(tmp, escaped);
+
+	// prepare the file scheme URL (+1 for '/', +1 for '\0')
+	char *mb_url = new char[strlen(escaped) + strlen("file://") +1 +1];
+	strcpy(mb_url, "file://");
+	if (*escaped != '/')		// ensure a leading path slash is present
+		strcat(mb_url, "/");
+	strcat(mb_url, escaped);
+
+	mbstowcs(url, mb_url, strlen(mb_url)+1);		// convert back to wcs
+	delete [] mb_url;
+	delete [] escaped;
+	delete [] tmp;
+}
+
 
 /*
 ;;; Local Variables: ***

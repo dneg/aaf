@@ -171,8 +171,10 @@ interface IAAFRecordingDescriptor;
 interface IAAFAuxiliaryDescriptor;
 interface IAAFDescriptiveFramework;
 interface IAAFDescriptiveMarker;
+interface IAAFDataDef2;
 interface IAAFEndian;
 interface IAAFSearchSource;
+interface IAAFEssenceDataEx;
 interface IAAFEssenceMultiAccess;
 interface IAAFTypeDefVariableArrayEx;
 interface IAAFMasterMobEx;
@@ -182,6 +184,7 @@ interface IAAFComponent2;
 interface IAAFDictionary2;
 interface IAAFSourceReference2;
 interface IAAFMasterMob2;
+interface IAAFCompositionMob2;
 #else
 typedef interface IAAFAIFCDescriptor IAAFAIFCDescriptor;
 typedef interface IAAFClassDef IAAFClassDef;
@@ -314,8 +317,10 @@ typedef interface IAAFRecordingDescriptor IAAFRecordingDescriptor;
 typedef interface IAAFAuxiliaryDescriptor IAAFAuxiliaryDescriptor;
 typedef interface IAAFDescriptiveFramework IAAFDescriptiveFramework;
 typedef interface IAAFDescriptiveMarker IAAFDescriptiveMarker;
+typedef interface IAAFDataDef2 IAAFDataDef2;
 typedef interface IAAFEndian IAAFEndian;
 typedef interface IAAFSearchSource IAAFSearchSource;
+typedef interface IAAFEssenceDataEx IAAFEssenceDataEx;
 typedef interface IAAFEssenceMultiAccess IAAFEssenceMultiAccess;
 typedef interface IAAFTypeDefVariableArrayEx IAAFTypeDefVariableArrayEx;
 typedef interface IAAFMasterMobEx IAAFMasterMobEx;
@@ -325,6 +330,7 @@ typedef interface IAAFComponent2 IAAFComponent2;
 typedef interface IAAFDictionary2 IAAFDictionary2;
 typedef interface IAAFSourceReference2 IAAFSourceReference2;
 typedef interface IAAFMasterMob2 IAAFMasterMob2;
+typedef interface IAAFCompositionMob2 IAAFCompositionMob2;
 #endif
 
 // IAAFAIFCDescriptor
@@ -1694,7 +1700,6 @@ DECLARE_INTERFACE_(IAAFCompositionMob, IUnknown)
   STDMETHOD_(ULONG,Release) (THIS) PURE;
 
   /* *** IAAFCompositionMob methods *** */
-
   //***********************************************************
   //
   // Initialize()
@@ -1789,10 +1794,14 @@ DECLARE_INTERFACE_(IAAFCompositionMob, IUnknown)
     // default fade edit unit
     /*[in]*/ aafRational_t  fadeEditUnit) PURE;
 
+
+
+
+
+
   END_INTERFACE
 };
 #endif // __IAAFCompositionMob_INTERFACE_DEFINED__
-
 
 
 // IAAFConstantValue
@@ -2801,6 +2810,8 @@ DECLARE_INTERFACE_(IAAFControlPoint, IUnknown)
 // ************************
 
 
+
+
 #ifndef __IAAFDataDef_INTERFACE_DEFINED__
 #define __IAAFDataDef_INTERFACE_DEFINED__
 
@@ -2819,7 +2830,6 @@ DECLARE_INTERFACE_(IAAFDataDef, IUnknown)
   STDMETHOD_(ULONG,Release) (THIS) PURE;
 
   /* *** IAAFDataDef methods *** */
-
   //***********************************************************
   //
   // Initialize()
@@ -2928,10 +2938,12 @@ DECLARE_INTERFACE_(IAAFDataDef, IUnknown)
     // pointer to result
     /*[retval, out]*/ aafBoolean_t *  bDoesConvertFrom) PURE;
 
+
+
+
   END_INTERFACE
 };
 #endif // __IAAFDataDef_INTERFACE_DEFINED__
-
 
 
 // IAAFDefObject
@@ -6597,7 +6609,6 @@ DECLARE_INTERFACE_(IAAFEssenceData, IUnknown)
 
   /* *** IAAFEssenceData methods *** */
 
-
   //***********************************************************
   //
   // Initialize()
@@ -6762,10 +6773,14 @@ DECLARE_INTERFACE_(IAAFEssenceData, IUnknown)
     /*[out]*/ aafMobID_t *  pFileMobID) PURE;
 
 
+
+
+
+
+
   END_INTERFACE
 };
 #endif // __IAAFEssenceData_INTERFACE_DEFINED__
-
 
 
 // IAAFEssenceDescriptor
@@ -34906,6 +34921,169 @@ DECLARE_INTERFACE_(IAAFDescriptiveMarker, IUnknown)
 
 
 
+// IAAFDataDef2
+
+// ************************
+//
+// Interface IAAFDataDef2
+//
+// ************************
+
+#ifndef __IAAFDataDef2_INTERFACE_DEFINED__
+#define __IAAFDataDef2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFDataDef2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFDataDef2
+
+DECLARE_INTERFACE_(IAAFDataDef2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFDataDef2 methods *** */
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  // Init all fields of a definition object.
+  //
+  STDMETHOD(Initialize) (THIS_
+    // AUID for new DeObject
+    /*[in, ref]*/ aafUID_constref  id,
+
+    // Name for new DefObject
+    /*[in, string]*/ aafCharacter_constptr  pName,
+
+    // Description for new DefObject
+    /*[in, string]*/ aafCharacter_constptr  pDescription) PURE;
+
+
+  //***********************************************************
+  //
+  // IsPictureKind()
+  //
+  // Sets return value to TRUE if DataDef is a picture.
+  //
+  STDMETHOD(IsPictureKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsPictureKind) PURE;
+
+
+  //***********************************************************
+  //
+  // IsMatteKind()
+  //
+  // Sets return value to TRUE if DataDef is a matte.
+  //
+  STDMETHOD(IsMatteKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsMatteKind) PURE;
+
+
+  //***********************************************************
+  //
+  // IsPictureWithMatteKind()
+  //
+  // Sets return value to TRUE if DataDef is a picture with matte.
+  //
+  STDMETHOD(IsPictureWithMatteKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsPictureWithMatteKind) PURE;
+
+
+  //***********************************************************
+  //
+  // IsSoundKind()
+  //
+  // Sets return value to TRUE if DataDef is a sound.
+  //
+  STDMETHOD(IsSoundKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsSoundKind) PURE;
+
+
+  //***********************************************************
+  //
+  // DoesDataDefConvertTo()
+  //
+  // Sets return value to TRUE if the DataDef of the given object
+   // can be converted to the DataDef specified in the IN 
+   // parameter with the DataDefName string.
+  //
+  STDMETHOD(DoesDataDefConvertTo) (THIS_
+    // data def to compare against
+    /*[in]*/ IAAFDataDef * id,
+
+    // pointer to result
+    /*[retval, out]*/ aafBoolean_t *  bDoesConvertTo) PURE;
+		   
+
+  //***********************************************************
+  //
+  // IsDataDefOf()
+  //
+  // Sets the value to TRUE if the DataDef of the given object
+  // matches the DataDef specified in the IN parameter with the
+  // DataDefName string.
+  //
+  STDMETHOD(IsDataDefOf) (THIS_
+    // data def to compare against
+    /*[in]*/ IAAFDataDef * pDataDef,
+
+    // pointer to result
+    /*[retval, out]*/ aafBoolean_t *  bIsDataDefOf) PURE;
+
+
+  //***********************************************************
+  //
+  // DoesDataDefConvertFrom()
+  //
+  // Sets return value to TRUE if the DataDef of the given object
+  // can be converted from the DataDef specified in the IN 
+  // parameter specified with the DataDefName string.
+  //
+  STDMETHOD(DoesDataDefConvertFrom) (THIS_
+    // data def to compare against
+    /*[in]*/ IAAFDataDef * pDataDef,
+
+    // pointer to result
+    /*[retval, out]*/ aafBoolean_t *  bDoesConvertFrom) PURE;
+
+
+  //***********************************************************
+  //
+  // IsEdgecodeKind()
+  //
+  // Sets return value to TRUE if DataDef is an edgecode.
+  //
+  STDMETHOD(IsEdgecodeKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsEdgecodeKind) PURE;
+
+  //***********************************************************
+  //
+  // IsTimecodeKind()
+  //
+  // Sets return value to TRUE if DataDef is a timecode.
+  //
+  STDMETHOD(IsTimecodeKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsTimecodeKind) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFDataDef2_INTERFACE_DEFINED__
+
+
+
 // IAAFEndian
 
 // ************************
@@ -35080,6 +35258,274 @@ DECLARE_INTERFACE_(IAAFSearchSource, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFSearchSource_INTERFACE_DEFINED__
+
+
+
+// IAAFEssenceDataEx
+
+// ************************
+//
+// Interface IAAFEssenceDataEx
+//
+// ************************
+
+
+
+
+
+#ifndef __IAAFEssenceDataEx_INTERFACE_DEFINED__
+#define __IAAFEssenceDataEx_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFEssenceDataEx;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFEssenceDataEx
+
+DECLARE_INTERFACE_(IAAFEssenceDataEx, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFEssenceDataEx methods *** */
+
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  // Associates a weak reference to the given file mob with the
+  // essence data.
+  //
+  // Succeeds if all of the following are true:
+  // - the pFileMob pointer is valid and points to 
+  // a file mob (contains a file descriptor).
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFileMob is null.
+  //
+  STDMETHOD(Initialize) (THIS_
+    // reference to a file mob
+    /*[in]*/ IAAFSourceMob * pFileMob) PURE;
+
+  //***********************************************************
+  //
+  // Write()
+  //
+  // Write pre-interleaved data to a essence stream.
+  //
+  STDMETHOD(Write) (THIS_
+    // write this many bytes to the data stream
+    /*[in]*/ aafUInt32  bytes,
+
+    // here is the buffer
+    /*[out, size_is(bytes)]*/ aafDataBuffer_t  buffer,
+
+    // 
+    /*[out,ref]*/ aafUInt32 *  bytesWritten) PURE;
+
+
+  //***********************************************************
+  //
+  // Read()
+  //
+  // Read pre-interleaved data from a essence stream.
+  //
+  STDMETHOD(Read) (THIS_
+    // read this many bytes from the data stream
+    /*[in]*/ aafUInt32  bytes,
+
+    // here is the buffer
+    /*[out, size_is(bytes), length_is(*bytesRead)]*/ aafDataBuffer_t  buffer,
+
+    // 
+    /*[out,ref]*/ aafUInt32 *  bytesRead) PURE;
+
+
+  //***********************************************************
+  //
+  // SetPosition()
+  //
+  // Seek to absolute position within the essence data.
+  //
+  STDMETHOD(SetPosition) (THIS_
+    // offset from beginning of essence
+    /*[in]*/ aafPosition_t  offset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPosition()
+  //
+  // Get the absolute position within the essence data.
+  //
+  STDMETHOD(GetPosition) (THIS_
+    // offset from beginning of essence
+    /*[out]*/ aafPosition_t*  pOffset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSize()
+  //
+  // Return the total size of the essence data.
+  //
+  STDMETHOD(GetSize) (THIS_
+    // size of essence data
+    /*[out]*/ aafLength_t *  pSize ) PURE;
+
+  //***********************************************************
+  //
+  // WriteSampleIndex()
+  //
+  // Write pre-interleaved data to a sample index stream.
+  //
+  STDMETHOD(WriteSampleIndex) (THIS_
+    // write this many bytes to the sample index stream
+    /*[in]*/ aafUInt32  bytes,
+
+    // here is the buffer
+    /*[out, size_is(bytes)]*/ aafDataBuffer_t  buffer,
+
+    // 
+    /*[out,ref]*/ aafUInt32 *  bytesWritten) PURE;
+
+
+  //***********************************************************
+  //
+  // ReadSampleIndex()
+  //
+  // Read pre-interleaved data from a sample index stream.
+  //
+  STDMETHOD(ReadSampleIndex) (THIS_
+    // read this many bytes from the sample index stream
+    /*[in]*/ aafUInt32  bytes,
+
+    // here is the buffer
+    /*[out, size_is(bytes), length_is(*bytesRead)]*/ aafDataBuffer_t  buffer,
+
+    // 
+    /*[out,ref]*/ aafUInt32 *  bytesRead) PURE;
+
+
+  //***********************************************************
+  //
+  // SetSampleIndexPosition()
+  //
+  // Seek to absolute position within the sample index data.
+  //
+  STDMETHOD(SetSampleIndexPosition) (THIS_
+    // offset from beginning of sample index
+    /*[in]*/ aafPosition_t  offset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSampleIndexPosition()
+  //
+  // Get the absolute position within the sample index data.
+  //
+  STDMETHOD(GetSampleIndexPosition) (THIS_
+    // offset from beginning of sample index
+    /*[out]*/ aafPosition_t*  pOffset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSampleIndexSize()
+  //
+  // Return the total size of the sample index data.
+  //
+  STDMETHOD(GetSampleIndexSize) (THIS_
+    // size of sample index data
+    /*[out]*/ aafLength_t *  pSize ) PURE;
+
+
+  //***********************************************************
+  //
+  // SetFileMob()
+  //
+  // Associates a weak reference to the given file mob with the
+  // essence data.
+  //
+  // Succeeds if all of the following are true:
+  // - the pFileMob pointer is valid and points to 
+  // a file mob (contains a file descriptor).
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFileMob is null.
+  //
+  STDMETHOD(SetFileMob) (THIS_
+    // reference to a file mob
+    /*[in]*/ IAAFSourceMob * pFileMob) PURE;
+
+
+  //***********************************************************
+  //
+  // GetFileMob()
+  //
+  // Associates a weak reference to the given file mob with the
+  // essence data.
+  //
+  // Succeeds if all of the following are true:
+  // - the ppFileMob pointer is valid and a weak
+  // reference to the associated file mob can be
+  // resolved.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppFileMob is null.
+  //
+  STDMETHOD(GetFileMob) (THIS_
+    // reference to a file mob
+    /*[in]*/ IAAFSourceMob ** ppFileMob) PURE;
+
+
+  //***********************************************************
+  //
+  // GetFileMobID()
+  //
+  // Return the mob id used to find the file mob associated with this
+  // essence.  The file mob must exist in the same file as this
+  // essence data.
+  //
+  STDMETHOD(GetFileMobID) (THIS_
+    // the file mob id associated with essence
+    /*[out]*/ aafMobID_t *  pFileMobID) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFEssenceDataEx_INTERFACE_DEFINED__
 
 
 
@@ -39696,6 +40142,179 @@ DECLARE_INTERFACE_(IAAFMasterMob2, IUnknown)
 };
 #endif // __IAAFMasterMob2_INTERFACE_DEFINED__
 
+
+
+
+// IAAFCompositionMob2
+
+// ************************
+//
+// Interface IAAFCompositionMob2
+//
+// ************************
+
+
+
+#ifndef __IAAFCompositionMob2_INTERFACE_DEFINED__
+#define __IAAFCompositionMob2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFCompositionMob2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFCompositionMob2
+
+DECLARE_INTERFACE_(IAAFCompositionMob2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFCompositionMob2 methods *** */
+
+
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  // Initializes this object with the given name.
+  // 
+  // Succeeds if all of the following are true:
+  // - this object has not yet been initialized.
+  // - the pName pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_ALREADY_INITIALIZED
+  //   - Initialize() has already been called on this object.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pName argument is NULL.
+  //
+  STDMETHOD(Initialize) (THIS_
+    // Mob name [optional]
+    /*[in, string]*/ aafCharacter_constptr  pName) PURE;
+
+
+  //***********************************************************
+  //
+  // GetDefaultFade()
+  //
+  // Get the default fade for this composition.  If there is no
+  // default fade, this function returns with no error, but the VALID
+  // field of the structure is false.  This allows you to pass this
+  // struct to SourceClip::GetFade() in all cases.
+  //
+  // Succeeds if all of the following are true:
+  // - this object has already been initialized.
+  // - the pResult pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult argument is NULL.
+  //
+  STDMETHOD(GetDefaultFade) (THIS_
+    // a default fade struct
+    /*[out]*/ aafDefaultFade_t *  pResult) PURE;
+	
+
+  //***********************************************************
+  //
+  // SetDefaultFade()
+  //
+  // Adds the default crossfade properties to the Mob.
+  //
+  // Succeeds if all of the following are true:
+  // - this object has already been initialized.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_BAD_TYPE
+  //   - invalid fadeType.
+  //
+  // AAFRESULT_BAD_LENGTH
+  //   - invalid fadeLength.
+  //
+  STDMETHOD(SetDefaultFade) (THIS_
+    // Default fade length
+    /*[in]*/ aafLength_t  fadeLength,
+
+    // default fade type
+    /*[in]*/ aafFadeType_t  fadeType,
+
+    // default fade edit unit
+    /*[in]*/ aafRational_t  fadeEditUnit) PURE;
+
+
+  //***********************************************************
+  //
+  // SetRendering()
+  //
+  // set the MobID of a rendering of this CompositionMob.
+
+  // This method will return the following codes:
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  STDMETHOD(SetRendering) (THIS_
+    // Rendering MobID
+    /*[in, ref]*/ aafMobID_constref  mobID) PURE;
+
+  //***********************************************************
+  //
+  // GetRendering()
+  //
+  // return the MobID of a rendering of this CompositionMob.
+
+  // Succeeds if all of the following are true:
+  // - the pMobID pointer is valid.
+  //
+  // If this method fails nothing will be written to *pMobID.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMobID arg is NULL.
+  //
+  STDMETHOD(GetRendering) (THIS_
+    // Rendering MobID
+    /*[out]*/ aafMobID_t *  pMobID) PURE;
+
+
+
+  END_INTERFACE
+};
+#endif // __IAAFCompositionMob2_INTERFACE_DEFINED__
 
 
 

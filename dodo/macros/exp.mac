@@ -278,7 +278,11 @@ AAFRESULT STDMETHODCALLTYPE
   assert (pO);
   ptr = static_cast<ImplAD_EXPORT_THIS_MODULE*> (pO);
   assert (ptr);
-  return ptr->%01();
+  HRESULT hr;
+AD_CATCH_ASSERTION_BEGIN\
+  hr = ptr->%01();
+AD_CATCH_ASSERTION_END
+  return hr;
 }\\
 \\\#endm
 
@@ -405,7 +409,9 @@ AAFRESULT STDMETHODCALLTYPE
   assert (ptr);
 
 .%03-setup(%04, %05)
+AD_CATCH_ASSERTION_BEGIN\
   stat = ptr->%01 (.%03-internalname(%05));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05)
   return stat;
 }\\
@@ -440,7 +446,9 @@ HRESULT STDMETHODCALLTYPE
   assert (ptr);
 
 .%03-setup(%04, %05, foo, bar)
+AD_CATCH_ASSERTION_BEGIN\
   hr = ptr->%01 (.%03-internalname(%05));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05, foo, bar)
   return hr;
 }\\
@@ -552,8 +560,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 .%03-setup(%04, %05)
 .%08-setup(%09, %10)
+AD_CATCH_ASSERTION_BEGIN\
   stat = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
   return stat;
@@ -586,8 +596,10 @@ HRESULT STDMETHODCALLTYPE
 
 .%03-setup(%04, %05, foo, bar)
 .%08-setup(%09, %10, foo, bar)
+AD_CATCH_ASSERTION_BEGIN\
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05, foo, bar)
 .%08-cleanup(%09, %10, foo, bar)
   return hr;
@@ -712,9 +724,11 @@ AAFRESULT STDMETHODCALLTYPE
 .%03-setup(%04, %05)
 .%08-setup(%09, %10)
 .%13-setup(%14, %15)
+AD_CATCH_ASSERTION_BEGIN\
   stat = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -751,9 +765,11 @@ HRESULT STDMETHODCALLTYPE
 .%03-setup(%04, %05, foo, bar)
 .%08-setup(%09, %10, foo, bar)
 .%13-setup(%14, %15, foo, bar)
+AD_CATCH_ASSERTION_BEGIN\
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05, foo, bar)
 .%08-cleanup(%09, %10, foo, bar)
 .%13-cleanup(%14, %15, foo, bar)
@@ -892,10 +908,12 @@ AAFRESULT STDMETHODCALLTYPE
 .%08-setup(%09, %10)
 .%13-setup(%14, %15)
 .%18-setup(%19, %20)
+AD_CATCH_ASSERTION_BEGIN\
   stat = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
     .%18-internalname(%20));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -937,10 +955,12 @@ HRESULT STDMETHODCALLTYPE
 .%08-setup(%09, %10, foo, bar)
 .%13-setup(%14, %15, foo, bar)
 .%18-setup(%19, %20, foo, bar)
+AD_CATCH_ASSERTION_BEGIN\
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
     .%18-internalname(%20));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05, foo, bar)
 .%08-cleanup(%09, %10, foo, bar)
 .%13-cleanup(%14, %15, foo, bar)
@@ -1094,11 +1114,13 @@ AAFRESULT STDMETHODCALLTYPE
 .%13-setup(%14, %15)
 .%18-setup(%19, %20)
 .%23-setup(%24, %25)
+AD_CATCH_ASSERTION_BEGIN\
   stat = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
     .%18-internalname(%20),
     .%23-internalname(%25));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -1144,11 +1166,13 @@ HRESULT STDMETHODCALLTYPE
 .%13-setup(%14, %15, foo, bar)
 .%18-setup(%19, %20, foo, bar)
 .%23-setup(%24, %25, foo, bar)
+AD_CATCH_ASSERTION_BEGIN\
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
     .%18-internalname(%20),
     .%23-internalname(%25));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05, foo, bar)
 .%08-cleanup(%09, %10, foo, bar)
 .%13-cleanup(%14, %15, foo, bar)
@@ -1315,12 +1339,14 @@ AAFRESULT STDMETHODCALLTYPE
 .%18-setup(%19, %20)
 .%23-setup(%24, %25)
 .%28-setup(%29, %30)
+AD_CATCH_ASSERTION_BEGIN\
   stat = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
     .%18-internalname(%20),
     .%23-internalname(%25),
     .%28-internalname(%30));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -1370,12 +1396,14 @@ HRESULT STDMETHODCALLTYPE
 .%18-setup(%19, %20, foo, bar)
 .%23-setup(%24, %25, foo, bar)
 .%28-setup(%29, %30, foo, bar)
+AD_CATCH_ASSERTION_BEGIN\
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
     .%18-internalname(%20),
     .%23-internalname(%25),
     .%28-internalname(%30));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05, foo, bar)
 .%08-cleanup(%09, %10, foo, bar)
 .%13-cleanup(%14, %15, foo, bar)
@@ -1556,6 +1584,7 @@ AAFRESULT STDMETHODCALLTYPE
 .%23-setup(%24, %25)
 .%28-setup(%29, %30)
 .%33-setup(%34, %35)
+AD_CATCH_ASSERTION_BEGIN\
   stat = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -1563,6 +1592,7 @@ AAFRESULT STDMETHODCALLTYPE
     .%23-internalname(%25),
     .%28-internalname(%30),
     .%33-internalname(%35));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -1615,6 +1645,7 @@ HRESULT STDMETHODCALLTYPE
 .%23-setup(%24, %25, foo, bar)
 .%28-setup(%29, %30, foo, bar)
 .%33-setup(%34, %35, foo, bar)
+AD_CATCH_ASSERTION_BEGIN\
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -1622,6 +1653,7 @@ HRESULT STDMETHODCALLTYPE
     .%23-internalname(%25),
     .%28-internalname(%30),
     .%33-internalname(%35));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05, foo, bar)
 .%08-cleanup(%09, %10, foo, bar)
 .%13-cleanup(%14, %15, foo, bar)
@@ -1816,6 +1848,7 @@ AAFRESULT STDMETHODCALLTYPE
 .%28-setup(%29, %30)
 .%33-setup(%34, %35)
 .%38-setup(%39, %40)
+AD_CATCH_ASSERTION_BEGIN\
   stat = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -1824,6 +1857,7 @@ AAFRESULT STDMETHODCALLTYPE
     .%28-internalname(%30),
     .%33-internalname(%35),
     .%38-internalname(%40));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -1880,6 +1914,7 @@ HRESULT STDMETHODCALLTYPE
 .%28-setup(%29, %30, foo, bar)
 .%33-setup(%34, %35, foo, bar)
 .%38-setup(%39, %40, foo, bar)
+AD_CATCH_ASSERTION_BEGIN\
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -1888,6 +1923,7 @@ HRESULT STDMETHODCALLTYPE
     .%28-internalname(%30),
     .%33-internalname(%35),
     .%38-internalname(%40));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05, foo, bar)
 .%08-cleanup(%09, %10, foo, bar)
 .%13-cleanup(%14, %15, foo, bar)
@@ -2096,6 +2132,7 @@ AAFRESULT STDMETHODCALLTYPE
 .%33-setup(%34, %35)
 .%38-setup(%39, %40)
 .%43-setup(%44, %45)
+AD_CATCH_ASSERTION_BEGIN\
   stat = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -2105,6 +2142,7 @@ AAFRESULT STDMETHODCALLTYPE
     .%33-internalname(%35),
     .%38-internalname(%40),
     .%43-internalname(%45));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -2165,6 +2203,7 @@ HRESULT STDMETHODCALLTYPE
 .%33-setup(%34, %35, foo, bar)
 .%38-setup(%39, %40, foo, bar)
 .%43-setup(%44, %45, foo, bar)
+AD_CATCH_ASSERTION_BEGIN\
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -2174,6 +2213,7 @@ HRESULT STDMETHODCALLTYPE
     .%33-internalname(%35),
     .%38-internalname(%40),
     .%43-internalname(%45));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05, foo, bar)
 .%08-cleanup(%09, %10, foo, bar)
 .%13-cleanup(%14, %15, foo, bar)
@@ -2397,6 +2437,7 @@ AAFRESULT STDMETHODCALLTYPE
 .%38-setup(%39, %40)
 .%43-setup(%44, %45)
 .%48-setup(%49, %50)
+AD_CATCH_ASSERTION_BEGIN\
   stat = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -2407,6 +2448,7 @@ AAFRESULT STDMETHODCALLTYPE
     .%38-internalname(%40),
     .%43-internalname(%45),
     .%48-internalname(%50));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -2471,6 +2513,7 @@ HRESULT STDMETHODCALLTYPE
 .%38-setup(%39, %40, foo, bar)
 .%43-setup(%44, %45, foo, bar)
 .%48-setup(%49, %50, foo, bar)
+AD_CATCH_ASSERTION_BEGIN\
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -2481,6 +2524,7 @@ HRESULT STDMETHODCALLTYPE
     .%38-internalname(%40),
     .%43-internalname(%45),
     .%48-internalname(%50));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05, foo, bar)
 .%08-cleanup(%09, %10, foo, bar)
 .%13-cleanup(%14, %15, foo, bar)
@@ -2718,6 +2762,7 @@ AAFRESULT STDMETHODCALLTYPE
 .%43-setup(%44, %45)
 .%48-setup(%49, %50)
 .%53-setup(%54, %55)
+AD_CATCH_ASSERTION_BEGIN\
   stat = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -2729,6 +2774,7 @@ AAFRESULT STDMETHODCALLTYPE
     .%43-internalname(%45),
     .%48-internalname(%50),
     .%53-internalname(%55));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -2797,6 +2843,7 @@ HRESULT STDMETHODCALLTYPE
 .%43-setup(%44, %45, foo, bar)
 .%48-setup(%49, %50, foo, bar)
 .%53-setup(%54, %55, foo, bar)
+AD_CATCH_ASSERTION_BEGIN\
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -2808,6 +2855,7 @@ HRESULT STDMETHODCALLTYPE
     .%43-internalname(%45),
     .%48-internalname(%50),
     .%53-internalname(%55));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05, foo, bar)
 .%08-cleanup(%09, %10, foo, bar)
 .%13-cleanup(%14, %15, foo, bar)
@@ -2951,9 +2999,11 @@ AAFRESULT STDMETHODCALLTYPE
 .%03-setup(%04, %05)
 .%10-setup(%11, %12)
 .%17-setup(%18, %19)
+AD_CATCH_ASSERTION_BEGIN\
   stat = ptr->%01 (.%03-internalname(%05),
     .%10-internalname(%12),
     .%17-internalname(%19));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05)
 .%10-cleanup(%11, %12)
 .%17-cleanup(%18, %19)
@@ -2990,9 +3040,11 @@ HRESULT STDMETHODCALLTYPE
 .%03-setup(%04, %05, %07)
 .%10-setup(%11, %12, %14)
 .%17-setup(%18, %19, %21)
+AD_CATCH_ASSERTION_BEGIN\
   hr = ptr->%01 (.%03-internalname(%05),
     .%10-internalname(%12),
     .%17-internalname(%19));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05, %07)
 .%10-cleanup(%11, %12, %14)
 .%17-cleanup(%18, %19, %21)
@@ -3141,10 +3193,12 @@ AAFRESULT STDMETHODCALLTYPE
 .%10-setup(%11, %12)
 .%17-setup(%18, %19)
 .%24-setup(%25, %26)
+AD_CATCH_ASSERTION_BEGIN\
   stat = ptr->%01 (.%03-internalname(%05),
     .%10-internalname(%12),
     .%17-internalname(%19),
     .%24-internalname(%26));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05)
 .%10-cleanup(%11, %12)
 .%17-cleanup(%18, %19)
@@ -3185,10 +3239,12 @@ HRESULT STDMETHODCALLTYPE
 .%10-setup(%11, %12, %14)
 .%17-setup(%18, %19, %21)
 .%24-setup(%25, %26, %28)
+AD_CATCH_ASSERTION_BEGIN\
   hr = ptr->%01 (.%03-internalname(%05),
     .%10-internalname(%12),
     .%17-internalname(%19),
     .%24-internalname(%26));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05, %07)
 .%10-cleanup(%11, %12, %14)
 .%17-cleanup(%18, %19, %21)
@@ -3351,11 +3407,13 @@ AAFRESULT STDMETHODCALLTYPE
 .%17-setup(%18, %19)
 .%24-setup(%25, %26)
 .%31-setup(%32, %33)
+AD_CATCH_ASSERTION_BEGIN\
   stat = ptr->%01 (.%03-internalname(%05),
     .%10-internalname(%12),
     .%17-internalname(%19),
     .%24-internalname(%26),
     .%31-internalname(%33));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05)
 .%10-cleanup(%11, %12)
 .%17-cleanup(%18, %19)
@@ -3400,11 +3458,13 @@ HRESULT STDMETHODCALLTYPE
 .%17-setup(%18, %19, %21)
 .%24-setup(%25, %26, %28)
 .%31-setup(%32, %33, %35)
+AD_CATCH_ASSERTION_BEGIN\
   hr = ptr->%01 (.%03-internalname(%05),
     .%10-internalname(%12),
     .%17-internalname(%19),
     .%24-internalname(%26),
     .%31-internalname(%33));
+AD_CATCH_ASSERTION_END
 .%03-cleanup(%04, %05, %07)
 .%10-cleanup(%11, %12, %14)
 .%17-cleanup(%18, %19, %21)

@@ -193,10 +193,14 @@ ImplAAFEssenceAccess::~ImplAAFEssenceAccess ()
 	OMVectorIterator<aafAccessor_t> i(_codecList, OMBefore);
 	++i;
 	while (!i.after()) {
+		if (i.value().fileMob)
+			i.value().fileMob->ReleaseReference();
 		if (i.value().mdes)
 			i.value().mdes->ReleaseReference();
-		if (i.value().dataFile)
+		if (i.value().dataFile) {
+			i.value().dataFile->Close();
 			i.value().dataFile->ReleaseReference();
+		}
 		if (i.value().codec)
 			i.value().codec->Release();
 		if (i.value().multicodec) 
@@ -234,7 +238,6 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 	ImplAAFHeader		*dataHead = NULL;
 	ImplAAFPluginManager *plugins = NULL;
 	ImplAAFEssenceData	*implData = NULL;
-	wchar_t				*nameBuf = NULL;
 	aafUInt32			buflen;
 	aafUID_t			aafFormat = ContainerAAF;
 
@@ -355,20 +358,22 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 		else
 		{
 			_destination->GetPathBufLen(&buflen);
-			nameBuf = new wchar_t[buflen];
-			if(nameBuf == NULL)
+			wchar_t *nameBuf = new wchar_t[buflen];
+			wchar_t *fileBuf = new wchar_t[buflen];
+			if(nameBuf == NULL || fileBuf == NULL)
 				RAISE(AAFRESULT_NOMEMORY);
 			CHECK(_destination->GetPath(nameBuf, buflen));
-			
+			wcsconvertURLtoFilepath(nameBuf, fileBuf);
+
 			CHECK(plugins->GetPluginInstance(_containerDefID, &plug));
 			CHECK(plug->QueryInterface(IID_IAAFEssenceContainer, (void **)&container));
 			plug->Release();
 			plug = NULL;
 			
-			CHECK(container->CreateEssenceStream(nameBuf, &fileMobUID, &_stream));
+			CHECK(container->CreateEssenceStream(fileBuf, &fileMobUID, &_stream));
 
 			delete [] nameBuf;
-			nameBuf = NULL;			
+			delete [] fileBuf;
 			container->Release();
 			container = NULL;
 		}
@@ -440,12 +445,8 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 		if(implData != NULL)
 		  implData->ReleaseReference();
 		implData = 0;
-		if(nameBuf != NULL)
-			delete [] nameBuf;
 		if(edStream != NULL)
 			edStream->Release();
-//		if(dataObj != NULL)
-//			dataObj->Release();
 		if(plugin != NULL)
 			plugin->Release();
 		if(container != NULL)
@@ -498,7 +499,6 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFMobSlot			*tmpTrack = NULL;
 	ImplAAFSourceMob		*fileMob = NULL;
 	aafSubChannel_t			*destPtr;
-	wchar_t					*nameBuf = NULL;
 	aafUInt32				buflen;
 	aafUInt32				n;
 	aafUID_t				aafFormat = ContainerAAF;
@@ -681,20 +681,22 @@ AAFRESULT STDMETHODCALLTYPE
 		else
 		{
 			_destination->GetPathBufLen(&buflen);
-			nameBuf = new wchar_t[buflen];
-			if(nameBuf == NULL)
+			wchar_t *nameBuf = new wchar_t[buflen];
+			wchar_t *fileBuf = new wchar_t[buflen];
+			if(nameBuf == NULL || fileBuf == NULL)
 				RAISE(AAFRESULT_NOMEMORY);
 			CHECK(_destination->GetPath(nameBuf, buflen));
-			
+			wcsconvertURLtoFilepath(nameBuf, fileBuf);
+
 			CHECK(plugins->GetPluginInstance(_containerDefID, &plug));
 			CHECK(plug->QueryInterface(IID_IAAFEssenceContainer, (void **)&container));
 			plug->Release();
 			plug = NULL;
 			
-			CHECK(container->CreateEssenceStream(nameBuf, &fileMobUID, &_stream));
+			CHECK(container->CreateEssenceStream(fileBuf, &fileMobUID, &_stream));
 			
 			delete [] nameBuf;
-			nameBuf = NULL;			
+			delete [] fileBuf;
 			container->Release();
 			container = NULL;
 		}
@@ -777,8 +779,6 @@ AAFRESULT STDMETHODCALLTYPE
 		if(implData != NULL)
 			implData->ReleaseReference();
 		implData = 0;
-		if(nameBuf != NULL)
-			delete [] nameBuf;
 		if(edStream != NULL)
 			edStream->Release();
 		//		if(dataObj != NULL)
@@ -839,7 +839,6 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUID_t			uid, targetID;
 	aafSourceRef_t		ref;
 	aafPosition_t		zeroPos;
-	wchar_t				*nameBuf = NULL;
 	aafUInt32			buflen;
 	aafUID_t			aafFormat = ContainerAAF;
 
@@ -1050,20 +1049,22 @@ AAFRESULT STDMETHODCALLTYPE
 		else
 		{
 			_destination->GetPathBufLen(&buflen);
-			nameBuf = new wchar_t[buflen];
-			if(nameBuf == NULL)
+			wchar_t *nameBuf = new wchar_t[buflen];
+			wchar_t *fileBuf = new wchar_t[buflen];
+			if(nameBuf == NULL || fileBuf == NULL)
 				RAISE(AAFRESULT_NOMEMORY);
 			CHECK(_destination->GetPath(nameBuf, buflen));
-			
+			wcsconvertURLtoFilepath(nameBuf, fileBuf);
+
 			CHECK(plugins->GetPluginInstance(_containerDefID, &plug));
 			CHECK(plug->QueryInterface(IID_IAAFEssenceContainer, (void **)&container));
 			plug->Release();
 			plug = NULL;
 			
-			CHECK(container->CreateEssenceStream(nameBuf, &fileMobUID, &_stream));
+			CHECK(container->CreateEssenceStream(fileBuf, &fileMobUID, &_stream));
 
 			delete [] nameBuf;
-			nameBuf = NULL;			
+			delete [] fileBuf;
 			container->Release();
 			container = NULL;
 		}
@@ -1159,12 +1160,8 @@ AAFRESULT STDMETHODCALLTYPE
 		if(implData != NULL)
 		  implData->ReleaseReference();
 		implData = 0;
-		if(nameBuf != NULL)
-			delete [] nameBuf;
 		if(edStream != NULL)
 			edStream->Release();
-//		if(dataObj != NULL)
-//			dataObj->Release();
 		if(plugin != NULL)
 			plugin->Release();
 		if(container != NULL)
@@ -1233,7 +1230,6 @@ ImplAAFEssenceAccess::MultiAppend (ImplAAFMasterMob *masterMob,
 	aafSourceRef_t		ref;
 	aafPosition_t		zeroPos;
 	aafSubChannel_t			*destPtr;
-	wchar_t					*nameBuf = NULL;
 	aafUInt32				buflen;
 	aafUInt32				n;
 	aafUID_t				aafFormat = ContainerAAF;
@@ -1494,20 +1490,22 @@ ImplAAFEssenceAccess::MultiAppend (ImplAAFMasterMob *masterMob,
 		else
 		{
 			_destination->GetPathBufLen(&buflen);
-			nameBuf = new wchar_t[buflen];
-			if(nameBuf == NULL)
+			wchar_t *nameBuf = new wchar_t[buflen];
+			wchar_t *fileBuf = new wchar_t[buflen];
+			if(nameBuf == NULL || fileBuf == NULL)
 				RAISE(AAFRESULT_NOMEMORY);
 			CHECK(_destination->GetPath(nameBuf, buflen));
-			
+			wcsconvertURLtoFilepath(nameBuf, fileBuf);
+
 			CHECK(plugins->GetPluginInstance(_containerDefID, &plug));
 			CHECK(plug->QueryInterface(IID_IAAFEssenceContainer, (void **)&container));
 			plug->Release();
 			plug = NULL;
 			
-			CHECK(container->CreateEssenceStream(nameBuf, &fileMobUID, &_stream));
+			CHECK(container->CreateEssenceStream(fileBuf, &fileMobUID, &_stream));
 			
 			delete [] nameBuf;
-			nameBuf = NULL;			
+			delete [] fileBuf;
 			container->Release();
 			container = NULL;
 		}
@@ -1590,8 +1588,6 @@ ImplAAFEssenceAccess::MultiAppend (ImplAAFMasterMob *masterMob,
 		if(implData != NULL)
 			implData->ReleaseReference();
 		implData = 0;
-		if(nameBuf != NULL)
-			delete [] nameBuf;
 		if(edStream != NULL)
 			edStream->Release();
 		//		if(dataObj != NULL)
@@ -1661,11 +1657,11 @@ AAFRESULT STDMETHODCALLTYPE
 	aafLength_t masterMobLength;
 	aafSourceRef_t	fileRef;
 	aafUInt16		numCh;
-	wchar_t				*nameBuf = NULL;
 	aafUInt32			buflen;
 	aafUID_t			essenceDescClass, codecID;
 	aafBool					found = kAAFFalse, isIdentified;
 	aafUID_t				testFormat;
+	aafRational_t 		mmobRate;
 
 	
 	XPROTECT()
@@ -1673,6 +1669,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(masterMob->MyHeadObject(&compHead));
 		CHECK(masterMob->FindSlotBySlotID (slotID,&slot));
 		CHECK(slot->GetSegment(&seg));
+		CHECK(((ImplAAFTimelineMobSlot*)slot)->GetEditRate(&mmobRate));
 		slot->ReleaseReference();
 		slot = NULL;
 
@@ -1686,6 +1683,7 @@ AAFRESULT STDMETHODCALLTYPE
 		_openType = kAAFReadOnly;
 		CvtInt32toPosition(0, Pos);	
 
+		// comparison performed in units of Master mob edit rate
 		while (Pos < masterMobLength) 
 		{
 			aafAccessor_t access;
@@ -1698,13 +1696,14 @@ AAFRESULT STDMETHODCALLTYPE
 				&sourceInfo));
 			//			masterMob->AcquireReference();		//!!!DEBUG
 			
-			CHECK(sourceInfo->GetLength(&access.length));
 			CHECK(sourceInfo->GetMob((ImplAAFMob **)&access.fileMob));
 			CHECK(sourceInfo->GetSourceReference(&fileRef));
 			sourceInfo->ReleaseReference();
 			sourceInfo = NULL;
 			
 			CHECK(access.fileMob->GetEssenceDescriptor((ImplAAFEssenceDescriptor **)&access.mdes));
+			CHECK(access.mdes->GetLength(&access.length));
+
 			if(access.mdes->GetContainerFormat (&containerDef) == AAFRESULT_SUCCESS)
 			{
 				CHECK(containerDef->GetAUID(&testFormat));
@@ -1783,10 +1782,12 @@ AAFRESULT STDMETHODCALLTYPE
 				{
 					
 					pLoc->GetPathBufLen(&buflen);
-					nameBuf = new wchar_t[buflen];
-					if(nameBuf == NULL)
+					wchar_t *nameBuf = new wchar_t[buflen];
+					wchar_t *fileBuf = new wchar_t[buflen];
+					if(nameBuf == NULL || fileBuf == NULL)
 						RAISE(AAFRESULT_NOMEMORY);
 					CHECK(pLoc->GetPath(nameBuf, buflen));
+					wcsconvertURLtoFilepath(nameBuf, fileBuf);
 					if(EqualAUID(&access.containerDefID, &ContainerAAF) == kAAFTrue)
 					{
 						if(openMode == kAAFMediaOpenAppend)
@@ -1796,7 +1797,7 @@ AAFRESULT STDMETHODCALLTYPE
 							memcpy((void *)&myFileCLSID, (void *)&CLSID_AAFFile, sizeof(aafUID_t));
 							access.dataFile = (ImplAAFFile *)CreateImpl(myFileCLSID);
 							CHECK(access.dataFile->Initialize());
-							status = access.dataFile->OpenExistingRead(nameBuf, 0);
+							status = access.dataFile->OpenExistingRead(fileBuf, 0);
 						}
 						
 						if(status == AAFRESULT_SUCCESS)
@@ -1849,11 +1850,11 @@ AAFRESULT STDMETHODCALLTYPE
 						
 						if(openMode == kAAFMediaOpenReadOnly)
 						{
-							status = container->OpenEssenceStreamReadOnly (nameBuf, &fileMobID, &access.stream);
+							status = container->OpenEssenceStreamReadOnly (fileBuf, &fileMobID, &access.stream);
 						}
 						else if(openMode == kAAFMediaOpenAppend)
 						{
-							status = container->OpenEssenceStreamAppend (nameBuf, &fileMobID, &access.stream);
+							status = container->OpenEssenceStreamAppend (fileBuf, &fileMobID, &access.stream);
 						}
 						else
 							RAISE(AAFRESULT_MEDIA_OPENMODE);
@@ -1867,7 +1868,7 @@ AAFRESULT STDMETHODCALLTYPE
 					}
 					
 					delete [] nameBuf;
-					nameBuf = NULL;
+					delete [] fileBuf;
 					pLoc->ReleaseReference();
 					pLoc = NULL;
 				}
@@ -1910,8 +1911,17 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(InstallEssenceAccessIntoCodec());
 		
 			CHECK(access.codec->Open(iFileMob, openMode, access.stream, compEnable));
-			
-			Pos += access.length;
+		
+			// Samples in Source mob are in Sample Rate which might be different
+			// to the Master mob edit rate. So we need to convert the samples
+			// into units of Master mob edit rate to check Pos against 
+			// Master mob length
+			aafRational_t smobRate;
+			CHECK(access.mdes->GetSampleRate(&smobRate));
+			aafPosition_t curPos;
+			CHECK(AAFConvertEditRate(smobRate, access.length, mmobRate, kRoundCeiling, &curPos));
+			Pos += curPos;
+
 			_codecList.append(access);
 
 			iFileMob->Release();
@@ -2052,7 +2062,6 @@ AAFRESULT STDMETHODCALLTYPE
 	aafLength_t masterMobLength;
 	aafSourceRef_t	fileRef;
 	aafUInt16		numCh;
-	wchar_t				*nameBuf = NULL;
 	aafUInt32			buflen;
 	aafUID_t			essenceDescClass, codecID;
 	aafBool					found = kAAFFalse, isIdentified;
@@ -2089,13 +2098,14 @@ AAFRESULT STDMETHODCALLTYPE
 				&sourceInfo));
 			//			masterMob->AcquireReference();		//!!!DEBUG
 			
-			CHECK(sourceInfo->GetLength(&access.length));
 			CHECK(sourceInfo->GetMob((ImplAAFMob **)&access.fileMob));
 			CHECK(sourceInfo->GetSourceReference(&fileRef));
 			sourceInfo->ReleaseReference();
 			sourceInfo = NULL;
 			
 			CHECK(access.fileMob->GetEssenceDescriptor((ImplAAFEssenceDescriptor **)&access.mdes));
+			CHECK(access.mdes->GetLength(&access.length));
+
 			if(access.mdes->GetContainerFormat (&containerDef) == AAFRESULT_SUCCESS)
 			{
 				CHECK(containerDef->GetAUID(&testFormat));
@@ -2174,10 +2184,12 @@ AAFRESULT STDMETHODCALLTYPE
 				{
 					
 					pLoc->GetPathBufLen(&buflen);
-					nameBuf = new wchar_t[buflen];
-					if(nameBuf == NULL)
+					wchar_t *nameBuf = new wchar_t[buflen];
+					wchar_t *fileBuf = new wchar_t[buflen];
+					if(nameBuf == NULL || fileBuf == NULL)
 						RAISE(AAFRESULT_NOMEMORY);
 					CHECK(pLoc->GetPath(nameBuf, buflen));
+					wcsconvertURLtoFilepath(nameBuf, fileBuf);
 					if(EqualAUID(&access.containerDefID, &ContainerAAF) == kAAFTrue)
 					{
 						if(openMode == kAAFMediaOpenAppend)
@@ -2187,7 +2199,7 @@ AAFRESULT STDMETHODCALLTYPE
 							memcpy((void *)&myFileCLSID, (void *)&CLSID_AAFFile, sizeof(aafUID_t));
 							access.dataFile = (ImplAAFFile *)CreateImpl(myFileCLSID);
 							CHECK(access.dataFile->Initialize());
-							status = access.dataFile->OpenExistingRead(nameBuf, 0);
+							status = access.dataFile->OpenExistingRead(fileBuf, 0);
 						}
 						
 						if(status == AAFRESULT_SUCCESS)
@@ -2240,11 +2252,11 @@ AAFRESULT STDMETHODCALLTYPE
 						
 						if(openMode == kAAFMediaOpenReadOnly)
 						{
-							status = container->OpenEssenceStreamReadOnly (nameBuf, &fileMobID, &access.stream);
+							status = container->OpenEssenceStreamReadOnly (fileBuf, &fileMobID, &access.stream);
 						}
 						else if(openMode == kAAFMediaOpenAppend)
 						{
-							status = container->OpenEssenceStreamAppend (nameBuf, &fileMobID, &access.stream);
+							status = container->OpenEssenceStreamAppend (fileBuf, &fileMobID, &access.stream);
 						}
 						else
 							RAISE(AAFRESULT_MEDIA_OPENMODE);
@@ -2258,7 +2270,7 @@ AAFRESULT STDMETHODCALLTYPE
 					}
 					
 					delete [] nameBuf;
-					nameBuf = NULL;
+					delete [] fileBuf;
 					pLoc->ReleaseReference();
 					pLoc = NULL;
 				}
@@ -3527,7 +3539,6 @@ ImplAAFEssenceAccess::CreateEssenceFileFromLocator (ImplAAFHeader *srcHead, Impl
 	aafProductIdentification_t		identSetup = { 0 };
 	aafUInt32						length;
 	aafUInt32						buflen;
-	wchar_t							*nameBuf = NULL;
 	ImplAAFFile						*theFile = NULL;
 	aafUID_t						myFileCLSID;
 
@@ -3539,10 +3550,12 @@ ImplAAFEssenceAccess::CreateEssenceFileFromLocator (ImplAAFHeader *srcHead, Impl
 	XPROTECT()
 	{
 		loc->GetPathBufLen(&buflen);
-		nameBuf = new wchar_t[buflen];
-		if(nameBuf == NULL)
+		wchar_t *nameBuf = new wchar_t[buflen];
+		wchar_t *fileBuf = new wchar_t[buflen];
+		if(nameBuf == NULL || fileBuf == NULL)
 			RAISE(AAFRESULT_NOMEMORY);
 		CHECK(loc->GetPath(nameBuf, buflen));
+		wcsconvertURLtoFilepath(nameBuf, fileBuf);
 		CHECK(srcHead->GetLastIdentification (&xferIdent));
 		CHECK(xferIdent->GetCompanyNameBufLen(&length));
 		identSetup.companyName = new wchar_t[length];
@@ -3566,12 +3579,12 @@ ImplAAFEssenceAccess::CreateEssenceFileFromLocator (ImplAAFHeader *srcHead, Impl
 		memcpy((void *)&myFileCLSID, (void *)&CLSID_AAFFile, sizeof(aafUID_t));
 		theFile = (ImplAAFFile *)CreateImpl(myFileCLSID);
 		CHECK(theFile->Initialize());
-	    CHECK(theFile->OpenNewModify(nameBuf, 0, &identSetup));
+	    CHECK(theFile->OpenNewModify(fileBuf, 0, &identSetup));
 		*result = theFile;
 		AcquireImplReference(theFile);
 
 		delete [] nameBuf;
-		nameBuf = NULL;			
+		delete [] fileBuf;
 
 		delete [] identSetup.companyName;
 		identSetup.companyName = NULL;
@@ -3617,7 +3630,6 @@ ImplAAFEssenceAccess::ModifyEssenceFileFromLocator (ImplAAFHeader *srcHead, Impl
 	aafProductIdentification_t		identSetup;
 	aafUInt32						length;
 	aafUInt32						buflen;
-	wchar_t							*nameBuf = NULL;
 	ImplAAFFile						*theFile;
 	aafUID_t						myFileCLSID;
 
@@ -3629,10 +3641,12 @@ ImplAAFEssenceAccess::ModifyEssenceFileFromLocator (ImplAAFHeader *srcHead, Impl
 	XPROTECT()
 	{
 		loc->GetPathBufLen(&buflen);
-		nameBuf = new wchar_t[buflen];
-		if(nameBuf == NULL)
+		wchar_t *nameBuf = new wchar_t[buflen];
+		wchar_t *fileBuf = new wchar_t[buflen];
+		if(nameBuf == NULL || fileBuf == NULL)
 			RAISE(AAFRESULT_NOMEMORY);
 		CHECK(loc->GetPath(nameBuf, buflen));
+		wcsconvertURLtoFilepath(nameBuf, fileBuf);
 		CHECK(srcHead->GetLastIdentification (&xferIdent));
 		CHECK(xferIdent->GetCompanyNameBufLen(&length));
 		identSetup.companyName = new wchar_t[length];
@@ -3656,12 +3670,12 @@ ImplAAFEssenceAccess::ModifyEssenceFileFromLocator (ImplAAFHeader *srcHead, Impl
 		memcpy((void *)&myFileCLSID, (void *)&CLSID_AAFFile, sizeof(aafUID_t));
 		theFile = (ImplAAFFile *)CreateImpl(myFileCLSID);
 		CHECK(theFile->Initialize());
-	    CHECK(theFile->OpenExistingModify(nameBuf, 0, &identSetup));
+	    CHECK(theFile->OpenExistingModify(fileBuf, 0, &identSetup));
 		*result = theFile;
 		AcquireImplReference(theFile);
 
 		delete [] nameBuf;
-		nameBuf = NULL;			
+		delete [] fileBuf;
 
 		delete [] identSetup.companyName;
 		identSetup.companyName = NULL;

@@ -68,7 +68,7 @@ runtest()
 			then
 				filen=$numEss$ext.aaf
 			fi
-			if [ $arg == "-eagerLoad" ]
+			if [ $arg == "-lazyLoad" ]
 			then
 				cmd="$exename $arg $AAF_TEST_DIR/$filen"
 			else
@@ -199,11 +199,11 @@ then
 	echo "InfoDumper on files with netloc"
 	runLoop "InfoDumper" "-netloc"
 	echo ""
-	echo "InfoDumper -eagerLoad"
-	runLoop "InfoDumper" "-eagerLoad"
+	echo "InfoDumper -lazyLoad"
+	runLoop "InfoDumper" "-lazyLoad"
 	echo ""
-	echo "InfoDumper -eagerLoad on files with netloc"
-	runLoop "InfoDumper" "-eagerLoad" "-netloc"
+	echo "InfoDumper -lazyLoad on files with netloc"
+	runLoop "InfoDumper" "-lazyLoad" "-netloc"
 	echo ""
 fi
 

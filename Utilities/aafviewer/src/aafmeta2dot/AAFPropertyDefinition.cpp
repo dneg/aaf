@@ -157,7 +157,7 @@ AAFPropertyDefinition::BuildDot( AAFDotHome *dotHome, DotFactory *factory, DotGr
       }
       if ( _isUniqueIdentifier )
       {
-	 name += "\\<\\<ID\\>\\> ";
+	 name += "<<ID>> ";
       }
       name += _name;
       DotRecordNodeClassAttribute classAttribute( name, _typeDef->GetName() );

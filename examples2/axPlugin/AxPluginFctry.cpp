@@ -18,5 +18,5 @@
 //
 //=---------------------------------------------------------------------=
 
-// Single include present to independenty verify AxPluginFctry.h compiles.
+// Single include present to independently verify AxPluginFctry.h compiles.
 #include "AxPluginFctry.h"

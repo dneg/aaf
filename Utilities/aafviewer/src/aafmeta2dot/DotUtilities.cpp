@@ -29,23 +29,54 @@
 #include <assert.h>
 using namespace std;
 
+#include <ctype.h>
+
 #include <DotUtilities.h>
 
 
 //-----------------------------------------------------------------------------
 string 
-ProcessStringForQuoting( string s )
+ProcessRecordString( string s )
 {
    string ret = s;
    int index = 0;
-   while ( index < ret.size() )
+   while ( index < (int)ret.size() )
    {
-      // escape newlines
+      // escape special characters
       if ( ret[ index ] == '\n' )
       {
 	 ret.erase( index, 1 );
 	 ret.insert( index, "\\n" );
+	 index += 1;
       }
+      // escape special characters in quotes
+      else if ( ret[ index ] == '"' ||
+		ret[ index ] == '\\' ||
+		ret[ index ] == '<' ||
+		ret[ index ] == '>' )
+      {
+	 ret.insert( index, "\\" );
+	 index += 1;
+      }
+      // replace special Record Node characters with "?"
+      else if ( ret[ index ] == '{' ||
+		ret[ index ] == '}' ||
+		ret[ index ] == '=' ||
+		ret[ index ] == '|' )
+      {
+	 ret[index] = '?';
+      }
+      // tab etc. become spaces
+      else if (isspace((unsigned char)ret[index]))
+      {
+	 ret[index] = ' ';
+      }
+      // replace non-printable or control characters with "?"
+      else if (!isprint((unsigned char)ret[index]) || iscntrl((unsigned char)ret[index]))
+      {
+	 ret[index] = '?';
+      }
+
       index++;
    }
 
@@ -62,7 +93,7 @@ LimitAttributeSize( string attribute, int maxLength, int maxWidth )
    {
       return "";
    }
-   else if ( attribute.size() > maxLength )
+   else if ( (int)attribute.size() > maxLength )
    {
       retAttribute.resize( maxLength - 1 );
       retAttribute.resize( maxLength, '~' );
@@ -70,10 +101,39 @@ LimitAttributeSize( string attribute, int maxLength, int maxWidth )
 
    // spread value over lines.
    int newLineIndex = maxWidth;
-   while ( newLineIndex < retAttribute.size() )
+   int index = 0;
+   bool escape = false;
+   while ( index < (int)retAttribute.size() )
    {
-      retAttribute.insert( newLineIndex, "\\n" );
-      newLineIndex += maxWidth + 2;
+      if (index == newLineIndex)
+      {
+	 if (escape)
+	 {
+	    index++;
+	    if (index < (int)retAttribute.size())
+	    {
+	       retAttribute.insert(index,"\\n");
+	    }
+	 }
+	 else
+	 {
+	    retAttribute.insert(index, "\\n");
+	 }
+	 newLineIndex = index + maxWidth + 3;
+      }
+      else 
+      {
+	 if (retAttribute[index] == '\\')
+	 {
+	    escape = !escape;
+	 }
+	 else
+	 {
+	    escape = false;
+	 }
+      }
+
+      index++;
    }
 
    return retAttribute;

@@ -121,10 +121,10 @@ const AAFByteOrder INTEL_ORDER		      = 0x4949; // 'II' for Intel
 const AAFByteOrder MOTOROLA_ORDER         = 0x4d4d; // 'MM' for Motorola
 
 
-AAFByteOrder GetNativeByteOrder(void);
-void AAFByteSwap32(
+AAFByteOrder getNativeByteOrder(void);
+void ByteSwap32(
 			aafInt32 *lp);	/* IN/OUT -- Byte swap this value */
-void AAFByteSwap16(
+void ByteSwap16(
 			aafInt16 * wp);	/* IN/OUT -- Byte swap this value */
 void scanWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data);
 void scanSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data);
@@ -765,7 +765,7 @@ struct CAAFInitialize
 
 //**********************
 // Extra code required to scan the original WAVE headers and extract metadata parameters & data offset
-AAFByteOrder GetNativeByteOrder(void)
+AAFByteOrder getNativeByteOrder(void)
 {
   aafInt16 word = 0x1234;
   aafInt8  byte = *((aafInt8*)&word);
@@ -781,7 +781,7 @@ AAFByteOrder GetNativeByteOrder(void)
   return result;
 }
 
-void AAFByteSwap32(
+void ByteSwap32(
 			aafInt32 *lp)	/* IN/OUT -- Byte swap this value */
 {
 	register unsigned char *cp = (unsigned char *) lp;
@@ -795,7 +795,7 @@ void AAFByteSwap32(
 	cp[1] = t;
 }
 
-void AAFByteSwap16(
+void ByteSwap16(
 			aafInt16 * wp)	/* IN/OUT -- Byte swap this value */
 {
 	register unsigned char *cp = (unsigned char *) wp;
@@ -815,15 +815,15 @@ void scanWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data)
 
 void scanSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data)
 {
-	AAFByteOrder	nativeByteOrder = GetNativeByteOrder()
+	AAFByteOrder	nativeByteOrder = getNativeByteOrder()
 		;
 	memcpy(data, *srcBufHdl, maxsize);
 	(*srcBufHdl) += maxsize;
 	
 	if ((maxsize == sizeof(aafInt32)) && (INTEL_ORDER != nativeByteOrder))
-			AAFByteSwap32((aafInt32 *) data);
+			ByteSwap32((aafInt32 *) data);
 	else if ((maxsize == sizeof(aafInt16)) && (INTEL_ORDER != nativeByteOrder))
-			AAFByteSwap16((aafInt16 *) data);
+			ByteSwap16((aafInt16 *) data);
 }
 
 AAFRESULT loadWAVEHeader(aafUInt8 *buf,

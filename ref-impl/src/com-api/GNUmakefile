@@ -44,27 +44,22 @@ INCLUDES = -I../../include/ref-api \
 	   -I../../aaflib
 
 
-LIBTARGET = $(LIBDIR)/libcom-api$(DLL)
+DYN_LIBTARGET = $(LIBDIR)/libcom-api$(DLL)
+STAT_LIBTARGET = $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libcom-api$(LIB)
 
+LIBTARGET=$(DYN_LIBTARGET)		# Default is dynamic library
+ifeq ($(AAFTARGET),Debug-static)
+	LIBTARGET = $(STAT_LIBTARGET)
+endif
+
+ifeq ($(AAFPLATFORM),PPCDarwin)
+PLATFORMLIBS += -framework CoreFoundation
+endif
 
 # The following two lines initialize CXXFILES2 to contain the list
 # of source files from ./com-dll directory.
 CXXFILES_TMP = $(wildcard com-dll/*.$(CPP_EXTENSION)) $(wildcard com-dll/*.c)
 CXXFILES2 = $(CXXFILES_TMP:com-dll/%=%)
-
-
-# STORAGE_LIBS is the list of Structured Storage implementations available.
-# Both Release and Debug builds use the same library.
-ifeq ($(wildcard $(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIB)),$(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIB))
-STORAGE_LIBS=$(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIB)
-else
-STORAGE_LIBS=
-endif
-
-ifeq ($(wildcard $(AAFBUILDDIR)/ss-impl/librefstg$(LIB)),$(AAFBUILDDIR)/ss-impl/librefstg$(LIB))
-STORAGE_LIBS+=$(AAFBUILDDIR)/ss-impl/librefstg$(LIB)
-endif
-
 
 
 .PHONY : all
@@ -80,7 +75,17 @@ com-dll :
 	cd com-dll && $(MAKE)
 
 
-$(LIBTARGET) : $(CXXOBJS) $(CXXOBJS2) $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libimpl$(LIB) $(AAFBUILDDIR)/OM/$(AAFTARGETDIR)/libom$(LIB) $(STORAGE_LIBS)
+# For a static build, simply archive the object files into a static library
+$(STAT_LIBTARGET) : $(CXXOBJS) $(CXXOBJS2)
+	$(LD_STAT_LIB) $@ $(CXXOBJS) $(CXXOBJS2)
+
+# The dynamic library must link in all necessary ref-impl code
+$(DYN_LIBTARGET) : $(CXXOBJS) $(CXXOBJS2) \
+				$(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libimpl$(LIB) \
+				$(AAFBUILDDIR)/OM/$(AAFTARGETDIR)/libom$(LIB) $(STORAGE_LIBS)
+ifeq ($(AAFPLATFORM),PPCDarwin)
+	ranlib -s $(STORAGE_LIBS)
+endif
 	$(LD_DYN_LIB) $(CXXOBJS) $(CXXOBJS2) -o $@ \
 	$(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libimpl$(LIB) \
 	$(AAFBUILDDIR)/OM/$(AAFTARGETDIR)/libom$(LIB) \
@@ -104,4 +109,3 @@ realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk
-

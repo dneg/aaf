@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding = "Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="7.00"
 	Name="AAFLIB"
 	SccProjectName=""
 	SccLocalPath="">
@@ -22,18 +22,18 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../../ref-impl/src/com-api,../../../ref-impl/plugins,../../../ref-impl/include/com-api/,../../../ref-impl/src/impl,../../../ref-impl/src/Om,../../../ref-impl/include/OM,../../../ref-impl/src/com-api/com-dll,../../../ref-impl/include"
-				PreprocessorDefinitions="_DEBUG;WIN32;UNICODE;_LIB"
+				PreprocessorDefinitions="_DEBUG,WIN32,UNICODE,_LIB"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
-				UsePrecompiledHeader="0"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\Debug/AAFLIB.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
-				WarnAsError="FALSE"
+				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="3"
+				DebugInformationFormat="1"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
@@ -55,12 +55,6 @@
 				Culture="1033"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -72,10 +66,9 @@
 			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="../../../ref-impl/src/com-api,../../../ref-impl/plugins,../../../ref-impl/include/com-api/,../../../ref-impl/src/impl,../../../ref-impl/src/Om,../../../ref-impl/include/OM,../../../ref-impl/src/com-api/com-dll,../../../ref-impl/include"
-				PreprocessorDefinitions="NDEBUG;WIN32;UNICODE;_LIB"
+				PreprocessorDefinitions="NDEBUG,WIN32,UNICODE,_LIB"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -108,56 +101,14 @@
 				Culture="1033"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
-	<References>
-	</References>
 	<Files>
 		<File
 			RelativePath="..\..\..\ref-impl\aaflib\aaflib.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BasicRuntimeChecks="3"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\aaflib\aaflibwin32.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BasicRuntimeChecks="3"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
-			</FileConfiguration>
 		</File>
 	</Files>
 	<Globals>

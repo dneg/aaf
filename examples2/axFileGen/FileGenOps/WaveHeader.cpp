@@ -85,7 +85,7 @@ WaveHeader::WaveHeader( int sampleRate,
 	// AudioFormat is PCM - indicated by the value 1
 	SetInt16( AUDIO_FORMAT_IDX, 1 );
 
-	// Set num changes as a 16 bit value;
+	// Set num channels as a 16 bit value;
 	SetInt16( NUM_CHANNELS_IDX, _numChannels );
 
 	// Sample rate

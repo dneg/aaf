@@ -1002,8 +1002,8 @@ public:
   // 
   STDMETHOD (LookupKLVDataDef)
    (
-    // @parm [in, ref] aafUID_constref | parameterId | Parameter Unique ID
-    aafUID_constref  parameterId,
+    // @parm [in, ref] aafUID_constref | defId | KLV data definition Unique ID
+    aafUID_constref  defId,
 
     // @parm [out,retval] AAFKLVDataDefinition | ppDef | KLVData descriptor object
     IAAFKLVDataDefinition ** ppDef
@@ -1077,8 +1077,8 @@ public:
   // 
   STDMETHOD (LookupTaggedValueDef)
    (
-    // @parm [in, ref] aafUID_constref | parameterId | Parameter Unique ID
-    aafUID_constref  parameterId,
+    // @parm [in, ref] aafUID_constref | defId | tagged value definition ID
+    aafUID_constref  defId,
 
     // @parm [out,retval] AAFTaggedValueDefinition | ppDef | tagged value descriptor object
     IAAFTaggedValueDefinition ** ppDef

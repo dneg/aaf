@@ -242,7 +242,7 @@ OMSetElement<UniqueIdentification, ReferencedObject>::identification(
 {
   TRACE("OMSetElement<UniqueIdentification, ReferencedObject>::"
                                                              "identification");
-  ReferencedObject* object = getValue();
+  ReferencedObject* object = this->getValue();
   ASSERT("Valid object", object!= 0);
   return object->identification();
 }

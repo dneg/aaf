@@ -98,7 +98,7 @@ void CEnumeratorTest<TEnum,TItem>::Run(testMode_t mode)
 		RemoveTestFile(L"CEnumeratorTest.aaf");
 
 	// Create new AAF file.
-	IAAFFileSP pFile;
+	IAAFFile *pFile;
 	if(mode == kAAFUnitTestReadWrite)
 	{
 		checkResult(AAFFileOpenNewModify(L"CEnumeratorTest.aaf",0,&ProductInfo,

@@ -162,10 +162,7 @@ public:
   // @mfunc AAFRESULT | AAFCompositionMob2 | SetRendering |
   // set the MobID of a rendering of this CompositionMob.
 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  //
+  // This method will return the following codes:
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   // @end

@@ -27,6 +27,7 @@
 #include <AxMetaDef.h>
 #include <AxMob.h>
 #include <AAFTypeDefUIDs.h>
+#include <AAFResult.h>
 
 #include <iostream>
 #include <sstream>
@@ -230,8 +231,13 @@ AAFDotInstanceMapper::MapAAFObject( AxObject axObject, bool &popStack )
    IAAFSourceReferenceSP spIaafSourceReference;
    if ( AxIsA( spIUnknown, spIaafSourceReference ) )
    {
-      aafMobID_t mobID;
-      CHECK_HRESULT( spIaafSourceReference->GetSourceID( &mobID ) );
+      aafMobID_t mobID = {0};
+      HRESULT result = spIaafSourceReference->GetSourceID( &mobID );
+      if (!SUCCEEDED(result)) {
+	 if (result != AAFRESULT_PROP_NOT_PRESENT) {
+	    throw AxExHResult(result, __FILE__, __LINE__);
+	 }
+      }
 
       aafSlotID_t slotID;
       CHECK_HRESULT( spIaafSourceReference->GetSourceMobSlotID( &slotID ) );
@@ -493,6 +499,73 @@ AAFDotInstanceMapper::MapKnownAAFRecordTypes( AxProperty axProperty, bool &popSt
 		
       popStack = true;
    }
+
+   if ( typeDef.GetAUID() == kAAFTypeID_Rational )	// Rational
+   {
+      ObjectStalker *oStalker = dynamic_cast< ObjectStalker* > ( PopStalker() );
+      if ( oStalker == 0 )
+      {
+	 cerr << "Error: Object stalker expected." << endl;
+	 throw;
+      }
+
+      string propName = AxStringToString( axProperty.GetName() );
+			
+      AxTypeDefRecord axTypeDefRecord(
+	 AxQueryInterface< IAAFTypeDef,IAAFTypeDefRecord > (
+	    typeDef ) );
+
+      string numeratorValue;
+      string denominatorValue;
+      if ( AxStringToString( axTypeDefRecord.GetMemberName( 0 ) ).compare( "Numerator" ) == 0 )
+      {
+	 IAAFPropertyValueSP propValue( axProperty.GetValue() );
+	 AxPropertyValue numerator( axTypeDefRecord.GetValue( propValue , 0 ) );
+	 AxPropertyValue denominator( axTypeDefRecord.GetValue( propValue, 1 ) );
+	 
+	 AxTypeDefInt numeratorIntType(
+	    AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
+	       numerator.GetType() ) );
+	 AxTypeDefInt denominatorIntType(
+	    AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
+	       denominator.GetType() ) );
+	 numeratorValue = GetIntValue( numeratorIntType, numerator, 
+				       oStalker->GetName(), propName );
+	 denominatorValue = GetIntValue( denominatorIntType, denominator,
+					 oStalker->GetName(), propName );
+      }
+      else
+      {
+	 IAAFPropertyValueSP propValue( axProperty.GetValue() );
+	 AxPropertyValue numerator( axTypeDefRecord.GetValue( propValue, 1 ) );
+	 AxPropertyValue denominator( axTypeDefRecord.GetValue( propValue, 0 ) );
+	 
+	 AxTypeDefInt numeratorIntType(
+	    AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
+	       numerator.GetType() ) );
+	 AxTypeDefInt denominatorIntType(
+	    AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
+	       denominator.GetType() ) );
+	 numeratorValue = GetIntValue( numeratorIntType, numerator,
+				       oStalker->GetName(), propName );
+	 denominatorValue = GetIntValue( denominatorIntType, denominator,
+					 oStalker->GetName(), propName );
+      }
+      
+      string value;
+      value.append( numeratorValue );
+      value.append( "/" );
+      value.append( denominatorValue );
+      
+    
+      DotRecordNodeAttribute attribute( propName, value );
+			
+      oStalker->GetNode()->AddAttribute( attribute );
+      
+      PushStalker( oStalker );
+
+      popStack = true;
+   }
 	
 }
 
@@ -509,84 +582,13 @@ AAFDotInstanceMapper::MapAAFPropertyValue( AxPropertyValue axPropertyValue, bool
    {
       // iterator will take us to the base type, so skip this iteration level
    }
+   else if ( axTypeDef.GetTypeCategory() == kAAFTypeCatIndirect )
+   {
+      // iterator will take us to the base type, so skip this iteration level
+   }
    else
    {
-      if ( AxStringToString( axTypeDef.GetName() ).compare( "Rational" ) == 0 )
-      {
-	 popStack = true;
-
-	 PropertyValueStalker *pStalker = dynamic_cast< PropertyValueStalker* > ( PopStalker() );
-	 if ( pStalker == 0 )
-	 {
-	    cerr << "Error: Property value stalker expected." << endl;
-	    throw;
-	 }
-	 ObjectStalker *oStalker = dynamic_cast< ObjectStalker* > ( PopStalker() );
-	 if ( oStalker == 0 )
-	 {
-	    cerr << "Error: Object stalker expected." << endl;
-	    throw;
-	 }
-
-			
-	 AxTypeDefRecord axTypeDefRecord(
-	    AxQueryInterface< IAAFTypeDef,IAAFTypeDefRecord > (
-	       axTypeDef ) );
-	 string numeratorValue;
-	 string denominatorValue;
-	 if ( AxStringToString( axTypeDefRecord.GetMemberName( 0 ) ).compare( "Numerator" ) == 0 )
-	 {
-	    IAAFPropertyValueSP propValue( axPropertyValue.GetValue() );
-	    AxPropertyValue numerator( axTypeDefRecord.GetValue( propValue , 0 ) );
-	    AxPropertyValue denominator( axTypeDefRecord.GetValue( propValue, 1 ) );
-
-	    AxTypeDefInt numeratorIntType(
-	       AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
-		  numerator.GetType() ) );
-	    AxTypeDefInt denominatorIntType(
-	       AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
-		  denominator.GetType() ) );
-	    numeratorValue = GetIntValue( numeratorIntType, numerator, 
-					  oStalker->GetName(), pStalker->GetName() );
-	    denominatorValue = GetIntValue( denominatorIntType, denominator,
-					    oStalker->GetName(), pStalker->GetName() );
-	 }
-	 else
-	 {
-	    IAAFPropertyValueSP propValue( axPropertyValue.GetValue() );
-	    AxPropertyValue numerator( axTypeDefRecord.GetValue( propValue, 1 ) );
-	    AxPropertyValue denominator( axTypeDefRecord.GetValue( propValue, 0 ) );
-
-	    AxTypeDefInt numeratorIntType(
-	       AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
-		  numerator.GetType() ) );
-	    AxTypeDefInt denominatorIntType(
-	       AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
-		  denominator.GetType() ) );
-	    numeratorValue = GetIntValue( numeratorIntType, numerator,
-					  oStalker->GetName(), pStalker->GetName() );
-	    denominatorValue = GetIntValue( denominatorIntType, denominator,
-					    oStalker->GetName(), pStalker->GetName() );
-	 }
-
-	 string value;
-	 value.append( numeratorValue );
-	 value.append( "/" );
-	 value.append( denominatorValue );
-
-			
-	 DotRecordNodeAttribute attribute( pStalker->GetName(), value );
-			
-	 oStalker->GetNode()->AddAttribute( attribute );
-
-	 PushStalker( oStalker );
-	 PushStalker( pStalker );
-      }
-
-      else
-      {
-	 MapAAFPropertyValueGeneric( axTypeDef, axPropertyValue, popStack );
-      }
+      MapAAFPropertyValueGeneric( axTypeDef, axPropertyValue, popStack );
    }
 }
 
@@ -606,13 +608,8 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
 	 AxQueryInterface< IAAFTypeDef,IAAFTypeDefFixedArray > (
 	    axTypeDef ) );
       AxTypeDef elementAxTypeDef( axTypeDefFixedArray.GetType() );
-      if ( elementAxTypeDef.GetTypeCategory() != kAAFTypeCatStrongObjRef &&
-	   elementAxTypeDef.GetTypeCategory() != kAAFTypeCatWeakObjRef )
-      {
-	 MapEmptyPropertyValue();
-	 popStack = true;
-      }
-      else
+      if ( elementAxTypeDef.GetTypeCategory() == kAAFTypeCatStrongObjRef ||
+	   elementAxTypeDef.GetTypeCategory() == kAAFTypeCatWeakObjRef )
       {
 	 PropertyValueStalker *pStalker = dynamic_cast< PropertyValueStalker* > ( PopStalker() );
 	 if ( pStalker == 0 )
@@ -622,6 +619,62 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
 	 }
 	 pStalker->InitArrayIndex();
 	 PushStalker( pStalker );
+      }
+      else if ( elementAxTypeDef.GetTypeCategory() == kAAFTypeCatInt )
+      {
+	 PropertyValueStalker *pStalker = dynamic_cast< PropertyValueStalker* > ( PopStalker() );
+	 if ( pStalker == 0 )
+	 {
+	    cerr << "Error: Property value stalker expected." << endl;
+	    throw;
+	 }
+	 ObjectStalker *oStalker = dynamic_cast< ObjectStalker* > ( PopStalker() );
+	 if ( oStalker == 0 )
+	 {
+	    cerr << "Error: Object stalker expected." << endl;
+	    throw;
+	 }
+
+	 AxPropertyValueIter elements( axTypeDefFixedArray.GetElements( propValue ) );
+	 IAAFPropertyValueSP elementValue;
+	 string arrayValue = "";
+	 bool isFirst = true;
+	 int maxLen = _profile.GetMaxAttributeLength();
+	 int len = 0;
+	 while ( elements.NextOne(elementValue) && len < maxLen )
+	 {
+	    IAAFTypeDefSP spElementType;
+	    CHECK_HRESULT(elementValue->GetType(&spElementType));
+	    AxTypeDefInt axTypeDefInt(
+	       AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
+		  spElementType ) );
+	    string value = GetIntValue( axTypeDefInt, elementValue );
+	    len += value.length();
+
+	    if (!isFirst)
+	    {
+	       arrayValue.append(" ");
+	       len += 1;
+	    }
+	    else
+	    {
+	       isFirst = false;
+	    }
+	    arrayValue.append(value);
+	 }
+	 DotRecordNodeAttribute attribute( pStalker->GetName(), arrayValue );
+	 DotRecordNode *node = oStalker->GetNode();
+	 node->AddAttribute( attribute );
+	 
+	 PushStalker( oStalker );
+	 PushStalker( pStalker );
+	 
+	 popStack = true;
+      }
+      else
+      {
+	 MapEmptyPropertyValue();
+	 popStack = true;
       }
    }
 
@@ -631,13 +684,8 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
 	 AxQueryInterface< IAAFTypeDef,IAAFTypeDefVariableArray > (
 	    axTypeDef ) );
       AxTypeDef elementAxTypeDef( axTypeDefVariableArray.GetType() );
-      if ( elementAxTypeDef.GetTypeCategory() != kAAFTypeCatStrongObjRef &&
-	   elementAxTypeDef.GetTypeCategory() != kAAFTypeCatWeakObjRef )
-      {
-	 MapEmptyPropertyValue();
-	 popStack = true;
-      }
-      else
+      if ( elementAxTypeDef.GetTypeCategory() == kAAFTypeCatStrongObjRef ||
+	   elementAxTypeDef.GetTypeCategory() == kAAFTypeCatWeakObjRef )
       {
 	 PropertyValueStalker *pStalker = dynamic_cast< PropertyValueStalker* > ( PopStalker() );
 	 if ( pStalker == 0 )
@@ -647,6 +695,62 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
 	 }
 	 pStalker->InitArrayIndex();
 	 PushStalker( pStalker );
+      }
+      else if ( elementAxTypeDef.GetTypeCategory() == kAAFTypeCatInt )
+      {
+	 PropertyValueStalker *pStalker = dynamic_cast< PropertyValueStalker* > ( PopStalker() );
+	 if ( pStalker == 0 )
+	 {
+	    cerr << "Error: Property value stalker expected." << endl;
+	    throw;
+	 }
+	 ObjectStalker *oStalker = dynamic_cast< ObjectStalker* > ( PopStalker() );
+	 if ( oStalker == 0 )
+	 {
+	    cerr << "Error: Object stalker expected." << endl;
+	    throw;
+	 }
+
+	 AxPropertyValueIter elements( axTypeDefVariableArray.GetElements( propValue ) );
+	 IAAFPropertyValueSP elementValue;
+	 string arrayValue = "";
+	 bool isFirst = true;
+	 int maxLen = _profile.GetMaxAttributeLength();
+	 int len = 0;
+	 while ( elements.NextOne(elementValue) && len < maxLen )
+	 {
+	    IAAFTypeDefSP spElementType;
+	    CHECK_HRESULT(elementValue->GetType(&spElementType));
+	    AxTypeDefInt axTypeDefInt(
+	       AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
+		  spElementType ) );
+	    string value = GetIntValue( axTypeDefInt, elementValue );
+	    len += value.length();
+
+	    if (!isFirst)
+	    {
+	       arrayValue.append(" ");
+	       len += 1;
+	    }
+	    else
+	    {
+	       isFirst = false;
+	    }
+	    arrayValue.append(value);
+	 }
+	 DotRecordNodeAttribute attribute( pStalker->GetName(), arrayValue );
+	 DotRecordNode *node = oStalker->GetNode();
+	 node->AddAttribute( attribute );
+
+	 PushStalker( oStalker );
+	 PushStalker( pStalker );
+
+	 popStack = true;
+      }
+      else
+      {
+	 MapEmptyPropertyValue();
+	 popStack = true;
       }
    }
 
@@ -684,6 +788,55 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
 	    axTypeDef ) );
       AxString value = axTypeDefString.GetElements( propValue );
       DotRecordNodeAttribute attribute( pStalker->GetName(), AxStringToString( value ) );
+
+      oStalker->GetNode()->AddAttribute( attribute );
+
+      PushStalker( oStalker );
+      PushStalker( pStalker );
+   }
+
+
+   else if ( axTypeDef.GetTypeCategory() == kAAFTypeCatStream)
+   {
+      PropertyValueStalker *pStalker = dynamic_cast< PropertyValueStalker* > ( PopStalker() );
+      if ( pStalker == 0 )
+      {
+	 cerr << "Error: Property value stalker expected." << endl;
+	 throw;
+      }
+      ObjectStalker *oStalker = dynamic_cast< ObjectStalker* > ( PopStalker() );
+      if ( oStalker == 0 )
+      {
+	 cerr << "Error: Object stalker expected." << endl;
+	 throw;
+      }
+
+      IAAFTypeDefStreamSP spTypeDefStream(
+	 AxQueryInterface< IAAFTypeDef,IAAFTypeDefStream > (
+	    axTypeDef ) );
+
+      aafInt64 size;
+      CHECK_HRESULT(spTypeDefStream->GetSize(propValue, &size));
+      if (size * 2 > _profile.GetMaxAttributeLength()) 
+      {
+	 size = _profile.GetMaxAttributeLength() / 2;
+      }
+
+      aafMemPtr_t buffer = new unsigned char[(unsigned int)size];
+      aafUInt32 readSize;
+      CHECK_HRESULT(spTypeDefStream->Read(propValue, (aafUInt32)size, buffer, &readSize));
+      
+      string streamValue = "0x";
+      for (aafUInt32 i=0; i<readSize; i++)
+      {
+	 char tmp[3];
+	 sprintf(tmp, "%02x", (int)buffer[i]);
+	 streamValue.append(tmp);
+      }
+
+      delete [] buffer;
+
+      DotRecordNodeAttribute attribute( pStalker->GetName(), streamValue );
 
       oStalker->GetNode()->AddAttribute( attribute );
 
@@ -740,6 +893,44 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
 	 AxQueryInterface< IAAFTypeDef,IAAFTypeDefEnum > (
 	    axTypeDef ) );
       string value = AxStringToString( axTypeDefEnum.GetNameFromValue( propValue ) );
+      DotRecordNodeAttribute attribute( pStalker->GetName(), value );
+
+      oStalker->GetNode()->AddAttribute( attribute );
+
+
+      PushStalker( oStalker );
+      PushStalker( pStalker );
+   }
+
+   else if ( axTypeDef.GetTypeCategory() == kAAFTypeCatExtEnum)
+   {
+      PropertyValueStalker *pStalker = dynamic_cast< PropertyValueStalker* > ( PopStalker() );
+      if ( pStalker == 0 )
+      {
+	 cerr << "Error: Property value stalker expected." << endl;
+	 throw;
+      }
+      ObjectStalker *oStalker = dynamic_cast< ObjectStalker* > ( PopStalker() );
+      if ( oStalker == 0 )
+      {
+	 cerr << "Error: Object stalker expected." << endl;
+	 throw;
+      }
+
+      IAAFTypeDefExtEnumSP spTypeDefExtEnum(AxQueryInterface<IAAFTypeDef,IAAFTypeDefExtEnum> 
+					    (axTypeDef));
+
+      aafUInt32 sizeInBytes = 0;
+      CHECK_HRESULT(spTypeDefExtEnum->GetNameBufLenFromValue(propValue, &sizeInBytes));
+
+      int sizeInChars = (int)((double)sizeInBytes / sizeof(aafCharacter) + 0.5);
+      vector<aafCharacter> buf(sizeInChars);
+
+      CHECK_HRESULT(spTypeDefExtEnum->GetNameFromValue(propValue, &buf[0], 
+						       sizeInChars*sizeof(aafCharacter)));
+      AxString name(&buf[0]);
+
+      string value = AxStringToString( name );
       DotRecordNodeAttribute attribute( pStalker->GetName(), value );
 
       oStalker->GetNode()->AddAttribute( attribute );
@@ -923,159 +1114,103 @@ AAFDotInstanceMapper::MapEmptyPropertyValue()
 
 //-----------------------------------------------------------------------------
 string
+AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue axPropertyValue )
+{
+   return GetIntValue( axTypeDefInt, axPropertyValue, false);
+}
+
+
+//-----------------------------------------------------------------------------
+string
 AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue axPropertyValue,
 				   string objectName, string propertyName )
 {
+   return GetIntValue( axTypeDefInt, axPropertyValue, DisplayHex( objectName, propertyName ) );
+}
+
+
+//-----------------------------------------------------------------------------
+string
+AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue axPropertyValue,
+				   bool displayHex )
+{
    bool fault = false;
    IAAFPropertyValueSP propValue( axPropertyValue.GetValue() );
-   string value;
-   if ( axTypeDefInt.IsSigned() ) {
-      switch ( axTypeDefInt.GetSize() ) {
-	 case sizeof( aafInt8 ) :
-	 { 
-	    aafInt8 i;
-	    axTypeDefInt.GetInteger( propValue, &i );
-	    ostringstream ostrs;
-	    if ( DisplayHex( objectName, propertyName ) )
-	    {
-	       ostrs << hex << "0x" << (int)i;
+
+   aafUInt8 bytes[8];
+   axTypeDefInt.GetInteger(propValue, &bytes);
+
+   char buffer[22];
+   int strSize = 0;
+   switch (axTypeDefInt.GetSize()) {
+      case 1:
+	 if (axTypeDefInt.IsSigned()) {
+	    if (displayHex) {
+	       strSize = sprintf(buffer, "0x%x", *((aafInt8*)bytes));
+	    } else {
+	       strSize = sprintf(buffer, "%d", *((aafInt8*)bytes));
 	    }
-	    else
-	    {
-	       ostrs << dec << (int)i;
+	 } else {
+	    if (displayHex) {
+	       strSize = sprintf(buffer, "0x%u", *((aafUInt8*)bytes));
+	    } else {
+	       strSize = sprintf(buffer, "%u", *((aafUInt8*)bytes));
 	    }
-	    value = ostrs.str();
-	    break;
 	 }
-	 case sizeof( aafInt16 ) :
-	 { 
-	    aafInt16 i;
-	    axTypeDefInt.GetInteger( propValue, &i );
-	    ostringstream ostrs;
-	    if ( DisplayHex( objectName, propertyName ) )
-	    {
-	       ostrs << hex << "0x" << i;
+	 break;
+      case 2:
+	 if (axTypeDefInt.IsSigned()) {
+	    if (displayHex) {
+	       strSize = sprintf(buffer, "0x%x", *((aafInt16*)bytes));
+	    } else {
+	       strSize = sprintf(buffer, "%d", *((aafInt16*)bytes));
 	    }
-	    else
-	    {
-	       ostrs << dec << i;
+	 } else {
+	    if (displayHex) {
+	       strSize = sprintf(buffer, "0x%x", *((aafUInt16*)bytes));
+	    } else {
+	       strSize = sprintf(buffer, "%u", *((aafUInt16*)bytes));
 	    }
-	    value = ostrs.str();
-	    break;
 	 }
-	 case sizeof( aafInt32 ) :
-	 { 
-	    aafInt32 i;
-	    axTypeDefInt.GetInteger( propValue, &i );
-	    ostringstream ostrs;
-	    if ( DisplayHex( objectName, propertyName ) )
-	    {
-	       ostrs << hex << "0x" << i;
+	 break;
+      case 4:
+	 if (axTypeDefInt.IsSigned()) {
+	    if (displayHex) {
+	       strSize = sprintf(buffer, "0x%lx", *((aafInt32*)bytes));
+	    } else {
+	       strSize = sprintf(buffer, "%ld", *((aafInt32*)bytes));
 	    }
-	    else
-	    {
-	       ostrs << dec << i;
+	 } else {
+	    if (displayHex) {
+	       strSize = sprintf(buffer, "0x%lx", *((aafUInt32*)bytes));
+	    } else {
+	       strSize = sprintf(buffer, "%lu", *((aafUInt32*)bytes));
 	    }
-	    value = ostrs.str();
-	    break;
 	 }
-	 case sizeof( aafInt64 ) :
-	 { 
-	    aafInt64 i;
-	    axTypeDefInt.GetInteger( propValue, &i );
-	    ostringstream ostrs;
-	    if ( DisplayHex( objectName, propertyName ) )
-	    {
-	       ostrs << hex << "0x" << (long int)i;
+	 break;
+      case 8:
+	 if (axTypeDefInt.IsSigned()) {
+	    if (displayHex) {
+	       strSize = sprintf(buffer, "0x%llx", *((aafInt64*)bytes));
+	    } else {
+	       strSize = sprintf(buffer, "%lld", *((aafInt64*)bytes));
 	    }
-	    else
-	    {
-	       ostrs << dec << (long int)i;
+	 } else {
+	    if (displayHex) {
+	       strSize = sprintf(buffer, "0x%llx", *((aafUInt64*)bytes));
+	    } else {
+	       strSize = sprintf(buffer, "%llu", *((aafUInt64*)bytes));
 	    }
-	    value = ostrs.str();
-	    break;
 	 }
-	 default:
-	    fault = true;
-      }
-   }
-   else {
-      switch ( axTypeDefInt.GetSize() ) {
-	 case sizeof( aafUInt8 ) :
-	 { 
-	    aafUInt8 i;
-	    axTypeDefInt.GetInteger( propValue, &i );
-	    ostringstream ostrs;
-	    if ( DisplayHex( objectName, propertyName ) )
-	    {
-	       ostrs << hex << "0x" << (int)i;
-	    }
-	    else
-	    {
-	       ostrs << dec << (int)i;
-	    }
-	    value = ostrs.str();
-	    break;
-	 }
-	 case sizeof( aafUInt16 ) :
-	 { 
-	    aafUInt16 i;
-	    axTypeDefInt.GetInteger( propValue, &i );
-	    ostringstream ostrs;
-	    if ( DisplayHex( objectName, propertyName ) )
-	    {
-	       ostrs << hex << "0x" << i;
-	    }
-	    else
-	    {
-	       ostrs << dec << i;
-	    }
-	    value = ostrs.str();
-	    break;
-	 }
-	 case sizeof( aafUInt32 ) :
-	 { 
-	    aafUInt32 i;
-	    axTypeDefInt.GetInteger( propValue, &i );
-	    ostringstream ostrs;
-	    if ( DisplayHex( objectName, propertyName ) )
-	    {
-	       ostrs << hex << "0x" << i;
-	    }
-	    else
-	    {
-	       ostrs << dec << i;
-	    }
-	    value = ostrs.str();
-	    break;
-	 }
-	 case sizeof( aafUInt64 ) :
-	 { 
-	    aafUInt64 i;
-	    axTypeDefInt.GetInteger( propValue, &i );
-	    ostringstream ostrs;
-	    if ( DisplayHex( objectName, propertyName ) )
-	    {
-	       ostrs << hex << "0x" << (long int)i;
-	    }
-	    else
-	    {
-	       ostrs << dec << (long int)i;
-	    }
-	    value = ostrs.str();
-	    break;
-	 }
-	 default:
-	    fault = true;
-      }
-   }
-	
-   if ( fault ) 
-   {
-      throw;
+	 break;
+      default:
+	 cerr << "Error: Unsupported integer size." << endl;
+	 throw;
    }
 
-   return value;
+   assert(strSize >= 0);
+
+   return buffer;
 }
 
 

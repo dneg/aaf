@@ -116,6 +116,62 @@ public:
 		// @parm [out] size of essence data
         (aafLength_t *  pSize );
 
+  //****************
+  // WriteSampleIndex()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    WriteSampleIndex
+        (// @parm [in] write this many bytes
+		 aafUInt32  bytes,
+
+		 // @parm [out, size_is(buflen), length_is(*bytesRead)] here is the buffer
+         aafDataBuffer_t  buffer,
+
+		 // @parm [out,ref] 
+		 aafUInt32 *  bytesWritten);
+
+/****/
+  //****************
+  // ReadSampleIndex()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    ReadSampleIndex
+        (// @parm [in] read this many bytes
+		 aafUInt32  bytes,
+
+		 // @parm [out, size_is(buflen), length_is(*bytesRead)] here is the buffer
+         aafDataBuffer_t  buffer,
+
+		 // @parm [out,ref] 
+		 aafUInt32 *  bytesRead);
+
+/****/
+  //****************
+  // SetSampleIndexPosition()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetSampleIndexPosition
+		// @parm [in] offset from beginning of essence
+        (aafPosition_t  offset);
+
+/****/
+  //****************
+  // GetSampleIndexPosition()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetSampleIndexPosition
+		// @parm [in] offset from beginning of essence
+        (aafPosition_t  *pOffset);
+
+/****/
+  //****************
+  // GetSampleIndexSize()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetSampleIndexSize
+		// @parm [out] size of essence data
+        (aafLength_t *  pSize );
+  
 /****/
   //****************
   // SetFileMob()
@@ -148,6 +204,7 @@ public:
 private:
   OMFixedSizeProperty<aafMobID_t> _fileMobID;
   OMDataStreamProperty _mediaData;
+  OMDataStreamProperty _indexData;
 };
 
 #endif // ! __ImplAAFEssenceData_h__

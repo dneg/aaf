@@ -58,7 +58,6 @@ typedef ImplAAFEnumerator<ImplAAFIdentification> ImplEnumAAFIdentifications;
 #include "ImplAAFFile.h"
 
 
-class AAFDataKind;
 class AAFOperationDef;
 
 

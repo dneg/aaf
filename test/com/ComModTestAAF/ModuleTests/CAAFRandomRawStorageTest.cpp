@@ -115,7 +115,7 @@ static HRESULT checkModeFlags ()
 {
   HRESULT temphr;
 
-  temphr = checkModeFlag (AAF_FILE_MODE_EAGER_LOADING,
+  temphr = checkModeFlag (AAF_FILE_MODE_LAZY_LOADING,
 						  AAFRESULT_NOT_IN_CURRENT_VERSION);
   if (AAFRESULT_FAILED (temphr)) return temphr;
 
@@ -243,7 +243,7 @@ static HRESULT localOpenFileDiskStgWrite
   checkResult
 	(AAFCreateAAFFileOnRawStorage (pStg,
 								   kAAFFileExistence_new,
-								   kAAFFileAccess_write,
+								   kAAFFileAccess_modify,
 								   &aafFileKindAafSSBinary,
 								   0,
 								   &sIdent,
@@ -311,7 +311,7 @@ static HRESULT localOpenFileCachedDiskStgWrite
   checkResult
 	(AAFCreateAAFFileOnRawStorage (pStg,
 								   kAAFFileExistence_new,
-								   kAAFFileAccess_write,
+								   kAAFFileAccess_modify,
 								   &aafFileKindAafSSBinary,
 								   0,
 								   &sIdent,
@@ -374,7 +374,7 @@ static HRESULT localOpenFileMemStgWrite
   checkResult
 	(AAFCreateAAFFileOnRawStorage (pStg,
 								   kAAFFileExistence_new,
-								   kAAFFileAccess_write,
+								   kAAFFileAccess_modify,
 								   &aafFileKindAafSSBinary,
 								   0,
 								   &sIdent,
@@ -663,7 +663,7 @@ static HRESULT localOpenFileCustomStgWrite
   checkResult
 	(AAFCreateAAFFileOnRawStorage (pStg,
 								   kAAFFileExistence_new,
-								   kAAFFileAccess_write,
+								   kAAFFileAccess_modify,
 								   &aafFileKindAafSSBinary,
 								   0,
 								   &sIdent,

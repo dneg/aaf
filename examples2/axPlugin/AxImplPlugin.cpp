@@ -24,6 +24,7 @@
 
 #include <AxTypes.h>
 #include <AxEssence.h>
+#include <AxDefObject.h>
 #include <AxDictionary.h>
 
 #include <AAFCodecDefs.h>

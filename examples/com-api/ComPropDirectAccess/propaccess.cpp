@@ -26,6 +26,7 @@
 #include <string.h>
 
 #include "AAF.h"
+#include "AAFFileMode.h"
 
 
 #include "CAAFBuiltinDefs.h"
@@ -612,7 +613,7 @@ static void ReadAAFFile(aafWChar * pFileName,
 						/*[in]*/ aafMobID_constref createdMobID)
 {
   IAAFFileSP spFile;
-  check (AAFFileOpenExistingRead(pFileName, 0, &spFile));
+  check (AAFFileOpenExistingRead(pFileName, AAF_FILE_MODE_LAZY_LOADING, &spFile));
 
   IAAFHeaderSP spHeader;
   check (spFile->GetHeader(&spHeader));

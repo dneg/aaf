@@ -25,7 +25,7 @@
 
 #include <sstream>
 
-class CmdState;
+#include "MultiGenTest.h"	// for CmdState class
 
 const int MULTI_GEN_AUDIO_SAMPLE_BPP  =      16;
 const int MULTI_GEN_VIDEO_WIDTH       = (720/4);

@@ -100,6 +100,22 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDataDef::IsTimecodeKind (
+      aafBool *bIsTimecodeKind)
+{
+	return(IsDataDefOf(GetDict()->GetBuiltinDefs()->ddTimecode(), bIsTimecodeKind));
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDataDef::IsEdgecodeKind (
+      aafBool *bIsEdgecodeKind)
+{
+	return(IsDataDefOf(GetDict()->GetBuiltinDefs()->ddEdgecode(), bIsEdgecodeKind));
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
     ImplAAFDataDef::DoesDataDefConvertTo (
       ImplAAFDataDef * pDataDef,
       aafBool *bDoesConvertTo)

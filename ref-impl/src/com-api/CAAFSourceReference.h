@@ -229,9 +229,6 @@ public:
 //
 // AAFRESULT_NULL_PARAM
 //   - pChannelIDs is null
-//
-// AAFRESULT_PROP_NOT_PRESENT
-//   - the property is not present
   // @end
   // 
   STDMETHOD (GetChannelIDsSize)
@@ -311,9 +308,6 @@ public:
 //
 // AAFRESULT_NULL_PARAM
 //   - pMonoSourceSlotIDs is null
-//
-// AAFRESULT_PROP_NOT_PRESENT
-//   - the property is not present
   // @end
   // 
   STDMETHOD (GetMonoSourceSlotIDsSize)

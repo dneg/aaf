@@ -48,11 +48,13 @@ AAFBUILDDIR = $(AAFBASE)/AAF$(AAFPLATFORM)SDK/$(COMPILER)
 
 #----------------------------------------------------------
 # Define AAFTARGET and related variables.
-# There are two supported build types: Debug (default) and 
-# Release. To change default setting user can specify 
-# AAFTARGET as parameter to make command:
+# There are three supported build types: Debug (default) 
+# Debug-static (as statically linked Debug build) and
+# Release. To change default setting a user can specify 
+# AAFTARGET as a parameter to the make command:
 #
 #	make AAFTARGET=Release
+#	make AAFTARGET=Debug-static
 #
 #----------------------------------------------------------
 # Define default target build
@@ -64,28 +66,39 @@ endif
 ifeq ($(AAFTARGET), Debug)
     AAFTARGETDIR = debug
 else
-    AAFTARGETDIR = .
+    ifeq ($(AAFTARGET), Debug-static)
+        AAFTARGETDIR = debug
+    else
+        AAFTARGETDIR = .
+    endif
 endif
 
 # Update DBG_FLAGS depending on build target.
-ifeq ($(AAFTARGET), Debug)
+ifeq ($(findstring Debug, $(AAFTARGET)), Debug)
+	# Add debug flags if -D_DEBUG is not already present
     ifneq ($(findstring -D_DEBUG, $(DBG_FLAGS)), -D_DEBUG)
         DBG_FLAGS += -D_DEBUG -DOM_DEBUG -DOM_STACK_TRACE_ON_ASSERT
     endif
 else
 ifeq ($(AAFTARGET), Release)
     ifneq ($(findstring -DNDEBUG, $(DBG_FLAGS)), -DNDEBUG)
-        DBG_FLAGS = -DNDEBUG
+        DBG_FLAGS = -DNDEBUG $(REL_FLAGS)
     endif
 endif
 endif
 
+ifeq ($(AAFTARGET), Debug-static)
+	DBG_FLAGS += -DDISABLE_DYNAMIC_LOADING
+endif
 
 #----------------------------------------------------------
-# AAFSDK is the directories where SDK libraries and 
+# AAFSDK controls the directories where SDK libraries and 
 # includes will be copied and applications (tests,examples,
 # utils) will be built.
 # The default setting is the AAF tollkit build directory.
+# Common alternatives include:
+#	AAFSDK=/usr/local
+#	AAFSDK=/opt/AAF
 #----------------------------------------------------------
 ifndef AAFSDK
     AAFSDK = $(AAFBUILDDIR)
@@ -161,3 +174,24 @@ DEPS_TMP = $(SOURCES:%.$(CPP_EXTENSION)=$(OBJDIR)/%.d)
 DEPS = $(DEPS_TMP:%.c=$(OBJDIR)/%.d)
 
 
+#----------------------------------------------------------
+# STORAGE_LIBS - Structured Storage Libraries.
+# Using wildcards, find all available structured storage
+# libraries and add them to STORAGE_LIBS.
+#----------------------------------------------------------
+
+STORAGE_LIBS=
+LINK_STG=
+# check for SchemaSoft implementation libSSRW2C.a
+ifeq ($(wildcard $(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIB)),$(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIB))
+STORAGE_LIBS += $(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIB)
+LINK_STG += -L$(AAFBUILDDIR)/sss-impl -lSSRW2C
+else
+endif
+
+#----------------------------------------------------------
+# STATIC_LINK_LINE - Link line used for static builds
+# Pulls in all required static libraries to achieve a
+# statically linked executable.
+#----------------------------------------------------------
+STATIC_LINK_LINE = -L$(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR) -L$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR) -L$(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR) -L$(AAFBUILDDIR)/OM/$(AAFTARGETDIR) -lcom-api -limpl -laaflib -laafiid -lom $(PLATFORMLIBS) $(LIBCIO) $(LINK_STG) $(UUIDLIB)

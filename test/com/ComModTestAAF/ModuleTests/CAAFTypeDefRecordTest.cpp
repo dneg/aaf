@@ -34,6 +34,7 @@ using namespace std;
 
 #include "AAF.h"
 #include "AAFResult.h"
+#include "AAFFileMode.h"
 #include "ModuleTest.h"
 #include "AAFDefUIDs.h"
 #include "AAFClassDefUIDs.h"
@@ -464,7 +465,9 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
   try 
 	{
 	  // Open the file, and get the dictionary.
-	  checkResult(AAFFileOpenExistingRead(pFileName, 0, &pFile));
+	  // Test fails when openened in default loading mode. So set mode to
+	  // lazy loading
+	  checkResult(AAFFileOpenExistingRead(pFileName, AAF_FILE_MODE_LAZY_LOADING, &pFile));
 	  IAAFHeaderSP pHeader;
 	  checkResult(pFile->GetHeader(&pHeader));
 	  IAAFDictionarySP pDict;

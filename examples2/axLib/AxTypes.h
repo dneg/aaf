@@ -104,6 +104,9 @@ inline bool operator!=( const tagGUID& uidL, const tagGUID& uidR )
 }
 #endif
 
+bool operator==( const aafMobID_t& lhs, const aafMobID_t& rhs );
+bool operator<( const aafMobID_t& lhs, const aafMobID_t& rhs );
+
 // Preserve auto_ptr ownership semantics but add a size
 // data member so that a buffer pointer and its size can travel
 // together.

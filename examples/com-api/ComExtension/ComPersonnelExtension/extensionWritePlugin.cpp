@@ -253,6 +253,12 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
   {
     rc = rhr;
   }
+  catch (...)
+  {
+    // We CANNOT throw an exception out of a COM interface method!
+    // Return a reasonable exception code.
+  	rc =  AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
 
 
   if (pPersResource)
@@ -273,12 +279,27 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
 	  pcd->Release ();
 	  pcd = 0;
 	}
+
   if (pFile)
   {
-    check (pFile->Save());
-    check (pFile->Close());
-    pFile->Release();
+  	try
+	{
+    	check (pFile->Save());
+   	    check (pFile->Close());
+        pFile->Release();
+	}
+    catch (HRESULT& rhr)
+    {
+    rc = rhr;
+    }
+    catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+    	rc =  AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
   }
+
   if (pPluginManager)
     pPluginManager->Release();
 

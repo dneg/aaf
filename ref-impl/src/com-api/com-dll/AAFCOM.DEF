@@ -37,6 +37,7 @@ EXPORTS		DllGetClassObject private
 EXPORTS		AAFFileOpenExistingRead
 EXPORTS		AAFFileOpenExistingModify
 EXPORTS		AAFFileOpenNewModify
+EXPORTS		AAFFileOpenNewModifyEx
 EXPORTS		AAFFileOpenTransient
 EXPORTS		AAFFileIsAAFFile
 EXPORTS		AAFGetPluginManager

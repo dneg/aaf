@@ -38,42 +38,53 @@ AxString colon( L":" );
 //=---------------------------------------------------------------------=
 
 AxEx::AxEx()
-: _what()
+  : _widewhat(L""),
+    _what("")
 {}
 
 AxEx::AxEx( const wchar_t* what )
-: _what( what )
+  : _widewhat( what ),
+    _what( AxStringUtil::wctomb( what ) )
 {}
 
 AxEx::AxEx( const AxString& what )
-: _what( what )
+  : _widewhat( what ),
+    _what( AxStringUtil::wctomb( what ) )
 {}
 
-AxEx::~AxEx()
+AxEx::~AxEx() throw()
 {}
 	
-const wchar_t* AxEx::what() const
+const wchar_t* AxEx::widewhat() const throw()
 {
-	return _what.c_str();
+	return _widewhat.c_str();
+}
+
+const char* AxEx::what() const throw()
+{
+  return _what.c_str();
 }
 
 //=---------------------------------------------------------------------=
 
 AxExHResult::AxExHResult()
 : AxEx(),
-  _what(0),
+  _widewhat(L""),
+  _what(""),
   _hresult( 0 )
 {}
 
 AxExHResult::AxExHResult( HRESULT hr )
 : AxEx(),
-  _what( L"" ),
+  _widewhat( L"" ),
+  _what( "" ),
   _hresult( hr )
 {}
 
 AxExHResult::AxExHResult( HRESULT hr, const wchar_t* what )
 : AxEx(),
-  _what( ),
+  _widewhat( what ),
+  _what( "" ),
   _hresult( hr )
 {
 	std::wostringstream os;
@@ -83,11 +94,14 @@ AxExHResult::AxExHResult( HRESULT hr, const wchar_t* what )
 	os << spc << AxHrMap::getInstance().getStr( hr ) << spc;
 	os << AxString( what );
 
-	_what = os.str();
+	_widewhat = os.str();
+	_what = AxStringUtil::wctomb( _widewhat );
 }
 
 AxExHResult::AxExHResult( HRESULT hr, const char* file, int line )
 : AxEx(),
+  _widewhat( L"" ),
+  _what( "" ),
   _file( file ),
   _line( line ),	
   _hresult( hr )
@@ -100,15 +114,21 @@ AxExHResult::AxExHResult( HRESULT hr, const char* file, int line )
 	os << zerox << AxStringUtil::int2StrHex( hr );
 	os << spc << AxHrMap::getInstance().getStr( hr );
 
-	_what = os.str();
+	_widewhat = os.str();
+	_what = AxStringUtil::wctomb( _widewhat );
 }
 
-AxExHResult::~AxExHResult()
+AxExHResult::~AxExHResult() throw()
 {}
 
-const wchar_t* AxExHResult::what() const
+const wchar_t* AxExHResult::widewhat() const throw()
 {
-	return _what.c_str();
+	return _widewhat.c_str();
+}
+
+const char* AxExHResult::what() const throw()
+{
+  return _what.c_str();
 }
 
 HRESULT AxExHResult::getHResult() const
@@ -133,7 +153,7 @@ AxExSmartPointer::AxExSmartPointer()
 :	AxEx( L"AAFSmartPointer assertion failed" )
 {}
 
-AxExSmartPointer::~AxExSmartPointer()
+AxExSmartPointer::~AxExSmartPointer() throw()
 {}
 
 //=---------------------------------------------------------------------=
@@ -142,5 +162,5 @@ AxExBadImp::AxExBadImp( const wchar_t* what )
 :	AxEx( what )
 {}
 
-AxExBadImp::~AxExBadImp()
+AxExBadImp::~AxExBadImp() throw()
 {}

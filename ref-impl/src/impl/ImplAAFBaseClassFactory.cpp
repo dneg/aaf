@@ -59,8 +59,6 @@
 #define CLSID_AAFEdgeCode CLSID_AAFEdgecode
 #define CLSID_AAFOperationDefinition CLSID_AAFOperationDef
 #define CLSID_AAFInterchangeObject CLSID_AAFObject
-#define CLSID_AAFJPEGImageData CLSID_AAFJPEGData
-#define CLSID_AAFMIDIFileData CLSID_AAFMIDIData
 #define CLSID_AAFParameterDefinition CLSID_AAFParameterDef
 #define CLSID_AAFPropertyDefinition CLSID_AAFPropertyDef
 #define CLSID_AAFTypeDefinition CLSID_AAFTypeDef
@@ -79,7 +77,6 @@
 #define CLSID_AAFTypeDefinitionStrongObjectReference CLSID_AAFTypeDefStrongObjRef
 #define CLSID_AAFTypeDefinitionVariableArray CLSID_AAFTypeDefVariableArray
 #define CLSID_AAFTypeDefinitionWeakObjectReference CLSID_AAFTypeDefWeakObjRef
-#define CLSID_AAFUNIXLocator CLSID_AAFUnixLocator
 #define CLSID_AAFCodecDefinition CLSID_AAFCodecDef
 #define CLSID_AAFContainerDefinition CLSID_AAFContainerDef
 #define CLSID_AAFPluginDefinition CLSID_AAFPluginDef

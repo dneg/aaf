@@ -27,6 +27,7 @@
 #include <AxMob.h>
 #include <AxMobSlot.h>
 #include <AxEssence.h>
+#include <AxDefObject.h>
 #include <AxIterator.h>
 #include <AxEx.h>
 #include <AxUtil.h>

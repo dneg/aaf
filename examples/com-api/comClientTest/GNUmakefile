@@ -32,7 +32,7 @@ include $(AAFBASE)/build/common.mk
 
 
 # Include directories
-INCLUDES = -I$(AAFSDKINCLUDEDIR) \
+INCLUDES = -I../../../ref-impl/include -I../../../ref-impl/include/ref-api \
 			-I../../../ref-impl/src/com-api
 
 
@@ -42,16 +42,24 @@ all : $(OBJDIR) $(AAFSDKBINDIR)/ComAAFInfo$(EXE) $(AAFSDKBINDIR)/ComClientAAF$(E
 
 CXXFILES = AAFInfo.cpp
 
-
+ifeq ($(AAFTARGET),Debug-static)
+$(AAFSDKBINDIR)/ComAAFInfo$(EXE) : $(CXXOBJS)
+	$(LD) $(CXXOBJS) $(STATIC_LINK_LINE) -o $@
+else
 $(AAFSDKBINDIR)/ComAAFInfo$(EXE) : $(CXXOBJS)
 	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid -o $@
-
+endif
 
 CXXFILES2 = ComClientTestAAF.cpp
 
 
+ifeq ($(AAFTARGET),Debug-static)
+$(AAFSDKBINDIR)/ComClientAAF$(EXE) : $(CXXOBJS2)
+	$(LD) $(CXXOBJS2) $(STATIC_LINK_LINE) -o $@
+else
 $(AAFSDKBINDIR)/ComClientAAF$(EXE) : $(CXXOBJS2)
 	$(LD) $(CXXOBJS2) -L$(AAFSDKLIBDIR) -laaflib -laafiid -o $@
+endif
 
 
 .PHONY : clean
@@ -69,4 +77,3 @@ realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk
-

@@ -62,15 +62,15 @@ public:
 	STDMETHOD(QueryInterface)(const IID& iid, void** ppv)    
 	{	                                                     
 		return GetOuterUnknown()->QueryInterface(iid,ppv) ;  
-	} ;	                                                     
+	}
 	STDMETHOD_(ULONG, AddRef)()	                             
 	{	                                                     
 		return GetOuterUnknown()->AddRef() ;                 
-	} ;	                                                     
+	}	                                                     
 	STDMETHOD_(ULONG, Release)() 	                         
 	{	                                                     
 		return GetOuterUnknown()->Release() ;               
-	} ;
+	}
 
 	
 	// Override CAxUnknown::NondelegatingQueryInterface() in order to add

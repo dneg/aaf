@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding = "Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="7.00"
 	Name="Impl"
 	SccProjectName=""
 	SccLocalPath="">
@@ -22,21 +22,21 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../../ref-impl/src/Impl,../../../ref-impl/include/Om,../../../ref-impl/include/com-api/,../../../ref-impl/src/OM,../../../ref-impl/include/,../../../ref-impl/aaflib"
-				PreprocessorDefinitions="_DEBUG;OM_DEBUG;COM_NO_WINDOWS_H;_WIN32;_WINDOWS;UNICODE;WIN32"
-				RuntimeLibrary="1"
+				PreprocessorDefinitions="_DEBUG,OM_DEBUG,COM_NO_WINDOWS_H,_WIN32,_WINDOWS,UNICODE,WIN32"
+				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough=""
-				PrecompiledHeaderFile=""
+				UsePrecompiledHeader="3"
+				PrecompiledHeaderThrough="stdafx.h"
+				PrecompiledHeaderFile=".\Debug/Impl.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
-				WarnAsError="FALSE"
+				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="3"
+				DebugInformationFormat="4"
 				CompileAs="0"
-				ForcedIncludeFiles=""/>
+				ForcedIncludeFiles="stdafx.h"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -56,12 +56,6 @@
 				Culture="1033"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -73,15 +67,14 @@
 			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="../../../ref-impl/src/Impl,../../../ref-impl/include/Om,../../../ref-impl/include/com-api/,../../../ref-impl/src/OM,../../../ref-impl/include/,../../../ref-impl/aaflib"
-				PreprocessorDefinitions="NDEBUG;COM_NO_WINDOWS_H;_WIN32;_WINDOWS;UNICODE;WIN32"
+				PreprocessorDefinitions="NDEBUG,COM_NO_WINDOWS_H,_WIN32,_WINDOWS,UNICODE,WIN32"
 				StringPooling="TRUE"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="3"
 				PrecompiledHeaderThrough="stdafx.h"
 				PrecompiledHeaderFile=".\Release/Impl.pch"
 				AssemblerListingLocation=".\Release/"
@@ -111,3366 +104,523 @@
 				Culture="1033"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
-	<References>
-	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\ref-impl\src\impl\aafCvt.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\impl\aafErr.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\aaflib\aaflibwin32.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
 			RelativePath="..\..\..\ref-impl\src\impl\AAFObjectModel.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\AAFObjectModelProcs.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\impl\aafTable.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\AAFUtils.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFAIFCDescriptor.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFAuxiliaryDescriptor.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFBaseClassFactory.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFBuiltinClasses.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFBuiltinTypes.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFCDCIDescriptor.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFClassDef.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFCloneResolver.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFCodecDef.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFCommentMarker.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFComponent.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFCompositionMob.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFConstantValue.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFContainerDef.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFContentStorage.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFContext.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFControlPoint.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFDataDef.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFDefObject.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFDescriptiveFramework.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFDescriptiveMarker.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFDictionary.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFDigitalImageDescrip.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFEdgecode.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFEssenceAccess.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFEssenceData.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFEssenceDescriptor.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFEssenceFormat.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFEssenceGroup.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFEvent.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFEventMobSlot.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFFile.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFFileDescriptor.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFFiller.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFFilmDescriptor.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFFindSourceInfo.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFGetFileBits.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFGPITrigger.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFHeader.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFGetFileBits.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFHTMLClip.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFHTMLDescriptor.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFHeader.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFIdentification.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFImportDescriptor.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFInterpolationDef.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFKLVData.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFKLVDataDefinition.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFLocator.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFMasterMob.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFMetaDefinition.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFMetaDictionary.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFMob.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFMobSlot.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFModule.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFNestedScope.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFNetworkLocator.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFObject.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFOMRawStorage.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFObject.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFOperationDef.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFOperationGroup.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFParameter.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFParameterDef.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFPCMDescriptor.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFParameter.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFParameterDef.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFPhysicalDescriptor.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFPluginDef.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFPluginFile.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFPluginManager.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFProperty.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFPropertyDef.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFPropertyValue.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFPropValData.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFProperty.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFPropertyDef.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFPropertyValue.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFPulldown.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFRGBADescriptor.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFRandomFile.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFRandomRawStorage.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFRawStorage.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFRecordingDescriptor.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFRefArrayValue.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFRefContainerValue.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFRefSetValue.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFRefValue.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFRGBADescriptor.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFRoot.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFScopeReference.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFSegment.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFSelector.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFSequence.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFSetFileBits.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFSoundDescriptor.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFSourceClip.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFSourceMob.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFSourceReference.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFStaticMobSlot.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFStorable.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFStreamPropertyValue.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFStrongRefArrayValue.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFStrongRefSetValue.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFStrongRefValue.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTIFFDescriptor.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTaggedValue.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTaggedValueDefinition.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTaggedValueUtil.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTapeDescriptor.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTextClip.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTextLocator.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTIFFDescriptor.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTimecode.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTimecodeStream.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTimecodeStream12M.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTimelineMobSlot.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTransition.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDef.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefArray.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefCharacter.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefEnum.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefExtEnum.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefFixedArray.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefIndirect.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefInt.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefObjectRef.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefOpaque.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefRecord.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefRename.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefSet.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefStream.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefString.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefStrongObjRef.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefVariableArry.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefWeakObjRef.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFVaryingValue.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFWAVEDescriptor.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFWeakRefArrayValue.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFWeakRefSetValue.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFWeakRefValue.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFClassDefs.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFCodecDefs.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFCodecFlavours.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFComponents.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFContainerDefs.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFControlPoints.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFDataDefs.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFEssenceData.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFIdentifications.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFInterpolateDefs.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFKLVData.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFKLVDataDefs.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFLoadedPlugins.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFLocators.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFMobs.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFMobSlots.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFMobs.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFOperationDefs.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFParameterDefs.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFParameters.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFPluginDefs.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFPluginLocators.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFProperties.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFPropertyDefs.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFPropertyValues.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFSegments.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFStorablePropVals.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFTaggedValueDefs.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFTaggedValues.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplEnumAAFTypeDefs.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\aafCvt.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\aafErr.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\aafTable.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\aaflib\aaflibwin32.cpp">
+		</File>
+		<File
+			RelativePath=".\stdafx.cpp">
 			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
+					UsePrecompiledHeader="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""/>
+					UsePrecompiledHeader="1"/>
 			</FileConfiguration>
 		</File>
 	</Files>

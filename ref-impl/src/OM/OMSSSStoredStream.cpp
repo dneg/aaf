@@ -199,8 +199,24 @@ void OMSSSStoredStream::close(void)
   TRACE("OMSSSStoredStream::close");
   PRECONDITION("Valid stream", _stream != 0);
 
+
+  	sresult status = SSTG_OK;
+
+	// save position for later test
+	OMUInt64 p = position();
+
+	// seek to the end of the stream
+	// SchemaSoft resizes the stream upon close
+	status = streamSeek64( _stream, 0, STG_END );
+
+	// test position
+	OMUInt64 sz = position();
+
+	if( p != sz )
+		OMUInt64 err = sz-p;
+
 #if defined(OM_DEBUG)
-  sresult status = closeStream( &_stream );
+   status = closeStream( &_stream );
   ASSERT("Reference count is 0.", status == 0);
 #else
   closeStream( &_stream );

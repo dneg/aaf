@@ -32,7 +32,7 @@ include $(AAFBASE)/build/common.mk
 
 
 # Include directories
-INCLUDES = -I$(AAFSDKINCLUDEDIR) \
+INCLUDES = -I../../../ref-impl/include -I../../../ref-impl/include/ref-api \
 			-I../../../ref-impl/src/com-api
 
 
@@ -42,10 +42,14 @@ BINTARGET = $(AAFSDKBINDIR)/$(EXAMPLE)$(EXE)
 .PHONY : all
 all : $(OBJDIR) $(BINTARGET)
 
-
+ifeq ($(AAFTARGET),Debug-static)
+$(BINTARGET) : $(CXXOBJS)
+	$(LD) $(CXXOBJS) $(STATIC_LINK_LINE) -o $@
+else
 $(BINTARGET) : $(CXXOBJS)
 	$(LD) $(CXXOBJS) $(RPATH_OPT) \
 	-L$(AAFSDKLIBDIR) -laaflib -laafiid $(LIBCIO) -o $@
+endif
 
 
 .PHONY : clean

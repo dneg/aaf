@@ -38,8 +38,13 @@ using namespace std;
 #include "AAFStoredObjectIDs.h"
 #include "AAFDefUIDs.h"
 #include "AAF.h"
+
 #include "AAFPlugin.h"
+#ifndef DISABLE_DYNAMIC_LOADING
+// AAFPlugin_i.c's definitions conflict with the definitions instantiated in ImplAAFPluginManager.cpp
+// So don't include it for static builds
 #include "AAFPlugin_i.c"
+#endif
 
 const CLSID CLSID_AAFBasicInterp = { 0x5B6C85A1, 0x0EDE, 0x11d3, { 0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 

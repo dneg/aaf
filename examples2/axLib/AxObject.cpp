@@ -62,3 +62,15 @@ IEnumAAFPropertiesSP AxObject::GetProperties()
 }
 
 //=---------------------------------------------------------------------=
+
+IAAFClassDefSP AxObject::GetDefinition()
+{
+  IAAFClassDefSP spIaafClassDef;
+
+  CHECK_HRESULT( _spIaafObject->GetDefinition( &spIaafClassDef ) );
+
+  return spIaafClassDef;
+}
+
+
+//=---------------------------------------------------------------------=

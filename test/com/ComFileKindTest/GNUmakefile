@@ -42,8 +42,13 @@ INCLUDES = -I../../../ref-impl/include \
 all : $(OBJDIR) $(AAFSDKBINDIR)/ComFileKindTest$(EXE)
 
 
+ifeq ($(AAFTARGET),Debug-static)
+$(AAFSDKBINDIR)/ComFileKindTest$(EXE) : $(CXXOBJS)
+	$(LD) $(CXXOBJS) $(STATIC_LINK_LINE) -o $@ 
+else
 $(AAFSDKBINDIR)/ComFileKindTest$(EXE) : $(CXXOBJS)
 	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(PLATFORMLIBS) $(LIBCIO) -o $@ 
+endif
 
 
 .PHONY : clean
@@ -59,4 +64,3 @@ realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk
-

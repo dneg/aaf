@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding = "Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="7.00"
 	Name="comapi"
 	SccProjectName=""
 	SccLocalPath="">
@@ -10,80 +10,6 @@
 			Name="Win32"/>
 	</Platforms>
 	<Configurations>
-		<Configuration
-			Name="Release|Win32"
-			OutputDirectory=".\../../Release/RefImpl"
-			IntermediateDirectory=".\Release"
-			ConfigurationType="2"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="1">
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="2"
-				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../../../ref-impl/src/com-api,../../../ref-impl/plugins,../../../ref-impl/include/com-api/,../../../ref-impl/src/impl,../../../ref-impl/src/Om,../../../ref-impl/include/OM,../../../ref-impl/src/com-api/com-dll,../../../ref-impl/include"
-				PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;WIN32;WIN32_LEAN_AND_MEAN"
-				StringPooling="TRUE"
-				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="TRUE"
-				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough=""
-				PrecompiledHeaderFile=""
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
-				WarningLevel="3"
-				WarnAsError="TRUE"
-				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="0"
-				CompileAs="0"
-				ForcedIncludeFiles="stdafx.h"/>
-			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="ssrw_c.lib"
-				OutputFile="../../Release/RefImpl/AAFCOAPI.dll"
-				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="../../sss-impl"
-				IgnoreDefaultLibraryNames="libc.lib,libcmt.lib,libcd.lib,libcmtd.lib,msvcrtd.lib"
-				ModuleDefinitionFile="..\..\..\ref-impl\src\com-api\com-dll\AAFCOM.DEF"
-				ProgramDatabaseFile=".\../../Release/RefImpl/AAFCOAPI.pdb"
-				SubSystem="2"
-				ImportLibrary=".\../../Release/RefImpl/AAFCOAPI.lib"
-				TargetMachine="1"/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="TRUE"
-				SuppressStartupBanner="TRUE"
-				TargetEnvironment="1"
-				TypeLibraryName=".\../../Release/RefImpl/comapi.tlb"
-				HeaderFileName=""/>
-			<Tool
-				Name="VCPostBuildEventTool"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
-		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory=".\../../Debug/RefImpl"
@@ -97,45 +23,43 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="../../../ref-impl/src/com-api,../../../ref-impl/plugins,../../../ref-impl/include/com-api/,../../../ref-impl/src/impl,../../../ref-impl/src/Om,../../../ref-impl/include/OM,../../../ref-impl/src/com-api/com-dll,../../../ref-impl/include"
 				PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;WIN32;WIN32_LEAN_AND_MEAN"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough=""
-				PrecompiledHeaderFile=""
+				UsePrecompiledHeader="3"
+				PrecompiledHeaderThrough="stdafx.h"
+				PrecompiledHeaderFile=".\Debug/comapi.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
-				WarnAsError="FALSE"
+				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="3"
+				DebugInformationFormat="4"
 				CompileAs="0"
-				ForcedIncludeFiles=""/>
+				ForcedIncludeFiles="stdafx.h"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="ssrw_c.lib"
 				OutputFile="../../Debug/RefImpl/AAFCOAPI.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="../../sss-impl"
-				IgnoreDefaultLibraryNames=""
+				IgnoreDefaultLibraryNames="libc.lib,libcmt.lib,msvcrt.lib,libcd.lib,libcmtd.lib"
 				ModuleDefinitionFile="..\..\..\ref-impl\src\com-api\com-dll\AAFCOM.DEF"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\../../Debug/RefImpl/AAFCOAPI.pdb"
 				SubSystem="2"
-				ImportLibrary=".\../../Debug/RefImpl/AAFCOAPI.lib"
-				TargetMachine="1"/>
+				ImportLibrary=".\../../Debug/RefImpl/AAFCOAPI.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\../../Debug/RefImpl/comapi.tlb"
-				HeaderFileName=""/>
+				TypeLibraryName=".\../../Debug/RefImpl/comapi.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -149,3282 +73,589 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCWebDeploymentTool"/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory=".\../../Release/RefImpl"
+			IntermediateDirectory=".\Release"
+			ConfigurationType="2"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="1">
+			<Tool
+				Name="VCCLCompilerTool"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="../../../ref-impl/src/com-api,../../../ref-impl/plugins,../../../ref-impl/include/com-api/,../../../ref-impl/src/impl,../../../ref-impl/src/Om,../../../ref-impl/include/OM,../../../ref-impl/src/com-api/com-dll,../../../ref-impl/include"
+				PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;WIN32;WIN32_LEAN_AND_MEAN"
+				StringPooling="TRUE"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="TRUE"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="3"
+				PrecompiledHeaderThrough="stdafx.h"
+				PrecompiledHeaderFile=".\Release/comapi.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName=".\Release/"
+				WarningLevel="3"
+				WarnAsError="TRUE"
+				SuppressStartupBanner="TRUE"
+				CompileAs="0"
+				ForcedIncludeFiles="stdafx.h"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalOptions="/MACHINE:I386"
+				AdditionalDependencies="ssrw_c.lib"
+				OutputFile="../../Release/RefImpl/AAFCOAPI.dll"
+				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="../../sss-impl"
+				IgnoreDefaultLibraryNames="libc.lib,libcmt.lib,libcd.lib,libcmtd.lib,msvcrtd.lib"
+				ModuleDefinitionFile="..\..\..\ref-impl\src\com-api\com-dll\AAFCOM.DEF"
+				ProgramDatabaseFile=".\../../Release/RefImpl/AAFCOAPI.pdb"
+				SubSystem="2"
+				ImportLibrary=".\../../Release/RefImpl/AAFCOAPI.lib"/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName=".\../../Release/RefImpl/comapi.tlb"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
 				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
-	<References>
-	</References>
 	<Files>
-		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\com-dll\AAFCOM.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\com-dll\AAFCOM.DEF">
 		</File>
 		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\com-dll\AAFCOM.cpp">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\com-dll\AAFObjectCreation.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\include\AAFVersion.rc">
 			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCResourceCompilerTool"
-					PreprocessorDefinitions="NDEBUG;$(NoInherit)"
-					AdditionalIncludeDirectories="\dev\AAF_Rosebud\AAF\AAFWinSDK\include"/>
-			</FileConfiguration>
-			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
 					Name="VCResourceCompilerTool"
-					PreprocessorDefinitions="_DEBUG;$(NoInherit)"
-					AdditionalIncludeDirectories="\dev\AAF_Rosebud\AAF\AAFWinSDK\include"/>
+					AdditionalIncludeDirectories="\AAF-rosebud-freeze\AAFWinSDK\include;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCResourceCompilerTool"
+					AdditionalIncludeDirectories="\AAF-rosebud-freeze\AAFWinSDK\include;$(NoInherit)"/>
 			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFAIFCDescriptor.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFAuxiliaryDescriptor.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-					PrecompiledHeaderThrough=""
-					PrecompiledHeaderFile=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFCDCIDescriptor.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFClassDef.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\com-dll\CAAFClassFactory.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFCodecDef.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFCommentMarker.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFComponent.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFCompositionMob.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFConstantValue.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFContainerDef.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFContentStorage.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFControlPoint.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFDataDef.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFDefObject.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFDescriptiveFramework.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFDescriptiveMarker.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFDictionary.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFDigitalImageDescriptor.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFEdgecode.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFEnumValidation.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFEssenceAccess.cpp">
 			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories="../../../ref-impl/plugins/"
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories="../../../ref-impl/plugins/"
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
+					AdditionalIncludeDirectories="../../../ref-impl/src/com-api,../../../ref-impl/plugins,../../../ref-impl/include/com-api/,../../../ref-impl/src/impl,../../../ref-impl/src/Om,../../../ref-impl/include/OM,../../../ref-impl/src/com-api/com-dll,../../../ref-impl/include;../../../ref-impl/plugins/;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories="../../../ref-impl/src/com-api,../../../ref-impl/plugins,../../../ref-impl/include/com-api/,../../../ref-impl/src/impl,../../../ref-impl/src/Om,../../../ref-impl/include/OM,../../../ref-impl/src/com-api/com-dll,../../../ref-impl/include;../../../ref-impl/plugins/;$(NoInherit)"/>
 			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFEssenceData.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFEssenceDescriptor.cpp">
 			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories="../../../ref-impl/plugins/"
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories="../../../ref-impl/plugins/"
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
+					AdditionalIncludeDirectories="../../../ref-impl/src/com-api,../../../ref-impl/plugins,../../../ref-impl/include/com-api/,../../../ref-impl/src/impl,../../../ref-impl/src/Om,../../../ref-impl/include/OM,../../../ref-impl/src/com-api/com-dll,../../../ref-impl/include;../../../ref-impl/plugins/;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories="../../../ref-impl/src/com-api,../../../ref-impl/plugins,../../../ref-impl/include/com-api/,../../../ref-impl/src/impl,../../../ref-impl/src/Om,../../../ref-impl/include/OM,../../../ref-impl/src/com-api/com-dll,../../../ref-impl/include;../../../ref-impl/plugins/;$(NoInherit)"/>
 			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFEssenceFormat.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFEssenceGroup.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFEvent.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFEventMobSlot.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFFile.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFFileDescriptor.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFFiller.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFFilmDescriptor.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFFindSourceInfo.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFGetFileBits.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFGPITrigger.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFHeader.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFGetFileBits.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFHTMLClip.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFHTMLDescriptor.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFHeader.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFIdentification.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFImportDescriptor.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\com-dll\CAAFInProcServer.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFInterpolationDef.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFKLVData.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFKLVDataDefinition.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFLocator.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFMasterMob.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFMetaDefinition.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFMetaDictionary.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFMob.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFMobSlot.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFModule.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFNestedScope.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFNetworkLocator.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFObject.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFOperationDef.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFOperationGroup.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFParameter.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFParameterDef.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFPCMDescriptor.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFParameter.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFParameterDef.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFPhysicalDescriptor.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFPluginDef.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFPluginManager.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFProperty.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFPropertyDef.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFPropertyValue.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFPropValData.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFProperty.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFPropertyDef.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFPropertyValue.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFPulldown.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFRandomFile.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFRandomRawStorage.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFRawStorage.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFRecordingDescriptor.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFRGBADescriptor.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFRandomFile.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFRandomRawStorage.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFRawStorage.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFRecordingDescriptor.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFRoot.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFScopeReference.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFSegment.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFSelector.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFSequence.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\com-dll\CAAFServer.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFSetFileBits.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFSoundDescriptor.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFSourceClip.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFSourceMob.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFSourceReference.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFStaticMobSlot.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFStreamPropertyValue.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFStrongRefArrayValue.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFStrongRefSetValue.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFStrongRefValue.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTaggedValue.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTaggedValueDefinition.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTapeDescriptor.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTextClip.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTextLocator.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTIFFDescriptor.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTaggedValue.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTaggedValueDefinition.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTapeDescriptor.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTextClip.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTextLocator.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTimecode.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTimecodeStream.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTimecodeStream12M.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTimelineMobSlot.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTransition.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDef.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefCharacter.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefEnum.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefExtEnum.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefFixedArray.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefIndirect.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefInt.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefObjectRef.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefOpaque.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefRecord.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefRename.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefSet.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefStream.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefString.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefStrongObjRef.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefVariableArray.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefWeakObjRef.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\com-dll\CAAFUnknown.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFVaryingValue.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFWAVEDescriptor.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFWeakRefArrayValue.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFWeakRefSetValue.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFWeakRefValue.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFClassDefs.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFCodecDefs.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFCodecFlavours.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFComponents.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFContainerDefs.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFControlPoints.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFDataDefs.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFEssenceData.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFIdentifications.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFInterpolationDefs.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFKLVData.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFKLVDataDefs.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFLoadedPlugins.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFLocators.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFMobs.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFMobSlots.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFMobs.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFOperationDefs.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFParameterDefs.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFParameters.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFPluginDefs.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFPluginLocators.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFProperties.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFPropertyDefs.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFPropertyValues.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFSegments.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFStorablePropVals.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFTaggedValueDefs.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFTaggedValues.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFTypeDefs.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\stdafx.cpp">
 			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					UsePrecompiledHeader="0"
-					ForcedIncludeFiles=""/>
+					UsePrecompiledHeader="1"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="1"/>
 			</FileConfiguration>
 		</File>
 	</Files>

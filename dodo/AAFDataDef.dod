@@ -28,11 +28,16 @@ AAFDataDef\
 #startm .parent-module 0
 AAFDefObject\
 #endm
+#import ./AAFDataDef2.exp
 AD_HEAD
+AD_IDL(//
+// IAAFDataDef is DEPRECATED\,  Please use IAAFDataDef2.
+//)
+
 AD_CLASS_UUID(dfbd652A, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(dfbd6529, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
-AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_COM_EXT_CLASS_BEGIN(public IAAFDataDef2)
 AD_XMETHOD3(Initialize,
 		   [in\, ref],
 		   objPass,
@@ -143,4 +148,7 @@ AD_XMETHOD2(DoesDataDefConvertFrom,
 		   Sets return value to TRUE if the DataDef of the given object
   // can be converted from the DataDef specified in the IN 
   // parameter specified with the DataDefName string.)
-AD_XCLASS_END(Concrete, StoredObject)
+
+AD_COM_METH(.method-IsEdgecodeKind)
+AD_COM_METH(.method-IsTimecodeKind)
+AD_COM_EXT_CLASS_END(AAFDataDef2)

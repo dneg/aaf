@@ -132,6 +132,19 @@ SOURCE=.\AxDictionary.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\AxDefObject.cpp
+
+!IF  "$(CFG)" == "axLib - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "axLib - Win32 Debug"
+
+# ADD CPP /w /W0
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\AxEssence.cpp
 
 !IF  "$(CFG)" == "axLib - Win32 Release"
@@ -391,6 +404,10 @@ SOURCE=.\AxContentStorage.h
 # Begin Source File
 
 SOURCE=.\AxDictionary.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\AxDefObject.h
 # End Source File
 # Begin Source File
 

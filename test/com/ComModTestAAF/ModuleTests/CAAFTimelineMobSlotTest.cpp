@@ -24,8 +24,15 @@
 //
 //=---------------------------------------------------------------------=
 
-
 #include "AAF.h"
+
+#if !defined( COMPILER_MSC )
+#define __STDC_CONSTANT_MACROS // enables INT64_C macro in stdint.h
+#include <inttypes.h>
+#else
+#define INT64_C(c) c
+#endif
+
 
 #include <iostream>
 using namespace std;
@@ -33,12 +40,6 @@ using namespace std;
 #include <stdlib.h>
 #include <wchar.h>
 
-#if !defined( COMPILER_MSC )
-#define __STDC_CONSTANT_MACROS // enables INT64_C macro in stdint.h
-#include <stdint.h>
-#else
-#define INT64_C(c) c
-#endif
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"

@@ -25,8 +25,10 @@
 class AxInit {
 public:
 	AxInit();
+	AxInit( const char* dllname );
 	virtual ~AxInit();
 private:
+	void Init( const char* dllname );
 	static bool once;
 };
 

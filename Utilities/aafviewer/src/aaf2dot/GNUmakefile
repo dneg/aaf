@@ -43,9 +43,10 @@ endif
 include $(AAFBASE)/build/common.mk
 
 # Include directories
-INCLUDES = -I$(AAFSDKINCLUDEDIR) \
-	   -I$(AAFBASE)/examples2/axLib \
-	   -I.
+INCLUDES = -I../../../../ref-impl/include \
+		-I../../../../ref-impl/include/ref-api \
+		-I../../../../examples2/axLib \
+		-I.
 
 # AxLib lib directory
 AXLIBPACKAGE = axExamples
@@ -56,9 +57,14 @@ BINTARGET = $(AAFSDKBINDIR)/$(PROGNAME)$(EXE)
 .PHONY : all
 all : $(OBJDIR) $(BINTARGET)
 
+ifeq ($(AAFTARGET),Debug-static)
+$(BINTARGET) : $(CXXOBJS)
+	$(LD) $(CXXOBJS) -L$(AXLIBDIR) -laxLib $(STATIC_LINK_LINE) -o $@
+else
 $(BINTARGET) : $(CXXOBJS)
 	$(LD) $(CXXOBJS) $(RPATH_OPT) \
 	-L$(AAFSDKLIBDIR) -L$(OBJDIR) -L$(AXLIBDIR) -laxLib -laaflib -laafiid $(LIBCIO) -o $@
+endif
 
 .PHONY : clean
 clean ::

@@ -114,7 +114,7 @@ static HRESULT checkModeFlags ()
 {
   HRESULT temphr;
 
-  temphr = checkModeFlag (AAF_FILE_MODE_EAGER_LOADING,
+  temphr = checkModeFlag (AAF_FILE_MODE_LAZY_LOADING,
 						  AAFRESULT_NOT_IN_CURRENT_VERSION);
   if (AAFRESULT_FAILED (temphr)) return temphr;
 
@@ -349,38 +349,44 @@ extern "C" HRESULT CAAFFile_test(testMode_t mode)
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	HRESULT hrex = AAFRESULT_NOT_IMPLEMENTED;
- 	aafWChar * pFileName = L"AAFFileTest.aaf";
- 	aafWChar * pFileNameEx = L"AAFFileTestEx.aaf";
+	aafWChar * pFileName = L"AAFFileTest.aaf";
+	aafWChar * pFileNameEx = L"AAFFileTestEx.aaf";
 
 	try
 	{
-  	        if(mode == kAAFUnitTestReadWrite) {
+		if (mode == kAAFUnitTestReadWrite) {
 			hr = CreateAAFFile(pFileName, false );
 			hrex = CreateAAFFile(pFileNameEx, true );
-	        }
+		}
 		else {
 			hr   = AAFRESULT_SUCCESS;
 			hrex = AAFRESULT_SUCCESS;
 		}
 
-		if(hr == AAFRESULT_SUCCESS) {
-			hr   = ReadAAFFile( pFileName );
-			hrex = ReadAAFFile( pFileNameEx );
-		}
+		if (hr != AAFRESULT_SUCCESS)
+			return hr;
+
+		if (hrex != AAFRESULT_SUCCESS)
+			return hrex;
+
+		hr   = ReadAAFFile( pFileName );
+		hrex = ReadAAFFile( pFileNameEx );
 	}
 	catch (...)
 	{
-	  cerr << "CAAFFile_test...Caught general C++"
-		   << " exception!" << endl; 
-	  hr = AAFRESULT_TEST_FAILED;
+		cerr << "CAAFFile_test...Caught general C++" << " exception!" << endl;
+		hr = AAFRESULT_TEST_FAILED;
 	}
 
-	if (SUCCEEDED(hr) && SUCCEEDED(hrex) )
-	{
-		// Open() and SaveCopyAs() method were not in the current version
-		// of the toolkit at the time this module test was written.
-		hr = AAFRESULT_NOT_IN_CURRENT_VERSION;
-	}
+	if (hr != AAFRESULT_SUCCESS)
+		return hr;
 
-	return hr;
+	if (hrex != AAFRESULT_SUCCESS)
+		return hrex;
+
+	// Open() and SaveCopyAs() method were not in the current version
+	// of the toolkit at the time this module test was written.
+	// TODO: Implement tests for Open() and SaveCopyAs() now that they
+	// are implemented in ImplAAFFile.cpp
+	return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }

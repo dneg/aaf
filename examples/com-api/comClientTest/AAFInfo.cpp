@@ -149,7 +149,7 @@ static void printProductVersion(aafProductVersion_t* pProductVersion)
 
 #if defined( OS_UNIX )
 
-aafUInt8 hostByteOrder(void)
+aafUInt8 HostByteOrder(void)
 {
   aafUInt16 word = 0x1234;
   aafUInt8 byte = *((aafUInt8*)&word);
@@ -176,7 +176,7 @@ typedef OLECHAR OMCHAR;
 
 int StringFromGUID2(const GUID& guid, OMCHAR* buffer, int bufferSize) 
 {
-  if (hostByteOrder() == 'L') {
+  if (HostByteOrder() == 'L') {
     guidMap = &idMapLittle[0];
   } else {
     guidMap = &idMapBig[0];

@@ -27,6 +27,8 @@
 #include <assert.h>
 using namespace std;
 
+#include <ctype.h>
+
 #include <AxMetaDef.h>
 #include <AxUtil.h>
 #include <AAFTypeDefUIDs.h>
@@ -292,7 +294,7 @@ GetTime( AxPropertyValue axPropertyValue )
    AxPropertyValue second = axTypeDefRecord.GetValue( propValue, 2 );
    AxPropertyValue fraction = axTypeDefRecord.GetValue( propValue, 3 );
 
-   retTime.hour = GetUInt16( hour );
+   retTime.hour = (aafUInt8)GetUInt16( hour );
    retTime.minute = GetUInt8( minute );
    retTime.second = GetUInt8( second );
    retTime.fraction = GetUInt8( fraction );
@@ -390,7 +392,7 @@ GetProductVersion( AxPropertyValue axPropertyValue )
    retProductVersion.minor = GetUInt16( minor );
    retProductVersion.tertiary = GetUInt16( tertiary );
    retProductVersion.patchLevel = GetUInt16( patchLevel );
-   retProductVersion.type = GetEnumValue( type );
+   retProductVersion.type = (aafProductReleaseType_t)GetEnumValue( type );
 
    return retProductVersion;
 }
@@ -500,32 +502,53 @@ std::string ProductVersionToString( _aafProductVersion_t productVersion )
 string
 AxStringToString( AxString axString )
 {
-   string name;
-	
-   AxString::iterator iter;
-   for ( iter=axString.begin(); iter!=axString.end(); iter++ )
-   {
-      name += *iter;
-   }
-
-   return name;
+   return AxStringUtil::wctomb(axString);
 }
 
 
 //-----------------------------------------------------------------------------
 string 
-ProcessStringForQuoting( string s )
+ProcessRecordString( string s )
 {
    string ret = s;
-   int index = 0;
+   unsigned index = 0;
    while ( index < ret.size() )
    {
-      // escape newlines
+      // escape special characters
       if ( ret[ index ] == '\n' )
       {
 	 ret.erase( index, 1 );
 	 ret.insert( index, "\\n" );
+	 index += 1;
       }
+      // escape special characters in quotes
+      else if ( ret[ index ] == '"' ||
+		ret[ index ] == '\\' ||
+		ret[ index ] == '<' ||
+		ret[ index ] == '>' )
+      {
+	 ret.insert( index, "\\" );
+	 index += 1;
+      }
+      // replace special Record Node characters with "?"
+      else if ( ret[ index ] == '{' ||
+		ret[ index ] == '}' ||
+		ret[ index ] == '=' ||
+		ret[ index ] == '|' )
+      {
+	 ret[index] = '?';
+      }
+      // tab etc. become spaces
+      else if (isspace((unsigned char)ret[index]))
+      {
+	 ret[index] = ' ';
+      }
+      // replace non-printable or control characters with "?"
+      else if (!isprint((unsigned char)ret[index]) || iscntrl((unsigned char)ret[index]))
+      {
+	 ret[index] = '?';
+      }
+
       index++;
    }
 
@@ -542,7 +565,7 @@ LimitAttributeSize( string attribute, int maxLength, int maxWidth )
    {
       return "";
    }
-   else if ( attribute.size() > maxLength )
+   else if ( (int)attribute.size() > maxLength )
    {
       retAttribute.resize( maxLength - 1 );
       retAttribute.resize( maxLength, '~' );
@@ -550,10 +573,39 @@ LimitAttributeSize( string attribute, int maxLength, int maxWidth )
 
    // spread value over lines.
    int newLineIndex = maxWidth;
-   while ( newLineIndex < retAttribute.size() )
+   int index = 0;
+   bool escape = false;
+   while ( index < (int)retAttribute.size() )
    {
-      retAttribute.insert( newLineIndex, "\\n" );
-      newLineIndex += maxWidth + 2;
+      if (index == newLineIndex)
+      {
+	 if (escape)
+	 {
+	    index++;
+	    if (index < (int)retAttribute.size())
+	    {
+	       retAttribute.insert(index,"\\n");
+	    }
+	 }
+	 else
+	 {
+	    retAttribute.insert(index, "\\n");
+	 }
+	 newLineIndex = index + maxWidth + 3;
+      }
+      else 
+      {
+	 if (retAttribute[index] == '\\')
+	 {
+	    escape = !escape;
+	 }
+	 else
+	 {
+	    escape = false;
+	 }
+      }
+
+      index++;
    }
 
    return retAttribute;

@@ -58,7 +58,7 @@ OMCharacterStringProperty<CharacterType>::~OMCharacterStringProperty(void)
 template <typename CharacterType>
 OMCharacterStringProperty<CharacterType>::operator const CharacterType*() const
 {
-  return reinterpret_cast<const CharacterType*>(_bits);
+  return reinterpret_cast<const CharacterType*>(this->_bits);
 }
 
   // @mfunc Assign the string <p characterString> to this
@@ -90,7 +90,7 @@ void OMCharacterStringProperty<CharacterType>::assign(
 template <typename CharacterType>
 size_t OMCharacterStringProperty<CharacterType>::length(void) const
 {
-  return (size() - sizeof(CharacterType)) / sizeof(CharacterType);
+  return (this->size() - sizeof(CharacterType)) / sizeof(CharacterType);
 }
 
   // @mfunc Utility function for computing the length, in characters,

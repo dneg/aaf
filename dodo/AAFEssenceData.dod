@@ -29,9 +29,13 @@ AAFEssenceData\
 AAFObject\
 #endm
 #c
+#import ./AAFEssenceDataEx.exp
 AD_HEAD
 
 AD_IDL(//
+//
+// This interface is DEPRECATED\, please use IAAFEssenceDataEx.
+//
 // The IAAFEssenceData interface is used to modify AAFEssenceData
 // objects\, which contain the actual essence data \(ex. WAVE\) when
 // it is contained within an AAF file.  Normally the client
@@ -55,7 +59,7 @@ AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_CLASS_UUID(6a33f4e1, 8ed6, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 
 AD_DEFAULT_UUID(6a33f4e2, 8ed6, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
-AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_COM_EXT_CLASS_BEGIN(public IAAFEssenceDataEx)
 
 AD_XMETHOD1(Initialize,
 [in],
@@ -170,4 +174,9 @@ AD_METHOD1(GetFileMobID,
   // essence.  The file mob must exist in the same file as this
   // essence data.)
 
-AD_XCLASS_END(Concrete, StoredObject)
+AD_COM_METH(.method-WriteSampleIndex)
+AD_COM_METH(.method-ReadSampleIndex)
+AD_COM_METH(.method-SetSampleIndexPosition)
+AD_COM_METH(.method-GetSampleIndexPosition)
+AD_COM_METH(.method-GetSampleIndexSize)
+AD_COM_EXT_CLASS_END(AAFEssenceDataEx)

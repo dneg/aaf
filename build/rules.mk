@@ -46,17 +46,24 @@ $(OBJDIR)/%$(OBJ): %.$(CPP_EXTENSION)
 # files.
 #------------------------------------------------------------------------------
 
+# g++ and MIPSpro both use '-M', but g++ can also use '-MM' which is cleaner
+# since it does not include headers from system header directories.
+MAKE_DEPS_FLAG=-M
+ifeq ($(CC),g++)
+  MAKE_DEPS_FLAG=-MM
+endif
+
 $(OBJDIR)/%.d : %.c 
 	@echo Generating dependencies for $<; \
 	$(SHELL) -ec 'if [ ! -d $(OBJDIR) ]; then $(MKDIR) $(OBJDIR); fi; \
-	$(CC) -M $(CFLAGS) $(INCLUDES) $< \
+	$(CC) $(MAKE_DEPS_FLAG) $(CFLAGS) $(INCLUDES) $< \
 	| sed '\''s,\($(*F)\)\.o[ :]*,$(@D)/\1.o $@ : ,g'\'' > $@; \
 	[ -s $@ ] || rm -f $@'
 
 $(OBJDIR)/%.d : %.$(CPP_EXTENSION)
 	@echo Generating dependencies for $<; \
 	$(SHELL) -ec 'if [ ! -d $(OBJDIR) ]; then $(MKDIR) $(OBJDIR); fi; \
-	$(CC) -M $(CFLAGS) $(INCLUDES) $< \
+	$(CC) $(MAKE_DEPS_FLAG) $(CFLAGS) $(INCLUDES) $< \
 	| sed '\''s,\($(*F)\)\.o[ :]*,$(@D)/\1.o $@ : ,g'\'' > $@; \
 	[ -s $@ ] || rm -f $@'
 
@@ -84,5 +91,3 @@ $(BINDIR):
 ifneq ($(GENDEPS), 0)
 -include $(DEPS)
 endif
-
-

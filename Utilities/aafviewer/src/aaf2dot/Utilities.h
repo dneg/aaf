@@ -50,7 +50,7 @@ inline void ErasePointerVector( std::vector< T > &theVector )
 
 std::string AxStringToString( AxString axString );
 
-std::string ProcessStringForQuoting( std::string s );
+std::string ProcessRecordString( std::string s );
 
 std::string LimitAttributeSize( std::string name, int maxLength, int maxWidth );
 

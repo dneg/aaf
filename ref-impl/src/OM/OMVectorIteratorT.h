@@ -166,7 +166,7 @@ bool OMVectorIterator<Element>::operator++()
 {
   TRACE("OMVectorIterator<Element>::operator++()");
 
-  PRECONDITION("Valid iterator", before() || valid());
+  PRECONDITION("Valid iterator", before() || this->valid());
 
   bool result;
   if (_state == OMVectorIteratorBefore) {
@@ -194,9 +194,9 @@ bool OMVectorIterator<Element>::operator++()
   }
   POSTCONDITION("Consistent result", IMPLIES( result, !after()));
   POSTCONDITION("Consistent result", IMPLIES(!result,  after()));
-  POSTCONDITION("Consistent result", IMPLIES( result,  valid()));
-  POSTCONDITION("Consistent result", IMPLIES(!result, !valid()));
-  POSTCONDITION("Valid index", IMPLIES(valid(), _index < _vector->count()));
+  POSTCONDITION("Consistent result", IMPLIES( result,  this->valid()));
+  POSTCONDITION("Consistent result", IMPLIES(!result, !this->valid()));
+  POSTCONDITION("Valid index", IMPLIES(this->valid(), _index < _vector->count()));
   return result;
 }
 
@@ -218,7 +218,7 @@ bool OMVectorIterator<Element>::operator--()
 {
   TRACE("OMVectorIterator<Element>::operator--()");
 
-  PRECONDITION("Valid iterator", after() || valid());
+  PRECONDITION("Valid iterator", after() || this->valid());
 
   bool result;
   if (_state == OMVectorIteratorAfter) {
@@ -246,9 +246,9 @@ bool OMVectorIterator<Element>::operator--()
   }
   POSTCONDITION("Consistent result", IMPLIES( result, !before()));
   POSTCONDITION("Consistent result", IMPLIES(!result,  before()));
-  POSTCONDITION("Consistent result", IMPLIES( result,  valid()));
-  POSTCONDITION("Consistent result", IMPLIES(!result, !valid()));
-  POSTCONDITION("Valid index", IMPLIES(valid(), _index < _vector->count()));
+  POSTCONDITION("Consistent result", IMPLIES( result,  this->valid()));
+  POSTCONDITION("Consistent result", IMPLIES(!result, !this->valid()));
+  POSTCONDITION("Valid index", IMPLIES(this->valid(), _index < _vector->count()));
   return result;
 }
 
@@ -263,7 +263,7 @@ Element& OMVectorIterator<Element>::value(void) const
 {
   TRACE("OMVectorIterator<Element>::value");
 
-  PRECONDITION("Valid iterator", valid());
+  PRECONDITION("Valid iterator", this->valid());
 
   return _vector->getAt(_index);
 }
@@ -280,7 +280,7 @@ Element OMVectorIterator<Element>::setValue(Element newElement)
 {
   TRACE("OMVectorIterator<Element>::setValue");
 
-  PRECONDITION("Valid iterator", valid());
+  PRECONDITION("Valid iterator", this->valid());
 
   OMVector<Element>* vector = const_cast<OMVector<Element>*>(_vector);
 
@@ -301,7 +301,7 @@ size_t OMVectorIterator<Element>::index(void) const
 {
   TRACE("OMVectorIterator<Element>::index");
 
-  PRECONDITION("Valid iterator", valid());
+  PRECONDITION("Valid iterator", this->valid());
 
   size_t result = _index;
 
