@@ -12,7 +12,7 @@
 
 PTFM_SUFX = ix
 OBJ = o${PTFM_SUFX}
-LIB = a${PTFM_SUFX}
+AAF_LIB = a${PTFM_SUFX}
 EXE = x${PTFM_SUFX}
 CC = CC
 LD = CC
