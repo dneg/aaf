@@ -302,11 +302,11 @@ if [ $BUMP_BUILD_NUMBER -eq 1 ]; then
 
     # Commit the modified file, and tag the tree.
     echo cvs commit -m \
-     \"$0 script automated edit. Changed build number from ${HEADER_BUILD_NUMBER} to ${NEXT_HEADER_BUILD_NUMBER}.\" \
+     \"`basename $0` script automated edit. Changed build number from ${HEADER_BUILD_NUMBER} to ${NEXT_HEADER_BUILD_NUMBER}.\" \
      $AAFSDKBUILD_H
 
     cvs commit -m \
-     "$0 script automated edit. Changed build number from ${HEADER_BUILD_NUMBER} to ${NEXT_HEADER_BUILD_NUMBER}." \
+     "`basename $0` script automated edit. Changed build number from ${HEADER_BUILD_NUMBER} to ${NEXT_HEADER_BUILD_NUMBER}." \
      $AAFSDKBUILD_H
 
     CVSSTATUS=$?
