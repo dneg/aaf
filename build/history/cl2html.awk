@@ -42,9 +42,9 @@ BEGIN {
       comments = comments ":" fields[i]
     }
 
-    printf("<!--[dir      = \"%s\"]-->\n", dir);
-    printf("<!--[files    = \"%s\"]-->\n", files);
-    printf("<!--[comments = \"%s\"]-->\n", comments);
+#    printf("<!--[dir      = \"%s\"]-->\n", dir);
+#    printf("<!--[files    = \"%s\"]-->\n", files);
+#    printf("<!--[comments = \"%s\"]-->\n", comments);
     /* Print previous table row */
     printRow(date, name, files, comments, color);
   }
