@@ -42,16 +42,11 @@
 
 
 
-#include "CAAFNestedScope.h"
-#include "CAAFNestedScope.h"
-#ifndef __CAAFNestedScope_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFNestedScope::test()
+extern "C" HRESULT CAAFNestedScope_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
