@@ -340,6 +340,18 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
+ImplAAFHeader::GetNumIdents
+(aafUInt32 *  pNumIdents)
+{
+    if (! pNumIdents)
+	  {
+		return AAFRESULT_NULL_PARAM;
+	  }
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::EnumAAFIdents (ImplEnumAAFIdentifications ** ppEnum)
 {
   if (! ppEnum)
