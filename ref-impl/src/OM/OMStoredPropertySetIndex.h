@@ -32,8 +32,6 @@
   //        stored property set.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMStoredPropertySetIndex {
-private:
-  struct IndexEntry;
 public:
   // @access Public members.
 
@@ -74,11 +72,11 @@ public:
     // @cmember Is this <c OMStoredPropertySetIndex> valid ?
   bool isValid(OMPropertyOffset baseOffset) const;
 
-protected:
+private:
+
+  struct IndexEntry;
 
   OMStoredPropertySetIndex::IndexEntry* find(OMPropertyId propertyId) const;
-
-private:
 
   struct IndexEntry {
     OMPropertyId _propertyId;

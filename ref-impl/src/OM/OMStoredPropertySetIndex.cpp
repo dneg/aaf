@@ -69,7 +69,7 @@ void OMStoredPropertySetIndex::insert(OMPropertyId propertyId,
 
   ASSERT("Space for new entry", _entries < _capacity);
   _entries++;
-  IndexEntry* entry = &_table[_entries - 1];
+  OMStoredPropertySetIndex::IndexEntry* entry = &_table[_entries - 1];
 
   entry->_propertyId = propertyId;
   entry->_storedForm = storedForm;
