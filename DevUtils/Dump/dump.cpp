@@ -206,6 +206,32 @@ const CLSID CLSID_AAFHeader =
     0x0000, 0x0000,
   { 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04 } };
 
+// The signature for structured storage binary AAF files. This includes
+// the structured storage file signature.
+//
+unsigned char aafSSBinaryFileSignature[] = {
+  0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1,
+  0x41, 0x41, 0x46, 0x0d, 0x4f, 0x4f, 0x4d, 0x4d,
+  0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff
+};
+
+// Table of valid signatures. Signatures are found at the beginning of
+// the file and are variable in size. There are multiple signatures
+// since there are multiple external representations (or "types") of
+// AAF file. e.g. "structured storage binary" and "XML text".
+//
+struct format {
+  unsigned char* signature;
+  size_t signatureSize;
+  // Could add the offset of the signature here
+  const char* formatName; // For now this is a string, this could be a GUID
+} formatTable[1] = {{aafSSBinaryFileSignature,
+                     sizeof(aafSSBinaryFileSignature),
+                     "SSBINARY"}};
+
+static size_t signatureSize(void);
+static size_t maxSignatureSize = signatureSize();
+
 // End of stuff that should be in a shared header
 
 // A note on file format versions.
@@ -404,7 +430,14 @@ static void openStorage(char* fileName, IStorage** storage);
 static void dumpFileHex(char* fileName);
 static void dumpFile(char* fileName);
 static void dumpFileProperties(char* fileName);
-static bool isAnAAFFile(const char* fileName);
+static FILE* wfopen(const wchar_t* fileName, const wchar_t* mode);
+static bool readSignature(const wchar_t* fileName,
+                          unsigned char* signature,
+                          size_t signatureSize);
+static bool isRecognizedSignature(unsigned char* signature,
+                                  size_t signatureSize,
+                                  const char** format);
+static bool isAnAAFFile(const wchar_t* fileName);
 static void usage(void);
 
 static void printInteger(const size_t value, char* label);
@@ -2384,40 +2417,108 @@ void dumpFileProperties(char* fileName)
 
 }
 
-static bool isAnAAFFile(const char* fileName)
+// Just like fopen() except for wchar_t* file names.
+//
+FILE* wfopen(const wchar_t* fileName, const wchar_t* mode)
+{
+  FILE* result = 0;
+#if defined(_WIN32) || defined(WIN32)
+  result = _wfopen(fileName, mode);
+#else
+  char cFileName[FILENAME_MAX];
+  size_t status = wcstombs(cFileName, fileName, FILENAME_MAX);
+  ASSERT("Convert succeeded", status != (size_t)-1);
+
+  char cMode[FILENAME_MAX];
+  status = wcstombs(cMode, mode, FILENAME_MAX);
+  ASSERT("Convert succeeded", status != (size_t)-1);
+
+  result = fopen(cFileName, cMode);
+#endif
+  return result;
+}
+
+// Read the file signature. Assumes that no valid file may be shorter
+// than the longest signature.
+//
+bool readSignature(const wchar_t* fileName,
+                   unsigned char* signature,
+                   size_t signatureSize)
 {
   bool result = false;
-  IStorage* storage = 0;
-  STATSTG statstg;
-  HRESULT status;
-  OMCHAR wcFileName[256];
+  unsigned char* sig = new unsigned char[signatureSize];
 
-  convert(wcFileName, 256, fileName);
-
-  status = StgOpenStorage(
-    wcFileName,
-    NULL,
-    STGM_READ | STGM_SHARE_DENY_WRITE,
-    NULL,
-    0,
-    &storage);
-
-  if (!check(fileName, status)) {
-    result = false;
-  } else {
-    status = storage->Stat(&statstg, STATFLAG_NONAME);
-    if (!check(fileName, status)) {
-      result = false;
+  FILE* f = wfopen(fileName, L"rb");
+  if (f != 0) {
+    size_t status = fread(sig, signatureSize, 1, f);
+    if (status == 1) {
+      memcpy(signature, sig, signatureSize);
+      result = true;
     } else {
-      if (IsEqualCLSID(statstg.clsid, OldCLSID_AAFHeader)) {
+      result = false;
+    }
+    fclose(f);
+  } else {
+    result = false;
+  }
+
+  delete [] sig;
+  return result;
+}
+
+// The number of bytes to read to be sure of getting the signature.
+//
+size_t signatureSize(void)
+{
+  size_t result = 0;
+  for (size_t i = 0; i < sizeof(formatTable)/sizeof(formatTable[0]); i++) {
+    if (formatTable[i].signatureSize > result) {
+      result = formatTable[i].signatureSize;
+    }
+  }
+  return result;
+}
+
+// Try to recognize a file signature. Assumes that no signature is a
+// prefix of any other signature.
+//
+bool isRecognizedSignature(unsigned char* signature,
+                           size_t signatureSize,
+                           const char** formatName)
+{
+  bool result = false;
+
+  for (size_t i = 0; i < sizeof(formatTable)/sizeof(formatTable[0]); i++) {
+    if (formatTable[i].signatureSize <= signatureSize) {
+      if (memcmp(formatTable[i].signature,
+                 signature,
+                 formatTable[i].signatureSize) == 0) {
         result = true;
-      } else if (IsEqualCLSID(statstg.clsid, CLSID_AAFHeader)) {
-        result = true;
-      } else {
-        result = false;
+        *formatName = formatTable[i].formatName;
+        break;
       }
     }
   }
+  return result;
+}
+
+// Does the given file purport to be an AAF file ?
+//
+static bool isAnAAFFile(const wchar_t* fileName)
+{
+  bool result = false;
+  unsigned char* signature = new unsigned char[maxSignatureSize];
+  if (readSignature(fileName, signature, maxSignatureSize)) {
+    const char* formatName = 0;
+    if (isRecognizedSignature(signature, maxSignatureSize, &formatName)) {
+      result = true;
+    } else {
+      result = false;
+    }
+  } else {
+    result = false;
+  }
+  delete [] signature;
   return result;
 }
 
@@ -2837,7 +2938,10 @@ int main(int argumentCount, char* argumentVector[])
   case aaf:
     for (i = flagCount + 1; i < argumentCount; i++) {
       cout << "AAF property dump." << endl;
-      if (isAnAAFFile(argumentVector[i])) {
+      wchar_t wcFileName[FILENAME_MAX];
+      size_t status = mbstowcs(wcFileName, argumentVector[i], FILENAME_MAX);
+      ASSERT("Convert succeeded", status != (size_t)-1);
+      if (isAnAAFFile(wcFileName)) {
         dumpFileProperties(argumentVector[i]);
       } else {
         cerr << programName
