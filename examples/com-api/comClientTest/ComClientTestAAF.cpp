@@ -430,7 +430,7 @@ static void CreateAAFFile(aafWChar * pFileName)
   IAAFDictionary *pDictionary = NULL;
   aafProductIdentification_t  ProductInfo;
   aafMobID_t          newMobID;
-  
+ 
   // delete any previous test file before continuing...
   char chFileName[1000];
   convert(chFileName, sizeof(chFileName), pFileName);
@@ -474,6 +474,7 @@ static void CreateAAFFile(aafWChar * pFileName)
   aafRational_t  audioRate = { 44100, 1 };
   IAAFLocator    *pLocator = NULL;
 	IAAFComponent*		pComponent = NULL;
+	IAAFAIFCDescriptor*			pAIFCDesc = NULL;
 
   for(test = 0; test < 5; test++)
   {
@@ -488,11 +489,15 @@ static void CreateAAFFile(aafWChar * pFileName)
     check(pMob->SetName(names[test]));
 
 	// Create a concrete subclass of FileDescriptor
-    check(defs.cdHTMLDescriptor()->
+    check(defs.cdAIFCDescriptor()->
 		  CreateInstance(IID_IAAFFileDescriptor, 
 						 (IUnknown **)&fileDesc));
     check(fileDesc->SetSampleRate(audioRate));
     check(fileDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&essenceDesc));
+	check(fileDesc->QueryInterface (IID_IAAFAIFCDescriptor, (void **)&pAIFCDesc));
+	check(pAIFCDesc->SetSummary (5, (unsigned char*)"TEST"));
+	pAIFCDesc->Release();
+	pAIFCDesc = NULL;
 
     {
       HRESULT stat;
