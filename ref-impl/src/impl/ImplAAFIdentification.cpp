@@ -20,6 +20,7 @@
 #include "AAFTypes.h"
 #include "AAFResult.h"
 
+#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
@@ -110,9 +111,7 @@ _platform(            PID_Identification_Platform,             "Platform")
 };
 
 
-extern "C" const aafClassID_t CLSID_AAFIdentification;
-
-OMDEFINE_STORABLE(ImplAAFIdentification, CLSID_AAFIdentification);
+OMDEFINE_STORABLE(ImplAAFIdentification, AUID_AAFIdentification);
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -121,18 +120,6 @@ ImplAAFIdentification::Initialize ()
   return AAFRESULT_SUCCESS;
 }
 
-
-// Cheat!  We're using this object's CLSID instead of object class...
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFIdentification::GetObjectClass(aafUID_t * pClass)
-{
-  if (! pClass)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  memcpy (pClass, &CLSID_AAFIdentification, sizeof (aafClassID_t));
-  return AAFRESULT_SUCCESS;
-}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetCompanyName (aafWChar *  pName,
