@@ -501,8 +501,7 @@ void OMFile::saveFile(void* clientOnSaveContext)
   _clientOnSaveContext = clientOnSaveContext;
 
   if (_mode == modifyMode) {
-    _root->save();
-    _rootStore->save(referencedProperties());
+    _rootStore->save(*this);
   }
 }
 
