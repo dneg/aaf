@@ -517,6 +517,26 @@ OMWeakReferenceProperty<ReferencedObject>::clearTargetTag(void) const
 }
 
 template <typename ReferencedObject>
+bool OMWeakReferenceProperty<ReferencedObject>::isResolved(void) const
+{
+  TRACE("OMWeakReferenceProperty<ReferencedObject>::isResolved");
+
+  ASSERT("Unimplemented code not reached", false);
+  bool result = false;
+  return result;
+}
+
+template <typename ReferencedObject>
+bool OMWeakReferenceProperty<ReferencedObject>::isResolvable(void) const
+{
+  TRACE("OMWeakReferenceProperty<ReferencedObject>::isResolvable");
+
+  ASSERT("Unimplemented code not reached", false);
+  bool result = false;
+  return result;
+}
+
+template <typename ReferencedObject>
 void OMWeakReferenceProperty<ReferencedObject>::shallowCopyTo(
                                                  OMProperty* destination) const
 {

@@ -270,6 +270,10 @@ public:
 
   virtual void clearTargetTag(void) const;
 
+  virtual bool isResolved(size_t index) const;
+
+  virtual bool isResolvable(size_t index) const;
+
   // Copying.
 
   virtual void shallowCopyTo(OMProperty* destination) const;

@@ -868,6 +868,30 @@ OMWeakReferenceSetProperty<ReferencedObject>::clearTargetTag(void) const
 }
 
 template <typename ReferencedObject>
+bool
+OMWeakReferenceSetProperty<ReferencedObject>::isResolved(
+                const OMUniqueObjectIdentification& /* identification */) const
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::isResolved");
+
+  ASSERT("Unimplemented code not reached", false);
+  bool result = false;
+  return result;
+}
+
+template <typename ReferencedObject>
+bool
+OMWeakReferenceSetProperty<ReferencedObject>::isResolvable(
+                const OMUniqueObjectIdentification& /* identification */) const
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::isResolvable");
+
+  ASSERT("Unimplemented code not reached", false);
+  bool result = false;
+  return result;
+}
+
+template <typename ReferencedObject>
 void OMWeakReferenceSetProperty<ReferencedObject>::shallowCopyTo(
                                                  OMProperty* destination) const
 {

@@ -218,6 +218,12 @@ public:
 
   virtual void clearTargetTag(void) const;
 
+  virtual bool isResolved(
+                     const OMUniqueObjectIdentification& identification) const;
+
+  virtual bool isResolvable(
+                     const OMUniqueObjectIdentification& identification) const;
+
   // Copying.
 
   virtual void shallowCopyTo(OMProperty* destination) const;
