@@ -39,6 +39,7 @@ PROGS=classDefUid$(EXE) \
 
 # main build target
 all : $(PROGS) \
+        $(GEN_H_DIR) \
         $(GEN_H_DIR)/AAFClassDefUIDs.h \
         $(GEN_H_DIR)/AAFExtEnum.h \
         $(GEN_H_DIR)/AAFPropertyDefs.h \
@@ -94,6 +95,9 @@ typeDefUid$(OBJ) : typeDefUid.cpp headerGenUtils.h \
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
 # targets for generated source files
+$(GEN_H_DIR) :
+	mkdir $(GEN_H_DIR)
+
 $(GEN_H_DIR)/AAFClassDefUIDs.h : classDefUid$(EXE)
 	./classDefUid AAFClassDefUIDs > $(GEN_H_DIR)/AAFClassDefUIDs.h
 
