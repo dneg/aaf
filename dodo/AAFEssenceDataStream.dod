@@ -1,19 +1,18 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                        	                    *
+#c* Advanced Authoring Format                       *
+#c*                        	                    *
+#c* Copyright (c) 1998-2000 Avid Technology, Inc.   *
+#c*                        	                    *
 #c\*************************************************/
 #startm .this-module 0
 AAFEssenceDataStream\
 #endm
 #c
 #startm .parent-module 0
-AAFDefaultStream\
+AAFRoot\
 #endm
 #c
-#c #import ./AAFObject.exp
 AD_HEAD
 
 AD_IDL(//
