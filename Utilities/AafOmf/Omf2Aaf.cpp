@@ -46,7 +46,7 @@ namespace OMF2
 
 
 #include "AAFTypes.h"
-#include "aafcodecdefs.h"
+#include "AAFCodecDefs.h"
 
 #include "CAAFBuiltinDefs.h"
 
@@ -71,7 +71,7 @@ namespace OMF2
 #include "AAFDomainExtensions.h"
 #include "OMFDomainExtensionUtils.h"
 #endif
-#include "omf2aaf.h"
+#include "Omf2Aaf.h"
 #include "EffectTranslate.h"
 #include "AAFDomainUtils.h"
 #include "AAFException.h"
