@@ -305,12 +305,10 @@ void OMDataStreamProperty::readTypedElements(const OMType* elementType,
     // Internalize an element of the property value
     size_t requiredBytesSize = elementType->internalSize(buffer,
                                                          externalElementSize);
-    ASSERT("Internal element size equals external element size",
-                                     requiredBytesSize == externalElementSize);
 
     elementType->internalize(buffer,
                              externalElementSize,
-                             &elements[i * externalElementSize],
+                             &elements[i * requiredBytesSize],
                              requiredBytesSize,
                              hostByteOrder());
   }
@@ -321,17 +319,17 @@ void OMDataStreamProperty::readTypedElements(const OMType* elementType,
 
   // @mfunc Attempt to write the number of elements given by
   //        <p elementCount> and described by <p elementType> and
-  //        <p externalElementSize> to the data stream from the buffer
+  //        <p internalElementSize> to the data stream from the buffer
   //        at address <p elements>. The actual number of elements written
   //        is returned in <p elementsWritten>.
   //   @parm The element type
-  //   @parm The external element size 
+  //   @parm The internal element size 
   //   @parm The address of the buffer from which the elements should
   //         be written.
   //   @parm The number of elements to write.
   //   @parm The actual number of elements that were written.
 void OMDataStreamProperty::writeTypedElements(const OMType* elementType,
-                                              size_t externalElementSize,
+                                              size_t internalElementSize,
                                               const OMByte* elements,
                                               OMUInt32 elementCount,
                                               OMUInt32& elementsWritten)
@@ -339,7 +337,7 @@ void OMDataStreamProperty::writeTypedElements(const OMType* elementType,
   TRACE("OMDataStreamProperty::writeTypedElements");
 
   PRECONDITION("Valid element type", elementType != 0);
-  PRECONDITION("Valid element size", externalElementSize!= 0);
+  PRECONDITION("Valid element size", internalElementSize!= 0);
   PRECONDITION("Valid buffer", elements != 0);
   PRECONDITION("Valid element count", elementCount > 0);
   PRECONDITION("Stream byte order is known", hasByteOrder());
@@ -352,17 +350,16 @@ void OMDataStreamProperty::writeTypedElements(const OMType* elementType,
   // Allocate buffer for one element
   size_t externalBytesSize = elementType->externalSize(
                                                  const_cast<OMByte*>(elements),
-                                                 externalElementSize);
-  ASSERT("Internal element size equals external element size",
-                                     externalBytesSize == externalElementSize);
+                                                 internalElementSize);
+
   OMByte* buffer = new OMByte[externalBytesSize];
 
   for (size_t i = 0; i < elementCount; i++) {
  
     // Externalize an element of the property value
     elementType->externalize(
-                       const_cast<OMByte*>(&elements[i * externalElementSize]),
-                       externalElementSize,
+                       const_cast<OMByte*>(&elements[i * internalElementSize]),
+                       internalElementSize,
                        buffer,
                        externalBytesSize,
                        hostByteOrder());
