@@ -35,8 +35,11 @@
 #include "AAF.h"
 #else
 #include "AAF.h"
+
 // TODO: This should not be here, I added them for now to get a good link.
-const CLSID CLSID_AAFSession = { 0xF0C10891, 0x3073, 0x11d2, { 0x80, 0x4A, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+// const CLSID CLSID_AAFSession = { 0xF0C10891, 0x3073, 0x11d2, { 0x80, 0x4A, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+const CLSID CLSID_AAFFile = { 0x9346ACD2, 0x2713, 0x11d2, { 0x80, 0x35, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+
 #endif
 
 static void     FatalErrorCode(HRESULT errcode, int line, char *file)
@@ -144,13 +147,21 @@ static void printIdentification(IAAFIdentification* pIdent)
 static void ReadAAFFile(aafWChar * pFileName)
 {
   HRESULT hr = S_OK;
-  IAAFSession * pSession = NULL;
-	  
+  // IAAFSession * pSession = NULL;
+  IAAFFile * pFile = NULL;
+
+  /*
   hr = CoCreateInstance(CLSID_AAFSession,
                         NULL, 
                         CLSCTX_INPROC_SERVER, 
                         IID_IAAFSession, 
                         (void **)&pSession);
+  */
+  hr = CoCreateInstance(CLSID_AAFFile,
+                        NULL, 
+                        CLSCTX_INPROC_SERVER, 
+                        IID_IAAFFile, 
+                        (void **)&pFile);
   check(hr); // display error message
   if (SUCCEEDED(hr))
   {
@@ -168,13 +179,16 @@ static void ReadAAFFile(aafWChar * pFileName)
     ProductInfo.productID = -1;
     ProductInfo.platform = NULL;
 
-    hr = pSession->SetDefaultIdentification(&ProductInfo);
-    check(hr); // display error message
+    // hr = pSession->SetDefaultIdentification(&ProductInfo);
+    // check(hr); // display error message
     if (SUCCEEDED(hr))
     {
-      IAAFFile * pFile = NULL;
+      // IAAFFile * pFile = NULL;
       
-      hr = pSession->OpenReadFile(pFileName, &pFile);
+      // hr = pSession->OpenReadFile(pFileName, &pFile);
+      hr = pFile->Initialize();
+      check(hr); // display error message
+      hr = pFile->OpenExistingRead(pFileName, 0);
       check(hr); // display error message
       if (SUCCEEDED(hr))
       {
@@ -208,10 +222,10 @@ static void ReadAAFFile(aafWChar * pFileName)
       }
     }
 
-    pSession->EndSession(); // obsolete!
+    // pSession->EndSession(); // obsolete!
 
-    pSession->Release();
-    pSession = NULL;
+    // pSession->Release();
+    // pSession = NULL;
   }
 }
 
