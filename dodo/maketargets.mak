@@ -37,10 +37,12 @@ TEST_DIR = ../test/com/ComModTestAAF/ModuleTests
 
 targets: $(DODO_TARGETS)
 targets: $(PLUGIN_TARGETS)
+targets: $(INCLUDE_DIR)/com-api/AAFPrivate.idl
 targets: $(INCLUDE_DIR)/com-api/AAF.idl
 targets: $(PLUGIN_DIR)/AAFPlugin.idl
+targets: $(INCLUDE_DIR)/ref-api/AAFPrivate.h
 targets: $(INCLUDE_DIR)/ref-api/AAF.h
-targets: $(UUID_DIR)/AAFRoot_i.c
+targets: $(UUID_DIR)/AAFPrivate_i.c
 targets: $(UUID_DIR)/AAF_i.c
 targets: $(INCLUDE_DIR)/ref-api/AAFPlugin.h
 targets: $(UUID_DIR)/AAFPlugin_i.c
@@ -50,6 +52,17 @@ targets: $(COMAPI_DIR)/AAFObjectTable.h
 targets: $(COMAPI_DIR)/AAFObjectTable_i.cpp
 targets: $(COMAPI_DIR)/CAAFEnumValidation.h
 targets: $(COMAPI_DIR)/CAAFEnumValidation.cpp
+
+
+$(INCLUDE_DIR)/com-api/AAFPrivate.idl : $(PRIVATE_FIDL_TARGETS)
+	@ $(ECHO) Generating AAFPrivate.idl...
+	$(RM) -f $(INCLUDE_DIR)/com-api/AAFPrivate.idl
+	$(CP)  aafobjects.mk tmp.sh
+	$(CHMOD) a+w tmp.sh
+	$(CAT) GenAAFPrivateIdl.sh >> tmp.sh
+	$(SH) tmp.sh > $(INCLUDE_DIR)/com-api/AAFPrivate.idl
+	$(RM) tmp.sh
+	$(CHMOD) -w $(INCLUDE_DIR)/com-api/AAFPrivate.idl
 
 
 $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
@@ -72,6 +85,17 @@ $(PLUGIN_DIR)/AAFPlugin.idl : $(PLUGIN_FIDL_TARGETS)
 	$(SH) tmp.sh > $(PLUGIN_DIR)/AAFPlugin.idl
 	$(RM) tmp.sh
 	$(CHMOD) -w $(PLUGIN_DIR)/AAFPlugin.idl
+
+
+$(INCLUDE_DIR)/ref-api/AAFPrivate.h : $(PRIVATE_FREFH_TARGETS)
+	@ $(ECHO) Generating reference AAFPrivate.h...
+	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFPrivate.h
+	$(CP)  aafobjects.mk tmp.sh
+	$(CHMOD) a+w tmp.sh
+	$(CAT) GenAafPrivateh.sh >> tmp.sh
+	$(SH) tmp.sh > $(INCLUDE_DIR)/ref-api/AAFPrivate.h
+	$(RM) tmp.sh
+	$(CHMOD) -w $(INCLUDE_DIR)/ref-api/AAFPrivate.h
 
 
 $(INCLUDE_DIR)/ref-api/AAF.h : $(FREFH_TARGETS)
@@ -118,15 +142,15 @@ $(UUID_DIR)/AAFPlugin_i.c : aafobjects.mk dod2iid.awk
 	$(CHMOD) -w $(UUID_DIR)/AAFPlugin_i.c
 
 
-$(UUID_DIR)/AAFRoot_i.c : aafobjects.mk dod2iid.awk
-	@ $(ECHO) Generating reference AAFRoot_i.c...
-	$(RM) -f $(UUID_DIR)/AAFRoot_i.c
+$(UUID_DIR)/AAFPrivate_i.c : aafobjects.mk dod2iid.awk
+	@ $(ECHO) Generating reference AAFPrivate_i.c...
+	$(RM) -f $(UUID_DIR)/AAFPrivate_i.c
 	$(CP)  aafobjects.mk tmp.sh
 	$(CHMOD) a+w tmp.sh
-	$(CAT) GenRoot_i.sh >> tmp.sh
-	$(SH) tmp.sh > $(UUID_DIR)/AAFRoot_i.c
+	$(CAT) GenAafPrivate_i.sh >> tmp.sh
+	$(SH) tmp.sh > $(UUID_DIR)/AAFPrivate_i.c
 	$(RM) tmp.sh
-	$(CHMOD) -w $(UUID_DIR)/AAFRoot_i.c
+	$(CHMOD) -w $(UUID_DIR)/AAFPrivate_i.c
 
 
 $(IMPL_DIR)/AAFClassIDs.h : aafobjects.mk
@@ -301,20 +325,22 @@ clean:
 	$(RM) -f core
 #	$(RM) -f $(TEST_DIR)/CAAF*Test.cpp
 #	$(RM) -f $(TEST_DIR)/CEnumAAF*Test.cpp
+	$(RM) -f $(INCLUDE_DIR)/com-api/AAFPrivate.h
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAF.h
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFTypes.h
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFPluginTypes.h
+	$(RM) -f $(INCLUDE_DIR)/com-api/AAFPrivate.idl
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAF.idl
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFTypes.idl
-	$(RM) -f $(INCLUDE_DIR)/com-api/AAFRoot.idl
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFPluginTypes.idl
+	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFPrivate.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAF.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFTypes.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFRoot.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFPluginTypes.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFPlugin.h
 	$(RM) -f $(IMPL_DIR)/AAFClassIDs.h
-	$(RM) -f $(UUID_DIR)/AAFRoot_i.c
+	$(RM) -f $(UUID_DIR)/AAFPrivate_i.c
 	$(RM) -f $(UUID_DIR)/AAF_i.c
 	$(RM) -f $(UUID_DIR)/AAFPlugin_i.c
 	$(RM) -f $(COMAPI_DIR)/AAFCLSIDs.h
