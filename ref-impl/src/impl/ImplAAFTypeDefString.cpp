@@ -15,6 +15,10 @@
 #include "ImplAAFTypeDefString.h"
 #endif
 
+#ifndef __ImplAAFHeader_h_
+#include "ImplAAFHeader.h"
+#endif
+
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
@@ -53,7 +57,11 @@ AAFRESULT STDMETHODCALLTYPE
   hr = SetAUID (pID);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  _ElementType = pTypeDef;
+  aafUID_t id;
+  assert (pTypeDef);
+  hr = pTypeDef->GetAUID(&id);
+  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+  _ElementType = id;
 
   return AAFRESULT_SUCCESS;
 }
@@ -65,10 +73,39 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDef ** ppTypeDef)
 {
   if (! ppTypeDef) return AAFRESULT_NULL_PARAM;
-  *ppTypeDef = _ElementType;
-  (*ppTypeDef)->AcquireReference ();
 
-  return AAFRESULT_SUCCESS;
+  ImplAAFHeader * pHead = NULL;
+  ImplAAFDictionary * pDict = NULL;
+  AAFRESULT rReturned = AAFRESULT_SUCCESS;
+  try
+	{
+	  AAFRESULT hr;
+	  hr = MyHeadObject(&pHead);
+	  if (AAFRESULT_FAILED(hr))
+		throw hr;
+	  assert (pHead);
+	  hr = (pHead->GetDictionary(&pDict));
+	  if (AAFRESULT_FAILED(hr))
+		throw hr;
+	  assert (pDict);
+
+	  ImplAAFTypeDef * ptd = NULL;
+	  aafUID_t id = _ElementType;
+	  hr = pDict->LookupType (&id, &ptd);
+	  if (AAFRESULT_FAILED(hr))
+		throw hr;
+
+	  *ppTypeDef = ptd;
+	  (*ppTypeDef)->AcquireReference ();
+	}
+  catch (AAFRESULT &rCaught)
+	{
+	  rReturned = rCaught;
+	}
+  RELEASE_IF_SET (pHead);
+  RELEASE_IF_SET (pDict);
+
+  return rReturned;
 }
 
 
