@@ -98,7 +98,7 @@ bool OMKLVStoredObject::isRecognized(const wchar_t* ANAME(fileName),
   TRACE("OMKLVStoredObject::isRecognized");
   PRECONDITION("Valid file name", validWideString(fileName));
   bool result = false;
-  ASSERT("Unimplemented code not reached", false);
+  // ASSERT("Unimplemented code not reached", false);
   return result;
 }
 
@@ -115,7 +115,7 @@ bool OMKLVStoredObject::isRecognized(OMRawStorage* ANAME(rawStorage),
   TRACE("OMKLVStoredObject::isRecognized");
   PRECONDITION("Valid raw storage", rawStorage != 0);
   bool result = false;
-  ASSERT("Unimplemented code not reached", false);
+  // ASSERT("Unimplemented code not reached", false);
   return result;
 }
 

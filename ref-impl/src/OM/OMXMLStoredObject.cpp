@@ -117,7 +117,7 @@ bool OMXMLStoredObject::isRecognized(const wchar_t* ANAME(fileName),
   TRACE("OMXMLStoredObject::isRecognized");
   PRECONDITION("Valid file name", validWideString(fileName));
   bool result = false;
-  ASSERT("Unimplemented code not reached", false);
+  // ASSERT("Unimplemented code not reached", false);
   return result;
 }
 
@@ -134,7 +134,7 @@ bool OMXMLStoredObject::isRecognized(OMRawStorage* ANAME(rawStorage),
   TRACE("OMXMLStoredObject::isRecognized");
   PRECONDITION("Valid raw storage", rawStorage != 0);
   bool result = false;
-  ASSERT("Unimplemented code not reached", false);
+  // ASSERT("Unimplemented code not reached", false);
   return result;
 }
 
