@@ -212,9 +212,10 @@ private:
   // @access Private members.
 
     // @cmember Constructor.
-  OMXMLStoredObject(OMRawStorage* s);
+  OMXMLStoredObject(OMRawStorage* s, OMByteOrder byteOrder);
 
   OMRawStorage* _store;
+  OMByteOrder _byteOrder;
 
 };
 

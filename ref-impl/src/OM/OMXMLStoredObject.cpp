@@ -57,12 +57,11 @@ OMXMLStoredObject* OMXMLStoredObject::openModify(
   //   @parm The raw storage in which to create the file.
   //   @parm The desired byte ordering for the new file.
   //   @rdesc An <c OMXMLStoredObject> representing the root object.
-OMXMLStoredObject* OMXMLStoredObject::createModify(
-                                             OMRawStorage* rawStorage,
-                                             const OMByteOrder /* byteOrder */)
+OMXMLStoredObject* OMXMLStoredObject::createModify(OMRawStorage* rawStorage,
+                                                   const OMByteOrder byteOrder)
 {
   TRACE("OMXMLStoredObject::createModify");
-  OMXMLStoredObject* result = new OMXMLStoredObject(rawStorage);
+  OMXMLStoredObject* result = new OMXMLStoredObject(rawStorage, byteOrder);
   ASSERT("Valid heap pointer", result != 0);
   return result;
 }
@@ -372,8 +371,10 @@ OMStoredStream* OMXMLStoredObject::createStoredStream(
 
   // @mfunc Constructor.
   //   @parm The <c OMRawStorage> on which this <c OMXMLStoredObject> resides.
-OMXMLStoredObject::OMXMLStoredObject(OMRawStorage* s)
-: _store(s)
+  //   @parm TBS
+OMXMLStoredObject::OMXMLStoredObject(OMRawStorage* s, OMByteOrder byteOrder)
+: _store(s),
+  _byteOrder(byteOrder)
 {
   TRACE("OMXMLStoredObject::OMXMLStoredObject");
 }

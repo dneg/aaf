@@ -57,12 +57,11 @@ OMKLVStoredObject* OMKLVStoredObject::openModify(
   //   @parm The raw storage in which to create the file.
   //   @parm The desired byte ordering for the new file.
   //   @rdesc An <c OMKLVStoredObject> representing the root object.
-OMKLVStoredObject* OMKLVStoredObject::createModify(
-                                             OMRawStorage* rawStorage,
-                                             const OMByteOrder /* byteOrder */)
+OMKLVStoredObject* OMKLVStoredObject::createModify(OMRawStorage* rawStorage,
+                                                   const OMByteOrder byteOrder)
 {
   TRACE("OMKLVStoredObject::createModify");
-  OMKLVStoredObject* result= new OMKLVStoredObject(rawStorage);
+  OMKLVStoredObject* result= new OMKLVStoredObject(rawStorage, byteOrder);
   ASSERT("Valid heap pointer", result != 0);
   return result;
 }
@@ -372,8 +371,10 @@ OMStoredStream* OMKLVStoredObject::createStoredStream(
 
   // @mfunc Constructor.
   //   @parm The <c OMRawStorage> on which this <c OMKLVStoredObject> resides.
-OMKLVStoredObject::OMKLVStoredObject(OMRawStorage* s)
-: _storage(s)
+  //   @parm TBS
+OMKLVStoredObject::OMKLVStoredObject(OMRawStorage* s, OMByteOrder byteOrder)
+: _storage(s),
+  _byteOrder(byteOrder)
 {
   TRACE("OMKLVStoredObject::OMKLVStoredObject");
 }
