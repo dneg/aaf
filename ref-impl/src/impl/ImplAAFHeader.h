@@ -53,10 +53,7 @@ class AAFDataKind;
 class AAFEffectDef;
 class ImplAAFSession;
 
-const int PID_HEADER_BYTEORDER          = 0;
-const int PID_HEADER_LASTMODIFIED       = 1;
-const int PID_HEADER_IDENTIFICATIONLIST = 2;
-const int PID_HEADER_CONTENTSTORAGE		= 3;
+#include "AAFPropertyIDs.h"
 
 class ImplAAFHeader : public ImplAAFObject
 {
