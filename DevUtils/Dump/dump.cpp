@@ -106,10 +106,12 @@
 #include <objbase.h>
 #elif defined(OM_MACINTOSH_SS)
 #include "wintypes.h"
+#include "macdef.h"
+#include "macpub.h"
 #include "compobj.h"
 #include "storage.h"
-#include <initguid.h>
-#include <coguid.h>
+#include "initguid.h"
+#include "coguid.h"
 #elif defined(OM_REFERENCE_SS)
 #include "h/storage.h"
 #endif
