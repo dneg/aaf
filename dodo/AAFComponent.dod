@@ -35,7 +35,7 @@ AD_FORWARD_DECLARATION(AAFDataDef)
 AD_CLASS_UUID(38e6f8a0, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(38e6f8a1, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Abstract, StoredObject)
 AD_METHOD1(SetLength,
 		   [in],
 		   aafLength_t *,
@@ -144,4 +144,4 @@ AD_XMETHOD1(GetDataDef,
   //
   // AAFRESULT_NULL_PARAM
   //   - pDatadef arg is NULL.)
-AD_CLASS_END
+AD_XCLASS_END(Abstract, StoredObject)
