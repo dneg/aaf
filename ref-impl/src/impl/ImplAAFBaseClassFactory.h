@@ -1,11 +1,13 @@
-#ifndef __ImplAAFClassFactory_h__
-#define __ImplAAFClassFactory_h__ 1
+#ifndef __ImplAAFBaseClassFactory_h__
+#define __ImplAAFBaseClassFactory_h__ 1
 
 //!This file should be merged into other files over time
 
+#include "AAFTypes.h"
 
 // Forward declarations.
-class OMFile;
+class OMFile; // obsolete
+class ImplAAFObject;
 
 
 class ImplAAFBaseClassFactory
@@ -14,8 +16,13 @@ public:
 	ImplAAFBaseClassFactory(void);
 	~ImplAAFBaseClassFactory(void);
 
+
+	// Factory method for making instances of the built-in base classes.
+	ImplAAFObject* createObject(const aafUID_t*	auid) const;
+
+// Obsolete
 	void RegisterPredefinedClasses(OMFile* file);
 };
 
 
-#endif /* __ImplAAFClassFactory_h__	*/
+#endif /* __ImplAAFBaseClassFactory_h__	*/
