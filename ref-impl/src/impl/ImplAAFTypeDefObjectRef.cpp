@@ -100,14 +100,14 @@ void ImplAAFTypeDefObjectRef::reorder(OMByte* /*externalBytes*/,
 }
 
 
-size_t ImplAAFTypeDefObjectRef::externalSize(OMByte* /*internalBytes*/,
+size_t ImplAAFTypeDefObjectRef::externalSize(const OMByte* /*internalBytes*/,
 											 size_t /*internalBytesSize*/) const
 {
   return PropValSize ();
 }
 
 
-void ImplAAFTypeDefObjectRef::externalize(OMByte* internalBytes,
+void ImplAAFTypeDefObjectRef::externalize(const OMByte* internalBytes,
 										  size_t internalBytesSize,
 										  OMByte* externalBytes,
 										  size_t ANAME(externalBytesSize),
@@ -124,14 +124,14 @@ void ImplAAFTypeDefObjectRef::externalize(OMByte* internalBytes,
 }
 
 
-size_t ImplAAFTypeDefObjectRef::internalSize(OMByte* /*externalBytes*/,
+size_t ImplAAFTypeDefObjectRef::internalSize(const OMByte* /*externalBytes*/,
 											 size_t /*externalBytesSize*/) const
 {
   return NativeSize ();
 }
 
 
-void ImplAAFTypeDefObjectRef::internalize(OMByte* externalBytes,
+void ImplAAFTypeDefObjectRef::internalize(const OMByte* externalBytes,
 										  size_t externalBytesSize,
 										  OMByte* internalBytes,
 										  size_t ANAME(internalBytesSize),

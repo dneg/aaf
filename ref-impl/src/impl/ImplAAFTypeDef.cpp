@@ -74,7 +74,7 @@ void ImplAAFTypeDef::reorder(OMByte* /*bytes*/,
 }
 
 
-size_t ImplAAFTypeDef::externalSize(OMByte* /*internalBytes*/,
+size_t ImplAAFTypeDef::externalSize(const OMByte* /*internalBytes*/,
 									size_t /*internalBytesSize*/) const
 {
   // Should be implemented in derived class.
@@ -83,7 +83,7 @@ size_t ImplAAFTypeDef::externalSize(OMByte* /*internalBytes*/,
 }
 
 
-void ImplAAFTypeDef::externalize(OMByte* /*internalBytes*/,
+void ImplAAFTypeDef::externalize(const OMByte* /*internalBytes*/,
 								 size_t /*internalBytesSize*/,
 								 OMByte* /*externalBytes*/,
 								 size_t /*externalBytesSize*/,
@@ -94,7 +94,7 @@ void ImplAAFTypeDef::externalize(OMByte* /*internalBytes*/,
 }
 
 
-size_t ImplAAFTypeDef::internalSize(OMByte* /*externalBytes*/,
+size_t ImplAAFTypeDef::internalSize(const OMByte* /*externalBytes*/,
 									size_t /*externalSize*/) const
 {
   // Should be implemented in derived class.
@@ -103,7 +103,7 @@ size_t ImplAAFTypeDef::internalSize(OMByte* /*externalBytes*/,
 }
 
 
-void ImplAAFTypeDef::internalize(OMByte* /*externalBytes*/,
+void ImplAAFTypeDef::internalize(const OMByte* /*externalBytes*/,
 								 size_t /*externalBytesSize*/,
 								 OMByte* /*internalBytes*/,
 								 size_t /*internalBytesSize*/,

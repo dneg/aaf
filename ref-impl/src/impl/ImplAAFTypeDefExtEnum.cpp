@@ -651,14 +651,14 @@ void ImplAAFTypeDefExtEnum::reorder(OMByte* bytes,
 }
 
 
-size_t ImplAAFTypeDefExtEnum::externalSize(OMByte* internalBytes,
+size_t ImplAAFTypeDefExtEnum::externalSize(const OMByte* internalBytes,
 										   size_t internalBytesSize) const
 {
 	return BaseType()->externalSize (internalBytes, internalBytesSize);
 }
 
 
-void ImplAAFTypeDefExtEnum::externalize(OMByte* internalBytes,
+void ImplAAFTypeDefExtEnum::externalize(const OMByte* internalBytes,
 										size_t internalBytesSize,
 										OMByte* externalBytes,
 										size_t externalBytesSize,
@@ -672,14 +672,14 @@ void ImplAAFTypeDefExtEnum::externalize(OMByte* internalBytes,
 }
 
 
-size_t ImplAAFTypeDefExtEnum::internalSize(OMByte* externalBytes,
+size_t ImplAAFTypeDefExtEnum::internalSize(const OMByte* externalBytes,
 										   size_t externalBytesSize) const
 {
 	return BaseType()->internalSize (externalBytes, externalBytesSize);
 }
 
 
-void ImplAAFTypeDefExtEnum::internalize(OMByte* externalBytes,
+void ImplAAFTypeDefExtEnum::internalize(const OMByte* externalBytes,
 										size_t externalBytesSize,
 										OMByte* internalBytes,
 										size_t internalBytesSize,

@@ -1218,7 +1218,7 @@ void ImplAAFTypeDefIndirect::reorder(OMByte* externalBytes,
   // 
 }
 
-size_t ImplAAFTypeDefIndirect::externalSize(OMByte* internalBytes,
+size_t ImplAAFTypeDefIndirect::externalSize(const OMByte* internalBytes,
                               size_t internalBytesSize) const
 {
   TRACE("ImplAAFTypeDefIndirect::externalSize");
@@ -1246,7 +1246,7 @@ size_t ImplAAFTypeDefIndirect::externalSize(OMByte* internalBytes,
 }
 
 void ImplAAFTypeDefIndirect::externalize(
-  OMByte* internalBytes,
+  const OMByte* internalBytes,
   size_t ANAME(internalBytesSize),
   OMByte* externalBytes,
   size_t externalBytesSize,
@@ -1286,7 +1286,7 @@ void ImplAAFTypeDefIndirect::externalize(
 
 
 size_t ImplAAFTypeDefIndirect::internalSize(
-  OMByte* externalBytes,
+  const OMByte* externalBytes,
   size_t externalSize) const
 {
   TRACE("ImplAAFTypeDefIndirect::internalSize");
@@ -1314,7 +1314,7 @@ size_t ImplAAFTypeDefIndirect::internalSize(
 }
 
 void ImplAAFTypeDefIndirect::internalize(
-  OMByte* externalBytes,
+  const OMByte* externalBytes,
   size_t externalBytesSize,
   OMByte* internalBytes,
   size_t ANAME(internalBytesSize),

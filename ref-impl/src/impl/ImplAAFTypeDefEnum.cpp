@@ -1025,14 +1025,14 @@ void ImplAAFTypeDefEnum::reorder(OMByte* externalBytes,
 }
 
 
-size_t ImplAAFTypeDefEnum::externalSize(OMByte* /*internalBytes*/,
+size_t ImplAAFTypeDefEnum::externalSize(const OMByte* /*internalBytes*/,
 										size_t /*internalBytesSize*/) const
 {
 	return PropValSize ();
 }
 
 
-void ImplAAFTypeDefEnum::externalize(OMByte* internalBytes,
+void ImplAAFTypeDefEnum::externalize(const OMByte* internalBytes,
 									 size_t internalBytesSize,
 									 OMByte* externalBytes,
 									 size_t externalBytesSize,
@@ -1046,7 +1046,7 @@ void ImplAAFTypeDefEnum::externalize(OMByte* internalBytes,
 }
 
 
-size_t ImplAAFTypeDefEnum::internalSize(OMByte* /*externalBytes*/,
+size_t ImplAAFTypeDefEnum::internalSize(const OMByte* /*externalBytes*/,
 										size_t /*externalBytesSize*/) const
 {
 	if (IsRegistered ())
@@ -1056,7 +1056,7 @@ size_t ImplAAFTypeDefEnum::internalSize(OMByte* /*externalBytes*/,
 }
 
 
-void ImplAAFTypeDefEnum::internalize(OMByte* externalBytes,
+void ImplAAFTypeDefEnum::internalize(const OMByte* externalBytes,
 									 size_t externalBytesSize,
 									 OMByte* internalBytes,
 									 size_t internalBytesSize,

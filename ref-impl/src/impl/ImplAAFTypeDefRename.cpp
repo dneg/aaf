@@ -217,14 +217,14 @@ void ImplAAFTypeDefRename::reorder(OMByte* externalBytes,
 }
 
 
-size_t ImplAAFTypeDefRename::externalSize(OMByte* internalBytes,
+size_t ImplAAFTypeDefRename::externalSize(const OMByte* internalBytes,
 										  size_t internalBytesSize) const
 {
   return BaseType()->externalSize (internalBytes, internalBytesSize);
 }
 
 
-void ImplAAFTypeDefRename::externalize(OMByte* internalBytes,
+void ImplAAFTypeDefRename::externalize(const OMByte* internalBytes,
 									   size_t internalBytesSize,
 									   OMByte* externalBytes,
 									   size_t externalBytesSize,
@@ -238,14 +238,14 @@ void ImplAAFTypeDefRename::externalize(OMByte* internalBytes,
 }
 
 
-size_t ImplAAFTypeDefRename::internalSize(OMByte* externalBytes,
+size_t ImplAAFTypeDefRename::internalSize(const OMByte* externalBytes,
 										  size_t externalBytesSize) const
 {
   return BaseType()->internalSize (externalBytes, externalBytesSize);
 }
 
 
-void ImplAAFTypeDefRename::internalize(OMByte* externalBytes,
+void ImplAAFTypeDefRename::internalize(const OMByte* externalBytes,
 									   size_t externalBytesSize,
 									   OMByte* internalBytes,
 									   size_t internalBytesSize,

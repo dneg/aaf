@@ -535,7 +535,7 @@ void ImplAAFTypeDefInt::reorder(OMByte* bytes,
 }
 
 
-size_t ImplAAFTypeDefInt::externalSize(OMByte* /*internalBytes*/,
+size_t ImplAAFTypeDefInt::externalSize(const OMByte* /*internalBytes*/,
 									   size_t /*internalBytesSize*/) const
 {
   assert (IsFixedSize());
@@ -543,7 +543,7 @@ size_t ImplAAFTypeDefInt::externalSize(OMByte* /*internalBytes*/,
 }
 
 
-void ImplAAFTypeDefInt::externalize(OMByte* internalBytes,
+void ImplAAFTypeDefInt::externalize(const OMByte* internalBytes,
 									size_t internalBytesSize,
 									OMByte* externalBytes,
 									size_t externalBytesSize,
@@ -585,14 +585,14 @@ void ImplAAFTypeDefInt::externalize(OMByte* internalBytes,
 }
 
 
-size_t ImplAAFTypeDefInt::internalSize(OMByte* /*externalBytes*/,
+size_t ImplAAFTypeDefInt::internalSize(const OMByte* /*externalBytes*/,
 									   size_t /*externalSize*/) const
 {
   return NativeSize ();
 }
 
 
-void ImplAAFTypeDefInt::internalize(OMByte* externalBytes,
+void ImplAAFTypeDefInt::internalize(const OMByte* externalBytes,
 									size_t externalBytesSize,
 									OMByte* internalBytes,
 									size_t internalBytesSize,

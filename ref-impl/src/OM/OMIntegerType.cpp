@@ -39,7 +39,7 @@ void OMIntegerType::reorder(OMByte* externalBytes,
   }
 }
 
-size_t OMIntegerType::externalSize(OMByte* ANAME(internalBytes),
+size_t OMIntegerType::externalSize(const OMByte* ANAME(internalBytes),
                                    size_t ANAME(internalBytesSize)) const
 {
   TRACE("OMIntegerType::externalSize");
@@ -50,7 +50,7 @@ size_t OMIntegerType::externalSize(OMByte* ANAME(internalBytes),
   return size();
 }
 
-void OMIntegerType::externalize(OMByte* internalBytes,
+void OMIntegerType::externalize(const OMByte* internalBytes,
                                 size_t ANAME(internalBytesSize),
                                 OMByte* externalBytes,
                                 size_t externalBytesSize,
@@ -69,7 +69,7 @@ void OMIntegerType::externalize(OMByte* internalBytes,
   copy(internalBytes, externalBytes, externalBytesSize);
 }
 
-size_t OMIntegerType::internalSize(OMByte* ANAME(externalBytes),
+size_t OMIntegerType::internalSize(const OMByte* ANAME(externalBytes),
                                    size_t ANAME(externalBytesSize)) const
 {
   TRACE("OMIntegerType::internalSize");
@@ -80,7 +80,7 @@ size_t OMIntegerType::internalSize(OMByte* ANAME(externalBytes),
   return size();
 }
 
-void OMIntegerType::internalize(OMByte* externalBytes,
+void OMIntegerType::internalize(const OMByte* externalBytes,
                                 size_t ANAME(externalBytesSize),
                                 OMByte* internalBytes,
                                 size_t internalBytesSize,

@@ -1027,14 +1027,14 @@ void ImplAAFTypeDefRecord::reorder(OMByte* externalBytes,
 }
 
 
-size_t ImplAAFTypeDefRecord::externalSize(OMByte* /*internalBytes*/,
+size_t ImplAAFTypeDefRecord::externalSize(const OMByte* /*internalBytes*/,
 										  size_t /*internalBytesSize*/) const
 {
   return PropValSize ();
 }
 
 
-void ImplAAFTypeDefRecord::externalize(OMByte* internalBytes,
+void ImplAAFTypeDefRecord::externalize(const OMByte* internalBytes,
 									   size_t internalBytesSize,
 									   OMByte* externalBytes,
 									   size_t externalBytesSize,
@@ -1088,7 +1088,7 @@ void ImplAAFTypeDefRecord::externalize(OMByte* internalBytes,
 }
 
 
-size_t ImplAAFTypeDefRecord::internalSize(OMByte* /*externalBytes*/,
+size_t ImplAAFTypeDefRecord::internalSize(const OMByte* /*externalBytes*/,
 										  size_t /*externalBytesSize*/) const
 {
   if (IsRegistered ())
@@ -1098,7 +1098,7 @@ size_t ImplAAFTypeDefRecord::internalSize(OMByte* /*externalBytes*/,
 }
 
 
-void ImplAAFTypeDefRecord::internalize(OMByte* externalBytes,
+void ImplAAFTypeDefRecord::internalize(const OMByte* externalBytes,
 									   size_t externalBytesSize,
 									   OMByte* internalBytes,
 									   size_t internalBytesSize,

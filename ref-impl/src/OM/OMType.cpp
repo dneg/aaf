@@ -69,7 +69,7 @@ void OMType::reorderInteger(OMByte* bytes,
   //   @parm The buffer to receive the output bytes.
   //   @parm The size of the output buffer.
   //   @parm The byte order.
-void OMType::expand(OMByte* inputBytes,
+void OMType::expand(const OMByte* inputBytes,
                     size_t inputBytesSize,
                     OMByte* outputBytes,
                     size_t outputBytesSize,
@@ -81,7 +81,7 @@ void OMType::expand(OMByte* inputBytes,
   PRECONDITION("Valid output size", outputBytesSize > 0);
   PRECONDITION("Valid sizes", outputBytesSize > inputBytesSize);
 
-  OMByte* ip = inputBytes;
+  const OMByte* ip = inputBytes;
   OMByte* op = outputBytes;
   size_t padSize = outputBytesSize - inputBytesSize;
 
@@ -114,7 +114,7 @@ void OMType::expand(OMByte* inputBytes,
   //   @parm The buffer to receive the output bytes.
   //   @parm The size of the output buffer.
   //   @parm The byte order.
-void OMType::contract(OMByte* inputBytes,
+void OMType::contract(const OMByte* inputBytes,
                       size_t inputBytesSize,
                       OMByte* outputBytes,
                       size_t outputBytesSize,
@@ -126,7 +126,7 @@ void OMType::contract(OMByte* inputBytes,
   PRECONDITION("Valid output size", outputBytesSize > 0);
   PRECONDITION("Valid sizes", outputBytesSize < inputBytesSize);
 
-  OMByte* ip = inputBytes;
+  const OMByte* ip = inputBytes;
   OMByte* op = outputBytes;
   size_t trimSize = inputBytesSize - outputBytesSize;
 
@@ -153,7 +153,7 @@ void OMType::contract(OMByte* inputBytes,
   //   @parm The buffer containing the input bytes.
   //   @parm The buffer to receive the output bytes.
   //   @parm The size of the input and output buffers.
-void OMType::copy(OMByte* inputBytes,
+void OMType::copy(const OMByte* inputBytes,
                   OMByte* outputBytes,
                   size_t bytesSize)
 {
@@ -162,7 +162,7 @@ void OMType::copy(OMByte* inputBytes,
   PRECONDITION("Valid output bytes", outputBytes != 0);
   PRECONDITION("Valid buffer size", bytesSize > 0);
 
-  OMByte* ip = inputBytes;
+  const OMByte* ip = inputBytes;
   OMByte* op = outputBytes;
 
   memcpy(op, ip, bytesSize);

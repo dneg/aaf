@@ -257,19 +257,19 @@ public:
   virtual void reorder(OMByte* externalBytes,
                        size_t externalBytesSize) const;
 
-  virtual size_t externalSize(OMByte* internalBytes,
+  virtual size_t externalSize(const OMByte* internalBytes,
                               size_t internalBytesSize) const;
 
-  virtual void externalize(OMByte* internalBytes,
+  virtual void externalize(const OMByte* internalBytes,
                            size_t internalBytesSize,
                            OMByte* externalBytes,
                            size_t externalBytesSize,
                            OMByteOrder byteOrder) const;
 
-  virtual size_t internalSize(OMByte* externalBytes,
+  virtual size_t internalSize(const OMByte* externalBytes,
                               size_t externalBytesSize) const;
 
-  virtual void internalize(OMByte* externalBytes,
+  virtual void internalize(const OMByte* externalBytes,
                            size_t externalBytesSize,
                            OMByte* internalBytes,
                            size_t internalBytesSize,

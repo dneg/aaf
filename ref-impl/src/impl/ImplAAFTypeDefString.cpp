@@ -486,7 +486,7 @@ void ImplAAFTypeDefString::reorder(OMByte* externalBytes,
 }
 
 
-size_t ImplAAFTypeDefString::externalSize(OMByte* /*internalBytes*/,
+size_t ImplAAFTypeDefString::externalSize(const OMByte* /*internalBytes*/,
 										  size_t internalBytesSize) const
 {
   ImplAAFTypeDefSP ptd = BaseType();
@@ -503,7 +503,7 @@ size_t ImplAAFTypeDefString::externalSize(OMByte* /*internalBytes*/,
 }
 
 
-void ImplAAFTypeDefString::externalize(OMByte* internalBytes,
+void ImplAAFTypeDefString::externalize(const OMByte* internalBytes,
 									   size_t internalBytesSize,
 									   OMByte* externalBytes,
 									   size_t externalBytesSize,
@@ -537,7 +537,7 @@ void ImplAAFTypeDefString::externalize(OMByte* internalBytes,
 }
 
 
-size_t ImplAAFTypeDefString::internalSize(OMByte* /*externalBytes*/,
+size_t ImplAAFTypeDefString::internalSize(const OMByte* /*externalBytes*/,
 										  size_t externalBytesSize) const
 {
   ImplAAFTypeDefSP ptd = BaseType();
@@ -554,7 +554,7 @@ size_t ImplAAFTypeDefString::internalSize(OMByte* /*externalBytes*/,
 }
 
 
-void ImplAAFTypeDefString::internalize(OMByte* externalBytes,
+void ImplAAFTypeDefString::internalize(const OMByte* externalBytes,
 									   size_t externalBytesSize,
 									   OMByte* internalBytes,
 									   size_t internalBytesSize,

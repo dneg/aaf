@@ -52,7 +52,7 @@ public:
     //          implementation of this virtual function for the data
     //          type being described. This class provides static
     //          functions to aid in such an implementation.
-  virtual size_t externalSize(OMByte* internalBytes,
+  virtual size_t externalSize(const OMByte* internalBytes,
                               size_t internalBytesSize) const = 0;
 
     // @cmember Convert the given <p internalBytes> from internal
@@ -72,7 +72,7 @@ public:
     //          implementation of this virtual function for the data
     //          type being described. This class provides static
     //          functions to aid in such an implementation.
-  virtual void externalize(OMByte* internalBytes,
+  virtual void externalize(const OMByte* internalBytes,
                            size_t internalBytesSize,
                            OMByte* externalBytes,
                            size_t externalBytesSize,
@@ -86,7 +86,7 @@ public:
     //          implementation of this virtual function for the data
     //          type being described. This class provides static
     //          functions to aid in such an implementation.
-  virtual size_t internalSize(OMByte* externalBytes,
+  virtual size_t internalSize(const OMByte* externalBytes,
                               size_t externalSize) const = 0;
 
     // @cmember Convert the given <p externalBytes> from external
@@ -106,7 +106,7 @@ public:
     //          implementation of this virtual function for the data
     //          type being described. This class provides static
     //          functions to aid in such an implementation.
-  virtual void internalize(OMByte* externalBytes,
+  virtual void internalize(const OMByte* externalBytes,
                            size_t externalBytesSize,
                            OMByte* internalBytes,
                            size_t internalBytesSize,
@@ -132,7 +132,7 @@ public:
     //          class. In particular, Object Manager clients may wish to use
     //          this function when implementing <mf OMType::internalize> and
     //          <mf OMType::externalize>.
-  static void expand(OMByte* inputBytes,
+  static void expand(const OMByte* inputBytes,
                      size_t inputBytesSize,
                      OMByte* outputBytes,
                      size_t outputBytesSize,
@@ -147,7 +147,7 @@ public:
     //          class. In particular, Object Manager clients may wish to use
     //          this function when implementing <mf OMType::internalize> and
     //          <mf OMType::externalize>.
-  static void contract(OMByte* inputBytes,
+  static void contract(const OMByte* inputBytes,
                        size_t inputBytesSize,
                        OMByte* outputBytes,
                        size_t outputBytesSize,
@@ -161,7 +161,7 @@ public:
     //          Object Manager clients may wish to use this function when
     //          implementing <mf OMType::internalize> and
     //          <mf OMType::externalize>.
-  static void copy(OMByte* inputBytes,
+  static void copy(const OMByte* inputBytes,
                    OMByte* outputBytes,
                    size_t bytesSize);
 
