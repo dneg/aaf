@@ -716,6 +716,14 @@ AAFRESULT STDMETHODCALLTYPE
 			pEnum->ReleaseReference();
 			pEnum = 0;
 		}
+
+		CHECK(GetDictionary(&pDictionary));
+    // Do not reference count the following type and class definitions...
+    ImplAAFTypeDef *pTaggedValueType = pDictionary->GetBuiltinDefs()->tdString();
+    assert (pTaggedValueType); // this is supposed to be a builtin type.
+ 		ImplAAFClassDef *pTaggedValueClass = pDictionary->GetBuiltinDefs()->cdTaggedValue();
+    assert (pTaggedValueClass); // this is supposed to be a builtin type.
+
 		if (commentFound)
 		{
 			// Update existing comment
@@ -726,17 +734,16 @@ AAFRESULT STDMETHODCALLTYPE
 		else
 		{
 			// Create a new comment and add it to the list!
-			CHECK(GetDictionary(&pDictionary));
-			CHECK(pDictionary->GetBuiltinDefs()->cdTaggedValue()->
-				  CreateInstance ((ImplAAFObject**) &pTaggedValue));
+			CHECK(pTaggedValueClass->CreateInstance ((ImplAAFObject**) &pTaggedValue));
 			CHECK(pTaggedValue->Initialize(pTagName,
-										   pDictionary->GetBuiltinDefs()->
-										   tdString()));
-			pDictionary->ReleaseReference();
-			pDictionary = NULL;
-			CHECK(pTaggedValue->SetValue((wcslen(pComment)*sizeof(aafCharacter)+2), (aafDataValue_t)pComment));
+										   pTaggedValueType,
+                       (wcslen(pComment)*sizeof(aafCharacter)+2), 
+                       (aafDataValue_t)pComment));
 			_userComments.appendValue(pTaggedValue);
 		}
+		pDictionary->ReleaseReference();
+		pDictionary = NULL;
+
 	}
 	XEXCEPT
 	{
