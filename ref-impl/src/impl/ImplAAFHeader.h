@@ -280,8 +280,6 @@ public:
 	// Interfaces visible inside the toolkit, but not exposed through the API
 
 AAFRESULT SetToolkitRevisionCurrent(void);
-AAFRESULT IsValidHeadObject(void);
-
 AAFRESULT GetNumIdentifications (aafInt32 * /*pCount*/);
 
 AAFRESULT AddIdentificationObject (aafProductIdentification_t * /*pIdent*/);
