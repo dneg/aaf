@@ -146,10 +146,10 @@
 #include <memory.h>		/* For AAFMalloc() and AAFFree() */
 #include <OSUtils.h>
 #endif
-#ifdef _WIN32
+
 #include <time.h>
-#elif defined (__sgi) || defined (__FreeBSD__)
-  #include <time.h>
+
+#if defined (__sgi) || defined (__FreeBSD__)
   #include <sys/time.h>
   #include <unistd.h>
   #include <sys/types.h>
@@ -632,12 +632,8 @@ static void pvtMacCreateGuid(GUID  *pguid)
   if (!sInitializedTemplate)
   {
     time_t timer = time(NULL);
-#ifndef __sgi // temp
     aafUInt32 ticks = TickCount();
     sTemplate.Data1 += timer + ticks;
-#else
-    sTemplate.Data1 += timer;
-#endif
     sInitializedTemplate = true;
   }
   
