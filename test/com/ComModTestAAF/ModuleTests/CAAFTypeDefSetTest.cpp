@@ -291,7 +291,8 @@ extern "C"
   HRESULT CAAFTypeDefSet_test(testMode_t);
   void CAAFTypeDefSet_Create(aafCharacter_constptr fileName);
   void CAAFTypeDefSet_Open(aafCharacter_constptr fileName);
-  void CAAFTypeDefSet_Register(IAAFDictionary* pDictionary);
+  
+  void CAAFTypeDefSet_Register(IAAFHeader * pHeader, IAAFDictionary* pDictionary);
   void CAAFTypeDefSet_Write(IAAFHeader* pHeader, IAAFDictionary* pDictionary);
   void CAAFTypeDefSet_Read(IAAFHeader* pHeader, IAAFDictionary* pDictionary);
 } 
@@ -304,7 +305,7 @@ extern "C" HRESULT CAAFTypeDefSet_test(testMode_t mode)
   try
   {
     if(mode == kAAFUnitTestReadWrite)
-		CAAFTypeDefSet_Create(pFileName);
+		  CAAFTypeDefSet_Create(pFileName);
     CAAFTypeDefSet_Open(pFileName);
   }
   catch (HRESULT& rhr)
@@ -359,6 +360,7 @@ static bool EqualObject(IUnknown* pObject1, IUnknown* pObject2)
     return false;
 }
 
+
 void CAAFTypeDefSet_Create(aafCharacter_constptr fileName)
 {
   HRESULT            hr = AAFRESULT_SUCCESS;
@@ -389,7 +391,7 @@ void CAAFTypeDefSet_Create(aafCharacter_constptr fileName)
     checkResult(pFile->GetHeader(&pHeader));
     checkResult(pHeader->GetDictionary(&pDictionary));
     
-    CAAFTypeDefSet_Register(pDictionary);
+    CAAFTypeDefSet_Register(pHeader, pDictionary);
     CAAFTypeDefSet_Write(pHeader, pDictionary);
     CAAFTypeDefSet_Read(pHeader, pDictionary);
     
@@ -432,8 +434,11 @@ void CAAFTypeDefSet_Open(aafCharacter_constptr fileName)
 
 
 
-void CAAFTypeDefSet_Register(IAAFDictionary* pDictionary)
+void CAAFTypeDefSet_Register(IAAFHeader * pHeader, IAAFDictionary* pDictionary)
 {
+  aafProductVersion_t toolkitVersion;
+  checkResult(GetAAFVersions(pHeader, &toolkitVersion, NULL));
+
   //
   // Create and register a new subclass of AAFDefObject.
   //
@@ -549,6 +554,9 @@ void CAAFTypeDefSet_Write(IAAFHeader* pHeader, IAAFDictionary* pDictionary)
 {
   if (!pHeader || !pDictionary)
     throw AAFRESULT_NULL_PARAM;
+
+  aafProductVersion_t toolkitVersion;
+  checkResult(GetAAFVersions(pHeader, &toolkitVersion, NULL));
   
   // Get the property value that represents the set of data definitions.
   IAAFTypeDefSetSP pDataDefinitionsSet;
@@ -653,6 +661,9 @@ void CAAFTypeDefSet_Read(IAAFHeader* pHeader, IAAFDictionary* pDictionary)
   if (!pHeader || !pDictionary)
     throw AAFRESULT_NULL_PARAM;    
   
+  aafProductVersion_t toolkitVersion, fileToolkitVersion;
+  checkResult(GetAAFVersions(pHeader, &toolkitVersion, &fileToolkitVersion));
+
   // Get the property value that represents the set of data definitions.
   IAAFTypeDefSetSP pDataDefinitionsSet;
   IAAFPropertyValueSP pDataDefinitionsValue;
