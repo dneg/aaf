@@ -226,15 +226,14 @@ void OMPropertySet::grow(const size_t additionalElements)
   
   // Copy over all elements from the old array
   //
-	size_t i;
-  for (i = 0; i < oldCapacity; i++) {
+  for (size_t i = 0; i < oldCapacity; i++) {
     _propertySet[i] = oldPropertySet[i];
   }
 
   // Initialize new elements to be invalid
   //
-  for (i = oldCapacity; i < _capacity; i++) {
-    _propertySet[i]._valid = false;
+  for (size_t j = oldCapacity; j < _capacity; j++) {
+    _propertySet[j]._valid = false;
   }
 
   // Delete the old array
