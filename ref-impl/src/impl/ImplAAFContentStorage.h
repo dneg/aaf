@@ -78,15 +78,6 @@ public:
         (aafMobKind_t  mobKind,   //@parm [in] The mob kind to count
 		 aafNumSlots_t *  pNumMobs);  //@parm [out,retval] Total number of mobs of kind mobKind
 
-
-  //****************
-  // GetPrimaryMobs()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetPrimaryMobs
-        (ImplEnumAAFMobs ** ppEnum);  //@parm [out,retval] Mob Enumeration
-
-
   //****************
   // GetMobs()
   //
