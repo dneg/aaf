@@ -205,6 +205,24 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
+AAFRESULT
+    ImplAAFContentStorage::ChangeIndexedMobID (ImplAAFMob *pMob, aafUID_t *newID)
+{
+	aafUID_t	mobID;
+
+	XPROTECT()
+	{
+		CHECK(pMob->GetMobID(&mobID));
+		CHECK(TableAddUID(_mobIndex, *newID, pMob, kAafTableDupError));
+		CHECK(TableRemoveUID(_mobIndex, mobID));
+	} /* XPROTECT */
+	XEXCEPT
+	{
+	}
+	XEND;
+	
+	return(AAFRESULT_SUCCESS);
+}
 
 
 AAFRESULT STDMETHODCALLTYPE

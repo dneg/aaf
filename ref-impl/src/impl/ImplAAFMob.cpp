@@ -229,65 +229,47 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::SetMobID (aafUID_t *newMobID)
 {
-    aafUID_t oldMobID;
-    aafBool hasMobID = AAFFalse;
-	ImplAAFMob	*foundMob = NULL;
-	aafInt32 index = 0;
-	aafErr_t aafError = OM_ERR_NONE;
-	ImplAAFMob *mobPtr = NULL;
-//	ImplAAFHeader *head;
-//	ImplAAFContentStorage	*cstore;
+	AAFRESULT				hr = AAFRESULT_SUCCESS;
+	ImplAAFMob				*mobPtr = NULL;
+	ImplAAFHeader			*head;
+	ImplAAFContentStorage	*cstore;
+
+	if(newMobID == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
 	XPROTECT()
-	  {
-		/* Remember the old mob ID so it can be removed from the hash table */
-		oldMobID = _mobID;
-
-//!!! JeffB; Put this back when we can get the head object from any object
-//!!!		CHECK(MyHeadObject(&head));
-//!!!		cstore = head->GetContentStorage();
+	{
+		hr = MyHeadObject(&head);
+		if(hr == AAFRESULT_SUCCESS)
+		{			
+			cstore = head->GetContentStorage();
 		
-			/* Does a mob with the new ID already exist?  If so, return error */
-
-//!!! JeffB; Put this back when we can get the head object from any object
-//!!!		aafError = cstore->LookupMob(newMobID, &mobPtr) ;
-		if(aafError == AAFRESULT_SUCCESS)
-		  {
-			if(mobPtr == NULL)
-				{
-				_mobID = *newMobID;
-//!!!				CHECK(_file->FillOutStubMob(newMobID, this));
-				}
-			else
+			// Does a mob with the new ID already exist?  If so, return error
+			hr= cstore->LookupMob(newMobID, &mobPtr) ;
+			if(hr== AAFRESULT_SUCCESS)
 			{
 				RAISE(OM_ERR_DUPLICATE_MOBID);
+			}	
+			else if(hr== AAFRESULT_MOB_NOT_FOUND)
+			{
+				_mobID = *newMobID;
+				CHECK(cstore->ChangeIndexedMobID (this, newMobID));
 			}
-		  }
-		else
+			else
+				RAISE(hr);
+		}
+		else if (hr == AAFRESULT_NOT_IN_FILE)
 		{
 			_mobID = *newMobID;
-
-			/* Remove the hash table entry for the old mobID, and add new one */
 		}
-		
-		/* Remove it last, so the old hash entry is still there on error */
+		else
+			RAISE(hr);
 
-		/* If there was a previous MobID, delete from hash table.  Also,
-		 * delete from the mob index if it is a 1.x file.
-		 */
-		if (hasMobID)
-		  {
-//!!! JeffB; Put this back when we can get the head object from any object
-//!!!			CHECK(cstore->UnlinkMobID(oldMobID));
-		  }
-	  } /* XPROTECT */
-
+	} /* XPROTECT */
 	XEXCEPT
-	  {
-		return(XCODE());
-	  }
 	XEND;
 
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 
