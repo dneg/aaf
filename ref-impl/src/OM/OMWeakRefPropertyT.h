@@ -37,7 +37,7 @@ OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
                                                  const char* name)
 : OMReferenceProperty<ReferencedObject>(propertyId,
                                         SF_WEAK_OBJECT_REFERENCE,
-                                        name), _pathName(0)
+                                        name), _reference(this, name)
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty");
 }
@@ -46,8 +46,6 @@ template<typename ReferencedObject>
 OMWeakReferenceProperty<ReferencedObject>::~OMWeakReferenceProperty(void)
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::~OMWeakReferenceProperty");
-  delete [] _pathName;
-  _pathName = 0;
 }
 
   // @mfunc Get the value of this <c OMWeakReferenceProperty>.
@@ -61,61 +59,13 @@ void OMWeakReferenceProperty<ReferencedObject>::getValue(
                                                ReferencedObject*& object) const
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::getValue");
+  PRECONDITION("Optional property is present",
+                                           IMPLIES(isOptional(), isPresent()));
 
-  if (_pointer == 0) {
-    if (_pathName != 0) {
-      // We're implementing "conceptual constness" and not "bitwise constness"
-      // so cast away the constness of this.
-      //
-      OMWeakReferenceProperty<ReferencedObject>* nonConstThis =
-                  const_cast<OMWeakReferenceProperty<ReferencedObject>*>(this);
-      
-      // lookup _pathName in the object directory
-      //
-      OMStorable* obj;
-      OMFile* file = _propertySet->container()->file();
-      bool found = file->objectDirectory()->lookup(_pathName, obj);
-      // Since this prototype does not currently implement lazy
-      // loading all weak references should be resolvable as the
-      // referenced object must have been loaded. Check this with an
-      // assertion.
-      //
-      ASSERT("Weak reference resolved", found);
-      if (found) {
-        nonConstThis->_pointer = dynamic_cast<ReferencedObject*>(obj);
-        ASSERT("Consistent object names",
-                                 strcmp(_pathName, _pointer->pathName()) == 0);
-      } else {
-        // This code can only execute for the "object level" and finer
-        // granularities of lazy loading.  Since this prototype does
-        // not currently implement lazy loading we shouldn't get here.
-        // Check this with an assertion.
-        //
-        ASSERT("Unsupported code not reachable", false);
+  ReferencedObject* result = _reference.getValue();
 
-        // open the named storage
-        //
-        OMFile* file =_propertySet->container()->file();
-        OMStoredObject* root = file->rootStoredObject();
-        OMStoredObject* storage = root->openStoragePath(_pathName);
+  object = result;
 
-        // restore object contents from the storage
-        //
-        OMStorable* referencedObject = OMStorable::restoreFrom(
-                                                     _propertySet->container(),
-                                                     name(),
-                                                     *storage);
-        nonConstThis->_pointer =
-                             dynamic_cast<ReferencedObject*>(referencedObject);
-
-        // close the storage
-        //
-        storage->close();  // tjb unreachable close
-        delete storage;
-      }
-    }
-  }
-  object = _pointer;
 }
 
   // @mfunc Set the value of this <c OMWeakReferenceProperty>.
@@ -132,9 +82,7 @@ ReferencedObject* OMWeakReferenceProperty<ReferencedObject>::setValue(
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::setValue");
 
-  delete [] _pathName;
-  _pathName = 0;
-  return OMReferenceProperty<ReferencedObject>::setValue(object);
+  return _reference.setValue(object);
 }
 
   // @mfunc Assignment operator.
@@ -163,14 +111,14 @@ template<typename ReferencedObject>
 ReferencedObject*
 OMWeakReferenceProperty<ReferencedObject>::operator -> (void)
 {
-  return pointer();
+  return _reference.getValue();
 }
 
 template<typename ReferencedObject>
 const ReferencedObject*
 OMWeakReferenceProperty<ReferencedObject>::operator -> (void) const
 {
-  return pointer();
+  return _reference.getValue();
 }
 
   // @mfunc Type conversion. Convert an
@@ -206,18 +154,8 @@ void OMWeakReferenceProperty<ReferencedObject>::save(void) const
   ASSERT("Container is persistent", container->persistent());
   OMStoredObject* s = container->store();
 
-  PRECONDITION("Valid weak reference",
-                                      IMPLIES(pointer() == 0, _pathName != 0));
-  PRECONDITION("Valid weak reference",
-                                      IMPLIES(pointer() != 0, _pathName == 0));
+  const char* pathName = _reference.pathName();
 
-  const char* pathName = 0;
-  OMStorable* object = pointer();
-  if (object != 0) {
-    pathName = object->pathName();
-  } else {
-    pathName = _pathName;
-  }
   ASSERT("Non-void weak reference", pathName != 0);
 
   // save this name as the value of this property
@@ -225,6 +163,8 @@ void OMWeakReferenceProperty<ReferencedObject>::save(void) const
            _storedForm,
            (void *)pathName,
            strlen(pathName) + 1);
+
+  _reference.save();
 
 }
 
@@ -251,28 +191,61 @@ void OMWeakReferenceProperty<ReferencedObject>::restore(size_t externalSize)
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::restore");
 
-  delete [] _pathName;
   // read the pathname from the file and save it in this weak reference
-  _pathName = new char[externalSize];
-  ASSERT("Valid heap pointer", _pathName != 0);
+  char* pathName = new char[externalSize];
+  ASSERT("Valid heap pointer", pathName != 0);
 
   OMStoredObject* store = _propertySet->container()->store();
   ASSERT("Valid store", store != 0);
 
-  store->read(_propertyId, _storedForm, _pathName, externalSize);
-  _pointer = 0;
+  store->read(_propertyId, _storedForm, pathName, externalSize);
+
+  _reference.setPathName(pathName);
+  _reference.restore();
+
 }
 
-  // @mfunc Load the persisted representation of this
-  //        <c OMWeakReferenceProperty> into memory.
+  // @mfunc Get the raw bits of this <c OMWeakReferenceProperty>. The raw bits
+  //        are copied to the buffer at address <p bits> which is
+  //        <p size> bytes in size.
   //   @tcarg class | ReferencedObject | The type of the referenced
-  //          (contained) object. This type must be a descendant of
-  //          <c OMStorable>.
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @parm The address of the buffer into which the raw bits are copied.
+  //   @parm The size of the buffer.
+  //   @this const
 template<typename ReferencedObject>
-void OMWeakReferenceProperty<ReferencedObject>::load(void)
+void OMWeakReferenceProperty<ReferencedObject>::getBits(OMByte* bits,
+                                                    size_t size) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::load");
-  ASSERT("Not yet implemented", false);
+  TRACE("OMWeakReferenceProperty<ReferencedObject>::getBits");
+  PRECONDITION("Optional property is present",
+                                           IMPLIES(isOptional(), isPresent()));
+  PRECONDITION("Valid bits", bits != 0);
+  PRECONDITION("Valid size", size >= bitsSize());
+
+  ReferencedObject* pointer;
+  getValue(pointer);
+
+  memcpy(bits, &pointer, bitsSize());
+}
+
+  // @mfunc Set the raw bits of this <c OMWeakReferenceProperty>. The raw
+  //        bits are copied from the buffer at address <p bits> which
+  //        is <p size> bytes in size.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @parm The address of the buffer into which the raw bits are copied.
+  //   @parm The size of the buffer.
+template<typename ReferencedObject>
+void OMWeakReferenceProperty<ReferencedObject>::setBits(const OMByte* bits,
+                                                    size_t size)
+{
+  TRACE("OMWeakReferenceProperty<ReferencedObject>::getBits");
+  PRECONDITION("Valid bits", bits != 0);
+  PRECONDITION("Valid size", size >= bitsSize());
+
+  const ReferencedObject* p = *(const ReferencedObject**)bits;
+  setValue(p);
 }
 
 #endif

@@ -30,6 +30,7 @@
 #define OMWEAKREFPROPERTY_H
 
 #include "OMPropertyBase.h"
+#include "OMObjectReference.h"
 
   // @class Persistent weak reference (pointer to shared object)
   //        properties supported by the Object Manager.
@@ -80,15 +81,20 @@ public:
     //          <p externalSize>.
   virtual void restore(size_t externalSize);
 
-protected:
-  // @access Protected members.
+    // @cmember Get the raw bits of this <c OMWeakReferenceProperty>. The
+    //          raw bits are copied to the buffer at address <p bits>
+    //          which is <p size> bytes in size.
+  virtual void getBits(OMByte* bits, size_t size) const;
 
-    // @cmember Load the persisted representation of this
-    //          <c OMWeakReferenceProperty> into memory.
-  virtual void load(void);
+    // @cmember Set the raw bits of this <c OMWeakReferenceProperty>. The raw
+    //          bits are copied from the buffer at address <p bits> which
+    //          is <p size> bytes in size.
+  virtual void setBits(const OMByte* bits, size_t size);
 
 private:
-  char* _pathName;
+
+  OMWeakObjectReference<ReferencedObject> _reference;
+
 };
 
 #include "OMWeakRefPropertyT.h"
