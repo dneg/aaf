@@ -136,7 +136,8 @@ computer=$(hostname)
 
 index=Changes-index.html
 
-echo "<!-- -->" > $index
+echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">" > $index
+echo "<!-- -->" >> $index
 echo "<!-- This file was generated on ${date} by user ${user} -->" >> $index
 echo "<!-- on system ${computer} using ${TOOLNAME} -->" >> $index
 echo "<!-- If you edit this file your changes may be lost. -->" >> $index
@@ -144,6 +145,7 @@ echo "<!-- -->" >> $index
 
 echo "<html>" >> $index
 echo "<head>" >> $index
+echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">" >> $index
 echo "<title>Index of cvs change logs</title>" >> $index
 echo "</head>" >> $index
 echo "<body>" >> $index

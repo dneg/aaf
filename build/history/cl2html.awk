@@ -90,6 +90,7 @@ function printHeader() {
   "echo $USER" | getline user
   "hostname" | getline computer
   printf("\
+<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n\
 <!-- -->\n\
 <!-- This file was generated on %s by user %s -->\n\
 <!-- on system %s using cl2html.awk -->\n\
@@ -98,6 +99,7 @@ function printHeader() {
 
   printf("<html>\n");
   printf("<head>\n");
+  printf("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">\n");
   printf("<title>%s</title>\n", TITLE);
   printf("</head>\n");
   printf("<body>\n");
@@ -238,6 +240,12 @@ function rowcolor(files) {
   return result;
 }
 
+function filter(comments) {
+  gsub("<", "\\&lt;", comments);
+  gsub(">", "\\&gt;", comments);
+  return comments;
+}
+
 function entry(entrytext) {
 #  printf("<!--[%s]-->\n", entrytext);
   gsub("\t", " ", entrytext);
@@ -279,6 +287,7 @@ function entry(entrytext) {
   for (i = cs + 1; i <= f; i++) {
     comments = comments ":" fields[i]
   }
+  comments = filter(comments);
 
   color = rowcolor(files);
 
