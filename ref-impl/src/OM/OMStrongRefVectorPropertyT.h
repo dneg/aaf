@@ -89,12 +89,10 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::save(
 
   // Iterate over the vector saving each element
   //
-  OMVectorIterator<OMStrongReferenceVectorElement<ReferencedObject> >
-                                                   iterator(_vector, OMBefore);
+  VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
 
-    OMStrongReferenceVectorElement<ReferencedObject>&
-                                                    element = iterator.value();
+    VectorElement& element = iterator.value();
 
     // enter into the index
     //
@@ -132,8 +130,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::close(void)
 {
   size_t count = _vector.count();
   for (size_t i = 0; i < count; i++) {
-    OMStrongReferenceVectorElement<ReferencedObject>&
-                                                    element = _vector.getAt(i);
+    VectorElement& element = _vector.getAt(i);
     element.close();
   }
 }
@@ -148,8 +145,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::detach(void)
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::detach");
   size_t count = _vector.count();
   for (size_t i = 0; i < count; i++) {
-    OMStrongReferenceVectorElement<ReferencedObject>&
-                                                    element = _vector.getAt(i);
+    VectorElement& element = _vector.getAt(i);
     element.detach();
   }
 }
@@ -198,8 +194,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::restore(
     for (size_t i = 0; i < entries; i++) {
       vectorIndex->iterate(context, localKey);
       char* name = elementName(localKey);
-      OMStrongReferenceVectorElement<ReferencedObject>
-                                              newElement(this, name, localKey);
+      VectorElement newElement(this, name, localKey);
       newElement.restore();
       _vector.setAt(newElement, i);
       delete [] name;
@@ -273,16 +268,14 @@ ReferencedObject*
     // This is an append, make sure the new element is defined.
     OMUInt32 localKey = nextLocalKey();
     char* name = elementName(localKey);
-    OMStrongReferenceVectorElement<ReferencedObject>
-                                              newElement(this, name, localKey);
+    VectorElement newElement(this, name, localKey);
     _vector.append(newElement);
     delete [] name;
   }
 
   // Set the vector to contain the new object
   //
-  OMStrongReferenceVectorElement<ReferencedObject>&
-                                                element = _vector.getAt(index);
+  VectorElement& element = _vector.getAt(index);
   ReferencedObject* oldObject = element.setValue(object);
   setPresent();
 
@@ -308,8 +301,7 @@ ReferencedObject* OMStrongReferenceVectorProperty<ReferencedObject>::valueAt(
                                            IMPLIES(isOptional(), isPresent()));
   PRECONDITION("Valid index", ((index >= 0) && (index < count())));
 
-  OMStrongReferenceVectorElement<ReferencedObject>&
-                                                element = _vector.getAt(index);
+  VectorElement& element = _vector.getAt(index);
 
   ReferencedObject* result = element.getValue();
   return result;
@@ -334,8 +326,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::getValueAt(
                                            IMPLIES(isOptional(), isPresent()));
   PRECONDITION("Valid index", ((index >= 0) && (index < count())));
 
-  OMStrongReferenceVectorElement<ReferencedObject>&
-                                                element = _vector.getAt(index);
+  VectorElement& element = _vector.getAt(index);
 
   object = element.getValue();
 
@@ -434,8 +425,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::insertAt(
   
   OMUInt32 localKey = nextLocalKey();
   char* name = elementName(localKey);
-  OMStrongReferenceVectorElement<ReferencedObject>
-                                              newElement(this, name, localKey);
+  VectorElement newElement(this, name, localKey);
   newElement.setValue(object);
   _vector.insertAt(newElement, index);
   delete [] name;
@@ -461,12 +451,9 @@ bool OMStrongReferenceVectorProperty<ReferencedObject>::containsValue(
   PRECONDITION("Valid object", object != 0);
 
   bool result = false;
-  OMVectorIterator<
-    OMStrongReferenceVectorElement<ReferencedObject> >
-                                                   iterator(_vector, OMBefore);
+  VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
-    OMStrongReferenceVectorElement<ReferencedObject>&
-                                                    element = iterator.value();
+    VectorElement& element = iterator.value();
     if (element.pointer() == object) {
       result = true;
       break;
@@ -572,12 +559,9 @@ size_t OMStrongReferenceVectorProperty<ReferencedObject>::indexOfValue(
 
   size_t result;
 
-  OMVectorIterator<
-    OMStrongReferenceVectorElement<ReferencedObject> >
-                                                   iterator(_vector, OMBefore);
+  VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
-    OMStrongReferenceVectorElement<ReferencedObject>&
-                                                    element = iterator.value();
+    VectorElement& element = iterator.value();
     if (element.pointer() == object) {
       result = iterator.index();
       break;
@@ -604,12 +588,9 @@ size_t OMStrongReferenceVectorProperty<ReferencedObject>::countOfValue(
 
   size_t result = 0;
 
-  OMVectorIterator<
-    OMStrongReferenceVectorElement<ReferencedObject> >
-                                                   iterator(_vector, OMBefore);
+  VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
-    OMStrongReferenceVectorElement<ReferencedObject>&
-                                                    element = iterator.value();
+    VectorElement& element = iterator.value();
     if (element.pointer() == object) {
       result = result + 1;
     }
@@ -657,12 +638,9 @@ bool OMStrongReferenceVectorProperty<ReferencedObject>::findIndex(
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::findIndex");
   bool result = false;
 
-  OMVectorIterator<
-    OMStrongReferenceVectorElement<ReferencedObject> >
-                                                   iterator(_vector, OMBefore);
+  VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
-    OMStrongReferenceVectorElement<ReferencedObject>&
-                                                    element = iterator.value();
+    VectorElement& element = iterator.value();
     if (element.pointer() == object) {
       index = iterator.index();
       result = true;
@@ -690,7 +668,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::grow(
 
   // Make sure the new elements are defined.
   for (size_t i = oldCount; i < capacity; i++) {
-    OMStrongReferenceVectorElement<ReferencedObject> voidElement;
+    VectorElement voidElement;
     _vector.insert(voidElement);
   }
 }
@@ -709,12 +687,9 @@ bool OMStrongReferenceVectorProperty<ReferencedObject>::isVoid(void) const
 
   bool result = true;
 
-  OMVectorIterator<
-    OMStrongReferenceVectorElement<ReferencedObject> >
-                                                   iterator(_vector, OMBefore);
+  VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
-    OMStrongReferenceVectorElement<ReferencedObject>&
-                                                    element = iterator.value();
+    VectorElement& element = iterator.value();
     ReferencedObject* object = element.getValue();
     if (object != 0) {
       result = false;
@@ -778,12 +753,9 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::getBits(
 
   const ReferencedObject** p = (const ReferencedObject**)bits;
 
-  OMVectorIterator<
-    OMStrongReferenceVectorElement<ReferencedObject> >
-                                                   iterator(_vector, OMBefore);
+  VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
-    OMStrongReferenceVectorElement<ReferencedObject>&
-                                                    element = iterator.value();
+    VectorElement& element = iterator.value();
     *p++ = element.getValue();
   }
 }

@@ -36,6 +36,9 @@
 template <typename ReferencedObject>
 class OMStrongReferenceVectorIterator;
 
+template <typename Element>
+class OMVectorIterator;
+
   // @class Persistent elastic sequential collections of strongly
   //        referenced (contained) objects supported by the Object Manager.
   //        Objects are accessible by index. The order of objects is
@@ -194,8 +197,12 @@ public:
 
 private:
 
+  typedef OMStrongReferenceVectorElement<ReferencedObject> VectorElement;
+
+  typedef OMVectorIterator<VectorElement> VectorIterator;
+
     // The vector of references.
-  OMVector<OMStrongReferenceVectorElement<ReferencedObject> > _vector;
+  OMVector<VectorElement> _vector;
 
   friend class OMStrongReferenceVectorIterator<ReferencedObject>;
 

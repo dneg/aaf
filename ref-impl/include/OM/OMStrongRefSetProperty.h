@@ -36,6 +36,9 @@
 template <typename ReferencedObject>
 class OMStrongReferenceSetIterator;
 
+template <typename Key, typename Element>
+class OMSetIterator;
+
   // @class Persistent sets of uniquely identified strongly referenced
   //        (contained) objects supported by the Object Manager.
   //        Objects are accessible by unique identifier (the key).
@@ -161,9 +164,12 @@ public:
 
 private:
 
+  typedef OMStrongReferenceSetElement<ReferencedObject> SetElement;
+
+  typedef OMSetIterator<OMUniqueObjectIdentification, SetElement> SetIterator;
+
   // The set of references.
-  OMSet<OMUniqueObjectIdentification,
-        OMStrongReferenceSetElement<ReferencedObject> > _set;
+  OMSet<OMUniqueObjectIdentification, SetElement> _set;
 
   friend class OMStrongReferenceSetIterator<ReferencedObject>;
 
