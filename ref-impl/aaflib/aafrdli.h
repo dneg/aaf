@@ -52,6 +52,7 @@ typedef long AAFRDLIRESULT;
 // Callback function signature for AAFFindLibrary.
 
 typedef AAFRDLIRESULT (* LPFNAAFTESTFILEPROC)(
+	const char* path,
     const char* name,
 		char isDirectory,
 		void * userData);
