@@ -104,7 +104,7 @@ endif
 
 # UUID library to use
 ifndef UUIDLIB
-    UUIDLIB =  $(AAFBUILDDIR)/uuid_gen/$(AAFTARGETDIR)/libuuid_gen$(LIB) -l socket -lnsl
+    UUIDLIB =
 endif
 
 

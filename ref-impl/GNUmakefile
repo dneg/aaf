@@ -24,10 +24,8 @@
 
 .PHONY : all
 all :
-	cd uuid_gen && $(MAKE)
 	cd aaflib && $(MAKE)
 	cd src && $(MAKE)
-	cd uuid_gen && $(MAKE)
 	cd aafiid && $(MAKE)
 	cd libjpeg && $(MAKE)
 	cd plugins && $(MAKE)
@@ -38,7 +36,6 @@ check :
 
 .PHONY : clean
 clean :
-	cd uuid_gen && $(MAKE) GENDEPS=0 $@
 	cd plugins && $(MAKE) GENDEPS=0 $@
 	cd libjpeg && $(MAKE) GENDEPS=0 $@
 	cd aaflib && $(MAKE) GENDEPS=0 $@
@@ -47,10 +44,8 @@ clean :
 
 .PHONY : realclean
 realclean :
-	cd uuid_gen && $(MAKE) GENDEPS=0 $@
 	cd plugins && $(MAKE) GENDEPS=0 $@
 	cd libjpeg && $(MAKE) GENDEPS=0 $@
 	cd aaflib && $(MAKE) GENDEPS=0 $@
 	cd aafiid && $(MAKE) GENDEPS=0 $@
 	cd src && $(MAKE) GENDEPS=0 $@
-
