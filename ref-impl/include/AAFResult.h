@@ -1,5 +1,5 @@
-#ifndef __AAFResult_h_
-#define __AAFResult_h_
+#ifndef __AAFResult_h__
+#define __AAFResult_h__
 
 #if defined(_MAC) || defined(macintosh)
 // Make sure SEVERITY_ERROR and FACILITY_ITF are defined.
@@ -328,4 +328,4 @@
 #define AAFRESULT_MAXCODE					MAKE_AAFHRESULT(0x0305)
 
 
-#endif // ! __AAFResult_h_
+#endif // ! __AAFResult_h__
