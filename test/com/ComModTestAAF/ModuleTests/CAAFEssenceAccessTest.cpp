@@ -254,7 +254,8 @@ static void HexDumpBuffer(const char* label, aafDataBuffer_t buffer, aafUInt32 b
 	printf("static const aafUInt8 %s[] =\n{", label);
 	if (buffer && 0 < bufferSize)
 	{
-		for (aafUInt32 i = 0; i < (bufferSize - 1); ++i)
+		aafUInt32 i;
+		for (i = 0; i < (bufferSize - 1); ++i)
 		{
 			if ((i % cols) == 0)
 				printf("\n  ");
