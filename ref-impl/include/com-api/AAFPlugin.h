@@ -67,6 +67,12 @@ typedef interface IAAFEssenceCodec IAAFEssenceCodec;
 #endif 	/* __IAAFEssenceCodec_FWD_DEFINED__ */
 
 
+#ifndef __IAAFEssenceCodec2_FWD_DEFINED__
+#define __IAAFEssenceCodec2_FWD_DEFINED__
+typedef interface IAAFEssenceCodec2 IAAFEssenceCodec2;
+#endif 	/* __IAAFEssenceCodec2_FWD_DEFINED__ */
+
+
 #ifndef __IAAFMultiEssenceCodec_FWD_DEFINED__
 #define __IAAFMultiEssenceCodec_FWD_DEFINED__
 typedef interface IAAFMultiEssenceCodec IAAFMultiEssenceCodec;
@@ -126,6 +132,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 // AAF Interfaces.
 //=--------------------------------------------------------------------------=
 //
+
 
 
 
@@ -1511,6 +1518,96 @@ void __RPC_STUB IAAFEssenceCodec_GetLargestSampleSize_Stub(
 
 
 #endif 	/* __IAAFEssenceCodec_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFEssenceCodec2_INTERFACE_DEFINED__
+#define __IAAFEssenceCodec2_INTERFACE_DEFINED__
+
+/* interface IAAFEssenceCodec2 */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFEssenceCodec2;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("8888F7A2-9121-11d2-8088-006008143e6f")
+    IAAFEssenceCodec2 : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE SetFlavour( 
+            /* [ref][in] */ aafUID_constref flavour) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFEssenceCodec2Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFEssenceCodec2 __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFEssenceCodec2 __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFEssenceCodec2 __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFlavour )( 
+            IAAFEssenceCodec2 __RPC_FAR * This,
+            /* [ref][in] */ aafUID_constref flavour);
+        
+        END_INTERFACE
+    } IAAFEssenceCodec2Vtbl;
+
+    interface IAAFEssenceCodec2
+    {
+        CONST_VTBL struct IAAFEssenceCodec2Vtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFEssenceCodec2_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFEssenceCodec2_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFEssenceCodec2_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFEssenceCodec2_SetFlavour(This,flavour)	\
+    (This)->lpVtbl -> SetFlavour(This,flavour)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec2_SetFlavour_Proxy( 
+    IAAFEssenceCodec2 __RPC_FAR * This,
+    /* [ref][in] */ aafUID_constref flavour);
+
+
+void __RPC_STUB IAAFEssenceCodec2_SetFlavour_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFEssenceCodec2_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFMultiEssenceCodec_INTERFACE_DEFINED__

@@ -213,11 +213,7 @@ interface IAAFTypeDefVariableArrayEx;
 //
 
 
-//
-// Objects that implement IAAFAIFCDescriptor also implement the following interfaces:
-//  - IAAFFileDescriptor
-//  - IAAFEssenceDescriptor
-//  - IAAFObject
+
 
 [
     object,
@@ -362,9 +358,13 @@ interface IAAFAIFCDescriptor : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFClassDef also implement the following interfaces:
-//  - IAAFMetaDefinition
+
+
+
+
+
+
+
 
 [
     object,
@@ -864,10 +864,8 @@ interface IAAFClassDef : IUnknown
 //
 
 
-//
-// Objects that implement IAAFCodecDef also implement the following interfaces:
-//  - IAAFDefObject
-//  - IAAFObject
+
+
 
 [
     object,
@@ -1199,13 +1197,8 @@ interface IAAFCodecDef : IUnknown
 //
 
 
-//
-// Objects that implement IAAFCommentMarker also implement the following interfaces:
-//  - IAAFEvent
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
+
+
 
 [
     object,
@@ -1298,10 +1291,9 @@ interface IAAFCommentMarker : IUnknown
 //
 
 
-//
-// Objects that implement IAAFComponent also implement the following interfaces:
-//  - IAAFComponent2
-//  - IAAFObject
+
+
+
 
 [
     object,
@@ -1534,6 +1526,15 @@ interface IAAFComponent : IUnknown
     [in] IAAFKLVData * pData);
 
 
+
+
+
+
+
+
+
+
+
 }
 
 
@@ -1560,13 +1561,6 @@ interface IAAFComponent : IUnknown
 //     operation.
 //
 
-
-//
-// Objects that implement IAAFCompositionMob also implement the following interfaces:
-//  - IAAFCompositionMob2
-//  - IAAFMob
-//  - IAAFMob2
-//  - IAAFObject
 
 [
     object,
@@ -1671,6 +1665,9 @@ interface IAAFCompositionMob : IUnknown
     [in] aafRational_t  fadeEditUnit);
 
 
+
+
+
 }
 
 
@@ -1695,10 +1692,9 @@ interface IAAFCompositionMob : IUnknown
 //
 
 
-//
-// Objects that implement IAAFConstantValue also implement the following interfaces:
-//  - IAAFParameter
-//  - IAAFObject
+
+
+
 
 [
     object,
@@ -1897,11 +1893,6 @@ interface IAAFConstantValue : IUnknown
 //
 
 
-//
-// Objects that implement IAAFContainerDef also implement the following interfaces:
-//  - IAAFDefObject
-//  - IAAFObject
-
 [
     object,
     uuid(AD1BB858-DBB2-11d2-809C-006008143E6F),
@@ -1992,16 +1983,13 @@ interface IAAFContainerDef : IUnknown
 // ************************
 
 
-//
-// Objects that implement IAAFContentStorage also implement the following interfaces:
-//  - IAAFObject
-
 [
     object,
     uuid(54D4C482-5F8B-11d2-8073-006008143E6F),
     helpstring("IAAFContentStorage Interface"),
     pointer_default(unique)
 ]
+
 
 
 interface IAAFContentStorage : IUnknown
@@ -2372,9 +2360,10 @@ interface IAAFContentStorage : IUnknown
 //
 
 
-//
-// Objects that implement IAAFControlPoint also implement the following interfaces:
-//  - IAAFObject
+
+
+
+
 
 [
     object,
@@ -2668,10 +2657,6 @@ interface IAAFControlPoint : IUnknown
 //
 
 
-//
-// Objects that implement IAAFDataDef also implement the following interfaces:
-//  - IAAFDefObject
-//  - IAAFObject
 
 [
     object,
@@ -2790,6 +2775,11 @@ interface IAAFDataDef : IUnknown
     [retval, out] aafBoolean_t *  bDoesConvertFrom);
 
 
+
+
+
+
+
 }
 
 
@@ -2820,9 +2810,6 @@ interface IAAFDataDef : IUnknown
 //     concrete object's primary interface.
 
 
-//
-// Objects that implement IAAFDefObject also implement the following interfaces:
-//  - IAAFObject
 
 [
     object,
@@ -3090,10 +3077,8 @@ interface IAAFDefObject : IUnknown
 //
 
 
-//
-// Objects that implement IAAFPluginDef also implement the following interfaces:
-//  - IAAFDefObject
-//  - IAAFObject
+
+
 
 [
     object,
@@ -4163,6 +4148,7 @@ interface IAAFPluginDef : IUnknown
     [in] aafBoolean_t  SupportsAuthentication);
 
 
+
   //***********************************************************
   //
   // CountLocators()
@@ -4353,6 +4339,7 @@ interface IAAFPluginDef : IUnknown
     [in] aafUInt32  index);
 
 
+
   //***********************************************************
   //
   // GetLocators()
@@ -4432,10 +4419,26 @@ interface IAAFPluginDef : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFDictionary also implement the following interfaces:
-//  - IAAFDictionary2
-//  - IAAFObject
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 [
     object,
@@ -4487,6 +4490,7 @@ interface IAAFDictionary : IUnknown
     // Address of output variable that receives the 
     // interface pointer requested in riid
     [out, iid_is(riid)] IUnknown ** ppMetaDefinition);
+
 
 
   //***********************************************************
@@ -5348,6 +5352,28 @@ interface IAAFDictionary : IUnknown
     [out, retval] aafUInt32 *  pResult);
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 
@@ -5359,12 +5385,6 @@ interface IAAFDictionary : IUnknown
  
 
 
-//
-// Objects that implement IAAFEdgecode also implement the following interfaces:
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
 
 [
     object,
@@ -5429,12 +5449,11 @@ interface IAAFEdgecode : IUnknown
 //
 
 
- 
 
-//
-// Objects that implement IAAFOperationDef also implement the following interfaces:
-//  - IAAFDefObject
-//  - IAAFObject
+
+
+
+ 
 
 [
     object,
@@ -6071,9 +6090,10 @@ interface IAAFOperationDef : IUnknown
 //                              was required.
 
 
-//
-// Objects that implement IAAFEssenceAccess also implement the following interfaces:
-//  - IAAFEssenceMultiAccess
+
+
+
+
 
 [
     object,
@@ -6385,6 +6405,9 @@ interface IAAFEssenceAccess : IUnknown
   HRESULT CompleteWrite ();
 
 
+
+
+
 }
 
 
@@ -6419,10 +6442,6 @@ interface IAAFEssenceAccess : IUnknown
 //
 
 
-//
-// Objects that implement IAAFEssenceData also implement the following interfaces:
-//  - IAAFEssenceDataEx
-//  - IAAFObject
 
 [
     object,
@@ -6597,6 +6616,10 @@ interface IAAFEssenceData : IUnknown
     [out] aafMobID_t *  pFileMobID);
 
 
+
+
+
+
 }
 
 
@@ -6628,9 +6651,7 @@ interface IAAFEssenceData : IUnknown
 //
 
 
-//
-// Objects that implement IAAFEssenceDescriptor also implement the following interfaces:
-//  - IAAFObject
+
 
 [
     object,
@@ -6884,12 +6905,6 @@ interface IAAFEssenceDescriptor : IUnknown
 //
 
 
-//
-// Objects that implement IAAFEvent also implement the following interfaces:
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
 
 [
     object,
@@ -7070,11 +7085,6 @@ interface IAAFEvent : IUnknown
 //
 
 
-//
-// Objects that implement IAAFEventMobSlot also implement the following interfaces:
-//  - IAAFMobSlot
-//  - IAAFObject
-
 [
     object,
     uuid(e684d766-b935-11d2-bf9d-00104bc9156d),
@@ -7138,6 +7148,7 @@ interface IAAFEventMobSlot : IUnknown
     [in] aafRational_t *  pEditRate);
 
 
+
 }
 
 
@@ -7168,6 +7179,7 @@ interface IAAFEventMobSlot : IUnknown
 //   - insufficient system memory is available to perform the
 //     operation.
 //
+
 
 
 [
@@ -7428,11 +7440,6 @@ interface IAAFFile : IUnknown
 //
 
 
-//
-// Objects that implement IAAFFileDescriptor also implement the following interfaces:
-//  - IAAFEssenceDescriptor
-//  - IAAFObject
-
 [
     object,
     uuid(e58a8561-2a3e-11D2-bfa4-006097116212),
@@ -7653,10 +7660,6 @@ interface IAAFFileDescriptor : IUnknown
 //
 
 
-//
-// Objects that implement IAAFFilmDescriptor also implement the following interfaces:
-//  - IAAFEssenceDescriptor
-//  - IAAFObject
 
 [
     object,
@@ -8183,13 +8186,6 @@ interface IAAFFilmDescriptor : IUnknown
 //     object's primary interface.
 //
 
-
-//
-// Objects that implement IAAFDigitalImageDescriptor also implement the following interfaces:
-//  - IAAFDigitalImageDescriptor2
-//  - IAAFFileDescriptor
-//  - IAAFEssenceDescriptor
-//  - IAAFObject
 
 [
     object,
@@ -8868,6 +8864,26 @@ interface IAAFDigitalImageDescriptor : IUnknown
     [out] aafUInt32 *  pImageAlignmentFactor);
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 
@@ -8893,15 +8909,6 @@ interface IAAFDigitalImageDescriptor : IUnknown
 //     operation.
 //
 
-
-//
-// Objects that implement IAAFCDCIDescriptor also implement the following interfaces:
-//  - IAAFCDCIDescriptor2
-//  - IAAFDigitalImageDescriptor
-//  - IAAFDigitalImageDescriptor2
-//  - IAAFFileDescriptor
-//  - IAAFEssenceDescriptor
-//  - IAAFObject
 
 [
     object,
@@ -9473,6 +9480,10 @@ interface IAAFCDCIDescriptor : IUnknown
     [out] aafInt16 *  pPaddingBits);
 
 
+
+
+
+
 }
 
 
@@ -9623,12 +9634,7 @@ interface IAAFEssenceFormat : IUnknown
 //
 
 
-//
-// Objects that implement IAAFEssenceGroup also implement the following interfaces:
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
+
 
 [
     object,
@@ -9893,12 +9899,6 @@ interface IAAFEssenceGroup : IUnknown
 //
 
 
-//
-// Objects that implement IAAFFiller also implement the following interfaces:
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
 
 [
     object,
@@ -9953,6 +9953,9 @@ interface IAAFFiller : IUnknown
 // Interface IAAFFindSourceInfo
 //
 // ************************
+
+
+
 
 
 [
@@ -10120,12 +10123,14 @@ interface IAAFFindSourceInfo : IUnknown
 //
 
 
-//
-// Objects that implement IAAFOperationGroup also implement the following interfaces:
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
+
+
+
+
+
+
+
+
 
 [
     object,
@@ -10718,13 +10723,6 @@ interface IAAFOperationGroup : IUnknown
 //
 
 
-//
-// Objects that implement IAAFGPITrigger also implement the following interfaces:
-//  - IAAFEvent
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
 
 [
     object,
@@ -10807,9 +10805,12 @@ interface IAAFGPITrigger : IUnknown
 //
 
 
-//
-// Objects that implement IAAFHeader also implement the following interfaces:
-//  - IAAFObject
+
+
+
+
+
+
 
 [
     object,
@@ -11475,6 +11476,22 @@ interface IAAFHeader : IUnknown
     [out] IAAFContentStorage ** ppStorage);
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 
@@ -11509,10 +11526,6 @@ interface IAAFHeader : IUnknown
 //     operation.
 //
 
-
-//
-// Objects that implement IAAFIdentification also implement the following interfaces:
-//  - IAAFObject
 
 [
     object,
@@ -12083,12 +12096,6 @@ interface IAAFIdentification : IUnknown
 //
 
 
-//
-// Objects that implement IAAFImportDescriptor also implement the following interfaces:
-//  - IAAFPhysicalDescriptor
-//  - IAAFEssenceDescriptor
-//  - IAAFObject
-
 [
     object,
     uuid(2CAA17DF-DDBC-4ac5-A87E-166fcd06cc9c ),
@@ -12145,10 +12152,6 @@ interface IAAFImportDescriptor : IUnknown
 //
 
 
-//
-// Objects that implement IAAFInterpolationDef also implement the following interfaces:
-//  - IAAFDefObject
-//  - IAAFObject
 
 [
     object,
@@ -12199,9 +12202,6 @@ interface IAAFInterpolationDef : IUnknown
 //
 
 
-//
-// Objects that implement IAAFKLVData also implement the following interfaces:
-//  - IAAFObject
 
 [
     object,
@@ -12417,10 +12417,6 @@ interface IAAFKLVData : IUnknown
 //
 
 
-//
-// Objects that implement IAAFLocator also implement the following interfaces:
-//  - IAAFObject
-
 [
     object,
     uuid(d4f89061-69d6-11d2-841b-00600832acb8),
@@ -12558,11 +12554,11 @@ interface IAAFLocator : IUnknown
 //
 
 
-//
-// Objects that implement IAAFMasterMob also implement the following interfaces:
-//  - IAAFMob
-//  - IAAFMob2
-//  - IAAFObject
+
+
+
+
+
 
 [
     object,
@@ -13203,6 +13199,14 @@ interface IAAFMasterMob : IUnknown
     [out] aafUInt16*  numCh);
 
 
+
+
+
+
+
+
+
+
 }
 
 
@@ -13231,6 +13235,8 @@ interface IAAFMasterMob : IUnknown
 //     appropriate for the Initialize() method to exist in this
 //     interface.  The Initialize() method is available through the
 //     concrete object's primary interface.
+
+
 
 
 [
@@ -13512,10 +13518,16 @@ interface IAAFMetaDefinition : IUnknown
 //
 
 
-//
-// Objects that implement IAAFMob also implement the following interfaces:
-//  - IAAFMob2
-//  - IAAFObject
+
+
+
+
+
+
+
+
+
+
 
 [
     object,
@@ -14496,6 +14508,17 @@ interface IAAFMob : IUnknown
     [in] IAAFKLVData * pData);
 
 
+
+
+
+
+
+
+
+
+
+
+
 }
 
 
@@ -14537,9 +14560,7 @@ interface IAAFMob : IUnknown
 //
 
 
-//
-// Objects that implement IAAFMobSlot also implement the following interfaces:
-//  - IAAFObject
+
 
 [
     object,
@@ -14880,12 +14901,8 @@ interface IAAFMobSlot : IUnknown
 //
 
 
-//
-// Objects that implement IAAFNestedScope also implement the following interfaces:
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
+
+
 
 [
     object,
@@ -15133,11 +15150,6 @@ interface IAAFNestedScope : IUnknown
 //
 
 
-//
-// Objects that implement IAAFNetworkLocator also implement the following interfaces:
-//  - IAAFLocator
-//  - IAAFObject
-
 [
     object,
     uuid(2c1097b2-69d6-11d2-841b-00600832acb8),
@@ -15171,6 +15183,13 @@ interface IAAFNetworkLocator : IUnknown
   HRESULT Initialize ();
 
 
+
+
+
+
+
+
+
 }
 
 
@@ -15201,6 +15220,14 @@ interface IAAFNetworkLocator : IUnknown
 //     appropriate for the Initialize() method to exist in this
 //     interface.  The Initialize() method is available through the
 //     concrete object's primary interface.
+
+
+
+
+
+
+
+
 
 
 [
@@ -15694,13 +15721,6 @@ interface IAAFObject : IUnknown
 //     operation.
 //
 
-
-//
-// Objects that implement IAAFPCMDescriptor also implement the following interfaces:
-//  - IAAFSoundDescriptor
-//  - IAAFFileDescriptor
-//  - IAAFEssenceDescriptor
-//  - IAAFObject
 
 [
     object,
@@ -16686,11 +16706,8 @@ interface IAAFPCMDescriptor : IUnknown
 //
 
 
- 
 
-//
-// Objects that implement IAAFParameter also implement the following interfaces:
-//  - IAAFObject
+ 
 
 [
     object,
@@ -16791,11 +16808,6 @@ interface IAAFParameter : IUnknown
 //
 
  
-
-//
-// Objects that implement IAAFParameterDef also implement the following interfaces:
-//  - IAAFDefObject
-//  - IAAFObject
 
 [
     object,
@@ -16990,11 +17002,6 @@ interface IAAFParameterDef : IUnknown
 //
 
 
-//
-// Objects that implement IAAFPhysicalDescriptor also implement the following interfaces:
-//  - IAAFEssenceDescriptor
-//  - IAAFObject
-
 [
     object,
     uuid(e3a1234e-a544-448e-95f0-ed4944edafc8),
@@ -17025,6 +17032,9 @@ interface IAAFPhysicalDescriptor : IUnknown
 // AAFRESULT_NOMEMORY
 //   - insufficient system memory is available to perform the
 //     operation.
+
+
+
 
 
 [
@@ -17127,11 +17137,8 @@ interface IAAFProperty : IUnknown
 //
 
 
- 
 
-//
-// Objects that implement IAAFPropertyDef also implement the following interfaces:
-//  - IAAFMetaDefinition
+ 
 
 [
     object,
@@ -17282,6 +17289,8 @@ interface IAAFPropertyDef : IUnknown
     [out, retval] aafBoolean_t *  pIsUniqueIdentifier);
 
 
+
+
   //***********************************************************
   //
   // SetDescription()
@@ -17410,6 +17419,7 @@ interface IAAFPropertyDef : IUnknown
 //     operation.
 
 
+
 [
     object,
     uuid(83057d72-9691-11d2-aa7f-80e6aa000000),
@@ -17501,6 +17511,8 @@ interface IAAFPropertyValue : IUnknown
 //   - insufficient system memory is available to perform the
 //     operation.
 //
+
+
 
 
 [
@@ -17683,13 +17695,6 @@ interface IAAFPluginManager : IUnknown
 //     operation.
 //
 
-
-//
-// Objects that implement IAAFPulldown also implement the following interfaces:
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
 
 [
     object,
@@ -17948,6 +17953,10 @@ interface IAAFPulldown : IUnknown
     [in] aafPhaseFrame_t  phaseFrame);
 
 
+
+
+
+
 }
 
 
@@ -17990,14 +17999,7 @@ interface IAAFPulldown : IUnknown
 //
 
 
-//
-// Objects that implement IAAFRGBADescriptor also implement the following interfaces:
-//  - IAAFRGBADescriptor2
-//  - IAAFDigitalImageDescriptor
-//  - IAAFDigitalImageDescriptor2
-//  - IAAFFileDescriptor
-//  - IAAFEssenceDescriptor
-//  - IAAFObject
+
 
 [
     object,
@@ -18300,6 +18302,16 @@ interface IAAFRGBADescriptor : IUnknown
     [out, size_is(numberElements)] aafRGBAComponent_t*  PaletteLayoutArray);
 
 
+
+
+
+
+
+
+
+
+
+
 }
 
 
@@ -18327,12 +18339,6 @@ interface IAAFRGBADescriptor : IUnknown
 //
 
 
-//
-// Objects that implement IAAFScopeReference also implement the following interfaces:
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
 
 [
     object,
@@ -18478,12 +18484,6 @@ interface IAAFScopeReference : IUnknown
 //
 
 
-//
-// Objects that implement IAAFSegment also implement the following interfaces:
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
-
 [
     object,
     uuid(7a2f0570-1ba3-11D2-bfaa-006097116212),
@@ -18588,12 +18588,7 @@ interface IAAFSegment : IUnknown
 //
 
 
-//
-// Objects that implement IAAFSelector also implement the following interfaces:
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
+
 
 [
     object,
@@ -18818,12 +18813,10 @@ interface IAAFSelector : IUnknown
 //
 
 
-//
-// Objects that implement IAAFSequence also implement the following interfaces:
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
+
+
+
+
 
 [
     object,
@@ -19193,6 +19186,10 @@ interface IAAFSequence : IUnknown
     [out, retval] IEnumAAFComponents ** ppEnum);
 
 
+
+
+
+
 }
 
 
@@ -19216,12 +19213,6 @@ interface IAAFSequence : IUnknown
 //     operation.
 //
 
-
-//
-// Objects that implement IAAFSoundDescriptor also implement the following interfaces:
-//  - IAAFFileDescriptor
-//  - IAAFEssenceDescriptor
-//  - IAAFObject
 
 [
     object,
@@ -19667,14 +19658,7 @@ interface IAAFSoundDescriptor : IUnknown
 //
 
 
-//
-// Objects that implement IAAFSourceClip also implement the following interfaces:
-//  - IAAFSourceReference
-//  - IAAFSourceReference2
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
+
 
 [
     object,
@@ -19946,12 +19930,10 @@ interface IAAFSourceClip : IUnknown
 //
 
 
-//
-// Objects that implement IAAFSourceMob also implement the following interfaces:
-//  - IAAFSearchSource
-//  - IAAFMob
-//  - IAAFMob2
-//  - IAAFObject
+
+
+
+
 
 [
     object,
@@ -20493,14 +20475,6 @@ interface IAAFSourceMob : IUnknown
 //
 
 
-//
-// Objects that implement IAAFSourceReference also implement the following interfaces:
-//  - IAAFSourceReference2
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
-
 [
     object,
     uuid(92B88033-2B2B-11d2-BF7E-00104BC9156D),
@@ -20606,6 +20580,13 @@ interface IAAFSourceReference : IUnknown
     [in] aafSlotID_t   mobSlotID);
 
 
+
+
+
+
+
+
+
 }
 
 
@@ -20622,10 +20603,6 @@ interface IAAFSourceReference : IUnknown
 //
 
 
-//
-// Objects that implement IAAFStaticMobSlot also implement the following interfaces:
-//  - IAAFMobSlot
-//  - IAAFObject
 
 [
     object,
@@ -20661,11 +20638,6 @@ interface IAAFStaticMobSlot : IUnknown
 //     operation.
 //
 
-
-//
-// Objects that implement IAAFTapeDescriptor also implement the following interfaces:
-//  - IAAFEssenceDescriptor
-//  - IAAFObject
 
 [
     object,
@@ -21154,9 +21126,6 @@ interface IAAFTapeDescriptor : IUnknown
 //
 
 
-//
-// Objects that implement IAAFTaggedValue also implement the following interfaces:
-//  - IAAFObject
 
 [
     object,
@@ -21438,10 +21407,6 @@ interface IAAFTaggedValue : IUnknown
 //
 
 
-//
-// Objects that implement IAAFTextLocator also implement the following interfaces:
-//  - IAAFLocator
-//  - IAAFObject
 
 [
     object,
@@ -21602,13 +21567,6 @@ interface IAAFTextLocator : IUnknown
 //
 
 
-//
-// Objects that implement IAAFTimecode also implement the following interfaces:
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
-
 [
     object,
     uuid(92B88035-2B2B-11d2-BF7E-00104BC9156D),
@@ -21709,6 +21667,8 @@ interface IAAFTimecode : IUnknown
     [in] aafTimecode_t *  timecode);
 
 
+
+
 }
 
 
@@ -21741,12 +21701,6 @@ interface IAAFTimecode : IUnknown
 // aafTrackID_t
 //
 
-
-//
-// Objects that implement IAAFTimelineMobSlot also implement the following interfaces:
-//  - IAAFTimelineMobSlot2
-//  - IAAFMobSlot
-//  - IAAFObject
 
 [
     object,
@@ -21877,6 +21831,11 @@ interface IAAFTimelineMobSlot : IUnknown
     [in] aafPosition_t  origin);
 
 
+
+
+
+
+
 }
 
 
@@ -21910,11 +21869,10 @@ interface IAAFTimelineMobSlot : IUnknown
 //
 
 
-//
-// Objects that implement IAAFTransition also implement the following interfaces:
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
+
+
+
+
 
 [
     object,
@@ -22015,12 +21973,6 @@ interface IAAFTransition : IUnknown
 //     operation.
 //  
 
-
-//
-// Objects that implement IAAFTIFFDescriptor also implement the following interfaces:
-//  - IAAFFileDescriptor
-//  - IAAFEssenceDescriptor
-//  - IAAFObject
 
 [
     object,
@@ -22395,12 +22347,6 @@ interface IAAFTIFFDescriptor : IUnknown
 //
 
 
-//
-// Objects that implement IAAFTimecodeStream also implement the following interfaces:
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
 
 [
     object,
@@ -22639,6 +22585,10 @@ interface IAAFTimecodeStream : IUnknown
     [in, size_is(valueSize)] aafDataBuffer_t  pValue);
 
 
+
+
+
+
 }
 
 
@@ -22650,13 +22600,6 @@ interface IAAFTimecodeStream : IUnknown
 // ************************
 
 
-//
-// Objects that implement IAAFTimecodeStream12M also implement the following interfaces:
-//  - IAAFTimecodeStream
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
 
 [
     object,
@@ -22667,6 +22610,8 @@ interface IAAFTimecodeStream : IUnknown
 
 interface IAAFTimecodeStream12M : IUnknown
 {
+
+
 
 
 }
@@ -22698,10 +22643,6 @@ interface IAAFTimecodeStream12M : IUnknown
 //     interface.  The Initialize() method is available through the
 //     concrete object's primary interface.
 
-
-//
-// Objects that implement IAAFTypeDef also implement the following interfaces:
-//  - IAAFMetaDefinition
 
 [
     object,
@@ -22786,10 +22727,7 @@ interface IAAFTypeDef : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFTypeDefCharacter also implement the following interfaces:
-//  - IAAFTypeDef
-//  - IAAFMetaDefinition
+
 
 [
     object,
@@ -22888,6 +22826,7 @@ interface IAAFTypeDefCharacter : IUnknown
     [in] aafCharacter  character);
 
 
+
 }
 
 
@@ -22910,10 +22849,7 @@ interface IAAFTypeDefCharacter : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFTypeDefIndirect also implement the following interfaces:
-//  - IAAFTypeDef
-//  - IAAFMetaDefinition
+
 
 [
     object,
@@ -22923,6 +22859,7 @@ interface IAAFTypeDefCharacter : IUnknown
 ]
 interface IAAFTypeDefIndirect : IUnknown
 {
+
 
 
   //***********************************************************
@@ -23186,6 +23123,7 @@ interface IAAFTypeDefIndirect : IUnknown
     [in] aafUInt32  dataSize);
 
 
+
 }
 
 
@@ -23208,10 +23146,6 @@ interface IAAFTypeDefIndirect : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFTypeDefInt also implement the following interfaces:
-//  - IAAFTypeDef
-//  - IAAFMetaDefinition
 
 [
     object,
@@ -23472,6 +23406,7 @@ interface IAAFTypeDefInt : IUnknown
     [out] aafBoolean_t *  pSigned);
 
 
+
 }
 
 
@@ -23495,10 +23430,6 @@ interface IAAFTypeDefInt : IUnknown
 //
 
 
-//
-// Objects that implement IAAFTypeDefRename also implement the following interfaces:
-//  - IAAFTypeDef
-//  - IAAFMetaDefinition
 
 [
     object,
@@ -23664,10 +23595,6 @@ interface IAAFTypeDefRename : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFTypeDefEnum also implement the following interfaces:
-//  - IAAFTypeDef
-//  - IAAFMetaDefinition
 
 [
     object,
@@ -23935,6 +23862,7 @@ interface IAAFTypeDefEnum : IUnknown
     [out] aafUInt32 *  pLen);
 
 
+
   
   //***********************************************************
   //
@@ -23962,6 +23890,7 @@ interface IAAFTypeDefEnum : IUnknown
   HRESULT CountElements (
     // count of elements within this enumeration
     [out] aafUInt32 *  pCount);
+
 
 
   //***********************************************************
@@ -24258,10 +24187,6 @@ interface IAAFTypeDefEnum : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFTypeDefExtEnum also implement the following interfaces:
-//  - IAAFTypeDef
-//  - IAAFMetaDefinition
 
 [
     object,
@@ -24777,6 +24702,7 @@ interface IAAFTypeDefExtEnum : IUnknown
     [in] aafCharacter_constptr  pName);
 
 
+
 }
 
 
@@ -24799,10 +24725,7 @@ interface IAAFTypeDefExtEnum : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFTypeDefFixedArray also implement the following interfaces:
-//  - IAAFTypeDef
-//  - IAAFMetaDefinition
+
 
 [
     object,
@@ -25201,6 +25124,8 @@ interface IAAFTypeDefFixedArray : IUnknown
     [in] aafUInt32  dataSize);
 
 
+
+
   //***********************************************************
   //
   // GetElements()
@@ -25255,10 +25180,7 @@ interface IAAFTypeDefFixedArray : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFTypeDefRecord also implement the following interfaces:
-//  - IAAFTypeDef
-//  - IAAFMetaDefinition
+
 
 [
     object,
@@ -25842,10 +25764,7 @@ interface IAAFTypeDefRecord : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFTypeDefSet also implement the following interfaces:
-//  - IAAFTypeDef
-//  - IAAFMetaDefinition
+
 
 [
     object,
@@ -26011,6 +25930,7 @@ interface IAAFTypeDefSet : IUnknown
 
     // value to be added to this set
     [out] aafBoolean_t*  pContainsElement);
+
 
 
   //***********************************************************
@@ -26214,10 +26134,6 @@ interface IAAFTypeDefSet : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFTypeDefStream also implement the following interfaces:
-//  - IAAFTypeDef
-//  - IAAFMetaDefinition
 
 [
     object,
@@ -26785,10 +26701,6 @@ cpp_quote("  // Extend in chunks of typed Elements")
 //     operation.
 
 
-//
-// Objects that implement IAAFTypeDefString also implement the following interfaces:
-//  - IAAFTypeDef
-//  - IAAFMetaDefinition
 
 [
     object,
@@ -27058,6 +26970,7 @@ interface IAAFTypeDefString : IUnknown
     [in] aafUInt32  bufferSize);
 
 
+
 }
 
 
@@ -27080,11 +26993,7 @@ interface IAAFTypeDefString : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFTypeDefStrongObjRef also implement the following interfaces:
-//  - IAAFTypeDefObjectRef
-//  - IAAFTypeDef
-//  - IAAFMetaDefinition
+
 
 [
     object,
@@ -27135,6 +27044,8 @@ interface IAAFTypeDefStrongObjRef : IUnknown
     [in, string] aafCharacter_constptr  pTypeName);
 
 
+
+
 }
 
 
@@ -27157,11 +27068,7 @@ interface IAAFTypeDefStrongObjRef : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFTypeDefWeakObjRef also implement the following interfaces:
-//  - IAAFTypeDefObjectRef
-//  - IAAFTypeDef
-//  - IAAFMetaDefinition
+
 
 [
     object,
@@ -27258,10 +27165,9 @@ interface IAAFTypeDefWeakObjRef : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFTypeDefObjectRef also implement the following interfaces:
-//  - IAAFTypeDef
-//  - IAAFMetaDefinition
+
+
+
 
 [
     object,
@@ -27403,6 +27309,7 @@ interface IAAFTypeDefObjectRef : IUnknown
     [in] IUnknown * pObject);
 
 
+
 }
 
 
@@ -27425,11 +27332,7 @@ interface IAAFTypeDefObjectRef : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFTypeDefOpaque also implement the following interfaces:
-//  - IAAFTypeDefIndirect
-//  - IAAFTypeDef
-//  - IAAFMetaDefinition
+
 
 [
     object,
@@ -27632,6 +27535,7 @@ interface IAAFTypeDefOpaque : IUnknown
     [out] IAAFPropertyValue ** ppOpaquePropertyValue);
 
 
+
 }
 
 
@@ -27654,11 +27558,7 @@ interface IAAFTypeDefOpaque : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFTypeDefVariableArray also implement the following interfaces:
-//  - IAAFTypeDefVariableArrayEx
-//  - IAAFTypeDef
-//  - IAAFMetaDefinition
+
 
 [
     object,
@@ -28111,6 +28011,8 @@ interface IAAFTypeDefVariableArray : IUnknown
     [in] aafUInt32  dataSize);
 
 
+
+
   //***********************************************************
   //
   // GetElements()
@@ -28144,6 +28046,9 @@ interface IAAFTypeDefVariableArray : IUnknown
     [out] IEnumAAFPropertyValues ** ppEnum);
 
 
+
+
+
 }
 
 
@@ -28169,10 +28074,10 @@ interface IAAFTypeDefVariableArray : IUnknown
 //
 
 
-//
-// Objects that implement IAAFVaryingValue also implement the following interfaces:
-//  - IAAFParameter
-//  - IAAFObject
+
+
+
+
 
 [
     object,
@@ -28507,12 +28412,6 @@ interface IAAFVaryingValue : IUnknown
 //
 
 
-//
-// Objects that implement IAAFWAVEDescriptor also implement the following interfaces:
-//  - IAAFFileDescriptor
-//  - IAAFEssenceDescriptor
-//  - IAAFObject
-
 [
     object,
     uuid(4c2e1692-8ae6-11d2-813c-006097310172),
@@ -28653,6 +28552,7 @@ interface IAAFWAVEDescriptor : IUnknown
 //   - insufficient system memory is available to perform the
 //     operation.
 //
+
 
 
 [
@@ -28815,6 +28715,8 @@ interface IEnumAAFClassDefs : IUnknown
 // Interface IEnumAAFCodecDefs
 //
 // ************************
+
+
 
 
 [
@@ -29110,6 +29012,7 @@ interface IEnumAAFCodecFlavours : IUnknown
 //
 
 
+
 [
     object,
     uuid(B1A21394-1A7D-11D2-BF78-00104BC9156D),
@@ -29269,6 +29172,7 @@ interface IEnumAAFComponents : IUnknown
 // Interface IEnumAAFContainerDefs
 //
 // ************************
+
 
 
 [
@@ -29433,6 +29337,7 @@ interface IEnumAAFContainerDefs : IUnknown
 // ************************
 
 
+
 [
     object,
     uuid(B1A2139C-1A7D-11D2-BF78-00104BC9156D),
@@ -29593,6 +29498,7 @@ interface IEnumAAFControlPoints : IUnknown
 // Interface IEnumAAFDataDefs
 //
 // ************************
+
 
 
 [
@@ -29769,6 +29675,7 @@ interface IEnumAAFDataDefs : IUnknown
 //
 
 
+
 [
     object,
     uuid(B1A21384-1A7D-11D2-BF78-00104BC9156D),
@@ -29931,6 +29838,7 @@ interface IEnumAAFIdentifications : IUnknown
 // ************************
 
 
+
 [
     object,
     uuid(293600A5-0D37-11d3-80A9-006008143E6F),
@@ -30091,6 +29999,7 @@ interface IEnumAAFInterpolationDefs : IUnknown
 // Interface IEnumAAFOperationDefs
 //
 // ************************
+
 
 
 [
@@ -30275,6 +30184,10 @@ interface IEnumAAFOperationDefs : IUnknown
 //
 
 
+
+
+
+
 [
     object,
     uuid(B1A21392-1A7D-11D2-BF78-00104BC9156D),
@@ -30362,6 +30275,7 @@ interface IEnumAAFEssenceData : IUnknown
 // Interface IEnumAAFKLVData
 //
 // ************************
+
 
 
 [
@@ -30539,6 +30453,10 @@ interface IEnumAAFKLVData : IUnknown
 //
 
 
+
+
+
+
 [
     object,
     uuid(AB4D9F14-DD69-11d2-809C-006008143E6F),
@@ -30640,6 +30558,7 @@ interface IEnumAAFLoadedPlugins : IUnknown
 //   - insufficient system memory is available to perform the
 //     operation.
 //
+
 
 
 [
@@ -30812,6 +30731,7 @@ interface IEnumAAFLocators : IUnknown
 //   - insufficient system memory is available to perform the
 //     operation.
 //
+
 
 
 [
@@ -31003,6 +30923,7 @@ interface IEnumAAFMobSlots : IUnknown
 //
 
 
+
 [
     object,
     uuid(B1A21386-1A7D-11D2-BF78-00104BC9156D),
@@ -31175,6 +31096,9 @@ interface IEnumAAFMobs : IUnknown
 //   - insufficient system memory is available to perform the
 //     operation.
 //
+
+
+
 
 
 [
@@ -31350,6 +31274,7 @@ interface IEnumAAFParameterDefs : IUnknown
 //   - insufficient system memory is available to perform the
 //     operation.
 //
+
 
 
 [
@@ -31530,6 +31455,7 @@ interface IEnumAAFParameters : IUnknown
 //     operation.
 
 
+
 [
     object,
     uuid(BE316DB2-7E73-11D2-841D-00600832ACB8),
@@ -31690,6 +31616,8 @@ interface IEnumAAFProperties : IUnknown
 // Interface IEnumAAFPropertyDefs
 //
 // ************************
+
+
 
 
 [
@@ -31864,6 +31792,7 @@ interface IEnumAAFPropertyDefs : IUnknown
 //   - insufficient system memory is available to perform the
 //     operation.
 //
+
 
 
 [
@@ -32045,6 +31974,7 @@ interface IEnumAAFPropertyValues : IUnknown
 //
 
 
+
 [
     object,
     uuid(AD1BB85F-DBB2-11d2-809C-006008143E6F),
@@ -32220,6 +32150,7 @@ interface IEnumAAFPluginDefs : IUnknown
 //
 
 
+
 [
     object,
     uuid(AD1BB861-DBB2-11d2-809C-006008143E6F),
@@ -32314,6 +32245,7 @@ interface IEnumAAFPluginLocators : IUnknown
 // Interface IEnumAAFSegments
 //
 // ************************
+
 
 
 [
@@ -32478,6 +32410,7 @@ interface IEnumAAFSegments : IUnknown
 // ************************
 
 
+
 [
     object,
     uuid(5f7916f1-0f87-11d3-8a3e-0050040ef7d2),
@@ -32638,6 +32571,7 @@ interface IEnumAAFTaggedValues : IUnknown
 // Interface IEnumAAFTypeDefs
 //
 // ************************
+
 
 
 [
@@ -33008,10 +32942,6 @@ interface IAAFRawStorage : IUnknown
 //   - insufficient system memory is available to perform the
 //     operation.
 
-
-//
-// Objects that implement IAAFRandomRawStorage also implement the following interfaces:
-//  - IAAFRawStorage
 
 [
     object,
@@ -33441,9 +33371,7 @@ interface IAAFSetFileBits : IUnknown
 //
 
 
-//
-// Objects that implement IAAFRandomFile also implement the following interfaces:
-//  - IAAFFile
+
 
 [
     object,
@@ -33586,10 +33514,8 @@ interface IAAFRandomFile : IUnknown
 //
 
 
-//
-// Objects that implement IAAFTaggedValueDefinition also implement the following interfaces:
-//  - IAAFDefObject
-//  - IAAFObject
+
+
 
 [
     object,
@@ -33710,10 +33636,9 @@ interface IAAFTaggedValueDefinition : IUnknown
 //
 
 
-//
-// Objects that implement IAAFKLVDataDefinition also implement the following interfaces:
-//  - IAAFDefObject
-//  - IAAFObject
+
+
+
 
 [
     object,
@@ -33868,6 +33793,8 @@ interface IAAFKLVDataDefinition : IUnknown
 // Interface IEnumAAFTaggedValueDefs
 //
 // ************************
+
+
 
 
 [
@@ -34031,6 +33958,8 @@ interface IEnumAAFTaggedValueDefs : IUnknown
 // Interface IEnumAAFKLVDataDefs
 //
 // ************************
+
+
 
 
 [
@@ -34209,11 +34138,7 @@ interface IEnumAAFKLVDataDefs : IUnknown
 //
 
 
-//
-// Objects that implement IAAFRecordingDescriptor also implement the following interfaces:
-//  - IAAFPhysicalDescriptor
-//  - IAAFEssenceDescriptor
-//  - IAAFObject
+
 
 [
     object,
@@ -34272,11 +34197,7 @@ interface IAAFRecordingDescriptor : IUnknown
 //
 
 
-//
-// Objects that implement IAAFAuxiliaryDescriptor also implement the following interfaces:
-//  - IAAFPhysicalDescriptor
-//  - IAAFEssenceDescriptor
-//  - IAAFObject
+
 
 [
     object,
@@ -34540,9 +34461,6 @@ interface IAAFAuxiliaryDescriptor : IUnknown
 //
 
 
-//
-// Objects that implement IAAFDescriptiveFramework also implement the following interfaces:
-//  - IAAFObject
 
 [
     object,
@@ -34589,14 +34507,8 @@ interface IAAFDescriptiveFramework : IUnknown
 //
 
 
-//
-// Objects that implement IAAFDescriptiveMarker also implement the following interfaces:
-//  - IAAFCommentMarker
-//  - IAAFEvent
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
+
+
 
 [
     object,
@@ -34759,14 +34671,6 @@ interface IAAFDescriptiveMarker : IUnknown
 //     operation.
 //
 
-
-//
-// Objects that implement IAAFCDCIDescriptor2 also implement the following interfaces:
-//  - IAAFDigitalImageDescriptor
-//  - IAAFDigitalImageDescriptor2
-//  - IAAFFileDescriptor
-//  - IAAFEssenceDescriptor
-//  - IAAFObject
 
 [
     object,
@@ -35467,9 +35371,10 @@ interface IAAFCDCIDescriptor2 : IUnknown
 //
 
 
-//
-// Objects that implement IAAFComponent2 also implement the following interfaces:
-//  - IAAFObject
+
+
+
+
 
 [
     object,
@@ -35479,6 +35384,8 @@ interface IAAFCDCIDescriptor2 : IUnknown
 ]
 interface IAAFComponent2 : IUnknown
 {
+
+
 
 
   //***********************************************************
@@ -35704,6 +35611,7 @@ interface IAAFComponent2 : IUnknown
     [in] IAAFKLVData * pData);
 
 
+
   //***********************************************************
   //
   // AppendComment()
@@ -35895,6 +35803,8 @@ interface IAAFComponent2 : IUnknown
    //	     - pName or pValue is null.
 
 
+
+
 }
 
 
@@ -35920,12 +35830,6 @@ interface IAAFComponent2 : IUnknown
 //
 
 
-//
-// Objects that implement IAAFCompositionMob2 also implement the following interfaces:
-//  - IAAFMob
-//  - IAAFMob2
-//  - IAAFObject
-
 [
     object,
     uuid(188a82c7-0d87-4af3-89e0-5f96e56ff9de),
@@ -35934,6 +35838,7 @@ interface IAAFComponent2 : IUnknown
 ]
 interface IAAFCompositionMob2 : IUnknown
 {
+
 
 
   //***********************************************************
@@ -36080,11 +35985,6 @@ interface IAAFCompositionMob2 : IUnknown
 // Interface IAAFDataDef2
 //
 // ************************
-
-//
-// Objects that implement IAAFDataDef2 also implement the following interfaces:
-//  - IAAFDefObject
-//  - IAAFObject
 
 [
     object,
@@ -36233,11 +36133,6 @@ interface IAAFDataDef2 : IUnknown
 // Interface IAAFDataDef3
 //
 // ************************
-
-//
-// Objects that implement IAAFDataDef3 also implement the following interfaces:
-//  - IAAFDefObject
-//  - IAAFObject
 
 [
     object,
@@ -36420,9 +36315,27 @@ interface IAAFDataDef3 : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFDictionary2 also implement the following interfaces:
-//  - IAAFObject
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 [
     object,
@@ -36473,6 +36386,8 @@ interface IAAFDictionary2 : IUnknown
     // Address of output variable that receives the 
     // interface pointer requested in riid
     [out, iid_is(riid)] IUnknown ** ppMetaDefinition);
+
+
 
 
   //***********************************************************
@@ -37819,11 +37734,6 @@ interface IAAFDictionary2 : IUnknown
 //
 
 
-//
-// Objects that implement IAAFDigitalImageDescriptor2 also implement the following interfaces:
-//  - IAAFFileDescriptor
-//  - IAAFEssenceDescriptor
-//  - IAAFObject
 
 [
     object,
@@ -38399,6 +38309,7 @@ interface IAAFDigitalImageDescriptor2 : IUnknown
   HRESULT GetAlphaTransparency (
     // Alpha Transparency value.
     [out] aafAlphaTransparency_t *  pAlphaTransparency);
+
 
 
   //***********************************************************
@@ -39071,9 +38982,6 @@ interface IAAFEndian : IUnknown
 //
 
 
-//
-// Objects that implement IAAFEssenceDataEx also implement the following interfaces:
-//  - IAAFObject
 
 [
     object,
@@ -39346,6 +39254,10 @@ interface IAAFEssenceDataEx : IUnknown
 //                           required.
 
 
+
+
+
+
 [
     object,
     uuid(D815E2B4-2425-11d3-80AD-006008143E6F),
@@ -39455,9 +39367,12 @@ interface IAAFEssenceMultiAccess : IUnknown
 //
 
 
-//
-// Objects that implement IAAFHeader2 also implement the following interfaces:
-//  - IAAFObject
+
+
+
+
+
+
 
 [
     object,
@@ -40550,11 +40465,12 @@ interface IAAFHeader2 : IUnknown
 //
 
 
-//
-// Objects that implement IAAFMasterMob2 also implement the following interfaces:
-//  - IAAFMob
-//  - IAAFMob2
-//  - IAAFObject
+
+
+
+
+
+
 
 [
     object,
@@ -40564,6 +40480,7 @@ interface IAAFHeader2 : IUnknown
 ]
 interface IAAFMasterMob2 : IUnknown
 {
+
 
 
   //***********************************************************
@@ -41197,6 +41114,8 @@ interface IAAFMasterMob2 : IUnknown
     [out] aafUInt16*  numCh);
 
 
+
+
   //***********************************************************
   //
   // ExtendEssence()
@@ -41395,11 +41314,9 @@ interface IAAFMasterMob2 : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFMasterMobEx also implement the following interfaces:
-//  - IAAFMob
-//  - IAAFMob2
-//  - IAAFObject
+
+
+
 
 [
     object,
@@ -41516,9 +41433,16 @@ interface IAAFMasterMobEx : IUnknown
 //
 
 
-//
-// Objects that implement IAAFMob2 also implement the following interfaces:
-//  - IAAFObject
+
+
+
+
+
+
+
+
+
+
 
 [
     object,
@@ -41528,6 +41452,12 @@ interface IAAFMasterMobEx : IUnknown
 ]
 interface IAAFMob2 : IUnknown
 {
+
+
+
+
+
+
 
 
   //***********************************************************
@@ -42766,13 +42696,7 @@ interface IAAFMob2 : IUnknown
 //
 
 
-//
-// Objects that implement IAAFRGBADescriptor2 also implement the following interfaces:
-//  - IAAFDigitalImageDescriptor
-//  - IAAFDigitalImageDescriptor2
-//  - IAAFFileDescriptor
-//  - IAAFEssenceDescriptor
-//  - IAAFObject
+
 
 [
     object,
@@ -43449,12 +43373,6 @@ interface IAAFSearchSource : IUnknown
 //
 
 
-//
-// Objects that implement IAAFSourceReference2 also implement the following interfaces:
-//  - IAAFSegment
-//  - IAAFComponent
-//  - IAAFComponent2
-//  - IAAFObject
 
 [
     object,
@@ -43464,6 +43382,7 @@ interface IAAFSearchSource : IUnknown
 ]
 interface IAAFSourceReference2 : IUnknown
 {
+
 
 
   //***********************************************************
@@ -43561,6 +43480,7 @@ interface IAAFSourceReference2 : IUnknown
   HRESULT SetSourceMobSlotID (
     // Source Mob ID to set
     [in] aafSlotID_t   mobSlotID);
+
 
 
   //***********************************************************
@@ -43729,11 +43649,6 @@ interface IAAFSourceReference2 : IUnknown
 // aafTrackID_t
 //
 
-
-//
-// Objects that implement IAAFTimelineMobSlot2 also implement the following interfaces:
-//  - IAAFMobSlot
-//  - IAAFObject
 
 [
     object,
@@ -44057,10 +43972,7 @@ interface IAAFTimelineMobSlot2 : IUnknown
 //     operation.
 
 
-//
-// Objects that implement IAAFTypeDefVariableArrayEx also implement the following interfaces:
-//  - IAAFTypeDef
-//  - IAAFMetaDefinition
+
 
 [
     object,
@@ -44071,6 +43983,7 @@ interface IAAFTimelineMobSlot2 : IUnknown
 
 interface IAAFTypeDefVariableArrayEx : IUnknown
 {
+
 
 
   //***********************************************************
@@ -44101,6 +44014,8 @@ interface IAAFTypeDefVariableArrayEx : IUnknown
 
     // value to be prepended to this array
     [in] IAAFPropertyValue * pMemberPropVal);
+
+
 
 
   //***********************************************************
@@ -44138,6 +44053,8 @@ interface IAAFTypeDefVariableArrayEx : IUnknown
 
     // zero-based index into elements in this array type
     [in] aafUInt32  index);
+
+
 
 
   //***********************************************************
@@ -44183,7 +44100,10 @@ interface IAAFTypeDefVariableArrayEx : IUnknown
     [in] IAAFPropertyValue * pMemberPropVal);
 
 
+
+
 }
+
 
 
 
@@ -44201,6 +44121,7 @@ interface IAAFTypeDefVariableArrayEx : IUnknown
   //   - insufficient system memory is available to perform the
   //     operation.
   //
+
 
 
 cpp_quote("  //***********************************************************") 
