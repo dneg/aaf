@@ -1,6 +1,6 @@
 #################################################
 #                                               #
-# Copyright (c) 1998-1999 Avid Technology, Inc. #
+# Copyright (c) 1998-2000 Avid Technology, Inc. #
 #                                               #
 #################################################
 
@@ -43,7 +43,7 @@ echo \#include \"AAFTypes.h\"
 echo \#endif
 echo ""
 echo ""
-for class in ${AAFOBJECTS} ; do \
+for class in ${PRIVATE_AAFOBJECTS} ${AAFOBJECTS} ; do \
 	echo "extern \"C\" const aafClassID_t CLSID_$class;"; \
 done
 echo ""

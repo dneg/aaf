@@ -5,7 +5,7 @@
 #################################################
 
 echo "//=--------------------------------------------------------------------------="
-echo "// (C) Copyright 1998-1999 Avid Technology."
+echo "// (C) Copyright 1998-2000 Avid Technology."
 echo "//"
 echo "// This file was GENERATED for the AAF SDK on "
 echo "//  "`date`
@@ -40,9 +40,17 @@ echo ""
 echo "//"
 echo "// Include the appropriate header files:"
 echo "//"
+for AAF in ${PRIVATE_AAFOBJECTS} ; do \
+    echo \#include \"C$AAF.h\"
+done
 for AAF in ${AAFOBJECTS} ; do \
     echo \#include \"C$AAF.h\"
 done
+echo ""
+echo "//"
+echo "// Include Private AAF Objects in Table:"
+echo "//"
+echo \#define AAF_PRIVATE_OBJECT_ENTRY\(name\) AAF_OBJECT_ENTRY\(name\)
 echo ""
 echo "//"
 echo "// Include AAF Object Table:"

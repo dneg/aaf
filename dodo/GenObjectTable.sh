@@ -1,6 +1,6 @@
 #################################################
 #                                               #
-# Copyright (c) 1998-1999 Avid Technology, Inc. #
+# Copyright (c) 1998-2000 Avid Technology, Inc. #
 #                                               #
 #################################################
 
@@ -49,8 +49,12 @@ echo \#ifndef AAF_END_OBJECT_MAP
 echo \#define AAF_END_OBJECT_MAP\(\)
 echo \#endif
 echo ""
-echo \#ifndef AAF_END_OBJECT_MAP
+echo \#ifndef AAF_OBJECT_ENTRY
 echo \#define AAF_OBJECT_ENTRY\(name\)
+echo \#endif
+echo ""
+echo \#ifndef AAF_PRIVATE_OBJECT_ENTRY
+echo \#define AAF_PRIVATE_OBJECT_ENTRY\(name\)
 echo \#endif
 echo ""
 echo ""
@@ -58,6 +62,9 @@ echo "//"
 echo "// Include all objects in the following table:"
 echo "//"
 echo AAF_BEGIN_OBJECT_MAP\(AAFObjectMap\)
+for AAF in ${PRIVATE_AAFOBJECTS} ; do \
+	echo "	AAF_PRIVATE_OBJECT_ENTRY("$AAF")"
+done
 for AAF in ${AAFOBJECTS} ; do \
 	echo "	AAF_OBJECT_ENTRY("$AAF")"
 done

@@ -9,7 +9,7 @@ echo "/* the IIDs and CLSIDs */"
 echo ""
 echo "/* link this file in with the server and any clients */"
 echo "//=--------------------------------------------------------------------------="
-echo "// (C) Copyright 1998-1999 Avid Technology."
+echo "// (C) Copyright 1998-2000 Avid Technology."
 echo "//"
 echo "// This file was GENERATED for the AAF SDK on "
 echo "//  "`date`
@@ -62,7 +62,7 @@ echo \#define CLSID_DEFINED
 echo "typedef IID CLSID;"
 echo \#endif "// CLSID_DEFINED"
 echo ""
-for class in AAFRoot ; do \
+for class in AAFRoot ${PRIVATE_AAFOBJECTS} ; do \
 	awk -f dod2iid.awk C=$class $class.dod
 done
 echo \#ifdef __cplusplus

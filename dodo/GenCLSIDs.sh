@@ -1,6 +1,6 @@
 #################################################
 #                                               #
-# Copyright (c) 1998-1999 Avid Technology, Inc. #
+# Copyright (c) 1998-2000 Avid Technology, Inc. #
 #                                               #
 #################################################
 
@@ -42,7 +42,7 @@ echo \#ifndef __AAFCOMPlatformTypes_h__
 echo \#include \"AAFCOMPlatformTypes.h\"
 echo \#endif
 echo ""
-for class in ${AAFOBJECTS} ; do \
+for class in ${PRIVATE_AAFOBJECTS} ${AAFOBJECTS} ; do \
 	echo "EXTERN_C const CLSID CLSID_$class;"; \
 done
 echo ""
