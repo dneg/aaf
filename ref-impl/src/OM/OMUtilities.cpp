@@ -343,3 +343,81 @@ size_t lengthOfOMString(const OMCharacter* string)
   }
   return length;
 }
+
+  // Manipulation of property paths (eventually these will be
+  // intantiations of templates shared with the wide character
+  // functions).
+
+bool validPropertyPath(const OMPropertyId* path)
+{
+  TRACE("validPropertyPath");
+
+  bool result;
+  if (path == 0) {
+    result = false;
+  } else {
+    if (lengthOfPropertyPath(path) == 0) {
+      result = false;
+    } else {
+      result = true;
+    }
+  }
+  return result;
+}
+
+size_t lengthOfPropertyPath(const OMPropertyId* path)
+{
+  TRACE("lengthOfPropertyPath");
+  // PRECONDITION("Valid property path", validPropertyPath(path));
+  PRECONDITION("Valid property path", path != 0);
+
+  const OMPropertyId* p = path;
+  size_t result = 0;
+  while (*p != 0) {
+    ++result;
+    ++p;
+  }
+  return result;
+}
+
+OMPropertyId* savePropertyPath(const OMPropertyId* path)
+{
+  TRACE("savePropertyPath");
+  PRECONDITION("Valid property path", validPropertyPath(path));
+
+  size_t length = lengthOfPropertyPath(path) + 1;
+  OMPropertyId* result = new OMPropertyId[length];
+  ASSERT("Valid heap pointer", result != 0);
+  for (size_t i = 0; i < length; i++) {
+    result[i] = path[i];
+  }
+
+  return result;
+}
+
+int comparePropertyPath(const OMPropertyId* path1, const OMPropertyId* path2)
+{
+  TRACE("comparePropertyPath");
+
+  PRECONDITION("Valid property path", validPropertyPath(path1));
+  PRECONDITION("Valid property path", validPropertyPath(path2));
+  int result = 0;
+  const OMPropertyId* p1 = path1;
+  const OMPropertyId* p2 = path2;
+  while (*p1 == *p2) {
+    if (*p1 == 0) {
+      break;
+    }
+    ++p1;
+    ++p2;
+  }
+
+  if ((*p1 == 0) && (*p2 == 0)) {
+    result = 0;
+  } else if (*p1 > *p2) {
+    result = 1;
+  } else if (*p1 < *p2) {
+    result = -1;
+  }
+  return result;
+}

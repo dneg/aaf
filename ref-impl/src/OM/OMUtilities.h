@@ -135,4 +135,14 @@ char* saveString(const char* string);
 
 size_t lengthOfOMString(const OMCharacter* string);
 
+  // Manipulation of property paths
+
+bool validPropertyPath(const OMPropertyId* path);
+
+size_t lengthOfPropertyPath(const OMPropertyId* path);
+
+OMPropertyId* savePropertyPath(const OMPropertyId* path);
+
+int comparePropertyPath(const OMPropertyId* path1, const OMPropertyId* path2);
+
 #endif
