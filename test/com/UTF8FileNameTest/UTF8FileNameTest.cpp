@@ -19,7 +19,8 @@
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
-// Licensor of the AAF Association is Avid Technology.
+// Licensor of the AAF Association is Avid Technology, 
+// with parts Metaglue Corporation.
 // All rights reserved.
 //
 //=---------------------------------------------------------------------=
