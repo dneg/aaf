@@ -21,14 +21,14 @@ AD_CLASS_BEGIN
 
 AD_SETOBJ_METHOD1(SetLength,
 				  [in],
-				  AAFLength,
+				  aafLength_t,
 				  length,
 				  Length of this object,
 				  sets the length property values on the input component object.)
 
 AD_GETOBJ_METHOD1(GetLength,
 				  [retval][out],
-				  AAFLength,
+				  aafLength_t,
 				  length,
 				  Length of this component,
   Gets the starting time and places it into the pStartTime
@@ -39,14 +39,14 @@ AD_GETOBJ_METHOD1(GetLength,
 	
 AD_SETOBJ_METHOD1(SetDataKind,
 				  [in],
-				  AAFDataKind,
+				  AAFDataDefinition,
 				  datakind,
 				  DataKind of this object,
 				  sets the datakind property values on the input component object.)
 
 AD_GETOBJ_METHOD1(GetDataKind,
 				  [retval][out],
-				  GetDatakind,
+				  GetDataDefinition,
 				  datakind,
 				  DataKind of this object,
 				  returns datakind definition object)
