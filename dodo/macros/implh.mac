@@ -1576,3 +1576,12 @@ public:
 #c
 #startm AD_XFUNCTION4 22
 #endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c macro for things which are not to be exported.
+#c
+#startm AD_NO_EXPORT 01
+%01\
+#endm

@@ -17,7 +17,7 @@
 #endif
 
 
-#define DEBUG 0
+// #define DEBUG 1
 
 
 #ifndef _TextStream_h_
@@ -182,7 +182,7 @@ void main (int argc, char ** argv)
 
   TextStream macroText;
   macroText.Append (macrofile,
-					SourceInfo (macrofilename, 1));
+		    SourceInfo (macrofilename, 1));
 
   MacroSet macros;
 
@@ -193,10 +193,10 @@ void main (int argc, char ** argv)
 
   TextStream tmpInput = input;
   macros.AddMacros (tmpInput, true);
-  if (DEBUG)
-	fprintf (stderr, "Macro dump:\n");
-  if (DEBUG)
-	macros.dump (stderr);
+#if DEBUG
+  fprintf (stderr, "Macro dump:\n");
+  macros.dump (stderr);
+#endif
 
   TextStream output;
   bool changed = true;
@@ -204,18 +204,17 @@ void main (int argc, char ** argv)
 	   repeats < 10 && changed;
 	   repeats++)
 	{
-	  if (DEBUG)
-		fprintf (stderr, "Pass %d...\n\n", repeats+1);
-
+#if DEBUG
+	  fprintf (stderr, "Pass %d...\n\n", repeats+1);
+#endif
 	  output.Clear();
 	  changed = macros.ApplyMacros (input, output);
 	  input = output;
-	  if (DEBUG)
-		{
-		  fprintf (stderr, "\n\nOutput of this pass:\n");
-		  output.dump (stderr);
-		  fprintf (stderr, "\n\n");
-		}
+#if DEBUG
+	  fprintf (stderr, "\n\nOutput of this pass:\n");
+	  output.dump (stderr);
+	  fprintf (stderr, "\n\n");
+#endif
 	}
 
   if (changed)

@@ -60,6 +60,32 @@ TextStream::TextStream
 }
 
 
+//
+// Utility method to reduce size of memory allocated.
+//
+const static int kCompressLimit = 1000;
+//
+void TextStream::compress ()
+{
+  if (! _pData || ! _pStorage)
+    return;
+
+  if ((_pData - _pStorage) < kCompressLimit)
+    // not enough to bother
+    return;
+
+#if DEBUG
+  fprintf (stderr, "Diff is %d; compressing.\n", (int)(_pData - _pStorage));
+#endif
+  char * newStorage = new char[strlen(_pData) + 1];
+  assert (newStorage);
+  strcpy (newStorage, _pData);
+  _pData = newStorage;
+  delete[] _pStorage;
+  _pStorage = newStorage;
+}
+
+
 TextStream TextStream::operator=
 (const TextStream & src)
 {
@@ -71,7 +97,7 @@ TextStream TextStream::operator=
 	  _numAllocated = 0;
 	  _cachedLen = src._cachedLen;
 	  _startSi = src._startSi;
-	  if (_cachedLen)
+	  if (src._cachedLen)
 		{
 		  _numAllocated = _cachedLen + 1;
 		  assert (_numAllocated > 0);
@@ -201,6 +227,7 @@ bool TextStream::Consume
 	{
 	  _startSi = SourceInfo (_startSi.GetFileName(), _startSi.GetLineNumber() + 1);
 	}
+  compress ();
   return true;
 }
 
@@ -216,6 +243,7 @@ bool TextStream::Expect
   _pData += key.GetLength();
   _cachedLen -= key.GetLength();
   assert (_cachedLen >= 0);
+  compress ();
   return true;
 }
 

@@ -152,6 +152,11 @@ struct TextStream
 
 private:
 
+  void compress ();
+  //
+  // Helper function to reduce memory usage.  If consumption is great
+  // enough, will re-allocate smaller storage.
+
   char *		_pStorage;
   int			_numAllocated;
 

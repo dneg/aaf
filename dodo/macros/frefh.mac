@@ -1641,3 +1641,12 @@ AD_CLASS_END\
     // %21
     /*%17*/ .%18-adornment%19 .%18-indirection %20);\
 #endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c macro for things which are not to be exported.
+#c
+#startm AD_NO_EXPORT 01
+%01\
+#endm
