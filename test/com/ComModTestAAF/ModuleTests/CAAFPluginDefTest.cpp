@@ -490,7 +490,6 @@ extern "C" HRESULT CAAFPluginDescriptor_test()
 //	if (SUCCEEDED(hr))
 //	{
 //		cout << "The following IAAFPluginDescriptor methods have not been implemented:" << endl;       
-//		cout << "     GetPluggableCode" << endl; 
 //		cout << "     IsPluginLocal" << endl; 
 //		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 //	}
