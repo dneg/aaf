@@ -85,8 +85,11 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetTapeNameBufLen
-		// @parm [out] required buffer length
-        (aafInt32 *  pLen);
+        (// @parm [in] SlotID of the Master Mob slot
+		 aafInt32  masterSlotID,
+
+		 // @parm [out] required buffer length
+         aafInt32 *  pLen);
 
 
   //****************

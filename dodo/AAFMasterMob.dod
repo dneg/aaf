@@ -124,12 +124,17 @@ AD_XMETHOD3(GetTapeName,
   //   - bufSize indicates the buffer is too small to hold the string.)
 
 
-AD_XMETHOD1(GetTapeNameBufLen,
+AD_XMETHOD2(GetTapeNameBufLen,
+			[in],
+			  objPass,
+			  aafInt32,
+			  masterSlotID,
+			  SlotID of the Master Mob slot,
 			[out],
-			objPass,
-			aafInt32 *,
-			pLen,
-			required buffer length,
+			  objPass,
+			  aafInt32 *,
+			  pLen,
+			  required buffer length,
 			Returns the length of buffer required for the GetTapeName\(\)
   // method.  The value is placed into the location specified by pLen.
   // The value will include space required for the trailing null
