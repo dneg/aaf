@@ -31,6 +31,10 @@
 
 #include <iostream.h>
 
+// Temporarily necessary global declarations.
+extern "C" const CLSID CLSID_AAFContentStorage;
+
+
 HRESULT CAAFContentStorage::test()
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
