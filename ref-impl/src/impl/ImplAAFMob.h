@@ -20,8 +20,6 @@
 #include "ImplAAFMobSlot.h"
 #endif
 
-const int CLSID_AAFMOB = 128;
-
 const int PID_MOB_MOBID			= 0;
 const int PID_MOB_NAME			= 1;
 const int PID_MOB_CREATE_TIME	= 2;
@@ -59,6 +57,7 @@ public:
   ImplAAFMob ();
   ~ImplAAFMob ();
 
+  OMDECLARE_STORABLE(AAFMob);
 
   //****************
   // IsAPrimaryMob()
