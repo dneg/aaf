@@ -397,7 +397,7 @@ public:
   // Register the given object to be initialized "at the right time".
   // If that time is now, will init immediately.  If not ready yet,
   // will put obj on queue to be initialized when everything's ready.
-  void pvtInitObjectProperties (ImplAAFObjectSP pObj) const;
+  void pvtInitObjectProperties (ImplAAFObject * pObj) const;
 
 private:
 
@@ -441,7 +441,7 @@ private:
 
 	ImplAAFObjectSP GetNext (void);
 
-	void Append (ImplAAFObjectSP obj);
+	void Append (ImplAAFObject * obj);
 
   private:
 	enum {
