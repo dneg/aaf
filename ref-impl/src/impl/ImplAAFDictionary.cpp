@@ -124,7 +124,9 @@ extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFPluginDescriptors;
 extern "C" const aafClassID_t CLSID_EnumAAFTypeDefs;
 
-
+// turn on/off the code that calls the om's find method
+// instead of using a linear search with an enumerator/iterator.
+#define USE_OMSET_FIND 1
 
 ImplAAFDictionary::ImplAAFDictionary ()
 : _operationDefinitions(PID_Dictionary_OperationDefinitions, "OperationDefinitions"), 
@@ -517,6 +519,27 @@ AAFRESULT ImplAAFDictionary::dictLookupClassDef (
 {
   if (!ppClassDef) return AAFRESULT_NULL_PARAM;
 
+#if USE_OMSET_FIND
+	AAFRESULT result = AAFRESULT_SUCCESS;
+  // NOTE: The following type cast is temporary. It should be removed as soon
+	// as the OM has a declarative sytax to include the type
+	// of the key used in the set. (trr:2000-FEB-29)
+	if (_classDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&classID)),
+                             *ppClassDef))
+	{
+		assert(NULL != *ppClassDef);
+    (*ppClassDef)->AcquireReference();
+	}
+	else
+	{
+    // no recognized class guid in dictionary
+    result = AAFRESULT_NO_MORE_OBJECTS;
+	}
+
+	return (result);
+
+#else // #if USE_OMSET_FIND
+
   ImplEnumAAFClassDefs		*classEnum = NULL;
   ImplAAFClassDef			*classDef = NULL;
   aafBool						defFound;
@@ -572,8 +595,10 @@ AAFRESULT ImplAAFDictionary::dictLookupClassDef (
 		}
 	}
   XEND
-	
+		
 	return(AAFRESULT_SUCCESS);
+
+#endif // #else // #if USE_OMSET_FIND
 }
 
 
@@ -750,7 +775,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pResult)
 	return AAFRESULT_NULL_PARAM;
-  return AAFRESULT_NOT_IMPLEMENTED;
+	*pResult = _classDefinitions.count();
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -803,7 +829,33 @@ AAFRESULT ImplAAFDictionary::dictLookupTypeDef (
       const aafUID_t & typeID,
       ImplAAFTypeDef ** ppTypeDef)
 {
-  ImplEnumAAFTypeDefs		*typeEnum = NULL;
+#if USE_OMSET_FIND
+  if (! ppTypeDef)
+    return AAFRESULT_NULL_PARAM;
+
+	
+	AAFRESULT result = AAFRESULT_SUCCESS;
+  // NOTE: The following type cast is temporary. It should be removed as soon
+	// as the OM has a declarative sytax to include the type
+	// of the key used in the set. (trr:2000-FEB-29)
+	if (_typeDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&typeID)),
+                             *ppTypeDef))
+	{
+		assert(NULL != *ppTypeDef);
+    (*ppTypeDef)->AcquireReference();
+	}
+	else
+	{
+    // no recognized class guid in dictionary
+    result = AAFRESULT_NO_MORE_OBJECTS;
+	}
+
+	return (result);
+
+#else // #if USE_OMSET_FIND
+
+
+	ImplEnumAAFTypeDefs		*typeEnum = NULL;
   ImplAAFTypeDef			*typeDef = NULL;
   aafBool						defFound;
   AAFRESULT					status;
@@ -862,6 +914,9 @@ AAFRESULT ImplAAFDictionary::dictLookupTypeDef (
   XEND
 	
 	return(AAFRESULT_SUCCESS);
+
+#endif // #else // #if USE_OMSET_FIND
+
 }
 
 
@@ -1086,7 +1141,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pResult)
 	return AAFRESULT_NULL_PARAM;
-  return AAFRESULT_NOT_IMPLEMENTED;
+	*pResult = _typeDefinitions.count();
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -1231,7 +1287,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pResult)
 	return AAFRESULT_NULL_PARAM;
-  return AAFRESULT_NOT_IMPLEMENTED;
+  *pResult = _dataDefinitions.count();
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -1349,7 +1406,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pResult)
 	return AAFRESULT_NULL_PARAM;
-  return AAFRESULT_NOT_IMPLEMENTED;
+  *pResult = _operationDefinitions.count();
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -1466,7 +1524,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pResult)
 	return AAFRESULT_NULL_PARAM;
-  return AAFRESULT_NOT_IMPLEMENTED;
+  *pResult = _parameterDefinitions.count();
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -1600,7 +1659,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pResult)
 	return AAFRESULT_NULL_PARAM;
-  return AAFRESULT_NOT_IMPLEMENTED;
+  *pResult = _codecDefinitions.count();
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -1742,7 +1802,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pResult)
 	return AAFRESULT_NULL_PARAM;
-  return AAFRESULT_NOT_IMPLEMENTED;
+  *pResult = _containerDefinitions.count();
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -1964,7 +2025,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pResult)
 	return AAFRESULT_NULL_PARAM;
-  return AAFRESULT_NOT_IMPLEMENTED;
+  *pResult = _interpolationDefinitions.count();
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -2081,7 +2143,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pResult)
 	return AAFRESULT_NULL_PARAM;
-  return AAFRESULT_NOT_IMPLEMENTED;
+  *pResult = _pluginDefinitions.count();
+  return AAFRESULT_SUCCESS;
 }
 
 
