@@ -66,6 +66,7 @@ typedef IAAFSmartPointer<IAAFSequence>              IAAFSequenceSP;
 typedef IAAFSmartPointer<IAAFTimelineMobSlot>       IAAFTimelineMobSlotSP;
 typedef IAAFSmartPointer<IAAFTypeDef>               IAAFTypeDefSP;
 typedef IAAFSmartPointer<IAAFTypeDefInt>            IAAFTypeDefIntSP;
+typedef IAAFSmartPointer<IAAFTypeDefRename>         IAAFTypeDefRenameSP;
 typedef IAAFSmartPointer<IEnumAAFClassDefs>         IEnumAAFClassDefsSP;
 typedef IAAFSmartPointer<IEnumAAFCodecDefs>         IEnumAAFCodecDefsSP;
 typedef IAAFSmartPointer<IEnumAAFComponents>        IEnumAAFComponentsSP;
@@ -189,6 +190,20 @@ static void RegisterNewClass (IAAFDictionary * pDictionary)
   checkResult (pDictionary->LookupClassDef (AUID_AAFFiller, &pFillClass));
   assert (pFillClass);
 
+  // Create a foward class reference to the new filler class (not really required).
+  // This is just to test the methods on Dictionary that implement foward class
+  // references.
+  checkResult (pDictionary->CreateForwardClassReference(kClassAUID_NewFill));
+
+  // Try a negative test: Attempt to create a forward class reference with the
+  // same class id. This should fail.
+  checkExpression(FAILED(pDictionary->CreateForwardClassReference(kClassAUID_NewFill)), AAFRESULT_TEST_FAILED);
+
+  // Make sure that the new filler class is recognized as a foward class reference.
+  aafBoolean_t isaFowardReference;
+  checkResult (pDictionary->HasForwardClassReference(kClassAUID_NewFill, &isaFowardReference));
+  checkExpression (kAAFTrue == isaFowardReference, AAFRESULT_TEST_FAILED);
+
   // Create new object for our new filler class, and initialize it.
   IAAFClassDefSP pNewFillClass;
   checkResult (defs.cdClassDef()->
@@ -214,6 +229,12 @@ static void RegisterNewClass (IAAFDictionary * pDictionary)
 
   // Register it in the dictionary.
   checkResult (pDictionary->RegisterClassDef (pNewFillClass));
+ 
+  // If RegisterClassDef succeeds then there should be no foward reference
+  // to kClassAUID_NewFill. Test: Make sure that the new filler class is no longer 
+  // recognized as a foward class reference.
+  checkResult (pDictionary->HasForwardClassReference(kClassAUID_NewFill, &isaFowardReference));
+  checkExpression (kAAFFalse == isaFowardReference, AAFRESULT_TEST_FAILED);
 }
 										  
 
@@ -335,18 +356,37 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 
   CAAFBuiltinDefs defs (pDict);
 
+  
+//  IAAFTypeDefSP pTypeUInt8;
+//  checkResult(pDict->LookupTypeDef(kAAFTypeID_UInt8, &pTypeUInt8));
+  { // Create an opaque type and register it in the dictionary.
+    IAAFTypeDefSP pOpaqueType;
+    IAAFTypeDefRenameSP pOpaqueTestType;
+	  checkResult(defs.cdTypeDefRename()->CreateInstance(IID_IAAFTypeDefRename, (IUnknown **)&pOpaqueTestType));
+    checkResult(pOpaqueTestType->Initialize(kTestTypeID, defs.tdUInt8(), L"TestUInt8"));
+    checkResult(pOpaqueTestType->QueryInterface(IID_IAAFTypeDef, (void **)&pOpaqueType));
+    checkResult(pDict->RegisterOpaqueTypeDef(pOpaqueType));
+  }
+
   RegisterOneDef (/* dictionary*/                  pDict,
-				  /* def object's class */         defs.cdTypeDefInt(),
-				  /* IID of def to pass to Init */ IID_IAAFTypeDefInt,
-				  /* SP of def to use with Init */ IAAFTypeDefIntSP,
+				  /* def object's class */         defs.cdTypeDefRename(),
+				  /* IID of def to pass to Init */ IID_IAAFTypeDefRename,
+				  /* SP of def to use with Init */ IAAFTypeDefRenameSP,
 				  /* Init() invocation */
-				  Initialize (kTestTypeID, 1, kAAFFalse, L"TestUInt8"),
+				  Initialize (kTestTypeID, defs.tdUInt8(), L"TestUInt8"),
 				  /* IID of type to QI */          IID_IAAFDefObject,
 				  /* SP for type to QI */          IAAFDefObjectSP,
 				  /* IID of def to register */     IID_IAAFTypeDef,
 				  /* SP for def to register */     IAAFTypeDefSP,
 				  /* reg method on pDict */        RegisterTypeDef);
-  
+
+  { // Make sure that "TestUInt8" is no longer opaque.
+    IAAFTypeDefSP pOpaqueTestType;
+    checkExpression(FAILED(pDict->LookupOpaqueTypeDef(kTestTypeID, &pOpaqueTestType)),
+                    AAFRESULT_TEST_FAILED);
+  }
+
+    
   RegisterOneDef (/* dictionary*/                  pDict,
 				  /* def object's class */         defs.cdDataDef(),
 				  /* IID of def to pass to Init */ IID_IAAFDataDef,
@@ -737,7 +777,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 	  // Add the master mob to the file and cleanup
 	  pHeader->AddMob(pMob);
-		
+
 	  checkResult (RegisterDefs (pDictionary));
 	}
   catch (HRESULT& rResult)
@@ -768,8 +808,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
   IAAFSequenceSP       pSequence;
   IAAFDictionarySP     pDictionary;
   IEnumAAFComponentsSP pCompIter;
-//  aafNumSlots_t        numMobs;
-//  aafSearchCrit_t      criteria;
+  aafNumSlots_t        numMobs;
+  aafSearchCrit_t      criteria;
   HRESULT              hr = S_OK;
 	
   try
@@ -777,7 +817,6 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	  // Open the AAF file
 	  checkResult(OpenAAFFile(pFileName, kAAFMediaOpenReadOnly, &pFile, &pHeader));
 		
-#if 0
 	  // Validate that there is only one composition mob.
 	  checkResult(pHeader->CountMobs(kAAFCompMob, &numMobs));
 	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
@@ -903,7 +942,6 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		}
 
 	  checkResult (LookupDefs (pDictionary));
-#endif
 	}
   catch (HRESULT& rResult)
 	{
@@ -932,6 +970,7 @@ extern "C" HRESULT CAAFDictionary_test()
   catch (...)
 	{
 	  cerr << "CAAFDictionary_test...Caught general C++ exception!" << endl; 
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
 	}
 
   return hr;
