@@ -98,14 +98,13 @@ AxCmdLineArgs::AxCmdLineArgs( int argc, const char** argv )
 AxCmdLineArgs::~AxCmdLineArgs()
 {}
 
-std::pair<bool,int> AxCmdLineArgs::get( const char* opt )
+std::pair<bool,int> AxCmdLineArgs::get( const char* opt, int i )
 {
 	std::pair<bool,int> result(false,-1);
 
 	// A Hash map would be better here....
 
-	int i;
-	for( i = 0; i < _argc; i++ ) {
+	for( ; i < _argc; i++ ) {
 		if ( strcmp( opt, _argv[i] ) == 0 ) {
 			result.first = true;
 			result.second = i;
