@@ -105,8 +105,7 @@ public:
   static AAFRESULT test();
 
 //Internal
-AAFRESULT
-    ImplEnumAAFMobSlots::SetEnumMob(ImplAAFMob *aMob);
+AAFRESULT SetEnumMob(ImplAAFMob *aMob);
 
 private:
 	aafInt32		_current;
