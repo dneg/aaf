@@ -493,6 +493,73 @@ AAFDotInstanceMapper::MapKnownAAFRecordTypes( AxProperty axProperty, bool &popSt
 		
       popStack = true;
    }
+
+   if ( typeDef.GetAUID() == kAAFTypeID_Rational )	// Rational
+   {
+      ObjectStalker *oStalker = dynamic_cast< ObjectStalker* > ( PopStalker() );
+      if ( oStalker == 0 )
+      {
+	 cerr << "Error: Object stalker expected." << endl;
+	 throw;
+      }
+
+      string propName = AxStringToString( axProperty.GetName() );
+			
+      AxTypeDefRecord axTypeDefRecord(
+	 AxQueryInterface< IAAFTypeDef,IAAFTypeDefRecord > (
+	    typeDef ) );
+
+      string numeratorValue;
+      string denominatorValue;
+      if ( AxStringToString( axTypeDefRecord.GetMemberName( 0 ) ).compare( "Numerator" ) == 0 )
+      {
+	 IAAFPropertyValueSP propValue( axProperty.GetValue() );
+	 AxPropertyValue numerator( axTypeDefRecord.GetValue( propValue , 0 ) );
+	 AxPropertyValue denominator( axTypeDefRecord.GetValue( propValue, 1 ) );
+	 
+	 AxTypeDefInt numeratorIntType(
+	    AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
+	       numerator.GetType() ) );
+	 AxTypeDefInt denominatorIntType(
+	    AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
+	       denominator.GetType() ) );
+	 numeratorValue = GetIntValue( numeratorIntType, numerator, 
+				       oStalker->GetName(), propName );
+	 denominatorValue = GetIntValue( denominatorIntType, denominator,
+					 oStalker->GetName(), propName );
+      }
+      else
+      {
+	 IAAFPropertyValueSP propValue( axProperty.GetValue() );
+	 AxPropertyValue numerator( axTypeDefRecord.GetValue( propValue, 1 ) );
+	 AxPropertyValue denominator( axTypeDefRecord.GetValue( propValue, 0 ) );
+	 
+	 AxTypeDefInt numeratorIntType(
+	    AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
+	       numerator.GetType() ) );
+	 AxTypeDefInt denominatorIntType(
+	    AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
+	       denominator.GetType() ) );
+	 numeratorValue = GetIntValue( numeratorIntType, numerator,
+				       oStalker->GetName(), propName );
+	 denominatorValue = GetIntValue( denominatorIntType, denominator,
+					 oStalker->GetName(), propName );
+      }
+      
+      string value;
+      value.append( numeratorValue );
+      value.append( "/" );
+      value.append( denominatorValue );
+      
+    
+      DotRecordNodeAttribute attribute( propName, value );
+			
+      oStalker->GetNode()->AddAttribute( attribute );
+      
+      PushStalker( oStalker );
+
+      popStack = true;
+   }
 	
 }
 
@@ -515,82 +582,7 @@ AAFDotInstanceMapper::MapAAFPropertyValue( AxPropertyValue axPropertyValue, bool
    }
    else
    {
-      if ( AxStringToString( axTypeDef.GetName() ).compare( "Rational" ) == 0 )
-      {
-	 popStack = true;
-
-	 PropertyValueStalker *pStalker = dynamic_cast< PropertyValueStalker* > ( PopStalker() );
-	 if ( pStalker == 0 )
-	 {
-	    cerr << "Error: Property value stalker expected." << endl;
-	    throw;
-	 }
-	 ObjectStalker *oStalker = dynamic_cast< ObjectStalker* > ( PopStalker() );
-	 if ( oStalker == 0 )
-	 {
-	    cerr << "Error: Object stalker expected." << endl;
-	    throw;
-	 }
-
-			
-	 AxTypeDefRecord axTypeDefRecord(
-	    AxQueryInterface< IAAFTypeDef,IAAFTypeDefRecord > (
-	       axTypeDef ) );
-	 string numeratorValue;
-	 string denominatorValue;
-	 if ( AxStringToString( axTypeDefRecord.GetMemberName( 0 ) ).compare( "Numerator" ) == 0 )
-	 {
-	    IAAFPropertyValueSP propValue( axPropertyValue.GetValue() );
-	    AxPropertyValue numerator( axTypeDefRecord.GetValue( propValue , 0 ) );
-	    AxPropertyValue denominator( axTypeDefRecord.GetValue( propValue, 1 ) );
-
-	    AxTypeDefInt numeratorIntType(
-	       AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
-		  numerator.GetType() ) );
-	    AxTypeDefInt denominatorIntType(
-	       AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
-		  denominator.GetType() ) );
-	    numeratorValue = GetIntValue( numeratorIntType, numerator, 
-					  oStalker->GetName(), pStalker->GetName() );
-	    denominatorValue = GetIntValue( denominatorIntType, denominator,
-					    oStalker->GetName(), pStalker->GetName() );
-	 }
-	 else
-	 {
-	    IAAFPropertyValueSP propValue( axPropertyValue.GetValue() );
-	    AxPropertyValue numerator( axTypeDefRecord.GetValue( propValue, 1 ) );
-	    AxPropertyValue denominator( axTypeDefRecord.GetValue( propValue, 0 ) );
-
-	    AxTypeDefInt numeratorIntType(
-	       AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
-		  numerator.GetType() ) );
-	    AxTypeDefInt denominatorIntType(
-	       AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
-		  denominator.GetType() ) );
-	    numeratorValue = GetIntValue( numeratorIntType, numerator,
-					  oStalker->GetName(), pStalker->GetName() );
-	    denominatorValue = GetIntValue( denominatorIntType, denominator,
-					    oStalker->GetName(), pStalker->GetName() );
-	 }
-
-	 string value;
-	 value.append( numeratorValue );
-	 value.append( "/" );
-	 value.append( denominatorValue );
-
-			
-	 DotRecordNodeAttribute attribute( pStalker->GetName(), value );
-			
-	 oStalker->GetNode()->AddAttribute( attribute );
-
-	 PushStalker( oStalker );
-	 PushStalker( pStalker );
-      }
-
-      else
-      {
-	 MapAAFPropertyValueGeneric( axTypeDef, axPropertyValue, popStack );
-      }
+      MapAAFPropertyValueGeneric( axTypeDef, axPropertyValue, popStack );
    }
 }
 
@@ -610,13 +602,8 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
 	 AxQueryInterface< IAAFTypeDef,IAAFTypeDefFixedArray > (
 	    axTypeDef ) );
       AxTypeDef elementAxTypeDef( axTypeDefFixedArray.GetType() );
-      if ( elementAxTypeDef.GetTypeCategory() != kAAFTypeCatStrongObjRef &&
-	   elementAxTypeDef.GetTypeCategory() != kAAFTypeCatWeakObjRef )
-      {
-	 MapEmptyPropertyValue();
-	 popStack = true;
-      }
-      else
+      if ( elementAxTypeDef.GetTypeCategory() == kAAFTypeCatStrongObjRef ||
+	   elementAxTypeDef.GetTypeCategory() == kAAFTypeCatWeakObjRef )
       {
 	 PropertyValueStalker *pStalker = dynamic_cast< PropertyValueStalker* > ( PopStalker() );
 	 if ( pStalker == 0 )
@@ -626,6 +613,63 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
 	 }
 	 pStalker->InitArrayIndex();
 	 PushStalker( pStalker );
+      }
+      else if ( elementAxTypeDef.GetTypeCategory() == kAAFTypeCatInt )
+      {
+	 PropertyValueStalker *pStalker = dynamic_cast< PropertyValueStalker* > ( PopStalker() );
+	 if ( pStalker == 0 )
+	 {
+	    cerr << "Error: Property value stalker expected." << endl;
+	    throw;
+	 }
+	 ObjectStalker *oStalker = dynamic_cast< ObjectStalker* > ( PopStalker() );
+	 if ( oStalker == 0 )
+	 {
+	    cerr << "Error: Object stalker expected." << endl;
+	    throw;
+	 }
+
+	 IAAFPropertyValueSP pValue(axPropertyValue);
+	 AxPropertyValueIter elements( axTypeDefFixedArray.GetElements( pValue ) );
+	 IAAFPropertyValueSP elementValue;
+	 string arrayValue = "";
+	 bool isFirst = true;
+	 int maxLen = _profile.GetMaxAttributeLength();
+	 int len = 0;
+	 while ( elements.NextOne(elementValue) && len < maxLen )
+	 {
+	    IAAFTypeDefSP spElementType;
+	    CHECK_HRESULT(elementValue->GetType(&spElementType));
+	    AxTypeDefInt axTypeDefInt(
+	       AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
+		  spElementType ) );
+	    string value = GetIntValue( axTypeDefInt, elementValue );
+	    len += value.length();
+
+	    if (!isFirst)
+	    {
+	       arrayValue.append(" ");
+	       len += 1;
+	    }
+	    else
+	    {
+	       isFirst = false;
+	    }
+	    arrayValue.append(value);
+	 }
+	 DotRecordNodeAttribute attribute( pStalker->GetName(), arrayValue );
+	 DotRecordNode *node = oStalker->GetNode();
+	 node->AddAttribute( attribute );
+	 
+	 PushStalker( oStalker );
+	 PushStalker( pStalker );
+	 
+	 popStack = true;
+      }
+      else
+      {
+	 MapEmptyPropertyValue();
+	 popStack = true;
       }
    }
 
@@ -635,13 +679,8 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
 	 AxQueryInterface< IAAFTypeDef,IAAFTypeDefVariableArray > (
 	    axTypeDef ) );
       AxTypeDef elementAxTypeDef( axTypeDefVariableArray.GetType() );
-      if ( elementAxTypeDef.GetTypeCategory() != kAAFTypeCatStrongObjRef &&
-	   elementAxTypeDef.GetTypeCategory() != kAAFTypeCatWeakObjRef )
-      {
-	 MapEmptyPropertyValue();
-	 popStack = true;
-      }
-      else
+      if ( elementAxTypeDef.GetTypeCategory() == kAAFTypeCatStrongObjRef ||
+	   elementAxTypeDef.GetTypeCategory() == kAAFTypeCatWeakObjRef )
       {
 	 PropertyValueStalker *pStalker = dynamic_cast< PropertyValueStalker* > ( PopStalker() );
 	 if ( pStalker == 0 )
@@ -651,6 +690,63 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
 	 }
 	 pStalker->InitArrayIndex();
 	 PushStalker( pStalker );
+      }
+      else if ( elementAxTypeDef.GetTypeCategory() == kAAFTypeCatInt )
+      {
+	 PropertyValueStalker *pStalker = dynamic_cast< PropertyValueStalker* > ( PopStalker() );
+	 if ( pStalker == 0 )
+	 {
+	    cerr << "Error: Property value stalker expected." << endl;
+	    throw;
+	 }
+	 ObjectStalker *oStalker = dynamic_cast< ObjectStalker* > ( PopStalker() );
+	 if ( oStalker == 0 )
+	 {
+	    cerr << "Error: Object stalker expected." << endl;
+	    throw;
+	 }
+
+	 IAAFPropertyValueSP pValue(axPropertyValue);
+	 AxPropertyValueIter elements( axTypeDefVariableArray.GetElements( pValue ) );
+	 IAAFPropertyValueSP elementValue;
+	 string arrayValue = "";
+	 bool isFirst = true;
+	 int maxLen = _profile.GetMaxAttributeLength();
+	 int len = 0;
+	 while ( elements.NextOne(elementValue) && len < maxLen )
+	 {
+	    IAAFTypeDefSP spElementType;
+	    CHECK_HRESULT(elementValue->GetType(&spElementType));
+	    AxTypeDefInt axTypeDefInt(
+	       AxQueryInterface< IAAFTypeDef,IAAFTypeDefInt > (
+		  spElementType ) );
+	    string value = GetIntValue( axTypeDefInt, elementValue );
+	    len += value.length();
+
+	    if (!isFirst)
+	    {
+	       arrayValue.append(" ");
+	       len += 1;
+	    }
+	    else
+	    {
+	       isFirst = false;
+	    }
+	    arrayValue.append(value);
+	 }
+	 DotRecordNodeAttribute attribute( pStalker->GetName(), arrayValue );
+	 DotRecordNode *node = oStalker->GetNode();
+	 node->AddAttribute( attribute );
+
+	 PushStalker( oStalker );
+	 PushStalker( pStalker );
+
+	 popStack = true;
+      }
+      else
+      {
+	 MapEmptyPropertyValue();
+	 popStack = true;
       }
    }
 
@@ -965,8 +1061,25 @@ AAFDotInstanceMapper::MapEmptyPropertyValue()
 
 //-----------------------------------------------------------------------------
 string
+AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue axPropertyValue )
+{
+   return GetIntValue( axTypeDefInt, axPropertyValue, false);
+}
+
+
+//-----------------------------------------------------------------------------
+string
 AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue axPropertyValue,
 				   string objectName, string propertyName )
+{
+   return GetIntValue( axTypeDefInt, axPropertyValue, DisplayHex( objectName, propertyName ) );
+}
+
+
+//-----------------------------------------------------------------------------
+string
+AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue axPropertyValue,
+				   bool displayHex )
 {
    bool fault = false;
    IAAFPropertyValueSP propValue( axPropertyValue.GetValue() );
@@ -978,7 +1091,7 @@ AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue a
 	    aafInt8 i;
 	    axTypeDefInt.GetInteger( propValue, &i );
 	    ostringstream ostrs;
-	    if ( DisplayHex( objectName, propertyName ) )
+	    if ( displayHex )
 	    {
 	       ostrs << hex << "0x" << (int)i;
 	    }
@@ -994,7 +1107,7 @@ AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue a
 	    aafInt16 i;
 	    axTypeDefInt.GetInteger( propValue, &i );
 	    ostringstream ostrs;
-	    if ( DisplayHex( objectName, propertyName ) )
+	    if ( displayHex )
 	    {
 	       ostrs << hex << "0x" << i;
 	    }
@@ -1010,7 +1123,7 @@ AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue a
 	    aafInt32 i;
 	    axTypeDefInt.GetInteger( propValue, &i );
 	    ostringstream ostrs;
-	    if ( DisplayHex( objectName, propertyName ) )
+	    if ( displayHex )
 	    {
 	       ostrs << hex << "0x" << i;
 	    }
@@ -1026,7 +1139,7 @@ AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue a
 	    aafInt64 i;
 	    axTypeDefInt.GetInteger( propValue, &i );
 	    ostringstream ostrs;
-	    if ( DisplayHex( objectName, propertyName ) )
+	    if ( displayHex )
 	    {
 	       ostrs << hex << "0x" << (long int)i;
 	    }
@@ -1048,7 +1161,7 @@ AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue a
 	    aafUInt8 i;
 	    axTypeDefInt.GetInteger( propValue, &i );
 	    ostringstream ostrs;
-	    if ( DisplayHex( objectName, propertyName ) )
+	    if ( displayHex )
 	    {
 	       ostrs << hex << "0x" << (int)i;
 	    }
@@ -1064,7 +1177,7 @@ AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue a
 	    aafUInt16 i;
 	    axTypeDefInt.GetInteger( propValue, &i );
 	    ostringstream ostrs;
-	    if ( DisplayHex( objectName, propertyName ) )
+	    if ( displayHex )
 	    {
 	       ostrs << hex << "0x" << i;
 	    }
@@ -1080,7 +1193,7 @@ AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue a
 	    aafUInt32 i;
 	    axTypeDefInt.GetInteger( propValue, &i );
 	    ostringstream ostrs;
-	    if ( DisplayHex( objectName, propertyName ) )
+	    if ( displayHex )
 	    {
 	       ostrs << hex << "0x" << i;
 	    }
@@ -1096,7 +1209,7 @@ AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue a
 	    aafUInt64 i;
 	    axTypeDefInt.GetInteger( propValue, &i );
 	    ostringstream ostrs;
-	    if ( DisplayHex( objectName, propertyName ) )
+	    if ( displayHex )
 	    {
 	       ostrs << hex << "0x" << (long int)i;
 	    }

@@ -158,8 +158,10 @@ class AAFDotInstanceMapper : public AxBaseObjRecIterListener
    bool FilterAAFObject( AxObject axObject, bool &popStack );
 
    // extract int value from the int property value; possibly display in hex ( see MapperSettings.h)
+   std::string GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue axPropertyValue, bool displayHex );
    std::string GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue axPropertyValue,
 			    std::string objectName, std::string propertyName );
+   std::string GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue axPropertyValue );
 
 
    // find the node referenced by the scope reference. 
