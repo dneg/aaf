@@ -241,6 +241,70 @@
 	SetFile -t TEXT -c CWIE -a L {refh}AAFPlugin_i.c
 
 
+{refh}AAFRoot_i.c Ä {dod}aafobjects.mk {dod}dod2iid.awk {macdodo}macaafobjects.mk
+	echo {refh}AAFRoot_i.c
+	if "`exists -f {refh}AAFRoot_i.c`"
+		SetFile -a l {refh}AAFRoot_i.c
+		Delete -i -ay {refh}AAFRoot_i.c
+	end
+	( echo "/* this file contains the actual definitions of */" ; ¶
+	  echo "/* the IIDs and CLSIDs */" ; ¶
+	  echo "" ; ¶
+	  echo "/* link this file in with the server and any clients */" ; ¶
+	  echo "//=--------------------------------------------------------------------------=" ; ¶
+	  echo "// (C) Copyright 1998 Avid Technology." ; ¶
+	  echo "// (C) Copyright 1998 Microsoft Corporation." ; ¶
+	  echo "//" ; ¶
+	  echo "// This file was GENERATED for the AAF SDK on " ; ¶
+	  echo "//  "`date` ; ¶
+	  echo "//" ; ¶
+	  echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; ¶
+	  echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; ¶
+	  echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; ¶
+	  echo "// PARTICULAR PURPOSE." ; ¶
+	  echo "//=--------------------------------------------------------------------------=" ; ¶
+	  echo "// Definitions for all public IID's needed by an AAF SDK Plugin author" ; ¶
+	  echo "//=--------------------------------------------------------------------------=" ; ¶
+	  echo "//" ; ¶
+	  echo "" ; ¶
+	  echo '#ifdef __cplusplus' ; ¶
+	  echo 'extern "C"{' ; ¶
+	  echo '#endif' ; ¶
+	  echo "" ; ¶
+	  echo "" ; ¶
+	  echo '#ifndef __IID_DEFINED__' ; ¶
+	  echo '#define __IID_DEFINED__' ; ¶
+	  echo "" ; ¶
+	  echo "typedef struct _IID" ; ¶
+	  echo '{' ; ¶
+	  echo "    unsigned long x;" ; ¶
+	  echo "    unsigned short s1;" ; ¶
+	  echo "    unsigned short s2;" ; ¶
+	  echo "    unsigned char  c[8];" ; ¶
+	  echo "} IID;" ; ¶
+	  echo "" ; ¶
+	  echo '#endif // __IID_DEFINED__' ; ¶
+	  echo "" ; ¶
+	  echo '#ifndef CLSID_DEFINED' ; ¶
+	  echo '#define CLSID_DEFINED' ; ¶
+	  echo "typedef IID CLSID;" ; ¶
+	  echo '#endif // CLSID_DEFINED' ; ¶
+	  echo "" ; ¶
+	  for class in AAFRoot ; ¶
+	      {DODO} -f :macros:dod2iid.mac < {class}.dod > dod2iid.tmp ; ¶
+	      Search -q /¥const IID IID_/ dod2iid.tmp ; ¶
+	      echo "" ; ¶
+	      echo "" ; ¶
+	  end ; ¶
+	  Delete -i -ay dod2iid.tmp ; ¶
+	  echo '#ifdef __cplusplus' ; ¶
+	  echo "}" ; ¶
+	  echo '#endif' ; ¶
+	  echo "" ; ¶
+	) > {refh}AAFRoot_i.c
+	SetFile -t TEXT -c CWIE -a L {refh}AAFRoot_i.c
+
+
 
 {impl}AAFClassIDs.h Ä {dod}aafobjects.mk {macdodo}macaafobjects.mk
 	echo {impl}AAFClassIDs.h
