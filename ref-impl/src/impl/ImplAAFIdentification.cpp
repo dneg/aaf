@@ -48,15 +48,15 @@ ImplAAFIdentification::~ImplAAFIdentification ()
 {}
 
 ImplAAFIdentification::ImplAAFIdentification():
-_companyName(         PID_Identification_CompanyName,          "CompanyName"),
-_productName(         PID_Identification_ProductName,          "ProductName"),
-_productVersion(      PID_Identification_ProductVersion,       "ProductVersion"),
-_productVersionString(PID_Identification_ProductVersionString, "ProductVersionString"),
-_productId(			  PID_Identification_ProductID,            "ProductID"),
-_date(                PID_Identification_Date,                 "Date"),
-_toolkitVersion(      PID_Identification_ToolkitVersion,       "ToolkitVersion"),
-_platform(            PID_Identification_Platform,             "Platform")
-// _generation(       PID_Identification_GenerationAUID,       "GenerationAUID")
+  _companyName(         PID_Identification_CompanyName,          "CompanyName"),
+  _productName(         PID_Identification_ProductName,          "ProductName"),
+  _productVersion(      PID_Identification_ProductVersion,       "ProductVersion"),
+  _productVersionString(PID_Identification_ProductVersionString, "ProductVersionString"),
+  _productId(			  PID_Identification_ProductID,            "ProductID"),
+  _date(                PID_Identification_Date,                 "Date"),
+  _toolkitVersion(      PID_Identification_ToolkitVersion,       "ToolkitVersion"),
+  _platform(            PID_Identification_Platform,             "Platform"),
+  _generation(       PID_Identification_GenerationAUID,       "GenerationAUID")
 {
   // Insert the properties into the persistent property set.
   //
@@ -68,7 +68,7 @@ _platform(            PID_Identification_Platform,             "Platform")
   _persistentProperties.put(   _date.address());
   _persistentProperties.put(_toolkitVersion.address());
   _persistentProperties.put(   _platform.address());
-  // _persistentProperties.put(_generation.address());
+  _persistentProperties.put(_generation.address());
 
   
 #if defined(_WIN32)
@@ -92,15 +92,15 @@ ImplAAFIdentification::ImplAAFIdentification(
                                      const wchar_t* platform
                                      // const AUID* generation
                                      ):
-_companyName(         PID_Identification_CompanyName,          "Company Name"),
-_productName(         PID_Identification_ProductName,          "Product Name"),
-_productVersion(      PID_Identification_ProductVersion,       "Product Version"),
-_productVersionString(PID_Identification_ProductVersionString, "Product Version String"),
-_productId(			  PID_Identification_ProductID,            "Product ID"),
-_date(                PID_Identification_Date,                 "Date"),
-_toolkitVersion(      PID_Identification_ToolkitVersion,       "Toolkit Version"),
-_platform(            PID_Identification_Platform,             "Platform")
-// _generation(       PID_Identification_GenerationAUID,       "Generation AUID")
+  _companyName(         PID_Identification_CompanyName,          "CompanyName"),
+  _productName(         PID_Identification_ProductName,          "ProductName"),
+  _productVersion(      PID_Identification_ProductVersion,       "ProductVersion"),
+  _productVersionString(PID_Identification_ProductVersionString, "ProductVersionString"),
+  _productId(			  PID_Identification_ProductID,            "ProductID"),
+  _date(                PID_Identification_Date,                 "Date"),
+  _toolkitVersion(      PID_Identification_ToolkitVersion,       "ToolkitVersion"),
+  _platform(            PID_Identification_Platform,             "Platform"),
+  _generation(       PID_Identification_GenerationAUID,       "GenerationAUID")
 {
   // Insert the properties into the persistent property set.
   //
@@ -112,7 +112,7 @@ _platform(            PID_Identification_Platform,             "Platform")
   _persistentProperties.put(   _date.address());
   _persistentProperties.put(_toolkitVersion.address());
   _persistentProperties.put(   _platform.address());
-  // _persistentProperties.put(_generation.address());
+  _persistentProperties.put(_generation.address());
 
   // Initialize members.
   //
