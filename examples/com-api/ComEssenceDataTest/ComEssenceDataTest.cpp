@@ -263,7 +263,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	pEssenceAccess->Release();
 	pEssenceAccess= NULL;
 
-	
 	pMasterMob->Release();
 	pMasterMob = NULL;
 	pMob->Release();
@@ -453,6 +452,7 @@ main()
 	CComInitialize comInit;
 	aafWChar * pwFileName = L"EssenceTest.aaf";
 	const char * pFileName = "EssenceTest .aaf";
+
 	IAAFEssencePlugin *codecManager = NULL;
 	aafInt32		numCodecs;
 
@@ -466,8 +466,8 @@ main()
 
 	printf("***Creating file %s\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName));
-//!!!	printf("***Re-opening file %s\n", pFileName);
-//!!!	ReadAAFFile(pwFileName);
+	printf("***Re-opening file %s\n", pFileName);
+	ReadAAFFile(pwFileName);
 
 	printf("Done\n");
 
