@@ -561,8 +561,15 @@ OMUInt64 OMStorable::objectCount(void) const
 {
   TRACE("OMStorable::objectCount");
 
-  OMUInt64 result = 0;
-  ASSERT("Unimplemented code not reached", false);
+  OMUInt64 result = 1; // Count this object
+  OMPropertySetIterator iterator(_persistentProperties, OMBefore);
+  while (++iterator) {
+    OMProperty* p = iterator.property();
+    ASSERT("Valid property", p != 0);
+    if (!p->isOptional() || p->isPresent()) {
+      result = result + p->objectCount();
+    }
+  }
   return result;
 }
 
