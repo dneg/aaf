@@ -40,9 +40,7 @@ AAFPERSISTENTOBJECTS = \
 	AAFReferenceValue \
 	AAFScopeReference \
 	AAFSequence \
-	AAFSourceClip \
 	AAFSourceMob \
-	AAFSourceReference \
 	AAFStringAttribute \
 	AAFTimecode \
 	AAFTimecodeStream \
@@ -100,6 +98,8 @@ HUMAN_TYPED_IMPL = \
 	AAFSegment \
 	AAFMobSlot \
 	AAFTimelineMobSlot \
+	AAFSourceReference \
+	AAFSourceClip \
 	AAFSession
 
 
