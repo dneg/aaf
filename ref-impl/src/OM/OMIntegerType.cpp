@@ -59,7 +59,7 @@ void OMIntegerType::externalize(OMByte* internalBytes,
                                 size_t ANAME(internalBytesSize),
                                 OMByte* externalBytes,
                                 size_t externalBytesSize,
-                                OMByteOrder /* byteOrder */) const
+                                OMByteOrder NNAME(byteOrder)) const
 {
   TRACE("OMIntegerType::externalize");
   PRECONDITION("Valid internal bytes", internalBytes != 0);
@@ -89,7 +89,7 @@ void OMIntegerType::internalize(OMByte* externalBytes,
                                 size_t ANAME(externalBytesSize),
                                 OMByte* internalBytes,
                                 size_t internalBytesSize,
-                                OMByteOrder /* byteOrder */) const
+                                OMByteOrder NNAME(byteOrder)) const
 {
   TRACE("OMIntegerType::internalize");
   PRECONDITION("Valid internal bytes", internalBytes != 0);

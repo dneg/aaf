@@ -62,7 +62,7 @@ void OMUniqueObjectIdentificationType::reorder(
 }
 
 size_t OMUniqueObjectIdentificationType::externalSize(
-                                         OMByte* /* internalBytes */,
+                                         OMByte* NNAME(internalBytes),
                                          size_t ANAME(internalBytesSize)) const
 {
   TRACE("OMUniqueObjectIdentificationType::externalSize");
@@ -73,11 +73,11 @@ size_t OMUniqueObjectIdentificationType::externalSize(
 }
 
 void OMUniqueObjectIdentificationType::externalize(
-                                             OMByte* internalBytes,
-                                             size_t internalBytesSize,
-                                             OMByte* externalBytes,
-                                             size_t /*externalBytesSize*/,
-                                             OMByteOrder /* byteOrder */) const
+                                            OMByte* internalBytes,
+                                            size_t internalBytesSize,
+                                            OMByte* externalBytes,
+                                            size_t NNAME(externalBytesSize),
+                                            OMByteOrder NNAME(byteOrder)) const
 {
   TRACE("OMUniqueObjectIdentificationType::externalize");
 
@@ -87,7 +87,7 @@ void OMUniqueObjectIdentificationType::externalize(
 }
 
 size_t OMUniqueObjectIdentificationType::internalSize(
-                                         OMByte* /* externalBytes */,
+                                         OMByte* NNAME(externalBytes),
                                          size_t ANAME(externalBytesSize)) const
 {
   TRACE("OMUniqueObjectIdentificationType::internalSize");
@@ -98,11 +98,11 @@ size_t OMUniqueObjectIdentificationType::internalSize(
 }
 
 void OMUniqueObjectIdentificationType::internalize(
-                                             OMByte* externalBytes,
-                                             size_t externalBytesSize,
-                                             OMByte* internalBytes,
-                                             size_t /* internalBytesSize */,
-                                             OMByteOrder /* byteOrder */) const
+                                            OMByte* externalBytes,
+                                            size_t externalBytesSize,
+                                            OMByte* internalBytes,
+                                            size_t NNAME(internalBytesSize),
+                                            OMByteOrder NNAME(byteOrder)) const
 {
   TRACE("OMUniqueObjectIdentificationType::internalize");
 
