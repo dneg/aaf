@@ -60,8 +60,8 @@ AD_XMETHOD5(AddMasterSlot,
 			  pDataDef,
     // Data kind of new slot.  Requires a data kind valid for a media
 	// stream. Valid data kinds are:
-    // - DDEF_Video
-    // - DDEF_Audio,
+    // - DDEF_Picture
+    // - DDEF_Sound,
 			[in],
 			  objPass,
 			  aafSlotID_t,
