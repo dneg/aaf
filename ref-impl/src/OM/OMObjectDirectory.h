@@ -36,9 +36,7 @@ class OMStorable;
 class OMObjectDirectory {
 public:
 
-  // Create with space for `capacity' entries.
-  //
-  OMObjectDirectory(int capacity);
+  OMObjectDirectory(void);
 
   ~OMObjectDirectory(void);
 

@@ -33,8 +33,10 @@
 #include <string.h>
 #include <iostream.h>
 
-OMObjectDirectory::OMObjectDirectory(int capacity)
-: _capacity(capacity), _current(0)
+#define OM_OBJECT_DIRECTORY_CAPACITY  (5000)
+
+OMObjectDirectory::OMObjectDirectory(void)
+: _capacity(OM_OBJECT_DIRECTORY_CAPACITY), _current(0)
 {
   TRACE("OMObjectDirectory::OMObjectDirectory");
 
