@@ -25,7 +25,7 @@
 #endif
 
 
-
+#include "AAFPropertyIDs.h"
 
 
 

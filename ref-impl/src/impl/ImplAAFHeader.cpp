@@ -45,6 +45,8 @@
 
 #include "ImplAAFFile.h"
 
+#include "AAFPropertyIDs.h"
+
 #include <assert.h>
 
 #if defined(__MWERKS__)
