@@ -68,6 +68,11 @@ public:
     aafFileRev_t *  rev
   );
 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  GetHeader (
+    ImplAAFHeader ** header
+  );
+
 public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFFileTest.cpp.
