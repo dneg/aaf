@@ -109,7 +109,7 @@ private:
   const ImplAAFTypeDef * _pType;
   
   OMProperty *_property; // The property associated with this property value.
-  ImplAAFRoot *_propertyContainer; // 
+  ImplAAFRoot *_propertyContainer; // The object that owns the property.
 };
 
 //
