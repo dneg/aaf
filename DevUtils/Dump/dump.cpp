@@ -497,7 +497,7 @@ static void warning(char* routineName, char* message);
 static void printError(const char* prefix,
                        const char* fileName,
                        DWORD errorCode);
-static int check(const char* fileName, DWORD resultCode);
+static int checkStatus(const char* fileName, DWORD resultCode);
 static int checks(DWORD resultCode);
 #if defined(OM_UNICODE_APIS)
 static void convert(wchar_t* wcName, size_t length, const char* name);
@@ -1066,7 +1066,7 @@ void printError(const char* prefix, const char* fileName, DWORD errorCode)
   formatError(errorCode);
 }
 
-int check(const char* fileName, DWORD resultCode)
+int checkStatus(const char* fileName, DWORD resultCode)
 {
   if (FAILED(resultCode)) {
     printError(programName, fileName, resultCode);
@@ -1201,7 +1201,7 @@ void getClass(IStorage* storage, CLSID* clsid, const char* fileName)
 {
   STATSTG statstg;
   HRESULT result = storage->Stat(&statstg, STATFLAG_DEFAULT);
-  if (!check(fileName, result)) {
+  if (!checkStatus(fileName, result)) {
     fatalError("getClass", "IStorage::Stat() failed.");
   }
   *clsid = statstg.clsid;
@@ -1268,7 +1268,7 @@ void openStream(IStorage* storage, const char* streamName, IStream** stream)
     STGM_SHARE_EXCLUSIVE | STGM_READ,
     0,
     stream);
-  if (!check(streamName, result)) {
+  if (!checkStatus(streamName, result)) {
     fatalError("openStream", "Failed to open stream.");
   }
 
@@ -1296,7 +1296,7 @@ size_t sizeOfStream(IStream* stream, const char* streamName)
 {
   STATSTG statstg;
   HRESULT result = stream->Stat(&statstg, STATFLAG_NONAME);
-  if (!check(streamName, result)) {
+  if (!checkStatus(streamName, result)) {
     fatalError("sizeOfStream", "Failed to Stat() stream.");
   }
   unsigned long int streamBytes = statstg.cbSize.LowPart;
@@ -1409,7 +1409,7 @@ void dumpStream(IStream* stream, STATSTG* statstg, char* pathName)
   
   for (unsigned long int i = 0; i < byteCount; i++) {
     result = stream->Read(&ch, 1, &bytesRead);
-    if (!check(pathName, result)) {
+    if (!checkStatus(pathName, result)) {
       fatalError("dumpStream", "IStream::Read() failed.");
     }
     if (bytesRead != 1) {
@@ -1464,12 +1464,12 @@ void dumpStorage(IStorage* storage,
 
   IEnumSTATSTG* enumerator;
   result = storage->EnumElements(0, NULL, 0, &enumerator);
-  if (!check(pathName, result)) {
+  if (!checkStatus(pathName, result)) {
     fatalError("dumpStorage", "IStorage::EnumElements() failed.");
   }
   
   result = enumerator->Reset();
-  if (!check(pathName, result)) {
+  if (!checkStatus(pathName, result)) {
     fatalError("dumpStorage", "IStorage::Reset() failed.");
   }
   
@@ -1489,7 +1489,7 @@ void dumpStorage(IStorage* storage,
           NULL,
           0,
           &subStorage);
-        if (!check(pathName, result)) {
+        if (!checkStatus(pathName, result)) {
           fatalError("dumpStorage", "IStorage::OpenStorage() failed.");
         }
         dumpStorage(subStorage, &statstg, myPathName, 0);
@@ -1505,7 +1505,7 @@ void dumpStorage(IStorage* storage,
           STGM_SHARE_EXCLUSIVE | STGM_READ,
           0,
           &subStream);
-        if (!check(pathName, result)) {
+        if (!checkStatus(pathName, result)) {
           fatalError("dumpStorage", "IStorage::OpenStream() failed.");
         }
         dumpStream(subStream, &statstg, myPathName);
@@ -1952,7 +1952,7 @@ void openStorage(IStorage* parentStorage,
     NULL,
     0,
     subStorage);
-  if (!check(storageName, result)) {
+  if (!checkStatus(storageName, result)) {
     fatalError("openStorage", "IStorage::OpenStorage() failed.");
   }
 }
@@ -2448,12 +2448,12 @@ void checkObject(IStorage* storage,
 
   IEnumSTATSTG* enumerator;
   result = storage->EnumElements(0, NULL, 0, &enumerator);
-  if (!check(pathName, result)) {
+  if (!checkStatus(pathName, result)) {
     fatalError("checkObject", "IStorage::EnumElements() failed.");
   }
   
   result = enumerator->Reset();
-  if (!check(pathName, result)) {
+  if (!checkStatus(pathName, result)) {
     fatalError("checkObject", "IStorage::Reset() failed.");
   }
   
@@ -3020,7 +3020,7 @@ void dumpDataStream(IStream* stream,
 
   STATSTG statstg;
   HRESULT result = stream->Stat(&statstg, STATFLAG_NONAME);
-  if (!check(streamName, result)) {
+  if (!checkStatus(streamName, result)) {
     fatalError("dumpdataStream", "Failed to Stat() stream.");
   }
   unsigned long int streamBytes = statstg.cbSize.LowPart;
@@ -3447,7 +3447,7 @@ void openStorage(char* fileName, IStorage** storage)
     
   }
   
-  if (!check(fileName, result)) {
+  if (!checkStatus(fileName, result)) {
     fatalError("openStorage", "StgIsStorageFile() failed.");
   }
   
@@ -3463,7 +3463,7 @@ void openStorage(char* fileName, IStorage** storage)
     NULL,
     0,
     storage);
-  if (!check(fileName, result)) {
+  if (!checkStatus(fileName, result)) {
     fatalError("openStorage", "StgOpenStorage() failed.");
   }
 
@@ -3509,7 +3509,7 @@ void dumpFile(char* fileName)
 
   STATSTG statstg;
   HRESULT result = storage->Stat(&statstg, STATFLAG_DEFAULT);
-  if (!check(fileName, result)) {
+  if (!checkStatus(fileName, result)) {
     fatalError("dumpFile", "IStorage::Stat() failed.");
   }
 
