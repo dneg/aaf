@@ -267,6 +267,7 @@ const int PID_Mob_UsageCode                                      = 0x4408;
 const int PID_CompositionMob_DefaultFadeLength                   = 0x4501;
 const int PID_CompositionMob_DefFadeType                         = 0x4502;
 const int PID_CompositionMob_DefFadeEditUnit                     = 0x4503;
+const int PID_CompositionMob_Rendering                           = 0x4504;
 const int PID_SourceMob_EssenceDescription                       = 0x4701;
 const int PID_MobSlot_SlotID                                     = 0x4801;
 const int PID_MobSlot_SlotName                                   = 0x4802;
