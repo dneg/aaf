@@ -102,7 +102,7 @@ SOURCE="..\..\..\ref-impl\include\com-api\AAF.idl"
 !IF  "$(CFG)" == "comapi - Win32 Release"
 
 # Begin Custom Build
-InputDir="\AAFSources\coresw\AAF-toolkit\ref-impl\include\com-api"
+InputDir="\coresw\AAF-toolkit\ref-impl\include\com-api"
 ProjDir=.
 InputPath=..\..\..\ref-impl\include\com-api\AAF.idl
 InputName=AAF
@@ -115,7 +115,7 @@ InputName=AAF
 !ELSEIF  "$(CFG)" == "comapi - Win32 Debug"
 
 # Begin Custom Build
-InputDir="\AAFSources\coresw\AAF-toolkit\ref-impl\include\com-api"
+InputDir="\coresw\AAF-toolkit\ref-impl\include\com-api"
 ProjDir=.
 InputPath=..\..\..\ref-impl\include\com-api\AAF.idl
 InputName=AAF
@@ -150,10 +150,21 @@ SOURCE="..\..\..\ref-impl\include\com-api\AAFModuleTest.idl"
 
 !IF  "$(CFG)" == "comapi - Win32 Release"
 
+# Begin Custom Build
+InputDir="\coresw\AAF-toolkit\ref-impl\include\com-api"
+ProjDir=.
+InputPath=..\..\..\ref-impl\include\com-api\AAFModuleTest.idl
+InputName=AAFModuleTest
+
+"$(ProjDir)\$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	midl $(InputPath) -I $(InputDir)
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "comapi - Win32 Debug"
 
 # Begin Custom Build
-InputDir="\AAFSources\coresw\AAF-toolkit\ref-impl\include\com-api"
+InputDir="\coresw\AAF-toolkit\ref-impl\include\com-api"
 ProjDir=.
 InputPath=..\..\..\ref-impl\include\com-api\AAFModuleTest.idl
 InputName=AAFModuleTest
@@ -177,7 +188,7 @@ SOURCE="..\..\..\ref-impl\include\com-api\AAFTypes.idl"
 !IF  "$(CFG)" == "comapi - Win32 Release"
 
 # Begin Custom Build
-InputDir="\AAFSources\coresw\AAF-toolkit\ref-impl\include\com-api"
+InputDir="\coresw\AAF-toolkit\ref-impl\include\com-api"
 ProjDir=.
 InputPath=..\..\..\ref-impl\include\com-api\AAFTypes.idl
 InputName=AAFTypes
@@ -190,7 +201,7 @@ InputName=AAFTypes
 !ELSEIF  "$(CFG)" == "comapi - Win32 Debug"
 
 # Begin Custom Build
-InputDir="\AAFSources\coresw\AAF-toolkit\ref-impl\include\com-api"
+InputDir="\coresw\AAF-toolkit\ref-impl\include\com-api"
 ProjDir=.
 InputPath=..\..\..\ref-impl\include\com-api\AAFTypes.idl
 InputName=AAFTypes

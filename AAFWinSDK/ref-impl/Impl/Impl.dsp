@@ -92,6 +92,16 @@ SOURCE="..\..\..\ref-impl\include\com-api\AAFTypes.idl"
 
 !IF  "$(CFG)" == "Impl - Win32 Release"
 
+# Begin Custom Build
+ProjDir=.
+InputPath=..\..\..\ref-impl\include\com-api\AAFTypes.idl
+InputName=AAFTypes
+
+"$(ProjDir)\$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	midl $(InputPath)
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "Impl - Win32 Debug"
 
 # Begin Custom Build
