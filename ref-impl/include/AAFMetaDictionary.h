@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Tue Apr 11 09:52:10 EDT 2000
-// by user transdel on system TRANSDEL.
+// This file was generated on Tue Apr 11 15:23:39 EDT 2000
+// by user bedell on system JBEDELL2.
 //
 // Key to macros.
 //
@@ -3205,26 +3205,6 @@ AAF_CLASS(TypeDefinitionVariableArray,
     false,
     TypeDefinitionVariableArray)
 AAF_CLASS_END(TypeDefinitionVariableArray)
-AAF_CLASS_SEPARATOR()
-
-// TypeDefinitionSet
-//
-AAF_CLASS(TypeDefinitionSet,
-  AAF_LITERAL_AUID(0x06570000,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  TypeDefinition,
-  true)
-  AAF_PROPERTY(ElementType,
-    AAF_LITERAL_AUID(0x06570100,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x5801,
-    AAF_REFERENCE_TYPE(WeakReference, TypeDefinition),
-    true,
-    false,
-    TypeDefinitionSet)
-AAF_CLASS_END(TypeDefinitionSet)
 AAF_CLASS_SEPARATOR()
 
 // TypeDefinitionString
