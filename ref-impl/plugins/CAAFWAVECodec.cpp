@@ -646,8 +646,8 @@ HRESULT STDMETHODCALLTYPE
 			for (n = 0; n < xferBlockCount; n++)
 			{
 				xfer = xferBlock + n;
-				resultBlock->bytesXfered[n] = xfer->numSamples * bytesPerSample;
-				resultBlock->samplesXfered[n] = xfer->numSamples;
+				resultBlock[n].bytesXfered = xfer->numSamples * bytesPerSample;
+				resultBlock[n].samplesXfered = xfer->numSamples;
 				
 				XASSERT((xfer->subTrackNum >= 1) && xfer->subTrackNum <= _numCh, AAFRESULT_CODEC_CHANNELS);
 				interPtr = _interleaveBuf + (xfer->subTrackNum-1);
