@@ -46,8 +46,8 @@ AD_XMETHOD1(ResolveRef,
 AD_METHOD1(GetRef,
 		   [out],aafSourceRef_t *,sourceRef,Source Reference,
 		   This function returns the 3 properties on a source Clip
-  // that make up the "source reference" \(sourceID\, sourceTrackID\, and
-  // startTime\).)
+  // that make up the "source reference" \\\(sourceID\\\, sourceTrackID\\\, and
+  // startTime\\\).)
 
 AD_METHOD4(SetFade,
 		   [in],aafInt32     ,fadeInLen  ,Fade In Length,
@@ -56,14 +56,14 @@ AD_METHOD4(SetFade,
 		   [in],aafFadeType_t,fadeOutType,Fade Out Type,
 		   This function sets the optional fade properties on the
   // input source clip object.  The fade properties only apply to a
-  // source clip of datakind \(or convertible to a datakind\) of type
+  // source clip of datakind \\\(or convertible to a datakind\\\) of type
   // Sound. All arguments should be specified.)
 
 AD_METHOD1(SetRef,
 		   [in],aafSourceRef_t,sourceRef,Source Reference,
 		   This function sets the 3 properties on a source Clip that
-  // make up the "source reference" \(sourceID\, sourceTrackID\, and
-  // startTime\).)
+  // make up the "source reference" \\\(sourceID\\\, sourceTrackID\\\, and
+  // startTime\\\).)
 
 AD_XMETHOD6(TraverseToClip,
 			[in],objPass,aafLength_t   ,length,,
