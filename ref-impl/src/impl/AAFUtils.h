@@ -58,8 +58,10 @@ aafBool	EqualMobID(aafMobID_constref mobID1, aafMobID_constref mobID2);
 
 AAFRESULT aafMobIDNew(aafMobID_t *mobID);
 AAFRESULT aafMobIDFromMajorMinor(
+        aafUInt32	prefix,
         aafUInt32	major,
 		aafUInt32	minor,
+		aafUInt8	UMIDType,	// 0x01-picture, 0x02-audio, 0x03-sound, 0x04-data
 		aafMobID_t *mobID);     /* OUT - Newly created Mob ID */
 
 /************************************************************************
