@@ -106,6 +106,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	case 1:
 	case 2:
+	case 4:
 		_horizontalSubsampling = HorizontalSubsampling;
 		hr = AAFRESULT_SUCCESS;
 		break;
