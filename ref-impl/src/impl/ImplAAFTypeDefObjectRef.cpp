@@ -67,7 +67,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefObjectRef::CreateValue (
-      ImplAAFObject * /*pObj*/,
+      ImplAAFRoot * /*pObj*/,
       ImplAAFPropertyValue ** /*ppPropVal*/)
 {
   // This is a virtual function should be implemented in a derived class.
@@ -89,7 +89,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefObjectRef::GetObject (
       ImplAAFPropertyValue * /*pPropVal*/,
-      ImplAAFObject ** /*ppObject*/)
+      ImplAAFRoot ** /*ppObject*/)
 {
   // This is a virtual function should be implemented in a derived class.
   return AAFRESULT_INTERNAL_ERROR;
@@ -100,7 +100,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefObjectRef::SetObject (
       ImplAAFPropertyValue * /*pPropVal*/,
-      ImplAAFObject * /*ppObject*/)
+      ImplAAFRoot * /*ppObject*/)
 {
   // This is a virtual function should be implemented in a derived class.
   return AAFRESULT_INTERNAL_ERROR;

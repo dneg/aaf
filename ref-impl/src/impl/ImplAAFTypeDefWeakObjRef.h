@@ -78,22 +78,22 @@ public:
 
   // Override from AAFTypeDefObjectRef
   virtual AAFRESULT STDMETHODCALLTYPE
+    CreateValue (/*[in]*/ ImplAAFRoot * pObj,
+      /*[out]*/ ImplAAFPropertyValue ** ppPropVal);
+
+  // Override from AAFTypeDefObjectRef
+  virtual AAFRESULT STDMETHODCALLTYPE
     SetObject (/*[in]*/ ImplAAFPropertyValue * pPropVal,
-      /*[in]*/ ImplAAFObject * ppObject);
+      /*[in]*/ ImplAAFRoot * ppObject);
 
   // Override from AAFTypeDefObjectRef
   virtual AAFRESULT STDMETHODCALLTYPE
     GetObject (/*[in]*/ ImplAAFPropertyValue * pPropVal,
-      /*[out]*/ ImplAAFObject ** ppObject);
+      /*[out]*/ ImplAAFRoot ** ppObject);
 
   // Override from AAFTypeDefObjectRef
   virtual AAFRESULT STDMETHODCALLTYPE
     GetObjectType (/*[out]*/ ImplAAFClassDef ** ppObjType);
-
-  // Override from AAFTypeDefObjectRef
-  virtual AAFRESULT STDMETHODCALLTYPE
-    CreateValue (/*[in]*/ ImplAAFObject * pObj,
-      /*[out]*/ ImplAAFPropertyValue ** ppPropVal);
 
   // Override from AAFTypeDef
   virtual AAFRESULT STDMETHODCALLTYPE
