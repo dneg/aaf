@@ -30,7 +30,7 @@
 #include "AAFUtils.h"
 
 ImplAAFTimelineMobSlot::ImplAAFTimelineMobSlot ():
-	_editRate(	PID_TIMELINEMOBSLOT_EDITRATE,	"EditRate"),
+	_editRate(	PID_TimelineMobSlot_EditRate,	"Edit Rate"),
 	_origin(	PID_TIMELINEMOBSLOT_ORIGIN,		"Origin")
 
 {

@@ -19,12 +19,12 @@
 
 
 ImplAAFTapeDescriptor::ImplAAFTapeDescriptor ():
-	_formFactor(		PID_TAPEDESCRIPTOR_FORMFACTOR,		"FormFactor"),
-	_videoSignalType(	PID_TAPEDESCRIPTOR_VIDEOSIGNAL,		"VideoSignalType"),
-	_tapeFormat(		PID_TAPEDESCRIPTOR_TAPEFORMAT,		"TapeFormat"),
-	_tapeLength(		PID_TAPEDESCRIPTOR_LENGTH,			"TapeLength"),
-	_manufacturer(		PID_TAPEDESCRIPTOR_MANUFACTURER,	"Manufacturer"),
-	_model(				PID_TAPEDESCRIPTOR_MODEL,			"Model")	
+	_formFactor(		PID_TapeDescriptor_FormFactor,		"Form Factor"),
+	_videoSignalType(	PID_TapeDescriptor_VideoSignal,		"Video Signal"),
+	_tapeFormat(		PID_TapeDescriptor_TapeFormat,		"Tape Format"),
+	_tapeLength(		PID_TapeDescriptor_Length,			"Length"),
+	_manufacturer(		PID_TapeDescriptor_ManufacturerID,	"Manufacturer ID"),
+	_model(				PID_TapeDescriptor_Model,			"Model")	
 {
 	_persistentProperties.put(_formFactor.address());
 	_persistentProperties.put(_videoSignalType.address());
