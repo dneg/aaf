@@ -117,13 +117,6 @@ ImplAAFMob::~ImplAAFMob ()
 	}
 }
 
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::IsAPrimaryMob (aafBool *  /*retval*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
 //****************
 // AppendSlot()
 //
@@ -255,8 +248,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::SetNewProps (aafBool  /*isMasterMob*/,
-                           aafWChar *  /*name*/,
-                           aafBool  /*isPrimary*/)
+                           aafWChar *  /*name*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -268,13 +260,6 @@ AAFRESULT STDMETHODCALLTYPE
 	_lastModified = *modTime;
 
 	return(AAFRESULT_SUCCESS);
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::SetPrimary (aafBool  /*isPrimary*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 

@@ -178,14 +178,6 @@ AAFRESULT STDMETHODCALLTYPE
 	return hr;
 }
 
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFContentStorage::GetPrimaryMobs (ImplEnumAAFMobs ** /*ppEnum*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFContentStorage::GetMobs (aafSearchCrit_t *pSearchCriteria,
                            ImplEnumAAFMobs **ppEnum)
