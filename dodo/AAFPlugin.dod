@@ -1,0 +1,32 @@
+#startm .this-module 0
+AAFPlugin\
+#endm
+#c
+#startm .parent-module 0
+AAFRoot\
+#endm
+#c
+#import ./AAFObject.exp
+AD_HEAD
+
+AD_FORWARD_DECLARATION(AAFEssenceStream)
+AD_FORWARD_DECLARATION(AAFEssenceFormat)
+AD_FORWARD_DECLARATION(AAFEssenceDescriptor)
+
+AD_IDL(//
+// The AAFPlugin interface describes the calls of a plugin.
+//
+// The AAFPluginManager keeps a copy of each plugin in a table\, along
+// with cached copies of pertinant metadata about the plugin\, and
+// instantiates a copy of the plugin.
+//
+//)
+AD_CLASS_UUID(3631F7A3, 9121, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
+
+AD_DEFAULT_UUID(3631F7A4, 9121, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
+AD_CLASS_BEGIN
+
+AD_METHOD0(Start, Set up a codec.)
+AD_METHOD0(Finish, Tear down a codec.)
+
+AD_CLASS_END
