@@ -88,12 +88,24 @@ const bool true = 1;
 // The actual type of a property can be derived from the stored PID by
 // an association PID -> type in the dictionary.
 //
+
+// version 0.8 and above
 const int TID_DATA                           = 0;
-const int TID_STRONG_OBJECT_REFERENCE        = 1;
-const int TID_STRONG_OBJECT_REFERENCE_VECTOR = 2;
-const int TID_WEAK_OBJECT_REFERENCE          = 3;
-const int TID_WEAK_OBJECT_REFERENCE_VECTOR   = 5;
-const int TID_DATA_STREAM                    = 4;
+const int TID_DATA_STREAM                    = 1;
+const int TID_STRONG_OBJECT_REFERENCE        = 2;
+const int TID_STRONG_OBJECT_REFERENCE_VECTOR = 3;
+const int TID_STRONG_OBJECT_REFERENCE_SET    = 4;
+const int TID_WEAK_OBJECT_REFERENCE          = 5;
+const int TID_WEAK_OBJECT_REFERENCE_VECTOR   = 6;
+const int TID_WEAK_OBJECT_REFERENCE_SET      = 7;
+
+// version 0.7 and below
+const int OLD_TID_DATA                           = 0;
+const int OLD_TID_STRONG_OBJECT_REFERENCE        = 1;
+const int OLD_TID_STRONG_OBJECT_REFERENCE_VECTOR = 2;
+const int OLD_TID_WEAK_OBJECT_REFERENCE          = 3;
+const int OLD_TID_WEAK_OBJECT_REFERENCE_VECTOR   = 5;
+const int OLD_TID_DATA_STREAM                    = 4;
 
 // Integral types
 //
@@ -176,6 +188,8 @@ const CLSID CLSID_AAFHeader =
 //  0.6    : change property names to match those in the dictionary
 //  0.7    : change AAFSourceMob::MediaDescription to
 //           AAFSourceMob::EssenceDescription.
+//  0.8    : remove AAFPluggableDef. Renumbered TID_* values.
+//
 //
 
 // The following may change at run time depending on the file format
@@ -187,7 +201,7 @@ char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const int HIGHVERSION = 7;
+const int HIGHVERSION = 8;
 
 // Output format requested
 //
@@ -278,10 +292,12 @@ static VectorIndexEntry* readVectorIndex(IStream* stream,
                                          bool swapNeeded);
 static ByteOrder readByteOrder(IStream* stream);
 static void dumpObject(IStorage* storage, char* pathName, int isRoot);
+static OMUInt32 typeOf(IndexEntry* entry, OMUInt32 version);
 static void dumpContainedObjects(IStorage* storage,
                                  IStream* propertiesStream,
                                  IndexEntry* index,
                                  OMUInt32 entries,
+                                 OMUInt32 version,
                                  char* pathName,
                                  int isRoot,
                                  bool swapNeeded);
@@ -291,6 +307,7 @@ static void dumpDataStream(IStream* stream,
 static void dumpProperties(IStorage* storage,
                            IndexEntry* index,
                            OMUInt32 entries,
+                           OMUInt32 version,
                            char* pathName,
                            int isRoot,
                            bool swapNeeded);
@@ -444,7 +461,7 @@ char* baseName(char* fullName)
 #elif defined(_MAC) || defined(macintosh)
   const int delimiter = ':';
 #else
-  const in delimiter = '/';
+  const int delimiter = '/';
 #endif
   result = strrchr(fullName, delimiter);
   if (result == 0) {
@@ -1143,6 +1160,10 @@ char* typeName(OMUInt32 type)
     result = "data";
     break;
     
+  case TID_DATA_STREAM:
+    result = "data stream";
+    break;
+
   case TID_STRONG_OBJECT_REFERENCE:
     result = "strong object reference";
     break;
@@ -1150,13 +1171,21 @@ char* typeName(OMUInt32 type)
   case TID_STRONG_OBJECT_REFERENCE_VECTOR:
     result = "strong object reference vector";
     break;
+
+  case TID_STRONG_OBJECT_REFERENCE_SET:
+    result = "strong object reference set";
+    break;
     
   case TID_WEAK_OBJECT_REFERENCE:
     result = "weak object reference";
     break;
 
-  case TID_DATA_STREAM:
-    result = "data stream";
+  case TID_WEAK_OBJECT_REFERENCE_VECTOR:
+    result = "weak object reference vector";
+    break;
+
+  case TID_WEAK_OBJECT_REFERENCE_SET:
+    result = "weak object reference set";
     break;
 
   default:
@@ -1250,21 +1279,82 @@ VectorIndexEntry* readVectorIndex(IStream* stream,
   return result;
 }
 
+OMUInt32 typeOf(IndexEntry* entry, OMUInt32 version)
+{
+  OMUInt32 result;
+
+  if (version > 7) {
+    result = entry->_type;
+  } else {
+    switch (entry->_type) {
+      case OLD_TID_DATA:
+        result = TID_DATA; 
+        break;
+      case OLD_TID_STRONG_OBJECT_REFERENCE:
+        result = TID_STRONG_OBJECT_REFERENCE;
+        break;
+      case OLD_TID_STRONG_OBJECT_REFERENCE_VECTOR:
+        result = TID_STRONG_OBJECT_REFERENCE_VECTOR;
+        break;
+      case OLD_TID_WEAK_OBJECT_REFERENCE:
+        result = TID_WEAK_OBJECT_REFERENCE;
+        break;
+      case OLD_TID_WEAK_OBJECT_REFERENCE_VECTOR:
+        result = TID_WEAK_OBJECT_REFERENCE_VECTOR;
+        break;
+      case OLD_TID_DATA_STREAM:
+        result = TID_DATA_STREAM;
+        break;
+      default:
+        break;
+    }
+  }
+  return result;
+}
+
 void dumpContainedObjects(IStorage* storage,
                           IStream* propertiesStream,
                           IndexEntry* index,
                           OMUInt32 entries,
+                          OMUInt32 version,
                           char* pathName,
                           int isRoot,
                           bool swapNeeded)
 {
   for (OMUInt32 i = 0; i < entries; i++) {
 
-    switch (index[i]._type) {
+    switch (typeOf(&index[i], version)) {
       
     case TID_DATA:
       // value is dumped when the property value stream is dumped
       break;
+
+    case TID_DATA_STREAM: {
+      char* subStreamName = new char[index[i]._length];
+      read(propertiesStream,
+           index[i]._offset,
+           subStreamName,
+           index[i]._length);
+      
+      // Compute the pathname for this stream
+      //
+      char thisPathName[256];
+      strcpy(thisPathName, pathName);
+      if (!isRoot) {
+        strcat(thisPathName, "/");
+      }
+      strcat(thisPathName, subStreamName);
+      IStream* stream = 0;
+      openStream(storage, subStreamName, &stream);
+      dumpDataStream(stream, thisPathName, subStreamName);
+
+      stream->Release();
+      stream = 0;
+
+      delete [] subStreamName;
+      subStreamName = 0;
+    }
+    break;
 
     case TID_STRONG_OBJECT_REFERENCE: {
       // get name of sub-storage
@@ -1300,7 +1390,8 @@ void dumpContainedObjects(IStorage* storage,
     }
     break;
 
-    case TID_STRONG_OBJECT_REFERENCE_VECTOR: {
+    case TID_STRONG_OBJECT_REFERENCE_VECTOR:
+    case TID_STRONG_OBJECT_REFERENCE_SET : {
       // get name of vector index
       //
       char* suffix = " index";
@@ -1408,32 +1499,10 @@ void dumpContainedObjects(IStorage* storage,
       // value is dumped when the property value stream is dumped
       break;
 
-    case TID_DATA_STREAM: {
-      char* subStreamName = new char[index[i]._length];
-      read(propertiesStream,
-           index[i]._offset,
-           subStreamName,
-           index[i]._length);
-      
-      // Compute the pathname for this stream
-      //
-      char thisPathName[256];
-      strcpy(thisPathName, pathName);
-      if (!isRoot) {
-        strcat(thisPathName, "/");
-      }
-      strcat(thisPathName, subStreamName);
-      IStream* stream = 0;
-      openStream(storage, subStreamName, &stream);
-      dumpDataStream(stream, thisPathName, subStreamName);
-
-      stream->Release();
-      stream = 0;
-
-      delete [] subStreamName;
-      subStreamName = 0;
-    }
-    break;
+    case TID_WEAK_OBJECT_REFERENCE_VECTOR:
+    case TID_WEAK_OBJECT_REFERENCE_SET:
+      // value is dumped when the property value stream is dumped
+      break;
 
     default:
       break;
@@ -1517,6 +1586,7 @@ void dumpDataStream(IStream* stream,
 void dumpProperties(IStorage* storage,
                     IndexEntry* index,
                     OMUInt32 entries,
+                    OMUInt32 version,
                     char* pathName,
                     int isRoot,
                     bool swapNeeded)
@@ -1556,7 +1626,9 @@ void dumpProperties(IStorage* storage,
 
     cout << endl;
     cout << "property " << i << " "
-         << "( " << typeName(index[i]._type) << " )" << endl;
+         << "( "
+         << typeName(typeOf(&index[i], version))
+         << " )" << endl;
 
     for (OMUInt32 byteCount = 0; byteCount < index[i]._length; byteCount++) {
 
@@ -1585,6 +1657,7 @@ void dumpProperties(IStorage* storage,
                        stream,
                        index,
                        entries,
+                       version,
                        pathName,
                        isRoot,
                        swapNeeded);
@@ -1790,7 +1863,13 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
   }
 
   cout << "Dump of properties" << endl;
-  dumpProperties(storage, index, _entryCount, pathName, isRoot, swapNeeded);
+  dumpProperties(storage,
+                 index,
+                 _entryCount,
+                 _formatVersion,
+                 pathName,
+                 isRoot,
+                 swapNeeded);
   if (_entryCount == 0) {
     cout << "empty" << endl;
   }
