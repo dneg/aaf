@@ -19,7 +19,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFMIDIData \
 	AAFMIDIFileDescriptor \
 	AAFPluggableCode \
-	AAFPulldown \
 	AAFReferenceValue \
 	AAFRGBADescriptor \
 	AAFTaggedValue \
@@ -36,7 +35,6 @@ AAFNONPERSISTENTOBJECTS = \
 	AAFRoot \
 	EnumAAFClassDefs \
 	EnumAAFCodecFlavours \
-	EnumAAFControlPoints \
 	EnumAAFDataDefs \
 	EnumAAFDefs \
 	EnumAAFIdentifications \
@@ -53,6 +51,7 @@ AAFNONPERSISTENTOBJECTS = \
 AAFCOMINTERFACESONLY = \
 	AAFEndian \
 	AAFEssenceSampleStream \
+	AAFInterpolator \
 	AAFSearchSource
 
 # These are the impl files that are typed by humans.  Be sure to
@@ -93,6 +92,7 @@ HUMAN_TYPED_IMPL = \
 	AAFHTMLClip \
 	AAFHTMLDescriptor \
 	AAFIdentification \
+	AAFInterpolationDef \
 	AAFIntraFrameMarker \
 	AAFMasterMob \
 	AAFMob  \
@@ -108,6 +108,7 @@ HUMAN_TYPED_IMPL = \
 	AAFPropValData \
 	AAFPluginDescriptor \
 	AAFPluginManager \
+	AAFPulldown \
 	AAFScopeReference \
 	AAFSegment \
 	AAFSelector \
@@ -139,6 +140,8 @@ HUMAN_TYPED_IMPL = \
 	EnumAAFCodecDefs \
 	EnumAAFComponents \
 	EnumAAFContainerDefs \
+	EnumAAFControlPoints \
+	EnumAAFInterpolationDefs \
 	EnumAAFOperationDefs \
 	EnumAAFEssenceData \
 	EnumAAFLoadedPlugins \
@@ -182,7 +185,8 @@ PLUGIN_OBJECTS = \
 	AAFEssenceStream \
 	AAFEssenceDataStream \
 	AAFEssenceCodec \
-	AAFEssenceContainer
+	AAFEssenceContainer \
+	AAFInterpolator
 
 # objects in PLUGIN_OBJECTS are NOT built into the main interface IDL
 #---------------------------------------------
