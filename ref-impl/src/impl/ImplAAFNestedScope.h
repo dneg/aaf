@@ -83,6 +83,10 @@ public:
         // @parm [retval][out] Slots - segment list  enumeration
         (ImplEnumAAFSegments ** ppEnum);
 
+public:
+	// SDK-internal
+
+	virtual AAFRESULT ChangeContainedReferences(aafUID_t *from, aafUID_t *to);
 
 
 public:

@@ -329,11 +329,6 @@ public:
          ImplAAFFile * destFile,   //@parm [in] Destination AAF File
 		 ImplAAFMob ** destMob);  //@parm [out] Destination Mob
 
-
-  // Override from AAFObject
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Delete ();
-
   // @commDeletes the entire Mob structure \(the MOBJ object and all its contained objects\)
   // and deletes the entry from the Header.
 
