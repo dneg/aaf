@@ -458,11 +458,19 @@ HRESULT AAFGetLibraryInfo(
     // when deducing the directory portion (below),
     // but we restore the full value at the end.
     len = strlen(info.dli_fname);
-    *pServerPath = new char[len + 1];
+    *pServerPath = new char[len + 3];
     if (!(*pServerPath))
         return E_OUTOFMEMORY;
-    strcpy(*pServerPath, info.dli_fname);
 
+    // Add "./" if path does not contain a '/' since the
+    // path manipulation logic requires the presence of '/'
+    if ( strrchr(info.dli_fname, '/') == NULL )
+    {
+        strcpy(*pServerPath, "./");
+        strcat(*pServerPath, info.dli_fname);
+    }
+    else
+        strcpy(*pServerPath, info.dli_fname);
 
     // This section cuts off the filename of the library
     // we've found, leaving only the directory.
@@ -470,10 +478,6 @@ HRESULT AAFGetLibraryInfo(
     // parallels the Windows equivalent. A major difference
     // is that dladdr() doesn't always return a fully-qualified
     // (absolute) path like Win32's GetModuleFileName() does.
-    // Practical tests have shown that even relative paths
-    // have some directory component (./libcom-api.so for example)
-    // based on how the library was found. So, the assert should be
-    // legitimate.
     pDirSeparator = strrchr(*pServerPath, '/');
     assert(pDirSeparator);
 
