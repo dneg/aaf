@@ -295,28 +295,9 @@ private:
 	ImplAAFContentStorage *GetContentStorage(void);
 	ImplAAFDictionary *GetDictionary(void);
 
-public:
-#if FULL_TOOLKIT
-AAFRESULT ReadToolkitRevision(aafProductVersion_t *revision);
-AAFRESULT WriteToolkitRevision(aafProductVersion_t revision);
-AAFRESULT FinishCreation(void);
-AAFRESULT BuildDatakindCache(void);
-AAFRESULT BuildEffectDefCache(void);
-AAFRESULT UpdateLocalCLSD(void);
-AAFRESULT CreateTables(void);
-AAFRESULT UpdateFileCLSD(void);
-AAFRESULT CreateDatakindCache(void);
-#endif
-
 private:
 
 		ImplAAFFile		*_file;
-#if FULL_TOOLKIT
-		aafTable_t       *_dataObjs;
-		aafTable_t       *_datadefs;
-		aafTable_t       *_effectDefs;
-		aafTable_t       *_mobs;
-#endif
 
 		// Non-table instance variables
 		aafVersionType_t	_fileRev;
