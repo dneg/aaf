@@ -64,7 +64,7 @@ ImplEnumAAFLoadedPlugins::~ImplEnumAAFLoadedPlugins ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFLoadedPlugins::NextOne (
-      ImplAAFPluginDescriptor **ppAAFPluginDescriptor)
+      ImplAAFPluginDef **ppAAFPluginDescriptor)
 {
 	XPROTECT()
 	{
@@ -87,10 +87,10 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFLoadedPlugins::Next (
       aafUInt32  count,
-      ImplAAFPluginDescriptor **ppAAFPluginDesc,
+      ImplAAFPluginDef **ppAAFPluginDesc,
       aafUInt32 *pFetched)
 {
-	ImplAAFPluginDescriptor**	ppDesc;
+	ImplAAFPluginDef**	ppDesc;
 	aafUInt32			numDesc;
 	HRESULT				hr;
 
@@ -124,7 +124,7 @@ AAFRESULT STDMETHODCALLTYPE
       aafUInt32  count)
 {
 	aafUInt32	n;
-	ImplAAFPluginDescriptor	*pJunk;
+	ImplAAFPluginDef	*pJunk;
 	
 	XPROTECT()
 	{

@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFPluginDescriptor
+// @com This file implements the module test for CAAFPluginDef
 /***********************************************************************
  *
  *              Copyright (c) 1998-1999 Avid Technology, Inc.
@@ -116,7 +116,7 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	v.patchLevel = 0;
 	v.type = kAAFVersionUnknown;
 	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFPluginDescriptor Test";
+	ProductInfo.productName = L"AAFPluginDef Test";
 	ProductInfo.productVersion = &v;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = UnitTestProductID;
@@ -157,7 +157,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFDictionary*	pDictionary = NULL;
   IAAFDefObject*	pPlugDef = NULL;
   IAAFCodecDef*		pCodecDef = NULL;
-  IAAFPluginDescriptor *pDesc = NULL;
+  IAAFPluginDef *pDesc = NULL;
   IAAFNetworkLocator *pNetLoc = NULL, *pNetLoc2 = NULL, *pNetLoc3 = NULL;
   IAAFLocator		*pLoc = NULL, *pLoc2 = NULL, *pLoc3 = NULL;
   aafUID_t			category = AUID_AAFDefObject, manufacturer = MANUF_JEFFS_PLUGINS;
@@ -184,8 +184,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(defs.cdCodecDef()->
 				CreateInstance(IID_IAAFDefObject, 
 							   (IUnknown **)&pPlugDef));
-	checkResult(defs.cdPluginDescriptor()->
-				CreateInstance(IID_IAAFPluginDescriptor, 
+	checkResult(defs.cdPluginDef()->
+				CreateInstance(IID_IAAFPluginDef, 
 							   (IUnknown **)&pDesc));
 	checkResult(defs.cdNetworkLocator()->
 				CreateInstance(IID_IAAFNetworkLocator, 
@@ -229,7 +229,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pLoc2->SetPath (manuf2URL));
     checkResult(pDesc->AppendLocator(pLoc2));
 	/**/
-	checkResult(pPlugDef->AppendPluginDef(pDesc));
+	checkResult(pDesc->SetDefinitionObjectID(CODEC_DEF_ID));
 
 	
 	checkResult(pPlugDef->QueryInterface (IID_IAAFCodecDef,
@@ -324,8 +324,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IEnumAAFCodecDefs *pEnumPluggable = NULL;
 	IAAFCodecDef *pCodecDef = NULL;
 	IAAFDefObject *pDefObj = NULL;
-	IEnumAAFPluginDescriptors *pEnumDesc;
-	IAAFPluginDescriptor *pPlugin = NULL;
+	IEnumAAFPluginDefs *pEnumDesc;
+	IAAFPluginDef *pPlugin = NULL;
 	IAAFNetworkLocator	*pNetLoc = NULL;
 	IAAFLocator			*pLoc = NULL;
 	IEnumAAFPluginLocators *pEnumLoc = NULL;
@@ -351,10 +351,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
-		checkResult(pDictionary->GetCodecDefs(&pEnumPluggable));
-		checkResult(pEnumPluggable->NextOne (&pCodecDef));
-		checkResult(pCodecDef->QueryInterface (IID_IAAFDefObject, (void **)&pDefObj));
-		checkResult(pDefObj->GetPluginDefs (&pEnumDesc));
+		checkResult(pDictionary->GetPluginDefs (&pEnumDesc));
 		checkResult(pEnumDesc->NextOne (&pPlugin));
 
 	  
@@ -471,10 +468,10 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 }
  
 
-extern "C" HRESULT CAAFPluginDescriptor_test()
+extern "C" HRESULT CAAFPluginDef_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-	aafWChar * pFileName = L"AAFPluginDescriptorTest.aaf";
+	aafWChar * pFileName = L"AAFPluginDefTest.aaf";
 
 	try
 	{
@@ -484,7 +481,7 @@ extern "C" HRESULT CAAFPluginDescriptor_test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFPluginDescriptor_test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFPluginDef_test...Caught general C++ exception!" << endl; 
 	}
 
 	return hr;
