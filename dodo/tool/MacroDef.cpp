@@ -11,7 +11,9 @@
 #include "MacroDef.h"
 #endif
 
+#if !defined(macintosh)
 #include <assert.h>
+#endif
 #include <string.h>
 
 

@@ -11,11 +11,13 @@
 #include "ArgSet.h"
 #endif
 
+#if !defined(macintosh)
 #ifndef _bld_cfg_h_
 #include "bld_cfg.h"
 #endif
 
 #include <assert.h>
+#endif
 
 
 #if AAF_BUILD_CONFIG_EXPLICIT_TEMPLATES
