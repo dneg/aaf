@@ -119,17 +119,17 @@ static wchar_t *manufName = L"Avid Technology, Inc.";
 static wchar_t *manufRev = L"Rev 0.1";
 
 HRESULT STDMETHODCALLTYPE
-    CAAFBasicInterp::CreateDescriptor (IAAFDictionary *dict, IAAFPluginDescriptor **descPtr)
+    CAAFBasicInterp::CreateDescriptor (IAAFDictionary *dict, IAAFPluginDef **descPtr)
 {
-	IAAFPluginDescriptor	*desc = NULL;
+	IAAFPluginDef			*desc = NULL;
 	IAAFLocator				*pLoc = NULL;
  	IAAFNetworkLocator		*pNetLoc = NULL;
 	
 	XPROTECT()
 	{
 	    CAAFBuiltinDefs defs (dict);
-		CHECK(defs.cdPluginDescriptor()->
-			  CreateInstance(IID_IAAFPluginDescriptor, 
+		CHECK(defs.cdPluginDef()->
+			  CreateInstance(IID_IAAFPluginDef, 
 							 (IUnknown **)&desc));
 		*descPtr = desc;
 		desc->AddRef();

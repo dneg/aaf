@@ -162,17 +162,17 @@ static wchar_t *manufName = L"Avid Technology, Inc.";
 static wchar_t *manufRev = L"Rev 0.1";
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::CreateDescriptor (IAAFDictionary *dict, IAAFPluginDescriptor **descPtr)
+    CAAFWaveCodec::CreateDescriptor (IAAFDictionary *dict, IAAFPluginDef **descPtr)
 {
-	IAAFPluginDescriptor	*desc = NULL;
+	IAAFPluginDef	*desc = NULL;
 	IAAFLocator				*pLoc = NULL;
  	IAAFNetworkLocator		*pNetLoc = NULL;
 	IAAFClassDef            *pcd = 0;
 	
 	XPROTECT()
 	{
-	    CHECK(dict->LookupClassDef(AUID_AAFPluginDescriptor, &pcd));
-		CHECK(pcd->CreateInstance(IID_IAAFPluginDescriptor, 
+	    CHECK(dict->LookupClassDef(AUID_AAFPluginDef, &pcd));
+		CHECK(pcd->CreateInstance(IID_IAAFPluginDef, 
 								  (IUnknown **)&desc));
 		pcd->Release ();
 		pcd = 0;

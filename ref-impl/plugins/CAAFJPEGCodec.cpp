@@ -389,10 +389,10 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGCodec::CreateDescriptor (IAAFDictionary *dict, IAAFPluginDescriptor **descPtr)
+    CAAFJPEGCodec::CreateDescriptor (IAAFDictionary *dict, IAAFPluginDef **descPtr)
 {
 	HRESULT hr = S_OK;
-	IAAFPluginDescriptor	*desc = NULL;
+	IAAFPluginDef	*desc = NULL;
 	IAAFLocator				*pLoc = NULL;
  	IAAFNetworkLocator		*pNetLoc = NULL;
 	IAAFClassDef            *pcd = 0;
@@ -405,8 +405,8 @@ HRESULT STDMETHODCALLTYPE
 
 	try
 	{
-	    checkResult(dict->LookupClassDef(AUID_AAFPluginDescriptor, &pcd));
-		checkResult(pcd->CreateInstance(IID_IAAFPluginDescriptor, 
+	    checkResult(dict->LookupClassDef(AUID_AAFPluginDef, &pcd));
+		checkResult(pcd->CreateInstance(IID_IAAFPluginDef, 
 										(IUnknown **)&desc));
 		pcd->Release ();
 		pcd = 0;

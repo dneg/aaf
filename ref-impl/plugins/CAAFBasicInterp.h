@@ -59,7 +59,7 @@ public:
   STDMETHOD (GetIndexedDefinitionID)(aafUInt32 index, aafUID_t *result);
   STDMETHOD (GetPluginDescriptorID)(aafUID_t *result);
   STDMETHOD (GetIndexedDefinitionObject)(aafUInt32 index, IAAFDictionary *dict, IAAFDefObject **def);
-  STDMETHOD (CreateDescriptor)(IAAFDictionary *dict, IAAFPluginDescriptor **desc);
+  STDMETHOD (CreateDescriptor)(IAAFDictionary *dict, IAAFPluginDef **desc);
 
   STDMETHOD (GetNumTypesSupported)(
     /* [out] */aafUInt32*  pCount);
