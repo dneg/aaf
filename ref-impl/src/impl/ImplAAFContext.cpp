@@ -118,3 +118,26 @@ OMLSession ImplAAFSession::GetContainerSession(void)
 {
 	return((OMLSession)NULL);
 }
+
+aafProductIdentification_t *ImplAAFSession::GetDefaultIdent(void)
+{
+	return(_defaultIdent);
+}
+
+  //***********************************************************
+  // METHOD NAME: SetCurrentIdentification()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFSession | SetCurrentIdentification |
+  // Sets the object which identifies the creator of the file.
+  // @end
+  // 
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFSession::SetDefaultIdentification (
+    // @parm aafProductIdentification | ident | [in] a struct from which it is initialized
+    aafProductIdentification_t  *ident
+  )
+  {
+	  _defaultIdent = ident;
+	  return(AAFRESULT_SUCCESS);
+  }
