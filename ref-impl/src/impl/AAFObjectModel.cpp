@@ -1475,10 +1475,6 @@ void AAFObjectModel::InitializePrivateClassDefinitions(void)
   // created.
   findClassDefinition(&AUID_AAFMetaDictionary)->makePrivateClass();
 
-  // The class definition of ClassDefinition is axiomatic. Clients
-  // should never be able to create this definition.
-  findClassDefinition(&AUID_AAFClassDefinition)->makePrivateClass();
-
   // Property definitions are created be the class definition's
   // factory methods.
   findClassDefinition(&AUID_AAFPropertyDefinition)->makePrivateClass();
