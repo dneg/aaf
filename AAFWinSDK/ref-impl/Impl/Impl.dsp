@@ -138,7 +138,7 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFContentStorage.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFControlCodeDef.cpp"
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFParameterDef.cpp"
 # End Source File
 # Begin Source File
 
@@ -386,7 +386,7 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFComponents.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFControlCodeDefs.cpp"
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFParameterDefs.cpp"
 # End Source File
 # Begin Source File
 
