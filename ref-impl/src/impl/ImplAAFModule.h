@@ -338,6 +338,17 @@ STDAPI ImplAAFFileIsAAFFile (
 
 //***********************************************************
 //
+// AAFRawStorageIsAAFFile()
+//
+// Please see AAF.h for comments.
+//
+STDAPI ImplAAFRawStorageIsAAFFile (
+  IAAFRawStorage * pRawStorage,
+  aafUID_t * pAAFFileKind,
+  aafBool *  pRawStorageIsAAFFile);
+
+//***********************************************************
+//
 // AAFLoadPluginManager()
 //
 // Returns a instance of the singleton plugin manager.
