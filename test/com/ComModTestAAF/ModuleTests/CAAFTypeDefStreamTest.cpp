@@ -543,8 +543,15 @@ void CAAFTypeDefStream_create (aafCharacter_constptr pFileName) // throw HRESULT
   checkResult(pMob->SetName(sMobName[0]));
 
   // Create a concrete subclass of EssenceDescriptor
-  checkResult(defs.cdHTMLDescriptor()->CreateInstance(IID_IAAFEssenceDescriptor, 
+  checkResult(defs.cdAIFCDescriptor()->CreateInstance(IID_IAAFEssenceDescriptor, 
                                                       (IUnknown **)&pEssenceDesciptor));
+
+	IAAFAIFCDescriptor*			pAIFCDesc = NULL;
+	checkResult(pEssenceDesciptor->QueryInterface (IID_IAAFAIFCDescriptor, (void **)&pAIFCDesc));
+	checkResult(pAIFCDesc->SetSummary (5, (unsigned char*)"TEST"));
+	pAIFCDesc->Release();
+	pAIFCDesc = NULL;
+
   checkResult(pSourceMob->SetEssenceDescriptor (pEssenceDesciptor));
   checkResult(pHeader->AddMob(pMob));
 
