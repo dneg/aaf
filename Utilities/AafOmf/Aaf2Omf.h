@@ -63,6 +63,7 @@ protected:
 	virtual void ConvertAAFTypeIDDatakind(aafUID_t, OMF2::omfDDefObj_t* pDatakind);
 	void TraverseSequence(IAAFSequence* pSequence, OMF2::omfObject_t* pOMFSequence );
 	void ConvertSelector(IAAFSelector* pSelector, OMF2::omfObject_t* pOMFSelector );
+	void ConvertEssenceGroup(IAAFEssenceGroup* pGroup, OMF2::omfObject_t* pOMFMediaGroup );
 	void ConvertLocator(IAAFEssenceDescriptor* pEssenceDesc, OMF2::omfMobObj_t*	pOMFSourceMob );
 	void ConvertEssenceDataObject(IAAFEssenceData* pEssenceData);
 	virtual void ConvertEffects(IAAFOperationGroup* pEffect, OMF2::omfEffObj_t nest, OMF2::omfEffObj_t*	pOMFEffect);

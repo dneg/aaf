@@ -65,6 +65,11 @@ namespace OMF2
 //#include "omcAvJPED.h"
 
 extern AafOmfGlobals* gpGlobals;
+
+static aafBool	EqualAUID(const aafUID_t *uid1, const aafUID_t *uid2)
+{
+	return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? kAAFTrue : kAAFFalse);
+}
 // ============================================================================
 // Constructor
 // ============================================================================
@@ -1181,18 +1186,24 @@ void Aaf2Omf::TraverseMob(IAAFMob* pMob,
 			pSegment->QueryInterface(IID_IAAFComponent, (void **)&pComponent);
 			ProcessComponent(pComponent, &OMFSegment);
 
-			OMFError = OMF2::omfiMobAppendNewTrack(OMFFileHdl,
-											 *pOMFMob,
-											 OMFeditRate,
-											 OMFSegment,
-											 OMFOrigin,
-											 OMFTrackID,
-											 pszTrackName, 
-											 &OMFNewSlot);
-			if (gpGlobals->bVerboseMode)
+			if(OMFSegment != NULL)
 			{
-				printf("%sConverted SlotID: %d, Name: %s\n",gpGlobals->indentLeader, (int)OMFTrackID, pszTrackName);
+				OMFError = OMF2::omfiMobAppendNewTrack(OMFFileHdl,
+					*pOMFMob,
+					OMFeditRate,
+					OMFSegment,
+					OMFOrigin,
+					OMFTrackID,
+					pszTrackName, 
+					&OMFNewSlot);
+				if (gpGlobals->bVerboseMode)
+				{
+					printf("%sConverted SlotID: %d, Name: %s\n",gpGlobals->indentLeader, (int)OMFTrackID, pszTrackName);
+				}
 			}
+			else
+				printf("%sWARNING: Failed to convert SlotID: %d, Name: %s\n",gpGlobals->indentLeader, (int)OMFTrackID, pszTrackName);
+				
 			if (pszTrackName)
 			{
 				delete [] pszTrackName;
@@ -1267,6 +1278,7 @@ void Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 	IAAFDataDef*            pDataDef = 0;
 	IAAFDefObject*          pDefObj = 0;
 	IAAFNestedScope*		pNest = 0;
+	IAAFEssenceGroup*		pGroup = 0;
 	aafUID_t				datadef;
 	aafLength_t				length;
 
@@ -1311,48 +1323,70 @@ void Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 			printf("%sProcessing Source Clip of length: %ld\n ", gpGlobals->indentLeader, (int)length);
 		}
 		// Get Source Clip properties
-		pSourceClip->GetSourceReference(&ref);
-		pSourceClip->GetFade(&fadeInLen,
-			&fadeInType,
-			&fadeInPresent,
-			&fadeOutLen,
-			&fadeOutType,
-			&fadeOutPresent);
-		ConvertMobIDtoUID(&ref.sourceID, &OMFSourceRef.sourceID);
-		OMFSourceRef.sourceTrackID = (OMF2::omfTrackID_t)ref.sourceSlotID;
-		OMFSourceRef.startTime = (OMF2::omfPosition_t)ref.startTime;
-		// Create OMF Source Clip
-		OMFError = OMF2::omfiSourceClipNew(OMFFileHdl,
-			OMFDatakind,
-			(OMF2::omfLength_t)length,
-			OMFSourceRef,
-			pOMFSegment);
-		if ( (fadeInPresent && fadeInLen > 0) || (fadeOutPresent && fadeOutLen > 0) )
+		if(pSourceClip->GetSourceReference(&ref) == AAFRESULT_SUCCESS)
 		{
-			// Some 'magic' required to get types to match
-			OMF2::omfInt32 fadeInLen32 = (OMF2::omfInt32) fadeInLen;
-			OMF2::omfInt32 fadeOutLen32 = (OMF2::omfInt32) fadeOutLen;
-			// Check that narrowing of data type didn't throw away
-			// data
-			if (((aafLength_t) fadeInLen32) != fadeInLen)
+			pSourceClip->GetFade(&fadeInLen,
+				&fadeInType,
+				&fadeInPresent,
+				&fadeOutLen,
+				&fadeOutType,
+				&fadeInPresent);
+			
+			if((fadeInPresent || fadeInPresent) && !EqualAUID(&datadef, &DDEF_Sound))
 			{
-				rc = AAFRESULT_INTERNAL_ERROR;
-				goto cleanup;
+				fadeInPresent = kAAFFalse;
+				fadeOutPresent = kAAFFalse;
+				printf("%sWARNING: Found fades on a non-audio Source Clip!\n ", gpGlobals->indentLeader);
 			}
-			if (((aafLength_t) fadeOutLen32) != fadeOutLen)
+			
+			ConvertMobIDtoUID(&ref.sourceID, &OMFSourceRef.sourceID);
+			OMFSourceRef.sourceTrackID = (OMF2::omfTrackID_t)ref.sourceSlotID;
+			OMFSourceRef.startTime = (OMF2::omfPosition_t)ref.startTime;
+			// Create OMF Source Clip
+			OMFError = OMF2::omfiSourceClipNew(OMFFileHdl,
+				OMFDatakind,
+				(OMF2::omfLength_t)length,
+				OMFSourceRef,
+				pOMFSegment);
+			if ( (fadeInPresent && fadeInLen > 0) || (fadeOutPresent && fadeOutLen > 0) )
 			{
-				rc = AAFRESULT_INTERNAL_ERROR;
-				goto cleanup;
+				// Some 'magic' required to get types to match
+				OMF2::omfInt32 fadeInLen32 = (OMF2::omfInt32) fadeInLen;
+				OMF2::omfInt32 fadeOutLen32 = (OMF2::omfInt32) fadeOutLen;
+				// Check that narrowing of data type didn't throw away
+				// data
+				if (((aafLength_t) fadeInLen32) != fadeInLen)
+				{
+					rc = AAFRESULT_INTERNAL_ERROR;
+					goto cleanup;
+				}
+				if (((aafLength_t) fadeOutLen32) != fadeOutLen)
+				{
+					rc = AAFRESULT_INTERNAL_ERROR;
+					goto cleanup;
+				}
+				OMFError = OMF2::omfiSourceClipSetFade(OMFFileHdl, 
+					*pOMFSegment,
+					fadeInLen32,
+					(OMF2::omfFadeType_t)fadeInType,
+					fadeOutLen32,
+					(OMF2::omfFadeType_t)fadeOutType);
 			}
-			OMFError = OMF2::omfiSourceClipSetFade(OMFFileHdl, 
-													   *pOMFSegment,
-													   fadeInLen32,
-													   (OMF2::omfFadeType_t)fadeInType,
-													   fadeOutLen32,
-													   (OMF2::omfFadeType_t)fadeOutType);
 		}
-		
-		
+		else
+		{
+			OMFSourceRef.sourceID.prefix = 0;
+			OMFSourceRef.sourceID.major = 0;
+			OMFSourceRef.sourceID.minor = 0;
+			OMFSourceRef.sourceTrackID = 0;
+			OMFSourceRef.startTime = 0;
+			OMFError = OMF2::omfiSourceClipNew(OMFFileHdl,
+				OMFDatakind,
+				(OMF2::omfLength_t)0,
+				OMFSourceRef,
+				pOMFSegment);
+		}
+
 		goto cleanup;
 	}
 
@@ -1525,6 +1559,20 @@ void Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 		goto cleanup;
 	}
 
+	if (SUCCEEDED(pComponent->QueryInterface(IID_IAAFEssenceGroup, (void **)&pGroup)))
+	{
+		// component is a nested scope
+		IncIndentLevel();
+		
+		OMFError = OMF2::omfiMediaGroupNew(OMFFileHdl,
+								   OMFDatakind,
+								   (OMF2::omfLength_t)length,
+								   pOMFSegment);
+		ConvertEssenceGroup(pGroup, pOMFSegment);
+		DecIndentLevel();
+		goto cleanup;
+	}
+
 	if (SUCCEEDED(pComponent->QueryInterface(IID_IAAFScopeReference, (void **)&pScopeRef)))
 	{
 		// component is a source clip
@@ -1547,11 +1595,32 @@ void Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 		goto cleanup;
 	}
 
-	char szTempUID[64];
-	AUIDtoString(&datadef ,szTempUID);
-	if (gpGlobals->bVerboseMode)
-		printf("%sInvalid component type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
-	fprintf(stderr,"%sInvalid component type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
+	IAAFClassDef			*myClass;
+	IAAFMetaDefinition		*classDef;
+	IAAFObject				*pObj;
+	aafUInt32				bufSize;
+	wchar_t					*wbuf;
+	char					*buf;
+
+	pComponent->QueryInterface(IID_IAAFObject, (void **)&pObj);
+	pObj->GetDefinition (&myClass);
+	myClass->QueryInterface(IID_IAAFMetaDefinition, (void **)&classDef);
+
+	classDef->GetNameBufLen(&bufSize);
+	wbuf = new wchar_t[bufSize];
+	buf = new char[bufSize/sizeof(wchar_t)];
+	classDef->GetName (wbuf, bufSize);
+	wcstombs(buf, wbuf, bufSize/sizeof(wchar_t));
+
+	printf("%sInvalid component type found \"%s\", Translating into filler.\n", gpGlobals->indentLeader, buf);
+	delete [] wbuf;
+	delete [] buf;
+	pObj->Release();
+	myClass->Release();
+	classDef->Release();
+
+	// Translate the component into a filler
+	OMFError = OMF2::omfiFillerNew(OMFFileHdl, OMFDatakind, (OMF2::omfLength_t)length, pOMFSegment);
 
 cleanup:
 
@@ -1565,6 +1634,12 @@ cleanup:
 	  {
 		pNest->Release();
 		pNest = 0;
+	  }
+
+	if (pGroup)
+	  {
+		pGroup->Release();
+		pGroup = 0;
 	  }
 	
 	if (pSequence)
@@ -1662,7 +1737,7 @@ void Aaf2Omf::ConvertAAFDatadef(aafUID_t Datadef,
 		strcpy(datakindName, "omfi:data:Edgecode");
 		bFound = OMF2::omfiDatakindLookup(OMFFileHdl, datakindName, pDatakind, (OMF2::omfErr_t *) &rc);
 	}
-	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectPictureWithMate, sizeof(aafUID_t)) == 0 )
+	else if ( memcmp((char *)&Datadef, (char *)&DDEF_PictureWithMatte, sizeof(aafUID_t)) == 0 )
 	{
 		strcpy(datakindName, "omfi:data:PictureWithMatte");
 		bFound = OMF2::omfiDatakindLookup(OMFFileHdl, datakindName, pDatakind, (OMF2::omfErr_t *) &rc);
@@ -1879,6 +1954,75 @@ void Aaf2Omf::ConvertNestedScope(IAAFNestedScope* pNest,
 //		rc = AAFRESULT_INTERNAL_ERROR;
 }
 
+// ============================================================================
+// ConvertEssenceGroup
+//
+//			This function converts an AAF EssenceGroup object and all the objects it
+// contains or references.
+//			
+// Returns: AAFRESULT_SUCCESS if succesfully
+//
+// ============================================================================
+void Aaf2Omf::ConvertEssenceGroup(IAAFEssenceGroup* pGroup,
+								 OMF2::omfObject_t* pOMFGroup )
+{
+	AAFCheck				rc;
+	OMFCheck				OMFError;
+	OMF2::omfSegObj_t		OMFSegment = NULL;
+
+	IAAFComponent*			pComponent = NULL;
+	IAAFSegment*			pSegment = NULL;
+	IAAFSourceClip	*		pSourceClip;
+	aafLength_t				length;
+	aafUInt32				numChoices, n;
+
+	IncIndentLevel();
+
+	pGroup->QueryInterface(IID_IAAFComponent, (void **)&pComponent);
+	pComponent->GetLength(&length);
+
+	if (gpGlobals->bVerboseMode)
+		printf("%sProcessing EssenceGroup object of length = %ld\n", gpGlobals->indentLeader, length);
+
+	rc = pGroup->CountChoices (&numChoices);
+	for(n = 0; n < numChoices; n++)
+	{
+		rc = pGroup->GetChoiceAt (n, &pSegment);
+	  
+	    pSegment->QueryInterface(IID_IAAFComponent, (void **)&pComponent);
+		ProcessComponent(pComponent, &OMFSegment);
+		OMFError = OMF2::omfiMediaGroupAddChoice(OMFFileHdl, *pOMFGroup, OMFSegment);
+		pSegment->Release();
+		pSegment = NULL;
+		pComponent->Release();
+		pComponent = NULL;
+	}
+
+	if(pGroup->GetStillFrame (&pSourceClip) == AAFRESULT_SUCCESS)
+	{
+		aafSourceRef_t			ref;
+		
+		if(pSourceClip->GetSourceReference(&ref) == AAFRESULT_SUCCESS)
+		{
+			rc = pSourceClip->QueryInterface(IID_IAAFComponent, (void **)&pComponent);
+			ProcessComponent(pComponent, &OMFSegment);
+			OMFError = OMF2::omfiMediaGroupSetStillFrame(OMFFileHdl, *pOMFGroup, OMFSegment);
+			pComponent->Release();
+			pComponent = NULL;
+		}
+	}
+
+	DecIndentLevel();
+	if (pSegment)
+		pSegment->Release();
+	if (pComponent)
+		pComponent->Release();
+	if (pSourceClip)
+		pSourceClip->Release();
+
+//	if (OMF2::OM_ERR_NONE != OMFError)
+//		rc = AAFRESULT_INTERNAL_ERROR;
+}
 // ============================================================================
 // ConvertLocator
 //
