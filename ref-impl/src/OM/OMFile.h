@@ -41,7 +41,9 @@ public:
 
   virtual OMFile* file(void) const;
 
-  virtual bool persistent(void);
+  virtual bool inFile(void) const;
+
+  virtual bool persistent(void) const;
 
 private:
 
