@@ -34,136 +34,7 @@ AD_XMETHOD1(GetName,
 		   aafString_t *,
 		   pstrName,
 		   Pointer to name,
-		   Gets the unique name that identifies this datakind object.)
-
-AD_XMETHOD1(IsCharKind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsCharKind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a Char.)
-
-AD_XMETHOD1(IsUInt8Kind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsUInt8Kind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a UINT8.)
-
-AD_XMETHOD1(IsUInt16Kind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsUIntKind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a UINT16.)
-
-AD_XMETHOD1(IsUInt32Kind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsUInt32Kind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a UINT32.)
-
-AD_XMETHOD1(IsInt8Kind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsInt8Kind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a INT8.)
-
-AD_XMETHOD1(IsInt16Kind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsIntKind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a INT16.)
-
-
-AD_XMETHOD1(IsInt32Kind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsInt32Kind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a INT32.)
-
-AD_XMETHOD1(IsRationalKind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsRationalKind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a rational.)
-
-AD_XMETHOD1(IsBooleanKind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsBooleanKind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a boolean.)
-
-AD_XMETHOD1(IsStringKind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsStringKind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a string.)
-
-AD_XMETHOD1(IsColorSpaceKind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsColorSpaceKind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a colorspace.)
-
-AD_XMETHOD1(IsColorKind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsColorKind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a Color.)
-
-AD_XMETHOD1(IsDistanceKind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsDistanceKind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a distance.)
-
-AD_XMETHOD1(IsPointKind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsPointKind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a point.)
-
-AD_XMETHOD1(IsDirectionCodeKind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsDirectionCodeKind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a direction code.)
-
-AD_XMETHOD1(IsPolynomialKind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsPolynomialKind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a polynomial.)
+		   Gets the unique name that identifies this DataDef object.)
 
 AD_XMETHOD1(IsPictureKind,
 		   [retval\,out],
@@ -197,51 +68,25 @@ AD_XMETHOD1(IsSoundKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataKind is a sound.)
 
-AD_XMETHOD1(IsStereoSoundKind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsStereoSoundKind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a stereo sound.)
-
-AD_XMETHOD1(IsTimecodeKind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsTimecodeKind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a timecode.)
-
-AD_XMETHOD1(IsEdgecodeKind,
-		   [retval\,out],
-		   objPass,
-		   aafBool *,
-		   bIsEdgecodeKind,
-		   pointer to the return value, 
-		   Sets return value to TRUE if DataKind is a edgecode.)
-
-
-
-AD_XMETHOD2(DoesDatakindConvertTo,
+AD_XMETHOD2(DoesDataDefConvertTo,
 		   [in\,ref], objPass, aafUID_t *, pAuid, Auid to compare against,
 		   [retval\,out], objPass, aafBool *, bDoesConvertTo, pointer to result,
-		   Sets return value to TRUE if the datakind of the given object
-		   // can be converted to the datakind specified in the IN 
-		   // parameter with the datakindName string.)
+		   Sets return value to TRUE if the DataDef of the given object
+		   // can be converted to the DataDef specified in the IN 
+		   // parameter with the DataDefName string.)
 		   
-AD_XMETHOD2(IsDatakindOf,
+AD_XMETHOD2(IsDataDefOf,
 		   [in\,ref], objPass, aafUID_t *, pAuid, Auid to compare against,
-		   [retval\,out], objPass, aafBool *, bIsDatakindOf, pointer to result,
-		   Sets the value to TRUE if the datakind of the given object
-		   // matches the datakind specified in the IN parameter with
-		   // the datakindName string.)
+		   [retval\,out], objPass, aafBool *, bIsDataDefOf, pointer to result,
+		   Sets the value to TRUE if the DataDef of the given object
+		   // matches the DataDef specified in the IN parameter with
+		   // the DataDefName string.)
 
-AD_XMETHOD2(DoesDatakindConvertFrom,
+AD_XMETHOD2(DoesDataDefConvertFrom,
 		   [in\,ref], objPass, aafUID_t *, pAuid, Auid to compare against,
 		   [retval\,out], objPass, aafBool *, bDoesConvertFrom, pointer to result,
-		   Sets return value to TRUE if the datakind of the given object
-		   // can be converted from the datakind specified in the IN 
-		   // parameter specified with the datakindName string.)
+		   Sets return value to TRUE if the DataDef of the given object
+		   // can be converted from the DataDef specified in the IN 
+		   // parameter specified with the DataDefName string.)
 
 AD_CLASS_END
