@@ -94,7 +94,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFComponent*				comp = NULL;
 	IAAFSegment*				seg = NULL;
 	IAAFDataDef *               pDataDef = 0;
-	aafRational_t				audioRate = { 44100, 1 };
 	aafLength_t					testLength = TEST_LENGTH;
 	bool bFileOpen = false;
 	aafProductIdentification_t	ProductInfo;
