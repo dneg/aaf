@@ -49,8 +49,8 @@
 #include "AAFUtils.h"
 
 ImplAAFTimelineMobSlot::ImplAAFTimelineMobSlot ():
-	_editRate(	PID_TimelineMobSlot_EditRate,	"EditRate"),
-	_origin(	PID_TimelineMobSlot_Origin,		"Origin")
+	_editRate(	PID_TimelineMobSlot_EditRate,	L"EditRate"),
+	_origin(	PID_TimelineMobSlot_Origin,		L"Origin")
 
 {
 	_persistentProperties.put( _editRate.address());

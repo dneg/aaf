@@ -52,8 +52,8 @@ extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 ImplAAFTypeDefStrongObjRef::ImplAAFTypeDefStrongObjRef ()
   : _referencedType ( PID_TypeDefinitionStrongObjectReference_ReferencedType,
-                      "ReferencedType",
-                      "/Dictionary/ClassDefinitions",
+                      L"ReferencedType",
+                      L"/Dictionary/ClassDefinitions",
                       PID_MetaDefinition_Identification)
 {
   _persistentProperties.put(_referencedType.address());
@@ -255,9 +255,9 @@ size_t ImplAAFTypeDefStrongObjRef::NativeSize (void) const
 }
 
 
-OMProperty * ImplAAFTypeDefStrongObjRef::pvtCreateOMPropertyMBS
+OMProperty * ImplAAFTypeDefStrongObjRef::pvtCreateOMProperty
   (OMPropertyId pid,
-   const char * name) const
+   const wchar_t * name) const
 {
   assert (name);
   OMProperty * result =

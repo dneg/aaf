@@ -44,8 +44,8 @@
 
 ImplAAFTypeDefStream::ImplAAFTypeDefStream ()
   : _elementType  (PID_TypeDefinitionStream_ElementType,
-                   "ElementType", 
-                   "/Dictionary/TypeDefinitions", 
+                   L"ElementType", 
+                   L"/Dictionary/TypeDefinitions", 
                    PID_MetaDefinition_Identification)
 {
   _persistentProperties.put(_elementType.address());
