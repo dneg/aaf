@@ -255,8 +255,8 @@ private:
 	AAFRESULT loadWAVEHeader(void);
 	AAFRESULT GetWAVEData(aafUInt32 len, void *buf);
 
-	AAFRESULT CAAFWaveCodec::ComputeWriteChunkSize(aafInt64 sizeOff, aafInt64 end);
-	AAFRESULT CAAFWaveCodec::CreateAudioDataEnd(void);
+	AAFRESULT ComputeWriteChunkSize(aafInt64 sizeOff, aafInt64 end);
+	AAFRESULT CreateAudioDataEnd(void);
 };
 
 #endif // ! __CAAFEssenceCodec_h__
