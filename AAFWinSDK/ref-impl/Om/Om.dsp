@@ -130,6 +130,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMDataStreamProperty.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMDataVector.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMDefinition.cpp"
 # End Source File
 # Begin Source File
@@ -394,6 +398,10 @@ SOURCE="..\..\..\ref-impl\src\OM\utf8.cpp"
 # PROP Default_Filter "h"
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMArrayPropertyT.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\include\OM\OMArrayType.h"
 # End Source File
 # Begin Source File
@@ -458,6 +466,14 @@ SOURCE="..\..\..\ref-impl\include\OM\OMContainerProperty.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMDataContainer.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMDataContainerIterator.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\include\OM\OMDataStream.h"
 # End Source File
 # Begin Source File
@@ -471,6 +487,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMDataStreamProperty.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMDataTypes.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMDataVector.h"
 # End Source File
 # Begin Source File
 
@@ -739,6 +759,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMSetIterator.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMSetIteratorT.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMSetPropertyT.h"
 # End Source File
 # Begin Source File
 
