@@ -60,18 +60,10 @@
 
 #include <assert.h>
 
-#ifndef USE_AAFOBJECT_MODEL
-#define USE_AAFOBJECT_MODEL 0
-#endif
-
-
-
-#if USE_AAFOBJECT_MODEL
 
 #include "AAFObjectModel.h"
 #include "AAFObjectModelProcs.h"
 
-#endif
 
 extern "C" const aafClassID_t CLSID_AAFMetaDictionary;
 extern "C" const aafClassID_t CLSID_EnumAAFClassDefs;
@@ -261,6 +253,59 @@ void ImplAAFMetaDictionary::onSave(void* /*clientContext*/) const
 {
 }
 
+
+
+void ImplAAFMetaDictionary::onRestore(void* /* clientContext */) const
+{
+#if 0
+
+	// Make sure that all of the axiomatic objects are in the dictionary.
+	// Use only low-level OM methods so that we can eliminate side-effects
+	// in the DM.
+	OMUniqueObjectIdentification id = {0};
+	ImplAAFMetaDictionary * nonConstThis = const_cast<ImplAAFMetaDictionary *>(this);
+	
+  // Make sure all of the _axiomaticClassDefinitions are in the persistent set.
+  OMReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef> axiomaticClassDefinitions(_axiomaticClassDefinitions);
+  while(++axiomaticClassDefinitions)
+  {
+    ImplAAFClassDef *pAxiomaticClassDef = axiomaticClassDefinitions.value();
+    assert (pAxiomaticClassDef);
+    if (pAxiomaticClassDef)
+    {
+      id = axiomaticClassDefinitions.identification();
+      if (_classDefinitions.contains(id))
+      {
+      	nonConstThis->_classDefinitions.remove(&id);
+      }
+
+	    nonConstThis->_classDefinitions.appendValue(pAxiomaticClassDef);
+	    pAxiomaticClassDef->AcquireReference(); // saving another reference...
+    }
+  }
+
+  // Make sure all of the _axiomaticTypeDefinitions are in the persistent set.
+  OMReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTypeDef> axiomaticTypeDefinitions(_axiomaticTypeDefinitions);
+  while(++axiomaticTypeDefinitions)
+  {
+    ImplAAFTypeDef *pAxiomaticTypeDef = axiomaticTypeDefinitions.value();
+    if (pAxiomaticTypeDef)
+    {
+      id = axiomaticTypeDefinitions.identification();
+      if (_typeDefinitions.contains(id))
+      {
+      	nonConstThis->_typeDefinitions.remove(&id);
+      }
+
+	    nonConstThis->_typeDefinitions.appendValue(pAxiomaticTypeDef);
+	    pAxiomaticTypeDef->AcquireReference(); // saving another reference... 
+    }
+  }
+#endif // #if 0
+}
+
+
+
 // Temporary method to set the 
 void ImplAAFMetaDictionary::setDataDictionary(ImplAAFDictionary *dataDictionary)
 {
@@ -324,6 +369,11 @@ void ImplAAFMetaDictionary::addAxiomaticClassDefinition(ImplAAFClassDef *pClassD
 {
   // Save the new axiomatic class definition in a non-persistent set.
   _axiomaticClassDefinitions.appendValue(pClassDef);
+  pClassDef->AcquireReference();
+  
+  // Save the new axiomatic class definition in a persistent set.
+  _classDefinitions.appendValue(pClassDef);
+  pClassDef->AcquireReference();
 }
 
 
@@ -332,6 +382,7 @@ void ImplAAFMetaDictionary::addAxiomaticPropertyDefinition(ImplAAFPropertyDef *p
 {
   // Save the new axiomatic property definition in a non-persistent set.
   _axiomaticPropertyDefinitions.appendValue(pPropertyDef);
+  pPropertyDef->AcquireReference();
 }
 
 
@@ -340,6 +391,11 @@ void ImplAAFMetaDictionary::addAxiomaticTypeDefinition(ImplAAFTypeDef *pTypeDef)
 {
   // Save the new axiomatic type definition in a non-persistent set.
   _axiomaticTypeDefinitions.appendValue(pTypeDef);
+  pTypeDef->AcquireReference();
+
+  // Save the new axiomatic type definition in a persistent set.
+  _typeDefinitions.appendValue(pTypeDef);
+  pTypeDef->AcquireReference();
 }
 
 
@@ -941,7 +997,6 @@ AAFRESULT STDMETHODCALLTYPE
 // Create all of the axiomatic classes as uninitialized objects.
 void ImplAAFMetaDictionary::CreateAxiomaticClasses(void)
 {
-#if USE_AAFOBJECT_MODEL
   // Get a pointer to the object model instance.
   const AAFObjectModel *objectModel = AAFObjectModel::singleton();
   aafUInt32 index;
@@ -956,13 +1011,11 @@ void ImplAAFMetaDictionary::CreateAxiomaticClasses(void)
         throw AAFRESULT_NOMEMORY;
     }
   }
-#endif // #if USE_AAFOBJECT_MODEL
 }
 
 // Create all of the axiomatic properties as uninitialized objects.
 void ImplAAFMetaDictionary::CreateAxiomaticProperties(void)
 {
-#if USE_AAFOBJECT_MODEL
   // Get a pointer to the object model instance.
   const AAFObjectModel *objectModel = AAFObjectModel::singleton();
   const PropertyDefinition *propertyDefinition;
@@ -977,13 +1030,11 @@ void ImplAAFMetaDictionary::CreateAxiomaticProperties(void)
         throw AAFRESULT_NOMEMORY;
     }
   }
-#endif // #if USE_AAFOBJECT_MODEL
 }
 
 // Create all of the axiomatic types as uninitialized objects.
 void ImplAAFMetaDictionary::CreateAxiomaticTypes(void)
 {
-#if USE_AAFOBJECT_MODEL
   // Get a pointer to the object model instance.
   const AAFObjectModel *objectModel = AAFObjectModel::singleton();
   const TypeDefinition *typeDefinition;
@@ -998,7 +1049,6 @@ void ImplAAFMetaDictionary::CreateAxiomaticTypes(void)
         throw AAFRESULT_NOMEMORY;
     }
   }
-#endif // #if USE_AAFOBJECT_MODEL
 }
 
 
@@ -1007,7 +1057,6 @@ void ImplAAFMetaDictionary::CreateAxiomaticTypes(void)
 // definitions.
 void ImplAAFMetaDictionary::InitializeAxiomaticClasses(void)
 {
-#if USE_AAFOBJECT_MODEL
   // Get a pointer to the object model instance.
   const AAFObjectModel *objectModel = AAFObjectModel::singleton();
   const ClassDefinition *classDefinition;
@@ -1025,14 +1074,12 @@ void ImplAAFMetaDictionary::InitializeAxiomaticClasses(void)
         throw AAFRESULT_CLASS_NOT_FOUND;
     }
   }
-#endif // #if USE_AAFOBJECT_MODEL
 }
 
 // Initialize all of the type definitions with there appropriate class and type
 // definitions.
 void ImplAAFMetaDictionary::InitializeAxiomaticTypes(void)
 {
-#if USE_AAFOBJECT_MODEL
   // Get a pointer to the object model instance.
   const AAFObjectModel *objectModel = AAFObjectModel::singleton();
   const TypeDefinition *typeDefinition;
@@ -1050,13 +1097,11 @@ void ImplAAFMetaDictionary::InitializeAxiomaticTypes(void)
         throw AAFRESULT_TYPE_NOT_FOUND;
     }
   }
-#endif // #if USE_AAFOBJECT_MODEL
 }
 
 // Initialize all of the property definitions with their type definitions.
 void ImplAAFMetaDictionary::InitializeAxiomaticProperties(void)
 {
-#if USE_AAFOBJECT_MODEL
   // Get a pointer to the object model instance.
   const AAFObjectModel *objectModel = AAFObjectModel::singleton();
   const PropertyDefinition *propertyDefinition;
@@ -1074,7 +1119,6 @@ void ImplAAFMetaDictionary::InitializeAxiomaticProperties(void)
         throw AAFRESULT_PROPERTY_NOT_FOUND;
     }
   }
-#endif // #if USE_AAFOBJECT_MODEL
 }
 
 
@@ -1082,7 +1126,6 @@ void ImplAAFMetaDictionary::InitializeAxiomaticProperties(void)
 //  axiomatic class definitions.
 void ImplAAFMetaDictionary::RegisterAxiomaticProperties(void)
 {
-#if USE_AAFOBJECT_MODEL
   // Get a pointer to the object model instance.
   const AAFObjectModel *objectModel = AAFObjectModel::singleton();
   const ClassDefinition *classDefinition;
@@ -1108,14 +1151,12 @@ void ImplAAFMetaDictionary::RegisterAxiomaticProperties(void)
       }
     }
   }
-#endif // #if USE_AAFOBJECT_MODEL
 }
 
 
 // Initialize all of the OMProperties for each aximatic definition.
 void ImplAAFMetaDictionary::InitializeAxiomaticOMProperties(void)
 {
-#if USE_AAFOBJECT_MODEL
   ImplAAFClassDef *pClassDef;
  
   // Get the class definition for all classes.
@@ -1188,7 +1229,6 @@ void ImplAAFMetaDictionary::InitializeAxiomaticOMProperties(void)
 
     pType->InitOMProperties(pClassDef);
   }
-#endif // #if USE_AAFOBJECT_MODEL
 }
 
 
@@ -1198,7 +1238,6 @@ void ImplAAFMetaDictionary::InitializeAxiomaticOMProperties(void)
 // been initialized and registered.
 void ImplAAFMetaDictionary::CompleteAxiomaticClassRegistration(void) // throw AAFRESULT
 {
-#if USE_AAFOBJECT_MODEL
   AAFRESULT result = AAFRESULT_SUCCESS;
   OMReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef> axiomaticClassDefinitions(_axiomaticClassDefinitions, OMBefore);
   while(++axiomaticClassDefinitions)
@@ -1212,7 +1251,6 @@ void ImplAAFMetaDictionary::CompleteAxiomaticClassRegistration(void) // throw AA
     if (AAFRESULT_FAILED(result))
       throw result;
   }
-#endif // #if USE_AAFOBJECT_MODEL
 }
 
 // Create all of the axiomatic definitions.
@@ -1232,8 +1270,6 @@ void ImplAAFMetaDictionary::InitializeAxiomaticDefinitions(void)
 
   RegisterAxiomaticProperties();
   InitializeAxiomaticOMProperties();
-  
-  CompleteAxiomaticClassRegistration();
 }
 
 // Create and initialize all of the axiomatic definitions.
@@ -1242,9 +1278,7 @@ AAFRESULT ImplAAFMetaDictionary::InstantiateAxiomaticDefinitions(void)
   AAFRESULT result = AAFRESULT_SUCCESS;
   try
   {
-#if USE_AAFOBJECT_MODEL
     InstallAAFObjectModelProcs();
-#endif // #if USE_AAFOBJECT_MODEL
 
     CreateAxiomaticDefinitions();
     InitializeAxiomaticDefinitions();
@@ -1445,6 +1479,4 @@ AAFRESULT STDMETHODCALLTYPE
 
   return AAFRESULT_NOT_IMPLEMENTED;
 }
-
-
 

@@ -122,17 +122,8 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pTargetSet)  return AAFRESULT_NULL_PARAM;
   if (0 == ids)
     return AAFRESULT_INVALID_PARAM;
-  
 
-  // Do not validate the given target hint until registration. If we attempt
-  // to validate at this point the corresponding property definitions might
-  // not be in the dictionary yet (one of the properties may be on a forward
-  // reference class). 
-  
-  // Copy the given target hint array to the variable sized property.
-  _targetSet.setElementValues(pTargetSet, ids);
-
-  AAFRESULT result = pvtInitialize (id, pObjType, pTypeName);
+  AAFRESULT result = pvtInitialize (id, pObjType, pTypeName, ids, pTargetSet);
   if (AAFRESULT_FAILED(result))
     return result;
   
@@ -180,7 +171,11 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefWeakObjRef::pvtInitialize (
       const aafUID_t & id,
       const ImplAAFClassDef * pClassDef,
-      const aafCharacter * pTypeName)
+      const aafCharacter * pTypeName,
+      aafUInt32  ids,
+      aafUID_constptr  pTargetSet,
+      OMPropertyId * targetPids,
+      OMPropertyId uniqueIdentifierPid)
 {
   if (! pTypeName) return AAFRESULT_NULL_PARAM;
 
@@ -191,10 +186,36 @@ AAFRESULT STDMETHODCALLTYPE
     return hr;
 
   _referencedType = pClassDef;
+  
 
+  // Do not validate the given target hint until registration. If we attempt
+  // to validate at this point the corresponding property definitions might
+  // not be in the dictionary yet (one of the properties may be on a forward
+  // reference class). 
+  
+  // Copy the given target hint array to the variable sized property.
+  _targetSet.setElementValues(pTargetSet, ids);
+
+	// Axiomatic classes can also call this method with the pTargetSet already
+	// converted to the targetPids array and the uniqueIdentifierPid defined.
+	if (NULL != targetPids)
+	{
+		_targetPids = new OMPropertyId[ids + 1]; // allocate space for the null pid.
+		if (NULL == _targetPids)
+			return AAFRESULT_NOMEMORY;
+		
+		for (aafUInt32 i = 0; i <= ids; i++)
+		{
+			_targetPids[i] = targetPids[i];
+		}
+	}
+
+	if (0 != _uniqueIdentifierPid)
+	{
+		_uniqueIdentifierPid = uniqueIdentifierPid;
+	}
 
   // This instance is now fully initialized.
-
   setInitialized();
 
 

@@ -122,7 +122,7 @@ public:
 
   // Override callbacks from OMStorable
   virtual void onSave(void* clientContext) const;
-  //  virtual void onRestore(void* clientContext) const;
+  virtual void onRestore(void* clientContext) const;
 
 
 

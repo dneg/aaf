@@ -78,10 +78,6 @@ extern "C" const aafClassID_t CLSID_EnumAAFPluginDefs;
 
 
 
-// Enable/disable the use of the new AAFObjectModel initialized objects.
-#ifndef USE_AAFOBJECT_MODEL
-#define USE_AAFOBJECT_MODEL 0
-#endif
 
 
 
@@ -519,16 +515,11 @@ bool ImplAAFDictionary::PvtIsClassPresent (
 bool
 ImplAAFDictionary::IsAxiomaticClass (const aafUID_t &classID) const
 {
-#if USE_AAFOBJECT_MODEL
-  ImplAAFClassDef *pAxiomaticClass = findAxiomaticClassDefinition(classID); // return value NOT reference counted! 
-  if (ImplAAFClassDef)
+  ImplAAFClassDef *pAxiomaticClass = metaDictionary()->findAxiomaticClassDefinition(classID); // return value NOT reference counted! 
+  if (pAxiomaticClass)
     return true;
   else
     return false;
-#else // #if USE_AAFOBJECT_MODEL
-  assert (_pBuiltinClasses);
-  return _pBuiltinClasses->IsAxiomaticClass (classID);
-#endif // #else // #if USE_AAFOBJECT_MODEL
 }
 
 
@@ -537,9 +528,7 @@ ImplAAFDictionary::pvtLookupAxiomaticClassDef (const aafUID_t &classID,
 										   ImplAAFClassDef **
 										   ppClassDef)
 {
-#if USE_AAFOBJECT_MODEL
-
-  *ppClassDef = findAxiomaticClassDefinition(classID); // return value NOT reference counted!
+  *ppClassDef = metaDictionary()->findAxiomaticClassDefinition(classID); // return value NOT reference counted!
   if (*ppClassDef)
   {
     (*ppClassDef)->AcquireReference(); // We will be returning this references!
@@ -549,20 +538,6 @@ ImplAAFDictionary::pvtLookupAxiomaticClassDef (const aafUID_t &classID,
   {
     return false;
   }
-
-#else // #if USE_AAFOBJECT_MODEL
-
-  if (_pBuiltinClasses->IsAxiomaticClass (classID))
-	{
-	  // It's axiomatic.
-	  assert (ppClassDef);
-	  *ppClassDef = _pBuiltinClasses->LookupAxiomaticClass (classID);
-	  assert (*ppClassDef); // reference count already incremented by LookupAxiomaticClass.
-	  return true;
-	}
-  return false;
-
-#endif // #else // #if USE_AAFOBJECT_MODEL
 }
 
 
@@ -763,81 +738,13 @@ bool ImplAAFDictionary::PvtIsTypePresent (
   return(metaDictionary()->containsType(typeID));
 }
 
-/*static*/
-const aafUID_t * ImplAAFDictionary::sAxiomaticTypeGuids[] = 
-{
-  & kAAFTypeID_AUID,
-  & kAAFTypeID_AUIDArray,
-  & kAAFTypeID_Boolean,
-  & kAAFTypeID_Character,
-  & kAAFTypeID_DateStruct,
-  & kAAFTypeID_TimeStruct,
-  & kAAFTypeID_Int16,
-  & kAAFTypeID_Int32,
-  & kAAFTypeID_Int64,
-  & kAAFTypeID_Int64Array,
-  & kAAFTypeID_Int8,
-  & kAAFTypeID_Character,
-  & kAAFTypeID_String,
-  & kAAFTypeID_TimeStamp,
-  & kAAFTypeID_UInt16,
-  & kAAFTypeID_UInt32,
-  & kAAFTypeID_UInt8,
-  & kAAFTypeID_UInt8Array8,
-  & kAAFTypeID_Indirect,
-  & kAAFTypeID_Opaque,
-  & kAAFTypeID_Stream,
-  & kAAFTypeID_VersionType,
-  & kAAFTypeID_RGBAComponent,
-  & kAAFTypeID_MobID,
-  & kAAFTypeID_DataValue,
-  & kAAFTypeID_CategoryType,
-
-  & kAAFTypeID_ClassDefinitionStrongReference,
-  & kAAFTypeID_ClassDefinitionStrongReferenceSet,
-  & kAAFTypeID_ClassDefinitionWeakReference,
-  & kAAFTypeID_CodecDefinitionStrongReference,
-  & kAAFTypeID_CodecDefinitionStrongReferenceSet,
-  & kAAFTypeID_ContainerDefinitionStrongReference,
-  & kAAFTypeID_ContainerDefinitionStrongReferenceSet,
-  & kAAFTypeID_DataDefinitionStrongReference,
-  & kAAFTypeID_DataDefinitionStrongReferenceSet,
-  & kAAFTypeID_DataDefinitionWeakReference,
-  & kAAFTypeID_DataDefinitionWeakReferenceSet,
-//  & kAAFTypeID_DefinitionObjectWeakReference, // This is not a valid weak reference!
-  & kAAFTypeID_InterpolationDefinitionStrongReference,
-  & kAAFTypeID_InterpolationDefinitionStrongReferenceSet,
-  & kAAFTypeID_LocatorStrongReference,
-  & kAAFTypeID_MobStrongReferenceSet,
-  & kAAFTypeID_NetworkLocatorStrongReference,
-  & kAAFTypeID_OperationDefinitionStrongReference,
-  & kAAFTypeID_OperationDefinitionStrongReferenceSet,
-  & kAAFTypeID_OperationDefinitionWeakReference,
-  & kAAFTypeID_OperationDefinitionWeakReferenceVector,
-  & kAAFTypeID_ParameterDefinitionStrongReference,
-  & kAAFTypeID_ParameterDefinitionStrongReferenceSet,
-  & kAAFTypeID_ParameterDefinitionWeakReference,
-  & kAAFTypeID_ParameterDefinitionWeakReferenceSet,
-  & kAAFTypeID_PluginDefinitionStrongReference,
-  & kAAFTypeID_PluginDefinitionStrongReferenceSet,
-  & kAAFTypeID_PluginDefinitionWeakReference,
-  & kAAFTypeID_PluginDefinitionWeakReferenceSet,
-  & kAAFTypeID_PropertyDefinitionStrongReference,
-  & kAAFTypeID_PropertyDefinitionStrongReferenceSet,
-  & kAAFTypeID_TypeDefinitionStrongReference,
-  & kAAFTypeID_TypeDefinitionStrongReferenceSet,
-  & kAAFTypeID_TypeDefinitionWeakReference,
-  & kAAFTypeID_TypeDefinitionWeakReferenceVector
-};
 
 bool
 ImplAAFDictionary::pvtLookupAxiomaticTypeDef (const aafUID_t &typeID,
 										   ImplAAFTypeDef **
 										   ppTypeDef)
 {
-#if USE_AAFOBJECT_MODEL
-
-  *ppTypeDef = findAxiomaticTypeDefinition(typeID); // return value NOT reference counted!
+  *ppTypeDef = metaDictionary()->findAxiomaticTypeDefinition(typeID); // return value NOT reference counted!
   if (*ppTypeDef)
   {
     (*ppTypeDef)->AcquireReference (); // We will be returning this references!
@@ -847,56 +754,6 @@ ImplAAFDictionary::pvtLookupAxiomaticTypeDef (const aafUID_t &typeID,
   {
     return false;
   }
-
-#else // #if USE_AAFOBJECT_MODEL
-
-  static const aafUInt32 ksNumAxiomaticTypes
-	= sizeof (sAxiomaticTypeGuids) / sizeof (sAxiomaticTypeGuids[0]);
-
-  if (! _axiomaticTypes)
-	{
-	  _axiomaticTypes = new ImplAAFTypeDefSP [ksNumAxiomaticTypes];
-	  for (aafUInt32 i = 0; i < ksNumAxiomaticTypes; i++)
-		_axiomaticTypes[i] = 0;
-	}
-  assert (_axiomaticTypes);
-
-  for (aafUInt32 i = 0; i < ksNumAxiomaticTypes; i++)
-	{
-	  if (EqualAUID (&typeID, sAxiomaticTypeGuids[i]))
-		{
-		  // It's axiomatic.  
-		  if (! _axiomaticTypes[i])
-			{
-			  // We haven't allocated one yet.
-			  AAFRESULT hr;
-			  ImplAAFTypeDefSP tmp;
-			  hr = _pBuiltinTypes-> NewBuiltinTypeDef (typeID, &tmp);
-			  assert (AAFRESULT_SUCCEEDED (hr));
-
-			  // In the case where a type is aliased
-			  // (e.g. TypeDefWeakRef is aliased to TypeDefAUID) then
-			  // in the process of making the referring type, the
-			  // ref'd type may already be created.  Check to make
-			  // sure that it didn't get created in the process.  If
-			  // so, then simply throw the new one away (currently in
-			  // tmp).
-			  if (! _axiomaticTypes[i])
-				_axiomaticTypes[i] = tmp;
-
-			 assert (_axiomaticTypes[i]);
-			}
-		  assert (_axiomaticTypes[i]);
-		  assert (ppTypeDef);
-		  *ppTypeDef = _axiomaticTypes[i];
-		  (*ppTypeDef)->AcquireReference ();
-		  return true;
-		}
-	}
-  return false;
-
-#endif // #else // #if USE_AAFOBJECT_MODEL
-
 }
 
 
@@ -2036,6 +1893,9 @@ void ImplAAFDictionary::pvtAttemptBuiltinSizeRegistration
 void ImplAAFDictionary::AssurePropertyTypes (ImplAAFClassDef * pcd)
 {
   assert (pcd);
+// All axiomatic definitions have already been loaded all other 
+// property and types can be loaded "lazily" if necessary.
+// Why do we need this stuff??? transdel 2000-DEC-20
   if (_OKToAssurePropTypes)
 	{
 	  pcd->AssurePropertyTypesLoaded ();
@@ -2053,9 +1913,6 @@ void ImplAAFDictionary::AssureClassPropertyTypes ()
 
   hr = GetClassDefs (&enumClassDefs);
   assert (AAFRESULT_SUCCEEDED (hr));
-
-  // do axiomatic classes
-  _pBuiltinClasses->AssurePropertyTypes ();
 
   // do registered (normal) classes
   while (AAFRESULT_SUCCEEDED
@@ -2092,17 +1949,12 @@ void ImplAAFDictionary::InitializeMetaDefinitions(void)
 {
   if (!_metaDefinitionsInitialized)
   {
+    _metaDefinitionsInitialized = true;
+
       //
       // TEMPORARY:
       // Initialize the built-in types and classes if necessary.
       //
-#if USE_AAFOBJECT_MODEL
-      // Experimental: Create and initialize all of the axiomatic definitions.
-      // This must be done before another other definitions or data objects
-      // can be created.
-      AAFRESULT result = InstantiateAxiomaticDefinitions();
-      assert(AAFRESULT_SUCCEEDED(result));
-#endif // #if USE_AAFOBJECT_MODEL
 
     if (!_pBuiltinTypes)
       _pBuiltinTypes   = new ImplAAFBuiltinTypes (this);
@@ -2112,7 +1964,6 @@ void ImplAAFDictionary::InitializeMetaDefinitions(void)
       _pBuiltinClasses = new ImplAAFBuiltinClasses (this);
     assert (_pBuiltinClasses);
 
-    _metaDefinitionsInitialized = true;
   }
 }
 
