@@ -31,6 +31,14 @@
 #include "ImplAAFTypeDefFixedArray.h"
 #endif
 
+#ifndef __ImplAAFTypeDefStrongObjRef_h__
+#include "ImplAAFTypeDefStrongObjRef.h"
+#endif
+
+#ifndef __ImplAAFTypeDefWeakObjRef_h__
+#include "ImplAAFTypeDefWeakObjRef.h"
+#endif
+
 #ifndef __ImplAAFPropertyValue_h__
 #include "ImplAAFPropertyValue.h"
 #endif
@@ -341,8 +349,35 @@ OMProperty * ImplAAFTypeDefFixedArray::pvtCreateOMPropertyMBS
    const char * name) const
 {
   assert (name);
-  size_t elemSize = PropValSize ();
-  OMProperty * result = new OMSimpleProperty (pid, name, elemSize);
+
+  ImplAAFTypeDefSP ptd = BaseType ();
+  assert (ptd);
+
+  OMProperty * result = 0;
+
+  if (dynamic_cast<ImplAAFTypeDefStrongObjRef*>((ImplAAFTypeDef*) ptd))
+	{
+	  // element is strong ref
+	  result = new OMStrongReferenceVectorProperty<ImplAAFObject> (pid, name);
+	}
+  else if (dynamic_cast<ImplAAFTypeDefWeakObjRef*>((ImplAAFTypeDef*) ptd))
+	{
+	  // element is weak ref, hence implemented as AUID array.
+	  // Specify a size of one element.
+	  result = new OMSimpleProperty (pid, name, sizeof (aafUID_t));
+	}
+
+  else
+	{
+	  // We don't support variable arrays of variably-sized properties.
+	  assert (ptd->IsFixedSize());
+	  aafUInt32 elemSize = ptd->NativeSize ();
+
+	  // But even though elems are fixed size, the variable array is
+	  // of variable size.  Specify a size of one element.
+	  result = new OMSimpleProperty (pid, name, elemSize);
+	}
+
   assert (result);
   return result;
 }
