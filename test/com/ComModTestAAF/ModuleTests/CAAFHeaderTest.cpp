@@ -315,6 +315,12 @@ void HeaderTest::createFile(wchar_t *pFileName)
 		CreateInstance(IID_IAAFIdentification, 
 					   (IUnknown **)&_pIdent));
 
+  // {319EFBBF-1189-11d4-804A-080036210804}
+  static const  aafUID_t productId = 
+  { 0x319efbbf, 0x1189, 0x11d4, { 0x80, 0x4a, 0x8, 0x0, 0x36, 0x21, 0x8, 0x4 } };
+
+  check(_pIdent->Initialize(L"Company Name", L"Product Name", L"Product Version String", productId));
+
   checkhr(_pHeader->AppendIdentification(NULL), AAFRESULT_NULL_PARAM);
   check(_pHeader->AppendIdentification(_pIdent));
   check(_pHeader->CountIdentifications(&numIdents));
@@ -350,7 +356,8 @@ void HeaderTest::createFile(wchar_t *pFileName)
   checkhr(_pHeader->LookupIdentification(fakeGeneration, &_pIdent), AAFRESULT_OBJECT_NOT_FOUND);
 
   check(_pHeader->QueryInterface (IID_IAAFObject, (void **)&pObject));
-  check(pObject->EnableGenerationTracking());  
+  check(pObject->EnableGenerationTracking());
+  _pFile->Save();  // tjb Hack - cause a generation to be assigned.
   check(pObject->GetGenerationAUID(&generation));
   check(_pHeader->LookupIdentification(generation, &_pIdent));
   _pIdent->Release();
