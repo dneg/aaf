@@ -51,6 +51,8 @@
 #               and Release. Added a plugins directory. No longer copy the    #
 #               AAFPGAPI.dll as part of the SDK.                              #
 # 14-JUL-1999 : transdel Updated with new required SDK files.                 #
+# 05-OCT-1999 : transdel Updated with new required SDK files. And removed     #
+#               vestiges of registration code.                                #
 ###############################################################################
 
 
@@ -173,10 +175,12 @@ TARGET_DIRS = \
 # Target Header files that need to be copied
 #
 TARGET_H_FILES = \
+	$(AAFSDK_INCLUDE)\AAFClassDefUIDs.h \
 	$(AAFSDK_INCLUDE)\AAFCodecDefs.h \
 	$(AAFSDK_INCLUDE)\AAFContainerDefs.h \
 	$(AAFSDK_INCLUDE)\AAFDataDefs.h \
 	$(AAFSDK_INCLUDE)\AAFDefUIDs.h \
+	$(AAFSDK_INCLUDE)\AAFEssenceFormats.h \
 	$(AAFSDK_INCLUDE)\AAFInterpolatorDefs.h \
 	$(AAFSDK_INCLUDE)\AAFMetaDictionary.h \
 	$(AAFSDK_INCLUDE)\AAFOperationCategories.h \
@@ -185,6 +189,8 @@ TARGET_H_FILES = \
 	$(AAFSDK_INCLUDE)\AAFPluginDefs.h \
 	$(AAFSDK_INCLUDE)\AAFPropertyIDs.h \
 	$(AAFSDK_INCLUDE)\AAFResult.h \
+	$(AAFSDK_INCLUDE)\AAFSmartPointer.h \
+	$(AAFSDK_INCLUDE)\AAFSmartPointerBase.h \
 	$(AAFSDK_INCLUDE)\AAFStoredObjectIDs.h \
 	$(AAFSDK_INCLUDE)\AAFTypeDefUIDs.h
 
@@ -271,44 +277,13 @@ TARGET_DLL_FILES = \
 
 
 #
-# This the file that is created after the dll's have been
-# successfully registered.
+# Configuration files that need to be cleanup up.
 #
-AAFSDK_DEBUG_REGISTERED = $(AAFSDK)\debug.txt
-AAFSDK_RELEASE_REGISTERED = $(AAFSDK)\release.txt
-
-
-!if "$(CFG)"=="Release"
-AAFSDK_REGISTERED = $(AAFSDK_RELEASE_REGISTERED)
-!elseif "$(CFG)"=="Debug"
-AAFSDK_REGISTERED = $(AAFSDK_DEBUG_REGISTERED)
-!else
-AAFSDK_REGISTERED = $(AAFSDK_RELEASE_REGISTERED)
-!endif
-
-#
-# These are the old dlls that need to be unregisted.
-#
-DLLS_TO_UNREGISTER = \
-!if "$(LASTCFG)"=="Release"
-	$(RELEASE_DLL_FILES)
-!elseif "$(LASTCFG)"=="Debug"
+CONFIG_FILES_TO_REMOVE = \
+	$(RELEASE_LIB_FILES) \
+	$(DEBUG_LIB_FILES) \
+	$(RELEASE_DLL_FILES) \
 	$(DEBUG_DLL_FILES)
-!else
-	XDUMMY.DLL
-!endif
-
-#
-# These are the new dlls that need to be registed.
-#
-DLLS_TO_REGISTER = \
-!if "$(CFG)"=="Release"
-	$(RELEASE_DLL_FILES)
-!elseif "$(CFG)"=="Debug"
-	$(DEBUG_DLL_FILES)
-!else
-	XDUMMY.DLL
-!endif
 
 
 #
@@ -318,12 +293,7 @@ TARGET_FILES_TO_REMOVE = \
 	$(TARGET_H_FILES) \
 	$(TARGET_IDL_FILES) \
 	$(TARGET_MIDL_FILES) \
-	$(RELEASE_LIB_FILES) \
-	$(DEBUG_LIB_FILES) \
-	$(RELEASE_DLL_FILES) \
-	$(DEBUG_DLL_FILES) \
-	$(AAFSDK_RELEASE_REGISTERED) \
-	$(AAFSDK_DEBUG_REGISTERED) \
+	$(CONFIG_FILES_TO_REMOVE) \
 	$(AAFSDK_CFG)
 
 
@@ -349,8 +319,7 @@ SDK_TARGETS = \
 	$(TARGET_IDL_FILES)\
 	$(TARGET_MIDL_FILES)\
 	$(TARGET_LIB_FILES)\
-	$(TARGET_DLL_FILES) \
-	$(AAFSDK_REGISTERED)
+	$(TARGET_DLL_FILES)
 
 
 #
@@ -359,9 +328,9 @@ SDK_TARGETS = \
 # the entire SDK does not have to be rebuilt.
 #
 !if "$(LASTCFG)"=="Debug" && "$(CFG)"=="Release" 
-targets : unregisterdlls
+targets : cleanconfigfiles
 !elseif "$(LASTCFG)"=="Release" && "$(CFG)"=="Debug" 
-targets : unregisterdlls
+targets : cleanconfigfiles
 !elseif "$(LASTCFG)"!="$(CFG)" && "$(LASTCFG)"!=""
 targets : cleanfiles
 !endif
@@ -404,6 +373,9 @@ $(AAFSDK_LIB) : $(AAFSDK)
 #
 # Dependency and build rules for the Header targets.
 #
+$(AAFSDK_INCLUDE)\AAFClassDefUIDs.h : $(TOOLKIT_INCLUDE)\AAFClassDefUIDs.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFClassDefUIDs.h "$(AAFSDK_INCLUDE)\"
+
 $(AAFSDK_INCLUDE)\AAFCodecDefs.h : $(TOOLKIT_INCLUDE)\AAFCodecDefs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFCodecDefs.h "$(AAFSDK_INCLUDE)\"
 
@@ -415,6 +387,9 @@ $(AAFSDK_INCLUDE)\AAFDataDefs.h : $(TOOLKIT_INCLUDE)\AAFDataDefs.h
 
 $(AAFSDK_INCLUDE)\AAFDefUIDs.h : $(TOOLKIT_INCLUDE)\AAFDefUIDs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFDefUIDs.h "$(AAFSDK_INCLUDE)\"
+
+$(AAFSDK_INCLUDE)\AAFEssenceFormats.h : $(TOOLKIT_INCLUDE)\AAFEssenceFormats.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFEssenceFormats.h "$(AAFSDK_INCLUDE)\"
 
 $(AAFSDK_INCLUDE)\AAFInterpolatorDefs.h : $(TOOLKIT_INCLUDE)\AAFInterpolatorDefs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFInterpolatorDefs.h "$(AAFSDK_INCLUDE)\"
@@ -439,6 +414,12 @@ $(AAFSDK_INCLUDE)\AAFPropertyIDs.h : $(TOOLKIT_INCLUDE)\AAFPropertyIDs.h
 
 $(AAFSDK_INCLUDE)\AAFResult.h : $(TOOLKIT_INCLUDE)\AAFResult.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFResult.h "$(AAFSDK_INCLUDE)\"
+
+$(AAFSDK_INCLUDE)\AAFSmartPointerBase.h : $(TOOLKIT_INCLUDE)\AAFSmartPointerBase.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFSmartPointerBase.h "$(AAFSDK_INCLUDE)\"
+
+$(AAFSDK_INCLUDE)\AAFSmartPointer.h : $(TOOLKIT_INCLUDE)\com-api\AAFSmartPointer.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\com-api\AAFSmartPointer.h "$(AAFSDK_INCLUDE)\"
 
 $(AAFSDK_INCLUDE)\AAFStoredObjectIDs.h : $(TOOLKIT_INCLUDE)\AAFStoredObjectIDs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFStoredObjectIDs.h "$(AAFSDK_INCLUDE)\"
@@ -524,33 +505,12 @@ $(AAFSDK_DEBUG)\aafcoapi.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.dll
 
 
 
-#
-# fake build rule to satisfy nmake#
-#
-XDUMMY.DLL :
-
-
 
 #
-# Register the dlls
+# Clean out all files that are specific to a particular configuration.
 #
-$(AAFSDK_REGISTERED): $(DLLS_TO_REGISTER)
-	@for %%f in ( $(DLLS_TO_REGISTER) ) do \
-	    @if exist %%f \
-		@echo regsvr32 /s/ /c %%f & \
-	        regsvr32 /s /c %%f
-	@echo # generated when the sdk registers is dlls. > $(AAFSDK_REGISTERED)
-	@echo $(AAFSDK_REGISTERED)
-
-#
-# Unregister the dlls
-#
-unregisterdlls:
-	@for %%f in ( $(DLLS_TO_UNREGISTER) ) do \
-	    @if exist %%f \
-		@echo regsvr32 /u /s/ /c %%f & \
-	        regsvr32 /u /s /c %%f
-	@for %%f in ( $(AAFSDK_RELEASE_REGISTERED) $(AAFSDK_DEBUG_REGISTERED) ) do \
+cleanconfigfiles:
+	@for %%f in ( $(CONFIG_FILES_TO_REMOVE) ) do \
 	    @if exist %%f \
 		@echo $(RM) $(RM_OPTS) %%f & \
 	        $(RM) $(RM_OPTS) %%f
@@ -560,7 +520,7 @@ unregisterdlls:
 #
 # The cleanup rules for all targets created by this make file.
 #
-cleanfiles : unregisterdlls
+cleanfiles : cleanconfigfiles
 	@for %%f in ( $(TARGET_FILES_TO_REMOVE) ) do \
 	    @if exist %%f \
 		@echo $(RM) $(RM_OPTS) %%f & \
