@@ -140,4 +140,4 @@ class ImplAAFPluginManager *ImplAAFContext::GetPluginManager (void)
 // extern "C" const aafClassID_t CLSID_AAFContext;
 // CLSID for AAFContext
 // {1B5D0F20-FCC5-11d2-BFBC-00104BC9156D}
-const aafClassID_t CLSID_AAFContext = { 0x1b5d0f20, 0xfcc5, 0x11d2, { 0xbf, 0xbc, 0x0, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
+// const aafClassID_t CLSID_AAFContext = { 0x1b5d0f20, 0xfcc5, 0x11d2, { 0xbf, 0xbc, 0x0, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
