@@ -103,11 +103,11 @@ ImplAAFFindSourceInfo::AddPulldown(ImplAAFPulldown * /*pdwn*/)
 	return AAFRESULT_NOT_IMPLEMENTED;
 }
 
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFFindSourceInfo::Duplicate(ImplAAFFindSourceInfo * /*result*/)
-{
-	return AAFRESULT_NOT_IMPLEMENTED;
-}
+//AAFRESULT STDMETHODCALLTYPE
+//ImplAAFFindSourceInfo::Duplicate(ImplAAFFindSourceInfo * /*result*/)
+//{
+//	return AAFRESULT_NOT_IMPLEMENTED;
+//}
 
 
 AAFRESULT STDMETHODCALLTYPE ImplAAFFindSourceInfo::Clear(void)
