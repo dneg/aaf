@@ -285,8 +285,6 @@ OMProperty * ImplAAFPropertyDef::CreateOMProperty () const
 {
   OMProperty * result = 0;
 
-  ImplAAFPropertyDef* pNonConstThis = (ImplAAFPropertyDef*) this;
-
   if (_OMPropCreateFunc)
 	{
 	  result = _OMPropCreateFunc (_pid, name());
