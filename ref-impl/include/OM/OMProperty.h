@@ -430,14 +430,14 @@ public:
     //          <c OMCharacterStringProperty>.
   void assign(const CharacterType* characterString);
 
-    // @cmember The length of this <c OMCharacterStringProperty> (not
-    //          counting the null terminator).
+    // @cmember The length of this <c OMCharacterStringProperty> in
+    //          characters (not counting the null terminating character).
     //   @this const
   size_t length(void) const;
 
-    // @cmember Utility function for computing the length of the
-    //          string of <p CharacterType> characters
-    //          <p characterString>.
+    // @cmember Utility function for computing the length, in
+    //          characters, of the string of <p CharacterType>
+   //           characters <p characterString>.
   static size_t stringLength(const CharacterType* characterString);
 
 private:
