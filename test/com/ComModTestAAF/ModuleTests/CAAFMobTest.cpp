@@ -140,8 +140,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  long	test;
 	  aafRational_t	audioRate = { 44100, 1 };
 
-	  // Create a Mob
-	  checkResult(defs.cdMob()->
+	  // Create a concrete subclass of Mob
+	  checkResult(defs.cdMasterMob()->
 				  CreateInstance(IID_IAAFMob, 
 								 (IUnknown **)&pMob));
 
@@ -189,7 +189,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(pHeader->AddMob(pMob));
 
 	  // Create another Mob, check mob count, then delete and recheck count
-	  checkResult(defs.cdMob()->
+	  checkResult(defs.cdMasterMob()->
 				  CreateInstance(IID_IAAFMob, 
 								 (IUnknown **)&pMob2));
 
