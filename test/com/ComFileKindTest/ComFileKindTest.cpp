@@ -264,16 +264,19 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 struct {
   const aafUID_t* kind;
   wchar_t* name;
+  char* type;
   bool read; // temporary - some kinds cannot be read
 } fileinfo[] = {
   {
     &aafFileKindAafSSBinary,
     L"ComFileKindTest.aaf",
+    "MSS",
     true
   },
   {
     &aafFileKindAafXmlText,
     L"ComFileKindTest.xml",
+    "XML",
     false
   }
 };
@@ -283,11 +286,15 @@ int main(void)
   try {
   IAAFFile* pFile = 0;
     for (int i = 0; i < sizeof(fileinfo)/sizeof(fileinfo[0]); i++) {
+      cout << fileinfo[i].type << endl;
       // Create the file
+      cout << "  Creating" << endl;
       checkResult(CreateAAFFile(fileinfo[i].name, fileinfo[i].kind, &pFile));
       // Write the file contents
+      cout << "  Writing" << endl;
       checkResult(WriteAAFFile(pFile));
       // Check that we made an AAF file with the correct encoding
+      cout << "  Checking" << endl;
       aafUID_t k = {0};
       aafBool b = kAAFFalse;
       checkResult(AAFFileIsAAFFile(fileinfo[i].name, &k, &b));
@@ -301,6 +308,7 @@ int main(void)
       }
       // Read the file
       if (fileinfo[i].read) {
+        cout << "  Reading" << endl;
         checkResult(ReadAAFFile(fileinfo[i].name));
       }
     }
