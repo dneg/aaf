@@ -113,7 +113,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				sourceRef.sourceID = referencedMobID;
 				sourceRef.sourceSlotID = 0;
 				sourceRef.startTime = 0;
-				hr = sclp->SetRef(sourceRef);
+				hr = sclp->SetSourceReference(sourceRef);
 				if (AAFRESULT_SUCCESS == hr)
 				{
 					hr = sclp->QueryInterface (IID_IAAFSegment, (void **)&seg);
@@ -244,7 +244,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		
 						hr = pSourceClip->GetFade( &rFadeInLen, &rFadeInType, &fadeInPresent, 
 											&rFadeOutLen, &rFadeOutType, &fadeOutPresent );
-						hr = pSourceClip->GetRef( &rSourceRef); 
+						hr = pSourceClip->GetSourceReference( &rSourceRef); 
 						// verify that we read exactly the same thing as we wrote to the file !!
 						if (fadeInPresent)
 						{

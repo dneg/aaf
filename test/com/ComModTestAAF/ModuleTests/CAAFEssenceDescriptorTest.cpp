@@ -129,7 +129,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							(void **)&edesc);		
  	if (AAFRESULT_SUCCESS != hr)
 		return hr;
- 	hr = pSourceMob->SetEssenceDescription (edesc);
+ 	hr = pSourceMob->SetEssenceDescriptor (edesc);
  	if (AAFRESULT_SUCCESS != hr)
 		return hr;
 
@@ -272,7 +272,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		hr = aMob->QueryInterface (IID_IAAFSourceMob, (void **)&pSourceMob);
 		if (AAFRESULT_SUCCESS != hr)
 			return hr;
-		hr = pSourceMob->GetEssenceDescription (&pEdesc);
+		hr = pSourceMob->GetEssenceDescriptor (&pEdesc);
 		if (AAFRESULT_SUCCESS != hr)
 			return hr;
 
