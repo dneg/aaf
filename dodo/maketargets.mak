@@ -601,8 +601,8 @@ SRC_DIR = ../ref-impl/src
 	./tool/$(DODO) -f macros/cppt.mac < $*.dod > $*.tmp
 	mv $*.tmp $*.cppt
 	chmod -w $*.cppt
-	cp -f $*.cppt $(SRC_DIR)/cpp-api/test/$*Test.cpp
-	chmod -w $(SRC_DIR)/cpp-api/test/$*Test.cpp
+	cp -f $*.cppt $(TEST_DIR)/$*Test.cpp
+	chmod -w $(TEST_DIR)//$*Test.cpp
 
 .dod.comh :
 	$(RM) -f $*.comh
@@ -704,8 +704,8 @@ clean:
 		echo $(RM) -f $(INCLUDE_DIR)/ref-api/$$file.h ; \
 		$(RM) -f $(INCLUDE_DIR)/ref-api/$$file.h ; \
 	done
-#	$(RM) -f $(SRC_DIR)/com-api/test/CAAF*Test.cpp
-#	$(RM) -f $(SRC_DIR)/com-api/test/CEnumAAF*Test.cpp
+#	$(RM) -f $(TEST_DIR)/CAAF*Test.cpp
+#	$(RM) -f $(TEST_DIR)/CEnumAAF*Test.cpp
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAF.h
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFTypes.h
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFPluginTypes.h
@@ -731,8 +731,8 @@ clean:
 		$(RM) -f $(SRC_DIR)/impl/Impl$$file.cpp ; \
 		echo $(RM) -f $(SRC_DIR)/impl/Impl$$file.h ; \
 		$(RM) -f $(SRC_DIR)/impl/Impl$$file.h ; \
-		echo $(RM) -f $(SRC_DIR)/com-api/test/C$${file}Test.cpp ; \
-		$(RM) -f $(SRC_DIR)/com-api/test/C$${file}Test.cpp ; \
+		echo $(RM) -f $(TEST_DIR)/C$${file}Test.cpp ; \
+		$(RM) -f $(TEST_DIR)/C$${file}Test.cpp ; \
 	done
 
 # This file contains the list of all dependents...
