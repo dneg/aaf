@@ -185,22 +185,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
   aafSearchCrit_t				criteria;
   aafDefaultFade_t			defaultFade;
-  aafProductIdentification_t	ProductInfo;
   aafNumSlots_t				numMobs;
   HRESULT						hr = S_OK;
 
-  aafProductVersion_t v;
-  v.major = 1;
-  v.minor = 0;
-  v.tertiary = 0;
-  v.patchLevel = 0;
-  v.type = kAAFVersionUnknown;
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"AAFCompositionMob Test";
-  ProductInfo.productVersion = &v;
-  ProductInfo.productVersionString = NULL;
-  ProductInfo.platform = NULL;
-  
   try
   {
 		checkResult(AAFFileOpenExistingRead(pFileName, 0, &pFile));
