@@ -42,6 +42,8 @@ class ImplAAFInterpolationDef;
 class ImplAAFOperationDef;
 class ImplAAFPluginDescriptor;
 class ImplAAFTypeDef;
+class ImplAAFTypeDefEnum;
+class ImplAAFTypeDefRecord;
 class ImplEnumAAFClassDefs;
 class ImplEnumAAFCodecDefs;
 class ImplEnumAAFContainerDefs;
@@ -412,6 +414,12 @@ public:
   // will put obj on queue to be initialized when everything's ready.
   void pvtInitObjectProperties (ImplAAFObject * pObj) const;
 
+  // Attempt to register the sizes of this type def if it is a
+  // built-in type.  Currently implemented for Enum and Record
+  // typedefs.
+  void pvtAttemptBuiltinSizeRegistration (ImplAAFTypeDefEnum * ptde) const;
+  void pvtAttemptBuiltinSizeRegistration (ImplAAFTypeDefRecord * ptdr) const;
+
 private:
 
   // Like the non-private LookupPropTypeByOMPid(), except will
@@ -458,7 +466,7 @@ private:
 
   private:
 	enum {
-	  kPvtMaxInitObjs = 200
+	  kPvtMaxInitObjs = 2000
 	};
 	ImplAAFObjectSP _objs[kPvtMaxInitObjs];
 	aafUInt32 _putIdx;
