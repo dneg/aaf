@@ -216,7 +216,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "ComModTestAAF"=".\Test\com\ComModTestAAF.dsp" - Package Owner=<4>
+Project: "ComModTestAAF"=".\Test\com\ComModTestAAF\ComModTestAAF.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -264,7 +264,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "CreateSequence"=".\examples\com-api\CreateSequence\CreateSequence.dsp" - Package Owner=<4>
+Project: "CreateSequence"=".\Test\com\CreateSequence\CreateSequence.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -303,7 +303,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "EssenceAccess"=".\examples\com-api\EssenceAccess\EssenceAccess.dsp" - Package Owner=<4>
+Project: "EssenceAccess"=".\Test\com\EssenceAccess\EssenceAccess.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
