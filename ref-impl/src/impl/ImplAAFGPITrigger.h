@@ -3,22 +3,14 @@
 #ifndef __ImplAAFGPITrigger_h__
 #define __ImplAAFGPITrigger_h__
 
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
-
-
-
-
-
+/***********************************************\
+*                                               *
+* Advanced Authoring Format                     *
+*                                               *
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*                                               *
+\***********************************************/
 
 #ifndef __ImplAAFEvent_h__
 #include "ImplAAFEvent.h"
@@ -64,9 +56,8 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFGPITrigger)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFGPITriggerTest.cpp.
-  static AAFRESULT test();
+protected:
+  OMFixedSizeProperty<aafBool> _activeState;
 };
 
 #endif // ! __ImplAAFGPITrigger_h__
