@@ -590,6 +590,25 @@ OMSSIStream::Read(
 	TRACE("OMSSIStream::Read");
 	*pcbRead = cb;
 	sresult result = streamRead( _stream, pv, pcbRead);
+
+	// Dealing with end of stream cases:
+	// 1. Read starts and ends before the end of the stream.
+	// 2. Read starts before and ends past the end of the stream.
+	// 3. Read starts and ends past the end of the stream.
+	// Microsoft Structured Storage implementation of IStream::Read()
+	// returns S_OK in all 3 cases setting the number of bytes
+	// actually read in pcbRead.
+	// Schemasoft's streamRead() behaves differently in the 3rd
+	// case for which it returns an error (SSTG_ERROR_END_OF_STREAM).
+	// Here the error is overwritten to keep the behavior of
+	// IStream::Read() identical across all implementations.
+	if (result == SSTG_ERROR_END_OF_STREAM)
+	{
+		if (*pcbRead == 0)
+		{
+			result = SSTG_OK;
+		}
+	}
 	return makeStatus(result);
 }
 
