@@ -22,6 +22,23 @@
 
 #ccccccccccccccccccccccccccc
 #c
+#c Pass through argument if for idl otherwise omit it.
+#c 
+#c This macro is generally used to specify IDL options that would
+#c make since to emit to c++.
+#c To allow proper marshalling code generation of a struct: |
+#c typedef struct
+#c {
+#c     aafInt32 length;
+#c     AD_IDL([length_is(length)]) aafWchar *str;
+#c } aafString_t;
+#c
+#startm AD_IDL 01
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Includes another file.
 #c
 #c Argument: Base filename
@@ -40,6 +57,14 @@
 #c Arguments: none
 #c
 #startm AD_HEAD 00
+/******************************************\\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\\******************************************/
 #endm
 
 
@@ -153,6 +178,17 @@ Impl.this-module::Impl.this-module ()
 
 Impl.this-module::~Impl.this-module ()
 {}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Starts a class definition
+#c
+#c Arguments: none
+#c
+#startm AD_COM_EXT_CLASS_BEGIN 01
+AD_CLASS_BEGIN\
 #endm
 
 
@@ -359,7 +395,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 32: method description
 #c
 #startm AD_XMETHOD6 32
- AAFRESULT STDMETHODCALLTYPE
+AAFRESULT STDMETHODCALLTYPE
    Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
                            .%08-adornment%09 .%08-indirection /*%10*/,
                            .%13-adornment%14 .%13-indirection /*%15*/,
@@ -610,6 +646,17 @@ void * Impl.this-module::GetContainer ()
 
 #ccccccccccccccccccccccccccc
 #c
+#c Specifies a method in a separate COM interface.
+#c
+#c Argument: method declaration
+#c
+#startm AD_COM_METH 01
+%01-com-meth-implc(.this-module)
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Inserts declaration for a constructor which takes one argument.
 #c Constructor name is assumed to be .this-module.
 #c
@@ -745,4 +792,14 @@ Impl\
 
 #startm .objOut-adornment 00
 Impl\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Hack to quote the .this-module macro and keep it out of export
+#c files.  Do not define this macro in exp.mac!!!
+#c
+#startm AD_EXPORT_THIS_MODULE 00
+.this-module\
 #endm
