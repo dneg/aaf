@@ -20,20 +20,17 @@ AD_IDL(//
 //     operation.
 //)
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
+/***********************************************\
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
+\***********************************************/
 AD_FORWARD_DECLARATION(AAFDefObject)
 
 
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
 AD_CLASS_UUID(AB4D9F13, DD69, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 
 AD_DEFAULT_UUID(AB4D9F14, DD69, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
@@ -49,12 +46,12 @@ AD_XMETHOD1(NextOne,
   // for properly releasing the returned pointer when it is no longer needed.
   // @comm This is a just simplified version of the Next method. )
 
-AD_XMETHOD3(Next,
-			[in], objPass, aafUInt32, count, number of AAFPluginDescriptor requested,
+AD_X2METHOD3(Next,
+			[in], objPass, aafUInt32, count, number of AAFPluginDescriptor requested,xxx,
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
-			objOut, AAFPluginDescriptor, ppAAFPluginDesc, array to receive AAFPluginDescriptors,
+			objOutArray, AAFPluginDescriptor, ppAAFPluginDesc, array to receive AAFPluginDescriptors,count,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
-			number of actual AAFPluginDescriptor fetched into ppAAFPluginDesc array,
+			number of actual AAFPluginDescriptor fetched into ppAAFPluginDesc array,xxx,
 			Enumerates the next count elements \(AAFPluginDesc pointers\) in 
   // the enumerator's list\, returning them in the given array along with the actual 
   // number of enumerated elements in pFetched. The caller is responsible for 
