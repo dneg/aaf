@@ -38,7 +38,6 @@
 #endif
 
 #include "ImplAAFObject.h"
-#include "OMProperty.h"
 
 
 class ImplAAFSourceReference : public ImplAAFSegment

@@ -47,6 +47,9 @@ class ImplAAFScopeStack;
 #include "ImplAAFObject.h"
 #endif
 
+#include "OMWeakRefProperty.h"
+#include "OMStrongRefVectorProperty.h"
+
 #ifndef __ImplAAFKLVData_h__
 #include "ImplAAFKLVData.h"
 #endif

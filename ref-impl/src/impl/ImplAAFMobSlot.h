@@ -61,6 +61,8 @@ class ImplAAFDataDef;
 #include "ImplAAFObject.h"
 #endif
 
+#include "OMStrongRefProperty.h"
+#include "OMWideStringProperty.h"
 
 class ImplAAFMobSlot : public ImplAAFObject
 {

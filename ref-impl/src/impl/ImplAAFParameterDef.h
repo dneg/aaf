@@ -39,6 +39,9 @@
 #include "ImplAAFTypeDef.h"
 #endif
 
+#include "OMWeakRefProperty.h"
+#include "OMWideStringProperty.h"
+
 class ImplAAFParameterDef : public ImplAAFDefObject
 {
 public:

@@ -37,6 +37,7 @@
 #include "ImplAAFTextClip.h"
 #endif
 
+#include "OMWideStringProperty.h"
 
 class ImplAAFHTMLClip : public ImplAAFTextClip
 {

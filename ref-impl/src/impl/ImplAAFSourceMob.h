@@ -50,7 +50,7 @@ class ImplAAFSegment;
 
 #include "ImplAAFEssenceDescriptor.h"
 
-#include "OMProperty.h"
+#include "OMStrongRefProperty.h"
 
 
 const int FULL_LENGTH = -1;

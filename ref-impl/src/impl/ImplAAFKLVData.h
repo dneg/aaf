@@ -39,6 +39,8 @@
 #include "ImplAAFObject.h"
 #endif
 
+#include "OMVariableSizeProperty.h"
+
 class ImplAAFTypeDefRename;
 
 class ImplAAFKLVData : public ImplAAFObject

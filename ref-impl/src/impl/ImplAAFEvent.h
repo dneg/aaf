@@ -35,6 +35,7 @@
 #ifndef __ImplAAFSegment_h__
 #include "ImplAAFSegment.h"
 #endif
+#include "OMWideStringProperty.h"
 
 
 class ImplAAFEvent : public ImplAAFSegment

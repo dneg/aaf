@@ -35,6 +35,8 @@
 #endif
 
 
+#include "OMStrongRefProperty.h"
+
 // Forward declaration
 class ImplAAFSourceReference;
 

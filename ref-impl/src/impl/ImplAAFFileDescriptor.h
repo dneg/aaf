@@ -35,6 +35,7 @@
 #ifndef __ImplAAFEssenceDescriptor_h__
 #include "ImplAAFEssenceDescriptor.h"
 #endif
+#include "OMWeakRefProperty.h"
 
 #include "ImplAAFContainerDef.h"
 #include "ImplAAFCodecDef.h"

@@ -40,6 +40,7 @@
 #include "ImplAAFEssenceDescriptor.h"
 #endif
 
+#include "OMWideStringProperty.h"
 
 class ImplAAFFilmDescriptor : public ImplAAFEssenceDescriptor
 {

@@ -43,6 +43,8 @@ class ImplAAFDataDef;
 #include "ImplAAFObject.h"
 #endif
 
+#include "OMVariableSizeProperty.h"
+
 class ImplAAFVaryingValue;
 class ImplAAFTypeDef;
 

@@ -32,6 +32,8 @@
 #include "ImplAAFFileDescriptor.h"
 #endif
 
+#include "OMVariableSizeProperty.h"
+
 class ImplAAFDigitalImageDescriptor : public ImplAAFFileDescriptor
 {
 public:

@@ -31,6 +31,7 @@
 
 #include "ImplAAFFileDescriptor.h"
 
+#include "OMVariableSizeProperty.h"
 
 class ImplAAFWAVEDescriptor : public ImplAAFFileDescriptor
 {

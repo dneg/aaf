@@ -38,6 +38,7 @@
 #include "ImplAAFLocator.h"
 #endif
 
+#include "OMWideStringProperty.h"
 
 
 

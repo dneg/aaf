@@ -40,6 +40,7 @@
 #include "ImplAAFFileDescriptor.h"
 #endif
 
+#include "OMVariableSizeProperty.h"
 
 class ImplAAFTIFFDescriptor : public ImplAAFFileDescriptor
 {

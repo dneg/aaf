@@ -33,6 +33,8 @@
 #include "ImplAAFLocator.h"
 #endif
 
+#include "OMWideStringProperty.h"
+
 
 class ImplAAFTextLocator : public ImplAAFLocator
 {

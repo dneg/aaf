@@ -39,6 +39,9 @@
 #include "ImplAAFObject.h"
 #endif
 
+#include "OMWideStringProperty.h"
+#include "OMVariableSizeProperty.h"
+
 class ImplAAFTypeDef;
 
 class ImplAAFTaggedValue : public ImplAAFObject

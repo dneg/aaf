@@ -38,6 +38,7 @@ class ImplAAFParameter;
 #ifndef __ImplAAFParameter_h__
 #include "ImplAAFParameter.h"
 #endif
+#include "OMVariableSizeProperty.h"
 
 class ImplAAFTypeDef;
 

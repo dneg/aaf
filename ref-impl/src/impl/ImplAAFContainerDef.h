@@ -36,7 +36,6 @@
 #include "ImplAAFDefObject.h"
 #endif
 
-
 class ImplAAFContainerDef : public ImplAAFDefObject
 {
 public:

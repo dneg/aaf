@@ -39,6 +39,7 @@
 #include "ImplAAFEssenceDescriptor.h"
 #endif
 
+#include "OMWideStringProperty.h"
 
 
 

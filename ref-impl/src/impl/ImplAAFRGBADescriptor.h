@@ -45,6 +45,8 @@
 #include "ImplAAFDigitalImageDescriptor.h"
 #endif
 
+#include "OMVariableSizeProperty.h"
+
 typedef struct
 {
 	aafRGBAComponent_t	comps[MAX_NUM_RGBA_COMPS];

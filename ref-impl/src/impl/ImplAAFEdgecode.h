@@ -39,6 +39,7 @@
 #ifndef __ImplAAFSegment_h__
 #include "ImplAAFSegment.h"
 #endif
+#include "OMVariableSizeProperty.h"
 
 class ImplAAFEdgecode : public ImplAAFSegment
 {
