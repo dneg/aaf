@@ -309,11 +309,7 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 		if (hr != AAFRESULT_SUCCESS)
 		  return hr;
 		_factory->SetEnableDefRegistration (regWasEnabled);
-
-		// For reading, we don't want to register the built-in data
-		// and container defs. Just stick with the ones actually in
-		// in the file we're reading.
-		// dictionary->InitBuiltins();
+		dictionary->InitBuiltins();
 		dictionary->ReleaseReference();
 		dictionary = 0;
 	}
