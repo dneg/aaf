@@ -24,10 +24,14 @@
 // Similar to standard C++ "exception" base class, but uses wide characters.
 // Not derived from "exception" so that "what()" method can return wide 
 // character.  Could be derived from "exception" if desired... with effort.
+// The wide string is  returned by widewhat();
+// The 8 bit string is returned by what() (override exception::what).
 
 #include "AxTypes.h"
 
 #include <AAF.h>
+
+#include <exception>
 
 #include <wchar.h>
 
@@ -39,7 +43,7 @@
 	}						       \
 }
 
-class AxEx {
+class AxEx : public exception {
 
 public:
 
@@ -47,11 +51,12 @@ public:
 	AxEx( const wchar_t* what );
 	AxEx( const AxString& what );
 	virtual ~AxEx();
-	virtual const wchar_t* what() const;
+	virtual const wchar_t* widewhat() const throw();
+	virtual const char* what() const throw();
 
 private:
-
-	AxString _what;
+	std::string _what;
+	AxString _widewhat;
 };
 
 class AxExHResult : public AxEx {
@@ -63,7 +68,8 @@ public:
 	AxExHResult( HRESULT hr, const wchar_t* what );
 	AxExHResult( HRESULT hr, const char* file, int line );
 	virtual ~AxExHResult();
-	virtual const wchar_t* what() const;
+	virtual const wchar_t* widewhat() const throw();
+	virtual const char* what() const throw();
 
 	HRESULT getHResult() const;
 	int getLine() const;
@@ -72,7 +78,8 @@ public:
 private:
 	const char* _file;
 	int _line;
-	AxString _what;
+	std::string _what;
+	AxString _widewhat;
 	HRESULT _hresult;
 };
 
