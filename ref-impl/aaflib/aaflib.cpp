@@ -61,6 +61,12 @@ void reportAssertionFailure(char* kind,
 #endif
 
 
+//
+// Initialize the AUID's.
+//
+#define INIT_AUID
+#include "AAFStoredObjectIDs.h"
+#undef INIT_AUID
 
 
 //
