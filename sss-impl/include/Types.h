@@ -71,7 +71,7 @@ typedef unsigned char BYTE;
 #else /* IA_64 */
 
 #ifdef _MSC_VER /* If this is Visual C++ */
-typedef unsigned __int64 UINT8;
+//typedef unsigned __int64 UINT8;
 #else /* _MSC_VER */
 typedef unsigned long long UINT8;
 #endif /* _MSC_VER */
@@ -100,8 +100,11 @@ typedef signed short SINT2;
 
 #endif /* IA_64 */
 
+#ifndef _MSC_VER /* If this not is Visual C++ */
 typedef signed char CHAR;
+#endif
 typedef UINT2 CHAR2;
+
 
 
 typedef double FLT8;
