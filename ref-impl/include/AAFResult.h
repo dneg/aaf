@@ -271,8 +271,10 @@
 #define HRESULT_NOT_IMPLEMENTED								0x80004001L
 #define HRESULT_SUCCESS										0
 
+/* Property access error codes */
+#define AAFRESULT_BAD_SIZE                  MAKE_AAFHRESULT(0x0200)
 
-#define AAFRESULT_MAXCODE					MAKE_AAFHRESULT(0x01F6)
+#define AAFRESULT_MAXCODE					MAKE_AAFHRESULT(0x0201)
 
 
 #endif // ! __AAFResult_h_
