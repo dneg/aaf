@@ -31,6 +31,7 @@ using namespace std;
 #include <stdlib.h>
 #include <wchar.h>
 #include <string.h>
+#include <assert.h>
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
@@ -369,6 +370,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 									 (IUnknown **)&pTimecode));
 		checkResult(pTimecode->Initialize(100, &timecode));		
 		checkResult(pTimecode->QueryInterface (IID_IAAFSegment, (void **)&seg));
+		
+		assert(pComponent == NULL);
+		checkResult(pTimecode->QueryInterface(IID_IAAFComponent,(void **)&pComponent));
+		checkResult(pComponent->SetDataDef(defs.ddTimecode()));
+		pComponent->Release();
+		pComponent = NULL;
 
  		checkResult(defs.cdStaticMobSlot()->
 					  CreateInstance(IID_IAAFMobSlot, 
@@ -579,6 +586,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  RemoveTestFile(dest_filename);
 	  checkResult(AAFFileOpenNewModify(dest_filename, 0, &ProductInfo, &spDestFile));
 	  checkResult(pMob->CloneExternal(kAAFNoFollowDepend, kAAFNoIncludeMedia, spDestFile, &spClonedMob));
+	  checkResult(spDestFile->Save());	  	
 	  checkResult(spDestFile->Close());	  	
 	}
   catch (HRESULT& rResult)
@@ -887,13 +895,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  timecode.drop = kAAFTcDrop;
 		  timecode.fps = 24;
 
-		  checkResult(aMob->LookupSlot(5, &slot));
+		  checkResult(aMob->LookupSlot(6, &slot));
 		  checkResult(slot->GetSegment(&pSegment));
 
-//		  checkResult(aMob->OffsetToMobTimecode(pSegment, &offset, &timecode));
-//		  checkExpression(timecode.startFrame == (TCstartFrame + offset), AAFRESULT_TEST_FAILED);
-//		  checkExpression(timecode.drop == TCdrop, AAFRESULT_TEST_FAILED);
-//		  checkExpression(timecode.fps == TCfps, AAFRESULT_TEST_FAILED);
+		  checkResult(aMob->OffsetToMobTimecode(pSegment, &offset, &timecode));
+		  checkExpression(timecode.startFrame == (TCstartFrame + offset), AAFRESULT_TEST_FAILED);
+		  checkExpression(timecode.drop == TCdrop, AAFRESULT_TEST_FAILED);
+		  checkExpression(timecode.fps == TCfps, AAFRESULT_TEST_FAILED);
 
 		  checkExpression(aMob->OffsetToMobTimecode(pSegment, NULL, &timecode) == AAFRESULT_NULL_PARAM,
 															AAFRESULT_TEST_FAILED);
@@ -906,10 +914,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  timecode.fps = 24;
 
 		  // According to IDL this should search for the slot containing the timecode segment
-//		  checkResult(aMob->OffsetToMobTimecode(NULL, &offset, &timecode));
-//		  checkExpression(timecode.startFrame == (TCstartFrame + offset), AAFRESULT_TEST_FAILED);
-//		  checkExpression(timecode.drop == TCdrop, AAFRESULT_TEST_FAILED);
-//		  checkExpression(timecode.fps == TCfps, AAFRESULT_TEST_FAILED);
+		  checkResult(aMob->OffsetToMobTimecode(NULL, &offset, &timecode));
+		  checkExpression(timecode.startFrame == (TCstartFrame + offset), AAFRESULT_TEST_FAILED);
+		  checkExpression(timecode.drop == TCdrop, AAFRESULT_TEST_FAILED);
+		  checkExpression(timecode.fps == TCfps, AAFRESULT_TEST_FAILED);
 															
 		  pSegment->Release();
 		  pSegment = NULL;
@@ -919,8 +927,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  // Pass in a segment that is not a timecode and make sure it returns correct hr
 		  checkResult(aMob->LookupSlot(1, &slot));
 		  checkResult(slot->GetSegment(&pSegment));
-//		  checkExpression(aMob->OffsetToMobTimecode(pSegment, &offset, &timecode) == AAFRESULT_TIMECODE_NOT_FOUND,
-//															AAFRESULT_TEST_FAILED);
+		  checkExpression(aMob->OffsetToMobTimecode(pSegment, &offset, &timecode) == AAFRESULT_TIMECODE_NOT_FOUND,
+															AAFRESULT_TEST_FAILED);
 		  pSegment->Release();
 		  pSegment = NULL;
 		  slot->Release();
@@ -1053,15 +1061,6 @@ extern "C" HRESULT CAAFMob_test(testMode_t mode)
 	}
 
   // Cleanup our object if it exists.
-
-	// When all of the functionality of this class is tested, we can return success.
-	// When a method and its unit test have been implemented, remove it from the list.
-	if (SUCCEEDED(hr))
-	{
-		cout << "The following AAFMob methods have not been implemented:" << endl; 
-		cout << "     OffsetToMobTimecode - Implementation not complete - NOT_IN_CURRENT_VERSION" << endl; 
-		hr = AAFRESULT_NOT_IN_CURRENT_VERSION;
-	}
 
   return hr;
 }
