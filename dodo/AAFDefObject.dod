@@ -6,47 +6,21 @@ AAFDefObject\
 AAFObject\
 #endm
 AD_HEAD
-
-
+AD_IDL(//
+// This interface is defines an item to be referenced in the AAF file.
+// It specifies the AUID unique identifier used to define types used
+// in AAF persistent objects.
+AD_STD_COMMENT_IFC_HEADER
+AD_STD_COMMENT_IFC_INIT)
 AD_INCLUDE(AAFTypes)
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
-
-/*************************************************************************
- * 
- * @module AAFDefObject | AAFDefObject is an abstract class
- *		  that defines an item to be referenced in the AAF file. 
- *		  AAFDefObject specifies the AUID unique identifier.
- *
- * @base public | AAFObject
- *
- *************************************************************************/
-
 AD_CLASS_UUID(dfbd6528, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(dfbd6527, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Abstract, StoredObject)
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Name,
+     the Name of this definition.)
 
 
-AD_XMETHOD1(GetAUID,
-		   [retval\,out],
-		   objPass,
-		   aafUID_t *,
-		   pAuid,
-		   Pointer to an AUID reference,
-		   Gets the AUID for this object.)
-
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Description,
+     the Description of this definition.)
 AD_XCLASS_END(Abstract, StoredObject)

@@ -10,10 +10,8 @@ AD_HEAD
 AD_IDL(//
 // This interface is used to define types used in AAF persistent
 // objects.
-//
 AD_STD_COMMENT_IFC_HEADER
-AD_STD_COMMENT_IFC_INIT
-AD_STD_COMMENT_IFC_STUB)
+AD_STD_COMMENT_IFC_INIT)
 AD_FORWARD_DECLARATION(EnumAAFReferenceValues)
 AD_CLASS_UUID(dfbd6524, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 
@@ -29,7 +27,6 @@ AD_XMETHOD1(GetTypeCategory,
   // 
   // Succeeds if:
   // - The pTid argument is valid
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pTid\))
 
@@ -44,10 +41,10 @@ AD_XMETHOD1(RawAccessType,
      This method returns the type def through which values of this
   // type may be accessed if the client wishes to access the value as
   // as raw data.
+  AD_STD_COMMENT_METH_STUB
   // 
   // Succeeds if:
   // - The ppRawTYPEDEF argument is valid
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppRawTypeDef\))
 
@@ -60,6 +57,7 @@ AD_XMETHOD1(GetMinVersion,
 			Pointer to the minimum version ,
 
 			Gets the Minimum AAF Version for this type object.
+  AD_STD_COMMENT_METH_STUB
   //
   // Succeeds if:
   // - This object has already been Initialize\(\)d.
@@ -68,7 +66,6 @@ AD_XMETHOD1(GetMinVersion,
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
   // encountered in the order given below:
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pMinVersion\))
 
@@ -81,6 +78,7 @@ AD_XMETHOD1(SetMinVersion,
 		    Minimum AAF Version,
 
 		    Sets the Minimum AAF Version for type definition.
+  AD_STD_COMMENT_METH_STUB
   //
   // Succeeds if:
   // - This object has already been Initialize\(\)d.
@@ -89,7 +87,6 @@ AD_XMETHOD1(SetMinVersion,
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
   // encountered in the order given below:
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pMinVersion\))
 
@@ -102,11 +99,11 @@ AD_XMETHOD1(GetMaxVersion,
 		    Pointer to the maximum version ,
 
 		    Gets the Maximum AAF Version for this type object.
+  AD_STD_COMMENT_METH_STUB
   //
   // Succeeds if:
   // - This object has already been Initialize\(\)d.
   // - The pMaxVersion pointer is valid.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pMaxVersion\))
 
@@ -119,11 +116,11 @@ AD_XMETHOD1(SetMaxVersion,
 		    Maximum AAF Version,
 
 		    Sets the Maximum AAF Version for type definition.
+  AD_STD_COMMENT_METH_STUB
   //
   // Succeeds if:
   // - This object has already been Initialize\(\)d.
   // - The pMaxVersion pointer is valid.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pMaxVersion\))
 
@@ -137,11 +134,11 @@ AD_XMETHOD1(GetSwapNeeded,
 
   		    Gets the swap information for this object.  Sets *pSwapNeeded to
   // true if swap is needed; sets it to false otherwise.
+  AD_STD_COMMENT_METH_STUB
   //
   // Succeeds if:
   // - This object has already been Initialize\(\)d.
   // - The pSwapNeeded pointer is valid.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pSwapNeeded\))
 
@@ -156,10 +153,10 @@ AD_XMETHOD1(SetSwapNeeded,
 			Sets the swap information for this object.  If SwapNeeded is
   // true\, indicates swap is needed; otherwise indicates swap is not
   // needed.
+  AD_STD_COMMENT_METH_STUB
   //
   // Succeeds if:
   // - This object has already been Initialize\(\)d.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER)
 
 
@@ -173,12 +170,12 @@ AD_XMETHOD1(GetRefValues,
             Places an enumerator for reference values into the *ppEnum argument.
   // 
   // The returned enumerator is AddRef\(\)ed before it is returned.
+  AD_STD_COMMENT_METH_STUB
   // 
   // Succeeds if all of the following are true:
   // - the ppEnum pointer is valid.
   // 
   // If this method fails nothing will be written to *ppEnum.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppEnum\))
 AD_XCLASS_END(Abstract, StoredObject)
