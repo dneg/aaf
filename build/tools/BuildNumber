@@ -314,6 +314,7 @@ if [ $BUMP_BUILD_NUMBER -eq 1 ]; then
       # Restore the original file.
       cp /tmp/AAFSDKBuild.h.sav $AAFSDKBUILD_H 
       echo cvs failed with status $CVSSTATUS
+      exit 1
     fi
 
     NEXT_HEADER_BUILD_TAG=`printf "Build-%04d" $NEXT_HEADER_BUILD_NUMBER`
