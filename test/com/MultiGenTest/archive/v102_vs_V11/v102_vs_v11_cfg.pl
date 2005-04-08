@@ -30,9 +30,9 @@ $Win2K_latest_Base = "g:/jpt/SDK/latest";
 $Linux_latest_Base = "/home/jpt/SDK/latest";
 $Irix_latest_Base  = "/usr/people/jpt/SDK/latest";
 
-$Win2KDataDir = "Z:/multigendata";     # /home/aaftestdata on the Linux server accessed via Samba
-$LinuxDataDir = "/home/aaftestdata/multigendata";    # This is the local directory on the Linux server.
-$IrixDataDir  = "/mnt/aaftestdata/multigendata";    # /home/aaftest on the Linux server accessed via NFS.
+$Win2KDataDir = "Z:/multigendata"; 
+$LinuxDataDir = "/home/aaftestdata/multigendata";
+$IrixDataDir  = "/mnt/aaftestdata/multigendata";
 
 $SharedTestDirPath = "testfiles";
 
@@ -58,8 +58,7 @@ $SharedTestDirPath = "testfiles";
   # names.  Every platform in the Platforms array must have a version
   # of the com library in the Versions list.
 
-  #  Versions => [ V102, V11 ],
-  Versions => [ V102, V11 ],
+  Versions => [ V102, V102r, V11, V11r ],
 
   # A list of the test that should be executed.  They will be executed
   # in order.  Each entry in this list must have an identically named
@@ -69,8 +68,9 @@ $SharedTestDirPath = "testfiles";
 	     AddMobs,
 	     ModifyMobs,
 	     ModifyComments,
+	     CopyMob,
 	     CreateEssence,
-	     ModifyEssence,
+	     #ModifyEssence,
 	   ],
 
   # Use this test vector run the tests mentioned in ../ReadMe.html.
@@ -88,9 +88,19 @@ $SharedTestDirPath = "testfiles";
 		 Irix  => "${Irix_V102_Base}/AAF/AAFMipsIrixSDK/MIPSpro/com-api/debug/libcom-api.so",
 	     },
 
+      V102r => { Win2K => "${Win2K_V102_Base}/AAF/AAFWinSDK/Release/Refimpl/AAFCOAPI.dll",
+		 Linux => "${Linux_V102_Base}/AAF/AAFi686LinuxSDK/g++/com-api/libcom-api.so",
+		 Irix  => "${Irix_V102_Base}/AAF/AAFMipsIrixSDK/MIPSpro/com-api/libcom-api.so",
+	     },
+
       V11 => {   Win2K => "${Win2K_latest_Base}/AAF/AAFWinSDK/Debug/Refimpl/AAFCOAPI.dll",
 		 Linux => "${Linux_latest_Base}/AAF/AAFi686LinuxSDK/g++/com-api/debug/libcom-api.so",
 		 Irix  => "${Irix_latest_Base}/AAF/AAFMipsIrixSDK/MIPSpro/com-api/debug/libcom-api.so",
+	     },
+
+      V11r => {  Win2K => "${Win2K_latest_Base}/AAF/AAFWinSDK/Release/Refimpl/AAFCOAPI.dll",
+		 Linux => "${Linux_latest_Base}/AAF/AAFi686LinuxSDK/g++/com-api/libcom-api.so",
+		 Irix  => "${Irix_latest_Base}/AAF/AAFMipsIrixSDK/MIPSpro/com-api/libcom-api.so",
 	     },
   },
 
@@ -101,11 +111,20 @@ $SharedTestDirPath = "testfiles";
 		Irix  => "${Irix_V102_Base}/AAF/AAFMipsIrixSDK/MIPSpro/ref-impl/debug/libaafpgapi.so",
 	    },
 
+      V102r => {Win2K => "${Win2K_V102_Base}/AAF/AAFWinSDK/Release/Refimpl/aafext/AAFPGAPI.dll",
+		Linux => "${Linux_V102_Base}/AAF/AAFi686LinuxSDK/g++/ref-impl/libaafpgapi.so",
+		Irix  => "${Irix_V102_Base}/AAF/AAFMipsIrixSDK/MIPSpro/ref-impl/libaafpgapi.so",
+	    },
+
       V11  => { Win2K => "${Win2K_latest_Base}/AAF/AAFWinSDK/Debug/Refimpl/aafext/AAFPGAPI.dll",
 		Linux => "${Linux_latest_Base}/AAF/AAFi686LinuxSDK/g++/ref-impl/debug/libaafpgapi.so",
 		Irix  => "${Irix_latest_Base}/AAF/AAFMipsIrixSDK/MIPSpro/ref-impl/debug/libaafpgapi.so",
 	    },
 
+      V11r => { Win2K => "${Win2K_latest_Base}/AAF/AAFWinSDK/Release/Refimpl/aafext/AAFPGAPI.dll",
+		Linux => "${Linux_latest_Base}/AAF/AAFi686LinuxSDK/g++/ref-impl/libaafpgapi.so",
+		Irix  => "${Irix_latest_Base}/AAF/AAFMipsIrixSDK/MIPSpro/ref-impl/libaafpgapi.so",
+	    }
   },
 
   # Test are executed using the MultiGenTest program.
@@ -119,7 +138,17 @@ $SharedTestDirPath = "testfiles";
 		Irix  => "${Irix_V102_Base}/AAF/AAFMipsIrixSDK/MIPSpro/bin/debug/MultiGenTest",
 	    },
 
+      V102r => { Win2K => "${Win2K_V102_Base}/AAF/AAFWinSDK/Debug/Test/MultiGenTest.exe",
+		Linux => "LD_LIBRARY_PATH=/usr/local/gnu/gcc322/lib  ${Linux_V102_Base}/AAF/AAFi686LinuxSDK/g++/bin/debug/MultiGenTest",
+		Irix  => "${Irix_V102_Base}/AAF/AAFMipsIrixSDK/MIPSpro/bin/debug/MultiGenTest",
+	    },
+
       V11 => { Win2K => "${Win2K_latest_Base}/AAF/AAFWinSDK/Debug/Test/MultiGenTest.exe",
+	       Linux => "LD_LIBRARY_PATH=/usr/local/gnu/gcc322/lib ${Linux_latest_Base}/AAF/AAFi686LinuxSDK/g++/bin/debug/MultiGenTest",
+		Irix  => "${Irix_latest_Base}/AAF/AAFMipsIrixSDK/MIPSpro/bin/debug/MultiGenTest",
+	    },
+
+      V11r => { Win2K => "${Win2K_latest_Base}/AAF/AAFWinSDK/Debug/Test/MultiGenTest.exe",
 	       Linux => "LD_LIBRARY_PATH=/usr/local/gnu/gcc322/lib ${Linux_latest_Base}/AAF/AAFi686LinuxSDK/g++/bin/debug/MultiGenTest",
 		Irix  => "${Irix_latest_Base}/AAF/AAFMipsIrixSDK/MIPSpro/bin/debug/MultiGenTest",
 	    },
@@ -129,18 +158,22 @@ $SharedTestDirPath = "testfiles";
 
   FileImpl => {
 
-#      CreateEssence-Win2K-V102-SS512.aaf fails!
-#      V102 => { Win2K => [ MS512, MS4096, SS512, SS4096 ],
-#		Linux => [ SS512, SS4096 ],
-#		Irix  => [ SS512, SS4096 ],
-#	      },
+      V102 => { Win2K => [ MS512, MS4096, SS512, SS4096 ],
+		Linux => [ SS512, SS4096 ],
+		Irix  => [ SS512, SS4096 ],
+	      },
 
-      V102 => { Win2K => [ MS512, MS4096, SS4096 ],
+      V102r => { Win2K => [ MS512, MS4096, SS512, SS4096 ],
 		Linux => [ SS512, SS4096 ],
 		Irix  => [ SS512, SS4096 ],
 	      },
 
       V11  => { Win2K => [ MS512, MS4096, SS512, SS4096 ],
+		Linux => [ SS512, SS4096 ],
+		Irix  => [ SS512, SS4096 ],
+	      },
+
+      V11r  => { Win2K => [ MS512, MS4096, SS512, SS4096 ],
 		Linux => [ SS512, SS4096 ],
 		Irix  => [ SS512, SS4096 ],
 	      },
@@ -176,7 +209,19 @@ $SharedTestDirPath = "testfiles";
 	        SS4096  => "S4KBinary"
               },
 
+      V102r => {MS512   => "MSSBinary",
+	        SS512   => "SSSBinary",
+	        MS4096  => "M4KBinary",
+	        SS4096  => "S4KBinary"
+              },
+
       V11  => { MS512  => "M512Binary",
+		SS512  => "S512Binary",
+		MS4096 => "M4KBinary",
+		SS4096 => "S4KBinary"
+	      },
+
+      V11r => { MS512  => "M512Binary",
 		SS512  => "S512Binary",
 		MS4096 => "M4KBinary",
 		SS4096 => "S4KBinary"
@@ -233,11 +278,17 @@ $SharedTestDirPath = "testfiles";
 		       ByteOrder => "false"
 		     },
 
+  NoCopyMobSupport => { Versions => { V102  => "true",
+				      V102r => "true" },
+		      },
+
   # Describe version incompatiblities. Versions with no entry in this
   # table are assumed compatible. e.g. V102 cannot read V11 files
   # hences is incompatible.
 
-  IncompatibleVersions => { V102 => "V11" },
+  IncompatibleVersions => { V102  => {V11 => "true", V11r => "true" },
+			    V102r => {V11 => "true", V11r => "true" },
+			  },
 
   ByteOrder => { Win2K => "little",
 		 Linux => "little",
@@ -251,7 +302,7 @@ $SharedTestDirPath = "testfiles";
   # If ExitOnTestFailure is true, MultiGenTest.pl will exit
   # immediately if a test fails.
 
-  ExitOnTestFailure => "true",
+  ExitOnTestFailure => "false",
 
   # The test script must copy .aaf files before executing modify
   # tests.  The copy command, and the host it should be executed
@@ -370,6 +421,33 @@ $SharedTestDirPath = "testfiles";
 	  ],
 
 	  "AddMobs",
+       ],
+
+  CopyMob =>
+
+       [ "modify",
+
+	 [ "CopyMob A Acopy",
+           "CopyMob B Bcopy",
+         ],
+
+	  [ "FindComment A CategoryOne  CommentOneChanged",
+	    "FindComment A CategoryFour CommentFour",
+	    "CountComments A 2",
+	    "FindComment B CategoryOne  CommentOne",
+	    "CountComments B 1",
+
+	    "CountMasterMobs 6",
+	    "FindMasterMob Acopy",
+	    "FindMasterMob Bcopy",
+	    "FindComment Acopy CategoryOne  CommentOneChanged",
+	    "FindComment Acopy CategoryFour CommentFour",
+	    "CountComments Acopy 2",
+	    "FindComment Bcopy CategoryOne  CommentOne",
+	    "CountComments Bcopy 1",
+	  ],
+
+	 "ModifyComments"
        ],
 
   CreateEssence =>

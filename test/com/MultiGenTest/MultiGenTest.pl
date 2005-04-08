@@ -338,6 +338,18 @@ sub PrintConfigSummary {
     }
     print "\n";
 
+    print "Incompatible versions:\n";
+    foreach my $CreateVersion ( @{$CFG{Versions}} ) {
+	printf "\t$CreateVersion cannot be read by: ";
+	foreach my $ReadVersion ( @{$CFG{Versions}} ) {
+	    if ( IsReadableByVersion($CreateVersion, $ReadVersion) eq "false" ) {
+		printf "$ReadVersion ";
+	    }
+	}
+	printf "\n";
+    }
+	printf "\n";
+
     print "Exclusion Rules:\n";
     print "\tModify operations using version(s): ";
     foreach $version ( @{$CFG{Versions}} ) {
@@ -425,7 +437,7 @@ sub IsReadableByVersion
 
     my $result;
 
-    if ( $CFG{IncompatibleVersions}{$readVersion} eq $createVersion ) {
+    if ( $CFG{IncompatibleVersions}{$readVersion}{$createVersion} eq "true" ) {
 	$result = "false";
     }
     else {
