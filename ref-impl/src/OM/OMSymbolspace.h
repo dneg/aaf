@@ -28,38 +28,71 @@
 #include "OMDataTypes.h"
 #include "OMWString.h"
 #include "OMSet.h"
+#include "OMList.h"
+#include "OMStorable.h"
 
+
+
+class OMXMLStorage;
+class OMXMLReader;
+class OMXMLWriter;
 
 class OMSymbolspace
 {
 public:
-    OMSymbolspace(OMClassId id, const wchar_t* uri, const wchar_t* preferredPrefix, 
-        const wchar_t* description);
+    OMSymbolspace(OMXMLStorage* store, OMClassId id, const wchar_t* uri, 
+        const wchar_t* preferredPrefix, const wchar_t* description);
     ~OMSymbolspace();
     
     OMClassId getId() const;
     const wchar_t* getURI() const;
     const wchar_t* getPreferredPrefix() const;
+    const wchar_t* getPrefix() const;
+    void setPrefix(const wchar_t* prefix);
     const wchar_t* getDescription() const;
     
     const wchar_t* getSymbol(OMClassId id) const;
     const wchar_t* createSymbolForClass(OMClassId id, const wchar_t* name);
-    const wchar_t* createSymbolForProperty(OMClassId id, const wchar_t* name);
+    const wchar_t* createSymbolForProperty(OMClassId id, OMPropertyId localId,
+        const wchar_t* name);
     const wchar_t* createSymbolForType(OMClassId id, const wchar_t* name);
-        
-    void addSymbol(OMClassId id, const wchar_t* symbol);
+
+    OMClassId getId(const wchar_t* symbol) const;
+    OMPropertyId getPropertyId(const wchar_t* symbol) const;
+
+    static OMSymbolspace* createDefaultExtSymbolspace(OMXMLStorage* storage, 
+        OMClassId id);
+    static OMSymbolspace* createV11Symbolspace(OMXMLStorage* storage);
     
-    
-    static OMSymbolspace* createDefaultExtSymbolspace(OMClassId id);
-    static OMSymbolspace* createV11Symbolspace();
-    
+    static const wchar_t* getBaselineURI();
+
+
 private:
-    OMClassId   _id;
-    wchar_t*    _uri;
-    wchar_t*    _preferredPrefix;
-    wchar_t*    _description;
-    OMSet<OMClassId, OMWString>  _idToSymbol; 
-    OMSet<OMWString, OMClassId>  _symbolToId; 
+    void addSymbol(OMClassId id, const wchar_t* symbol);
+    void addPropertySymbol(OMClassId id, OMPropertyId localId, const wchar_t* symbol);
+    wchar_t* createSymbol(const wchar_t* name);
+
+    static const wchar_t* _baselineURI;
+    
+    OMXMLStorage*   _store;
+    OMClassId       _id;
+    wchar_t*        _uri;
+    wchar_t*        _preferredPrefix;
+    wchar_t*        _prefix;
+    wchar_t*        _description;
+    OMSet<OMClassId, OMWString>     _idToSymbol; 
+    OMSet<OMWString, OMClassId>     _symbolToId;
+    OMSet<OMClassId, OMPropertyId>  _idToLocalId;
+    OMUInt32    _uniqueSymbolSuffix;
+
+    
+public:
+    void save(OMList<OMStorable*>& definitions);
+
+private:
+    OMXMLWriter* getWriter();
+    OMXMLReader* getReader();
+
 };
 
 

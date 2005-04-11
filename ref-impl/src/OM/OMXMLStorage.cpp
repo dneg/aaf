@@ -24,6 +24,7 @@
 
 #include "OMXMLStorage.h"
 #include "OMSetIterator.h"
+#include "OMListIterator.h"
 #include "OMUtilities.h"
 #include "OMAssertions.h"
 
@@ -39,20 +40,19 @@ OMXMLStorage::OMXMLStorage(OMRawStorage* storage, bool isRead)
     
     if (isRead)
     {
-        ASSERT("Not implemented", false);
         _xmlWriter = 0;
-        _xmlReader = 0;
+        _xmlReader = new OMXMLReader(storage);;
     }
     else
     {
         _xmlWriter = new OMXMLWriter(storage);
         _xmlReader = 0;
-        
-        _baselineSymbolspace = OMSymbolspace::createV11Symbolspace();
-        _symbolspaces.insert(_baselineSymbolspace->getURI(), _baselineSymbolspace);
-        
-        loadStringIds();
     }
+    
+    _baselineSymbolspace = OMSymbolspace::createV11Symbolspace(this);
+    _symbolspaces.insert(_baselineSymbolspace->getURI(), _baselineSymbolspace);
+
+    loadStringIds();
 }
 
 OMXMLStorage::~OMXMLStorage()
@@ -99,24 +99,34 @@ OMXMLStorage::getReader()
     return _xmlReader;
 }
     
-const wchar_t* 
+OMSymbolspace* 
 OMXMLStorage::getBaselineSymbolspace() const
 {
     TRACE("OMXMLStorage::getBaselineSymbolspace");
-    PRECONDITION("Baseline symbolspace known", _baselineSymbolspace != 0);
     
-    return _baselineSymbolspace->getURI();
+    return _baselineSymbolspace;
 }
 
-const wchar_t* 
-OMXMLStorage::getBaselinePrefix() const
+OMSymbolspace* 
+OMXMLStorage::getDefaultExtSymbolspace() const
 {
-    TRACE("OMXMLStorage::getBaselinePrefix");
-    PRECONDITION("Baseline symbolspace known", _baselineSymbolspace != 0);
+    TRACE("OMXMLStorage::getBaselineSymbolspace");
     
-    return _baselineSymbolspace->getPreferredPrefix();
+    return _defaultExtSymbolspace;
 }
+
+OMSymbolspace*
+OMXMLStorage::createDefaultExtSymbolspace(OMClassId id)
+{
+    TRACE("OMXMLStorage::createDefaultExtSymbolspace");
+    PRECONDITION("Default symbolspace does not already exist", _defaultExtSymbolspace == 0);
     
+    _defaultExtSymbolspace = OMSymbolspace::createDefaultExtSymbolspace(this, id);
+    _symbolspaces.insert(_defaultExtSymbolspace->getURI(), _defaultExtSymbolspace);
+    
+    return _defaultExtSymbolspace;
+}
+
 bool 
 OMXMLStorage::getSymbol(OMClassId id, const wchar_t** symbolspaceURI, const wchar_t** symbol) const
 {
@@ -137,16 +147,57 @@ OMXMLStorage::getSymbol(OMClassId id, const wchar_t** symbolspaceURI, const wcha
 }
 
 const wchar_t* 
-OMXMLStorage::getStringId(OMClassId id)
+OMXMLStorage::getDefinitionSymbol(OMClassId id)
 {
-    TRACE("OMXMLStorage::getSymbol");
+    TRACE("OMXMLStorage::getDefinitionSymbol");
     
-    OMWString* stringId;
-    if (_stringIds.find(id, &stringId))
+    OMWString* defSymbol;
+    if (_idToDefSymbol.find(id, &defSymbol))
     {
-        return (*stringId).c_str();
+        return (*defSymbol).c_str();
     }
     return 0;
+}
+
+OMClassId 
+OMXMLStorage::getId(const wchar_t* symbolspaceURI, const wchar_t* symbol) const
+{
+    TRACE("OMXMLStorage::getId");
+    
+    OMClassId result = nullOMUniqueObjectIdentification;
+    OMSymbolspace* symbolspace;
+    if (_symbolspaces.find(symbolspaceURI, symbolspace))
+    {
+        result = symbolspace->getId(symbol); 
+    }
+    
+    return result;
+}
+
+OMPropertyId 
+OMXMLStorage::getPropertyId(const wchar_t* symbolspaceURI, const wchar_t* symbol) const
+{
+    TRACE("OMXMLStorage::getPropertyId");
+    
+    OMPropertyId result = 0x0000;
+    OMSymbolspace* symbolspace;
+    if (_symbolspaces.find(symbolspaceURI, symbolspace))
+    {
+        result = symbolspace->getPropertyId(symbol); 
+    }
+    
+    return result;
+}
+
+OMClassId 
+OMXMLStorage::getId(const wchar_t* definitionSymbol) const
+{
+    OMClassId id;
+    if (_defSymbolToId.find(definitionSymbol, id))
+    {
+        return id;
+    }
+    return nullOMUniqueObjectIdentification;
 }
 
 const wchar_t* 
@@ -271,7 +322,8 @@ OMXMLStorage::getForwardedObjectSetId()
 #define ADD_STRING_ID(ID, STRING) \
 { \
     const OMClassId id = ID; \
-    _stringIds.insert(id, STRING); \
+    _idToDefSymbol.insert(id, STRING); \
+    _defSymbolToId.insert(STRING, id); \
 }
 
 void 
