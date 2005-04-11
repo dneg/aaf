@@ -237,6 +237,11 @@ public:
   virtual void onSave(void* clientContext) const;
   virtual void onRestore(void* clientContext) const;
 
+
+  // PdN: temporary; override from OMType
+  virtual const OMPropertyId* getTargetPath() const;
+
+  
   // Method is called after class has been added to MetaDictionary.
   // If this method fails the class is removed from the MetaDictionary and the
   // registration method will fail.

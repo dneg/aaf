@@ -889,6 +889,13 @@ void ImplAAFTypeDefSet::onRestore(void* clientContext) const
   ImplAAFTypeDef::onRestore(clientContext);
 }
 
+
+const OMPropertyId* ImplAAFTypeDefSet::getTargetPath() const
+{
+    return elementType()->getTargetPath();
+}
+
+
 // Method is called after associated class has been added to MetaDictionary.
 // If this method fails the class is removed from the MetaDictionary and the
 // registration method will fail.

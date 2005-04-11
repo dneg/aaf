@@ -810,3 +810,11 @@ HRESULT ImplAAFTypeDefWeakObjRef::CompleteClassRegistration(void)
 
   return rc;
 }
+
+
+const OMPropertyId* ImplAAFTypeDefWeakObjRef::getTargetPath() const
+{
+    return GetTargetPids();
+}
+
+

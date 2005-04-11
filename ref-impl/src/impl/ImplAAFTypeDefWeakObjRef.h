@@ -40,7 +40,7 @@ class ImplAAFClassDef;
 #include "OMArrayProperty.h"
 
 
-class ImplAAFTypeDefWeakObjRef : public ImplAAFTypeDefObjectRef
+class ImplAAFTypeDefWeakObjRef : public ImplAAFTypeDefObjectRef 
 {
 public:
   //
@@ -151,6 +151,9 @@ public:
   // If this method fails the class is removed from the MetaDictionary and the
   // registration method will fail.
   virtual HRESULT CompleteClassRegistration(void);
+
+  // PdN: temporary; override from OMType
+  virtual const OMPropertyId* getTargetPath() const;
 
 private:
   // Persistent member properties

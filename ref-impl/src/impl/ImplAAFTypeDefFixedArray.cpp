@@ -491,3 +491,11 @@ void ImplAAFTypeDefFixedArray::onRestore(void* clientContext) const
 {
   ImplAAFTypeDefArray::onRestore(clientContext);
 }
+
+
+const OMPropertyId* ImplAAFTypeDefFixedArray::getTargetPath() const
+{
+    return elementType()->getTargetPath();
+}
+
+
