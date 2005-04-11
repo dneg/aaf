@@ -53,6 +53,11 @@ public:
 
   static void finalize(void);
 
+  
+  virtual bool registerClassDef(const OMClassId& classId) = 0;
+  
+  virtual bool registerTypeDef(const OMClassId& typeId) = 0;
+
 private:
 
   typedef OMRedBlackTree<OMPropertyId,
