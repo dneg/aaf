@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /WX /GR /GX /O2 /I "../../../ref-impl/src/OM" /I "../../../ref-impl/include/Om" /I "../../../ref-impl/include" /I "../../../sss-impl/include" /D "NDEBUG" /D "_WIN32" /D "WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "OM_USE_STORAGE_EX" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /WX /GR /GX /O2 /I "../../../ref-impl/src/OM" /I "../../../ref-impl/include/Om" /I "../../../ref-impl/include" /I "../../../sss-impl/include" /I "$(EXPAT_HOME)/Source/lib" /D "NDEBUG" /D "_WIN32" /D "WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "OM_USE_STORAGE_EX" /D "HAVE_EXPAT" /YX /FD /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /W3 /WX /GR /GX /Z7 /Od /I "../../../ref-impl/src/OM" /I "../../../ref-impl/include/Om" /I "../../../ref-impl/include" /I "../../../sss-impl/include" /D "_DEBUG" /D "OM_DEBUG" /D "OM_STACK_TRACE_ON_ASSERT" /D "_WIN32" /D "WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "OM_USE_STORAGE_EX" /FR /YX /FD /c
+# ADD CPP /nologo /MDd /W3 /WX /GR /GX /Z7 /Od /I "../../../ref-impl/src/OM" /I "../../../ref-impl/include/Om" /I "../../../ref-impl/include" /I "../../../sss-impl/include" /I "$(EXPAT_HOME)/Source/lib" /D "_DEBUG" /D "OM_DEBUG" /D "OM_STACK_TRACE_ON_ASSERT" /D "_WIN32" /D "WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "OM_USE_STORAGE_EX" /D "HAVE_EXPAT" /FR /YX /FD /c
 # SUBTRACT CPP /X
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
@@ -390,6 +390,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMWString.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMXMLException.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMXMLPStoredObject.cpp"
 # End Source File
 # Begin Source File
@@ -399,6 +403,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMXMLPStoredObjectFactory.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMXMLPStoredStream.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMXMLReader.cpp"
 # End Source File
 # Begin Source File
 
@@ -427,6 +435,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMXMLWriter.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\utf8.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\XMLReader.cpp"
 # End Source File
 # Begin Source File
 
@@ -1038,6 +1050,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMWString.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMXMLException.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\include\OM\OMXMLPStoredObject.h"
 # End Source File
 # Begin Source File
@@ -1075,6 +1091,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMXMLUtilities.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMXMLWriter.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\XMLReader.h"
 # End Source File
 # Begin Source File
 
