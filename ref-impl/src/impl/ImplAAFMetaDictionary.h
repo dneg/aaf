@@ -113,6 +113,11 @@ public:
   //
   OMStorable* create(const OMClassId& classId) const;
 
+  // Override from OMDictionary
+  virtual bool registerClassDef(const OMClassId& classId);
+  virtual bool registerTypeDef(const OMClassId& typeId);
+
+  
   //
   // This method implements the required OMStorable interface method
   //
