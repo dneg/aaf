@@ -84,8 +84,10 @@ ifndef LD_DYN_LIB
 endif
 
 # UUID library to use
+# CoreFoundation contains definitions for CFUUIDCreate(), CFUUIDGetUUIDBytes()
+# UUIDLIB is currently only used for static builds (AAFTARGET=Debug-static)
 ifndef UUIDLIB
-    UUIDLIB =
+    UUIDLIB = -framework CoreFoundation
 endif
 
 
