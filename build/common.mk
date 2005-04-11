@@ -63,6 +63,16 @@ ifdef LIBGSF_PATH
 endif
 
 
+#--------------------------------------------------------------------------
+# Prototype AAF-XML stored format support can be turned on using e.g.
+# make LIBEXPAT_PATH=/usr/local
+#--------------------------------------------------------------------------
+ifdef LIBEXPAT_PATH
+    PLATFORMLIBS += -L$(LIBEXPAT_PATH)/lib -lexpat
+    ADD_CFLAGS += -I$(LIBEXPAT_PATH)/include -DHAVE_EXPAT
+endif
+
+
 #----------------------------------------------------------
 # AAFBUILDDIR is the directory where all the binaries will 
 # be placed. It's located in AAF toolkit directory and has
