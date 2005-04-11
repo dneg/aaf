@@ -120,6 +120,15 @@ ifndef LIBDV_PATH
 	endif
 endif
 
+# Check availablity of expat library. Set LIBEXPAT_PATH path if found.
+# If this detection fails, LIBEXPAT_PATH can be passed on the make command line.
+ifndef LIBEXPAT_PATH
+	TMP_LIBEXPAT_PATH := $(shell for f in /usr/local /usr; do test -e $$f/lib/libexpat.a && echo $$f && break; done)
+	ifneq "$(TMP_LIBEXPAT_PATH)" ""
+		LIBEXPAT_PATH = $(TMP_LIBEXPAT_PATH)
+	endif
+endif
+
 #------------------------------------------------------------------------------
 # Select UNICODE or ansi API's:
 #   U_OPTS=use_unicode
