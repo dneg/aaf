@@ -35,5 +35,8 @@
 void oidToURI(OMUniqueObjectIdentification oid, wchar_t* uri);
 void umidToURI(OMMaterialIdentification umid, wchar_t* uri);
 
+bool isURI(const wchar_t* uri);
+void uriToOID(const wchar_t* uri, OMUniqueObjectIdentification* oid);
+void uriToUMID(const wchar_t* uri, OMMaterialIdentification* umid);
 
 #endif 

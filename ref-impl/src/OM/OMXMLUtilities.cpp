@@ -24,6 +24,7 @@
 
 #include "OMXMLUtilities.h"
 #include "OMUtilities.h"
+#include "OMXMLException.h"
 #include "OMAssertions.h"
 
 
@@ -81,5 +82,121 @@ umidToURI(OMMaterialIdentification umid, wchar_t* uri)
         umid.material.Data4[4], umid.material.Data4[5], umid.material.Data4[6], umid.material.Data4[7]);
     
     convertStringToWideString(uri, umidStr, XML_MAX_UMID_URI_SIZE);
+}
+
+bool 
+isURI(const wchar_t* uri)
+{
+    TRACE("::isURI");
+
+    if (compareWideString(uri, L"urn:uuid", 8) == 0 ||
+        compareWideString(uri, L"urn:x-ul", 8) == 0 ||
+        compareWideString(uri, L"urn:x-umid", 10) == 0)
+    {
+        return true;
+    }
+    return false;
+}
+
+void 
+uriToOID(const wchar_t* uri, OMUniqueObjectIdentification* oid)
+{
+    TRACE("::uriToOID");
+
+    unsigned int bytes[16];
+    
+    if (compareWideString(uri, L"urn:uuid", 8) == 0)
+    {
+        char* uri8 = convertWideString(uri);
+        
+        int ret = sscanf(uri8,
+		    "urn:uuid:%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+		    &bytes[0], &bytes[1], &bytes[2], &bytes[3],
+		    &bytes[4], &bytes[5], &bytes[6], &bytes[7],
+		    &bytes[8], &bytes[9], &bytes[10], &bytes[11],
+		    &bytes[12], &bytes[13], &bytes[14], &bytes[15]);
+
+        if (ret != 16) 
+        {
+            throw OMXMLException(L"Invalid AUID");
+        }
+    }
+    else
+    {
+        char* uri8 = convertWideString(uri);
+        
+        int ret = sscanf(uri8,
+            "urn:x-ul:%02x%02x%02x%02x.%02x%02x.%02x%02x.%02x%02x%02x%02x.%02x%02x%02x%02x",
+		    &bytes[8], &bytes[9], &bytes[10], &bytes[11],
+		    &bytes[12], &bytes[13], &bytes[14], &bytes[15],
+		    &bytes[0], &bytes[1], &bytes[2], &bytes[3],
+            &bytes[4], &bytes[5],
+            &bytes[6], &bytes[7]);
+
+        if (ret != 16) 
+        {
+            throw OMXMLException(L"Invalid AUID");
+        }
+    }
+    
+    oid->Data1 = ((OMUInt32)bytes[0] << 24) + ((OMUInt32)bytes[1] << 16) +
+        ((OMUInt32)bytes[2] << 8) + (OMUInt32)(bytes[3]);
+    oid->Data2 = ((OMUInt16)bytes[4] << 8) + (OMUInt16)(bytes[5]);
+    oid->Data3 = ((OMUInt16)bytes[6] << 8) + (OMUInt16)(bytes[7]);
+    for (unsigned int i=0; i<8; i++)
+    {
+        oid->Data4[i] = (OMUInt8)bytes[i + 8];
+    }
+    
+}
+
+void 
+uriToUMID(const wchar_t* uri, OMMaterialIdentification* umid)
+{
+    TRACE("::uriToUMID");
+
+    char* uri8 = convertWideString(uri);
+    
+    unsigned int bytes[32];
+    
+    int ret = sscanf(uri8,
+        "urn:x-umid:%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x-"
+        "%02x-"
+        "%02x%02x%02x-"
+        "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
+        &bytes[0], &bytes[1], &bytes[2], &bytes[3], 
+        &bytes[4], &bytes[5], &bytes[6], &bytes[7], 
+        &bytes[8], &bytes[9], &bytes[10], &bytes[11], 
+        &bytes[12],
+        &bytes[13], &bytes[14], &bytes[15],
+        &bytes[16], &bytes[17], &bytes[18], &bytes[19], 
+        &bytes[20], &bytes[21], 
+        &bytes[22], &bytes[23], 
+        &bytes[24], &bytes[25], &bytes[26], &bytes[27], 
+        &bytes[28], &bytes[29], &bytes[30], &bytes[31]);
+    
+    if (ret != 32) 
+    {
+        throw OMXMLException(L"Invalid UMID");
+    }
+    
+    unsigned int i;
+    for (i=0; i<12; i++)
+    {
+        umid->SMPTELabel[i] = (OMUInt8)bytes[i];
+    }
+    umid->length = (OMUInt8)bytes[12];
+    umid->instanceHigh = (OMUInt8)bytes[13]; 
+    umid->instanceMid = (OMUInt8)bytes[14]; 
+    umid->instanceLow = (OMUInt8)bytes[15];
+    umid->material.Data1 = ((OMUInt32)bytes[16] << 24) + ((OMUInt32)bytes[17] << 16) +
+        ((OMUInt32)bytes[18] << 8) + (OMUInt32)(bytes[19]);
+    umid->material.Data2 = ((OMUInt16)bytes[20] << 8) + (OMUInt16)(bytes[21]);
+    umid->material.Data3 = ((OMUInt16)bytes[22] << 8) + (OMUInt16)(bytes[23]);
+    for (i=0; i<8; i++)
+    {
+        umid->material.Data4[i] = (OMUInt8)bytes[i + 24];
+    }
+    
 }
 
