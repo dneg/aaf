@@ -445,6 +445,12 @@ XMLWriterSimple::WriteProcInstruction(const char* target, const char* instructio
     }
 }
 
+void 
+XMLWriterSimple::WriteText(const char* text)
+{
+    Write(text, strlen(text));
+}
+
 void
 XMLWriterSimple::Synchronize(void)
 {

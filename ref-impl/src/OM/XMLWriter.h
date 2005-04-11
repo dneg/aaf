@@ -63,6 +63,7 @@ public:
     virtual void WriteElementEnd(void) = 0;
     virtual void WriteComment(const char* comment) = 0;
     virtual void WriteProcInstruction(const char* target, const char* instruction) = 0;
+    virtual void WriteText(const char* text) = 0;
 
     virtual void Synchronize(void) = 0;
 };
@@ -105,6 +106,7 @@ public:
     virtual void WriteElementEnd(void);
     virtual void WriteComment(const char* comment);
     virtual void WriteProcInstruction(const char* target, const char* instruction);
+    virtual void WriteText(const char* text);
 
     virtual void Synchronize(void);
 

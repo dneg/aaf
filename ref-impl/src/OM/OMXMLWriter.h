@@ -62,7 +62,8 @@ public:
     void writeElementEnd(void);
     void writeComment(const wchar_t* comment);
     void writeProcInstruction(const wchar_t* target, const wchar_t* instruction);
-
+    void writeText(const wchar_t* text);
+    
     void synchronize(void);
     
 private:

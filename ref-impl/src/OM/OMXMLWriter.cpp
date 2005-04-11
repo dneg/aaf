@@ -201,6 +201,16 @@ OMXMLWriter::writeProcInstruction(const wchar_t* target, const wchar_t* instruct
 }
 
 void 
+OMXMLWriter::writeText(const wchar_t* text)
+{
+    char* text8 = convertWideString(text);    
+    
+    _xmlWriter->WriteComment(text8);
+    
+    delete [] text8;
+}
+
+void 
 OMXMLWriter::synchronize(void)
 {
     _xmlWriter->Synchronize();
