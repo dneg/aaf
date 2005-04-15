@@ -92,6 +92,11 @@ EOF
 	-r $PWD/Dist/res
 
 pushd Dist
-tar czvf $DIST_FILE_NAME.tar.gz ./$filename
+# create paths for packaging into tar file by stripping "Dist" from names
+tar_file=`echo $DIST_FILE_NAME.tar.gz | sed 's/^Dist\///'`
+dir_to_packup=`echo $filename | sed 's/^Dist\///'`
+
+tar czvf $tar_file $dir_to_packup
 popd
+
 rm -rf Dist/res

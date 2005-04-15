@@ -38,3 +38,6 @@ rmdir Dist/root/bin >/dev/null 2>&1
 # set file ownership
 #
 [ $EUID -eq 0 ] && chown -R root:wheel Dist/root
+
+# fix permissions - all directories should be executable
+find Dist -type d -exec chmod +x \{\} \;
