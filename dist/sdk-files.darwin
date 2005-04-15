@@ -8,8 +8,8 @@ include
 # The release versions of the com-api, plugins, and static
 # libraries.
 ./bin/libcom-api.dylib
-./bin/libaafintp.dylib
-./bin/libaafpgapi.dylib
+./bin/aafext/libaafintp.dylib
+./bin/aafext/libaafpgapi.dylib
 ./lib/libaafiid.a
 ./lib/libaaflib.a
 
@@ -22,7 +22,7 @@ include
 # also be required.
 
 ./bin/debug/libcom-api.dylib
-./bin/debug/libaafintp.dylib
-./bin/debug/libaafpgapi.dylib
+./bin/debug/aafext/libaafintp.dylib
+./bin/debug/aafext/libaafpgapi.dylib
 ./lib/debug/libaafiid.a
 ./lib/debug/libaaflib.a

@@ -8,8 +8,8 @@ include
 # The release versions of the com-api, plugins, and static
 # libraries.
 ./bin/libcom-api.so
-./bin/libaafintp.so
-./bin/libaafpgapi.so
+./bin/aafext/libaafintp.so
+./bin/aafext/libaafpgapi.so
 ./lib/libaafiid.a
 ./lib/libaaflib.a
 
@@ -17,12 +17,11 @@ include
 
 # The debug libraries are more verbose in regards to error messages,
 # and also will dump a stack trace if any error is detected by the AAF
-# com library.  Of course, the debug libraries are also required in
-# order to run a debugger.  In that case, the source distribution will
-# also be required.
+# com library.  Of course, the debug libraries are also required to
+# see full debugging symbols under a debugger.
 
 ./bin/debug/libcom-api.so
-./bin/debug/libaafintp.so
-./bin/debug/libaafpgapi.so
+./bin/debug/aafext/libaafintp.so
+./bin/debug/aafext/libaafpgapi.so
 ./lib/debug/libaafiid.a
 ./lib/debug/libaaflib.a
