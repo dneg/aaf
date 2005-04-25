@@ -25,7 +25,24 @@
 
 #include "OMSymbolspace.h"
 #include "OMXMLStorage.h"
-#include "OMListIterator.h"
+#include "OMClassDefinition.h"
+#include "OMPropertyDefinition.h"
+#include "OMType.h"
+#include "OMCharacterType.h"
+#include "OMEnumeratedType.h"
+#include "OMExtEnumeratedType.h"
+#include "OMFixedArrayType.h"
+#include "OMIndirectType.h"
+#include "OMIntType.h"
+#include "OMOpaqueType.h"
+#include "OMRecordType.h"
+#include "OMRenamedType.h"
+#include "OMSetType.h"
+#include "OMStreamType.h"
+#include "OMStringType.h"
+#include "OMStrongObjectReferenceType.h"
+#include "OMVariableArrayType.h"
+#include "OMWeakObjectReferenceType.h"
 #include "OMUtilities.h"
 #include "OMXMLUtilities.h"
 #include "OMAssertions.h"
@@ -35,7 +52,7 @@ const wchar_t* OMSymbolspace::_baselineURI =
     L"http://www.aafassociation.org/aafx/v1.1/20050329";
     
     
-OMSymbolspace::OMSymbolspace(OMXMLStorage* store, OMClassId id, const wchar_t* uri, 
+OMSymbolspace::OMSymbolspace(OMXMLStorage* store, OMUniqueObjectIdentification id, const wchar_t* uri, 
     const wchar_t* preferredPrefix, const wchar_t* description)
 : _store(store), _id(id), _uri(0), _preferredPrefix(0), _prefix(0), _description(0), 
     _uniqueSymbolSuffix(1)
@@ -79,9 +96,21 @@ OMSymbolspace::~OMSymbolspace()
     {
         delete [] _description;
     }
+
+    size_t i;
+    for (i = 0; i < _propertyDefs.count(); i++)
+    {
+        delete _propertyDefs.getAt(i);
+    }
 }
 
-OMClassId 
+bool 
+OMSymbolspace::isEmpty()
+{
+    return _idToSymbol.count() == 0;
+}
+
+OMUniqueObjectIdentification 
 OMSymbolspace::getId() const
 {
     TRACE("OMSymbolspace::getId");
@@ -144,7 +173,7 @@ OMSymbolspace::getDescription() const
 }
     
 const wchar_t* 
-OMSymbolspace::getSymbol(OMClassId id) const
+OMSymbolspace::getSymbol(OMUniqueObjectIdentification id) const
 {
     TRACE("OMSymbolspace::getSymbol");
     
@@ -157,8 +186,150 @@ OMSymbolspace::getSymbol(OMClassId id) const
     return 0;
 }
 
+OMUniqueObjectIdentification 
+OMSymbolspace::getId(const wchar_t* symbol) const
+{
+    TRACE("OMSymbolspace::getId");
+    PRECONDITION("Valid symbol", symbol != 0);
+
+    OMUniqueObjectIdentification id;
+    if (_symbolToId.find(symbol, id))
+    {
+        return id;
+    }
+    
+    return nullOMUniqueObjectIdentification;
+}
+
+OMPropertyId 
+OMSymbolspace::getPropertyId(const wchar_t* symbol) const
+{
+    TRACE("OMSymbolspace::getPropertyId");
+    PRECONDITION("Valid symbol", symbol != 0);
+
+    OMUniqueObjectIdentification id = getId(symbol);
+    
+    OMPropertyId localId;
+    if (_idToLocalId.find(id, localId))
+    {
+        return localId;
+    }
+    
+    return 0x0000;
+}
+
+void 
+OMSymbolspace::addClassDef(OMClassDefinition* classDef)
+{
+    TRACE("OMSymbolspace::addClassDef");
+    
+    _classDefs.append(classDef);
+    createSymbolForClass(classDef->identification(), classDef->name());    
+}
+
+void 
+OMSymbolspace::addTypeDef(OMType* typeDef)
+{
+    TRACE("OMSymbolspace::addTypeDef");
+    
+    _typeDefs.append(typeDef);
+    createSymbolForType(typeDef->identification(), typeDef->name());    
+}
+
+void 
+OMSymbolspace::addPropertyDef(OMClassDefinition* classDef, OMPropertyDefinition* propertyDef)
+{
+    TRACE("OMSymbolspace::addPropertyDef");
+    
+    PropertyPair* pp = new PropertyPair;
+    pp->ownerClassDef = classDef;
+    pp->propertyDef = propertyDef;
+    
+    _propertyDefs.append(pp);
+    createSymbolForProperty(propertyDef->identification(), propertyDef->localIdentification(),
+        propertyDef->name());    
+}
+
+void 
+OMSymbolspace::save()
+{
+    TRACE("OMSymbolspace::save");
+    
+    getWriter()->writeElementStart(getBaselineURI(), L"MetaDictionary");
+
+    wchar_t idUri[XML_MAX_OID_URI_SIZE];
+    oidToURI(_id, idUri);
+    getWriter()->writeElementStart(getBaselineURI(), L"Identification");
+    getWriter()->writeElementContent(idUri, lengthOfWideString(idUri));
+    getWriter()->writeElementEnd();
+
+    getWriter()->writeElementStart(getBaselineURI(), L"Symbolspace");
+    getWriter()->writeElementContent(_uri, lengthOfWideString(_uri));
+    getWriter()->writeElementEnd();
+
+    if (_preferredPrefix != 0)
+    {
+        getWriter()->writeElementStart(getBaselineURI(), L"PreferredPrefix");
+        getWriter()->writeElementContent(_preferredPrefix,
+            lengthOfWideString(_preferredPrefix));
+        getWriter()->writeElementEnd();
+    }
+
+    if (_description != 0)
+    {
+        getWriter()->writeElementStart(getBaselineURI(), L"Description");
+        getWriter()->writeElementContent(_description,
+            lengthOfWideString(_description));
+        getWriter()->writeElementEnd();
+    }
+
+    if (_classDefs.count() > 0 || _typeDefs.count() > 0 || _propertyDefs.count() > 0)
+    {
+        getWriter()->writeElementStart(getBaselineURI(), L"Definitions");
+
+        size_t i;
+        for (i = 0; i<_classDefs.count(); i++)
+        {
+            saveClassDef(_classDefs.getAt(i));
+        }
+        
+        for (i = 0; i<_propertyDefs.count(); i++)
+        {
+            savePropertyDef(_propertyDefs.getAt(i)->ownerClassDef, 
+                _propertyDefs.getAt(i)->propertyDef);
+        }
+
+        for (i = 0; i<_typeDefs.count(); i++)
+        {
+            saveTypeDef(_typeDefs.getAt(i));
+        }
+
+        getWriter()->writeElementEnd();
+    }
+
+    getWriter()->writeElementEnd();
+}
+
+
+
+OMXMLWriter*
+OMSymbolspace::getWriter()
+{
+    TRACE("OMSymbolspace::getWriter");
+    
+    return _store->getWriter();
+}
+
+OMXMLReader*
+OMSymbolspace::getReader()
+{
+    TRACE("OMSymbolspace::getReader");
+    
+    return _store->getReader();
+}
+
 const wchar_t* 
-OMSymbolspace::createSymbolForClass(OMClassId id, 
+OMSymbolspace::createSymbolForClass(OMUniqueObjectIdentification id, 
     const wchar_t* name)
 {
     TRACE("OMSymbolspace::createSymbolForClass");
@@ -183,7 +354,7 @@ OMSymbolspace::createSymbolForClass(OMClassId id,
 }
 
 const wchar_t* 
-OMSymbolspace::createSymbolForProperty(OMClassId id, OMPropertyId localId,
+OMSymbolspace::createSymbolForProperty(OMUniqueObjectIdentification id, OMPropertyId localId,
     const wchar_t* name)
 {
     TRACE("OMSymbolspace::createSymbolForProperty");
@@ -208,7 +379,7 @@ OMSymbolspace::createSymbolForProperty(OMClassId id, OMPropertyId localId,
 }
 
 const wchar_t* 
-OMSymbolspace::createSymbolForType(OMClassId id, 
+OMSymbolspace::createSymbolForType(OMUniqueObjectIdentification id, 
     const wchar_t* name)
 {
     TRACE("OMSymbolspace::createSymbolForType");
@@ -230,61 +401,6 @@ OMSymbolspace::createSymbolForType(OMClassId id,
     delete [] symbol;
     
     return getSymbol(id);
-}
-
-OMClassId 
-OMSymbolspace::getId(const wchar_t* symbol) const
-{
-    TRACE("OMSymbolspace::getId");
-    PRECONDITION("Valid symbol", symbol != 0);
-
-    OMClassId id;
-    if (_symbolToId.find(symbol, id))
-    {
-        return id;
-    }
-    
-    return nullOMUniqueObjectIdentification;
-}
-
-OMPropertyId 
-OMSymbolspace::getPropertyId(const wchar_t* symbol) const
-{
-    TRACE("OMSymbolspace::getPropertyId");
-    PRECONDITION("Valid symbol", symbol != 0);
-
-    OMClassId id = getId(symbol);
-    
-    OMPropertyId localId;
-    if (_idToLocalId.find(id, localId))
-    {
-        return localId;
-    }
-    
-    return 0x0000;
-}
-
-void 
-OMSymbolspace::addSymbol(OMClassId id, const wchar_t* symbol)
-{
-    TRACE("OMSymbolspace::addSymbol");
-    PRECONDITION("Symbol is unique", !_symbolToId.contains(symbol));
-    PRECONDITION("Identification is unique", !_idToSymbol.contains(id));
-    
-    _idToSymbol.insert(id, symbol);
-    _symbolToId.insert(symbol, id);
-}
-    
-void 
-OMSymbolspace::addPropertySymbol(OMClassId id, OMPropertyId localId, const wchar_t* symbol)
-{
-    TRACE("OMSymbolspace::addPropertySymbol");
-    PRECONDITION("Symbol is unique", !_symbolToId.contains(symbol));
-    PRECONDITION("Identification is unique", !_idToSymbol.contains(id));
-    
-    _idToSymbol.insert(id, symbol);
-    _symbolToId.insert(symbol, id);
-    _idToLocalId.insert(id, localId);
 }
 
 wchar_t* 
@@ -336,6 +452,545 @@ OMSymbolspace::createSymbol(const wchar_t* name)
     return symbol;
 }
 
+void 
+OMSymbolspace::addSymbol(OMUniqueObjectIdentification id, const wchar_t* symbol)
+{
+    TRACE("OMSymbolspace::addSymbol");
+    PRECONDITION("Symbol is unique", !_symbolToId.contains(symbol));
+    PRECONDITION("Identification is unique", !_idToSymbol.contains(id));
+    
+    _idToSymbol.insert(id, symbol);
+    _symbolToId.insert(symbol, id);
+}
+    
+void 
+OMSymbolspace::addPropertySymbol(OMUniqueObjectIdentification id, OMPropertyId localId, const wchar_t* symbol)
+{
+    TRACE("OMSymbolspace::addPropertySymbol");
+    PRECONDITION("Symbol is unique", !_symbolToId.contains(symbol));
+    PRECONDITION("Identification is unique", !_idToSymbol.contains(id));
+    
+    _idToSymbol.insert(id, symbol);
+    _symbolToId.insert(symbol, id);
+    _idToLocalId.insert(id, localId);
+}
+
+void
+OMSymbolspace::saveMetaDef(OMMetaDefinition* metaDef)
+{
+    TRACE("OMSymbolspace::saveMetaDef");
+
+    wchar_t uri[XML_MAX_OID_URI_SIZE];
+    oidToURI(metaDef->identification(), uri);
+    getWriter()->writeElementStart(getBaselineURI(), L"Identification");
+    getWriter()->writeElementContent(uri, lengthOfWideString(uri));
+    getWriter()->writeElementEnd();
+
+    const wchar_t* symbol = getSymbol(metaDef->identification());
+    getWriter()->writeElementStart(getBaselineURI(), L"Symbol");
+    getWriter()->writeElementContent(symbol, lengthOfWideString(symbol));
+    getWriter()->writeElementEnd();
+
+    const wchar_t* name = metaDef->name();
+    getWriter()->writeElementStart(getBaselineURI(), L"Name");
+    getWriter()->writeElementContent(name, lengthOfWideString(name));
+    getWriter()->writeElementEnd();
+
+    const wchar_t* description = metaDef->description();
+    if (description != 0)
+    {
+        getWriter()->writeElementStart(getBaselineURI(), L"Description");
+        getWriter()->writeElementContent(description, lengthOfWideString(description));
+        getWriter()->writeElementEnd();
+    }
+    
+}
+
+void
+OMSymbolspace::saveClassDef(OMClassDefinition* classDef)
+{
+    TRACE("OMSymbolspace::saveClassDef");
+
+    getWriter()->writeElementStart(getBaselineURI(), L"ClassDefinition");
+    
+    saveMetaDef(classDef);
+    
+    OMClassDefinition* parentClass = classDef->parentClass(); 
+    if (parentClass != 0)
+    {
+        wchar_t uri[XML_MAX_OID_URI_SIZE];
+        oidToURI(parentClass->identification(), uri);
+        getWriter()->writeElementStart(getBaselineURI(), L"ParentClass");
+        getWriter()->writeElementContent(uri, lengthOfWideString(uri));
+        getWriter()->writeElementEnd();
+    }
+
+    getWriter()->writeElementStart(getBaselineURI(), L"IsConcrete");
+    if (classDef->isConcrete())
+    {
+        getWriter()->writeElementContent(L"true", 4);
+    }
+    else
+    {
+        getWriter()->writeElementContent(L"false", 5);
+    }
+    getWriter()->writeElementEnd();
+    
+    getWriter()->writeElementEnd();
+}
+
+void
+OMSymbolspace::savePropertyDef(OMClassDefinition* ownerClassDef, OMPropertyDefinition* propertyDef)
+{
+    TRACE("OMSymbolspace::savePropertyDef");
+
+    getWriter()->writeElementStart(getBaselineURI(), L"PropertyDefinition");
+
+    saveMetaDef(propertyDef);
+
+    const OMType* type = propertyDef->type(); 
+    wchar_t uri[XML_MAX_OID_URI_SIZE];
+    oidToURI(type->identification(), uri);
+    getWriter()->writeElementStart(getBaselineURI(), L"Type");
+    getWriter()->writeElementContent(uri, lengthOfWideString(uri));
+    getWriter()->writeElementEnd();
+
+    oidToURI(ownerClassDef->identification(), uri);
+    getWriter()->writeElementStart(getBaselineURI(), L"MemberOf");
+    getWriter()->writeElementContent(uri, lengthOfWideString(uri));
+    getWriter()->writeElementEnd();
+
+    wchar_t localIdStr[XML_MAX_INTEGER_STRING_SIZE];
+    OMUInt16 localId = propertyDef->localIdentification();
+    integerToString((OMByte*)&localId, sizeof(OMUInt16), false, localIdStr);
+    getWriter()->writeElementStart(getBaselineURI(), L"LocalIdentification");
+    getWriter()->writeElementContent(localIdStr, lengthOfWideString(localIdStr));
+    getWriter()->writeElementEnd();
+    
+    getWriter()->writeElementStart(getBaselineURI(), L"IsOptional");
+    if (propertyDef->isOptional())
+    {
+        getWriter()->writeElementContent(L"true", 4);
+    }
+    else
+    {
+        getWriter()->writeElementContent(L"false", 5);
+    }
+    getWriter()->writeElementEnd();
+
+    if (propertyDef->isUniqueIdentifier())
+    {
+        getWriter()->writeElementStart(getBaselineURI(), L"IsUniqueIdentifier");
+        getWriter()->writeElementContent(L"true", 4);
+        getWriter()->writeElementEnd();
+    }
+    
+    
+    getWriter()->writeElementEnd();
+}
+
+void
+OMSymbolspace::saveTypeDef(OMType* typeDef)
+{
+    TRACE("OMSymbolspace::saveTypeDef");
+
+    switch (typeDef->category())
+    {
+        case OMMetaDefinition::CHARACTER_TYPE:
+            saveCharacterTypeDef(dynamic_cast<OMCharacterType*>(typeDef));
+            break;
+        case OMMetaDefinition::ENUMERATED_TYPE:
+            saveEnumeratedTypeDef(dynamic_cast<OMEnumeratedType*>(typeDef));
+            break;
+        case OMMetaDefinition::EXT_ENUMERATED_TYPE:
+            saveExtEnumeratedTypeDef(dynamic_cast<OMExtEnumeratedType*>(typeDef));
+            break;
+        case OMMetaDefinition::FIXED_ARRAY_TYPE:
+            saveFixedArrayTypeDef(dynamic_cast<OMFixedArrayType*>(typeDef));
+            break;
+        case OMMetaDefinition::INDIRECT_TYPE:
+            saveIndirectTypeDef(dynamic_cast<OMIndirectType*>(typeDef));
+            break;
+        case OMMetaDefinition::INTEGER_TYPE:
+            saveIntTypeDef(dynamic_cast<OMIntType*>(typeDef));
+            break;
+        case OMMetaDefinition::OPAQUE_TYPE:
+            saveOpaqueTypeDef(dynamic_cast<OMOpaqueType*>(typeDef));
+            break;
+        case OMMetaDefinition::RECORD_TYPE:
+            saveRecordTypeDef(dynamic_cast<OMRecordType*>(typeDef));
+            break;
+        case OMMetaDefinition::RENAMED_TYPE:
+            saveRenamedTypeDef(dynamic_cast<OMRenamedType*>(typeDef));
+            break;
+        case OMMetaDefinition::SET_TYPE:
+            saveSetTypeDef(dynamic_cast<OMSetType*>(typeDef));
+            break;
+        case OMMetaDefinition::STREAM_TYPE:
+            saveStreamTypeDef(dynamic_cast<OMStreamType*>(typeDef));
+            break;
+        case OMMetaDefinition::STRING_TYPE:
+            saveStringTypeDef(dynamic_cast<OMStringType*>(typeDef));
+            break;
+        case OMMetaDefinition::STRONG_REF_TYPE:
+            saveStrongObjectReferenceTypeDef(dynamic_cast<OMStrongObjectReferenceType*>(typeDef));
+            break;
+        case OMMetaDefinition::VARIABLE_ARRAY_TYPE:
+            saveVariableArrayTypeDef(dynamic_cast<OMVariableArrayType*>(typeDef));
+            break;
+        case OMMetaDefinition::WEAK_REF_TYPE:
+            saveWeakObjectReferenceTypeDef(dynamic_cast<OMWeakObjectReferenceType*>(typeDef));
+            break;
+        default:
+            ASSERT("Valid type category", false);
+            break;
+    }
+    
+}
+
+void
+OMSymbolspace::saveCharacterTypeDef(OMCharacterType* typeDef)
+{
+    TRACE("OMSymbolspace::saveCharacterTypeDef");
+
+    getWriter()->writeElementStart(getBaselineURI(), L"TypeDefinitionCharacter");
+    saveMetaDef(typeDef);
+    getWriter()->writeElementEnd();
+}
+
+void
+OMSymbolspace::saveEnumeratedTypeDef(OMEnumeratedType* typeDef)
+{
+    TRACE("OMSymbolspace::saveEnumeratedTypeDef");
+
+    getWriter()->writeElementStart(getBaselineURI(), L"TypeDefinitionEnumeration");
+
+    saveMetaDef(typeDef);
+
+    const OMType* elementType = typeDef->elementType(); 
+    wchar_t uri[XML_MAX_OID_URI_SIZE];
+    oidToURI(elementType->identification(), uri);
+    getWriter()->writeElementStart(getBaselineURI(), L"ElementType");
+    getWriter()->writeElementContent(uri, lengthOfWideString(uri));
+    getWriter()->writeElementEnd();
+
+    OMUInt32 count = typeDef->elementCount();
+    if (count > 0)
+    {
+        getWriter()->writeElementStart(getBaselineURI(), L"Elements");
+        
+        for (OMUInt32 i = 0; i<count; i++)
+        {
+            wchar_t* elementName = typeDef->elementName(i);
+            OMInt64 elementValue = typeDef->elementValue(i);
+
+            wchar_t valueStr[XML_MAX_INTEGER_STRING_SIZE];
+            integerToString((OMByte*)&elementValue, sizeof(OMInt64), true, valueStr);
+
+            getWriter()->writeElementStart(getBaselineURI(), L"Name");
+            getWriter()->writeElementContent(elementName, lengthOfWideString(elementName));
+            getWriter()->writeElementEnd();
+            
+            getWriter()->writeElementStart(getBaselineURI(), L"Value");
+            getWriter()->writeElementContent(valueStr, lengthOfWideString(valueStr));
+            getWriter()->writeElementEnd();
+            
+            delete [] elementName;
+        }
+
+        getWriter()->writeElementEnd();
+    }
+    
+    getWriter()->writeElementEnd();
+}
+
+void
+OMSymbolspace::saveExtEnumeratedTypeDef(OMExtEnumeratedType* typeDef)
+{
+    TRACE("OMSymbolspace::saveExtEnumeratedTypeDef");
+
+    getWriter()->writeElementStart(getBaselineURI(), L"TypeDefinitionExtendibleEnumeration");
+
+    saveMetaDef(typeDef);
+
+    OMUInt32 count = typeDef->elementCount();
+    if (count > 0)
+    {
+        getWriter()->writeElementStart(getBaselineURI(), L"Elements");
+        
+        for (OMUInt32 i = 0; i<count; i++)
+        {
+            wchar_t* elementName = typeDef->elementName(i);
+            OMUniqueObjectIdentification elementValue = typeDef->elementValue(i);
+
+            wchar_t valueStr[XML_MAX_OID_URI_SIZE];
+            oidToURI(elementValue, valueStr);
+
+            getWriter()->writeElementStart(getBaselineURI(), L"Name");
+            getWriter()->writeElementContent(elementName, lengthOfWideString(elementName));
+            getWriter()->writeElementEnd();
+            
+            getWriter()->writeElementStart(getBaselineURI(), L"Value");
+            getWriter()->writeElementContent(valueStr, lengthOfWideString(valueStr));
+            getWriter()->writeElementEnd();
+            
+            delete [] elementName;
+        }
+
+        getWriter()->writeElementEnd();
+    }
+    
+    getWriter()->writeElementEnd();
+}
+
+void
+OMSymbolspace::saveFixedArrayTypeDef(OMFixedArrayType* typeDef)
+{
+    TRACE("OMSymbolspace::saveFixedArrayTypeDef");
+
+    getWriter()->writeElementStart(getBaselineURI(), L"TypeDefinitionFixedArray");
+
+    saveMetaDef(typeDef);
+
+    const OMType* elementType = typeDef->elementType(); 
+    wchar_t uri[XML_MAX_OID_URI_SIZE];
+    oidToURI(elementType->identification(), uri);
+    getWriter()->writeElementStart(getBaselineURI(), L"ElementType");
+    getWriter()->writeElementContent(uri, lengthOfWideString(uri));
+    getWriter()->writeElementEnd();
+
+    
+    getWriter()->writeElementEnd();
+}
+
+void
+OMSymbolspace::saveIndirectTypeDef(OMIndirectType* typeDef)
+{
+    TRACE("OMSymbolspace::saveIndirectTypeDef");
+
+    getWriter()->writeElementStart(getBaselineURI(), L"TypeDefinitionIndirect");
+    saveMetaDef(typeDef);
+    getWriter()->writeElementEnd();
+}
+
+void
+OMSymbolspace::saveIntTypeDef(OMIntType* typeDef)
+{
+    TRACE("OMSymbolspace::saveIntTypeDef");
+
+    getWriter()->writeElementStart(getBaselineURI(), L"TypeDefinitionInteger");
+
+    saveMetaDef(typeDef);
+
+    wchar_t sizeStr[XML_MAX_INTEGER_STRING_SIZE];
+    OMUInt8 size = typeDef->size();
+    integerToString((OMByte*)&size, sizeof(OMUInt8), false, sizeStr);
+    getWriter()->writeElementStart(getBaselineURI(), L"Size");
+    getWriter()->writeElementContent(sizeStr, lengthOfWideString(sizeStr));
+    getWriter()->writeElementEnd();
+    
+    getWriter()->writeElementStart(getBaselineURI(), L"IsSigned");
+    if (typeDef->isSigned())
+    {
+        getWriter()->writeElementContent(L"true", 4);
+    }
+    else
+    {
+        getWriter()->writeElementContent(L"false", 5);
+    }
+    getWriter()->writeElementEnd();
+    
+    getWriter()->writeElementEnd();
+}
+
+void
+OMSymbolspace::saveOpaqueTypeDef(OMOpaqueType* typeDef)
+{
+    TRACE("OMSymbolspace::saveOpaqueTypeDef");
+
+    getWriter()->writeElementStart(getBaselineURI(), L"TypeDefinitionOpaque");
+    saveMetaDef(typeDef);
+    getWriter()->writeElementEnd();
+}
+
+void
+OMSymbolspace::saveRecordTypeDef(OMRecordType* typeDef)
+{
+    TRACE("OMSymbolspace::saveRecordTypeDef");
+
+    getWriter()->writeElementStart(getBaselineURI(), L"TypeDefinitionRecord");
+
+    saveMetaDef(typeDef);
+
+    OMUInt32 count = typeDef->memberCount();
+    if (count > 0)
+    {
+        getWriter()->writeElementStart(getBaselineURI(), L"Members");
+        
+        for (OMUInt32 i = 0; i<count; i++)
+        {
+            wchar_t* memberName = typeDef->memberName(i);
+            OMType* memberType = typeDef->memberType(i);
+
+            wchar_t typeStr[XML_MAX_OID_URI_SIZE];
+            oidToURI(memberType->identification(), typeStr);
+
+            getWriter()->writeElementStart(getBaselineURI(), L"Name");
+            getWriter()->writeElementContent(memberName, lengthOfWideString(memberName));
+            getWriter()->writeElementEnd();
+            
+            getWriter()->writeElementStart(getBaselineURI(), L"Type");
+            getWriter()->writeElementContent(typeStr, lengthOfWideString(typeStr));
+            getWriter()->writeElementEnd();
+            
+            delete [] memberName;
+        }
+
+        getWriter()->writeElementEnd();
+    }
+    
+    getWriter()->writeElementEnd();
+}
+
+void
+OMSymbolspace::saveRenamedTypeDef(OMRenamedType* typeDef)
+{
+    TRACE("OMSymbolspace::saveRenamedTypeDef");
+
+    getWriter()->writeElementStart(getBaselineURI(), L"TypeDefinitionRename");
+
+    saveMetaDef(typeDef);
+
+    const OMType* renamedType = typeDef->renamedType(); 
+    wchar_t uri[XML_MAX_OID_URI_SIZE];
+    oidToURI(renamedType->identification(), uri);
+    getWriter()->writeElementStart(getBaselineURI(), L"RenamedType");
+    getWriter()->writeElementContent(uri, lengthOfWideString(uri));
+    getWriter()->writeElementEnd();
+
+    
+    getWriter()->writeElementEnd();
+}
+
+void
+OMSymbolspace::saveSetTypeDef(OMSetType* typeDef)
+{
+    TRACE("OMSymbolspace::saveSetTypeDef");
+
+    getWriter()->writeElementStart(getBaselineURI(), L"TypeDefinitionSet");
+
+    saveMetaDef(typeDef);
+
+    const OMType* elementType = typeDef->elementType(); 
+    wchar_t uri[XML_MAX_OID_URI_SIZE];
+    oidToURI(elementType->identification(), uri);
+    getWriter()->writeElementStart(getBaselineURI(), L"ElementType");
+    getWriter()->writeElementContent(uri, lengthOfWideString(uri));
+    getWriter()->writeElementEnd();
+    
+    getWriter()->writeElementEnd();
+}
+
+void
+OMSymbolspace::saveStreamTypeDef(OMStreamType* typeDef)
+{
+    TRACE("OMSymbolspace::saveStreamTypeDef");
+
+    getWriter()->writeElementStart(getBaselineURI(), L"TypeDefinitionStream");
+    saveMetaDef(typeDef);
+    getWriter()->writeElementEnd();
+}
+
+void
+OMSymbolspace::saveStringTypeDef(OMStringType* typeDef)
+{
+    TRACE("OMSymbolspace::saveStringTypeDef");
+
+    getWriter()->writeElementStart(getBaselineURI(), L"TypeDefinitionString");
+
+    saveMetaDef(typeDef);
+
+    const OMType* elementType = typeDef->elementType(); 
+    wchar_t uri[XML_MAX_OID_URI_SIZE];
+    oidToURI(elementType->identification(), uri);
+    getWriter()->writeElementStart(getBaselineURI(), L"ElementType");
+    getWriter()->writeElementContent(uri, lengthOfWideString(uri));
+    getWriter()->writeElementEnd();
+
+    getWriter()->writeElementEnd();
+}
+
+void
+OMSymbolspace::saveStrongObjectReferenceTypeDef(OMStrongObjectReferenceType* typeDef)
+{
+    TRACE("OMSymbolspace::saveStrongObjectReferenceTypeDef");
+
+    getWriter()->writeElementStart(getBaselineURI(), L"TypeDefinitionStrongObjectReference");
+
+    saveMetaDef(typeDef);
+
+    const OMClassDefinition* referencedClass = typeDef->referencedClass(); 
+    wchar_t uri[XML_MAX_OID_URI_SIZE];
+    oidToURI(referencedClass->identification(), uri);
+    getWriter()->writeElementStart(getBaselineURI(), L"ReferencedClass");
+    getWriter()->writeElementContent(uri, lengthOfWideString(uri));
+    getWriter()->writeElementEnd();
+
+    getWriter()->writeElementEnd();
+}
+
+void
+OMSymbolspace::saveVariableArrayTypeDef(OMVariableArrayType* typeDef)
+{
+    TRACE("OMSymbolspace::saveVariableArrayTypeDef");
+
+    getWriter()->writeElementStart(getBaselineURI(), L"TypeDefinitionVariableArray");
+
+    saveMetaDef(typeDef);
+
+    const OMType* elementType = typeDef->elementType(); 
+    wchar_t uri[XML_MAX_OID_URI_SIZE];
+    oidToURI(elementType->identification(), uri);
+    getWriter()->writeElementStart(getBaselineURI(), L"ElementType");
+    getWriter()->writeElementContent(uri, lengthOfWideString(uri));
+    getWriter()->writeElementEnd();
+    
+    getWriter()->writeElementEnd();
+}
+
+void
+OMSymbolspace::saveWeakObjectReferenceTypeDef(OMWeakObjectReferenceType* typeDef)
+{
+    TRACE("OMSymbolspace::saveWeakObjectReferenceTypeDef");
+
+    getWriter()->writeElementStart(getBaselineURI(), L"TypeDefinitionWeakObjectReference");
+
+    saveMetaDef(typeDef);
+
+    const OMClassDefinition* referencedClass = typeDef->referencedClass(); 
+    wchar_t uri[XML_MAX_OID_URI_SIZE];
+    oidToURI(referencedClass->identification(), uri);
+    getWriter()->writeElementStart(getBaselineURI(), L"ReferencedClass");
+    getWriter()->writeElementContent(uri, lengthOfWideString(uri));
+    getWriter()->writeElementEnd();
+
+    getWriter()->writeElementStart(getBaselineURI(), L"TargetSet");
+    OMVector<OMUniqueObjectIdentification> targetSet;
+    typeDef->targetSet(targetSet);
+    for (size_t i = 0; i<targetSet.count(); i++)
+    {
+        wchar_t uri[XML_MAX_OID_URI_SIZE];
+        oidToURI(targetSet.getAt(i), uri);
+        getWriter()->writeElementStart(getBaselineURI(), L"AUID");
+        getWriter()->writeElementContent(uri, lengthOfWideString(uri));
+        getWriter()->writeElementEnd();
+    }
+    getWriter()->writeElementEnd();
+
+    
+    getWriter()->writeElementEnd();
+}
+
 
 const wchar_t* 
 OMSymbolspace::getBaselineURI()
@@ -348,19 +1003,19 @@ OMSymbolspace::getBaselineURI()
 
 #define ADD_SYMBOL(ID, SYMBOL) \
 { \
-    const OMClassId id = ID; \
+    const OMUniqueObjectIdentification id = ID; \
     ss->addSymbol(id, SYMBOL); \
 }
 
 #define ADD_PROPERTY_SYMBOL(ID, LOCAL_ID, SYMBOL) \
 { \
-    const OMClassId id = ID; \
+    const OMUniqueObjectIdentification id = ID; \
     ss->addPropertySymbol(id, LOCAL_ID, SYMBOL); \
 }
 
 
 OMSymbolspace* 
-OMSymbolspace::createDefaultExtSymbolspace(OMXMLStorage* store, OMClassId id)
+OMSymbolspace::createDefaultExtSymbolspace(OMXMLStorage* store, OMUniqueObjectIdentification id)
 {
     TRACE("OMSymbolspace::createDefaultExtSymbolspace");
 
@@ -378,7 +1033,7 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
 {
     TRACE("OMSymbolspace::createV11Symbolspace");
 
-    const OMClassId id =
+    const OMUniqueObjectIdentification id =
         {0x4c3765b6, 0x2f0d, 0x4147, {0xaa, 0x02, 0xd6, 0xd5, 0x28, 0xd4, 0x62 ,0x8c}};
 
     OMSymbolspace* ss = new OMSymbolspace(store, id, _baselineURI, L"aaf", 
@@ -681,11 +1336,11 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0101, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0101,
-        L"InterchangeObjectObjClass");
+        L"ObjClass");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05200701, 0x0800, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0102,
-        L"InterchangeObjectGeneration");
+        L"Generation");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04070100, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0201,
@@ -713,11 +1368,11 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04100103, 0x0109, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0402,
-        L"EdgeCodeFilmKind");
+        L"FilmKind");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04100103, 0x0102, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x0403,
-        L"EdgeCodeCodeFormat");
+        L"CodeFormat");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x01030201, 0x0200, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0404,
@@ -725,31 +1380,31 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0601, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0501,
-        L"EssenceGroupChoices");
+        L"Choices");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0208, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0502,
-        L"EssenceGroupStillFrame");
+        L"StillFrame");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x07020103, 0x0303, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0601,
-        L"EventPosition");
+        L"Position");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05300404, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0602,
-        L"EventComment");
+        L"Comment");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05300401, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x0801,
-        L"GPITriggerActiveState");
+        L"ActiveState");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x020a, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0901,
-        L"CommentMarkerAnnotation");
+        L"Annotation");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x01070105, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x04),
         0x6102,
-        L"DescriptiveMarkerDescribedSlots");
+        L"DescribedSlots");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x020c, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x6101,
@@ -757,19 +1412,19 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05300506, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0B01,
-        L"OperationGroupOperation");
+        L"Operation");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0602, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0B02,
-        L"OperationGroupInputSegments");
+        L"InputSegments");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x060a, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0B03,
-        L"OperationGroupParameters");
+        L"Parameters");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x0530050c, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0B04,
-        L"OperationGroupBypassOverride");
+        L"BypassOverride");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0206, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0B05,
@@ -781,83 +1436,83 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0207, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0D01,
-        L"PulldownInputSegment");
+        L"InputSegment");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05401001, 0x0200, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0D02,
-        L"PulldownPulldownKind");
+        L"PulldownKind");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05401001, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0D03,
-        L"PulldownPulldownDirection");
+        L"PulldownDirection");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05401001, 0x0300, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0D04,
-        L"PulldownPhaseFrame");
+        L"PhaseFrame");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010103, 0x0300, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0E01,
-        L"ScopeReferenceRelativeScope");
+        L"RelativeScope");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010103, 0x0400, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0E02,
-        L"ScopeReferenceRelativeSlot");
+        L"RelativeSlot");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0209, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0F01,
-        L"SelectorSelected");
+        L"Selected");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0608, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0F02,
-        L"SelectorAlternates");
+        L"Alternates");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0609, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1001,
-        L"SequenceComponents");
+        L"Components");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010103, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1101,
-        L"SourceReferenceSourceID");
+        L"SourceID");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010103, 0x0200, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1102,
-        L"SourceReferenceSourceMobSlotID");
+        L"SourceMobSlotID");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010103, 0x0700, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x07),
         0x1103,
-        L"SourceReferenceChannelIDs");
+        L"ChannelIDs");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010103, 0x0800, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x08),
         0x1104,
-        L"SourceReferenceMonoSourceSlotIDs");
+        L"MonoSourceSlotIDs");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x07020103, 0x0104, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1201,
-        L"SourceClipStartTime");
+        L"StartTime");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x07020201, 0x0105, 0x0200, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1202,
-        L"SourceClipFadeInLength");
+        L"FadeInLength");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05300501, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x1203,
-        L"SourceClipFadeInType");
+        L"FadeInType");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x07020201, 0x0105, 0x0300, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1204,
-        L"SourceClipFadeOutLength");
+        L"FadeOutLength");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05300502, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x1205,
-        L"SourceClipFadeOutType");
+        L"FadeOutType");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05300601, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1401,
-        L"HTMLClipBeginAnchor");
+        L"BeginAnchor");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05300602, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1402,
-        L"HTMLClipEndAnchor");
+        L"EndAnchor");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x07020103, 0x0105, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1501,
@@ -865,11 +1520,11 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04040101, 0x0206, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1502,
-        L"TimecodeFPS");
+        L"FPS");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04040101, 0x0500, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x1503,
-        L"TimecodeDrop");
+        L"Drop");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04040101, 0x0201, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1601,
@@ -877,15 +1532,15 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04070300, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1602,
-        L"TimecodeStreamSource");
+        L"Source");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04040201, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x1603,
-        L"TimecodeStreamSourceType");
+        L"SourceType");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04040101, 0x0400, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x1701,
-        L"TimecodeStream12MIncludeSync");
+        L"IncludeSync");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0205, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1801,
@@ -893,11 +1548,11 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x07020103, 0x0106, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1802,
-        L"TransitionCutPoint");
+        L"CutPoint");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0501, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1901,
-        L"ContentStorageMobs");
+        L"Mobs");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0502, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1902,
@@ -909,11 +1564,11 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x07020103, 0x1002, 0x0100, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1A03,
-        L"ControlPointTime");
+        L"Time");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05300508, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1A04,
-        L"ControlPointEditHint");
+        L"EditHint");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x01011503, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1B01,
@@ -929,15 +1584,15 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010107, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0008,
-        L"ClassDefinitionParentClass");
+        L"ParentClass");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010107, 0x0200, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0009,
-        L"ClassDefinitionProperties");
+        L"Properties");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010107, 0x0300, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x000A,
-        L"ClassDefinitionIsConcrete");
+        L"IsConcrete");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05300509, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1E01,
@@ -945,27 +1600,27 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05300503, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x1E02,
-        L"OperationDefinitionIsTimeWarp");
+        L"IsTimeWarp");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0401, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1E03,
-        L"OperationDefinitionDegradeTo");
+        L"DegradeTo");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x0530050a, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1E06,
-        L"OperationDefinitionOperationCategory");
+        L"OperationCategory");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05300504, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x1E07,
-        L"OperationDefinitionNumberInputs");
+        L"NumberInputs");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05300505, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x1E08,
-        L"OperationDefinitionBypass");
+        L"Bypass");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0302, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1E09,
-        L"OperationDefinitionParametersDefined");
+        L"ParametersDefined");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0106, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1F01,
@@ -973,7 +1628,7 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x0530050b, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x1F03,
-        L"ParameterDefinitionDisplayUnits");
+        L"DisplayUnits");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010107, 0x0400, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x000B,
@@ -981,27 +1636,27 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03010202, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x000C,
-        L"PropertyDefinitionIsOptional");
+        L"IsOptional");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010107, 0x0500, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x000D,
-        L"PropertyDefinitionLocalIdentification");
+        L"LocalIdentification");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010107, 0x0600, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x000E,
-        L"PropertyDefinitionIsUniqueIdentifier");
+        L"IsUniqueIdentifier");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05200901, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2203,
-        L"PluginDefinitionPluginCategory");
+        L"PluginCategory");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03030301, 0x0300, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2204,
-        L"PluginDefinitionVersionNumber");
+        L"VersionNumber");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03030301, 0x0201, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2205,
-        L"PluginDefinitionVersionString");
+        L"VersionString");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x010a0101, 0x0101, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2206,
@@ -1009,7 +1664,7 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x020b, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2207,
-        L"PluginDefinitionManufacturerInfo");
+        L"ManufacturerInfo");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x010a0101, 0x0300, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2208,
@@ -1021,51 +1676,51 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05200903, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x220A,
-        L"PluginDefinitionMinPlatformVersion");
+        L"MinPlatformVersion");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05200904, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x220B,
-        L"PluginDefinitionMaxPlatformVersion");
+        L"MaxPlatformVersion");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05200905, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x220C,
-        L"PluginDefinitionEngine");
+        L"Engine");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05200906, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x220D,
-        L"PluginDefinitionMinEngineVersion");
+        L"MinEngineVersion");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05200907, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x220E,
-        L"PluginDefinitionMaxEngineVersion");
+        L"MaxEngineVersion");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05200908, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x220F,
-        L"PluginDefinitionPluginAPI");
+        L"PluginAPI");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05200909, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2210,
-        L"PluginDefinitionMinPluginAPI");
+        L"MinPluginAPI");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x0520090a, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2211,
-        L"PluginDefinitionMaxPluginAPI");
+        L"MaxPluginAPI");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x0520090b, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2212,
-        L"PluginDefinitionSoftwareOnly");
+        L"SoftwareOnly");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x0520090c, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2213,
-        L"PluginDefinitionAccelerator");
+        L"Accelerator");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x0520090d, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2214,
-        L"PluginDefinitionLocators");
+        L"Locators");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x0520090e, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2215,
-        L"PluginDefinitionAuthentication");
+        L"Authentication");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x0520090f, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2216,
@@ -1073,7 +1728,7 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0107, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2301,
-        L"CodecDefinitionFileDescriptorClass");
+        L"FileDescriptorClass");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0301, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2302,
@@ -1081,43 +1736,43 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03010201, 0x0300, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x2401,
-        L"ContainerDefinitionEssenceIsIdentified");
+        L"EssenceIsIdentified");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0503, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2603,
-        L"DictionaryOperationDefinitions");
+        L"OperationDefinitions");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0504, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2604,
-        L"DictionaryParameterDefinitions");
+        L"ParameterDefinitions");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0505, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2605,
-        L"DictionaryDataDefinitions");
+        L"DataDefinitions");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0506, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2606,
-        L"DictionaryPluginDefinitions");
+        L"PluginDefinitions");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0507, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2607,
-        L"DictionaryCodecDefinitions");
+        L"CodecDefinitions");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0508, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2608,
-        L"DictionaryContainerDefinitions");
+        L"ContainerDefinitions");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0509, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2609,
-        L"DictionaryInterpolationDefinitions");
+        L"InterpolationDefinitions");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x050a, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x07),
         0x260A,
-        L"DictionaryKLVDataDefinitions");
+        L"KLVDataDefinitions");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x050b, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x07),
         0x260B,
-        L"DictionaryTaggedValueDefinitions");
+        L"TaggedValueDefinitions");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010106, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2701,
@@ -1125,11 +1780,11 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04070200, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2702,
-        L"EssenceDataData");
+        L"Data");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010102, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2B01,
-        L"EssenceDataSampleIndex");
+        L"SampleIndex");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0603, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x2F01,
@@ -1145,7 +1800,7 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0102, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3004,
-        L"FileDescriptorContainerFormat");
+        L"ContainerFormat");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0103, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3005,
@@ -1161,203 +1816,203 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010502, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x3202,
-        L"DigitalImageDescriptorStoredHeight");
+        L"StoredHeight");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010502, 0x0200, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x3203,
-        L"DigitalImageDescriptorStoredWidth");
+        L"StoredWidth");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010501, 0x0700, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x3204,
-        L"DigitalImageDescriptorSampledHeight");
+        L"SampledHeight");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010501, 0x0800, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x3205,
-        L"DigitalImageDescriptorSampledWidth");
+        L"SampledWidth");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010501, 0x0900, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x3206,
-        L"DigitalImageDescriptorSampledXOffset");
+        L"SampledXOffset");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010501, 0x0a00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x3207,
-        L"DigitalImageDescriptorSampledYOffset");
+        L"SampledYOffset");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010501, 0x0b00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x3208,
-        L"DigitalImageDescriptorDisplayHeight");
+        L"DisplayHeight");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010501, 0x0c00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x3209,
-        L"DigitalImageDescriptorDisplayWidth");
+        L"DisplayWidth");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010501, 0x0d00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x320A,
-        L"DigitalImageDescriptorDisplayXOffset");
+        L"DisplayXOffset");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010501, 0x0e00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x320B,
-        L"DigitalImageDescriptorDisplayYOffset");
+        L"DisplayYOffset");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010301, 0x0400, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x320C,
-        L"DigitalImageDescriptorFrameLayout");
+        L"FrameLayout");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010302, 0x0500, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x320D,
-        L"DigitalImageDescriptorVideoLineMap");
+        L"VideoLineMap");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010101, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x320E,
-        L"DigitalImageDescriptorImageAspectRatio");
+        L"ImageAspectRatio");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05200102, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x320F,
-        L"DigitalImageDescriptorAlphaTransparency");
+        L"AlphaTransparency");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010201, 0x0101, 0x0200, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3210,
-        L"DigitalImageDescriptorTransferCharacteristic");
+        L"TransferCharacteristic");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010201, 0x0106, 0x0100, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x09),
         0x3219,
-        L"DigitalImageDescriptorColorPrimaries");
+        L"ColorPrimaries");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010201, 0x0103, 0x0100, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x321A,
-        L"DigitalImageDescriptorCodingEquations");
+        L"CodingEquations");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04180101, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3211,
-        L"DigitalImageDescriptorImageAlignmentFactor");
+        L"ImageAlignmentFactor");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010301, 0x0600, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3212,
-        L"DigitalImageDescriptorFieldDominance");
+        L"FieldDominance");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04180102, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3213,
-        L"DigitalImageDescriptorFieldStartOffset");
+        L"FieldStartOffset");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04180103, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3214,
-        L"DigitalImageDescriptorFieldEndOffset");
+        L"FieldEndOffset");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04050113, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3215,
-        L"DigitalImageDescriptorSignalStandard");
+        L"SignalStandard");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010302, 0x0800, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3216,
-        L"DigitalImageDescriptorStoredF2Offset");
+        L"StoredF2Offset");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010302, 0x0700, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3217,
-        L"DigitalImageDescriptorDisplayF2Offset");
+        L"DisplayF2Offset");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010302, 0x0900, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3218,
-        L"DigitalImageDescriptorActiveFormatDescriptor");
+        L"ActiveFormatDescriptor");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010503, 0x0a00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3301,
-        L"CDCIDescriptorComponentWidth");
+        L"ComponentWidth");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010501, 0x0500, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x3302,
-        L"CDCIDescriptorHorizontalSubsampling");
+        L"HorizontalSubsampling");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010501, 0x0600, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x3303,
-        L"CDCIDescriptorColorSiting");
+        L"ColorSiting");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010503, 0x0300, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x3304,
-        L"CDCIDescriptorBlackReferenceLevel");
+        L"BlackReferenceLevel");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010503, 0x0400, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x3305,
-        L"CDCIDescriptorWhiteReferenceLevel");
+        L"WhiteReferenceLevel");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010503, 0x0500, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3306,
-        L"CDCIDescriptorColorRange");
+        L"ColorRange");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04180104, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3307,
-        L"CDCIDescriptorPaddingBits");
+        L"PaddingBits");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010501, 0x1000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3308,
-        L"CDCIDescriptorVerticalSubsampling");
+        L"VerticalSubsampling");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010503, 0x0700, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3309,
-        L"CDCIDescriptorAlphaSamplingWidth");
+        L"AlphaSamplingWidth");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03010201, 0x0a00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x330B,
-        L"CDCIDescriptorReversedByteOrder");
+        L"ReversedByteOrder");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010503, 0x0600, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3401,
-        L"RGBADescriptorPixelLayout");
+        L"PixelLayout");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010503, 0x0800, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3403,
-        L"RGBADescriptorPalette");
+        L"Palette");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010503, 0x0900, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3404,
-        L"RGBADescriptorPaletteLayout");
+        L"PaletteLayout");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010404, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3405,
-        L"RGBADescriptorScanningDirection");
+        L"ScanningDirection");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010503, 0x0b00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3406,
-        L"RGBADescriptorComponentMaxRef");
+        L"ComponentMaxRef");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010503, 0x0c00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3407,
-        L"RGBADescriptorComponentMinRef");
+        L"ComponentMinRef");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010503, 0x0d00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3408,
-        L"RGBADescriptorAlphaMaxRef");
+        L"AlphaMaxRef");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010503, 0x0e00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3409,
-        L"RGBADescriptorAlphaMinRef");
+        L"AlphaMinRef");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020301, 0x0101, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3D03,
-        L"SoundDescriptorAudioSamplingRate");
+        L"SAudioSamplingRate");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020301, 0x0400, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x04),
         0x3D02,
-        L"SoundDescriptorLocked");
+        L"Locked");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020101, 0x0300, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x3D04,
-        L"SoundDescriptorAudioRefLevel");
+        L"AudioRefLevel");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020101, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x3D05,
-        L"SoundDescriptorElectroSpatial");
+        L"ElectroSpatial");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020101, 0x0400, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3D07,
-        L"SoundDescriptorChannels");
+        L"Channels");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020303, 0x0400, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x04),
         0x3D01,
-        L"SoundDescriptorQuantizationBits");
+        L"QuantizationBits");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020701, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3D0C,
-        L"SoundDescriptorDialNorm");
+        L"DialNorm");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020402, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3D06,
@@ -1365,75 +2020,75 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020302, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3D0A,
-        L"PCMDescriptorBlockAlign");
+        L"BlockAlign");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020302, 0x0200, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3D0B,
-        L"PCMDescriptorSequenceOffset");
+        L"SequenceOffset");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020303, 0x0500, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3D09,
-        L"PCMDescriptorAverageBPS");
+        L"AverageBPS");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020101, 0x0500, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x07),
         0x3D32,
-        L"PCMDescriptorChannelAssignment");
+        L"ChannelAssignment");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020301, 0x0600, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x08),
         0x3D29,
-        L"PCMDescriptorPeakEnvelopeVersion");
+        L"PeakEnvelopeVersion");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020301, 0x0700, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x08),
         0x3D2A,
-        L"PCMDescriptorPeakEnvelopeFormat");
+        L"PeakEnvelopeFormat");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020301, 0x0800, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x08),
         0x3D2B,
-        L"PCMDescriptorPointsPerPeakValue");
+        L"PointsPerPeakValue");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020301, 0x0900, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x08),
         0x3D2C,
-        L"PCMDescriptorPeakEnvelopeBlockSize");
+        L"PeakEnvelopeBlockSize");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020301, 0x0a00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x08),
         0x3D2D,
-        L"PCMDescriptorPeakChannels");
+        L"PeakChannels");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020301, 0x0b00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x08),
         0x3D2E,
-        L"PCMDescriptorPeakFrames");
+        L"PeakFrames");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020301, 0x0c00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x08),
         0x3D2F,
-        L"PCMDescriptorPeakOfPeaksPosition");
+        L"PeakOfPeaksPosition");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020301, 0x0d00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x08),
         0x3D30,
-        L"PCMDescriptorPeakEnvelopeTimestamp");
+        L"PeakEnvelopeTimestamp");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04020301, 0x0e00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x08),
         0x3D31,
-        L"PCMDescriptorPeakEnvelopeData");
+        L"PeakEnvelopeData");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05020103, 0x0101, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3701,
-        L"TIFFDescriptorIsUniform");
+        L"IsUniform");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06080201, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x3702,
-        L"TIFFDescriptorIsContiguous");
+        L"IsContiguous");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010302, 0x0300, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x3703,
-        L"TIFFDescriptorLeadingLines");
+        L"LeadingLines");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010302, 0x0400, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x3704,
-        L"TIFFDescriptorTrailingLines");
+        L"TrailingLines");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05020103, 0x0102, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3705,
-        L"TIFFDescriptorJPEGTableID");
+        L"JPEGTableID");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03030302, 0x0300, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3706,
@@ -1445,19 +2100,19 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04100103, 0x0108, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3901,
-        L"FilmDescriptorFilmFormat");
+        L"FilmFormat");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010802, 0x0300, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3902,
-        L"FilmDescriptorFrameRate");
+        L"FrameRate");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04100103, 0x0103, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3903,
-        L"FilmDescriptorPerforationsPerFrame");
+        L"PerforationsPerFrame");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04100103, 0x0203, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3904,
-        L"FilmDescriptorFilmAspectRatio");
+        L"FilmAspectRatio");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04100103, 0x0106, 0x0100, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3905,
@@ -1469,23 +2124,23 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04100103, 0x0104, 0x0100, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3907,
-        L"FilmDescriptorFilmGaugeFormat");
+        L"FilmGaugeFormat");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04100103, 0x0107, 0x0100, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3908,
-        L"FilmDescriptorFilmBatchNumber");
+        L"FilmBatchNumber");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04100101, 0x0101, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3A01,
-        L"TapeDescriptorFormFactor");
+        L"FormFactor");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04010401, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3A02,
-        L"TapeDescriptorVideoSignal");
+        L"VideoSignal");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x0d010101, 0x0101, 0x0100, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3A03,
-        L"TapeDescriptorTapeFormat");
+        L"TapeFormat");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04100101, 0x0300, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3A04,
@@ -1501,35 +2156,35 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04100101, 0x0601, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3A07,
-        L"TapeDescriptorTapeBatchNumber");
+        L"TapeBatchNumber");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04100101, 0x0501, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3A08,
-        L"TapeDescriptorTapeStock");
+        L"TapeStock");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04090201, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x07),
         0x4E11,
-        L"AuxiliaryDescriptorMimeType");
+        L"MimeType");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x04090300, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x08),
         0x4E12,
-        L"AuxiliaryDescriptorCharSet");
+        L"CharSet");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0109, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x07),
         0x4D12,
-        L"KLVDataDefinitionKLVDataType");
+        L"KLVDataType");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03010201, 0x0200, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x3B01,
-        L"HeaderByteOrder");
+        L"ByteOrder");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x07020110, 0x0204, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3B02,
-        L"HeaderLastModified");
+        L"LastModified");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0201, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3B03,
-        L"HeaderContent");
+        L"Content");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0202, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3B04,
@@ -1537,55 +2192,55 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03010201, 0x0500, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3B05,
-        L"HeaderVersion");
+        L"Version");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0604, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3B06,
-        L"HeaderIdentificationList");
+        L"IdentificationList");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03010201, 0x0400, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3B07,
-        L"HeaderObjectModelVersion");
+        L"ObjectModelVersion");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x01020203, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3B09,
-        L"HeaderOperationalPattern");
+        L"OperationalPattern");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x01020210, 0x0201, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3B0A,
-        L"HeaderEssenceContainers");
+        L"EssenceContainers");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x01020210, 0x0202, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3B0B,
-        L"HeaderDescriptiveSchemes");
+        L"DescriptiveSchemes");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05200701, 0x0201, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3C01,
-        L"IdentificationCompanyName");
+        L"CompanyName");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05200701, 0x0301, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3C02,
-        L"IdentificationProductName");
+        L"ProductName");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05200701, 0x0400, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3C03,
-        L"IdentificationProductVersion");
+        L"ProductVersion");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05200701, 0x0501, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3C04,
-        L"IdentificationProductVersionString");
+        L"ProductVersionString");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05200701, 0x0700, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3C05,
-        L"IdentificationProductID");
+        L"ProductID");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x07020110, 0x0203, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3C06,
-        L"IdentificationDate");
+        L"Date");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05200701, 0x0a00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3C07,
-        L"IdentificationToolkitVersion");
+        L"ToolkitVersion");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05200701, 0x0601, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3C08,
@@ -1593,11 +2248,11 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05200701, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x3C09,
-        L"IdentificationGenerationAUID");
+        L"GenerationAUID");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x01020101, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x4001,
-        L"NetworkLocatorURLString");
+        L"URLString");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x01040102, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x4101,
@@ -1605,7 +2260,7 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x01011510, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x4401,
-        L"MobMobID");
+        L"MobID");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x01030302, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x4402,
@@ -1621,7 +2276,7 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x07020110, 0x0103, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x4405,
-        L"MobCreationTime");
+        L"CreationTime");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03020102, 0x0c00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x4406,
@@ -1637,19 +2292,19 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05010108, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x07),
         0x4408,
-        L"MobUsageCode");
+        L"UsageCode");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x07020201, 0x0105, 0x0100, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x4501,
-        L"CompositionMobDefaultFadeLength");
+        L"DefaultFadeLength");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05300201, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01),
         0x4502,
-        L"CompositionMobDefFadeType");
+        L"DefFadeType");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05300403, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x4503,
-        L"CompositionMobDefFadeEditUnit");
+        L"DefFadeEditUnit");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x010a, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x08),
         0x4504,
@@ -1657,15 +2312,15 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0203, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x4701,
-        L"SourceMobEssenceDescription");
+        L"EssenceDescription");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x01070101, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x4801,
-        L"MobSlotSlotID");
+        L"SlotID");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x01070102, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x4802,
-        L"MobSlotSlotName");
+        L"SlotName");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0204, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x4803,
@@ -1673,7 +2328,7 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x01040103, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x4804,
-        L"MobSlotPhysicalTrackNumber");
+        L"PhysicalTrackNumber");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05300402, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x4901,
@@ -1685,23 +2340,23 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x07020103, 0x0103, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x4B02,
-        L"TimelineMobSlotOrigin");
+        L"SlotOrigin");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x07020103, 0x010c, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x07),
         0x4B03,
-        L"TimelineMobSlotMarkIn");
+        L"MarkIn");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x07020103, 0x0203, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x07),
         0x4B04,
-        L"TimelineMobSlotMarkOut");
+        L"MarkOut");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x07020103, 0x010d, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x07),
         0x4B05,
-        L"TimelineMobSlotUserPos");
+        L"UserPos");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0104, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x4C01,
-        L"ParameterDefinitionProperty");
+        L"Property");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x05300507, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x4D01,
@@ -1709,11 +2364,11 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0105, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x4E01,
-        L"VaryingValueInterpolation");
+        L"Interpolation");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0606, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x4E02,
-        L"VaryingValuePointList");
+        L"PointList");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03020102, 0x0901, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x5001,
@@ -1729,75 +2384,75 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03010203, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x000F,
-        L"TypeDefinitionIntegerSize");
+        L"IntegerSize");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03010203, 0x0200, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0010,
-        L"TypeDefinitionIntegerIsSigned");
+        L"IsSigned");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010107, 0x0900, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0011,
-        L"TypeDefinitionStrongObjectReferenceReferencedType");
+        L"StrongReferencedType");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010107, 0x0a00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0012,
-        L"TypeDefinitionWeakObjectReferenceReferencedType");
+        L"WeakReferencedType");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03010203, 0x0b00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0013,
-        L"TypeDefinitionWeakObjectReferenceTargetSet");
+        L"ReferenceTargetSet");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010107, 0x0b00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0014,
-        L"TypeDefinitionEnumerationElementType");
+        L"EnumElementType");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03010203, 0x0400, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0015,
-        L"TypeDefinitionEnumerationElementNames");
+        L"EnumElementNames");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03010203, 0x0500, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0016,
-        L"TypeDefinitionEnumerationElementValues");
+        L"EnumElementValues");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010107, 0x0c00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0017,
-        L"TypeDefinitionFixedArrayElementType");
+        L"FixedArrayElementType");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03010203, 0x0300, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0018,
-        L"TypeDefinitionFixedArrayElementCount");
+        L"ElementCount");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010107, 0x0d00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0019,
-        L"TypeDefinitionVariableArrayElementType");
+        L"VariableArrayElementType");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010107, 0x0e00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x001A,
-        L"TypeDefinitionSetElementType");
+        L"SetElementType");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010107, 0x0f00, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x001B,
-        L"TypeDefinitionStringElementType");
+        L"StringElementType");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010107, 0x1100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x001C,
-        L"TypeDefinitionRecordMemberTypes");
+        L"MemberTypes");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03010203, 0x0600, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x001D,
-        L"TypeDefinitionRecordMemberNames");
+        L"MemberNames");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010107, 0x1200, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x001E,
-        L"TypeDefinitionRenameRenamedType");
+        L"RenamedType");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03010203, 0x0700, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x001F,
-        L"TypeDefinitionExtendibleEnumerationElementNames");
+        L"ExtEnumElementNames");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x03010203, 0x0800, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0020,
-        L"TypeDefinitionExtendibleEnumerationElementValues");
+        L"ExtEnumElementValues");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010107, 0x1300, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0005,
@@ -1813,11 +2468,11 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010107, 0x0700, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0003,
-        L"MetaDictionaryClassDefinitions");
+        L"ClassDefinitions");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x06010107, 0x0800, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0004,
-        L"MetaDictionaryTypeDefinitions");
+        L"TypeDefinitions");
     ADD_PROPERTY_SYMBOL(
         LITERAL_AUID(0x0d010301, 0x0101, 0x0100, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x0001,
@@ -1964,7 +2619,7 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
         L"MobIDType");
     ADD_SYMBOL(
         LITERAL_AUID(0x03010200, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01),
-        L"ProductVersion");
+        L"ProductVersionType");
     ADD_SYMBOL(
         LITERAL_AUID(0x03010300, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01),
         L"VersionType");
@@ -2254,74 +2909,5 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     return ss;
 }
 
-
-void 
-OMSymbolspace::save(OMList<OMStorable*>& definitions)
-{
-    TRACE("OMSymbolspace::save");
-    
-    getWriter()->writeElementStart(getBaselineURI(), L"MetaDictionary");
-
-    wchar_t idUri[XML_MAX_OID_URI_SIZE];
-    oidToURI(_id, idUri);
-    getWriter()->writeElementStart(getBaselineURI(), L"Identification");
-    getWriter()->writeElementContent(idUri, lengthOfWideString(idUri));
-    getWriter()->writeElementEnd();
-
-    getWriter()->writeElementStart(getBaselineURI(), L"Symbolspace");
-    getWriter()->writeElementContent(_uri, lengthOfWideString(_uri));
-    getWriter()->writeElementEnd();
-
-    if (_preferredPrefix != 0)
-    {
-        getWriter()->writeElementStart(getBaselineURI(), L"PreferredPrefix");
-        getWriter()->writeElementContent(_preferredPrefix,
-            lengthOfWideString(_preferredPrefix));
-        getWriter()->writeElementEnd();
-    }
-
-    if (_description != 0)
-    {
-        getWriter()->writeElementStart(getBaselineURI(), L"Description");
-        getWriter()->writeElementContent(_description,
-            lengthOfWideString(_description));
-        getWriter()->writeElementEnd();
-    }
-
-    if (definitions.count() > 0)
-    {
-        getWriter()->writeElementStart(getBaselineURI(), L"Definitions");
-
-        OMListIterator<OMStorable*> iter(definitions, OMBefore);
-        while (++iter)
-        {
-            OMStorable* storable = iter.value();
-            OMProperty* nameProp = storable->findProperty(0x0006);
-            ASSERT("MetaDef has Name property", nameProp != 0);
-            const wchar_t* name = (wchar_t*)(dynamic_cast<OMSimpleProperty*>(nameProp))->bits();
-            getWriter()->writeComment(name);
-        }
-
-        getWriter()->writeElementEnd();
-    }
-
-    getWriter()->writeElementEnd();
-}
-
-OMXMLWriter*
-OMSymbolspace::getWriter()
-{
-    TRACE("OMSymbolspace::getWriter");
-    
-    return _store->getWriter();
-}
-
-OMXMLReader*
-OMSymbolspace::getReader()
-{
-    TRACE("OMSymbolspace::getReader");
-    
-    return _store->getReader();
-}
 
 
