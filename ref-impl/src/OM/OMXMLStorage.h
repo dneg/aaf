@@ -47,15 +47,15 @@ public:
     
     OMSymbolspace* getBaselineSymbolspace() const;
     OMSymbolspace* getDefaultExtSymbolspace() const;
-    OMSymbolspace* createDefaultExtSymbolspace(OMClassId id);
+    OMSymbolspace* createDefaultExtSymbolspace(OMUniqueObjectIdentification id);
     
-    bool getSymbol(OMClassId id, const wchar_t** symbolspaceURI, const wchar_t** symbol) const;
-    const wchar_t* getDefinitionSymbol(OMClassId id);
-    OMClassId getId(const wchar_t* symbolspaceURI, const wchar_t* symbol) const;
+    bool getSymbol(OMUniqueObjectIdentification id, const wchar_t** symbolspaceURI, const wchar_t** symbol) const;
+    const wchar_t* getDefinitionSymbol(OMUniqueObjectIdentification id);
+    OMUniqueObjectIdentification getId(const wchar_t* symbolspaceURI, const wchar_t* symbol) const;
     OMPropertyId getPropertyId(const wchar_t* symbolspaceURI, const wchar_t* symbol) const;
-    OMClassId getId(const wchar_t* definitionSymbol) const;
+    OMUniqueObjectIdentification getId(const wchar_t* definitionSymbol) const;
     
-    const wchar_t* getDataStreamNotationName(OMClassId typeId);
+    const wchar_t* getDataStreamNotationName(OMUniqueObjectIdentification typeId);
     const wchar_t* getDataStreamEntityName(void* ref);
     const wchar_t* getDataStreamEntityValue(void* ref);
     
@@ -76,13 +76,13 @@ private:
     OMSymbolspace*  _defaultExtSymbolspace;
     
     OMSet<OMWString, OMSymbolspace*> _symbolspaces;
-    OMSet<OMClassId, OMWString> _idToDefSymbol;
-    OMSet<OMWString, OMClassId> _defSymbolToId;
+    OMSet<OMUniqueObjectIdentification, OMWString> _idToDefSymbol;
+    OMSet<OMWString, OMUniqueObjectIdentification> _defSymbolToId;
 
     int             _dataStreamNotationNameIndex;
     int             _dataStreamEntityNameIndex;
     int             _dataStreamEntityValueIndex;
-    OMSet<OMClassId, OMWString> _dataStreamNotationNames;
+    OMSet<OMUniqueObjectIdentification, OMWString> _dataStreamNotationNames;
     OMSet<void*, OMWString> _dataStreamEntityNames;
     OMSet<void*, OMWString> _dataStreamEntityValues;
 };
