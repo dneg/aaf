@@ -79,7 +79,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	bool bFileOpen = false;
 	IAAFHeader *        pHeader = NULL;
 	IAAFDictionary*  pDictionary = NULL;
-	IAAFSourceReference	*pSourceReference = NULL;
+	IAAFSourceReference			*pSourceReference = NULL;
+	IAAFSourceReference2		*pSrcRef2 = NULL;
 	aafProductIdentification_t	ProductInfo;
 	aafMobID_t					outSourceID;
 	aafUInt32 inMobSlotID, outMobSlotID;
@@ -117,8 +118,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		// Create a concrete subclass of an Abstract SourceReference
 		checkResult(defs.cdSourceClip()->
-					CreateInstance(IID_IAAFSourceReference, 
-								   (IUnknown **)&pSourceReference));
+					CreateInstance(IID_IAAFSourceReference, (IUnknown **)&pSourceReference));
+		checkResult(pSourceReference->
+					QueryInterface(IID_IAAFSourceReference2, (void **)&pSrcRef2));
 
 		// module-specific tests go here
 		//		Set Values.	
@@ -133,11 +135,46 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Compare value with the one we set
 		checkExpression(memcmp(&TEST_MobID, &outSourceID, sizeof(TEST_MobID)) == 0, AAFRESULT_TEST_FAILED);
 
-		
 		checkResult(pSourceReference->GetSourceMobSlotID( &outMobSlotID));
 
 		// Compare value with the one we set
 		checkExpression(inMobSlotID == outMobSlotID, AAFRESULT_TEST_FAILED);
+
+
+		// Test SetChannelIDs(), GetChannelIDsSize(), GetChannelIDs()
+		aafUInt32 size;
+		aafUInt32 ChannelIDs[3] = { 1234, 4567, 7890 }, *pChan = ChannelIDs;
+		aafUInt32 ChannelOutIDs[3], *pOutChan = ChannelOutIDs;
+
+		checkResult(pSrcRef2->SetChannelIDs(1, pChan));
+		checkResult(pSrcRef2->GetChannelIDs(1, pOutChan));
+		checkResult(pSrcRef2->GetChannelIDsSize(&size));
+		checkExpression(size == (1 * sizeof(*pChan)), AAFRESULT_TEST_FAILED);
+		checkExpression(pChan[0] == pOutChan[0], AAFRESULT_TEST_FAILED);
+
+		checkResult(pSrcRef2->SetChannelIDs(3, pChan));
+		checkExpression(pSrcRef2->GetChannelIDs(2, pOutChan) != AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED);
+		checkResult(pSrcRef2->GetChannelIDs(3, pOutChan));
+		checkResult(pSrcRef2->GetChannelIDsSize(&size));
+		checkExpression(size == (3 * sizeof(*pChan)), AAFRESULT_TEST_FAILED);
+		checkExpression(memcmp(pChan, pOutChan, 3 * sizeof(*pChan)) == 0, AAFRESULT_TEST_FAILED);
+
+		// Test SetMonoSourceSlotIDs(), GetMonoSourceSlotIDsSize(), GetMonoSourceSlotIDs()
+		aafUInt32 MonoSourceSlotIDs[2] = { 55555, 666666 }, *pMono = MonoSourceSlotIDs;
+		aafUInt32 MonoOutIDs[2], *pOutMono = MonoOutIDs;
+
+		checkResult(pSrcRef2->SetMonoSourceSlotIDs(1, pMono));
+		checkResult(pSrcRef2->GetMonoSourceSlotIDs(1, pOutMono));
+		checkResult(pSrcRef2->GetMonoSourceSlotIDsSize(&size));
+		checkExpression(size == (1 * sizeof(*pMono)), AAFRESULT_TEST_FAILED);
+		checkExpression(pMono[0] == pOutMono[0], AAFRESULT_TEST_FAILED);
+
+		checkResult(pSrcRef2->SetMonoSourceSlotIDs(2, pMono));
+		checkExpression(pSrcRef2->GetMonoSourceSlotIDs(1, pOutMono) != AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED);
+		checkResult(pSrcRef2->GetMonoSourceSlotIDs(2, pOutMono));
+		checkResult(pSrcRef2->GetMonoSourceSlotIDsSize(&size));
+		checkExpression(size == (2 * sizeof(*pMono)), AAFRESULT_TEST_FAILED);
+		checkExpression(memcmp(pMono, pOutMono, 2 * sizeof(*pChan)) == 0, AAFRESULT_TEST_FAILED);
 	}
 	catch (HRESULT& rResult)
 	{
