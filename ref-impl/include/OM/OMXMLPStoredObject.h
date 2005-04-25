@@ -47,6 +47,22 @@ class OMWeakReferenceSet;
 class OMWeakReferenceVector;
 class OMStoredStream;
 
+class OMCharacterType;
+class OMEnumeratedType;
+class OMExtEnumeratedType;
+class OMFixedArrayType;
+class OMIndirectType;
+class OMIntType;
+class OMOpaqueType;
+class OMRecordType;
+class OMRenamedType;
+class OMSetType;
+class OMStreamType;
+class OMStringType;
+class OMStrongObjectReferenceType;
+class OMVariableArrayType;
+class OMWeakObjectReferenceType;
+
   // @class In-memory representation of an object persisted in an
   //        eXtensible Markup Language (XML) text file.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
@@ -248,21 +264,51 @@ private:
     OMXMLReader* getReader();
     const wchar_t* getBaselineURI();
 
+    void registerExtensions(OMFile& file, OMSymbolspace* extSymbolspace);
+    
+    void saveSimpleValue(const OMByte* internalBytes, OMUInt16 internalSize, const OMType* type,
+        bool isElementContent);
+    void saveCharacter(const OMByte* externalBytes, OMUInt16 externalSize, const OMCharacterType* type,
+        bool isElementContent);
+    void saveEnum(const OMByte* internalBytes, OMUInt16 internalSize, const OMEnumeratedType* type,
+        bool isElementContent);
+    void saveExtEnum(const OMByte* internalBytes, OMUInt16 internalSize, const OMExtEnumeratedType* type,
+        bool isElementContent);
+    void saveFixedArray(const OMByte* internalBytes, OMUInt16 internalSize, const OMFixedArrayType* type,
+        bool isElementContent);
+    void saveIndirect(const OMByte* externalBytes, OMUInt16 externalSize, const OMIndirectType* type,
+        bool isElementContent);
+    void saveInteger(const OMByte* internalBytes, OMUInt16 internalSize, const OMIntType* type,
+        bool isElementContent);
+    void saveOpaque(const OMByte* externalBytes, OMUInt16 externalSize, const OMOpaqueType* type,
+        bool isElementContent);
+    void saveRecord(const OMByte* internalBytes, OMUInt16 internalSize, const OMRecordType* type,
+        bool isElementContent);
+    void saveRenamed(const OMByte* internalBytes, OMUInt16 internalSize, const OMRenamedType* type,
+        bool isElementContent);
+    void saveString(const OMByte* internalBytes, OMUInt16 internalSize, const OMStringType* type,
+        bool isElementContent);
+    void saveSet(const OMByte* internalBytes, OMUInt16 internalSize, const OMSetType* type,
+        bool isElementContent);
+    void saveVariableArray(const OMByte* internalBytes, OMUInt16 internalSize, const OMVariableArrayType* type,
+        bool isElementContent);
+
+    void writeDataInHex(const OMByte* data, size_t size, bool isElementContent);
+
+    const OMType* baseType(const OMType* type);
+    
     void restoreWeakRef(OMFile* file, const OMType* type,
         OMUniqueObjectIdentification& id, OMPropertyTag& tag);
     
-        
-    OMUniqueObjectIdentification getGeneration(OMFile& file);
-    void getExtensions(OMFile& file, OMSymbolspace* extSymbolspace, 
-        OMList<OMStorable*>& exts);
-    void getExtensions(OMStorable* storable, OMSymbolspace* extSymbolspace,
-        OMList<OMStorable*>& exts);
-    void readSetId(OMByte* key, OMKeySize keySize, const wchar_t* idStr);
-    OMUniqueObjectIdentification readRefId(const wchar_t* refStr);
-  
+    OMUniqueObjectIdentification getExtensionSymbolspaceId(OMFile& file);
     
-    OMXMLStorage* _store;
-    bool _isRoot;
+    void readSetId(OMByte* key, OMKeySize keySize, const wchar_t* idStr);
+    
+    OMUniqueObjectIdentification readRefId(const wchar_t* refStr);
+
+    
+    OMXMLStorage*   _store;
+    bool            _isRoot;
   
 };
 
