@@ -200,3 +200,152 @@ uriToUMID(const wchar_t* uri, OMMaterialIdentification* umid)
     
 }
 
+void 
+integerToString(const OMByte* value, OMUInt8 size, bool isSigned, wchar_t* str)
+{
+    TRACE("::integerToString");
+
+    char buffer[22];    
+    switch (size)
+    {
+        case 1:
+            {
+                if (isSigned)
+                {
+                    sprintf(buffer, "%d", *((OMInt8*)value));
+                }
+                else
+                {
+                    sprintf(buffer, "%u", *((OMInt8*)value));
+                }
+            }
+            break;        
+        case 2:
+            {
+                if (isSigned)
+                {
+                    sprintf(buffer, "%d", *((OMInt16*)value));
+                }
+                else
+                {
+                    sprintf(buffer, "%u", *((OMInt16*)value));
+                }
+            }
+            break;        
+        case 4:
+            {
+                if (isSigned)
+                {
+                    sprintf(buffer, "%d", *((OMInt32*)value));
+                }
+                else
+                {
+                    sprintf(buffer, "%u", *((OMInt32*)value));
+                }
+            }
+            break;        
+        case 8:
+            {
+                // TODO: need to have access to AAFFMT64 from AAFPlatform.h
+                if (isSigned)
+                {
+                    sprintf(buffer, "%lld", *((OMInt64*)value));
+                    // sprintf(buffer, "%"AAFFMT64"d", *((OMInt64*)value));
+                }
+                else
+                {
+                    sprintf(buffer, "%llu", *((OMInt64*)value));
+                    // sprintf(buffer, "%"AAFFMT64"u", *((OMInt64*)value));
+                }
+            }
+            break;        
+        default:
+            ASSERT("Valid integer size", false);
+            break;
+    }
+    
+    convertStringToWideString(str, buffer, 22);
+}
+
+void 
+byteOrderToString(OMByteOrder byteOrder, wchar_t* str)
+{
+    if (byteOrder == littleEndian)
+    {
+        copyWideString(str, L"LittleEndian", 13);
+    }
+    else if (byteOrder == bigEndian)
+    {
+        copyWideString(str, L"BigEndian", 10);
+    }
+    else
+    {
+        copyWideString(str, L"Unknown", 8);
+    }
+}
+
+
+// must match type in AAFTypes.h
+struct DateStruct
+{
+    OMInt16 year;
+    OMUInt8 month;
+    OMUInt8 day;
+};
+
+void 
+dateStructToString(const OMByte* internalBytes, wchar_t* str)
+{
+    const DateStruct* dateStruct = reinterpret_cast<const DateStruct*>(internalBytes);
+    
+    char dateStr[XML_MAX_DATESTRUCT_STRING_SIZE];
+    sprintf(dateStr, "%04d-%02u-%02uZ", dateStruct->year, dateStruct->month, 
+        dateStruct->day);
+        
+    convertStringToWideString(str, dateStr, XML_MAX_DATESTRUCT_STRING_SIZE);        
+}
+
+// must match type in AAFTypes.h
+struct TimeStruct
+{
+    OMUInt8 hour;
+    OMUInt8 minute;
+    OMUInt8 second;
+    OMUInt8 fraction;
+};
+
+void 
+timeStructToString(const OMByte* internalBytes, wchar_t* str)
+{
+    const TimeStruct* timeStruct = reinterpret_cast<const TimeStruct*>(internalBytes);
+    
+    char timeStr[XML_MAX_TIMESTRUCT_STRING_SIZE];
+    sprintf(timeStr, "%02u:%02u:%02u.%02uZ", timeStruct->hour, timeStruct->minute, 
+        timeStruct->second, timeStruct->fraction);
+        
+    convertStringToWideString(str, timeStr, XML_MAX_TIMESTRUCT_STRING_SIZE);        
+}
+
+// must match type in AAFTypes.h
+struct TimeStamp
+{
+    DateStruct date;
+    TimeStruct time;
+};
+
+void 
+timeStampToString(const OMByte* internalBytes, wchar_t* str)
+{
+    const TimeStamp* timeStamp = reinterpret_cast<const TimeStamp*>(internalBytes);
+    
+    char timeStampStr[XML_MAX_TIMESTAMP_STRING_SIZE];
+    sprintf(timeStampStr, "%04d-%02u-%02uT%02u:%02u:%02u.%02uZ", 
+        timeStamp->date.year, timeStamp->date.month, timeStamp->date.day, 
+        timeStamp->time.hour, timeStamp->time.minute, 
+        timeStamp->time.second, timeStamp->time.fraction);
+    
+    convertStringToWideString(str, timeStampStr, XML_MAX_TIMESTAMP_STRING_SIZE);        
+}
+
+
+
