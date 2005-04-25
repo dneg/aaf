@@ -490,6 +490,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMCharacterStringPropertyT.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMCharacterType.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\include\OM\OMClassDefinition.h"
 # End Source File
 # Begin Source File
@@ -574,7 +578,15 @@ SOURCE="..\..\..\ref-impl\include\OM\OMExceptions.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMExtEnumeratedType.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMFile.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMFixedArrayType.h"
 # End Source File
 # Begin Source File
 
@@ -598,7 +610,15 @@ SOURCE="..\..\..\ref-impl\src\OM\OMIdentitySetT.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMIndirectType.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\include\OM\OMIntegerType.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMIntType.h"
 # End Source File
 # Begin Source File
 
@@ -642,6 +662,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMMemoryRawStorage.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMMetaDefinition.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\include\OM\OMMS_SSStoredObjectFactory.h"
 # End Source File
 # Begin Source File
@@ -671,6 +695,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMObjectSet.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMObjectVector.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMOpaqueType.h"
 # End Source File
 # Begin Source File
 
@@ -894,6 +922,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMStringType.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMStrongObjectReferenceType.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\include\OM\OMStrongReference.h"
 # End Source File
 # Begin Source File
@@ -966,6 +998,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMUtilities.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMVariableArrayType.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\include\OM\OMVariableSizeProperty.h"
 # End Source File
 # Begin Source File
@@ -987,6 +1023,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMVectorIteratorT.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMVectorT.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMWeakObjectReferenceType.h"
 # End Source File
 # Begin Source File
 
