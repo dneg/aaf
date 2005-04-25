@@ -26,6 +26,15 @@
 #ifndef OMRECORDTYPE_H
 #define OMRECORDTYPE_H
 
-// Nothing yet
+#include "OMType.h"
+
+class OMRecordType : virtual public OMType
+{
+public:
+    virtual OMUInt32 memberCount(void) const = 0;
+    virtual wchar_t* memberName(OMUInt32 index) const = 0;
+    virtual OMType* memberType(OMUInt32 index) const = 0;
+};
+
 
 #endif

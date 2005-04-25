@@ -26,6 +26,16 @@
 #ifndef OMOBJECTREFERENCETYPE_H
 #define OMOBJECTREFERENCETYPE_H
 
-// Nothing yet
+#include "OMType.h"
+#include "OMClassDefinition.h"
+#include "OMVector.h"
+
+
+class OMObjectReferenceType : virtual public OMType
+{
+public:
+    virtual OMClassDefinition* referencedClass(void) const = 0;
+};
+
 
 #endif

@@ -26,6 +26,17 @@
 #ifndef OMENUMERATEDTYPE_H
 #define OMENUMERATEDTYPE_H
 
-// Nothing yet
+#include "OMType.h"
+
+class OMEnumeratedType : virtual public OMType
+{
+public:
+    virtual OMType* elementType(void) const = 0;
+    virtual OMUInt32 elementCount(void) const = 0;
+    virtual wchar_t* elementName(OMUInt32 index) const = 0;
+    virtual OMInt64 elementValue(OMUInt32 index) const = 0;
+    virtual wchar_t* elementNameFromValue(OMInt64 value) const = 0;
+};
+
 
 #endif

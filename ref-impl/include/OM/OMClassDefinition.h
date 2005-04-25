@@ -27,6 +27,8 @@
 #define OMCLASSDEFINITION_H
 
 #include "OMDataTypes.h"
+#include "OMMetaDefinition.h"
+#include "OMVector.h"
 
 class OMPropertyDefinition;
 class OMStorable;
@@ -34,9 +36,8 @@ class OMStorable;
   // @class Abstract base class used to define persistent classes
   //        supported by the Object Manager.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-class OMClassDefinition {
+class OMClassDefinition : virtual public OMMetaDefinition {
 public:
-
   virtual ~OMClassDefinition(void) {}
 
     // @cmember The <c OMPropertyDefinition> for properties (members
@@ -49,6 +50,12 @@ public:
   virtual const OMPropertyDefinition* propertyDefinition(
 			     const  OMStorable* pDstStorable,
 			     const OMPropertyDefinition* pSrcProperty ) = 0;
+
+  virtual bool isConcrete(void) const = 0;
+  
+  virtual OMClassDefinition* parentClass(void) const = 0;
+  
+  virtual void propertyDefinitions(OMVector<OMPropertyDefinition*>& propertyDefs) const = 0;
 
 };
 

@@ -32,9 +32,8 @@
 class OMIntegerType;
 
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMIntegerType
-class OMIntegerType : public OMType {
+class OMIntegerType : public OMInternalType {
 public:
-
   OMIntegerType(void);
 
   virtual ~OMIntegerType(void);

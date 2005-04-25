@@ -27,13 +27,14 @@
 #define OMTYPE_H
 
 #include "OMDataTypes.h"
+#include "OMMetaDefinition.h"
 
 #include <stddef.h>
 
   // @class Abstract base class describing the data types that may be
   //        assumed by persistent properties supported by the Object Manager.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-class OMType {
+class OMType : virtual public OMMetaDefinition {
 public:
   // @access Public members.
 
@@ -192,7 +193,19 @@ public:
 
   // PdN: temporary function
   virtual const OMPropertyId* getTargetPath() const { return 0; };
-                   
+  
+  
+};
+
+// internal types that are not TypeDefinitions registered in the Dictionary
+class OMInternalType : public OMType
+{
+public:
+    // overrides from OMMetaDefinition
+    virtual Category category(void) const { return INTERNAL_TYPE; }
+    virtual const OMUniqueObjectIdentification& identification() const;
+    virtual const wchar_t* name() const;
+    virtual const wchar_t* description() const;
 };
 
 #endif

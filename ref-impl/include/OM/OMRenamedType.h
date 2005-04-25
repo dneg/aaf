@@ -26,6 +26,13 @@
 #ifndef OMRENAMEDTYPE_H
 #define OMRENAMEDTYPE_H
 
-// Nothing yet
+#include "OMType.h"
+
+class OMRenamedType : virtual public OMType
+{
+public:
+    virtual OMType* renamedType(void) const = 0;
+};
+
 
 #endif

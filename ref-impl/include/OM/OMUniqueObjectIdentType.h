@@ -36,10 +36,9 @@ class OMUniqueObjectIdentificationType;
   //   @base public | <c OMSingleton>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMUniqueObjectIdentificationType :
-                         public OMType,
+                         public OMInternalType,
                          public OMSingleton<OMUniqueObjectIdentificationType> {
 public:
-
   OMUniqueObjectIdentificationType(void);
 
   virtual ~OMUniqueObjectIdentificationType(void);

@@ -25,13 +25,12 @@
 #ifndef OMSETTYPE_H
 #define OMSETTYPE_H
 
-class OMType;
+#include "OMType.h"
 
-class OMSetType {
+class OMSetType : virtual public OMType 
+{
 public:
-
-  virtual OMType* elementType(void) const = 0;
-
+    virtual OMType* elementType(void) const = 0;
 };
 
 #endif

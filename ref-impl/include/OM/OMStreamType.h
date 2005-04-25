@@ -26,6 +26,11 @@
 #ifndef OMSTREAMTYPE_H
 #define OMSTREAMTYPE_H
 
-// Nothing yet
+#include "OMType.h"
+
+class OMStreamType : virtual public OMType
+{
+};
+
 
 #endif

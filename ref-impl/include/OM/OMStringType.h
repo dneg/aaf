@@ -26,6 +26,13 @@
 #ifndef OMSTRINGTYPE_H
 #define OMSTRINGTYPE_H
 
-// Nothing yet
+#include "OMType.h"
+
+class OMStringType : virtual public OMType
+{
+public:
+    virtual OMType* elementType(void) const = 0;
+};
+
 
 #endif

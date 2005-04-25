@@ -27,6 +27,7 @@
 #define OMPROPERTYDEFINITION_H
 
 #include "OMDataTypes.h"
+#include "OMMetaDefinition.h"
 
 #include <stddef.h>
 
@@ -35,7 +36,7 @@ class OMType;
   // @class Abstract base class used to define persistent properties
   //        supported by the Object Manager.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-class OMPropertyDefinition {
+class OMPropertyDefinition : virtual public OMMetaDefinition {
 public:
   // @access Public members.
 
@@ -46,15 +47,6 @@ public:
     //          <c OMPropertyDefinition>.
   virtual const OMType* type(void) const = 0;
 
-    // @cmember The unique identification of the <c OMProperty> defined by
-    //          this <c OMPropertyDefinition>.
-  virtual const OMUniqueObjectIdentification&
-                                          uniqueIdentification(void) const = 0;
-
-    // @cmember The name of the <c OMProperty> defined by this
-    //          <c OMPropertyDefinition>.
-  virtual const wchar_t* name(void) const = 0;
-
     // @cmember The locally unique identification of the <c OMProperty>
     //          defined by this <c OMPropertyDefinition>.
   virtual OMPropertyId localIdentification(void) const = 0;
@@ -62,6 +54,10 @@ public:
     // @cmember Is the <c OMProperty> defined by this
     //          <c OMPropertyDefinition> optional?
   virtual bool isOptional(void) const = 0;
+
+    // @cmember Is the <c OMProperty> defined by this
+    //          <c OMPropertyDefinition> uniquely identify the class?
+  virtual bool isUniqueIdentifier(void) const = 0;
 
 };
 
@@ -75,9 +71,14 @@ class OMBuiltinPropertyDefinition : public OMPropertyDefinition {
 public:
   // @access Public members.
 
+  // overrides from OMMetaDefinition
+  virtual Category category(void) const { return PROPERTY; }
+
+
     // @cmember Constructor.
   OMBuiltinPropertyDefinition(const OMType* type,
                               const wchar_t* name,
+                              const wchar_t* description,
                               const OMPropertyId propertyId,
                               const bool isOptional);
 
@@ -88,14 +89,18 @@ public:
     //          <c OMBuiltinPropertyDefinition>.
   virtual const OMType* type(void) const;
 
-    // @cmember The unique identification of the <c OMProperty> defined by
-    //          this <c OMPropertyDefinition>.
-  virtual const OMUniqueObjectIdentification& uniqueIdentification(void) const;
+    // @cmember The identification of the <c OMProperty> defined by this
+    //          <c OMBuiltinPropertyDefinition>.
+  virtual const OMUniqueObjectIdentification& identification(void) const;
 
     // @cmember The name of the <c OMProperty> defined by this
     //          <c OMBuiltinPropertyDefinition>.
   virtual const wchar_t* name(void) const;
 
+    // @cmember The description of the <c OMProperty> defined by this
+    //          <c OMBuiltinPropertyDefinition>.
+  virtual const wchar_t* description() const;
+  
     // @cmember The locally unique identification of the <c OMProperty>
     //          defined by this <c OMBuiltinPropertyDefinition>.
   virtual OMPropertyId localIdentification(void) const;
@@ -104,11 +109,18 @@ public:
     //          <c OMBuiltinPropertyDefinition> optional?
   virtual bool isOptional(void) const;
 
+    // @cmember Is the <c OMProperty> defined by this
+    //          <c OMPropertyDefinition> uniquely identify the class?
+  virtual bool isUniqueIdentifier(void) const;
+
+  
+
 private:
   // @access Private members.
 
   const OMType* _type;
   const wchar_t* _name;
+  const wchar_t* _description;
   const OMPropertyId _propertyId;
   const bool _isOptional;
 

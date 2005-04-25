@@ -28,8 +28,10 @@
 #include "OMClassFactory.h"
 #include "OMStorable.h"
 #include "OMRedBlackTree.h"
+#include "OMVector.h"
 
 class OMPropertyDefinition;
+class OMType;
 
   // @class Dictionary containing definitions of classes, properties and types.
   //        The dictionary is a factory for <c OMstorable> objects.
@@ -58,6 +60,10 @@ public:
   
   virtual bool registerTypeDef(const OMClassId& typeId) = 0;
 
+  virtual void classDefinitions(OMVector<OMClassDefinition*>& classDefs) const = 0;
+
+  virtual void typeDefinitions(OMVector<OMType*>& typeDefs) const = 0;
+  
 private:
 
   typedef OMRedBlackTree<OMPropertyId,
