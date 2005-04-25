@@ -31,6 +31,7 @@
 #include "OMRawStorage.h"
 #include "OMWString.h"
 #include "OMList.h"
+#include "OMListIterator.h"
 
 
 class OMXMLIStream;
