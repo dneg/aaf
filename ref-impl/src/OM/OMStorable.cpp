@@ -593,7 +593,7 @@ OMPropertyId OMStorable::destinationId(const OMStorable* destination,
 
   const OMPropertyDefinition* srcPropDef = property->definition();
   ASSERT("Valid property definition", srcPropDef != 0);
-  OMUniqueObjectIdentification id = srcPropDef->uniqueIdentification();
+  OMUniqueObjectIdentification id = srcPropDef->identification();
   const OMClassDefinition* dstClassDef = destination->definition();
   ASSERT("Valid class definition", dstClassDef != 0);
   const OMPropertyDefinition* dstPropDef = dstClassDef->propertyDefinition(id);
