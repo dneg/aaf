@@ -32,9 +32,11 @@
 #include "ImplAAFTypeDef.h"
 #endif
 
+#include "OMIntType.h"
+
 class ImplAAFPropertyValue;
 
-class ImplAAFTypeDefInt : public ImplAAFTypeDef
+class ImplAAFTypeDefInt : public ImplAAFTypeDef, public OMIntType
 {
 public:
   //
@@ -168,7 +170,16 @@ public:
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
 
+  
+  // overrides from OMMetaDefinition
+  virtual Category category(void) const { return INTEGER_TYPE; }
 
+  // overrides from OMIntType                           
+  virtual bool isSigned(void) const;
+  
+  virtual OMUInt8 size(void) const;
+
+  
 public:
 
   // overrides from ImplAAFTypeDef

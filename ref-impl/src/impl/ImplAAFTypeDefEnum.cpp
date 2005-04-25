@@ -1126,6 +1126,92 @@ void ImplAAFTypeDefEnum::internalize(const OMByte* externalBytes,
 }
 
 
+OMType* ImplAAFTypeDefEnum::elementType(void) const
+{
+    ImplAAFTypeDef* pTypeDef = 0;
+
+    HRESULT hr = GetElementType(&pTypeDef);
+    assert(AAFRESULT_SUCCEEDED(hr));
+    pTypeDef->ReleaseReference();
+    
+    return pTypeDef;
+}
+  
+OMUInt32 ImplAAFTypeDefEnum::elementCount(void) const
+{
+    return _ElementValues.count();
+}
+  
+wchar_t* ImplAAFTypeDefEnum::elementName(OMUInt32 index) const
+{
+    assert(index < _ElementValues.count());
+
+    // position charIndex at the first character in the string
+    wchar_t c;
+    size_t numChars = _ElementNames.count();
+    aafUInt32 stringNum = 0;
+    size_t charIndex = 0;
+    while (stringNum != index && charIndex < numChars)
+    {
+        _ElementNames.getValueAt(&c, charIndex);
+        if (c == 0)
+        {
+            stringNum++;
+        }
+        charIndex++;
+    }
+    assert(stringNum == index && charIndex < numChars);
+    size_t startIndex = charIndex;
+    
+    // position charIndex at the character after the null character in the string
+    do 
+    {
+        _ElementNames.getValueAt(&c, charIndex);
+        charIndex++;
+    }
+    while (c != 0 && charIndex < numChars);
+    assert(c == 0 && charIndex <= numChars);
+    
+    // create a copy of the string
+    wchar_t* result = new wchar_t[charIndex - startIndex];
+    wchar_t* resultPtr = result;
+    charIndex = startIndex;
+    do
+    {
+        _ElementNames.getValueAt(&c, charIndex);
+        *resultPtr = c;
+        resultPtr++;
+        charIndex++;
+    }
+    while (c != 0);
+    
+    return result;
+}
+  
+OMInt64 ImplAAFTypeDefEnum::elementValue(OMUInt32 index) const
+{
+    assert(index < _ElementValues.count());
+    
+	aafInt64 value;
+	_ElementValues.getValueAt(&value, index);
+
+    return value;
+}
+
+wchar_t* ImplAAFTypeDefEnum::elementNameFromValue(OMInt64 value) const
+{
+    ImplAAFTypeDefEnum* pNonConstThis = const_cast<ImplAAFTypeDefEnum*>(this);
+    
+    aafUInt32 len;
+    HRESULT hr = pNonConstThis->GetNameBufLenFromInteger(value, &len);
+    assert(AAFRESULT_SUCCEEDED(hr));
+    wchar_t* result = (wchar_t*)(new OMByte[len]);
+    hr = pNonConstThis->GetNameFromInteger(value, result, len);
+    assert(AAFRESULT_SUCCEEDED(hr));
+    
+    return result;
+}
+
 
 aafBool ImplAAFTypeDefEnum::IsFixedSize (void) const
 {

@@ -753,6 +753,95 @@ void ImplAAFTypeDefExtEnum::internalize(const OMByte* externalBytes,
 }
 
 
+OMUInt32 ImplAAFTypeDefExtEnum::elementCount(void) const
+{
+    return _ElementValues.count();
+}
+  
+wchar_t* ImplAAFTypeDefExtEnum::elementName(OMUInt32 index) const
+{
+    assert(index < _ElementValues.count());
+
+    // position charIndex at the first character in the string
+    wchar_t c;
+    size_t numChars = _ElementNames.count();
+    aafUInt32 stringNum = 0;
+    size_t charIndex = 0;
+    while (stringNum != index && charIndex < numChars)
+    {
+        _ElementNames.getValueAt(&c, charIndex);
+        if (c == 0)
+        {
+            stringNum++;
+        }
+        charIndex++;
+    }
+    assert(stringNum == index && charIndex < numChars);
+    size_t startIndex = charIndex;
+    
+    // position charIndex at the character after the null character in the string
+    do 
+    {
+        _ElementNames.getValueAt(&c, charIndex);
+        charIndex++;
+    }
+    while (c != 0 && charIndex < numChars);
+    assert(c == 0 && charIndex <= numChars);
+    
+    // create a copy of the string
+    wchar_t* result = new wchar_t[charIndex - startIndex];
+    wchar_t* resultPtr = result;
+    charIndex = startIndex;
+    do
+    {
+        _ElementNames.getValueAt(&c, charIndex);
+        *resultPtr = c;
+        resultPtr++;
+        charIndex++;
+    }
+    while (c != 0);
+    
+    return result;
+}
+  
+OMUniqueObjectIdentification ImplAAFTypeDefExtEnum::elementValue(OMUInt32 index) const
+{
+    assert(index < _ElementValues.count());
+    
+	aafUID_t value;
+	_ElementValues.getValueAt(&value, index);
+
+    return (*reinterpret_cast<const OMUniqueObjectIdentification*>(&value));
+}
+
+wchar_t* ImplAAFTypeDefExtEnum::elementNameFromValue(OMUniqueObjectIdentification value) const
+{
+    ImplAAFTypeDefExtEnum* pNonConstThis = const_cast<ImplAAFTypeDefExtEnum*>(this);
+    
+    aafUID_t valueI = (*reinterpret_cast<aafUID_t*>(&value));
+    aafUInt32 len;
+    HRESULT hr = pNonConstThis->GetNameBufLenFromAUID(valueI, &len);
+    assert(AAFRESULT_SUCCEEDED(hr));
+    wchar_t* result = (wchar_t*)(new OMByte[len]);
+    hr = pNonConstThis->GetNameFromAUID(valueI, result, len);
+    assert(AAFRESULT_SUCCEEDED(hr));
+    
+    return result;
+}
+
+bool ImplAAFTypeDefExtEnum::isValidValue(OMUniqueObjectIdentification value) const
+{
+    ImplAAFTypeDefExtEnum* pNonConstThis = const_cast<ImplAAFTypeDefExtEnum*>(this);
+    
+    aafUID_t valueI = (*reinterpret_cast<aafUID_t*>(&value));
+    aafUInt32 len;
+    HRESULT hr = pNonConstThis->GetNameBufLenFromAUID(valueI, &len);
+    
+    return AAFRESULT_SUCCEEDED(hr);
+}
+
+
+
 aafBool ImplAAFTypeDefExtEnum::IsFixedSize (void) const
 {
 	return kAAFTrue;

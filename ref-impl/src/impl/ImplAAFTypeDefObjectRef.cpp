@@ -41,6 +41,7 @@
 #include "OMAssertions.h"
 
 #include <string.h>
+#include <assert.h>
 
 
 ImplAAFTypeDefObjectRef::ImplAAFTypeDefObjectRef ()
@@ -165,6 +166,18 @@ bool ImplAAFTypeDefObjectRef::IsVariableArrayable () const
 bool ImplAAFTypeDefObjectRef::IsStringable () const
 { return false; }
 
+
+OMClassDefinition* ImplAAFTypeDefObjectRef::referencedClass(void) const
+{
+    ImplAAFTypeDefObjectRef* pNonConstThis = const_cast<ImplAAFTypeDefObjectRef*>(this);
+    
+    ImplAAFClassDef* pClassDef = 0;
+    HRESULT hr = pNonConstThis->GetObjectType(&pClassDef);
+    assert(AAFRESULT_SUCCEEDED(hr));
+    pClassDef->ReleaseReference();
+    
+    return pClassDef;
+}
 
 
 

@@ -139,14 +139,14 @@ public:
   //
   // Returns the OM pid (small integer) identifying this property
 
-  //
+  // overrides from OMMetaDefinition
+  virtual Category category(void) const { return PROPERTY; }
+
   // Overrides from OMPropertyDefinition
-  //
   const OMType* type(void) const;
-  const OMUniqueObjectIdentification& uniqueIdentification(void) const;
-  const wchar_t* name(void) const;
   OMPropertyId localIdentification(void) const;
   bool isOptional(void) const;
+  bool isUniqueIdentifier(void) const;
 
   // Allocates and returns an OMProperty which can represent this
   // property.  

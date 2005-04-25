@@ -545,6 +545,31 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+OMUniqueObjectIdentification ImplAAFTypeDefOpaque::actualTypeId(
+    const OMByte* externalBytes, size_t externalSize) const
+{
+    return ImplAAFTypeDefIndirect::actualTypeId(externalBytes, externalSize);
+}
+
+OMType* ImplAAFTypeDefOpaque::actualType(const OMByte* externalBytes, 
+    size_t externalSize) const
+{
+    assert(false);
+    return 0;
+}
+  
+OMByteOrder ImplAAFTypeDefOpaque::byteOrder(const OMByte* externalBytes,
+    size_t externalSize) const
+{
+    return ImplAAFTypeDefIndirect::byteOrder(externalBytes, externalSize);
+}
+
+void ImplAAFTypeDefOpaque::actualData(const OMByte* externalBytes, size_t externalSize,
+    const OMByte*& actualBytes, size_t& actualBytesSize) const
+{
+    ImplAAFTypeDefIndirect::actualData(externalBytes, externalSize, actualBytes, 
+        actualBytesSize);
+}
 
 
 

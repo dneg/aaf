@@ -114,8 +114,10 @@ public:
   OMStorable* create(const OMClassId& classId) const;
 
   // Override from OMDictionary
-  virtual bool registerClassDef(const OMClassId& classId);
-  virtual bool registerTypeDef(const OMClassId& typeId);
+  virtual bool registerClassDef(const OMUniqueObjectIdentification& classId);
+  virtual bool registerTypeDef(const OMUniqueObjectIdentification& typeId);
+  virtual void classDefinitions(OMVector<OMClassDefinition*>& classDefs) const;
+  virtual void typeDefinitions(OMVector<OMType*>& typeDefs) const;
 
   
   //

@@ -41,8 +41,10 @@ class ImplAAFPropertyValue;
 #include "ImplAAFTypeDef.h"
 #endif
 
+#include "OMCharacterType.h"
 
-class ImplAAFTypeDefCharacter : public ImplAAFTypeDef
+
+class ImplAAFTypeDefCharacter : public ImplAAFTypeDef, public OMCharacterType
 {
 public:
   //
@@ -130,6 +132,9 @@ public:
                            OMByteOrder byteOrder) const;
 
   
+  // overrides from OMMetaDefinition
+  virtual Category category(void) const { return CHARACTER_TYPE; }
+
   
   //
   // ImplAAFTypeDef methods

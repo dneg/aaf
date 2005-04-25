@@ -716,6 +716,53 @@ const OMPropertyDefinition* ImplAAFClassDef::propertyDefinition(
   return pDstPropertyDef;
 }
 
+bool ImplAAFClassDef::isConcrete(void) const
+{
+    return _IsConcrete == kAAFTrue;
+}
+  
+OMClassDefinition* ImplAAFClassDef::parentClass(void) const
+{
+    ImplAAFClassDef* pParentClassDef = 0;
+    
+    ImplAAFClassDef* nonConstThis = const_cast<ImplAAFClassDef*>(this);
+    
+    aafBoolean_t isRoot = kAAFFalse;
+    nonConstThis->IsRoot(&isRoot);
+    if (isRoot == kAAFFalse)
+    {
+        HRESULT hr = nonConstThis->GetParent(&pParentClassDef);
+        if (AAFRESULT_SUCCESS == hr)
+        {
+            // This method does not increment the reference count
+            // of the returned class definition.
+            pParentClassDef->ReleaseReference();
+        }
+        else
+        {
+            pParentClassDef = 0;
+        }
+    }
+    
+    return pParentClassDef;
+}
+
+void ImplAAFClassDef::propertyDefinitions(OMVector<OMPropertyDefinition*>& propertyDefs) const
+{
+    if (_Properties.count() > 0)
+    {
+        OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFPropertyDef> 
+            iter(_Properties);
+        propertyDefs.grow(iter.count());
+        while(++iter)
+        {
+            propertyDefs.append(iter.value());
+        }
+    }
+}
+
+
+
 // Find the unique identifier property defintion for this class or any parent class
 // (RECURSIVE)
 ImplAAFPropertyDef * ImplAAFClassDef::pvtGetUniqueIdentifier(void) // result is NOT reference counted.

@@ -201,6 +201,10 @@ public:
     GetUniqueIdentifier
         (ImplAAFPropertyDef ** ppUniqueIdentifier);
 
+  // overrides from OMMetaDefinition
+  virtual Category category(void) const { return CLASS; }
+
+  // Overrides from OMClassDefinition
   const OMPropertyDefinition* propertyDefinition(
                                  const OMUniqueObjectIdentification& id) const;
 
@@ -208,6 +212,12 @@ public:
 			     const OMStorable* pDstStorable,
 				 const OMPropertyDefinition* pSrcPropertyDef );
 
+  virtual bool isConcrete(void) const;
+  
+  virtual OMClassDefinition* parentClass(void) const;
+
+  virtual void propertyDefinitions(OMVector<OMPropertyDefinition*>& propertyDefs) const;
+  
 public:
 
 	bool

@@ -343,6 +343,11 @@ OMType* ImplAAFTypeDefFixedArray::elementType(void) const
   return result;
 }
 
+OMUInt32 ImplAAFTypeDefFixedArray::elementCount(void) const
+{
+    return _ElementCount;
+}
+
 aafBool ImplAAFTypeDefFixedArray::IsFixedSize (void) const
 {
   return BaseType()->IsFixedSize();
@@ -490,12 +495,6 @@ void ImplAAFTypeDefFixedArray::onSave(void* clientContext) const
 void ImplAAFTypeDefFixedArray::onRestore(void* clientContext) const
 {
   ImplAAFTypeDefArray::onRestore(clientContext);
-}
-
-
-const OMPropertyId* ImplAAFTypeDefFixedArray::getTargetPath() const
-{
-    return elementType()->getTargetPath();
 }
 
 

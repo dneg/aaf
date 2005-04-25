@@ -261,6 +261,16 @@ void ImplAAFTypeDefRename::internalize(const OMByte* externalBytes,
 }
 
 
+OMType* ImplAAFTypeDefRename::renamedType(void) const
+{
+    ImplAAFTypeDef* pRenamedTypeDef = 0;
+    HRESULT hr = GetBaseType(&pRenamedTypeDef);
+    assert(AAFRESULT_SUCCEEDED(hr));
+    pRenamedTypeDef->ReleaseReference();
+    
+    return pRenamedTypeDef;
+}
+
 
 aafBool ImplAAFTypeDefRename::IsFixedSize() const
 {

@@ -35,11 +35,12 @@
 #endif
 
 #include "OMWeakRefProperty.h"
+#include "OMRenamedType.h"
 
 class ImplAAFPropertyValue;
 
 
-class ImplAAFTypeDefRename : public ImplAAFTypeDef
+class ImplAAFTypeDefRename : public ImplAAFTypeDef, public OMRenamedType
 {
 public:
   //
@@ -127,6 +128,13 @@ public:
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
 
+                           
+  // overrides from OMMetaDefinition
+  virtual Category category(void) const { return RENAMED_TYPE; }
+
+  // overrides from OMRenamedType
+  virtual OMType* renamedType(void) const;
+  
 
   // overrides from ImplAAFTypeDef
   //

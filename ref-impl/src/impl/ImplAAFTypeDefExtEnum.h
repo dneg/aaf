@@ -36,9 +36,9 @@ class ImplAAFPropertyValue;
 
 #include "AAFUtils.h"
 #include "OMArrayProperty.h"
+#include "OMExtEnumeratedType.h"
 
-
-class ImplAAFTypeDefExtEnum : public ImplAAFTypeDef
+class ImplAAFTypeDefExtEnum : public ImplAAFTypeDef, public OMExtEnumeratedType
 {
 public:
 	//
@@ -238,7 +238,23 @@ public:
 		GetElementName (aafUInt32 index,
 		wchar_t * pName,
 		aafUInt32  bufSize);
-	
+
+        
+    // overrides from OMMetaDefinition
+    virtual Category category(void) const { return EXT_ENUMERATED_TYPE; }
+
+    // overrides from OMExtEnumeratedType
+    virtual OMUInt32 elementCount(void) const;
+
+    virtual wchar_t* elementName(OMUInt32 index) const;
+  
+    virtual OMUniqueObjectIdentification elementValue(OMUInt32 index) const;
+
+    virtual wchar_t* elementNameFromValue(OMUniqueObjectIdentification value) const;
+
+    virtual bool isValidValue(OMUniqueObjectIdentification value) const;
+    
+        
 private:
 	// names of elements in this record; stored as single wchar_t array
 	// with embedded nulls

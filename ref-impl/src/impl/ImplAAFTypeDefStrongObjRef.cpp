@@ -442,6 +442,7 @@ OMProperty * ImplAAFTypeDefStrongObjRef::pvtCreateOMProperty
 
 
 
+
 // override from OMStorable.
 const OMClassId& ImplAAFTypeDefStrongObjRef::classId(void) const
 {

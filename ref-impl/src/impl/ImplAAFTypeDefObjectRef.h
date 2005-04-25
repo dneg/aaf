@@ -42,7 +42,10 @@ class ImplAAFClassDef;
 #endif
 
 
-class ImplAAFTypeDefObjectRef : public ImplAAFTypeDef
+#include "OMObjectReferenceType.h"
+
+
+class ImplAAFTypeDefObjectRef : public ImplAAFTypeDef, virtual public OMObjectReferenceType
 {
 public:
   //
@@ -138,6 +141,9 @@ public:
   virtual bool IsFixedArrayable () const;
   virtual bool IsVariableArrayable () const;
   virtual bool IsStringable () const;
+
+  // overrides from OMObjectReferenceType
+  OMClassDefinition* referencedClass(void) const;
 
   // Override callbacks from OMStorable
   virtual void onSave(void* clientContext) const;

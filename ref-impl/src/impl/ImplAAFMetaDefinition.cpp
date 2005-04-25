@@ -433,6 +433,11 @@ const wchar_t* ImplAAFMetaDefinition::name(void) const
   return _name;
 }
 
+const wchar_t* ImplAAFMetaDefinition::description(void) const
+{
+    return _description;
+}
+
 // Private method to install the AAFObjectModel definition associated with
 // this meta definition.
 AAFRESULT ImplAAFMetaDefinition::SetIdentification(aafUID_constref identification)

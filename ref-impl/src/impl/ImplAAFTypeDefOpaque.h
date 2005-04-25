@@ -32,10 +32,12 @@
 #include "ImplAAFTypeDefIndirect.h"
 #endif
 
+#include "OMOpaqueType.h"
+
 class ImplAAFPropertyValue;
 
 
-class ImplAAFTypeDefOpaque : public ImplAAFTypeDefIndirect
+class ImplAAFTypeDefOpaque : public ImplAAFTypeDefIndirect, public OMOpaqueType
 {
 public:
   //
@@ -142,7 +144,21 @@ public:
        ImplAAFDictionary *pDictionary);
 
 
+  // overrides from OMMetaDefinition
+  virtual Category category(void) const { return OPAQUE_TYPE; }
 
+  // overrides from OMIndirectType
+  virtual OMUniqueObjectIdentification actualTypeId(const OMByte* externalBytes, 
+      size_t externalSize) const;
+  
+  virtual OMType* actualType(const OMByte* externalBytes, size_t externalSize) const;
+  
+  virtual OMByteOrder byteOrder(const OMByte* externalBytes, size_t externalSize) const;
+
+  virtual void actualData(const OMByte* externalBytes, size_t externalSize,
+    const OMByte*& actualBytes, size_t& actualBytesSize) const;
+
+  
   // override from OMStorable.
   virtual const OMClassId& classId(void) const;
 

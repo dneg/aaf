@@ -32,15 +32,13 @@
 #include "ImplAAFMetaDefinition.h"
 #endif
 
-#ifndef OMTYPE_H
 #include "OMType.h"
-#endif
 
 
 
 class ImplAAFPropertyValue;
 
-class ImplAAFTypeDef : public ImplAAFMetaDefinition, public OMType
+class ImplAAFTypeDef : public ImplAAFMetaDefinition, virtual public OMType
 {
 public:
   //
@@ -134,6 +132,10 @@ public:
                            OMByte* internalBytes,
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
+
+  
+  // overrides from OMMetaDefinition
+  virtual Category category(void) const { return TYPE; }
 
   // Allocate an OMProperty that can represent this type.  Implemented
   // by derived classes.

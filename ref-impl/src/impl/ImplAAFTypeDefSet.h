@@ -238,8 +238,8 @@ public:
   virtual void onRestore(void* clientContext) const;
 
 
-  // PdN: temporary; override from OMType
-  virtual const OMPropertyId* getTargetPath() const;
+  // overrides from OMMetaDefinition
+  virtual Category category(void) const { return SET_TYPE; }
 
   
   // Method is called after class has been added to MetaDictionary.

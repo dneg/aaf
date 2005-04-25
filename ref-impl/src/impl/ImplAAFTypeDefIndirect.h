@@ -34,6 +34,8 @@
 #endif
 
 
+#include "OMIndirectType.h"
+
 
 // Forward declarations:
 class ImplAAFPropertyValue;
@@ -42,7 +44,7 @@ class ImplAAFDictioanry;
 
 
 
-class ImplAAFTypeDefIndirect : public ImplAAFTypeDef
+class ImplAAFTypeDefIndirect : public ImplAAFTypeDef, public OMIndirectType
 {
 public:
   //
@@ -170,6 +172,20 @@ public:
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
 
+  // overrides from OMMetaDefinition
+  virtual Category category(void) const { return INDIRECT_TYPE; }
+
+  // overrides from OMIndirectType
+  virtual OMUniqueObjectIdentification actualTypeId(const OMByte* externalBytes, 
+      size_t externalSize) const;
+  
+  virtual OMType* actualType(const OMByte* externalBytes, size_t externalSize) const;
+  
+  virtual OMByteOrder byteOrder(const OMByte* externalBytes, size_t externalSize) const;
+
+  virtual void actualData(const OMByte* externalBytes, size_t externalSize,
+    const OMByte*& actualBytes, size_t& actualBytesSize) const;
+  
 
   //****************
   // Initialize() 

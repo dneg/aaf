@@ -35,8 +35,9 @@ class ImplAAFPropertyValue;
 
 #include "OMWeakRefVectorProperty.h"
 #include "OMWeakRefProperty.h"
+#include "OMStringType.h"
 
-class ImplAAFTypeDefString : public ImplAAFTypeDef
+class ImplAAFTypeDefString : public ImplAAFTypeDef, public OMStringType
 {
 public:
   //
@@ -180,6 +181,13 @@ public:
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
 
+                           
+  // overrides from OMMetaDefinition
+  virtual Category category(void) const { return STRING_TYPE; }
+
+  // overrides from OMStringType
+  virtual OMType* elementType(void) const;
+  
 
   //****************
   // pvtInitialize()

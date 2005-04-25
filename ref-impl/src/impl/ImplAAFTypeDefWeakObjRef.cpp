@@ -775,6 +775,22 @@ OMProperty * ImplAAFTypeDefWeakObjRef::pvtCreateOMProperty
 }
 
 
+void ImplAAFTypeDefWeakObjRef::targetSet(OMVector<OMUniqueObjectIdentification>& result) const
+{
+    for (size_t i=0; i<_targetSet.count(); i++)
+    {
+        aafUID_t value;
+        _targetSet.getValueAt(&value, i);
+        result.insert((*reinterpret_cast<const OMUniqueObjectIdentification*>(&value)));
+    }
+}
+
+const OMPropertyId* ImplAAFTypeDefWeakObjRef::targetPath(void) const
+{
+    return GetTargetPids();
+}
+
+
 
 
 
@@ -811,10 +827,5 @@ HRESULT ImplAAFTypeDefWeakObjRef::CompleteClassRegistration(void)
   return rc;
 }
 
-
-const OMPropertyId* ImplAAFTypeDefWeakObjRef::getTargetPath() const
-{
-    return GetTargetPids();
-}
 
 

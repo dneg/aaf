@@ -38,8 +38,10 @@ class ImplAAFClassDef;
 
 #include "OMWeakRefVectorProperty.h"
 #include "OMWeakRefProperty.h"
+#include "OMStrongObjectReferenceType.h"
 
-class ImplAAFTypeDefStrongObjRef : public ImplAAFTypeDefObjectRef
+
+class ImplAAFTypeDefStrongObjRef : public ImplAAFTypeDefObjectRef, public OMStrongObjectReferenceType
 {
 public:
   //
@@ -118,7 +120,8 @@ public:
     CreatePropertyValue(OMProperty *property, 
                         ImplAAFPropertyValue ** pPropertyValue) const;
 
-
+  // overrides from OMMetaDefinition
+  virtual Category category(void) const { return STRONG_REF_TYPE; }
 
   // override from OMStorable.
   virtual const OMClassId& classId(void) const;

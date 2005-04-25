@@ -32,10 +32,11 @@ class ImplAAFPropertyValue;
 #endif
 
 #include "OMWeakRefProperty.h"
+#include "OMVariableArrayType.h"
 
 class ImplEnumAAFPropertyValues;
 
-class ImplAAFTypeDefVariableArray : public ImplAAFTypeDefArray
+class ImplAAFTypeDefVariableArray : public ImplAAFTypeDefArray, public OMVariableArrayType
 {
 public:
   //
@@ -148,6 +149,10 @@ public:
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
 
+  // overrides from OMMetaDefinition
+  virtual Category category(void) const { return VARIABLE_ARRAY_TYPE; }
+
+  // overrides from OMArrayType
   virtual OMType* elementType(void) const;
 
 
@@ -243,9 +248,6 @@ public:
   // Override callbacks from OMStorable
   virtual void onSave(void* clientContext) const;
   virtual void onRestore(void* clientContext) const;
-
-  // PdN: temporary; override from OMType
-  virtual const OMPropertyId* getTargetPath() const;
 
 private:
    OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;

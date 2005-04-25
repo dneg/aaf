@@ -31,10 +31,11 @@
 
 #include "OMWeakRefVectorProperty.h"
 #include "OMWeakRefProperty.h"
+#include "OMFixedArrayType.h"
 
 class ImplEnumAAFPropertyValues;
 
-class ImplAAFTypeDefFixedArray : public ImplAAFTypeDefArray
+class ImplAAFTypeDefFixedArray : public ImplAAFTypeDefArray, public OMFixedArrayType
 {
 public:
   //
@@ -141,8 +142,16 @@ public:
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
 
+  // overrides from OMMetaDefinition
+  virtual Category category(void) const { return FIXED_ARRAY_TYPE; }
+
+  // overrides from OMArrayType
   virtual OMType* elementType(void) const;
 
+  // overrides from OMFixedArrayType
+  virtual OMUInt32 elementCount(void) const;
+  
+  
   //****************
   // pvtInitialize()
   //
@@ -204,9 +213,6 @@ public:
   virtual void onSave(void* clientContext) const;
   virtual void onRestore(void* clientContext) const;
 
-  
-  // PdN: temporary; override from OMType
-  virtual const OMPropertyId* getTargetPath() const;
 
 private:
   ImplAAFTypeDefSP BaseType (void) const;

@@ -603,6 +603,17 @@ void ImplAAFTypeDefString::internalize(const OMByte* externalBytes,
 }
 
 
+OMType* ImplAAFTypeDefString::elementType(void) const
+{
+    ImplAAFTypeDef* pElementTypeDef = 0;
+    HRESULT hr = GetType(&pElementTypeDef);
+    assert(AAFRESULT_SUCCEEDED(hr));
+    pElementTypeDef->ReleaseReference();
+    
+    return pElementTypeDef;
+}
+
+
 aafBool ImplAAFTypeDefString::IsFixedSize (void) const
 {
   return kAAFFalse;

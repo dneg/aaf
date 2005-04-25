@@ -635,6 +635,16 @@ void ImplAAFTypeDefInt::internalize(const OMByte* externalBytes,
 	}
 }
 
+bool ImplAAFTypeDefInt::isSigned(void) const
+{
+    return _isSigned == kAAFTrue;
+}
+  
+OMUInt8 ImplAAFTypeDefInt::size(void) const
+{
+    return _size;
+}
+
 
 aafBool ImplAAFTypeDefInt::IsFixedSize (void) const
 {

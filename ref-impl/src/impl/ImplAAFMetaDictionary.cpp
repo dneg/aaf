@@ -240,8 +240,7 @@ OMStorable* ImplAAFMetaDictionary::create(const OMClassId& classId) const
 }
 
 
-bool  
-ImplAAFMetaDictionary::registerClassDef(const OMClassId& classId)
+bool ImplAAFMetaDictionary::registerClassDef(const OMUniqueObjectIdentification& classId)
 {
     const aafUID_t* auid = reinterpret_cast<const aafUID_t*>(&classId);
     ImplAAFClassDefSP pClassDef;
@@ -249,13 +248,40 @@ ImplAAFMetaDictionary::registerClassDef(const OMClassId& classId)
     return AAFRESULT_SUCCEEDED(hr);
 }
 
-bool 
-ImplAAFMetaDictionary::registerTypeDef(const OMClassId& typeId)
+bool ImplAAFMetaDictionary::registerTypeDef(const OMUniqueObjectIdentification& typeId)
 {
     const aafUID_t* auid = reinterpret_cast<const aafUID_t*>(&typeId);
     ImplAAFTypeDefSP pTypeDef;
     AAFRESULT hr = dataDictionary()->LookupTypeDef(*auid, &pTypeDef);
     return AAFRESULT_SUCCEEDED(hr);
+}
+
+void ImplAAFMetaDictionary::classDefinitions(OMVector<OMClassDefinition*>& classDefs) const
+{
+    if (_classDefinitions.count() > 0)
+    {
+        OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef> 
+            iter(_classDefinitions);
+        classDefs.grow(iter.count());
+        while(++iter)
+        {
+            classDefs.append(iter.value());
+        }
+    }
+}
+
+void ImplAAFMetaDictionary::typeDefinitions(OMVector<OMType*>& typeDefs) const
+{
+    if (_typeDefinitions.count() > 0)
+    {
+        OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTypeDef> 
+            iter(_typeDefinitions);
+        typeDefs.grow(iter.count());
+        while(++iter)
+        {
+            typeDefs.append(iter.value());
+        }
+    }
 }
 
 

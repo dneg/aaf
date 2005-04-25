@@ -37,12 +37,13 @@
 #include "ImplAAFTypeDef.h"
 #endif
 
+#include "OMStreamType.h"
 
 class ImplAAFPropertyValue;
 class ImplAAFStreamPropertyValue;
 
 
-class ImplAAFTypeDefStream : public ImplAAFTypeDef
+class ImplAAFTypeDefStream : public ImplAAFTypeDef, public OMStreamType
 {
 public:
   //
@@ -358,6 +359,9 @@ public:
   virtual bool IsVariableArrayable () const;
   virtual bool IsStringable () const;
 
+
+  // overrides from OMMetaDefinition
+  virtual Category category(void) const { return STREAM_TYPE; }
 
   // override from OMStorable.
   virtual const OMClassId& classId(void) const;

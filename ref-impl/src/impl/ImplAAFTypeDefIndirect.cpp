@@ -1313,6 +1313,84 @@ void ImplAAFTypeDefIndirect::internalize(
 }
 
 
+OMUniqueObjectIdentification ImplAAFTypeDefIndirect::actualTypeId(
+    const OMByte* externalBytes, size_t externalSize) const
+{
+    TRACE("ImplAAFTypeDefIndirect::actualTypeId");
+    PRECONDITION("Object has been initialized", _initialized);
+    PRECONDITION("Valid external bytes", externalBytes != 0);
+    PRECONDITION("Valid external size", externalSize > 0);
+    PRECONDITION("External byte size is large enough for id and byte order", 
+        externalSize >= _externalIndirectSize);
+
+    OMByteOrder originalByteOrder = byteOrder(externalBytes, externalSize);
+    
+    if (originalByteOrder != hostByteOrder())
+    {
+	    _typeDefAUID->reorder((OMByte*)&externalBytes[sizeof(originalByteOrder)], _externalAUIDSize);
+    }
+
+    aafUID_t actualTypeID;
+    _typeDefAUID->internalize((OMByte*)&externalBytes[sizeof(originalByteOrder)], _externalAUIDSize,
+        (OMByte*)&actualTypeID, sizeof(actualTypeID), hostByteOrder());
+
+    if (originalByteOrder != hostByteOrder())
+    {
+        _typeDefAUID->reorder((OMByte*)&externalBytes[sizeof(originalByteOrder)], _externalAUIDSize);
+    }
+    
+    return *(reinterpret_cast<OMUniqueObjectIdentification*>(&actualTypeID));
+}
+  
+OMType* ImplAAFTypeDefIndirect::actualType(const OMByte* externalBytes, 
+    size_t externalSize) const
+{
+    TRACE("ImplAAFTypeDefIndirect::actualType");
+    PRECONDITION("Object has been initialized", _initialized);
+    PRECONDITION("Valid external bytes", externalBytes != 0);
+    PRECONDITION("Valid external size", externalSize > 0);
+    PRECONDITION("External byte size is large enough for id and byte order", 
+        externalSize >= _externalIndirectSize);
+    
+    OMUniqueObjectIdentification actualTypeID = actualTypeId(externalBytes, 
+        externalSize);
+
+    ImplAAFTypeDef* pActualType;
+    HRESULT hr = LookupActualType(*(reinterpret_cast<aafUID_t*>(&actualTypeID)), 
+        &pActualType);
+    assert(AAFRESULT_SUCCEEDED(hr));
+    pActualType->ReleaseReference();
+    
+    return pActualType;    
+}
+  
+OMByteOrder ImplAAFTypeDefIndirect::byteOrder(const OMByte* externalBytes,
+    size_t externalSize) const
+{
+    TRACE("ImplAAFTypeDefIndirect::byteOrder");
+    PRECONDITION("Object has been initialized", _initialized);
+    PRECONDITION("Valid external bytes", externalBytes != 0);
+    PRECONDITION("Valid external size", externalSize > 0);
+    PRECONDITION("External byte size is large enough for id and byte order", 
+        externalSize >= _externalIndirectSize);
+    
+    OMByteOrder originalByteOrder = 0;
+    copy(&externalBytes[0], (OMByte*)&originalByteOrder, sizeof(originalByteOrder));
+    ASSERT("Valid byte order",
+        (originalByteOrder == littleEndian) || (originalByteOrder == bigEndian));
+    return originalByteOrder;
+}
+
+void ImplAAFTypeDefIndirect::actualData(const OMByte* externalBytes, 
+    size_t externalSize, const OMByte*& actualBytes, size_t& actualBytesSize) const
+{
+    TRACE("ImplAAFTypeDefIndirect::actualData");
+    PRECONDITION("Object has been initialized", _initialized);
+    PRECONDITION("Valid external bytes", externalBytes != 0);
+    
+    actualBytes = (const OMByte*)&externalBytes[sizeof(OMByteOrder) + _externalAUIDSize];
+    actualBytesSize = externalSize - (sizeof(OMByteOrder) + _externalAUIDSize);
+}
 
 
 

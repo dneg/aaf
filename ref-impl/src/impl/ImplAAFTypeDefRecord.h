@@ -36,8 +36,10 @@ class ImplEnumAAFPropertyValues;
 #endif
 
 #include "OMWeakRefVectorProperty.h"
+#include "OMRecordType.h"
 
-class ImplAAFTypeDefRecord : public ImplAAFTypeDef
+
+class ImplAAFTypeDefRecord : public ImplAAFTypeDef, public OMRecordType
 {
 public:
   //
@@ -269,6 +271,17 @@ public:
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
 
+
+  // overrides from OMMetaDefinition
+  virtual Category category(void) const { return RECORD_TYPE; }
+
+  // overrides from OMRecordType
+  virtual OMUInt32 memberCount(void) const;
+  
+  virtual wchar_t* memberName(OMUInt32 index) const;
+  
+  virtual OMType* memberType(OMUInt32 index) const;
+  
 
   //****************
   // pvtInitialize()

@@ -38,9 +38,10 @@ class ImplAAFClassDef;
 #include "AAFUtils.h"
 #include "OMWeakRefProperty.h"
 #include "OMArrayProperty.h"
+#include "OMWeakObjectReferenceType.h"
 
 
-class ImplAAFTypeDefWeakObjRef : public ImplAAFTypeDefObjectRef 
+class ImplAAFTypeDefWeakObjRef : public ImplAAFTypeDefObjectRef, public OMWeakObjectReferenceType 
 {
 public:
   //
@@ -140,6 +141,13 @@ public:
                         ImplAAFPropertyValue ** pPropertyValue) const;
 
 
+  // overrides from OMMetaDefinition
+  virtual Category category(void) const { return WEAK_REF_TYPE; }
+
+  // overrides from OMWeakObjectReferenceType
+  virtual void targetSet(OMVector<OMUniqueObjectIdentification>& result) const;
+  virtual const OMPropertyId* targetPath(void) const;
+  
   // override from OMStorable.
   virtual const OMClassId& classId(void) const;
 
@@ -151,9 +159,6 @@ public:
   // If this method fails the class is removed from the MetaDictionary and the
   // registration method will fail.
   virtual HRESULT CompleteClassRegistration(void);
-
-  // PdN: temporary; override from OMType
-  virtual const OMPropertyId* getTargetPath() const;
 
 private:
   // Persistent member properties
