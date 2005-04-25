@@ -108,9 +108,10 @@ bool OMDictionary::contains(const OMPropertyId propertyId)
 struct _properties_t {
   OMPropertyId _pid;
   wchar_t* _name;
+  wchar_t* _description;
 } _properties[] = {
-  {0x0001, L"MetaDictionary"},
-  {0x0002, L"Header"}
+  {0x0001, L"MetaDictionary", L""},
+  {0x0002, L"Header", L""}
 };
 
 void OMDictionary::initialize(void)
@@ -125,6 +126,7 @@ void OMDictionary::initialize(void)
     OMPropertyDefinition* d =
       new OMBuiltinPropertyDefinition (0,
                                        _properties[i]._name,
+                                       _properties[i]._description,
                                        _properties[i]._pid,
                                        false);
     ASSERT("Valid heap pointer", d != 0);
