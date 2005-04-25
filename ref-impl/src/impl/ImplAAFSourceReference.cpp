@@ -124,7 +124,7 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_BAD_SIZE;
   }
 
-  _channelIDs.setValue(pChannelIDs, numberElements);
+  _channelIDs.setValue(pChannelIDs, numberElements * sizeof(*pChannelIDs));
   
   return AAFRESULT_SUCCESS;
 }
@@ -144,11 +144,11 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_PROP_NOT_PRESENT;
   }
 
-  if ( _channelIDs.size() > numberElements ) {
+  if ( _channelIDs.size() > (numberElements * sizeof(*pChannelIDs)) ) {
     return AAFRESULT_SMALLBUF;
   }
 
-  _channelIDs.copyToBuffer( pChannelIDs, numberElements );
+  _channelIDs.copyToBuffer( pChannelIDs, numberElements * sizeof(*pChannelIDs));
   
   return AAFRESULT_SUCCESS;
 }
@@ -156,17 +156,17 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceReference::GetChannelIDsSize (
-      aafUInt32 *  pNumberElements)
+      aafUInt32 *  pSize)
 {
-  if ( NULL == pNumberElements ) {
+  if ( NULL == pSize ) {
     return AAFRESULT_NULL_PARAM;
   }
 
   if( !_channelIDs.isPresent() ) {
-    *pNumberElements = 0;
+    *pSize = 0;
   }
   else {
-    *pNumberElements = _channelIDs.size();
+    *pSize = _channelIDs.size();
   }
 
   return AAFRESULT_SUCCESS;
@@ -185,7 +185,7 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_BAD_SIZE;
   }
 
-  _monoSourceSlotIDs.setValue(pMonoSourceSlotIDs, numberElements);
+  _monoSourceSlotIDs.setValue(pMonoSourceSlotIDs, numberElements * sizeof(*pMonoSourceSlotIDs));
   
   return AAFRESULT_SUCCESS;
 }
@@ -203,11 +203,11 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_PROP_NOT_PRESENT;
   }
 
-  if ( _monoSourceSlotIDs.size() > numberElements ) {
+  if ( _monoSourceSlotIDs.size() > (numberElements * sizeof(*pMonoSourceSlotIDs)) ) {
     return AAFRESULT_SMALLBUF;
   }
 
-  _monoSourceSlotIDs.copyToBuffer( pMonoSourceSlotIDs, numberElements );
+  _monoSourceSlotIDs.copyToBuffer( pMonoSourceSlotIDs, numberElements * sizeof(*pMonoSourceSlotIDs));
 
 
   return AAFRESULT_SUCCESS;
@@ -216,17 +216,17 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceReference::GetMonoSourceSlotIDsSize (
-      aafUInt32 *  pNumberElements )
+      aafUInt32 *  pSize )
 {
-  if ( NULL == pNumberElements) {
+  if ( NULL == pSize) {
     return AAFRESULT_NULL_PARAM;
   }
 
   if( !_monoSourceSlotIDs.isPresent() ) {
-    *pNumberElements = 0;
+    *pSize = 0;
   }
   else {
-    *pNumberElements = _monoSourceSlotIDs.size();
+    *pSize = _monoSourceSlotIDs.size();
   }
 
   return AAFRESULT_SUCCESS;
