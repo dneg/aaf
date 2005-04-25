@@ -169,3 +169,26 @@ void OMType::copy(const OMByte* inputBytes,
 
   memcpy(op, ip, bytesSize);
 }
+
+
+const OMUniqueObjectIdentification& OMInternalType::identification() const
+{
+  TRACE("OMInternalType::identification");
+  ASSERT("Internal type not asked for identification", false);
+  return nullOMUniqueObjectIdentification;
+}
+
+const wchar_t* OMInternalType::name() const
+{
+  TRACE("OMInternalType::name");
+  ASSERT("Internal type not asked for name", false);
+  return 0;
+}
+
+const wchar_t* OMInternalType::description() const
+{
+  TRACE("OMInternalType::description");
+  ASSERT("Internal type not asked for description", false);
+  return 0;
+}
+
