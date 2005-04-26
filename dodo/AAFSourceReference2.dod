@@ -218,16 +218,17 @@ AD_XMETHOD1(GetChannelIDsSize,
 		[out],
 		objPass,
 		aafUInt32 *,
-		numberElements,
-		Number of elements in the pChannelIDs array,
+		pSize,
+		required buffer size to hold the ChannelIDs array,
 
-/// Get the number of channel IDs stored by this SourceReference.
+/// Returns the size in bytes of the buffer required to hold the array
+/// returned by GetChannelIDs\(\).
 ///
 /// AAFRESULT_SUCCESS
 ///   - succeeded
 ///
 /// AAFRESULT_NULL_PARAM
-///   - pChannelIDs is null)
+///   - pSize is null)
 
 AD_XMETHOD2(SetMonoSourceSlotIDs,
 		[in],
@@ -287,15 +288,16 @@ AD_XMETHOD1(GetMonoSourceSlotIDsSize,
 		[out],
 		objPass,
 		aafUInt32 *,
-		numberElements,
-		Number of elements in the pMonoSourceSlotIDs array,
+		pSize,
+		required buffer size to hold the MonoSourceSlotIDs array,
 
-/// Get the number of mono slot IDs stored by this SourceReference.
+/// Returns the size in bytes of the buffer required to hold the array
+/// returned by GetMonoSourceSlotIDs\(\).
 ///
 /// AAFRESULT_SUCCESS
 ///   - succeeded
 ///
 /// AAFRESULT_NULL_PARAM
-///   - pMonoSourceSlotIDs is null)
+///   - pSize is null)
 
 AD_XCLASS_END(Abstract, StoredObject)
