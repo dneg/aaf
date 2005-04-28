@@ -9,6 +9,10 @@ Getting Started
     - Build the "Everything" project
       (a Debug or Release build type can be selected)
 
+    - Client application builds should point their library & include paths to:
+        AAFWinSDK/include/
+        AAFWinSDK/lib/
+
 (b) Using GNU make
     - To build the library, tests and all the examples and utilities run
         make everything
@@ -17,15 +21,23 @@ Getting Started
         make check
 
     - To build a release version (instead of the default debug version)
-        make AAFTARGET=Release
+        make AAFTARGET=Release <target>
 
     - To build a static library and statically linked examples and utilities
-        make AAFTARGET=Debug-static
+        make AAFTARGET=Debug-static <target>
 
     - To build the SDK to use the libgsf Structured Storage library
-        make LIBGSF_PATH=/usr/local
+        make LIBGSF_PATH=/usr/local <target>
       (the prefix of your libgsf and glib libraries & includes may differ)
 
+    - The "install" target is the minimum needed to build and install the
+      library and header files for client development.  Client application
+      builds should point their library and include paths to the following
+      (the AAF*SDK/ directory will vary by platform):
+        AAFi686LinuxSDK/g++/include/              # all builds
+        AAFi686LinuxSDK/g++/lib/debug/            # Debug libs
+        AAFi686LinuxSDK/g++/lib/                  # Release libs
+      
 Examples
 ---------
 To run an example the SDK dynamic library (AAFCOAPI.dll for WIN32,
@@ -45,10 +57,10 @@ dynamic library search path.
 
     - run InfoDumper to inspect an AAF file
         env LD_LIBRARY_PATH=AAFi686LinuxSDK/g++/bin/debug AAFi686LinuxSDK/g++/bin/debug/InfoDumper test/com/ComModTestAAF/EssenceAccessCDCI_DV.aaf
-        (the platform specific paths may differ on your platform)
+        (the platform specific paths <AAF*SDK> will vary by platform)
 
 Further information
-----=---------------
+--------------------
 API documentation and the AAF SDK FAQ are available from the AAF SDK home page
   http://aaf.sourceforge.net/
 
