@@ -292,8 +292,16 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
     // We can't really do anthing in AAF without the header.
   	checkResult(pFile->GetHeader(&pHeader));
 
-		checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
-		checkExpression (1 == numMobs, AAFRESULT_TEST_FAILED);
+	// Check mandatory Header properties are sane
+	aafTimeStamp_t ts;
+	checkResult(pHeader->GetLastModified(&ts));
+	checkExpression(			// YYYY-MM-DD should not be 0000-00-00
+		!( ts.date.year == 0 && ts.date.month == 0 && ts.date.day == 0),
+		AAFRESULT_TEST_FAILED);
+
+	// Check written mobs preserved
+	checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
+	checkExpression (1 == numMobs, AAFRESULT_TEST_FAILED);
 
     checkResult(pHeader->GetMobs (NULL, &mobIter));
     for(n = 0; n < numMobs; n++)
