@@ -1182,6 +1182,10 @@ ImplAAFFile::Save ()
 	  aafUID_t latestGen;
 	  hr = pLatestIdent->GetGenerationID (&latestGen);
 	  if (AAFRESULT_FAILED (hr)) return hr;
+
+	  // Record the fact that this file was modified
+	  _head->SetModified();
+
 	  _file->saveFile(&latestGen);
 
 	  dictSP->SetEnableDefRegistration (regWasEnabled);
@@ -1189,10 +1193,6 @@ ImplAAFFile::Save ()
 	} else {
 	  return AAFRESULT_WRONG_OPENMODE;
 	}
-
-
-	// Record the fact that this file was modified
-	_head->SetModified();
 
 	return AAFRESULT_SUCCESS;
 }
