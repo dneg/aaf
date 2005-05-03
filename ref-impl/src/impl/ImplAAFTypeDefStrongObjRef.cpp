@@ -402,6 +402,26 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+bool ImplAAFTypeDefStrongObjRef::initialise(const OMUniqueObjectIdentification& id, 
+    const wchar_t* name, const wchar_t* description,
+    const OMUniqueObjectIdentification& refClassId, OMPropertyTag classDefsTag)
+{
+    if (!ImplAAFMetaDefinition::initialise(id, name, description))
+    {
+        return false;
+    }
+    
+    OMWeakObjectReference& reference = _referencedType.reference();
+    reference = OMWeakObjectReference(&_referencedType, refClassId, 
+        classDefsTag);
+    
+    setInitialized();
+    
+    return true;
+}
+
+
+
 aafBool ImplAAFTypeDefStrongObjRef::IsFixedSize (void) const
 {
   return kAAFTrue;

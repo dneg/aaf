@@ -122,6 +122,9 @@ public:
 
   // overrides from OMMetaDefinition
   virtual Category category(void) const { return STRONG_REF_TYPE; }
+  virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+      const wchar_t* description,
+      const OMUniqueObjectIdentification& refClassId, OMPropertyTag classDefsTag);
 
   // override from OMStorable.
   virtual const OMClassId& classId(void) const;

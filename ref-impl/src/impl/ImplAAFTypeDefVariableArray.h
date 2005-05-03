@@ -155,6 +155,11 @@ public:
   // overrides from OMArrayType
   virtual OMType* elementType(void) const;
 
+  // overrides from OMVariableArrayType
+  virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+      const wchar_t* description, const OMUniqueObjectIdentification& elementTypeId,
+      OMPropertyTag typeDefsTag);
+  
 
   //****************
   // pvtInitialize()

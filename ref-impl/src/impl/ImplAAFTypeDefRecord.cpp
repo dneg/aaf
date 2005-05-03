@@ -1243,6 +1243,38 @@ OMType* ImplAAFTypeDefRecord::memberType(OMUInt32 index) const
     return pMemberType;
 }
 
+bool ImplAAFTypeDefRecord::initialise(const OMUniqueObjectIdentification& id, 
+    const wchar_t* name, const wchar_t* description, OMVector<wchar_t*>& memberNames, 
+    OMVector<OMUniqueObjectIdentification>& memberTypeIds, 
+    OMPropertyTag typeDefsTag)
+{
+    if (!ImplAAFMetaDefinition::initialise(id, name, description))
+    {
+        return false;
+    }
+    
+    size_t count = memberTypeIds.count();
+    _memberTypes.grow(count);
+    for (size_t i = 0; i < count; i++)
+    {
+        const wchar_t* namePtr = memberNames.getAt(i);
+        while (*namePtr != 0)
+        {
+            _memberNames.appendValue(namePtr);
+            namePtr++;
+        }
+        _memberNames.appendValue(namePtr);
+
+        OMWeakReferenceVectorElement element(&_memberTypes, memberTypeIds.getAt(i), 
+            typeDefsTag);
+        _memberTypes.insert(i, element);
+    }
+    
+    setInitialized();
+    
+    return true;
+}
+
 
 aafBool ImplAAFTypeDefRecord::IsFixedSize (void) const
 {

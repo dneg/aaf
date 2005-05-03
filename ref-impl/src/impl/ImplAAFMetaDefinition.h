@@ -169,6 +169,8 @@ public:
   virtual const OMUniqueObjectIdentification& identification(void) const;
   virtual const wchar_t* name(void) const;
   virtual const wchar_t* description(void) const;
+  virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+    const wchar_t* description);
 
   // Private method to assign the unique identifier.
   AAFRESULT SetIdentification(aafUID_constref identification);

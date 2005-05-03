@@ -143,7 +143,7 @@ public:
   virtual bool IsStringable () const;
 
   // overrides from OMObjectReferenceType
-  OMClassDefinition* referencedClass(void) const;
+  virtual OMClassDefinition* referencedClass(void) const;
 
   // Override callbacks from OMStorable
   virtual void onSave(void* clientContext) const;

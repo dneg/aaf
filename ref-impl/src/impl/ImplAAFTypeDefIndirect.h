@@ -186,6 +186,11 @@ public:
   virtual void actualData(const OMByte* externalBytes, size_t externalSize,
     const OMByte*& actualBytes, size_t& actualBytesSize) const;
   
+  virtual OMType* actualType(OMUniqueObjectIdentification id) const;
+
+  virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+      const wchar_t* description);
+  
 
   //****************
   // Initialize() 

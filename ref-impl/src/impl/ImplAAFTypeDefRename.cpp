@@ -271,6 +271,25 @@ OMType* ImplAAFTypeDefRename::renamedType(void) const
     return pRenamedTypeDef;
 }
 
+bool ImplAAFTypeDefRename::initialise(const OMUniqueObjectIdentification& id, 
+    const wchar_t* name, const wchar_t* description, 
+    const OMUniqueObjectIdentification& renamedTypeId, OMPropertyTag typeDefsTag)
+{
+    if (!ImplAAFMetaDefinition::initialise(id, name, description))
+    {
+        return false;
+    }
+    
+    OMWeakObjectReference& reference = _RenamedType.reference();
+    reference = OMWeakObjectReference(&_RenamedType, renamedTypeId, 
+        typeDefsTag);
+    
+    //setInitialized();
+    
+    return true;
+}
+
+
 
 aafBool ImplAAFTypeDefRename::IsFixedSize() const
 {

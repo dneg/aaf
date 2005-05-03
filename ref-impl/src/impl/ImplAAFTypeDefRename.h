@@ -134,6 +134,9 @@ public:
 
   // overrides from OMRenamedType
   virtual OMType* renamedType(void) const;
+  virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+      const wchar_t* description, const OMUniqueObjectIdentification& renamedTypeId,
+      OMPropertyTag typeDefsTag);
   
 
   // overrides from ImplAAFTypeDef

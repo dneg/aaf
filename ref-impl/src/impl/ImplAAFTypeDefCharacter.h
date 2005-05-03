@@ -134,6 +134,8 @@ public:
   
   // overrides from OMMetaDefinition
   virtual Category category(void) const { return CHARACTER_TYPE; }
+  virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+      const wchar_t* description);
 
   
   //

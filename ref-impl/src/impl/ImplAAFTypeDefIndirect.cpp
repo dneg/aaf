@@ -1392,7 +1392,32 @@ void ImplAAFTypeDefIndirect::actualData(const OMByte* externalBytes,
     actualBytesSize = externalSize - (sizeof(OMByteOrder) + _externalAUIDSize);
 }
 
+OMType* ImplAAFTypeDefIndirect::actualType(OMUniqueObjectIdentification id) const
+{
+    TRACE("ImplAAFTypeDefIndirect::actualType");
+    PRECONDITION("Object has been initialized", _initialized);
 
+    ImplAAFTypeDef* pActualType;
+    HRESULT hr = LookupActualType(*(reinterpret_cast<aafUID_t*>(&id)), 
+        &pActualType);
+    assert(AAFRESULT_SUCCEEDED(hr));
+    pActualType->ReleaseReference();
+    
+    return pActualType;    
+}
+
+bool ImplAAFTypeDefIndirect::initialise(const OMUniqueObjectIdentification& id, 
+    const wchar_t* name, const wchar_t* description)
+{
+    if (!ImplAAFMetaDefinition::initialise(id, name, description))
+    {
+        return false;
+    }
+
+    setInitialized();
+
+    return true;    
+}
 
 
 

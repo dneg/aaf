@@ -529,6 +529,25 @@ OMType* ImplAAFTypeDefVariableArray::elementType(void) const
   return result;
 }
 
+bool ImplAAFTypeDefVariableArray::initialise(const OMUniqueObjectIdentification& id, 
+    const wchar_t* name, const wchar_t* description, 
+    const OMUniqueObjectIdentification& elementTypeId, OMPropertyTag typeDefsTag)
+{
+    if (!ImplAAFMetaDefinition::initialise(id, name, description))
+    {
+        return false;
+    }
+    
+    OMWeakObjectReference& reference = _ElementType.reference();
+    reference = OMWeakObjectReference(&_ElementType, elementTypeId, 
+        typeDefsTag);
+    
+    //setInitialized();
+    
+    return true;
+}
+
+
 aafUInt32 ImplAAFTypeDefVariableArray::pvtCount
 (
  ImplAAFPropertyValue * pInPropVal

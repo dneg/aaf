@@ -252,6 +252,12 @@ public:
 
     virtual wchar_t* elementNameFromValue(OMUniqueObjectIdentification value) const;
 
+    virtual OMUniqueObjectIdentification elementValueFromName(const wchar_t* name) const;
+    
+    virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+        const wchar_t* description, OMVector<wchar_t*>& elementNames, 
+        OMVector<OMUniqueObjectIdentification>& elementValues);
+
     virtual bool isValidValue(OMUniqueObjectIdentification value) const;
     
         

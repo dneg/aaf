@@ -191,8 +191,6 @@ public:
 
 public:
 
-  virtual OMType* elementType(void) const;
-
   //****************
   // pvtInitialize()
   //
@@ -241,6 +239,12 @@ public:
   // overrides from OMMetaDefinition
   virtual Category category(void) const { return SET_TYPE; }
 
+  // overrides from OMSetType
+  virtual OMType* elementType(void) const;
+  virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+      const wchar_t* description, const OMUniqueObjectIdentification& elementTypeId,
+      OMPropertyTag typeDefsTag);
+      
   
   // Method is called after class has been added to MetaDictionary.
   // If this method fails the class is removed from the MetaDictionary and the

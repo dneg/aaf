@@ -645,6 +645,31 @@ OMUInt8 ImplAAFTypeDefInt::size(void) const
     return _size;
 }
 
+bool ImplAAFTypeDefInt::initialise(const OMUniqueObjectIdentification& id, 
+    const wchar_t* name, const wchar_t* description,
+    OMUInt8 size, bool isSigned)
+{
+    if (!ImplAAFMetaDefinition::initialise(id, name, description))
+    {
+        return false;
+    }
+    
+    _size = size;
+    if (isSigned)
+    {
+        _isSigned = kAAFTrue;
+    }
+    else
+    {
+        _isSigned = kAAFFalse;
+    }
+    
+    //setInitialized();
+
+    return true;    
+}
+
+
 
 aafBool ImplAAFTypeDefInt::IsFixedSize (void) const
 {

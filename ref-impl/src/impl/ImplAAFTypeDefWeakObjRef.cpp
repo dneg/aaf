@@ -790,6 +790,33 @@ const OMPropertyId* ImplAAFTypeDefWeakObjRef::targetPath(void) const
     return GetTargetPids();
 }
 
+bool ImplAAFTypeDefWeakObjRef::initialise(const OMUniqueObjectIdentification& id, 
+    const wchar_t* name, const wchar_t* description,
+    const OMUniqueObjectIdentification& refClassId, OMPropertyTag classDefsTag,
+    OMVector<OMUniqueObjectIdentification>& targetSet)
+{
+    if (!ImplAAFMetaDefinition::initialise(id, name, description))
+    {
+        return false;
+    }
+    
+    OMWeakObjectReference& reference = _referencedType.reference();
+    reference = OMWeakObjectReference(&_referencedType, refClassId, 
+        classDefsTag);
+    
+    size_t count = targetSet.count();
+    for (size_t i = 0; i < count; i++)
+    {
+        OMUniqueObjectIdentification id = targetSet.getAt(i);
+        _targetSet.append(*(reinterpret_cast<aafUID_t*>(&id)));
+    }
+        
+    // TODO: not fully initialised? 
+    // setInitialized();
+    
+    return true;
+}
+
 
 
 

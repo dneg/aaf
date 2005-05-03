@@ -293,6 +293,13 @@ public:
   virtual OMInt64 elementValue(OMUInt32 index) const;
 
   virtual wchar_t* elementNameFromValue(OMInt64 value) const;
+
+  virtual OMInt64 elementValueFromName(const wchar_t* name) const;
+
+  virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+      const wchar_t* description, const OMUniqueObjectIdentification& elementTypeId,
+      OMPropertyTag typeDefsTag, OMVector<wchar_t*>& elementNames, 
+      OMVector<OMInt64>& elementValues);
   
 
   //****************

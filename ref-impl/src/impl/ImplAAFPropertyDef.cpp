@@ -268,6 +268,39 @@ bool ImplAAFPropertyDef::isUniqueIdentifier(void) const
   }
 }
 
+OMUniqueObjectIdentification ImplAAFPropertyDef::typeId(void) const
+{
+    aafUID_t tid = _Type;
+    return *(reinterpret_cast<OMUniqueObjectIdentification*>(&tid));
+}
+
+bool ImplAAFPropertyDef::initialise(const OMUniqueObjectIdentification& id, 
+    const wchar_t* name, const wchar_t* description, 
+    OMPropertyId localId, const OMUniqueObjectIdentification& typeId, 
+    bool isOptional, bool isUniqueIdentifier)
+{
+    if (!ImplAAFMetaDefinition::initialise(id, name, description))
+    {
+        return false;
+    }
+
+    _pid = localId;    
+    _Type = *(reinterpret_cast<const aafUID_t*>(&typeId));
+    _IsOptional = isOptional;
+    if (_IsUniqueIdentifier.isPresent() && isUniqueIdentifier == false)
+    {
+        _IsUniqueIdentifier = false;
+    }
+    else if (isUniqueIdentifier)
+    {
+        _IsUniqueIdentifier = true;
+    }
+    assert(_cachedType == 0);
+    //setInitialized();
+    
+    return true;
+}
+
 
 OMProperty * ImplAAFPropertyDef::CreateOMProperty () const
 {

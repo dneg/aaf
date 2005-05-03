@@ -362,6 +362,10 @@ public:
 
   // overrides from OMMetaDefinition
   virtual Category category(void) const { return STREAM_TYPE; }
+  
+  // overrides from OMStreamType
+  virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+      const wchar_t* description);
 
   // override from OMStorable.
   virtual const OMClassId& classId(void) const;

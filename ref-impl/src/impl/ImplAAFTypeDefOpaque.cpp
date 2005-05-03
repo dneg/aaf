@@ -571,6 +571,25 @@ void ImplAAFTypeDefOpaque::actualData(const OMByte* externalBytes, size_t extern
         actualBytesSize);
 }
 
+OMType* ImplAAFTypeDefOpaque::actualType(OMUniqueObjectIdentification id) const
+{
+    assert(false);
+    return 0;
+}
+
+bool ImplAAFTypeDefOpaque::initialise(const OMUniqueObjectIdentification& id, 
+    const wchar_t* name, const wchar_t* description)
+{
+    if (!ImplAAFMetaDefinition::initialise(id, name, description))
+    {
+        return false;
+    }
+
+    //setInitialized();
+
+    return true;    
+}
+
 
 
 

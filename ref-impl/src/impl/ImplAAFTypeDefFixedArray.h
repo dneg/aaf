@@ -150,6 +150,9 @@ public:
 
   // overrides from OMFixedArrayType
   virtual OMUInt32 elementCount(void) const;
+  virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+      const wchar_t* description, const OMUniqueObjectIdentification& elementTypeId,
+      OMPropertyTag typeDefsTag, OMUInt32 elementCount);
   
   
   //****************

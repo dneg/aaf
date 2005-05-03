@@ -438,6 +438,16 @@ const wchar_t* ImplAAFMetaDefinition::description(void) const
     return _description;
 }
 
+bool ImplAAFMetaDefinition::initialise(const OMUniqueObjectIdentification& id, 
+    const wchar_t* name, const wchar_t* description)
+{
+    HRESULT result = Initialize(*(reinterpret_cast<const aafUID_t*>(&id)), name, 
+        description);
+    
+    return AAFRESULT_SUCCEEDED(result);
+}
+
+
 // Private method to install the AAFObjectModel definition associated with
 // this meta definition.
 AAFRESULT ImplAAFMetaDefinition::SetIdentification(aafUID_constref identification)

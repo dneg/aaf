@@ -297,7 +297,18 @@ void ImplAAFTypeDefCharacter::internalize(const OMByte* externalBytes,
 }
 
 
+bool ImplAAFTypeDefCharacter::initialise(const OMUniqueObjectIdentification& id, 
+    const wchar_t* name, const wchar_t* description)
+{
+    if (!ImplAAFMetaDefinition::initialise(id, name, description))
+    {
+        return false;
+    }
 
+    //setInitialized();
+
+    return true;    
+}
 
 
 

@@ -281,6 +281,11 @@ public:
   virtual wchar_t* memberName(OMUInt32 index) const;
   
   virtual OMType* memberType(OMUInt32 index) const;
+
+  virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+      const wchar_t* description, OMVector<wchar_t*>& memberNames, 
+      OMVector<OMUniqueObjectIdentification>& memberTypeIds, 
+      OMPropertyTag typeDefsTag);
   
 
   //****************

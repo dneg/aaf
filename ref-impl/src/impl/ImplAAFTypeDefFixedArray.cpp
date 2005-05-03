@@ -348,6 +348,29 @@ OMUInt32 ImplAAFTypeDefFixedArray::elementCount(void) const
     return _ElementCount;
 }
 
+bool ImplAAFTypeDefFixedArray::initialise(const OMUniqueObjectIdentification& id, 
+    const wchar_t* name, const wchar_t* description, 
+    const OMUniqueObjectIdentification& elementTypeId, OMPropertyTag typeDefsTag,
+    OMUInt32 elementCount)
+{
+    if (!ImplAAFMetaDefinition::initialise(id, name, description))
+    {
+        return false;
+    }
+    
+    OMWeakObjectReference& reference = _ElementType.reference();
+    reference = OMWeakObjectReference(&_ElementType, elementTypeId, 
+        typeDefsTag);
+    
+    _ElementCount = elementCount;
+    
+    //setInitialized();
+    
+    return true;
+}
+
+
+
 aafBool ImplAAFTypeDefFixedArray::IsFixedSize (void) const
 {
   return BaseType()->IsFixedSize();
