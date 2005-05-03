@@ -25,6 +25,9 @@
 
 #include "OMSymbolspace.h"
 #include "OMXMLStorage.h"
+#include "OMDictionary.h"
+#include "OMFile.h"
+#include "OMPropertyTable.h"
 #include "OMClassDefinition.h"
 #include "OMPropertyDefinition.h"
 #include "OMType.h"
@@ -45,35 +48,67 @@
 #include "OMWeakObjectReferenceType.h"
 #include "OMUtilities.h"
 #include "OMXMLUtilities.h"
+#include "OMVector.h"
+#include "OMXMLException.h"
 #include "OMAssertions.h"
+
+
+static const OMUniqueObjectIdentification ClassID_ClassDefinition =
+{0x0d010101, 0x0201, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+static const OMUniqueObjectIdentification ClassID_PropertyDefinition =
+{0x0d010101, 0x0202, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+static const OMUniqueObjectIdentification ClassID_TypeDefinitionInteger =
+{0x0d010101, 0x0204, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+static const OMUniqueObjectIdentification ClassID_TypeDefinitionStrongObjectReference =
+{0x0d010101, 0x0205, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+static const OMUniqueObjectIdentification ClassID_TypeDefinitionWeakObjectReference =
+{0x0d010101, 0x0206, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+static const OMUniqueObjectIdentification ClassID_TypeDefinitionEnumeration =
+{0x0d010101, 0x0207, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+static const OMUniqueObjectIdentification ClassID_TypeDefinitionFixedArray =
+{0x0d010101, 0x0208, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+static const OMUniqueObjectIdentification ClassID_TypeDefinitionVariableArray =
+{0x0d010101, 0x0209, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+static const OMUniqueObjectIdentification ClassID_TypeDefinitionSet =
+{0x0d010101, 0x020a, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+static const OMUniqueObjectIdentification ClassID_TypeDefinitionString =
+{0x0d010101, 0x020b, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+static const OMUniqueObjectIdentification ClassID_TypeDefinitionStream =
+{0x0d010101, 0x020c, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+static const OMUniqueObjectIdentification ClassID_TypeDefinitionRecord =
+{0x0d010101, 0x020d, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+static const OMUniqueObjectIdentification ClassID_TypeDefinitionRename =
+{0x0d010101, 0x020e, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+static const OMUniqueObjectIdentification ClassID_TypeDefinitionExtendibleEnumeration =
+{0x0d010101, 0x0220, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+static const OMUniqueObjectIdentification ClassID_TypeDefinitionIndirect =
+{0x0d010101, 0x0221, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+static const OMUniqueObjectIdentification ClassID_TypeDefinitionOpaque =
+{0x0d010101, 0x0222, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+static const OMUniqueObjectIdentification ClassID_TypeDefinitionCharacter =
+{0x0d010101, 0x0223, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+
+static const OMPropertyId classDefsTargetPath[3] = {0x0001, 0x0003, 0x0000};
+static const OMPropertyId typeDefsTargetPath[3] = {0x0001, 0x0004, 0x0000};
 
 
 const wchar_t* OMSymbolspace::_baselineURI = 
     L"http://www.aafassociation.org/aafx/v1.1/20050329";
     
     
+OMSymbolspace::OMSymbolspace(OMXMLStorage* store)
+: _isInitialised(false), _store(store), _id(nullOMUniqueObjectIdentification), _uri(0), 
+    _preferredPrefix(0), _prefix(0), _description(0), _uniqueSymbolSuffix(1)
+{}
+
 OMSymbolspace::OMSymbolspace(OMXMLStorage* store, OMUniqueObjectIdentification id, const wchar_t* uri, 
     const wchar_t* preferredPrefix, const wchar_t* description)
-: _store(store), _id(id), _uri(0), _preferredPrefix(0), _prefix(0), _description(0), 
-    _uniqueSymbolSuffix(1)
+: _isInitialised(false), _store(store), _id(nullOMUniqueObjectIdentification), _uri(0), 
+    _preferredPrefix(0), _prefix(0), _description(0), _uniqueSymbolSuffix(1)
 {
     TRACE("OMSymbolspace::OMSymbolspace");
     
-    if (uri != 0)
-    {
-        _uri = new wchar_t[lengthOfWideString(uri) + 1];
-        copyWideString(_uri, uri);
-    }
-    if (preferredPrefix != 0)
-    {
-        _preferredPrefix = new wchar_t[lengthOfWideString(preferredPrefix) + 1];
-        copyWideString(_preferredPrefix, preferredPrefix);
-    }
-    if (description != 0)
-    {
-        _description = new wchar_t[lengthOfWideString(description) + 1];
-        copyWideString(_description, description);
-    }
+    initialise(id, uri, preferredPrefix, description);
 }
 
 OMSymbolspace::~OMSymbolspace()
@@ -107,6 +142,8 @@ OMSymbolspace::~OMSymbolspace()
 bool 
 OMSymbolspace::isEmpty()
 {
+    TRACE("OMSymbolspace::isEmpty");
+    
     return _idToSymbol.count() == 0;
 }
 
@@ -114,6 +151,7 @@ OMUniqueObjectIdentification
 OMSymbolspace::getId() const
 {
     TRACE("OMSymbolspace::getId");
+    PRECONDITION("Is initialised", _isInitialised);
     
     return _id;
 }
@@ -122,6 +160,7 @@ const wchar_t*
 OMSymbolspace::getURI() const
 {
     TRACE("OMSymbolspace::getURI");
+    PRECONDITION("Is initialised", _isInitialised);
     
     return _uri;
 }
@@ -130,6 +169,7 @@ const wchar_t*
 OMSymbolspace::getPreferredPrefix() const
 {
     TRACE("OMSymbolspace::getPreferredPrefix");
+    PRECONDITION("Is initialised", _isInitialised);
     
     return _preferredPrefix;
 }
@@ -138,6 +178,7 @@ const wchar_t*
 OMSymbolspace::getPrefix() const
 {
     TRACE("OMSymbolspace::getPrefix");
+    PRECONDITION("Is initialised", _isInitialised);
     
     if (_prefix == 0)
     {
@@ -168,6 +209,7 @@ const wchar_t*
 OMSymbolspace::getDescription() const
 {
     TRACE("OMSymbolspace::getDescription");
+    PRECONDITION("Is initialised", _isInitialised);
     
     return _description;
 }
@@ -218,6 +260,32 @@ OMSymbolspace::getPropertyId(const wchar_t* symbol) const
     return 0x0000;
 }
 
+const wchar_t* 
+OMSymbolspace::getDefinitionSymbol(OMUniqueObjectIdentification id)
+{
+    TRACE("OMSymbolspace::getDefinitionSymbol");
+    
+    OMWString* defSymbol;
+    if (_idToDefSymbol.find(id, &defSymbol))
+    {
+        return (*defSymbol).c_str();
+    }
+    return 0;
+}
+
+OMUniqueObjectIdentification 
+OMSymbolspace::getDefinitionId(const wchar_t* definitionSymbol) const
+{
+    TRACE("OMSymbolspace::getDefinitionId");
+    
+    OMUniqueObjectIdentification id;
+    if (_defSymbolToId.find(definitionSymbol, id))
+    {
+        return id;
+    }
+    return nullOMUniqueObjectIdentification;
+}
+
 void 
 OMSymbolspace::addClassDef(OMClassDefinition* classDef)
 {
@@ -254,6 +322,7 @@ void
 OMSymbolspace::save()
 {
     TRACE("OMSymbolspace::save");
+    PRECONDITION("Is initialised", _isInitialised);
     
     getWriter()->writeElementStart(getBaselineURI(), L"MetaDictionary");
 
@@ -310,7 +379,130 @@ OMSymbolspace::save()
     getWriter()->writeElementEnd();
 }
 
+void 
+OMSymbolspace::restore(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::restore");
+    
+    // make sure classdefs and typedefs target paths are set
+    // these are needed when registering extensions MetaDefinitions
+    getClassDefsTag(dictionary);
+    getTypeDefsTag(dictionary);
+    
+    OMVector<RegisterPropertyPair*> propertyDefs;
+        
+    OMUniqueObjectIdentification id;
+    wchar_t* symbolspace = 0;
+    wchar_t* preferredPrefix = 0;
+    wchar_t* description = 0;
+    
+    while (getReader()->nextElement())
+    {
+        const wchar_t* nmspace;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attrs;
+        getReader()->getStartElement(nmspace, localName, attrs);
+        
+        if (getReader()->elementEquals(getBaselineURI(), L"Identification"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid MetaDictionary Identification "
+                    L"value");
+            }
+            getReader()->getCharacters(data, length);
+            uriToAUID(data, &id);
+            getReader()->moveToEndElement();
+        }
+        else if (getReader()->elementEquals(getBaselineURI(), L"Symbolspace"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid MetaDictionary Symbolspace "
+                    L"value");
+            }
+            getReader()->getCharacters(data, length);
+            symbolspace = convertToWideString(data);
+            getReader()->moveToEndElement();
+        }
+        else if (getReader()->elementEquals(getBaselineURI(), L"PreferredPrefix"))
+        {
+            getReader()->next();
+            if (getReader()->getEventType() == OMXMLReader::CHARACTERS)
+            {
+                const char* data;
+                size_t length;
+                getReader()->getCharacters(data, length);
+                preferredPrefix = convertToWideString(data);
+            }
+            getReader()->moveToEndElement();
+        }
+        else if (getReader()->elementEquals(getBaselineURI(), L"Description"))
+        {
+            getReader()->next();
+            if (getReader()->getEventType() == OMXMLReader::CHARACTERS)
+            {
+                const char* data;
+                size_t length;
+                getReader()->getCharacters(data, length);
+                description = convertToWideString(data);
+            }
+            getReader()->moveToEndElement();
+        }
+        else if (getReader()->elementEquals(getBaselineURI(), L"Definitions"))
+        {
+            while (getReader()->nextElement())
+            {
+                restoreMetaDictDefinition(dictionary, propertyDefs);
+            }
+            getReader()->moveToEndElement();
+        }
+        else
+        {
+            throw OMXMLException(L"Unknown element in MetaDictionary");
+        }
+    }
+    getReader()->moveToEndElement();
+    
+    initialise(id, symbolspace, preferredPrefix, description);
+    
+    registerPropertyDefs(dictionary, propertyDefs);
+}
 
+
+
+
+void 
+OMSymbolspace::initialise(OMUniqueObjectIdentification id, const wchar_t* uri, 
+    const wchar_t* preferredPrefix, const wchar_t* description)
+{
+    TRACE("OMSymbolspace::initialise");
+    ASSERT("Valid symbolspace id", id != nullOMUniqueObjectIdentification);
+    ASSERT("Valid symbolspace uri", uri != 0);
+    
+    _id = id;
+    _uri = new wchar_t[lengthOfWideString(uri) + 1];
+    copyWideString(_uri, uri);
+
+    if (preferredPrefix != 0)
+    {
+        _preferredPrefix = new wchar_t[lengthOfWideString(preferredPrefix) + 1];
+        copyWideString(_preferredPrefix, preferredPrefix);
+    }
+    if (description != 0)
+    {
+        _description = new wchar_t[lengthOfWideString(description) + 1];
+        copyWideString(_description, description);
+    }
+    
+    _isInitialised = true;
+}
 
 OMXMLWriter*
 OMSymbolspace::getWriter()
@@ -366,8 +558,9 @@ OMSymbolspace::createSymbolForProperty(OMUniqueObjectIdentification id, OMProper
         wchar_t suffix[9];
         toWideString(_uniqueSymbolSuffix, suffix, 8);
         size_t len = lengthOfWideString(symbol);
-        wchar_t* newSymbol = new wchar_t[len + 8 + 1];
-        copyWideString(newSymbol, symbol);
+        wchar_t* newSymbol = new wchar_t[len + 8 + 1 + 1];
+        newSymbol[0] = L'_';
+        copyWideString(&newSymbol[1], symbol);
         delete [] symbol;
         symbol = concatenateWideString(newSymbol, suffix);
         _uniqueSymbolSuffix++;
@@ -475,6 +668,17 @@ OMSymbolspace::addPropertySymbol(OMUniqueObjectIdentification id, OMPropertyId l
     _idToLocalId.insert(id, localId);
 }
 
+void 
+OMSymbolspace::addDefinitionSymbol(OMUniqueObjectIdentification id, const wchar_t* symbol)
+{
+    TRACE("OMSymbolspace::addDefinitionSymbol");
+    PRECONDITION("Symbol is unique", !_defSymbolToId.contains(symbol));
+    PRECONDITION("Identification is unique", !_idToDefSymbol.contains(id));
+    
+    _idToDefSymbol.insert(id, symbol);
+    _defSymbolToId.insert(symbol, id);
+}
+    
 void
 OMSymbolspace::saveMetaDef(OMMetaDefinition* metaDef)
 {
@@ -525,15 +729,10 @@ OMSymbolspace::saveClassDef(OMClassDefinition* classDef)
         getWriter()->writeElementEnd();
     }
 
+    wchar_t boolStr[XML_MAX_BOOL_STRING_SIZE];
+    boolToString(classDef->isConcrete(), boolStr);
     getWriter()->writeElementStart(getBaselineURI(), L"IsConcrete");
-    if (classDef->isConcrete())
-    {
-        getWriter()->writeElementContent(L"true", 4);
-    }
-    else
-    {
-        getWriter()->writeElementContent(L"false", 5);
-    }
+    getWriter()->writeElementContent(boolStr, lengthOfWideString(boolStr));
     getWriter()->writeElementEnd();
     
     getWriter()->writeElementEnd();
@@ -567,21 +766,17 @@ OMSymbolspace::savePropertyDef(OMClassDefinition* ownerClassDef, OMPropertyDefin
     getWriter()->writeElementContent(localIdStr, lengthOfWideString(localIdStr));
     getWriter()->writeElementEnd();
     
+    wchar_t boolStr[XML_MAX_BOOL_STRING_SIZE];
+    boolToString(propertyDef->isOptional(), boolStr);
     getWriter()->writeElementStart(getBaselineURI(), L"IsOptional");
-    if (propertyDef->isOptional())
-    {
-        getWriter()->writeElementContent(L"true", 4);
-    }
-    else
-    {
-        getWriter()->writeElementContent(L"false", 5);
-    }
+    getWriter()->writeElementContent(boolStr, lengthOfWideString(boolStr));
     getWriter()->writeElementEnd();
 
     if (propertyDef->isUniqueIdentifier())
     {
+        boolToString(true, boolStr);
         getWriter()->writeElementStart(getBaselineURI(), L"IsUniqueIdentifier");
-        getWriter()->writeElementContent(L"true", 4);
+        getWriter()->writeElementContent(boolStr, lengthOfWideString(boolStr));
         getWriter()->writeElementEnd();
     }
     
@@ -759,6 +954,12 @@ OMSymbolspace::saveFixedArrayTypeDef(OMFixedArrayType* typeDef)
     getWriter()->writeElementContent(uri, lengthOfWideString(uri));
     getWriter()->writeElementEnd();
 
+    wchar_t elementCountStr[XML_MAX_INTEGER_STRING_SIZE];
+    OMUInt32 elementCount = typeDef->elementCount();
+    integerToString((OMByte*)&elementCount, sizeof(OMUInt32), false, elementCountStr);
+    getWriter()->writeElementStart(getBaselineURI(), L"ElementCount");
+    getWriter()->writeElementContent(elementCountStr, lengthOfWideString(elementCountStr));
+    getWriter()->writeElementEnd();
     
     getWriter()->writeElementEnd();
 }
@@ -789,15 +990,10 @@ OMSymbolspace::saveIntTypeDef(OMIntType* typeDef)
     getWriter()->writeElementContent(sizeStr, lengthOfWideString(sizeStr));
     getWriter()->writeElementEnd();
     
+    wchar_t boolStr[XML_MAX_BOOL_STRING_SIZE];
+    boolToString(typeDef->isSigned(), boolStr);
     getWriter()->writeElementStart(getBaselineURI(), L"IsSigned");
-    if (typeDef->isSigned())
-    {
-        getWriter()->writeElementContent(L"true", 4);
-    }
-    else
-    {
-        getWriter()->writeElementContent(L"false", 5);
-    }
+    getWriter()->writeElementContent(boolStr, lengthOfWideString(boolStr));
     getWriter()->writeElementEnd();
     
     getWriter()->writeElementEnd();
@@ -991,6 +1187,1560 @@ OMSymbolspace::saveWeakObjectReferenceTypeDef(OMWeakObjectReferenceType* typeDef
     getWriter()->writeElementEnd();
 }
 
+void 
+OMSymbolspace::restoreMetaDictDefinition(OMDictionary* dictionary, 
+    OMVector<RegisterPropertyPair*>& propertyDefs)
+{
+    TRACE("OMSymbolspace::restoreMetaDictDefinition");
+    
+    const wchar_t* nmspace;
+    const wchar_t* localName;
+    const OMList<OMXMLAttribute*>* attrs;
+    getReader()->getStartElement(nmspace, localName, attrs);
+    
+    if (getReader()->elementEquals(getBaselineURI(), L"ClassDefinition"))
+    {
+        restoreClassDef(dictionary);
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"PropertyDefinition"))
+    {
+        restorePropertyDef(dictionary, propertyDefs);
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"TypeDefinitionCharacter"))
+    {
+        restoreCharacterTypeDef(dictionary);
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"TypeDefinitionEnumeration"))
+    {
+        restoreEnumeratedTypeDef(dictionary);
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"TypeDefinitionExtendibleEnumeration"))
+    {
+        restoreExtEnumeratedTypeDef(dictionary);
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"TypeDefinitionFixedArray"))
+    {
+        restoreFixedArrayTypeDef(dictionary);
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"TypeDefinitionIndirect"))
+    {
+        restoreIndirectTypeDef(dictionary);
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"TypeDefinitionInteger"))
+    {
+        restoreIntTypeDef(dictionary);
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"TypeDefinitionOpaque"))
+    {
+        restoreOpaqueTypeDef(dictionary);
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"TypeDefinitionRecord"))
+    {
+        restoreRecordTypeDef(dictionary);
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"TypeDefinitionRename"))
+    {
+        restoreRenamedTypeDef(dictionary);
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"TypeDefinitionSet"))
+    {
+        restoreSetTypeDef(dictionary);
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"TypeDefinitionStream"))
+    {
+        restoreStreamTypeDef(dictionary);
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"TypeDefinitionString"))
+    {
+        restoreStringTypeDef(dictionary);
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"TypeDefinitionStrongObjectReference"))
+    {
+        restoreStrongObjectReferenceTypeDef(dictionary);
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"TypeDefinitionVariableArray"))
+    {
+        restoreVariableArrayTypeDef(dictionary);
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"TypeDefinitionWeakObjectReference"))
+    {
+        restoreWeakObjectReferenceTypeDef(dictionary);
+    }
+    else
+    {
+        printf("Skipping Definition '%ls'\n", localName); 
+        getReader()->skipContent();
+    }
+    
+}
+
+class MetaDef
+{
+public:
+    MetaDef() 
+    {
+        id = nullOMUniqueObjectIdentification;
+        symbol = 0;
+        name = 0;
+        description = 0;
+    }
+    ~MetaDef()
+    {
+        if (symbol != 0)
+        {
+            delete [] symbol;
+        }
+        if (name != 0)
+        {
+            delete [] name;
+        }
+        if (description != 0)
+        {
+            delete [] description;
+        }
+    }
+    bool isSet()
+    {
+        return (id != nullOMUniqueObjectIdentification &&
+            symbol != 0 && name != 0);
+    }
+    
+    OMUniqueObjectIdentification id;
+    wchar_t* symbol;
+    wchar_t* name;
+    wchar_t* description;
+};
+
+bool 
+OMSymbolspace::restoreMetaDef(MetaDef* metaDef)
+{
+    TRACE("OMSymbolspace::restoreMetaDef");
+    
+    if (getReader()->elementEquals(getBaselineURI(), L"Identification"))
+    {
+        const char* data;
+        size_t length;
+        getReader()->next();
+        if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+        {
+            throw OMXMLException(L"Empty string is invalid MetaDef Identification value");
+        }
+        getReader()->getCharacters(data, length);
+        uriToAUID(data, &metaDef->id);
+        getReader()->moveToEndElement();
+        
+        return true;
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"Symbol"))
+    {
+        const char* data;
+        size_t length;
+        getReader()->next();
+        if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+        {
+            throw OMXMLException(L"Empty string is invalid MetaDef Symbol value");
+        }
+        getReader()->getCharacters(data, length);
+        metaDef->symbol = convertToWideString(data);
+        getReader()->moveToEndElement();
+        
+        return true;
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"Name"))
+    {
+        const char* data;
+        size_t length;
+        getReader()->next();
+        if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+        {
+            throw OMXMLException(L"Empty string is invalid MetaDef Name value");
+        }
+        getReader()->getCharacters(data, length);
+        metaDef->name = convertToWideString(data);
+        getReader()->moveToEndElement();
+        
+        return true;
+    }
+    else if (getReader()->elementEquals(getBaselineURI(), L"Description"))
+    {
+        getReader()->next();
+        if (getReader()->getEventType() == OMXMLReader::CHARACTERS)
+        {
+            const char* data;
+            size_t length;
+            getReader()->getCharacters(data, length);
+            metaDef->symbol = convertToWideString(data);
+        }
+        getReader()->moveToEndElement();
+        
+        return true;
+    }
+    else 
+    {
+        return false;
+    }
+}
+
+void 
+OMSymbolspace::restoreClassDef(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::restoreClassDef");
+    
+    MetaDef metaDef;
+    OMUniqueObjectIdentification parentClassId = nullOMUniqueObjectIdentification;
+    bool isConcrete;
+    
+    bool isConcreteSet = false;
+    
+    while (getReader()->nextElement())
+    {
+        const wchar_t* nmspace;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attrs;
+        getReader()->getStartElement(nmspace, localName, attrs);
+        
+        if (getReader()->elementEquals(getBaselineURI(), L"ParentClass"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid ClassDef ParentClass "
+                    L"value");
+            }
+            getReader()->getCharacters(data, length);
+            uriToAUID(data, &parentClassId);
+            getReader()->moveToEndElement();
+        }
+        else if (getReader()->elementEquals(getBaselineURI(), L"IsConcrete"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid ClassDef IsConcrete "
+                    L"value");
+            }
+            getReader()->getCharacters(data, length);
+            boolFromString(data, isConcrete);
+            getReader()->moveToEndElement();
+            isConcreteSet = true;
+        }
+        else 
+        {
+            if (!restoreMetaDef(&metaDef))
+            {
+                throw OMXMLException(L"Unknown element in ClassDefinition");
+            }
+        }
+    }
+    getReader()->moveToEndElement();
+    
+    if (!metaDef.isSet() || !isConcreteSet)
+    {
+        throw OMXMLException(L"Incomplete ClassDefinition");
+    }
+    
+    OMStorable* storable = dictionary->create(ClassID_ClassDefinition);
+    OMClassDefinition* classDef = dynamic_cast<OMClassDefinition*>(storable);
+    if (!classDef->initialise(metaDef.id, metaDef.name, metaDef.description, 
+        parentClassId, isConcrete, getClassDefsTag(dictionary)))
+    {
+        throw OMXMLException(L"Failed to initialise class definition");
+    }
+    int result = dictionary->registerExtClassDef(classDef);
+    if (result == OM_CLASS_REGISTERED_FAILED)
+    {
+        throw OMXMLException(L"Failed to register extension class definition");
+    }
+
+    createSymbolForClass(classDef->identification(), classDef->name());    
+
+    if (result == OM_CLASS_REGISTERED_ALREADY_REGISTERED)
+    {
+        delete classDef;
+    }
+}
+
+void 
+OMSymbolspace::restorePropertyDef(OMDictionary* dictionary,
+    OMVector<RegisterPropertyPair*>& propertyDefs)
+{
+    TRACE("OMSymbolspace::restorePropertyDef");
+    
+    MetaDef metaDef;
+    OMPropertyId localId = 0;
+    OMUniqueObjectIdentification typeId = nullOMUniqueObjectIdentification;
+    OMUniqueObjectIdentification memberOfId = nullOMUniqueObjectIdentification;
+    bool isOptional;
+    bool isUniqueIdentifier = false;
+    
+    bool isOptionalSet = false;
+    
+    while (getReader()->nextElement())
+    {
+        const wchar_t* nmspace;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attrs;
+        getReader()->getStartElement(nmspace, localName, attrs);
+        
+        if (getReader()->elementEquals(getBaselineURI(), L"LocalIdentification"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid PropertyDef "
+                    L"LocalIdentification value");
+            }
+            getReader()->getCharacters(data, length);
+            uint16FromString(data, localId);
+            getReader()->moveToEndElement();
+        }
+        else if (getReader()->elementEquals(getBaselineURI(), L"Type"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid PropertyDef Type "
+                    L"value");
+            }
+            getReader()->getCharacters(data, length);
+            uriToAUID(data, &typeId);
+            getReader()->moveToEndElement();
+        }
+        else if (getReader()->elementEquals(getBaselineURI(), L"MemberOf"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid PropertyDef MemberOf "
+                    L"value");
+            }
+            getReader()->getCharacters(data, length);
+            uriToAUID(data, &memberOfId);
+            getReader()->moveToEndElement();
+        }
+        else if (getReader()->elementEquals(getBaselineURI(), L"IsUniqueIdentifier"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid PropertyDef IsUniqueIdentifier "
+                    L"value");
+            }
+            getReader()->getCharacters(data, length);
+            boolFromString(data, isUniqueIdentifier);
+            getReader()->moveToEndElement();
+        }
+        else if (getReader()->elementEquals(getBaselineURI(), L"IsOptional"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid PropertyDef IsOptional "
+                    L"value");
+            }
+            getReader()->getCharacters(data, length);
+            boolFromString(data, isOptional);
+            getReader()->moveToEndElement();
+            isOptionalSet = true;
+        }
+        else 
+        {
+            if (!restoreMetaDef(&metaDef))
+            {
+                throw OMXMLException(L"Unknown element in PropertyDefinition");
+            }
+        }
+    }
+    getReader()->moveToEndElement();
+    
+    if (!metaDef.isSet() || localId == 0 || typeId == nullOMUniqueObjectIdentification ||
+        memberOfId == nullOMUniqueObjectIdentification || !isOptionalSet)
+    {
+        throw OMXMLException(L"Incomplete PropertyDefinition");
+    }
+
+    OMStorable* storable = dictionary->create(ClassID_PropertyDefinition);
+    OMPropertyDefinition* propertyDef = dynamic_cast<OMPropertyDefinition*>(storable);
+    if (!propertyDef->initialise(metaDef.id, metaDef.name, metaDef.description, 
+        localId, typeId, isOptional, isUniqueIdentifier))
+    {
+        throw OMXMLException(L"Failed to initialise property definition");
+    }
+    RegisterPropertyPair* regPair = new RegisterPropertyPair;
+    regPair->ownerClassId = memberOfId;
+    regPair->propertyDef = propertyDef;
+    propertyDefs.append(regPair);
+}
+
+void 
+OMSymbolspace::restoreCharacterTypeDef(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::restoreCharacterTypeDef");
+    
+    MetaDef metaDef;
+    
+    while (getReader()->nextElement())
+    {
+        const wchar_t* nmspace;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attrs;
+        getReader()->getStartElement(nmspace, localName, attrs);
+        
+        if (!restoreMetaDef(&metaDef))
+        {
+            throw OMXMLException(L"Unknown element in CharacterTypeDef");
+        }
+    }
+    getReader()->moveToEndElement();
+    
+    if (!metaDef.isSet())
+    {
+        throw OMXMLException(L"Incomplete CharacterTypeDef");
+    }
+    
+    OMStorable* storable = dictionary->create(ClassID_TypeDefinitionCharacter);
+    OMCharacterType* typeDef = dynamic_cast<OMCharacterType*>(storable);
+    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description))
+    {
+        throw OMXMLException(L"Failed to initialise CharacterTypeDef");
+    }
+    int result = dictionary->registerExtTypeDef(typeDef);
+    if (result == OM_TYPE_REGISTERED_FAILED)
+    {
+        throw OMXMLException(L"Failed to register extension CharacterTypeDef");
+    }
+
+    createSymbolForType(typeDef->identification(), typeDef->name());    
+
+    if (result == OM_TYPE_REGISTERED_ALREADY_REGISTERED)
+    {
+        delete typeDef;
+    }
+    
+}
+
+void 
+OMSymbolspace::restoreEnumeratedTypeDef(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::restoreEnumeratedTypeDef");
+    
+    MetaDef metaDef;
+    OMUniqueObjectIdentification elementTypeId = nullOMUniqueObjectIdentification;
+    OMSet<OMWString, OMWString> elementNamesSet;
+    OMSet<OMInt64, OMInt64> elementValuesSet;
+    OMVector<wchar_t*> elementNames;
+    OMVector<OMInt64> elementValues;
+    
+    while (getReader()->nextElement())
+    {
+        const wchar_t* nmspace;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attrs;
+        getReader()->getStartElement(nmspace, localName, attrs);
+        
+        if (getReader()->elementEquals(getBaselineURI(), L"ElementType"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid Enumerated ElementType "
+                    L"value");
+            }
+            getReader()->getCharacters(data, length);
+            uriToAUID(data, &elementTypeId);
+            getReader()->moveToEndElement();
+        }
+        else if (getReader()->elementEquals(getBaselineURI(), L"Elements"))
+        {
+            while (getReader()->nextElement())
+            {
+                const wchar_t* nmspace;
+                const wchar_t* localName;
+                const OMList<OMXMLAttribute*>* attrs;
+                getReader()->getStartElement(nmspace, localName, attrs);
+                if (!getReader()->elementEquals(getBaselineURI(), L"Name"))
+                {
+                    throw OMXMLException(L"Expecting Name element in EnumeratedType Elements");
+                }
+                getReader()->next();
+                if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+                {
+                    throw OMXMLException(L"Invalid Name element in EnumeratedType Elements");
+                }
+                const char* data;
+                size_t length;
+                getReader()->getCharacters(data, length);
+                wchar_t* name = convertToWideString(data);
+                if (elementNamesSet.contains(name))
+                {
+                    throw OMXMLException(L"Duplicate Name value in EnumeratedType Elements");
+                }
+                elementNamesSet.insert(name, name);
+                elementNames.append(name);
+                getReader()->moveToEndElement();
+                
+                if (!getReader()->nextElement())
+                {
+                    throw OMXMLException(L"Missing matching Value element in EnumeratedType Elements");
+                }
+                
+                getReader()->getStartElement(nmspace, localName, attrs);
+                if (!getReader()->elementEquals(getBaselineURI(), L"Value"))
+                {
+                    throw OMXMLException(L"Expecting Value element in EnumeratedType Elements");
+                }
+                getReader()->next();
+                if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+                {
+                    throw OMXMLException(L"Invalid Value element in EnumeratedType Elements");
+                }
+                getReader()->getCharacters(data, length);
+                OMInt64 value;
+                int64FromString(data, value);
+                if (elementValuesSet.contains(value))
+                {
+                    throw OMXMLException(L"Duplicate Value value in EnumeratedType Elements");
+                }
+                elementValuesSet.insert(value, value);
+                elementValues.append(value);
+                getReader()->moveToEndElement();
+            }
+            getReader()->moveToEndElement();
+        }
+        else if (!restoreMetaDef(&metaDef))
+        {
+            throw OMXMLException(L"Unknown element in EnumeratedTypeDef");
+        }
+    }
+    getReader()->moveToEndElement();
+    
+    if (!metaDef.isSet() || elementTypeId == nullOMUniqueObjectIdentification)
+    {
+        throw OMXMLException(L"Incomplete EnumeratedTypeDef");
+    }
+
+    OMStorable* storable = dictionary->create(ClassID_TypeDefinitionEnumeration);
+    OMEnumeratedType* typeDef = dynamic_cast<OMEnumeratedType*>(storable);
+    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+        elementTypeId, getTypeDefsTag(dictionary),
+        elementNames, elementValues))
+    {
+        throw OMXMLException(L"Failed to initialise EnumeratedTypeDef");
+    }
+    int result = dictionary->registerExtTypeDef(typeDef);
+    if (result == OM_TYPE_REGISTERED_FAILED)
+    {
+        throw OMXMLException(L"Failed to register extension EnumeratedTypeDef");
+    }
+
+    createSymbolForType(typeDef->identification(), typeDef->name());    
+
+    if (result == OM_TYPE_REGISTERED_ALREADY_REGISTERED)
+    {
+        delete typeDef;
+    }
+    
+    size_t count = elementNames.count();
+    for (size_t i = 0; i < count; i++)
+    {
+        delete [] elementNames.getAt(i);
+    }
+}
+
+void 
+OMSymbolspace::restoreExtEnumeratedTypeDef(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::restoreExtEnumeratedTypeDef");
+    
+    MetaDef metaDef;
+    OMSet<OMWString, OMWString> elementNamesSet;
+    OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification> elementValuesSet;
+    OMVector<wchar_t*> elementNames;
+    OMVector<OMUniqueObjectIdentification> elementValues;
+    
+    while (getReader()->nextElement())
+    {
+        const wchar_t* nmspace;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attrs;
+        getReader()->getStartElement(nmspace, localName, attrs);
+        
+        if (getReader()->elementEquals(getBaselineURI(), L"Elements"))
+        {
+            while (getReader()->nextElement())
+            {
+                const wchar_t* nmspace;
+                const wchar_t* localName;
+                const OMList<OMXMLAttribute*>* attrs;
+                getReader()->getStartElement(nmspace, localName, attrs);
+                if (!getReader()->elementEquals(getBaselineURI(), L"Name"))
+                {
+                    throw OMXMLException(L"Expecting Name element in ExtEnumeratedType Elements");
+                }
+                getReader()->next();
+                if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+                {
+                    throw OMXMLException(L"Invalid Name element in ExtEnumeratedType Elements");
+                }
+                const char* data;
+                size_t length;
+                getReader()->getCharacters(data, length);
+                wchar_t* name = convertToWideString(data);
+                if (elementNamesSet.contains(name))
+                {
+                    throw OMXMLException(L"Duplicate Name value in ExtEnumeratedType Elements");
+                }
+                elementNamesSet.insert(name, name);
+                elementNames.append(name);
+                getReader()->moveToEndElement();
+                
+                if (!getReader()->nextElement())
+                {
+                    throw OMXMLException(L"Missing matching Value element in ExtEnumeratedType Elements");
+                }
+                
+                getReader()->getStartElement(nmspace, localName, attrs);
+                if (!getReader()->elementEquals(getBaselineURI(), L"Value"))
+                {
+                    throw OMXMLException(L"Expecting Value element in ExtEnumeratedType Elements");
+                }
+                getReader()->next();
+                if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+                {
+                    throw OMXMLException(L"Invalid Value element in ExtEnumeratedType Elements");
+                }
+                getReader()->getCharacters(data, length);
+                OMUniqueObjectIdentification value;
+                uriToAUID(data, &value);
+                if (elementValuesSet.contains(value))
+                {
+                    throw OMXMLException(L"Duplicate Value value in ExtEnumeratedType Elements");
+                }
+                elementValuesSet.insert(value, value);
+                elementValues.append(value);
+                getReader()->moveToEndElement();
+            }
+            getReader()->moveToEndElement();
+        }
+        else if (!restoreMetaDef(&metaDef))
+        {
+            throw OMXMLException(L"Unknown element in ExtEnumeratedTypeDef");
+        }
+    }
+    getReader()->moveToEndElement();
+    
+    if (!metaDef.isSet())
+    {
+        throw OMXMLException(L"Incomplete ExtEnumeratedTypeDef");
+    }
+
+    OMStorable* storable = dictionary->create(ClassID_TypeDefinitionExtendibleEnumeration);
+    OMExtEnumeratedType* typeDef = dynamic_cast<OMExtEnumeratedType*>(storable);
+    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+        elementNames, elementValues))
+    {
+        throw OMXMLException(L"Failed to initialise ExtEnumeratedTypeDef");
+    }
+    int result = dictionary->registerExtTypeDef(typeDef);
+    if (result == OM_TYPE_REGISTERED_FAILED)
+    {
+        throw OMXMLException(L"Failed to register extension ExtEnumeratedTypeDef");
+    }
+
+    createSymbolForType(typeDef->identification(), typeDef->name());    
+
+    if (result == OM_TYPE_REGISTERED_ALREADY_REGISTERED)
+    {
+        delete typeDef;
+    }
+    
+    size_t count = elementNames.count();
+    for (size_t i = 0; i < count; i++)
+    {
+        delete [] elementNames.getAt(i);
+    }
+}
+
+void 
+OMSymbolspace::restoreFixedArrayTypeDef(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::restoreFixedArrayTypeDef");
+    
+    MetaDef metaDef;
+    OMUniqueObjectIdentification elementTypeId = nullOMUniqueObjectIdentification;
+    OMUInt32 elementCount;
+    
+    bool elementCountSet = false;
+    
+    while (getReader()->nextElement())
+    {
+        const wchar_t* nmspace;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attrs;
+        getReader()->getStartElement(nmspace, localName, attrs);
+        
+        if (getReader()->elementEquals(getBaselineURI(), L"ElementType"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid FixedArray ElementType "
+                    L"value");
+            }
+            getReader()->getCharacters(data, length);
+            uriToAUID(data, &elementTypeId);
+            getReader()->moveToEndElement();
+        }
+        else if (getReader()->elementEquals(getBaselineURI(), L"ElementCount"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid FixedArray ElementCount "
+                    L"value");
+            }
+            getReader()->getCharacters(data, length);
+            uint32FromString(data, elementCount);
+            getReader()->moveToEndElement();
+            elementCountSet = true;
+        }
+        else if (!restoreMetaDef(&metaDef))
+        {
+            throw OMXMLException(L"Unknown element in FixedArrayTypeDef");
+        }
+    }
+    getReader()->moveToEndElement();
+    
+    if (!metaDef.isSet() || elementTypeId == nullOMUniqueObjectIdentification ||
+        !elementCountSet)
+    {
+        throw OMXMLException(L"Incomplete FixedArrayTypeDef");
+    }
+    
+    OMStorable* storable = dictionary->create(ClassID_TypeDefinitionFixedArray);
+    OMFixedArrayType* typeDef = dynamic_cast<OMFixedArrayType*>(storable);
+    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+        elementTypeId, getTypeDefsTag(dictionary), elementCount))
+    {
+        throw OMXMLException(L"Failed to initialise FixedArrayTypeDef");
+    }
+    int result = dictionary->registerExtTypeDef(typeDef);
+    if (result == OM_TYPE_REGISTERED_FAILED)
+    {
+        throw OMXMLException(L"Failed to register extension FixedArrayTypeDef");
+    }
+
+    createSymbolForType(typeDef->identification(), typeDef->name());    
+
+    if (result == OM_TYPE_REGISTERED_ALREADY_REGISTERED)
+    {
+        delete typeDef;
+    }
+}
+
+void 
+OMSymbolspace::restoreIndirectTypeDef(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::restoreIndirectTypeDef");
+    
+    MetaDef metaDef;
+    
+    while (getReader()->nextElement())
+    {
+        const wchar_t* nmspace;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attrs;
+        getReader()->getStartElement(nmspace, localName, attrs);
+        
+        if (!restoreMetaDef(&metaDef))
+        {
+            throw OMXMLException(L"Unknown element in IndirectTypeDef");
+        }
+    }
+    getReader()->moveToEndElement();
+    
+    if (!metaDef.isSet())
+    {
+        throw OMXMLException(L"Incomplete IndirectTypeDef");
+    }
+
+    OMStorable* storable = dictionary->create(ClassID_TypeDefinitionIndirect);
+    OMIndirectType* typeDef = dynamic_cast<OMIndirectType*>(storable);
+    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description))
+    {
+        throw OMXMLException(L"Failed to initialise IndirectTypeDef");
+    }
+    int result = dictionary->registerExtTypeDef(typeDef);
+    if (result == OM_TYPE_REGISTERED_FAILED)
+    {
+        throw OMXMLException(L"Failed to register extension IndirectTypeDef");
+    }
+
+    createSymbolForType(typeDef->identification(), typeDef->name());    
+
+    if (result == OM_TYPE_REGISTERED_ALREADY_REGISTERED)
+    {
+        delete typeDef;
+    }
+}
+
+void 
+OMSymbolspace::restoreIntTypeDef(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::restoreIntTypeDef");
+    
+    MetaDef metaDef;
+    OMUInt8 size = 0;
+    bool isSigned;
+    
+    bool isSignedSet = false;
+    
+    while (getReader()->nextElement())
+    {
+        const wchar_t* nmspace;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attrs;
+        getReader()->getStartElement(nmspace, localName, attrs);
+        
+        if (getReader()->elementEquals(getBaselineURI(), L"Size"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid IntTypeDef "
+                    L"Size value");
+            }
+            getReader()->getCharacters(data, length);
+            uint8FromString(data, size);
+            if (size != 1 && size != 2 && size != 4 && size != 8)
+            {
+                throw OMXMLException(L"Invalid IntTypeDef size value");
+            }
+            getReader()->moveToEndElement();
+        }
+        else if (getReader()->elementEquals(getBaselineURI(), L"IsSigned"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid IntTypeDef "
+                    L"IsSigned value");
+            }
+            getReader()->getCharacters(data, length);
+            boolFromString(data, isSigned);
+            getReader()->moveToEndElement();
+            isSignedSet = true;
+        }
+        else if (!restoreMetaDef(&metaDef))
+        {
+            throw OMXMLException(L"Unknown element in IntTypeDef");
+        }
+    }
+    getReader()->moveToEndElement();
+    
+    if (!metaDef.isSet() || size == 0 || !isSignedSet)
+    {
+        throw OMXMLException(L"Incomplete IntTypeDef");
+    }
+
+    OMStorable* storable = dictionary->create(ClassID_TypeDefinitionInteger);
+    OMIntType* typeDef = dynamic_cast<OMIntType*>(storable);
+    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+        size, isSigned))
+    {
+        throw OMXMLException(L"Failed to initialise IntTypeDef");
+    }
+    int result = dictionary->registerExtTypeDef(typeDef);
+    if (result == OM_TYPE_REGISTERED_FAILED)
+    {
+        throw OMXMLException(L"Failed to register extension IntTypeDef");
+    }
+
+    createSymbolForType(typeDef->identification(), typeDef->name());    
+
+    if (result == OM_TYPE_REGISTERED_ALREADY_REGISTERED)
+    {
+        delete typeDef;
+    }
+}
+
+void 
+OMSymbolspace::restoreOpaqueTypeDef(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::restoreOpaqueTypeDef");
+    
+    MetaDef metaDef;
+    
+    while (getReader()->nextElement())
+    {
+        const wchar_t* nmspace;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attrs;
+        getReader()->getStartElement(nmspace, localName, attrs);
+        
+        if (!restoreMetaDef(&metaDef))
+        {
+            throw OMXMLException(L"Unknown element in OpaqueTypeDef");
+        }
+    }
+    getReader()->moveToEndElement();
+    
+    if (!metaDef.isSet())
+    {
+        throw OMXMLException(L"Incomplete OpaqueTypeDef");
+    }
+
+    OMStorable* storable = dictionary->create(ClassID_TypeDefinitionOpaque);
+    OMOpaqueType* typeDef = dynamic_cast<OMOpaqueType*>(storable);
+    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description))
+    {
+        throw OMXMLException(L"Failed to initialise OpaqueTypeDef");
+    }
+    int result = dictionary->registerExtTypeDef(typeDef);
+    if (result == OM_TYPE_REGISTERED_FAILED)
+    {
+        throw OMXMLException(L"Failed to register extension OpaqueTypeDef");
+    }
+
+    createSymbolForType(typeDef->identification(), typeDef->name());    
+
+    if (result == OM_TYPE_REGISTERED_ALREADY_REGISTERED)
+    {
+        delete typeDef;
+    }
+}
+
+void 
+OMSymbolspace::restoreRecordTypeDef(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::restoreRecordTypeDef");
+    
+    MetaDef metaDef;
+    OMSet<OMWString, OMWString> memberNamesSet;
+    OMVector<wchar_t*> memberNames;
+    OMVector<OMUniqueObjectIdentification> memberTypeIds;
+    
+    while (getReader()->nextElement())
+    {
+        const wchar_t* nmspace;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attrs;
+        getReader()->getStartElement(nmspace, localName, attrs);
+        
+        if (getReader()->elementEquals(getBaselineURI(), L"Members"))
+        {
+            while (getReader()->nextElement())
+            {
+                const wchar_t* nmspace;
+                const wchar_t* localName;
+                const OMList<OMXMLAttribute*>* attrs;
+                getReader()->getStartElement(nmspace, localName, attrs);
+                if (!getReader()->elementEquals(getBaselineURI(), L"Name"))
+                {
+                    throw OMXMLException(L"Expecting Name element in RecordType Members");
+                }
+                getReader()->next();
+                if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+                {
+                    throw OMXMLException(L"Invalid Name element in RecordType Members");
+                }
+                const char* data;
+                size_t length;
+                getReader()->getCharacters(data, length);
+                wchar_t* name = convertToWideString(data);
+                if (memberNamesSet.contains(name))
+                {
+                    throw OMXMLException(L"Duplicate Name value in RecordType Elements");
+                }
+                memberNamesSet.insert(name, name);
+                memberNames.append(name);
+                getReader()->moveToEndElement();
+                
+                if (!getReader()->nextElement())
+                {
+                    throw OMXMLException(L"Missing matching Type element in RecordType Members");
+                }
+                
+                getReader()->getStartElement(nmspace, localName, attrs);
+                if (!getReader()->elementEquals(getBaselineURI(), L"Type"))
+                {
+                    throw OMXMLException(L"Expecting Type element in RecordType Members");
+                }
+                getReader()->next();
+                if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+                {
+                    throw OMXMLException(L"Invalid Type element in RecordType Members");
+                }
+                getReader()->getCharacters(data, length);
+                OMUniqueObjectIdentification typeId;
+                uriToAUID(data, &typeId);
+                memberTypeIds.append(typeId);
+                getReader()->moveToEndElement();
+            }
+            getReader()->moveToEndElement();
+        }
+        else if (!restoreMetaDef(&metaDef))
+        {
+            throw OMXMLException(L"Unknown element in RecordTypeDef");
+        }
+    }
+    getReader()->moveToEndElement();
+    
+    if (!metaDef.isSet())
+    {
+        throw OMXMLException(L"Incomplete RecordTypeDef");
+    }
+
+    OMStorable* storable = dictionary->create(ClassID_TypeDefinitionRecord);
+    OMRecordType* typeDef = dynamic_cast<OMRecordType*>(storable);
+    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+        memberNames, memberTypeIds, getTypeDefsTag(dictionary)))
+    {
+        throw OMXMLException(L"Failed to initialise RecordTypeDef");
+    }
+    int result = dictionary->registerExtTypeDef(typeDef);
+    if (result == OM_TYPE_REGISTERED_FAILED)
+    {
+        throw OMXMLException(L"Failed to register extension RecordTypeDef");
+    }
+
+    createSymbolForType(typeDef->identification(), typeDef->name());    
+
+    if (result == OM_TYPE_REGISTERED_ALREADY_REGISTERED)
+    {
+        delete typeDef;
+    }
+    
+    size_t count = memberNames.count();
+    for (size_t i = 0; i < count; i++)
+    {
+        delete [] memberNames.getAt(i);
+    }
+}
+
+void 
+OMSymbolspace::restoreRenamedTypeDef(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::restoreRenamedTypeDef");
+    
+    MetaDef metaDef;
+    OMUniqueObjectIdentification renamedTypeId = nullOMUniqueObjectIdentification;
+    
+    while (getReader()->nextElement())
+    {
+        const wchar_t* nmspace;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attrs;
+        getReader()->getStartElement(nmspace, localName, attrs);
+        
+        if (getReader()->elementEquals(getBaselineURI(), L"RenamedType"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid Renamed RenamedType "
+                    L"value");
+            }
+            getReader()->getCharacters(data, length);
+            uriToAUID(data, &renamedTypeId);
+            getReader()->moveToEndElement();
+        }
+        else if (!restoreMetaDef(&metaDef))
+        {
+            throw OMXMLException(L"Unknown element in RenamedTypeDef");
+        }
+    }
+    getReader()->moveToEndElement();
+    
+    if (!metaDef.isSet() || renamedTypeId == nullOMUniqueObjectIdentification)
+    {
+        throw OMXMLException(L"Incomplete RenamedTypeDef");
+    }
+
+    OMStorable* storable = dictionary->create(ClassID_TypeDefinitionRename);
+    OMRenamedType* typeDef = dynamic_cast<OMRenamedType*>(storable);
+    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+        renamedTypeId, getTypeDefsTag(dictionary)))
+    {
+        throw OMXMLException(L"Failed to initialise RenamedTypeDef");
+    }
+    int result = dictionary->registerExtTypeDef(typeDef);
+    if (result == OM_TYPE_REGISTERED_FAILED)
+    {
+        throw OMXMLException(L"Failed to register extension RenamedTypeDef");
+    }
+
+    createSymbolForType(typeDef->identification(), typeDef->name());    
+
+    if (result == OM_TYPE_REGISTERED_ALREADY_REGISTERED)
+    {
+        delete typeDef;
+    }
+}
+
+void 
+OMSymbolspace::restoreSetTypeDef(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::restoreSetTypeDef");
+    
+    MetaDef metaDef;
+    OMUniqueObjectIdentification elementTypeId = nullOMUniqueObjectIdentification;
+    
+    while (getReader()->nextElement())
+    {
+        const wchar_t* nmspace;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attrs;
+        getReader()->getStartElement(nmspace, localName, attrs);
+        
+        if (getReader()->elementEquals(getBaselineURI(), L"ElementType"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid Set ElementType "
+                    L"value");
+            }
+            getReader()->getCharacters(data, length);
+            uriToAUID(data, &elementTypeId);
+            getReader()->moveToEndElement();
+        }
+        else if (!restoreMetaDef(&metaDef))
+        {
+            throw OMXMLException(L"Unknown element in SetTypeDef");
+        }
+    }
+    getReader()->moveToEndElement();
+    
+    if (!metaDef.isSet() || elementTypeId == nullOMUniqueObjectIdentification)
+    {
+        throw OMXMLException(L"Incomplete SetTypeDef");
+    }
+    OMStorable* storable = dictionary->create(ClassID_TypeDefinitionSet);
+    OMSetType* typeDef = dynamic_cast<OMSetType*>(storable);
+    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+        elementTypeId, getTypeDefsTag(dictionary)))
+    {
+        throw OMXMLException(L"Failed to initialise SetTypeDef");
+    }
+    int result = dictionary->registerExtTypeDef(typeDef);
+    if (result == OM_TYPE_REGISTERED_FAILED)
+    {
+        throw OMXMLException(L"Failed to register extension SetTypeDef");
+    }
+
+    createSymbolForType(typeDef->identification(), typeDef->name());    
+
+    if (result == OM_TYPE_REGISTERED_ALREADY_REGISTERED)
+    {
+        delete typeDef;
+    }
+}
+
+void 
+OMSymbolspace::restoreStreamTypeDef(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::restoreStreamTypeDef");
+    
+    MetaDef metaDef;
+    
+    while (getReader()->nextElement())
+    {
+        const wchar_t* nmspace;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attrs;
+        getReader()->getStartElement(nmspace, localName, attrs);
+        
+        if (!restoreMetaDef(&metaDef))
+        {
+            throw OMXMLException(L"Unknown element in StreamTypeDef");
+        }
+    }
+    getReader()->moveToEndElement();
+    
+    if (!metaDef.isSet())
+    {
+        throw OMXMLException(L"Incomplete StreamTypeDef");
+    }
+
+    OMStorable* storable = dictionary->create(ClassID_TypeDefinitionStream);
+    OMStreamType* typeDef = dynamic_cast<OMStreamType*>(storable);
+    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description))
+    {
+        throw OMXMLException(L"Failed to initialise StreamTypeDef");
+    }
+    int result = dictionary->registerExtTypeDef(typeDef);
+    if (result == OM_TYPE_REGISTERED_FAILED)
+    {
+        throw OMXMLException(L"Failed to register extension StreamTypeDef");
+    }
+
+    createSymbolForType(typeDef->identification(), typeDef->name());    
+
+    if (result == OM_TYPE_REGISTERED_ALREADY_REGISTERED)
+    {
+        delete typeDef;
+    }
+}
+
+void 
+OMSymbolspace::restoreStringTypeDef(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::restoreStringTypeDef");
+    
+    MetaDef metaDef;
+    OMUniqueObjectIdentification elementTypeId = nullOMUniqueObjectIdentification;
+    
+    while (getReader()->nextElement())
+    {
+        const wchar_t* nmspace;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attrs;
+        getReader()->getStartElement(nmspace, localName, attrs);
+        
+        if (getReader()->elementEquals(getBaselineURI(), L"ElementType"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid String ElementType "
+                    L"value");
+            }
+            getReader()->getCharacters(data, length);
+            uriToAUID(data, &elementTypeId);
+            getReader()->moveToEndElement();
+        }
+        else if (!restoreMetaDef(&metaDef))
+        {
+            throw OMXMLException(L"Unknown element in StringTypeDef");
+        }
+    }
+    getReader()->moveToEndElement();
+    
+    if (!metaDef.isSet() || elementTypeId == nullOMUniqueObjectIdentification)
+    {
+        throw OMXMLException(L"Incomplete StringTypeDef");
+    }
+
+    OMStorable* storable = dictionary->create(ClassID_TypeDefinitionString);
+    OMStringType* typeDef = dynamic_cast<OMStringType*>(storable);
+    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+        elementTypeId, getTypeDefsTag(dictionary)))
+    {
+        throw OMXMLException(L"Failed to initialise StringTypeDef");
+    }
+    int result = dictionary->registerExtTypeDef(typeDef);
+    if (result == OM_TYPE_REGISTERED_FAILED)
+    {
+        throw OMXMLException(L"Failed to register extension StringTypeDef");
+    }
+
+    createSymbolForType(typeDef->identification(), typeDef->name());    
+
+    if (result == OM_TYPE_REGISTERED_ALREADY_REGISTERED)
+    {
+        delete typeDef;
+    }
+}
+
+void 
+OMSymbolspace::restoreStrongObjectReferenceTypeDef(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::restoreStrongObjectReferenceTypeDef");
+    
+    MetaDef metaDef;
+    OMUniqueObjectIdentification referencedClassId = nullOMUniqueObjectIdentification;
+    
+    while (getReader()->nextElement())
+    {
+        const wchar_t* nmspace;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attrs;
+        getReader()->getStartElement(nmspace, localName, attrs);
+        
+        if (getReader()->elementEquals(getBaselineURI(), L"ReferencedClass"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid StrongObjectReference "
+                    L"ReferencedClass value");
+            }
+            getReader()->getCharacters(data, length);
+            uriToAUID(data, &referencedClassId);
+            getReader()->moveToEndElement();
+        }
+        else if (!restoreMetaDef(&metaDef))
+        {
+            throw OMXMLException(L"Unknown element in StrongObjectReferenceTypeDef");
+        }
+    }
+    getReader()->moveToEndElement();
+    
+    if (!metaDef.isSet() || referencedClassId == nullOMUniqueObjectIdentification)
+    {
+        throw OMXMLException(L"Incomplete StrongObjectReferenceTypeDef");
+    }
+
+    OMStorable* storable = dictionary->create(ClassID_TypeDefinitionStrongObjectReference);
+    OMStrongObjectReferenceType* typeDef = dynamic_cast<OMStrongObjectReferenceType*>(storable);
+    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+        referencedClassId, getClassDefsTag(dictionary)))
+    {
+        throw OMXMLException(L"Failed to initialise StrongObjectReferenceTypeDef");
+    }
+    int result = dictionary->registerExtTypeDef(typeDef);
+    if (result == OM_TYPE_REGISTERED_FAILED)
+    {
+        throw OMXMLException(L"Failed to register extension StrongObjectReferenceTypeDef");
+    }
+
+    createSymbolForType(typeDef->identification(), typeDef->name());    
+
+    if (result == OM_TYPE_REGISTERED_ALREADY_REGISTERED)
+    {
+        delete typeDef;
+    }
+}
+
+void 
+OMSymbolspace::restoreVariableArrayTypeDef(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::restoreVariableArrayTypeDef");
+    
+    MetaDef metaDef;
+    OMUniqueObjectIdentification elementTypeId = nullOMUniqueObjectIdentification;
+    
+    while (getReader()->nextElement())
+    {
+        const wchar_t* nmspace;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attrs;
+        getReader()->getStartElement(nmspace, localName, attrs);
+        
+        if (getReader()->elementEquals(getBaselineURI(), L"ElementType"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid VariableArray ElementType "
+                    L"value");
+            }
+            getReader()->getCharacters(data, length);
+            uriToAUID(data, &elementTypeId);
+            getReader()->moveToEndElement();
+        }
+        else if (!restoreMetaDef(&metaDef))
+        {
+            throw OMXMLException(L"Unknown element in VariableArrayTypeDef");
+        }
+    }
+    getReader()->moveToEndElement();
+    
+    if (!metaDef.isSet() || elementTypeId == nullOMUniqueObjectIdentification)
+    {
+        throw OMXMLException(L"Incomplete VariableArrayTypeDef");
+    }
+
+    OMStorable* storable = dictionary->create(ClassID_TypeDefinitionVariableArray);
+    OMVariableArrayType* typeDef = dynamic_cast<OMVariableArrayType*>(storable);
+    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+        elementTypeId, getTypeDefsTag(dictionary)))
+    {
+        throw OMXMLException(L"Failed to initialise VariableArrayTypeDef");
+    }
+    int result = dictionary->registerExtTypeDef(typeDef);
+    if (result == OM_TYPE_REGISTERED_FAILED)
+    {
+        throw OMXMLException(L"Failed to register extension VariableArrayTypeDef");
+    }
+
+    createSymbolForType(typeDef->identification(), typeDef->name());    
+
+    if (result == OM_TYPE_REGISTERED_ALREADY_REGISTERED)
+    {
+        delete typeDef;
+    }
+}
+
+void 
+OMSymbolspace::restoreWeakObjectReferenceTypeDef(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::restoreWeakObjectReferenceTypeDef");
+    
+    MetaDef metaDef;
+    OMUniqueObjectIdentification referencedClassId = nullOMUniqueObjectIdentification;
+    OMVector<OMUniqueObjectIdentification> targetSet;
+    
+    while (getReader()->nextElement())
+    {
+        const wchar_t* nmspace;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attrs;
+        getReader()->getStartElement(nmspace, localName, attrs);
+        
+        if (getReader()->elementEquals(getBaselineURI(), L"ReferencedClass"))
+        {
+            const char* data;
+            size_t length;
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMXMLException(L"Empty string is invalid WeakObjectReference "
+                    L"ReferencedClass value");
+            }
+            getReader()->getCharacters(data, length);
+            uriToAUID(data, &referencedClassId);
+            getReader()->moveToEndElement();
+        }
+        else if (getReader()->elementEquals(getBaselineURI(), L"TargetSet"))
+        {
+            while (getReader()->nextElement())
+            {
+                const wchar_t* nmspace;
+                const wchar_t* localName;
+                const OMList<OMXMLAttribute*>* attrs;
+                getReader()->getStartElement(nmspace, localName, attrs);
+                if (!getReader()->elementEquals(getBaselineURI(), L"AUID"))
+                {
+                    throw OMXMLException(L"Expecting AUID element in WeakObjectReferenceType TargetSet");
+                }
+                getReader()->next();
+                if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+                {
+                    throw OMXMLException(L"Invalid AUID element in WeakObjectReferenceType TargetSet");
+                }
+                OMUniqueObjectIdentification id;
+                const char* data;
+                size_t length;
+                getReader()->getCharacters(data, length);
+                uriToAUID(data, &id);
+                getReader()->moveToEndElement();
+                
+                targetSet.append(id);
+            }
+            getReader()->moveToEndElement();
+        }
+        else if (!restoreMetaDef(&metaDef))
+        {
+            throw OMXMLException(L"Unknown element in WeakObjectReferenceTypeDef");
+        }
+    }
+    getReader()->moveToEndElement();
+    
+    if (!metaDef.isSet() || referencedClassId == nullOMUniqueObjectIdentification)
+    {
+        throw OMXMLException(L"Incomplete WeakObjectReferenceTypeDef");
+    }
+
+    OMStorable* storable = dictionary->create(ClassID_TypeDefinitionWeakObjectReference);
+    OMWeakObjectReferenceType* typeDef = dynamic_cast<OMWeakObjectReferenceType*>(storable);
+    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+        referencedClassId, getClassDefsTag(dictionary),
+        targetSet))
+    {
+        throw OMXMLException(L"Failed to initialise WeakObjectReferenceTypeDef");
+    }
+    int result = dictionary->registerExtTypeDef(typeDef);
+    if (result == OM_TYPE_REGISTERED_FAILED)
+    {
+        throw OMXMLException(L"Failed to register extension WeakObjectReferenceTypeDef");
+    }
+
+    createSymbolForType(typeDef->identification(), typeDef->name());    
+
+    if (result == OM_TYPE_REGISTERED_ALREADY_REGISTERED)
+    {
+        delete typeDef;
+    }
+}
+
+void 
+OMSymbolspace::registerPropertyDefs(OMDictionary* dictionary,
+    OMVector<RegisterPropertyPair*>& propertyDefs)
+{
+    TRACE("OMSymbolspace::registerPropertyDefs");
+
+    size_t count = propertyDefs.count();
+    for (size_t i = 0; i < count; i++)
+    {
+        RegisterPropertyPair* rp = propertyDefs.getAt(i);
+        
+        int result = dictionary->registerExtPropertyDef(rp->ownerClassId, 
+            rp->propertyDef);
+        if (result == OM_PROPERTY_REGISTERED_FAILED)
+        {
+            throw OMXMLException(L"Failed to register property def");
+        }
+
+        createSymbolForProperty(rp->propertyDef->identification(), 
+            rp->propertyDef->localIdentification(), rp->propertyDef->name());
+
+        if (result == OM_PROPERTY_REGISTERED_ALREADY_REGISTERED)
+        {
+            delete rp->propertyDef;
+        }
+        
+        delete rp;
+    }
+    propertyDefs.clear();
+}
+
+// TODO: cache tags?
+OMPropertyTag 
+OMSymbolspace::getClassDefsTag(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::getClassDefsTag");
+
+    OMPropertyTable* table = dictionary->file()->referencedProperties();
+    return table->insert(classDefsTargetPath);
+}
+
+// TODO: cache tags?
+OMPropertyTag 
+OMSymbolspace::getTypeDefsTag(OMDictionary* dictionary)
+{
+    TRACE("OMSymbolspace::getTypeDefsTag");
+
+    OMPropertyTable* table = dictionary->file()->referencedProperties();
+    return table->insert(typeDefsTargetPath);
+}
+
+
 
 const wchar_t* 
 OMSymbolspace::getBaselineURI()
@@ -1012,6 +2762,13 @@ OMSymbolspace::getBaselineURI()
     const OMUniqueObjectIdentification id = ID; \
     ss->addPropertySymbol(id, LOCAL_ID, SYMBOL); \
 }
+
+#define ADD_DEFINITION_SYMBOL_ID(ID, SYMBOL) \
+{ \
+    const OMUniqueObjectIdentification id = ID; \
+    ss->addDefinitionSymbol(id, SYMBOL); \
+}
+
 
 
 OMSymbolspace* 
@@ -2905,6 +4662,338 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_SYMBOL(
         LITERAL_AUID(0x05040300, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01),
         L"DataDefinitionWeakReferenceVector");
+
+
+    // Definition symbols
+
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x01030202, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01),
+        L"DataDef_Picture");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x6f3c8ce1, 0x6cef, 0x11d2, 0x80, 0x7d, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"DataDef_LegacyPicture");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x05cba731, 0x1daa, 0x11d3, 0x80, 0xad, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"DataDef_Matte");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x05cba732, 0x1daa, 0x11d3, 0x80, 0xad, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"DataDef_PictureWithMatte");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x01030202, 0x0200, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01),
+        L"DataDef_Sound");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x78e1ebe1, 0x6cef, 0x11d2, 0x80, 0x7d, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"DataDef_LegacySound");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x01030201, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01),
+        L"DataDef_Timecode");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x7f275e81, 0x77e5, 0x11d2, 0x80, 0x7f, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"DataDef_LegacyTimecode");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xd2bb2af0, 0xd234, 0x11d2, 0x89, 0xee, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12),
+        L"DataDef_Edgecode");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x01030201, 0x1000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01),
+        L"DataDef_DescriptiveMetadata");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x01030203, 0x0100, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x05),
+        L"DataDef_Auxiliary");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x851419d0, 0x2e4f, 0x11d3, 0x8a, 0x5b, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"DataDef_Unknown");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x568fb761, 0x9458, 0x11d2, 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"CodecDef_None");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x90ac17c8, 0xe3e2, 0x4596, 0x9e, 0x9e, 0xa6, 0xdd, 0x1c, 0x70, 0xc8, 0x92),
+        L"CodecDef_PCM");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x820f09b1, 0xeb9b, 0x11d2, 0x80, 0x9f, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"CodecDef_WAVE");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x4b1c1a45, 0x03f2, 0x11d4, 0x80, 0xfb, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"CodecDef_AIFC");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x18634f8c, 0x3bab, 0x11d3, 0xbf, 0xd6, 0x00, 0x10, 0x4b, 0xc9, 0x15, 0x6d),
+        L"CodecDef_JPEG");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x4e84045e, 0x0f29, 0x11d4, 0xa3, 0x59, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x6a),
+        L"CodecDef_CDCI");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x4e84045f, 0x0f29, 0x11d4, 0xa3, 0x59, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x6a),
+        L"CodecDef_RGBA");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x1b31f3b1, 0x9450, 0x11d2, 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"CodecFlavour_None");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xaf4de587, 0x23d7, 0x4c7c, 0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11),
+        L"CodecFlavour_LegacyDV_625_50");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xaf4de587, 0x23d7, 0x4c7d, 0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11),
+        L"CodecFlavour_LegacyDV_525_60");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xaf4de587, 0x23d7, 0x4c7e, 0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11),
+        L"CodecFlavour_IEC_DV_625_50");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xaf4de587, 0x23d7, 0x4c7f, 0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11),
+        L"CodecFlavour_IEC_DV_525_60");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x4313b572, 0xd8ba, 0x11d2, 0x80, 0x9b, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"ContainerDef_External");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x4b1c1a46, 0x03f2, 0x11d4, 0x80, 0xfb, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"ContainerDef_OMF");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x4313b571, 0xd8ba, 0x11d2, 0x80, 0x9b, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"ContainerDef_AAF");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x42464141, 0x000d, 0x4d4f, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff),
+        L"ContainerDef_AAFMSS");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x4b464141, 0x000d, 0x4d4f, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff),
+        L"ContainerDef_AAFKLV");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x58464141, 0x000d, 0x4d4f, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff),
+        L"ContainerDef_AAFXML");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x0d011301, 0x0101, 0x0100, 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x06),
+        L"ContainerDef_RIFFWAVE");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x0d011301, 0x0102, 0x0200, 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x07),
+        L"ContainerDef_JFIF");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x0d011301, 0x0104, 0x0100, 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x06),
+        L"ContainerDef_AIFFAIFC");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x5b6c85a3, 0x0ede, 0x11d3, 0x80, 0xa9, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"InterpolationDef_None");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x5b6c85a4, 0x0ede, 0x11d3, 0x80, 0xa9, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"InterpolationDef_Linear");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x5b6c85a5, 0x0ede, 0x11d3, 0x80, 0xa9, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"InterpolationDef_Constant");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x5b6c85a6, 0x0ede, 0x11d3, 0x80, 0xa9, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"InterpolationDef_BSpline");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x15829ec3, 0x1f24, 0x458a, 0x96, 0x0d, 0xc6, 0x5b, 0xb2, 0x3c, 0x2a, 0xa1),
+        L"InterpolationDef_Log");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xc09153f7, 0xbd18, 0x4e5a, 0xad, 0x09, 0xcb, 0xdd, 0x65, 0x4f, 0xa0, 0x01),
+        L"InterpolationDef_Power");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x0c3bea40, 0xfc05, 0x11d2, 0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"OperationDef_VideoDissolve");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x0c3bea44, 0xfc05, 0x11d2, 0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"OperationDef_SMPTEVideoWipe");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9d2ea890, 0x0968, 0x11d3, 0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"OperationDef_VideoSpeedControl");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9d2ea891, 0x0968, 0x11d3, 0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"OperationDef_VideoRepeat");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xf1db0f32, 0x8d64, 0x11d3, 0x80, 0xdf, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"OperationDef_Flip");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xf1db0f34, 0x8d64, 0x11d3, 0x80, 0xdf, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"OperationDef_Flop");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xf1db0f33, 0x8d64, 0x11d3, 0x80, 0xdf, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"OperationDef_FlipFlop");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x86f5711e, 0xee72, 0x450c, 0xa1, 0x18, 0x17, 0xcf, 0x3b, 0x17, 0x5d, 0xff),
+        L"OperationDef_VideoPosition");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xf5826680, 0x26c5, 0x4149, 0x85, 0x54, 0x43, 0xd3, 0xc7, 0xa3, 0xbc, 0x09),
+        L"OperationDef_VideoCrop");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x2e0a119d, 0xe6f7, 0x4bee, 0xb5, 0xdc, 0x6d, 0xd4, 0x29, 0x88, 0x68, 0x7e),
+        L"OperationDef_VideoScale");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xf2ca330d, 0x8d45, 0x4db4, 0xb1, 0xb5, 0x13, 0x6a, 0xb0, 0x55, 0x58, 0x6f),
+        L"OperationDef_VideoRotate");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x21d5c51a, 0x8acb, 0x46d5, 0x93, 0x92, 0x5c, 0xae, 0x64, 0x0c, 0x88, 0x36),
+        L"OperationDef_VideoCornerPinning");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x14db900e, 0xd537, 0x49f6, 0x88, 0x9b, 0x01, 0x25, 0x68, 0xfc, 0xc2, 0x34),
+        L"OperationDef_VideoAlphaWithinVideoKey");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xe599cb0f, 0xba5f, 0x4192, 0x93, 0x56, 0x51, 0xeb, 0x19, 0xc0, 0x85, 0x89),
+        L"OperationDef_VideoSeparateAlphaKey");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x38ff7903, 0x69e5, 0x476b, 0xbe, 0x5a, 0xea, 0xfc, 0x20, 0x00, 0xf0, 0x11),
+        L"OperationDef_VideoLuminanceKey");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x30a315c2, 0x71e5, 0x4e82, 0xa4, 0xef, 0x05, 0x13, 0xee, 0x05, 0x6b, 0x65),
+        L"OperationDef_VideoChromaKey");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9d2ea894, 0x0968, 0x11d3, 0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"OperationDef_MonoAudioGain");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9d2ea893, 0x0968, 0x11d3, 0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"OperationDef_MonoAudioPan");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x0c3bea41, 0xfc05, 0x11d2, 0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"OperationDef_MonoAudioDissolve");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x2311bd90, 0xb5da, 0x4285, 0xaa, 0x3a, 0x85, 0x52, 0x84, 0x87, 0x79, 0xb3),
+        L"OperationDef_TwoParameterMonoAudioDissolve");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x1575e350, 0xfca3, 0x11d2, 0x8a, 0x2a, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"OperationDef_Unknown");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x0c3bea43, 0xfc05, 0x11d2, 0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"OperationDef_VideoFadeToBlack");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x0a3c75e0, 0xfd82, 0x11d2, 0x8a, 0x2b, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"OperationDef_PictureWithMate");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9d2ea892, 0x0968, 0x11d3, 0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"OperationDef_VideoFrameToMask");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x0c3bea42, 0xfc05, 0x11d2, 0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"OperationDef_StereoAudioDissolve");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9d2ea895, 0x0968, 0x11d3, 0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"OperationDef_StereoAudioGain");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x8d896ad0, 0x2261, 0x11d3, 0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"OperationDef_MonoAudioMixdown");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xe4962320, 0x2267, 0x11d3, 0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"ParameterDef_Level");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xe4962323, 0x2267, 0x11d3, 0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"ParameterDef_SMPTEWipeNumber");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9c894ba0, 0x2277, 0x11d3, 0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"ParameterDef_SMPTEReverse");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x72559a80, 0x24d7, 0x11d3, 0x8a, 0x50, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"ParameterDef_SpeedRatio");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xc573a510, 0x071a, 0x454f, 0xb6, 0x17, 0xad, 0x6a, 0xe6, 0x90, 0x54, 0xc2),
+        L"ParameterDef_PositionOffsetX");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x82e27478, 0x1336, 0x4ea3, 0xbc, 0xb9, 0x6b, 0x8f, 0x17, 0x86, 0x4c, 0x42),
+        L"ParameterDef_PositionOffsetY");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xd47b3377, 0x318c, 0x4657, 0xa9, 0xd8, 0x75, 0x81, 0x1b, 0x6d, 0xc3, 0xd1),
+        L"ParameterDef_CropLeft");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x5ecc9dd5, 0x21c1, 0x462b, 0x9f, 0xec, 0xc2, 0xbd, 0x85, 0xf1, 0x40, 0x33),
+        L"ParameterDef_CropRight");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x8170a539, 0x9b55, 0x4051, 0x9d, 0x4e, 0x46, 0x59, 0x8d, 0x01, 0xb9, 0x14),
+        L"ParameterDef_CropTop");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x154ba82b, 0x990a, 0x4c80, 0x91, 0x01, 0x30, 0x37, 0xe2, 0x88, 0x39, 0xa1),
+        L"ParameterDef_CropBottom");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x8d568129, 0x847e, 0x11d5, 0x93, 0x5a, 0x50, 0xf8, 0x57, 0xc1, 0x00, 0x00),
+        L"ParameterDef_ScaleX");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x8d56812a, 0x847e, 0x11d5, 0x93, 0x5a, 0x50, 0xf8, 0x57, 0xc1, 0x00, 0x00),
+        L"ParameterDef_ScaleY");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x062cfbd8, 0xf4b1, 0x4a50, 0xb9, 0x44, 0xf3, 0x9e, 0x2f, 0xc7, 0x3c, 0x17),
+        L"ParameterDef_Rotation");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x72a3b4a2, 0x873d, 0x4733, 0x90, 0x52, 0x9f, 0x83, 0xa7, 0x06, 0xca, 0x5b),
+        L"ParameterDef_PinTopLeftX");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x29e4d78f, 0xa502, 0x4ebb, 0x8c, 0x07, 0xed, 0x5a, 0x03, 0x20, 0xc1, 0xb0),
+        L"ParameterDef_PinTopLeftY");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xa95296c0, 0x1ed9, 0x4925, 0x84, 0x81, 0x20, 0x96, 0xc7, 0x2e, 0x81, 0x8d),
+        L"ParameterDef_PinTopRightX");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xce1757ae, 0x7a0b, 0x45d9, 0xb3, 0xf3, 0x36, 0x86, 0xad, 0xff, 0x1e, 0x2d),
+        L"ParameterDef_PinTopRightY");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x08b2bc81, 0x9b1b, 0x4c01, 0xba, 0x73, 0xbb, 0xa3, 0x55, 0x4e, 0xd0, 0x29),
+        L"ParameterDef_PinBottomLeftX");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xc163f2ff, 0xcd83, 0x4655, 0x82, 0x6e, 0x37, 0x24, 0xab, 0x7f, 0xa0, 0x92),
+        L"ParameterDef_PinBottomLeftY");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x53bc5884, 0x897f, 0x479e, 0xb8, 0x33, 0x19, 0x1f, 0x86, 0x92, 0x10, 0x0d),
+        L"ParameterDef_PinBottomRightX");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x812fb15b, 0x0b95, 0x4406, 0x87, 0x8d, 0xef, 0xaa, 0x1c, 0xff, 0xc1, 0x29),
+        L"ParameterDef_PinBottomRightY");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xa2667f65, 0x65d8, 0x4abf, 0xa1, 0x79, 0x0b, 0x9b, 0x93, 0x41, 0x39, 0x49),
+        L"ParameterDef_AlphaKeyInvertAlpha");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x21ed5b0f, 0xb7a0, 0x43bc, 0xb7, 0x79, 0xc4, 0x7f, 0x85, 0xbf, 0x6c, 0x4d),
+        L"ParameterDef_LumKeyLevel");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xcbd39b25, 0x3ece, 0x441e, 0xba, 0x2c, 0xda, 0x47, 0x3a, 0xb5, 0xcc, 0x7c),
+        L"ParameterDef_LumKeyClip");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xe4962321, 0x2267, 0x11d3, 0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"ParameterDef_Amplitude");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0xe4962322, 0x2267, 0x11d3, 0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"ParameterDef_Pan");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9e610007, 0x1be2, 0x41e1, 0xbb, 0x11, 0xc9, 0x5d, 0xe9, 0x96, 0x4d, 0x03),
+        L"ParameterDef_OutgoingLevel");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x48cea642, 0xa8f9, 0x455b, 0x82, 0xb3, 0x86, 0xc8, 0x14, 0xb7, 0x97, 0xc7),
+        L"ParameterDef_IncomingLevel");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9c894ba1, 0x2277, 0x11d3, 0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"ParameterDef_SMPTESoft");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9c894ba2, 0x2277, 0x11d3, 0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"ParameterDef_SMPTEBorder");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9c894ba3, 0x2277, 0x11d3, 0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"ParameterDef_SMPTEPosition");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9c894ba4, 0x2277, 0x11d3, 0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"ParameterDef_SMPTEModulator");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9c894ba5, 0x2277, 0x11d3, 0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"ParameterDef_SMPTEShadow");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9c894ba6, 0x2277, 0x11d3, 0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"ParameterDef_SMPTETumble");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9c894ba7, 0x2277, 0x11d3, 0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"ParameterDef_SMPTESpotlight");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9c894ba8, 0x2277, 0x11d3, 0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"ParameterDef_SMPTEReplicationH");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9c894ba9, 0x2277, 0x11d3, 0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"ParameterDef_SMPTEReplicationV");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9c894baa, 0x2277, 0x11d3, 0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"ParameterDef_SMPTECheckerboard");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x5f1c2560, 0x2415, 0x11d3, 0x8a, 0x4f, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2),
+        L"ParameterDef_PhaseOffset");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x3d1dd891, 0xe793, 0x11d2, 0x80, 0x9e, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"Platform_Independent");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x9fdef8c1, 0xe847, 0x11d2, 0x80, 0x9e, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"Engine_None");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x69c870a1, 0xe793, 0x11d2, 0x80, 0x9e, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f),
+        L"PluginAPI_EssenceAccess");
+    ADD_DEFINITION_SYMBOL_ID(
+        LITERAL_AUID(0x56905e0b, 0x537d, 0x11d4, 0xa3, 0x6c, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x6a),
+        L"PluginCategory_Codec");
+    
         
     return ss;
 }
