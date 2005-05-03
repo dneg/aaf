@@ -106,4 +106,29 @@ bool OMBuiltinPropertyDefinition::isUniqueIdentifier(void) const
   return false;
 }
 
+OMUniqueObjectIdentification OMBuiltinPropertyDefinition::typeId(void) const
+{
+  TRACE("OMBuiltinPropertyDefinition::typeId");
+  ASSERT("Ask for type id from non-builtin properties only", false);
+  return nullOMUniqueObjectIdentification;
+}
+
+bool OMBuiltinPropertyDefinition::initialise(const OMUniqueObjectIdentification& id, 
+    const wchar_t* name, const wchar_t* description)
+{
+  TRACE("OMBuiltinPropertyDefinition::initialise");
+  ASSERT("Initialise non-builtin properties only", false);
+  return false;
+}
+
+bool OMBuiltinPropertyDefinition::initialise(const OMUniqueObjectIdentification& id, 
+    const wchar_t* name, const wchar_t* description, 
+    OMPropertyId localId, const OMUniqueObjectIdentification& typeId, 
+    bool isOptional, bool isUniqueIdentifier)
+{
+  TRACE("OMBuiltinPropertyDefinition::initialise");
+  ASSERT("Initialise non-builtin properties only", false);
+  return false;
+}
+    
 
