@@ -25,6 +25,20 @@
 #ifndef OMDICTIONARY_H
 #define OMDICTIONARY_H
 
+
+#define OM_CLASS_REGISTERED_OK                      0
+#define OM_CLASS_REGISTERED_FAILED                  1
+#define OM_CLASS_REGISTERED_ALREADY_REGISTERED      2
+
+#define OM_PROPERTY_REGISTERED_OK                   0
+#define OM_PROPERTY_REGISTERED_FAILED               1
+#define OM_PROPERTY_REGISTERED_ALREADY_REGISTERED   2
+
+#define OM_TYPE_REGISTERED_OK                       0
+#define OM_TYPE_REGISTERED_FAILED                   1
+#define OM_TYPE_REGISTERED_ALREADY_REGISTERED       2
+
+
 #include "OMClassFactory.h"
 #include "OMStorable.h"
 #include "OMRedBlackTree.h"
@@ -56,13 +70,16 @@ public:
   static void finalize(void);
 
   
-  virtual bool registerClassDef(const OMClassId& classId) = 0;
-  
-  virtual bool registerTypeDef(const OMClassId& typeId) = 0;
+  virtual bool registerClassDef(const OMUniqueObjectIdentification& classId) = 0;
+  virtual bool registerTypeDef(const OMUniqueObjectIdentification& typeId) = 0;
 
   virtual void classDefinitions(OMVector<OMClassDefinition*>& classDefs) const = 0;
-
   virtual void typeDefinitions(OMVector<OMType*>& typeDefs) const = 0;
+  
+  virtual int registerExtClassDef(OMClassDefinition* classDef) = 0;
+  virtual int registerExtPropertyDef(const OMUniqueObjectIdentification& classId, 
+    OMPropertyDefinition* propertyDef) = 0;
+  virtual int registerExtTypeDef(OMType* typeDef) = 0;
   
 private:
 
