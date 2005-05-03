@@ -118,6 +118,11 @@ public:
   virtual bool registerTypeDef(const OMUniqueObjectIdentification& typeId);
   virtual void classDefinitions(OMVector<OMClassDefinition*>& classDefs) const;
   virtual void typeDefinitions(OMVector<OMType*>& typeDefs) const;
+  virtual int registerExtClassDef(OMClassDefinition* classDef);
+  virtual int registerExtPropertyDef(const OMUniqueObjectIdentification& classId, 
+    OMPropertyDefinition* propertyDef);
+  virtual int registerExtTypeDef(OMType* typeDef);
+  
 
   
   //
