@@ -102,6 +102,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMBufferedStream.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMByteArray.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMCachedDiskRawStorage.cpp"
 # End Source File
 # Begin Source File
@@ -475,6 +479,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMBufferedIStream.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMBufferedStream.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMByteArray.h"
 # End Source File
 # Begin Source File
 
