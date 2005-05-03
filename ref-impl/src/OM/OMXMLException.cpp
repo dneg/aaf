@@ -50,6 +50,7 @@ OMXMLException::OMXMLException(const wchar_t* message, const wchar_t* secondaryM
         {
             _message = new wchar_t[lengthOfWideString(message) + 
                 lengthOfWideString(secondaryMessage) + 3];
+            _message[0] = L'\0';
             concatenateWideString(_message, message);
             concatenateWideString(_message, L":\n");
             concatenateWideString(_message, secondaryMessage);
