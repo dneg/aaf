@@ -56,6 +56,7 @@ public:
     bool next();
     bool nextElement();
     bool nextEndElement();
+    bool moveToEndElement();
     void skipContent();
     EventType getEventType();
     bool elementEquals(const wchar_t* uri, const wchar_t* localName);
