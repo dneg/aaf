@@ -217,7 +217,14 @@ public:
   virtual OMClassDefinition* parentClass(void) const;
 
   virtual void propertyDefinitions(OMVector<OMPropertyDefinition*>& propertyDefs) const;
-  
+
+  virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+    const wchar_t* description, 
+    const OMUniqueObjectIdentification& parentClassId, bool isConcrete,
+    OMPropertyTag classDefsTag);
+
+  virtual bool registerExtPropertyDef(OMPropertyDefinition* propertyDef);
+    
 public:
 
 	bool
