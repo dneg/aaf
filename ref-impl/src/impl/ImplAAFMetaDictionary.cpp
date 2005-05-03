@@ -284,6 +284,86 @@ void ImplAAFMetaDictionary::typeDefinitions(OMVector<OMType*>& typeDefs) const
     }
 }
 
+int ImplAAFMetaDictionary::registerExtClassDef(OMClassDefinition* classDef)
+{
+    if (isRegistered(classDef->identification()))
+    {
+        return OM_CLASS_REGISTERED_ALREADY_REGISTERED;
+    }
+    
+    HRESULT result = RegisterClassDef(dynamic_cast<ImplAAFClassDef*>(classDef));
+    if (AAFRESULT_SUCCEEDED(result))
+    {
+        return OM_CLASS_REGISTERED_OK;
+    }
+    else
+    {
+        return OM_CLASS_REGISTERED_FAILED;
+    }
+}
+
+int ImplAAFMetaDictionary::registerExtPropertyDef(const OMUniqueObjectIdentification& classId, 
+    OMPropertyDefinition* propertyDef)
+{
+    ImplAAFClassDefSP spClassDef;
+    HRESULT result = dataDictionary()->LookupClassDef(*(reinterpret_cast<const aafUID_t*>(
+        &classId)), &spClassDef);
+    if (!AAFRESULT_SUCCEEDED(result))
+    {
+        return OM_PROPERTY_REGISTERED_FAILED;
+    }
+    spClassDef->AssurePropertyTypesLoaded();
+
+    ImplAAFPropertyDefSP spPropertyDef;
+    result = spClassDef->LookupPropertyDef(*(reinterpret_cast<const aafUID_t*>(
+        &propertyDef->identification())), &spPropertyDef);
+    if (AAFRESULT_SUCCEEDED(result))
+    {
+        return OM_PROPERTY_REGISTERED_ALREADY_REGISTERED;
+    }
+    
+    ImplAAFTypeDefSP spTypeDef;
+    OMUniqueObjectIdentification typeId = propertyDef->typeId();
+    result = dataDictionary()->LookupTypeDef(*(reinterpret_cast<const aafUID_t*>(
+        &typeId)), &spTypeDef);
+    if (!AAFRESULT_SUCCEEDED(result))
+    {
+        return OM_PROPERTY_REGISTERED_FAILED;
+    }
+
+    if (spClassDef->registerExtPropertyDef(propertyDef))
+    {
+        return OM_PROPERTY_REGISTERED_OK;
+    }
+    else
+    {
+        return OM_PROPERTY_REGISTERED_FAILED;
+    }
+}
+
+int ImplAAFMetaDictionary::registerExtTypeDef(OMType* typeDef)
+{
+    OMUniqueObjectIdentification typeId = typeDef->identification();
+    ImplAAFTypeDefSP spTypeDef;
+    HRESULT result = dataDictionary()->LookupTypeDef(*(reinterpret_cast<const aafUID_t*>(
+        &typeId)), &spTypeDef);
+    if (AAFRESULT_SUCCEEDED(result))
+    {
+        return OM_TYPE_REGISTERED_ALREADY_REGISTERED;
+    }
+
+    result = RegisterTypeDef(dynamic_cast<ImplAAFTypeDef*>(typeDef));
+    if (AAFRESULT_SUCCEEDED(result))
+    {
+        return OM_TYPE_REGISTERED_OK;
+    }
+    else
+    {
+        return OM_TYPE_REGISTERED_FAILED;
+    }
+}
+
+
 
 //
 // Define the symbol for the stored object id
