@@ -48,12 +48,14 @@ public:
     OMSymbolspace* getBaselineSymbolspace() const;
     OMSymbolspace* getDefaultExtSymbolspace() const;
     OMSymbolspace* createDefaultExtSymbolspace(OMUniqueObjectIdentification id);
+    OMSymbolspace* createSymbolspace();
+    void addSymbolspace(OMSymbolspace* symbolspace);
     
     bool getSymbol(OMUniqueObjectIdentification id, const wchar_t** symbolspaceURI, const wchar_t** symbol) const;
-    const wchar_t* getDefinitionSymbol(OMUniqueObjectIdentification id);
     OMUniqueObjectIdentification getId(const wchar_t* symbolspaceURI, const wchar_t* symbol) const;
     OMPropertyId getPropertyId(const wchar_t* symbolspaceURI, const wchar_t* symbol) const;
-    OMUniqueObjectIdentification getId(const wchar_t* definitionSymbol) const;
+    const wchar_t* getDefinitionSymbol(OMUniqueObjectIdentification id);
+    OMUniqueObjectIdentification getDefinitionId(const wchar_t* symbol) const;
     
     const wchar_t* getDataStreamNotationName(OMUniqueObjectIdentification typeId);
     const wchar_t* getDataStreamEntityName(void* ref);
@@ -64,8 +66,6 @@ public:
     wchar_t* getForwardedObjectSetId();
     
 private:
-    void loadStringIds();
-
     bool            _isRead;
     OMXMLWriter*    _xmlWriter;
     OMXMLReader*    _xmlReader;
@@ -76,8 +76,6 @@ private:
     OMSymbolspace*  _defaultExtSymbolspace;
     
     OMSet<OMWString, OMSymbolspace*> _symbolspaces;
-    OMSet<OMUniqueObjectIdentification, OMWString> _idToDefSymbol;
-    OMSet<OMWString, OMUniqueObjectIdentification> _defSymbolToId;
 
     int             _dataStreamNotationNameIndex;
     int             _dataStreamEntityNameIndex;
