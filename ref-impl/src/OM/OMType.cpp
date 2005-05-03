@@ -192,3 +192,11 @@ const wchar_t* OMInternalType::description() const
   return 0;
 }
 
+bool OMInternalType::initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+    const wchar_t* description)
+{
+  TRACE("OMInternalType::initialise");
+  ASSERT("Internal type not asked to initialise", false);
+  return false;
+}
+
