@@ -31,6 +31,9 @@ class OMSetType : virtual public OMType
 {
 public:
     virtual OMType* elementType(void) const = 0;
+    virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+        const wchar_t* description, const OMUniqueObjectIdentification& elementTypeId,
+        OMPropertyTag typeDefsTag) = 0;
 };
 
 #endif

@@ -206,6 +206,8 @@ public:
     virtual const OMUniqueObjectIdentification& identification() const;
     virtual const wchar_t* name() const;
     virtual const wchar_t* description() const;
+    virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+        const wchar_t* description);
 };
 
 #endif

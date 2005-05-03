@@ -34,6 +34,10 @@ class OMWeakObjectReferenceType : virtual public OMObjectReferenceType
 public:
     virtual void targetSet(OMVector<OMUniqueObjectIdentification>& result) const = 0;
     virtual const OMPropertyId* targetPath(void) const = 0;
+    virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+        const wchar_t* description,
+        const OMUniqueObjectIdentification& refClassId, OMPropertyTag classDefsTag,
+        OMVector<OMUniqueObjectIdentification>& targetSet) = 0;
 };
 
 

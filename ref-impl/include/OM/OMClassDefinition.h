@@ -57,6 +57,13 @@ public:
   
   virtual void propertyDefinitions(OMVector<OMPropertyDefinition*>& propertyDefs) const = 0;
 
+  virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+    const wchar_t* description, 
+    const OMUniqueObjectIdentification& parentClassId, bool isConcrete,
+    OMPropertyTag classDefsTag) = 0;
+
+  virtual bool registerExtPropertyDef(OMPropertyDefinition* propertyDef) = 0;
+    
 };
 
 #endif

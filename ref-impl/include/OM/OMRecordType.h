@@ -27,6 +27,7 @@
 #define OMRECORDTYPE_H
 
 #include "OMType.h"
+#include "OMVector.h"
 
 class OMRecordType : virtual public OMType
 {
@@ -34,6 +35,10 @@ public:
     virtual OMUInt32 memberCount(void) const = 0;
     virtual wchar_t* memberName(OMUInt32 index) const = 0;
     virtual OMType* memberType(OMUInt32 index) const = 0;
+    virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+        const wchar_t* description, OMVector<wchar_t*>& memberNames, 
+        OMVector<OMUniqueObjectIdentification>& memberTypeIds, 
+        OMPropertyTag typeDefsTag) = 0;
 };
 
 

@@ -29,7 +29,12 @@
 #include "OMArrayType.h"
 
 class OMVariableArrayType : virtual public OMArrayType
-{};
+{
+public:
+    virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+        const wchar_t* description, const OMUniqueObjectIdentification& elementTypeId,
+        OMPropertyTag typeDefsTag) = 0;
+};
 
 
 #endif

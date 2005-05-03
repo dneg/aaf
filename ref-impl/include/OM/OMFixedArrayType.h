@@ -31,6 +31,9 @@ class OMFixedArrayType : virtual public OMArrayType
 {
 public:
     virtual OMUInt32 elementCount(void) const = 0;
+    virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+        const wchar_t* description, const OMUniqueObjectIdentification& elementTypeId,
+        OMPropertyTag typeDefsTag, OMUInt32 elementCount) = 0;
 };
 
 

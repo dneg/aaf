@@ -27,6 +27,7 @@
 #define OMENUMERATEDTYPE_H
 
 #include "OMType.h"
+#include "OMVector.h"
 
 class OMEnumeratedType : virtual public OMType
 {
@@ -36,6 +37,11 @@ public:
     virtual wchar_t* elementName(OMUInt32 index) const = 0;
     virtual OMInt64 elementValue(OMUInt32 index) const = 0;
     virtual wchar_t* elementNameFromValue(OMInt64 value) const = 0;
+    virtual OMInt64 elementValueFromName(const wchar_t* name) const = 0;
+    virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+        const wchar_t* description, const OMUniqueObjectIdentification& elementTypeId,
+        OMPropertyTag typeDefsTag, OMVector<wchar_t*>& elementNames, 
+        OMVector<OMInt64>& elementValues) = 0;
 };
 
 

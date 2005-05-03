@@ -58,6 +58,9 @@ public:
     virtual const OMUniqueObjectIdentification& identification() const = 0;
     virtual const wchar_t* name() const = 0;
     virtual const wchar_t* description() const = 0;
+
+    virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+        const wchar_t* description) = 0;
 };
 
 #endif

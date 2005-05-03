@@ -29,7 +29,12 @@
 
 
 class OMStrongObjectReferenceType : virtual public OMObjectReferenceType
-{};
+{
+public:
+    virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+        const wchar_t* description,
+        const OMUniqueObjectIdentification& refClassId, OMPropertyTag classDefsTag) = 0;
+};
 
 
 #endif

@@ -59,6 +59,14 @@ public:
     //          <c OMPropertyDefinition> uniquely identify the class?
   virtual bool isUniqueIdentifier(void) const = 0;
 
+  virtual OMUniqueObjectIdentification typeId(void) const = 0;
+  
+  virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+    const wchar_t* description, 
+    OMPropertyId localId, const OMUniqueObjectIdentification& typeId, 
+    bool isOptional, bool isUniqueIdentifier) = 0;
+    
+  
 };
 
   // @class Definitions of persistent properties supported by
@@ -113,7 +121,16 @@ public:
     //          <c OMPropertyDefinition> uniquely identify the class?
   virtual bool isUniqueIdentifier(void) const;
 
+  virtual OMUniqueObjectIdentification typeId(void) const;
+
+  virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+    const wchar_t* description);
   
+  virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+    const wchar_t* description, 
+    OMPropertyId localId, const OMUniqueObjectIdentification& typeId, 
+    bool isOptional, bool isUniqueIdentifier);
+    
 
 private:
   // @access Private members.

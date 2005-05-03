@@ -32,6 +32,9 @@ class OMRenamedType : virtual public OMType
 {
 public:
     virtual OMType* renamedType(void) const = 0;
+    virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+        const wchar_t* description, const OMUniqueObjectIdentification& renamedTypeId,
+        OMPropertyTag typeDefsTag) = 0;
 };
 
 

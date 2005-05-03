@@ -32,6 +32,8 @@ class OMIntType : virtual public OMType
 public:
     virtual bool isSigned(void) const = 0;
     virtual OMUInt8 size(void) const = 0;
+    virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+        const wchar_t* description, OMUInt8 size, bool isSigned) = 0;
 };
 
 

@@ -28,7 +28,11 @@
 #include "OMType.h"
 
 class OMCharacterType : virtual public OMType
-{};
+{
+public:
+    virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
+        const wchar_t* description) = 0;
+};
 
 
 #endif

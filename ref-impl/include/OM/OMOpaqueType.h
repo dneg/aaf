@@ -29,8 +29,7 @@
 #include "OMIndirectType.h"
 
 class OMOpaqueType : virtual public OMIndirectType
-{
-};
+{};
 
 
 #endif
