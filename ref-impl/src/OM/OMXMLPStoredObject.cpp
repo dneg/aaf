@@ -757,18 +757,10 @@ OMXMLPStoredObject::restore(OMPropertySet& properties)
             OMPropertyId localId = _store->getPropertyId(nmspace, localName);
             if (localId == 0)
             {
-                // TODO: will be removed and replaced with exception
-                printf("Skipping unknown property (%d, {%ls, %ls})\n", localId, 
-                    nmspace, localName);
-                getReader()->skipContent();
+                throw OMXMLException(L"Unknown property encountered");
             }
-            else
-            {
-                OMProperty* property = properties.get(localId);
-                printf("Restoring (%d, {%ls, %ls})\n", localId, nmspace,
-                    localName);
-                property->restore(property->bitsSize());
-            }
+            OMProperty* property = properties.get(localId);
+            property->restore(property->bitsSize());
 
             ASSERT("Reader is positioned on property end element", 
                 getReader()->getEventType() == OMXMLReader::END_ELEMENT);
@@ -1020,28 +1012,6 @@ OMXMLPStoredObject::restore(OMStrongReferenceSet& set,
         OMStrongReferenceSetElement element(&set, name, localKey, key, keySize);
         element.restore();
         set.insert(key, element);
-
-        // TODO: This will be removed once we read in simple values
-        // this hack ensures the set key equals the property uniquely 
-        // identifying the object
-        {
-            OMStorable* storable = element.getValue();
-            OMProperty* keyProperty;
-            
-            // handle special case for OperationGroup::Parameters
-            const OMUniqueObjectIdentification propIDOperationGroupParameters = 
-               {0x06010104, 0x060a, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
-            if (set.definition()->identification() == propIDOperationGroupParameters)
-            {
-                keyProperty = storable->findProperty(0x4c01); // Parameter::Definition
-            }
-            else
-            {
-                keyProperty = storable->findProperty(set.keyPropertyId());
-            }
-            ASSERT("Valid key property for object in strong ref set", keyProperty != 0);
-            keyProperty->setBits(key, keySize);
-        }
 
         delete [] name;
         localKey++;
@@ -1536,6 +1506,7 @@ OMXMLPStoredObject::saveRecord(const OMByte* internalBytes, OMUInt16 internalSiz
                 isElementContent);
             getWriter()->writeElementEnd();
             
+            delete [] name;
             memberBytes += memberType->internalSize();
         }
     }
@@ -1871,6 +1842,7 @@ OMXMLPStoredObject::restoreEnum(OMByteArray& bytes, const OMList<OMXMLAttribute*
 
     wchar_t* wData = convertToWideString(data);
     OMInt64 value = type->elementValueFromName(wData);
+    delete [] wData;
 
     bytes.append(reinterpret_cast<OMByte*>(&value), sizeof(OMInt64));    
     
@@ -1902,6 +1874,7 @@ OMXMLPStoredObject::restoreExtEnum(OMByteArray& bytes, const OMList<OMXMLAttribu
 
     wchar_t* wData = convertToWideString(data);
     OMUniqueObjectIdentification value = type->elementValueFromName(wData);
+    delete [] wData;
 
     bytes.append(reinterpret_cast<OMByte*>(&value), sizeof(OMUniqueObjectIdentification));    
     
@@ -2211,6 +2184,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
             {
                 throw OMXMLException(L"Invalid record value - unexpected member");
             }
+            delete [] memberName;
             
             restoreSimpleValue(bytes, attrs, 0, memberType);
         }            
