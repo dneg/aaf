@@ -380,8 +380,4 @@ void ImplAAFTypeDefRename::onRestore(void* clientContext) const
 }
 
 
-const OMPropertyId* ImplAAFTypeDefRename::getTargetPath() const
-{
-    return BaseType()->getTargetPath();
-}
 

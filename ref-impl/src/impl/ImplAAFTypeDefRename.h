@@ -181,9 +181,6 @@ public:
   virtual void onSave(void* clientContext) const;
   virtual void onRestore(void* clientContext) const;
 
-  // PdN: temporary; override from OMType
-  virtual const OMPropertyId* getTargetPath() const;
-
   
 private:
   ImplAAFTypeDefSP BaseType () const;

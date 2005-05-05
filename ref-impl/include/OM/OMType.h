@@ -191,10 +191,6 @@ public:
                    size_t bytesSize);
 
 
-  // PdN: temporary function
-  virtual const OMPropertyId* getTargetPath() const { return 0; };
-  
-  
 };
 
 // internal types that are not TypeDefinitions registered in the Dictionary
