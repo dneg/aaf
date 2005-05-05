@@ -21,7 +21,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "AAFConverterLib"=.\Utilities\AAFConverterLib\AAFConverterLib.dsp - Package Owner=<4>
+Project: "AAFConverterLib"=".\Utilities\AAFConverterLib\AAFConverterLib.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -81,7 +81,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "AafOmf"=.\Utilities\AafOmf\AafOmf.dsp - Package Owner=<4>
+Project: "AafOmf"=".\Utilities\AafOmf\AafOmf.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -189,7 +189,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "ComFileKindTest"=.\Test\com\ComFileKindTest\ComFileKindTest.dsp - Package Owner=<4>
+Project: "ComFileKindTest"=".\Test\com\ComFileKindTest\ComFileKindTest.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -204,52 +204,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "UTF8FileNameTest"=.\Test\com\UTF8FileNameTest\UTF8FileNameTest.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name MakeSDK
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "OpenExistingModify"=.\Test\com\OpenExistingModify\OpenExistingModify.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name MakeSDK
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "ScaleTest"=.\Test\com\ScaleTest\ScaleTest.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name MakeSDK
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "ComModTestAAF"=.\Test\com\ComModTestAAF\ComModTestAAF.dsp - Package Owner=<4>
+Project: "ComModTestAAF"=".\Test\com\ComModTestAAF\ComModTestAAF.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -321,7 +276,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "CreateSequence"=.\Test\com\CreateSequence\CreateSequence.dsp - Package Owner=<4>
+Project: "CreateSequence"=".\Test\com\CreateSequence\CreateSequence.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -336,7 +291,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "Dump"=.\DevUtils\dump\dump.dsp - Package Owner=<4>
+Project: "Dump"=".\DevUtils\dump\dump.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -348,7 +303,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "EssenceAccess"=.\Test\com\EssenceAccess\EssenceAccess.dsp - Package Owner=<4>
+Project: "EssenceAccess"=".\Test\com\EssenceAccess\EssenceAccess.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -363,7 +318,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "Everything"=.\Everything\Everything.dsp - Package Owner=<4>
+Project: "Everything"=".\Everything\Everything.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -522,7 +477,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "MakeSDK"=.\MakeSDK.dsp - Package Owner=<4>
+Project: "MakeSDK"=".\MakeSDK.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -549,7 +504,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "MakeSDKExamples"=.\MakeSDKExamples.dsp - Package Owner=<4>
+Project: "MakeSDKExamples"=".\MakeSDKExamples.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -648,7 +603,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "MakeSDKExamples2"=.\MakeSDKExamples2.dsp - Package Owner=<4>
+Project: "MakeSDKExamples2"=".\MakeSDKExamples2.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -678,7 +633,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "MakeSDKUtilities"=.\MakeSDKUtilities.dsp - Package Owner=<4>
+Project: "MakeSDKUtilities"=".\MakeSDKUtilities.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -704,11 +659,14 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name aafextract
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name formatconv
+    End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "MultiGenTest"=.\TEST\COM\MultiGenTest\MultiGenTest.dsp - Package Owner=<4>
+Project: "MultiGenTest"=".\TEST\COM\MultiGenTest\MultiGenTest.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -735,121 +693,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "aaf2dot"=.\Utilities\aafviewer\aaf2dot\aaf2dot.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name axLib
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "aafdump"=.\Utilities\aafdump\aafdump.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "aafextract"=.\Utilities\aafextract\aafextract.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "aafmeta2dot"=.\Utilities\aafviewer\aafmeta2dot\aafmeta2dot.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name axLib
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "axDump"=..\examples2\axDump\axDump.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name axLib
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "axExample"=..\examples2\axExample\axExample.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name axLib
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "axFileGen"=..\examples2\axFileGen\axFileGen.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name axLib
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "axHrMap"=..\examples2\axHrMap\axHrMap.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name axLib
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "axLib"=..\examples2\axLib\axLib.dsp - Package Owner=<4>
+Project: "OpenExistingModify"=".\Test\com\OpenExistingModify\OpenExistingModify.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -864,7 +708,37 @@ Package=<4>
 
 ###############################################################################
 
-Project: "axMasterMobEx"=..\examples2\axMasterMobEx\axMasterMobEx.dsp - Package Owner=<4>
+Project: "ScaleTest"=".\Test\com\ScaleTest\ScaleTest.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MakeSDK
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "UTF8FileNameTest"=".\Test\com\UTF8FileNameTest\UTF8FileNameTest.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MakeSDK
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "aaf2dot"=".\Utilities\aafviewer\aaf2dot\aaf2dot.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -879,7 +753,31 @@ Package=<4>
 
 ###############################################################################
 
-Project: "axPlugin"=..\examples2\axPlugin\axPlugin.dsp - Package Owner=<4>
+Project: "aafdump"=".\Utilities\aafdump\aafdump.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "aafextract"=".\Utilities\aafextract\aafextract.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "aafmeta2dot"=".\Utilities\aafviewer\aafmeta2dot\aafmeta2dot.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -894,7 +792,112 @@ Package=<4>
 
 ###############################################################################
 
-Project: "axPluginInfo"=..\examples2\axPluginInfo\axPluginInfo.dsp - Package Owner=<4>
+Project: "axDump"="..\examples2\axDump\axDump.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name axLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "axExample"="..\examples2\axExample\axExample.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name axLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "axFileGen"="..\examples2\axFileGen\axFileGen.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name axLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "axHrMap"="..\examples2\axHrMap\axHrMap.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name axLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "axLib"="..\examples2\axLib\axLib.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MakeSDK
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "axMasterMobEx"="..\examples2\axMasterMobEx\axMasterMobEx.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name axLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "axPlugin"="..\examples2\axPlugin\axPlugin.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name axLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "axPluginInfo"="..\examples2\axPluginInfo\axPluginInfo.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -924,7 +927,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "eli2aaf"=.\Utilities\eli2aaf\eli2aaf.dsp - Package Owner=<4>
+Project: "eli2aaf"=".\Utilities\eli2aaf\eli2aaf.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -935,6 +938,18 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name axLib
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "formatconv"=".\Utilities\formatconv\formatconv.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################
