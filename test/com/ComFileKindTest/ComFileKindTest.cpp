@@ -126,6 +126,20 @@ kind_info_t filekind[] = {
 	{ &kAAFFileKind_AafG512Binary, "G512" },
 	{ NULL, ""} };
 
+// OpenNewModify has a filemode argument to exercise
+typedef struct _modeflag_info_t
+{
+	int flag;
+	const aafUID_t* kind;
+	char name[16];
+} modeflag_info_t;
+
+// Specify the file mode flag and the compatible RawStorage kind
+modeflag_info_t modeNewModify[] = {
+	{ AAF_FILE_MODE_USE_LARGE_SS_SECTORS, &kAAFFileKind_Aaf4KBinary, "4K" },
+	{ 0, &kAAFFileKind_Aaf512Binary,  "512" },
+	{ -1, NULL, ""} };
+
 
 static HRESULT WriteAAFFile(IAAFFile* pFile)
 {
@@ -406,21 +420,24 @@ static HRESULT CreateAAFFile(api_info_t info, bool testLargeNames)
 	{
 		if (info.api == FileOpenNewModify)
 		{
-			SetFilename(filename, info.name, NULL, testLargeNames);
-			RemoveTestFile(filename);
+			for (int i = 0; modeNewModify[i].flag != -1; i++)
+			{
+				SetFilename(filename, info.name, modeNewModify[i].name, testLargeNames);
+				RemoveTestFile(filename);
 
-			printf("%-8s|", info.name);
+				printf("%-2s-%-4s |", info.name, modeNewModify[i].name);
 
-			checkResult(AAFFileOpenNewModify(
-								filename,
-								0,
-								&TestProductID,
-								&pFile));
+				checkResult(AAFFileOpenNewModify(
+									filename,
+									modeNewModify[i].flag,
+									&TestProductID,
+									&pFile));
 
-			checkResult(WriteAAFFile(pFile));
+				checkResult(WriteAAFFile(pFile));
 
-			checkResult(OpenAAFFile(NULL, filename));
-			printf("\n");
+				checkResult(OpenAAFFile( modeNewModify[i].kind, filename));
+				printf("\n");
+			}
 		}
 		else if (info.api == FileOpenNewModifyEx)
 		{
