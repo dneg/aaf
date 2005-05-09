@@ -105,6 +105,18 @@
 
 /*
  *  Compiler:   GNU C++
+ *  Processor:  ppc64 (Apple G5 and IBM Power64)
+ *  OS:         Linux
+ */
+#elif defined(__GNUC__) && defined(__powerpc64__) && defined(__linux__)
+#define CPU_POWERPC64
+#define OS_LINUX
+#define OS_UNIX
+#define COMPILER_GCC
+#define PLATFORM_GCC_POWERPC64_LINUX
+
+/*
+ *  Compiler:   GNU C++
  *  Processor:  SPARC
  *  OS:         Solaris
  */
@@ -241,8 +253,9 @@ typedef wchar_t			aafCharacter;
  *  Linux, Irix, Darwin, Solaris, FreeBSD
  */
 #elif defined(PLATFORM_GCC_INTEL_LINUX) || defined(PLATFORM_GCC_X86_64_LINUX) \
-	|| defined(PLATFORM_MIPSPRO_MIPS_IRIX) || defined(PLATFORM_GCC_MIPS_IRIX) \
+	|| defined(PLATFORM_GCC_POWERPC64_LINUX) \
 	|| defined(PLATFORM_GCC_POWERPC_DARWIN) || defined(PLATFORM_MWERKS_POWERPC_DARWIN) \
+	|| defined(PLATFORM_MIPSPRO_MIPS_IRIX) || defined(PLATFORM_GCC_MIPS_IRIX) \
 	|| defined(PLATFORM_GCC_SPARC_SOLARIS) || defined(PLATFORM_GCC_INTEL_FREEBSD) \
 	|| defined(PLATFORM_GCC_INTEL_OPENBSD)
 
@@ -292,7 +305,7 @@ typedef wchar_t			aafCharacter;
  */
 #if defined(_MSC_VER)
 #define AAFFMT64 "I64"
-#elif defined(__x86_64__)
+#elif defined(__x86_64__) or defined(__powerpc64__)
 #define AAFFMT64 "l"
 #else			// all 32bit platforms using POSIX compilers
 #define AAFFMT64 "ll"

@@ -52,6 +52,9 @@
 #elif defined(__GNUC__) && defined(__x86_64__) && defined(__linux__)
 #define OM_COMPILER_GCC_X86_64_LINUX
 #define OM_OS_UNIX
+#elif defined(__GNUC__) && defined(__powerpc64__) && defined(__linux__)
+#define OM_COMPILER_GCC_PPC64_LINUX
+#define OM_OS_UNIX
 #elif defined(__GNUC__) && defined(__i386__) && defined(__FreeBSD__)
 #define OM_COMPILER_GCC_INTEL_FREEBSD
 #define OM_OS_UNIX
