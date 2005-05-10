@@ -60,12 +60,8 @@ include $(AAFBASE)/build/cdefs-$(COMPILER).mk
 #------------------------------------------------------------------------------
 PLATFORM_CFLAGS =
 
-#Is this needed for PPC64?
-# -fPIC is necessary when building object code to be used in a shared library
-#PLATFORM_CFLAGS += -fPIC
-
 # turn on PPC64 specific optimisations for Release builds
-REL_FLAGS += -march=powerpc64
+REL_FLAGS += -mcpu=G5 -mpowerpc64
 
 
 # Platform specific compiler options
