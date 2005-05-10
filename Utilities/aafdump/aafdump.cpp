@@ -1928,8 +1928,8 @@ bool isValid(const IndexEntry* index,
 {
   bool result = true;
 
-  size_t position;
-  size_t previousOffset;
+  size_t position = 0;
+  size_t previousOffset = 0;
   size_t currentOffset;
   size_t currentLength;
 
@@ -2385,7 +2385,7 @@ WeakCollectionIndexEntry* readWeakCollectionIndex(IStream* stream,
 
 OMUInt32 typeOf(IndexEntry* entry, OMUInt32 version)
 {
-  OMUInt32 result;
+  OMUInt32 result = 0;
 
   if (version > 24) {
     result = entry->_type;
@@ -3342,7 +3342,7 @@ void dumpObject(IStorage* storage,
     fatalError("dumpObject", "Property index stream empty.");
   }
 
-  OMUInt16 _byteOrder;
+  OMUInt16 _byteOrder = unspecifiedEndian;
   if (version >= 23) {
     OMUInt8 byteOrder;
     readUInt8(stream, &byteOrder);
@@ -3653,7 +3653,7 @@ void dumpFile(char* fileName)
 
 OMUInt16 determineVersion(IStorage* storage)
 {
-  OMUInt16 result;
+  OMUInt16 result = 0;
   IStream* s = 0;
   // Version >= 21 (or < 2)
   HRESULT r = openStreamTry(storage, "properties", &s);
@@ -3835,7 +3835,7 @@ static void dumpReferencedProperties(IStorage* root, OMUInt16 version)
     if (stream == 0) {
       fatalError("dumpReferencedProperties", "openStream() failed.");
     }
-    ByteOrder bo;
+    ByteOrder bo = unspecifiedEndian;
     OMByte _byteOrder;
     read(stream, 0, &_byteOrder, sizeof(_byteOrder));
     ASSERT("Valid byte order", (_byteOrder == 'L') || (_byteOrder == 'B'));
