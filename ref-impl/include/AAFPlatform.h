@@ -305,7 +305,7 @@ typedef wchar_t			aafCharacter;
  */
 #if defined(_MSC_VER)
 #define AAFFMT64 "I64"
-#elif defined(__x86_64__) or defined(__powerpc64__)
+#elif defined(__x86_64__) || defined(__powerpc64__)
 #define AAFFMT64 "l"
 #else			// all 32bit platforms using POSIX compilers
 #define AAFFMT64 "ll"
