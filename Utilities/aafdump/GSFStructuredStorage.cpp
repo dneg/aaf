@@ -40,6 +40,30 @@ extern "C" {
 #endif
 
 
+// Byte ordering
+//
+typedef OMUInt16 ByteOrder;
+const ByteOrder unspecifiedEndian = 0;
+const ByteOrder littleEndian      = 0x4949;
+const ByteOrder bigEndian         = 0x4d4d;
+
+static inline ByteOrder hostByteOrder(void)
+{
+  OMUInt16 word = 0x1234;
+  OMUInt8  byte = *((OMUInt8*)&word);
+  ByteOrder result;
+
+  assert((byte == 0x12) || (byte == 0x34));
+
+  if (byte == 0x12) {
+    result = bigEndian;
+  } else {
+    result = littleEndian;
+  }
+  return result;
+}
+
+
 // Determine host operating system.
 //
 #if defined(_WIN32)
@@ -447,6 +471,27 @@ GSFIStorage::SetElementTimes(
     return STG_E_UNIMPLEMENTEDFUNCTION;
 }
 
+// libgsf treats clsid as an array of 16 bytes storing it unchanged on disk.
+// The container spec requires a little-endian ordering of clsid on disk
+// so on bigendian machines we must reorder the class id.
+static inline void reorder_clsid(unsigned char *id)
+{
+	if (hostByteOrder() == littleEndian)
+		return;
+
+	unsigned char t[8];
+	memmove(t, &id[0], 8);
+	id[0] = t[3];		// reorder Data1 int32_t
+	id[1] = t[2];
+	id[2] = t[1];
+	id[3] = t[0];
+	id[4] = t[5];		// reorder Data2 int16_t
+	id[5] = t[4];
+	id[6] = t[7];		// reorder Data3 int16_t
+	id[7] = t[6];
+	// Data4 is an array of char so remains unchanged
+}
+
 HRESULT STDMETHODCALLTYPE
 GSFIStorage::SetClass (REFCLSID clsid)
 {
@@ -455,6 +500,7 @@ GSFIStorage::SetClass (REFCLSID clsid)
 	unsigned char tmp_clsid[16];
 
 	memmove(&tmp_clsid, &clsid, sizeof(tmp_clsid));
+	reorder_clsid(tmp_clsid);
 
 	int status = GSTG_OK;
 	if (!gsf_outfile_msole_set_class_id (GSF_OUTFILE_MSOLE(_storage), tmp_clsid))
@@ -516,7 +562,10 @@ GSFIStorage::Stat(
 	if ( _mode == GSF_READ)
 	{
 		if (gsf_infile_msole_get_class_id (GSF_INFILE_MSOLE(_storage), clsid))
+		{
+			reorder_clsid(clsid);
 			memmove (&pstatstg->clsid, clsid, sizeof(pstatstg->clsid));
+		}
 		else
 			status = GSTG_ERROR;
 	}
@@ -931,7 +980,10 @@ GSFIEnumSTATSTG::Next(
         if (mode == GSF_READ)
         {
             if (gsf_infile_msole_get_class_id (GSF_INFILE_MSOLE(input), clsid))
+            {
+                reorder_clsid(clsid);
                 memmove (&pstatstg->clsid, clsid, sizeof(pstatstg->clsid));
+            }
         }
 
 
