@@ -539,7 +539,11 @@ void OMDataStreamProperty::deepCopyTo(OMProperty* destination,
   OMUInt64 bytesToCopy = size();
   OMByte buffer[1024];
   while (bytesToCopy != 0) {
-    read(buffer, sizeof(buffer), bytesRead);
+    if (bytesToCopy < sizeof(buffer)) {
+        read(buffer, (OMUInt32)bytesToCopy, bytesRead);
+    } else {
+        read(buffer, sizeof(buffer), bytesRead);
+    }
     dest->write(buffer, bytesRead, bytesWritten);
     bytesToCopy = bytesToCopy - bytesWritten;
   }
