@@ -76,6 +76,15 @@ typedef uint64_t               OMUInt64;
 #error "Unknown compiler"
 #endif
 
+#if defined(_MSC_VER)
+#define OMFMT64 "I64"
+#elif defined(__x86_64__)
+#define OMFMT64 "l"
+#else			// all 32bit platforms using POSIX compilers
+#define OMFMT64 "ll"
+#endif
+
+
 typedef OMUInt8                OMByte;
 typedef OMUInt16               OMCharacter;
 
