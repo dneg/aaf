@@ -51,15 +51,25 @@ public:
     OMSymbolspace* createSymbolspace();
     void addSymbolspace(OMSymbolspace* symbolspace);
     
-    bool getSymbol(OMUniqueObjectIdentification id, const wchar_t** symbolspaceURI, const wchar_t** symbol) const;
-    OMUniqueObjectIdentification getId(const wchar_t* symbolspaceURI, const wchar_t* symbol) const;
-    OMPropertyId getPropertyId(const wchar_t* symbolspaceURI, const wchar_t* symbol) const;
-    const wchar_t* getDefinitionSymbol(OMUniqueObjectIdentification id);
-    OMUniqueObjectIdentification getDefinitionId(const wchar_t* symbol) const;
+    bool getMetaDefSymbol(OMUniqueObjectIdentification id, const wchar_t** symbolspaceURI, const wchar_t** symbol) const;
+    OMUniqueObjectIdentification getMetaDefId(const wchar_t* symbolspaceURI, const wchar_t* symbol) const;
+    OMPropertyId getPropertyDefId(const wchar_t* symbolspaceURI, const wchar_t* symbol) const;
+    const wchar_t* getDefSymbol(OMUniqueObjectIdentification id);
+    OMUniqueObjectIdentification getDefId(const wchar_t* symbol) const;
+    OMUniqueObjectIdentification getBaselineDefId(const wchar_t* symbol) const;
+    OMUniqueObjectIdentification getBaselineMetaDefId(const wchar_t* symbol) const;
+    const wchar_t* getBaselineDefSymbol(OMUniqueObjectIdentification id);
+    const wchar_t* getBaselineMetaDefSymbol(OMUniqueObjectIdentification id);
     
     const wchar_t* getDataStreamNotationName(OMUniqueObjectIdentification typeId);
     const wchar_t* getDataStreamEntityName(void* ref);
-    const wchar_t* getDataStreamEntityValue(void* ref);
+    const wchar_t* getDataStreamEntityValue(void* ref, const wchar_t* prefix);
+    const wchar_t* registerDataStreamEntityValue(void* ref, const wchar_t* value);
+    bool registerDataStreamEntity(const wchar_t* name, const wchar_t* value);
+    const wchar_t* getDataStreamEntityValue(const wchar_t* name);
+    
+    wchar_t* getFilenamePrefixForStream() const;
+    wchar_t* getFilePathForStream() const;
     
     void forwardObjectSetId(const wchar_t* id);
     bool haveForwardedObjectSetId();
@@ -67,6 +77,7 @@ public:
     
 private:
     bool            _isRead;
+    OMRawStorage*   _storage;
     OMXMLWriter*    _xmlWriter;
     OMXMLReader*    _xmlReader;
     
@@ -83,6 +94,8 @@ private:
     OMSet<OMUniqueObjectIdentification, OMWString> _dataStreamNotationNames;
     OMSet<void*, OMWString> _dataStreamEntityNames;
     OMSet<void*, OMWString> _dataStreamEntityValues;
+    
+    OMSet<OMWString, OMWString> _inputDataStreamEntities;
 };
 
 

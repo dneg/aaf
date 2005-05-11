@@ -225,6 +225,17 @@ XMLReader::Event(void)
     return _event;
 }
 
+void 
+XMLReader::UnparsedEntityDecl(const char*& name, const char*& publicID, const char*& systemID, 
+    const char*& notationName)
+{
+    assert(_event == UNPARSED_ENTITY_DECL);
+    
+    name = _name.c_str();
+    publicID = _publicID.c_str();
+    systemID = _systemID.c_str();
+    notationName = _notationName.c_str();
+}
 
 void 
 XMLReader::StartElement(const char*& uri, const char*& localName, const XMLAttribute*& attributes)
@@ -406,6 +417,7 @@ XMLReaderExpat::XMLReaderExpat(XMLIStream* xmlStream)
 : XMLReader(), _xmlStream(xmlStream), _parser(0)
 {
     _parser = XML_ParserCreateNS(0, NAMESPACE_SEPARATOR);
+    XML_SetEntityDeclHandler(_parser, ::expat_EntityDeclHandler);
     XML_SetStartElementHandler(_parser, ::expat_StartElementHandler);
     XML_SetEndElementHandler(_parser, ::expat_EndElementHandler);
     XML_SetCharacterDataHandler(_parser, ::expat_CharacterDataHandler);
@@ -526,6 +538,45 @@ XMLReaderExpat::GetPositionString(void)
     sprintf(buffer, "line %d, column %d", lineNumber, columnNumber);
     
     return buffer;
+}
+
+void 
+XMLReaderExpat::EntityDeclHandler(const XML_Char *entityName, 
+    int is_parameter_entity, const XML_Char *value, int value_length, 
+    const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId, 
+    const XML_Char *notationName)
+{
+    // only report unparsed (external) entity declarations
+    if (is_parameter_entity == 0 && value == 0 && systemId != 0 && notationName != 0)
+    {
+        char* workBuffer = GetWorkBuffer(XMLStringLen(entityName, 0) + 1);
+        OMUInt64 strLen = ReadCharacters(workBuffer, entityName, 0, GetWorkBufferSize());
+        _name = workBuffer;
+        
+        workBuffer = GetWorkBuffer(XMLStringLen(systemId, 0) + 1);
+        strLen = ReadCharacters(workBuffer, systemId, 0, GetWorkBufferSize());
+        _systemID = workBuffer;
+        
+        if (publicId != 0)
+        {
+            workBuffer = GetWorkBuffer(XMLStringLen(publicId, 0) + 1);
+            strLen = ReadCharacters(workBuffer, publicId, 0, GetWorkBufferSize());
+            _publicID = workBuffer;
+        }
+        else
+        {
+            _publicID = "";
+        }
+        
+        XML_Status status = XML_StopParser(_parser, true);
+        if (status != XML_STATUS_OK)
+        {
+            /*XML_Error errorCode = */XML_GetErrorCode(_parser);
+            assert(false);
+        }
+    
+        RegisterEvent(UNPARSED_ENTITY_DECL);
+    }
 }
 
 void 
@@ -782,6 +833,19 @@ XMLReaderExpat::XMLStringLen(const XML_Char* s, XML_Char terminator) const
 }
 
 
+void 
+expat_EntityDeclHandler(void* userData, const XML_Char *entityName, 
+    int is_parameter_entity, const XML_Char *value, int value_length, 
+    const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId, 
+    const XML_Char *notationName)
+{
+    XMLReaderExpat* reader = reinterpret_cast<XMLReaderExpat*>(userData);
+    assert(reader != 0);
+
+    reader->EntityDeclHandler(entityName, is_parameter_entity, value, value_length,
+        base, systemId, publicId, notationName);
+}
+    
 void 
 expat_StartElementHandler(void* userData, const XML_Char* name, const XML_Char** atts)
 {

@@ -64,6 +64,8 @@ class OMStrongObjectReferenceType;
 class OMVariableArrayType;
 class OMWeakObjectReferenceType;
 
+class OMWeakObjectReference;
+
 class OMXMLAttribute;
 
   // @class In-memory representation of an object persisted in an
@@ -269,6 +271,8 @@ private:
 
     void registerExtensions(OMFile& file, OMSymbolspace* extSymbolspace);
     
+    void saveHeaderByteOrder(const OMProperty* property);
+    
     void saveSimpleValue(const OMByte* internalBytes, OMUInt16 internalSize, const OMType* type,
         bool isElementContent);
     void saveCharacter(const OMByte* externalBytes, OMUInt16 externalSize, const OMCharacterType* type,
@@ -300,6 +304,8 @@ private:
 
     
     void restoreExtensions(OMDictionary* dictionary);
+
+    void restoreHeaderByteOrder(OMProperty* property);
     
     void restoreSimpleValue(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
         const char* str, const OMType* type);
@@ -327,18 +333,32 @@ private:
         const char* str, const OMStringType* type);
     void restoreVariableArray(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
         const char* str, const OMVariableArrayType* type);
+
+    enum AUIDTargetType
+    {
+        METADICT_DEF,
+        DICT_DEF,
+        NON_DEF,
+        ANY
+    };
+    OMUniqueObjectIdentification restoreAUID(const char* idStr, AUIDTargetType targetType);
+    OMUniqueObjectIdentification restoreAUID(const wchar_t* idStr, AUIDTargetType targetType);
+    void saveAUID(OMUniqueObjectIdentification id, wchar_t* idStr, AUIDTargetType targetType);
     
     
     const OMType* baseType(const OMType* type);
     
     void restoreWeakRef(OMFile* file, const OMType* type,
         OMUniqueObjectIdentification& id, OMPropertyTag& tag);
+    void saveWeakRef(OMWeakObjectReference& weakRef, 
+        const OMWeakObjectReferenceType* weakRefType);
     
+    void getHeaderVersion(OMFile& file, wchar_t* versionStr);
     OMUniqueObjectIdentification getExtensionSymbolspaceId(OMFile& file);
+
+    void getDataStreams(OMStorable* storable, OMVector<OMDataStream*>& dataStreams);
     
     void readSetId(OMByte* key, OMKeySize keySize, const wchar_t* idStr);
-    
-    OMUniqueObjectIdentification readRefId(const wchar_t* refStr);
 
     
     OMXMLStorage*   _store;

@@ -206,7 +206,7 @@ OMXMLWriter::writeText(const wchar_t* text)
 {
     char* text8 = convertFromWideString(text);    
     
-    _xmlWriter->WriteComment(text8);
+    _xmlWriter->WriteText(text8);
     
     delete [] text8;
 }

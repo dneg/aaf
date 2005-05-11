@@ -167,9 +167,17 @@ void
 XMLWriterSimple::DeclareNamespace(const char* ns, const char* prefix)
 {
     assert(_prevWriteType == DELAYED_ELEMENT_START || 
-        _prevWriteType == ELEMENT_START);
+        _prevWriteType == ELEMENT_START ||
+        _prevWriteType == ATTRIBUTE_START ||
+        _prevWriteType == ATTRIBUTE_CONTENT ||
+        _prevWriteType == ATTRIBUTE_END);
     assert(prefix == 0 || ValidPrefix(prefix));
     assert(ValidNamespace(ns));
+
+    if (_prevWriteType == ATTRIBUTE_START || _prevWriteType == ATTRIBUTE_CONTENT)
+    {
+        WriteAttributeEnd();
+    }
 
     assert(_elementStack.size() > 0);
     Element* element = _elementStack.back();
@@ -644,6 +652,7 @@ XMLWriterSimple::WriteElementData(const char* data, size_t length)
     const char* lt = "&lt;";
     const char* gt = "&gt;";
     const char* amp = "&amp;";
+    const char* lf = "&#x0D;";
     
     char buffer[1024];
     unsigned int bufferPos = 0;
@@ -671,6 +680,11 @@ XMLWriterSimple::WriteElementData(const char* data, size_t length)
             memcpy(&(buffer[bufferPos]), amp, 5);
             bufferPos += 5;
         }
+        else if (*dataPtr == 0x0D)
+        {
+            memcpy(&(buffer[bufferPos]), lf, 6);
+            bufferPos += 6;
+        }
         else
         {
             buffer[bufferPos] = *dataPtr;
@@ -690,6 +704,7 @@ XMLWriterSimple::WriteAttributeData(const char* data, size_t length)
     const char* amp = "&amp;";
     const char* quot = "&quot;";
     const char* apos = "&apos;";
+    const char* lf = "&#x0D;";
     
     char buffer[1024];
     unsigned int bufferPos = 0;
@@ -716,6 +731,11 @@ XMLWriterSimple::WriteAttributeData(const char* data, size_t length)
         {
             memcpy(&(buffer[bufferPos]), amp, 5);
             bufferPos += 5;
+        }
+        else if (*dataPtr == 0x0D)
+        {
+            memcpy(&(buffer[bufferPos]), lf, 6);
+            bufferPos += 6;
         }
         else
         {

@@ -34,7 +34,7 @@ convertToWideString(const char* str)
 {
     TRACE("::convertToWideString(str)");
 
-    size_t length = strlen(str);
+    size_t length = u8swcslen(str);
     wchar_t* result = new wchar_t[length + 1];
     u8stowcs(result, str, length + 1);
     
@@ -54,7 +54,7 @@ convertFromWideString(const wchar_t* str)
 {
     TRACE("::convertFromWideString");
 
-    size_t length = lengthOfWideString(str);
+    int length = wcsu8slen(str);
     char* result = new char[length + 1];
     wcstou8s(result, str, length + 1);
 
@@ -62,59 +62,67 @@ convertFromWideString(const wchar_t* str)
 }
 
 void 
-oidToURI(OMUniqueObjectIdentification oid, wchar_t* uri)
+convertFromWideString(char* dest, const wchar_t* src, size_t n)
 {
-    TRACE("::oidToURI");
+    TRACE("::convertFromWideString(dest, src, n)");
 
-    if ((oid.Data4[0] & 0x80) != 0 || // bit 65 of a UUID is 1 for non-NCS UUIDs
-        oid == nullOMUniqueObjectIdentification)
+    wcstou8s(dest, src, n);
+}
+
+void 
+auidToURI(OMUniqueObjectIdentification id, wchar_t* uri)
+{
+    TRACE("::auidToURI");
+
+    if ((id.Data4[0] & 0x80) != 0 || // bit 65 of a UUID is 1 for non-NCS UUIDs
+        id == nullOMUniqueObjectIdentification)
     {
-        char uuidStr[XML_MAX_OID_URI_SIZE];
+        char uuidStr[XML_MAX_AUID_URI_SIZE];
         
         sprintf(uuidStr,
             "urn:uuid:%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-            oid.Data1, oid.Data2, oid.Data3,
-            oid.Data4[0], oid.Data4[1], oid.Data4[2], oid.Data4[3],
-            oid.Data4[4], oid.Data4[5], oid.Data4[6], oid.Data4[7]);
+            id.Data1, id.Data2, id.Data3,
+            id.Data4[0], id.Data4[1], id.Data4[2], id.Data4[3],
+            id.Data4[4], id.Data4[5], id.Data4[6], id.Data4[7]);
         
-        convertToWideString(uri, uuidStr, XML_MAX_OID_URI_SIZE);
+        convertToWideString(uri, uuidStr, XML_MAX_AUID_URI_SIZE);
     }
     else
     {
-        char ulStr[XML_MAX_OID_URI_SIZE];
+        char ulStr[XML_MAX_AUID_URI_SIZE];
     
         sprintf(ulStr,
             "urn:x-ul:%02x%02x%02x%02x.%02x%02x.%02x%02x.%08x.%04x%04x",
-            oid.Data4[0], oid.Data4[1], oid.Data4[2], oid.Data4[3],
-            oid.Data4[4], oid.Data4[5], oid.Data4[6], oid.Data4[7],
-            oid.Data1, oid.Data2, oid.Data3);
+            id.Data4[0], id.Data4[1], id.Data4[2], id.Data4[3],
+            id.Data4[4], id.Data4[5], id.Data4[6], id.Data4[7],
+            id.Data1, id.Data2, id.Data3);
         
-        convertToWideString(uri, ulStr, XML_MAX_OID_URI_SIZE);
+        convertToWideString(uri, ulStr, XML_MAX_AUID_URI_SIZE);
     }
 }
 
 void 
-umidToURI(OMMaterialIdentification umid, wchar_t* uri)
+mobIdToURI(OMMaterialIdentification mobId, wchar_t* uri)
 {
-    TRACE("::umidToURI");
+    TRACE("::mobIdToURI");
 
-    char umidStr[XML_MAX_UMID_URI_SIZE];
+    char mobIdStr[XML_MAX_MOBID_URI_SIZE];
     
-    sprintf(umidStr,
+    sprintf(mobIdStr,
         "urn:x-umid:%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x-"
         "%02x-"
         "%02x%02x%02x-"
         "%08x%04x%04x%02x%02x%02x%02x%02x%02x%02x%02x",
-        umid.SMPTELabel[0], umid.SMPTELabel[1], umid.SMPTELabel[2], umid.SMPTELabel[3], 
-        umid.SMPTELabel[4], umid.SMPTELabel[5], umid.SMPTELabel[6], umid.SMPTELabel[7], 
-        umid.SMPTELabel[8], umid.SMPTELabel[9], umid.SMPTELabel[10], umid.SMPTELabel[11], 
-        umid.length,
-        umid.instanceHigh, umid.instanceMid, umid.instanceLow,
-        umid.material.Data1, umid.material.Data2, umid.material.Data3,
-        umid.material.Data4[0], umid.material.Data4[1], umid.material.Data4[2], umid.material.Data4[3], 
-        umid.material.Data4[4], umid.material.Data4[5], umid.material.Data4[6], umid.material.Data4[7]);
+        mobId.SMPTELabel[0], mobId.SMPTELabel[1], mobId.SMPTELabel[2], mobId.SMPTELabel[3], 
+        mobId.SMPTELabel[4], mobId.SMPTELabel[5], mobId.SMPTELabel[6], mobId.SMPTELabel[7], 
+        mobId.SMPTELabel[8], mobId.SMPTELabel[9], mobId.SMPTELabel[10], mobId.SMPTELabel[11], 
+        mobId.length,
+        mobId.instanceHigh, mobId.instanceMid, mobId.instanceLow,
+        mobId.material.Data1, mobId.material.Data2, mobId.material.Data3,
+        mobId.material.Data4[0], mobId.material.Data4[1], mobId.material.Data4[2], mobId.material.Data4[3], 
+        mobId.material.Data4[4], mobId.material.Data4[5], mobId.material.Data4[6], mobId.material.Data4[7]);
     
-    convertToWideString(uri, umidStr, XML_MAX_UMID_URI_SIZE);
+    convertToWideString(uri, mobIdStr, XML_MAX_MOBID_URI_SIZE);
 }
 
 bool 
@@ -132,20 +140,20 @@ isURI(const wchar_t* uri)
 }
 
 void 
-uriToOID(const wchar_t* uri, OMUniqueObjectIdentification* oid)
+uriToAUID(const wchar_t* uri, OMUniqueObjectIdentification* id)
 {
-    TRACE("::uriToOID");
+    TRACE("::uriToAUID(wchar");
 
     char* uri8 = convertFromWideString(uri);
-    uriToAUID(uri8, oid);     
+    uriToAUID(uri8, id);     
     
     delete [] uri8;
 }
 
 void 
-uriToAUID(const char* uri, OMUniqueObjectIdentification* auid)
+uriToAUID(const char* uri, OMUniqueObjectIdentification* id)
 {
-    TRACE("::uriToAUID");
+    TRACE("::uriToAUID(char");
 
     unsigned int bytes[16];
     
@@ -179,23 +187,23 @@ uriToAUID(const char* uri, OMUniqueObjectIdentification* auid)
         }
     }
     
-    auid->Data1 = ((OMUInt32)bytes[0] << 24) + ((OMUInt32)bytes[1] << 16) +
+    id->Data1 = ((OMUInt32)bytes[0] << 24) + ((OMUInt32)bytes[1] << 16) +
         ((OMUInt32)bytes[2] << 8) + (OMUInt32)(bytes[3]);
-    auid->Data2 = ((OMUInt16)bytes[4] << 8) + (OMUInt16)(bytes[5]);
-    auid->Data3 = ((OMUInt16)bytes[6] << 8) + (OMUInt16)(bytes[7]);
+    id->Data2 = ((OMUInt16)bytes[4] << 8) + (OMUInt16)(bytes[5]);
+    id->Data3 = ((OMUInt16)bytes[6] << 8) + (OMUInt16)(bytes[7]);
     for (unsigned int i=0; i<8; i++)
     {
-        auid->Data4[i] = (OMUInt8)bytes[i + 8];
+        id->Data4[i] = (OMUInt8)bytes[i + 8];
     }
 }
 
 void 
-uriToUMID(const wchar_t* uri, OMMaterialIdentification* umid)
+uriToMobId(const wchar_t* uri, OMMaterialIdentification* mobId)
 {
-    TRACE("::uriToUMID");
+    TRACE("::uriToMobId(wchar");
 
     char* uri8 = convertFromWideString(uri);
-    uriToMobId(uri8, umid);     
+    uriToMobId(uri8, mobId);     
 
     delete [] uri8;
 }
@@ -203,7 +211,7 @@ uriToUMID(const wchar_t* uri, OMMaterialIdentification* umid)
 void 
 uriToMobId(const char* uri, OMMaterialIdentification* mobId)
 {
-    TRACE("::uriToMobId");
+    TRACE("::uriToMobId(char");
 
     unsigned int bytes[32];
     
@@ -263,7 +271,7 @@ integerToString(const OMByte* value, OMUInt8 size, bool isSigned, wchar_t* str)
                 }
                 else
                 {
-                    sprintf(buffer, "%u", *((OMInt8*)value));
+                    sprintf(buffer, "%u", *((OMUInt8*)value));
                 }
             }
             break;        
@@ -275,7 +283,7 @@ integerToString(const OMByte* value, OMUInt8 size, bool isSigned, wchar_t* str)
                 }
                 else
                 {
-                    sprintf(buffer, "%u", *((OMInt16*)value));
+                    sprintf(buffer, "%u", *((OMUInt16*)value));
                 }
             }
             break;        
@@ -287,22 +295,19 @@ integerToString(const OMByte* value, OMUInt8 size, bool isSigned, wchar_t* str)
                 }
                 else
                 {
-                    sprintf(buffer, "%u", *((OMInt32*)value));
+                    sprintf(buffer, "%u", *((OMUInt32*)value));
                 }
             }
             break;        
         case 8:
             {
-                // TODO: need to have access to AAFFMT64 from AAFPlatform.h
                 if (isSigned)
                 {
-                    sprintf(buffer, "%lld", *((OMInt64*)value));
-                    // sprintf(buffer, "%"AAFFMT64"d", *((OMInt64*)value));
+                    sprintf(buffer, "%"OMFMT64"d", *((OMInt64*)value));
                 }
                 else
                 {
-                    sprintf(buffer, "%llu", *((OMInt64*)value));
-                    // sprintf(buffer, "%"AAFFMT64"u", *((OMInt64*)value));
+                    sprintf(buffer, "%"OMFMT64"u", *((OMUInt64*)value));
                 }
             }
             break;        
@@ -322,6 +327,24 @@ byteOrderToString(OMByteOrder byteOrder, wchar_t* str)
         copyWideString(str, L"LittleEndian", 13);
     }
     else if (byteOrder == bigEndian)
+    {
+        copyWideString(str, L"BigEndian", 10);
+    }
+    else
+    {
+        copyWideString(str, L"Unknown", 8);
+    }
+}
+
+void 
+headerByteOrderToString(const OMByte* internalBytes, wchar_t* str)
+{
+    OMInt16 byteOrder = *(reinterpret_cast<const OMInt16*>(internalBytes));
+    if (byteOrder == 0x4949)
+    {
+        copyWideString(str, L"LittleEndian", 13);
+    }
+    else if (byteOrder == 0x4D4D)
     {
         copyWideString(str, L"BigEndian", 10);
     }
@@ -411,12 +434,54 @@ boolToString(bool value, wchar_t* str)
     convertToWideString(str, boolStr, XML_MAX_BOOL_STRING_SIZE);        
 }
 
+struct Rational
+{
+    OMInt32 numerator;
+    OMInt32 denominator;
+};
+
+void 
+rationalToString(const OMByte* internalBytes, wchar_t* str)
+{
+    const Rational* rational = reinterpret_cast<const Rational*>(internalBytes);
+    
+    char rationalStr[XML_MAX_RATIONAL_STRING_SIZE];
+    sprintf(rationalStr, "%d/%d", rational->numerator, rational->denominator);
+    
+    convertToWideString(str, rationalStr, XML_MAX_RATIONAL_STRING_SIZE); 
+}
+
+struct VersionType
+{
+    OMInt8 major;
+    OMInt8 minor;
+};
+
+void 
+versionTypeToString(const OMByte* internalBytes, wchar_t* str)
+{
+    const VersionType* version = reinterpret_cast<const VersionType*>(internalBytes);
+    
+    char versionStr[XML_MAX_VERSIONTYPE_STRING_SIZE];
+    sprintf(versionStr, "%d.%d", version->major, version->minor);
+    
+    convertToWideString(str, versionStr, XML_MAX_VERSIONTYPE_STRING_SIZE); 
+}
+
 
 void
 integerFromString(OMByteArray& bytes, const char* str, OMUInt8 size, bool isSigned)
 {
     TRACE("::integerFromString");
 
+    const char* strPtr = str;
+    bool hex = false;
+    if (strncmp(str, "0x", 2) == 0)
+    {
+        hex = true;
+        strPtr += 2;
+    }
+    
     int result = 0;
     switch (size) 
     {
@@ -424,14 +489,28 @@ integerFromString(OMByteArray& bytes, const char* str, OMUInt8 size, bool isSign
             if (isSigned) 
             {
                 int tmp;
-                result = sscanf(str, "%d", &tmp);
+                if (hex)
+                {
+                    result = sscanf(strPtr, "%x", &tmp);
+                }
+                else
+                {
+                    result = sscanf(strPtr, "%d", &tmp);
+                }
                 OMInt8 value = (OMInt8)tmp;
                 bytes.append(reinterpret_cast<OMByte*>(&value), size);
             }
             else 
             {
                 unsigned int tmp;
-                result = sscanf(str, "%u", &tmp);
+                if (hex)
+                {
+                    result = sscanf(strPtr, "%x", &tmp);
+                }
+                else
+                {
+                    result = sscanf(strPtr, "%u", &tmp);
+                }
                 OMUInt8 value = (OMUInt8)tmp;
                 bytes.append(reinterpret_cast<OMByte*>(&value), size);
             }
@@ -441,14 +520,28 @@ integerFromString(OMByteArray& bytes, const char* str, OMUInt8 size, bool isSign
             if (isSigned) 
             {
                 int tmp;
-                result = sscanf(str, "%d", &tmp);
+                if (hex)
+                {
+                    result = sscanf(strPtr, "%x", &tmp);
+                }
+                else
+                {
+                    result = sscanf(strPtr, "%d", &tmp);
+                }
                 OMInt16 value = (OMInt16)tmp;
                 bytes.append(reinterpret_cast<OMByte*>(&value), size);
             }
             else 
             {
                 unsigned int tmp;
-                result = sscanf(str, "%u", &tmp);
+                if (hex)
+                {
+                    result = sscanf(strPtr, "%x", &tmp);
+                }
+                else
+                {
+                    result = sscanf(strPtr, "%u", &tmp);
+                }
                 OMUInt16 value = (OMUInt16)tmp;
                 bytes.append(reinterpret_cast<OMByte*>(&value), size);
             }
@@ -458,13 +551,27 @@ integerFromString(OMByteArray& bytes, const char* str, OMUInt8 size, bool isSign
             if (isSigned) 
             {
                 OMInt32 value;
-                result = sscanf(str, "%d", &value);
+                if (hex)
+                {
+                    result = sscanf(strPtr, "%x", &value);
+                }
+                else
+                {
+                    result = sscanf(strPtr, "%d", &value);
+                }
                 bytes.append(reinterpret_cast<OMByte*>(&value), size);
             }
             else 
             {
                 OMUInt32 value;
-                result = sscanf(str, "%u", &value);
+                if (hex)
+                {
+                    result = sscanf(strPtr, "%x", &value);
+                }
+                else
+                {
+                    result = sscanf(strPtr, "%u", &value);
+                }
                 bytes.append(reinterpret_cast<OMByte*>(&value), size);
             }
             break;
@@ -473,15 +580,27 @@ integerFromString(OMByteArray& bytes, const char* str, OMUInt8 size, bool isSign
             if (isSigned) 
             {
                 OMInt64 value;
-                result = sscanf(str, "%lld", &value);
-    //            result = sscanf(str, "%"AAFFMT64"d", &tmp);
+                if (hex)
+                {
+                    result = sscanf(strPtr, "%"OMFMT64"x", &value);
+                }
+                else
+                {
+                    result = sscanf(strPtr, "%"OMFMT64"d", &value);
+                }
                 bytes.append(reinterpret_cast<OMByte*>(&value), size);
             }
             else 
             {
                 OMUInt64 value;
-                result = sscanf(str, "%llu", &value);
-    //            result = sscanf(str, "%"AAFFMT64"u", &tmp);
+                if (hex)
+                {
+                    result = sscanf(strPtr, "%"OMFMT64"x", &value);
+                }
+                else
+                {
+                    result = sscanf(strPtr, "%"OMFMT64"u", &value);
+                }
                 bytes.append(reinterpret_cast<OMByte*>(&value), size);
             }
             break;
@@ -514,10 +633,10 @@ auidFromString(OMByteArray& bytes, const char* str)
 {
     TRACE("::auidFromString");
 
-    OMUniqueObjectIdentification auid;
-    uriToAUID(str, &auid);
+    OMUniqueObjectIdentification id;
+    uriToAUID(str, &id);
     
-    bytes.append(reinterpret_cast<OMByte*>(&auid), sizeof(OMUniqueObjectIdentification));
+    bytes.append(reinterpret_cast<OMByte*>(&id), sizeof(OMUniqueObjectIdentification));
 }
 
 void
@@ -642,6 +761,50 @@ byteArrayFromString(OMByteArray& bytes, const char* str)
 }
 
 void 
+rationalFromString(OMByteArray& bytes, const char* str)
+{
+    TRACE("::rationalFromString");
+    
+    int numerator;
+    int denominator;
+
+    int result = sscanf(str, "%d/%d", &numerator, &denominator);
+    if (result != 2)
+    {
+        throw OMXMLException(L"Invalid Rational value");
+    }
+
+    Rational rational;
+    
+    rational.numerator = (OMInt32)numerator;
+    rational.denominator = (OMInt32)denominator;
+
+    bytes.append(reinterpret_cast<OMByte*>(&rational), sizeof(Rational));
+}
+
+void 
+versionTypeFromString(OMByteArray& bytes, const char* str)
+{
+    TRACE("::versionTypeFromString");
+    
+    int major;
+    int minor;
+
+    int result = sscanf(str, "%d.%d", &major, &minor);
+    if (result != 2)
+    {
+        throw OMXMLException(L"Invalid VersionType value");
+    }
+
+    VersionType version;
+    
+    version.major = (OMInt8)major;
+    version.minor = (OMInt8)minor;
+
+    bytes.append(reinterpret_cast<OMByte*>(&version), sizeof(VersionType));
+}
+
+void 
 byteOrderFromString(const wchar_t* str, OMByteOrder* byteOrder)
 {
     TRACE("::byteOrderFromString(str, byteOrder)");
@@ -663,6 +826,39 @@ byteOrderFromString(const wchar_t* str, OMByteOrder* byteOrder)
         throw OMXMLException(L"Invalid byte order value");
     }
     
+}
+
+void 
+headerByteOrderFromString(OMByteArray& bytes, const char* str)
+{
+    TRACE("::headerByteOrderFromString");
+
+    OMInt16 byteOrder; 
+    if (strcmp(str, "LittleEndian") == 0)
+    {
+        byteOrder = 0x4949;
+    }
+    else if (strcmp(str, "BigEndian") == 0)
+    {
+        byteOrder = 0x4D4D;
+    }
+    else if (strcmp(str, "Unknown") == 0)
+    {
+        if (hostByteOrder() == littleEndian)
+        {
+            byteOrder = 0x4949;
+        }
+        else
+        {
+            byteOrder = 0x4D4D;
+        }
+    }
+    else
+    {
+        throw OMXMLException(L"Invalid header byte order value");
+    }
+    
+    bytes.append(reinterpret_cast<OMByte*>(&byteOrder), sizeof(OMInt16));
 }
 
 void 
@@ -712,8 +908,7 @@ int64FromString(const char* str, OMInt64& value)
     TRACE("::int64FromString");
 
     OMInt64 tmp;
-    int result = sscanf(str, "%lld", &tmp);
-    //            int result = sscanf(str, "%"AAFFMT64"d", &tmp);
+    int result = sscanf(str, "%"OMFMT64"d", &tmp);
     if (result != 1)
     {
         throw OMXMLException(L"Invalid Int64 integer value");
@@ -750,4 +945,177 @@ uint8FromString(const char* str, OMUInt8& value)
 }
 
 
+bool 
+stringRequiresEscaping(const wchar_t* str)
+{
+    TRACE("::stringRequiresEscaping");
+
+    bool escapeRequired = false;
+    const wchar_t* strPtr = str;
+    while (!escapeRequired && *strPtr != 0)
+    {
+        escapeRequired = characterRequiresEscaping(*strPtr);
+        strPtr++;
+    }
+    
+    return escapeRequired;
+}
+
+bool 
+characterRequiresEscaping(wchar_t c)
+{
+    TRACE("::characterRequiresEscaping");
+
+    if ((c >= 0x0000 && c <= 0x0009) ||
+        (c >= 0x000B && c <= 0x000C) ||
+        (c >= 0x000E && c <= 0x001F) ||
+        (c >= 0xD800 && c <= 0xDFFF) ||
+        (c >= 0xFFFE && c <= 0xFFFF))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+wchar_t* 
+escapeString(const wchar_t* str)
+{
+    TRACE("::escapeString");
+
+    OMByteArray buffer;
+    buffer.grow((lengthOfWideString(str) + 1) * sizeof(wchar_t));
+    const wchar_t* strPtr = str;
+    while (*strPtr != 0)
+    {
+        if (characterRequiresEscaping(*strPtr))
+        {
+            char code[9];
+            sprintf(code, "$#x%x;", *strPtr);
+            wchar_t* tmp = convertToWideString(code);
+            buffer.append(reinterpret_cast<OMByte*>(tmp), 
+                (lengthOfWideString(tmp) + 1) * sizeof(wchar_t));
+            delete [] tmp;
+        }
+        else if (*strPtr == L'$')
+        {
+            const wchar_t* escapedDollar = L"$#x24;";
+            buffer.append(reinterpret_cast<const OMByte*>(escapedDollar), 
+                (lengthOfWideString(escapedDollar) + 1) * sizeof(wchar_t));
+        }
+        else
+        {
+            buffer.append(reinterpret_cast<const OMByte*>(strPtr), sizeof(wchar_t));
+        }
+        strPtr++;
+    }
+    const wchar_t* nullTerm = L'\0';
+    buffer.append(reinterpret_cast<OMByte*>(&nullTerm), sizeof(wchar_t));
+    wchar_t* result = new wchar_t[buffer.size() / sizeof(wchar_t)];
+    memcpy(result, buffer.bytes(), buffer.size());
+    return result;    
+}
+
+wchar_t* 
+escapeCharacter(wchar_t c)
+{
+    TRACE("::escapeCharacter");
+
+    OMByteArray buffer;
+    buffer.grow(sizeof(wchar_t));
+    if (characterRequiresEscaping(c))
+    {
+        char code[9];
+        sprintf(code, "$#x%x;", c);
+        wchar_t* tmp = convertToWideString(code);
+        buffer.append(reinterpret_cast<OMByte*>(tmp), 
+            (lengthOfWideString(tmp) + 1) * sizeof(wchar_t));
+        delete [] tmp;
+    }
+    else if (c == L'$')
+    {
+        const wchar_t* escapedDollar = L"$#x24;";
+        buffer.append(reinterpret_cast<const OMByte*>(escapedDollar), 
+            (lengthOfWideString(escapedDollar) + 1) * sizeof(wchar_t));
+    }
+    else
+    {
+        buffer.append(reinterpret_cast<const OMByte*>(&c), sizeof(wchar_t));
+    }
+    const wchar_t* nullTerm = L'\0';
+    buffer.append(reinterpret_cast<OMByte*>(&nullTerm), sizeof(wchar_t));
+    wchar_t* result = new wchar_t[buffer.size() / sizeof(wchar_t)];
+    memcpy(result, buffer.bytes(), buffer.size());
+    return result;    
+}
+
+wchar_t* 
+unescapeString(const wchar_t* str)
+{
+    TRACE("::unescapeString");
+
+    wchar_t* result = new wchar_t[lengthOfWideString(str) + 1];
+    wchar_t* resultPtr = result;
+    const wchar_t* strPtr = str;
+    while (*strPtr != 0)
+    {
+        if (*strPtr == L'$')
+        {
+            char cstr[9];
+            convertFromWideString(cstr, strPtr, 9);
+            unsigned int tmp;
+            int ret;
+            if (compareWideString(strPtr, L"$#x", 3) == 0)
+            {
+                ret = sscanf(cstr, "$#x%x;", &tmp);
+            }
+            else if (compareWideString(strPtr, L"$#", 2) == 0)
+            {
+                ret = sscanf(cstr, "$#%u;", &tmp);
+            }
+            else
+            {
+                throw OMXMLException(L"Invalid escaped string");
+            }
+
+            if (ret != 1)
+            {
+                throw OMXMLException(L"Invalid escaped string - could not read number");
+            }
+            *resultPtr = (wchar_t)tmp;
+            
+            while (*strPtr != 0 && *strPtr != L';')
+            {
+                strPtr++;
+            }
+            if (*strPtr != L';')
+            {
+                throw OMXMLException(L"Invalid escaped string - missing ';'");
+            }
+        }
+        else
+        {
+            *resultPtr = *strPtr;
+        }
+        resultPtr++;
+        strPtr++;            
+    }
+    *resultPtr = L'\0';
+
+    return result;    
+}
+
+wchar_t 
+unescapeCharacter(const wchar_t* cstr)
+{
+    TRACE("::unescapeCharacter");
+
+    wchar_t* unescapeStr = unescapeString(cstr);
+    wchar_t c = *unescapeStr;
+    delete [] unescapeStr;
+    
+    return c;
+}
 

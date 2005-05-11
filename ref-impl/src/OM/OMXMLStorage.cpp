@@ -25,6 +25,7 @@
 #include "OMXMLStorage.h"
 #include "OMSetIterator.h"
 #include "OMListIterator.h"
+#include "OMDiskRawStorage.h"
 #include "OMUtilities.h"
 #include "OMXMLUtilities.h"
 #include "OMXMLException.h"
@@ -32,7 +33,7 @@
 
 
 OMXMLStorage::OMXMLStorage(OMRawStorage* storage, bool isRead)
-: _objectSetId(0), _baselineSymbolspace(0), _defaultExtSymbolspace(0),
+: _storage(storage), _objectSetId(0), _baselineSymbolspace(0), _defaultExtSymbolspace(0),
     _dataStreamNotationNameIndex(0), _dataStreamEntityNameIndex(0),
     _dataStreamEntityValueIndex(0)
 {
@@ -43,7 +44,7 @@ OMXMLStorage::OMXMLStorage(OMRawStorage* storage, bool isRead)
     if (isRead)
     {
         _xmlWriter = 0;
-        _xmlReader = new OMXMLReader(storage);;
+        _xmlReader = new OMXMLReader(storage);
     }
     else
     {
@@ -149,15 +150,15 @@ OMXMLStorage::addSymbolspace(OMSymbolspace* symbolspace)
 }
 
 bool 
-OMXMLStorage::getSymbol(OMUniqueObjectIdentification id, const wchar_t** symbolspaceURI, const wchar_t** symbol) const
+OMXMLStorage::getMetaDefSymbol(OMUniqueObjectIdentification id, const wchar_t** symbolspaceURI, const wchar_t** symbol) const
 {
-    TRACE("OMXMLStorage::getSymbol");
+    TRACE("OMXMLStorage::getMetaDefSymbol");
     
     const wchar_t* sym = 0;
     OMSetIterator<OMWString, OMSymbolspace*> iter(_symbolspaces, OMBefore);
     while (sym == 0 && ++iter) 
     {
-        if ((sym = iter.value()->getSymbol(id)) != 0)
+        if ((sym = iter.value()->getMetaDefSymbol(id)) != 0)
         {
             *symbol = sym;
             *symbolspaceURI = iter.value()->getURI();
@@ -168,49 +169,101 @@ OMXMLStorage::getSymbol(OMUniqueObjectIdentification id, const wchar_t** symbols
 }
 
 OMUniqueObjectIdentification 
-OMXMLStorage::getId(const wchar_t* symbolspaceURI, const wchar_t* symbol) const
+OMXMLStorage::getMetaDefId(const wchar_t* symbolspaceURI, const wchar_t* symbol) const
 {
-    TRACE("OMXMLStorage::getId");
+    TRACE("OMXMLStorage::getMetaDefId");
     
     OMUniqueObjectIdentification result = nullOMUniqueObjectIdentification;
     OMSymbolspace* symbolspace;
     if (_symbolspaces.find(symbolspaceURI, symbolspace))
     {
-        result = symbolspace->getId(symbol); 
+        result = symbolspace->getMetaDefId(symbol); 
     }
     
     return result;
 }
 
 OMPropertyId 
-OMXMLStorage::getPropertyId(const wchar_t* symbolspaceURI, const wchar_t* symbol) const
+OMXMLStorage::getPropertyDefId(const wchar_t* symbolspaceURI, const wchar_t* symbol) const
 {
-    TRACE("OMXMLStorage::getPropertyId");
+    TRACE("OMXMLStorage::getPropertyDefId");
     
     OMPropertyId result = 0x0000;
     OMSymbolspace* symbolspace;
     if (_symbolspaces.find(symbolspaceURI, symbolspace))
     {
-        result = symbolspace->getPropertyId(symbol); 
+        result = symbolspace->getPropertyDefId(symbol); 
     }
     
     return result;
 }
 
 const wchar_t* 
-OMXMLStorage::getDefinitionSymbol(OMUniqueObjectIdentification id)
+OMXMLStorage::getDefSymbol(OMUniqueObjectIdentification id)
 {
-    TRACE("OMXMLStorage::getDefinitionSymbol");
+    TRACE("OMXMLStorage::getDefSymbol");
     
-    return _baselineSymbolspace->getDefinitionSymbol(id);
+    return _baselineSymbolspace->getDefSymbol(id);
 }
 
 OMUniqueObjectIdentification 
-OMXMLStorage::getDefinitionId(const wchar_t* symbol) const
+OMXMLStorage::getDefId(const wchar_t* symbol) const
 {
-    TRACE("OMXMLStorage::getDefinitionId");
+    TRACE("OMXMLStorage::getDefId");
     
-    return _baselineSymbolspace->getDefinitionId(symbol);
+    return _baselineSymbolspace->getDefId(symbol);
+}
+
+OMUniqueObjectIdentification 
+OMXMLStorage::getBaselineDefId(const wchar_t* symbol) const
+{
+    TRACE("OMXMLStorage::getBaselineDefId");
+    
+    if (_baselineSymbolspace == 0)
+    {
+        return nullOMUniqueObjectIdentification;
+    }
+    
+    return _baselineSymbolspace->getDefId(symbol);
+}
+
+OMUniqueObjectIdentification 
+OMXMLStorage::getBaselineMetaDefId(const wchar_t* symbol) const
+{
+    TRACE("OMXMLStorage::getBaselineMetaDefId");
+    
+    if (_baselineSymbolspace == 0)
+    {
+        return nullOMUniqueObjectIdentification;
+    }
+    
+    return _baselineSymbolspace->getMetaDefId(symbol);
+}
+
+const wchar_t* 
+OMXMLStorage::getBaselineDefSymbol(OMUniqueObjectIdentification id)
+{
+    TRACE("OMXMLStorage::getBaselineDefSymbol");
+    
+    if (_baselineSymbolspace == 0)
+    {
+        return 0;
+    }
+    
+    return _baselineSymbolspace->getDefSymbol(id);
+}
+
+const wchar_t* 
+OMXMLStorage::getBaselineMetaDefSymbol(OMUniqueObjectIdentification id)
+{
+    TRACE("OMXMLStorage::getBaselineMetaDefSymbol");
+    
+    if (_baselineSymbolspace == 0)
+    {
+        return 0;
+    }
+    
+    return _baselineSymbolspace->getMetaDefSymbol(id);
 }
 
 const wchar_t* 
@@ -266,7 +319,7 @@ OMXMLStorage::getDataStreamEntityName(void* ref)
 }
 
 const wchar_t* 
-OMXMLStorage::getDataStreamEntityValue(void* ref)
+OMXMLStorage::getDataStreamEntityValue(void* ref, const wchar_t* prefix)
 {
     TRACE("OMXMLStorage::getDataStreamEntityValue");
     
@@ -276,9 +329,11 @@ OMXMLStorage::getDataStreamEntityValue(void* ref)
         return (*ret).c_str();
     }
 
-    char buffer[19];
-    sprintf(buffer, "stream%x.raw", _dataStreamEntityValueIndex);
-    wchar_t* value = convertToWideString(buffer);
+    char buffer[20];
+    sprintf(buffer, "_stream%x", _dataStreamEntityValueIndex);
+    wchar_t* value = new wchar_t[20 + lengthOfWideString(prefix)];
+    convertToWideString(value, buffer, 20);
+    concatenateWideString(value, prefix);
     _dataStreamEntityValues.insert(ref, value); 
     delete [] value;
     _dataStreamEntityValueIndex++;
@@ -290,7 +345,159 @@ OMXMLStorage::getDataStreamEntityValue(void* ref)
     }
     return (*ret).c_str();
 }
+
+const wchar_t* 
+OMXMLStorage::registerDataStreamEntityValue(void* ref, const wchar_t* value)
+{
+    TRACE("OMXMLStorage::registerDataStreamEntityValue");
     
+    OMWString* ret;
+    if (_dataStreamEntityValues.find(ref, &ret))
+    {
+        return 0;
+    }
+
+    _dataStreamEntityValues.insert(ref, value); 
+
+    if (!_dataStreamEntityValues.find(ref, &ret))
+    {
+        ASSERT("Value correctly inserted", false);
+        return 0;
+    }
+    return (*ret).c_str();
+}
+
+bool 
+OMXMLStorage::registerDataStreamEntity(const wchar_t* name, const wchar_t* value)
+{
+    TRACE("OMXMLStorage::registerDataStreamEntity");
+    
+    OMWString* ret;
+    if (_inputDataStreamEntities.find(name, &ret))
+    {
+        return false;
+    }
+
+    _inputDataStreamEntities.insert(name, value);
+    
+    return true;
+}
+
+const wchar_t* 
+OMXMLStorage::getDataStreamEntityValue(const wchar_t* name)
+{
+    TRACE("OMXMLStorage::getDataStreamEntityValue");
+    
+    OMWString* ret;
+    if (_inputDataStreamEntities.find(name, &ret))
+    {
+        return (*ret).c_str();
+    }
+    
+    return 0;
+}
+
+wchar_t* 
+OMXMLStorage::getFilenamePrefixForStream() const
+{
+    TRACE("OMXMLStorage::getFilenamePrefixForStream");
+
+    wchar_t* result = new wchar_t[1];
+    result[0] = L'\0';
+    return result;
+    
+#if 0 // we don't have access to a fileName from the raw storage    
+    OMDiskRawStorage* diskStorage = dynamic_cast<OMDiskRawStorage*>(_storage);
+    ASSERT("RawStorage is DiskRawStorage", diskStorage != 0);
+
+    const wchar_t* fileName = diskStorage->fileName();
+    const wchar_t* startPtr = fileName;    
+    const wchar_t* endPtr = fileName;
+    const wchar_t* ptr = fileName;
+    bool inSuffix = false;
+    while (*ptr != L'\0')
+    {
+#ifdef _WIN32
+        if (*ptr == L'\\' || *ptr == L':')
+#else
+        if (*ptr == L'/')
+#endif
+        {
+            startPtr = ptr + 1;
+            endPtr = startPtr;
+            inSuffix = false;
+        }
+        else if (*ptr == L'.')
+        {
+            endPtr++;
+            inSuffix = true;
+        }
+        else if (!inSuffix)
+        {
+            endPtr++;
+        }
+        ptr++;
+    }
+    ASSERT("Valid end pointer", *endPtr == L'\0' || *endPtr == L'.');
+    
+    size_t size = endPtr - startPtr;
+    if (size == 0)
+    {
+        return 0;
+    }
+    wchar_t* result = new wchar_t[size + 1];
+    copyWideString(result, startPtr, size);
+    result[size] = L'\0';
+    
+    return result;
+#endif
+}
+
+wchar_t* 
+OMXMLStorage::getFilePathForStream() const
+{
+    TRACE("OMXMLStorage::getFilePathForStream");
+
+    wchar_t* result = new wchar_t[1];
+    result[0] = L'\0';
+    return result;
+    
+#if 0 // we don't have access to a fileName from the raw storage
+    OMDiskRawStorage* diskStorage = dynamic_cast<OMDiskRawStorage*>(_storage);
+    ASSERT("RawStorage is DiskRawStorage", diskStorage != 0);
+
+    const wchar_t* fileName = diskStorage->fileName();
+    const wchar_t* startPtr = fileName;    
+    const wchar_t* endPtr = fileName;
+    const wchar_t* ptr = fileName;
+    while (*ptr != L'\0')
+    {
+#ifdef _WIN32
+        if (*ptr == L'\\' || *ptr == L':')
+#else
+        if (*ptr == L'/')
+#endif
+        {
+            endPtr = ptr + 1;
+        }
+        ptr++;
+    }
+#ifdef _WIN32
+    ASSERT("Valid end pointer", *endPtr == *startPtr || *(endPtr - 1) == L'\\' 
+        || *(endPtr - 1) == L':'));
+#else
+    ASSERT("Valid end pointer", *endPtr == *startPtr || *(endPtr - 1) == L'/');
+#endif
+    
+    size_t size = endPtr - startPtr;
+    wchar_t* result = new wchar_t[size + 1];
+    copyWideString(result, startPtr, size);
+    result[size] = L'\0';
+    
+    return result;
+#endif
+}
+
 void 
 OMXMLStorage::forwardObjectSetId(const wchar_t* id)
 {
