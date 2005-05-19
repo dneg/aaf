@@ -260,6 +260,8 @@ public:
 
     virtual bool isValidValue(OMUniqueObjectIdentification value) const;
     
+    virtual bool registerExtensions(OMVector<const wchar_t*>& names, 
+        OMVector<OMUniqueObjectIdentification>& values);
         
 private:
 	// names of elements in this record; stored as single wchar_t array

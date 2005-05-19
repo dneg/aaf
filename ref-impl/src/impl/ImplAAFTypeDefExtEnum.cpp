@@ -818,13 +818,16 @@ wchar_t* ImplAAFTypeDefExtEnum::elementNameFromValue(OMUniqueObjectIdentificatio
 {
     ImplAAFTypeDefExtEnum* pNonConstThis = const_cast<ImplAAFTypeDefExtEnum*>(this);
     
+    wchar_t* result = 0;
     aafUID_t valueI = (*reinterpret_cast<aafUID_t*>(&value));
     aafUInt32 len;
     HRESULT hr = pNonConstThis->GetNameBufLenFromAUID(valueI, &len);
-    assert(AAFRESULT_SUCCEEDED(hr));
-    wchar_t* result = (wchar_t*)(new OMByte[len]);
-    hr = pNonConstThis->GetNameFromAUID(valueI, result, len);
-    assert(AAFRESULT_SUCCEEDED(hr));
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        result = (wchar_t*)(new OMByte[len]);
+        hr = pNonConstThis->GetNameFromAUID(valueI, result, len);
+        assert(AAFRESULT_SUCCEEDED(hr));
+    }
     
     return result;
 }
@@ -836,9 +839,14 @@ OMUniqueObjectIdentification ImplAAFTypeDefExtEnum::elementValueFromName(
     
     aafUID_t result;
     HRESULT hr = pNonConstThis->LookupValByName(&result, static_cast<const aafCharacter*>(name));
-    assert(AAFRESULT_SUCCEEDED(hr));
-    
-    return (*reinterpret_cast<const OMUniqueObjectIdentification*>(&result));
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        return (*reinterpret_cast<const OMUniqueObjectIdentification*>(&result));
+    }
+    else
+    {
+        return nullOMUniqueObjectIdentification;
+    }
 }
 
 bool ImplAAFTypeDefExtEnum::initialise(const OMUniqueObjectIdentification& id, 
@@ -866,6 +874,43 @@ bool ImplAAFTypeDefExtEnum::initialise(const OMUniqueObjectIdentification& id,
     setInitialized();
     
     return true;
+}
+
+bool ImplAAFTypeDefExtEnum::registerExtensions(OMVector<const wchar_t*>& names, 
+    OMVector<OMUniqueObjectIdentification>& values)
+{
+    // check names and values are unique wrt existing names and values
+    bool result = true;
+    size_t i;
+    for (i = 0; result && i < values.count(); i++)
+    {
+        wchar_t* name = elementNameFromValue(values.getAt(i));
+        if (name == 0)
+        {
+            result = elementValueFromName(names.getAt(i)) == nullOMUniqueObjectIdentification;
+        }
+        else
+        {
+            result = false;
+            delete [] name;
+        }
+    }
+    if (result)
+    {
+        for (i = 0; i < values.count(); i++)
+        {
+            const wchar_t* namePtr = names.getAt(i);
+            while (*namePtr != 0)
+            {
+                _ElementNames.appendValue(namePtr);
+                namePtr++;
+            }
+            _ElementNames.appendValue(namePtr);
+            _ElementValues.append(*(reinterpret_cast<aafUID_t*>(&values.getAt(i))));
+        }
+    }
+    
+    return result;
 }
 
 bool ImplAAFTypeDefExtEnum::isValidValue(OMUniqueObjectIdentification value) const
