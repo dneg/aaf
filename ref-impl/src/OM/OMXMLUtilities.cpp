@@ -29,45 +29,516 @@
 #include "OMAssertions.h"
 
 
-wchar_t* 
-convertToWideString(const char* str)
-{
-    TRACE("::convertToWideString(str)");
 
-    size_t length = u8swcslen(str);
-    wchar_t* result = new wchar_t[length + 1];
-    u8stowcs(result, str, length + 1);
+int 
+utf8CodeLen(const char* u8Code)
+{
+    TRACE("::utf8CodeLen(char*)");
+
+    if ((unsigned char)u8Code[0] < 0x80)
+    {
+        return 1;
+    }
+    else if (((unsigned char)u8Code[0] & 0xE0) == 0xC0)
+    {
+        if ((u8Code[1] & 0xC0) == 0x80)
+        {
+            return 2;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    else if (((unsigned char)u8Code[0] & 0xF0) == 0xE0)
+    {
+        if (((unsigned char)u8Code[1] & 0xC0) == 0x80 && 
+            ((unsigned char)u8Code[2] & 0xC0) == 0x80)
+        {
+            return 3;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    else if (((unsigned char)u8Code[0] & 0xF8) == 0xF0)
+    {
+        if (((unsigned char)u8Code[1] & 0xC0) == 0x80 && 
+            ((unsigned char)u8Code[2] & 0xC0) == 0x80 && 
+            ((unsigned char)u8Code[3] & 0xC0) == 0x80)
+        {
+            return 4;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+int 
+utf16CodeLen(const wchar_t* u16Code)
+{
+    TRACE("::utf16CodeLen(wchar_t*)");
+
+    if (u16Code[0] < 0xD800 || u16Code[0] > 0xDFFF)
+    {
+        return 1;
+    }
+    else if (((u16Code[0] & 0xFC00) == 0xD800) && ((u16Code[1] & 0xFC00) == 0xDC00))
+    {
+        return 2;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+int 
+utf8CodeLen(const wchar_t* u16Code)
+{
+    TRACE("::utf8CodeLen(wchar_t*)");
+
+    if (u16Code[0] < 0x80)
+    {
+        return 1;
+    }
+    else if (u16Code[0] < 0x800)
+    {
+        return 2;
+    }
+    else if (u16Code[0] < 0xD800 || u16Code[0] > 0xDFFF)
+    {
+        return 3;
+    }
+    else if (((u16Code[0] & 0xFC00) == 0xD800) && ((u16Code[1] & 0xFC00) == 0xDC00))
+    {
+        return 4;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+int 
+utf16CodeLen(const char* u8Code)
+{
+    TRACE("::utf16CodeLen(char*)");
+
+    int u8CodeLen = utf8CodeLen(u8Code);
+    if (u8CodeLen == 1 || u8CodeLen == 2 || u8CodeLen == 3)
+    {
+        return 1;
+    }
+    else if (u8CodeLen == 4)
+    {
+        return 2;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+int 
+utf8CodeToUTF16(wchar_t* u16Code, const char* u8Code, int* u8Len, int* u16Len)
+{
+    TRACE("::utf8CodeToUTF16");
+
+    int len16 = utf16CodeLen(u8Code);
+    int len8 = utf8CodeLen(u8Code);
+    if (len16 == -1 || len8 == -1)
+    {
+        return -1;
+    }
+    *u16Len = len16;
+    *u8Len = len8;
     
-    return result;
+    if (len8 == 1)
+    {
+        u16Code[0] = (wchar_t)u8Code[0];
+    }
+    else if (len8 == 2)
+    {
+        wchar_t c = (((wchar_t)u8Code[0]) & 0x1F) << 6;
+        c |= (((wchar_t)u8Code[1]) & 0x3F);
+        u16Code[0] = c;
+    }
+    else if (len8 == 3)
+    {
+        wchar_t c = (((wchar_t)u8Code[0]) & 0x0F) << 12;
+        c |= (((wchar_t)u8Code[1]) & 0x3F) << 6;
+        c |= (((wchar_t)u8Code[2]) & 0x3F);
+        u16Code[0] = c;
+    }
+    else
+    {
+        OMUInt32 c = (((wchar_t)u8Code[0]) & 0x07) << 18;
+        c |= (((wchar_t)u8Code[1]) & 0x3F) << 12;
+        c |= (((wchar_t)u8Code[2]) & 0x3F) << 6;
+        c |= (((wchar_t)u8Code[3]) & 0x3F);
+        c -= 0x10000;
+        u16Code[0] = (wchar_t)(0xD800 | ((c >> 10) & 0x03FF));
+        u16Code[1] = (wchar_t)(0xDC00 | (c & 0x03FF));
+    }
+
+    return *u16Len;
+}
+
+int 
+utf16CodeToUTF8(char* u8Code, const wchar_t* u16Code, int* u16Len, int* u8Len)
+{
+    TRACE("::utf16CodeToUTF8");
+
+    int len8 = utf8CodeLen(u16Code);
+    int len16 = utf16CodeLen(u16Code);
+    if (len8 == -1 || len16 == -1)
+    {
+        return -1;
+    }
+    *u8Len = len8;
+    *u16Len = len16;
+    
+    if (len8 == 1)
+    {
+        u8Code[0] = (char)(u16Code[0]);
+    }
+    else if (len8 == 2)
+    {
+        u8Code[0] = (char)(0xC0 | (u16Code[0] >> 6));
+        u8Code[1] = (char)(0x80 | (u16Code[0] & 0x3F));
+    }
+    else if (len8 == 3)
+    {
+        u8Code[0] = (char)(0xE0 | (u16Code[0] >> 12));
+        u8Code[1] = (char)(0x80 | ((u16Code[0] >> 6) & 0x3F));
+        u8Code[2] = (char)(0x80 | (u16Code[0] & 0x3F));
+    }
+    else
+    {
+        OMUInt32 c = (u16Code[0] & 0x03FF) << 10;
+        c |= (u16Code[1] & 0x03FF);
+        c += 0x10000;
+        u8Code[0] = (char)(0xF0 | ((c >> 18) & 0x07));
+        u8Code[1] = (char)(0x80 | ((c >> 12) & 0x3F));
+        u8Code[2] = (char)(0x80 | ((c >> 6) & 0x3F));
+        u8Code[3] = (char)(0x80 | (c & 0x3F));
+    }
+    
+    return *u8Len;
+}
+
+int 
+utf16StrLen(const char* u8str)
+{
+    TRACE("::utf16StrLen");
+
+    int len = 0;
+    const char* u8strPtr = u8str;
+    while (*u8strPtr != '\0')
+    {
+        int u8CodeLen = utf8CodeLen(u8strPtr);
+        int u16CodeLen = utf16CodeLen(u8strPtr);
+        if (u8CodeLen == -1 || u16CodeLen == -1)
+        {
+            len = -1;
+            break;
+        }
+        u8strPtr += u8CodeLen;
+        len += u16CodeLen;
+    }
+    
+    return len;
+}
+
+int 
+utf8StrLen(const wchar_t* u16str)
+{
+    TRACE("::utf8StrLen");
+
+    int len = 0;
+    const wchar_t* u16strPtr = u16str;
+    while (*u16strPtr != L'\0')
+    {
+        int u8CodeLen = utf8CodeLen(u16strPtr);
+        int u16CodeLen = utf16CodeLen(u16strPtr);
+        if (u8CodeLen == -1 || u16CodeLen == -1)
+        {
+            len = -1;
+            break;
+        }
+        u16strPtr += u16CodeLen;
+        len += u8CodeLen;
+    }
+    
+    return len;
+}
+
+wchar_t* 
+utf8ToUTF16(const char* u8str)
+{
+    TRACE("::utf8ToUTF16");
+
+    int u16Len = utf16StrLen(u8str);
+    if (u16Len == -1)
+    {
+        return 0;
+    }
+    
+    wchar_t* u16str = new wchar_t[u16Len + 1];
+    
+    wchar_t* u16strPtr = u16str;
+    const char* u8strPtr = u8str;
+    while (*u8strPtr != '\0')
+    {
+        int u8CodeLen;
+        int u16CodeLen;
+        utf8CodeToUTF16(u16strPtr, u8strPtr, &u8CodeLen, &u16CodeLen);
+        if (u8CodeLen == -1 || u16CodeLen == -1)
+        {
+            delete [] u16str;
+            return 0;
+        }
+        u8strPtr += u8CodeLen;
+        u16strPtr += u16CodeLen;
+    }
+    *u16strPtr = L'\0';
+    
+    return u16str;    
 }
 
 void 
-convertToWideString(wchar_t* dest, const char* src, size_t n)
+utf8ToUTF16(wchar_t* u16str, const char* u8str, size_t u16Size)
 {
-    TRACE("::convertToWideString(dest, src, n)");
+    TRACE("::utf8ToUTF16");
 
-    u8stowcs(dest, src, n);
+    if (u16Size == 0)
+    {
+        return;
+    }
+    int u16Len = utf16StrLen(u8str);
+    if (u16Len == -1)
+    {
+        return;
+    }
+
+    size_t count = 0;    
+    wchar_t* u16strPtr = u16str;
+    const char* u8strPtr = u8str;
+    while (*u8strPtr != '\0' && count < u16Size)
+    {
+        int u16CodeLen = utf16CodeLen(u8strPtr);
+        if (u16CodeLen == -1)
+        {
+            return;
+        }
+        count += u16CodeLen;
+        if (count < u16Size)
+        {
+            int u8CodeLen;
+            utf8CodeToUTF16(u16strPtr, u8strPtr, &u8CodeLen, &u16CodeLen);
+            if (u8CodeLen == -1 || u16CodeLen == -1)
+            {
+                return;
+            }
+            u8strPtr += u8CodeLen;
+            u16strPtr += u16CodeLen;
+        }
+    }
+    while (count < u16Size)
+    {
+        *u16strPtr = L'\0';
+        u16strPtr++;
+        count++;
+    }
 }
 
 char* 
-convertFromWideString(const wchar_t* str)
+utf16ToUTF8(const wchar_t* u16str)
 {
-    TRACE("::convertFromWideString");
+    TRACE("::utf16ToUTF8");
 
-    int length = wcsu8slen(str);
-    char* result = new char[length + 1];
-    wcstou8s(result, str, length + 1);
+    int u8Len = utf8StrLen(u16str);
+    if (u8Len == -1)
+    {
+        return 0;
+    }
+    
+    char* u8str = new char[u8Len + 1];
+    
+    const wchar_t* u16strPtr = u16str;
+    char* u8strPtr = u8str;
+    while (*u16strPtr != L'\0')
+    {
+        int u8CodeLen;
+        int u16CodeLen;
+        utf16CodeToUTF8(u8strPtr, u16strPtr, &u16CodeLen, &u8CodeLen);
+        if (u16CodeLen == -1 || u8CodeLen == -1)
+        {
+            delete [] u8str;
+            return 0;
+        }
+        u8strPtr += u8CodeLen;
+        u16strPtr += u16CodeLen;
+    }
+    *u8strPtr = '\0';
 
-    return result;
+    return u8str;
 }
 
 void 
-convertFromWideString(char* dest, const wchar_t* src, size_t n)
+utf16ToUTF8(char* u8str, const wchar_t* u16str, size_t u8Size)
 {
-    TRACE("::convertFromWideString(dest, src, n)");
+    TRACE("::utf16ToUTF8");
 
-    wcstou8s(dest, src, n);
+    if (u8Size == 0)
+    {
+        return;
+    }
+    int u8Len = utf8StrLen(u16str);
+    if (u8Len == -1)
+    {
+        return;
+    }
+
+    size_t count = 0;    
+    char* u8strPtr = u8str;
+    const wchar_t* u16strPtr = u16str;
+    while (*u16strPtr != L'\0' && count < u8Size)
+    {
+        int u8CodeLen = utf8CodeLen(u16strPtr);
+        if (u8CodeLen == -1)
+        {
+            return;
+        }
+        count += u8CodeLen;
+        if (count < u8Size)
+        {
+            int u16CodeLen;
+            utf16CodeToUTF8(u8strPtr, u16strPtr, &u16CodeLen, &u8CodeLen);
+            if (u16CodeLen == -1 || u8CodeLen == -1)
+            {
+                return;
+            }
+            u16strPtr += u16CodeLen;
+            u8strPtr += u8CodeLen;
+        }
+    }
+    while (count < u8Size)
+    {
+        *u8strPtr = '\0';
+        u8strPtr++;
+        count++;
+    }
 }
+
+bool
+isValidCodePoint(OMUInt32 code)
+{
+    TRACE("::isValidCodePoint");
+
+    if ((code >= 0xD800 && code <= 0xDFFF) || // used for UTF-16 surrogates
+        (code >= 0xFFFE && code <= 0xFFFF) || // process internal, not for interchange
+        (code >= 0x110000)) // outside code range
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+void
+codePointToUTF16(OMUInt32 code, wchar_t** u16Str)
+{
+    TRACE("::codePointToUTF16");
+    ASSERT("Valid code point", isValidCodePoint(code));
+    
+    if (code > 0xFFFF)
+    {
+        OMUInt32 c = code - 0x10000;
+        **u16Str = (wchar_t)(0xD800 | ((c >> 10) & 0x03FF));
+        (*u16Str)++;
+        **u16Str = (wchar_t)(0xDC00 | (c & 0x03FF));
+    }
+    else
+    {
+        **u16Str = (wchar_t)code;
+    }
+}
+
+OMUInt32
+codePoint(const char* u8Code)
+{
+    TRACE("::codePoint(char*)");
+
+    int u8Len = utf8CodeLen(u8Code);
+    if (u8Len == -1)
+    {
+        return 0xD800; // indicates an invalid code point
+    }
+    
+    OMUInt32 c;
+    if (u8Len == 1)
+    {
+        c = (OMUInt32)u8Code[0];
+    }
+    else if (u8Len == 2)
+    {
+        c = (((OMUInt32)u8Code[0]) & 0x1F) << 6;
+        c |= (((OMUInt32)u8Code[1]) & 0x3F);
+    }
+    else if (u8Len == 3)
+    {
+        c = (((OMUInt32)u8Code[0]) & 0x0F) << 12;
+        c |= (((OMUInt32)u8Code[1]) & 0x3F) << 6;
+        c |= (((OMUInt32)u8Code[2]) & 0x3F);
+    }
+    else
+    {
+        c = (((OMUInt32)u8Code[0]) & 0x07) << 18;
+        c |= (((OMUInt32)u8Code[1]) & 0x3F) << 12;
+        c |= (((OMUInt32)u8Code[2]) & 0x3F) << 6;
+        c |= (((OMUInt32)u8Code[3]) & 0x3F);
+    }
+
+    return c;
+}
+
+OMUInt32
+codePoint(const wchar_t* u16Code)
+{
+    TRACE("::codePoint(wchar_t*)");
+
+    int u16Len = utf16CodeLen(u16Code);
+    if (u16Len == -1)
+    {
+        return 0xD800; // indicates an invalid code point
+    }
+
+    OMUInt32 c;
+    if (u16Len == 1)
+    {
+        c = (OMUInt32)u16Code[0];
+    }
+    else
+    {
+        c = (u16Code[0] & 0x03FF) << 10;
+        c |= (u16Code[1] & 0x03FF);
+        c += 0x10000;
+    }
+    
+    return c;
+}
+
 
 void 
 auidToURI(OMUniqueObjectIdentification id, wchar_t* uri)
@@ -85,7 +556,7 @@ auidToURI(OMUniqueObjectIdentification id, wchar_t* uri)
             id.Data4[0], id.Data4[1], id.Data4[2], id.Data4[3],
             id.Data4[4], id.Data4[5], id.Data4[6], id.Data4[7]);
         
-        convertToWideString(uri, uuidStr, XML_MAX_AUID_URI_SIZE);
+        utf8ToUTF16(uri, uuidStr, XML_MAX_AUID_URI_SIZE);
     }
     else
     {
@@ -97,7 +568,7 @@ auidToURI(OMUniqueObjectIdentification id, wchar_t* uri)
             id.Data4[4], id.Data4[5], id.Data4[6], id.Data4[7],
             id.Data1, id.Data2, id.Data3);
         
-        convertToWideString(uri, ulStr, XML_MAX_AUID_URI_SIZE);
+        utf8ToUTF16(uri, ulStr, XML_MAX_AUID_URI_SIZE);
     }
 }
 
@@ -122,7 +593,7 @@ mobIdToURI(OMMaterialIdentification mobId, wchar_t* uri)
         mobId.material.Data4[0], mobId.material.Data4[1], mobId.material.Data4[2], mobId.material.Data4[3], 
         mobId.material.Data4[4], mobId.material.Data4[5], mobId.material.Data4[6], mobId.material.Data4[7]);
     
-    convertToWideString(uri, mobIdStr, XML_MAX_MOBID_URI_SIZE);
+    utf8ToUTF16(uri, mobIdStr, XML_MAX_MOBID_URI_SIZE);
 }
 
 bool 
@@ -144,7 +615,7 @@ uriToAUID(const wchar_t* uri, OMUniqueObjectIdentification* id)
 {
     TRACE("::uriToAUID(wchar");
 
-    char* uri8 = convertFromWideString(uri);
+    char* uri8 = utf16ToUTF8(uri);
     uriToAUID(uri8, id);     
     
     delete [] uri8;
@@ -202,7 +673,7 @@ uriToMobId(const wchar_t* uri, OMMaterialIdentification* mobId)
 {
     TRACE("::uriToMobId(wchar");
 
-    char* uri8 = convertFromWideString(uri);
+    char* uri8 = utf16ToUTF8(uri);
     uriToMobId(uri8, mobId);     
 
     delete [] uri8;
@@ -316,7 +787,7 @@ integerToString(const OMByte* value, OMUInt8 size, bool isSigned, wchar_t* str)
             break;
     }
     
-    convertToWideString(str, buffer, 22);
+    utf8ToUTF16(str, buffer, 22);
 }
 
 void 
@@ -372,7 +843,7 @@ dateStructToString(const OMByte* internalBytes, wchar_t* str)
     sprintf(dateStr, "%04d-%02u-%02uZ", dateStruct->year, dateStruct->month, 
         dateStruct->day);
         
-    convertToWideString(str, dateStr, XML_MAX_DATESTRUCT_STRING_SIZE);        
+    utf8ToUTF16(str, dateStr, XML_MAX_DATESTRUCT_STRING_SIZE);        
 }
 
 // must match type in AAFTypes.h
@@ -393,7 +864,7 @@ timeStructToString(const OMByte* internalBytes, wchar_t* str)
     sprintf(timeStr, "%02u:%02u:%02u.%02uZ", timeStruct->hour, timeStruct->minute, 
         timeStruct->second, timeStruct->fraction);
         
-    convertToWideString(str, timeStr, XML_MAX_TIMESTRUCT_STRING_SIZE);        
+    utf8ToUTF16(str, timeStr, XML_MAX_TIMESTRUCT_STRING_SIZE);        
 }
 
 // must match type in AAFTypes.h
@@ -414,7 +885,7 @@ timeStampToString(const OMByte* internalBytes, wchar_t* str)
         timeStamp->time.hour, timeStamp->time.minute, 
         timeStamp->time.second, timeStamp->time.fraction);
     
-    convertToWideString(str, timeStampStr, XML_MAX_TIMESTAMP_STRING_SIZE);        
+    utf8ToUTF16(str, timeStampStr, XML_MAX_TIMESTAMP_STRING_SIZE);        
 }
 
 void
@@ -431,7 +902,7 @@ boolToString(bool value, wchar_t* str)
         strcpy(boolStr, "false");
     }
 
-    convertToWideString(str, boolStr, XML_MAX_BOOL_STRING_SIZE);        
+    utf8ToUTF16(str, boolStr, XML_MAX_BOOL_STRING_SIZE);        
 }
 
 struct Rational
@@ -448,7 +919,7 @@ rationalToString(const OMByte* internalBytes, wchar_t* str)
     char rationalStr[XML_MAX_RATIONAL_STRING_SIZE];
     sprintf(rationalStr, "%d/%d", rational->numerator, rational->denominator);
     
-    convertToWideString(str, rationalStr, XML_MAX_RATIONAL_STRING_SIZE); 
+    utf8ToUTF16(str, rationalStr, XML_MAX_RATIONAL_STRING_SIZE); 
 }
 
 struct VersionType
@@ -465,7 +936,7 @@ versionTypeToString(const OMByte* internalBytes, wchar_t* str)
     char versionStr[XML_MAX_VERSIONTYPE_STRING_SIZE];
     sprintf(versionStr, "%d.%d", version->major, version->minor);
     
-    convertToWideString(str, versionStr, XML_MAX_VERSIONTYPE_STRING_SIZE); 
+    utf8ToUTF16(str, versionStr, XML_MAX_VERSIONTYPE_STRING_SIZE); 
 }
 
 
@@ -946,31 +1417,17 @@ uint8FromString(const char* str, OMUInt8& value)
 
 
 bool 
-stringRequiresEscaping(const wchar_t* str)
+characterRequiresEscaping(OMUInt32 code)
 {
-    TRACE("::stringRequiresEscaping");
+    TRACE("::characterRequiresEscaping(OMUInt32)");
 
-    bool escapeRequired = false;
-    const wchar_t* strPtr = str;
-    while (!escapeRequired && *strPtr != 0)
-    {
-        escapeRequired = characterRequiresEscaping(*strPtr);
-        strPtr++;
-    }
-    
-    return escapeRequired;
-}
-
-bool 
-characterRequiresEscaping(wchar_t c)
-{
-    TRACE("::characterRequiresEscaping");
-
-    if ((c >= 0x0000 && c <= 0x0009) ||
-        (c >= 0x000B && c <= 0x000C) ||
-        (c >= 0x000E && c <= 0x001F) ||
-        (c >= 0xD800 && c <= 0xDFFF) ||
-        (c >= 0xFFFE && c <= 0xFFFF))
+    // characters not accepted in XML version 1.0
+    if ((code >= 0x0000 && code <= 0x0009) ||
+        (code >= 0x000B && code <= 0x000C) ||
+        (code >= 0x000E && code <= 0x001F) ||
+        (code >= 0xD800 && code <= 0xDFFF) || // invalid Unicode character - used for UTF-16 surrogates
+        (code >= 0xFFFE && code <= 0xFFFF) || // invalid Unicode character - process internal, not for interchange
+        (code >= 0x110000)) // invalid Unicode character - outside code range
     {
         return true;
     }
@@ -978,6 +1435,60 @@ characterRequiresEscaping(wchar_t c)
     {
         return false;
     }
+}
+
+bool 
+stringRequiresEscaping(const wchar_t* str)
+{
+    TRACE("::stringRequiresEscaping");
+
+    bool escapeRequired = false;
+    const wchar_t* strPtr = str;
+    while (!escapeRequired && *strPtr != L'\0')
+    {
+        int codeLen = utf16CodeLen(strPtr);
+        if (codeLen == -1)
+        {
+            escapeRequired = true;
+        }
+        else
+        {
+            OMUInt32 code = codePoint(strPtr);
+            if (characterRequiresEscaping(code))
+            {
+                escapeRequired = true;
+            }
+            else
+            {
+                strPtr += codeLen;
+            }
+        }
+    }
+    
+    return escapeRequired;
+}
+
+bool
+characterRequiresEscaping(const wchar_t* c)
+{
+    TRACE("::characterRequiresEscaping(wchar_t*)");
+    
+    bool escapeRequired = false;
+    int codeLen = utf16CodeLen(c);
+    if (codeLen == -1)
+    {
+        escapeRequired = true;
+    }
+    else
+    {
+        OMUInt32 code = codePoint(c);
+        if (characterRequiresEscaping(code))
+        {
+            escapeRequired = true;
+        }
+    }
+    
+    return escapeRequired;
 }
 
 wchar_t* 
@@ -990,26 +1501,43 @@ escapeString(const wchar_t* str)
     const wchar_t* strPtr = str;
     while (*strPtr != 0)
     {
-        if (characterRequiresEscaping(*strPtr))
+        if (characterRequiresEscaping(strPtr))
         {
-            char code[9];
-            sprintf(code, "$#x%x;", *strPtr);
-            wchar_t* tmp = convertToWideString(code);
+            OMUInt32 code;
+            int codeLen = utf16CodeLen(strPtr);
+            if (codeLen == -1)
+            {
+                code = (OMUInt32)*strPtr;
+                strPtr++;
+            }
+            else
+            {
+                code = codePoint(strPtr);
+                strPtr += codeLen;
+            }
+
+            char codeStr[13];
+            sprintf(codeStr, "$#x%x;", code);
+            wchar_t* tmp = utf8ToUTF16(codeStr);
             buffer.append(reinterpret_cast<OMByte*>(tmp), 
-                (lengthOfWideString(tmp) + 1) * sizeof(wchar_t));
+                lengthOfWideString(tmp) * sizeof(wchar_t));
             delete [] tmp;
+
         }
         else if (*strPtr == L'$')
         {
             const wchar_t* escapedDollar = L"$#x24;";
             buffer.append(reinterpret_cast<const OMByte*>(escapedDollar), 
-                (lengthOfWideString(escapedDollar) + 1) * sizeof(wchar_t));
+                lengthOfWideString(escapedDollar) * sizeof(wchar_t));
+            strPtr++;
         }
         else
         {
             buffer.append(reinterpret_cast<const OMByte*>(strPtr), sizeof(wchar_t));
+            int codeLen = utf16CodeLen(strPtr);
+            ASSERT("Valid code length", codeLen >= 1);
+            strPtr += codeLen;
         }
-        strPtr++;
     }
     const wchar_t* nullTerm = L'\0';
     buffer.append(reinterpret_cast<OMByte*>(&nullTerm), sizeof(wchar_t));
@@ -1019,22 +1547,31 @@ escapeString(const wchar_t* str)
 }
 
 wchar_t* 
-escapeCharacter(wchar_t c)
+escapeCharacter(const wchar_t* c)
 {
     TRACE("::escapeCharacter");
 
     OMByteArray buffer;
-    buffer.grow(sizeof(wchar_t));
     if (characterRequiresEscaping(c))
     {
-        char code[9];
-        sprintf(code, "$#x%x;", c);
-        wchar_t* tmp = convertToWideString(code);
+        OMUInt32 code;
+        int codeLen = utf16CodeLen(c);
+        if (codeLen == -1)
+        {
+            code = (OMUInt32)*c;
+        }
+        else
+        {
+            code = codePoint(c);
+        }
+        char codeStr[13];
+        sprintf(codeStr, "$#x%x;", code);
+        wchar_t* tmp = utf8ToUTF16(codeStr);
         buffer.append(reinterpret_cast<OMByte*>(tmp), 
             (lengthOfWideString(tmp) + 1) * sizeof(wchar_t));
         delete [] tmp;
     }
-    else if (c == L'$')
+    else if (*c == L'$')
     {
         const wchar_t* escapedDollar = L"$#x24;";
         buffer.append(reinterpret_cast<const OMByte*>(escapedDollar), 
@@ -1042,10 +1579,11 @@ escapeCharacter(wchar_t c)
     }
     else
     {
-        buffer.append(reinterpret_cast<const OMByte*>(&c), sizeof(wchar_t));
+        int codeLen = utf16CodeLen(c);
+        buffer.append(reinterpret_cast<const OMByte*>(c), sizeof(wchar_t) * codeLen);
+        const wchar_t* nullTerm = L'\0';
+        buffer.append(reinterpret_cast<OMByte*>(&nullTerm), sizeof(wchar_t));
     }
-    const wchar_t* nullTerm = L'\0';
-    buffer.append(reinterpret_cast<OMByte*>(&nullTerm), sizeof(wchar_t));
     wchar_t* result = new wchar_t[buffer.size() / sizeof(wchar_t)];
     memcpy(result, buffer.bytes(), buffer.size());
     return result;    
@@ -1059,21 +1597,21 @@ unescapeString(const wchar_t* str)
     wchar_t* result = new wchar_t[lengthOfWideString(str) + 1];
     wchar_t* resultPtr = result;
     const wchar_t* strPtr = str;
-    while (*strPtr != 0)
+    while (*strPtr != L'\0')
     {
         if (*strPtr == L'$')
         {
-            char cstr[9];
-            convertFromWideString(cstr, strPtr, 9);
-            unsigned int tmp;
+            char cstr[14];
+            utf16ToUTF8(cstr, strPtr, 14);
+            OMUInt32 code;
             int ret;
             if (compareWideString(strPtr, L"$#x", 3) == 0)
             {
-                ret = sscanf(cstr, "$#x%x;", &tmp);
+                ret = sscanf(cstr, "$#x%x;", &code);
             }
             else if (compareWideString(strPtr, L"$#", 2) == 0)
             {
-                ret = sscanf(cstr, "$#%u;", &tmp);
+                ret = sscanf(cstr, "$#%u;", &code);
             }
             else
             {
@@ -1084,7 +1622,23 @@ unescapeString(const wchar_t* str)
             {
                 throw OMXMLException(L"Invalid escaped string - could not read number");
             }
-            *resultPtr = (wchar_t)tmp;
+            if (isValidCodePoint(code))
+            {
+                codePointToUTF16(code, &resultPtr);
+            }
+            else
+            {
+                if (code > 0xFFFF)
+                {
+                    *resultPtr = (wchar_t)(code >> 16);
+                    resultPtr++;
+                    *resultPtr = (wchar_t)(code & 0xFFFF);
+                }
+                else
+                {
+                    *resultPtr = (wchar_t)(code);
+                }
+            }
             
             while (*strPtr != 0 && *strPtr != L';')
             {
@@ -1097,7 +1651,15 @@ unescapeString(const wchar_t* str)
         }
         else
         {
+            int u16Len = utf16CodeLen(strPtr);
+            ASSERT("Valid code length", u16Len == 1 || u16Len == 2);
             *resultPtr = *strPtr;
+            if (u16Len == 2)
+            {
+                resultPtr++;
+                strPtr++;
+                *resultPtr = *strPtr;
+            }
         }
         resultPtr++;
         strPtr++;            
@@ -1107,15 +1669,13 @@ unescapeString(const wchar_t* str)
     return result;    
 }
 
-wchar_t 
+wchar_t*
 unescapeCharacter(const wchar_t* cstr)
 {
     TRACE("::unescapeCharacter");
 
     wchar_t* unescapeStr = unescapeString(cstr);
-    wchar_t c = *unescapeStr;
-    delete [] unescapeStr;
-    
-    return c;
+
+    return unescapeStr;
 }
 

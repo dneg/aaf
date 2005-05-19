@@ -266,6 +266,20 @@ OMXMLStorage::getBaselineMetaDefSymbol(OMUniqueObjectIdentification id)
     return _baselineSymbolspace->getMetaDefSymbol(id);
 }
 
+bool 
+OMXMLStorage::knownBaselineExtEnum(OMUniqueObjectIdentification id, 
+    OMUniqueObjectIdentification value) const
+{
+    TRACE("OMXMLStorage::knownBaselineExtEnum");
+    
+    if (_baselineSymbolspace == 0)
+    {
+        return false;
+    }
+    
+    return _baselineSymbolspace->knownExtEnum(id, value);
+}
+
 const wchar_t* 
 OMXMLStorage::getDataStreamNotationName(OMUniqueObjectIdentification typeId)
 {
@@ -279,7 +293,7 @@ OMXMLStorage::getDataStreamNotationName(OMUniqueObjectIdentification typeId)
 
     char buffer[19];
     sprintf(buffer, "DataStream%x", _dataStreamNotationNameIndex);
-    wchar_t* name = convertToWideString(buffer);
+    wchar_t* name = utf8ToUTF16(buffer);
     _dataStreamNotationNames.insert(typeId, name); 
     delete [] name;
     _dataStreamNotationNameIndex++;
@@ -305,7 +319,7 @@ OMXMLStorage::getDataStreamEntityName(void* ref)
 
     char buffer[15];
     sprintf(buffer, "stream%x", _dataStreamEntityNameIndex);
-    wchar_t* name = convertToWideString(buffer);
+    wchar_t* name = utf8ToUTF16(buffer);
     _dataStreamEntityNames.insert(ref, name); 
     delete [] name;
     _dataStreamEntityNameIndex++;
@@ -332,7 +346,7 @@ OMXMLStorage::getDataStreamEntityValue(void* ref, const wchar_t* prefix)
     char buffer[20];
     sprintf(buffer, "_stream%x", _dataStreamEntityValueIndex);
     wchar_t* value = new wchar_t[20 + lengthOfWideString(prefix)];
-    convertToWideString(value, buffer, 20);
+    utf8ToUTF16(value, buffer, 20);
     concatenateWideString(value, prefix);
     _dataStreamEntityValues.insert(ref, value); 
     delete [] value;

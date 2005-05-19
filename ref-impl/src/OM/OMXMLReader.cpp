@@ -32,7 +32,7 @@
 
 #define COPY_STRING(DEST, SRC) \
 { \
-    wchar_t* tmp = convertToWideString(SRC); \
+    wchar_t* tmp = utf8ToUTF16(SRC); \
     DEST = tmp; \
     delete [] tmp; \
 }

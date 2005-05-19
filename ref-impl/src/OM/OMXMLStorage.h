@@ -60,6 +60,8 @@ public:
     OMUniqueObjectIdentification getBaselineMetaDefId(const wchar_t* symbol) const;
     const wchar_t* getBaselineDefSymbol(OMUniqueObjectIdentification id);
     const wchar_t* getBaselineMetaDefSymbol(OMUniqueObjectIdentification id);
+    bool knownBaselineExtEnum(OMUniqueObjectIdentification id, 
+        OMUniqueObjectIdentification value) const;
     
     const wchar_t* getDataStreamNotationName(OMUniqueObjectIdentification typeId);
     const wchar_t* getDataStreamEntityName(void* ref);

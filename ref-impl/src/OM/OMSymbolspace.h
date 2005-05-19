@@ -83,14 +83,17 @@ public:
     OMPropertyId getPropertyDefId(const wchar_t* symbol) const;
     const wchar_t* getDefSymbol(OMUniqueObjectIdentification id);
     OMUniqueObjectIdentification getDefId(const wchar_t* symbol) const;
-
+    bool knownExtEnum(OMUniqueObjectIdentification id, OMUniqueObjectIdentification value) const;
+    
     void addClassDef(OMClassDefinition* classDef);
     void addTypeDef(OMType* typeDef);
     void addPropertyDef(OMClassDefinition* classDef, OMPropertyDefinition* propertyDef);
-
+    void addExtEnumExtensions(OMUniqueObjectIdentification id, OMVector<OMWString>& names,
+        OMVector<OMUniqueObjectIdentification>& values);
+    
     void save();
     void restore(OMDictionary* dictionary);
-    void registerPropertyDefs(OMDictionary* dictionary);
+    void registerDeferredDefs(OMDictionary* dictionary);
 
     
     static OMSymbolspace* createDefaultExtSymbolspace(OMXMLStorage* storage, 
@@ -115,7 +118,17 @@ private:
     const wchar_t* createSymbolForType(OMUniqueObjectIdentification id, const wchar_t* name);
     wchar_t* createSymbol(const wchar_t* name);
     void addDefSymbol(OMUniqueObjectIdentification id, const wchar_t* symbol);
+    void addExtEnum(OMUniqueObjectIdentification id, 
+        OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>* values);
 
+
+    struct ExtEnumExtGroup
+    {
+        OMUniqueObjectIdentification typeId;
+        OMVector<OMWString> names;
+        OMVector<OMUniqueObjectIdentification> values;
+    };
+    
     void saveMetaDef(OMMetaDefinition* metaDef);
     void saveClassDef(OMClassDefinition* classDef);
     void savePropertyDef(OMClassDefinition* ownerClassDef, OMPropertyDefinition* propertyDef);
@@ -135,7 +148,7 @@ private:
     void saveStrongObjectReferenceTypeDef(OMStrongObjectReferenceType* typeDef);
     void saveVariableArrayTypeDef(OMVariableArrayType* typeDef);
     void saveWeakObjectReferenceTypeDef(OMWeakObjectReferenceType* typeDef);
-
+    void saveExtEnumExt(ExtEnumExtGroup* extEnumExt);
     
     struct RegisterPropertyPair
     {
@@ -161,6 +174,7 @@ private:
     void restoreStrongObjectReferenceTypeDef(OMDictionary* dictionary);
     void restoreVariableArrayTypeDef(OMDictionary* dictionary);
     void restoreWeakObjectReferenceTypeDef(OMDictionary* dictionary);
+    void restoreExtEnumExt(OMDictionary* dictionary);
     
     OMUniqueObjectIdentification restoreMetaDefAUID(const char* idStr);
     void saveMetaDefAUID(OMUniqueObjectIdentification id, wchar_t* idStr);
@@ -191,12 +205,17 @@ private:
         OMClassDefinition* ownerClassDef;
         OMPropertyDefinition* propertyDef;
     };
-    
+
     OMVector<OMClassDefinition*> _classDefs;
     OMVector<OMType*> _typeDefs;
     OMVector<PropertyPair*> _propertyDefs;
+    OMVector<ExtEnumExtGroup*> _extEnumExtDefs;
 
+    OMSet<OMUniqueObjectIdentification, 
+        OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>* > _extEnumValues;
+    
     OMVector<RegisterPropertyPair*> _propertyDefsForRegistration;
+    OMVector<ExtEnumExtGroup*> _extEnumExtDefsForRegistration;
     
 };
 

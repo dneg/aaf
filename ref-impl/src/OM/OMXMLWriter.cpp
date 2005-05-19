@@ -79,8 +79,8 @@ OMXMLWriter::writeDocumentEnd()
 void 
 OMXMLWriter::writeElementStart(const wchar_t* ns, const wchar_t* localName)
 {
-    char* ns8 = convertFromWideString(ns);    
-    char* localName8 = convertFromWideString(localName);
+    char* ns8 = utf16ToUTF8(ns);    
+    char* localName8 = utf16ToUTF8(localName);
     
     _xmlWriter->WriteElementStart(ns8, localName8);
     
@@ -91,11 +91,11 @@ OMXMLWriter::writeElementStart(const wchar_t* ns, const wchar_t* localName)
 void 
 OMXMLWriter::declareNamespace(const wchar_t* ns, const wchar_t* prefix)
 {
-    char* ns8 = convertFromWideString(ns);    
+    char* ns8 = utf16ToUTF8(ns);    
     char* prefix8 = 0;
     if (prefix != 0)
     {
-        prefix8 = convertFromWideString(prefix);
+        prefix8 = utf16ToUTF8(prefix);
     }
     
     _xmlWriter->DeclareNamespace(ns8, prefix8);
@@ -113,10 +113,10 @@ OMXMLWriter::writeAttribute(const wchar_t* ns, const wchar_t* localName, const w
     char* ns8 = 0;
     if (ns != 0)
     {
-        ns8 = convertFromWideString(ns);
+        ns8 = utf16ToUTF8(ns);
     }
-    char* localName8 = convertFromWideString(localName);
-    char* value8 = convertFromWideString(value);
+    char* localName8 = utf16ToUTF8(localName);
+    char* value8 = utf16ToUTF8(value);
     
     _xmlWriter->WriteAttribute(ns8, localName8, value8);
     
@@ -134,9 +134,9 @@ OMXMLWriter::writeAttributeStart(const wchar_t* ns, const wchar_t* localName)
     char* ns8 = 0;
     if (ns != 0)
     {
-        ns8 = convertFromWideString(ns);
+        ns8 = utf16ToUTF8(ns);
     }
-    char* localName8 = convertFromWideString(localName);
+    char* localName8 = utf16ToUTF8(localName);
     
     _xmlWriter->WriteAttributeStart(ns8, localName8);
     
@@ -150,7 +150,7 @@ OMXMLWriter::writeAttributeStart(const wchar_t* ns, const wchar_t* localName)
 void 
 OMXMLWriter::writeAttributeContent(const wchar_t* value)
 {
-    char* value8 = convertFromWideString(value);
+    char* value8 = utf16ToUTF8(value);
     
     _xmlWriter->WriteAttributeContent(value8);
     
@@ -166,7 +166,7 @@ OMXMLWriter::writeAttributeEnd(void)
 void 
 OMXMLWriter::writeElementContent(const wchar_t* content, size_t length)
 {
-    char* content8 = convertFromWideString(content);    
+    char* content8 = utf16ToUTF8(content);    
     
     _xmlWriter->WriteElementContent(content8, strlen(content8));
     
@@ -182,7 +182,7 @@ OMXMLWriter::writeElementEnd(void)
 void 
 OMXMLWriter::writeComment(const wchar_t* comment)
 {
-    char* comment8 = convertFromWideString(comment);    
+    char* comment8 = utf16ToUTF8(comment);    
     
     _xmlWriter->WriteComment(comment8);
     
@@ -192,8 +192,8 @@ OMXMLWriter::writeComment(const wchar_t* comment)
 void 
 OMXMLWriter::writeProcInstruction(const wchar_t* target, const wchar_t* instruction)
 {
-    char* target8 = convertFromWideString(target);    
-    char* instruction8 = convertFromWideString(instruction);
+    char* target8 = utf16ToUTF8(target);    
+    char* instruction8 = utf16ToUTF8(instruction);
     
     _xmlWriter->WriteProcInstruction(target8, instruction8);
     
@@ -204,7 +204,7 @@ OMXMLWriter::writeProcInstruction(const wchar_t* target, const wchar_t* instruct
 void 
 OMXMLWriter::writeText(const wchar_t* text)
 {
-    char* text8 = convertFromWideString(text);    
+    char* text8 = utf16ToUTF8(text);    
     
     _xmlWriter->WriteText(text8);
     

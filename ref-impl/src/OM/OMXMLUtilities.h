@@ -43,11 +43,22 @@
 #define XML_MAX_VERSIONTYPE_STRING_SIZE         10
 
 
-
-wchar_t* convertToWideString(const char* str);
-void convertToWideString(wchar_t* dest, const char* src, size_t n);
-char* convertFromWideString(const wchar_t* str);
-void convertFromWideString(char* dest, const wchar_t* src, size_t n);
+int utf8CodeLen(const char* u8Code);
+int utf16CodeLen(const wchar_t* u16Code);
+int utf16CodeLen(const char* u8Code);
+int utf8CodeLen(const wchar_t* u16Code);
+int utf8CodeToUTF16(wchar_t* u16Code, const char* u8Code, int* u8Len, int* u16Len);
+int utf16CodeToUTF8(char* u8Code, const wchar_t* u16Code, int* u16Len, int* u8Len);
+int utf16StrLen(const char* u8str);
+int utf8StrLen(const wchar_t* u16str);
+wchar_t* utf8ToUTF16(const char* u8str);
+void utf8ToUTF16(wchar_t* u16str, const char* u8str, size_t u16Size);
+char* utf16ToUTF8(const wchar_t* u16str);
+void utf16ToUTF8(char* u8str, const wchar_t* u16str, size_t u8Size);
+bool isValidCodePoint(OMUInt32 code);
+void codePointToUTF16(OMUInt32 code, wchar_t** u16Str);
+OMUInt32 codePoint(const char* u8Code);
+OMUInt32 codePoint(const wchar_t* u16Code);
 
 
 void auidToURI(OMUniqueObjectIdentification id, wchar_t* uri);
@@ -90,11 +101,12 @@ void uint8FromString(const char* str, OMUInt8& value);
 
 
 bool stringRequiresEscaping(const wchar_t* str);
-bool characterRequiresEscaping(wchar_t c);
+bool characterRequiresEscaping(const wchar_t* c);
+bool characterRequiresEscaping(OMUInt32 code);
 wchar_t* escapeString(const wchar_t* str);
-wchar_t* escapeCharacter(wchar_t c);
+wchar_t* escapeCharacter(const wchar_t* c);
 wchar_t* unescapeString(const wchar_t* str);
-wchar_t unescapeCharacter(const wchar_t* cstr);
+wchar_t* unescapeCharacter(const wchar_t* cstr);
 
 
 #endif 
