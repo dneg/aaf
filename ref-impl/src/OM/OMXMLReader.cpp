@@ -359,8 +359,8 @@ OMXMLIStream::~OMXMLIStream()
     TRACE("OMXMLIStream::~OMXMLIStream");
 }
     
-OMUInt64 
-OMXMLIStream::Read(OMByte* data, OMUInt64 count)
+OMUInt32 
+OMXMLIStream::Read(OMByte* data, OMUInt32 count)
 {
     TRACE("OMXMLIStream::Read");
 
@@ -370,7 +370,7 @@ OMXMLIStream::Read(OMByte* data, OMUInt64 count)
     OMUInt32 realCount = count;
     if (realCount > (_size - _position))
     {
-        realCount = _size - _position;
+        realCount = (OMUInt32)(_size - _position);
     }
     if (realCount == 0)
     {

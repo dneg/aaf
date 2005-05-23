@@ -144,7 +144,7 @@ public:
     XMLIStream(void) {}
     virtual ~XMLIStream(void) {}
     
-    virtual OMUInt64 Read(OMByte* data, OMUInt64 count) = 0;
+    virtual OMUInt32 Read(OMByte* data, OMUInt32 count) = 0;
 };
 
 
@@ -175,14 +175,14 @@ public:
 
 private:
     
-    OMUInt64 ReadNextChunk(void* buffer, OMUInt64 num);
+    OMUInt32 ReadNextChunk(void* buffer, OMUInt32 num);
     XML_Parser GetParser(void) const;
-    char* GetWorkBuffer(OMUInt64 len);
+    char* GetWorkBuffer(OMUInt32 len);
     char* GetWorkBuffer(void);
-    OMUInt64 GetWorkBufferSize(void);
-    OMUInt64 XMLStringLen(const XML_Char* s, XML_Char terminator) const;
-    OMUInt64 ReadCharacters(char* out, const XML_Char* in, char terminator, OMUInt64 maxSize);
-    void ReadCharacters(char* out, const XML_Char* in, OMUInt64 size);
+    OMUInt32 GetWorkBufferSize(void);
+    OMUInt32 XMLStringLen(const XML_Char* s, XML_Char terminator) const;
+    OMUInt32 ReadCharacters(char* out, const XML_Char* in, char terminator, OMUInt32 maxSize);
+    void ReadCharacters(char* out, const XML_Char* in, OMUInt32 size);
     
     XMLIStream* _xmlStream;
     OMUInt64    _filePosition;
@@ -190,9 +190,9 @@ private:
     XML_Parser  _parser;
     bool        _readNextChunk;
     bool        _status;
-    OMUInt64    _numInBuffer;
+    OMUInt32    _numInBuffer;
     char*       _workBuffer;
-    OMUInt64    _workBufferSize;
+    OMUInt32    _workBufferSize;
     
 };
 

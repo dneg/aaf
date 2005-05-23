@@ -35,11 +35,11 @@ OMXMLOStream::OMXMLOStream(OMRawStorage* storage)
 OMXMLOStream::~OMXMLOStream()
 {}
     
-OMUInt64 
-OMXMLOStream::Write(const OMByte* data, OMUInt64 count)
+OMUInt32 
+OMXMLOStream::Write(const OMByte* data, OMUInt32 count)
 {
     OMUInt32 numWritten;
-    _storage->write(data, (OMUInt32)count, numWritten);
+    _storage->write(data, count, numWritten);
     
     return numWritten;
 }

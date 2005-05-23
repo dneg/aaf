@@ -36,7 +36,7 @@ public:
     OMXMLOStream(OMRawStorage* storage);
     virtual ~OMXMLOStream();
     
-    virtual OMUInt64 Write(const OMByte* data, OMUInt64 count);
+    virtual OMUInt32 Write(const OMByte* data, OMUInt32 count);
     virtual void Synchronize(void);
     
 private:

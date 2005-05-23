@@ -550,7 +550,7 @@ XMLReaderExpat::EntityDeclHandler(const XML_Char *entityName,
     if (is_parameter_entity == 0 && value == 0 && systemId != 0 && notationName != 0)
     {
         char* workBuffer = GetWorkBuffer(XMLStringLen(entityName, 0) + 1);
-        OMUInt64 strLen = ReadCharacters(workBuffer, entityName, 0, GetWorkBufferSize());
+        OMUInt32 strLen = ReadCharacters(workBuffer, entityName, 0, GetWorkBufferSize());
         _name = workBuffer;
         
         workBuffer = GetWorkBuffer(XMLStringLen(systemId, 0) + 1);
@@ -585,7 +585,7 @@ XMLReaderExpat::StartElementHandler(const XML_Char* name, const XML_Char** atts)
     assert(name != 0);
 
     char* workBuffer = GetWorkBuffer(XMLStringLen(name, 0) + 1);
-    OMUInt64 strLen = ReadCharacters(workBuffer, name, NAMESPACE_SEPARATOR, GetWorkBufferSize());
+    OMUInt32 strLen = ReadCharacters(workBuffer, name, NAMESPACE_SEPARATOR, GetWorkBufferSize());
     _uri = workBuffer;
     if (strLen > 0)
     {
@@ -618,7 +618,7 @@ XMLReaderExpat::StartElementHandler(const XML_Char* name, const XML_Char** atts)
             }
 
             char* workBuffer = GetWorkBuffer(XMLStringLen(*attsPtr, 0) + 1);
-            OMUInt64 strLen = ReadCharacters(workBuffer, *attsPtr, NAMESPACE_SEPARATOR, GetWorkBufferSize());
+            OMUInt32 strLen = ReadCharacters(workBuffer, *attsPtr, NAMESPACE_SEPARATOR, GetWorkBufferSize());
             a->SetNamespace(workBuffer);
             if (strLen > 0)
             {
@@ -662,7 +662,7 @@ XMLReaderExpat::EndElementHandler(const XML_Char* name)
     assert(name != 0);
 
     char* workBuffer = GetWorkBuffer(XMLStringLen(name, 0) + 1);
-    OMUInt64 strLen = ReadCharacters(workBuffer, name, NAMESPACE_SEPARATOR, GetWorkBufferSize());
+    OMUInt32 strLen = ReadCharacters(workBuffer, name, NAMESPACE_SEPARATOR, GetWorkBufferSize());
     _uri = workBuffer;
     if (strLen > 0)
     {
@@ -712,26 +712,26 @@ XMLReaderExpat::CharacterDataHandler(const XML_Char* s, int len)
     RegisterEvent(CHARACTERS);
 }
 
-OMUInt64 
-XMLReaderExpat::ReadNextChunk(void* buffer, OMUInt64 num)
+OMUInt32 
+XMLReaderExpat::ReadNextChunk(void* buffer, OMUInt32 num)
 {
     assert(buffer != 0);
     assert(num != 0);
 
-    OMUInt64 numRead = _xmlStream->Read((OMByte*)buffer, num);
+    OMUInt32 numRead = _xmlStream->Read((OMByte*)buffer, num);
     _filePosition += numRead;
 
     return numRead;
 }
 
-OMUInt64 
-XMLReaderExpat::ReadCharacters(char* out, const XML_Char* in, char terminator, OMUInt64 maxSize)
+OMUInt32 
+XMLReaderExpat::ReadCharacters(char* out, const XML_Char* in, char terminator, OMUInt32 maxSize)
 {
     assert(out != 0);
     assert(in != 0);
 
 
-    OMUInt64 size = 0;
+    OMUInt32 size = 0;
     char* outPtr = out;
     const XML_Char* inPtr = in;
     *outPtr = *inPtr;
@@ -762,12 +762,12 @@ XMLReaderExpat::ReadCharacters(char* out, const XML_Char* in, char terminator, O
 }
 
 void 
-XMLReaderExpat::ReadCharacters(char* out, const XML_Char* in, OMUInt64 len)
+XMLReaderExpat::ReadCharacters(char* out, const XML_Char* in, OMUInt32 len)
 {
     assert(out != 0);
     assert(in != 0);
 
-    OMUInt64 i;
+    OMUInt32 i;
     const XML_Char* inPtr = in;
     char* outPtr = out;
     for (i=0; i<len; i++, outPtr++, inPtr++)
@@ -777,7 +777,7 @@ XMLReaderExpat::ReadCharacters(char* out, const XML_Char* in, OMUInt64 len)
 }
 
 char* 
-XMLReaderExpat::GetWorkBuffer(OMUInt64 size)
+XMLReaderExpat::GetWorkBuffer(OMUInt32 size)
 {
     if (size > _workBufferSize)
     {
@@ -810,18 +810,18 @@ XMLReaderExpat::GetWorkBuffer(void)
     return _workBuffer;
 }
 
-OMUInt64 
+OMUInt32 
 XMLReaderExpat::GetWorkBufferSize(void)
 {
     return _workBufferSize;
 }
 
-OMUInt64 
+OMUInt32 
 XMLReaderExpat::XMLStringLen(const XML_Char* s, XML_Char terminator) const
 {
     assert(s != 0);
 
-    OMUInt64 len = 0;
+    OMUInt32 len = 0;
     const XML_Char* sPtr = s;
     while (*sPtr != terminator)
     {

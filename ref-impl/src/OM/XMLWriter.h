@@ -75,7 +75,7 @@ public:
     XMLOStream(void) {}
     virtual ~XMLOStream(void) {}
     
-    virtual OMUInt64 Write(const OMByte* data, OMUInt64 count) = 0;
+    virtual OMUInt32 Write(const OMByte* data, OMUInt32 count) = 0;
     virtual void Synchronize(void) = 0;
 };
 

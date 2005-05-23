@@ -131,7 +131,7 @@ public:
     OMXMLIStream(OMRawStorage* storage);
     virtual ~OMXMLIStream();
     
-    virtual OMUInt64 Read(OMByte* data, OMUInt64 count);
+    virtual OMUInt32 Read(OMByte* data, OMUInt32 count);
     
 private:
     OMRawStorage*   _storage;
