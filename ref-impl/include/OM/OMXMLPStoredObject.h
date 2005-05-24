@@ -308,31 +308,31 @@ private:
     void restoreHeaderByteOrder(OMProperty* property);
     
     void restoreSimpleValue(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-        const char* str, const OMType* type);
+        const wchar_t* str, const OMType* type);
     void restoreCharacter(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-        const char* str, const OMCharacterType* type);
+        const wchar_t* str, const OMCharacterType* type);
     void restoreEnum(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-        const char* str, const OMEnumeratedType* type);
+        const wchar_t* str, const OMEnumeratedType* type);
     void restoreExtEnum(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-        const char* str, const OMExtEnumeratedType* type);
+        const wchar_t* str, const OMExtEnumeratedType* type);
     void restoreFixedArray(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-        const char* str, const OMFixedArrayType* type);
+        const wchar_t* str, const OMFixedArrayType* type);
     void restoreIndirect(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-        const char* str, const OMIndirectType* type);
+        const wchar_t* str, const OMIndirectType* type);
     void restoreInteger(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-        const char* str, const OMIntType* type);
+        const wchar_t* str, const OMIntType* type);
     void restoreOpaque(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-        const char* str, const OMOpaqueType* type);
+        const wchar_t* str, const OMOpaqueType* type);
     void restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-        const char* str, const OMRecordType* type);
+        const wchar_t* str, const OMRecordType* type);
     void restoreRenamed(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-        const char* str, const OMRenamedType* type);
+        const wchar_t* str, const OMRenamedType* type);
     void restoreSet(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-        const char* str, const OMSetType* type);
+        const wchar_t* str, const OMSetType* type);
     void restoreString(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-        const char* str, const OMStringType* type);
+        const wchar_t* str, const OMStringType* type);
     void restoreVariableArray(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-        const char* str, const OMVariableArrayType* type);
+        const wchar_t* str, const OMVariableArrayType* type);
 
     enum AUIDTargetType
     {
@@ -341,7 +341,6 @@ private:
         NON_DEF,
         ANY
     };
-    OMUniqueObjectIdentification restoreAUID(const char* idStr, AUIDTargetType targetType);
     OMUniqueObjectIdentification restoreAUID(const wchar_t* idStr, AUIDTargetType targetType);
     void saveAUID(OMUniqueObjectIdentification id, wchar_t* idStr, AUIDTargetType targetType);
     
