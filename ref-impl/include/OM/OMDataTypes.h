@@ -77,11 +77,11 @@ typedef uint64_t               OMUInt64;
 #endif
 
 #if defined(_MSC_VER)
-#define OMFMT64 "I64"
+#define OMWFMT64 L"I64"
 #elif defined(__x86_64__)
-#define OMFMT64 "l"
+#define OMWFMT64 L"l"
 #else			// all 32bit platforms using POSIX compilers
-#define OMFMT64 "ll"
+#define OMWFMT64 L"ll"
 #endif
 
 
