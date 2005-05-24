@@ -43,6 +43,13 @@
 #define XML_MAX_VERSIONTYPE_STRING_SIZE         10
 
 
+#if defined (_MSC_VER)
+int std_swprintf(wchar_t* buffer, size_t count, const wchar_t* format, ...);
+#else
+#define std_swprintf swprintf
+#endif
+
+
 int utf8CodeLen(const char* u8Code);
 int utf16CodeLen(const wchar_t* u16Code);
 int utf16CodeLen(const char* u8Code);
@@ -66,9 +73,7 @@ void mobIdToURI(OMMaterialIdentification mobId, wchar_t* uri);
 
 bool isURI(const wchar_t* uri);
 void uriToAUID(const wchar_t* uri, OMUniqueObjectIdentification* id);
-void uriToAUID(const char* uri, OMUniqueObjectIdentification* id);
 void uriToMobId(const wchar_t* uri, OMMaterialIdentification* mobId);
-void uriToMobId(const char* uri, OMMaterialIdentification* mobId);
 
 void integerToString(const OMByte* value, OMUInt8 size, bool isSigned, wchar_t* str);
 void byteOrderToString(OMByteOrder byteOrder, wchar_t* str);
@@ -80,24 +85,24 @@ void boolToString(bool value, wchar_t* str);
 void rationalToString(const OMByte* internalBytes, wchar_t* str);
 void versionTypeToString(const OMByte* internalBytes, wchar_t* str);
 
-void integerFromString(OMByteArray& bytes, const char* str, OMUInt8 size, bool isSigned);
-void mobIdFromString(OMByteArray& bytes, const char* str);
-void auidFromString(OMByteArray& bytes, const char* str);
-void timeStructFromString(OMByteArray& bytes, const char* str);
-void dateStructFromString(OMByteArray& bytes, const char* str);
-void timeStampFromString(OMByteArray& bytes, const char* str);
+void integerFromString(OMByteArray& bytes, const wchar_t* str, OMUInt8 size, bool isSigned);
+void mobIdFromString(OMByteArray& bytes, const wchar_t* str);
+void auidFromString(OMByteArray& bytes, const wchar_t* str);
+void timeStructFromString(OMByteArray& bytes, const wchar_t* str);
+void dateStructFromString(OMByteArray& bytes, const wchar_t* str);
+void timeStampFromString(OMByteArray& bytes, const wchar_t* str);
 void byteOrderFromString(OMByteArray& bytes, const wchar_t* str);
-void byteArrayFromString(OMByteArray& bytes, const char* str);
-void rationalFromString(OMByteArray& bytes, const char* str);
-void versionTypeFromString(OMByteArray& bytes, const char* str);
+void byteArrayFromString(OMByteArray& bytes, const wchar_t* str);
+void rationalFromString(OMByteArray& bytes, const wchar_t* str);
+void versionTypeFromString(OMByteArray& bytes, const wchar_t* str);
 
 void byteOrderFromString(const wchar_t* str, OMByteOrder* byteOrder);
-void headerByteOrderFromString(OMByteArray& bytes, const char* str);
-void boolFromString(const char* str, bool& value);
-void uint16FromString(const char* str, OMUInt16& value);
-void int64FromString(const char* str, OMInt64& value);
-void uint32FromString(const char* str, OMUInt32& value);
-void uint8FromString(const char* str, OMUInt8& value);
+void headerByteOrderFromString(OMByteArray& bytes, const wchar_t* str);
+void boolFromString(const wchar_t* str, bool& value);
+void uint16FromString(const wchar_t* str, OMUInt16& value);
+void int64FromString(const wchar_t* str, OMInt64& value);
+void uint32FromString(const wchar_t* str, OMUInt32& value);
+void uint8FromString(const wchar_t* str, OMUInt8& value);
 
 
 bool stringRequiresEscaping(const wchar_t* str);
@@ -108,5 +113,6 @@ wchar_t* escapeCharacter(const wchar_t* c);
 wchar_t* unescapeString(const wchar_t* str);
 wchar_t* unescapeCharacter(const wchar_t* cstr);
 
+wchar_t* wideCharacterStringDup(const wchar_t* str);
 
 #endif 

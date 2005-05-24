@@ -47,7 +47,6 @@
 #include "OMVariableArrayType.h"
 #include "OMWeakObjectReferenceType.h"
 #include "OMSetIterator.h"
-#include "OMUtilities.h"
 #include "OMXMLUtilities.h"
 #include "OMVector.h"
 #include "OMXMLException.h"
@@ -215,8 +214,8 @@ OMSymbolspace::setPrefix(const wchar_t* prefix)
     
     if (prefix != 0)
     {
-        _prefix = new wchar_t[lengthOfWideString(prefix) + 1];
-        copyWideString(_prefix, prefix);
+        _prefix = new wchar_t[wcslen(prefix) + 1];
+        wcscpy(_prefix, prefix);
     }
 }
 
@@ -381,18 +380,18 @@ OMSymbolspace::save()
     wchar_t idUri[XML_MAX_AUID_URI_SIZE];
     auidToURI(_id, idUri);
     getWriter()->writeElementStart(getBaselineURI(), L"Identification");
-    getWriter()->writeElementContent(idUri, lengthOfWideString(idUri));
+    getWriter()->writeElementContent(idUri, wcslen(idUri));
     getWriter()->writeElementEnd();
 
     getWriter()->writeElementStart(getBaselineURI(), L"Symbolspace");
-    getWriter()->writeElementContent(_uri, lengthOfWideString(_uri));
+    getWriter()->writeElementContent(_uri, wcslen(_uri));
     getWriter()->writeElementEnd();
 
     if (_preferredPrefix != 0)
     {
         getWriter()->writeElementStart(getBaselineURI(), L"PreferredPrefix");
         getWriter()->writeElementContent(_preferredPrefix,
-            lengthOfWideString(_preferredPrefix));
+            wcslen(_preferredPrefix));
         getWriter()->writeElementEnd();
     }
 
@@ -400,7 +399,7 @@ OMSymbolspace::save()
     {
         getWriter()->writeElementStart(getBaselineURI(), L"Description");
         getWriter()->writeElementContent(_description,
-            lengthOfWideString(_description));
+            wcslen(_description));
         getWriter()->writeElementEnd();
     }
 
@@ -447,9 +446,9 @@ OMSymbolspace::restore(OMDictionary* dictionary)
     getTypeDefsTag(dictionary);
     
     OMUniqueObjectIdentification id;
-    wchar_t* symbolspace = 0;
-    wchar_t* preferredPrefix = 0;
-    wchar_t* description = 0;
+    OMWString symbolspace = 0;
+    OMWString preferredPrefix = 0;
+    OMWString description = 0;
     
     while (getReader()->nextElement())
     {
@@ -460,7 +459,7 @@ OMSymbolspace::restore(OMDictionary* dictionary)
         
         if (getReader()->elementEquals(getBaselineURI(), L"Identification"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -474,7 +473,7 @@ OMSymbolspace::restore(OMDictionary* dictionary)
         }
         else if (getReader()->elementEquals(getBaselineURI(), L"Symbolspace"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -483,7 +482,7 @@ OMSymbolspace::restore(OMDictionary* dictionary)
                     L"value");
             }
             getReader()->getCharacters(data, length);
-            symbolspace = utf8ToUTF16(data);
+            symbolspace = data;
             getReader()->moveToEndElement();
         }
         else if (getReader()->elementEquals(getBaselineURI(), L"PreferredPrefix"))
@@ -491,10 +490,10 @@ OMSymbolspace::restore(OMDictionary* dictionary)
             getReader()->next();
             if (getReader()->getEventType() == OMXMLReader::CHARACTERS)
             {
-                const char* data;
+                const wchar_t* data;
                 size_t length;
                 getReader()->getCharacters(data, length);
-                preferredPrefix = utf8ToUTF16(data);
+                preferredPrefix = data;
             }
             getReader()->moveToEndElement();
         }
@@ -503,10 +502,10 @@ OMSymbolspace::restore(OMDictionary* dictionary)
             getReader()->next();
             if (getReader()->getEventType() == OMXMLReader::CHARACTERS)
             {
-                const char* data;
+                const wchar_t* data;
                 size_t length;
                 getReader()->getCharacters(data, length);
-                description = utf8ToUTF16(data);
+                description = data;
             }
             getReader()->moveToEndElement();
         }
@@ -525,20 +524,7 @@ OMSymbolspace::restore(OMDictionary* dictionary)
     }
     getReader()->moveToEndElement();
     
-    initialise(id, symbolspace, preferredPrefix, description);
-    
-    if (symbolspace != 0)
-    {
-        delete [] symbolspace;
-    }
-    if (preferredPrefix != 0)
-    {
-        delete [] preferredPrefix;
-    }
-    if (description != 0)
-    {
-        delete [] description;
-    }
+    initialise(id, symbolspace.c_str(), preferredPrefix.c_str(), description.c_str());
 }
 
 void 
@@ -606,18 +592,18 @@ OMSymbolspace::initialise(OMUniqueObjectIdentification id, const wchar_t* uri,
     ASSERT("Valid symbolspace uri", uri != 0);
     
     _id = id;
-    _uri = new wchar_t[lengthOfWideString(uri) + 1];
-    copyWideString(_uri, uri);
+    _uri = new wchar_t[wcslen(uri) + 1];
+    wcscpy(_uri, uri);
 
     if (preferredPrefix != 0)
     {
-        _preferredPrefix = new wchar_t[lengthOfWideString(preferredPrefix) + 1];
-        copyWideString(_preferredPrefix, preferredPrefix);
+        _preferredPrefix = new wchar_t[wcslen(preferredPrefix) + 1];
+        wcscpy(_preferredPrefix, preferredPrefix);
     }
     if (description != 0)
     {
-        _description = new wchar_t[lengthOfWideString(description) + 1];
-        copyWideString(_description, description);
+        _description = new wchar_t[wcslen(description) + 1];
+        wcscpy(_description, description);
     }
     
     _isInitialised = true;
@@ -650,12 +636,12 @@ OMSymbolspace::createSymbolForClass(OMUniqueObjectIdentification id,
     while (_symbolToId.contains(symbol))
     {
         wchar_t suffix[9];
-        toWideString(_uniqueSymbolSuffix, suffix, 8);
-        size_t len = lengthOfWideString(symbol);
+        std_swprintf(suffix, 9, L"%u", _uniqueSymbolSuffix);
+        size_t len = wcslen(symbol);
         wchar_t* newSymbol = new wchar_t[len + 8 + 1];
-        copyWideString(newSymbol, symbol);
+        wcscpy(newSymbol, symbol);
         delete [] symbol;
-        symbol = concatenateWideString(newSymbol, suffix);
+        symbol = wcscat(newSymbol, suffix);
         _uniqueSymbolSuffix++;
     }
     addMetaDefSymbol(id, symbol);
@@ -675,13 +661,13 @@ OMSymbolspace::createSymbolForProperty(OMUniqueObjectIdentification id, OMProper
     while (_symbolToId.contains(symbol))
     {
         wchar_t suffix[9];
-        toWideString(_uniqueSymbolSuffix, suffix, 8);
-        size_t len = lengthOfWideString(symbol);
+        std_swprintf(suffix, 9, L"%u", _uniqueSymbolSuffix);
+        size_t len = wcslen(symbol);
         wchar_t* newSymbol = new wchar_t[len + 8 + 1 + 1];
         newSymbol[0] = L'_';
-        copyWideString(&newSymbol[1], symbol);
+        wcscpy(&newSymbol[1], symbol);
         delete [] symbol;
-        symbol = concatenateWideString(newSymbol, suffix);
+        symbol = wcscat(newSymbol, suffix);
         _uniqueSymbolSuffix++;
     }
     addPropertyDefSymbol(id, localId, symbol);
@@ -701,12 +687,12 @@ OMSymbolspace::createSymbolForType(OMUniqueObjectIdentification id,
     while (_symbolToId.contains(symbol))
     {
         wchar_t suffix[9];
-        toWideString(_uniqueSymbolSuffix, suffix, 8);
-        size_t len = lengthOfWideString(symbol);
+        std_swprintf(suffix, 9, L"%u", _uniqueSymbolSuffix);
+        size_t len = wcslen(symbol);
         wchar_t* newSymbol = new wchar_t[len + 8 + 1];
-        copyWideString(newSymbol, symbol);
+        wcscpy(newSymbol, symbol);
         delete [] symbol;
-        symbol = concatenateWideString(newSymbol, suffix);
+        symbol = wcscat(newSymbol, suffix);
         _uniqueSymbolSuffix++;
     }
     addMetaDefSymbol(id, symbol);
@@ -721,7 +707,7 @@ OMSymbolspace::createSymbol(const wchar_t* name)
     TRACE("OMSymbolspace::createSymbol");
     PRECONDITION("Valid name", name != 0);
     
-    size_t nameLen = lengthOfWideString(name);
+    size_t nameLen = wcslen(name);
     if (nameLen == 0)
     {
         wchar_t* symbol = new wchar_t[2];
@@ -832,24 +818,24 @@ OMSymbolspace::saveMetaDef(OMMetaDefinition* metaDef)
     wchar_t uri[XML_MAX_AUID_URI_SIZE];
     auidToURI(metaDef->identification(), uri);
     getWriter()->writeElementStart(getBaselineURI(), L"Identification");
-    getWriter()->writeElementContent(uri, lengthOfWideString(uri));
+    getWriter()->writeElementContent(uri, wcslen(uri));
     getWriter()->writeElementEnd();
 
     const wchar_t* symbol = getMetaDefSymbol(metaDef->identification());
     getWriter()->writeElementStart(getBaselineURI(), L"Symbol");
-    getWriter()->writeElementContent(symbol, lengthOfWideString(symbol));
+    getWriter()->writeElementContent(symbol, wcslen(symbol));
     getWriter()->writeElementEnd();
 
     const wchar_t* name = metaDef->name();
     getWriter()->writeElementStart(getBaselineURI(), L"Name");
-    getWriter()->writeElementContent(name, lengthOfWideString(name));
+    getWriter()->writeElementContent(name, wcslen(name));
     getWriter()->writeElementEnd();
 
     const wchar_t* description = metaDef->description();
     if (description != 0)
     {
         getWriter()->writeElementStart(getBaselineURI(), L"Description");
-        getWriter()->writeElementContent(description, lengthOfWideString(description));
+        getWriter()->writeElementContent(description, wcslen(description));
         getWriter()->writeElementEnd();
     }
     
@@ -870,14 +856,14 @@ OMSymbolspace::saveClassDef(OMClassDefinition* classDef)
         wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
         saveMetaDefAUID(parentClass->identification(), idStr);        
         getWriter()->writeElementStart(getBaselineURI(), L"ParentClass");
-        getWriter()->writeElementContent(idStr, lengthOfWideString(idStr));
+        getWriter()->writeElementContent(idStr, wcslen(idStr));
         getWriter()->writeElementEnd();
     }
 
     wchar_t boolStr[XML_MAX_BOOL_STRING_SIZE];
     boolToString(classDef->isConcrete(), boolStr);
     getWriter()->writeElementStart(getBaselineURI(), L"IsConcrete");
-    getWriter()->writeElementContent(boolStr, lengthOfWideString(boolStr));
+    getWriter()->writeElementContent(boolStr, wcslen(boolStr));
     getWriter()->writeElementEnd();
     
     getWriter()->writeElementEnd();
@@ -896,32 +882,32 @@ OMSymbolspace::savePropertyDef(OMClassDefinition* ownerClassDef, OMPropertyDefin
     wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
     saveMetaDefAUID(type->identification(), idStr);        
     getWriter()->writeElementStart(getBaselineURI(), L"Type");
-    getWriter()->writeElementContent(idStr, lengthOfWideString(idStr));
+    getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
 
     saveMetaDefAUID(ownerClassDef->identification(), idStr);        
     getWriter()->writeElementStart(getBaselineURI(), L"MemberOf");
-    getWriter()->writeElementContent(idStr, lengthOfWideString(idStr));
+    getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
 
     wchar_t localIdStr[XML_MAX_INTEGER_STRING_SIZE];
     OMUInt16 localId = propertyDef->localIdentification();
     integerToString((OMByte*)&localId, sizeof(OMUInt16), false, localIdStr);
     getWriter()->writeElementStart(getBaselineURI(), L"LocalIdentification");
-    getWriter()->writeElementContent(localIdStr, lengthOfWideString(localIdStr));
+    getWriter()->writeElementContent(localIdStr, wcslen(localIdStr));
     getWriter()->writeElementEnd();
     
     wchar_t boolStr[XML_MAX_BOOL_STRING_SIZE];
     boolToString(propertyDef->isOptional(), boolStr);
     getWriter()->writeElementStart(getBaselineURI(), L"IsOptional");
-    getWriter()->writeElementContent(boolStr, lengthOfWideString(boolStr));
+    getWriter()->writeElementContent(boolStr, wcslen(boolStr));
     getWriter()->writeElementEnd();
 
     if (propertyDef->isUniqueIdentifier())
     {
         boolToString(true, boolStr);
         getWriter()->writeElementStart(getBaselineURI(), L"IsUniqueIdentifier");
-        getWriter()->writeElementContent(boolStr, lengthOfWideString(boolStr));
+        getWriter()->writeElementContent(boolStr, wcslen(boolStr));
         getWriter()->writeElementEnd();
     }
     
@@ -1011,7 +997,7 @@ OMSymbolspace::saveEnumeratedTypeDef(OMEnumeratedType* typeDef)
     wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
     saveMetaDefAUID(elementType->identification(), idStr);        
     getWriter()->writeElementStart(getBaselineURI(), L"ElementType");
-    getWriter()->writeElementContent(idStr, lengthOfWideString(idStr));
+    getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
 
     OMUInt32 count = typeDef->elementCount();
@@ -1028,11 +1014,11 @@ OMSymbolspace::saveEnumeratedTypeDef(OMEnumeratedType* typeDef)
             integerToString((OMByte*)&elementValue, sizeof(OMInt64), true, valueStr);
 
             getWriter()->writeElementStart(getBaselineURI(), L"Name");
-            getWriter()->writeElementContent(elementName, lengthOfWideString(elementName));
+            getWriter()->writeElementContent(elementName, wcslen(elementName));
             getWriter()->writeElementEnd();
             
             getWriter()->writeElementStart(getBaselineURI(), L"Value");
-            getWriter()->writeElementContent(valueStr, lengthOfWideString(valueStr));
+            getWriter()->writeElementContent(valueStr, wcslen(valueStr));
             getWriter()->writeElementEnd();
             
             delete [] elementName;
@@ -1067,11 +1053,11 @@ OMSymbolspace::saveExtEnumeratedTypeDef(OMExtEnumeratedType* typeDef)
             auidToURI(elementValue, valueStr);
 
             getWriter()->writeElementStart(getBaselineURI(), L"Name");
-            getWriter()->writeElementContent(elementName, lengthOfWideString(elementName));
+            getWriter()->writeElementContent(elementName, wcslen(elementName));
             getWriter()->writeElementEnd();
             
             getWriter()->writeElementStart(getBaselineURI(), L"Value");
-            getWriter()->writeElementContent(valueStr, lengthOfWideString(valueStr));
+            getWriter()->writeElementContent(valueStr, wcslen(valueStr));
             getWriter()->writeElementEnd();
             
             delete [] elementName;
@@ -1096,14 +1082,14 @@ OMSymbolspace::saveFixedArrayTypeDef(OMFixedArrayType* typeDef)
     wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
     saveMetaDefAUID(elementType->identification(), idStr);        
     getWriter()->writeElementStart(getBaselineURI(), L"ElementType");
-    getWriter()->writeElementContent(idStr, lengthOfWideString(idStr));
+    getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
 
     wchar_t elementCountStr[XML_MAX_INTEGER_STRING_SIZE];
     OMUInt32 elementCount = typeDef->elementCount();
     integerToString((OMByte*)&elementCount, sizeof(OMUInt32), false, elementCountStr);
     getWriter()->writeElementStart(getBaselineURI(), L"ElementCount");
-    getWriter()->writeElementContent(elementCountStr, lengthOfWideString(elementCountStr));
+    getWriter()->writeElementContent(elementCountStr, wcslen(elementCountStr));
     getWriter()->writeElementEnd();
     
     getWriter()->writeElementEnd();
@@ -1132,13 +1118,13 @@ OMSymbolspace::saveIntTypeDef(OMIntType* typeDef)
     OMUInt8 size = typeDef->size();
     integerToString((OMByte*)&size, sizeof(OMUInt8), false, sizeStr);
     getWriter()->writeElementStart(getBaselineURI(), L"Size");
-    getWriter()->writeElementContent(sizeStr, lengthOfWideString(sizeStr));
+    getWriter()->writeElementContent(sizeStr, wcslen(sizeStr));
     getWriter()->writeElementEnd();
     
     wchar_t boolStr[XML_MAX_BOOL_STRING_SIZE];
     boolToString(typeDef->isSigned(), boolStr);
     getWriter()->writeElementStart(getBaselineURI(), L"IsSigned");
-    getWriter()->writeElementContent(boolStr, lengthOfWideString(boolStr));
+    getWriter()->writeElementContent(boolStr, wcslen(boolStr));
     getWriter()->writeElementEnd();
     
     getWriter()->writeElementEnd();
@@ -1174,13 +1160,13 @@ OMSymbolspace::saveRecordTypeDef(OMRecordType* typeDef)
             OMType* memberType = typeDef->memberType(i);
 
             getWriter()->writeElementStart(getBaselineURI(), L"Name");
-            getWriter()->writeElementContent(memberName, lengthOfWideString(memberName));
+            getWriter()->writeElementContent(memberName, wcslen(memberName));
             getWriter()->writeElementEnd();
             
             wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
             saveMetaDefAUID(memberType->identification(), idStr);        
             getWriter()->writeElementStart(getBaselineURI(), L"Type");
-            getWriter()->writeElementContent(idStr, lengthOfWideString(idStr));
+            getWriter()->writeElementContent(idStr, wcslen(idStr));
             getWriter()->writeElementEnd();
             
             delete [] memberName;
@@ -1205,7 +1191,7 @@ OMSymbolspace::saveRenamedTypeDef(OMRenamedType* typeDef)
     wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
     saveMetaDefAUID(renamedType->identification(), idStr);        
     getWriter()->writeElementStart(getBaselineURI(), L"RenamedType");
-    getWriter()->writeElementContent(idStr, lengthOfWideString(idStr));
+    getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
 
     
@@ -1225,7 +1211,7 @@ OMSymbolspace::saveSetTypeDef(OMSetType* typeDef)
     wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
     saveMetaDefAUID(elementType->identification(), idStr);        
     getWriter()->writeElementStart(getBaselineURI(), L"ElementType");
-    getWriter()->writeElementContent(idStr, lengthOfWideString(idStr));
+    getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
     
     getWriter()->writeElementEnd();
@@ -1254,7 +1240,7 @@ OMSymbolspace::saveStringTypeDef(OMStringType* typeDef)
     wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
     saveMetaDefAUID(elementType->identification(), idStr);        
     getWriter()->writeElementStart(getBaselineURI(), L"ElementType");
-    getWriter()->writeElementContent(idStr, lengthOfWideString(idStr));
+    getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
 
     getWriter()->writeElementEnd();
@@ -1273,7 +1259,7 @@ OMSymbolspace::saveStrongObjectReferenceTypeDef(OMStrongObjectReferenceType* typ
     wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
     saveMetaDefAUID(referencedClass->identification(), idStr);        
     getWriter()->writeElementStart(getBaselineURI(), L"ReferencedClass");
-    getWriter()->writeElementContent(idStr, lengthOfWideString(idStr));
+    getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
 
     getWriter()->writeElementEnd();
@@ -1292,7 +1278,7 @@ OMSymbolspace::saveVariableArrayTypeDef(OMVariableArrayType* typeDef)
     wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
     saveMetaDefAUID(elementType->identification(), idStr);        
     getWriter()->writeElementStart(getBaselineURI(), L"ElementType");
-    getWriter()->writeElementContent(idStr, lengthOfWideString(idStr));
+    getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
     
     getWriter()->writeElementEnd();
@@ -1311,7 +1297,7 @@ OMSymbolspace::saveWeakObjectReferenceTypeDef(OMWeakObjectReferenceType* typeDef
     wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
     saveMetaDefAUID(referencedClass->identification(), idStr);        
     getWriter()->writeElementStart(getBaselineURI(), L"ReferencedClass");
-    getWriter()->writeElementContent(idStr, lengthOfWideString(idStr));
+    getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
 
     getWriter()->writeElementStart(getBaselineURI(), L"TargetSet");
@@ -1321,7 +1307,7 @@ OMSymbolspace::saveWeakObjectReferenceTypeDef(OMWeakObjectReferenceType* typeDef
     {
         saveMetaDefAUID(targetSet.getAt(i), idStr);        
         getWriter()->writeElementStart(getBaselineURI(), L"AUID");
-        getWriter()->writeElementContent(idStr, lengthOfWideString(idStr));
+        getWriter()->writeElementContent(idStr, wcslen(idStr));
         getWriter()->writeElementEnd();
     }
     getWriter()->writeElementEnd();
@@ -1340,7 +1326,7 @@ OMSymbolspace::saveExtEnumExt(ExtEnumExtGroup* extEnumExt)
     wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
     saveMetaDefAUID(extEnumExt->typeId, idStr);        
     getWriter()->writeElementStart(getBaselineURI(), L"Extends");
-    getWriter()->writeElementContent(idStr, lengthOfWideString(idStr));
+    getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
 
     if (extEnumExt->names.count() > 0)
@@ -1356,7 +1342,7 @@ OMSymbolspace::saveExtEnumExt(ExtEnumExtGroup* extEnumExt)
             wchar_t valueStr[XML_MAX_AUID_URI_SIZE];
             auidToURI(extEnumExt->values.getAt(i), valueStr);
             getWriter()->writeElementStart(getBaselineURI(), L"Value");
-            getWriter()->writeElementContent(valueStr, lengthOfWideString(valueStr));
+            getWriter()->writeElementContent(valueStr, wcslen(valueStr));
             getWriter()->writeElementEnd();
         }
         getWriter()->writeElementEnd();
@@ -1460,35 +1446,19 @@ public:
     MetaDef() 
     {
         id = nullOMUniqueObjectIdentification;
-        symbol = 0;
-        name = 0;
-        description = 0;
     }
-    ~MetaDef()
-    {
-        if (symbol != 0)
-        {
-            delete [] symbol;
-        }
-        if (name != 0)
-        {
-            delete [] name;
-        }
-        if (description != 0)
-        {
-            delete [] description;
-        }
-    }
+    ~MetaDef() 
+    {}
     bool isSet()
     {
         return (id != nullOMUniqueObjectIdentification &&
-            symbol != 0 && name != 0);
+            symbol.length() > 0 && name.length() > 0);
     }
     
     OMUniqueObjectIdentification id;
-    wchar_t* symbol;
-    wchar_t* name;
-    wchar_t* description;
+    OMWString symbol;
+    OMWString name;
+    OMWString description;
 };
 
 bool 
@@ -1498,7 +1468,7 @@ OMSymbolspace::restoreMetaDef(MetaDef* metaDef)
     
     if (getReader()->elementEquals(getBaselineURI(), L"Identification"))
     {
-        const char* data;
+        const wchar_t* data;
         size_t length;
         getReader()->next();
         if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -1513,7 +1483,7 @@ OMSymbolspace::restoreMetaDef(MetaDef* metaDef)
     }
     else if (getReader()->elementEquals(getBaselineURI(), L"Symbol"))
     {
-        const char* data;
+        const wchar_t* data;
         size_t length;
         getReader()->next();
         if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -1521,14 +1491,14 @@ OMSymbolspace::restoreMetaDef(MetaDef* metaDef)
             throw OMXMLException(L"Empty string is invalid MetaDef Symbol value");
         }
         getReader()->getCharacters(data, length);
-        metaDef->symbol = utf8ToUTF16(data);
+        metaDef->symbol = data;
         getReader()->moveToEndElement();
         
         return true;
     }
     else if (getReader()->elementEquals(getBaselineURI(), L"Name"))
     {
-        const char* data;
+        const wchar_t* data;
         size_t length;
         getReader()->next();
         if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -1536,7 +1506,7 @@ OMSymbolspace::restoreMetaDef(MetaDef* metaDef)
             throw OMXMLException(L"Empty string is invalid MetaDef Name value");
         }
         getReader()->getCharacters(data, length);
-        metaDef->name = utf8ToUTF16(data);
+        metaDef->name = data;
         getReader()->moveToEndElement();
         
         return true;
@@ -1546,10 +1516,10 @@ OMSymbolspace::restoreMetaDef(MetaDef* metaDef)
         getReader()->next();
         if (getReader()->getEventType() == OMXMLReader::CHARACTERS)
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->getCharacters(data, length);
-            metaDef->symbol = utf8ToUTF16(data);
+            metaDef->description = data;
         }
         getReader()->moveToEndElement();
         
@@ -1581,7 +1551,7 @@ OMSymbolspace::restoreClassDef(OMDictionary* dictionary)
         
         if (getReader()->elementEquals(getBaselineURI(), L"ParentClass"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -1595,7 +1565,7 @@ OMSymbolspace::restoreClassDef(OMDictionary* dictionary)
         }
         else if (getReader()->elementEquals(getBaselineURI(), L"IsConcrete"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -1625,7 +1595,7 @@ OMSymbolspace::restoreClassDef(OMDictionary* dictionary)
     
     OMStorable* storable = dictionary->create(ClassID_ClassDefinition);
     OMClassDefinition* classDef = dynamic_cast<OMClassDefinition*>(storable);
-    if (!classDef->initialise(metaDef.id, metaDef.name, metaDef.description, 
+    if (!classDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(), 
         parentClassId, isConcrete, getClassDefsTag(dictionary)))
     {
         throw OMXMLException(L"Failed to initialise class definition");
@@ -1667,7 +1637,7 @@ OMSymbolspace::restorePropertyDef(OMDictionary* dictionary)
         
         if (getReader()->elementEquals(getBaselineURI(), L"LocalIdentification"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -1681,7 +1651,7 @@ OMSymbolspace::restorePropertyDef(OMDictionary* dictionary)
         }
         else if (getReader()->elementEquals(getBaselineURI(), L"Type"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -1695,7 +1665,7 @@ OMSymbolspace::restorePropertyDef(OMDictionary* dictionary)
         }
         else if (getReader()->elementEquals(getBaselineURI(), L"MemberOf"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -1709,7 +1679,7 @@ OMSymbolspace::restorePropertyDef(OMDictionary* dictionary)
         }
         else if (getReader()->elementEquals(getBaselineURI(), L"IsUniqueIdentifier"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -1723,7 +1693,7 @@ OMSymbolspace::restorePropertyDef(OMDictionary* dictionary)
         }
         else if (getReader()->elementEquals(getBaselineURI(), L"IsOptional"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -1754,7 +1724,7 @@ OMSymbolspace::restorePropertyDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_PropertyDefinition);
     OMPropertyDefinition* propertyDef = dynamic_cast<OMPropertyDefinition*>(storable);
-    if (!propertyDef->initialise(metaDef.id, metaDef.name, metaDef.description, 
+    if (!propertyDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(), 
         localId, typeId, isOptional, isUniqueIdentifier))
     {
         throw OMXMLException(L"Failed to initialise property definition");
@@ -1793,7 +1763,7 @@ OMSymbolspace::restoreCharacterTypeDef(OMDictionary* dictionary)
     
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionCharacter);
     OMCharacterType* typeDef = dynamic_cast<OMCharacterType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description))
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str()))
     {
         throw OMXMLException(L"Failed to initialise CharacterTypeDef");
     }
@@ -1833,7 +1803,7 @@ OMSymbolspace::restoreEnumeratedTypeDef(OMDictionary* dictionary)
         
         if (getReader()->elementEquals(getBaselineURI(), L"ElementType"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -1862,16 +1832,15 @@ OMSymbolspace::restoreEnumeratedTypeDef(OMDictionary* dictionary)
                 {
                     throw OMXMLException(L"Invalid Name element in EnumeratedType Elements");
                 }
-                const char* data;
+                const wchar_t* data;
                 size_t length;
                 getReader()->getCharacters(data, length);
-                wchar_t* name = utf8ToUTF16(data);
-                if (elementNamesSet.contains(name))
+                if (elementNamesSet.contains(data))
                 {
                     throw OMXMLException(L"Duplicate Name value in EnumeratedType Elements");
                 }
-                elementNamesSet.insert(name, name);
-                elementNames.append(name);
+                elementNamesSet.insert(data, data);
+                elementNames.append(wideCharacterStringDup(data));
                 getReader()->moveToEndElement();
                 
                 if (!getReader()->nextElement())
@@ -1916,7 +1885,7 @@ OMSymbolspace::restoreEnumeratedTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionEnumeration);
     OMEnumeratedType* typeDef = dynamic_cast<OMEnumeratedType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
         elementTypeId, getTypeDefsTag(dictionary),
         elementNames, elementValues))
     {
@@ -1977,16 +1946,15 @@ OMSymbolspace::restoreExtEnumeratedTypeDef(OMDictionary* dictionary)
                 {
                     throw OMXMLException(L"Invalid Name element in ExtEnumeratedType Elements");
                 }
-                const char* data;
+                const wchar_t* data;
                 size_t length;
                 getReader()->getCharacters(data, length);
-                wchar_t* name = utf8ToUTF16(data);
-                if (elementNamesSet.contains(name))
+                if (elementNamesSet.contains(data))
                 {
                     throw OMXMLException(L"Duplicate Name value in ExtEnumeratedType Elements");
                 }
-                elementNamesSet.insert(name, name);
-                elementNames.append(name);
+                elementNamesSet.insert(data, data);
+                elementNames.append(wideCharacterStringDup(data));
                 getReader()->moveToEndElement();
                 
                 if (!getReader()->nextElement())
@@ -2031,7 +1999,7 @@ OMSymbolspace::restoreExtEnumeratedTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionExtendibleEnumeration);
     OMExtEnumeratedType* typeDef = dynamic_cast<OMExtEnumeratedType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
         elementNames, elementValues))
     {
         throw OMXMLException(L"Failed to initialise ExtEnumeratedTypeDef");
@@ -2076,7 +2044,7 @@ OMSymbolspace::restoreFixedArrayTypeDef(OMDictionary* dictionary)
         
         if (getReader()->elementEquals(getBaselineURI(), L"ElementType"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -2090,7 +2058,7 @@ OMSymbolspace::restoreFixedArrayTypeDef(OMDictionary* dictionary)
         }
         else if (getReader()->elementEquals(getBaselineURI(), L"ElementCount"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -2118,7 +2086,7 @@ OMSymbolspace::restoreFixedArrayTypeDef(OMDictionary* dictionary)
     
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionFixedArray);
     OMFixedArrayType* typeDef = dynamic_cast<OMFixedArrayType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
         elementTypeId, getTypeDefsTag(dictionary), elementCount))
     {
         throw OMXMLException(L"Failed to initialise FixedArrayTypeDef");
@@ -2165,7 +2133,7 @@ OMSymbolspace::restoreIndirectTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionIndirect);
     OMIndirectType* typeDef = dynamic_cast<OMIndirectType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description))
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str()))
     {
         throw OMXMLException(L"Failed to initialise IndirectTypeDef");
     }
@@ -2203,7 +2171,7 @@ OMSymbolspace::restoreIntTypeDef(OMDictionary* dictionary)
         
         if (getReader()->elementEquals(getBaselineURI(), L"Size"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -2221,7 +2189,7 @@ OMSymbolspace::restoreIntTypeDef(OMDictionary* dictionary)
         }
         else if (getReader()->elementEquals(getBaselineURI(), L"IsSigned"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -2248,7 +2216,7 @@ OMSymbolspace::restoreIntTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionInteger);
     OMIntType* typeDef = dynamic_cast<OMIntType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
         size, isSigned))
     {
         throw OMXMLException(L"Failed to initialise IntTypeDef");
@@ -2295,7 +2263,7 @@ OMSymbolspace::restoreOpaqueTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionOpaque);
     OMOpaqueType* typeDef = dynamic_cast<OMOpaqueType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description))
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str()))
     {
         throw OMXMLException(L"Failed to initialise OpaqueTypeDef");
     }
@@ -2347,16 +2315,15 @@ OMSymbolspace::restoreRecordTypeDef(OMDictionary* dictionary)
                 {
                     throw OMXMLException(L"Invalid Name element in RecordType Members");
                 }
-                const char* data;
+                const wchar_t* data;
                 size_t length;
                 getReader()->getCharacters(data, length);
-                wchar_t* name = utf8ToUTF16(data);
-                if (memberNamesSet.contains(name))
+                if (memberNamesSet.contains(data))
                 {
                     throw OMXMLException(L"Duplicate Name value in RecordType Elements");
                 }
-                memberNamesSet.insert(name, name);
-                memberNames.append(name);
+                memberNamesSet.insert(data, data);
+                memberNames.append(wideCharacterStringDup(data));
                 getReader()->moveToEndElement();
                 
                 if (!getReader()->nextElement())
@@ -2395,7 +2362,7 @@ OMSymbolspace::restoreRecordTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionRecord);
     OMRecordType* typeDef = dynamic_cast<OMRecordType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
         memberNames, memberTypeIds, getTypeDefsTag(dictionary)))
     {
         throw OMXMLException(L"Failed to initialise RecordTypeDef");
@@ -2437,7 +2404,7 @@ OMSymbolspace::restoreRenamedTypeDef(OMDictionary* dictionary)
         
         if (getReader()->elementEquals(getBaselineURI(), L"RenamedType"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -2463,7 +2430,7 @@ OMSymbolspace::restoreRenamedTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionRename);
     OMRenamedType* typeDef = dynamic_cast<OMRenamedType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
         renamedTypeId, getTypeDefsTag(dictionary)))
     {
         throw OMXMLException(L"Failed to initialise RenamedTypeDef");
@@ -2499,7 +2466,7 @@ OMSymbolspace::restoreSetTypeDef(OMDictionary* dictionary)
         
         if (getReader()->elementEquals(getBaselineURI(), L"ElementType"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -2524,7 +2491,7 @@ OMSymbolspace::restoreSetTypeDef(OMDictionary* dictionary)
     }
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionSet);
     OMSetType* typeDef = dynamic_cast<OMSetType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
         elementTypeId, getTypeDefsTag(dictionary)))
     {
         throw OMXMLException(L"Failed to initialise SetTypeDef");
@@ -2571,7 +2538,7 @@ OMSymbolspace::restoreStreamTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionStream);
     OMStreamType* typeDef = dynamic_cast<OMStreamType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description))
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str()))
     {
         throw OMXMLException(L"Failed to initialise StreamTypeDef");
     }
@@ -2606,7 +2573,7 @@ OMSymbolspace::restoreStringTypeDef(OMDictionary* dictionary)
         
         if (getReader()->elementEquals(getBaselineURI(), L"ElementType"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -2632,7 +2599,7 @@ OMSymbolspace::restoreStringTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionString);
     OMStringType* typeDef = dynamic_cast<OMStringType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
         elementTypeId, getTypeDefsTag(dictionary)))
     {
         throw OMXMLException(L"Failed to initialise StringTypeDef");
@@ -2668,7 +2635,7 @@ OMSymbolspace::restoreStrongObjectReferenceTypeDef(OMDictionary* dictionary)
         
         if (getReader()->elementEquals(getBaselineURI(), L"ReferencedClass"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -2694,7 +2661,7 @@ OMSymbolspace::restoreStrongObjectReferenceTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionStrongObjectReference);
     OMStrongObjectReferenceType* typeDef = dynamic_cast<OMStrongObjectReferenceType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
         referencedClassId, getClassDefsTag(dictionary)))
     {
         throw OMXMLException(L"Failed to initialise StrongObjectReferenceTypeDef");
@@ -2730,7 +2697,7 @@ OMSymbolspace::restoreVariableArrayTypeDef(OMDictionary* dictionary)
         
         if (getReader()->elementEquals(getBaselineURI(), L"ElementType"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -2756,7 +2723,7 @@ OMSymbolspace::restoreVariableArrayTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionVariableArray);
     OMVariableArrayType* typeDef = dynamic_cast<OMVariableArrayType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
         elementTypeId, getTypeDefsTag(dictionary)))
     {
         throw OMXMLException(L"Failed to initialise VariableArrayTypeDef");
@@ -2793,7 +2760,7 @@ OMSymbolspace::restoreWeakObjectReferenceTypeDef(OMDictionary* dictionary)
         
         if (getReader()->elementEquals(getBaselineURI(), L"ReferencedClass"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -2822,7 +2789,7 @@ OMSymbolspace::restoreWeakObjectReferenceTypeDef(OMDictionary* dictionary)
                 {
                     throw OMXMLException(L"Invalid AUID element in WeakObjectReferenceType TargetSet");
                 }
-                const char* data;
+                const wchar_t* data;
                 size_t length;
                 getReader()->getCharacters(data, length);
                 OMUniqueObjectIdentification id = restoreMetaDefAUID(data);
@@ -2846,7 +2813,7 @@ OMSymbolspace::restoreWeakObjectReferenceTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionWeakObjectReference);
     OMWeakObjectReferenceType* typeDef = dynamic_cast<OMWeakObjectReferenceType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name, metaDef.description,
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
         referencedClassId, getClassDefsTag(dictionary),
         targetSet))
     {
@@ -2885,7 +2852,7 @@ OMSymbolspace::restoreExtEnumExt(OMDictionary* dictionary)
         
         if (getReader()->elementEquals(getBaselineURI(), L"Extends"))
         {
-            const char* data;
+            const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
@@ -2914,17 +2881,15 @@ OMSymbolspace::restoreExtEnumExt(OMDictionary* dictionary)
                 {
                     throw OMXMLException(L"Invalid Name element in ExtEnumExt Elements");
                 }
-                const char* data;
+                const wchar_t* data;
                 size_t length;
                 getReader()->getCharacters(data, length);
-                wchar_t* name = utf8ToUTF16(data);
-                if (elementNamesSet.contains(name))
+                if (elementNamesSet.contains(data))
                 {
                     throw OMXMLException(L"Duplicate Name value in ExtEnumExt Elements");
                 }
-                elementNamesSet.insert(name, name);
-                extEnumExt->names.append(name);
-                delete [] name;
+                elementNamesSet.insert(data, data);
+                extEnumExt->names.append(data);
                 getReader()->moveToEndElement();
                 
                 if (!getReader()->nextElement())
@@ -2979,26 +2944,23 @@ OMSymbolspace::restoreExtEnumExt(OMDictionary* dictionary)
 
 
 OMUniqueObjectIdentification
-OMSymbolspace::restoreMetaDefAUID(const char* idStr)
+OMSymbolspace::restoreMetaDefAUID(const wchar_t* idStr)
 {
     TRACE("OMSymbolspace::restoreMetaDefAUID");
     
-    wchar_t* wIdStr = utf8ToUTF16(idStr);
     OMUniqueObjectIdentification id = nullOMUniqueObjectIdentification;
-    if (isURI(wIdStr))
+    if (isURI(idStr))
     {
         uriToAUID(idStr, &id);
     }
     else
     {
-        id = _store->getBaselineMetaDefId(wIdStr);
+        id = _store->getBaselineMetaDefId(idStr);
         if (id == nullOMUniqueObjectIdentification)
         {
             throw OMXMLException(L"Could not retrieve unique id from symbol");
         }
     }
-    delete [] wIdStr;
-    
     return id;
 }
 
@@ -3010,13 +2972,13 @@ OMSymbolspace::saveMetaDefAUID(OMUniqueObjectIdentification id, wchar_t* idStr)
     const wchar_t* symbol = _store->getBaselineMetaDefSymbol(id);
     if (symbol != 0)
     {
-        copyWideString(idStr, symbol, XML_MAX_BASELINE_SYMBOL_SIZE);
+        wcsncpy(idStr, symbol, XML_MAX_BASELINE_SYMBOL_SIZE);
     }
     else
     {
         wchar_t uri[XML_MAX_AUID_URI_SIZE];
         auidToURI(id, uri);
-        copyWideString(idStr, uri, XML_MAX_AUID_URI_SIZE);
+        wcsncpy(idStr, uri, XML_MAX_AUID_URI_SIZE);
     }
 }
 
@@ -3053,21 +3015,21 @@ OMSymbolspace::getBaselineURI()
 
 #define ADD_METADEF_SYMBOL(ID, SYMBOL) \
 { \
-    ASSERT("Symbol size is less than maximum", lengthOfWideString(SYMBOL) < XML_MAX_BASELINE_SYMBOL_SIZE); \
+    ASSERT("Symbol size is less than maximum", wcslen(SYMBOL) < XML_MAX_BASELINE_SYMBOL_SIZE); \
     const OMUniqueObjectIdentification id = ID; \
     ss->addMetaDefSymbol(id, SYMBOL); \
 }
 
 #define ADD_PROPERTYDEF_SYMBOL(ID, LOCAL_ID, SYMBOL) \
 { \
-    ASSERT("Symbol size is less than maximum", lengthOfWideString(SYMBOL) < XML_MAX_BASELINE_SYMBOL_SIZE); \
+    ASSERT("Symbol size is less than maximum", wcslen(SYMBOL) < XML_MAX_BASELINE_SYMBOL_SIZE); \
     const OMUniqueObjectIdentification id = ID; \
     ss->addPropertyDefSymbol(id, LOCAL_ID, SYMBOL); \
 }
 
 #define ADD_DEF_SYMBOL_ID(ID, SYMBOL) \
 { \
-    ASSERT("Symbol size is less than maximum", lengthOfWideString(SYMBOL) < XML_MAX_BASELINE_SYMBOL_SIZE); \
+    ASSERT("Symbol size is less than maximum", wcslen(SYMBOL) < XML_MAX_BASELINE_SYMBOL_SIZE); \
     const OMUniqueObjectIdentification id = ID; \
     ss->addDefSymbol(id, SYMBOL); \
 }

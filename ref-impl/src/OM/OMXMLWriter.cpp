@@ -23,7 +23,6 @@
 //=---------------------------------------------------------------------=
 
 #include "OMXMLWriter.h"
-#include "OMUtilities.h"
 #include "OMXMLUtilities.h"
 #include "OMAssertions.h"
 

@@ -24,7 +24,6 @@
 
 #include "OMXMLReader.h"
 #include "OMListIterator.h"
-#include "OMUtilities.h"
 #include "OMXMLUtilities.h"
 #include "OMAssertions.h"
 #include "OMXMLException.h"
@@ -40,7 +39,7 @@
 
 
 OMXMLReader::OMXMLReader(OMRawStorage* storage)
-: _eventType(NONE), _data(0), _dataLength(0)
+: _eventType(NONE)
 {
     TRACE("OMXMLReader::OMXMLReader");
     
@@ -161,8 +160,8 @@ OMXMLReader::elementEquals(const wchar_t* uri, const wchar_t* localName)
     PRECONDITION("Event is start or end element", 
         _eventType == START_ELEMENT || _eventType == END_ELEMENT);
     
-    if (compareWideString(_uri.c_str(), uri) == 0 &&
-        compareWideString(_localName.c_str(), localName) == 0)
+    if (wcscmp(_uri.c_str(), uri) == 0 &&
+        wcscmp(_localName.c_str(), localName) == 0)
     {
         return true;
     }
@@ -217,13 +216,13 @@ OMXMLReader::getEndElement(const wchar_t*& uri, const wchar_t*& localName)
 }
 
 void 
-OMXMLReader::getCharacters(const char*& data, size_t& length)
+OMXMLReader::getCharacters(const wchar_t*& data, size_t& length)
 {
     TRACE("OMXMLReader::getCharacters");
     PRECONDITION("Valid event", _eventType == CHARACTERS);
 
-    data = _data;
-    length = _dataLength;
+    data = _data.c_str();
+    length = _data.length();
 }
 
 const wchar_t* 
@@ -244,8 +243,8 @@ OMXMLReader::getAttribute(const OMList<OMXMLAttribute*>* attributes,
     while (result == 0 && ++iter)
     {
         OMXMLAttribute* attr = iter.value();
-        if (compareWideString(attr->getNamespace(), nmspace) == 0 &&
-            compareWideString(attr->getLocalName(), localName) == 0)
+        if (wcscmp(attr->getNamespace(), nmspace) == 0 &&
+            wcscmp(attr->getLocalName(), localName) == 0)
         {
             result = attr;
         }
@@ -315,12 +314,11 @@ OMXMLReader::EndElement(const char* uri, const char* localName)
 }
 
 void 
-OMXMLReader::Characters(const char* data, size_t length)
+OMXMLReader::Characters(const char* data, size_t /*length*/)
 {
     TRACE("OMXMLReader::Characters");
 
-    _data = data;
-    _dataLength = length;
+    COPY_STRING(_data, data);
     
     _eventType = CHARACTERS;
 }
@@ -330,9 +328,6 @@ OMXMLReader::cleanUp()
 {
     TRACE("OMXMLReader::cleanUp");
 
-    _data = 0;
-    _dataLength = 0;
-    
     OMListIterator<OMXMLAttribute*> iter(_attributes, OMBefore);
     while (++iter)
     {

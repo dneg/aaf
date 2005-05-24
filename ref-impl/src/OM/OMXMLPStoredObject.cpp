@@ -450,7 +450,7 @@ OMXMLPStoredObject::save(const OMSimpleProperty& property)
             *(reinterpret_cast<const OMUniqueObjectIdentification*>(property.bits()));
         wchar_t uri[XML_MAX_AUID_URI_SIZE];
         auidToURI(id, uri);
-        getWriter()->writeElementContent(uri, lengthOfWideString(uri));
+        getWriter()->writeElementContent(uri, wcslen(uri));
     }
     else
     {
@@ -1149,10 +1149,7 @@ OMXMLPStoredObject::createStoredStream(const OMDataStream& property)
         throw OMXMLException(L"Opening DataStream property without known filename");
     }
     
-    // TODO: is there an established OM way to remove an existing file?
-    char* u8Filename = utf16ToUTF8(streamFilename);
-    remove(u8Filename);
-    delete [] u8Filename;
+    wremove(streamFilename);
     
     OMRawStorage* store = OMDiskRawStorage::openNewModify(streamFilename);
     if (store == 0)
@@ -1197,7 +1194,7 @@ OMXMLPStoredObject::saveHeaderByteOrder(const OMProperty* property)
     wchar_t byteOrderStr[XML_MAX_BYTE_ORDER_STRING_SIZE];
     headerByteOrderToString(simpleProp->bits(), byteOrderStr);
     
-    getWriter()->writeElementContent(byteOrderStr, lengthOfWideString(byteOrderStr));
+    getWriter()->writeElementContent(byteOrderStr, wcslen(byteOrderStr));
 }
 
 void 
@@ -1285,14 +1282,14 @@ OMXMLPStoredObject::saveCharacter(const OMByte* internalBytes, OMUInt16 internal
         }
         getWriter()->writeAttribute(getBaselineURI(), AAFEscape_AttrName, L"true");
         wchar_t* escapedStr = escapeCharacter(buffer);
-        getWriter()->writeElementContent(escapedStr, lengthOfWideString(escapedStr)); 
+        getWriter()->writeElementContent(escapedStr, wcslen(escapedStr)); 
         delete [] escapedStr;
     }
     else
     {
         if (isElementContent)
         {
-            getWriter()->writeElementContent(buffer, lengthOfWideString(buffer));
+            getWriter()->writeElementContent(buffer, wcslen(buffer));
         }
         else
         {
@@ -1331,7 +1328,7 @@ OMXMLPStoredObject::saveEnum(const OMByte* internalBytes, OMUInt16 internalSize,
     
     if (isElementContent)
     {
-        getWriter()->writeElementContent(name, lengthOfWideString(name));
+        getWriter()->writeElementContent(name, wcslen(name));
     }
     else
     {
@@ -1354,7 +1351,7 @@ OMXMLPStoredObject::saveExtEnum(const OMByte* internalBytes, OMUInt16 internalSi
     
     if (isElementContent)
     {
-        getWriter()->writeElementContent(name, lengthOfWideString(name));
+        getWriter()->writeElementContent(name, wcslen(name));
     }
     else
     {
@@ -1431,7 +1428,7 @@ OMXMLPStoredObject::saveInteger(const OMByte* internalBytes, OMUInt16 internalSi
     
     if (isElementContent)
     {
-        getWriter()->writeElementContent(intStr, lengthOfWideString(intStr));
+        getWriter()->writeElementContent(intStr, wcslen(intStr));
     }
     else
     {
@@ -1480,7 +1477,7 @@ OMXMLPStoredObject::saveRecord(const OMByte* internalBytes, OMUInt16 internalSiz
         saveAUID(id, idStr, ANY);
         if (isElementContent)
         {
-            getWriter()->writeElementContent(idStr, lengthOfWideString(idStr));
+            getWriter()->writeElementContent(idStr, wcslen(idStr));
         }
         else
         {
@@ -1495,7 +1492,7 @@ OMXMLPStoredObject::saveRecord(const OMByte* internalBytes, OMUInt16 internalSiz
         mobIdToURI(mobId, uri);
         if (isElementContent)
         {
-            getWriter()->writeElementContent(uri, lengthOfWideString(uri));
+            getWriter()->writeElementContent(uri, wcslen(uri));
         }
         else
         {
@@ -1508,7 +1505,7 @@ OMXMLPStoredObject::saveRecord(const OMByte* internalBytes, OMUInt16 internalSiz
         dateStructToString(internalBytes, dateStr);
         if (isElementContent)
         {
-            getWriter()->writeElementContent(dateStr, lengthOfWideString(dateStr));
+            getWriter()->writeElementContent(dateStr, wcslen(dateStr));
         }
         else
         {
@@ -1521,7 +1518,7 @@ OMXMLPStoredObject::saveRecord(const OMByte* internalBytes, OMUInt16 internalSiz
         timeStructToString(internalBytes, timeStr);
         if (isElementContent)
         {
-            getWriter()->writeElementContent(timeStr, lengthOfWideString(timeStr));
+            getWriter()->writeElementContent(timeStr, wcslen(timeStr));
         }
         else
         {
@@ -1534,7 +1531,7 @@ OMXMLPStoredObject::saveRecord(const OMByte* internalBytes, OMUInt16 internalSiz
         timeStampToString(internalBytes, timeStampStr);
         if (isElementContent)
         {
-            getWriter()->writeElementContent(timeStampStr, lengthOfWideString(timeStampStr));
+            getWriter()->writeElementContent(timeStampStr, wcslen(timeStampStr));
         }
         else
         {
@@ -1547,7 +1544,7 @@ OMXMLPStoredObject::saveRecord(const OMByte* internalBytes, OMUInt16 internalSiz
         rationalToString(internalBytes, rationalStr);
         if (isElementContent)
         {
-            getWriter()->writeElementContent(rationalStr, lengthOfWideString(rationalStr));
+            getWriter()->writeElementContent(rationalStr, wcslen(rationalStr));
         }
         else
         {
@@ -1560,7 +1557,7 @@ OMXMLPStoredObject::saveRecord(const OMByte* internalBytes, OMUInt16 internalSiz
         versionTypeToString(internalBytes, versionStr);
         if (isElementContent)
         {
-            getWriter()->writeElementContent(versionStr, lengthOfWideString(versionStr));
+            getWriter()->writeElementContent(versionStr, wcslen(versionStr));
         }
         else
         {
@@ -1672,7 +1669,7 @@ OMXMLPStoredObject::saveString(const OMByte* internalBytes, OMUInt16 internalSiz
                 }
                 getWriter()->writeAttribute(getBaselineURI(), AAFEscape_AttrName, L"true");
                 wchar_t* escapedStr = escapeString(str);
-                getWriter()->writeElementContent(escapedStr, lengthOfWideString(escapedStr)); 
+                getWriter()->writeElementContent(escapedStr, wcslen(escapedStr)); 
                 delete [] escapedStr;
             }
             else
@@ -1759,7 +1756,7 @@ OMXMLPStoredObject::saveVariableArray(const OMByte* internalBytes, OMUInt16 inte
                     }
                     getWriter()->writeAttribute(getBaselineURI(), AAFEscape_AttrName, L"true");
                     wchar_t* escapedStr = escapeString((wchar_t*)stringInternalBytes);
-                    getWriter()->writeElementContent(escapedStr, lengthOfWideString(escapedStr)); 
+                    getWriter()->writeElementContent(escapedStr, wcslen(escapedStr)); 
                     delete [] escapedStr;
                 }
                 else
@@ -1897,7 +1894,7 @@ OMXMLPStoredObject::restoreHeaderByteOrder(OMProperty* property)
     {
         throw OMXMLException(L"Invalid Header::ByteOrder value - string is empty");
     }
-    const char* data;
+    const wchar_t* data;
     size_t length;
     getReader()->getCharacters(data, length);
     
@@ -1910,7 +1907,7 @@ OMXMLPStoredObject::restoreHeaderByteOrder(OMProperty* property)
 
 void 
 OMXMLPStoredObject::restoreSimpleValue(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-    const char* str, const OMType* type)
+    const wchar_t* str, const OMType* type)
 {
     TRACE("OMXMLPStoredObject::restoreSimpleValue");
 
@@ -1960,7 +1957,7 @@ OMXMLPStoredObject::restoreSimpleValue(OMByteArray& bytes, const OMList<OMXMLAtt
 
 void 
 OMXMLPStoredObject::restoreCharacter(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-    const char* str, const OMCharacterType* type)
+    const wchar_t* str, const OMCharacterType* type)
 {
     TRACE("OMXMLPStoredObject::restoreCharacter");
 
@@ -1973,13 +1970,11 @@ OMXMLPStoredObject::restoreCharacter(OMByteArray& bytes, const OMList<OMXMLAttri
             getBaselineURI(), AAFEscape_AttrName);
         if (escapeAttr != 0)
         {
-            char* tmp = utf16ToUTF8(escapeAttr->getValue());
-            boolFromString(tmp, isEscaped);
-            delete [] tmp;
+            boolFromString(escapeAttr->getValue(), isEscaped);
         }
     }
     
-    const char* data = str;
+    const wchar_t* data = str;
     if (str == 0)
     {
         size_t length;
@@ -1990,23 +1985,19 @@ OMXMLPStoredObject::restoreCharacter(OMByteArray& bytes, const OMList<OMXMLAttri
         }
         getReader()->getCharacters(data, length);
     }
-    if (data == 0 || strlen(data) == 0)
+    if (data == 0 || wcslen(data) == 0)
     {
         throw OMXMLException(L"Invalid character value - zero length string for character");
     }
 
-    wchar_t* c = 0;
+    wchar_t* unescaped = 0;
+    const wchar_t* c = data;
     if (isEscaped)
     {
-        wchar_t* wData = utf8ToUTF16(data);
-        c = unescapeCharacter(wData);
-        delete [] wData;
+        unescaped = unescapeCharacter(data);
+        c = unescaped;
     }
-    else
-    {
-        c = utf8ToUTF16(data);
-    }
-    size_t len = lengthOfWideString(c);
+    size_t len = wcslen(c);
     int codeLen = utf16CodeLen(c);
     // maximum length is a surrogate pair, i.e. 2
     // if length exceeds 2 or the code is not encoded as a surrogate pair then it is an error
@@ -2014,8 +2005,11 @@ OMXMLPStoredObject::restoreCharacter(OMByteArray& bytes, const OMList<OMXMLAttri
     {
         throw OMXMLException(L"Invalid character value - multiple characters present");
     }
-    bytes.append(reinterpret_cast<OMByte*>(c), len * sizeof(wchar_t));
-    delete [] c;
+    bytes.append(reinterpret_cast<const OMByte*>(c), len * sizeof(wchar_t));
+    if (isEscaped)
+    {
+        delete [] unescaped;
+    }
     
     if (isElementContent)
     {
@@ -2025,13 +2019,13 @@ OMXMLPStoredObject::restoreCharacter(OMByteArray& bytes, const OMList<OMXMLAttri
 
 void 
 OMXMLPStoredObject::restoreEnum(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-    const char* str, const OMEnumeratedType* type)
+    const wchar_t* str, const OMEnumeratedType* type)
 {
     TRACE("OMXMLPStoredObject::restoreEnum");
 
     bool isElementContent = (attributes != 0 && str == 0);
     
-    const char* data = str;
+    const wchar_t* data = str;
     if (str == 0)
     {
         size_t length;
@@ -2043,9 +2037,7 @@ OMXMLPStoredObject::restoreEnum(OMByteArray& bytes, const OMList<OMXMLAttribute*
         getReader()->getCharacters(data, length);
     }
 
-    wchar_t* wData = utf8ToUTF16(data);
-    OMInt64 value = type->elementValueFromName(wData);
-    delete [] wData;
+    OMInt64 value = type->elementValueFromName(data);
 
     bytes.append(reinterpret_cast<OMByte*>(&value), sizeof(OMInt64));    
     
@@ -2057,13 +2049,13 @@ OMXMLPStoredObject::restoreEnum(OMByteArray& bytes, const OMList<OMXMLAttribute*
 
 void 
 OMXMLPStoredObject::restoreExtEnum(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-    const char* str, const OMExtEnumeratedType* type)
+    const wchar_t* str, const OMExtEnumeratedType* type)
 {
     TRACE("OMXMLPStoredObject::restoreExtEnum");
 
     bool isElementContent = (attributes != 0 && str == 0);
     
-    const char* data = str;
+    const wchar_t* data = str;
     if (str == 0)
     {
         size_t length;
@@ -2075,9 +2067,7 @@ OMXMLPStoredObject::restoreExtEnum(OMByteArray& bytes, const OMList<OMXMLAttribu
         getReader()->getCharacters(data, length);
     }
 
-    wchar_t* wData = utf8ToUTF16(data);
-    OMUniqueObjectIdentification value = type->elementValueFromName(wData);
-    delete [] wData;
+    OMUniqueObjectIdentification value = type->elementValueFromName(data);
 
     bytes.append(reinterpret_cast<OMByte*>(&value), sizeof(OMUniqueObjectIdentification));    
     
@@ -2089,7 +2079,7 @@ OMXMLPStoredObject::restoreExtEnum(OMByteArray& bytes, const OMList<OMXMLAttribu
 
 void 
 OMXMLPStoredObject::restoreFixedArray(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-    const char* str, const OMFixedArrayType* type)
+    const wchar_t* str, const OMFixedArrayType* type)
 {
     TRACE("OMXMLPStoredObject::restoreFixedArray");
 
@@ -2129,7 +2119,7 @@ OMXMLPStoredObject::restoreFixedArray(OMByteArray& bytes, const OMList<OMXMLAttr
 
 void 
 OMXMLPStoredObject::restoreIndirect(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-    const char* str, const OMIndirectType* type)
+    const wchar_t* str, const OMIndirectType* type)
 {
     TRACE("OMXMLPStoredObject::restoreIndirect");
     PRECONDITION("Valid indirect state", attributes != 0 && str == 0);
@@ -2173,13 +2163,13 @@ OMXMLPStoredObject::restoreIndirect(OMByteArray& bytes, const OMList<OMXMLAttrib
 
 void 
 OMXMLPStoredObject::restoreInteger(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-    const char* str, const OMIntType* type)
+    const wchar_t* str, const OMIntType* type)
 {
     TRACE("OMXMLPStoredObject::restoreInteger");
 
     bool isElementContent = (attributes != 0 && str == 0);
     
-    const char* data = str;
+    const wchar_t* data = str;
     if (str == 0)
     {
         size_t length;
@@ -2201,7 +2191,7 @@ OMXMLPStoredObject::restoreInteger(OMByteArray& bytes, const OMList<OMXMLAttribu
 
 void 
 OMXMLPStoredObject::restoreOpaque(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-    const char* str, const OMOpaqueType* type)
+    const wchar_t* str, const OMOpaqueType* type)
 {
     TRACE("OMXMLPStoredObject::restoreOpaque");
     PRECONDITION("Valid indirect state", attributes != 0 && str == 0);
@@ -2241,7 +2231,7 @@ OMXMLPStoredObject::restoreOpaque(OMByteArray& bytes, const OMList<OMXMLAttribut
     getReader()->next();
     if (getReader()->getEventType() == OMXMLReader::CHARACTERS)
     {
-        const char* data = 0;
+        const wchar_t* data;
         size_t length;
         getReader()->getCharacters(data, length);
         byteArrayFromString(bytes, data);
@@ -2251,7 +2241,7 @@ OMXMLPStoredObject::restoreOpaque(OMByteArray& bytes, const OMList<OMXMLAttribut
 
 void 
 OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-    const char* str, const OMRecordType* type)
+    const wchar_t* str, const OMRecordType* type)
 {
     TRACE("OMXMLPStoredObject::restoreRecord");
 
@@ -2259,7 +2249,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
 
     if (type->identification() == TypeID_AUID)
     {
-        const char* data = str;
+        const wchar_t* data = str;
         if (str == 0)
         {
             size_t length;
@@ -2281,7 +2271,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
     }
     else if (type->identification() == TypeID_MobIDType)
     {
-        const char* data = str;
+        const wchar_t* data = str;
         if (str == 0)
         {
             size_t length;
@@ -2302,7 +2292,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
     }
     else if (type->identification() == TypeID_DateStruct)
     {
-        const char* data = str;
+        const wchar_t* data = str;
         if (str == 0)
         {
             size_t length;
@@ -2323,7 +2313,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
     }
     else if (type->identification() == TypeID_TimeStruct)
     {
-        const char* data = str;
+        const wchar_t* data = str;
         if (str == 0)
         {
             size_t length;
@@ -2344,7 +2334,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
     }
     else if (type->identification() == TypeID_TimeStamp)
     {
-        const char* data = str;
+        const wchar_t* data = str;
         if (str == 0)
         {
             size_t length;
@@ -2365,7 +2355,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
     }
     else if (type->identification() == TypeID_Rational)
     {
-        const char* data = str;
+        const wchar_t* data = str;
         if (str == 0)
         {
             size_t length;
@@ -2386,7 +2376,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
     }
     else if (type->identification() == TypeID_VersionType)
     {
-        const char* data = str;
+        const wchar_t* data = str;
         if (str == 0)
         {
             size_t length;
@@ -2422,7 +2412,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
             const OMList<OMXMLAttribute*>* attrs;
             getReader()->getStartElement(nmspace, localName, attrs);
             
-            if (compareWideString(localName, memberName) != 0)
+            if (wcscmp(localName, memberName) != 0)
             {
                 throw OMXMLException(L"Invalid record value - unexpected member");
             }
@@ -2440,7 +2430,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
 
 void 
 OMXMLPStoredObject::restoreRenamed(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-    const char* str, const OMRenamedType* type)
+    const wchar_t* str, const OMRenamedType* type)
 {
     TRACE("OMXMLPStoredObject::restoreRenamed");
 
@@ -2449,7 +2439,7 @@ OMXMLPStoredObject::restoreRenamed(OMByteArray& bytes, const OMList<OMXMLAttribu
 
 void 
 OMXMLPStoredObject::restoreSet(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-    const char* str, const OMSetType* type)
+    const wchar_t* str, const OMSetType* type)
 {
     TRACE("OMXMLPStoredObject::restoreSet");
 
@@ -2480,7 +2470,7 @@ OMXMLPStoredObject::restoreSet(OMByteArray& bytes, const OMList<OMXMLAttribute*>
 
 void 
 OMXMLPStoredObject::restoreString(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-    const char* str, const OMStringType* type) // note: restoring string array result in type == 0
+    const wchar_t* str, const OMStringType* type) // note: restoring string array result in type == 0
 {
     TRACE("OMXMLPStoredObject::restoreString");
 
@@ -2495,13 +2485,11 @@ OMXMLPStoredObject::restoreString(OMByteArray& bytes, const OMList<OMXMLAttribut
                 getBaselineURI(), AAFEscape_AttrName);
             if (escapeAttr != 0)
             {
-                char* tmp = utf16ToUTF8(escapeAttr->getValue());
-                boolFromString(tmp, isEscaped);
-                delete [] tmp;
+                boolFromString(escapeAttr->getValue(), isEscaped);
             }
         }
         
-        const char* data = str;
+        const wchar_t* data = str;
         if (str == 0)
         {
             size_t length;
@@ -2514,21 +2502,24 @@ OMXMLPStoredObject::restoreString(OMByteArray& bytes, const OMList<OMXMLAttribut
         
         if (data == 0)
         {
-            wchar_t* wData = L"\0";    
-            bytes.append(reinterpret_cast<OMByte*>(wData), sizeof(wchar_t));
+            wchar_t* nullData = L"\0";    
+            bytes.append(reinterpret_cast<OMByte*>(nullData), sizeof(wchar_t));
         }
         else
         {
-            wchar_t* wData = utf8ToUTF16(data);
+            const wchar_t* s = data;
+            wchar_t* tmp = 0;
             if (isEscaped)
             {
-                wchar_t* tmp = wData;
-                wData = unescapeString(tmp);
+                tmp = unescapeString(data);
+                s = tmp;
+            }
+            bytes.append(reinterpret_cast<const OMByte*>(s), 
+                (wcslen(s) + 1) * sizeof(wchar_t));
+            if (isEscaped)
+            {
                 delete [] tmp;
             }
-            bytes.append(reinterpret_cast<OMByte*>(wData), 
-                (lengthOfWideString(wData) + 1) * sizeof(wchar_t));
-            delete [] wData;
         }
     }        
     else if (type->elementType()->category() == OMMetaDefinition::INTEGER_TYPE)
@@ -2538,19 +2529,19 @@ OMXMLPStoredObject::restoreString(OMByteArray& bytes, const OMList<OMXMLAttribut
         getReader()->next();
         if (getReader()->getEventType() == OMXMLReader::CHARACTERS)
         {
-            const char* data = 0;
+            const wchar_t* data;
             size_t length;
             getReader()->getCharacters(data, length);
             
-            const char* dataPtr = data;
-            while (*dataPtr != '\0')
+            const wchar_t* dataPtr = data;
+            while (*dataPtr != L'\0')
             {
                 restoreSimpleValue(bytes, 0, dataPtr, elementType);
-                while (*dataPtr != '\0' && *dataPtr != 0x20)
+                while (*dataPtr != L'\0' && *dataPtr != 0x20)
                 {
                     dataPtr++;
                 }
-                while (*dataPtr != '\0' && *dataPtr == 0x20)
+                while (*dataPtr != L'\0' && *dataPtr == 0x20)
                 {
                     dataPtr++;
                 }
@@ -2576,7 +2567,7 @@ OMXMLPStoredObject::restoreString(OMByteArray& bytes, const OMList<OMXMLAttribut
 
 void 
 OMXMLPStoredObject::restoreVariableArray(OMByteArray& bytes, const OMList<OMXMLAttribute*>* attributes,
-    const char* str, const OMVariableArrayType* type)
+    const wchar_t* str, const OMVariableArrayType* type)
 {
     TRACE("OMXMLPStoredObject::restoreVariableArray");
 
@@ -2585,7 +2576,7 @@ OMXMLPStoredObject::restoreVariableArray(OMByteArray& bytes, const OMList<OMXMLA
         getReader()->next();
         if (getReader()->getEventType() == OMXMLReader::CHARACTERS)
         {
-            const char* data = 0;
+            const wchar_t* data = 0;
             size_t length;
             getReader()->getCharacters(data, length);
             byteArrayFromString(bytes, data);
@@ -2767,13 +2758,12 @@ OMXMLPStoredObject::saveWeakRef(OMWeakObjectReference& weakRef,
 }
 
 OMUniqueObjectIdentification 
-OMXMLPStoredObject::restoreAUID(const char* idStr, AUIDTargetType targetType)
+OMXMLPStoredObject::restoreAUID(const wchar_t* idStr, AUIDTargetType targetType)
 {
-    TRACE("OMXMLPStoredObject::restoreAUID(char)");
+    TRACE("OMXMLPStoredObject::restoreAUID");
     
-    wchar_t* wIdStr = utf8ToUTF16(idStr);
     OMUniqueObjectIdentification id = nullOMUniqueObjectIdentification;
-    if (isURI(wIdStr))
+    if (isURI(idStr))
     {
         uriToAUID(idStr, &id);
     }
@@ -2781,12 +2771,12 @@ OMXMLPStoredObject::restoreAUID(const char* idStr, AUIDTargetType targetType)
     {
         if (targetType == METADICT_DEF || targetType == ANY)
         {
-            id = _store->getBaselineMetaDefId(wIdStr);
+            id = _store->getBaselineMetaDefId(idStr);
         }
         if (id == nullOMUniqueObjectIdentification && 
             (targetType == DICT_DEF || targetType == ANY))
         {
-            id = _store->getBaselineDefId(wIdStr);
+            id = _store->getBaselineDefId(idStr);
         }
         
         if (id == nullOMUniqueObjectIdentification)
@@ -2794,19 +2784,6 @@ OMXMLPStoredObject::restoreAUID(const char* idStr, AUIDTargetType targetType)
             throw OMXMLException(L"Could not retrieve unique id from symbol");
         }
     }
-    delete [] wIdStr;
-    
-    return id;
-}
-
-OMUniqueObjectIdentification 
-OMXMLPStoredObject::restoreAUID(const wchar_t* idStr, AUIDTargetType targetType)
-{
-    TRACE("OMXMLPStoredObject::restoreAUID(wchar_t)");
-
-    char* sIdStr = utf16ToUTF8(idStr);
-    OMUniqueObjectIdentification id = restoreAUID(sIdStr, targetType);
-    delete [] sIdStr;
     
     return id;
 }
@@ -2829,13 +2806,13 @@ OMXMLPStoredObject::saveAUID(OMUniqueObjectIdentification id, wchar_t* idStr,
     
     if (symbol != 0)
     {
-        copyWideString(idStr, symbol, XML_MAX_BASELINE_SYMBOL_SIZE);
+        wcsncpy(idStr, symbol, XML_MAX_BASELINE_SYMBOL_SIZE);
     }
     else
     {
         wchar_t uri[XML_MAX_AUID_URI_SIZE];
         auidToURI(id, uri);
-        copyWideString(idStr, uri, XML_MAX_AUID_URI_SIZE);
+        wcsncpy(idStr, uri, XML_MAX_AUID_URI_SIZE);
     }
 }
     

@@ -23,7 +23,7 @@
 //=---------------------------------------------------------------------=
 
 #include "OMXMLException.h"
-#include "OMUtilities.h"
+#include "wchar.h"
 
 
 OMXMLException::OMXMLException()
@@ -36,8 +36,8 @@ OMXMLException::OMXMLException(const wchar_t* message)
 {
     if (message != 0)
     {
-        _message = new wchar_t[lengthOfWideString(message) + 1];
-        copyWideString(_message, message);
+        _message = new wchar_t[wcslen(message) + 1];
+        wcscpy(_message, message);
     }
 }
 
@@ -48,17 +48,17 @@ OMXMLException::OMXMLException(const wchar_t* message, const wchar_t* secondaryM
     {
         if (secondaryMessage != 0)
         {
-            _message = new wchar_t[lengthOfWideString(message) + 
-                lengthOfWideString(secondaryMessage) + 3];
+            _message = new wchar_t[wcslen(message) + 
+                wcslen(secondaryMessage) + 3];
             _message[0] = L'\0';
-            concatenateWideString(_message, message);
-            concatenateWideString(_message, L":\n");
-            concatenateWideString(_message, secondaryMessage);
+            wcscat(_message, message);
+            wcscat(_message, L":\n");
+            wcscat(_message, secondaryMessage);
         }
         else
         {
-            _message = new wchar_t[lengthOfWideString(message) + 1];
-            copyWideString(_message, message);
+            _message = new wchar_t[wcslen(message) + 1];
+            wcscpy(_message, message);
         }
     }
 }
@@ -68,8 +68,8 @@ OMXMLException::OMXMLException(const OMXMLException& ex)
 {
     if (ex._message != 0)
     {
-        _message = new wchar_t[lengthOfWideString(ex._message) + 1];
-        copyWideString(_message, ex._message);
+        _message = new wchar_t[wcslen(ex._message) + 1];
+        wcscpy(_message, ex._message);
     }
 }
 

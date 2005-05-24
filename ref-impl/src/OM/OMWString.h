@@ -25,7 +25,7 @@
 #ifndef __OMWSTRING_H__
 #define __OMWSTRING_H__
 
-#include <wchar.h>
+#include "wchar.h"
 
 class OMWString
 {

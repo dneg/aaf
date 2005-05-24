@@ -22,9 +22,8 @@
 //
 //=---------------------------------------------------------------------=
 
-#include <OMWString.h>
-#include <OMUtilities.h>
-#include <OMAssertions.h>
+#include "OMWString.h"
+#include "OMAssertions.h"
 
 
 OMWString::OMWString()
@@ -42,7 +41,7 @@ OMWString::OMWString(const OMWString& ws)
     if (ws.length() != 0)
     {
         _ws = new wchar_t[ws.length() + 1];
-        copyWideString(_ws, ws.c_str());
+        wcscpy(_ws, ws.c_str());
     }
 }
 
@@ -54,8 +53,8 @@ OMWString::OMWString(const wchar_t* ws)
 
     if (ws != 0)
     {
-        _ws = new wchar_t[lengthOfWideString(ws) + 1];
-        copyWideString(_ws, ws);
+        _ws = new wchar_t[wcslen(ws) + 1];
+        wcscpy(_ws, ws);
     }
 }
 
@@ -85,7 +84,7 @@ int OMWString::compare(const wchar_t* rhs) const
     TRACE("OMWString::compare");
     PRECONDITION("Valid strings", _ws != 0 && rhs != 0);
 
-    return compareWideString(_ws, rhs);
+    return wcscmp(_ws, rhs);
 }
 
 
@@ -95,7 +94,7 @@ size_t OMWString::length() const
 
     if (_ws != 0)
     {
-        return lengthOfWideString(_ws);
+        return wcslen(_ws);
     }
     else
     {
@@ -123,8 +122,8 @@ OMWString& OMWString::operator=(const wchar_t* rhs)
     
     if (rhs != 0) 
     {
-        _ws = new wchar_t[lengthOfWideString(rhs) + 1];
-        copyWideString(_ws, rhs);
+        _ws = new wchar_t[wcslen(rhs) + 1];
+        wcscpy(_ws, rhs);
     }
     else
     {
@@ -149,7 +148,7 @@ bool OMWString::operator==(const wchar_t* rhs) const
     TRACE("OMWString::operator==");
     PRECONDITION("Valid strings", _ws != 0 && rhs != 0);
 
-    return compareWideString(_ws, rhs) == 0;
+    return wcscmp(_ws, rhs) == 0;
 }
 
 
@@ -167,7 +166,7 @@ bool OMWString::operator!=(const wchar_t* rhs) const
     TRACE("OMWString::operator!=");
     PRECONDITION("Valid strings", _ws != 0 && rhs != 0);
 
-    return compareWideString(_ws, rhs) != 0;
+    return wcscmp(_ws, rhs) != 0;
 }
 
 
@@ -185,7 +184,7 @@ bool OMWString::operator<(const wchar_t* rhs) const
     TRACE("OMWString::operator<");
     PRECONDITION("Valid strings", _ws != 0 && rhs != 0);
 
-    return compareWideString(_ws, rhs) < 0;
+    return wcscmp(_ws, rhs) < 0;
 }
 
 

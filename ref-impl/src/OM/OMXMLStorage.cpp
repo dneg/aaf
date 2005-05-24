@@ -26,7 +26,6 @@
 #include "OMSetIterator.h"
 #include "OMListIterator.h"
 #include "OMDiskRawStorage.h"
-#include "OMUtilities.h"
 #include "OMXMLUtilities.h"
 #include "OMXMLException.h"
 #include "OMAssertions.h"
@@ -291,11 +290,9 @@ OMXMLStorage::getDataStreamNotationName(OMUniqueObjectIdentification typeId)
         return (*ret).c_str();
     }
 
-    char buffer[19];
-    sprintf(buffer, "DataStream%x", _dataStreamNotationNameIndex);
-    wchar_t* name = utf8ToUTF16(buffer);
+    wchar_t name[19];
+    std_swprintf(name, 19, L"DataStream%x", _dataStreamNotationNameIndex);
     _dataStreamNotationNames.insert(typeId, name); 
-    delete [] name;
     _dataStreamNotationNameIndex++;
 
     if (!_dataStreamNotationNames.find(typeId, &ret))
@@ -317,11 +314,9 @@ OMXMLStorage::getDataStreamEntityName(void* ref)
         return (*ret).c_str();
     }
 
-    char buffer[15];
-    sprintf(buffer, "stream%x", _dataStreamEntityNameIndex);
-    wchar_t* name = utf8ToUTF16(buffer);
+    wchar_t name[15];
+    std_swprintf(name, 15, L"stream%x", _dataStreamEntityNameIndex);
     _dataStreamEntityNames.insert(ref, name); 
-    delete [] name;
     _dataStreamEntityNameIndex++;
     
     if (!_dataStreamEntityNames.find(ref, &ret))
@@ -343,12 +338,11 @@ OMXMLStorage::getDataStreamEntityValue(void* ref, const wchar_t* prefix)
         return (*ret).c_str();
     }
 
-    char buffer[20];
-    sprintf(buffer, "_stream%x", _dataStreamEntityValueIndex);
-    wchar_t* value = new wchar_t[20 + lengthOfWideString(prefix)];
-    utf8ToUTF16(value, buffer, 20);
-    concatenateWideString(value, prefix);
-    _dataStreamEntityValues.insert(ref, value); 
+    size_t len = 19 + wcslen(prefix);
+    wchar_t* value = new wchar_t[len + 1];
+    std_swprintf(value, 20, L"_stream%x", _dataStreamEntityValueIndex);
+    wcscat(value, prefix);
+    _dataStreamEntityValues.insert(ref, value);
     delete [] value;
     _dataStreamEntityValueIndex++;
     
@@ -460,7 +454,7 @@ OMXMLStorage::getFilenamePrefixForStream() const
         return 0;
     }
     wchar_t* result = new wchar_t[size + 1];
-    copyWideString(result, startPtr, size);
+    wcsncpy(result, startPtr, size);
     result[size] = L'\0';
     
     return result;
@@ -505,7 +499,7 @@ OMXMLStorage::getFilePathForStream() const
     
     size_t size = endPtr - startPtr;
     wchar_t* result = new wchar_t[size + 1];
-    copyWideString(result, startPtr, size);
+    wcsncpy(result, startPtr, size);
     result[size] = L'\0';
     
     return result;
@@ -523,8 +517,8 @@ OMXMLStorage::forwardObjectSetId(const wchar_t* id)
         delete [] _objectSetId;
     }
     
-    _objectSetId = new wchar_t[lengthOfWideString(id) + 1];
-    copyWideString(_objectSetId, id);
+    _objectSetId = new wchar_t[wcslen(id) + 1];
+    wcscpy(_objectSetId, id);
 }
 
 bool 
@@ -541,8 +535,8 @@ OMXMLStorage::getForwardedObjectSetId()
     TRACE("OMXMLStorage::getForwardedObjectSetId");
     PRECONDITION("Have forwarded object set id", _objectSetId != 0);
     
-    wchar_t* copy = new wchar_t[lengthOfWideString(_objectSetId) + 1];
-    copyWideString(copy, _objectSetId);
+    wchar_t* copy = new wchar_t[wcslen(_objectSetId) + 1];
+    wcscpy(copy, _objectSetId);
     
     delete [] _objectSetId;
     _objectSetId = 0;

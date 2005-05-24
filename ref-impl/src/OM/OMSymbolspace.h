@@ -176,7 +176,7 @@ private:
     void restoreWeakObjectReferenceTypeDef(OMDictionary* dictionary);
     void restoreExtEnumExt(OMDictionary* dictionary);
     
-    OMUniqueObjectIdentification restoreMetaDefAUID(const char* idStr);
+    OMUniqueObjectIdentification restoreMetaDefAUID(const wchar_t* idStr);
     void saveMetaDefAUID(OMUniqueObjectIdentification id, wchar_t* idStr);
     
     OMPropertyTag getClassDefsTag(OMDictionary* dictionary);
