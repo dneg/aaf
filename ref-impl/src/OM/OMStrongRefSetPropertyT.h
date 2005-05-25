@@ -289,7 +289,10 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   PRECONDITION("Object is present", contains(identification));
 
   SetElement* element = 0;
-  bool found = _set.find(identification, &element);
+#if defined(OM_DEBUG)
+  bool found =
+#endif
+  _set.find(identification, &element);
   ASSERT("Object found", found);
   UniqueIdentification nullUniqueIdentification;
   memset(&nullUniqueIdentification, 0, sizeof(UniqueIdentification));
@@ -888,7 +891,10 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   PRECONDITION("Object already present", contains(identification));
 
   SetElement* element = 0;
-  bool found = _set.find(identification, &element);
+#if defined(OM_DEBUG)
+  bool found =
+#endif
+  _set.find(identification, &element);
   ASSERT("Object found", found);
   OMStrongObjectReference& reference = element->reference();
 
