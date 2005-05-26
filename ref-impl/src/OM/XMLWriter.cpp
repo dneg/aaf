@@ -465,6 +465,22 @@ XMLWriterSimple::Synchronize(void)
     _xmlStream->Synchronize();
 }
 
+void
+XMLWriterSimple::Reset(void)
+{
+    vector<Element*>::iterator iter;
+    for (iter = _elementStack.begin(); iter != _elementStack.end(); iter++)
+    {
+        delete *iter;
+    }
+    _elementStack.clear();
+    
+    _prevWriteType = NONE;
+    _level = 0;
+
+    _xmlStream->SetPosition(0);
+}
+
 string
 XMLWriterSimple::GetPrefix(const char* ns)
 {

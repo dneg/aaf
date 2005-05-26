@@ -28,7 +28,7 @@
 #if defined (_MSC_VER)
   // - 'identifier' : identifier was truncated to 'number' characters in
   //   the debug information
-#pragma warning(disable:4786) // Gak !
+#pragma warning(disable:4786)
 #endif
 
 #include <OMDataTypes.h>
@@ -66,6 +66,7 @@ public:
     virtual void WriteText(const char* text) = 0;
 
     virtual void Synchronize(void) = 0;
+    virtual void Reset(void) = 0;
 };
 
 
@@ -77,6 +78,7 @@ public:
     
     virtual OMUInt32 Write(const OMByte* data, OMUInt32 count) = 0;
     virtual void Synchronize(void) = 0;
+    virtual void SetPosition(OMUInt64 position) = 0;
 };
 
 
@@ -109,6 +111,7 @@ public:
     virtual void WriteText(const char* text);
 
     virtual void Synchronize(void);
+    virtual void Reset(void);
 
 private:
     enum XMLEncoding

@@ -49,6 +49,12 @@ OMXMLOStream::Synchronize(void)
     _storage->synchronize();
 }
 
+void 
+OMXMLOStream::SetPosition(OMUInt64 position)
+{
+    _storage->setPosition(position);
+}
+
 
 OMXMLWriter::OMXMLWriter(OMRawStorage* storage)
 {
@@ -214,6 +220,12 @@ void
 OMXMLWriter::synchronize(void)
 {
     _xmlWriter->Synchronize();
+}
+
+void 
+OMXMLWriter::reset(void)
+{
+    _xmlWriter->Reset();
 }
 
 

@@ -38,6 +38,7 @@ public:
     
     virtual OMUInt32 Write(const OMByte* data, OMUInt32 count);
     virtual void Synchronize(void);
+    virtual void SetPosition(OMUInt64 position);
     
 private:
     OMRawStorage*   _storage;
@@ -65,6 +66,7 @@ public:
     void writeText(const wchar_t* text);
     
     void synchronize(void);
+    void reset(void);
     
 private:
     XMLWriter*      _xmlWriter;
