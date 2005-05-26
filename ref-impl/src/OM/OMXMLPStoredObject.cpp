@@ -317,7 +317,10 @@ OMXMLPStoredObject::save(OMFile& file)
             if (_store->isBaselineSymbolspace(symbolspace) || !symbolspace->isEmpty())
             {
                 getWriter()->declareNamespace(symbolspace->getURI(), symbolspace->getPrefix());
-                haveExtensions = true;
+                if (!_store->isBaselineSymbolspace(symbolspace))
+                {
+                    haveExtensions = true;
+                }
             }
         }
 
