@@ -48,6 +48,8 @@ public:
         NONE,
         NOTATION_DECL,
         UNPARSED_ENTITY_DECL,
+        START_PREFIX_MAPPING,
+        END_PREFIX_MAPPING,
         START_ELEMENT,
         END_ELEMENT,
         CHARACTERS
@@ -64,6 +66,8 @@ public:
     void getNotationDecl(const wchar_t*& name, const wchar_t*& publicID, const wchar_t*& systemID);
     void getUnparsedEntityDecl(const wchar_t*& name, const wchar_t*& publicID, 
         const wchar_t*& systemID, const wchar_t*& notationName);
+    void getStartPrefixMapping(const wchar_t*& prefix, const wchar_t*& uri);
+    void getEndPrefixMapping(const wchar_t*& prefix);
     void getStartElement(const wchar_t*& uri, const wchar_t*& localName, 
         const OMList<OMXMLAttribute*>*& attributes);
     void getEndElement(const wchar_t*& uri, const wchar_t*& localName);
@@ -78,6 +82,8 @@ public:
     virtual void NotationDecl(const char* name, const char* publicID, const char* systemID);
     virtual void UnparsedEntityDecl(const char* name, const char* publicID, const char* systemID, 
         const char* notationName);
+    virtual void StartPrefixMapping(const char* prefix, const char* uri);
+    virtual void EndPrefixMapping(const char* prefix);
     virtual void StartElement(const char* uri, const char* localName, 
         const XMLAttribute* attributes);
     virtual void EndElement(const char* uri, const char* localName);
@@ -93,6 +99,7 @@ private:
     OMWString   _publicID;
     OMWString   _systemID;
     OMWString   _notationName;
+    OMWString   _prefix;
     OMWString   _uri;
     OMWString   _localName;
     OMWString   _data;

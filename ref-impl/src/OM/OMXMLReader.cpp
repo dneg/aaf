@@ -69,7 +69,16 @@ OMXMLReader::next()
     TRACE("OMXMLReader::next");
 
     cleanUp();
-    return _xmlReader->Next(false);
+    try
+    {
+        return _xmlReader->Next(false);
+    }
+    catch (XMLReaderException& ex)
+    {
+        OMWString message;
+        COPY_STRING(message, ex.GetMessage());
+        throw OMXMLException(message.c_str());
+    }
 }
 
 OMXMLReader::EventType 
@@ -194,6 +203,25 @@ OMXMLReader::getUnparsedEntityDecl(const wchar_t*& name, const wchar_t*& publicI
 }
 
 void 
+OMXMLReader::getStartPrefixMapping(const wchar_t*& prefix, const wchar_t*& uri)
+{
+    TRACE("OMXMLReader::getStartPrefixMapping");
+    PRECONDITION("Valid event", _eventType == START_PREFIX_MAPPING);
+
+    prefix = _prefix.c_str();
+    uri = _uri.c_str();
+}
+
+void 
+OMXMLReader::getEndPrefixMapping(const wchar_t*& prefix)
+{
+    TRACE("OMXMLReader::getEndPrefixMapping");
+    PRECONDITION("Valid event", _eventType == END_PREFIX_MAPPING);
+
+    prefix = _prefix.c_str();
+}
+
+void 
 OMXMLReader::getStartElement(const wchar_t*& uri, const wchar_t*& localName, 
     const OMList<OMXMLAttribute*>*& attributes)
 {
@@ -277,6 +305,27 @@ OMXMLReader::UnparsedEntityDecl(const char* name, const char* publicID, const ch
     COPY_STRING(_notationName, notationName);
     
     _eventType = UNPARSED_ENTITY_DECL;
+}
+
+void 
+OMXMLReader::StartPrefixMapping(const char* prefix, const char* uri)
+{
+    TRACE("OMXMLReader::StartPrefixMapping");
+
+    COPY_STRING(_prefix, prefix);
+    COPY_STRING(_uri, uri);
+    
+    _eventType = START_PREFIX_MAPPING;
+}
+
+void 
+OMXMLReader::EndPrefixMapping(const char* prefix)
+{
+    TRACE("OMXMLReader::EndPrefixMapping");
+
+    COPY_STRING(_prefix, prefix);
+    
+    _eventType = END_PREFIX_MAPPING;
 }
 
 void 
