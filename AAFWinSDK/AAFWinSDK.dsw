@@ -704,6 +704,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name aafextract
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name aafembed
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -751,6 +754,18 @@ Package=<4>
 ###############################################################################
 
 Project: "aafdump"=.\Utilities\aafdump\aafdump.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "aafembed"=.\Utilities\aafembed\aafembed.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
