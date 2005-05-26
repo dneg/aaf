@@ -207,20 +207,24 @@ OMXMLPStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
 {
   TRACE("OMXMLPStoredObjectFactory::isRecognized");
   PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Positionable raw storage", rawStorage->isPositionable());
 
+  bool isRecog = false;
   try
   {
     OMXMLReader reader(rawStorage);
     if (reader.nextElement() &&
           reader.elementEquals(OMSymbolspace::getBaselineURI(), L"AAF"))
     {
-          return true;
+        isRecog = true;
     }
   }
-  catch (OMXMLException&)
+  catch (...)
   {}
 
-  return false;
+  rawStorage->setPosition(0);
+  
+  return isRecog;
 }
 
   // @mfunc Can a file be created successfully on the given
@@ -285,25 +289,6 @@ bool OMXMLPStoredObjectFactory::readSignature(OMRawStorage* rawStorage,
                                              size_t signatureSize)
 {
   TRACE("OMXMLPStoredObjectFactory::readSignature");
-  size_t index = 0;
-  while (index < signatureSize - 1) {
-    unsigned char ch;
-    OMUInt32 bytesRead;
-    rawStorage->read(reinterpret_cast<OMByte*>(&ch), 1, bytesRead);
-    if (bytesRead != 1) {
-      break;
-    }
-    int c = ch;
-    if (isprint(c)) {
-      signature[index++] = toupper(ch);
-    }
-  }
-  bool result;
-  if (index == (signatureSize - 1)) {
-  signature[index] = 0;
-    result = true;
-  } else {
-    result = false;
-  }
-  return result;
+  ASSERT("Unimplemented code not reached", false);
+  return false;
 }
