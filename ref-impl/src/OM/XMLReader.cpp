@@ -29,6 +29,27 @@
 using namespace std;
 
 
+XMLReaderException::XMLReaderException()
+{}
+
+XMLReaderException::XMLReaderException(const char* message)
+: _message(message)
+{}
+
+XMLReaderException::XMLReaderException(const XMLReaderException& ex)
+: _message(ex._message)
+{}
+
+XMLReaderException::~XMLReaderException()
+{}
+    
+const char* 
+XMLReaderException::GetMessage()
+{
+    return _message.c_str();
+}
+
+
 XMLAttribute::XMLAttribute()
 : _next(0), _prev(0)
 {}
@@ -219,55 +240,6 @@ XMLReader::RegisterListener(XMLReaderListener* listener)
 }
 
 
-XMLReader::EventType 
-XMLReader::Event(void)
-{
-    return _event;
-}
-
-void 
-XMLReader::UnparsedEntityDecl(const char*& name, const char*& publicID, const char*& systemID, 
-    const char*& notationName)
-{
-    assert(_event == UNPARSED_ENTITY_DECL);
-    
-    name = _name.c_str();
-    publicID = _publicID.c_str();
-    systemID = _systemID.c_str();
-    notationName = _notationName.c_str();
-}
-
-void 
-XMLReader::StartElement(const char*& uri, const char*& localName, const XMLAttribute*& attributes)
-{
-    assert(_event == START_ELEMENT);
-    
-    uri = _uri.c_str();
-    localName = _localName.c_str();
-    attributes = _attributes;
-}
-
-
-void 
-XMLReader::EndElement(const char*& uri, const char*& localName)
-{
-    assert(_event == END_ELEMENT);
-    
-    uri = _uri.c_str();
-    localName = _localName.c_str();
-}
-
-
-void 
-XMLReader::Characters(const char*& data, size_t& length)
-{
-    assert(_event == CHARACTERS);
-    
-    data = _data.c_str();
-    length = _data.length();
-}
-
-
 void 
 XMLReader::RegisterEvent(EventType event)
 {
@@ -327,6 +299,35 @@ XMLReader::NextEvent(void)
                 {
                     (*iter)->UnparsedEntityDecl(_name.c_str(), _publicID.c_str(), _systemID.c_str(), 
                         _notationName.c_str());
+                }
+            }
+            break;
+        case START_PREFIX_MAPPING:
+            {
+                if (_startNmspaceDecls.size() > 0)
+                {
+                    pair<string, string> nmspaceDecl = _startNmspaceDecls.front();
+                    _startNmspaceDecls.pop();
+                    vector<XMLReaderListener*>::const_iterator iter;
+                    for (iter = _listeners.begin(); iter != _listeners.end(); iter++)
+                    {
+                        (*iter)->StartPrefixMapping(nmspaceDecl.first.c_str(), 
+                            nmspaceDecl.second.c_str());
+                    }
+                }
+            }
+            break;
+        case END_PREFIX_MAPPING:
+            {
+                if (_endNmspaceDecls.size() > 0)
+                {
+                    string nmspaceDecl = _endNmspaceDecls.front();
+                    _endNmspaceDecls.pop();
+                    vector<XMLReaderListener*>::const_iterator iter;
+                    for (iter = _listeners.begin(); iter != _listeners.end(); iter++)
+                    {
+                        (*iter)->EndPrefixMapping(nmspaceDecl.c_str());
+                    }
                 }
             }
             break;
@@ -403,6 +404,7 @@ XMLReader::SetAttributes(XMLAttribute* attributes)
 }
 
 
+
 #if defined(HAVE_EXPAT)
 
 
@@ -417,7 +419,10 @@ XMLReaderExpat::XMLReaderExpat(XMLIStream* xmlStream)
 : XMLReader(), _xmlStream(xmlStream), _parser(0)
 {
     _parser = XML_ParserCreateNS(0, NAMESPACE_SEPARATOR);
+    XML_SetNotationDeclHandler(_parser, ::expat_NotationDeclHandler);
     XML_SetEntityDeclHandler(_parser, ::expat_EntityDeclHandler);
+    XML_SetStartNamespaceDeclHandler(_parser, ::expat_StartNamespaceDeclHandler);
+    XML_SetEndNamespaceDeclHandler(_parser, ::expat_EndNamespaceDeclHandler);
     XML_SetStartElementHandler(_parser, ::expat_StartElementHandler);
     XML_SetEndElementHandler(_parser, ::expat_EndElementHandler);
     XML_SetCharacterDataHandler(_parser, ::expat_CharacterDataHandler);
@@ -484,7 +489,7 @@ XMLReaderExpat::Next(bool ignoreCharacterData)
                 }
                 else
                 {
-                    assert(false);
+                    throw XMLReaderException(GetErrorString().c_str());
                 }
             }
         }
@@ -498,8 +503,7 @@ XMLReaderExpat::Next(bool ignoreCharacterData)
 
             if (ret == XML_STATUS_ERROR)
             {
-                /*XML_Error errorCode = */XML_GetErrorCode(_parser);
-                assert(false);
+                throw XMLReaderException(GetErrorString().c_str());
             }
 
             if (_status)
@@ -541,6 +545,60 @@ XMLReaderExpat::GetPositionString(void)
 }
 
 void 
+XMLReaderExpat::NotationDeclHandler(const XML_Char* notationName, const XML_Char* base,
+    const XML_Char* systemId, const XML_Char* publicId)
+{
+    char* workBuffer = GetWorkBuffer(XMLStringLen(notationName, 0) + 1);
+    OMUInt32 strLen = ReadCharacters(workBuffer, notationName, 0, GetWorkBufferSize());
+    _notationName = workBuffer;
+    
+    if (base != 0)
+    {
+        workBuffer = GetWorkBuffer(XMLStringLen(base, 0) + 1);
+        strLen = ReadCharacters(workBuffer, base, 0, GetWorkBufferSize());
+        _base = workBuffer;
+    }
+    else
+    {
+        _base = "";
+    }
+    
+    if (systemId != 0)
+    {
+        workBuffer = GetWorkBuffer(XMLStringLen(systemId, 0) + 1);
+        strLen = ReadCharacters(workBuffer, systemId, 0, GetWorkBufferSize());
+        _systemID = workBuffer;
+    }
+    else
+    {
+        _systemID = "";
+    }
+    
+    if (publicId != 0)
+    {
+        workBuffer = GetWorkBuffer(XMLStringLen(publicId, 0) + 1);
+        strLen = ReadCharacters(workBuffer, publicId, 0, GetWorkBufferSize());
+        _publicID = workBuffer;
+    }
+    else
+    {
+        _publicID = "";
+    }
+    
+    XML_Status status = XML_StopParser(_parser, true);
+    if (status != XML_STATUS_OK)
+    {
+        XML_Error errorCode = XML_GetErrorCode(_parser);
+        if (errorCode != XML_ERROR_SUSPENDED)
+        {
+            throw XMLReaderException(GetErrorString().c_str());
+        }
+    }
+
+    RegisterEvent(NOTATION_DECL);
+}
+
+void 
 XMLReaderExpat::EntityDeclHandler(const XML_Char *entityName, 
     int is_parameter_entity, const XML_Char *value, int value_length, 
     const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId, 
@@ -571,12 +629,89 @@ XMLReaderExpat::EntityDeclHandler(const XML_Char *entityName,
         XML_Status status = XML_StopParser(_parser, true);
         if (status != XML_STATUS_OK)
         {
-            /*XML_Error errorCode = */XML_GetErrorCode(_parser);
-            assert(false);
+            XML_Error errorCode = XML_GetErrorCode(_parser);
+            if (errorCode != XML_ERROR_SUSPENDED)
+            {
+                throw XMLReaderException(GetErrorString().c_str());
+            }
         }
     
         RegisterEvent(UNPARSED_ENTITY_DECL);
     }
+}
+
+void 
+XMLReaderExpat::StartNamespaceDeclHandler(const XML_Char* prefix, const XML_Char* uri)
+{
+    string tmpPrefix;
+    string tmpUri;
+    
+    if (prefix != 0)
+    {
+        char* workBuffer = GetWorkBuffer(XMLStringLen(prefix, 0) + 1);
+        ReadCharacters(workBuffer, prefix, 0, GetWorkBufferSize());
+        tmpPrefix = workBuffer;
+    }
+    else
+    {
+        tmpPrefix = "";
+    }
+    
+    if (uri != 0)
+    {
+        char* workBuffer = GetWorkBuffer(XMLStringLen(uri, 0) + 1);
+        ReadCharacters(workBuffer, uri, 0, GetWorkBufferSize());
+        tmpUri = workBuffer;
+    }
+    else
+    {
+        tmpUri = "";
+    }
+
+    _startNmspaceDecls.push(pair<string, string>(tmpPrefix, tmpUri));
+
+    XML_Status status = XML_StopParser(_parser, true);
+    if (status != XML_STATUS_OK)
+    {
+        XML_Error errorCode = XML_GetErrorCode(_parser);
+        if (errorCode != XML_ERROR_SUSPENDED)
+        {
+            throw XMLReaderException(GetErrorString().c_str());
+        }
+    }
+
+    RegisterEvent(START_PREFIX_MAPPING);
+}
+
+void 
+XMLReaderExpat::EndNamespaceDeclHandler(const XML_Char* prefix)
+{
+    string tmpPrefix;
+    
+    if (prefix != 0)
+    {
+        char* workBuffer = GetWorkBuffer(XMLStringLen(prefix, 0) + 1);
+        ReadCharacters(workBuffer, prefix, 0, GetWorkBufferSize());
+        tmpPrefix = workBuffer;
+    }
+    else
+    {
+        tmpPrefix = "";
+    }
+
+    _endNmspaceDecls.push(tmpPrefix);
+    
+    XML_Status status = XML_StopParser(_parser, true);
+    if (status != XML_STATUS_OK)
+    {
+        XML_Error errorCode = XML_GetErrorCode(_parser);
+        if (errorCode != XML_ERROR_SUSPENDED)
+        {
+            throw XMLReaderException(GetErrorString().c_str());
+        }
+    }
+
+    RegisterEvent(END_PREFIX_MAPPING);
 }
 
 void 
@@ -649,8 +784,11 @@ XMLReaderExpat::StartElementHandler(const XML_Char* name, const XML_Char** atts)
     XML_Status status = XML_StopParser(_parser, true);
     if (status != XML_STATUS_OK)
     {
-        /*XML_Error errorCode = */XML_GetErrorCode(_parser);
-        assert(false);
+        XML_Error errorCode = XML_GetErrorCode(_parser);
+        if (errorCode != XML_ERROR_SUSPENDED)
+        {
+            throw XMLReaderException(GetErrorString().c_str());
+        }
     }
 
     RegisterEvent(START_ELEMENT);
@@ -680,9 +818,8 @@ XMLReaderExpat::EndElementHandler(const XML_Char* name)
         XML_Error errorCode = XML_GetErrorCode(_parser);
         if (errorCode != XML_ERROR_SUSPENDED)
         {
-            assert(false);
+            throw XMLReaderException(GetErrorString().c_str());
         }
-        // combined start/end element brings us here
     }
 
     RegisterEvent(END_ELEMENT);
@@ -705,8 +842,11 @@ XMLReaderExpat::CharacterDataHandler(const XML_Char* s, int len)
     XML_Status status = XML_StopParser(_parser, true);
     if (status != XML_STATUS_OK)
     {
-        /*XML_Error errorCode = */XML_GetErrorCode(_parser);
-        assert(false);
+        XML_Error errorCode = XML_GetErrorCode(_parser);
+        if (errorCode != XML_ERROR_SUSPENDED)
+        {
+            throw XMLReaderException(GetErrorString().c_str());
+        }
     }
 
     RegisterEvent(CHARACTERS);
@@ -832,6 +972,30 @@ XMLReaderExpat::XMLStringLen(const XML_Char* s, XML_Char terminator) const
     return len;
 }
 
+string 
+XMLReaderExpat::GetErrorString()
+{
+    const XML_LChar* xmlErrorString = XML_ErrorString(XML_GetErrorCode(_parser));
+    char* workBuffer = GetWorkBuffer(XMLStringLen(xmlErrorString, 0) + 1);
+    ReadCharacters(workBuffer, xmlErrorString, 0, GetWorkBufferSize());
+    
+    string errorString = "XMLReader: ";
+    errorString += workBuffer;
+    
+    return errorString;
+}
+
+
+
+void 
+expat_NotationDeclHandler(void* userData, const XML_Char* notationName,
+    const XML_Char* base, const XML_Char* systemId, const XML_Char* publicId)
+{
+    XMLReaderExpat* reader = reinterpret_cast<XMLReaderExpat*>(userData);
+    assert(reader != 0);
+
+    reader->NotationDeclHandler(notationName, base, systemId, publicId);
+}
 
 void 
 expat_EntityDeclHandler(void* userData, const XML_Char *entityName, 
@@ -846,6 +1010,25 @@ expat_EntityDeclHandler(void* userData, const XML_Char *entityName,
         base, systemId, publicId, notationName);
 }
     
+void 
+expat_StartNamespaceDeclHandler(void* userData, const XML_Char* prefix,
+    const XML_Char* uri)
+{
+    XMLReaderExpat* reader = reinterpret_cast<XMLReaderExpat*>(userData);
+    assert(reader != 0);
+
+    reader->StartNamespaceDeclHandler(prefix, uri);
+}
+
+void 
+expat_EndNamespaceDeclHandler(void* userData, const XML_Char *prefix)
+{
+    XMLReaderExpat* reader = reinterpret_cast<XMLReaderExpat*>(userData);
+    assert(reader != 0);
+
+    reader->EndNamespaceDeclHandler(prefix);
+}
+
 void 
 expat_StartElementHandler(void* userData, const XML_Char* name, const XML_Char** atts)
 {

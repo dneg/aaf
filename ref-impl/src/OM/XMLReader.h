@@ -25,11 +25,33 @@
 #ifndef __XMLREADER_H__
 #define __XMLREADER_H__
 
+#if defined (_MSC_VER)
+  // - 'identifier' : identifier was truncated to 'number' characters in
+  //   the debug information
+#pragma warning(disable:4786)
+#endif
+
+
 
 #include <OMDataTypes.h>
 #include <string>
 #include <vector>
 #include <queue>
+
+
+class XMLReaderException
+{
+public:
+    XMLReaderException();
+    XMLReaderException(const char* message);
+    XMLReaderException(const XMLReaderException& ex);
+    ~XMLReaderException();
+    
+    const char* GetMessage();
+    
+private:
+    std::string _message;
+};
 
 
 class XMLAttribute;
@@ -40,6 +62,8 @@ public:
     virtual void NotationDecl(const char* name, const char* publicID, const char* systemID) = 0;
     virtual void UnparsedEntityDecl(const char* name, const char* publicID, const char* systemID, 
         const char* notationName) = 0;
+    virtual void StartPrefixMapping(const char* prefix, const char* uri) = 0;
+    virtual void EndPrefixMapping(const char* prefix) = 0;
     virtual void StartElement(const char* uri, const char* localName, 
         const XMLAttribute* attributes) = 0;
     virtual void EndElement(const char* uri, const char* localName) = 0;
@@ -58,32 +82,24 @@ public:
     
     void RegisterListener(XMLReaderListener* listener);
 
+protected:
     enum EventType
     {
         NONE,
         NOTATION_DECL,
         UNPARSED_ENTITY_DECL,
+        START_PREFIX_MAPPING,
+        END_PREFIX_MAPPING,
         START_ELEMENT,
         END_ELEMENT,
         CHARACTERS
     };
 
-    EventType Event(void);
-    
-    void NotationDecl(const char*& name, const char*& publicID, const char*& systemID);
-    void UnparsedEntityDecl(const char*& name, const char*& publicID, const char*& systemID, const char*& notationName);
-    void StartElement(const char*& uri, const char*& localName, const XMLAttribute*& attributes);
-    void EndElement(const char*& uri, const char*& localName);
-    void Characters(const char*& data, size_t& length);
-
-    
-protected:
     void RegisterEvent(EventType event);
     EventType NextEvent(void);
     void ClearEvents(void);
     void SetCharacterData(const char* data, size_t len);
     void SetAttributes(XMLAttribute* attributes);
-    
 
     std::vector<XMLReaderListener*>     _listeners;
     std::queue<EventType>  _events;
@@ -92,15 +108,16 @@ protected:
     std::string      _publicID;
     std::string      _systemID;
     std::string      _notationName;
+    std::string      _base;
     std::string      _uri;
     std::string      _localName;
     std::string      _qName;
     std::string      _data;
     bool             _appendData;
     size_t           _length;
-    std::string      _prefix;
     XMLAttribute*    _attributes;
-    
+    std::queue<std::pair<std::string, std::string> > _startNmspaceDecls;
+    std::queue<std::string> _endNmspaceDecls;
 };
 
 
@@ -165,10 +182,14 @@ public:
     
 public:
     // internal
-    void EntityDeclHandler(const XML_Char *entityName, 
-        int is_parameter_entity, const XML_Char *value, int value_length, 
-        const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId, 
-        const XML_Char *notationName);
+    void NotationDeclHandler(const XML_Char* notationName, const XML_Char* base,
+        const XML_Char* systemId, const XML_Char* publicId);
+    void EntityDeclHandler(const XML_Char* entityName, 
+        int is_parameter_entity, const XML_Char* value, int value_length, 
+        const XML_Char* base, const XML_Char* systemId, const XML_Char* publicId, 
+        const XML_Char* notationName);
+    void StartNamespaceDeclHandler(const XML_Char* prefix, const XML_Char* uri);
+    void EndNamespaceDeclHandler(const XML_Char* prefix);
     void StartElementHandler(const XML_Char* name, const XML_Char** atts);
     void EndElementHandler(const XML_Char* name);
     void CharacterDataHandler(const XML_Char* s, int len);
@@ -183,6 +204,7 @@ private:
     OMUInt32 XMLStringLen(const XML_Char* s, XML_Char terminator) const;
     OMUInt32 ReadCharacters(char* out, const XML_Char* in, char terminator, OMUInt32 maxSize);
     void ReadCharacters(char* out, const XML_Char* in, OMUInt32 size);
+    std::string GetErrorString();
     
     XMLIStream* _xmlStream;
     OMUInt64    _filePosition;
@@ -198,13 +220,20 @@ private:
 
 
 // expat handlers
-void expat_EntityDeclHandler(void* userData, const XML_Char *entityName, 
-    int is_parameter_entity, const XML_Char *value, int value_length, 
-    const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId, 
-    const XML_Char *notationName);
+void expat_NotationDeclHandler(void* userData, const XML_Char* notationName,
+    const XML_Char* base, const XML_Char* systemId, const XML_Char* publicId);
+void expat_EntityDeclHandler(void* userData, const XML_Char* entityName, 
+    int is_parameter_entity, const XML_Char* value, int value_length, 
+    const XML_Char* base, const XML_Char* systemId, const XML_Char* publicId, 
+    const XML_Char* notationName);
+void expat_StartNamespaceDeclHandler(void* userData, const XML_Char* prefix,
+    const XML_Char* uri);
+void expat_EndNamespaceDeclHandler(void* userData, const XML_Char *prefix);
 void expat_StartElementHandler(void* userData, const XML_Char* name, const XML_Char** atts);
 void expat_EndElementHandler(void* userData, const XML_Char* name);
 void expat_CharacterDataHandler(void* userData, const XML_Char* s, int len);
+
+
 
 #endif // HAVE_EXPAT
 
