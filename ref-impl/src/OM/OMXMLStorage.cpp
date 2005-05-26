@@ -31,16 +31,15 @@
 #include "OMAssertions.h"
 
 
-OMXMLStorage::OMXMLStorage(OMRawStorage* storage, bool isRead)
-: _storage(storage), _objectSetId(0), _baselineSymbolspace(0), _defaultExtSymbolspace(0),
-    _dataStreamNotationNameIndex(0), _dataStreamEntityNameIndex(0),
+OMXMLStorage::OMXMLStorage(OMRawStorage* storage, Mode mode)
+: _mode(mode), _storage(storage), _objectSetId(0), _baselineSymbolspace(0), 
+    _defaultExtSymbolspace(0), _symbolspacePrefixIndex(0),
+    _dataStreamNotationNameIndex(0), _dataStreamEntityNameIndex(0), 
     _dataStreamEntityValueIndex(0)
 {
     TRACE("OMXMLStorage::OMXMLStorage");
     
-    _isRead = isRead;
-    
-    if (isRead)
+    if (mode == READ_MODE || mode == EXISTING_MODIFY_MODE)
     {
         _xmlWriter = 0;
         _xmlReader = new OMXMLReader(storage);
@@ -52,7 +51,7 @@ OMXMLStorage::OMXMLStorage(OMRawStorage* storage, bool isRead)
     }
     
     _baselineSymbolspace = OMSymbolspace::createV11Symbolspace(this);
-    _symbolspaces.insert(_baselineSymbolspace->getURI(), _baselineSymbolspace);
+    addSymbolspace(_baselineSymbolspace);
 }
 
 OMXMLStorage::~OMXMLStorage()
@@ -75,17 +74,35 @@ OMXMLStorage::~OMXMLStorage()
     }
 }
 
-bool 
-OMXMLStorage::isRead()
+OMXMLStorage::Mode 
+OMXMLStorage::mode()
 {
-    return _isRead;
+    TRACE("OMXMLStorage::mode");
+    
+    return _mode;
+}
+
+bool 
+OMXMLStorage::haveReader()
+{
+    TRACE("OMXMLStorage::haveReader");
+    
+    return _xmlReader != 0;
+}
+
+bool 
+OMXMLStorage::haveWriter()
+{
+    TRACE("OMXMLStorage::haveWriter");
+    
+    return _xmlWriter != 0;
 }
 
 OMXMLWriter* 
 OMXMLStorage::getWriter()
 {
     TRACE("OMXMLStorage::getWriter");
-    PRECONDITION("Is writer", !_isRead);
+    PRECONDITION("Is writer", _xmlWriter != 0);
 
     return _xmlWriter;
 }
@@ -94,11 +111,59 @@ OMXMLReader*
 OMXMLStorage::getReader()
 {
     TRACE("OMXMLStorage::getReader");
-    PRECONDITION("Is reader", _isRead);
+    PRECONDITION("Is reader", _xmlReader != 0);
 
     return _xmlReader;
 }
+
+void 
+OMXMLStorage::resetForWriting()
+{
+    TRACE("OMXMLStorage::resetForWriting");
+    PRECONDITION("Is modifiable", _mode == EXISTING_MODIFY_MODE || _mode == NEW_MODIFY_MODE);
     
+    OMSetIterator<OMWString, OMSymbolspace*> iter(_symbolspaces, OMBefore);
+    while (++iter) 
+    {
+        iter.value()->resetForWriting();
+    }
+    
+    if (_xmlReader != 0)
+    {
+        delete _xmlReader;
+        _xmlReader = 0;
+        
+        _xmlWriter = new OMXMLWriter(_storage);
+    }
+    else
+    {
+        // fill remaining space in file with spaces
+        if (_storage->position() < _storage->size())
+        {
+            wchar_t spaces[1024];
+            wmemset(spaces, L' ', 1023);
+            spaces[1023] = L'\0';
+            
+            OMUInt64 remainingSpace = _storage->size() - _storage->position();
+            OMUInt64 count = 0;
+            while (count < remainingSpace)
+            {
+                OMUInt32 len = ((remainingSpace - count) > 1023) ? 1023 : 
+                    (OMUInt32)(remainingSpace - count);
+                if (len < 1023)
+                {
+                    spaces[len] = L'\0';
+                }
+                
+                _xmlWriter->writeText(spaces);
+                
+                count += len;
+            }
+        }
+    }
+    _xmlWriter->reset();
+}
+
 OMSymbolspace* 
 OMXMLStorage::getBaselineSymbolspace() const
 {
@@ -122,7 +187,7 @@ OMXMLStorage::createDefaultExtSymbolspace(OMUniqueObjectIdentification id)
     PRECONDITION("Default symbolspace does not already exist", _defaultExtSymbolspace == 0);
     
     _defaultExtSymbolspace = OMSymbolspace::createDefaultExtSymbolspace(this, id);
-    _symbolspaces.insert(_defaultExtSymbolspace->getURI(), _defaultExtSymbolspace);
+    addSymbolspace(_defaultExtSymbolspace);
     
     return _defaultExtSymbolspace;
 }
@@ -144,8 +209,17 @@ OMXMLStorage::addSymbolspace(OMSymbolspace* symbolspace)
     {
         throw OMXMLException(L"Could not add symbolspace - symbolspace with URI already exists");
     }
-    
+    setUniquePrefix(symbolspace);
+
     _symbolspaces.insert(symbolspace->getURI(), symbolspace);
+}
+
+OMSet<OMWString, OMSymbolspace*>& 
+OMXMLStorage::getSymbolspaces()
+{
+    TRACE("OMXMLStorage::getSymbolspaces");
+    
+    return _symbolspaces;
 }
 
 bool 
@@ -279,6 +353,74 @@ OMXMLStorage::knownBaselineExtEnum(OMUniqueObjectIdentification id,
     return _baselineSymbolspace->knownExtEnum(id, value);
 }
 
+OMSymbolspace* 
+OMXMLStorage::getSymbolspaceForDef(OMUniqueObjectIdentification id) const
+{
+    TRACE("OMXMLStorage::getSymbolspaceForDef");
+
+    OMSymbolspace* symbolspace = 0;    
+    OMSetIterator<OMWString, OMSymbolspace*> iter(_symbolspaces, OMBefore);
+    while (symbolspace == 0 && ++iter) 
+    {
+        if (iter.value()->getDefSymbol(id) != 0)
+        {
+            symbolspace = iter.value();
+        }
+    }
+    
+    return symbolspace;
+}
+
+OMSymbolspace* 
+OMXMLStorage::getSymbolspaceForMetaDef(OMUniqueObjectIdentification id) const
+{
+    TRACE("OMXMLStorage::getSymbolspaceForMetaDef");
+    
+    OMSymbolspace* symbolspace = 0;    
+    OMSetIterator<OMWString, OMSymbolspace*> iter(_symbolspaces, OMBefore);
+    while (symbolspace == 0 && ++iter) 
+    {
+        if (iter.value()->getMetaDefSymbol(id) != 0)
+        {
+            symbolspace = iter.value();
+        }
+    }
+    
+    return symbolspace;
+}
+
+OMSymbolspace* 
+OMXMLStorage::getSymbolspaceForExtEnum(OMUniqueObjectIdentification id,
+    OMUniqueObjectIdentification value) const
+{
+    TRACE("OMXMLStorage::getSymbolspaceForExtEnum");
+    
+    OMSymbolspace* symbolspace = 0;    
+    OMSetIterator<OMWString, OMSymbolspace*> iter(_symbolspaces, OMBefore);
+    while (symbolspace == 0 && ++iter) 
+    {
+        if (iter.value()->knownExtEnum(id, value))
+        {
+            symbolspace = iter.value();
+        }
+    }
+    
+    return symbolspace;
+}
+
+bool 
+OMXMLStorage::isBaselineSymbolspace(OMSymbolspace* symbolspace) const
+{
+    TRACE("OMXMLStorage::isBaselineSymbolspace");
+    
+    if (_baselineSymbolspace != 0 && symbolspace == _baselineSymbolspace)
+    {
+        return true;
+    }
+    
+    return false;    
+}
+
 const wchar_t* 
 OMXMLStorage::getDataStreamNotationName(OMUniqueObjectIdentification typeId)
 {
@@ -403,6 +545,31 @@ OMXMLStorage::getDataStreamEntityValue(const wchar_t* name)
     }
     
     return 0;
+}
+
+bool 
+OMXMLStorage::registerDataStreamNotation(const wchar_t* notationName, 
+    const wchar_t* systemId)
+{
+    TRACE("OMXMLStorage::registerDataStreamNotation");
+
+    if (notationName == 0 || systemId == 0 || !isURI(systemId))
+    {
+        return false;
+    }
+
+    OMUniqueObjectIdentification id;
+    uriToAUID(systemId, &id);
+    
+    OMWString* ret;
+    if (_dataStreamNotationNames.find(id, &ret))
+    {
+        return false;
+    }
+
+    _dataStreamNotationNames.insert(id, notationName);
+    
+    return true;
 }
 
 wchar_t* 
@@ -543,5 +710,77 @@ OMXMLStorage::getForwardedObjectSetId()
     
     return copy;
 }
+
+void 
+OMXMLStorage::registerNamespacePrefix(const wchar_t* prefix, const wchar_t* uri)
+{
+    TRACE("OMXMLStorage::registerNamespacePrefix");
+
+    if (_namespacesPrefixMap.contains(uri))
+    {
+        _namespacesPrefixMap.remove(uri);
+    }
+    _namespacesPrefixMap.insert(uri, prefix);
+}
+
+
+void
+OMXMLStorage::setUniquePrefix(OMSymbolspace* symbolspace)
+{
+    TRACE("OMXMLStorage::setUniquePrefix");
+
+    // use the prefix used in the existing document if it is unique
+    OMWString* prefix = 0;
+    _namespacesPrefixMap.find(symbolspace->getURI(), &prefix);
+    if (prefix != 0 &&
+        !_symbolspacesPrefixMap.contains(prefix->c_str()))
+    {
+        symbolspace->setPrefix(prefix->c_str());
+        _symbolspacesPrefixMap.insert(symbolspace->getPrefix(), symbolspace);
+    }
+    
+    // else use the preferred prefix if it is unique
+    else if (symbolspace->getPreferredPrefix() != 0 &&
+        wcslen(symbolspace->getPreferredPrefix()) > 0 && 
+        !_symbolspacesPrefixMap.contains(symbolspace->getPreferredPrefix()))
+    {
+        symbolspace->setPrefix(symbolspace->getPreferredPrefix());
+        _symbolspacesPrefixMap.insert(symbolspace->getPrefix(), symbolspace);
+    }
+
+    // else create a unique prefix from the preferred prefix or from 'ns'
+    else
+    {
+        wchar_t* prefix = 0;
+        if (symbolspace->getPreferredPrefix() == 0 ||
+            wcslen(symbolspace->getPreferredPrefix()) == 0)
+        {
+            const wchar_t* basePrefix = L"ns";
+            prefix = new wchar_t[wcslen(basePrefix) + 1];
+            wcscpy(prefix, basePrefix);
+        }
+        else
+        {
+            prefix = wideCharacterStringDup(symbolspace->getPreferredPrefix());
+        }
+        
+        while (_symbolspacesPrefixMap.contains(prefix))
+        {
+            wchar_t suffix[9];
+            std_swprintf(suffix, 9, L"%u", _symbolspacePrefixIndex);
+            wchar_t* newPrefix = new wchar_t[wcslen(prefix) + 8 + 1];
+            wcscpy(newPrefix, prefix);
+            delete [] prefix;
+            prefix = wcscat(newPrefix, suffix);
+            _symbolspacePrefixIndex++;
+        }
+        
+        symbolspace->setPrefix(prefix);
+        _symbolspacesPrefixMap.insert(symbolspace->getPrefix(), symbolspace);
+
+        delete [] prefix;
+    }
+}
+
 
 

@@ -136,19 +136,20 @@ OMXMLPStoredObject::openRead(OMRawStorage* rawStorage)
     TRACE("OMXMLPStoredObject::openRead");
     PRECONDITION("Compatible raw storage access mode", rawStorage->isReadable());
     OMXMLPStoredObject* result = new OMXMLPStoredObject(
-        new OMXMLStorage(rawStorage, true), true);
+        new OMXMLStorage(rawStorage, OMXMLStorage::READ_MODE), true);
     return result;
 }
 
 OMXMLPStoredObject*
-OMXMLPStoredObject::openModify(OMRawStorage* ANAME(rawStorage))
+OMXMLPStoredObject::openModify(OMRawStorage* rawStorage)
 {
     TRACE("OMXMLPStoredObject::openModify");
     PRECONDITION("Compatible raw storage access mode",
         rawStorage->isReadable() && rawStorage->isWritable());
     PRECONDITION("Compatible raw storage", rawStorage->isPositionable());
-    ASSERT("Unimplemented code not reached", false);
-    return 0;
+    OMXMLPStoredObject* result = new OMXMLPStoredObject(
+        new OMXMLStorage(rawStorage, OMXMLStorage::EXISTING_MODIFY_MODE), true);
+    return result;
 }
 
 OMXMLPStoredObject*
@@ -157,7 +158,7 @@ OMXMLPStoredObject::createWrite(OMRawStorage* rawStorage)
     TRACE("OMXMLPStoredObject::createWrite");
     PRECONDITION("Compatible raw storage access mode", rawStorage->isWritable());
     OMXMLPStoredObject* result = new OMXMLPStoredObject(
-        new OMXMLStorage(rawStorage, false), true);
+        new OMXMLStorage(rawStorage, OMXMLStorage::WRITE_MODE), true);
     return result;
 }
 
@@ -168,8 +169,9 @@ OMXMLPStoredObject::createModify(OMRawStorage* rawStorage)
 
     PRECONDITION("Compatible raw storage access mode",
                  rawStorage->isReadable() && rawStorage->isWritable());
+    PRECONDITION("Compatible raw storage", rawStorage->isPositionable());
     OMXMLPStoredObject* result = new OMXMLPStoredObject(
-        new OMXMLStorage(rawStorage, false), true);
+        new OMXMLStorage(rawStorage, OMXMLStorage::NEW_MODIFY_MODE), true);
     return result;
 }
 
@@ -210,7 +212,7 @@ void
 OMXMLPStoredObject::close(void)
 {
     TRACE("OMXMLPStoredObject::close");
-    if (_isRoot && !_store->isRead())
+    if (_isRoot && _store->haveWriter())
     {
         getWriter()->synchronize();
     }
@@ -227,6 +229,7 @@ void
 OMXMLPStoredObject::save(OMFile& file)
 {
     TRACE("OMXMLPStoredObject::save(OMFile)");
+    PRECONDITION("XML document is set for writing", _store->haveWriter());
 
     try
     {
@@ -293,27 +296,47 @@ OMXMLPStoredObject::save(OMFile& file)
             getWriter()->writeText(L"]>\n");
         }
         
+        OMSymbolspace* extSymbolspace = _store->getDefaultExtSymbolspace();
+        if (extSymbolspace == 0)
+        {
+            OMUniqueObjectIdentification extId = getExtensionSymbolspaceId(file);
+            extSymbolspace = _store->createDefaultExtSymbolspace(extId);
+        }
+        registerExtensions(file, extSymbolspace);
+        
+
         getWriter()->writeElementStart(getBaselineURI(), L"AAF");
         getWriter()->declareNamespace(getBaselineURI(), 0);
-        getWriter()->declareNamespace(getBaselineURI(),
-            _store->getBaselineSymbolspace()->getPrefix());
         
+        bool haveExtensions = false;
+        OMSet<OMWString, OMSymbolspace*>& symbolspaces = _store->getSymbolspaces();
+        OMSetIterator<OMWString, OMSymbolspace*> iterS(symbolspaces, OMBefore);
+        while (++iterS)
+        {
+            OMSymbolspace* symbolspace = iterS.value();
+            if (_store->isBaselineSymbolspace(symbolspace) || !symbolspace->isEmpty())
+            {
+                getWriter()->declareNamespace(symbolspace->getURI(), symbolspace->getPrefix());
+                haveExtensions = true;
+            }
+        }
+
         wchar_t versionStr[XML_MAX_VERSIONTYPE_STRING_SIZE];
         getHeaderVersion(file, versionStr);
         getWriter()->writeAttribute(0, L"version", versionStr);
-            
-        OMList<OMStorable*> exts;
-        OMUniqueObjectIdentification extId = getExtensionSymbolspaceId(file);
-        OMSymbolspace* extSymbolspace = _store->createDefaultExtSymbolspace(extId);
-        registerExtensions(file, extSymbolspace);
-        
-        if (!extSymbolspace->isEmpty())
+
+        if (haveExtensions)
         {
-            getWriter()->declareNamespace(_store->getDefaultExtSymbolspace()->getURI(),
-                _store->getDefaultExtSymbolspace()->getPrefix());
-        
             getWriter()->writeElementStart(getBaselineURI(), L"Extensions");
-            _store->getDefaultExtSymbolspace()->save();
+            iterS.reset(OMBefore);
+            while (++iterS)
+            {
+                OMSymbolspace* symbolspace = iterS.value();
+                if (!_store->isBaselineSymbolspace(symbolspace) && !symbolspace->isEmpty())
+                {
+                    symbolspace->save();
+                }
+            }
             getWriter()->writeElementEnd();
         }
         
@@ -325,6 +348,12 @@ OMXMLPStoredObject::save(OMFile& file)
     {
         printf("XML Exception: %ls\n", ex.getMessage());
         throw;
+    }
+    
+    if (_store->mode() == OMXMLStorage::EXISTING_MODIFY_MODE ||
+        _store->mode() == OMXMLStorage::NEW_MODIFY_MODE)
+    {
+        _store->resetForWriting();
     }
 }
 
@@ -650,6 +679,7 @@ OMRootStorable*
 OMXMLPStoredObject::restore(OMFile& file)
 {
     TRACE("OMXMLPStoredObject::restore(OMFile)");
+    PRECONDITION("XML document is set for reading", _store->haveReader());
 
     OMRootStorable* root = 0;
     try
@@ -660,7 +690,18 @@ OMXMLPStoredObject::restore(OMFile& file)
         bool haveRootElement = false;
         while (!haveRootElement && getReader()->next())
         {
-            if (getReader()->getEventType() == OMXMLReader::UNPARSED_ENTITY_DECL)
+            if (getReader()->getEventType() == OMXMLReader::NOTATION_DECL)
+            {
+                const wchar_t* notationName;
+                const wchar_t* publicID;
+                const wchar_t* systemID;
+                getReader()->getNotationDecl(notationName, publicID, systemID);
+                if (!_store->registerDataStreamNotation(notationName, systemID))
+                {
+                    throw OMXMLException(L"Failed to register DataStream Notation");
+                }
+            }
+            else if (getReader()->getEventType() == OMXMLReader::UNPARSED_ENTITY_DECL)
             {
                 const wchar_t* name;
                 const wchar_t* publicID;
@@ -670,6 +711,16 @@ OMXMLPStoredObject::restore(OMFile& file)
                 if (!_store->registerDataStreamEntity(name, systemID))
                 {
                     throw OMXMLException(L"Failed to register DataStream Entity");
+                }
+            }
+            else if (getReader()->getEventType() == OMXMLReader::START_PREFIX_MAPPING)
+            {
+                const wchar_t* prefix;
+                const wchar_t* uri;
+                getReader()->getStartPrefixMapping(prefix, uri);
+                if (prefix != 0 && uri != 0 && wcslen(prefix) > 0 && wcslen(uri) > 0)
+                {
+                    _store->registerNamespacePrefix(prefix, uri);
                 }
             }
             else if (getReader()->getEventType() == OMXMLReader::START_ELEMENT)
@@ -697,12 +748,18 @@ OMXMLPStoredObject::restore(OMFile& file)
     }
     catch (OMXMLException& ex)
     {
-        printf("XML Exception: %ls\nXML parser position: %ls\n", ex.getMessage(),
+        // print to stderr here because the message would otherwise not get to the user
+        fprintf(stderr, "XML Exception: %ls\nXML parser position: %ls\n", ex.getMessage(),
             getReader()->getPositionString());
-        OMXMLException newEx(ex.getMessage(), getReader()->getPositionString());
-        throw newEx;
+        throw OMXMLException(ex.getMessage(), getReader()->getPositionString());
     }
 
+    if (_store->mode() == OMXMLStorage::EXISTING_MODIFY_MODE ||
+        _store->mode() == OMXMLStorage::NEW_MODIFY_MODE)
+    {
+        _store->resetForWriting();
+    }
+    
     return root;
 }
 
@@ -2961,11 +3018,14 @@ OMXMLPStoredObject::registerExtensions(OMFile& file, OMSymbolspace* extSymbolspa
     {
         OMClassDefinition* classDef = classDefs.getAt(i);
         
-        bool isExtClassDef = false;
-        if (_store->getBaselineMetaDefSymbol(classDef->identification()) == 0)
+        OMSymbolspace* symbolspace = _store->getSymbolspaceForMetaDef(classDef->identification());
+        if (symbolspace == 0)
         {
             extSymbolspace->addClassDef(classDef);
-            isExtClassDef = true;
+        }
+        else if (!_store->isBaselineSymbolspace(symbolspace))
+        {
+            symbolspace->addClassDef(classDef);
         }
         
         OMVector<OMPropertyDefinition*> propertyDefs;
@@ -2975,10 +3035,15 @@ OMXMLPStoredObject::registerExtensions(OMFile& file, OMSymbolspace* extSymbolspa
         {
             OMPropertyDefinition* propertyDef = propertyDefs.getAt(j);
             
-            if (isExtClassDef || 
-                _store->getBaselineMetaDefSymbol(propertyDef->identification()) == 0)
+            OMSymbolspace* symbolspace = _store->getSymbolspaceForMetaDef(
+                propertyDef->identification());
+            if (symbolspace == 0)
             {
                 extSymbolspace->addPropertyDef(classDef, propertyDef);
+            }
+            else if (!_store->isBaselineSymbolspace(symbolspace))
+            {
+                symbolspace->addPropertyDef(classDef, propertyDef);
             }
         }
     }
@@ -2988,37 +3053,43 @@ OMXMLPStoredObject::registerExtensions(OMFile& file, OMSymbolspace* extSymbolspa
     for (i = 0; i < typeDefs.count(); i++)
     {
         OMType* typeDef = typeDefs.getAt(i);
-        if (_store->getBaselineMetaDefSymbol(typeDef->identification()) == 0)
+        OMSymbolspace* symbolspace = _store->getSymbolspaceForMetaDef(
+            typeDef->identification());
+
+        const OMType* baseTypeDef = baseType(typeDef);
+        if (baseTypeDef->category() != OMMetaDefinition::EXT_ENUMERATED_TYPE)
         {
-            extSymbolspace->addTypeDef(typeDef);
+            if (symbolspace == 0)
+            {
+                extSymbolspace->addTypeDef(typeDef);
+            }
+            else if (!_store->isBaselineSymbolspace(symbolspace))
+            {
+                symbolspace->addTypeDef(typeDef);
+            }
         }
         else
         {
-            const OMType* baseTypeDef = baseType(typeDef);
-            if (baseTypeDef->category() == OMMetaDefinition::EXT_ENUMERATED_TYPE)
-            {
-                const OMExtEnumeratedType* extEnumTypeDef = 
-                    dynamic_cast<const OMExtEnumeratedType*>(baseTypeDef);
-                OMUniqueObjectIdentification id = extEnumTypeDef->identification();
-                    
-                OMVector<OMWString> names;
-                OMVector<OMUniqueObjectIdentification> values;
-                OMUInt32 count = extEnumTypeDef->elementCount();
-                for (OMUInt32 j = 0; j < count; j++)
-                {
-                    OMUniqueObjectIdentification value = extEnumTypeDef->elementValue(j);
-                    if (!_store->knownBaselineExtEnum(id, value))
-                    {
-                        wchar_t* name = extEnumTypeDef->elementName(j);
-                        names.append(name);
-                        delete [] name;
-                        values.append(value);
-                    }
-                }
+            const OMExtEnumeratedType* extEnumTypeDef = 
+                dynamic_cast<const OMExtEnumeratedType*>(baseTypeDef);
+            OMUniqueObjectIdentification id = extEnumTypeDef->identification();
                 
-                if (values.count() > 0)
+            OMUInt32 count = extEnumTypeDef->elementCount();
+            for (OMUInt32 j = 0; j < count; j++)
+            {
+                OMUniqueObjectIdentification value = extEnumTypeDef->elementValue(j);
+                OMSymbolspace* symbolspace = _store->getSymbolspaceForExtEnum(id, value);
+                if (symbolspace == 0)
                 {
-                    extSymbolspace->addExtEnumExtensions(id, names, values);
+                    wchar_t* name = extEnumTypeDef->elementName(j);
+                    extSymbolspace->addExtEnumExtension(id, name, value);
+                    delete [] name;
+                }
+                else if (!_store->isBaselineSymbolspace(symbolspace))
+                {
+                    wchar_t* name = extEnumTypeDef->elementName(j);
+                    symbolspace->addExtEnumExtension(id, name, value);
+                    delete [] name;
                 }
             }
         }

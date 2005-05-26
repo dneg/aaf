@@ -38,18 +38,25 @@
 class OMXMLStorage
 {
 public:
-    OMXMLStorage(OMRawStorage* storage, bool isRead);
+    enum Mode {READ_MODE, WRITE_MODE, EXISTING_MODIFY_MODE, NEW_MODIFY_MODE};
+    
+    OMXMLStorage(OMRawStorage* storage, Mode mode);
     ~OMXMLStorage();
     
-    bool isRead();
+    Mode mode();
+    bool haveReader();
+    bool haveWriter();
     OMXMLWriter* getWriter();
     OMXMLReader* getReader();
+    
+    void resetForWriting();
     
     OMSymbolspace* getBaselineSymbolspace() const;
     OMSymbolspace* getDefaultExtSymbolspace() const;
     OMSymbolspace* createDefaultExtSymbolspace(OMUniqueObjectIdentification id);
     OMSymbolspace* createSymbolspace();
     void addSymbolspace(OMSymbolspace* symbolspace);
+    OMSet<OMWString, OMSymbolspace*>& getSymbolspaces();
     
     bool getMetaDefSymbol(OMUniqueObjectIdentification id, const wchar_t** symbolspaceURI, const wchar_t** symbol) const;
     OMUniqueObjectIdentification getMetaDefId(const wchar_t* symbolspaceURI, const wchar_t* symbol) const;
@@ -62,13 +69,19 @@ public:
     const wchar_t* getBaselineMetaDefSymbol(OMUniqueObjectIdentification id);
     bool knownBaselineExtEnum(OMUniqueObjectIdentification id, 
         OMUniqueObjectIdentification value) const;
-    
+    OMSymbolspace* getSymbolspaceForDef(OMUniqueObjectIdentification id) const;
+    OMSymbolspace* getSymbolspaceForMetaDef(OMUniqueObjectIdentification id) const;
+    OMSymbolspace* getSymbolspaceForExtEnum(OMUniqueObjectIdentification id,
+        OMUniqueObjectIdentification value) const;
+    bool isBaselineSymbolspace(OMSymbolspace* symbolspace) const;
+        
     const wchar_t* getDataStreamNotationName(OMUniqueObjectIdentification typeId);
     const wchar_t* getDataStreamEntityName(void* ref);
     const wchar_t* getDataStreamEntityValue(void* ref, const wchar_t* prefix);
     const wchar_t* registerDataStreamEntityValue(void* ref, const wchar_t* value);
     bool registerDataStreamEntity(const wchar_t* name, const wchar_t* value);
     const wchar_t* getDataStreamEntityValue(const wchar_t* name);
+    bool registerDataStreamNotation(const wchar_t* notationName, const wchar_t* systemId);
     
     wchar_t* getFilenamePrefixForStream() const;
     wchar_t* getFilePathForStream() const;
@@ -76,9 +89,13 @@ public:
     void forwardObjectSetId(const wchar_t* id);
     bool haveForwardedObjectSetId();
     wchar_t* getForwardedObjectSetId();
+
+    void registerNamespacePrefix(const wchar_t* prefix, const wchar_t* uri);
     
 private:
-    bool            _isRead;
+    void setUniquePrefix(OMSymbolspace* symbolspace);
+
+    Mode            _mode;
     OMRawStorage*   _storage;
     OMXMLWriter*    _xmlWriter;
     OMXMLReader*    _xmlReader;
@@ -89,6 +106,8 @@ private:
     OMSymbolspace*  _defaultExtSymbolspace;
     
     OMSet<OMWString, OMSymbolspace*> _symbolspaces;
+    OMSet<OMWString, OMSymbolspace*> _symbolspacesPrefixMap;
+    int             _symbolspacePrefixIndex;
 
     int             _dataStreamNotationNameIndex;
     int             _dataStreamEntityNameIndex;
@@ -98,6 +117,8 @@ private:
     OMSet<void*, OMWString> _dataStreamEntityValues;
     
     OMSet<OMWString, OMWString> _inputDataStreamEntities;
+    
+    OMSet<OMWString, OMWString> _namespacesPrefixMap;
 };
 
 
