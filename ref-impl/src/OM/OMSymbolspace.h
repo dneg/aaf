@@ -75,7 +75,6 @@ public:
     const wchar_t* getURI() const;
     const wchar_t* getPreferredPrefix() const;
     const wchar_t* getPrefix() const;
-    void setPrefix(const wchar_t* prefix);
     const wchar_t* getDescription() const;
     
     const wchar_t* getMetaDefSymbol(OMUniqueObjectIdentification id) const;
@@ -88,13 +87,14 @@ public:
     void addClassDef(OMClassDefinition* classDef);
     void addTypeDef(OMType* typeDef);
     void addPropertyDef(OMClassDefinition* classDef, OMPropertyDefinition* propertyDef);
-    void addExtEnumExtensions(OMUniqueObjectIdentification id, OMVector<OMWString>& names,
-        OMVector<OMUniqueObjectIdentification>& values);
+    void addExtEnumExtension(OMUniqueObjectIdentification id, const wchar_t* name,
+        OMUniqueObjectIdentification value);
     
     void save();
     void restore(OMDictionary* dictionary);
     void registerDeferredDefs(OMDictionary* dictionary);
 
+    void resetForWriting();
     
     static OMSymbolspace* createDefaultExtSymbolspace(OMXMLStorage* storage, 
         OMUniqueObjectIdentification id);
@@ -102,7 +102,10 @@ public:
     
     static const wchar_t* getBaselineURI();
 
-
+public:
+    // called by OMXMLStorage
+    void setPrefix(const wchar_t* prefix);
+    
 private:
     void initialise(OMUniqueObjectIdentification id, const wchar_t* uri, 
         const wchar_t* preferredPrefix, const wchar_t* description);
@@ -187,33 +190,41 @@ private:
     
     bool            _isInitialised;
     OMXMLStorage*   _store;
+    
     OMUniqueObjectIdentification    _id;
     wchar_t*        _uri;
     wchar_t*        _preferredPrefix;
     wchar_t*        _prefix;
     wchar_t*        _description;
+    
+    OMUInt32        _uniqueSymbolSuffix;
+    
+    // meta-definition symbol/identification which are defined in this symbolspace
     OMSet<OMUniqueObjectIdentification, OMWString>     _idToSymbol; 
     OMSet<OMWString, OMUniqueObjectIdentification>     _symbolToId;
     OMSet<OMUniqueObjectIdentification, OMPropertyId>  _idToLocalId;
-    OMUInt32    _uniqueSymbolSuffix;
 
+    // definition symbol/identification which are defined in this symbolspace
     OMSet<OMUniqueObjectIdentification, OMWString> _idToDefSymbol;
     OMSet<OMWString, OMUniqueObjectIdentification> _defSymbolToId;
-    
+
+    // extendible enumeration values which are defined in this symbolspace
+    OMSet<OMUniqueObjectIdentification, 
+        OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>* > _extEnumValues;
+
+    // definitions, including extendible enumeration extensions, which are part
+    // of this NON-BASELINE symbolspace and which must be saved to the document
+    OMVector<OMClassDefinition*> _classDefs;
+    OMVector<OMType*> _typeDefs;
     struct PropertyPair
     {
         OMClassDefinition* ownerClassDef;
         OMPropertyDefinition* propertyDef;
     };
-
-    OMVector<OMClassDefinition*> _classDefs;
-    OMVector<OMType*> _typeDefs;
     OMVector<PropertyPair*> _propertyDefs;
-    OMVector<ExtEnumExtGroup*> _extEnumExtDefs;
+    OMSet<OMUniqueObjectIdentification, ExtEnumExtGroup*> _extEnumExtDefs;
 
-    OMSet<OMUniqueObjectIdentification, 
-        OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>* > _extEnumValues;
-    
+    // definitions that must be registered last when restoring
     OMVector<RegisterPropertyPair*> _propertyDefsForRegistration;
     OMVector<ExtEnumExtGroup*> _extEnumExtDefsForRegistration;
     

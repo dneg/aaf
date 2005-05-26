@@ -140,16 +140,18 @@ OMSymbolspace::~OMSymbolspace()
     {
         delete _propertyDefs.getAt(i);
     }
-    for (i = 0; i < _extEnumExtDefs.count(); i++)
+    OMSetIterator<OMUniqueObjectIdentification, ExtEnumExtGroup*> iterD(
+        _extEnumExtDefs, OMBefore);
+    while (++iterD)
     {
-        delete _extEnumExtDefs.getAt(i);
+        delete iterD.value();
     }
     OMSetIterator<OMUniqueObjectIdentification, 
-        OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>* > iter(
+        OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>* > iterV(
             _extEnumValues, OMBefore);
-    while (++iter)
+    while (++iterV)
     {
-        delete iter.value();
+        delete iterV.value();
     }
 }
 
@@ -306,11 +308,10 @@ OMSymbolspace::knownExtEnum(OMUniqueObjectIdentification id,
 {
     TRACE("OMSymbolspace::knownExtEnum");
 
-    OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>* values; 
+    OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>* values = 0; 
     if (_extEnumValues.find(id, values))
     {
-        OMUniqueObjectIdentification tmp;
-        if (values->find(value, tmp))
+        if (values->contains(value))
         {
             return true;
         }
@@ -352,21 +353,25 @@ OMSymbolspace::addPropertyDef(OMClassDefinition* classDef, OMPropertyDefinition*
 }
 
 void 
-OMSymbolspace::addExtEnumExtensions(OMUniqueObjectIdentification id, 
-    OMVector<OMWString>& names, OMVector<OMUniqueObjectIdentification>& values)
+OMSymbolspace::addExtEnumExtension(OMUniqueObjectIdentification id, 
+    const wchar_t* name, OMUniqueObjectIdentification value)
 {
-    TRACE("OMSymbolspace::addExtEnumExtensions");
+    TRACE("OMSymbolspace::addExtEnumExtension");
     
-    ExtEnumExtGroup* extEnumExt = new ExtEnumExtGroup;
-    extEnumExt->typeId = id;
-    size_t i;
-    for (i = 0; i < names.count(); i++)
+    ExtEnumExtGroup* extEnumExt = 0;
+    if (_extEnumExtDefs.contains(id))
     {
-        extEnumExt->names.append(names.getAt(i));
-        extEnumExt->values.append(values.getAt(i));
+        _extEnumExtDefs.find(id, extEnumExt);
+    }
+    else
+    {
+        extEnumExt = new ExtEnumExtGroup;
+        extEnumExt->typeId = id;
+        _extEnumExtDefs.insert(id, extEnumExt);
     }
     
-    _extEnumExtDefs.insert(extEnumExt);
+    extEnumExt->names.append(name);
+    extEnumExt->values.append(value);
 }
 
 void 
@@ -424,9 +429,11 @@ OMSymbolspace::save()
             saveTypeDef(_typeDefs.getAt(i));
         }
 
-        for (i = 0; i < _extEnumExtDefs.count(); i++)
+        OMSetIterator<OMUniqueObjectIdentification, ExtEnumExtGroup*> iter(
+            _extEnumExtDefs, OMBefore);
+        while (++iter)
         {
-            saveExtEnumExt(_extEnumExtDefs.getAt(i));
+            saveExtEnumExt(iter.value());
         }
         
         getWriter()->writeElementEnd();
@@ -446,9 +453,9 @@ OMSymbolspace::restore(OMDictionary* dictionary)
     getTypeDefsTag(dictionary);
     
     OMUniqueObjectIdentification id;
-    OMWString symbolspace = 0;
-    OMWString preferredPrefix = 0;
-    OMWString description = 0;
+    OMWString symbolspace;
+    OMWString preferredPrefix;
+    OMWString description;
     
     while (getReader()->nextElement())
     {
@@ -580,6 +587,30 @@ OMSymbolspace::registerDeferredDefs(OMDictionary* dictionary)
     _extEnumExtDefsForRegistration.clear();
 }
 
+void 
+OMSymbolspace::resetForWriting()
+{
+    TRACE("OMSymbolspace::resetForWriting");
+    
+    // remove the definitions that must be saved to the document
+    // but keep the symbols/identification/ext enum values so that the definitions
+    // remain in the same symbolspace when writing
+    size_t i;
+    for (i = 0; i < _propertyDefs.count(); i++)
+    {
+        delete _propertyDefs.getAt(i);
+    }
+    OMSetIterator<OMUniqueObjectIdentification, ExtEnumExtGroup*> iter(
+        _extEnumExtDefs, OMBefore);
+    while (++iter)
+    {
+        delete iter.value();
+    }
+    _classDefs.clear();
+    _propertyDefs.clear();
+    _typeDefs.clear();
+    _extEnumExtDefs.clear();
+}
 
 
 
@@ -631,21 +662,24 @@ OMSymbolspace::createSymbolForClass(OMUniqueObjectIdentification id,
 {
     TRACE("OMSymbolspace::createSymbolForClass");
     PRECONDITION("Valid name", name != 0);
-    
-    wchar_t* symbol = createSymbol(name);
-    while (_symbolToId.contains(symbol))
+
+    if (!_idToSymbol.contains(id))
     {
-        wchar_t suffix[9];
-        std_swprintf(suffix, 9, L"%u", _uniqueSymbolSuffix);
-        size_t len = wcslen(symbol);
-        wchar_t* newSymbol = new wchar_t[len + 8 + 1];
-        wcscpy(newSymbol, symbol);
+        wchar_t* symbol = createSymbol(name);
+        while (_symbolToId.contains(symbol))
+        {
+            wchar_t suffix[9];
+            std_swprintf(suffix, 9, L"%u", _uniqueSymbolSuffix);
+            size_t len = wcslen(symbol);
+            wchar_t* newSymbol = new wchar_t[len + 8 + 1];
+            wcscpy(newSymbol, symbol);
+            delete [] symbol;
+            symbol = wcscat(newSymbol, suffix);
+            _uniqueSymbolSuffix++;
+        }
+        addMetaDefSymbol(id, symbol);
         delete [] symbol;
-        symbol = wcscat(newSymbol, suffix);
-        _uniqueSymbolSuffix++;
     }
-    addMetaDefSymbol(id, symbol);
-    delete [] symbol;
     
     return getMetaDefSymbol(id);
 }
@@ -657,21 +691,24 @@ OMSymbolspace::createSymbolForProperty(OMUniqueObjectIdentification id, OMProper
     TRACE("OMSymbolspace::createSymbolForProperty");
     PRECONDITION("Valid name", name != 0);
 
-    wchar_t* symbol = createSymbol(name);
-    while (_symbolToId.contains(symbol))
+    if (!_idToSymbol.contains(id))
     {
-        wchar_t suffix[9];
-        std_swprintf(suffix, 9, L"%u", _uniqueSymbolSuffix);
-        size_t len = wcslen(symbol);
-        wchar_t* newSymbol = new wchar_t[len + 8 + 1 + 1];
-        newSymbol[0] = L'_';
-        wcscpy(&newSymbol[1], symbol);
+        wchar_t* symbol = createSymbol(name);
+        while (_symbolToId.contains(symbol))
+        {
+            wchar_t suffix[9];
+            std_swprintf(suffix, 9, L"%u", _uniqueSymbolSuffix);
+            size_t len = wcslen(symbol);
+            wchar_t* newSymbol = new wchar_t[len + 8 + 1 + 1];
+            newSymbol[0] = L'_';
+            wcscpy(&newSymbol[1], symbol);
+            delete [] symbol;
+            symbol = wcscat(newSymbol, suffix);
+            _uniqueSymbolSuffix++;
+        }
+        addPropertyDefSymbol(id, localId, symbol);
         delete [] symbol;
-        symbol = wcscat(newSymbol, suffix);
-        _uniqueSymbolSuffix++;
     }
-    addPropertyDefSymbol(id, localId, symbol);
-    delete [] symbol;
     
     return getMetaDefSymbol(id);
 }
@@ -683,20 +720,23 @@ OMSymbolspace::createSymbolForType(OMUniqueObjectIdentification id,
     TRACE("OMSymbolspace::createSymbolForType");
     PRECONDITION("Valid name", name != 0);
 
-    wchar_t* symbol = createSymbol(name);
-    while (_symbolToId.contains(symbol))
+    if (!_idToSymbol.contains(id))
     {
-        wchar_t suffix[9];
-        std_swprintf(suffix, 9, L"%u", _uniqueSymbolSuffix);
-        size_t len = wcslen(symbol);
-        wchar_t* newSymbol = new wchar_t[len + 8 + 1];
-        wcscpy(newSymbol, symbol);
+        wchar_t* symbol = createSymbol(name);
+        while (_symbolToId.contains(symbol))
+        {
+            wchar_t suffix[9];
+            std_swprintf(suffix, 9, L"%u", _uniqueSymbolSuffix);
+            size_t len = wcslen(symbol);
+            wchar_t* newSymbol = new wchar_t[len + 8 + 1];
+            wcscpy(newSymbol, symbol);
+            delete [] symbol;
+            symbol = wcscat(newSymbol, suffix);
+            _uniqueSymbolSuffix++;
+        }
+        addMetaDefSymbol(id, symbol);
         delete [] symbol;
-        symbol = wcscat(newSymbol, suffix);
-        _uniqueSymbolSuffix++;
     }
-    addMetaDefSymbol(id, symbol);
-    delete [] symbol;
     
     return getMetaDefSymbol(id);
 }
@@ -3036,15 +3076,26 @@ OMSymbolspace::getBaselineURI()
 
 #define SET_EXT_ENUM_ID(ID) \
 { \
-    const OMUniqueObjectIdentification tmp = ID; \
-    id = tmp; \
+    const OMUniqueObjectIdentification id = ID; \
+    typeId = id; \
 }
+
 
 #define ADD_EXT_ENUM_VALUE(VALUE) \
 { \
+    const OMUniqueObjectIdentification key = VALUE; \
     const OMUniqueObjectIdentification value = VALUE; \
-    values->insert(value, value); \
+    values->insert(key, value); \
 }
+
+// for some unknown reason this will mangle the first value inserted
+// into the set when building a (linux) Release version of the SDK. Why ????
+// (note that the backslashes have been removed here)
+//#define ADD_EXT_ENUM_VALUE(VALUE)
+//{
+//    const OMUniqueObjectIdentification value = VALUE;
+//    values->insert(value, value);
+//}
 
 
 
@@ -3056,7 +3107,7 @@ OMSymbolspace::createDefaultExtSymbolspace(OMXMLStorage* store, OMUniqueObjectId
     wchar_t uri[XML_MAX_AUID_URI_SIZE];
     auidToURI(id, uri);
     
-    OMSymbolspace* ss = new OMSymbolspace(store, id, uri, L"aafext", 
+    OMSymbolspace* ss = new OMSymbolspace(store, id, uri, L"this", 
         L"AAF file default extension symbolspace");
     
     return ss;
@@ -5272,19 +5323,19 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
         
     // Extendible enumerations
     
-    OMUniqueObjectIdentification id;
+    OMUniqueObjectIdentification typeId;
     OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>* values;
     
     // OperationCategoryType
-    values = new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>;
+    values = new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>();
     SET_EXT_ENUM_ID(
         LITERAL_AUID(0x02020101, 0x0000, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
         LITERAL_AUID(0x0D010102, 0x0101, 0x0100, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
-    ss->addExtEnum(id, values);
+    ss->addExtEnum(typeId, values);
     
     // TransferCharacteristicType
-    values = new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>;
+    values = new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>();
     SET_EXT_ENUM_ID(
         LITERAL_AUID(0x02020102, 0x0000, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
@@ -5297,10 +5348,10 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
         LITERAL_AUID(0x04010101, 0x0105, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
         LITERAL_AUID(0x04010101, 0x0106, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
-    ss->addExtEnum(id, values);
+    ss->addExtEnum(typeId, values);
     
     // PluginCategoryType
-    values = new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>;
+    values = new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>();
     SET_EXT_ENUM_ID(
         LITERAL_AUID(0x02020103, 0x0000, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
@@ -5309,10 +5360,10 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
         LITERAL_AUID(0x0D010102, 0x0101, 0x0300, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
         LITERAL_AUID(0x0D010102, 0x0101, 0x0400, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
-    ss->addExtEnum(id, values);
+    ss->addExtEnum(typeId, values);
 
     // UsageType
-    values = new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>;
+    values = new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>();
     SET_EXT_ENUM_ID(
         LITERAL_AUID(0x02020104, 0x0000, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
@@ -5325,10 +5376,10 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
         LITERAL_AUID(0x0D010102, 0x0101, 0x0800, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
         LITERAL_AUID(0x0D010102, 0x0101, 0x0900, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
-    ss->addExtEnum(id, values);
+    ss->addExtEnum(typeId, values);
 
     // ColorPrimariesType
-    values = new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>;
+    values = new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>();
     SET_EXT_ENUM_ID(
         LITERAL_AUID(0x02020105, 0x0000, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
@@ -5337,10 +5388,10 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
         LITERAL_AUID(0x04010101, 0x0302, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x06));
     ADD_EXT_ENUM_VALUE(
         LITERAL_AUID(0x04010101, 0x0303, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x06));
-    ss->addExtEnum(id, values);
+    ss->addExtEnum(typeId, values);
 
     // CodingEquationsType
-    values = new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>;
+    values = new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>();
     SET_EXT_ENUM_ID(
         LITERAL_AUID(0x02020106, 0x0000, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
@@ -5349,7 +5400,7 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
         LITERAL_AUID(0x04010101, 0x0202, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
         LITERAL_AUID(0x04010101, 0x0203, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
-    ss->addExtEnum(id, values);
+    ss->addExtEnum(typeId, values);
     
     
     return ss;
