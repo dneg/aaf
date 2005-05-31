@@ -25,7 +25,7 @@
 #ifndef __OMXMLSTORAGE_H__
 #define __OMXMLSTORAGE_H__
 
-#include "OMRawStorage.h"
+#include "OMDiskRawStorageGroup.h"
 #include "OMXMLWriter.h"
 #include "OMXMLReader.h"
 #include "OMSymbolspace.h"
@@ -40,7 +40,8 @@ class OMXMLStorage
 public:
     enum Mode {READ_MODE, WRITE_MODE, EXISTING_MODIFY_MODE, NEW_MODIFY_MODE};
     
-    OMXMLStorage(OMRawStorage* storage, Mode mode);
+    // note that OMXMLStorage takes ownership of storage
+    OMXMLStorage(OMDiskRawStorageGroup* storage, Mode mode);
     ~OMXMLStorage();
     
     Mode mode();
@@ -77,14 +78,14 @@ public:
         
     const wchar_t* getDataStreamNotationName(OMUniqueObjectIdentification typeId);
     const wchar_t* getDataStreamEntityName(void* ref);
-    const wchar_t* getDataStreamEntityValue(void* ref, const wchar_t* prefix);
+    const wchar_t* getDataStreamEntityValue(void* ref);
     const wchar_t* registerDataStreamEntityValue(void* ref, const wchar_t* value);
     bool registerDataStreamEntity(const wchar_t* name, const wchar_t* value);
     const wchar_t* getDataStreamEntityValue(const wchar_t* name);
     bool registerDataStreamNotation(const wchar_t* notationName, const wchar_t* systemId);
     
-    wchar_t* getFilenamePrefixForStream() const;
-    wchar_t* getFilePathForStream() const;
+    OMRawStorage* openExistingDataStream(const wchar_t* fileName);
+    OMRawStorage* openNewDataStream(const wchar_t* fileName);
     
     void forwardObjectSetId(const wchar_t* id);
     bool haveForwardedObjectSetId();
@@ -96,7 +97,7 @@ private:
     void setUniquePrefix(OMSymbolspace* symbolspace);
 
     Mode            _mode;
-    OMRawStorage*   _storage;
+    OMDiskRawStorageGroup*   _storage;
     OMXMLWriter*    _xmlWriter;
     OMXMLReader*    _xmlReader;
     

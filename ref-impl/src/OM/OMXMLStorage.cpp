@@ -31,7 +31,7 @@
 #include "OMAssertions.h"
 
 
-OMXMLStorage::OMXMLStorage(OMRawStorage* storage, Mode mode)
+OMXMLStorage::OMXMLStorage(OMDiskRawStorageGroup* storage, Mode mode)
 : _mode(mode), _storage(storage), _objectSetId(0), _baselineSymbolspace(0), 
     _defaultExtSymbolspace(0), _symbolspacePrefixIndex(0),
     _dataStreamNotationNameIndex(0), _dataStreamEntityNameIndex(0), 
@@ -72,6 +72,8 @@ OMXMLStorage::~OMXMLStorage()
     {
         delete iter.value();
     }
+    
+    delete _storage;
 }
 
 OMXMLStorage::Mode 
@@ -470,7 +472,7 @@ OMXMLStorage::getDataStreamEntityName(void* ref)
 }
 
 const wchar_t* 
-OMXMLStorage::getDataStreamEntityValue(void* ref, const wchar_t* prefix)
+OMXMLStorage::getDataStreamEntityValue(void* ref)
 {
     TRACE("OMXMLStorage::getDataStreamEntityValue");
     
@@ -479,11 +481,52 @@ OMXMLStorage::getDataStreamEntityValue(void* ref, const wchar_t* prefix)
     {
         return (*ret).c_str();
     }
+    
+    const wchar_t* filepath = _storage->getFileName();
 
-    size_t len = 19 + wcslen(prefix);
-    wchar_t* value = new wchar_t[len + 1];
-    std_swprintf(value, 20, L"_stream%x", _dataStreamEntityValueIndex);
-    wcscat(value, prefix);
+    // add "_streamxxx" suffix to XML document filename minus the path
+    const wchar_t* startPtr = filepath;
+    const wchar_t* endPtr = filepath;
+    const wchar_t* ptr = filepath;
+    bool inSuffix = false;
+    while (*ptr != L'\0')
+    {
+        // move past path separator
+#ifdef _WIN32
+        if (*ptr == L'\\' || *ptr == L':')
+#else
+        if (*ptr == L'/')
+#endif
+        {
+            startPtr = ptr + 1;
+            endPtr = startPtr;
+            inSuffix = false;
+        }
+        // don't include the file suffix
+        else if (*ptr == L'.')
+        {
+            endPtr = ptr;
+            inSuffix = true;
+        }
+        else if (!inSuffix)
+        {
+            endPtr++;
+        }
+        ptr++;
+    }
+    ASSERT("Valid end pointer", *endPtr == L'\0' || *endPtr == L'.');
+    size_t len = endPtr - startPtr + 19;
+    wchar_t* streamFilepath = new wchar_t[len + 1];
+    wcsncpy(streamFilepath, startPtr, len);
+    std_swprintf(&(streamFilepath[endPtr - startPtr]), 20, L"_stream%x", _dataStreamEntityValueIndex);
+ 
+    // convert filepath to URI
+    // worst case length is every character escaped (*3) plus "file:///" prefix (+8) 
+    wchar_t* value = new wchar_t[utf8StrLen(streamFilepath) * 3 + 9]; 
+    wcsconvertFilepathtoURI(streamFilepath, value);
+    delete [] streamFilepath;
+    
+    // insert URI value
     _dataStreamEntityValues.insert(ref, value);
     delete [] value;
     _dataStreamEntityValueIndex++;
@@ -522,12 +565,11 @@ OMXMLStorage::registerDataStreamEntity(const wchar_t* name, const wchar_t* value
 {
     TRACE("OMXMLStorage::registerDataStreamEntity");
     
-    OMWString* ret;
-    if (_inputDataStreamEntities.find(name, &ret))
+    if (_inputDataStreamEntities.contains(name))
     {
         return false;
     }
-
+    
     _inputDataStreamEntities.insert(name, value);
     
     return true;
@@ -572,105 +614,20 @@ OMXMLStorage::registerDataStreamNotation(const wchar_t* notationName,
     return true;
 }
 
-wchar_t* 
-OMXMLStorage::getFilenamePrefixForStream() const
+OMRawStorage* 
+OMXMLStorage::openExistingDataStream(const wchar_t* fileName)
 {
-    TRACE("OMXMLStorage::getFilenamePrefixForStream");
+    TRACE("OMXMLStorage::openExistingDataStream");
 
-    wchar_t* result = new wchar_t[1];
-    result[0] = L'\0';
-    return result;
-    
-#if 0 // we don't have access to a fileName from the raw storage    
-    OMDiskRawStorage* diskStorage = dynamic_cast<OMDiskRawStorage*>(_storage);
-    ASSERT("RawStorage is DiskRawStorage", diskStorage != 0);
-
-    const wchar_t* fileName = diskStorage->fileName();
-    const wchar_t* startPtr = fileName;    
-    const wchar_t* endPtr = fileName;
-    const wchar_t* ptr = fileName;
-    bool inSuffix = false;
-    while (*ptr != L'\0')
-    {
-#ifdef _WIN32
-        if (*ptr == L'\\' || *ptr == L':')
-#else
-        if (*ptr == L'/')
-#endif
-        {
-            startPtr = ptr + 1;
-            endPtr = startPtr;
-            inSuffix = false;
-        }
-        else if (*ptr == L'.')
-        {
-            endPtr++;
-            inSuffix = true;
-        }
-        else if (!inSuffix)
-        {
-            endPtr++;
-        }
-        ptr++;
-    }
-    ASSERT("Valid end pointer", *endPtr == L'\0' || *endPtr == L'.');
-    
-    size_t size = endPtr - startPtr;
-    if (size == 0)
-    {
-        return 0;
-    }
-    wchar_t* result = new wchar_t[size + 1];
-    wcsncpy(result, startPtr, size);
-    result[size] = L'\0';
-    
-    return result;
-#endif
+    return _storage->openStorage(fileName);
 }
 
-wchar_t* 
-OMXMLStorage::getFilePathForStream() const
+OMRawStorage* 
+OMXMLStorage::openNewDataStream(const wchar_t* fileName)
 {
-    TRACE("OMXMLStorage::getFilePathForStream");
+    TRACE("OMXMLStorage::openNewDataStream");
 
-    wchar_t* result = new wchar_t[1];
-    result[0] = L'\0';
-    return result;
-    
-#if 0 // we don't have access to a fileName from the raw storage
-    OMDiskRawStorage* diskStorage = dynamic_cast<OMDiskRawStorage*>(_storage);
-    ASSERT("RawStorage is DiskRawStorage", diskStorage != 0);
-
-    const wchar_t* fileName = diskStorage->fileName();
-    const wchar_t* startPtr = fileName;    
-    const wchar_t* endPtr = fileName;
-    const wchar_t* ptr = fileName;
-    while (*ptr != L'\0')
-    {
-#ifdef _WIN32
-        if (*ptr == L'\\' || *ptr == L':')
-#else
-        if (*ptr == L'/')
-#endif
-        {
-            endPtr = ptr + 1;
-        }
-        ptr++;
-    }
-#ifdef _WIN32
-    ASSERT("Valid end pointer", *endPtr == *startPtr || *(endPtr - 1) == L'\\' 
-        || *(endPtr - 1) == L':'));
-#else
-    ASSERT("Valid end pointer", *endPtr == *startPtr || *(endPtr - 1) == L'/');
-#endif
-    
-    size_t size = endPtr - startPtr;
-    wchar_t* result = new wchar_t[size + 1];
-    wcsncpy(result, startPtr, size);
-    result[size] = L'\0';
-    
-    return result;
-#endif
+    return _storage->createStorage(fileName);
 }
 
 void 
