@@ -131,47 +131,46 @@ static const wchar_t* AAFEscape_AttrName = L"escaped";
 
 
 OMXMLPStoredObject*
-OMXMLPStoredObject::openRead(OMRawStorage* rawStorage)
+OMXMLPStoredObject::openRead(OMDiskRawStorageGroup* groupStorage)
 {
     TRACE("OMXMLPStoredObject::openRead");
-    PRECONDITION("Compatible raw storage access mode", rawStorage->isReadable());
+    PRECONDITION("Compatible raw storage access mode", groupStorage->isReadable());
     OMXMLPStoredObject* result = new OMXMLPStoredObject(
-        new OMXMLStorage(rawStorage, OMXMLStorage::READ_MODE), true);
+        new OMXMLStorage(groupStorage, OMXMLStorage::READ_MODE), true);
     return result;
 }
 
 OMXMLPStoredObject*
-OMXMLPStoredObject::openModify(OMRawStorage* rawStorage)
+OMXMLPStoredObject::openModify(OMDiskRawStorageGroup* groupStorage)
 {
     TRACE("OMXMLPStoredObject::openModify");
     PRECONDITION("Compatible raw storage access mode",
-        rawStorage->isReadable() && rawStorage->isWritable());
-    PRECONDITION("Compatible raw storage", rawStorage->isPositionable());
+        groupStorage->isReadable() && groupStorage->isWritable());
+    PRECONDITION("Compatible raw storage", groupStorage->isPositionable());
     OMXMLPStoredObject* result = new OMXMLPStoredObject(
-        new OMXMLStorage(rawStorage, OMXMLStorage::EXISTING_MODIFY_MODE), true);
+        new OMXMLStorage(groupStorage, OMXMLStorage::EXISTING_MODIFY_MODE), true);
     return result;
 }
 
 OMXMLPStoredObject*
-OMXMLPStoredObject::createWrite(OMRawStorage* rawStorage)
+OMXMLPStoredObject::createWrite(OMDiskRawStorageGroup* groupStorage)
 {
     TRACE("OMXMLPStoredObject::createWrite");
-    PRECONDITION("Compatible raw storage access mode", rawStorage->isWritable());
+    PRECONDITION("Compatible raw storage access mode", groupStorage->isWritable());
     OMXMLPStoredObject* result = new OMXMLPStoredObject(
-        new OMXMLStorage(rawStorage, OMXMLStorage::WRITE_MODE), true);
+        new OMXMLStorage(groupStorage, OMXMLStorage::WRITE_MODE), true);
     return result;
 }
 
 OMXMLPStoredObject*
-OMXMLPStoredObject::createModify(OMRawStorage* rawStorage)
+OMXMLPStoredObject::createModify(OMDiskRawStorageGroup* groupStorage)
 {
     TRACE("OMXMLPStoredObject::createModify");
-
     PRECONDITION("Compatible raw storage access mode",
-                 rawStorage->isReadable() && rawStorage->isWritable());
-    PRECONDITION("Compatible raw storage", rawStorage->isPositionable());
+                 groupStorage->isReadable() && groupStorage->isWritable());
+    PRECONDITION("Compatible raw storage", groupStorage->isPositionable());
     OMXMLPStoredObject* result = new OMXMLPStoredObject(
-        new OMXMLStorage(rawStorage, OMXMLStorage::NEW_MODIFY_MODE), true);
+        new OMXMLStorage(groupStorage, OMXMLStorage::NEW_MODIFY_MODE), true);
     return result;
 }
 
@@ -229,8 +228,14 @@ void
 OMXMLPStoredObject::save(OMFile& file)
 {
     TRACE("OMXMLPStoredObject::save(OMFile)");
-    PRECONDITION("XML document is set for writing", _store->haveWriter());
 
+    if (_store->mode() == OMXMLStorage::EXISTING_MODIFY_MODE ||
+        _store->mode() == OMXMLStorage::NEW_MODIFY_MODE)
+    {
+        _store->resetForWriting();
+    }
+    ASSERT("XML document is set for writing", _store->haveWriter());
+    
     try
     {
         getWriter()->writeDocumentStart();
@@ -271,7 +276,6 @@ OMXMLPStoredObject::save(OMFile& file)
             }
             
             // write data stream entities
-            wchar_t* prefix = _store->getFilenamePrefixForStream();
             for (i = 0; i < dataStreams.count(); i++)
             {
                 getWriter()->writeText(L"<!ENTITY ");
@@ -281,7 +285,7 @@ OMXMLPStoredObject::save(OMFile& file)
         
                 getWriter()->writeText(L" SYSTEM \"");
                 const wchar_t* entityValue = _store->getDataStreamEntityValue(
-                    dataStreams.getAt(i), prefix);
+                    dataStreams.getAt(i));
                 getWriter()->writeText(entityValue);
                 getWriter()->writeText(L"\"");
                 
@@ -291,7 +295,6 @@ OMXMLPStoredObject::save(OMFile& file)
                 getWriter()->writeText(notationName);
                 getWriter()->writeText(L">\n");
             }
-            delete [] prefix;
             
             getWriter()->writeText(L"]>\n");
         }
@@ -351,12 +354,6 @@ OMXMLPStoredObject::save(OMFile& file)
     {
         printf("XML Exception: %ls\n", ex.getMessage());
         throw;
-    }
-    
-    if (_store->mode() == OMXMLStorage::EXISTING_MODIFY_MODE ||
-        _store->mode() == OMXMLStorage::NEW_MODIFY_MODE)
-    {
-        _store->resetForWriting();
     }
 }
 
@@ -711,6 +708,11 @@ OMXMLPStoredObject::restore(OMFile& file)
                 const wchar_t* systemID;
                 const wchar_t* notationName;
                 getReader()->getUnparsedEntityDecl(name, publicID, systemID, notationName);
+                if (!isRelativeURI(systemID) && !isFileURL(systemID))
+                {
+                    throw OMXMLException(L"Failed to register DataStream Entity: system ID "
+                        L"is not a file URL or a relative URI");
+                }
                 if (!_store->registerDataStreamEntity(name, systemID))
                 {
                     throw OMXMLException(L"Failed to register DataStream Entity");
@@ -757,12 +759,6 @@ OMXMLPStoredObject::restore(OMFile& file)
         throw OMXMLException(ex.getMessage(), getReader()->getPositionString());
     }
 
-    if (_store->mode() == OMXMLStorage::EXISTING_MODIFY_MODE ||
-        _store->mode() == OMXMLStorage::NEW_MODIFY_MODE)
-    {
-        _store->resetForWriting();
-    }
-    
     return root;
 }
 
@@ -1182,20 +1178,24 @@ OMStoredStream*
 OMXMLPStoredObject::openStoredStream(const OMDataStream& property)
 {
     TRACE("OMXMLPStoredObject::openStoredStream");
-    
-    const wchar_t* streamFilename = _store->getDataStreamEntityValue((void*)&property, L"");
-    if (streamFilename == 0)
+
+    const wchar_t* value = _store->getDataStreamEntityValue((void*)&property);
+    if (value == 0)
     {
         throw OMXMLException(L"Opening DataStream property without known filename");
     }
     
-    OMRawStorage* store = OMDiskRawStorage::openExistingRead(streamFilename);
-    if (store == 0)
+    wchar_t* filepath = new wchar_t[wcslen(value) + 1];
+    wcsconvertURItoFilepath(value, filepath);
+    
+    OMRawStorage* storage = _store->openExistingDataStream(filepath);
+    delete [] filepath;
+    if (storage == 0)
     {
-        throw OMXMLException(L"Could not open DataStream file");
+        throw OMXMLException(L"Failed to open DataStream");
     }
-    OMXMLPStoredStream* result = new OMXMLPStoredStream(store);
-    return result;
+    
+    return new OMXMLPStoredStream(storage);
 }
 
 OMStoredStream*
@@ -1203,21 +1203,23 @@ OMXMLPStoredObject::createStoredStream(const OMDataStream& property)
 {
     TRACE("OMXMLPStoredObject::createStoredStream");
 
-    const wchar_t* streamFilename = _store->getDataStreamEntityValue((void*)&property, L"");   
-    if (streamFilename == 0)
+    const wchar_t* value = _store->getDataStreamEntityValue((void*)&property);
+    if (value == 0)
     {
         throw OMXMLException(L"Opening DataStream property without known filename");
     }
+
+    wchar_t* filepath = new wchar_t[wcslen(value) + 1];
+    wcsconvertURItoFilepath(value, filepath);
     
-    wremove(streamFilename);
-    
-    OMRawStorage* store = OMDiskRawStorage::openNewModify(streamFilename);
-    if (store == 0)
+    OMRawStorage* storage = _store->openNewDataStream(filepath);
+    delete [] filepath;
+    if (storage == 0)
     {
-        throw OMXMLException(L"Could not open DataStream file");
+        throw OMXMLException(L"Failed to create DataStream");
     }
-    OMXMLPStoredStream* result = new OMXMLPStoredStream(store);
-    return result;
+    
+    return new OMXMLPStoredStream(storage);
 }
 
 OMXMLWriter*
