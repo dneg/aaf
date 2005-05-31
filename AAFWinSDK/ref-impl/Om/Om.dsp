@@ -154,6 +154,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMDiskRawStorage.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMDiskRawStorageGroup.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMDynamicLibrary.cpp"
 # End Source File
 # Begin Source File
@@ -571,6 +575,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMDictionary.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMDiskRawStorage.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMDiskRawStorageGroup.h"
 # End Source File
 # Begin Source File
 
