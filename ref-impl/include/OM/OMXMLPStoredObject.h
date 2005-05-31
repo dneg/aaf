@@ -77,19 +77,19 @@ public:
 
     // @cmember Open the root <c OMXMLPStoredObject> in the raw storage
     //          <p rawStorage> for reading only.
-    static OMXMLPStoredObject* openRead(OMRawStorage* rawStorage);
+    static OMXMLPStoredObject* openRead(OMDiskRawStorageGroup* groupStorage);
 
     // @cmember Open the root <c OMXMLPStoredObject> in the raw storage
     //          <p rawStorage> for modification.
-    static OMXMLPStoredObject* openModify(OMRawStorage* rawStorage);
+    static OMXMLPStoredObject* openModify(OMDiskRawStorageGroup* groupStorage);
 
     // @cmember Create a new root <c OMXMLStoredObject> in the raw storage
     //          <p rawStorage>.
-    static OMXMLPStoredObject* createWrite(OMRawStorage* rawStorage);
+    static OMXMLPStoredObject* createWrite(OMDiskRawStorageGroup* groupStorage);
 
     // @cmember Create a new root <c OMXMLPStoredObject> in the raw storage
     //          <p rawStorage>.
-    static OMXMLPStoredObject* createModify(OMRawStorage* rawStorage);
+    static OMXMLPStoredObject* createModify(OMDiskRawStorageGroup* groupStorage);
 
   // @access Public members.
 
