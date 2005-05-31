@@ -72,6 +72,12 @@ public:
 				   aafProductIdentification_t * pIdent);
 
   virtual AAFRESULT STDMETHODCALLTYPE
+	OpenNewModifyEx (const aafCharacter * pFileName,
+				     aafUID_constptr pFileKind,
+				     aafUInt32 modeFlags,
+				     aafProductIdentification_t * pIdent);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
 	OpenTransient (aafProductIdentification_t * pIdent);
 
   virtual AAFRESULT STDMETHODCALLTYPE

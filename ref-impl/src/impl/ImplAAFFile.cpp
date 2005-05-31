@@ -675,6 +675,167 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 }
 
 AAFRESULT STDMETHODCALLTYPE
+ImplAAFFile::OpenNewModifyEx (const aafCharacter * pFileName,
+                              aafUID_constptr pFileKind,
+							  aafUInt32 modeFlags,
+							  aafProductIdentification_t * pIdent)
+{
+	ImplAAFContentStorage	*pCStore = NULL;
+	AAFRESULT stat = AAFRESULT_SUCCESS;
+	aafVersionType_t		theVersion = { 1, 1 };
+
+    if (! _initialized)
+	    return AAFRESULT_NOT_INITIALIZED;
+
+    if (IsOpen())
+        return AAFRESULT_ALREADY_OPEN;
+
+	if (_file)
+		return AAFRESULT_ALREADY_OPEN;
+
+    if (! pFileName)
+        return AAFRESULT_NULL_PARAM;
+
+	if (! pIdent)
+		return AAFRESULT_NULL_PARAM;
+    
+    if (! pFileKind)
+        return AAFRESULT_NULL_PARAM;
+
+    if (! areAllModeFlagsDefined (modeFlags))
+        return AAFRESULT_BAD_FLAGS;
+
+    if (! areAllModeFlagsSupported (modeFlags))
+        return AAFRESULT_NOT_IN_CURRENT_VERSION;
+
+    if (!OMFile::hasFactory(ENCODING(*pFileKind)))
+        return AAFRESULT_FILEKIND_NOT_REGISTERED;
+
+    const OMStoredObjectEncoding aafFileEncoding = ENCODING(*pFileKind);
+    // replaces const OMStoredObjectEncoding aafFileEncoding = *reinterpret_cast<const OMStoredObjectEncoding*> (pFileKind);
+
+    if (! OMFile::compatibleNamedFile (OMFile::modifyMode, aafFileEncoding))
+        return AAFRESULT_INVALID_PARAM;
+                                      
+    
+    _access = kAAFFileAccess_modify;
+    _existence = kAAFFileExistence_new;
+
+    try
+    {
+        // Create the header for the OM manager to use as the root
+        // for the file. Use the OMClassFactory interface for this
+        // object because the dictionary has not been associated
+        // with a header yet (Chicken 'n Egg problem).
+        const OMClassId& soid =
+            *reinterpret_cast<const OMClassId *>(&AUID_AAFHeader);
+        _head = static_cast<ImplAAFHeader *>(_factory->create(soid));
+        checkExpression(NULL != _head, AAFRESULT_BADHEAD);
+    
+        // Make sure the header is initialized with our previously
+        // created dictionary.
+        _head->SetDictionary(_factory);
+
+        // Set the file format version.
+        //
+        // BobT Fri Jan 21 14:37:43 EST 2000: the default behavior
+        // is that if the version isn't present, it's assumed to
+        // Version 0.  Therefore if the current version is 0, don't
+        // write out the property.  We do this so that hackers
+        // examining written files won't know that a mechanism
+        // exists to mark future incompatible versions, and so will
+        // work harder to make any future changes compatible.
+        if (sCurrentAAFObjectModelVersion)
+        {
+            _head->SetObjectModelVersion
+            (sCurrentAAFObjectModelVersion);
+        }
+
+        // Add the ident to the header.
+        checkResult(_head->AddIdentificationObject(pIdent));
+      
+        // Set the byte order
+        OMByteOrder byteOrder = hostByteOrder();
+        if (byteOrder == littleEndian)
+        {
+            _byteOrder = 0x4949; // 'II'
+        }
+        else
+        { // bigEndian
+            _byteOrder = 0x4d4d; // 'MM'
+        }
+        _head->SetByteOrder(_byteOrder);
+        _head->SetFileRevision (theVersion);
+
+        //JeffB!!! We must decide whether def-only files have a
+        //content storage
+        checkResult(_head->GetContentStorage(&pCStore));
+        pCStore->ReleaseReference(); // need to release this pointer!
+        pCStore = 0;
+
+        _file = OMFile::openNewModify (pFileName,
+                                       _factory,
+                                       0,
+                                       byteOrder,
+                                       _head,
+                                       aafFileEncoding,
+                                       _metafactory);
+        checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
+        
+        // Restore the meta dictionary, it should be the same object
+        // as _metafactory
+        OMDictionary* mf = _file->dictionary();
+        assert(mf == _metafactory);
+        
+        // Make sure all definitions are present in the meta dictionary
+        ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
+        assert(d);
+        checkResult( d->InstantiateAxiomaticDefinitions() );
+        
+        // Make sure properties that exist in builtin class
+        // definitions but not the file's class definition,
+        // are merged to the file's class definition.
+        checkResult( d->MergeBuiltinClassDefs() );
+        
+        // Now that the file is open and the header has been
+        // restored, complete the initialization of the
+        // dictionary. We obtain the dictionary via the header
+        // to give the persistence mechanism a chance to work.
+        _factory->InitializeOMStorable
+            (_factory->GetBuiltinDefs()->cdDictionary());
+        ImplAAFDictionary* dictionary = 0;
+        HRESULT hr = _head->GetDictionary(&dictionary);
+        if (hr != AAFRESULT_SUCCESS)
+            return hr;
+        dictionary->InitBuiltins();
+        
+        dictionary->ReleaseReference();
+        dictionary = 0;
+        GetRevision(&_setrev);
+    }
+
+    catch (AAFRESULT &rc)
+    {
+        stat = rc;
+        
+		// Cleanup after failure.
+		if (_file)
+		{
+			_file->close();
+			_file = 0;
+		}
+
+		if (NULL != _head)
+		{
+			_head->ReleaseReference();
+			_head = 0;
+		}
+    }
+    
+    return stat;
+}
+
+AAFRESULT STDMETHODCALLTYPE
 ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 {
 	if (! _initialized)
