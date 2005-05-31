@@ -46,6 +46,7 @@ int std_swprintf(wchar_t* buffer, size_t /*count*/, const wchar_t* format, ...)
 #endif
 
 
+
 int 
 utf8CodeLen(const char* u8Code)
 {
@@ -1646,6 +1647,281 @@ wideCharacterStringDup(const wchar_t* str)
     
     return result;
 }
+
+
+#ifdef _MSC_VER			// MS VC++ dosen't provide POSIX strncasecmp
+#define strncasecmp(s1, s2, n) strnicmp(s1, s2, n)
+#else
+#include <strings.h>	// strncasecmp()
+#endif
+
+bool 
+isRelativePath(const wchar_t* filepath)
+{
+#ifdef _WIN32
+    // check if the path starts with a drive letter, i.e. xxx:
+    const wchar_t* pathPtr = filepath;
+    while (*pathPtr != 0 && *pathPtr != L'\\' && *pathPtr != L':')
+    {
+        pathPtr++;
+    }
+    if (*pathPtr != L':')
+    {
+        return true;
+    }
+    return false;
+#else
+    // check if path starts with root
+    if (*filepath != L'/')
+    {
+        return true;
+    }
+    return false;
+#endif
+}
+
+bool 
+isFileURL(const wchar_t* uri)
+{
+    char* u8URI = utf16ToUTF8(uri);
+    bool result = strncasecmp(u8URI, "file://", strlen("file://")) == 0;
+    delete [] u8URI;
+ 
+    return result;
+}
+
+bool
+isRelativeURI(const wchar_t* uri)
+{
+    const wchar_t* uriPtr = uri;
+
+    if (*uriPtr == L'/')
+    {
+        return false;
+    }
+    while (*uriPtr != 0 && *uriPtr != L'/' && *uriPtr != L':')
+    {
+        uriPtr++;
+    }
+    if (*uriPtr == L':')
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
+
+// Code below was copied from ref-impl/src/impl/AAFUtils.cpp
+// The code was modified to support relative URIs in addition to File URLs
+// This code is a candidate for inclusion in the shared library
+
+
+/**************** Start of copied functions ************************/
+
+#include "utf8.h"
+
+/*
+ *	Routines to support the URL and URI utility functions.
+ */
+
+// These routines rely upon URLs as defined in RFC 1738:
+//
+// <scheme>:<scheme-specific-part>
+// ; the scheme is in lower case; interpreters should use case-ignore
+//	scheme		= 1*[ lowalpha | digit | "+" | "-" | "." ]
+//
+// For file scheme:
+//	fileurl		= "file://" [ host | "localhost" ] "/" fpath
+//
+// NB. ':' is acceptable unescaped in the fpath component
+
+
+static bool acceptable_pchar(unsigned char c)
+{
+	static const unsigned char isAcceptable[96] =
+	/*	0x0 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xA 0xB 0xC 0xD 0xE 0xF */
+	{
+	    0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0xF,0xE,0x0,0xF,0xF,0xC, /* 2x  !"#$%&'()*+,-./   */
+	    0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0x8,0x0,0x0,0x0,0x0,0x0, /* 3x 0123456789:;<=>?   */
+	    0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF, /* 4x @ABCDEFGHIJKLMNO   */
+	    0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0x0,0x0,0x0,0x0,0xF, /* 5x PQRSTUVWXYZ[\]^_   */
+	    0x0,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF, /* 6x `abcdefghijklmno   */
+	    0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0x0,0x0,0x0,0x0,0x0  /* 7x pqrstuvwxyz{\}~DEL */
+	};
+
+	return (c >= 32 && c < 128 && isAcceptable[c - 32]);
+}
+
+static void escapeURI(const char *str, char *result)
+{
+	const char	*p, hex[] = "0123456789ABCDEF";
+    char		*q;
+
+    if (!str || !result)
+		return;
+
+    for (q = result, p = str; *p; p++)
+	{
+    	unsigned char a = *p;
+		if (!acceptable_pchar(a))
+		{
+		    *q++ = '%';
+		    *q++ = hex[a >> 4];
+		    *q++ = hex[a & 15];
+		}
+		else
+			*q++ = *p;
+    }
+    *q++ = '\0';
+}
+
+static char asciiHexToChar (char c)
+{
+    return  c >= '0' && c <= '9' ?  c - '0' 
+    	    : c >= 'A' && c <= 'F'? c - 'A' + 10
+    	    : c - 'a' + 10;	/* accept lowercase letters too */
+}
+
+static void unescapeURI(char *str)
+{
+    char *p = str;
+    char *q = str;
+
+    while (*p)
+	{
+        if (*p == '%')		// URI hex escape char
+		{
+			p++;
+			if (*p)
+				*q = asciiHexToChar(*p++) * 16;
+			if (*p)
+				*q = *q + asciiHexToChar(*p);
+			p++;
+			q++;
+		}
+		else
+		    *q++ = *p++; 
+    }
+    *q++ = 0;
+}
+
+/************************
+ * Function: wcsconvertURItoFilepath
+ *
+ *	Converts a file scheme URL into an absolute filepath or a relative URI
+ *  into a relative filepath. An invalid URI is returned unmodified.
+ *
+ * Argument Notes:
+ *		filepath must have space allocated by the caller
+ *
+ * ReturnValue:
+ *		void
+ *
+ * Possible Errors:
+ *		none
+ */
+void wcsconvertURItoFilepath(const wchar_t *uri, wchar_t *filepath)
+{
+	// Convert to char* for ease of processing.
+	// (wcsncasecmp and similiar are not available everywhere)
+	//unsigned tlen = wcslen(uri);
+	unsigned tlen =wcsu8slen(uri);
+	char *tmp = new char[tlen+1];		// +1 includes terminating '\0'
+	wcstou8s(tmp, uri, tlen+1);
+
+	// If no file scheme is found, assume a relative URI.
+	// Note that other schemes such as http and ftp are not supported.
+	if (strncasecmp(tmp, "file://", strlen("file://")) != 0)
+	{
+    	unescapeURI(tmp);
+    	u8stowcs(filepath, tmp, strlen(tmp)+1);		// convert back to wcs
+	    delete [] tmp;
+        return;
+	}
+
+	// Skip over the file://[host]/ to point to the fpath.
+	char *fpath = tmp + strlen("file://");
+	while (*fpath && *fpath != '/')
+		fpath++;
+
+#ifdef _WIN32
+	// WIN32 filepaths must start with a drive letter, so remove the
+	// initial '/' from the URL.
+	if (*fpath == '/')
+		fpath++;
+#endif
+
+	unescapeURI(fpath);
+
+	u8stowcs(filepath, fpath, strlen(fpath)+1);		// convert back to wcs
+	delete [] tmp;
+}
+
+/************************
+ * Function: wcsconvertFilepathtoURI
+ *
+ *	Converts an absolute filepath into a file scheme URL or a relative filepath
+ *  into a relative URI.
+ *
+ * Argument Notes:
+ *		uri must have space allocated by the caller
+ *
+ * ReturnValue:
+ *		void
+ *
+ * Possible Errors:
+ *		none
+ */
+void wcsconvertFilepathtoURI(const wchar_t *filepath, wchar_t *uri)
+{
+    // convert to char* for ease of processing
+    int tlen = wcsu8slen(filepath);
+    char *tmp = new char[tlen+1];		// +1 includes terminating '\0'
+    wcstou8s(tmp, filepath, tlen+1);
+    
+#ifdef _WIN32
+    // On WIN32 backslash is the directory separator, not a regular filename
+    // character like under Unix or in a URL.  So convert them to the URL
+    // directory separator, forward slash '/', to preserve the hierarchy.
+    char *p = tmp;
+    while (*p)
+    {
+        if (*p == '\\')
+            *p = '/';
+        p++;
+    }
+#endif
+    // worst case: every char must be hex-escaped - therefore multiply by 3
+    char *escaped = new char[tlen*3+1];
+    escapeURI(tmp, escaped);
+    
+    
+    if (isRelativePath(filepath))
+    {
+        // straight copy for relative URIs
+        u8stowcs(uri, escaped, strlen(escaped)+1);		// convert back to wcs
+    }
+    else
+    {
+        // prepare the file scheme URL (+1 for '/', +1 for '\0')
+        char *mb_uri = new char[strlen(escaped) + strlen("file://") +1 +1];
+        strcpy(mb_uri, "file://");
+        if (*escaped != '/')		// ensure a leading path slash is present
+            strcat(mb_uri, "/");
+        strcat(mb_uri, escaped);
+    
+        u8stowcs(uri, mb_uri, strlen(mb_uri)+1);		// convert back to wcs
+        delete [] mb_uri;
+    }
+
+    delete [] escaped;
+    delete [] tmp;
+}
+
+
+/**************** End of copied functions ************************/
 
 
 

@@ -115,4 +115,12 @@ wchar_t* unescapeCharacter(const wchar_t* cstr);
 
 wchar_t* wideCharacterStringDup(const wchar_t* str);
 
+bool isRelativePath(const wchar_t* filepath);
+bool isFileURL(const wchar_t* uri);
+bool isRelativeURI(const wchar_t* uri);
+
+void wcsconvertURItoFilepath(const wchar_t *uri, wchar_t *filepath);
+void wcsconvertFilepathtoURI(const wchar_t *filepath, wchar_t *uri);
+
+
 #endif 
