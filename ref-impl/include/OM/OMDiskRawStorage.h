@@ -172,17 +172,23 @@ public:
     //          representation.
   virtual void synchronize(void);
 
+  
+    // @cmember Get the file name for this <c OMDiskRawStorage>
+  const wchar_t* fileName(void) const;
+  
 protected:
   // @access Protected members.
 
     // @cmember Constructor.
-  OMDiskRawStorage(OMStream* file, OMFile::OMAccessMode accessMode);
+  OMDiskRawStorage(OMStream* file, OMFile::OMAccessMode accessMode, 
+    const wchar_t* fileName);
 
 private:
   // @access Private members.
 
   OMStream* _file;
   OMFile::OMAccessMode _mode;
+  wchar_t* _fileName;
 
 };
 

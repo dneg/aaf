@@ -198,6 +198,7 @@ private:
     // @cmember Constructor.
   OMCachedDiskRawStorage(OMStream* file,
                          OMFile::OMAccessMode accessMode,
+                         const wchar_t* fileName,
                          OMUInt32 pageSize,
                          OMUInt32 pageCount);
 

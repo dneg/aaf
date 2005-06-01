@@ -53,6 +53,7 @@ OMCachedDiskRawStorage::openExistingRead(const wchar_t* fileName,
   OMCachedDiskRawStorage* result = new OMCachedDiskRawStorage(
                                                           file,
                                                           OMFile::readOnlyMode,
+                                                          fileName,
                                                           pageSize,
                                                           pageCount);
   ASSERT("Valid heap pointer", result != 0);
@@ -81,6 +82,7 @@ OMCachedDiskRawStorage::openExistingModify(const wchar_t* fileName,
   OMCachedDiskRawStorage* result = new OMCachedDiskRawStorage(
                                                             file,
                                                             OMFile::modifyMode,
+                                                            fileName,
                                                             pageSize,
                                                             pageCount);
   ASSERT("Valid heap pointer", result != 0);
@@ -109,6 +111,7 @@ OMCachedDiskRawStorage::openNewModify(const wchar_t* fileName,
   OMCachedDiskRawStorage* result = new OMCachedDiskRawStorage(
                                                             file,
                                                             OMFile::modifyMode,
+                                                            fileName,
                                                             pageSize,
                                                             pageCount);
   ASSERT("Valid heap pointer", result != 0);
@@ -132,6 +135,7 @@ OMCachedDiskRawStorage::openNewModify(OMUInt32 pageSize,
   OMCachedDiskRawStorage* result = new OMCachedDiskRawStorage(
                                                             file,
                                                             OMFile::modifyMode,
+                                                            0,
                                                             pageSize,
                                                             pageCount);
   ASSERT("Valid heap pointer", result != 0);
@@ -382,9 +386,10 @@ void OMCachedDiskRawStorage::writePage(OMUInt64 position,
   // @mfunc Constructor.
 OMCachedDiskRawStorage::OMCachedDiskRawStorage(OMStream* file,
                                                OMFile::OMAccessMode accessMode,
+                                               const wchar_t* fileName,
                                                OMUInt32 pageSize,
                                                OMUInt32 pageCount)
-: OMDiskRawStorage(file, accessMode),
+: OMDiskRawStorage(file, accessMode, fileName),
   OMPageCache(pageSize, pageCount),
   _size(0),
   _actualSize(0),
