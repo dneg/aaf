@@ -28,8 +28,8 @@
 #include "OMXMLPStoredObject.h"
 #include "OMUtilities.h"
 #include "OMAssertions.h"
-#include "OMDiskRawStorageGroup.h"
-#include "OMXMLException.h"
+#include "OMDiskRawStorage.h"
+#include "OMExceptions.h"
 
 
 #include <ctype.h>
@@ -130,7 +130,7 @@ OMStoredObject*
 OMXMLPStoredObjectFactory::openRead(const wchar_t* fileName )
 {
   TRACE("OMXMLPStoredObjectFactory::openRead");
-  OMDiskRawStorageGroup* storage = OMDiskRawStorageGroup::openExistingRead(fileName);
+  OMDiskRawStorage* storage = OMDiskRawStorage::openExistingRead(fileName);
   return OMXMLPStoredObject::openRead(storage);
 }
 
@@ -143,7 +143,7 @@ OMStoredObject*
 OMXMLPStoredObjectFactory::openModify(const wchar_t* fileName)
 {
   TRACE("OMXMLPStoredObjectFactory::openModify");
-  OMDiskRawStorageGroup* storage = OMDiskRawStorageGroup::openExistingModify(fileName);
+  OMDiskRawStorage* storage = OMDiskRawStorage::openExistingModify(fileName);
   return OMXMLPStoredObject::openModify(storage);
 }
 
@@ -159,7 +159,7 @@ OMXMLPStoredObjectFactory::createModify(const wchar_t* fileName,
                                        const OMByteOrder byteOrder)
 {
   TRACE("OMXMLPStoredObjectFactory::createModify");
-  OMDiskRawStorageGroup* storage = OMDiskRawStorageGroup::openNewModify(fileName);
+  OMDiskRawStorage* storage = OMDiskRawStorage::openNewModify(fileName);
   return OMXMLPStoredObject::createModify(storage);
 }
 
@@ -238,8 +238,7 @@ bool OMXMLPStoredObjectFactory::compatibleRawStorage(
                                   const OMFile::OMAccessMode NNAME(accessMode))
 {
   TRACE("OMXMLPStoredObjectFactory::compatibleRawStorage");
-  // raw storage cannot be used for the XML stored format because
-  // a AAF-X file group is required rather than a single file
+  // raw storage is not supported
   return false;
 }
 
@@ -252,8 +251,7 @@ bool OMXMLPStoredObjectFactory::compatibleNamedFile(
 {
   TRACE("OMXMLPStoredObjectFactory::compatibleNamedFile");
 
-  bool result = true;
-  return result;
+  return true;
 }
 
   // @mfunc Perform any necessary actions when the file
