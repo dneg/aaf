@@ -56,7 +56,7 @@
 
 #include "OMXMLUtilities.h"
 #include "OMDictionary.h"
-#include "OMXMLException.h"
+#include "OMExceptions.h"
 #include "OMRootStorable.h"
 #include "OMPropertyTable.h"
 #include "OMList.h"
@@ -131,46 +131,46 @@ static const wchar_t* AAFEscape_AttrName = L"escaped";
 
 
 OMXMLPStoredObject*
-OMXMLPStoredObject::openRead(OMDiskRawStorageGroup* groupStorage)
+OMXMLPStoredObject::openRead(OMDiskRawStorage* storage)
 {
     TRACE("OMXMLPStoredObject::openRead");
-    PRECONDITION("Compatible raw storage access mode", groupStorage->isReadable());
+    PRECONDITION("Compatible raw storage access mode", storage->isReadable());
     OMXMLPStoredObject* result = new OMXMLPStoredObject(
-        new OMXMLStorage(groupStorage, OMXMLStorage::READ_MODE), true);
+        new OMXMLStorage(storage, OMXMLStorage::READ_MODE), true);
     return result;
 }
 
 OMXMLPStoredObject*
-OMXMLPStoredObject::openModify(OMDiskRawStorageGroup* groupStorage)
+OMXMLPStoredObject::openModify(OMDiskRawStorage* storage)
 {
     TRACE("OMXMLPStoredObject::openModify");
     PRECONDITION("Compatible raw storage access mode",
-        groupStorage->isReadable() && groupStorage->isWritable());
-    PRECONDITION("Compatible raw storage", groupStorage->isPositionable());
+        storage->isReadable() && storage->isWritable());
+    PRECONDITION("Compatible raw storage", storage->isPositionable());
     OMXMLPStoredObject* result = new OMXMLPStoredObject(
-        new OMXMLStorage(groupStorage, OMXMLStorage::EXISTING_MODIFY_MODE), true);
+        new OMXMLStorage(storage, OMXMLStorage::EXISTING_MODIFY_MODE), true);
     return result;
 }
 
 OMXMLPStoredObject*
-OMXMLPStoredObject::createWrite(OMDiskRawStorageGroup* groupStorage)
+OMXMLPStoredObject::createWrite(OMDiskRawStorage* storage)
 {
     TRACE("OMXMLPStoredObject::createWrite");
-    PRECONDITION("Compatible raw storage access mode", groupStorage->isWritable());
+    PRECONDITION("Compatible raw storage access mode", storage->isWritable());
     OMXMLPStoredObject* result = new OMXMLPStoredObject(
-        new OMXMLStorage(groupStorage, OMXMLStorage::WRITE_MODE), true);
+        new OMXMLStorage(storage, OMXMLStorage::WRITE_MODE), true);
     return result;
 }
 
 OMXMLPStoredObject*
-OMXMLPStoredObject::createModify(OMDiskRawStorageGroup* groupStorage)
+OMXMLPStoredObject::createModify(OMDiskRawStorage* storage)
 {
     TRACE("OMXMLPStoredObject::createModify");
     PRECONDITION("Compatible raw storage access mode",
-                 groupStorage->isReadable() && groupStorage->isWritable());
-    PRECONDITION("Compatible raw storage", groupStorage->isPositionable());
+                 storage->isReadable() && storage->isWritable());
+    PRECONDITION("Compatible raw storage", storage->isPositionable());
     OMXMLPStoredObject* result = new OMXMLPStoredObject(
-        new OMXMLStorage(groupStorage, OMXMLStorage::NEW_MODIFY_MODE), true);
+        new OMXMLStorage(storage, OMXMLStorage::NEW_MODIFY_MODE), true);
     return result;
 }
 
@@ -350,9 +350,12 @@ OMXMLPStoredObject::save(OMFile& file)
         
         getWriter()->writeDocumentEnd();
     }
-    catch (OMXMLException& ex)
+    catch (OMException& ex)
     {
-        printf("XML Exception: %ls\n", ex.getMessage());
+        if (ex.name() != 0)
+        {
+            printf("Exception: %s\n", ex.name());
+        }
         throw;
     }
 }
@@ -698,7 +701,7 @@ OMXMLPStoredObject::restore(OMFile& file)
                 getReader()->getNotationDecl(notationName, publicID, systemID);
                 if (!_store->registerDataStreamNotation(notationName, systemID))
                 {
-                    throw OMXMLException(L"Failed to register DataStream Notation");
+                    throw OMException("Failed to register DataStream Notation");
                 }
             }
             else if (getReader()->getEventType() == OMXMLReader::UNPARSED_ENTITY_DECL)
@@ -710,12 +713,12 @@ OMXMLPStoredObject::restore(OMFile& file)
                 getReader()->getUnparsedEntityDecl(name, publicID, systemID, notationName);
                 if (!isRelativeURI(systemID) && !isFileURL(systemID))
                 {
-                    throw OMXMLException(L"Failed to register DataStream Entity: system ID "
-                        L"is not a file URL or a relative URI");
+                    throw OMException("Failed to register DataStream Entity: system ID "
+                        "is not a file URL or a relative URI");
                 }
                 if (!_store->registerDataStreamEntity(name, systemID))
                 {
-                    throw OMXMLException(L"Failed to register DataStream Entity");
+                    throw OMException("Failed to register DataStream Entity");
                 }
             }
             else if (getReader()->getEventType() == OMXMLReader::START_PREFIX_MAPPING)
@@ -734,7 +737,7 @@ OMXMLPStoredObject::restore(OMFile& file)
                 file.rootStore()->restore(id);
                 if (id != OMRootStorable::_rootClassId)
                 {
-                    throw OMXMLException(L"Invalid root element");
+                    throw OMException("Invalid root element");
                 }
                 haveRootElement = true;
             }
@@ -751,12 +754,15 @@ OMXMLPStoredObject::restore(OMFile& file)
         
         file.setLoadMode(originalLoadMode);
     }
-    catch (OMXMLException& ex)
+    catch (OMException& ex)
     {
-        // print to stderr here because the message would otherwise not get to the user
-        fprintf(stderr, "XML Exception: %ls\nXML parser position: %ls\n", ex.getMessage(),
-            getReader()->getPositionString());
-        throw OMXMLException(ex.getMessage(), getReader()->getPositionString());
+        fprintf(stderr, "Exception: ");
+        if (ex.name() != 0)
+        {
+            fprintf(stderr, "%s\n", ex.name());
+        }
+        fprintf(stderr, "XML parser position: %ls\n", getReader()->getPositionString());
+        throw;
     }
 
     return root;
@@ -830,7 +836,7 @@ OMXMLPStoredObject::restore(OMPropertySet& properties)
         }
         else
         {
-            throw OMXMLException(L"Header expected");
+            throw OMException("Header expected");
         }
     }
     else
@@ -844,7 +850,7 @@ OMXMLPStoredObject::restore(OMPropertySet& properties)
             OMPropertyId localId = _store->getPropertyDefId(nmspace, localName);
             if (localId == 0)
             {
-                throw OMXMLException(L"Unknown property encountered");
+                throw OMException("Unknown property encountered");
             }
             OMProperty* property = properties.get(localId);
             if (property->propertyId() == PropLocalID_Header_ByteOrder)
@@ -956,7 +962,7 @@ OMXMLPStoredObject::restore(OMStrongReference& singleton,
     bool haveNextElement = getReader()->nextElement();
     if (!haveNextElement)
     {
-        throw OMXMLException(L"Empty strong reference singleton found");
+        throw OMException("Empty strong reference singleton found");
     }
 
     wchar_t* name = referenceName(singleton.name(), singleton.propertyId());
@@ -1034,8 +1040,8 @@ OMXMLPStoredObject::restore(OMStrongReferenceSet& set,
                                  getBaselineURI(), UniqueId_AttrName);
         if (idAttr == 0)
         {
-            throw OMXMLException(L"Object in strong reference set is missing a "
-                                 L"aaf:uid attribute");
+            throw OMException("Object in strong reference set is missing a "
+                                 "aaf:uid attribute");
         }
         readSetId(key, keySize, idAttr->getValue());
 
@@ -1151,7 +1157,7 @@ OMXMLPStoredObject::restore(OMDataStream& stream,
         getBaselineURI(), ByteOrder_AttrName);
     if (byteOrderAttr == 0)
     {
-        throw OMXMLException(L"DataStream element is missing a aaf:byteOrder attribute");
+        throw OMException("DataStream element is missing a aaf:byteOrder attribute");
     }
     OMByteOrder byteOrder;
     byteOrderFromString(byteOrderAttr->getValue(), &byteOrder);
@@ -1161,13 +1167,13 @@ OMXMLPStoredObject::restore(OMDataStream& stream,
         StreamRef_AttrName);
     if (streamAttr == 0)
     {
-        throw OMXMLException(L"DataStream element is missing a aaf:stream attribute");
+        throw OMException("DataStream element is missing a aaf:stream attribute");
     }
     const wchar_t* streamFilename = _store->registerDataStreamEntityValue((void*)&stream, 
         _store->getDataStreamEntityValue(streamAttr->getValue()));
     if (streamFilename == 0)
     {
-        throw OMXMLException(L"Could not register filename for DataStream property");
+        throw OMException("Could not register filename for DataStream property");
     }
 
     getReader()->moveToEndElement();
@@ -1182,7 +1188,9 @@ OMXMLPStoredObject::openStoredStream(const OMDataStream& property)
     const wchar_t* value = _store->getDataStreamEntityValue((void*)&property);
     if (value == 0)
     {
-        throw OMXMLException(L"Opening DataStream property without known filename");
+        // Print to stderr because these exceptions are not caught in OM layer
+        fprintf(stderr, "Exception thrown \"Opening DataStream property without known filename\"\n");
+        throw OMException("Opening DataStream property without known filename");
     }
     
     wchar_t* filepath = new wchar_t[wcslen(value) + 1];
@@ -1192,7 +1200,9 @@ OMXMLPStoredObject::openStoredStream(const OMDataStream& property)
     delete [] filepath;
     if (storage == 0)
     {
-        throw OMXMLException(L"Failed to open DataStream");
+        // Print to stderr because these exceptions are not caught in OM layer
+        fprintf(stderr, "Exception thrown \"Failed to open DataStream\"\n");
+        throw OMException("Failed to open DataStream");
     }
     
     return new OMXMLPStoredStream(storage);
@@ -1206,7 +1216,9 @@ OMXMLPStoredObject::createStoredStream(const OMDataStream& property)
     const wchar_t* value = _store->getDataStreamEntityValue((void*)&property);
     if (value == 0)
     {
-        throw OMXMLException(L"Opening DataStream property without known filename");
+        // Print to stderr because these exceptions are not caught in OM layer
+        fprintf(stderr, "Exception thrown \"Opening DataStream property without known filename\"\n");
+        throw OMException("Opening DataStream property without known filename");
     }
 
     wchar_t* filepath = new wchar_t[wcslen(value) + 1];
@@ -1216,7 +1228,9 @@ OMXMLPStoredObject::createStoredStream(const OMDataStream& property)
     delete [] filepath;
     if (storage == 0)
     {
-        throw OMXMLException(L"Failed to create DataStream");
+        // Print to stderr because these exceptions are not caught in OM layer
+        fprintf(stderr, "Exception thrown \"Failed to create DataStream\"\n");
+        throw OMException("Failed to create DataStream");
     }
     
     return new OMXMLPStoredStream(storage);
@@ -1329,7 +1343,7 @@ OMXMLPStoredObject::saveCharacter(const OMByte* internalBytes, OMUInt16 internal
 
     if (internalSize > 2 * sizeof(wchar_t))
     {
-        throw OMXMLException(L"Invalid character - size is greater than 2");
+        throw OMException("Invalid character - size is greater than 2");
     }
     
     wchar_t buffer[3];
@@ -1340,7 +1354,7 @@ OMXMLPStoredObject::saveCharacter(const OMByte* internalBytes, OMUInt16 internal
     {
         if (!isElementContent)
         {
-            throw OMXMLException(L"Character requiring escaping is not element content");
+            throw OMException("Character requiring escaping is not element content");
         }
         getWriter()->writeAttribute(getBaselineURI(), AAFEscape_AttrName, L"true");
         wchar_t* escapedStr = escapeCharacter(buffer);
@@ -1727,7 +1741,7 @@ OMXMLPStoredObject::saveString(const OMByte* internalBytes, OMUInt16 internalSiz
             {
                 if (!isElementContent)
                 {
-                    throw OMXMLException(L"String requiring escaping is not element content");
+                    throw OMException("String requiring escaping is not element content");
                 }
                 getWriter()->writeAttribute(getBaselineURI(), AAFEscape_AttrName, L"true");
                 wchar_t* escapedStr = escapeString(str);
@@ -1773,7 +1787,7 @@ OMXMLPStoredObject::saveString(const OMByte* internalBytes, OMUInt16 internalSiz
     }
     else
     {
-        throw OMXMLException(L"Invalid element type for string type");
+        throw OMException("Invalid element type for string type");
     }
 }
 
@@ -1814,7 +1828,7 @@ OMXMLPStoredObject::saveVariableArray(const OMByte* internalBytes, OMUInt16 inte
                 {
                     if (!isElementContent)
                     {
-                        throw OMXMLException(L"String requiring escaping is not element content");
+                        throw OMException("String requiring escaping is not element content");
                     }
                     getWriter()->writeAttribute(getBaselineURI(), AAFEscape_AttrName, L"true");
                     wchar_t* escapedStr = escapeString((wchar_t*)stringInternalBytes);
@@ -1911,7 +1925,7 @@ OMXMLPStoredObject::writeDataInHex(const OMByte* data, size_t size, bool isEleme
 void
 OMXMLPStoredObject::restoreExtensions(OMDictionary* dictionary)
 {
-    // remeber the symbolspaces so that after all classes defs and types defs have been
+    // remember the symbolspaces so that after all classes defs and types defs have been
     // registered we can register the property defs, which are dependent on the class
     // defs being present, and extdendible enumeration extensions, which are dependent
     // on the extendible enumeration def being present
@@ -1925,7 +1939,7 @@ OMXMLPStoredObject::restoreExtensions(OMDictionary* dictionary)
         getReader()->getStartElement(nmspace, localName, attrs);
         if (!getReader()->elementEquals(getBaselineURI(), L"MetaDictionary"))
         {
-            throw OMXMLException(L"Unknown element in Extensions - expected MetaDictionary");
+            throw OMException("Unknown element in Extensions - expected MetaDictionary");
         }
         
         OMSymbolspace* symbolspace = _store->createSymbolspace();
@@ -1954,7 +1968,7 @@ OMXMLPStoredObject::restoreHeaderByteOrder(OMProperty* property)
     getReader()->next();
     if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
     {
-        throw OMXMLException(L"Invalid Header::ByteOrder value - string is empty");
+        throw OMException("Invalid Header::ByteOrder value - string is empty");
     }
     const wchar_t* data;
     size_t length;
@@ -2043,13 +2057,13 @@ OMXMLPStoredObject::restoreCharacter(OMByteArray& bytes, const OMList<OMXMLAttri
         getReader()->next();
         if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
         {
-            throw OMXMLException(L"Invalid character value - zero length string for character");
+            throw OMException("Invalid character value - zero length string for character");
         }
         getReader()->getCharacters(data, length);
     }
     if (data == 0 || wcslen(data) == 0)
     {
-        throw OMXMLException(L"Invalid character value - zero length string for character");
+        throw OMException("Invalid character value - zero length string for character");
     }
 
     wchar_t* unescaped = 0;
@@ -2065,7 +2079,7 @@ OMXMLPStoredObject::restoreCharacter(OMByteArray& bytes, const OMList<OMXMLAttri
     // if length exceeds 2 or the code is not encoded as a surrogate pair then it is an error
     if (len > 2 || (len == 2 && codeLen != 2))
     {
-        throw OMXMLException(L"Invalid character value - multiple characters present");
+        throw OMException("Invalid character value - multiple characters present");
     }
     bytes.append(reinterpret_cast<const OMByte*>(c), len * sizeof(wchar_t));
     if (isEscaped)
@@ -2094,7 +2108,7 @@ OMXMLPStoredObject::restoreEnum(OMByteArray& bytes, const OMList<OMXMLAttribute*
         getReader()->next();
         if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
         {
-            throw OMXMLException(L"Invalid enumeration value - string is empty");
+            throw OMException("Invalid enumeration value - string is empty");
         }
         getReader()->getCharacters(data, length);
     }
@@ -2124,7 +2138,7 @@ OMXMLPStoredObject::restoreExtEnum(OMByteArray& bytes, const OMList<OMXMLAttribu
         getReader()->next();
         if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
         {
-            throw OMXMLException(L"Invalid ext enumeration value - string is empty");
+            throw OMException("Invalid ext enumeration value - string is empty");
         }
         getReader()->getCharacters(data, length);
     }
@@ -2163,7 +2177,7 @@ OMXMLPStoredObject::restoreFixedArray(OMByteArray& bytes, const OMList<OMXMLAttr
         getReader()->getStartElement(nmspace, localName, attrs);
         if (!getReader()->elementEquals(elementTypeSymbolspace, elementTypeSymbol))
         {
-            throw OMXMLException(L"Invalid fixed array element symbol");
+            throw OMException("Invalid fixed array element symbol");
         }
         
         restoreSimpleValue(bytes, attrs, 0, elementType);
@@ -2174,7 +2188,7 @@ OMXMLPStoredObject::restoreFixedArray(OMByteArray& bytes, const OMList<OMXMLAttr
 
     if (count != type->elementCount())
     {
-        throw OMXMLException(L"Fixed array does not have correct number of elements");
+        throw OMException("Fixed array does not have correct number of elements");
     }
     
 }
@@ -2199,7 +2213,7 @@ OMXMLPStoredObject::restoreIndirect(OMByteArray& bytes, const OMList<OMXMLAttrib
         getBaselineURI(), ActualType_AttrName);
     if (typeIdAttr == 0)
     {
-        throw OMXMLException(L"Invalid indirect value - missing 'aaf:actualType' attribute");
+        throw OMException("Invalid indirect value - missing 'aaf:actualType' attribute");
     }
     OMUniqueObjectIdentification typeId = restoreAUID(typeIdAttr->getValue(), METADICT_DEF);
 
@@ -2238,7 +2252,7 @@ OMXMLPStoredObject::restoreInteger(OMByteArray& bytes, const OMList<OMXMLAttribu
         getReader()->next();
         if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
         {
-            throw OMXMLException(L"Invalid integer value - string is empty");
+            throw OMException("Invalid integer value - string is empty");
         }
         getReader()->getCharacters(data, length);
     }
@@ -2262,7 +2276,7 @@ OMXMLPStoredObject::restoreOpaque(OMByteArray& bytes, const OMList<OMXMLAttribut
         getBaselineURI(), ByteOrder_AttrName);
     if (byteOrderAttr == 0)
     {
-        throw OMXMLException(L"Invalid opaque value - missing 'aaf:byteOrder' attribute");
+        throw OMException("Invalid opaque value - missing 'aaf:byteOrder' attribute");
     }
     OMByteOrder byteOrder;
     byteOrderFromString(byteOrderAttr->getValue(), &byteOrder);
@@ -2278,7 +2292,7 @@ OMXMLPStoredObject::restoreOpaque(OMByteArray& bytes, const OMList<OMXMLAttribut
         getBaselineURI(), ActualType_AttrName);
     if (typeIdAttr == 0)
     {
-        throw OMXMLException(L"Invalid opaque value - missing 'aaf:actualType' attribute");
+        throw OMException("Invalid opaque value - missing 'aaf:actualType' attribute");
     }
     OMUniqueObjectIdentification typeId = restoreAUID(typeIdAttr->getValue(), METADICT_DEF);
 
@@ -2318,7 +2332,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
             {
-                throw OMXMLException(L"Empty string is invalid AUID value");
+                throw OMException("Empty string is invalid AUID value");
             }
             getReader()->getCharacters(data, length);
         }
@@ -2340,7 +2354,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
             {
-                throw OMXMLException(L"Empty string is invalid MobId value");
+                throw OMException("Empty string is invalid MobId value");
             }
             getReader()->getCharacters(data, length);
         }
@@ -2361,7 +2375,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
             {
-                throw OMXMLException(L"Empty string is invalid DateStruct value");
+                throw OMException("Empty string is invalid DateStruct value");
             }
             getReader()->getCharacters(data, length);
         }
@@ -2382,7 +2396,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
             {
-                throw OMXMLException(L"Empty string is invalid TimeStruct value");
+                throw OMException("Empty string is invalid TimeStruct value");
             }
             getReader()->getCharacters(data, length);
         }
@@ -2403,7 +2417,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
             {
-                throw OMXMLException(L"Empty string is invalid TimeStamp value");
+                throw OMException("Empty string is invalid TimeStamp value");
             }
             getReader()->getCharacters(data, length);
         }
@@ -2424,7 +2438,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
             {
-                throw OMXMLException(L"Empty string is invalid Rational value");
+                throw OMException("Empty string is invalid Rational value");
             }
             getReader()->getCharacters(data, length);
         }
@@ -2445,7 +2459,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
             {
-                throw OMXMLException(L"Empty string is invalid VersionType value");
+                throw OMException("Empty string is invalid VersionType value");
             }
             getReader()->getCharacters(data, length);
         }
@@ -2467,7 +2481,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
 
             if (!getReader()->nextElement())
             {
-                throw OMXMLException(L"Invalid record value - expecting member");
+                throw OMException("Invalid record value - expecting member");
             }
             const wchar_t* nmspace;
             const wchar_t* localName;
@@ -2476,7 +2490,7 @@ OMXMLPStoredObject::restoreRecord(OMByteArray& bytes, const OMList<OMXMLAttribut
             
             if (wcscmp(localName, memberName) != 0)
             {
-                throw OMXMLException(L"Invalid record value - unexpected member");
+                throw OMException("Invalid record value - unexpected member");
             }
             delete [] memberName;
             
@@ -2522,7 +2536,7 @@ OMXMLPStoredObject::restoreSet(OMByteArray& bytes, const OMList<OMXMLAttribute*>
         getReader()->getStartElement(nmspace, localName, attrs);
         if (!getReader()->elementEquals(elementTypeSymbolspace, elementTypeSymbol))
         {
-            throw OMXMLException(L"Invalid set element symbol");
+            throw OMException("Invalid set element symbol");
         }
         
         restoreSimpleValue(bytes, attrs, 0, elementType);
@@ -2618,7 +2632,7 @@ OMXMLPStoredObject::restoreString(OMByteArray& bytes, const OMList<OMXMLAttribut
     }
     else
     {
-        throw OMXMLException(L"Invalid element type for string type");
+        throw OMException("Invalid element type for string type");
     }
     
     if (isElementContent)
@@ -2655,7 +2669,7 @@ OMXMLPStoredObject::restoreVariableArray(OMByteArray& bytes, const OMList<OMXMLA
         {
             if (!getReader()->elementEquals(stringTypeSymbolspace, stringTypeSymbol))
             {
-                throw OMXMLException(L"Invalid string array element symbol");
+                throw OMException("Invalid string array element symbol");
             }
             
             const wchar_t* nmspace;
@@ -2685,7 +2699,7 @@ OMXMLPStoredObject::restoreVariableArray(OMByteArray& bytes, const OMList<OMXMLA
             getReader()->getStartElement(nmspace, localName, attrs);
             if (!getReader()->elementEquals(elementTypeSymbolspace, elementTypeSymbol))
             {
-                throw OMXMLException(L"Invalid variable array element symbol");
+                throw OMException("Invalid variable array element symbol");
             }
             
             restoreSimpleValue(bytes, attrs, 0, elementType);
@@ -2753,7 +2767,7 @@ OMXMLPStoredObject::restoreWeakRef(OMFile* file, const OMType* type,
         Target_AttrName);
     if (targetAttr == 0)
     {
-        throw OMXMLException(L"Weak reference is missing a 'aaf:target' attribute");
+        throw OMException("Weak reference is missing a 'aaf:target' attribute");
     }
     if (targetPath[0] == PropLocalID_Root_MetaDictionary)
     {
@@ -2776,16 +2790,16 @@ OMXMLPStoredObject::restoreWeakRef(OMFile* file, const OMType* type,
         {
             if (!file->dictionary()->registerClassDef(id))
             {
-                throw OMXMLException(L"Unknown ClassDefinition: failed to register "
-                    L"weak referenced ClassDefinition");
+                throw OMException("Unknown ClassDefinition: failed to register "
+                    "weak referenced ClassDefinition");
             }
         }
         else // TypeDefinitions
         {
             if (!file->dictionary()->registerTypeDef(id))
             {
-                throw OMXMLException(L"Unknown TypeDefinition: failed to register "
-                    L"weak referenced TypeDefinition");
+                throw OMException("Unknown TypeDefinition: failed to register "
+                    "weak referenced TypeDefinition");
             }
         }
     }
@@ -2825,7 +2839,7 @@ OMXMLPStoredObject::restoreAUID(const wchar_t* idStr, AUIDTargetType targetType)
     TRACE("OMXMLPStoredObject::restoreAUID");
     
     OMUniqueObjectIdentification id = nullOMUniqueObjectIdentification;
-    if (isURI(idStr))
+    if (isAUIDURI(idStr))
     {
         uriToAUID(idStr, &id);
     }
@@ -2843,7 +2857,7 @@ OMXMLPStoredObject::restoreAUID(const wchar_t* idStr, AUIDTargetType targetType)
         
         if (id == nullOMUniqueObjectIdentification)
         {
-            throw OMXMLException(L"Could not retrieve unique id from symbol");
+            throw OMException("Could not retrieve unique id from symbol");
         }
     }
     
@@ -2983,27 +2997,28 @@ OMXMLPStoredObject::readSetId(OMByte* key, OMKeySize keySize, const wchar_t* idS
 {
     TRACE("OMXMLPStoredObject::readSetId");
 
-    if (isURI(idStr))
+    if (isAUIDURI(idStr))
     {
-        if (keySize == 16)
+        if (keySize != 16)
         {
-            uriToAUID(idStr, reinterpret_cast<OMUniqueObjectIdentification*>(key));
+            throw OMException("Set id is an AUID but the key size does not equal 16");
         }
-        else if (keySize == 32)
+        uriToAUID(idStr, reinterpret_cast<OMUniqueObjectIdentification*>(key));
+    }
+    else if (isUMIDURI(idStr))
+    {
+        if (keySize != 32)
         {
-            uriToMobId(idStr, reinterpret_cast<OMMaterialIdentification*>(key));
+            throw OMException("Set id is an MobID but the key size does not equal 32");
         }
-        else
-        {
-            ASSERT("Set key size either 16 for AUID or 32 for MobID", false);
-        }
+        uriToMobId(idStr, reinterpret_cast<OMMaterialIdentification*>(key));
     }
     else
     {
         OMUniqueObjectIdentification id = _store->getDefId(idStr);
         if (id == nullOMUniqueObjectIdentification)
         {
-            throw OMXMLException(L"Unknown definition symbol encountered");
+            throw OMException("Set id with unknown definition symbol");
         }
         memcpy(key, &id, sizeof(OMUniqueObjectIdentification));
     }

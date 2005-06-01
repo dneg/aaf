@@ -26,12 +26,14 @@
 #include "OMSetIterator.h"
 #include "OMListIterator.h"
 #include "OMDiskRawStorage.h"
+#include "OMCachedDiskRawStorage.h"
 #include "OMXMLUtilities.h"
-#include "OMXMLException.h"
+#include "OMUtilities.h"
+#include "OMExceptions.h"
 #include "OMAssertions.h"
 
 
-OMXMLStorage::OMXMLStorage(OMDiskRawStorageGroup* storage, Mode mode)
+OMXMLStorage::OMXMLStorage(OMDiskRawStorage* storage, Mode mode)
 : _mode(mode), _storage(storage), _objectSetId(0), _baselineSymbolspace(0), 
     _defaultExtSymbolspace(0), _symbolspacePrefixIndex(0),
     _dataStreamNotationNameIndex(0), _dataStreamEntityNameIndex(0), 
@@ -209,7 +211,7 @@ OMXMLStorage::addSymbolspace(OMSymbolspace* symbolspace)
 
     if (_symbolspaces.contains(symbolspace->getURI()))
     {
-        throw OMXMLException(L"Could not add symbolspace - symbolspace with URI already exists");
+        throw OMException("Could not add symbolspace - symbolspace with URI already exists");
     }
     setUniquePrefix(symbolspace);
 
@@ -482,7 +484,7 @@ OMXMLStorage::getDataStreamEntityValue(void* ref)
         return (*ret).c_str();
     }
     
-    const wchar_t* filepath = _storage->getFileName();
+    const wchar_t* filepath = _storage->fileName();
 
     // add "_streamxxx" suffix to XML document filename minus the path
     const wchar_t* startPtr = filepath;
@@ -595,7 +597,7 @@ OMXMLStorage::registerDataStreamNotation(const wchar_t* notationName,
 {
     TRACE("OMXMLStorage::registerDataStreamNotation");
 
-    if (notationName == 0 || systemId == 0 || !isURI(systemId))
+    if (notationName == 0 || systemId == 0 || !isAUIDURI(systemId))
     {
         return false;
     }
@@ -619,7 +621,36 @@ OMXMLStorage::openExistingDataStream(const wchar_t* fileName)
 {
     TRACE("OMXMLStorage::openExistingDataStream");
 
-    return _storage->openStorage(fileName);
+    wchar_t* fullFileName;
+    if (isRelativePath(fileName) && _storage->fileName() != 0)
+    {
+        wchar_t* base = getBaseFilePath(_storage->fileName());
+        fullFileName = new wchar_t[wcslen(base) + wcslen(fileName) + 1];
+        wcscpy(fullFileName, base);
+        wcscat(fullFileName, fileName);
+        delete [] base;
+    }
+    else
+    {
+        fullFileName = new wchar_t[wcslen(fileName) + 1];
+        wcscpy(fullFileName, fileName);
+    }
+        
+    OMDiskRawStorage* storage = 0;
+    if (fileExists(fullFileName))
+    {
+        if (_mode == READ_MODE)
+        {
+            storage = OMCachedDiskRawStorage::openExistingRead(fullFileName);
+        }
+        else
+        {
+            storage = OMCachedDiskRawStorage::openExistingModify(fullFileName);
+        }
+    }
+    delete [] fullFileName;
+    
+    return storage;
 }
 
 OMRawStorage* 
@@ -627,7 +658,27 @@ OMXMLStorage::openNewDataStream(const wchar_t* fileName)
 {
     TRACE("OMXMLStorage::openNewDataStream");
 
-    return _storage->createStorage(fileName);
+    wchar_t* fullFileName;
+    if (isRelativePath(fileName) && _storage->fileName() != 0)
+    {
+        wchar_t* base = getBaseFilePath(_storage->fileName());
+        fullFileName = new wchar_t[wcslen(base) + wcslen(fileName) + 1];
+        wcscpy(fullFileName, base);
+        wcscat(fullFileName, fileName);
+        delete [] base;
+    }
+    else
+    {
+        fullFileName = new wchar_t[wcslen(fileName) + 1];
+        wcscpy(fullFileName, fileName);
+    }
+        
+    wremove(fullFileName);
+
+    OMDiskRawStorage* storage = OMCachedDiskRawStorage::openNewModify(fullFileName);
+    delete [] fullFileName;
+    
+    return storage;
 }
 
 void 
@@ -659,13 +710,10 @@ OMXMLStorage::getForwardedObjectSetId()
     TRACE("OMXMLStorage::getForwardedObjectSetId");
     PRECONDITION("Have forwarded object set id", _objectSetId != 0);
     
-    wchar_t* copy = new wchar_t[wcslen(_objectSetId) + 1];
-    wcscpy(copy, _objectSetId);
-    
-    delete [] _objectSetId;
+    wchar_t* id = _objectSetId;
     _objectSetId = 0;
     
-    return copy;
+    return id;
 }
 
 void 
