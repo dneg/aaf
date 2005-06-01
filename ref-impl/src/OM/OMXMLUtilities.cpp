@@ -24,26 +24,9 @@
 
 #include "OMXMLUtilities.h"
 #include "OMUtilities.h"
-#include "OMXMLException.h"
+#include "OMExceptions.h"
 #include "OMAssertions.h"
 #include "wchar.h"
-
-
-#if defined (_MSC_VER)
-
-#include "stdarg.h"
-
-int std_swprintf(wchar_t* buffer, size_t /*count*/, const wchar_t* format, ...)
-{
-    va_list p_arg;
-    va_start(p_arg, format);
-    int result = vswprintf(buffer, format, p_arg);
-    va_end(p_arg);
-    
-    return result;
-}
-
-#endif
 
 
 
@@ -586,29 +569,66 @@ mobIdToURI(OMMaterialIdentification mobId, wchar_t* uri)
 {
     TRACE("::mobIdToURI");
 
-    std_swprintf(uri, XML_MAX_MOBID_URI_SIZE, 
-        L"urn:x-umid:%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x-"
-        L"%02x-"
-        L"%02x%02x%02x-"
-        L"%08x%04x%04x%02x%02x%02x%02x%02x%02x%02x%02x",
-        mobId.SMPTELabel[0], mobId.SMPTELabel[1], mobId.SMPTELabel[2], mobId.SMPTELabel[3], 
-        mobId.SMPTELabel[4], mobId.SMPTELabel[5], mobId.SMPTELabel[6], mobId.SMPTELabel[7], 
-        mobId.SMPTELabel[8], mobId.SMPTELabel[9], mobId.SMPTELabel[10], mobId.SMPTELabel[11], 
-        mobId.length,
-        mobId.instanceHigh, mobId.instanceMid, mobId.instanceLow,
-        mobId.material.Data1, mobId.material.Data2, mobId.material.Data3,
-        mobId.material.Data4[0], mobId.material.Data4[1], mobId.material.Data4[2], mobId.material.Data4[3], 
-        mobId.material.Data4[4], mobId.material.Data4[5], mobId.material.Data4[6], mobId.material.Data4[7]);
+    // handle special case of OMF UMIDs where the material number if half swapped
+    if (mobId.SMPTELabel[11] == 0x00 && // "not defined" material generation method
+        mobId.material.Data4[0] == 0x06 &&
+        mobId.material.Data4[1] == 0x0E &&
+        mobId.material.Data4[2] == 0x2B &&
+        mobId.material.Data4[3] == 0x34 &&
+        mobId.material.Data4[4] == 0x7F &&
+        mobId.material.Data4[5] == 0x7F)
+    {
+        std_swprintf(uri, XML_MAX_MOBID_URI_SIZE, 
+            L"urn:x-umid:%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x-"
+            L"%02x-"
+            L"%02x%02x%02x-"
+            L"%02x%02x%02x%02x%02x%02x%02x%02x%08x%04x%04x",
+            mobId.SMPTELabel[0], mobId.SMPTELabel[1], mobId.SMPTELabel[2], mobId.SMPTELabel[3], 
+            mobId.SMPTELabel[4], mobId.SMPTELabel[5], mobId.SMPTELabel[6], mobId.SMPTELabel[7], 
+            mobId.SMPTELabel[8], mobId.SMPTELabel[9], mobId.SMPTELabel[10], mobId.SMPTELabel[11], 
+            mobId.length,
+            mobId.instanceHigh, mobId.instanceMid, mobId.instanceLow,
+            mobId.material.Data4[0], mobId.material.Data4[1], mobId.material.Data4[2], mobId.material.Data4[3], 
+            mobId.material.Data4[4], mobId.material.Data4[5], mobId.material.Data4[6], mobId.material.Data4[7],
+            mobId.material.Data1, mobId.material.Data2, mobId.material.Data3);
+    }
+    else
+    {
+        std_swprintf(uri, XML_MAX_MOBID_URI_SIZE, 
+            L"urn:x-umid:%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x-"
+            L"%02x-"
+            L"%02x%02x%02x-"
+            L"%08x%04x%04x%02x%02x%02x%02x%02x%02x%02x%02x",
+            mobId.SMPTELabel[0], mobId.SMPTELabel[1], mobId.SMPTELabel[2], mobId.SMPTELabel[3], 
+            mobId.SMPTELabel[4], mobId.SMPTELabel[5], mobId.SMPTELabel[6], mobId.SMPTELabel[7], 
+            mobId.SMPTELabel[8], mobId.SMPTELabel[9], mobId.SMPTELabel[10], mobId.SMPTELabel[11], 
+            mobId.length,
+            mobId.instanceHigh, mobId.instanceMid, mobId.instanceLow,
+            mobId.material.Data1, mobId.material.Data2, mobId.material.Data3,
+            mobId.material.Data4[0], mobId.material.Data4[1], mobId.material.Data4[2], mobId.material.Data4[3], 
+            mobId.material.Data4[4], mobId.material.Data4[5], mobId.material.Data4[6], mobId.material.Data4[7]);
+    }
 }
 
 bool 
-isURI(const wchar_t* uri)
+isAUIDURI(const wchar_t* uri)
 {
-    TRACE("::isURI");
+    TRACE("::isAUIDURI");
 
-    if (wcsncmp(uri, L"urn:uuid", 8) == 0 ||
-        wcsncmp(uri, L"urn:x-ul", 8) == 0 ||
-        wcsncmp(uri, L"urn:x-umid", 10) == 0)
+    if (wcsncmp(uri, L"urn:uuid", 8) == 0 || 
+        wcsncmp(uri, L"urn:x-ul", 8) == 0)
+    {
+        return true;
+    }
+    return false;
+}
+
+bool 
+isUMIDURI(const wchar_t* uri)
+{
+    TRACE("::isUMIDURI");
+
+    if (wcsncmp(uri, L"urn:x-umid", 10) == 0)
     {
         return true;
     }
@@ -633,7 +653,7 @@ uriToAUID(const wchar_t* uri, OMUniqueObjectIdentification* id)
 
         if (ret != 16) 
         {
-            throw OMXMLException(L"Invalid AUID");
+            throw OMException("Invalid AUID");
         }
     }
     else
@@ -648,7 +668,7 @@ uriToAUID(const wchar_t* uri, OMUniqueObjectIdentification* id)
 
         if (ret != 16) 
         {
-            throw OMXMLException(L"Invalid AUID");
+            throw OMException("Invalid AUID");
         }
     }
     
@@ -687,7 +707,7 @@ uriToMobId(const wchar_t* uri, OMMaterialIdentification* mobId)
     
     if (ret != 32) 
     {
-        throw OMXMLException(L"Invalid MobId");
+        throw OMException("Invalid MobId");
     }
     
     unsigned int i;
@@ -699,13 +719,31 @@ uriToMobId(const wchar_t* uri, OMMaterialIdentification* mobId)
     mobId->instanceHigh = (OMUInt8)bytes[13]; 
     mobId->instanceMid = (OMUInt8)bytes[14]; 
     mobId->instanceLow = (OMUInt8)bytes[15];
-    mobId->material.Data1 = ((OMUInt32)bytes[16] << 24) + ((OMUInt32)bytes[17] << 16) +
-        ((OMUInt32)bytes[18] << 8) + (OMUInt32)(bytes[19]);
-    mobId->material.Data2 = ((OMUInt16)bytes[20] << 8) + (OMUInt16)(bytes[21]);
-    mobId->material.Data3 = ((OMUInt16)bytes[22] << 8) + (OMUInt16)(bytes[23]);
-    for (i=0; i<8; i++)
+    
+    // handle special case of OMF UMIDs where the material number if half swapped
+    if (bytes[11] == 0x00 && 
+        bytes[16] == 0x06 && bytes[17] == 0x0E && bytes[18] == 0x2B &&
+        bytes[19] == 0x34 && bytes[20] == 0x7F && bytes[21] == 0x7F)
     {
-        mobId->material.Data4[i] = (OMUInt8)bytes[i + 24];
+        mobId->material.Data1 = ((OMUInt32)bytes[24] << 24) + ((OMUInt32)bytes[25] << 16) +
+            ((OMUInt32)bytes[26] << 8) + (OMUInt32)(bytes[27]);
+        mobId->material.Data2 = ((OMUInt16)bytes[28] << 8) + (OMUInt16)(bytes[29]);
+        mobId->material.Data3 = ((OMUInt16)bytes[30] << 8) + (OMUInt16)(bytes[31]);
+        for (i=0; i<8; i++)
+        {
+            mobId->material.Data4[i] = (OMUInt8)bytes[i + 16];
+        }
+    }
+    else
+    {
+        mobId->material.Data1 = ((OMUInt32)bytes[16] << 24) + ((OMUInt32)bytes[17] << 16) +
+            ((OMUInt32)bytes[18] << 8) + (OMUInt32)(bytes[19]);
+        mobId->material.Data2 = ((OMUInt16)bytes[20] << 8) + (OMUInt16)(bytes[21]);
+        mobId->material.Data3 = ((OMUInt16)bytes[22] << 8) + (OMUInt16)(bytes[23]);
+        for (i=0; i<8; i++)
+        {
+            mobId->material.Data4[i] = (OMUInt8)bytes[i + 24];
+        }
     }
 }
 
@@ -1046,7 +1084,7 @@ integerFromString(OMByteArray& bytes, const wchar_t* str, OMUInt8 size, bool isS
 
     if (result != 1)
     {
-        throw OMXMLException(L"Invalid integer value");
+        throw OMException("Invalid integer value");
     }
 
 }
@@ -1086,7 +1124,7 @@ timeStructFromString(OMByteArray& bytes, const wchar_t* str)
     int result = swscanf(str, L"%02u:%02u:%02u.%02u", &hour, &minute, &second, &fraction);
     if (result != 4)
     {
-        throw OMXMLException(L"Invalid TimeStruct value");
+        throw OMException("Invalid TimeStruct value");
     }
 
     TimeStruct timeStruct;
@@ -1110,7 +1148,7 @@ dateStructFromString(OMByteArray& bytes, const wchar_t* str)
     int result = swscanf(str, L"%04d-%02u-%02u", &year, &month, &day);
     if (result != 3)
     {
-        throw OMXMLException(L"Invalid DateStruct value");
+        throw OMException("Invalid DateStruct value");
     }
 
     DateStruct dateStruct;
@@ -1139,7 +1177,7 @@ timeStampFromString(OMByteArray& bytes, const wchar_t* str)
         &hour, &minute, &second, &fraction);
     if (result != 7)
     {
-        throw OMXMLException(L"Invalid TimeStamp value");
+        throw OMException("Invalid TimeStamp value");
     }
 
     TimeStamp timeStamp;
@@ -1181,7 +1219,7 @@ byteArrayFromString(OMByteArray& bytes, const wchar_t* str)
         {
             if ((i + 1) == len)
             {
-                throw OMXMLException(L"Invalid hex byte array value");
+                throw OMException("Invalid hex byte array value");
             }
             unsigned int tmp;
             swscanf(valuePtr, L"%02x", &tmp);
@@ -1205,7 +1243,7 @@ rationalFromString(OMByteArray& bytes, const wchar_t* str)
     int result = swscanf(str, L"%d/%d", &numerator, &denominator);
     if (result != 2)
     {
-        throw OMXMLException(L"Invalid Rational value");
+        throw OMException("Invalid Rational value");
     }
 
     Rational rational;
@@ -1227,7 +1265,7 @@ versionTypeFromString(OMByteArray& bytes, const wchar_t* str)
     int result = swscanf(str, L"%d.%d", &major, &minor);
     if (result != 2)
     {
-        throw OMXMLException(L"Invalid VersionType value");
+        throw OMException("Invalid VersionType value");
     }
 
     VersionType version;
@@ -1257,7 +1295,7 @@ byteOrderFromString(const wchar_t* str, OMByteOrder* byteOrder)
     }
     else
     {
-        throw OMXMLException(L"Invalid byte order value");
+        throw OMException("Invalid byte order value");
     }
     
 }
@@ -1289,7 +1327,7 @@ headerByteOrderFromString(OMByteArray& bytes, const wchar_t* str)
     }
     else
     {
-        throw OMXMLException(L"Invalid header byte order value");
+        throw OMException("Invalid header byte order value");
     }
     
     bytes.append(reinterpret_cast<OMByte*>(&byteOrder), sizeof(OMInt16));
@@ -1318,7 +1356,7 @@ boolFromString(const wchar_t* str, bool& value)
     }
     else
     {
-        throw OMXMLException(L"Invalid boolean value");
+        throw OMException("Invalid boolean value");
     }
 }
 
@@ -1331,7 +1369,7 @@ uint16FromString(const wchar_t* str, OMUInt16& value)
     int result = swscanf(str, L"%u", &tmp);
     if (result != 1)
     {
-        throw OMXMLException(L"Invalid UInt16 integer value");
+        throw OMException("Invalid UInt16 integer value");
     }
     value = (OMUInt16)tmp;
 }
@@ -1345,7 +1383,7 @@ int64FromString(const wchar_t* str, OMInt64& value)
     int result = swscanf(str, L"%"OMWFMT64 L"d", &tmp);
     if (result != 1)
     {
-        throw OMXMLException(L"Invalid Int64 integer value");
+        throw OMException("Invalid Int64 integer value");
     }
     value = tmp;
 }
@@ -1359,7 +1397,7 @@ uint32FromString(const wchar_t* str, OMUInt32& value)
     int result = swscanf(str, L"%u", &tmp);
     if (result != 1)
     {
-        throw OMXMLException(L"Invalid UInt32 integer value");
+        throw OMException("Invalid UInt32 integer value");
     }
     value = (OMUInt32)tmp;
 }
@@ -1373,7 +1411,7 @@ uint8FromString(const wchar_t* str, OMUInt8& value)
     int result = swscanf(str, L"%u", &tmp);
     if (result != 1)
     {
-        throw OMXMLException(L"Invalid UInt8 integer value");
+        throw OMException("Invalid UInt8 integer value");
     }
     value = (OMUInt8)tmp;
 }
@@ -1571,12 +1609,12 @@ unescapeString(const wchar_t* str)
             }
             else
             {
-                throw OMXMLException(L"Invalid escaped string");
+                throw OMException("Invalid escaped string");
             }
 
             if (ret != 1)
             {
-                throw OMXMLException(L"Invalid escaped string - could not read number");
+                throw OMException("Invalid escaped string - could not read number");
             }
             if (isValidCodePoint(code))
             {
@@ -1602,7 +1640,7 @@ unescapeString(const wchar_t* str)
             }
             if (*strPtr != L';')
             {
-                throw OMXMLException(L"Invalid escaped string - missing ';'");
+                throw OMException("Invalid escaped string - missing ';'");
             }
         }
         else
@@ -1649,11 +1687,26 @@ wideCharacterStringDup(const wchar_t* str)
 }
 
 
-#ifdef _MSC_VER			// MS VC++ dosen't provide POSIX strncasecmp
-#define strncasecmp(s1, s2, n) strnicmp(s1, s2, n)
-#else
-#include <strings.h>	// strncasecmp()
-#endif
+bool 
+fileExists(const wchar_t* fileName)
+{
+    TRACE("::wideCharacterStringDup");
+    
+    if (fileName == 0)
+    {
+        return false;
+    }
+    
+    FILE* file = wfopen(fileName, L"r");
+    if (file == 0)
+    {
+        return false;
+    }
+    
+    fclose(file);
+    return true;
+}
+
 
 bool 
 isRelativePath(const wchar_t* filepath)
@@ -1710,6 +1763,41 @@ isRelativeURI(const wchar_t* uri)
 
     return true;
 }
+
+wchar_t* 
+getBaseFilePath(const wchar_t* filepath)
+{
+    TRACE("::getBaseFilePath");
+
+    const wchar_t* endPtr = filepath;
+    const wchar_t* ptr = filepath;
+    while (*ptr != L'\0')
+    {
+#ifdef _WIN32
+        if (*ptr == L'\\' || *ptr == L':')
+#else
+        if (*ptr == L'/')
+#endif
+        {
+            endPtr = ptr + 1;
+        }
+        ptr++;
+    }
+#ifdef _WIN32
+    ASSERT("Valid end pointer", endPtr == filepath || *(endPtr - 1) == L'\\' 
+        || *(endPtr - 1) == L':');
+#else
+    ASSERT("Valid end pointer", endPtr == filepath || *(endPtr - 1) == L'/');
+#endif
+    
+    size_t len = endPtr - filepath;
+    wchar_t* result = new wchar_t[len + 1];
+    wcsncpy(result, filepath, len);
+    result[len] = L'\0';
+    
+    return result;
+}
+
 
 
 

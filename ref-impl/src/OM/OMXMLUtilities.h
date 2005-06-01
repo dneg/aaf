@@ -44,9 +44,16 @@
 
 
 #if defined (_MSC_VER)
-int std_swprintf(wchar_t* buffer, size_t count, const wchar_t* format, ...);
+#define std_swprintf _snwprintf
 #else
 #define std_swprintf swprintf
+#endif
+
+
+#ifdef _MSC_VER			// MS VC++ dosen't provide POSIX strncasecmp
+#define strncasecmp(s1, s2, n) strnicmp(s1, s2, n)
+#else
+#include <strings.h>	// strncasecmp()
 #endif
 
 
@@ -71,7 +78,8 @@ OMUInt32 codePoint(const wchar_t* u16Code);
 void auidToURI(OMUniqueObjectIdentification id, wchar_t* uri);
 void mobIdToURI(OMMaterialIdentification mobId, wchar_t* uri);
 
-bool isURI(const wchar_t* uri);
+bool isAUIDURI(const wchar_t* uri);
+bool isUMIDURI(const wchar_t* uri);
 void uriToAUID(const wchar_t* uri, OMUniqueObjectIdentification* id);
 void uriToMobId(const wchar_t* uri, OMMaterialIdentification* mobId);
 
@@ -115,9 +123,12 @@ wchar_t* unescapeCharacter(const wchar_t* cstr);
 
 wchar_t* wideCharacterStringDup(const wchar_t* str);
 
+bool fileExists(const wchar_t* fileName);
+
 bool isRelativePath(const wchar_t* filepath);
 bool isFileURL(const wchar_t* uri);
 bool isRelativeURI(const wchar_t* uri);
+wchar_t* getBaseFilePath(const wchar_t* filepath);
 
 void wcsconvertURItoFilepath(const wchar_t *uri, wchar_t *filepath);
 void wcsconvertFilepathtoURI(const wchar_t *filepath, wchar_t *uri);
