@@ -189,7 +189,8 @@ void CheckNameValuePairs( IEnumAAFTaggedValues* pEnum,
     count++;
   }
 
-  checkExpression( count == nameValArraySize, AAFRESULT_TEST_FAILED );
+  //since we removed one attribute & comment count is count--
+  checkExpression( count == nameValArraySize - nameValuePairOffset, AAFRESULT_TEST_FAILED );
 }
 
 static HRESULT CreateAAFFile(aafWChar * pFileName)
