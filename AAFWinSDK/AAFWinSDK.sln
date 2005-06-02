@@ -170,6 +170,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImportPCM", "examples\com-a
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InfoDumper", "examples\com-api\InfoDumper\InfoDumper.vcproj", "{B58E49CE-6203-4C99-9C81-A0D8E942E3F7}"
 	ProjectSection(ProjectDependencies) = postProject
+		{08296C77-388B-42C6-BF97-B06B9796985A} = {08296C77-388B-42C6-BF97-B06B9796985A}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MakeSDK", "MakeSDK.vcproj", "{08296C77-388B-42C6-BF97-B06B9796985A}"
