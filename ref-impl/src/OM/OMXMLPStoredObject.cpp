@@ -1702,6 +1702,7 @@ OMXMLPStoredObject::saveSet(const OMByte* internalBytes, OMUInt16 internalSize,
         getWriter()->writeElementEnd();
         
         count -= elementType->internalSize();
+        elementBytes += elementType->internalSize();
     }
 }
 
@@ -1875,6 +1876,7 @@ OMXMLPStoredObject::saveVariableArray(const OMByte* internalBytes, OMUInt16 inte
             getWriter()->writeElementEnd();
             
             count -= elementType->internalSize();
+            elementBytes += elementType->internalSize();
         }
     }
 }
