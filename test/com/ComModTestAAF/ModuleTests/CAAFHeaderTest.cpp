@@ -72,6 +72,10 @@ static const aafMobID_t  _mobID[gMaxMobCount] =
 	
 }; //end mobid block
 
+const aafUID_t descSchID_1 = { 0x070D, 0x4400, 0xA00B, { 0x06, 0x07, 0x07, 0x08, 0x00, 0x08, 0x09, 0x09 } };
+const aafUID_t descSchID_2 = { 0xAF45, 0x3221, 0xA05C, { 0x05, 0x05, 0x06, 0x07, 0x08, 0x08, 0x09, 0x10 } };
+const aafUID_t setOpPatternID = {0x4e8404ff, 0x0f29, 0x11f4, {0xf3, 0x59, 0x0f, 0x90, 0x27, 0xdf, 0xca, 0x6a}};
+
 
 // {B8CF441F-F2F5-11d4-8040-00104BC9156D}
 static const aafUID_t Header_OptionalPropID =
@@ -99,6 +103,10 @@ struct HeaderTest
   void writeOptionalProperties();
   void readOptionalProperties();
 
+  void checkByteOrder();
+  void checkOperationalPattern();
+  void checkEssenceContainer();
+  void checkDescriptiveSchemes();
   void createFileMob(aafUInt32 itemNumber);
   void createEssenceData(IAAFSourceMob *pSourceMob);
   void openMobs();
@@ -116,7 +124,9 @@ struct HeaderTest
   IAAFFile *_pFile;
   bool _bFileOpen;
   IAAFHeader *_pHeader;
+  IAAFHeader2 *_pHeader2;
   IAAFDictionary *_pDictionary;
+  IAAFDictionary2 *_pDictionary2;
 
   IAAFMob *_pMob;
   IAAFSourceMob *_pSourceMob;
@@ -133,6 +143,7 @@ struct HeaderTest
   IAAFTypeDefInt *_pTypeDefInt;
   IAAFPropertyDef *_pOptionalPropDef;
   IAAFPropertyValue *_pOptionalPropValue;
+  IAAFEndian *_pEndian;
 };
 
 extern "C" HRESULT CAAFHeader_test(testMode_t mode);
@@ -170,7 +181,9 @@ HeaderTest::HeaderTest():
   _pFile(NULL),
   _bFileOpen(false),
   _pHeader(NULL),
+  _pHeader2(NULL),
   _pDictionary(NULL),
+  _pDictionary2(NULL),
   _pMob(NULL),
   _pSourceMob(NULL),
   _pEnumMobs(NULL),
@@ -183,7 +196,8 @@ HeaderTest::HeaderTest():
   _pOptionalPropTypeDef(NULL),
   _pTypeDefInt(NULL),
   _pOptionalPropDef(NULL),
-  _pOptionalPropValue(NULL)
+  _pOptionalPropValue(NULL),
+  _pEndian(NULL)
 {
   _productVersion.major = 1;
   _productVersion.minor = 0;
@@ -302,6 +316,24 @@ void HeaderTest::cleanupReferences()
       _pFile->Close();
     _pFile->Release();
     _pFile = NULL;
+  }
+
+  if(NULL != _pEndian)
+  {
+    _pEndian->Release();
+    _pEndian = NULL;
+  }
+
+  if(NULL != _pHeader2)
+  {
+    _pHeader2->Release();
+    _pHeader2 = NULL;
+  }
+
+  if(NULL != _pDictionary2)
+  {
+    _pDictionary2->Release();
+    _pDictionary2 = NULL;
   }
 }
 
@@ -450,11 +482,12 @@ void HeaderTest::openFile(wchar_t *pFileName)
   check(_pHeader->GetDictionary(&_pDictionary));
 
   openEssenceData();
-
   openMobs();
-
   readOptionalProperties();
-
+  checkByteOrder();
+  checkOperationalPattern();
+  checkEssenceContainer();
+  checkDescriptiveSchemes();
   cleanupReferences();
 }
 
@@ -484,6 +517,24 @@ void HeaderTest::writeOptionalProperties()
                                     sizeof(Header_OptionalPropertyValue),
                                     &_pOptionalPropValue));
     check(_pHeaderObject->SetPropertyValue(_pOptionalPropDef, _pOptionalPropValue));
+
+    //add some descriptive schemes
+    check(_pHeader->QueryInterface(IID_IAAFHeader2, reinterpret_cast<void**>(&_pHeader2) ) );
+    assert(_pHeader2);  
+
+    if(_pHeader2->AddDescriptiveScheme(descSchID_1) != AAFRESULT_SUCCESS)
+      check(AAFRESULT_TEST_FAILED);
+
+    if(_pHeader2->AddDescriptiveScheme(descSchID_2) != AAFRESULT_SUCCESS)
+      check(AAFRESULT_TEST_FAILED);
+
+    //now remove one descriptive scheme
+    if(_pHeader2->RemoveDescriptiveScheme(descSchID_2) != AAFRESULT_SUCCESS)
+      check(AAFRESULT_TEST_FAILED);
+
+    //test setOperationalPattern method
+    if(_pHeader2->SetOperationalPattern(setOpPatternID) != AAFRESULT_SUCCESS)
+      check(AAFRESULT_TEST_FAILED);
     
     // Release references
     _pOptionalPropValue->Release();
@@ -601,6 +652,29 @@ void HeaderTest::createFileMob(aafUInt32 itemNumber)
   check(_pFileDescriptor->QueryInterface (IID_IAAFEssenceDescriptor,
                                           (void **)&_pEssenceDescriptor));
   check(_pSourceMob->SetEssenceDescriptor (_pEssenceDescriptor));
+  
+
+	//create a container for the AIFCDescriptor, assigning it a container definition
+	//4 containers will be created
+  	check(_pDictionary->QueryInterface(IID_IAAFDictionary2, reinterpret_cast<void**>(&_pDictionary2) ) );
+  	assert(_pDictionary2);
+
+	aafUInt32 num;
+	check(_pDictionary2->CountContainerDefs(&num));
+
+	IEnumAAFContainerDefs *pEnum;
+	IAAFContainerDef *pDef;
+
+	check(_pDictionary2->GetContainerDefs(&pEnum));
+
+	for(unsigned int i = 0; i <= itemNumber && i < num; i++)
+	{
+		check(pEnum->NextOne(&pDef));
+	}
+
+	check(pDef->SetEssenceIsIdentified((aafBoolean_t)true));
+	check(_pFileDescriptor->SetContainerFormat(pDef));
+
 
   // AddMob
   checkhr(_pHeader->AddMob(NULL), AAFRESULT_NULL_PARAM);
@@ -614,7 +688,6 @@ void HeaderTest::createFileMob(aafUInt32 itemNumber)
   
   // Add it again, for real this time
   check(_pHeader->AddMob(_pMob));
-
   createEssenceData(_pSourceMob);
 
   // Cleanup instance data for reuse...
@@ -794,3 +867,115 @@ void HeaderTest::openEssenceData()
   _pEnumEssenceData = NULL;
 }
 
+void HeaderTest::checkByteOrder()
+{
+  //little endian tests blanked out because they will fail on mac/sparc systems since
+  //those systems use big endian. intel byte order
+
+  if(_pHeader2 == NULL)
+  {
+    check(_pHeader->QueryInterface(IID_IAAFEndian, reinterpret_cast<void**>(&_pEndian) ) );
+    assert(_pEndian);
+  }
+  eAAFByteOrder_t result;
+
+  //test GetStoredByteOrder method
+  if(_pEndian->GetStoredByteOrder(&result) != AAFRESULT_SUCCESS)
+    check(AAFRESULT_TEST_FAILED);
+
+  //ensure that the returned val is little endian
+  if(result != kAAFByteOrderLittle && result != kAAFByteOrderBig)
+    check(AAFRESULT_TEST_FAILED);
+
+  //test GetNativeByteOrder method
+  if(_pEndian->GetNativeByteOrder(&result) != AAFRESULT_SUCCESS)
+    check(AAFRESULT_TEST_FAILED);
+
+  //ensure that the returned val is little endian
+  if(result != kAAFByteOrderLittle && result != kAAFByteOrderBig)
+    check(AAFRESULT_TEST_FAILED);
+
+}
+
+void HeaderTest::checkOperationalPattern()
+{
+  if(_pHeader2 == NULL)
+  {
+    check(_pHeader->QueryInterface(IID_IAAFHeader2, reinterpret_cast<void**>(&_pHeader2) ) );
+    assert(_pHeader2);  
+  }
+  aafUID_t getOpPatternID;
+
+  //test getOperationalPattern method
+  if(_pHeader2->GetOperationalPattern(&getOpPatternID) != AAFRESULT_SUCCESS)
+    check(AAFRESULT_TEST_FAILED);
+
+  //ensure the retrieved operational pattern is the same as the set pattern
+  if(setOpPatternID != getOpPatternID)   
+    check(AAFRESULT_TEST_FAILED);
+
+}
+
+void HeaderTest::checkEssenceContainer()
+{
+  //Essence containers created in createFileMob() so that below methods could be tested
+  if(_pDictionary2 == NULL)
+  {
+    check(_pDictionary->QueryInterface(IID_IAAFDictionary2, reinterpret_cast<void**>(&_pDictionary2) ) );
+    assert(_pDictionary2);
+  }
+
+  //NOTE:_pHeader2 init'd in (this*)checkOperationalPattern()
+  if(_pHeader2->UpdateEssenceContainers() != AAFRESULT_SUCCESS)
+    check(AAFRESULT_TEST_FAILED); 
+  //
+  aafUInt32 count;
+  if(_pHeader2->CountEssenceContainers(&count) != AAFRESULT_SUCCESS)
+    check(AAFRESULT_TEST_FAILED);
+
+  //ensure the # of container defs equals # of essence containers
+  aafUInt32 num;
+  check(_pDictionary2->CountContainerDefs(&num));
+  if(count != num)
+    check(AAFRESULT_TEST_FAILED);    
+
+  aafUID_t contIDs[count]; 
+  if(_pHeader2->GetEssenceContainers(count, contIDs) != AAFRESULT_SUCCESS)
+    check(AAFRESULT_TEST_FAILED);
+
+  aafBoolean_t isPresent = false;
+  if(_pHeader2->IsEssenceContainerPresent(contIDs[0], &isPresent) != AAFRESULT_SUCCESS)
+    check(AAFRESULT_TEST_FAILED);  
+
+  //ensure the container was found
+  if(isPresent == false)
+    check(AAFRESULT_TEST_FAILED); 
+
+}
+
+void HeaderTest::checkDescriptiveSchemes()
+{
+  if(_pHeader2 == NULL)
+  {
+    check(_pHeader->QueryInterface(IID_IAAFHeader2, reinterpret_cast<void**>(&_pHeader2) ) );
+    assert(_pHeader2);  
+  }
+
+  aafUInt32 count;
+
+  //ensure there is only one desc scheme present
+  if(_pHeader2->CountDescriptiveSchemes(&count) != AAFRESULT_SUCCESS)
+    check(AAFRESULT_TEST_FAILED);
+
+  if(count != 1)
+    check(AAFRESULT_TEST_FAILED);
+
+  aafUID_t descIDs[count];
+  if(_pHeader2->GetDescriptiveSchemes(count, descIDs) != AAFRESULT_SUCCESS) 
+    check(AAFRESULT_TEST_FAILED);
+
+  aafBoolean_t isPresent = false;
+  if(_pHeader2->IsDescriptiveSchemePresent(descIDs[0], &isPresent) != AAFRESULT_SUCCESS)
+    check(AAFRESULT_TEST_FAILED);
+
+}

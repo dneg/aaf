@@ -35,6 +35,8 @@
 #include <AAFTypes.h>
 #include <AAFStoredObjectIDs.h>
 
+#include <assert.h>
+
 #include <wchar.h>
 #include <iostream>
 using namespace std;
@@ -111,6 +113,24 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
     CheckExpression( ::wcscmp( stringBuf, L"csISO069French" ) == 0, AAFRESULT_TEST_FAILED );
 
     CheckResult( filePointers.pFile->Close() );
+
+    //test the get buf length methods
+    aafUInt32 bufSize;
+
+    if(pAuxDesc->GetMimeTypeBufLen(&bufSize) != AAFRESULT_SUCCESS)
+      CheckResult(AAFRESULT_TEST_FAILED);
+    
+    //ensure the sizes match
+    if(bufSize != sizeof(stringBuf))
+      CheckResult(AAFRESULT_TEST_FAILED);
+
+    if(pAuxDesc->GetCharSetBufLen(&bufSize) != AAFRESULT_SUCCESS)
+      CheckResult(AAFRESULT_TEST_FAILED);
+
+    //ensure the sizes match
+    if(bufSize != sizeof(stringBuf))
+      CheckResult(AAFRESULT_TEST_FAILED);
+
   }
   catch( const AAFRESULT& hr ) {
     cout << "failed hr = " << hr << endl;

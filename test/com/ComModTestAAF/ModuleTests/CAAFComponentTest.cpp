@@ -41,6 +41,8 @@ using namespace std;
 
 #include "CAAFBuiltinDefs.h"
 
+#include <assert.h>
+
 static aafWChar *slotName = L"SLOT1";
 
 static const	aafMobID_t	TEST_MobID = 
@@ -55,6 +57,12 @@ static const	aafMobID_t	TEST_referencedMobID =
 
 
 namespace {
+
+// The remove test removes the first comment and attribute. The test
+// uses this index to compute an index into these arrays taking into
+// account that the initial entry was removed.
+
+const int nameValuePairOffset = 1;
 
 const aafCharacter* AttributeNames[]  = { L"Star Count", L"Mob Count" };
 const aafCharacter* AttributeValues[] = { L"Billions and Billions", L"Thousands and Thousands" };
@@ -92,6 +100,45 @@ inline void checkExpression(bool expression, HRESULT r)
 #define TEST_DDEF	kAAFDataDef_Sound
 #define TEST_LENGTH	42L
 
+void testCommentAttributeMethods(IAAFComponent2 *pComp2)
+{
+	//test remove methods for comments and attributes
+	IEnumAAFTaggedValues* pEnum = NULL;
+  	IAAFTaggedValue* pTagVal = NULL;
+
+	//test RemoveComment - remove the very first comment
+	pComp2->GetComments(&pEnum);
+  	pEnum->NextOne(&pTagVal); 
+
+	if(pComp2->RemoveComment(pTagVal) != AAFRESULT_SUCCESS)
+		checkResult(AAFRESULT_TEST_FAILED);
+
+	//test RemoveAttribute - remove the very first attribute
+	pComp2->GetAttributes(&pEnum);
+  	pEnum->NextOne(&pTagVal);
+		
+	if(pComp2->RemoveAttribute(pTagVal) != AAFRESULT_SUCCESS)
+		checkResult(AAFRESULT_TEST_FAILED);
+
+	//test count methods for comments and attributes
+	aafUInt32 numComments;
+	aafUInt32 numAttributes;
+		
+	if(pComp2->CountComments(&numComments) != AAFRESULT_SUCCESS)
+		checkResult(AAFRESULT_TEST_FAILED);
+
+	if(pComp2->CountAttributes(&numAttributes) != AAFRESULT_SUCCESS)
+		checkResult(AAFRESULT_TEST_FAILED);
+
+	//initially there were 2 comments and 2 attributes, but we deleted one of each
+	if(numComments != 1 || numAttributes != 1)
+		checkResult(AAFRESULT_TEST_FAILED);
+
+	pTagVal->Release();
+	pTagVal = NULL;
+	pEnum->Release();
+	pEnum = NULL;
+}
 
 void CheckNameValuePairs( IEnumAAFTaggedValues* pEnum, 
 			  const aafCharacter* nameArray[], 
@@ -108,19 +155,18 @@ void CheckNameValuePairs( IEnumAAFTaggedValues* pEnum,
   for( atthr = pEnum->NextOne( &pTagVal );
        atthr == AAFRESULT_SUCCESS;
        atthr = pEnum->NextOne( &pTagVal ) ) {
-    
+ 
     /// check the name
 
     aafUInt32 bufLen = 0;
     checkResult( pTagVal->GetNameBufLen(&bufLen) );
-    
+   
     checkExpression( count < nameValArraySize, AAFRESULT_TEST_FAILED );
     checkResult( pTagVal->GetName( strbuf, bufLen ) );
-    checkExpression( wcscmp(strbuf, nameArray[count] ) == 0, AAFRESULT_TEST_FAILED );
-    
-    
-    // check the value, 
-    
+    //comment @ fist index was deleted so check @ second index
+    checkExpression( wcscmp(strbuf, nameArray[nameValuePairOffset+count] ) == 0, AAFRESULT_TEST_FAILED ); 
+
+    // check the value,    
     IAAFTypeDef* pTypeDef = NULL;
     checkResult( pTagVal->GetTypeDefinition( &pTypeDef ) );
     // It should be a string.
@@ -128,9 +174,9 @@ void CheckNameValuePairs( IEnumAAFTaggedValues* pEnum,
     checkResult( pTypeDef->QueryInterface( IID_IAAFTypeDefString, reinterpret_cast<void**>(&pTDString) ) );
     checkResult( pTagVal->GetValue( sizeof(strbuf),
 				    reinterpret_cast<aafDataBuffer_t>(strbuf), &bufLen ) );
-    checkExpression( wcscmp( valueArray[count], strbuf ) == 0, AAFRESULT_TEST_FAILED );
-    
-    
+    //value @ fist index was deleted so check @ second index
+    checkExpression( wcscmp( valueArray[nameValuePairOffset+count], strbuf ) == 0, AAFRESULT_TEST_FAILED );
+
     pTypeDef->Release();
     pTypeDef = NULL;
     
@@ -224,17 +270,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		comp = NULL;
 								 		
 		aafRational_t editRate = { 0, 1};
-		checkResult(pMob->AppendNewTimelineSlot (editRate,
-												 seg,
-												 1,
-												 slotName,
-												 0,
-												 &newSlot));
+		checkResult(pMob->AppendNewTimelineSlot (editRate, seg, 1, slotName, 0, &newSlot));
 
 		checkResult(pHeader->AddMob(pMob));
 		checkResult(pHeader->AddMob(pReferencedMob));
-
-
 
 		// Get the IAAFComponent2 interface from the
 		// SourceClip object and test the attribute and user
@@ -245,7 +284,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult( pComp2->AppendComment( CommentNames[0], CommentValues[0] ) );
 		checkResult( pComp2->AppendComment( CommentNames[1], CommentValues[1] ) );
 
-
+		testCommentAttributeMethods(pComp2);
 	}
   catch (HRESULT& rResult)
   {
@@ -316,7 +355,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pFile->Release();
 		pFile = 0;
 	}
-
 
 	return hr;
 }
@@ -391,7 +429,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 					pDataDef = 0;
 					pDefObj->Release ();
 					pDefObj = 0;
-					checkExpression(memcmp(&testUID, &checkUID, sizeof(testUID)) == 0, AAFRESULT_TEST_FAILED);
+					checkExpression(memcmp(&testUID, &checkUID, sizeof(testUID)) == 0, 						AAFRESULT_TEST_FAILED);
 					checkResult(pComp2->GetLength (&testLength));
 					checkExpression(TEST_LENGTH == testLength, AAFRESULT_TEST_FAILED);
 
@@ -429,7 +467,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			pMob->Release();
 			pMob = NULL;
 		}
-
 	}
   catch (HRESULT& rResult)
   {

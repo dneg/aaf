@@ -88,6 +88,15 @@ typedef IAAFSmartPointer<IUnknown>                  IUnknownSP;
 
 #define kNumComponents	5
 
+const aafUID_t KLVKey_TestData =
+		{ 0xfb118, 0xf5c, 0x8baa, { 0xbd, 0x9b, 0x3c, 0x85, 0x75, 0xad, 0xf5, 0x77 } };
+
+const aafUID_t KLVDef_TestData =
+		{ 0x23302cd4, 0x42d5, 0x4a35, { 0xac, 0x8d, 0xda, 0x52, 0x82, 0x56, 0xa6, 0x4d } };
+
+const aafUID_t TAGDef_TestData = 
+		{ 0xfb999, 0xf9c, 0x9baa, { 0xbd, 0x9b, 0x3c, 0x95, 0x79, 0xad, 0x02, 0x02 } };
+
 // {69E9DEB3-4130-11d3-843E-00600832ACB8}
 static aafUID_t kClassAUID_NewFill = 
 { 0x69e9deb3, 0x4130, 0x11d3, { 0x84, 0x3e, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
@@ -633,6 +642,83 @@ static HRESULT LookupDefs (IAAFDictionary * pDict)
 }
 
 
+void testKLVDataDefinitions(IAAFDictionary *pDictionary, IAAFMob *pMob)
+{
+	IAAFDictionary2	*pDic2 = NULL;
+	IAAFClassDef *pKLVDataCD = NULL;
+	IAAFKLVDataDefinition *pKLVDef = NULL; 
+	IAAFKLVData *pKLVData = NULL;
+	IAAFTypeDef *typeDef = NULL;
+
+	const aafCharacter defName[32] = L"Data Definition Omega";
+	const aafCharacter defDescription[64] = L"This is a test of the data definition!!!";
+
+	static const aafUInt8 blobData[]={ 0x01, 0x02, 0x00, 0x00, 0x03 };
+
+	//lookup class definition for KLVData
+	checkResult(pDictionary->LookupClassDef(AUID_AAFKLVData, &pKLVDataCD));
+
+	//Register the KLVKeys
+	checkResult(pDictionary->LookupTypeDef(kAAFTypeID_UInt8Array, &typeDef));
+	checkResult(pDictionary->RegisterKLVDataKey(KLVKey_TestData, typeDef));
+
+	//Create KLVData and append it to Mob
+	checkResult(pKLVDataCD->CreateInstance(IID_IAAFKLVData, (IUnknown **)&pKLVData));
+	checkResult(pKLVData->Initialize(KLVKey_TestData, sizeof(blobData), (aafUInt8 *)blobData));
+	checkResult(pMob->AppendKLVData(pKLVData));
+
+	checkResult( pDictionary->QueryInterface( IID_IAAFDictionary2, reinterpret_cast<void**>(&pDic2) ) );
+	assert(pDic2);
+
+	//lookup class definition for KLVDataDefinition
+	checkResult(pDictionary->LookupClassDef(AUID_AAFKLVDataDefinition, &pKLVDataCD));
+
+	//Create KLVDataDef and append it to Dic
+	checkResult(pKLVDataCD->CreateInstance(IID_IAAFKLVDataDefinition, (IUnknown **)&pKLVDef));
+	checkResult(pKLVDef->Initialize(KLVDef_TestData, defName, defDescription));
+	checkResult(pDic2->RegisterKLVDataDef(pKLVDef));
+
+	//cleanup
+	pDic2->Release();
+	pDic2 = NULL;
+	pKLVDataCD->Release();
+	pKLVDataCD = NULL;
+	pKLVDef->Release();
+	pKLVDef = NULL; 
+	pKLVData->Release();	
+	pKLVData = NULL;
+	typeDef->Release();
+	typeDef = NULL;
+}
+
+void testTaggedDefinitions(IAAFDictionary *pDictionary, IAAFMob *pMob)
+{
+	IAAFDictionary2	*pDic2 = NULL;
+	IAAFClassDef *pTAGDataCD = NULL;
+	IAAFTaggedValueDefinition *pTAGDef = NULL; 
+
+	const aafCharacter defName[32] = L"Tagged Definition Kappa";
+	const aafCharacter defDef[64] = L"This is a test of the Tagged definition!!!";
+
+	checkResult( pDictionary->QueryInterface( IID_IAAFDictionary2, reinterpret_cast<void**>(&pDic2) ) );
+	assert(pDic2);
+
+	//Create a tagged value def & register it
+	checkResult(pDictionary->LookupClassDef(AUID_AAFTaggedValueDefinition, &pTAGDataCD));
+	checkResult(pTAGDataCD->CreateInstance(IID_IAAFTaggedValueDefinition, (IUnknown **)&pTAGDef));	
+	checkResult(pTAGDef->Initialize(TAGDef_TestData, defName, defDef));
+	checkResult(pDic2->RegisterTaggedValueDef(pTAGDef));
+
+	//cleanup
+	pDic2->Release();
+	pDic2 = NULL;
+	pTAGDataCD->Release();
+	pTAGDataCD = NULL;
+	pTAGDef->Release();
+	pTAGDef = NULL; 
+}
+
+
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
 						   aafMediaOpenMode_t	mode,
 						   IAAFFile**			ppFile,
@@ -824,6 +910,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  pHeader->AddMob(pMob);
 
 	  checkResult (RegisterDefs (pDictionary));
+
+	  testKLVDataDefinitions(pDictionary, pMob);
+	  testTaggedDefinitions(pDictionary, pMob);
+
 	}
   catch (HRESULT& rResult)
 	{
@@ -987,7 +1077,57 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		}
 
 	  checkResult (LookupDefs (pDictionary));
+
+
+	//Test the Lookup KLV and Tagged methods
+	IAAFKLVDataDefinition *pKLVLook = NULL;
+	IAAFTaggedValueDefinition *pTAGDefLook = NULL;
+	IAAFDictionary2 *pDic2 = NULL;	
+	IAAFDefObject *pDefObj = NULL;
+	aafUID_t auid;
+
+	checkResult( pDictionary->QueryInterface( IID_IAAFDictionary2, reinterpret_cast<void**>(&pDic2) ) );
+	assert(pDic2);
+	
+	//test LookUpKLV()
+	if(pDic2->LookupKLVDataDef(KLVDef_TestData, &pKLVLook) != AAFRESULT_SUCCESS)
+		checkResult(AAFRESULT_TEST_FAILED);
+
+	checkResult( pKLVLook->QueryInterface( IID_IAAFDefObject, reinterpret_cast<void**>(&pDefObj) ) );
+	assert(pDefObj);
+	
+	//ensure the KLVLook auid is equal to KLVDef_TestData auid
+	checkResult(pDefObj->GetAUID(&auid));
+
+	if(auid != KLVDef_TestData)
+		checkResult(AAFRESULT_TEST_FAILED);
+
+	//test LookUpTagged()
+	if(pDic2->LookupTaggedValueDef(TAGDef_TestData, &pTAGDefLook) != AAFRESULT_SUCCESS)
+		checkResult(AAFRESULT_TEST_FAILED);
+
+	checkResult( pTAGDefLook->QueryInterface( IID_IAAFDefObject, reinterpret_cast<void**>(&pDefObj) ) );
+	assert(pDefObj);
+	
+	//ensure the TAGDefLook auid is equal to TAGDef_TestData auid
+	checkResult(pDefObj->GetAUID(&auid));
+
+	if(auid != TAGDef_TestData)
+		checkResult(AAFRESULT_TEST_FAILED);
+
+
+	//cleanup	
+	pDic2->Release();
+	pDic2 = NULL;
+	pKLVLook->Release();
+	pKLVLook = NULL;
+	pTAGDefLook->Release();
+	pTAGDefLook = NULL;
+	pDefObj->Release();
+	pDefObj = NULL;
+
 	}
+
   catch (HRESULT& rResult)
 	{
 	  hr = rResult;
