@@ -90,6 +90,11 @@ writeFooter ()
   echo "</html>"
 }
 
+usage ()
+{
+  echo "$TOOLNAME : Usage : $TOOLNAME <tagdates> <colormap>"
+}
+
 TOOLNAME=${0##*/}
 TOOLPATH=${0%/${TOOLNAME}}
 
