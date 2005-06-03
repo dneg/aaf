@@ -420,7 +420,7 @@ UIDToString( aafUID_t &uid )
 string
 DateToString( _aafDateStruct_t &date )
 {
-   char buf[13];
+   char buf[15];
 
    sprintf( buf, "%04d-%02d-%02d", date.year, date.month, date.day );
 
@@ -432,7 +432,7 @@ DateToString( _aafDateStruct_t &date )
 string
 TimeToString( _aafTimeStruct_t &time )
 {
-   char buf[12];
+   char buf[16];
 
    sprintf( buf, "%02d:%02d:%02d.%02d", time.hour, time.minute, time.second, time.fraction );
 
@@ -444,7 +444,7 @@ TimeToString( _aafTimeStruct_t &time )
 string
 TimeStampToString( _aafTimeStamp_t &timeStamp )
 {
-   char buf[22];
+   char buf[31];
 
    strcpy( buf, DateToString( timeStamp.date ).c_str() );
    strcat( buf, " " );
@@ -458,7 +458,7 @@ TimeStampToString( _aafTimeStamp_t &timeStamp )
 //-----------------------------------------------------------------------------
 std::string VersionToString( _aafVersionType_t version )
 {
-   char buf[8];
+   char buf[10];
 
    sprintf( buf, "%d.%d", version.major, version.minor );
 
