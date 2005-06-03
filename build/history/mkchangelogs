@@ -216,10 +216,12 @@ do
   #
   title="Log of changes made between $ptag and $tag"
   #
-  # get the raw "cvs log" output
+  # get the raw "cvs log" output, after first making a working copy
+  # corresponging to $tag/$date
   #
   if [[ ! -f $log ]]
   then
+    cvs update -C -P -A -d -D "${date}" > /dev/null
     cvs -q log -d"${pdate}<${date}" > $log
   fi
   #
