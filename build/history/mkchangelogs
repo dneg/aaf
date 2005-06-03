@@ -221,7 +221,7 @@ do
   #
   if [[ ! -f $log ]]
   then
-    cvs update -C -P -A -d -D "${date}" > /dev/null
+    cvs update -C -P -A -d -D "${date}" > /dev/null 2>&1
     cvs -q log -d"${pdate}<${date}" > $log
   fi
   #
