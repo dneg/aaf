@@ -92,15 +92,19 @@ writeFooter ()
 
 usage ()
 {
-  echo "$TOOLNAME : Usage : $TOOLNAME <tagdates> <colormap>"
+  echo "$TOOLNAME : Usage : $TOOLNAME [-h] <tagdates> <colormap>"
 }
 
 TOOLNAME=${0##*/}
 TOOLPATH=${0%/${TOOLNAME}}
 
-while getopts ":" opt
+while getopts ":h" opt
 do
   case $opt in
+  h)
+    usage
+    exit 0
+    ;;
   \?)
     echo "$TOOLNAME : Error Illegal option (-${OPTARG})."
     exit
