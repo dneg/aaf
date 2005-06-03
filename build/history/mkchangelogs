@@ -246,9 +246,9 @@ do
   #
   if [[ ! -f $log ]]
   then
-    verbosePrint "cvs update to ${date} ($tag)."
+    verbosePrint "  cvs update to ${date} ($tag)."
     cvs update -C -P -A -d -D "${date}" > /dev/null 2>&1
-    verbosePrint "Create cvs log ($log)."
+    verbosePrint "  Create cvs log ($log)."
     cvs -q log -d"${pdate}<${date}" > $log
   fi
   #
@@ -256,7 +256,7 @@ do
   #
   if [[ ! -f $clog ]]
   then
-    verbosePrint "Convert cvs log to change log ($clog)."
+    verbosePrint "  Convert cvs log to change log ($clog)."
     cat $log | ${TOOLPATH}/cvs2cl.pl --stdin --stdout > $clog
   fi
   #
@@ -264,7 +264,7 @@ do
   # 
   if [[ ! -f $html ]]
   then
-    verbosePrint "Convert change log to html ($html)."
+    verbosePrint "  Convert change log to html ($html)."
     cat $clog | awk -v TITLE="$title" -f ${TOOLPATH}/cl2html.awk ${cmfile} > $html
   fi
   #
