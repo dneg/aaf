@@ -116,6 +116,12 @@ then
   exit 1
 fi
 
+if [ $0 -ef ./build/history/mkchangelogs ]
+then
+  echo "$TOOLNAME : Can't use this script to get its own change log."
+  exit 1
+fi
+
 declare -a tagstuff
 let i=0;
 while read tag date time
