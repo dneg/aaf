@@ -92,17 +92,29 @@ writeFooter ()
 
 usage ()
 {
-  echo "$TOOLNAME : Usage : $TOOLNAME [-f -h] <tagdates> <colormap>"
+  echo "$TOOLNAME : Usage : $TOOLNAME [-v -f -h] <tagdates> <colormap>"
+}
+
+verbosePrint ()
+{
+  if [ $VERBOSE = 1 ]
+  then
+    echo "$*"
+  fi
 }
 
 TOOLNAME=${0##*/}
 TOOLPATH=${0%/${TOOLNAME}}
 
+VERBOSE=0
 FORCE=0
 
-while getopts ":fh" opt
+while getopts ":vfh" opt
 do
   case $opt in
+  v)
+    VERBOSE=1
+    ;;
   f)
     FORCE=1
     ;;
