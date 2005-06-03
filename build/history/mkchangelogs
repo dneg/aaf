@@ -98,6 +98,17 @@ usage ()
 TOOLNAME=${0##*/}
 TOOLPATH=${0%/${TOOLNAME}}
 
+while getopts ":" opt
+do
+  case $opt in
+  \?)
+    echo "$TOOLNAME : Error Illegal option (-${OPTARG})."
+    exit
+    ;;
+  esac
+done
+shift $(($OPTIND - 1))
+
 if [[ ${#} != 2 ]]
 then
   echo "$TOOLNAME : Error wrong number of arguments (${#})."
