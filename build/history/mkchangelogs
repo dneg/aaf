@@ -101,7 +101,7 @@ TOOLPATH=${0%/${TOOLNAME}}
 if [[ ${#} != 2 ]]
 then
   echo "$TOOLNAME : Error wrong number of arguments (${#})."
-  echo "$TOOLNAME : Usage : $TOOLNAME <tagdates> <colormap>"
+  usage
   exit 1
 fi
 
