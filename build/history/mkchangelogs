@@ -92,15 +92,20 @@ writeFooter ()
 
 usage ()
 {
-  echo "$TOOLNAME : Usage : $TOOLNAME [-h] <tagdates> <colormap>"
+  echo "$TOOLNAME : Usage : $TOOLNAME [-f -h] <tagdates> <colormap>"
 }
 
 TOOLNAME=${0##*/}
 TOOLPATH=${0%/${TOOLNAME}}
 
-while getopts ":h" opt
+FORCE=0
+
+while getopts ":fh" opt
 do
   case $opt in
+  f)
+    FORCE=1
+    ;;
   h)
     usage
     exit 0
@@ -140,6 +145,24 @@ if [ $0 -ef ./build/history/mkchangelogs ]
 then
   echo "$TOOLNAME : Can't use this script to get its own change log."
   exit 1
+fi
+
+if [ ${FORCE} != 1 ]
+then
+  CONT=0
+  echo "$TOOLNAME : This script will modify the current working copy (including removal of modified files)."
+  echo -n "Continue (Y/N) ? "
+  read ANSWER
+  case "$ANSWER" in
+  yes|YES|Yes|y|Y)
+    CONT=1
+    ;;
+  esac
+  if [ $CONT != 1 ]
+  then
+    echo "$TOOLNAME : Exiting without modifying the current working copy."
+    exit 1
+  fi
 fi
 
 declare -a tagstuff
