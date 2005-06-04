@@ -246,8 +246,14 @@ do
   #
   if [[ ! -f $log ]]
   then
-    verbosePrint "  cvs update to ${date} ($tag)."
-    cvs update -C -P -A -d -D "${date}" > /dev/null 2>&1
+    if [[ "${tag}" != "head" ]]
+    then
+      DFLAG="-D \"${date}\""
+    else
+      DFLAG=""
+    fi
+    verbosePrint "  cvs update to ${tag}."
+    eval cvs update -C -P -A -d ${DFLAG} > /dev/null 2>&1
     verbosePrint "  Create cvs log ($log)."
     cvs -q log -d"${pdate}<${date}" > $log
   fi
