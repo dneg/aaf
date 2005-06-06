@@ -2338,6 +2338,10 @@ OMXMLPStoredObject::restoreOpaque(OMByteArray& bytes, const OMList<OMXMLAttribut
     bytes.grow(externalIdentSize);
     identType.externalize(reinterpret_cast<OMByte*>(&typeId), sizeof(typeId), 
         &(bytes.bytes()[bytes.size()]), externalIdentSize, byteOrder);
+    if (byteOrder != hostByteOrder())
+    {
+        identType.reorder(&(bytes.bytes()[bytes.size()]), externalIdentSize); 
+    }
     bytes.setSize(bytes.size() + externalIdentSize);
     
     getReader()->next();
