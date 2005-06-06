@@ -82,10 +82,19 @@ find the cvs repository so you must set the CVSROOT environment
 variable or set your current directory somewhere inside a valid cvs
 working copy. The commands also operate recursively so to produce
 change logs for the entire AAF tree, the easiest way is to cd to the
-root of a working copy. For example -
+root of a working copy. Since your working copy (including the scripts
+themselves) is modified by this process you should copy the scripte to
+a temporary directory, outside of the working copy, and execute them
+from there. For example -
 
 $ cd your-working-copy/AAF
-$ ./build/history/AAFmkchangelogs
+$ cp ./build/history/AAFcolormap \
+     ./build/history/AAFmkchangelogs \
+     ./build/history/ AAFtagdates \
+     ./build/history/cl2html.awk \
+     ./build/history/cvs2cl.pl \
+     ./build/history/mkchangelogs temporary-directory
+$ temporary-directory/AAFmkchangelogs
 
 Note that the first time you you execute this step, all of the pages
 are generated from scratch. If you retain the output (and
