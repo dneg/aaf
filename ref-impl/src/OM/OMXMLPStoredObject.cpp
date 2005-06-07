@@ -809,6 +809,10 @@ OMXMLPStoredObject::restore(OMStoredObjectIdentification& id)
         const OMList<OMXMLAttribute*>* attrs;
         getReader()->getStartElement(nmspace, localName, attrs);
         id = _store->getMetaDefId(nmspace, localName);
+        if (id == nullOMUniqueObjectIdentification)
+        {
+            throw OMException("Unknown class encountered");
+        }
     }
 }
 
