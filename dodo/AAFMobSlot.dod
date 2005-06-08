@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -74,7 +74,6 @@ AD_XMETHOD1(GetSegment,
 			AAFSegment,
 			ppResult,
 			Segment property value,
-
 			This method will get the segment for this mob slot and place an
   /// interface for it into the **ppResult argument.  If a segment
   /// exists\, the result will be AddRef\(\)ed.  If not\, the result will
@@ -106,7 +105,6 @@ AD_XMETHOD1(GetPhysicalNum,
 			aafUInt32 *,
 			pResult,
 			The physical slot number property value,
-
 			Returns information about the physical output channel associated
   /// with the  Slot.
   ///
@@ -145,7 +143,6 @@ AD_XMETHOD1(GetDataDef,
 			AAFDataDef,
 			ppResult,
 			Data Definition AUID,
-
 			This method will return the Data Definition object
   /// associated with the segment in this Mob Slot.  Common
   /// DataDefinitions are kAAFDataDef_Picture\, kAAFDataDef_Sound\, kAAFDataDef_Timecode\,
@@ -173,7 +170,6 @@ AD_XMETHOD1(GetSlotID,
 			aafSlotID_t *,
 			pResult,
 			Slot id of the Mob Slot,
-
 			This method will return the slot id of this mob slot.
   ///
   /// Succeeds if all of the following are true:
@@ -198,7 +194,6 @@ AD_XMETHOD1(SetSegment,
 			AAFSegment,
 			pSegment,
 			Segment property value,
-
 			This method will set the segment for this mob slot.  If a segment
   /// already exists for this mob slot\, it will be discarded.
   /// 
@@ -220,8 +215,7 @@ AD_XMETHOD1(SetPhysicalNum,
 			aafUInt32,
 			number,
 			The physical slot number property value,
-
-  /// This function sets the physical slot number of the specified
+			This function sets the physical slot number of the specified
   /// slot.  The physical slot number identifies the physical slot
   /// associated with the media.  For File Source Mobs that describe
   /// stereo audio media\, the left channel should have a PhysicalSlot
@@ -252,7 +246,6 @@ AD_XMETHOD1(SetSlotID,
 			aafSlotID_t,
 			value,
 			Slot id of the Mob Slot,
-
 			This method will set the slot id of this mob slot.
   /// 
   /// Always succeeds.

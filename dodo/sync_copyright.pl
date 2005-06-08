@@ -13,7 +13,7 @@
 # the License for the specific language governing rights and limitations
 # under the License.
 #
-# The Original Code of this file is Copyright 1998-2004, Licensor of the
+# The Original Code of this file is Copyright 1998-2005, Licensor of the
 # AAF Association.
 #
 # The Initial Developer of the Original Code of this file and the
@@ -27,10 +27,10 @@
 # file: sync_copyright.pl
 # author: Tom Ransdell
 # created: 27-MAR-2001
-# purpase:
+# purpose:
 #    Common tool to keep the contents of the copyright macros synchrozied with the
 # contents copyright text file specified on the command line. This tool also
-# serves as the single source for transformations 
+# serves as the single source for transformations.
 #
 # examples
 # Update the base.mac file with the current copyright test:
@@ -158,7 +158,7 @@ sub read_copyright_message
 
 
 #
-# Filters to be applied the current line buffer (i.e. $_) to decarate the
+# Filters to be applied the current line buffer (i.e. $_) to decorate
 # it with appropriate comment symbols.
 #
 sub shell_style
@@ -211,7 +211,7 @@ sub add_trailing_lines
   $_ .= "\n"
 }
 
-# Subroutine to print out the copyright message decarated with C style comments.
+# Subroutine to print out the copyright message decorated with C style comments.
 sub print_copyright_message
 {
   print "TEXT_STYLE_BEGIN_DEBUG\n" if ($debug);
@@ -220,7 +220,7 @@ sub print_copyright_message
 }
 
 
-# Subroutine to print out the copyright message decarated with C style comments.
+# Subroutine to print out the copyright message decorated with C style comments.
 sub print_c_style_copyright_message
 {
   print "C_STYLE_BEGIN_DEBUG\n" if ($debug);
@@ -232,7 +232,7 @@ sub print_c_style_copyright_message
 }
 
 
-# Subroutine to print out the copyright message decarated with C++ style comments.
+# Subroutine to print out the copyright message decorated with C++ style comments.
 sub print_cpp_style_copyright_message
 {
   print "CPP_STYLE_BEGIN_DEBUG\n" if ($debug);
@@ -244,7 +244,7 @@ sub print_cpp_style_copyright_message
 }
 
 
-# Subroutine to print out the copyright message decarated with IDL style comments.
+# Subroutine to print out the copyright message decorated with IDL style comments.
 sub print_idl_style_copyright_message
 {
   print "IDL_STYLE_BEGIN_DEBUG\n" if ($debug);
@@ -256,8 +256,7 @@ sub print_idl_style_copyright_message
 }
 
 
-# Subroutine to print out the copyright message decarated with 
-# shell style comments.
+# Subroutine to print out the copyright message decorated with shell style comments.
 sub print_shell_style_copyright_message
 {
   print "SHELL_STYLE_BEGIN_DEBUG\n" if ($debug);
@@ -269,7 +268,7 @@ sub print_shell_style_copyright_message
 }
 
 
-# Subroutine to print out the copyright message decarated with IDL style comments.
+# Subroutine to print out the copyright message decorated with IDL style comments.
 sub print_dodo_idl_style_copyright_message
 {
   print "DODO_IDL_STYLE_BEGIN_DEBUG\n" if ($debug);
@@ -282,7 +281,7 @@ sub print_dodo_idl_style_copyright_message
 }
 
 
-# Subroutine to print out the copyright message decarated with cpp style comments.
+# Subroutine to print out the copyright message decorated with cpp style comments.
 sub print_dodo_cpp_style_copyright_message
 {
   print "DODO_CPP_STYLE_BEGIN_DEBUG\n" if ($debug);

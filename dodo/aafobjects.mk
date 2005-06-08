@@ -13,7 +13,7 @@
 # the License for the specific language governing rights and limitations
 # under the License.
 #
-# The Original Code of this file is Copyright 1998-2004, Licensor of the
+# The Original Code of this file is Copyright 1998-2005, Licensor of the
 # AAF Association.
 #
 # The Initial Developer of the Original Code of this file and the
@@ -56,6 +56,8 @@ AAFCOMINTERFACESONLY="\
 # Do not add the 'Impl'prefix here.
 HUMAN_TYPED_IMPL="\
 	AAFAIFCDescriptor \
+	AAFAuxiliaryDescriptor \
+	AAFCDCIDescriptor \
 	AAFClassDef \
 	AAFCodecDef \
 	AAFCommentMarker \
@@ -67,31 +69,31 @@ HUMAN_TYPED_IMPL="\
 	AAFControlPoint \
 	AAFDataDef \
 	AAFDefObject \
-	AAFPluginDef \
+	AAFDescriptiveFramework \
+	AAFDescriptiveMarker \
 	AAFDictionary \
+	AAFDigitalImageDescriptor \
 	AAFEdgecode \
-	AAFOperationDef \
 	AAFEssenceAccess \
 	AAFEssenceData \
 	AAFEssenceDescriptor \
+	AAFEssenceFormat \
+	AAFEssenceGroup \
 	AAFEvent \
 	AAFEventMobSlot \
 	AAFFile \
 	AAFFileDescriptor \
-	AAFFilmDescriptor \
-	AAFDigitalImageDescriptor \
-	AAFCDCIDescriptor \
-	AAFEssenceFormat \
-	AAFEssenceGroup \
 	AAFFiller \
+	AAFFilmDescriptor \
 	AAFFindSourceInfo \
-	AAFOperationGroup \
 	AAFGPITrigger \
+	AAFGetFileBits \
 	AAFHeader \
 	AAFIdentification \
 	AAFImportDescriptor \
 	AAFInterpolationDef \
 	AAFKLVData \
+	AAFKLVDataDefinition \
 	AAFLocator \
 	AAFMasterMob \
 	AAFMetaDefinition \
@@ -100,51 +102,60 @@ HUMAN_TYPED_IMPL="\
 	AAFNestedScope\
 	AAFNetworkLocator \
 	AAFObject \
+	AAFOperationDef \
+	AAFOperationGroup \
 	AAFPCMDescriptor \
 	AAFParameter \
 	AAFParameterDef \
 	AAFPhysicalDescriptor \
+	AAFPluginDef \
+	AAFPluginManager \
 	AAFProperty \
 	AAFPropertyDef \
 	AAFPropertyValue \
-	AAFPluginManager \
 	AAFPulldown \
 	AAFRGBADescriptor \
+	AAFRandomFile \
+	AAFRandomRawStorage \
+	AAFRawStorage \
+	AAFRecordingDescriptor \
 	AAFScopeReference \
 	AAFSegment \
 	AAFSelector \
 	AAFSequence \
+	AAFSetFileBits \
 	AAFSoundDescriptor \
 	AAFSourceClip \
 	AAFSourceMob \
 	AAFSourceReference \
 	AAFStaticMobSlot \
-	AAFTapeDescriptor \
+	AAFTIFFDescriptor \
 	AAFTaggedValue \
+	AAFTaggedValueDefinition \
+	AAFTapeDescriptor \
 	AAFTextLocator \
 	AAFTimecode \
-	AAFTimelineMobSlot \
-	AAFTransition \
-	AAFTIFFDescriptor \
 	AAFTimecodeStream \
 	AAFTimecodeStream12M \
+	AAFTimelineMobSlot \
+	AAFTransition \
 	AAFTypeDef \
 	AAFTypeDefCharacter \
-	AAFTypeDefIndirect \
-	AAFTypeDefInt \
-	AAFTypeDefRename \
 	AAFTypeDefEnum \
 	AAFTypeDefExtEnum \
 	AAFTypeDefFixedArray \
+	AAFTypeDefIndirect \
+	AAFTypeDefInt \
+	AAFTypeDefObjectRef \
+	AAFTypeDefOpaque \
 	AAFTypeDefRecord \
+	AAFTypeDefRename \
 	AAFTypeDefSet \
 	AAFTypeDefStream \
 	AAFTypeDefString \
 	AAFTypeDefStrongObjRef \
-	AAFTypeDefWeakObjRef \
-	AAFTypeDefObjectRef \
-	AAFTypeDefOpaque \
 	AAFTypeDefVariableArray \
+	AAFTypeDefWeakObjRef \
 	AAFVaryingValue \
 	AAFWAVEDescriptor \
 	EnumAAFClassDefs \
@@ -154,38 +165,27 @@ HUMAN_TYPED_IMPL="\
 	EnumAAFContainerDefs \
 	EnumAAFControlPoints \
 	EnumAAFDataDefs \
+	EnumAAFEssenceData \
 	EnumAAFIdentifications \
 	EnumAAFInterpolationDefs \
-	EnumAAFOperationDefs \
-	EnumAAFEssenceData \
 	EnumAAFKLVData \
+	EnumAAFKLVDataDefs \
 	EnumAAFLoadedPlugins \
 	EnumAAFLocators \
 	EnumAAFMobSlots \
 	EnumAAFMobs \
+	EnumAAFOperationDefs \
 	EnumAAFParameterDefs \
 	EnumAAFParameters \
+	EnumAAFPluginDefs \
+	EnumAAFPluginLocators \
 	EnumAAFProperties \
 	EnumAAFPropertyDefs \
 	EnumAAFPropertyValues \
-	EnumAAFPluginDefs \
-	EnumAAFPluginLocators \
 	EnumAAFSegments \
-	EnumAAFTaggedValues \
-	EnumAAFTypeDefs \
-	AAFRawStorage \
-	AAFRandomRawStorage \
-	AAFGetFileBits \
-	AAFSetFileBits \
-	AAFRandomFile \
-	AAFTaggedValueDefinition \
-	AAFKLVDataDefinition \
 	EnumAAFTaggedValueDefs \
-	EnumAAFKLVDataDefs \
-	AAFRecordingDescriptor \
-	AAFAuxiliaryDescriptor \
-	AAFDescriptiveFramework \
-	AAFDescriptiveMarker "
+	EnumAAFTaggedValues \
+	EnumAAFTypeDefs "
 
 # Defered interfaces
 #	AAFIntraFrameMarker \
@@ -196,7 +196,6 @@ DODO_TARGET_NAMES="\
 	${AAFPERSISTENTOBJECTS} \
 	${AAFNONPERSISTENTOBJECTS} \
 	${HUMAN_TYPED_IMPL} "
-
 
 # Build the list of all public objects that need to be built into the COM DLL
 AAFOBJECTS="\
@@ -221,7 +220,6 @@ PRIVATE_AAFOBJECTS="\
 	AAFWeakRefValue \
 	EnumAAFStorablePropVals "
 
-
 # Build the list of all objects that have automatically-generated
 # implementation classes.
 AUTO_GEN_IMPL="\
@@ -233,16 +231,15 @@ AUTO_GEN_IMPL="\
 # NOT into AAF.idl.
 
 PLUGIN_OBJECTS="\
-	AAFPlugin \
 	AAFClassExtension \
-	AAFEssenceStream \
-	AAFEssenceDataStream \
 	AAFEssenceCodec \
 	AAFEssenceCodec2 \
-	AAFMultiEssenceCodec \
 	AAFEssenceContainer \
-	AAFInterpolator "
-
+	AAFEssenceDataStream \
+	AAFEssenceStream \
+	AAFInterpolator \
+	AAFMultiEssenceCodec \
+	AAFPlugin "
 
 # objects in PLUGIN_OBJECTS are NOT built into the main interface IDL
 #---------------------------------------------

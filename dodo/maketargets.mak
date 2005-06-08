@@ -13,7 +13,7 @@
 # the License for the specific language governing rights and limitations
 # under the License.
 #
-# The Original Code of this file is Copyright 1998-2004, Licensor of the
+# The Original Code of this file is Copyright 1998-2005, Licensor of the
 # AAF Association.
 #
 # The Initial Developer of the Original Code of this file and the
@@ -43,6 +43,14 @@ INCLUDE_DIR = ../ref-impl/include
 IMPL_DIR = ../ref-impl/src/impl
 COMAPI_DIR = ../ref-impl/src/com-api
 TEST_DIR = ../test/com/ComModTestAAF/ModuleTests
+
+SED = sed
+MIDL_SED = \
+	-e '/^ *\/\* File created by MIDL compiler version / { ' \
+	-e 's/^ *\(\/\* File created by MIDL compiler version .*\)/\1/' \
+	-e 'N' \
+	-e 's/ *\(\/\* at \).*/\1TIMESTAMP REMOVED/' \
+	-e '}'
 
 targets: macros/base.mac
 targets: $(DODO_TARGETS)
@@ -341,8 +349,6 @@ CAAFEnumValidation.h.tmp : GenEnumValidation.pl AAFPluginTypes.dod AAFTypes.dod 
 	$(CAT) CAAFEnumValidation.h >> CAAFEnumValidation.h.tmp
 	$(RM) -f CAAFEnumValidation.h
 
-
-
 #
 #
 # Rules for files generated in ref-impl/include/com-api directory by IDL compiler.
@@ -353,8 +359,8 @@ $(INCLUDE_DIR)/com-api/AAF.h $(INCLUDE_DIR)/com-api/AAF_i.c : $(INCLUDE_DIR)/com
 	@ $(ECHO) Generating AAF.h AAF_i.c ...
 	$(MIDL) -I $(INCLUDE_DIR)/com-api -out . $(INCLUDE_DIR)/com-api/AAF.idl
 	@ $(ECHO) Removing timestamp from generated files ...
-	sed -e '/^\/\* File created by MIDL compiler version /{' -e 'N' -e 's/\/\* at .*/\/\* at TIMESTAMP REMOVED/' -e '}' AAF.h > AAF.h.tmp
-	sed -e '/^\/\* File created by MIDL compiler version /{' -e 'N' -e 's/\/\* at .*/\/\* at TIMESTAMP REMOVED/' -e '}' AAF_i.c > AAF_i.c.tmp
+	$(SED) $(MIDL_SED) AAF.h > AAF.h.tmp
+	$(SED) $(MIDL_SED) AAF_i.c > AAF_i.c.tmp
 	$(UPDATE) AAF.h.tmp $(INCLUDE_DIR)/com-api/AAF.h
 	$(UPDATE) AAF_i.c.tmp $(INCLUDE_DIR)/com-api/AAF_i.c
 	$(RM) -f AAF.h AAF_i.c AAF_p.c AAF.h.tmp AAF_i.c.tmp dlldata.c
@@ -363,8 +369,8 @@ $(INCLUDE_DIR)/com-api/AAFPlugin.h $(INCLUDE_DIR)/com-api/AAFPlugin_i.c : $(INCL
 	@ $(ECHO) Generating AAFPlugin.h AAFPlugin_i.c ...
 	$(MIDL) -I $(INCLUDE_DIR)/com-api -out . $(INCLUDE_DIR)/com-api/AAFPlugin.idl
 	@ $(ECHO) Removing timestamp from generated files ...
-	sed -e '/^\/\* File created by MIDL compiler version /{' -e 'N' -e 's/\/\* at .*/\/\* at TIMESTAMP REMOVED/' -e '}' AAFPlugin.h > AAFPlugin.h.tmp
-	sed -e '/^\/\* File created by MIDL compiler version /{' -e 'N' -e 's/\/\* at .*/\/\* at TIMESTAMP REMOVED/' -e '}' AAFPlugin_i.c > AAFPlugin_i.c.tmp
+	$(SED) $(MIDL_SED) AAFPlugin.h > AAFPlugin.h.tmp
+	$(SED) $(MIDL_SED) AAFPlugin_i.c > AAFPlugin_i.c.tmp
 	$(UPDATE) AAFPlugin.h.tmp $(INCLUDE_DIR)/com-api/AAFPlugin.h
 	$(UPDATE) AAFPlugin_i.c.tmp $(INCLUDE_DIR)/com-api/AAFPlugin_i.c
 	$(RM) -f AAFPlugin.h AAFPlugin_i.c AAFPlugin_p.c AAFPlugin.h.tmp AAFPlugin_i.c.tmp dlldata.c
@@ -373,7 +379,7 @@ $(INCLUDE_DIR)/com-api/AAFPluginTypes.h : $(INCLUDE_DIR)/com-api/AAFPluginTypes.
 	@ $(ECHO) Generating AAFPluginTypes.h
 	$(MIDL) -I $(INCLUDE_DIR)/com-api -out . $(INCLUDE_DIR)/com-api/AAFPluginTypes.idl
 	@ $(ECHO) Removing timestamp from generated files ...
-	sed -e '/^\/\* File created by MIDL compiler version /{' -e 'N' -e 's/\/\* at .*/\/\* at TIMESTAMP REMOVED/' -e '}' AAFPluginTypes.h > AAFPluginTypes.h.tmp
+	$(SED) $(MIDL_SED) AAFPluginTypes.h > AAFPluginTypes.h.tmp
 	$(UPDATE) AAFPluginTypes.h.tmp $(INCLUDE_DIR)/com-api/AAFPluginTypes.h
 	$(RM) -f AAFPluginTypes.h AAFPluginTypes.h.tmp
 
@@ -381,8 +387,8 @@ $(INCLUDE_DIR)/com-api/AAFPrivate.h $(INCLUDE_DIR)/com-api/AAFPrivate_i.c : $(IN
 	@ $(ECHO) Generating AAFPrivate.h AAFPrivate_i.c ...
 	$(MIDL) -I $(INCLUDE_DIR)/com-api -out . $(INCLUDE_DIR)/com-api/AAFPrivate.idl
 	@ $(ECHO) Removing timestamp from generated files ...
-	sed -e '/^\/\* File created by MIDL compiler version /{' -e 'N' -e 's/\/\* at .*/\/\* at TIMESTAMP REMOVED/' -e '}' AAFPrivate.h > AAFPrivate.h.tmp
-	sed -e '/^\/\* File created by MIDL compiler version /{' -e 'N' -e 's/\/\* at .*/\/\* at TIMESTAMP REMOVED/' -e '}' AAFPrivate_i.c > AAFPrivate_i.c.tmp
+	$(SED) $(MIDL_SED) AAFPrivate.h > AAFPrivate.h.tmp
+	$(SED) $(MIDL_SED) AAFPrivate_i.c > AAFPrivate_i.c.tmp
 	$(UPDATE) AAFPrivate.h.tmp $(INCLUDE_DIR)/com-api/AAFPrivate.h
 	$(UPDATE) AAFPrivate_i.c.tmp $(INCLUDE_DIR)/com-api/AAFPrivate_i.c
 	$(RM) -f AAFPrivate.h AAFPrivate_i.c AAFPrivate_p.c AAFPrivate.h.tmp AAFPrivate_i.c.tmp dlldata.c
@@ -391,11 +397,9 @@ $(INCLUDE_DIR)/com-api/AAFTypes.h : $(INCLUDE_DIR)/com-api/AAFTypes.idl
 	@ $(ECHO) Generating AAFTypes.h
 	$(MIDL) -I $(INCLUDE_DIR)/com-api -out . $(INCLUDE_DIR)/com-api/AAFTypes.idl
 	@ $(ECHO) Removing timestamp from generated files ...
-	sed -e '/^\/\* File created by MIDL compiler version /{' -e 'N' -e 's/\/\* at .*/\/\* at TIMESTAMP REMOVED/' -e '}' AAFTypes.h > AAFTypes.h.tmp
+	$(SED) $(MIDL_SED) AAFTypes.h > AAFTypes.h.tmp
 	$(UPDATE) AAFTypes.h.tmp $(INCLUDE_DIR)/com-api/AAFTypes.h
 	$(RM) -f AAFTypes.h AAFTypes.h.tmp
-
-
 
 SRC_DIR = ../ref-impl/src
 

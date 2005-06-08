@@ -18,7 +18,7 @@
      ClearCase) we switched to method b) above when AAF transitioned
      to OpenSource.
 
-     $ clearmake -C gnu -f makefile SHELL=y:/mksnt/sh.exe
+     $ clearmake -C gnu -f makefile SHELL=c:/mks/mksnt/sh.exe
 
      + "-C gnu" tells clearmake to run in GNU make compatibility mode
          (compatibility is limited)
@@ -27,8 +27,9 @@
          GNUmakefile, added when b) was implemented, clearmake can't
          process GNUmakefile even in GNU compatibility mode.
  
-     + "SHELL=y:/mksnt/sh.exe" is necessary because I have the MKS
-          tools installed on Y: and not C:
+     + "SHELL=c:/mks/mksnt/sh.exe" is necessary so that make can find the
+        shell. Note that the mks shell may be in c:/mks/mksnt or
+        c:/mksnt or any place else you chose to put it.
 
 2) Running dodo on Unix/Linux
 

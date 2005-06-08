@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -67,8 +67,7 @@ AD_XMETHOD1(AddParentProperty,
 	    AAFPropertyDef,
 	    pParentProperty,
 	    Property definition to add.,
-
-  /// Add a property definition to the tagged value definition.
+	    Add a property definition to the tagged value definition.
   ///
   /// Return codes:
   ///
@@ -84,8 +83,7 @@ AD_XMETHOD1(GetParentProperties,
 	    EnumAAFPropertyDefs,
 	    ppEnum,
 	    Property definition enumerator.,
-
-  /// Writes an enumerator for the property definitions into *ppEnum.
+	    Writes an enumerator for the property definitions into *ppEnum.
   /// A reference is added to the new enumerator before it is returned.
   ///
   /// Return codes:
@@ -102,8 +100,7 @@ AD_XMETHOD1(CountParentProperties,
 	    aafUInt32*,
 	    pNumProperties,
 	    Number of property definitions.,
-
-  /// Writes the total number of property definitions into *pNumProperties if\,
+	    Writes the total number of property definitions into *pNumProperties if\,
   /// and only if\, the method succeeds.
   ///
   /// Return codes:
@@ -120,8 +117,7 @@ AD_XMETHOD1(RemoveParentProperty,
 	    AAFPropertyDef,
 	    pParentProperty,
 	    Property to remove.,
-
-  /// Removes the given property definition.
+	    Removes the given property definition.
   ///
   /// Return codes:
   ///

@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -88,19 +88,17 @@ AD_XMETHOD2(SetDescribedSlotIDs,
 		aafUInt32*,
 		pDescribedSlotIDs,
 		Array of slot IDs,
-
-	Specifies the slot IDs in the Mob to which the DescriptiveFramework refers.
-///
-/// 
-/// Return codes:
-///
-/// AAFRESULT_SUCCESS
-///   - succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///   - pMonoSourceSlotIDs is null 
-///
-/// This interface is not currently implemented.)
+		Specifies the slot IDs in the Mob to which the DescriptiveFramework refers.
+  /// 
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pMonoSourceSlotIDs is null 
+  ///
+  /// This interface is not currently implemented.)
 
 
 AD_XMETHOD2(GetDescribedSlotIDs,
@@ -114,24 +112,24 @@ AD_XMETHOD2(GetDescribedSlotIDs,
 		aafUInt32*,
 		pDescribedSlotIDs,
 		Array of channel IDs,
-
-/// Get the described slot IDs that are referenced by this object.  Refer to
-/// SetDescribedSlotIDs for a description of pDescribedSlotIDs.
-/// Return codes:
-///
-/// AAFRESULT_SUCCESS
-///   - succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///   - pDescribedSlotIDs is null
-///
-/// AAFRESULT_PROP_NOT_PRESENT
-///   - the property is not present
-///
-/// AAFRESULT_SMALLBUF
-///   - pDescribedSlotIDs is too small
-///
-/// This interface is not currently implemented.)
+		Get the described slot IDs that are referenced by this object.  Refer to
+  /// SetDescribedSlotIDs for a description of pDescribedSlotIDs.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pDescribedSlotIDs is null
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - pDescribedSlotIDs is too small
+  ///
+  /// This interface is not currently implemented.)
 
 AD_XMETHOD1(GetDescribedSlotIDsSize,
 		[out],
@@ -139,16 +137,15 @@ AD_XMETHOD1(GetDescribedSlotIDsSize,
 		aafUInt32 *,
 		numberElements,
 		Number of elements in the pDescribedSlotIDs array,
-
-/// Get the number of slot IDs stored by this DescriptiveMarker.
-///
-/// Return codes:
-///
-/// AAFRESULT_SUCCESS
-///   - succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///   - pDescribedSlotIDs is null )
+		Get the number of slot IDs stored by this DescriptiveMarker.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pDescribedSlotIDs is null )
 
 AD_XMETHOD1(SetDescriptiveFramework,
 		[in],
@@ -156,16 +153,15 @@ AD_XMETHOD1(SetDescriptiveFramework,
 		AAFDescriptiveFramework,
 		pDescriptiveFramework,
 		DescriptorFramework object to set,
-
-/// Sets the DescriptiveFramework that describes this DescriptiveMarker.
-///
-/// Return codes:
-///
-/// AAFRESULT_SUCCESS
-///	- succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///	- pDescriptorFramework is null)
+		Sets the DescriptiveFramework that describes this DescriptiveMarker.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///	- succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///	- pDescriptorFramework is null)
 
 AD_XMETHOD1(GetDescriptiveFramework,
 		[out\,retval],
@@ -173,15 +169,14 @@ AD_XMETHOD1(GetDescriptiveFramework,
 		AAFDescriptiveFramework,
 		ppDescriptiveFramework,
 		DescriptorFramework object to return,
-
-/// Gets the DescriptiveFramework that describes this DescriptiveMarker.
-///
-/// Return codes:
-///
-/// AAFRESULT_SUCCESS
-///	- succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///	- ppDescriptorFramework is null)
+		Gets the DescriptiveFramework that describes this DescriptiveMarker.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///	- succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///	- ppDescriptorFramework is null)
 
 AD_XCLASS_END(Concrete, StoredObject)

@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -59,7 +59,7 @@ AD_XMETHOD1(GetSelectedSegment,
 			AAFSegment,
 			ppSelSegment,
 			Returned the selected Segment object,
-     Places the Selected Segment object in this Selector into the
+			Places the Selected Segment object in this Selector into the
   /// *ppSelSegment argument.  If none exists yet\, NULL is placed into
   /// the *ppSelSegment argument.
   ///
@@ -115,7 +115,7 @@ AD_XMETHOD1(AppendAlternateSegment,
 			AAFSegment,
 			pSegment,
 			Segment to append to the Alternate list of segments,
-     This function appends the input segment to the alternate segment
+			This function appends the input segment to the alternate segment
   /// list\, the alternate list of segments represents unused
   /// alternative segments. 
   ///
@@ -178,7 +178,7 @@ AD_XMETHOD1(EnumAlternateSegments,
 			EnumAAFSegments,
 			ppEnum,
 			Segment Enumeration,
-     Places an IEnumAAFSegments enumerator for the alterante segments
+			Places an IEnumAAFSegments enumerator for the alterante segments
   /// contained in the selector into the *ppEnum argument.
   /// 
   /// The returned enumerator is AddRef\(\)ed before it is returned.
@@ -211,8 +211,7 @@ AD_XMETHOD1(RemoveAlternateSegment,
 			AAFSegment,
 			pSegment,
 			Segment to remove,
-
-  /// Removes the given Segment from the selector.
+			Removes the given Segment from the selector.
   ///
   /// Succeeds if all of the following are true:
   /// - the v pointer is valid.

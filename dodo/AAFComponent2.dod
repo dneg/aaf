@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -132,7 +132,7 @@ AD_XMETHOD1(SetDataDef,
 			AAFDataDef,
 			pDataDef,
 			DataDef of this object,
-			sets the data definition property AUID on this component.
+			Sets the data definition property AUID on this component.
   /// 
   /// If this method fails the Data Definition property will not be
   /// changed.
@@ -152,7 +152,7 @@ AD_XMETHOD1(GetDataDef,
 			AAFDataDef,
 			ppDatadef,
 			DataDef of this object,
-			returns data definition object.
+			Returns data definition object.
   ///
   /// Succeeds if all of the following are true:
   /// - the ppDatadef pointer is valid.
@@ -175,7 +175,6 @@ AD_XMETHOD1(AppendKLVData,
 			AAFKLVData,
 			pData,
 			KLV object,
-
 			Appends a pre-existing KLV Data object to the specified
   /// component.
   /// 
@@ -200,9 +199,8 @@ AD_XMETHOD1(CountKLVData,
 			objPass,
 			aafUInt32 *,
 			pNumData,
-			Number  of KLV data objects,
-
-			return total number of KLV data objects attached to this component.
+			Number of KLV data objects,
+			Return total number of KLV data objects attached to this component.
   ///
   /// Succeeds if all of the following are true:
   /// - the pNumData pointer is valid.
@@ -226,8 +224,7 @@ AD_XMETHOD1(GetKLVData,
 			EnumAAFKLVData,
 			ppEnum,
 			KLV data objects,
-
-			return the enumeration for all KLV data objects on this component.  The returned
+			Return the enumeration for all KLV data objects on this component.  The returned
   /// enumerator is AddRef\(\)ed before it is returned.  The enumerator
   /// is implemented as a EnumAAFKLVData.
   /// 
@@ -253,8 +250,7 @@ AD_XMETHOD1(RemoveKLVData,
 			AAFKLVData,
 			pData,
 			KLV data object to remove,
-
-  /// Removes the given KLV data object from this component.
+			Removes the given KLV data object from this component.
   /// 
   /// Succeeds if all of the following are true:
   /// - the pData pointer is valid.
@@ -282,13 +278,13 @@ AD_XMETHOD1(RemoveKLVData,
 
 AD_XMETHOD2( AppendComment,
 	     [in], objPass, aafCharacter_constptr, pName,
- 	     The attribute name.,
+		The attribute name.,
 	     [in], objPass, aafCharacter_constptr, pValue,
-             The attribute value.,
-	     Append and attribute name/value pair to the attribute list. )
-
-  /// Creates a new tagged value, initializes it with the specified comment
-  /// name/value pair, and appends it to the comment list.
+		The attribute value.,
+	     Append an attribute name/value pair to the attribute list.
+  ///
+  /// Creates a new tagged value\, initializes it with the specified comment
+  /// name/value pair\, and appends it to the comment list.
   ///
   /// Succeeds if:
   ///   - pName and pValue are valid pointers.
@@ -298,14 +294,12 @@ AD_XMETHOD2( AppendComment,
   ///   AAFRESULT_SUCCESS
   ///
   ///   AAFRESULT_NULL_PARAM
-  ///	     - pName or pValue is null.
+  ///	     - pName or pValue is null.)
 
 AD_XMETHOD1( CountComments,
 	     [out], objPass, aafUInt32*, pNumComments,
 	     Pointer to comment count.,
-	     Return the number of comments contained by this component )
-
-  /// Returns the number of comments on this component.
+	     Return the number of comments contained in this component.
   ///
   /// Succeeds if:
   ///   - pNumComments is a valid pointer
@@ -315,16 +309,16 @@ AD_XMETHOD1( CountComments,
   ///   AAFRESULT_SUCCESS
   ///
   ///   AAFRESULT_NULL_PARAM
-  ///	     - pNumComments is null
+  ///	     - pNumComments is null.)
   
 
 AD_XMETHOD1( GetComments,
 	     [out], objOut, EnumAAFTaggedValues, ppEnum,
 	     Pointer to the new enumerator object created by this method.,
-	     Return a comment enumerator for this component. )
-
+	     Return a comment enumerator for this component.
+  ///
   /// Creates an enumerator for this component\'s comments.  The new enumerator is
-  /// AddRef'ed before it is returned.
+  /// AddRef\(\)ed before it is returned.
   ///
   /// Succeeds if:
   ///   - pName and pValue are valid pointers.
@@ -334,15 +328,13 @@ AD_XMETHOD1( GetComments,
   ///   AAFRESULT_SUCCESS
   ///
   ///   AAFRESULT_NULL_PARAM
-  ///	     - pEnum was null
+  ///	     - pEnum was null.)
 
 
 AD_XMETHOD1( RemoveComment,
 	     [in], objIn, AAFTaggedValue, pComment,
 	     Pointer to the tagged value comment.,
-	     Remove a comment \(tagged value\).)
-
-  /// Removes a component comment.
+	     Remove a component comment \(tagged value\).
   ///
   /// Succeeds if:
   ///   - pName and pValue are valid pointers.
@@ -352,17 +344,17 @@ AD_XMETHOD1( RemoveComment,
   ///   AAFRESULT_SUCCESS
   ///
   ///   AAFRESULT_NULL_PARAM
-  ///	     - pName or pValue is null.
+  ///	     - pName or pValue is null.)
 
 AD_XMETHOD2( AppendAttribute,
 	     [in], objPass, aafCharacter_constptr, pName,
  	     The attribute name.,
 	     [in], objPass, aafCharacter_constptr, pValue,
              The attribute value.,
-	     Append and attribute name/value pair to the attribute list. )
-
-  /// Creates a new tagged value, initializes it with the specified attribute
-  /// name/value pair, and appends it to the attribute list.
+	     Append an attribute name/value pair to the attribute list.
+  ///
+  /// Creates a new tagged value\, initializes it with the specified attribute
+  /// name/value pair\, and appends it to the attribute list.
   ///
   /// Succeeds if:
   ///   - pName and pValue are valid pointers.
@@ -372,14 +364,12 @@ AD_XMETHOD2( AppendAttribute,
   ///   AAFRESULT_SUCCESS
   ///
   ///   AAFRESULT_NULL_PARAM
-  ///	     - pName or pValue is null.
+  ///	     - pName or pValue is null.)
 
 AD_XMETHOD1( CountAttributes,
 	     [out], objPass, aafUInt32*, pNumAttributes,
 	     Pointer to attribute count.,
-	     Return the number of attributes contained by this component )
-
-  /// Returns the number of attributes on this component.
+	     Return the number of attributes contained in this component.
   ///
   /// Succeeds if:
   ///   - pNumAttributes is a valid pointer
@@ -389,16 +379,16 @@ AD_XMETHOD1( CountAttributes,
   ///   AAFRESULT_SUCCESS
   ///
   ///   AAFRESULT_NULL_PARAM
-  ///	     - pNumAttributes is null
+  ///	     - pNumAttributes is null.)
   
 
 AD_XMETHOD1( GetAttributes,
 	     [out], objOut, EnumAAFTaggedValues, ppEnum,
 	     Pointer to the new enumerator object created by this method.,
-	     Return an attribute enumerator for this component. )
-
+	     Return an attribute enumerator for this component.
+  ///
   /// Creates an enumerator for this component\'s attributes.  The new enumerator is
-  /// AddRef'ed before it is returned.
+  /// AddRef\(\)ed before it is returned.
   ///
   /// Succeeds if:
   ///   - pName and pValue are valid pointers.
@@ -408,15 +398,13 @@ AD_XMETHOD1( GetAttributes,
   ///   AAFRESULT_SUCCESS
   ///
   ///   AAFRESULT_NULL_PARAM
-  ///	     - pEnum was null
+  ///	     - pEnum was null.)
 
 
 AD_XMETHOD1( RemoveAttribute,
 	     [in], objIn, AAFTaggedValue, pAttribute,
 	     Pointer to the tagged value attribute.,
-	     Remove an attribute \(tagged value\).)
-
-  /// Removes a component attribute.
+	     Remove a component attribute \(tagged value\).
   ///
   /// Succeeds if:
   ///   - pName and pValue are valid pointers.
@@ -426,9 +414,6 @@ AD_XMETHOD1( RemoveAttribute,
   ///   AAFRESULT_SUCCESS
   ///
   ///   AAFRESULT_NULL_PARAM
-  ///	     - pName or pValue is null.
-
-
-
+  ///	     - pName or pValue is null.)
 
 AD_XCLASS_END(Abstract, StoredObject)

@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -128,7 +128,7 @@ AD_XMETHOD1(SetDataDef,
 			AAFDataDef,
 			pDataDef,
 			DataDef of this object,
-			sets the data definition property AUID on this component.
+			Sets the data definition property AUID on this component.
   /// 
   /// If this method fails the Data Definition property will not be
   /// changed.
@@ -148,7 +148,7 @@ AD_XMETHOD1(GetDataDef,
 			AAFDataDef,
 			ppDatadef,
 			DataDef of this object,
-			returns data definition object.
+			Returns data definition object.
   ///
   /// Succeeds if all of the following are true:
   /// - the ppDatadef pointer is valid.
@@ -171,7 +171,6 @@ AD_XMETHOD1(AppendKLVData,
 			AAFKLVData,
 			pData,
 			KLV object,
-
 			Appends a pre-existing KLV Data object to the specified
   /// component.
   /// 
@@ -197,8 +196,7 @@ AD_XMETHOD1(CountKLVData,
 			aafUInt32 *,
 			pNumData,
 			Number  of KLV data objects,
-
-			return total number of KLV data objects attached to this component.
+			Return total number of KLV data objects attached to this component.
   ///
   /// Succeeds if all of the following are true:
   /// - the pNumData pointer is valid.
@@ -222,8 +220,7 @@ AD_XMETHOD1(GetKLVData,
 			EnumAAFKLVData,
 			ppEnum,
 			KLV data objects,
-
-			return the enumeration for all KLV data objects on this component.  The returned
+			Return the enumeration for all KLV data objects on this component.  The returned
   /// enumerator is AddRef\(\)ed before it is returned.  The enumerator
   /// is implemented as a EnumAAFKLVData.
   /// 
@@ -249,8 +246,7 @@ AD_XMETHOD1(RemoveKLVData,
 			AAFKLVData,
 			pData,
 			KLV data object to remove,
-
-  /// Removes the given KLV data object from this component.
+			Removes the given KLV data object from this component.
   /// 
   /// Succeeds if all of the following are true:
   /// - the pData pointer is valid.

@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -1683,11 +1683,8 @@ AD_CLASS_END\
   /// @param %10 %07 %11
   /// 
   STDAPI %01 (
-    // %06
-    /*%02*/ .%03-adornment%04 .%03-indirection %05,
-
-    // %11
-    /*%07*/ .%08-adornment%09 .%08-indirection %10);\
+    .%03-adornment%04 .%03-indirection %05,
+    .%08-adornment%09 .%08-indirection %10);\
 #endm
 
 

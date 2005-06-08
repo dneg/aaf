@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -64,11 +64,10 @@ AD_XCLASS_BEGIN(Abstract, StoredObject)
 
 AD_XMETHOD1(GetSourceID,
 			[retval][out],
-			objPass,
-			aafMobID_t *,
-			pSourceID,
-			Place to put source ID,
-
+			  objPass,
+			  aafMobID_t *,
+			  pSourceID,
+			  Place to put source ID,
 			Gets the SourceID and places it into the pSourceID argument.
   ///
   /// Succeeds if all of the following are true:
@@ -89,11 +88,10 @@ AD_XMETHOD1(GetSourceID,
 
 AD_XMETHOD1(SetSourceID,
 			[in],
-			objPass,
-			aafMobID_constref ,
-			sourceID,
-			Source ID to set,
-
+			  objPass,
+			  aafMobID_constref ,
+			  sourceID,
+			  Source ID to set,
 			Sets the SourceID using the sourceID argument.
   /// 
   /// Always succeeds.
@@ -108,11 +106,10 @@ AD_XMETHOD1(SetSourceID,
 
 AD_XMETHOD1(GetSourceMobSlotID,
 			[retval][out],
-			objPass,
-			aafSlotID_t *,
-			pMobSlotID,
-			Place to put source mob slot ID,
-
+			  objPass,
+			  aafSlotID_t *,
+			  pMobSlotID,
+			  Place to put source mob slot ID,
 			Gets the Mob Slot ID and places it into the pMobSlotID argument.
   ///
   /// Succeeds if all of the following are true:
@@ -133,11 +130,10 @@ AD_XMETHOD1(GetSourceMobSlotID,
 
 AD_XMETHOD1(SetSourceMobSlotID,
 			[in],
-			objPass,
-			aafSlotID_t ,
-			mobSlotID,
-			Source Mob ID to set,
-
+			  objPass,
+			  aafSlotID_t ,
+			  mobSlotID,
+			  Source Mob ID to set,
 			Sets the mob slot ID using the mobSlotID argument.
   /// 
   /// Succeeds if all of the following are true:
@@ -160,144 +156,143 @@ AD_XMETHOD1(SetSourceMobSlotID,
 #c
 
 AD_XMETHOD2(SetChannelIDs,
-		[in],
-		objPass,
-		aafUInt32,
-		numberElements,
-		Number of elements in the pChannelIDs array,
-		[in],
-		objPass,
-		aafUInt32*,
-		pChannelIDs,
-		Array of channel IDs,
-
-	   Specify the channels in a slot that are referenced. The first channel has
-/// and ID of 1\, the N'th channel has an ID of N.  The number of channel IDs
-/// shall equal the number of channels being described the bht MobSlot containing
-/// the SourceReference\, e.g. 1 element for a mono audio slot\, 6 elements for a 5.1
-/// multi-channel audio slot.
-/// 
-/// Return codes:
-///
-/// AAFRESULT_SUCCESS
-///   - succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///   - pChannelIDs is null )
+			[in],
+			  objPass,
+			  aafUInt32,
+			  numberElements,
+			  Number of elements in the pChannelIDs array,
+			[in],
+			  objPass,
+			  aafUInt32*,
+			  pChannelIDs,
+			  Array of channel IDs,
+			Specify the channels in a slot that are referenced. The first channel has
+  /// and ID of 1\, the N'th channel has an ID of N.  The number of channel IDs
+  /// shall equal the number of channels being described the bht MobSlot containing
+  /// the SourceReference\, e.g. 1 element for a mono audio slot\, 6 elements for a 5.1
+  /// multi-channel audio slot.
+  /// 
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pChannelIDs is null )
 
 
 AD_XMETHOD2(GetChannelIDs,
-		[in],
-		objPass,
-		aafUInt32,
-		numberElements,
-		Number of elements in the pChannelIDs array,
-		[in],
-		objPass,
-		aafUInt32*,
-		pChannelIDs,
-		Array of channel IDs,
-
-/// Get the channels in a slot that are referenced.  Refer to
-/// SetChannelIDs for channel IDs description.
-/// Return codes:
-///
-/// AAFRESULT_SUCCESS
-///   - succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///   - pChannelIDs is null
-///
-/// AAFRESULT_PROP_NOT_PRESENT
-///   - the property is not present
-///
-/// AAFRESULT_SMALLBUF
-///   - pChannelIDs is too small)
+			[in],
+			  objPass,
+			  aafUInt32,
+			  numberElements,
+			  Number of elements in the pChannelIDs array,
+			[in],
+			  objPass,
+			  aafUInt32*,
+			  pChannelIDs,
+			  Array of channel IDs,
+			Get the channels in a slot that are referenced.  Refer to
+  /// SetChannelIDs for channel IDs description.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pChannelIDs is null
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - pChannelIDs is too small)
 
 AD_XMETHOD1(GetChannelIDsSize,
-		[out],
-		objPass,
-		aafUInt32 *,
-		pSize,
-		required buffer size to hold the ChannelIDs array,
-
-/// Returns the size in bytes of the buffer required to hold the array
-/// returned by GetChannelIDs\(\).
-///
-/// AAFRESULT_SUCCESS
-///   - succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///   - pSize is null)
+			[out],
+			  objPass,
+			  aafUInt32 *,
+			  pSize,
+			  required buffer size to hold the ChannelIDs array,
+			Returns the size in bytes of the buffer required to hold the array
+  /// returned by GetChannelIDs\(\).
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSize is null)
 
 AD_XMETHOD2(SetMonoSourceSlotIDs,
-		[in],
-		objPass,
-		aafUInt32,
-		numberElements,
-		Number of elements in the pMonoSourceSlotIDs array,
-		[in],
-		objPass,
-		aafUInt32*,
-		pMonoSourceSlotIDs,
-		Array of slot IDs,
-
-	   For reference from a multi-channel MobSlot to multiple mono MobSlots.
-/// pMonoSourceSlotIDs identifies the mono slots referenced by this SourceReference
-/// object.
-
-/// 
-/// Return codes:
-///
-/// AAFRESULT_SUCCESS
-///   - succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///   - pMonoSourceSlotIDs is null )
+			[in],
+			  objPass,
+			  aafUInt32,
+			  numberElements,
+			  Number of elements in the pMonoSourceSlotIDs array,
+			[in],
+			  objPass,
+			  aafUInt32*,
+			  pMonoSourceSlotIDs,
+			  Array of slot IDs,
+			For reference from a multi-channel MobSlot to multiple mono MobSlots.
+  /// pMonoSourceSlotIDs identifies the mono slots referenced by this SourceReference
+  /// object.
+  /// 
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pMonoSourceSlotIDs is null )
 
 
 AD_XMETHOD2(GetMonoSourceSlotIDs,
-		[in],
-		objPass,
-		aafUInt32,
-		numberElements,
-		Number of elements in the pMonoSourceSlotIDs array,
-		[in],
-		objPass,
-		aafUInt32*,
-		pMonoSourceSlotIDs,
-		Array of channel IDs,
-
-/// Get the mono slot IDs that are referenced by this object.  Refer to
-/// SetMonoSourceSlotIDs for a description of pMonoSourceSlotIDs.
-/// Return codes:
-///
-/// AAFRESULT_SUCCESS
-///   - succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///   - pMonoSourceSlotIDs is null
-///
-/// AAFRESULT_PROP_NOT_PRESENT
-///   - the property is not present
-///
-/// AAFRESULT_SMALLBUF
-///   - pMonoSourceSlotIDs is too small)
+			[in],
+			  objPass,
+			  aafUInt32,
+			  numberElements,
+			  Number of elements in the pMonoSourceSlotIDs array,
+			[in],
+			  objPass,
+			  aafUInt32*,
+			  pMonoSourceSlotIDs,
+			  Array of channel IDs,
+			Get the mono slot IDs that are referenced by this object.  Refer to
+  /// SetMonoSourceSlotIDs for a description of pMonoSourceSlotIDs.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pMonoSourceSlotIDs is null
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - pMonoSourceSlotIDs is too small)
 
 AD_XMETHOD1(GetMonoSourceSlotIDsSize,
-		[out],
-		objPass,
-		aafUInt32 *,
-		pSize,
-		required buffer size to hold the MonoSourceSlotIDs array,
-
-/// Returns the size in bytes of the buffer required to hold the array
-/// returned by GetMonoSourceSlotIDs\(\).
-///
-/// AAFRESULT_SUCCESS
-///   - succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///   - pSize is null)
+			[out],
+			  objPass,
+			  aafUInt32 *,
+			  pSize,
+			  required buffer size to hold the MonoSourceSlotIDs array,
+			Returns the size in bytes of the buffer required to hold the array
+  /// returned by GetMonoSourceSlotIDs\(\).
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSize is null)
 
 AD_XCLASS_END(Abstract, StoredObject)

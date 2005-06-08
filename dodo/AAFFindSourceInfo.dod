@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -39,12 +39,11 @@ AD_XCLASS_BEGIN(Concrete, Transient)
 
 AD_XMETHOD1(GetMob,
 			[out],
-			objOut,
-			AAFMob,
-			ppMob,
-			The final media object referenced,
-
-  /// This function returns the mob found by the function
+			  objOut,
+			  AAFMob,
+			  ppMob,
+			  The final media object referenced,
+			This function returns the mob found by the function
   /// which generated this IAAFFindSourceInfo as a result.
   ///
   /// Succeeds if all of the following are true:
@@ -67,12 +66,11 @@ AD_XMETHOD1(GetMob,
 
 AD_XMETHOD1(GetSourceReference,
 			[out],
-			objPass,
-			aafSourceRef_t *,
-			pSourceRef,
-			Source Reference,
-
-  /// This function returns the source reference found by the function
+			  objPass,
+			  aafSourceRef_t *,
+			  pSourceRef,
+			  Source Reference,
+			This function returns the source reference found by the function
   /// which generated this IAAFFindSourceInfo as a result.
   ///
   /// Note: the 3 properties that make up the "source
@@ -99,10 +97,10 @@ AD_XMETHOD1(GetSourceReference,
 
 AD_METHOD1(GetLength,
 		   [retval][out],
-		   aafLength_t *,
-		   pLength,
-		   Length of this component,
-		   Gets the  of this component.
+		     aafLength_t *,
+		     pLength,
+		     Length of this component,
+		   Gets the length of this component.
   /// This function returns the duration in edit units of the result.
   ///	
   /// Succeeds if all of the following are true:
@@ -129,9 +127,9 @@ AD_METHOD1(GetLength,
 
 AD_METHOD1(GetEditRate,
 		   [out\\\,retval], 
-		   aafRational_t *, 
-		   pEditRate, 
-		   Edit rate property value,
+		     aafRational_t *, 
+		     pEditRate, 
+		     Edit rate property value,
 		   This method will get the edit rate for this result.
   /// 
   /// Succeeds if all of the following are true:

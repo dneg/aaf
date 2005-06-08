@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -54,19 +54,16 @@ AD_XMETHOD3(Initialize,
 			aafUID_constref,
 			id,
 			auid to be used to identify this type,
-
 			[in],
 			objIn,
 			AAFTypeDef,
 			pBaseType,
 			type to which this is an alias,
-
 			[in\, string],
 			objPass,
 			aafCharacter_constptr,
 			pTypeName,
 			friendly name of this type definition,
-
 			Initializes this type def to be an alias for the given type
   /// \(similar to a C typedef\).
   /// 
@@ -98,7 +95,6 @@ AD_XMETHOD1(GetBaseType,
 			AAFTypeDef,
 			ppBaseType,
 			type definition for which this is an alias,
-
 			Returns the type definition to which this type def is an alias.
   ///
   /// Succeeds if:
@@ -125,14 +121,12 @@ AD_XMETHOD2(GetBaseValue,
 			AAFPropertyValue,
 			pInPropVal,
 			property value from which value is to be read,
-
 			[out],
 			objOut,
 			AAFPropertyValue,
 			ppOutPropVal,
 			pointer to property value represented by base type,
-
-  /// Gets the property value of the base type from the given property
+			Gets the property value of the base type from the given property
   /// value of the typedef type and places a pointer to the base type's
   /// property value into *ppOutPropVal.
   ///
@@ -159,14 +153,12 @@ AD_XMETHOD2(CreateValue,
 			AAFPropertyValue,
 			pInPropVal,
 			property value from which value is to be read,
-
 			[out],
 			objOut,
 			AAFPropertyValue,
 			ppOutPropVal,
 			pointer to property value represented by rename type,
-
-  /// Gets the property value of the typedef type from the given property
+			Gets the property value of the typedef type from the given property
   /// value of the base type and places a pointer to the base type's
   /// property value into *ppOutPropVal.
   ///

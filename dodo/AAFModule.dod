@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -49,15 +49,13 @@ AD_CPP_QUOTE(\  /// library then the following functions will always succeed:)
 AD_CPP_QUOTE(\  ///***********************************************************)
 
 AD_XFUNCTION1(AAFLoad,
-
 			[in],
-			objPass,
-			const char *,
-			dllname,
-       Pointer to the name of AAF dll to load.
+			  objPass,
+			  const char *,
+			  dllname,
+			  Pointer to the name of AAF dll to load.
   /// If this pointer is NULL the function will attempt to load the
   /// default AAF dll.,
-
 			Attempts to load the given implementation of AAF into
   /// the processes address space. Only one implementation
   /// of AAF can be active. Note: once AAFUnload has been
@@ -70,7 +68,6 @@ AD_XFUNCTION1(AAFLoad,
 
 
 AD_FUNCTION0(AAFUnload,
-
 			Attempts to unload the current AAF dll loaded with a
   /// previous call to AAFLoad.)
 
@@ -80,33 +77,29 @@ AD_CPP_QUOTE(\  /// Factory functions for AAF files:.)
 AD_CPP_QUOTE(\  ///***********************************************************)
 
 AD_XFUNCTION3(AAFFileOpenExistingRead,
-
 			[in\, string],
-			objPass,
-			aafCharacter_constptr,
-			pFileName,
-       Null-terminated string containing name of filesystem file to be
+			  objPass,
+			  aafCharacter_constptr,
+			  pFileName,
+			  Null-terminated string containing name of filesystem file to be
   /// opened for reading.  Filename must be in a form that would be
   /// acceptable to StgOpenStorage\(\) for this platform.,
-
 			[in],
-			objPass,
-			aafUInt32,
-			modeFlags,
-       File open mode flags.  May be any of the following ORed
+			  objPass,
+			  aafUInt32,
+			  modeFlags,
+			  File open mode flags.  May be any of the following ORed
   /// together.  All other bits must be set to zero.
   ///
   ///  - kAAFFileModeUnbuffered - to indicate buffered mode.  Default
   ///    is buffered.,
 
 			[out],
-			objOut,
-			AAFFile,
-			ppFile,
-			Pointer to buffer to receive pointer to new file.,
-
-
-     Creates an object associated with with an existing filesystem
+			  objOut,
+			  AAFFile,
+			  ppFile,
+			  Pointer to buffer to receive pointer to new file.,
+			Creates an object associated with with an existing filesystem
   /// file that contains data which is only to be read.
   /// Does the following:
   ///
@@ -152,20 +145,18 @@ AD_XFUNCTION3(AAFFileOpenExistingRead,
 
 
 AD_XFUNCTION4(AAFFileOpenExistingModify,
-
 			[in\, string],
-			objPass,
-			aafCharacter_constptr,
-			pFileName,
-			Null-terminated string containing name of filesystem file to be
+			  objPass,
+			  aafCharacter_constptr,
+			  pFileName,
+			  Null-terminated string containing name of filesystem file to be
   /// opened for modification.  Filename must be in a form that would
   /// be acceptable to StgOpenStorage\(\) for this platform.,
-
 			[in],
-			objPass,
-			aafUInt32,
-			modeFlags,
-			File open mode flags.  May be any of the following ORed together.
+			  objPass,
+			  aafUInt32,
+			  modeFlags,
+			  File open mode flags.  May be any of the following ORed together.
   /// All other bits must be set to zero.
   ///
   ///  - kAAFFileModeUnbuffered
@@ -174,18 +165,15 @@ AD_XFUNCTION4(AAFFileOpenExistingModify,
   ///    to indicate that Revert is possible on this file \(for all changes except those to essence\).,
 
 			[in],
-			objPass,
-			aafProductIdentification_t *,
-			pIdent,
-			Identification of the application which is modifying this file.,
-
+			  objPass,
+			  aafProductIdentification_t *,
+			  pIdent,
+			  Identification of the application which is modifying this file.,
 			[out],
-			objOut,
-			AAFFile,
-			ppFile,
-			Pointer to buffer to receive pointer to new file.,
-
-
+			  objOut,
+			  AAFFile,
+			  ppFile,
+			  Pointer to buffer to receive pointer to new file.,
 			Creates an object associated with with an existing
   /// filesystem file that contains data which is to be read and
   /// written.  Associates the given identification with it.
@@ -240,40 +228,34 @@ AD_XFUNCTION4(AAFFileOpenExistingModify,
 
 
 AD_XFUNCTION4(AAFFileOpenNewModify,
-
 			[in\, string],
-			objPass,
-			aafCharacter_constptr,
-			pFileName,
-			Null-terminated string containing name of filesystem file to be
+			  objPass,
+			  aafCharacter_constptr,
+			  pFileName,
+			  Null-terminated string containing name of filesystem file to be
   /// opened for modification.  Filename must be in a form that would
   /// be acceptable to StgOpenStorage\(\) for this platform.,
-
 			[in],
-			objPass,
-			aafUInt32,
-			modeFlags,
-			File open mode flags.  May be any of the following ORed together.
+			  objPass,
+			  aafUInt32,
+			  modeFlags,
+			  File open mode flags.  May be any of the following ORed together.
   /// All other bits must be set to zero.
   ///
   ///  - kAAFFileModeUnbuffered
   ///    to indicate unbuffered mode. Default is buffered.
   ///  - kAAFFileModeRevertable
   ///    to indicate that Revert is possible on this file \(for all changes except those to essence\).,
-
 			[in],
-			objPass,
-			aafProductIdentification_t *,
-			pIdent,
-			Identification of the application which is creating this file.,
-
+			  objPass,
+			  aafProductIdentification_t *,
+			  pIdent,
+			  Identification of the application which is creating this file.,
 			[out],
-			objOut,
-			AAFFile,
-			ppFile,
-			Pointer to buffer to receive pointer to new file.,
-
-
+			  objOut,
+			  AAFFile,
+			  ppFile,
+			  Pointer to buffer to receive pointer to new file.,
 			Creates an object associated with with a new
   /// filesystem file that contains data which is to be read and
   /// written.  Associates the given identification with it.
@@ -319,39 +301,32 @@ AD_XFUNCTION4(AAFFileOpenNewModify,
 
 
 AD_XFUNCTION5(AAFFileOpenNewModifyEx,
-
 			[in\, string],
-			objPass,
-			aafCharacter_constptr,
-			pFileName,
-			Null-terminated string containing name of filesystem file to be
+			  objPass,
+			  aafCharacter_constptr,
+			  pFileName,
+			  Null-terminated string containing name of filesystem file to be
   /// opened for modification.,
-
 			[in],
-			objPass,
-			aafUID_constptr,
-			pFileKind,
-			kind of file to be created,
-
+			  objPass,
+			  aafUID_constptr,
+			  pFileKind,
+			  kind of file to be created,
 			[in],
-			objPass,
-			aafUInt32,
-			modeFlags,
-			File open mode flags,
-
+			  objPass,
+			  aafUInt32,
+			  modeFlags,
+			  File open mode flags,
 			[in],
-			objPass,
-			aafProductIdentification_t *,
-			pIdent,
-			Identification of the application which is creating this file.,
-
+			  objPass,
+			  aafProductIdentification_t *,
+			  pIdent,
+			  Identification of the application which is creating this file.,
 			[out],
-			objOut,
-			AAFFile,
-			ppFile,
-			Pointer to buffer to receive pointer to new file.,
-
-
+			  objOut,
+			  AAFFile,
+			  ppFile,
+			  Pointer to buffer to receive pointer to new file.,
 			Creates an object associated with with a new
   /// filesystem file that contains data which is to be read and
   /// written.  Associates the given identification with it.
@@ -399,18 +374,15 @@ AD_XFUNCTION5(AAFFileOpenNewModifyEx,
 
 AD_XFUNCTION2(AAFFileOpenTransient,
 			[in],
-			objPass,
-			aafProductIdentification_t *,
-			pIdent,
-			Identification which is to be associated with this file.,
-
+			  objPass,
+			  aafProductIdentification_t *,
+			  pIdent,
+			  Identification which is to be associated with this file.,
 			[out],
-			objOut,
-			AAFFile,
-			ppFile,
-			Pointer to buffer to receive pointer to new file.,
-
-
+			  objOut,
+			  AAFFile,
+			  ppFile,
+			  Pointer to buffer to receive pointer to new file.,
 			Creates an object associated with with a transient file\,
   /// meaning that it is not associated with any filesystem file but
   /// may still be used to contain AAF objects as if it was associated
@@ -442,25 +414,21 @@ AD_XFUNCTION2(AAFFileOpenTransient,
 
 
 AD_XFUNCTION3(AAFFileIsAAFFile,
-
 			[in\, string],
-			objPass,
-			aafCharacter_constptr,
-			pFileName,
-			Null-terminated string containing name of filesystem file.,
-
+			  objPass,
+			  aafCharacter_constptr,
+			  pFileName,
+			  Null-terminated string containing name of filesystem file.,
 			[out],
-			objPass,
-			aafUID_t *,
-			pAAFFileKind,
-			Pointer to an AUID indicating the file kind,
-
+			  objPass,
+			  aafUID_t *,
+			  pAAFFileKind,
+			  Pointer to an AUID indicating the file kind,
 			[out\,retval],
-			objPass,
-			aafBool *,
-			pFileIsAAFFile,
-			Returns AAFTrue if the given file is an AAF file\, returns AAFFalse otherwise.,
-
+			  objPass,
+			  aafBool *,
+			  pFileIsAAFFile,
+			  Returns AAFTrue if the given file is an AAF file\, returns AAFFalse otherwise.,
 			Is the named file an AAF file ?
   ///
   /// Note that the function result is returned via the pFileIsAAFFile argument.
@@ -481,25 +449,21 @@ AD_XFUNCTION3(AAFFileIsAAFFile,
   ///   - the file named by pFileName cannot be found.)
 
 AD_XFUNCTION3(AAFRawStorageIsAAFFile,
-
 			[in],
-			objPass,
-			IAAFRawStorage *,
-			pRawStorage,
-			storage containing the purported file,
-
+			  objPass,
+			  IAAFRawStorage *,
+			  pRawStorage,
+			  storage containing the purported file,
 			[out],
-			objPass,
-			aafUID_t *,
-			pAAFFileKind,
-			Pointer to an AUID indicating the file kind,
-
+			  objPass,
+			  aafUID_t *,
+			  pAAFFileKind,
+			  Pointer to an AUID indicating the file kind,
 			[out\,retval],
-			objPass,
-			aafBool *,
-			pRawStorageIsAAFFile,
-			Returns AAFTrue if the given storage contains an AAF file\, returns AAFFalse otherwise.,
-
+			  objPass,
+			  aafBool *,
+			  pRawStorageIsAAFFile,
+			  Returns AAFTrue if the given storage contains an AAF file\, returns AAFFalse otherwise.,
 			Does the storage contain an AAF file ?
   ///
   /// Note that the function result is returned via the pRawStorageIsAAFFile argument.
@@ -519,32 +483,27 @@ AD_XFUNCTION3(AAFRawStorageIsAAFFile,
 
 AD_XFUNCTION1(AAFGetPluginManager,
 			[out],
-			objOut,
-			AAFPluginManager,
-			ppPluginManager,
-			Pointer to the interface of the plugin manager.,
-
-
-     Returns an interface of the plugin manager\, which is used to
+			  objOut,
+			  AAFPluginManager,
+			  ppPluginManager,
+			  Pointer to the interface of the plugin manager.,
+			Returns an interface of the plugin manager\, which is used to
   /// select plugins for exporting.)
 
 
 AD_XFUNCTION2(AAFCreateRawStorageMemory,
-
-			  [in],
+			[in],
 			  objPass,
 			  aafFileAccess_t,
 			  access,
 			  Governs whether stream may be read from and/or written
   /// to.,
-
-			  [out],
+			[out],
 			  objOut,
 			  AAFRawStorage,
 			  ppNewRawStorage,
 			  Newly created storage,
-
-     Create a raw storage providing a built-in implementation of
+			Create a raw storage providing a built-in implementation of
   /// IAAFRawStorage on memory.
   ///
   /// This is considered a value-added function since clients could
@@ -557,34 +516,29 @@ AD_XFUNCTION2(AAFCreateRawStorageMemory,
 
 
 AD_XFUNCTION4(AAFCreateRawStorageDisk,
-
-			  [in],
+			[in],
 			  objPass,
 			  aafCharacter_constptr,
 			  pFilename,
 			  Name of file to be associated with this storage,
-
-			  [in],
+			[in],
 			  objPass,
 			  aafFileExistence_t,
 			  existence,
 			  Governs whether storage is on pre-existing data\, or is
   ///  newly created.,
-
-			  [in],
+			[in],
 			  objPass,
 			  aafFileAccess_t,
 			  access,
 			  Governs whether stream may be read from and/or written
   ///  to.,
-
-			  [out],
+			[out],
 			  objOut,
 			  AAFRawStorage,
 			  ppNewRawStorage,
 			  Newly created storage,
-
-     Create a raw storage providing a built-in implementation of
+			Create a raw storage providing a built-in implementation of
   /// IAAFRawStorage on a file on disk.
   ///
   /// Note that it is illegal to specify existence and access as "New"
@@ -608,46 +562,39 @@ AD_XFUNCTION4(AAFCreateRawStorageDisk,
 
 
 AD_XFUNCTION6(AAFCreateRawStorageCachedDisk,
-
-			  [in],
+			[in],
 			  objPass,
 			  aafCharacter_constptr,
 			  pFilename,
 			  Name of file to be associated with this storage,
-
-			  [in],
+			[in],
 			  objPass,
 			  aafFileExistence_t,
 			  existence,
 			  Governs whether storage is on pre-existing data\, or is
   ///  newly created.,
-
-			  [in],
+			[in],
 			  objPass,
 			  aafFileAccess_t,
 			  access,
 			  Governs whether stream may be read from and/or written
   ///  to.,
-
-			  [in],
+			[in],
 			  objPass,
 			  aafUInt32,
 			  pageCount,
 			  Count of cache pages,
-
-			  [in],
+			[in],
 			  objPass,
 			  aafUInt32,
 			  pageSize,
 			  Cache page size in bytes,
-
-			  [out],
+			[out],
 			  objOut,
 			  AAFRawStorage,
 			  ppNewRawStorage,
 			  Newly created storage,
-
-     Create a raw storage providing a built-in implementation of
+			Create a raw storage providing a built-in implementation of
   /// IAAFRawStorage on a file on disk with caching.
   ///
   /// Note that it is illegal to specify existence and access as "New"
@@ -671,53 +618,45 @@ AD_XFUNCTION6(AAFCreateRawStorageCachedDisk,
 
 
 AD_XFUNCTION7(AAFCreateAAFFileOnRawStorage,
-
-			  [in],
+			[in],
 			  objPass,
 			  IAAFRawStorage *,
 			  pRawStorage,
 			  storage to be associated with this file,
-
-			  [in],
+			[in],
 			  objPass,
 			  aafFileExistence_t,
 			  existence,
 			  Governs whether storage is on pre-existing data\, or is
   ///  newly created.,
-
-			  [in],
+			[in],
 			  objPass,
 			  aafFileAccess_t,
 			  access,
 			  Governs whether stream may be read from and/or written
   ///  to.,
-
-			  [in],
+			[in],
 			  objPass,
 			  aafUID_constptr,
 			  pFileKind,
 			  kind of file to be created; only used for new files,
-
-			  [in],
+			[in],
 			  objPass,
 			  aafUInt32,
 			  modeFlags,
 			  File mode flags,
-
-			  [in],
+			[in],
 			  objPass,
 			  aafProductIdentification_constptr,
 			  pIdent,
 			  Identification to be associated with this file; only
   ///  used for new files,
-
-			  [out],
+			[out],
 			  objOut,
 			  AAFFile,
 			  ppNewFile,
 			  newly-created file,
-
-     Given an IAAFRawStorage\, create an IAAFFile.  If pRawStorage is
+			Given an IAAFRawStorage\, create an IAAFFile.  If pRawStorage is
   /// actually an IAAFRandomRawStorage\, the created file will be an
   /// IAAFRandomFile.
   ///
@@ -764,11 +703,11 @@ AD_XFUNCTION7(AAFCreateAAFFileOnRawStorage,
 
 AD_XFUNCTION1(AAFGetLibraryVersion,
 			[out\, retval],
-			objPass,
-			aafProductVersion_t *,
-			pVersion,
-			The library version,
-     Return the version of the AAF library currently
+			  objPass,
+			  aafProductVersion_t *,
+			  pVersion,
+			  The library version,
+			Return the version of the AAF library currently
   /// running on this machine\, which implements these interfaces.
   /// 
   /// Succeeds if all of the following are true:
@@ -788,12 +727,11 @@ AD_XFUNCTION1(AAFGetLibraryVersion,
 
 AD_XFUNCTION1(AAFGetLibraryPathNameBufLen,
 			[out],
-			objPass,
-			aafUInt32 *,
-			pBufSize,
-			size of required buffer\, in bytes,
-
-     Returns size of buffer \(in bytes\) required for AAFGetLibraryPathName\(\).
+			  objPass,
+			  aafUInt32 *,
+			  pBufSize,
+			  size of required buffer\, in bytes,
+			Returns size of buffer \(in bytes\) required for AAFGetLibraryPathName\(\).
   /// 
   /// Succeeds if:
   /// - The pBufSize pointer is valid.
@@ -801,20 +739,17 @@ AD_XFUNCTION1(AAFGetLibraryPathNameBufLen,
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pBufSize\))
 
 AD_XFUNCTION2(AAFGetLibraryPathName,
-
-    [out\, string\, size_is\(bufSize\)],
-    objPass,
-    aafCharacter *,
-    pLibraryPathName,
-    buffer into which LibraryPathName is to be written,
-
-    [in],
-    objPass,
-    aafUInt32,
-    bufSize,
-    size of *pLibraryPathName buffer in bytes,
-
-    Get the pathname of the AAF library.
+  			[out\, string\, size_is\(bufSize\)],
+    			  objPass,
+    			  aafCharacter *,
+    			  pLibraryPathName,
+   			  buffer into which LibraryPathName is to be written,
+    			[in],
+    			  objPass,
+    			  aafUInt32,
+    			  bufSize,
+			  size of *pLibraryPathName buffer in bytes,
+			Get the pathname of the AAF library.
   /// 
   /// Writes the LibraryPathName\, with a trailing null
   /// character\, into the pLibraryPathName buffer.  The

@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -98,7 +98,7 @@ AD_X2METHOD3(Next,
 			  number of actual Identifications fetched into ppIdentifications array,
 			  xxx,
 			  xxx,
-  /// Enumerates the next count elements \(AAFIdentification pointers\)
+			  Enumerates the next count elements \(AAFIdentification pointers\)
   /// in the enumerator's list\, returning them in the given array
   /// along with the actual number of enumerated elements in
   /// pNumFetched. The caller is responsible for properly releasing the
@@ -129,7 +129,7 @@ AD_XMETHOD1(Skip,
 			aafUInt32,
 			count,
 			Number of elements to skip,
-  /// Instructs the enumerator to skip the next count elements in the
+			Instructs the enumerator to skip the next count elements in the
   /// enumeration so that the next call to EnumAAFIdentifications::Next
   /// will not return those elements.
   /// 
@@ -165,7 +165,7 @@ AD_XMETHOD1(Clone,
 			EnumAAFIdentifications,
 			ppEnum,
 			new enumeration,
-  /// Creates another identification enumerator with the same state as
+			Creates another identification enumerator with the same state as
   /// the current enumerator to iterate over the same list. This method
   /// makes it possible to record a point in the enumeration sequence
   /// in order to return to that point at a later time.

@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -133,8 +133,7 @@ AD_XMETHOD1(SetCompression,
 				aafUID_constref,
 				compression,
 				Optional.,
-  ///
-  /// Sets the kind of compression and format of compression
+			Sets the kind of compression and format of compression
   /// information of the video essence data.  This property is
   /// optional.  If there is no compression\, the property is omitted.
   /// 
@@ -153,7 +152,7 @@ AD_XMETHOD1(GetCompression,
 				aafUID_t *,
 				pCompression,
 				Optional.,
-  /// Gets the kind of compression and format of compression
+			Gets the kind of compression and format of compression
   /// information of the video essence data.  This property is
   /// optional.
   ///
@@ -182,7 +181,6 @@ AD_XMETHOD2(SetStoredView,
 				aafUInt32,
 				StoredWidth,
 				Number of pixels in horizontal dimension of stored view.,
-
 			Sets the dimension of the stored view.  Typically this includes
   /// leading blank video lines\, any VITC lines\, as well as the active
   /// picture area.
@@ -247,7 +245,6 @@ AD_XMETHOD4(SetSampledView,
 				aafInt32,
 				SampledYOffset,
 				Number of pixels from top left corner of sampled view. Optional.,
-
 			Sets the dimensions of sampled view.  Typically this includes
   /// any VITC lines as well as the active picture area\, but excludes
   /// leading blank video lines.  The offset is specified relative to
@@ -298,7 +295,6 @@ AD_XMETHOD4(GetSampledView,
 				aafInt32 *,
 				pSampledYOffset,
 				Number of pixels from top left corner of sampled view. Optional.,
-
 			Gets the dimensions of sampled view.  Typically this includes
   /// any VITC lines as well as the active picture area\, but excludes
   /// leading blank video lines.  The offset is specified relative to
@@ -345,7 +341,6 @@ AD_XMETHOD4(SetDisplayView,
 				aafInt32,
 				DisplayYOffset,
 				Number pixels from the top-left corner of the display view. Optional.,
-
 			Sets the dimension of display view.  Typically this includes
   /// the active picture area\, but excludes leading blank video lines
   /// and any VITC lines.  The offset is specified relative to the
@@ -400,7 +395,6 @@ AD_XMETHOD4(GetDisplayView,
 				aafInt32 *,
 				pDisplayYOffset,
 				Number pixels from the top-left corner of the display view. Optional.,
-
 			Gets the dimension of display view.  Typically this includes
   /// the active picture area\, but excludes leading blank video lines
   /// and any VITC lines.  The offset is specified relative to the
@@ -514,7 +508,6 @@ AD_XMETHOD2(SetVideoLineMap,
 				aafInt32 *,
 				pVideoLineMap,
 				Array to hold the Video Line Map information,
-
 			Sets the VideoLineMap property.  The video line map specifies the
   /// scan line in the analog source that corresponds to the beginning
   /// of each digitized field.  For single-field video\, there is 1
@@ -604,7 +597,6 @@ AD_XMETHOD1(SetImageAspectRatio,
 				aafRational_t,
 				ImageAspectRatio,
 				Ratio between horizontal and vertical size,
-
 			Sets the Image Aspect Ratio property.  This ratio describes the
   /// ratio between the horizontal size and the vertical size in the
   /// intended final image.

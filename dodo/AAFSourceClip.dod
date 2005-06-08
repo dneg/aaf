@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -93,38 +93,32 @@ AD_XMETHOD6(GetFade,
 			aafLength_t *,
 			pFadeInLen,
 			Fade In Length,
-
 			[out],
 			objPass,
 			aafFadeType_t *,
 			pFadeInType,
 			Fade In Type,
-
 			[out],
 			objPass,
 			aafBoolean_t *,
 			pFadeInPresent,
 			Fade In Type,
-
 			[out],
 			objPass,
 			aafLength_t *,
 			pFadeOutLen,
 			Fade Out Length,
-
 			[out],
 			objPass,
 			aafFadeType_t *,
 			pFadeOutType,
 			Fade Out Type,
-
 			[out],
 			objPass,
 			aafBoolean_t *,
 			pFadeOutPresent,
 			Fade In Type,
-
-     This function returns the optional fade information from a
+			This function returns the optional fade information from a
   /// source clip.  This function only applies to audio source clips.
   /// Length units are specified by the containing mob slot's edit
   /// rate.
@@ -156,7 +150,6 @@ AD_XMETHOD1(ResolveRef,
 			AAFMob,
 			ppMob,
 			Referenced mob,
-
 			Given a source clip object\, this function returns a pointer
   /// to the mob that it references.
   ///
@@ -191,8 +184,7 @@ AD_XMETHOD1(GetSourceReference,
 			aafSourceRef_t *,
 			pSourceRef,
 			Source Reference,
-
-  /// This function returns the source reference of this source clip.
+			This function returns the source reference of this source clip.
   ///
   /// Note: the 3 properties of a source Clip that make up the "source
   /// reference" are sourceID\, sourceTrackID\, and startTime.
@@ -238,8 +230,7 @@ AD_XMETHOD4(SetFade,
 				aafFadeType_t,
 				fadeOutType,
 				Fade Out Type,
-
-     This function sets the optional fade properties on this source
+		  This function sets the optional fade properties on this source
   /// clip object.  The fade properties only apply to a source clip of
   /// data definition \(or convertible to a data definition\) of type
   /// Sound.  All arguments should be specified.  Length units are
@@ -264,8 +255,7 @@ AD_METHOD1(SetSourceReference,
 				aafSourceRef_t,
 				sourceRef,
 				Source Reference,
-
-     This function sets the source reference of this source clip.
+		   This function sets the source reference of this source clip.
   ///
   /// Note: the  3 properties of a source Clip that make up the "source
   /// reference" are sourceID\\\, sourceTrackID\\\, and startTime.

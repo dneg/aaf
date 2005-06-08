@@ -1,5 +1,7 @@
 #c *********************************************************************
 #c
+#c $Id$ $Name$
+#c
 #c The contents of this file are subject to the AAF SDK Public
 #c Source License Agreement (the "License"); You may not use this file
 #c except in compliance with the License.  The License is available in
@@ -11,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c 
-#c The Original Code of this file is Copyright 1998-2001, Licensor of the
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
 #c AAF Association.
 #c 
 #c The Initial Developer of the Original Code of this file and the
@@ -66,7 +68,7 @@ AD_XMETHOD2(LookupMob,
 			  AAFMob,
 			  ppMob,
 			  Matching Mob,
-     Looks up the Mob that matches the given mob id and puts it into
+			Looks up the Mob that matches the given mob id and puts it into
   /// the ppMob argument.  The returned mob interface is AddRef\(\)ed
   /// before it is returned.
   /// 
@@ -100,7 +102,7 @@ AD_XMETHOD2(CountMobs,
 			  aafNumSlots_t *,
 			  pResult,
 			  Total number of mobs of kind mobKind,
-     Writes the number of matches for the given mob kind into the
+			Writes the number of matches for the given mob kind into the
   /// *pNumMobs argument.
   /// 
   /// Succeeds if all of the following are true:
@@ -130,7 +132,7 @@ AD_XMETHOD2(GetMobs,
 			  EnumAAFMobs,
 			  ppEnum,
 			  Mob Enumeration,
-     Places an enumerator for mobs that apply to the criteria into the
+			Places an enumerator for mobs that apply to the criteria into the
   /// *ppEnum argument.  If pSearchCriteria is null\, all mobs are
   /// returned.   The searchTag field of pSearchCriteria\, and exactly
   /// ONE of the fields in the union \(tags.mobID\, tags.name\, etc. \)
@@ -159,7 +161,7 @@ AD_XMETHOD1(AddMob,
 			AAFMob,
 			pMob,
 			Mob to add,
-     Appends the given mob to the header.  If the given mob is already
+			Appends the given mob to the header.  If the given mob is already
   /// contained this method will do nothing and will return success.
   /// 
   /// Succeeds if all of the following are true:
@@ -188,8 +190,7 @@ AD_XMETHOD1(RemoveMob,
 			AAFMob,
 			pMob,
 			Mob to remove,
-
-  /// Removes the given mob from the header.
+			Removes the given mob from the header.
   ///
   /// Succeeds if all of the following are true:
   /// - the pMob pointer is valid.
@@ -217,7 +218,7 @@ AD_XMETHOD1(CountEssenceData,
 			  aafUInt32 *,
 			  pResult,
 			  Total number of essence data,
-     Writes the total number of essence data into the *pNumEssenceData
+			Writes the total number of essence data into the *pNumEssenceData
   /// argument.
   /// 
   /// Succeeds if all of the following are true:
@@ -253,7 +254,8 @@ AD_XMETHOD3(IsEssenceDataPresent,
 			  aafBoolean_t *,
 			  pResult,
 			  True if the essence is found,
-  /// 
+			Returns true if the essence is found.
+  ///
   /// Succeeds if all of the following are true:
   /// - the pResult pointer is valid.
   /// 
@@ -276,7 +278,7 @@ AD_XMETHOD1(EnumEssenceData,
 			  EnumAAFEssenceData,
 			  ppEnum,
 			  Essence Enumeration,
-     Places an enumerator for essence that applies to the criteria
+			Places an enumerator for essence that applies to the criteria
   /// into the *ppEnum argument.  The returned enumerator is
   /// AddRef\(\)ed before it is returned.
   /// 
@@ -332,8 +334,7 @@ AD_XMETHOD1(RemoveEssenceData,
 			AAFEssenceData,
 			pEssenceData,
 			EssenceData to remove,
-
-  /// Removes the given EssenceData from the header.
+			Removes the given EssenceData from the header.
   ///
   /// Succeeds if all of the following are true:
   /// - the pEssenceData pointer is valid.
@@ -895,6 +896,7 @@ AD_XMETHOD2(IsEssenceContainerPresent,
 			  aafBoolean_t*,
 			  pIsPresent,
 			  Is this essence container present,
+			Returns true if the essence container is present.
   ///
   /// Succeeds if all of the following are true:
   /// - the pIsPresent pointer is valid.
@@ -996,6 +998,8 @@ AD_XMETHOD2(IsDescriptiveSchemePresent,
 			  aafBoolean_t*,
 			  pIsPresent,
 			  Is this descriptive scheme ID present,
+			Returns true if the descriptive scheme ID is present.
+  ///
   ///
   /// Succeeds if all of the following are true:
   /// - the pIsPresent pointer is valid;

@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -101,7 +101,6 @@ AD_XMETHOD1(GetMobID,
 			aafMobID_t *,
 			pMobID,
 			The unique media object id,
-
 			This method returns the unique Mob ID associated with this mob.
   ///
   /// Succeeds if all of the following are true:
@@ -126,10 +125,9 @@ AD_XMETHOD1(SetMobID,
 			aafMobID_constref,
 			mobID,
 			New Mob ID,
-
-  /// When a mob is initially created\, the Reference Implementation
+			When a mob is initially created\, the Reference Implementation
   /// internally creates a mobID for the new mob.  This method should
-  /// be used to change the mob's identity to an explicit mobID.
+  /// be used to change the mob\'s identity to an explicit mobID.
   /// 
   /// If this method fails no state will be changed.
   /// 
@@ -151,7 +149,6 @@ AD_XMETHOD1(CountSlots,
 			aafNumSlots_t *,
 			pNumSlots,
 			Number of slots,
-
 			This method returns the number of slots contained by this mob.
   ///
   /// Succeeds if all of the following are true:
@@ -176,7 +173,6 @@ AD_XMETHOD1(AppendSlot,
 			AAFMobSlot,
 			pSlot,
 			slot to append,
-
 			Appends the given mob slot to the mob.
   /// 
   /// Succeeds if all of the following are true:
@@ -201,7 +197,6 @@ AD_XMETHOD1(PrependSlot,
 			AAFMobSlot,
 			pSlot,
 			slot to prepend,
-
 			Prepends the given mob slot to the mob.
   /// 
   /// Succeeds if all of the following are true:
@@ -221,20 +216,17 @@ AD_XMETHOD1(PrependSlot,
 
 
 AD_XMETHOD2(InsertSlotAt,
-
 			[in],
 			objPass,
 			aafUInt32,
 			index,
 			index where slot is to be inserted,
-
 			[in],
 			objIn,
 			AAFMobSlot,
 			pSlot,
 			slot to insert,
-
-     Inserts the given slot into this mob at the given index.  All
+			Inserts the given slot into this mob at the given index.  All
   /// existing slots at the given and higher index will be moved up one
   /// index to accommodate.
   /// 
@@ -266,8 +258,7 @@ AD_XMETHOD1(RemoveSlotAt,
 			aafUInt32,
 			index,
 			index of slot to be removed,
-
-     Removes the slot at the given index.  All existing slots at
+			Removes the slot at the given index.  All existing slots at
   /// indices higher than the given index will be moved down one index
   /// to accommodate.
   /// 
@@ -289,20 +280,17 @@ AD_XMETHOD1(RemoveSlotAt,
 
 
 AD_XMETHOD2(GetSlotAt,
-
 			[in],
 			objPass,
 			aafUInt32,
 			index,
 			index of slot to be obtained,
-
 			[out\, retval],
 			objOut,
 			AAFMobSlot,
 			ppSlot,
 			the returned slot,
-
-     Returns the indexed slot in *ppSlot.
+			Returns the indexed slot in *ppSlot.
   /// 
   /// Succeeds if all of the following are true:
   /// - ppSlot is a valid pointer.
@@ -331,8 +319,7 @@ AD_XMETHOD1(GetSlots,
 			EnumAAFMobSlots,
 			ppEnum,
 			Mob Slot Enumeration,
-
-			return an enumeration for all mob slots.  The returned
+			Return an enumeration for all mob slots.  The returned
   /// enumerator is AddRef\(\)ed before it is returned.
   /// 
   /// Succeeds if all of the following are true:
@@ -357,7 +344,6 @@ AD_XMETHOD1(GetModTime,
 			aafTimeStamp_t *,
 			pLastModified,
 			Modified Time,
-
 			This method will return the modification time for this mob.
   ///
   /// Succeeds if all of the following are true:
@@ -382,7 +368,6 @@ AD_XMETHOD1(SetModTime,
 			aafTimeStamp_constref,
 			modTime,
 			New Modification Time,
-
 			This method sets the modification time on a mob.  The
   /// modification time is initially set to the time that the mob
   /// was created.  The Reference Implementation does not maintain the
@@ -406,7 +391,6 @@ AD_XMETHOD1(GetCreateTime,
 			aafTimeStamp_t *,
 			pCreationTime,
 			Creation Time,
-
 			This method will return the creation time for this mob.
   ///
   /// Succeeds if all of the following are true:
@@ -431,7 +415,6 @@ AD_XMETHOD1(SetCreateTime,
 			aafTimeStamp_constref,
 			createTime,
 			New Creation Time,
-
 			This method sets the creation time on a mob.  The
   /// creation time is initially set to the time that the mob
   /// was created.
@@ -454,13 +437,11 @@ AD_XMETHOD2(AppendComment,
 			aafCharacter *,
 			pCategory,
 			Comment heading,
-
 			[in\, string],
 			objPass,
 			aafCharacter_constptr,
 			pComment,
 			Comment value,
-
 			Creates a user-defined comment and appends it to the specified
   /// Mob.  A Mob comment is implemented as a AAFTaggedValue object of type 
   /// WCharString.
@@ -488,7 +469,6 @@ AD_XMETHOD1(CountComments,
 			aafUInt32 *,
 			pNumComments,
 			Number  of Mob Comments,
-
 			return total number of comments attached to this mob.
   ///
   /// Succeeds if all of the following are true:
@@ -513,8 +493,7 @@ AD_XMETHOD1(GetComments,
 			EnumAAFTaggedValues,
 			ppEnum,
 			Mob Comments,
-
-			return the enumeration for all mob comments.  The returned
+			Return the enumeration for all mob comments.  The returned
   /// enumerator is AddRef\(\)ed before it is returned.  Mob comments are 
   /// implemented as AAFTaggedValue of type WCharString.   The enumerator
   /// is implemented as a EnumAAAFTaggedValues.
@@ -541,8 +520,7 @@ AD_XMETHOD1(RemoveComment,
 			AAFTaggedValue,
 			pComment,
 			Comment to remove,
-
-  /// Removes the given comment from this mob.
+			Removes the given comment from this mob.
   /// 
   /// Succeeds if all of the following are true:
   /// - the pComment pointer is valid.
@@ -570,37 +548,31 @@ AD_XMETHOD6(AppendNewTimelineSlot,
 			aafRational_t,
 			editRate,
 			Edit rate property value,
-
 			[in],
 			objIn,
 			AAFSegment,
 			pSegment,
 			Segment to append as slot component,
-
 			[in],
 			objPass,
 			aafSlotID_t,
 			slotID,
 			new slot ID,
-
 			[in\, string],
 			objPass,
 			aafCharacter_constptr,
 			pSlotName,
 			new slot name,
-
 			[in],
 			objPass,
 			aafPosition_t,
 			origin,
 			The slot origin,
-
 			[out],
 			objOut,
 			AAFTimelineMobSlot,
 			ppNewSlot,
 			Newly created slot,
-
 			This method creates a new timeline mob slot with the given
   /// property values and appends it to the input mob.
   /// 
@@ -630,25 +602,21 @@ AD_XMETHOD4(GetMobInfo,
 			aafTimeStamp_t *,
 			pLastModified,
 			Modified Time,
-
 			[out],
 			objPass,
 			aafTimeStamp_t *,
 			pCreationTime,
 			Creation Time,
-
 			[out\, size_is\(bufSize\)\, string],
 			objPass,
 			aafCharacter *,
 			pName,
 			Mob Name,
-
 			[in],
 			objPass,
 			aafInt32,
 			bufSize,
 			size of the supplied buffer.,
-
 			This method will get all mob property information is a single call.
   ///
   /// Caller may call GetNameBufLen\(\) to determine the required pName
@@ -682,20 +650,17 @@ AD_XMETHOD3(OffsetToMobTimecode,
 			AAFSegment,
 			pTcSeg,
 			Timecode Segment,
-
 			[in],
 			objPass,
 			aafPosition_t *,
 			pOffset,
 			Offset into segment in edit units for that segment's mob slot,
-
 			[out],
 			objPass,
 			aafTimecode_t *,
 			pResult,
 			The resulting timecode,
-
-	This method will determine the timecode at the given offset into
+			This method will determine the timecode at the given offset into
   /// the given timecode segment\, and will return it in *pResult.  If
   /// pTcSeg is NULL\, will search for the slot containing a timecode
   /// segment and will use that instead.
@@ -719,7 +684,7 @@ AD_XMETHOD3(OffsetToMobTimecode,
   ///   - either pOffset or pResult argument is NULL.
   ///
   /// AAFRESULT_TIMECODE_NOT_FOUND
-  ///   - timecode track wasn't found.)
+  ///   - timecode track wasn\'t found.)
 
 
 AD_XMETHOD2(LookupSlot,
@@ -728,13 +693,11 @@ AD_XMETHOD2(LookupSlot,
 			aafSlotID_t,
 			slotId,
 			The requested slot id,
-
 			[out],
 			objOut,
 			AAFMobSlot,
 			ppDestSlot,
 			The requested slot,
-
 			The method will find the mob slot for the given slot id.
   ///
   /// The returned mob slot is AddRef\(\)ed before it is returned.
@@ -762,13 +725,11 @@ AD_XMETHOD2(ChangeRef,
 			aafMobID_constref,
 			oldMobID,
 			Old Mob ID reference in source clip,
-
 			[in\, ref],
 			objPass,
 			aafMobID_constref,
 			newMobID,
 			New Mob ID reference in source clip,
-
 			Finds all Source Clips in the specified Mob that refer to the
   /// specified old Mob\, and changes the references to point to the
   /// new Mob.
@@ -793,26 +754,22 @@ AD_XMETHOD4(CloneExternal,
 			aafDepend_t,
 			resolveDependencies,
 			Whether to clone dependent mobs,
-
 			[in],
 			enumIn,
 			aafIncMedia_t,
 			includeMedia,
 			Whether to include media data,
-
 			[in],
 			objIn,
 			AAFFile,
 			pDestFile,
 			Destination AAF File,
-
 			[out],
 			objOut,
 			AAFMob,
 			ppDestMob,
 			Destination Mob,
-
-	Clones the specified Source Mob\, and optionally all dependent
+			Clones the specified Source Mob\, and optionally all dependent
   /// Mobs\, to an external file\, keeping the same MobID.  A pointer
   /// to the newly created destination mob is returned in *ppDestMob.
   /// 
@@ -854,15 +811,13 @@ AD_XMETHOD2(Copy,
 			aafCharacter_constptr,
 			pDestMobName,
 			Optional Input. The name to be assigned to the new copy of the
-	/// Mob.  The destMobName argument is optional. Specify a NULL
-	/// value if no destination Mob name is desired.,
-
+  /// Mob.  The destMobName argument is optional. Specify a NULL
+  /// value if no destination Mob name is desired.,
 			[out],
 			objOut,
 			AAFMob,
 			ppDestMob,
 			Destination Mob,
-
 			This function copies the specified Mob into a destination Mob in
   /// the same AAF file. The new Mob is returned through the destMob
   /// parameter. The function gives the destination Mob a new MobID and
@@ -894,7 +849,6 @@ AD_XMETHOD1(AppendKLVData,
 			AAFKLVData,
 			pData,
 			KLV object,
-
 			Appends a pre-existing KLV Data object to the specified
   /// Mob.
   /// 
@@ -920,8 +874,7 @@ AD_XMETHOD1(CountKLVData,
 			aafUInt32 *,
 			pNumData,
 			Number  of KLV data objects,
-
-			return total number of KLV data objects attached to this mob.
+			Return total number of KLV data objects attached to this mob.
   ///
   /// Succeeds if all of the following are true:
   /// - the pNumData pointer is valid.
@@ -945,8 +898,7 @@ AD_XMETHOD1(GetKLVData,
 			EnumAAFKLVData,
 			ppEnum,
 			KLV data objects,
-
-			return the enumeration for all KLV data objects on this mob.  The returned
+			Return the enumeration for all KLV data objects on this mob.  The returned
   /// enumerator is AddRef\(\)ed before it is returned.  The enumerator
   /// is implemented as a EnumAAFKLVData.
   /// 
@@ -972,8 +924,7 @@ AD_XMETHOD1(RemoveKLVData,
 			AAFKLVData,
 			pData,
 			KLV data object to remove,
-
-  /// Removes the given KLV data object from this mob.
+			Removes the given KLV data object from this mob.
   /// 
   /// Succeeds if all of the following are true:
   /// - the pData pointer is valid.
@@ -1000,13 +951,13 @@ AD_XMETHOD1(RemoveKLVData,
 
 AD_XMETHOD2( AppendAttribute,
 	     [in], objPass, aafCharacter_constptr, pName,
- 	     The attribute name.,
+		The attribute name.,
 	     [in], objPass, aafCharacter_constptr, pValue,
-             The attribute value.,
-	     Append and attribute name/value pair to the attribute list. )
-
-  /// Creates a new tagged value, initializes it with the specified attribute
-  /// name/value pair, and appends it to the attribute list.
+ 		The attribute value.,
+	     Append an attribute name/value pair to the attribute list.
+  ///
+  /// Creates a new tagged value\, initializes it with the specified attribute
+  /// name/value pair\, and appends it to the attribute list.
   ///
   /// Succeeds if:
   ///   - pName and pValue are valid pointers.
@@ -1016,14 +967,12 @@ AD_XMETHOD2( AppendAttribute,
   ///   AAFRESULT_SUCCESS
   ///
   ///   AAFRESULT_NULL_PARAM
-  ///	     - pName or pValue is null.
+  ///	     - pName or pValue is null.)
 
 AD_XMETHOD1( CountAttributes,
 	     [out], objPass, aafUInt32*, pNumAttributes,
 	     Pointer to attribute count.,
-	     Return the number of attributes contained by this mob )
-
-  /// Returns the number of attributes on this mob.
+	     Return the number of attributes contained in this mob.
   ///
   /// Succeeds if:
   ///   - pNumAttributes is a valid pointer
@@ -1033,16 +982,16 @@ AD_XMETHOD1( CountAttributes,
   ///   AAFRESULT_SUCCESS
   ///
   ///   AAFRESULT_NULL_PARAM
-  ///	     - pNumAttributes is null
+  ///	     - pNumAttributes is null.)
   
 
 AD_XMETHOD1( GetAttributes,
 	     [out], objOut, EnumAAFTaggedValues, ppEnum,
 	     Pointer to the new enumerator object created by this method.,
-	     Return an attribute enumerator for this mob. )
-
+	     Return an attribute enumerator for this mob.
+  ///
   /// Creates an enumerator for this mobs attributes.  The new enumerator is
-  /// AddRef'ed before it is returned.
+  /// AddRef\(\)ed before it is returned.
   ///
   /// Succeeds if:
   ///   - pName and pValue are valid pointers.
@@ -1052,15 +1001,13 @@ AD_XMETHOD1( GetAttributes,
   ///   AAFRESULT_SUCCESS
   ///
   ///   AAFRESULT_NULL_PARAM
-  ///	     - pEnum was null
+  ///	     - pEnum was null.)
 
 
 AD_XMETHOD1( RemoveAttribute,
 	     [in], objIn, AAFTaggedValue, pAttribute,
 	     Pointer to the tagged value attribute.,
-	     Remove an attribute \(tagged value\).)
-
-  /// Removes a mob attribute.
+	     Remove a mob attribute \(tagged value\).
   ///
   /// Succeeds if:
   ///   - pName and pValue are valid pointers.
@@ -1070,28 +1017,23 @@ AD_XMETHOD1( RemoveAttribute,
   ///   AAFRESULT_SUCCESS
   ///
   ///   AAFRESULT_NULL_PARAM
-  ///	     - pName or pValue is null.
+  ///	     - pName or pValue is null.)
 	
 AD_XMETHOD1( SetUsageCode,
 	     [in], objPass, aafUID_constref, usageCode,
 	     The usage code value.,
-	     Set this mob\'s usage code. )
-
-  /// Set this mob\'s usage code. Usage codes are documented in the
-  /// AAF Edit Protocol, and related specifications.
+  	     Set this mob\'s usage code. Usage codes are documented in the
+  /// AAF Edit Protocol\, and related specifications.
   ///
   /// Return codes:
   ///
-  ///   AAFRESULT_SUCCESS
-  ///
+  ///   AAFRESULT_SUCCESS)
 
 AD_XMETHOD1( GetUsageCode,
 	     [out], objPass, aafUID_t*, pUsageCode,
 	     Pointer to usage code.,
-	     Get this mob\'s usage code. )
-
-  /// Get this mob\'s usage code. Usage codes are documented in the
-  /// AAF Edit Protocol, and related specifications.
+	     Get this mob\'s usage code. Usage codes are documented in the
+  /// AAF Edit Protocol\, and related specifications.
   ///
   /// Succeeds if:
   ///   - pUsageCode is a valid pointer
@@ -1105,36 +1047,30 @@ AD_XMETHOD1( GetUsageCode,
   ///	     - pUsageCode is null
   ///	
   ///   AAFRESULT_SUCCESS
-  ///        - succeeded \(This is the only code indicating success.\)
-  ///
+  ///        - succeeded \(This is the only code indicating success.\))
 
 
 AD_XMETHOD4(AppendNewStaticSlot,
-
 			[in],
 			objIn,
 			AAFSegment,
 			pSegment,
 			Segment to append as slot component,
-
 			[in],
 			objPass,
 			aafSlotID_t,
 			slotID,
 			new slot ID,
-
 			[in\, string],
 			objPass,
 			aafCharacter_constptr,
 			pSlotName,
 			new slot name,
-
 			[out],
 			objOut,
 			AAFStaticMobSlot,
 			ppNewSlot,
 			Newly created slot,
-
 			This method creates a new static mob slot with the given
   /// property values and appends it to the input mob.
   /// 
@@ -1164,37 +1100,31 @@ AD_XMETHOD6(AppendNewEventSlot,
 			aafRational_t,
 			editRate,
 			Edit rate property value,
-
 			[in],
 			objIn,
 			AAFSegment,
 			pSegment,
 			Segment to append as slot component,
-
 			[in],
 			objPass,
 			aafSlotID_t,
 			slotID,
 			new slot ID,
-
 			[in\, string],
 			objPass,
 			aafCharacter_constptr,
 			pSlotName,
 			new slot name,
-
 			[in],
 			objPass,
 			aafPosition_t,
 			origin,
 			The slot origin,
-
 			[out],
 			objOut,
 			AAFEventMobSlot,
 			ppNewSlot,
 			Newly created slot,
-
 			This method creates a new event mob slot with the given
   /// property values and appends it to the input mob.
   /// 

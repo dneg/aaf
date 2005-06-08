@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -58,12 +58,11 @@ AD_DEFAULT_UUID(e58a8561, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Abstract, StoredObject)
 AD_XMETHOD1(SetLength,
 			[in],
-			objPass,
-			aafLength_t,
-			length,
-			length of the essence in samples,
-  /// 
-  /// Sets the length of the essence in samples [not edit units].
+			  objPass,
+			  aafLength_t,
+			  length,
+			  length of the essence in samples,
+			Sets the length of the essence in samples [not edit units].
   /// 
   /// Always succeeds.
   /// 
@@ -77,11 +76,11 @@ AD_XMETHOD1(SetLength,
 
 AD_XMETHOD1(GetLength,
 			[out],
-			objPass,
-			aafLength_t *,
-			pLength,
-			returns length of the essence in samples,
-  /// Gets the length of the essence in samples [not edit units].
+			  objPass,
+			  aafLength_t *,
+			  pLength,
+			  returns length of the essence in samples,
+			Gets the length of the essence in samples [not edit units].
   ///
   /// Succeeds if all of the following are true:
   /// - the pLength pointer is valid.
@@ -101,11 +100,11 @@ AD_XMETHOD1(GetLength,
 
 AD_XMETHOD1(SetCodecDef,
 			[in],
-			objIn,
-			AAFCodecDef,
-			codecDef,
-			Which codec was used,
-  /// Set to the exact codec which was used as a hint.
+			  objIn,
+			  AAFCodecDef,
+			  codecDef,
+			  Which codec was used,
+			Set to the exact codec which was used as a hint.
   /// 
   /// Always succeeds.
   /// 
@@ -119,11 +118,11 @@ AD_XMETHOD1(SetCodecDef,
 
 AD_XMETHOD1(GetCodecDef,
 			[out],
-			objOut,
-			AAFCodecDef,
-			pCodecDef,
-			Which codec was used,
-  /// Get to the exact codec which was used as a hint.
+			  objOut,
+			  AAFCodecDef,
+			  pCodecDef,
+			  Which codec was used,
+			Get to the exact codec which was used as a hint.
   ///
   /// Succeeds if all of the following are true:
   /// - the pCodecDef pointer is valid.
@@ -143,10 +142,10 @@ AD_XMETHOD1(GetCodecDef,
 
 AD_XMETHOD1(SetSampleRate,
 			[in],
-			objPass,
-			aafRational_constref,
-			rate,
-			sample rate of the essence,
+			  objPass,
+			  aafRational_constref,
+			  rate,
+			  sample rate of the essence,
 			Sets sample rate of the essence as opposed to the edit rate.
   /// 
   /// If this method fails the sample rate property will not be
@@ -162,10 +161,10 @@ AD_XMETHOD1(SetSampleRate,
 
 AD_XMETHOD1(GetSampleRate,
 			[out],
-			objPass,
-			aafRational_t*,
-			pRate,
-			sample rate of the essence,
+			  objPass,
+			  aafRational_t*,
+			  pRate,
+			  sample rate of the essence,
 			Gets sample rate of the essence as opposed to the edit rate. and
   /// writes it into the *pRate argument.
   ///
@@ -187,10 +186,10 @@ AD_XMETHOD1(GetSampleRate,
 
 AD_XMETHOD1(SetContainerFormat,
 			[in],
-			objIn,
-			AAFContainerDef,
-			format,
-			file format,
+			  objIn,
+			  AAFContainerDef,
+			  format,
+			  file format,
 			Identifies the file format.  The container format is an optional
   /// property.
   /// 
@@ -207,11 +206,11 @@ AD_XMETHOD1(SetContainerFormat,
 
 AD_XMETHOD1(GetContainerFormat,
 			[out],
-			objOut,
-			AAFContainerDef,
-			pFormat,
-			Identifies the file format,
-  /// Optional. Identifies the file format.
+			  objOut,
+			  AAFContainerDef,
+			  pFormat,
+  			  Optional,
+			Identifies the file format.
   ///
   /// Succeeds if all of the following are true:
   /// - the pFormat pointer is valid.
