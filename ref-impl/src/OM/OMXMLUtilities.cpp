@@ -1469,29 +1469,6 @@ stringRequiresEscaping(const wchar_t* str)
     return escapeRequired;
 }
 
-bool
-characterRequiresEscaping(const wchar_t* c)
-{
-    TRACE("::characterRequiresEscaping(wchar_t*)");
-    
-    bool escapeRequired = false;
-    int codeLen = utf16CodeLen(c);
-    if (codeLen == -1)
-    {
-        escapeRequired = true;
-    }
-    else
-    {
-        OMUInt32 code = codePoint(c);
-        if (characterRequiresEscaping(code))
-        {
-            escapeRequired = true;
-        }
-    }
-    
-    return escapeRequired;
-}
-
 wchar_t* 
 escapeString(const wchar_t* str)
 {
@@ -1502,10 +1479,24 @@ escapeString(const wchar_t* str)
     const wchar_t* strPtr = str;
     while (*strPtr != 0)
     {
-        if (characterRequiresEscaping(strPtr))
+        bool escapeRequired = false;
+        int codeLen = utf16CodeLen(strPtr);
+        if (codeLen == -1)
+        {
+            escapeRequired = true;
+        }
+        else
+        {
+            OMUInt32 code = codePoint(strPtr);
+            if (characterRequiresEscaping(code))
+            {
+                escapeRequired = true;
+            }
+        }
+
+        if (escapeRequired)
         {
             OMUInt32 code;
-            int codeLen = utf16CodeLen(strPtr);
             if (codeLen == -1)
             {
                 code = (OMUInt32)*strPtr;
@@ -1532,7 +1523,6 @@ escapeString(const wchar_t* str)
         else
         {
             buffer.append(reinterpret_cast<const OMByte*>(strPtr), sizeof(wchar_t));
-            int codeLen = utf16CodeLen(strPtr);
             ASSERT("Valid code length", codeLen >= 1);
             strPtr += codeLen;
         }
@@ -1545,44 +1535,29 @@ escapeString(const wchar_t* str)
 }
 
 wchar_t* 
-escapeCharacter(const wchar_t* c)
+escapeCharacter(const wchar_t c)
 {
     TRACE("::escapeCharacter");
 
-    OMByteArray buffer;
+    wchar_t* cstr = 0;
     if (characterRequiresEscaping(c))
     {
-        OMUInt32 code;
-        int codeLen = utf16CodeLen(c);
-        if (codeLen == -1)
-        {
-            code = (OMUInt32)*c;
-        }
-        else
-        {
-            code = codePoint(c);
-        }
-        wchar_t codeStr[13];
-        std_swprintf(codeStr, 13, L"$#x%x;", code);
-        buffer.append(reinterpret_cast<OMByte*>(codeStr), 
-            (wcslen(codeStr) + 1) * sizeof(wchar_t));
+        cstr = new wchar_t[13];
+        std_swprintf(cstr, 13, L"$#x%x;", c);
     }
-    else if (*c == L'$')
+    else if (c == L'$')
     {
         const wchar_t* escapedDollar = L"$#x24;";
-        buffer.append(reinterpret_cast<const OMByte*>(escapedDollar), 
-            (wcslen(escapedDollar) + 1) * sizeof(wchar_t));
+        cstr = new wchar_t[wcslen(escapedDollar) + 1];
+        wcscpy(cstr, escapedDollar);
     }
     else
     {
-        int codeLen = utf16CodeLen(c);
-        buffer.append(reinterpret_cast<const OMByte*>(c), sizeof(wchar_t) * codeLen);
-        const wchar_t* nullTerm = L'\0';
-        buffer.append(reinterpret_cast<OMByte*>(&nullTerm), sizeof(wchar_t));
+        cstr = new wchar_t[2];
+        cstr[0] = c;
+        cstr[1] = L'\0';
     }
-    wchar_t* result = new wchar_t[buffer.size() / sizeof(wchar_t)];
-    memcpy(result, buffer.bytes(), buffer.size());
-    return result;    
+    return cstr;    
 }
 
 wchar_t* 
@@ -1663,14 +1638,22 @@ unescapeString(const wchar_t* str)
     return result;    
 }
 
-wchar_t*
+wchar_t
 unescapeCharacter(const wchar_t* cstr)
 {
     TRACE("::unescapeCharacter");
 
     wchar_t* unescapeStr = unescapeString(cstr);
 
-    return unescapeStr;
+    if (unescapeStr[0] != 0 && unescapeStr[1] != 0)
+    {
+        throw OMException("Invalid escaped character value");
+    }
+    
+    wchar_t c = *unescapeStr;
+    delete [] unescapeStr;
+    
+    return c;
 }
 
 
