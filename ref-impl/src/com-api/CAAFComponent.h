@@ -20,7 +20,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -131,7 +131,7 @@ public:
   //
   // SetDataDef()
   //
-  // sets the data definition property AUID on this component.
+  // Sets the data definition property AUID on this component.
   /// 
   /// If this method fails the Data Definition property will not be
   /// changed.
@@ -155,7 +155,7 @@ public:
   //
   // GetDataDef()
   //
-  // returns data definition object.
+  // Returns data definition object.
   ///
   /// Succeeds if all of the following are true:
   /// - the ppDatadef pointer is valid.
@@ -207,7 +207,7 @@ public:
   //
   // CountKLVData()
   //
-  // return total number of KLV data objects attached to this component.
+  // Return total number of KLV data objects attached to this component.
   ///
   /// Succeeds if all of the following are true:
   /// - the pNumData pointer is valid.
@@ -233,7 +233,7 @@ public:
   //
   // GetKLVData()
   //
-  // return the enumeration for all KLV data objects on this component.  The returned
+  // Return the enumeration for all KLV data objects on this component.  The returned
   /// enumerator is AddRef()ed before it is returned.  The enumerator
   /// is implemented as a EnumAAFKLVData.
   /// 
@@ -261,7 +261,7 @@ public:
   //
   // RemoveKLVData()
   //
-  // /// Removes the given KLV data object from this component.
+  // Removes the given KLV data object from this component.
   /// 
   /// Succeeds if all of the following are true:
   /// - the pData pointer is valid.
@@ -292,7 +292,20 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFComponent2 | AppendComment |
-  // Append and attribute name/value pair to the attribute list. 
+  // Append an attribute name/value pair to the attribute list.
+  ///
+  /// Creates a new tagged value, initializes it with the specified comment
+  /// name/value pair, and appends it to the comment list.
+  ///
+  /// Succeeds if:
+  ///   - pName and pValue are valid pointers.
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_SUCCESS
+  ///
+  ///   AAFRESULT_NULL_PARAM
+  ///	     - pName or pValue is null.
   // @end
   // 
   STDMETHOD (AppendComment)
@@ -309,7 +322,17 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFComponent2 | CountComments |
-  // Return the number of comments contained by this component 
+  // Return the number of comments contained in this component.
+  ///
+  /// Succeeds if:
+  ///   - pNumComments is a valid pointer
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_SUCCESS
+  ///
+  ///   AAFRESULT_NULL_PARAM
+  ///	     - pNumComments is null.
   // @end
   // 
   STDMETHOD (CountComments)
@@ -323,7 +346,20 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFComponent2 | GetComments |
-  // Return a comment enumerator for this component. 
+  // Return a comment enumerator for this component.
+  ///
+  /// Creates an enumerator for this component's comments.  The new enumerator is
+  /// AddRef()ed before it is returned.
+  ///
+  /// Succeeds if:
+  ///   - pName and pValue are valid pointers.
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_SUCCESS
+  ///
+  ///   AAFRESULT_NULL_PARAM
+  ///	     - pEnum was null.
   // @end
   // 
   STDMETHOD (GetComments)
@@ -337,7 +373,17 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFComponent2 | RemoveComment |
-  // Remove a comment (tagged value).
+  // Remove a component comment (tagged value).
+  ///
+  /// Succeeds if:
+  ///   - pName and pValue are valid pointers.
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_SUCCESS
+  ///
+  ///   AAFRESULT_NULL_PARAM
+  ///	     - pName or pValue is null.
   // @end
   // 
   STDMETHOD (RemoveComment)
@@ -351,7 +397,20 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFComponent2 | AppendAttribute |
-  // Append and attribute name/value pair to the attribute list. 
+  // Append an attribute name/value pair to the attribute list.
+  ///
+  /// Creates a new tagged value, initializes it with the specified attribute
+  /// name/value pair, and appends it to the attribute list.
+  ///
+  /// Succeeds if:
+  ///   - pName and pValue are valid pointers.
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_SUCCESS
+  ///
+  ///   AAFRESULT_NULL_PARAM
+  ///	     - pName or pValue is null.
   // @end
   // 
   STDMETHOD (AppendAttribute)
@@ -368,7 +427,17 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFComponent2 | CountAttributes |
-  // Return the number of attributes contained by this component 
+  // Return the number of attributes contained in this component.
+  ///
+  /// Succeeds if:
+  ///   - pNumAttributes is a valid pointer
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_SUCCESS
+  ///
+  ///   AAFRESULT_NULL_PARAM
+  ///	     - pNumAttributes is null.
   // @end
   // 
   STDMETHOD (CountAttributes)
@@ -382,7 +451,20 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFComponent2 | GetAttributes |
-  // Return an attribute enumerator for this component. 
+  // Return an attribute enumerator for this component.
+  ///
+  /// Creates an enumerator for this component's attributes.  The new enumerator is
+  /// AddRef()ed before it is returned.
+  ///
+  /// Succeeds if:
+  ///   - pName and pValue are valid pointers.
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_SUCCESS
+  ///
+  ///   AAFRESULT_NULL_PARAM
+  ///	     - pEnum was null.
   // @end
   // 
   STDMETHOD (GetAttributes)
@@ -396,7 +478,17 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFComponent2 | RemoveAttribute |
-  // Remove an attribute (tagged value).
+  // Remove a component attribute (tagged value).
+  ///
+  /// Succeeds if:
+  ///   - pName and pValue are valid pointers.
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_SUCCESS
+  ///
+  ///   AAFRESULT_NULL_PARAM
+  ///	     - pName or pValue is null.
   // @end
   // 
   STDMETHOD (RemoveAttribute)

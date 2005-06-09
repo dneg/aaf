@@ -20,7 +20,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -186,7 +186,7 @@ public:
   //
   // GetSourceReference()
   //
-  // /// This function returns the source reference of this source clip.
+  // This function returns the source reference of this source clip.
   ///
   /// Note: the 3 properties of a source Clip that make up the "source
   /// reference" are sourceID, sourceTrackID, and startTime.

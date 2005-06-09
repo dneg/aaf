@@ -20,7 +20,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -64,7 +64,7 @@ public:
   //
   // SetCompression()
   //
-  // /// Sets the kind of compression and format of compression
+  // Sets the kind of compression and format of compression
   /// information of the sound essence data. This property is
   /// optional.
   /// 
@@ -81,7 +81,7 @@ public:
   //
   STDMETHOD (SetCompression) (
     // Identifies kind of compression and format of
-	/// compression information. 
+  /// compression information. 
     /*[in]*/ aafUID_constref  compression);
 
 
@@ -89,7 +89,7 @@ public:
   //
   // GetCompression()
   //
-  // /// Gets the kind of compression and format of compression
+  // Gets the kind of compression and format of compression
   /// information of the sound essence data. This property is
   /// optional.
   /// 
@@ -120,7 +120,7 @@ public:
   //
   // SetChannelCount()
   //
-  // /// Sets the number of channels of sound represented by
+  // Sets the number of channels of sound represented by
   /// this descriptor. This property is required.
   /// 
   /// Succeeds if all of the following are true:
@@ -136,7 +136,7 @@ public:
   //
   STDMETHOD (SetChannelCount) (
     // The number of channels of sound represented
-	/// by this descriptor. 
+  /// by this descriptor. 
     /*[in]*/ aafUInt32  channelCount);
 
 
@@ -144,7 +144,7 @@ public:
   //
   // GetChannelCount()
   //
-  // /// Gets the number of channels of sound represented by
+  // Gets the number of channels of sound represented by
   /// this descriptor. This property is required.
   /// 
   /// Succeeds if all of the following are true:
@@ -163,7 +163,7 @@ public:
   //
   STDMETHOD (GetChannelCount) (
     // The number of channels of sound represented
-	/// by this descriptor. 
+  /// by this descriptor. 
     /*[out]*/ aafUInt32 *  pChannelCount);
 
 
@@ -171,7 +171,7 @@ public:
   //
   // SetAudioSamplingRate()
   //
-  // /// Sets the sample rate of audio represented by this descriptor.
+  // Sets the sample rate of audio represented by this descriptor.
   /// This property is required.
   /// 
   /// Succeeds if all of the following are true:
@@ -194,7 +194,7 @@ public:
   //
   // GetAudioSamplingRate()
   //
-  // /// Gets the sample rate of audio represented by this descriptor.
+  // Gets the sample rate of audio represented by this descriptor.
   /// This property is required.
   /// 
   /// Succeeds if all of the following are true:
@@ -220,7 +220,7 @@ public:
   //
   // SetIsLocked()
   //
-  // /// Sets the Locked flag which indicates whether the number of
+  // Sets the Locked flag which indicates whether the number of
   /// samples per frame is locked or unlocked. This property is
   /// optional.
   /// 
@@ -244,7 +244,7 @@ public:
   //
   // IsLocked()
   //
-  // /// Gets the Locked flag which indicates whether the number of
+  // Gets the Locked flag which indicates whether the number of
   /// samples per frame is locked or unlocked. This property is
   /// optional.
   /// 
@@ -275,7 +275,7 @@ public:
   //
   // SetElectroSpatialFormulation()
   //
-  // /// Sets the electro-spatial form of the signal. This property is
+  // Sets the electro-spatial form of the signal. This property is
   /// optional.
   /// 
   /// Succeeds if all of the following are true:
@@ -298,7 +298,7 @@ public:
   //
   // GetElectroSpatialFormulation()
   //
-  // /// Gets the electro-spatial form of the signal. This property is
+  // Gets the electro-spatial form of the signal. This property is
   /// optional.
   /// 
   /// Succeeds if all of the following are true:
@@ -328,7 +328,7 @@ public:
   //
   // SetAudioRefLevel()
   //
-  // /// Sets the audio reference level. This property is optional.
+  // Sets the audio reference level. This property is optional.
   /// 
   /// Succeeds if all of the following are true:
   /// - the object is initialized.
@@ -350,7 +350,7 @@ public:
   //
   // GetAudioRefLevel()
   //
-  // /// Gets the audio reference level. This property is optional.
+  // Gets the audio reference level. This property is optional.
   /// 
   /// Succeeds if all of the following are true:
   /// - the object is initialized.
@@ -379,7 +379,7 @@ public:
   //
   // SetDialNorm()
   //
-  // /// Sets the dial norm. This property is optional.
+  // Sets the dial norm. This property is optional.
   /// 
   /// Succeeds if all of the following are true:
   /// - the object is initialized.
@@ -401,7 +401,7 @@ public:
   //
   // GetDialNorm()
   //
-  // /// Gets the dial norm. This property is optional.
+  // Gets the dial norm. This property is optional.
   /// 
   /// Succeeds if all of the following are true:
   /// - the object is initialized.
@@ -430,7 +430,7 @@ public:
   //
   // SetQuantizationBits()
   //
-  // /// Sets the number of quantization bits. This property is required.
+  // Sets the number of quantization bits. This property is required.
   ///  
   /// Succeeds if all of the following are true:
   /// - the object is initialized.
@@ -452,7 +452,7 @@ public:
   //
   // GetQuantizationBits()
   //
-  // /// Gets the number of quantization bits. This property is required.
+  // Gets the number of quantization bits. This property is required.
   /// 
   /// Succeeds if all of the following are true:
   /// - the object is initialized.

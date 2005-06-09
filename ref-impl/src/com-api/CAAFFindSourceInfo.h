@@ -20,7 +20,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -70,7 +70,7 @@ public:
   //
   // GetMob()
   //
-  // /// This function returns the mob found by the function
+  // This function returns the mob found by the function
   /// which generated this IAAFFindSourceInfo as a result.
   ///
   /// Succeeds if all of the following are true:
@@ -99,7 +99,7 @@ public:
   //
   // GetSourceReference()
   //
-  // /// This function returns the source reference found by the function
+  // This function returns the source reference found by the function
   /// which generated this IAAFFindSourceInfo as a result.
   ///
   /// Note: the 3 properties that make up the "source
@@ -132,7 +132,7 @@ public:
   //
   // GetLength()
   //
-  // Gets the  of this component.
+  // Gets the length of this component.
   /// This function returns the duration in edit units of the result.
   ///	
   /// Succeeds if all of the following are true:

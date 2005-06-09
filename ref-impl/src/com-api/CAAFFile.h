@@ -20,7 +20,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -94,6 +94,8 @@ public:
   // Copies the contents of this file to *pDestFile.  Requires that
   /// *pDestFile be open, writeable or modifiable, and not yet
   /// contain any objects.
+  ///
+  /// NOTE! Stub only.   Implementation not yet added.
   ///
   /// Succeeds if:
   /// - This object is currently open.

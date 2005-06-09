@@ -20,7 +20,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -163,18 +163,18 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFSourceReference2 | SetChannelIDs |
   // Specify the channels in a slot that are referenced. The first channel has
-/// and ID of 1, the N'th channel has an ID of N.  The number of channel IDs
-/// shall equal the number of channels being described the bht MobSlot containing
-/// the SourceReference, e.g. 1 element for a mono audio slot, 6 elements for a 5.1
-/// multi-channel audio slot.
-/// 
-/// Return codes:
-///
-/// AAFRESULT_SUCCESS
-///   - succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///   - pChannelIDs is null 
+  /// and ID of 1, the N'th channel has an ID of N.  The number of channel IDs
+  /// shall equal the number of channels being described the bht MobSlot containing
+  /// the SourceReference, e.g. 1 element for a mono audio slot, 6 elements for a 5.1
+  /// multi-channel audio slot.
+  /// 
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pChannelIDs is null 
   // @end
   // 
   STDMETHOD (SetChannelIDs)
@@ -191,21 +191,22 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFSourceReference2 | GetChannelIDs |
-  // /// Get the channels in a slot that are referenced.  Refer to
-/// SetChannelIDs for channel IDs description.
-/// Return codes:
-///
-/// AAFRESULT_SUCCESS
-///   - succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///   - pChannelIDs is null
-///
-/// AAFRESULT_PROP_NOT_PRESENT
-///   - the property is not present
-///
-/// AAFRESULT_SMALLBUF
-///   - pChannelIDs is too small
+  // Get the channels in a slot that are referenced.  Refer to
+  /// SetChannelIDs for channel IDs description.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pChannelIDs is null
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - pChannelIDs is too small
   // @end
   // 
   STDMETHOD (GetChannelIDs)
@@ -222,19 +223,22 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFSourceReference2 | GetChannelIDsSize |
-  // /// Get the number of channel IDs stored by this SourceReference.
-///
-/// AAFRESULT_SUCCESS
-///   - succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///   - pChannelIDs is null
+  // Returns the size in bytes of the buffer required to hold the array
+  /// returned by GetChannelIDs().
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSize is null
   // @end
   // 
   STDMETHOD (GetChannelIDsSize)
    (
-    // @parm [out] aafUInt32 * | numberElements | Number of elements in the pChannelIDs array
-    aafUInt32 *  numberElements
+    // @parm [out] aafUInt32 * | pSize | required buffer size to hold the ChannelIDs array
+    aafUInt32 *  pSize
   );
 
   //***********************************************************
@@ -243,17 +247,16 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFSourceReference2 | SetMonoSourceSlotIDs |
   // For reference from a multi-channel MobSlot to multiple mono MobSlots.
-/// pMonoSourceSlotIDs identifies the mono slots referenced by this SourceReference
-/// object.
-
-/// 
-/// Return codes:
-///
-/// AAFRESULT_SUCCESS
-///   - succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///   - pMonoSourceSlotIDs is null 
+  /// pMonoSourceSlotIDs identifies the mono slots referenced by this SourceReference
+  /// object.
+  /// 
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pMonoSourceSlotIDs is null 
   // @end
   // 
   STDMETHOD (SetMonoSourceSlotIDs)
@@ -270,21 +273,22 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFSourceReference2 | GetMonoSourceSlotIDs |
-  // /// Get the mono slot IDs that are referenced by this object.  Refer to
-/// SetMonoSourceSlotIDs for a description of pMonoSourceSlotIDs.
-/// Return codes:
-///
-/// AAFRESULT_SUCCESS
-///   - succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///   - pMonoSourceSlotIDs is null
-///
-/// AAFRESULT_PROP_NOT_PRESENT
-///   - the property is not present
-///
-/// AAFRESULT_SMALLBUF
-///   - pMonoSourceSlotIDs is too small
+  // Get the mono slot IDs that are referenced by this object.  Refer to
+  /// SetMonoSourceSlotIDs for a description of pMonoSourceSlotIDs.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pMonoSourceSlotIDs is null
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - pMonoSourceSlotIDs is too small
   // @end
   // 
   STDMETHOD (GetMonoSourceSlotIDs)
@@ -301,19 +305,22 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFSourceReference2 | GetMonoSourceSlotIDsSize |
-  // /// Get the number of mono slot IDs stored by this SourceReference.
-///
-/// AAFRESULT_SUCCESS
-///   - succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///   - pMonoSourceSlotIDs is null
+  // Returns the size in bytes of the buffer required to hold the array
+  /// returned by GetMonoSourceSlotIDs().
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSize is null
   // @end
   // 
   STDMETHOD (GetMonoSourceSlotIDsSize)
    (
-    // @parm [out] aafUInt32 * | numberElements | Number of elements in the pMonoSourceSlotIDs array
-    aafUInt32 *  numberElements
+    // @parm [out] aafUInt32 * | pSize | required buffer size to hold the MonoSourceSlotIDs array
+    aafUInt32 *  pSize
   );
 
 

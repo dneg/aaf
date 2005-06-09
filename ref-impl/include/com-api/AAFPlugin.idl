@@ -15,7 +15,7 @@ cpp_quote("// basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  S
 cpp_quote("// the License for the specific language governing rights and limitations")
 cpp_quote("// under the License.")
 cpp_quote("//")
-cpp_quote("// The Original Code of this file is Copyright 1998-2004, Licensor of the")
+cpp_quote("// The Original Code of this file is Copyright 1998-2005, Licensor of the")
 cpp_quote("// AAF Association.")
 cpp_quote("//")
 cpp_quote("// The Initial Developer of the Original Code of this file and the")
@@ -45,224 +45,15 @@ import "AAF.idl";
 import "AAFPluginTypes.idl";
 #endif
 
-interface IAAFPlugin;
 interface IAAFClassExtension;
-interface IAAFEssenceStream;
-interface IAAFEssenceDataStream;
 interface IAAFEssenceCodec;
 interface IAAFEssenceCodec2;
-interface IAAFMultiEssenceCodec;
 interface IAAFEssenceContainer;
+interface IAAFEssenceDataStream;
+interface IAAFEssenceStream;
 interface IAAFInterpolator;
-
-
-// ************************
-//
-// Interface IAAFPlugin
-//
-// ************************
-
-
-
-
-
-///
-/// The AAFPlugin interface describes the calls of a plugin.
-///
-/// The AAFPluginManager keeps a copy of each plugin in a table, along
-/// with cached copies of pertinant metadata about the plugin, and
-/// instantiates a copy of the plugin.
-///
-///
-
-
-[
-    object,
-    uuid(3631F7A4-9121-11d2-8088-006008143e6f),
-    helpstring("IAAFPlugin Interface"),
-    pointer_default(unique)
-]
-interface IAAFPlugin : IUnknown
-{
-
-
-  //***********************************************************
-  //
-  // CountDefinitions()
-  //
-  /// This method returns the number of subclasses of AAFDefObject associated with this plugin,
-	/// and will be called once at startup by the plugin manager.
-	/// A non-zero index is used when a single piece of code implements more than one definition, which
-	/// is not to be confused with multiple plugin interfaces existing in a single plugin file.
-	/// An example where an index other than one would be useful is an interpolator which implements
-	/// multiple types of interpolation (ex. linear, constant, etc...), but has one entry point
-	/// for all types.  Codecs will have only one definition per interface, but may have many interfaces
-	/// clumped together into a single file.
-  ///
-  /// If this method fails nothing will be written to *pDefCount.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pDefCount arg is NULL.
-  /// 
-  /// @param pDefCount [out] The number of definitions associated with this plugin
-  ///
-  HRESULT CountDefinitions (
-    [out] aafUInt32 *  pDefCount);
-
-  //***********************************************************
-  //
-  // GetIndexedDefinitionID()
-  //
-  /// This method returns the unique ID of the AAFDefObject associated with this Plugin. 
- 	/// This range of indices will be from 0 to one less than the total number of codecs,
-	/// operation groups, classes, types, containers, etc.. implemented by this plugin.
-	/// A non-zero index is used when a single piece of code implements more than one definition, which
-	/// is not to be confused with multiple plugin interfaces existing in a single plugin file.
-	/// An example where an index other than one would be useful is an interpolator which implements
-	/// multiple types of interpolation (ex. linear, constant, etc...), but has one entry point
-	/// for all types.  Codecs will have only one definition per interface, but may have many interfaces
-	/// clumped together into a single file.
- ///
-  /// Succeeds if all of the following are true:
-  /// - the pPluginID pointer is valid.
-  /// - Index is within range.
-  /// 
-  /// If this method fails nothing will be written to *pPluginID.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pPluginID arg is NULL.
-  ///
-  /// AAFRESULT_INDEX_RANGE
-  ///   - The index value is out of range
-  /// 
-  /// @param index [in] An index from 0 to the number of definitions - 1
-  /// @param pPluginID [out] The unique media object id
-  ///
-  HRESULT GetIndexedDefinitionID (
-    [in] aafUInt32  index,
-    [out] aafUID_t *  pPluginID);
-
-  //***********************************************************
-  //
-  // GetPluginDescriptorID()
-  //
-  /// This method returns the unique ID of the AAFPluginDescriptor associated with this Plugin.
-  /// This method is called by the plugin manager to determine if a particular plugin descriptor
-  /// (indicating a particular plugin) is already in the current file, so that the full create
-  /// function does not need to be called.
-  ///
-  /// Succeeds if all of the following are true:
-  /// - the pPluginID pointer is valid.
-  /// 
-  /// If this method fails nothing will be written to *pPluginID.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pPluginID arg is NULL.
-  /// 
-  /// @param pPluginID [out] The unique media object id
-  ///
-  HRESULT GetPluginDescriptorID (
-    [out] aafUID_t *  pPluginID);
-
-  //***********************************************************
-  //
-  // GetIndexedDefinitionObject()
-  //
-  /// This method manufactures a definition object of the correct
-  /// class for this plugin, and fills in the values.  You must call QueryInterface
-  /// on the result in order to find the correct interface.  The dictionary supplied
-  /// should be for the file where the definition will go, but the definition will not
-  /// be added to the file by this function.  The supplied dictionary also needs no
-  /// former knowledge of the new definition.  This function will be called by the plugin
-  /// manager in order to add the correct definition objects to a file.
-	/// A non-zero index is used when a single piece of code implements more than one definition, which
-	/// is not to be confused with multiple plugin interfaces existing in a single plugin file.
-	/// An example where an index other than one would be useful is an interpolator which implements
-	/// multiple types of interpolation (ex. linear, constant, etc...), but has one entry point
-	/// for all types.  Codecs will have only one definition per interface, but may have many interfaces
-	/// clumped together into a single file.
-  ///
-  /// Succeeds if all of the following are true:
-  /// - the pDefObject pointer is valid.
-  /// 
-  /// If this method fails nothing will be written to *pDefObject.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pDefObject arg is NULL.
-  /// 
-  /// @param index [in] An index from 0 to the number of definitions - 1
-  /// @param pDictionary [in] The dictionary to use when creating the definition
-  /// @param pDefObject [out] The interface of the pluggable definition
-  ///
-  HRESULT GetIndexedDefinitionObject (
-    [in] aafUInt32  index,
-    [in] IAAFDictionary * pDictionary,
-    [out] IAAFDefObject ** pDefObject);
-
-  //***********************************************************
-  //
-  // CreateDescriptor()
-  //
-  /// This method manufactures a plugin descriptor of the correct
-  /// class for this plugin, and fills in the values.  You must call QueryInterface
-  /// on the result in order to find the corret interface.  The dictionary supplied
-  /// should be for the file where the descriptor will go, but the descriptor will not
-  /// be added to the file by this function.  The supplied dictionary also needs no
-  /// former knowledge of the new descriptor.  This function will be called by the plugin
-  /// manager in order to add the correct plugin descriptors to a file.
-  ///
-  /// Succeeds if all of the following are true:
-  /// - the pPluginDef pointer is valid.
-  /// 
-  /// If this method fails nothing will be written to *pPluginDef.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pPluginDef arg is NULL.
-  /// 
-  /// @param pDictionary [in] The dictionary to use when creating the descriptor
-  /// @param pPluginDef [out] The interface of the pluggable definition
-  ///
-  HRESULT CreateDescriptor (
-    [in] IAAFDictionary * pDictionary,
-    [out] IAAFPluginDef ** pPluginDef);
-
-}
-
+interface IAAFMultiEssenceCodec;
+interface IAAFPlugin;
 
 
 // ************************
@@ -282,9 +73,6 @@ interface IAAFPlugin : IUnknown
 /// associated extension class.
 ///
 ///
-
-
-
 [
     object,
     uuid(65C07344-DF36-11d3-8008-00104bc9156d),
@@ -327,295 +115,6 @@ interface IAAFClassExtension : IUnknown
 
 // ************************
 //
-// Interface IAAFEssenceStream
-//
-// ************************
-
-///
-/// The IAAFEssenceStream interface is an internal interface used by AAFEssenceAccess and
-/// essence codecs to read the low-level representation of the essence.  There are multiple
-/// classes implementing this interface, each representing a different underlying container
-/// holding the essence data.  The idea of "container" is separate from any formatting such
-/// as WAVE or JPEG.  Examples of containers (and therefore streams), are essence embedded
-/// in AAF files, and essence in a file all by itself (ex. a WAVE file).
-///
-/// Objects which support this interface must be created by methods in IAAFContainerDef, since
-/// the container definition is what is used to differentiate between the different streams.
-/// If the stream needs a reference to data other than a file pointer (ex. the AAFContainer
-/// makes a stream which needs a reference to a structureed storage stream) will have another
-/// interface to support the additional behaviour.  For an AAF container, the additional interface
-/// is IAAFEssenceDataStream.
-///
-/// NOTE: The SDK will init the representation of this object with the correct path
-/// and open the underlying file before handing out an interface pointer.  Hence,
-/// there is no Open method on the stream.
-///
-
-
-[
-    object,
-    uuid(83402902-9146-11d2-8088-006008143e6f),
-    helpstring("IAAFEssenceStream Interface"),
-    pointer_default(unique)
-]
-interface IAAFEssenceStream : IUnknown
-{
-
-
-  //***********************************************************
-  //
-  // Write()
-  //
-  /// Write some number of bytes to the stream exactly and with no formatting or compression.
-	/// 
-	/// This method should return only the following codes.  If more than one of
-	/// the listed errors is in effect, it should return the first one
-	/// encountered in the order given below:
-	/// 
-	/// AAFRESULT_SUCCESS
-	///   - succeeded.  (This is the only code indicating success.)
-	///
-	/// AAFRESULT_NULL_PARAM
-	///   - pBuffer or pBytesRead is null.
-	///
-	/// AAFRESULT_STREAM_FULL
-	///   - The essence can not be written because of a fault such as a disk full error in the
-	/// underlying operating system.
-  /// 
-  /// @param bytes [in] the number of bytes to write
-  /// @param buffer [out, size_is(bytes)] the buffer that contains at least bytes
-  /// @param bytesWritten [out,ref] the number of bytes actually written from the buffer
-  ///
-  HRESULT Write (
-    [in] aafUInt32  bytes,
-    [out, size_is(bytes)] aafDataBuffer_t  buffer,
-    [out,ref] aafUInt32 *  bytesWritten);
-
-
-  //***********************************************************
-  //
-  // Read()
-  //
-  /// Read some number of bytes from the stream exactly and with no formatting or compression.
-	/// 
-	/// This method should return only the following codes.  If more than one of
-	/// the listed errors is in effect, it should return the first one
-	/// encountered in the order given below:
-	/// 
-	/// AAFRESULT_SUCCESS
-	///   - succeeded.  (This is the only code indicating success.)
-	///
-	/// AAFRESULT_NULL_PARAM
-	///   - pBuffer or pBytesRead is null.
-	///
-	/// AAFRESULT_END_OF_ESSENCE
-	///   - Hit either the end-of-file on a raw essence file, or the end of the essence property.
-	///	The pBytesRead parameter correctly reflects the number of bytes actually read.
-  /// 
-  /// @param buflen [in] to a buffer of this size
-  /// @param pBuffer [out, size_is(buflen), length_is(*pBytesRead)] here is the buffer
-  /// @param pBytesRead [out,ref] Return bytes actually read
-  ///
-  HRESULT Read (
-    [in] aafUInt32  buflen,
-    [out, size_is(buflen), length_is(*pBytesRead)] aafDataBuffer_t  pBuffer,
-    [out,ref] aafUInt32 *  pBytesRead);
-
-  //***********************************************************
-  //
-  // Seek()
-  //
-  /// Seek to the absolute byte offset into the stream.
-  /// 
-  /// @param byteOffset [in] The absolute byte offset into the stream.
-  ///
-  HRESULT Seek (
-    [in] aafPosition_t  byteOffset);
-	/// 
-	/// This method should return only the following codes.  If more than one of
-	/// the listed errors is in effect\\\, it should return the first one
-	/// encountered in the order given below:
-	/// 
-	/// AAFRESULT_SUCCESS
-	///   - succeeded.  \\\(This is the only code indicating success.\\\)
-	///
-	/// AAFRESULT_STREAM_BOUNDS
-	///   - The new position would be outside of the bounds of the stream.)
-
-  //***********************************************************
-  //
-  // SeekRelative()
-  //
-  /// Seek forward or backward the given byte count.
-	/// 
-	/// This method should return only the following codes.  If more than one of
-	/// the listed errors is in effect, it should return the first one
-	/// encountered in the order given below:
-	/// 
-	/// AAFRESULT_SUCCESS
-	///   - succeeded.  (This is the only code indicating success.)
-	///
-	/// AAFRESULT_STREAM_BOUNDS
-	///   - The new position would be outside of the bounds of the stream.
-  /// 
-  /// @param byteOffset [in] The relative byte offset into the stream.
-  ///
-  HRESULT SeekRelative (
-    [in] aafInt32  byteOffset);
-
-  //***********************************************************
-  //
-  // GetPosition()
-  //
-  /// Returns the position within the stream.
-	/// 
-	/// This method should return only the following codes.  If more than one of
-	/// the listed errors is in effect, it should return the first one
-	/// encountered in the order given below:
-	/// 
-	/// AAFRESULT_SUCCESS
-	///   - succeeded.  (This is the only code indicating success.)
-	///
-	/// AAFRESULT_NULL_PARAM
-	///   - pPosition is null.
-  /// 
-  /// @param pPosition [out] The position within the stream.
-  ///
-  HRESULT GetPosition (
-    [out] aafPosition_t *  pPosition);
-
-  //***********************************************************
-  //
-  // GetLength()
-  //
-  /// Returns the length of the stream.
-	/// 
-	/// This method should return only the following codes.  If more than one of
-	/// the listed errors is in effect, it should return the first one
-	/// encountered in the order given below:
-	/// 
-	/// AAFRESULT_SUCCESS
-	///   - succeeded.  (This is the only code indicating success.)
-	///
-	/// AAFRESULT_NULL_PARAM
-	///   - pLength is null.
-  /// 
-  /// @param pLength [out] The length of the stream.
-  ///
-  HRESULT GetLength (
-    [out] aafLength_t *  pLength);
-
-///
-/// NOTE: Methods which help support optional buffering or caching of the essence
-/// data.  Caching is not required to be supported, and may actually reduce performance.
-/// on some platforms.  If your stream does not support caching, then return AAFRESULT_SUCCESS
-/// for these calls.
-///
-
-  //***********************************************************
-  //
-  // FlushCache()
-  //
-  /// Ensure that all bits are written.  The caller of this interface
-	/// is required to call FlushCache before releasing the stream.
-	/// 
-	/// This method should return only the following codes.  If more than one of
-	/// the listed errors is in effect\, it should return the first one
-	/// encountered in the order given below:
-	/// 
-	/// AAFRESULT_SUCCESS
-	///   - succeeded.  \(This is the only code indicating success.\)
-	/// 
-	/// AAFRESULT_STREAM_FULL
-	///   - The essence can not be written because of a fault such as a disk full error in the
-	/// underlying operating system.
-  /// 
-  HRESULT FlushCache ();
-
-  //***********************************************************
-  //
-  // SetCacheSize()
-  //
-  /// Sets the size of the cache buffer used for further operations.
-			/// Destroys the current contents of the cache.
-	/// 
-	/// This method should return only the following codes.  If more than one of
-	/// the listed errors is in effect, it should return the first one
-	/// encountered in the order given below:
-	/// 
-	/// AAFRESULT_SUCCESS
-	///   - succeeded.  (This is the only code indicating success.) 
-  /// 
-  /// @param itsSize [in] The size of the cache buffer.  Zero is a valid size, and means to turn caching off
-  ///
-  HRESULT SetCacheSize (
-    [in] aafUInt32  itsSize);
-
-}
-
-
-
-
-// ************************
-//
-// Interface IAAFEssenceDataStream
-//
-// ************************
-
-///
-/// The IAAFEssenceDataStream interface is an additional interface implemented by objects
-/// which stream over AAF files, and were therefore created by the AAFContainerDef for
-/// AAF files.  This interface allows the setting of one additional parameter (a pointer
-/// to the AAFEssenceData object to stream over) which was not general-purpose enough
-/// to be in the IAAFEssenceStream interface.
-///
-/// Objects which support this interface must be created by methods in IAAFContainerDef, since
-/// the container definition is what is used to differentiate between the different streams.
-/// If the stream needs a reference to data other than a file pointer (ex. the AAFContainer
-/// makes a stream which needs a reference to a structureed storage stream) will have another
-/// interface to support the additional behaviour.  For an AAF container, the additional interface
-/// is IAAFEssenceDataStream.
-///
-/// The following has been copied from the IAAFEssenceStream interface:
-///		The IAAFEssenceStream interface is an internal interface used by AAFEssenceAccess and
-///		essence codecs to read the low-level representation of the essence.  There are multiple
-///		classes implementing this interface, each representing a different underlying container
-///		holding the essence data.  The idea of "container" is separate from any formatting such
-///		as WAVE or JPEG.  Examples of containers (and therefore streams), are essence embedded
-///		in AAF files, and essence in a file all by itself (ex. a WAVE file).
-///
-///
-
-
-
-[
-    object,
-    uuid(CDDB6AB1-98DC-11d2-808a-006008143e6f),
-    helpstring("IAAFEssenceDataStream Interface"),
-    pointer_default(unique)
-]
-interface IAAFEssenceDataStream : IUnknown
-{
-
-
-  //***********************************************************
-  //
-  // Init()
-  //
-  /// Init the stream over a particular EssenceData.
-  /// 
-  /// @param essenceData [in] The EssenceData to stream over
-  ///
-  HRESULT Init (
-    [in] IUnknown * essenceData);
-
-}
-
-
-
-
-// ************************
-//
 // Interface IAAFEssenceCodec
 //
 // ************************
@@ -647,6 +146,10 @@ interface IAAFEssenceDataStream : IUnknown
 ///
 
 
+///
+/// Objects that implement IAAFEssenceCodec also implement the following interfaces:
+///  - IAAFEssenceCodec2
+///  - IAAFPlugin
 [
     object,
     uuid(3631F7A2-9121-11d2-8088-006008143e6f),
@@ -1539,9 +1042,9 @@ interface IAAFEssenceCodec : IUnknown
 ///   - insufficient system memory is available to perform the
 ///     operation.
 ///
-
-
-
+///
+/// Objects that implement IAAFEssenceCodec2 also implement the following interfaces:
+///  - IAAFPlugin
 [
     object,
     uuid(8888F7A2-9121-11d2-8088-006008143e6f),
@@ -2424,232 +1927,6 @@ interface IAAFEssenceCodec2 : IUnknown
 
 // ************************
 //
-// Interface IAAFMultiEssenceCodec
-//
-// ************************
-
-
-
-///
-/// The AAFMultiEssenceCodec interface describes the calls of a plugin
-/// which handles encoding media in a particular file format, with
-/// optional compression.  These methods are used internally by the SDK,
-/// and are not exported through the client interface.
-///
-/// The AAFPluginManager keeps a copy of each codec in a table, along
-/// with cached copies of pertinant metadata about the codec, and
-/// instantiates a copy of the codec for each media stream.
-///
-/// In addition to the specific error results listed for each method,
-/// all methods in this interface may also return one of the following
-/// values:
-///
-/// AAFRESULT_NULL_PARAM
-///   - One of the passed in pointers is NULL.
-///
-/// AAFRESULT_NOMEMORY
-///   - insufficient system memory is available to perform the
-///     operation.
-///
-
-
-[
-    object,
-    uuid(7F93992D-DDA3-11d3-8008-00104bc9156d),
-    helpstring("IAAFMultiEssenceCodec Interface"),
-    pointer_default(unique)
-]
-interface IAAFMultiEssenceCodec : IUnknown
-{
-
-
-///
-	///**************
-	/// Meta codec functions.  Called to plug a codec into the SDK, but
-	/// NOT for each instance of a codec.
-	///
-
-	
-///
-	///**************
-	/// General purpose codec functions, always callable (whether or
-	/// not Open or Create have been called.)  These are called by
-	/// AAFEssenceAccess to before the stream is actually opened, and
-	/// therefore may not rely on data which is created during open or
-	/// create.  This is why they take so many parameters.
-	///
-
-
-  //***********************************************************
-  //
-  // MultiCreate()
-  //
-  /// Initalize the stream to be of the correct format with no data and
-  /// default metadata, attach the correct type of EssenceDescriptor
-  /// to the fileMob, and file in the default metadata on the
-  /// descriptor also.  Prepare the stream for writing the first sample
-  /// of data.
-  /// 
-  /// This method should return only the following codes.  If more than
-  /// one of the listed errors is in effect, it should return the
-  /// first one encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - fileMob, stream or createParms is null.
-  ///
-  /// AAFRESULT_STREAM_FULL
-  ///   - The essence can not be written because of a fault such as a
-  ///     disk full error in the underlying operating system.
-  /// 
-  /// @param fileMob [in] Create the essence attached to this file mob
-  /// @param flavour [in, ref] which flavour of the codec to use
-  /// @param stream [in] Here is an essence stream with the data
-  /// @param compEnable [in] optionally compressing
-  /// @param numParms [in] Here are the number of create parameters
-  /// @param createParms [in, size_is(numParms)] Here are the create parameters
-  ///
-  HRESULT MultiCreate (
-    [in] IAAFSourceMob * fileMob,
-    [in, ref] aafUID_constref  flavour,
-    [in] IAAFEssenceStream * stream,
-    [in] aafCompressEnable_t  compEnable,
-    [in] aafUInt32  numParms,
-    [in, size_is(numParms)] aafmMultiCreate_t *  createParms);
-
-
-  //***********************************************************
-  //
-  // MultiOpen()
-  //
-  /// Read the metadata from the essence descriptor and/or the
-  /// formatted data, and prepare the stream for reading the first
-  /// sample of data.
-  /// 
-  /// This method should return only the following codes.  If more than
-  /// one of the listed errors is in effect, it should return the
-  /// first one encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - fileMob or stream  is null.
-  /// 
-  /// @param fileMob [in] Open the essence attached to this file mob
-  /// @param openMode [in] In this mode
-  /// @param stream [in] Here is an essence stream with the raw data
-  /// @param compEnable [in] optionally decompressing
-  ///
-  HRESULT MultiOpen (
-    [in] IAAFSourceMob * fileMob,
-    [in] aafMediaOpenMode_t  openMode,
-    [in] IAAFEssenceStream * stream,
-    [in] aafCompressEnable_t  compEnable);
-	
-
-///
-	///**************
-	/// Essence access codec functions, MultiOpen or MultiCreate must have been
-	/// called.
-	///
-
-
-
-
-  //***********************************************************
-  //
-  // WriteBlocks()
-  //
-  /// Write blocks from one or more buffers, interleaving if needed.
-  /// 
-  /// This method should return only the following codes.  If more than
-  /// one of the listed errors is in effect, it should return the
-  /// first one encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_ZERO_SAMPLESIZE
-  ///	 - The sample size of the stream has not been set.
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pTransferParm or pResultParm is null.
-  ///
-  /// AAFRESULT_SMALLBUF
-  ///   - One of the supplied buffers is not large enough to hold the
-  ///     given number of samples.
-  ///
-  /// AAFRESULT_CODEC_CHANNELS
-  ///   - SPecified channel numbers are out of range
-  ///
-  /// AAFRESULT_XFER_DUPCH
-  ///   - The SDK passed in the same channel number on two blocks
-  ///
-  /// AAFRESULT_MULTI_WRITELEN
-  ///   - The length fields of the channels must specify an identical
-  ///     length of clock time.
-  /// 
-  /// @param inter [in] Whether the material will be de-interleaved on read
-  /// @param xferBlockCount [in] How many aafMultiXfer blocks follow
-  /// @param pTransferParm [in, size_is(xferBlockCount)] One or more blocks containing buffer pointer and length
-  /// @param pResultParm [out, size_is(xferBlockCount)] One or more blocks containing results
-  ///
-  HRESULT WriteBlocks (
-    [in] aafDeinterleave_t  inter,
-    [in] aafUInt16  xferBlockCount,
-    [in, size_is(xferBlockCount)] aafmMultiXfer_t *  pTransferParm,
-    [out, size_is(xferBlockCount)] aafmMultiResult_t *  pResultParm);
-
-  //***********************************************************
-  //
-  // ReadBlocks()
-  //
-  /// Read blocks into one or more buffers, de-interleaving if needed.
-  /// 
-  /// This method should return only the following codes.  If more than
-  /// one of the listed errors is in effect, it should return the
-  /// first one  encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pTransferParm is null.
-  ///
-  /// AAFRESULT_SMALLBUF
-  ///   - The buffer is not large enough to hold the data
-  ///
-  /// AAFRESULT_CODEC_CHANNELS
-  ///   - SPecified channel numbers are out of range
-  ///
-  /// AAFRESULT_XFER_DUPCH
-  ///   - The SDK passed in the same channel number on two blocks
-  ///
-  /// AAFRESULT_END_OF_DATA
-  ///   - Hit either the end-of-file on a raw essence file, or the
-  ///     end of the essence property.  The bytesRead fields inside of
-  ///     pTransferParm correctly reflect the number of bytes and
-  ///     complete samples on each track.
-  /// 
-  /// @param inter [in] Whether the material will be de-interleaved on read
-  /// @param xferBlockCount [in] How many aafmMultiXfer blocks follow
-  /// @param pTransferParm [out, size_is(xferBlockCount)] One or more blocks containing buffer pointer and length
-  /// @param pResultParm [out, size_is(xferBlockCount)] One or more blocks containing results
-  ///
-  HRESULT ReadBlocks (
-    [in] aafDeinterleave_t  inter,
-    [in] aafUInt16  xferBlockCount,
-    [out, size_is(xferBlockCount)] aafmMultiXfer_t *  pTransferParm,
-    [out, size_is(xferBlockCount)] aafmMultiResult_t *  pResultParm);
-}
-
-
-
-// ************************
-//
 // Interface IAAFEssenceContainer
 //
 // ************************
@@ -2807,6 +2084,292 @@ interface IAAFEssenceContainer : IUnknown
 
 // ************************
 //
+// Interface IAAFEssenceDataStream
+//
+// ************************
+
+///
+/// The IAAFEssenceDataStream interface is an additional interface implemented by objects
+/// which stream over AAF files, and were therefore created by the AAFContainerDef for
+/// AAF files.  This interface allows the setting of one additional parameter (a pointer
+/// to the AAFEssenceData object to stream over) which was not general-purpose enough
+/// to be in the IAAFEssenceStream interface.
+///
+/// Objects which support this interface must be created by methods in IAAFContainerDef, since
+/// the container definition is what is used to differentiate between the different streams.
+/// If the stream needs a reference to data other than a file pointer (ex. the AAFContainer
+/// makes a stream which needs a reference to a structureed storage stream) will have another
+/// interface to support the additional behaviour.  For an AAF container, the additional interface
+/// is IAAFEssenceDataStream.
+///
+/// The following has been copied from the IAAFEssenceStream interface:
+///		The IAAFEssenceStream interface is an internal interface used by AAFEssenceAccess and
+///		essence codecs to read the low-level representation of the essence.  There are multiple
+///		classes implementing this interface, each representing a different underlying container
+///		holding the essence data.  The idea of "container" is separate from any formatting such
+///		as WAVE or JPEG.  Examples of containers (and therefore streams), are essence embedded
+///		in AAF files, and essence in a file all by itself (ex. a WAVE file).
+///
+///
+[
+    object,
+    uuid(CDDB6AB1-98DC-11d2-808a-006008143e6f),
+    helpstring("IAAFEssenceDataStream Interface"),
+    pointer_default(unique)
+]
+interface IAAFEssenceDataStream : IUnknown
+{
+
+
+  //***********************************************************
+  //
+  // Init()
+  //
+  /// Init the stream over a particular EssenceData.
+  /// 
+  /// @param essenceData [in] The EssenceData to stream over
+  ///
+  HRESULT Init (
+    [in] IUnknown * essenceData);
+
+}
+
+
+
+
+// ************************
+//
+// Interface IAAFEssenceStream
+//
+// ************************
+
+///
+/// The IAAFEssenceStream interface is an internal interface used by AAFEssenceAccess and
+/// essence codecs to read the low-level representation of the essence.  There are multiple
+/// classes implementing this interface, each representing a different underlying container
+/// holding the essence data.  The idea of "container" is separate from any formatting such
+/// as WAVE or JPEG.  Examples of containers (and therefore streams), are essence embedded
+/// in AAF files, and essence in a file all by itself (ex. a WAVE file).
+///
+/// Objects which support this interface must be created by methods in IAAFContainerDef, since
+/// the container definition is what is used to differentiate between the different streams.
+/// If the stream needs a reference to data other than a file pointer (ex. the AAFContainer
+/// makes a stream which needs a reference to a structureed storage stream) will have another
+/// interface to support the additional behaviour.  For an AAF container, the additional interface
+/// is IAAFEssenceDataStream.
+///
+/// NOTE: The SDK will init the representation of this object with the correct path
+/// and open the underlying file before handing out an interface pointer.  Hence,
+/// there is no Open method on the stream.
+///
+
+
+[
+    object,
+    uuid(83402902-9146-11d2-8088-006008143e6f),
+    helpstring("IAAFEssenceStream Interface"),
+    pointer_default(unique)
+]
+interface IAAFEssenceStream : IUnknown
+{
+
+
+  //***********************************************************
+  //
+  // Write()
+  //
+  /// Write some number of bytes to the stream exactly and with no formatting or compression.
+	/// 
+	/// This method should return only the following codes.  If more than one of
+	/// the listed errors is in effect, it should return the first one
+	/// encountered in the order given below:
+	/// 
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  (This is the only code indicating success.)
+	///
+	/// AAFRESULT_NULL_PARAM
+	///   - pBuffer or pBytesRead is null.
+	///
+	/// AAFRESULT_STREAM_FULL
+	///   - The essence can not be written because of a fault such as a disk full error in the
+	/// underlying operating system.
+  /// 
+  /// @param bytes [in] the number of bytes to write
+  /// @param buffer [out, size_is(bytes)] the buffer that contains at least bytes
+  /// @param bytesWritten [out,ref] the number of bytes actually written from the buffer
+  ///
+  HRESULT Write (
+    [in] aafUInt32  bytes,
+    [out, size_is(bytes)] aafDataBuffer_t  buffer,
+    [out,ref] aafUInt32 *  bytesWritten);
+
+
+  //***********************************************************
+  //
+  // Read()
+  //
+  /// Read some number of bytes from the stream exactly and with no formatting or compression.
+	/// 
+	/// This method should return only the following codes.  If more than one of
+	/// the listed errors is in effect, it should return the first one
+	/// encountered in the order given below:
+	/// 
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  (This is the only code indicating success.)
+	///
+	/// AAFRESULT_NULL_PARAM
+	///   - pBuffer or pBytesRead is null.
+	///
+	/// AAFRESULT_END_OF_ESSENCE
+	///   - Hit either the end-of-file on a raw essence file, or the end of the essence property.
+	///	The pBytesRead parameter correctly reflects the number of bytes actually read.
+  /// 
+  /// @param buflen [in] to a buffer of this size
+  /// @param pBuffer [out, size_is(buflen), length_is(*pBytesRead)] here is the buffer
+  /// @param pBytesRead [out,ref] Return bytes actually read
+  ///
+  HRESULT Read (
+    [in] aafUInt32  buflen,
+    [out, size_is(buflen), length_is(*pBytesRead)] aafDataBuffer_t  pBuffer,
+    [out,ref] aafUInt32 *  pBytesRead);
+
+  //***********************************************************
+  //
+  // Seek()
+  //
+  /// Seek to the absolute byte offset into the stream.
+  /// 
+  /// @param byteOffset [in] The absolute byte offset into the stream.
+  ///
+  HRESULT Seek (
+    [in] aafPosition_t  byteOffset);
+	/// 
+	/// This method should return only the following codes.  If more than one of
+	/// the listed errors is in effect\\\, it should return the first one
+	/// encountered in the order given below:
+	/// 
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \\\(This is the only code indicating success.\\\)
+	///
+	/// AAFRESULT_STREAM_BOUNDS
+	///   - The new position would be outside of the bounds of the stream.)
+
+  //***********************************************************
+  //
+  // SeekRelative()
+  //
+  /// Seek forward or backward the given byte count.
+	/// 
+	/// This method should return only the following codes.  If more than one of
+	/// the listed errors is in effect, it should return the first one
+	/// encountered in the order given below:
+	/// 
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  (This is the only code indicating success.)
+	///
+	/// AAFRESULT_STREAM_BOUNDS
+	///   - The new position would be outside of the bounds of the stream.
+  /// 
+  /// @param byteOffset [in] The relative byte offset into the stream.
+  ///
+  HRESULT SeekRelative (
+    [in] aafInt32  byteOffset);
+
+  //***********************************************************
+  //
+  // GetPosition()
+  //
+  /// Returns the position within the stream.
+	/// 
+	/// This method should return only the following codes.  If more than one of
+	/// the listed errors is in effect, it should return the first one
+	/// encountered in the order given below:
+	/// 
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  (This is the only code indicating success.)
+	///
+	/// AAFRESULT_NULL_PARAM
+	///   - pPosition is null.
+  /// 
+  /// @param pPosition [out] The position within the stream.
+  ///
+  HRESULT GetPosition (
+    [out] aafPosition_t *  pPosition);
+
+  //***********************************************************
+  //
+  // GetLength()
+  //
+  /// Returns the length of the stream.
+	/// 
+	/// This method should return only the following codes.  If more than one of
+	/// the listed errors is in effect, it should return the first one
+	/// encountered in the order given below:
+	/// 
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  (This is the only code indicating success.)
+	///
+	/// AAFRESULT_NULL_PARAM
+	///   - pLength is null.
+  /// 
+  /// @param pLength [out] The length of the stream.
+  ///
+  HRESULT GetLength (
+    [out] aafLength_t *  pLength);
+
+///
+/// NOTE: Methods which help support optional buffering or caching of the essence
+/// data.  Caching is not required to be supported, and may actually reduce performance.
+/// on some platforms.  If your stream does not support caching, then return AAFRESULT_SUCCESS
+/// for these calls.
+///
+
+  //***********************************************************
+  //
+  // FlushCache()
+  //
+  /// Ensure that all bits are written.  The caller of this interface
+	/// is required to call FlushCache before releasing the stream.
+	/// 
+	/// This method should return only the following codes.  If more than one of
+	/// the listed errors is in effect\, it should return the first one
+	/// encountered in the order given below:
+	/// 
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \(This is the only code indicating success.\)
+	/// 
+	/// AAFRESULT_STREAM_FULL
+	///   - The essence can not be written because of a fault such as a disk full error in the
+	/// underlying operating system.
+  /// 
+  HRESULT FlushCache ();
+
+  //***********************************************************
+  //
+  // SetCacheSize()
+  //
+  /// Sets the size of the cache buffer used for further operations.
+			/// Destroys the current contents of the cache.
+	/// 
+	/// This method should return only the following codes.  If more than one of
+	/// the listed errors is in effect, it should return the first one
+	/// encountered in the order given below:
+	/// 
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  (This is the only code indicating success.) 
+  /// 
+  /// @param itsSize [in] The size of the cache buffer.  Zero is a valid size, and means to turn caching off
+  ///
+  HRESULT SetCacheSize (
+    [in] aafUInt32  itsSize);
+
+}
+
+
+
+
+// ************************
+//
 // Interface IAAFInterpolator
 //
 // ************************
@@ -2832,6 +2395,9 @@ interface IAAFEssenceContainer : IUnknown
 ///
 
 
+///
+/// Objects that implement IAAFInterpolator also implement the following interfaces:
+///  - IAAFPlugin
 [
     object,
     uuid(75C6CDF2-0D67-11d3-80A9-006008143e6f),
@@ -3103,5 +2669,443 @@ interface IAAFInterpolator : IUnknown
     [in] aafUInt32  generateCount,
     [out] aafMemPtr_t  pOutputValue,
     [out] aafUInt32 *  pResultCount);
+}
+
+
+
+// ************************
+//
+// Interface IAAFMultiEssenceCodec
+//
+// ************************
+
+
+
+///
+/// The AAFMultiEssenceCodec interface describes the calls of a plugin
+/// which handles encoding media in a particular file format, with
+/// optional compression.  These methods are used internally by the SDK,
+/// and are not exported through the client interface.
+///
+/// The AAFPluginManager keeps a copy of each codec in a table, along
+/// with cached copies of pertinant metadata about the codec, and
+/// instantiates a copy of the codec for each media stream.
+///
+/// In addition to the specific error results listed for each method,
+/// all methods in this interface may also return one of the following
+/// values:
+///
+/// AAFRESULT_NULL_PARAM
+///   - One of the passed in pointers is NULL.
+///
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///
+
+
+///
+/// Objects that implement IAAFMultiEssenceCodec also implement the following interfaces:
+///  - IAAFPlugin
+[
+    object,
+    uuid(7F93992D-DDA3-11d3-8008-00104bc9156d),
+    helpstring("IAAFMultiEssenceCodec Interface"),
+    pointer_default(unique)
+]
+interface IAAFMultiEssenceCodec : IUnknown
+{
+
+
+///
+	///**************
+	/// Meta codec functions.  Called to plug a codec into the SDK, but
+	/// NOT for each instance of a codec.
+	///
+
+	
+///
+	///**************
+	/// General purpose codec functions, always callable (whether or
+	/// not Open or Create have been called.)  These are called by
+	/// AAFEssenceAccess to before the stream is actually opened, and
+	/// therefore may not rely on data which is created during open or
+	/// create.  This is why they take so many parameters.
+	///
+
+
+  //***********************************************************
+  //
+  // MultiCreate()
+  //
+  /// Initalize the stream to be of the correct format with no data and
+  /// default metadata, attach the correct type of EssenceDescriptor
+  /// to the fileMob, and file in the default metadata on the
+  /// descriptor also.  Prepare the stream for writing the first sample
+  /// of data.
+  /// 
+  /// This method should return only the following codes.  If more than
+  /// one of the listed errors is in effect, it should return the
+  /// first one encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - fileMob, stream or createParms is null.
+  ///
+  /// AAFRESULT_STREAM_FULL
+  ///   - The essence can not be written because of a fault such as a
+  ///     disk full error in the underlying operating system.
+  /// 
+  /// @param fileMob [in] Create the essence attached to this file mob
+  /// @param flavour [in, ref] which flavour of the codec to use
+  /// @param stream [in] Here is an essence stream with the data
+  /// @param compEnable [in] optionally compressing
+  /// @param numParms [in] Here are the number of create parameters
+  /// @param createParms [in, size_is(numParms)] Here are the create parameters
+  ///
+  HRESULT MultiCreate (
+    [in] IAAFSourceMob * fileMob,
+    [in, ref] aafUID_constref  flavour,
+    [in] IAAFEssenceStream * stream,
+    [in] aafCompressEnable_t  compEnable,
+    [in] aafUInt32  numParms,
+    [in, size_is(numParms)] aafmMultiCreate_t *  createParms);
+
+
+  //***********************************************************
+  //
+  // MultiOpen()
+  //
+  /// Read the metadata from the essence descriptor and/or the
+  /// formatted data, and prepare the stream for reading the first
+  /// sample of data.
+  /// 
+  /// This method should return only the following codes.  If more than
+  /// one of the listed errors is in effect, it should return the
+  /// first one encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - fileMob or stream  is null.
+  /// 
+  /// @param fileMob [in] Open the essence attached to this file mob
+  /// @param openMode [in] In this mode
+  /// @param stream [in] Here is an essence stream with the raw data
+  /// @param compEnable [in] optionally decompressing
+  ///
+  HRESULT MultiOpen (
+    [in] IAAFSourceMob * fileMob,
+    [in] aafMediaOpenMode_t  openMode,
+    [in] IAAFEssenceStream * stream,
+    [in] aafCompressEnable_t  compEnable);
+	
+
+///
+	///**************
+	/// Essence access codec functions, MultiOpen or MultiCreate must have been
+	/// called.
+	///
+
+
+
+
+  //***********************************************************
+  //
+  // WriteBlocks()
+  //
+  /// Write blocks from one or more buffers, interleaving if needed.
+  /// 
+  /// This method should return only the following codes.  If more than
+  /// one of the listed errors is in effect, it should return the
+  /// first one encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_ZERO_SAMPLESIZE
+  ///	 - The sample size of the stream has not been set.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pTransferParm or pResultParm is null.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - One of the supplied buffers is not large enough to hold the
+  ///     given number of samples.
+  ///
+  /// AAFRESULT_CODEC_CHANNELS
+  ///   - SPecified channel numbers are out of range
+  ///
+  /// AAFRESULT_XFER_DUPCH
+  ///   - The SDK passed in the same channel number on two blocks
+  ///
+  /// AAFRESULT_MULTI_WRITELEN
+  ///   - The length fields of the channels must specify an identical
+  ///     length of clock time.
+  /// 
+  /// @param inter [in] Whether the material will be de-interleaved on read
+  /// @param xferBlockCount [in] How many aafMultiXfer blocks follow
+  /// @param pTransferParm [in, size_is(xferBlockCount)] One or more blocks containing buffer pointer and length
+  /// @param pResultParm [out, size_is(xferBlockCount)] One or more blocks containing results
+  ///
+  HRESULT WriteBlocks (
+    [in] aafDeinterleave_t  inter,
+    [in] aafUInt16  xferBlockCount,
+    [in, size_is(xferBlockCount)] aafmMultiXfer_t *  pTransferParm,
+    [out, size_is(xferBlockCount)] aafmMultiResult_t *  pResultParm);
+
+  //***********************************************************
+  //
+  // ReadBlocks()
+  //
+  /// Read blocks into one or more buffers, de-interleaving if needed.
+  /// 
+  /// This method should return only the following codes.  If more than
+  /// one of the listed errors is in effect, it should return the
+  /// first one  encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pTransferParm is null.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - The buffer is not large enough to hold the data
+  ///
+  /// AAFRESULT_CODEC_CHANNELS
+  ///   - SPecified channel numbers are out of range
+  ///
+  /// AAFRESULT_XFER_DUPCH
+  ///   - The SDK passed in the same channel number on two blocks
+  ///
+  /// AAFRESULT_END_OF_DATA
+  ///   - Hit either the end-of-file on a raw essence file, or the
+  ///     end of the essence property.  The bytesRead fields inside of
+  ///     pTransferParm correctly reflect the number of bytes and
+  ///     complete samples on each track.
+  /// 
+  /// @param inter [in] Whether the material will be de-interleaved on read
+  /// @param xferBlockCount [in] How many aafmMultiXfer blocks follow
+  /// @param pTransferParm [out, size_is(xferBlockCount)] One or more blocks containing buffer pointer and length
+  /// @param pResultParm [out, size_is(xferBlockCount)] One or more blocks containing results
+  ///
+  HRESULT ReadBlocks (
+    [in] aafDeinterleave_t  inter,
+    [in] aafUInt16  xferBlockCount,
+    [out, size_is(xferBlockCount)] aafmMultiXfer_t *  pTransferParm,
+    [out, size_is(xferBlockCount)] aafmMultiResult_t *  pResultParm);
+}
+
+
+
+// ************************
+//
+// Interface IAAFPlugin
+//
+// ************************
+
+
+
+
+
+///
+/// The AAFPlugin interface describes the calls of a plugin.
+///
+/// The AAFPluginManager keeps a copy of each plugin in a table, along
+/// with cached copies of pertinant metadata about the plugin, and
+/// instantiates a copy of the plugin.
+///
+///
+
+
+[
+    object,
+    uuid(3631F7A4-9121-11d2-8088-006008143e6f),
+    helpstring("IAAFPlugin Interface"),
+    pointer_default(unique)
+]
+interface IAAFPlugin : IUnknown
+{
+
+
+  //***********************************************************
+  //
+  // CountDefinitions()
+  //
+  /// This method returns the number of subclasses of AAFDefObject associated with this plugin,
+	/// and will be called once at startup by the plugin manager.
+	/// A non-zero index is used when a single piece of code implements more than one definition, which
+	/// is not to be confused with multiple plugin interfaces existing in a single plugin file.
+	/// An example where an index other than one would be useful is an interpolator which implements
+	/// multiple types of interpolation (ex. linear, constant, etc...), but has one entry point
+	/// for all types.  Codecs will have only one definition per interface, but may have many interfaces
+	/// clumped together into a single file.
+  ///
+  /// If this method fails nothing will be written to *pDefCount.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pDefCount arg is NULL.
+  /// 
+  /// @param pDefCount [out] The number of definitions associated with this plugin
+  ///
+  HRESULT CountDefinitions (
+    [out] aafUInt32 *  pDefCount);
+
+  //***********************************************************
+  //
+  // GetIndexedDefinitionID()
+  //
+  /// This method returns the unique ID of the AAFDefObject associated with this Plugin. 
+ 	/// This range of indices will be from 0 to one less than the total number of codecs,
+	/// operation groups, classes, types, containers, etc.. implemented by this plugin.
+	/// A non-zero index is used when a single piece of code implements more than one definition, which
+	/// is not to be confused with multiple plugin interfaces existing in a single plugin file.
+	/// An example where an index other than one would be useful is an interpolator which implements
+	/// multiple types of interpolation (ex. linear, constant, etc...), but has one entry point
+	/// for all types.  Codecs will have only one definition per interface, but may have many interfaces
+	/// clumped together into a single file.
+ ///
+  /// Succeeds if all of the following are true:
+  /// - the pPluginID pointer is valid.
+  /// - Index is within range.
+  /// 
+  /// If this method fails nothing will be written to *pPluginID.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pPluginID arg is NULL.
+  ///
+  /// AAFRESULT_INDEX_RANGE
+  ///   - The index value is out of range
+  /// 
+  /// @param index [in] An index from 0 to the number of definitions - 1
+  /// @param pPluginID [out] The unique media object id
+  ///
+  HRESULT GetIndexedDefinitionID (
+    [in] aafUInt32  index,
+    [out] aafUID_t *  pPluginID);
+
+  //***********************************************************
+  //
+  // GetPluginDescriptorID()
+  //
+  /// This method returns the unique ID of the AAFPluginDescriptor associated with this Plugin.
+  /// This method is called by the plugin manager to determine if a particular plugin descriptor
+  /// (indicating a particular plugin) is already in the current file, so that the full create
+  /// function does not need to be called.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pPluginID pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pPluginID.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pPluginID arg is NULL.
+  /// 
+  /// @param pPluginID [out] The unique media object id
+  ///
+  HRESULT GetPluginDescriptorID (
+    [out] aafUID_t *  pPluginID);
+
+  //***********************************************************
+  //
+  // GetIndexedDefinitionObject()
+  //
+  /// This method manufactures a definition object of the correct
+  /// class for this plugin, and fills in the values.  You must call QueryInterface
+  /// on the result in order to find the correct interface.  The dictionary supplied
+  /// should be for the file where the definition will go, but the definition will not
+  /// be added to the file by this function.  The supplied dictionary also needs no
+  /// former knowledge of the new definition.  This function will be called by the plugin
+  /// manager in order to add the correct definition objects to a file.
+	/// A non-zero index is used when a single piece of code implements more than one definition, which
+	/// is not to be confused with multiple plugin interfaces existing in a single plugin file.
+	/// An example where an index other than one would be useful is an interpolator which implements
+	/// multiple types of interpolation (ex. linear, constant, etc...), but has one entry point
+	/// for all types.  Codecs will have only one definition per interface, but may have many interfaces
+	/// clumped together into a single file.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pDefObject pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pDefObject.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pDefObject arg is NULL.
+  /// 
+  /// @param index [in] An index from 0 to the number of definitions - 1
+  /// @param pDictionary [in] The dictionary to use when creating the definition
+  /// @param pDefObject [out] The interface of the pluggable definition
+  ///
+  HRESULT GetIndexedDefinitionObject (
+    [in] aafUInt32  index,
+    [in] IAAFDictionary * pDictionary,
+    [out] IAAFDefObject ** pDefObject);
+
+  //***********************************************************
+  //
+  // CreateDescriptor()
+  //
+  /// This method manufactures a plugin descriptor of the correct
+  /// class for this plugin, and fills in the values.  You must call QueryInterface
+  /// on the result in order to find the corret interface.  The dictionary supplied
+  /// should be for the file where the descriptor will go, but the descriptor will not
+  /// be added to the file by this function.  The supplied dictionary also needs no
+  /// former knowledge of the new descriptor.  This function will be called by the plugin
+  /// manager in order to add the correct plugin descriptors to a file.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pPluginDef pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pPluginDef.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pPluginDef arg is NULL.
+  /// 
+  /// @param pDictionary [in] The dictionary to use when creating the descriptor
+  /// @param pPluginDef [out] The interface of the pluggable definition
+  ///
+  HRESULT CreateDescriptor (
+    [in] IAAFDictionary * pDictionary,
+    [out] IAAFPluginDef ** pPluginDef);
+
 }
 

@@ -20,7 +20,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -512,7 +512,8 @@ public:
   //
   // Add the definition for the given KLV key to the runtime dictionary.
   /// The pTypeDef will often be kAAFTypeID_UInt8Array,
-  /// but may be something else.  /// 
+  /// but may be something else.
+  /// 
   /// Succeeds if:
   /// - The pTypeDef pointer is valid.
   /// - the definition is not already been registered with RegisterTypeDef.

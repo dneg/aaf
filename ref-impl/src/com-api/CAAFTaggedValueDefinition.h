@@ -20,7 +20,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -85,7 +85,7 @@ public:
   //
   // AddParentProperty()
   //
-  // /// Add a property definition to the tagged value definition.
+  // Add a property definition to the tagged value definition.
   ///
   /// Return codes:
   ///
@@ -103,7 +103,7 @@ public:
   //
   // GetParentProperties()
   //
-  // /// Writes an enumerator for the property definitions into *ppEnum.
+  // Writes an enumerator for the property definitions into *ppEnum.
   /// A reference is added to the new enumerator before it is returned.
   ///
   /// Return codes:
@@ -122,7 +122,7 @@ public:
   //
   // CountParentProperties()
   //
-  // /// Writes the total number of property definitions into *pNumProperties if,
+  // Writes the total number of property definitions into *pNumProperties if,
   /// and only if, the method succeeds.
   ///
   /// Return codes:
@@ -141,7 +141,7 @@ public:
   //
   // RemoveParentProperty()
   //
-  // /// Removes the given property definition.
+  // Removes the given property definition.
   ///
   /// Return codes:
   ///

@@ -20,7 +20,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -103,7 +103,7 @@ public:
   //
   // SetMobID()
   //
-  // /// When a mob is initially created, the Reference Implementation
+  // When a mob is initially created, the Reference Implementation
   /// internally creates a mobID for the new mob.  This method should
   /// be used to change the mob's identity to an explicit mobID.
   /// 
@@ -407,7 +407,7 @@ public:
   //
   // GetSlots()
   //
-  // return an enumeration for all mob slots.  The returned
+  // Return an enumeration for all mob slots.  The returned
   /// enumerator is AddRef()ed before it is returned.
   /// 
   /// Succeeds if all of the following are true:
@@ -567,7 +567,7 @@ public:
   //
   // CountComments()
   //
-  // return total number of comments attached to this mob.
+  // Return total number of comments attached to this mob.
   ///
   /// Succeeds if all of the following are true:
   /// - the pNumComments pointer is valid.
@@ -593,7 +593,7 @@ public:
   //
   // GetComments()
   //
-  // return the enumeration for all mob comments.  The returned
+  // Return the enumeration for all mob comments.  The returned
   /// enumerator is AddRef()ed before it is returned.  Mob comments are 
   /// implemented as AAFTaggedValue of type WCharString.   The enumerator
   /// is implemented as a EnumAAAFTaggedValues.
@@ -622,7 +622,7 @@ public:
   //
   // RemoveComment()
   //
-  // /// Removes the given comment from this mob.
+  // Removes the given comment from this mob.
   /// 
   /// Succeeds if all of the following are true:
   /// - the pComment pointer is valid.
@@ -923,8 +923,8 @@ public:
   //
   STDMETHOD (Copy) (
     // Optional Input. The name to be assigned to the new copy of the
-	/// Mob.  The destMobName argument is optional. Specify a NULL
-	/// value if no destination Mob name is desired.
+  /// Mob.  The destMobName argument is optional. Specify a NULL
+  /// value if no destination Mob name is desired.
     /*[in, string]*/ aafCharacter_constptr  pDestMobName,
 
     // Destination Mob
@@ -962,7 +962,7 @@ public:
   //
   // CountKLVData()
   //
-  // return total number of KLV data objects attached to this mob.
+  // Return total number of KLV data objects attached to this mob.
   ///
   /// Succeeds if all of the following are true:
   /// - the pNumData pointer is valid.
@@ -988,7 +988,7 @@ public:
   //
   // GetKLVData()
   //
-  // return the enumeration for all KLV data objects on this mob.  The returned
+  // Return the enumeration for all KLV data objects on this mob.  The returned
   /// enumerator is AddRef()ed before it is returned.  The enumerator
   /// is implemented as a EnumAAFKLVData.
   /// 
@@ -1016,7 +1016,7 @@ public:
   //
   // RemoveKLVData()
   //
-  // /// Removes the given KLV data object from this mob.
+  // Removes the given KLV data object from this mob.
   /// 
   /// Succeeds if all of the following are true:
   /// - the pData pointer is valid.
@@ -1049,7 +1049,20 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFMob2 | AppendAttribute |
-  // Append and attribute name/value pair to the attribute list. 
+  // Append an attribute name/value pair to the attribute list.
+  ///
+  /// Creates a new tagged value, initializes it with the specified attribute
+  /// name/value pair, and appends it to the attribute list.
+  ///
+  /// Succeeds if:
+  ///   - pName and pValue are valid pointers.
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_SUCCESS
+  ///
+  ///   AAFRESULT_NULL_PARAM
+  ///	     - pName or pValue is null.
   // @end
   // 
   STDMETHOD (AppendAttribute)
@@ -1066,7 +1079,17 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFMob2 | CountAttributes |
-  // Return the number of attributes contained by this mob 
+  // Return the number of attributes contained in this mob.
+  ///
+  /// Succeeds if:
+  ///   - pNumAttributes is a valid pointer
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_SUCCESS
+  ///
+  ///   AAFRESULT_NULL_PARAM
+  ///	     - pNumAttributes is null.
   // @end
   // 
   STDMETHOD (CountAttributes)
@@ -1080,7 +1103,20 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFMob2 | GetAttributes |
-  // Return an attribute enumerator for this mob. 
+  // Return an attribute enumerator for this mob.
+  ///
+  /// Creates an enumerator for this mobs attributes.  The new enumerator is
+  /// AddRef()ed before it is returned.
+  ///
+  /// Succeeds if:
+  ///   - pName and pValue are valid pointers.
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_SUCCESS
+  ///
+  ///   AAFRESULT_NULL_PARAM
+  ///	     - pEnum was null.
   // @end
   // 
   STDMETHOD (GetAttributes)
@@ -1094,7 +1130,17 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFMob2 | RemoveAttribute |
-  // Remove an attribute (tagged value).
+  // Remove a mob attribute (tagged value).
+  ///
+  /// Succeeds if:
+  ///   - pName and pValue are valid pointers.
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_SUCCESS
+  ///
+  ///   AAFRESULT_NULL_PARAM
+  ///	     - pName or pValue is null.
   // @end
   // 
   STDMETHOD (RemoveAttribute)
@@ -1108,7 +1154,12 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFMob2 | SetUsageCode |
-  // Set this mob's usage code. 
+  // Set this mob's usage code. Usage codes are documented in the
+  /// AAF Edit Protocol, and related specifications.
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_SUCCESS
   // @end
   // 
   STDMETHOD (SetUsageCode)
@@ -1122,7 +1173,22 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFMob2 | GetUsageCode |
-  // Get this mob's usage code. 
+  // Get this mob's usage code. Usage codes are documented in the
+  /// AAF Edit Protocol, and related specifications.
+  ///
+  /// Succeeds if:
+  ///   - pUsageCode is a valid pointer
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_PROP_NOT_PRESENT
+  ///        - no usage code is present on this mob
+  ///
+  ///   AAFRESULT_NULL_PARAM
+  ///	     - pUsageCode is null
+  ///	
+  ///   AAFRESULT_SUCCESS
+  ///        - succeeded (This is the only code indicating success.)
   // @end
   // 
   STDMETHOD (GetUsageCode)

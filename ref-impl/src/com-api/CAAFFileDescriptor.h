@@ -20,7 +20,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -64,8 +64,7 @@ public:
   //
   // SetLength()
   //
-  // /// 
-  /// Sets the length of the essence in samples [not edit units].
+  // Sets the length of the essence in samples [not edit units].
   /// 
   /// Always succeeds.
   /// 
@@ -85,7 +84,7 @@ public:
   //
   // GetLength()
   //
-  // /// Gets the length of the essence in samples [not edit units].
+  // Gets the length of the essence in samples [not edit units].
   ///
   /// Succeeds if all of the following are true:
   /// - the pLength pointer is valid.
@@ -111,7 +110,7 @@ public:
   //
   // SetCodecDef()
   //
-  // /// Set to the exact codec which was used as a hint.
+  // Set to the exact codec which was used as a hint.
   /// 
   /// Always succeeds.
   /// 
@@ -131,7 +130,7 @@ public:
   //
   // GetCodecDef()
   //
-  // /// Get to the exact codec which was used as a hint.
+  // Get to the exact codec which was used as a hint.
   ///
   /// Succeeds if all of the following are true:
   /// - the pCodecDef pointer is valid.
@@ -227,7 +226,7 @@ public:
   //
   // GetContainerFormat()
   //
-  // /// Optional. Identifies the file format.
+  // Identifies the file format.
   ///
   /// Succeeds if all of the following are true:
   /// - the pFormat pointer is valid.
@@ -245,7 +244,7 @@ public:
   ///   - pFormat arg is NULL.
   //
   STDMETHOD (GetContainerFormat) (
-    // Identifies the file format 
+    // Optional 
     /*[out]*/ IAAFContainerDef ** pFormat);
 
 protected:

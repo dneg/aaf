@@ -20,7 +20,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -97,7 +97,7 @@ public:
   //
   // Next()
   //
-  // /// Enumerates the next count elements (AAFIdentification pointers)
+  // Enumerates the next count elements (AAFIdentification pointers)
   /// in the enumerator's list, returning them in the given array
   /// along with the actual number of enumerated elements in
   /// pNumFetched. The caller is responsible for properly releasing the
@@ -136,7 +136,7 @@ public:
   //
   // Skip()
   //
-  // /// Instructs the enumerator to skip the next count elements in the
+  // Instructs the enumerator to skip the next count elements in the
   /// enumeration so that the next call to EnumAAFIdentifications::Next
   /// will not return those elements.
   /// 
@@ -181,7 +181,7 @@ public:
   //
   // Clone()
   //
-  // /// Creates another identification enumerator with the same state as
+  // Creates another identification enumerator with the same state as
   /// the current enumerator to iterate over the same list. This method
   /// makes it possible to record a point in the enumeration sequence
   /// in order to return to that point at a later time.

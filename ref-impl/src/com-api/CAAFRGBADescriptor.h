@@ -20,7 +20,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -321,7 +321,7 @@ public:
   //
   // GetPaletteLayout()
   //
-  // /// The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
+  // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
   /// from the set:
   ///   	- kAAFCompNone
   /// 	- kAAFCompAlpha

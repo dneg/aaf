@@ -20,7 +20,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -92,17 +92,16 @@ public:
   // SetDescribedSlotIDs()
   //
   // Specifies the slot IDs in the Mob to which the DescriptiveFramework refers.
-///
-/// 
-/// Return codes:
-///
-/// AAFRESULT_SUCCESS
-///   - succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///   - pMonoSourceSlotIDs is null 
-///
-/// This interface is not currently implemented.
+  /// 
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pMonoSourceSlotIDs is null 
+  ///
+  /// This interface is not currently implemented.
   //
   STDMETHOD (SetDescribedSlotIDs) (
     // Number of elements in the pDescribedSlotIDs array
@@ -116,23 +115,24 @@ public:
   //
   // GetDescribedSlotIDs()
   //
-  // /// Get the described slot IDs that are referenced by this object.  Refer to
-/// SetDescribedSlotIDs for a description of pDescribedSlotIDs.
-/// Return codes:
-///
-/// AAFRESULT_SUCCESS
-///   - succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///   - pDescribedSlotIDs is null
-///
-/// AAFRESULT_PROP_NOT_PRESENT
-///   - the property is not present
-///
-/// AAFRESULT_SMALLBUF
-///   - pDescribedSlotIDs is too small
-///
-/// This interface is not currently implemented.
+  // Get the described slot IDs that are referenced by this object.  Refer to
+  /// SetDescribedSlotIDs for a description of pDescribedSlotIDs.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pDescribedSlotIDs is null
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - pDescribedSlotIDs is too small
+  ///
+  /// This interface is not currently implemented.
   //
   STDMETHOD (GetDescribedSlotIDs) (
     // Number of elements in the pDescribedSlotIDs array
@@ -145,15 +145,15 @@ public:
   //
   // GetDescribedSlotIDsSize()
   //
-  // /// Get the number of slot IDs stored by this DescriptiveMarker.
-///
-/// Return codes:
-///
-/// AAFRESULT_SUCCESS
-///   - succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///   - pDescribedSlotIDs is null 
+  // Get the number of slot IDs stored by this DescriptiveMarker.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pDescribedSlotIDs is null 
   //
   STDMETHOD (GetDescribedSlotIDsSize) (
     // Number of elements in the pDescribedSlotIDs array 
@@ -163,15 +163,15 @@ public:
   //
   // SetDescriptiveFramework()
   //
-  // /// Sets the DescriptiveFramework that describes this DescriptiveMarker.
-///
-/// Return codes:
-///
-/// AAFRESULT_SUCCESS
-///	- succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///	- pDescriptorFramework is null
+  // Sets the DescriptiveFramework that describes this DescriptiveMarker.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///	- succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///	- pDescriptorFramework is null
   //
   STDMETHOD (SetDescriptiveFramework) (
     // DescriptorFramework object to set 
@@ -181,15 +181,15 @@ public:
   //
   // GetDescriptiveFramework()
   //
-  // /// Gets the DescriptiveFramework that describes this DescriptiveMarker.
-///
-/// Return codes:
-///
-/// AAFRESULT_SUCCESS
-///	- succeeded
-///
-/// AAFRESULT_NULL_PARAM
-///	- ppDescriptorFramework is null
+  // Gets the DescriptiveFramework that describes this DescriptiveMarker.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///	- succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///	- ppDescriptorFramework is null
   //
   STDMETHOD (GetDescriptiveFramework) (
     // DescriptorFramework object to return 

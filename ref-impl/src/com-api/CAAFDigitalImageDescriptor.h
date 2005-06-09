@@ -20,7 +20,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -66,8 +66,7 @@ public:
   //
   // SetCompression()
   //
-  // ///
-  /// Sets the kind of compression and format of compression
+  // Sets the kind of compression and format of compression
   /// information of the video essence data.  This property is
   /// optional.  If there is no compression, the property is omitted.
   /// 
@@ -88,7 +87,7 @@ public:
   //
   // GetCompression()
   //
-  // /// Gets the kind of compression and format of compression
+  // Gets the kind of compression and format of compression
   /// information of the video essence data.  This property is
   /// optional.
   ///
