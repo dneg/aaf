@@ -518,7 +518,7 @@ OMXMLPStoredObject::save(const OMDataSet& property)
 
     // defer processing to saveSimpleValue
     
-    OMType* elementType = dynamic_cast<const OMArrayType*>(baseType(property.type()))->elementType();
+    OMType* elementType = dynamic_cast<const OMSetType*>(baseType(property.type()))->elementType();
     size_t elementInternalSize = elementType->internalSize(); 
 
     OMByteArray buffer;
@@ -937,7 +937,7 @@ OMXMLPStoredObject::restore(OMDataSet& property,
     
     property.clear();
     
-    OMType* elementType = dynamic_cast<const OMArrayType*>(baseType(property.type()))->elementType();
+    OMType* elementType = dynamic_cast<const OMSetType*>(baseType(property.type()))->elementType();
     size_t elementInternalSize = elementType->internalSize(); 
 
     const wchar_t* nmspace;
@@ -1345,28 +1345,30 @@ OMXMLPStoredObject::saveCharacter(const OMByte* internalBytes, OMUInt16 internal
 {
     TRACE("OMXMLPStoredObject::saveCharacter");
 
-    if (internalSize > 2 * sizeof(wchar_t))
+    if (internalSize != sizeof(wchar_t))
     {
-        throw OMException("Invalid character - size is greater than 2");
+        throw OMException("Invalid character");
     }
     
-    wchar_t buffer[3];
-    memset(buffer, 0, sizeof(wchar_t) * 3);
-    memcpy(buffer, internalBytes, internalSize);
+    wchar_t c = *(reinterpret_cast<const wchar_t*>(internalBytes));
 
-    if (characterRequiresEscaping(buffer))
+    if (characterRequiresEscaping(c))
     {
         if (!isElementContent)
         {
             throw OMException("Character requiring escaping is not element content");
         }
         getWriter()->writeAttribute(getBaselineURI(), AAFEscape_AttrName, L"true");
-        wchar_t* escapedStr = escapeCharacter(buffer);
+        wchar_t* escapedStr = escapeCharacter(c);
         getWriter()->writeElementContent(escapedStr, wcslen(escapedStr)); 
         delete [] escapedStr;
     }
     else
     {
+        wchar_t buffer[2];
+        buffer[0] = c;
+        buffer[1] = L'\0';
+        
         if (isElementContent)
         {
             getWriter()->writeElementContent(buffer, wcslen(buffer));
@@ -2072,26 +2074,20 @@ OMXMLPStoredObject::restoreCharacter(OMByteArray& bytes, const OMList<OMXMLAttri
         throw OMException("Invalid character value - zero length string for character");
     }
 
-    wchar_t* unescaped = 0;
-    const wchar_t* c = data;
+    wchar_t c;
     if (isEscaped)
     {
-        unescaped = unescapeCharacter(data);
-        c = unescaped;
+        c = unescapeCharacter(data);
     }
-    size_t len = wcslen(c);
-    int codeLen = utf16CodeLen(c);
-    // maximum length is a surrogate pair, i.e. 2
-    // if length exceeds 2 or the code is not encoded as a surrogate pair then it is an error
-    if (len > 2 || (len == 2 && codeLen != 2))
+    else
     {
-        throw OMException("Invalid character value - multiple characters present");
+        if (wcslen(data) > 1)
+        {
+            throw OMException("Invalid character value - multiple characters present");
+        }
+        c = *data;
     }
-    bytes.append(reinterpret_cast<const OMByte*>(c), len * sizeof(wchar_t));
-    if (isEscaped)
-    {
-        delete [] unescaped;
-    }
+    bytes.append(reinterpret_cast<const OMByte*>(&c), sizeof(wchar_t));
     
     if (isElementContent)
     {
@@ -3117,22 +3113,21 @@ OMXMLPStoredObject::registerExtensions(OMFile& file, OMSymbolspace* extSymbolspa
     for (i = 0; i < typeDefs.count(); i++)
     {
         OMType* typeDef = typeDefs.getAt(i);
-        OMSymbolspace* symbolspace = _store->getSymbolspaceForMetaDef(
+        OMSymbolspace* typeDefSymbolspace = _store->getSymbolspaceForMetaDef(
             typeDef->identification());
 
         const OMType* baseTypeDef = baseType(typeDef);
-        if (baseTypeDef->category() != OMMetaDefinition::EXT_ENUMERATED_TYPE)
+        if (typeDefSymbolspace == 0)
         {
-            if (symbolspace == 0)
-            {
-                extSymbolspace->addTypeDef(typeDef);
-            }
-            else if (!_store->isBaselineSymbolspace(symbolspace))
-            {
-                symbolspace->addTypeDef(typeDef);
-            }
+            typeDefSymbolspace = extSymbolspace;
+            extSymbolspace->addTypeDef(typeDef);
         }
-        else
+        else if (!_store->isBaselineSymbolspace(typeDefSymbolspace))
+        {
+            typeDefSymbolspace->addTypeDef(typeDef);
+        }
+
+        if (baseTypeDef->category() == OMMetaDefinition::EXT_ENUMERATED_TYPE)
         {
             const OMExtEnumeratedType* extEnumTypeDef = 
                 dynamic_cast<const OMExtEnumeratedType*>(baseTypeDef);
@@ -3145,15 +3140,35 @@ OMXMLPStoredObject::registerExtensions(OMFile& file, OMSymbolspace* extSymbolspa
                 OMSymbolspace* symbolspace = _store->getSymbolspaceForExtEnum(id, value);
                 if (symbolspace == 0)
                 {
-                    wchar_t* name = extEnumTypeDef->elementName(j);
-                    extSymbolspace->addExtEnumExtension(id, name, value);
-                    delete [] name;
+                    // here if the ext enum value is not registered with a symbolspace
+                    if (_store->isBaselineSymbolspace(typeDefSymbolspace))
+                    {
+                        // here if the ext enum value extends a baseline ext enum type def
+                        wchar_t* name = extEnumTypeDef->elementName(j);
+                        extSymbolspace->addExtEnumExtension(id, name, value);
+                        delete [] name;
+                    }
+                    else
+                    {
+                        // here if the ext enum value is part of a non-baseline ext enum type def
+                        typeDefSymbolspace->addExtEnumValue(id, value);
+                    }
                 }
                 else if (!_store->isBaselineSymbolspace(symbolspace))
                 {
-                    wchar_t* name = extEnumTypeDef->elementName(j);
-                    symbolspace->addExtEnumExtension(id, name, value);
-                    delete [] name;
+                    // here if the ext enum value is registered with a non-baseline symbolspace
+                    if (typeDefSymbolspace != symbolspace)
+                    {
+                        // here if the ext enum value extends a non-baseline ext enum type def
+                        wchar_t* name = extEnumTypeDef->elementName(j);
+                        symbolspace->addExtEnumExtension(id, name, value);
+                        delete [] name;
+                    }
+                    else
+                    {
+                        // here if the ext enum value is part of a non-baseline ext enum type def
+                        symbolspace->addExtEnumValue(id, value);
+                    }
                 }
             }
         }
