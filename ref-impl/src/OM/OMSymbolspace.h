@@ -89,6 +89,7 @@ public:
     void addPropertyDef(OMClassDefinition* classDef, OMPropertyDefinition* propertyDef);
     void addExtEnumExtension(OMUniqueObjectIdentification id, const wchar_t* name,
         OMUniqueObjectIdentification value);
+    void addExtEnumValue(OMUniqueObjectIdentification id, OMUniqueObjectIdentification value);
     
     void save();
     void restore(OMDictionary* dictionary);

@@ -335,7 +335,7 @@ OMSymbolspace::addTypeDef(OMType* typeDef)
     TRACE("OMSymbolspace::addTypeDef");
     
     _typeDefs.append(typeDef);
-    createSymbolForType(typeDef->identification(), typeDef->name());    
+    createSymbolForType(typeDef->identification(), typeDef->name());
 }
 
 void 
@@ -372,6 +372,31 @@ OMSymbolspace::addExtEnumExtension(OMUniqueObjectIdentification id,
     
     extEnumExt->names.append(name);
     extEnumExt->values.append(value);
+    
+    // add to values known in this symbolspace
+    addExtEnumValue(id, value);
+}
+
+void 
+OMSymbolspace::addExtEnumValue(OMUniqueObjectIdentification id, 
+    OMUniqueObjectIdentification value)
+{
+    TRACE("OMSymbolspace::addExtEnumValue");
+    
+    if (!_extEnumValues.contains(id))
+    {
+        _extEnumValues.insert(id, 
+            new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>());
+    }
+
+    OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>* values = 0;
+    _extEnumValues.find(id, values);
+    ASSERT("Ext enum type known", values != 0);
+    
+    if (!values->contains(value))
+    {
+        values->insert(value, value);
+    }
 }
 
 void 
@@ -408,7 +433,8 @@ OMSymbolspace::save()
         getWriter()->writeElementEnd();
     }
 
-    if (_classDefs.count() > 0 || _typeDefs.count() > 0 || _propertyDefs.count() > 0)
+    if (_classDefs.count() > 0 || _typeDefs.count() > 0 || _propertyDefs.count() > 0 ||
+        _extEnumExtDefs.count() > 0)
     {
         getWriter()->writeElementStart(getBaselineURI(), L"Definitions");
 
@@ -570,8 +596,9 @@ OMSymbolspace::registerDeferredDefs(OMDictionary* dictionary)
     {
         ExtEnumExtGroup* extEnumExt = _extEnumExtDefsForRegistration.getAt(i);
      
+        size_t j;
         OMVector<const wchar_t*> names;
-        for (size_t j = 0; j < extEnumExt->names.count(); j++)
+        for (j = 0; j < extEnumExt->names.count(); j++)
         {
             names.append(extEnumExt->names.getAt(j).c_str());
         }
@@ -580,6 +607,12 @@ OMSymbolspace::registerDeferredDefs(OMDictionary* dictionary)
         if (!result)
         {
             throw OMException("Failed to register extendible enumeration extension");
+        }
+        
+        // register values with this symbolspace
+        for (j = 0; j < extEnumExt->values.count(); j++)
+        {
+            addExtEnumValue(extEnumExt->typeId, extEnumExt->values.getAt(j));
         }
         
         delete extEnumExt;
@@ -1084,23 +1117,28 @@ OMSymbolspace::saveExtEnumeratedTypeDef(OMExtEnumeratedType* typeDef)
     {
         getWriter()->writeElementStart(getBaselineURI(), L"Elements");
         
+        OMUniqueObjectIdentification id = typeDef->identification();
         for (OMUInt32 i = 0; i<count; i++)
         {
-            wchar_t* elementName = typeDef->elementName(i);
             OMUniqueObjectIdentification elementValue = typeDef->elementValue(i);
 
-            wchar_t valueStr[XML_MAX_AUID_URI_SIZE];
-            auidToURI(elementValue, valueStr);
-
-            getWriter()->writeElementStart(getBaselineURI(), L"Name");
-            getWriter()->writeElementContent(elementName, wcslen(elementName));
-            getWriter()->writeElementEnd();
-            
-            getWriter()->writeElementStart(getBaselineURI(), L"Value");
-            getWriter()->writeElementContent(valueStr, wcslen(valueStr));
-            getWriter()->writeElementEnd();
-            
-            delete [] elementName;
+            if (knownExtEnum(id, elementValue))
+            {
+                wchar_t* elementName = typeDef->elementName(i);
+    
+                wchar_t valueStr[XML_MAX_AUID_URI_SIZE];
+                auidToURI(elementValue, valueStr);
+    
+                getWriter()->writeElementStart(getBaselineURI(), L"Name");
+                getWriter()->writeElementContent(elementName, wcslen(elementName));
+                getWriter()->writeElementEnd();
+                
+                getWriter()->writeElementStart(getBaselineURI(), L"Value");
+                getWriter()->writeElementContent(valueStr, wcslen(valueStr));
+                getWriter()->writeElementEnd();
+                
+                delete [] elementName;
+            }
         }
 
         getWriter()->writeElementEnd();
