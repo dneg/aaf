@@ -41,6 +41,7 @@ import "objidl.idl";
 import "AAFTypes.idl";
 #endif
 
+interface IAAFAES3PCMDescriptor;
 interface IAAFAIFCDescriptor;
 interface IAAFAuxiliaryDescriptor;
 interface IAAFCDCIDescriptor;
@@ -85,6 +86,7 @@ interface IAAFMasterMob;
 interface IAAFMetaDefinition;
 interface IAAFMob;
 interface IAAFMobSlot;
+interface IAAFMultipleDescriptor;
 interface IAAFNestedScope;
 interface IAAFNetworkLocator;
 interface IAAFObject;
@@ -191,6 +193,70 @@ interface IAAFSearchSource;
 interface IAAFSourceReference2;
 interface IAAFTimelineMobSlot2;
 interface IAAFTypeDefVariableArrayEx;
+
+
+// ************************
+//
+// Interface IAAFAES3PCMDescriptor
+//
+// ************************
+///
+/// The IAAFAES3PCMDescriptor interface is implemented by objects which
+/// describe video essence formatted with one luminance component and 
+/// two color-difference components.
+///
+/// In addition to the specific error results listed for each method,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///
+
+
+///
+/// Objects that implement IAAFAES3PCMDescriptor also implement the following interfaces:
+///  - IAAFPCMDescriptor
+///  - IAAFSoundDescriptor
+///  - IAAFFileDescriptor
+///  - IAAFEssenceDescriptor
+///  - IAAFObject
+[
+    object,
+    uuid(2EBFFDE0-5997-414D-808B-6BAA4A74F40F),
+    helpstring("IAAFAES3PCMDescriptor Interface"),
+    pointer_default(unique)
+]
+interface IAAFAES3PCMDescriptor : IUnknown
+{
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  /// Initializes a newly allocated, IAAFAES3PCMDescriptor-supporting
+  /// object. This method must be called after allocation, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  /// 
+  HRESULT Initialize ();
+
+
+}
+
 
 
 // ************************
@@ -13197,6 +13263,259 @@ interface IAAFMobSlot : IUnknown
   ///
   HRESULT SetSlotID (
     [in] aafSlotID_t  value);
+}
+
+
+
+// ************************
+//
+// Interface IAAFMultipleDescriptor
+//
+// ************************
+///
+/// The IAAFMultipleDescriptor interface is implemented by objects which
+/// describe the format of the content data associated with a File
+/// Source mob or of the media associated with a Physical Source mob
+/// when the File Source mob describes multiple types of interleaved essence.
+///
+/// In addition to the specific error results listed for each method,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///
+/// AAFRESULT_NOT_INITIALIZED
+///   - This object has not yet had Initialize() called on it through
+///     this object's primary interface.
+///
+///
+/// Objects that implement IAAFMultipleDescriptor also implement the following interfaces:
+///  - IAAFFileDescriptor
+///  - IAAFEssenceDescriptor
+///  - IAAFObject
+[
+    object,
+    uuid(dabf53cf-1ec3-43a2-9418-f22fb87c38f4),
+    helpstring("IAAFMultipleDescriptor Interface"),
+    pointer_default(unique)
+]
+
+interface IAAFMultipleDescriptor : IUnknown
+{
+
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  /// Initializes a newly allocated, empty
+  /// IAAFMultipleDescriptor-supporting object.  This method must be
+  /// called after allocation, and before any other method can be
+  /// called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  /// 
+  HRESULT Initialize ();
+
+  //***********************************************************
+  //
+  // CountFileDescriptors()
+  //
+  /// Return the number of FileDescriptors attached to this essence
+  /// descriptor.  The number of FileDescriptors may be zero if the essence is
+  /// in the current file.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pCount pointer is valid.
+  /// 
+  /// If this method fails nothing is written to *pCount.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pCount is null.
+  /// 
+  /// @param pResult [out] Returns the number of FileDescriptors
+  ///
+  HRESULT CountFileDescriptors (
+    [out] aafUInt32 *  pResult);
+
+
+  //***********************************************************
+  //
+  // AppendFileDescriptor()
+  //
+  /// Append another FileDescriptor to this essence descriptor.  Use this
+  /// function to add a FileDescriptor to the end of the interleave pattern.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pFileDescriptor pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileDescriptor is null.
+  /// 
+  /// @param pFileDescriptor [in] FileDescriptor to append
+  ///
+  HRESULT AppendFileDescriptor (
+    [in] IAAFFileDescriptor * pFileDescriptor);
+
+
+  //***********************************************************
+  //
+  // PrependFileDescriptor()
+  //
+  /// Prepend another FileDescriptor to this essence descriptor.  Use this
+  /// function to add a FileDescriptor to to the beginning of the interleave pattern.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pFileDescriptor pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileDescriptor is null.
+  /// 
+  /// @param pFileDescriptor [in] FileDescriptor to append
+  ///
+  HRESULT PrependFileDescriptor (
+    [in] IAAFFileDescriptor * pFileDescriptor);
+
+
+  //***********************************************************
+  //
+  // InsertFileDescriptorAt()
+  //
+  /// Inserts the given FileDescriptor at the given index.  FileDescriptors already
+  /// existing at the given and higher indices will be moved to the
+  /// next higher index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pFileDescriptor pointer is valid.
+  /// - index is less than or equal to the value returned by
+  ///   CountFileDescriptors().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileDescriptor is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than the value returned by
+  ///     CountFileDescriptors().
+  /// 
+  /// @param index [in] index at which FileDescriptor is to be inserted
+  /// @param pFileDescriptor [in] FileDescriptor to append
+  ///
+  HRESULT InsertFileDescriptorAt (
+    [in] aafUInt32  index,
+    [in] IAAFFileDescriptor * pFileDescriptor);
+
+
+  //***********************************************************
+  //
+  // GetFileDescriptorAt()
+  //
+  /// Retrieves the FileDescriptor at the given index.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pFileDescriptor pointer is valid.
+  /// - index is less than the value returned by CountFileDescriptors().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileDescriptor is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountFileDescriptors().
+  /// 
+  /// @param index [in] index of FileDescriptor to retrieve
+  /// @param ppFileDescriptor [out, retval] returned FileDescriptor
+  ///
+  HRESULT GetFileDescriptorAt (
+    [in] aafUInt32  index,
+    [out, retval] IAAFFileDescriptor ** ppFileDescriptor);
+
+
+  //***********************************************************
+  //
+  // RemoveFileDescriptorAt()
+  //
+  /// Removes the FileDescriptor at the given index.  FileDescriptors already
+  /// existing at indices higher than the given index will be moved to
+  /// the next lower index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - index is less than the value returned by CountFileDescriptors().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountFileDescriptors().
+  /// 
+  /// @param index [in] index of FileDescriptor to remove
+  ///
+  HRESULT RemoveFileDescriptorAt (
+    [in] aafUInt32  index);
+
+
 }
 
 

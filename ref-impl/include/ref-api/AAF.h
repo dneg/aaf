@@ -40,6 +40,7 @@
 #endif
 
 #ifdef __cplusplus
+interface IAAFAES3PCMDescriptor;
 interface IAAFAIFCDescriptor;
 interface IAAFAuxiliaryDescriptor;
 interface IAAFCDCIDescriptor;
@@ -84,6 +85,7 @@ interface IAAFMasterMob;
 interface IAAFMetaDefinition;
 interface IAAFMob;
 interface IAAFMobSlot;
+interface IAAFMultipleDescriptor;
 interface IAAFNestedScope;
 interface IAAFNetworkLocator;
 interface IAAFObject;
@@ -191,6 +193,7 @@ interface IAAFSourceReference2;
 interface IAAFTimelineMobSlot2;
 interface IAAFTypeDefVariableArrayEx;
 #else
+typedef interface IAAFAES3PCMDescriptor IAAFAES3PCMDescriptor;
 typedef interface IAAFAIFCDescriptor IAAFAIFCDescriptor;
 typedef interface IAAFAuxiliaryDescriptor IAAFAuxiliaryDescriptor;
 typedef interface IAAFCDCIDescriptor IAAFCDCIDescriptor;
@@ -235,6 +238,7 @@ typedef interface IAAFMasterMob IAAFMasterMob;
 typedef interface IAAFMetaDefinition IAAFMetaDefinition;
 typedef interface IAAFMob IAAFMob;
 typedef interface IAAFMobSlot IAAFMobSlot;
+typedef interface IAAFMultipleDescriptor IAAFMultipleDescriptor;
 typedef interface IAAFNestedScope IAAFNestedScope;
 typedef interface IAAFNetworkLocator IAAFNetworkLocator;
 typedef interface IAAFObject IAAFObject;
@@ -342,6 +346,65 @@ typedef interface IAAFSourceReference2 IAAFSourceReference2;
 typedef interface IAAFTimelineMobSlot2 IAAFTimelineMobSlot2;
 typedef interface IAAFTypeDefVariableArrayEx IAAFTypeDefVariableArrayEx;
 #endif
+
+// IAAFAES3PCMDescriptor
+
+// ************************
+//
+// Interface IAAFAES3PCMDescriptor
+//
+// ************************
+
+
+
+#ifndef __IAAFAES3PCMDescriptor_INTERFACE_DEFINED__
+#define __IAAFAES3PCMDescriptor_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFAES3PCMDescriptor;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFAES3PCMDescriptor
+
+DECLARE_INTERFACE_(IAAFAES3PCMDescriptor, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFAES3PCMDescriptor methods *** */
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  /// Initializes a newly allocated, IAAFAES3PCMDescriptor-supporting
+  /// object. This method must be called after allocation, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  STDMETHOD(Initialize) (THIS) PURE;
+
+
+
+  END_INTERFACE
+};
+#endif // __IAAFAES3PCMDescriptor_INTERFACE_DEFINED__
+
+
 
 // IAAFAIFCDescriptor
 
@@ -13279,6 +13342,255 @@ DECLARE_INTERFACE_(IAAFMobSlot, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFMobSlot_INTERFACE_DEFINED__
+
+
+
+// IAAFMultipleDescriptor
+
+// ************************
+//
+// Interface IAAFMultipleDescriptor
+//
+// ************************
+
+
+
+
+
+#ifndef __IAAFMultipleDescriptor_INTERFACE_DEFINED__
+#define __IAAFMultipleDescriptor_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFMultipleDescriptor;
+
+
+#undef  INTERFACE
+#define INTERFACE   IAAFMultipleDescriptor
+
+DECLARE_INTERFACE_(IAAFMultipleDescriptor, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFMultipleDescriptor methods *** */
+
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  /// Initializes a newly allocated, empty
+  /// IAAFMultipleDescriptor-supporting object.  This method must be
+  /// called after allocation, and before any other method can be
+  /// called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  STDMETHOD(Initialize) (THIS) PURE;
+
+  //***********************************************************
+  //
+  // CountFileDescriptors()
+  //
+  /// Return the number of FileDescriptors attached to this essence
+  /// descriptor.  The number of FileDescriptors may be zero if the essence is
+  /// in the current file.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pCount pointer is valid.
+  /// 
+  /// If this method fails nothing is written to *pCount.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pCount is null.
+  ///
+  /// @param pResult [out] Returns the number of FileDescriptors
+  ///
+  STDMETHOD(CountFileDescriptors) (THIS_
+    aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // AppendFileDescriptor()
+  //
+  /// Append another FileDescriptor to this essence descriptor.  Use this
+  /// function to add a FileDescriptor to the end of the interleave pattern.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pFileDescriptor pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileDescriptor is null.
+  ///
+  /// @param pFileDescriptor [in] FileDescriptor to append
+  ///
+  STDMETHOD(AppendFileDescriptor) (THIS_
+    IAAFFileDescriptor * pFileDescriptor) PURE;
+
+
+  //***********************************************************
+  //
+  // PrependFileDescriptor()
+  //
+  /// Prepend another FileDescriptor to this essence descriptor.  Use this
+  /// function to add a FileDescriptor to to the beginning of the interleave pattern.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pFileDescriptor pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileDescriptor is null.
+  ///
+  /// @param pFileDescriptor [in] FileDescriptor to append
+  ///
+  STDMETHOD(PrependFileDescriptor) (THIS_
+    IAAFFileDescriptor * pFileDescriptor) PURE;
+
+
+  //***********************************************************
+  //
+  // InsertFileDescriptorAt()
+  //
+  /// Inserts the given FileDescriptor at the given index.  FileDescriptors already
+  /// existing at the given and higher indices will be moved to the
+  /// next higher index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pFileDescriptor pointer is valid.
+  /// - index is less than or equal to the value returned by
+  ///   CountFileDescriptors().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileDescriptor is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than the value returned by
+  ///     CountFileDescriptors().
+  ///
+  /// @param index [in] index at which FileDescriptor is to be inserted
+  /// @param pFileDescriptor [in] FileDescriptor to append
+  ///
+  STDMETHOD(InsertFileDescriptorAt) (THIS_
+    aafUInt32  index,
+    IAAFFileDescriptor * pFileDescriptor) PURE;
+
+
+  //***********************************************************
+  //
+  // GetFileDescriptorAt()
+  //
+  /// Retrieves the FileDescriptor at the given index.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pFileDescriptor pointer is valid.
+  /// - index is less than the value returned by CountFileDescriptors().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileDescriptor is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountFileDescriptors().
+  ///
+  /// @param index [in] index of FileDescriptor to retrieve
+  /// @param ppFileDescriptor [out, retval] returned FileDescriptor
+  ///
+  STDMETHOD(GetFileDescriptorAt) (THIS_
+    aafUInt32  index,
+    IAAFFileDescriptor ** ppFileDescriptor) PURE;
+
+
+  //***********************************************************
+  //
+  // RemoveFileDescriptorAt()
+  //
+  /// Removes the FileDescriptor at the given index.  FileDescriptors already
+  /// existing at indices higher than the given index will be moved to
+  /// the next lower index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - index is less than the value returned by CountFileDescriptors().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountFileDescriptors().
+  ///
+  /// @param index [in] index of FileDescriptor to remove
+  ///
+  STDMETHOD(RemoveFileDescriptorAt) (THIS_
+    aafUInt32  index) PURE;
+
+
+
+  END_INTERFACE
+};
+#endif // __IAAFMultipleDescriptor_INTERFACE_DEFINED__
 
 
 

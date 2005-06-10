@@ -55,6 +55,7 @@ AAFCOMINTERFACESONLY="\
 # its name here and remove it from either list above where it occurs.
 # Do not add the 'Impl'prefix here.
 HUMAN_TYPED_IMPL="\
+	AAFAES3PCMDescriptor \
 	AAFAIFCDescriptor \
 	AAFAuxiliaryDescriptor \
 	AAFCDCIDescriptor \
@@ -99,6 +100,7 @@ HUMAN_TYPED_IMPL="\
 	AAFMetaDefinition \
 	AAFMob  \
 	AAFMobSlot \
+	AAFMultipleDescriptor \
 	AAFNestedScope\
 	AAFNetworkLocator \
 	AAFObject \

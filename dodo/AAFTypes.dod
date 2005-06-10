@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -284,6 +284,64 @@ typedef enum _aafElectroSpatialFormulation_e
 	kAAFElectroSpatialFormulation_MultiChannelMode = 15
 } aafElectroSpatialFormulation_e;
 	
+typedef aafInt32 aafEmphasisType_t;
+typedef enum _aafEmphasisType_e
+{
+	kAAFEmphasis_Unknown = 0,
+	kAAFEmphasis_Reserved0 = 1,
+	kAAFEmphasis_Reserved1 = 2,
+	kAAFEmphasis_Reserved2 = 3,
+	kAAFEmphasis_None = 4,
+	kAAFEmphasis_Reserved3 = 5,
+	kAAFEmphasis_15and50 = 6,
+	kAAFEmphasis_ITU = 7
+} aafEmphasisType_e;
+
+typedef aafInt32 aafAuxBitsModeType_t;
+typedef enum _aafAuxBitsModeType_e
+{
+	kAAFAuxBitsMode_NotDefined = 0,
+	kAAFAuxBitsMode_MainAudioSampleData = 1,
+	kAAFAuxBitsMode_SingleCoordinationSignal = 2,
+	kAAFAuxBitsMode_UserDefined = 3,
+	kAAFAuxBitsMode_Reserved0 = 4,
+	kAAFAuxBitsMode_Reserved1 = 5,
+	kAAFAuxBitsMode_Reserved2 = 6,
+	kAAFAuxBitsMode_Reserved3 = 7
+} aafAuxBitsModeType_e;
+
+typedef aafInt32 aafChannelStatusModeType_t;
+typedef enum _aafChannelStatusModeType_e
+{
+	kAAFChannelStatusMode_None = 0,
+	kAAFChannelStatusMode_Minimum = 1,
+	kAAFChannelStatusMode_Standard = 2,
+	kAAFChannelStatusMode_Fixed = 3,
+	kAAFChannelStatusMode_Stream = 4,
+	kAAFChannelStatusMode_Essence = 5
+} aafChannelStatusModeType_e;
+
+typedef aafInt32 aafUserDataModeType_t;
+typedef enum _aafUserDataModeType_e
+{
+	kAAFUserDataMode_NotDefined = 0,
+	kAAFUserDataMode_192BitBlockStructure = 1,
+	kAAFUserDataMode_AES18 = 2,
+	kAAFUserDataMode_UserDefined = 3,
+	kAAFUserDataMode_IEC = 4,
+	kAAFUserDataMode_Metadata = 5,
+	kAAFUserDataMode_Reserved0 = 6,
+	kAAFUserDataMode_Reserved1 = 7,
+	kAAFUserDataMode_Reserved2 = 8,
+	kAAFUserDataMode_Reserved3 = 9,
+	kAAFUserDataMode_Reserved4 = 10,
+	kAAFUserDataMode_Reserved5 = 11,
+	kAAFUserDataMode_Reserved6 = 12,
+	kAAFUserDataMode_Reserved7 = 13,
+	kAAFUserDataMode_Reserved8 = 14,
+	kAAFUserDataMode_Reserved9 = 15
+} aafUserDataModeType_e;
+
 typedef aafInt32 aafSignalStandard_t;
 typedef enum _aafSignalStandard_e
 {

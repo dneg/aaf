@@ -187,6 +187,7 @@ public:
   CLASS_DEF_METHOD(MasterMob);
   CLASS_DEF_METHOD(Mob);
   CLASS_DEF_METHOD(MobSlot);
+  CLASS_DEF_METHOD(MultipleDescriptor);
   CLASS_DEF_METHOD(NestedScope);
   CLASS_DEF_METHOD(NetworkLocator);
   CLASS_DEF_METHOD(OperationDef);

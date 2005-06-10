@@ -224,6 +224,7 @@ const int PID_PCMDescriptor_PeakFrames                           = 0x3D2E;
 const int PID_PCMDescriptor_PeakOfPeaksPosition                  = 0x3D2F;
 const int PID_PCMDescriptor_PeakEnvelopeTimestamp                = 0x3D30;
 const int PID_PCMDescriptor_PeakEnvelopeData                     = 0x3D31;
+const int PID_MultipleDescriptor_FileDescriptors                 = 0x3F01;
 const int PID_TIFFDescriptor_IsUniform                           = 0x3701;
 const int PID_TIFFDescriptor_IsContiguous                        = 0x3702;
 const int PID_TIFFDescriptor_LeadingLines                        = 0x3703;

@@ -48,8 +48,8 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Sat Mar 19 13:56:15 EST 2005
-// by user OliverOliver on system awol.
+// This file was generated on Fri Jun 10 13:28:12 EDT 2005
+// by user pmontrow on system tjb.global.avidww.com.
 //
 // Key to macros.
 //
@@ -3379,6 +3379,34 @@ AAF_CLASS_END(PCMDescriptor,
   true)
 AAF_CLASS_SEPARATOR()
 
+// MultipleDescriptor
+//
+AAF_CLASS(MultipleDescriptor,
+  // {0D010101-0101-4400-060E-2B3402060101}
+  AAF_LITERAL_AUID(0x0D010101,
+    0x0101, 0x4400,
+    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
+  FileDescriptor,
+  true)
+  AAF_PROPERTY(FileDescriptors,
+    // {06010104-060B-0000-060E-2B3401010104}
+    AAF_LITERAL_AUID(0x06010104,
+      0x060B, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+    0x3f01,
+    AAF_REFERENCE_TYPE(StrongReferenceVector, FileDescriptor),
+    true,
+    false,
+    MultipleDescriptor)
+AAF_CLASS_END(MultipleDescriptor,
+  // {0D010101-0101-4400-060E-2B3402060101}
+  AAF_LITERAL_AUID(0x0D010101,
+    0x0101, 0x4400,
+    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
+  FileDescriptor,
+  true)
+AAF_CLASS_SEPARATOR()
+
 // HTMLDescriptor
 //
 AAF_CLASS(HTMLDescriptor,
@@ -5749,6 +5777,138 @@ AAF_TYPE_DEFINITION_ENUMERATION_END(ElectroSpatialFormulation,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
 AAF_TYPE_SEPARATOR()
 
+// EmphasisType
+//
+AAF_TYPE_DEFINITION_ENUMERATION(EmphasisType, 
+  // {02010123-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x02010123,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(Emphasis_Unknown,
+    0, EmphasisType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(Emphasis_Reserved0,
+    1, EmphasisType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(Emphasis_Reserved1,
+    2, EmphasisType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(Emphasis_Reserved2,
+    3, EmphasisType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(Emphasis_None,
+    4, EmphasisType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(Emphasis_Reserved3,
+    5, EmphasisType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(Emphasis_15and50,
+    6, EmphasisType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(Emphasis_ITU,
+    7, EmphasisType)
+AAF_TYPE_DEFINITION_ENUMERATION_END(EmphasisType, 
+  // {02010123-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x02010123,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
+AAF_TYPE_SEPARATOR()
+
+// AuxBitsModeType
+//
+AAF_TYPE_DEFINITION_ENUMERATION(AuxBitsModeType, 
+  // {02010124-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x02010124,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(AuxBitsMode_NotDefined,
+    0, AuxBitsModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(AuxBitsMode_MainAudioSampleData,
+    1, AuxBitsModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(AuxBitsMode_SingleCoordinationSignal,
+    2, AuxBitsModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(AuxBitsMode_UserDefined,
+    3, AuxBitsModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(AuxBitsMode_Reserved0,
+    4, AuxBitsModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(AuxBitsMode_Reserved1,
+    5, AuxBitsModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(AuxBitsMode_Reserved2,
+    6, AuxBitsModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(AuxBitsMode_Reserved3,
+    7, AuxBitsModeType)
+AAF_TYPE_DEFINITION_ENUMERATION_END(AuxBitsModeType, 
+  // {02010124-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x02010124,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
+AAF_TYPE_SEPARATOR()
+
+// ChannelStatusModeType
+//
+AAF_TYPE_DEFINITION_ENUMERATION(ChannelStatusModeType, 
+  // {02010125-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x02010125,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(ChannelStatusMode_None,
+    0, ChannelStatusModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(ChannelStatusMode_Minimum,
+    1, ChannelStatusModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(ChannelStatusMode_Standard,
+    2, ChannelStatusModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(ChannelStatusMode_Fixed,
+    3, ChannelStatusModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(ChannelStatusMode_Stream,
+    4, ChannelStatusModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(ChannelStatusMode_Essence,
+    5, ChannelStatusModeType)
+AAF_TYPE_DEFINITION_ENUMERATION_END(ChannelStatusModeType, 
+  // {02010125-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x02010125,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
+AAF_TYPE_SEPARATOR()
+
+// UserDataModeType
+//
+AAF_TYPE_DEFINITION_ENUMERATION(UserDataModeType, 
+  // {02010126-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x02010126,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(UserDataMode_NotDefined,
+    0, UserDataModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(UserDataMode_192BitBlockStructure,
+    1, UserDataModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(UserDataMode_AES18,
+    2, UserDataModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(UserDataMode_UserDefined,
+    3, UserDataModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(UserDataMode_IEC,
+    4, UserDataModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(UserDataMode_Metadata,
+    5, UserDataModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(UserDataMode_Reserved0,
+    6, UserDataModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(UserDataMode_Reserved1,
+    7, UserDataModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(UserDataMode_Reserved2,
+    8, UserDataModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(UserDataMode_Reserved3,
+    9, UserDataModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(UserDataMode_Reserved4,
+    10, UserDataModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(UserDataMode_Reserved5,
+    11, UserDataModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(UserDataMode_Reserved6,
+    12, UserDataModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(UserDataMode_Reserved7,
+    13, UserDataModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(UserDataMode_Reserved8,
+    14, UserDataModeType)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(UserDataMode_Reserved9,
+    15, UserDataModeType)
+AAF_TYPE_DEFINITION_ENUMERATION_END(UserDataModeType, 
+  // {02010126-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x02010126,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
+AAF_TYPE_SEPARATOR()
+
 // SignalStandardType
 //
 AAF_TYPE_DEFINITION_ENUMERATION(SignalStandardType, 
@@ -6716,6 +6876,17 @@ AAF_TYPE_DEFINITION_STRONG_REFERENCE(
   AAF_TYPE(KLVData))
 AAF_TYPE_SEPARATOR()
 
+// StrongReference<FileDescriptor>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE(
+  AAF_REFERENCE_TYPE_NAME(StrongReference, FileDescriptor), 
+  // {05021D00-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x05021D00,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
+  AAF_TYPE(FileDescriptor))
+AAF_TYPE_SEPARATOR()
+
 // StrongReference<DescriptiveFramework>
 //
 AAF_TYPE_DEFINITION_STRONG_REFERENCE(
@@ -7011,6 +7182,17 @@ AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(Parameter))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceVector<FileDescriptor>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(
+  AAF_REFERENCE_TYPE_NAME(StrongReferenceVector, FileDescriptor), 
+  // {05060B00-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x05060B00,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
+  AAF_TYPE(FileDescriptor))
 AAF_TYPE_SEPARATOR()
 
 // WeakReference<ClassDefinition>

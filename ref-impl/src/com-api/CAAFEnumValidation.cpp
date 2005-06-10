@@ -85,11 +85,43 @@ bool Is_aafAudioSampleType_t_Valid(aafAudioSampleType_t param)
   }
 }
 
+bool Is_aafAuxBitsModeType_t_Valid(aafAuxBitsModeType_t param)
+{
+  switch (param) {
+    case kAAFAuxBitsMode_NotDefined:
+    case kAAFAuxBitsMode_MainAudioSampleData:
+    case kAAFAuxBitsMode_SingleCoordinationSignal:
+    case kAAFAuxBitsMode_UserDefined:
+    case kAAFAuxBitsMode_Reserved0:
+    case kAAFAuxBitsMode_Reserved1:
+    case kAAFAuxBitsMode_Reserved2:
+    case kAAFAuxBitsMode_Reserved3:
+      return true;
+    default:
+      return false;
+  }
+}
+
 bool Is_aafBoolean_t_Valid(aafBoolean_t param)
 {
   switch (param) {
     case kAAFFalse:
     case kAAFTrue:
+      return true;
+    default:
+      return false;
+  }
+}
+
+bool Is_aafChannelStatusModeType_t_Valid(aafChannelStatusModeType_t param)
+{
+  switch (param) {
+    case kAAFChannelStatusMode_None:
+    case kAAFChannelStatusMode_Minimum:
+    case kAAFChannelStatusMode_Standard:
+    case kAAFChannelStatusMode_Fixed:
+    case kAAFChannelStatusMode_Stream:
+    case kAAFChannelStatusMode_Essence:
       return true;
     default:
       return false;
@@ -292,6 +324,23 @@ bool Is_aafElectroSpatialFormulation_t_Valid(aafElectroSpatialFormulation_t para
     case kAAFElectroSpatialFormulation_StereoLeftChannelDoubleSamplingFrequencyMode:
     case kAAFElectroSpatialFormulation_StereoRightChannelDoubleSamplingFrequencyMode:
     case kAAFElectroSpatialFormulation_MultiChannelMode:
+      return true;
+    default:
+      return false;
+  }
+}
+
+bool Is_aafEmphasisType_t_Valid(aafEmphasisType_t param)
+{
+  switch (param) {
+    case kAAFEmphasis_Unknown:
+    case kAAFEmphasis_Reserved0:
+    case kAAFEmphasis_Reserved1:
+    case kAAFEmphasis_Reserved2:
+    case kAAFEmphasis_None:
+    case kAAFEmphasis_Reserved3:
+    case kAAFEmphasis_15and50:
+    case kAAFEmphasis_ITU:
       return true;
     default:
       return false;
@@ -744,6 +793,31 @@ bool Is_aafTimecodeSourceType_t_Valid(aafTimecodeSourceType_t param)
   switch (param) {
     case kAAFTimecodeLTC:
     case kAAFTimecodeVITC:
+      return true;
+    default:
+      return false;
+  }
+}
+
+bool Is_aafUserDataModeType_t_Valid(aafUserDataModeType_t param)
+{
+  switch (param) {
+    case kAAFUserDataMode_NotDefined:
+    case kAAFUserDataMode_192BitBlockStructure:
+    case kAAFUserDataMode_AES18:
+    case kAAFUserDataMode_UserDefined:
+    case kAAFUserDataMode_IEC:
+    case kAAFUserDataMode_Metadata:
+    case kAAFUserDataMode_Reserved0:
+    case kAAFUserDataMode_Reserved1:
+    case kAAFUserDataMode_Reserved2:
+    case kAAFUserDataMode_Reserved3:
+    case kAAFUserDataMode_Reserved4:
+    case kAAFUserDataMode_Reserved5:
+    case kAAFUserDataMode_Reserved6:
+    case kAAFUserDataMode_Reserved7:
+    case kAAFUserDataMode_Reserved8:
+    case kAAFUserDataMode_Reserved9:
       return true;
     default:
       return false;

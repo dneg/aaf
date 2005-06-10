@@ -228,10 +228,10 @@ $(INSTALL_H_DIR)/AAFTaggedValueDefs.h : $(GEN_H_DIR)/AAFTaggedValueDefs.h
 	cp $(GEN_H_DIR)/AAFTaggedValueDefs.h $(INSTALL_H_DIR)/AAFTaggedValueDefs.h
 
 $(INSTALL_H_DIR)/AAFPluginDefs.h : $(GEN_H_DIR)/AAFPluginDefs.h
-    cp $(GEN_H_DIR)/AAFPluginDefs.h $(INSTALL_H_DIR)/AAFPluginDefs.h
+	cp $(GEN_H_DIR)/AAFPluginDefs.h $(INSTALL_H_DIR)/AAFPluginDefs.h
 
 $(INSTALL_H_DIR)/AAFCodecDefs.h : $(GEN_H_DIR)/AAFCodecDefs.h
-    cp $(GEN_H_DIR)/AAFCodecDefs.h $(INSTALL_H_DIR)/AAFCodecDefs.h
+	cp $(GEN_H_DIR)/AAFCodecDefs.h $(INSTALL_H_DIR)/AAFCodecDefs.h
 
 $(INSTALL_H_DIR)/AAFCompressionDefs.h : $(GEN_H_DIR)/AAFCompressionDefs.h
 	cp $(GEN_H_DIR)/AAFCompressionDefs.h $(INSTALL_H_DIR)/AAFCompressionDefs.h
