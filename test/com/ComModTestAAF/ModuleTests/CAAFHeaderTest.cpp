@@ -939,17 +939,19 @@ void HeaderTest::checkEssenceContainer()
   if(count != num)
     check(AAFRESULT_TEST_FAILED);    
 
-  aafUID_t contIDs[count]; 
-  if(_pHeader2->GetEssenceContainers(count, contIDs) != AAFRESULT_SUCCESS)
+  aafUID_t* pContIDs = new aafUID_t [count]; 
+  if(_pHeader2->GetEssenceContainers(count, pContIDs) != AAFRESULT_SUCCESS)
     check(AAFRESULT_TEST_FAILED);
 
   aafBoolean_t isPresent = false;
-  if(_pHeader2->IsEssenceContainerPresent(contIDs[0], &isPresent) != AAFRESULT_SUCCESS)
+  if(_pHeader2->IsEssenceContainerPresent(pContIDs[0], &isPresent) != AAFRESULT_SUCCESS)
     check(AAFRESULT_TEST_FAILED);  
 
   //ensure the container was found
   if(isPresent == false)
     check(AAFRESULT_TEST_FAILED); 
+
+  delete [] pContIDs;
 
 }
 
@@ -970,12 +972,14 @@ void HeaderTest::checkDescriptiveSchemes()
   if(count != 1)
     check(AAFRESULT_TEST_FAILED);
 
-  aafUID_t descIDs[count];
-  if(_pHeader2->GetDescriptiveSchemes(count, descIDs) != AAFRESULT_SUCCESS) 
+  aafUID_t* pDescIDs = new aafUID_t [count];
+  if(_pHeader2->GetDescriptiveSchemes(count, pDescIDs) != AAFRESULT_SUCCESS) 
     check(AAFRESULT_TEST_FAILED);
 
   aafBoolean_t isPresent = false;
-  if(_pHeader2->IsDescriptiveSchemePresent(descIDs[0], &isPresent) != AAFRESULT_SUCCESS)
+  if(_pHeader2->IsDescriptiveSchemePresent( pDescIDs[0], &isPresent) != AAFRESULT_SUCCESS)
     check(AAFRESULT_TEST_FAILED);
+
+  delete [] pDescIDs;
 
 }
