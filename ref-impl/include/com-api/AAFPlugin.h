@@ -37,28 +37,10 @@ extern "C"{
 
 /* Forward Declarations */ 
 
-#ifndef __IAAFPlugin_FWD_DEFINED__
-#define __IAAFPlugin_FWD_DEFINED__
-typedef interface IAAFPlugin IAAFPlugin;
-#endif 	/* __IAAFPlugin_FWD_DEFINED__ */
-
-
 #ifndef __IAAFClassExtension_FWD_DEFINED__
 #define __IAAFClassExtension_FWD_DEFINED__
 typedef interface IAAFClassExtension IAAFClassExtension;
 #endif 	/* __IAAFClassExtension_FWD_DEFINED__ */
-
-
-#ifndef __IAAFEssenceStream_FWD_DEFINED__
-#define __IAAFEssenceStream_FWD_DEFINED__
-typedef interface IAAFEssenceStream IAAFEssenceStream;
-#endif 	/* __IAAFEssenceStream_FWD_DEFINED__ */
-
-
-#ifndef __IAAFEssenceDataStream_FWD_DEFINED__
-#define __IAAFEssenceDataStream_FWD_DEFINED__
-typedef interface IAAFEssenceDataStream IAAFEssenceDataStream;
-#endif 	/* __IAAFEssenceDataStream_FWD_DEFINED__ */
 
 
 #ifndef __IAAFEssenceCodec_FWD_DEFINED__
@@ -73,22 +55,40 @@ typedef interface IAAFEssenceCodec2 IAAFEssenceCodec2;
 #endif 	/* __IAAFEssenceCodec2_FWD_DEFINED__ */
 
 
-#ifndef __IAAFMultiEssenceCodec_FWD_DEFINED__
-#define __IAAFMultiEssenceCodec_FWD_DEFINED__
-typedef interface IAAFMultiEssenceCodec IAAFMultiEssenceCodec;
-#endif 	/* __IAAFMultiEssenceCodec_FWD_DEFINED__ */
-
-
 #ifndef __IAAFEssenceContainer_FWD_DEFINED__
 #define __IAAFEssenceContainer_FWD_DEFINED__
 typedef interface IAAFEssenceContainer IAAFEssenceContainer;
 #endif 	/* __IAAFEssenceContainer_FWD_DEFINED__ */
 
 
+#ifndef __IAAFEssenceDataStream_FWD_DEFINED__
+#define __IAAFEssenceDataStream_FWD_DEFINED__
+typedef interface IAAFEssenceDataStream IAAFEssenceDataStream;
+#endif 	/* __IAAFEssenceDataStream_FWD_DEFINED__ */
+
+
+#ifndef __IAAFEssenceStream_FWD_DEFINED__
+#define __IAAFEssenceStream_FWD_DEFINED__
+typedef interface IAAFEssenceStream IAAFEssenceStream;
+#endif 	/* __IAAFEssenceStream_FWD_DEFINED__ */
+
+
 #ifndef __IAAFInterpolator_FWD_DEFINED__
 #define __IAAFInterpolator_FWD_DEFINED__
 typedef interface IAAFInterpolator IAAFInterpolator;
 #endif 	/* __IAAFInterpolator_FWD_DEFINED__ */
+
+
+#ifndef __IAAFMultiEssenceCodec_FWD_DEFINED__
+#define __IAAFMultiEssenceCodec_FWD_DEFINED__
+typedef interface IAAFMultiEssenceCodec IAAFMultiEssenceCodec;
+#endif 	/* __IAAFMultiEssenceCodec_FWD_DEFINED__ */
+
+
+#ifndef __IAAFPlugin_FWD_DEFINED__
+#define __IAAFPlugin_FWD_DEFINED__
+typedef interface IAAFPlugin IAAFPlugin;
+#endif 	/* __IAAFPlugin_FWD_DEFINED__ */
 
 
 /* header files for imported files */
@@ -120,7 +120,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -145,196 +145,6 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 
 extern RPC_IF_HANDLE __MIDL_itf_AAFPlugin_0000_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_AAFPlugin_0000_v0_0_s_ifspec;
-
-#ifndef __IAAFPlugin_INTERFACE_DEFINED__
-#define __IAAFPlugin_INTERFACE_DEFINED__
-
-/* interface IAAFPlugin */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFPlugin;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("3631F7A4-9121-11d2-8088-006008143e6f")
-    IAAFPlugin : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE CountDefinitions( 
-            /* [out] */ aafUInt32 __RPC_FAR *pDefCount) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetIndexedDefinitionID( 
-            /* [in] */ aafUInt32 index,
-            /* [out] */ aafUID_t __RPC_FAR *pPluginID) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetPluginDescriptorID( 
-            /* [out] */ aafUID_t __RPC_FAR *pPluginID) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetIndexedDefinitionObject( 
-            /* [in] */ aafUInt32 index,
-            /* [in] */ IAAFDictionary __RPC_FAR *pDictionary,
-            /* [out] */ IAAFDefObject __RPC_FAR *__RPC_FAR *pDefObject) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CreateDescriptor( 
-            /* [in] */ IAAFDictionary __RPC_FAR *pDictionary,
-            /* [out] */ IAAFPluginDef __RPC_FAR *__RPC_FAR *pPluginDef) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFPluginVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFPlugin __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFPlugin __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFPlugin __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountDefinitions )( 
-            IAAFPlugin __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pDefCount);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIndexedDefinitionID )( 
-            IAAFPlugin __RPC_FAR * This,
-            /* [in] */ aafUInt32 index,
-            /* [out] */ aafUID_t __RPC_FAR *pPluginID);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPluginDescriptorID )( 
-            IAAFPlugin __RPC_FAR * This,
-            /* [out] */ aafUID_t __RPC_FAR *pPluginID);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIndexedDefinitionObject )( 
-            IAAFPlugin __RPC_FAR * This,
-            /* [in] */ aafUInt32 index,
-            /* [in] */ IAAFDictionary __RPC_FAR *pDictionary,
-            /* [out] */ IAAFDefObject __RPC_FAR *__RPC_FAR *pDefObject);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateDescriptor )( 
-            IAAFPlugin __RPC_FAR * This,
-            /* [in] */ IAAFDictionary __RPC_FAR *pDictionary,
-            /* [out] */ IAAFPluginDef __RPC_FAR *__RPC_FAR *pPluginDef);
-        
-        END_INTERFACE
-    } IAAFPluginVtbl;
-
-    interface IAAFPlugin
-    {
-        CONST_VTBL struct IAAFPluginVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFPlugin_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFPlugin_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFPlugin_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFPlugin_CountDefinitions(This,pDefCount)	\
-    (This)->lpVtbl -> CountDefinitions(This,pDefCount)
-
-#define IAAFPlugin_GetIndexedDefinitionID(This,index,pPluginID)	\
-    (This)->lpVtbl -> GetIndexedDefinitionID(This,index,pPluginID)
-
-#define IAAFPlugin_GetPluginDescriptorID(This,pPluginID)	\
-    (This)->lpVtbl -> GetPluginDescriptorID(This,pPluginID)
-
-#define IAAFPlugin_GetIndexedDefinitionObject(This,index,pDictionary,pDefObject)	\
-    (This)->lpVtbl -> GetIndexedDefinitionObject(This,index,pDictionary,pDefObject)
-
-#define IAAFPlugin_CreateDescriptor(This,pDictionary,pPluginDef)	\
-    (This)->lpVtbl -> CreateDescriptor(This,pDictionary,pPluginDef)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFPlugin_CountDefinitions_Proxy( 
-    IAAFPlugin __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pDefCount);
-
-
-void __RPC_STUB IAAFPlugin_CountDefinitions_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPlugin_GetIndexedDefinitionID_Proxy( 
-    IAAFPlugin __RPC_FAR * This,
-    /* [in] */ aafUInt32 index,
-    /* [out] */ aafUID_t __RPC_FAR *pPluginID);
-
-
-void __RPC_STUB IAAFPlugin_GetIndexedDefinitionID_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPlugin_GetPluginDescriptorID_Proxy( 
-    IAAFPlugin __RPC_FAR * This,
-    /* [out] */ aafUID_t __RPC_FAR *pPluginID);
-
-
-void __RPC_STUB IAAFPlugin_GetPluginDescriptorID_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPlugin_GetIndexedDefinitionObject_Proxy( 
-    IAAFPlugin __RPC_FAR * This,
-    /* [in] */ aafUInt32 index,
-    /* [in] */ IAAFDictionary __RPC_FAR *pDictionary,
-    /* [out] */ IAAFDefObject __RPC_FAR *__RPC_FAR *pDefObject);
-
-
-void __RPC_STUB IAAFPlugin_GetIndexedDefinitionObject_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPlugin_CreateDescriptor_Proxy( 
-    IAAFPlugin __RPC_FAR * This,
-    /* [in] */ IAAFDictionary __RPC_FAR *pDictionary,
-    /* [out] */ IAAFPluginDef __RPC_FAR *__RPC_FAR *pPluginDef);
-
-
-void __RPC_STUB IAAFPlugin_CreateDescriptor_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFPlugin_INTERFACE_DEFINED__ */
-
 
 #ifndef __IAAFClassExtension_INTERFACE_DEFINED__
 #define __IAAFClassExtension_INTERFACE_DEFINED__
@@ -424,349 +234,6 @@ void __RPC_STUB IAAFClassExtension_RegisterDefinitions_Stub(
 
 
 #endif 	/* __IAAFClassExtension_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFEssenceStream_INTERFACE_DEFINED__
-#define __IAAFEssenceStream_INTERFACE_DEFINED__
-
-/* interface IAAFEssenceStream */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFEssenceStream;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("83402902-9146-11d2-8088-006008143e6f")
-    IAAFEssenceStream : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Write( 
-            /* [in] */ aafUInt32 bytes,
-            /* [size_is][out] */ aafDataBuffer_t buffer,
-            /* [ref][out] */ aafUInt32 __RPC_FAR *bytesWritten) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Read( 
-            /* [in] */ aafUInt32 buflen,
-            /* [length_is][size_is][out] */ aafDataBuffer_t pBuffer,
-            /* [ref][out] */ aafUInt32 __RPC_FAR *pBytesRead) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Seek( 
-            /* [in] */ aafPosition_t byteOffset) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SeekRelative( 
-            /* [in] */ aafInt32 byteOffset) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetPosition( 
-            /* [out] */ aafPosition_t __RPC_FAR *pPosition) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetLength( 
-            /* [out] */ aafLength_t __RPC_FAR *pLength) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE FlushCache( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetCacheSize( 
-            /* [in] */ aafUInt32 itsSize) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFEssenceStreamVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFEssenceStream __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFEssenceStream __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFEssenceStream __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Write )( 
-            IAAFEssenceStream __RPC_FAR * This,
-            /* [in] */ aafUInt32 bytes,
-            /* [size_is][out] */ aafDataBuffer_t buffer,
-            /* [ref][out] */ aafUInt32 __RPC_FAR *bytesWritten);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Read )( 
-            IAAFEssenceStream __RPC_FAR * This,
-            /* [in] */ aafUInt32 buflen,
-            /* [length_is][size_is][out] */ aafDataBuffer_t pBuffer,
-            /* [ref][out] */ aafUInt32 __RPC_FAR *pBytesRead);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Seek )( 
-            IAAFEssenceStream __RPC_FAR * This,
-            /* [in] */ aafPosition_t byteOffset);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SeekRelative )( 
-            IAAFEssenceStream __RPC_FAR * This,
-            /* [in] */ aafInt32 byteOffset);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPosition )( 
-            IAAFEssenceStream __RPC_FAR * This,
-            /* [out] */ aafPosition_t __RPC_FAR *pPosition);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLength )( 
-            IAAFEssenceStream __RPC_FAR * This,
-            /* [out] */ aafLength_t __RPC_FAR *pLength);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FlushCache )( 
-            IAAFEssenceStream __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCacheSize )( 
-            IAAFEssenceStream __RPC_FAR * This,
-            /* [in] */ aafUInt32 itsSize);
-        
-        END_INTERFACE
-    } IAAFEssenceStreamVtbl;
-
-    interface IAAFEssenceStream
-    {
-        CONST_VTBL struct IAAFEssenceStreamVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFEssenceStream_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFEssenceStream_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFEssenceStream_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFEssenceStream_Write(This,bytes,buffer,bytesWritten)	\
-    (This)->lpVtbl -> Write(This,bytes,buffer,bytesWritten)
-
-#define IAAFEssenceStream_Read(This,buflen,pBuffer,pBytesRead)	\
-    (This)->lpVtbl -> Read(This,buflen,pBuffer,pBytesRead)
-
-#define IAAFEssenceStream_Seek(This,byteOffset)	\
-    (This)->lpVtbl -> Seek(This,byteOffset)
-
-#define IAAFEssenceStream_SeekRelative(This,byteOffset)	\
-    (This)->lpVtbl -> SeekRelative(This,byteOffset)
-
-#define IAAFEssenceStream_GetPosition(This,pPosition)	\
-    (This)->lpVtbl -> GetPosition(This,pPosition)
-
-#define IAAFEssenceStream_GetLength(This,pLength)	\
-    (This)->lpVtbl -> GetLength(This,pLength)
-
-#define IAAFEssenceStream_FlushCache(This)	\
-    (This)->lpVtbl -> FlushCache(This)
-
-#define IAAFEssenceStream_SetCacheSize(This,itsSize)	\
-    (This)->lpVtbl -> SetCacheSize(This,itsSize)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceStream_Write_Proxy( 
-    IAAFEssenceStream __RPC_FAR * This,
-    /* [in] */ aafUInt32 bytes,
-    /* [size_is][out] */ aafDataBuffer_t buffer,
-    /* [ref][out] */ aafUInt32 __RPC_FAR *bytesWritten);
-
-
-void __RPC_STUB IAAFEssenceStream_Write_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceStream_Read_Proxy( 
-    IAAFEssenceStream __RPC_FAR * This,
-    /* [in] */ aafUInt32 buflen,
-    /* [length_is][size_is][out] */ aafDataBuffer_t pBuffer,
-    /* [ref][out] */ aafUInt32 __RPC_FAR *pBytesRead);
-
-
-void __RPC_STUB IAAFEssenceStream_Read_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceStream_Seek_Proxy( 
-    IAAFEssenceStream __RPC_FAR * This,
-    /* [in] */ aafPosition_t byteOffset);
-
-
-void __RPC_STUB IAAFEssenceStream_Seek_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceStream_SeekRelative_Proxy( 
-    IAAFEssenceStream __RPC_FAR * This,
-    /* [in] */ aafInt32 byteOffset);
-
-
-void __RPC_STUB IAAFEssenceStream_SeekRelative_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceStream_GetPosition_Proxy( 
-    IAAFEssenceStream __RPC_FAR * This,
-    /* [out] */ aafPosition_t __RPC_FAR *pPosition);
-
-
-void __RPC_STUB IAAFEssenceStream_GetPosition_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceStream_GetLength_Proxy( 
-    IAAFEssenceStream __RPC_FAR * This,
-    /* [out] */ aafLength_t __RPC_FAR *pLength);
-
-
-void __RPC_STUB IAAFEssenceStream_GetLength_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceStream_FlushCache_Proxy( 
-    IAAFEssenceStream __RPC_FAR * This);
-
-
-void __RPC_STUB IAAFEssenceStream_FlushCache_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceStream_SetCacheSize_Proxy( 
-    IAAFEssenceStream __RPC_FAR * This,
-    /* [in] */ aafUInt32 itsSize);
-
-
-void __RPC_STUB IAAFEssenceStream_SetCacheSize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFEssenceStream_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFEssenceDataStream_INTERFACE_DEFINED__
-#define __IAAFEssenceDataStream_INTERFACE_DEFINED__
-
-/* interface IAAFEssenceDataStream */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFEssenceDataStream;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("CDDB6AB1-98DC-11d2-808a-006008143e6f")
-    IAAFEssenceDataStream : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Init( 
-            /* [in] */ IUnknown __RPC_FAR *essenceData) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFEssenceDataStreamVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFEssenceDataStream __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFEssenceDataStream __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFEssenceDataStream __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Init )( 
-            IAAFEssenceDataStream __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *essenceData);
-        
-        END_INTERFACE
-    } IAAFEssenceDataStreamVtbl;
-
-    interface IAAFEssenceDataStream
-    {
-        CONST_VTBL struct IAAFEssenceDataStreamVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFEssenceDataStream_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFEssenceDataStream_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFEssenceDataStream_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFEssenceDataStream_Init(This,essenceData)	\
-    (This)->lpVtbl -> Init(This,essenceData)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceDataStream_Init_Proxy( 
-    IAAFEssenceDataStream __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *essenceData);
-
-
-void __RPC_STUB IAAFEssenceDataStream_Init_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFEssenceDataStream_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFEssenceCodec_INTERFACE_DEFINED__
@@ -2293,204 +1760,6 @@ void __RPC_STUB IAAFEssenceCodec2_SetFlavour_Stub(
 #endif 	/* __IAAFEssenceCodec2_INTERFACE_DEFINED__ */
 
 
-#ifndef __IAAFMultiEssenceCodec_INTERFACE_DEFINED__
-#define __IAAFMultiEssenceCodec_INTERFACE_DEFINED__
-
-/* interface IAAFMultiEssenceCodec */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFMultiEssenceCodec;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("7F93992D-DDA3-11d3-8008-00104bc9156d")
-    IAAFMultiEssenceCodec : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE MultiCreate( 
-            /* [in] */ IAAFSourceMob __RPC_FAR *fileMob,
-            /* [ref][in] */ aafUID_constref flavour,
-            /* [in] */ IAAFEssenceStream __RPC_FAR *stream,
-            /* [in] */ aafCompressEnable_t compEnable,
-            /* [in] */ aafUInt32 numParms,
-            /* [size_is][in] */ aafmMultiCreate_t __RPC_FAR *createParms) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE MultiOpen( 
-            /* [in] */ IAAFSourceMob __RPC_FAR *fileMob,
-            /* [in] */ aafMediaOpenMode_t openMode,
-            /* [in] */ IAAFEssenceStream __RPC_FAR *stream,
-            /* [in] */ aafCompressEnable_t compEnable) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE WriteBlocks( 
-            /* [in] */ aafDeinterleave_t inter,
-            /* [in] */ aafUInt16 xferBlockCount,
-            /* [size_is][in] */ aafmMultiXfer_t __RPC_FAR *pTransferParm,
-            /* [size_is][out] */ aafmMultiResult_t __RPC_FAR *pResultParm) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE ReadBlocks( 
-            /* [in] */ aafDeinterleave_t inter,
-            /* [in] */ aafUInt16 xferBlockCount,
-            /* [size_is][out] */ aafmMultiXfer_t __RPC_FAR *pTransferParm,
-            /* [size_is][out] */ aafmMultiResult_t __RPC_FAR *pResultParm) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFMultiEssenceCodecVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFMultiEssenceCodec __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFMultiEssenceCodec __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFMultiEssenceCodec __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MultiCreate )( 
-            IAAFMultiEssenceCodec __RPC_FAR * This,
-            /* [in] */ IAAFSourceMob __RPC_FAR *fileMob,
-            /* [ref][in] */ aafUID_constref flavour,
-            /* [in] */ IAAFEssenceStream __RPC_FAR *stream,
-            /* [in] */ aafCompressEnable_t compEnable,
-            /* [in] */ aafUInt32 numParms,
-            /* [size_is][in] */ aafmMultiCreate_t __RPC_FAR *createParms);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MultiOpen )( 
-            IAAFMultiEssenceCodec __RPC_FAR * This,
-            /* [in] */ IAAFSourceMob __RPC_FAR *fileMob,
-            /* [in] */ aafMediaOpenMode_t openMode,
-            /* [in] */ IAAFEssenceStream __RPC_FAR *stream,
-            /* [in] */ aafCompressEnable_t compEnable);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WriteBlocks )( 
-            IAAFMultiEssenceCodec __RPC_FAR * This,
-            /* [in] */ aafDeinterleave_t inter,
-            /* [in] */ aafUInt16 xferBlockCount,
-            /* [size_is][in] */ aafmMultiXfer_t __RPC_FAR *pTransferParm,
-            /* [size_is][out] */ aafmMultiResult_t __RPC_FAR *pResultParm);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReadBlocks )( 
-            IAAFMultiEssenceCodec __RPC_FAR * This,
-            /* [in] */ aafDeinterleave_t inter,
-            /* [in] */ aafUInt16 xferBlockCount,
-            /* [size_is][out] */ aafmMultiXfer_t __RPC_FAR *pTransferParm,
-            /* [size_is][out] */ aafmMultiResult_t __RPC_FAR *pResultParm);
-        
-        END_INTERFACE
-    } IAAFMultiEssenceCodecVtbl;
-
-    interface IAAFMultiEssenceCodec
-    {
-        CONST_VTBL struct IAAFMultiEssenceCodecVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFMultiEssenceCodec_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFMultiEssenceCodec_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFMultiEssenceCodec_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFMultiEssenceCodec_MultiCreate(This,fileMob,flavour,stream,compEnable,numParms,createParms)	\
-    (This)->lpVtbl -> MultiCreate(This,fileMob,flavour,stream,compEnable,numParms,createParms)
-
-#define IAAFMultiEssenceCodec_MultiOpen(This,fileMob,openMode,stream,compEnable)	\
-    (This)->lpVtbl -> MultiOpen(This,fileMob,openMode,stream,compEnable)
-
-#define IAAFMultiEssenceCodec_WriteBlocks(This,inter,xferBlockCount,pTransferParm,pResultParm)	\
-    (This)->lpVtbl -> WriteBlocks(This,inter,xferBlockCount,pTransferParm,pResultParm)
-
-#define IAAFMultiEssenceCodec_ReadBlocks(This,inter,xferBlockCount,pTransferParm,pResultParm)	\
-    (This)->lpVtbl -> ReadBlocks(This,inter,xferBlockCount,pTransferParm,pResultParm)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFMultiEssenceCodec_MultiCreate_Proxy( 
-    IAAFMultiEssenceCodec __RPC_FAR * This,
-    /* [in] */ IAAFSourceMob __RPC_FAR *fileMob,
-    /* [ref][in] */ aafUID_constref flavour,
-    /* [in] */ IAAFEssenceStream __RPC_FAR *stream,
-    /* [in] */ aafCompressEnable_t compEnable,
-    /* [in] */ aafUInt32 numParms,
-    /* [size_is][in] */ aafmMultiCreate_t __RPC_FAR *createParms);
-
-
-void __RPC_STUB IAAFMultiEssenceCodec_MultiCreate_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFMultiEssenceCodec_MultiOpen_Proxy( 
-    IAAFMultiEssenceCodec __RPC_FAR * This,
-    /* [in] */ IAAFSourceMob __RPC_FAR *fileMob,
-    /* [in] */ aafMediaOpenMode_t openMode,
-    /* [in] */ IAAFEssenceStream __RPC_FAR *stream,
-    /* [in] */ aafCompressEnable_t compEnable);
-
-
-void __RPC_STUB IAAFMultiEssenceCodec_MultiOpen_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFMultiEssenceCodec_WriteBlocks_Proxy( 
-    IAAFMultiEssenceCodec __RPC_FAR * This,
-    /* [in] */ aafDeinterleave_t inter,
-    /* [in] */ aafUInt16 xferBlockCount,
-    /* [size_is][in] */ aafmMultiXfer_t __RPC_FAR *pTransferParm,
-    /* [size_is][out] */ aafmMultiResult_t __RPC_FAR *pResultParm);
-
-
-void __RPC_STUB IAAFMultiEssenceCodec_WriteBlocks_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFMultiEssenceCodec_ReadBlocks_Proxy( 
-    IAAFMultiEssenceCodec __RPC_FAR * This,
-    /* [in] */ aafDeinterleave_t inter,
-    /* [in] */ aafUInt16 xferBlockCount,
-    /* [size_is][out] */ aafmMultiXfer_t __RPC_FAR *pTransferParm,
-    /* [size_is][out] */ aafmMultiResult_t __RPC_FAR *pResultParm);
-
-
-void __RPC_STUB IAAFMultiEssenceCodec_ReadBlocks_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFMultiEssenceCodec_INTERFACE_DEFINED__ */
-
-
 #ifndef __IAAFEssenceContainer_INTERFACE_DEFINED__
 #define __IAAFEssenceContainer_INTERFACE_DEFINED__
 
@@ -2669,6 +1938,349 @@ void __RPC_STUB IAAFEssenceContainer_OpenEssenceStreamAppend_Stub(
 
 
 #endif 	/* __IAAFEssenceContainer_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFEssenceDataStream_INTERFACE_DEFINED__
+#define __IAAFEssenceDataStream_INTERFACE_DEFINED__
+
+/* interface IAAFEssenceDataStream */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFEssenceDataStream;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("CDDB6AB1-98DC-11d2-808a-006008143e6f")
+    IAAFEssenceDataStream : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Init( 
+            /* [in] */ IUnknown __RPC_FAR *essenceData) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFEssenceDataStreamVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFEssenceDataStream __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFEssenceDataStream __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFEssenceDataStream __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Init )( 
+            IAAFEssenceDataStream __RPC_FAR * This,
+            /* [in] */ IUnknown __RPC_FAR *essenceData);
+        
+        END_INTERFACE
+    } IAAFEssenceDataStreamVtbl;
+
+    interface IAAFEssenceDataStream
+    {
+        CONST_VTBL struct IAAFEssenceDataStreamVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFEssenceDataStream_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFEssenceDataStream_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFEssenceDataStream_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFEssenceDataStream_Init(This,essenceData)	\
+    (This)->lpVtbl -> Init(This,essenceData)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataStream_Init_Proxy( 
+    IAAFEssenceDataStream __RPC_FAR * This,
+    /* [in] */ IUnknown __RPC_FAR *essenceData);
+
+
+void __RPC_STUB IAAFEssenceDataStream_Init_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFEssenceDataStream_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFEssenceStream_INTERFACE_DEFINED__
+#define __IAAFEssenceStream_INTERFACE_DEFINED__
+
+/* interface IAAFEssenceStream */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFEssenceStream;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("83402902-9146-11d2-8088-006008143e6f")
+    IAAFEssenceStream : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Write( 
+            /* [in] */ aafUInt32 bytes,
+            /* [size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *bytesWritten) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Read( 
+            /* [in] */ aafUInt32 buflen,
+            /* [length_is][size_is][out] */ aafDataBuffer_t pBuffer,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *pBytesRead) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Seek( 
+            /* [in] */ aafPosition_t byteOffset) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SeekRelative( 
+            /* [in] */ aafInt32 byteOffset) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPosition( 
+            /* [out] */ aafPosition_t __RPC_FAR *pPosition) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetLength( 
+            /* [out] */ aafLength_t __RPC_FAR *pLength) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE FlushCache( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetCacheSize( 
+            /* [in] */ aafUInt32 itsSize) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFEssenceStreamVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFEssenceStream __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFEssenceStream __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFEssenceStream __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Write )( 
+            IAAFEssenceStream __RPC_FAR * This,
+            /* [in] */ aafUInt32 bytes,
+            /* [size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *bytesWritten);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Read )( 
+            IAAFEssenceStream __RPC_FAR * This,
+            /* [in] */ aafUInt32 buflen,
+            /* [length_is][size_is][out] */ aafDataBuffer_t pBuffer,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *pBytesRead);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Seek )( 
+            IAAFEssenceStream __RPC_FAR * This,
+            /* [in] */ aafPosition_t byteOffset);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SeekRelative )( 
+            IAAFEssenceStream __RPC_FAR * This,
+            /* [in] */ aafInt32 byteOffset);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPosition )( 
+            IAAFEssenceStream __RPC_FAR * This,
+            /* [out] */ aafPosition_t __RPC_FAR *pPosition);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLength )( 
+            IAAFEssenceStream __RPC_FAR * This,
+            /* [out] */ aafLength_t __RPC_FAR *pLength);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FlushCache )( 
+            IAAFEssenceStream __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCacheSize )( 
+            IAAFEssenceStream __RPC_FAR * This,
+            /* [in] */ aafUInt32 itsSize);
+        
+        END_INTERFACE
+    } IAAFEssenceStreamVtbl;
+
+    interface IAAFEssenceStream
+    {
+        CONST_VTBL struct IAAFEssenceStreamVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFEssenceStream_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFEssenceStream_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFEssenceStream_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFEssenceStream_Write(This,bytes,buffer,bytesWritten)	\
+    (This)->lpVtbl -> Write(This,bytes,buffer,bytesWritten)
+
+#define IAAFEssenceStream_Read(This,buflen,pBuffer,pBytesRead)	\
+    (This)->lpVtbl -> Read(This,buflen,pBuffer,pBytesRead)
+
+#define IAAFEssenceStream_Seek(This,byteOffset)	\
+    (This)->lpVtbl -> Seek(This,byteOffset)
+
+#define IAAFEssenceStream_SeekRelative(This,byteOffset)	\
+    (This)->lpVtbl -> SeekRelative(This,byteOffset)
+
+#define IAAFEssenceStream_GetPosition(This,pPosition)	\
+    (This)->lpVtbl -> GetPosition(This,pPosition)
+
+#define IAAFEssenceStream_GetLength(This,pLength)	\
+    (This)->lpVtbl -> GetLength(This,pLength)
+
+#define IAAFEssenceStream_FlushCache(This)	\
+    (This)->lpVtbl -> FlushCache(This)
+
+#define IAAFEssenceStream_SetCacheSize(This,itsSize)	\
+    (This)->lpVtbl -> SetCacheSize(This,itsSize)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceStream_Write_Proxy( 
+    IAAFEssenceStream __RPC_FAR * This,
+    /* [in] */ aafUInt32 bytes,
+    /* [size_is][out] */ aafDataBuffer_t buffer,
+    /* [ref][out] */ aafUInt32 __RPC_FAR *bytesWritten);
+
+
+void __RPC_STUB IAAFEssenceStream_Write_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceStream_Read_Proxy( 
+    IAAFEssenceStream __RPC_FAR * This,
+    /* [in] */ aafUInt32 buflen,
+    /* [length_is][size_is][out] */ aafDataBuffer_t pBuffer,
+    /* [ref][out] */ aafUInt32 __RPC_FAR *pBytesRead);
+
+
+void __RPC_STUB IAAFEssenceStream_Read_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceStream_Seek_Proxy( 
+    IAAFEssenceStream __RPC_FAR * This,
+    /* [in] */ aafPosition_t byteOffset);
+
+
+void __RPC_STUB IAAFEssenceStream_Seek_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceStream_SeekRelative_Proxy( 
+    IAAFEssenceStream __RPC_FAR * This,
+    /* [in] */ aafInt32 byteOffset);
+
+
+void __RPC_STUB IAAFEssenceStream_SeekRelative_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceStream_GetPosition_Proxy( 
+    IAAFEssenceStream __RPC_FAR * This,
+    /* [out] */ aafPosition_t __RPC_FAR *pPosition);
+
+
+void __RPC_STUB IAAFEssenceStream_GetPosition_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceStream_GetLength_Proxy( 
+    IAAFEssenceStream __RPC_FAR * This,
+    /* [out] */ aafLength_t __RPC_FAR *pLength);
+
+
+void __RPC_STUB IAAFEssenceStream_GetLength_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceStream_FlushCache_Proxy( 
+    IAAFEssenceStream __RPC_FAR * This);
+
+
+void __RPC_STUB IAAFEssenceStream_FlushCache_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceStream_SetCacheSize_Proxy( 
+    IAAFEssenceStream __RPC_FAR * This,
+    /* [in] */ aafUInt32 itsSize);
+
+
+void __RPC_STUB IAAFEssenceStream_SetCacheSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFEssenceStream_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFInterpolator_INTERFACE_DEFINED__
@@ -2937,6 +2549,394 @@ void __RPC_STUB IAAFInterpolator_InterpolateMany_Stub(
 
 
 #endif 	/* __IAAFInterpolator_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFMultiEssenceCodec_INTERFACE_DEFINED__
+#define __IAAFMultiEssenceCodec_INTERFACE_DEFINED__
+
+/* interface IAAFMultiEssenceCodec */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFMultiEssenceCodec;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("7F93992D-DDA3-11d3-8008-00104bc9156d")
+    IAAFMultiEssenceCodec : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE MultiCreate( 
+            /* [in] */ IAAFSourceMob __RPC_FAR *fileMob,
+            /* [ref][in] */ aafUID_constref flavour,
+            /* [in] */ IAAFEssenceStream __RPC_FAR *stream,
+            /* [in] */ aafCompressEnable_t compEnable,
+            /* [in] */ aafUInt32 numParms,
+            /* [size_is][in] */ aafmMultiCreate_t __RPC_FAR *createParms) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE MultiOpen( 
+            /* [in] */ IAAFSourceMob __RPC_FAR *fileMob,
+            /* [in] */ aafMediaOpenMode_t openMode,
+            /* [in] */ IAAFEssenceStream __RPC_FAR *stream,
+            /* [in] */ aafCompressEnable_t compEnable) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE WriteBlocks( 
+            /* [in] */ aafDeinterleave_t inter,
+            /* [in] */ aafUInt16 xferBlockCount,
+            /* [size_is][in] */ aafmMultiXfer_t __RPC_FAR *pTransferParm,
+            /* [size_is][out] */ aafmMultiResult_t __RPC_FAR *pResultParm) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE ReadBlocks( 
+            /* [in] */ aafDeinterleave_t inter,
+            /* [in] */ aafUInt16 xferBlockCount,
+            /* [size_is][out] */ aafmMultiXfer_t __RPC_FAR *pTransferParm,
+            /* [size_is][out] */ aafmMultiResult_t __RPC_FAR *pResultParm) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFMultiEssenceCodecVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFMultiEssenceCodec __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFMultiEssenceCodec __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFMultiEssenceCodec __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MultiCreate )( 
+            IAAFMultiEssenceCodec __RPC_FAR * This,
+            /* [in] */ IAAFSourceMob __RPC_FAR *fileMob,
+            /* [ref][in] */ aafUID_constref flavour,
+            /* [in] */ IAAFEssenceStream __RPC_FAR *stream,
+            /* [in] */ aafCompressEnable_t compEnable,
+            /* [in] */ aafUInt32 numParms,
+            /* [size_is][in] */ aafmMultiCreate_t __RPC_FAR *createParms);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MultiOpen )( 
+            IAAFMultiEssenceCodec __RPC_FAR * This,
+            /* [in] */ IAAFSourceMob __RPC_FAR *fileMob,
+            /* [in] */ aafMediaOpenMode_t openMode,
+            /* [in] */ IAAFEssenceStream __RPC_FAR *stream,
+            /* [in] */ aafCompressEnable_t compEnable);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WriteBlocks )( 
+            IAAFMultiEssenceCodec __RPC_FAR * This,
+            /* [in] */ aafDeinterleave_t inter,
+            /* [in] */ aafUInt16 xferBlockCount,
+            /* [size_is][in] */ aafmMultiXfer_t __RPC_FAR *pTransferParm,
+            /* [size_is][out] */ aafmMultiResult_t __RPC_FAR *pResultParm);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReadBlocks )( 
+            IAAFMultiEssenceCodec __RPC_FAR * This,
+            /* [in] */ aafDeinterleave_t inter,
+            /* [in] */ aafUInt16 xferBlockCount,
+            /* [size_is][out] */ aafmMultiXfer_t __RPC_FAR *pTransferParm,
+            /* [size_is][out] */ aafmMultiResult_t __RPC_FAR *pResultParm);
+        
+        END_INTERFACE
+    } IAAFMultiEssenceCodecVtbl;
+
+    interface IAAFMultiEssenceCodec
+    {
+        CONST_VTBL struct IAAFMultiEssenceCodecVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFMultiEssenceCodec_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFMultiEssenceCodec_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFMultiEssenceCodec_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFMultiEssenceCodec_MultiCreate(This,fileMob,flavour,stream,compEnable,numParms,createParms)	\
+    (This)->lpVtbl -> MultiCreate(This,fileMob,flavour,stream,compEnable,numParms,createParms)
+
+#define IAAFMultiEssenceCodec_MultiOpen(This,fileMob,openMode,stream,compEnable)	\
+    (This)->lpVtbl -> MultiOpen(This,fileMob,openMode,stream,compEnable)
+
+#define IAAFMultiEssenceCodec_WriteBlocks(This,inter,xferBlockCount,pTransferParm,pResultParm)	\
+    (This)->lpVtbl -> WriteBlocks(This,inter,xferBlockCount,pTransferParm,pResultParm)
+
+#define IAAFMultiEssenceCodec_ReadBlocks(This,inter,xferBlockCount,pTransferParm,pResultParm)	\
+    (This)->lpVtbl -> ReadBlocks(This,inter,xferBlockCount,pTransferParm,pResultParm)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFMultiEssenceCodec_MultiCreate_Proxy( 
+    IAAFMultiEssenceCodec __RPC_FAR * This,
+    /* [in] */ IAAFSourceMob __RPC_FAR *fileMob,
+    /* [ref][in] */ aafUID_constref flavour,
+    /* [in] */ IAAFEssenceStream __RPC_FAR *stream,
+    /* [in] */ aafCompressEnable_t compEnable,
+    /* [in] */ aafUInt32 numParms,
+    /* [size_is][in] */ aafmMultiCreate_t __RPC_FAR *createParms);
+
+
+void __RPC_STUB IAAFMultiEssenceCodec_MultiCreate_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMultiEssenceCodec_MultiOpen_Proxy( 
+    IAAFMultiEssenceCodec __RPC_FAR * This,
+    /* [in] */ IAAFSourceMob __RPC_FAR *fileMob,
+    /* [in] */ aafMediaOpenMode_t openMode,
+    /* [in] */ IAAFEssenceStream __RPC_FAR *stream,
+    /* [in] */ aafCompressEnable_t compEnable);
+
+
+void __RPC_STUB IAAFMultiEssenceCodec_MultiOpen_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMultiEssenceCodec_WriteBlocks_Proxy( 
+    IAAFMultiEssenceCodec __RPC_FAR * This,
+    /* [in] */ aafDeinterleave_t inter,
+    /* [in] */ aafUInt16 xferBlockCount,
+    /* [size_is][in] */ aafmMultiXfer_t __RPC_FAR *pTransferParm,
+    /* [size_is][out] */ aafmMultiResult_t __RPC_FAR *pResultParm);
+
+
+void __RPC_STUB IAAFMultiEssenceCodec_WriteBlocks_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMultiEssenceCodec_ReadBlocks_Proxy( 
+    IAAFMultiEssenceCodec __RPC_FAR * This,
+    /* [in] */ aafDeinterleave_t inter,
+    /* [in] */ aafUInt16 xferBlockCount,
+    /* [size_is][out] */ aafmMultiXfer_t __RPC_FAR *pTransferParm,
+    /* [size_is][out] */ aafmMultiResult_t __RPC_FAR *pResultParm);
+
+
+void __RPC_STUB IAAFMultiEssenceCodec_ReadBlocks_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFMultiEssenceCodec_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFPlugin_INTERFACE_DEFINED__
+#define __IAAFPlugin_INTERFACE_DEFINED__
+
+/* interface IAAFPlugin */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFPlugin;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("3631F7A4-9121-11d2-8088-006008143e6f")
+    IAAFPlugin : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE CountDefinitions( 
+            /* [out] */ aafUInt32 __RPC_FAR *pDefCount) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetIndexedDefinitionID( 
+            /* [in] */ aafUInt32 index,
+            /* [out] */ aafUID_t __RPC_FAR *pPluginID) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPluginDescriptorID( 
+            /* [out] */ aafUID_t __RPC_FAR *pPluginID) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetIndexedDefinitionObject( 
+            /* [in] */ aafUInt32 index,
+            /* [in] */ IAAFDictionary __RPC_FAR *pDictionary,
+            /* [out] */ IAAFDefObject __RPC_FAR *__RPC_FAR *pDefObject) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CreateDescriptor( 
+            /* [in] */ IAAFDictionary __RPC_FAR *pDictionary,
+            /* [out] */ IAAFPluginDef __RPC_FAR *__RPC_FAR *pPluginDef) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFPluginVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFPlugin __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFPlugin __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFPlugin __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountDefinitions )( 
+            IAAFPlugin __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pDefCount);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIndexedDefinitionID )( 
+            IAAFPlugin __RPC_FAR * This,
+            /* [in] */ aafUInt32 index,
+            /* [out] */ aafUID_t __RPC_FAR *pPluginID);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPluginDescriptorID )( 
+            IAAFPlugin __RPC_FAR * This,
+            /* [out] */ aafUID_t __RPC_FAR *pPluginID);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIndexedDefinitionObject )( 
+            IAAFPlugin __RPC_FAR * This,
+            /* [in] */ aafUInt32 index,
+            /* [in] */ IAAFDictionary __RPC_FAR *pDictionary,
+            /* [out] */ IAAFDefObject __RPC_FAR *__RPC_FAR *pDefObject);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateDescriptor )( 
+            IAAFPlugin __RPC_FAR * This,
+            /* [in] */ IAAFDictionary __RPC_FAR *pDictionary,
+            /* [out] */ IAAFPluginDef __RPC_FAR *__RPC_FAR *pPluginDef);
+        
+        END_INTERFACE
+    } IAAFPluginVtbl;
+
+    interface IAAFPlugin
+    {
+        CONST_VTBL struct IAAFPluginVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFPlugin_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFPlugin_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFPlugin_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFPlugin_CountDefinitions(This,pDefCount)	\
+    (This)->lpVtbl -> CountDefinitions(This,pDefCount)
+
+#define IAAFPlugin_GetIndexedDefinitionID(This,index,pPluginID)	\
+    (This)->lpVtbl -> GetIndexedDefinitionID(This,index,pPluginID)
+
+#define IAAFPlugin_GetPluginDescriptorID(This,pPluginID)	\
+    (This)->lpVtbl -> GetPluginDescriptorID(This,pPluginID)
+
+#define IAAFPlugin_GetIndexedDefinitionObject(This,index,pDictionary,pDefObject)	\
+    (This)->lpVtbl -> GetIndexedDefinitionObject(This,index,pDictionary,pDefObject)
+
+#define IAAFPlugin_CreateDescriptor(This,pDictionary,pPluginDef)	\
+    (This)->lpVtbl -> CreateDescriptor(This,pDictionary,pPluginDef)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlugin_CountDefinitions_Proxy( 
+    IAAFPlugin __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pDefCount);
+
+
+void __RPC_STUB IAAFPlugin_CountDefinitions_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlugin_GetIndexedDefinitionID_Proxy( 
+    IAAFPlugin __RPC_FAR * This,
+    /* [in] */ aafUInt32 index,
+    /* [out] */ aafUID_t __RPC_FAR *pPluginID);
+
+
+void __RPC_STUB IAAFPlugin_GetIndexedDefinitionID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlugin_GetPluginDescriptorID_Proxy( 
+    IAAFPlugin __RPC_FAR * This,
+    /* [out] */ aafUID_t __RPC_FAR *pPluginID);
+
+
+void __RPC_STUB IAAFPlugin_GetPluginDescriptorID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlugin_GetIndexedDefinitionObject_Proxy( 
+    IAAFPlugin __RPC_FAR * This,
+    /* [in] */ aafUInt32 index,
+    /* [in] */ IAAFDictionary __RPC_FAR *pDictionary,
+    /* [out] */ IAAFDefObject __RPC_FAR *__RPC_FAR *pDefObject);
+
+
+void __RPC_STUB IAAFPlugin_GetIndexedDefinitionObject_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlugin_CreateDescriptor_Proxy( 
+    IAAFPlugin __RPC_FAR * This,
+    /* [in] */ IAAFDictionary __RPC_FAR *pDictionary,
+    /* [out] */ IAAFPluginDef __RPC_FAR *__RPC_FAR *pPluginDef);
+
+
+void __RPC_STUB IAAFPlugin_CreateDescriptor_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFPlugin_INTERFACE_DEFINED__ */
 
 
 /* Additional Prototypes for ALL interfaces */

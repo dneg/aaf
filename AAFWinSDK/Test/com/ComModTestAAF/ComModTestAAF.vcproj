@@ -152,6 +152,9 @@
 			Name="Module Tests"
 			Filter="">
 			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFAES3PCMDescriptorTest.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFAIFCDescriptorTest.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1116,6 +1119,9 @@
 						PreprocessorDefinitions=""
 						ForcedIncludeFiles=""/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMultipleDescriptorTest.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFNestedScopeTest.cpp">

@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="comapi"
+	ProjectGUID="{16BC85B5-FE23-43DC-8B37-9846B8907BE7}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -220,6 +221,9 @@
 					PreprocessorDefinitions="_DEBUG;$(NoInherit)"
 					AdditionalIncludeDirectories="\cygwin\home\Administrator\nightly\tip\AAFWinSDK\include"/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFAES3PCMDescriptor.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFAIFCDescriptor.cpp">
@@ -1291,6 +1295,9 @@
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFMultipleDescriptor.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFNestedScope.cpp">

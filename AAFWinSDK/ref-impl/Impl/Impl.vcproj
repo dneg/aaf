@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="Impl"
+	ProjectGUID="{207BF6A4-EAA1-4F59-8C37-B47FA33982A9}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -247,6 +248,9 @@
 					PreprocessorDefinitions=""
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFAES3PCMDescriptor.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFAIFCDescriptor.cpp">
@@ -1360,6 +1364,9 @@
 					PreprocessorDefinitions=""
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFMultipleDescriptor.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFNestedScope.cpp">

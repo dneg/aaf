@@ -29,6 +29,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 using namespace std;
 
 #include "AAFResult.h"

@@ -37,10 +37,28 @@ extern "C"{
 
 /* Forward Declarations */ 
 
+#ifndef __IAAFAES3PCMDescriptor_FWD_DEFINED__
+#define __IAAFAES3PCMDescriptor_FWD_DEFINED__
+typedef interface IAAFAES3PCMDescriptor IAAFAES3PCMDescriptor;
+#endif 	/* __IAAFAES3PCMDescriptor_FWD_DEFINED__ */
+
+
 #ifndef __IAAFAIFCDescriptor_FWD_DEFINED__
 #define __IAAFAIFCDescriptor_FWD_DEFINED__
 typedef interface IAAFAIFCDescriptor IAAFAIFCDescriptor;
 #endif 	/* __IAAFAIFCDescriptor_FWD_DEFINED__ */
+
+
+#ifndef __IAAFAuxiliaryDescriptor_FWD_DEFINED__
+#define __IAAFAuxiliaryDescriptor_FWD_DEFINED__
+typedef interface IAAFAuxiliaryDescriptor IAAFAuxiliaryDescriptor;
+#endif 	/* __IAAFAuxiliaryDescriptor_FWD_DEFINED__ */
+
+
+#ifndef __IAAFCDCIDescriptor_FWD_DEFINED__
+#define __IAAFCDCIDescriptor_FWD_DEFINED__
+typedef interface IAAFCDCIDescriptor IAAFCDCIDescriptor;
+#endif 	/* __IAAFCDCIDescriptor_FWD_DEFINED__ */
 
 
 #ifndef __IAAFClassDef_FWD_DEFINED__
@@ -109,10 +127,16 @@ typedef interface IAAFDefObject IAAFDefObject;
 #endif 	/* __IAAFDefObject_FWD_DEFINED__ */
 
 
-#ifndef __IAAFPluginDef_FWD_DEFINED__
-#define __IAAFPluginDef_FWD_DEFINED__
-typedef interface IAAFPluginDef IAAFPluginDef;
-#endif 	/* __IAAFPluginDef_FWD_DEFINED__ */
+#ifndef __IAAFDescriptiveFramework_FWD_DEFINED__
+#define __IAAFDescriptiveFramework_FWD_DEFINED__
+typedef interface IAAFDescriptiveFramework IAAFDescriptiveFramework;
+#endif 	/* __IAAFDescriptiveFramework_FWD_DEFINED__ */
+
+
+#ifndef __IAAFDescriptiveMarker_FWD_DEFINED__
+#define __IAAFDescriptiveMarker_FWD_DEFINED__
+typedef interface IAAFDescriptiveMarker IAAFDescriptiveMarker;
+#endif 	/* __IAAFDescriptiveMarker_FWD_DEFINED__ */
 
 
 #ifndef __IAAFDictionary_FWD_DEFINED__
@@ -121,16 +145,16 @@ typedef interface IAAFDictionary IAAFDictionary;
 #endif 	/* __IAAFDictionary_FWD_DEFINED__ */
 
 
+#ifndef __IAAFDigitalImageDescriptor_FWD_DEFINED__
+#define __IAAFDigitalImageDescriptor_FWD_DEFINED__
+typedef interface IAAFDigitalImageDescriptor IAAFDigitalImageDescriptor;
+#endif 	/* __IAAFDigitalImageDescriptor_FWD_DEFINED__ */
+
+
 #ifndef __IAAFEdgecode_FWD_DEFINED__
 #define __IAAFEdgecode_FWD_DEFINED__
 typedef interface IAAFEdgecode IAAFEdgecode;
 #endif 	/* __IAAFEdgecode_FWD_DEFINED__ */
-
-
-#ifndef __IAAFOperationDef_FWD_DEFINED__
-#define __IAAFOperationDef_FWD_DEFINED__
-typedef interface IAAFOperationDef IAAFOperationDef;
-#endif 	/* __IAAFOperationDef_FWD_DEFINED__ */
 
 
 #ifndef __IAAFEssenceAccess_FWD_DEFINED__
@@ -149,6 +173,18 @@ typedef interface IAAFEssenceData IAAFEssenceData;
 #define __IAAFEssenceDescriptor_FWD_DEFINED__
 typedef interface IAAFEssenceDescriptor IAAFEssenceDescriptor;
 #endif 	/* __IAAFEssenceDescriptor_FWD_DEFINED__ */
+
+
+#ifndef __IAAFEssenceFormat_FWD_DEFINED__
+#define __IAAFEssenceFormat_FWD_DEFINED__
+typedef interface IAAFEssenceFormat IAAFEssenceFormat;
+#endif 	/* __IAAFEssenceFormat_FWD_DEFINED__ */
+
+
+#ifndef __IAAFEssenceGroup_FWD_DEFINED__
+#define __IAAFEssenceGroup_FWD_DEFINED__
+typedef interface IAAFEssenceGroup IAAFEssenceGroup;
+#endif 	/* __IAAFEssenceGroup_FWD_DEFINED__ */
 
 
 #ifndef __IAAFEvent_FWD_DEFINED__
@@ -175,40 +211,16 @@ typedef interface IAAFFileDescriptor IAAFFileDescriptor;
 #endif 	/* __IAAFFileDescriptor_FWD_DEFINED__ */
 
 
-#ifndef __IAAFFilmDescriptor_FWD_DEFINED__
-#define __IAAFFilmDescriptor_FWD_DEFINED__
-typedef interface IAAFFilmDescriptor IAAFFilmDescriptor;
-#endif 	/* __IAAFFilmDescriptor_FWD_DEFINED__ */
-
-
-#ifndef __IAAFDigitalImageDescriptor_FWD_DEFINED__
-#define __IAAFDigitalImageDescriptor_FWD_DEFINED__
-typedef interface IAAFDigitalImageDescriptor IAAFDigitalImageDescriptor;
-#endif 	/* __IAAFDigitalImageDescriptor_FWD_DEFINED__ */
-
-
-#ifndef __IAAFCDCIDescriptor_FWD_DEFINED__
-#define __IAAFCDCIDescriptor_FWD_DEFINED__
-typedef interface IAAFCDCIDescriptor IAAFCDCIDescriptor;
-#endif 	/* __IAAFCDCIDescriptor_FWD_DEFINED__ */
-
-
-#ifndef __IAAFEssenceFormat_FWD_DEFINED__
-#define __IAAFEssenceFormat_FWD_DEFINED__
-typedef interface IAAFEssenceFormat IAAFEssenceFormat;
-#endif 	/* __IAAFEssenceFormat_FWD_DEFINED__ */
-
-
-#ifndef __IAAFEssenceGroup_FWD_DEFINED__
-#define __IAAFEssenceGroup_FWD_DEFINED__
-typedef interface IAAFEssenceGroup IAAFEssenceGroup;
-#endif 	/* __IAAFEssenceGroup_FWD_DEFINED__ */
-
-
 #ifndef __IAAFFiller_FWD_DEFINED__
 #define __IAAFFiller_FWD_DEFINED__
 typedef interface IAAFFiller IAAFFiller;
 #endif 	/* __IAAFFiller_FWD_DEFINED__ */
+
+
+#ifndef __IAAFFilmDescriptor_FWD_DEFINED__
+#define __IAAFFilmDescriptor_FWD_DEFINED__
+typedef interface IAAFFilmDescriptor IAAFFilmDescriptor;
+#endif 	/* __IAAFFilmDescriptor_FWD_DEFINED__ */
 
 
 #ifndef __IAAFFindSourceInfo_FWD_DEFINED__
@@ -217,16 +229,16 @@ typedef interface IAAFFindSourceInfo IAAFFindSourceInfo;
 #endif 	/* __IAAFFindSourceInfo_FWD_DEFINED__ */
 
 
-#ifndef __IAAFOperationGroup_FWD_DEFINED__
-#define __IAAFOperationGroup_FWD_DEFINED__
-typedef interface IAAFOperationGroup IAAFOperationGroup;
-#endif 	/* __IAAFOperationGroup_FWD_DEFINED__ */
-
-
 #ifndef __IAAFGPITrigger_FWD_DEFINED__
 #define __IAAFGPITrigger_FWD_DEFINED__
 typedef interface IAAFGPITrigger IAAFGPITrigger;
 #endif 	/* __IAAFGPITrigger_FWD_DEFINED__ */
+
+
+#ifndef __IAAFGetFileBits_FWD_DEFINED__
+#define __IAAFGetFileBits_FWD_DEFINED__
+typedef interface IAAFGetFileBits IAAFGetFileBits;
+#endif 	/* __IAAFGetFileBits_FWD_DEFINED__ */
 
 
 #ifndef __IAAFHeader_FWD_DEFINED__
@@ -259,6 +271,12 @@ typedef interface IAAFKLVData IAAFKLVData;
 #endif 	/* __IAAFKLVData_FWD_DEFINED__ */
 
 
+#ifndef __IAAFKLVDataDefinition_FWD_DEFINED__
+#define __IAAFKLVDataDefinition_FWD_DEFINED__
+typedef interface IAAFKLVDataDefinition IAAFKLVDataDefinition;
+#endif 	/* __IAAFKLVDataDefinition_FWD_DEFINED__ */
+
+
 #ifndef __IAAFLocator_FWD_DEFINED__
 #define __IAAFLocator_FWD_DEFINED__
 typedef interface IAAFLocator IAAFLocator;
@@ -289,6 +307,12 @@ typedef interface IAAFMobSlot IAAFMobSlot;
 #endif 	/* __IAAFMobSlot_FWD_DEFINED__ */
 
 
+#ifndef __IAAFMultipleDescriptor_FWD_DEFINED__
+#define __IAAFMultipleDescriptor_FWD_DEFINED__
+typedef interface IAAFMultipleDescriptor IAAFMultipleDescriptor;
+#endif 	/* __IAAFMultipleDescriptor_FWD_DEFINED__ */
+
+
 #ifndef __IAAFNestedScope_FWD_DEFINED__
 #define __IAAFNestedScope_FWD_DEFINED__
 typedef interface IAAFNestedScope IAAFNestedScope;
@@ -305,6 +329,18 @@ typedef interface IAAFNetworkLocator IAAFNetworkLocator;
 #define __IAAFObject_FWD_DEFINED__
 typedef interface IAAFObject IAAFObject;
 #endif 	/* __IAAFObject_FWD_DEFINED__ */
+
+
+#ifndef __IAAFOperationDef_FWD_DEFINED__
+#define __IAAFOperationDef_FWD_DEFINED__
+typedef interface IAAFOperationDef IAAFOperationDef;
+#endif 	/* __IAAFOperationDef_FWD_DEFINED__ */
+
+
+#ifndef __IAAFOperationGroup_FWD_DEFINED__
+#define __IAAFOperationGroup_FWD_DEFINED__
+typedef interface IAAFOperationGroup IAAFOperationGroup;
+#endif 	/* __IAAFOperationGroup_FWD_DEFINED__ */
 
 
 #ifndef __IAAFPCMDescriptor_FWD_DEFINED__
@@ -331,6 +367,18 @@ typedef interface IAAFPhysicalDescriptor IAAFPhysicalDescriptor;
 #endif 	/* __IAAFPhysicalDescriptor_FWD_DEFINED__ */
 
 
+#ifndef __IAAFPluginDef_FWD_DEFINED__
+#define __IAAFPluginDef_FWD_DEFINED__
+typedef interface IAAFPluginDef IAAFPluginDef;
+#endif 	/* __IAAFPluginDef_FWD_DEFINED__ */
+
+
+#ifndef __IAAFPluginManager_FWD_DEFINED__
+#define __IAAFPluginManager_FWD_DEFINED__
+typedef interface IAAFPluginManager IAAFPluginManager;
+#endif 	/* __IAAFPluginManager_FWD_DEFINED__ */
+
+
 #ifndef __IAAFProperty_FWD_DEFINED__
 #define __IAAFProperty_FWD_DEFINED__
 typedef interface IAAFProperty IAAFProperty;
@@ -349,12 +397,6 @@ typedef interface IAAFPropertyValue IAAFPropertyValue;
 #endif 	/* __IAAFPropertyValue_FWD_DEFINED__ */
 
 
-#ifndef __IAAFPluginManager_FWD_DEFINED__
-#define __IAAFPluginManager_FWD_DEFINED__
-typedef interface IAAFPluginManager IAAFPluginManager;
-#endif 	/* __IAAFPluginManager_FWD_DEFINED__ */
-
-
 #ifndef __IAAFPulldown_FWD_DEFINED__
 #define __IAAFPulldown_FWD_DEFINED__
 typedef interface IAAFPulldown IAAFPulldown;
@@ -365,6 +407,30 @@ typedef interface IAAFPulldown IAAFPulldown;
 #define __IAAFRGBADescriptor_FWD_DEFINED__
 typedef interface IAAFRGBADescriptor IAAFRGBADescriptor;
 #endif 	/* __IAAFRGBADescriptor_FWD_DEFINED__ */
+
+
+#ifndef __IAAFRandomFile_FWD_DEFINED__
+#define __IAAFRandomFile_FWD_DEFINED__
+typedef interface IAAFRandomFile IAAFRandomFile;
+#endif 	/* __IAAFRandomFile_FWD_DEFINED__ */
+
+
+#ifndef __IAAFRandomRawStorage_FWD_DEFINED__
+#define __IAAFRandomRawStorage_FWD_DEFINED__
+typedef interface IAAFRandomRawStorage IAAFRandomRawStorage;
+#endif 	/* __IAAFRandomRawStorage_FWD_DEFINED__ */
+
+
+#ifndef __IAAFRawStorage_FWD_DEFINED__
+#define __IAAFRawStorage_FWD_DEFINED__
+typedef interface IAAFRawStorage IAAFRawStorage;
+#endif 	/* __IAAFRawStorage_FWD_DEFINED__ */
+
+
+#ifndef __IAAFRecordingDescriptor_FWD_DEFINED__
+#define __IAAFRecordingDescriptor_FWD_DEFINED__
+typedef interface IAAFRecordingDescriptor IAAFRecordingDescriptor;
+#endif 	/* __IAAFRecordingDescriptor_FWD_DEFINED__ */
 
 
 #ifndef __IAAFScopeReference_FWD_DEFINED__
@@ -389,6 +455,12 @@ typedef interface IAAFSelector IAAFSelector;
 #define __IAAFSequence_FWD_DEFINED__
 typedef interface IAAFSequence IAAFSequence;
 #endif 	/* __IAAFSequence_FWD_DEFINED__ */
+
+
+#ifndef __IAAFSetFileBits_FWD_DEFINED__
+#define __IAAFSetFileBits_FWD_DEFINED__
+typedef interface IAAFSetFileBits IAAFSetFileBits;
+#endif 	/* __IAAFSetFileBits_FWD_DEFINED__ */
 
 
 #ifndef __IAAFSoundDescriptor_FWD_DEFINED__
@@ -421,16 +493,28 @@ typedef interface IAAFStaticMobSlot IAAFStaticMobSlot;
 #endif 	/* __IAAFStaticMobSlot_FWD_DEFINED__ */
 
 
-#ifndef __IAAFTapeDescriptor_FWD_DEFINED__
-#define __IAAFTapeDescriptor_FWD_DEFINED__
-typedef interface IAAFTapeDescriptor IAAFTapeDescriptor;
-#endif 	/* __IAAFTapeDescriptor_FWD_DEFINED__ */
+#ifndef __IAAFTIFFDescriptor_FWD_DEFINED__
+#define __IAAFTIFFDescriptor_FWD_DEFINED__
+typedef interface IAAFTIFFDescriptor IAAFTIFFDescriptor;
+#endif 	/* __IAAFTIFFDescriptor_FWD_DEFINED__ */
 
 
 #ifndef __IAAFTaggedValue_FWD_DEFINED__
 #define __IAAFTaggedValue_FWD_DEFINED__
 typedef interface IAAFTaggedValue IAAFTaggedValue;
 #endif 	/* __IAAFTaggedValue_FWD_DEFINED__ */
+
+
+#ifndef __IAAFTaggedValueDefinition_FWD_DEFINED__
+#define __IAAFTaggedValueDefinition_FWD_DEFINED__
+typedef interface IAAFTaggedValueDefinition IAAFTaggedValueDefinition;
+#endif 	/* __IAAFTaggedValueDefinition_FWD_DEFINED__ */
+
+
+#ifndef __IAAFTapeDescriptor_FWD_DEFINED__
+#define __IAAFTapeDescriptor_FWD_DEFINED__
+typedef interface IAAFTapeDescriptor IAAFTapeDescriptor;
+#endif 	/* __IAAFTapeDescriptor_FWD_DEFINED__ */
 
 
 #ifndef __IAAFTextLocator_FWD_DEFINED__
@@ -445,24 +529,6 @@ typedef interface IAAFTimecode IAAFTimecode;
 #endif 	/* __IAAFTimecode_FWD_DEFINED__ */
 
 
-#ifndef __IAAFTimelineMobSlot_FWD_DEFINED__
-#define __IAAFTimelineMobSlot_FWD_DEFINED__
-typedef interface IAAFTimelineMobSlot IAAFTimelineMobSlot;
-#endif 	/* __IAAFTimelineMobSlot_FWD_DEFINED__ */
-
-
-#ifndef __IAAFTransition_FWD_DEFINED__
-#define __IAAFTransition_FWD_DEFINED__
-typedef interface IAAFTransition IAAFTransition;
-#endif 	/* __IAAFTransition_FWD_DEFINED__ */
-
-
-#ifndef __IAAFTIFFDescriptor_FWD_DEFINED__
-#define __IAAFTIFFDescriptor_FWD_DEFINED__
-typedef interface IAAFTIFFDescriptor IAAFTIFFDescriptor;
-#endif 	/* __IAAFTIFFDescriptor_FWD_DEFINED__ */
-
-
 #ifndef __IAAFTimecodeStream_FWD_DEFINED__
 #define __IAAFTimecodeStream_FWD_DEFINED__
 typedef interface IAAFTimecodeStream IAAFTimecodeStream;
@@ -475,6 +541,18 @@ typedef interface IAAFTimecodeStream12M IAAFTimecodeStream12M;
 #endif 	/* __IAAFTimecodeStream12M_FWD_DEFINED__ */
 
 
+#ifndef __IAAFTimelineMobSlot_FWD_DEFINED__
+#define __IAAFTimelineMobSlot_FWD_DEFINED__
+typedef interface IAAFTimelineMobSlot IAAFTimelineMobSlot;
+#endif 	/* __IAAFTimelineMobSlot_FWD_DEFINED__ */
+
+
+#ifndef __IAAFTransition_FWD_DEFINED__
+#define __IAAFTransition_FWD_DEFINED__
+typedef interface IAAFTransition IAAFTransition;
+#endif 	/* __IAAFTransition_FWD_DEFINED__ */
+
+
 #ifndef __IAAFTypeDef_FWD_DEFINED__
 #define __IAAFTypeDef_FWD_DEFINED__
 typedef interface IAAFTypeDef IAAFTypeDef;
@@ -485,24 +563,6 @@ typedef interface IAAFTypeDef IAAFTypeDef;
 #define __IAAFTypeDefCharacter_FWD_DEFINED__
 typedef interface IAAFTypeDefCharacter IAAFTypeDefCharacter;
 #endif 	/* __IAAFTypeDefCharacter_FWD_DEFINED__ */
-
-
-#ifndef __IAAFTypeDefIndirect_FWD_DEFINED__
-#define __IAAFTypeDefIndirect_FWD_DEFINED__
-typedef interface IAAFTypeDefIndirect IAAFTypeDefIndirect;
-#endif 	/* __IAAFTypeDefIndirect_FWD_DEFINED__ */
-
-
-#ifndef __IAAFTypeDefInt_FWD_DEFINED__
-#define __IAAFTypeDefInt_FWD_DEFINED__
-typedef interface IAAFTypeDefInt IAAFTypeDefInt;
-#endif 	/* __IAAFTypeDefInt_FWD_DEFINED__ */
-
-
-#ifndef __IAAFTypeDefRename_FWD_DEFINED__
-#define __IAAFTypeDefRename_FWD_DEFINED__
-typedef interface IAAFTypeDefRename IAAFTypeDefRename;
-#endif 	/* __IAAFTypeDefRename_FWD_DEFINED__ */
 
 
 #ifndef __IAAFTypeDefEnum_FWD_DEFINED__
@@ -523,10 +583,40 @@ typedef interface IAAFTypeDefFixedArray IAAFTypeDefFixedArray;
 #endif 	/* __IAAFTypeDefFixedArray_FWD_DEFINED__ */
 
 
+#ifndef __IAAFTypeDefIndirect_FWD_DEFINED__
+#define __IAAFTypeDefIndirect_FWD_DEFINED__
+typedef interface IAAFTypeDefIndirect IAAFTypeDefIndirect;
+#endif 	/* __IAAFTypeDefIndirect_FWD_DEFINED__ */
+
+
+#ifndef __IAAFTypeDefInt_FWD_DEFINED__
+#define __IAAFTypeDefInt_FWD_DEFINED__
+typedef interface IAAFTypeDefInt IAAFTypeDefInt;
+#endif 	/* __IAAFTypeDefInt_FWD_DEFINED__ */
+
+
+#ifndef __IAAFTypeDefObjectRef_FWD_DEFINED__
+#define __IAAFTypeDefObjectRef_FWD_DEFINED__
+typedef interface IAAFTypeDefObjectRef IAAFTypeDefObjectRef;
+#endif 	/* __IAAFTypeDefObjectRef_FWD_DEFINED__ */
+
+
+#ifndef __IAAFTypeDefOpaque_FWD_DEFINED__
+#define __IAAFTypeDefOpaque_FWD_DEFINED__
+typedef interface IAAFTypeDefOpaque IAAFTypeDefOpaque;
+#endif 	/* __IAAFTypeDefOpaque_FWD_DEFINED__ */
+
+
 #ifndef __IAAFTypeDefRecord_FWD_DEFINED__
 #define __IAAFTypeDefRecord_FWD_DEFINED__
 typedef interface IAAFTypeDefRecord IAAFTypeDefRecord;
 #endif 	/* __IAAFTypeDefRecord_FWD_DEFINED__ */
+
+
+#ifndef __IAAFTypeDefRename_FWD_DEFINED__
+#define __IAAFTypeDefRename_FWD_DEFINED__
+typedef interface IAAFTypeDefRename IAAFTypeDefRename;
+#endif 	/* __IAAFTypeDefRename_FWD_DEFINED__ */
 
 
 #ifndef __IAAFTypeDefSet_FWD_DEFINED__
@@ -553,28 +643,16 @@ typedef interface IAAFTypeDefStrongObjRef IAAFTypeDefStrongObjRef;
 #endif 	/* __IAAFTypeDefStrongObjRef_FWD_DEFINED__ */
 
 
-#ifndef __IAAFTypeDefWeakObjRef_FWD_DEFINED__
-#define __IAAFTypeDefWeakObjRef_FWD_DEFINED__
-typedef interface IAAFTypeDefWeakObjRef IAAFTypeDefWeakObjRef;
-#endif 	/* __IAAFTypeDefWeakObjRef_FWD_DEFINED__ */
-
-
-#ifndef __IAAFTypeDefObjectRef_FWD_DEFINED__
-#define __IAAFTypeDefObjectRef_FWD_DEFINED__
-typedef interface IAAFTypeDefObjectRef IAAFTypeDefObjectRef;
-#endif 	/* __IAAFTypeDefObjectRef_FWD_DEFINED__ */
-
-
-#ifndef __IAAFTypeDefOpaque_FWD_DEFINED__
-#define __IAAFTypeDefOpaque_FWD_DEFINED__
-typedef interface IAAFTypeDefOpaque IAAFTypeDefOpaque;
-#endif 	/* __IAAFTypeDefOpaque_FWD_DEFINED__ */
-
-
 #ifndef __IAAFTypeDefVariableArray_FWD_DEFINED__
 #define __IAAFTypeDefVariableArray_FWD_DEFINED__
 typedef interface IAAFTypeDefVariableArray IAAFTypeDefVariableArray;
 #endif 	/* __IAAFTypeDefVariableArray_FWD_DEFINED__ */
+
+
+#ifndef __IAAFTypeDefWeakObjRef_FWD_DEFINED__
+#define __IAAFTypeDefWeakObjRef_FWD_DEFINED__
+typedef interface IAAFTypeDefWeakObjRef IAAFTypeDefWeakObjRef;
+#endif 	/* __IAAFTypeDefWeakObjRef_FWD_DEFINED__ */
 
 
 #ifndef __IAAFVaryingValue_FWD_DEFINED__
@@ -631,6 +709,12 @@ typedef interface IEnumAAFDataDefs IEnumAAFDataDefs;
 #endif 	/* __IEnumAAFDataDefs_FWD_DEFINED__ */
 
 
+#ifndef __IEnumAAFEssenceData_FWD_DEFINED__
+#define __IEnumAAFEssenceData_FWD_DEFINED__
+typedef interface IEnumAAFEssenceData IEnumAAFEssenceData;
+#endif 	/* __IEnumAAFEssenceData_FWD_DEFINED__ */
+
+
 #ifndef __IEnumAAFIdentifications_FWD_DEFINED__
 #define __IEnumAAFIdentifications_FWD_DEFINED__
 typedef interface IEnumAAFIdentifications IEnumAAFIdentifications;
@@ -643,22 +727,16 @@ typedef interface IEnumAAFInterpolationDefs IEnumAAFInterpolationDefs;
 #endif 	/* __IEnumAAFInterpolationDefs_FWD_DEFINED__ */
 
 
-#ifndef __IEnumAAFOperationDefs_FWD_DEFINED__
-#define __IEnumAAFOperationDefs_FWD_DEFINED__
-typedef interface IEnumAAFOperationDefs IEnumAAFOperationDefs;
-#endif 	/* __IEnumAAFOperationDefs_FWD_DEFINED__ */
-
-
-#ifndef __IEnumAAFEssenceData_FWD_DEFINED__
-#define __IEnumAAFEssenceData_FWD_DEFINED__
-typedef interface IEnumAAFEssenceData IEnumAAFEssenceData;
-#endif 	/* __IEnumAAFEssenceData_FWD_DEFINED__ */
-
-
 #ifndef __IEnumAAFKLVData_FWD_DEFINED__
 #define __IEnumAAFKLVData_FWD_DEFINED__
 typedef interface IEnumAAFKLVData IEnumAAFKLVData;
 #endif 	/* __IEnumAAFKLVData_FWD_DEFINED__ */
+
+
+#ifndef __IEnumAAFKLVDataDefs_FWD_DEFINED__
+#define __IEnumAAFKLVDataDefs_FWD_DEFINED__
+typedef interface IEnumAAFKLVDataDefs IEnumAAFKLVDataDefs;
+#endif 	/* __IEnumAAFKLVDataDefs_FWD_DEFINED__ */
 
 
 #ifndef __IEnumAAFLoadedPlugins_FWD_DEFINED__
@@ -685,6 +763,12 @@ typedef interface IEnumAAFMobs IEnumAAFMobs;
 #endif 	/* __IEnumAAFMobs_FWD_DEFINED__ */
 
 
+#ifndef __IEnumAAFOperationDefs_FWD_DEFINED__
+#define __IEnumAAFOperationDefs_FWD_DEFINED__
+typedef interface IEnumAAFOperationDefs IEnumAAFOperationDefs;
+#endif 	/* __IEnumAAFOperationDefs_FWD_DEFINED__ */
+
+
 #ifndef __IEnumAAFParameterDefs_FWD_DEFINED__
 #define __IEnumAAFParameterDefs_FWD_DEFINED__
 typedef interface IEnumAAFParameterDefs IEnumAAFParameterDefs;
@@ -695,6 +779,18 @@ typedef interface IEnumAAFParameterDefs IEnumAAFParameterDefs;
 #define __IEnumAAFParameters_FWD_DEFINED__
 typedef interface IEnumAAFParameters IEnumAAFParameters;
 #endif 	/* __IEnumAAFParameters_FWD_DEFINED__ */
+
+
+#ifndef __IEnumAAFPluginDefs_FWD_DEFINED__
+#define __IEnumAAFPluginDefs_FWD_DEFINED__
+typedef interface IEnumAAFPluginDefs IEnumAAFPluginDefs;
+#endif 	/* __IEnumAAFPluginDefs_FWD_DEFINED__ */
+
+
+#ifndef __IEnumAAFPluginLocators_FWD_DEFINED__
+#define __IEnumAAFPluginLocators_FWD_DEFINED__
+typedef interface IEnumAAFPluginLocators IEnumAAFPluginLocators;
+#endif 	/* __IEnumAAFPluginLocators_FWD_DEFINED__ */
 
 
 #ifndef __IEnumAAFProperties_FWD_DEFINED__
@@ -715,22 +811,16 @@ typedef interface IEnumAAFPropertyValues IEnumAAFPropertyValues;
 #endif 	/* __IEnumAAFPropertyValues_FWD_DEFINED__ */
 
 
-#ifndef __IEnumAAFPluginDefs_FWD_DEFINED__
-#define __IEnumAAFPluginDefs_FWD_DEFINED__
-typedef interface IEnumAAFPluginDefs IEnumAAFPluginDefs;
-#endif 	/* __IEnumAAFPluginDefs_FWD_DEFINED__ */
-
-
-#ifndef __IEnumAAFPluginLocators_FWD_DEFINED__
-#define __IEnumAAFPluginLocators_FWD_DEFINED__
-typedef interface IEnumAAFPluginLocators IEnumAAFPluginLocators;
-#endif 	/* __IEnumAAFPluginLocators_FWD_DEFINED__ */
-
-
 #ifndef __IEnumAAFSegments_FWD_DEFINED__
 #define __IEnumAAFSegments_FWD_DEFINED__
 typedef interface IEnumAAFSegments IEnumAAFSegments;
 #endif 	/* __IEnumAAFSegments_FWD_DEFINED__ */
+
+
+#ifndef __IEnumAAFTaggedValueDefs_FWD_DEFINED__
+#define __IEnumAAFTaggedValueDefs_FWD_DEFINED__
+typedef interface IEnumAAFTaggedValueDefs IEnumAAFTaggedValueDefs;
+#endif 	/* __IEnumAAFTaggedValueDefs_FWD_DEFINED__ */
 
 
 #ifndef __IEnumAAFTaggedValues_FWD_DEFINED__
@@ -743,84 +833,6 @@ typedef interface IEnumAAFTaggedValues IEnumAAFTaggedValues;
 #define __IEnumAAFTypeDefs_FWD_DEFINED__
 typedef interface IEnumAAFTypeDefs IEnumAAFTypeDefs;
 #endif 	/* __IEnumAAFTypeDefs_FWD_DEFINED__ */
-
-
-#ifndef __IAAFRawStorage_FWD_DEFINED__
-#define __IAAFRawStorage_FWD_DEFINED__
-typedef interface IAAFRawStorage IAAFRawStorage;
-#endif 	/* __IAAFRawStorage_FWD_DEFINED__ */
-
-
-#ifndef __IAAFRandomRawStorage_FWD_DEFINED__
-#define __IAAFRandomRawStorage_FWD_DEFINED__
-typedef interface IAAFRandomRawStorage IAAFRandomRawStorage;
-#endif 	/* __IAAFRandomRawStorage_FWD_DEFINED__ */
-
-
-#ifndef __IAAFGetFileBits_FWD_DEFINED__
-#define __IAAFGetFileBits_FWD_DEFINED__
-typedef interface IAAFGetFileBits IAAFGetFileBits;
-#endif 	/* __IAAFGetFileBits_FWD_DEFINED__ */
-
-
-#ifndef __IAAFSetFileBits_FWD_DEFINED__
-#define __IAAFSetFileBits_FWD_DEFINED__
-typedef interface IAAFSetFileBits IAAFSetFileBits;
-#endif 	/* __IAAFSetFileBits_FWD_DEFINED__ */
-
-
-#ifndef __IAAFRandomFile_FWD_DEFINED__
-#define __IAAFRandomFile_FWD_DEFINED__
-typedef interface IAAFRandomFile IAAFRandomFile;
-#endif 	/* __IAAFRandomFile_FWD_DEFINED__ */
-
-
-#ifndef __IAAFTaggedValueDefinition_FWD_DEFINED__
-#define __IAAFTaggedValueDefinition_FWD_DEFINED__
-typedef interface IAAFTaggedValueDefinition IAAFTaggedValueDefinition;
-#endif 	/* __IAAFTaggedValueDefinition_FWD_DEFINED__ */
-
-
-#ifndef __IAAFKLVDataDefinition_FWD_DEFINED__
-#define __IAAFKLVDataDefinition_FWD_DEFINED__
-typedef interface IAAFKLVDataDefinition IAAFKLVDataDefinition;
-#endif 	/* __IAAFKLVDataDefinition_FWD_DEFINED__ */
-
-
-#ifndef __IEnumAAFTaggedValueDefs_FWD_DEFINED__
-#define __IEnumAAFTaggedValueDefs_FWD_DEFINED__
-typedef interface IEnumAAFTaggedValueDefs IEnumAAFTaggedValueDefs;
-#endif 	/* __IEnumAAFTaggedValueDefs_FWD_DEFINED__ */
-
-
-#ifndef __IEnumAAFKLVDataDefs_FWD_DEFINED__
-#define __IEnumAAFKLVDataDefs_FWD_DEFINED__
-typedef interface IEnumAAFKLVDataDefs IEnumAAFKLVDataDefs;
-#endif 	/* __IEnumAAFKLVDataDefs_FWD_DEFINED__ */
-
-
-#ifndef __IAAFRecordingDescriptor_FWD_DEFINED__
-#define __IAAFRecordingDescriptor_FWD_DEFINED__
-typedef interface IAAFRecordingDescriptor IAAFRecordingDescriptor;
-#endif 	/* __IAAFRecordingDescriptor_FWD_DEFINED__ */
-
-
-#ifndef __IAAFAuxiliaryDescriptor_FWD_DEFINED__
-#define __IAAFAuxiliaryDescriptor_FWD_DEFINED__
-typedef interface IAAFAuxiliaryDescriptor IAAFAuxiliaryDescriptor;
-#endif 	/* __IAAFAuxiliaryDescriptor_FWD_DEFINED__ */
-
-
-#ifndef __IAAFDescriptiveFramework_FWD_DEFINED__
-#define __IAAFDescriptiveFramework_FWD_DEFINED__
-typedef interface IAAFDescriptiveFramework IAAFDescriptiveFramework;
-#endif 	/* __IAAFDescriptiveFramework_FWD_DEFINED__ */
-
-
-#ifndef __IAAFDescriptiveMarker_FWD_DEFINED__
-#define __IAAFDescriptiveMarker_FWD_DEFINED__
-typedef interface IAAFDescriptiveMarker IAAFDescriptiveMarker;
-#endif 	/* __IAAFDescriptiveMarker_FWD_DEFINED__ */
 
 
 #ifndef __IAAFCDCIDescriptor2_FWD_DEFINED__
@@ -965,7 +977,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -1129,8 +1141,97 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 
 
 
+
+
 extern RPC_IF_HANDLE __MIDL_itf_AAF_0000_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_AAF_0000_v0_0_s_ifspec;
+
+#ifndef __IAAFAES3PCMDescriptor_INTERFACE_DEFINED__
+#define __IAAFAES3PCMDescriptor_INTERFACE_DEFINED__
+
+/* interface IAAFAES3PCMDescriptor */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFAES3PCMDescriptor;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("2EBFFDE0-5997-414D-808B-6BAA4A74F40F")
+    IAAFAES3PCMDescriptor : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFAES3PCMDescriptorVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFAES3PCMDescriptor __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFAES3PCMDescriptor __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFAES3PCMDescriptor __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFAES3PCMDescriptor __RPC_FAR * This);
+        
+        END_INTERFACE
+    } IAAFAES3PCMDescriptorVtbl;
+
+    interface IAAFAES3PCMDescriptor
+    {
+        CONST_VTBL struct IAAFAES3PCMDescriptorVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFAES3PCMDescriptor_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFAES3PCMDescriptor_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFAES3PCMDescriptor_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFAES3PCMDescriptor_Initialize(This)	\
+    (This)->lpVtbl -> Initialize(This)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFAES3PCMDescriptor_Initialize_Proxy( 
+    IAAFAES3PCMDescriptor __RPC_FAR * This);
+
+
+void __RPC_STUB IAAFAES3PCMDescriptor_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFAES3PCMDescriptor_INTERFACE_DEFINED__ */
+
 
 #ifndef __IAAFAIFCDescriptor_INTERFACE_DEFINED__
 #define __IAAFAIFCDescriptor_INTERFACE_DEFINED__
@@ -1289,6 +1390,670 @@ void __RPC_STUB IAAFAIFCDescriptor_SetSummary_Stub(
 
 
 #endif 	/* __IAAFAIFCDescriptor_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFAuxiliaryDescriptor_INTERFACE_DEFINED__
+#define __IAAFAuxiliaryDescriptor_INTERFACE_DEFINED__
+
+/* interface IAAFAuxiliaryDescriptor */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFAuxiliaryDescriptor;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("197a9cb2-48de-40a3-b965-59531d3fcf23")
+    IAAFAuxiliaryDescriptor : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetMimeType( 
+            /* [string][in] */ aafCharacter_constptr pMimeType) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetMimeType( 
+            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pMimeType,
+            /* [in] */ aafUInt32 bufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetMimeTypeBufLen( 
+            /* [out] */ aafUInt32 __RPC_FAR *pBufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetCharSet( 
+            /* [string][in] */ aafCharacter_constptr pCharSet) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetCharSet( 
+            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pCharSet,
+            /* [in] */ aafUInt32 bufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetCharSetBufLen( 
+            /* [out] */ aafUInt32 __RPC_FAR *pBufSize) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFAuxiliaryDescriptorVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFAuxiliaryDescriptor __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFAuxiliaryDescriptor __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFAuxiliaryDescriptor __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFAuxiliaryDescriptor __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMimeType )( 
+            IAAFAuxiliaryDescriptor __RPC_FAR * This,
+            /* [string][in] */ aafCharacter_constptr pMimeType);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMimeType )( 
+            IAAFAuxiliaryDescriptor __RPC_FAR * This,
+            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pMimeType,
+            /* [in] */ aafUInt32 bufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMimeTypeBufLen )( 
+            IAAFAuxiliaryDescriptor __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCharSet )( 
+            IAAFAuxiliaryDescriptor __RPC_FAR * This,
+            /* [string][in] */ aafCharacter_constptr pCharSet);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCharSet )( 
+            IAAFAuxiliaryDescriptor __RPC_FAR * This,
+            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pCharSet,
+            /* [in] */ aafUInt32 bufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCharSetBufLen )( 
+            IAAFAuxiliaryDescriptor __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
+        
+        END_INTERFACE
+    } IAAFAuxiliaryDescriptorVtbl;
+
+    interface IAAFAuxiliaryDescriptor
+    {
+        CONST_VTBL struct IAAFAuxiliaryDescriptorVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFAuxiliaryDescriptor_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFAuxiliaryDescriptor_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFAuxiliaryDescriptor_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFAuxiliaryDescriptor_Initialize(This)	\
+    (This)->lpVtbl -> Initialize(This)
+
+#define IAAFAuxiliaryDescriptor_SetMimeType(This,pMimeType)	\
+    (This)->lpVtbl -> SetMimeType(This,pMimeType)
+
+#define IAAFAuxiliaryDescriptor_GetMimeType(This,pMimeType,bufSize)	\
+    (This)->lpVtbl -> GetMimeType(This,pMimeType,bufSize)
+
+#define IAAFAuxiliaryDescriptor_GetMimeTypeBufLen(This,pBufSize)	\
+    (This)->lpVtbl -> GetMimeTypeBufLen(This,pBufSize)
+
+#define IAAFAuxiliaryDescriptor_SetCharSet(This,pCharSet)	\
+    (This)->lpVtbl -> SetCharSet(This,pCharSet)
+
+#define IAAFAuxiliaryDescriptor_GetCharSet(This,pCharSet,bufSize)	\
+    (This)->lpVtbl -> GetCharSet(This,pCharSet,bufSize)
+
+#define IAAFAuxiliaryDescriptor_GetCharSetBufLen(This,pBufSize)	\
+    (This)->lpVtbl -> GetCharSetBufLen(This,pBufSize)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_Initialize_Proxy( 
+    IAAFAuxiliaryDescriptor __RPC_FAR * This);
+
+
+void __RPC_STUB IAAFAuxiliaryDescriptor_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_SetMimeType_Proxy( 
+    IAAFAuxiliaryDescriptor __RPC_FAR * This,
+    /* [string][in] */ aafCharacter_constptr pMimeType);
+
+
+void __RPC_STUB IAAFAuxiliaryDescriptor_SetMimeType_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_GetMimeType_Proxy( 
+    IAAFAuxiliaryDescriptor __RPC_FAR * This,
+    /* [size_is][string][out] */ aafCharacter __RPC_FAR *pMimeType,
+    /* [in] */ aafUInt32 bufSize);
+
+
+void __RPC_STUB IAAFAuxiliaryDescriptor_GetMimeType_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_GetMimeTypeBufLen_Proxy( 
+    IAAFAuxiliaryDescriptor __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
+
+
+void __RPC_STUB IAAFAuxiliaryDescriptor_GetMimeTypeBufLen_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_SetCharSet_Proxy( 
+    IAAFAuxiliaryDescriptor __RPC_FAR * This,
+    /* [string][in] */ aafCharacter_constptr pCharSet);
+
+
+void __RPC_STUB IAAFAuxiliaryDescriptor_SetCharSet_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_GetCharSet_Proxy( 
+    IAAFAuxiliaryDescriptor __RPC_FAR * This,
+    /* [size_is][string][out] */ aafCharacter __RPC_FAR *pCharSet,
+    /* [in] */ aafUInt32 bufSize);
+
+
+void __RPC_STUB IAAFAuxiliaryDescriptor_GetCharSet_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_GetCharSetBufLen_Proxy( 
+    IAAFAuxiliaryDescriptor __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
+
+
+void __RPC_STUB IAAFAuxiliaryDescriptor_GetCharSetBufLen_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFAuxiliaryDescriptor_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFCDCIDescriptor_INTERFACE_DEFINED__
+#define __IAAFCDCIDescriptor_INTERFACE_DEFINED__
+
+/* interface IAAFCDCIDescriptor */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFCDCIDescriptor;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("44861703-8AEA-11d2-813C-006097310172")
+    IAAFCDCIDescriptor : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetComponentWidth( 
+            /* [in] */ aafInt32 ComponentWidth) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetComponentWidth( 
+            /* [out] */ aafInt32 __RPC_FAR *pComponentWidth) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetHorizontalSubsampling( 
+            /* [in] */ aafUInt32 HorizontalSubsampling) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetHorizontalSubsampling( 
+            /* [out] */ aafUInt32 __RPC_FAR *pHorizontalSubsampling) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetVerticalSubsampling( 
+            /* [in] */ aafUInt32 VerticalSubsampling) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetVerticalSubsampling( 
+            /* [out] */ aafUInt32 __RPC_FAR *pVerticalSubsampling) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetColorSiting( 
+            /* [in] */ aafColorSiting_t ColorSiting) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetColorSiting( 
+            /* [out] */ aafColorSiting_t __RPC_FAR *pColorSiting) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetBlackReferenceLevel( 
+            /* [in] */ aafUInt32 BlackReferenceLevel) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetBlackReferenceLevel( 
+            /* [out] */ aafUInt32 __RPC_FAR *pBlackReferenceLevel) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetWhiteReferenceLevel( 
+            /* [in] */ aafUInt32 WhiteReferenceLevel) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetWhiteReferenceLevel( 
+            /* [out] */ aafUInt32 __RPC_FAR *pWhiteReferenceLevel) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetColorRange( 
+            /* [in] */ aafUInt32 ColorRange) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetColorRange( 
+            /* [out] */ aafUInt32 __RPC_FAR *pColorRange) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetPaddingBits( 
+            /* [in] */ aafInt16 PaddingBits) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPaddingBits( 
+            /* [out] */ aafInt16 __RPC_FAR *pPaddingBits) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFCDCIDescriptorVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFCDCIDescriptor __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFCDCIDescriptor __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFCDCIDescriptor __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFCDCIDescriptor __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetComponentWidth )( 
+            IAAFCDCIDescriptor __RPC_FAR * This,
+            /* [in] */ aafInt32 ComponentWidth);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetComponentWidth )( 
+            IAAFCDCIDescriptor __RPC_FAR * This,
+            /* [out] */ aafInt32 __RPC_FAR *pComponentWidth);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHorizontalSubsampling )( 
+            IAAFCDCIDescriptor __RPC_FAR * This,
+            /* [in] */ aafUInt32 HorizontalSubsampling);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHorizontalSubsampling )( 
+            IAAFCDCIDescriptor __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pHorizontalSubsampling);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVerticalSubsampling )( 
+            IAAFCDCIDescriptor __RPC_FAR * This,
+            /* [in] */ aafUInt32 VerticalSubsampling);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVerticalSubsampling )( 
+            IAAFCDCIDescriptor __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pVerticalSubsampling);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetColorSiting )( 
+            IAAFCDCIDescriptor __RPC_FAR * This,
+            /* [in] */ aafColorSiting_t ColorSiting);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetColorSiting )( 
+            IAAFCDCIDescriptor __RPC_FAR * This,
+            /* [out] */ aafColorSiting_t __RPC_FAR *pColorSiting);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBlackReferenceLevel )( 
+            IAAFCDCIDescriptor __RPC_FAR * This,
+            /* [in] */ aafUInt32 BlackReferenceLevel);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBlackReferenceLevel )( 
+            IAAFCDCIDescriptor __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pBlackReferenceLevel);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetWhiteReferenceLevel )( 
+            IAAFCDCIDescriptor __RPC_FAR * This,
+            /* [in] */ aafUInt32 WhiteReferenceLevel);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWhiteReferenceLevel )( 
+            IAAFCDCIDescriptor __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pWhiteReferenceLevel);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetColorRange )( 
+            IAAFCDCIDescriptor __RPC_FAR * This,
+            /* [in] */ aafUInt32 ColorRange);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetColorRange )( 
+            IAAFCDCIDescriptor __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pColorRange);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPaddingBits )( 
+            IAAFCDCIDescriptor __RPC_FAR * This,
+            /* [in] */ aafInt16 PaddingBits);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPaddingBits )( 
+            IAAFCDCIDescriptor __RPC_FAR * This,
+            /* [out] */ aafInt16 __RPC_FAR *pPaddingBits);
+        
+        END_INTERFACE
+    } IAAFCDCIDescriptorVtbl;
+
+    interface IAAFCDCIDescriptor
+    {
+        CONST_VTBL struct IAAFCDCIDescriptorVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFCDCIDescriptor_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFCDCIDescriptor_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFCDCIDescriptor_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFCDCIDescriptor_Initialize(This)	\
+    (This)->lpVtbl -> Initialize(This)
+
+#define IAAFCDCIDescriptor_SetComponentWidth(This,ComponentWidth)	\
+    (This)->lpVtbl -> SetComponentWidth(This,ComponentWidth)
+
+#define IAAFCDCIDescriptor_GetComponentWidth(This,pComponentWidth)	\
+    (This)->lpVtbl -> GetComponentWidth(This,pComponentWidth)
+
+#define IAAFCDCIDescriptor_SetHorizontalSubsampling(This,HorizontalSubsampling)	\
+    (This)->lpVtbl -> SetHorizontalSubsampling(This,HorizontalSubsampling)
+
+#define IAAFCDCIDescriptor_GetHorizontalSubsampling(This,pHorizontalSubsampling)	\
+    (This)->lpVtbl -> GetHorizontalSubsampling(This,pHorizontalSubsampling)
+
+#define IAAFCDCIDescriptor_SetVerticalSubsampling(This,VerticalSubsampling)	\
+    (This)->lpVtbl -> SetVerticalSubsampling(This,VerticalSubsampling)
+
+#define IAAFCDCIDescriptor_GetVerticalSubsampling(This,pVerticalSubsampling)	\
+    (This)->lpVtbl -> GetVerticalSubsampling(This,pVerticalSubsampling)
+
+#define IAAFCDCIDescriptor_SetColorSiting(This,ColorSiting)	\
+    (This)->lpVtbl -> SetColorSiting(This,ColorSiting)
+
+#define IAAFCDCIDescriptor_GetColorSiting(This,pColorSiting)	\
+    (This)->lpVtbl -> GetColorSiting(This,pColorSiting)
+
+#define IAAFCDCIDescriptor_SetBlackReferenceLevel(This,BlackReferenceLevel)	\
+    (This)->lpVtbl -> SetBlackReferenceLevel(This,BlackReferenceLevel)
+
+#define IAAFCDCIDescriptor_GetBlackReferenceLevel(This,pBlackReferenceLevel)	\
+    (This)->lpVtbl -> GetBlackReferenceLevel(This,pBlackReferenceLevel)
+
+#define IAAFCDCIDescriptor_SetWhiteReferenceLevel(This,WhiteReferenceLevel)	\
+    (This)->lpVtbl -> SetWhiteReferenceLevel(This,WhiteReferenceLevel)
+
+#define IAAFCDCIDescriptor_GetWhiteReferenceLevel(This,pWhiteReferenceLevel)	\
+    (This)->lpVtbl -> GetWhiteReferenceLevel(This,pWhiteReferenceLevel)
+
+#define IAAFCDCIDescriptor_SetColorRange(This,ColorRange)	\
+    (This)->lpVtbl -> SetColorRange(This,ColorRange)
+
+#define IAAFCDCIDescriptor_GetColorRange(This,pColorRange)	\
+    (This)->lpVtbl -> GetColorRange(This,pColorRange)
+
+#define IAAFCDCIDescriptor_SetPaddingBits(This,PaddingBits)	\
+    (This)->lpVtbl -> SetPaddingBits(This,PaddingBits)
+
+#define IAAFCDCIDescriptor_GetPaddingBits(This,pPaddingBits)	\
+    (This)->lpVtbl -> GetPaddingBits(This,pPaddingBits)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_Initialize_Proxy( 
+    IAAFCDCIDescriptor __RPC_FAR * This);
+
+
+void __RPC_STUB IAAFCDCIDescriptor_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_SetComponentWidth_Proxy( 
+    IAAFCDCIDescriptor __RPC_FAR * This,
+    /* [in] */ aafInt32 ComponentWidth);
+
+
+void __RPC_STUB IAAFCDCIDescriptor_SetComponentWidth_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_GetComponentWidth_Proxy( 
+    IAAFCDCIDescriptor __RPC_FAR * This,
+    /* [out] */ aafInt32 __RPC_FAR *pComponentWidth);
+
+
+void __RPC_STUB IAAFCDCIDescriptor_GetComponentWidth_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_SetHorizontalSubsampling_Proxy( 
+    IAAFCDCIDescriptor __RPC_FAR * This,
+    /* [in] */ aafUInt32 HorizontalSubsampling);
+
+
+void __RPC_STUB IAAFCDCIDescriptor_SetHorizontalSubsampling_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_GetHorizontalSubsampling_Proxy( 
+    IAAFCDCIDescriptor __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pHorizontalSubsampling);
+
+
+void __RPC_STUB IAAFCDCIDescriptor_GetHorizontalSubsampling_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_SetVerticalSubsampling_Proxy( 
+    IAAFCDCIDescriptor __RPC_FAR * This,
+    /* [in] */ aafUInt32 VerticalSubsampling);
+
+
+void __RPC_STUB IAAFCDCIDescriptor_SetVerticalSubsampling_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_GetVerticalSubsampling_Proxy( 
+    IAAFCDCIDescriptor __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pVerticalSubsampling);
+
+
+void __RPC_STUB IAAFCDCIDescriptor_GetVerticalSubsampling_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_SetColorSiting_Proxy( 
+    IAAFCDCIDescriptor __RPC_FAR * This,
+    /* [in] */ aafColorSiting_t ColorSiting);
+
+
+void __RPC_STUB IAAFCDCIDescriptor_SetColorSiting_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_GetColorSiting_Proxy( 
+    IAAFCDCIDescriptor __RPC_FAR * This,
+    /* [out] */ aafColorSiting_t __RPC_FAR *pColorSiting);
+
+
+void __RPC_STUB IAAFCDCIDescriptor_GetColorSiting_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_SetBlackReferenceLevel_Proxy( 
+    IAAFCDCIDescriptor __RPC_FAR * This,
+    /* [in] */ aafUInt32 BlackReferenceLevel);
+
+
+void __RPC_STUB IAAFCDCIDescriptor_SetBlackReferenceLevel_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_GetBlackReferenceLevel_Proxy( 
+    IAAFCDCIDescriptor __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pBlackReferenceLevel);
+
+
+void __RPC_STUB IAAFCDCIDescriptor_GetBlackReferenceLevel_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_SetWhiteReferenceLevel_Proxy( 
+    IAAFCDCIDescriptor __RPC_FAR * This,
+    /* [in] */ aafUInt32 WhiteReferenceLevel);
+
+
+void __RPC_STUB IAAFCDCIDescriptor_SetWhiteReferenceLevel_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_GetWhiteReferenceLevel_Proxy( 
+    IAAFCDCIDescriptor __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pWhiteReferenceLevel);
+
+
+void __RPC_STUB IAAFCDCIDescriptor_GetWhiteReferenceLevel_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_SetColorRange_Proxy( 
+    IAAFCDCIDescriptor __RPC_FAR * This,
+    /* [in] */ aafUInt32 ColorRange);
+
+
+void __RPC_STUB IAAFCDCIDescriptor_SetColorRange_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_GetColorRange_Proxy( 
+    IAAFCDCIDescriptor __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pColorRange);
+
+
+void __RPC_STUB IAAFCDCIDescriptor_GetColorRange_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_SetPaddingBits_Proxy( 
+    IAAFCDCIDescriptor __RPC_FAR * This,
+    /* [in] */ aafInt16 PaddingBits);
+
+
+void __RPC_STUB IAAFCDCIDescriptor_SetPaddingBits_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_GetPaddingBits_Proxy( 
+    IAAFCDCIDescriptor __RPC_FAR * This,
+    /* [out] */ aafInt16 __RPC_FAR *pPaddingBits);
+
+
+void __RPC_STUB IAAFCDCIDescriptor_GetPaddingBits_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFCDCIDescriptor_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFClassDef_INTERFACE_DEFINED__
@@ -3959,379 +4724,46 @@ void __RPC_STUB IAAFDefObject_GetAUID_Stub(
 #endif 	/* __IAAFDefObject_INTERFACE_DEFINED__ */
 
 
-#ifndef __IAAFPluginDef_INTERFACE_DEFINED__
-#define __IAAFPluginDef_INTERFACE_DEFINED__
+#ifndef __IAAFDescriptiveFramework_INTERFACE_DEFINED__
+#define __IAAFDescriptiveFramework_INTERFACE_DEFINED__
 
-/* interface IAAFPluginDef */
+/* interface IAAFDescriptiveFramework */
 /* [unique][helpstring][uuid][object] */ 
 
 
-EXTERN_C const IID IID_IAAFPluginDef;
+EXTERN_C const IID IID_IAAFDescriptiveFramework;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    MIDL_INTERFACE("AD1BB854-DBB2-11d2-809C-006008143E6F")
-    IAAFPluginDef : public IUnknown
+    MIDL_INTERFACE("1cded29f-b8f0-437d-abb0-2144dd35b4aa")
+    IAAFDescriptiveFramework : public IUnknown
     {
     public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [ref][in] */ aafUID_constref id,
-            /* [in] */ aafCharacter_constptr pName,
-            /* [in] */ aafCharacter_constptr pDescription) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCategoryClass( 
-            /* [out] */ aafUID_t __RPC_FAR *pCategoryClass) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetCategoryClass( 
-            /* [ref][in] */ aafUID_constref categoryClass) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetPluginVersion( 
-            /* [out] */ aafVersionType_t __RPC_FAR *pVersion) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetPluginVersion( 
-            /* [in] */ aafVersionType_t __RPC_FAR *pVersion) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetPluginVersionString( 
-            /* [string][in] */ aafCharacter_constptr pPluginVersionString) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetPluginVersionString( 
-            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pPluginVersionString,
-            /* [in] */ aafUInt32 bufSize) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetPluginVersionStringBufLen( 
-            /* [out] */ aafUInt32 __RPC_FAR *pBufSize) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetPluginManufacturerName( 
-            /* [string][in] */ aafCharacter_constptr pPluginManufacturerName) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetPluginManufacturerName( 
-            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pPluginManufacturerName,
-            /* [in] */ aafUInt32 bufSize) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetPluginManufacturerNameBufLen( 
-            /* [out] */ aafUInt32 __RPC_FAR *pBufSize) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetManufacturerInfo( 
-            /* [retval][out] */ IAAFNetworkLocator __RPC_FAR *__RPC_FAR *ppResult) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetManufacturerInfo( 
-            /* [in] */ IAAFNetworkLocator __RPC_FAR *pManufacturerInfo) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetManufacturerID( 
-            /* [out] */ aafUID_t __RPC_FAR *pManufacturerID) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetManufacturerID( 
-            /* [ref][in] */ aafUID_constref manufacturerID) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetHardwarePlatform( 
-            /* [out] */ aafHardwarePlatform_t __RPC_FAR *pHardwarePlatform) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetHardwarePlatform( 
-            /* [in] */ aafHardwarePlatform_constref hardwarePlatform) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetPlatformVersionRange( 
-            /* [out] */ aafVersionType_t __RPC_FAR *pMinVersion,
-            /* [out] */ aafVersionType_t __RPC_FAR *pMaxVersion) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetPlatformMinimumVersion( 
-            /* [in] */ aafVersionType_constref minVersion) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetPlatformMaximumVersion( 
-            /* [in] */ aafVersionType_constref maxVersion) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetEngine( 
-            /* [out] */ aafEngine_t __RPC_FAR *pEngine) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetEngine( 
-            /* [in] */ aafEngine_constref engine) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetEngineVersionRange( 
-            /* [out] */ aafVersionType_t __RPC_FAR *pMinVersion,
-            /* [out] */ aafVersionType_t __RPC_FAR *pMaxVersion) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetEngineMinimumVersion( 
-            /* [in] */ aafVersionType_constref minVersion) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetEngineMaximumVersion( 
-            /* [in] */ aafVersionType_constref pMaxVersion) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetPluginAPI( 
-            /* [out] */ aafPluginAPI_t __RPC_FAR *pPluginAPI) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetPluginAPI( 
-            /* [in] */ aafPluginAPI_constref pluginAPI) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetPluginAPIVersionRange( 
-            /* [out] */ aafVersionType_t __RPC_FAR *pMinVersion,
-            /* [out] */ aafVersionType_t __RPC_FAR *pMaxVersion) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetPluginAPIMinimumVersion( 
-            /* [out] */ aafVersionType_constref minVersion) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetPluginAPIMaximumVersion( 
-            /* [in] */ aafVersionType_constref maxVersion) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE IsSoftwareOnly( 
-            /* [out] */ aafBoolean_t __RPC_FAR *pIsSoftwareOnly) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetIsSoftwareOnly( 
-            /* [in] */ aafBoolean_t isSoftwareOnly) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE IsAccelerated( 
-            /* [out] */ aafBoolean_t __RPC_FAR *pIsAccelerated) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetIsAccelerated( 
-            /* [in] */ aafBoolean_t isAccelerated) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SupportsAuthentication( 
-            /* [out] */ aafBoolean_t __RPC_FAR *pSupportsAuthentication) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetSupportsAuthentication( 
-            /* [in] */ aafBoolean_t SupportsAuthentication) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CountLocators( 
-            /* [out] */ aafUInt32 __RPC_FAR *pResult) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE AppendLocator( 
-            /* [in] */ IAAFLocator __RPC_FAR *pLocator) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE PrependLocator( 
-            /* [in] */ IAAFLocator __RPC_FAR *pLocator) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE InsertLocatorAt( 
-            /* [in] */ aafUInt32 index,
-            /* [in] */ IAAFLocator __RPC_FAR *pLocator) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetLocatorAt( 
-            /* [in] */ aafUInt32 index,
-            /* [out] */ IAAFLocator __RPC_FAR *__RPC_FAR *ppLocator) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE RemoveLocatorAt( 
-            /* [in] */ aafUInt32 index) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetLocators( 
-            /* [retval][out] */ IEnumAAFPluginLocators __RPC_FAR *__RPC_FAR *ppEnum) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetDefinitionObjectID( 
-            /* [in] */ aafUID_t pDef) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetDefinitionObjectID( 
-            /* [out][retval] */ aafUID_t __RPC_FAR *ppDef) = 0;
-        
     };
     
 #else 	/* C style interface */
 
-    typedef struct IAAFPluginDefVtbl
+    typedef struct IAAFDescriptiveFrameworkVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFPluginDef __RPC_FAR * This,
+            IAAFDescriptiveFramework __RPC_FAR * This,
             /* [in] */ REFIID riid,
             /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFPluginDef __RPC_FAR * This);
+            IAAFDescriptiveFramework __RPC_FAR * This);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFPluginDef __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [ref][in] */ aafUID_constref id,
-            /* [in] */ aafCharacter_constptr pName,
-            /* [in] */ aafCharacter_constptr pDescription);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCategoryClass )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [out] */ aafUID_t __RPC_FAR *pCategoryClass);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCategoryClass )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [ref][in] */ aafUID_constref categoryClass);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPluginVersion )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [out] */ aafVersionType_t __RPC_FAR *pVersion);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPluginVersion )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ aafVersionType_t __RPC_FAR *pVersion);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPluginVersionString )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [string][in] */ aafCharacter_constptr pPluginVersionString);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPluginVersionString )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pPluginVersionString,
-            /* [in] */ aafUInt32 bufSize);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPluginVersionStringBufLen )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPluginManufacturerName )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [string][in] */ aafCharacter_constptr pPluginManufacturerName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPluginManufacturerName )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pPluginManufacturerName,
-            /* [in] */ aafUInt32 bufSize);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPluginManufacturerNameBufLen )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetManufacturerInfo )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [retval][out] */ IAAFNetworkLocator __RPC_FAR *__RPC_FAR *ppResult);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetManufacturerInfo )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ IAAFNetworkLocator __RPC_FAR *pManufacturerInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetManufacturerID )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [out] */ aafUID_t __RPC_FAR *pManufacturerID);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetManufacturerID )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [ref][in] */ aafUID_constref manufacturerID);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHardwarePlatform )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [out] */ aafHardwarePlatform_t __RPC_FAR *pHardwarePlatform);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHardwarePlatform )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ aafHardwarePlatform_constref hardwarePlatform);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPlatformVersionRange )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [out] */ aafVersionType_t __RPC_FAR *pMinVersion,
-            /* [out] */ aafVersionType_t __RPC_FAR *pMaxVersion);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPlatformMinimumVersion )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ aafVersionType_constref minVersion);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPlatformMaximumVersion )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ aafVersionType_constref maxVersion);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEngine )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [out] */ aafEngine_t __RPC_FAR *pEngine);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEngine )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ aafEngine_constref engine);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEngineVersionRange )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [out] */ aafVersionType_t __RPC_FAR *pMinVersion,
-            /* [out] */ aafVersionType_t __RPC_FAR *pMaxVersion);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEngineMinimumVersion )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ aafVersionType_constref minVersion);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEngineMaximumVersion )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ aafVersionType_constref pMaxVersion);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPluginAPI )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [out] */ aafPluginAPI_t __RPC_FAR *pPluginAPI);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPluginAPI )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ aafPluginAPI_constref pluginAPI);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPluginAPIVersionRange )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [out] */ aafVersionType_t __RPC_FAR *pMinVersion,
-            /* [out] */ aafVersionType_t __RPC_FAR *pMaxVersion);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPluginAPIMinimumVersion )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [out] */ aafVersionType_constref minVersion);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPluginAPIMaximumVersion )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ aafVersionType_constref maxVersion);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsSoftwareOnly )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [out] */ aafBoolean_t __RPC_FAR *pIsSoftwareOnly);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIsSoftwareOnly )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ aafBoolean_t isSoftwareOnly);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsAccelerated )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [out] */ aafBoolean_t __RPC_FAR *pIsAccelerated);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIsAccelerated )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ aafBoolean_t isAccelerated);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SupportsAuthentication )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [out] */ aafBoolean_t __RPC_FAR *pSupportsAuthentication);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSupportsAuthentication )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ aafBoolean_t SupportsAuthentication);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountLocators )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pResult);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AppendLocator )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ IAAFLocator __RPC_FAR *pLocator);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrependLocator )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ IAAFLocator __RPC_FAR *pLocator);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InsertLocatorAt )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ aafUInt32 index,
-            /* [in] */ IAAFLocator __RPC_FAR *pLocator);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLocatorAt )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ aafUInt32 index,
-            /* [out] */ IAAFLocator __RPC_FAR *__RPC_FAR *ppLocator);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveLocatorAt )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ aafUInt32 index);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLocators )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [retval][out] */ IEnumAAFPluginLocators __RPC_FAR *__RPC_FAR *ppEnum);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDefinitionObjectID )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [in] */ aafUID_t pDef);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDefinitionObjectID )( 
-            IAAFPluginDef __RPC_FAR * This,
-            /* [out][retval] */ aafUID_t __RPC_FAR *ppDef);
+            IAAFDescriptiveFramework __RPC_FAR * This);
         
         END_INTERFACE
-    } IAAFPluginDefVtbl;
+    } IAAFDescriptiveFrameworkVtbl;
 
-    interface IAAFPluginDef
+    interface IAAFDescriptiveFramework
     {
-        CONST_VTBL struct IAAFPluginDefVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAAFDescriptiveFrameworkVtbl __RPC_FAR *lpVtbl;
     };
 
     
@@ -4339,150 +4771,15 @@ EXTERN_C const IID IID_IAAFPluginDef;
 #ifdef COBJMACROS
 
 
-#define IAAFPluginDef_QueryInterface(This,riid,ppvObject)	\
+#define IAAFDescriptiveFramework_QueryInterface(This,riid,ppvObject)	\
     (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
 
-#define IAAFPluginDef_AddRef(This)	\
+#define IAAFDescriptiveFramework_AddRef(This)	\
     (This)->lpVtbl -> AddRef(This)
 
-#define IAAFPluginDef_Release(This)	\
+#define IAAFDescriptiveFramework_Release(This)	\
     (This)->lpVtbl -> Release(This)
 
-
-#define IAAFPluginDef_Initialize(This,id,pName,pDescription)	\
-    (This)->lpVtbl -> Initialize(This,id,pName,pDescription)
-
-#define IAAFPluginDef_GetCategoryClass(This,pCategoryClass)	\
-    (This)->lpVtbl -> GetCategoryClass(This,pCategoryClass)
-
-#define IAAFPluginDef_SetCategoryClass(This,categoryClass)	\
-    (This)->lpVtbl -> SetCategoryClass(This,categoryClass)
-
-#define IAAFPluginDef_GetPluginVersion(This,pVersion)	\
-    (This)->lpVtbl -> GetPluginVersion(This,pVersion)
-
-#define IAAFPluginDef_SetPluginVersion(This,pVersion)	\
-    (This)->lpVtbl -> SetPluginVersion(This,pVersion)
-
-#define IAAFPluginDef_SetPluginVersionString(This,pPluginVersionString)	\
-    (This)->lpVtbl -> SetPluginVersionString(This,pPluginVersionString)
-
-#define IAAFPluginDef_GetPluginVersionString(This,pPluginVersionString,bufSize)	\
-    (This)->lpVtbl -> GetPluginVersionString(This,pPluginVersionString,bufSize)
-
-#define IAAFPluginDef_GetPluginVersionStringBufLen(This,pBufSize)	\
-    (This)->lpVtbl -> GetPluginVersionStringBufLen(This,pBufSize)
-
-#define IAAFPluginDef_SetPluginManufacturerName(This,pPluginManufacturerName)	\
-    (This)->lpVtbl -> SetPluginManufacturerName(This,pPluginManufacturerName)
-
-#define IAAFPluginDef_GetPluginManufacturerName(This,pPluginManufacturerName,bufSize)	\
-    (This)->lpVtbl -> GetPluginManufacturerName(This,pPluginManufacturerName,bufSize)
-
-#define IAAFPluginDef_GetPluginManufacturerNameBufLen(This,pBufSize)	\
-    (This)->lpVtbl -> GetPluginManufacturerNameBufLen(This,pBufSize)
-
-#define IAAFPluginDef_GetManufacturerInfo(This,ppResult)	\
-    (This)->lpVtbl -> GetManufacturerInfo(This,ppResult)
-
-#define IAAFPluginDef_SetManufacturerInfo(This,pManufacturerInfo)	\
-    (This)->lpVtbl -> SetManufacturerInfo(This,pManufacturerInfo)
-
-#define IAAFPluginDef_GetManufacturerID(This,pManufacturerID)	\
-    (This)->lpVtbl -> GetManufacturerID(This,pManufacturerID)
-
-#define IAAFPluginDef_SetManufacturerID(This,manufacturerID)	\
-    (This)->lpVtbl -> SetManufacturerID(This,manufacturerID)
-
-#define IAAFPluginDef_GetHardwarePlatform(This,pHardwarePlatform)	\
-    (This)->lpVtbl -> GetHardwarePlatform(This,pHardwarePlatform)
-
-#define IAAFPluginDef_SetHardwarePlatform(This,hardwarePlatform)	\
-    (This)->lpVtbl -> SetHardwarePlatform(This,hardwarePlatform)
-
-#define IAAFPluginDef_GetPlatformVersionRange(This,pMinVersion,pMaxVersion)	\
-    (This)->lpVtbl -> GetPlatformVersionRange(This,pMinVersion,pMaxVersion)
-
-#define IAAFPluginDef_SetPlatformMinimumVersion(This,minVersion)	\
-    (This)->lpVtbl -> SetPlatformMinimumVersion(This,minVersion)
-
-#define IAAFPluginDef_SetPlatformMaximumVersion(This,maxVersion)	\
-    (This)->lpVtbl -> SetPlatformMaximumVersion(This,maxVersion)
-
-#define IAAFPluginDef_GetEngine(This,pEngine)	\
-    (This)->lpVtbl -> GetEngine(This,pEngine)
-
-#define IAAFPluginDef_SetEngine(This,engine)	\
-    (This)->lpVtbl -> SetEngine(This,engine)
-
-#define IAAFPluginDef_GetEngineVersionRange(This,pMinVersion,pMaxVersion)	\
-    (This)->lpVtbl -> GetEngineVersionRange(This,pMinVersion,pMaxVersion)
-
-#define IAAFPluginDef_SetEngineMinimumVersion(This,minVersion)	\
-    (This)->lpVtbl -> SetEngineMinimumVersion(This,minVersion)
-
-#define IAAFPluginDef_SetEngineMaximumVersion(This,pMaxVersion)	\
-    (This)->lpVtbl -> SetEngineMaximumVersion(This,pMaxVersion)
-
-#define IAAFPluginDef_GetPluginAPI(This,pPluginAPI)	\
-    (This)->lpVtbl -> GetPluginAPI(This,pPluginAPI)
-
-#define IAAFPluginDef_SetPluginAPI(This,pluginAPI)	\
-    (This)->lpVtbl -> SetPluginAPI(This,pluginAPI)
-
-#define IAAFPluginDef_GetPluginAPIVersionRange(This,pMinVersion,pMaxVersion)	\
-    (This)->lpVtbl -> GetPluginAPIVersionRange(This,pMinVersion,pMaxVersion)
-
-#define IAAFPluginDef_SetPluginAPIMinimumVersion(This,minVersion)	\
-    (This)->lpVtbl -> SetPluginAPIMinimumVersion(This,minVersion)
-
-#define IAAFPluginDef_SetPluginAPIMaximumVersion(This,maxVersion)	\
-    (This)->lpVtbl -> SetPluginAPIMaximumVersion(This,maxVersion)
-
-#define IAAFPluginDef_IsSoftwareOnly(This,pIsSoftwareOnly)	\
-    (This)->lpVtbl -> IsSoftwareOnly(This,pIsSoftwareOnly)
-
-#define IAAFPluginDef_SetIsSoftwareOnly(This,isSoftwareOnly)	\
-    (This)->lpVtbl -> SetIsSoftwareOnly(This,isSoftwareOnly)
-
-#define IAAFPluginDef_IsAccelerated(This,pIsAccelerated)	\
-    (This)->lpVtbl -> IsAccelerated(This,pIsAccelerated)
-
-#define IAAFPluginDef_SetIsAccelerated(This,isAccelerated)	\
-    (This)->lpVtbl -> SetIsAccelerated(This,isAccelerated)
-
-#define IAAFPluginDef_SupportsAuthentication(This,pSupportsAuthentication)	\
-    (This)->lpVtbl -> SupportsAuthentication(This,pSupportsAuthentication)
-
-#define IAAFPluginDef_SetSupportsAuthentication(This,SupportsAuthentication)	\
-    (This)->lpVtbl -> SetSupportsAuthentication(This,SupportsAuthentication)
-
-#define IAAFPluginDef_CountLocators(This,pResult)	\
-    (This)->lpVtbl -> CountLocators(This,pResult)
-
-#define IAAFPluginDef_AppendLocator(This,pLocator)	\
-    (This)->lpVtbl -> AppendLocator(This,pLocator)
-
-#define IAAFPluginDef_PrependLocator(This,pLocator)	\
-    (This)->lpVtbl -> PrependLocator(This,pLocator)
-
-#define IAAFPluginDef_InsertLocatorAt(This,index,pLocator)	\
-    (This)->lpVtbl -> InsertLocatorAt(This,index,pLocator)
-
-#define IAAFPluginDef_GetLocatorAt(This,index,ppLocator)	\
-    (This)->lpVtbl -> GetLocatorAt(This,index,ppLocator)
-
-#define IAAFPluginDef_RemoveLocatorAt(This,index)	\
-    (This)->lpVtbl -> RemoveLocatorAt(This,index)
-
-#define IAAFPluginDef_GetLocators(This,ppEnum)	\
-    (This)->lpVtbl -> GetLocators(This,ppEnum)
-
-#define IAAFPluginDef_SetDefinitionObjectID(This,pDef)	\
-    (This)->lpVtbl -> SetDefinitionObjectID(This,pDef)
-
-#define IAAFPluginDef_GetDefinitionObjectID(This,ppDef)	\
-    (This)->lpVtbl -> GetDefinitionObjectID(This,ppDef)
 
 #endif /* COBJMACROS */
 
@@ -4491,549 +4788,203 @@ EXTERN_C const IID IID_IAAFPluginDef;
 
 
 
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_Initialize_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [ref][in] */ aafUID_constref id,
-    /* [in] */ aafCharacter_constptr pName,
-    /* [in] */ aafCharacter_constptr pDescription);
+
+#endif 	/* __IAAFDescriptiveFramework_INTERFACE_DEFINED__ */
 
 
-void __RPC_STUB IAAFPluginDef_Initialize_Stub(
+#ifndef __IAAFDescriptiveMarker_INTERFACE_DEFINED__
+#define __IAAFDescriptiveMarker_INTERFACE_DEFINED__
+
+/* interface IAAFDescriptiveMarker */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFDescriptiveMarker;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("c377b78e-591f-4ba9-a069-18438c626e34")
+    IAAFDescriptiveMarker : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetDescribedSlotIDs( 
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetDescribedSlotIDs( 
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetDescribedSlotIDsSize( 
+            /* [out] */ aafUInt32 __RPC_FAR *numberElements) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetDescriptiveFramework( 
+            /* [in] */ IAAFDescriptiveFramework __RPC_FAR *pDescriptiveFramework) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetDescriptiveFramework( 
+            /* [retval][out] */ IAAFDescriptiveFramework __RPC_FAR *__RPC_FAR *ppDescriptiveFramework) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFDescriptiveMarkerVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFDescriptiveMarker __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFDescriptiveMarker __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFDescriptiveMarker __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFDescriptiveMarker __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDescribedSlotIDs )( 
+            IAAFDescriptiveMarker __RPC_FAR * This,
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescribedSlotIDs )( 
+            IAAFDescriptiveMarker __RPC_FAR * This,
+            /* [in] */ aafUInt32 numberElements,
+            /* [in] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescribedSlotIDsSize )( 
+            IAAFDescriptiveMarker __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *numberElements);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDescriptiveFramework )( 
+            IAAFDescriptiveMarker __RPC_FAR * This,
+            /* [in] */ IAAFDescriptiveFramework __RPC_FAR *pDescriptiveFramework);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescriptiveFramework )( 
+            IAAFDescriptiveMarker __RPC_FAR * This,
+            /* [retval][out] */ IAAFDescriptiveFramework __RPC_FAR *__RPC_FAR *ppDescriptiveFramework);
+        
+        END_INTERFACE
+    } IAAFDescriptiveMarkerVtbl;
+
+    interface IAAFDescriptiveMarker
+    {
+        CONST_VTBL struct IAAFDescriptiveMarkerVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFDescriptiveMarker_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFDescriptiveMarker_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFDescriptiveMarker_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFDescriptiveMarker_Initialize(This)	\
+    (This)->lpVtbl -> Initialize(This)
+
+#define IAAFDescriptiveMarker_SetDescribedSlotIDs(This,numberElements,pDescribedSlotIDs)	\
+    (This)->lpVtbl -> SetDescribedSlotIDs(This,numberElements,pDescribedSlotIDs)
+
+#define IAAFDescriptiveMarker_GetDescribedSlotIDs(This,numberElements,pDescribedSlotIDs)	\
+    (This)->lpVtbl -> GetDescribedSlotIDs(This,numberElements,pDescribedSlotIDs)
+
+#define IAAFDescriptiveMarker_GetDescribedSlotIDsSize(This,numberElements)	\
+    (This)->lpVtbl -> GetDescribedSlotIDsSize(This,numberElements)
+
+#define IAAFDescriptiveMarker_SetDescriptiveFramework(This,pDescriptiveFramework)	\
+    (This)->lpVtbl -> SetDescriptiveFramework(This,pDescriptiveFramework)
+
+#define IAAFDescriptiveMarker_GetDescriptiveFramework(This,ppDescriptiveFramework)	\
+    (This)->lpVtbl -> GetDescriptiveFramework(This,ppDescriptiveFramework)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFDescriptiveMarker_Initialize_Proxy( 
+    IAAFDescriptiveMarker __RPC_FAR * This);
+
+
+void __RPC_STUB IAAFDescriptiveMarker_Initialize_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetCategoryClass_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [out] */ aafUID_t __RPC_FAR *pCategoryClass);
+HRESULT STDMETHODCALLTYPE IAAFDescriptiveMarker_SetDescribedSlotIDs_Proxy( 
+    IAAFDescriptiveMarker __RPC_FAR * This,
+    /* [in] */ aafUInt32 numberElements,
+    /* [in] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs);
 
 
-void __RPC_STUB IAAFPluginDef_GetCategoryClass_Stub(
+void __RPC_STUB IAAFDescriptiveMarker_SetDescribedSlotIDs_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetCategoryClass_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [ref][in] */ aafUID_constref categoryClass);
+HRESULT STDMETHODCALLTYPE IAAFDescriptiveMarker_GetDescribedSlotIDs_Proxy( 
+    IAAFDescriptiveMarker __RPC_FAR * This,
+    /* [in] */ aafUInt32 numberElements,
+    /* [in] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs);
 
 
-void __RPC_STUB IAAFPluginDef_SetCategoryClass_Stub(
+void __RPC_STUB IAAFDescriptiveMarker_GetDescribedSlotIDs_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetPluginVersion_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [out] */ aafVersionType_t __RPC_FAR *pVersion);
+HRESULT STDMETHODCALLTYPE IAAFDescriptiveMarker_GetDescribedSlotIDsSize_Proxy( 
+    IAAFDescriptiveMarker __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *numberElements);
 
 
-void __RPC_STUB IAAFPluginDef_GetPluginVersion_Stub(
+void __RPC_STUB IAAFDescriptiveMarker_GetDescribedSlotIDsSize_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetPluginVersion_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ aafVersionType_t __RPC_FAR *pVersion);
+HRESULT STDMETHODCALLTYPE IAAFDescriptiveMarker_SetDescriptiveFramework_Proxy( 
+    IAAFDescriptiveMarker __RPC_FAR * This,
+    /* [in] */ IAAFDescriptiveFramework __RPC_FAR *pDescriptiveFramework);
 
 
-void __RPC_STUB IAAFPluginDef_SetPluginVersion_Stub(
+void __RPC_STUB IAAFDescriptiveMarker_SetDescriptiveFramework_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetPluginVersionString_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [string][in] */ aafCharacter_constptr pPluginVersionString);
+HRESULT STDMETHODCALLTYPE IAAFDescriptiveMarker_GetDescriptiveFramework_Proxy( 
+    IAAFDescriptiveMarker __RPC_FAR * This,
+    /* [retval][out] */ IAAFDescriptiveFramework __RPC_FAR *__RPC_FAR *ppDescriptiveFramework);
 
 
-void __RPC_STUB IAAFPluginDef_SetPluginVersionString_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetPluginVersionString_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [size_is][string][out] */ aafCharacter __RPC_FAR *pPluginVersionString,
-    /* [in] */ aafUInt32 bufSize);
-
-
-void __RPC_STUB IAAFPluginDef_GetPluginVersionString_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetPluginVersionStringBufLen_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
-
-
-void __RPC_STUB IAAFPluginDef_GetPluginVersionStringBufLen_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetPluginManufacturerName_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [string][in] */ aafCharacter_constptr pPluginManufacturerName);
-
-
-void __RPC_STUB IAAFPluginDef_SetPluginManufacturerName_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetPluginManufacturerName_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [size_is][string][out] */ aafCharacter __RPC_FAR *pPluginManufacturerName,
-    /* [in] */ aafUInt32 bufSize);
-
-
-void __RPC_STUB IAAFPluginDef_GetPluginManufacturerName_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetPluginManufacturerNameBufLen_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
-
-
-void __RPC_STUB IAAFPluginDef_GetPluginManufacturerNameBufLen_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetManufacturerInfo_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [retval][out] */ IAAFNetworkLocator __RPC_FAR *__RPC_FAR *ppResult);
-
-
-void __RPC_STUB IAAFPluginDef_GetManufacturerInfo_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetManufacturerInfo_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ IAAFNetworkLocator __RPC_FAR *pManufacturerInfo);
-
-
-void __RPC_STUB IAAFPluginDef_SetManufacturerInfo_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetManufacturerID_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [out] */ aafUID_t __RPC_FAR *pManufacturerID);
-
-
-void __RPC_STUB IAAFPluginDef_GetManufacturerID_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetManufacturerID_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [ref][in] */ aafUID_constref manufacturerID);
-
-
-void __RPC_STUB IAAFPluginDef_SetManufacturerID_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetHardwarePlatform_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [out] */ aafHardwarePlatform_t __RPC_FAR *pHardwarePlatform);
-
-
-void __RPC_STUB IAAFPluginDef_GetHardwarePlatform_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetHardwarePlatform_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ aafHardwarePlatform_constref hardwarePlatform);
-
-
-void __RPC_STUB IAAFPluginDef_SetHardwarePlatform_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetPlatformVersionRange_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [out] */ aafVersionType_t __RPC_FAR *pMinVersion,
-    /* [out] */ aafVersionType_t __RPC_FAR *pMaxVersion);
-
-
-void __RPC_STUB IAAFPluginDef_GetPlatformVersionRange_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetPlatformMinimumVersion_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ aafVersionType_constref minVersion);
-
-
-void __RPC_STUB IAAFPluginDef_SetPlatformMinimumVersion_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetPlatformMaximumVersion_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ aafVersionType_constref maxVersion);
-
-
-void __RPC_STUB IAAFPluginDef_SetPlatformMaximumVersion_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetEngine_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [out] */ aafEngine_t __RPC_FAR *pEngine);
-
-
-void __RPC_STUB IAAFPluginDef_GetEngine_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetEngine_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ aafEngine_constref engine);
-
-
-void __RPC_STUB IAAFPluginDef_SetEngine_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetEngineVersionRange_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [out] */ aafVersionType_t __RPC_FAR *pMinVersion,
-    /* [out] */ aafVersionType_t __RPC_FAR *pMaxVersion);
-
-
-void __RPC_STUB IAAFPluginDef_GetEngineVersionRange_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetEngineMinimumVersion_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ aafVersionType_constref minVersion);
-
-
-void __RPC_STUB IAAFPluginDef_SetEngineMinimumVersion_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetEngineMaximumVersion_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ aafVersionType_constref pMaxVersion);
-
-
-void __RPC_STUB IAAFPluginDef_SetEngineMaximumVersion_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetPluginAPI_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [out] */ aafPluginAPI_t __RPC_FAR *pPluginAPI);
-
-
-void __RPC_STUB IAAFPluginDef_GetPluginAPI_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetPluginAPI_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ aafPluginAPI_constref pluginAPI);
-
-
-void __RPC_STUB IAAFPluginDef_SetPluginAPI_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetPluginAPIVersionRange_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [out] */ aafVersionType_t __RPC_FAR *pMinVersion,
-    /* [out] */ aafVersionType_t __RPC_FAR *pMaxVersion);
-
-
-void __RPC_STUB IAAFPluginDef_GetPluginAPIVersionRange_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetPluginAPIMinimumVersion_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [out] */ aafVersionType_constref minVersion);
-
-
-void __RPC_STUB IAAFPluginDef_SetPluginAPIMinimumVersion_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetPluginAPIMaximumVersion_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ aafVersionType_constref maxVersion);
-
-
-void __RPC_STUB IAAFPluginDef_SetPluginAPIMaximumVersion_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_IsSoftwareOnly_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [out] */ aafBoolean_t __RPC_FAR *pIsSoftwareOnly);
-
-
-void __RPC_STUB IAAFPluginDef_IsSoftwareOnly_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetIsSoftwareOnly_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ aafBoolean_t isSoftwareOnly);
-
-
-void __RPC_STUB IAAFPluginDef_SetIsSoftwareOnly_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_IsAccelerated_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [out] */ aafBoolean_t __RPC_FAR *pIsAccelerated);
-
-
-void __RPC_STUB IAAFPluginDef_IsAccelerated_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetIsAccelerated_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ aafBoolean_t isAccelerated);
-
-
-void __RPC_STUB IAAFPluginDef_SetIsAccelerated_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SupportsAuthentication_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [out] */ aafBoolean_t __RPC_FAR *pSupportsAuthentication);
-
-
-void __RPC_STUB IAAFPluginDef_SupportsAuthentication_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetSupportsAuthentication_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ aafBoolean_t SupportsAuthentication);
-
-
-void __RPC_STUB IAAFPluginDef_SetSupportsAuthentication_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_CountLocators_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pResult);
-
-
-void __RPC_STUB IAAFPluginDef_CountLocators_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_AppendLocator_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ IAAFLocator __RPC_FAR *pLocator);
-
-
-void __RPC_STUB IAAFPluginDef_AppendLocator_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_PrependLocator_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ IAAFLocator __RPC_FAR *pLocator);
-
-
-void __RPC_STUB IAAFPluginDef_PrependLocator_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_InsertLocatorAt_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ aafUInt32 index,
-    /* [in] */ IAAFLocator __RPC_FAR *pLocator);
-
-
-void __RPC_STUB IAAFPluginDef_InsertLocatorAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetLocatorAt_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ aafUInt32 index,
-    /* [out] */ IAAFLocator __RPC_FAR *__RPC_FAR *ppLocator);
-
-
-void __RPC_STUB IAAFPluginDef_GetLocatorAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_RemoveLocatorAt_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ aafUInt32 index);
-
-
-void __RPC_STUB IAAFPluginDef_RemoveLocatorAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetLocators_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [retval][out] */ IEnumAAFPluginLocators __RPC_FAR *__RPC_FAR *ppEnum);
-
-
-void __RPC_STUB IAAFPluginDef_GetLocators_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetDefinitionObjectID_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [in] */ aafUID_t pDef);
-
-
-void __RPC_STUB IAAFPluginDef_SetDefinitionObjectID_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetDefinitionObjectID_Proxy( 
-    IAAFPluginDef __RPC_FAR * This,
-    /* [out][retval] */ aafUID_t __RPC_FAR *ppDef);
-
-
-void __RPC_STUB IAAFPluginDef_GetDefinitionObjectID_Stub(
+void __RPC_STUB IAAFDescriptiveMarker_GetDescriptiveFramework_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -5041,7 +4992,7 @@ void __RPC_STUB IAAFPluginDef_GetDefinitionObjectID_Stub(
 
 
 
-#endif 	/* __IAAFPluginDef_INTERFACE_DEFINED__ */
+#endif 	/* __IAAFDescriptiveMarker_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFDictionary_INTERFACE_DEFINED__
@@ -6150,6 +6101,584 @@ void __RPC_STUB IAAFDictionary_CountPluginDefs_Stub(
 #endif 	/* __IAAFDictionary_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFDigitalImageDescriptor_INTERFACE_DEFINED__
+#define __IAAFDigitalImageDescriptor_INTERFACE_DEFINED__
+
+/* interface IAAFDigitalImageDescriptor */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFDigitalImageDescriptor;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("44861701-8AEA-11d2-813C-006097310172")
+    IAAFDigitalImageDescriptor : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE SetCompression( 
+            /* [in] */ aafUID_constref compression) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetCompression( 
+            /* [out] */ aafUID_t __RPC_FAR *pCompression) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetStoredView( 
+            /* [in] */ aafUInt32 StoredHeight,
+            /* [in] */ aafUInt32 StoredWidth) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetStoredView( 
+            /* [out] */ aafUInt32 __RPC_FAR *pStoredHeight,
+            /* [out] */ aafUInt32 __RPC_FAR *pStoredWidth) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetSampledView( 
+            /* [in] */ aafUInt32 SampledHeight,
+            /* [in] */ aafUInt32 SampledWidth,
+            /* [in] */ aafInt32 SampledXOffset,
+            /* [in] */ aafInt32 SampledYOffset) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSampledView( 
+            /* [out] */ aafUInt32 __RPC_FAR *pSampledHeight,
+            /* [out] */ aafUInt32 __RPC_FAR *pSampledWidth,
+            /* [out] */ aafInt32 __RPC_FAR *pSampledXOffset,
+            /* [out] */ aafInt32 __RPC_FAR *pSampledYOffset) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetDisplayView( 
+            /* [in] */ aafUInt32 DisplayHeight,
+            /* [in] */ aafUInt32 DisplayWidth,
+            /* [in] */ aafInt32 DisplayXOffset,
+            /* [in] */ aafInt32 DisplayYOffset) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetDisplayView( 
+            /* [out] */ aafUInt32 __RPC_FAR *pDisplayHeight,
+            /* [out] */ aafUInt32 __RPC_FAR *pDisplayWidth,
+            /* [out] */ aafInt32 __RPC_FAR *pDisplayXOffset,
+            /* [out] */ aafInt32 __RPC_FAR *pDisplayYOffset) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetFrameLayout( 
+            /* [in] */ aafFrameLayout_t FrameLayout) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetFrameLayout( 
+            /* [out] */ aafFrameLayout_t __RPC_FAR *pFrameLayout) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetVideoLineMap( 
+            /* [in] */ aafUInt32 numberElements,
+            /* [size_is][in] */ aafInt32 __RPC_FAR *pVideoLineMap) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetVideoLineMap( 
+            /* [in] */ aafUInt32 numberElements,
+            /* [size_is][out] */ aafInt32 __RPC_FAR *pVideoLineMap) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetVideoLineMapSize( 
+            /* [out] */ aafUInt32 __RPC_FAR *pNumberElements) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetImageAspectRatio( 
+            /* [in] */ aafRational_t ImageAspectRatio) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetImageAspectRatio( 
+            /* [out] */ aafRational_t __RPC_FAR *pImageAspectRatio) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetAlphaTransparency( 
+            /* [in] */ aafAlphaTransparency_t AlphaTransparency) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetAlphaTransparency( 
+            /* [out] */ aafAlphaTransparency_t __RPC_FAR *pAlphaTransparency) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetGamma( 
+            /* [in] */ aafUID_t Gamma) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetGamma( 
+            /* [out] */ aafUID_t __RPC_FAR *pGamma) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetImageAlignmentFactor( 
+            /* [in] */ aafUInt32 ImageAlignmentFactor) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetImageAlignmentFactor( 
+            /* [out] */ aafUInt32 __RPC_FAR *pImageAlignmentFactor) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFDigitalImageDescriptorVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCompression )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [in] */ aafUID_constref compression);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCompression )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [out] */ aafUID_t __RPC_FAR *pCompression);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStoredView )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [in] */ aafUInt32 StoredHeight,
+            /* [in] */ aafUInt32 StoredWidth);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoredView )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pStoredHeight,
+            /* [out] */ aafUInt32 __RPC_FAR *pStoredWidth);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSampledView )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [in] */ aafUInt32 SampledHeight,
+            /* [in] */ aafUInt32 SampledWidth,
+            /* [in] */ aafInt32 SampledXOffset,
+            /* [in] */ aafInt32 SampledYOffset);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSampledView )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pSampledHeight,
+            /* [out] */ aafUInt32 __RPC_FAR *pSampledWidth,
+            /* [out] */ aafInt32 __RPC_FAR *pSampledXOffset,
+            /* [out] */ aafInt32 __RPC_FAR *pSampledYOffset);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDisplayView )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [in] */ aafUInt32 DisplayHeight,
+            /* [in] */ aafUInt32 DisplayWidth,
+            /* [in] */ aafInt32 DisplayXOffset,
+            /* [in] */ aafInt32 DisplayYOffset);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDisplayView )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pDisplayHeight,
+            /* [out] */ aafUInt32 __RPC_FAR *pDisplayWidth,
+            /* [out] */ aafInt32 __RPC_FAR *pDisplayXOffset,
+            /* [out] */ aafInt32 __RPC_FAR *pDisplayYOffset);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFrameLayout )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [in] */ aafFrameLayout_t FrameLayout);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFrameLayout )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [out] */ aafFrameLayout_t __RPC_FAR *pFrameLayout);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVideoLineMap )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [in] */ aafUInt32 numberElements,
+            /* [size_is][in] */ aafInt32 __RPC_FAR *pVideoLineMap);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVideoLineMap )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [in] */ aafUInt32 numberElements,
+            /* [size_is][out] */ aafInt32 __RPC_FAR *pVideoLineMap);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVideoLineMapSize )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pNumberElements);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetImageAspectRatio )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [in] */ aafRational_t ImageAspectRatio);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetImageAspectRatio )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [out] */ aafRational_t __RPC_FAR *pImageAspectRatio);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAlphaTransparency )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [in] */ aafAlphaTransparency_t AlphaTransparency);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAlphaTransparency )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [out] */ aafAlphaTransparency_t __RPC_FAR *pAlphaTransparency);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetGamma )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [in] */ aafUID_t Gamma);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetGamma )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [out] */ aafUID_t __RPC_FAR *pGamma);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetImageAlignmentFactor )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [in] */ aafUInt32 ImageAlignmentFactor);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetImageAlignmentFactor )( 
+            IAAFDigitalImageDescriptor __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pImageAlignmentFactor);
+        
+        END_INTERFACE
+    } IAAFDigitalImageDescriptorVtbl;
+
+    interface IAAFDigitalImageDescriptor
+    {
+        CONST_VTBL struct IAAFDigitalImageDescriptorVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFDigitalImageDescriptor_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFDigitalImageDescriptor_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFDigitalImageDescriptor_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFDigitalImageDescriptor_SetCompression(This,compression)	\
+    (This)->lpVtbl -> SetCompression(This,compression)
+
+#define IAAFDigitalImageDescriptor_GetCompression(This,pCompression)	\
+    (This)->lpVtbl -> GetCompression(This,pCompression)
+
+#define IAAFDigitalImageDescriptor_SetStoredView(This,StoredHeight,StoredWidth)	\
+    (This)->lpVtbl -> SetStoredView(This,StoredHeight,StoredWidth)
+
+#define IAAFDigitalImageDescriptor_GetStoredView(This,pStoredHeight,pStoredWidth)	\
+    (This)->lpVtbl -> GetStoredView(This,pStoredHeight,pStoredWidth)
+
+#define IAAFDigitalImageDescriptor_SetSampledView(This,SampledHeight,SampledWidth,SampledXOffset,SampledYOffset)	\
+    (This)->lpVtbl -> SetSampledView(This,SampledHeight,SampledWidth,SampledXOffset,SampledYOffset)
+
+#define IAAFDigitalImageDescriptor_GetSampledView(This,pSampledHeight,pSampledWidth,pSampledXOffset,pSampledYOffset)	\
+    (This)->lpVtbl -> GetSampledView(This,pSampledHeight,pSampledWidth,pSampledXOffset,pSampledYOffset)
+
+#define IAAFDigitalImageDescriptor_SetDisplayView(This,DisplayHeight,DisplayWidth,DisplayXOffset,DisplayYOffset)	\
+    (This)->lpVtbl -> SetDisplayView(This,DisplayHeight,DisplayWidth,DisplayXOffset,DisplayYOffset)
+
+#define IAAFDigitalImageDescriptor_GetDisplayView(This,pDisplayHeight,pDisplayWidth,pDisplayXOffset,pDisplayYOffset)	\
+    (This)->lpVtbl -> GetDisplayView(This,pDisplayHeight,pDisplayWidth,pDisplayXOffset,pDisplayYOffset)
+
+#define IAAFDigitalImageDescriptor_SetFrameLayout(This,FrameLayout)	\
+    (This)->lpVtbl -> SetFrameLayout(This,FrameLayout)
+
+#define IAAFDigitalImageDescriptor_GetFrameLayout(This,pFrameLayout)	\
+    (This)->lpVtbl -> GetFrameLayout(This,pFrameLayout)
+
+#define IAAFDigitalImageDescriptor_SetVideoLineMap(This,numberElements,pVideoLineMap)	\
+    (This)->lpVtbl -> SetVideoLineMap(This,numberElements,pVideoLineMap)
+
+#define IAAFDigitalImageDescriptor_GetVideoLineMap(This,numberElements,pVideoLineMap)	\
+    (This)->lpVtbl -> GetVideoLineMap(This,numberElements,pVideoLineMap)
+
+#define IAAFDigitalImageDescriptor_GetVideoLineMapSize(This,pNumberElements)	\
+    (This)->lpVtbl -> GetVideoLineMapSize(This,pNumberElements)
+
+#define IAAFDigitalImageDescriptor_SetImageAspectRatio(This,ImageAspectRatio)	\
+    (This)->lpVtbl -> SetImageAspectRatio(This,ImageAspectRatio)
+
+#define IAAFDigitalImageDescriptor_GetImageAspectRatio(This,pImageAspectRatio)	\
+    (This)->lpVtbl -> GetImageAspectRatio(This,pImageAspectRatio)
+
+#define IAAFDigitalImageDescriptor_SetAlphaTransparency(This,AlphaTransparency)	\
+    (This)->lpVtbl -> SetAlphaTransparency(This,AlphaTransparency)
+
+#define IAAFDigitalImageDescriptor_GetAlphaTransparency(This,pAlphaTransparency)	\
+    (This)->lpVtbl -> GetAlphaTransparency(This,pAlphaTransparency)
+
+#define IAAFDigitalImageDescriptor_SetGamma(This,Gamma)	\
+    (This)->lpVtbl -> SetGamma(This,Gamma)
+
+#define IAAFDigitalImageDescriptor_GetGamma(This,pGamma)	\
+    (This)->lpVtbl -> GetGamma(This,pGamma)
+
+#define IAAFDigitalImageDescriptor_SetImageAlignmentFactor(This,ImageAlignmentFactor)	\
+    (This)->lpVtbl -> SetImageAlignmentFactor(This,ImageAlignmentFactor)
+
+#define IAAFDigitalImageDescriptor_GetImageAlignmentFactor(This,pImageAlignmentFactor)	\
+    (This)->lpVtbl -> GetImageAlignmentFactor(This,pImageAlignmentFactor)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetCompression_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [in] */ aafUID_constref compression);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_SetCompression_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetCompression_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [out] */ aafUID_t __RPC_FAR *pCompression);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_GetCompression_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetStoredView_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [in] */ aafUInt32 StoredHeight,
+    /* [in] */ aafUInt32 StoredWidth);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_SetStoredView_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetStoredView_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pStoredHeight,
+    /* [out] */ aafUInt32 __RPC_FAR *pStoredWidth);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_GetStoredView_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetSampledView_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [in] */ aafUInt32 SampledHeight,
+    /* [in] */ aafUInt32 SampledWidth,
+    /* [in] */ aafInt32 SampledXOffset,
+    /* [in] */ aafInt32 SampledYOffset);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_SetSampledView_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetSampledView_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pSampledHeight,
+    /* [out] */ aafUInt32 __RPC_FAR *pSampledWidth,
+    /* [out] */ aafInt32 __RPC_FAR *pSampledXOffset,
+    /* [out] */ aafInt32 __RPC_FAR *pSampledYOffset);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_GetSampledView_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetDisplayView_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [in] */ aafUInt32 DisplayHeight,
+    /* [in] */ aafUInt32 DisplayWidth,
+    /* [in] */ aafInt32 DisplayXOffset,
+    /* [in] */ aafInt32 DisplayYOffset);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_SetDisplayView_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetDisplayView_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pDisplayHeight,
+    /* [out] */ aafUInt32 __RPC_FAR *pDisplayWidth,
+    /* [out] */ aafInt32 __RPC_FAR *pDisplayXOffset,
+    /* [out] */ aafInt32 __RPC_FAR *pDisplayYOffset);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_GetDisplayView_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetFrameLayout_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [in] */ aafFrameLayout_t FrameLayout);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_SetFrameLayout_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetFrameLayout_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [out] */ aafFrameLayout_t __RPC_FAR *pFrameLayout);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_GetFrameLayout_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetVideoLineMap_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [in] */ aafUInt32 numberElements,
+    /* [size_is][in] */ aafInt32 __RPC_FAR *pVideoLineMap);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_SetVideoLineMap_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetVideoLineMap_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [in] */ aafUInt32 numberElements,
+    /* [size_is][out] */ aafInt32 __RPC_FAR *pVideoLineMap);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_GetVideoLineMap_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetVideoLineMapSize_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pNumberElements);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_GetVideoLineMapSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetImageAspectRatio_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [in] */ aafRational_t ImageAspectRatio);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_SetImageAspectRatio_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetImageAspectRatio_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [out] */ aafRational_t __RPC_FAR *pImageAspectRatio);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_GetImageAspectRatio_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetAlphaTransparency_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [in] */ aafAlphaTransparency_t AlphaTransparency);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_SetAlphaTransparency_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetAlphaTransparency_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [out] */ aafAlphaTransparency_t __RPC_FAR *pAlphaTransparency);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_GetAlphaTransparency_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetGamma_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [in] */ aafUID_t Gamma);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_SetGamma_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetGamma_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [out] */ aafUID_t __RPC_FAR *pGamma);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_GetGamma_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetImageAlignmentFactor_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [in] */ aafUInt32 ImageAlignmentFactor);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_SetImageAlignmentFactor_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetImageAlignmentFactor_Proxy( 
+    IAAFDigitalImageDescriptor __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pImageAlignmentFactor);
+
+
+void __RPC_STUB IAAFDigitalImageDescriptor_GetImageAlignmentFactor_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFDigitalImageDescriptor_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFEdgecode_INTERFACE_DEFINED__
 #define __IAAFEdgecode_INTERFACE_DEFINED__
 
@@ -6263,548 +6792,6 @@ void __RPC_STUB IAAFEdgecode_GetEdgecode_Stub(
 
 
 #endif 	/* __IAAFEdgecode_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFOperationDef_INTERFACE_DEFINED__
-#define __IAAFOperationDef_INTERFACE_DEFINED__
-
-/* interface IAAFOperationDef */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFOperationDef;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("14035d91-1ff5-11d2-bf97-006097116212")
-    IAAFOperationDef : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [ref][in] */ aafUID_constref id,
-            /* [string][in] */ aafCharacter_constptr pName,
-            /* [string][in] */ aafCharacter_constptr pDescription) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetDataDef( 
-            /* [out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetDataDef( 
-            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE IsTimeWarp( 
-            /* [retval][out] */ aafBoolean_t __RPC_FAR *bIsTimeWarp) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetIsTimeWarp( 
-            /* [in] */ aafBoolean_t IsTimeWarp) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE PrependDegradeToOperation( 
-            /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE AppendDegradeToOperation( 
-            /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE InsertDegradeToOperationAt( 
-            /* [in] */ aafUInt32 index,
-            /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE RemoveDegradeToOperationAt( 
-            /* [in] */ aafUInt32 index) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetDegradeToOperations( 
-            /* [retval][out] */ IEnumAAFOperationDefs __RPC_FAR *__RPC_FAR *ppEnum) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CountDegradeToOperations( 
-            /* [retval][out] */ aafUInt32 __RPC_FAR *pResult) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCategory( 
-            /* [out] */ aafUID_t __RPC_FAR *pValue) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetCategory( 
-            /* [ref][in] */ aafUID_constref value) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetNumberInputs( 
-            /* [retval][out] */ aafInt32 __RPC_FAR *pNumberInputs) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetNumberInputs( 
-            /* [in] */ aafInt32 NumberInputs) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetBypass( 
-            /* [retval][out] */ aafUInt32 __RPC_FAR *pBypass) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetBypass( 
-            /* [in] */ aafUInt32 bypass) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE AddParameterDef( 
-            /* [in] */ IAAFParameterDef __RPC_FAR *pParameterDef) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetParameterDefs( 
-            /* [retval][out] */ IEnumAAFParameterDefs __RPC_FAR *__RPC_FAR *ppEnum) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CountParameterDefs( 
-            /* [out] */ aafUInt32 __RPC_FAR *pResult) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE LookupParameterDef( 
-            /* [in] */ aafUID_constref parameterDefId,
-            /* [out] */ IAAFParameterDef __RPC_FAR *__RPC_FAR *ppParameterDef) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFOperationDefVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFOperationDef __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFOperationDef __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [ref][in] */ aafUID_constref id,
-            /* [string][in] */ aafCharacter_constptr pName,
-            /* [string][in] */ aafCharacter_constptr pDescription);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDataDef )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDataDef )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsTimeWarp )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [retval][out] */ aafBoolean_t __RPC_FAR *bIsTimeWarp);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIsTimeWarp )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [in] */ aafBoolean_t IsTimeWarp);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrependDegradeToOperation )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AppendDegradeToOperation )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InsertDegradeToOperationAt )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [in] */ aafUInt32 index,
-            /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveDegradeToOperationAt )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [in] */ aafUInt32 index);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDegradeToOperations )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [retval][out] */ IEnumAAFOperationDefs __RPC_FAR *__RPC_FAR *ppEnum);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountDegradeToOperations )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [retval][out] */ aafUInt32 __RPC_FAR *pResult);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCategory )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [out] */ aafUID_t __RPC_FAR *pValue);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCategory )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [ref][in] */ aafUID_constref value);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNumberInputs )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [retval][out] */ aafInt32 __RPC_FAR *pNumberInputs);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetNumberInputs )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [in] */ aafInt32 NumberInputs);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBypass )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [retval][out] */ aafUInt32 __RPC_FAR *pBypass);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBypass )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [in] */ aafUInt32 bypass);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddParameterDef )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [in] */ IAAFParameterDef __RPC_FAR *pParameterDef);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetParameterDefs )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [retval][out] */ IEnumAAFParameterDefs __RPC_FAR *__RPC_FAR *ppEnum);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountParameterDefs )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pResult);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupParameterDef )( 
-            IAAFOperationDef __RPC_FAR * This,
-            /* [in] */ aafUID_constref parameterDefId,
-            /* [out] */ IAAFParameterDef __RPC_FAR *__RPC_FAR *ppParameterDef);
-        
-        END_INTERFACE
-    } IAAFOperationDefVtbl;
-
-    interface IAAFOperationDef
-    {
-        CONST_VTBL struct IAAFOperationDefVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFOperationDef_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFOperationDef_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFOperationDef_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFOperationDef_Initialize(This,id,pName,pDescription)	\
-    (This)->lpVtbl -> Initialize(This,id,pName,pDescription)
-
-#define IAAFOperationDef_GetDataDef(This,ppDataDef)	\
-    (This)->lpVtbl -> GetDataDef(This,ppDataDef)
-
-#define IAAFOperationDef_SetDataDef(This,pDataDef)	\
-    (This)->lpVtbl -> SetDataDef(This,pDataDef)
-
-#define IAAFOperationDef_IsTimeWarp(This,bIsTimeWarp)	\
-    (This)->lpVtbl -> IsTimeWarp(This,bIsTimeWarp)
-
-#define IAAFOperationDef_SetIsTimeWarp(This,IsTimeWarp)	\
-    (This)->lpVtbl -> SetIsTimeWarp(This,IsTimeWarp)
-
-#define IAAFOperationDef_PrependDegradeToOperation(This,pOperationDef)	\
-    (This)->lpVtbl -> PrependDegradeToOperation(This,pOperationDef)
-
-#define IAAFOperationDef_AppendDegradeToOperation(This,pOperationDef)	\
-    (This)->lpVtbl -> AppendDegradeToOperation(This,pOperationDef)
-
-#define IAAFOperationDef_InsertDegradeToOperationAt(This,index,pOperationDef)	\
-    (This)->lpVtbl -> InsertDegradeToOperationAt(This,index,pOperationDef)
-
-#define IAAFOperationDef_RemoveDegradeToOperationAt(This,index)	\
-    (This)->lpVtbl -> RemoveDegradeToOperationAt(This,index)
-
-#define IAAFOperationDef_GetDegradeToOperations(This,ppEnum)	\
-    (This)->lpVtbl -> GetDegradeToOperations(This,ppEnum)
-
-#define IAAFOperationDef_CountDegradeToOperations(This,pResult)	\
-    (This)->lpVtbl -> CountDegradeToOperations(This,pResult)
-
-#define IAAFOperationDef_GetCategory(This,pValue)	\
-    (This)->lpVtbl -> GetCategory(This,pValue)
-
-#define IAAFOperationDef_SetCategory(This,value)	\
-    (This)->lpVtbl -> SetCategory(This,value)
-
-#define IAAFOperationDef_GetNumberInputs(This,pNumberInputs)	\
-    (This)->lpVtbl -> GetNumberInputs(This,pNumberInputs)
-
-#define IAAFOperationDef_SetNumberInputs(This,NumberInputs)	\
-    (This)->lpVtbl -> SetNumberInputs(This,NumberInputs)
-
-#define IAAFOperationDef_GetBypass(This,pBypass)	\
-    (This)->lpVtbl -> GetBypass(This,pBypass)
-
-#define IAAFOperationDef_SetBypass(This,bypass)	\
-    (This)->lpVtbl -> SetBypass(This,bypass)
-
-#define IAAFOperationDef_AddParameterDef(This,pParameterDef)	\
-    (This)->lpVtbl -> AddParameterDef(This,pParameterDef)
-
-#define IAAFOperationDef_GetParameterDefs(This,ppEnum)	\
-    (This)->lpVtbl -> GetParameterDefs(This,ppEnum)
-
-#define IAAFOperationDef_CountParameterDefs(This,pResult)	\
-    (This)->lpVtbl -> CountParameterDefs(This,pResult)
-
-#define IAAFOperationDef_LookupParameterDef(This,parameterDefId,ppParameterDef)	\
-    (This)->lpVtbl -> LookupParameterDef(This,parameterDefId,ppParameterDef)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_Initialize_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [ref][in] */ aafUID_constref id,
-    /* [string][in] */ aafCharacter_constptr pName,
-    /* [string][in] */ aafCharacter_constptr pDescription);
-
-
-void __RPC_STUB IAAFOperationDef_Initialize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_GetDataDef_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
-
-
-void __RPC_STUB IAAFOperationDef_GetDataDef_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_SetDataDef_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [in] */ IAAFDataDef __RPC_FAR *pDataDef);
-
-
-void __RPC_STUB IAAFOperationDef_SetDataDef_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_IsTimeWarp_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [retval][out] */ aafBoolean_t __RPC_FAR *bIsTimeWarp);
-
-
-void __RPC_STUB IAAFOperationDef_IsTimeWarp_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_SetIsTimeWarp_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [in] */ aafBoolean_t IsTimeWarp);
-
-
-void __RPC_STUB IAAFOperationDef_SetIsTimeWarp_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_PrependDegradeToOperation_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef);
-
-
-void __RPC_STUB IAAFOperationDef_PrependDegradeToOperation_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_AppendDegradeToOperation_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef);
-
-
-void __RPC_STUB IAAFOperationDef_AppendDegradeToOperation_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_InsertDegradeToOperationAt_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [in] */ aafUInt32 index,
-    /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef);
-
-
-void __RPC_STUB IAAFOperationDef_InsertDegradeToOperationAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_RemoveDegradeToOperationAt_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [in] */ aafUInt32 index);
-
-
-void __RPC_STUB IAAFOperationDef_RemoveDegradeToOperationAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_GetDegradeToOperations_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [retval][out] */ IEnumAAFOperationDefs __RPC_FAR *__RPC_FAR *ppEnum);
-
-
-void __RPC_STUB IAAFOperationDef_GetDegradeToOperations_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_CountDegradeToOperations_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [retval][out] */ aafUInt32 __RPC_FAR *pResult);
-
-
-void __RPC_STUB IAAFOperationDef_CountDegradeToOperations_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_GetCategory_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [out] */ aafUID_t __RPC_FAR *pValue);
-
-
-void __RPC_STUB IAAFOperationDef_GetCategory_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_SetCategory_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [ref][in] */ aafUID_constref value);
-
-
-void __RPC_STUB IAAFOperationDef_SetCategory_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_GetNumberInputs_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [retval][out] */ aafInt32 __RPC_FAR *pNumberInputs);
-
-
-void __RPC_STUB IAAFOperationDef_GetNumberInputs_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_SetNumberInputs_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [in] */ aafInt32 NumberInputs);
-
-
-void __RPC_STUB IAAFOperationDef_SetNumberInputs_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_GetBypass_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [retval][out] */ aafUInt32 __RPC_FAR *pBypass);
-
-
-void __RPC_STUB IAAFOperationDef_GetBypass_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_SetBypass_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [in] */ aafUInt32 bypass);
-
-
-void __RPC_STUB IAAFOperationDef_SetBypass_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_AddParameterDef_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [in] */ IAAFParameterDef __RPC_FAR *pParameterDef);
-
-
-void __RPC_STUB IAAFOperationDef_AddParameterDef_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_GetParameterDefs_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [retval][out] */ IEnumAAFParameterDefs __RPC_FAR *__RPC_FAR *ppEnum);
-
-
-void __RPC_STUB IAAFOperationDef_GetParameterDefs_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_CountParameterDefs_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pResult);
-
-
-void __RPC_STUB IAAFOperationDef_CountParameterDefs_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationDef_LookupParameterDef_Proxy( 
-    IAAFOperationDef __RPC_FAR * This,
-    /* [in] */ aafUID_constref parameterDefId,
-    /* [out] */ IAAFParameterDef __RPC_FAR *__RPC_FAR *ppParameterDef);
-
-
-void __RPC_STUB IAAFOperationDef_LookupParameterDef_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFOperationDef_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFEssenceAccess_INTERFACE_DEFINED__
@@ -7750,6 +7737,439 @@ void __RPC_STUB IAAFEssenceDescriptor_GetLocators_Stub(
 #endif 	/* __IAAFEssenceDescriptor_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFEssenceFormat_INTERFACE_DEFINED__
+#define __IAAFEssenceFormat_INTERFACE_DEFINED__
+
+/* interface IAAFEssenceFormat */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFEssenceFormat;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("34C2DC82-904C-11d2-8088-006008143E6F")
+    IAAFEssenceFormat : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE AddFormatSpecifier( 
+            /* [in] */ aafUID_constref essenceFormatCode,
+            /* [in] */ aafInt32 valueSize,
+            /* [size_is][in] */ aafDataBuffer_t value) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetFormatSpecifier( 
+            /* [in] */ aafUID_constref essenceFormatCode,
+            /* [in] */ aafInt32 valueSize,
+            /* [length_is][size_is][out] */ aafDataBuffer_t value,
+            /* [out] */ aafInt32 __RPC_FAR *bytesRead) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE NumFormatSpecifiers( 
+            /* [out] */ aafInt32 __RPC_FAR *numSpecifiers) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetIndexedFormatSpecifier( 
+            /* [in] */ aafInt32 index,
+            /* [out] */ aafUID_t __RPC_FAR *essenceFormatCode,
+            /* [in] */ aafInt32 valueSize,
+            /* [length_is][size_is][out] */ aafDataBuffer_t value,
+            /* [out] */ aafInt32 __RPC_FAR *bytesRead) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFEssenceFormatVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFEssenceFormat __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFEssenceFormat __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFEssenceFormat __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddFormatSpecifier )( 
+            IAAFEssenceFormat __RPC_FAR * This,
+            /* [in] */ aafUID_constref essenceFormatCode,
+            /* [in] */ aafInt32 valueSize,
+            /* [size_is][in] */ aafDataBuffer_t value);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFormatSpecifier )( 
+            IAAFEssenceFormat __RPC_FAR * This,
+            /* [in] */ aafUID_constref essenceFormatCode,
+            /* [in] */ aafInt32 valueSize,
+            /* [length_is][size_is][out] */ aafDataBuffer_t value,
+            /* [out] */ aafInt32 __RPC_FAR *bytesRead);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NumFormatSpecifiers )( 
+            IAAFEssenceFormat __RPC_FAR * This,
+            /* [out] */ aafInt32 __RPC_FAR *numSpecifiers);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIndexedFormatSpecifier )( 
+            IAAFEssenceFormat __RPC_FAR * This,
+            /* [in] */ aafInt32 index,
+            /* [out] */ aafUID_t __RPC_FAR *essenceFormatCode,
+            /* [in] */ aafInt32 valueSize,
+            /* [length_is][size_is][out] */ aafDataBuffer_t value,
+            /* [out] */ aafInt32 __RPC_FAR *bytesRead);
+        
+        END_INTERFACE
+    } IAAFEssenceFormatVtbl;
+
+    interface IAAFEssenceFormat
+    {
+        CONST_VTBL struct IAAFEssenceFormatVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFEssenceFormat_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFEssenceFormat_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFEssenceFormat_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFEssenceFormat_AddFormatSpecifier(This,essenceFormatCode,valueSize,value)	\
+    (This)->lpVtbl -> AddFormatSpecifier(This,essenceFormatCode,valueSize,value)
+
+#define IAAFEssenceFormat_GetFormatSpecifier(This,essenceFormatCode,valueSize,value,bytesRead)	\
+    (This)->lpVtbl -> GetFormatSpecifier(This,essenceFormatCode,valueSize,value,bytesRead)
+
+#define IAAFEssenceFormat_NumFormatSpecifiers(This,numSpecifiers)	\
+    (This)->lpVtbl -> NumFormatSpecifiers(This,numSpecifiers)
+
+#define IAAFEssenceFormat_GetIndexedFormatSpecifier(This,index,essenceFormatCode,valueSize,value,bytesRead)	\
+    (This)->lpVtbl -> GetIndexedFormatSpecifier(This,index,essenceFormatCode,valueSize,value,bytesRead)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceFormat_AddFormatSpecifier_Proxy( 
+    IAAFEssenceFormat __RPC_FAR * This,
+    /* [in] */ aafUID_constref essenceFormatCode,
+    /* [in] */ aafInt32 valueSize,
+    /* [size_is][in] */ aafDataBuffer_t value);
+
+
+void __RPC_STUB IAAFEssenceFormat_AddFormatSpecifier_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceFormat_GetFormatSpecifier_Proxy( 
+    IAAFEssenceFormat __RPC_FAR * This,
+    /* [in] */ aafUID_constref essenceFormatCode,
+    /* [in] */ aafInt32 valueSize,
+    /* [length_is][size_is][out] */ aafDataBuffer_t value,
+    /* [out] */ aafInt32 __RPC_FAR *bytesRead);
+
+
+void __RPC_STUB IAAFEssenceFormat_GetFormatSpecifier_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceFormat_NumFormatSpecifiers_Proxy( 
+    IAAFEssenceFormat __RPC_FAR * This,
+    /* [out] */ aafInt32 __RPC_FAR *numSpecifiers);
+
+
+void __RPC_STUB IAAFEssenceFormat_NumFormatSpecifiers_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceFormat_GetIndexedFormatSpecifier_Proxy( 
+    IAAFEssenceFormat __RPC_FAR * This,
+    /* [in] */ aafInt32 index,
+    /* [out] */ aafUID_t __RPC_FAR *essenceFormatCode,
+    /* [in] */ aafInt32 valueSize,
+    /* [length_is][size_is][out] */ aafDataBuffer_t value,
+    /* [out] */ aafInt32 __RPC_FAR *bytesRead);
+
+
+void __RPC_STUB IAAFEssenceFormat_GetIndexedFormatSpecifier_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFEssenceFormat_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFEssenceGroup_INTERFACE_DEFINED__
+#define __IAAFEssenceGroup_INTERFACE_DEFINED__
+
+/* interface IAAFEssenceGroup */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFEssenceGroup;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("e58a8567-2a3e-11D2-bfa4-006097116212")
+    IAAFEssenceGroup : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE SetStillFrame( 
+            /* [in] */ IAAFSourceClip __RPC_FAR *pStillFrame) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetStillFrame( 
+            /* [out] */ IAAFSourceClip __RPC_FAR *__RPC_FAR *ppStillFrame) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AppendChoice( 
+            /* [in] */ IAAFSegment __RPC_FAR *pChoice) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE PrependChoice( 
+            /* [in] */ IAAFSegment __RPC_FAR *pChoice) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE InsertChoiceAt( 
+            /* [in] */ aafUInt32 index,
+            /* [in] */ IAAFSegment __RPC_FAR *pChoice) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountChoices( 
+            /* [out] */ aafUInt32 __RPC_FAR *pCount) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetChoiceAt( 
+            /* [in] */ aafUInt32 index,
+            /* [out] */ IAAFSegment __RPC_FAR *__RPC_FAR *ppChoice) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RemoveChoiceAt( 
+            /* [in] */ aafUInt32 index) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFEssenceGroupVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFEssenceGroup __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFEssenceGroup __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFEssenceGroup __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStillFrame )( 
+            IAAFEssenceGroup __RPC_FAR * This,
+            /* [in] */ IAAFSourceClip __RPC_FAR *pStillFrame);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStillFrame )( 
+            IAAFEssenceGroup __RPC_FAR * This,
+            /* [out] */ IAAFSourceClip __RPC_FAR *__RPC_FAR *ppStillFrame);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AppendChoice )( 
+            IAAFEssenceGroup __RPC_FAR * This,
+            /* [in] */ IAAFSegment __RPC_FAR *pChoice);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrependChoice )( 
+            IAAFEssenceGroup __RPC_FAR * This,
+            /* [in] */ IAAFSegment __RPC_FAR *pChoice);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InsertChoiceAt )( 
+            IAAFEssenceGroup __RPC_FAR * This,
+            /* [in] */ aafUInt32 index,
+            /* [in] */ IAAFSegment __RPC_FAR *pChoice);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountChoices )( 
+            IAAFEssenceGroup __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pCount);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetChoiceAt )( 
+            IAAFEssenceGroup __RPC_FAR * This,
+            /* [in] */ aafUInt32 index,
+            /* [out] */ IAAFSegment __RPC_FAR *__RPC_FAR *ppChoice);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveChoiceAt )( 
+            IAAFEssenceGroup __RPC_FAR * This,
+            /* [in] */ aafUInt32 index);
+        
+        END_INTERFACE
+    } IAAFEssenceGroupVtbl;
+
+    interface IAAFEssenceGroup
+    {
+        CONST_VTBL struct IAAFEssenceGroupVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFEssenceGroup_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFEssenceGroup_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFEssenceGroup_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFEssenceGroup_SetStillFrame(This,pStillFrame)	\
+    (This)->lpVtbl -> SetStillFrame(This,pStillFrame)
+
+#define IAAFEssenceGroup_GetStillFrame(This,ppStillFrame)	\
+    (This)->lpVtbl -> GetStillFrame(This,ppStillFrame)
+
+#define IAAFEssenceGroup_AppendChoice(This,pChoice)	\
+    (This)->lpVtbl -> AppendChoice(This,pChoice)
+
+#define IAAFEssenceGroup_PrependChoice(This,pChoice)	\
+    (This)->lpVtbl -> PrependChoice(This,pChoice)
+
+#define IAAFEssenceGroup_InsertChoiceAt(This,index,pChoice)	\
+    (This)->lpVtbl -> InsertChoiceAt(This,index,pChoice)
+
+#define IAAFEssenceGroup_CountChoices(This,pCount)	\
+    (This)->lpVtbl -> CountChoices(This,pCount)
+
+#define IAAFEssenceGroup_GetChoiceAt(This,index,ppChoice)	\
+    (This)->lpVtbl -> GetChoiceAt(This,index,ppChoice)
+
+#define IAAFEssenceGroup_RemoveChoiceAt(This,index)	\
+    (This)->lpVtbl -> RemoveChoiceAt(This,index)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceGroup_SetStillFrame_Proxy( 
+    IAAFEssenceGroup __RPC_FAR * This,
+    /* [in] */ IAAFSourceClip __RPC_FAR *pStillFrame);
+
+
+void __RPC_STUB IAAFEssenceGroup_SetStillFrame_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceGroup_GetStillFrame_Proxy( 
+    IAAFEssenceGroup __RPC_FAR * This,
+    /* [out] */ IAAFSourceClip __RPC_FAR *__RPC_FAR *ppStillFrame);
+
+
+void __RPC_STUB IAAFEssenceGroup_GetStillFrame_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceGroup_AppendChoice_Proxy( 
+    IAAFEssenceGroup __RPC_FAR * This,
+    /* [in] */ IAAFSegment __RPC_FAR *pChoice);
+
+
+void __RPC_STUB IAAFEssenceGroup_AppendChoice_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceGroup_PrependChoice_Proxy( 
+    IAAFEssenceGroup __RPC_FAR * This,
+    /* [in] */ IAAFSegment __RPC_FAR *pChoice);
+
+
+void __RPC_STUB IAAFEssenceGroup_PrependChoice_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceGroup_InsertChoiceAt_Proxy( 
+    IAAFEssenceGroup __RPC_FAR * This,
+    /* [in] */ aafUInt32 index,
+    /* [in] */ IAAFSegment __RPC_FAR *pChoice);
+
+
+void __RPC_STUB IAAFEssenceGroup_InsertChoiceAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceGroup_CountChoices_Proxy( 
+    IAAFEssenceGroup __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pCount);
+
+
+void __RPC_STUB IAAFEssenceGroup_CountChoices_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceGroup_GetChoiceAt_Proxy( 
+    IAAFEssenceGroup __RPC_FAR * This,
+    /* [in] */ aafUInt32 index,
+    /* [out] */ IAAFSegment __RPC_FAR *__RPC_FAR *ppChoice);
+
+
+void __RPC_STUB IAAFEssenceGroup_GetChoiceAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceGroup_RemoveChoiceAt_Proxy( 
+    IAAFEssenceGroup __RPC_FAR * This,
+    /* [in] */ aafUInt32 index);
+
+
+void __RPC_STUB IAAFEssenceGroup_RemoveChoiceAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFEssenceGroup_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFEvent_INTERFACE_DEFINED__
 #define __IAAFEvent_INTERFACE_DEFINED__
 
@@ -8500,6 +8920,99 @@ void __RPC_STUB IAAFFileDescriptor_GetContainerFormat_Stub(
 #endif 	/* __IAAFFileDescriptor_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFFiller_INTERFACE_DEFINED__
+#define __IAAFFiller_INTERFACE_DEFINED__
+
+/* interface IAAFFiller */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFFiller;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("38e6f8a9-2a2c-11d2-8411-00600832acb8")
+    IAAFFiller : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( 
+            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
+            /* [in] */ aafLength_t length) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFFillerVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFFiller __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFFiller __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFFiller __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFFiller __RPC_FAR * This,
+            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
+            /* [in] */ aafLength_t length);
+        
+        END_INTERFACE
+    } IAAFFillerVtbl;
+
+    interface IAAFFiller
+    {
+        CONST_VTBL struct IAAFFillerVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFFiller_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFFiller_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFFiller_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFFiller_Initialize(This,pDataDef,length)	\
+    (This)->lpVtbl -> Initialize(This,pDataDef,length)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFFiller_Initialize_Proxy( 
+    IAAFFiller __RPC_FAR * This,
+    /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
+    /* [in] */ aafLength_t length);
+
+
+void __RPC_STUB IAAFFiller_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFFiller_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFFilmDescriptor_INTERFACE_DEFINED__
 #define __IAAFFilmDescriptor_INTERFACE_DEFINED__
 
@@ -8882,1549 +9395,6 @@ void __RPC_STUB IAAFFilmDescriptor_SetFilmAspectRatio_Stub(
 #endif 	/* __IAAFFilmDescriptor_INTERFACE_DEFINED__ */
 
 
-#ifndef __IAAFDigitalImageDescriptor_INTERFACE_DEFINED__
-#define __IAAFDigitalImageDescriptor_INTERFACE_DEFINED__
-
-/* interface IAAFDigitalImageDescriptor */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFDigitalImageDescriptor;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("44861701-8AEA-11d2-813C-006097310172")
-    IAAFDigitalImageDescriptor : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE SetCompression( 
-            /* [in] */ aafUID_constref compression) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCompression( 
-            /* [out] */ aafUID_t __RPC_FAR *pCompression) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetStoredView( 
-            /* [in] */ aafUInt32 StoredHeight,
-            /* [in] */ aafUInt32 StoredWidth) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetStoredView( 
-            /* [out] */ aafUInt32 __RPC_FAR *pStoredHeight,
-            /* [out] */ aafUInt32 __RPC_FAR *pStoredWidth) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetSampledView( 
-            /* [in] */ aafUInt32 SampledHeight,
-            /* [in] */ aafUInt32 SampledWidth,
-            /* [in] */ aafInt32 SampledXOffset,
-            /* [in] */ aafInt32 SampledYOffset) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetSampledView( 
-            /* [out] */ aafUInt32 __RPC_FAR *pSampledHeight,
-            /* [out] */ aafUInt32 __RPC_FAR *pSampledWidth,
-            /* [out] */ aafInt32 __RPC_FAR *pSampledXOffset,
-            /* [out] */ aafInt32 __RPC_FAR *pSampledYOffset) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetDisplayView( 
-            /* [in] */ aafUInt32 DisplayHeight,
-            /* [in] */ aafUInt32 DisplayWidth,
-            /* [in] */ aafInt32 DisplayXOffset,
-            /* [in] */ aafInt32 DisplayYOffset) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetDisplayView( 
-            /* [out] */ aafUInt32 __RPC_FAR *pDisplayHeight,
-            /* [out] */ aafUInt32 __RPC_FAR *pDisplayWidth,
-            /* [out] */ aafInt32 __RPC_FAR *pDisplayXOffset,
-            /* [out] */ aafInt32 __RPC_FAR *pDisplayYOffset) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetFrameLayout( 
-            /* [in] */ aafFrameLayout_t FrameLayout) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetFrameLayout( 
-            /* [out] */ aafFrameLayout_t __RPC_FAR *pFrameLayout) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetVideoLineMap( 
-            /* [in] */ aafUInt32 numberElements,
-            /* [size_is][in] */ aafInt32 __RPC_FAR *pVideoLineMap) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetVideoLineMap( 
-            /* [in] */ aafUInt32 numberElements,
-            /* [size_is][out] */ aafInt32 __RPC_FAR *pVideoLineMap) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetVideoLineMapSize( 
-            /* [out] */ aafUInt32 __RPC_FAR *pNumberElements) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetImageAspectRatio( 
-            /* [in] */ aafRational_t ImageAspectRatio) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetImageAspectRatio( 
-            /* [out] */ aafRational_t __RPC_FAR *pImageAspectRatio) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetAlphaTransparency( 
-            /* [in] */ aafAlphaTransparency_t AlphaTransparency) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetAlphaTransparency( 
-            /* [out] */ aafAlphaTransparency_t __RPC_FAR *pAlphaTransparency) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetGamma( 
-            /* [in] */ aafUID_t Gamma) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetGamma( 
-            /* [out] */ aafUID_t __RPC_FAR *pGamma) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetImageAlignmentFactor( 
-            /* [in] */ aafUInt32 ImageAlignmentFactor) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetImageAlignmentFactor( 
-            /* [out] */ aafUInt32 __RPC_FAR *pImageAlignmentFactor) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFDigitalImageDescriptorVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCompression )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [in] */ aafUID_constref compression);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCompression )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [out] */ aafUID_t __RPC_FAR *pCompression);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStoredView )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [in] */ aafUInt32 StoredHeight,
-            /* [in] */ aafUInt32 StoredWidth);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStoredView )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pStoredHeight,
-            /* [out] */ aafUInt32 __RPC_FAR *pStoredWidth);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSampledView )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [in] */ aafUInt32 SampledHeight,
-            /* [in] */ aafUInt32 SampledWidth,
-            /* [in] */ aafInt32 SampledXOffset,
-            /* [in] */ aafInt32 SampledYOffset);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSampledView )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pSampledHeight,
-            /* [out] */ aafUInt32 __RPC_FAR *pSampledWidth,
-            /* [out] */ aafInt32 __RPC_FAR *pSampledXOffset,
-            /* [out] */ aafInt32 __RPC_FAR *pSampledYOffset);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDisplayView )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [in] */ aafUInt32 DisplayHeight,
-            /* [in] */ aafUInt32 DisplayWidth,
-            /* [in] */ aafInt32 DisplayXOffset,
-            /* [in] */ aafInt32 DisplayYOffset);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDisplayView )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pDisplayHeight,
-            /* [out] */ aafUInt32 __RPC_FAR *pDisplayWidth,
-            /* [out] */ aafInt32 __RPC_FAR *pDisplayXOffset,
-            /* [out] */ aafInt32 __RPC_FAR *pDisplayYOffset);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFrameLayout )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [in] */ aafFrameLayout_t FrameLayout);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFrameLayout )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [out] */ aafFrameLayout_t __RPC_FAR *pFrameLayout);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVideoLineMap )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [in] */ aafUInt32 numberElements,
-            /* [size_is][in] */ aafInt32 __RPC_FAR *pVideoLineMap);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVideoLineMap )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [in] */ aafUInt32 numberElements,
-            /* [size_is][out] */ aafInt32 __RPC_FAR *pVideoLineMap);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVideoLineMapSize )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pNumberElements);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetImageAspectRatio )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [in] */ aafRational_t ImageAspectRatio);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetImageAspectRatio )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [out] */ aafRational_t __RPC_FAR *pImageAspectRatio);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAlphaTransparency )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [in] */ aafAlphaTransparency_t AlphaTransparency);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAlphaTransparency )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [out] */ aafAlphaTransparency_t __RPC_FAR *pAlphaTransparency);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetGamma )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [in] */ aafUID_t Gamma);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetGamma )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [out] */ aafUID_t __RPC_FAR *pGamma);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetImageAlignmentFactor )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [in] */ aafUInt32 ImageAlignmentFactor);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetImageAlignmentFactor )( 
-            IAAFDigitalImageDescriptor __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pImageAlignmentFactor);
-        
-        END_INTERFACE
-    } IAAFDigitalImageDescriptorVtbl;
-
-    interface IAAFDigitalImageDescriptor
-    {
-        CONST_VTBL struct IAAFDigitalImageDescriptorVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFDigitalImageDescriptor_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFDigitalImageDescriptor_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFDigitalImageDescriptor_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFDigitalImageDescriptor_SetCompression(This,compression)	\
-    (This)->lpVtbl -> SetCompression(This,compression)
-
-#define IAAFDigitalImageDescriptor_GetCompression(This,pCompression)	\
-    (This)->lpVtbl -> GetCompression(This,pCompression)
-
-#define IAAFDigitalImageDescriptor_SetStoredView(This,StoredHeight,StoredWidth)	\
-    (This)->lpVtbl -> SetStoredView(This,StoredHeight,StoredWidth)
-
-#define IAAFDigitalImageDescriptor_GetStoredView(This,pStoredHeight,pStoredWidth)	\
-    (This)->lpVtbl -> GetStoredView(This,pStoredHeight,pStoredWidth)
-
-#define IAAFDigitalImageDescriptor_SetSampledView(This,SampledHeight,SampledWidth,SampledXOffset,SampledYOffset)	\
-    (This)->lpVtbl -> SetSampledView(This,SampledHeight,SampledWidth,SampledXOffset,SampledYOffset)
-
-#define IAAFDigitalImageDescriptor_GetSampledView(This,pSampledHeight,pSampledWidth,pSampledXOffset,pSampledYOffset)	\
-    (This)->lpVtbl -> GetSampledView(This,pSampledHeight,pSampledWidth,pSampledXOffset,pSampledYOffset)
-
-#define IAAFDigitalImageDescriptor_SetDisplayView(This,DisplayHeight,DisplayWidth,DisplayXOffset,DisplayYOffset)	\
-    (This)->lpVtbl -> SetDisplayView(This,DisplayHeight,DisplayWidth,DisplayXOffset,DisplayYOffset)
-
-#define IAAFDigitalImageDescriptor_GetDisplayView(This,pDisplayHeight,pDisplayWidth,pDisplayXOffset,pDisplayYOffset)	\
-    (This)->lpVtbl -> GetDisplayView(This,pDisplayHeight,pDisplayWidth,pDisplayXOffset,pDisplayYOffset)
-
-#define IAAFDigitalImageDescriptor_SetFrameLayout(This,FrameLayout)	\
-    (This)->lpVtbl -> SetFrameLayout(This,FrameLayout)
-
-#define IAAFDigitalImageDescriptor_GetFrameLayout(This,pFrameLayout)	\
-    (This)->lpVtbl -> GetFrameLayout(This,pFrameLayout)
-
-#define IAAFDigitalImageDescriptor_SetVideoLineMap(This,numberElements,pVideoLineMap)	\
-    (This)->lpVtbl -> SetVideoLineMap(This,numberElements,pVideoLineMap)
-
-#define IAAFDigitalImageDescriptor_GetVideoLineMap(This,numberElements,pVideoLineMap)	\
-    (This)->lpVtbl -> GetVideoLineMap(This,numberElements,pVideoLineMap)
-
-#define IAAFDigitalImageDescriptor_GetVideoLineMapSize(This,pNumberElements)	\
-    (This)->lpVtbl -> GetVideoLineMapSize(This,pNumberElements)
-
-#define IAAFDigitalImageDescriptor_SetImageAspectRatio(This,ImageAspectRatio)	\
-    (This)->lpVtbl -> SetImageAspectRatio(This,ImageAspectRatio)
-
-#define IAAFDigitalImageDescriptor_GetImageAspectRatio(This,pImageAspectRatio)	\
-    (This)->lpVtbl -> GetImageAspectRatio(This,pImageAspectRatio)
-
-#define IAAFDigitalImageDescriptor_SetAlphaTransparency(This,AlphaTransparency)	\
-    (This)->lpVtbl -> SetAlphaTransparency(This,AlphaTransparency)
-
-#define IAAFDigitalImageDescriptor_GetAlphaTransparency(This,pAlphaTransparency)	\
-    (This)->lpVtbl -> GetAlphaTransparency(This,pAlphaTransparency)
-
-#define IAAFDigitalImageDescriptor_SetGamma(This,Gamma)	\
-    (This)->lpVtbl -> SetGamma(This,Gamma)
-
-#define IAAFDigitalImageDescriptor_GetGamma(This,pGamma)	\
-    (This)->lpVtbl -> GetGamma(This,pGamma)
-
-#define IAAFDigitalImageDescriptor_SetImageAlignmentFactor(This,ImageAlignmentFactor)	\
-    (This)->lpVtbl -> SetImageAlignmentFactor(This,ImageAlignmentFactor)
-
-#define IAAFDigitalImageDescriptor_GetImageAlignmentFactor(This,pImageAlignmentFactor)	\
-    (This)->lpVtbl -> GetImageAlignmentFactor(This,pImageAlignmentFactor)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetCompression_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [in] */ aafUID_constref compression);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_SetCompression_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetCompression_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [out] */ aafUID_t __RPC_FAR *pCompression);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_GetCompression_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetStoredView_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [in] */ aafUInt32 StoredHeight,
-    /* [in] */ aafUInt32 StoredWidth);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_SetStoredView_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetStoredView_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pStoredHeight,
-    /* [out] */ aafUInt32 __RPC_FAR *pStoredWidth);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_GetStoredView_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetSampledView_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [in] */ aafUInt32 SampledHeight,
-    /* [in] */ aafUInt32 SampledWidth,
-    /* [in] */ aafInt32 SampledXOffset,
-    /* [in] */ aafInt32 SampledYOffset);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_SetSampledView_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetSampledView_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pSampledHeight,
-    /* [out] */ aafUInt32 __RPC_FAR *pSampledWidth,
-    /* [out] */ aafInt32 __RPC_FAR *pSampledXOffset,
-    /* [out] */ aafInt32 __RPC_FAR *pSampledYOffset);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_GetSampledView_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetDisplayView_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [in] */ aafUInt32 DisplayHeight,
-    /* [in] */ aafUInt32 DisplayWidth,
-    /* [in] */ aafInt32 DisplayXOffset,
-    /* [in] */ aafInt32 DisplayYOffset);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_SetDisplayView_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetDisplayView_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pDisplayHeight,
-    /* [out] */ aafUInt32 __RPC_FAR *pDisplayWidth,
-    /* [out] */ aafInt32 __RPC_FAR *pDisplayXOffset,
-    /* [out] */ aafInt32 __RPC_FAR *pDisplayYOffset);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_GetDisplayView_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetFrameLayout_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [in] */ aafFrameLayout_t FrameLayout);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_SetFrameLayout_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetFrameLayout_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [out] */ aafFrameLayout_t __RPC_FAR *pFrameLayout);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_GetFrameLayout_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetVideoLineMap_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [in] */ aafUInt32 numberElements,
-    /* [size_is][in] */ aafInt32 __RPC_FAR *pVideoLineMap);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_SetVideoLineMap_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetVideoLineMap_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [in] */ aafUInt32 numberElements,
-    /* [size_is][out] */ aafInt32 __RPC_FAR *pVideoLineMap);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_GetVideoLineMap_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetVideoLineMapSize_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pNumberElements);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_GetVideoLineMapSize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetImageAspectRatio_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [in] */ aafRational_t ImageAspectRatio);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_SetImageAspectRatio_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetImageAspectRatio_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [out] */ aafRational_t __RPC_FAR *pImageAspectRatio);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_GetImageAspectRatio_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetAlphaTransparency_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [in] */ aafAlphaTransparency_t AlphaTransparency);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_SetAlphaTransparency_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetAlphaTransparency_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [out] */ aafAlphaTransparency_t __RPC_FAR *pAlphaTransparency);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_GetAlphaTransparency_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetGamma_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [in] */ aafUID_t Gamma);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_SetGamma_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetGamma_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [out] */ aafUID_t __RPC_FAR *pGamma);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_GetGamma_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_SetImageAlignmentFactor_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [in] */ aafUInt32 ImageAlignmentFactor);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_SetImageAlignmentFactor_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDigitalImageDescriptor_GetImageAlignmentFactor_Proxy( 
-    IAAFDigitalImageDescriptor __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pImageAlignmentFactor);
-
-
-void __RPC_STUB IAAFDigitalImageDescriptor_GetImageAlignmentFactor_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFDigitalImageDescriptor_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFCDCIDescriptor_INTERFACE_DEFINED__
-#define __IAAFCDCIDescriptor_INTERFACE_DEFINED__
-
-/* interface IAAFCDCIDescriptor */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFCDCIDescriptor;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("44861703-8AEA-11d2-813C-006097310172")
-    IAAFCDCIDescriptor : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetComponentWidth( 
-            /* [in] */ aafInt32 ComponentWidth) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetComponentWidth( 
-            /* [out] */ aafInt32 __RPC_FAR *pComponentWidth) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetHorizontalSubsampling( 
-            /* [in] */ aafUInt32 HorizontalSubsampling) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetHorizontalSubsampling( 
-            /* [out] */ aafUInt32 __RPC_FAR *pHorizontalSubsampling) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetVerticalSubsampling( 
-            /* [in] */ aafUInt32 VerticalSubsampling) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetVerticalSubsampling( 
-            /* [out] */ aafUInt32 __RPC_FAR *pVerticalSubsampling) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetColorSiting( 
-            /* [in] */ aafColorSiting_t ColorSiting) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetColorSiting( 
-            /* [out] */ aafColorSiting_t __RPC_FAR *pColorSiting) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetBlackReferenceLevel( 
-            /* [in] */ aafUInt32 BlackReferenceLevel) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetBlackReferenceLevel( 
-            /* [out] */ aafUInt32 __RPC_FAR *pBlackReferenceLevel) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetWhiteReferenceLevel( 
-            /* [in] */ aafUInt32 WhiteReferenceLevel) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetWhiteReferenceLevel( 
-            /* [out] */ aafUInt32 __RPC_FAR *pWhiteReferenceLevel) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetColorRange( 
-            /* [in] */ aafUInt32 ColorRange) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetColorRange( 
-            /* [out] */ aafUInt32 __RPC_FAR *pColorRange) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetPaddingBits( 
-            /* [in] */ aafInt16 PaddingBits) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetPaddingBits( 
-            /* [out] */ aafInt16 __RPC_FAR *pPaddingBits) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFCDCIDescriptorVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFCDCIDescriptor __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFCDCIDescriptor __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFCDCIDescriptor __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IAAFCDCIDescriptor __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetComponentWidth )( 
-            IAAFCDCIDescriptor __RPC_FAR * This,
-            /* [in] */ aafInt32 ComponentWidth);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetComponentWidth )( 
-            IAAFCDCIDescriptor __RPC_FAR * This,
-            /* [out] */ aafInt32 __RPC_FAR *pComponentWidth);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHorizontalSubsampling )( 
-            IAAFCDCIDescriptor __RPC_FAR * This,
-            /* [in] */ aafUInt32 HorizontalSubsampling);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHorizontalSubsampling )( 
-            IAAFCDCIDescriptor __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pHorizontalSubsampling);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVerticalSubsampling )( 
-            IAAFCDCIDescriptor __RPC_FAR * This,
-            /* [in] */ aafUInt32 VerticalSubsampling);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVerticalSubsampling )( 
-            IAAFCDCIDescriptor __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pVerticalSubsampling);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetColorSiting )( 
-            IAAFCDCIDescriptor __RPC_FAR * This,
-            /* [in] */ aafColorSiting_t ColorSiting);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetColorSiting )( 
-            IAAFCDCIDescriptor __RPC_FAR * This,
-            /* [out] */ aafColorSiting_t __RPC_FAR *pColorSiting);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBlackReferenceLevel )( 
-            IAAFCDCIDescriptor __RPC_FAR * This,
-            /* [in] */ aafUInt32 BlackReferenceLevel);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBlackReferenceLevel )( 
-            IAAFCDCIDescriptor __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pBlackReferenceLevel);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetWhiteReferenceLevel )( 
-            IAAFCDCIDescriptor __RPC_FAR * This,
-            /* [in] */ aafUInt32 WhiteReferenceLevel);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWhiteReferenceLevel )( 
-            IAAFCDCIDescriptor __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pWhiteReferenceLevel);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetColorRange )( 
-            IAAFCDCIDescriptor __RPC_FAR * This,
-            /* [in] */ aafUInt32 ColorRange);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetColorRange )( 
-            IAAFCDCIDescriptor __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pColorRange);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPaddingBits )( 
-            IAAFCDCIDescriptor __RPC_FAR * This,
-            /* [in] */ aafInt16 PaddingBits);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPaddingBits )( 
-            IAAFCDCIDescriptor __RPC_FAR * This,
-            /* [out] */ aafInt16 __RPC_FAR *pPaddingBits);
-        
-        END_INTERFACE
-    } IAAFCDCIDescriptorVtbl;
-
-    interface IAAFCDCIDescriptor
-    {
-        CONST_VTBL struct IAAFCDCIDescriptorVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFCDCIDescriptor_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFCDCIDescriptor_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFCDCIDescriptor_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFCDCIDescriptor_Initialize(This)	\
-    (This)->lpVtbl -> Initialize(This)
-
-#define IAAFCDCIDescriptor_SetComponentWidth(This,ComponentWidth)	\
-    (This)->lpVtbl -> SetComponentWidth(This,ComponentWidth)
-
-#define IAAFCDCIDescriptor_GetComponentWidth(This,pComponentWidth)	\
-    (This)->lpVtbl -> GetComponentWidth(This,pComponentWidth)
-
-#define IAAFCDCIDescriptor_SetHorizontalSubsampling(This,HorizontalSubsampling)	\
-    (This)->lpVtbl -> SetHorizontalSubsampling(This,HorizontalSubsampling)
-
-#define IAAFCDCIDescriptor_GetHorizontalSubsampling(This,pHorizontalSubsampling)	\
-    (This)->lpVtbl -> GetHorizontalSubsampling(This,pHorizontalSubsampling)
-
-#define IAAFCDCIDescriptor_SetVerticalSubsampling(This,VerticalSubsampling)	\
-    (This)->lpVtbl -> SetVerticalSubsampling(This,VerticalSubsampling)
-
-#define IAAFCDCIDescriptor_GetVerticalSubsampling(This,pVerticalSubsampling)	\
-    (This)->lpVtbl -> GetVerticalSubsampling(This,pVerticalSubsampling)
-
-#define IAAFCDCIDescriptor_SetColorSiting(This,ColorSiting)	\
-    (This)->lpVtbl -> SetColorSiting(This,ColorSiting)
-
-#define IAAFCDCIDescriptor_GetColorSiting(This,pColorSiting)	\
-    (This)->lpVtbl -> GetColorSiting(This,pColorSiting)
-
-#define IAAFCDCIDescriptor_SetBlackReferenceLevel(This,BlackReferenceLevel)	\
-    (This)->lpVtbl -> SetBlackReferenceLevel(This,BlackReferenceLevel)
-
-#define IAAFCDCIDescriptor_GetBlackReferenceLevel(This,pBlackReferenceLevel)	\
-    (This)->lpVtbl -> GetBlackReferenceLevel(This,pBlackReferenceLevel)
-
-#define IAAFCDCIDescriptor_SetWhiteReferenceLevel(This,WhiteReferenceLevel)	\
-    (This)->lpVtbl -> SetWhiteReferenceLevel(This,WhiteReferenceLevel)
-
-#define IAAFCDCIDescriptor_GetWhiteReferenceLevel(This,pWhiteReferenceLevel)	\
-    (This)->lpVtbl -> GetWhiteReferenceLevel(This,pWhiteReferenceLevel)
-
-#define IAAFCDCIDescriptor_SetColorRange(This,ColorRange)	\
-    (This)->lpVtbl -> SetColorRange(This,ColorRange)
-
-#define IAAFCDCIDescriptor_GetColorRange(This,pColorRange)	\
-    (This)->lpVtbl -> GetColorRange(This,pColorRange)
-
-#define IAAFCDCIDescriptor_SetPaddingBits(This,PaddingBits)	\
-    (This)->lpVtbl -> SetPaddingBits(This,PaddingBits)
-
-#define IAAFCDCIDescriptor_GetPaddingBits(This,pPaddingBits)	\
-    (This)->lpVtbl -> GetPaddingBits(This,pPaddingBits)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_Initialize_Proxy( 
-    IAAFCDCIDescriptor __RPC_FAR * This);
-
-
-void __RPC_STUB IAAFCDCIDescriptor_Initialize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_SetComponentWidth_Proxy( 
-    IAAFCDCIDescriptor __RPC_FAR * This,
-    /* [in] */ aafInt32 ComponentWidth);
-
-
-void __RPC_STUB IAAFCDCIDescriptor_SetComponentWidth_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_GetComponentWidth_Proxy( 
-    IAAFCDCIDescriptor __RPC_FAR * This,
-    /* [out] */ aafInt32 __RPC_FAR *pComponentWidth);
-
-
-void __RPC_STUB IAAFCDCIDescriptor_GetComponentWidth_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_SetHorizontalSubsampling_Proxy( 
-    IAAFCDCIDescriptor __RPC_FAR * This,
-    /* [in] */ aafUInt32 HorizontalSubsampling);
-
-
-void __RPC_STUB IAAFCDCIDescriptor_SetHorizontalSubsampling_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_GetHorizontalSubsampling_Proxy( 
-    IAAFCDCIDescriptor __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pHorizontalSubsampling);
-
-
-void __RPC_STUB IAAFCDCIDescriptor_GetHorizontalSubsampling_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_SetVerticalSubsampling_Proxy( 
-    IAAFCDCIDescriptor __RPC_FAR * This,
-    /* [in] */ aafUInt32 VerticalSubsampling);
-
-
-void __RPC_STUB IAAFCDCIDescriptor_SetVerticalSubsampling_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_GetVerticalSubsampling_Proxy( 
-    IAAFCDCIDescriptor __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pVerticalSubsampling);
-
-
-void __RPC_STUB IAAFCDCIDescriptor_GetVerticalSubsampling_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_SetColorSiting_Proxy( 
-    IAAFCDCIDescriptor __RPC_FAR * This,
-    /* [in] */ aafColorSiting_t ColorSiting);
-
-
-void __RPC_STUB IAAFCDCIDescriptor_SetColorSiting_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_GetColorSiting_Proxy( 
-    IAAFCDCIDescriptor __RPC_FAR * This,
-    /* [out] */ aafColorSiting_t __RPC_FAR *pColorSiting);
-
-
-void __RPC_STUB IAAFCDCIDescriptor_GetColorSiting_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_SetBlackReferenceLevel_Proxy( 
-    IAAFCDCIDescriptor __RPC_FAR * This,
-    /* [in] */ aafUInt32 BlackReferenceLevel);
-
-
-void __RPC_STUB IAAFCDCIDescriptor_SetBlackReferenceLevel_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_GetBlackReferenceLevel_Proxy( 
-    IAAFCDCIDescriptor __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pBlackReferenceLevel);
-
-
-void __RPC_STUB IAAFCDCIDescriptor_GetBlackReferenceLevel_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_SetWhiteReferenceLevel_Proxy( 
-    IAAFCDCIDescriptor __RPC_FAR * This,
-    /* [in] */ aafUInt32 WhiteReferenceLevel);
-
-
-void __RPC_STUB IAAFCDCIDescriptor_SetWhiteReferenceLevel_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_GetWhiteReferenceLevel_Proxy( 
-    IAAFCDCIDescriptor __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pWhiteReferenceLevel);
-
-
-void __RPC_STUB IAAFCDCIDescriptor_GetWhiteReferenceLevel_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_SetColorRange_Proxy( 
-    IAAFCDCIDescriptor __RPC_FAR * This,
-    /* [in] */ aafUInt32 ColorRange);
-
-
-void __RPC_STUB IAAFCDCIDescriptor_SetColorRange_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_GetColorRange_Proxy( 
-    IAAFCDCIDescriptor __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pColorRange);
-
-
-void __RPC_STUB IAAFCDCIDescriptor_GetColorRange_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_SetPaddingBits_Proxy( 
-    IAAFCDCIDescriptor __RPC_FAR * This,
-    /* [in] */ aafInt16 PaddingBits);
-
-
-void __RPC_STUB IAAFCDCIDescriptor_SetPaddingBits_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFCDCIDescriptor_GetPaddingBits_Proxy( 
-    IAAFCDCIDescriptor __RPC_FAR * This,
-    /* [out] */ aafInt16 __RPC_FAR *pPaddingBits);
-
-
-void __RPC_STUB IAAFCDCIDescriptor_GetPaddingBits_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFCDCIDescriptor_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFEssenceFormat_INTERFACE_DEFINED__
-#define __IAAFEssenceFormat_INTERFACE_DEFINED__
-
-/* interface IAAFEssenceFormat */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFEssenceFormat;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("34C2DC82-904C-11d2-8088-006008143E6F")
-    IAAFEssenceFormat : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE AddFormatSpecifier( 
-            /* [in] */ aafUID_constref essenceFormatCode,
-            /* [in] */ aafInt32 valueSize,
-            /* [size_is][in] */ aafDataBuffer_t value) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetFormatSpecifier( 
-            /* [in] */ aafUID_constref essenceFormatCode,
-            /* [in] */ aafInt32 valueSize,
-            /* [length_is][size_is][out] */ aafDataBuffer_t value,
-            /* [out] */ aafInt32 __RPC_FAR *bytesRead) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE NumFormatSpecifiers( 
-            /* [out] */ aafInt32 __RPC_FAR *numSpecifiers) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetIndexedFormatSpecifier( 
-            /* [in] */ aafInt32 index,
-            /* [out] */ aafUID_t __RPC_FAR *essenceFormatCode,
-            /* [in] */ aafInt32 valueSize,
-            /* [length_is][size_is][out] */ aafDataBuffer_t value,
-            /* [out] */ aafInt32 __RPC_FAR *bytesRead) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFEssenceFormatVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFEssenceFormat __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFEssenceFormat __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFEssenceFormat __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddFormatSpecifier )( 
-            IAAFEssenceFormat __RPC_FAR * This,
-            /* [in] */ aafUID_constref essenceFormatCode,
-            /* [in] */ aafInt32 valueSize,
-            /* [size_is][in] */ aafDataBuffer_t value);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFormatSpecifier )( 
-            IAAFEssenceFormat __RPC_FAR * This,
-            /* [in] */ aafUID_constref essenceFormatCode,
-            /* [in] */ aafInt32 valueSize,
-            /* [length_is][size_is][out] */ aafDataBuffer_t value,
-            /* [out] */ aafInt32 __RPC_FAR *bytesRead);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NumFormatSpecifiers )( 
-            IAAFEssenceFormat __RPC_FAR * This,
-            /* [out] */ aafInt32 __RPC_FAR *numSpecifiers);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIndexedFormatSpecifier )( 
-            IAAFEssenceFormat __RPC_FAR * This,
-            /* [in] */ aafInt32 index,
-            /* [out] */ aafUID_t __RPC_FAR *essenceFormatCode,
-            /* [in] */ aafInt32 valueSize,
-            /* [length_is][size_is][out] */ aafDataBuffer_t value,
-            /* [out] */ aafInt32 __RPC_FAR *bytesRead);
-        
-        END_INTERFACE
-    } IAAFEssenceFormatVtbl;
-
-    interface IAAFEssenceFormat
-    {
-        CONST_VTBL struct IAAFEssenceFormatVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFEssenceFormat_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFEssenceFormat_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFEssenceFormat_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFEssenceFormat_AddFormatSpecifier(This,essenceFormatCode,valueSize,value)	\
-    (This)->lpVtbl -> AddFormatSpecifier(This,essenceFormatCode,valueSize,value)
-
-#define IAAFEssenceFormat_GetFormatSpecifier(This,essenceFormatCode,valueSize,value,bytesRead)	\
-    (This)->lpVtbl -> GetFormatSpecifier(This,essenceFormatCode,valueSize,value,bytesRead)
-
-#define IAAFEssenceFormat_NumFormatSpecifiers(This,numSpecifiers)	\
-    (This)->lpVtbl -> NumFormatSpecifiers(This,numSpecifiers)
-
-#define IAAFEssenceFormat_GetIndexedFormatSpecifier(This,index,essenceFormatCode,valueSize,value,bytesRead)	\
-    (This)->lpVtbl -> GetIndexedFormatSpecifier(This,index,essenceFormatCode,valueSize,value,bytesRead)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceFormat_AddFormatSpecifier_Proxy( 
-    IAAFEssenceFormat __RPC_FAR * This,
-    /* [in] */ aafUID_constref essenceFormatCode,
-    /* [in] */ aafInt32 valueSize,
-    /* [size_is][in] */ aafDataBuffer_t value);
-
-
-void __RPC_STUB IAAFEssenceFormat_AddFormatSpecifier_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceFormat_GetFormatSpecifier_Proxy( 
-    IAAFEssenceFormat __RPC_FAR * This,
-    /* [in] */ aafUID_constref essenceFormatCode,
-    /* [in] */ aafInt32 valueSize,
-    /* [length_is][size_is][out] */ aafDataBuffer_t value,
-    /* [out] */ aafInt32 __RPC_FAR *bytesRead);
-
-
-void __RPC_STUB IAAFEssenceFormat_GetFormatSpecifier_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceFormat_NumFormatSpecifiers_Proxy( 
-    IAAFEssenceFormat __RPC_FAR * This,
-    /* [out] */ aafInt32 __RPC_FAR *numSpecifiers);
-
-
-void __RPC_STUB IAAFEssenceFormat_NumFormatSpecifiers_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceFormat_GetIndexedFormatSpecifier_Proxy( 
-    IAAFEssenceFormat __RPC_FAR * This,
-    /* [in] */ aafInt32 index,
-    /* [out] */ aafUID_t __RPC_FAR *essenceFormatCode,
-    /* [in] */ aafInt32 valueSize,
-    /* [length_is][size_is][out] */ aafDataBuffer_t value,
-    /* [out] */ aafInt32 __RPC_FAR *bytesRead);
-
-
-void __RPC_STUB IAAFEssenceFormat_GetIndexedFormatSpecifier_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFEssenceFormat_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFEssenceGroup_INTERFACE_DEFINED__
-#define __IAAFEssenceGroup_INTERFACE_DEFINED__
-
-/* interface IAAFEssenceGroup */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFEssenceGroup;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("e58a8567-2a3e-11D2-bfa4-006097116212")
-    IAAFEssenceGroup : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE SetStillFrame( 
-            /* [in] */ IAAFSourceClip __RPC_FAR *pStillFrame) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetStillFrame( 
-            /* [out] */ IAAFSourceClip __RPC_FAR *__RPC_FAR *ppStillFrame) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE AppendChoice( 
-            /* [in] */ IAAFSegment __RPC_FAR *pChoice) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE PrependChoice( 
-            /* [in] */ IAAFSegment __RPC_FAR *pChoice) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE InsertChoiceAt( 
-            /* [in] */ aafUInt32 index,
-            /* [in] */ IAAFSegment __RPC_FAR *pChoice) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CountChoices( 
-            /* [out] */ aafUInt32 __RPC_FAR *pCount) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetChoiceAt( 
-            /* [in] */ aafUInt32 index,
-            /* [out] */ IAAFSegment __RPC_FAR *__RPC_FAR *ppChoice) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE RemoveChoiceAt( 
-            /* [in] */ aafUInt32 index) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFEssenceGroupVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFEssenceGroup __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFEssenceGroup __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFEssenceGroup __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStillFrame )( 
-            IAAFEssenceGroup __RPC_FAR * This,
-            /* [in] */ IAAFSourceClip __RPC_FAR *pStillFrame);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStillFrame )( 
-            IAAFEssenceGroup __RPC_FAR * This,
-            /* [out] */ IAAFSourceClip __RPC_FAR *__RPC_FAR *ppStillFrame);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AppendChoice )( 
-            IAAFEssenceGroup __RPC_FAR * This,
-            /* [in] */ IAAFSegment __RPC_FAR *pChoice);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrependChoice )( 
-            IAAFEssenceGroup __RPC_FAR * This,
-            /* [in] */ IAAFSegment __RPC_FAR *pChoice);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InsertChoiceAt )( 
-            IAAFEssenceGroup __RPC_FAR * This,
-            /* [in] */ aafUInt32 index,
-            /* [in] */ IAAFSegment __RPC_FAR *pChoice);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountChoices )( 
-            IAAFEssenceGroup __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pCount);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetChoiceAt )( 
-            IAAFEssenceGroup __RPC_FAR * This,
-            /* [in] */ aafUInt32 index,
-            /* [out] */ IAAFSegment __RPC_FAR *__RPC_FAR *ppChoice);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveChoiceAt )( 
-            IAAFEssenceGroup __RPC_FAR * This,
-            /* [in] */ aafUInt32 index);
-        
-        END_INTERFACE
-    } IAAFEssenceGroupVtbl;
-
-    interface IAAFEssenceGroup
-    {
-        CONST_VTBL struct IAAFEssenceGroupVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFEssenceGroup_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFEssenceGroup_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFEssenceGroup_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFEssenceGroup_SetStillFrame(This,pStillFrame)	\
-    (This)->lpVtbl -> SetStillFrame(This,pStillFrame)
-
-#define IAAFEssenceGroup_GetStillFrame(This,ppStillFrame)	\
-    (This)->lpVtbl -> GetStillFrame(This,ppStillFrame)
-
-#define IAAFEssenceGroup_AppendChoice(This,pChoice)	\
-    (This)->lpVtbl -> AppendChoice(This,pChoice)
-
-#define IAAFEssenceGroup_PrependChoice(This,pChoice)	\
-    (This)->lpVtbl -> PrependChoice(This,pChoice)
-
-#define IAAFEssenceGroup_InsertChoiceAt(This,index,pChoice)	\
-    (This)->lpVtbl -> InsertChoiceAt(This,index,pChoice)
-
-#define IAAFEssenceGroup_CountChoices(This,pCount)	\
-    (This)->lpVtbl -> CountChoices(This,pCount)
-
-#define IAAFEssenceGroup_GetChoiceAt(This,index,ppChoice)	\
-    (This)->lpVtbl -> GetChoiceAt(This,index,ppChoice)
-
-#define IAAFEssenceGroup_RemoveChoiceAt(This,index)	\
-    (This)->lpVtbl -> RemoveChoiceAt(This,index)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceGroup_SetStillFrame_Proxy( 
-    IAAFEssenceGroup __RPC_FAR * This,
-    /* [in] */ IAAFSourceClip __RPC_FAR *pStillFrame);
-
-
-void __RPC_STUB IAAFEssenceGroup_SetStillFrame_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceGroup_GetStillFrame_Proxy( 
-    IAAFEssenceGroup __RPC_FAR * This,
-    /* [out] */ IAAFSourceClip __RPC_FAR *__RPC_FAR *ppStillFrame);
-
-
-void __RPC_STUB IAAFEssenceGroup_GetStillFrame_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceGroup_AppendChoice_Proxy( 
-    IAAFEssenceGroup __RPC_FAR * This,
-    /* [in] */ IAAFSegment __RPC_FAR *pChoice);
-
-
-void __RPC_STUB IAAFEssenceGroup_AppendChoice_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceGroup_PrependChoice_Proxy( 
-    IAAFEssenceGroup __RPC_FAR * This,
-    /* [in] */ IAAFSegment __RPC_FAR *pChoice);
-
-
-void __RPC_STUB IAAFEssenceGroup_PrependChoice_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceGroup_InsertChoiceAt_Proxy( 
-    IAAFEssenceGroup __RPC_FAR * This,
-    /* [in] */ aafUInt32 index,
-    /* [in] */ IAAFSegment __RPC_FAR *pChoice);
-
-
-void __RPC_STUB IAAFEssenceGroup_InsertChoiceAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceGroup_CountChoices_Proxy( 
-    IAAFEssenceGroup __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pCount);
-
-
-void __RPC_STUB IAAFEssenceGroup_CountChoices_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceGroup_GetChoiceAt_Proxy( 
-    IAAFEssenceGroup __RPC_FAR * This,
-    /* [in] */ aafUInt32 index,
-    /* [out] */ IAAFSegment __RPC_FAR *__RPC_FAR *ppChoice);
-
-
-void __RPC_STUB IAAFEssenceGroup_GetChoiceAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceGroup_RemoveChoiceAt_Proxy( 
-    IAAFEssenceGroup __RPC_FAR * This,
-    /* [in] */ aafUInt32 index);
-
-
-void __RPC_STUB IAAFEssenceGroup_RemoveChoiceAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFEssenceGroup_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFFiller_INTERFACE_DEFINED__
-#define __IAAFFiller_INTERFACE_DEFINED__
-
-/* interface IAAFFiller */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFFiller;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("38e6f8a9-2a2c-11d2-8411-00600832acb8")
-    IAAFFiller : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
-            /* [in] */ aafLength_t length) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFFillerVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFFiller __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFFiller __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFFiller __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IAAFFiller __RPC_FAR * This,
-            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
-            /* [in] */ aafLength_t length);
-        
-        END_INTERFACE
-    } IAAFFillerVtbl;
-
-    interface IAAFFiller
-    {
-        CONST_VTBL struct IAAFFillerVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFFiller_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFFiller_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFFiller_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFFiller_Initialize(This,pDataDef,length)	\
-    (This)->lpVtbl -> Initialize(This,pDataDef,length)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFFiller_Initialize_Proxy( 
-    IAAFFiller __RPC_FAR * This,
-    /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
-    /* [in] */ aafLength_t length);
-
-
-void __RPC_STUB IAAFFiller_Initialize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFFiller_INTERFACE_DEFINED__ */
-
-
 #ifndef __IAAFFindSourceInfo_INTERFACE_DEFINED__
 #define __IAAFFindSourceInfo_INTERFACE_DEFINED__
 
@@ -10581,507 +9551,6 @@ void __RPC_STUB IAAFFindSourceInfo_GetEditRate_Stub(
 #endif 	/* __IAAFFindSourceInfo_INTERFACE_DEFINED__ */
 
 
-#ifndef __IAAFOperationGroup_INTERFACE_DEFINED__
-#define __IAAFOperationGroup_INTERFACE_DEFINED__
-
-/* interface IAAFOperationGroup */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFOperationGroup;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("3AE3BA82-2C98-11d2-8042-006008143E6F")
-    IAAFOperationGroup : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
-            /* [in] */ aafLength_t length,
-            /* [in] */ IAAFOperationDef __RPC_FAR *operationDef) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetOperationDefinition( 
-            /* [out] */ IAAFOperationDef __RPC_FAR *__RPC_FAR *ppOperationDef) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetOperationDefinition( 
-            /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetRender( 
-            /* [out] */ IAAFSourceReference __RPC_FAR *__RPC_FAR *ppSourceRef) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE IsATimeWarp( 
-            /* [retval][out] */ aafBoolean_t __RPC_FAR *pIsTimeWarp) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetBypassOverride( 
-            /* [out] */ aafUInt32 __RPC_FAR *pBypassOverride) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CountSourceSegments( 
-            /* [out] */ aafUInt32 __RPC_FAR *pResult) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE IsValidTranOperation( 
-            /* [out] */ aafBoolean_t __RPC_FAR *pValidTransition) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CountParameters( 
-            /* [out] */ aafUInt32 __RPC_FAR *pResult) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE AddParameter( 
-            /* [in] */ IAAFParameter __RPC_FAR *pParameter) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE AppendInputSegment( 
-            /* [in] */ IAAFSegment __RPC_FAR *pSegment) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE PrependInputSegment( 
-            /* [in] */ IAAFSegment __RPC_FAR *pSegment) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE InsertInputSegmentAt( 
-            /* [in] */ aafUInt32 index,
-            /* [in] */ IAAFSegment __RPC_FAR *pSegment) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetRender( 
-            /* [in] */ IAAFSourceReference __RPC_FAR *ppSourceRef) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetBypassOverride( 
-            /* [in] */ aafUInt32 bypassOverride) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetParameters( 
-            /* [out] */ IEnumAAFParameters __RPC_FAR *__RPC_FAR *ppEnum) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE LookupParameter( 
-            /* [in] */ aafArgIDType_constref argID,
-            /* [out] */ IAAFParameter __RPC_FAR *__RPC_FAR *ppParameter) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetInputSegmentAt( 
-            /* [in] */ aafUInt32 index,
-            /* [out] */ IAAFSegment __RPC_FAR *__RPC_FAR *ppInputSegment) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE RemoveInputSegmentAt( 
-            /* [in] */ aafUInt32 index) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFOperationGroupVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFOperationGroup __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFOperationGroup __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
-            /* [in] */ aafLength_t length,
-            /* [in] */ IAAFOperationDef __RPC_FAR *operationDef);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOperationDefinition )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [out] */ IAAFOperationDef __RPC_FAR *__RPC_FAR *ppOperationDef);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOperationDefinition )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRender )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [out] */ IAAFSourceReference __RPC_FAR *__RPC_FAR *ppSourceRef);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsATimeWarp )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [retval][out] */ aafBoolean_t __RPC_FAR *pIsTimeWarp);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBypassOverride )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pBypassOverride);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountSourceSegments )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pResult);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsValidTranOperation )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [out] */ aafBoolean_t __RPC_FAR *pValidTransition);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountParameters )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pResult);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddParameter )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [in] */ IAAFParameter __RPC_FAR *pParameter);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AppendInputSegment )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [in] */ IAAFSegment __RPC_FAR *pSegment);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrependInputSegment )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [in] */ IAAFSegment __RPC_FAR *pSegment);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InsertInputSegmentAt )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [in] */ aafUInt32 index,
-            /* [in] */ IAAFSegment __RPC_FAR *pSegment);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRender )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [in] */ IAAFSourceReference __RPC_FAR *ppSourceRef);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBypassOverride )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [in] */ aafUInt32 bypassOverride);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetParameters )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [out] */ IEnumAAFParameters __RPC_FAR *__RPC_FAR *ppEnum);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupParameter )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [in] */ aafArgIDType_constref argID,
-            /* [out] */ IAAFParameter __RPC_FAR *__RPC_FAR *ppParameter);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInputSegmentAt )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [in] */ aafUInt32 index,
-            /* [out] */ IAAFSegment __RPC_FAR *__RPC_FAR *ppInputSegment);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveInputSegmentAt )( 
-            IAAFOperationGroup __RPC_FAR * This,
-            /* [in] */ aafUInt32 index);
-        
-        END_INTERFACE
-    } IAAFOperationGroupVtbl;
-
-    interface IAAFOperationGroup
-    {
-        CONST_VTBL struct IAAFOperationGroupVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFOperationGroup_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFOperationGroup_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFOperationGroup_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFOperationGroup_Initialize(This,pDataDef,length,operationDef)	\
-    (This)->lpVtbl -> Initialize(This,pDataDef,length,operationDef)
-
-#define IAAFOperationGroup_GetOperationDefinition(This,ppOperationDef)	\
-    (This)->lpVtbl -> GetOperationDefinition(This,ppOperationDef)
-
-#define IAAFOperationGroup_SetOperationDefinition(This,pOperationDef)	\
-    (This)->lpVtbl -> SetOperationDefinition(This,pOperationDef)
-
-#define IAAFOperationGroup_GetRender(This,ppSourceRef)	\
-    (This)->lpVtbl -> GetRender(This,ppSourceRef)
-
-#define IAAFOperationGroup_IsATimeWarp(This,pIsTimeWarp)	\
-    (This)->lpVtbl -> IsATimeWarp(This,pIsTimeWarp)
-
-#define IAAFOperationGroup_GetBypassOverride(This,pBypassOverride)	\
-    (This)->lpVtbl -> GetBypassOverride(This,pBypassOverride)
-
-#define IAAFOperationGroup_CountSourceSegments(This,pResult)	\
-    (This)->lpVtbl -> CountSourceSegments(This,pResult)
-
-#define IAAFOperationGroup_IsValidTranOperation(This,pValidTransition)	\
-    (This)->lpVtbl -> IsValidTranOperation(This,pValidTransition)
-
-#define IAAFOperationGroup_CountParameters(This,pResult)	\
-    (This)->lpVtbl -> CountParameters(This,pResult)
-
-#define IAAFOperationGroup_AddParameter(This,pParameter)	\
-    (This)->lpVtbl -> AddParameter(This,pParameter)
-
-#define IAAFOperationGroup_AppendInputSegment(This,pSegment)	\
-    (This)->lpVtbl -> AppendInputSegment(This,pSegment)
-
-#define IAAFOperationGroup_PrependInputSegment(This,pSegment)	\
-    (This)->lpVtbl -> PrependInputSegment(This,pSegment)
-
-#define IAAFOperationGroup_InsertInputSegmentAt(This,index,pSegment)	\
-    (This)->lpVtbl -> InsertInputSegmentAt(This,index,pSegment)
-
-#define IAAFOperationGroup_SetRender(This,ppSourceRef)	\
-    (This)->lpVtbl -> SetRender(This,ppSourceRef)
-
-#define IAAFOperationGroup_SetBypassOverride(This,bypassOverride)	\
-    (This)->lpVtbl -> SetBypassOverride(This,bypassOverride)
-
-#define IAAFOperationGroup_GetParameters(This,ppEnum)	\
-    (This)->lpVtbl -> GetParameters(This,ppEnum)
-
-#define IAAFOperationGroup_LookupParameter(This,argID,ppParameter)	\
-    (This)->lpVtbl -> LookupParameter(This,argID,ppParameter)
-
-#define IAAFOperationGroup_GetInputSegmentAt(This,index,ppInputSegment)	\
-    (This)->lpVtbl -> GetInputSegmentAt(This,index,ppInputSegment)
-
-#define IAAFOperationGroup_RemoveInputSegmentAt(This,index)	\
-    (This)->lpVtbl -> RemoveInputSegmentAt(This,index)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_Initialize_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
-    /* [in] */ aafLength_t length,
-    /* [in] */ IAAFOperationDef __RPC_FAR *operationDef);
-
-
-void __RPC_STUB IAAFOperationGroup_Initialize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_GetOperationDefinition_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [out] */ IAAFOperationDef __RPC_FAR *__RPC_FAR *ppOperationDef);
-
-
-void __RPC_STUB IAAFOperationGroup_GetOperationDefinition_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_SetOperationDefinition_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef);
-
-
-void __RPC_STUB IAAFOperationGroup_SetOperationDefinition_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_GetRender_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [out] */ IAAFSourceReference __RPC_FAR *__RPC_FAR *ppSourceRef);
-
-
-void __RPC_STUB IAAFOperationGroup_GetRender_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_IsATimeWarp_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [retval][out] */ aafBoolean_t __RPC_FAR *pIsTimeWarp);
-
-
-void __RPC_STUB IAAFOperationGroup_IsATimeWarp_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_GetBypassOverride_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pBypassOverride);
-
-
-void __RPC_STUB IAAFOperationGroup_GetBypassOverride_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_CountSourceSegments_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pResult);
-
-
-void __RPC_STUB IAAFOperationGroup_CountSourceSegments_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_IsValidTranOperation_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [out] */ aafBoolean_t __RPC_FAR *pValidTransition);
-
-
-void __RPC_STUB IAAFOperationGroup_IsValidTranOperation_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_CountParameters_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pResult);
-
-
-void __RPC_STUB IAAFOperationGroup_CountParameters_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_AddParameter_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [in] */ IAAFParameter __RPC_FAR *pParameter);
-
-
-void __RPC_STUB IAAFOperationGroup_AddParameter_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_AppendInputSegment_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [in] */ IAAFSegment __RPC_FAR *pSegment);
-
-
-void __RPC_STUB IAAFOperationGroup_AppendInputSegment_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_PrependInputSegment_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [in] */ IAAFSegment __RPC_FAR *pSegment);
-
-
-void __RPC_STUB IAAFOperationGroup_PrependInputSegment_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_InsertInputSegmentAt_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [in] */ aafUInt32 index,
-    /* [in] */ IAAFSegment __RPC_FAR *pSegment);
-
-
-void __RPC_STUB IAAFOperationGroup_InsertInputSegmentAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_SetRender_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [in] */ IAAFSourceReference __RPC_FAR *ppSourceRef);
-
-
-void __RPC_STUB IAAFOperationGroup_SetRender_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_SetBypassOverride_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [in] */ aafUInt32 bypassOverride);
-
-
-void __RPC_STUB IAAFOperationGroup_SetBypassOverride_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_GetParameters_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [out] */ IEnumAAFParameters __RPC_FAR *__RPC_FAR *ppEnum);
-
-
-void __RPC_STUB IAAFOperationGroup_GetParameters_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_LookupParameter_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [in] */ aafArgIDType_constref argID,
-    /* [out] */ IAAFParameter __RPC_FAR *__RPC_FAR *ppParameter);
-
-
-void __RPC_STUB IAAFOperationGroup_LookupParameter_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_GetInputSegmentAt_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [in] */ aafUInt32 index,
-    /* [out] */ IAAFSegment __RPC_FAR *__RPC_FAR *ppInputSegment);
-
-
-void __RPC_STUB IAAFOperationGroup_GetInputSegmentAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFOperationGroup_RemoveInputSegmentAt_Proxy( 
-    IAAFOperationGroup __RPC_FAR * This,
-    /* [in] */ aafUInt32 index);
-
-
-void __RPC_STUB IAAFOperationGroup_RemoveInputSegmentAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFOperationGroup_INTERFACE_DEFINED__ */
-
-
 #ifndef __IAAFGPITrigger_INTERFACE_DEFINED__
 #define __IAAFGPITrigger_INTERFACE_DEFINED__
 
@@ -11192,6 +9661,124 @@ void __RPC_STUB IAAFGPITrigger_SetActiveState_Stub(
 
 
 #endif 	/* __IAAFGPITrigger_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFGetFileBits_INTERFACE_DEFINED__
+#define __IAAFGetFileBits_INTERFACE_DEFINED__
+
+/* interface IAAFGetFileBits */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFGetFileBits;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("3CC80282-72A8-11D4-B80D-0000863F2C27")
+    IAAFGetFileBits : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE ReadAt( 
+            /* [size_is][out] */ aafMemPtr_t buf,
+            /* [in] */ aafUInt32 bufSize,
+            /* [in] */ aafUInt64 position) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSize( 
+            /* [out] */ aafUInt64 __RPC_FAR *pSize) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFGetFileBitsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFGetFileBits __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFGetFileBits __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFGetFileBits __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReadAt )( 
+            IAAFGetFileBits __RPC_FAR * This,
+            /* [size_is][out] */ aafMemPtr_t buf,
+            /* [in] */ aafUInt32 bufSize,
+            /* [in] */ aafUInt64 position);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSize )( 
+            IAAFGetFileBits __RPC_FAR * This,
+            /* [out] */ aafUInt64 __RPC_FAR *pSize);
+        
+        END_INTERFACE
+    } IAAFGetFileBitsVtbl;
+
+    interface IAAFGetFileBits
+    {
+        CONST_VTBL struct IAAFGetFileBitsVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFGetFileBits_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFGetFileBits_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFGetFileBits_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFGetFileBits_ReadAt(This,buf,bufSize,position)	\
+    (This)->lpVtbl -> ReadAt(This,buf,bufSize,position)
+
+#define IAAFGetFileBits_GetSize(This,pSize)	\
+    (This)->lpVtbl -> GetSize(This,pSize)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFGetFileBits_ReadAt_Proxy( 
+    IAAFGetFileBits __RPC_FAR * This,
+    /* [size_is][out] */ aafMemPtr_t buf,
+    /* [in] */ aafUInt32 bufSize,
+    /* [in] */ aafUInt64 position);
+
+
+void __RPC_STUB IAAFGetFileBits_ReadAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFGetFileBits_GetSize_Proxy( 
+    IAAFGetFileBits __RPC_FAR * This,
+    /* [out] */ aafUInt64 __RPC_FAR *pSize);
+
+
+void __RPC_STUB IAAFGetFileBits_GetSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFGetFileBits_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFHeader_INTERFACE_DEFINED__
@@ -12563,6 +11150,234 @@ void __RPC_STUB IAAFKLVData_SetValue_Stub(
 
 
 #endif 	/* __IAAFKLVData_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFKLVDataDefinition_INTERFACE_DEFINED__
+#define __IAAFKLVDataDefinition_INTERFACE_DEFINED__
+
+/* interface IAAFKLVDataDefinition */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFKLVDataDefinition;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("f6af8700-949c-4304-9706-c0576b53f4aa")
+    IAAFKLVDataDefinition : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( 
+            /* [ref][in] */ aafUID_constref id,
+            /* [string][in] */ aafCharacter_constptr pName,
+            /* [string][in] */ aafCharacter_constptr pDescription) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AddParentProperty( 
+            /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetParentProperties( 
+            /* [out] */ IEnumAAFPropertyDefs __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountParentProperties( 
+            /* [out] */ aafUInt32 __RPC_FAR *pNumProperties) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RemoveParentProperty( 
+            /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetKLVDataType( 
+            /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *ppTypeDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetKLVDataType( 
+            /* [in] */ IAAFTypeDef __RPC_FAR *pTypeDef) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFKLVDataDefinitionVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFKLVDataDefinition __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFKLVDataDefinition __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFKLVDataDefinition __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFKLVDataDefinition __RPC_FAR * This,
+            /* [ref][in] */ aafUID_constref id,
+            /* [string][in] */ aafCharacter_constptr pName,
+            /* [string][in] */ aafCharacter_constptr pDescription);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddParentProperty )( 
+            IAAFKLVDataDefinition __RPC_FAR * This,
+            /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetParentProperties )( 
+            IAAFKLVDataDefinition __RPC_FAR * This,
+            /* [out] */ IEnumAAFPropertyDefs __RPC_FAR *__RPC_FAR *ppEnum);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountParentProperties )( 
+            IAAFKLVDataDefinition __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pNumProperties);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveParentProperty )( 
+            IAAFKLVDataDefinition __RPC_FAR * This,
+            /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetKLVDataType )( 
+            IAAFKLVDataDefinition __RPC_FAR * This,
+            /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *ppTypeDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetKLVDataType )( 
+            IAAFKLVDataDefinition __RPC_FAR * This,
+            /* [in] */ IAAFTypeDef __RPC_FAR *pTypeDef);
+        
+        END_INTERFACE
+    } IAAFKLVDataDefinitionVtbl;
+
+    interface IAAFKLVDataDefinition
+    {
+        CONST_VTBL struct IAAFKLVDataDefinitionVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFKLVDataDefinition_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFKLVDataDefinition_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFKLVDataDefinition_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFKLVDataDefinition_Initialize(This,id,pName,pDescription)	\
+    (This)->lpVtbl -> Initialize(This,id,pName,pDescription)
+
+#define IAAFKLVDataDefinition_AddParentProperty(This,pParentProperty)	\
+    (This)->lpVtbl -> AddParentProperty(This,pParentProperty)
+
+#define IAAFKLVDataDefinition_GetParentProperties(This,ppEnum)	\
+    (This)->lpVtbl -> GetParentProperties(This,ppEnum)
+
+#define IAAFKLVDataDefinition_CountParentProperties(This,pNumProperties)	\
+    (This)->lpVtbl -> CountParentProperties(This,pNumProperties)
+
+#define IAAFKLVDataDefinition_RemoveParentProperty(This,pParentProperty)	\
+    (This)->lpVtbl -> RemoveParentProperty(This,pParentProperty)
+
+#define IAAFKLVDataDefinition_GetKLVDataType(This,ppTypeDef)	\
+    (This)->lpVtbl -> GetKLVDataType(This,ppTypeDef)
+
+#define IAAFKLVDataDefinition_SetKLVDataType(This,pTypeDef)	\
+    (This)->lpVtbl -> SetKLVDataType(This,pTypeDef)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFKLVDataDefinition_Initialize_Proxy( 
+    IAAFKLVDataDefinition __RPC_FAR * This,
+    /* [ref][in] */ aafUID_constref id,
+    /* [string][in] */ aafCharacter_constptr pName,
+    /* [string][in] */ aafCharacter_constptr pDescription);
+
+
+void __RPC_STUB IAAFKLVDataDefinition_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFKLVDataDefinition_AddParentProperty_Proxy( 
+    IAAFKLVDataDefinition __RPC_FAR * This,
+    /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty);
+
+
+void __RPC_STUB IAAFKLVDataDefinition_AddParentProperty_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFKLVDataDefinition_GetParentProperties_Proxy( 
+    IAAFKLVDataDefinition __RPC_FAR * This,
+    /* [out] */ IEnumAAFPropertyDefs __RPC_FAR *__RPC_FAR *ppEnum);
+
+
+void __RPC_STUB IAAFKLVDataDefinition_GetParentProperties_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFKLVDataDefinition_CountParentProperties_Proxy( 
+    IAAFKLVDataDefinition __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pNumProperties);
+
+
+void __RPC_STUB IAAFKLVDataDefinition_CountParentProperties_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFKLVDataDefinition_RemoveParentProperty_Proxy( 
+    IAAFKLVDataDefinition __RPC_FAR * This,
+    /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty);
+
+
+void __RPC_STUB IAAFKLVDataDefinition_RemoveParentProperty_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFKLVDataDefinition_GetKLVDataType_Proxy( 
+    IAAFKLVDataDefinition __RPC_FAR * This,
+    /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *ppTypeDef);
+
+
+void __RPC_STUB IAAFKLVDataDefinition_GetKLVDataType_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFKLVDataDefinition_SetKLVDataType_Proxy( 
+    IAAFKLVDataDefinition __RPC_FAR * This,
+    /* [in] */ IAAFTypeDef __RPC_FAR *pTypeDef);
+
+
+void __RPC_STUB IAAFKLVDataDefinition_SetKLVDataType_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFKLVDataDefinition_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFLocator_INTERFACE_DEFINED__
@@ -14567,6 +13382,231 @@ void __RPC_STUB IAAFMobSlot_SetSlotID_Stub(
 #endif 	/* __IAAFMobSlot_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFMultipleDescriptor_INTERFACE_DEFINED__
+#define __IAAFMultipleDescriptor_INTERFACE_DEFINED__
+
+/* interface IAAFMultipleDescriptor */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFMultipleDescriptor;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("dabf53cf-1ec3-43a2-9418-f22fb87c38f4")
+    IAAFMultipleDescriptor : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountFileDescriptors( 
+            /* [out] */ aafUInt32 __RPC_FAR *pResult) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AppendFileDescriptor( 
+            /* [in] */ IAAFFileDescriptor __RPC_FAR *pFileDescriptor) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE PrependFileDescriptor( 
+            /* [in] */ IAAFFileDescriptor __RPC_FAR *pFileDescriptor) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE InsertFileDescriptorAt( 
+            /* [in] */ aafUInt32 index,
+            /* [in] */ IAAFFileDescriptor __RPC_FAR *pFileDescriptor) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetFileDescriptorAt( 
+            /* [in] */ aafUInt32 index,
+            /* [retval][out] */ IAAFFileDescriptor __RPC_FAR *__RPC_FAR *ppFileDescriptor) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RemoveFileDescriptorAt( 
+            /* [in] */ aafUInt32 index) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFMultipleDescriptorVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFMultipleDescriptor __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFMultipleDescriptor __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFMultipleDescriptor __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFMultipleDescriptor __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountFileDescriptors )( 
+            IAAFMultipleDescriptor __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pResult);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AppendFileDescriptor )( 
+            IAAFMultipleDescriptor __RPC_FAR * This,
+            /* [in] */ IAAFFileDescriptor __RPC_FAR *pFileDescriptor);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrependFileDescriptor )( 
+            IAAFMultipleDescriptor __RPC_FAR * This,
+            /* [in] */ IAAFFileDescriptor __RPC_FAR *pFileDescriptor);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InsertFileDescriptorAt )( 
+            IAAFMultipleDescriptor __RPC_FAR * This,
+            /* [in] */ aafUInt32 index,
+            /* [in] */ IAAFFileDescriptor __RPC_FAR *pFileDescriptor);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFileDescriptorAt )( 
+            IAAFMultipleDescriptor __RPC_FAR * This,
+            /* [in] */ aafUInt32 index,
+            /* [retval][out] */ IAAFFileDescriptor __RPC_FAR *__RPC_FAR *ppFileDescriptor);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveFileDescriptorAt )( 
+            IAAFMultipleDescriptor __RPC_FAR * This,
+            /* [in] */ aafUInt32 index);
+        
+        END_INTERFACE
+    } IAAFMultipleDescriptorVtbl;
+
+    interface IAAFMultipleDescriptor
+    {
+        CONST_VTBL struct IAAFMultipleDescriptorVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFMultipleDescriptor_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFMultipleDescriptor_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFMultipleDescriptor_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFMultipleDescriptor_Initialize(This)	\
+    (This)->lpVtbl -> Initialize(This)
+
+#define IAAFMultipleDescriptor_CountFileDescriptors(This,pResult)	\
+    (This)->lpVtbl -> CountFileDescriptors(This,pResult)
+
+#define IAAFMultipleDescriptor_AppendFileDescriptor(This,pFileDescriptor)	\
+    (This)->lpVtbl -> AppendFileDescriptor(This,pFileDescriptor)
+
+#define IAAFMultipleDescriptor_PrependFileDescriptor(This,pFileDescriptor)	\
+    (This)->lpVtbl -> PrependFileDescriptor(This,pFileDescriptor)
+
+#define IAAFMultipleDescriptor_InsertFileDescriptorAt(This,index,pFileDescriptor)	\
+    (This)->lpVtbl -> InsertFileDescriptorAt(This,index,pFileDescriptor)
+
+#define IAAFMultipleDescriptor_GetFileDescriptorAt(This,index,ppFileDescriptor)	\
+    (This)->lpVtbl -> GetFileDescriptorAt(This,index,ppFileDescriptor)
+
+#define IAAFMultipleDescriptor_RemoveFileDescriptorAt(This,index)	\
+    (This)->lpVtbl -> RemoveFileDescriptorAt(This,index)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFMultipleDescriptor_Initialize_Proxy( 
+    IAAFMultipleDescriptor __RPC_FAR * This);
+
+
+void __RPC_STUB IAAFMultipleDescriptor_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMultipleDescriptor_CountFileDescriptors_Proxy( 
+    IAAFMultipleDescriptor __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pResult);
+
+
+void __RPC_STUB IAAFMultipleDescriptor_CountFileDescriptors_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMultipleDescriptor_AppendFileDescriptor_Proxy( 
+    IAAFMultipleDescriptor __RPC_FAR * This,
+    /* [in] */ IAAFFileDescriptor __RPC_FAR *pFileDescriptor);
+
+
+void __RPC_STUB IAAFMultipleDescriptor_AppendFileDescriptor_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMultipleDescriptor_PrependFileDescriptor_Proxy( 
+    IAAFMultipleDescriptor __RPC_FAR * This,
+    /* [in] */ IAAFFileDescriptor __RPC_FAR *pFileDescriptor);
+
+
+void __RPC_STUB IAAFMultipleDescriptor_PrependFileDescriptor_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMultipleDescriptor_InsertFileDescriptorAt_Proxy( 
+    IAAFMultipleDescriptor __RPC_FAR * This,
+    /* [in] */ aafUInt32 index,
+    /* [in] */ IAAFFileDescriptor __RPC_FAR *pFileDescriptor);
+
+
+void __RPC_STUB IAAFMultipleDescriptor_InsertFileDescriptorAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMultipleDescriptor_GetFileDescriptorAt_Proxy( 
+    IAAFMultipleDescriptor __RPC_FAR * This,
+    /* [in] */ aafUInt32 index,
+    /* [retval][out] */ IAAFFileDescriptor __RPC_FAR *__RPC_FAR *ppFileDescriptor);
+
+
+void __RPC_STUB IAAFMultipleDescriptor_GetFileDescriptorAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMultipleDescriptor_RemoveFileDescriptorAt_Proxy( 
+    IAAFMultipleDescriptor __RPC_FAR * This,
+    /* [in] */ aafUInt32 index);
+
+
+void __RPC_STUB IAAFMultipleDescriptor_RemoveFileDescriptorAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFMultipleDescriptor_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFNestedScope_INTERFACE_DEFINED__
 #define __IAAFNestedScope_INTERFACE_DEFINED__
 
@@ -15262,6 +14302,1049 @@ void __RPC_STUB IAAFObject_IsGenerationTracked_Stub(
 
 
 #endif 	/* __IAAFObject_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFOperationDef_INTERFACE_DEFINED__
+#define __IAAFOperationDef_INTERFACE_DEFINED__
+
+/* interface IAAFOperationDef */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFOperationDef;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("14035d91-1ff5-11d2-bf97-006097116212")
+    IAAFOperationDef : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( 
+            /* [ref][in] */ aafUID_constref id,
+            /* [string][in] */ aafCharacter_constptr pName,
+            /* [string][in] */ aafCharacter_constptr pDescription) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetDataDef( 
+            /* [out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetDataDef( 
+            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsTimeWarp( 
+            /* [retval][out] */ aafBoolean_t __RPC_FAR *bIsTimeWarp) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetIsTimeWarp( 
+            /* [in] */ aafBoolean_t IsTimeWarp) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE PrependDegradeToOperation( 
+            /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AppendDegradeToOperation( 
+            /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE InsertDegradeToOperationAt( 
+            /* [in] */ aafUInt32 index,
+            /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RemoveDegradeToOperationAt( 
+            /* [in] */ aafUInt32 index) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetDegradeToOperations( 
+            /* [retval][out] */ IEnumAAFOperationDefs __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountDegradeToOperations( 
+            /* [retval][out] */ aafUInt32 __RPC_FAR *pResult) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetCategory( 
+            /* [out] */ aafUID_t __RPC_FAR *pValue) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetCategory( 
+            /* [ref][in] */ aafUID_constref value) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetNumberInputs( 
+            /* [retval][out] */ aafInt32 __RPC_FAR *pNumberInputs) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetNumberInputs( 
+            /* [in] */ aafInt32 NumberInputs) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetBypass( 
+            /* [retval][out] */ aafUInt32 __RPC_FAR *pBypass) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetBypass( 
+            /* [in] */ aafUInt32 bypass) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AddParameterDef( 
+            /* [in] */ IAAFParameterDef __RPC_FAR *pParameterDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetParameterDefs( 
+            /* [retval][out] */ IEnumAAFParameterDefs __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountParameterDefs( 
+            /* [out] */ aafUInt32 __RPC_FAR *pResult) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE LookupParameterDef( 
+            /* [in] */ aafUID_constref parameterDefId,
+            /* [out] */ IAAFParameterDef __RPC_FAR *__RPC_FAR *ppParameterDef) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFOperationDefVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFOperationDef __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFOperationDef __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [ref][in] */ aafUID_constref id,
+            /* [string][in] */ aafCharacter_constptr pName,
+            /* [string][in] */ aafCharacter_constptr pDescription);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDataDef )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDataDef )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsTimeWarp )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [retval][out] */ aafBoolean_t __RPC_FAR *bIsTimeWarp);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIsTimeWarp )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [in] */ aafBoolean_t IsTimeWarp);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrependDegradeToOperation )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AppendDegradeToOperation )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InsertDegradeToOperationAt )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [in] */ aafUInt32 index,
+            /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveDegradeToOperationAt )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [in] */ aafUInt32 index);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDegradeToOperations )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [retval][out] */ IEnumAAFOperationDefs __RPC_FAR *__RPC_FAR *ppEnum);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountDegradeToOperations )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [retval][out] */ aafUInt32 __RPC_FAR *pResult);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCategory )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [out] */ aafUID_t __RPC_FAR *pValue);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCategory )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [ref][in] */ aafUID_constref value);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNumberInputs )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [retval][out] */ aafInt32 __RPC_FAR *pNumberInputs);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetNumberInputs )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [in] */ aafInt32 NumberInputs);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBypass )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [retval][out] */ aafUInt32 __RPC_FAR *pBypass);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBypass )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [in] */ aafUInt32 bypass);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddParameterDef )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [in] */ IAAFParameterDef __RPC_FAR *pParameterDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetParameterDefs )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [retval][out] */ IEnumAAFParameterDefs __RPC_FAR *__RPC_FAR *ppEnum);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountParameterDefs )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pResult);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupParameterDef )( 
+            IAAFOperationDef __RPC_FAR * This,
+            /* [in] */ aafUID_constref parameterDefId,
+            /* [out] */ IAAFParameterDef __RPC_FAR *__RPC_FAR *ppParameterDef);
+        
+        END_INTERFACE
+    } IAAFOperationDefVtbl;
+
+    interface IAAFOperationDef
+    {
+        CONST_VTBL struct IAAFOperationDefVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFOperationDef_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFOperationDef_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFOperationDef_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFOperationDef_Initialize(This,id,pName,pDescription)	\
+    (This)->lpVtbl -> Initialize(This,id,pName,pDescription)
+
+#define IAAFOperationDef_GetDataDef(This,ppDataDef)	\
+    (This)->lpVtbl -> GetDataDef(This,ppDataDef)
+
+#define IAAFOperationDef_SetDataDef(This,pDataDef)	\
+    (This)->lpVtbl -> SetDataDef(This,pDataDef)
+
+#define IAAFOperationDef_IsTimeWarp(This,bIsTimeWarp)	\
+    (This)->lpVtbl -> IsTimeWarp(This,bIsTimeWarp)
+
+#define IAAFOperationDef_SetIsTimeWarp(This,IsTimeWarp)	\
+    (This)->lpVtbl -> SetIsTimeWarp(This,IsTimeWarp)
+
+#define IAAFOperationDef_PrependDegradeToOperation(This,pOperationDef)	\
+    (This)->lpVtbl -> PrependDegradeToOperation(This,pOperationDef)
+
+#define IAAFOperationDef_AppendDegradeToOperation(This,pOperationDef)	\
+    (This)->lpVtbl -> AppendDegradeToOperation(This,pOperationDef)
+
+#define IAAFOperationDef_InsertDegradeToOperationAt(This,index,pOperationDef)	\
+    (This)->lpVtbl -> InsertDegradeToOperationAt(This,index,pOperationDef)
+
+#define IAAFOperationDef_RemoveDegradeToOperationAt(This,index)	\
+    (This)->lpVtbl -> RemoveDegradeToOperationAt(This,index)
+
+#define IAAFOperationDef_GetDegradeToOperations(This,ppEnum)	\
+    (This)->lpVtbl -> GetDegradeToOperations(This,ppEnum)
+
+#define IAAFOperationDef_CountDegradeToOperations(This,pResult)	\
+    (This)->lpVtbl -> CountDegradeToOperations(This,pResult)
+
+#define IAAFOperationDef_GetCategory(This,pValue)	\
+    (This)->lpVtbl -> GetCategory(This,pValue)
+
+#define IAAFOperationDef_SetCategory(This,value)	\
+    (This)->lpVtbl -> SetCategory(This,value)
+
+#define IAAFOperationDef_GetNumberInputs(This,pNumberInputs)	\
+    (This)->lpVtbl -> GetNumberInputs(This,pNumberInputs)
+
+#define IAAFOperationDef_SetNumberInputs(This,NumberInputs)	\
+    (This)->lpVtbl -> SetNumberInputs(This,NumberInputs)
+
+#define IAAFOperationDef_GetBypass(This,pBypass)	\
+    (This)->lpVtbl -> GetBypass(This,pBypass)
+
+#define IAAFOperationDef_SetBypass(This,bypass)	\
+    (This)->lpVtbl -> SetBypass(This,bypass)
+
+#define IAAFOperationDef_AddParameterDef(This,pParameterDef)	\
+    (This)->lpVtbl -> AddParameterDef(This,pParameterDef)
+
+#define IAAFOperationDef_GetParameterDefs(This,ppEnum)	\
+    (This)->lpVtbl -> GetParameterDefs(This,ppEnum)
+
+#define IAAFOperationDef_CountParameterDefs(This,pResult)	\
+    (This)->lpVtbl -> CountParameterDefs(This,pResult)
+
+#define IAAFOperationDef_LookupParameterDef(This,parameterDefId,ppParameterDef)	\
+    (This)->lpVtbl -> LookupParameterDef(This,parameterDefId,ppParameterDef)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_Initialize_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [ref][in] */ aafUID_constref id,
+    /* [string][in] */ aafCharacter_constptr pName,
+    /* [string][in] */ aafCharacter_constptr pDescription);
+
+
+void __RPC_STUB IAAFOperationDef_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_GetDataDef_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [out] */ IAAFDataDef __RPC_FAR *__RPC_FAR *ppDataDef);
+
+
+void __RPC_STUB IAAFOperationDef_GetDataDef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_SetDataDef_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [in] */ IAAFDataDef __RPC_FAR *pDataDef);
+
+
+void __RPC_STUB IAAFOperationDef_SetDataDef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_IsTimeWarp_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [retval][out] */ aafBoolean_t __RPC_FAR *bIsTimeWarp);
+
+
+void __RPC_STUB IAAFOperationDef_IsTimeWarp_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_SetIsTimeWarp_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [in] */ aafBoolean_t IsTimeWarp);
+
+
+void __RPC_STUB IAAFOperationDef_SetIsTimeWarp_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_PrependDegradeToOperation_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef);
+
+
+void __RPC_STUB IAAFOperationDef_PrependDegradeToOperation_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_AppendDegradeToOperation_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef);
+
+
+void __RPC_STUB IAAFOperationDef_AppendDegradeToOperation_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_InsertDegradeToOperationAt_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [in] */ aafUInt32 index,
+    /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef);
+
+
+void __RPC_STUB IAAFOperationDef_InsertDegradeToOperationAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_RemoveDegradeToOperationAt_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [in] */ aafUInt32 index);
+
+
+void __RPC_STUB IAAFOperationDef_RemoveDegradeToOperationAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_GetDegradeToOperations_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [retval][out] */ IEnumAAFOperationDefs __RPC_FAR *__RPC_FAR *ppEnum);
+
+
+void __RPC_STUB IAAFOperationDef_GetDegradeToOperations_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_CountDegradeToOperations_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [retval][out] */ aafUInt32 __RPC_FAR *pResult);
+
+
+void __RPC_STUB IAAFOperationDef_CountDegradeToOperations_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_GetCategory_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [out] */ aafUID_t __RPC_FAR *pValue);
+
+
+void __RPC_STUB IAAFOperationDef_GetCategory_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_SetCategory_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [ref][in] */ aafUID_constref value);
+
+
+void __RPC_STUB IAAFOperationDef_SetCategory_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_GetNumberInputs_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [retval][out] */ aafInt32 __RPC_FAR *pNumberInputs);
+
+
+void __RPC_STUB IAAFOperationDef_GetNumberInputs_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_SetNumberInputs_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [in] */ aafInt32 NumberInputs);
+
+
+void __RPC_STUB IAAFOperationDef_SetNumberInputs_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_GetBypass_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [retval][out] */ aafUInt32 __RPC_FAR *pBypass);
+
+
+void __RPC_STUB IAAFOperationDef_GetBypass_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_SetBypass_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [in] */ aafUInt32 bypass);
+
+
+void __RPC_STUB IAAFOperationDef_SetBypass_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_AddParameterDef_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [in] */ IAAFParameterDef __RPC_FAR *pParameterDef);
+
+
+void __RPC_STUB IAAFOperationDef_AddParameterDef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_GetParameterDefs_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [retval][out] */ IEnumAAFParameterDefs __RPC_FAR *__RPC_FAR *ppEnum);
+
+
+void __RPC_STUB IAAFOperationDef_GetParameterDefs_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_CountParameterDefs_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pResult);
+
+
+void __RPC_STUB IAAFOperationDef_CountParameterDefs_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationDef_LookupParameterDef_Proxy( 
+    IAAFOperationDef __RPC_FAR * This,
+    /* [in] */ aafUID_constref parameterDefId,
+    /* [out] */ IAAFParameterDef __RPC_FAR *__RPC_FAR *ppParameterDef);
+
+
+void __RPC_STUB IAAFOperationDef_LookupParameterDef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFOperationDef_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFOperationGroup_INTERFACE_DEFINED__
+#define __IAAFOperationGroup_INTERFACE_DEFINED__
+
+/* interface IAAFOperationGroup */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFOperationGroup;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("3AE3BA82-2C98-11d2-8042-006008143E6F")
+    IAAFOperationGroup : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( 
+            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
+            /* [in] */ aafLength_t length,
+            /* [in] */ IAAFOperationDef __RPC_FAR *operationDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetOperationDefinition( 
+            /* [out] */ IAAFOperationDef __RPC_FAR *__RPC_FAR *ppOperationDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetOperationDefinition( 
+            /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetRender( 
+            /* [out] */ IAAFSourceReference __RPC_FAR *__RPC_FAR *ppSourceRef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsATimeWarp( 
+            /* [retval][out] */ aafBoolean_t __RPC_FAR *pIsTimeWarp) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetBypassOverride( 
+            /* [out] */ aafUInt32 __RPC_FAR *pBypassOverride) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountSourceSegments( 
+            /* [out] */ aafUInt32 __RPC_FAR *pResult) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsValidTranOperation( 
+            /* [out] */ aafBoolean_t __RPC_FAR *pValidTransition) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountParameters( 
+            /* [out] */ aafUInt32 __RPC_FAR *pResult) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AddParameter( 
+            /* [in] */ IAAFParameter __RPC_FAR *pParameter) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AppendInputSegment( 
+            /* [in] */ IAAFSegment __RPC_FAR *pSegment) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE PrependInputSegment( 
+            /* [in] */ IAAFSegment __RPC_FAR *pSegment) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE InsertInputSegmentAt( 
+            /* [in] */ aafUInt32 index,
+            /* [in] */ IAAFSegment __RPC_FAR *pSegment) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetRender( 
+            /* [in] */ IAAFSourceReference __RPC_FAR *ppSourceRef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetBypassOverride( 
+            /* [in] */ aafUInt32 bypassOverride) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetParameters( 
+            /* [out] */ IEnumAAFParameters __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE LookupParameter( 
+            /* [in] */ aafArgIDType_constref argID,
+            /* [out] */ IAAFParameter __RPC_FAR *__RPC_FAR *ppParameter) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetInputSegmentAt( 
+            /* [in] */ aafUInt32 index,
+            /* [out] */ IAAFSegment __RPC_FAR *__RPC_FAR *ppInputSegment) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RemoveInputSegmentAt( 
+            /* [in] */ aafUInt32 index) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFOperationGroupVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFOperationGroup __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFOperationGroup __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
+            /* [in] */ aafLength_t length,
+            /* [in] */ IAAFOperationDef __RPC_FAR *operationDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOperationDefinition )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [out] */ IAAFOperationDef __RPC_FAR *__RPC_FAR *ppOperationDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOperationDefinition )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRender )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [out] */ IAAFSourceReference __RPC_FAR *__RPC_FAR *ppSourceRef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsATimeWarp )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [retval][out] */ aafBoolean_t __RPC_FAR *pIsTimeWarp);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBypassOverride )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pBypassOverride);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountSourceSegments )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pResult);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsValidTranOperation )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [out] */ aafBoolean_t __RPC_FAR *pValidTransition);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountParameters )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pResult);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddParameter )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [in] */ IAAFParameter __RPC_FAR *pParameter);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AppendInputSegment )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [in] */ IAAFSegment __RPC_FAR *pSegment);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrependInputSegment )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [in] */ IAAFSegment __RPC_FAR *pSegment);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InsertInputSegmentAt )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [in] */ aafUInt32 index,
+            /* [in] */ IAAFSegment __RPC_FAR *pSegment);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRender )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [in] */ IAAFSourceReference __RPC_FAR *ppSourceRef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBypassOverride )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [in] */ aafUInt32 bypassOverride);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetParameters )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [out] */ IEnumAAFParameters __RPC_FAR *__RPC_FAR *ppEnum);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupParameter )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [in] */ aafArgIDType_constref argID,
+            /* [out] */ IAAFParameter __RPC_FAR *__RPC_FAR *ppParameter);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInputSegmentAt )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [in] */ aafUInt32 index,
+            /* [out] */ IAAFSegment __RPC_FAR *__RPC_FAR *ppInputSegment);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveInputSegmentAt )( 
+            IAAFOperationGroup __RPC_FAR * This,
+            /* [in] */ aafUInt32 index);
+        
+        END_INTERFACE
+    } IAAFOperationGroupVtbl;
+
+    interface IAAFOperationGroup
+    {
+        CONST_VTBL struct IAAFOperationGroupVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFOperationGroup_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFOperationGroup_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFOperationGroup_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFOperationGroup_Initialize(This,pDataDef,length,operationDef)	\
+    (This)->lpVtbl -> Initialize(This,pDataDef,length,operationDef)
+
+#define IAAFOperationGroup_GetOperationDefinition(This,ppOperationDef)	\
+    (This)->lpVtbl -> GetOperationDefinition(This,ppOperationDef)
+
+#define IAAFOperationGroup_SetOperationDefinition(This,pOperationDef)	\
+    (This)->lpVtbl -> SetOperationDefinition(This,pOperationDef)
+
+#define IAAFOperationGroup_GetRender(This,ppSourceRef)	\
+    (This)->lpVtbl -> GetRender(This,ppSourceRef)
+
+#define IAAFOperationGroup_IsATimeWarp(This,pIsTimeWarp)	\
+    (This)->lpVtbl -> IsATimeWarp(This,pIsTimeWarp)
+
+#define IAAFOperationGroup_GetBypassOverride(This,pBypassOverride)	\
+    (This)->lpVtbl -> GetBypassOverride(This,pBypassOverride)
+
+#define IAAFOperationGroup_CountSourceSegments(This,pResult)	\
+    (This)->lpVtbl -> CountSourceSegments(This,pResult)
+
+#define IAAFOperationGroup_IsValidTranOperation(This,pValidTransition)	\
+    (This)->lpVtbl -> IsValidTranOperation(This,pValidTransition)
+
+#define IAAFOperationGroup_CountParameters(This,pResult)	\
+    (This)->lpVtbl -> CountParameters(This,pResult)
+
+#define IAAFOperationGroup_AddParameter(This,pParameter)	\
+    (This)->lpVtbl -> AddParameter(This,pParameter)
+
+#define IAAFOperationGroup_AppendInputSegment(This,pSegment)	\
+    (This)->lpVtbl -> AppendInputSegment(This,pSegment)
+
+#define IAAFOperationGroup_PrependInputSegment(This,pSegment)	\
+    (This)->lpVtbl -> PrependInputSegment(This,pSegment)
+
+#define IAAFOperationGroup_InsertInputSegmentAt(This,index,pSegment)	\
+    (This)->lpVtbl -> InsertInputSegmentAt(This,index,pSegment)
+
+#define IAAFOperationGroup_SetRender(This,ppSourceRef)	\
+    (This)->lpVtbl -> SetRender(This,ppSourceRef)
+
+#define IAAFOperationGroup_SetBypassOverride(This,bypassOverride)	\
+    (This)->lpVtbl -> SetBypassOverride(This,bypassOverride)
+
+#define IAAFOperationGroup_GetParameters(This,ppEnum)	\
+    (This)->lpVtbl -> GetParameters(This,ppEnum)
+
+#define IAAFOperationGroup_LookupParameter(This,argID,ppParameter)	\
+    (This)->lpVtbl -> LookupParameter(This,argID,ppParameter)
+
+#define IAAFOperationGroup_GetInputSegmentAt(This,index,ppInputSegment)	\
+    (This)->lpVtbl -> GetInputSegmentAt(This,index,ppInputSegment)
+
+#define IAAFOperationGroup_RemoveInputSegmentAt(This,index)	\
+    (This)->lpVtbl -> RemoveInputSegmentAt(This,index)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_Initialize_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
+    /* [in] */ aafLength_t length,
+    /* [in] */ IAAFOperationDef __RPC_FAR *operationDef);
+
+
+void __RPC_STUB IAAFOperationGroup_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_GetOperationDefinition_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [out] */ IAAFOperationDef __RPC_FAR *__RPC_FAR *ppOperationDef);
+
+
+void __RPC_STUB IAAFOperationGroup_GetOperationDefinition_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_SetOperationDefinition_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [in] */ IAAFOperationDef __RPC_FAR *pOperationDef);
+
+
+void __RPC_STUB IAAFOperationGroup_SetOperationDefinition_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_GetRender_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [out] */ IAAFSourceReference __RPC_FAR *__RPC_FAR *ppSourceRef);
+
+
+void __RPC_STUB IAAFOperationGroup_GetRender_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_IsATimeWarp_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [retval][out] */ aafBoolean_t __RPC_FAR *pIsTimeWarp);
+
+
+void __RPC_STUB IAAFOperationGroup_IsATimeWarp_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_GetBypassOverride_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pBypassOverride);
+
+
+void __RPC_STUB IAAFOperationGroup_GetBypassOverride_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_CountSourceSegments_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pResult);
+
+
+void __RPC_STUB IAAFOperationGroup_CountSourceSegments_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_IsValidTranOperation_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [out] */ aafBoolean_t __RPC_FAR *pValidTransition);
+
+
+void __RPC_STUB IAAFOperationGroup_IsValidTranOperation_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_CountParameters_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pResult);
+
+
+void __RPC_STUB IAAFOperationGroup_CountParameters_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_AddParameter_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [in] */ IAAFParameter __RPC_FAR *pParameter);
+
+
+void __RPC_STUB IAAFOperationGroup_AddParameter_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_AppendInputSegment_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [in] */ IAAFSegment __RPC_FAR *pSegment);
+
+
+void __RPC_STUB IAAFOperationGroup_AppendInputSegment_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_PrependInputSegment_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [in] */ IAAFSegment __RPC_FAR *pSegment);
+
+
+void __RPC_STUB IAAFOperationGroup_PrependInputSegment_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_InsertInputSegmentAt_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [in] */ aafUInt32 index,
+    /* [in] */ IAAFSegment __RPC_FAR *pSegment);
+
+
+void __RPC_STUB IAAFOperationGroup_InsertInputSegmentAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_SetRender_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [in] */ IAAFSourceReference __RPC_FAR *ppSourceRef);
+
+
+void __RPC_STUB IAAFOperationGroup_SetRender_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_SetBypassOverride_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [in] */ aafUInt32 bypassOverride);
+
+
+void __RPC_STUB IAAFOperationGroup_SetBypassOverride_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_GetParameters_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [out] */ IEnumAAFParameters __RPC_FAR *__RPC_FAR *ppEnum);
+
+
+void __RPC_STUB IAAFOperationGroup_GetParameters_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_LookupParameter_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [in] */ aafArgIDType_constref argID,
+    /* [out] */ IAAFParameter __RPC_FAR *__RPC_FAR *ppParameter);
+
+
+void __RPC_STUB IAAFOperationGroup_LookupParameter_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_GetInputSegmentAt_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [in] */ aafUInt32 index,
+    /* [out] */ IAAFSegment __RPC_FAR *__RPC_FAR *ppInputSegment);
+
+
+void __RPC_STUB IAAFOperationGroup_GetInputSegmentAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFOperationGroup_RemoveInputSegmentAt_Proxy( 
+    IAAFOperationGroup __RPC_FAR * This,
+    /* [in] */ aafUInt32 index);
+
+
+void __RPC_STUB IAAFOperationGroup_RemoveInputSegmentAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFOperationGroup_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFPCMDescriptor_INTERFACE_DEFINED__
@@ -16393,6 +16476,1306 @@ EXTERN_C const IID IID_IAAFPhysicalDescriptor;
 #endif 	/* __IAAFPhysicalDescriptor_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFPluginDef_INTERFACE_DEFINED__
+#define __IAAFPluginDef_INTERFACE_DEFINED__
+
+/* interface IAAFPluginDef */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFPluginDef;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("AD1BB854-DBB2-11d2-809C-006008143E6F")
+    IAAFPluginDef : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( 
+            /* [ref][in] */ aafUID_constref id,
+            /* [in] */ aafCharacter_constptr pName,
+            /* [in] */ aafCharacter_constptr pDescription) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetCategoryClass( 
+            /* [out] */ aafUID_t __RPC_FAR *pCategoryClass) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetCategoryClass( 
+            /* [ref][in] */ aafUID_constref categoryClass) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPluginVersion( 
+            /* [out] */ aafVersionType_t __RPC_FAR *pVersion) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetPluginVersion( 
+            /* [in] */ aafVersionType_t __RPC_FAR *pVersion) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetPluginVersionString( 
+            /* [string][in] */ aafCharacter_constptr pPluginVersionString) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPluginVersionString( 
+            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pPluginVersionString,
+            /* [in] */ aafUInt32 bufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPluginVersionStringBufLen( 
+            /* [out] */ aafUInt32 __RPC_FAR *pBufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetPluginManufacturerName( 
+            /* [string][in] */ aafCharacter_constptr pPluginManufacturerName) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPluginManufacturerName( 
+            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pPluginManufacturerName,
+            /* [in] */ aafUInt32 bufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPluginManufacturerNameBufLen( 
+            /* [out] */ aafUInt32 __RPC_FAR *pBufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetManufacturerInfo( 
+            /* [retval][out] */ IAAFNetworkLocator __RPC_FAR *__RPC_FAR *ppResult) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetManufacturerInfo( 
+            /* [in] */ IAAFNetworkLocator __RPC_FAR *pManufacturerInfo) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetManufacturerID( 
+            /* [out] */ aafUID_t __RPC_FAR *pManufacturerID) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetManufacturerID( 
+            /* [ref][in] */ aafUID_constref manufacturerID) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetHardwarePlatform( 
+            /* [out] */ aafHardwarePlatform_t __RPC_FAR *pHardwarePlatform) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetHardwarePlatform( 
+            /* [in] */ aafHardwarePlatform_constref hardwarePlatform) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPlatformVersionRange( 
+            /* [out] */ aafVersionType_t __RPC_FAR *pMinVersion,
+            /* [out] */ aafVersionType_t __RPC_FAR *pMaxVersion) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetPlatformMinimumVersion( 
+            /* [in] */ aafVersionType_constref minVersion) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetPlatformMaximumVersion( 
+            /* [in] */ aafVersionType_constref maxVersion) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetEngine( 
+            /* [out] */ aafEngine_t __RPC_FAR *pEngine) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetEngine( 
+            /* [in] */ aafEngine_constref engine) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetEngineVersionRange( 
+            /* [out] */ aafVersionType_t __RPC_FAR *pMinVersion,
+            /* [out] */ aafVersionType_t __RPC_FAR *pMaxVersion) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetEngineMinimumVersion( 
+            /* [in] */ aafVersionType_constref minVersion) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetEngineMaximumVersion( 
+            /* [in] */ aafVersionType_constref pMaxVersion) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPluginAPI( 
+            /* [out] */ aafPluginAPI_t __RPC_FAR *pPluginAPI) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetPluginAPI( 
+            /* [in] */ aafPluginAPI_constref pluginAPI) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPluginAPIVersionRange( 
+            /* [out] */ aafVersionType_t __RPC_FAR *pMinVersion,
+            /* [out] */ aafVersionType_t __RPC_FAR *pMaxVersion) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetPluginAPIMinimumVersion( 
+            /* [out] */ aafVersionType_constref minVersion) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetPluginAPIMaximumVersion( 
+            /* [in] */ aafVersionType_constref maxVersion) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsSoftwareOnly( 
+            /* [out] */ aafBoolean_t __RPC_FAR *pIsSoftwareOnly) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetIsSoftwareOnly( 
+            /* [in] */ aafBoolean_t isSoftwareOnly) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsAccelerated( 
+            /* [out] */ aafBoolean_t __RPC_FAR *pIsAccelerated) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetIsAccelerated( 
+            /* [in] */ aafBoolean_t isAccelerated) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SupportsAuthentication( 
+            /* [out] */ aafBoolean_t __RPC_FAR *pSupportsAuthentication) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetSupportsAuthentication( 
+            /* [in] */ aafBoolean_t SupportsAuthentication) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountLocators( 
+            /* [out] */ aafUInt32 __RPC_FAR *pResult) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AppendLocator( 
+            /* [in] */ IAAFLocator __RPC_FAR *pLocator) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE PrependLocator( 
+            /* [in] */ IAAFLocator __RPC_FAR *pLocator) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE InsertLocatorAt( 
+            /* [in] */ aafUInt32 index,
+            /* [in] */ IAAFLocator __RPC_FAR *pLocator) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetLocatorAt( 
+            /* [in] */ aafUInt32 index,
+            /* [out] */ IAAFLocator __RPC_FAR *__RPC_FAR *ppLocator) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RemoveLocatorAt( 
+            /* [in] */ aafUInt32 index) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetLocators( 
+            /* [retval][out] */ IEnumAAFPluginLocators __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetDefinitionObjectID( 
+            /* [in] */ aafUID_t pDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetDefinitionObjectID( 
+            /* [out][retval] */ aafUID_t __RPC_FAR *ppDef) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFPluginDefVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFPluginDef __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFPluginDef __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [ref][in] */ aafUID_constref id,
+            /* [in] */ aafCharacter_constptr pName,
+            /* [in] */ aafCharacter_constptr pDescription);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCategoryClass )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [out] */ aafUID_t __RPC_FAR *pCategoryClass);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCategoryClass )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [ref][in] */ aafUID_constref categoryClass);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPluginVersion )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [out] */ aafVersionType_t __RPC_FAR *pVersion);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPluginVersion )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ aafVersionType_t __RPC_FAR *pVersion);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPluginVersionString )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [string][in] */ aafCharacter_constptr pPluginVersionString);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPluginVersionString )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pPluginVersionString,
+            /* [in] */ aafUInt32 bufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPluginVersionStringBufLen )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPluginManufacturerName )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [string][in] */ aafCharacter_constptr pPluginManufacturerName);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPluginManufacturerName )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pPluginManufacturerName,
+            /* [in] */ aafUInt32 bufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPluginManufacturerNameBufLen )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetManufacturerInfo )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [retval][out] */ IAAFNetworkLocator __RPC_FAR *__RPC_FAR *ppResult);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetManufacturerInfo )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ IAAFNetworkLocator __RPC_FAR *pManufacturerInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetManufacturerID )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [out] */ aafUID_t __RPC_FAR *pManufacturerID);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetManufacturerID )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [ref][in] */ aafUID_constref manufacturerID);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHardwarePlatform )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [out] */ aafHardwarePlatform_t __RPC_FAR *pHardwarePlatform);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHardwarePlatform )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ aafHardwarePlatform_constref hardwarePlatform);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPlatformVersionRange )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [out] */ aafVersionType_t __RPC_FAR *pMinVersion,
+            /* [out] */ aafVersionType_t __RPC_FAR *pMaxVersion);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPlatformMinimumVersion )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ aafVersionType_constref minVersion);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPlatformMaximumVersion )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ aafVersionType_constref maxVersion);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEngine )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [out] */ aafEngine_t __RPC_FAR *pEngine);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEngine )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ aafEngine_constref engine);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEngineVersionRange )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [out] */ aafVersionType_t __RPC_FAR *pMinVersion,
+            /* [out] */ aafVersionType_t __RPC_FAR *pMaxVersion);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEngineMinimumVersion )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ aafVersionType_constref minVersion);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEngineMaximumVersion )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ aafVersionType_constref pMaxVersion);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPluginAPI )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [out] */ aafPluginAPI_t __RPC_FAR *pPluginAPI);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPluginAPI )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ aafPluginAPI_constref pluginAPI);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPluginAPIVersionRange )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [out] */ aafVersionType_t __RPC_FAR *pMinVersion,
+            /* [out] */ aafVersionType_t __RPC_FAR *pMaxVersion);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPluginAPIMinimumVersion )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [out] */ aafVersionType_constref minVersion);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPluginAPIMaximumVersion )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ aafVersionType_constref maxVersion);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsSoftwareOnly )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [out] */ aafBoolean_t __RPC_FAR *pIsSoftwareOnly);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIsSoftwareOnly )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ aafBoolean_t isSoftwareOnly);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsAccelerated )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [out] */ aafBoolean_t __RPC_FAR *pIsAccelerated);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIsAccelerated )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ aafBoolean_t isAccelerated);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SupportsAuthentication )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [out] */ aafBoolean_t __RPC_FAR *pSupportsAuthentication);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSupportsAuthentication )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ aafBoolean_t SupportsAuthentication);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountLocators )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pResult);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AppendLocator )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ IAAFLocator __RPC_FAR *pLocator);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrependLocator )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ IAAFLocator __RPC_FAR *pLocator);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InsertLocatorAt )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ aafUInt32 index,
+            /* [in] */ IAAFLocator __RPC_FAR *pLocator);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLocatorAt )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ aafUInt32 index,
+            /* [out] */ IAAFLocator __RPC_FAR *__RPC_FAR *ppLocator);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveLocatorAt )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ aafUInt32 index);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLocators )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [retval][out] */ IEnumAAFPluginLocators __RPC_FAR *__RPC_FAR *ppEnum);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDefinitionObjectID )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [in] */ aafUID_t pDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDefinitionObjectID )( 
+            IAAFPluginDef __RPC_FAR * This,
+            /* [out][retval] */ aafUID_t __RPC_FAR *ppDef);
+        
+        END_INTERFACE
+    } IAAFPluginDefVtbl;
+
+    interface IAAFPluginDef
+    {
+        CONST_VTBL struct IAAFPluginDefVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFPluginDef_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFPluginDef_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFPluginDef_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFPluginDef_Initialize(This,id,pName,pDescription)	\
+    (This)->lpVtbl -> Initialize(This,id,pName,pDescription)
+
+#define IAAFPluginDef_GetCategoryClass(This,pCategoryClass)	\
+    (This)->lpVtbl -> GetCategoryClass(This,pCategoryClass)
+
+#define IAAFPluginDef_SetCategoryClass(This,categoryClass)	\
+    (This)->lpVtbl -> SetCategoryClass(This,categoryClass)
+
+#define IAAFPluginDef_GetPluginVersion(This,pVersion)	\
+    (This)->lpVtbl -> GetPluginVersion(This,pVersion)
+
+#define IAAFPluginDef_SetPluginVersion(This,pVersion)	\
+    (This)->lpVtbl -> SetPluginVersion(This,pVersion)
+
+#define IAAFPluginDef_SetPluginVersionString(This,pPluginVersionString)	\
+    (This)->lpVtbl -> SetPluginVersionString(This,pPluginVersionString)
+
+#define IAAFPluginDef_GetPluginVersionString(This,pPluginVersionString,bufSize)	\
+    (This)->lpVtbl -> GetPluginVersionString(This,pPluginVersionString,bufSize)
+
+#define IAAFPluginDef_GetPluginVersionStringBufLen(This,pBufSize)	\
+    (This)->lpVtbl -> GetPluginVersionStringBufLen(This,pBufSize)
+
+#define IAAFPluginDef_SetPluginManufacturerName(This,pPluginManufacturerName)	\
+    (This)->lpVtbl -> SetPluginManufacturerName(This,pPluginManufacturerName)
+
+#define IAAFPluginDef_GetPluginManufacturerName(This,pPluginManufacturerName,bufSize)	\
+    (This)->lpVtbl -> GetPluginManufacturerName(This,pPluginManufacturerName,bufSize)
+
+#define IAAFPluginDef_GetPluginManufacturerNameBufLen(This,pBufSize)	\
+    (This)->lpVtbl -> GetPluginManufacturerNameBufLen(This,pBufSize)
+
+#define IAAFPluginDef_GetManufacturerInfo(This,ppResult)	\
+    (This)->lpVtbl -> GetManufacturerInfo(This,ppResult)
+
+#define IAAFPluginDef_SetManufacturerInfo(This,pManufacturerInfo)	\
+    (This)->lpVtbl -> SetManufacturerInfo(This,pManufacturerInfo)
+
+#define IAAFPluginDef_GetManufacturerID(This,pManufacturerID)	\
+    (This)->lpVtbl -> GetManufacturerID(This,pManufacturerID)
+
+#define IAAFPluginDef_SetManufacturerID(This,manufacturerID)	\
+    (This)->lpVtbl -> SetManufacturerID(This,manufacturerID)
+
+#define IAAFPluginDef_GetHardwarePlatform(This,pHardwarePlatform)	\
+    (This)->lpVtbl -> GetHardwarePlatform(This,pHardwarePlatform)
+
+#define IAAFPluginDef_SetHardwarePlatform(This,hardwarePlatform)	\
+    (This)->lpVtbl -> SetHardwarePlatform(This,hardwarePlatform)
+
+#define IAAFPluginDef_GetPlatformVersionRange(This,pMinVersion,pMaxVersion)	\
+    (This)->lpVtbl -> GetPlatformVersionRange(This,pMinVersion,pMaxVersion)
+
+#define IAAFPluginDef_SetPlatformMinimumVersion(This,minVersion)	\
+    (This)->lpVtbl -> SetPlatformMinimumVersion(This,minVersion)
+
+#define IAAFPluginDef_SetPlatformMaximumVersion(This,maxVersion)	\
+    (This)->lpVtbl -> SetPlatformMaximumVersion(This,maxVersion)
+
+#define IAAFPluginDef_GetEngine(This,pEngine)	\
+    (This)->lpVtbl -> GetEngine(This,pEngine)
+
+#define IAAFPluginDef_SetEngine(This,engine)	\
+    (This)->lpVtbl -> SetEngine(This,engine)
+
+#define IAAFPluginDef_GetEngineVersionRange(This,pMinVersion,pMaxVersion)	\
+    (This)->lpVtbl -> GetEngineVersionRange(This,pMinVersion,pMaxVersion)
+
+#define IAAFPluginDef_SetEngineMinimumVersion(This,minVersion)	\
+    (This)->lpVtbl -> SetEngineMinimumVersion(This,minVersion)
+
+#define IAAFPluginDef_SetEngineMaximumVersion(This,pMaxVersion)	\
+    (This)->lpVtbl -> SetEngineMaximumVersion(This,pMaxVersion)
+
+#define IAAFPluginDef_GetPluginAPI(This,pPluginAPI)	\
+    (This)->lpVtbl -> GetPluginAPI(This,pPluginAPI)
+
+#define IAAFPluginDef_SetPluginAPI(This,pluginAPI)	\
+    (This)->lpVtbl -> SetPluginAPI(This,pluginAPI)
+
+#define IAAFPluginDef_GetPluginAPIVersionRange(This,pMinVersion,pMaxVersion)	\
+    (This)->lpVtbl -> GetPluginAPIVersionRange(This,pMinVersion,pMaxVersion)
+
+#define IAAFPluginDef_SetPluginAPIMinimumVersion(This,minVersion)	\
+    (This)->lpVtbl -> SetPluginAPIMinimumVersion(This,minVersion)
+
+#define IAAFPluginDef_SetPluginAPIMaximumVersion(This,maxVersion)	\
+    (This)->lpVtbl -> SetPluginAPIMaximumVersion(This,maxVersion)
+
+#define IAAFPluginDef_IsSoftwareOnly(This,pIsSoftwareOnly)	\
+    (This)->lpVtbl -> IsSoftwareOnly(This,pIsSoftwareOnly)
+
+#define IAAFPluginDef_SetIsSoftwareOnly(This,isSoftwareOnly)	\
+    (This)->lpVtbl -> SetIsSoftwareOnly(This,isSoftwareOnly)
+
+#define IAAFPluginDef_IsAccelerated(This,pIsAccelerated)	\
+    (This)->lpVtbl -> IsAccelerated(This,pIsAccelerated)
+
+#define IAAFPluginDef_SetIsAccelerated(This,isAccelerated)	\
+    (This)->lpVtbl -> SetIsAccelerated(This,isAccelerated)
+
+#define IAAFPluginDef_SupportsAuthentication(This,pSupportsAuthentication)	\
+    (This)->lpVtbl -> SupportsAuthentication(This,pSupportsAuthentication)
+
+#define IAAFPluginDef_SetSupportsAuthentication(This,SupportsAuthentication)	\
+    (This)->lpVtbl -> SetSupportsAuthentication(This,SupportsAuthentication)
+
+#define IAAFPluginDef_CountLocators(This,pResult)	\
+    (This)->lpVtbl -> CountLocators(This,pResult)
+
+#define IAAFPluginDef_AppendLocator(This,pLocator)	\
+    (This)->lpVtbl -> AppendLocator(This,pLocator)
+
+#define IAAFPluginDef_PrependLocator(This,pLocator)	\
+    (This)->lpVtbl -> PrependLocator(This,pLocator)
+
+#define IAAFPluginDef_InsertLocatorAt(This,index,pLocator)	\
+    (This)->lpVtbl -> InsertLocatorAt(This,index,pLocator)
+
+#define IAAFPluginDef_GetLocatorAt(This,index,ppLocator)	\
+    (This)->lpVtbl -> GetLocatorAt(This,index,ppLocator)
+
+#define IAAFPluginDef_RemoveLocatorAt(This,index)	\
+    (This)->lpVtbl -> RemoveLocatorAt(This,index)
+
+#define IAAFPluginDef_GetLocators(This,ppEnum)	\
+    (This)->lpVtbl -> GetLocators(This,ppEnum)
+
+#define IAAFPluginDef_SetDefinitionObjectID(This,pDef)	\
+    (This)->lpVtbl -> SetDefinitionObjectID(This,pDef)
+
+#define IAAFPluginDef_GetDefinitionObjectID(This,ppDef)	\
+    (This)->lpVtbl -> GetDefinitionObjectID(This,ppDef)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_Initialize_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [ref][in] */ aafUID_constref id,
+    /* [in] */ aafCharacter_constptr pName,
+    /* [in] */ aafCharacter_constptr pDescription);
+
+
+void __RPC_STUB IAAFPluginDef_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetCategoryClass_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [out] */ aafUID_t __RPC_FAR *pCategoryClass);
+
+
+void __RPC_STUB IAAFPluginDef_GetCategoryClass_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetCategoryClass_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [ref][in] */ aafUID_constref categoryClass);
+
+
+void __RPC_STUB IAAFPluginDef_SetCategoryClass_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetPluginVersion_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [out] */ aafVersionType_t __RPC_FAR *pVersion);
+
+
+void __RPC_STUB IAAFPluginDef_GetPluginVersion_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetPluginVersion_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ aafVersionType_t __RPC_FAR *pVersion);
+
+
+void __RPC_STUB IAAFPluginDef_SetPluginVersion_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetPluginVersionString_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [string][in] */ aafCharacter_constptr pPluginVersionString);
+
+
+void __RPC_STUB IAAFPluginDef_SetPluginVersionString_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetPluginVersionString_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [size_is][string][out] */ aafCharacter __RPC_FAR *pPluginVersionString,
+    /* [in] */ aafUInt32 bufSize);
+
+
+void __RPC_STUB IAAFPluginDef_GetPluginVersionString_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetPluginVersionStringBufLen_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
+
+
+void __RPC_STUB IAAFPluginDef_GetPluginVersionStringBufLen_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetPluginManufacturerName_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [string][in] */ aafCharacter_constptr pPluginManufacturerName);
+
+
+void __RPC_STUB IAAFPluginDef_SetPluginManufacturerName_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetPluginManufacturerName_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [size_is][string][out] */ aafCharacter __RPC_FAR *pPluginManufacturerName,
+    /* [in] */ aafUInt32 bufSize);
+
+
+void __RPC_STUB IAAFPluginDef_GetPluginManufacturerName_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetPluginManufacturerNameBufLen_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
+
+
+void __RPC_STUB IAAFPluginDef_GetPluginManufacturerNameBufLen_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetManufacturerInfo_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [retval][out] */ IAAFNetworkLocator __RPC_FAR *__RPC_FAR *ppResult);
+
+
+void __RPC_STUB IAAFPluginDef_GetManufacturerInfo_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetManufacturerInfo_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ IAAFNetworkLocator __RPC_FAR *pManufacturerInfo);
+
+
+void __RPC_STUB IAAFPluginDef_SetManufacturerInfo_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetManufacturerID_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [out] */ aafUID_t __RPC_FAR *pManufacturerID);
+
+
+void __RPC_STUB IAAFPluginDef_GetManufacturerID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetManufacturerID_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [ref][in] */ aafUID_constref manufacturerID);
+
+
+void __RPC_STUB IAAFPluginDef_SetManufacturerID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetHardwarePlatform_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [out] */ aafHardwarePlatform_t __RPC_FAR *pHardwarePlatform);
+
+
+void __RPC_STUB IAAFPluginDef_GetHardwarePlatform_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetHardwarePlatform_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ aafHardwarePlatform_constref hardwarePlatform);
+
+
+void __RPC_STUB IAAFPluginDef_SetHardwarePlatform_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetPlatformVersionRange_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [out] */ aafVersionType_t __RPC_FAR *pMinVersion,
+    /* [out] */ aafVersionType_t __RPC_FAR *pMaxVersion);
+
+
+void __RPC_STUB IAAFPluginDef_GetPlatformVersionRange_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetPlatformMinimumVersion_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ aafVersionType_constref minVersion);
+
+
+void __RPC_STUB IAAFPluginDef_SetPlatformMinimumVersion_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetPlatformMaximumVersion_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ aafVersionType_constref maxVersion);
+
+
+void __RPC_STUB IAAFPluginDef_SetPlatformMaximumVersion_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetEngine_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [out] */ aafEngine_t __RPC_FAR *pEngine);
+
+
+void __RPC_STUB IAAFPluginDef_GetEngine_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetEngine_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ aafEngine_constref engine);
+
+
+void __RPC_STUB IAAFPluginDef_SetEngine_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetEngineVersionRange_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [out] */ aafVersionType_t __RPC_FAR *pMinVersion,
+    /* [out] */ aafVersionType_t __RPC_FAR *pMaxVersion);
+
+
+void __RPC_STUB IAAFPluginDef_GetEngineVersionRange_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetEngineMinimumVersion_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ aafVersionType_constref minVersion);
+
+
+void __RPC_STUB IAAFPluginDef_SetEngineMinimumVersion_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetEngineMaximumVersion_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ aafVersionType_constref pMaxVersion);
+
+
+void __RPC_STUB IAAFPluginDef_SetEngineMaximumVersion_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetPluginAPI_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [out] */ aafPluginAPI_t __RPC_FAR *pPluginAPI);
+
+
+void __RPC_STUB IAAFPluginDef_GetPluginAPI_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetPluginAPI_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ aafPluginAPI_constref pluginAPI);
+
+
+void __RPC_STUB IAAFPluginDef_SetPluginAPI_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetPluginAPIVersionRange_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [out] */ aafVersionType_t __RPC_FAR *pMinVersion,
+    /* [out] */ aafVersionType_t __RPC_FAR *pMaxVersion);
+
+
+void __RPC_STUB IAAFPluginDef_GetPluginAPIVersionRange_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetPluginAPIMinimumVersion_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [out] */ aafVersionType_constref minVersion);
+
+
+void __RPC_STUB IAAFPluginDef_SetPluginAPIMinimumVersion_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetPluginAPIMaximumVersion_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ aafVersionType_constref maxVersion);
+
+
+void __RPC_STUB IAAFPluginDef_SetPluginAPIMaximumVersion_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_IsSoftwareOnly_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [out] */ aafBoolean_t __RPC_FAR *pIsSoftwareOnly);
+
+
+void __RPC_STUB IAAFPluginDef_IsSoftwareOnly_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetIsSoftwareOnly_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ aafBoolean_t isSoftwareOnly);
+
+
+void __RPC_STUB IAAFPluginDef_SetIsSoftwareOnly_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_IsAccelerated_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [out] */ aafBoolean_t __RPC_FAR *pIsAccelerated);
+
+
+void __RPC_STUB IAAFPluginDef_IsAccelerated_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetIsAccelerated_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ aafBoolean_t isAccelerated);
+
+
+void __RPC_STUB IAAFPluginDef_SetIsAccelerated_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SupportsAuthentication_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [out] */ aafBoolean_t __RPC_FAR *pSupportsAuthentication);
+
+
+void __RPC_STUB IAAFPluginDef_SupportsAuthentication_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetSupportsAuthentication_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ aafBoolean_t SupportsAuthentication);
+
+
+void __RPC_STUB IAAFPluginDef_SetSupportsAuthentication_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_CountLocators_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pResult);
+
+
+void __RPC_STUB IAAFPluginDef_CountLocators_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_AppendLocator_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ IAAFLocator __RPC_FAR *pLocator);
+
+
+void __RPC_STUB IAAFPluginDef_AppendLocator_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_PrependLocator_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ IAAFLocator __RPC_FAR *pLocator);
+
+
+void __RPC_STUB IAAFPluginDef_PrependLocator_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_InsertLocatorAt_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ aafUInt32 index,
+    /* [in] */ IAAFLocator __RPC_FAR *pLocator);
+
+
+void __RPC_STUB IAAFPluginDef_InsertLocatorAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetLocatorAt_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ aafUInt32 index,
+    /* [out] */ IAAFLocator __RPC_FAR *__RPC_FAR *ppLocator);
+
+
+void __RPC_STUB IAAFPluginDef_GetLocatorAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_RemoveLocatorAt_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ aafUInt32 index);
+
+
+void __RPC_STUB IAAFPluginDef_RemoveLocatorAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetLocators_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [retval][out] */ IEnumAAFPluginLocators __RPC_FAR *__RPC_FAR *ppEnum);
+
+
+void __RPC_STUB IAAFPluginDef_GetLocators_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_SetDefinitionObjectID_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [in] */ aafUID_t pDef);
+
+
+void __RPC_STUB IAAFPluginDef_SetDefinitionObjectID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginDef_GetDefinitionObjectID_Proxy( 
+    IAAFPluginDef __RPC_FAR * This,
+    /* [out][retval] */ aafUID_t __RPC_FAR *ppDef);
+
+
+void __RPC_STUB IAAFPluginDef_GetDefinitionObjectID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFPluginDef_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFPluginManager_INTERFACE_DEFINED__
+#define __IAAFPluginManager_INTERFACE_DEFINED__
+
+/* interface IAAFPluginManager */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFPluginManager;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("AD1BB85C-DBB2-11d2-809C-006008143E6F")
+    IAAFPluginManager : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE RegisterSharedPlugins( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RegisterPluginDirectory( 
+            /* [in] */ aafCharacter_constptr directoryName) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RegisterPluginFile( 
+            /* [in] */ aafCharacter_constptr fileName) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE EnumLoadedPlugins( 
+            /* [ref][in] */ aafUID_constref categoryID,
+            /* [retval][out] */ IEnumAAFLoadedPlugins __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CreatePluginDefinition( 
+            /* [ref][in] */ aafUID_constref pluginDefID,
+            /* [in] */ IAAFDictionary __RPC_FAR *pDictionary,
+            /* [out] */ IAAFDefObject __RPC_FAR *__RPC_FAR *ppPluginDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CreateInstance( 
+            /* [in] */ REFCLSID rclsid,
+            /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppPlugin) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFPluginManagerVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFPluginManager __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFPluginManager __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFPluginManager __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterSharedPlugins )( 
+            IAAFPluginManager __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterPluginDirectory )( 
+            IAAFPluginManager __RPC_FAR * This,
+            /* [in] */ aafCharacter_constptr directoryName);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterPluginFile )( 
+            IAAFPluginManager __RPC_FAR * This,
+            /* [in] */ aafCharacter_constptr fileName);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumLoadedPlugins )( 
+            IAAFPluginManager __RPC_FAR * This,
+            /* [ref][in] */ aafUID_constref categoryID,
+            /* [retval][out] */ IEnumAAFLoadedPlugins __RPC_FAR *__RPC_FAR *ppEnum);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreatePluginDefinition )( 
+            IAAFPluginManager __RPC_FAR * This,
+            /* [ref][in] */ aafUID_constref pluginDefID,
+            /* [in] */ IAAFDictionary __RPC_FAR *pDictionary,
+            /* [out] */ IAAFDefObject __RPC_FAR *__RPC_FAR *ppPluginDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateInstance )( 
+            IAAFPluginManager __RPC_FAR * This,
+            /* [in] */ REFCLSID rclsid,
+            /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppPlugin);
+        
+        END_INTERFACE
+    } IAAFPluginManagerVtbl;
+
+    interface IAAFPluginManager
+    {
+        CONST_VTBL struct IAAFPluginManagerVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFPluginManager_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFPluginManager_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFPluginManager_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFPluginManager_RegisterSharedPlugins(This)	\
+    (This)->lpVtbl -> RegisterSharedPlugins(This)
+
+#define IAAFPluginManager_RegisterPluginDirectory(This,directoryName)	\
+    (This)->lpVtbl -> RegisterPluginDirectory(This,directoryName)
+
+#define IAAFPluginManager_RegisterPluginFile(This,fileName)	\
+    (This)->lpVtbl -> RegisterPluginFile(This,fileName)
+
+#define IAAFPluginManager_EnumLoadedPlugins(This,categoryID,ppEnum)	\
+    (This)->lpVtbl -> EnumLoadedPlugins(This,categoryID,ppEnum)
+
+#define IAAFPluginManager_CreatePluginDefinition(This,pluginDefID,pDictionary,ppPluginDef)	\
+    (This)->lpVtbl -> CreatePluginDefinition(This,pluginDefID,pDictionary,ppPluginDef)
+
+#define IAAFPluginManager_CreateInstance(This,rclsid,pUnkOuter,riid,ppPlugin)	\
+    (This)->lpVtbl -> CreateInstance(This,rclsid,pUnkOuter,riid,ppPlugin)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginManager_RegisterSharedPlugins_Proxy( 
+    IAAFPluginManager __RPC_FAR * This);
+
+
+void __RPC_STUB IAAFPluginManager_RegisterSharedPlugins_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginManager_RegisterPluginDirectory_Proxy( 
+    IAAFPluginManager __RPC_FAR * This,
+    /* [in] */ aafCharacter_constptr directoryName);
+
+
+void __RPC_STUB IAAFPluginManager_RegisterPluginDirectory_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginManager_RegisterPluginFile_Proxy( 
+    IAAFPluginManager __RPC_FAR * This,
+    /* [in] */ aafCharacter_constptr fileName);
+
+
+void __RPC_STUB IAAFPluginManager_RegisterPluginFile_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginManager_EnumLoadedPlugins_Proxy( 
+    IAAFPluginManager __RPC_FAR * This,
+    /* [ref][in] */ aafUID_constref categoryID,
+    /* [retval][out] */ IEnumAAFLoadedPlugins __RPC_FAR *__RPC_FAR *ppEnum);
+
+
+void __RPC_STUB IAAFPluginManager_EnumLoadedPlugins_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginManager_CreatePluginDefinition_Proxy( 
+    IAAFPluginManager __RPC_FAR * This,
+    /* [ref][in] */ aafUID_constref pluginDefID,
+    /* [in] */ IAAFDictionary __RPC_FAR *pDictionary,
+    /* [out] */ IAAFDefObject __RPC_FAR *__RPC_FAR *ppPluginDef);
+
+
+void __RPC_STUB IAAFPluginManager_CreatePluginDefinition_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPluginManager_CreateInstance_Proxy( 
+    IAAFPluginManager __RPC_FAR * This,
+    /* [in] */ REFCLSID rclsid,
+    /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
+    /* [in] */ REFIID riid,
+    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppPlugin);
+
+
+void __RPC_STUB IAAFPluginManager_CreateInstance_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFPluginManager_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFProperty_INTERFACE_DEFINED__
 #define __IAAFProperty_INTERFACE_DEFINED__
 
@@ -16865,221 +18248,6 @@ void __RPC_STUB IAAFPropertyValue_IsDefinedType_Stub(
 
 
 #endif 	/* __IAAFPropertyValue_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFPluginManager_INTERFACE_DEFINED__
-#define __IAAFPluginManager_INTERFACE_DEFINED__
-
-/* interface IAAFPluginManager */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFPluginManager;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("AD1BB85C-DBB2-11d2-809C-006008143E6F")
-    IAAFPluginManager : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE RegisterSharedPlugins( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE RegisterPluginDirectory( 
-            /* [in] */ aafCharacter_constptr directoryName) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE RegisterPluginFile( 
-            /* [in] */ aafCharacter_constptr fileName) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE EnumLoadedPlugins( 
-            /* [ref][in] */ aafUID_constref categoryID,
-            /* [retval][out] */ IEnumAAFLoadedPlugins __RPC_FAR *__RPC_FAR *ppEnum) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CreatePluginDefinition( 
-            /* [ref][in] */ aafUID_constref pluginDefID,
-            /* [in] */ IAAFDictionary __RPC_FAR *pDictionary,
-            /* [out] */ IAAFDefObject __RPC_FAR *__RPC_FAR *ppPluginDef) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CreateInstance( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppPlugin) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFPluginManagerVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFPluginManager __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFPluginManager __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFPluginManager __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterSharedPlugins )( 
-            IAAFPluginManager __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterPluginDirectory )( 
-            IAAFPluginManager __RPC_FAR * This,
-            /* [in] */ aafCharacter_constptr directoryName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterPluginFile )( 
-            IAAFPluginManager __RPC_FAR * This,
-            /* [in] */ aafCharacter_constptr fileName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumLoadedPlugins )( 
-            IAAFPluginManager __RPC_FAR * This,
-            /* [ref][in] */ aafUID_constref categoryID,
-            /* [retval][out] */ IEnumAAFLoadedPlugins __RPC_FAR *__RPC_FAR *ppEnum);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreatePluginDefinition )( 
-            IAAFPluginManager __RPC_FAR * This,
-            /* [ref][in] */ aafUID_constref pluginDefID,
-            /* [in] */ IAAFDictionary __RPC_FAR *pDictionary,
-            /* [out] */ IAAFDefObject __RPC_FAR *__RPC_FAR *ppPluginDef);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateInstance )( 
-            IAAFPluginManager __RPC_FAR * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppPlugin);
-        
-        END_INTERFACE
-    } IAAFPluginManagerVtbl;
-
-    interface IAAFPluginManager
-    {
-        CONST_VTBL struct IAAFPluginManagerVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFPluginManager_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFPluginManager_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFPluginManager_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFPluginManager_RegisterSharedPlugins(This)	\
-    (This)->lpVtbl -> RegisterSharedPlugins(This)
-
-#define IAAFPluginManager_RegisterPluginDirectory(This,directoryName)	\
-    (This)->lpVtbl -> RegisterPluginDirectory(This,directoryName)
-
-#define IAAFPluginManager_RegisterPluginFile(This,fileName)	\
-    (This)->lpVtbl -> RegisterPluginFile(This,fileName)
-
-#define IAAFPluginManager_EnumLoadedPlugins(This,categoryID,ppEnum)	\
-    (This)->lpVtbl -> EnumLoadedPlugins(This,categoryID,ppEnum)
-
-#define IAAFPluginManager_CreatePluginDefinition(This,pluginDefID,pDictionary,ppPluginDef)	\
-    (This)->lpVtbl -> CreatePluginDefinition(This,pluginDefID,pDictionary,ppPluginDef)
-
-#define IAAFPluginManager_CreateInstance(This,rclsid,pUnkOuter,riid,ppPlugin)	\
-    (This)->lpVtbl -> CreateInstance(This,rclsid,pUnkOuter,riid,ppPlugin)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginManager_RegisterSharedPlugins_Proxy( 
-    IAAFPluginManager __RPC_FAR * This);
-
-
-void __RPC_STUB IAAFPluginManager_RegisterSharedPlugins_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginManager_RegisterPluginDirectory_Proxy( 
-    IAAFPluginManager __RPC_FAR * This,
-    /* [in] */ aafCharacter_constptr directoryName);
-
-
-void __RPC_STUB IAAFPluginManager_RegisterPluginDirectory_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginManager_RegisterPluginFile_Proxy( 
-    IAAFPluginManager __RPC_FAR * This,
-    /* [in] */ aafCharacter_constptr fileName);
-
-
-void __RPC_STUB IAAFPluginManager_RegisterPluginFile_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginManager_EnumLoadedPlugins_Proxy( 
-    IAAFPluginManager __RPC_FAR * This,
-    /* [ref][in] */ aafUID_constref categoryID,
-    /* [retval][out] */ IEnumAAFLoadedPlugins __RPC_FAR *__RPC_FAR *ppEnum);
-
-
-void __RPC_STUB IAAFPluginManager_EnumLoadedPlugins_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginManager_CreatePluginDefinition_Proxy( 
-    IAAFPluginManager __RPC_FAR * This,
-    /* [ref][in] */ aafUID_constref pluginDefID,
-    /* [in] */ IAAFDictionary __RPC_FAR *pDictionary,
-    /* [out] */ IAAFDefObject __RPC_FAR *__RPC_FAR *ppPluginDef);
-
-
-void __RPC_STUB IAAFPluginManager_CreatePluginDefinition_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFPluginManager_CreateInstance_Proxy( 
-    IAAFPluginManager __RPC_FAR * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppPlugin);
-
-
-void __RPC_STUB IAAFPluginManager_CreateInstance_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFPluginManager_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFPulldown_INTERFACE_DEFINED__
@@ -17608,6 +18776,651 @@ void __RPC_STUB IAAFRGBADescriptor_GetPaletteLayout_Stub(
 
 
 #endif 	/* __IAAFRGBADescriptor_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFRandomFile_INTERFACE_DEFINED__
+#define __IAAFRandomFile_INTERFACE_DEFINED__
+
+/* interface IAAFRandomFile */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFRandomFile;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("3CC80284-72A8-11D4-B80D-0000863F2C27")
+    IAAFRandomFile : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE GetFileBits( 
+            /* [out] */ IAAFGetFileBits __RPC_FAR *__RPC_FAR *ppGetFileBits) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Revert( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SaveAsFile( 
+            /* [in] */ IAAFFile __RPC_FAR *pDestFile) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetFileBits( 
+            /* [out] */ IAAFSetFileBits __RPC_FAR *__RPC_FAR *ppSetFileBits) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFRandomFileVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFRandomFile __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFRandomFile __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFRandomFile __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFileBits )( 
+            IAAFRandomFile __RPC_FAR * This,
+            /* [out] */ IAAFGetFileBits __RPC_FAR *__RPC_FAR *ppGetFileBits);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Revert )( 
+            IAAFRandomFile __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveAsFile )( 
+            IAAFRandomFile __RPC_FAR * This,
+            /* [in] */ IAAFFile __RPC_FAR *pDestFile);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFileBits )( 
+            IAAFRandomFile __RPC_FAR * This,
+            /* [out] */ IAAFSetFileBits __RPC_FAR *__RPC_FAR *ppSetFileBits);
+        
+        END_INTERFACE
+    } IAAFRandomFileVtbl;
+
+    interface IAAFRandomFile
+    {
+        CONST_VTBL struct IAAFRandomFileVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFRandomFile_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFRandomFile_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFRandomFile_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFRandomFile_GetFileBits(This,ppGetFileBits)	\
+    (This)->lpVtbl -> GetFileBits(This,ppGetFileBits)
+
+#define IAAFRandomFile_Revert(This)	\
+    (This)->lpVtbl -> Revert(This)
+
+#define IAAFRandomFile_SaveAsFile(This,pDestFile)	\
+    (This)->lpVtbl -> SaveAsFile(This,pDestFile)
+
+#define IAAFRandomFile_SetFileBits(This,ppSetFileBits)	\
+    (This)->lpVtbl -> SetFileBits(This,ppSetFileBits)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFRandomFile_GetFileBits_Proxy( 
+    IAAFRandomFile __RPC_FAR * This,
+    /* [out] */ IAAFGetFileBits __RPC_FAR *__RPC_FAR *ppGetFileBits);
+
+
+void __RPC_STUB IAAFRandomFile_GetFileBits_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRandomFile_Revert_Proxy( 
+    IAAFRandomFile __RPC_FAR * This);
+
+
+void __RPC_STUB IAAFRandomFile_Revert_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRandomFile_SaveAsFile_Proxy( 
+    IAAFRandomFile __RPC_FAR * This,
+    /* [in] */ IAAFFile __RPC_FAR *pDestFile);
+
+
+void __RPC_STUB IAAFRandomFile_SaveAsFile_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRandomFile_SetFileBits_Proxy( 
+    IAAFRandomFile __RPC_FAR * This,
+    /* [out] */ IAAFSetFileBits __RPC_FAR *__RPC_FAR *ppSetFileBits);
+
+
+void __RPC_STUB IAAFRandomFile_SetFileBits_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFRandomFile_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFRandomRawStorage_INTERFACE_DEFINED__
+#define __IAAFRandomRawStorage_INTERFACE_DEFINED__
+
+/* interface IAAFRandomRawStorage */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFRandomRawStorage;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("B1341782-71FE-11d4-B80D-0000863F2C27")
+    IAAFRandomRawStorage : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE ReadAt( 
+            /* [in] */ aafUInt64 position,
+            /* [length_is][size_is][out] */ aafMemPtr_t buf,
+            /* [in] */ aafUInt32 bufSize,
+            /* [out] */ aafUInt32 __RPC_FAR *pNumRead) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE WriteAt( 
+            /* [in] */ aafUInt64 position,
+            /* [size_is][in] */ aafMemConstPtr_t buf,
+            /* [in] */ aafUInt32 bufSize,
+            /* [out] */ aafUInt32 __RPC_FAR *pNumWritten) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSize( 
+            /* [out] */ aafUInt64 __RPC_FAR *pSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsExtendable( 
+            /* [out] */ aafBoolean_t __RPC_FAR *pResult) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetExtent( 
+            /* [out] */ aafUInt64 __RPC_FAR *pExtent) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetExtent( 
+            /* [in] */ aafUInt64 extent) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFRandomRawStorageVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFRandomRawStorage __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFRandomRawStorage __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFRandomRawStorage __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReadAt )( 
+            IAAFRandomRawStorage __RPC_FAR * This,
+            /* [in] */ aafUInt64 position,
+            /* [length_is][size_is][out] */ aafMemPtr_t buf,
+            /* [in] */ aafUInt32 bufSize,
+            /* [out] */ aafUInt32 __RPC_FAR *pNumRead);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WriteAt )( 
+            IAAFRandomRawStorage __RPC_FAR * This,
+            /* [in] */ aafUInt64 position,
+            /* [size_is][in] */ aafMemConstPtr_t buf,
+            /* [in] */ aafUInt32 bufSize,
+            /* [out] */ aafUInt32 __RPC_FAR *pNumWritten);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSize )( 
+            IAAFRandomRawStorage __RPC_FAR * This,
+            /* [out] */ aafUInt64 __RPC_FAR *pSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsExtendable )( 
+            IAAFRandomRawStorage __RPC_FAR * This,
+            /* [out] */ aafBoolean_t __RPC_FAR *pResult);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetExtent )( 
+            IAAFRandomRawStorage __RPC_FAR * This,
+            /* [out] */ aafUInt64 __RPC_FAR *pExtent);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetExtent )( 
+            IAAFRandomRawStorage __RPC_FAR * This,
+            /* [in] */ aafUInt64 extent);
+        
+        END_INTERFACE
+    } IAAFRandomRawStorageVtbl;
+
+    interface IAAFRandomRawStorage
+    {
+        CONST_VTBL struct IAAFRandomRawStorageVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFRandomRawStorage_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFRandomRawStorage_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFRandomRawStorage_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFRandomRawStorage_ReadAt(This,position,buf,bufSize,pNumRead)	\
+    (This)->lpVtbl -> ReadAt(This,position,buf,bufSize,pNumRead)
+
+#define IAAFRandomRawStorage_WriteAt(This,position,buf,bufSize,pNumWritten)	\
+    (This)->lpVtbl -> WriteAt(This,position,buf,bufSize,pNumWritten)
+
+#define IAAFRandomRawStorage_GetSize(This,pSize)	\
+    (This)->lpVtbl -> GetSize(This,pSize)
+
+#define IAAFRandomRawStorage_IsExtendable(This,pResult)	\
+    (This)->lpVtbl -> IsExtendable(This,pResult)
+
+#define IAAFRandomRawStorage_GetExtent(This,pExtent)	\
+    (This)->lpVtbl -> GetExtent(This,pExtent)
+
+#define IAAFRandomRawStorage_SetExtent(This,extent)	\
+    (This)->lpVtbl -> SetExtent(This,extent)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFRandomRawStorage_ReadAt_Proxy( 
+    IAAFRandomRawStorage __RPC_FAR * This,
+    /* [in] */ aafUInt64 position,
+    /* [length_is][size_is][out] */ aafMemPtr_t buf,
+    /* [in] */ aafUInt32 bufSize,
+    /* [out] */ aafUInt32 __RPC_FAR *pNumRead);
+
+
+void __RPC_STUB IAAFRandomRawStorage_ReadAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRandomRawStorage_WriteAt_Proxy( 
+    IAAFRandomRawStorage __RPC_FAR * This,
+    /* [in] */ aafUInt64 position,
+    /* [size_is][in] */ aafMemConstPtr_t buf,
+    /* [in] */ aafUInt32 bufSize,
+    /* [out] */ aafUInt32 __RPC_FAR *pNumWritten);
+
+
+void __RPC_STUB IAAFRandomRawStorage_WriteAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRandomRawStorage_GetSize_Proxy( 
+    IAAFRandomRawStorage __RPC_FAR * This,
+    /* [out] */ aafUInt64 __RPC_FAR *pSize);
+
+
+void __RPC_STUB IAAFRandomRawStorage_GetSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRandomRawStorage_IsExtendable_Proxy( 
+    IAAFRandomRawStorage __RPC_FAR * This,
+    /* [out] */ aafBoolean_t __RPC_FAR *pResult);
+
+
+void __RPC_STUB IAAFRandomRawStorage_IsExtendable_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRandomRawStorage_GetExtent_Proxy( 
+    IAAFRandomRawStorage __RPC_FAR * This,
+    /* [out] */ aafUInt64 __RPC_FAR *pExtent);
+
+
+void __RPC_STUB IAAFRandomRawStorage_GetExtent_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRandomRawStorage_SetExtent_Proxy( 
+    IAAFRandomRawStorage __RPC_FAR * This,
+    /* [in] */ aafUInt64 extent);
+
+
+void __RPC_STUB IAAFRandomRawStorage_SetExtent_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFRandomRawStorage_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFRawStorage_INTERFACE_DEFINED__
+#define __IAAFRawStorage_INTERFACE_DEFINED__
+
+/* interface IAAFRawStorage */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFRawStorage;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("F45FA9E1-7166-11D4-B80D-0000863F2C27")
+    IAAFRawStorage : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE IsReadable( 
+            /* [out] */ aafBoolean_t __RPC_FAR *pResult) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Read( 
+            /* [length_is][size_is][out] */ aafMemPtr_t buf,
+            /* [in] */ aafUInt32 bufSize,
+            /* [out] */ aafUInt32 __RPC_FAR *pNumRead) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsWriteable( 
+            /* [out] */ aafBoolean_t __RPC_FAR *pResult) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Write( 
+            /* [size_is][in] */ aafMemConstPtr_t buf,
+            /* [in] */ aafUInt32 bufSize,
+            /* [out] */ aafUInt32 __RPC_FAR *pNumWritten) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Synchronize( void) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFRawStorageVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFRawStorage __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFRawStorage __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFRawStorage __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsReadable )( 
+            IAAFRawStorage __RPC_FAR * This,
+            /* [out] */ aafBoolean_t __RPC_FAR *pResult);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Read )( 
+            IAAFRawStorage __RPC_FAR * This,
+            /* [length_is][size_is][out] */ aafMemPtr_t buf,
+            /* [in] */ aafUInt32 bufSize,
+            /* [out] */ aafUInt32 __RPC_FAR *pNumRead);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsWriteable )( 
+            IAAFRawStorage __RPC_FAR * This,
+            /* [out] */ aafBoolean_t __RPC_FAR *pResult);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Write )( 
+            IAAFRawStorage __RPC_FAR * This,
+            /* [size_is][in] */ aafMemConstPtr_t buf,
+            /* [in] */ aafUInt32 bufSize,
+            /* [out] */ aafUInt32 __RPC_FAR *pNumWritten);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Synchronize )( 
+            IAAFRawStorage __RPC_FAR * This);
+        
+        END_INTERFACE
+    } IAAFRawStorageVtbl;
+
+    interface IAAFRawStorage
+    {
+        CONST_VTBL struct IAAFRawStorageVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFRawStorage_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFRawStorage_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFRawStorage_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFRawStorage_IsReadable(This,pResult)	\
+    (This)->lpVtbl -> IsReadable(This,pResult)
+
+#define IAAFRawStorage_Read(This,buf,bufSize,pNumRead)	\
+    (This)->lpVtbl -> Read(This,buf,bufSize,pNumRead)
+
+#define IAAFRawStorage_IsWriteable(This,pResult)	\
+    (This)->lpVtbl -> IsWriteable(This,pResult)
+
+#define IAAFRawStorage_Write(This,buf,bufSize,pNumWritten)	\
+    (This)->lpVtbl -> Write(This,buf,bufSize,pNumWritten)
+
+#define IAAFRawStorage_Synchronize(This)	\
+    (This)->lpVtbl -> Synchronize(This)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFRawStorage_IsReadable_Proxy( 
+    IAAFRawStorage __RPC_FAR * This,
+    /* [out] */ aafBoolean_t __RPC_FAR *pResult);
+
+
+void __RPC_STUB IAAFRawStorage_IsReadable_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRawStorage_Read_Proxy( 
+    IAAFRawStorage __RPC_FAR * This,
+    /* [length_is][size_is][out] */ aafMemPtr_t buf,
+    /* [in] */ aafUInt32 bufSize,
+    /* [out] */ aafUInt32 __RPC_FAR *pNumRead);
+
+
+void __RPC_STUB IAAFRawStorage_Read_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRawStorage_IsWriteable_Proxy( 
+    IAAFRawStorage __RPC_FAR * This,
+    /* [out] */ aafBoolean_t __RPC_FAR *pResult);
+
+
+void __RPC_STUB IAAFRawStorage_IsWriteable_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRawStorage_Write_Proxy( 
+    IAAFRawStorage __RPC_FAR * This,
+    /* [size_is][in] */ aafMemConstPtr_t buf,
+    /* [in] */ aafUInt32 bufSize,
+    /* [out] */ aafUInt32 __RPC_FAR *pNumWritten);
+
+
+void __RPC_STUB IAAFRawStorage_Write_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFRawStorage_Synchronize_Proxy( 
+    IAAFRawStorage __RPC_FAR * This);
+
+
+void __RPC_STUB IAAFRawStorage_Synchronize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFRawStorage_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFRecordingDescriptor_INTERFACE_DEFINED__
+#define __IAAFRecordingDescriptor_INTERFACE_DEFINED__
+
+/* interface IAAFRecordingDescriptor */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFRecordingDescriptor;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("a6542226-19a7-40ee-9650-a3b9c66ccfe7")
+    IAAFRecordingDescriptor : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFRecordingDescriptorVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFRecordingDescriptor __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFRecordingDescriptor __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFRecordingDescriptor __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFRecordingDescriptor __RPC_FAR * This);
+        
+        END_INTERFACE
+    } IAAFRecordingDescriptorVtbl;
+
+    interface IAAFRecordingDescriptor
+    {
+        CONST_VTBL struct IAAFRecordingDescriptorVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFRecordingDescriptor_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFRecordingDescriptor_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFRecordingDescriptor_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFRecordingDescriptor_Initialize(This)	\
+    (This)->lpVtbl -> Initialize(This)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFRecordingDescriptor_Initialize_Proxy( 
+    IAAFRecordingDescriptor __RPC_FAR * This);
+
+
+void __RPC_STUB IAAFRecordingDescriptor_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFRecordingDescriptor_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFScopeReference_INTERFACE_DEFINED__
@@ -18344,6 +20157,124 @@ void __RPC_STUB IAAFSequence_GetComponents_Stub(
 
 
 #endif 	/* __IAAFSequence_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFSetFileBits_INTERFACE_DEFINED__
+#define __IAAFSetFileBits_INTERFACE_DEFINED__
+
+/* interface IAAFSetFileBits */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFSetFileBits;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("6D950762-8DB4-11D4-B80D-0000863F2C27")
+    IAAFSetFileBits : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE WriteAt( 
+            /* [size_is][in] */ aafMemPtr_t buf,
+            /* [in] */ aafUInt32 bufSize,
+            /* [in] */ aafUInt64 position) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetSize( 
+            /* [in] */ aafUInt64 size) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFSetFileBitsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFSetFileBits __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFSetFileBits __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFSetFileBits __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WriteAt )( 
+            IAAFSetFileBits __RPC_FAR * This,
+            /* [size_is][in] */ aafMemPtr_t buf,
+            /* [in] */ aafUInt32 bufSize,
+            /* [in] */ aafUInt64 position);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSize )( 
+            IAAFSetFileBits __RPC_FAR * This,
+            /* [in] */ aafUInt64 size);
+        
+        END_INTERFACE
+    } IAAFSetFileBitsVtbl;
+
+    interface IAAFSetFileBits
+    {
+        CONST_VTBL struct IAAFSetFileBitsVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFSetFileBits_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFSetFileBits_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFSetFileBits_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFSetFileBits_WriteAt(This,buf,bufSize,position)	\
+    (This)->lpVtbl -> WriteAt(This,buf,bufSize,position)
+
+#define IAAFSetFileBits_SetSize(This,size)	\
+    (This)->lpVtbl -> SetSize(This,size)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFSetFileBits_WriteAt_Proxy( 
+    IAAFSetFileBits __RPC_FAR * This,
+    /* [size_is][in] */ aafMemPtr_t buf,
+    /* [in] */ aafUInt32 bufSize,
+    /* [in] */ aafUInt64 position);
+
+
+void __RPC_STUB IAAFSetFileBits_WriteAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFSetFileBits_SetSize_Proxy( 
+    IAAFSetFileBits __RPC_FAR * This,
+    /* [in] */ aafUInt64 size);
+
+
+void __RPC_STUB IAAFSetFileBits_SetSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFSetFileBits_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFSoundDescriptor_INTERFACE_DEFINED__
@@ -19601,6 +21532,793 @@ EXTERN_C const IID IID_IAAFStaticMobSlot;
 #endif 	/* __IAAFStaticMobSlot_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFTIFFDescriptor_INTERFACE_DEFINED__
+#define __IAAFTIFFDescriptor_INTERFACE_DEFINED__
+
+/* interface IAAFTIFFDescriptor */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFTIFFDescriptor;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("e684d76c-b935-11d2-bf9d-00104bc9156d")
+    IAAFTIFFDescriptor : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE SetIsUniform( 
+            /* [in] */ aafBoolean_t IsUniform) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetIsUniform( 
+            /* [out] */ aafBoolean_t __RPC_FAR *pIsUniform) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetIsContiguous( 
+            /* [in] */ aafBoolean_t IsContiguous) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetIsContiguous( 
+            /* [out] */ aafBoolean_t __RPC_FAR *pIsContiguous) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetLeadingLines( 
+            /* [in] */ aafInt32 LeadingLines) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetLeadingLines( 
+            /* [out] */ aafInt32 __RPC_FAR *pLeadingLines) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetTrailingLines( 
+            /* [in] */ aafInt32 TrailingLines) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetTrailingLines( 
+            /* [out] */ aafInt32 __RPC_FAR *pTrailingLines) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetJPEGTableID( 
+            /* [in] */ aafJPEGTableID_t JPEGTableID) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetJPEGTableID( 
+            /* [out] */ aafJPEGTableID_t __RPC_FAR *pJPEGTableID) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSummary( 
+            /* [in] */ aafUInt32 size,
+            /* [size_is][out] */ aafDataValue_t pSummary) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSummaryBufferSize( 
+            /* [out] */ aafUInt32 __RPC_FAR *pSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetSummary( 
+            /* [in] */ aafUInt32 size,
+            /* [size_is][in] */ aafDataValue_t pSummary) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFTIFFDescriptorVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFTIFFDescriptor __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFTIFFDescriptor __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFTIFFDescriptor __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIsUniform )( 
+            IAAFTIFFDescriptor __RPC_FAR * This,
+            /* [in] */ aafBoolean_t IsUniform);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIsUniform )( 
+            IAAFTIFFDescriptor __RPC_FAR * This,
+            /* [out] */ aafBoolean_t __RPC_FAR *pIsUniform);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIsContiguous )( 
+            IAAFTIFFDescriptor __RPC_FAR * This,
+            /* [in] */ aafBoolean_t IsContiguous);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIsContiguous )( 
+            IAAFTIFFDescriptor __RPC_FAR * This,
+            /* [out] */ aafBoolean_t __RPC_FAR *pIsContiguous);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLeadingLines )( 
+            IAAFTIFFDescriptor __RPC_FAR * This,
+            /* [in] */ aafInt32 LeadingLines);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLeadingLines )( 
+            IAAFTIFFDescriptor __RPC_FAR * This,
+            /* [out] */ aafInt32 __RPC_FAR *pLeadingLines);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTrailingLines )( 
+            IAAFTIFFDescriptor __RPC_FAR * This,
+            /* [in] */ aafInt32 TrailingLines);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTrailingLines )( 
+            IAAFTIFFDescriptor __RPC_FAR * This,
+            /* [out] */ aafInt32 __RPC_FAR *pTrailingLines);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetJPEGTableID )( 
+            IAAFTIFFDescriptor __RPC_FAR * This,
+            /* [in] */ aafJPEGTableID_t JPEGTableID);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetJPEGTableID )( 
+            IAAFTIFFDescriptor __RPC_FAR * This,
+            /* [out] */ aafJPEGTableID_t __RPC_FAR *pJPEGTableID);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSummary )( 
+            IAAFTIFFDescriptor __RPC_FAR * This,
+            /* [in] */ aafUInt32 size,
+            /* [size_is][out] */ aafDataValue_t pSummary);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSummaryBufferSize )( 
+            IAAFTIFFDescriptor __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSummary )( 
+            IAAFTIFFDescriptor __RPC_FAR * This,
+            /* [in] */ aafUInt32 size,
+            /* [size_is][in] */ aafDataValue_t pSummary);
+        
+        END_INTERFACE
+    } IAAFTIFFDescriptorVtbl;
+
+    interface IAAFTIFFDescriptor
+    {
+        CONST_VTBL struct IAAFTIFFDescriptorVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFTIFFDescriptor_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFTIFFDescriptor_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFTIFFDescriptor_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFTIFFDescriptor_SetIsUniform(This,IsUniform)	\
+    (This)->lpVtbl -> SetIsUniform(This,IsUniform)
+
+#define IAAFTIFFDescriptor_GetIsUniform(This,pIsUniform)	\
+    (This)->lpVtbl -> GetIsUniform(This,pIsUniform)
+
+#define IAAFTIFFDescriptor_SetIsContiguous(This,IsContiguous)	\
+    (This)->lpVtbl -> SetIsContiguous(This,IsContiguous)
+
+#define IAAFTIFFDescriptor_GetIsContiguous(This,pIsContiguous)	\
+    (This)->lpVtbl -> GetIsContiguous(This,pIsContiguous)
+
+#define IAAFTIFFDescriptor_SetLeadingLines(This,LeadingLines)	\
+    (This)->lpVtbl -> SetLeadingLines(This,LeadingLines)
+
+#define IAAFTIFFDescriptor_GetLeadingLines(This,pLeadingLines)	\
+    (This)->lpVtbl -> GetLeadingLines(This,pLeadingLines)
+
+#define IAAFTIFFDescriptor_SetTrailingLines(This,TrailingLines)	\
+    (This)->lpVtbl -> SetTrailingLines(This,TrailingLines)
+
+#define IAAFTIFFDescriptor_GetTrailingLines(This,pTrailingLines)	\
+    (This)->lpVtbl -> GetTrailingLines(This,pTrailingLines)
+
+#define IAAFTIFFDescriptor_SetJPEGTableID(This,JPEGTableID)	\
+    (This)->lpVtbl -> SetJPEGTableID(This,JPEGTableID)
+
+#define IAAFTIFFDescriptor_GetJPEGTableID(This,pJPEGTableID)	\
+    (This)->lpVtbl -> GetJPEGTableID(This,pJPEGTableID)
+
+#define IAAFTIFFDescriptor_GetSummary(This,size,pSummary)	\
+    (This)->lpVtbl -> GetSummary(This,size,pSummary)
+
+#define IAAFTIFFDescriptor_GetSummaryBufferSize(This,pSize)	\
+    (This)->lpVtbl -> GetSummaryBufferSize(This,pSize)
+
+#define IAAFTIFFDescriptor_SetSummary(This,size,pSummary)	\
+    (This)->lpVtbl -> SetSummary(This,size,pSummary)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_SetIsUniform_Proxy( 
+    IAAFTIFFDescriptor __RPC_FAR * This,
+    /* [in] */ aafBoolean_t IsUniform);
+
+
+void __RPC_STUB IAAFTIFFDescriptor_SetIsUniform_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_GetIsUniform_Proxy( 
+    IAAFTIFFDescriptor __RPC_FAR * This,
+    /* [out] */ aafBoolean_t __RPC_FAR *pIsUniform);
+
+
+void __RPC_STUB IAAFTIFFDescriptor_GetIsUniform_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_SetIsContiguous_Proxy( 
+    IAAFTIFFDescriptor __RPC_FAR * This,
+    /* [in] */ aafBoolean_t IsContiguous);
+
+
+void __RPC_STUB IAAFTIFFDescriptor_SetIsContiguous_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_GetIsContiguous_Proxy( 
+    IAAFTIFFDescriptor __RPC_FAR * This,
+    /* [out] */ aafBoolean_t __RPC_FAR *pIsContiguous);
+
+
+void __RPC_STUB IAAFTIFFDescriptor_GetIsContiguous_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_SetLeadingLines_Proxy( 
+    IAAFTIFFDescriptor __RPC_FAR * This,
+    /* [in] */ aafInt32 LeadingLines);
+
+
+void __RPC_STUB IAAFTIFFDescriptor_SetLeadingLines_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_GetLeadingLines_Proxy( 
+    IAAFTIFFDescriptor __RPC_FAR * This,
+    /* [out] */ aafInt32 __RPC_FAR *pLeadingLines);
+
+
+void __RPC_STUB IAAFTIFFDescriptor_GetLeadingLines_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_SetTrailingLines_Proxy( 
+    IAAFTIFFDescriptor __RPC_FAR * This,
+    /* [in] */ aafInt32 TrailingLines);
+
+
+void __RPC_STUB IAAFTIFFDescriptor_SetTrailingLines_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_GetTrailingLines_Proxy( 
+    IAAFTIFFDescriptor __RPC_FAR * This,
+    /* [out] */ aafInt32 __RPC_FAR *pTrailingLines);
+
+
+void __RPC_STUB IAAFTIFFDescriptor_GetTrailingLines_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_SetJPEGTableID_Proxy( 
+    IAAFTIFFDescriptor __RPC_FAR * This,
+    /* [in] */ aafJPEGTableID_t JPEGTableID);
+
+
+void __RPC_STUB IAAFTIFFDescriptor_SetJPEGTableID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_GetJPEGTableID_Proxy( 
+    IAAFTIFFDescriptor __RPC_FAR * This,
+    /* [out] */ aafJPEGTableID_t __RPC_FAR *pJPEGTableID);
+
+
+void __RPC_STUB IAAFTIFFDescriptor_GetJPEGTableID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_GetSummary_Proxy( 
+    IAAFTIFFDescriptor __RPC_FAR * This,
+    /* [in] */ aafUInt32 size,
+    /* [size_is][out] */ aafDataValue_t pSummary);
+
+
+void __RPC_STUB IAAFTIFFDescriptor_GetSummary_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_GetSummaryBufferSize_Proxy( 
+    IAAFTIFFDescriptor __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pSize);
+
+
+void __RPC_STUB IAAFTIFFDescriptor_GetSummaryBufferSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_SetSummary_Proxy( 
+    IAAFTIFFDescriptor __RPC_FAR * This,
+    /* [in] */ aafUInt32 size,
+    /* [size_is][in] */ aafDataValue_t pSummary);
+
+
+void __RPC_STUB IAAFTIFFDescriptor_SetSummary_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFTIFFDescriptor_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFTaggedValue_INTERFACE_DEFINED__
+#define __IAAFTaggedValue_INTERFACE_DEFINED__
+
+/* interface IAAFTaggedValue */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFTaggedValue;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("e684d762-b935-11d2-bf9d-00104bc9156d")
+    IAAFTaggedValue : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( 
+            /* [string][in] */ aafCharacter_constptr pName,
+            /* [in] */ IAAFTypeDef __RPC_FAR *pTypeDef,
+            /* [in] */ aafUInt32 valueSize,
+            /* [size_is][in] */ aafDataBuffer_t pValue) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetName( 
+            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pName,
+            /* [in] */ aafUInt32 bufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetNameBufLen( 
+            /* [out] */ aafUInt32 __RPC_FAR *pBufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetTypeDefinition( 
+            /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *ppTypeDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetValue( 
+            /* [in] */ aafUInt32 valueSize,
+            /* [length_is][size_is][out] */ aafDataBuffer_t pValue,
+            /* [out] */ aafUInt32 __RPC_FAR *bytesRead) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetValueBufLen( 
+            /* [out] */ aafUInt32 __RPC_FAR *pLen) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetValue( 
+            /* [in] */ aafUInt32 valueSize,
+            /* [size_is][in] */ aafDataBuffer_t pValue) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFTaggedValueVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFTaggedValue __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFTaggedValue __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFTaggedValue __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFTaggedValue __RPC_FAR * This,
+            /* [string][in] */ aafCharacter_constptr pName,
+            /* [in] */ IAAFTypeDef __RPC_FAR *pTypeDef,
+            /* [in] */ aafUInt32 valueSize,
+            /* [size_is][in] */ aafDataBuffer_t pValue);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
+            IAAFTaggedValue __RPC_FAR * This,
+            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pName,
+            /* [in] */ aafUInt32 bufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNameBufLen )( 
+            IAAFTaggedValue __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeDefinition )( 
+            IAAFTaggedValue __RPC_FAR * This,
+            /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *ppTypeDef);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetValue )( 
+            IAAFTaggedValue __RPC_FAR * This,
+            /* [in] */ aafUInt32 valueSize,
+            /* [length_is][size_is][out] */ aafDataBuffer_t pValue,
+            /* [out] */ aafUInt32 __RPC_FAR *bytesRead);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetValueBufLen )( 
+            IAAFTaggedValue __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pLen);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetValue )( 
+            IAAFTaggedValue __RPC_FAR * This,
+            /* [in] */ aafUInt32 valueSize,
+            /* [size_is][in] */ aafDataBuffer_t pValue);
+        
+        END_INTERFACE
+    } IAAFTaggedValueVtbl;
+
+    interface IAAFTaggedValue
+    {
+        CONST_VTBL struct IAAFTaggedValueVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFTaggedValue_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFTaggedValue_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFTaggedValue_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFTaggedValue_Initialize(This,pName,pTypeDef,valueSize,pValue)	\
+    (This)->lpVtbl -> Initialize(This,pName,pTypeDef,valueSize,pValue)
+
+#define IAAFTaggedValue_GetName(This,pName,bufSize)	\
+    (This)->lpVtbl -> GetName(This,pName,bufSize)
+
+#define IAAFTaggedValue_GetNameBufLen(This,pBufSize)	\
+    (This)->lpVtbl -> GetNameBufLen(This,pBufSize)
+
+#define IAAFTaggedValue_GetTypeDefinition(This,ppTypeDef)	\
+    (This)->lpVtbl -> GetTypeDefinition(This,ppTypeDef)
+
+#define IAAFTaggedValue_GetValue(This,valueSize,pValue,bytesRead)	\
+    (This)->lpVtbl -> GetValue(This,valueSize,pValue,bytesRead)
+
+#define IAAFTaggedValue_GetValueBufLen(This,pLen)	\
+    (This)->lpVtbl -> GetValueBufLen(This,pLen)
+
+#define IAAFTaggedValue_SetValue(This,valueSize,pValue)	\
+    (This)->lpVtbl -> SetValue(This,valueSize,pValue)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFTaggedValue_Initialize_Proxy( 
+    IAAFTaggedValue __RPC_FAR * This,
+    /* [string][in] */ aafCharacter_constptr pName,
+    /* [in] */ IAAFTypeDef __RPC_FAR *pTypeDef,
+    /* [in] */ aafUInt32 valueSize,
+    /* [size_is][in] */ aafDataBuffer_t pValue);
+
+
+void __RPC_STUB IAAFTaggedValue_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTaggedValue_GetName_Proxy( 
+    IAAFTaggedValue __RPC_FAR * This,
+    /* [size_is][string][out] */ aafCharacter __RPC_FAR *pName,
+    /* [in] */ aafUInt32 bufSize);
+
+
+void __RPC_STUB IAAFTaggedValue_GetName_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTaggedValue_GetNameBufLen_Proxy( 
+    IAAFTaggedValue __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
+
+
+void __RPC_STUB IAAFTaggedValue_GetNameBufLen_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTaggedValue_GetTypeDefinition_Proxy( 
+    IAAFTaggedValue __RPC_FAR * This,
+    /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *ppTypeDef);
+
+
+void __RPC_STUB IAAFTaggedValue_GetTypeDefinition_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTaggedValue_GetValue_Proxy( 
+    IAAFTaggedValue __RPC_FAR * This,
+    /* [in] */ aafUInt32 valueSize,
+    /* [length_is][size_is][out] */ aafDataBuffer_t pValue,
+    /* [out] */ aafUInt32 __RPC_FAR *bytesRead);
+
+
+void __RPC_STUB IAAFTaggedValue_GetValue_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTaggedValue_GetValueBufLen_Proxy( 
+    IAAFTaggedValue __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pLen);
+
+
+void __RPC_STUB IAAFTaggedValue_GetValueBufLen_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTaggedValue_SetValue_Proxy( 
+    IAAFTaggedValue __RPC_FAR * This,
+    /* [in] */ aafUInt32 valueSize,
+    /* [size_is][in] */ aafDataBuffer_t pValue);
+
+
+void __RPC_STUB IAAFTaggedValue_SetValue_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFTaggedValue_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFTaggedValueDefinition_INTERFACE_DEFINED__
+#define __IAAFTaggedValueDefinition_INTERFACE_DEFINED__
+
+/* interface IAAFTaggedValueDefinition */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFTaggedValueDefinition;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("c358428a-bf73-4558-bfdf-482160719823")
+    IAAFTaggedValueDefinition : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( 
+            /* [ref][in] */ aafUID_constref id,
+            /* [string][in] */ aafCharacter_constptr pName,
+            /* [string][in] */ aafCharacter_constptr pDescription) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AddParentProperty( 
+            /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetParentProperties( 
+            /* [out] */ IEnumAAFPropertyDefs __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountParentProperties( 
+            /* [out] */ aafUInt32 __RPC_FAR *pNumProperties) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RemoveParentProperty( 
+            /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFTaggedValueDefinitionVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFTaggedValueDefinition __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFTaggedValueDefinition __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFTaggedValueDefinition __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFTaggedValueDefinition __RPC_FAR * This,
+            /* [ref][in] */ aafUID_constref id,
+            /* [string][in] */ aafCharacter_constptr pName,
+            /* [string][in] */ aafCharacter_constptr pDescription);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddParentProperty )( 
+            IAAFTaggedValueDefinition __RPC_FAR * This,
+            /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetParentProperties )( 
+            IAAFTaggedValueDefinition __RPC_FAR * This,
+            /* [out] */ IEnumAAFPropertyDefs __RPC_FAR *__RPC_FAR *ppEnum);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountParentProperties )( 
+            IAAFTaggedValueDefinition __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pNumProperties);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveParentProperty )( 
+            IAAFTaggedValueDefinition __RPC_FAR * This,
+            /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty);
+        
+        END_INTERFACE
+    } IAAFTaggedValueDefinitionVtbl;
+
+    interface IAAFTaggedValueDefinition
+    {
+        CONST_VTBL struct IAAFTaggedValueDefinitionVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFTaggedValueDefinition_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFTaggedValueDefinition_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFTaggedValueDefinition_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFTaggedValueDefinition_Initialize(This,id,pName,pDescription)	\
+    (This)->lpVtbl -> Initialize(This,id,pName,pDescription)
+
+#define IAAFTaggedValueDefinition_AddParentProperty(This,pParentProperty)	\
+    (This)->lpVtbl -> AddParentProperty(This,pParentProperty)
+
+#define IAAFTaggedValueDefinition_GetParentProperties(This,ppEnum)	\
+    (This)->lpVtbl -> GetParentProperties(This,ppEnum)
+
+#define IAAFTaggedValueDefinition_CountParentProperties(This,pNumProperties)	\
+    (This)->lpVtbl -> CountParentProperties(This,pNumProperties)
+
+#define IAAFTaggedValueDefinition_RemoveParentProperty(This,pParentProperty)	\
+    (This)->lpVtbl -> RemoveParentProperty(This,pParentProperty)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFTaggedValueDefinition_Initialize_Proxy( 
+    IAAFTaggedValueDefinition __RPC_FAR * This,
+    /* [ref][in] */ aafUID_constref id,
+    /* [string][in] */ aafCharacter_constptr pName,
+    /* [string][in] */ aafCharacter_constptr pDescription);
+
+
+void __RPC_STUB IAAFTaggedValueDefinition_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTaggedValueDefinition_AddParentProperty_Proxy( 
+    IAAFTaggedValueDefinition __RPC_FAR * This,
+    /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty);
+
+
+void __RPC_STUB IAAFTaggedValueDefinition_AddParentProperty_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTaggedValueDefinition_GetParentProperties_Proxy( 
+    IAAFTaggedValueDefinition __RPC_FAR * This,
+    /* [out] */ IEnumAAFPropertyDefs __RPC_FAR *__RPC_FAR *ppEnum);
+
+
+void __RPC_STUB IAAFTaggedValueDefinition_GetParentProperties_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTaggedValueDefinition_CountParentProperties_Proxy( 
+    IAAFTaggedValueDefinition __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pNumProperties);
+
+
+void __RPC_STUB IAAFTaggedValueDefinition_CountParentProperties_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTaggedValueDefinition_RemoveParentProperty_Proxy( 
+    IAAFTaggedValueDefinition __RPC_FAR * This,
+    /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty);
+
+
+void __RPC_STUB IAAFTaggedValueDefinition_RemoveParentProperty_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFTaggedValueDefinition_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFTapeDescriptor_INTERFACE_DEFINED__
 #define __IAAFTapeDescriptor_INTERFACE_DEFINED__
 
@@ -20002,249 +22720,6 @@ void __RPC_STUB IAAFTapeDescriptor_GetTapeLength_Stub(
 #endif 	/* __IAAFTapeDescriptor_INTERFACE_DEFINED__ */
 
 
-#ifndef __IAAFTaggedValue_INTERFACE_DEFINED__
-#define __IAAFTaggedValue_INTERFACE_DEFINED__
-
-/* interface IAAFTaggedValue */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFTaggedValue;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("e684d762-b935-11d2-bf9d-00104bc9156d")
-    IAAFTaggedValue : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [string][in] */ aafCharacter_constptr pName,
-            /* [in] */ IAAFTypeDef __RPC_FAR *pTypeDef,
-            /* [in] */ aafUInt32 valueSize,
-            /* [size_is][in] */ aafDataBuffer_t pValue) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pName,
-            /* [in] */ aafUInt32 bufSize) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetNameBufLen( 
-            /* [out] */ aafUInt32 __RPC_FAR *pBufSize) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetTypeDefinition( 
-            /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *ppTypeDef) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetValue( 
-            /* [in] */ aafUInt32 valueSize,
-            /* [length_is][size_is][out] */ aafDataBuffer_t pValue,
-            /* [out] */ aafUInt32 __RPC_FAR *bytesRead) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetValueBufLen( 
-            /* [out] */ aafUInt32 __RPC_FAR *pLen) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetValue( 
-            /* [in] */ aafUInt32 valueSize,
-            /* [size_is][in] */ aafDataBuffer_t pValue) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFTaggedValueVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFTaggedValue __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFTaggedValue __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFTaggedValue __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IAAFTaggedValue __RPC_FAR * This,
-            /* [string][in] */ aafCharacter_constptr pName,
-            /* [in] */ IAAFTypeDef __RPC_FAR *pTypeDef,
-            /* [in] */ aafUInt32 valueSize,
-            /* [size_is][in] */ aafDataBuffer_t pValue);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
-            IAAFTaggedValue __RPC_FAR * This,
-            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pName,
-            /* [in] */ aafUInt32 bufSize);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNameBufLen )( 
-            IAAFTaggedValue __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeDefinition )( 
-            IAAFTaggedValue __RPC_FAR * This,
-            /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *ppTypeDef);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetValue )( 
-            IAAFTaggedValue __RPC_FAR * This,
-            /* [in] */ aafUInt32 valueSize,
-            /* [length_is][size_is][out] */ aafDataBuffer_t pValue,
-            /* [out] */ aafUInt32 __RPC_FAR *bytesRead);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetValueBufLen )( 
-            IAAFTaggedValue __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pLen);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetValue )( 
-            IAAFTaggedValue __RPC_FAR * This,
-            /* [in] */ aafUInt32 valueSize,
-            /* [size_is][in] */ aafDataBuffer_t pValue);
-        
-        END_INTERFACE
-    } IAAFTaggedValueVtbl;
-
-    interface IAAFTaggedValue
-    {
-        CONST_VTBL struct IAAFTaggedValueVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFTaggedValue_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFTaggedValue_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFTaggedValue_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFTaggedValue_Initialize(This,pName,pTypeDef,valueSize,pValue)	\
-    (This)->lpVtbl -> Initialize(This,pName,pTypeDef,valueSize,pValue)
-
-#define IAAFTaggedValue_GetName(This,pName,bufSize)	\
-    (This)->lpVtbl -> GetName(This,pName,bufSize)
-
-#define IAAFTaggedValue_GetNameBufLen(This,pBufSize)	\
-    (This)->lpVtbl -> GetNameBufLen(This,pBufSize)
-
-#define IAAFTaggedValue_GetTypeDefinition(This,ppTypeDef)	\
-    (This)->lpVtbl -> GetTypeDefinition(This,ppTypeDef)
-
-#define IAAFTaggedValue_GetValue(This,valueSize,pValue,bytesRead)	\
-    (This)->lpVtbl -> GetValue(This,valueSize,pValue,bytesRead)
-
-#define IAAFTaggedValue_GetValueBufLen(This,pLen)	\
-    (This)->lpVtbl -> GetValueBufLen(This,pLen)
-
-#define IAAFTaggedValue_SetValue(This,valueSize,pValue)	\
-    (This)->lpVtbl -> SetValue(This,valueSize,pValue)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFTaggedValue_Initialize_Proxy( 
-    IAAFTaggedValue __RPC_FAR * This,
-    /* [string][in] */ aafCharacter_constptr pName,
-    /* [in] */ IAAFTypeDef __RPC_FAR *pTypeDef,
-    /* [in] */ aafUInt32 valueSize,
-    /* [size_is][in] */ aafDataBuffer_t pValue);
-
-
-void __RPC_STUB IAAFTaggedValue_Initialize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTaggedValue_GetName_Proxy( 
-    IAAFTaggedValue __RPC_FAR * This,
-    /* [size_is][string][out] */ aafCharacter __RPC_FAR *pName,
-    /* [in] */ aafUInt32 bufSize);
-
-
-void __RPC_STUB IAAFTaggedValue_GetName_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTaggedValue_GetNameBufLen_Proxy( 
-    IAAFTaggedValue __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
-
-
-void __RPC_STUB IAAFTaggedValue_GetNameBufLen_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTaggedValue_GetTypeDefinition_Proxy( 
-    IAAFTaggedValue __RPC_FAR * This,
-    /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *ppTypeDef);
-
-
-void __RPC_STUB IAAFTaggedValue_GetTypeDefinition_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTaggedValue_GetValue_Proxy( 
-    IAAFTaggedValue __RPC_FAR * This,
-    /* [in] */ aafUInt32 valueSize,
-    /* [length_is][size_is][out] */ aafDataBuffer_t pValue,
-    /* [out] */ aafUInt32 __RPC_FAR *bytesRead);
-
-
-void __RPC_STUB IAAFTaggedValue_GetValue_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTaggedValue_GetValueBufLen_Proxy( 
-    IAAFTaggedValue __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pLen);
-
-
-void __RPC_STUB IAAFTaggedValue_GetValueBufLen_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTaggedValue_SetValue_Proxy( 
-    IAAFTaggedValue __RPC_FAR * This,
-    /* [in] */ aafUInt32 valueSize,
-    /* [size_is][in] */ aafDataBuffer_t pValue);
-
-
-void __RPC_STUB IAAFTaggedValue_SetValue_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFTaggedValue_INTERFACE_DEFINED__ */
-
-
 #ifndef __IAAFTextLocator_INTERFACE_DEFINED__
 #define __IAAFTextLocator_INTERFACE_DEFINED__
 
@@ -20536,728 +23011,6 @@ void __RPC_STUB IAAFTimecode_SetTimecode_Stub(
 
 
 #endif 	/* __IAAFTimecode_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFTimelineMobSlot_INTERFACE_DEFINED__
-#define __IAAFTimelineMobSlot_INTERFACE_DEFINED__
-
-/* interface IAAFTimelineMobSlot */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFTimelineMobSlot;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("B1A21378-1A7D-11D2-BF78-00104BC9156D")
-    IAAFTimelineMobSlot : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetEditRate( 
-            /* [retval][out] */ aafRational_t __RPC_FAR *pEditRate) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetEditRate( 
-            /* [in] */ aafRational_constref editRate) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetOrigin( 
-            /* [retval][out] */ aafPosition_t __RPC_FAR *pOrigin) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetOrigin( 
-            /* [in] */ aafPosition_t origin) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFTimelineMobSlotVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFTimelineMobSlot __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFTimelineMobSlot __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFTimelineMobSlot __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IAAFTimelineMobSlot __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEditRate )( 
-            IAAFTimelineMobSlot __RPC_FAR * This,
-            /* [retval][out] */ aafRational_t __RPC_FAR *pEditRate);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEditRate )( 
-            IAAFTimelineMobSlot __RPC_FAR * This,
-            /* [in] */ aafRational_constref editRate);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOrigin )( 
-            IAAFTimelineMobSlot __RPC_FAR * This,
-            /* [retval][out] */ aafPosition_t __RPC_FAR *pOrigin);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOrigin )( 
-            IAAFTimelineMobSlot __RPC_FAR * This,
-            /* [in] */ aafPosition_t origin);
-        
-        END_INTERFACE
-    } IAAFTimelineMobSlotVtbl;
-
-    interface IAAFTimelineMobSlot
-    {
-        CONST_VTBL struct IAAFTimelineMobSlotVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFTimelineMobSlot_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFTimelineMobSlot_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFTimelineMobSlot_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFTimelineMobSlot_Initialize(This)	\
-    (This)->lpVtbl -> Initialize(This)
-
-#define IAAFTimelineMobSlot_GetEditRate(This,pEditRate)	\
-    (This)->lpVtbl -> GetEditRate(This,pEditRate)
-
-#define IAAFTimelineMobSlot_SetEditRate(This,editRate)	\
-    (This)->lpVtbl -> SetEditRate(This,editRate)
-
-#define IAAFTimelineMobSlot_GetOrigin(This,pOrigin)	\
-    (This)->lpVtbl -> GetOrigin(This,pOrigin)
-
-#define IAAFTimelineMobSlot_SetOrigin(This,origin)	\
-    (This)->lpVtbl -> SetOrigin(This,origin)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFTimelineMobSlot_Initialize_Proxy( 
-    IAAFTimelineMobSlot __RPC_FAR * This);
-
-
-void __RPC_STUB IAAFTimelineMobSlot_Initialize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTimelineMobSlot_GetEditRate_Proxy( 
-    IAAFTimelineMobSlot __RPC_FAR * This,
-    /* [retval][out] */ aafRational_t __RPC_FAR *pEditRate);
-
-
-void __RPC_STUB IAAFTimelineMobSlot_GetEditRate_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTimelineMobSlot_SetEditRate_Proxy( 
-    IAAFTimelineMobSlot __RPC_FAR * This,
-    /* [in] */ aafRational_constref editRate);
-
-
-void __RPC_STUB IAAFTimelineMobSlot_SetEditRate_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTimelineMobSlot_GetOrigin_Proxy( 
-    IAAFTimelineMobSlot __RPC_FAR * This,
-    /* [retval][out] */ aafPosition_t __RPC_FAR *pOrigin);
-
-
-void __RPC_STUB IAAFTimelineMobSlot_GetOrigin_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTimelineMobSlot_SetOrigin_Proxy( 
-    IAAFTimelineMobSlot __RPC_FAR * This,
-    /* [in] */ aafPosition_t origin);
-
-
-void __RPC_STUB IAAFTimelineMobSlot_SetOrigin_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFTimelineMobSlot_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFTransition_INTERFACE_DEFINED__
-#define __IAAFTransition_INTERFACE_DEFINED__
-
-/* interface IAAFTransition */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFTransition;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("E3F38312-2D3C-11d2-8043-006008143E6F")
-    IAAFTransition : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
-            /* [in] */ aafLength_t length,
-            /* [in] */ aafPosition_t cutPoint,
-            /* [in] */ IAAFOperationGroup __RPC_FAR *op) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCutPoint( 
-            /* [out] */ aafPosition_t __RPC_FAR *cutPoint) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetOperationGroup( 
-            /* [out] */ IAAFOperationGroup __RPC_FAR *__RPC_FAR *groupObj) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetCutPoint( 
-            /* [in] */ aafPosition_t cutPoint) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetOperationGroup( 
-            /* [in] */ IAAFOperationGroup __RPC_FAR *opgroup) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFTransitionVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFTransition __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFTransition __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFTransition __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IAAFTransition __RPC_FAR * This,
-            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
-            /* [in] */ aafLength_t length,
-            /* [in] */ aafPosition_t cutPoint,
-            /* [in] */ IAAFOperationGroup __RPC_FAR *op);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCutPoint )( 
-            IAAFTransition __RPC_FAR * This,
-            /* [out] */ aafPosition_t __RPC_FAR *cutPoint);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOperationGroup )( 
-            IAAFTransition __RPC_FAR * This,
-            /* [out] */ IAAFOperationGroup __RPC_FAR *__RPC_FAR *groupObj);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCutPoint )( 
-            IAAFTransition __RPC_FAR * This,
-            /* [in] */ aafPosition_t cutPoint);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOperationGroup )( 
-            IAAFTransition __RPC_FAR * This,
-            /* [in] */ IAAFOperationGroup __RPC_FAR *opgroup);
-        
-        END_INTERFACE
-    } IAAFTransitionVtbl;
-
-    interface IAAFTransition
-    {
-        CONST_VTBL struct IAAFTransitionVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFTransition_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFTransition_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFTransition_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFTransition_Initialize(This,pDataDef,length,cutPoint,op)	\
-    (This)->lpVtbl -> Initialize(This,pDataDef,length,cutPoint,op)
-
-#define IAAFTransition_GetCutPoint(This,cutPoint)	\
-    (This)->lpVtbl -> GetCutPoint(This,cutPoint)
-
-#define IAAFTransition_GetOperationGroup(This,groupObj)	\
-    (This)->lpVtbl -> GetOperationGroup(This,groupObj)
-
-#define IAAFTransition_SetCutPoint(This,cutPoint)	\
-    (This)->lpVtbl -> SetCutPoint(This,cutPoint)
-
-#define IAAFTransition_SetOperationGroup(This,opgroup)	\
-    (This)->lpVtbl -> SetOperationGroup(This,opgroup)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFTransition_Initialize_Proxy( 
-    IAAFTransition __RPC_FAR * This,
-    /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
-    /* [in] */ aafLength_t length,
-    /* [in] */ aafPosition_t cutPoint,
-    /* [in] */ IAAFOperationGroup __RPC_FAR *op);
-
-
-void __RPC_STUB IAAFTransition_Initialize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTransition_GetCutPoint_Proxy( 
-    IAAFTransition __RPC_FAR * This,
-    /* [out] */ aafPosition_t __RPC_FAR *cutPoint);
-
-
-void __RPC_STUB IAAFTransition_GetCutPoint_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTransition_GetOperationGroup_Proxy( 
-    IAAFTransition __RPC_FAR * This,
-    /* [out] */ IAAFOperationGroup __RPC_FAR *__RPC_FAR *groupObj);
-
-
-void __RPC_STUB IAAFTransition_GetOperationGroup_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTransition_SetCutPoint_Proxy( 
-    IAAFTransition __RPC_FAR * This,
-    /* [in] */ aafPosition_t cutPoint);
-
-
-void __RPC_STUB IAAFTransition_SetCutPoint_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTransition_SetOperationGroup_Proxy( 
-    IAAFTransition __RPC_FAR * This,
-    /* [in] */ IAAFOperationGroup __RPC_FAR *opgroup);
-
-
-void __RPC_STUB IAAFTransition_SetOperationGroup_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFTransition_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFTIFFDescriptor_INTERFACE_DEFINED__
-#define __IAAFTIFFDescriptor_INTERFACE_DEFINED__
-
-/* interface IAAFTIFFDescriptor */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFTIFFDescriptor;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("e684d76c-b935-11d2-bf9d-00104bc9156d")
-    IAAFTIFFDescriptor : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE SetIsUniform( 
-            /* [in] */ aafBoolean_t IsUniform) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetIsUniform( 
-            /* [out] */ aafBoolean_t __RPC_FAR *pIsUniform) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetIsContiguous( 
-            /* [in] */ aafBoolean_t IsContiguous) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetIsContiguous( 
-            /* [out] */ aafBoolean_t __RPC_FAR *pIsContiguous) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetLeadingLines( 
-            /* [in] */ aafInt32 LeadingLines) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetLeadingLines( 
-            /* [out] */ aafInt32 __RPC_FAR *pLeadingLines) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetTrailingLines( 
-            /* [in] */ aafInt32 TrailingLines) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetTrailingLines( 
-            /* [out] */ aafInt32 __RPC_FAR *pTrailingLines) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetJPEGTableID( 
-            /* [in] */ aafJPEGTableID_t JPEGTableID) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetJPEGTableID( 
-            /* [out] */ aafJPEGTableID_t __RPC_FAR *pJPEGTableID) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetSummary( 
-            /* [in] */ aafUInt32 size,
-            /* [size_is][out] */ aafDataValue_t pSummary) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetSummaryBufferSize( 
-            /* [out] */ aafUInt32 __RPC_FAR *pSize) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetSummary( 
-            /* [in] */ aafUInt32 size,
-            /* [size_is][in] */ aafDataValue_t pSummary) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFTIFFDescriptorVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFTIFFDescriptor __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFTIFFDescriptor __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFTIFFDescriptor __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIsUniform )( 
-            IAAFTIFFDescriptor __RPC_FAR * This,
-            /* [in] */ aafBoolean_t IsUniform);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIsUniform )( 
-            IAAFTIFFDescriptor __RPC_FAR * This,
-            /* [out] */ aafBoolean_t __RPC_FAR *pIsUniform);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIsContiguous )( 
-            IAAFTIFFDescriptor __RPC_FAR * This,
-            /* [in] */ aafBoolean_t IsContiguous);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIsContiguous )( 
-            IAAFTIFFDescriptor __RPC_FAR * This,
-            /* [out] */ aafBoolean_t __RPC_FAR *pIsContiguous);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLeadingLines )( 
-            IAAFTIFFDescriptor __RPC_FAR * This,
-            /* [in] */ aafInt32 LeadingLines);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLeadingLines )( 
-            IAAFTIFFDescriptor __RPC_FAR * This,
-            /* [out] */ aafInt32 __RPC_FAR *pLeadingLines);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTrailingLines )( 
-            IAAFTIFFDescriptor __RPC_FAR * This,
-            /* [in] */ aafInt32 TrailingLines);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTrailingLines )( 
-            IAAFTIFFDescriptor __RPC_FAR * This,
-            /* [out] */ aafInt32 __RPC_FAR *pTrailingLines);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetJPEGTableID )( 
-            IAAFTIFFDescriptor __RPC_FAR * This,
-            /* [in] */ aafJPEGTableID_t JPEGTableID);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetJPEGTableID )( 
-            IAAFTIFFDescriptor __RPC_FAR * This,
-            /* [out] */ aafJPEGTableID_t __RPC_FAR *pJPEGTableID);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSummary )( 
-            IAAFTIFFDescriptor __RPC_FAR * This,
-            /* [in] */ aafUInt32 size,
-            /* [size_is][out] */ aafDataValue_t pSummary);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSummaryBufferSize )( 
-            IAAFTIFFDescriptor __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pSize);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSummary )( 
-            IAAFTIFFDescriptor __RPC_FAR * This,
-            /* [in] */ aafUInt32 size,
-            /* [size_is][in] */ aafDataValue_t pSummary);
-        
-        END_INTERFACE
-    } IAAFTIFFDescriptorVtbl;
-
-    interface IAAFTIFFDescriptor
-    {
-        CONST_VTBL struct IAAFTIFFDescriptorVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFTIFFDescriptor_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFTIFFDescriptor_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFTIFFDescriptor_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFTIFFDescriptor_SetIsUniform(This,IsUniform)	\
-    (This)->lpVtbl -> SetIsUniform(This,IsUniform)
-
-#define IAAFTIFFDescriptor_GetIsUniform(This,pIsUniform)	\
-    (This)->lpVtbl -> GetIsUniform(This,pIsUniform)
-
-#define IAAFTIFFDescriptor_SetIsContiguous(This,IsContiguous)	\
-    (This)->lpVtbl -> SetIsContiguous(This,IsContiguous)
-
-#define IAAFTIFFDescriptor_GetIsContiguous(This,pIsContiguous)	\
-    (This)->lpVtbl -> GetIsContiguous(This,pIsContiguous)
-
-#define IAAFTIFFDescriptor_SetLeadingLines(This,LeadingLines)	\
-    (This)->lpVtbl -> SetLeadingLines(This,LeadingLines)
-
-#define IAAFTIFFDescriptor_GetLeadingLines(This,pLeadingLines)	\
-    (This)->lpVtbl -> GetLeadingLines(This,pLeadingLines)
-
-#define IAAFTIFFDescriptor_SetTrailingLines(This,TrailingLines)	\
-    (This)->lpVtbl -> SetTrailingLines(This,TrailingLines)
-
-#define IAAFTIFFDescriptor_GetTrailingLines(This,pTrailingLines)	\
-    (This)->lpVtbl -> GetTrailingLines(This,pTrailingLines)
-
-#define IAAFTIFFDescriptor_SetJPEGTableID(This,JPEGTableID)	\
-    (This)->lpVtbl -> SetJPEGTableID(This,JPEGTableID)
-
-#define IAAFTIFFDescriptor_GetJPEGTableID(This,pJPEGTableID)	\
-    (This)->lpVtbl -> GetJPEGTableID(This,pJPEGTableID)
-
-#define IAAFTIFFDescriptor_GetSummary(This,size,pSummary)	\
-    (This)->lpVtbl -> GetSummary(This,size,pSummary)
-
-#define IAAFTIFFDescriptor_GetSummaryBufferSize(This,pSize)	\
-    (This)->lpVtbl -> GetSummaryBufferSize(This,pSize)
-
-#define IAAFTIFFDescriptor_SetSummary(This,size,pSummary)	\
-    (This)->lpVtbl -> SetSummary(This,size,pSummary)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_SetIsUniform_Proxy( 
-    IAAFTIFFDescriptor __RPC_FAR * This,
-    /* [in] */ aafBoolean_t IsUniform);
-
-
-void __RPC_STUB IAAFTIFFDescriptor_SetIsUniform_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_GetIsUniform_Proxy( 
-    IAAFTIFFDescriptor __RPC_FAR * This,
-    /* [out] */ aafBoolean_t __RPC_FAR *pIsUniform);
-
-
-void __RPC_STUB IAAFTIFFDescriptor_GetIsUniform_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_SetIsContiguous_Proxy( 
-    IAAFTIFFDescriptor __RPC_FAR * This,
-    /* [in] */ aafBoolean_t IsContiguous);
-
-
-void __RPC_STUB IAAFTIFFDescriptor_SetIsContiguous_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_GetIsContiguous_Proxy( 
-    IAAFTIFFDescriptor __RPC_FAR * This,
-    /* [out] */ aafBoolean_t __RPC_FAR *pIsContiguous);
-
-
-void __RPC_STUB IAAFTIFFDescriptor_GetIsContiguous_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_SetLeadingLines_Proxy( 
-    IAAFTIFFDescriptor __RPC_FAR * This,
-    /* [in] */ aafInt32 LeadingLines);
-
-
-void __RPC_STUB IAAFTIFFDescriptor_SetLeadingLines_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_GetLeadingLines_Proxy( 
-    IAAFTIFFDescriptor __RPC_FAR * This,
-    /* [out] */ aafInt32 __RPC_FAR *pLeadingLines);
-
-
-void __RPC_STUB IAAFTIFFDescriptor_GetLeadingLines_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_SetTrailingLines_Proxy( 
-    IAAFTIFFDescriptor __RPC_FAR * This,
-    /* [in] */ aafInt32 TrailingLines);
-
-
-void __RPC_STUB IAAFTIFFDescriptor_SetTrailingLines_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_GetTrailingLines_Proxy( 
-    IAAFTIFFDescriptor __RPC_FAR * This,
-    /* [out] */ aafInt32 __RPC_FAR *pTrailingLines);
-
-
-void __RPC_STUB IAAFTIFFDescriptor_GetTrailingLines_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_SetJPEGTableID_Proxy( 
-    IAAFTIFFDescriptor __RPC_FAR * This,
-    /* [in] */ aafJPEGTableID_t JPEGTableID);
-
-
-void __RPC_STUB IAAFTIFFDescriptor_SetJPEGTableID_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_GetJPEGTableID_Proxy( 
-    IAAFTIFFDescriptor __RPC_FAR * This,
-    /* [out] */ aafJPEGTableID_t __RPC_FAR *pJPEGTableID);
-
-
-void __RPC_STUB IAAFTIFFDescriptor_GetJPEGTableID_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_GetSummary_Proxy( 
-    IAAFTIFFDescriptor __RPC_FAR * This,
-    /* [in] */ aafUInt32 size,
-    /* [size_is][out] */ aafDataValue_t pSummary);
-
-
-void __RPC_STUB IAAFTIFFDescriptor_GetSummary_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_GetSummaryBufferSize_Proxy( 
-    IAAFTIFFDescriptor __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pSize);
-
-
-void __RPC_STUB IAAFTIFFDescriptor_GetSummaryBufferSize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTIFFDescriptor_SetSummary_Proxy( 
-    IAAFTIFFDescriptor __RPC_FAR * This,
-    /* [in] */ aafUInt32 size,
-    /* [size_is][in] */ aafDataValue_t pSummary);
-
-
-void __RPC_STUB IAAFTIFFDescriptor_SetSummary_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFTIFFDescriptor_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFTimecodeStream_INTERFACE_DEFINED__
@@ -21709,6 +23462,368 @@ EXTERN_C const IID IID_IAAFTimecodeStream12M;
 #endif 	/* __IAAFTimecodeStream12M_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFTimelineMobSlot_INTERFACE_DEFINED__
+#define __IAAFTimelineMobSlot_INTERFACE_DEFINED__
+
+/* interface IAAFTimelineMobSlot */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFTimelineMobSlot;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("B1A21378-1A7D-11D2-BF78-00104BC9156D")
+    IAAFTimelineMobSlot : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetEditRate( 
+            /* [retval][out] */ aafRational_t __RPC_FAR *pEditRate) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetEditRate( 
+            /* [in] */ aafRational_constref editRate) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetOrigin( 
+            /* [retval][out] */ aafPosition_t __RPC_FAR *pOrigin) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetOrigin( 
+            /* [in] */ aafPosition_t origin) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFTimelineMobSlotVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFTimelineMobSlot __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFTimelineMobSlot __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFTimelineMobSlot __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFTimelineMobSlot __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEditRate )( 
+            IAAFTimelineMobSlot __RPC_FAR * This,
+            /* [retval][out] */ aafRational_t __RPC_FAR *pEditRate);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEditRate )( 
+            IAAFTimelineMobSlot __RPC_FAR * This,
+            /* [in] */ aafRational_constref editRate);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOrigin )( 
+            IAAFTimelineMobSlot __RPC_FAR * This,
+            /* [retval][out] */ aafPosition_t __RPC_FAR *pOrigin);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOrigin )( 
+            IAAFTimelineMobSlot __RPC_FAR * This,
+            /* [in] */ aafPosition_t origin);
+        
+        END_INTERFACE
+    } IAAFTimelineMobSlotVtbl;
+
+    interface IAAFTimelineMobSlot
+    {
+        CONST_VTBL struct IAAFTimelineMobSlotVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFTimelineMobSlot_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFTimelineMobSlot_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFTimelineMobSlot_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFTimelineMobSlot_Initialize(This)	\
+    (This)->lpVtbl -> Initialize(This)
+
+#define IAAFTimelineMobSlot_GetEditRate(This,pEditRate)	\
+    (This)->lpVtbl -> GetEditRate(This,pEditRate)
+
+#define IAAFTimelineMobSlot_SetEditRate(This,editRate)	\
+    (This)->lpVtbl -> SetEditRate(This,editRate)
+
+#define IAAFTimelineMobSlot_GetOrigin(This,pOrigin)	\
+    (This)->lpVtbl -> GetOrigin(This,pOrigin)
+
+#define IAAFTimelineMobSlot_SetOrigin(This,origin)	\
+    (This)->lpVtbl -> SetOrigin(This,origin)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFTimelineMobSlot_Initialize_Proxy( 
+    IAAFTimelineMobSlot __RPC_FAR * This);
+
+
+void __RPC_STUB IAAFTimelineMobSlot_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTimelineMobSlot_GetEditRate_Proxy( 
+    IAAFTimelineMobSlot __RPC_FAR * This,
+    /* [retval][out] */ aafRational_t __RPC_FAR *pEditRate);
+
+
+void __RPC_STUB IAAFTimelineMobSlot_GetEditRate_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTimelineMobSlot_SetEditRate_Proxy( 
+    IAAFTimelineMobSlot __RPC_FAR * This,
+    /* [in] */ aafRational_constref editRate);
+
+
+void __RPC_STUB IAAFTimelineMobSlot_SetEditRate_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTimelineMobSlot_GetOrigin_Proxy( 
+    IAAFTimelineMobSlot __RPC_FAR * This,
+    /* [retval][out] */ aafPosition_t __RPC_FAR *pOrigin);
+
+
+void __RPC_STUB IAAFTimelineMobSlot_GetOrigin_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTimelineMobSlot_SetOrigin_Proxy( 
+    IAAFTimelineMobSlot __RPC_FAR * This,
+    /* [in] */ aafPosition_t origin);
+
+
+void __RPC_STUB IAAFTimelineMobSlot_SetOrigin_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFTimelineMobSlot_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFTransition_INTERFACE_DEFINED__
+#define __IAAFTransition_INTERFACE_DEFINED__
+
+/* interface IAAFTransition */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFTransition;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("E3F38312-2D3C-11d2-8043-006008143E6F")
+    IAAFTransition : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( 
+            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
+            /* [in] */ aafLength_t length,
+            /* [in] */ aafPosition_t cutPoint,
+            /* [in] */ IAAFOperationGroup __RPC_FAR *op) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetCutPoint( 
+            /* [out] */ aafPosition_t __RPC_FAR *cutPoint) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetOperationGroup( 
+            /* [out] */ IAAFOperationGroup __RPC_FAR *__RPC_FAR *groupObj) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetCutPoint( 
+            /* [in] */ aafPosition_t cutPoint) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetOperationGroup( 
+            /* [in] */ IAAFOperationGroup __RPC_FAR *opgroup) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFTransitionVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFTransition __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFTransition __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFTransition __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFTransition __RPC_FAR * This,
+            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
+            /* [in] */ aafLength_t length,
+            /* [in] */ aafPosition_t cutPoint,
+            /* [in] */ IAAFOperationGroup __RPC_FAR *op);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCutPoint )( 
+            IAAFTransition __RPC_FAR * This,
+            /* [out] */ aafPosition_t __RPC_FAR *cutPoint);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOperationGroup )( 
+            IAAFTransition __RPC_FAR * This,
+            /* [out] */ IAAFOperationGroup __RPC_FAR *__RPC_FAR *groupObj);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCutPoint )( 
+            IAAFTransition __RPC_FAR * This,
+            /* [in] */ aafPosition_t cutPoint);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOperationGroup )( 
+            IAAFTransition __RPC_FAR * This,
+            /* [in] */ IAAFOperationGroup __RPC_FAR *opgroup);
+        
+        END_INTERFACE
+    } IAAFTransitionVtbl;
+
+    interface IAAFTransition
+    {
+        CONST_VTBL struct IAAFTransitionVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFTransition_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFTransition_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFTransition_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFTransition_Initialize(This,pDataDef,length,cutPoint,op)	\
+    (This)->lpVtbl -> Initialize(This,pDataDef,length,cutPoint,op)
+
+#define IAAFTransition_GetCutPoint(This,cutPoint)	\
+    (This)->lpVtbl -> GetCutPoint(This,cutPoint)
+
+#define IAAFTransition_GetOperationGroup(This,groupObj)	\
+    (This)->lpVtbl -> GetOperationGroup(This,groupObj)
+
+#define IAAFTransition_SetCutPoint(This,cutPoint)	\
+    (This)->lpVtbl -> SetCutPoint(This,cutPoint)
+
+#define IAAFTransition_SetOperationGroup(This,opgroup)	\
+    (This)->lpVtbl -> SetOperationGroup(This,opgroup)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFTransition_Initialize_Proxy( 
+    IAAFTransition __RPC_FAR * This,
+    /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
+    /* [in] */ aafLength_t length,
+    /* [in] */ aafPosition_t cutPoint,
+    /* [in] */ IAAFOperationGroup __RPC_FAR *op);
+
+
+void __RPC_STUB IAAFTransition_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTransition_GetCutPoint_Proxy( 
+    IAAFTransition __RPC_FAR * This,
+    /* [out] */ aafPosition_t __RPC_FAR *cutPoint);
+
+
+void __RPC_STUB IAAFTransition_GetCutPoint_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTransition_GetOperationGroup_Proxy( 
+    IAAFTransition __RPC_FAR * This,
+    /* [out] */ IAAFOperationGroup __RPC_FAR *__RPC_FAR *groupObj);
+
+
+void __RPC_STUB IAAFTransition_GetOperationGroup_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTransition_SetCutPoint_Proxy( 
+    IAAFTransition __RPC_FAR * This,
+    /* [in] */ aafPosition_t cutPoint);
+
+
+void __RPC_STUB IAAFTransition_SetCutPoint_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTransition_SetOperationGroup_Proxy( 
+    IAAFTransition __RPC_FAR * This,
+    /* [in] */ IAAFOperationGroup __RPC_FAR *opgroup);
+
+
+void __RPC_STUB IAAFTransition_SetOperationGroup_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFTransition_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFTypeDef_INTERFACE_DEFINED__
 #define __IAAFTypeDef_INTERFACE_DEFINED__
 
@@ -21962,628 +24077,6 @@ void __RPC_STUB IAAFTypeDefCharacter_SetCharacter_Stub(
 
 
 #endif 	/* __IAAFTypeDefCharacter_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFTypeDefIndirect_INTERFACE_DEFINED__
-#define __IAAFTypeDefIndirect_INTERFACE_DEFINED__
-
-/* interface IAAFTypeDefIndirect */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFTypeDefIndirect;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("FE717CA8-F04C-11d3-800B-00104BC9156D")
-    IAAFTypeDefIndirect : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE CreateValueFromActualValue( 
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pActualValue,
-            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppIndirectPropertyValue) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CreateValueFromActualData( 
-            /* [in] */ IAAFTypeDef __RPC_FAR *pActualType,
-            /* [size_is][in] */ aafMemPtr_t pInitData,
-            /* [in] */ aafUInt32 initDataSize,
-            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppIndirectPropertyValue) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetActualValue( 
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pIndirectPropertyValue,
-            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppActualPropertyValue) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetActualSize( 
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pIndirectPropertyValue,
-            /* [out] */ aafUInt32 __RPC_FAR *pActualSize) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetActualType( 
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pIndirectPropertyValue,
-            /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *pActualType) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetActualData( 
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-            /* [size_is][out] */ aafMemPtr_t pData,
-            /* [in] */ aafUInt32 dataSize) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFTypeDefIndirectVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFTypeDefIndirect __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFTypeDefIndirect __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFTypeDefIndirect __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateValueFromActualValue )( 
-            IAAFTypeDefIndirect __RPC_FAR * This,
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pActualValue,
-            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppIndirectPropertyValue);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateValueFromActualData )( 
-            IAAFTypeDefIndirect __RPC_FAR * This,
-            /* [in] */ IAAFTypeDef __RPC_FAR *pActualType,
-            /* [size_is][in] */ aafMemPtr_t pInitData,
-            /* [in] */ aafUInt32 initDataSize,
-            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppIndirectPropertyValue);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetActualValue )( 
-            IAAFTypeDefIndirect __RPC_FAR * This,
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pIndirectPropertyValue,
-            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppActualPropertyValue);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetActualSize )( 
-            IAAFTypeDefIndirect __RPC_FAR * This,
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pIndirectPropertyValue,
-            /* [out] */ aafUInt32 __RPC_FAR *pActualSize);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetActualType )( 
-            IAAFTypeDefIndirect __RPC_FAR * This,
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pIndirectPropertyValue,
-            /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *pActualType);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetActualData )( 
-            IAAFTypeDefIndirect __RPC_FAR * This,
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-            /* [size_is][out] */ aafMemPtr_t pData,
-            /* [in] */ aafUInt32 dataSize);
-        
-        END_INTERFACE
-    } IAAFTypeDefIndirectVtbl;
-
-    interface IAAFTypeDefIndirect
-    {
-        CONST_VTBL struct IAAFTypeDefIndirectVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFTypeDefIndirect_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFTypeDefIndirect_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFTypeDefIndirect_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFTypeDefIndirect_CreateValueFromActualValue(This,pActualValue,ppIndirectPropertyValue)	\
-    (This)->lpVtbl -> CreateValueFromActualValue(This,pActualValue,ppIndirectPropertyValue)
-
-#define IAAFTypeDefIndirect_CreateValueFromActualData(This,pActualType,pInitData,initDataSize,ppIndirectPropertyValue)	\
-    (This)->lpVtbl -> CreateValueFromActualData(This,pActualType,pInitData,initDataSize,ppIndirectPropertyValue)
-
-#define IAAFTypeDefIndirect_GetActualValue(This,pIndirectPropertyValue,ppActualPropertyValue)	\
-    (This)->lpVtbl -> GetActualValue(This,pIndirectPropertyValue,ppActualPropertyValue)
-
-#define IAAFTypeDefIndirect_GetActualSize(This,pIndirectPropertyValue,pActualSize)	\
-    (This)->lpVtbl -> GetActualSize(This,pIndirectPropertyValue,pActualSize)
-
-#define IAAFTypeDefIndirect_GetActualType(This,pIndirectPropertyValue,pActualType)	\
-    (This)->lpVtbl -> GetActualType(This,pIndirectPropertyValue,pActualType)
-
-#define IAAFTypeDefIndirect_GetActualData(This,pPropVal,pData,dataSize)	\
-    (This)->lpVtbl -> GetActualData(This,pPropVal,pData,dataSize)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefIndirect_CreateValueFromActualValue_Proxy( 
-    IAAFTypeDefIndirect __RPC_FAR * This,
-    /* [in] */ IAAFPropertyValue __RPC_FAR *pActualValue,
-    /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppIndirectPropertyValue);
-
-
-void __RPC_STUB IAAFTypeDefIndirect_CreateValueFromActualValue_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefIndirect_CreateValueFromActualData_Proxy( 
-    IAAFTypeDefIndirect __RPC_FAR * This,
-    /* [in] */ IAAFTypeDef __RPC_FAR *pActualType,
-    /* [size_is][in] */ aafMemPtr_t pInitData,
-    /* [in] */ aafUInt32 initDataSize,
-    /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppIndirectPropertyValue);
-
-
-void __RPC_STUB IAAFTypeDefIndirect_CreateValueFromActualData_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefIndirect_GetActualValue_Proxy( 
-    IAAFTypeDefIndirect __RPC_FAR * This,
-    /* [in] */ IAAFPropertyValue __RPC_FAR *pIndirectPropertyValue,
-    /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppActualPropertyValue);
-
-
-void __RPC_STUB IAAFTypeDefIndirect_GetActualValue_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefIndirect_GetActualSize_Proxy( 
-    IAAFTypeDefIndirect __RPC_FAR * This,
-    /* [in] */ IAAFPropertyValue __RPC_FAR *pIndirectPropertyValue,
-    /* [out] */ aafUInt32 __RPC_FAR *pActualSize);
-
-
-void __RPC_STUB IAAFTypeDefIndirect_GetActualSize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefIndirect_GetActualType_Proxy( 
-    IAAFTypeDefIndirect __RPC_FAR * This,
-    /* [in] */ IAAFPropertyValue __RPC_FAR *pIndirectPropertyValue,
-    /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *pActualType);
-
-
-void __RPC_STUB IAAFTypeDefIndirect_GetActualType_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefIndirect_GetActualData_Proxy( 
-    IAAFTypeDefIndirect __RPC_FAR * This,
-    /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-    /* [size_is][out] */ aafMemPtr_t pData,
-    /* [in] */ aafUInt32 dataSize);
-
-
-void __RPC_STUB IAAFTypeDefIndirect_GetActualData_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFTypeDefIndirect_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFTypeDefInt_INTERFACE_DEFINED__
-#define __IAAFTypeDefInt_INTERFACE_DEFINED__
-
-/* interface IAAFTypeDefInt */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFTypeDefInt;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("809c8ca2-9884-11d2-841f-00600832acb8")
-    IAAFTypeDefInt : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [ref][in] */ aafUID_constref id,
-            /* [in] */ aafUInt8 intSize,
-            /* [in] */ aafBoolean_t isSigned,
-            /* [string][in] */ aafCharacter_constptr pTypeName) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CreateValue( 
-            /* [size_is][in] */ aafMemPtr_t pVal,
-            /* [in] */ aafUInt32 valSize,
-            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppPropVal) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetInteger( 
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-            /* [size_is][out] */ aafMemPtr_t pVal,
-            /* [in] */ aafUInt32 valSize) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetInteger( 
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-            /* [size_is][in] */ aafMemPtr_t pVal,
-            /* [in] */ aafUInt32 valSize) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetSize( 
-            /* [out] */ aafUInt32 __RPC_FAR *pSize) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE IsSigned( 
-            /* [out] */ aafBoolean_t __RPC_FAR *pSigned) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFTypeDefIntVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFTypeDefInt __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFTypeDefInt __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFTypeDefInt __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IAAFTypeDefInt __RPC_FAR * This,
-            /* [ref][in] */ aafUID_constref id,
-            /* [in] */ aafUInt8 intSize,
-            /* [in] */ aafBoolean_t isSigned,
-            /* [string][in] */ aafCharacter_constptr pTypeName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateValue )( 
-            IAAFTypeDefInt __RPC_FAR * This,
-            /* [size_is][in] */ aafMemPtr_t pVal,
-            /* [in] */ aafUInt32 valSize,
-            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppPropVal);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInteger )( 
-            IAAFTypeDefInt __RPC_FAR * This,
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-            /* [size_is][out] */ aafMemPtr_t pVal,
-            /* [in] */ aafUInt32 valSize);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInteger )( 
-            IAAFTypeDefInt __RPC_FAR * This,
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-            /* [size_is][in] */ aafMemPtr_t pVal,
-            /* [in] */ aafUInt32 valSize);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSize )( 
-            IAAFTypeDefInt __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pSize);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsSigned )( 
-            IAAFTypeDefInt __RPC_FAR * This,
-            /* [out] */ aafBoolean_t __RPC_FAR *pSigned);
-        
-        END_INTERFACE
-    } IAAFTypeDefIntVtbl;
-
-    interface IAAFTypeDefInt
-    {
-        CONST_VTBL struct IAAFTypeDefIntVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFTypeDefInt_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFTypeDefInt_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFTypeDefInt_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFTypeDefInt_Initialize(This,id,intSize,isSigned,pTypeName)	\
-    (This)->lpVtbl -> Initialize(This,id,intSize,isSigned,pTypeName)
-
-#define IAAFTypeDefInt_CreateValue(This,pVal,valSize,ppPropVal)	\
-    (This)->lpVtbl -> CreateValue(This,pVal,valSize,ppPropVal)
-
-#define IAAFTypeDefInt_GetInteger(This,pPropVal,pVal,valSize)	\
-    (This)->lpVtbl -> GetInteger(This,pPropVal,pVal,valSize)
-
-#define IAAFTypeDefInt_SetInteger(This,pPropVal,pVal,valSize)	\
-    (This)->lpVtbl -> SetInteger(This,pPropVal,pVal,valSize)
-
-#define IAAFTypeDefInt_GetSize(This,pSize)	\
-    (This)->lpVtbl -> GetSize(This,pSize)
-
-#define IAAFTypeDefInt_IsSigned(This,pSigned)	\
-    (This)->lpVtbl -> IsSigned(This,pSigned)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefInt_Initialize_Proxy( 
-    IAAFTypeDefInt __RPC_FAR * This,
-    /* [ref][in] */ aafUID_constref id,
-    /* [in] */ aafUInt8 intSize,
-    /* [in] */ aafBoolean_t isSigned,
-    /* [string][in] */ aafCharacter_constptr pTypeName);
-
-
-void __RPC_STUB IAAFTypeDefInt_Initialize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefInt_CreateValue_Proxy( 
-    IAAFTypeDefInt __RPC_FAR * This,
-    /* [size_is][in] */ aafMemPtr_t pVal,
-    /* [in] */ aafUInt32 valSize,
-    /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppPropVal);
-
-
-void __RPC_STUB IAAFTypeDefInt_CreateValue_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefInt_GetInteger_Proxy( 
-    IAAFTypeDefInt __RPC_FAR * This,
-    /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-    /* [size_is][out] */ aafMemPtr_t pVal,
-    /* [in] */ aafUInt32 valSize);
-
-
-void __RPC_STUB IAAFTypeDefInt_GetInteger_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefInt_SetInteger_Proxy( 
-    IAAFTypeDefInt __RPC_FAR * This,
-    /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-    /* [size_is][in] */ aafMemPtr_t pVal,
-    /* [in] */ aafUInt32 valSize);
-
-
-void __RPC_STUB IAAFTypeDefInt_SetInteger_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefInt_GetSize_Proxy( 
-    IAAFTypeDefInt __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pSize);
-
-
-void __RPC_STUB IAAFTypeDefInt_GetSize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefInt_IsSigned_Proxy( 
-    IAAFTypeDefInt __RPC_FAR * This,
-    /* [out] */ aafBoolean_t __RPC_FAR *pSigned);
-
-
-void __RPC_STUB IAAFTypeDefInt_IsSigned_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFTypeDefInt_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFTypeDefRename_INTERFACE_DEFINED__
-#define __IAAFTypeDefRename_INTERFACE_DEFINED__
-
-/* interface IAAFTypeDefRename */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFTypeDefRename;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("307e9e6a-dcb2-11d2-8429-00600832acb8")
-    IAAFTypeDefRename : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [ref][in] */ aafUID_constref id,
-            /* [in] */ IAAFTypeDef __RPC_FAR *pBaseType,
-            /* [string][in] */ aafCharacter_constptr pTypeName) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetBaseType( 
-            /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *ppBaseType) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetBaseValue( 
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pInPropVal,
-            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppOutPropVal) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CreateValue( 
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pInPropVal,
-            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppOutPropVal) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFTypeDefRenameVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFTypeDefRename __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFTypeDefRename __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFTypeDefRename __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IAAFTypeDefRename __RPC_FAR * This,
-            /* [ref][in] */ aafUID_constref id,
-            /* [in] */ IAAFTypeDef __RPC_FAR *pBaseType,
-            /* [string][in] */ aafCharacter_constptr pTypeName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBaseType )( 
-            IAAFTypeDefRename __RPC_FAR * This,
-            /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *ppBaseType);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBaseValue )( 
-            IAAFTypeDefRename __RPC_FAR * This,
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pInPropVal,
-            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppOutPropVal);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateValue )( 
-            IAAFTypeDefRename __RPC_FAR * This,
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pInPropVal,
-            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppOutPropVal);
-        
-        END_INTERFACE
-    } IAAFTypeDefRenameVtbl;
-
-    interface IAAFTypeDefRename
-    {
-        CONST_VTBL struct IAAFTypeDefRenameVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFTypeDefRename_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFTypeDefRename_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFTypeDefRename_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFTypeDefRename_Initialize(This,id,pBaseType,pTypeName)	\
-    (This)->lpVtbl -> Initialize(This,id,pBaseType,pTypeName)
-
-#define IAAFTypeDefRename_GetBaseType(This,ppBaseType)	\
-    (This)->lpVtbl -> GetBaseType(This,ppBaseType)
-
-#define IAAFTypeDefRename_GetBaseValue(This,pInPropVal,ppOutPropVal)	\
-    (This)->lpVtbl -> GetBaseValue(This,pInPropVal,ppOutPropVal)
-
-#define IAAFTypeDefRename_CreateValue(This,pInPropVal,ppOutPropVal)	\
-    (This)->lpVtbl -> CreateValue(This,pInPropVal,ppOutPropVal)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefRename_Initialize_Proxy( 
-    IAAFTypeDefRename __RPC_FAR * This,
-    /* [ref][in] */ aafUID_constref id,
-    /* [in] */ IAAFTypeDef __RPC_FAR *pBaseType,
-    /* [string][in] */ aafCharacter_constptr pTypeName);
-
-
-void __RPC_STUB IAAFTypeDefRename_Initialize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefRename_GetBaseType_Proxy( 
-    IAAFTypeDefRename __RPC_FAR * This,
-    /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *ppBaseType);
-
-
-void __RPC_STUB IAAFTypeDefRename_GetBaseType_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefRename_GetBaseValue_Proxy( 
-    IAAFTypeDefRename __RPC_FAR * This,
-    /* [in] */ IAAFPropertyValue __RPC_FAR *pInPropVal,
-    /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppOutPropVal);
-
-
-void __RPC_STUB IAAFTypeDefRename_GetBaseValue_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefRename_CreateValue_Proxy( 
-    IAAFTypeDefRename __RPC_FAR * This,
-    /* [in] */ IAAFPropertyValue __RPC_FAR *pInPropVal,
-    /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppOutPropVal);
-
-
-void __RPC_STUB IAAFTypeDefRename_CreateValue_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFTypeDefRename_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFTypeDefEnum_INTERFACE_DEFINED__
@@ -23751,6 +25244,833 @@ void __RPC_STUB IAAFTypeDefFixedArray_GetElements_Stub(
 #endif 	/* __IAAFTypeDefFixedArray_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFTypeDefIndirect_INTERFACE_DEFINED__
+#define __IAAFTypeDefIndirect_INTERFACE_DEFINED__
+
+/* interface IAAFTypeDefIndirect */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFTypeDefIndirect;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("FE717CA8-F04C-11d3-800B-00104BC9156D")
+    IAAFTypeDefIndirect : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE CreateValueFromActualValue( 
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pActualValue,
+            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppIndirectPropertyValue) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CreateValueFromActualData( 
+            /* [in] */ IAAFTypeDef __RPC_FAR *pActualType,
+            /* [size_is][in] */ aafMemPtr_t pInitData,
+            /* [in] */ aafUInt32 initDataSize,
+            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppIndirectPropertyValue) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetActualValue( 
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pIndirectPropertyValue,
+            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppActualPropertyValue) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetActualSize( 
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pIndirectPropertyValue,
+            /* [out] */ aafUInt32 __RPC_FAR *pActualSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetActualType( 
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pIndirectPropertyValue,
+            /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *pActualType) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetActualData( 
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+            /* [size_is][out] */ aafMemPtr_t pData,
+            /* [in] */ aafUInt32 dataSize) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFTypeDefIndirectVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFTypeDefIndirect __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFTypeDefIndirect __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFTypeDefIndirect __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateValueFromActualValue )( 
+            IAAFTypeDefIndirect __RPC_FAR * This,
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pActualValue,
+            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppIndirectPropertyValue);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateValueFromActualData )( 
+            IAAFTypeDefIndirect __RPC_FAR * This,
+            /* [in] */ IAAFTypeDef __RPC_FAR *pActualType,
+            /* [size_is][in] */ aafMemPtr_t pInitData,
+            /* [in] */ aafUInt32 initDataSize,
+            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppIndirectPropertyValue);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetActualValue )( 
+            IAAFTypeDefIndirect __RPC_FAR * This,
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pIndirectPropertyValue,
+            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppActualPropertyValue);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetActualSize )( 
+            IAAFTypeDefIndirect __RPC_FAR * This,
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pIndirectPropertyValue,
+            /* [out] */ aafUInt32 __RPC_FAR *pActualSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetActualType )( 
+            IAAFTypeDefIndirect __RPC_FAR * This,
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pIndirectPropertyValue,
+            /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *pActualType);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetActualData )( 
+            IAAFTypeDefIndirect __RPC_FAR * This,
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+            /* [size_is][out] */ aafMemPtr_t pData,
+            /* [in] */ aafUInt32 dataSize);
+        
+        END_INTERFACE
+    } IAAFTypeDefIndirectVtbl;
+
+    interface IAAFTypeDefIndirect
+    {
+        CONST_VTBL struct IAAFTypeDefIndirectVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFTypeDefIndirect_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFTypeDefIndirect_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFTypeDefIndirect_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFTypeDefIndirect_CreateValueFromActualValue(This,pActualValue,ppIndirectPropertyValue)	\
+    (This)->lpVtbl -> CreateValueFromActualValue(This,pActualValue,ppIndirectPropertyValue)
+
+#define IAAFTypeDefIndirect_CreateValueFromActualData(This,pActualType,pInitData,initDataSize,ppIndirectPropertyValue)	\
+    (This)->lpVtbl -> CreateValueFromActualData(This,pActualType,pInitData,initDataSize,ppIndirectPropertyValue)
+
+#define IAAFTypeDefIndirect_GetActualValue(This,pIndirectPropertyValue,ppActualPropertyValue)	\
+    (This)->lpVtbl -> GetActualValue(This,pIndirectPropertyValue,ppActualPropertyValue)
+
+#define IAAFTypeDefIndirect_GetActualSize(This,pIndirectPropertyValue,pActualSize)	\
+    (This)->lpVtbl -> GetActualSize(This,pIndirectPropertyValue,pActualSize)
+
+#define IAAFTypeDefIndirect_GetActualType(This,pIndirectPropertyValue,pActualType)	\
+    (This)->lpVtbl -> GetActualType(This,pIndirectPropertyValue,pActualType)
+
+#define IAAFTypeDefIndirect_GetActualData(This,pPropVal,pData,dataSize)	\
+    (This)->lpVtbl -> GetActualData(This,pPropVal,pData,dataSize)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefIndirect_CreateValueFromActualValue_Proxy( 
+    IAAFTypeDefIndirect __RPC_FAR * This,
+    /* [in] */ IAAFPropertyValue __RPC_FAR *pActualValue,
+    /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppIndirectPropertyValue);
+
+
+void __RPC_STUB IAAFTypeDefIndirect_CreateValueFromActualValue_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefIndirect_CreateValueFromActualData_Proxy( 
+    IAAFTypeDefIndirect __RPC_FAR * This,
+    /* [in] */ IAAFTypeDef __RPC_FAR *pActualType,
+    /* [size_is][in] */ aafMemPtr_t pInitData,
+    /* [in] */ aafUInt32 initDataSize,
+    /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppIndirectPropertyValue);
+
+
+void __RPC_STUB IAAFTypeDefIndirect_CreateValueFromActualData_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefIndirect_GetActualValue_Proxy( 
+    IAAFTypeDefIndirect __RPC_FAR * This,
+    /* [in] */ IAAFPropertyValue __RPC_FAR *pIndirectPropertyValue,
+    /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppActualPropertyValue);
+
+
+void __RPC_STUB IAAFTypeDefIndirect_GetActualValue_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefIndirect_GetActualSize_Proxy( 
+    IAAFTypeDefIndirect __RPC_FAR * This,
+    /* [in] */ IAAFPropertyValue __RPC_FAR *pIndirectPropertyValue,
+    /* [out] */ aafUInt32 __RPC_FAR *pActualSize);
+
+
+void __RPC_STUB IAAFTypeDefIndirect_GetActualSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefIndirect_GetActualType_Proxy( 
+    IAAFTypeDefIndirect __RPC_FAR * This,
+    /* [in] */ IAAFPropertyValue __RPC_FAR *pIndirectPropertyValue,
+    /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *pActualType);
+
+
+void __RPC_STUB IAAFTypeDefIndirect_GetActualType_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefIndirect_GetActualData_Proxy( 
+    IAAFTypeDefIndirect __RPC_FAR * This,
+    /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+    /* [size_is][out] */ aafMemPtr_t pData,
+    /* [in] */ aafUInt32 dataSize);
+
+
+void __RPC_STUB IAAFTypeDefIndirect_GetActualData_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFTypeDefIndirect_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFTypeDefInt_INTERFACE_DEFINED__
+#define __IAAFTypeDefInt_INTERFACE_DEFINED__
+
+/* interface IAAFTypeDefInt */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFTypeDefInt;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("809c8ca2-9884-11d2-841f-00600832acb8")
+    IAAFTypeDefInt : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( 
+            /* [ref][in] */ aafUID_constref id,
+            /* [in] */ aafUInt8 intSize,
+            /* [in] */ aafBoolean_t isSigned,
+            /* [string][in] */ aafCharacter_constptr pTypeName) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CreateValue( 
+            /* [size_is][in] */ aafMemPtr_t pVal,
+            /* [in] */ aafUInt32 valSize,
+            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppPropVal) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetInteger( 
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+            /* [size_is][out] */ aafMemPtr_t pVal,
+            /* [in] */ aafUInt32 valSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetInteger( 
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+            /* [size_is][in] */ aafMemPtr_t pVal,
+            /* [in] */ aafUInt32 valSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSize( 
+            /* [out] */ aafUInt32 __RPC_FAR *pSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsSigned( 
+            /* [out] */ aafBoolean_t __RPC_FAR *pSigned) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFTypeDefIntVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFTypeDefInt __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFTypeDefInt __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFTypeDefInt __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFTypeDefInt __RPC_FAR * This,
+            /* [ref][in] */ aafUID_constref id,
+            /* [in] */ aafUInt8 intSize,
+            /* [in] */ aafBoolean_t isSigned,
+            /* [string][in] */ aafCharacter_constptr pTypeName);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateValue )( 
+            IAAFTypeDefInt __RPC_FAR * This,
+            /* [size_is][in] */ aafMemPtr_t pVal,
+            /* [in] */ aafUInt32 valSize,
+            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppPropVal);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInteger )( 
+            IAAFTypeDefInt __RPC_FAR * This,
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+            /* [size_is][out] */ aafMemPtr_t pVal,
+            /* [in] */ aafUInt32 valSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInteger )( 
+            IAAFTypeDefInt __RPC_FAR * This,
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+            /* [size_is][in] */ aafMemPtr_t pVal,
+            /* [in] */ aafUInt32 valSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSize )( 
+            IAAFTypeDefInt __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsSigned )( 
+            IAAFTypeDefInt __RPC_FAR * This,
+            /* [out] */ aafBoolean_t __RPC_FAR *pSigned);
+        
+        END_INTERFACE
+    } IAAFTypeDefIntVtbl;
+
+    interface IAAFTypeDefInt
+    {
+        CONST_VTBL struct IAAFTypeDefIntVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFTypeDefInt_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFTypeDefInt_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFTypeDefInt_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFTypeDefInt_Initialize(This,id,intSize,isSigned,pTypeName)	\
+    (This)->lpVtbl -> Initialize(This,id,intSize,isSigned,pTypeName)
+
+#define IAAFTypeDefInt_CreateValue(This,pVal,valSize,ppPropVal)	\
+    (This)->lpVtbl -> CreateValue(This,pVal,valSize,ppPropVal)
+
+#define IAAFTypeDefInt_GetInteger(This,pPropVal,pVal,valSize)	\
+    (This)->lpVtbl -> GetInteger(This,pPropVal,pVal,valSize)
+
+#define IAAFTypeDefInt_SetInteger(This,pPropVal,pVal,valSize)	\
+    (This)->lpVtbl -> SetInteger(This,pPropVal,pVal,valSize)
+
+#define IAAFTypeDefInt_GetSize(This,pSize)	\
+    (This)->lpVtbl -> GetSize(This,pSize)
+
+#define IAAFTypeDefInt_IsSigned(This,pSigned)	\
+    (This)->lpVtbl -> IsSigned(This,pSigned)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefInt_Initialize_Proxy( 
+    IAAFTypeDefInt __RPC_FAR * This,
+    /* [ref][in] */ aafUID_constref id,
+    /* [in] */ aafUInt8 intSize,
+    /* [in] */ aafBoolean_t isSigned,
+    /* [string][in] */ aafCharacter_constptr pTypeName);
+
+
+void __RPC_STUB IAAFTypeDefInt_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefInt_CreateValue_Proxy( 
+    IAAFTypeDefInt __RPC_FAR * This,
+    /* [size_is][in] */ aafMemPtr_t pVal,
+    /* [in] */ aafUInt32 valSize,
+    /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppPropVal);
+
+
+void __RPC_STUB IAAFTypeDefInt_CreateValue_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefInt_GetInteger_Proxy( 
+    IAAFTypeDefInt __RPC_FAR * This,
+    /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+    /* [size_is][out] */ aafMemPtr_t pVal,
+    /* [in] */ aafUInt32 valSize);
+
+
+void __RPC_STUB IAAFTypeDefInt_GetInteger_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefInt_SetInteger_Proxy( 
+    IAAFTypeDefInt __RPC_FAR * This,
+    /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+    /* [size_is][in] */ aafMemPtr_t pVal,
+    /* [in] */ aafUInt32 valSize);
+
+
+void __RPC_STUB IAAFTypeDefInt_SetInteger_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefInt_GetSize_Proxy( 
+    IAAFTypeDefInt __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pSize);
+
+
+void __RPC_STUB IAAFTypeDefInt_GetSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefInt_IsSigned_Proxy( 
+    IAAFTypeDefInt __RPC_FAR * This,
+    /* [out] */ aafBoolean_t __RPC_FAR *pSigned);
+
+
+void __RPC_STUB IAAFTypeDefInt_IsSigned_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFTypeDefInt_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFTypeDefObjectRef_INTERFACE_DEFINED__
+#define __IAAFTypeDefObjectRef_INTERFACE_DEFINED__
+
+/* interface IAAFTypeDefObjectRef */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFTypeDefObjectRef;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("c3274644-9467-11d2-841f-00600832acb8")
+    IAAFTypeDefObjectRef : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE GetObjectType( 
+            /* [out] */ IAAFClassDef __RPC_FAR *__RPC_FAR *ppObjType) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CreateValue( 
+            /* [in] */ IUnknown __RPC_FAR *pObj,
+            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppPropVal) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetObject( 
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+            /* [in] */ REFIID iid,
+            /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppObject) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetObject( 
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+            /* [in] */ IUnknown __RPC_FAR *pObject) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFTypeDefObjectRefVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFTypeDefObjectRef __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFTypeDefObjectRef __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFTypeDefObjectRef __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectType )( 
+            IAAFTypeDefObjectRef __RPC_FAR * This,
+            /* [out] */ IAAFClassDef __RPC_FAR *__RPC_FAR *ppObjType);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateValue )( 
+            IAAFTypeDefObjectRef __RPC_FAR * This,
+            /* [in] */ IUnknown __RPC_FAR *pObj,
+            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppPropVal);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObject )( 
+            IAAFTypeDefObjectRef __RPC_FAR * This,
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+            /* [in] */ REFIID iid,
+            /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppObject);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetObject )( 
+            IAAFTypeDefObjectRef __RPC_FAR * This,
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+            /* [in] */ IUnknown __RPC_FAR *pObject);
+        
+        END_INTERFACE
+    } IAAFTypeDefObjectRefVtbl;
+
+    interface IAAFTypeDefObjectRef
+    {
+        CONST_VTBL struct IAAFTypeDefObjectRefVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFTypeDefObjectRef_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFTypeDefObjectRef_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFTypeDefObjectRef_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFTypeDefObjectRef_GetObjectType(This,ppObjType)	\
+    (This)->lpVtbl -> GetObjectType(This,ppObjType)
+
+#define IAAFTypeDefObjectRef_CreateValue(This,pObj,ppPropVal)	\
+    (This)->lpVtbl -> CreateValue(This,pObj,ppPropVal)
+
+#define IAAFTypeDefObjectRef_GetObject(This,pPropVal,iid,ppObject)	\
+    (This)->lpVtbl -> GetObject(This,pPropVal,iid,ppObject)
+
+#define IAAFTypeDefObjectRef_SetObject(This,pPropVal,pObject)	\
+    (This)->lpVtbl -> SetObject(This,pPropVal,pObject)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefObjectRef_GetObjectType_Proxy( 
+    IAAFTypeDefObjectRef __RPC_FAR * This,
+    /* [out] */ IAAFClassDef __RPC_FAR *__RPC_FAR *ppObjType);
+
+
+void __RPC_STUB IAAFTypeDefObjectRef_GetObjectType_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefObjectRef_CreateValue_Proxy( 
+    IAAFTypeDefObjectRef __RPC_FAR * This,
+    /* [in] */ IUnknown __RPC_FAR *pObj,
+    /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppPropVal);
+
+
+void __RPC_STUB IAAFTypeDefObjectRef_CreateValue_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefObjectRef_GetObject_Proxy( 
+    IAAFTypeDefObjectRef __RPC_FAR * This,
+    /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+    /* [in] */ REFIID iid,
+    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppObject);
+
+
+void __RPC_STUB IAAFTypeDefObjectRef_GetObject_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefObjectRef_SetObject_Proxy( 
+    IAAFTypeDefObjectRef __RPC_FAR * This,
+    /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+    /* [in] */ IUnknown __RPC_FAR *pObject);
+
+
+void __RPC_STUB IAAFTypeDefObjectRef_SetObject_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFTypeDefObjectRef_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFTypeDefOpaque_INTERFACE_DEFINED__
+#define __IAAFTypeDefOpaque_INTERFACE_DEFINED__
+
+/* interface IAAFTypeDefOpaque */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFTypeDefOpaque;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("FE717CAC-F04C-11d3-800B-00104BC9156D")
+    IAAFTypeDefOpaque : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE GetActualTypeID( 
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pOpaquePropertyValue,
+            /* [out] */ aafUID_t __RPC_FAR *pActualTypeID) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetHandle( 
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+            /* [in] */ aafUInt32 handleSize,
+            /* [length_is][size_is][out] */ aafDataBuffer_t pHandle,
+            /* [out] */ aafUInt32 __RPC_FAR *bytesRead) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetHandleBufLen( 
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+            /* [out] */ aafUInt32 __RPC_FAR *pLen) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetHandle( 
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+            /* [in] */ aafUInt32 handleSize,
+            /* [size_is][in] */ aafDataBuffer_t pHandle) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CreateValueFromHandle( 
+            /* [size_is][in] */ aafMemPtr_t pInitData,
+            /* [in] */ aafUInt32 initDataSize,
+            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppOpaquePropertyValue) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFTypeDefOpaqueVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFTypeDefOpaque __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFTypeDefOpaque __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFTypeDefOpaque __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetActualTypeID )( 
+            IAAFTypeDefOpaque __RPC_FAR * This,
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pOpaquePropertyValue,
+            /* [out] */ aafUID_t __RPC_FAR *pActualTypeID);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHandle )( 
+            IAAFTypeDefOpaque __RPC_FAR * This,
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+            /* [in] */ aafUInt32 handleSize,
+            /* [length_is][size_is][out] */ aafDataBuffer_t pHandle,
+            /* [out] */ aafUInt32 __RPC_FAR *bytesRead);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHandleBufLen )( 
+            IAAFTypeDefOpaque __RPC_FAR * This,
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+            /* [out] */ aafUInt32 __RPC_FAR *pLen);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHandle )( 
+            IAAFTypeDefOpaque __RPC_FAR * This,
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+            /* [in] */ aafUInt32 handleSize,
+            /* [size_is][in] */ aafDataBuffer_t pHandle);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateValueFromHandle )( 
+            IAAFTypeDefOpaque __RPC_FAR * This,
+            /* [size_is][in] */ aafMemPtr_t pInitData,
+            /* [in] */ aafUInt32 initDataSize,
+            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppOpaquePropertyValue);
+        
+        END_INTERFACE
+    } IAAFTypeDefOpaqueVtbl;
+
+    interface IAAFTypeDefOpaque
+    {
+        CONST_VTBL struct IAAFTypeDefOpaqueVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFTypeDefOpaque_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFTypeDefOpaque_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFTypeDefOpaque_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFTypeDefOpaque_GetActualTypeID(This,pOpaquePropertyValue,pActualTypeID)	\
+    (This)->lpVtbl -> GetActualTypeID(This,pOpaquePropertyValue,pActualTypeID)
+
+#define IAAFTypeDefOpaque_GetHandle(This,pPropVal,handleSize,pHandle,bytesRead)	\
+    (This)->lpVtbl -> GetHandle(This,pPropVal,handleSize,pHandle,bytesRead)
+
+#define IAAFTypeDefOpaque_GetHandleBufLen(This,pPropVal,pLen)	\
+    (This)->lpVtbl -> GetHandleBufLen(This,pPropVal,pLen)
+
+#define IAAFTypeDefOpaque_SetHandle(This,pPropVal,handleSize,pHandle)	\
+    (This)->lpVtbl -> SetHandle(This,pPropVal,handleSize,pHandle)
+
+#define IAAFTypeDefOpaque_CreateValueFromHandle(This,pInitData,initDataSize,ppOpaquePropertyValue)	\
+    (This)->lpVtbl -> CreateValueFromHandle(This,pInitData,initDataSize,ppOpaquePropertyValue)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefOpaque_GetActualTypeID_Proxy( 
+    IAAFTypeDefOpaque __RPC_FAR * This,
+    /* [in] */ IAAFPropertyValue __RPC_FAR *pOpaquePropertyValue,
+    /* [out] */ aafUID_t __RPC_FAR *pActualTypeID);
+
+
+void __RPC_STUB IAAFTypeDefOpaque_GetActualTypeID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefOpaque_GetHandle_Proxy( 
+    IAAFTypeDefOpaque __RPC_FAR * This,
+    /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+    /* [in] */ aafUInt32 handleSize,
+    /* [length_is][size_is][out] */ aafDataBuffer_t pHandle,
+    /* [out] */ aafUInt32 __RPC_FAR *bytesRead);
+
+
+void __RPC_STUB IAAFTypeDefOpaque_GetHandle_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefOpaque_GetHandleBufLen_Proxy( 
+    IAAFTypeDefOpaque __RPC_FAR * This,
+    /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+    /* [out] */ aafUInt32 __RPC_FAR *pLen);
+
+
+void __RPC_STUB IAAFTypeDefOpaque_GetHandleBufLen_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefOpaque_SetHandle_Proxy( 
+    IAAFTypeDefOpaque __RPC_FAR * This,
+    /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
+    /* [in] */ aafUInt32 handleSize,
+    /* [size_is][in] */ aafDataBuffer_t pHandle);
+
+
+void __RPC_STUB IAAFTypeDefOpaque_SetHandle_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefOpaque_CreateValueFromHandle_Proxy( 
+    IAAFTypeDefOpaque __RPC_FAR * This,
+    /* [size_is][in] */ aafMemPtr_t pInitData,
+    /* [in] */ aafUInt32 initDataSize,
+    /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppOpaquePropertyValue);
+
+
+void __RPC_STUB IAAFTypeDefOpaque_CreateValueFromHandle_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFTypeDefOpaque_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFTypeDefRecord_INTERFACE_DEFINED__
 #define __IAAFTypeDefRecord_INTERFACE_DEFINED__
 
@@ -24149,6 +26469,174 @@ void __RPC_STUB IAAFTypeDefRecord_RegisterMembers_Stub(
 #endif 	/* __IAAFTypeDefRecord_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFTypeDefRename_INTERFACE_DEFINED__
+#define __IAAFTypeDefRename_INTERFACE_DEFINED__
+
+/* interface IAAFTypeDefRename */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFTypeDefRename;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("307e9e6a-dcb2-11d2-8429-00600832acb8")
+    IAAFTypeDefRename : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( 
+            /* [ref][in] */ aafUID_constref id,
+            /* [in] */ IAAFTypeDef __RPC_FAR *pBaseType,
+            /* [string][in] */ aafCharacter_constptr pTypeName) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetBaseType( 
+            /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *ppBaseType) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetBaseValue( 
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pInPropVal,
+            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppOutPropVal) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CreateValue( 
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pInPropVal,
+            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppOutPropVal) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFTypeDefRenameVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFTypeDefRename __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFTypeDefRename __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFTypeDefRename __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFTypeDefRename __RPC_FAR * This,
+            /* [ref][in] */ aafUID_constref id,
+            /* [in] */ IAAFTypeDef __RPC_FAR *pBaseType,
+            /* [string][in] */ aafCharacter_constptr pTypeName);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBaseType )( 
+            IAAFTypeDefRename __RPC_FAR * This,
+            /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *ppBaseType);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBaseValue )( 
+            IAAFTypeDefRename __RPC_FAR * This,
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pInPropVal,
+            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppOutPropVal);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateValue )( 
+            IAAFTypeDefRename __RPC_FAR * This,
+            /* [in] */ IAAFPropertyValue __RPC_FAR *pInPropVal,
+            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppOutPropVal);
+        
+        END_INTERFACE
+    } IAAFTypeDefRenameVtbl;
+
+    interface IAAFTypeDefRename
+    {
+        CONST_VTBL struct IAAFTypeDefRenameVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFTypeDefRename_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFTypeDefRename_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFTypeDefRename_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFTypeDefRename_Initialize(This,id,pBaseType,pTypeName)	\
+    (This)->lpVtbl -> Initialize(This,id,pBaseType,pTypeName)
+
+#define IAAFTypeDefRename_GetBaseType(This,ppBaseType)	\
+    (This)->lpVtbl -> GetBaseType(This,ppBaseType)
+
+#define IAAFTypeDefRename_GetBaseValue(This,pInPropVal,ppOutPropVal)	\
+    (This)->lpVtbl -> GetBaseValue(This,pInPropVal,ppOutPropVal)
+
+#define IAAFTypeDefRename_CreateValue(This,pInPropVal,ppOutPropVal)	\
+    (This)->lpVtbl -> CreateValue(This,pInPropVal,ppOutPropVal)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefRename_Initialize_Proxy( 
+    IAAFTypeDefRename __RPC_FAR * This,
+    /* [ref][in] */ aafUID_constref id,
+    /* [in] */ IAAFTypeDef __RPC_FAR *pBaseType,
+    /* [string][in] */ aafCharacter_constptr pTypeName);
+
+
+void __RPC_STUB IAAFTypeDefRename_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefRename_GetBaseType_Proxy( 
+    IAAFTypeDefRename __RPC_FAR * This,
+    /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *ppBaseType);
+
+
+void __RPC_STUB IAAFTypeDefRename_GetBaseType_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefRename_GetBaseValue_Proxy( 
+    IAAFTypeDefRename __RPC_FAR * This,
+    /* [in] */ IAAFPropertyValue __RPC_FAR *pInPropVal,
+    /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppOutPropVal);
+
+
+void __RPC_STUB IAAFTypeDefRename_GetBaseValue_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefRename_CreateValue_Proxy( 
+    IAAFTypeDefRename __RPC_FAR * This,
+    /* [in] */ IAAFPropertyValue __RPC_FAR *pInPropVal,
+    /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppOutPropVal);
+
+
+void __RPC_STUB IAAFTypeDefRename_CreateValue_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFTypeDefRename_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFTypeDefSet_INTERFACE_DEFINED__
 #define __IAAFTypeDefSet_INTERFACE_DEFINED__
 
@@ -24485,7 +26973,7 @@ void __RPC_STUB IAAFTypeDefSet_GetElements_Stub(
 /* interface IAAFTypeDefStream */
 /* [unique][helpstring][uuid][object] */ 
 
-  // Extend in chunks of typed Elements
+  /// Extend in chunks of typed Elements
 
 EXTERN_C const IID IID_IAAFTypeDefStream;
 
@@ -25276,481 +27764,6 @@ void __RPC_STUB IAAFTypeDefStrongObjRef_Initialize_Stub(
 #endif 	/* __IAAFTypeDefStrongObjRef_INTERFACE_DEFINED__ */
 
 
-#ifndef __IAAFTypeDefWeakObjRef_INTERFACE_DEFINED__
-#define __IAAFTypeDefWeakObjRef_INTERFACE_DEFINED__
-
-/* interface IAAFTypeDefWeakObjRef */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFTypeDefWeakObjRef;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("381e1f24-e7bb-11d2-842a-00600832acb8")
-    IAAFTypeDefWeakObjRef : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [ref][in] */ aafUID_constref id,
-            /* [in] */ IAAFClassDef __RPC_FAR *pObjType,
-            /* [string][in] */ aafCharacter_constptr pTypeName,
-            /* [in] */ aafUInt32 ids,
-            /* [size_is][in] */ aafUID_constptr pTargetSet) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFTypeDefWeakObjRefVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFTypeDefWeakObjRef __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFTypeDefWeakObjRef __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFTypeDefWeakObjRef __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IAAFTypeDefWeakObjRef __RPC_FAR * This,
-            /* [ref][in] */ aafUID_constref id,
-            /* [in] */ IAAFClassDef __RPC_FAR *pObjType,
-            /* [string][in] */ aafCharacter_constptr pTypeName,
-            /* [in] */ aafUInt32 ids,
-            /* [size_is][in] */ aafUID_constptr pTargetSet);
-        
-        END_INTERFACE
-    } IAAFTypeDefWeakObjRefVtbl;
-
-    interface IAAFTypeDefWeakObjRef
-    {
-        CONST_VTBL struct IAAFTypeDefWeakObjRefVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFTypeDefWeakObjRef_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFTypeDefWeakObjRef_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFTypeDefWeakObjRef_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFTypeDefWeakObjRef_Initialize(This,id,pObjType,pTypeName,ids,pTargetSet)	\
-    (This)->lpVtbl -> Initialize(This,id,pObjType,pTypeName,ids,pTargetSet)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefWeakObjRef_Initialize_Proxy( 
-    IAAFTypeDefWeakObjRef __RPC_FAR * This,
-    /* [ref][in] */ aafUID_constref id,
-    /* [in] */ IAAFClassDef __RPC_FAR *pObjType,
-    /* [string][in] */ aafCharacter_constptr pTypeName,
-    /* [in] */ aafUInt32 ids,
-    /* [size_is][in] */ aafUID_constptr pTargetSet);
-
-
-void __RPC_STUB IAAFTypeDefWeakObjRef_Initialize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFTypeDefWeakObjRef_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFTypeDefObjectRef_INTERFACE_DEFINED__
-#define __IAAFTypeDefObjectRef_INTERFACE_DEFINED__
-
-/* interface IAAFTypeDefObjectRef */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFTypeDefObjectRef;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("c3274644-9467-11d2-841f-00600832acb8")
-    IAAFTypeDefObjectRef : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetObjectType( 
-            /* [out] */ IAAFClassDef __RPC_FAR *__RPC_FAR *ppObjType) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CreateValue( 
-            /* [in] */ IUnknown __RPC_FAR *pObj,
-            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppPropVal) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetObject( 
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-            /* [in] */ REFIID iid,
-            /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppObject) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetObject( 
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-            /* [in] */ IUnknown __RPC_FAR *pObject) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFTypeDefObjectRefVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFTypeDefObjectRef __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFTypeDefObjectRef __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFTypeDefObjectRef __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectType )( 
-            IAAFTypeDefObjectRef __RPC_FAR * This,
-            /* [out] */ IAAFClassDef __RPC_FAR *__RPC_FAR *ppObjType);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateValue )( 
-            IAAFTypeDefObjectRef __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pObj,
-            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppPropVal);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObject )( 
-            IAAFTypeDefObjectRef __RPC_FAR * This,
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-            /* [in] */ REFIID iid,
-            /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppObject);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetObject )( 
-            IAAFTypeDefObjectRef __RPC_FAR * This,
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-            /* [in] */ IUnknown __RPC_FAR *pObject);
-        
-        END_INTERFACE
-    } IAAFTypeDefObjectRefVtbl;
-
-    interface IAAFTypeDefObjectRef
-    {
-        CONST_VTBL struct IAAFTypeDefObjectRefVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFTypeDefObjectRef_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFTypeDefObjectRef_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFTypeDefObjectRef_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFTypeDefObjectRef_GetObjectType(This,ppObjType)	\
-    (This)->lpVtbl -> GetObjectType(This,ppObjType)
-
-#define IAAFTypeDefObjectRef_CreateValue(This,pObj,ppPropVal)	\
-    (This)->lpVtbl -> CreateValue(This,pObj,ppPropVal)
-
-#define IAAFTypeDefObjectRef_GetObject(This,pPropVal,iid,ppObject)	\
-    (This)->lpVtbl -> GetObject(This,pPropVal,iid,ppObject)
-
-#define IAAFTypeDefObjectRef_SetObject(This,pPropVal,pObject)	\
-    (This)->lpVtbl -> SetObject(This,pPropVal,pObject)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefObjectRef_GetObjectType_Proxy( 
-    IAAFTypeDefObjectRef __RPC_FAR * This,
-    /* [out] */ IAAFClassDef __RPC_FAR *__RPC_FAR *ppObjType);
-
-
-void __RPC_STUB IAAFTypeDefObjectRef_GetObjectType_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefObjectRef_CreateValue_Proxy( 
-    IAAFTypeDefObjectRef __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pObj,
-    /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppPropVal);
-
-
-void __RPC_STUB IAAFTypeDefObjectRef_CreateValue_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefObjectRef_GetObject_Proxy( 
-    IAAFTypeDefObjectRef __RPC_FAR * This,
-    /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-    /* [in] */ REFIID iid,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppObject);
-
-
-void __RPC_STUB IAAFTypeDefObjectRef_GetObject_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefObjectRef_SetObject_Proxy( 
-    IAAFTypeDefObjectRef __RPC_FAR * This,
-    /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-    /* [in] */ IUnknown __RPC_FAR *pObject);
-
-
-void __RPC_STUB IAAFTypeDefObjectRef_SetObject_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFTypeDefObjectRef_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFTypeDefOpaque_INTERFACE_DEFINED__
-#define __IAAFTypeDefOpaque_INTERFACE_DEFINED__
-
-/* interface IAAFTypeDefOpaque */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFTypeDefOpaque;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("FE717CAC-F04C-11d3-800B-00104BC9156D")
-    IAAFTypeDefOpaque : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetActualTypeID( 
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pOpaquePropertyValue,
-            /* [out] */ aafUID_t __RPC_FAR *pActualTypeID) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetHandle( 
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-            /* [in] */ aafUInt32 handleSize,
-            /* [length_is][size_is][out] */ aafDataBuffer_t pHandle,
-            /* [out] */ aafUInt32 __RPC_FAR *bytesRead) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetHandleBufLen( 
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-            /* [out] */ aafUInt32 __RPC_FAR *pLen) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetHandle( 
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-            /* [in] */ aafUInt32 handleSize,
-            /* [size_is][in] */ aafDataBuffer_t pHandle) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CreateValueFromHandle( 
-            /* [size_is][in] */ aafMemPtr_t pInitData,
-            /* [in] */ aafUInt32 initDataSize,
-            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppOpaquePropertyValue) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFTypeDefOpaqueVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFTypeDefOpaque __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFTypeDefOpaque __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFTypeDefOpaque __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetActualTypeID )( 
-            IAAFTypeDefOpaque __RPC_FAR * This,
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pOpaquePropertyValue,
-            /* [out] */ aafUID_t __RPC_FAR *pActualTypeID);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHandle )( 
-            IAAFTypeDefOpaque __RPC_FAR * This,
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-            /* [in] */ aafUInt32 handleSize,
-            /* [length_is][size_is][out] */ aafDataBuffer_t pHandle,
-            /* [out] */ aafUInt32 __RPC_FAR *bytesRead);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHandleBufLen )( 
-            IAAFTypeDefOpaque __RPC_FAR * This,
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-            /* [out] */ aafUInt32 __RPC_FAR *pLen);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHandle )( 
-            IAAFTypeDefOpaque __RPC_FAR * This,
-            /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-            /* [in] */ aafUInt32 handleSize,
-            /* [size_is][in] */ aafDataBuffer_t pHandle);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateValueFromHandle )( 
-            IAAFTypeDefOpaque __RPC_FAR * This,
-            /* [size_is][in] */ aafMemPtr_t pInitData,
-            /* [in] */ aafUInt32 initDataSize,
-            /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppOpaquePropertyValue);
-        
-        END_INTERFACE
-    } IAAFTypeDefOpaqueVtbl;
-
-    interface IAAFTypeDefOpaque
-    {
-        CONST_VTBL struct IAAFTypeDefOpaqueVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFTypeDefOpaque_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFTypeDefOpaque_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFTypeDefOpaque_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFTypeDefOpaque_GetActualTypeID(This,pOpaquePropertyValue,pActualTypeID)	\
-    (This)->lpVtbl -> GetActualTypeID(This,pOpaquePropertyValue,pActualTypeID)
-
-#define IAAFTypeDefOpaque_GetHandle(This,pPropVal,handleSize,pHandle,bytesRead)	\
-    (This)->lpVtbl -> GetHandle(This,pPropVal,handleSize,pHandle,bytesRead)
-
-#define IAAFTypeDefOpaque_GetHandleBufLen(This,pPropVal,pLen)	\
-    (This)->lpVtbl -> GetHandleBufLen(This,pPropVal,pLen)
-
-#define IAAFTypeDefOpaque_SetHandle(This,pPropVal,handleSize,pHandle)	\
-    (This)->lpVtbl -> SetHandle(This,pPropVal,handleSize,pHandle)
-
-#define IAAFTypeDefOpaque_CreateValueFromHandle(This,pInitData,initDataSize,ppOpaquePropertyValue)	\
-    (This)->lpVtbl -> CreateValueFromHandle(This,pInitData,initDataSize,ppOpaquePropertyValue)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefOpaque_GetActualTypeID_Proxy( 
-    IAAFTypeDefOpaque __RPC_FAR * This,
-    /* [in] */ IAAFPropertyValue __RPC_FAR *pOpaquePropertyValue,
-    /* [out] */ aafUID_t __RPC_FAR *pActualTypeID);
-
-
-void __RPC_STUB IAAFTypeDefOpaque_GetActualTypeID_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefOpaque_GetHandle_Proxy( 
-    IAAFTypeDefOpaque __RPC_FAR * This,
-    /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-    /* [in] */ aafUInt32 handleSize,
-    /* [length_is][size_is][out] */ aafDataBuffer_t pHandle,
-    /* [out] */ aafUInt32 __RPC_FAR *bytesRead);
-
-
-void __RPC_STUB IAAFTypeDefOpaque_GetHandle_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefOpaque_GetHandleBufLen_Proxy( 
-    IAAFTypeDefOpaque __RPC_FAR * This,
-    /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-    /* [out] */ aafUInt32 __RPC_FAR *pLen);
-
-
-void __RPC_STUB IAAFTypeDefOpaque_GetHandleBufLen_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefOpaque_SetHandle_Proxy( 
-    IAAFTypeDefOpaque __RPC_FAR * This,
-    /* [in] */ IAAFPropertyValue __RPC_FAR *pPropVal,
-    /* [in] */ aafUInt32 handleSize,
-    /* [size_is][in] */ aafDataBuffer_t pHandle);
-
-
-void __RPC_STUB IAAFTypeDefOpaque_SetHandle_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTypeDefOpaque_CreateValueFromHandle_Proxy( 
-    IAAFTypeDefOpaque __RPC_FAR * This,
-    /* [size_is][in] */ aafMemPtr_t pInitData,
-    /* [in] */ aafUInt32 initDataSize,
-    /* [out] */ IAAFPropertyValue __RPC_FAR *__RPC_FAR *ppOpaquePropertyValue);
-
-
-void __RPC_STUB IAAFTypeDefOpaque_CreateValueFromHandle_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFTypeDefOpaque_INTERFACE_DEFINED__ */
-
-
 #ifndef __IAAFTypeDefVariableArray_INTERFACE_DEFINED__
 #define __IAAFTypeDefVariableArray_INTERFACE_DEFINED__
 
@@ -26132,6 +28145,108 @@ void __RPC_STUB IAAFTypeDefVariableArray_GetElements_Stub(
 
 
 #endif 	/* __IAAFTypeDefVariableArray_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFTypeDefWeakObjRef_INTERFACE_DEFINED__
+#define __IAAFTypeDefWeakObjRef_INTERFACE_DEFINED__
+
+/* interface IAAFTypeDefWeakObjRef */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFTypeDefWeakObjRef;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("381e1f24-e7bb-11d2-842a-00600832acb8")
+    IAAFTypeDefWeakObjRef : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( 
+            /* [ref][in] */ aafUID_constref id,
+            /* [in] */ IAAFClassDef __RPC_FAR *pObjType,
+            /* [string][in] */ aafCharacter_constptr pTypeName,
+            /* [in] */ aafUInt32 ids,
+            /* [size_is][in] */ aafUID_constptr pTargetSet) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFTypeDefWeakObjRefVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFTypeDefWeakObjRef __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFTypeDefWeakObjRef __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFTypeDefWeakObjRef __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFTypeDefWeakObjRef __RPC_FAR * This,
+            /* [ref][in] */ aafUID_constref id,
+            /* [in] */ IAAFClassDef __RPC_FAR *pObjType,
+            /* [string][in] */ aafCharacter_constptr pTypeName,
+            /* [in] */ aafUInt32 ids,
+            /* [size_is][in] */ aafUID_constptr pTargetSet);
+        
+        END_INTERFACE
+    } IAAFTypeDefWeakObjRefVtbl;
+
+    interface IAAFTypeDefWeakObjRef
+    {
+        CONST_VTBL struct IAAFTypeDefWeakObjRefVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFTypeDefWeakObjRef_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFTypeDefWeakObjRef_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFTypeDefWeakObjRef_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFTypeDefWeakObjRef_Initialize(This,id,pObjType,pTypeName,ids,pTargetSet)	\
+    (This)->lpVtbl -> Initialize(This,id,pObjType,pTypeName,ids,pTargetSet)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefWeakObjRef_Initialize_Proxy( 
+    IAAFTypeDefWeakObjRef __RPC_FAR * This,
+    /* [ref][in] */ aafUID_constref id,
+    /* [in] */ IAAFClassDef __RPC_FAR *pObjType,
+    /* [string][in] */ aafCharacter_constptr pTypeName,
+    /* [in] */ aafUInt32 ids,
+    /* [size_is][in] */ aafUID_constptr pTargetSet);
+
+
+void __RPC_STUB IAAFTypeDefWeakObjRef_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFTypeDefWeakObjRef_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFVaryingValue_INTERFACE_DEFINED__
@@ -27841,6 +29956,187 @@ void __RPC_STUB IEnumAAFDataDefs_Clone_Stub(
 #endif 	/* __IEnumAAFDataDefs_INTERFACE_DEFINED__ */
 
 
+#ifndef __IEnumAAFEssenceData_INTERFACE_DEFINED__
+#define __IEnumAAFEssenceData_INTERFACE_DEFINED__
+
+/* interface IEnumAAFEssenceData */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IEnumAAFEssenceData;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("B1A21392-1A7D-11D2-BF78-00104BC9156D")
+    IEnumAAFEssenceData : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE NextOne( 
+            /* [retval][out] */ IAAFEssenceData __RPC_FAR *__RPC_FAR *ppEssenceData) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Next( 
+            /* [in] */ aafUInt32 count,
+            /* [length_is][size_is][out] */ IAAFEssenceData __RPC_FAR *__RPC_FAR *ppEssenceData,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *pFetched) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Skip( 
+            /* [in] */ aafUInt32 count) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Clone( 
+            /* [retval][out] */ IEnumAAFEssenceData __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IEnumAAFEssenceDataVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IEnumAAFEssenceData __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IEnumAAFEssenceData __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IEnumAAFEssenceData __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NextOne )( 
+            IEnumAAFEssenceData __RPC_FAR * This,
+            /* [retval][out] */ IAAFEssenceData __RPC_FAR *__RPC_FAR *ppEssenceData);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
+            IEnumAAFEssenceData __RPC_FAR * This,
+            /* [in] */ aafUInt32 count,
+            /* [length_is][size_is][out] */ IAAFEssenceData __RPC_FAR *__RPC_FAR *ppEssenceData,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *pFetched);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
+            IEnumAAFEssenceData __RPC_FAR * This,
+            /* [in] */ aafUInt32 count);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
+            IEnumAAFEssenceData __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
+            IEnumAAFEssenceData __RPC_FAR * This,
+            /* [retval][out] */ IEnumAAFEssenceData __RPC_FAR *__RPC_FAR *ppEnum);
+        
+        END_INTERFACE
+    } IEnumAAFEssenceDataVtbl;
+
+    interface IEnumAAFEssenceData
+    {
+        CONST_VTBL struct IEnumAAFEssenceDataVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IEnumAAFEssenceData_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IEnumAAFEssenceData_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IEnumAAFEssenceData_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IEnumAAFEssenceData_NextOne(This,ppEssenceData)	\
+    (This)->lpVtbl -> NextOne(This,ppEssenceData)
+
+#define IEnumAAFEssenceData_Next(This,count,ppEssenceData,pFetched)	\
+    (This)->lpVtbl -> Next(This,count,ppEssenceData,pFetched)
+
+#define IEnumAAFEssenceData_Skip(This,count)	\
+    (This)->lpVtbl -> Skip(This,count)
+
+#define IEnumAAFEssenceData_Reset(This)	\
+    (This)->lpVtbl -> Reset(This)
+
+#define IEnumAAFEssenceData_Clone(This,ppEnum)	\
+    (This)->lpVtbl -> Clone(This,ppEnum)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFEssenceData_NextOne_Proxy( 
+    IEnumAAFEssenceData __RPC_FAR * This,
+    /* [retval][out] */ IAAFEssenceData __RPC_FAR *__RPC_FAR *ppEssenceData);
+
+
+void __RPC_STUB IEnumAAFEssenceData_NextOne_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFEssenceData_Next_Proxy( 
+    IEnumAAFEssenceData __RPC_FAR * This,
+    /* [in] */ aafUInt32 count,
+    /* [length_is][size_is][out] */ IAAFEssenceData __RPC_FAR *__RPC_FAR *ppEssenceData,
+    /* [ref][out] */ aafUInt32 __RPC_FAR *pFetched);
+
+
+void __RPC_STUB IEnumAAFEssenceData_Next_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFEssenceData_Skip_Proxy( 
+    IEnumAAFEssenceData __RPC_FAR * This,
+    /* [in] */ aafUInt32 count);
+
+
+void __RPC_STUB IEnumAAFEssenceData_Skip_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFEssenceData_Reset_Proxy( 
+    IEnumAAFEssenceData __RPC_FAR * This);
+
+
+void __RPC_STUB IEnumAAFEssenceData_Reset_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFEssenceData_Clone_Proxy( 
+    IEnumAAFEssenceData __RPC_FAR * This,
+    /* [retval][out] */ IEnumAAFEssenceData __RPC_FAR *__RPC_FAR *ppEnum);
+
+
+void __RPC_STUB IEnumAAFEssenceData_Clone_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IEnumAAFEssenceData_INTERFACE_DEFINED__ */
+
+
 #ifndef __IEnumAAFIdentifications_INTERFACE_DEFINED__
 #define __IEnumAAFIdentifications_INTERFACE_DEFINED__
 
@@ -28203,368 +30499,6 @@ void __RPC_STUB IEnumAAFInterpolationDefs_Clone_Stub(
 #endif 	/* __IEnumAAFInterpolationDefs_INTERFACE_DEFINED__ */
 
 
-#ifndef __IEnumAAFOperationDefs_INTERFACE_DEFINED__
-#define __IEnumAAFOperationDefs_INTERFACE_DEFINED__
-
-/* interface IEnumAAFOperationDefs */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IEnumAAFOperationDefs;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("92B88021-2B2B-11D2-BF7E-00104BC9156D")
-    IEnumAAFOperationDefs : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE NextOne( 
-            /* [retval][out] */ IAAFOperationDef __RPC_FAR *__RPC_FAR *ppOperationDefs) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ aafUInt32 count,
-            /* [length_is][size_is][out] */ IAAFOperationDef __RPC_FAR *__RPC_FAR *ppOperationDefs,
-            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ aafUInt32 count) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumAAFOperationDefs __RPC_FAR *__RPC_FAR *ppEnum) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IEnumAAFOperationDefsVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumAAFOperationDefs __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumAAFOperationDefs __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumAAFOperationDefs __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NextOne )( 
-            IEnumAAFOperationDefs __RPC_FAR * This,
-            /* [retval][out] */ IAAFOperationDef __RPC_FAR *__RPC_FAR *ppOperationDefs);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumAAFOperationDefs __RPC_FAR * This,
-            /* [in] */ aafUInt32 count,
-            /* [length_is][size_is][out] */ IAAFOperationDef __RPC_FAR *__RPC_FAR *ppOperationDefs,
-            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumAAFOperationDefs __RPC_FAR * This,
-            /* [in] */ aafUInt32 count);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumAAFOperationDefs __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumAAFOperationDefs __RPC_FAR * This,
-            /* [retval][out] */ IEnumAAFOperationDefs __RPC_FAR *__RPC_FAR *ppEnum);
-        
-        END_INTERFACE
-    } IEnumAAFOperationDefsVtbl;
-
-    interface IEnumAAFOperationDefs
-    {
-        CONST_VTBL struct IEnumAAFOperationDefsVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IEnumAAFOperationDefs_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IEnumAAFOperationDefs_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IEnumAAFOperationDefs_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IEnumAAFOperationDefs_NextOne(This,ppOperationDefs)	\
-    (This)->lpVtbl -> NextOne(This,ppOperationDefs)
-
-#define IEnumAAFOperationDefs_Next(This,count,ppOperationDefs,pNumFetched)	\
-    (This)->lpVtbl -> Next(This,count,ppOperationDefs,pNumFetched)
-
-#define IEnumAAFOperationDefs_Skip(This,count)	\
-    (This)->lpVtbl -> Skip(This,count)
-
-#define IEnumAAFOperationDefs_Reset(This)	\
-    (This)->lpVtbl -> Reset(This)
-
-#define IEnumAAFOperationDefs_Clone(This,ppEnum)	\
-    (This)->lpVtbl -> Clone(This,ppEnum)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFOperationDefs_NextOne_Proxy( 
-    IEnumAAFOperationDefs __RPC_FAR * This,
-    /* [retval][out] */ IAAFOperationDef __RPC_FAR *__RPC_FAR *ppOperationDefs);
-
-
-void __RPC_STUB IEnumAAFOperationDefs_NextOne_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFOperationDefs_Next_Proxy( 
-    IEnumAAFOperationDefs __RPC_FAR * This,
-    /* [in] */ aafUInt32 count,
-    /* [length_is][size_is][out] */ IAAFOperationDef __RPC_FAR *__RPC_FAR *ppOperationDefs,
-    /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
-
-
-void __RPC_STUB IEnumAAFOperationDefs_Next_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFOperationDefs_Skip_Proxy( 
-    IEnumAAFOperationDefs __RPC_FAR * This,
-    /* [in] */ aafUInt32 count);
-
-
-void __RPC_STUB IEnumAAFOperationDefs_Skip_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFOperationDefs_Reset_Proxy( 
-    IEnumAAFOperationDefs __RPC_FAR * This);
-
-
-void __RPC_STUB IEnumAAFOperationDefs_Reset_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFOperationDefs_Clone_Proxy( 
-    IEnumAAFOperationDefs __RPC_FAR * This,
-    /* [retval][out] */ IEnumAAFOperationDefs __RPC_FAR *__RPC_FAR *ppEnum);
-
-
-void __RPC_STUB IEnumAAFOperationDefs_Clone_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IEnumAAFOperationDefs_INTERFACE_DEFINED__ */
-
-
-#ifndef __IEnumAAFEssenceData_INTERFACE_DEFINED__
-#define __IEnumAAFEssenceData_INTERFACE_DEFINED__
-
-/* interface IEnumAAFEssenceData */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IEnumAAFEssenceData;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("B1A21392-1A7D-11D2-BF78-00104BC9156D")
-    IEnumAAFEssenceData : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE NextOne( 
-            /* [retval][out] */ IAAFEssenceData __RPC_FAR *__RPC_FAR *ppEssenceData) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ aafUInt32 count,
-            /* [length_is][size_is][out] */ IAAFEssenceData __RPC_FAR *__RPC_FAR *ppEssenceData,
-            /* [ref][out] */ aafUInt32 __RPC_FAR *pFetched) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ aafUInt32 count) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumAAFEssenceData __RPC_FAR *__RPC_FAR *ppEnum) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IEnumAAFEssenceDataVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumAAFEssenceData __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumAAFEssenceData __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumAAFEssenceData __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NextOne )( 
-            IEnumAAFEssenceData __RPC_FAR * This,
-            /* [retval][out] */ IAAFEssenceData __RPC_FAR *__RPC_FAR *ppEssenceData);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumAAFEssenceData __RPC_FAR * This,
-            /* [in] */ aafUInt32 count,
-            /* [length_is][size_is][out] */ IAAFEssenceData __RPC_FAR *__RPC_FAR *ppEssenceData,
-            /* [ref][out] */ aafUInt32 __RPC_FAR *pFetched);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumAAFEssenceData __RPC_FAR * This,
-            /* [in] */ aafUInt32 count);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumAAFEssenceData __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumAAFEssenceData __RPC_FAR * This,
-            /* [retval][out] */ IEnumAAFEssenceData __RPC_FAR *__RPC_FAR *ppEnum);
-        
-        END_INTERFACE
-    } IEnumAAFEssenceDataVtbl;
-
-    interface IEnumAAFEssenceData
-    {
-        CONST_VTBL struct IEnumAAFEssenceDataVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IEnumAAFEssenceData_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IEnumAAFEssenceData_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IEnumAAFEssenceData_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IEnumAAFEssenceData_NextOne(This,ppEssenceData)	\
-    (This)->lpVtbl -> NextOne(This,ppEssenceData)
-
-#define IEnumAAFEssenceData_Next(This,count,ppEssenceData,pFetched)	\
-    (This)->lpVtbl -> Next(This,count,ppEssenceData,pFetched)
-
-#define IEnumAAFEssenceData_Skip(This,count)	\
-    (This)->lpVtbl -> Skip(This,count)
-
-#define IEnumAAFEssenceData_Reset(This)	\
-    (This)->lpVtbl -> Reset(This)
-
-#define IEnumAAFEssenceData_Clone(This,ppEnum)	\
-    (This)->lpVtbl -> Clone(This,ppEnum)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFEssenceData_NextOne_Proxy( 
-    IEnumAAFEssenceData __RPC_FAR * This,
-    /* [retval][out] */ IAAFEssenceData __RPC_FAR *__RPC_FAR *ppEssenceData);
-
-
-void __RPC_STUB IEnumAAFEssenceData_NextOne_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFEssenceData_Next_Proxy( 
-    IEnumAAFEssenceData __RPC_FAR * This,
-    /* [in] */ aafUInt32 count,
-    /* [length_is][size_is][out] */ IAAFEssenceData __RPC_FAR *__RPC_FAR *ppEssenceData,
-    /* [ref][out] */ aafUInt32 __RPC_FAR *pFetched);
-
-
-void __RPC_STUB IEnumAAFEssenceData_Next_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFEssenceData_Skip_Proxy( 
-    IEnumAAFEssenceData __RPC_FAR * This,
-    /* [in] */ aafUInt32 count);
-
-
-void __RPC_STUB IEnumAAFEssenceData_Skip_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFEssenceData_Reset_Proxy( 
-    IEnumAAFEssenceData __RPC_FAR * This);
-
-
-void __RPC_STUB IEnumAAFEssenceData_Reset_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFEssenceData_Clone_Proxy( 
-    IEnumAAFEssenceData __RPC_FAR * This,
-    /* [retval][out] */ IEnumAAFEssenceData __RPC_FAR *__RPC_FAR *ppEnum);
-
-
-void __RPC_STUB IEnumAAFEssenceData_Clone_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IEnumAAFEssenceData_INTERFACE_DEFINED__ */
-
-
 #ifndef __IEnumAAFKLVData_INTERFACE_DEFINED__
 #define __IEnumAAFKLVData_INTERFACE_DEFINED__
 
@@ -28744,6 +30678,187 @@ void __RPC_STUB IEnumAAFKLVData_Clone_Stub(
 
 
 #endif 	/* __IEnumAAFKLVData_INTERFACE_DEFINED__ */
+
+
+#ifndef __IEnumAAFKLVDataDefs_INTERFACE_DEFINED__
+#define __IEnumAAFKLVDataDefs_INTERFACE_DEFINED__
+
+/* interface IEnumAAFKLVDataDefs */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IEnumAAFKLVDataDefs;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("2a368c5c-e5af-43c8-8e5a-e78ba02f5f3b")
+    IEnumAAFKLVDataDefs : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE NextOne( 
+            /* [retval][out] */ IAAFKLVDataDefinition __RPC_FAR *__RPC_FAR *ppKLVDataDefs) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Next( 
+            /* [in] */ aafUInt32 count,
+            /* [length_is][size_is][out] */ IAAFKLVDataDefinition __RPC_FAR *__RPC_FAR *ppKLVDataDefs,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Skip( 
+            /* [in] */ aafUInt32 count) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Clone( 
+            /* [retval][out] */ IEnumAAFKLVDataDefs __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IEnumAAFKLVDataDefsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IEnumAAFKLVDataDefs __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IEnumAAFKLVDataDefs __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IEnumAAFKLVDataDefs __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NextOne )( 
+            IEnumAAFKLVDataDefs __RPC_FAR * This,
+            /* [retval][out] */ IAAFKLVDataDefinition __RPC_FAR *__RPC_FAR *ppKLVDataDefs);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
+            IEnumAAFKLVDataDefs __RPC_FAR * This,
+            /* [in] */ aafUInt32 count,
+            /* [length_is][size_is][out] */ IAAFKLVDataDefinition __RPC_FAR *__RPC_FAR *ppKLVDataDefs,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
+            IEnumAAFKLVDataDefs __RPC_FAR * This,
+            /* [in] */ aafUInt32 count);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
+            IEnumAAFKLVDataDefs __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
+            IEnumAAFKLVDataDefs __RPC_FAR * This,
+            /* [retval][out] */ IEnumAAFKLVDataDefs __RPC_FAR *__RPC_FAR *ppEnum);
+        
+        END_INTERFACE
+    } IEnumAAFKLVDataDefsVtbl;
+
+    interface IEnumAAFKLVDataDefs
+    {
+        CONST_VTBL struct IEnumAAFKLVDataDefsVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IEnumAAFKLVDataDefs_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IEnumAAFKLVDataDefs_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IEnumAAFKLVDataDefs_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IEnumAAFKLVDataDefs_NextOne(This,ppKLVDataDefs)	\
+    (This)->lpVtbl -> NextOne(This,ppKLVDataDefs)
+
+#define IEnumAAFKLVDataDefs_Next(This,count,ppKLVDataDefs,pNumFetched)	\
+    (This)->lpVtbl -> Next(This,count,ppKLVDataDefs,pNumFetched)
+
+#define IEnumAAFKLVDataDefs_Skip(This,count)	\
+    (This)->lpVtbl -> Skip(This,count)
+
+#define IEnumAAFKLVDataDefs_Reset(This)	\
+    (This)->lpVtbl -> Reset(This)
+
+#define IEnumAAFKLVDataDefs_Clone(This,ppEnum)	\
+    (This)->lpVtbl -> Clone(This,ppEnum)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFKLVDataDefs_NextOne_Proxy( 
+    IEnumAAFKLVDataDefs __RPC_FAR * This,
+    /* [retval][out] */ IAAFKLVDataDefinition __RPC_FAR *__RPC_FAR *ppKLVDataDefs);
+
+
+void __RPC_STUB IEnumAAFKLVDataDefs_NextOne_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFKLVDataDefs_Next_Proxy( 
+    IEnumAAFKLVDataDefs __RPC_FAR * This,
+    /* [in] */ aafUInt32 count,
+    /* [length_is][size_is][out] */ IAAFKLVDataDefinition __RPC_FAR *__RPC_FAR *ppKLVDataDefs,
+    /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
+
+
+void __RPC_STUB IEnumAAFKLVDataDefs_Next_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFKLVDataDefs_Skip_Proxy( 
+    IEnumAAFKLVDataDefs __RPC_FAR * This,
+    /* [in] */ aafUInt32 count);
+
+
+void __RPC_STUB IEnumAAFKLVDataDefs_Skip_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFKLVDataDefs_Reset_Proxy( 
+    IEnumAAFKLVDataDefs __RPC_FAR * This);
+
+
+void __RPC_STUB IEnumAAFKLVDataDefs_Reset_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFKLVDataDefs_Clone_Proxy( 
+    IEnumAAFKLVDataDefs __RPC_FAR * This,
+    /* [retval][out] */ IEnumAAFKLVDataDefs __RPC_FAR *__RPC_FAR *ppEnum);
+
+
+void __RPC_STUB IEnumAAFKLVDataDefs_Clone_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IEnumAAFKLVDataDefs_INTERFACE_DEFINED__ */
 
 
 #ifndef __IEnumAAFLoadedPlugins_INTERFACE_DEFINED__
@@ -29470,6 +31585,187 @@ void __RPC_STUB IEnumAAFMobs_Clone_Stub(
 #endif 	/* __IEnumAAFMobs_INTERFACE_DEFINED__ */
 
 
+#ifndef __IEnumAAFOperationDefs_INTERFACE_DEFINED__
+#define __IEnumAAFOperationDefs_INTERFACE_DEFINED__
+
+/* interface IEnumAAFOperationDefs */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IEnumAAFOperationDefs;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("92B88021-2B2B-11D2-BF7E-00104BC9156D")
+    IEnumAAFOperationDefs : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE NextOne( 
+            /* [retval][out] */ IAAFOperationDef __RPC_FAR *__RPC_FAR *ppOperationDefs) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Next( 
+            /* [in] */ aafUInt32 count,
+            /* [length_is][size_is][out] */ IAAFOperationDef __RPC_FAR *__RPC_FAR *ppOperationDefs,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Skip( 
+            /* [in] */ aafUInt32 count) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Clone( 
+            /* [retval][out] */ IEnumAAFOperationDefs __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IEnumAAFOperationDefsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IEnumAAFOperationDefs __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IEnumAAFOperationDefs __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IEnumAAFOperationDefs __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NextOne )( 
+            IEnumAAFOperationDefs __RPC_FAR * This,
+            /* [retval][out] */ IAAFOperationDef __RPC_FAR *__RPC_FAR *ppOperationDefs);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
+            IEnumAAFOperationDefs __RPC_FAR * This,
+            /* [in] */ aafUInt32 count,
+            /* [length_is][size_is][out] */ IAAFOperationDef __RPC_FAR *__RPC_FAR *ppOperationDefs,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
+            IEnumAAFOperationDefs __RPC_FAR * This,
+            /* [in] */ aafUInt32 count);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
+            IEnumAAFOperationDefs __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
+            IEnumAAFOperationDefs __RPC_FAR * This,
+            /* [retval][out] */ IEnumAAFOperationDefs __RPC_FAR *__RPC_FAR *ppEnum);
+        
+        END_INTERFACE
+    } IEnumAAFOperationDefsVtbl;
+
+    interface IEnumAAFOperationDefs
+    {
+        CONST_VTBL struct IEnumAAFOperationDefsVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IEnumAAFOperationDefs_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IEnumAAFOperationDefs_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IEnumAAFOperationDefs_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IEnumAAFOperationDefs_NextOne(This,ppOperationDefs)	\
+    (This)->lpVtbl -> NextOne(This,ppOperationDefs)
+
+#define IEnumAAFOperationDefs_Next(This,count,ppOperationDefs,pNumFetched)	\
+    (This)->lpVtbl -> Next(This,count,ppOperationDefs,pNumFetched)
+
+#define IEnumAAFOperationDefs_Skip(This,count)	\
+    (This)->lpVtbl -> Skip(This,count)
+
+#define IEnumAAFOperationDefs_Reset(This)	\
+    (This)->lpVtbl -> Reset(This)
+
+#define IEnumAAFOperationDefs_Clone(This,ppEnum)	\
+    (This)->lpVtbl -> Clone(This,ppEnum)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFOperationDefs_NextOne_Proxy( 
+    IEnumAAFOperationDefs __RPC_FAR * This,
+    /* [retval][out] */ IAAFOperationDef __RPC_FAR *__RPC_FAR *ppOperationDefs);
+
+
+void __RPC_STUB IEnumAAFOperationDefs_NextOne_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFOperationDefs_Next_Proxy( 
+    IEnumAAFOperationDefs __RPC_FAR * This,
+    /* [in] */ aafUInt32 count,
+    /* [length_is][size_is][out] */ IAAFOperationDef __RPC_FAR *__RPC_FAR *ppOperationDefs,
+    /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
+
+
+void __RPC_STUB IEnumAAFOperationDefs_Next_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFOperationDefs_Skip_Proxy( 
+    IEnumAAFOperationDefs __RPC_FAR * This,
+    /* [in] */ aafUInt32 count);
+
+
+void __RPC_STUB IEnumAAFOperationDefs_Skip_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFOperationDefs_Reset_Proxy( 
+    IEnumAAFOperationDefs __RPC_FAR * This);
+
+
+void __RPC_STUB IEnumAAFOperationDefs_Reset_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFOperationDefs_Clone_Proxy( 
+    IEnumAAFOperationDefs __RPC_FAR * This,
+    /* [retval][out] */ IEnumAAFOperationDefs __RPC_FAR *__RPC_FAR *ppEnum);
+
+
+void __RPC_STUB IEnumAAFOperationDefs_Clone_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IEnumAAFOperationDefs_INTERFACE_DEFINED__ */
+
+
 #ifndef __IEnumAAFParameterDefs_INTERFACE_DEFINED__
 #define __IEnumAAFParameterDefs_INTERFACE_DEFINED__
 
@@ -29830,6 +32126,368 @@ void __RPC_STUB IEnumAAFParameters_Clone_Stub(
 
 
 #endif 	/* __IEnumAAFParameters_INTERFACE_DEFINED__ */
+
+
+#ifndef __IEnumAAFPluginDefs_INTERFACE_DEFINED__
+#define __IEnumAAFPluginDefs_INTERFACE_DEFINED__
+
+/* interface IEnumAAFPluginDefs */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IEnumAAFPluginDefs;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("AD1BB85F-DBB2-11d2-809C-006008143E6F")
+    IEnumAAFPluginDefs : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE NextOne( 
+            /* [retval][out] */ IAAFPluginDef __RPC_FAR *__RPC_FAR *ppPluginDefs) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Next( 
+            /* [in] */ aafUInt32 count,
+            /* [length_is][size_is][out] */ IAAFPluginDef __RPC_FAR *__RPC_FAR *ppPluginDefs,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Skip( 
+            /* [in] */ aafUInt32 count) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Clone( 
+            /* [retval][out] */ IEnumAAFPluginDefs __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IEnumAAFPluginDefsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IEnumAAFPluginDefs __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IEnumAAFPluginDefs __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IEnumAAFPluginDefs __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NextOne )( 
+            IEnumAAFPluginDefs __RPC_FAR * This,
+            /* [retval][out] */ IAAFPluginDef __RPC_FAR *__RPC_FAR *ppPluginDefs);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
+            IEnumAAFPluginDefs __RPC_FAR * This,
+            /* [in] */ aafUInt32 count,
+            /* [length_is][size_is][out] */ IAAFPluginDef __RPC_FAR *__RPC_FAR *ppPluginDefs,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
+            IEnumAAFPluginDefs __RPC_FAR * This,
+            /* [in] */ aafUInt32 count);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
+            IEnumAAFPluginDefs __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
+            IEnumAAFPluginDefs __RPC_FAR * This,
+            /* [retval][out] */ IEnumAAFPluginDefs __RPC_FAR *__RPC_FAR *ppEnum);
+        
+        END_INTERFACE
+    } IEnumAAFPluginDefsVtbl;
+
+    interface IEnumAAFPluginDefs
+    {
+        CONST_VTBL struct IEnumAAFPluginDefsVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IEnumAAFPluginDefs_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IEnumAAFPluginDefs_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IEnumAAFPluginDefs_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IEnumAAFPluginDefs_NextOne(This,ppPluginDefs)	\
+    (This)->lpVtbl -> NextOne(This,ppPluginDefs)
+
+#define IEnumAAFPluginDefs_Next(This,count,ppPluginDefs,pNumFetched)	\
+    (This)->lpVtbl -> Next(This,count,ppPluginDefs,pNumFetched)
+
+#define IEnumAAFPluginDefs_Skip(This,count)	\
+    (This)->lpVtbl -> Skip(This,count)
+
+#define IEnumAAFPluginDefs_Reset(This)	\
+    (This)->lpVtbl -> Reset(This)
+
+#define IEnumAAFPluginDefs_Clone(This,ppEnum)	\
+    (This)->lpVtbl -> Clone(This,ppEnum)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFPluginDefs_NextOne_Proxy( 
+    IEnumAAFPluginDefs __RPC_FAR * This,
+    /* [retval][out] */ IAAFPluginDef __RPC_FAR *__RPC_FAR *ppPluginDefs);
+
+
+void __RPC_STUB IEnumAAFPluginDefs_NextOne_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFPluginDefs_Next_Proxy( 
+    IEnumAAFPluginDefs __RPC_FAR * This,
+    /* [in] */ aafUInt32 count,
+    /* [length_is][size_is][out] */ IAAFPluginDef __RPC_FAR *__RPC_FAR *ppPluginDefs,
+    /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
+
+
+void __RPC_STUB IEnumAAFPluginDefs_Next_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFPluginDefs_Skip_Proxy( 
+    IEnumAAFPluginDefs __RPC_FAR * This,
+    /* [in] */ aafUInt32 count);
+
+
+void __RPC_STUB IEnumAAFPluginDefs_Skip_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFPluginDefs_Reset_Proxy( 
+    IEnumAAFPluginDefs __RPC_FAR * This);
+
+
+void __RPC_STUB IEnumAAFPluginDefs_Reset_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFPluginDefs_Clone_Proxy( 
+    IEnumAAFPluginDefs __RPC_FAR * This,
+    /* [retval][out] */ IEnumAAFPluginDefs __RPC_FAR *__RPC_FAR *ppEnum);
+
+
+void __RPC_STUB IEnumAAFPluginDefs_Clone_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IEnumAAFPluginDefs_INTERFACE_DEFINED__ */
+
+
+#ifndef __IEnumAAFPluginLocators_INTERFACE_DEFINED__
+#define __IEnumAAFPluginLocators_INTERFACE_DEFINED__
+
+/* interface IEnumAAFPluginLocators */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IEnumAAFPluginLocators;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("AD1BB861-DBB2-11d2-809C-006008143E6F")
+    IEnumAAFPluginLocators : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE NextOne( 
+            /* [retval][out] */ IAAFLocator __RPC_FAR *__RPC_FAR *ppAAFLocator) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Next( 
+            /* [in] */ aafUInt32 count,
+            /* [length_is][size_is][out] */ IAAFLocator __RPC_FAR *__RPC_FAR *ppAAFLocators,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *pFetched) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Skip( 
+            /* [in] */ aafUInt32 count) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Clone( 
+            /* [retval][out] */ IEnumAAFPluginLocators __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IEnumAAFPluginLocatorsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IEnumAAFPluginLocators __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IEnumAAFPluginLocators __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IEnumAAFPluginLocators __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NextOne )( 
+            IEnumAAFPluginLocators __RPC_FAR * This,
+            /* [retval][out] */ IAAFLocator __RPC_FAR *__RPC_FAR *ppAAFLocator);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
+            IEnumAAFPluginLocators __RPC_FAR * This,
+            /* [in] */ aafUInt32 count,
+            /* [length_is][size_is][out] */ IAAFLocator __RPC_FAR *__RPC_FAR *ppAAFLocators,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *pFetched);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
+            IEnumAAFPluginLocators __RPC_FAR * This,
+            /* [in] */ aafUInt32 count);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
+            IEnumAAFPluginLocators __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
+            IEnumAAFPluginLocators __RPC_FAR * This,
+            /* [retval][out] */ IEnumAAFPluginLocators __RPC_FAR *__RPC_FAR *ppEnum);
+        
+        END_INTERFACE
+    } IEnumAAFPluginLocatorsVtbl;
+
+    interface IEnumAAFPluginLocators
+    {
+        CONST_VTBL struct IEnumAAFPluginLocatorsVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IEnumAAFPluginLocators_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IEnumAAFPluginLocators_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IEnumAAFPluginLocators_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IEnumAAFPluginLocators_NextOne(This,ppAAFLocator)	\
+    (This)->lpVtbl -> NextOne(This,ppAAFLocator)
+
+#define IEnumAAFPluginLocators_Next(This,count,ppAAFLocators,pFetched)	\
+    (This)->lpVtbl -> Next(This,count,ppAAFLocators,pFetched)
+
+#define IEnumAAFPluginLocators_Skip(This,count)	\
+    (This)->lpVtbl -> Skip(This,count)
+
+#define IEnumAAFPluginLocators_Reset(This)	\
+    (This)->lpVtbl -> Reset(This)
+
+#define IEnumAAFPluginLocators_Clone(This,ppEnum)	\
+    (This)->lpVtbl -> Clone(This,ppEnum)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFPluginLocators_NextOne_Proxy( 
+    IEnumAAFPluginLocators __RPC_FAR * This,
+    /* [retval][out] */ IAAFLocator __RPC_FAR *__RPC_FAR *ppAAFLocator);
+
+
+void __RPC_STUB IEnumAAFPluginLocators_NextOne_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFPluginLocators_Next_Proxy( 
+    IEnumAAFPluginLocators __RPC_FAR * This,
+    /* [in] */ aafUInt32 count,
+    /* [length_is][size_is][out] */ IAAFLocator __RPC_FAR *__RPC_FAR *ppAAFLocators,
+    /* [ref][out] */ aafUInt32 __RPC_FAR *pFetched);
+
+
+void __RPC_STUB IEnumAAFPluginLocators_Next_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFPluginLocators_Skip_Proxy( 
+    IEnumAAFPluginLocators __RPC_FAR * This,
+    /* [in] */ aafUInt32 count);
+
+
+void __RPC_STUB IEnumAAFPluginLocators_Skip_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFPluginLocators_Reset_Proxy( 
+    IEnumAAFPluginLocators __RPC_FAR * This);
+
+
+void __RPC_STUB IEnumAAFPluginLocators_Reset_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFPluginLocators_Clone_Proxy( 
+    IEnumAAFPluginLocators __RPC_FAR * This,
+    /* [retval][out] */ IEnumAAFPluginLocators __RPC_FAR *__RPC_FAR *ppEnum);
+
+
+void __RPC_STUB IEnumAAFPluginLocators_Clone_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IEnumAAFPluginLocators_INTERFACE_DEFINED__ */
 
 
 #ifndef __IEnumAAFProperties_INTERFACE_DEFINED__
@@ -30375,368 +33033,6 @@ void __RPC_STUB IEnumAAFPropertyValues_Clone_Stub(
 #endif 	/* __IEnumAAFPropertyValues_INTERFACE_DEFINED__ */
 
 
-#ifndef __IEnumAAFPluginDefs_INTERFACE_DEFINED__
-#define __IEnumAAFPluginDefs_INTERFACE_DEFINED__
-
-/* interface IEnumAAFPluginDefs */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IEnumAAFPluginDefs;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("AD1BB85F-DBB2-11d2-809C-006008143E6F")
-    IEnumAAFPluginDefs : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE NextOne( 
-            /* [retval][out] */ IAAFPluginDef __RPC_FAR *__RPC_FAR *ppPluginDefs) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ aafUInt32 count,
-            /* [length_is][size_is][out] */ IAAFPluginDef __RPC_FAR *__RPC_FAR *ppPluginDefs,
-            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ aafUInt32 count) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumAAFPluginDefs __RPC_FAR *__RPC_FAR *ppEnum) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IEnumAAFPluginDefsVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumAAFPluginDefs __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumAAFPluginDefs __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumAAFPluginDefs __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NextOne )( 
-            IEnumAAFPluginDefs __RPC_FAR * This,
-            /* [retval][out] */ IAAFPluginDef __RPC_FAR *__RPC_FAR *ppPluginDefs);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumAAFPluginDefs __RPC_FAR * This,
-            /* [in] */ aafUInt32 count,
-            /* [length_is][size_is][out] */ IAAFPluginDef __RPC_FAR *__RPC_FAR *ppPluginDefs,
-            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumAAFPluginDefs __RPC_FAR * This,
-            /* [in] */ aafUInt32 count);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumAAFPluginDefs __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumAAFPluginDefs __RPC_FAR * This,
-            /* [retval][out] */ IEnumAAFPluginDefs __RPC_FAR *__RPC_FAR *ppEnum);
-        
-        END_INTERFACE
-    } IEnumAAFPluginDefsVtbl;
-
-    interface IEnumAAFPluginDefs
-    {
-        CONST_VTBL struct IEnumAAFPluginDefsVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IEnumAAFPluginDefs_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IEnumAAFPluginDefs_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IEnumAAFPluginDefs_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IEnumAAFPluginDefs_NextOne(This,ppPluginDefs)	\
-    (This)->lpVtbl -> NextOne(This,ppPluginDefs)
-
-#define IEnumAAFPluginDefs_Next(This,count,ppPluginDefs,pNumFetched)	\
-    (This)->lpVtbl -> Next(This,count,ppPluginDefs,pNumFetched)
-
-#define IEnumAAFPluginDefs_Skip(This,count)	\
-    (This)->lpVtbl -> Skip(This,count)
-
-#define IEnumAAFPluginDefs_Reset(This)	\
-    (This)->lpVtbl -> Reset(This)
-
-#define IEnumAAFPluginDefs_Clone(This,ppEnum)	\
-    (This)->lpVtbl -> Clone(This,ppEnum)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFPluginDefs_NextOne_Proxy( 
-    IEnumAAFPluginDefs __RPC_FAR * This,
-    /* [retval][out] */ IAAFPluginDef __RPC_FAR *__RPC_FAR *ppPluginDefs);
-
-
-void __RPC_STUB IEnumAAFPluginDefs_NextOne_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFPluginDefs_Next_Proxy( 
-    IEnumAAFPluginDefs __RPC_FAR * This,
-    /* [in] */ aafUInt32 count,
-    /* [length_is][size_is][out] */ IAAFPluginDef __RPC_FAR *__RPC_FAR *ppPluginDefs,
-    /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
-
-
-void __RPC_STUB IEnumAAFPluginDefs_Next_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFPluginDefs_Skip_Proxy( 
-    IEnumAAFPluginDefs __RPC_FAR * This,
-    /* [in] */ aafUInt32 count);
-
-
-void __RPC_STUB IEnumAAFPluginDefs_Skip_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFPluginDefs_Reset_Proxy( 
-    IEnumAAFPluginDefs __RPC_FAR * This);
-
-
-void __RPC_STUB IEnumAAFPluginDefs_Reset_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFPluginDefs_Clone_Proxy( 
-    IEnumAAFPluginDefs __RPC_FAR * This,
-    /* [retval][out] */ IEnumAAFPluginDefs __RPC_FAR *__RPC_FAR *ppEnum);
-
-
-void __RPC_STUB IEnumAAFPluginDefs_Clone_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IEnumAAFPluginDefs_INTERFACE_DEFINED__ */
-
-
-#ifndef __IEnumAAFPluginLocators_INTERFACE_DEFINED__
-#define __IEnumAAFPluginLocators_INTERFACE_DEFINED__
-
-/* interface IEnumAAFPluginLocators */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IEnumAAFPluginLocators;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("AD1BB861-DBB2-11d2-809C-006008143E6F")
-    IEnumAAFPluginLocators : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE NextOne( 
-            /* [retval][out] */ IAAFLocator __RPC_FAR *__RPC_FAR *ppAAFLocator) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ aafUInt32 count,
-            /* [length_is][size_is][out] */ IAAFLocator __RPC_FAR *__RPC_FAR *ppAAFLocators,
-            /* [ref][out] */ aafUInt32 __RPC_FAR *pFetched) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ aafUInt32 count) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumAAFPluginLocators __RPC_FAR *__RPC_FAR *ppEnum) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IEnumAAFPluginLocatorsVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumAAFPluginLocators __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumAAFPluginLocators __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumAAFPluginLocators __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NextOne )( 
-            IEnumAAFPluginLocators __RPC_FAR * This,
-            /* [retval][out] */ IAAFLocator __RPC_FAR *__RPC_FAR *ppAAFLocator);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumAAFPluginLocators __RPC_FAR * This,
-            /* [in] */ aafUInt32 count,
-            /* [length_is][size_is][out] */ IAAFLocator __RPC_FAR *__RPC_FAR *ppAAFLocators,
-            /* [ref][out] */ aafUInt32 __RPC_FAR *pFetched);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumAAFPluginLocators __RPC_FAR * This,
-            /* [in] */ aafUInt32 count);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumAAFPluginLocators __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumAAFPluginLocators __RPC_FAR * This,
-            /* [retval][out] */ IEnumAAFPluginLocators __RPC_FAR *__RPC_FAR *ppEnum);
-        
-        END_INTERFACE
-    } IEnumAAFPluginLocatorsVtbl;
-
-    interface IEnumAAFPluginLocators
-    {
-        CONST_VTBL struct IEnumAAFPluginLocatorsVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IEnumAAFPluginLocators_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IEnumAAFPluginLocators_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IEnumAAFPluginLocators_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IEnumAAFPluginLocators_NextOne(This,ppAAFLocator)	\
-    (This)->lpVtbl -> NextOne(This,ppAAFLocator)
-
-#define IEnumAAFPluginLocators_Next(This,count,ppAAFLocators,pFetched)	\
-    (This)->lpVtbl -> Next(This,count,ppAAFLocators,pFetched)
-
-#define IEnumAAFPluginLocators_Skip(This,count)	\
-    (This)->lpVtbl -> Skip(This,count)
-
-#define IEnumAAFPluginLocators_Reset(This)	\
-    (This)->lpVtbl -> Reset(This)
-
-#define IEnumAAFPluginLocators_Clone(This,ppEnum)	\
-    (This)->lpVtbl -> Clone(This,ppEnum)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFPluginLocators_NextOne_Proxy( 
-    IEnumAAFPluginLocators __RPC_FAR * This,
-    /* [retval][out] */ IAAFLocator __RPC_FAR *__RPC_FAR *ppAAFLocator);
-
-
-void __RPC_STUB IEnumAAFPluginLocators_NextOne_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFPluginLocators_Next_Proxy( 
-    IEnumAAFPluginLocators __RPC_FAR * This,
-    /* [in] */ aafUInt32 count,
-    /* [length_is][size_is][out] */ IAAFLocator __RPC_FAR *__RPC_FAR *ppAAFLocators,
-    /* [ref][out] */ aafUInt32 __RPC_FAR *pFetched);
-
-
-void __RPC_STUB IEnumAAFPluginLocators_Next_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFPluginLocators_Skip_Proxy( 
-    IEnumAAFPluginLocators __RPC_FAR * This,
-    /* [in] */ aafUInt32 count);
-
-
-void __RPC_STUB IEnumAAFPluginLocators_Skip_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFPluginLocators_Reset_Proxy( 
-    IEnumAAFPluginLocators __RPC_FAR * This);
-
-
-void __RPC_STUB IEnumAAFPluginLocators_Reset_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFPluginLocators_Clone_Proxy( 
-    IEnumAAFPluginLocators __RPC_FAR * This,
-    /* [retval][out] */ IEnumAAFPluginLocators __RPC_FAR *__RPC_FAR *ppEnum);
-
-
-void __RPC_STUB IEnumAAFPluginLocators_Clone_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IEnumAAFPluginLocators_INTERFACE_DEFINED__ */
-
-
 #ifndef __IEnumAAFSegments_INTERFACE_DEFINED__
 #define __IEnumAAFSegments_INTERFACE_DEFINED__
 
@@ -30916,6 +33212,187 @@ void __RPC_STUB IEnumAAFSegments_Clone_Stub(
 
 
 #endif 	/* __IEnumAAFSegments_INTERFACE_DEFINED__ */
+
+
+#ifndef __IEnumAAFTaggedValueDefs_INTERFACE_DEFINED__
+#define __IEnumAAFTaggedValueDefs_INTERFACE_DEFINED__
+
+/* interface IEnumAAFTaggedValueDefs */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IEnumAAFTaggedValueDefs;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("9d1bd790-16a8-488c-8743-f9a60a1cba95")
+    IEnumAAFTaggedValueDefs : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE NextOne( 
+            /* [retval][out] */ IAAFTaggedValueDefinition __RPC_FAR *__RPC_FAR *ppTaggedValueDefs) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Next( 
+            /* [in] */ aafUInt32 count,
+            /* [length_is][size_is][out] */ IAAFTaggedValueDefinition __RPC_FAR *__RPC_FAR *ppTaggedValueDefs,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Skip( 
+            /* [in] */ aafUInt32 count) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Clone( 
+            /* [retval][out] */ IEnumAAFTaggedValueDefs __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IEnumAAFTaggedValueDefsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IEnumAAFTaggedValueDefs __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IEnumAAFTaggedValueDefs __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IEnumAAFTaggedValueDefs __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NextOne )( 
+            IEnumAAFTaggedValueDefs __RPC_FAR * This,
+            /* [retval][out] */ IAAFTaggedValueDefinition __RPC_FAR *__RPC_FAR *ppTaggedValueDefs);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
+            IEnumAAFTaggedValueDefs __RPC_FAR * This,
+            /* [in] */ aafUInt32 count,
+            /* [length_is][size_is][out] */ IAAFTaggedValueDefinition __RPC_FAR *__RPC_FAR *ppTaggedValueDefs,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
+            IEnumAAFTaggedValueDefs __RPC_FAR * This,
+            /* [in] */ aafUInt32 count);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
+            IEnumAAFTaggedValueDefs __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
+            IEnumAAFTaggedValueDefs __RPC_FAR * This,
+            /* [retval][out] */ IEnumAAFTaggedValueDefs __RPC_FAR *__RPC_FAR *ppEnum);
+        
+        END_INTERFACE
+    } IEnumAAFTaggedValueDefsVtbl;
+
+    interface IEnumAAFTaggedValueDefs
+    {
+        CONST_VTBL struct IEnumAAFTaggedValueDefsVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IEnumAAFTaggedValueDefs_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IEnumAAFTaggedValueDefs_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IEnumAAFTaggedValueDefs_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IEnumAAFTaggedValueDefs_NextOne(This,ppTaggedValueDefs)	\
+    (This)->lpVtbl -> NextOne(This,ppTaggedValueDefs)
+
+#define IEnumAAFTaggedValueDefs_Next(This,count,ppTaggedValueDefs,pNumFetched)	\
+    (This)->lpVtbl -> Next(This,count,ppTaggedValueDefs,pNumFetched)
+
+#define IEnumAAFTaggedValueDefs_Skip(This,count)	\
+    (This)->lpVtbl -> Skip(This,count)
+
+#define IEnumAAFTaggedValueDefs_Reset(This)	\
+    (This)->lpVtbl -> Reset(This)
+
+#define IEnumAAFTaggedValueDefs_Clone(This,ppEnum)	\
+    (This)->lpVtbl -> Clone(This,ppEnum)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFTaggedValueDefs_NextOne_Proxy( 
+    IEnumAAFTaggedValueDefs __RPC_FAR * This,
+    /* [retval][out] */ IAAFTaggedValueDefinition __RPC_FAR *__RPC_FAR *ppTaggedValueDefs);
+
+
+void __RPC_STUB IEnumAAFTaggedValueDefs_NextOne_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFTaggedValueDefs_Next_Proxy( 
+    IEnumAAFTaggedValueDefs __RPC_FAR * This,
+    /* [in] */ aafUInt32 count,
+    /* [length_is][size_is][out] */ IAAFTaggedValueDefinition __RPC_FAR *__RPC_FAR *ppTaggedValueDefs,
+    /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
+
+
+void __RPC_STUB IEnumAAFTaggedValueDefs_Next_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFTaggedValueDefs_Skip_Proxy( 
+    IEnumAAFTaggedValueDefs __RPC_FAR * This,
+    /* [in] */ aafUInt32 count);
+
+
+void __RPC_STUB IEnumAAFTaggedValueDefs_Skip_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFTaggedValueDefs_Reset_Proxy( 
+    IEnumAAFTaggedValueDefs __RPC_FAR * This);
+
+
+void __RPC_STUB IEnumAAFTaggedValueDefs_Reset_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFTaggedValueDefs_Clone_Proxy( 
+    IEnumAAFTaggedValueDefs __RPC_FAR * This,
+    /* [retval][out] */ IEnumAAFTaggedValueDefs __RPC_FAR *__RPC_FAR *ppEnum);
+
+
+void __RPC_STUB IEnumAAFTaggedValueDefs_Clone_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IEnumAAFTaggedValueDefs_INTERFACE_DEFINED__ */
 
 
 #ifndef __IEnumAAFTaggedValues_INTERFACE_DEFINED__
@@ -31278,2157 +33755,6 @@ void __RPC_STUB IEnumAAFTypeDefs_Clone_Stub(
 
 
 #endif 	/* __IEnumAAFTypeDefs_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFRawStorage_INTERFACE_DEFINED__
-#define __IAAFRawStorage_INTERFACE_DEFINED__
-
-/* interface IAAFRawStorage */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFRawStorage;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("F45FA9E1-7166-11D4-B80D-0000863F2C27")
-    IAAFRawStorage : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE IsReadable( 
-            /* [out] */ aafBoolean_t __RPC_FAR *pResult) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Read( 
-            /* [length_is][size_is][out] */ aafMemPtr_t buf,
-            /* [in] */ aafUInt32 bufSize,
-            /* [out] */ aafUInt32 __RPC_FAR *pNumRead) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE IsWriteable( 
-            /* [out] */ aafBoolean_t __RPC_FAR *pResult) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Write( 
-            /* [size_is][in] */ aafMemConstPtr_t buf,
-            /* [in] */ aafUInt32 bufSize,
-            /* [out] */ aafUInt32 __RPC_FAR *pNumWritten) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Synchronize( void) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFRawStorageVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFRawStorage __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFRawStorage __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFRawStorage __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsReadable )( 
-            IAAFRawStorage __RPC_FAR * This,
-            /* [out] */ aafBoolean_t __RPC_FAR *pResult);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Read )( 
-            IAAFRawStorage __RPC_FAR * This,
-            /* [length_is][size_is][out] */ aafMemPtr_t buf,
-            /* [in] */ aafUInt32 bufSize,
-            /* [out] */ aafUInt32 __RPC_FAR *pNumRead);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsWriteable )( 
-            IAAFRawStorage __RPC_FAR * This,
-            /* [out] */ aafBoolean_t __RPC_FAR *pResult);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Write )( 
-            IAAFRawStorage __RPC_FAR * This,
-            /* [size_is][in] */ aafMemConstPtr_t buf,
-            /* [in] */ aafUInt32 bufSize,
-            /* [out] */ aafUInt32 __RPC_FAR *pNumWritten);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Synchronize )( 
-            IAAFRawStorage __RPC_FAR * This);
-        
-        END_INTERFACE
-    } IAAFRawStorageVtbl;
-
-    interface IAAFRawStorage
-    {
-        CONST_VTBL struct IAAFRawStorageVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFRawStorage_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFRawStorage_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFRawStorage_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFRawStorage_IsReadable(This,pResult)	\
-    (This)->lpVtbl -> IsReadable(This,pResult)
-
-#define IAAFRawStorage_Read(This,buf,bufSize,pNumRead)	\
-    (This)->lpVtbl -> Read(This,buf,bufSize,pNumRead)
-
-#define IAAFRawStorage_IsWriteable(This,pResult)	\
-    (This)->lpVtbl -> IsWriteable(This,pResult)
-
-#define IAAFRawStorage_Write(This,buf,bufSize,pNumWritten)	\
-    (This)->lpVtbl -> Write(This,buf,bufSize,pNumWritten)
-
-#define IAAFRawStorage_Synchronize(This)	\
-    (This)->lpVtbl -> Synchronize(This)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFRawStorage_IsReadable_Proxy( 
-    IAAFRawStorage __RPC_FAR * This,
-    /* [out] */ aafBoolean_t __RPC_FAR *pResult);
-
-
-void __RPC_STUB IAAFRawStorage_IsReadable_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFRawStorage_Read_Proxy( 
-    IAAFRawStorage __RPC_FAR * This,
-    /* [length_is][size_is][out] */ aafMemPtr_t buf,
-    /* [in] */ aafUInt32 bufSize,
-    /* [out] */ aafUInt32 __RPC_FAR *pNumRead);
-
-
-void __RPC_STUB IAAFRawStorage_Read_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFRawStorage_IsWriteable_Proxy( 
-    IAAFRawStorage __RPC_FAR * This,
-    /* [out] */ aafBoolean_t __RPC_FAR *pResult);
-
-
-void __RPC_STUB IAAFRawStorage_IsWriteable_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFRawStorage_Write_Proxy( 
-    IAAFRawStorage __RPC_FAR * This,
-    /* [size_is][in] */ aafMemConstPtr_t buf,
-    /* [in] */ aafUInt32 bufSize,
-    /* [out] */ aafUInt32 __RPC_FAR *pNumWritten);
-
-
-void __RPC_STUB IAAFRawStorage_Write_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFRawStorage_Synchronize_Proxy( 
-    IAAFRawStorage __RPC_FAR * This);
-
-
-void __RPC_STUB IAAFRawStorage_Synchronize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFRawStorage_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFRandomRawStorage_INTERFACE_DEFINED__
-#define __IAAFRandomRawStorage_INTERFACE_DEFINED__
-
-/* interface IAAFRandomRawStorage */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFRandomRawStorage;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("B1341782-71FE-11d4-B80D-0000863F2C27")
-    IAAFRandomRawStorage : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE ReadAt( 
-            /* [in] */ aafUInt64 position,
-            /* [length_is][size_is][out] */ aafMemPtr_t buf,
-            /* [in] */ aafUInt32 bufSize,
-            /* [out] */ aafUInt32 __RPC_FAR *pNumRead) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE WriteAt( 
-            /* [in] */ aafUInt64 position,
-            /* [size_is][in] */ aafMemConstPtr_t buf,
-            /* [in] */ aafUInt32 bufSize,
-            /* [out] */ aafUInt32 __RPC_FAR *pNumWritten) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetSize( 
-            /* [out] */ aafUInt64 __RPC_FAR *pSize) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE IsExtendable( 
-            /* [out] */ aafBoolean_t __RPC_FAR *pResult) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetExtent( 
-            /* [out] */ aafUInt64 __RPC_FAR *pExtent) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetExtent( 
-            /* [in] */ aafUInt64 extent) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFRandomRawStorageVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFRandomRawStorage __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFRandomRawStorage __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFRandomRawStorage __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReadAt )( 
-            IAAFRandomRawStorage __RPC_FAR * This,
-            /* [in] */ aafUInt64 position,
-            /* [length_is][size_is][out] */ aafMemPtr_t buf,
-            /* [in] */ aafUInt32 bufSize,
-            /* [out] */ aafUInt32 __RPC_FAR *pNumRead);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WriteAt )( 
-            IAAFRandomRawStorage __RPC_FAR * This,
-            /* [in] */ aafUInt64 position,
-            /* [size_is][in] */ aafMemConstPtr_t buf,
-            /* [in] */ aafUInt32 bufSize,
-            /* [out] */ aafUInt32 __RPC_FAR *pNumWritten);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSize )( 
-            IAAFRandomRawStorage __RPC_FAR * This,
-            /* [out] */ aafUInt64 __RPC_FAR *pSize);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsExtendable )( 
-            IAAFRandomRawStorage __RPC_FAR * This,
-            /* [out] */ aafBoolean_t __RPC_FAR *pResult);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetExtent )( 
-            IAAFRandomRawStorage __RPC_FAR * This,
-            /* [out] */ aafUInt64 __RPC_FAR *pExtent);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetExtent )( 
-            IAAFRandomRawStorage __RPC_FAR * This,
-            /* [in] */ aafUInt64 extent);
-        
-        END_INTERFACE
-    } IAAFRandomRawStorageVtbl;
-
-    interface IAAFRandomRawStorage
-    {
-        CONST_VTBL struct IAAFRandomRawStorageVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFRandomRawStorage_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFRandomRawStorage_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFRandomRawStorage_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFRandomRawStorage_ReadAt(This,position,buf,bufSize,pNumRead)	\
-    (This)->lpVtbl -> ReadAt(This,position,buf,bufSize,pNumRead)
-
-#define IAAFRandomRawStorage_WriteAt(This,position,buf,bufSize,pNumWritten)	\
-    (This)->lpVtbl -> WriteAt(This,position,buf,bufSize,pNumWritten)
-
-#define IAAFRandomRawStorage_GetSize(This,pSize)	\
-    (This)->lpVtbl -> GetSize(This,pSize)
-
-#define IAAFRandomRawStorage_IsExtendable(This,pResult)	\
-    (This)->lpVtbl -> IsExtendable(This,pResult)
-
-#define IAAFRandomRawStorage_GetExtent(This,pExtent)	\
-    (This)->lpVtbl -> GetExtent(This,pExtent)
-
-#define IAAFRandomRawStorage_SetExtent(This,extent)	\
-    (This)->lpVtbl -> SetExtent(This,extent)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFRandomRawStorage_ReadAt_Proxy( 
-    IAAFRandomRawStorage __RPC_FAR * This,
-    /* [in] */ aafUInt64 position,
-    /* [length_is][size_is][out] */ aafMemPtr_t buf,
-    /* [in] */ aafUInt32 bufSize,
-    /* [out] */ aafUInt32 __RPC_FAR *pNumRead);
-
-
-void __RPC_STUB IAAFRandomRawStorage_ReadAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFRandomRawStorage_WriteAt_Proxy( 
-    IAAFRandomRawStorage __RPC_FAR * This,
-    /* [in] */ aafUInt64 position,
-    /* [size_is][in] */ aafMemConstPtr_t buf,
-    /* [in] */ aafUInt32 bufSize,
-    /* [out] */ aafUInt32 __RPC_FAR *pNumWritten);
-
-
-void __RPC_STUB IAAFRandomRawStorage_WriteAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFRandomRawStorage_GetSize_Proxy( 
-    IAAFRandomRawStorage __RPC_FAR * This,
-    /* [out] */ aafUInt64 __RPC_FAR *pSize);
-
-
-void __RPC_STUB IAAFRandomRawStorage_GetSize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFRandomRawStorage_IsExtendable_Proxy( 
-    IAAFRandomRawStorage __RPC_FAR * This,
-    /* [out] */ aafBoolean_t __RPC_FAR *pResult);
-
-
-void __RPC_STUB IAAFRandomRawStorage_IsExtendable_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFRandomRawStorage_GetExtent_Proxy( 
-    IAAFRandomRawStorage __RPC_FAR * This,
-    /* [out] */ aafUInt64 __RPC_FAR *pExtent);
-
-
-void __RPC_STUB IAAFRandomRawStorage_GetExtent_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFRandomRawStorage_SetExtent_Proxy( 
-    IAAFRandomRawStorage __RPC_FAR * This,
-    /* [in] */ aafUInt64 extent);
-
-
-void __RPC_STUB IAAFRandomRawStorage_SetExtent_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFRandomRawStorage_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFGetFileBits_INTERFACE_DEFINED__
-#define __IAAFGetFileBits_INTERFACE_DEFINED__
-
-/* interface IAAFGetFileBits */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFGetFileBits;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("3CC80282-72A8-11D4-B80D-0000863F2C27")
-    IAAFGetFileBits : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE ReadAt( 
-            /* [size_is][out] */ aafMemPtr_t buf,
-            /* [in] */ aafUInt32 bufSize,
-            /* [in] */ aafUInt64 position) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetSize( 
-            /* [out] */ aafUInt64 __RPC_FAR *pSize) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFGetFileBitsVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFGetFileBits __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFGetFileBits __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFGetFileBits __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReadAt )( 
-            IAAFGetFileBits __RPC_FAR * This,
-            /* [size_is][out] */ aafMemPtr_t buf,
-            /* [in] */ aafUInt32 bufSize,
-            /* [in] */ aafUInt64 position);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSize )( 
-            IAAFGetFileBits __RPC_FAR * This,
-            /* [out] */ aafUInt64 __RPC_FAR *pSize);
-        
-        END_INTERFACE
-    } IAAFGetFileBitsVtbl;
-
-    interface IAAFGetFileBits
-    {
-        CONST_VTBL struct IAAFGetFileBitsVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFGetFileBits_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFGetFileBits_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFGetFileBits_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFGetFileBits_ReadAt(This,buf,bufSize,position)	\
-    (This)->lpVtbl -> ReadAt(This,buf,bufSize,position)
-
-#define IAAFGetFileBits_GetSize(This,pSize)	\
-    (This)->lpVtbl -> GetSize(This,pSize)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFGetFileBits_ReadAt_Proxy( 
-    IAAFGetFileBits __RPC_FAR * This,
-    /* [size_is][out] */ aafMemPtr_t buf,
-    /* [in] */ aafUInt32 bufSize,
-    /* [in] */ aafUInt64 position);
-
-
-void __RPC_STUB IAAFGetFileBits_ReadAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFGetFileBits_GetSize_Proxy( 
-    IAAFGetFileBits __RPC_FAR * This,
-    /* [out] */ aafUInt64 __RPC_FAR *pSize);
-
-
-void __RPC_STUB IAAFGetFileBits_GetSize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFGetFileBits_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFSetFileBits_INTERFACE_DEFINED__
-#define __IAAFSetFileBits_INTERFACE_DEFINED__
-
-/* interface IAAFSetFileBits */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFSetFileBits;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("6D950762-8DB4-11D4-B80D-0000863F2C27")
-    IAAFSetFileBits : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE WriteAt( 
-            /* [size_is][in] */ aafMemPtr_t buf,
-            /* [in] */ aafUInt32 bufSize,
-            /* [in] */ aafUInt64 position) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetSize( 
-            /* [in] */ aafUInt64 size) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFSetFileBitsVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFSetFileBits __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFSetFileBits __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFSetFileBits __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WriteAt )( 
-            IAAFSetFileBits __RPC_FAR * This,
-            /* [size_is][in] */ aafMemPtr_t buf,
-            /* [in] */ aafUInt32 bufSize,
-            /* [in] */ aafUInt64 position);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSize )( 
-            IAAFSetFileBits __RPC_FAR * This,
-            /* [in] */ aafUInt64 size);
-        
-        END_INTERFACE
-    } IAAFSetFileBitsVtbl;
-
-    interface IAAFSetFileBits
-    {
-        CONST_VTBL struct IAAFSetFileBitsVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFSetFileBits_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFSetFileBits_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFSetFileBits_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFSetFileBits_WriteAt(This,buf,bufSize,position)	\
-    (This)->lpVtbl -> WriteAt(This,buf,bufSize,position)
-
-#define IAAFSetFileBits_SetSize(This,size)	\
-    (This)->lpVtbl -> SetSize(This,size)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFSetFileBits_WriteAt_Proxy( 
-    IAAFSetFileBits __RPC_FAR * This,
-    /* [size_is][in] */ aafMemPtr_t buf,
-    /* [in] */ aafUInt32 bufSize,
-    /* [in] */ aafUInt64 position);
-
-
-void __RPC_STUB IAAFSetFileBits_WriteAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFSetFileBits_SetSize_Proxy( 
-    IAAFSetFileBits __RPC_FAR * This,
-    /* [in] */ aafUInt64 size);
-
-
-void __RPC_STUB IAAFSetFileBits_SetSize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFSetFileBits_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFRandomFile_INTERFACE_DEFINED__
-#define __IAAFRandomFile_INTERFACE_DEFINED__
-
-/* interface IAAFRandomFile */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFRandomFile;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("3CC80284-72A8-11D4-B80D-0000863F2C27")
-    IAAFRandomFile : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetFileBits( 
-            /* [out] */ IAAFGetFileBits __RPC_FAR *__RPC_FAR *ppGetFileBits) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Revert( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SaveAsFile( 
-            /* [in] */ IAAFFile __RPC_FAR *pDestFile) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetFileBits( 
-            /* [out] */ IAAFSetFileBits __RPC_FAR *__RPC_FAR *ppSetFileBits) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFRandomFileVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFRandomFile __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFRandomFile __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFRandomFile __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFileBits )( 
-            IAAFRandomFile __RPC_FAR * This,
-            /* [out] */ IAAFGetFileBits __RPC_FAR *__RPC_FAR *ppGetFileBits);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Revert )( 
-            IAAFRandomFile __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveAsFile )( 
-            IAAFRandomFile __RPC_FAR * This,
-            /* [in] */ IAAFFile __RPC_FAR *pDestFile);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFileBits )( 
-            IAAFRandomFile __RPC_FAR * This,
-            /* [out] */ IAAFSetFileBits __RPC_FAR *__RPC_FAR *ppSetFileBits);
-        
-        END_INTERFACE
-    } IAAFRandomFileVtbl;
-
-    interface IAAFRandomFile
-    {
-        CONST_VTBL struct IAAFRandomFileVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFRandomFile_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFRandomFile_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFRandomFile_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFRandomFile_GetFileBits(This,ppGetFileBits)	\
-    (This)->lpVtbl -> GetFileBits(This,ppGetFileBits)
-
-#define IAAFRandomFile_Revert(This)	\
-    (This)->lpVtbl -> Revert(This)
-
-#define IAAFRandomFile_SaveAsFile(This,pDestFile)	\
-    (This)->lpVtbl -> SaveAsFile(This,pDestFile)
-
-#define IAAFRandomFile_SetFileBits(This,ppSetFileBits)	\
-    (This)->lpVtbl -> SetFileBits(This,ppSetFileBits)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFRandomFile_GetFileBits_Proxy( 
-    IAAFRandomFile __RPC_FAR * This,
-    /* [out] */ IAAFGetFileBits __RPC_FAR *__RPC_FAR *ppGetFileBits);
-
-
-void __RPC_STUB IAAFRandomFile_GetFileBits_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFRandomFile_Revert_Proxy( 
-    IAAFRandomFile __RPC_FAR * This);
-
-
-void __RPC_STUB IAAFRandomFile_Revert_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFRandomFile_SaveAsFile_Proxy( 
-    IAAFRandomFile __RPC_FAR * This,
-    /* [in] */ IAAFFile __RPC_FAR *pDestFile);
-
-
-void __RPC_STUB IAAFRandomFile_SaveAsFile_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFRandomFile_SetFileBits_Proxy( 
-    IAAFRandomFile __RPC_FAR * This,
-    /* [out] */ IAAFSetFileBits __RPC_FAR *__RPC_FAR *ppSetFileBits);
-
-
-void __RPC_STUB IAAFRandomFile_SetFileBits_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFRandomFile_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFTaggedValueDefinition_INTERFACE_DEFINED__
-#define __IAAFTaggedValueDefinition_INTERFACE_DEFINED__
-
-/* interface IAAFTaggedValueDefinition */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFTaggedValueDefinition;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("c358428a-bf73-4558-bfdf-482160719823")
-    IAAFTaggedValueDefinition : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [ref][in] */ aafUID_constref id,
-            /* [string][in] */ aafCharacter_constptr pName,
-            /* [string][in] */ aafCharacter_constptr pDescription) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE AddParentProperty( 
-            /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetParentProperties( 
-            /* [out] */ IEnumAAFPropertyDefs __RPC_FAR *__RPC_FAR *ppEnum) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CountParentProperties( 
-            /* [out] */ aafUInt32 __RPC_FAR *pNumProperties) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE RemoveParentProperty( 
-            /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFTaggedValueDefinitionVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFTaggedValueDefinition __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFTaggedValueDefinition __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFTaggedValueDefinition __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IAAFTaggedValueDefinition __RPC_FAR * This,
-            /* [ref][in] */ aafUID_constref id,
-            /* [string][in] */ aafCharacter_constptr pName,
-            /* [string][in] */ aafCharacter_constptr pDescription);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddParentProperty )( 
-            IAAFTaggedValueDefinition __RPC_FAR * This,
-            /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetParentProperties )( 
-            IAAFTaggedValueDefinition __RPC_FAR * This,
-            /* [out] */ IEnumAAFPropertyDefs __RPC_FAR *__RPC_FAR *ppEnum);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountParentProperties )( 
-            IAAFTaggedValueDefinition __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pNumProperties);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveParentProperty )( 
-            IAAFTaggedValueDefinition __RPC_FAR * This,
-            /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty);
-        
-        END_INTERFACE
-    } IAAFTaggedValueDefinitionVtbl;
-
-    interface IAAFTaggedValueDefinition
-    {
-        CONST_VTBL struct IAAFTaggedValueDefinitionVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFTaggedValueDefinition_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFTaggedValueDefinition_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFTaggedValueDefinition_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFTaggedValueDefinition_Initialize(This,id,pName,pDescription)	\
-    (This)->lpVtbl -> Initialize(This,id,pName,pDescription)
-
-#define IAAFTaggedValueDefinition_AddParentProperty(This,pParentProperty)	\
-    (This)->lpVtbl -> AddParentProperty(This,pParentProperty)
-
-#define IAAFTaggedValueDefinition_GetParentProperties(This,ppEnum)	\
-    (This)->lpVtbl -> GetParentProperties(This,ppEnum)
-
-#define IAAFTaggedValueDefinition_CountParentProperties(This,pNumProperties)	\
-    (This)->lpVtbl -> CountParentProperties(This,pNumProperties)
-
-#define IAAFTaggedValueDefinition_RemoveParentProperty(This,pParentProperty)	\
-    (This)->lpVtbl -> RemoveParentProperty(This,pParentProperty)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFTaggedValueDefinition_Initialize_Proxy( 
-    IAAFTaggedValueDefinition __RPC_FAR * This,
-    /* [ref][in] */ aafUID_constref id,
-    /* [string][in] */ aafCharacter_constptr pName,
-    /* [string][in] */ aafCharacter_constptr pDescription);
-
-
-void __RPC_STUB IAAFTaggedValueDefinition_Initialize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTaggedValueDefinition_AddParentProperty_Proxy( 
-    IAAFTaggedValueDefinition __RPC_FAR * This,
-    /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty);
-
-
-void __RPC_STUB IAAFTaggedValueDefinition_AddParentProperty_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTaggedValueDefinition_GetParentProperties_Proxy( 
-    IAAFTaggedValueDefinition __RPC_FAR * This,
-    /* [out] */ IEnumAAFPropertyDefs __RPC_FAR *__RPC_FAR *ppEnum);
-
-
-void __RPC_STUB IAAFTaggedValueDefinition_GetParentProperties_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTaggedValueDefinition_CountParentProperties_Proxy( 
-    IAAFTaggedValueDefinition __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pNumProperties);
-
-
-void __RPC_STUB IAAFTaggedValueDefinition_CountParentProperties_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFTaggedValueDefinition_RemoveParentProperty_Proxy( 
-    IAAFTaggedValueDefinition __RPC_FAR * This,
-    /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty);
-
-
-void __RPC_STUB IAAFTaggedValueDefinition_RemoveParentProperty_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFTaggedValueDefinition_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFKLVDataDefinition_INTERFACE_DEFINED__
-#define __IAAFKLVDataDefinition_INTERFACE_DEFINED__
-
-/* interface IAAFKLVDataDefinition */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFKLVDataDefinition;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("f6af8700-949c-4304-9706-c0576b53f4aa")
-    IAAFKLVDataDefinition : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [ref][in] */ aafUID_constref id,
-            /* [string][in] */ aafCharacter_constptr pName,
-            /* [string][in] */ aafCharacter_constptr pDescription) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE AddParentProperty( 
-            /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetParentProperties( 
-            /* [out] */ IEnumAAFPropertyDefs __RPC_FAR *__RPC_FAR *ppEnum) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CountParentProperties( 
-            /* [out] */ aafUInt32 __RPC_FAR *pNumProperties) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE RemoveParentProperty( 
-            /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetKLVDataType( 
-            /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *ppTypeDef) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetKLVDataType( 
-            /* [in] */ IAAFTypeDef __RPC_FAR *pTypeDef) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFKLVDataDefinitionVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFKLVDataDefinition __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFKLVDataDefinition __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFKLVDataDefinition __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IAAFKLVDataDefinition __RPC_FAR * This,
-            /* [ref][in] */ aafUID_constref id,
-            /* [string][in] */ aafCharacter_constptr pName,
-            /* [string][in] */ aafCharacter_constptr pDescription);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddParentProperty )( 
-            IAAFKLVDataDefinition __RPC_FAR * This,
-            /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetParentProperties )( 
-            IAAFKLVDataDefinition __RPC_FAR * This,
-            /* [out] */ IEnumAAFPropertyDefs __RPC_FAR *__RPC_FAR *ppEnum);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountParentProperties )( 
-            IAAFKLVDataDefinition __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pNumProperties);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveParentProperty )( 
-            IAAFKLVDataDefinition __RPC_FAR * This,
-            /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetKLVDataType )( 
-            IAAFKLVDataDefinition __RPC_FAR * This,
-            /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *ppTypeDef);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetKLVDataType )( 
-            IAAFKLVDataDefinition __RPC_FAR * This,
-            /* [in] */ IAAFTypeDef __RPC_FAR *pTypeDef);
-        
-        END_INTERFACE
-    } IAAFKLVDataDefinitionVtbl;
-
-    interface IAAFKLVDataDefinition
-    {
-        CONST_VTBL struct IAAFKLVDataDefinitionVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFKLVDataDefinition_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFKLVDataDefinition_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFKLVDataDefinition_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFKLVDataDefinition_Initialize(This,id,pName,pDescription)	\
-    (This)->lpVtbl -> Initialize(This,id,pName,pDescription)
-
-#define IAAFKLVDataDefinition_AddParentProperty(This,pParentProperty)	\
-    (This)->lpVtbl -> AddParentProperty(This,pParentProperty)
-
-#define IAAFKLVDataDefinition_GetParentProperties(This,ppEnum)	\
-    (This)->lpVtbl -> GetParentProperties(This,ppEnum)
-
-#define IAAFKLVDataDefinition_CountParentProperties(This,pNumProperties)	\
-    (This)->lpVtbl -> CountParentProperties(This,pNumProperties)
-
-#define IAAFKLVDataDefinition_RemoveParentProperty(This,pParentProperty)	\
-    (This)->lpVtbl -> RemoveParentProperty(This,pParentProperty)
-
-#define IAAFKLVDataDefinition_GetKLVDataType(This,ppTypeDef)	\
-    (This)->lpVtbl -> GetKLVDataType(This,ppTypeDef)
-
-#define IAAFKLVDataDefinition_SetKLVDataType(This,pTypeDef)	\
-    (This)->lpVtbl -> SetKLVDataType(This,pTypeDef)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFKLVDataDefinition_Initialize_Proxy( 
-    IAAFKLVDataDefinition __RPC_FAR * This,
-    /* [ref][in] */ aafUID_constref id,
-    /* [string][in] */ aafCharacter_constptr pName,
-    /* [string][in] */ aafCharacter_constptr pDescription);
-
-
-void __RPC_STUB IAAFKLVDataDefinition_Initialize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFKLVDataDefinition_AddParentProperty_Proxy( 
-    IAAFKLVDataDefinition __RPC_FAR * This,
-    /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty);
-
-
-void __RPC_STUB IAAFKLVDataDefinition_AddParentProperty_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFKLVDataDefinition_GetParentProperties_Proxy( 
-    IAAFKLVDataDefinition __RPC_FAR * This,
-    /* [out] */ IEnumAAFPropertyDefs __RPC_FAR *__RPC_FAR *ppEnum);
-
-
-void __RPC_STUB IAAFKLVDataDefinition_GetParentProperties_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFKLVDataDefinition_CountParentProperties_Proxy( 
-    IAAFKLVDataDefinition __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pNumProperties);
-
-
-void __RPC_STUB IAAFKLVDataDefinition_CountParentProperties_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFKLVDataDefinition_RemoveParentProperty_Proxy( 
-    IAAFKLVDataDefinition __RPC_FAR * This,
-    /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty);
-
-
-void __RPC_STUB IAAFKLVDataDefinition_RemoveParentProperty_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFKLVDataDefinition_GetKLVDataType_Proxy( 
-    IAAFKLVDataDefinition __RPC_FAR * This,
-    /* [out] */ IAAFTypeDef __RPC_FAR *__RPC_FAR *ppTypeDef);
-
-
-void __RPC_STUB IAAFKLVDataDefinition_GetKLVDataType_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFKLVDataDefinition_SetKLVDataType_Proxy( 
-    IAAFKLVDataDefinition __RPC_FAR * This,
-    /* [in] */ IAAFTypeDef __RPC_FAR *pTypeDef);
-
-
-void __RPC_STUB IAAFKLVDataDefinition_SetKLVDataType_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFKLVDataDefinition_INTERFACE_DEFINED__ */
-
-
-#ifndef __IEnumAAFTaggedValueDefs_INTERFACE_DEFINED__
-#define __IEnumAAFTaggedValueDefs_INTERFACE_DEFINED__
-
-/* interface IEnumAAFTaggedValueDefs */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IEnumAAFTaggedValueDefs;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("9d1bd790-16a8-488c-8743-f9a60a1cba95")
-    IEnumAAFTaggedValueDefs : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE NextOne( 
-            /* [retval][out] */ IAAFTaggedValueDefinition __RPC_FAR *__RPC_FAR *ppTaggedValueDefs) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ aafUInt32 count,
-            /* [length_is][size_is][out] */ IAAFTaggedValueDefinition __RPC_FAR *__RPC_FAR *ppTaggedValueDefs,
-            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ aafUInt32 count) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumAAFTaggedValueDefs __RPC_FAR *__RPC_FAR *ppEnum) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IEnumAAFTaggedValueDefsVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumAAFTaggedValueDefs __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumAAFTaggedValueDefs __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumAAFTaggedValueDefs __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NextOne )( 
-            IEnumAAFTaggedValueDefs __RPC_FAR * This,
-            /* [retval][out] */ IAAFTaggedValueDefinition __RPC_FAR *__RPC_FAR *ppTaggedValueDefs);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumAAFTaggedValueDefs __RPC_FAR * This,
-            /* [in] */ aafUInt32 count,
-            /* [length_is][size_is][out] */ IAAFTaggedValueDefinition __RPC_FAR *__RPC_FAR *ppTaggedValueDefs,
-            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumAAFTaggedValueDefs __RPC_FAR * This,
-            /* [in] */ aafUInt32 count);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumAAFTaggedValueDefs __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumAAFTaggedValueDefs __RPC_FAR * This,
-            /* [retval][out] */ IEnumAAFTaggedValueDefs __RPC_FAR *__RPC_FAR *ppEnum);
-        
-        END_INTERFACE
-    } IEnumAAFTaggedValueDefsVtbl;
-
-    interface IEnumAAFTaggedValueDefs
-    {
-        CONST_VTBL struct IEnumAAFTaggedValueDefsVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IEnumAAFTaggedValueDefs_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IEnumAAFTaggedValueDefs_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IEnumAAFTaggedValueDefs_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IEnumAAFTaggedValueDefs_NextOne(This,ppTaggedValueDefs)	\
-    (This)->lpVtbl -> NextOne(This,ppTaggedValueDefs)
-
-#define IEnumAAFTaggedValueDefs_Next(This,count,ppTaggedValueDefs,pNumFetched)	\
-    (This)->lpVtbl -> Next(This,count,ppTaggedValueDefs,pNumFetched)
-
-#define IEnumAAFTaggedValueDefs_Skip(This,count)	\
-    (This)->lpVtbl -> Skip(This,count)
-
-#define IEnumAAFTaggedValueDefs_Reset(This)	\
-    (This)->lpVtbl -> Reset(This)
-
-#define IEnumAAFTaggedValueDefs_Clone(This,ppEnum)	\
-    (This)->lpVtbl -> Clone(This,ppEnum)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFTaggedValueDefs_NextOne_Proxy( 
-    IEnumAAFTaggedValueDefs __RPC_FAR * This,
-    /* [retval][out] */ IAAFTaggedValueDefinition __RPC_FAR *__RPC_FAR *ppTaggedValueDefs);
-
-
-void __RPC_STUB IEnumAAFTaggedValueDefs_NextOne_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFTaggedValueDefs_Next_Proxy( 
-    IEnumAAFTaggedValueDefs __RPC_FAR * This,
-    /* [in] */ aafUInt32 count,
-    /* [length_is][size_is][out] */ IAAFTaggedValueDefinition __RPC_FAR *__RPC_FAR *ppTaggedValueDefs,
-    /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
-
-
-void __RPC_STUB IEnumAAFTaggedValueDefs_Next_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFTaggedValueDefs_Skip_Proxy( 
-    IEnumAAFTaggedValueDefs __RPC_FAR * This,
-    /* [in] */ aafUInt32 count);
-
-
-void __RPC_STUB IEnumAAFTaggedValueDefs_Skip_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFTaggedValueDefs_Reset_Proxy( 
-    IEnumAAFTaggedValueDefs __RPC_FAR * This);
-
-
-void __RPC_STUB IEnumAAFTaggedValueDefs_Reset_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFTaggedValueDefs_Clone_Proxy( 
-    IEnumAAFTaggedValueDefs __RPC_FAR * This,
-    /* [retval][out] */ IEnumAAFTaggedValueDefs __RPC_FAR *__RPC_FAR *ppEnum);
-
-
-void __RPC_STUB IEnumAAFTaggedValueDefs_Clone_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IEnumAAFTaggedValueDefs_INTERFACE_DEFINED__ */
-
-
-#ifndef __IEnumAAFKLVDataDefs_INTERFACE_DEFINED__
-#define __IEnumAAFKLVDataDefs_INTERFACE_DEFINED__
-
-/* interface IEnumAAFKLVDataDefs */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IEnumAAFKLVDataDefs;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("2a368c5c-e5af-43c8-8e5a-e78ba02f5f3b")
-    IEnumAAFKLVDataDefs : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE NextOne( 
-            /* [retval][out] */ IAAFKLVDataDefinition __RPC_FAR *__RPC_FAR *ppKLVDataDefs) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ aafUInt32 count,
-            /* [length_is][size_is][out] */ IAAFKLVDataDefinition __RPC_FAR *__RPC_FAR *ppKLVDataDefs,
-            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ aafUInt32 count) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumAAFKLVDataDefs __RPC_FAR *__RPC_FAR *ppEnum) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IEnumAAFKLVDataDefsVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumAAFKLVDataDefs __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumAAFKLVDataDefs __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumAAFKLVDataDefs __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NextOne )( 
-            IEnumAAFKLVDataDefs __RPC_FAR * This,
-            /* [retval][out] */ IAAFKLVDataDefinition __RPC_FAR *__RPC_FAR *ppKLVDataDefs);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumAAFKLVDataDefs __RPC_FAR * This,
-            /* [in] */ aafUInt32 count,
-            /* [length_is][size_is][out] */ IAAFKLVDataDefinition __RPC_FAR *__RPC_FAR *ppKLVDataDefs,
-            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumAAFKLVDataDefs __RPC_FAR * This,
-            /* [in] */ aafUInt32 count);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumAAFKLVDataDefs __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumAAFKLVDataDefs __RPC_FAR * This,
-            /* [retval][out] */ IEnumAAFKLVDataDefs __RPC_FAR *__RPC_FAR *ppEnum);
-        
-        END_INTERFACE
-    } IEnumAAFKLVDataDefsVtbl;
-
-    interface IEnumAAFKLVDataDefs
-    {
-        CONST_VTBL struct IEnumAAFKLVDataDefsVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IEnumAAFKLVDataDefs_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IEnumAAFKLVDataDefs_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IEnumAAFKLVDataDefs_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IEnumAAFKLVDataDefs_NextOne(This,ppKLVDataDefs)	\
-    (This)->lpVtbl -> NextOne(This,ppKLVDataDefs)
-
-#define IEnumAAFKLVDataDefs_Next(This,count,ppKLVDataDefs,pNumFetched)	\
-    (This)->lpVtbl -> Next(This,count,ppKLVDataDefs,pNumFetched)
-
-#define IEnumAAFKLVDataDefs_Skip(This,count)	\
-    (This)->lpVtbl -> Skip(This,count)
-
-#define IEnumAAFKLVDataDefs_Reset(This)	\
-    (This)->lpVtbl -> Reset(This)
-
-#define IEnumAAFKLVDataDefs_Clone(This,ppEnum)	\
-    (This)->lpVtbl -> Clone(This,ppEnum)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFKLVDataDefs_NextOne_Proxy( 
-    IEnumAAFKLVDataDefs __RPC_FAR * This,
-    /* [retval][out] */ IAAFKLVDataDefinition __RPC_FAR *__RPC_FAR *ppKLVDataDefs);
-
-
-void __RPC_STUB IEnumAAFKLVDataDefs_NextOne_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFKLVDataDefs_Next_Proxy( 
-    IEnumAAFKLVDataDefs __RPC_FAR * This,
-    /* [in] */ aafUInt32 count,
-    /* [length_is][size_is][out] */ IAAFKLVDataDefinition __RPC_FAR *__RPC_FAR *ppKLVDataDefs,
-    /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
-
-
-void __RPC_STUB IEnumAAFKLVDataDefs_Next_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFKLVDataDefs_Skip_Proxy( 
-    IEnumAAFKLVDataDefs __RPC_FAR * This,
-    /* [in] */ aafUInt32 count);
-
-
-void __RPC_STUB IEnumAAFKLVDataDefs_Skip_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFKLVDataDefs_Reset_Proxy( 
-    IEnumAAFKLVDataDefs __RPC_FAR * This);
-
-
-void __RPC_STUB IEnumAAFKLVDataDefs_Reset_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFKLVDataDefs_Clone_Proxy( 
-    IEnumAAFKLVDataDefs __RPC_FAR * This,
-    /* [retval][out] */ IEnumAAFKLVDataDefs __RPC_FAR *__RPC_FAR *ppEnum);
-
-
-void __RPC_STUB IEnumAAFKLVDataDefs_Clone_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IEnumAAFKLVDataDefs_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFRecordingDescriptor_INTERFACE_DEFINED__
-#define __IAAFRecordingDescriptor_INTERFACE_DEFINED__
-
-/* interface IAAFRecordingDescriptor */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFRecordingDescriptor;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("a6542226-19a7-40ee-9650-a3b9c66ccfe7")
-    IAAFRecordingDescriptor : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFRecordingDescriptorVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFRecordingDescriptor __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFRecordingDescriptor __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFRecordingDescriptor __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IAAFRecordingDescriptor __RPC_FAR * This);
-        
-        END_INTERFACE
-    } IAAFRecordingDescriptorVtbl;
-
-    interface IAAFRecordingDescriptor
-    {
-        CONST_VTBL struct IAAFRecordingDescriptorVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFRecordingDescriptor_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFRecordingDescriptor_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFRecordingDescriptor_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFRecordingDescriptor_Initialize(This)	\
-    (This)->lpVtbl -> Initialize(This)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFRecordingDescriptor_Initialize_Proxy( 
-    IAAFRecordingDescriptor __RPC_FAR * This);
-
-
-void __RPC_STUB IAAFRecordingDescriptor_Initialize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFRecordingDescriptor_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFAuxiliaryDescriptor_INTERFACE_DEFINED__
-#define __IAAFAuxiliaryDescriptor_INTERFACE_DEFINED__
-
-/* interface IAAFAuxiliaryDescriptor */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFAuxiliaryDescriptor;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("197a9cb2-48de-40a3-b965-59531d3fcf23")
-    IAAFAuxiliaryDescriptor : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetMimeType( 
-            /* [string][in] */ aafCharacter_constptr pMimeType) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetMimeType( 
-            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pMimeType,
-            /* [in] */ aafUInt32 bufSize) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetMimeTypeBufLen( 
-            /* [out] */ aafUInt32 __RPC_FAR *pBufSize) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetCharSet( 
-            /* [string][in] */ aafCharacter_constptr pCharSet) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCharSet( 
-            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pCharSet,
-            /* [in] */ aafUInt32 bufSize) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCharSetBufLen( 
-            /* [out] */ aafUInt32 __RPC_FAR *pBufSize) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFAuxiliaryDescriptorVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFAuxiliaryDescriptor __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFAuxiliaryDescriptor __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFAuxiliaryDescriptor __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IAAFAuxiliaryDescriptor __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMimeType )( 
-            IAAFAuxiliaryDescriptor __RPC_FAR * This,
-            /* [string][in] */ aafCharacter_constptr pMimeType);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMimeType )( 
-            IAAFAuxiliaryDescriptor __RPC_FAR * This,
-            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pMimeType,
-            /* [in] */ aafUInt32 bufSize);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMimeTypeBufLen )( 
-            IAAFAuxiliaryDescriptor __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCharSet )( 
-            IAAFAuxiliaryDescriptor __RPC_FAR * This,
-            /* [string][in] */ aafCharacter_constptr pCharSet);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCharSet )( 
-            IAAFAuxiliaryDescriptor __RPC_FAR * This,
-            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pCharSet,
-            /* [in] */ aafUInt32 bufSize);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCharSetBufLen )( 
-            IAAFAuxiliaryDescriptor __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
-        
-        END_INTERFACE
-    } IAAFAuxiliaryDescriptorVtbl;
-
-    interface IAAFAuxiliaryDescriptor
-    {
-        CONST_VTBL struct IAAFAuxiliaryDescriptorVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFAuxiliaryDescriptor_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFAuxiliaryDescriptor_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFAuxiliaryDescriptor_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFAuxiliaryDescriptor_Initialize(This)	\
-    (This)->lpVtbl -> Initialize(This)
-
-#define IAAFAuxiliaryDescriptor_SetMimeType(This,pMimeType)	\
-    (This)->lpVtbl -> SetMimeType(This,pMimeType)
-
-#define IAAFAuxiliaryDescriptor_GetMimeType(This,pMimeType,bufSize)	\
-    (This)->lpVtbl -> GetMimeType(This,pMimeType,bufSize)
-
-#define IAAFAuxiliaryDescriptor_GetMimeTypeBufLen(This,pBufSize)	\
-    (This)->lpVtbl -> GetMimeTypeBufLen(This,pBufSize)
-
-#define IAAFAuxiliaryDescriptor_SetCharSet(This,pCharSet)	\
-    (This)->lpVtbl -> SetCharSet(This,pCharSet)
-
-#define IAAFAuxiliaryDescriptor_GetCharSet(This,pCharSet,bufSize)	\
-    (This)->lpVtbl -> GetCharSet(This,pCharSet,bufSize)
-
-#define IAAFAuxiliaryDescriptor_GetCharSetBufLen(This,pBufSize)	\
-    (This)->lpVtbl -> GetCharSetBufLen(This,pBufSize)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_Initialize_Proxy( 
-    IAAFAuxiliaryDescriptor __RPC_FAR * This);
-
-
-void __RPC_STUB IAAFAuxiliaryDescriptor_Initialize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_SetMimeType_Proxy( 
-    IAAFAuxiliaryDescriptor __RPC_FAR * This,
-    /* [string][in] */ aafCharacter_constptr pMimeType);
-
-
-void __RPC_STUB IAAFAuxiliaryDescriptor_SetMimeType_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_GetMimeType_Proxy( 
-    IAAFAuxiliaryDescriptor __RPC_FAR * This,
-    /* [size_is][string][out] */ aafCharacter __RPC_FAR *pMimeType,
-    /* [in] */ aafUInt32 bufSize);
-
-
-void __RPC_STUB IAAFAuxiliaryDescriptor_GetMimeType_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_GetMimeTypeBufLen_Proxy( 
-    IAAFAuxiliaryDescriptor __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
-
-
-void __RPC_STUB IAAFAuxiliaryDescriptor_GetMimeTypeBufLen_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_SetCharSet_Proxy( 
-    IAAFAuxiliaryDescriptor __RPC_FAR * This,
-    /* [string][in] */ aafCharacter_constptr pCharSet);
-
-
-void __RPC_STUB IAAFAuxiliaryDescriptor_SetCharSet_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_GetCharSet_Proxy( 
-    IAAFAuxiliaryDescriptor __RPC_FAR * This,
-    /* [size_is][string][out] */ aafCharacter __RPC_FAR *pCharSet,
-    /* [in] */ aafUInt32 bufSize);
-
-
-void __RPC_STUB IAAFAuxiliaryDescriptor_GetCharSet_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFAuxiliaryDescriptor_GetCharSetBufLen_Proxy( 
-    IAAFAuxiliaryDescriptor __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
-
-
-void __RPC_STUB IAAFAuxiliaryDescriptor_GetCharSetBufLen_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFAuxiliaryDescriptor_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFDescriptiveFramework_INTERFACE_DEFINED__
-#define __IAAFDescriptiveFramework_INTERFACE_DEFINED__
-
-/* interface IAAFDescriptiveFramework */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFDescriptiveFramework;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("1cded29f-b8f0-437d-abb0-2144dd35b4aa")
-    IAAFDescriptiveFramework : public IUnknown
-    {
-    public:
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFDescriptiveFrameworkVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFDescriptiveFramework __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFDescriptiveFramework __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFDescriptiveFramework __RPC_FAR * This);
-        
-        END_INTERFACE
-    } IAAFDescriptiveFrameworkVtbl;
-
-    interface IAAFDescriptiveFramework
-    {
-        CONST_VTBL struct IAAFDescriptiveFrameworkVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFDescriptiveFramework_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFDescriptiveFramework_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFDescriptiveFramework_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-
-#endif 	/* __IAAFDescriptiveFramework_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFDescriptiveMarker_INTERFACE_DEFINED__
-#define __IAAFDescriptiveMarker_INTERFACE_DEFINED__
-
-/* interface IAAFDescriptiveMarker */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFDescriptiveMarker;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("c377b78e-591f-4ba9-a069-18438c626e34")
-    IAAFDescriptiveMarker : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetDescribedSlotIDs( 
-            /* [in] */ aafUInt32 numberElements,
-            /* [in] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetDescribedSlotIDs( 
-            /* [in] */ aafUInt32 numberElements,
-            /* [in] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetDescribedSlotIDsSize( 
-            /* [out] */ aafUInt32 __RPC_FAR *numberElements) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetDescriptiveFramework( 
-            /* [in] */ IAAFDescriptiveFramework __RPC_FAR *pDescriptiveFramework) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetDescriptiveFramework( 
-            /* [retval][out] */ IAAFDescriptiveFramework __RPC_FAR *__RPC_FAR *ppDescriptiveFramework) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFDescriptiveMarkerVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFDescriptiveMarker __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFDescriptiveMarker __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFDescriptiveMarker __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IAAFDescriptiveMarker __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDescribedSlotIDs )( 
-            IAAFDescriptiveMarker __RPC_FAR * This,
-            /* [in] */ aafUInt32 numberElements,
-            /* [in] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescribedSlotIDs )( 
-            IAAFDescriptiveMarker __RPC_FAR * This,
-            /* [in] */ aafUInt32 numberElements,
-            /* [in] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescribedSlotIDsSize )( 
-            IAAFDescriptiveMarker __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *numberElements);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDescriptiveFramework )( 
-            IAAFDescriptiveMarker __RPC_FAR * This,
-            /* [in] */ IAAFDescriptiveFramework __RPC_FAR *pDescriptiveFramework);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescriptiveFramework )( 
-            IAAFDescriptiveMarker __RPC_FAR * This,
-            /* [retval][out] */ IAAFDescriptiveFramework __RPC_FAR *__RPC_FAR *ppDescriptiveFramework);
-        
-        END_INTERFACE
-    } IAAFDescriptiveMarkerVtbl;
-
-    interface IAAFDescriptiveMarker
-    {
-        CONST_VTBL struct IAAFDescriptiveMarkerVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFDescriptiveMarker_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFDescriptiveMarker_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFDescriptiveMarker_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAAFDescriptiveMarker_Initialize(This)	\
-    (This)->lpVtbl -> Initialize(This)
-
-#define IAAFDescriptiveMarker_SetDescribedSlotIDs(This,numberElements,pDescribedSlotIDs)	\
-    (This)->lpVtbl -> SetDescribedSlotIDs(This,numberElements,pDescribedSlotIDs)
-
-#define IAAFDescriptiveMarker_GetDescribedSlotIDs(This,numberElements,pDescribedSlotIDs)	\
-    (This)->lpVtbl -> GetDescribedSlotIDs(This,numberElements,pDescribedSlotIDs)
-
-#define IAAFDescriptiveMarker_GetDescribedSlotIDsSize(This,numberElements)	\
-    (This)->lpVtbl -> GetDescribedSlotIDsSize(This,numberElements)
-
-#define IAAFDescriptiveMarker_SetDescriptiveFramework(This,pDescriptiveFramework)	\
-    (This)->lpVtbl -> SetDescriptiveFramework(This,pDescriptiveFramework)
-
-#define IAAFDescriptiveMarker_GetDescriptiveFramework(This,ppDescriptiveFramework)	\
-    (This)->lpVtbl -> GetDescriptiveFramework(This,ppDescriptiveFramework)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IAAFDescriptiveMarker_Initialize_Proxy( 
-    IAAFDescriptiveMarker __RPC_FAR * This);
-
-
-void __RPC_STUB IAAFDescriptiveMarker_Initialize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDescriptiveMarker_SetDescribedSlotIDs_Proxy( 
-    IAAFDescriptiveMarker __RPC_FAR * This,
-    /* [in] */ aafUInt32 numberElements,
-    /* [in] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs);
-
-
-void __RPC_STUB IAAFDescriptiveMarker_SetDescribedSlotIDs_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDescriptiveMarker_GetDescribedSlotIDs_Proxy( 
-    IAAFDescriptiveMarker __RPC_FAR * This,
-    /* [in] */ aafUInt32 numberElements,
-    /* [in] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs);
-
-
-void __RPC_STUB IAAFDescriptiveMarker_GetDescribedSlotIDs_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDescriptiveMarker_GetDescribedSlotIDsSize_Proxy( 
-    IAAFDescriptiveMarker __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *numberElements);
-
-
-void __RPC_STUB IAAFDescriptiveMarker_GetDescribedSlotIDsSize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDescriptiveMarker_SetDescriptiveFramework_Proxy( 
-    IAAFDescriptiveMarker __RPC_FAR * This,
-    /* [in] */ IAAFDescriptiveFramework __RPC_FAR *pDescriptiveFramework);
-
-
-void __RPC_STUB IAAFDescriptiveMarker_SetDescriptiveFramework_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFDescriptiveMarker_GetDescriptiveFramework_Proxy( 
-    IAAFDescriptiveMarker __RPC_FAR * This,
-    /* [retval][out] */ IAAFDescriptiveFramework __RPC_FAR *__RPC_FAR *ppDescriptiveFramework);
-
-
-void __RPC_STUB IAAFDescriptiveMarker_GetDescriptiveFramework_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAAFDescriptiveMarker_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFCDCIDescriptor2_INTERFACE_DEFINED__
@@ -41721,7 +42047,7 @@ EXTERN_C const IID IID_IAAFSourceReference2;
             /* [in] */ aafUInt32 __RPC_FAR *pChannelIDs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetChannelIDsSize( 
-            /* [out] */ aafUInt32 __RPC_FAR *numberElements) = 0;
+            /* [out] */ aafUInt32 __RPC_FAR *pSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMonoSourceSlotIDs( 
             /* [in] */ aafUInt32 numberElements,
@@ -41732,7 +42058,7 @@ EXTERN_C const IID IID_IAAFSourceReference2;
             /* [in] */ aafUInt32 __RPC_FAR *pMonoSourceSlotIDs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMonoSourceSlotIDsSize( 
-            /* [out] */ aafUInt32 __RPC_FAR *numberElements) = 0;
+            /* [out] */ aafUInt32 __RPC_FAR *pSize) = 0;
         
     };
     
@@ -41781,7 +42107,7 @@ EXTERN_C const IID IID_IAAFSourceReference2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetChannelIDsSize )( 
             IAAFSourceReference2 __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *numberElements);
+            /* [out] */ aafUInt32 __RPC_FAR *pSize);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMonoSourceSlotIDs )( 
             IAAFSourceReference2 __RPC_FAR * This,
@@ -41795,7 +42121,7 @@ EXTERN_C const IID IID_IAAFSourceReference2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMonoSourceSlotIDsSize )( 
             IAAFSourceReference2 __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *numberElements);
+            /* [out] */ aafUInt32 __RPC_FAR *pSize);
         
         END_INTERFACE
     } IAAFSourceReference2Vtbl;
@@ -41838,8 +42164,8 @@ EXTERN_C const IID IID_IAAFSourceReference2;
 #define IAAFSourceReference2_GetChannelIDs(This,numberElements,pChannelIDs)	\
     (This)->lpVtbl -> GetChannelIDs(This,numberElements,pChannelIDs)
 
-#define IAAFSourceReference2_GetChannelIDsSize(This,numberElements)	\
-    (This)->lpVtbl -> GetChannelIDsSize(This,numberElements)
+#define IAAFSourceReference2_GetChannelIDsSize(This,pSize)	\
+    (This)->lpVtbl -> GetChannelIDsSize(This,pSize)
 
 #define IAAFSourceReference2_SetMonoSourceSlotIDs(This,numberElements,pMonoSourceSlotIDs)	\
     (This)->lpVtbl -> SetMonoSourceSlotIDs(This,numberElements,pMonoSourceSlotIDs)
@@ -41847,8 +42173,8 @@ EXTERN_C const IID IID_IAAFSourceReference2;
 #define IAAFSourceReference2_GetMonoSourceSlotIDs(This,numberElements,pMonoSourceSlotIDs)	\
     (This)->lpVtbl -> GetMonoSourceSlotIDs(This,numberElements,pMonoSourceSlotIDs)
 
-#define IAAFSourceReference2_GetMonoSourceSlotIDsSize(This,numberElements)	\
-    (This)->lpVtbl -> GetMonoSourceSlotIDsSize(This,numberElements)
+#define IAAFSourceReference2_GetMonoSourceSlotIDsSize(This,pSize)	\
+    (This)->lpVtbl -> GetMonoSourceSlotIDsSize(This,pSize)
 
 #endif /* COBJMACROS */
 
@@ -41933,7 +42259,7 @@ void __RPC_STUB IAAFSourceReference2_GetChannelIDs_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAFSourceReference2_GetChannelIDsSize_Proxy( 
     IAAFSourceReference2 __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *numberElements);
+    /* [out] */ aafUInt32 __RPC_FAR *pSize);
 
 
 void __RPC_STUB IAAFSourceReference2_GetChannelIDsSize_Stub(
@@ -41971,7 +42297,7 @@ void __RPC_STUB IAAFSourceReference2_GetMonoSourceSlotIDs_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAFSourceReference2_GetMonoSourceSlotIDsSize_Proxy( 
     IAAFSourceReference2 __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *numberElements);
+    /* [out] */ aafUInt32 __RPC_FAR *pSize);
 
 
 void __RPC_STUB IAAFSourceReference2_GetMonoSourceSlotIDsSize_Stub(
@@ -42438,24 +42764,24 @@ void __RPC_STUB IAAFTypeDefVariableArrayEx_InsertElement_Stub(
 #endif 	/* __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0227 */
+/* interface __MIDL_itf_AAF_0229 */
 /* [local] */ 
 
-  //***********************************************************
-  // Functions used to dynamically load and unload the AAF dll
-  // without statically linking to the dll's export library.
-  // To use these functions link to the stub library aaf.lib
-  // (or aafd.lib for the debugging version). 
-  // If the client is statically linking to the AAF dll's export
-  // library then the following functions will always succeed:
-  //***********************************************************
+  ///***********************************************************
+  /// Functions used to dynamically load and unload the AAF dll
+  /// without statically linking to the dll's export library.
+  /// To use these functions link to the stub library aaf.lib
+  /// (or aafd.lib for the debugging version). 
+  /// If the client is statically linking to the AAF dll's export
+  /// library then the following functions will always succeed:
+  ///***********************************************************
 STDAPI AAFLoad (const char *  dllname);
 
 STDAPI AAFUnload ();
 
-  //***********************************************************
-  // Factory functions for AAF files:.
-  //***********************************************************
+  ///***********************************************************
+  /// Factory functions for AAF files:.
+  ///***********************************************************
 STDAPI AAFFileOpenExistingRead (
           aafCharacter_constptr  pFileName,
           aafUInt32  modeFlags,
@@ -42533,8 +42859,8 @@ STDAPI AAFGetLibraryPathName (
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0227_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0227_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0229_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0229_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
