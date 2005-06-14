@@ -1,9 +1,6 @@
-#ifndef __KLVDataDefinition_h__
-#define __KLVDataDefinition_h__
-
+#ifndef __headerGenTypes_h__
+#define __headerGenTypes_h__
 //=---------------------------------------------------------------------=
-//
-// This file was GENERATED for the AAF SDK
 //
 // $Id$ $Name$
 //
@@ -22,19 +19,43 @@
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
-// Licensor of the AAF Association is Metaglue Corporation.
+// Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
 //
 //=---------------------------------------------------------------------=
 
+// Author : Tim Bingham (Tim_Bingham@avid.com) - after an initial
+// implementation by Bob Tillman.
 
-#include "AAFTypes.h"
+#include "AAFPlatform.h" // For integral types
 
-// AAF well-known KLVDataDefinition instances
-//
+// Local type definitions so that we don't depend on AAFTypes.h which
+// might not exist yet, in fact, we might be generating it.
 
-// AAF KLVDataDefinition legacy aliases
-//
+struct uid {
+  aafUInt32 Data1;
+  aafUInt16 Data2;
+  aafUInt16 Data3;
+  aafUInt8  Data4[8];
+};
 
+struct label {
+  aafUInt8 octet0;
+  aafUInt8 octet1;
+  aafUInt8 octet2;
+  aafUInt8 octet3;
+  aafUInt8 octet4;
+  aafUInt8 octet5;
+  aafUInt8 octet6;
+  aafUInt8 octet7;
+  aafUInt8 octet8;
+  aafUInt8 octet9;
+  aafUInt8 octet10;
+  aafUInt8 octet11;
+  aafUInt8 octet12;
+  aafUInt8 octet13;
+  aafUInt8 octet14;
+  aafUInt8 octet15;
+};
 
-#endif // ! __KLVDataDefinition_h__
+#endif // ! __headerGenTypes_h__

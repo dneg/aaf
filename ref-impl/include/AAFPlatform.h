@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -181,6 +181,16 @@
 #define COMPILER_MWERKS
 #define PLATFORM_MWERKS_POWERPC_DARWIN
 
+/*
+ *  Compiler:   GNU C++
+ *  Processor:  Intel x86
+ *  OS:         Windows/Cygwin
+ */
+#elif defined(__GNUC__) && defined(__i386__) && defined(__CYGWIN__)
+#define CPU_INTEL
+#define OS_WINDOWS
+#define COMPILER_GCC
+#define PLATFORM_GCC_INTEL_WINDOWS
 
 #else
 #error Unknown platform
@@ -250,14 +260,19 @@ typedef wchar_t			aafCharacter;
 
 
 /*
- *  Linux, Irix, Darwin, Solaris, FreeBSD
+ *  Linux, Irix, Darwin, Solaris, FreeBSD, CygWin
  */
-#elif defined(PLATFORM_GCC_INTEL_LINUX) || defined(PLATFORM_GCC_X86_64_LINUX) \
+#elif defined(PLATFORM_GCC_INTEL_LINUX) \
+	|| defined(PLATFORM_GCC_X86_64_LINUX) \
 	|| defined(PLATFORM_GCC_POWERPC64_LINUX) \
-	|| defined(PLATFORM_GCC_POWERPC_DARWIN) || defined(PLATFORM_MWERKS_POWERPC_DARWIN) \
-	|| defined(PLATFORM_MIPSPRO_MIPS_IRIX) || defined(PLATFORM_GCC_MIPS_IRIX) \
-	|| defined(PLATFORM_GCC_SPARC_SOLARIS) || defined(PLATFORM_GCC_INTEL_FREEBSD) \
-	|| defined(PLATFORM_GCC_INTEL_OPENBSD)
+	|| defined(PLATFORM_GCC_POWERPC_DARWIN) \
+	|| defined(PLATFORM_MWERKS_POWERPC_DARWIN) \
+	|| defined(PLATFORM_MIPSPRO_MIPS_IRIX) \
+	|| defined(PLATFORM_GCC_MIPS_IRIX) \
+	|| defined(PLATFORM_GCC_SPARC_SOLARIS) \
+	|| defined(PLATFORM_GCC_INTEL_FREEBSD) \
+	|| defined(PLATFORM_GCC_INTEL_OPENBSD) \
+	|| defined(PLATFORM_GCC_INTEL_WINDOWS)
 
 // Use ISO C99 (also ANSI and POSIX) fixed size integers
 #include <inttypes.h>

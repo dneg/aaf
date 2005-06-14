@@ -13,7 +13,7 @@
 # the License for the specific language governing rights and limitations
 # under the License.
 #
-# The Original Code of this file is Copyright 1998-2004, Licensor of the
+# The Original Code of this file is Copyright 1998-2005, Licensor of the
 # AAF Association.
 #
 # The Initial Developer of the Original Code of this file and the
@@ -120,7 +120,7 @@ BEGIN {
   printf("// the License for the specific language governing rights and limitations\n");
   printf("// under the License.\n");
   printf("//\n");
-  printf("// The Original Code of this file is Copyright 1998-2004, Licensor of the\n");
+  printf("// The Original Code of this file is Copyright 1998-2005, Licensor of the\n");
   printf("// AAF Association.\n");
   printf("//\n");
   printf("// The Initial Developer of the Original Code of this file and the\n");
@@ -158,7 +158,7 @@ BEGIN {
   printf("\n");
   printf("//\n");
   "date" | getline date
-  "echo $USER$USERNAME" | getline user
+  user = getUser()
   "hostname" | getline computer
   printf("// This file was generated on %s\n", date);
   printf("// by user %s on system %s.\n", user, computer);
@@ -1645,3 +1645,17 @@ function propertyError(property, class, column)
   elementError(column, sprintf("property \"%s\" of class \"%s\"", property, class));
 }
 
+function getUser()
+{
+  result = "unknown"
+  "echo $USER" | getline user
+  if (user != "") {
+    result = user
+  } else {
+    "echo $USERNAME" | getline user 
+    if (user != ""){
+      result = user
+    }
+  }
+  return result
+}

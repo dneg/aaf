@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -116,7 +116,7 @@ const char* prefix = "kAAFTypeID_";
 
 struct {
   char* name;
-  aafUID_t identifier;
+  uid identifier;
 } types [] = {
 #include "AAFMetaDictionary.h"
 };

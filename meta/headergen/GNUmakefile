@@ -13,7 +13,7 @@
 # the License for the specific language governing rights and limitations
 # under the License.
 #
-# The Original Code of this file is Copyright 1998-2004, Licensor of the
+# The Original Code of this file is Copyright 1998-2005, Licensor of the
 # AAF Association.
 #
 # The Initial Developer of the Original Code of this file and the
@@ -29,36 +29,39 @@ OBJ=.o
 COMPILE=c++
 COMPILEFLAGS=-I.. -I../../ref-impl/include/ref-api -I../../ref-impl/include
 LINK=c++
+RM=rm -f
+CP= cp -p
 
 PROGS=classDefUid$(EXE) \
-      extEnumUid$(EXE) \
-      propertyDefUid$(EXE) \
-      propertyId$(EXE) \
-      storedObjectUid$(EXE) \
-      typeDefUid$(EXE) \
-      genDefInstances$(EXE)
+	extEnumUid$(EXE) \
+	propertyDefUid$(EXE) \
+	propertyId$(EXE) \
+	storedObjectUid$(EXE) \
+	typeDefUid$(EXE) \
+	genDefInstances$(EXE)
+
+HEADERS=AAFClassDefUIDs.h \
+	AAFExtEnum.h \
+	AAFPropertyDefs.h \
+	AAFPropertyIDs.h \
+	AAFStoredObjectIDs.h \
+	AAFTypeDefUIDs.h  \
+	AAFOperationDefs.h \
+	AAFParameterDefs.h \
+	AAFDataDefs.h \
+	AAFContainerDefs.h \
+	AAFInterpolatorDefs.h \
+	AAFOPDefs.h \
+	AAFKLVDataDefs.h \
+	AAFTaggedValueDefs.h \
+	AAFPluginDefs.h \
+	AAFCodecDefs.h \
+	AAFCompressionDefs.h
 
 # main build target
 all : $(PROGS) \
-        $(GEN_H_DIR) \
-        $(GEN_H_DIR)/AAFClassDefUIDs.h \
-        $(GEN_H_DIR)/AAFExtEnum.h \
-        $(GEN_H_DIR)/AAFPropertyDefs.h \
-        $(GEN_H_DIR)/AAFPropertyIDs.h \
-        $(GEN_H_DIR)/AAFStoredObjectIDs.h \
-        $(GEN_H_DIR)/AAFTypeDefUIDs.h  \
-        $(GEN_H_DIR)/AAFOperationDefs.h \
-        $(GEN_H_DIR)/AAFParameterDefs.h \
-        $(GEN_H_DIR)/AAFDataDefs.h \
-        $(GEN_H_DIR)/AAFContainerDefs.h \
-        $(GEN_H_DIR)/AAFInterpolatorDefs.h \
-        $(GEN_H_DIR)/AAFOPDefs.h \
-		$(GEN_H_DIR)/AAFKLVDataDefs.h \
-		$(GEN_H_DIR)/AAFTaggedValueDefs.h \
-		$(GEN_H_DIR)/AAFPluginDefs.h \
-		$(GEN_H_DIR)/AAFCodecDefs.h \
-		$(GEN_H_DIR)/AAFCompressionDefs.h
-
+	$(GEN_H_DIR) \
+	$(addprefix $(GEN_H_DIR)/,$(HEADERS))
 
 # utilities
 headerGenUtils$(OBJ) : headerGenUtils.cpp headerGenUtils.h
@@ -68,52 +71,44 @@ headerGenUtils$(OBJ) : headerGenUtils.cpp headerGenUtils.h
 classDefUid$(EXE) : headerGenUtils$(OBJ) classDefUid$(OBJ)
 	$(LINK) $^ -o $@
 
-classDefUid$(OBJ) : classDefUid.cpp headerGenUtils.h \
-        ../AAFMetaDictionary.h 
+classDefUid$(OBJ) : classDefUid.cpp headerGenUtils.h ../AAFMetaDictionary.h 
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
 extEnumUid$(EXE) : headerGenUtils$(OBJ) extEnumUid$(OBJ)
 	$(LINK) $^ -o $@
 
-extEnumUid$(OBJ) : extEnumUid.cpp headerGenUtils.h \
-        ../AAFMetaDictionary.h
+extEnumUid$(OBJ) : extEnumUid.cpp headerGenUtils.h ../AAFMetaDictionary.h
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
 propertyDefUid$(EXE) : headerGenUtils$(OBJ) propertyDefUid$(OBJ)
 	$(LINK) $^ -o $@
 
-propertyDefUid$(OBJ) : propertyDefUid.cpp headerGenUtils.h \
-        ../AAFMetaDictionary.h
+propertyDefUid$(OBJ) : propertyDefUid.cpp headerGenUtils.h ../AAFMetaDictionary.h
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
 propertyId$(EXE) : headerGenUtils$(OBJ) propertyId$(OBJ)
 	$(LINK) $^ -o $@
 
-propertyId$(OBJ) : propertyId.cpp headerGenUtils.h \
-        ../AAFMetaDictionary.h
+propertyId$(OBJ) : propertyId.cpp headerGenUtils.h ../AAFMetaDictionary.h
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
 storedObjectUid$(EXE) : headerGenUtils$(OBJ) storedObjectUid$(OBJ)
 	$(LINK) $^ -o $@
 
-storedObjectUid$(OBJ) : storedObjectUid.cpp headerGenUtils.h \
-        ../AAFMetaDictionary.h
+storedObjectUid$(OBJ) : storedObjectUid.cpp headerGenUtils.h ../AAFMetaDictionary.h
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
 typeDefUid$(EXE) : headerGenUtils$(OBJ) typeDefUid$(OBJ)
 	$(LINK) $^ -o $@
 
-typeDefUid$(OBJ) : typeDefUid.cpp headerGenUtils.h \
-        ../AAFMetaDictionary.h
+typeDefUid$(OBJ) : typeDefUid.cpp headerGenUtils.h ../AAFMetaDictionary.h
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
 genDefInstances$(EXE) : headerGenUtils$(OBJ) genDefInstances$(OBJ)
 	$(LINK) $^ -o $@
 
-genDefInstances$(OBJ) : genDefInstances.cpp headerGenUtils.h \
-        ../AAFMetaDictionary.h
+genDefInstances$(OBJ) : genDefInstances.cpp headerGenUtils.h ../AAFMetaDictionary.h
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
-
 
 
 # targets for generated source files
@@ -137,8 +132,6 @@ $(GEN_H_DIR)/AAFStoredObjectIDs.h : storedObjectUid$(EXE)
 
 $(GEN_H_DIR)/AAFTypeDefUIDs.h : typeDefUid$(EXE)
 	./typeDefUid AAFTypeDefUIDs > $(GEN_H_DIR)/AAFTypeDefUIDs.h
-
-
 
 # targets for generated Definition Object instance header files
 
@@ -177,103 +170,67 @@ $(GEN_H_DIR)/AAFCodecDefs.h : genDefInstances$(EXE)
 $(GEN_H_DIR)/AAFCompressionDefs.h : genDefInstances$(EXE)
 	./genDefInstances CompressionDefinition kAAF > $(GEN_H_DIR)/AAFCompressionDefs.h
 
-
-
 # install targets
 
 $(INSTALL_H_DIR)/AAFClassDefUIDs.h : $(GEN_H_DIR)/AAFClassDefUIDs.h
-	cp $(GEN_H_DIR)/AAFClassDefUIDs.h $(INSTALL_H_DIR)/AAFClassDefUIDs.h
+	$(CP) $(GEN_H_DIR)/AAFClassDefUIDs.h $(INSTALL_H_DIR)/AAFClassDefUIDs.h
 
 $(INSTALL_H_DIR)/AAFExtEnum.h : $(GEN_H_DIR)/AAFExtEnum.h
-	cp $(GEN_H_DIR)/AAFExtEnum.h $(INSTALL_H_DIR)/AAFExtEnum.h
+	$(CP) $(GEN_H_DIR)/AAFExtEnum.h $(INSTALL_H_DIR)/AAFExtEnum.h
 
 $(INSTALL_H_DIR)/AAFPropertyDefs.h : $(GEN_H_DIR)/AAFPropertyDefs.h
-	cp $(GEN_H_DIR)/AAFPropertyDefs.h $(INSTALL_H_DIR)/AAFPropertyDefs.h
+	$(CP) $(GEN_H_DIR)/AAFPropertyDefs.h $(INSTALL_H_DIR)/AAFPropertyDefs.h
 
 $(INSTALL_H_DIR)/AAFPropertyIDs.h : $(GEN_H_DIR)/AAFPropertyIDs.h
-	cp $(GEN_H_DIR)/AAFPropertyIDs.h $(INSTALL_H_DIR)/AAFPropertyIDs.h
+	$(CP) $(GEN_H_DIR)/AAFPropertyIDs.h $(INSTALL_H_DIR)/AAFPropertyIDs.h
 
 $(INSTALL_H_DIR)/AAFStoredObjectIDs.h : $(GEN_H_DIR)/AAFStoredObjectIDs.h
-	cp $(GEN_H_DIR)/AAFStoredObjectIDs.h $(INSTALL_H_DIR)/AAFStoredObjectIDs.h
+	$(CP) $(GEN_H_DIR)/AAFStoredObjectIDs.h $(INSTALL_H_DIR)/AAFStoredObjectIDs.h
 
 $(INSTALL_H_DIR)/AAFTypeDefUIDs.h : $(GEN_H_DIR)/AAFTypeDefUIDs.h
-	cp $(GEN_H_DIR)/AAFTypeDefUIDs.h $(INSTALL_H_DIR)/AAFTypeDefUIDs.h
-
-
+	$(CP) $(GEN_H_DIR)/AAFTypeDefUIDs.h $(INSTALL_H_DIR)/AAFTypeDefUIDs.h
 
 # install targets for generated Definition Object instance header files
 
 $(INSTALL_H_DIR)/AAFOperationDefs.h : $(GEN_H_DIR)/AAFOperationDefs.h
-	cp $(GEN_H_DIR)/AAFOperationDefs.h kAAF_ $(INSTALL_H_DIR)/AAFOperationDefs.h
+	$(CP) $(GEN_H_DIR)/AAFOperationDefs.h $(INSTALL_H_DIR)/AAFOperationDefs.h
 
 $(INSTALL_H_DIR)/AAFParameterDefs.h : $(GEN_H_DIR)/AAFParameterDefs.h
-	cp $(GEN_H_DIR)/AAFParameterDefs.h $(INSTALL_H_DIR)/AAFParameterDefs.h
+	$(CP) $(GEN_H_DIR)/AAFParameterDefs.h $(INSTALL_H_DIR)/AAFParameterDefs.h
 
 $(INSTALL_H_DIR)/AAFDataDefs.h : $(GEN_H_DIR)/AAFDataDefs.h
-	cp $(GEN_H_DIR)/AAFDataDefs.h $(INSTALL_H_DIR)/AAFDataDefs.h
+	$(CP) $(GEN_H_DIR)/AAFDataDefs.h $(INSTALL_H_DIR)/AAFDataDefs.h
 
 $(INSTALL_H_DIR)/AAFContainerDefs.h : $(GEN_H_DIR)/AAFContainerDefs.h
-	cp $(GEN_H_DIR)/AAFContainerDefs.h $(INSTALL_H_DIR)/AAFContainerDefs.h
+	$(CP) $(GEN_H_DIR)/AAFContainerDefs.h $(INSTALL_H_DIR)/AAFContainerDefs.h
 
 $(INSTALL_H_DIR)/AAFInterpolatorDefs.h : $(GEN_H_DIR)/AAFInterpolatorDefs.h
-	cp $(GEN_H_DIR)/AAFInterpolatorDefs.h $(INSTALL_H_DIR)/AAFInterpolatorDefs.h
+	$(CP) $(GEN_H_DIR)/AAFInterpolatorDefs.h $(INSTALL_H_DIR)/AAFInterpolatorDefs.h
 
 $(INSTALL_H_DIR)/AAFOPDefs.h : $(GEN_H_DIR)/AAFOPDefs.h
-	cp $(GEN_H_DIR)/AAFOPDefs.h $(INSTALL_H_DIR)/AAFOPDefs.h
+	$(CP) $(GEN_H_DIR)/AAFOPDefs.h $(INSTALL_H_DIR)/AAFOPDefs.h
 
 $(INSTALL_H_DIR)/AAFKLVDataDefs.h : $(GEN_H_DIR)/AAFKLVDataDefs.h
-	cp $(GEN_H_DIR)/AAFKLVDataDefs.h $(INSTALL_H_DIR)/AAFKLVDataDefs.h
+	$(CP) $(GEN_H_DIR)/AAFKLVDataDefs.h $(INSTALL_H_DIR)/AAFKLVDataDefs.h
 
 $(INSTALL_H_DIR)/AAFTaggedValueDefs.h : $(GEN_H_DIR)/AAFTaggedValueDefs.h
-	cp $(GEN_H_DIR)/AAFTaggedValueDefs.h $(INSTALL_H_DIR)/AAFTaggedValueDefs.h
+	$(CP) $(GEN_H_DIR)/AAFTaggedValueDefs.h $(INSTALL_H_DIR)/AAFTaggedValueDefs.h
 
 $(INSTALL_H_DIR)/AAFPluginDefs.h : $(GEN_H_DIR)/AAFPluginDefs.h
-	cp $(GEN_H_DIR)/AAFPluginDefs.h $(INSTALL_H_DIR)/AAFPluginDefs.h
+	$(CP) $(GEN_H_DIR)/AAFPluginDefs.h $(INSTALL_H_DIR)/AAFPluginDefs.h
 
 $(INSTALL_H_DIR)/AAFCodecDefs.h : $(GEN_H_DIR)/AAFCodecDefs.h
-	cp $(GEN_H_DIR)/AAFCodecDefs.h $(INSTALL_H_DIR)/AAFCodecDefs.h
+	$(CP) $(GEN_H_DIR)/AAFCodecDefs.h $(INSTALL_H_DIR)/AAFCodecDefs.h
 
 $(INSTALL_H_DIR)/AAFCompressionDefs.h : $(GEN_H_DIR)/AAFCompressionDefs.h
-	cp $(GEN_H_DIR)/AAFCompressionDefs.h $(INSTALL_H_DIR)/AAFCompressionDefs.h
-
-
+	$(CP) $(GEN_H_DIR)/AAFCompressionDefs.h $(INSTALL_H_DIR)/AAFCompressionDefs.h
 
 # other targets
-clean:
-	rm -f $(PROGS)
-	rm -rf *$(OBJ) *~
-	rm -rf $(GEN_H_DIR)/AAFClassDefUIDs.h
-	rm -rf $(GEN_H_DIR)/AAFExtEnum.h
-	rm -rf $(GEN_H_DIR)/AAFPropertyDefs.h
-	rm -rf $(GEN_H_DIR)/AAFPropertyIDs.h
-	rm -rf $(GEN_H_DIR)/AAFStoredObjectIDs.h
-	rm -rf $(GEN_H_DIR)/AAFTypeDefUIDs.h
-	rm -rf $(GEN_H_DIR)/AAFOperationDefs.h
-	rm -rf $(GEN_H_DIR)/AAFParameterDefs.h
-	rm -rf $(GEN_H_DIR)/AAFDataDefs.h
-	rm -rf $(GEN_H_DIR)/AAFContainerDefs.h
-	rm -rf $(GEN_H_DIR)/AAFInterpolatorDefs.h
-	rm -rf $(GEN_H_DIR)/AAFOPDefs.h
-	rm -rf $(GEN_H_DIR)/AAFKLVDataDefs.h
-	rm -rf $(GEN_H_DIR)/AAFTaggedValueDefs.h
-	rm -rf $(GEN_H_DIR)/AAFPluginDefs.h
-	rm -rf $(GEN_H_DIR)/AAFCodecDefs.h
-	rm -rf $(GEN_H_DIR)/AAFCompressionDefs.h
 
-install: $(INSTALL_H_DIR)/AAFClassDefUIDs.h \
-        $(INSTALL_H_DIR)/AAFExtEnum.h \
-        $(INSTALL_H_DIR)/AAFPropertyDefs.h \
-        $(INSTALL_H_DIR)/AAFPropertyIDs.h \
-        $(INSTALL_H_DIR)/AAFStoredObjectIDs.h \
-        $(INSTALL_H_DIR)/AAFTypeDefUIDs.h \
-		$(INSTALL_H_DIR)/AAFOperationDefs.h \
-		$(INSTALL_H_DIR)/AAFParameterDefs.h \
-		$(INSTALL_H_DIR)/AAFDataDefs.h \
-		$(INSTALL_H_DIR)/AAFContainerDefs.h \
-		$(INSTALL_H_DIR)/AAFInterpolatorDefs.h \
-		$(INSTALL_H_DIR)/AAFOPDefs.h \
-		$(INSTALL_H_DIR)/AAFKLVDataDefs.h \
-		$(INSTALL_H_DIR)/AAFTaggedValueDefs.h \
-		$(INSTALL_H_DIR)/AAFPluginDefs.h \
-		$(INSTALL_H_DIR)/AAFCodecDefs.h \
-		$(INSTALL_H_DIR)/AAFCompressionDefs.h
+clean:
+	$(RM) $(PROGS)
+	$(RM) *$(OBJ) *~
+	$(RM) $(addprefix $(GEN_H_DIR)/,$(HEADERS))
+
+install: $(addprefix $(INSTALL_H_DIR)/,$(HEADERS))
+

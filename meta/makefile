@@ -13,7 +13,7 @@
 # the License for the specific language governing rights and limitations
 # under the License.
 #
-# The Original Code of this file is Copyright 1998-2004, Licensor of the
+# The Original Code of this file is Copyright 1998-2005, Licensor of the
 # AAF Association.
 #
 # The Initial Developer of the Original Code of this file and the
@@ -22,24 +22,39 @@
 #
 ###############################################################################
 
+AWK=awk
+CP=cp -p
+ECHO=echo
+RM=rm -f
+
+AWKFILE=mkdict.awk
 EXCEL="c:/program files/Microsoft Office/Office/EXCEL.EXE"
+INSTALL_DIR=../ref-impl/include
 
 all : AAFMetaDictionary.h
 
-AAFMetaDict.csv : AAFMetaDict.xls
-	@ echo "1) Save the new .xls file as a .csv file"
-	@ echo "   Choose File/Save As ..."
-	@ echo "   File name: AAFMetaDict.csv"
-	@ echo "   Save as type: CSV(OS/2 or MSDOS)"
-	@ echo "   Choose Yes in the annoying dialog"
-	@ echo "2) get out of Excel"
-	@ echo "   Choose File/Exit"
-	@ echo "   Choose No in the annoying dialog"
+AAFMetaDict.csv : AAFMetaDict.xls 
+	@$(ECHO) "1) Save the new .xls file as a .csv file"
+	@$(ECHO) "   Choose File/Save As ..."
+	@$(ECHO) "   File name: AAFMetaDict.csv"
+	@$(ECHO) "   Save as type: CSV(OS/2 or MSDOS)"
+	@$(ECHO) "   Choose Yes in the annoying dialog"
+	@$(ECHO) "2) Get out of Excel"
+	@$(ECHO) "   Choose File/Exit"
+	@$(ECHO) "   Choose No in the annoying dialog"
 	$(EXCEL) /e /r AAFMetaDict.xls /p .
 
-AAFMetaDictionary.h : AAFMetaDict.csv
-	awk -f mkdict.awk AAFMetaDict.csv > AAFMetaDictionary.h
+AAFMetaDictionary.h : AAFMetaDict.csv $(AWKFILE)
+	$(AWK) -f $(AWKFILE) AAFMetaDict.csv > AAFMetaDictionary.h
+
+$(INSTALL_DIR)/AAFMetaDictionary.h: AAFMetaDictionary.h
+	@$(ECHO) "Installing new Meta Dictionary"
+	$(RM) $(INSTALL_DIR)/AAFMetaDictionary.h
+	$(CP) AAFMetaDictionary.h $(INSTALL_DIR)/AAFMetaDictionary.h 
+
+install: $(INSTALL_DIR)/AAFMetaDictionary.h
 
 clean:
-	rm -f AAFMetaDict.csv
-	rm -f AAFMetaDictionary.h
+	$(RM) AAFMetaDict.csv
+	$(RM) AAFMetaDictionary.h
+
