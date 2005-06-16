@@ -145,7 +145,7 @@ static HRESULT OpenAAFFile(aafWChar * pFileName)
 	check(pHeader->GetDictionary(&pDictionary));
 
 	/* Lookup any necessary data definitions. */
-	check(pDictionary->LookupDataDef(DDEF_Sound, &pSoundDef));
+	check(pDictionary->LookupDataDef(kAAFDataDef_Sound, &pSoundDef));
 
 	/* Check number of Mobs in file */
 	check(pHeader->CountMobs(kAAFMasterMob, &numMobs));

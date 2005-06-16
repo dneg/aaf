@@ -162,7 +162,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, aafUID_t container)
 	check(pDictionary->LookupClassDef(AUID_AAFMasterMob, &pCDMasterMob));
 
 	/* Lookup any necessary data definitions. */
-	check(pDictionary->LookupDataDef(DDEF_Sound, &pSoundDef));
+	check(pDictionary->LookupDataDef(kAAFDataDef_Sound, &pSoundDef));
 
 	/* Create a Mastermob */
 
