@@ -571,7 +571,7 @@ HRESULT STDMETHODCALLTYPE
 {
 	plugin_trace("CAAFPCMCodec::CountChannels()\n");
 
-	if(EqualAUID(&essenceKind, &DDEF_Sound)
+	if(EqualAUID(&essenceKind, &kAAFDataDef_Sound)
 		|| EqualAUID(&essenceKind, &kAAFDataDef_LegacySound))
 	{
 		if(_stream == NULL)
