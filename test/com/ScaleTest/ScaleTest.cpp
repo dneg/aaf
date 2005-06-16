@@ -375,24 +375,20 @@ static HRESULT CreateAAFFileEssenceData(aafWChar *pFileName, bool useRawStorage,
 static HRESULT ReadAAFFileEssenceData(aafWChar *pFileName, aafLength_t frame_limit, aafLength_t bytes)
 {
 	HRESULT			hr = S_OK;
-	char cFileName[FILENAME_MAX];
 
 	try
 	{
-		// Delete any previous test file before continuing...
-		convert(cFileName, sizeof(cFileName), pFileName);
-
 		// Open new file
 		IAAFFile		*pFile = NULL;
 
 		hr = AAFFileOpenExistingRead(pFileName, 0, &pFile);
 		if (hr == S_OK)
 		{
-			printf("  FileOpenExistingRead for %s succeeded\n", cFileName);
+			printf("  FileOpenExistingRead for %ls succeeded, reading using EssenceData\n", pFileName);
 		}
 		else
 		{
-			printf("  FileOpenExistingRead for %s failed hr=0x%08x\n", cFileName, hr);
+			printf("  FileOpenExistingRead for %ls failed hr=0x%08x\n", pFileName, hr);
 		}
 
 		// Check that size of essence data stream is what we expect
@@ -449,8 +445,171 @@ static HRESULT ReadAAFFileEssenceData(aafWChar *pFileName, aafLength_t frame_lim
 		cout << "*** ReadAAFFileEssenceData: caught error hr=0x" << hex << hr << dec << endl;
 	}
 
-	if (deleteFiles)
-		remove(cFileName);
+	return hr;
+}
+
+static void deleteTestFile(const aafWChar *pFileName)
+{
+	if (! deleteFiles)
+		return;
+
+	char cFileName[FILENAME_MAX];
+	convert(cFileName, sizeof(cFileName), pFileName);
+	remove(cFileName);
+}
+
+static HRESULT ReadAAFFileCodec(aafWChar *pFileName, aafLength_t frame_limit, aafLength_t bytes)
+{
+	HRESULT			hr = S_OK;
+
+	try
+	{
+		// Open new file
+		IAAFFile		*pFile = NULL;
+
+		hr = AAFFileOpenExistingRead(pFileName, 0, &pFile);
+		if (hr == S_OK)
+		{
+			printf("  FileOpenExistingRead for %ls succeeded, reading using EssenceAccess\n", pFileName);
+		}
+		else
+		{
+			printf("  FileOpenExistingRead for %ls failed hr=0x%08x\n", pFileName, hr);
+		}
+
+		// Read the samples using the EssenceAccess Codec API
+		IAAFHeader				*pHeader = NULL;
+		IAAFDataDef				*pPictureDef = NULL, *pSoundDef = NULL;
+		IAAFDictionary*			pDictionary = NULL;
+		IAAFMob*				pMob = NULL;
+		IAAFMobSlot*			pMobSlot = NULL;
+		aafSearchCrit_t			criteria;
+		IEnumAAFMobs*			pMobIter = NULL;
+
+		aaf_simple_assert(pFile);
+		check(pFile->GetHeader(&pHeader));
+		aaf_simple_assert(pHeader);
+		check(pHeader->GetDictionary(&pDictionary));
+		check(pDictionary->LookupDataDef(kAAFDataDef_Picture, &pPictureDef));
+		check(pDictionary->LookupDataDef(kAAFDataDef_Sound, &pSoundDef));
+
+		criteria.searchTag = kAAFByMobKind;
+		criteria.tags.mobKind = kAAFMasterMob;
+		check(pHeader->GetMobs(&criteria, &pMobIter));
+
+		while (AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
+		{
+			IEnumAAFMobSlots* pMobSlotIter = NULL;
+			check(pMob->GetSlots(&pMobSlotIter));
+			while(AAFRESULT_SUCCESS == pMobSlotIter->NextOne(&pMobSlot))
+			{
+				IAAFEssenceAccess*			pEssenceAccess = NULL;
+				IAAFMasterMob*			pMasterMob = NULL;
+				aafUInt32 MobSlotID;
+				IAAFDataDef *pDataDef = NULL;
+				IAAFTimelineMobSlot* pTimelineMobSlot = NULL;
+				HRESULT hr;
+
+				// Confirm this Mob has a timeline mob slot
+				hr = pMobSlot->QueryInterface(IID_IAAFTimelineMobSlot,(void **) &pTimelineMobSlot);
+
+				if (FAILED(hr))
+					continue;
+
+				check(pMobSlot->GetDataDef(&pDataDef));
+				aafBool bIsPictureKind = kAAFFalse;
+				aafBool bIsSoundKind = kAAFFalse;
+				check(pDataDef->IsPictureKind(&bIsPictureKind));
+				check(pDataDef->IsSoundKind(&bIsSoundKind));
+
+				check(pMobSlot->GetSlotID(&MobSlotID));
+				check(pMob->QueryInterface(IID_IAAFMasterMob, (void **)&pMasterMob));
+				check(pMasterMob->OpenEssence(MobSlotID,
+											 	  NULL,	
+												  kAAFMediaOpenReadOnly,
+												  kAAFCompressionDisable, 
+												  &pEssenceAccess));
+
+				IAAFEssenceFormat		*fmtTemplate =  NULL;
+				IAAFEssenceFormat*			pFormat = NULL;
+				check(pEssenceAccess->GetEmptyFileFormat (&fmtTemplate));
+				aafRational_t		sampleRate;
+				aafUInt32			maxSampleSize;
+				aafRect_t			storedRect;
+				aafFrameLayout_t	frameLayout;
+				aafInt32			fmtBytesRead;
+				aafUInt32			samples_to_read = 0;
+
+				if (bIsPictureKind)
+				{
+					check(fmtTemplate->AddFormatSpecifier(kAAFSampleRate, 0, NULL));
+					check(fmtTemplate->AddFormatSpecifier(kAAFMaxSampleBytes, 0, NULL));
+					check(fmtTemplate->AddFormatSpecifier(kAAFStoredRect, 0, NULL));
+					check(fmtTemplate->AddFormatSpecifier(kAAFFrameLayout, 0, NULL));
+					check(pEssenceAccess->GetFileFormat (fmtTemplate, &pFormat));
+					check(pFormat->GetFormatSpecifier(kAAFSampleRate, sizeof(sampleRate), (aafDataBuffer_t)&sampleRate, &fmtBytesRead));
+					check(pFormat->GetFormatSpecifier(kAAFMaxSampleBytes, sizeof(maxSampleSize), (aafDataBuffer_t)&maxSampleSize, &fmtBytesRead));
+					check(pFormat->GetFormatSpecifier(kAAFStoredRect, sizeof(storedRect), (aafDataBuffer_t)&storedRect, &fmtBytesRead));
+					check(pFormat->GetFormatSpecifier(kAAFFrameLayout, sizeof(frameLayout), (aafDataBuffer_t)&frameLayout, &fmtBytesRead));
+					samples_to_read = 1;
+				}
+				else if (bIsSoundKind)
+				{
+					check(fmtTemplate->AddFormatSpecifier(kAAFSampleRate, 0, NULL));
+					check(fmtTemplate->AddFormatSpecifier(kAAFMaxSampleBytes, 0, NULL));
+					check(pEssenceAccess->GetFileFormat (fmtTemplate, &pFormat));
+					check(pFormat->GetFormatSpecifier(kAAFSampleRate, sizeof(sampleRate), (aafDataBuffer_t)&sampleRate, &fmtBytesRead));
+					check(pFormat->GetFormatSpecifier(kAAFMaxSampleBytes, sizeof(maxSampleSize), (aafDataBuffer_t)&maxSampleSize, &fmtBytesRead));
+					samples_to_read = 4000;
+				}
+
+				aafUInt8 buf[UNC_PAL_FRAME_SIZE];
+				aafLength_t total_samples = 0, total_bytes = 0;
+				while (true)
+				{
+					aafUInt32	samplesRead, actualBytesRead;
+					HRESULT hr;
+
+					hr = pEssenceAccess->ReadSamples(
+											samples_to_read, 	// number of samples to read
+											sizeof(buf),		// maximum buffer size
+											buf,				// output buffer for audio data
+											&samplesRead,		// number of samples read
+											&actualBytesRead);
+					total_samples += samplesRead;
+					total_bytes += actualBytesRead;
+
+					if (hr == AAFRESULT_EOF)
+						break;
+					else
+						check(hr);
+				}
+				aaf_assert(total_bytes == bytes, "total Read() matches total written bytes");
+
+				printf("  EssenceAccess total Read() correct (%"AAFFMT64"d bytes, %"AAFFMT64"d samples)\n", total_bytes, total_samples);
+
+				check(fmtTemplate->Release());
+				check(pFormat->Release());
+				check(pTimelineMobSlot->Release());
+				check(pMasterMob->Release());
+				check(pEssenceAccess->Release());
+				check(pDataDef->Release());
+				check(pMobSlot->Release());
+			}
+			check(pMob->Release());
+		}
+		check(pMobIter->Release());
+		check(pDictionary->Release());
+		check(pHeader->Release());
+
+		check(pFile->Close());
+		check(pFile->Release());
+	}
+	catch (HRESULT& rResult)
+	{
+		hr = rResult;
+		cout << "*** ReadAAFFileEssenceData: caught error hr=0x" << hex << hr << dec << endl;
+	}
 
 	return hr;
 }
@@ -850,23 +1009,31 @@ extern int main(int argc, char *argv[])
 		checkFatal(CreateAAFFileCodec(CDCIName, false, compressionEnable,
 							kAAFCodecCDCI, ContainerAAF, size_limit, &bytes));
 		checkFatal(ReadAAFFileEssenceData(CDCIName, size_limit, bytes));
+		checkFatal(ReadAAFFileCodec(CDCIName, size_limit, bytes));
+		deleteTestFile(CDCIName);
 
 		if (testRawStorage)
         {
 			checkFatal(CreateAAFFileCodec(CDCIName, true, compressionEnable,
 								kAAFCodecCDCI, ContainerAAF, size_limit, &bytes));
 			checkFatal(ReadAAFFileEssenceData(CDCIName, size_limit, bytes));
+			checkFatal(ReadAAFFileCodec(CDCIName, size_limit, bytes));
+			deleteTestFile(CDCIName);
 		}
 
 		checkFatal(CreateAAFFileCodec(PCMName, false, compressionEnable,
 							kAAFCodecPCM, ContainerAAF, size_limit, &bytes));
 		checkFatal(ReadAAFFileEssenceData(PCMName, size_limit, bytes));
+		checkFatal(ReadAAFFileCodec(PCMName, size_limit, bytes));
+		deleteTestFile(PCMName);
 
 		if (testRawStorage)
         {
 			checkFatal(CreateAAFFileCodec(PCMName, true, compressionEnable,
 								kAAFCodecPCM, ContainerAAF, size_limit, &bytes));
 			checkFatal(ReadAAFFileEssenceData(PCMName, size_limit, bytes));
+			checkFatal(ReadAAFFileCodec(PCMName, size_limit, bytes));
+			deleteTestFile(PCMName);
 		}
 
 		// TODO: write a ReadAAFFileCodec() which uses the codec to read back samples
