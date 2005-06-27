@@ -26,21 +26,35 @@
 #ifndef __OMXMLREADER_H__
 #define __OMXMLREADER_H__
 
-
-#include "XMLReader.h"
 #include "OMRawStorage.h"
 #include "OMWString.h"
 #include "OMList.h"
 #include "OMListIterator.h"
+#include "OMVector.h"
 
 
-class OMXMLIStream;
-class OMXMLAttribute;
-
-class OMXMLReader : public XMLReaderListener
+class OMXMLAttribute
 {
 public:
-    OMXMLReader(OMRawStorage* storage);
+    OMXMLAttribute(const wchar_t* nmspace, const wchar_t* localName, const wchar_t* value);
+    ~OMXMLAttribute();
+
+    const wchar_t* getNamespace() const;
+    const wchar_t* getLocalName() const;
+    const wchar_t* getValue() const;
+
+private:
+    OMWString       _nmspace;
+    OMWString       _localName;
+    OMWString       _value;
+};
+
+
+class OMXMLReader
+{
+public:
+    static OMXMLReader* create(OMRawStorage* xmlStream);
+    
     virtual ~OMXMLReader();
 
     enum EventType
@@ -55,96 +69,144 @@ public:
         CHARACTERS
     };
 
-    bool next();
+    virtual bool next() = 0;
+    
+    virtual EventType getEventType() = 0;
+    virtual void getNotationDecl(const wchar_t*& name, const wchar_t*& publicID, 
+        const wchar_t*& systemID) = 0;
+    virtual void getUnparsedEntityDecl(const wchar_t*& name, const wchar_t*& publicID, 
+        const wchar_t*& systemID, const wchar_t*& notationName) = 0;
+    virtual void getStartPrefixMapping(const wchar_t*& prefix, const wchar_t*& uri) = 0;
+    virtual void getEndPrefixMapping(const wchar_t*& prefix) = 0;
+    virtual void getStartElement(const wchar_t*& uri, const wchar_t*& localName, 
+        const OMList<OMXMLAttribute*>*& attributes) = 0;
+    virtual void getEndElement(const wchar_t*& uri, const wchar_t*& localName) = 0;
+    virtual void getCharacters(const wchar_t*& data, size_t& length) = 0;
+
+    virtual const wchar_t* getPositionString() = 0;
+    
+public:
+    // utility functions
     bool nextElement();
     bool nextEndElement();
     bool moveToEndElement();
     void skipContent();
-    EventType getEventType();
     bool elementEquals(const wchar_t* uri, const wchar_t* localName);
-
-    void getNotationDecl(const wchar_t*& name, const wchar_t*& publicID, const wchar_t*& systemID);
-    void getUnparsedEntityDecl(const wchar_t*& name, const wchar_t*& publicID, 
-        const wchar_t*& systemID, const wchar_t*& notationName);
-    void getStartPrefixMapping(const wchar_t*& prefix, const wchar_t*& uri);
-    void getEndPrefixMapping(const wchar_t*& prefix);
-    void getStartElement(const wchar_t*& uri, const wchar_t*& localName, 
-        const OMList<OMXMLAttribute*>*& attributes);
-    void getEndElement(const wchar_t*& uri, const wchar_t*& localName);
-    void getCharacters(const wchar_t*& data, size_t& length);
-
-    const wchar_t* getPositionString();
-    
     OMXMLAttribute* getAttribute(const OMList<OMXMLAttribute*>* attributes,
         const wchar_t* nmspace, const wchar_t* localName);
+};
+
+
+
+#if defined(HAVE_EXPAT)
+
+#include <expat.h>
+
+
+class OMXMLReaderExpat : public OMXMLReader
+{
+public:
+    OMXMLReaderExpat(OMRawStorage* xmlStream);
+    virtual ~OMXMLReaderExpat();
+
+    virtual bool next();
+    
+    virtual EventType getEventType();
+    virtual void getNotationDecl(const wchar_t*& name, const wchar_t*& publicID, 
+        const wchar_t*& systemID);
+    virtual void getUnparsedEntityDecl(const wchar_t*& name, const wchar_t*& publicID, 
+        const wchar_t*& systemID, const wchar_t*& notationName);
+    virtual void getStartPrefixMapping(const wchar_t*& prefix, const wchar_t*& uri);
+    virtual void getEndPrefixMapping(const wchar_t*& prefix);
+    virtual void getStartElement(const wchar_t*& uri, const wchar_t*& localName, 
+        const OMList<OMXMLAttribute*>*& attributes);
+    virtual void getEndElement(const wchar_t*& uri, const wchar_t*& localName);
+    virtual void getCharacters(const wchar_t*& data, size_t& length);
+
+    virtual const wchar_t* getPositionString();
+
     
 public:
-    virtual void NotationDecl(const char* name, const char* publicID, const char* systemID);
-    virtual void UnparsedEntityDecl(const char* name, const char* publicID, const char* systemID, 
-        const char* notationName);
-    virtual void StartPrefixMapping(const char* prefix, const char* uri);
-    virtual void EndPrefixMapping(const char* prefix);
-    virtual void StartElement(const char* uri, const char* localName, 
-        const XMLAttribute* attributes);
-    virtual void EndElement(const char* uri, const char* localName);
-    virtual void Characters(const char* data, size_t length);
-
-private:
-    void cleanUp();
-
-    XMLReader*  _xmlReader;
+    void notationDeclHandler(const XML_Char* notationName, const XML_Char* base,
+        const XML_Char* systemId, const XML_Char* publicId);
+    void entityDeclHandler(const XML_Char* entityName, 
+        int is_parameter_entity, const XML_Char* value, int value_length, 
+        const XML_Char* base, const XML_Char* systemId, const XML_Char* publicId, 
+        const XML_Char* notationName);
+    void startNamespaceDeclHandler(const XML_Char* prefix, const XML_Char* uri);
+    void endNamespaceDeclHandler(const XML_Char* prefix);
+    void startElementHandler(const XML_Char* name, const XML_Char** atts);
+    void endElementHandler(const XML_Char* name);
+    void characterDataHandler(const XML_Char* s, int len);
     
-    EventType   _eventType;
-    OMWString   _name;
-    OMWString   _publicID;
-    OMWString   _systemID;
-    OMWString   _notationName;
-    OMWString   _prefix;
-    OMWString   _uri;
-    OMWString   _localName;
-    OMWString   _data;
+private:
+    void registerEvent(EventType event);
+    EventType nextEvent(void);
+    void clearEvents(void);
+    void setCharacterData(const wchar_t* data);
+
+    OMUInt32 readNextChunk(void* buffer, OMUInt32 num);
+    OMUInt32 readCharacters(wchar_t* out, const XML_Char* in, wchar_t terminator);
+    OMUInt32 xmlStringLen(const XML_Char* s) const;
+
+    wchar_t* getWorkBuffer(OMUInt32 len);
+    wchar_t* getWorkBuffer(void);
+    OMUInt32 getWorkBufferSize(void);
+
+    const char* getErrorString();
+    
+    OMVector<EventType>  _events;
+    EventType        _event;
+    OMWString        _name;
+    OMWString        _publicID;
+    OMWString        _systemID;
+    OMWString        _notationName;
+    OMWString        _base;
+    OMWString        _uri;
+    OMWString        _localName;
     OMList<OMXMLAttribute*>   _attributes;
+    OMWString        _data;
+    OMWString        _prefix;
+    OMWString        _prefixUri;
+
+    bool             _appendData;
+    
+    struct QName
+    {
+        OMWString uri;
+        OMWString prefix;
+    };
+    OMVector<QName*>    _startNmspaceDecls;
+    OMVector<OMWString> _endNmspaceDecls;
+    
     OMWString   _positionString;
+    char _errorString[512];
+
+    OMRawStorage* _xmlStream;
+    XML_Parser  _parser;
+    bool        _readNextChunk;
+    bool        _status;
+    OMUInt32    _numInBuffer;
+    wchar_t*    _workBuffer;
+    OMUInt32    _workBufferSize;
 };
 
-
-class OMXMLAttribute
-{
-public:
-    friend class OMXMLReader;
-    
-public:
-    ~OMXMLAttribute();
-
-    const wchar_t* getNamespace() const;
-    const wchar_t* getLocalName() const;
-    const wchar_t* getValue() const;
-    
-protected:    
-    OMXMLAttribute(const char* nmspace, const char* localName, const char* value);
-
-private:
-    OMWString       _nmspace;
-    OMWString       _localName;
-    OMWString       _value;
-    
-};
+// expat handlers
+void expat_NotationDeclHandler(void* userData, const XML_Char* notationName,
+    const XML_Char* base, const XML_Char* systemId, const XML_Char* publicId);
+void expat_EntityDeclHandler(void* userData, const XML_Char* entityName, 
+    int is_parameter_entity, const XML_Char* value, int value_length, 
+    const XML_Char* base, const XML_Char* systemId, const XML_Char* publicId, 
+    const XML_Char* notationName);
+void expat_StartNamespaceDeclHandler(void* userData, const XML_Char* prefix,
+    const XML_Char* uri);
+void expat_EndNamespaceDeclHandler(void* userData, const XML_Char *prefix);
+void expat_StartElementHandler(void* userData, const XML_Char* name, const XML_Char** atts);
+void expat_EndElementHandler(void* userData, const XML_Char* name);
+void expat_CharacterDataHandler(void* userData, const XML_Char* s, int len);
 
 
-class OMXMLIStream : public XMLIStream
-{
-public:
-    OMXMLIStream(OMRawStorage* storage);
-    virtual ~OMXMLIStream();
-    
-    virtual OMUInt32 Read(OMByte* data, OMUInt32 count);
-    
-private:
-    OMRawStorage*   _storage;
-    OMUInt64        _position;
-    OMUInt64        _size;
-};
-
+#endif // HAVE_EXPAT
 
 
 #endif
