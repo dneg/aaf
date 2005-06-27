@@ -436,14 +436,6 @@ SOURCE="..\..\..\ref-impl\src\OM\OMXMLWriter.cpp"
 
 SOURCE="..\..\..\ref-impl\src\OM\utf8.cpp"
 # End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\XMLReader.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\XMLWriter.cpp"
-# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -1131,14 +1123,6 @@ SOURCE="..\..\..\ref-impl\src\OM\OMXMLUtilities.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMXMLWriter.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\XMLReader.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\XMLWriter.h"
 # End Source File
 # End Group
 # End Target
