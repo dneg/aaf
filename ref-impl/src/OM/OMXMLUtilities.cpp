@@ -1697,7 +1697,7 @@ isRelativePath(const wchar_t* filepath)
 #ifdef _WIN32
     // check if the path starts with a drive letter, i.e. xxx:
     const wchar_t* pathPtr = filepath;
-    while (*pathPtr != 0 && *pathPtr != L'\\' && *pathPtr != L':')
+    while (*pathPtr != 0 && *pathPtr != L'\\' && *pathPtr != L'/' && *pathPtr != L':')
     {
         pathPtr++;
     }
@@ -1757,7 +1757,7 @@ getBaseFilePath(const wchar_t* filepath)
     while (*ptr != L'\0')
     {
 #ifdef _WIN32
-        if (*ptr == L'\\' || *ptr == L':')
+        if (*ptr == L'/' || *ptr == L'\\' || *ptr == L':')
 #else
         if (*ptr == L'/')
 #endif
@@ -1767,8 +1767,8 @@ getBaseFilePath(const wchar_t* filepath)
         ptr++;
     }
 #ifdef _WIN32
-    ASSERT("Valid end pointer", endPtr == filepath || *(endPtr - 1) == L'\\' 
-        || *(endPtr - 1) == L':');
+    ASSERT("Valid end pointer", endPtr == filepath || *(endPtr - 1) == L'\\' ||
+        *(endPtr - 1) == L'/' || *(endPtr - 1) == L':');
 #else
     ASSERT("Valid end pointer", endPtr == filepath || *(endPtr - 1) == L'/');
 #endif
