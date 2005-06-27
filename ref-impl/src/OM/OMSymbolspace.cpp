@@ -905,7 +905,7 @@ OMSymbolspace::saveMetaDef(OMMetaDefinition* metaDef)
     getWriter()->writeElementEnd();
 
     const wchar_t* description = metaDef->description();
-    if (description != 0)
+    if (description != 0 && wcslen(description) > 0)
     {
         getWriter()->writeElementStart(getBaselineURI(), L"Description");
         getWriter()->writeElementContent(description, wcslen(description));
@@ -1524,19 +1524,31 @@ public:
     MetaDef() 
     {
         id = nullOMUniqueObjectIdentification;
+        descriptionIsNull = true;
     }
     ~MetaDef() 
     {}
+    
     bool isSet()
     {
         return (id != nullOMUniqueObjectIdentification &&
             symbol.length() > 0 && name.length() > 0);
     }
     
+    const wchar_t* getOptionalDescription()
+    {
+        if (descriptionIsNull)
+        {
+            return 0;
+        }
+        return description.c_str();
+    }
+    
     OMUniqueObjectIdentification id;
     OMWString symbol;
     OMWString name;
     OMWString description;
+    bool descriptionIsNull;
 };
 
 bool 
@@ -1591,6 +1603,7 @@ OMSymbolspace::restoreMetaDef(MetaDef* metaDef)
     }
     else if (getReader()->elementEquals(getBaselineURI(), L"Description"))
     {
+        metaDef->descriptionIsNull = false;
         getReader()->next();
         if (getReader()->getEventType() == OMXMLReader::CHARACTERS)
         {
@@ -1673,7 +1686,7 @@ OMSymbolspace::restoreClassDef(OMDictionary* dictionary)
     
     OMStorable* storable = dictionary->create(ClassID_ClassDefinition);
     OMClassDefinition* classDef = dynamic_cast<OMClassDefinition*>(storable);
-    if (!classDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(), 
+    if (!classDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription(), 
         parentClassId, isConcrete, getClassDefsTag(dictionary)))
     {
         throw OMException("Failed to initialise class definition");
@@ -1802,7 +1815,7 @@ OMSymbolspace::restorePropertyDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_PropertyDefinition);
     OMPropertyDefinition* propertyDef = dynamic_cast<OMPropertyDefinition*>(storable);
-    if (!propertyDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(), 
+    if (!propertyDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription(), 
         localId, typeId, isOptional, isUniqueIdentifier))
     {
         throw OMException("Failed to initialise property definition");
@@ -1841,7 +1854,7 @@ OMSymbolspace::restoreCharacterTypeDef(OMDictionary* dictionary)
     
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionCharacter);
     OMCharacterType* typeDef = dynamic_cast<OMCharacterType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str()))
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription()))
     {
         throw OMException("Failed to initialise CharacterTypeDef");
     }
@@ -1963,7 +1976,7 @@ OMSymbolspace::restoreEnumeratedTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionEnumeration);
     OMEnumeratedType* typeDef = dynamic_cast<OMEnumeratedType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription(),
         elementTypeId, getTypeDefsTag(dictionary),
         elementNames, elementValues))
     {
@@ -2077,7 +2090,7 @@ OMSymbolspace::restoreExtEnumeratedTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionExtendibleEnumeration);
     OMExtEnumeratedType* typeDef = dynamic_cast<OMExtEnumeratedType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription(),
         elementNames, elementValues))
     {
         throw OMException("Failed to initialise ExtEnumeratedTypeDef");
@@ -2164,7 +2177,7 @@ OMSymbolspace::restoreFixedArrayTypeDef(OMDictionary* dictionary)
     
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionFixedArray);
     OMFixedArrayType* typeDef = dynamic_cast<OMFixedArrayType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription(),
         elementTypeId, getTypeDefsTag(dictionary), elementCount))
     {
         throw OMException("Failed to initialise FixedArrayTypeDef");
@@ -2211,7 +2224,7 @@ OMSymbolspace::restoreIndirectTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionIndirect);
     OMIndirectType* typeDef = dynamic_cast<OMIndirectType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str()))
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription()))
     {
         throw OMException("Failed to initialise IndirectTypeDef");
     }
@@ -2294,7 +2307,7 @@ OMSymbolspace::restoreIntTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionInteger);
     OMIntType* typeDef = dynamic_cast<OMIntType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription(),
         size, isSigned))
     {
         throw OMException("Failed to initialise IntTypeDef");
@@ -2341,7 +2354,7 @@ OMSymbolspace::restoreOpaqueTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionOpaque);
     OMOpaqueType* typeDef = dynamic_cast<OMOpaqueType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str()))
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription()))
     {
         throw OMException("Failed to initialise OpaqueTypeDef");
     }
@@ -2440,7 +2453,7 @@ OMSymbolspace::restoreRecordTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionRecord);
     OMRecordType* typeDef = dynamic_cast<OMRecordType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription(),
         memberNames, memberTypeIds, getTypeDefsTag(dictionary)))
     {
         throw OMException("Failed to initialise RecordTypeDef");
@@ -2508,7 +2521,7 @@ OMSymbolspace::restoreRenamedTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionRename);
     OMRenamedType* typeDef = dynamic_cast<OMRenamedType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription(),
         renamedTypeId, getTypeDefsTag(dictionary)))
     {
         throw OMException("Failed to initialise RenamedTypeDef");
@@ -2569,7 +2582,7 @@ OMSymbolspace::restoreSetTypeDef(OMDictionary* dictionary)
     }
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionSet);
     OMSetType* typeDef = dynamic_cast<OMSetType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription(),
         elementTypeId, getTypeDefsTag(dictionary)))
     {
         throw OMException("Failed to initialise SetTypeDef");
@@ -2616,7 +2629,7 @@ OMSymbolspace::restoreStreamTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionStream);
     OMStreamType* typeDef = dynamic_cast<OMStreamType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str()))
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription()))
     {
         throw OMException("Failed to initialise StreamTypeDef");
     }
@@ -2677,7 +2690,7 @@ OMSymbolspace::restoreStringTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionString);
     OMStringType* typeDef = dynamic_cast<OMStringType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription(),
         elementTypeId, getTypeDefsTag(dictionary)))
     {
         throw OMException("Failed to initialise StringTypeDef");
@@ -2739,7 +2752,7 @@ OMSymbolspace::restoreStrongObjectReferenceTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionStrongObjectReference);
     OMStrongObjectReferenceType* typeDef = dynamic_cast<OMStrongObjectReferenceType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription(),
         referencedClassId, getClassDefsTag(dictionary)))
     {
         throw OMException("Failed to initialise StrongObjectReferenceTypeDef");
@@ -2801,7 +2814,7 @@ OMSymbolspace::restoreVariableArrayTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionVariableArray);
     OMVariableArrayType* typeDef = dynamic_cast<OMVariableArrayType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription(),
         elementTypeId, getTypeDefsTag(dictionary)))
     {
         throw OMException("Failed to initialise VariableArrayTypeDef");
@@ -2891,7 +2904,7 @@ OMSymbolspace::restoreWeakObjectReferenceTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionWeakObjectReference);
     OMWeakObjectReferenceType* typeDef = dynamic_cast<OMWeakObjectReferenceType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.description.c_str(),
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription(),
         referencedClassId, getClassDefsTag(dictionary),
         targetSet))
     {
