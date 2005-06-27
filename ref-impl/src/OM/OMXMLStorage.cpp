@@ -33,6 +33,7 @@
 #include "OMAssertions.h"
 
 
+
 OMXMLStorage::OMXMLStorage(OMDiskRawStorage* storage, Mode mode)
 : _mode(mode), _storage(storage), _objectSetId(0), _baselineSymbolspace(0), 
     _defaultExtSymbolspace(0), _symbolspacePrefixIndex(0),
@@ -40,15 +41,15 @@ OMXMLStorage::OMXMLStorage(OMDiskRawStorage* storage, Mode mode)
     _dataStreamEntityValueIndex(0)
 {
     TRACE("OMXMLStorage::OMXMLStorage");
-    
+
     if (mode == READ_MODE || mode == EXISTING_MODIFY_MODE)
     {
         _xmlWriter = 0;
-        _xmlReader = new OMXMLReader(storage);
+        _xmlReader = OMXMLReader::create(storage);
     }
     else
     {
-        _xmlWriter = new OMXMLWriter(storage);
+        _xmlWriter = OMXMLWriter::create(storage);
         _xmlReader = 0;
     }
     
@@ -137,7 +138,7 @@ OMXMLStorage::resetForWriting()
         delete _xmlReader;
         _xmlReader = 0;
         
-        _xmlWriter = new OMXMLWriter(_storage);
+        _xmlWriter = OMXMLWriter::create(_storage);
     }
     else
     {
@@ -495,7 +496,7 @@ OMXMLStorage::getDataStreamEntityValue(void* ref)
     {
         // move past path separator
 #ifdef _WIN32
-        if (*ptr == L'\\' || *ptr == L':')
+        if (*ptr == L'\\' || *ptr == L'/' || *ptr == L':')
 #else
         if (*ptr == L'/')
 #endif
@@ -635,17 +636,25 @@ OMXMLStorage::openExistingDataStream(const wchar_t* fileName)
         fullFileName = new wchar_t[wcslen(fileName) + 1];
         wcscpy(fullFileName, fileName);
     }
-        
+    
     OMDiskRawStorage* storage = 0;
     if (fileExists(fullFileName))
     {
-        if (_mode == READ_MODE)
+        try
         {
-            storage = OMCachedDiskRawStorage::openExistingRead(fullFileName);
+            if (_mode == READ_MODE)
+            {
+                storage = OMCachedDiskRawStorage::openExistingRead(fullFileName);
+            }
+            else
+            {
+                storage = OMCachedDiskRawStorage::openExistingModify(fullFileName);
+            }
         }
-        else
+        catch (...)
         {
-            storage = OMCachedDiskRawStorage::openExistingModify(fullFileName);
+            fprintf(stderr, "Failed to open DataStream '%ls'\n", fullFileName);
+            throw;
         }
     }
     delete [] fullFileName;
@@ -672,10 +681,19 @@ OMXMLStorage::openNewDataStream(const wchar_t* fileName)
         fullFileName = new wchar_t[wcslen(fileName) + 1];
         wcscpy(fullFileName, fileName);
     }
-        
+
     wremove(fullFileName);
 
-    OMDiskRawStorage* storage = OMCachedDiskRawStorage::openNewModify(fullFileName);
+    OMDiskRawStorage* storage = 0;
+    try
+    {
+        storage = OMCachedDiskRawStorage::openNewModify(fullFileName);
+    }
+    catch (...)
+    {
+        fprintf(stderr, "Failed to create DataStream '%ls'\n", fullFileName);
+        throw;
+    }
     delete [] fullFileName;
     
     return storage;
@@ -786,6 +804,8 @@ OMXMLStorage::setUniquePrefix(OMSymbolspace* symbolspace)
         delete [] prefix;
     }
 }
+
+
 
 
 
