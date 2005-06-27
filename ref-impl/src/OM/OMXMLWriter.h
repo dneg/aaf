@@ -26,50 +26,151 @@
 #define __OMXMLWRITER_H__
 
 
-#include "XMLWriter.h"
+#include "OMDataTypes.h"
+#include "OMWString.h"
+#include "OMVector.h"
+#include "OMSet.h"
 #include "OMRawStorage.h"
 
 
-class OMXMLOStream : public XMLOStream
-{
-public:
-    OMXMLOStream(OMRawStorage* storage);
-    virtual ~OMXMLOStream();
-    
-    virtual OMUInt32 Write(const OMByte* data, OMUInt32 count);
-    virtual void Synchronize(void);
-    virtual void SetPosition(OMUInt64 position);
-    
-private:
-    OMRawStorage*   _storage;
-};
+#define OMXMLWRITER_DEFAULT_NAMESPACE_PREFIX  0
+#define OMXMLWRITER_PARENT_ELEMENT_NAMESPACE  0
 
 
 class OMXMLWriter
 {
 public:
-    OMXMLWriter(OMRawStorage* storage);
-    ~OMXMLWriter();
-    
-    void writeDocumentStart();
-    void writeDocumentEnd();
-    void writeElementStart(const wchar_t* ns, const wchar_t* localName);
-    void declareNamespace(const wchar_t* ns, const wchar_t* prefix);
-    void writeAttribute(const wchar_t* ns, const wchar_t* localName, const wchar_t* value);
-    void writeAttributeStart(const wchar_t* ns, const wchar_t* localName);
-    void writeAttributeContent(const wchar_t* value);
-    void writeAttributeEnd(void);
-    void writeElementContent(const wchar_t* content, size_t length);
-    void writeElementEnd(void);
-    void writeComment(const wchar_t* comment);
-    void writeProcInstruction(const wchar_t* target, const wchar_t* instruction);
-    void writeText(const wchar_t* text);
-    
-    void synchronize(void);
-    void reset(void);
-    
+    static OMXMLWriter* create(OMRawStorage* xmlStream);
+
+    virtual ~OMXMLWriter(void) {}
+
+    virtual void writeDocumentStart(void) = 0;
+    virtual void writeDocumentEnd(void) = 0;
+    virtual void writeElementStart(const wchar_t* ns, const wchar_t* localName) = 0;
+    virtual void declareNamespace(const wchar_t* ns, const wchar_t* prefix) = 0;
+    virtual void writeAttribute(const wchar_t* ns, const wchar_t* localName, const wchar_t* value) = 0;
+    virtual void writeAttributeStart(const wchar_t* ns, const wchar_t* localName) = 0;
+    virtual void writeAttributeContent(const wchar_t* value) = 0;
+    virtual void writeAttributeEnd(void) = 0;
+    virtual void writeElementContent(const wchar_t* content, size_t length) = 0;
+    virtual void writeElementEnd(void) = 0;
+    virtual void writeComment(const wchar_t* comment) = 0;
+    virtual void writeProcInstruction(const wchar_t* target, const wchar_t* instruction) = 0;
+    virtual void writeText(const wchar_t* text) = 0;
+
+    virtual void synchronize(void) = 0;
+    virtual void reset(void) = 0;
+};
+
+
+
+// simple implementation of the OMXMLWriter interface
+
+// note: character escaping and formating is left up to the application for 
+// writeComment and writeProcInstruction
+
+class OMXMLWriterSimple : public OMXMLWriter
+{
+public:
+    enum XMLUTF16ByteOrder {LE, BE};
+
+    OMXMLWriterSimple(OMRawStorage* xmlStream);
+    OMXMLWriterSimple(OMRawStorage* xmlStream, XMLUTF16ByteOrder byteOrder);
+    virtual ~OMXMLWriterSimple(void);
+
+
+    virtual void writeDocumentStart(void);
+    virtual void writeDocumentEnd(void);
+    virtual void writeElementStart(const wchar_t* ns, const wchar_t* localName);
+    virtual void declareNamespace(const wchar_t* ns, const wchar_t* prefix);
+    virtual void writeAttribute(const wchar_t* ns, const wchar_t* localName, const wchar_t* value);
+    virtual void writeAttributeStart(const wchar_t* ns, const wchar_t* localName);
+    virtual void writeAttributeContent(const wchar_t* value);
+    virtual void writeAttributeEnd(void);
+    virtual void writeElementContent(const wchar_t* content, size_t length);
+    virtual void writeElementEnd(void);
+    virtual void writeComment(const wchar_t* comment);
+    virtual void writeProcInstruction(const wchar_t* target, const wchar_t* instruction);
+    virtual void writeText(const wchar_t* text);
+
+    virtual void synchronize(void);
+    virtual void reset(void);
+
 private:
-    XMLWriter*      _xmlWriter;
+    enum XMLEncoding {UTF8, UTF16};
+    
+    void initialise(OMRawStorage* xmlStream, XMLEncoding encoding, XMLUTF16ByteOrder byteOrder);
+    
+    const wchar_t* getPrefix(const wchar_t* ns);
+    const wchar_t* getNonDefaultNSPrefix(const wchar_t* ns);
+
+    class Element
+    {
+    public:
+        Element(Element* parentElement, const wchar_t* ns, const wchar_t* localName);
+        ~Element(void);
+
+        bool addNamespaceDecl(const wchar_t* ns, const wchar_t* prefix);
+        OMSet<OMWString, OMWString>* getNamespaceDecls(void);
+
+        const wchar_t* getNamespace(void) const;
+        const wchar_t* getLocalName(void) const;
+        const wchar_t* getPrefix(const wchar_t* ns) const;
+        const wchar_t* getNonDefaultNSPrefix(const wchar_t* ns) const;
+        const wchar_t* getPrefix(void) const;
+        const wchar_t* getDefaultNamespace(void) const;
+
+    private:
+        Element*            _parentElement;
+        OMWString           _ns;
+        OMWString           _prefix;
+        OMWString           _localName;
+        OMWString           _defaultNs;
+        OMSet<OMWString, OMWString>   _nspaceDecls;
+    };
+
+    enum WriteType
+    {
+        NONE,
+        START,
+        END,
+        ELEMENT_START,
+        DELAYED_ELEMENT_START,
+        ATTRIBUTE_START,
+        ATTRIBUTE_CONTENT,
+        ATTRIBUTE_END,
+        ELEMENT_CONTENT,
+        ELEMENT_END,
+        COMMENT,
+        PROC_INSTRUCTION
+    };
+
+    WriteType               _prevWriteType;
+    OMVector<Element*>      _elementStack;
+    int                     _level;
+
+
+private:
+    void writeProlog(void);
+    void writeName(const wchar_t* data, size_t length);
+    void writeElementData(const wchar_t* data, size_t length);
+    void writeAttributeData(const wchar_t* data, size_t length);
+    void writeCommentData(const wchar_t* data, size_t length);
+    void writeProcInstrData(const wchar_t* data, size_t length);
+    void writeIndent(int level);
+
+    bool validName(const wchar_t* name);
+    bool validNamespace(const wchar_t* ns);
+    bool validPrefix(const wchar_t* prefix);
+
+    void write(const wchar_t* data, size_t length);
+    void writeRaw(const OMByte* bytes, size_t size);
+
+private:
+    OMRawStorage*       _xmlStream;
+    XMLEncoding         _encoding;
+    XMLUTF16ByteOrder   _byteOrder;
+    bool                _swap;
 };
 
 
