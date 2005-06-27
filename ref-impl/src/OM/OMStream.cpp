@@ -138,7 +138,6 @@ void OMStream::read(OMByte* bytes,
   ASSERT("Successful read", ferror(_file) == 0);
 
   bytesRead = actualByteCount;
-  POSTCONDITION("All bytes read", actualByteCount == byteCount);
 }
 
 void OMStream::write(const OMByte* bytes,
