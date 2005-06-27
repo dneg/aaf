@@ -27,27 +27,24 @@
 
 
 OMWString::OMWString()
-: _ws(0)
 {
     TRACE("OMWString::OMWString");
+    
+    _ws = new wchar_t[1];
+    _ws[0] = L'\0';
 }
 
 
 OMWString::OMWString(const OMWString& ws)
-: _ws(0)
 {
     TRACE("OMWString::OMWString");
 
-    if (ws.length() != 0)
-    {
-        _ws = new wchar_t[ws.length() + 1];
-        wcscpy(_ws, ws.c_str());
-    }
+    _ws = new wchar_t[ws.length() + 1];
+    wcscpy(_ws, ws.c_str());
 }
 
 
 OMWString::OMWString(const wchar_t* ws)
-: _ws(0)
 {
     TRACE("OMWString::OMWString");
 
@@ -56,6 +53,11 @@ OMWString::OMWString(const wchar_t* ws)
         _ws = new wchar_t[wcslen(ws) + 1];
         wcscpy(_ws, ws);
     }
+    else
+    {
+        _ws = new wchar_t[1];
+        _ws[0] = L'\0';
+    }
 }
 
 
@@ -63,17 +65,13 @@ OMWString::~OMWString()
 {
     TRACE("OMWString::~OMWString");
     
-    if (_ws != 0) 
-    {
-        delete [] _ws;
-    }
+    delete [] _ws;
 }
 
 
 int OMWString::compare(const OMWString& rhs) const
 {
     TRACE("OMWString::compare");
-    PRECONDITION("Valid strings", _ws != 0 && rhs.c_str() != 0);
 
     return compare(rhs.c_str());
 }
@@ -82,7 +80,6 @@ int OMWString::compare(const OMWString& rhs) const
 int OMWString::compare(const wchar_t* rhs) const
 {
     TRACE("OMWString::compare");
-    PRECONDITION("Valid strings", _ws != 0 && rhs != 0);
 
     return wcscmp(_ws, rhs);
 }
@@ -92,14 +89,7 @@ size_t OMWString::length() const
 {
     TRACE("OMWString::length");
 
-    if (_ws != 0)
-    {
-        return wcslen(_ws);
-    }
-    else
-    {
-        return 0;
-    }
+    return wcslen(_ws);
 }
 
 
@@ -115,19 +105,16 @@ OMWString& OMWString::operator=(const wchar_t* rhs)
 {
     TRACE("OMWString::operator=");
 
-    if (_ws != 0)
-    {
-        delete [] _ws;
-    }
-    
-    if (rhs != 0) 
+    delete [] _ws;
+    if (rhs != 0)
     {
         _ws = new wchar_t[wcslen(rhs) + 1];
         wcscpy(_ws, rhs);
     }
     else
     {
-        _ws = 0;
+        _ws = new wchar_t[1];
+        _ws[0] = L'\0';
     }
     
     return *this;
@@ -137,7 +124,6 @@ OMWString& OMWString::operator=(const wchar_t* rhs)
 bool OMWString::operator==(const OMWString& rhs) const
 {
     TRACE("OMWString::operator==");
-    PRECONDITION("Valid strings", _ws != 0 && rhs.c_str() != 0);
 
     return operator==(rhs.c_str());
 }
@@ -146,7 +132,11 @@ bool OMWString::operator==(const OMWString& rhs) const
 bool OMWString::operator==(const wchar_t* rhs) const
 {
     TRACE("OMWString::operator==");
-    PRECONDITION("Valid strings", _ws != 0 && rhs != 0);
+
+    if (rhs == 0)
+    {
+        return false;
+    }
 
     return wcscmp(_ws, rhs) == 0;
 }
@@ -155,7 +145,6 @@ bool OMWString::operator==(const wchar_t* rhs) const
 bool OMWString::operator!=(const OMWString& rhs) const
 {
     TRACE("OMWString::operator!=");
-    PRECONDITION("Valid strings", _ws != 0 && rhs.c_str() != 0);
 
     return operator!=(rhs.c_str());
 }
@@ -164,8 +153,12 @@ bool OMWString::operator!=(const OMWString& rhs) const
 bool OMWString::operator!=(const wchar_t* rhs) const
 {
     TRACE("OMWString::operator!=");
-    PRECONDITION("Valid strings", _ws != 0 && rhs != 0);
 
+    if (rhs == 0)
+    {
+        return true;
+    }
+    
     return wcscmp(_ws, rhs) != 0;
 }
 
@@ -173,7 +166,6 @@ bool OMWString::operator!=(const wchar_t* rhs) const
 bool OMWString::operator<(const OMWString& rhs) const
 {
     TRACE("OMWString::operator<");
-    PRECONDITION("Valid strings", _ws != 0 && rhs.c_str() != 0);
 
     return operator<(rhs.c_str());
 }
@@ -182,8 +174,12 @@ bool OMWString::operator<(const OMWString& rhs) const
 bool OMWString::operator<(const wchar_t* rhs) const
 {
     TRACE("OMWString::operator<");
-    PRECONDITION("Valid strings", _ws != 0 && rhs != 0);
 
+    if (rhs == 0)
+    {
+        return false;
+    }
+    
     return wcscmp(_ws, rhs) < 0;
 }
 
