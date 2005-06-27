@@ -2127,19 +2127,19 @@ OMXMLPStoredObject::restoreEnum(OMByteArray& bytes, const OMList<OMXMLAttribute*
     {
         case 1:
             {
-                OMInt8 internalValue = value;
+                OMInt8 internalValue = (OMInt8)value;
                 bytes.append(reinterpret_cast<OMByte*>(&internalValue), sizeof(OMInt8));
             }
             break;
         case 2:
             {
-                OMInt16 internalValue = value;
+                OMInt16 internalValue = (OMInt8)value;
                 bytes.append(reinterpret_cast<OMByte*>(&internalValue), sizeof(OMInt16));    
             }
             break;
         case 4:
             {
-                OMInt32 internalValue = value;
+                OMInt32 internalValue = (OMInt8)value;
                 bytes.append(reinterpret_cast<OMByte*>(&internalValue), sizeof(OMInt32));    
             }
             break;
