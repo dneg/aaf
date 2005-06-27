@@ -210,11 +210,12 @@ OMXMLPStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
   PRECONDITION("Positionable raw storage", rawStorage->isPositionable());
 
   bool isRecog = false;
+  OMXMLReader* reader = 0;
   try
   {
-    OMXMLReader reader(rawStorage);
-    if (reader.nextElement() &&
-          reader.elementEquals(OMSymbolspace::getBaselineURI(), L"AAF"))
+    reader = OMXMLReader::create(rawStorage);
+    if (reader->nextElement() &&
+          reader->elementEquals(OMSymbolspace::getBaselineURI(), L"AAF"))
     {
         isRecog = true;
     }
@@ -222,6 +223,11 @@ OMXMLPStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
   catch (...)
   {}
 
+  if (reader != 0)
+  {
+    delete reader;
+  }
+  
   rawStorage->setPosition(0);
   
   return isRecog;
