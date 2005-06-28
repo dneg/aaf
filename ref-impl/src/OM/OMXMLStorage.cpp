@@ -485,54 +485,48 @@ OMXMLStorage::getDataStreamEntityValue(void* ref)
         return (*ret).c_str();
     }
     
-    const wchar_t* filepath = _storage->fileName();
+    // worst case length is every character escaped (*3) plus "file:///" prefix (+8) + null (+1) 
+    wchar_t* documentUri = new wchar_t[utf8StrLen(_storage->fileName()) * 3 + 9]; 
+    wcsconvertFilepathtoURI(_storage->fileName(), documentUri);
 
-    // add "_streamxxx" suffix to XML document filename minus the path
-    const wchar_t* startPtr = filepath;
-    const wchar_t* endPtr = filepath;
-    const wchar_t* ptr = filepath;
-    bool inSuffix = false;
-    while (*ptr != L'\0')
+    // remove the file suffix and the path
+    wchar_t* startPtr = documentUri + wcslen(documentUri);
+    wchar_t* endPtr = startPtr;
+    while (endPtr != documentUri && 
+        *endPtr != L'.' && *endPtr != '/' && *endPtr != ':')
     {
-        // move past path separator
-#ifdef _WIN32
-        if (*ptr == L'\\' || *ptr == L'/' || *ptr == L':')
-#else
-        if (*ptr == L'/')
-#endif
-        {
-            startPtr = ptr + 1;
-            endPtr = startPtr;
-            inSuffix = false;
-        }
-        // don't include the file suffix
-        else if (*ptr == L'.')
-        {
-            endPtr = ptr;
-            inSuffix = true;
-        }
-        else if (!inSuffix)
-        {
-            endPtr++;
-        }
-        ptr++;
+        endPtr--;
     }
-    ASSERT("Valid end pointer", *endPtr == L'\0' || *endPtr == L'.');
-    size_t len = endPtr - startPtr + 19;
-    wchar_t* streamFilepath = new wchar_t[len + 1];
-    wcsncpy(streamFilepath, startPtr, len);
-    std_swprintf(&(streamFilepath[endPtr - startPtr]), 20, L"_stream%x", _dataStreamEntityValueIndex);
- 
-    // convert filepath to URI
-    // worst case length is every character escaped (*3) plus "file:///" prefix (+8) 
-    wchar_t* value = new wchar_t[utf8StrLen(streamFilepath) * 3 + 9]; 
-    wcsconvertFilepathtoURI(streamFilepath, value);
-    delete [] streamFilepath;
+    if (*endPtr == L'.')
+    {
+        *endPtr = L'\0';
+        startPtr = endPtr;
+    }
+    while (startPtr != documentUri && 
+        *startPtr != '/' && *startPtr != ':')
+    {
+        startPtr--;
+    }
+    if (*startPtr == '/' || *startPtr == ':')
+    {
+        startPtr++;
+    }
+
+    // append "_streams/streamxxxxx"
+    wchar_t* suffix = new wchar_t[6];
+    std_swprintf(suffix, 6, L"%d", _dataStreamEntityValueIndex);
+    _dataStreamEntityValueIndex++;
+    wchar_t* value = new wchar_t[wcslen(startPtr) + wcslen(L"_streams/stream") + wcslen(suffix) + 1];
+    wcscpy(value, startPtr);
+    wcscat(value, L"_streams/stream");
+    wcscat(value, suffix);
+    
+    delete [] suffix;
+    delete [] documentUri; 
     
     // insert URI value
     _dataStreamEntityValues.insert(ref, value);
     delete [] value;
-    _dataStreamEntityValueIndex++;
     
     if (!_dataStreamEntityValues.find(ref, &ret))
     {
@@ -618,23 +612,26 @@ OMXMLStorage::registerDataStreamNotation(const wchar_t* notationName,
 }
 
 OMRawStorage* 
-OMXMLStorage::openExistingDataStream(const wchar_t* fileName)
+OMXMLStorage::openExistingDataStream(const wchar_t* uri)
 {
     TRACE("OMXMLStorage::openExistingDataStream");
 
+    wchar_t* filepath = new wchar_t[wcslen(uri) + 1];
+    wcsconvertURItoFilepath(uri, filepath);
+    
     wchar_t* fullFileName;
-    if (isRelativePath(fileName) && _storage->fileName() != 0)
+    if (isRelativePath(filepath) && _storage->fileName() != 0)
     {
         wchar_t* base = getBaseFilePath(_storage->fileName());
-        fullFileName = new wchar_t[wcslen(base) + wcslen(fileName) + 1];
+        fullFileName = new wchar_t[wcslen(base) + wcslen(filepath) + 1];
         wcscpy(fullFileName, base);
-        wcscat(fullFileName, fileName);
+        wcscat(fullFileName, filepath);
         delete [] base;
     }
     else
     {
-        fullFileName = new wchar_t[wcslen(fileName) + 1];
-        wcscpy(fullFileName, fileName);
+        fullFileName = new wchar_t[wcslen(filepath) + 1];
+        wcscpy(fullFileName, filepath);
     }
     
     OMDiskRawStorage* storage = 0;
@@ -653,48 +650,65 @@ OMXMLStorage::openExistingDataStream(const wchar_t* fileName)
         }
         catch (...)
         {
-            fprintf(stderr, "Failed to open DataStream '%ls'\n", fullFileName);
-            throw;
+            storage = 0;
         }
     }
+
+    delete [] filepath;
     delete [] fullFileName;
     
     return storage;
 }
 
 OMRawStorage* 
-OMXMLStorage::openNewDataStream(const wchar_t* fileName)
+OMXMLStorage::openNewDataStream(const wchar_t* uri)
 {
     TRACE("OMXMLStorage::openNewDataStream");
+    PRECONDITION("XML document raw storage has filename", _storage->fileName() != 0);
 
-    wchar_t* fullFileName;
-    if (isRelativePath(fileName) && _storage->fileName() != 0)
-    {
-        wchar_t* base = getBaseFilePath(_storage->fileName());
-        fullFileName = new wchar_t[wcslen(base) + wcslen(fileName) + 1];
-        wcscpy(fullFileName, base);
-        wcscat(fullFileName, fileName);
-        delete [] base;
-    }
-    else
-    {
-        fullFileName = new wchar_t[wcslen(fileName) + 1];
-        wcscpy(fullFileName, fileName);
-    }
-
-    wremove(fullFileName);
+    // uri is assumed to be 'stream directory' / 'stream file name' as
+    // created in getDataStreamEntityValue()
 
     OMDiskRawStorage* storage = 0;
+
+    wchar_t* base = getBaseFilePath(_storage->fileName());
+
+
+    // start by creating the directory
+    wchar_t* workBuffer = new wchar_t[wcslen(uri) + 1];
+    wcscpy(workBuffer, uri);
+    wchar_t* sep = wmemchr(workBuffer, L'/', wcslen(uri));
+    ASSERT("New DataStream uri starts with a directory", sep != 0);
+    *sep = L'\0';
+    wchar_t* filepath = new wchar_t[wcslen(workBuffer) + 1];
+    wcsconvertURItoFilepath(workBuffer, filepath);
+    wchar_t* fullFilepath = new wchar_t[wcslen(base) + wcslen(filepath) + 1];
+    wcscpy(fullFilepath, base);
+    wcscat(fullFilepath, filepath);
+    wmkdir(fullFilepath);
+    delete [] workBuffer;
+    delete [] filepath;
+    delete [] fullFilepath;
+
+    // remove the file and then open new modify
+    filepath = new wchar_t[wcslen(uri) + 1];
+    wcsconvertURItoFilepath(uri, filepath);
+    fullFilepath = new wchar_t[wcslen(base) + wcslen(filepath) + 1];
+    wcscpy(fullFilepath, base);
+    wcscat(fullFilepath, filepath);
+    wremove(fullFilepath);
     try
     {
-        storage = OMCachedDiskRawStorage::openNewModify(fullFileName);
+        storage = OMCachedDiskRawStorage::openNewModify(fullFilepath);
     }
     catch (...)
     {
-        fprintf(stderr, "Failed to create DataStream '%ls'\n", fullFileName);
-        throw;
+        storage = 0;
     }
-    delete [] fullFileName;
+
+    delete [] filepath;
+    delete [] fullFilepath;
+    delete [] base;
     
     return storage;
 }

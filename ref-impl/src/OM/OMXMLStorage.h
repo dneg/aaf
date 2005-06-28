@@ -86,8 +86,8 @@ public:
     const wchar_t* getDataStreamEntityValue(const wchar_t* name);
     bool registerDataStreamNotation(const wchar_t* notationName, const wchar_t* systemId);
     
-    OMRawStorage* openExistingDataStream(const wchar_t* fileName);
-    OMRawStorage* openNewDataStream(const wchar_t* fileName);
+    OMRawStorage* openExistingDataStream(const wchar_t* uri);
+    OMRawStorage* openNewDataStream(const wchar_t* uri);
     
     void forwardObjectSetId(const wchar_t* id);
     bool haveForwardedObjectSetId();
