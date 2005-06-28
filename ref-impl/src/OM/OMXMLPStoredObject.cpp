@@ -1197,11 +1197,7 @@ OMXMLPStoredObject::openStoredStream(const OMDataStream& property)
         throw OMException("Opening DataStream property without known filename");
     }
     
-    wchar_t* filepath = new wchar_t[wcslen(value) + 1];
-    wcsconvertURItoFilepath(value, filepath);
-    
-    OMRawStorage* storage = _store->openExistingDataStream(filepath);
-    delete [] filepath;
+    OMRawStorage* storage = _store->openExistingDataStream(value);
     if (storage == 0)
     {
         // Print to stderr because these exceptions are not caught in OM layer
@@ -1225,11 +1221,7 @@ OMXMLPStoredObject::createStoredStream(const OMDataStream& property)
         throw OMException("Opening DataStream property without known filename");
     }
 
-    wchar_t* filepath = new wchar_t[wcslen(value) + 1];
-    wcsconvertURItoFilepath(value, filepath);
-    
-    OMRawStorage* storage = _store->openNewDataStream(filepath);
-    delete [] filepath;
+    OMRawStorage* storage = _store->openNewDataStream(value);
     if (storage == 0)
     {
         // Print to stderr because these exceptions are not caught in OM layer
