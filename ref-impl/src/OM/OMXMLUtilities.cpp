@@ -28,6 +28,13 @@
 #include "OMAssertions.h"
 #include "wchar.h"
 
+// includes for function wmkdir()
+#if defined(_MSC_VER)
+#include <direct.h>
+#else
+#include <sys/stat.h>
+#endif
+
 
 
 int 
@@ -1690,12 +1697,25 @@ fileExists(const wchar_t* fileName)
     return true;
 }
 
+int 
+wmkdir(const wchar_t* dirpath)
+{
+    char* u8Dirpath = utf16ToUTF8(dirpath);
+#if defined(_MSC_VER)
+    int status = _mkdir(u8Dirpath);
+#else
+    int status = mkdir(u8Dirpath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+#endif
+    delete [] u8Dirpath;
+    
+    return status;
+}
 
 bool 
 isRelativePath(const wchar_t* filepath)
 {
 #ifdef _WIN32
-    // check if the path starts with a drive letter, i.e. xxx:
+    // check if the path starts with a drive letter, i.e. x:
     const wchar_t* pathPtr = filepath;
     while (*pathPtr != 0 && *pathPtr != L'\\' && *pathPtr != L'/' && *pathPtr != L':')
     {

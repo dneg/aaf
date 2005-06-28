@@ -123,6 +123,7 @@ wchar_t unescapeCharacter(const wchar_t* cstr);
 wchar_t* wideCharacterStringDup(const wchar_t* str);
 
 bool fileExists(const wchar_t* fileName);
+int wmkdir(const wchar_t* dirpath);
 
 bool isRelativePath(const wchar_t* filepath);
 bool isFileURL(const wchar_t* uri);
