@@ -109,5 +109,5 @@ int main (int argc, char ** argv)
   validateArgs(argc, argv, moduleName);
   assert(moduleName);
   doFile(moduleName);
-  return 0;
+  return EXIT_SUCCESS;
 }

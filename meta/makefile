@@ -33,7 +33,7 @@ INSTALL_DIR=../ref-impl/include
 
 all : AAFMetaDictionary.h
 
-AAFMetaDict.csv : AAFMetaDict.xls 
+AAFMetaDict.csv : AAFMetaDict.xls
 	@$(ECHO) "1) Save the new .xls file as a .csv file"
 	@$(ECHO) "   Choose File/Save As ..."
 	@$(ECHO) "   File name: AAFMetaDict.csv"
