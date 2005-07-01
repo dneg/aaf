@@ -35,6 +35,7 @@
 #include "OMXMLStorage.h"
 #include "OMList.h"
 #include "OMByteArray.h"
+#include "OMVector.h"
 
 class OMSimpleProperty;
 class OMDataVector;
@@ -342,7 +343,7 @@ private:
         ANY
     };
     OMUniqueObjectIdentification restoreAUID(const wchar_t* idStr, AUIDTargetType targetType);
-    void saveAUID(OMUniqueObjectIdentification id, wchar_t* idStr, AUIDTargetType targetType);
+    wchar_t* saveAUID(OMUniqueObjectIdentification id, AUIDTargetType targetType);
     
     
     const OMType* baseType(const OMType* type);
@@ -362,7 +363,6 @@ private:
     
     OMXMLStorage*   _store;
     bool            _isRoot;
-  
 };
 
 #endif
