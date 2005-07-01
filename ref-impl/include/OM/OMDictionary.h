@@ -80,8 +80,8 @@ public:
   virtual int registerExtPropertyDef(const OMUniqueObjectIdentification& classId, 
     OMPropertyDefinition* propertyDef) = 0;
   virtual int registerExtTypeDef(OMType* typeDef) = 0;
-  virtual bool registerExtEnumExt(OMUniqueObjectIdentification typeId,
-    OMVector<const wchar_t*>& names, OMVector<OMUniqueObjectIdentification>& values) = 0;
+  virtual bool registerExtEnumElement(OMUniqueObjectIdentification elementOf,
+    const wchar_t* name, OMUniqueObjectIdentification value) = 0;
   
 private:
 

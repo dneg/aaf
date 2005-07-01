@@ -366,12 +366,12 @@ int ImplAAFMetaDictionary::registerExtTypeDef(OMType* typeDef)
     }
 }
 
-bool ImplAAFMetaDictionary::registerExtEnumExt(OMUniqueObjectIdentification typeId,
-    OMVector<const wchar_t*>& names, OMVector<OMUniqueObjectIdentification>& values)
+bool ImplAAFMetaDictionary::registerExtEnumElement(OMUniqueObjectIdentification elementOf,
+    const wchar_t* name, OMUniqueObjectIdentification value)
 {
     ImplAAFTypeDef* pTypeDef;
     HRESULT hresult = dataDictionary()->LookupTypeDef(*(reinterpret_cast<const aafUID_t*>(
-        &typeId)), &pTypeDef);
+        &elementOf)), &pTypeDef);
     if (!AAFRESULT_SUCCEEDED(hresult))
     {
         return false;
@@ -381,7 +381,7 @@ bool ImplAAFMetaDictionary::registerExtEnumExt(OMUniqueObjectIdentification type
     ImplAAFTypeDefExtEnum* pTypeDefExtEnum = dynamic_cast<ImplAAFTypeDefExtEnum*>(pTypeDef);
     if (pTypeDefExtEnum != 0)
     {
-        result = pTypeDefExtEnum->registerExtensions(names, values);
+        result = pTypeDefExtEnum->registerElement(name, value);
     }
     pTypeDef->ReleaseReference();
 
