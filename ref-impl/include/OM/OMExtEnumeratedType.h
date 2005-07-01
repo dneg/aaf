@@ -37,10 +37,8 @@ public:
     virtual wchar_t* elementNameFromValue(OMUniqueObjectIdentification value) const = 0;
     virtual OMUniqueObjectIdentification elementValueFromName(const wchar_t* name) const = 0;
     virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
-        const wchar_t* description, OMVector<wchar_t*>& elementNames, 
-        OMVector<OMUniqueObjectIdentification>& elementValues) = 0;
-    virtual bool registerExtensions(OMVector<const wchar_t*>& names, 
-        OMVector<OMUniqueObjectIdentification>& values) = 0;
+        const wchar_t* description) = 0;
+    virtual bool registerElement(const wchar_t* name, OMUniqueObjectIdentification value) = 0;
     
     // only defined and used because converting from older files does not handle
     // extendible enumerations properly

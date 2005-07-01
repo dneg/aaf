@@ -850,25 +850,11 @@ OMUniqueObjectIdentification ImplAAFTypeDefExtEnum::elementValueFromName(
 }
 
 bool ImplAAFTypeDefExtEnum::initialise(const OMUniqueObjectIdentification& id, 
-    const wchar_t* name, const wchar_t* description, 
-    OMVector<wchar_t*>& elementNames, OMVector<OMUniqueObjectIdentification>& elementValues)
+    const wchar_t* name, const wchar_t* description)
 {
     if (!ImplAAFMetaDefinition::initialise(id, name, description))
     {
         return false;
-    }
-    
-    size_t count = elementValues.count();
-    for (size_t i = 0; i < count; i++)
-    {
-        const wchar_t* namePtr = elementNames.getAt(i);
-        while (*namePtr != 0)
-        {
-            _ElementNames.appendValue(namePtr);
-            namePtr++;
-        }
-        _ElementNames.appendValue(namePtr);
-        _ElementValues.append(*(reinterpret_cast<aafUID_t*>(&elementValues.getAt(i))));
     }
     
     setInitialized();
@@ -876,38 +862,22 @@ bool ImplAAFTypeDefExtEnum::initialise(const OMUniqueObjectIdentification& id,
     return true;
 }
 
-bool ImplAAFTypeDefExtEnum::registerExtensions(OMVector<const wchar_t*>& names, 
-    OMVector<OMUniqueObjectIdentification>& values)
+bool ImplAAFTypeDefExtEnum::registerElement(const wchar_t* name, 
+    OMUniqueObjectIdentification value)
 {
-    // check names and values are unique wrt existing names and values
-    bool result = true;
-    size_t i;
-    for (i = 0; result && i < values.count(); i++)
-    {
-        wchar_t* name = elementNameFromValue(values.getAt(i));
-        if (name == 0)
-        {
-            result = elementValueFromName(names.getAt(i)) == nullOMUniqueObjectIdentification;
-        }
-        else
-        {
-            result = false;
-            delete [] name;
-        }
-    }
+    // check name and value are unique wrt existing names and values
+    bool result = elementValueFromName(name) == nullOMUniqueObjectIdentification;
+
     if (result)
     {
-        for (i = 0; i < values.count(); i++)
+        const wchar_t* namePtr = name;
+        while (*namePtr != 0)
         {
-            const wchar_t* namePtr = names.getAt(i);
-            while (*namePtr != 0)
-            {
-                _ElementNames.appendValue(namePtr);
-                namePtr++;
-            }
             _ElementNames.appendValue(namePtr);
-            _ElementValues.append(*(reinterpret_cast<aafUID_t*>(&values.getAt(i))));
+            namePtr++;
         }
+        _ElementNames.appendValue(namePtr);
+        _ElementValues.append(*(reinterpret_cast<aafUID_t*>(&value)));
     }
     
     return result;

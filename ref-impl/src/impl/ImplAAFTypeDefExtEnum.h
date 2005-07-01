@@ -255,13 +255,11 @@ public:
     virtual OMUniqueObjectIdentification elementValueFromName(const wchar_t* name) const;
     
     virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
-        const wchar_t* description, OMVector<wchar_t*>& elementNames, 
-        OMVector<OMUniqueObjectIdentification>& elementValues);
+        const wchar_t* description);
 
     virtual bool isValidValue(OMUniqueObjectIdentification value) const;
     
-    virtual bool registerExtensions(OMVector<const wchar_t*>& names, 
-        OMVector<OMUniqueObjectIdentification>& values);
+    virtual bool registerElement(const wchar_t* name, OMUniqueObjectIdentification value);
         
 private:
 	// names of elements in this record; stored as single wchar_t array
