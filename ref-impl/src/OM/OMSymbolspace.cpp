@@ -93,10 +93,10 @@ static const OMPropertyId typeDefsTargetPath[3] = {0x0001, 0x0004, 0x0000};
 
 
 const wchar_t* OMSymbolspace::_baselineURI = 
-    L"http://www.aafassociation.org/aafx/v1.1/20050511";
+    L"http://www.aafassociation.org/aafx/v1.1/20050628";
 const OMUniqueObjectIdentification OMSymbolspace::_baselineId =
-    {0x342fe22a, 0xa30e, 0x4219, {0xac, 0xc7, 0x5b, 0xe6, 0xda, 0x8b, 0xb9 ,0xa1}};
-
+    {0x4d4548db, 0x4a2c, 0x48c6, {0x9e, 0x90, 0x47, 0xf3, 0x45, 0xf3, 0xd5, 0xf9}};
+    
     
     
 OMSymbolspace::OMSymbolspace(OMXMLStorage* store)
@@ -140,18 +140,10 @@ OMSymbolspace::~OMSymbolspace()
     {
         delete _propertyDefs.getAt(i);
     }
-    OMSetIterator<OMUniqueObjectIdentification, ExtEnumExtGroup*> iterD(
-        _extEnumExtDefs, OMBefore);
+    OMSetIterator<ExtEnumId, ExtEnumElement*> iterD(_extEnumElements, OMBefore);
     while (++iterD)
     {
         delete iterD.value();
-    }
-    OMSetIterator<OMUniqueObjectIdentification, 
-        OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>* > iterV(
-            _extEnumValues, OMBefore);
-    while (++iterV)
-    {
-        delete iterV.value();
     }
 }
 
@@ -160,7 +152,7 @@ OMSymbolspace::isEmpty()
 {
     TRACE("OMSymbolspace::isEmpty");
     
-    return _idToSymbol.count() == 0 && _extEnumExtDefs.count() == 0;
+    return _idToSymbol.count() == 0 && _extEnumElements.count() == 0;
 }
 
 OMUniqueObjectIdentification 
@@ -303,21 +295,12 @@ OMSymbolspace::getDefId(const wchar_t* definitionSymbol) const
 }
 
 bool 
-OMSymbolspace::knownExtEnum(OMUniqueObjectIdentification id, 
+OMSymbolspace::isKnownExtEnumElement(OMUniqueObjectIdentification elementOf, 
     OMUniqueObjectIdentification value) const
 {
-    TRACE("OMSymbolspace::knownExtEnum");
+    TRACE("OMSymbolspace::isKnownExtEnumElement");
 
-    OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>* values = 0; 
-    if (_extEnumValues.find(id, values))
-    {
-        if (values->contains(value))
-        {
-            return true;
-        }
-    }
-    
-    return false;
+    return _extEnumElements.contains(ExtEnumId(elementOf, value));
 }
 
 void 
@@ -353,49 +336,18 @@ OMSymbolspace::addPropertyDef(OMClassDefinition* classDef, OMPropertyDefinition*
 }
 
 void 
-OMSymbolspace::addExtEnumExtension(OMUniqueObjectIdentification id, 
+OMSymbolspace::addExtEnumElement(OMUniqueObjectIdentification elementOf, 
     const wchar_t* name, OMUniqueObjectIdentification value)
 {
-    TRACE("OMSymbolspace::addExtEnumExtension");
-    
-    ExtEnumExtGroup* extEnumExt = 0;
-    if (_extEnumExtDefs.contains(id))
-    {
-        _extEnumExtDefs.find(id, extEnumExt);
-    }
-    else
-    {
-        extEnumExt = new ExtEnumExtGroup;
-        extEnumExt->typeId = id;
-        _extEnumExtDefs.insert(id, extEnumExt);
-    }
-    
-    extEnumExt->names.append(name);
-    extEnumExt->values.append(value);
-    
-    // add to values known in this symbolspace
-    addExtEnumValue(id, value);
-}
+    TRACE("OMSymbolspace::addExtEnumElement");
 
-void 
-OMSymbolspace::addExtEnumValue(OMUniqueObjectIdentification id, 
-    OMUniqueObjectIdentification value)
-{
-    TRACE("OMSymbolspace::addExtEnumValue");
-    
-    if (!_extEnumValues.contains(id))
+    if (!_extEnumElements.contains(ExtEnumId(elementOf, value)))
     {
-        _extEnumValues.insert(id, 
-            new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>());
-    }
-
-    OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>* values = 0;
-    _extEnumValues.find(id, values);
-    ASSERT("Ext enum type known", values != 0);
-    
-    if (!values->contains(value))
-    {
-        values->insert(value, value);
+        ExtEnumElement* member = new ExtEnumElement;
+        member->elementOf = elementOf;
+        member->name = name;
+        member->value = value;
+        _extEnumElements.insert(ExtEnumId(elementOf, value), member);
     }
 }
 
@@ -405,7 +357,7 @@ OMSymbolspace::save()
     TRACE("OMSymbolspace::save");
     PRECONDITION("Is initialised", _isInitialised);
     
-    getWriter()->writeElementStart(getBaselineURI(), L"MetaDictionary");
+    getWriter()->writeElementStart(getBaselineURI(), L"Extension");
 
     wchar_t idUri[XML_MAX_AUID_URI_SIZE];
     auidToURI(_id, idUri);
@@ -434,7 +386,7 @@ OMSymbolspace::save()
     }
 
     if (_classDefs.count() > 0 || _typeDefs.count() > 0 || _propertyDefs.count() > 0 ||
-        _extEnumExtDefs.count() > 0)
+        _extEnumElements.count() > 0)
     {
         getWriter()->writeElementStart(getBaselineURI(), L"Definitions");
 
@@ -455,11 +407,10 @@ OMSymbolspace::save()
             saveTypeDef(_typeDefs.getAt(i));
         }
 
-        OMSetIterator<OMUniqueObjectIdentification, ExtEnumExtGroup*> iter(
-            _extEnumExtDefs, OMBefore);
+        OMSetIterator<ExtEnumId, ExtEnumElement*> iter(_extEnumElements, OMBefore);
         while (++iter)
         {
-            saveExtEnumExt(iter.value());
+            saveExtEnumElement(iter.value());
         }
         
         getWriter()->writeElementEnd();
@@ -497,7 +448,7 @@ OMSymbolspace::restore(OMDictionary* dictionary)
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
             {
-                throw OMException("Empty string is invalid MetaDictionary Identification "
+                throw OMException("Empty string is invalid Extension Identification "
                     "value");
             }
             getReader()->getCharacters(data, length);
@@ -511,7 +462,7 @@ OMSymbolspace::restore(OMDictionary* dictionary)
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
             {
-                throw OMException("Empty string is invalid MetaDictionary Symbolspace "
+                throw OMException("Empty string is invalid Extension Symbolspace "
                     "value");
             }
             getReader()->getCharacters(data, length);
@@ -552,7 +503,7 @@ OMSymbolspace::restore(OMDictionary* dictionary)
         }
         else
         {
-            throw OMException("Unknown element in MetaDictionary");
+            throw OMException("Unknown element in Extension");
         }
     }
     getReader()->moveToEndElement();
@@ -589,35 +540,26 @@ OMSymbolspace::registerDeferredDefs(OMDictionary* dictionary)
         delete rp;
     }
     _propertyDefsForRegistration.clear();
+ 
     
-    
-    count = _extEnumExtDefsForRegistration.count();
+    count = _extEnumElementsForRegistration.count();
     for (i = 0; i < count; i++)
     {
-        ExtEnumExtGroup* extEnumExt = _extEnumExtDefsForRegistration.getAt(i);
+        ExtEnumElement* extEnumElement = _extEnumElementsForRegistration.getAt(i);
      
-        size_t j;
-        OMVector<const wchar_t*> names;
-        for (j = 0; j < extEnumExt->names.count(); j++)
-        {
-            names.append(extEnumExt->names.getAt(j).c_str());
-        }
-        bool result = dictionary->registerExtEnumExt(extEnumExt->typeId,
-            names, extEnumExt->values);
+        bool result = dictionary->registerExtEnumElement(extEnumElement->elementOf,
+            extEnumElement->name.c_str(), extEnumElement->value);
         if (!result)
         {
-            throw OMException("Failed to register extendible enumeration extension");
+            throw OMException("Failed to register extendible enumeration member");
         }
         
-        // register values with this symbolspace
-        for (j = 0; j < extEnumExt->values.count(); j++)
-        {
-            addExtEnumValue(extEnumExt->typeId, extEnumExt->values.getAt(j));
-        }
+        addExtEnumElement(extEnumElement->elementOf, extEnumElement->name.c_str(), 
+            extEnumElement->value);
         
-        delete extEnumExt;
+        delete extEnumElement;
     }
-    _extEnumExtDefsForRegistration.clear();
+    _extEnumElementsForRegistration.clear();
 }
 
 void 
@@ -626,23 +568,17 @@ OMSymbolspace::resetForWriting()
     TRACE("OMSymbolspace::resetForWriting");
     
     // remove the definitions that must be saved to the document
-    // but keep the symbols/identification/ext enum values so that the definitions
+    // but keep the symbols/identification/ext enum members so that the definitions
     // remain in the same symbolspace when writing
     size_t i;
     for (i = 0; i < _propertyDefs.count(); i++)
     {
         delete _propertyDefs.getAt(i);
     }
-    OMSetIterator<OMUniqueObjectIdentification, ExtEnumExtGroup*> iter(
-        _extEnumExtDefs, OMBefore);
-    while (++iter)
-    {
-        delete iter.value();
-    }
+    
     _classDefs.clear();
     _propertyDefs.clear();
     _typeDefs.clear();
-    _extEnumExtDefs.clear();
 }
 
 
@@ -874,15 +810,6 @@ OMSymbolspace::addDefSymbol(OMUniqueObjectIdentification id, const wchar_t* symb
     _defSymbolToId.insert(symbol, id);
 }
  
-void 
-OMSymbolspace::addExtEnum(OMUniqueObjectIdentification id, 
-    OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>* values)
-{
-    TRACE("OMSymbolspace::addExtEnum");
-
-    _extEnumValues.insert(id, values);
-}
-
 void
 OMSymbolspace::saveMetaDef(OMMetaDefinition* metaDef)
 {
@@ -926,11 +853,11 @@ OMSymbolspace::saveClassDef(OMClassDefinition* classDef)
     OMClassDefinition* parentClass = classDef->parentClass(); 
     if (parentClass != 0)
     {
-        wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
-        saveMetaDefAUID(parentClass->identification(), idStr);        
+        wchar_t* idStr = saveMetaDefAUID(parentClass->identification());        
         getWriter()->writeElementStart(getBaselineURI(), L"ParentClass");
         getWriter()->writeElementContent(idStr, wcslen(idStr));
         getWriter()->writeElementEnd();
+        delete [] idStr;
     }
 
     wchar_t boolStr[XML_MAX_BOOL_STRING_SIZE];
@@ -952,16 +879,17 @@ OMSymbolspace::savePropertyDef(OMClassDefinition* ownerClassDef, OMPropertyDefin
     saveMetaDef(propertyDef);
 
     const OMType* type = propertyDef->type();
-    wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
-    saveMetaDefAUID(type->identification(), idStr);        
+    wchar_t* idStr = saveMetaDefAUID(type->identification());        
     getWriter()->writeElementStart(getBaselineURI(), L"Type");
     getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
+    delete [] idStr;
 
-    saveMetaDefAUID(ownerClassDef->identification(), idStr);        
+    idStr = saveMetaDefAUID(ownerClassDef->identification());        
     getWriter()->writeElementStart(getBaselineURI(), L"MemberOf");
     getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
+    delete [] idStr;
 
     wchar_t localIdStr[XML_MAX_INTEGER_STRING_SIZE];
     OMUInt16 localId = propertyDef->localIdentification();
@@ -1067,11 +995,11 @@ OMSymbolspace::saveEnumeratedTypeDef(OMEnumeratedType* typeDef)
     saveMetaDef(typeDef);
 
     const OMType* elementType = typeDef->elementType(); 
-    wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
-    saveMetaDefAUID(elementType->identification(), idStr);        
+    wchar_t* idStr = saveMetaDefAUID(elementType->identification());        
     getWriter()->writeElementStart(getBaselineURI(), L"ElementType");
     getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
+    delete [] idStr;
 
     OMUInt32 count = typeDef->elementCount();
     if (count > 0)
@@ -1112,38 +1040,6 @@ OMSymbolspace::saveExtEnumeratedTypeDef(OMExtEnumeratedType* typeDef)
 
     saveMetaDef(typeDef);
 
-    OMUInt32 count = typeDef->elementCount();
-    if (count > 0)
-    {
-        getWriter()->writeElementStart(getBaselineURI(), L"Elements");
-        
-        OMUniqueObjectIdentification id = typeDef->identification();
-        for (OMUInt32 i = 0; i<count; i++)
-        {
-            OMUniqueObjectIdentification elementValue = typeDef->elementValue(i);
-
-            if (knownExtEnum(id, elementValue))
-            {
-                wchar_t* elementName = typeDef->elementName(i);
-    
-                wchar_t valueStr[XML_MAX_AUID_URI_SIZE];
-                auidToURI(elementValue, valueStr);
-    
-                getWriter()->writeElementStart(getBaselineURI(), L"Name");
-                getWriter()->writeElementContent(elementName, wcslen(elementName));
-                getWriter()->writeElementEnd();
-                
-                getWriter()->writeElementStart(getBaselineURI(), L"Value");
-                getWriter()->writeElementContent(valueStr, wcslen(valueStr));
-                getWriter()->writeElementEnd();
-                
-                delete [] elementName;
-            }
-        }
-
-        getWriter()->writeElementEnd();
-    }
-    
     getWriter()->writeElementEnd();
 }
 
@@ -1157,11 +1053,11 @@ OMSymbolspace::saveFixedArrayTypeDef(OMFixedArrayType* typeDef)
     saveMetaDef(typeDef);
 
     const OMType* elementType = typeDef->elementType(); 
-    wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
-    saveMetaDefAUID(elementType->identification(), idStr);        
+    wchar_t* idStr = saveMetaDefAUID(elementType->identification());        
     getWriter()->writeElementStart(getBaselineURI(), L"ElementType");
     getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
+    delete [] idStr;
 
     wchar_t elementCountStr[XML_MAX_INTEGER_STRING_SIZE];
     OMUInt32 elementCount = typeDef->elementCount();
@@ -1241,11 +1137,11 @@ OMSymbolspace::saveRecordTypeDef(OMRecordType* typeDef)
             getWriter()->writeElementContent(memberName, wcslen(memberName));
             getWriter()->writeElementEnd();
             
-            wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
-            saveMetaDefAUID(memberType->identification(), idStr);        
+            wchar_t* idStr = saveMetaDefAUID(memberType->identification());        
             getWriter()->writeElementStart(getBaselineURI(), L"Type");
             getWriter()->writeElementContent(idStr, wcslen(idStr));
             getWriter()->writeElementEnd();
+            delete [] idStr;
             
             delete [] memberName;
         }
@@ -1266,12 +1162,11 @@ OMSymbolspace::saveRenamedTypeDef(OMRenamedType* typeDef)
     saveMetaDef(typeDef);
 
     const OMType* renamedType = typeDef->renamedType(); 
-    wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
-    saveMetaDefAUID(renamedType->identification(), idStr);        
+    wchar_t* idStr = saveMetaDefAUID(renamedType->identification());        
     getWriter()->writeElementStart(getBaselineURI(), L"RenamedType");
     getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
-
+    delete [] idStr;
     
     getWriter()->writeElementEnd();
 }
@@ -1286,11 +1181,11 @@ OMSymbolspace::saveSetTypeDef(OMSetType* typeDef)
     saveMetaDef(typeDef);
 
     const OMType* elementType = typeDef->elementType(); 
-    wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
-    saveMetaDefAUID(elementType->identification(), idStr);        
+    wchar_t* idStr = saveMetaDefAUID(elementType->identification());        
     getWriter()->writeElementStart(getBaselineURI(), L"ElementType");
     getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
+    delete [] idStr;
     
     getWriter()->writeElementEnd();
 }
@@ -1315,11 +1210,11 @@ OMSymbolspace::saveStringTypeDef(OMStringType* typeDef)
     saveMetaDef(typeDef);
 
     const OMType* elementType = typeDef->elementType(); 
-    wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
-    saveMetaDefAUID(elementType->identification(), idStr);        
+    wchar_t* idStr = saveMetaDefAUID(elementType->identification());        
     getWriter()->writeElementStart(getBaselineURI(), L"ElementType");
     getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
+    delete [] idStr;
 
     getWriter()->writeElementEnd();
 }
@@ -1334,11 +1229,11 @@ OMSymbolspace::saveStrongObjectReferenceTypeDef(OMStrongObjectReferenceType* typ
     saveMetaDef(typeDef);
 
     const OMClassDefinition* referencedClass = typeDef->referencedClass(); 
-    wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
-    saveMetaDefAUID(referencedClass->identification(), idStr);        
-    getWriter()->writeElementStart(getBaselineURI(), L"ReferencedClass");
+    wchar_t* idStr = saveMetaDefAUID(referencedClass->identification());        
+    getWriter()->writeElementStart(getBaselineURI(), L"ReferencedType");
     getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
+    delete [] idStr;
 
     getWriter()->writeElementEnd();
 }
@@ -1353,11 +1248,11 @@ OMSymbolspace::saveVariableArrayTypeDef(OMVariableArrayType* typeDef)
     saveMetaDef(typeDef);
 
     const OMType* elementType = typeDef->elementType(); 
-    wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
-    saveMetaDefAUID(elementType->identification(), idStr);        
+    wchar_t* idStr = saveMetaDefAUID(elementType->identification());        
     getWriter()->writeElementStart(getBaselineURI(), L"ElementType");
     getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
+    delete [] idStr;
     
     getWriter()->writeElementEnd();
 }
@@ -1372,21 +1267,22 @@ OMSymbolspace::saveWeakObjectReferenceTypeDef(OMWeakObjectReferenceType* typeDef
     saveMetaDef(typeDef);
 
     const OMClassDefinition* referencedClass = typeDef->referencedClass(); 
-    wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
-    saveMetaDefAUID(referencedClass->identification(), idStr);        
-    getWriter()->writeElementStart(getBaselineURI(), L"ReferencedClass");
+    wchar_t* idStr = saveMetaDefAUID(referencedClass->identification());        
+    getWriter()->writeElementStart(getBaselineURI(), L"ReferencedType");
     getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
+    delete [] idStr;
 
     getWriter()->writeElementStart(getBaselineURI(), L"TargetSet");
     OMVector<OMUniqueObjectIdentification> targetSet;
     typeDef->targetSet(targetSet);
     for (size_t i = 0; i<targetSet.count(); i++)
     {
-        saveMetaDefAUID(targetSet.getAt(i), idStr);        
+        idStr = saveMetaDefAUID(targetSet.getAt(i));        
         getWriter()->writeElementStart(getBaselineURI(), L"AUID");
         getWriter()->writeElementContent(idStr, wcslen(idStr));
         getWriter()->writeElementEnd();
+        delete [] idStr;
     }
     getWriter()->writeElementEnd();
 
@@ -1395,36 +1291,27 @@ OMSymbolspace::saveWeakObjectReferenceTypeDef(OMWeakObjectReferenceType* typeDef
 }
 
 void 
-OMSymbolspace::saveExtEnumExt(ExtEnumExtGroup* extEnumExt)
+OMSymbolspace::saveExtEnumElement(ExtEnumElement* member)
 {
-    TRACE("OMSymbolspace::saveExtEnumExt");
+    TRACE("OMSymbolspace::saveExtEnumElement");
     
-    getWriter()->writeElementStart(getBaselineURI(), L"ExtendibleEnumerationExtension");
+    getWriter()->writeElementStart(getBaselineURI(), L"ExtendibleEnumerationElement");
 
-    wchar_t idStr[XML_MAX_BASELINE_SYMBOL_SIZE];
-    saveMetaDefAUID(extEnumExt->typeId, idStr);        
-    getWriter()->writeElementStart(getBaselineURI(), L"Extends");
+    wchar_t* idStr = saveMetaDefAUID(member->elementOf);        
+    getWriter()->writeElementStart(getBaselineURI(), L"ElementOf");
     getWriter()->writeElementContent(idStr, wcslen(idStr));
     getWriter()->writeElementEnd();
+    delete [] idStr;
 
-    if (extEnumExt->names.count() > 0)
-    {
-        getWriter()->writeElementStart(getBaselineURI(), L"Elements");
-        for (size_t i = 0; i < extEnumExt->names.count(); i++)
-        {
-            OMWString elementName = extEnumExt->names.getAt(i);
-            getWriter()->writeElementStart(getBaselineURI(), L"Name");
-            getWriter()->writeElementContent(elementName.c_str(), elementName.length());
-            getWriter()->writeElementEnd();
-            
-            wchar_t valueStr[XML_MAX_AUID_URI_SIZE];
-            auidToURI(extEnumExt->values.getAt(i), valueStr);
-            getWriter()->writeElementStart(getBaselineURI(), L"Value");
-            getWriter()->writeElementContent(valueStr, wcslen(valueStr));
-            getWriter()->writeElementEnd();
-        }
-        getWriter()->writeElementEnd();
-    }
+    getWriter()->writeElementStart(getBaselineURI(), L"Name");
+    getWriter()->writeElementContent(member->name.c_str(), member->name.length());
+    getWriter()->writeElementEnd();
+    
+    wchar_t valueStr[XML_MAX_AUID_URI_SIZE];
+    auidToURI(member->value, valueStr);
+    getWriter()->writeElementStart(getBaselineURI(), L"Value");
+    getWriter()->writeElementContent(valueStr, wcslen(valueStr));
+    getWriter()->writeElementEnd();
     
     getWriter()->writeElementEnd();
 }
@@ -1507,9 +1394,9 @@ OMSymbolspace::restoreMetaDictDefinition(OMDictionary* dictionary)
     {
         restoreWeakObjectReferenceTypeDef(dictionary);
     }
-    else if (getReader()->elementEquals(getBaselineURI(), L"ExtendibleEnumerationExtension"))
+    else if (getReader()->elementEquals(getBaselineURI(), L"ExtendibleEnumerationElement"))
     {
-        restoreExtEnumExt(dictionary);
+        restoreExtEnumElement(dictionary);
     }
     else
     {
@@ -2020,63 +1907,7 @@ OMSymbolspace::restoreExtEnumeratedTypeDef(OMDictionary* dictionary)
         const OMList<OMXMLAttribute*>* attrs;
         getReader()->getStartElement(nmspace, localName, attrs);
         
-        if (getReader()->elementEquals(getBaselineURI(), L"Elements"))
-        {
-            while (getReader()->nextElement())
-            {
-                const wchar_t* nmspace;
-                const wchar_t* localName;
-                const OMList<OMXMLAttribute*>* attrs;
-                getReader()->getStartElement(nmspace, localName, attrs);
-                if (!getReader()->elementEquals(getBaselineURI(), L"Name"))
-                {
-                    throw OMException("Expecting Name element in ExtEnumeratedType Elements");
-                }
-                getReader()->next();
-                if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
-                {
-                    throw OMException("Invalid Name element in ExtEnumeratedType Elements");
-                }
-                const wchar_t* data;
-                size_t length;
-                getReader()->getCharacters(data, length);
-                if (elementNamesSet.contains(data))
-                {
-                    throw OMException("Duplicate Name value in ExtEnumeratedType Elements");
-                }
-                elementNamesSet.insert(data, data);
-                elementNames.append(wideCharacterStringDup(data));
-                getReader()->moveToEndElement();
-                
-                if (!getReader()->nextElement())
-                {
-                    throw OMException("Missing matching Value element in ExtEnumeratedType Elements");
-                }
-                
-                getReader()->getStartElement(nmspace, localName, attrs);
-                if (!getReader()->elementEquals(getBaselineURI(), L"Value"))
-                {
-                    throw OMException("Expecting Value element in ExtEnumeratedType Elements");
-                }
-                getReader()->next();
-                if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
-                {
-                    throw OMException("Invalid Value element in ExtEnumeratedType Elements");
-                }
-                getReader()->getCharacters(data, length);
-                OMUniqueObjectIdentification value;
-                uriToAUID(data, &value);
-                if (elementValuesSet.contains(value))
-                {
-                    throw OMException("Duplicate Value value in ExtEnumeratedType Elements");
-                }
-                elementValuesSet.insert(value, value);
-                elementValues.append(value);
-                getReader()->moveToEndElement();
-            }
-            getReader()->moveToEndElement();
-        }
-        else if (!restoreMetaDef(&metaDef))
+        if (!restoreMetaDef(&metaDef))
         {
             throw OMException("Unknown element in ExtEnumeratedTypeDef");
         }
@@ -2090,8 +1921,7 @@ OMSymbolspace::restoreExtEnumeratedTypeDef(OMDictionary* dictionary)
 
     OMStorable* storable = dictionary->create(ClassID_TypeDefinitionExtendibleEnumeration);
     OMExtEnumeratedType* typeDef = dynamic_cast<OMExtEnumeratedType*>(storable);
-    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription(),
-        elementNames, elementValues))
+    if (!typeDef->initialise(metaDef.id, metaDef.name.c_str(), metaDef.getOptionalDescription()))
     {
         throw OMException("Failed to initialise ExtEnumeratedTypeDef");
     }
@@ -2106,12 +1936,6 @@ OMSymbolspace::restoreExtEnumeratedTypeDef(OMDictionary* dictionary)
     if (result == OM_TYPE_REGISTERED_ALREADY_REGISTERED)
     {
         delete typeDef;
-    }
-    
-    size_t count = elementNames.count();
-    for (size_t i = 0; i < count; i++)
-    {
-        delete [] elementNames.getAt(i);
     }
 }
 
@@ -2724,7 +2548,7 @@ OMSymbolspace::restoreStrongObjectReferenceTypeDef(OMDictionary* dictionary)
         const OMList<OMXMLAttribute*>* attrs;
         getReader()->getStartElement(nmspace, localName, attrs);
         
-        if (getReader()->elementEquals(getBaselineURI(), L"ReferencedClass"))
+        if (getReader()->elementEquals(getBaselineURI(), L"ReferencedType"))
         {
             const wchar_t* data;
             size_t length;
@@ -2732,7 +2556,7 @@ OMSymbolspace::restoreStrongObjectReferenceTypeDef(OMDictionary* dictionary)
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
             {
                 throw OMException("Empty string is invalid StrongObjectReference "
-                    "ReferencedClass value");
+                    "ReferencedType value");
             }
             getReader()->getCharacters(data, length);
             referencedClassId = restoreMetaDefAUID(data);
@@ -2849,7 +2673,7 @@ OMSymbolspace::restoreWeakObjectReferenceTypeDef(OMDictionary* dictionary)
         const OMList<OMXMLAttribute*>* attrs;
         getReader()->getStartElement(nmspace, localName, attrs);
         
-        if (getReader()->elementEquals(getBaselineURI(), L"ReferencedClass"))
+        if (getReader()->elementEquals(getBaselineURI(), L"ReferencedType"))
         {
             const wchar_t* data;
             size_t length;
@@ -2857,7 +2681,7 @@ OMSymbolspace::restoreWeakObjectReferenceTypeDef(OMDictionary* dictionary)
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
             {
                 throw OMException("Empty string is invalid WeakObjectReference "
-                    "ReferencedClass value");
+                    "ReferencedType value");
             }
             getReader()->getCharacters(data, length);
             referencedClassId = restoreMetaDefAUID(data);
@@ -2925,14 +2749,13 @@ OMSymbolspace::restoreWeakObjectReferenceTypeDef(OMDictionary* dictionary)
 }
 
 void 
-OMSymbolspace::restoreExtEnumExt(OMDictionary* dictionary)
+OMSymbolspace::restoreExtEnumElement(OMDictionary* dictionary)
 {
-    TRACE("OMSymbolspace::restoreExtEnumExt");
+    TRACE("OMSymbolspace::restoreExtEnumElement");
     
-    OMSet<OMWString, OMWString> elementNamesSet;
-    OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification> elementValuesSet;
-    ExtEnumExtGroup* extEnumExt = new ExtEnumExtGroup;
-    extEnumExt->typeId = nullOMUniqueObjectIdentification;
+    ExtEnumElement* extEnumElement = new ExtEnumElement;
+    extEnumElement->elementOf = nullOMUniqueObjectIdentification;
+    extEnumElement->value = nullOMUniqueObjectIdentification;
     
     while (getReader()->nextElement())
     {
@@ -2941,96 +2764,61 @@ OMSymbolspace::restoreExtEnumExt(OMDictionary* dictionary)
         const OMList<OMXMLAttribute*>* attrs;
         getReader()->getStartElement(nmspace, localName, attrs);
         
-        if (getReader()->elementEquals(getBaselineURI(), L"Extends"))
+        if (getReader()->elementEquals(getBaselineURI(), L"ElementOf"))
         {
             const wchar_t* data;
             size_t length;
             getReader()->next();
             if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
             {
-                throw OMException("Empty string is invalid ExtEnumExt "
-                    "value");
+                throw OMException("Empty string is invalid ExtEnumElement "
+                    "ElementOf");
             }
             getReader()->getCharacters(data, length);
-            extEnumExt->typeId = restoreMetaDefAUID(data);
+            extEnumElement->elementOf = restoreMetaDefAUID(data);
             getReader()->moveToEndElement();
         }
-        else if (getReader()->elementEquals(getBaselineURI(), L"Elements"))
+        else if (getReader()->elementEquals(getBaselineURI(), L"Name"))
         {
-            while (getReader()->nextElement())
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
             {
-                const wchar_t* nmspace;
-                const wchar_t* localName;
-                const OMList<OMXMLAttribute*>* attrs;
-                getReader()->getStartElement(nmspace, localName, attrs);
-                if (!getReader()->elementEquals(getBaselineURI(), L"Name"))
-                {
-                    throw OMException("Expecting Name element in ExtEnumExt Elements");
-                }
-                getReader()->next();
-                if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
-                {
-                    throw OMException("Invalid Name element in ExtEnumExt Elements");
-                }
-                const wchar_t* data;
-                size_t length;
-                getReader()->getCharacters(data, length);
-                if (elementNamesSet.contains(data))
-                {
-                    throw OMException("Duplicate Name value in ExtEnumExt Elements");
-                }
-                elementNamesSet.insert(data, data);
-                extEnumExt->names.append(data);
-                getReader()->moveToEndElement();
-                
-                if (!getReader()->nextElement())
-                {
-                    throw OMException("Missing matching Value element in ExtEnumExt Elements");
-                }
-                
-                getReader()->getStartElement(nmspace, localName, attrs);
-                if (!getReader()->elementEquals(getBaselineURI(), L"Value"))
-                {
-                    throw OMException("Expecting Value element in ExtEnumExt Elements");
-                }
-                getReader()->next();
-                if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
-                {
-                    throw OMException("Invalid Value element in ExtEnumExt Elements");
-                }
-                getReader()->getCharacters(data, length);
-                OMUniqueObjectIdentification value;
-                uriToAUID(data, &value);
-                if (elementValuesSet.contains(value))
-                {
-                    throw OMException("Duplicate Value value in ExtEnumExt Elements");
-                }
-                elementValuesSet.insert(value, value);
-                extEnumExt->values.append(value);
-                getReader()->moveToEndElement();
+                throw OMException("Invalid Name element in ExtEnumeratedElement");
             }
+            const wchar_t* data;
+            size_t length;
+            getReader()->getCharacters(data, length);
+            extEnumElement->name = data;
+            getReader()->moveToEndElement();
+        }
+        else if (getReader()->elementEquals(getBaselineURI(), L"Value"))
+        {
+            getReader()->next();
+            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+            {
+                throw OMException("Invalid Value element in ExtEnumeratedElement");
+            }
+            const wchar_t* data;
+            size_t length;
+            getReader()->getCharacters(data, length);
+            uriToAUID(data, &extEnumElement->value);
             getReader()->moveToEndElement();
         }
         else
         {
-            throw OMException("Unknown element in ExtEnumExt");
+            throw OMException("Unknown element in ExtEnumElement");
         }
     }
     getReader()->moveToEndElement();
     
-    if (extEnumExt->typeId == nullOMUniqueObjectIdentification)
+    if (extEnumElement->elementOf == nullOMUniqueObjectIdentification ||
+        extEnumElement->name.length() == 0 ||
+        extEnumElement->value == nullOMUniqueObjectIdentification)
     {
-        throw OMException("Incomplete ExtEnumExt");
+        throw OMException("Incomplete ExtEnumElement");
     }
 
-    if (extEnumExt->names.count() == 0)
-    {
-        delete [] extEnumExt;
-    }
-    else
-    {
-        _extEnumExtDefsForRegistration.insert(extEnumExt);
-    }
+    _extEnumElementsForRegistration.insert(extEnumElement);
 }
 
 
@@ -3044,6 +2832,14 @@ OMSymbolspace::restoreMetaDefAUID(const wchar_t* idStr)
     {
         uriToAUID(idStr, &id);
     }
+    else if (isQSymbol(idStr))
+    {
+        id = _store->getMetaDefIdFromQSymbol(idStr);
+        if (id == nullOMUniqueObjectIdentification)
+        {
+            throw OMException("Could not retrieve unique id from qualified symbol");
+        }
+    }
     else
     {
         id = _store->getBaselineMetaDefId(idStr);
@@ -3055,22 +2851,37 @@ OMSymbolspace::restoreMetaDefAUID(const wchar_t* idStr)
     return id;
 }
 
-void 
-OMSymbolspace::saveMetaDefAUID(OMUniqueObjectIdentification id, wchar_t* idStr)
+wchar_t*
+OMSymbolspace::saveMetaDefAUID(OMUniqueObjectIdentification id)
 {
     TRACE("OMSymbolspace::saveMetaDefAUID");
     
+    wchar_t* idStr = 0;
     const wchar_t* symbol = _store->getBaselineMetaDefSymbol(id);
     if (symbol != 0)
     {
-        wcsncpy(idStr, symbol, XML_MAX_BASELINE_SYMBOL_SIZE);
+        idStr = new wchar_t[wcslen(symbol) + 1];
+        wcscpy(idStr, symbol);
     }
     else
     {
-        wchar_t uri[XML_MAX_AUID_URI_SIZE];
-        auidToURI(id, uri);
-        wcsncpy(idStr, uri, XML_MAX_AUID_URI_SIZE);
+        const wchar_t* symbolspace;
+        const wchar_t* symbol;
+        if (_store->getMetaDefSymbol(id, &symbolspace, &symbol))
+        {
+            idStr = new wchar_t[wcslen(symbolspace) + 1 + wcslen(symbol) + 1];
+            wcscpy(idStr, symbolspace);
+            wcscat(idStr, L" ");
+            wcscat(idStr, symbol);
+        }
+        else
+        {
+            idStr = new wchar_t[XML_MAX_AUID_URI_SIZE];
+            auidToURI(id, idStr);
+        }
     }
+    
+    return idStr;
 }
 
 // TODO: cache tags?
@@ -3093,13 +2904,75 @@ OMSymbolspace::getTypeDefsTag(OMDictionary* dictionary)
     return table->insert(typeDefsTargetPath);
 }
 
-
-
 const wchar_t* 
 OMSymbolspace::getBaselineURI()
 {
     return _baselineURI;
 }
+
+OMSymbolspace::ExtEnumId::ExtEnumId()
+: _elementOf(nullOMUniqueObjectIdentification), _value(nullOMUniqueObjectIdentification)
+{
+    TRACE("OMSymbolspace::ExtEnumId::ExtEnumId()");    
+}
+
+OMSymbolspace::ExtEnumId::ExtEnumId(OMUniqueObjectIdentification elementOf, 
+    OMUniqueObjectIdentification value)
+: _elementOf(elementOf), _value(value)
+{
+    TRACE("OMSymbolspace::ExtEnumId::ExtEnumId(OMUniqueObjectIdentification. OMUniqueObjectIdentification)");
+}
+
+OMSymbolspace::ExtEnumId::ExtEnumId(const ExtEnumId& id)
+: _elementOf(id._elementOf), _value(id._value)
+{
+    TRACE("OMSymbolspace::ExtEnumId::ExtEnumId(ExtEnumId)");    
+}
+
+OMSymbolspace::ExtEnumId::~ExtEnumId()
+{
+    TRACE("OMSymbolspace::ExtEnumId::~ExtEnumId");    
+}
+        
+OMSymbolspace::ExtEnumId& 
+OMSymbolspace::ExtEnumId::operator=(const ExtEnumId& rhs)
+{
+    // MSVC 6.0 didn't like this TRACE - said it couldn't access the private class
+    //TRACE("OMSymbolspace::ExtEnumId::operator=");
+    
+    _elementOf = rhs._elementOf;
+    _value = rhs._value;
+    
+    return *this;
+}
+
+bool 
+OMSymbolspace::ExtEnumId::operator==(const ExtEnumId& rhs) const
+{
+    TRACE("OMSymbolspace::ExtEnumId::operator==");
+    
+    return _elementOf == rhs._elementOf && _value == rhs._value;
+}
+
+bool 
+OMSymbolspace::ExtEnumId::operator!=(const ExtEnumId& rhs) const
+{
+    TRACE("OMSymbolspace::ExtEnumId::operator1=");
+    
+    return !operator==(rhs);
+}
+
+bool 
+OMSymbolspace::ExtEnumId::operator<(const ExtEnumId& rhs) const
+{
+    TRACE("OMSymbolspace::ExtEnumId::operator<");
+    
+    return _elementOf < rhs._elementOf || 
+        (_elementOf == rhs._elementOf && _value < rhs._value);
+}
+
+
+
 
 #define LITERAL_AUID(l, w1, w2,  b1, b2, b3, b4, b5, b6, b7, b8) \
     {l, w1, w2, {b1, b2, b3, b4, b5, b6, b7, b8}}
@@ -3125,28 +2998,18 @@ OMSymbolspace::getBaselineURI()
     ss->addDefSymbol(id, SYMBOL); \
 }
 
-#define SET_EXT_ENUM_ID(ID) \
+#define SET_EXT_ENUM_ID(MEMBEROF) \
 { \
-    const OMUniqueObjectIdentification id = ID; \
-    typeId = id; \
+    const OMUniqueObjectIdentification id = MEMBEROF; \
+    elementOf = id; \
 }
 
 
 #define ADD_EXT_ENUM_VALUE(VALUE) \
 { \
-    const OMUniqueObjectIdentification key = VALUE; \
     const OMUniqueObjectIdentification value = VALUE; \
-    values->insert(key, value); \
+    ss->addExtEnumElement(elementOf, 0, value); \
 }
-
-// for some unknown reason this will mangle the first value inserted
-// into the set when building a (linux) Release version of the SDK. Why ????
-// (note that the backslashes have been removed here)
-//#define ADD_EXT_ENUM_VALUE(VALUE)
-//{
-//    const OMUniqueObjectIdentification value = VALUE;
-//    values->insert(value, value);
-//}
 
 
 
@@ -4489,7 +4352,7 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
     ADD_PROPERTYDEF_SYMBOL(
         LITERAL_AUID(0x06010104, 0x0104, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x4C01,
-        L"Property");
+        L"Definition");
     ADD_PROPERTYDEF_SYMBOL(
         LITERAL_AUID(0x05300507, 0x0000, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02),
         0x4D01,
@@ -5374,19 +5237,15 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
         
     // Extendible enumerations
     
-    OMUniqueObjectIdentification typeId;
-    OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>* values;
+    OMUniqueObjectIdentification elementOf;
     
     // OperationCategoryType
-    values = new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>();
     SET_EXT_ENUM_ID(
         LITERAL_AUID(0x02020101, 0x0000, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
         LITERAL_AUID(0x0D010102, 0x0101, 0x0100, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
-    ss->addExtEnum(typeId, values);
     
     // TransferCharacteristicType
-    values = new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>();
     SET_EXT_ENUM_ID(
         LITERAL_AUID(0x02020102, 0x0000, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
@@ -5399,10 +5258,8 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
         LITERAL_AUID(0x04010101, 0x0105, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
         LITERAL_AUID(0x04010101, 0x0106, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
-    ss->addExtEnum(typeId, values);
     
     // PluginCategoryType
-    values = new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>();
     SET_EXT_ENUM_ID(
         LITERAL_AUID(0x02020103, 0x0000, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
@@ -5411,10 +5268,8 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
         LITERAL_AUID(0x0D010102, 0x0101, 0x0300, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
         LITERAL_AUID(0x0D010102, 0x0101, 0x0400, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
-    ss->addExtEnum(typeId, values);
 
     // UsageType
-    values = new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>();
     SET_EXT_ENUM_ID(
         LITERAL_AUID(0x02020104, 0x0000, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
@@ -5427,10 +5282,8 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
         LITERAL_AUID(0x0D010102, 0x0101, 0x0800, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
         LITERAL_AUID(0x0D010102, 0x0101, 0x0900, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
-    ss->addExtEnum(typeId, values);
 
     // ColorPrimariesType
-    values = new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>();
     SET_EXT_ENUM_ID(
         LITERAL_AUID(0x02020105, 0x0000, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
@@ -5439,10 +5292,8 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
         LITERAL_AUID(0x04010101, 0x0302, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x06));
     ADD_EXT_ENUM_VALUE(
         LITERAL_AUID(0x04010101, 0x0303, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x06));
-    ss->addExtEnum(typeId, values);
 
     // CodingEquationsType
-    values = new OMSet<OMUniqueObjectIdentification, OMUniqueObjectIdentification>();
     SET_EXT_ENUM_ID(
         LITERAL_AUID(0x02020106, 0x0000, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
@@ -5451,7 +5302,6 @@ OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
         LITERAL_AUID(0x04010101, 0x0202, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
         LITERAL_AUID(0x04010101, 0x0203, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
-    ss->addExtEnum(typeId, values);
     
     
     return ss;

@@ -351,6 +351,54 @@ OMXMLReaderExpat::next()
     return _status;
 }
 
+void
+OMXMLReaderExpat::reset()
+{
+    TRACE("OMXMLReaderExpat::reset");
+    
+    XML_ParserFree(_parser);
+    
+    if (_workBuffer != 0)
+    {
+        delete [] _workBuffer;
+    }
+    
+    OMListIterator<OMXMLAttribute*> iter(_attributes, OMBefore);
+    while (++iter)
+    {
+        delete iter.value();
+    }
+    
+    size_t elementCount = _startNmspaceDecls.count();
+    for (size_t i = 0; i < elementCount; i++)
+    {
+        delete _startNmspaceDecls.getAt(i);
+    }
+    _endNmspaceDecls.clear();
+    
+    
+    clearEvents();
+
+    _parser = XML_ParserCreateNS(0, NAMESPACE_SEPARATOR);
+    XML_SetNotationDeclHandler(_parser, ::expat_NotationDeclHandler);
+    XML_SetEntityDeclHandler(_parser, ::expat_EntityDeclHandler);
+    XML_SetStartNamespaceDeclHandler(_parser, ::expat_StartNamespaceDeclHandler);
+    XML_SetEndNamespaceDeclHandler(_parser, ::expat_EndNamespaceDeclHandler);
+    XML_SetStartElementHandler(_parser, ::expat_StartElementHandler);
+    XML_SetEndElementHandler(_parser, ::expat_EndElementHandler);
+    XML_SetCharacterDataHandler(_parser, ::expat_CharacterDataHandler);
+    XML_SetUserData(_parser, this);
+
+    _workBuffer = new wchar_t[WORK_BUFFER_MIN_SIZE];
+    _workBufferSize = WORK_BUFFER_MIN_SIZE;
+    
+    _readNextChunk = true;
+    _status = true;
+    _numInBuffer = 0;
+    
+    _xmlStream->setPosition(0);
+}
+
 OMXMLReaderExpat::EventType 
 OMXMLReaderExpat::getEventType()
 {

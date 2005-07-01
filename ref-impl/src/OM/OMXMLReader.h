@@ -70,6 +70,7 @@ public:
     };
 
     virtual bool next() = 0;
+    virtual void reset() = 0;
     
     virtual EventType getEventType() = 0;
     virtual void getNotationDecl(const wchar_t*& name, const wchar_t*& publicID, 
@@ -110,6 +111,7 @@ public:
     virtual ~OMXMLReaderExpat();
 
     virtual bool next();
+    virtual void reset();
     
     virtual EventType getEventType();
     virtual void getNotationDecl(const wchar_t*& name, const wchar_t*& publicID, 

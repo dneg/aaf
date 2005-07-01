@@ -34,6 +34,69 @@
 
 
 
+OMQSymbolMap::OMQSymbolMap()
+{
+    TRACE("OMQSymbolMap::OMQSymbolMap");
+}
+
+OMQSymbolMap::~OMQSymbolMap()
+{
+    TRACE("OMQSymbolMap::~OMQSymbolMap");
+}
+    
+void 
+OMQSymbolMap::addQSymbol(OMUniqueObjectIdentification id, const wchar_t* qSymbol)
+{
+    TRACE("OMQSymbolMap::addQSymbol");
+    
+    _idToQSymbol.insert(id, qSymbol);
+    _qSymbolToId.insert(qSymbol, id);
+}
+
+void 
+OMQSymbolMap::addQSymbol(OMUniqueObjectIdentification id, const wchar_t* symbolspace,
+    const wchar_t* symbol)
+{
+    TRACE("OMQSymbolMap::addQSymbol");
+
+    wchar_t* qSymbol = new wchar_t[wcslen(symbolspace) + 1 + wcslen(symbol) + 1];
+    wcscpy(qSymbol, symbolspace);
+    wcscat(qSymbol, L" ");
+    wcscat(qSymbol, symbol);
+            
+    _idToQSymbol.insert(id, qSymbol);
+    _qSymbolToId.insert(qSymbol, id);
+    
+    delete [] qSymbol;
+}
+    
+OMUniqueObjectIdentification 
+OMQSymbolMap::getId(const wchar_t* qSymbol) const
+{
+    TRACE("OMQSymbolMap::getId");
+    
+    OMUniqueObjectIdentification* id;
+    if (_qSymbolToId.find(qSymbol, &id))
+    {
+        return *id;
+    }
+    return nullOMUniqueObjectIdentification;
+}
+
+const wchar_t* 
+OMQSymbolMap::getQSymbol(OMUniqueObjectIdentification id) const
+{
+    TRACE("OMQSymbolMap::getQSymbol");
+
+    OMWString* qSymbol;
+    if (_idToQSymbol.find(id, &qSymbol))
+    {
+        return qSymbol->c_str();
+    }
+    return 0;
+}
+
+
 OMXMLStorage::OMXMLStorage(OMDiskRawStorage* storage, Mode mode)
 : _mode(mode), _storage(storage), _objectSetId(0), _baselineSymbolspace(0), 
     _defaultExtSymbolspace(0), _symbolspacePrefixIndex(0),
@@ -130,7 +193,10 @@ OMXMLStorage::resetForWriting()
     OMSetIterator<OMWString, OMSymbolspace*> iter(_symbolspaces, OMBefore);
     while (++iter) 
     {
-        iter.value()->resetForWriting();
+        if (!isBaselineSymbolspace(iter.value()))
+        {
+            iter.value()->resetForWriting();
+        }
     }
     
     if (_xmlReader != 0)
@@ -225,6 +291,35 @@ OMXMLStorage::getSymbolspaces()
     TRACE("OMXMLStorage::getSymbolspaces");
     
     return _symbolspaces;
+}
+
+void 
+OMXMLStorage::addQSymbolToMap(OMUniqueObjectIdentification id, const wchar_t* symbolspace, 
+    const wchar_t* symbol)
+{
+    TRACE("OMXMLStorage::addQSymbolToMap");
+    
+    _qSymbolMap.addQSymbol(id, symbolspace, symbol);
+}
+
+OMUniqueObjectIdentification 
+OMXMLStorage::getMetaDefIdFromQSymbol(const wchar_t* qSymbol) const
+{
+    TRACE("OMXMLStorage::getMetaDefIdFromQSymbol");
+    
+    // if the qSymbol refers to a non-baseline metadef then it
+    // must be in the qSymbolMap; otherwise it is a baseline qSymbol
+    OMUniqueObjectIdentification id = _qSymbolMap.getId(qSymbol);
+    if (id == nullOMUniqueObjectIdentification)
+    {
+        // support qualified baseline symbols
+        // users __should__ use just the symbol for baseline metadefs
+        const wchar_t* spc = wmemchr(qSymbol, L' ', wcslen(qSymbol));
+        ASSERT("Valid QSymbol has space", spc != 0);
+        id = getBaselineMetaDefId(spc + 1);
+    }
+    
+    return id;
 }
 
 bool 
@@ -344,20 +439,6 @@ OMXMLStorage::getBaselineMetaDefSymbol(OMUniqueObjectIdentification id)
     return _baselineSymbolspace->getMetaDefSymbol(id);
 }
 
-bool 
-OMXMLStorage::knownBaselineExtEnum(OMUniqueObjectIdentification id, 
-    OMUniqueObjectIdentification value) const
-{
-    TRACE("OMXMLStorage::knownBaselineExtEnum");
-    
-    if (_baselineSymbolspace == 0)
-    {
-        return false;
-    }
-    
-    return _baselineSymbolspace->knownExtEnum(id, value);
-}
-
 OMSymbolspace* 
 OMXMLStorage::getSymbolspaceForDef(OMUniqueObjectIdentification id) const
 {
@@ -394,23 +475,20 @@ OMXMLStorage::getSymbolspaceForMetaDef(OMUniqueObjectIdentification id) const
     return symbolspace;
 }
 
-OMSymbolspace* 
-OMXMLStorage::getSymbolspaceForExtEnum(OMUniqueObjectIdentification id,
+bool 
+OMXMLStorage::isKnownExtEnumElement(OMUniqueObjectIdentification elementOf,
     OMUniqueObjectIdentification value) const
 {
-    TRACE("OMXMLStorage::getSymbolspaceForExtEnum");
+    TRACE("OMXMLStorage::isKnownExtEnumElement");
     
-    OMSymbolspace* symbolspace = 0;    
+    bool isKnown = false;    
     OMSetIterator<OMWString, OMSymbolspace*> iter(_symbolspaces, OMBefore);
-    while (symbolspace == 0 && ++iter) 
+    while (!isKnown && ++iter) 
     {
-        if (iter.value()->knownExtEnum(id, value))
-        {
-            symbolspace = iter.value();
-        }
+        isKnown = iter.value()->isKnownExtEnumElement(elementOf, value);
     }
     
-    return symbolspace;
+    return isKnown;
 }
 
 bool 
@@ -818,8 +896,5 @@ OMXMLStorage::setUniquePrefix(OMSymbolspace* symbolspace)
         delete [] prefix;
     }
 }
-
-
-
 
 

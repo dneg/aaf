@@ -78,8 +78,9 @@ OMUInt32 codePoint(const wchar_t* u16Code);
 void auidToURI(OMUniqueObjectIdentification id, wchar_t* uri);
 void mobIdToURI(OMMaterialIdentification mobId, wchar_t* uri);
 
-bool isAUIDURI(const wchar_t* uri);
-bool isUMIDURI(const wchar_t* uri);
+bool isQSymbol(const wchar_t* str);
+bool isAUIDURI(const wchar_t* str);
+bool isUMIDURI(const wchar_t* str);
 void uriToAUID(const wchar_t* uri, OMUniqueObjectIdentification* id);
 void uriToMobId(const wchar_t* uri, OMMaterialIdentification* mobId);
 

@@ -618,12 +618,36 @@ mobIdToURI(OMMaterialIdentification mobId, wchar_t* uri)
 }
 
 bool 
-isAUIDURI(const wchar_t* uri)
+isQSymbol(const wchar_t* str)
+{
+    TRACE("::isQSymbol");
+
+    // qSymbol == "something without spaces (a uri)" + L' ' +  
+    // "something without spaces (a symbol)"
+    
+    if (str == 0 || *str == L'\0' || *str == L' ')
+    {
+        return false;
+    }
+    const wchar_t* spc1 = wmemchr(str, L' ', wcslen(str));
+    if (spc1 != 0)
+    {
+        if (*(spc1 + 1) != L'\0' && wmemchr(spc1 + 1, L' ', wcslen(spc1 + 1)) == 0)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool 
+isAUIDURI(const wchar_t* str)
 {
     TRACE("::isAUIDURI");
 
-    if (wcsncmp(uri, L"urn:uuid", 8) == 0 || 
-        wcsncmp(uri, L"urn:x-ul", 8) == 0)
+    if ((wcsncmp(str, L"urn:uuid", 8) == 0 || wcsncmp(str, L"urn:x-ul", 8) == 0) &&
+        (wmemchr(str, L' ', wcslen(str)) == 0))
+    
     {
         return true;
     }
@@ -631,11 +655,11 @@ isAUIDURI(const wchar_t* uri)
 }
 
 bool 
-isUMIDURI(const wchar_t* uri)
+isUMIDURI(const wchar_t* str)
 {
     TRACE("::isUMIDURI");
 
-    if (wcsncmp(uri, L"urn:x-umid", 10) == 0)
+    if (wcsncmp(str, L"urn:x-umid", 10) == 0)
     {
         return true;
     }
