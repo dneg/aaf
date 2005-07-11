@@ -1414,7 +1414,7 @@ bool ImplAAFTypeDefIndirect::initialise(const OMUniqueObjectIdentification& id,
         return false;
     }
 
-    setInitialized();
+    //setInitialized();
 
     return true;    
 }
