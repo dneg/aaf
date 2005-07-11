@@ -34,36 +34,46 @@
 
 
 
-OMQSymbolMap::OMQSymbolMap()
+OMMetaDefIdMap::OMMetaDefIdMap()
 {
-    TRACE("OMQSymbolMap::OMQSymbolMap");
+    TRACE("OMMetaDefIdMap::OMMetaDefIdMap");
 }
 
-OMQSymbolMap::~OMQSymbolMap()
+OMMetaDefIdMap::~OMMetaDefIdMap()
 {
-    TRACE("OMQSymbolMap::~OMQSymbolMap");
+    TRACE("OMMetaDefIdMap::~OMMetaDefIdMap");
 }
     
 void 
-OMQSymbolMap::addQSymbol(OMUniqueObjectIdentification id, const wchar_t* qSymbol)
+OMMetaDefIdMap::add(OMUniqueObjectIdentification id, const wchar_t* qSymbol)
 {
-    TRACE("OMQSymbolMap::addQSymbol");
+    TRACE("OMMetaDefIdMap::add(OMUniqueObjectIdentification, wchar_t)");
+    
+    if (_idToQSymbol.contains(id) || _qSymbolToId.contains(qSymbol))
+    {
+        throw OMException("MetaDef Id to Symbol map already contains element");
+    }
     
     _idToQSymbol.insert(id, qSymbol);
     _qSymbolToId.insert(qSymbol, id);
 }
 
 void 
-OMQSymbolMap::addQSymbol(OMUniqueObjectIdentification id, const wchar_t* symbolspace,
+OMMetaDefIdMap::add(OMUniqueObjectIdentification id, const wchar_t* symbolspace,
     const wchar_t* symbol)
 {
-    TRACE("OMQSymbolMap::addQSymbol");
+    TRACE("OMMetaDefIdMap::add(OMUniqueObjectIdentification, wchar_t,wchar_t)");
 
     wchar_t* qSymbol = new wchar_t[wcslen(symbolspace) + 1 + wcslen(symbol) + 1];
     wcscpy(qSymbol, symbolspace);
     wcscat(qSymbol, L" ");
     wcscat(qSymbol, symbol);
-            
+
+    if (_idToQSymbol.contains(id) || _qSymbolToId.contains(qSymbol))
+    {
+        throw OMException("MetaDef Id to Symbol map already contains element");
+    }
+    
     _idToQSymbol.insert(id, qSymbol);
     _qSymbolToId.insert(qSymbol, id);
     
@@ -71,9 +81,9 @@ OMQSymbolMap::addQSymbol(OMUniqueObjectIdentification id, const wchar_t* symbols
 }
     
 OMUniqueObjectIdentification 
-OMQSymbolMap::getId(const wchar_t* qSymbol) const
+OMMetaDefIdMap::getId(const wchar_t* qSymbol) const
 {
-    TRACE("OMQSymbolMap::getId");
+    TRACE("OMMetaDefIdMap::getId");
     
     OMUniqueObjectIdentification* id;
     if (_qSymbolToId.find(qSymbol, &id))
@@ -84,14 +94,65 @@ OMQSymbolMap::getId(const wchar_t* qSymbol) const
 }
 
 const wchar_t* 
-OMQSymbolMap::getQSymbol(OMUniqueObjectIdentification id) const
+OMMetaDefIdMap::getQSymbol(OMUniqueObjectIdentification id) const
 {
-    TRACE("OMQSymbolMap::getQSymbol");
+    TRACE("OMMetaDefIdMap::getQSymbol");
 
     OMWString* qSymbol;
     if (_idToQSymbol.find(id, &qSymbol))
     {
         return qSymbol->c_str();
+    }
+    return 0;
+}
+
+
+OMDefIdMap::OMDefIdMap()
+{
+    TRACE("OMDefIdMap::OMDefIdMap");
+}
+
+OMDefIdMap::~OMDefIdMap()
+{
+    TRACE("OMDefIdMap::~OMDefIdMap");
+}
+    
+void 
+OMDefIdMap::add(OMUniqueObjectIdentification id, const wchar_t* uidStr)
+{
+    TRACE("OMDefIdMap::addQSymbol");
+    
+    if (_idToUIDStr.contains(id) || _uidStrToId.contains(uidStr))
+    {
+        throw OMException("Def id to uid string map already contains element");
+    }
+    
+    _idToUIDStr.insert(id, uidStr);
+    _uidStrToId.insert(uidStr, id);
+}
+
+OMUniqueObjectIdentification 
+OMDefIdMap::getId(const wchar_t* uidStr) const
+{
+    TRACE("OMDefIdMap::getId");
+    
+    OMUniqueObjectIdentification* id;
+    if (_uidStrToId.find(uidStr, &id))
+    {
+        return *id;
+    }
+    return nullOMUniqueObjectIdentification;
+}
+
+const wchar_t* 
+OMDefIdMap::getUIDStr(OMUniqueObjectIdentification id) const
+{
+    TRACE("OMDefIdMap::getUIDStr");
+
+    OMWString* uidStr;
+    if (_idToUIDStr.find(id, &uidStr))
+    {
+        return uidStr->c_str();
     }
     return 0;
 }
@@ -116,7 +177,35 @@ OMXMLStorage::OMXMLStorage(OMDiskRawStorage* storage, Mode mode)
         _xmlReader = 0;
     }
     
-    _baselineSymbolspace = OMSymbolspace::createV11Symbolspace(this);
+    loadBaselineSymbolspace();
+}
+
+void
+OMXMLStorage::loadBaselineSymbolspace()
+{
+    TRACE("OMXMLStorage::loadBaselineSymbolspace");
+
+    if (_xmlReader != 0)
+    {
+        if (!_xmlReader->nextElement())
+        {
+            throw OMException("Invalid AAF file - no root element present");
+        }
+        const wchar_t* uri;
+        const wchar_t* localName;
+        const OMList<OMXMLAttribute*>* attributes;
+        _xmlReader->getStartElement(uri, localName, attributes);
+        _baselineSymbolspace = OMSymbolspace::createBaselineSymbolspace(this, uri);
+        if (_baselineSymbolspace == 0)
+        {
+            throw OMException("Root element not recognised");
+        }
+        _xmlReader->reset();
+    }
+    else
+    {
+        _baselineSymbolspace = OMSymbolspace::createBaselineSymbolspace(this);
+    }
     addSymbolspace(_baselineSymbolspace);
 }
 
@@ -235,6 +324,14 @@ OMXMLStorage::resetForWriting()
     _xmlWriter->reset();
 }
 
+const wchar_t* 
+OMXMLStorage::getBaselineVersion() const
+{
+    TRACE("OMXMLStorage::getBaselineVersion");
+    
+    return _baselineSymbolspace->getVersion();
+}
+
 OMSymbolspace* 
 OMXMLStorage::getBaselineSymbolspace() const
 {
@@ -294,12 +391,12 @@ OMXMLStorage::getSymbolspaces()
 }
 
 void 
-OMXMLStorage::addQSymbolToMap(OMUniqueObjectIdentification id, const wchar_t* symbolspace, 
+OMXMLStorage::addMetaDefIdMap(OMUniqueObjectIdentification id, const wchar_t* symbolspace, 
     const wchar_t* symbol)
 {
-    TRACE("OMXMLStorage::addQSymbolToMap");
+    TRACE("OMXMLStorage::addMetaDefIdMap");
     
-    _qSymbolMap.addQSymbol(id, symbolspace, symbol);
+    _metaDefIdMap.add(id, symbolspace, symbol);
 }
 
 OMUniqueObjectIdentification 
@@ -309,7 +406,7 @@ OMXMLStorage::getMetaDefIdFromQSymbol(const wchar_t* qSymbol) const
     
     // if the qSymbol refers to a non-baseline metadef then it
     // must be in the qSymbolMap; otherwise it is a baseline qSymbol
-    OMUniqueObjectIdentification id = _qSymbolMap.getId(qSymbol);
+    OMUniqueObjectIdentification id = _metaDefIdMap.getId(qSymbol);
     if (id == nullOMUniqueObjectIdentification)
     {
         // support qualified baseline symbols
@@ -320,6 +417,38 @@ OMXMLStorage::getMetaDefIdFromQSymbol(const wchar_t* qSymbol) const
     }
     
     return id;
+}
+
+OMUniqueObjectIdentification 
+OMXMLStorage::getDefIdFromUIDStr(const wchar_t* uidStr) const
+{
+    TRACE("OMXMLStorage::getDefIdFromUIDStr");
+    
+    // try the baseline symbols first
+    OMUniqueObjectIdentification id = getDefId(uidStr);
+    if (id == nullOMUniqueObjectIdentification)
+    {
+        // try non-baseline uid strings
+        id = _defIdMap.getId(uidStr);
+    }
+    
+    return id;
+}
+
+const wchar_t* 
+OMXMLStorage::getUIDStrFromId(OMUniqueObjectIdentification id) const
+{
+    TRACE("OMXMLStorage::getUIDStrFromId");
+    
+    return _defIdMap.getUIDStr(id);
+}
+
+void 
+OMXMLStorage::addDefIdMap(OMUniqueObjectIdentification id, const wchar_t* uidStr)
+{
+    TRACE("OMXMLStorage::addDefIdMap");
+    
+    _defIdMap.add(id, uidStr);
 }
 
 bool 

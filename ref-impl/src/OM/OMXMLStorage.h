@@ -35,14 +35,14 @@
 #include "OMByteArray.h"
 
 
-class OMQSymbolMap
+class OMMetaDefIdMap
 {
 public:
-    OMQSymbolMap();
-    ~OMQSymbolMap();
+    OMMetaDefIdMap();
+    ~OMMetaDefIdMap();
     
-    void addQSymbol(OMUniqueObjectIdentification id, const wchar_t* qSymbol);
-    void addQSymbol(OMUniqueObjectIdentification id, const wchar_t* symbolspace,
+    void add(OMUniqueObjectIdentification id, const wchar_t* qSymbol);
+    void add(OMUniqueObjectIdentification id, const wchar_t* symbolspace,
         const wchar_t* symbol);
     
     OMUniqueObjectIdentification getId(const wchar_t* qSymbol) const;
@@ -51,6 +51,23 @@ public:
 private:
     OMSet<OMUniqueObjectIdentification, OMWString> _idToQSymbol;
     OMSet<OMWString, OMUniqueObjectIdentification> _qSymbolToId;    
+};
+
+
+class OMDefIdMap
+{
+public:
+    OMDefIdMap();
+    ~OMDefIdMap();
+    
+    void add(OMUniqueObjectIdentification id, const wchar_t* uid);
+    
+    OMUniqueObjectIdentification getId(const wchar_t* uid) const;
+    const wchar_t* getUIDStr(OMUniqueObjectIdentification id) const;
+    
+private:
+    OMSet<OMUniqueObjectIdentification, OMWString> _idToUIDStr;
+    OMSet<OMWString, OMUniqueObjectIdentification> _uidStrToId;    
 };
 
 
@@ -71,6 +88,7 @@ public:
     
     void resetForWriting();
     
+    const wchar_t* getBaselineVersion() const;
     OMSymbolspace* getBaselineSymbolspace() const;
     OMSymbolspace* getDefaultExtSymbolspace() const;
     OMSymbolspace* createDefaultExtSymbolspace(OMUniqueObjectIdentification id);
@@ -79,8 +97,12 @@ public:
     OMSet<OMWString, OMSymbolspace*>& getSymbolspaces();
 
     OMUniqueObjectIdentification getMetaDefIdFromQSymbol(const wchar_t* qSymbol) const;
-    void addQSymbolToMap(OMUniqueObjectIdentification id, const wchar_t* symbolspace, 
+    void addMetaDefIdMap(OMUniqueObjectIdentification id, const wchar_t* symbolspace, 
         const wchar_t* symbol); 
+    
+    OMUniqueObjectIdentification getDefIdFromUIDStr(const wchar_t* uidStr) const;
+    const wchar_t* getUIDStrFromId(OMUniqueObjectIdentification id) const;
+    void addDefIdMap(OMUniqueObjectIdentification id, const wchar_t* uidStr); 
     
     bool getMetaDefSymbol(OMUniqueObjectIdentification id, const wchar_t** symbolspaceURI, const wchar_t** symbol) const;
     OMUniqueObjectIdentification getMetaDefId(const wchar_t* symbolspaceURI, const wchar_t* symbol) const;
@@ -118,6 +140,7 @@ public:
     
 private:
     void setUniquePrefix(OMSymbolspace* symbolspace);
+    void loadBaselineSymbolspace();
 
     Mode            _mode;
     OMDiskRawStorage*   _storage;
@@ -144,7 +167,9 @@ private:
     
     OMSet<OMWString, OMWString> _namespacesPrefixMap;
     
-    OMQSymbolMap _qSymbolMap;
+    OMMetaDefIdMap _metaDefIdMap;
+
+    OMDefIdMap _defIdMap;
 };
 
 
