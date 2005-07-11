@@ -779,7 +779,7 @@ uriToMobId(const wchar_t* uri, OMMaterialIdentification* mobId)
 }
 
 void 
-integerToString(const OMByte* value, OMUInt8 size, bool isSigned, wchar_t* str)
+integerToString(const OMByte* value, OMUInt8 size, bool isSigned, wchar_t* str, bool hex)
 {
     TRACE("::integerToString");
 
@@ -787,7 +787,11 @@ integerToString(const OMByte* value, OMUInt8 size, bool isSigned, wchar_t* str)
     {
         case 1:
             {
-                if (isSigned)
+                if (hex)
+                {
+                    std_swprintf(str, 5, L"0x%x", *((OMUInt8*)value));
+                }
+                else if (isSigned)
                 {
                     std_swprintf(str, 5, L"%d", *((OMInt8*)value));
                 }
@@ -799,7 +803,11 @@ integerToString(const OMByte* value, OMUInt8 size, bool isSigned, wchar_t* str)
             break;        
         case 2:
             {
-                if (isSigned)
+                if (hex)
+                {
+                    std_swprintf(str, 9, L"0x%x", *((OMUInt16*)value));
+                }
+                else if (isSigned)
                 {
                     std_swprintf(str, 7, L"%d", *((OMInt16*)value));
                 }
@@ -811,7 +819,11 @@ integerToString(const OMByte* value, OMUInt8 size, bool isSigned, wchar_t* str)
             break;        
         case 4:
             {
-                if (isSigned)
+                if (hex)
+                {
+                    std_swprintf(str, 11, L"0x%x", *((OMUInt32*)value));
+                }
+                else if (isSigned)
                 {
                     std_swprintf(str, 12, L"%d", *((OMInt32*)value));
                 }
@@ -823,7 +835,11 @@ integerToString(const OMByte* value, OMUInt8 size, bool isSigned, wchar_t* str)
             break;        
         case 8:
             {
-                if (isSigned)
+                if (hex)
+                {
+                    std_swprintf(str, 19, L"0x%"OMWFMT64 L"x", *((OMUInt64*)value));
+                }
+                else if (isSigned)
                 {
                     std_swprintf(str, 22, L"%"OMWFMT64 L"d", *((OMInt64*)value));
                 }
@@ -1397,7 +1413,15 @@ uint16FromString(const wchar_t* str, OMUInt16& value)
     TRACE("::uint16FromString");
 
     unsigned int tmp;
-    int result = swscanf(str, L"%u", &tmp);
+    int result = 0;
+    if (wcsncmp(str, L"0x", 2) == 0)
+    {
+        result = swscanf(str, L"0x%x", &tmp);
+    }
+    else
+    {
+        result = swscanf(str, L"%u", &tmp);
+    }
     if (result != 1)
     {
         throw OMException("Invalid UInt16 integer value");
@@ -1411,7 +1435,15 @@ int64FromString(const wchar_t* str, OMInt64& value)
     TRACE("::int64FromString");
 
     OMInt64 tmp;
-    int result = swscanf(str, L"%"OMWFMT64 L"d", &tmp);
+    int result = 0;
+    if (wcsncmp(str, L"0x", 2) == 0)
+    {
+        result = swscanf(str, L"0x%"OMWFMT64 L"x", &tmp);
+    }
+    else
+    {
+        result = swscanf(str, L"%"OMWFMT64 L"d", &tmp);
+    }
     if (result != 1)
     {
         throw OMException("Invalid Int64 integer value");
@@ -1425,7 +1457,15 @@ uint32FromString(const wchar_t* str, OMUInt32& value)
     TRACE("::uint32FromString");
 
     unsigned int tmp;
-    int result = swscanf(str, L"%u", &tmp);
+    int result = 0;
+    if (wcsncmp(str, L"0x", 2) == 0)
+    {
+        result = swscanf(str, L"0x%x", &tmp);
+    }
+    else
+    {
+        result = swscanf(str, L"%u", &tmp);
+    }
     if (result != 1)
     {
         throw OMException("Invalid UInt32 integer value");
@@ -1439,7 +1479,15 @@ uint8FromString(const wchar_t* str, OMUInt8& value)
     TRACE("::uint8FromString");
 
     unsigned int tmp;
-    int result = swscanf(str, L"%u", &tmp);
+    int result = 0;
+    if (wcsncmp(str, L"0x", 2) == 0)
+    {
+        result = swscanf(str, L"0x%x", &tmp);
+    }
+    else
+    {
+        result = swscanf(str, L"%u", &tmp);
+    }
     if (result != 1)
     {
         throw OMException("Invalid UInt8 integer value");

@@ -84,7 +84,7 @@ bool isUMIDURI(const wchar_t* str);
 void uriToAUID(const wchar_t* uri, OMUniqueObjectIdentification* id);
 void uriToMobId(const wchar_t* uri, OMMaterialIdentification* mobId);
 
-void integerToString(const OMByte* value, OMUInt8 size, bool isSigned, wchar_t* str);
+void integerToString(const OMByte* value, OMUInt8 size, bool isSigned, wchar_t* str, bool hex = false);
 void byteOrderToString(OMByteOrder byteOrder, wchar_t* str);
 void headerByteOrderToString(const OMByte* internalBytes, wchar_t* str);
 void timeStampToString(const OMByte* internalBytes, wchar_t* str);
