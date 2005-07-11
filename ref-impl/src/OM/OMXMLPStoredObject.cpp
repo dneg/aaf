@@ -82,7 +82,13 @@
 #include "OMUniqueObjectIdentType.h"
 
 
+// class definition identifications
+static const OMUniqueObjectIdentification ClassID_Header =
+    {0x0d010101, 0x0101, 0x2f00, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+
 // type definition identifications
+static const OMUniqueObjectIdentification TypeID_Boolean =
+    {0x01040100, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
 static const OMUniqueObjectIdentification TypeID_DataValue =
     {0x04100100, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
 static const OMUniqueObjectIdentification TypeID_StringArray =
@@ -111,6 +117,8 @@ static const OMUniqueObjectIdentification PropID_DefinitionObject_Identification
     {0x01011503, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
 static const OMUniqueObjectIdentification PropID_OperationGroup_Parameters =
     {0x06010104, 0x060a, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
+static const OMUniqueObjectIdentification PropID_Header_Dictionary =
+    {0x06010104, 0x0202, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
 
 // property definition local identifications
 static const OMPropertyId PropLocalID_Root_MetaDictionary = 0x0001;
@@ -131,6 +139,10 @@ static const wchar_t* ByteOrder_AttrName = L"byteOrder";
 static const wchar_t* ActualType_AttrName = L"actualType";
 static const wchar_t* AAFEscape_AttrName = L"escaped";
 
+
+// property symbols
+static const wchar_t* HeaderDictionarySymbol = L"HeaderDictionary";
+static const wchar_t* DefObjectIdentificationSymbol = L"DefinitionObjectIdentification"; 
 
 
 OMXMLPStoredObject*
@@ -330,9 +342,7 @@ OMXMLPStoredObject::save(OMFile& file)
             }
         }
 
-        wchar_t versionStr[XML_MAX_VERSIONTYPE_STRING_SIZE];
-        getHeaderVersion(file, versionStr);
-        getWriter()->writeAttribute(0, L"version", versionStr);
+        getWriter()->writeAttribute(0, L"version", _store->getBaselineVersion());
 
         if (haveExtensions)
         {
@@ -403,10 +413,38 @@ OMXMLPStoredObject::save(const OMPropertySet& properties )
 {
     TRACE("OMXMLPStoredObject::save(OMPropertySet)");
 
+    // write the Header::Dictionary property first
+    if (properties.container()->definition()->identification() == ClassID_Header)
+    {
+        const OMProperty* property = properties.get(PropLocalID_Header_Dictionary);
+
+        const wchar_t* symbolspace;
+        const wchar_t* symbol;
+        OMUniqueObjectIdentification id =
+            property->definition()->identification();
+        if (_store->getMetaDefSymbol(id, &symbolspace, &symbol))
+        {
+            getWriter()->writeElementStart(symbolspace, symbol);
+        }
+        else
+        {
+            ASSERT("Property definition registered in MetaDictionary and Symbolspace", false);
+        }
+        property->save();
+        getWriter()->writeElementEnd();
+    }
+    
     OMPropertySetIterator iterator(properties, OMBefore);
     while (++iterator)
     {
         const OMProperty* property = iterator.property();
+        
+        // skip the Header::Dictionary property because it has already been written
+        if (property->definition()->identification() == PropID_Header_Dictionary)
+        {
+            continue;
+        }
+        
         if (!property->isOptional() || property->isPresent())
         {
             // converting older files does not handle extendible enumerations 
@@ -569,15 +607,15 @@ OMXMLPStoredObject::save(const OMStrongReferenceSet& set)
 
         // Forward the DefinitionObject::Identification to the object
         // so that it can be written as the value of the aaf:uid attribute
-        // Handle special case of OperationGroup::Parameters where the contained
-        // object uses the weak reference DataDefinition as a key and this id
-        // must not be forwarded
+        // Handle special case of OperationGroup::Parameters set where the key
+        // is defined to be the DefinitionObject::Identification property and 
+        // this id must not be forwarded
         if (set.keyPropertyId() == PropLocalID_DefinitionObject_Identification &&
             set.definition()->identification() != PropID_OperationGroup_Parameters)
         {
             OMUniqueObjectIdentification id =
                 *(reinterpret_cast<OMUniqueObjectIdentification*>(element.identification()));
-            wchar_t* idStr = saveAUID(id, ANY);
+            wchar_t* idStr = saveAUID(id, DICT_DEF);
             _store->forwardObjectSetId(idStr);
             delete [] idStr;
         }
@@ -833,6 +871,7 @@ OMXMLPStoredObject::restore(OMPropertySet& properties)
         if (getReader()->getEventType() == OMXMLReader::START_ELEMENT &&
             getReader()->elementEquals(getBaselineURI(), L"Header"))
         {
+            createDictionaryMap();
             OMStrongReference* headerRef = dynamic_cast<OMStrongReference*>(
                 properties.get(PropLocalID_Root_Header));
             headerRef->reference().restore();
@@ -1044,8 +1083,9 @@ OMXMLPStoredObject::restore(OMStrongReferenceSet& set,
                                  getBaselineURI(), UniqueId_AttrName);
         if (idAttr != 0)
         {
-            key = new OMByte[16];
-            readSetId(key, keySize, idAttr->getValue());
+            key = new OMByte[sizeof(OMUniqueObjectIdentification)];
+            OMUniqueObjectIdentification id = restoreAUID(idAttr->getValue(), DICT_DEF);
+            memcpy(key, reinterpret_cast<void*>(&id), sizeof(OMUniqueObjectIdentification));
         }
 
         // restore the object using a dummy (key and keySize not yet known)
@@ -1444,7 +1484,16 @@ OMXMLPStoredObject::saveEnum(const OMByte* internalBytes, OMUInt16 internalSize,
             ASSERT("Valid integer size", false);
             break;
     }
-    wchar_t* name = type->elementNameFromValue(value);
+    wchar_t* name = 0;
+    if (type->identification() == TypeID_Boolean)
+    {
+        name = new wchar_t[XML_MAX_BOOL_STRING_SIZE];
+        boolToString(value != 0, name); // kAAFFalse = 0, kAAFTrue = 1
+    }
+    else
+    {
+        name = type->elementNameFromValue(value);
+    }
     ASSERT("Valid name", name != 0);
     
     if (isElementContent)
@@ -2039,7 +2088,7 @@ OMXMLPStoredObject::restoreExtensions(OMDictionary* dictionary)
                         if (symbolspace.length() > 0 && 
                             symbol.length() > 0 && id != nullOMUniqueObjectIdentification)
                         {
-                            _store->addQSymbolToMap(id, symbolspace.c_str(), symbol.c_str());
+                            _store->addMetaDefIdMap(id, symbolspace.c_str(), symbol.c_str());
                         }
                     }
                 }
@@ -2246,7 +2295,24 @@ OMXMLPStoredObject::restoreEnum(OMByteArray& bytes, const OMList<OMXMLAttribute*
         getReader()->getCharacters(data, length);
     }
 
-    OMInt64 value = type->elementValueFromName(data);
+    OMInt64 value;
+    if (type->identification() == TypeID_Boolean)
+    {
+        bool boolValue;
+        boolFromString(data, boolValue);
+        if (boolValue)
+        {
+            value = 1; // kAAFTrue
+        }
+        else
+        {
+            value = 0; // kAAFFalse
+        }
+    }
+    else
+    {
+        value = type->elementValueFromName(data);
+    }
     
     // Can't call internalSize() - no parameters - because it will go to 
     // ImplAAFTypeDef::internalSize() which calls NativeSize() which for extensions 
@@ -3040,6 +3106,11 @@ OMXMLPStoredObject::restoreAUID(const wchar_t* idStr, AUIDTargetType targetType)
         {
             id = _store->getBaselineDefId(idStr);
         }
+        if (id == nullOMUniqueObjectIdentification && 
+            targetType == DICT_DEF)
+        {
+            id = _store->getDefIdFromUIDStr(idStr);
+        }
         
         if (id == nullOMUniqueObjectIdentification)
         {
@@ -3083,6 +3154,14 @@ OMXMLPStoredObject::saveAUID(OMUniqueObjectIdentification id, AUIDTargetType tar
         {
             idStr = wideCharacterStringDup(symbol);
         }
+        else if (targetType == DICT_DEF)
+        {
+            const wchar_t* uidStr = _store->getUIDStrFromId(id);
+            if (uidStr != 0)
+            {
+                idStr = wideCharacterStringDup(uidStr);
+            }
+        }
     }
     if (idStr == 0)
     {
@@ -3093,22 +3172,6 @@ OMXMLPStoredObject::saveAUID(OMUniqueObjectIdentification id, AUIDTargetType tar
     return idStr;
 }
     
-void
-OMXMLPStoredObject::getHeaderVersion(OMFile& file, wchar_t* versionStr)
-{
-    TRACE("OMXMLPStoredObject::getHeaderVersion");
-
-    // traverse object tree to /Header/Version
-    const OMPropertyId versionPath[3] = 
-        {PropLocalID_Root_Header, PropLocalID_Header_Version, 0x0000}; 
-    OMProperty* versionProp = file.findProperty(versionPath);
-    ASSERT("Header::Version property present", versionProp != 0);
-    OMSimpleProperty* versionSimpleProp = dynamic_cast<OMSimpleProperty*>(versionProp);
-    ASSERT("Header::Version property is a Simple value", versionSimpleProp != 0);
-    
-    versionTypeToString(versionSimpleProp->bits(), versionStr);    
-}
-
 OMUniqueObjectIdentification
 OMXMLPStoredObject::getExtensionSymbolspaceId(OMFile& file)
 {
@@ -3151,6 +3214,7 @@ OMXMLPStoredObject::getExtensionSymbolspaceId(OMFile& file)
 void
 OMXMLPStoredObject::getDataStreams(OMStorable* storable, OMVector<OMDataStream*>& dataStreams)
 {
+    // iterate through the whole object tree and register each occurence of a DataStream property 
     OMPropertySet* properties = storable->propertySet();
     OMPropertySetIterator propIterator(*properties, OMBefore);
     while (++propIterator)
@@ -3190,38 +3254,6 @@ OMXMLPStoredObject::getDataStreams(OMStorable* storable, OMVector<OMDataStream*>
                 delete &iterator;
             }
         }
-    }
-}
-
-void
-OMXMLPStoredObject::readSetId(OMByte* key, OMKeySize keySize, const wchar_t* idStr)
-{
-    TRACE("OMXMLPStoredObject::readSetId");
-
-    if (isAUIDURI(idStr))
-    {
-        if (keySize != 16)
-        {
-            throw OMException("Set id is an AUID but the key size does not equal 16");
-        }
-        uriToAUID(idStr, reinterpret_cast<OMUniqueObjectIdentification*>(key));
-    }
-    else if (isUMIDURI(idStr))
-    {
-        if (keySize != 32)
-        {
-            throw OMException("Set id is an MobID but the key size does not equal 32");
-        }
-        uriToMobId(idStr, reinterpret_cast<OMMaterialIdentification*>(key));
-    }
-    else
-    {
-        OMUniqueObjectIdentification id = _store->getDefId(idStr);
-        if (id == nullOMUniqueObjectIdentification)
-        {
-            throw OMException("Set id with unknown definition symbol");
-        }
-        memcpy(key, &id, sizeof(OMUniqueObjectIdentification));
     }
 }
 
@@ -3309,4 +3341,102 @@ OMXMLPStoredObject::registerExtensions(OMFile& file, OMSymbolspace* extSymbolspa
     }
 }
 
+void
+OMXMLPStoredObject::createDictionaryMap()
+{
+    TRACE("OMXMLPStoredObject::createDictionaryMap");
 
+    // first-pass: register all aaf:uid to DefinitionObject:Identification mappings
+    
+    while (getReader()->nextElement())
+    {
+        if (getReader()->elementEquals(getBaselineURI(), HeaderDictionarySymbol))
+        {
+            // move to <Dictionary>
+            getReader()->nextElement();
+            
+            // iterate over DefinitionObject sets
+            OMWString symbolspace;
+            while (getReader()->nextElement())
+            {
+                // iterate over DefinitionObjects
+                while (getReader()->nextElement())
+                {
+                    // read the aaf:uid attribute
+                    const wchar_t* nmspace;
+                    const wchar_t* localName;
+                    const OMList<OMXMLAttribute*>* attrs;
+                    getReader()->getStartElement(nmspace, localName, attrs);
+                    OMXMLAttribute* idAttr = getReader()->getAttribute(attrs,
+                                             getBaselineURI(), UniqueId_AttrName);
+                    if (idAttr == 0)
+                    {
+                        throw OMException("Missing aaf:uid attribute on DefinitionObject");
+                    }
+                    OMWString uidStr = idAttr->getValue();
+
+                    // iterate over the properties and get DefinitionObject::Identification
+                    OMUniqueObjectIdentification id = nullOMUniqueObjectIdentification;
+                    while (getReader()->nextElement())
+                    {
+                        if (getReader()->elementEquals(getBaselineURI(), DefObjectIdentificationSymbol))
+                        {
+                            const wchar_t* data;
+                            size_t length;
+                            getReader()->next();
+                            if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
+                            {
+                                throw OMException("Empty string is invalid DefinitiobObject::Identification "
+                                    "value");
+                            }
+                            getReader()->getCharacters(data, length);
+                            uriToAUID(data, &id);
+                            getReader()->moveToEndElement();
+                        }
+                        else
+                        {
+                            getReader()->skipContent();
+                        }
+                    }
+                    if (id == nullOMUniqueObjectIdentification)
+                    {
+                        throw OMException("Missing DefinitionObject::Identification");
+                    }
+
+                    if (!isAUIDURI(uidStr.c_str()))
+                    {
+                        const wchar_t* defSymbol = _store->getDefSymbol(id);
+                        if (defSymbol != 0)
+                        {
+                            if (wcscmp(defSymbol, uidStr.c_str()) != 0)
+                            {
+                                throw OMException("Invalid aaf:uid attribute value for "
+                                    "baseline Definition");
+                            }
+                        }
+                        else
+                        {
+                            _store->addDefIdMap(id, uidStr.c_str());
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            getReader()->skipContent();
+        }
+    }
+
+    
+    
+    // return the reader to the <Header> element
+    getReader()->reset();
+    getReader()->nextElement();
+    while (getReader()->nextElement() && 
+        !getReader()->elementEquals(getBaselineURI(), L"Header"))
+    {
+        getReader()->skipContent();
+    }
+    
+}
