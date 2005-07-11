@@ -265,12 +265,14 @@ OMXMLReaderExpat::~OMXMLReaderExpat()
     {
         delete iter.value();
     }
-    
+    _attributes.clear();
+
     size_t elementCount = _startNmspaceDecls.count();
     for (size_t i = 0; i < elementCount; i++)
     {
         delete _startNmspaceDecls.getAt(i);
     }
+    _startNmspaceDecls.clear();
 }
 
 bool 
@@ -368,12 +370,14 @@ OMXMLReaderExpat::reset()
     {
         delete iter.value();
     }
+    _attributes.clear();
     
     size_t elementCount = _startNmspaceDecls.count();
     for (size_t i = 0; i < elementCount; i++)
     {
         delete _startNmspaceDecls.getAt(i);
     }
+    _startNmspaceDecls.clear();
     _endNmspaceDecls.clear();
     
     
