@@ -96,18 +96,18 @@ const wchar_t* OMSymbolspace::_baselineURI =
     L"http://www.aafassociation.org/aafx/v1.1/20050628";
 const OMUniqueObjectIdentification OMSymbolspace::_baselineId =
     {0x4d4548db, 0x4a2c, 0x48c6, {0x9e, 0x90, 0x47, 0xf3, 0x45, 0xf3, 0xd5, 0xf9}};
-    
+const wchar_t* OMSymbolspace::_baselineVersion = L"1.1";
     
     
 OMSymbolspace::OMSymbolspace(OMXMLStorage* store)
 : _isInitialised(false), _store(store), _id(nullOMUniqueObjectIdentification), _uri(0), 
-    _preferredPrefix(0), _prefix(0), _description(0), _uniqueSymbolSuffix(1)
+    _preferredPrefix(0), _prefix(0), _description(0), _version(0), _uniqueSymbolSuffix(1)
 {}
 
 OMSymbolspace::OMSymbolspace(OMXMLStorage* store, OMUniqueObjectIdentification id, const wchar_t* uri, 
     const wchar_t* preferredPrefix, const wchar_t* description)
 : _isInitialised(false), _store(store), _id(nullOMUniqueObjectIdentification), _uri(0), 
-    _preferredPrefix(0), _prefix(0), _description(0), _uniqueSymbolSuffix(1)
+    _preferredPrefix(0), _prefix(0), _description(0), _version(0), _uniqueSymbolSuffix(1)
 {
     TRACE("OMSymbolspace::OMSymbolspace");
     
@@ -133,6 +133,10 @@ OMSymbolspace::~OMSymbolspace()
     if (_description != 0)
     {
         delete [] _description;
+    }
+    if (_version != 0)
+    {
+        delete [] _version;
     }
 
     size_t i;
@@ -222,6 +226,14 @@ OMSymbolspace::getDescription() const
     return _description;
 }
     
+const wchar_t* 
+OMSymbolspace::getVersion() const
+{
+    TRACE("OMSymbolspace::getVersion");
+    
+    return _version;
+}
+
 const wchar_t* 
 OMSymbolspace::getMetaDefSymbol(OMUniqueObjectIdentification id) const
 {
@@ -893,7 +905,7 @@ OMSymbolspace::savePropertyDef(OMClassDefinition* ownerClassDef, OMPropertyDefin
 
     wchar_t localIdStr[XML_MAX_INTEGER_STRING_SIZE];
     OMUInt16 localId = propertyDef->localIdentification();
-    integerToString((OMByte*)&localId, sizeof(OMUInt16), false, localIdStr);
+    integerToString((OMByte*)&localId, sizeof(OMUInt16), false, localIdStr, true);
     getWriter()->writeElementStart(getBaselineURI(), L"LocalIdentification");
     getWriter()->writeElementContent(localIdStr, wcslen(localIdStr));
     getWriter()->writeElementEnd();
@@ -1279,7 +1291,7 @@ OMSymbolspace::saveWeakObjectReferenceTypeDef(OMWeakObjectReferenceType* typeDef
     for (size_t i = 0; i<targetSet.count(); i++)
     {
         idStr = saveMetaDefAUID(targetSet.getAt(i));        
-        getWriter()->writeElementStart(getBaselineURI(), L"AUID");
+        getWriter()->writeElementStart(getBaselineURI(), L"MetaDefRef");
         getWriter()->writeElementContent(idStr, wcslen(idStr));
         getWriter()->writeElementEnd();
         delete [] idStr;
@@ -2695,14 +2707,14 @@ OMSymbolspace::restoreWeakObjectReferenceTypeDef(OMDictionary* dictionary)
                 const wchar_t* localName;
                 const OMList<OMXMLAttribute*>* attrs;
                 getReader()->getStartElement(nmspace, localName, attrs);
-                if (!getReader()->elementEquals(getBaselineURI(), L"AUID"))
+                if (!getReader()->elementEquals(getBaselineURI(), L"MetaDefRef"))
                 {
-                    throw OMException("Expecting AUID element in WeakObjectReferenceType TargetSet");
+                    throw OMException("Expecting MetaDefRef element in WeakObjectReferenceType TargetSet");
                 }
                 getReader()->next();
                 if (getReader()->getEventType() != OMXMLReader::CHARACTERS)
                 {
-                    throw OMException("Invalid AUID element in WeakObjectReferenceType TargetSet");
+                    throw OMException("Invalid MetaDefRef element in WeakObjectReferenceType TargetSet");
                 }
                 const wchar_t* data;
                 size_t length;
@@ -3028,13 +3040,28 @@ OMSymbolspace::createDefaultExtSymbolspace(OMXMLStorage* store, OMUniqueObjectId
 }
 
 OMSymbolspace* 
-OMSymbolspace::createV11Symbolspace(OMXMLStorage* store)
+OMSymbolspace::createBaselineSymbolspace(OMXMLStorage* store, const wchar_t* uri)
 {
-    TRACE("OMSymbolspace::createV11Symbolspace");
+    TRACE("OMSymbolspace::createBaselineSymbolspace(OMXMLStorage, wchar_t)");
+
+    if (wcscmp(uri, _baselineURI) == 0)
+    {
+        return createBaselineSymbolspace(store);
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+OMSymbolspace* 
+OMSymbolspace::createBaselineSymbolspace(OMXMLStorage* store)
+{
+    TRACE("OMSymbolspace::createBaselineSymbolspace(OMXMLStorage)");
 
     OMSymbolspace* ss = new OMSymbolspace(store, _baselineId, _baselineURI, L"aaf", 
         L"AAF version 1.1 baseline symbolspace");
-
+    ss->_version = wideCharacterStringDup(_baselineVersion);
         
     //
     // Classes
