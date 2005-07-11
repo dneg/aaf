@@ -353,12 +353,11 @@ private:
     void saveWeakRef(OMWeakObjectReference& weakRef, 
         const OMWeakObjectReferenceType* weakRefType);
     
-    void getHeaderVersion(OMFile& file, wchar_t* versionStr);
     OMUniqueObjectIdentification getExtensionSymbolspaceId(OMFile& file);
 
     void getDataStreams(OMStorable* storable, OMVector<OMDataStream*>& dataStreams);
     
-    void readSetId(OMByte* key, OMKeySize keySize, const wchar_t* idStr);
+    void createDictionaryMap();
 
     
     OMXMLStorage*   _store;
