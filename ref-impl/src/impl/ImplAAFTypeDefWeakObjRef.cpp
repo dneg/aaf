@@ -211,7 +211,7 @@ AAFRESULT STDMETHODCALLTYPE
 		}
 	}
 
-	if (0 != _uniqueIdentifierPid)
+	if (0 != uniqueIdentifierPid)
 	{
 		_uniqueIdentifierPid = uniqueIdentifierPid;
 	}
@@ -811,8 +811,7 @@ bool ImplAAFTypeDefWeakObjRef::initialise(const OMUniqueObjectIdentification& id
         _targetSet.append(*(reinterpret_cast<aafUID_t*>(&id)));
     }
         
-    // TODO: not fully initialised? 
-    // setInitialized();
+    setInitialized();
     
     return true;
 }
