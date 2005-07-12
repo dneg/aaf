@@ -381,7 +381,7 @@ OMSymbolspace::save()
     getWriter()->writeElementContent(_uri, wcslen(_uri));
     getWriter()->writeElementEnd();
 
-    if (_preferredPrefix != 0)
+    if (_preferredPrefix != 0 && wcslen(_preferredPrefix) > 0)
     {
         getWriter()->writeElementStart(getBaselineURI(), L"PreferredPrefix");
         getWriter()->writeElementContent(_preferredPrefix,
@@ -389,7 +389,7 @@ OMSymbolspace::save()
         getWriter()->writeElementEnd();
     }
 
-    if (_description != 0)
+    if (_description != 0 && wcslen(_description) > 0)
     {
         getWriter()->writeElementStart(getBaselineURI(), L"Description");
         getWriter()->writeElementContent(_description,
@@ -607,12 +607,12 @@ OMSymbolspace::initialise(OMUniqueObjectIdentification id, const wchar_t* uri,
     _uri = new wchar_t[wcslen(uri) + 1];
     wcscpy(_uri, uri);
 
-    if (preferredPrefix != 0)
+    if (preferredPrefix != 0 && wcslen(preferredPrefix) > 0)
     {
         _preferredPrefix = new wchar_t[wcslen(preferredPrefix) + 1];
         wcscpy(_preferredPrefix, preferredPrefix);
     }
-    if (description != 0)
+    if (description != 0 && wcslen(description) > 0)
     {
         _description = new wchar_t[wcslen(description) + 1];
         wcscpy(_description, description);
@@ -4011,7 +4011,7 @@ OMSymbolspace::createBaselineSymbolspace(OMXMLStorage* store)
     ADD_PROPERTYDEF_SYMBOL(
         LITERAL_AUID(0x04020301, 0x0101, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05),
         0x3D03,
-        L"SAudioSamplingRate");
+        L"AudioSamplingRate");
     ADD_PROPERTYDEF_SYMBOL(
         LITERAL_AUID(0x04020301, 0x0400, 0x0000, 0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x04),
         0x3D02,
@@ -5329,7 +5329,6 @@ OMSymbolspace::createBaselineSymbolspace(OMXMLStorage* store)
         LITERAL_AUID(0x04010101, 0x0202, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
     ADD_EXT_ENUM_VALUE(
         LITERAL_AUID(0x04010101, 0x0203, 0x0000, 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01));
-    
     
     return ss;
 }
