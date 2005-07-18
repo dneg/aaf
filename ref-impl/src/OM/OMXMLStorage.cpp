@@ -161,8 +161,7 @@ OMDefIdMap::getUIDStr(OMUniqueObjectIdentification id) const
 OMXMLStorage::OMXMLStorage(OMDiskRawStorage* storage, Mode mode)
 : _mode(mode), _storage(storage), _objectSetId(0), _baselineSymbolspace(0), 
     _defaultExtSymbolspace(0), _symbolspacePrefixIndex(0),
-    _dataStreamNotationNameIndex(0), _dataStreamEntityNameIndex(0), 
-    _dataStreamEntityValueIndex(0)
+    _dataStreamNotationNameIndex(0), _dataStreamEntityNameIndex(0) 
 {
     TRACE("OMXMLStorage::OMXMLStorage");
 
@@ -644,8 +643,8 @@ OMXMLStorage::getDataStreamNotationName(OMUniqueObjectIdentification typeId)
         return (*ret).c_str();
     }
 
-    wchar_t name[19];
-    std_swprintf(name, 19, L"DataStream%x", _dataStreamNotationNameIndex);
+    wchar_t name[20];
+    std_swprintf(name, 20, L"DataStream_%x", _dataStreamNotationNameIndex);
     _dataStreamNotationNames.insert(typeId, name); 
     _dataStreamNotationNameIndex++;
 
@@ -668,8 +667,8 @@ OMXMLStorage::getDataStreamEntityName(void* ref)
         return (*ret).c_str();
     }
 
-    wchar_t name[15];
-    std_swprintf(name, 15, L"stream%x", _dataStreamEntityNameIndex);
+    wchar_t name[16];
+    std_swprintf(name, 16, L"stream_%x", _dataStreamEntityNameIndex);
     _dataStreamEntityNames.insert(ref, name); 
     _dataStreamEntityNameIndex++;
     
@@ -719,16 +718,13 @@ OMXMLStorage::getDataStreamEntityValue(void* ref)
         startPtr++;
     }
 
-    // append "_streams/streamxxxxx"
-    wchar_t* suffix = new wchar_t[6];
-    std_swprintf(suffix, 6, L"%d", _dataStreamEntityValueIndex);
-    _dataStreamEntityValueIndex++;
-    wchar_t* value = new wchar_t[wcslen(startPtr) + wcslen(L"_streams/stream") + wcslen(suffix) + 1];
+    // append "_streams/" + entity name
+    const wchar_t* entityName = getDataStreamEntityName(ref);
+    wchar_t* value = new wchar_t[wcslen(startPtr) + wcslen(L"_streams/") + wcslen(entityName) + 1];
     wcscpy(value, startPtr);
-    wcscat(value, L"_streams/stream");
-    wcscat(value, suffix);
+    wcscat(value, L"_streams/");
+    wcscat(value, entityName);
     
-    delete [] suffix;
     delete [] documentUri; 
     
     // insert URI value

@@ -158,7 +158,6 @@ private:
 
     int             _dataStreamNotationNameIndex;
     int             _dataStreamEntityNameIndex;
-    int             _dataStreamEntityValueIndex;
     OMSet<OMUniqueObjectIdentification, OMWString> _dataStreamNotationNames;
     OMSet<void*, OMWString> _dataStreamEntityNames;
     OMSet<void*, OMWString> _dataStreamEntityValues;
