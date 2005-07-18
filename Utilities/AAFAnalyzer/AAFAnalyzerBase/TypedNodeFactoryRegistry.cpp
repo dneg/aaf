@@ -20,7 +20,7 @@
 
 #include "TypedNodeFactoryRegistry.h"
 
-#include "TypedNodeFactory.h"
+#include "TypedNodeFactoryImpl.h"
 
 namespace {
 
@@ -44,15 +44,22 @@ TypedNodeFactoryRegistry::TypedNodeFactoryRegistry()
 
 TypedNodeFactoryRegistry::~TypedNodeFactoryRegistry()
 {
+  if(_pFactory != NULL)
+  {
+    delete _pFactory;
+    _pFactory = NULL;
+  }
 }
 
 bool TypedNodeFactoryRegistry::IsPresent(aafUID_t AUID)
 {
-  return false;
+  Map::const_iterator iter = _Map.find(AUID);
+  return iter != _Map.end();
 }
 
 bool TypedNodeFactoryRegistry::Deregister(aafUID_t AUID)
 {
+  // TO BE COMPLETED
   return false;
 }
 
@@ -70,9 +77,26 @@ TypedNodeFactoryRegistry& TypedNodeFactoryRegistry::GetInstance()
 boost::shared_ptr<TypedNodeFactory> TypedNodeFactoryRegistry::LookUp(aafUID_t AUID)
 {
   // TO BE COMPLETED
+  boost::shared_ptr<TypedNodeFactory> spNodeFactory;
+  
+  if(IsPresent(AUID))
+  {
+    spNodeFactory = _Map[AUID];
+  }
+  else
+  { //try to register the class
+    if(false)
+    {
+    }    
+    //registering class failed - no factory object exists for the AAF object,
+    //instantiate on IAAFObject
+    else
+    {
+      spNodeFactory.reset(new TypedNodeFactoryImpl<IAAFObject>());     
+    }
+  }  
 
-  boost::shared_ptr<TypedNodeFactory> NOVAL;
-  return NOVAL;
+  return spNodeFactory;
 }
 
 void TypedNodeFactoryRegistry::Register(aafUID_t AUID, boost::shared_ptr<TypedNodeFactory> spFactory)

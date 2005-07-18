@@ -22,7 +22,8 @@
 #include "NodeFactoryImpl.h"
 
 #include "TypedNodeFactoryImpl.h"
-
+#include "TypedNodeFactoryRegistry.h"
+#include <iostream>
 namespace {
 
 using namespace aafanalyzer;
@@ -46,17 +47,36 @@ NodeFactoryImpl::~NodeFactoryImpl()
 
 boost::shared_ptr<Node> NodeFactoryImpl::CreateNode(IAAFObjectSP spObj)
 {
+  aafUID_t Auid;
+  boost::shared_ptr<TypedNodeFactory> spNodeFactory;
+
+  spObj->GetGenerationAUID(&Auid);
+  spNodeFactory = TypedNodeFactoryRegistry::GetInstance().LookUp(Auid);
+
+  return spNodeFactory->CreateNode(spObj);
+
   // First, check the registry for a node factory support the specific
   // AAF object type.
-  
+  /*boost::shared_ptr<TypedNodeFactory> spNodeFactory;
+  aafUID_t *pAuid = NULL;
+  spObj->GetGenerationAUID(pAuid);
+
+  if(TypedNodeFactoryRegistry::GetInstance().IsPresent(*pAuid))
+  {
+    spNodeFactory = TypedNodeFactoryRegistry::GetInstance().LookUp(*pAuid);
+    return spNodeFactory->CreateNode(spObj);
+  }
+  else
+  {
+  }  
   // To Be Completed
 
-  // If no factory object exists for the AAF object in question,
+  // No factory object exists for the AAF object in question,
   // therefore, we simply instantiate TypeNodeFactoryImpl on
   // IAAFObject.
   boost::shared_ptr<TypedNodeFactory> spNodeFactory(new TypedNodeFactoryImpl<IAAFObject>());
 
-  return spNodeFactory->CreateNode(spObj);
+  return spNodeFactory->CreateNode(spObj);*/
 }
 
 } // end of namespace diskstream

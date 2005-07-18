@@ -39,21 +39,24 @@ class TypedNodeFactory;
 class TypedNodeFactoryRegistry
 {
  public:
+
+  typedef std::map<aafUID_t, boost::shared_ptr<TypedNodeFactory> > Map;
+
   // dtor must be public so that shared_ptr class can access it
   ~TypedNodeFactoryRegistry();
 
-  bool IsPresent(aafUID_t AUID);
-  bool Deregister(aafUID_t AUID);
-  TypedNodeFactoryRegistry& GetInstance();
   boost::shared_ptr<TypedNodeFactory> LookUp(aafUID_t AUID);
-  void Register(aafUID_t AUID, boost::shared_ptr<TypedNodeFactory> spFactory);  
+  static TypedNodeFactoryRegistry& GetInstance();
 
  private:
-  //using Singleton pattern to allow only one object
-  TypedNodeFactoryRegistry();
+
+  TypedNodeFactoryRegistry();//using Singleton pattern to allow only one object
+  bool IsPresent(aafUID_t AUID);
+  bool Deregister(aafUID_t AUID);
+  void Register(aafUID_t AUID, boost::shared_ptr<TypedNodeFactory> spFactory);
 
   static TypedNodeFactoryRegistry* _pFactory;
-  std::map<aafUID_t, boost::shared_ptr<TypedNodeFactory> > _pMap;  
+  Map _Map;  
 
   // prohibited
   //TypedNodeFactoryRegistry( const TypedNodeFactoryRegistry& );
