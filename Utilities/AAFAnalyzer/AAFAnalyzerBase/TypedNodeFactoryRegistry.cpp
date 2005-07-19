@@ -21,6 +21,8 @@
 #include "TypedNodeFactoryRegistry.h"
 
 #include "TypedNodeFactoryImpl.h"
+#include <AAFMetaDictionary.h>
+#include <iostream>
 
 namespace {
 
@@ -40,6 +42,8 @@ TypedNodeFactoryRegistry* TypedNodeFactoryRegistry::_pFactory = NULL;
 
 TypedNodeFactoryRegistry::TypedNodeFactoryRegistry()
 {
+  //while() parse thru input file and register classes
+  Register(AUID_AAFInterchangeObject, boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFObject>()));
 }
 
 TypedNodeFactoryRegistry::~TypedNodeFactoryRegistry()
@@ -74,34 +78,35 @@ TypedNodeFactoryRegistry& TypedNodeFactoryRegistry::GetInstance()
   return *_pFactory;
 }
 
-boost::shared_ptr<TypedNodeFactory> TypedNodeFactoryRegistry::LookUp(aafUID_t AUID)
+boost::shared_ptr<TypedNodeFactory> TypedNodeFactoryRegistry::LookUp(AxClassDef& clsDef)
 {
-  // TO BE COMPLETED
+  //Find the Auid for the IAAFObject in question, if none exists look to its parent and continue
+  //upwards until an Auid is found.  An exception will be thrown if no Auid is found at the
+  //topmost level (i.e. no parent exists for IAAFObject).  This is not handled because it should 
+  //not happen in a correct file.
   boost::shared_ptr<TypedNodeFactory> spNodeFactory;
-  
-  if(IsPresent(AUID))
+  aafUID_t Auid = clsDef.GetAUID();
+
+  if(IsPresent(Auid))//Base Case:
   {
-    spNodeFactory = _Map[AUID];
+    spNodeFactory = _Map[Auid];
   }
-  else
-  { //try to register the class
-    if(false)
-    {
-    }    
-    //registering class failed - no factory object exists for the AAF object,
-    //instantiate on IAAFObject
-    else
-    {
-      spNodeFactory.reset(new TypedNodeFactoryImpl<IAAFObject>());     
-    }
-  }  
+  else//Recursive Case:
+  {
+    AxClassDef clsParent(clsDef.GetParent());
+    spNodeFactory = LookUp(clsParent);         
+  }
 
   return spNodeFactory;
 }
 
 void TypedNodeFactoryRegistry::Register(aafUID_t AUID, boost::shared_ptr<TypedNodeFactory> spFactory)
 {
-  // TO BE COMPLETED
+  //only add a factory into Map if it is not already present
+  if(!IsPresent(AUID))
+  {
+    _Map[AUID] = spFactory;
+  }
 }
 
 } // end of namespace diskstream

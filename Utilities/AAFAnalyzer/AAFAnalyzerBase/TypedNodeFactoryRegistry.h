@@ -26,6 +26,9 @@
 //AAF files
 #include <AAFTypes.h>
 
+//Ax files
+#include <AxMetaDef.h>
+
 //boost files
 #include <boost/shared_ptr.hpp>
 
@@ -45,7 +48,7 @@ class TypedNodeFactoryRegistry
   // dtor must be public so that shared_ptr class can access it
   ~TypedNodeFactoryRegistry();
 
-  boost::shared_ptr<TypedNodeFactory> LookUp(aafUID_t AUID);
+  boost::shared_ptr<TypedNodeFactory> LookUp(AxClassDef& clsDef);
   static TypedNodeFactoryRegistry& GetInstance();
 
  private:
