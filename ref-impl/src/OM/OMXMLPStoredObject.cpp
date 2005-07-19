@@ -1566,25 +1566,19 @@ OMXMLPStoredObject::saveIndirect(const OMByte* externalBytes, OMUInt16 externalS
     TRACE("OMXMLPStoredObject::saveIndirect");
 
     OMType* actualType = type->actualType(externalBytes, externalSize);
-    OMByteOrder byteOrder = type->byteOrder(externalBytes, externalSize);
 
-    const OMByte* actualData;
-    size_t actualDataSize;
-    type->actualData(externalBytes, externalSize, actualData, actualDataSize);
+    OMByteArray actualData;
+    size_t actualSize;
+    type->actualSize(externalBytes, externalSize, actualSize);
+    actualData.grow(actualSize);
+    actualData.setSize(actualSize);
+    type->actualData(externalBytes, (size_t)externalSize, actualData.bytes(), actualSize);
     
-    size_t actualInternalSize = actualType->internalSize(actualData, actualDataSize);
-    OMByte* actualInternalData = new OMByte[actualInternalSize]; 
-    actualType->internalize(actualData, actualDataSize, actualInternalData, 
-        actualInternalSize, byteOrder);
-
     wchar_t* idStr = saveAUID(actualType->identification(), METADICT_DEF);
     getWriter()->writeAttribute(getBaselineURI(), ActualType_AttrName, idStr);
     delete [] idStr;
         
-    saveSimpleValue(actualInternalData, actualInternalSize, actualType, isElementContent);
-        
-    delete [] actualInternalData;
-
+    saveSimpleValue(actualData.bytes(), actualSize, actualType, isElementContent);
 }
 
 void 
@@ -1617,9 +1611,9 @@ OMXMLPStoredObject::saveOpaque(const OMByte* externalBytes, OMUInt16 externalSiz
         externalSize);
     OMByteOrder byteOrder = type->byteOrder(externalBytes, externalSize);
 
-    const OMByte* actualData;
-    size_t actualDataSize;
-    type->actualData(externalBytes, externalSize, actualData, actualDataSize);
+    const OMByte* externalDataBytes;
+    size_t externalDataSize;
+    type->externalData(externalBytes, externalSize, externalDataBytes, externalDataSize);
     
     wchar_t* idStr = saveAUID(actualTypeId, METADICT_DEF);
     getWriter()->writeAttribute(getBaselineURI(), ActualType_AttrName, idStr);
@@ -1629,8 +1623,7 @@ OMXMLPStoredObject::saveOpaque(const OMByte* externalBytes, OMUInt16 externalSiz
     byteOrderToString(byteOrder, byteOrderStr);
     getWriter()->writeAttribute(getBaselineURI(), ByteOrder_AttrName, byteOrderStr);
 
-    writeDataInHex(actualData, actualDataSize, isElementContent);    
-        
+    writeDataInHex(externalDataBytes, externalDataSize, isElementContent);    
 }
 
 void 
@@ -2518,7 +2511,7 @@ OMXMLPStoredObject::restoreOpaque(OMByteArray& bytes, const OMList<OMXMLAttribut
         reinterpret_cast<OMByte*>(&byteOrder), sizeof(OMByteOrder));
     bytes.grow(externalByteOrderSize);
     intType.externalize(reinterpret_cast<OMByte*>(&byteOrder), sizeof(OMByteOrder), 
-        &(bytes.bytes()[bytes.size()]), externalByteOrderSize, byteOrder);
+        &(bytes.bytes()[bytes.size()]), externalByteOrderSize, hostByteOrder());
     bytes.setSize(bytes.size() + externalByteOrderSize);
     
     const OMXMLAttribute* typeIdAttr = getReader()->getAttribute(attributes,
@@ -2534,7 +2527,7 @@ OMXMLPStoredObject::restoreOpaque(OMByteArray& bytes, const OMList<OMXMLAttribut
         reinterpret_cast<OMByte*>(&typeId), sizeof(typeId));
     bytes.grow(externalIdentSize);
     identType.externalize(reinterpret_cast<OMByte*>(&typeId), sizeof(typeId), 
-        &(bytes.bytes()[bytes.size()]), externalIdentSize, byteOrder);
+        &(bytes.bytes()[bytes.size()]), externalIdentSize, hostByteOrder());
     if (byteOrder != hostByteOrder())
     {
         identType.reorder(&(bytes.bytes()[bytes.size()]), externalIdentSize); 
