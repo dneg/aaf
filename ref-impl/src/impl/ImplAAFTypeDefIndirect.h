@@ -183,11 +183,17 @@ public:
   
   virtual OMByteOrder byteOrder(const OMByte* externalBytes, size_t externalSize) const;
 
+  virtual void actualSize(const OMByte* externalBytes, size_t externalSize, 
+    size_t& actualSize) const;
+    
   virtual void actualData(const OMByte* externalBytes, size_t externalSize,
-    const OMByte*& actualBytes, size_t& actualBytesSize) const;
+    OMByte* actualBytes, size_t& actualSize) const;
   
   virtual OMType* actualType(OMUniqueObjectIdentification id) const;
 
+  virtual void externalData(const OMByte* externalBytes, size_t externalSize, 
+        const OMByte*& externalDataBytes, size_t& externalDataBytesSize) const;
+        
   virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
       const wchar_t* description);
   
