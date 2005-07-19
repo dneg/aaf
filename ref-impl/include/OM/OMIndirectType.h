@@ -35,9 +35,13 @@ public:
         size_t externalSize) const = 0;
     virtual OMType* actualType(const OMByte* externalBytes, size_t externalSize) const = 0;
     virtual OMByteOrder byteOrder(const OMByte* externalBytes, size_t externalSize) const = 0;
+    virtual void actualSize(const OMByte* externalBytes, size_t externalSize, 
+        size_t& actualSize) const = 0;
     virtual void actualData(const OMByte* externalBytes, size_t externalSize,
-        const OMByte*& actualBytes, size_t& actualBytesSize) const = 0;
+        OMByte* actualBytes, size_t& actualSize) const = 0;
     virtual OMType* actualType(OMUniqueObjectIdentification id) const = 0;
+    virtual void externalData(const OMByte* externalBytes, size_t externalSize, 
+        const OMByte*& externalDataBytes, size_t& externalDataSize) const = 0;
     virtual bool initialise(const OMUniqueObjectIdentification& id, const wchar_t* name,
         const wchar_t* description) = 0;
 };
