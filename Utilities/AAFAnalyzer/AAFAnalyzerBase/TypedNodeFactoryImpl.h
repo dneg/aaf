@@ -46,7 +46,16 @@ class TypedNodeFactoryImpl : public TypedNodeFactory
 
   boost::shared_ptr<Node> CreateNode(IAAFObjectSP spObj)
   {
-    boost::shared_ptr<Node> spNode(new AAFTypedObjNode<AAFObjType>(spObj, AxObject(spObj).GetClassName()));
+    IAAFSmartPointer<AAFObjType> spObjOfType;
+
+    // Cast spObj from IAAFObjectSP to a smart pointer of type
+    // AAFObjType. AxQueryInterface does this without the complexity
+    // of calling QueryInterface directly.  It will throw an exception
+    // if the cast fails.
+    AxQueryInterface( spObj, spObjOfType );
+
+    boost::shared_ptr<Node> spNode(new AAFTypedObjNode<AAFObjType>(spObjOfType,
+								   AxObject(spObj).GetClassName()));
     return spNode;
   }
 

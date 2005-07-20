@@ -21,11 +21,6 @@
 #ifndef __TYPEDNODEFACTORYREGISTRY_h__
 #define __TYPEDNODEFACTORYREGISTRY_h__
 
-//project files
-
-//AAF files
-#include <AAFTypes.h>
-
 //Ax files
 #include <AxMetaDef.h>
 
