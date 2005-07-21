@@ -1394,7 +1394,7 @@ void ImplAAFTypeDefIndirect::actualSize(const OMByte* externalBytes,
     size_t externalDataSize;
     externalData(externalBytes, externalSize, externalDataBytes, externalDataSize);
 
-    actualSize = pActualType->internalSize(externalDataBytes, externalSize);    
+    actualSize = pActualType->internalSize(externalDataBytes, externalDataSize);    
 }
 
 void ImplAAFTypeDefIndirect::actualData(const OMByte* externalBytes, 
@@ -1416,6 +1416,7 @@ void ImplAAFTypeDefIndirect::actualData(const OMByte* externalBytes,
         pActualType->reorder((OMByte*)externalDataBytes, externalDataSize);
     }
 
+    actualSize = pActualType->internalSize(externalDataBytes, externalDataSize);    
 	pActualType->internalize(externalDataBytes, externalDataSize, actualBytes, 
         actualSize, hostByteOrder());
 
