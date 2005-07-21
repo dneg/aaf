@@ -1804,26 +1804,20 @@ OMXMLPStoredObject::saveString(const OMByte* internalBytes, OMUInt16 internalSiz
         OMByteArray modifiedBytes; 
         const wchar_t* str = reinterpret_cast<const wchar_t*>(internalBytes);
         size_t size = internalSize / sizeof(wchar_t);
-        size_t count = size;
-        while (count > 0 && str[count - 1] != L'\0')
+        size_t len = 0;
+        while (len < size && str[len] != L'\0')
         {
-            count--;
+            len++;
         }
-        if (count == 0)
+        if (len == size)
         {
             const wchar_t n = L'\0';
             modifiedBytes.append(internalBytes, internalSize);
             modifiedBytes.append(reinterpret_cast<const OMByte*>(&n), sizeof(wchar_t));
             str = reinterpret_cast<const wchar_t*>(modifiedBytes.bytes());
-            size++;
             printf("Invalid string value encountered ('%ls') - string was not null terminated\n", str);
         }
-        else
-        {
-            size = count;
-        }
-            
-        if (size > 1)
+        if (len > 0)
         {
             if (stringRequiresEscaping(str))
             {
@@ -1840,7 +1834,7 @@ OMXMLPStoredObject::saveString(const OMByte* internalBytes, OMUInt16 internalSiz
             {
                 if (isElementContent)
                 {
-                    getWriter()->writeElementContent(str, size - 1); 
+                    getWriter()->writeElementContent(str, wcslen(str)); 
                 }
                 else
                 {
