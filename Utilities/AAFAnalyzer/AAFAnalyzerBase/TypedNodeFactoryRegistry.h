@@ -52,6 +52,7 @@ class TypedNodeFactoryRegistry
   bool IsPresent(aafUID_t AUID);
   bool Deregister(aafUID_t AUID);
   void Register(aafUID_t AUID, boost::shared_ptr<TypedNodeFactory> spFactory);
+  void RegisterAAFObjects();
 
   static TypedNodeFactoryRegistry* _pFactory;
   Map _Map;  
