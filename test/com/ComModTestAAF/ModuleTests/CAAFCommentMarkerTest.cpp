@@ -1,5 +1,3 @@
-// @doc INTERNAL
-// @com This file implements the module test for CAAFCommentMarker
 //=---------------------------------------------------------------------=
 //
 // $Id$ $Name$
@@ -15,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -40,32 +38,18 @@ using namespace std;
 #include "CAAFBuiltinDefs.h"
 #include "AAFDefUIDs.h"
 
-
-
-// Cross-platform utility to delete a file.
-static void RemoveTestFile(const wchar_t* pFileName)
-{
-	const size_t kMaxFileName = 512;
-	char cFileName[kMaxFileName];
-	
-	size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
-	if (status != (size_t)-1)
-	{ // delete the file.
-		remove(cFileName);
-	}
-}
-
 // convenient error handlers.
 inline void checkResult(HRESULT r)
 {
-	if (FAILED(r))
-		throw r;
+  if (FAILED(r))
+    throw r;
 }
 inline void checkExpression(bool expression, HRESULT r)
 {
-	if (!expression)
-		throw r;
+  if (!expression)
+    throw r;
 }
+
 
 // {81831639-EDF4-11d3-A353-009027DFCA6A}
 static const aafUID_t kAAFDataDef_Test = 

@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -30,10 +30,11 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
-using namespace std;
-
+#include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
+
+using namespace std;
 
 
 #ifndef __AAF_h__
@@ -45,12 +46,15 @@ using namespace std;
 #endif
 
 #include "AAFResult.h"
-
+#include "AAFFileKinds.h"
+#include "AAFWideString.h"
 
 #if defined( OS_WINDOWS )
 #include <winbase.h>
 #include <unknwn.h>
 #include <objbase.h>
+#else
+#undef _WINDEF_
 #endif
 
 #include "CAAFModuleTest.h"
@@ -95,6 +99,49 @@ static void throwIfError(HRESULT hr)
   }
 }
 
+static void dumpLibInfo(ostream & os)
+{
+	// print library path name
+	aafUInt32 bufSize;
+	HRESULT hr = AAFGetLibraryPathNameBufLen(&bufSize);
+	if (hr != AAFRESULT_DLL_SYMBOL_NOT_FOUND)
+	{
+		if (AAFRESULT_SUCCEEDED(hr))
+		{
+			aafCharacter* buffer = (aafCharacter*)new aafUInt8[bufSize];
+			hr = AAFGetLibraryPathName (buffer, bufSize);
+			if (AAFRESULT_SUCCEEDED(hr))
+			{
+				os << "AAF DLL path name: ";
+#if 1
+				size_t length = (bufSize / sizeof(aafCharacter)) - 1;
+				char* result = new char[length + 1];
+				wcstombs(result, buffer, length + 1);
+				os << result;
+				delete [] result;
+#else
+				//printAAFString(buffer, os);
+#endif
+				os << endl;
+			}
+			delete [] buffer;
+		}
+	}
+	
+	// print library version
+	aafProductVersion_t vers;
+	hr = AAFGetLibraryVersion(&vers);
+	if (hr != AAFRESULT_DLL_SYMBOL_NOT_FOUND)
+	{
+		if (AAFRESULT_SUCCEEDED(hr))
+		{
+			os << "AAF DLL version  : "
+				<< vers.major << "."
+				<< vers.minor << "."
+				<< vers.tertiary << " (" << vers.patchLevel << ")" << endl;
+		}
+	}
+}
 
 // simple helper class to initialize and cleanup AAF library.
 struct CAAFInitialize
@@ -110,6 +157,7 @@ struct CAAFInitialize
       throwIfError(hr);
     }
     cout << "DONE" << endl;
+    dumpLibInfo(cout);
   }
 
   ~CAAFInitialize()
@@ -161,6 +209,9 @@ int main(int argc, char* argv[])
   int  startArg = 1;
   testMode_t  testMode = kAAFUnitTestReadWrite;
   bool skipTests = false;
+  const size_t maxEncodingNameLength = 64;
+  aafCharacter encodingName[ maxEncodingNameLength+1 ] = L"";
+  bool isEncodingNameSpecified = false;
 
 
   // Create the module test object.
@@ -187,10 +238,26 @@ int main(int argc, char* argv[])
       {
         skipTests = true;
       }
+      else if (0 == strcmp(argv[startArg],"-e") || 0 == strcmp(argv[startArg],"--encoding"))
+      {
+        if ( startArg < (argc-1))
+        {
+          startArg++;
+          mbstowcs( encodingName, argv[startArg], strlen(argv[startArg])+1 );
+          encodingName[ maxEncodingNameLength ] = L'\0';
+          isEncodingNameSpecified = true;
+        }
+        else
+        {
+          cerr << "ERROR: The " << argv[startArg]
+               << " option requires an argument" << endl;
+          return EXIT_FAILURE;
+        }
+      }
       /* Check arguments to see if help was requested */
       else
       {
-        cout<< "\nCOMMODAAF [-l] [-r] [-s] [test1 test2 etc] ***********************\n"; 
+        cout<< "\nCOMMODAAF [-l] [-r] [-s] [-e file_encoding] [test1 test2 etc] ***********************\n"; 
         cout<< " No arguments --> To run all tests\n";
         cout<< " Otherwise any AAF object class name can be typed\n";
         cout<< " and that objects test method will be executed.\n";
@@ -198,9 +265,11 @@ int main(int argc, char* argv[])
         cout<< " -l : print list of all tests to stdout\n";
         cout<< " -r : run read/only tests for regression and cross-platform testing.\n";
         cout<< " -s : Use with -r to skip tests that were not supported in earlier releases.\n";
+        cout<< " -e : Use to test with file encoding other than MS Structured Storage encoding.\n";
+        cout<< " Note -e option not implemented yet!\n";
         cout<< endl;        
 
-        return(0);
+        return EXIT_SUCCESS;
       }
     }
 
@@ -211,15 +280,24 @@ int main(int argc, char* argv[])
     // Make sure the shared plugins can be loaded and registered.
      CAAFInitializePlugins aafInitPlugins;
 
+
+    // If encoding name is specified change the
+    // default value of file encoding to be used
+    // by module tests.
+    aafUID_t fileKind = testFileKindDefault;
+    testRawStorageType_t rawStorageType = kAAFNamedFile;
+
     if (startArg >= argc)
     {    
       // Call all Module tests...
-      hr = AAFModuleTest.Test(testMode);
+      // WARNING: old style module tests only require/specify first paarmeter -- C calling conventions hanld this
+      hr = AAFModuleTest.Test(testMode, fileKind, rawStorageType);
     }
     else
     {
       // Call only the modules that are named in the command line.
-      hr = AAFModuleTest.Test(testMode, skipTests, argc - startArg, const_cast<const char **>(&argv[startArg]));
+      // WARNING: old style module tests only require/specify first paarmeter -- C calling conventions hanld this
+      hr = AAFModuleTest.Test(testMode, fileKind, rawStorageType, skipTests, argc - startArg, const_cast<const char **>(&argv[startArg]));
     }
 
     result = (int)hr;
@@ -240,7 +318,7 @@ int main(int argc, char* argv[])
   // is reserved to indicate core dumped (GNU C Library manual 25.6.2).
 
   if (result == AAFRESULT_SUCCESS)
-  	return 0;
+    return EXIT_SUCCESS;
   else
-    return 1;		// Test failed or test could not run
+    return EXIT_FAILURE;		// Test failed or test could not run
 }

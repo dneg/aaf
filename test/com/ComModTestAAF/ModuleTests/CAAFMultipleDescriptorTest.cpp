@@ -1,7 +1,5 @@
 //=---------------------------------------------------------------------=
 //
-// This file was GENERATED for the AAF SDK
-//
 // $Id$ $Name$
 //
 // The contents of this file are subject to the AAF SDK Public
@@ -29,36 +27,18 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 using namespace std;
 
 #include "AAFResult.h"
 
 #include "CAAFBuiltinDefs.h"
 #include "ModuleTest.h"
-#include "AAFDefUIDs.h"
 
 //{060c2b340205110101001000-13-00-00-00-{12bd35d0-996e-11d4-9f7b-080036210804}}
 static const aafMobID_t TEST_MobID = {
 {0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00}, 
 0x13, 0x00, 0x00, 0x00, 
 {0x12bd35d0, 0x996e, 0x11d4, {0x9f, 0x7b, 0x08, 0x00, 0x36, 0x21, 0x08, 0x04}}};
-
-static
-aafProductIdentification_t productInfo;
-
-// Cross-platform utility to delete a file.
-static void RemoveTestFile(const wchar_t* pFileName)
-{
-  const size_t kMaxFileName = 512;
-  char cFileName[kMaxFileName];
-
-  size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
-  if (status != (size_t)-1)
-  { // delete the file.
-    remove(cFileName);
-  }
-}
 
 // Convenient error handlers.
 inline void checkResult(HRESULT r)
@@ -72,25 +52,29 @@ inline void checkExpression(bool expression, HRESULT r)
         throw r;
 }
 
-static HRESULT CreateAAFFile(aafWChar * pFileName)
+static HRESULT CreateAAFFile(
+    aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
-	IAAFFile*		pFile = NULL;
-	IAAFHeader*		pHeader = NULL;
-	IAAFDictionary*		pDictionary = NULL;
-	IAAFMultipleDescriptor*	pMDesc = NULL;
-	IAAFSourceMob*		pSourceMob = NULL;
-	IAAFMob*		pMob = NULL;
-	aafUInt32		i;
-	HRESULT			hr = AAFRESULT_SUCCESS;
-	bool			bFileOpen = false;
+	IAAFFile 					*pFile = NULL;
+	IAAFHeader 					*pHeader = NULL;
+	IAAFDictionary				*pDictionary = NULL;
+	IAAFMultipleDescriptor 		*pMDesc = NULL;
+	IAAFSourceMob 				*pSourceMob = NULL;
+	IAAFMob						*pMob = NULL;
+	aafUInt32					i;
+	HRESULT						hr = AAFRESULT_SUCCESS;
+	bool bFileOpen = false;
 
 	try
 	{
 		// Remove the previous test file if any.
 		RemoveTestFile(pFileName);
 
-		// Create the file
-		checkResult(AAFFileOpenNewModify(pFileName, 0, &productInfo, &pFile));
+		// Create the file.
+		checkResult(CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile ));
 		bFileOpen = true;
 
 		// We can't really do anthing in AAF without the header.
@@ -666,95 +650,31 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	return hr;
 }
 
-// Genereates a file name based on the passed in
-// base name and file encoding specified by file_kind.
-// The resulting file name is stored in the buffer
-// addressed by the passed in p_generated_name_buffer
-// pointer. The number of characters that can fit in
-// the buffer (including NULL-terminator) is specified
-// by generated_name_buffer_length.
-static bool GenerateTestFileName(
-    const aafCharacter* p_base_name,
-    const size_t generated_name_buffer_length,
-    aafCharacter* p_generated_name_buffer )
-{
-    assert( p_base_name != 0 );
-    assert( wcslen( p_base_name ) != 0 );
-    assert( generated_name_buffer_length > 1 );
-    assert( p_generated_name_buffer != 0 );
-
-
-    //
-    // 1. Base name
-    //
-    const size_t  base_name_length = wcslen( p_base_name );
-
-
-    //
-    //  4. Extension
-    //
-    const aafCharacter  extension[] = L".aaf";
-    const size_t extension_length = wcslen( extension );
-
-
-    //
-    // Putting it all together
-    //
-    const size_t  file_name_length = base_name_length +
-                                     extension_length;
-
-    bool succeeded = true;
-
-    if( file_name_length < generated_name_buffer_length )
-    {
-        wcscpy( p_generated_name_buffer, p_base_name );
-        wcscat( p_generated_name_buffer, extension );
-
-        succeeded = true;
-    }
-    else
-    {
-        succeeded = false;
-    }
-
-    return succeeded;
-}
-
-
 // Required function prototype.
 extern "C" HRESULT CAAFMultipleDescriptor_test(
-    testMode_t mode
-);
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
 
 //
 // The public entry for this module test,
 //
 HRESULT CAAFMultipleDescriptor_test(
-    testMode_t mode
-)
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 2;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	productInfo.companyName = L"AAF Developers Desk";
-	productInfo.productName = L"AAFMultipleDescriptor Test";
-	productInfo.productVersion = &v;
-	productInfo.productVersionString = NULL;
-	productInfo.productID = UnitTestProductID;
-	productInfo.platform = NULL;
-
 	HRESULT hr = AAFRESULT_SUCCESS;
 	const size_t fileNameBufLen = 128;
 	aafWChar pFileName[ fileNameBufLen ] = L"";
-	GenerateTestFileName( productInfo.productName, fileNameBufLen, pFileName );
+	GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
 
 	try
 	{
 		if(mode == kAAFUnitTestReadWrite)
-			hr = CreateAAFFile(pFileName);
+			hr = CreateAAFFile(pFileName, fileKind, rawStorageType, productID);
 		else
 			hr = AAFRESULT_SUCCESS;
 		if(hr == AAFRESULT_SUCCESS)

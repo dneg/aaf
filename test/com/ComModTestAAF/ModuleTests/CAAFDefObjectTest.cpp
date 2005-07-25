@@ -1,5 +1,3 @@
-// @doc INTERNAL
-// @com This file implements the module test for CAAFDefObject
 //=---------------------------------------------------------------------=
 //
 // $Id$ $Name$
@@ -15,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -85,19 +83,6 @@ static const aafUID_t kTestPluginDescID3 =
 // {4E84045D-0F29-11d4-A359-009027DFCA6A}
 static const aafUID_t testUID = 
 { 0x4e84045d, 0xf29, 0x11d4, { 0xa3, 0x59, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
-
-// Cross-platform utility to delete a file.
-static void RemoveTestFile(const wchar_t* pFileName)
-{
-  const size_t kMaxFileName = 512;
-  char cFileName[kMaxFileName];
-
-  size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
-  if (status != (size_t)-1)
-  { // delete the file.
-    remove(cFileName);
-  }
-}
 
 // convenient error handlers.
 inline void checkResult(HRESULT r)

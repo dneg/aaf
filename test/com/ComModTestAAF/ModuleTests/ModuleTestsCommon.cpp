@@ -1,5 +1,3 @@
-// @doc INTERNAL
-// @com Common module test routines.
 //=---------------------------------------------------------------------=
 //
 // $Id$ $Name$
@@ -15,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -25,11 +23,12 @@
 //=---------------------------------------------------------------------=
 
 #include "ModuleTestsCommon.h"
+#include "ModuleTest.h"
 
-#include <AAFSmartPointer.h>
-#include <AAFDefUIDs.h>
-#include <AAFResult.h>
-#include <CAAFBuiltinDefs.h>
+#include "AAFSmartPointer.h"
+#include "AAFDefUIDs.h"
+#include "AAFResult.h"
+#include "CAAFBuiltinDefs.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -58,10 +57,12 @@ void RemoveTestFile(const wchar_t* pFileName)
 
 //======================================================================
 
-void CreateSimpleAAFFile(aafWChar * pFileName, aafWChar* pTestName,
-			 SimpleFilePointers* pFilePointers )
+
+void CreateSimpleAAFFile(aafWChar* pFileName
+	, aafWChar* pTestName
+	, SimpleFilePointers* pFilePointers)
 {
-  aafProductIdentification_t  ProductInfo;
+  aafProductIdentification_t productIdentification;
 
   aafProductVersion_t v;
   v.major = 1;
@@ -69,19 +70,36 @@ void CreateSimpleAAFFile(aafWChar * pFileName, aafWChar* pTestName,
   v.tertiary = 0;
   v.patchLevel = 0;
   v.type = kAAFVersionUnknown;
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = pTestName;
-  ProductInfo.productVersion = &v;
-  ProductInfo.productVersionString = NULL;
-  ProductInfo.productID = UnitTestProductID;
-  ProductInfo.platform = NULL;
+  productIdentification.companyName = L"AAF Developers Desk";
+  productIdentification.productName = pTestName;
+  productIdentification.productVersion = &v;
+  productIdentification.productVersionString = NULL;
+  productIdentification.productID = UnitTestProductID;
+  productIdentification.platform = NULL;
 
+  CreateSimpleAAFFile(pFileName
+	, testFileKindDefault
+	, kAAFNamedFile
+	, productIdentification
+	, pFilePointers);
+}
+
+void CreateSimpleAAFFile(aafWChar * pFileName,
+			 aafUID_constref fileKind,
+			 const testRawStorageType_t rawStorageType,
+			 aafProductIdentification_constref productIdentification,
+			 SimpleFilePointers* pFilePointers )
+{
   // Remove the previous test file if any.
   RemoveTestFile(pFileName);
 
   // Create the file.
   IAAFSmartPointer<IAAFFile> pFile;
-  CheckResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
+  CheckResult(CreateTestFile(pFileName,
+                             fileKind,
+                             rawStorageType,
+                             productIdentification,
+                             &pFile));
     
   IAAFSmartPointer<IAAFHeader> pHeader;
   CheckResult(pFile->GetHeader(&pHeader));
@@ -107,7 +125,7 @@ void CreateSimpleAAFFile(aafWChar * pFileName, aafWChar* pTestName,
 	      CreateInstance(IID_IAAFMob, 
 			     (IUnknown **)&pMob));
   CheckResult(pMob->SetMobID(TEST_CompositionMobID));
-  CheckResult(pMob->SetName( pTestName ));
+  CheckResult(pMob->SetName( productIdentification.productName ));
   
   IAAFSmartPointer<IAAFSourceClip> pSourceClip;
   CheckResult(defs.cdSourceClip()->
@@ -296,6 +314,19 @@ IAAFSmartPointer<IAAFSourceMob> AddChainedSourceMob( SimpleFilePointers* pFilePo
   CheckResult( pFilePointers->pHeader->AddMob( pMob ) );
 
   return pSrcMob;
+}
+
+// convenient error handlers.
+void CheckResult(AAFRESULT r)
+{
+  if (FAILED(r))
+    throw r;
+}
+
+void CheckExpression(bool expression, AAFRESULT r)
+{
+  if (!expression)
+    throw r;
 }
 
 } // end of namespace mtc

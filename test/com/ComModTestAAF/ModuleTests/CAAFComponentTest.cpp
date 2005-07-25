@@ -70,19 +70,6 @@ const aafCharacter* CommentValues[] = { L"Component Comment A Value", L"Componen
 
 };
 
-// Cross-platform utility to delete a file.
-static void RemoveTestFile(const wchar_t* pFileName)
-{
-  const size_t kMaxFileName = 512;
-  char cFileName[kMaxFileName];
-
-  size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
-  if (status != (size_t)-1)
-  { // delete the file.
-    remove(cFileName);
-  }
-}
-
 // convenient error handlers.
 inline void checkResult(HRESULT r)
 {

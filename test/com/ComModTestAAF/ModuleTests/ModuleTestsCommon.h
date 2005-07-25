@@ -1,5 +1,3 @@
-// @doc INTERNAL
-// @com Common module test routines.
 //=---------------------------------------------------------------------=
 //
 // $Id$ $Name$
@@ -15,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -28,8 +26,11 @@
 #ifndef __ModuleTestsCommon_h__
 #define __ModuleTestsCommon_h__
 
-#include <AAF.h>
-#include <AAFSmartPointer.h>
+#include "AAF.h"
+#include "AAFResult.h"
+#include "AAFSmartPointer.h"
+
+#include "ModuleTest.h"
 
 // This is a collection of simple functions intended to ease the
 // implemenation of module tests and to prevent the spread of
@@ -82,8 +83,15 @@ struct SimpleFilePointers {
   IAAFSmartPointer<IAAFDataDef> pDataDef;
 };
 
+// Deprecated
 void CreateSimpleAAFFile( aafCharacter* pFileName,
 			  aafCharacter* pCompMobName,
+			  SimpleFilePointers* pFilePointers );
+
+void CreateSimpleAAFFile( aafCharacter* pFileName,
+			  aafUID_constref fileKind,
+			  const testRawStorageType_t rawStorageType,
+			  aafProductIdentification_constref productIdentification,
 			  SimpleFilePointers* pFilePointers );
 
 void ReadSimpleAAFFile( aafCharacter* pFileName,
@@ -100,17 +108,9 @@ IAAFSmartPointer<IAAFSourceClip> GetSourceClipFromSlot( IAAFSmartPointer<IAAFMob
 IAAFSmartPointer<IAAFSourceMob> AddChainedSourceMob( SimpleFilePointers* pFilePointers );
 
 // convenient error handlers.
-inline void CheckResult(AAFRESULT r)
-{
-  if (FAILED(r))
-    throw r;
-}
+void CheckResult(AAFRESULT r);
 
-inline void CheckExpression(bool expression, AAFRESULT r)
-{
-  if (!expression)
-    throw r;
-}
+void CheckExpression(bool expression, AAFRESULT r = AAFRESULT_TEST_FAILED);
 
 } // end of namespace mtc
 

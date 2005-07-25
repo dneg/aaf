@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -23,10 +23,11 @@
 //=---------------------------------------------------------------------=
 //
 // File: CAAFModuleTest.cpp
-// 
+//
 // Implementation for the CAAFModuleTest class.
 //
 
+#include "AAFWideString.h"
 #include "CAAFModuleTest.h"
 #include "ModuleTest.h"
 
@@ -36,6 +37,7 @@ using namespace std;
 
 #include <time.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "AAFTypes.h"
 #include "AAFResult.h"
@@ -44,7 +46,10 @@ using namespace std;
 // Use the x-macros in AAFObjectTable.h to declare the function
 // prototypes for all of the module tests.
 //
-#define AAF_OBJECT_ENTRY(xclass) extern "C" HRESULT C##xclass##_test(testMode_t);
+#define AAF_OBJECT_ENTRY(xclass) extern "C" HRESULT C##xclass##_test(testMode_t,\
+                                                                     aafUID_t,\
+                                                                     testRawStorageType_t,\
+                                                                     aafProductIdentification_t);
 
 #include "AAFObjectTable.h"
 
@@ -60,8 +65,11 @@ using namespace std;
 
 // Define the object creation callback function that should be
 // implemented as a static method for every concrete AAF object.
-// 
-typedef HRESULT (*AAFModuleTestProc)(testMode_t mode); 
+//
+typedef HRESULT (*AAFModuleTestProc)(testMode_t mode,
+                                     aafUID_t fileKind,
+                                     testRawStorageType_t rawStorageType,
+                                     aafProductIdentification_t productID);
 
 
 struct AAFObjectTestInfo
@@ -71,7 +79,9 @@ struct AAFObjectTestInfo
 
   // Encapsulate the test proc so that we can trap exceptions
   // in one place.
-  HRESULT CallTestProc(testMode_t mode) const;
+  HRESULT CallTestProc(testMode_t mode,
+                       aafUID_t fileKind,
+                       testRawStorageType_t rawStorageType) const;
 };
 
 
@@ -87,19 +97,42 @@ struct AAFObjectTestInfo
 
 // Encapsulate the test proc so that we can trap exceptions
 // in one place.
-HRESULT AAFObjectTestInfo::CallTestProc(testMode_t mode) const
+HRESULT AAFObjectTestInfo::CallTestProc(testMode_t mode,
+                                        aafUID_t fileKind,
+                                        testRawStorageType_t rawStorageType) const
 {
   HRESULT result = S_OK;
+
+  // Create default module test product ID.
+  aafProductIdentification_t productID = MakeProductID();
+
+  //
+  // In module test product ID replace product name
+  // with the module test's name.
+  //
+  const aafCharacter* pProductNameSuffix = L"Test";
+  // Changing the default value of the productID.productName pointer
+  // will not cause a memory leak because MakeProductID() sets
+  // productID.productName to point to a static string.
+  productID.productName = new aafCharacter[ strlen(pClassName) + wcslen(pProductNameSuffix) + 1 ];
+  mbstowcs( productID.productName, pClassName, strlen(pClassName)+1 );
+  wcscat( productID.productName, pProductNameSuffix );
+
+
   try
   {
     // Call the module test.
-    result = (*pfnTestProc)(mode);
+    result = (*pfnTestProc)(mode, fileKind, rawStorageType, productID);
   }
   catch (...)
   {
     result = AAFRESULT_UNEXPECTED_EXCEPTION;
   }
   
+
+  delete[] productID.productName;
+
+
   return (result);
 }
 
@@ -190,6 +223,8 @@ static void printNotFound(void)
 HRESULT CAAFModuleTest::Test
 (
   testMode_t  mode,
+  aafUID_t fileKind,
+  testRawStorageType_t rawStorageType,
   bool filter,
   int count,
   const char *pClassName[]
@@ -220,7 +255,7 @@ HRESULT CAAFModuleTest::Test
     index = findObjectTestInfo(pClassName[0]);
     if (0 <= index)
     {
-      hr = AAFObjectMap[index].CallTestProc(mode);
+      hr = AAFObjectMap[index].CallTestProc(mode, fileKind, rawStorageType);
       printResult(mode, hr);  
       return hr;
     }
@@ -256,9 +291,11 @@ HRESULT CAAFModuleTest::Test
         if (0 <= index)
         {
           cout << AAFObjectMap[index].pClassName << endl;
-          testResults[index] = AAFObjectMap[index].CallTestProc(mode);
+          testResults[index] = AAFObjectMap[index].CallTestProc(mode, fileKind, rawStorageType);
           if (testResults[index] != AAFRESULT_SUCCESS)
-			cout << "     ^^^ NOT SUCCESS ^^^" << endl;
+		cout << "     ^^^ NOT SUCCESS ^^^ -- return="
+			<< hex << showbase << testResults[index] << dec << noshowbase
+			<< endl;
           ++testCount;
         }
         else
@@ -276,9 +313,11 @@ HRESULT CAAFModuleTest::Test
           continue;
           
         cout << "  " << AAFObjectMap[index].pClassName << endl;
-        testResults[index] = AAFObjectMap[index].CallTestProc(mode);
-		if (testResults[index] != AAFRESULT_SUCCESS)
-			cout << "     ^^^ NOT SUCCESS ^^^" << endl;
+        testResults[index] = AAFObjectMap[index].CallTestProc(mode, fileKind, rawStorageType);
+	if (testResults[index] != AAFRESULT_SUCCESS)
+		cout << "     ^^^ NOT SUCCESS ^^^ -- return="
+			<< hex << showbase << testResults[index] << dec << noshowbase
+			<< endl;
         ++testCount;
       }
     }
