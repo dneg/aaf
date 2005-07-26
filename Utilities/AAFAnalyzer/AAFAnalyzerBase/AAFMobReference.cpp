@@ -19,7 +19,7 @@
 //=---------------------------------------------------------------------=
 
 #include "AAFMobReference.h"
-#include "Visitor.h"
+#include "TypedVisitor.h"
 
 namespace {
 
@@ -46,6 +46,12 @@ AAFMobReference::~AAFMobReference()
 
 bool AAFMobReference::Visit(boost::shared_ptr<Visitor> spVisitor)
 {
+  boost::shared_ptr<TypedVisitor> spTypedVis = boost::dynamic_pointer_cast<TypedVisitor>(spVisitor);
+  if(spTypedVis)
+  {
+    return spTypedVis->EdgeVisit(*this);
+  }
+
   return spVisitor->EdgeVisit(*this);
 }
 

@@ -23,7 +23,6 @@
 
 //project files
 #include "Node.h"
-#include "Visitor.h"
 
 //Ax files
 #include <AxSmartPointer.h>
@@ -44,7 +43,7 @@ class AAFTypedObjNode : public Node
   
   bool PreOrderVisit(boost::shared_ptr<Visitor> spVisitor);
   bool PostOrderVisit(boost::shared_ptr<Visitor> spVisitor);
-  boost::shared_ptr<AAFObjType> GetAAFObjectType() const;
+  IAAFSmartPointer<AAFObjType> GetAAFObjectType() const;
 
  private:
 
@@ -55,42 +54,6 @@ class AAFTypedObjNode : public Node
 
   IAAFSmartPointer<AAFObjType> _spTypedObj;
 };
-
-template<typename AAFObjType>
-AAFTypedObjNode<AAFObjType>::AAFTypedObjNode(IAAFSmartPointer<AAFObjType> spObject)
-  : _spTypedObj( spObject ),
-    Node( L"" )
-{}
-
-template<typename AAFObjType>
-AAFTypedObjNode<AAFObjType>::AAFTypedObjNode(IAAFSmartPointer<AAFObjType> spObject,
-					     const std::basic_string<wchar_t>& name)
-  : Node( name ),
-    _spTypedObj( spObject )
-{}
-
-template<typename AAFObjType>
-AAFTypedObjNode<AAFObjType>::~AAFTypedObjNode()
-{
-}
-
-template<typename AAFObjType>
-bool AAFTypedObjNode<AAFObjType>::PreOrderVisit(boost::shared_ptr<Visitor> spVisitor)
-{
-  return spVisitor->PreOrderVisit(*this);
-}
-
-template<typename AAFObjType>
-bool AAFTypedObjNode<AAFObjType>::PostOrderVisit(boost::shared_ptr<Visitor> spVisitor)
-{
-  return spVisitor->PostOrderVisit(*this);
-}
-
-template<typename AAFObjType>
-boost::shared_ptr<AAFObjType> AAFTypedObjNode<AAFObjType>::GetAAFObjectType() const
-{
-  return _spTypedObj;
-}
 
 } // end of namespace diskstream
 
