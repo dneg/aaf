@@ -3,9 +3,7 @@
 # The implementation is placed into the file RegistrationCode.cpp.gen
 
 INPUTFILE=classgen.txt
-OUTPUTFILE=TypedNodeFactoryRegistry.cpp
 CLASSLIST=''
-GENCODE=''
 
 #Call the generator script to produce a class list
 . generator.sh
