@@ -24,6 +24,7 @@
 #include <DepthFirstTraversal.h>
 #include <EdgeMap.h>
 #include <Edge.h>
+#include <TypedVisitor.h>
 #include <TestVisitor.h>
 #include <GraphBuilder.h>
 #include <NodeFactory.h>
