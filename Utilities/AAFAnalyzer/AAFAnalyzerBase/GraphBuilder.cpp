@@ -78,7 +78,7 @@ void BuildTree( AxBaseObjRecIter& recIter,
 
        // We now have a parent, and a child. Create a containment edge
        // and add it to the edge map.
-       shared_ptr<AAFContainment> spEdge( new AAFContainment( parentStack.top().second, spChildNode ) );
+       shared_ptr<Edge> spEdge( new AAFContainment( parentStack.top().second, spChildNode ) );
        edgeMap.AddEdge( spEdge );
         
        // The child node becomes the new parent for lower level objects.

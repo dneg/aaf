@@ -43,11 +43,6 @@ TypedNodeFactoryRegistry* TypedNodeFactoryRegistry::_pFactory = NULL;
 TypedNodeFactoryRegistry::TypedNodeFactoryRegistry()
 {
   RegisterAAFObjects();
-
-  //temporary lines, will be deleted once autogen scripts finished
-  /*Register(AUID_AAFInterchangeObject, boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFObject>()));
-  IAAFSourceMob* unused = 0;
-  Register(AxAUID(unused), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFSourceMob>()));*/
 }
 
 TypedNodeFactoryRegistry::~TypedNodeFactoryRegistry()

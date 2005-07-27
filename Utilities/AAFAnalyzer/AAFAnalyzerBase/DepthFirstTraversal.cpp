@@ -25,8 +25,6 @@
 #include "EdgeMap.h"
 #include "Edge.h"
 
-#include <iostream>
-
 namespace {
 
 using namespace aafanalyzer;
