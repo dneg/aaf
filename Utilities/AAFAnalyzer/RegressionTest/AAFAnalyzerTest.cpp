@@ -26,6 +26,8 @@
 #include <Edge.h>
 #include <TypedVisitor.h>
 #include <TestVisitor.h>
+#include <ResolveRefVisitor.h>
+#include <AcyclicVisitor.h>
 #include <GraphBuilder.h>
 #include <NodeFactory.h>
 #include <NodeFactoryImpl.h>
@@ -52,15 +54,15 @@ void BasicDataStructureTest()
   boost::shared_ptr<Edge> edgeThree(new Edge(parentTwo, childTwo));
 
   //test the EdgeMap class
-  boost::shared_ptr<EdgeMap> pEdgeMap(new EdgeMap());
+  boost::shared_ptr<EdgeMap> spEdgeMap(new EdgeMap());
 
-  pEdgeMap->AddEdge(edgeOne);
-  pEdgeMap->AddEdge(edgeTwo);
-  pEdgeMap->AddEdge(edgeThree);
-  EdgeMap::EdgeVectorSP theParentsOne = pEdgeMap->GetParents(childOne);
-  EdgeMap::EdgeVectorSP theParentsTwo = pEdgeMap->GetParents(childTwo);
-  EdgeMap::EdgeVectorSP theChildrenOne = pEdgeMap->GetChildren(parentOne);
-  EdgeMap::EdgeVectorSP theChildrenTwo = pEdgeMap->GetChildren(parentTwo);
+  spEdgeMap->AddEdge(edgeOne);
+  spEdgeMap->AddEdge(edgeTwo);
+  spEdgeMap->AddEdge(edgeThree);
+  EdgeMap::EdgeVectorSP theParentsOne = spEdgeMap->GetParents(childOne);
+  EdgeMap::EdgeVectorSP theParentsTwo = spEdgeMap->GetParents(childTwo);
+  EdgeMap::EdgeVectorSP theChildrenOne = spEdgeMap->GetChildren(parentOne);
+  EdgeMap::EdgeVectorSP theChildrenTwo = spEdgeMap->GetChildren(parentTwo);
 
   //ensure the correct edges were returned by checking Node LIDs
   assert(theParentsOne->front()->GetParentNode()->GetLID() == parentOne->GetLID());//parent of childOne
@@ -71,38 +73,58 @@ void BasicDataStructureTest()
   assert(theChildrenTwo->front()->GetChildNode()->GetLID() == childTwo->GetLID());//child of parentTwo
 
   //test the DepthFirstTraversal class
-  boost::shared_ptr<Visitor> pVisitor(new TestVisitor());  
+  boost::shared_ptr<Visitor> spVisitor(new TestVisitor());  
   boost::shared_ptr<Node> fooOne(new Node());
   boost::shared_ptr<Node> fooTwo(new Node());  
-  pEdgeMap->AddEdge(boost::shared_ptr<Edge>(new Edge(childTwo, fooOne)));
-  pEdgeMap->AddEdge(boost::shared_ptr<Edge>(new Edge(childTwo, fooTwo)));
+  spEdgeMap->AddEdge(boost::shared_ptr<Edge>(new Edge(childTwo, fooOne)));
+  spEdgeMap->AddEdge(boost::shared_ptr<Edge>(new Edge(childTwo, fooTwo)));
 
-  DepthFirstTraversal dfs(pEdgeMap, parentOne);
-  dfs.TraverseDown(pVisitor, parentOne);
+  DepthFirstTraversal dfs(spEdgeMap, parentOne);
+  dfs.TraverseDown(spVisitor, parentOne);
   std::cout << "********************" << std::endl;
-  dfs.TraverseUp(pVisitor, fooOne);
+  dfs.TraverseUp(spVisitor, fooOne);
 
-  std::cout << "Completed Basic Testing Successfully!" << std::endl;
+  //test the Acyclic Visitor
+  std::cout << "***CYCLE TESTER (no cycles)***" << std::endl;
+  spVisitor.reset(new AcyclicVisitor());
+  dfs.TraverseDown(spVisitor, parentOne);
+  
+  std::cout << "***CYCLE TESTER (w/ cycle present)***" << std::endl;
+  spEdgeMap->AddEdge(boost::shared_ptr<Edge>(new Edge(fooTwo, parentTwo)));//adds a cycle
+  dfs.TraverseDown(spVisitor, parentOne);
+
+  std::cout << "Completed Basic Testing Successfully!" << std::endl << std::endl;
 }
 
 
 int main()
 {
   GraphBuilder graphBuild;
-  boost::shared_ptr<Visitor> pVisitor(new TestVisitor());  
-  boost::shared_ptr<NodeFactory> pFactory(new NodeFactoryImpl());
+  boost::shared_ptr<Visitor> spVisitor;
+  boost::shared_ptr<NodeFactory> spFactory(new NodeFactoryImpl());
   const std::basic_string<wchar_t> file = L"test.aaf";  
 
   try
   {
     BasicDataStructureTest();
-    std::cout << std::endl;
 
     if(AAFLoad(getenv("AX_AAF_COMAPI")) == 0)
     {
-      TestGraph testGraph(graphBuild.CreateGraph(file, pFactory));
-      DepthFirstTraversal dfs(testGraph.GetEdgeMap(), testGraph.GetRootNode());
-      dfs.TraverseDown(pVisitor, testGraph.GetRootNode());
+      TestGraph testGraph(graphBuild.CreateGraph(file, spFactory));
+      DepthFirstTraversal dfs(testGraph.GetEdgeMap(), testGraph.GetRootNode()); 
+      
+      //resolve the references
+      spVisitor.reset(new ResolveRefVisitor(testGraph.GetEdgeMap())); 
+      dfs.TraverseDown(spVisitor, testGraph.GetRootNode());
+
+      //check for cycles
+      spVisitor.reset(new AcyclicVisitor());
+      dfs.TraverseDown(spVisitor, testGraph.GetRootNode());
+      
+      //now dump the objects to the console
+      //spVisitor.reset(new TestVisitor());
+      //dfs.TraverseDown(spVisitor, testGraph.GetRootNode());
+
       AAFUnload();
     }
     else
