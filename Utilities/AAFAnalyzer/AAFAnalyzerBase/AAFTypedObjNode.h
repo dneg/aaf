@@ -22,7 +22,7 @@
 #define __AAFTYPEDOBJNODE_h__
 
 //project files
-#include "Node.h"
+#include "AAFObjNode.h"
 
 //Ax files
 #include <AxSmartPointer.h>
@@ -33,7 +33,7 @@
 namespace aafanalyzer {
 
 template<typename AAFObjType>
-class AAFTypedObjNode : public Node
+class AAFTypedObjNode : public AAFObjNode
 {
  public:
   AAFTypedObjNode(IAAFSmartPointer<AAFObjType> ObjectType );
@@ -43,7 +43,7 @@ class AAFTypedObjNode : public Node
   
   bool PreOrderVisit(boost::shared_ptr<Visitor> spVisitor);
   bool PostOrderVisit(boost::shared_ptr<Visitor> spVisitor);
-  IAAFSmartPointer<AAFObjType> GetAAFObjectType() const;
+  IAAFSmartPointer<AAFObjType> GetAAFObjectOfType() const;
 
  private:
 

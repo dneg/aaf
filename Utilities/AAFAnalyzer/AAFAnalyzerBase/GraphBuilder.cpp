@@ -23,6 +23,10 @@
 #include "EdgeMap.h"
 #include "NodeFactory.h"
 #include "AAFContainment.h"
+#include "MobNodeMap.h"
+
+/*TEMPORARY SOLUTION UNTIL WEAK REFERENCES ARE IMPLEMENTED**/
+#include "TempAllNodeMap.h"
 
 #include <AxBaseObjIter.h>
 #include <AxBaseObj.h>
@@ -30,6 +34,8 @@
 #include <AxFile.h>
 #include <AxHeader.h>
 #include <AxEx.h>
+#include <AxMob.h>
+#include <AxSmartPointer.h>
 
 #include <memory>
 #include <stack>
@@ -38,6 +44,23 @@ namespace {
 
 using namespace aafanalyzer;
 using namespace boost;
+
+
+void UpdateNodeMap( IAAFObjectSP spObj, boost::shared_ptr<Node> spNode )
+{
+  IAAFMobSP spMob;
+  AxObject axObj(spObj);
+
+  //add the Mob ID to the map for future reference resolving
+  if(AxIsA(axObj, spMob))
+  {
+    AxMob axMob(spMob);
+    aafMobID_t mobid = axMob.GetMobID();
+    MobNodeMap::GetInstance().AddMobNode(mobid, spNode);
+  }
+  //TEMPORARY SOLUTION UNTIL WEAK REFERENCES ARE IMPLEMENTED
+  TempAllNodeMap::GetInstance().AddNode(spNode->GetLID(), spNode);
+}
 
 void BuildTree( AxBaseObjRecIter& recIter,
           shared_ptr<Node> spRootParent,
@@ -75,6 +98,9 @@ void BuildTree( AxBaseObjRecIter& recIter,
        // Used the supplied factory to create a node for the
        // containment graph we are bulding.
        boost::shared_ptr<Node> spChildNode( nodeFactory.CreateNode( spObj ) );
+
+       // Add to the node map (if necessary)
+       UpdateNodeMap( spObj, spChildNode );
 
        // We now have a parent, and a child. Create a containment edge
        // and add it to the edge map.
@@ -147,7 +173,7 @@ TestGraph GraphBuilder::CreateGraph(const std::basic_string<wchar_t>& fileName, 
   
   //create the root node
   boost::shared_ptr<Node> spRootNode = spFactory->CreateNode(axHeader);
-  
+
   // Initialize the recursive iterator.
   AxObject axRootObject( axHeader );
   std::auto_ptr< AxBaseObjIterPrtcl >

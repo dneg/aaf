@@ -18,37 +18,35 @@
 //
 //=---------------------------------------------------------------------=
 
-#ifndef __GRAPHBUILDER_h__
-#define __GRAPHBUILDER_h__
+#ifndef __RESOLVEREFVISITOR_h__
+#define __RESOLVEREFVISITOR_h__
 
-//project files
-#include "TestGraph.h"
-
-//stl files
-#include <string>
-#include <map>
+#include "TypedVisitor.h"
 
 //boost files
 #include <boost/shared_ptr.hpp>
 
 namespace aafanalyzer {
 
-class NodeFactory;
+class Edge;
+class EdgeMap;
 
-class GraphBuilder
+class ResolveRefVisitor : public TypedVisitor
 {
-
  public:
-  GraphBuilder();
-  ~GraphBuilder();
+  ResolveRefVisitor(boost::shared_ptr<EdgeMap> spEdgeMap);
+  virtual ~ResolveRefVisitor();
 
-  TestGraph CreateGraph(const std::basic_string<wchar_t>& fileName, boost::shared_ptr<NodeFactory> spFactory );
+  virtual bool PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node);
+  virtual bool EdgeVisit(Edge& edge);
 
- private:  
+ private:
+
+  boost::shared_ptr<EdgeMap> _spEdgeMap;
 
   // prohibited
-  GraphBuilder( const GraphBuilder& );
-  GraphBuilder& operator=( const GraphBuilder& );
+  ResolveRefVisitor( const ResolveRefVisitor& );
+  ResolveRefVisitor& operator=( const ResolveRefVisitor& );
 };
 
 } // end of namespace diskstream

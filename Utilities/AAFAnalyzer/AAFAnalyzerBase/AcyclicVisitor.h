@@ -18,37 +18,43 @@
 //
 //=---------------------------------------------------------------------=
 
-#ifndef __GRAPHBUILDER_h__
-#define __GRAPHBUILDER_h__
+#ifndef __ACYCLICVISITOR_h__
+#define __ACYCLICVISITOR_h__
 
-//project files
-#include "TestGraph.h"
+#include "Visitor.h"
 
 //stl files
-#include <string>
-#include <map>
+#include <vector>
 
 //boost files
 #include <boost/shared_ptr.hpp>
 
 namespace aafanalyzer {
 
-class NodeFactory;
+class Node;
 
-class GraphBuilder
+class AcyclicVisitor : public Visitor
 {
-
  public:
-  GraphBuilder();
-  ~GraphBuilder();
 
-  TestGraph CreateGraph(const std::basic_string<wchar_t>& fileName, boost::shared_ptr<NodeFactory> spFactory );
+  typedef std::vector<unsigned int> Vector;
 
- private:  
+  AcyclicVisitor();
+  virtual ~AcyclicVisitor();
+
+  virtual bool PreOrderVisit(Node& node);
+  virtual bool PostOrderVisit(Node& node);
+
+ private:
+  bool IsPresent(unsigned int lid);
+  void Erase(unsigned int lid);
+
+  Vector _Vector;
+  
 
   // prohibited
-  GraphBuilder( const GraphBuilder& );
-  GraphBuilder& operator=( const GraphBuilder& );
+  AcyclicVisitor( const AcyclicVisitor& );
+  AcyclicVisitor& operator=( const AcyclicVisitor& );
 };
 
 } // end of namespace diskstream
