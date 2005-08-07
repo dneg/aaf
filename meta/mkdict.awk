@@ -26,7 +26,7 @@
 #
 # Command line:
 #
-# awk [-v APP="app"] [-v APPVER="1.1" ] -f mkdict.awk AAFMetaDict.csv > AAFMetaDictionary.h
+# awk [-v APP="app"] [-v APPVER="1.1" ] [-v SYM="s_sym"] -f mkdict.awk AAFMetaDict.csv > AAFMetaDictionary.h
 #
 #	the csv file must have a line with "_fields" in the first column
 #	before any line that does not begin with #
@@ -36,6 +36,11 @@
 #   "AAF>=1.2" and the stated relation is true
 #   if no APP is specified, will skip lines beginning #
 #	always skips lines beginning ##
+#   always skips lines of r_nest==Node
+#   always skips lines with r_sym blank
+#
+#   if the -v SYM= value is specified, mkdict will use this field instead of s_sym
+#   note that for legacy support, if s_sym does not exist, r_sym will be used
 #
 # Authors
 #
@@ -51,9 +56,10 @@
 #
 # r_reg					  => which of the SMPTE registers this belongs in Groups Types Labels
 #                            (and Aliases - non SMPTE)
-# r_nest				  => whether this line will be a Node L:eaf or Child in SMPTE
+# r_nest				  => whether this line will be a Node Leaf or Child in SMPTE
 # ul_1..ul_16             => AUID (with appropriate reordering).
-# r_sym                   => class/property/type/member/label/alias name.
+# s_sym                   => class/property/type/member/label/alias name
+# r_sym                   => the SMPTE version of s_sym (sometimes different)
 # s_type_sym              => if this field == "AAFClass" then the entity is a
 #                            class, otherwise it is a property and this field
 #                            denotes the type of the property. When this
@@ -100,6 +106,10 @@ BEGIN {
   errors = 0;
   FS=","
   processedfields=0;
+ 
+  # default value for field name that contains the normative symbols
+  if( SYM=="" ) SYM="s_sym";
+
   #
   # Write a header to the generated file.
   #
@@ -797,11 +807,19 @@ BEGIN {
 /^[#_]fields/ {
 	# set up indirect input column mapping
 	# line beginning #fields is legacy, line beginning _fields is now preferred 
-	# e.g. if 18th input column == "r_sym", $C["r_sym"]==$18
+	# e.g. if 18th input column == "r_sym", C["r_sym"]==18 and thus $C["r_sym"]==$18
+
+    # set erroneous column number for the source of symbols
+	C[SYM] = -1;
+
 	for( i=1; i<=NF; i++)
 	{
 		if( $i != "" ) C[ $i ] = i;
 	}
+
+	# for legacy, if s_sym is no provided, use r_sym
+    if( C[SYM]<0 ) C[SYM]=C["r_sym"];
+
 	processedfields=1;
 	next
 }
@@ -811,8 +829,11 @@ BEGIN {
 }
 
 {
-  # Discard lines with no name field
-  if ($C["r_sym"] == "") next 
+  # Discard Node lines (not used by MetaDictionary.h)
+  if( $C["r_nest"] == "" || $C["r_nest"] == "Node") next 
+
+  # Discard lines with no symbol field
+  if ($C[SYM] == "") next 
 
   # If no APP is specified, discard lines beginning #
   if( APP == "" && 1 == index($1,"#") ) next
@@ -882,7 +903,7 @@ BEGIN {
 	  #		e.g. ASPA::TimestampedKLV
 
 	  # assert( $C["r_nest"] == "Leaf" )
-      if ($C["r_sym"] != class) { # This is a new class
+      if ($C[SYM] != class) { # This is a new class
         if (class != "" ) {
           # end the old one
           printf("AAF_CLASS_END(%s,%s,\n  %s,\n  %s)\n",
@@ -892,7 +913,7 @@ BEGIN {
         } else {
           parent = "Root"
         }
-        class = $C["r_sym"];
+        class = $C[SYM];
         printf("\n");
         printf("// %s\n", class);
         printf("//\n");
@@ -918,7 +939,7 @@ BEGIN {
                          $C["ul_9"], $C["ul_10"], $C["ul_11"], $C["ul_12"],
                          $C["ul_13"], $C["ul_14"], $C["ul_15"], $C["ul_16"], "  ");
       printf("AAF_CLASS(%s,%s,\n  %s,\n  %s)\n",
-             $C["r_sym"], cguid, parent, concrete);
+             $C[SYM], cguid, parent, concrete);
 
     } else { # this item is a property
 
@@ -954,7 +975,7 @@ BEGIN {
         if ($C["s_target_sym"] == "") {
           type = sprintf("AAF_TYPE(%s)", type);
         } else {
-          propertyError($C["r_sym"], class, C["s_target_sym"]);
+          propertyError($C[SYM], class, C["s_target_sym"]);
           errors++;
         }
       }
@@ -964,21 +985,21 @@ BEGIN {
       } else if ($C["r_minOccurs"] == "0") {
         mandatory = "false";
       } else {
-        propertyError($C["r_sym"], class, C["r_minOccurs"]);
+        propertyError($C[SYM], class, C["r_minOccurs"]);
         errors++;
       }
       if ($C["s_parent_sym"] != class) {
-        propertyError($C["r_sym"], class, C["s_parent_sym"]);
+        propertyError($C[SYM], class, C["s_parent_sym"]);
         errors++;
       }
       if ($C["r_isAbstract"] != "") {
-        propertyError($C["r_sym"], class, C["r_isAbstract"]);
+        propertyError($C[SYM], class, C["r_isAbstract"]);
         errors++;
       }
       if ($C["r_isUnique"] == "uid") {
         uid = "true";
         if ($C["r_minOccurs"] == "O") {
-          propertyError($C["r_sym"], class, C["r_isUnique"]);
+          propertyError($C[SYM], class, C["r_isUnique"]);
           printError("A unique identifier must be mandatory.\n");
           errors++;
         }
@@ -991,7 +1012,7 @@ BEGIN {
                          $C["ul_9"], $C["ul_10"], $C["ul_11"], $C["ul_12"],
                          $C["ul_13"], $C["ul_14"], $C["ul_15"], $C["ul_16"], "    ");
 	  ppid = formatTag( $C["r_tag"] );
-      printf("  AAF_PROPERTY(%s,%s,\n    %s,\n    %s,\n    %s,\n    %s,\n    %s)\n", $C["r_sym"], pguid, ppid, type, mandatory, uid, class);
+      printf("  AAF_PROPERTY(%s,%s,\n    %s,\n    %s,\n    %s,\n    %s,\n    %s)\n", $C[SYM], pguid, ppid, type, mandatory, uid, class);
     }
 
   # Types Register
@@ -1035,7 +1056,7 @@ BEGIN {
 	  kind = $C["r_kind"];
       qualif = $C["r_qualif"];
 
-      typeName = $C["r_sym"];
+      typeName = $C[SYM];
 
       # diagnostic comments
       printf("\n");
@@ -1149,7 +1170,7 @@ BEGIN {
 
     } else if( $C["r_nest"] == "Child" ) { # all "member"s of a type are Child elements
 
-      memberName = $C["r_sym"];
+      memberName = $C[SYM];
       if (kind == "enumeration" )
 	  {
 		if( $C["s_type_sym"]==etype || $C["s_type_sym"]=="member" ) # "member" is old-style, etype is new-style (!)
@@ -1242,7 +1263,7 @@ BEGIN {
         printf("AAF_ALIAS_SEPARATOR()\n");
       }
 
-      aalias = $C["r_sym"];
+      aalias = $C[SYM];
       aoriginal = $C["g_alias"];
       printf("AAF_CLASS_ALIAS(%s, %s)\n", aoriginal, aalias); 
 	}
@@ -1328,7 +1349,7 @@ BEGIN {
             printf("AAF_INSTANCE_GROUP_SEPARATOR()\n");
         }
 
-        igsym = $C["r_sym"];
+        igsym = $C[SYM];
         if( igsym=="" ) nullError( "r_sym", "Instance" );
 
         igtarget = $C["s_target_sym"];
@@ -1353,7 +1374,7 @@ BEGIN {
                 printf("  AAF_INSTANCE_SEPARATOR()\n");
             }
 
-            isym = $C["r_sym"];
+            isym = $C[SYM];
 
             iid = formatAUID($C["ul_1"], $C["ul_2"], $C["ul_3"], $C["ul_4"],
                              $C["ul_5"], $C["ul_6"], $C["ul_7"], $C["ul_8"],
@@ -1363,7 +1384,7 @@ BEGIN {
             iclass = $C["s_type_sym"];
             idesc = $C["r_detail"];
 
-			asym = "AAF_SYMBOL(" $C["r_sym"] "," $C["r_name"] ",\"" $C["g_alias"] "\",\"" $C["r_detail"] "\")"
+			asym = "AAF_SYMBOL(" $C[SYM] "," $C["r_name"] ",\"" $C["g_alias"] "\",\"" $C["r_detail"] "\")"
 
             printf("  AAF_INSTANCE(%s, %s, %s, %s)\n", iclass, asym, iid, "\"" idesc "\"");
 
@@ -1379,7 +1400,7 @@ BEGIN {
        {
             # a property of the subclass
 
-            ipsym = $C["r_sym"];
+            ipsym = $C[SYM];
             iptype = $C["s_type_sym"];
             ipvalue = $C["r_value"];
             printf("    AAF_INSTANCE_PROPERTY(%s, %s, %s)\n", ipsym, iptype, "\"" ipvalue "\"");
