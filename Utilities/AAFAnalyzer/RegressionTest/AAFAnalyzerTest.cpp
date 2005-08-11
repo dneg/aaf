@@ -86,8 +86,8 @@ void BasicDataStructureTest()
 
   //test the Acyclic Visitor
   std::cout << "***CYCLE TESTER (no cycles)***" << std::endl;
-  spVisitor.reset(new AcyclicVisitor());
-  dfs.TraverseDown(spVisitor, parentOne);
+  //spVisitor.reset(new AcyclicVisitor());
+  //dfs.TraverseDown(spVisitor, parentOne);
   
   std::cout << "***CYCLE TESTER (w/ cycle present)***" << std::endl;
   spEdgeMap->AddEdge(boost::shared_ptr<Edge>(new Edge(fooTwo, parentTwo)));//adds a cycle
@@ -97,7 +97,7 @@ void BasicDataStructureTest()
 }
 
 
-int main()
+int blah()
 {
   GraphBuilder graphBuild;
   boost::shared_ptr<Visitor> spVisitor;
@@ -114,16 +114,16 @@ int main()
       DepthFirstTraversal dfs(testGraph.GetEdgeMap(), testGraph.GetRootNode()); 
       
       //resolve the references
-      spVisitor.reset(new ResolveRefVisitor(testGraph.GetEdgeMap())); 
-      dfs.TraverseDown(spVisitor, testGraph.GetRootNode());
+      //spVisitor.reset(new ResolveRefVisitor(testGraph.GetEdgeMap())); 
+      //dfs.TraverseDown(spVisitor, testGraph.GetRootNode());
 
       //check for cycles
-      spVisitor.reset(new AcyclicVisitor());
-      dfs.TraverseDown(spVisitor, testGraph.GetRootNode());
+      //spVisitor.reset(new AcyclicVisitor());
+      //dfs.TraverseDown(spVisitor, testGraph.GetRootNode());
       
       //now dump the objects to the console
-      //spVisitor.reset(new TestVisitor());
-      //dfs.TraverseDown(spVisitor, testGraph.GetRootNode());
+      spVisitor.reset(new TestVisitor());
+      dfs.TraverseDown(spVisitor, testGraph.GetRootNode());
 
       AAFUnload();
     }
