@@ -21,6 +21,7 @@
 				Name="VCNMakeTool"
 				BuildCommandLine="NMAKE /f win32aafsdk.mak CFG=Release"
 				ReBuildCommandLine="NMAKE /f win32aafsdk.mak CFG=Release /a"
+				CleanCommandLine="NMAKE /f win32aafsdk.mak CFG=Release clean"
 				Output="MakeSDK"/>
 		</Configuration>
 		<Configuration
@@ -33,6 +34,7 @@
 				Name="VCNMakeTool"
 				BuildCommandLine="NMAKE /f win32aafsdk.mak CFG=Debug"
 				ReBuildCommandLine="NMAKE /f win32aafsdk.mak CFG=Debug /a"
+				CleanCommandLine="NMAKE /f win32aafsdk.mak CFG=Debug clean"
 				Output="MakeSDK"/>
 		</Configuration>
 	</Configurations>
