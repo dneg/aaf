@@ -307,6 +307,8 @@ char* programName(void);
 
 void mxfError(char* format, ...);
 
+void mxfWarning(char* format, ...);
+
 void print(char* format, ...)
 {
   va_list ap;
@@ -405,9 +407,19 @@ void mxfError(char* format, ...)
   errors = errors + 1;
 }
 
+mxfUInt32 warnings = 0;
+
+void mxfWarning(char* format, ...)
+{
+  va_list ap;
+  va_start(ap, format);
+  verror(format, ap);
+  va_end(ap);
+  warnings = warnings + 1;
+}
+
 bool verbose = false;
 bool debug = false;
-mxfUInt32 warnings = 0;
 
 mxfUInt64 keyPosition;   // position/address of current key
 
@@ -777,10 +789,9 @@ int readMxfLength(mxfLength& l, mxfFile infile)
              keyPosition);
   }
   if (x == 0) {
-    warning("Length is zero"
-            " (following key at offset 0x%"MXFPRIx64").\n",
-            keyPosition);
-    warnings = warnings + 1;
+    mxfWarning("Length is zero"
+               " (following key at offset 0x%"MXFPRIx64").\n",
+               keyPosition);
   }
   l = x;
   return bytesRead;
@@ -2751,13 +2762,12 @@ void checkElementSize(mxfUInt32 expectedSize,
 {
   if (actualSize != expectedSize) {
     if ((elementCount == 0) && (actualSize == 0)) {
-      warning("Incorrect element size"
-              " - expected %"MXFPRIu32", found %"MXFPRIu32""
-              " (following key at offset 0x%"MXFPRIx64").\n",
-              expectedSize,
-              actualSize,
-              keyPosition);
-      warnings = warnings + 1;
+      mxfWarning("Incorrect element size"
+                 " - expected %"MXFPRIu32", found %"MXFPRIu32""
+                 " (following key at offset 0x%"MXFPRIx64").\n",
+                 expectedSize,
+                 actualSize,
+                 keyPosition);
     } else {
       mxfError("Incorrect element size"
                " - expected %"MXFPRIu32", found %"MXFPRIu32""
@@ -2886,13 +2896,12 @@ void checkField(mxfUInt64 expected,
 {
   if (actual != expected) {
     if (actual == 0) {
-      warning("%s not defined"
-              " - expected 0x%"MXFPRIx64","
-              " (following key at offset 0x%"MXFPRIx64").\n",
-              label,
-              expected,
-              keyAddress);
-      warnings = warnings + 1;
+      mxfWarning("%s not defined"
+                 " - expected 0x%"MXFPRIx64","
+                 " (following key at offset 0x%"MXFPRIx64").\n",
+                 label,
+                 expected,
+                 keyAddress);
     } else {
       mxfError("Incorrect value for %s"
                " - expected 0x%"MXFPRIx64", found 0x%"MXFPRIx64""
@@ -3833,8 +3842,7 @@ void mxfValidate(mxfFile infile)
   if (!rip.empty()) {
     checkRandomIndex(rip, p);
   } else {
-    warning("No random index found.\n");
-    warnings = warnings + 1;
+    mxfWarning("No random index found.\n");
   }
   destroyPartitions(p);
 
