@@ -397,7 +397,7 @@ void close(mxfFile infile)
 {
   BOOL result = CloseHandle(infile);
   if (!result) {
-    fatalError("CloseHandle() failed.");
+    fatalError("CloseHandle() failed.\n");
   }
 }
 
@@ -407,7 +407,7 @@ void setPosition(mxfFile infile, const mxfUInt64 position)
   li.QuadPart = position;
   li.LowPart = SetFilePointer(infile, li.LowPart, &li.HighPart, FILE_BEGIN);
   if ((li.LowPart == -1) && GetLastError() != NO_ERROR) {
-    fatalError("SetFilePointer() failed.");
+    fatalError("SetFilePointer() failed.\n");
   }
 }
 
@@ -416,7 +416,7 @@ size_t readBytes(mxfFile infile, void* buffer, size_t count)
   DWORD bytesRead;
   BOOL result = ReadFile(infile, buffer, count, &bytesRead, 0);
   if (!result) {
-    fatalError("ReadFile() failed.");
+    fatalError("ReadFile() failed.\n");
   }
   return bytesRead;
 }
@@ -428,7 +428,7 @@ mxfUInt64 getPosition(mxfFile infile)
   li.QuadPart = 0;
   li.LowPart = SetFilePointer(infile, li.LowPart, &li.HighPart, FILE_CURRENT);
   if ((li.LowPart == -1) && GetLastError() != NO_ERROR) {
-    fatalError("SetFilePointer() failed.");
+    fatalError("SetFilePointer() failed.\n");
   }
   result = li.QuadPart;
   return result;
@@ -440,7 +440,7 @@ mxfUInt64 size(mxfFile infile)
   ULARGE_INTEGER li;
   li.LowPart = GetFileSize(infile, &li.HighPart);
   if ((li.LowPart == -1) && GetLastError() != NO_ERROR) {
-    fatalError("GetFileSize() failed.");
+    fatalError("GetFileSize() failed.\n");
   }
   result = li.QuadPart;
   return result;
