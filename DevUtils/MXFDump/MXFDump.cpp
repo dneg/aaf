@@ -156,7 +156,24 @@ typedef unsigned long long int mxfUInt64;
 
 typedef mxfUInt64 mxfLength;
 typedef mxfUInt08 mxfByte;
-typedef mxfByte mxfKey[16];
+typedef struct {
+  mxfByte octet0;
+  mxfByte octet1;
+  mxfByte octet2;
+  mxfByte octet3;
+  mxfByte octet4;
+  mxfByte octet5;
+  mxfByte octet6;
+  mxfByte octet7;
+  mxfByte octet8;
+  mxfByte octet9;
+  mxfByte octet10;
+  mxfByte octet11;
+  mxfByte octet12;
+  mxfByte octet13;
+  mxfByte octet14;
+  mxfByte octet15;
+} mxfKey;
 typedef mxfUInt16 mxfLocalKey;
 
 typedef struct aafUIDTag {
@@ -1259,13 +1276,25 @@ void printHex(FILE* f, mxfUInt64& i)
 
 void printMxfKey(const mxfKey& k, FILE* f)
 {
-  for (size_t i = 0; i < sizeof(mxfKey); i++) {
-    unsigned int b = k[i];
-    fprintf(f, "%02x", b);
-    if (i < (sizeof(mxfKey) - 1)) {
-      fprintf(f, ".");
-    }
-  }
+  fprintf(f,
+          "%02x.%02x.%02x.%02x.%02x.%02x.%02x.%02x."
+          "%02x.%02x.%02x.%02x.%02x.%02x.%02x.%02x",
+          k.octet0,
+          k.octet1,
+          k.octet2,
+          k.octet3,
+          k.octet4,
+          k.octet5,
+          k.octet6,
+          k.octet7,
+          k.octet8,
+          k.octet9,
+          k.octet10,
+          k.octet11,
+          k.octet12,
+          k.octet13,
+          k.octet14,
+          k.octet15);
 }
 
 void printMxfLength(mxfLength& l, FILE* f)
@@ -1734,7 +1763,7 @@ void printGeneralizedOperationalPattern(mxfKey& k, FILE* outfile);
 
 void printGeneralizedOperationalPattern(mxfKey& k, FILE* outfile)
 {
-  mxfByte itemComplexity = k[12];
+  mxfByte itemComplexity = k.octet12;
   if ((itemComplexity >= 1) && (itemComplexity <= 3)) {
     char* itemCplxName;
     switch (itemComplexity) {
@@ -1752,7 +1781,7 @@ void printGeneralizedOperationalPattern(mxfKey& k, FILE* outfile)
       break;
     }
 
-    mxfByte packageComplexity = k[13];
+    mxfByte packageComplexity = k.octet13;
     char* packageCplxName;
     switch (packageComplexity) {
     case 1:
@@ -1768,7 +1797,7 @@ void printGeneralizedOperationalPattern(mxfKey& k, FILE* outfile)
       packageCplxName = "Unknown";
      break;
     }
-    // mxfByte qualifiers = k[14]; // tjb not yet decoded
+    // mxfByte qualifiers = k.octet14; // tjb not yet decoded
     fprintf(outfile, "%s, %s", itemCplxName, packageCplxName);
   }
 }
@@ -1785,7 +1814,7 @@ void printSpecializedOperationalPattern(mxfKey& k, FILE* outfile);
 
 void printSpecializedOperationalPattern(mxfKey& k, FILE* outfile)
 {
-  mxfByte itemComplexity = k[12];
+  mxfByte itemComplexity = k.octet12;
   if (itemComplexity == 0x10) {
     printAtomOperationalPattern(k, outfile);
   } else {
@@ -1797,7 +1826,7 @@ void printOperationalPattern(mxfKey& k, FILE* outfile)
 {
   if (isOperationalPattern(k)) {
     fprintf(outfile, "[ ");
-    mxfByte itemComplexity = k[12];
+    mxfByte itemComplexity = k.octet12;
     if ((itemComplexity >= 1) && (itemComplexity <= 3)) {
       printGeneralizedOperationalPattern(k, outfile);
     } else if ((itemComplexity >= 0x10) && (itemComplexity <= 0x7f)) {
@@ -1830,7 +1859,7 @@ bool isPrivateLabel(mxfKey& k)
 
 void printPrivateLabelName(mxfKey& k, FILE* outfile)
 {
-  mxfByte organization = k[9];
+  mxfByte organization = k.octet9;
   char* name = "Unknown organization";
   switch (organization) {
   case 1:
@@ -1939,12 +1968,12 @@ void decode(mxfUInt16 tag1, mxfUInt32 tag2, FILE* outfile)
 void decode(mxfKey& label, FILE* outfile)
 {
   mxfUInt16 tag1 = 0;
-  tag1 = tag1 + (label[12] << 8);
-  tag1 = tag1 + (label[13] << 0);
+  tag1 = tag1 + (label.octet12 << 8);
+  tag1 = tag1 + (label.octet13 << 0);
 
   mxfUInt16 tag2 = 0;
-  tag2 = tag2 + (label[14] << 8);
-  tag2 = tag2 + (label[15] << 0);
+  tag2 = tag2 + (label.octet14 << 8);
+  tag2 = tag2 + (label.octet15 << 0);
 
   decode(tag1, tag2, outfile);
 }
@@ -2204,7 +2233,7 @@ void checkKeyTable(void)
   for (i = 0; i < mxfKeyTableSize; i++) {
     for (j = 0; j < mxfKeyTableSize; j++) {
       if (i != j) {
-        if (*mxfKeyTable[i]._key == *mxfKeyTable[j]._key) {
+        if (memcmp(mxfKeyTable[i]._key, mxfKeyTable[j]._key, sizeof(mxfKey)) == 0) {
           error("Duplicate keys - %s has the same key as %s.\n",
                 mxfKeyTable[i]._name,
                 mxfKeyTable[j]._name);
@@ -2267,33 +2296,33 @@ void aafUIDToMxfKey(mxfKey& key, aafUID& aafID)
 {
   // Bottom half of key <- top half of aafID
   //
-  key[ 0] = aafID.Data4[0];
-  key[ 1] = aafID.Data4[1];
-  key[ 2] = aafID.Data4[2];
-  key[ 3] = aafID.Data4[3];
-  key[ 4] = aafID.Data4[4];
-  key[ 5] = aafID.Data4[5];
-  key[ 6] = aafID.Data4[6];
-  key[ 7] = aafID.Data4[7];
+  key.octet0  = aafID.Data4[0];
+  key.octet1  = aafID.Data4[1];
+  key.octet2  = aafID.Data4[2];
+  key.octet3  = aafID.Data4[3];
+  key.octet4  = aafID.Data4[4];
+  key.octet5  = aafID.Data4[5];
+  key.octet6  = aafID.Data4[6];
+  key.octet7  = aafID.Data4[7];
 
   // Top half of key <- bottom half of aafID
   //
-  key[ 8] = (aafID.Data1 & 0xff000000) >> 24;
-  key[ 9] = (aafID.Data1 & 0x00ff0000) >> 16;
-  key[10] = (aafID.Data1 & 0x0000ff00) >>  8;
-  key[11] = (aafID.Data1 & 0x000000ff);
+  key.octet8  = (aafID.Data1 & 0xff000000) >> 24;
+  key.octet9  = (aafID.Data1 & 0x00ff0000) >> 16;
+  key.octet10 = (aafID.Data1 & 0x0000ff00) >>  8;
+  key.octet11 = (aafID.Data1 & 0x000000ff);
 
-  key[12] = (aafID.Data2 & 0xff00) >> 8;
-  key[13] = (aafID.Data2 & 0x00ff);
+  key.octet12 = (aafID.Data2 & 0xff00) >> 8;
+  key.octet13 = (aafID.Data2 & 0x00ff);
 
-  key[14] = (aafID.Data3 & 0xff00) >> 8;
-  key[15] = (aafID.Data3 & 0x00ff);
+  key.octet14 = (aafID.Data3 & 0xff00) >> 8;
+  key.octet15 = (aafID.Data3 & 0x00ff);
 
   // If aafID is an AAF class AUID, map it to a SMPTE 336M local set key
   //
   mxfByte classIdPrefix[] = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06};
   if (memcmp(&key, &classIdPrefix, sizeof(classIdPrefix)) == 0) {
-    key[5]  = 0x53;
+    key.octet5 = 0x53;
   }
 }
 
@@ -2310,7 +2339,7 @@ bool lookupAAFKey(mxfKey& k, size_t& index)
 {
   bool result = false;
   for (size_t i = 0; i < aafKeyTableSize; i++) {
-    if (memcmp(k, aafKeyTable[i]._key, sizeof(mxfKey)) == 0) {
+    if (memcmp(&k, &aafKeyTable[i]._key, sizeof(mxfKey)) == 0) {
       index = i;
       result = true;
       break;
@@ -2333,8 +2362,8 @@ bool findAAFKey(mxfKey& k, size_t& index, char** flag)
       // This could be an AUID/GUID that cannot be mapped to a SMPTE label.
       // Force the mapping and try again.
       mxfKey x;
-      memcpy(x, k, sizeof(x));
-      x[5] = 0x53;
+      memcpy(&x, &k, sizeof(x));
+      x.octet5 = 0x53;
       found = lookupAAFKey(x, index);
       if (found) {
         *flag = " +"; // A valid key but not a SMPTE label
@@ -2343,7 +2372,7 @@ bool findAAFKey(mxfKey& k, size_t& index, char** flag)
           // This could be a bogus key (Intel byte order GUID)
           // Fix it up and try again.
           aafUID a;
-          memcpy(&a, k, sizeof(a));
+          memcpy(&a, &k, sizeof(a));
           if (hostByteOrder() == 'B') {
             reorder(a);
           }
@@ -3002,7 +3031,7 @@ bool lookupMXFKey(mxfKey& k, size_t& index)
 {
   bool result = false;
   for (size_t i = 0; i < mxfKeyTableSize; i++) {
-    if (memcmp(k, mxfKeyTable[i]._key, sizeof(mxfKey)) == 0) {
+    if (memcmp(&k, mxfKeyTable[i]._key, sizeof(mxfKey)) == 0) {
       index = i;
       result = true;
       break;
@@ -3516,8 +3545,8 @@ void printEssenceKL(mxfKey& k, mxfLength& len);
 
 void printEssenceKL(mxfKey& k, mxfLength& /* len */)
 {
-  mxfByte itemTypeId = k[12];
-  mxfByte elementTypeId = k[14];
+  mxfByte itemTypeId = k.octet12;
+  mxfByte elementTypeId = k.octet14;
 
   char* itemTypeIdName = itemTypeName(itemTypeId);
   char* elementTypeIdName;
@@ -3527,16 +3556,16 @@ void printEssenceKL(mxfKey& k, mxfLength& /* len */)
     elementTypeIdName = elementTypeName(itemTypeId, elementTypeId);
   }
 
-  int elementCount = k[13];
-  int elementNumber = k[15];
+  int elementCount = k.octet13;
+  int elementNumber = k.octet15;
 
 
   fprintf(stdout,
           "  Track          = %02x.%02x.%02x.%02x\n",
-          k[12],
-          k[13],
-          k[14],
-          k[15]);
+          k.octet12,
+          k.octet13,
+          k.octet14,
+          k.octet15);
   fprintf(stdout,
           "  Item Type      = \"%s\" (%02x)\n",
           itemTypeIdName,
@@ -3796,7 +3825,7 @@ void printFill(mxfKey& k, mxfLength& len, mxfFile infile)
 bool isNullKey(const mxfKey& k)
 {
   bool result;
-  if (memcmp(NullKey, k, sizeof(mxfKey)) == 0) {
+  if (memcmp(&NullKey, &k, sizeof(mxfKey)) == 0) {
     result = true;
   } else {
     result = false;
@@ -3810,7 +3839,7 @@ bool isLocalSet(mxfKey& k)
 {
   char* flag;
   bool result;
-  if (k[5] == 0x53) {
+  if (k.octet5 == 0x53) {
     result = true;
   } else {
     if (aafKeysAsSets) {
