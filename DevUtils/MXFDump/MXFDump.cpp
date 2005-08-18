@@ -149,6 +149,7 @@ void setDumpFile(char* fileName);
 void mxfDumpFile(char* fileName);
 void aafDumpFile(char* fileName);
 
+bool isDark(mxfKey& k, Mode mode);
 bool isFill(mxfKey& k);
 
 void printFill(mxfKey& k, mxfLength& len, FILE* infile);
@@ -1629,6 +1630,27 @@ void checkLocalKey(mxfLocalKey& k)
     printMxfLocalKey(k, stdout);
     fprintf(stdout, ").\n");
   }
+}
+
+bool isDark(mxfKey& k, Mode mode)
+{
+  bool result = false;
+  size_t x;
+  switch (mode) {
+  case klvMode:
+    result = false;
+    break;
+  case localSetMode:
+    result = false;
+    break;
+  case mxfMode:
+    result = !lookupKey(k, x);
+    break;
+  case aafMode:
+    result = !findAAFKey(k, x);
+    break;
+  }
+  return result;
 }
 
 bool dumpFill = false;
