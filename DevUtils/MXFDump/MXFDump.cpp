@@ -1052,6 +1052,10 @@ void printFormatOptions(void)
   fprintf(stderr, "print only the first <n> ");
   fprintf(stderr, "index table entries (-c)\n");
 
+  fprintf(stderr, "  --no-limit-entries  = ");
+  fprintf(stderr, "print all ");
+  fprintf(stderr, "index table entries\n");
+
   fprintf(stderr, "  --show-fill         = ");
   fprintf(stderr, "dump fill bytes (-f)\n");
 
@@ -2590,6 +2594,8 @@ int main(int argumentCount, char* argumentVector[])
       maxIndex = getIntegerOption(i, argumentCount, argumentVector, "count");
       cFlag = true;
       i = i + 1;
+    } else if (strcmp(p, "--no-limit-entries") == 0) {
+      cFlag = false;
     } else if ((strcmp(p, "--frames") == 0) ||
                (strcmp(p, "-p") == 0)) {
       frames = true;
