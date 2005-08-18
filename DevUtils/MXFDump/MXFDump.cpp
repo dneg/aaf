@@ -403,10 +403,18 @@ int readBERLength(mxfUInt64& i, FILE* f)
 
 int readMxfLength(mxfLength& l, FILE* f)
 {
-  mxfUInt64 x;
+  mxfUInt64 x = 0;
   int bytesRead = readBERLength(x, f);
   if (bytesRead > 9) {
-    fprintf(stderr, "%s : Error : Invalid BER encoded length.\n", programName);
+    fprintf(stderr,
+            "%s : Error : Invalid BER encoded length.\n",
+            programName);
+    errors = errors + 1;
+  }
+  if (x == 0) {
+    fprintf(stderr,
+            "%s : Warning : Length is zero.\n",
+            programName);
     errors = errors + 1;
   }
   l = x;
