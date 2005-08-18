@@ -288,6 +288,7 @@ bool findAAFKey(mxfKey& k, size_t& index, char** flag);
 bool lookupMXFLocalKey(mxfLocalKey& k, size_t& index);
 bool lookupAAFLocalKey(mxfLocalKey& k, size_t& index);
 
+const char* aafKeyName(const mxfKey& k);
 const char* mxfKeyName(const mxfKey& k);
 
 bool isEssenceElement(mxfKey& k);
@@ -2699,6 +2700,17 @@ const char* mxfKeyName(const mxfKey& k)
   bool found = lookupMXFKey(const_cast<mxfKey&>(k), i);
   if (found) {
     result = mxfKeyTable[i]._name;
+  }
+  return result;
+}
+
+const char* aafKeyName(const mxfKey& k)
+{
+  const char* result = "Unknown";
+  size_t i;
+  bool found = lookupAAFKey(const_cast<mxfKey&>(k), i);
+  if (found) {
+    result = aafKeyTable[i]._name;
   }
   return result;
 }
