@@ -77,36 +77,169 @@ typedef struct aafUIDTag {
   mxfUInt08 Data4[8];
 } aafUID;
 
-mxfUInt08 hostByteOrder(void);
-
-mxfUInt08 hostByteOrder(void)
-{
-  mxfUInt16 word = 0x1234;
-  mxfUInt08  byte = *((mxfUInt08*)&word);
-  mxfUInt08 result;
-
-  if (byte == 0x12) {
-    result = 'B';
-  } else {
-    result = 'L';
-  }
-  return result;
-}
+const char* programName;
 
 bool reorder(void);
+mxfUInt08 hostByteOrder(void);
 
-bool reorder(void)
+void readMxfUInt08(mxfByte& b, FILE* f);
+void readMxfUInt16(mxfUInt16& i, FILE* f);
+void readMxfUInt32(mxfUInt32& i, FILE* f);
+void readMxfUInt64(mxfUInt64& i, FILE* f);
+bool readMxfKey(mxfKey& k, FILE* f);
+void readBERLength(mxfUInt64& i, FILE* f);
+void readMxfLength(mxfLength& l, FILE* f);
+
+void reorder(mxfUInt16& i);
+void reorder(mxfUInt32& i);
+void reorder(mxfUInt64& i);
+
+void printField(FILE* f, mxfUInt32& i);
+
+void printHexField(FILE* f, mxfUInt32& i);
+
+void printMxfKey(const mxfKey& k, FILE* f);
+void printMxfLength(mxfLength& l, FILE* f);
+
+void dumpMxfUInt16(const char* label, FILE* infile);
+void dumpMxfUInt32(const char* label, FILE* infile);
+void dumpMxfUInt64(const char* label, FILE* infile);
+void dumpMxfKey(const char* label, FILE* infile);
+
+void readMxfUInt08(mxfByte& b, FILE* f)
 {
-  bool result;
-  if (hostByteOrder() == 'B') {
-    result = false;
-  } else {
-    result = true;
+  int c = fread(&b, sizeof(mxfByte), 1, f);
+  if (c != 1) {
+    fprintf(stderr, "%s : Error : Failed to read byte.\n", programName);
+    exit(EXIT_FAILURE);
+  }
+}
+
+void readMxfUInt16(mxfUInt16& i, FILE* f)
+{
+  int c = fread(&i, sizeof(mxfUInt16), 1, f);
+  if (c != 1) {
+    fprintf(stderr, "%s : Error : Failed to read mxfUInt16.\n", programName);
+    exit(EXIT_FAILURE);
+  }
+  if (reorder()) {
+    reorder(i);
+  }
+}
+
+void readMxfUInt32(mxfUInt32& i, FILE* f)
+{
+  int c = fread(&i, sizeof(mxfUInt32), 1, f);
+  if (c != 1) {
+    fprintf(stderr, "%s : Error : Failed to read mxfUInt32.\n", programName);
+    exit(EXIT_FAILURE);
+  }
+  if (reorder()) {
+    reorder(i);
+  }
+}
+
+void readMxfUInt64(mxfUInt64& i, FILE* f)
+{
+  int c = fread(&i, sizeof(mxfUInt64), 1, f);
+  if (c != 1) {
+    fprintf(stderr, "%s : Error : Failed to read mxfUInt64.\n", programName);
+    exit(EXIT_FAILURE);
+  }
+  if (reorder()) {
+    reorder(i);
+  }
+}
+
+bool readMxfKey(mxfKey& k, FILE* f)
+{
+  bool result = true;
+  int c = fread(&k, sizeof(mxfKey), 1, f);
+  if (c != 1) {
+    if (!feof(f)) {
+      fprintf(stderr, "%s : Error : Failed to read key.\n", programName);
+      exit(EXIT_FAILURE);
+    } else {
+      result = false;
+    }
   }
   return result;
 }
 
-void printField(FILE* f, mxfUInt32& i);
+void readBERLength(mxfUInt64& i, FILE* f)
+{
+  mxfUInt08 b;
+  readMxfUInt08(b, f);
+  if (b == 0x80) {
+    // unknown length
+    i = 0;
+  } else if ((b & 0x80) != 0x80) {
+    // short form
+    i = b;
+  } else {
+    // long form
+    int length = b & 0x7f;
+    i = 0;
+    for (int k = 0; k < length; k++) {
+      readMxfUInt08(b, f);
+      i = i << 8;
+      i = i + b;
+    }
+  }
+}
+
+void readMxfLength(mxfLength& l, FILE* f)
+{
+  mxfUInt64 x;
+  readBERLength(x, f);
+  l = static_cast<mxfLength>(x);
+}
+
+void reorder(mxfUInt16& i)
+{
+  mxfUInt08* p = (mxfUInt08*)&i;
+  mxfUInt08 temp;
+
+  temp = p[0];
+  p[0] = p[1];
+  p[1] = temp;
+}
+
+void reorder(mxfUInt32& i)
+{
+  mxfUInt08* p = (mxfUInt08*)&i;
+  mxfUInt08 temp;
+
+  temp = p[0];
+  p[0] = p[3];
+  p[3] = temp;
+
+  temp = p[1];
+  p[1] = p[2];
+  p[2] = temp;
+}
+
+void reorder(mxfUInt64& i)
+{
+  mxfUInt08* p = (mxfUInt08*)&i;
+  mxfUInt08 temp;
+
+  temp = p[0];
+  p[0] = p[7];
+  p[7] = temp;
+
+  temp = p[1];
+  p[1] = p[6];
+  p[6] = temp;
+
+  temp = p[2];
+  p[2] = p[5];
+  p[5] = temp;
+
+  temp = p[3];
+  p[3] = p[4];
+  p[4] = temp;
+}
 
 void printField(FILE* f, mxfUInt32& i)
 {
@@ -123,8 +256,6 @@ void printField(FILE* f, mxfUInt32& i)
 #endif
 }
 
-void printHexField(FILE* f, mxfUInt32& i);
-
 void printHexField(FILE* f, mxfUInt32& i)
 {
 #if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
@@ -138,6 +269,81 @@ void printHexField(FILE* f, mxfUInt32& i)
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
   fprintf(f, "%08lx", i);
 #endif
+}
+
+void printMxfKey(const mxfKey& k, FILE* f)
+{
+  for (size_t i = 0; i < sizeof(mxfKey); i++) {
+    unsigned int b = k[i];
+    fprintf(f, "%02x", b);
+    if (i < (sizeof(mxfKey) - 1)) {
+      fprintf(f, ".");
+    }
+  }
+}
+
+void printMxfLength(mxfLength& l, FILE* f)
+{
+  printField(f, l);
+  fprintf(f, " ");
+  fprintf(f, "(");
+  printHexField(f, l);
+  fprintf(f, ")");
+}
+
+void dumpMxfUInt16(const char* label, FILE* infile)
+{
+  mxfUInt16 i;
+  readMxfUInt16(i, infile);
+  fprintf(stdout, "%20s = %04x\n", label, i);
+}
+
+void dumpMxfUInt32(const char* label, FILE* infile)
+{
+  mxfUInt32 i;
+  readMxfUInt32(i, infile);
+  fprintf(stdout, "%20s = %08x\n", label, i);
+}
+
+void dumpMxfUInt64(const char* label, FILE* infile)
+{
+  mxfUInt64 i;
+  readMxfUInt64(i, infile);
+  fprintf(stdout, "%20s = %08x\n", label, i);
+}
+
+void dumpMxfKey(const char* label, FILE* infile)
+{
+  mxfKey k;
+  readMxfKey(k, infile);
+  fprintf(stdout, "%20s = ", label);
+  printMxfKey(k, stdout);
+  fprintf(stdout, "\n");
+}
+
+bool reorder(void)
+{
+  bool result;
+  if (hostByteOrder() == 'B') {
+    result = false;
+  } else {
+    result = true;
+  }
+  return result;
+}
+
+mxfUInt08 hostByteOrder(void)
+{
+  mxfUInt16 word = 0x1234;
+  mxfUInt08  byte = *((mxfUInt08*)&word);
+  mxfUInt08 result;
+
+  if (byte == 0x12) {
+    result = 'B';
+  } else {
+    result = 'L';
+  }
+  return result;
 }
 
 // Define values of MXF keys
@@ -235,8 +441,6 @@ bool lookupAAFKey(mxfKey& k, size_t& index)
 }
 
 const mxfLocalKey nullMxfLocalKey = {0, 0};
-
-const char* programName;
 
 void checkSizes(void);
 
@@ -386,147 +590,6 @@ const char* baseName(char* fullName)
   }
 
   return result;
-}
-
-void readMxfUInt08(mxfByte& b, FILE* f);
-
-void readMxfUInt08(mxfByte& b, FILE* f)
-{
-  int c = fread(&b, sizeof(mxfByte), 1, f);
-  if (c != 1) {
-    fprintf(stderr, "%s : Error : Failed to read byte.\n", programName);
-    exit(EXIT_FAILURE);
-  }
-}
-
-void reorder(mxfUInt16& i);
-
-void reorder(mxfUInt16& i)
-{
-  mxfUInt08* p = (mxfUInt08*)&i;
-  mxfUInt08 temp;
-
-  temp = p[0];
-  p[0] = p[1];
-  p[1] = temp;
-}
-
-void readMxfUInt16(mxfUInt16& i, FILE* f);
-
-void readMxfUInt16(mxfUInt16& i, FILE* f)
-{
-  int c = fread(&i, sizeof(mxfUInt16), 1, f);
-  if (c != 1) {
-    fprintf(stderr, "%s : Error : Failed to read mxfUInt16.\n", programName);
-    exit(EXIT_FAILURE);
-  }
-  if (reorder()) {
-    reorder(i);
-  }
-}
-
-void reorder(mxfUInt32& i);
-
-void reorder(mxfUInt32& i)
-{
-  mxfUInt08* p = (mxfUInt08*)&i;
-  mxfUInt08 temp;
-
-  temp = p[0];
-  p[0] = p[3];
-  p[3] = temp;
-
-  temp = p[1];
-  p[1] = p[2];
-  p[2] = temp;
-}
-
-void readBERLength(mxfUInt64& i, FILE* f);
-
-void readBERLength(mxfUInt64& i, FILE* f)
-{
-  mxfUInt08 b;
-  readMxfUInt08(b, f);
-  if (b == 0x80) {
-    // unknown length
-    i = 0;
-  } else if ((b & 0x80) != 0x80) {
-    // short form
-    i = b;
-  } else {
-    // long form
-    int length = b & 0x7f;
-    i = 0;
-    for (int k = 0; k < length; k++) {
-      readMxfUInt08(b, f);
-      i = i << 8;
-      i = i + b;
-    }
-  }
-}
-
-void readMxfUInt32(mxfUInt32& i, FILE* f);
-
-void readMxfUInt32(mxfUInt32& i, FILE* f)
-{
-  int c = fread(&i, sizeof(mxfUInt32), 1, f);
-  if (c != 1) {
-    fprintf(stderr, "%s : Error : Failed to read mxfUInt32.\n", programName);
-    exit(EXIT_FAILURE);
-  }
-  if (reorder()) {
-    reorder(i);
-  }
-}
-
-void readMxfLength(mxfLength& l, FILE* f);
-
-void readMxfLength(mxfLength& l, FILE* f)
-{
-  mxfUInt64 x;
-  readBERLength(x, f);
-  l = static_cast<mxfLength>(x);
-}
-
-void printMxfLength(mxfLength& l, FILE* f);
-
-void printMxfLength(mxfLength& l, FILE* f)
-{
-  printField(f, l);
-  fprintf(f, " ");
-  fprintf(f, "(");
-  printHexField(f, l);
-  fprintf(f, ")");
-}
-
-bool readMxfKey(mxfKey& k, FILE* f);
-
-bool readMxfKey(mxfKey& k, FILE* f)
-{
-  bool result = true;
-  int c = fread(&k, sizeof(mxfKey), 1, f);
-  if (c != 1) {
-    if (!feof(f)) {
-      fprintf(stderr, "%s : Error : Failed to read key.\n", programName);
-      exit(EXIT_FAILURE);
-    } else {
-      result = false;
-    }
-  }
-  return result;
-}
-
-void printMxfKey(const mxfKey& k, FILE* f);
-
-void printMxfKey(const mxfKey& k, FILE* f)
-{
-  for (size_t i = 0; i < sizeof(mxfKey); i++) {
-    unsigned int b = k[i];
-    fprintf(f, "%02x", b);
-    if (i < (sizeof(mxfKey) - 1)) {
-      fprintf(f, ".");
-    }
-  }
 }
 
 #define AAF_PROPERTY(name, id, tag, type, mandatory, uid, container) \
@@ -894,7 +957,32 @@ void printHeaderPartition(mxfKey& k, mxfLength& len, FILE* infile);
 void printHeaderPartition(mxfKey& k, mxfLength& len, FILE* infile)
 {
   printKL(k, len);
-  printV(len, false, 0, infile);
+
+  dumpMxfUInt16("Major Version", infile);
+  dumpMxfUInt16("Minor Version", infile);
+  dumpMxfUInt32("KAGSize", infile);
+  dumpMxfUInt64("ThisPartition", infile);
+  dumpMxfUInt64("PreviousPartition", infile);
+  dumpMxfUInt64("FooterPartition", infile);
+  dumpMxfUInt64("HeaderByteCount", infile);
+  dumpMxfUInt64("IndexByteCount", infile);
+  dumpMxfUInt32("IndexSID", infile);
+  dumpMxfUInt64("BodyOffset", infile);
+  dumpMxfUInt32("BodySID", infile);
+  dumpMxfKey("Operational Pattern", infile);
+  fprintf(stdout, "%20s = ", "EssenceContainers");
+  fprintf(stdout, "\n");
+  mxfUInt32 elementCount;
+  readMxfUInt32(elementCount, infile);
+  mxfUInt32 elementSize;
+  readMxfUInt32(elementSize, infile);
+  for (mxfUInt32 i = 0; i < elementCount; i++) {
+    mxfKey essence;
+    readMxfKey(essence, infile);
+    fprintf(stdout, "  %4d : ", i);
+    printMxfKey(essence, stdout);
+    fprintf(stdout, "\n");
+  }
 }
 
 void printPrimer(mxfKey& k, mxfLength& len, FILE* infile);
