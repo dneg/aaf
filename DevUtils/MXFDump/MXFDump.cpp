@@ -3750,15 +3750,9 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
   // IndexSID
   // BodyOffset
   mxfUInt64 bodyOffset = 0;
-  if (!p->_segments.empty()) {
-    SegmentList::const_iterator it;
-    for (it = p->_segments.begin(); it != p->_segments.end(); it++) {
-      Segment* seg = *it;
-      if (isEssenceElement(seg->_label)) {
-        bodyOffset = seg->_start;
-        break;
-      }
-    }
+  Segment* seg = findEssenceSegment(p);
+  if (seg != 0) {
+    bodyOffset = seg->_start;
   }
   checkField(bodyOffset,
              p->_bodyOffset,
@@ -3766,6 +3760,25 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
              p->_address,
              "BodyOffset");
   // BodySID
+  if (seg != 0) {
+    if (p->_bodySID == 0) {
+      mxfError(p->_key,
+               p->_address,
+               "Incorrect value for BodySID"
+               " - partition contains essence,"
+               " expected != 0x0, found 0x%"MXFPRIx32"",
+               p->_bodySID);
+    }
+  } else {
+    if (p->_bodySID != 0) {
+      mxfError(p->_key,
+               p->_address,
+               "Incorrect value for BodySID"
+               " - partition does not contain essence,"
+               " expected 0x0, found 0x%"MXFPRIx32"",
+               p->_bodySID);
+    }
+  }
   // Operational Pattern
   checkOperationalPattern(p);
   // EssenceContainers
