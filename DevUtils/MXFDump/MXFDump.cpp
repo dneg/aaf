@@ -4740,7 +4740,7 @@ int main(int argumentCount, char* argumentVector[])
     fatalError("File \"%s\" is not an MXF file.\n", fileName);
   } else if (headerPosition > 64 * 1024) {
     // We found the header but the run-in was too big
-    mxfError("Run-in too large [ %"MXFPRIu64" bytes ]\n", headerPosition);
+    mxfError("Run-in too large [ %"MXFPRIu64" bytes ].\n", headerPosition);
   }
   if (isDumpMode(mode)) {
     if (headerPosition != 0) {
