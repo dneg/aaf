@@ -1453,6 +1453,15 @@ typedef std::map<mxfUInt16, node*> forest;
 
 forest f;
 
+node* newNode(mxfUInt16 key, const char* prefix);
+void addLabel(node* n, mxfUInt16 key, const char* suffix);
+void addNode(node* n);
+void initEssenceContainerLabelMap(void);
+void decode(mxfUInt16 tag1, mxfUInt32 tag2, FILE* outfile);
+void printEssenceContainerLabelName(mxfKey& label, FILE* outfile);
+void decode(mxfKey& label, FILE* outfile);
+void printEssenceContainerLabel(mxfKey& label, mxfUInt32 index, FILE* outfile);
+
 node* newNode(mxfUInt16 key, const char* prefix)
 {
   node* result = new node;
