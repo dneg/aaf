@@ -1666,7 +1666,15 @@ void dumpExtensionTypeExtendibleEnumerated(mxfFile infile)
   fprintf(stdout, "]\n");
 }
 
-// Indirect
+void dumpExtensionTypeIndirect(mxfFile infile);
+
+void dumpExtensionTypeIndirect(mxfFile infile)
+{
+  fprintf(stdout, "indirect type = [\n");
+  dumpExtensionDefinition(infile);
+
+  fprintf(stdout, "]\n");
+}
 
 void dumpMxfLabel(const char* label, mxfFile infile)
 {
@@ -5620,7 +5628,9 @@ void printMetaDictionary(mxfKey& /* k */, mxfLength& len, mxfFile infile)
     case 0x3d:
       dumpExtensionTypeExtendibleEnumerated(infile);
       break;
-      // Indirect              = 3e
+    case 0x3e:
+      dumpExtensionTypeIndirect(infile);
+      break;
     default:
       mxfError("Invalid definition tag (%"MXFPRIx08").\n", tag);
       skipBytes(length - 1, infile);
