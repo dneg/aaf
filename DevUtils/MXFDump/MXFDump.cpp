@@ -5515,9 +5515,8 @@ void validateIndexSegment(mxfIndexSegment* index)
     }
   }
   if (index->_isV10Index) {
-    mxfWarning("Index table segment key at offset 0x%"MXFPRIx64""
-               "is not S377M compliant.\n",
-               keyPosition);
+    mxfError("Index table segment key at offset 0x%"MXFPRIx64" is obsolete.\n",
+             keyPosition);
   }
 }
 
