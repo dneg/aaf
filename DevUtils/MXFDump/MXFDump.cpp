@@ -4282,6 +4282,20 @@ void printIndexSegment(mxfIndexSegment* index)
   }
 }
 
+
+void validateArray(mxfUInt32 defaultSize,
+                   mxfUInt32 expectedSize,
+                   mxfUInt32 actualSize,
+                   mxfUInt32 elementCount)
+{
+  if (expectedSize == 0) {
+    expectedSize = defaultSize;
+  }
+  checkElementSize(expectedSize,
+                   actualSize,
+                   elementCount);
+}
+
 void validateIndexSegment(mxfIndexSegment* index);
 
 void validateIndexSegment(mxfIndexSegment* index)
