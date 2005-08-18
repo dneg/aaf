@@ -3304,12 +3304,22 @@ void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
 
   // Check that the partitions in the random index are in the correct order.
   //
-  // NYI
+  RandomIndex::const_iterator rit;
+  mxfUInt64 previous;
+  for (rit = rip.begin(); rit != rip.end(); ++rit) {
+    if ((rit != rip.begin()) && (rit->_offset <= previous)) {
+      mxfError("Invalid random index - partitions out of order"
+               " (partition address = %"MXFPRIx64","
+               " address of previous partition = %"MXFPRIx64").\n",
+               rit->_offset,
+               previous);
+    }
+    previous = rit->_offset;
+ }
 
   // Check that each entry in the random index corresponds to a
   // partition in the file.
   //
-  RandomIndex::const_iterator rit;
   for (rit = rip.begin(); rit != rip.end(); ++rit) {
     bool found = false;
     mxfRIPEntry e = *rit;
