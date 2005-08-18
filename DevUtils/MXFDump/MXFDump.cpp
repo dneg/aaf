@@ -1439,7 +1439,7 @@ void printOperationalPattern(mxfKey& k, FILE* outfile)
 }
 
 
-void decode(mxfUInt16 tag1, mxfUInt32 /* tag2 */, FILE* outfile)
+void decode(mxfUInt16 tag1, mxfUInt32 tag2, FILE* outfile)
 {
   switch (tag1) {
   case 0x0101:
@@ -1447,6 +1447,68 @@ void decode(mxfUInt16 tag1, mxfUInt32 /* tag2 */, FILE* outfile)
     break;
   case 0x0201:
     fprintf(outfile, "D-10");
+    switch (tag2) {
+    // 50Mbps 625/50i
+    case 0x0101:
+      fprintf(outfile, "50Mbps 625/50i (defined template)");
+      break;
+    case 0x0102:
+      fprintf(outfile, "50Mbps 625/50i (extended template)");
+      break;
+    case 0x017f:
+      fprintf(outfile, "50Mbps 625/50i (picture only)");
+      break;
+    // 50Mbps 525/60i
+    case 0x0201:
+      fprintf(outfile, "50Mbps 525/60i (defined template)");
+      break;
+    case 0x0202:
+      fprintf(outfile, "50Mbps 525/60i (extended template)");
+      break;
+    case 0x027f:
+      fprintf(outfile, "50Mbps 525/60i (picture only)");
+      break;
+    // 40Mbps 625/50i
+    case 0x0301:
+      fprintf(outfile, "40Mbps 625/50i (defined template)");
+      break;
+    case 0x0302:
+      fprintf(outfile, "40Mbps 625/50i (extended template)");
+      break;
+    case 0x037f:
+      fprintf(outfile, "40Mbps 625/50i (picture only)");
+      break;
+    // 40Mbps 525/60i
+    case 0x0401:
+      fprintf(outfile, "40Mbps 525/60i (defined template)");
+      break;
+    case 0x0402:
+      fprintf(outfile, "40Mbps 525/60i (extended template)");
+      break;
+    case 0x047f:
+      fprintf(outfile, "40Mbps 525/60i (picture only)");
+      break;
+    // 30Mbps 625/50i
+    case 0x0501:
+      fprintf(outfile, "30Mbps 625/50i (defined template)");
+      break;
+    case 0x0502:
+      fprintf(outfile, "30Mbps 625/50i (extended template)");
+      break;
+    case 0x057f:
+      fprintf(outfile, "30Mbps 625/50i (picture only)");
+      break;
+    // 30Mbps 525/60i
+    case 0x0601:
+      fprintf(outfile, "30Mbps 525/60i (defined template)");
+      break;
+    case 0x0602:
+      fprintf(outfile, "30Mbps 525/60i (extended template)");
+      break;
+    case 0x067f:
+      fprintf(outfile, "30Mbps 525/60i (picture only)");
+      break;
+    }
     break;
   case 0x0202:
     fprintf(outfile, "DV");
