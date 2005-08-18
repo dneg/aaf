@@ -420,6 +420,7 @@ void mxfDumpFile(char* fileName)
   while (!feof(infile)) {
     mxfKey k;
     readMxfKey(k, infile);
+    fprintf(stdout, "\n");
     fprintf(stdout, "[ k = ");
     printMxfKey(k, stdout);
     fprintf(stdout, ",  ");
@@ -508,6 +509,7 @@ void klvDumpFile(char* fileName)
   while (!feof(infile)) {
     mxfKey k;
     readMxfKey(k, infile);
+    fprintf(stdout, "\n");
     fprintf(stdout, "[ k = ");
     printMxfKey(k, stdout);
     fprintf(stdout, ",  ");
