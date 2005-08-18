@@ -6419,6 +6419,7 @@ int mxfExitStatus(int status)
 // -c --limit-entries
 // -p --frames
 // -i --limit-frames
+//    --no-limit-frames
 // -j --key-addresses
 //    --no-key-addresses
 // -r --relative
@@ -6524,6 +6525,10 @@ int main(int argumentCount, char* argumentVector[])
       checkDumpMode(p);
       maxFrames = getIntegerOption(i, argumentCount, argumentVector, "count");
       iFlag = true;
+      i = i + 1;
+    } else if (strcmp(p, "--no-limit-frames") == 0) {
+      checkDumpMode(p);
+      iFlag = false;
       i = i + 1;
     } else if ((strcmp(p, "--key-addresses") == 0) ||
                (strcmp(p, "-j") == 0)) {
