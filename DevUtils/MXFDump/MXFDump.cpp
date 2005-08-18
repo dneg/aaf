@@ -3834,7 +3834,10 @@ void printPartitions(PartitionList& partitions)
   PartitionList::const_iterator it;
   for (it = partitions.begin(); it != partitions.end(); ++it) {
     mxfPartition* p = *it;
-    fprintf(stdout, "  Address = %016"MXFPRIx64"\n", p->_address);
+    fprintf(stdout,
+            "  Address = %016"MXFPRIx64" [%s]\n",
+            p->_address,
+            mxfKeyName(p->_key));
     printSegments(p->_segments);
   }
 }
