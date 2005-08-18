@@ -676,7 +676,7 @@ mxfFile openExistingRead(char* fileName)
 {
   HANDLE result = CreateFile(fileName,
                              GENERIC_READ,
-                             FILE_SHARE_READ,
+                             FILE_SHARE_READ | FILE_SHARE_WRITE,
                              0,
                              OPEN_EXISTING,
                              0,
