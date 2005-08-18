@@ -528,7 +528,10 @@ void vmxfError(const mxfKey& key,
 
 void printLocation(const mxfKey& key, mxfUInt64 keyPosition)
 {
-  print(" (following key at offset 0x%"MXFPRIx64").\n", keyPosition);
+  const char *name = keyName(key);
+  print(" (following %s key at offset 0x%"MXFPRIx64").\n",
+        name,
+        keyPosition);
 }
 
 bool verbose = false;
