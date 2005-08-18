@@ -868,6 +868,12 @@ void printUsage(void)
   fprintf(stderr, "  --no-limit    = ");
   fprintf(stderr, "dump all the bytes of each ");
   fprintf(stderr, "essence container (-e)\n");
+  fprintf(stderr, "  --relative    = ");
+  fprintf(stderr, "print relative addresses ");
+  fprintf(stderr, "- the start of the value == 0 (-r)\n");
+  fprintf(stderr, "  --absolute    = ");
+  fprintf(stderr, "print absolute addresses ");
+  fprintf(stderr, "- the start of the file == 0 (-b)\n");
   fprintf(stderr, "  --fill        = ");
   fprintf(stderr, "dump fill bytes (-f)\n");
   fprintf(stderr, "\n");
@@ -880,6 +886,12 @@ void printUsage(void)
   fprintf(stderr, "  --no-limit    = ");
   fprintf(stderr, "dump all the bytes of each ");
   fprintf(stderr, "essence container (-e)\n");
+  fprintf(stderr, "  --relative    = ");
+  fprintf(stderr, "print relative addresses ");
+  fprintf(stderr, "- the start of the value == 0 (-r)\n");
+  fprintf(stderr, "  --absolute    = ");
+  fprintf(stderr, "print absolute addresses ");
+  fprintf(stderr, "- the start of the file == 0 (-b)\n");
   fprintf(stderr, "  --fill        = ");
   fprintf(stderr, "dump fill bytes (-f)\n");
   fprintf(stderr, "\n");
@@ -892,6 +904,12 @@ void printUsage(void)
   fprintf(stderr, "  --no-limit    = ");
   fprintf(stderr, "dump all the bytes of each ");
   fprintf(stderr, "essence container (-e)\n");
+  fprintf(stderr, "  --relative    = ");
+  fprintf(stderr, "print relative addresses ");
+  fprintf(stderr, "- the start of the value == 0 (-r)\n");
+  fprintf(stderr, "  --absolute    = ");
+  fprintf(stderr, "print absolute addresses ");
+  fprintf(stderr, "- the start of the file == 0 (-b)\n");
   fprintf(stderr, "  --fill        = ");
   fprintf(stderr, "dump fill bytes (-f)\n");
   fprintf(stderr, "\n");
@@ -901,6 +919,12 @@ void printUsage(void)
   fprintf(stderr, "dump only the first <n> bytes of each ");
   fprintf(stderr, "value (-l)\n");
   fprintf(stderr, "                  [default n == 0]\n");
+  fprintf(stderr, "  --relative    = ");
+  fprintf(stderr, "print relative addresses ");
+  fprintf(stderr, "- the start of the value == 0 (-r)\n");
+  fprintf(stderr, "  --absolute    = ");
+  fprintf(stderr, "print absolute addresses ");
+  fprintf(stderr, "- the start of the file == 0 (-b)\n");
   fprintf(stderr, "\n");
   fprintf(stderr, "--symbolic      = ");
   fprintf(stderr, "dump the names of keys if known [default] (-y)\n");
@@ -1096,11 +1120,18 @@ void printKL(mxfKey& k, mxfLength& l)
   fprintf(stdout, " ]\n");
 }
 
+bool relative = true;
+
 void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f);
 
 void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
 {
-  init(0);
+  mxfUInt64 start = position;
+  if (relative) {
+    start = 0;
+  }
+  init(start);
+
   mxfLength count = 0;
   for (mxfLength i = 0; i < length; i++) {
     mxfByte b;
@@ -1817,6 +1848,8 @@ bool getInteger(int& i, char* s)
 // -f --fill
 // -e --no-limit
 // -l --limit
+// -r --relative
+// -b --absolute
 // -y --symbolic
 // -n --no-symbolic
 // -h --help
@@ -1874,6 +1907,10 @@ int main(int argumentCount, char* argumentVector[])
         printUsage();
         exit(EXIT_FAILURE);
       }
+    } else if ((strcmp(p, "-r") == 0) || (strcmp(p, "--relative") == 0)) {
+      relative = true;
+    } else if ((strcmp(p, "-b") == 0) || (strcmp(p, "--absolute") == 0)) {
+      relative = false;
     } else if ((strcmp(p, "-y") == 0) || (strcmp(p, "--symbolic") == 0)) {
       symbolic = true;
     } else if ((strcmp(p, "-n") == 0) || (strcmp(p, "--no-symbolic") == 0)) {
