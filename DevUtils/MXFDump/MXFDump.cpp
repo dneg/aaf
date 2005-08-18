@@ -2953,10 +2953,6 @@ struct {
   // Generic Sound Essence Descriptor
   {"Locked/Unlocked",      0x3d02},
   //
-  // Generic Picture Essence Descriptor
-  {"Signal Standard",      0x3215},
-  {"Stored F2 Offset",     0x3216},
-  {"Display F2 Offset",    0x3217},
   // CDCI Essence Descriptor
   {"Reversed Byte Order",  0x330b},
   // Sentinel
