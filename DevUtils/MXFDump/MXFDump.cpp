@@ -4075,6 +4075,83 @@ void readIndexSegment(mxfIndexSegment* index, mxfLength& len, mxfFile infile);
 
 void readIndexSegment(mxfIndexSegment* index, mxfLength& len, mxfFile infile)
 {
+  mxfLength remainder = len;
+  while (remainder > 0) {
+    mxfLocalKey identifier;
+    readMxfLocalKey(identifier, infile);
+    mxfUInt16 length;
+    readMxfUInt16(length, infile);
+    remainder = remainder - 4;
+
+    if (identifier == 0x3c0a) {
+      // InstanceUID
+      readMxfLabel(index->_instanceUID, infile);
+      remainder = remainder - 16;
+    } else if (identifier == 0x3f05) {
+      // Edit Unit Byte Count
+      readMxfUInt32(index->_editUnitByteCount, infile);
+      remainder = remainder - 4;
+      index->_hasEditUnitByteCount = true;
+    } else if (identifier == 0x3f06) {
+      // IndexSID
+      readMxfUInt32(index->_indexSID, infile);
+      remainder = remainder - 4;
+      index->_hasIndexSID = true;
+    } else if (identifier == 0x3f07) {
+      // BodySID
+      readMxfUInt32(index->_bodySID, infile);
+      remainder = remainder - 4;
+    } else if (identifier == 0x3f08) {
+      // Slice Count
+      readMxfUInt08(index->_sliceCount, infile);
+      remainder = remainder - 1;
+      index->_hasSliceCount = true;
+    } else if (identifier == 0x3f0a) {
+      // Entry array
+      readMxfUInt32(index->_indexEntryCount, infile);
+      readMxfUInt32(index->_indexEntrySize, infile);
+      remainder = remainder - 8;
+      index->_indexEntryArrayPosition = position(infile);
+      mxfUInt64 size = index->_indexEntryCount * index->_indexEntrySize;
+      skipBytes(size, infile);
+      remainder = remainder - size;
+      index->_hasIndexEntryArray = true;
+    } else if (identifier == 0x3f0b) {
+      // Index Edit Rate
+      readMxfRational(index->_indexEditRate, infile);
+      remainder = remainder - 8;
+    } else if (identifier == 0x3f0c) {
+      // Index Start Position
+      readMxfUInt64(index->_indexStartPosition, infile);
+      remainder = remainder - 8;
+    } else if (identifier == 0x3f0d) {
+      // Index Duration
+      readMxfUInt64(index->_indexDuration, infile);
+      remainder = remainder - 8;
+    } else if (identifier == 0x3f0e) {
+      // Pos Table Count
+      readMxfUInt08(index->_posTableCount, infile);
+      remainder = remainder - 1;
+      index->_hasPosTableCount = true;
+    } else if (identifier == 0x3f09) {
+      // Delta Entry Array
+      readMxfUInt32(index->_deltaEntryCount, infile);
+      readMxfUInt32(index->_deltaEntrySize, infile);
+      remainder = remainder - 8;
+      index->_deltaEntryArrayPosition = position(infile);
+      mxfUInt64 size = index->_deltaEntryCount * index->_deltaEntrySize;
+      skipBytes(size, infile);
+      remainder = remainder - size;
+      index->_hasDeltaEntryArray = true;
+    } else {
+      mxfError(currentKey,
+               keyPosition,
+               "Local key (%04"MXFPRIx16") not recognized.",
+               identifier);
+      mxfUInt16 vLength = validateLocalV(length, remainder, infile);
+      skipBytes(vLength, infile);
+    }
+  }
 }
 
 void printIndexSegment(mxfIndexSegment* index);
