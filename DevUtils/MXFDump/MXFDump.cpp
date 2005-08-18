@@ -1415,29 +1415,31 @@ void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
 
 char* elementTypeName(mxfByte itemTypeId, mxfByte type);
 
-char* elementTypeName(mxfByte /* itemTypeId */, mxfByte type)
+char* elementTypeName(mxfByte itemTypeId, mxfByte type)
 {
-  char* result;
-  if (type == 0x00) {
-    result = "Illegal";
-  } else if ((type >= 0x01) && (type <= 0x0f)) {
-    if (type == 0x01) {
-      result = "MPEG-2 V-ES";
-    } else {
-      result = "Picture";
+  char* result = "Unknown";
+  if ((itemTypeId == 0x05) || (itemTypeId == 0x06) || (itemTypeId == 0x07)) {
+    if (type == 0x00) {
+      result = "Illegal";
+    } else if ((type >= 0x01) && (type <= 0x0f)) {
+      if (type == 0x01) {
+        result = "MPEG-2 V-ES";
+      } else {
+        result = "Picture";
+      }
+    } else if ((type >= 0x10) && (type <= 0x1f)) {
+      if (type == 0x10) {
+        result = "AES3";
+      } else {
+        result = "Audio";
+      }
+    } else if ((type >= 0x20) && (type <= 0x77)) {
+      result = "Auxilliary";
+    } else if ((type >= 0x78) && (type <= 0x7f)) {
+      result = "System";
+    } else if ((type >= 0x80) && (type <= 0xff)) {
+      result = "System";
     }
-  } else if ((type >= 0x10) && (type <= 0x1f)) {
-    if (type == 0x10) {
-      result = "AES3";
-    } else {
-      result = "Audio";
-    }
-  } else if ((type >= 0x20) && (type <= 0x77)) {
-    result = "Auxilliary";
-  } else if ((type >= 0x78) && (type <= 0x7f)) {
-    result = "System";
-  } else if ((type >= 0x80) && (type <= 0xff)) {
-    result = "System";
   }
   return result;
 }
@@ -1469,37 +1471,30 @@ void printEssenceKL(mxfKey& k, mxfLength& len)
   switch (itemTypeId) {
   case 0x05:
     itemTypeIdName = "CP Picture";
-    elementTypeIdName = elementTypeName(itemTypeId, elementTypeId);
     break;
   case 0x06:
     itemTypeIdName = "CP Sound";
-    elementTypeIdName = elementTypeName(itemTypeId, elementTypeId);
     break;
   case 0x07:
     itemTypeIdName = "CP Data";
-    elementTypeIdName = elementTypeName(itemTypeId, elementTypeId);
     break;
   case 0x15:
     itemTypeIdName = "GC Picture";
-    elementTypeIdName = "Unknown";
     break;
   case 0x16:
     itemTypeIdName = "GC Sound";
-    elementTypeIdName = "Unknown";
     break;
   case 0x17:
     itemTypeIdName = "GC Data";
-    elementTypeIdName = "Unknown";
     break;
   case 0x18:
     itemTypeIdName = "GC Compound";
-    elementTypeIdName = "Unknown";
     break;
   default:
     itemTypeIdName = "Unknown";
-    elementTypeIdName = "Unknown";
     break;
   }
+  elementTypeIdName = elementTypeName(itemTypeId, elementTypeId);
 
   int elementCount = k[13];
   int elementNumber = k[15] + 1; // zero based
