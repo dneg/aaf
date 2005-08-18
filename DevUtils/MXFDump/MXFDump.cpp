@@ -987,9 +987,9 @@ void printLocalV(mxfLocalKey& identifier,
       printMxfLocalKey(identifier, stdout);
       fprintf(stdout,") size = ");
       printField(stdout, length);
-      fprintf(stdout, " (should be ");
+      fprintf(stdout, ", only ");
       printField(stdout, remain);
-      fprintf(stdout, ").\n");
+      fprintf(stdout, " bytes remain in this value.\n");
   }
 }
 
