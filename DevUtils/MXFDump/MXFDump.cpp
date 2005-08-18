@@ -1498,37 +1498,10 @@ void printEssenceKL(mxfKey& k, mxfLength& len);
 void printEssenceKL(mxfKey& k, mxfLength& len)
 {
   mxfByte itemTypeId = k[12];
-  char* itemTypeIdName;
   mxfByte elementTypeId = k[14];
-  char* elementTypeIdName;
 
-  switch (itemTypeId) {
-  case 0x05:
-    itemTypeIdName = "CP Picture";
-    break;
-  case 0x06:
-    itemTypeIdName = "CP Sound";
-    break;
-  case 0x07:
-    itemTypeIdName = "CP Data";
-    break;
-  case 0x15:
-    itemTypeIdName = "GC Picture";
-    break;
-  case 0x16:
-    itemTypeIdName = "GC Sound";
-    break;
-  case 0x17:
-    itemTypeIdName = "GC Data";
-    break;
-  case 0x18:
-    itemTypeIdName = "GC Compound";
-    break;
-  default:
-    itemTypeIdName = "Unknown";
-    break;
-  }
-  elementTypeIdName = elementTypeName(itemTypeId, elementTypeId);
+  char* itemTypeIdName = elementTypeIdName(itemTypeId);
+  char* elementTypeIdName = elementTypeName(itemTypeId, elementTypeId);
 
   int elementCount = k[13];
   int elementNumber = k[15] + 1; // zero based
