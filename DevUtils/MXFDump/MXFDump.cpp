@@ -1590,7 +1590,7 @@ void printFooterPartition(mxfKey& k, mxfLength& len, FILE* infile)
 }
 
 bool cFlag = false;
-mxfUInt32 maxIndexEntries = 0;
+mxfUInt32 maxIndex = 0;
 
 void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile);
 
@@ -1662,7 +1662,7 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
         mxfUInt64 streamOffset;
         readMxfUInt64(streamOffset, infile);
 
-        if (!cFlag || (i < maxIndexEntries)) {
+        if (!cFlag || (i < maxIndex)) {
           fprintf(stdout, "    ");
           printField(stdout, i);
           fprintf(stdout, " :");
@@ -1689,7 +1689,7 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
         fprintf(stdout, "[ Truncated from ");
         printField(stdout, entryCount);
         fprintf(stdout, " entries to ");
-        printField(stdout, maxIndexEntries);
+        printField(stdout, maxIndex);
         fprintf(stdout, " entries ]\n");
       }
     } else if (identifier == 0x3f0b) {
@@ -2009,17 +2009,11 @@ int main(int argumentCount, char* argumentVector[])
     } else if ((strcmp(p, "-e") == 0) || (strcmp(p, "--no-limit") == 0)) {
       lFlag = false;
     } else if ((strcmp(p, "-l") == 0) || (strcmp(p, "--limit") == 0)) {
-      limit = getIntegerOption(i,
-                               argumentCount,
-                               argumentVector,
-                               "byte count");
+      limit = getIntegerOption(i, argumentCount, argumentVector, "byte count");
       lFlag = true;
       i = i + 1;
     } else if ((strcmp(p, "-c") == 0) || (strcmp(p, "--entries") == 0)) {
-      maxIndexEntries = getIntegerOption(i,
-                                         argumentCount,
-                                         argumentVector,
-                                         "count");
+      maxIndex = getIntegerOption(i, argumentCount, argumentVector, "count");
       cFlag = true;
       i = i + 1;
     } else if ((strcmp(p, "-r") == 0) || (strcmp(p, "--relative") == 0)) {
