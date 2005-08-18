@@ -2948,8 +2948,6 @@ struct {
   {"Index Duration",       0x3f0d},
   {"PosTableCount",        0x3f0e},
   //
-  // Generic Sound Essence Descriptor
-  {"Locked/Unlocked",      0x3d02},
   // Sentinel
   {"bogus",                0x00}
 };
