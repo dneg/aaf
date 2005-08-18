@@ -6518,6 +6518,7 @@ int main(int argumentCount, char* argumentVector[])
     dumpAAFKeyTable();
 
     checkKeyTable();
+    checkLocalKeyTable();
     checkAAFKeyTable();
     checkAAFLocalKeyTable();
   }
