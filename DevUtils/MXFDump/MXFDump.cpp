@@ -380,16 +380,6 @@ const char* baseName(char* fullName)
   return result;
 }
 
-void decodeMxfLength(mxfLength& l);
-
-void decodeMxfLength(mxfLength& l)
-{
-  mxfLength x;
-  unsigned char* p = reinterpret_cast<unsigned char*>(&l);
-  x = (p[1] << 16) + (p[2] << 8) + p[3];
-  l = x;
-}
-
 void readMxfUInt08(mxfByte& b, FILE* f);
 
 void readMxfUInt08(mxfByte& b, FILE* f)
@@ -443,6 +433,30 @@ void reorder(mxfUInt32& i)
   p[2] = temp;
 }
 
+void berReadMxfUInt64(mxfUInt64& i, FILE* f);
+
+void berReadMxfUInt64(mxfUInt64& i, FILE* f)
+{
+  mxfUInt08 b;
+  readMxfUInt08(b, f);
+  if (b == 0x80) {
+    // unknown length
+    i = 0;
+  } else if ((b & 0x80) != 0x80) {
+    // short form
+    i = b;
+  } else {
+    // long form
+    int length = b & 0x7f;
+    i = 0;
+    for (int k = 0; k < length; k++) {
+      readMxfUInt08(b, f);
+      i = i << 8;
+      i = i + b;
+    }
+  }
+}
+
 void readMxfUInt32(mxfUInt32& i, FILE* f);
 
 void readMxfUInt32(mxfUInt32& i, FILE* f)
@@ -461,12 +475,9 @@ void readMxfLength(mxfLength& l, FILE* f);
 
 void readMxfLength(mxfLength& l, FILE* f)
 {
-  int c = fread(&l, sizeof(mxfLength), 1, f);
-  if (c != 1) {
-    fprintf(stderr, "%s : Error : Failed to read length.\n", programName);
-    exit(EXIT_FAILURE);
-  }
-  decodeMxfLength(l);
+  mxfUInt64 x;
+  berReadMxfUInt64(x, f);
+  l = static_cast<mxfLength>(x);
 }
 
 void printMxfLength(mxfLength& l, FILE* f);
