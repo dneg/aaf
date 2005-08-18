@@ -6488,12 +6488,10 @@ void printSummary(void);
 
 void printSummary(void)
 {
-  if (verbose) {
-    if ((errors != 0) || (warnings != 0)) {
-      message("Encountered %"MXFPRIu32" errors and %"MXFPRIu32" warnings.\n",
-               errors,
-               warnings);
-    }
+  if ((errors != 0) || (warnings != 0)) {
+    message("Encountered %"MXFPRIu32" errors and %"MXFPRIu32" warnings.\n",
+             errors,
+             warnings);
   }
 }
 
