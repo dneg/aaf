@@ -363,6 +363,8 @@ void printMxfKey(mxfKey& k, FILE* f)
     } else {
       fprintf(stdout, "Unknown\n");
     }
+  } else {
+    fprintf(stdout, "\n");
   }
   printRawMxfKey(k, f);
 }
@@ -401,12 +403,14 @@ void klvDumpFile(char* fileName)
   while (!feof(infile)) {
     mxfKey k;
     readMxfKey(k, infile);
+    fprintf(stdout, "[ k = ");
     printMxfKey(k, stdout);
-    fprintf(stdout, "  ");
+    fprintf(stdout, ",  ");
     mxfLength len;
     readMxfLength(len, infile);
+    fprintf(stdout, "l = ");
     printMxfLength(len, stdout);
-    fprintf(stdout, "\n");
+    fprintf(stdout, "]\n");
 
     init();
     for (mxfLength i = 0; i < len; i++) {
