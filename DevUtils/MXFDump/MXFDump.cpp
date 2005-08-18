@@ -3479,9 +3479,9 @@ char* avidElementTypeName(mxfByte itemTypeId, mxfByte type)
   return result;
 }
 
-bool isSystemItem(mxfKey& k);
+bool isSystemElement(mxfKey& k);
 
-bool isSystemItem(mxfKey& k)
+bool isSystemElement(mxfKey& k)
 {
   bool result;
   if (memcmp(&k, &SystemMetadata, sizeof(mxfKey)) == 0) {
