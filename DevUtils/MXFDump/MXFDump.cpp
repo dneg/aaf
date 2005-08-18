@@ -4916,6 +4916,23 @@ void printRandomIndex(RandomIndex& rip)
   }
 }
 
+void checkRandomIndex(mxfUInt64 keyPosition,
+                      mxfUInt64 endPosition,
+                      mxfUInt64 length,
+                      mxfUInt32 overallLength);
+
+void checkRandomIndex(mxfUInt64 keyPosition,
+                      mxfUInt64 endPosition,
+                      mxfUInt64 length,
+                      mxfUInt32 overallLength)
+{
+  // length must be (n * (8 + 4)) + 4
+  // NYI
+
+  // overall length must be (endPosition - keyPosition)
+  // NYI
+}
+
 void checkRandomIndex(RandomIndex& rip, PartitionList& partitions);
 
 void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
