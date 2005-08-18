@@ -228,15 +228,15 @@ void setPosition(const mxfUInt64 position, FILE* f)
   fpos_t pos = position;
   int status = fsetpos(f, &pos);
 #elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
-  int status = fseeko(f, offset, SEEK_SET);
+  int status = fseeko(f, position, SEEK_SET);
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
-  int status = _fseek(f, offset, SEEK_SET);
+  int status = _fseek(f, position, SEEK_SET);
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
-  int status = _fseek(f, offset, SEEK_SET);
+  int status = _fseek(f, position, SEEK_SET);
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
-  int status = fseeko(f, offset, SEEK_SET);
+  int status = fseeko(f, position, SEEK_SET);
 #elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
-  int status = fseeko64(f, offset, SEEK_SET);
+  int status = fseeko64(f, position, SEEK_SET);
 #else
   long offset = static_cast<long>(position);
   if (position != static_cast<mxfUInt64>(offset)) {
