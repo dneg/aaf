@@ -220,20 +220,27 @@ void printUsage(void)
   fprintf(stderr, "print more detailed information (-v)\n");
 }
 
-const char* baseName(char* pathName);
+const char* baseName(char* fullName);
 
-const char* baseName(char* pathName)
+const char* baseName(char* fullName)
 {
-  const char* result;
+  char* result;
+#if defined(MXF_OS_WINDOWS)
   const int delimiter = '\\';
-  result = strrchr(pathName, delimiter);
+#elif defined(MXF_OS_MACOS)
+  const int delimiter = ':';
+#else
+  const int delimiter = '/';
+#endif
+  result = strrchr(fullName, delimiter);
   if (result == 0) {
-    result = pathName;
+    result = fullName;
   } else if (strlen(result) == 0) {
-    result = pathName;
+    result = fullName;
   } else {
     result++;
   }
+
   return result;
 }
 
