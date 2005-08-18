@@ -3796,25 +3796,8 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
              "IndexByteCount");
   // IndexSID
   Segment* iseg = findIndexSegment(p);
-  if (iseg != 0) {
-    if (p->_indexSID == 0) {
-      mxfError(p->_key,
-               p->_address,
-               "Incorrect value for IndexSID"
-               " - partition contains index,"
-               " expected != 0x0, found 0x%"MXFPRIx32"",
-               p->_indexSID);
-    }
-  } else {
-    if (p->_indexSID != 0) {
-      mxfError(p->_key,
-               p->_address,
-               "Incorrect value for IndexSID"
-               " - partition does not contain index,"
-               " expected 0x0, found 0x%"MXFPRIx32"",
-               p->_indexSID);
-    }
-  }
+  checkSID(iseg, p->_indexSID, p->_key, p->_address, "IndexSID", "index");
+
   // BodyOffset
   mxfUInt64 bodyOffset = 0;
   Segment* seg = findEssenceSegment(p);
@@ -3827,25 +3810,8 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
              p->_address,
              "BodyOffset");
   // BodySID
-  if (seg != 0) {
-    if (p->_bodySID == 0) {
-      mxfError(p->_key,
-               p->_address,
-               "Incorrect value for BodySID"
-               " - partition contains essence,"
-               " expected != 0x0, found 0x%"MXFPRIx32"",
-               p->_bodySID);
-    }
-  } else {
-    if (p->_bodySID != 0) {
-      mxfError(p->_key,
-               p->_address,
-               "Incorrect value for BodySID"
-               " - partition does not contain essence,"
-               " expected 0x0, found 0x%"MXFPRIx32"",
-               p->_bodySID);
-    }
-  }
+  checkSID(seg, p->_bodySID, p->_key, p->_address, "BodySID", "essence");
+
   // Operational Pattern
   checkOperationalPattern(p);
   // EssenceContainers
