@@ -220,6 +220,23 @@ void skipV(mxfLength& length, FILE* f);
 mxfUInt64 position;
 mxfUInt64 keyPosition;
 
+// Frame wrapped essence
+bool frames = false;     // if true, treat essence as frame wrapped.
+bool iFlag = false;      // if true, only print maxFrames frames
+mxfUInt32 maxFrames = 0;
+
+// Frame index tables
+bool cFlag = true;      // if true, only print maxIndex entries
+mxfUInt32 maxIndex = 0;
+
+// Essence elements
+bool lFlag = false;      // if true, limit/no-limit specified on command line
+bool limitBytes = false; // if true, only print limit bytes
+mxfUInt32 limit = 0;
+
+// Help
+bool hFlag = false;
+
 void setPosition(const mxfUInt64 position, FILE* f)
 {
 #if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
@@ -1685,10 +1702,6 @@ void printEssenceKL(mxfKey& k, mxfLength& len)
   fprintf(stdout, " ]\n");
 }
 
-bool frames = false;
-bool iFlag = false;
-mxfUInt32 maxFrames = 0;
-
 void printEssenceFrameFill(mxfKey& k,
                            mxfLength& length,
                            mxfUInt32 frameCount,
@@ -2015,9 +2028,6 @@ void printFooterPartition(mxfKey& k, mxfLength& len, FILE* infile)
   printPartition(k, len, infile);
 }
 
-bool cFlag = false;
-mxfUInt32 maxIndex = 0;
-
 void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile);
 
 void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
@@ -2220,10 +2230,6 @@ void printObjectDirectory(mxfKey& k, mxfLength& len, FILE* infile)
     fprintf(stdout, "\n");
   }
 }
-
-bool lFlag = false;
-bool limitBytes = false;
-mxfUInt32 limit = 0;
 
 void klvDumpFile(char* fileName)
 { 
@@ -2531,8 +2537,6 @@ int getIntegerOption(int currentArgument,
 // -u --unknown-as-sets 
 
 // Free letters - goqz
-
-bool hFlag = false;
 
 int main(int argumentCount, char* argumentVector[])
 {
