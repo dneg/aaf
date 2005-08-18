@@ -141,6 +141,8 @@ void setDumpFile(char* fileName);
 void mxfDumpFile(char* fileName);
 void aafDumpFile(char* fileName);
 
+mxfUInt64 position;
+
 void readMxfUInt08(mxfByte& b, FILE* f)
 {
   int c = fread(&b, sizeof(mxfByte), 1, f);
@@ -148,6 +150,7 @@ void readMxfUInt08(mxfByte& b, FILE* f)
     fprintf(stderr, "%s : Error : Failed to read byte.\n", programName);
     exit(EXIT_FAILURE);
   }
+  position = position + sizeof(mxfByte);
 }
 
 void readMxfUInt16(mxfUInt16& i, FILE* f)
@@ -157,6 +160,7 @@ void readMxfUInt16(mxfUInt16& i, FILE* f)
     fprintf(stderr, "%s : Error : Failed to read mxfUInt16.\n", programName);
     exit(EXIT_FAILURE);
   }
+  position = position + sizeof(mxfUInt16);
   if (reorder()) {
     reorder(i);
   }
@@ -169,6 +173,7 @@ void readMxfUInt32(mxfUInt32& i, FILE* f)
     fprintf(stderr, "%s : Error : Failed to read mxfUInt32.\n", programName);
     exit(EXIT_FAILURE);
   }
+  position = position + sizeof(mxfUInt32);
   if (reorder()) {
     reorder(i);
   }
@@ -181,6 +186,7 @@ void readMxfUInt64(mxfUInt64& i, FILE* f)
     fprintf(stderr, "%s : Error : Failed to read mxfUInt64.\n", programName);
     exit(EXIT_FAILURE);
   }
+  position = position + sizeof(mxfUInt64);
   if (reorder()) {
     reorder(i);
   }
@@ -199,6 +205,7 @@ void readMxfKey(mxfKey& k, FILE* f)
     fprintf(stderr, "%s : Error : Failed to read key.\n", programName);
     exit(EXIT_FAILURE);
   }
+  position = position + sizeof(mxfKey);
 }
 
 bool readOuterMxfKey(mxfKey& k, FILE* f)
@@ -213,6 +220,7 @@ bool readOuterMxfKey(mxfKey& k, FILE* f)
       result = false;
     }
   }
+  position = position + sizeof(mxfKey);
   return result;
 }
 
@@ -1805,6 +1813,7 @@ int main(int argumentCount, char* argumentVector[])
   programName = baseName(argumentVector[0]);
   checkSizes();
   initAAFKeyTable();
+  position = 0;
   int fileCount = 0;
   int fileArg = 0;
   char* p = 0;
