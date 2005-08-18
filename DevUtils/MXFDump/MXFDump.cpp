@@ -854,6 +854,23 @@ void printCommonOptions(void);
 
 void printCommonOptions(void)
 {
+  fprintf(stderr, "--relative      = ");
+  fprintf(stderr, "print relative addresses ");
+  fprintf(stderr, "- the start of the value = 0 (-r)\n");
+  fprintf(stderr, "--absolute      = ");
+  fprintf(stderr, "print absolute addresses ");
+  fprintf(stderr, "- the start of the file = 0 (-b)\n");
+  fprintf(stderr, "--symbolic      = ");
+  fprintf(stderr, "dump the names of keys if known [default] (-y)\n");
+  fprintf(stderr, "--no-symbolic   = ");
+  fprintf(stderr, "don't dump the names of keys (-n)\n");
+  fprintf(stderr, "\n");
+  fprintf(stderr, "--help          = ");
+  fprintf(stderr, "print this message and exit (-h)\n");
+  fprintf(stderr, "--verbose       = ");
+  fprintf(stderr, "print more detailed information (-v)\n");
+  fprintf(stderr, "--debug         = ");
+  fprintf(stderr, "print information useful in debugging this program (-d)\n");
 }
 
 void printFormatOptions(void);
@@ -866,12 +883,6 @@ void printFormatOptions(void)
   fprintf(stderr, "  --no-limit    = ");
   fprintf(stderr, "do not truncate ");
   fprintf(stderr, "essence containers (-e)\n");
-  fprintf(stderr, "  --relative    = ");
-  fprintf(stderr, "print relative addresses ");
-  fprintf(stderr, "- the start of the value = 0 (-r)\n");
-  fprintf(stderr, "  --absolute    = ");
-  fprintf(stderr, "print absolute addresses ");
-  fprintf(stderr, "- the start of the file = 0 (-b)\n");
   fprintf(stderr, "  --fill        = ");
   fprintf(stderr, "dump fill bytes (-f)\n");
 }
@@ -886,12 +897,6 @@ void printRawOptions(void)
   fprintf(stderr, "  --no-limit    = ");
   fprintf(stderr, "do not truncate ");
   fprintf(stderr, "values (-e)\n");
-  fprintf(stderr, "  --relative    = ");
-  fprintf(stderr, "print relative addresses ");
-  fprintf(stderr, "- the start of the value == 0 (-r)\n");
-  fprintf(stderr, "  --absolute    = ");
-  fprintf(stderr, "print absolute addresses ");
-  fprintf(stderr, "- the start of the file == 0 (-b)\n");
 }
 
 void printAAFOptions(void);
@@ -899,7 +904,6 @@ void printAAFOptions(void);
 void printAAFOptions(void)
 {
   printFormatOptions();
-  printCommonOptions();
 }
 
 void printMXFOptions(void);
@@ -907,7 +911,6 @@ void printMXFOptions(void);
 void printMXFOptions(void)
 {
   printFormatOptions();
-  printCommonOptions();
 }
 
 void printSetOptions(void);
@@ -915,7 +918,6 @@ void printSetOptions(void);
 void printSetOptions(void)
 {
   printFormatOptions();
-  printCommonOptions();
 }
 
 void printKLVOptions(void);
@@ -923,7 +925,6 @@ void printKLVOptions(void);
 void printKLVOptions(void)
 {
   printRawOptions();
-  printCommonOptions();
 }
 
 void printUsage(void);
@@ -956,17 +957,7 @@ void printUsage(void)
   printKLVOptions();
   fprintf(stderr, "\n");
 
-  fprintf(stderr, "--symbolic      = ");
-  fprintf(stderr, "dump the names of keys if known [default] (-y)\n");
-  fprintf(stderr, "--no-symbolic   = ");
-  fprintf(stderr, "don't dump the names of keys (-n)\n");
-  fprintf(stderr, "\n");
-  fprintf(stderr, "--help          = ");
-  fprintf(stderr, "print this message and exit (-h)\n");
-  fprintf(stderr, "--verbose       = ");
-  fprintf(stderr, "print more detailed information (-v)\n");
-  fprintf(stderr, "--debug         = ");
-  fprintf(stderr, "print information useful in debugging this program (-d)\n");
+  printCommonOptions();
 }
 
 const char* baseName(char* fullName);
