@@ -2906,7 +2906,6 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer);
 
 void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
 {
-  checkPartitionLength(p->_length);
   checkElementSize(sizeof(mxfKey), p->_elementSize, p->_elementCount);
   checkElementCount(p->_elementCount,
                     sizeof(mxfKey),
@@ -3029,12 +3028,12 @@ bool isFooter(mxfKey& key)
   return result;
 }
 
-typedef struct mxfRandomIndexEntryTag {
+typedef struct mxfRIPEntryTag {
   mxfUInt32 _sid;
   mxfUInt64 _offset;
-} mxfRandomIndexEntry;
+} mxfRIPEntry;
 
-typedef std::list<mxfRandomIndexEntry> RandomIndex;
+typedef std::list<mxfRIPEntry> RandomIndex;
 
 void readRandomIndex(RandomIndex& rip, mxfLength length, mxfFile infile);
 
@@ -3043,7 +3042,7 @@ void readRandomIndex(RandomIndex& rip, mxfLength length, mxfFile infile)
 {
   mxfUInt64 entryCount = length / (sizeof(mxfUInt32) + sizeof(mxfUInt64));
   for (mxfUInt32 i = 0; i < entryCount; i++) {
-    mxfRandomIndexEntry e;
+    mxfRIPEntry e;
     readMxfUInt32(e._sid, infile);
     readMxfUInt64(e._offset, infile);
     rip.push_back(e);
@@ -3057,7 +3056,7 @@ void printRandomIndex(RandomIndex& rip)
 {
   RandomIndex::const_iterator it;
   for (it = rip.begin(); it != rip.end(); ++it) {
-    mxfRandomIndexEntry e = *it;
+    mxfRIPEntry e = *it;
     fprintf(stderr, "%"MXFPRIx32" : %"MXFPRIx64"\n", e._sid, e._offset);
   }
 }
@@ -3072,7 +3071,7 @@ void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
   RandomIndex::const_iterator rit;
   for (rit = rip.begin(); rit != rip.end(); ++rit) {
     bool found = false;
-    mxfRandomIndexEntry e = *rit;
+    mxfRIPEntry e = *rit;
     PartitionList::const_iterator pit;
     for (pit = partitions.begin(); pit != partitions.end(); ++pit) {
       mxfPartition* p = *pit;
@@ -3806,10 +3805,11 @@ void mxfValidate(mxfFile infile)
       checkPrimerLength(length);
       skipV(len, infile);
     } else if (isPartition(k)) {
+      checkPartitionLength(length);
       if (isFooter(k)) {
         footer = checkFooterPosition(footer, keyPosition);
       }
-      readPartition(p, length, infile);
+      readPartition(p, len, infile);
     } else if (memcmp(&RandomIndexMetadata, &k, sizeof(mxfKey)) == 0) {
       readRandomIndex(rip, len, infile);
     } else {
