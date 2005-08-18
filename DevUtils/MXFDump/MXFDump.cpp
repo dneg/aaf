@@ -3196,6 +3196,17 @@ void checkField(mxfUInt64 expected,
   }
 }
 
+void checkOperationalPattern(mxfPartition* p);
+
+void checkOperationalPattern(mxfPartition* p)
+{
+  if (isNullKey(p->_operationalPattern)) {
+    mxfError("Null operational pattern"
+             " (following key at offset 0x%"MXFPRIx64").\n",
+             p->_address + headerPosition);
+  }
+}
+
 void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer);
 
 void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
@@ -3226,6 +3237,7 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
   // BodyOffset
   // BodySID
   // Operational Pattern
+  checkOperationalPattern(p);
   // EssenceContainers
   checkElementSize(sizeof(mxfKey), p->_elementSize, p->_elementCount);
   checkElementCount(p->_elementCount,
