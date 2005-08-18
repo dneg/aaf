@@ -4531,8 +4531,6 @@ void mxfValidate(mxfFile infile)
     if (verbose) {
       printRandomIndex(rip);
     }
-  } else {
-    mxfWarning("No random index found.\n");
   }
 
   if (verbose) {
