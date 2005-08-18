@@ -4,6 +4,7 @@
 //
 MXF_ESSENCE_CONTANER_NODE(0x01, 0x01, "Generic container (deprecated)")
 // None yet.
+MXF_ESSENCE_CONTAINER_END()
 
 // D-10
 //
@@ -34,6 +35,8 @@ MXF_ESSENCE_CONTANER_LABEL(0x06, 0x01, "30Mbps 525/60i (defined template)")
 MXF_ESSENCE_CONTANER_LABEL(0x06, 0x02, "30Mbps 525/60i (extended template)")
 MXF_ESSENCE_CONTANER_LABEL(0x06, 0x7f, "30Mbps 525/60i (picture only)")
 
+MXF_ESSENCE_CONTAINER_END()
+
 // DV
 //
 MXF_ESSENCE_CONTANER_NODE(0x02, 0x02, "DV")
@@ -62,15 +65,19 @@ MXF_ESSENCE_CONTANER_LABEL(0x6302, "100Mbps 720/50p (clip wrapped)")
 MXF_ESSENCE_CONTANER_LABEL(0x7f01, "undefined (frame wrapped)")
 MXF_ESSENCE_CONTANER_LABEL(0x7f02, "undefined (clip wrapped)")
 
+MXF_ESSENCE_CONTAINER_END()
+
 // D-11
 //
 MXF_ESSENCE_CONTANER_NODE(0x02, 0x03, "D-11")
 // None yet.
+MXF_ESSENCE_CONTAINER_END()
 
 // MPEG Elementary Stream
 //
 MXF_ESSENCE_CONTANER_NODE(0x02, 0x04, "MPEG Elementary Stream")
 // None yet
+MXF_ESSENCE_CONTAINER_END()
 
 // Uncompressed Picture
 //
@@ -89,6 +96,8 @@ MXF_ESSENCE_CONTAINER_LABEL(0x01, 0x1D, "625 50p 422 27MHz (frame wrapped)")
 MXF_ESSENCE_CONTAINER_LABEL(0x01, 0x1E, "625 50p 422 27MHz (clip wrapped)")
 MXF_ESSENCE_CONTAINER_LABEL(0x01, 0x1F, "625 50p 422 27MHz (line wrapped)")
 
+MXF_ESSENCE_CONTAINER_END()
+
 // AES3/BWF
 //
 MXF_ESSENCE_CONTANER_NODE(0x02, 0x06, "AES3/BWF")
@@ -98,17 +107,22 @@ MXF_ESSENCE_CONTAINER_LABEL(0x02, 0x00, "BWF (clip wrapped)")
 MXF_ESSENCE_CONTAINER_LABEL(0x03, 0x00, "AES3 (frame wrapped)")
 MXF_ESSENCE_CONTAINER_LABEL(0x04, 0x00, "AES3 (clip wrapped)")
 
+MXF_ESSENCE_CONTAINER_END()
+
 // MPEG Packetized Elementary Stream
 //
 MXF_ESSENCE_CONTANER_NODE(0x02, 0x07, "MPEG Packetized Elementary Stream")
 // None yet.
+MXF_ESSENCE_CONTAINER_END()
 
 // MPEG Programme Stream
 //
 MXF_ESSENCE_CONTANER_NODE(0x02, 0x08, "MPEG Programme Stream")
 // None yet.
+MXF_ESSENCE_CONTAINER_END()
 
 // MPEG Transport Stream
 //
 MXF_ESSENCE_CONTANER_NODE(0x02, 0x09, "MPEG Transport Stream")
 // None yet.
+MXF_ESSENCE_CONTAINER_END()
