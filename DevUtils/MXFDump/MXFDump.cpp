@@ -796,20 +796,22 @@ void init(void)
 
 void flush(void)
 {
-  printField(stdout, address);
-  fprintf(stdout, "  ");
-  for (size_t i = 0; i < bufferIndex; i++) {
-    fprintf(stdout, "%02x ", buffer[i]);
-  }
-  fprintf(stdout, "   ");
-  for (size_t j = 0; j < 16 - bufferIndex; j++) {
+  if (bufferIndex > 0) {
+    printField(stdout, address);
+    fprintf(stdout, "  ");
+    for (size_t i = 0; i < bufferIndex; i++) {
+      fprintf(stdout, "%02x ", buffer[i]);
+    }
     fprintf(stdout, "   ");
+    for (size_t j = 0; j < 16 - bufferIndex; j++) {
+      fprintf(stdout, "   ");
+    }
+    for (size_t k = 0; k < bufferIndex; k++) {
+      char c = map(buffer[k]);
+      fprintf(stdout, "%c", c);
+    }
+    fprintf(stdout, "\n");
   }
-  for (size_t k = 0; k < bufferIndex; k++) {
-    char c = map(buffer[k]);
-    fprintf(stdout, "%c", c);
-  }
-  fprintf(stdout, "\n");
 }
 
 void dumpByte(mxfByte byte)
