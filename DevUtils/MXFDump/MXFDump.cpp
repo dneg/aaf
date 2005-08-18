@@ -1549,6 +1549,12 @@ void decodeDV(mxfUInt32 tag2, FILE* outfile)
   case 0x6302:
     fprintf(outfile, " - 100Mbps 720/50p (clip wrapped)");
     break;
+  case 0x7f01:
+    fprintf(outfile, " - undefined (frame wrapped)");
+    break;
+  case 0x7f02:
+    fprintf(outfile, " - undefined (clip wrapped)");
+    break;
   default:
     fprintf(outfile, " - Not recognized");
     break;
