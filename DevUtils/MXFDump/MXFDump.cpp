@@ -1111,8 +1111,7 @@ void printFooterPartition(mxfKey& k, mxfLength& len, FILE* infile);
 
 void printFooterPartition(mxfKey& k, mxfLength& len, FILE* infile)
 {
-  printKL(k, len);
-  printV(len, false, 0, infile);
+  printHeaderPartition(k, len, infile);
 }
 
 bool isLocalSet(mxfKey& k);
