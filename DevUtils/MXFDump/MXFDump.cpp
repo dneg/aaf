@@ -279,6 +279,8 @@ bool lookupAAFLocalKey(mxfLocalKey& k, size_t& index);
 
 bool isEssenceElement(mxfKey& k);
 
+bool isIndexSegment(mxfKey& k);
+
 void checkKey(mxfKey& k);
 bool isNullKey(mxfKey& k);
 bool isDark(mxfKey& k, Mode mode);
@@ -2691,6 +2693,19 @@ bool isEssenceElement(mxfKey& k)
   if (isPredefinedEssenceElement(k)) {
     result = true;
   } else if (isAvidEssenceElement(k)) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+bool isIndexSegment(mxfKey& k)
+{
+  bool result;
+  if (memcmp(&IndexTableSegment, &k, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&V10IndexTableSegment, &k, sizeof(mxfKey)) == 0) {
     result = true;
   } else {
     result = false;
