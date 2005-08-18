@@ -49,7 +49,7 @@
 typedef unsigned char          mxfUInt08;
 typedef unsigned short int     mxfUInt16;
 typedef unsigned int           mxfUInt32;
-typedef unsigned _int64        mxfUInt64;
+typedef unsigned __int64       mxfUInt64;
 
 #define MXFPRIu08 "u"
 #define MXFPRIu16 "hu"
