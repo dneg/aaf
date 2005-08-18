@@ -62,6 +62,16 @@ const char* baseName(char* pathName)
   return result;
 }
 
+void decodeMxfLength(mxfLength& l);
+
+void decodeMxfLength(mxfLength& l)
+{
+  mxfLength x;
+  unsigned char* p = reinterpret_cast<unsigned char*>(&l);
+  x = (p[1] << 16) + (p[2] << 8) + p[3];
+  l = x;
+}
+
 void readMxfLength(mxfLength& l, FILE* f);
 
 void readMxfLength(mxfLength& l, FILE* f)
@@ -71,6 +81,7 @@ void readMxfLength(mxfLength& l, FILE* f)
     cerr << programName << " : Error : Failed to read length" << endl;
     exit(EXIT_FAILURE);
   }
+  decodeMxfLength(l);
 }
 
 void printMxfLength(mxfLength& l);
@@ -136,7 +147,7 @@ void rawDumpFile(char* fileName)
       unsigned char ch;
       int c = fread(&ch, sizeof(unsigned char), 1, infile);
       if (c != 1) {
-        cerr << programName << " : Error : Failed to read key" << endl;
+        cerr << programName << " : Error : Failed to read value" << endl;
         exit(EXIT_FAILURE);
       }
     }
