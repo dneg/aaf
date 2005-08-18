@@ -1438,6 +1438,18 @@ void printOperationalPattern(mxfKey& k, FILE* outfile)
   }
 }
 
+void decodeAES3BWF(mxfUInt32 tag2, FILE* outfile)
+{
+  switch (tag2) {
+  case 0x0100:
+    fprintf(outfile, " - AES/BWF (frame wrapped)");
+    break;
+  case 0x0200:
+    fprintf(outfile, " - AES/BWF (clip wrapped)");
+    break;
+  }
+}
+
 void decodeDV(mxfUInt32 tag2, FILE* outfile)
 {
   switch (tag2) {
@@ -1558,6 +1570,7 @@ void decode(mxfUInt16 tag1, mxfUInt32 tag2, FILE* outfile)
     break;
   case 0x0206:
     fprintf(outfile, "AES3/BWF");
+    decodeAES3BWF(tag2, outfile);
     break;
   case 0x0207:
     fprintf(outfile, "MPEG Packetized Elementary Stream");
