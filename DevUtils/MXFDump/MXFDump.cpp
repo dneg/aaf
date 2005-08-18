@@ -2162,7 +2162,7 @@ size_t mxfKeyTableSize = (sizeof(mxfKeyTable)/sizeof(mxfKeyTable[0])) - 1;
 #define MXF_PROPERTY(name, id, tag, type, mandatory, isuid, container) \
 {#name, tag},
 
-struct {
+struct MXFLocalKey {
   const char* _name;
   mxfUInt16 _key;
 } mxfLocalKeyTable [] = {
@@ -2975,7 +2975,7 @@ const char* baseName(char* fullName)
 #define AAF_PROPERTY(name, id, tag, type, mandatory, uid, container) \
 {#name, tag},
 
-struct {
+struct AAFLocalKey {
   const char* _name;
   mxfUInt16 _key;
 } aafLocalKeyTable [] = {
