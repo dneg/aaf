@@ -13,6 +13,7 @@
 #include <stdarg.h>
 
 #include <list>
+#include <map>
 
 #if defined (_MSC_VER) && defined(_M_IX86) && defined(_WIN32)
 #define MXF_COMPILER_MSC_INTEL_WINDOWS
@@ -466,11 +467,22 @@ mxfKey currentKey = {0};
 mxfKey previousKey = {0};
 mxfUInt64 primerPosition = 0;
 mxfUInt64 indexPosition = 0;
+mxfUInt32 essenceSID = 0;
+mxfUInt64 essencePosition = 0;
 
 void markMetadataStart(mxfUInt64 primerKeyPosition);
 void markMetadataEnd(mxfUInt64 endKeyPosition);
 void markIndexStart(mxfUInt64 indexKeyPosition);
 void markIndexEnd(mxfUInt64 endKeyPosition);
+void markEssenceSegmentStart(mxfUInt32 sid, mxfUInt64 essenceKeyPosition);
+void markEssenceSegmentEnd(mxfUInt32 sid,
+                           mxfUInt64 start,
+                           mxfUInt64 endKeyPosition);
+
+void essenceSegment(mxfUInt32 sid,
+                    mxfUInt64 start,
+                    mxfUInt64 size,
+                    mxfUInt64 origin);
 
 // Frame wrapped essence
 bool frames = false;     // if true, treat essence as frame wrapped.
@@ -3260,6 +3272,108 @@ void markIndexEnd(mxfUInt64 endKeyPosition)
   }
 }
 
+void markEssenceSegmentStart(mxfUInt32 sid, mxfUInt64 essenceKeyPosition)
+{
+  essenceSID = sid;
+  essencePosition = essenceKeyPosition;
+}
+
+void markEssenceSegmentEnd(mxfUInt32 sid,
+                           mxfUInt64 start,
+                           mxfUInt64 endKeyPosition)
+{
+  if (essenceSID != 0) {
+    mxfUInt64 size = endKeyPosition - essencePosition;
+    essenceSegment(sid, start, size, essencePosition);
+    essenceSID = 0;
+  }
+}
+
+typedef struct SegmentTag {
+  mxfUInt64 _start;
+  mxfUInt64 _size;
+  mxfUInt64 _origin;
+} Segment;
+
+typedef std::list<Segment*> SegmentList;
+
+typedef struct StreamTag {
+  mxfUInt32 _sid;
+  SegmentList _segments;
+} Stream;
+
+typedef std::map<mxfUInt32, Stream*> StreamSet;
+StreamSet streams;
+
+void printSegment(Segment* seg)
+{
+  fprintf(stdout,
+          "  %016"MXFPRIx64" : %016"MXFPRIx64"",
+          seg->_origin,
+          seg->_origin + seg->_size); 
+  fprintf(stdout,
+          " [%016"MXFPRIx64" : %016"MXFPRIx64"]\n",
+          seg->_start,
+          seg->_start + seg->_size); 
+}
+
+void printStream(Stream* s)
+{
+  fprintf(stdout, "Stream %08"MXFPRIu32"\n", s->_sid);
+  SegmentList::const_iterator it;
+  for (it = s->_segments.begin(); it != s->_segments.end(); it++) {
+    Segment* seg = *it;
+    printSegment(seg);
+  }
+}
+
+void printStreams(StreamSet& streams)
+{
+  StreamSet::const_iterator it;
+  for (it = streams.begin(); it != streams.end(); it++) {
+    printStream(it->second);
+  }
+}
+
+void destroyStream(Stream* s)
+{
+  SegmentList::const_iterator it;
+  for (it = s->_segments.begin(); it != s->_segments.end(); it++) {
+    Segment* seg = *it;
+    delete seg;
+  }
+}
+
+void destroyStreams(StreamSet& streams)
+{
+  StreamSet::const_iterator it;
+  for (it = streams.begin(); it != streams.end(); it++) {
+    destroyStream(it->second);
+    delete it->second;
+  }
+}
+
+void essenceSegment(mxfUInt32 sid,
+                    mxfUInt64 start,
+                    mxfUInt64 size,
+                    mxfUInt64 origin)
+{
+  Stream* s;
+  StreamSet::const_iterator it = streams.find(sid);
+  if (it == streams.end()) {
+    s = new Stream();
+    s->_sid = sid;
+    streams.insert(StreamSet::value_type(sid, s));
+  } else {
+    s = it->second;
+  }
+  Segment* seg = new Segment;
+  seg->_start = start;
+  seg->_size = size;
+  seg->_origin = origin;
+  s->_segments.push_back(seg);
+}
+
 void readPartition(PartitionList& partitions,
                    mxfUInt64 length,
                    mxfFile infile);
@@ -4349,6 +4463,11 @@ void mxfValidate(mxfFile infile)
     } else if (isPartition(k)) {
       markMetadataEnd(keyPosition);
       markIndexEnd(keyPosition);
+      if (currentPartition != 0) {
+        markEssenceSegmentEnd(currentPartition->_bodySID,
+                              currentPartition->_bodyOffset,
+                              keyPosition);
+      }
       checkPartitionLength(length);
       if (isFooter(k)) {
         footer = checkFooterPosition(footer, keyPosition);
@@ -4361,6 +4480,7 @@ void mxfValidate(mxfFile infile)
     } else if (isEssenceElement(k)) {
       markMetadataEnd(keyPosition);
       markIndexEnd(keyPosition);
+      markEssenceSegmentStart(currentPartition->_bodySID, keyPosition);
       skipV(len, infile);
     } else if (isIndexSegment(k)) {
       markMetadataEnd(keyPosition);
@@ -4383,6 +4503,8 @@ void mxfValidate(mxfFile infile)
     mxfWarning("No random index found.\n");
   }
   destroyPartitions(p);
+//printStreams(streams);
+  destroyStreams(streams);
 
   fprintf(stderr,
           "%s : MXF validation       - ",
