@@ -6154,6 +6154,7 @@ void mxfValidate(mxfFile infile)
       markIndexEnd(keyPosition);
       mxfUInt32 overall;
       readRandomIndex(rip, len, overall, infile);
+      checkRandomIndex(keyPosition, position(infile), len, overall);
     } else if (isEssenceElement(k) || isSystemElement(k)) {
       markMetadataEnd(keyPosition);
       markIndexEnd(keyPosition);
