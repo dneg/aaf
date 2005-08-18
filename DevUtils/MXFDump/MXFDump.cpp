@@ -3091,15 +3091,15 @@ void setDumpFile(mxfFile infile)
     mxfLength len;
     readMxfLength(len, infile);
 
-    if (isNullKey(k)) {
-      printKL(k, len);
-      fatalError("Null key.\n");
-    } else if (isLocalSet(k)) {
+    if (isLocalSet(k)) {
       printLocalSet(k, len, infile);
     } else if (isFill(k)) {
       printFill(k, len, infile);
     } else if (isEssenceElement(k)) {
       printEssenceElement(k, len, limitBytes, limit, infile);
+    } else if (isNullKey(k)) {
+      printKL(k, len);
+      fatalError("Null key.\n");
     } else {
       printKL(k, len);
       printV(len, false, 0, infile);
@@ -3113,10 +3113,7 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
 {
-  if (isNullKey(k)) {
-    printKL(k, len);
-    fatalError("Null key.\n");
-  } else if (memcmp(&OpenHeader, &k, sizeof(mxfKey)) == 0) {
+  if (memcmp(&OpenHeader, &k, sizeof(mxfKey)) == 0) {
     printHeaderPartition(k, len, infile);
   } else if (memcmp(&OpenCompleteHeader, &k, sizeof(mxfKey)) == 0) {
     printHeaderPartition(k, len, infile);
@@ -3180,6 +3177,9 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
     printFill(k, len, infile);
   } else if (isEssenceElement(k)) {
     printEssenceElement(k, len, limitBytes, limit, infile);
+  } else if (isNullKey(k)) {
+    printKL(k, len);
+    fatalError("Null key.\n");
   } else {
     if (!isDark(k, mode) || dumpDark) {
       if (isLocalSet(k)) {
@@ -3210,10 +3210,7 @@ void aafDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void aafDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
 {
-  if (isNullKey(k)) {
-    printKL(k, len);
-    fatalError("Null key.\n");
-  } else if (isAAFKey(k)) {
+  if (isAAFKey(k)) {
     printLocalSet(k, len, infile);
   } else {
     mxfDumpKLV(k, len, infile);
