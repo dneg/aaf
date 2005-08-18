@@ -1751,16 +1751,17 @@ int main(int argumentCount, char* argumentVector[])
     }
   }
   if (debug) {
-    for (size_t i = 0; i < keyTableSize; i++) {
+    size_t i;
+    for (i = 0; i < keyTableSize; i++) {
       fprintf(stdout, "%s\n", keyTable[i]._name);
       fprintf(stdout, "  ");
       printMxfKey(*keyTable[i]._key, stdout);
       fprintf(stdout, "\n");
     }
-    for (size_t j = 0; j < aafKeyTableSize; j++) {
-      fprintf(stdout, "%s\n", aafKeyTable[j]._name);
+    for (i = 0; i < aafKeyTableSize; i++) {
+      fprintf(stdout, "%s\n", aafKeyTable[i]._name);
       fprintf(stdout, "  ");
-      printMxfKey(aafKeyTable[j]._key, stdout);
+      printMxfKey(aafKeyTable[i]._key, stdout);
       fprintf(stdout, "\n");
     }
   }
