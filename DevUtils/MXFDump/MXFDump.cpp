@@ -109,8 +109,8 @@ void printUsage(void)
           programName,
           programName);
   fprintf(stderr, "OPTIONS :\n");
-  fprintf(stderr, "--raw-dump      = ");
-  fprintf(stderr, "dump raw KLV (-r)\n");
+  fprintf(stderr, "--klv-dump      = ");
+  fprintf(stderr, "dump raw KLV (-k)\n");
   fprintf(stderr, "  --limit <n>   = ");
   fprintf(stderr, "dump only the first <n> bytes of each value (-l)\n");
   fprintf(stderr, "\n");
@@ -219,9 +219,9 @@ bool verbose = false;
 bool lFlag;
 mxfLength limit = 0;
 
-void rawDumpFile(char* fileName);
+void klvDumpFile(char* fileName);
 
-void rawDumpFile(char* fileName)
+void klvDumpFile(char* fileName)
 { 
   FILE* infile;
 
@@ -259,7 +259,7 @@ void rawDumpFile(char* fileName)
 
 typedef enum ModeTag {
   unspecifiedMode,
-  rawMode,
+  klvMode,
   mxfMode} Mode;
 Mode mode = unspecifiedMode;
 
@@ -269,7 +269,7 @@ void setMode(Mode m)
 {
   if (mode != unspecifiedMode) {
     fprintf(stderr,
-            "%s : Error : Specify only one of --raw-dump, --mxf-dump.\n",
+            "%s : Error : Specify only one of --klv-dump, --mxf-dump.\n",
             programName);
     printUsage();
     exit(EXIT_FAILURE);
@@ -301,8 +301,8 @@ int main(int argumentCount, char* argumentVector[])
   char* p = 0;
   for (int i = 1; i < argumentCount; i++) {
     p = argumentVector[i];
-    if ((strcmp(p, "-r") == 0) || (strcmp(p, "--raw-dump") == 0)) {
-      setMode(rawMode);
+    if ((strcmp(p, "-k") == 0) || (strcmp(p, "--klv-dump") == 0)) {
+      setMode(klvMode);
     } else if ((strcmp(p, "-m") == 0) || (strcmp(p, "--mxf-dump") == 0)) {
       setMode(mxfMode);
     } else if ((strcmp(p, "-v") == 0) || (strcmp(p, "--verbose") == 0)) {
@@ -375,7 +375,7 @@ int main(int argumentCount, char* argumentVector[])
   if (mode == mxfMode) {
     mxfDumpFile(fileName);
   } else {
-    rawDumpFile(fileName);
+    klvDumpFile(fileName);
   }
   return 0;  
 }
