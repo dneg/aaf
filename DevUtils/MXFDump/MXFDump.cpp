@@ -816,6 +816,16 @@ bool findAAFKey(mxfKey& k, size_t& index, char** flag)
   return found;
 }
 
+bool isAAFKey(mxfKey& k);
+
+bool isAAFKey(mxfKey& k)
+{
+  size_t index;
+  char* flag;
+  bool found = findAAFKey(k, index, &flag);
+  return found;
+}
+
 const mxfLocalKey nullMxfLocalKey = 0x00;
 
 void checkSizes(void);
@@ -2135,15 +2145,10 @@ void aafDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
             "%s : Error : Null key.\n",
             programName);
     exit(EXIT_FAILURE);
+  } else if (isAAFKey(k)) {
+    printAAFLocalSet(k, len, infile);
   } else {
-    size_t index;
-    char* flag;
-    bool found = findAAFKey(k, index, &flag);
-    if (found) {
-      printAAFLocalSet(k, len, infile);
-    } else {
-      mxfDumpKLV(k, len, infile);
-    }
+    mxfDumpKLV(k, len, infile);
   }
 }
 
