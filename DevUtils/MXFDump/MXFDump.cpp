@@ -299,6 +299,9 @@ bool isFill(mxfKey& k);
 bool isPartition(mxfKey& key);
 bool isHeader(mxfKey& key);
 bool isFooter(mxfKey& key);
+bool isClosed(const mxfKey& key);
+bool isComplete(const mxfKey& key);
+
 const char* keyName(const mxfKey& key);
 
 void printFill(mxfKey& k, mxfLength& len, mxfFile infile);
@@ -4056,6 +4059,46 @@ bool isFooter(mxfKey& key)
 {
   bool result;
   if (memcmp(&IncompleteFooter, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&Footer, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+bool isClosed(const mxfKey& key)
+{
+  bool result;
+  if (memcmp(&IncompleteHeader, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&Header, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&IncompleteBody, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&Body, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&IncompleteFooter, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&Footer, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+bool isComplete(const mxfKey& key)
+{
+  bool result;
+  if (memcmp(&OpenHeader, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&Header, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&OpenBody, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&Body, &key, sizeof(mxfKey)) == 0) {
     result = true;
   } else if (memcmp(&Footer, &key, sizeof(mxfKey)) == 0) {
     result = true;
