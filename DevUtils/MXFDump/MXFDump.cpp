@@ -597,6 +597,29 @@ void printLocalKL(mxfLocalKey& k, mxfUInt16& l)
           l);
 }
 
+void printLocalV(mxfLocalKey& identifier, mxfUInt16& length, mxfLength& len, mxfLength& setLength, FILE* infile)
+{
+  mxfLength vLength;
+  if ((setLength + length) < len) {
+    vLength = length;
+  } else {
+    vLength = len - setLength;
+  }
+  printV(vLength, false, 0, infile);
+  setLength = setLength + length;
+  if (setLength > len) {
+      mxfUInt16 remain = length - (setLength - len);
+      fprintf(stdout,
+              "%s : Error : Wrong size (k = ",
+              programName);
+      printMxfLocalKey(identifier, stdout);
+      fprintf(stdout,
+              ") size = %d (should be %d).\n",
+              length,
+              remain);
+  }
+}
+
 void checkLocalKey(mxfLocalKey& k);
 
 void checkLocalKey(mxfLocalKey& k)
@@ -623,6 +646,9 @@ void dumpLocalSet(mxfLength& len, FILE* infile)
     setLength = setLength + 4;
     printLocalKL(identifier, length);
     checkLocalKey(identifier);
+#if 1
+    printLocalV(identifier, length, len, setLength, infile);
+#else
     mxfLength vLength;
     if ((setLength + length) < len) {
       vLength = length;
@@ -642,6 +668,7 @@ void dumpLocalSet(mxfLength& len, FILE* infile)
                 length,
                 remain);
     }
+#endif
   }
 }
 
