@@ -700,7 +700,7 @@ mxfUInt08 hostByteOrder(void)
 #define MXF_DEFINE_SEGMENT_KEY(n, k)  {#n, &n},
 #define MXF_DEFINE_KEY(n, k)          {#n, &n},
 
-struct {
+struct Key {
   const char* _name;
   const mxfKey* _key;
 } keyTable [] = {
@@ -712,7 +712,7 @@ size_t keyTableSize = (sizeof(keyTable)/sizeof(keyTable[0])) - 1;
 
 #define AAF_CLASS(name, id, parent, concrete) {#name, {0}, id},
 
-struct {
+struct AAFKey {
   const char* _name;
   mxfKey _key;
   aafUID _aafKey;
@@ -757,6 +757,54 @@ struct {
 };
 
 size_t aafKeyTableSize = (sizeof(aafKeyTable)/sizeof(aafKeyTable[0])) - 1;
+
+int compareKey(const void* k1, const void* k2)
+{
+  const char* n1 = (*(Key**)k1)->_name;
+  const char* n2 = (*(Key**)k2)->_name;
+  return strcmp(n1, n2);
+}
+
+void dumpKeyTable(void)
+{
+    size_t i;
+    Key** t = new Key*[keyTableSize];
+    for (i = 0; i < keyTableSize; i++) {
+      t[i] = &keyTable[i];
+    }
+    qsort(t, keyTableSize, sizeof(Key*), compareKey);
+    for (i = 0; i < keyTableSize; i++) {
+      fprintf(stdout, "%s\n", t[i]->_name);
+      fprintf(stdout, "  ");
+      printMxfKey(*t[i]->_key, stdout);
+      fprintf(stdout, "\n");
+    }
+    delete [] t;
+}
+
+int compareAAFKey(const void* k1, const void* k2)
+{
+  const char* n1 = (*(AAFKey**)k1)->_name;
+  const char* n2 = (*(AAFKey**)k2)->_name;
+  return strcmp(n1, n2);
+}
+
+void dumpAAFKeyTable(void)
+{
+    size_t i;
+    AAFKey** t = new AAFKey*[aafKeyTableSize];
+    for (i = 0; i < aafKeyTableSize; i++) {
+      t[i] = &aafKeyTable[i];
+    }
+    qsort(t, aafKeyTableSize, sizeof(AAFKey*), compareAAFKey);
+    for (i = 0; i < aafKeyTableSize; i++) {
+      fprintf(stdout, "%s\n", t[i]->_name);
+      fprintf(stdout, "  ");
+      printMxfKey(t[i]->_key, stdout);
+      fprintf(stdout, "\n");
+    }
+    delete [] t;
+}
 
 void aafUIDToMxfKey(mxfKey& key, aafUID& aafID);
 
@@ -2814,19 +2862,8 @@ int main(int argumentCount, char* argumentVector[])
     }
   }
   if (debug) {
-    size_t i;
-    for (i = 0; i < keyTableSize; i++) {
-      fprintf(stdout, "%s\n", keyTable[i]._name);
-      fprintf(stdout, "  ");
-      printMxfKey(*keyTable[i]._key, stdout);
-      fprintf(stdout, "\n");
-    }
-    for (i = 0; i < aafKeyTableSize; i++) {
-      fprintf(stdout, "%s\n", aafKeyTable[i]._name);
-      fprintf(stdout, "  ");
-      printMxfKey(aafKeyTable[i]._key, stdout);
-      fprintf(stdout, "\n");
-    }
+    dumpKeyTable();
+    dumpAAFKeyTable();
   }
   if (hFlag) {
     printHelp();
