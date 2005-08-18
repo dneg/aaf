@@ -1239,13 +1239,13 @@ const mxfKey BogusFill =
   {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
    0x03, 0x01, 0x02, 0x10, 0x01, 0x01, 0x01, 0x00};
 //
-const mxfKey GenericAudioEssenceDescriptor =
+const mxfKey MXFGenericAudioEssenceDescriptor =
   {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x53, 0x01, 0x01,
    0x0d, 0x01, 0x01, 0x01, 0x01, 0x01, 0x42, 0x00};
-const mxfKey WaveAudioEssenceDescriptor =
+const mxfKey MXFWaveAudioEssenceDescriptor =
   {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x53, 0x01, 0x01,
    0x0d, 0x01, 0x01, 0x01, 0x01, 0x01, 0x48, 0x00};
-const mxfKey AES3AudioEssenceDescriptor =
+const mxfKey MXFAES3AudioEssenceDescriptor =
   {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x53, 0x01, 0x01,
    0x0d, 0x01, 0x01, 0x01, 0x01, 0x01, 0x47, 0x00};
 //
@@ -1257,7 +1257,7 @@ const mxfKey ObjectDirectory =
 
 #define MXF_DEFINE_PACK_KEY(n, k)     {#n, &n},
 #define MXF_DEFINE_KEY(n, k)          {#n, &n},
-#define MXF_CLASS(name, id, parent, concrete) {#name, &name},
+#define MXF_CLASS(name, id, parent, concrete) {"MXF"#name, &name},
 
 struct Key {
   const char* _name;
@@ -1270,9 +1270,9 @@ struct Key {
   {"SystemMetadata", &SystemMetadata},
   {"BogusFill", &BogusFill},
   //
-  {"GenericAudioEssenceDescriptor", &GenericAudioEssenceDescriptor},
-  {"WaveAudioEssenceDescriptor", &WaveAudioEssenceDescriptor},
-  {"AES3AudioEssenceDescriptor", &AES3AudioEssenceDescriptor},
+  {"MXFGenericAudioEssenceDescriptor", &MXFGenericAudioEssenceDescriptor},
+  {"MXFWaveAudioEssenceDescriptor", &MXFWaveAudioEssenceDescriptor},
+  {"MXFAES3AudioEssenceDescriptor", &MXFAES3AudioEssenceDescriptor},
   //
   {"ObjectDirectory", &ObjectDirectory},
   //
@@ -1309,7 +1309,7 @@ bool lookupMXFLocalKey(mxfLocalKey& k, size_t& index)
   return result;
 }
 
-#define AAF_CLASS(name, id, parent, concrete) {#name, {0}, id},
+#define AAF_CLASS(name, id, parent, concrete) {"AAF"#name, {0}, id},
 
 struct AAFKey {
   const char* _name;
@@ -1349,9 +1349,10 @@ struct AAFKey {
 // {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}
   {"AvidSourceFileDescriptor", {0},
 {0xa4d2a4a6, 0x04bc, 0x11d4,{0xa0, 0x87, 0x00, 0x60, 0x94, 0xeb, 0x75, 0xcb}}},
-  {"GenericSoundEssenceDescriptor", {0},
+  //
+  {"AAFGenericSoundEssenceDescriptor", {0},
 {0x0D010101, 0x0101, 0x4200,{0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01}}},
-  {"MultipleDescriptor", {0},
+  {"AAFMultipleDescriptor", {0},
 {0x0D010101, 0x0101, 0x4400,{0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01}}},
   // Sentinel
   {"bogus", {0},
