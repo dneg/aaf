@@ -414,6 +414,7 @@ void printMxfLocalKeySymbol(mxfLocalKey& k, FILE* f)
   } else {
     fprintf(stdout, "\n");
   }
+  fprintf(stdout, "  ");
   printMxfLocalKey(k, f);
 }
 
@@ -486,7 +487,7 @@ void mxfDumpFile(char* fileName)
         mxfUInt16 length;
         readMxfUInt16(length, infile);
         setLength = setLength + 4;
-        fprintf(stdout, "[ k = ");
+        fprintf(stdout, "  [ k = ");
         printMxfLocalKeySymbol(identifier, stdout);
         fprintf(stdout,
                 ", l = %5d (%04x) ]\n",
