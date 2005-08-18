@@ -6163,11 +6163,9 @@ void aafValidate(mxfFile infile);
 
 void aafValidate(mxfFile /* infile */)
 {
-  if (verbose) {
-    fprintf(stderr,
-            "%s : AAF validation       - not yet implemented.\n",
-            programName());
-  }
+  fprintf(stderr,
+          "%s : AAF validation       - not yet implemented.\n",
+          programName());
 }
 
 void mxfValidateFile(Mode mode, mxfFile infile);
@@ -6549,8 +6547,10 @@ int main(int argumentCount, char* argumentVector[])
     exit(EXIT_FAILURE);
   }
   char* fileName = argumentVector[fileArg];
-  if (verbose) {
+  if (debug) {
     fprintf(stdout, "file = %s\n", fileName);
+  }
+  if (verbose) {
     if (limitBytes) {
       fprintf(stdout,
               "dumping only the first ");
