@@ -4138,6 +4138,8 @@ const char* keyName(const mxfKey& key)
     found = lookupMXFKey(const_cast<mxfKey&>(key), x);
     if (found) {
       result = mxfKeyTable[x]._name;
+    } else if (isNullKey(key)) {
+      result = "Null";
     } else {
       result = "Unknown";
     }
@@ -4151,6 +4153,8 @@ const char* keyName(const mxfKey& key)
       found = lookupAAFKey(const_cast<mxfKey&>(key), x);
       if (found) {
         result = aafKeyTable[x]._name;
+      } else if (isNullKey(key)) {
+        result = "Null";
       } else {
         result = "Unknown";
       }
