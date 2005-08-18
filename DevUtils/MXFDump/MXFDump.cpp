@@ -488,6 +488,7 @@ void mxfDumpFile(char* fileName)
         flush();
         setLength = setLength + length;
         if (setLength > len) {
+            mxfUInt16 remain = length - (setLength - len);
             fprintf(stdout,
                     "%s : Error : Wrong size (k = ",
                     programName);
@@ -495,7 +496,7 @@ void mxfDumpFile(char* fileName)
             fprintf(stdout,
                     ") size = %d (should be %d).\n",
                     length,
-                    length - (setLength - len));
+                    remain);
         }
       }
     } else {
