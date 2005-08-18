@@ -1385,9 +1385,9 @@ void printKL(mxfKey& k, mxfLength& l)
 bool relative = true;
 int base = 10;
 
-void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f);
+void printV(mxfLength& length, bool limitBytes, mxfUInt32 limit, FILE* f);
 
-void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
+void printV(mxfLength& length, bool limitBytes, mxfUInt32 limit, FILE* f)
 {
   mxfUInt64 start = position;
   if (relative) {
@@ -1399,7 +1399,7 @@ void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
   for (mxfLength i = 0; i < length; i++) {
     mxfByte b;
     readMxfUInt08(b, f);
-    if ((i < limit) || !lFlag) {
+    if ((i < limit) || !limitBytes) {
       dumpByte(b);
       count = count + 1;
     }
@@ -1671,14 +1671,14 @@ void printEssenceFrameFill(mxfKey& k,
 void printEssenceFrameValue(mxfKey& k,
                             mxfLength& length,
                             mxfUInt32 frameCount,
-                            bool lFlag,
+                            bool limitBytes,
                             mxfUInt32 limit,
                             FILE* f);
 
 void printEssenceFrameValue(mxfKey& k,
                             mxfLength& length,
                             mxfUInt32 frameCount,
-                            bool lFlag,
+                            bool limitBytes,
                             mxfUInt32 limit,
                             FILE* f)
 {
@@ -1689,7 +1689,7 @@ void printEssenceFrameValue(mxfKey& k,
     fprintf(stdout, "]");
 
     printKL(k, length);
-    printV(length, lFlag, limit, f);
+    printV(length, limitBytes, limit, f);
   } else {
     skipV(length, f);
   }
@@ -1697,13 +1697,13 @@ void printEssenceFrameValue(mxfKey& k,
 
 void printEssenceFrames(mxfKey& k,
                         mxfLength& length,
-                        bool lFlag,
+                        bool limitBytes,
                         mxfUInt32 limit,
                         FILE* f);
 
 void printEssenceFrames(mxfKey& k,
                         mxfLength& length,
-                        bool lFlag,
+                        bool limitBytes,
                         mxfUInt32 limit,
                         FILE* f)
 {
@@ -1721,7 +1721,7 @@ void printEssenceFrames(mxfKey& k,
     if (isFill(k)) {
       printEssenceFrameFill(k, len, frameCount, f);
     } else {
-      printEssenceFrameValue(k, len, frameCount, lFlag, limit, f);
+      printEssenceFrameValue(k, len, frameCount, limitBytes, limit, f);
       frameCount = frameCount + 1;
     }
     total = total + len;
@@ -1737,18 +1737,18 @@ void printEssenceFrames(mxfKey& k,
 
 void printEssence(mxfKey& k,
                   mxfLength& length,
-                  bool lFlag,
+                  bool limitBytes,
                   mxfUInt32 limit,
                   FILE* f);
 
 void printEssence(mxfKey& k,
                   mxfLength& length,
-                  bool lFlag,
+                  bool limitBytes,
                   mxfUInt32 limit,
                   FILE* f)
 {
   printEssenceKL(k, length);
-  printV(length, lFlag, limit, f);
+  printV(length, limitBytes, limit, f);
 }
 
 void skipV(mxfLength& length, FILE* f)
@@ -2145,7 +2145,8 @@ void printSystemMetadata(mxfKey& k, mxfLength& len, FILE* infile)
   printV(len, false, 0, infile);
 }
 
-bool lFlag = false;
+bool lFlag = false;      // Was --limit-bytes specified ?
+bool limitBytes = false; // Are we limiting the numer of bytes to be output ?
 mxfUInt32 limit = 0;
 
 void klvDumpFile(char* fileName)
@@ -2166,7 +2167,7 @@ void klvDumpFile(char* fileName)
     mxfLength len;
     readMxfLength(len, infile);
     printKL(k, len);
-    printV(len, lFlag, limit, infile);
+    printV(len, limitBytes, limit, infile);
   }
   fclose(infile);
 }
@@ -2201,9 +2202,9 @@ void setDumpFile(char* fileName)
       printFill(k, len, infile);
     } else if (isEssenceElement(k)) {
       if (frames) {
-        printEssenceFrames(k, len, lFlag, limit, infile);
+        printEssenceFrames(k, len, limitBytes, limit, infile);
       } else {
-        printEssence(k, len, lFlag, limit, infile);
+        printEssence(k, len, limitBytes, limit, infile);
       }
     } else {
       printKL(k, len);
@@ -2271,9 +2272,9 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
     printFill(k, len, infile);
   } else if (isEssenceElement(k)) {
     if (frames) {
-      printEssenceFrames(k, len, lFlag, limit, infile);
+      printEssenceFrames(k, len, limitBytes, limit, infile);
     } else {
-      printEssence(k, len, lFlag, limit, infile);
+      printEssence(k, len, limitBytes, limit, infile);
     }
   } else {
     if (!isDark(k, mode) || dumpDark) {
@@ -2563,7 +2564,7 @@ int main(int argumentCount, char* argumentVector[])
 
   if (mode != klvMode) {
     if (!lFlag) {
-      lFlag = true;
+      limitBytes = true;
       limit = 0;
     }
   }
@@ -2595,7 +2596,7 @@ int main(int argumentCount, char* argumentVector[])
   char* fileName = argumentVector[fileArg];
   if (verbose) {
     fprintf(stdout, "file = %s\n", fileName);
-    if (lFlag) {
+    if (limitBytes) {
       fprintf(stdout,
               "dumping only the first ");
       printField(stdout, limit);
