@@ -559,14 +559,18 @@ mxfUInt64 keyPosition;   // position/address of current key
 mxfKey currentKey = {0};
 mxfKey previousKey = {0};
 mxfUInt64 primerPosition = 0;
+
+mxfUInt32 indexSID = 0;
+mxfKey indexLabel = {0};
 mxfUInt64 indexPosition = 0;
+
 mxfUInt32 essenceSID = 0;
 mxfKey essenceLabel = {0};
 mxfUInt64 essencePosition = 0;
 
 void markMetadataStart(mxfUInt64 primerKeyPosition);
 void markMetadataEnd(mxfUInt64 endKeyPosition);
-void markIndexStart(mxfUInt64 indexKeyPosition);
+void markIndexStart(mxfUInt32 sid, mxfUInt64 indexKeyPosition);
 void markIndexEnd(mxfUInt64 endKeyPosition);
 void markEssenceSegmentStart(mxfUInt32 sid, mxfUInt64 essenceKeyPosition);
 void markEssenceSegmentEnd(mxfUInt64 endKeyPosition);
@@ -3397,17 +3401,21 @@ void markMetadataEnd(mxfUInt64 endKeyPosition)
   }
 }
 
-void markIndexStart(mxfUInt64 indexKeyPosition)
+void markIndexStart(mxfUInt32 sid, mxfUInt64 indexKeyPosition)
 {
+  indexSID = sid;
+  memcpy(&indexLabel, &currentKey, sizeof(mxfKey));
   indexPosition = indexKeyPosition;
 }
 
 void markIndexEnd(mxfUInt64 endKeyPosition)
 {
-  if (indexPosition != 0) {
+  if (indexSID != 0) {
     mxfUInt64 indexByteCount = endKeyPosition - indexPosition;
     currentPartition->_indexSize = indexByteCount;
+    newSegment(indexSID, indexLabel, indexPosition, endKeyPosition);
     indexPosition = 0;
+    indexSID = 0;
   }
 }
 
@@ -5060,7 +5068,7 @@ void mxfValidate(mxfFile infile)
       skipV(len, infile);
     } else if (isIndexSegment(k)) {
       markMetadataEnd(keyPosition);
-      markIndexStart(keyPosition);
+      markIndexStart(currentPartition->_indexSID, keyPosition);
       validateIndexSegment(k, len, infile);
     } else {
       skipV(len, infile);
