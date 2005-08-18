@@ -2170,6 +2170,23 @@ bool lookupMXFLocalKey(mxfLocalKey& k, size_t& index)
   return result;
 }
 
+void checkLocalKeyTable(void)
+{
+  size_t i;
+  size_t j;
+  for (i = 0; i < mxfLocalKeyTableSize; i++) {
+    for (j = 0; j < mxfLocalKeyTableSize; j++) {
+      if (i != j) {
+        if (mxfLocalKeyTable[i]._key == mxfLocalKeyTable[j]._key) {
+          error("Duplicate keys - %s has the same key as %s.\n",
+                mxfLocalKeyTable[i]._name,
+                mxfLocalKeyTable[j]._name);
+        }
+      }
+    }
+  }
+}
+
 #define AAF_CLASS(name, id, parent, concrete) {"AAF"#name, {0}, id},
 
 struct AAFKey {
