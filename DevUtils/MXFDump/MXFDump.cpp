@@ -171,7 +171,9 @@ void setMode(Mode m);
 void setMode(Mode m)
 {
   if (mode != unspecifiedMode) {
-    fprintf(stderr, "%s : Error : Multiple modes specified.\n", programName);
+    fprintf(stderr,
+            "%s : Error : Specify only one of --raw-dump, --mxf-dump.\n",
+            programName);
     printUsage();
     exit(EXIT_FAILURE);
   }
