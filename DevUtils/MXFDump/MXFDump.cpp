@@ -101,6 +101,9 @@ void printMxfKey(mxfKey& k)
   for (size_t i = 0; i < sizeof(mxfKey); i++) {
     unsigned int b = k[i];
     fprintf(stdout, "%02x", b);
+    if (i < (sizeof(mxfKey) - 1)) {
+      fprintf(stdout, ".");
+    }
   }
 }
 
