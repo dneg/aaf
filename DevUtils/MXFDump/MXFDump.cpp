@@ -259,6 +259,9 @@ void checkKey(mxfKey& k);
 bool isNullKey(mxfKey& k);
 bool isDark(mxfKey& k, Mode mode);
 bool isFill(mxfKey& k);
+bool isPartition(mxfKey& key);
+bool isHeader(mxfKey& key);
+bool isFooter(mxfKey& key);
 
 void printFill(mxfKey& k, mxfLength& len, mxfFile infile);
 
@@ -679,6 +682,23 @@ mxfUInt64 size(mxfFile infile)
   return result;
 }
 #endif
+
+bool isMxfFile(mxfFile infile);
+
+bool isMxfFile(mxfFile infile)
+{
+  bool result = false;
+  mxfUInt64 savedPosition = position(infile);
+
+  mxfKey k;
+  readMxfKey(k, infile);
+  if (isHeader(k)) {
+    result = true;
+  }
+
+  setPosition(infile, savedPosition);
+  return result;
+}
 
 void skipBytes(const mxfUInt64 byteCount, mxfFile infile)
 {
@@ -3049,7 +3069,22 @@ bool isPartition(mxfKey& key)
   return result;
 }
 
-bool isFooter(mxfKey& key);
+bool isHeader(mxfKey& key)
+{
+  bool result;
+  if (memcmp(&OpenHeader, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&OpenCompleteHeader, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&ClosedHeader, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&ClosedCompleteHeader, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
 
 bool isFooter(mxfKey& key)
 {
@@ -4178,6 +4213,9 @@ int main(int argumentCount, char* argumentVector[])
     fatalError("File \"%s\" not found.\n", fileName);
   }
 
+  if (!isMxfFile(infile)) {
+    fatalError("File \"%s\" is not an MXF file.\n", fileName);
+  }
   if (mode == klvMode) {
     klvDumpFile(infile);
   } else if (mode == localSetMode) {
