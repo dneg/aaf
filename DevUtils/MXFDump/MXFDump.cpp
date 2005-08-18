@@ -273,7 +273,9 @@ void message(char* format, ...);
 
 void vmessage(char* format, va_list ap);
 
-void setProgramName(const char* programName);
+const char* baseName(char* fullName);
+
+void setProgramName(char* programName);
 
 char* programName(void);
 
@@ -340,12 +342,23 @@ void vmessage(char* format, va_list ap)
   vfprintf(stderr, format, ap);
 }
 
-char* progName;
+char progName[FILENAME_MAX];
 
-void setProgramName(const char* programName)
+void setProgramName(char* programName)
 {
-  progName = (char*)malloc(strlen(programName) + 1);
-  strcpy(progName, programName);
+  const char* base = baseName(programName);
+  const char* suffix = strrchr(base, '.');
+  size_t length;
+  if (suffix != 0) {
+    length = suffix - base;
+  } else {
+    length = strlen(base);
+  }
+  if (length >= FILENAME_MAX) {
+    length = FILENAME_MAX - 1;
+  }
+  strncpy(progName, base, length);
+  progName[length] = '\0';
 }
 
 char* programName(void)
@@ -1630,8 +1643,6 @@ void printHelp(void)
     printFullUsage();
   }
 }
-
-const char* baseName(char* fullName);
 
 const char* baseName(char* fullName)
 {
@@ -3419,7 +3430,7 @@ int main(int argumentCount, char* argumentVector[])
   argumentCount = ccommand(&argumentVector);
 #endif
   atexit(printSummary);
-  setProgramName(baseName(argumentVector[0]));
+  setProgramName(argumentVector[0]);
   checkSizes();
   initAAFKeyTable();
   int fileCount = 0;
