@@ -1451,27 +1451,13 @@ char* CPPictureElementTypeName(mxfByte type);
 
 char* CPPictureElementTypeName(mxfByte type)
 {
-  char* result = "Unknown";
-  if (type == 0x00) {
-    result = "Illegal";
-  } else if ((type >= 0x01) && (type <= 0x0f)) {
-    if (type == 0x01) {
-      result = "MPEG-2 V-ES";
-    } else {
-      result = "Picture";
-    }
-  } else if ((type >= 0x10) && (type <= 0x1f)) {
-    if (type == 0x10) {
-      result = "AES3";
-    } else {
-      result = "Audio";
-    }
-  } else if ((type >= 0x20) && (type <= 0x77)) {
-    result = "Auxilliary";
-  } else if ((type >= 0x78) && (type <= 0x7f)) {
-    result = "System";
-  } else if ((type >= 0x80) && (type <= 0xff)) {
-    result = "System";
+  char* result = "Unknown Picture";
+  if (type == 0x01) {
+    result = "MPEG-2 (D10)";
+  } else if (type == 0x41) {
+    result = "JFIF";
+  } else if (type == 0x42) {
+    result = "TIFF";
   }
   return result;
 }
@@ -1480,42 +1466,75 @@ char* CPSoundElementTypeName(mxfByte type);
 
 char* CPSoundElementTypeName(mxfByte type)
 {
-  return CPPictureElementTypeName(type);
+  char* result = "Unknown Sound";
+  if (type == 0x10) {
+    result = "AES3";
+  } else if (type == 0x40) {
+    result = "WAVE";
+  }
+  return result;
 }
 
 char* CPDataElementTypeName(mxfByte type);
 
 char* CPDataElementTypeName(mxfByte type)
 {
-  return CPPictureElementTypeName(type);
+  char* result = "Unknown Data";
+  return result;
 }
 
 char* GCPictureElementTypeName(mxfByte type);
 
 char* GCPictureElementTypeName(mxfByte type)
 {
-  return "Unknown";
+  char* result = "Unknown Picture";
+  if (type == 0x01) {
+    result = "Compressed HD (D11)";
+  } else if (type == 0x02) {
+    result = "Uncompressed (Frame Wrapped)";
+  } else if (type == 0x02) {
+    result = "Uncompressed (Clip Wrapped)";
+  } else if (type == 0x04) {
+    result = "Uncompressed (Line Wrapped)";
+  }
+  return result;
 }
 
 char* GCSoundElementTypeName(mxfByte type);
 
 char* GCSoundElementTypeName(mxfByte type)
 {
-  return "Unknown";
+  char* result = "Unknown Sound";
+  if (type == 0x01) {
+    result = "Broadcast Wave (Frame Wrapped)";
+  } else if (type == 0x02) {
+    result = "Broadcast Wave (Clip Wrapped)";
+  } else if (type == 0x03) {
+    result = "AES3( Frame Wrapped)";
+  } else if (type == 0x04) {
+    result = "AES3 (Clip Wrapped)";
+  }
+  return result;
 }
 
 char* GCDataElementTypeName(mxfByte type);
 
 char* GCDataElementTypeName(mxfByte type)
 {
-  return "Unknown";
+  return "Unknown Data";
 }
 
 char* GCCompoundElementTypeName(mxfByte type);
 
 char* GCCompoundElementTypeName(mxfByte type)
 {
-  return "Unknown";
+  char* result = "Unknown Compound";
+  if (type == 0x01) {
+    result = "DV-DIF (Frame Wrapped)";
+  } else if (type == 0x02) {
+    result = "DV-DIF (Clip Wrapped)";
+  }
+  return result;
 }
 
 char* elementTypeName(mxfByte itemTypeId, mxfByte type);
