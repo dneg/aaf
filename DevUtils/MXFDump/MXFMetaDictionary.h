@@ -2,7 +2,7 @@
 //
 // Meta definition of the MXF object model.
 //
-// This file was generated on Mon Oct 13 12:06:56 EDT 2003
+// This file was generated on Mon Oct 13 13:15:13 EDT 2003
 
 //
 // MXF_LABEL(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)
@@ -221,13 +221,6 @@ MXF_DEFINE_PACK_KEY(Primer,
 MXF_DEFINE_PACK_KEY(RandomIndexMetadata,
   MXF_LABEL(0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
             0x0d, 0x01, 0x02, 0x01, 0x01, 0x11, 0x01, 0x00))
-
-// Random Index Pack (v10)
-//
-// 06.0e.2b.34.02.05.01.01.0d.01.02.01.01.11.00.00
-MXF_DEFINE_PACK_KEY(RandomIndexMetadataV10,
-  MXF_LABEL(0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
-            0x0d, 0x01, 0x02, 0x01, 0x01, 0x11, 0x00, 0x00))
 
 // KLV Filler packet
 //
