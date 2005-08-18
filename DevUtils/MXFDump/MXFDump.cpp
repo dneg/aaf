@@ -1107,6 +1107,14 @@ void printPrimer(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
+void printFooterPartition(mxfKey& k, mxfLength& len, FILE* infile);
+
+void printFooterPartition(mxfKey& k, mxfLength& len, FILE* infile)
+{
+  printKL(k, len);
+  printV(len, false, 0, infile);
+}
+
 bool isLocalSet(mxfKey& k);
 
 bool isLocalSet(mxfKey& k)
@@ -1184,6 +1192,10 @@ void mxfDumpFile(char* fileName)
       printFill(k, len, infile);
     } else if (isEssenceElement(k)) {
       printEssence(k, len, lFlag, limit, infile);
+    } else if (memcmp(&OpenFooterPartition, &k, sizeof(mxfKey)) == 0) {
+      printFooterPartition(k, len, infile);
+    } else if (memcmp(&ClosedFooterPartition, &k, sizeof(mxfKey)) == 0) {
+      printFooterPartition(k, len, infile);
     } else {
       printKL(k, len);
       printV(len, false, 0, infile);
