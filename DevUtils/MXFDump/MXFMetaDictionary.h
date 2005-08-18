@@ -11,8 +11,8 @@
 #define MXF_DEFINE_SET_KEY(n, k)
 #endif
 
-#ifndef MXF_DEFINE_SEGEMENT_KEY
-#define MXF_DEFINE_SEGEMENT_KEY(n, k)
+#ifndef MXF_DEFINE_SEGMENT_KEY
+#define MXF_DEFINE_SEGMENT_KEY(n, k)
 #endif
 
 #ifndef MXF_DEFINE_KEY
@@ -131,7 +131,7 @@ MXF_DEFINE_SET_KEY(TextLocator,
   MXF_LABEL(0x06, 0x0e, 0x2b, 0x34, 0x02, 0x53, 0x01, 0x01,
             0x0d, 0x01, 0x01, 0x01, 0x01, 0x01, 0x33, 0x00))
 
-MXF_DEFINE_SEGEMENT_KEY(IndexTable,
+MXF_DEFINE_SEGMENT_KEY(IndexTable,
   MXF_LABEL(0x06, 0x0e, 0x2b, 0x34, 0x02, 0x53, 0x01, 0x01,
             0x0d, 0x01, 0x02, 0x01, 0x01, 0x10, 0x00, 0x00))
 
@@ -165,6 +165,6 @@ MXF_DEFINE_KEY(NullKey,
 
 #undef MXF_DEFINE_SET_KEY
 
-#undef MXF_DEFINE_SEGEMENT_KEY
+#undef MXF_DEFINE_SEGMENT_KEY
 
 #undef MXF_DEFINE_KEY
