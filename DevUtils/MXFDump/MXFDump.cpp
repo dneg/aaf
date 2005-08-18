@@ -674,9 +674,17 @@ char* elementTypeName(mxfByte type)
   if (type == 0x00) {
     result = "Illegal";
   } else if ((type >= 0x01) && (type <= 0x0f)) {
-    result = "Picture";
+    if (type == 0x01) {
+      result = "MPEG-2 V-ES";
+    } else {
+      result = "Picture";
+    }
   } else if ((type >= 0x10) && (type <= 0x1f)) {
-    result = "Audio";
+    if (type == 0x10) {
+      result = "AES3";
+    } else {
+      result = "Audio";
+    }
   } else if ((type >= 0x20) && (type <= 0x77)) {
     result = "Auxilliary";
   } else if ((type >= 0x78) && (type <= 0x7f)) {
@@ -738,7 +746,7 @@ void printEssenceKL(mxfKey& k, mxfLength& len)
   fprintf(stdout, "[ K = ");
   fprintf(stdout, "Essence");
   fprintf(stdout,
-          " \"%s\" (%d of %d), type = %s (%02x), ",
+          " \"%s\" (%d of %d), %s (%02x), ",
           itemTypeIdName,
           elementNumber,
           elementCount,
