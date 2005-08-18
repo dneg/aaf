@@ -65,7 +65,7 @@ typedef unsigned long int      mxfUInt32;
 typedef unsigned long long int mxfUInt64;
 #endif
 
-typedef mxfUInt32 mxfLength;
+typedef mxfUInt64 mxfLength;
 typedef mxfUInt08 mxfByte;
 typedef mxfByte mxfKey[16];
 typedef mxfByte  mxfLocalKey[2];
@@ -95,9 +95,15 @@ void reorder(mxfUInt16& i);
 void reorder(mxfUInt32& i);
 void reorder(mxfUInt64& i);
 
+void printField(FILE* f, mxfUInt16& i);
 void printField(FILE* f, mxfUInt32& i);
+void printField(FILE* f, mxfUInt64& i);
 
+void printHexField(FILE* f, mxfUInt16& i);
 void printHexField(FILE* f, mxfUInt32& i);
+void printHexField(FILE* f, mxfUInt64& i);
+
+void printHex(FILE* f, mxfUInt64& i);
 
 void printMxfKey(const mxfKey& k, FILE* f);
 void printMxfLength(mxfLength& l, FILE* f);
@@ -194,7 +200,7 @@ void readMxfLength(mxfLength& l, FILE* f)
 {
   mxfUInt64 x;
   readBERLength(x, f);
-  l = static_cast<mxfLength>(x);
+  l = x;
 }
 
 void readMxfLocalKey(mxfLocalKey& k, FILE* f)
@@ -252,6 +258,21 @@ void reorder(mxfUInt64& i)
   p[4] = temp;
 }
 
+void printField(FILE* f, mxfUInt16& i)
+{
+#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
+  fprintf(f, "%10u", i);
+#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
+  fprintf(f, "%10u", i);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
+  fprintf(f, "%10lu", i);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
+  fprintf(f, "%10lu", i);
+#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
+  fprintf(f, "%10u", i);
+#endif
+}
+
 void printField(FILE* f, mxfUInt32& i)
 {
 #if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
@@ -267,6 +288,36 @@ void printField(FILE* f, mxfUInt32& i)
 #endif
 }
 
+void printField(FILE* f, mxfUInt64& i)
+{
+#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
+  fprintf(f, "%10I64u", i);
+#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
+  fprintf(f, "%10llu", i);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
+  fprintf(f, "%10llu", i);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
+  fprintf(f, "%10llu", i);
+#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
+  fprintf(f, "%10llu", i);
+#endif
+}
+
+void printHexField(FILE* f, mxfUInt16& i)
+{
+#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
+  fprintf(f, "%04x", i);
+#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
+  fprintf(f, "%04x", i);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
+  fprintf(f, "%04lx", i);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
+  fprintf(f, "%04lx", i);
+#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
+  fprintf(f, "%04x", i);
+#endif
+}
+
 void printHexField(FILE* f, mxfUInt32& i)
 {
 #if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
@@ -279,6 +330,36 @@ void printHexField(FILE* f, mxfUInt32& i)
   fprintf(f, "%08lx", i);
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
   fprintf(f, "%08lx", i);
+#endif
+}
+
+void printHexField(FILE* f, mxfUInt64& i)
+{
+#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
+  fprintf(f, "%016I64x", i);
+#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
+  fprintf(f, "%016llx", i);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
+  fprintf(f, "%016llx", i);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
+  fprintf(f, "%016llx", i);
+#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
+  fprintf(f, "%016llx", i);
+#endif
+}
+
+void printHex(FILE* f, mxfUInt64& i)
+{
+#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
+  fprintf(f, "%I64x", i);
+#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
+  fprintf(f, "%llx", i);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
+  fprintf(f, "%llx", i);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
+  fprintf(f, "%llx", i);
+#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
+  fprintf(f, "%llx", i);
 #endif
 }
 
@@ -298,7 +379,7 @@ void printMxfLength(mxfLength& l, FILE* f)
   printField(f, l);
   fprintf(f, " ");
   fprintf(f, "(");
-  printHexField(f, l);
+  printHex(f, l);
   fprintf(f, ")");
 }
 
@@ -317,21 +398,27 @@ void dumpMxfUInt16(const char* label, FILE* infile)
 {
   mxfUInt16 i;
   readMxfUInt16(i, infile);
-  fprintf(stdout, "%20s = %4x\n", label, i);
+  fprintf(stdout, "%20s = ", label);
+  printHexField(stdout, i);
+  fprintf(stdout, "\n");
 }
 
 void dumpMxfUInt32(const char* label, FILE* infile)
 {
   mxfUInt32 i;
   readMxfUInt32(i, infile);
-  fprintf(stdout, "%20s = %8x\n", label, i);
+  fprintf(stdout, "%20s = ", label);
+  printHexField(stdout, i);
+  fprintf(stdout, "\n");
 }
 
 void dumpMxfUInt64(const char* label, FILE* infile)
 {
   mxfUInt64 i;
   readMxfUInt64(i, infile);
-  fprintf(stdout, "%20s = %8x\n", label, i);
+  fprintf(stdout, "%20s = ", label);
+  printHexField(stdout, i);
+  fprintf(stdout, "\n");
 }
 
 void dumpMxfKey(const char* label, FILE* infile)
@@ -468,7 +555,7 @@ void checkSizes(void);
 
 void checkSizes(void)
 {
-  if (sizeof(mxfLength) != 4) {
+  if (sizeof(mxfLength) != 8) {
     fprintf(stderr, "%s : Error : Wrong sizeof(mxfLength).\n", programName);
     exit(EXIT_FAILURE);
   }
@@ -893,15 +980,16 @@ void printLocalV(mxfLocalKey& identifier,
   printV(vLength, false, 0, infile);
   setLength = setLength + length;
   if (setLength > len) {
-      mxfUInt16 remain = length - (setLength - len);
+      mxfLength remain = length - (setLength - len);
       fprintf(stdout,
               "%s : Error : Wrong size (k = ",
               programName);
       printMxfLocalKey(identifier, stdout);
-      fprintf(stdout,
-              ") size = %d (should be %d).\n",
-              length,
-              remain);
+      fprintf(stdout,") size = ");
+      printField(stdout, length);
+      fprintf(stdout, " (should be ");
+      printField(stdout, remain);
+      fprintf(stdout, ").\n");
   }
 }
 
@@ -977,7 +1065,9 @@ void printHeaderPartition(mxfKey& k, mxfLength& len, FILE* infile)
   for (mxfUInt32 i = 0; i < elementCount; i++) {
     mxfKey essence;
     readMxfKey(essence, infile);
-    fprintf(stdout, "  %4d : ", i);
+    fprintf(stdout, "  ");
+    printField(stdout, i);
+    fprintf(stdout, " : ");
     printMxfKey(essence, stdout);
     fprintf(stdout, "\n");
   }
@@ -1072,6 +1162,8 @@ void mxfDumpFile(char* fileName)
 
     if (isLocalSet(k)) {
       printLocalSet(k, len, infile);
+    } else if (memcmp(&OpenHeaderPartition, &k, sizeof(mxfKey)) == 0) {
+      printHeaderPartition(k, len, infile);
     } else if (memcmp(&ClosedHeaderPartition, &k, sizeof(mxfKey)) == 0) {
       printHeaderPartition(k, len, infile);
     } else if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
