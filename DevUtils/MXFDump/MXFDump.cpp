@@ -1496,28 +1496,28 @@ void decodeDV(mxfUInt32 tag2, FILE* outfile)
 {
   switch (tag2) {
   case 0x4002:
-    fprintf(outfile, " -  25Mbps 525/60i (clip wrapped)");
+    fprintf(outfile, " - 25Mbps 525/60i (clip wrapped)");
     break;
   case 0x4102:
-    fprintf(outfile, " -  25Mbps 625/50i (clip wrapped)");
+    fprintf(outfile, " - 25Mbps 625/50i (clip wrapped)");
     break;
   case 0x5002:
-    fprintf(outfile, " -  50Mbps 525/60i (clip wrapped)");
+    fprintf(outfile, " - 50Mbps 525/60i (clip wrapped)");
     break;
   case 0x5102:
-    fprintf(outfile, " -  50Mbps 625/50i (clip wrapped)");
+    fprintf(outfile, " - 50Mbps 625/50i (clip wrapped)");
     break;
   case 0x6002:
-    fprintf(outfile, " -  100Mbps 1080/60i (clip wrapped)");
+    fprintf(outfile, " - 100Mbps 1080/60i (clip wrapped)");
     break;
   case 0x6102:
-    fprintf(outfile, " -  100Mbps 1080/50i (clip wrapped)");
+    fprintf(outfile, " - 100Mbps 1080/50i (clip wrapped)");
     break;
   case 0x6202:
-    fprintf(outfile, " -  100Mbps 720/60p (clip wrapped)");
+    fprintf(outfile, " - 100Mbps 720/60p (clip wrapped)");
     break;
   case 0x6302:
-    fprintf(outfile, " -  100Mbps 720/50p (clip wrapped)");
+    fprintf(outfile, " - 100Mbps 720/50p (clip wrapped)");
     break;
   }
 }
