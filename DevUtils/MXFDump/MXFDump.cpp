@@ -2563,8 +2563,17 @@ void printAAFLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing);
 void printAAFLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing)
 {
   if (isAAFKey(enclosing)) {
+    mxfLocalKey key = k;
+    const char* name = aafKeyName(enclosing);
+    if (strcmp(name, "Root") == 0) {
+      if (key == 0x0003) {
+        key = 0x7f03;
+      } else if (key == 0x0004) {
+        key = 0x7f04;
+      }
+    }
     size_t i;
-    bool found = lookupAAFLocalKey(k, i);
+    bool found = lookupAAFLocalKey(key, i);
     if (found) {
       fprintf(stdout, "%s\n", aafLocalKeyTable[i]._name);
     } else {
