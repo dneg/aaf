@@ -4233,6 +4233,21 @@ void setMode(Mode m)
   mode = m;
 }
 
+void checkDumpMode(const char* option);
+
+void checkDumpMode(const char* option)
+{
+  if ((mode == klvMode) ||
+      (mode == localSetMode) ||
+      (mode == mxfMode) ||
+      (mode  == aafMode)) {
+  } else {
+    error("%s not valid with --aaf-validate, --mxf-validate, --set-validate, --klv-validate.\n", option);
+    printUsage();
+    exit(EXIT_FAILURE);
+  }
+}
+
 bool getInteger(int& i, char* s);
 
 bool getInteger(int& i, char* s)
@@ -4358,21 +4373,27 @@ int main(int argumentCount, char* argumentVector[])
       setMode(aafValidateMode);
     } else if ((strcmp(p, "--verbose") == 0) ||
                (strcmp(p, "-v") == 0)) {
+      checkDumpMode(p);
       verbose = true;
     } else if ((strcmp(p, "--show-fill") == 0) ||
                (strcmp(p, "-f") == 0)) {
+      checkDumpMode(p);
       dumpFill = true;
     } else if ((strcmp(p, "--show-dark") == 0) ||
                (strcmp(p, "-w") == 0)) {
+      checkDumpMode(p);
       dumpDark = true;
     } else if (strcmp(p, "--show-run-in") == 0) {
+      checkDumpMode(p);
       dumpRunIn = true;
     } else if ((strcmp(p, "--no-limit-bytes") == 0) ||
                (strcmp(p, "-e") == 0)) {
+      checkDumpMode(p);
       lFlag = true;
       limitBytes = false;
     } else if ((strcmp(p, "--limit-bytes") == 0) ||
                (strcmp(p, "-l") == 0)) {
+      checkDumpMode(p);
       lFlag = true;
       limitBytes = true;
       limit = getIntegerOption(i, argumentCount, argumentVector, "byte count");
@@ -4380,44 +4401,57 @@ int main(int argumentCount, char* argumentVector[])
       i = i + 1;
     } else if ((strcmp(p, "--limit-entries") == 0) ||
                (strcmp(p, "-c") == 0)) {
+      checkDumpMode(p);
       maxIndex = getIntegerOption(i, argumentCount, argumentVector, "count");
       cFlag = true;
       i = i + 1;
     } else if (strcmp(p, "--no-limit-entries") == 0) {
+      checkDumpMode(p);
       cFlag = false;
     } else if ((strcmp(p, "--frames") == 0) ||
                (strcmp(p, "-p") == 0)) {
+      checkDumpMode(p);
       frames = true;
     } else if ((strcmp(p, "--limit-frames") == 0) ||
                (strcmp(p, "-i") == 0)) {
+      checkDumpMode(p);
       maxFrames = getIntegerOption(i, argumentCount, argumentVector, "count");
       iFlag = true;
       i = i + 1;
     } else if ((strcmp(p, "--key-addresses") == 0) ||
                (strcmp(p, "-j") == 0)) {
+      checkDumpMode(p);
       keyAddresses = true;
     } else if (strcmp(p, "--no-key-addresses") == 0) {
+      checkDumpMode(p);
       keyAddresses = false;
     } else if ((strcmp(p, "--relative") == 0) ||
                (strcmp(p, "-r") == 0)) {
+      checkDumpMode(p);
       relative = true;
     } else if ((strcmp(p, "--absolute") == 0) ||
                (strcmp(p, "-b") == 0)) {
+      checkDumpMode(p);
       relative = false;
     } else if ((strcmp(p, "--decimal") == 0) ||
                (strcmp(p, "-t") == 0)) {
+      checkDumpMode(p);
       base = 10;
     } else if ((strcmp(p, "--hexadecimal") == 0) ||
                (strcmp(p, "-x") == 0)) {
+      checkDumpMode(p);
       base = 16;
     } else if ((strcmp(p, "--symbolic") == 0) ||
                (strcmp(p, "-y") == 0)) {
+      checkDumpMode(p);
       symbolic = true;
     } else if ((strcmp(p, "--no-symbolic") == 0) ||
                (strcmp(p, "-n") == 0)) {
+      checkDumpMode(p);
       symbolic = false;
     } else if ((strcmp(p, "-u") == 0) ||
                (strcmp(p, "--show-dark-as-sets") == 0)) {
+      checkDumpMode(p);
       darkKeysAsSets = true;
       dumpDark = true;
     } else if ((strcmp(p, "--help") == 0) ||
@@ -4425,6 +4459,7 @@ int main(int argumentCount, char* argumentVector[])
       hFlag = true;
     } else if ((strcmp(p, "--debug") == 0) ||
                (strcmp(p, "-d") == 0)) {
+      checkDumpMode(p);
       debug = true;
     } else if (*p == '-') {
       error("Invalid option \"%s\".\n", p);
