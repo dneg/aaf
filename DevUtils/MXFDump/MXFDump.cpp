@@ -691,47 +691,59 @@ void printEssenceKL(mxfKey& k, mxfLength& len);
 
 void printEssenceKL(mxfKey& k, mxfLength& len)
 {
-  char* itemType;
-  switch (k[12]) {
+  mxfByte itemTypeId = k[12];
+  char* itemTypeIdName;
+  mxfByte elementTypeId = k[14];
+  char* elementTypeIdName;
+
+  switch (itemTypeId) {
   case 0x05:
-    itemType = "CP Picture";
+    itemTypeIdName = "CP Picture";
+    elementTypeIdName = elementTypeName(elementTypeId);
     break;
   case 0x06:
-    itemType = "CP Sound";
+    itemTypeIdName = "CP Sound";
+    elementTypeIdName = elementTypeName(elementTypeId);
     break;
   case 0x07:
-    itemType = "CP Data";
+    itemTypeIdName = "CP Data";
+    elementTypeIdName = elementTypeName(elementTypeId);
     break;
   case 0x15:
-    itemType = "GC Picture";
+    itemTypeIdName = "GC Picture";
+    elementTypeIdName = "Unknown";
     break;
   case 0x16:
-    itemType = "GC Sound";
+    itemTypeIdName = "GC Sound";
+    elementTypeIdName = "Unknown";
     break;
   case 0x17:
-    itemType = "GC Data";
+    itemTypeIdName = "GC Data";
+    elementTypeIdName = "Unknown";
     break;
   case 0x18:
-    itemType = "GC Compound";
+    itemTypeIdName = "GC Compound";
+    elementTypeIdName = "Unknown";
     break;
   default:
-    itemType = "Unknown";
+    itemTypeIdName = "Unknown";
+    elementTypeIdName = "Unknown";
     break;
   }
+
   int elementCount = k[13];
-  int elementType = k[14];
   int elementNumber = k[15] + 1; // zero based
-  char* typeName = elementTypeName(elementType);
+
   fprintf(stdout, "\n");
   fprintf(stdout, "[ K = ");
   fprintf(stdout, "Essence");
   fprintf(stdout,
           " \"%s\" (%d of %d), type = %s (%02x), ",
-          itemType,
+          itemTypeIdName,
           elementNumber,
           elementCount,
-          typeName,
-          elementType);
+          elementTypeIdName,
+          elementTypeId);
   fprintf(stdout,
           "track = %02x.%02x.%02x.%02x\n",
           k[12],
