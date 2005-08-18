@@ -2692,6 +2692,8 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
 
 bool printStats = false;
 
+mxfUInt32 objectCount = 0;
+
 mxfUInt32 darkItems = 0;
 
 void printDarkItems(void);
@@ -5243,6 +5245,7 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
       darkItems = darkItems + 1;
       skipV(len, infile);
     }
+    objectCount = objectCount + 1;
   }
 }
 
