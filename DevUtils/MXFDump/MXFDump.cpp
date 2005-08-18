@@ -2952,9 +2952,6 @@ struct {
   {"Sub Descriptor UIDs",  0x3f01},
   // Generic Sound Essence Descriptor
   {"Locked/Unlocked",      0x3d02},
-  //
-  // CDCI Essence Descriptor
-  {"Reversed Byte Order",  0x330b},
   // Sentinel
   {"bogus",                0x00}
 };
