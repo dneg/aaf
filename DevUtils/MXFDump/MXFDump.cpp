@@ -3313,13 +3313,15 @@ void printSegment(Segment* seg)
 
 void printSegments(SegmentList& segments)
 {
-  fprintf(stdout, "  Segments\n");
-  fprintf(stdout, "    File address range");
-  fprintf(stdout, "                  [Stream address range]\n");
-  SegmentList::const_iterator it;
-  for (it = segments.begin(); it != segments.end(); it++) {
-    Segment* seg = *it;
-    printSegment(seg);
+  if (!segments.empty()) {
+    fprintf(stdout, "  Segments\n");
+    fprintf(stdout, "    File address range");
+    fprintf(stdout, "                  [Stream address range]\n");
+    SegmentList::const_iterator it;
+    for (it = segments.begin(); it != segments.end(); it++) {
+      Segment* seg = *it;
+      printSegment(seg);
+    }
   }
 }
 
