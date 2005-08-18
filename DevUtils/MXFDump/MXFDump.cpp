@@ -4236,12 +4236,17 @@ void printStream(Stream* s);
 
 void printStream(Stream* s)
 {
-  fprintf(stdout, "  SID = %08"MXFPRIu32", ", s->_sid);
+  fprintf(stdout, "  SID = %08"MXFPRIu32",", s->_sid);
 
-  fprintf(stdout, " Size = %016"MXFPRIu64", ", s->_size);
+  fprintf(stdout, " Size = %016"MXFPRIu64",", s->_size);
 
-  fprintf(stdout, " Used = %016"MXFPRIu64"\n", s->_used);
+  fprintf(stdout, " Used = %016"MXFPRIu64",", s->_used);
 
+  if (s->_isEssence) {
+    fprintf(stdout, " [ essence ]\n");
+  } else {
+    fprintf(stdout, " [ index ]\n");
+  }
   printSegments(s->_segments);
 }
 
