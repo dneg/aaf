@@ -482,6 +482,8 @@ mxfUInt32 maxIndex = 0;
 bool lFlag = false;      // if true, limit/no-limit specified on command line
 bool limitBytes = false; // if true, only print limit bytes
 mxfUInt32 limit = 0;
+mxfUInt32 runInLimit = 64 * 1024;
+
 
 // Help
 bool hFlag = false;
@@ -761,7 +763,7 @@ bool findHeader(mxfFile infile, mxfUInt64& headerPosition)
   return findPattern(headerPosition,
                      headerPrefix,
                      sizeof(headerPrefix),
-                     64 * 1024,
+                     runInLimit,
                      infile);
 }
 
@@ -1776,6 +1778,10 @@ void printCommonOptions(void);
 
 void printCommonOptions(void)
 {
+  fprintf(stderr, "  --search-run-in <n>   = ");
+  fprintf(stderr, "search <n> bytes of run-in");
+  fprintf(stderr, "[default n = 64k]\n");
+
   fprintf(stderr, "--help                = ");
   fprintf(stderr, "print this message and exit (-h)\n");
   fprintf(stderr, "\n");
@@ -4499,6 +4505,7 @@ void printSummary(void)
 // -f --show-fill
 // -w --show-dark
 //    --show-run-in
+//    --search-run-in
 // -e --no-limit-bytes
 // -l --limit-bytes
 // -c --limit-entries
@@ -4571,6 +4578,12 @@ int main(int argumentCount, char* argumentVector[])
     } else if (strcmp(p, "--show-run-in") == 0) {
       checkDumpMode(p);
       dumpRunIn = true;
+    } else if (strcmp(p, "--search-run-in") == 0) {
+      runInLimit = getIntegerOption(i,
+                                    argumentCount,
+                                    argumentVector,
+                                    "byte count");
+      i = i + 1;
     } else if ((strcmp(p, "--no-limit-bytes") == 0) ||
                (strcmp(p, "-e") == 0)) {
       checkDumpMode(p);
@@ -4720,7 +4733,14 @@ int main(int argumentCount, char* argumentVector[])
   }
 
   if (!isMxfFile(infile, headerPosition)) {
+    if (runInLimit < 64 * 1024) {
+      // We searched less than 64k bytes
+      warning("Searched only %"MXFPRIu32" bytes of run-in.\n", runInLimit);
+    }
     fatalError("File \"%s\" is not an MXF file.\n", fileName);
+  } else if (headerPosition > 64 * 1024) {
+    // We found the header but the run-in was too big
+    mxfError("Run-in too large [ %"MXFPRIu64" bytes ]\n", headerPosition);
   }
   if (isDumpMode(mode)) {
     if (headerPosition != 0) {
