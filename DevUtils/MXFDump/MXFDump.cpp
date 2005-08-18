@@ -276,6 +276,7 @@ void dumpMxfBoolean(const char* label,
                     const char* falseLabel,
                     mxfFile infile);
 void dumpMxfString(const char* label, mxfFile infile);
+void dumpOptionalMxfString(const char* label, mxfFile infile);
 void dumpMxfLabel(const char* label, mxfFile infile);
 void dumpMxfOperationalPattern(const char* label, mxfFile infile);
 
@@ -1410,13 +1411,33 @@ void dumpMxfString(const char* label, mxfFile infile)
   delete [] buffer;
 }
 
+void dumpOptionalMxfString(const char* label, mxfFile infile)
+{
+  mxfUInt16 length; // in bytes, including terminator
+  readMxfUInt16(length, infile);
+  mxfUInt32 characterCount = length / sizeof(mxfUInt16);
+
+  if (characterCount > 0) {
+    mxfUInt16* buffer = new mxfUInt16[characterCount];
+    readString(buffer, characterCount, infile);
+
+    fprintf(stdout, "%20s = ", label);
+    printString(stdout, buffer);
+
+    delete [] buffer;
+  } else {
+    fprintf(stdout, "%20s   <not present>\n", label);
+  }
+
+}
+
 void dumpExtensionDefinition(mxfFile infile);
 
 void dumpExtensionDefinition(mxfFile infile)
 {
   dumpMxfLabel("identification", infile);
   dumpMxfString("name", infile);
-  dumpMxfString("description", infile);
+  dumpOptionalMxfString("description", infile);
 }
 
 void dumpExtensionClass(mxfFile infile);
