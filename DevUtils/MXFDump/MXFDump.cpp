@@ -4340,6 +4340,22 @@ void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
 {
+#if 1
+  mxfUInt64 startPosition = position(infile);
+  mxfIndexSegment index;
+  initializeIndexSegment(&index);
+  readIndexSegment(&index, len, infile);
+  printIndexSegment(&index);
+  if (index._hasDeltaEntryArray) {
+    setPosition(infile, index._deltaEntryArrayPosition);
+    dumpDeltaEntryArray(index._deltaEntryCount, index._deltaEntrySize, infile);
+  }
+  if (index._hasIndexEntryArray) {
+    setPosition(infile, index._indexEntryArrayPosition);
+    dumpIndexEntryArray(index._indexEntryCount, index._indexEntrySize, infile);
+  }
+  setPosition(infile, startPosition + len);
+#else
   mxfLength remainder = len;
   while (remainder > 0) {
     mxfLocalKey identifier;
@@ -4411,6 +4427,7 @@ void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
       skipBytes(vLength, infile);
     }
   }
+#endif
 }
 
 // Size of the fixed portion of a primer
