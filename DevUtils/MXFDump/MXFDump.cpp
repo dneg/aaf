@@ -1595,6 +1595,9 @@ void printEssenceKL(mxfKey& k, mxfLength& len)
   char* itemTypeIdName = itemTypeName(itemTypeId);
   char* elementTypeIdName = elementTypeName(itemTypeId, elementTypeId);
 
+  int elementCount = k[13];
+  int elementNumber = k[15];
+
   fprintf(stdout, "\n");
   fprintf(stdout, "[ K = ");
   fprintf(stdout,
@@ -1604,13 +1607,21 @@ void printEssenceKL(mxfKey& k, mxfLength& len)
           k[14],
           k[15]);
   fprintf(stdout,
-          "  Item Type    = \"%s\" (%02x),\n",
+          "  Item Type      = \"%s\" (%02x),\n",
           itemTypeIdName,
           itemTypeId);
   fprintf(stdout,
-          "  Element Type = \"%s\" (%02x),\n",
+          "  Element Type   = \"%s\" (%02x),\n",
           elementTypeIdName,
           elementTypeId);
+  fprintf(stdout,
+          "  Element Count  = %d (%02x),\n",
+          elementCount,
+          elementCount);
+  fprintf(stdout,
+          "  Element Number = %d (%02x),\n",
+          elementNumber,
+          elementNumber);
   printMxfKey(k, stdout);
   fprintf(stdout, ", ");
   fprintf(stdout, "L = ");
