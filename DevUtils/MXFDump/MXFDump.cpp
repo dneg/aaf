@@ -324,7 +324,7 @@ int main(int argumentCount, char* argumentVector[])
         limit = bytes;
       } else {
         fprintf(stderr,
-                "%s : Error : \"%s\" must be followed by a byte count.",
+                "%s : Error : \"%s\" must be followed by a byte count.\n",
                 programName,
                 p);
         printUsage();
