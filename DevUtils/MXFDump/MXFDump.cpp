@@ -1564,6 +1564,33 @@ char* GCPictureElementTypeName(mxfByte type)
   return result;
 }
 
+char* avidPictureElementTypeName(mxfByte type);
+
+char* avidPictureElementTypeName(mxfByte type)
+{
+  char* result = "Unknown Picture";
+  if (type == 0x01) {
+    result = "Avid JFIF";
+  } else if (type == 0x02) {
+    result = "Avid DV";
+  } else if (type == 0x03) {
+    result = "Avid MPEG";
+  } else if (type == 0x04) {
+    result = "Avid Uncompressed SD";
+  } else if (type == 0x05) {
+    result = "Avid Uncompressed HD";
+  } else if (type == 0x06) {
+    result = "Avid Compressed HD";
+  } else if (type == 0x07) {
+    result = "Avid Packed 10-bit";
+  } else if (type == 0x08) {
+    result = "Avid RGBA";
+  } else if (type == 0x09) {
+    result = "Avid RLE";
+  }
+  return result;
+}
+
 char* GCSoundElementTypeName(mxfByte type);
 
 char* GCSoundElementTypeName(mxfByte type)
@@ -1642,14 +1669,61 @@ char* elementTypeName(mxfByte itemTypeId, mxfByte type)
   return result;
 }
 
+char* avidElementTypeName(mxfByte itemTypeId, mxfByte type);
+
+char* avidElementTypeName(mxfByte itemTypeId, mxfByte type)
+{
+  char* result = "Unknown";
+  switch (itemTypeId) {
+  case 0x15: // "GC Picture"
+    result = avidPictureElementTypeName(type);
+    break;
+  default:
+    break;
+  }
+  return result;
+}
+
+bool isPredefinedEssenceElement(mxfKey& k);
+
+bool isPredefinedEssenceElement(mxfKey& k)
+{
+  // Prefix for MXF predefined MXF essence element labels
+  mxfKey pe = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01,
+               0x0d, 0x01, 0x03, 0x01, 0xff, 0xff, 0xff, 0xff};
+  bool result;
+  if (memcmp(&k, &pe, 12) == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+bool isAvidEssenceElement(mxfKey& k);
+
+bool isAvidEssenceElement(mxfKey& k)
+{
+  // Prefix for Avid defined essence element labels
+  mxfKey ae = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01,
+               0x0e, 0x04, 0x03, 0x01, 0xff, 0xff, 0xff, 0xff};
+  bool result;
+  if (memcmp(&k, &ae, 12) == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 bool isEssenceElement(mxfKey& k);
 
 bool isEssenceElement(mxfKey& k)
 {
-  mxfKey ee = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01,
-               0x0d, 0x01, 0x03, 0x01, 0xff, 0xff, 0xff, 0xff};
   bool result;
-  if (memcmp(&k, &ee, 12) == 0) {
+  if (isPredefinedEssenceElement(k)) {
+    result = true;
+  } else if (isAvidEssenceElement(k)) {
     result = true;
   } else {
     result = false;
@@ -1665,7 +1739,12 @@ void printEssenceKL(mxfKey& k, mxfLength& len)
   mxfByte elementTypeId = k[14];
 
   char* itemTypeIdName = itemTypeName(itemTypeId);
-  char* elementTypeIdName = elementTypeName(itemTypeId, elementTypeId);
+  char* elementTypeIdName;
+  if (isAvidEssenceElement(k)) {
+    elementTypeIdName = avidElementTypeName(itemTypeId, elementTypeId);
+  } else {
+    elementTypeIdName = elementTypeName(itemTypeId, elementTypeId);
+  }
 
   int elementCount = k[13];
   int elementNumber = k[15];
