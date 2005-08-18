@@ -1589,7 +1589,26 @@ void dumpExtensionTypeString(mxfFile infile)
   fprintf(stdout, "]\n");
 }
 
-// ExtendibleEnumeration
+void dumpExtensionTypeExtendibleEnumerated(mxfFile infile);
+
+void dumpExtensionTypeExtendibleEnumerated(mxfFile infile)
+{
+  fprintf(stdout, "extendible enumerated type = [\n");
+  dumpExtensionDefinition(infile);
+
+  // ElementCount
+  mxfUInt32 count;
+  readMxfUInt32(count, infile);
+  printMxfUInt32(stdout, "element count", count);
+  for (mxfUInt32 i = 0; i < count; i++) {
+    // ElementName
+    dumpMxfString("name", infile);
+    // ElementValue
+    dumpMxfLabel("value", infile);
+  }
+  fprintf(stdout, "]\n");
+}
+
 // Indirect
 
 void dumpMxfLabel(const char* label, mxfFile infile)
@@ -5524,7 +5543,9 @@ void printMetaDictionary(mxfKey& /* k */, mxfLength& len, mxfFile infile)
     case 0x3c:
       dumpExtensionTypeString(infile);
       break;
-      // ExtendibleEnumeration = 3d
+    case 0x3d:
+      dumpExtensionTypeExtendibleEnumerated(infile);
+      break;
       // Indirect              = 3e
     default:
       mxfError("Invalid definition tag (%"MXFPRIx08").\n", tag);
