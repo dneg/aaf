@@ -908,6 +908,10 @@ void printFormatOptions(void)
   fprintf(stderr, "do not truncate ");
   fprintf(stderr, "essence containers (-e)\n");
 
+  fprintf(stderr, "  --frames      = ");
+  fprintf(stderr, "assume essence is ");
+  fprintf(stderr, "wrapped frames (-p)\n");
+
   fprintf(stderr, "  --entries <n> = ");
   fprintf(stderr, "print only the first <n> ");
   fprintf(stderr, "index table entries (-c)\n");
@@ -1341,6 +1345,7 @@ void printEssenceKL(mxfKey& k, mxfLength& len)
   fprintf(stdout, " ]\n");
 }
 
+bool frames = false;
 void printEssence(mxfKey& k,
                   mxfLength& length,
                   bool lFlag,
@@ -1970,6 +1975,7 @@ int getIntegerOption(int currentArgument,
 // -e --no-limit
 // -l --limit
 // -c --entries
+// -p --frames
 // -r --relative
 // -b --absolute
 // -t --decimal
@@ -2016,6 +2022,8 @@ int main(int argumentCount, char* argumentVector[])
       maxIndex = getIntegerOption(i, argumentCount, argumentVector, "count");
       cFlag = true;
       i = i + 1;
+    } else if ((strcmp(p, "-p") == 0) || (strcmp(p, "--frames") == 0)) {
+      frames = true;
     } else if ((strcmp(p, "-r") == 0) || (strcmp(p, "--relative") == 0)) {
       relative = true;
     } else if ((strcmp(p, "-b") == 0) || (strcmp(p, "--absolute") == 0)) {
