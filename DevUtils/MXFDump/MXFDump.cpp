@@ -1557,7 +1557,15 @@ void dumpExtensionTypeRecord(mxfFile infile)
   fprintf(stdout, "]\n");
 }
 
-// Stream
+void dumpExtensionTypeStream(mxfFile infile);
+
+void dumpExtensionTypeStream(mxfFile infile)
+{
+  fprintf(stdout, "stream type = [\n");
+  dumpExtensionDefinition(infile);
+
+  fprintf(stdout, "]\n");
+}
 
 void dumpExtensionTypeString(mxfFile infile);
 
@@ -5498,7 +5506,9 @@ void printMetaDictionary(mxfKey& /* k */, mxfLength& len, mxfFile infile)
     case 0x3a: // Record
       dumpExtensionTypeRecord(infile);
       break;
-      // Stream                = 3b
+    case 0x3b: // Stream
+      dumpExtensionTypeStream(infile);
+      break;
     case 0x3c: // String
       dumpExtensionTypeString(infile);
       break;
