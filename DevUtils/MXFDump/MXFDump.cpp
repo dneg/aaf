@@ -2145,8 +2145,8 @@ void printSystemMetadata(mxfKey& k, mxfLength& len, FILE* infile)
   printV(len, false, 0, infile);
 }
 
-bool lFlag = false;      // Was --limit-bytes specified ?
-bool limitBytes = false; // Are we limiting the numer of bytes to be output ?
+bool lFlag = false;
+bool limitBytes = false;
 mxfUInt32 limit = 0;
 
 void klvDumpFile(char* fileName)
@@ -2484,11 +2484,14 @@ int main(int argumentCount, char* argumentVector[])
       dumpDark = true;
     } else if ((strcmp(p, "--no-limit-bytes") == 0) ||
                (strcmp(p, "-e") == 0)) {
-      lFlag = false;
+      lFlag = true;
+      limitBytes = false;
     } else if ((strcmp(p, "--limit-bytes") == 0) ||
                (strcmp(p, "-l") == 0)) {
-      limit = getIntegerOption(i, argumentCount, argumentVector, "byte count");
       lFlag = true;
+      limitBytes = true;
+      limit = getIntegerOption(i, argumentCount, argumentVector, "byte count");
+
       i = i + 1;
     } else if ((strcmp(p, "--limit-entries") == 0) ||
                (strcmp(p, "-c") == 0)) {
@@ -2562,11 +2565,19 @@ int main(int argumentCount, char* argumentVector[])
     mode = mxfMode;
   }
 
-  if (mode != klvMode) {
-    if (!lFlag) {
+  // Apply --limit-bytes default
+  if (!lFlag) {
+    if (mode == klvMode) {
+      limitBytes = false;
+    } else if (mode == localSetMode) {
+      limitBytes = false;
+    } else if (mode == mxfMode) {
       limitBytes = true;
       limit = 0;
-    }
+    } else if (mode == aafMode) {
+      limitBytes = true;
+      limit = 0;
+    } 
   }
 
   if (mode == klvMode) {
