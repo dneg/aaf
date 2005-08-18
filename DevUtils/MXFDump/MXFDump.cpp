@@ -390,9 +390,9 @@ void decodeMxfLength(mxfLength& l)
   l = x;
 }
 
-void readMxfByte(mxfByte& b, FILE* f);
+void readMxfUInt08(mxfByte& b, FILE* f);
 
-void readMxfByte(mxfByte& b, FILE* f)
+void readMxfUInt08(mxfByte& b, FILE* f)
 {
   int c = fread(&b, sizeof(mxfByte), 1, f);
   if (c != 1) {
@@ -647,7 +647,7 @@ void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
   init();
   for (mxfLength i = 0; i < length; i++) {
     mxfByte b;
-    readMxfByte(b, f);
+    readMxfUInt08(b, f);
     if ((i < limit) || !lFlag) {
       dumpByte(b);
     }
@@ -735,7 +735,7 @@ void skipV(mxfLength& length, FILE* f)
 {
   for (mxfLength i = 0; i < length; i++) {
     mxfByte b;
-    readMxfByte(b, f);
+    readMxfUInt08(b, f);
   }
 }
 
