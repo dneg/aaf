@@ -1446,22 +1446,31 @@ void decode(mxfUInt16 tag1, mxfUInt32 /* tag2 */, FILE* outfile)
     fprintf(outfile, "Generic container (deprecated)");
     break;
   case 0x0201:
-    fprintf(outfile, "MPEG2 (D10) (IMX)");
+    fprintf(outfile, "D-10");
     break;
   case 0x0202:
     fprintf(outfile, "DV");
     break;
   case 0x0203:
-    fprintf(outfile, "D11");
+    fprintf(outfile, "D-11");
     break;
   case 0x0204:
-    fprintf(outfile, "MPEG (Long GOP)");
+    fprintf(outfile, "MPEG Elementary Stream");
     break;
   case 0x0205:
-    fprintf(outfile, "Uncompressed SD");
+    fprintf(outfile, "Uncompressed Picture");
     break;
   case 0x0206:
-    fprintf(outfile, "AES3 BWF");
+    fprintf(outfile, "AES3/BWF");
+    break;
+  case 0x0207:
+    fprintf(outfile, "MPEG Packetized Elementary Stream");
+    break;
+  case 0x0208:
+    fprintf(outfile, "MPEG Programme Stream");
+    break;
+  case 0x0209:
+    fprintf(outfile, "MPEG Transport Stream");
     break;
   default:
     fprintf(outfile, "Not recognized");
