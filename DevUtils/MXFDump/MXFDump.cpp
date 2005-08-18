@@ -4019,31 +4019,43 @@ void printFooterPartition(mxfKey& k, mxfLength& len, mxfFile infile)
 typedef struct mxfIndexSegmentTag {
   mxfKey _instanceUID;
   bool _hasInstanceUID;
+
   mxfRational _indexEditRate;
   bool _hasIndexEditRate;
+
   mxfUInt64 _indexStartPosition;
   bool _hasIndexStartPosition;
+
   mxfUInt64 _indexDuration;
   bool _hasIndexDuration;
+
   mxfUInt32 _editUnitByteCount; // D/req
   bool _hasEditUnitByteCount;
+
   mxfUInt32 _indexSID; // D/req
   bool _hasIndexSID;
+
   mxfUInt32 _bodySID;
+  bool _hasBodySID;
+
   mxfUInt08 _sliceCount; // D/req
   bool _hasSliceCount;
+
   mxfUInt08 _posTableCount; // Opt
   bool _hasPosTableCount;
+
   // Delta entry array // D/req
   mxfUInt32 _deltaEntryCount;
   mxfUInt32 _deltaEntrySize;
   mxfUInt64 _deltaEntryArrayPosition;
   bool _hasDeltaEntryArray;
+
   // Index Entry Array // D/req
   mxfUInt32 _indexEntryCount;
   mxfUInt32 _indexEntrySize;
   mxfUInt64 _indexEntryArrayPosition;
   bool _hasIndexEntryArray;
+
   bool _isV10Index;
 } mxfIndexSegment;
 
@@ -4053,27 +4065,38 @@ void initializeIndexSegment(mxfIndexSegment* index)
 {
   memcpy(&index->_instanceUID, &NullKey, sizeof(mxfKey));
   index->_hasInstanceUID = false;
-  index->_indexEditRate.numerator = 0;;
+
+  index->_indexEditRate.numerator = 0;
   index->_indexEditRate.denominator = 0;
   index->_hasIndexEditRate = false;
+
   index->_indexStartPosition = 0;
   index->_hasIndexStartPosition = false;
+
   index->_indexDuration = 0;
   index->_hasIndexDuration = false;
+
   index->_editUnitByteCount = 0;
   index->_hasEditUnitByteCount = false;
+
   index->_indexSID = 0;
   index->_hasIndexSID = false;
+
   index->_bodySID = 0;
+  index->_hasBodySID = false;
+
   index->_sliceCount = 0;
   index->_hasSliceCount = false;
+
   index->_posTableCount = 0;
   index->_hasPosTableCount = false;
+
   // Delta entry array // D/req
   index->_deltaEntryCount = 0;
   index->_deltaEntrySize = 0;
   index->_deltaEntryArrayPosition = 0;
   index->_hasDeltaEntryArray = false;
+
   // Index Entry Array // D/req
   index->_indexEntryCount = 0;
   index->_indexEntrySize = 0;
@@ -4112,6 +4135,7 @@ void readIndexSegment(mxfIndexSegment* index, mxfLength& len, mxfFile infile)
       // BodySID
       readMxfUInt32(index->_bodySID, infile);
       remainder = remainder - 4;
+      index->_hasBodySID = true;
     } else if (identifier == 0x3f08) {
       // Slice Count
       readMxfUInt08(index->_sliceCount, infile);
@@ -4211,7 +4235,9 @@ void printIndexSegment(mxfIndexSegment* index)
   }
 
   // BodySID
-  printMxfUInt32(stdout, "BodySID", index->_bodySID);
+  if (index->_hasBodySID) {
+    printMxfUInt32(stdout, "BodySID", index->_bodySID);
+  }
 
   // Slice Count
   if (index->_hasSliceCount) {
