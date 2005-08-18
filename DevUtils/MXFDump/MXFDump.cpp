@@ -2842,18 +2842,6 @@ void checkPartition(Partition* p, mxfUInt64 previous, mxfUInt64 footer)
              p->_thisPartition,
              p->_address,
              "ThisPartition");
-#if 1
-  checkField(p->_address - previous,
-             p->_previousPartition,
-             p->_address,
-             "PreviousPartition");
-  if (footer != 0) {
-    checkField(footer - p->_address,
-               p->_footerPartition,
-               p->_address,
-               "FooterPartition");
-  }
-#else
   checkField(previous,
              p->_previousPartition,
              p->_address,
@@ -2864,7 +2852,6 @@ void checkPartition(Partition* p, mxfUInt64 previous, mxfUInt64 footer)
                p->_address,
                "FooterPartition");
   }
-#endif
 }
 
 void checkPartitions(PartitionList& partitions, mxfUInt64 footer);
