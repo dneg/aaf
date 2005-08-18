@@ -3430,7 +3430,7 @@ bool isFill(mxfKey& k)
 void printFill(mxfKey& k, mxfLength& len, mxfFile infile)
 {
   if (memcmp(&KLVFill, &previousKey, sizeof(mxfKey)) == 0) {
-    mxfWarning(k, keyPosition, "Consecutive fill items");  
+    mxfWarning(k, keyPosition, "Consecutive fill items");
   }
   if (dumpFill) {
     printV(len, false, 0, infile);
@@ -3750,11 +3750,11 @@ void printSegment(Segment* seg)
   fprintf(stdout,
           "      %016"MXFPRIx64" : %016"MXFPRIx64"",
           seg->_origin,
-          seg->_origin + seg->_size); 
+          seg->_origin + seg->_size);
   fprintf(stdout,
           " [%016"MXFPRIx64" : %016"MXFPRIx64"]\n",
           seg->_start,
-          seg->_start + seg->_size); 
+          seg->_start + seg->_size);
 }
 
 void printSegments(SegmentList& segments);
@@ -4789,12 +4789,12 @@ void validateIndexSegment(mxfIndexSegment* index)
                  "Index segment has index entries (%"MXFPRIu32")"
                  " and edit unit byte count (%"MXFPRIu32")",
                  index->_indexEntryCount,
-                 index->_editUnitByteCount); 
+                 index->_editUnitByteCount);
     }
     // else VBR index
   } else {
     if (!index->_hasEditUnitByteCount || index->_editUnitByteCount == 0) {
-       mxfWarning(currentKey,
+      mxfWarning(currentKey,
                  keyPosition,
                  "Index segment has no index entries"
                  " and no edit unit byte count");
@@ -4825,7 +4825,7 @@ void validateIndexSegment(mxfIndexSegment* index)
                  "Index entry count (%"MXFPRIu32") greater than"
                  " index duration (%"MXFPRIu64")",
                  index->_indexEntryCount,
-                 index->_indexDuration); 
+                 index->_indexDuration);
     }
   }
 
