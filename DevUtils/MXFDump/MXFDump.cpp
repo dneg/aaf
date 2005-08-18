@@ -3966,9 +3966,18 @@ void newSegment(bool isEssence,
     streams.insert(StreamSet::value_type(sid, s));
   } else {
     s = it->second;
-    if ((s->_isEssence && !isEssence) ||
-        (!s->_isEssence && isEssence)) {
-      mxfWarning("Essence and Index have the same SID (%"MXFPRIu32").\n", sid);
+    if (isEssence && !s->_isEssence) {
+      mxfWarning(currentPartition->_key,
+                 currentPartition->_address,
+                 "Essence has the same SID (%"MXFPRIu32") as index"
+                 " (possibly in another partition),",
+                 sid);
+    } else if (!isEssence && s->_isEssence) {
+      mxfWarning(currentPartition->_key,
+                 currentPartition->_address,
+                 "Index has the same SID (%"MXFPRIu32") as essence"
+                 " (possibly in another partition),",
+                 sid);
     }
   }
   mxfUInt64 size = end - start;
