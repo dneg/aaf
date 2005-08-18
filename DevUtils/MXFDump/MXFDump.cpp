@@ -161,7 +161,7 @@ char map(int c)
 
 unsigned char buffer[16];
 size_t bufferIndex;
-size_t address;
+mxfUInt32 address;
 
 void init(void)
 {
