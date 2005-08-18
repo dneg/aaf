@@ -2021,14 +2021,14 @@ void printAAFKeySymbol(mxfKey& k);
 void printAAFKeySymbol(mxfKey& k)
 {
   size_t i;
-  bool found = lookupMXFKey(k, i); // tjb ???
+  char* flag;
+  bool found = findAAFKey(k, i, &flag);
   if (found) {
-    fprintf(stdout, "%s", keyTable[i]._name);
+    fprintf(stdout, "%s%s", aafKeyTable[i]._name, flag);
   } else {
-    char* flag;
-    found = findAAFKey(k, i, &flag);
+    found = lookupMXFKey(k, i);
     if (found) {
-      fprintf(stdout, "%s%s", aafKeyTable[i]._name, flag);
+      fprintf(stdout, "%s", keyTable[i]._name);
     } else if (isEssenceElement(k)) {
       fprintf(stdout, "Essence Element");
     } else {
@@ -2642,9 +2642,9 @@ bool isDark(mxfKey& k, Mode mode)
     result = !lookupMXFKey(k, x);
     break;
   case aafMode: {
-      bool found = lookupMXFKey(k, x); // tjb ???
+      bool found = findAAFKey(k, x, &flag);
       if (!found) {
-        found = findAAFKey(k, x, &flag);
+        found = lookupMXFKey(k, x);
       }
       result = !found;
     }
