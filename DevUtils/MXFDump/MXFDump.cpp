@@ -25,7 +25,10 @@ void printUsage(void);
 
 void printUsage(void)
 {
-  fprintf(stderr, "% : Usage : %s OPTIONS <file>\n", programName, programName);
+  fprintf(stderr,
+          "%s : Usage : %s OPTIONS <file>\n",
+          programName,
+          programName);
   fprintf(stderr, "OPTIONS :\n");
   fprintf(stderr, "--raw-dump      = ");
   fprintf(stderr, "dump raw KLV (-r)");
