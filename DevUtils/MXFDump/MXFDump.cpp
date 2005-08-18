@@ -150,6 +150,17 @@ void decodeMxfLength(mxfLength& l)
   l = x;
 }
 
+void readMxfByte(mxfByte& b, FILE* f);
+
+void readMxfByte(mxfByte& b, FILE* f)
+{
+  int c = fread(&b, sizeof(mxfByte), 1, f);
+  if (c != 1) {
+    fprintf(stderr, "%s : Error : Failed to read byte.\n", programName);
+    exit(EXIT_FAILURE);
+  }
+}
+
 void readMxfLength(mxfLength& l, FILE* f);
 
 void readMxfLength(mxfLength& l, FILE* f)
@@ -240,22 +251,14 @@ void rawDumpFile(char* fileName)
     init();
     for (mxfLength i = 0; i < count; i++) {
       mxfByte b;
-      int c = fread(&b, sizeof(mxfByte), 1, infile);
-      if (c != 1) {
-        fprintf(stderr, "%s : Error : Failed to read value.\n", programName);
-        exit(EXIT_FAILURE);
-      }
+      readMxfByte(b, infile);
       dumpByte(b);
     }
     flush();
     if (count < len) {
       for (mxfLength i = count; i < len; i++) {
         mxfByte b;
-        int c = fread(&b, sizeof(mxfByte), 1, infile);
-        if (c != 1) {
-          fprintf(stderr, "%s : Error : Failed to read value.\n", programName);
-          exit(EXIT_FAILURE);
-        }
+        readMxfByte(b, infile);
       }
     }
   }
