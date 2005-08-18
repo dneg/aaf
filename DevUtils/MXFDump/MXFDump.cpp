@@ -4187,9 +4187,12 @@ void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
         remainder = remainder - entrySize;
       }
     } else {
-      checkLocalKey(identifier);
-      printLocalKL(identifier, length, k);
-      printLocalV(length, remainder, infile);
+      mxfError(k,
+               keyPosition,
+               "Local key (%04"MXFPRIx16") not recognized.",
+               identifier);
+      mxfUInt16 vLength = validateLocalV(length, remainder, infile);
+      skipBytes(vLength, infile);
     }
   }
 }
