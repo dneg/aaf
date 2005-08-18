@@ -124,6 +124,8 @@ size_t keyTableSize = (sizeof(keyTable)/sizeof(keyTable[0])) - 1;
 
 const mxfKey Primer = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
                        0x0d, 0x01, 0x02, 0x01, 0x01, 0x05, 0x01, 0x00};
+const mxfKey Filler = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
+                       0x03, 0x01, 0x02, 0x10, 0x01, 0x00, 0x00, 0x00};
 
 const char* programName;
 
@@ -569,6 +571,11 @@ void mxfDumpFile(char* fileName)
         fprintf(stdout, " : ");
         printMxfKey(longIdentifier, stdout);
         fprintf(stdout, "\n");
+      }
+    } else if (memcmp(&Filler, &k, sizeof(mxfKey)) == 0) {
+      for (mxfUInt16 i = 0; i < len; i++) {
+        mxfByte b;
+        readMxfByte(b, infile);
       }
     } else {
       init();
