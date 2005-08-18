@@ -418,7 +418,7 @@ void mxfDumpFile(char* fileName)
     readMxfLength(len, infile);
     fprintf(stdout, "l = ");
     printMxfLength(len, stdout);
-    fprintf(stdout, "]\n");
+    fprintf(stdout, " ]\n");
 
     if (k[5] == 0x53) {
       mxfLength setLength = 0;
@@ -496,7 +496,7 @@ void klvDumpFile(char* fileName)
     readMxfLength(len, infile);
     fprintf(stdout, "l = ");
     printMxfLength(len, stdout);
-    fprintf(stdout, "]\n");
+    fprintf(stdout, " ]\n");
 
     init();
     for (mxfLength i = 0; i < len; i++) {
