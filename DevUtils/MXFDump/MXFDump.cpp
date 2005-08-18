@@ -1375,16 +1375,14 @@ void readString(mxfUInt16* buffer, mxfUInt32 bufferSize, mxfFile infile)
   }
 }
 
-void dumpMxfString(const char* label, mxfLength& remaining, mxfFile infile)
+void dumpMxfString(const char* label, mxfFile infile)
 {
   mxfUInt16 length; // in bytes, including terminator
   readMxfUInt16(length, infile);
-  remaining = remaining - sizeof(mxfUInt16);
   mxfUInt32 characterCount = length / sizeof(mxfUInt16);
 
   mxfUInt16* buffer = new mxfUInt16[characterCount];
   readString(buffer, characterCount, infile);
-  remaining = remaining - length; 
 
   fprintf(stdout, "%20s = ", label);
   printString(stdout, buffer);
@@ -1392,50 +1390,35 @@ void dumpMxfString(const char* label, mxfLength& remaining, mxfFile infile)
   delete [] buffer;
 }
 
-void dumpExtensionDefinition(const char* /* label */,
-                             mxfLength& remaining,
-                             mxfFile infile)
+void dumpExtensionDefinition(const char* /* label */, mxfFile infile)
 {
   dumpMxfLabel("identification", infile);
-  remaining = remaining - sizeof(mxfKey);
-
-  dumpMxfString("name", remaining, infile);
-
-  dumpMxfString("description", remaining, infile);
+  dumpMxfString("name", infile);
+  dumpMxfString("description", infile);
 }
 
-void dumpExtensionClass(const char* label,
-                        mxfLength& remaining,
-                        mxfFile infile)
+void dumpExtensionClass(const char* label, mxfFile infile)
 {
-  dumpExtensionDefinition(label, remaining, infile);
+  dumpExtensionDefinition(label, infile);
 
   dumpMxfLabel("parent class", infile);
-  remaining = remaining - sizeof(mxfKey);
-
   dumpMxfBoolean("concrete/abstract", "concrete", "abstract", infile);
-  remaining = remaining - sizeof(mxfUInt08);
 }
 
-void dumpExtensionProperty(const char* label,
-                           mxfLength& remaining,
-                           mxfFile infile)
+void dumpExtensionProperty(const char* label, mxfFile infile)
 {
-  dumpExtensionDefinition(label, remaining, infile);
+  dumpExtensionDefinition(label, infile);
 
   dumpMxfLabel("type", infile);
-  remaining = remaining - sizeof(mxfKey);
-
   dumpMxfBoolean("optional/required", "optional", "required", infile);
-  remaining = remaining - sizeof(mxfUInt08);
 }
 
-void dumpExtensionType(const char* label,
-                       mxfLength& remaining,
-                       mxfFile infile)
+void dumpIntegerType(const char* label, mxfFile infile)
 {
-  dumpExtensionDefinition(label, remaining, infile);
+  dumpExtensionDefinition(label, infile);
 
+  dumpMxfUInt08("size", infile);
+  dumpMxfBoolean("signed/unsigned", "signed", "unsigned", infile);
 }
 
 void dumpMxfLabel(const char* label, mxfFile infile)
@@ -5293,8 +5276,20 @@ void printClassExtensions(mxfKey& /* k */,
 {
   mxfLength remaining = len;
   while (remaining > 0) {
+    mxfUInt16 length;
+    readMxfUInt16(length, infile);
+    remaining = remaining - sizeof(mxfUInt16);
+    mxfByte tag;
+    readMxfUInt08(tag, infile);
+    if (tag != 0x10) {
+      mxfError("Invalid class tag"
+               ", found (%"MXFPRIx08") expecting (%"MXFPRIx08").\n",
+               tag,
+               0x10);
+    }
     fprintf(stdout, "\n");
-    dumpExtensionClass("class", remaining, infile);
+    dumpExtensionClass("class", infile);
+    remaining = remaining - length;
   }
 }
 
@@ -5306,8 +5301,20 @@ void printPropertyExtensions(mxfKey& /* k */,
 {
   mxfLength remaining = len;
   while (remaining > 0) {
+    mxfUInt16 length;
+    readMxfUInt16(length, infile);
+    remaining = remaining - sizeof(mxfUInt16);
+    mxfByte tag;
+    readMxfUInt08(tag, infile);
+    if (tag != 0x20) {
+      mxfError("Invalid property tag"
+               ", found (%"MXFPRIx08") expecting (%"MXFPRIx08").\n",
+               tag,
+               0x20);
+    }
     fprintf(stdout, "\n");
-    dumpExtensionProperty("property", remaining, infile);
+    dumpExtensionProperty("property", infile);
+    remaining = remaining - length;
   }
 }
 
@@ -5319,8 +5326,21 @@ void printTypeExtensions(mxfKey& /* k */,
 {
   mxfLength remaining = len;
   while (remaining > 0) {
+    mxfUInt16 length;
+    readMxfUInt16(length, infile);
+    remaining = remaining - sizeof(mxfUInt16);
+    mxfByte tag;
+    readMxfUInt08(tag, infile);
     fprintf(stdout, "\n");
-    dumpExtensionType("type", remaining, infile);
+    switch (tag) {
+    case 0x31: // integer
+      dumpIntegerType("Integer", infile);
+      break;
+    default:
+      mxfError("Invalid type tag (%"MXFPRIx08").\n", tag);
+      break;
+    }
+    remaining = remaining - length;
   }
 }
 
