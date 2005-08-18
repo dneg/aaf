@@ -152,22 +152,19 @@ void printHexField(FILE* f, mxfUInt32& i)
 
 #include "MXFMetaDictionary.h"
 
-// Define map
+// Define map key <-> key name
 
-#define MXF_LABEL(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) \
-                 {a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p}
-
-#define MXF_DEFINE_PACK_KEY(n, k)     {#n, k},
-#define MXF_DEFINE_SET_KEY(n, k)      {#n, k},
-#define MXF_DEFINE_SEGEMENT_KEY(n, k) {#n, k},
-#define MXF_DEFINE_KEY(n, k)          {#n, k},
+#define MXF_DEFINE_PACK_KEY(n, k)     {#n, &n},
+#define MXF_DEFINE_SET_KEY(n, k)      {#n, &n},
+#define MXF_DEFINE_SEGEMENT_KEY(n, k) {#n, &n},
+#define MXF_DEFINE_KEY(n, k)          {#n, &n},
 
 struct {
   const char* _name;
-  mxfKey _key;
+  const mxfKey* _key;
 } keyTable [] = {
 #include "MXFMetaDictionary.h"
-{"bogus", {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}}
+{"bogus", 0}
 };
 
 size_t keyTableSize = (sizeof(keyTable)/sizeof(keyTable[0])) - 1;
@@ -519,9 +516,9 @@ bool readMxfKey(mxfKey& k, FILE* f)
   return result;
 }
 
-void printMxfKey(mxfKey& k, FILE* f);
+void printMxfKey(const mxfKey& k, FILE* f);
 
-void printMxfKey(mxfKey& k, FILE* f)
+void printMxfKey(const mxfKey& k, FILE* f)
 {
   for (size_t i = 0; i < sizeof(mxfKey); i++) {
     unsigned int b = k[i];
@@ -1133,7 +1130,7 @@ int main(int argumentCount, char* argumentVector[])
     for (size_t i = 0; i < keyTableSize; i++) {
       fprintf(stdout, "%s\n", keyTable[i]._name);
       fprintf(stdout, "  ");
-      printMxfKey(keyTable[i]._key, stdout);
+      printMxfKey(*keyTable[i]._key, stdout);
       fprintf(stdout, "\n");
     }
   }
