@@ -338,10 +338,14 @@ void printUsage(void)
   fprintf(stderr, "--klv-dump      = ");
   fprintf(stderr, "dump raw KLV (-k)\n");
   fprintf(stderr, "  --limit <n>   = ");
-  fprintf(stderr, "dump only the first <n> bytes of each value (-l)\n");
+  fprintf(stderr, "dump only the first <n> bytes of each ");
+  fprintf(stderr, "value (-l)\n");
   fprintf(stderr, "\n");
   fprintf(stderr, "--mxf-dump      = ");
   fprintf(stderr, "dump MXF (-m)\n");
+  fprintf(stderr, "  --limit <n>   = ");
+  fprintf(stderr, "dump only the first <n> bytes of each ");
+  fprintf(stderr, "essence container (-l)\n");
   fprintf(stderr, "  --fill        = ");
   fprintf(stderr, "dump fill bytes (-f)\n");
   fprintf(stderr, "\n");
@@ -1120,13 +1124,7 @@ int main(int argumentCount, char* argumentVector[])
     mode = mxfMode;
   }
   if (mode == mxfMode) {
-    if (lFlag) {
-      fprintf(stderr,
-              "%s : Error : --limit not valid with --mxf-dump.\n",
-              programName);
-      printUsage();
-      exit(EXIT_FAILURE);
-    }
+    // No checks here yet
   } else { // mode == klvMode
     if (dumpFill) {
       fprintf(stderr,
