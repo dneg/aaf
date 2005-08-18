@@ -2669,18 +2669,37 @@ void checkPartitionLength(mxfUInt64& length);
 
 void checkPartitionLength(mxfUInt64& length)
 {
-  mxfUInt64 fixedSize = 88; // Size of the fixed portion of a partition
+ // Size of the fixed portion of a partition
+  mxfUInt64 fixedSize = sizeof(mxfUInt16) + // Major Version
+                        sizeof(mxfUInt16) + // Minor Version
+                        sizeof(mxfUInt32) + // KAGSize
+                        sizeof(mxfUInt64) + // ThisPartition
+                        sizeof(mxfUInt64) + // PreviousPartition
+                        sizeof(mxfUInt64) + // FooterPartition
+                        sizeof(mxfUInt64) + // HeaderByteCount
+                        sizeof(mxfUInt64) + // IndexByteCount
+                        sizeof(mxfUInt32) + // IndexSID
+                        sizeof(mxfUInt64) + // BodyOffset
+                        sizeof(mxfUInt32) + // BodySID
+                        sizeof(mxfKey)    + // Operational pattern
+                        sizeof(mxfUInt32) + // Essence container label count
+                        sizeof(mxfUInt32);  // Essence container label size
+  mxfUInt64 entrySize = sizeof(mxfKey);     // Essence container label
   if (length < fixedSize) {
+    // Valid length >= size of fixed portion
     error("Invalid partition length - length too small"
           " (following key at offset 0x%"MXFPRIx64").\n",
           keyPosition);
     errors = errors + 1;
   } else {
     mxfUInt64 labelBytes = length - fixedSize;
-    mxfUInt64 labels = labelBytes / sizeof(mxfKey);
-    if ((labels * sizeof(mxfKey)) != labelBytes) {
-      error("Invalid partition length - length != 88 + (N * 16)"
+    mxfUInt64 labels = labelBytes / entrySize;
+    if ((labels * entrySize ) != labelBytes) {
+      error("Invalid partition length -"
+            " length != %"MXFPRIu64" + (N * %"MXFPRIu64")"
             " (following key at offset 0x%"MXFPRIx64").\n",
+            fixedSize,
+            entrySize,
             keyPosition);
       errors = errors + 1;
     }
@@ -2991,18 +3010,29 @@ void checkPrimerLength(mxfUInt64& length);
 
 void checkPrimerLength(mxfUInt64& length)
 {
-  mxfUInt64 fixedSize = 8; // Size of the fixed portion of a primer
+  // Size of the fixed portion of a primer
+  mxfUInt64 fixedSize = sizeof(mxfUInt32) + // Element count
+                        sizeof(mxfUInt32);  // Element size
+  // Size of a primer entry
+  mxfUInt64 entrySize = sizeof(mxfLocalKey) + // Local key
+                        sizeof(mxfKey);       // Global key
+
   if (length < fixedSize) {
-    error("Invalid primer length - length too small"
+    // Valid length >= size of fixed portion
+    error("Invalid primer length - length is too small"
           " (following key at offset 0x%"MXFPRIx64").\n",
           keyPosition);
     errors = errors + 1;
   } else {
+    // Valid length == 8 + (N * 18)
     mxfUInt64 entryBytes = length - fixedSize;
-    mxfUInt64 entries = entryBytes / (sizeof(mxfLocalKey) + sizeof(mxfKey));
-    if ((entries * (sizeof(mxfLocalKey) + sizeof(mxfKey))) != entryBytes) {
-      error("Invalid primer length - length != 8 + (N * 18)"
+    mxfUInt64 entries = entryBytes / entrySize;
+    if ((entries * entrySize) != entryBytes) {
+      error("Invalid primer length -"
+            " length != %"MXFPRIu64" + (N * %"MXFPRIu64")"
             " (following key at offset 0x%"MXFPRIx64").\n",
+            fixedSize,
+            entrySize,
             keyPosition);
       errors = errors + 1;
     }
