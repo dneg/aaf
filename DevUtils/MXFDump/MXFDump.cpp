@@ -183,6 +183,8 @@ typedef enum ModeTag {
   aafValidateMode} Mode;
 Mode mode = unspecifiedMode;
 
+mxfKey nullMxfKey = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
 bool reorder(void);
 mxfUInt08 hostByteOrder(void);
 
