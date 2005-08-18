@@ -1837,7 +1837,11 @@ void setDumpFile(char* fileName)
     } else if (isFill(k)) {
       printFill(k, len, infile);
     } else if (isEssenceElement(k)) {
-      printEssence(k, len, lFlag, limit, infile);
+      if (frames) {
+        printEssenceFrames(k, len, lFlag, limit, infile);
+      } else {
+        printEssence(k, len, lFlag, limit, infile);
+      }
     } else {
       printKL(k, len);
       printV(len, false, 0, infile);
@@ -1916,7 +1920,11 @@ void mxfDumpFile(char* fileName)
     } else if (isFill(k)) {
       printFill(k, len, infile);
     } else if (isEssenceElement(k)) {
-      printEssence(k, len, lFlag, limit, infile);
+      if (frames) {
+        printEssenceFrames(k, len, lFlag, limit, infile);
+      } else {
+        printEssence(k, len, lFlag, limit, infile);
+      }
     } else {
       printKL(k, len);
       printV(len, false, 0, infile);
