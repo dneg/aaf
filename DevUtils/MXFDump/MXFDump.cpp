@@ -228,6 +228,8 @@ void printDecField(FILE* f, mxfUInt16& i);
 void printDecField(FILE* f, mxfUInt32& i);
 void printDecField(FILE* f, mxfUInt64& i);
 
+void printSignedDecField(FILE* f, mxfUInt08& i);
+
 void printDecFieldPad(FILE* f, mxfUInt08& i);
 void printDecFieldPad(FILE* f, mxfUInt16& i);
 void printDecFieldPad(FILE* f, mxfUInt32& i);
@@ -1138,6 +1140,19 @@ void printDecField(FILE* f, mxfUInt32& i)
 void printDecField(FILE* f, mxfUInt64& i)
 {
   fprintf(f, "%10"MXFPRIu64, i); // tjb - should be 20
+}
+
+// print unsigned byte as signed
+void printSignedDecField(FILE* f, mxfUInt08& i)
+{
+  if ((i & 0x80) == 0) {
+    fprintf(f, " ");
+    printDecField(f, i);
+  } else {
+    mxfUInt08 x =  (0xff - i) + 1;
+    fprintf(f, "-");
+    printDecField(f, x);
+  }
 }
 
 void printDecFieldPad(FILE* f, mxfUInt08& i)
@@ -5321,9 +5336,9 @@ void dumpIndexEntryArray(mxfUInt32 entryCount,
       printDecField(stdout, i);
       fprintf(stdout, " :");
       fprintf(stdout, "    ");
-      printDecField(stdout, temporalOffset);
+      printSignedDecField(stdout, temporalOffset);
       fprintf(stdout, "    ");
-      printDecField(stdout, anchorOffset);
+      printSignedDecField(stdout, anchorOffset);
       fprintf(stdout, "     ");
       printHexFieldPad(stdout, flags);
       fprintf(stdout, " ");
