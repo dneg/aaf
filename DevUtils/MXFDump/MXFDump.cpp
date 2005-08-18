@@ -1757,6 +1757,12 @@ int main(int argumentCount, char* argumentVector[])
       printMxfKey(*keyTable[i]._key, stdout);
       fprintf(stdout, "\n");
     }
+    for (size_t j = 0; j < aafKeyTableSize; j++) {
+      fprintf(stdout, "%s\n", aafKeyTable[j]._name);
+      fprintf(stdout, "  ");
+      printMxfKey(aafKeyTable[j]._key, stdout);
+      fprintf(stdout, "\n");
+    }
   }
   if (mode == unspecifiedMode) {
     mode = mxfMode;
