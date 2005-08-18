@@ -3215,7 +3215,7 @@ mxfUInt16 validateLocalV(mxfUInt16& length,
 
 mxfUInt16 validateLocalV(mxfUInt16& length,
                          mxfLength& remainder,
-                         mxfFile infile)
+                         mxfFile /* infile */)
 {
   mxfLength vLength;
   if (length < remainder) {
@@ -4874,7 +4874,7 @@ void klvValidate(mxfFile infile)
 
 void validateLocalSet(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void validateLocalSet(mxfKey& k, mxfLength& len, mxfFile infile)
+void validateLocalSet(mxfKey& /* k */, mxfLength& len, mxfFile infile)
 {
   mxfLength remainder = len;
   while (remainder > 0) {
