@@ -4186,8 +4186,9 @@ void printPartition(mxfKey& /* k */, mxfLength& len, mxfFile infile)
   for (mxfUInt32 i = 0; i < elementCount; i++) {
     mxfKey essence;
     readMxfLabel(essence, infile);
-    fprintf(stdout, "  ");
-    printDecField(stdout, i);
+//  fprintf(stdout, "  ");
+//  printDecField(stdout, i);
+    fprintf(stdout, "%3"MXFPRIu32, i);
     fprintf(stdout, " : ");
     printEssenceContainerLabel(essence, stdout);
     fprintf(stdout, "\n");
