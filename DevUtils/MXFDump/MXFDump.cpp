@@ -2368,6 +2368,19 @@ void printEssence(mxfKey& k,
   printV(length, limitBytes, limit, infile);
 }
 
+void printEssenceElement(mxfKey& k,
+                         mxfLength& length,
+                         bool limitBytes,
+                         mxfUInt32 limit,
+                         mxfFile infile)
+{
+  if (frames) {
+    printEssenceFrames(k, length, limitBytes, limit, infile);
+  } else {
+    printEssence(k, length, limitBytes, limit, infile);
+  }
+}
+
 void skipV(mxfLength& length, mxfFile infile)
 {
   // Seek past (length - 1) bytes then read a byte
@@ -2424,6 +2437,22 @@ void checkLocalKey(mxfLocalKey& k)
           keyPosition);
     errors = errors + 1;
   }
+}
+
+mxfUInt64 checkLength(mxfUInt64 length, mxfUInt64 fileSize, mxfUInt64 position)
+{
+  mxfUInt64 result;
+  mxfUInt64 remainder = fileSize - position;
+  if (length > remainder) {
+    error("Length points beyond end of file"
+          " (following key at offset 0x%"MXFPRIx64").\n",
+          keyPosition);
+    errors = errors + 1;
+    result = remainder;
+  } else {
+    result = length;
+  }
+  return result;
 }
 
 bool isDark(mxfKey& k, Mode mode)
@@ -3091,11 +3120,7 @@ void setDumpFile(char* fileName)
     } else if (isFill(k)) {
       printFill(k, len, infile);
     } else if (isEssenceElement(k)) {
-      if (frames) {
-        printEssenceFrames(k, len, limitBytes, limit, infile);
-      } else {
-        printEssence(k, len, limitBytes, limit, infile);
-      }
+      printEssenceElement(k, len, limitBytes, limit, infile);
     } else {
       printKL(k, len);
       printV(len, false, 0, infile);
@@ -3176,11 +3201,7 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
   } else if (isFill(k)) {
     printFill(k, len, infile);
   } else if (isEssenceElement(k)) {
-    if (frames) {
-      printEssenceFrames(k, len, limitBytes, limit, infile);
-    } else {
-      printEssence(k, len, limitBytes, limit, infile);
-    }
+    printEssenceElement(k, len, limitBytes, limit, infile);
   } else {
     if (!isDark(k, mode) || dumpDark) {
       if (isLocalSet(k)) {
@@ -3258,14 +3279,7 @@ void klvValidate(mxfFile infile)
   while (readOuterMxfKey(k, infile)) {
     mxfLength len;
     readMxfLength(len, infile);
-    mxfUInt64 remainder = fileSize - position(infile);
-    if (len > remainder) {
-      error("Length points beyond end of file"
-            " (following key at offset 0x%"MXFPRIx64").\n",
-            keyPosition);
-      errors = errors + 1;
-      len = remainder;
-    }
+    len = checkLength(len, fileSize, position(infile));
     skipV(len, infile);
   }
 
