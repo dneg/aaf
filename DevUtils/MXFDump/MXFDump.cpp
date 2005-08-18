@@ -1080,6 +1080,27 @@ void printFullUsage(void)
   printCommonOptions();
 }
 
+void printHelp(void);
+
+void printHelp(void)
+{
+  if (mode == klvMode) {
+    printKLVUsage();
+    printCommonOptions();
+  } else if (mode == localSetMode) {
+    printSetUsage();
+    printCommonOptions();
+  } else if (mode == mxfMode) {
+    printMXFUsage();
+    printCommonOptions();
+  } else if (mode == aafMode) {
+    printAAFUsage();
+    printCommonOptions();
+  } else {
+    printFullUsage();
+  }
+}
+
 const char* baseName(char* fullName);
 
 const char* baseName(char* fullName)
@@ -2220,21 +2241,7 @@ int main(int argumentCount, char* argumentVector[])
       symbolic = false;
     } else if ((strcmp(p, "--help") == 0) ||
                (strcmp(p, "-h") == 0)) {
-      if (mode == klvMode) {
-        printKLVUsage();
-        printCommonOptions();
-      } else if (mode == localSetMode) {
-        printSetUsage();
-        printCommonOptions();
-      } else if (mode == mxfMode) {
-        printMXFUsage();
-        printCommonOptions();
-      } else if (mode == aafMode) {
-        printAAFUsage();
-        printCommonOptions();
-      } else {
-        printFullUsage();
-      }
+      printHelp();
       exit(EXIT_SUCCESS);
     } else if ((strcmp(p, "--debug") == 0) ||
                (strcmp(p, "-d") == 0)) {
