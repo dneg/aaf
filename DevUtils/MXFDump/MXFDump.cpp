@@ -1342,7 +1342,9 @@ void klvDumpFile(char* fileName)
 typedef enum ModeTag {
   unspecifiedMode,
   klvMode,
-  mxfMode} Mode;
+  localSetMode,
+  mxfMode,
+  aafMode} Mode;
 Mode mode = unspecifiedMode;
 
 void setMode(Mode m);
@@ -1351,8 +1353,10 @@ void setMode(Mode m)
 {
   if (mode != unspecifiedMode) {
     fprintf(stderr,
-            "%s : Error : Specify only one of --klv-dump, --mxf-dump.\n",
+            "%s : Error : Specify only one of ",
             programName);
+    fprintf(stderr,
+            "--klv-dump, --set-dump, --mxf-dump, --aaf-dump.\n");
     printUsage();
     exit(EXIT_FAILURE);
   }
@@ -1393,11 +1397,11 @@ int main(int argumentCount, char* argumentVector[])
     if ((strcmp(p, "-k") == 0) || (strcmp(p, "--klv-dump") == 0)) {
       setMode(klvMode);
     } else if ((strcmp(p, "-l") == 0) || (strcmp(p, "--set-dump") == 0)) {
-      setMode(mxfMode);
+      setMode(localSetMode);
     } else if ((strcmp(p, "-m") == 0) || (strcmp(p, "--mxf-dump") == 0)) {
       setMode(mxfMode);
     } else if ((strcmp(p, "-a") == 0) || (strcmp(p, "--aaf-dump") == 0)) {
-      setMode(mxfMode);
+      setMode(aafMode);
     } else if ((strcmp(p, "-v") == 0) || (strcmp(p, "--verbose") == 0)) {
       verbose = true;
     } else if ((strcmp(p, "-f") == 0) || (strcmp(p, "--fill") == 0)) {
@@ -1460,9 +1464,8 @@ int main(int argumentCount, char* argumentVector[])
   if (mode == unspecifiedMode) {
     mode = mxfMode;
   }
-  if (mode == mxfMode) {
-    // No checks here yet
-  } else { // mode == klvMode
+
+  if (mode == klvMode) {
     if (dumpFill) {
       fprintf(stderr,
               "%s : Error : --fill not valid with --klv-dump.\n",
@@ -1470,6 +1473,12 @@ int main(int argumentCount, char* argumentVector[])
       printUsage();
       exit(EXIT_FAILURE);
     }
+  } else if (mode == localSetMode) {
+    // No checks here yet
+  } else if (mode == mxfMode) {
+    // No checks here yet
+  } else if (mode == aafMode) {
+    // No checks here yet
   }
   int expectedFiles = 1;
   if (fileCount != expectedFiles) {
@@ -1491,10 +1500,16 @@ int main(int argumentCount, char* argumentVector[])
               " bytes of values.\n");
     }
   }
-  if (mode == mxfMode) {
-    mxfDumpFile(fileName);
-  } else {
+
+  if (mode == klvMode) {
     klvDumpFile(fileName);
+  } else if (mode == localSetMode) {
+    mxfDumpFile(fileName);
+  } else if (mode == mxfMode) {
+    mxfDumpFile(fileName);
+  } else if (mode == aafMode) {
+    mxfDumpFile(fileName);
   }
+
   return 0;  
 }
