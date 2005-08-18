@@ -2906,25 +2906,37 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer);
 
 void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
 {
-  checkElementSize(sizeof(mxfKey), p->_elementSize, p->_elementCount);
-  checkElementCount(p->_elementCount,
-                    sizeof(mxfKey),
-                    p->_length,
-                    partitionFixedSize);
+  // Major Version
+  // Minor Version
+  // KAGSize
+  // ThisPartition
   checkField(p->_address,
              p->_thisPartition,
              p->_address,
              "ThisPartition");
+  // PreviousPartition
   checkField(previous,
              p->_previousPartition,
              p->_address,
              "PreviousPartition");
+  // FooterPartition
   if (footer != 0) {
     checkField(footer,
                p->_footerPartition,
                p->_address,
                "FooterPartition");
   }
+  // HeaderByteCount
+  // IndexSID
+  // BodyOffset
+  // BodySID
+  // Operational Pattern
+  // EssenceContainers
+  checkElementSize(sizeof(mxfKey), p->_elementSize, p->_elementCount);
+  checkElementCount(p->_elementCount,
+                    sizeof(mxfKey),
+                    p->_length,
+                    partitionFixedSize);
 }
 
 void checkPartitions(PartitionList& partitions, mxfUInt64 footer);
