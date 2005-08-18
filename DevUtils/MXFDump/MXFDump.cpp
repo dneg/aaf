@@ -202,7 +202,7 @@ int main(int argumentCount, char* argumentVector[])
     mode = mxfMode;
   }
   int expectedFiles = 1;
-  if (fileCount > expectedFiles) {
+  if (fileCount != expectedFiles) {
     fprintf(stderr,
             "%s : Error : Wrong number of arguments (%d).\n",
             programName,
