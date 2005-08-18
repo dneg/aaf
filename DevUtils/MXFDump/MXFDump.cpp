@@ -151,6 +151,8 @@ struct {
 
 size_t keyTableSize = (sizeof(keyTable)/sizeof(keyTable[0])) - 1;
 
+const mxfLocalKey nullMxfLocalKey = {0, 0};
+
 const mxfKey Primer = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
                        0x0d, 0x01, 0x02, 0x01, 0x01, 0x05, 0x01, 0x00};
 const mxfKey Filler = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
@@ -588,7 +590,7 @@ void mxfDumpFile(char* fileName)
                 ", l = %5d (%04x) ]\n",
                 length,
                 length);
-        if (identifier == 0) {
+        if (memcmp(identifier, nullMxfLocalKey, sizeof(mxfLocalKey))== 0) {
           fprintf(stdout,
                   "%s : Error : Illegal local key (",
                   programName);
