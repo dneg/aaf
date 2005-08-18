@@ -754,6 +754,8 @@ void close(mxfFile infile)
   fclose(infile);
 }
 
+void seek64(mxfFile infile, const mxfUInt64 position, int whence);
+
 void seek64(mxfFile infile, const mxfUInt64 position, int whence)
 {
 #if defined(MXF_COMPILER_GCC_INTEL_LINUX) && defined(MXF_SEEKO)
@@ -787,6 +789,8 @@ size_t read(mxfFile infile, void* buffer, size_t count)
 {
   return fread(buffer, 1, count, infile);
 }
+
+mxfUInt64 tell64(mxfFile infile);
 
 mxfUInt64 tell64(mxfFile infile)
 {
