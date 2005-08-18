@@ -2049,6 +2049,54 @@ bool isLocalSet(mxfKey& k)
   return result;
 }
 
+void skipBogusBytes(const mxfUInt64 byteCount, FILE* f);
+
+void skipBogusBytes(const mxfUInt64 byteCount, FILE* f)
+{
+  mxfUInt64 length = byteCount;
+  fprintf(stdout, "[ * Error * %"MXFPRIu64" superfluous bytes ]\n", length);
+  printV(length, false, 0, f);
+}
+
+void printLocalKey(mxfLocalKey& identifier,
+                   mxfLength& remainder,
+                   FILE* infile);
+
+void printLocalKey(mxfLocalKey& identifier,
+                   mxfLength& remainder,
+                   FILE* infile)
+{
+  if (remainder > 2) {
+    readMxfLocalKey(identifier, infile);
+    checkLocalKey(identifier);
+    remainder = remainder - 2;
+  } else {
+    fprintf(stderr, "%s : Error : Local set KLV parse error", programName);
+    fprintf(stderr, " (set exhausted looking for key).\n");
+    skipBogusBytes(remainder, infile);
+    remainder = 0;
+  }
+}
+
+void printLocalLength(mxfUInt16& length,
+                      mxfLength& remainder,
+                      FILE* infile);
+
+void printLocalLength(mxfUInt16& length,
+                      mxfLength& remainder,
+                      FILE* infile)
+{
+  if (remainder > 2) {
+    readMxfUInt16(length, infile);
+    remainder = remainder - 2;
+  } else {
+    fprintf(stderr, "%s : Error : Local set KLV parse error", programName);
+    fprintf(stderr, " (set exhausted looking for length).\n");
+    skipBogusBytes(remainder, infile);
+    remainder = 0;
+  }
+}
+
 void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile);
 
 void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
