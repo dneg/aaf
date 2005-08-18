@@ -4286,7 +4286,8 @@ void printIndexSegment(mxfIndexSegment* index)
 void validateArray(mxfUInt32 defaultSize,
                    mxfUInt32 expectedSize,
                    mxfUInt32 actualSize,
-                   mxfUInt32 elementCount)
+                   mxfUInt32 elementCount,
+                   char* /* arrayName */)
 {
   if (expectedSize == 0) {
     expectedSize = defaultSize;
@@ -4329,14 +4330,16 @@ void validateIndexSegment(mxfIndexSegment* index)
     validateArray(6,
                   index->_deltaEntrySize,
                   index->_deltaEntrySize,
-                  index->_deltaEntryCount);
+                  index->_deltaEntryCount,
+                  "Delta Entry Array");
   }
 
   if (index->_hasIndexEntryArray) {
     validateArray(11,
                   index->_indexEntrySize,
                   index->_indexEntrySize,
-                  index->_indexEntryCount);
+                  index->_indexEntryCount,
+                  "Index Entry Array");
   }
 
   if (index->_hasIndexDuration) {
