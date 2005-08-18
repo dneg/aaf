@@ -465,9 +465,12 @@ mxfUInt64 keyPosition;   // position/address of current key
 mxfKey currentKey = {0};
 mxfKey previousKey = {0};
 mxfUInt64 primerPosition = 0;
+mxfUInt64 indexPosition = 0;
 
 void markMetadataStart(mxfUInt64 primerKeyPosition);
 void markMetadataEnd(mxfUInt64 essenceKeyPosition);
+void markIndexStart(mxfUInt64 indexKeyPosition);
+void markIndexEnd(mxfUInt64 essenceKeyPosition);
 
 // Frame wrapped essence
 bool frames = false;     // if true, treat essence as frame wrapped.
@@ -3221,6 +3224,7 @@ typedef struct mxfPartitionTag {
   mxfUInt64 _address; // Address of partition relative to header
   mxfUInt64 _length;
   mxfUInt64 _metadataSize;
+  mxfUInt64 _indexSize;
 } mxfPartition;
 
 typedef std::list<mxfPartition*> PartitionList;
@@ -3242,6 +3246,20 @@ void markMetadataEnd(mxfUInt64 essenceKeyPosition)
   }
 }
 
+void markIndexStart(mxfUInt64 indexKeyPosition)
+{
+  indexPosition = indexKeyPosition;
+}
+
+void markIndexEnd(mxfUInt64 essenceKeyPosition)
+{
+  if (indexPosition != 0) {
+    mxfUInt64 indexByteCount = essenceKeyPosition - indexPosition;
+    currentPartition->_indexSize = indexByteCount;
+    indexPosition = 0;
+  }
+}
+
 void readPartition(PartitionList& partitions,
                    mxfUInt64 length,
                    mxfFile infile);
@@ -3255,6 +3273,7 @@ void readPartition(PartitionList& partitions,
   p->_address = keyPosition - headerPosition;
   p->_length = length;
   p->_metadataSize = 0;
+  p->_indexSize = 0;
 
   readMxfUInt16(p->_majorVersion, infile);
   readMxfUInt16(p->_minorVersion, infile);
@@ -3372,6 +3391,10 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
              p->_address,
              "HeaderByteCount");
   // IndexByteCount
+  checkField(p->_indexSize,
+             p->_indexByteCount,
+             p->_address,
+             "IndexByteCount");
   // IndexSID
   // BodyOffset
   // BodySID
@@ -4325,6 +4348,7 @@ void mxfValidate(mxfFile infile)
       skipV(len, infile);
     } else if (isPartition(k)) {
       markMetadataEnd(keyPosition);
+      markIndexEnd(keyPosition);
       checkPartitionLength(length);
       if (isFooter(k)) {
         footer = checkFooterPosition(footer, keyPosition);
@@ -4332,18 +4356,22 @@ void mxfValidate(mxfFile infile)
       readPartition(p, len, infile);
     } else if (memcmp(&RandomIndexMetadata, &k, sizeof(mxfKey)) == 0) {
       markMetadataEnd(keyPosition);
+      markIndexEnd(keyPosition);
       readRandomIndex(rip, len, infile);
     } else if (isEssenceElement(k)) {
       markMetadataEnd(keyPosition);
+      markIndexEnd(keyPosition);
       skipV(len, infile);
     } else if (isIndexSegment(k)) {
       markMetadataEnd(keyPosition);
+      markIndexStart(keyPosition);
       skipV(len, infile);
     } else {
       skipV(len, infile);
     }
   }
   markMetadataEnd(fileSize);
+  markIndexEnd(fileSize);
 
   if (footer == 0) {
     mxfError("No footer found.\n");
