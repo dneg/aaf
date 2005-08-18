@@ -1984,6 +1984,7 @@ bool isFill(mxfKey& k)
   if (memcmp(&Fill, &k, sizeof(mxfKey)) == 0) {
     result = true;
   } else if (memcmp(&BogusFill, &k, sizeof(mxfKey)) == 0) {
+    result = true;
   } else {
     result = false;
   }
