@@ -2560,6 +2560,8 @@ void printCommonOptions(void)
   fprintf(stderr, "search <n> bytes of run-in");
   fprintf(stderr, "[default n = 64k]\n");
 
+  fprintf(stderr, "  --verbose           = ");
+  fprintf(stderr, "print more detailed information (-v)\n");
 
   fprintf(stderr, "  --debug             = ");
   fprintf(stderr, "print debuging information (-d)\n");
@@ -2606,9 +2608,6 @@ void printCommonDumpOptions(void)
 
   fprintf(stderr, "  --statistics        = ");
   fprintf(stderr, "print statistics\n");
-
-  fprintf(stderr, "  --verbose           = ");
-  fprintf(stderr, "print more detailed information (-v)\n");
   fprintf(stderr, "\n");
 }
 
@@ -6390,7 +6389,6 @@ int main(int argumentCount, char* argumentVector[])
       setMode(aafValidateMode);
     } else if ((strcmp(p, "--verbose") == 0) ||
                (strcmp(p, "-v") == 0)) {
-      checkDumpMode(p);
       verbose = true;
     } else if ((strcmp(p, "--show-fill") == 0) ||
                (strcmp(p, "-f") == 0)) {
