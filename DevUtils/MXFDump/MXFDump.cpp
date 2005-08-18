@@ -1694,11 +1694,10 @@ bool isLocalSet(mxfKey& k)
   return result;
 }
 
-void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile);
+void printLocalSetV(mxfLength& len, FILE* infile);
 
-void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
+void printLocalSetV(mxfLength& len, FILE* infile)
 {
-  printKL(k, len);
   mxfLength setLength = 0;
   while (setLength < len) {
     mxfLocalKey identifier;
@@ -1710,6 +1709,14 @@ void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
     checkLocalKey(identifier);
     printLocalV(identifier, length, len, setLength, infile);
   }
+}
+
+void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile);
+
+void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
+{
+  printKL(k, len);
+  printLocalSetV(len, infile);
 }
 
 void printPartition(mxfKey& k, mxfLength& len, FILE* infile);
