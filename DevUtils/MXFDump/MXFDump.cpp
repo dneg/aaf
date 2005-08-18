@@ -4936,11 +4936,13 @@ typedef struct mxfRandomIndexTag {
 } mxfRandomIndex;
 
 void readRandomIndex(mxfRandomIndex& rip,
+                     const mxfKey& key,
                      mxfLength length,
                      mxfUInt32& overallLength,
                      mxfFile infile);
 
 void readRandomIndex(mxfRandomIndex& rip,
+                     const mxfKey& key,
                      mxfLength length,
                      mxfUInt32& overallLength,
                      mxfFile infile)
@@ -6232,7 +6234,7 @@ void mxfValidate(mxfFile infile)
       markMetadataEnd(keyPosition);
       markIndexEnd(keyPosition);
       mxfUInt32 overall;
-      readRandomIndex(rip, len, overall, infile);
+      readRandomIndex(rip, k, len, overall, infile);
       checkRandomIndex(keyPosition, position(infile), len, overall);
     } else if (isEssenceElement(k) || isSystemElement(k)) {
       markMetadataEnd(keyPosition);
