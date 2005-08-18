@@ -24,17 +24,23 @@
 
 
 .PHONY : all
-all : dump
+all : dump MXFDump
 
 .PHONY : dump
 dump :
 	cd Dump && $(MAKE)
 
+.PHONY : MXFDump
+MXFDump :
+	cd MXFDump && $(MAKE)
+
 .PHONY : clean
 clean :
 	cd Dump && $(MAKE) GENDEPS=0 $@
+	cd MXFDump && $(MAKE) GENDEPS=0 $@
 
 .PHONY : realclean
 realclean :
 	cd Dump && $(MAKE) GENDEPS=0 $@
+	cd MXFDump && $(MAKE) GENDEPS=0 $@
 
