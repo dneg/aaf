@@ -867,9 +867,9 @@ void printFill(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
-void dumpLocalSet(mxfKey& k, mxfLength& len, FILE* infile);
+void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile);
 
-void dumpLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
+void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
 {
   printKL(k, len);
   mxfLength setLength = 0;
@@ -973,7 +973,7 @@ void mxfDumpFile(char* fileName)
     readMxfLength(len, infile);
 
     if (isLocalSet(k)) {
-      dumpLocalSet(k, len, infile);
+      printLocalSet(k, len, infile);
     } else if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
       printPrimer(k, len, infile);
     } else if (isFill(k)) {
