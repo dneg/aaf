@@ -159,6 +159,7 @@ void printFill(mxfKey& k, mxfLength& len, FILE* infile);
 void skipV(mxfLength& length, FILE* f);
 
 mxfUInt64 position;
+mxfUInt64 keyPosition;
 
 void readMxfUInt08(mxfByte& b, FILE* f)
 {
@@ -217,6 +218,7 @@ void readMxfRational(mxfRational& r, FILE* f)
 
 void readMxfKey(mxfKey& k, FILE* f)
 {
+  keyPosition = position;
   int c = fread(&k, sizeof(mxfKey), 1, f);
   if (c != 1) {
     fprintf(stderr, "%s : Error : Failed to read key.\n", programName);
@@ -228,6 +230,7 @@ void readMxfKey(mxfKey& k, FILE* f)
 bool readOuterMxfKey(mxfKey& k, FILE* f)
 {
   bool result = true;
+  keyPosition = position;
   int c = fread(&k, sizeof(mxfKey), 1, f);
   if (c != 1) {
     if (!feof(f)) {
@@ -1330,10 +1333,18 @@ void printMxfKeySymbol(mxfKey& k)
   size_t i;
   bool found = lookupKey(k, i);
   if (found) {
-    fprintf(stdout, "%s\n", keyTable[i]._name);
+    fprintf(stdout, "%s", keyTable[i]._name);
   } else {
-    fprintf(stdout, "Dark\n");
+    fprintf(stdout, "Dark");
   }
+  fprintf(stdout, " ( ");
+  if (addressBase == 10) {
+    printField(stdout, keyPosition);
+  } else {
+    printHexField(stdout, keyPosition);
+  }
+  fprintf(stdout, " )");
+  fprintf(stdout, "\n");
 }
 
 void printAAFKeySymbol(mxfKey& k);
