@@ -264,6 +264,8 @@ void printMxfUInt64(FILE* f, const char* label, mxfUInt64& i);
 
 void printMxfRational(FILE* f, const char* label, mxfRational& r);
 
+void printMxfKey(FILE* f, const char* label, mxfKey& k);
+
 void dumpMxfUInt08(const char* label, mxfFile infile);
 void dumpMxfUInt16(const char* label, mxfFile infile);
 void dumpMxfUInt32(const char* label, mxfFile infile);
@@ -1258,6 +1260,13 @@ void printMxfRational(FILE* f, const char* label, mxfRational& r)
   fprintf(stdout, " / ");
   printDecField(stdout, r.denominator);
   fprintf(stdout, " )");
+  fprintf(stdout, "\n");
+}
+
+void printMxfKey(FILE* f, const char* label, mxfKey& k)
+{
+  fprintf(stdout, "%20s = ", label);
+  printMxfKey(k, stdout);
   fprintf(stdout, "\n");
 }
 
