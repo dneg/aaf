@@ -794,12 +794,16 @@ char map(int c)
 
 unsigned char buffer[16];
 size_t bufferIndex;
+size_t bufferStart;
+size_t align;
 mxfUInt32 address;
 
-void init(void)
+void init(mxfUInt64 start)
 {
   bufferIndex = 0;
-  address = 0;
+  bufferStart = bufferIndex;
+  address = static_cast<mxfUInt32>(start);
+  align = address % 16;
 }
 
 void flush(void)
@@ -807,14 +811,20 @@ void flush(void)
   if (bufferIndex > 0) {
     printField(stdout, address);
     fprintf(stdout, "  ");
-    for (size_t i = 0; i < bufferIndex; i++) {
+    for (size_t x = 0; x < bufferStart; x++) {
+      fprintf(stdout, "   ");
+    }
+    for (size_t i = bufferStart; i < bufferIndex; i++) {
       fprintf(stdout, "%02x ", buffer[i]);
     }
     fprintf(stdout, "   ");
-    for (size_t j = 0; j < 16 - bufferIndex; j++) {
+    for (size_t j = bufferStart; j < 16 - bufferIndex; j++) {
       fprintf(stdout, "   ");
     }
-    for (size_t k = 0; k < bufferIndex; k++) {
+    for (size_t z = 0; z < bufferStart; z++) {
+      fprintf(stdout, " ");
+    }
+    for (size_t k = bufferStart; k < bufferIndex; k++) {
       char c = map(buffer[k]);
       fprintf(stdout, "%c", c);
     }
@@ -827,7 +837,15 @@ void dumpByte(mxfByte byte)
   if (bufferIndex == 16) {
     flush();
     bufferIndex = 0;
+    bufferStart = bufferIndex;
     address = address + 16;
+  } else if (bufferIndex == 0) {
+    if (align != 0) {
+      // align
+      bufferIndex = align;
+      bufferStart = bufferIndex;
+      address = address - align;
+    }
   }
   buffer[bufferIndex++] = byte;
 }
@@ -1082,7 +1100,7 @@ void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f);
 
 void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
 {
-  init();
+  init(0);
   mxfLength count = 0;
   for (mxfLength i = 0; i < length; i++) {
     mxfByte b;
