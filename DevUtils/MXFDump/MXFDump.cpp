@@ -2451,6 +2451,8 @@ void setMode(Mode m)
   mode = m;
 }
 
+bool getInteger(int& i, char* s);
+
 bool getInteger(int& i, char* s)
 {
   bool result;
@@ -2465,6 +2467,11 @@ bool getInteger(int& i, char* s)
   }
   return result;
 }
+
+int getIntegerOption(int currentArgument,
+                     int argumentCount,
+                     char* argumentVector[],
+                     const char* label);
 
 int getIntegerOption(int currentArgument,
                      int argumentCount,
