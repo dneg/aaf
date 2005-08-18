@@ -231,6 +231,9 @@ void printHexFieldPad(FILE* f, mxfUInt16& i);
 void printHexFieldPad(FILE* f, mxfUInt32& i);
 void printHexFieldPad(FILE* f, mxfUInt64& i);
 
+void printHex(FILE* f, mxfUInt08& i);
+void printHex(FILE* f, mxfUInt16& i);
+void printHex(FILE* f, mxfUInt32& i);
 void printHex(FILE* f, mxfUInt64& i);
 
 void printMxfKey(const mxfKey& k, FILE* f);
@@ -956,6 +959,21 @@ void printHexFieldPad(FILE* f, mxfUInt32& i)
 void printHexFieldPad(FILE* f, mxfUInt64& i)
 {
   fprintf(f, "%016"MXFPRIx64, i);
+}
+
+void printHex(FILE* f, mxfUInt08& i)
+{
+  fprintf(f, "%"MXFPRIx08, i);
+}
+
+void printHex(FILE* f, mxfUInt16& i)
+{
+  fprintf(f, "%"MXFPRIx16, i);
+}
+
+void printHex(FILE* f, mxfUInt32& i)
+{
+  fprintf(f, "%"MXFPRIx32, i);
 }
 
 void printHex(FILE* f, mxfUInt64& i)
