@@ -836,6 +836,10 @@ void printUsage(void)
   fprintf(stderr, "  --limit <n>   = ");
   fprintf(stderr, "dump only the first <n> bytes of each ");
   fprintf(stderr, "essence container (-l)\n");
+  fprintf(stderr, "                  [default n == 0]\n");
+  fprintf(stderr, "  --no-limit    = ");
+  fprintf(stderr, "dump all the bytes of each ");
+  fprintf(stderr, "essence container (-e)\n");
   fprintf(stderr, "  --fill        = ");
   fprintf(stderr, "dump fill bytes (-f)\n");
   fprintf(stderr, "\n");
@@ -844,6 +848,10 @@ void printUsage(void)
   fprintf(stderr, "  --limit <n>   = ");
   fprintf(stderr, "dump only the first <n> bytes of each ");
   fprintf(stderr, "essence container (-l)\n");
+  fprintf(stderr, "                  [default n == 0]\n");
+  fprintf(stderr, "  --no-limit    = ");
+  fprintf(stderr, "dump all the bytes of each ");
+  fprintf(stderr, "essence container (-e)\n");
   fprintf(stderr, "  --fill        = ");
   fprintf(stderr, "dump fill bytes (-f)\n");
   fprintf(stderr, "\n");
@@ -852,6 +860,10 @@ void printUsage(void)
   fprintf(stderr, "  --limit <n>   = ");
   fprintf(stderr, "dump only the first <n> bytes of each ");
   fprintf(stderr, "essence container (-l)\n");
+  fprintf(stderr, "                  [default n == 0]\n");
+  fprintf(stderr, "  --no-limit    = ");
+  fprintf(stderr, "dump all the bytes of each ");
+  fprintf(stderr, "essence container (-e)\n");
   fprintf(stderr, "  --fill        = ");
   fprintf(stderr, "dump fill bytes (-f)\n");
   fprintf(stderr, "\n");
@@ -860,6 +872,7 @@ void printUsage(void)
   fprintf(stderr, "  --limit <n>   = ");
   fprintf(stderr, "dump only the first <n> bytes of each ");
   fprintf(stderr, "value (-l)\n");
+  fprintf(stderr, "                  [default n == 0]\n");
   fprintf(stderr, "\n");
   fprintf(stderr, "--symbolic      = ");
   fprintf(stderr, "dump the names of keys if known [default] (-s)\n");
@@ -1584,7 +1597,7 @@ void printPrimer(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
-bool lFlag;
+bool lFlag = true;
 mxfUInt32 limit = 0;
 
 void klvDumpFile(char* fileName)
@@ -1790,6 +1803,8 @@ int main(int argumentCount, char* argumentVector[])
       verbose = true;
     } else if ((strcmp(p, "-f") == 0) || (strcmp(p, "--fill") == 0)) {
       dumpFill = true;
+    } else if ((strcmp(p, "-e") == 0) || (strcmp(p, "--no-limit") == 0)) {
+      lFlag = false;
     } else if ((strcmp(p, "-l") == 0) || (strcmp(p, "--limit") == 0)) {
       if ((i + 1 < argumentCount) && (*argumentVector[i + 1] != '-' )) {
         lFlag = true;
