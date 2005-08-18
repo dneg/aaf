@@ -80,7 +80,7 @@ void printMxfLength(mxfLength& l);
 
 void printMxfLength(mxfLength& l)
 {
-  fprintf(stdout, "%8x", l);
+  fprintf(stdout, "%12d (%8x)", l, l);
 }
 
 void readMxfKey(mxfKey& k, FILE* f);
