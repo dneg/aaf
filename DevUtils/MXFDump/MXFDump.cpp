@@ -406,7 +406,7 @@ int readMxfLength(mxfLength& l, FILE* f)
   mxfUInt64 x;
   int bytesRead = readBERLength(x, f);
   if (bytesRead > 9) {
-    fprintf(stderr, "%s : Error : Length overflow.\n", programName);
+    fprintf(stderr, "%s : Error : Invalid BER encoded length.\n", programName);
     errors = errors + 1;
   }
   l = x;
