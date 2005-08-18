@@ -4569,17 +4569,26 @@ void mxfValidateFile(Mode mode, mxfFile infile)
 {
   switch (mode) {
   case aafValidateMode:
-    aafValidate(infile);
+    klvValidate(infile);
     setPosition(infile, headerPosition);
-    /* fall through */
-  case mxfValidateMode:
-    mxfValidate(infile);
-    setPosition(infile, headerPosition);
-    /* fall through */
-  case setValidateMode:
     setValidate(infile);
     setPosition(infile, headerPosition);
-    /* fall through */
+    mxfValidate(infile);
+    setPosition(infile, headerPosition);
+    aafValidate(infile);
+    break;
+  case mxfValidateMode:
+    klvValidate(infile);
+    setPosition(infile, headerPosition);
+    setValidate(infile);
+    setPosition(infile, headerPosition);
+    mxfValidate(infile);
+    break;
+  case setValidateMode:
+    klvValidate(infile);
+    setPosition(infile, headerPosition);
+    setValidate(infile);
+    break;
   case klvValidateMode:
     klvValidate(infile);
     break;
