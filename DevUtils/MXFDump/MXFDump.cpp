@@ -1438,6 +1438,8 @@ void printOperationalPattern(mxfKey& k, FILE* outfile)
   }
 }
 
+#if 0
+
 void decodeUncompressedPicture(mxfUInt32 tag2, FILE* outfile)
 {
   switch (tag2) {
@@ -1677,6 +1679,66 @@ void decode(mxfUInt16 tag1, mxfUInt32 tag2, FILE* outfile)
     break;
   }
 }
+
+#else
+
+typedef std::map<mxfUInt16, const char *> tree;
+
+typedef struct _node {
+  tree _map;
+  const char* _prefix;
+  mxfUInt16 _key;
+} node;
+
+typedef std::map<mxfUInt16, node*> forest;
+
+forest f;
+
+node* newNode(mxfUInt16 key, const char* prefix)
+{
+  node* result = new node;
+  result->_prefix = prefix;
+  result->_key = key;
+  return result;
+}
+
+void addLabel(node* n, mxfUInt16 key, const char* suffix)
+{
+  n->_map.insert(tree::value_type(key, suffix));
+}
+
+void addNode(node* n)
+{
+  f.insert(forest::value_type(n->_key, n));
+}
+
+#define MXF_ESSENCE_CONTAINER_NODE(x, y, p) n = newNode((x << 8) + y, p);
+#define MXF_ESSENCE_CONTAINER_LABEL(a, b, s) addLabel(n, (a << 8) + b, s);
+#define MXF_ESSENCE_CONTAINER_END() addNode(n);
+
+void initEssenceContainerLabelMap(void)
+{
+  node* n = 0;
+#include "MXFLabels.h"
+}
+
+void decode(mxfUInt16 tag1, mxfUInt32 tag2, FILE* outfile)
+{
+  forest::const_iterator fiter = f.find(tag1);
+  if (fiter != f.end()) {
+    const node* n = fiter->second;
+    fprintf(outfile, "%s", n->_prefix);
+    tree::const_iterator titer = n->_map.find(tag2);
+    if (titer != n->_map.end()) {
+      const char* name = titer->second;
+      fprintf(outfile, " - %s", name);
+    }
+  } else {
+    fprintf(outfile, "Not recognized");
+  }
+}
+
+#endif
 
 void decode(mxfKey& label, FILE* outfile)
 {
@@ -5674,6 +5736,7 @@ int main(int argumentCount, char* argumentVector[])
   setProgramName(argumentVector[0]);
   checkSizes();
   initAAFKeyTable();
+  initEssenceContainerLabelMap();
   int fileCount = 0;
   int fileArg = 0;
   char* p = 0;
