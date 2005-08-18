@@ -585,6 +585,25 @@ void skipV(mxfLength& length, FILE* f)
   }
 }
 
+void dumpPrimer(FILE* infile, FILE* outfile)
+{
+  mxfUInt32 elementCount;
+  readMxfUInt32(elementCount, infile);
+  mxfUInt32 elementSize;
+  readMxfUInt32(elementSize, infile);
+  for (mxfUInt32 j = 0; j < elementCount; j++) {
+    mxfLocalKey identifier;
+    readMxfLocalKey(identifier, infile);
+    mxfKey longIdentifier;
+    readMxfKey(longIdentifier, infile);
+    fprintf(outfile, "  ");
+    printMxfLocalKey(identifier, outfile);
+    fprintf(outfile, " : ");
+    printMxfKey(longIdentifier, outfile);
+    fprintf(outfile, "\n");
+  }
+}
+
 bool dumpFiller = false;
 
 void mxfDumpFile(char* fileName);
@@ -653,21 +672,7 @@ void mxfDumpFile(char* fileName)
         }
       }
     } else if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
-      mxfUInt32 elementCount;
-      readMxfUInt32(elementCount, infile);
-      mxfUInt32 elementSize;
-      readMxfUInt32(elementSize, infile);
-      for (mxfUInt32 j = 0; j < elementCount; j++) {
-        mxfLocalKey identifier;
-        readMxfLocalKey(identifier, infile);
-        mxfKey longIdentifier;
-        readMxfKey(longIdentifier, infile);
-        fprintf(stdout, "  ");
-        printMxfLocalKey(identifier, stdout);
-        fprintf(stdout, " : ");
-        printMxfKey(longIdentifier, stdout);
-        fprintf(stdout, "\n");
-      }
+      dumpPrimer(infile, stdout);
     } else if ((memcmp(&Filler, &k, sizeof(mxfKey)) == 0) && !dumpFiller) {
       skipV(len, infile);
     } else {
