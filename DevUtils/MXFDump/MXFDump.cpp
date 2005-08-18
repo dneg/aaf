@@ -3310,6 +3310,15 @@ void printSegment(Segment* seg)
           seg->_start + seg->_size); 
 }
 
+void printSegments(SegmentList& segments)
+{
+  SegmentList::const_iterator it;
+  for (it = segments.begin(); it != segments.end(); it++) {
+    Segment* seg = *it;
+    printSegment(seg);
+  }
+}
+
 void printStream(Stream* s)
 {
   fprintf(stdout, "Stream %08"MXFPRIu32" ", s->_sid);
