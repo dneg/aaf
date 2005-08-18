@@ -1361,8 +1361,10 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
       printField(stdout, entrySize);
       fprintf(stdout, " ]\n");
 
-      fprintf(stdout, "         index : temporal anchor flags     stream\n");
-      fprintf(stdout, "                   offset offset           offset\n");
+      fprintf(stdout, "         ");
+      fprintf(stdout, "index : temporal   anchor  flags        stream\n");
+      fprintf(stdout, "         ");
+      fprintf(stdout, "          offset   offset               offset\n");
 
       for (mxfUInt32 i = 0; i < entryCount; i++) {
         mxfUInt08 temporalOffset;
@@ -1376,13 +1378,14 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
 
         fprintf(stdout, "    ");
         printField(stdout, i);
-        fprintf(stdout, " :    ");
-        printField(stdout, temporalOffset);
-        fprintf(stdout, "  ");
-        printField(stdout, anchorOffset);
+        fprintf(stdout, " :");
         fprintf(stdout, "    ");
+        printField(stdout, temporalOffset);
+        fprintf(stdout, "    ");
+        printField(stdout, anchorOffset);
+        fprintf(stdout, "     ");
         printHexField(stdout, flags);
-        fprintf(stdout, " ");
+        fprintf(stdout, "    ");
         printField(stdout, streamOffset);
         fprintf(stdout, "\n");
 
