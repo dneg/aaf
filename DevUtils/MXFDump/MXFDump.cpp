@@ -2980,6 +2980,23 @@ bool lookupAAFLocalKey(mxfLocalKey& k, size_t& index)
   return result;
 }
 
+void checkAAFLocalKeyTable(void)
+{
+  size_t i;
+  size_t j;
+  for (i = 0; i < aafLocalKeyTableSize; i++) {
+    for (j = 0; j < aafLocalKeyTableSize; j++) {
+      if (i != j) {
+        if (aafLocalKeyTable[i]._key == aafLocalKeyTable[j]._key) {
+          error("Duplicate keys - %s has the same key as %s.\n",
+                aafLocalKeyTable[i]._name,
+                aafLocalKeyTable[j]._name);
+        }
+      }
+    }
+  }
+}
+
 bool symbolic = true;
 
 void printMxfLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing);
