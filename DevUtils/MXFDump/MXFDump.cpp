@@ -1498,7 +1498,26 @@ void dumpExtensionTypeStrongObjectReference(mxfFile infile)
   fprintf(stdout, "]\n");
 }
 
-// WeakObjectReference
+void dumpExtensionTypeWeakObjectReference(mxfFile infile);
+
+void dumpExtensionTypeWeakObjectReference(mxfFile infile)
+{
+  fprintf(stdout, "weak object reference type = [\n");
+  dumpExtensionDefinition(infile);
+
+  dumpMxfLabel("referenced type", infile);
+
+  // TargetPathElementCount
+  mxfUInt32 count;
+  readMxfUInt32(count, infile);
+  printMxfUInt32(stdout, "element count", count);
+  // TargetPath
+  for (mxfUInt32 i = 0; i < count; i++) {
+    dumpMxfLabel("property", infile);
+  }
+  fprintf(stdout, "]\n");
+}
+
 // Rename
 
 void dumpExtensionTypeEnumerated(mxfFile infile);
@@ -5522,7 +5541,9 @@ void printMetaDictionary(mxfKey& /* k */, mxfLength& len, mxfFile infile)
     case 0x33:
       dumpExtensionTypeStrongObjectReference(infile);
       break;
-      // WeakObjectReference   = 34
+    case 0x34:
+      dumpExtensionTypeWeakObjectReference(infile);
+      break;
       // Rename                = 35
     case 0x36:
       dumpExtensionTypeEnumerated(infile);
