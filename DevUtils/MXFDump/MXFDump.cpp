@@ -1460,7 +1460,22 @@ void dumpExtensionTypeInteger(mxfFile infile)
 // StrongObjectReference
 // WeakObjectReference
 // Rename
-// Enumerated
+
+void dumpExtensionTypeEnumerated(mxfFile infile);
+
+void dumpExtensionTypeEnumerated(mxfFile infile)
+{
+  fprintf(stdout, "enumerated type = [\n");
+  dumpExtensionDefinition(infile);
+
+  dumpMxfLabel("element type", infile);
+
+  // ElementNames
+  // ElementValues
+
+  fprintf(stdout, "]\n");
+}
+
 // FixedArray
 
 void dumpExtensionTypeVaryingArray(mxfFile infile);
@@ -1483,8 +1498,16 @@ void dumpExtensionTypeRecord(mxfFile infile)
 {
   fprintf(stdout, "record type = [\n");
   dumpExtensionDefinition(infile);
-  // MemberTypes
-  // MemberNames
+  // MemberCount
+  mxfUInt32 count;
+  readMxfUInt32(count, infile);
+  printMxfUInt32(stdout, "member count", count);
+  for (mxfUInt32 i = 0; i < count; i++) {
+    // MemberType
+    dumpMxfLabel("type", infile);
+    // MemberName
+    dumpMxfString("name", infile);
+  }
   fprintf(stdout, "]\n");
 }
 
@@ -5414,7 +5437,9 @@ void printMetaDictionary(mxfKey& /* k */, mxfLength& len, mxfFile infile)
       // StrongObjectReference = 33
       // WeakObjectReference   = 34
       // Rename                = 35
-      // Enumerated            = 36
+    case 0x36: // Enumerated
+      dumpExtensionTypeEnumerated(infile);
+      break;
       // FixedArray            = 37
     case 0x38: // VaryingArray
       dumpExtensionTypeVaryingArray(infile);
