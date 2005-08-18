@@ -3916,9 +3916,7 @@ bool isFill(mxfKey& k)
 
 void printFill(mxfKey& k, mxfLength& len, mxfFile infile)
 {
-  if (memcmp(&KLVFill, &previousKey, sizeof(mxfKey)) == 0) {
-    mxfWarning(k, keyPosition, "Consecutive fill items");
-  }
+  checkFill(k, keyPosition, previousKey);
   if (dumpFill) {
     printV(len, false, 0, infile);
   } else {
@@ -6279,6 +6277,7 @@ void mxfValidate(mxfFile infile)
     } else if (isFill(k)) {
       skipV(len, infile);
       markFill(keyPosition, position(infile));
+      checkFill(k, keyPosition, previousKey);
     } else {
       skipV(len, infile);
     }
