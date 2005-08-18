@@ -6488,9 +6488,15 @@ void printSummary(void);
 
 void printSummary(void)
 {
-  if ((errors != 0) || (warnings != 0)) {
+  if ((errors != 0) && (warnings != 0)) {
     message("Encountered %"MXFPRIu32" errors and %"MXFPRIu32" warnings.\n",
              errors,
+             warnings);
+  } else if (errors != 0) {
+    message("Encountered %"MXFPRIu32" errors.\n",
+             errors);
+  } else if (warnings != 0) {
+    message("Encountered %"MXFPRIu32" warnings.\n",
              warnings);
   }
 }
