@@ -1916,37 +1916,25 @@ void printLocalKL(mxfLocalKey& k, mxfUInt16& l, mxfKey& enclosing)
           l);
 }
 
-void printLocalV(mxfLocalKey& identifier,
-                 mxfUInt16& length,
-                 mxfLength& len,
-                 mxfLength& setLength,
+void printLocalV(mxfUInt16& length,
+                 mxfLength& remainder,
                  FILE* infile);
 
-void printLocalV(mxfLocalKey& identifier,
-                 mxfUInt16& length,
-                 mxfLength& len,
-                 mxfLength& setLength,
+void printLocalV(mxfUInt16& length,
+                 mxfLength& remainder,
                  FILE* infile)
 {
   mxfLength vLength;
-  if ((setLength + length) < len) {
+  if (length < remainder) {
     vLength = length;
   } else {
-    vLength = len - setLength;
+    vLength = remainder;
   }
   printV(vLength, false, 0, infile);
-  setLength = setLength + length;
-  if (setLength > len) {
-      mxfLength remain = length - (setLength - len);
-      fprintf(stderr,
-              "%s : Error : Wrong size (k = ",
-              programName);
-      printMxfLocalKey(identifier, stderr);
-      fprintf(stderr,") size = ");
-      printField(stderr, length);
-      fprintf(stderr, ", only ");
-      printField(stderr, remain);
-      fprintf(stderr, " bytes remain in this value.\n");
+  remainder = remainder - vLength;
+  if (vLength < length) {
+    fprintf(stderr, "%s : Error : Local set KLV parse error", programName);
+    fprintf(stderr, " (set exhausted printing value).\n");
   }
 }
 
@@ -1958,8 +1946,8 @@ void checkLocalKey(mxfLocalKey& k)
     fprintf(stderr,
             "%s : Error : Illegal local key (",
             programName);
-    printMxfLocalKey(k, stdout);
-    fprintf(stdout, ").\n");
+    printMxfLocalKey(k, stderr);
+    fprintf(stderr, ").\n");
   }
 }
 
@@ -2102,16 +2090,25 @@ void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile);
 void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
 {
   printKL(k, len);
-  mxfLength setLength = 0;
-  while (setLength < len) {
+  mxfLength remainder = len;
+  while (remainder > 0) {
+    // Key (local identifier)
     mxfLocalKey identifier;
-    readMxfLocalKey(identifier, infile);
+    printLocalKey(identifier, remainder, infile);
+    if (remainder == 0) {
+      break;
+    }
+
+    // Length
     mxfUInt16 length;
-    readMxfUInt16(length, infile);
-    setLength = setLength + 4;
+    printLocalLength(length, remainder, infile);
+    if (remainder == 0) {
+      break;
+    }
+
+    // Value
     printLocalKL(identifier, length, k);
-    checkLocalKey(identifier);
-    printLocalV(identifier, length, len, setLength, infile);
+    printLocalV(length, remainder, infile);
   }
 }
 
@@ -2179,34 +2176,34 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
 {
   printKL(k, len);
 
-  mxfLength setLength = 0;
-  while (setLength < len) {
+  mxfLength remainder = len;
+  while (remainder > 0) {
     mxfLocalKey identifier;
     readMxfLocalKey(identifier, infile);
     mxfUInt16 length;
     readMxfUInt16(length, infile);
-    setLength = setLength + 4;
+    remainder = remainder - 4;
 
     if (identifier == 0x3c0a) {
       // InstanceUID
       dumpMxfKey("InstanceUID", infile);
-      setLength = setLength + 16;
+      remainder = remainder - 16;
     } else if (identifier == 0x3f05) {
       // Edit Unit Byte Count
       dumpMxfUInt32("Edit Unit Byte Count", infile);
-      setLength = setLength + 4;
+      remainder = remainder - 4;
     } else if (identifier == 0x3f06) {
       // IndexSID
       dumpMxfUInt32("IndexSID", infile);
-      setLength = setLength + 4;
+      remainder = remainder - 4;
     } else if (identifier == 0x3f07) {
       // BodySID
       dumpMxfUInt32("BodySID", infile);
-      setLength = setLength + 4;
+      remainder = remainder - 4;
     } else if (identifier == 0x3f08) {
       // Slice Count
       dumpMxfUInt08("SliceCount", infile);
-      setLength = setLength + 1;
+      remainder = remainder - 1;
     } else if (identifier == 0x3f0a) {
       // Entry array
       mxfUInt32 entryCount;
@@ -2214,7 +2211,7 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
       mxfUInt32 entrySize;
       readMxfUInt32(entrySize, infile);
       mxfUInt32 sliceCount = (entrySize - 11) / 4;
-      setLength = setLength + 8;
+      remainder = remainder - 8;
 
       fprintf(stdout, "     IndexEntryArray = ");
       fprintf(stdout, "[ Number of entries = ");
@@ -2264,7 +2261,7 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
           }
           count = count + 1;
         }
-        setLength = setLength + 11 + (4 * sliceCount);
+        remainder = remainder - (11 + (4 * sliceCount));
       }
       if (cFlag && (count < entryCount)) {
         fprintf(stdout, "[ Index table truncated from ");
@@ -2276,19 +2273,19 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
     } else if (identifier == 0x3f0b) {
       // Index Edit Rate
       dumpMxfRational("Index Edit Rate", infile);
-      setLength = setLength + 8;
+      remainder = remainder - 8;
     } else if (identifier == 0x3f0c) {
       // Index Start Position
       dumpMxfUInt64("Index Start Position", infile);
-      setLength = setLength + 8;
+      remainder = remainder - 8;
     } else if (identifier == 0x3f0d) {
       // Index Duration
       dumpMxfUInt64("Index Duration", infile);
-      setLength = setLength + 8;
+      remainder = remainder - 8;
     } else {
       checkLocalKey(identifier);
       printLocalKL(identifier, length, k);
-      printLocalV(identifier, length, len, setLength, infile);
+      printLocalV(length, remainder, infile);
     }
   }
 }
