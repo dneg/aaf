@@ -835,20 +835,22 @@ mxfUInt64 size(mxfFile infile)
 }
 #endif
 
-bool findPattern(mxfUInt64& position,
+bool findPattern(mxfUInt64 currentPosition,
+                 mxfUInt64& patternPosition,
                  mxfByte* pattern,
                  size_t patternSize,
                  mxfUInt32 limit,
                  mxfFile infile);
 
-bool findPattern(mxfUInt64& position,
+bool findPattern(mxfUInt64 currentPosition,
+                 mxfUInt64& patternPosition,
                  mxfByte* pattern,
                  size_t patternSize,
                  mxfUInt32 limit,
                  mxfFile infile)
 {
   bool found = false;
-  mxfUInt64 pos = 0;
+  mxfUInt64 pos = currentPosition;
   int c = 0;
   size_t i = 0;
   do {
@@ -862,7 +864,7 @@ bool findPattern(mxfUInt64& position,
         if (i < patternSize - 1) {
           i = i + 1;
         } else {
-          position = pos;
+          patternPosition = pos;
           found = true;
         }
       }
@@ -878,7 +880,10 @@ bool findHeader(mxfFile infile, mxfUInt64& headerPosition);
 
 bool findHeader(mxfFile infile, mxfUInt64& headerPosition)
 {
-  return findPattern(headerPosition,
+  mxfUInt64 startPosition = 0;
+  setPosition(infile, startPosition);
+  return findPattern(startPosition,
+                     headerPosition,
                      headerPrefix,
                      sizeof(headerPrefix),
                      runInLimit,
