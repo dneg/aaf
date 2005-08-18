@@ -4015,9 +4015,12 @@ void checkPartitionLength(mxfUInt64& length)
       mxfError(currentKey,
                keyPosition,
                "Invalid partition length -"
-               " %"MXFPRIu64" != %"MXFPRIu64" + (N * %"MXFPRIu64")",
+               " space for essence container labels "
+               "(%"MXFPRIu64" - %"MXFPRIu64" = %"MXFPRIu64")"
+               " not a multiple of %"MXFPRIu64" bytes.",
                length,
                partitionFixedSize,
+               labelBytes,
                entrySize);
     }
   }
