@@ -3207,6 +3207,17 @@ void checkOperationalPattern(mxfPartition* p)
   }
 }
 
+void checkEssenceContainers(mxfPartition* p);
+
+void checkEssenceContainers(mxfPartition* p)
+{
+  checkElementSize(sizeof(mxfKey), p->_elementSize, p->_elementCount);
+  checkElementCount(p->_elementCount,
+                    sizeof(mxfKey),
+                    p->_length,
+                    partitionFixedSize);
+}
+
 void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer);
 
 void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
@@ -3239,11 +3250,7 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
   // Operational Pattern
   checkOperationalPattern(p);
   // EssenceContainers
-  checkElementSize(sizeof(mxfKey), p->_elementSize, p->_elementCount);
-  checkElementCount(p->_elementCount,
-                    sizeof(mxfKey),
-                    p->_length,
-                    partitionFixedSize);
+  checkEssenceContainers(p);
 }
 
 void checkPartitions(PartitionList& partitions, mxfUInt64 footer);
