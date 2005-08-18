@@ -2323,6 +2323,14 @@ void printRunIn(mxfUInt64& headerPosition,
                 mxfUInt32 limit,
                 mxfFile infile)
 {
+  setPosition(infile, 0);
+  fprintf(stdout, "\n");
+  fprintf(stdout, "[ %"MXFPRIu64" bytes of run-in ]\n", headerPosition);
+  if (lFlag) {
+    printV(headerPosition, limitBytes, limit, infile);
+  } else {
+    printV(headerPosition, false, 64, infile);
+  }
 }
 
 char* itemTypeName(mxfByte itemTypeId);
