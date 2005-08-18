@@ -346,6 +346,9 @@ void printPrivateLabel(mxfKey& k, FILE* outfile);
 
 const char* keyName(const mxfKey& key);
 
+void checkFill(const mxfKey& key,
+               mxfUInt64 keyPosition,
+               const mxfKey& previousKey);
 void printFill(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void skipV(mxfLength length, mxfFile infile);
@@ -4603,10 +4606,6 @@ void checkOperationalPattern(mxfPartition* p)
              "Invalid operational pattern");
   }
 }
-
-void checkFill(const mxfKey& key,
-               mxfUInt64 keyPosition,
-               const mxfKey& previousKey);
 
 void checkFill(const mxfKey& key,
                mxfUInt64 keyPosition,
