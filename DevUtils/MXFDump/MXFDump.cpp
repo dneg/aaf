@@ -3617,6 +3617,24 @@ bool hasEssence(mxfPartition* p)
   return result;
 }
 
+Segment* findIndexSegment(mxfPartition* p);
+
+Segment* findIndexSegment(mxfPartition* p)
+{
+  Segment* result = 0;
+  if (!p->_segments.empty()) {
+    SegmentList::const_iterator it;
+    for (it = p->_segments.begin(); it != p->_segments.end(); it++) {
+      Segment* seg = *it;
+      if (isIndexSegment(seg->_label)) {
+        result = seg;
+        break;
+      }
+    }
+  }
+  return result;
+}
+
 void checkField(mxfUInt64 expected,
                 mxfUInt64 actual,
                 const mxfKey& key,
