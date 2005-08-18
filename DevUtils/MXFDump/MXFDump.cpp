@@ -518,7 +518,7 @@ void vmxfError(char* format, va_list ap)
   errors = errors + 1;
   if (errors > 100) {
     error("More than 100 errors encountered - giving up.\n");
-    exit(EXIT_FAILURE);
+    exit(mxfExitStatus(EXIT_FAILURE));
   }
 }
 
@@ -6612,14 +6612,5 @@ int main(int argumentCount, char* argumentVector[])
   }
   close(infile);
 
-  int result;
-  if (errors != 0) {
-    result = 2; // Errors, possibly also warnings
-  } else if (warnings != 0) {
-    result = 1; // Warnings only
-  } else {
-    result = 0; // No errors or warnings
-  }
-
-  return result;
+  return mxfExitStatus(EXIT_SUCCESS);
 }
