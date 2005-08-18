@@ -1458,9 +1458,8 @@ void readString(mxfUInt16* buffer, mxfUInt32 bufferSize, mxfFile infile)
 
 void dumpMxfString(const char* label, mxfFile infile)
 {
-  mxfUInt16 length; // in bytes, including terminator
-  readMxfUInt16(length, infile);
-  mxfUInt32 characterCount = length / sizeof(mxfUInt16);
+  mxfUInt16 characterCount; // including terminator
+  readMxfUInt16(characterCount, infile);
 
   mxfUInt16* buffer = new mxfUInt16[characterCount];
   readString(buffer, characterCount, infile);
@@ -1473,9 +1472,8 @@ void dumpMxfString(const char* label, mxfFile infile)
 
 void dumpOptionalMxfString(const char* label, mxfFile infile)
 {
-  mxfUInt16 length; // in bytes, including terminator
-  readMxfUInt16(length, infile);
-  mxfUInt32 characterCount = length / sizeof(mxfUInt16);
+  mxfUInt16 characterCount; // including terminator
+  readMxfUInt16(characterCount, infile);
 
   if (characterCount > 0) {
     mxfUInt16* buffer = new mxfUInt16[characterCount];
