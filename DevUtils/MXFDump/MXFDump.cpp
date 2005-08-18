@@ -694,6 +694,19 @@ void checkLocalKey(mxfLocalKey& k)
   }
 }
 
+bool dumpFiller = false;
+
+void printFiller(mxfLength& len, FILE* infile);
+
+void printFiller(mxfLength& len, FILE* infile)
+{
+  if (dumpFiller) {
+    printV(len, false, 0, infile);
+  } else {
+    skipV(len, infile);
+  }
+}
+
 void dumpLocalSet(mxfLength& len, FILE* infile);
 
 void dumpLocalSet(mxfLength& len, FILE* infile)
@@ -760,7 +773,6 @@ bool isEssenceElement(mxfKey& k)
   return result;
 }
 
-bool dumpFiller = false;
 bool lFlag;
 mxfUInt32 limit = 0;
 
@@ -789,8 +801,8 @@ void mxfDumpFile(char* fileName)
       dumpLocalSet(len, infile);
     } else if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
       dumpPrimer(infile);
-    } else if ((memcmp(&Filler, &k, sizeof(mxfKey)) == 0) && !dumpFiller) {
-      skipV(len, infile);
+    } else if (memcmp(&Filler, &k, sizeof(mxfKey)) == 0) {
+      printFiller(len, infile);
     } else if (isEssenceElement(k)) {
       printEssence(k, len, lFlag, limit, infile);
     } else {
