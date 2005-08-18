@@ -2703,6 +2703,19 @@ void checkPartitions(PartitionList& partitions);
 
 void checkPartitions(PartitionList& partitions)
 {
+  PartitionList::const_iterator it;
+  for (it = partitions.begin(); it != partitions.end(); ++it) {
+    Partition* p = *it;
+    if (p->_thisPartition != p->_address) {
+      error("Incorrect value for ThisPartition"
+            " - expected 0x%"MXFPRIx64", found 0x%"MXFPRIx64""
+            " (following key at offset 0x%"MXFPRIx64").\n",
+            p->_address,
+            p->_thisPartition,
+            p->_address);
+      errors = errors + 1;
+    }
+  }
 #if 0
   printPartitions(partitions);
 #endif
@@ -2828,14 +2841,7 @@ void printPartition(mxfKey& k, mxfLength& len, mxfFile infile)
   dumpMxfUInt16("Major Version", infile);
   dumpMxfUInt16("Minor Version", infile);
   dumpMxfUInt32("KAGSize", infile);
-  mxfUInt64 thisPartition;
-  readMxfUInt64(thisPartition, infile);
-  printMxfUInt64(stdout, "ThisPartition", thisPartition);
-  if (thisPartition != keyPosition) {
-    error("Incorrect value for ThisPartition.\n");
-    printMxfUInt64(stderr, "Expected", keyPosition);
-    errors = errors + 1;
-  }
+  dumpMxfUInt64("ThisPartition", infile);
   dumpMxfUInt64("PreviousPartition", infile);
   dumpMxfUInt64("FooterPartition", infile);
   dumpMxfUInt64("HeaderByteCount", infile);
