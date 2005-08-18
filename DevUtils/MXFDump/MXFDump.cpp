@@ -688,7 +688,7 @@ mxfUInt08 hostByteOrder(void)
 
 #define MXF_DEFINE_PACK_KEY(n, k)     const mxfKey n = k;
 #define MXF_DEFINE_SET_KEY(n, k)      const mxfKey n = k;
-#define MXF_DEFINE_SEGEMENT_KEY(n, k) const mxfKey n = k;
+#define MXF_DEFINE_SEGMENT_KEY(n, k)  const mxfKey n = k;
 #define MXF_DEFINE_KEY(n, k)          const mxfKey n = k;
 
 #include "MXFMetaDictionary.h"
@@ -697,7 +697,7 @@ mxfUInt08 hostByteOrder(void)
 
 #define MXF_DEFINE_PACK_KEY(n, k)     {#n, &n},
 #define MXF_DEFINE_SET_KEY(n, k)      {#n, &n},
-#define MXF_DEFINE_SEGEMENT_KEY(n, k) {#n, &n},
+#define MXF_DEFINE_SEGMENT_KEY(n, k)  {#n, &n},
 #define MXF_DEFINE_KEY(n, k)          {#n, &n},
 
 struct {
