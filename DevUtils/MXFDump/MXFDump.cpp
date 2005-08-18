@@ -3173,13 +3173,13 @@ void validateLocalKey(mxfLocalKey& identifier,
   }
 }
 
-void printLocalLength(mxfUInt16& length,
-                      mxfLength& remainder,
-                      mxfFile infile);
+void validateLocalLength(mxfUInt16& length,
+                         mxfLength& remainder,
+                         mxfFile infile);
 
-void printLocalLength(mxfUInt16& length,
-                      mxfLength& remainder,
-                      mxfFile infile)
+void validateLocalLength(mxfUInt16& length,
+                         mxfLength& remainder,
+                         mxfFile infile)
 {
   if (remainder > 2) {
     readMxfUInt16(length, infile);
@@ -3209,7 +3209,7 @@ void printLocalSet(mxfKey& k, mxfLength& len, mxfFile infile)
 
     // Length
     mxfUInt16 length;
-    printLocalLength(length, remainder, infile);
+    validateLocalLength(length, remainder, infile);
     if (remainder == 0) {
       break;
     }
