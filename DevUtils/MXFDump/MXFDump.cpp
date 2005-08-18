@@ -77,6 +77,11 @@ typedef struct aafUIDTag {
   mxfUInt08 Data4[8];
 } aafUID;
 
+typedef struct mxfRationalTag {
+  mxfUInt32 numerator;
+  mxfUInt32 denominator;
+} mxfRational;
+
 const char* programName;
 
 typedef enum ModeTag {
@@ -94,6 +99,7 @@ void readMxfUInt08(mxfByte& b, FILE* f);
 void readMxfUInt16(mxfUInt16& i, FILE* f);
 void readMxfUInt32(mxfUInt32& i, FILE* f);
 void readMxfUInt64(mxfUInt64& i, FILE* f);
+void readMxfRational(mxfRational& r, FILE* f);
 void readMxfKey(mxfKey& k, FILE* f);
 bool readOuterMxfKey(mxfKey& k, FILE* f);
 void readBERLength(mxfUInt64& i, FILE* f);
@@ -124,6 +130,7 @@ void dumpMxfUInt08(const char* label, FILE* infile);
 void dumpMxfUInt16(const char* label, FILE* infile);
 void dumpMxfUInt32(const char* label, FILE* infile);
 void dumpMxfUInt64(const char* label, FILE* infile);
+void dumpMxfRational(const char* label, FILE* infile);
 void dumpMxfKey(const char* label, FILE* infile);
 void dumpMxfOperationalPattern(const char* label, FILE* infile);
 void printOperationalPattern(mxfKey& k, FILE* outfile);
@@ -176,6 +183,12 @@ void readMxfUInt64(mxfUInt64& i, FILE* f)
   if (reorder()) {
     reorder(i);
   }
+}
+
+void readMxfRational(mxfRational& r, FILE* f)
+{
+  readMxfUInt32(r.numerator, f);
+  readMxfUInt32(r.denominator, f);
 }
 
 void readMxfKey(mxfKey& k, FILE* f)
@@ -477,6 +490,19 @@ void dumpMxfUInt64(const char* label, FILE* infile)
   readMxfUInt64(i, infile);
   fprintf(stdout, "%20s = ", label);
   printHexField(stdout, i);
+  fprintf(stdout, "\n");
+}
+
+void dumpMxfRational(const char* label, FILE* infile)
+{
+  mxfRational r;
+  readMxfRational(r, infile);
+  fprintf(stdout, "%20s = ", label);
+  fprintf(stdout, "( ");
+  printField(stdout, r.numerator);
+  fprintf(stdout, " / ");
+  printField(stdout, r.denominator);
+  fprintf(stdout, " )");
   fprintf(stdout, "\n");
 }
 
@@ -1432,7 +1458,7 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
       }
     } else if (identifier == 0x3f0b) {
       // Index Edit Rate
-      dumpMxfUInt64("Index Edit Rate", infile); // rational
+      dumpMxfRational("Index Edit Rate", infile);
       setLength = setLength + 8;
     } else if (identifier == 0x3f0c) {
       // Index Start Position
