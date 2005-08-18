@@ -4236,13 +4236,7 @@ void printIndexSegment(mxfIndexSegment* index)
 
   // Index Edit Rate
   if (index->_hasIndexEditRate) {
-    fprintf(stdout, "%20s = ", "Index Edit Rate");
-    fprintf(stdout, "( ");
-    printDecField(stdout, index->_indexEditRate.numerator);
-    fprintf(stdout, " / ");
-    printDecField(stdout, index->_indexEditRate.denominator);
-    fprintf(stdout, " )");
-    fprintf(stdout, "\n");
+    printMxfRational(stdout, "Index Edit Rate", index->_indexEditRate);
   }
 
   // Index Start Position
