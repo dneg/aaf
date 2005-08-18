@@ -19,12 +19,10 @@ key headerKey  = {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01,
 
 //
 
-char* programName;
-
 void usage(void)
 {
-  cerr << programName << ": Usage : "
-       << programName << " <file>"
+  cerr << programName() << ": Usage : "
+       << programName() << " <file>"
                       << endl;
 }
 
@@ -51,7 +49,7 @@ void dumpFile(char* fileName)
 //
     fclose(infile);
   } else {
-    cerr << programName <<": Error: "
+    cerr << programName() <<": Error: "
          << "File \"" << fileName << "\" not found."
          << endl;
     exit(EXIT_FAILURE);
@@ -61,21 +59,19 @@ void dumpFile(char* fileName)
 int main(int argumentCount, char* argumentVector[])
 {
   if (sizeof(length) != 4) {
-    cerr << programName
+    cerr << programName()
       << ": Error : Wrong sizeof(length)."
       << endl;
   }
     if (sizeof(key) != 16) {
-    cerr << programName
+    cerr << programName()
       << ": Error : Wrong sizeof(key)."
       << endl;
   }
-  programName = baseName(argumentVector[0]);
-  
   int fileCount = argumentCount - 1;
   
   if (fileCount != 1) {
-    cerr << programName
+    cerr << programName()
       << ": Error : Wrong number of arguments ("
       << fileCount << ")."
       << endl;
