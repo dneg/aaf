@@ -149,6 +149,10 @@ void setDumpFile(char* fileName);
 void mxfDumpFile(char* fileName);
 void aafDumpFile(char* fileName);
 
+bool isFill(mxfKey& k);
+
+void printFill(mxfKey& k, mxfLength& len, FILE* infile);
+
 mxfUInt64 position;
 
 void readMxfUInt08(mxfByte& b, FILE* f)
@@ -1399,8 +1403,12 @@ void printEssenceFrames(mxfKey& k,
     mxfLength len;
     int lengthLen = readMxfLength(len, f);
     total = total + lengthLen;
-    printKL(k, len);
-    printV(len, lFlag, limit, f);
+    if (isFill(k)) {
+      printFill(k, len, f);
+    } else {
+      printKL(k, len);
+      printV(len, lFlag, limit, f);
+    }
     total = total + len;
   }
 }
@@ -1492,8 +1500,6 @@ void checkLocalKey(mxfLocalKey& k)
 
 bool dumpFill = false;
 
-bool isFill(mxfKey& k);
-
 bool isFill(mxfKey& k)
 {
   bool result;
@@ -1505,8 +1511,6 @@ bool isFill(mxfKey& k)
   }
   return result;
 }
-
-void printFill(mxfKey& k, mxfLength& len, FILE* infile);
 
 void printFill(mxfKey& k, mxfLength& len, FILE* infile)
 {
