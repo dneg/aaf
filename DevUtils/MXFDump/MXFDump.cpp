@@ -1411,9 +1411,7 @@ void mxfDumpFile(char* fileName)
     mxfLength len;
     readMxfLength(len, infile);
 
-    if (isLocalSet(k)) {
-      printLocalSet(k, len, infile);
-    } else if (memcmp(&OpenHeaderPartition, &k, sizeof(mxfKey)) == 0) {
+    if (memcmp(&OpenHeaderPartition, &k, sizeof(mxfKey)) == 0) {
       printHeaderPartition(k, len, infile);
     } else if (memcmp(&ClosedHeaderPartition, &k, sizeof(mxfKey)) == 0) {
       printHeaderPartition(k, len, infile);
@@ -1429,6 +1427,8 @@ void mxfDumpFile(char* fileName)
       printEssence(k, len, lFlag, limit, infile);
     } else if (memcmp(&ClosedFooterPartition, &k, sizeof(mxfKey)) == 0) {
       printFooterPartition(k, len, infile);
+    } else if (isLocalSet(k)) {
+      printLocalSet(k, len, infile);
     } else {
       printKL(k, len);
       printV(len, false, 0, infile);
