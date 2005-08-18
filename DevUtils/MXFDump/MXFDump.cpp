@@ -226,6 +226,7 @@ void skipV(mxfLength& length, FILE* f);
 
 bool verbose = false;
 bool debug = false;
+mxfUInt32 errors = 0;
 
 mxfUInt64 position;      // current position in the file
 mxfUInt64 keyPosition;   // position/address of current key
@@ -406,6 +407,7 @@ int readMxfLength(mxfLength& l, FILE* f)
   int bytesRead = readBERLength(x, f);
   if (bytesRead > 9) {
     fprintf(stderr, "%s : Error : Length overflow.\n", programName);
+    errors = errors + 1;
   }
   l = x;
   return bytesRead;
@@ -3005,12 +3007,22 @@ void aafDumpFile(char* fileName)
 
 void klvValidate(FILE* infile);
 
-void klvValidate(FILE* /* infile */)
+void klvValidate(FILE* infile)
 {
-  if (verbose) {
-    fprintf(stderr,
-            "%s : local set validation - not yet implemented.\n",
-            programName);
+  mxfKey k;
+  while (readOuterMxfKey(k, infile)) {
+    mxfLength len;
+    readMxfLength(len, infile);
+    skipV(len, infile);
+  }
+
+  fprintf(stderr,
+          "%s : KLV validation       - ",
+          programName);
+  if (errors == 0) {
+    fprintf(stderr, "passed.\n");
+  } else {
+    fprintf(stderr, "failed.\n");
   }
 }
 
@@ -3020,7 +3032,7 @@ void setValidate(FILE* /* infile */)
 {
   if (verbose) {
     fprintf(stderr,
-            "%s : KLV validation       - not yet implemented.\n",
+            "%s : local set validation - not yet implemented.\n",
             programName);
   }
 }
