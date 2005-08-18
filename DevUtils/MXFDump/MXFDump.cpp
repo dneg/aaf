@@ -1319,7 +1319,7 @@ bool lookupAAFKey(mxfKey& k, size_t& index)
 
 bool aafKeysAsSets = true;
 bool bogusKeysAsSets = true;
-bool unknownKeysAsSets = false;
+bool darkKeysAsSets = false;
 
 bool findAAFKey(mxfKey& k, size_t& index, char** flag);
 
@@ -3762,7 +3762,7 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
     if (!isDark(k, mode) || dumpDark) {
       if (isLocalSet(k)) {
         printLocalSet(k, len, infile);
-      } else if (unknownKeysAsSets) {
+      } else if (darkKeysAsSets) {
         printLocalSet(k, len, infile);
       } else {
         printV(len, false, 0, infile);
@@ -4031,7 +4031,7 @@ void printSummary(void)
 // -n --no-symbolic
 // -h --help
 // -d --debug
-// -u --unknown-as-sets
+// -u --show-dark-as-sets
 //    --klv-validate
 //    --set-validate
 //    --mxf-validate
@@ -4132,8 +4132,9 @@ int main(int argumentCount, char* argumentVector[])
                (strcmp(p, "-n") == 0)) {
       symbolic = false;
     } else if ((strcmp(p, "-u") == 0) ||
-               (strcmp(p, "--unknown-as-sets") == 0)) {
-      unknownKeysAsSets = true;
+               (strcmp(p, "--show-dark-as-sets") == 0)) {
+      darkKeysAsSets = true;
+      dumpDark = true;
     } else if ((strcmp(p, "--help") == 0) ||
                (strcmp(p, "-h") == 0)) {
       hFlag = true;
