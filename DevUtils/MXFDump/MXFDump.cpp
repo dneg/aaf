@@ -976,6 +976,10 @@ void printCommonOptions(void);
 
 void printCommonOptions(void)
 {
+  fprintf(stderr, "--key-addresses       = ");
+  fprintf(stderr, "print key addresses ");
+  fprintf(stderr, "- always absolute (-j)\n");
+
   fprintf(stderr, "--relative            = ");
   fprintf(stderr, "relative addresses ");
   fprintf(stderr, "- value start = 0 [default] (-r)\n");
@@ -1326,6 +1330,8 @@ bool lookupKey(mxfKey& k, size_t& index)
   return result;
 }
 
+bool keyAddresses = false;
+
 void printMxfKeySymbol(mxfKey& k);
 
 void printMxfKeySymbol(mxfKey& k)
@@ -1337,13 +1343,15 @@ void printMxfKeySymbol(mxfKey& k)
   } else {
     fprintf(stdout, "Dark");
   }
-  fprintf(stdout, " ( ");
-  if (addressBase == 10) {
-    printField(stdout, keyPosition);
-  } else {
-    printHexField(stdout, keyPosition);
+  if (keyAddresses) {
+    fprintf(stdout, " ( ");
+    if (addressBase == 10) {
+      printField(stdout, keyPosition);
+    } else {
+      printHexField(stdout, keyPosition);
+    }
+    fprintf(stdout, " )");
   }
-  fprintf(stdout, " )");
   fprintf(stdout, "\n");
 }
 
@@ -2495,6 +2503,7 @@ int getIntegerOption(int currentArgument,
 // -c --limit-entries
 // -p --frames
 // -i --limit-frames
+// -j --key-addresses
 // -r --relative
 // -b --absolute
 // -t --decimal
@@ -2504,6 +2513,8 @@ int getIntegerOption(int currentArgument,
 // -h --help
 // -d --debug
 // -u --unknown-as-sets 
+
+// Free letters - goqz
 
 bool hFlag = false;
 
@@ -2567,6 +2578,9 @@ int main(int argumentCount, char* argumentVector[])
       maxFrames = getIntegerOption(i, argumentCount, argumentVector, "count");
       iFlag = true;
       i = i + 1;      
+    } else if ((strcmp(p, "--key-addresses") == 0) ||
+               (strcmp(p, "-j") == 0)) {
+      keyAddresses = true;
     } else if ((strcmp(p, "--relative") == 0) ||
                (strcmp(p, "-r") == 0)) {
       relative = true;
