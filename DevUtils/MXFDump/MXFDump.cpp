@@ -3660,10 +3660,12 @@ void printRandomIndex(RandomIndex& rip);
 
 void printRandomIndex(RandomIndex& rip)
 {
+  fprintf(stderr, "Random index\n");
+  fprintf(stderr, "SID      : Address\n");
   RandomIndex::const_iterator it;
   for (it = rip.begin(); it != rip.end(); ++it) {
     mxfRIPEntry e = *it;
-    fprintf(stderr, "%"MXFPRIx32" : %"MXFPRIx64"\n", e._sid, e._offset);
+    fprintf(stderr, "%08"MXFPRIx32" : %016"MXFPRIx64"\n", e._sid, e._offset);
   }
 }
 
