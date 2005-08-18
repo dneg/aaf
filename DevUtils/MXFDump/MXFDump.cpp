@@ -4849,6 +4849,7 @@ void mxfDumpFile(mxfFile infile)
     len = checkLength(len, fileSize, position(infile));
     mxfDumpKLV(k, len, infile);
   }
+  printDarkItems();
 }
 
 void aafDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile);
@@ -4876,6 +4877,7 @@ void aafDumpFile(mxfFile infile)
     len = checkLength(len, fileSize, position(infile));
     aafDumpKLV(k, len, infile);
   }
+  printDarkItems();
 }
 
 void klvValidate(mxfFile infile);
