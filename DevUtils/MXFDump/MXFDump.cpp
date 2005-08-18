@@ -5621,7 +5621,18 @@ void printSystemMetadata(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void printSystemMetadata(mxfKey& /* k */, mxfLength& len, mxfFile infile)
 {
-  printV(len, false, 0, infile);
+  if (len == 57) {
+    dumpMxfUInt08("Bitmap", infile);
+    dumpMxfUInt08("Rate", infile);
+    dumpMxfUInt08("Type", infile);
+    dumpMxfUInt16("Channel Handle", infile);
+    dumpMxfUInt16("Continuity Count", infile);
+    dumpMxfLabel("Label", infile);
+    dumpMxfUInt08Array("Creation Date", 17, infile);
+    dumpMxfUInt08Array("User Date", 17, infile);
+  } else {
+    printV(len, false, 0, infile);
+  }
 }
 
 void printObjectDirectory(mxfKey& k, mxfLength& len, mxfFile infile);
