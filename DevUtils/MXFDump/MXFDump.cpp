@@ -3290,6 +3290,17 @@ void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
 #if 0
   printRandomIndex(rip);
 #endif
+  // Check that we have the correct number of partitions.
+  //
+  // NYI
+
+  // Check that the partitions in the random index are in the correct order.
+  //
+  // NYI
+
+  // Check that each entry in the random index corresponds to a
+  // partition in the file.
+  //
   RandomIndex::const_iterator rit;
   for (rit = rip.begin(); rit != rip.end(); ++rit) {
     bool found = false;
@@ -3309,6 +3320,10 @@ void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
                e._offset);
     }
   }
+
+  // Check that each partition in the file has an entry in the random index.
+  //
+  // NYI
 }
 
 mxfUInt64 checkFooterPosition(mxfUInt64 footer, mxfUInt64 keyPosition);
