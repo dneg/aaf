@@ -773,6 +773,41 @@ bool lookupAAFKey(mxfKey& k, size_t& index)
   return result;
 }
 
+bool aafKeysAsSets = true;
+bool bogusKeysAsSets = true;
+
+bool findAAFKey(mxfKey& k, size_t& index);
+
+bool findAAFKey(mxfKey& k, size_t& index)
+{
+  bool found = lookupAAFKey(k, index);
+  if (!found) {
+    if (aafKeysAsSets) {
+      // This could be an AUID/GUID that cannot be mapped to a SMPTE label.
+      // Force the mapping and try again.
+      mxfKey x;
+      memcpy(x, k, sizeof(x));
+      x[5] = 0x53;
+      found = lookupAAFKey(x, index);
+      if (!found) {
+        if (bogusKeysAsSets) {
+          // This could be a bogus key (Intel byte order GUID)
+          // Fix it up and try again.
+          aafUID a;
+          memcpy(&a, k, sizeof(a));
+          if (hostByteOrder() == 'B') {
+            reorder(a);
+          }
+          mxfKey b;
+          aafUIDToMxfKey(b, a);
+          bool found = lookupAAFKey(b, index);
+        }
+      }
+    }
+  }
+  return found;
+}
+
 const mxfLocalKey nullMxfLocalKey = 0x00;
 
 void checkSizes(void);
@@ -1210,9 +1245,6 @@ bool lookupKey(mxfKey& k, size_t& index)
   }
   return result;
 }
-
-bool aafKeysAsSets = true;
-bool bogusKeysAsSets = true;
 
 void printMxfKeySymbol(mxfKey& k, FILE* f);
 
