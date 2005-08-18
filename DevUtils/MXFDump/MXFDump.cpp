@@ -1,3 +1,12 @@
+// KLV/MXF file dumper.
+//
+// Tim Bingham - October 2002 - Tim_Bingham@avid.com
+
+// This program is deliberately constructed as one file with no dependencies
+// so that it can easily be ported to a new host. You'll be able to make some
+// progress understanding an MXF file even if all you have is this source and
+// a C++ compiler.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
