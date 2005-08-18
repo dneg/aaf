@@ -1799,15 +1799,19 @@ void printGeneralizedOperationalPattern(mxfKey& k, FILE* outfile)
 {
   mxfByte itemComplexity = k.octet12;
   if ((itemComplexity >= 1) && (itemComplexity <= 3)) {
+    char* number = 0;
     char* itemCplxName;
     switch (itemComplexity) {
     case 1:
+      number = "1";
       itemCplxName = "Single Item";
       break;
     case 2:
+      number = "2";
       itemCplxName = "Play-list Items";
       break;
     case 3:
+      number = "3";
       itemCplxName = "Edit Items";
       break;
     default:
@@ -1816,15 +1820,19 @@ void printGeneralizedOperationalPattern(mxfKey& k, FILE* outfile)
     }
 
     mxfByte packageComplexity = k.octet13;
+    char* letter = 0;
     char* packageCplxName;
     switch (packageComplexity) {
     case 1:
+      letter = "a";
       packageCplxName = "Single Package";
       break;
     case 2:
+      letter = "b";
       packageCplxName = "Ganged Packages";
       break;
     case 3:
+      letter = "c";
       packageCplxName = "Alternate Versions";
       break;
     default:
@@ -1832,7 +1840,12 @@ void printGeneralizedOperationalPattern(mxfKey& k, FILE* outfile)
      break;
     }
     // mxfByte qualifiers = k.octet14; // tjb not yet decoded
-    fprintf(outfile, "%s, %s", itemCplxName, packageCplxName);
+    if ((number != 0) && (letter != 0)) {
+      fprintf(outfile, "%s%s - %s, %s",
+              number, letter, itemCplxName, packageCplxName);
+    } else {
+      fprintf(outfile, "%s, %s", itemCplxName, packageCplxName);
+    }
   }
 }
 
