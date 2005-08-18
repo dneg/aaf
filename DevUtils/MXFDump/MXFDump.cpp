@@ -1230,7 +1230,7 @@ void printMxfLocalKeySymbol(mxfLocalKey& k, FILE* f)
     if (found) {
       fprintf(stdout, "%s\n", localKeyTable[i]._name);
     } else {
-      fprintf(stdout, "Unknown\n");
+      fprintf(stdout, "Dark\n");
     }
   } else {
     fprintf(stdout, "\n");
@@ -1269,7 +1269,7 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
       if (found) {
         fprintf(stdout, "%s%s\n", aafKeyTable[i]._name, flag);
       } else {
-        fprintf(stdout, "Unknown\n");
+        fprintf(stdout, "Dark\n");
       }
     }
   } else {
