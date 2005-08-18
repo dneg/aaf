@@ -1600,7 +1600,7 @@ void flush(void)
     if (addressBase == 10) {
       printDecField(stdout, address);
     } else {
-      printHexFieldPad(stdout, address);
+      printHexField(stdout, address);
     }
     fprintf(stdout, "  ");
     for (size_t x = 0; x < bufferStart; x++) {
