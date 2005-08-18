@@ -855,12 +855,11 @@ void printKLVOptions(void);
 void printKLVOptions(void)
 {
   fprintf(stderr, "  --limit <n>   = ");
-  fprintf(stderr, "dump only the first <n> bytes of each ");
-  fprintf(stderr, "value (-l)\n");
-  fprintf(stderr, "                  [default n == 0]\n");
+  fprintf(stderr, "truncate values ");
+  fprintf(stderr, "to <n> bytes [default n = 0] (-l)\n");
   fprintf(stderr, "  --no-limit    = ");
-  fprintf(stderr, "dump all the bytes of each ");
-  fprintf(stderr, "value (-e)\n");
+  fprintf(stderr, "do not truncate ");
+  fprintf(stderr, "values (-e)\n");
   fprintf(stderr, "  --relative    = ");
   fprintf(stderr, "print relative addresses ");
   fprintf(stderr, "- the start of the value == 0 (-r)\n");
@@ -873,18 +872,17 @@ void printCommonOptions(void);
 void printCommonOptions(void)
 {
   fprintf(stderr, "  --limit <n>   = ");
-  fprintf(stderr, "dump only the first <n> bytes of each ");
-  fprintf(stderr, "essence container (-l)\n");
-  fprintf(stderr, "                  [default n == 0]\n");
+  fprintf(stderr, "truncate essence containers ");
+  fprintf(stderr, "to <n> bytes [default n = 0] (-l)\n");
   fprintf(stderr, "  --no-limit    = ");
-  fprintf(stderr, "dump all the bytes of each ");
-  fprintf(stderr, "essence container (-e)\n");
+  fprintf(stderr, "do not truncate ");
+  fprintf(stderr, "essence containers (-e)\n");
   fprintf(stderr, "  --relative    = ");
   fprintf(stderr, "print relative addresses ");
-  fprintf(stderr, "- the start of the value == 0 (-r)\n");
+  fprintf(stderr, "- the start of the value = 0 (-r)\n");
   fprintf(stderr, "  --absolute    = ");
   fprintf(stderr, "print absolute addresses ");
-  fprintf(stderr, "- the start of the file == 0 (-b)\n");
+  fprintf(stderr, "- the start of the file = 0 (-b)\n");
   fprintf(stderr, "  --fill        = ");
   fprintf(stderr, "dump fill bytes (-f)\n");
 }
