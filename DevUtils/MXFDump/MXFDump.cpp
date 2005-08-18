@@ -1419,8 +1419,9 @@ void printEssenceFrameValue(mxfKey& k,
 {
   if ((frameCount < maxFrames) || !iFlag) {
     fprintf(stdout, "\n");
-    fprintf(stdout, "Frame ");
+    fprintf(stdout, "[ Frame = ");
     printField(stdout, frameCount);
+    fprintf(stdout, "]");
 
     printKL(k, length);
     printV(length, lFlag, limit, f);
