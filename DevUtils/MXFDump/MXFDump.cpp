@@ -799,6 +799,9 @@ struct {
   mxfUInt16 _key;
 } localKeyTable [] = {
 #include "AAFMetaDictionary.h"
+  // local keys not in AAFMetaDictionary.h
+  {"MetaDictionary",       0x0001},
+  {"Header",               0x0002},
   // All objects
   {"InstanceUID",          0x3c0a},
   // Preface
