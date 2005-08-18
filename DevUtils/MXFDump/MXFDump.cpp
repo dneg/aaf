@@ -2828,9 +2828,9 @@ void checkField(mxfUInt64 expected,
   }
 }
 
-void checkPartition(Partition* p, mxfUInt64 previous);
+void checkPartition(Partition* p, mxfUInt64 previous, mxfUInt64 footer);
 
-void checkPartition(Partition* p, mxfUInt64 previous)
+void checkPartition(Partition* p, mxfUInt64 previous, mxfUInt64 footer)
 {
   checkPartitionLength(p->_length);
   checkElementSize(sizeof(mxfKey), p->_elementSize, p->_elementCount);
@@ -2846,17 +2846,21 @@ void checkPartition(Partition* p, mxfUInt64 previous)
              p->_previousPartition,
              p->_address,
              "PreviousPartition");
+  checkField(footer,
+             p->_footerPartition,
+             p->_address,
+             "FooterPartition");
 }
 
-void checkPartitions(PartitionList& partitions);
+void checkPartitions(PartitionList& partitions, mxfUInt64 footer);
 
-void checkPartitions(PartitionList& partitions)
+void checkPartitions(PartitionList& partitions, mxfUInt64 footer)
 {
   mxfUInt64 previous = 0;
   PartitionList::const_iterator it;
   for (it = partitions.begin(); it != partitions.end(); ++it) {
     Partition* p = *it;
-    checkPartition(p, previous);
+    checkPartition(p, previous, footer);
     previous = p->_address;
   }
 #if 0
@@ -2925,6 +2929,21 @@ bool isPartition(mxfKey& key)
   } else if (memcmp(&ClosedCompleteBodyPartition, &key, sizeof(mxfKey)) == 0) {
     result = true;
   } else if (memcmp(&Footer, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&CompleteFooter, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+bool isFooter(mxfKey& key);
+
+bool isFooter(mxfKey& key)
+{
+  bool result;
+  if (memcmp(&Footer, &key, sizeof(mxfKey)) == 0) {
     result = true;
   } else if (memcmp(&CompleteFooter, &key, sizeof(mxfKey)) == 0) {
     result = true;
@@ -3622,6 +3641,7 @@ void mxfValidate(mxfFile infile);
 void mxfValidate(mxfFile infile)
 {
   PartitionList p;
+  mxfUInt64 footer = 0;
   mxfUInt64 fileSize = size(infile);
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
@@ -3634,13 +3654,22 @@ void mxfValidate(mxfFile infile)
       checkPrimerLength(length);
       skipV(len, infile);
     } else if (isPartition(k)) {
+      if (isFooter(k)) {
+        if (footer != 0) {
+          error("More than one footer"
+                " (following key at offset 0x%"MXFPRIx64").\n",
+                keyPosition);
+          errors = errors + 1;
+        }
+        footer = keyPosition;
+      }
       readPartition(p, length, infile);
     } else {
       skipV(len, infile);
     }
   }
 
-  checkPartitions(p);
+  checkPartitions(p, footer);
   destroyPartitions(p);
 
   fprintf(stderr,
