@@ -4372,6 +4372,9 @@ void checkDumpMode(const char* option);
 
 void checkDumpMode(const char* option)
 {
+  if (mode == unspecifiedMode) {
+    mode = mxfMode;
+  }
   if (!isDumpMode(mode)) {
     error("%s not valid with "
           "--aaf-validate, --mxf-validate, --set-validate, --klv-validate.\n",
