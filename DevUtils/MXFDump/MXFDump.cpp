@@ -2640,6 +2640,45 @@ void printObjectDirectory(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
+void printRandomIndex(mxfKey& k, mxfLength& len, FILE* infile);
+
+void printRandomIndex(mxfKey& k, mxfLength& len, FILE* infile)
+{
+  printKL(k, len);
+
+  mxfUInt64 entryCount = len / (sizeof(mxfUInt32) + sizeof(mxfUInt64));
+  fprintf(stdout, "  [ Number of entries = ");
+  printField(stdout, entryCount );
+  fprintf(stdout, " ]\n");
+  fprintf(stdout, "                           SID        Offset\n");
+  for (mxfUInt32 i = 0; i < entryCount; i++) {
+    mxfUInt32 sid;
+    mxfUInt64 offset;
+    readMxfUInt32(sid, infile);
+    readMxfUInt64(offset, infile);
+    fprintf(stdout, "    ");
+    printField(stdout, i);
+    fprintf(stdout, " :");
+    fprintf(stdout, "    ");
+    printField(stdout, sid);
+    fprintf(stdout, "    ");
+    printField(stdout, offset);
+    fprintf(stdout, "\n");
+  }
+  mxfUInt32 length;
+  readMxfUInt32(length, infile);
+  fprintf(stdout, "  [ Overall length = ");
+  printField(stdout, length);
+  fprintf(stdout, " ]\n");
+}
+
+void printV10RandomIndex(mxfKey& k, mxfLength& len, FILE* infile);
+
+void printV10RandomIndex(mxfKey& k, mxfLength& len, FILE* infile)
+{
+  printRandomIndex(k, len, infile);
+}
+
 void klvDumpFile(char* fileName)
 { 
   FILE* infile;
@@ -2773,6 +2812,10 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
     printV10IndexTable(k, len, infile);
   } else if (memcmp(&IndexTableSegment, &k, sizeof(mxfKey)) == 0) {
     printIndexTable(k, len, infile);
+  } else if (memcmp(&RandomIndexMetadataV10, &k, sizeof(mxfKey)) == 0) {
+    printV10RandomIndex(k, len, infile);
+  } else if (memcmp(&RandomIndexMetadata, &k, sizeof(mxfKey)) == 0) {
+    printRandomIndex(k, len, infile);
   } else if (isFill(k)) {
     printFill(k, len, infile);
   } else if (isEssenceElement(k)) {
