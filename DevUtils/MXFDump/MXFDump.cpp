@@ -4042,6 +4042,24 @@ typedef struct mxfIndexSegmentTag {
   bool _hasIndexEntryArray;
 } mxfIndexSegment;
 
+void initializeIndexSegment(mxfIndexSegment* index);
+
+void initializeIndexSegment(mxfIndexSegment* index)
+{
+}
+
+void readIndexSegment(mxfIndexSegment* index, mxfLength& len, mxfFile infile);
+
+void readIndexSegment(mxfIndexSegment* index, mxfLength& len, mxfFile infile)
+{
+}
+
+void printIndexSegment(mxfIndexSegment* index);
+
+void printIndexSegment(mxfIndexSegment* index)
+{
+}
+
 void dumpIndexEntryArray(mxfUInt32 entryCount,
                          mxfUInt32 entrySize,
                          mxfFile& infile);
