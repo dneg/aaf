@@ -150,7 +150,7 @@ void rawDumpFile(char* fileName)
       unsigned char ch;
       int c = fread(&ch, sizeof(unsigned char), 1, infile);
       if (c != 1) {
-        fprintf(stderr, "%s : Error : Failed to read key.\n", programName);
+        fprintf(stderr, "%s : Error : Failed to read value.\n", programName);
         exit(EXIT_FAILURE);
       }
     }
