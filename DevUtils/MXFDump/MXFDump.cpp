@@ -475,6 +475,11 @@ int main(int argumentCount, char* argumentVector[])
       fileArg = i;
     }
   }
+  if (debug) {
+    for (size_t i = 0; i < (sizeof(keyTable)/sizeof(keyTable[0])); i++) {
+      fprintf(stdout, "%4d : %s\n", i, keyTable[i]._name);
+    }
+  }
   if (mode == unspecifiedMode) {
     mode = mxfMode;
   }
@@ -505,11 +510,6 @@ int main(int argumentCount, char* argumentVector[])
       printField(stdout, limit);
       fprintf(stdout,
               " bytes of values.\n");
-    }
-  }
-  if (debug) {
-    for (size_t i = 0; i < (sizeof(keyTable)/sizeof(keyTable[0])); i++) {
-      fprintf(stdout, "%4d : %s\n", i, keyTable[i]._name);
     }
   }
   if (mode == mxfMode) {
