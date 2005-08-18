@@ -204,6 +204,10 @@ void mxfDumpFile(char* /* fileName */)
   exit(EXIT_FAILURE);
 }
 
+bool verbose = false;
+bool lFlag;
+mxfLength limit = 0;
+
 void rawDumpFile(char* fileName);
 
 void rawDumpFile(char* fileName)
@@ -229,8 +233,12 @@ void rawDumpFile(char* fileName)
     printMxfLength(len, stdout);
     fprintf(stdout, "\n");
 
+    mxfLength count = len;
+    if (lFlag) {
+      count = limit;
+    }
     init();
-    for (mxfLength i = 0; i < len; i++) {
+    for (mxfLength i = 0; i < count; i++) {
       mxfByte b;
       int c = fread(&b, sizeof(mxfByte), 1, infile);
       if (c != 1) {
@@ -240,13 +248,19 @@ void rawDumpFile(char* fileName)
       dumpByte(b);
     }
     flush();
+    if (count < len) {
+      for (mxfLength i = count; i < len; i++) {
+        mxfByte b;
+        int c = fread(&b, sizeof(mxfByte), 1, infile);
+        if (c != 1) {
+          fprintf(stderr, "%s : Error : Failed to read value.\n", programName);
+          exit(EXIT_FAILURE);
+        }
+      }
+    }
   }
   fclose(infile);
 }
-
-bool verbose = false;
-bool lFlag;
-mxfLength limit = 0;
 
 typedef enum ModeTag {
   unspecifiedMode,
