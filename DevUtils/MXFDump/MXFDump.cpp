@@ -46,31 +46,84 @@ typedef unsigned char          mxfUInt08;
 typedef unsigned short int     mxfUInt16;
 typedef unsigned int           mxfUInt32;
 typedef unsigned _int64        mxfUInt64;
+
+#define MXFPRIu08 "u"
+#define MXFPRIu16 "u"
+#define MXFPRIu32 "u"
+#define MXFPRIu64 "I64u"
+#define MXFPRIx08 "x"
+#define MXFPRIx16 "x"
+#define MXFPRIx32 "x"
+#define MXFPRIx64 "I64x"
 #elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
 typedef unsigned char          mxfUInt08;
 typedef unsigned short int     mxfUInt16;
 typedef unsigned long int      mxfUInt32;
 typedef unsigned long long int mxfUInt64;
+
+#define MXFPRIu08 "u"
+#define MXFPRIu16 "u"
+#define MXFPRIu32 "lu"
+#define MXFPRIu64 "llu"
+#define MXFPRIx08 "x"
+#define MXFPRIx16 "x"
+#define MXFPRIx32 "lx"
+#define MXFPRIx64 "llx"
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
 typedef unsigned char          mxfUInt08;
 typedef unsigned short int     mxfUInt16;
 typedef unsigned long int      mxfUInt32;
 typedef unsigned long long int mxfUInt64;
+
+#define MXFPRIu08 "u"
+#define MXFPRIu16 "u"
+#define MXFPRIu32 "lu"
+#define MXFPRIu64 "llu"
+#define MXFPRIx08 "x"
+#define MXFPRIx16 "x"
+#define MXFPRIx32 "lx"
+#define MXFPRIx64 "llx"
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
 typedef unsigned char          mxfUInt08;
 typedef unsigned short int     mxfUInt16;
 typedef unsigned long int      mxfUInt32;
 typedef unsigned long long int mxfUInt64;
+
+#define MXFPRIu08 "u"
+#define MXFPRIu16 "u"
+#define MXFPRIu32 "lu"
+#define MXFPRIu64 "llu"
+#define MXFPRIx16 "x"
+#define MXFPRIx32 "lx"
+#define MXFPRIx64 "llx"
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
 typedef unsigned char          mxfUInt08;
 typedef unsigned short int     mxfUInt16;
 typedef unsigned long int      mxfUInt32;
 typedef unsigned long long int mxfUInt64;
+
+#define MXFPRIu08 "u"
+#define MXFPRIu16 "u"
+#define MXFPRIu32 "lu"
+#define MXFPRIu64 "llu"
+#define MXFPRIx08 "x"
+#define MXFPRIx16 "x"
+#define MXFPRIx32 "lx"
+#define MXFPRIx64 "llx"
 #elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
 typedef unsigned char          mxfUInt08;
 typedef unsigned short int     mxfUInt16;
 typedef unsigned long int      mxfUInt32;
 typedef unsigned long long int mxfUInt64;
+
+#define MXFPRIu08 "u"
+#define MXFPRIu16 "u"
+#define MXFPRIu32 "lu"
+#define MXFPRIu64 "llu"
+#define MXFPRIx08 "x"
+#define MXFPRIx16 "x"
+#define MXFPRIx32 "lx"
+#define MXFPRIx64 "llx"
 #endif
 
 typedef mxfUInt64 mxfLength;
@@ -339,155 +392,47 @@ void reorder(aafUID& u)
 
 void printField(FILE* f, mxfUInt08& i)
 {
-#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
-  fprintf(f, "%5u", i);
-#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
-  fprintf(f, "%5u", i);
-#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
-  fprintf(f, "%05u", i);
-#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
-  fprintf(f, "%05u", i);
-#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
-  fprintf(f, "%05u", i);
-#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
-  fprintf(f, "%05u", i);
-#endif
+  fprintf(f, "%5"MXFPRIu08, i);
 }
 
 void printField(FILE* f, mxfUInt16& i)
 {
-#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
-  fprintf(f, "%10u", i);
-#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
-  fprintf(f, "%10u", i);
-#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
-  fprintf(f, "%10lu", i);
-#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
-  fprintf(f, "%10lu", i);
-#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
-  fprintf(f, "%10u", i);
-#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
-  fprintf(f, "%10u", i);
-#endif
+  fprintf(f, "%10"MXFPRIu16, i);
 }
 
 void printField(FILE* f, mxfUInt32& i)
 {
-#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
-  fprintf(f, "%10u", i);
-#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
-  fprintf(f, "%10lu", i);
-#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
-  fprintf(f, "%10lu", i);
-#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
-  fprintf(f, "%10lu", i);
-#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
-  fprintf(f, "%10lu", i);
-#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
-  fprintf(f, "%10lu", i);
-#endif
+  fprintf(f, "%10"MXFPRIu32, i);
 }
 
 void printField(FILE* f, mxfUInt64& i)
 {
-#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
-  fprintf(f, "%10I64u", i);
-#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
-  fprintf(f, "%10llu", i);
-#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
-  fprintf(f, "%10llu", i);
-#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
-  fprintf(f, "%10llu", i);
-#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
-  fprintf(f, "%10llu", i);
-#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
-  fprintf(f, "%10llu", i);
-#endif
+  fprintf(f, "%10"MXFPRIu64, i);
 }
 
 void printHexField(FILE* f, mxfUInt08& i)
 {
-#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
-  fprintf(f, "%02x", i);
-#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
-  fprintf(f, "%02x", i);
-#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
-  fprintf(f, "%02x", i);
-#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
-  fprintf(f, "%02x", i);
-#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
-  fprintf(f, "%02x", i);
-#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
-  fprintf(f, "%02x", i);
-#endif
+  fprintf(f, "%02"MXFPRIx08, i);
 }
 
 void printHexField(FILE* f, mxfUInt16& i)
 {
-#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
-  fprintf(f, "%04x", i);
-#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
-  fprintf(f, "%04x", i);
-#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
-  fprintf(f, "%04lx", i);
-#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
-  fprintf(f, "%04lx", i);
-#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
-  fprintf(f, "%04x", i);
-#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
-  fprintf(f, "%04x", i);
-#endif
+  fprintf(f, "%04"MXFPRIx16, i);
 }
 
 void printHexField(FILE* f, mxfUInt32& i)
 {
-#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
-  fprintf(f, "%08x", i);
-#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
-  fprintf(f, "%08lx", i);
-#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
-  fprintf(f, "%08lx", i);
-#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
-  fprintf(f, "%08lx", i);
-#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
-  fprintf(f, "%08lx", i);
-#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
-  fprintf(f, "%08lx", i);
-#endif
+  fprintf(f, "%08"MXFPRIx32, i);
 }
 
 void printHexField(FILE* f, mxfUInt64& i)
 {
-#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
-  fprintf(f, "%016I64x", i);
-#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
-  fprintf(f, "%016llx", i);
-#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
-  fprintf(f, "%016llx", i);
-#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
-  fprintf(f, "%016llx", i);
-#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
-  fprintf(f, "%016llx", i);
-#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
-  fprintf(f, "%016llx", i);
-#endif
+  fprintf(f, "%016"MXFPRIx64, i);
 }
 
 void printHex(FILE* f, mxfUInt64& i)
 {
-#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
-  fprintf(f, "%I64x", i);
-#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
-  fprintf(f, "%llx", i);
-#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
-  fprintf(f, "%llx", i);
-#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
-  fprintf(f, "%llx", i);
-#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
-  fprintf(f, "%llx", i);
-#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
-  fprintf(f, "%llx", i);
-#endif
+  fprintf(f, "%"MXFPRIx64, i);
 }
 
 void printMxfKey(const mxfKey& k, FILE* f)
