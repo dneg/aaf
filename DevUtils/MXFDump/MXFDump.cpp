@@ -1339,6 +1339,19 @@ struct {
   {"Index Edit Rate",      0x3f0b},
   {"Index Start Position", 0x3f0c},
   {"Index Duration",       0x3f0d},
+  // Multiple Descriptor
+  {"Sub Descriptor UIDs",  0x3f01},
+  // Generic Sound Essence Descriptor
+  {"Quantization Bits",    0x3d01},
+  {"Locked/Unlocked",      0x3d02},
+  {"Audio Sampling Rate",  0x3d03},
+  {"Channel Count",        0x3d07},
+  // Generic Picture Essence Descriptor
+  {"Signal Standard",      0x3215},
+  {"Stored F2 Offset",     0x3216},
+  {"Display F2 Offset",    0x3217},
+  // CDCI Essence Descriptor
+  {"Reversed Byte Order",  0x330b},
   // Sentinel
   {"bogus",                0x00}
 };
