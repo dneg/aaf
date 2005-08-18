@@ -4183,8 +4183,9 @@ void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
         fprintf(stdout, "     ");
         printDecField(stdout, elementDelta);
         fprintf(stdout, "\n");
+
+        remainder = remainder - entrySize;
       }
-      remainder = remainder - (entryCount * entrySize);
     } else {
       checkLocalKey(identifier);
       printLocalKL(identifier, length, k);
