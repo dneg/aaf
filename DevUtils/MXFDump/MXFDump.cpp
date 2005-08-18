@@ -346,9 +346,9 @@ void readMxfKey(mxfKey& k, FILE* f)
   }
 }
 
-void printRawMxfKey(mxfKey& k, FILE* f);
+void printMxfKey(mxfKey& k, FILE* f);
 
-void printRawMxfKey(mxfKey& k, FILE* f)
+void printMxfKey(mxfKey& k, FILE* f)
 {
   for (size_t i = 0; i < sizeof(mxfKey); i++) {
     unsigned int b = k[i];
@@ -384,9 +384,9 @@ bool lookupKey(mxfKey& k, size_t& index)
 
 bool symbolic = false;
 
-void printMxfKey(mxfKey& k, FILE* f);
+void printMxfKeySymbol(mxfKey& k, FILE* f);
 
-void printMxfKey(mxfKey& k, FILE* f)
+void printMxfKeySymbol(mxfKey& k, FILE* f)
 {
   if (symbolic) {
     size_t i;
@@ -399,7 +399,7 @@ void printMxfKey(mxfKey& k, FILE* f)
   } else {
     fprintf(stdout, "\n");
   }
-  printRawMxfKey(k, f);
+  printMxfKey(k, f);
 }
 
 void mxfDumpFile(char* fileName);
@@ -422,7 +422,7 @@ void mxfDumpFile(char* fileName)
     readMxfKey(k, infile);
     fprintf(stdout, "\n");
     fprintf(stdout, "[ k = ");
-    printMxfKey(k, stdout);
+    printMxfKeySymbol(k, stdout);
     fprintf(stdout, ",  ");
     mxfLength len;
     readMxfLength(len, infile);
@@ -511,7 +511,7 @@ void klvDumpFile(char* fileName)
     readMxfKey(k, infile);
     fprintf(stdout, "\n");
     fprintf(stdout, "[ k = ");
-    printMxfKey(k, stdout);
+    printMxfKeySymbol(k, stdout);
     fprintf(stdout, ",  ");
     mxfLength len;
     readMxfLength(len, infile);
@@ -629,7 +629,7 @@ int main(int argumentCount, char* argumentVector[])
     for (size_t i = 0; i < keyTableSize; i++) {
       fprintf(stdout, "%s\n", keyTable[i]._name);
       fprintf(stdout, "  ");
-      printRawMxfKey(keyTable[i]._key, stdout);
+      printMxfKey(keyTable[i]._key, stdout);
       fprintf(stdout, "\n");
     }
   }
