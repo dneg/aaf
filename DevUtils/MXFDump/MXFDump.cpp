@@ -2102,9 +2102,34 @@ void mxfDumpFile(char* fileName)
   fclose(infile);
 }
 
+void aafDumpKLV(mxfKey& k, mxfLength& len, FILE* infile);
+
+void aafDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
+{
+  mxfDumpKLV(k, len, infile);
+}
+
 void aafDumpFile(char* fileName)
 {
-  mxfDumpFile(fileName);
+  FILE* infile;
+
+  infile = fopen(fileName, "rb");
+  if (infile == NULL) {
+    fprintf(stderr,
+            "%s : Error : File \"%s\" not found.\n",
+            programName,
+            fileName);
+    exit(EXIT_FAILURE);
+  }
+
+  mxfKey k;
+  while (readOuterMxfKey(k, infile)) {
+    mxfLength len;
+    readMxfLength(len, infile);
+    aafDumpKLV(k, len, infile);
+  }
+
+  fclose(infile);
 }
 
 bool verbose = false;
