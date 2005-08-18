@@ -322,6 +322,7 @@ char* programName(void)
 bool verbose = false;
 bool debug = false;
 mxfUInt32 errors = 0;
+mxfUInt32 warnings = 0;
 
 mxfUInt64 position;      // current position in the file
 mxfUInt64 keyPosition;   // position/address of current key
@@ -498,7 +499,7 @@ int readMxfLength(mxfLength& l, FILE* f)
   }
   if (x == 0) {
     warning("Length is zero.\n");
-    errors = errors + 1;
+    warnings = warnings + 1;
   }
   l = x;
   return bytesRead;
@@ -2232,6 +2233,7 @@ void printLocalV(mxfUInt16& length,
   remainder = remainder - vLength;
   if (vLength < length) {
     error("Local set KLV parse error (set exhausted printing value).\n");
+    errors = errors + 1;
   }
 }
 
@@ -2241,6 +2243,7 @@ void checkLocalKey(mxfLocalKey& k)
 {
   if (k == nullMxfLocalKey) {
     error("Illegal local key ("MXFPRIu16").\n", k);
+    errors = errors + 1;
   }
 }
 
@@ -2354,6 +2357,7 @@ void printLocalKey(mxfLocalKey& identifier,
     remainder = remainder - 2;
   } else {
     error("Local set KLV parse error (set exhausted looking for key).\n");
+    errors = errors + 1;
     skipBogusBytes(remainder, infile);
     remainder = 0;
   }
@@ -2372,6 +2376,7 @@ void printLocalLength(mxfUInt16& length,
     remainder = remainder - 2;
   } else {
     error("Local set KLV parse error (set exhausted looking for length).\n");
+    errors = errors + 1;
     skipBogusBytes(remainder, infile);
     remainder = 0;
   }
@@ -2450,6 +2455,7 @@ void printPartition(mxfKey& k, mxfLength& len, FILE* infile)
   if (thisPartition != keyPosition) {
     error("Incorrect value for ThisPartition.\n");
     printMxfUInt64(stderr, "Expected", keyPosition);
+    errors = errors + 1;
   }
   dumpMxfUInt64("PreviousPartition", infile);
   dumpMxfUInt64("FooterPartition", infile);
@@ -3418,5 +3424,19 @@ int main(int argumentCount, char* argumentVector[])
     mxfValidateFile(mode, fileName);
   }
 
-  return 0;  
+  int result = EXIT_SUCCESS;
+  if ((errors != 0) || (warnings != 0)) {
+    result = EXIT_FAILURE;
+
+    if (verbose) {
+      if (errors != 0) {
+        message("%"MXFPRIu32" errors.\n", errors);
+      }
+      if (warnings != 0) {
+        message("%"MXFPRIu32" warnings.\n", warnings);
+      }
+    }
+  }
+
+  return result;
 }
