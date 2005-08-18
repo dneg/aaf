@@ -593,19 +593,19 @@ bool verbose = false;
 bool debug = false;
 
 mxfUInt64 keyPosition;   // position/address of current key
-mxfKey currentKey = {0};
-mxfKey previousKey = {0};
+mxfKey currentKey = nullMxfKey;
+mxfKey previousKey = nullMxfKey;
 mxfUInt64 primerPosition = 0;
 
-mxfKey currentPartitionKey = {0};
-mxfKey previousPartitionKey = {0};
+mxfKey currentPartitionKey = nullMxfKey;
+mxfKey previousPartitionKey = nullMxfKey;
 
 mxfUInt32 indexSID = 0;
-mxfKey indexLabel = {0};
+mxfKey indexLabel = nullMxfKey;
 mxfUInt64 indexPosition = 0;
 
 mxfUInt32 essenceSID = 0;
-mxfKey essenceLabel = {0};
+mxfKey essenceLabel = nullMxfKey;
 mxfUInt64 essencePosition = 0;
 
 void markMetadataStart(mxfUInt64 primerKeyPosition);
