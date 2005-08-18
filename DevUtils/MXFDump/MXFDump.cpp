@@ -224,6 +224,9 @@ void printFill(mxfKey& k, mxfLength& len, FILE* infile);
 
 void skipV(mxfLength& length, FILE* f);
 
+bool verbose = false;
+bool debug = false;
+
 mxfUInt64 position;      // current position in the file
 mxfUInt64 keyPosition;   // position/address of current key
 
@@ -3004,24 +3007,52 @@ void klvValidate(FILE* infile);
 
 void klvValidate(FILE* /* infile */)
 {
+  if (verbose) {
+    fprintf(stderr, "%s : KLV validation       - ", programName);
+  }
+
+  if (verbose) {
+    fprintf(stderr, "not yet implemented.\n");
+  }
 }
 
 void setValidate(FILE* infile);
 
 void setValidate(FILE* /* infile */)
 {
+  if (verbose) {
+    fprintf(stderr, "%s : local set validation - ", programName);
+  }
+
+  if (verbose) {
+    fprintf(stderr, "not yet implemented.\n");
+  }
 }
 
 void mxfValidate(FILE* infile);
 
 void mxfValidate(FILE* /* infile */)
 {
+  if (verbose) {
+    fprintf(stderr, "%s : MXF validation       - ", programName);
+  }
+
+  if (verbose) {
+    fprintf(stderr, "not yet implemented.\n");
+  }
 }
 
 void aafValidate(FILE* infile);
 
 void aafValidate(FILE* /* infile */)
 {
+  if (verbose) {
+    fprintf(stderr, "%s : AAF validation       - ", programName);
+  }
+
+  if (verbose) {
+    fprintf(stderr, "not yet implemented.\n");
+  }
 }
 
 void mxfValidateFile(Mode mode, char* fileName)
@@ -3056,9 +3087,6 @@ void mxfValidateFile(Mode mode, char* fileName)
   }
   fclose(infile);
 }
-
-bool verbose = false;
-bool debug = false;
 
 void setMode(Mode m);
 
