@@ -5079,7 +5079,10 @@ void checkRandomIndex(mxfRandomIndex& rip, PartitionList& partitions)
                p->_address);
     }
   }
-
+  if (memcmp(&V10RandomIndexMetadata, &rip._key, sizeof(mxfKey)) == 0) {
+    mxfError("Random index key at offset 0x%"MXFPRIx64" is obsolete.\n",
+             keyPosition);
+  }
 }
 
 mxfPartition* checkFooterPartition(mxfPartition* footer,
