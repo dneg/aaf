@@ -1322,6 +1322,7 @@ bool getInteger(int& i, char* s)
   }
   return result;
 }
+
 const char* VERSION ="$Revision$";
 
 int main(int argumentCount, char* argumentVector[])
