@@ -653,11 +653,15 @@ int readMxfLength(mxfLength& l, mxfFile infile)
   mxfUInt64 x = 0;
   int bytesRead = readBERLength(x, infile);
   if (bytesRead > 9) {
-    error("Invalid BER encoded length.\n");
+    error("Invalid BER encoded length"
+          " (following key at offset 0x%"MXFPRIx64").\n",
+          keyPosition);
     errors = errors + 1;
   }
   if (x == 0) {
-    warning("Length is zero.\n");
+    warning("Length is zero"
+            " (following key at offset 0x%"MXFPRIx64").\n",
+            keyPosition);
     warnings = warnings + 1;
   }
   l = x;
@@ -2400,7 +2404,9 @@ void printLocalV(mxfUInt16& length,
   printV(vLength, false, 0, infile);
   remainder = remainder - vLength;
   if (vLength < length) {
-    error("Local set KLV parse error (set exhausted printing value).\n");
+    error("Local set KLV parse error - set exhausted printing value"
+          " (following key at offset 0x%"MXFPRIx64").\n",
+          keyPosition);
     errors = errors + 1;
   }
 }
@@ -2410,7 +2416,9 @@ void checkLocalKey(mxfLocalKey& k);
 void checkLocalKey(mxfLocalKey& k)
 {
   if (k == nullMxfLocalKey) {
-    error("Illegal local key ("MXFPRIu16").\n", k);
+    error("Null local key"
+          " (following key at offset 0x%"MXFPRIx64").\n",
+          keyPosition);
     errors = errors + 1;
   }
 }
@@ -2524,7 +2532,9 @@ void printLocalKey(mxfLocalKey& identifier,
     checkLocalKey(identifier);
     remainder = remainder - 2;
   } else {
-    error("Local set KLV parse error (set exhausted looking for key).\n");
+    error("Local set KLV parse error - set exhausted looking for local key"
+          " (following key at offset 0x%"MXFPRIx64").\n",
+          keyPosition);
     errors = errors + 1;
     skipBogusBytes(remainder, infile);
     remainder = 0;
@@ -2543,7 +2553,9 @@ void printLocalLength(mxfUInt16& length,
     readMxfUInt16(length, infile);
     remainder = remainder - 2;
   } else {
-    error("Local set KLV parse error (set exhausted looking for length).\n");
+    error("Local set KLV parse error - set exhausted looking for local length"
+          " (following key at offset 0x%"MXFPRIx64").\n",
+          keyPosition);
     errors = errors + 1;
     skipBogusBytes(remainder, infile);
     remainder = 0;
@@ -3245,7 +3257,9 @@ void klvValidate(mxfFile infile)
     readMxfLength(len, infile);
     mxfUInt64 remainder = fileSize - position(infile);
     if (len > remainder) {
-      error("Length points beyond end of file.\n");
+      error("Length points beyond end of file"
+            " (following key at offset 0x%"MXFPRIx64").\n",
+            keyPosition);
       errors = errors + 1;
       len = remainder;
     }
