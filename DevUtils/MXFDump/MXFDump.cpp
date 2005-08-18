@@ -6156,7 +6156,7 @@ void mxfValidate(mxfFile infile)
 {
   PartitionList p;
   RandomIndex rip;
-  mxfUInt64 footer = 0;
+  mxfPartition* footer = 0;
   mxfUInt64 fileSize = size(infile);
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
@@ -6174,10 +6174,10 @@ void mxfValidate(mxfFile infile)
       markIndexEnd(keyPosition);
       markEssenceSegmentEnd(keyPosition);
       checkPartitionLength(length);
-      if (isFooter(k)) {
-        footer = checkFooterPosition(footer, keyPosition);
-      }
       readPartition(p, len, infile);
+      if (isFooter(k)) {
+        footer = checkFooterPartition(footer, currentPartition);
+      }
     } else if (memcmp(&RandomIndexMetadata, &k, sizeof(mxfKey)) == 0) {
       markMetadataEnd(keyPosition);
       markIndexEnd(keyPosition);
@@ -6206,7 +6206,7 @@ void mxfValidate(mxfFile infile)
   if (footer == 0) {
     mxfError("No footer found.\n");
   }
-  checkPartitions(p, footer);
+  checkPartitions(p, footer->_address);
   if (!rip.empty()) {
     checkRandomIndex(rip, p);
     if (debug) {
