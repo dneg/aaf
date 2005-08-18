@@ -2796,28 +2796,68 @@ void printPartitions(PartitionList& partitions)
   }
 }
 
+void checkField(mxfUInt64 expected,
+                mxfUInt64 actual,
+                mxfUInt64 keyAddress,
+                char* label);
+
+void checkField(mxfUInt64 expected,
+                mxfUInt64 actual,
+                mxfUInt64 keyAddress,
+                char* label)
+{
+  if (actual != expected) {
+    if (actual == 0) {
+      warning("%s not defined"
+              " - expected 0x%"MXFPRIx64","
+              " (following key at offset 0x%"MXFPRIx64").\n",
+              label,
+              expected,
+              keyAddress);
+      warnings = warnings + 1;
+    } else {
+      error("Incorrect value for %s"
+            " - expected 0x%"MXFPRIx64", found 0x%"MXFPRIx64""
+            " (following key at offset 0x%"MXFPRIx64").\n",
+            label,
+            expected,
+            actual,
+            keyAddress);
+      errors = errors + 1;
+    }
+  }
+}
+
+void checkPartition(Partition* p, mxfUInt64 previous);
+
+void checkPartition(Partition* p, mxfUInt64 previous)
+{
+  checkPartitionLength(p->_length);
+  checkElementSize(sizeof(mxfKey), p->_elementSize, p->_elementCount);
+  checkElementCount(p->_elementCount,
+                    sizeof(mxfKey),
+                    p->_length,
+                    partitionFixedSize);
+  checkField(p->_address,
+             p->_thisPartition,
+             p->_address,
+             "ThisPartition");
+  checkField(previous,
+             p->_previousPartition,
+             p->_address,
+             "PreviousPartition");
+}
+
 void checkPartitions(PartitionList& partitions);
 
 void checkPartitions(PartitionList& partitions)
 {
+  mxfUInt64 previous = 0;
   PartitionList::const_iterator it;
   for (it = partitions.begin(); it != partitions.end(); ++it) {
     Partition* p = *it;
-    checkPartitionLength(p->_length);
-    checkElementSize(sizeof(mxfKey), p->_elementSize, p->_elementCount);
-    checkElementCount(p->_elementCount,
-                      sizeof(mxfKey),
-                      p->_length,
-                      partitionFixedSize);
-    if (p->_thisPartition != p->_address) {
-      error("Incorrect value for ThisPartition"
-            " - expected 0x%"MXFPRIx64", found 0x%"MXFPRIx64""
-            " (following key at offset 0x%"MXFPRIx64").\n",
-            p->_address,
-            p->_thisPartition,
-            p->_address);
-      errors = errors + 1;
-    }
+    checkPartition(p, previous);
+    previous = p->_address;
   }
 #if 0
   printPartitions(partitions);
