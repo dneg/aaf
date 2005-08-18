@@ -86,6 +86,23 @@ void printField(FILE* f, mxfUInt32& i)
 #endif
 }
 
+void printHexField(FILE* f, mxfUInt32& i);
+
+void printHexField(FILE* f, mxfUInt32& i)
+{
+#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
+  fprintf(f, "%08x", i);
+#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
+  fprintf(f, "%08lx", i);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
+  fprintf(f, "%08lx", i);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
+  fprintf(f, "%08lx", i);
+#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
+  fprintf(f, "%08lx", i);
+#endif
+}
+
 const char* programName;
 
 void checkSizes(void);
