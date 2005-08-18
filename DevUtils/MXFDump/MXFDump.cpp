@@ -3671,9 +3671,6 @@ void checkRandomIndex(RandomIndex& rip, PartitionList& partitions);
 
 void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
 {
-#if 0
-  printRandomIndex(rip);
-#endif
   // Check that we have the correct number of partitions.
   //
   size_t expectedPartitions = partitions.size();
@@ -4495,6 +4492,9 @@ void mxfValidate(mxfFile infile)
   checkPartitions(p, footer);
   if (!rip.empty()) {
     checkRandomIndex(rip, p);
+    if (verbose) {
+      printRandomIndex(rip);
+    }
   } else {
     mxfWarning("No random index found.\n");
   }
