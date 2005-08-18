@@ -1878,15 +1878,16 @@ void printOperationalPattern(mxfKey& k, FILE* outfile)
 {
   if (isOperationalPattern(k)) {
     fprintf(outfile, "[ ");
-    mxfByte itemComplexity = k.octet12;
-    if ((itemComplexity >= 1) && (itemComplexity <= 3)) {
-      printGeneralizedOperationalPattern(k, outfile);
-    } else if ((itemComplexity >= 0x10) && (itemComplexity <= 0x7f)) {
-      printSpecializedOperationalPattern(k, outfile);
+    if (!isPrivateLabel(k)) {
+      mxfByte itemComplexity = k.octet12;
+      if ((itemComplexity >= 1) && (itemComplexity <= 3)) {
+        printGeneralizedOperationalPattern(k, outfile);
+      } else if ((itemComplexity >= 0x10) && (itemComplexity <= 0x7f)) {
+        printSpecializedOperationalPattern(k, outfile);
+      } else {
+        fprintf(outfile, "Unknown");
+      }
     } else {
-      fprintf(outfile, "Unknown");
-    }
-    if (isPrivateLabel(k)) {
       fprintf(outfile, " (");
       printPrivateLabelName(k, outfile);
       fprintf(outfile, ")");
