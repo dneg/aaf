@@ -3112,11 +3112,13 @@ typedef struct mxfPartitionTag {
   mxfUInt32 _elementCount;
   mxfUInt32 _elementSize;
   //
-  mxfUInt64 _address; // Actual file address
+  mxfUInt64 _address; // Address of partition relative to header
   mxfUInt64 _length;
 } mxfPartition;
 
 typedef std::list<mxfPartition*> PartitionList;
+
+mxfUInt64 headerPosition = 0;
 
 void readPartition(PartitionList& partitions,
                    mxfUInt64 length,
@@ -3128,7 +3130,7 @@ void readPartition(PartitionList& partitions,
 {
   mxfPartition* p = new mxfPartition;
 
-  p->_address = keyPosition;
+  p->_address = keyPosition - headerPosition;
   p->_length = length;
 
   readMxfUInt16(p->_majorVersion, infile);
@@ -3204,18 +3206,18 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
   // ThisPartition
   checkField(p->_address,
              p->_thisPartition,
-             p->_address,
+             p->_address + headerPosition,
              "ThisPartition");
   // PreviousPartition
   checkField(previous,
              p->_previousPartition,
-             p->_address,
+             p->_address + headerPosition,
              "PreviousPartition");
   // FooterPartition
   if (footer != 0) {
     checkField(footer,
                p->_footerPartition,
-               p->_address,
+               p->_address + headerPosition,
                "FooterPartition");
   }
   // HeaderByteCount
@@ -4215,8 +4217,6 @@ void aafValidate(mxfFile /* infile */)
             programName());
   }
 }
-
-mxfUInt64 headerPosition = 0;
 
 void mxfValidateFile(Mode mode, mxfFile infile)
 {
