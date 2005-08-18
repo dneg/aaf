@@ -323,7 +323,7 @@ int main(int argumentCount, char* argumentVector[])
         int bytes;
         if (!getInteger(bytes, bytess)) {
           fprintf(stderr, 
-                  ": Error : \"%s\" is not a valid byte count.",
+                  "%s : Error : \"%s\" is not a valid byte count.\n",
                   programName,
                   bytess);
           printUsage();
