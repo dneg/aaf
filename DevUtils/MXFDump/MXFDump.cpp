@@ -2113,7 +2113,14 @@ void aafDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
             programName);
     exit(EXIT_FAILURE);
   } else {
-    mxfDumpKLV(k, len, infile);
+    size_t index;
+    char* flag;
+    bool found = findAAFKey(k, index, &flag);
+    if (found) {
+      printLocalSet(k, len, infile);
+    } else {
+      mxfDumpKLV(k, len, infile);
+    }
   }
 }
 
