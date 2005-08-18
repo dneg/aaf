@@ -562,7 +562,14 @@ struct {
   aafUID _aafKey;
 } aafKeyTable [] = {
 #include "AAFMetaDictionary.h"
-  {"bogus", {0}}
+  // keys not in AAFMetaDictionary.h
+  {"Root", {0},
+// {B3B398A5-1C90-11d4-8053-080036210804}
+{0xb3b398a5, 0x1c90, 0x11d4,{0x80, 0x53, 0x08, 0x00, 0x36, 0x21, 0x08, 0x04}}},
+  // Sentinel
+  {"bogus", {0},
+// {00000000-0000-0000-0000-000000000000}
+{0x00000000, 0x0000, 0x0000,{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}}}
 };
 
 size_t aafKeyTableSize = (sizeof(aafKeyTable)/sizeof(aafKeyTable[0])) - 1;
