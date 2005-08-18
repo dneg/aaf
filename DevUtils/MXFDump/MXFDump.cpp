@@ -66,8 +66,8 @@ typedef unsigned long long int mxfUInt64;
 #endif
 
 typedef unsigned long int mxfLength;
-typedef unsigned char mxfKey[16];
-typedef unsigned char mxfByte;
+typedef mxfUInt08 mxfByte;
+typedef mxfByte mxfKey[16];
 
 const char* programName;
 
