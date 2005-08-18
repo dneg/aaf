@@ -4311,6 +4311,26 @@ void validateIndexSegment(mxfIndexSegment* index)
 
   // Other checks.
   //
+  if (index->_hasDeltaEntryArray) {
+    mxfUInt32 expectedDeltaEntrySize = index->_deltaEntrySize;
+    if (expectedDeltaEntrySize == 0) {
+      expectedDeltaEntrySize = 6;
+    }
+    checkElementSize(expectedDeltaEntrySize,
+                     index->_deltaEntrySize,
+                     index->_deltaEntryCount);
+  }
+
+  if (index->_hasIndexEntryArray) {
+    mxfUInt32 expectedIndexEntrySize = index->_indexEntrySize;
+    if (expectedIndexEntrySize == 0) {
+      expectedIndexEntrySize = 11;
+    }
+    checkElementSize(expectedIndexEntrySize,
+                     index->_indexEntrySize,
+                     index->_indexEntryCount);
+  }
+
   if (index->_hasIndexDuration) {
     if (index->_indexEntryCount > index->_indexDuration) {
       mxfWarning(currentKey,
