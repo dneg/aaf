@@ -4238,9 +4238,7 @@ void printIndexSegment(mxfIndexSegment* index)
 {
   // InstanceUID
   if (index->_hasInstanceUID) {
-    fprintf(stdout, "%20s = ", "InstanceUID");
-    printMxfKey(index->_instanceUID, stdout);
-    fprintf(stdout, "\n");
+    printMxfKey(stdout, "InstanceUID", index->_instanceUID);
   }
 
   // Index Edit Rate
