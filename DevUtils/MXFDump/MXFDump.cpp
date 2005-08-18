@@ -1935,8 +1935,9 @@ int getIntegerOption(int currentArgument,
 {
   char* option = argumentVector[currentArgument];
   int result = 0;
-  if (currentArgument + 1 < argumentCount) {
-    char* value = argumentVector[currentArgument + 1];
+  int optArg = currentArgument + 1;
+  if ((optArg < argumentCount) && (*argumentVector[optArg] != '-' )) {
+    char* value = argumentVector[optArg];
     if (!getInteger(result, value)) {
       fprintf(stderr, 
               "%s : Error : \"%s\" is not a valid %s.\n",
@@ -2008,23 +2009,19 @@ int main(int argumentCount, char* argumentVector[])
     } else if ((strcmp(p, "-e") == 0) || (strcmp(p, "--no-limit") == 0)) {
       lFlag = false;
     } else if ((strcmp(p, "-l") == 0) || (strcmp(p, "--limit") == 0)) {
-      if ((i + 1 < argumentCount) && (*argumentVector[i + 1] != '-' )) {
-        limit = getIntegerOption(i,
-                                 argumentCount,
-                                 argumentVector,
-                                 "byte count");
-        lFlag = true;
-        i = i + 1;
-      }
+      limit = getIntegerOption(i,
+                               argumentCount,
+                               argumentVector,
+                               "byte count");
+      lFlag = true;
+      i = i + 1;
     } else if ((strcmp(p, "-c") == 0) || (strcmp(p, "--entries") == 0)) {
-      if ((i + 1 < argumentCount) && (*argumentVector[i + 1] != '-' )) {
-        maxIndexEntries = getIntegerOption(i,
-                                           argumentCount,
-                                           argumentVector,
-                                           "count");
-        cFlag = true;
-        i = i + 1;
-      }
+      maxIndexEntries = getIntegerOption(i,
+                                         argumentCount,
+                                         argumentVector,
+                                         "count");
+      cFlag = true;
+      i = i + 1;
     } else if ((strcmp(p, "-r") == 0) || (strcmp(p, "--relative") == 0)) {
       relative = true;
     } else if ((strcmp(p, "-b") == 0) || (strcmp(p, "--absolute") == 0)) {
