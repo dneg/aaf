@@ -156,7 +156,7 @@ typedef unsigned long long int mxfUInt64;
 
 typedef mxfUInt64 mxfLength;
 typedef mxfUInt08 mxfByte;
-typedef struct {
+struct mxfKey {
   mxfByte octet0;
   mxfByte octet1;
   mxfByte octet2;
@@ -173,20 +173,20 @@ typedef struct {
   mxfByte octet13;
   mxfByte octet14;
   mxfByte octet15;
-} mxfKey;
+};
 typedef mxfUInt16 mxfLocalKey;
 
-typedef struct aafUIDTag {
+struct aafUID {
   mxfUInt32 Data1;
   mxfUInt16 Data2;
   mxfUInt16 Data3;
   mxfUInt08 Data4[8];
-} aafUID;
+};
 
-typedef struct mxfRationalTag {
+struct mxfRational {
   mxfUInt32 numerator;
   mxfUInt32 denominator;
-} mxfRational;
+};
 
 typedef enum ModeTag {
   unspecifiedMode,
@@ -1965,11 +1965,11 @@ void printPrivateLabel(mxfKey& k, FILE* outfile)
 
 typedef std::map<mxfUInt16, const char *> tree;
 
-typedef struct _node {
+struct node {
   tree _map;
   const char* _prefix;
   mxfUInt16 _key;
-} node;
+};
 
 typedef std::map<mxfUInt16, node*> forest;
 
@@ -4132,18 +4132,18 @@ void checkElementCount(mxfUInt32 elementCount,
   } // else reported elsewhere
 }
 
-typedef struct SegmentTag {
+struct Segment {
   mxfUInt64 _start;
   mxfUInt64 _size; // allocated
   mxfUInt64 _free; // free within allocated
   mxfUInt64 _origin;
   mxfKey _label;
-} Segment;
+};
 
 typedef std::list<Segment*> SegmentList;
 
 // In-memory representaton of a partition
-typedef struct mxfPartitionTag {
+struct mxfPartition {
   // As read from the file
   mxfKey _key;
   mxfUInt16 _majorVersion;
@@ -4166,7 +4166,7 @@ typedef struct mxfPartitionTag {
   mxfUInt64 _metadataSize;
   mxfUInt64 _indexSize;
   SegmentList _segments; // in this partition
-} mxfPartition;
+};
 
 typedef std::list<mxfPartition*> PartitionList;
 
@@ -4251,13 +4251,13 @@ void markFill(mxfUInt64 fillKeyPosition,
   fillEnd = fillEndPosition;
 }
 
-typedef struct StreamTag {
+struct Stream {
   SegmentList _segments;
   mxfUInt64 _size; // allocated
   mxfUInt64 _used; // in use
   mxfUInt32 _sid;
   bool _isEssence; // _sid is body sid
-} Stream;
+};
 
 typedef std::map<mxfUInt32, Stream*> StreamSet;
 StreamSet streams;
@@ -4938,17 +4938,17 @@ const char* keyName(const mxfKey& key)
   return result;
 }
 
-typedef struct mxfRIPEntryTag {
+struct mxfRIPEntry {
   mxfUInt32 _sid;
   mxfUInt64 _offset;
-} mxfRIPEntry;
+};
 
 typedef std::list<mxfRIPEntry> RandomIndex;
 
-typedef struct mxfRandomIndexTag {
+struct mxfRandomIndex {
   mxfKey _key;
   RandomIndex _index;
-} mxfRandomIndex;
+};
 
 void readRandomIndex(mxfRandomIndex& rip,
                      const mxfKey& key,
@@ -5202,7 +5202,7 @@ void printFooterPartition(mxfKey& k, mxfLength& len, mxfFile infile)
   printPartition(k, len, infile);
 }
 
-typedef struct mxfIndexSegmentTag {
+struct mxfIndexSegment {
   mxfPartition* _partition;
 
   mxfKey _instanceUID; // Req
@@ -5245,7 +5245,7 @@ typedef struct mxfIndexSegmentTag {
   bool _hasIndexEntryArray;
 
   bool _isV10Index;
-} mxfIndexSegment;
+};
 
 void initializeIndexSegment(mxfIndexSegment* index, mxfKey& key);
 
