@@ -4189,7 +4189,7 @@ void printPartition(mxfKey& /* k */, mxfLength& len, mxfFile infile)
     fprintf(stdout, "  ");
     printDecField(stdout, i);
     fprintf(stdout, " : ");
-    printMxfKey(essence, stdout);
+    printEssenceContainerLabel(essence, stdout);
     fprintf(stdout, "\n");
   }
 }
