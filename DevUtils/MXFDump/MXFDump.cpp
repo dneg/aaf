@@ -2486,8 +2486,11 @@ struct {
 } aafLocalKeyTable [] = {
 #include "AAFMetaDictionary.h"
   // local keys not in AAFMetaDictionary.h
+  // Root
   {"MetaDictionary",       0x0001},
   {"Header",               0x0002},
+  {"ObjectDirectory",      0x7f03}, // 0x0003
+  {"FormatVersion",        0x7f04}, // 0x0004
   // All objects
   {"InstanceUID",          0x3c0a},
   // Preface
