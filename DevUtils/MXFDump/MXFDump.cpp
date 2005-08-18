@@ -1182,6 +1182,8 @@ void printFill(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
+bool unknownAsSets = false;
+
 bool isLocalSet(mxfKey& k);
 
 bool isLocalSet(mxfKey& k)
@@ -1190,7 +1192,19 @@ bool isLocalSet(mxfKey& k)
   if (k[5] == 0x53) {
     result = true;
   } else {
-    result = false;
+    if (unknownAsSets) {
+      size_t index;
+      mxfKey x;
+      aafUIDToMxfKey(x, *reinterpret_cast<aafUID*>(&k));
+      bool found = lookupAAFKey(x, index);
+      if (found) {
+        result = true;
+      } else {
+        result = false;
+      }
+    } else {
+      result = false;
+    }
   }
   return result;
 }
@@ -1295,7 +1309,6 @@ void printPrimer(mxfKey& k, mxfLength& len, FILE* infile)
 
 bool lFlag;
 mxfUInt32 limit = 0;
-bool unknownAsSets = false;
 
 void klvDumpFile(char* fileName)
 { 
@@ -1322,7 +1335,34 @@ void klvDumpFile(char* fileName)
 
 void setDumpFile(char* fileName)
 {
-  mxfDumpFile(fileName);
+  FILE* infile;
+
+  infile = fopen(fileName, "rb");
+  if (infile == NULL) {
+    fprintf(stderr,
+            "%s : Error : File \"%s\" not found.\n",
+            programName,
+            fileName);
+    exit(EXIT_FAILURE);
+  }
+
+  mxfKey k;
+  while (readOuterMxfKey(k, infile)) {
+    mxfLength len;
+    readMxfLength(len, infile);
+
+    if (isLocalSet(k)) {
+      printLocalSet(k, len, infile);
+    } else if (isFill(k)) {
+      printFill(k, len, infile);
+    } else if (isEssenceElement(k)) {
+      printEssence(k, len, lFlag, limit, infile);
+    } else {
+      printKL(k, len);
+      printV(len, false, 0, infile);
+    }
+  }
+  fclose(infile);
 }
 
 void mxfDumpFile(char* fileName)
@@ -1430,6 +1470,7 @@ int main(int argumentCount, char* argumentVector[])
       setMode(klvMode);
     } else if ((strcmp(p, "-l") == 0) || (strcmp(p, "--set-dump") == 0)) {
       setMode(localSetMode);
+      unknownAsSets = true;
     } else if ((strcmp(p, "-m") == 0) || (strcmp(p, "--mxf-dump") == 0)) {
       setMode(mxfMode);
       unknownAsSets = true;
