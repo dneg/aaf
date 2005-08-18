@@ -604,6 +604,7 @@ mxfUInt32 indexSID = 0;
 mxfKey indexLabel = nullMxfKey;
 mxfUInt64 indexPosition = 0;
 
+bool inEssence = false;
 mxfUInt32 essenceSID = 0;
 mxfKey essenceLabel = nullMxfKey;
 mxfUInt64 essencePosition = 0;
@@ -4125,22 +4126,24 @@ void markIndexEnd(mxfUInt64 endKeyPosition)
 
 void markEssenceSegmentStart(mxfUInt32 sid, mxfUInt64 essenceKeyPosition)
 {
-  if (essenceSID == 0) {
+  if (!inEssence) {
+    inEssence = true;
     essenceSID = sid;
     memcpy(&essenceLabel, &currentKey, sizeof(mxfKey));
     essencePosition = essenceKeyPosition;
-  }
+  } // else error - starting new essence without ending previous essence
 }
 
 void markEssenceSegmentEnd(mxfUInt64 endKeyPosition)
 {
-  if (essenceSID != 0) {
+  if (inEssence) {
     newEssenceSegment(essenceSID,
                       essenceLabel,
                       essencePosition,
                       endKeyPosition);
+    inEssence = false;
     essenceSID = 0;
-  }
+  } // else error - ending essence that wasn't started
 }
 
 typedef struct StreamTag {
