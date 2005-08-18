@@ -3532,9 +3532,6 @@ void checkPartitions(PartitionList& partitions, mxfUInt64 footer)
     checkPartition(p, previous, footer);
     previous = p->_address;
   }
-#if 0
-  printPartitions(partitions);
-#endif
 }
 void destroyPartitions(PartitionList& partitions);
 
@@ -4501,6 +4498,9 @@ void mxfValidate(mxfFile infile)
   } else {
     mxfWarning("No random index found.\n");
   }
+#if 0
+  printPartitions(partitions);
+#endif
   destroyPartitions(p);
 #if 0
   printStreams(streams);
