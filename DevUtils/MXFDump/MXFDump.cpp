@@ -295,6 +295,7 @@ bool isFill(mxfKey& k);
 bool isPartition(mxfKey& key);
 bool isHeader(mxfKey& key);
 bool isFooter(mxfKey& key);
+const char* keyName(const mxfKey& key);
 
 void printFill(mxfKey& k, mxfLength& len, mxfFile infile);
 
@@ -3738,6 +3739,47 @@ bool isFooter(mxfKey& key)
     result = true;
   } else {
     result = false;
+  }
+  return result;
+}
+
+const char* keyName(const mxfKey& key)
+{
+  const char* result = "Unknown";
+  size_t x;
+  bool found;
+
+  switch (mode) {
+  case klvMode:
+  case localSetMode:
+  case mxfMode:
+  case klvValidateMode:
+  case setValidateMode:
+  case mxfValidateMode:
+    found = lookupMXFKey(const_cast<mxfKey&>(key), x);
+    if (found) {
+      result = mxfKeyTable[x]._name;
+    } else {
+      result = "Unknown";
+    }
+    break;
+  case aafMode:
+  case aafValidateMode:
+    found = lookupMXFKey(const_cast<mxfKey&>(key), x);
+    if (found) {
+      result = mxfKeyTable[x]._name;
+    } else {
+      found = lookupAAFKey(const_cast<mxfKey&>(key), x);
+      if (found) {
+        result = aafKeyTable[x]._name;
+      } else {
+        result = "Unknown";
+      }
+    }
+    break;
+  default:
+    /* Invalid mode ? */
+    break;
   }
   return result;
 }
