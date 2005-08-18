@@ -1682,6 +1682,9 @@ bool isDark(mxfKey& k, Mode mode)
   case aafMode:
     result = !findAAFKey(k, x, &flag);
     break;
+  default:
+    result = false;
+    break;
   }
   return result;
 }
