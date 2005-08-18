@@ -865,11 +865,11 @@ void printCommonOptions(void)
 {
   fprintf(stderr, "--relative      = ");
   fprintf(stderr, "print relative addresses ");
-  fprintf(stderr, "- the start of the value = 0 (-r)\n");
+  fprintf(stderr, "- value start = 0 [default] (-r)\n");
 
   fprintf(stderr, "--absolute      = ");
   fprintf(stderr, "print absolute addresses ");
-  fprintf(stderr, "- the start of the file = 0 (-b)\n");
+  fprintf(stderr, "- file start = 0 (-b)\n");
 
   fprintf(stderr, "--decimal       = ");
   fprintf(stderr, "print addresses in ");
