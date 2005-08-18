@@ -1287,6 +1287,10 @@ void printMxfLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing, FILE* f)
       printAAFLocalKeySymbol(k, enclosing);
     } else if (mode == mxfMode) {
       printMxfLocalKeySymbol(k, enclosing);
+    } else if (mode == klvMode) {
+      printMxfLocalKeySymbol(k, enclosing);
+    } else if (mode == localSetMode) {
+      printMxfLocalKeySymbol(k, enclosing);
     } else {
       fprintf(stdout, "Unknown\n");
     }
@@ -1350,6 +1354,10 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
     if (mode == aafMode) {
       printAAFKeySymbol(k);
     } else if (mode == mxfMode) {
+      printMxfKeySymbol(k);
+    } else if (mode == klvMode) {
+      printMxfKeySymbol(k);
+    } else if (mode == localSetMode) {
       printMxfKeySymbol(k);
     } else {
       fprintf(stdout, "Unknown\n");
