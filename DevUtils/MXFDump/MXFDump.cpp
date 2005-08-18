@@ -1772,6 +1772,9 @@ void printFormatOptions(void)
 
   fprintf(stderr, "  --show-dark         = ");
   fprintf(stderr, "dump dark data (-w)\n");
+
+  fprintf(stderr, "  --show-run-in       = ");
+  fprintf(stderr, "dump run-in\n");
 }
 
 void printRawOptions(void);
@@ -2308,6 +2311,18 @@ void printV(mxfLength& length,
     mxfUInt64 skipLength = (length - count) - 1;
     skipV(skipLength, infile);
   }
+}
+
+void printRunIn(mxfUInt64& headerPosition,
+                bool limitBytes,
+                mxfUInt32 limit,
+                mxfFile infile);
+
+void printRunIn(mxfUInt64& headerPosition,
+                bool limitBytes,
+                mxfUInt32 limit,
+                mxfFile infile)
+{
 }
 
 char* itemTypeName(mxfByte itemTypeId);
@@ -3943,6 +3958,7 @@ void setDumpFile(mxfFile infile)
 }
 
 bool dumpDark = false;
+bool dumpRunIn = false;
 
 void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile);
 
@@ -4273,6 +4289,7 @@ void printSummary(void)
 // -v --verbose
 // -f --show-fill
 // -w --show-dark
+//    --show-run-in
 // -e --no-limit-bytes
 // -l --limit-bytes
 // -c --limit-entries
@@ -4339,6 +4356,8 @@ int main(int argumentCount, char* argumentVector[])
     } else if ((strcmp(p, "--show-dark") == 0) ||
                (strcmp(p, "-w") == 0)) {
       dumpDark = true;
+    } else if (strcmp(p, "--show-run-in") == 0) {
+      dumpRunIn = true;
     } else if ((strcmp(p, "--no-limit-bytes") == 0) ||
                (strcmp(p, "-e") == 0)) {
       lFlag = true;
@@ -4473,6 +4492,21 @@ int main(int argumentCount, char* argumentVector[])
 
   if (!isMxfFile(infile, headerPosition)) {
     fatalError("File \"%s\" is not an MXF file.\n", fileName);
+  }
+  if ((mode == klvMode) ||
+      (mode == localSetMode) ||
+      (mode == mxfMode) ||
+      (mode  == aafMode)) {
+    if (headerPosition != 0) {
+      if (dumpRunIn) {
+        printRunIn(headerPosition, limitBytes, limit, infile);
+      } else {
+        fprintf(stdout, "\n");
+        fprintf(stdout,
+                "[ Omitted %"MXFPRIu64" bytes of run-in ]\n",
+                headerPosition);
+      }
+    }
   }
   setPosition(infile, headerPosition);
 
