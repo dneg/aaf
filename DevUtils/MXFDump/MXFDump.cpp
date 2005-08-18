@@ -1133,6 +1133,9 @@ const mxfKey NullKey =
 
 #include "MXFMetaDictionary.h"
 // keys not in MXFMetaDictionary.h
+const mxfKey V10IndexTableSegment =
+  {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x53, 0x01, 0x01,
+   0x0d, 0x01, 0x02, 0x01, 0x01, 0x10, 0x00, 0x00};
 const mxfKey GenericAudioEssenceDescriptor =
   {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x53, 0x01, 0x01,
    0x0d, 0x01, 0x01, 0x01, 0x01, 0x01, 0x42, 0x00};
@@ -1164,6 +1167,7 @@ struct Key {
 } mxfKeyTable [] = {
 #include "MXFMetaDictionary.h"
   // keys not in MXFMetaDictionary.h
+  {"V10IndexTableSegment", &V10IndexTableSegment},
   {"GenericAudioEssenceDescriptor", &GenericAudioEssenceDescriptor},
   {"WaveAudioEssenceDescriptor", &WaveAudioEssenceDescriptor},
   {"AES3AudioEssenceDescriptor", &AES3AudioEssenceDescriptor},
