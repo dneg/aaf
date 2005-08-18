@@ -1719,6 +1719,22 @@ void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
   printLocalSetV(len, infile);
 }
 
+void printMXFLocalSet(mxfKey& k, mxfLength& len, FILE* infile);
+
+void printMXFLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
+{
+  printKL(k, len);
+  printLocalSetV(len, infile);
+}
+
+void printAAFLocalSet(mxfKey& k, mxfLength& len, FILE* infile);
+
+void printAAFLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
+{
+  printKL(k, len);
+  printLocalSetV(len, infile);
+}
+
 void printPartition(mxfKey& k, mxfLength& len, FILE* infile);
 
 void printPartition(mxfKey& k, mxfLength& len, FILE* infile)
@@ -2075,7 +2091,7 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
   } else {
     if (!isDark(k, mode)) {
       if (isLocalSet(k)) {
-        printLocalSet(k, len, infile);
+        printMXFLocalSet(k, len, infile);
       } else {
         printKL(k, len);
         printV(len, false, 0, infile);
@@ -2124,7 +2140,7 @@ void aafDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
     char* flag;
     bool found = findAAFKey(k, index, &flag);
     if (found) {
-      printLocalSet(k, len, infile);
+      printAAFLocalSet(k, len, infile);
     } else {
       mxfDumpKLV(k, len, infile);
     }
