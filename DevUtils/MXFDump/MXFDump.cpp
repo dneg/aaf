@@ -4431,14 +4431,14 @@ void checkField(mxfUInt64 expected,
 }
 
 void checkSID(Segment* seg,
-              mxfUInt64 actual,
+              mxfUInt32 actual,
               const mxfKey& key,
               mxfUInt64 keyAddress,
               char* label,
               char* kind);
 
 void checkSID(Segment* seg,
-              mxfUInt64 actual,
+              mxfUInt32 actual,
               const mxfKey& key,
               mxfUInt64 keyAddress,
               char* label,
