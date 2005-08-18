@@ -4927,10 +4927,27 @@ void checkRandomIndex(mxfUInt64 keyPosition,
                       mxfUInt32 overallLength)
 {
   // length must be (n * (8 + 4)) + 4
-  // NYI
+  //
+  mxfUInt32 entrySize = sizeof(mxfUInt32) + sizeof(mxfUInt64);
+  mxfUInt64 entries = length / entrySize;
+  if (((entries * entrySize) + sizeof(mxfUInt32)) != length) {
+    mxfError(currentKey,
+             keyPosition,
+             "Incorrect value for random index length"
+             " - expected (N * 12) + 4, found %"MXFPRIu64"",
+             length);
+  }
 
   // overall length must be (endPosition - keyPosition)
-  // NYI
+  //
+  if ((endPosition - keyPosition) != overallLength) {
+    mxfError(currentKey,
+             keyPosition,
+             "Incorrect value for random index overall length"
+             " - expected %"MXFPRIu64", found %"MXFPRIu32"",
+             (endPosition - keyPosition),
+             overallLength);
+  }
 }
 
 void checkRandomIndex(RandomIndex& rip, PartitionList& partitions);
