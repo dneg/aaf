@@ -86,6 +86,19 @@ mxfUInt08 hostByteOrder(void)
   return result;
 }
 
+bool swapNeeded(void);
+
+bool swapNeeded(void)
+{
+  bool result;
+  if (hostByteOrder() == 'B') {
+    result = false;
+  } else {
+    result = true;
+  }
+  return result;
+}
+
 void printField(FILE* f, mxfUInt32& i);
 
 void printField(FILE* f, mxfUInt32& i)
