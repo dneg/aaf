@@ -863,8 +863,6 @@ void printUsage(void)
   fprintf(stderr, "print more detailed information (-v)\n");
   fprintf(stderr, "--debug         = ");
   fprintf(stderr, "print information useful in debugging this program (-d)\n");
-  fprintf(stderr, "--version       = ");
-  fprintf(stderr, "print the program version number and exit\n");
 }
 
 const char* baseName(char* fullName);
@@ -1676,8 +1674,6 @@ bool getInteger(int& i, char* s)
   return result;
 }
 
-const char* VERSION ="$Revision$";
-
 int main(int argumentCount, char* argumentVector[])
 {
 #if defined(MXF_USE_CONSOLE)
@@ -1736,9 +1732,6 @@ int main(int argumentCount, char* argumentVector[])
       exit(EXIT_SUCCESS);
     } else if ((strcmp(p, "-d") == 0) || (strcmp(p, "--debug") == 0)) {
       debug = true;
-    } else if (strcmp(p, "--version") == 0) {
-      fprintf(stdout, "%s : version %s\n", programName, VERSION);
-      exit(EXIT_SUCCESS);
     } else if (*p == '-') {
       fprintf(stderr, "%s : Error : Invalid option \"%s\".\n", programName, p);
       printUsage();
