@@ -518,7 +518,7 @@ void close(mxfFile infile)
 void setPosition(mxfFile infile, const mxfUInt64 position)
 {
   SInt64 pos = position;
-  OSErr status = FSSetForkPosition(infile, fsFromMark, pos);
+  OSErr status = FSSetForkPosition(infile, fsFromStart, pos);
   if (status != noErr) {
     fatalError("FSSetForkPosition() failed (%d).\n", status);
   }
@@ -541,7 +541,7 @@ mxfUInt64 position(mxfFile infile)
   if (status != noErr) {
     fatalError("FSGetForkPosition() failed (%d).\n", status);
   }
-  mxfUInt64 result = 0;
+  mxfUInt64 result = position;
   return result;
 }
 
