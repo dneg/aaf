@@ -5274,7 +5274,7 @@ void dumpFlags(mxfUInt08 flags);
 
 void dumpFlags(mxfUInt08 flags)
 {
-  char symbols[] = "IBPB";
+  char symbols[] = "IbPB";
   mxfUInt08 prediction = (flags & 0x30) >> 4;
   char ch = symbols[prediction];
   fprintf(stdout, " %c ", ch);
