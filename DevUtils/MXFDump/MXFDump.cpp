@@ -3265,6 +3265,7 @@ typedef std::list<Segment*> SegmentList;
 // In-memory representaton of a partition
 typedef struct mxfPartitionTag {
   // As read from the file
+  mxfKey _key;
   mxfUInt16 _majorVersion;
   mxfUInt16 _minorVersion;
   mxfUInt32 _KAGSize;
@@ -3443,6 +3444,7 @@ void readPartition(PartitionList& partitions,
 {
   mxfPartition* p = new mxfPartition;
 
+  memcpy(&p->_key, &currentKey, sizeof(mxfKey));
   p->_address = keyPosition - headerPosition;
   p->_length = length;
   p->_metadataSize = 0;
