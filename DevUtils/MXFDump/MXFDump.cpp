@@ -1456,6 +1456,31 @@ void dumpExtensionTypeInteger(mxfFile infile)
   fprintf(stdout, "]\n");
 }
 
+// Character
+// StrongObjectReference
+// WeakObjectReference
+// Rename
+// Enumerated
+// FixedArray
+// VaryingArray
+// Set
+
+void dumpExtensionTypeRecord(mxfFile infile);
+
+void dumpExtensionTypeRecord(mxfFile infile)
+{
+  fprintf(stdout, "record type = [\n");
+  dumpExtensionDefinition(infile);
+  // MemberTypes
+  // MemberNames
+  fprintf(stdout, "]\n");
+}
+
+// Stream
+// String
+// ExtendibleEnumeration
+// Indirect
+
 void dumpMxfLabel(const char* label, mxfFile infile)
 {
   mxfKey k;
@@ -5358,9 +5383,24 @@ void printMetaDictionary(mxfKey& /* k */, mxfLength& len, mxfFile infile)
     case 0x20:
       dumpExtensionProperty(infile);
       break;
-    case 0x31: // integer
+    case 0x31: // Integer
       dumpExtensionTypeInteger(infile);
       break;
+      // Character             = 32
+      // StrongObjectReference = 33
+      // WeakObjectReference   = 34
+      // Rename                = 35
+      // Enumerated            = 36
+      // FixedArray            = 37
+      // VaryingArray          = 38
+      // Set                   = 39
+    case 0x3a: // Record
+      dumpExtensionTypeRecord(infile);
+      break;
+      // Stream                = 3b
+      // String                = 3c
+      // ExtendibleEnumeration = 3d
+      // Indirect              = 3e
     default:
       mxfError("Invalid definition tag (%"MXFPRIx08").\n", tag);
       skipBytes(length - 1, infile);
