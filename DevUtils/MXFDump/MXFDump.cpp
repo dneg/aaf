@@ -433,9 +433,9 @@ void reorder(mxfUInt32& i)
   p[2] = temp;
 }
 
-void berReadMxfUInt64(mxfUInt64& i, FILE* f);
+void readBERLength(mxfUInt64& i, FILE* f);
 
-void berReadMxfUInt64(mxfUInt64& i, FILE* f)
+void readBERLength(mxfUInt64& i, FILE* f)
 {
   mxfUInt08 b;
   readMxfUInt08(b, f);
@@ -476,7 +476,7 @@ void readMxfLength(mxfLength& l, FILE* f);
 void readMxfLength(mxfLength& l, FILE* f)
 {
   mxfUInt64 x;
-  berReadMxfUInt64(x, f);
+  readBERLength(x, f);
   l = static_cast<mxfLength>(x);
 }
 
