@@ -2727,7 +2727,7 @@ void checkElementCount(mxfUInt32 elementCount,
 }
 
 // In-memory representaton of a partition
-typedef struct PartitionTag {
+typedef struct mxfPartitionTag {
   //
   mxfUInt16 _majorVersion;
   mxfUInt16 _minorVersion;
@@ -2746,9 +2746,9 @@ typedef struct PartitionTag {
   //
   mxfUInt64 _address; // Actual file address
   mxfUInt64 _length;
-} Partition;
+} mxfPartition;
 
-typedef std::list<Partition*> PartitionList;
+typedef std::list<mxfPartition*> PartitionList;
 
 void readPartition(PartitionList& partitions,
                    mxfUInt64 length,
@@ -2758,7 +2758,7 @@ void readPartition(PartitionList& partitions,
                    mxfUInt64 length,
                    mxfFile infile)
 {
-  Partition* p = new Partition;
+  mxfPartition* p = new mxfPartition;
 
   p->_address = keyPosition;
   p->_length = length;
@@ -2791,7 +2791,7 @@ void printPartitions(PartitionList& partitions)
 {
   PartitionList::const_iterator it;
   for (it = partitions.begin(); it != partitions.end(); ++it) {
-    Partition* p = *it;
+    mxfPartition* p = *it;
     fprintf(stderr, "%"MXFPRIx64"\n", p->_address);
   }
 }
@@ -2828,9 +2828,9 @@ void checkField(mxfUInt64 expected,
   }
 }
 
-void checkPartition(Partition* p, mxfUInt64 previous, mxfUInt64 footer);
+void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer);
 
-void checkPartition(Partition* p, mxfUInt64 previous, mxfUInt64 footer)
+void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
 {
   checkPartitionLength(p->_length);
   checkElementSize(sizeof(mxfKey), p->_elementSize, p->_elementCount);
@@ -2861,7 +2861,7 @@ void checkPartitions(PartitionList& partitions, mxfUInt64 footer)
   mxfUInt64 previous = 0;
   PartitionList::const_iterator it;
   for (it = partitions.begin(); it != partitions.end(); ++it) {
-    Partition* p = *it;
+    mxfPartition* p = *it;
     checkPartition(p, previous, footer);
     previous = p->_address;
   }
@@ -2875,7 +2875,7 @@ void destroyPartitions(PartitionList& partitions)
 {
   PartitionList::const_iterator it;
   for (it = partitions.begin(); it != partitions.end(); ++it) {
-    Partition* p = *it;
+    mxfPartition* p = *it;
     delete p;
   }
 }
@@ -3001,7 +3001,7 @@ void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
     RandomIndexEntry e = *rit;
     PartitionList::const_iterator pit;
     for (pit = partitions.begin(); pit != partitions.end(); ++pit) {
-      Partition* p = *pit;
+      mxfPartition* p = *pit;
       if (e._offset == p->_address) {
         found = true;
         break;
