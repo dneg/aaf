@@ -729,7 +729,9 @@ void printUsage(void)
   fprintf(stderr, "dump fill bytes (-f)\n");
   fprintf(stderr, "\n");
   fprintf(stderr, "--symbolic      = ");
-  fprintf(stderr, "dump the names of keys if known (-s)\n");
+  fprintf(stderr, "dump the names of keys if known [default] (-s)\n");
+  fprintf(stderr, "--no-symbolic   = ");
+  fprintf(stderr, "don't dump the names of keys (-n)\n");
   fprintf(stderr, "\n");
   fprintf(stderr, "--help          = ");
   fprintf(stderr, "print this message and exit (-h)\n");
@@ -799,7 +801,7 @@ bool lookupLocalKey(mxfLocalKey& k, size_t& index)
   return result;
 }
 
-bool symbolic = false;
+bool symbolic = true;
 
 void printMxfLocalKeySymbol(mxfLocalKey& k, FILE* f);
 
@@ -1374,6 +1376,8 @@ int main(int argumentCount, char* argumentVector[])
       }
     } else if ((strcmp(p, "-s") == 0) || (strcmp(p, "--symbolic") == 0)) {
       symbolic = true;
+    } else if ((strcmp(p, "-n") == 0) || (strcmp(p, "--no-symbolic") == 0)) {
+      symbolic = false;
     } else if ((strcmp(p, "-h") == 0) || (strcmp(p, "--help") == 0)) {
       printUsage();
       exit(EXIT_SUCCESS);
