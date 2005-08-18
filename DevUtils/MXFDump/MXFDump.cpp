@@ -854,6 +854,12 @@ void printCommonOptions(void);
 
 void printCommonOptions(void)
 {
+}
+
+void printFormatOptions(void);
+
+void printFormatOptions(void)
+{
   fprintf(stderr, "  --limit <n>   = ");
   fprintf(stderr, "truncate essence containers ");
   fprintf(stderr, "to <n> bytes [default n = 0] (-l)\n");
@@ -874,6 +880,7 @@ void printAAFOptions(void);
 
 void printAAFOptions(void)
 {
+  printFormatOptions();
   printCommonOptions();
 }
 
@@ -881,6 +888,7 @@ void printMXFOptions(void);
 
 void printMXFOptions(void)
 {
+  printFormatOptions();
   printCommonOptions();
 }
 
@@ -888,6 +896,7 @@ void printSetOptions(void);
 
 void printSetOptions(void)
 {
+  printFormatOptions();
   printCommonOptions();
 }
 void printKLVOptions(void);
@@ -906,6 +915,7 @@ void printKLVOptions(void)
   fprintf(stderr, "  --absolute    = ");
   fprintf(stderr, "print absolute addresses ");
   fprintf(stderr, "- the start of the file == 0 (-b)\n");
+  printCommonOptions();
 }
 
 void printUsage(void);
