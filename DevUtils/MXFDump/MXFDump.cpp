@@ -1326,13 +1326,7 @@ void printMXFKL(mxfKey& k, mxfLength& l);
 
 void printMXFKL(mxfKey& k, mxfLength& l)
 {
-  fprintf(stdout, "\n");
-  fprintf(stdout, "[ K = ");
-  printMxfKeySymbol(k, stdout);
-  fprintf(stdout, ", ");
-  fprintf(stdout, "L = ");
-  printMxfLength(l, stdout);
-  fprintf(stdout, " ]\n");
+  printKL(k, l);
 }
 void printAAFKL(mxfKey& k, mxfLength& l);
 
