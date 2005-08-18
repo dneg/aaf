@@ -1892,12 +1892,15 @@ void printOperationalPattern(mxfKey& k, FILE* outfile)
   }
 }
 
-mxfByte pvtPrefix[] = {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01, 0x0e};
+mxfByte pvtPrefix1[] = {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01, 0x0e};
+mxfByte pvtPrefix2[] = {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x02, 0x0e};
 
 bool isPrivateLabel(mxfKey& k)
 {
   bool result = false;
-  if (memcmp(&k, &pvtPrefix, sizeof(pvtPrefix)) == 0) {
+  if (memcmp(&k, &pvtPrefix1, sizeof(pvtPrefix1)) == 0) {
+    result = true;
+  } else if (memcmp(&k, &pvtPrefix2, sizeof(pvtPrefix2)) == 0) {
     result = true;
   }
   return result;
