@@ -722,6 +722,14 @@ void printUsage(void)
   fprintf(stderr, "  --fill        = ");
   fprintf(stderr, "dump fill bytes (-f)\n");
   fprintf(stderr, "\n");
+  fprintf(stderr, "--set-dump      = ");
+  fprintf(stderr, "dump local sets (-l)\n");
+  fprintf(stderr, "  --limit <n>   = ");
+  fprintf(stderr, "dump only the first <n> bytes of each ");
+  fprintf(stderr, "essence container (-l)\n");
+  fprintf(stderr, "  --fill        = ");
+  fprintf(stderr, "dump fill bytes (-f)\n");
+  fprintf(stderr, "\n");
   fprintf(stderr, "--klv-dump      = ");
   fprintf(stderr, "dump raw KLV (-k)\n");
   fprintf(stderr, "  --limit <n>   = ");
@@ -1376,6 +1384,8 @@ int main(int argumentCount, char* argumentVector[])
     p = argumentVector[i];
     if ((strcmp(p, "-k") == 0) || (strcmp(p, "--klv-dump") == 0)) {
       setMode(klvMode);
+    } else if ((strcmp(p, "-l") == 0) || (strcmp(p, "--set-dump") == 0)) {
+      setMode(mxfMode);
     } else if ((strcmp(p, "-m") == 0) || (strcmp(p, "--mxf-dump") == 0)) {
       setMode(mxfMode);
     } else if ((strcmp(p, "-v") == 0) || (strcmp(p, "--verbose") == 0)) {
