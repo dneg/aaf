@@ -111,8 +111,12 @@ void printUsage(void)
   fprintf(stderr, "OPTIONS :\n");
   fprintf(stderr, "--raw-dump      = ");
   fprintf(stderr, "dump raw KLV (-r)\n");
+  fprintf(stderr, "  --limit <n>   = ");
+  fprintf(stderr, "dump only the first <n> bytes of each value (-l)\n");
+  fprintf(stderr, "\n");
   fprintf(stderr, "--mxf-dump      = ");
   fprintf(stderr, "dump MXF (-m)\n");
+  fprintf(stderr, "\n");
   fprintf(stderr, "--help          = ");
   fprintf(stderr, "print this messsage and exit (-h)\n");
   fprintf(stderr, "--verbose       = ");
