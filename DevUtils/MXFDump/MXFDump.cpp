@@ -86,9 +86,9 @@ mxfUInt08 hostByteOrder(void)
   return result;
 }
 
-bool swapNeeded(void);
+bool reorder(void);
 
-bool swapNeeded(void)
+bool reorder(void)
 {
   bool result;
   if (hostByteOrder() == 'B') {
