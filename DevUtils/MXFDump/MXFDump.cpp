@@ -1541,7 +1541,20 @@ void dumpExtensionTypeEnumerated(mxfFile infile)
   fprintf(stdout, "]\n");
 }
 
-// FixedArray
+void dumpExtensionTypeFixedArray(mxfFile infile);
+
+void dumpExtensionTypeFixedArray(mxfFile infile)
+{
+  fprintf(stdout, "fixed array type = [\n");
+  dumpExtensionDefinition(infile);
+
+  // ElementType
+  dumpMxfLabel("element type", infile);
+  // ElementCount
+  dumpMxfUInt32("element count", infile);
+
+  fprintf(stdout, "]\n");
+}
 
 void dumpExtensionTypeVaryingArray(mxfFile infile);
 
@@ -5548,7 +5561,9 @@ void printMetaDictionary(mxfKey& /* k */, mxfLength& len, mxfFile infile)
     case 0x36:
       dumpExtensionTypeEnumerated(infile);
       break;
-      // FixedArray            = 37
+    case 0x37:
+      dumpExtensionTypeFixedArray(infile);
+      break;
     case 0x38:
       dumpExtensionTypeVaryingArray(infile);
       break;
