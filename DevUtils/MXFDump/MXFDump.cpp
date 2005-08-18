@@ -191,6 +191,8 @@ void printMxfKey(const mxfKey& k, FILE* f);
 void printMxfLength(mxfLength& l, FILE* f);
 void printMxfLocalKey(mxfLocalKey& k, FILE* f);
 
+void printKeyAddress(FILE* f, mxfUInt64 keyAddress);
+
 void dumpMxfUInt08(const char* label, FILE* infile);
 void dumpMxfUInt16(const char* label, FILE* infile);
 void dumpMxfUInt32(const char* label, FILE* infile);
@@ -950,6 +952,17 @@ void dumpByte(mxfByte byte)
   buffer[bufferIndex++] = byte;
 }
 
+void printKeyAddress(FILE* f, mxfUInt64 keyAddress)
+{
+  fprintf(stdout, "( ");
+  if (addressBase == 10) {
+    printField(stdout, keyAddress);
+  } else {
+    printHexField(stdout, keyAddress);
+  }
+  fprintf(stdout, " )");
+}
+
 void printCommonOptions(void);
 
 void printCommonOptions(void)
@@ -1322,13 +1335,8 @@ void printMxfKeySymbol(mxfKey& k)
     fprintf(stdout, "Dark");
   }
   if (keyAddresses) {
-    fprintf(stdout, " ( ");
-    if (addressBase == 10) {
-      printField(stdout, keyPosition);
-    } else {
-      printHexField(stdout, keyPosition);
-    }
-    fprintf(stdout, " )");
+    fprintf(stdout, " ");
+    printKeyAddress(stdout, keyPosition);
   }
   fprintf(stdout, "\n");
 }
