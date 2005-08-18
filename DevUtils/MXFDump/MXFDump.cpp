@@ -1439,9 +1439,75 @@ void printOperationalPattern(mxfKey& k, FILE* outfile)
 }
 
 
+void decode(mxfUInt16 tag1, mxfUInt32 /* tag2 */, FILE* outfile)
+{
+  switch (tag1) {
+  case 0x0101:
+    fprintf(outfile, "Generic container (deprecated)");
+    break;
+  case 0x0201:
+    fprintf(outfile, "MPEG2 (D10) (IMX)");
+    break;
+  case 0x0202:
+    fprintf(outfile, "DV");
+    break;
+  case 0x0203:
+    fprintf(outfile, "D11");
+    break;
+  case 0x0204:
+    fprintf(outfile, "MPEG (Long GOP)");
+    break;
+  case 0x0205:
+    fprintf(outfile, "Uncompressed SD");
+    break;
+  case 0x0206:
+    fprintf(outfile, "AES3 BWF");
+    break;
+  default:
+    fprintf(outfile, "Not recognized");
+    break;
+  }
+}
+
+void decode(mxfKey& label, FILE* outfile)
+{
+  mxfUInt16 tag1 = 0;
+  tag1 = tag1 + (label[12] << 8);
+  tag1 = tag1 + (label[13] << 0);
+
+  mxfUInt16 tag2 = 0;
+  tag2 = tag2 + (label[14] << 8);
+  tag2 = tag2 + (label[15] << 0);
+
+  fprintf(outfile, " - [ ");
+  decode(tag1, tag2, outfile);
+  fprintf(outfile, " ]");
+}
+
+mxfByte privatePfx[] = {0x06, 0x0e, 0x2b,0x34, 0x04, 0x01, 0x01, 0x01,
+                        0x0e};
+mxfByte eclPfx1[]    = {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01,
+                        0x0d, 0x01, 0x03, 0x01};
+mxfByte eclPfx2[]    = {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x02,
+                        0x0d, 0x01, 0x03, 0x01};
+
+void printEssenceContainerLabelName(mxfKey& label, FILE* outfile)
+{
+  if (memcmp(&label, &eclPfx1, sizeof(eclPfx1)) == 0) {
+    decode(label, outfile);
+  } else if (memcmp(&label, &eclPfx2, sizeof(eclPfx2)) == 0) {
+    decode(label, outfile);
+  } else if (memcmp(&label, &privatePfx, sizeof(privatePfx)) == 0) {
+    fprintf(outfile, " - [ Private ]");
+  } else {
+    fprintf(outfile, " - [ Invalid ]");
+  }
+}
+
 void printEssenceContainerLabel(mxfKey& label, FILE* outfile)
 {
   printMxfKey(label, outfile);
+//printEssenceContainerLabelName(label, outfile);
 }
 
 bool reorder(void)
