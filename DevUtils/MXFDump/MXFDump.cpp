@@ -2148,7 +2148,7 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
       } else {
         printKL(k, len);
         printV(len, false, 0, infile);
-		}
+      }
     } else {
       skipV(len, infile);
     } 
