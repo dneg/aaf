@@ -288,6 +288,8 @@ bool findAAFKey(mxfKey& k, size_t& index, char** flag);
 bool lookupMXFLocalKey(mxfLocalKey& k, size_t& index);
 bool lookupAAFLocalKey(mxfLocalKey& k, size_t& index);
 
+const char* mxfKeyName(const mxfKey& k);
+
 bool isEssenceElement(mxfKey& k);
 
 bool isIndexSegment(mxfKey& k);
@@ -2689,8 +2691,6 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
   }
   printMxfKey(k, f);
 }
-
-const char* mxfKeyName(const mxfKey& k);
 
 const char* mxfKeyName(const mxfKey& k)
 {
