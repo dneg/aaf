@@ -3122,6 +3122,7 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
                "FooterPartition");
   }
   // HeaderByteCount
+  // IndexByteCount
   // IndexSID
   // BodyOffset
   // BodySID
