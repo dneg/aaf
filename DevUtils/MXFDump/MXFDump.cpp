@@ -2556,12 +2556,12 @@ void printCommonOptions(void);
 
 void printCommonOptions(void)
 {
-  fprintf(stderr, "  --search-run-in <n>   = ");
+  fprintf(stderr, "  --search-run-in <n> = ");
   fprintf(stderr, "search <n> bytes of run-in");
   fprintf(stderr, "[default n = 64k]\n");
 
 
-  fprintf(stderr, "  --debug               = ");
+  fprintf(stderr, "  --debug             = ");
   fprintf(stderr, "print debuging information (-d)\n");
   fprintf(stderr, "\n");
 
