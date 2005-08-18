@@ -721,7 +721,7 @@ void printUsage(void)
   fprintf(stderr, "value (-l)\n");
   fprintf(stderr, "\n");
   fprintf(stderr, "--mxf-dump      = ");
-  fprintf(stderr, "dump MXF (-m)\n");
+  fprintf(stderr, "dump MXF [default] (-m)\n");
   fprintf(stderr, "  --limit <n>   = ");
   fprintf(stderr, "dump only the first <n> bytes of each ");
   fprintf(stderr, "essence container (-l)\n");
