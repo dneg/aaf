@@ -2407,7 +2407,120 @@ void printV10IndexTable(mxfKey& k, mxfLength& len, FILE* infile);
 
 void printV10IndexTable(mxfKey& k, mxfLength& len, FILE* infile)
 {
-  printIndexTable(k, len, infile);
+  printKL(k, len);
+
+  mxfLength remainder = len;
+  while (remainder > 0) {
+    mxfLocalKey identifier;
+    readMxfLocalKey(identifier, infile);
+    mxfUInt16 length;
+    readMxfUInt16(length, infile);
+    remainder = remainder - 4;
+
+    if (identifier == 0x3c0a) {
+      // InstanceUID
+      dumpMxfKey("InstanceUID", infile);
+      remainder = remainder - 16;
+    } else if (identifier == 0x3f05) {
+      // Edit Unit Byte Count
+      dumpMxfUInt32("Edit Unit Byte Count", infile);
+      remainder = remainder - 4;
+    } else if (identifier == 0x3f06) {
+      // IndexSID
+      dumpMxfUInt32("IndexSID", infile);
+      remainder = remainder - 4;
+    } else if (identifier == 0x3f07) {
+      // BodySID
+      dumpMxfUInt32("BodySID", infile);
+      remainder = remainder - 4;
+    } else if (identifier == 0x3f08) {
+      // Slice Count
+      dumpMxfUInt08("SliceCount", infile);
+      remainder = remainder - 1;
+    } else if (identifier == 0x3f0a) {
+      // Entry array
+      mxfUInt32 entryCount;
+      readMxfUInt32(entryCount, infile);
+      mxfUInt32 entrySize;
+      readMxfUInt32(entrySize, infile);
+      mxfUInt32 sliceCount = (entrySize - 11) / 4;
+      remainder = remainder - 8;
+
+      fprintf(stdout, "     IndexEntryArray = ");
+      fprintf(stdout, "[ Number of entries = ");
+      printField(stdout, entryCount);
+      fprintf(stdout, "\n");
+      fprintf(stdout, "                       ");
+      fprintf(stdout, "  Entry size        = ");
+      printField(stdout, entrySize);
+      fprintf(stdout, " ]\n");
+
+      if (entryCount > 0) {
+        fprintf(stdout, "         ");
+        fprintf(stdout, "        Temporal   Anchor  Flags        Stream\n");
+        fprintf(stdout, "         ");
+        fprintf(stdout, "          Offset   Offset               Offset\n");
+      }
+
+      mxfUInt32 count = 0;
+      for (mxfUInt32 i = 0; i < entryCount; i++) {
+        mxfUInt08 temporalOffset; // signed
+        readMxfUInt08(temporalOffset, infile);
+        mxfUInt08 anchorOffset; // signed
+        readMxfUInt08(anchorOffset, infile);
+        mxfUInt08 flags;
+        readMxfUInt08(flags, infile);
+        mxfUInt64 streamOffset;
+        readMxfUInt64(streamOffset, infile);
+
+        if (!cFlag || (i < maxIndex)) {
+          fprintf(stdout, "    ");
+          printField(stdout, i);
+          fprintf(stdout, " :");
+          fprintf(stdout, "    ");
+          printField(stdout, temporalOffset);
+          fprintf(stdout, "    ");
+          printField(stdout, anchorOffset);
+          fprintf(stdout, "     ");
+          printHexField(stdout, flags);
+          fprintf(stdout, "    ");
+          printField(stdout, streamOffset);
+          fprintf(stdout, "\n");
+
+          for (mxfUInt32 s = 0; s < sliceCount; s++) {
+            mxfUInt32 sliceOffset;
+            readMxfUInt32(sliceOffset, infile);
+            // Not yet printed
+          }
+          count = count + 1;
+        }
+        remainder = remainder - (11 + (4 * sliceCount));
+      }
+      if (cFlag && (count < entryCount)) {
+        fprintf(stdout, "[ Index table truncated from ");
+        printField(stdout, entryCount);
+        fprintf(stdout, " entries to ");
+        printField(stdout, maxIndex);
+        fprintf(stdout, " entries ]\n");
+      }
+    } else if (identifier == 0x3f0b) {
+      // Index Edit Rate
+      dumpMxfRational("Index Edit Rate", infile);
+      remainder = remainder - 8;
+    } else if (identifier == 0x3f0c) {
+      // Index Start Position
+      dumpMxfUInt64("Index Start Position", infile);
+      remainder = remainder - 8;
+    } else if (identifier == 0x3f0d) {
+      // Index Duration
+      dumpMxfUInt64("Index Duration", infile);
+      remainder = remainder - 8;
+    } else {
+      checkLocalKey(identifier);
+      printLocalKL(identifier, length, k);
+      printLocalV(length, remainder, infile);
+    }
+  }
 }
 
 void printPrimer(mxfKey& k, mxfLength& len, FILE* infile);
