@@ -104,10 +104,12 @@ void reorder(mxfUInt16& i);
 void reorder(mxfUInt32& i);
 void reorder(mxfUInt64& i);
 
+void printField(FILE* f, mxfUInt08& i);
 void printField(FILE* f, mxfUInt16& i);
 void printField(FILE* f, mxfUInt32& i);
 void printField(FILE* f, mxfUInt64& i);
 
+void printHexField(FILE* f, mxfUInt08& i);
 void printHexField(FILE* f, mxfUInt16& i);
 void printHexField(FILE* f, mxfUInt32& i);
 void printHexField(FILE* f, mxfUInt64& i);
@@ -279,6 +281,21 @@ void reorder(mxfUInt64& i)
   p[4] = temp;
 }
 
+void printField(FILE* f, mxfUInt08& i)
+{
+#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
+  fprintf(f, "%5u", i);
+#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
+  fprintf(f, "%5u", i);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
+  fprintf(f, "%05u", i);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
+  fprintf(f, "%05u", i);
+#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
+  fprintf(f, "%05u", i);
+#endif
+}
+
 void printField(FILE* f, mxfUInt16& i)
 {
 #if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
@@ -321,6 +338,21 @@ void printField(FILE* f, mxfUInt64& i)
   fprintf(f, "%10llu", i);
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
   fprintf(f, "%10llu", i);
+#endif
+}
+
+void printHexField(FILE* f, mxfUInt08& i)
+{
+#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
+  fprintf(f, "%02x", i);
+#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
+  fprintf(f, "%02x", i);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
+  fprintf(f, "%02x", i);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
+  fprintf(f, "%02x", i);
+#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
+  fprintf(f, "%02x", i);
 #endif
 }
 
@@ -1299,6 +1331,73 @@ void printFooterPartition(mxfKey& k, mxfLength& len, FILE* infile);
 void printFooterPartition(mxfKey& k, mxfLength& len, FILE* infile)
 {
   printPartition(k, len, infile);
+}
+
+void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile);
+
+void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
+{
+  printKL(k, len);
+  mxfLength setLength = 0;
+  while (setLength < len) {
+    mxfLocalKey identifier;
+    readMxfLocalKey(identifier, infile);
+    mxfUInt16 length;
+    readMxfUInt16(length, infile);
+    setLength = setLength + 4;
+    if (identifier == 0x3f0a) {
+      // Entry array
+      mxfUInt32 entryCount;
+      readMxfUInt32(entryCount, infile);
+      mxfUInt32 entrySize;
+      readMxfUInt32(entrySize, infile);
+      mxfUInt32 sliceCount = entrySize - 11;
+      setLength = setLength + 8;
+
+      fprintf(stdout, "  IndexEntryArray = ");
+      fprintf(stdout, "[ count = ");
+      printField(stdout, entryCount);
+      fprintf(stdout, ", size = ");
+      printField(stdout, entrySize);
+      fprintf(stdout, " ]\n");
+
+      fprintf(stdout, "         index : temporal anchor flags     stream\n");
+      fprintf(stdout, "                   offset offset           offset\n");
+
+      for (mxfUInt32 i = 0; i < entryCount; i++) {
+        mxfUInt08 temporalOffset;
+        readMxfUInt08(temporalOffset, infile);
+        mxfUInt08 anchorOffset;
+        readMxfUInt08(anchorOffset, infile);
+        mxfUInt08 flags;
+        readMxfUInt08(flags, infile);
+        mxfUInt64 streamOffset;
+        readMxfUInt64(streamOffset, infile);
+
+        fprintf(stdout, "    ");
+        printField(stdout, i);
+        fprintf(stdout, " :    ");
+        printField(stdout, temporalOffset);
+        fprintf(stdout, "  ");
+        printField(stdout, anchorOffset);
+        fprintf(stdout, "    ");
+        printHexField(stdout, flags);
+        fprintf(stdout, " ");
+        printField(stdout, streamOffset);
+        fprintf(stdout, "\n");
+
+        for (mxfUInt32 s = 0; s < sliceCount; s++) {
+          mxfUInt32 sliceOffset;
+          readMxfUInt32(sliceOffset, infile);
+        }
+        setLength = setLength + 11 + (4 * sliceCount);
+      }
+    } else {
+      checkLocalKey(identifier);
+      printLocalKL(identifier, length);
+      printLocalV(identifier, length, len, setLength, infile);
+    }
+  }
 }
 
 void printPrimer(mxfKey& k, mxfLength& len, FILE* infile);
