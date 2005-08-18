@@ -575,10 +575,54 @@ void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
   flush();
 }
 
-void printEssence(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f);
+void printEssence(mxfKey& k,
+                  mxfLength& length,
+                  bool lFlag,
+                  mxfUInt32 limit,
+                  FILE* f);
 
-void printEssence(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
+void printEssence(mxfKey& k,
+                  mxfLength& length,
+                  bool lFlag,
+                  mxfUInt32 limit,
+                  FILE* f)
 {
+  char* itemType;
+  switch (k[12]) {
+  case 0x05:
+    itemType = "CP Picture";
+    break;
+  case 0x06:
+    itemType = "CP Sound";
+    break;
+  case 0x07:
+    itemType = "CP Data";
+    break;
+  case 0x15:
+    itemType = "GC Picture";
+    break;
+  case 0x16:
+    itemType = "GC Sound";
+    break;
+  case 0x17:
+    itemType = "GC Data";
+    break;
+  case 0x18:
+    itemType = "GC Compound";
+    break;
+  default:
+    itemType = "Unknown";
+    break;
+  }
+  int elementCount = k[13];
+  int elementType = k[14];
+  int elementNumber = k[15] + 1; // zero based
+  fprintf(stdout,
+          "  [ %s (%d of %d) (type = %x) ]\n",
+          itemType,
+          elementNumber,
+          elementCount,
+          elementType);
   printV(length, lFlag, limit, f);
 }
 
@@ -748,7 +792,7 @@ void mxfDumpFile(char* fileName)
     } else if ((memcmp(&Filler, &k, sizeof(mxfKey)) == 0) && !dumpFiller) {
       skipV(len, infile);
     } else if (isEssenceElement(k)) {
-      printEssence(len, lFlag, limit, infile);
+      printEssence(k, len, lFlag, limit, infile);
     } else {
       printV(len, false, 0, infile);
     }
