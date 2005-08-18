@@ -2383,6 +2383,13 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
+void printV10IndexTable(mxfKey& k, mxfLength& len, FILE* infile);
+
+void printV10IndexTable(mxfKey& k, mxfLength& len, FILE* infile)
+{
+  printIndexTable(k, len, infile);
+}
+
 void printPrimer(mxfKey& k, mxfLength& len, FILE* infile);
 
 void printPrimer(mxfKey& k, mxfLength& len, FILE* infile)
@@ -2586,6 +2593,8 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
   } else if (memcmp(&ObjectDirectory, &k, sizeof(mxfKey)) == 0) {
     printObjectDirectory(k, len, infile);
   } else if (memcmp(&V10IndexTableSegment, &k, sizeof(mxfKey)) == 0) {
+    printV10IndexTable(k, len, infile);
+  } else if (memcmp(&IndexTableSegment, &k, sizeof(mxfKey)) == 0) {
     printIndexTable(k, len, infile);
   } else if (isFill(k)) {
     printFill(k, len, infile);
