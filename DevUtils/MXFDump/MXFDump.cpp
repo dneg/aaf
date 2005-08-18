@@ -600,6 +600,7 @@ mxfUInt64 primerPosition = 0;
 mxfKey currentPartitionKey = nullMxfKey;
 mxfKey previousPartitionKey = nullMxfKey;
 
+bool inIndex = false;
 mxfUInt32 indexSID = 0;
 mxfKey indexLabel = nullMxfKey;
 mxfUInt64 indexPosition = 0;
@@ -4103,16 +4104,17 @@ void markMetadataEnd(mxfUInt64 endKeyPosition)
 
 void markIndexStart(mxfUInt32 sid, mxfUInt64 indexKeyPosition)
 {
-  if (indexSID == 0) {
+  if (!inIndex) {
+    inIndex = true;
     indexSID = sid;
     memcpy(&indexLabel, &currentKey, sizeof(mxfKey));
     indexPosition = indexKeyPosition;
-  }
+  } //  else error - starting new index without ending previous index
 }
 
 void markIndexEnd(mxfUInt64 endKeyPosition)
 {
-  if (indexSID != 0) {
+  if (inIndex) {
     mxfUInt64 indexByteCount = endKeyPosition - indexPosition;
     currentPartition->_indexSize = indexByteCount;
     newIndexSegment(indexSID,
@@ -4120,8 +4122,9 @@ void markIndexEnd(mxfUInt64 endKeyPosition)
                     indexPosition,
                     endKeyPosition);
     indexPosition = 0;
+    inIndex = false;
     indexSID = 0;
-  }
+  } // else error - ending index that wasn't started
 }
 
 void markEssenceSegmentStart(mxfUInt32 sid, mxfUInt64 essenceKeyPosition)
