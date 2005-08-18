@@ -125,6 +125,11 @@ void dumpMxfKey(const char* label, FILE* infile);
 void dumpMxfOperationalPattern(const char* label, FILE* infile);
 void printOperationalPattern(mxfKey& k, FILE* outfile);
 
+void klvDumpFile(char* fileName);
+void setDumpFile(char* fileName);
+void mxfDumpFile(char* fileName);
+void aafDumpFile(char* fileName);
+
 void readMxfUInt08(mxfByte& b, FILE* f)
 {
   int c = fread(&b, sizeof(mxfByte), 1, f);
@@ -1292,7 +1297,33 @@ bool lFlag;
 mxfUInt32 limit = 0;
 bool unknownAsSets = false;
 
-void mxfDumpFile(char* fileName);
+void klvDumpFile(char* fileName)
+{ 
+  FILE* infile;
+
+  infile = fopen(fileName, "rb");
+  if (infile == NULL) {
+    fprintf(stderr,
+            "%s : Error : File \"%s\" not found.\n",
+            programName,
+            fileName);
+    exit(EXIT_FAILURE);
+  }
+
+  mxfKey k;
+  while (readOuterMxfKey(k, infile)) {
+    mxfLength len;
+    readMxfLength(len, infile);
+    printKL(k, len);
+    printV(len, lFlag, limit, infile);
+  }
+  fclose(infile);
+}
+
+void setDumpFile(char* fileName)
+{
+  mxfDumpFile(fileName);
+}
 
 void mxfDumpFile(char* fileName)
 {
@@ -1340,33 +1371,13 @@ void mxfDumpFile(char* fileName)
   fclose(infile);
 }
 
+void aafDumpFile(char* fileName)
+{
+  mxfDumpFile(fileName);
+}
+
 bool verbose = false;
 bool debug = false;
-
-void klvDumpFile(char* fileName);
-
-void klvDumpFile(char* fileName)
-{ 
-  FILE* infile;
-
-  infile = fopen(fileName, "rb");
-  if (infile == NULL) {
-    fprintf(stderr,
-            "%s : Error : File \"%s\" not found.\n",
-            programName,
-            fileName);
-    exit(EXIT_FAILURE);
-  }
-
-  mxfKey k;
-  while (readOuterMxfKey(k, infile)) {
-    mxfLength len;
-    readMxfLength(len, infile);
-    printKL(k, len);
-    printV(len, lFlag, limit, infile);
-  }
-  fclose(infile);
-}
 
 void setMode(Mode m);
 
@@ -1524,11 +1535,11 @@ int main(int argumentCount, char* argumentVector[])
   if (mode == klvMode) {
     klvDumpFile(fileName);
   } else if (mode == localSetMode) {
-    mxfDumpFile(fileName);
+    setDumpFile(fileName);
   } else if (mode == mxfMode) {
     mxfDumpFile(fileName);
   } else if (mode == aafMode) {
-    mxfDumpFile(fileName);
+    aafDumpFile(fileName);
   }
 
   return 0;  
