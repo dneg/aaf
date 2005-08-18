@@ -3341,7 +3341,25 @@ void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
 
   // Check that each partition in the file has an entry in the random index.
   //
-  // NYI
+  PartitionList::const_iterator pit;
+  for (pit = partitions.begin(); pit != partitions.end(); ++pit) {
+    bool found = false;
+    mxfPartition* p = *pit;
+    RandomIndex::const_iterator rit;
+    for (rit = rip.begin(); rit != rip.end(); ++rit) {
+      mxfRIPEntry e = *rit;
+      if (p->_address == e._offset) {
+         found = true;
+        break;
+      }
+    }
+    if (!found) {
+      mxfError("Invalid random index - missing partition",
+               " (partition address = %"MXFPRIx64").\n",
+               p->_address);
+    }
+  }
+
 }
 
 mxfUInt64 checkFooterPosition(mxfUInt64 footer, mxfUInt64 keyPosition);
