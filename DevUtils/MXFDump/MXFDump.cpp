@@ -5036,6 +5036,18 @@ mxfUInt64 checkFooterPosition(mxfUInt64 footer, mxfUInt64 keyPosition)
   return keyPosition;
 }
 
+mxfPartition* checkFooterPartition(mxfPartition* footer,
+                                   mxfPartition* partition);
+
+mxfPartition* checkFooterPartition(mxfPartition* footer,
+                                   mxfPartition* partition)
+{
+  if (footer != 0) {
+    mxfError(currentKey, keyPosition, "More than one footer");
+  }
+  return partition;
+}
+
 void checkPartitionLength(mxfUInt64& length)
 {
   mxfUInt64 entrySize = sizeof(mxfKey);     // Essence container label
