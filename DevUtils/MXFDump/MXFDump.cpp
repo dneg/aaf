@@ -6471,9 +6471,13 @@ int main(int argumentCount, char* argumentVector[])
   }
   close(infile);
 
-  int result = EXIT_SUCCESS;
-  if ((errors != 0) || (warnings != 0)) {
-    result = EXIT_FAILURE;
+  int result;
+  if (errors != 0) {
+    result = 2; // Errors, possibly also warnings
+  } else if (warnings != 0) {
+    result = 1; // Warnings only
+  } else {
+    result = 0; // No errors or warnings
   }
 
   return result;
