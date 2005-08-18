@@ -295,6 +295,8 @@ void fatalError(char* format, ...);
 
 void warning(char* format, ...);
 
+void vwarning(char* format, va_list ap);
+
 void message(char* format, ...);
 
 void vmessage(char* format, va_list ap);
@@ -356,6 +358,11 @@ void warning(char* format, ...)
   va_end(ap);
 }
 
+void vwarning(char* format, va_list ap)
+{
+  fprintf(stderr, "%s : Warning : ", programName());
+  vfprintf(stderr, format, ap);
+}
 
 void message(char* format, ...)
 {
@@ -417,7 +424,7 @@ void mxfWarning(char* format, ...)
 {
   va_list ap;
   va_start(ap, format);
-  verror(format, ap);
+  vwarning(format, ap);
   va_end(ap);
   warnings = warnings + 1;
 }
