@@ -2663,10 +2663,35 @@ void printLocalSet(mxfKey& k, mxfLength& len, mxfFile infile)
 //    Open/Closed and Complete/Incomplete
 //
 
+
+
+void checkPartitionLength(mxfUInt64& length);
+
+void checkPartitionLength(mxfUInt64& length)
+{
+  mxfUInt64 fixedSize = 88; // Size of the fixed portion of a partition
+  if (length < fixedSize) {
+    error("Invalid partition length - length too small"
+          " (following key at offset 0x%"MXFPRIx64").\n",
+          keyPosition);
+    errors = errors + 1;
+  } else {
+    mxfUInt64 labelBytes = length - fixedSize;
+    mxfUInt64 labels = labelBytes / sizeof(mxfKey);
+    if ((labels * sizeof(mxfKey)) != labelBytes) {
+      error("Invalid partition length - length != 88 + (N * 16)"
+            " (following key at offset 0x%"MXFPRIx64").\n",
+            keyPosition);
+      errors = errors + 1;
+    }
+  }
+}
+
 void printPartition(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void printPartition(mxfKey& k, mxfLength& len, mxfFile infile)
 {
+  checkPartitionLength(len);
   dumpMxfUInt16("Major Version", infile);
   dumpMxfUInt16("Minor Version", infile);
   dumpMxfUInt32("KAGSize", infile);
@@ -2962,10 +2987,33 @@ void printV10IndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
   }
 }
 
+void checkPrimerLength(mxfUInt64& length);
+
+void checkPrimerLength(mxfUInt64& length)
+{
+  mxfUInt64 fixedSize = 8; // Size of the fixed portion of a primer
+  if (length < fixedSize) {
+    error("Invalid primer length - length too small"
+          " (following key at offset 0x%"MXFPRIx64").\n",
+          keyPosition);
+    errors = errors + 1;
+  } else {
+    mxfUInt64 entryBytes = length - fixedSize;
+    mxfUInt64 entries = entryBytes / (sizeof(mxfLocalKey) + sizeof(mxfKey));
+    if ((entries * (sizeof(mxfLocalKey) + sizeof(mxfKey))) != entryBytes) {
+      error("Invalid primer length - length != 8 + (N * 18)"
+            " (following key at offset 0x%"MXFPRIx64").\n",
+            keyPosition);
+      errors = errors + 1;
+    }
+  }
+}
+
 void printPrimer(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void printPrimer(mxfKey& k, mxfLength& len, mxfFile infile)
 {
+  checkPrimerLength(len);
   mxfUInt32 elementCount;
   readMxfUInt32(elementCount, infile);
   mxfUInt32 elementSize;
