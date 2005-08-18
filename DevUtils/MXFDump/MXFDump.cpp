@@ -1199,7 +1199,7 @@ void dumpMxfOperationalPattern(const char* label, mxfFile infile)
   fprintf(stdout, "\n");
 }
 
-void printOperationalPattern(mxfKey& k, FILE* outfile)
+void printGeneralizedOperationalPattern(mxfKey& k, FILE* outfile)
 {
   mxfByte itemComplexity = k[12];
   if ((itemComplexity >= 1) && (itemComplexity <= 3)) {
@@ -1237,17 +1237,35 @@ void printOperationalPattern(mxfKey& k, FILE* outfile)
     }
     // mxfByte qualifiers = k[14]; // tjb not yet decoded
     fprintf(outfile, "[%s, %s]", itemCplxName, packageCplxName);
+  }
+}
+
+void printAtomOperationalPattern(mxfKey& k, FILE* outfile)
+{
+  // tjb - should check for specific Atom patterns
+  fprintf(outfile, "[Specialized - Atom]");
+}
+
+void printSpecializedOperationalPattern(mxfKey& k, FILE* outfile)
+{
+  mxfByte itemComplexity = k[12];
+  if (itemComplexity == 0x10) {
+    printAtomOperationalPattern(k, outfile);
+  } else {
+    fprintf(outfile, "[Specialized - Unknown]");
+  }
+}
+
+void printOperationalPattern(mxfKey& k, FILE* outfile)
+{
+  mxfByte itemComplexity = k[12];
+  if ((itemComplexity >= 1) && (itemComplexity <= 3)) {
+    printGeneralizedOperationalPattern(k, outfile);
   } else if ((itemComplexity >= 0x10) && (itemComplexity <= 0x7f)) {
-    if (itemComplexity == 0x10) {
-      // tjb - should check for specific Atol patterns
-      fprintf(outfile, "[Specialized - Atom]");
-    } else {
-      fprintf(outfile, "[Specialized - Unknown]");
-    }
+    printSpecializedOperationalPattern(k, outfile);
   } else {
     fprintf(outfile, "[Unknown]");
   }
-
 }
 
 bool reorder(void)
