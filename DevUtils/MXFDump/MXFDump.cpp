@@ -2570,7 +2570,8 @@ int main(int argumentCount, char* argumentVector[])
     if (mode == klvMode) {
       limitBytes = false;
     } else if (mode == localSetMode) {
-      limitBytes = false;
+      limitBytes = true;
+      limit = 0;
     } else if (mode == mxfMode) {
       limitBytes = true;
       limit = 0;
