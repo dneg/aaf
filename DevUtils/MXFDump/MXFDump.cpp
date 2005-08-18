@@ -4018,9 +4018,13 @@ void printFooterPartition(mxfKey& k, mxfLength& len, mxfFile infile)
 
 typedef struct mxfIndexSegmentTag {
   mxfKey _instanceUID;
+  bool _hasInstanceUID;
   mxfRational _indexEditRate;
+  bool _hasIndexEditRate;
   mxfUInt64 _indexStartPosition;
+  bool _hasIndexStartPosition;
   mxfUInt64 _indexDuration;
+  bool _hasIndexDuration;
   mxfUInt32 _editUnitByteCount; // D/req
   bool _hasEditUnitByteCount;
   mxfUInt32 _indexSID; // D/req
@@ -4040,6 +4044,7 @@ typedef struct mxfIndexSegmentTag {
   mxfUInt32 _indexEntrySize;
   mxfUInt64 _indexEntryArrayPosition;
   bool _hasIndexEntryArray;
+  bool _isV10Index;
 } mxfIndexSegment;
 
 void initializeIndexSegment(mxfIndexSegment* index);
@@ -4047,10 +4052,14 @@ void initializeIndexSegment(mxfIndexSegment* index);
 void initializeIndexSegment(mxfIndexSegment* index)
 {
   memcpy(&index->_instanceUID, &NullKey, sizeof(mxfKey));
+  index->_hasInstanceUID = false;
   index->_indexEditRate.numerator = 0;;
-  index->_indexEditRate.denominator = 0;;
+  index->_indexEditRate.denominator = 0;
+  index->_hasIndexEditRate = false;
   index->_indexStartPosition = 0;
+  index->_hasIndexStartPosition = false;
   index->_indexDuration = 0;
+  index->_hasIndexDuration = false;
   index->_editUnitByteCount = 0;
   index->_hasEditUnitByteCount = false;
   index->_indexSID = 0;
@@ -4088,6 +4097,7 @@ void readIndexSegment(mxfIndexSegment* index, mxfLength& len, mxfFile infile)
       // InstanceUID
       readMxfLabel(index->_instanceUID, infile);
       remainder = remainder - 16;
+      index->_hasInstanceUID = true;
     } else if (identifier == 0x3f05) {
       // Edit Unit Byte Count
       readMxfUInt32(index->_editUnitByteCount, infile);
@@ -4121,14 +4131,17 @@ void readIndexSegment(mxfIndexSegment* index, mxfLength& len, mxfFile infile)
       // Index Edit Rate
       readMxfRational(index->_indexEditRate, infile);
       remainder = remainder - 8;
+      index->_hasIndexEditRate = true;
     } else if (identifier == 0x3f0c) {
       // Index Start Position
       readMxfUInt64(index->_indexStartPosition, infile);
       remainder = remainder - 8;
+      index->_hasIndexStartPosition = true;
     } else if (identifier == 0x3f0d) {
       // Index Duration
       readMxfUInt64(index->_indexDuration, infile);
       remainder = remainder - 8;
+      index->_hasIndexDuration = true;
     } else if (identifier == 0x3f0e) {
       // Pos Table Count
       readMxfUInt08(index->_posTableCount, infile);
@@ -4160,24 +4173,32 @@ void printIndexSegment(mxfIndexSegment* index);
 void printIndexSegment(mxfIndexSegment* index)
 {
   // InstanceUID
-  fprintf(stdout, "%20s = ", "InstanceUID");
-  printMxfKey(index->_instanceUID, stdout);
-  fprintf(stdout, "\n");
+  if (index->_hasInstanceUID) {
+    fprintf(stdout, "%20s = ", "InstanceUID");
+    printMxfKey(index->_instanceUID, stdout);
+    fprintf(stdout, "\n");
+  }
 
   // Index Edit Rate
-  fprintf(stdout, "%20s = ", "Index Edit Rate");
-  fprintf(stdout, "( ");
-  printDecField(stdout, index->_indexEditRate.numerator);
-  fprintf(stdout, " / ");
-  printDecField(stdout, index->_indexEditRate.denominator);
-  fprintf(stdout, " )");
-  fprintf(stdout, "\n");
+  if (index->_hasIndexEditRate) {
+    fprintf(stdout, "%20s = ", "Index Edit Rate");
+    fprintf(stdout, "( ");
+    printDecField(stdout, index->_indexEditRate.numerator);
+    fprintf(stdout, " / ");
+    printDecField(stdout, index->_indexEditRate.denominator);
+    fprintf(stdout, " )");
+    fprintf(stdout, "\n");
+  }
 
   // Index Start Position
-  printMxfUInt64(stdout, "Index Start Position", index->_indexStartPosition);
+  if (index->_hasIndexStartPosition) {
+    printMxfUInt64(stdout, "Index Start Position", index->_indexStartPosition);
+  }
 
   // Index Duration
-  printMxfUInt64(stdout, "Index Duration", index->_indexDuration);
+  if (index->_hasIndexDuration) {
+    printMxfUInt64(stdout, "Index Duration", index->_indexDuration);
+  }
 
   // Edit Unit Byte Count
   if (index->_hasEditUnitByteCount) {
