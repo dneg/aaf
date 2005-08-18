@@ -4135,7 +4135,7 @@ void markIndexStart(mxfUInt32 sid, mxfUInt64 indexKeyPosition)
     indexSID = sid;
     memcpy(&indexLabel, &currentKey, sizeof(mxfKey));
     indexPosition = indexKeyPosition;
-  } //  else error - starting new index without ending previous index
+  }
 }
 
 void markIndexEnd(mxfUInt64 endKeyPosition)
@@ -4155,7 +4155,7 @@ void markIndexEnd(mxfUInt64 endKeyPosition)
     indexPosition = 0;
     inIndex = false;
     indexSID = 0;
-  } // else error - ending index that wasn't started
+  }
 }
 
 void markEssenceSegmentStart(mxfUInt32 sid, mxfUInt64 essenceKeyPosition)
@@ -4165,7 +4165,7 @@ void markEssenceSegmentStart(mxfUInt32 sid, mxfUInt64 essenceKeyPosition)
     essenceSID = sid;
     memcpy(&essenceLabel, &currentKey, sizeof(mxfKey));
     essencePosition = essenceKeyPosition;
-  } // else error - starting new essence without ending previous essence
+  }
 }
 
 void markEssenceSegmentEnd(mxfUInt64 endKeyPosition)
@@ -4182,7 +4182,7 @@ void markEssenceSegmentEnd(mxfUInt64 endKeyPosition)
                       free);
     inEssence = false;
     essenceSID = 0;
-  } // else error - ending essence that wasn't started
+  }
 }
 
 void markFill(mxfUInt64 fillKeyPosition,
