@@ -1404,10 +1404,11 @@ void printV(mxfLength& length, bool limitBytes, mxfUInt32 limit, FILE* f)
   for (mxfLength i = 0; i < length; i++) {
     mxfByte b;
     readMxfUInt08(b, f);
-    if ((i < limit) || !limitBytes) {
-      dumpByte(b);
-      count = count + 1;
+    if (limitBytes && (i == limit)) {
+      break;
     }
+    dumpByte(b);
+    count = count + 1;
   }
   flush();
   if (count < length) {
@@ -1416,6 +1417,9 @@ void printV(mxfLength& length, bool limitBytes, mxfUInt32 limit, FILE* f)
     fprintf(stdout, " bytes to ");
     printField(stdout, limit);
     fprintf(stdout, " bytes ]\n");
+
+    mxfUInt64 skipLength = (length - count) - 1;
+    skipV(skipLength, f);
   }
 }
 
