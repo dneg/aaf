@@ -876,6 +876,24 @@ void printFormatOptions(void)
   fprintf(stderr, "dump fill bytes (-f)\n");
 }
 
+void printRawOptions(void);
+
+void printRawOptions(void)
+{
+  fprintf(stderr, "  --limit <n>   = ");
+  fprintf(stderr, "truncate values ");
+  fprintf(stderr, "to <n> bytes [default n = 0] (-l)\n");
+  fprintf(stderr, "  --no-limit    = ");
+  fprintf(stderr, "do not truncate ");
+  fprintf(stderr, "values (-e)\n");
+  fprintf(stderr, "  --relative    = ");
+  fprintf(stderr, "print relative addresses ");
+  fprintf(stderr, "- the start of the value == 0 (-r)\n");
+  fprintf(stderr, "  --absolute    = ");
+  fprintf(stderr, "print absolute addresses ");
+  fprintf(stderr, "- the start of the file == 0 (-b)\n");
+}
+
 void printAAFOptions(void);
 
 void printAAFOptions(void)
@@ -899,22 +917,12 @@ void printSetOptions(void)
   printFormatOptions();
   printCommonOptions();
 }
+
 void printKLVOptions(void);
 
 void printKLVOptions(void)
 {
-  fprintf(stderr, "  --limit <n>   = ");
-  fprintf(stderr, "truncate values ");
-  fprintf(stderr, "to <n> bytes [default n = 0] (-l)\n");
-  fprintf(stderr, "  --no-limit    = ");
-  fprintf(stderr, "do not truncate ");
-  fprintf(stderr, "values (-e)\n");
-  fprintf(stderr, "  --relative    = ");
-  fprintf(stderr, "print relative addresses ");
-  fprintf(stderr, "- the start of the value == 0 (-r)\n");
-  fprintf(stderr, "  --absolute    = ");
-  fprintf(stderr, "print absolute addresses ");
-  fprintf(stderr, "- the start of the file == 0 (-b)\n");
+  printRawOptions();
   printCommonOptions();
 }
 
