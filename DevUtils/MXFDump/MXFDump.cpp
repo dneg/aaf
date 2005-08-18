@@ -2153,6 +2153,46 @@ void printSystemMetadata(mxfKey& k, mxfLength& len, FILE* infile)
   printV(len, false, 0, infile);
 }
 
+void printObjectDirectory(mxfKey& k, mxfLength& len, FILE* infile);
+
+void printObjectDirectory(mxfKey& k, mxfLength& len, FILE* infile)
+{
+  printKL(k, len);
+  mxfUInt64 entryCount;
+  readMxfUInt64(entryCount, infile);
+  mxfUInt08 entrySize;
+  readMxfUInt08(entrySize, infile);
+
+  fprintf(stdout, "  [ Number of entries = ");
+  printField(stdout, entryCount);
+  fprintf(stdout, ", Entry size        = ");
+  printField(stdout, entrySize);
+  fprintf(stdout, " ]\n");
+
+  if (entryCount > 0) { 
+    fprintf(stdout, "  Object");
+	fprintf(stdout, "                                           Offset");
+    fprintf(stdout, "            Flags\n");
+  }
+
+  for (mxfUInt64 i = 0; i < entryCount; i++) {
+    mxfKey instance;
+    readMxfKey(instance, infile);
+    mxfUInt64 offset;
+    readMxfUInt64(offset, infile);
+    mxfUInt08 flags;
+    readMxfUInt08(flags, infile);
+
+    fprintf(stdout, "  ");
+    printMxfKey(instance, stdout);
+    fprintf(stdout, "  ");
+    printHexField(stdout, offset);
+    fprintf(stdout, "  ");
+    printHexField(stdout, flags);
+    fprintf(stdout, "\n");
+  }
+}
+
 bool lFlag = false;
 bool limitBytes = false;
 mxfUInt32 limit = 0;
@@ -2274,6 +2314,8 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
     //
   } else if (memcmp(&SystemMetadata, &k, sizeof(mxfKey)) == 0) {
     printSystemMetadata(k, len, infile);
+  } else if (memcmp(&ObjectDirectory, &k, sizeof(mxfKey)) == 0) {
+    printObjectDirectory(k, len, infile);
   } else if (memcmp(&IndexTable, &k, sizeof(mxfKey)) == 0) {
     printIndexTable(k, len, infile);
   } else if (isFill(k)) {
