@@ -1,4 +1,24 @@
 
+#ifndef MXF_LABEL
+#define MXF_LABEL(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)
+#endif
+
+#ifndef MXF_DEFINE_PACK_KEY
+#define MXF_DEFINE_PACK_KEY(n, k)
+#endif
+
+#ifndef MXF_DEFINE_SET_KEY
+#define MXF_DEFINE_SET_KEY(n, k)
+#endif
+
+#ifndef MXF_DEFINE_SEGEMENT_KEY
+#define MXF_DEFINE_SEGEMENT_KEY(n, k)
+#endif
+
+#ifndef MXF_DEFINE_KEY
+#define MXF_DEFINE_KEY(n, k)
+#endif
+
 MXF_DEFINE_PACK_KEY(OpenHeaderPartition,
   MXF_LABEL(0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
             0x0d, 0x01, 0x02, 0x01, 0x01, 0x02, 0x01, 0x00))
@@ -128,3 +148,13 @@ MXF_DEFINE_KEY(SystemMetadata,
 MXF_DEFINE_KEY(BogusFill,
   MXF_LABEL(0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
             0x03, 0x01, 0x02, 0x10, 0x01, 0x01, 0x01, 0x00))
+
+#undef MXF_LABEL
+
+#undef MXF_DEFINE_PACK_KEY
+
+#undef MXF_DEFINE_SET_KEY
+
+#undef MXF_DEFINE_SEGEMENT_KEY
+
+#undef MXF_DEFINE_KEY
