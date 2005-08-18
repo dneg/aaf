@@ -908,6 +908,10 @@ void printFormatOptions(void)
   fprintf(stderr, "do not truncate ");
   fprintf(stderr, "essence containers (-e)\n");
 
+  fprintf(stderr, "  --entries <n> = ");
+  fprintf(stderr, "print only the first <n> ");
+  fprintf(stderr, "index table entries (-c)\n");
+
   fprintf(stderr, "  --fill        = ");
   fprintf(stderr, "dump fill bytes (-f)\n");
 }
@@ -1560,6 +1564,9 @@ void printFooterPartition(mxfKey& k, mxfLength& len, FILE* infile)
   printPartition(k, len, infile);
 }
 
+bool cFlag = false;
+mxfUInt32 maxIndexEntries = 0;
+
 void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile);
 
 void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
@@ -1619,6 +1626,7 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
         fprintf(stdout, "          Offset   Offset               Offset\n");
       }
 
+      mxfUInt32 count = 0;
       for (mxfUInt32 i = 0; i < entryCount; i++) {
         mxfUInt08 temporalOffset; // signed
         readMxfUInt08(temporalOffset, infile);
@@ -1629,25 +1637,35 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
         mxfUInt64 streamOffset;
         readMxfUInt64(streamOffset, infile);
 
-        fprintf(stdout, "    ");
-        printField(stdout, i);
-        fprintf(stdout, " :");
-        fprintf(stdout, "    ");
-        printField(stdout, temporalOffset);
-        fprintf(stdout, "    ");
-        printField(stdout, anchorOffset);
-        fprintf(stdout, "     ");
-        printHexField(stdout, flags);
-        fprintf(stdout, "    ");
-        printField(stdout, streamOffset);
-        fprintf(stdout, "\n");
+        if (!cFlag || (i < maxIndexEntries)) {
+          fprintf(stdout, "    ");
+          printField(stdout, i);
+          fprintf(stdout, " :");
+          fprintf(stdout, "    ");
+          printField(stdout, temporalOffset);
+          fprintf(stdout, "    ");
+          printField(stdout, anchorOffset);
+          fprintf(stdout, "     ");
+          printHexField(stdout, flags);
+          fprintf(stdout, "    ");
+          printField(stdout, streamOffset);
+          fprintf(stdout, "\n");
 
-        for (mxfUInt32 s = 0; s < sliceCount; s++) {
-          mxfUInt32 sliceOffset;
-          readMxfUInt32(sliceOffset, infile);
-          // Not yet printed
+          for (mxfUInt32 s = 0; s < sliceCount; s++) {
+            mxfUInt32 sliceOffset;
+            readMxfUInt32(sliceOffset, infile);
+            // Not yet printed
+          }
+          count = count + 1;
         }
         setLength = setLength + 11 + (4 * sliceCount);
+      }
+      if (count < entryCount) {
+        fprintf(stdout, "[ Truncated from ");
+        printField(stdout, entryCount);
+        fprintf(stdout, " entries to ");
+        printField(stdout, maxIndexEntries);
+        fprintf(stdout, " entries ]\n");
       }
     } else if (identifier == 0x3f0b) {
       // Index Edit Rate
@@ -1895,6 +1913,7 @@ bool getInteger(int& i, char* s)
 // -f --fill
 // -e --no-limit
 // -l --limit
+// -c --entries
 // -r --relative
 // -b --absolute
 // -t --decimal
@@ -1951,6 +1970,29 @@ int main(int argumentCount, char* argumentVector[])
       } else {
         fprintf(stderr,
                 "%s : Error : \"%s\" must be followed by a byte count.\n",
+                programName,
+                p);
+        printUsage();
+        exit(EXIT_FAILURE);
+      }
+    } else if ((strcmp(p, "-c") == 0) || (strcmp(p, "--entries") == 0)) {
+      if ((i + 1 < argumentCount) && (*argumentVector[i + 1] != '-' )) {
+        cFlag = true;
+        i = i + 1;
+        char* counts = argumentVector[i];
+        int count;
+        if (!getInteger(count, counts)) {
+          fprintf(stderr, 
+                  "%s : Error : \"%s\" is not a valid count.\n",
+                  programName,
+                  counts);
+          printUsage();
+          exit(EXIT_FAILURE);
+        }
+        maxIndexEntries = count;
+      } else {
+        fprintf(stderr,
+                "%s : Error : \"%s\" must be followed by a count.\n",
                 programName,
                 p);
         printUsage();
