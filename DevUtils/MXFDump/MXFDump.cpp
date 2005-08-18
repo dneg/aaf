@@ -1477,7 +1477,19 @@ void dumpExtensionTypeRecord(mxfFile infile)
 }
 
 // Stream
-// String
+
+void dumpExtensionTypeString(mxfFile infile);
+
+void dumpExtensionTypeString(mxfFile infile)
+{
+  fprintf(stdout, "string type = [\n");
+  dumpExtensionDefinition(infile);
+
+  dumpMxfLabel("element type", infile);
+
+  fprintf(stdout, "]\n");
+}
+
 // ExtendibleEnumeration
 // Indirect
 
@@ -5398,7 +5410,9 @@ void printMetaDictionary(mxfKey& /* k */, mxfLength& len, mxfFile infile)
       dumpExtensionTypeRecord(infile);
       break;
       // Stream                = 3b
-      // String                = 3c
+    case 0x3c: // String
+      dumpExtensionTypeString(infile);
+      break;
       // ExtendibleEnumeration = 3d
       // Indirect              = 3e
     default:
