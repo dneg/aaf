@@ -5026,16 +5026,6 @@ void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
 
 }
 
-mxfUInt64 checkFooterPosition(mxfUInt64 footer, mxfUInt64 keyPosition);
-
-mxfUInt64 checkFooterPosition(mxfUInt64 footer, mxfUInt64 keyPosition)
-{
-  if (footer != 0) {
-    mxfError(currentKey, keyPosition, "More than one footer");
-  }
-  return keyPosition;
-}
-
 mxfPartition* checkFooterPartition(mxfPartition* footer,
                                    mxfPartition* partition);
 
