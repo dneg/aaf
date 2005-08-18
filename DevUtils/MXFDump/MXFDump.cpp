@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 #if defined (_MSC_VER) && defined(_M_IX86) && defined(_WIN32)
 #define MXF_COMPILER_MSC_INTEL_WINDOWS
@@ -144,8 +145,6 @@ typedef struct mxfRationalTag {
   mxfUInt32 denominator;
 } mxfRational;
 
-const char* programName;
-
 typedef enum ModeTag {
   unspecifiedMode,
   klvMode,
@@ -224,6 +223,102 @@ void printFill(mxfKey& k, mxfLength& len, FILE* infile);
 
 void skipV(mxfLength& length, FILE* f);
 
+void print(char* format, ...);
+
+void vprint(char* format, va_list ap);
+
+void error(char* format, ...);
+
+void verror(char* format, va_list ap);
+
+void fatalError(char* format, ...);
+
+void warning(char* format, ...);
+
+void message(char* format, ...);
+
+void vmessage(char* format, va_list ap);
+
+void setProgramName(const char* programName);
+
+char* programName(void);
+
+void print(char* format, ...)
+{
+  va_list ap;
+  va_start(ap, format);
+  vfprintf(stderr, format, ap);
+  va_end(ap);
+}
+
+void vprint(char* format, va_list ap)
+{
+  vfprintf(stderr, format, ap);
+}
+
+void error(char* format, ...)
+{
+  va_list ap;
+  va_start(ap, format);
+  fprintf(stderr, "%s : Error : ", programName());
+  vfprintf(stderr, format, ap);
+  va_end(ap);
+}
+
+void verror(char* format, va_list ap)
+{
+  fprintf(stderr, "%s : Error : ", programName());
+  vfprintf(stderr, format, ap);
+}
+
+void fatalError(char* format, ...)
+{
+  va_list ap;
+  va_start(ap, format);
+  fprintf(stderr, "%s : Error : ", programName());
+  vfprintf(stderr, format, ap);
+  exit(EXIT_FAILURE);
+  va_end(ap);
+}
+
+void warning(char* format, ...)
+{
+  va_list ap;
+  va_start(ap, format);
+  fprintf(stderr, "%s : Warning : ", programName());
+  vfprintf(stderr, format, ap);
+  va_end(ap);
+}
+
+
+void message(char* format, ...)
+{
+  va_list ap;
+  va_start(ap, format);
+  fprintf(stderr, "%s : ", programName());
+  vfprintf(stderr, format, ap);
+  va_end(ap);
+}
+
+void vmessage(char* format, va_list ap)
+{
+  fprintf(stderr, "%s : ", programName());
+  vfprintf(stderr, format, ap);
+}
+
+char* progName;
+
+void setProgramName(const char* programName)
+{
+  progName = (char*)malloc(strlen(programName) + 1);
+  strcpy(progName, programName);
+}
+
+char* programName(void)
+{
+  return progName;
+}
+
 bool verbose = false;
 bool debug = false;
 mxfUInt32 errors = 0;
@@ -275,14 +370,12 @@ void setPosition(const mxfUInt64 position, FILE* f)
 #else
   long offset = static_cast<long>(position);
   if (position != static_cast<mxfUInt64>(offset)) {
-    fprintf(stderr, "%s : Error : Offset too large.\n", programName);
-    exit(EXIT_FAILURE);
+    fatalError("Offset too large.\n");
   }
   int status = fseek(f, offset, SEEK_SET);
 #endif
   if (status != 0) {
-    fprintf(stderr, "%s : Error : Failed to seek.\n", programName);
-    exit(EXIT_FAILURE);
+    fatalError("Failed to seek.\n");
   }
 }
 
@@ -296,8 +389,7 @@ void readMxfUInt08(mxfByte& b, FILE* f)
 {
   int c = fread(&b, 1, sizeof(mxfByte), f);
   if (c != sizeof(mxfByte)) {
-    fprintf(stderr, "%s : Error : Failed to read byte.\n", programName);
-    exit(EXIT_FAILURE);
+    fatalError("Failed to read byte.\n");
   }
   position = position + c;
 }
@@ -306,8 +398,7 @@ void readMxfUInt16(mxfUInt16& i, FILE* f)
 {
   int c = fread(&i, 1, sizeof(mxfUInt16), f);
   if (c != sizeof(mxfUInt16)) {
-    fprintf(stderr, "%s : Error : Failed to read mxfUInt16.\n", programName);
-    exit(EXIT_FAILURE);
+    fatalError("Failed to read mxfUInt16.\n");
   }
   position = position + c;
   if (reorder()) {
@@ -319,8 +410,7 @@ void readMxfUInt32(mxfUInt32& i, FILE* f)
 {
   int c = fread(&i, 1, sizeof(mxfUInt32), f);
   if (c != sizeof(mxfUInt32)) {
-    fprintf(stderr, "%s : Error : Failed to read mxfUInt32.\n", programName);
-    exit(EXIT_FAILURE);
+    fatalError("Failed to read mxfUInt32.\n");
   }
   position = position + c;
   if (reorder()) {
@@ -332,8 +422,7 @@ void readMxfUInt64(mxfUInt64& i, FILE* f)
 {
   int c = fread(&i, 1, sizeof(mxfUInt64), f);
   if (c != sizeof(mxfUInt64)) {
-    fprintf(stderr, "%s : Error : Failed to read mxfUInt64.\n", programName);
-    exit(EXIT_FAILURE);
+    fatalError("Failed to read mxfUInt64.\n");
   }
   position = position + c;
   if (reorder()) {
@@ -352,8 +441,7 @@ void readMxfKey(mxfKey& k, FILE* f)
   keyPosition = position;
   int c = fread(&k, 1, sizeof(mxfKey), f);
   if (c != sizeof(mxfKey)) {
-    fprintf(stderr, "%s : Error : Failed to read key.\n", programName);
-    exit(EXIT_FAILURE);
+    fatalError("Failed to read key.\n");
   }
   position = position + c;
 }
@@ -365,8 +453,7 @@ bool readOuterMxfKey(mxfKey& k, FILE* f)
   int c = fread(&k, 1, sizeof(mxfKey), f);
   if (c != sizeof(mxfKey)) {
     if (!feof(f)) {
-      fprintf(stderr, "%s : Error : Failed to read key.\n", programName);
-      exit(EXIT_FAILURE);
+      fatalError("Failed to read key.\n");
     } else {
       result = false;
     }
@@ -406,15 +493,11 @@ int readMxfLength(mxfLength& l, FILE* f)
   mxfUInt64 x = 0;
   int bytesRead = readBERLength(x, f);
   if (bytesRead > 9) {
-    fprintf(stderr,
-            "%s : Error : Invalid BER encoded length.\n",
-            programName);
+    error("Invalid BER encoded length.\n");
     errors = errors + 1;
   }
   if (x == 0) {
-    fprintf(stderr,
-            "%s : Warning : Length is zero.\n",
-            programName);
+    warning("Length is zero.\n");
     errors = errors + 1;
   }
   l = x;
@@ -972,16 +1055,13 @@ void checkSizes(void);
 void checkSizes(void)
 {
   if (sizeof(mxfLength) != 8) {
-    fprintf(stderr, "%s : Error : Wrong sizeof(mxfLength).\n", programName);
-    exit(EXIT_FAILURE);
+    fatalError("Wrong sizeof(mxfLength).\n");
   }
   if (sizeof(mxfKey) != 16) {
-    fprintf(stderr, "%s : Error : Wrong sizeof(mxfKey).\n", programName);
-    exit(EXIT_FAILURE);
+    fatalError("Wrong sizeof(mxfKey).\n");
   }
   if (sizeof(mxfByte) != 1) {
-    fprintf(stderr, "%s : Error : Wrong sizeof(mxfByte).\n", programName);
-    exit(EXIT_FAILURE);
+    fatalError("Wrong sizeof(mxfByte).\n");
   }
 }
 
@@ -1231,8 +1311,8 @@ void printUsage(void)
 {
   fprintf(stderr,
           "%s : Usage : %s OPTIONS <file>\n",
-          programName,
-          programName);
+          programName(),
+          programName());
 
   fprintf(stderr, "--aaf-dump            = ");
   fprintf(stderr, "dump AAF (-a)\n");
@@ -1348,8 +1428,8 @@ void printFullUsage(void)
 {
   fprintf(stderr,
           "%s : Usage : %s OPTIONS <file>\n",
-          programName,
-          programName);
+          programName(),
+          programName());
 
   printAAFUsage();
   printMXFUsage();
@@ -2151,8 +2231,7 @@ void printLocalV(mxfUInt16& length,
   printV(vLength, false, 0, infile);
   remainder = remainder - vLength;
   if (vLength < length) {
-    fprintf(stderr, "%s : Error : Local set KLV parse error", programName);
-    fprintf(stderr, " (set exhausted printing value).\n");
+    error("Local set KLV parse error (set exhausted printing value).\n");
   }
 }
 
@@ -2161,11 +2240,7 @@ void checkLocalKey(mxfLocalKey& k);
 void checkLocalKey(mxfLocalKey& k)
 {
   if (k == nullMxfLocalKey) {
-    fprintf(stderr,
-            "%s : Error : Illegal local key (",
-            programName);
-    printMxfLocalKey(k, stderr);
-    fprintf(stderr, ").\n");
+    error("Illegal local key ("MXFPRIu16").\n", k);
   }
 }
 
@@ -2278,8 +2353,7 @@ void printLocalKey(mxfLocalKey& identifier,
     checkLocalKey(identifier);
     remainder = remainder - 2;
   } else {
-    fprintf(stderr, "%s : Error : Local set KLV parse error", programName);
-    fprintf(stderr, " (set exhausted looking for key).\n");
+    error("Local set KLV parse error (set exhausted looking for key).\n");
     skipBogusBytes(remainder, infile);
     remainder = 0;
   }
@@ -2297,8 +2371,7 @@ void printLocalLength(mxfUInt16& length,
     readMxfUInt16(length, infile);
     remainder = remainder - 2;
   } else {
-    fprintf(stderr, "%s : Error : Local set KLV parse error", programName);
-    fprintf(stderr, " (set exhausted looking for length).\n");
+    error("Local set KLV parse error (set exhausted looking for length).\n");
     skipBogusBytes(remainder, infile);
     remainder = 0;
   }
@@ -2375,8 +2448,7 @@ void printPartition(mxfKey& k, mxfLength& len, FILE* infile)
   readMxfUInt64(thisPartition, infile);
   printMxfUInt64(stdout, "ThisPartition", thisPartition);
   if (thisPartition != keyPosition) {
-    fprintf(stderr, "%s : Error : ", programName);
-    fprintf(stderr, "Incorrect value for ThisPartition.\n");
+    error("Incorrect value for ThisPartition.\n");
     printMxfUInt64(stderr, "Expected", keyPosition);
   }
   dumpMxfUInt64("PreviousPartition", infile);
@@ -2795,11 +2867,7 @@ void klvDumpFile(char* fileName)
 
   infile = fopen(fileName, "rb");
   if (infile == NULL) {
-    fprintf(stderr,
-            "%s : Error : File \"%s\" not found.\n",
-            programName,
-            fileName);
-    exit(EXIT_FAILURE);
+    fatalError("File \"%s\" not found.\n", fileName);
   }
 
   mxfKey k;
@@ -2818,11 +2886,7 @@ void setDumpFile(char* fileName)
 
   infile = fopen(fileName, "rb");
   if (infile == NULL) {
-    fprintf(stderr,
-            "%s : Error : File \"%s\" not found.\n",
-            programName,
-            fileName);
-    exit(EXIT_FAILURE);
+    fatalError("File \"%s\" not found.\n", fileName);
   }
 
   mxfKey k;
@@ -2832,10 +2896,7 @@ void setDumpFile(char* fileName)
 
     if (isNullKey(k)) {
       printKL(k, len);
-      fprintf(stderr,
-              "%s : Error : Null key.\n",
-              programName);
-      exit(EXIT_FAILURE);
+      fatalError("Null key.\n");
     } else if (isLocalSet(k)) {
       printLocalSet(k, len, infile);
     } else if (isFill(k)) {
@@ -2862,10 +2923,7 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
 {
   if (isNullKey(k)) {
     printKL(k, len);
-    fprintf(stderr,
-            "%s : Error : Null key.\n",
-            programName);
-    exit(EXIT_FAILURE);
+    fatalError("Null key.\n");
   } else if (memcmp(&OpenHeader, &k, sizeof(mxfKey)) == 0) {
     printHeaderPartition(k, len, infile);
   } else if (memcmp(&OpenCompleteHeader, &k, sizeof(mxfKey)) == 0) {
@@ -2956,11 +3014,7 @@ void mxfDumpFile(char* fileName)
 
   infile = fopen(fileName, "rb");
   if (infile == NULL) {
-    fprintf(stderr,
-            "%s : Error : File \"%s\" not found.\n",
-            programName,
-            fileName);
-    exit(EXIT_FAILURE);
+    fatalError("File \"%s\" not found.\n", fileName);
   }
 
   mxfKey k;
@@ -2979,10 +3033,7 @@ void aafDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
 {
   if (isNullKey(k)) {
     printKL(k, len);
-    fprintf(stderr,
-            "%s : Error : Null key.\n",
-            programName);
-    exit(EXIT_FAILURE);
+    fatalError("Null key.\n");
   } else if (isAAFKey(k)) {
     printLocalSet(k, len, infile);
   } else {
@@ -2996,11 +3047,7 @@ void aafDumpFile(char* fileName)
 
   infile = fopen(fileName, "rb");
   if (infile == NULL) {
-    fprintf(stderr,
-            "%s : Error : File \"%s\" not found.\n",
-            programName,
-            fileName);
-    exit(EXIT_FAILURE);
+    fatalError("File \"%s\" not found.\n", fileName);
   }
 
   mxfKey k;
@@ -3026,7 +3073,7 @@ void klvValidate(FILE* infile)
 
   fprintf(stderr,
           "%s : KLV validation       - ",
-          programName);
+          programName());
   if (errors == 0) {
     fprintf(stderr, "passed.\n");
   } else {
@@ -3041,7 +3088,7 @@ void setValidate(FILE* /* infile */)
   if (verbose) {
     fprintf(stderr,
             "%s : local set validation - not yet implemented.\n",
-            programName);
+            programName());
   }
 }
 
@@ -3052,7 +3099,7 @@ void mxfValidate(FILE* /* infile */)
   if (verbose) {
     fprintf(stderr,
             "%s : MXF validation       - not yet implemented.\n",
-            programName);
+            programName());
   }
 }
 
@@ -3063,7 +3110,7 @@ void aafValidate(FILE* /* infile */)
   if (verbose) {
     fprintf(stderr,
             "%s : AAF validation       - not yet implemented.\n",
-            programName);
+            programName());
   }
 }
 
@@ -3073,11 +3120,7 @@ void mxfValidateFile(Mode mode, char* fileName)
 
   infile = fopen(fileName, "rb");
   if (infile == NULL) {
-    fprintf(stderr,
-            "%s : Error : File \"%s\" not found.\n",
-            programName,
-            fileName);
-    exit(EXIT_FAILURE);
+    fatalError("File \"%s\" not found.\n", fileName);
   }
 
   switch (mode) {
@@ -3105,11 +3148,8 @@ void setMode(Mode m);
 void setMode(Mode m)
 {
   if (mode != unspecifiedMode) {
-    fprintf(stderr,
-            "%s : Error : Specify only one of ",
-            programName);
-    fprintf(stderr,
-            "--klv-dump, --set-dump, --mxf-dump, --aaf-dump.\n");
+    error("Specify only one of "
+          "--klv-dump, --set-dump, --mxf-dump, --aaf-dump.\n");
     printUsage();
     exit(EXIT_FAILURE);
   }
@@ -3149,20 +3189,12 @@ int getIntegerOption(int currentArgument,
   if ((optArg < argumentCount) && (*argumentVector[optArg] != '-' )) {
     char* value = argumentVector[optArg];
     if (!getInteger(result, value)) {
-      fprintf(stderr, 
-              "%s : Error : \"%s\" is not a valid %s.\n",
-              programName,
-              value,
-              label);
+      error("\"%s\" is not a valid %s.\n", value, label);
       printUsage();
       exit(EXIT_FAILURE);
     }
   } else {
-    fprintf(stderr,
-            "%s : Error : \"%s\" must be followed by a %s.\n",
-            programName,
-            option,
-            label);
+    error("\"%s\" must be followed by a %s.\n", option, label);
     printUsage();
     exit(EXIT_FAILURE);
   }
@@ -3206,7 +3238,7 @@ int main(int argumentCount, char* argumentVector[])
   argumentCount = ccommand(&argumentVector);
 #endif
 
-  programName = baseName(argumentVector[0]);
+  setProgramName(baseName(argumentVector[0]));
   checkSizes();
   initAAFKeyTable();
   position = 0;
@@ -3301,7 +3333,7 @@ int main(int argumentCount, char* argumentVector[])
                (strcmp(p, "-d") == 0)) {
       debug = true;
     } else if (*p == '-') {
-      fprintf(stderr, "%s : Error : Invalid option \"%s\".\n", programName, p);
+      error("Invalid option \"%s\".\n", p);
       printUsage();
       exit(EXIT_FAILURE);
     } else {
@@ -3339,9 +3371,7 @@ int main(int argumentCount, char* argumentVector[])
 
   if (mode == klvMode) {
     if (dumpFill) {
-      fprintf(stderr,
-              "%s : Error : --show-fill not valid with --klv-dump.\n",
-              programName);
+      error("--show-fill not valid with --klv-dump.\n");
       printUsage();
       exit(EXIT_FAILURE);
     }
@@ -3354,10 +3384,7 @@ int main(int argumentCount, char* argumentVector[])
   }
   int expectedFiles = 1;
   if (fileCount != expectedFiles) {
-    fprintf(stderr,
-            "%s : Error : Wrong number of arguments (%d).\n",
-            programName,
-            fileCount);
+    error("Wrong number of arguments (%d).\n", fileCount);
     printUsage();
     exit(EXIT_FAILURE);
   }
