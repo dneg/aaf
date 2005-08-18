@@ -1310,41 +1310,49 @@ bool lookupKey(mxfKey& k, size_t& index)
   return result;
 }
 
+void printMxfKeySymbol(mxfKey& k);
+
+void printMxfKeySymbol(mxfKey& k)
+{
+  size_t i;
+  bool found = lookupKey(k, i);
+  if (found) {
+    fprintf(stdout, "%s\n", keyTable[i]._name);
+  } else {
+    fprintf(stdout, "Dark\n");
+  }
+}
+
+void printAAFKeySymbol(mxfKey& k);
+
+void printAAFKeySymbol(mxfKey& k)
+{
+  size_t i;
+  bool found = lookupKey(k, i);
+  if (found) {
+    fprintf(stdout, "%s\n", keyTable[i]._name);
+  } else {
+    char* flag;
+    found = findAAFKey(k, i, &flag);
+    if (found) {
+      fprintf(stdout, "%s%s\n", aafKeyTable[i]._name, flag);
+    } else {
+      fprintf(stdout, "Dark\n");
+    }
+  }
+}
+
 void printMxfKeySymbol(mxfKey& k, FILE* f);
 
 void printMxfKeySymbol(mxfKey& k, FILE* f)
 {
   if (symbolic) {
-    size_t i;
-    bool found = lookupKey(k, i);
-    if (found) {
-      fprintf(stdout, "%s\n", keyTable[i]._name);
+    if (mode == aafMode) {
+      printAAFKeySymbol(k);
+    } else if (mode == mxfMode) {
+      printMxfKeySymbol(k);
     } else {
-      fprintf(stdout, "Dark\n");
-    }
-  } else {
-    fprintf(stdout, "\n");
-  }
-  printMxfKey(k, f);
-}
-
-void printAAFKeySymbol(mxfKey& k, FILE* f);
-
-void printAAFKeySymbol(mxfKey& k, FILE* f)
-{
-  if (symbolic) {
-    size_t i;
-    bool found = lookupKey(k, i);
-    if (found) {
-      fprintf(stdout, "%s\n", keyTable[i]._name);
-    } else {
-      char* flag;
-      found = findAAFKey(k, i, &flag);
-      if (found) {
-        fprintf(stdout, "%s%s\n", aafKeyTable[i]._name, flag);
-      } else {
-        fprintf(stdout, "Dark\n");
-      }
+      fprintf(stdout, "Unknown\n");
     }
   } else {
     fprintf(stdout, "\n");
