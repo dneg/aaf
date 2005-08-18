@@ -577,13 +577,13 @@ void mxfDumpFile(char* fileName)
         fprintf(stdout, "\n");
       }
     } else if ((memcmp(&Filler, &k, sizeof(mxfKey)) == 0) && !dumpFiller) {
-      for (mxfUInt16 i = 0; i < len; i++) {
+      for (mxfLength i = 0; i < len; i++) {
         mxfByte b;
         readMxfByte(b, infile);
       }
     } else {
       init();
-      for (mxfUInt16 i = 0; i < len; i++) {
+      for (mxfLength i = 0; i < len; i++) {
         mxfByte b;
         readMxfByte(b, infile);
         dumpByte(b);
