@@ -6094,6 +6094,8 @@ void mxfValidate(mxfFile infile)
       markMetadataEnd(keyPosition);
       markIndexStart(currentPartition->_indexSID, keyPosition);
       validateIndexSegment(k, len, infile);
+    } else if (isFill(k)) {
+      skipV(len, infile);
     } else {
       skipV(len, infile);
     }
