@@ -1254,10 +1254,10 @@ void printMxfLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing)
     if (found) {
       fprintf(stdout, "%s\n", localKeyTable[i]._name);
     } else {
-      fprintf(stdout, "Unknown\n");
+      fprintf(stdout, "Dark\n");
     }
   } else {
-    fprintf(stdout, "Unknown\n");
+    fprintf(stdout, "Dark\n");
   }
 }
 
@@ -1271,10 +1271,10 @@ void printAAFLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing)
     if (found) {
       fprintf(stdout, "%s\n", localKeyTable[i]._name);
     } else {
-      fprintf(stdout, "Unknown\n");
+      fprintf(stdout, "Dark\n");
     }
   } else {
-    fprintf(stdout, "Unknown\n");
+    fprintf(stdout, "Dark\n");
   }
 }
 
