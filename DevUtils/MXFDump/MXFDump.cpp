@@ -4493,7 +4493,9 @@ void mxfValidate(mxfFile infile)
     mxfWarning("No random index found.\n");
   }
   destroyPartitions(p);
-//printStreams(streams);
+#if 0
+  printStreams(streams);
+#endif
   destroyStreams(streams);
 
   fprintf(stderr,
