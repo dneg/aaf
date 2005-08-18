@@ -140,6 +140,20 @@ void printHexField(FILE* f, mxfUInt32& i)
 #endif
 }
 
+// Define values of MXF keys
+
+#define MXF_LABEL(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) \
+                 {a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p}
+
+#define MXF_DEFINE_PACK_KEY(n, k)     const mxfKey n = k;
+#define MXF_DEFINE_SET_KEY(n, k)      const mxfKey n = k;
+#define MXF_DEFINE_SEGEMENT_KEY(n, k) const mxfKey n = k;
+#define MXF_DEFINE_KEY(n, k)          const mxfKey n = k;
+
+#include "MXFMetaDictionary.h"
+
+// Define map
+
 #define MXF_LABEL(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) \
                  {a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p}
 
@@ -224,19 +238,6 @@ bool lookupAAFKey(mxfKey& k, size_t& index)
 }
 
 const mxfLocalKey nullMxfLocalKey = {0, 0};
-
-const mxfKey ClosedHeaderPartition =
-  {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
-   0x0d, 0x01, 0x02, 0x01, 0x01, 0x02, 0x02, 0x00};
-const mxfKey Primer =
-  {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
-   0x0d, 0x01, 0x02, 0x01, 0x01, 0x05, 0x01, 0x00};
-const mxfKey Fill =
-  {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
-   0x03, 0x01, 0x02, 0x10, 0x01, 0x00, 0x00, 0x00};
-const mxfKey BogusFill =
-  {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
-   0x03, 0x01, 0x02, 0x10, 0x01, 0x01, 0x01, 0x00};
 
 const char* programName;
 
@@ -895,6 +896,8 @@ void printHeaderPartition(mxfKey& k, mxfLength& len, FILE* infile);
 
 void printHeaderPartition(mxfKey& k, mxfLength& len, FILE* infile)
 {
+  printKL(k, len);
+  printV(len, false, 0, infile);
 }
 
 void printPrimer(mxfKey& k, mxfLength& len, FILE* infile);
