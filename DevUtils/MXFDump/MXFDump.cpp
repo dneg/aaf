@@ -26,6 +26,9 @@
 #elif defined(__GNUC__) && defined(__ppc__) && defined(__APPLE__)
 #define MXF_COMPILER_GCC_PPC_MACOSX
 #define MXF_OS_MACOSX
+#elif defined(mips) && defined(sgi)
+#define MXF_COMPILER_SGICC_MIPS_SGI
+#define MXF_OS_UNIX
 #else
 #error "Unknown compiler"
 #endif
@@ -59,6 +62,11 @@ typedef unsigned short int     mxfUInt16;
 typedef unsigned long int      mxfUInt32;
 typedef unsigned long long int mxfUInt64;
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
+typedef unsigned char          mxfUInt08;
+typedef unsigned short int     mxfUInt16;
+typedef unsigned long int      mxfUInt32;
+typedef unsigned long long int mxfUInt64;
+#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
 typedef unsigned char          mxfUInt08;
 typedef unsigned short int     mxfUInt16;
 typedef unsigned long int      mxfUInt32;
@@ -329,6 +337,8 @@ void printField(FILE* f, mxfUInt08& i)
   fprintf(f, "%05u", i);
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
   fprintf(f, "%05u", i);
+#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
+  fprintf(f, "%05u", i);
 #endif
 }
 
@@ -343,6 +353,8 @@ void printField(FILE* f, mxfUInt16& i)
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
   fprintf(f, "%10lu", i);
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
+  fprintf(f, "%10u", i);
+#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
   fprintf(f, "%10u", i);
 #endif
 }
@@ -359,6 +371,8 @@ void printField(FILE* f, mxfUInt32& i)
   fprintf(f, "%10lu", i);
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
   fprintf(f, "%10lu", i);
+#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
+  fprintf(f, "%10lu", i);
 #endif
 }
 
@@ -373,6 +387,8 @@ void printField(FILE* f, mxfUInt64& i)
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
   fprintf(f, "%10llu", i);
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
+  fprintf(f, "%10llu", i);
+#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
   fprintf(f, "%10llu", i);
 #endif
 }
@@ -389,6 +405,8 @@ void printHexField(FILE* f, mxfUInt08& i)
   fprintf(f, "%02x", i);
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
   fprintf(f, "%02x", i);
+#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
+  fprintf(f, "%02x", i);
 #endif
 }
 
@@ -403,6 +421,8 @@ void printHexField(FILE* f, mxfUInt16& i)
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
   fprintf(f, "%04lx", i);
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
+  fprintf(f, "%04x", i);
+#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
   fprintf(f, "%04x", i);
 #endif
 }
@@ -419,6 +439,8 @@ void printHexField(FILE* f, mxfUInt32& i)
   fprintf(f, "%08lx", i);
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
   fprintf(f, "%08lx", i);
+#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
+  fprintf(f, "%08lx", i);
 #endif
 }
 
@@ -434,6 +456,8 @@ void printHexField(FILE* f, mxfUInt64& i)
   fprintf(f, "%016llx", i);
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
   fprintf(f, "%016llx", i);
+#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
+  fprintf(f, "%016llx", i);
 #endif
 }
 
@@ -448,6 +472,8 @@ void printHex(FILE* f, mxfUInt64& i)
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
   fprintf(f, "%llx", i);
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
+  fprintf(f, "%llx", i);
+#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
   fprintf(f, "%llx", i);
 #endif
 }
