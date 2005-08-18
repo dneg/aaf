@@ -48,11 +48,11 @@ typedef unsigned int           mxfUInt32;
 typedef unsigned _int64        mxfUInt64;
 
 #define MXFPRIu08 "u"
-#define MXFPRIu16 "u"
+#define MXFPRIu16 "hu"
 #define MXFPRIu32 "u"
 #define MXFPRIu64 "I64u"
 #define MXFPRIx08 "x"
-#define MXFPRIx16 "x"
+#define MXFPRIx16 "hx"
 #define MXFPRIx32 "x"
 #define MXFPRIx64 "I64x"
 #elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
@@ -62,11 +62,11 @@ typedef unsigned long int      mxfUInt32;
 typedef unsigned long long int mxfUInt64;
 
 #define MXFPRIu08 "u"
-#define MXFPRIu16 "u"
+#define MXFPRIu16 "hu"
 #define MXFPRIu32 "lu"
 #define MXFPRIu64 "llu"
 #define MXFPRIx08 "x"
-#define MXFPRIx16 "x"
+#define MXFPRIx16 "hx"
 #define MXFPRIx32 "lx"
 #define MXFPRIx64 "llx"
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
@@ -76,11 +76,11 @@ typedef unsigned long int      mxfUInt32;
 typedef unsigned long long int mxfUInt64;
 
 #define MXFPRIu08 "u"
-#define MXFPRIu16 "u"
+#define MXFPRIu16 "hu"
 #define MXFPRIu32 "lu"
 #define MXFPRIu64 "llu"
 #define MXFPRIx08 "x"
-#define MXFPRIx16 "x"
+#define MXFPRIx16 "hx"
 #define MXFPRIx32 "lx"
 #define MXFPRIx64 "llx"
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
@@ -90,10 +90,10 @@ typedef unsigned long int      mxfUInt32;
 typedef unsigned long long int mxfUInt64;
 
 #define MXFPRIu08 "u"
-#define MXFPRIu16 "u"
+#define MXFPRIu16 "hu"
 #define MXFPRIu32 "lu"
 #define MXFPRIu64 "llu"
-#define MXFPRIx16 "x"
+#define MXFPRIx16 "hx"
 #define MXFPRIx32 "lx"
 #define MXFPRIx64 "llx"
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
@@ -103,11 +103,11 @@ typedef unsigned long int      mxfUInt32;
 typedef unsigned long long int mxfUInt64;
 
 #define MXFPRIu08 "u"
-#define MXFPRIu16 "u"
+#define MXFPRIu16 "hu"
 #define MXFPRIu32 "lu"
 #define MXFPRIu64 "llu"
 #define MXFPRIx08 "x"
-#define MXFPRIx16 "x"
+#define MXFPRIx16 "hx"
 #define MXFPRIx32 "lx"
 #define MXFPRIx64 "llx"
 #elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
@@ -117,11 +117,11 @@ typedef unsigned long int      mxfUInt32;
 typedef unsigned long long int mxfUInt64;
 
 #define MXFPRIu08 "u"
-#define MXFPRIu16 "u"
+#define MXFPRIu16 "hu"
 #define MXFPRIu32 "lu"
 #define MXFPRIu64 "llu"
 #define MXFPRIx08 "x"
-#define MXFPRIx16 "x"
+#define MXFPRIx16 "hx"
 #define MXFPRIx32 "lx"
 #define MXFPRIx64 "llx"
 #endif
