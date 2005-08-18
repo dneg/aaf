@@ -4883,10 +4883,15 @@ typedef struct mxfRIPEntryTag {
 
 typedef std::list<mxfRIPEntry> RandomIndex;
 
-void readRandomIndex(RandomIndex& rip, mxfLength length, mxfFile infile);
+void readRandomIndex(RandomIndex& rip,
+                     mxfLength length,
+                     mxfUInt32& overallLength,
+                     mxfFile infile);
 
-
-void readRandomIndex(RandomIndex& rip, mxfLength length, mxfFile infile)
+void readRandomIndex(RandomIndex& rip,
+                     mxfLength length,
+                     mxfUInt32& overallLength,
+                     mxfFile infile)
 {
   mxfUInt64 entryCount = length / (sizeof(mxfUInt32) + sizeof(mxfUInt64));
   for (mxfUInt32 i = 0; i < entryCount; i++) {
@@ -4895,7 +4900,7 @@ void readRandomIndex(RandomIndex& rip, mxfLength length, mxfFile infile)
     readMxfUInt64(e._offset, infile);
     rip.push_back(e);
   }
-  skipBytes(sizeof(mxfUInt32), infile);
+  readMxfUInt32(overallLength, infile);
 }
 
 void printRandomIndex(RandomIndex& rip);
@@ -6130,7 +6135,8 @@ void mxfValidate(mxfFile infile)
     } else if (memcmp(&RandomIndexMetadata, &k, sizeof(mxfKey)) == 0) {
       markMetadataEnd(keyPosition);
       markIndexEnd(keyPosition);
-      readRandomIndex(rip, len, infile);
+      mxfUInt32 overall;
+      readRandomIndex(rip, len, overall, infile);
     } else if (isEssenceElement(k) || isSystemElement(k)) {
       markMetadataEnd(keyPosition);
       markIndexEnd(keyPosition);
