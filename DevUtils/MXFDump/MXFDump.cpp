@@ -598,6 +598,16 @@ void newSegment(mxfUInt32 sid,
                 mxfUInt64 start,
                 mxfUInt64 end);
 
+void newEssenceSegment(mxfUInt32 sid,
+                       mxfKey& label,
+                       mxfUInt64 start,
+                       mxfUInt64 end);
+
+void newIndexSegment(mxfUInt32 sid,
+                     mxfKey& label,
+                     mxfUInt64 start,
+                     mxfUInt64 end);
+
 // Frame wrapped essence
 bool frames = false;     // if true, treat essence as frame wrapped.
 bool iFlag = false;      // if true, only print maxFrames frames
@@ -3957,6 +3967,22 @@ void newSegment(mxfUInt32 sid,
   s->_size = s->_size + seg->_size;
 
   currentPartition->_segments.push_back(seg);
+}
+
+void newEssenceSegment(mxfUInt32 sid,
+                       mxfKey& label,
+                       mxfUInt64 start,
+                       mxfUInt64 end)
+{
+  newSegment(sid, label, start, end);
+}
+
+void newIndexSegment(mxfUInt32 sid,
+                     mxfKey& label,
+                     mxfUInt64 start,
+                     mxfUInt64 end)
+{
+  newSegment(sid, label, start, end);
 }
 
 void readPartition(PartitionList& partitions,
