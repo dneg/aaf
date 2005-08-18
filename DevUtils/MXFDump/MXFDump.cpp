@@ -4127,16 +4127,17 @@ void checkElementSize(mxfUInt32 expectedSize,
   }
 }
 
-void checkElementCount(mxfUInt32 elementCount,
-                       mxfUInt32 elementSize,
-                       mxfUInt64 length,
-                       mxfUInt64 fixedSize);
+mxfUInt32 checkElementCount(mxfUInt32 elementCount,
+                            mxfUInt32 elementSize,
+                            mxfUInt64 length,
+                            mxfUInt64 fixedSize);
 
-void checkElementCount(mxfUInt32 elementCount,
-                       mxfUInt32 elementSize,
-                       mxfUInt64 length,
-                       mxfUInt64 fixedSize)
+mxfUInt32 checkElementCount(mxfUInt32 elementCount,
+                            mxfUInt32 elementSize,
+                            mxfUInt64 length,
+                            mxfUInt64 fixedSize)
 {
+  mxfUInt32 result = elementCount;
   if (length >= fixedSize) {
     mxfUInt64 remaining = length - fixedSize;
     mxfUInt64 elementBytes = elementSize * elementCount;
@@ -4149,6 +4150,7 @@ void checkElementCount(mxfUInt32 elementCount,
                elementCount,
                elementBytes,
                remaining);
+      result = static_cast<mxfUInt32>(remaining / elementSize);
     } else if (remaining > elementBytes) {
       mxfError(currentKey,
                keyPosition,
@@ -4158,8 +4160,10 @@ void checkElementCount(mxfUInt32 elementCount,
                elementCount,
                elementBytes,
                remaining);
+      result = static_cast<mxfUInt32>(remaining / elementSize);
     } // else correct
   } // else reported elsewhere
+  return result;
 }
 
 struct Segment {
@@ -5203,8 +5207,11 @@ void printPartition(mxfKey& /* k */, mxfLength& len, mxfFile infile)
   mxfUInt32 elementSize;
   readMxfUInt32(elementSize, infile);
   checkElementSize(sizeof(mxfKey), elementSize, elementCount);
-  checkElementCount(elementCount, sizeof(mxfKey), len, partitionFixedSize);
-  for (mxfUInt32 i = 0; i < elementCount; i++) {
+  mxfUInt32 count = checkElementCount(elementCount,
+                                      sizeof(mxfKey),
+                                      len,
+                                      partitionFixedSize);
+  for (mxfUInt32 i = 0; i < count; i++) {
     mxfKey essence;
     readMxfLabel(essence, infile);
     printEssenceContainerLabel(essence, i, stdout);
@@ -5800,10 +5807,10 @@ void printPrimer(mxfKey& /* k */, mxfLength& len, mxfFile infile)
   checkElementSize(sizeof(mxfUInt16) + sizeof(mxfKey),
                    elementSize,
                    elementCount);
-  checkElementCount(elementCount,
-                    sizeof(mxfUInt16) + sizeof(mxfKey),
-                    len,
-                    primerFixedSize);
+  mxfUInt32 count = checkElementCount(elementCount,
+                                      sizeof(mxfUInt16) + sizeof(mxfKey),
+                                      len,
+                                      primerFixedSize);
 
   fprintf(stdout, "  [ Number of entries = ");
   printDecField(stdout, elementCount);
@@ -5815,7 +5822,7 @@ void printPrimer(mxfKey& /* k */, mxfLength& len, mxfFile infile)
     fprintf(stdout, "  Local Tag      UID\n");
   }
 
-  for (mxfUInt32 j = 0; j < elementCount; j++) {
+  for (mxfUInt32 j = 0; j < count; j++) {
     mxfLocalKey identifier;
     readMxfLocalKey(identifier, infile);
     mxfKey longIdentifier;
