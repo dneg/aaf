@@ -466,9 +466,9 @@ void mxfDumpFile(char* fileName)
         fprintf(stdout, "[ k = ");
         printMxfLocalKeySymbol(identifier, stdout);
         fprintf(stdout,
-                ", l = %d (%d) ]\n",
+                ", l = %5d (%04x) ]\n",
                 length,
-                setLength);
+                length);
         if (identifier == 0) {
           fprintf(stdout,
                   "%s : Error : Illegal local key (",
