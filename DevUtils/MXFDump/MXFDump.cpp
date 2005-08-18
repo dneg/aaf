@@ -623,7 +623,7 @@ void newSegment(bool isEssence,
                 mxfUInt32 sid,
                 mxfKey& label,
                 mxfUInt64 start,
-                mxfUInt64 end);
+                mxfUInt64 size);
 
 void newEssenceSegment(mxfUInt32 sid,
                        mxfKey& label,
@@ -4260,7 +4260,7 @@ void newSegment(bool isEssence,
                 mxfUInt32 sid,
                 mxfKey& label,
                 mxfUInt64 start,
-                mxfUInt64 end)
+                mxfUInt64 size)
 {
   Stream* s;
   StreamSet::const_iterator it = streams.find(sid);
@@ -4287,7 +4287,6 @@ void newSegment(bool isEssence,
                  sid);
     }
   }
-  mxfUInt64 size = end - start;
   Segment* seg = new Segment;
   seg->_start = s->_size;
   seg->_size = size;
@@ -4304,7 +4303,7 @@ void newEssenceSegment(mxfUInt32 sid,
                        mxfUInt64 start,
                        mxfUInt64 end)
 {
-  newSegment(true, sid, label, start, end);
+  newSegment(true, sid, label, start, end - start);
 }
 
 void newIndexSegment(mxfUInt32 sid,
@@ -4312,7 +4311,7 @@ void newIndexSegment(mxfUInt32 sid,
                      mxfUInt64 start,
                      mxfUInt64 end)
 {
-  newSegment(false, sid, label, start, end);
+  newSegment(false, sid, label, start, end - start);
 }
 
 void readPartition(PartitionList& partitions,
