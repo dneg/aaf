@@ -2194,10 +2194,17 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
   printMxfKey(k, f);
 }
 
+mxfUInt32 darkItems = 0;
+
 void printKL(mxfKey& k, mxfLength& l);
 
 void printKL(mxfKey& k, mxfLength& l)
 {
+  if (darkItems > 0) {
+    fprintf(stdout, "\n");
+    fprintf(stdout, "[ Omitted %"MXFPRIu32" dark KLV triplets ]\n", darkItems);
+    darkItems = 0;
+  }
   fprintf(stdout, "\n");
   fprintf(stdout, "[ K = ");
   printMxfKeySymbol(k, stdout);
@@ -3906,6 +3913,7 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
         printV(len, false, 0, infile);
       }
     } else {
+      darkItems = darkItems + 1;
       skipV(len, infile);
     }
   }
