@@ -114,7 +114,11 @@ void mxfDumpFile(char* fileName);
 
 void mxfDumpFile(char* /* fileName */)
 {
-  fprintf(stdout, "MXF dump not yet implemented\n.");
+  fprintf(stderr,
+          "%s : Error : --mxf-dump not yet implemented.\n",
+          programName);
+  printUsage();
+  exit(EXIT_FAILURE);
 }
 
 void rawDumpFile(char* fileName);
