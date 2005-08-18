@@ -30,6 +30,9 @@
 #elif defined(mips) && defined(sgi)
 #define MXF_COMPILER_SGICC_MIPS_SGI
 #define MXF_OS_UNIX
+#elif defined(__GNUC__) && defined(__i386__) && defined(__FreeBSD__)
+#define MXF_COMPILER_GCC_INTEL_FREEBSD
+#define MXF_OS_UNIX
 #else
 #error "Unknown compiler"
 #endif
@@ -126,6 +129,20 @@ typedef unsigned long long int mxfUInt64;
 #define MXFPRIx16 "hx"
 #define MXFPRIx32 "lx"
 #define MXFPRIx64 "llx"
+#elif defined (MXF_COMPILER_GCC_INTEL_FREEBSD)
+typedef unsigned char          mxfUInt08;
+typedef unsigned short int     mxfUInt16;
+typedef unsigned long int      mxfUInt32;
+typedef unsigned long long int mxfUInt64;
+
+#define MXFPRIu08 "u"
+#define MXFPRIu16 "hu"
+#define MXFPRIu32 "lu"
+#define MXFPRIu64 "llu"
+#define MXFPRIx08 "x"
+#define MXFPRIx16 "hx"
+#define MXFPRIx32 "lx"
+#define MXFPRIx64 "llx"
 #endif
 
 typedef mxfUInt64 mxfLength;
@@ -160,19 +177,35 @@ Mode mode = unspecifiedMode;
 bool reorder(void);
 mxfUInt08 hostByteOrder(void);
 
-void setPosition(const mxfUInt64 position, FILE* f);
-void skipBytes(const mxfUInt64 byteCount, FILE* f);
+// Primitives
+#if defined(MXF_OS_WINDOWS)
+#include <windows.h>
+typedef HANDLE mxfFile;
+#else
+typedef FILE* mxfFile;
+#endif
 
-void readMxfUInt08(mxfByte& b, FILE* f);
-void readMxfUInt16(mxfUInt16& i, FILE* f);
-void readMxfUInt32(mxfUInt32& i, FILE* f);
-void readMxfUInt64(mxfUInt64& i, FILE* f);
-void readMxfRational(mxfRational& r, FILE* f);
-void readMxfKey(mxfKey& k, FILE* f);
-bool readOuterMxfKey(mxfKey& k, FILE* f);
-int readBERLength(mxfUInt64& i, FILE* f);
-int readMxfLength(mxfLength& l, FILE* f);
-void readMxfLocalKey(mxfLocalKey& k, FILE* f);
+mxfFile openRead(char* fileName);
+void close(mxfFile infile);
+void setPosition(mxfFile infile, const mxfUInt64 position);
+mxfUInt64 getPosition(mxfFile infile);
+size_t readBytes(mxfFile infile, void* buffer, size_t count);
+mxfUInt64 size(mxfFile infile);
+
+bool endOfFile(mxfFile infile);
+
+void skipBytes(const mxfUInt64 byteCount, mxfFile infile);
+
+void readMxfUInt08(mxfByte& b, mxfFile infile);
+void readMxfUInt16(mxfUInt16& i, mxfFile infile);
+void readMxfUInt32(mxfUInt32& i, mxfFile infile);
+void readMxfUInt64(mxfUInt64& i, mxfFile infile);
+void readMxfRational(mxfRational& r, mxfFile infile);
+void readMxfKey(mxfKey& k, mxfFile infile);
+bool readOuterMxfKey(mxfKey& k, mxfFile infile);
+int readBERLength(mxfUInt64& i, mxfFile infile);
+int readMxfLength(mxfLength& l, mxfFile infile);
+void readMxfLocalKey(mxfLocalKey& k, mxfFile infile);
 
 void reorder(mxfUInt16& i);
 void reorder(mxfUInt32& i);
@@ -200,13 +233,14 @@ void printMxfUInt16(FILE* f, const char* label, mxfUInt16& i);
 void printMxfUInt32(FILE* f, const char* label, mxfUInt32& i);
 void printMxfUInt64(FILE* f, const char* label, mxfUInt64& i);
 
-void dumpMxfUInt08(const char* label, FILE* infile);
-void dumpMxfUInt16(const char* label, FILE* infile);
-void dumpMxfUInt32(const char* label, FILE* infile);
-void dumpMxfUInt64(const char* label, FILE* infile);
-void dumpMxfRational(const char* label, FILE* infile);
-void dumpMxfKey(const char* label, FILE* infile);
-void dumpMxfOperationalPattern(const char* label, FILE* infile);
+void dumpMxfUInt08(const char* label, mxfFile infile);
+void dumpMxfUInt16(const char* label, mxfFile infile);
+void dumpMxfUInt32(const char* label, mxfFile infile);
+void dumpMxfUInt64(const char* label, mxfFile infile);
+void dumpMxfRational(const char* label, mxfFile infile);
+void dumpMxfKey(const char* label, mxfFile infile);
+void dumpMxfOperationalPattern(const char* label, mxfFile infile);
+
 void printOperationalPattern(mxfKey& k, FILE* outfile);
 
 void klvDumpFile(char* fileName);
@@ -219,9 +253,9 @@ bool lookupKey(mxfKey& k, size_t& index);
 bool isDark(mxfKey& k, Mode mode);
 bool isFill(mxfKey& k);
 
-void printFill(mxfKey& k, mxfLength& len, FILE* infile);
+void printFill(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void skipV(mxfLength& length, FILE* f);
+void skipV(mxfLength& length, mxfFile infile);
 
 void print(char* format, ...);
 
@@ -324,7 +358,6 @@ bool debug = false;
 mxfUInt32 errors = 0;
 mxfUInt32 warnings = 0;
 
-mxfUInt64 position;      // current position in the file
 mxfUInt64 keyPosition;   // position/address of current key
 
 // Frame wrapped essence
@@ -344,6 +377,77 @@ mxfUInt32 limit = 0;
 // Help
 bool hFlag = false;
 
+#if defined(MXF_OS_WINDOWS)
+mxfFile openRead(char* fileName)
+{
+  HANDLE result = CreateFile(fileName,
+                             GENERIC_READ,
+                             FILE_SHARE_READ,
+                             0,
+                             OPEN_EXISTING,
+                             0,
+                             0);
+  if (result == INVALID_HANDLE_VALUE) {
+    result = 0;
+  }
+  return result;
+}
+
+void close(mxfFile infile)
+{
+  BOOL result = CloseHandle(infile);
+  if (!result) {
+    fatalError("CloseHandle() failed.");
+  }
+}
+
+void setPosition(mxfFile infile, const mxfUInt64 position)
+{
+  LARGE_INTEGER li;
+  li.QuadPart = position;
+  li.LowPart = SetFilePointer(infile, li.LowPart, &li.HighPart, FILE_BEGIN);
+  if ((li.LowPart == -1) && GetLastError() != NO_ERROR) {
+    fatalError("SetFilePointer() failed.");
+  }
+}
+
+size_t readBytes(mxfFile infile, void* buffer, size_t count)
+{
+  DWORD bytesRead;
+  BOOL result = ReadFile(infile, buffer, count, &bytesRead, 0);
+  if (!result) {
+    fatalError("ReadFile() failed.");
+  }
+  return bytesRead;
+}
+
+mxfUInt64 getPosition(mxfFile infile)
+{
+  mxfUInt64 result;
+  LARGE_INTEGER li;
+  li.QuadPart = 0;
+  li.LowPart = SetFilePointer(infile, li.LowPart, &li.HighPart, FILE_CURRENT);
+  if ((li.LowPart == -1) && GetLastError() != NO_ERROR) {
+    fatalError("SetFilePointer() failed.");
+  }
+  result = li.QuadPart;
+  return result;
+}
+
+mxfUInt64 size(mxfFile infile)
+{
+  mxfUInt64 result;
+  ULARGE_INTEGER li;
+  li.LowPart = GetFileSize(infile, &li.HighPart);
+  if ((li.LowPart == -1) && GetLastError() != NO_ERROR) {
+    fatalError("GetFileSize() failed.");
+  }
+  result = li.QuadPart;
+  return result;
+}
+
+#else
+
 #if defined(__GLIBC__) && defined(__GNUC_MINOR__)
 #if (__GLIBC__ >= 2) && (__GLIBC_MINOR__ >=3)
 // fseeko present in 2.3 but not in 2.2
@@ -351,123 +455,149 @@ bool hFlag = false;
 #endif
 #endif
 
-void setPosition(const mxfUInt64 position, FILE* f)
+mxfFile openRead(char* fileName)
+{
+  return  fopen(fileName, "rb");
+}
+
+void close(mxfFile infile)
+{
+  fclose(infile);
+}
+
+void setPosition(mxfFile infile, const mxfUInt64 position)
 {
 #if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
   // ISO says that fpos_t is opaque,
   // on Windows fpos_t is a 64-bit integer.
   fpos_t pos = position;
-  int status = fsetpos(f, &pos);
+  int status = fsetpos(infile, &pos);
 #elif defined(MXF_COMPILER_GCC_INTEL_LINUX) && defined(MXF_SEEKO)
-  int status = fseeko(f, position, SEEK_SET);
+  int status = fseeko(infile, position, SEEK_SET);
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
-  int status = _fseek(f, position, SEEK_SET);
+  int status = _fseek(infile, position, SEEK_SET);
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
-  int status = _fseek(f, position, SEEK_SET);
+  int status = _fseek(infile, position, SEEK_SET);
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
-  int status = fseeko(f, position, SEEK_SET);
+  int status = fseeko(infile, position, SEEK_SET);
 #elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
-  int status = fseeko64(f, position, SEEK_SET);
+  int status = fseeko64(infile, position, SEEK_SET);
 #else
   long offset = static_cast<long>(position);
   if (position != static_cast<mxfUInt64>(offset)) {
     fatalError("Offset too large.\n");
   }
-  int status = fseek(f, offset, SEEK_SET);
+  int status = fseek(infile, offset, SEEK_SET);
 #endif
   if (status != 0) {
     fatalError("Failed to seek.\n");
   }
 }
 
-void skipBytes(const mxfUInt64 byteCount, FILE* f)
+size_t readBytes(mxfFile infile, void* buffer, size_t count)
 {
-  setPosition(position + byteCount, f);
-  position = position + byteCount;
+  return fread(buffer, 1, count, infile);
 }
 
-void readMxfUInt08(mxfByte& b, FILE* f)
+mxfUInt64 getPosition(mxfFile infile)
 {
-  int c = fread(&b, 1, sizeof(mxfByte), f);
+  // NYI
+  return 0;
+}
+
+mxfUInt64 size(mxfFile /* infile */)
+{
+  // NYI
+  return 0;
+}
+#endif
+
+bool endOfFile(mxfFile infile)
+{
+  return getPosition(infile) == size(infile);
+}
+
+void skipBytes(const mxfUInt64 byteCount, mxfFile infile)
+{
+  setPosition(infile, getPosition(infile) + byteCount);
+}
+
+void readMxfUInt08(mxfByte& b, mxfFile infile)
+{
+  int c = readBytes(infile, &b, sizeof(mxfByte));
   if (c != sizeof(mxfByte)) {
     fatalError("Failed to read byte.\n");
   }
-  position = position + c;
 }
 
-void readMxfUInt16(mxfUInt16& i, FILE* f)
+void readMxfUInt16(mxfUInt16& i, mxfFile infile)
 {
-  int c = fread(&i, 1, sizeof(mxfUInt16), f);
+  int c = readBytes(infile, &i, sizeof(mxfUInt16));
   if (c != sizeof(mxfUInt16)) {
     fatalError("Failed to read mxfUInt16.\n");
   }
-  position = position + c;
   if (reorder()) {
     reorder(i);
   }
 }
 
-void readMxfUInt32(mxfUInt32& i, FILE* f)
+void readMxfUInt32(mxfUInt32& i, mxfFile infile)
 {
-  int c = fread(&i, 1, sizeof(mxfUInt32), f);
+  int c = readBytes(infile, &i, sizeof(mxfUInt32));
   if (c != sizeof(mxfUInt32)) {
     fatalError("Failed to read mxfUInt32.\n");
   }
-  position = position + c;
   if (reorder()) {
     reorder(i);
   }
 }
 
-void readMxfUInt64(mxfUInt64& i, FILE* f)
+void readMxfUInt64(mxfUInt64& i, mxfFile infile)
 {
-  int c = fread(&i, 1, sizeof(mxfUInt64), f);
+  int c = readBytes(infile, &i, sizeof(mxfUInt64));
   if (c != sizeof(mxfUInt64)) {
     fatalError("Failed to read mxfUInt64.\n");
   }
-  position = position + c;
   if (reorder()) {
     reorder(i);
   }
 }
 
-void readMxfRational(mxfRational& r, FILE* f)
+void readMxfRational(mxfRational& r, mxfFile infile)
 {
-  readMxfUInt32(r.numerator, f);
-  readMxfUInt32(r.denominator, f);
+  readMxfUInt32(r.numerator, infile);
+  readMxfUInt32(r.denominator, infile);
 }
 
-void readMxfKey(mxfKey& k, FILE* f)
+void readMxfKey(mxfKey& k, mxfFile infile)
 {
-  keyPosition = position;
-  int c = fread(&k, 1, sizeof(mxfKey), f);
+  keyPosition = getPosition(infile);
+  int c = readBytes(infile, &k, sizeof(mxfKey));
   if (c != sizeof(mxfKey)) {
     fatalError("Failed to read key.\n");
   }
-  position = position + c;
 }
 
-bool readOuterMxfKey(mxfKey& k, FILE* f)
+bool readOuterMxfKey(mxfKey& k, mxfFile infile)
 {
   bool result = true;
-  keyPosition = position;
-  int c = fread(&k, 1, sizeof(mxfKey), f);
-  if (c != sizeof(mxfKey)) {
-    if (!feof(f)) {
-      fatalError("Failed to read key.\n");
-    } else {
-      result = false;
-    }
+  keyPosition = getPosition(infile);
+  int c = readBytes(infile, &k, sizeof(mxfKey));
+  if (c == sizeof(mxfKey)) {
+    result = true;
+  } else if ((c == 0) && (endOfFile(infile)) ){
+    result = false;
+  } else {
+    fatalError("Failed to read key.\n");
   }
-  position = position + c;
   return result;
 }
 
-int readBERLength(mxfUInt64& i, FILE* f)
+int readBERLength(mxfUInt64& i, mxfFile infile)
 {
   int bytesRead = 0;
   mxfUInt08 b;
-  readMxfUInt08(b, f);
+  readMxfUInt08(b, infile);
   bytesRead = bytesRead + 1;
   if (b == 0x80) {
     // unknown length
@@ -480,7 +610,7 @@ int readBERLength(mxfUInt64& i, FILE* f)
     int length = b & 0x7f;
     i = 0;
     for (int k = 0; k < length; k++) {
-      readMxfUInt08(b, f);
+      readMxfUInt08(b, infile);
       bytesRead = bytesRead + 1;
       i = i << 8;
       i = i + b;
@@ -489,10 +619,10 @@ int readBERLength(mxfUInt64& i, FILE* f)
   return bytesRead;
 }
 
-int readMxfLength(mxfLength& l, FILE* f)
+int readMxfLength(mxfLength& l, mxfFile infile)
 {
   mxfUInt64 x = 0;
-  int bytesRead = readBERLength(x, f);
+  int bytesRead = readBERLength(x, infile);
   if (bytesRead > 9) {
     error("Invalid BER encoded length.\n");
     errors = errors + 1;
@@ -505,9 +635,9 @@ int readMxfLength(mxfLength& l, FILE* f)
   return bytesRead;
 }
 
-void readMxfLocalKey(mxfLocalKey& k, FILE* f)
+void readMxfLocalKey(mxfLocalKey& k, mxfFile infile)
 {
-  readMxfUInt16(k, f);
+  readMxfUInt16(k, infile);
 }
 
 void reorder(mxfUInt16& i)
@@ -664,35 +794,35 @@ void printMxfUInt64(FILE* f, const char* label, mxfUInt64& i)
   fprintf(f, "\n");
 }
 
-void dumpMxfUInt08(const char* label, FILE* infile)
+void dumpMxfUInt08(const char* label, mxfFile infile)
 {
   mxfUInt08 i;
   readMxfUInt08(i, infile);
   printMxfUInt08(stdout, label, i);
 }
 
-void dumpMxfUInt16(const char* label, FILE* infile)
+void dumpMxfUInt16(const char* label, mxfFile infile)
 {
   mxfUInt16 i;
   readMxfUInt16(i, infile);
   printMxfUInt16(stdout, label, i);
 }
 
-void dumpMxfUInt32(const char* label, FILE* infile)
+void dumpMxfUInt32(const char* label, mxfFile infile)
 {
   mxfUInt32 i;
   readMxfUInt32(i, infile);
   printMxfUInt32(stdout, label, i);
 }
 
-void dumpMxfUInt64(const char* label, FILE* infile)
+void dumpMxfUInt64(const char* label, mxfFile infile)
 {
   mxfUInt64 i;
   readMxfUInt64(i, infile);
   printMxfUInt64(stdout, label, i);
 }
 
-void dumpMxfRational(const char* label, FILE* infile)
+void dumpMxfRational(const char* label, mxfFile infile)
 {
   mxfRational r;
   readMxfRational(r, infile);
@@ -705,7 +835,7 @@ void dumpMxfRational(const char* label, FILE* infile)
   fprintf(stdout, "\n");
 }
 
-void dumpMxfKey(const char* label, FILE* infile)
+void dumpMxfKey(const char* label, mxfFile infile)
 {
   mxfKey k;
   readMxfKey(k, infile);
@@ -714,7 +844,7 @@ void dumpMxfKey(const char* label, FILE* infile)
   fprintf(stdout, "\n");
 }
 
-void dumpMxfOperationalPattern(const char* label, FILE* infile)
+void dumpMxfOperationalPattern(const char* label, mxfFile infile)
 {
   mxfKey k;
   readMxfKey(k, infile);
@@ -1618,12 +1748,12 @@ void printMxfLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing, FILE* f)
     } else if (mode == localSetMode) {
       printMxfLocalKeySymbol(k, enclosing);
     } else {
-      fprintf(stdout, "Unknown\n");
+      fprintf(f, "Unknown\n");
     }
   } else {
-    fprintf(stdout, "\n");
+    fprintf(f, "\n");
   }
-  fprintf(stdout, "  ");
+  fprintf(f, "  ");
   printMxfLocalKey(k, f);
 }
 
@@ -1713,10 +1843,10 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
     } else if (mode == localSetMode) {
       printMxfKeySymbol(k);
     } else {
-      fprintf(stdout, "Unknown\n");
+      fprintf(f, "Unknown\n");
     }
   } else {
-    fprintf(stdout, "\n");
+    fprintf(f, "\n");
   }
   printMxfKey(k, f);
 }
@@ -1734,11 +1864,17 @@ void printKL(mxfKey& k, mxfLength& l)
   fprintf(stdout, " ]\n");
 }
 
-void printV(mxfLength& length, bool limitBytes, mxfUInt32 limit, FILE* f);
+void printV(mxfLength& length,
+            bool limitBytes,
+            mxfUInt32 limit,
+            mxfFile infile);
 
-void printV(mxfLength& length, bool limitBytes, mxfUInt32 limit, FILE* f)
+void printV(mxfLength& length,
+            bool limitBytes,
+            mxfUInt32 limit,
+            mxfFile infile)
 {
-  mxfUInt64 start = position;
+  mxfUInt64 start = getPosition(infile);
   if (relative) {
     start = 0;
   }
@@ -1747,7 +1883,7 @@ void printV(mxfLength& length, bool limitBytes, mxfUInt32 limit, FILE* f)
   mxfLength count = 0;
   for (mxfLength i = 0; i < length; i++) {
     mxfByte b;
-    readMxfUInt08(b, f);
+    readMxfUInt08(b, infile);
     if (limitBytes && (i == limit)) {
       break;
     }
@@ -1763,7 +1899,7 @@ void printV(mxfLength& length, bool limitBytes, mxfUInt32 limit, FILE* f)
     fprintf(stdout, " bytes ]\n");
 
     mxfUInt64 skipLength = (length - count) - 1;
-    skipV(skipLength, f);
+    skipV(skipLength, infile);
   }
 }
 
@@ -2101,17 +2237,17 @@ void printEssenceKL(mxfKey& k, mxfLength& len)
 void printEssenceFrameFill(mxfKey& k,
                            mxfLength& length,
                            mxfUInt32 frameCount,
-                           FILE* f);
+                           mxfFile infile);
 
 void printEssenceFrameFill(mxfKey& k,
                            mxfLength& length,
                            mxfUInt32 frameCount,
-                           FILE* f)
+                           mxfFile infile)
 {
   if ((frameCount < maxFrames) || !iFlag) {
-    printFill(k, length, f);
+    printFill(k, length, infile);
   } else {
-    skipV(length, f);
+    skipV(length, infile);
   }
 }
 
@@ -2120,14 +2256,14 @@ void printEssenceFrameValue(mxfKey& k,
                             mxfUInt32 frameCount,
                             bool limitBytes,
                             mxfUInt32 limit,
-                            FILE* f);
+                            mxfFile infile);
 
 void printEssenceFrameValue(mxfKey& k,
                             mxfLength& length,
                             mxfUInt32 frameCount,
                             bool limitBytes,
                             mxfUInt32 limit,
-                            FILE* f)
+                            mxfFile infile)
 {
   if ((frameCount < maxFrames) || !iFlag) {
     fprintf(stdout, "\n");
@@ -2136,9 +2272,9 @@ void printEssenceFrameValue(mxfKey& k,
     fprintf(stdout, "]");
 
     printKL(k, length);
-    printV(length, limitBytes, limit, f);
+    printV(length, limitBytes, limit, infile);
   } else {
-    skipV(length, f);
+    skipV(length, infile);
   }
 }
 
@@ -2146,13 +2282,13 @@ void printEssenceFrames(mxfKey& k,
                         mxfLength& length,
                         bool limitBytes,
                         mxfUInt32 limit,
-                        FILE* f);
+                        mxfFile infile);
 
 void printEssenceFrames(mxfKey& k,
                         mxfLength& length,
                         bool limitBytes,
                         mxfUInt32 limit,
-                        FILE* f)
+                        mxfFile infile)
 {
   mxfUInt32 frameCount = 0;
   mxfLength total = 0;
@@ -2160,15 +2296,15 @@ void printEssenceFrames(mxfKey& k,
   printEssenceKL(k, length);
   while (total < length) {
     mxfKey k;
-    readMxfKey(k, f);
+    readMxfKey(k, infile);
     mxfLength len;
-    int lengthLen = readMxfLength(len, f);
+    int lengthLen = readMxfLength(len, infile);
     total = total + lengthLen;
 
     if (isFill(k)) {
-      printEssenceFrameFill(k, len, frameCount, f);
+      printEssenceFrameFill(k, len, frameCount, infile);
     } else {
-      printEssenceFrameValue(k, len, frameCount, limitBytes, limit, f);
+      printEssenceFrameValue(k, len, frameCount, limitBytes, limit, infile);
       frameCount = frameCount + 1;
     }
     total = total + len;
@@ -2186,21 +2322,26 @@ void printEssence(mxfKey& k,
                   mxfLength& length,
                   bool limitBytes,
                   mxfUInt32 limit,
-                  FILE* f);
+                  mxfFile infile);
 
 void printEssence(mxfKey& k,
                   mxfLength& length,
                   bool limitBytes,
                   mxfUInt32 limit,
-                  FILE* f)
+                  mxfFile infile)
 {
   printEssenceKL(k, length);
-  printV(length, limitBytes, limit, f);
+  printV(length, limitBytes, limit, infile);
 }
 
-void skipV(mxfLength& length, FILE* f)
+void skipV(mxfLength& length, mxfFile infile)
 {
-  skipBytes(length, f);
+  // Seek past (length - 1) bytes then read a byte
+  if (length != 0) {
+    skipBytes(length - 1, infile);
+    mxfUInt08 x;
+    readMxfUInt08(x, infile);
+  }
 }
 
 void printLocalKL(mxfLocalKey& k, mxfUInt16& l, mxfKey& enclosing);
@@ -2217,11 +2358,11 @@ void printLocalKL(mxfLocalKey& k, mxfUInt16& l, mxfKey& enclosing)
 
 void printLocalV(mxfUInt16& length,
                  mxfLength& remainder,
-                 FILE* infile);
+                 mxfFile infile);
 
 void printLocalV(mxfUInt16& length,
                  mxfLength& remainder,
-                 FILE* infile)
+                 mxfFile infile)
 {
   mxfLength vLength;
   if (length < remainder) {
@@ -2287,7 +2428,7 @@ bool isFill(mxfKey& k)
   return result;
 }
 
-void printFill(mxfKey& k, mxfLength& len, FILE* infile)
+void printFill(mxfKey& k, mxfLength& len, mxfFile infile)
 {
   printKL(k, len);
   if (dumpFill) {
@@ -2334,22 +2475,22 @@ bool isLocalSet(mxfKey& k)
   return result;
 }
 
-void skipBogusBytes(const mxfUInt64 byteCount, FILE* f);
+void skipBogusBytes(const mxfUInt64 byteCount, mxfFile infile);
 
-void skipBogusBytes(const mxfUInt64 byteCount, FILE* f)
+void skipBogusBytes(const mxfUInt64 byteCount, mxfFile infile)
 {
   mxfUInt64 length = byteCount;
   fprintf(stdout, "[ * Error * %"MXFPRIu64" superfluous bytes ]\n", length);
-  printV(length, false, 0, f);
+  printV(length, false, 0, infile);
 }
 
 void printLocalKey(mxfLocalKey& identifier,
                    mxfLength& remainder,
-                   FILE* infile);
+                   mxfFile infile);
 
 void printLocalKey(mxfLocalKey& identifier,
                    mxfLength& remainder,
-                   FILE* infile)
+                   mxfFile infile)
 {
   if (remainder > 2) {
     readMxfLocalKey(identifier, infile);
@@ -2365,11 +2506,11 @@ void printLocalKey(mxfLocalKey& identifier,
 
 void printLocalLength(mxfUInt16& length,
                       mxfLength& remainder,
-                      FILE* infile);
+                      mxfFile infile);
 
 void printLocalLength(mxfUInt16& length,
                       mxfLength& remainder,
-                      FILE* infile)
+                      mxfFile infile)
 {
   if (remainder > 2) {
     readMxfUInt16(length, infile);
@@ -2382,9 +2523,9 @@ void printLocalLength(mxfUInt16& length,
   }
 }
 
-void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile);
+void printLocalSet(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
+void printLocalSet(mxfKey& k, mxfLength& len, mxfFile infile)
 {
   printKL(k, len);
   mxfLength remainder = len;
@@ -2440,9 +2581,9 @@ void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
 //    Open/Closed and Complete/Incomplete
 //
 
-void printPartition(mxfKey& k, mxfLength& len, FILE* infile);
+void printPartition(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printPartition(mxfKey& k, mxfLength& len, FILE* infile)
+void printPartition(mxfKey& k, mxfLength& len, mxfFile infile)
 {
   printKL(k, len);
 
@@ -2484,30 +2625,30 @@ void printPartition(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
-void printHeaderPartition(mxfKey& k, mxfLength& len, FILE* infile);
+void printHeaderPartition(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printHeaderPartition(mxfKey& k, mxfLength& len, FILE* infile)
+void printHeaderPartition(mxfKey& k, mxfLength& len, mxfFile infile)
 {
   printPartition(k, len, infile);
 }
 
-void printBodyPartition(mxfKey& k, mxfLength& len, FILE* infile);
+void printBodyPartition(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printBodyPartition(mxfKey& k, mxfLength& len, FILE* infile)
+void printBodyPartition(mxfKey& k, mxfLength& len, mxfFile infile)
 {
   printPartition(k, len, infile);
 }
 
-void printFooterPartition(mxfKey& k, mxfLength& len, FILE* infile);
+void printFooterPartition(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printFooterPartition(mxfKey& k, mxfLength& len, FILE* infile)
+void printFooterPartition(mxfKey& k, mxfLength& len, mxfFile infile)
 {
   printPartition(k, len, infile);
 }
 
-void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile);
+void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
+void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
 {
   printKL(k, len);
 
@@ -2625,9 +2766,9 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
-void printV10IndexTable(mxfKey& k, mxfLength& len, FILE* infile);
+void printV10IndexTable(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printV10IndexTable(mxfKey& k, mxfLength& len, FILE* infile)
+void printV10IndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
 {
   printKL(k, len);
 
@@ -2745,9 +2886,9 @@ void printV10IndexTable(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
-void printPrimer(mxfKey& k, mxfLength& len, FILE* infile);
+void printPrimer(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printPrimer(mxfKey& k, mxfLength& len, FILE* infile)
+void printPrimer(mxfKey& k, mxfLength& len, mxfFile infile)
 {
   printKL(k, len);
 
@@ -2779,17 +2920,17 @@ void printPrimer(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
-void printSystemMetadata(mxfKey& k, mxfLength& len, FILE* infile);
+void printSystemMetadata(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printSystemMetadata(mxfKey& k, mxfLength& len, FILE* infile)
+void printSystemMetadata(mxfKey& k, mxfLength& len, mxfFile infile)
 {
   printKL(k, len);
   printV(len, false, 0, infile);
 }
 
-void printObjectDirectory(mxfKey& k, mxfLength& len, FILE* infile);
+void printObjectDirectory(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printObjectDirectory(mxfKey& k, mxfLength& len, FILE* infile)
+void printObjectDirectory(mxfKey& k, mxfLength& len, mxfFile infile)
 {
   printKL(k, len);
 
@@ -2828,9 +2969,9 @@ void printObjectDirectory(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
-void printRandomIndex(mxfKey& k, mxfLength& len, FILE* infile);
+void printRandomIndex(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printRandomIndex(mxfKey& k, mxfLength& len, FILE* infile)
+void printRandomIndex(mxfKey& k, mxfLength& len, mxfFile infile)
 {
   printKL(k, len);
 
@@ -2860,18 +3001,18 @@ void printRandomIndex(mxfKey& k, mxfLength& len, FILE* infile)
   fprintf(stdout, " ]\n");
 }
 
-void printV10RandomIndex(mxfKey& k, mxfLength& len, FILE* infile);
+void printV10RandomIndex(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printV10RandomIndex(mxfKey& k, mxfLength& len, FILE* infile)
+void printV10RandomIndex(mxfKey& k, mxfLength& len, mxfFile infile)
 {
   printRandomIndex(k, len, infile);
 }
 
 void klvDumpFile(char* fileName)
 { 
-  FILE* infile;
+  mxfFile infile;
 
-  infile = fopen(fileName, "rb");
+  infile = openRead(fileName);
   if (infile == NULL) {
     fatalError("File \"%s\" not found.\n", fileName);
   }
@@ -2883,14 +3024,14 @@ void klvDumpFile(char* fileName)
     printKL(k, len);
     printV(len, limitBytes, limit, infile);
   }
-  fclose(infile);
+  close(infile);
 }
 
 void setDumpFile(char* fileName)
 {
-  FILE* infile;
+  mxfFile infile;
 
-  infile = fopen(fileName, "rb");
+  infile = openRead(fileName);
   if (infile == NULL) {
     fatalError("File \"%s\" not found.\n", fileName);
   }
@@ -2918,14 +3059,14 @@ void setDumpFile(char* fileName)
       printV(len, false, 0, infile);
     }
   }
-  fclose(infile);
+  close(infile);
 }
 
 bool dumpDark = false;
 
-void mxfDumpKLV(mxfKey& k, mxfLength& len, FILE* infile);
+void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void mxfDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
+void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
 {
   if (isNullKey(k)) {
     printKL(k, len);
@@ -3016,9 +3157,9 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
 
 void mxfDumpFile(char* fileName)
 {
-  FILE* infile;
+  mxfFile infile;
 
-  infile = fopen(fileName, "rb");
+  infile = openRead(fileName);
   if (infile == NULL) {
     fatalError("File \"%s\" not found.\n", fileName);
   }
@@ -3030,12 +3171,12 @@ void mxfDumpFile(char* fileName)
     mxfDumpKLV(k, len, infile);
   }
 
-  fclose(infile);
+  close(infile);
 }
 
-void aafDumpKLV(mxfKey& k, mxfLength& len, FILE* infile);
+void aafDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void aafDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
+void aafDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
 {
   if (isNullKey(k)) {
     printKL(k, len);
@@ -3049,9 +3190,9 @@ void aafDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
 
 void aafDumpFile(char* fileName)
 {
-  FILE* infile;
+  mxfFile infile;
 
-  infile = fopen(fileName, "rb");
+  infile = openRead(fileName);
   if (infile == NULL) {
     fatalError("File \"%s\" not found.\n", fileName);
   }
@@ -3063,12 +3204,12 @@ void aafDumpFile(char* fileName)
     aafDumpKLV(k, len, infile);
   }
 
-  fclose(infile);
+  close(infile);
 }
 
-void klvValidate(FILE* infile);
+void klvValidate(mxfFile infile);
 
-void klvValidate(FILE* infile)
+void klvValidate(mxfFile infile)
 {
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
@@ -3087,9 +3228,9 @@ void klvValidate(FILE* infile)
   }
 }
 
-void setValidate(FILE* infile);
+void setValidate(mxfFile infile);
 
-void setValidate(FILE* /* infile */)
+void setValidate(mxfFile /* infile */)
 {
   if (verbose) {
     fprintf(stderr,
@@ -3098,9 +3239,9 @@ void setValidate(FILE* /* infile */)
   }
 }
 
-void mxfValidate(FILE* infile);
+void mxfValidate(mxfFile infile);
 
-void mxfValidate(FILE* /* infile */)
+void mxfValidate(mxfFile /* infile */)
 {
   if (verbose) {
     fprintf(stderr,
@@ -3109,9 +3250,9 @@ void mxfValidate(FILE* /* infile */)
   }
 }
 
-void aafValidate(FILE* infile);
+void aafValidate(mxfFile infile);
 
-void aafValidate(FILE* /* infile */)
+void aafValidate(mxfFile /* infile */)
 {
   if (verbose) {
     fprintf(stderr,
@@ -3122,9 +3263,9 @@ void aafValidate(FILE* /* infile */)
 
 void mxfValidateFile(Mode mode, char* fileName)
 {
-  FILE* infile;
+  mxfFile infile;
 
-  infile = fopen(fileName, "rb");
+  infile = openRead(fileName);
   if (infile == NULL) {
     fatalError("File \"%s\" not found.\n", fileName);
   }
@@ -3146,7 +3287,7 @@ void mxfValidateFile(Mode mode, char* fileName)
     /* Invalid mode ? */
     break;
   }
-  fclose(infile);
+  close(infile);
 }
 
 void setMode(Mode m);
@@ -3207,6 +3348,17 @@ int getIntegerOption(int currentArgument,
   return result;
 }
 
+void printSummary(void)
+{
+  if (verbose) {
+    if ((errors != 0) || (warnings != 0)) {
+      message("Encountered %"MXFPRIu32" errors and %"MXFPRIu32" warnings.\n",
+               errors,
+               warnings);
+    }
+  }
+}
+
 // Summary of options -
 //
 // -k --klv-dump
@@ -3243,11 +3395,10 @@ int main(int argumentCount, char* argumentVector[])
 #if defined(MXF_USE_CONSOLE)
   argumentCount = ccommand(&argumentVector);
 #endif
-
+  atexit(printSummary);
   setProgramName(baseName(argumentVector[0]));
   checkSizes();
   initAAFKeyTable();
-  position = 0;
   int fileCount = 0;
   int fileArg = 0;
   char* p = 0;
@@ -3427,15 +3578,6 @@ int main(int argumentCount, char* argumentVector[])
   int result = EXIT_SUCCESS;
   if ((errors != 0) || (warnings != 0)) {
     result = EXIT_FAILURE;
-
-    if (verbose) {
-      if (errors != 0) {
-        message("%"MXFPRIu32" errors.\n", errors);
-      }
-      if (warnings != 0) {
-        message("%"MXFPRIu32" warnings.\n", warnings);
-      }
-    }
   }
 
   return result;
