@@ -261,6 +261,25 @@ void printFill(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void skipV(mxfLength& length, mxfFile infile);
 
+void checkPartitionLength(mxfUInt64& length);
+
+// Size of the fixed portion of a partition
+mxfUInt64 partitionFixedSize =
+  sizeof(mxfUInt16) + // Major Version
+  sizeof(mxfUInt16) + // Minor Version
+  sizeof(mxfUInt32) + // KAGSize
+  sizeof(mxfUInt64) + // ThisPartition
+  sizeof(mxfUInt64) + // PreviousPartition
+  sizeof(mxfUInt64) + // FooterPartition
+  sizeof(mxfUInt64) + // HeaderByteCount
+  sizeof(mxfUInt64) + // IndexByteCount
+  sizeof(mxfUInt32) + // IndexSID
+  sizeof(mxfUInt64) + // BodyOffset
+  sizeof(mxfUInt32) + // BodySID
+  sizeof(mxfKey)    + // Operational pattern
+  sizeof(mxfUInt32) + // Essence container label count
+  sizeof(mxfUInt32);  // Essence container label size
+
 void print(char* format, ...);
 
 void vprint(char* format, va_list ap);
@@ -981,7 +1000,7 @@ const mxfKey NullKey =
 
 #include "MXFMetaDictionary.h"
 // keys not in MXFMetaDictionary.h
-const mxfKey ObjectDirectory = 
+const mxfKey ObjectDirectory =
   {0x96, 0x13, 0xb3, 0x8a, 0x87, 0x34, 0x87, 0x46,
    0xf1, 0x02, 0x96, 0xf0, 0x56, 0xe0, 0x4d, 0x2a};
 const mxfKey SystemMetadata =
@@ -2722,19 +2741,27 @@ typedef struct PartitionTag {
   mxfUInt64 _bodyOffset;
   mxfUInt32 _bodySID;
   mxfKey _operationalPattern;
+  mxfUInt32 _elementCount;
+  mxfUInt32 _elementSize;
   //
   mxfUInt64 _address; // Actual file address
+  mxfUInt64 _length;
 } Partition;
 
 typedef std::list<Partition*> PartitionList;
 
-void readPartition(PartitionList& partitions, mxfFile infile);
+void readPartition(PartitionList& partitions,
+                   mxfUInt64 length,
+                   mxfFile infile);
 
-void readPartition(PartitionList& partitions, mxfFile infile)
+void readPartition(PartitionList& partitions,
+                   mxfUInt64 length,
+                   mxfFile infile)
 {
   Partition* p = new Partition;
 
   p->_address = keyPosition;
+  p->_length = length;
 
   readMxfUInt16(p->_majorVersion, infile);
   readMxfUInt16(p->_minorVersion, infile);
@@ -2749,14 +2776,11 @@ void readPartition(PartitionList& partitions, mxfFile infile)
   readMxfUInt32(p->_bodySID, infile);
   readMxfLabel(p->_operationalPattern, infile);
 
-  mxfUInt32 elementCount;
-  readMxfUInt32(elementCount, infile);
-  mxfUInt32 elementSize;
-  readMxfUInt32(elementSize, infile);
-  for (mxfUInt32 i = 0; i < elementCount; i++) {
-    mxfKey essence;
-    readMxfLabel(essence, infile);
-  }
+  readMxfUInt32(p->_elementCount, infile);
+  readMxfUInt32(p->_elementSize, infile);
+
+  mxfUInt64 remaining = length - partitionFixedSize;
+  skipBytes(remaining, infile);
 
   partitions.push_back(p);
 }
@@ -2779,6 +2803,12 @@ void checkPartitions(PartitionList& partitions)
   PartitionList::const_iterator it;
   for (it = partitions.begin(); it != partitions.end(); ++it) {
     Partition* p = *it;
+    checkPartitionLength(p->_length);
+    checkElementSize(sizeof(mxfKey), p->_elementSize, p->_elementCount);
+    checkElementCount(p->_elementCount,
+                      sizeof(mxfKey),
+                      p->_length,
+                      partitionFixedSize);
     if (p->_thisPartition != p->_address) {
       error("Incorrect value for ThisPartition"
             " - expected 0x%"MXFPRIx64", found 0x%"MXFPRIx64""
@@ -2864,25 +2894,6 @@ bool isPartition(mxfKey& key)
   return result;
 }
 
-// Size of the fixed portion of a partition
-mxfUInt64 partitionFixedSize =
-  sizeof(mxfUInt16) + // Major Version
-  sizeof(mxfUInt16) + // Minor Version
-  sizeof(mxfUInt32) + // KAGSize
-  sizeof(mxfUInt64) + // ThisPartition
-  sizeof(mxfUInt64) + // PreviousPartition
-  sizeof(mxfUInt64) + // FooterPartition
-  sizeof(mxfUInt64) + // HeaderByteCount
-  sizeof(mxfUInt64) + // IndexByteCount
-  sizeof(mxfUInt32) + // IndexSID
-  sizeof(mxfUInt64) + // BodyOffset
-  sizeof(mxfUInt32) + // BodySID
-  sizeof(mxfKey)    + // Operational pattern
-  sizeof(mxfUInt32) + // Essence container label count
-  sizeof(mxfUInt32);  // Essence container label size
-
-void checkPartitionLength(mxfUInt64& length);
-
 void checkPartitionLength(mxfUInt64& length)
 {
   mxfUInt64 entrySize = sizeof(mxfKey);     // Essence container label
@@ -2897,8 +2908,9 @@ void checkPartitionLength(mxfUInt64& length)
     mxfUInt64 labels = labelBytes / entrySize;
     if ((labels * entrySize ) != labelBytes) {
       error("Invalid partition length -"
-            " length != %"MXFPRIu64" + (N * %"MXFPRIu64")"
+            " %"MXFPRIu64" != %"MXFPRIu64" + (N * %"MXFPRIu64")"
             " (following key at offset 0x%"MXFPRIx64").\n",
+            length,
             partitionFixedSize,
             entrySize,
             keyPosition);
@@ -3227,8 +3239,9 @@ void checkPrimerLength(mxfUInt64& length)
     mxfUInt64 entries = entryBytes / entrySize;
     if ((entries * entrySize) != entryBytes) {
       error("Invalid primer length -"
-            " length != %"MXFPRIu64" + (N * %"MXFPRIu64")"
+            " %"MXFPRIu64" != %"MXFPRIu64" + (N * %"MXFPRIu64")"
             " (following key at offset 0x%"MXFPRIx64").\n",
+            length,
             primerFixedSize,
             entrySize,
             keyPosition);
@@ -3246,6 +3259,13 @@ void printPrimer(mxfKey& k, mxfLength& len, mxfFile infile)
   readMxfUInt32(elementCount, infile);
   mxfUInt32 elementSize;
   readMxfUInt32(elementSize, infile);
+  checkElementSize(sizeof(mxfUInt16) + sizeof(mxfKey),
+                   elementSize,
+                   elementCount);
+  checkElementCount(elementCount,
+                    sizeof(mxfUInt16) + sizeof(mxfKey),
+                    len,
+                    primerFixedSize);
 
   fprintf(stdout, "  [ Number of entries = ");
   printField(stdout, elementCount);
@@ -3253,7 +3273,7 @@ void printPrimer(mxfKey& k, mxfLength& len, mxfFile infile)
   printField(stdout, elementSize);
   fprintf(stdout, " ]\n");
 
-  if (elementCount > 0) { 
+  if (elementCount > 0) {
     fprintf(stdout, "  Local Tag      UID\n");
   }
 
@@ -3292,7 +3312,7 @@ void printObjectDirectory(mxfKey& k, mxfLength& len, mxfFile infile)
   printField(stdout, entrySize);
   fprintf(stdout, " ]\n");
 
-  if (entryCount > 0) { 
+  if (entryCount > 0) {
     fprintf(stdout, "  Object");
     fprintf(stdout, "                                           Offset");
     fprintf(stdout, "            Flags\n");
@@ -3358,7 +3378,7 @@ void printV10RandomIndex(mxfKey& k, mxfLength& len, mxfFile infile)
 }
 
 void klvDumpFile(mxfFile infile)
-{ 
+{
   mxfUInt64 fileSize = size(infile);
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
@@ -3475,7 +3495,7 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
       }
     } else {
       skipV(len, infile);
-    } 
+    }
   }
 }
 
@@ -3568,13 +3588,13 @@ void mxfValidate(mxfFile infile)
     checkKey(k);
     mxfLength len;
     readMxfLength(len, infile);
+    mxfLength length = len;
     len = checkLength(len, fileSize, position(infile));
     if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
-      checkPrimerLength(len);
+      checkPrimerLength(length);
       skipV(len, infile);
     } else if (isPartition(k)) {
-      checkPartitionLength(len);
-      readPartition(p, infile);
+      readPartition(p, length, infile);
     } else {
       skipV(len, infile);
     }
@@ -3721,7 +3741,7 @@ void printSummary(void)
 // -n --no-symbolic
 // -h --help
 // -d --debug
-// -u --unknown-as-sets 
+// -u --unknown-as-sets
 //    --klv-validate
 //    --set-validate
 //    --mxf-validate
@@ -3797,7 +3817,7 @@ int main(int argumentCount, char* argumentVector[])
                (strcmp(p, "-i") == 0)) {
       maxFrames = getIntegerOption(i, argumentCount, argumentVector, "count");
       iFlag = true;
-      i = i + 1;      
+      i = i + 1;
     } else if ((strcmp(p, "--key-addresses") == 0) ||
                (strcmp(p, "-j") == 0)) {
       keyAddresses = true;
@@ -3864,7 +3884,7 @@ int main(int argumentCount, char* argumentVector[])
     } else if (mode == aafMode) {
       limitBytes = true;
       limit = 0;
-    } 
+    }
   }
 
   if (mode == klvMode) {
