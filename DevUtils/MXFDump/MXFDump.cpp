@@ -4083,6 +4083,51 @@ void dumpIndexEntryArray(mxfUInt32 entryCount,
   }
 }
 
+void dumpDeltaEntryArray(mxfUInt32 entryCount,
+                         mxfUInt32 entrySize,
+                         mxfFile& infile);
+
+void dumpDeltaEntryArray(mxfUInt32 entryCount,
+                         mxfUInt32 entrySize,
+                         mxfFile& infile)
+{
+  fprintf(stdout, "     DeltaEntryArray = ");
+  fprintf(stdout, "[ Number of entries = ");
+  printDecField(stdout, entryCount);
+  fprintf(stdout, "\n");
+  fprintf(stdout, "                       ");
+  fprintf(stdout, "  Entry size        = ");
+  printDecField(stdout, entrySize);
+  fprintf(stdout, " ]\n");
+
+  if (entryCount > 0) {
+    fprintf(stdout, "         ");
+    fprintf(stdout, "        Pos Table  Slice     Element\n");
+    fprintf(stdout, "         ");
+    fprintf(stdout, "            Index              Delta\n");
+  }
+
+  for (mxfUInt32 i = 0; i < entryCount; i++) {
+    mxfUInt08 posTableIndex; // signed
+    readMxfUInt08(posTableIndex, infile);
+    mxfUInt08 slice;
+    readMxfUInt08(slice, infile);
+    mxfUInt32 elementDelta;
+    readMxfUInt32(elementDelta, infile);
+
+    fprintf(stdout, "    ");
+    printDecField(stdout, i);
+    fprintf(stdout, " :");
+    fprintf(stdout, "    ");
+    printDecField(stdout, posTableIndex);
+    fprintf(stdout, "    ");
+    printDecField(stdout, slice);
+    fprintf(stdout, "     ");
+    printDecField(stdout, elementDelta);
+    fprintf(stdout, "\n");
+  }
+}
+
 void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
@@ -4147,44 +4192,8 @@ void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
       mxfUInt32 entrySize;
       readMxfUInt32(entrySize, infile);
       remainder = remainder - 8;
-
-      fprintf(stdout, "     DeltaEntryArray = ");
-      fprintf(stdout, "[ Number of entries = ");
-      printDecField(stdout, entryCount);
-      fprintf(stdout, "\n");
-      fprintf(stdout, "                       ");
-      fprintf(stdout, "  Entry size        = ");
-      printDecField(stdout, entrySize);
-      fprintf(stdout, " ]\n");
-
-      if (entryCount > 0) {
-        fprintf(stdout, "         ");
-        fprintf(stdout, "        Pos Table  Slice     Element\n");
-        fprintf(stdout, "         ");
-        fprintf(stdout, "            Index              Delta\n");
-      }
-
-      for (mxfUInt32 i = 0; i < entryCount; i++) {
-        mxfUInt08 posTableIndex; // signed
-        readMxfUInt08(posTableIndex, infile);
-        mxfUInt08 slice;
-        readMxfUInt08(slice, infile);
-        mxfUInt32 elementDelta;
-        readMxfUInt32(elementDelta, infile);
-
-        fprintf(stdout, "    ");
-        printDecField(stdout, i);
-        fprintf(stdout, " :");
-        fprintf(stdout, "    ");
-        printDecField(stdout, posTableIndex);
-        fprintf(stdout, "    ");
-        printDecField(stdout, slice);
-        fprintf(stdout, "     ");
-        printDecField(stdout, elementDelta);
-        fprintf(stdout, "\n");
-
-        remainder = remainder - entrySize;
-      }
+      dumpDeltaEntryArray(entryCount, entrySize, infile);
+      remainder = remainder - (entryCount * entrySize);
     } else {
       mxfError(k,
                keyPosition,
