@@ -6067,6 +6067,11 @@ void aafDumpFile(mxfFile infile)
   mxfUInt64 fileSize = size(infile);
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
+    if (isPartition(k)) {
+      memcpy(&previousPartitionKey, &currentPartitionKey, sizeof(mxfKey));
+      memcpy(&currentPartitionKey, &k, sizeof(mxfKey));
+      printObjectCount(previousPartitionKey);
+    }
     checkKey(k);
     mxfLength len;
     readMxfLength(len, infile);
