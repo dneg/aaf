@@ -365,6 +365,8 @@ void vmxfError(const mxfKey& key,
                char* format,
                va_list ap);
 
+void printLocation(const mxfKey& key, mxfUInt64 keyPosition);
+
 void print(char* format, ...)
 {
   va_list ap;
@@ -520,6 +522,11 @@ void vmxfError(const mxfKey& key,
                char* format, va_list ap)
 {
   vmxfError(format, ap);
+  print(" (following key at offset 0x%"MXFPRIx64").\n", keyPosition);
+}
+
+void printLocation(const mxfKey& key, mxfUInt64 keyPosition)
+{
   print(" (following key at offset 0x%"MXFPRIx64").\n", keyPosition);
 }
 
