@@ -707,6 +707,42 @@ mxfUInt64 size(mxfFile infile)
 }
 #endif
 
+bool findPattern(mxfUInt64& position,
+                 mxfByte* pattern,
+                 size_t patternSize,
+                 mxfUInt32 limit,
+                 mxfFile infile);
+
+bool findPattern(mxfUInt64& position,
+                 mxfByte* pattern,
+                 size_t patternSize,
+                 mxfUInt32 limit,
+                 mxfFile infile)
+{
+  bool found = false;
+  mxfUInt64 pos = 0;
+  int c = 0;
+  size_t i = 0;
+  do {
+    mxfByte b;
+    c = read(infile, &b, 1);
+    if (c == 1) {
+      if (b != pattern[i]) {
+        pos = pos + i + 1;
+        i = 0;
+      } else {
+        if (i < patternSize - 1) {
+          i = i + 1;
+        } else {
+          position = pos;
+          found = true;
+        }
+      }
+    }
+  } while ((!found) && (pos < limit) && (c == 1));
+  return found;
+}
+
 bool isMxfFile(mxfFile infile);
 
 bool isMxfFile(mxfFile infile)
