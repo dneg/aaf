@@ -1160,7 +1160,7 @@ const mxfKey BogusFill =
 struct Key {
   const char* _name;
   const mxfKey* _key;
-} keyTable [] = {
+} mxfKeyTable [] = {
 #include "MXFMetaDictionary.h"
   // keys not in MXFMetaDictionary.h
   {"GenericAudioEssenceDescriptor", &GenericAudioEssenceDescriptor},
@@ -1172,7 +1172,7 @@ struct Key {
   {"bogus", 0}
 };
 
-size_t keyTableSize = (sizeof(keyTable)/sizeof(keyTable[0])) - 1;
+size_t mxfKeyTableSize = (sizeof(mxfKeyTable)/sizeof(mxfKeyTable[0])) - 1;
 
 #define AAF_CLASS(name, id, parent, concrete) {#name, {0}, id},
 
@@ -1236,12 +1236,12 @@ int compareKey(const void* k1, const void* k2)
 void dumpKeyTable(void)
 {
     size_t i;
-    Key** t = new Key*[keyTableSize];
-    for (i = 0; i < keyTableSize; i++) {
-      t[i] = &keyTable[i];
+    Key** t = new Key*[mxfKeyTableSize];
+    for (i = 0; i < mxfKeyTableSize; i++) {
+      t[i] = &mxfKeyTable[i];
     }
-    qsort(t, keyTableSize, sizeof(Key*), compareKey);
-    for (i = 0; i < keyTableSize; i++) {
+    qsort(t, mxfKeyTableSize, sizeof(Key*), compareKey);
+    for (i = 0; i < mxfKeyTableSize; i++) {
       fprintf(stdout, "%s\n", t[i]->_name);
       fprintf(stdout, "  ");
       printMxfKey(*t[i]->_key, stdout);
@@ -1969,8 +1969,8 @@ void printMxfLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing, FILE* f)
 bool lookupMXFKey(mxfKey& k, size_t& index)
 {
   bool result = false;
-  for (size_t i = 0; i < keyTableSize; i++) {
-    if (memcmp(k, keyTable[i]._key, sizeof(mxfKey)) == 0) {
+  for (size_t i = 0; i < mxfKeyTableSize; i++) {
+    if (memcmp(k, mxfKeyTable[i]._key, sizeof(mxfKey)) == 0) {
       index = i;
       result = true;
       break;
@@ -2003,7 +2003,7 @@ void printMxfKeySymbol(mxfKey& k)
   size_t i;
   bool found = lookupMXFKey(k, i);
   if (found) {
-    fprintf(stdout, "%s", keyTable[i]._name);
+    fprintf(stdout, "%s", mxfKeyTable[i]._name);
   } else if (isEssenceElement(k)) {
     fprintf(stdout, "Essence Element");
   } else {
@@ -2028,7 +2028,7 @@ void printAAFKeySymbol(mxfKey& k)
   } else {
     found = lookupMXFKey(k, i);
     if (found) {
-      fprintf(stdout, "%s", keyTable[i]._name);
+      fprintf(stdout, "%s", mxfKeyTable[i]._name);
     } else if (isEssenceElement(k)) {
       fprintf(stdout, "Essence Element");
     } else {
