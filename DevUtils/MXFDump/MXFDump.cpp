@@ -4528,12 +4528,12 @@ void mxfValidate(mxfFile infile)
   checkPartitions(p, footer);
   if (!rip.empty()) {
     checkRandomIndex(rip, p);
-    if (verbose) {
+    if (debug) {
       printRandomIndex(rip);
     }
   }
 
-  if (verbose) {
+  if (debug) {
     printPartitions(p);
     printStreams(streams);
   }
@@ -4768,6 +4768,7 @@ int main(int argumentCount, char* argumentVector[])
       setMode(aafValidateMode);
     } else if ((strcmp(p, "--verbose") == 0) ||
                (strcmp(p, "-v") == 0)) {
+      checkDumpMode(p);
       verbose = true;
     } else if ((strcmp(p, "--show-fill") == 0) ||
                (strcmp(p, "-f") == 0)) {
@@ -4859,7 +4860,6 @@ int main(int argumentCount, char* argumentVector[])
       hFlag = true;
     } else if ((strcmp(p, "--debug") == 0) ||
                (strcmp(p, "-d") == 0)) {
-      checkDumpMode(p);
       debug = true;
     } else if (*p == '-') {
       error("Invalid option \"%s\".\n", p);
