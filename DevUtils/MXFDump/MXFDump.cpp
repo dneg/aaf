@@ -4506,6 +4506,18 @@ void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
   setPosition(infile, startPosition + len);
 }
 
+void validateIndexSegment(mxfKey& k, mxfLength& len, mxfFile infile);
+
+void validateIndexSegment(mxfKey& k, mxfLength& len, mxfFile infile)
+{
+  mxfUInt64 startPosition = position(infile);
+  mxfIndexSegment index;
+  initializeIndexSegment(&index, k);
+  readIndexSegment(&index, len, infile);
+  validateIndexSegment(&index);
+  setPosition(infile, startPosition + len);
+}
+
 // Size of the fixed portion of a primer
 mxfUInt64 primerFixedSize =
   sizeof(mxfUInt32) + // Element count
@@ -4954,7 +4966,7 @@ void mxfValidate(mxfFile infile)
     } else if (isIndexSegment(k)) {
       markMetadataEnd(keyPosition);
       markIndexStart(keyPosition);
-      skipV(len, infile);
+      validateIndexSegment(k, len, infile);
     } else {
       skipV(len, infile);
     }
