@@ -1444,11 +1444,11 @@ void printOperationalPattern(mxfKey& k, FILE* outfile)
       printGeneralizedOperationalPattern(k, outfile);
     } else if ((itemComplexity >= 0x10) && (itemComplexity <= 0x7f)) {
       printSpecializedOperationalPattern(k, outfile);
+    } else if (isPrivateLabel(k)) {
+       printPrivateLabel(k, outfile);
     } else {
       fprintf(outfile, "[ Unknown ]");
     }
-  } else if (isPrivateLabel(k)) {
-     printPrivateLabel(k, outfile);
   } else {
     fprintf(outfile, "[ Invalid ]");
   }
