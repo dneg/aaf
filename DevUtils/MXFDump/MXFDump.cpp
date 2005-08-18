@@ -106,18 +106,20 @@ void printHexField(FILE* f, mxfUInt32& i)
 #define MXF_LABEL(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) \
                  {a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p}
 
-#define MXF_DEFINE_PACK_KEY(n, k)     MXF_DEFINE_KEY(n ## PackKey,    k)
-#define MXF_DEFINE_SET_KEY(n, k)      MXF_DEFINE_KEY(n ## SetKey,     k)
-#define MXF_DEFINE_SEGEMENT_KEY(n, k) MXF_DEFINE_KEY(n ## SegmentKey, k)
+#define MXF_DEFINE_PACK_KEY(n, k)     MXF_DEFINE_KEY(n, k)
+#define MXF_DEFINE_SET_KEY(n, k)      MXF_DEFINE_KEY(n, k)
+#define MXF_DEFINE_SEGEMENT_KEY(n, k) MXF_DEFINE_KEY(n, k)
 #define MXF_DEFINE_KEY(n, k) {#n, k},
 
 struct {
   const char* _name;
-  mxfKey _value;
+  mxfKey _key;
 } keyTable [] = {
 #include "MXFMetaDictionary.h"
 {"bogus", {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}}
 };
+
+size_t keyTableSize = (sizeof(keyTable)/sizeof(keyTable[0])) - 1;
 
 const char* programName;
 
@@ -226,6 +228,8 @@ void printUsage(void)
   fprintf(stderr, "dump raw KLV (-k)\n");
   fprintf(stderr, "  --limit <n>   = ");
   fprintf(stderr, "dump only the first <n> bytes of each value (-l)\n");
+  fprintf(stderr, "  --symbolic    = ");
+  fprintf(stderr, "dump the names of keys if known (-s)\n");
   fprintf(stderr, "\n");
   fprintf(stderr, "--mxf-dump      = ");
   fprintf(stderr, "dump MXF (-m)\n");
@@ -317,9 +321,9 @@ void readMxfKey(mxfKey& k, FILE* f)
   }
 }
 
-void printMxfKey(mxfKey& k, FILE* f);
+void printRawMxfKey(mxfKey& k, FILE* f);
 
-void printMxfKey(mxfKey& k, FILE* f)
+void printRawMxfKey(mxfKey& k, FILE* f)
 {
   for (size_t i = 0; i < sizeof(mxfKey); i++) {
     unsigned int b = k[i];
@@ -328,6 +332,39 @@ void printMxfKey(mxfKey& k, FILE* f)
       fprintf(f, ".");
     }
   }
+}
+
+bool lookupKey(mxfKey& k, size_t& index);
+
+bool lookupKey(mxfKey& k, size_t& index)
+{
+  bool result = false;
+  for (size_t i = 0; i < keyTableSize; i++) {
+    if (memcmp(k, keyTable[i]._key, sizeof(mxfKey)) == 0) {
+      index = i;
+      result = true;
+      break;
+    }
+  }
+  return result;
+}
+
+bool symbolic = false;
+
+void printMxfKey(mxfKey& k, FILE* f);
+
+void printMxfKey(mxfKey& k, FILE* f)
+{
+  if (symbolic) {
+    size_t i;
+    bool found = lookupKey(k, i);
+    if (found) {
+      fprintf(stdout, "%s\n", keyTable[i]._name);
+    } else {
+      fprintf(stdout, "Unknown\n");
+    }
+  }
+  printRawMxfKey(k, f);
 }
 
 void mxfDumpFile(char* fileName);
@@ -461,6 +498,8 @@ int main(int argumentCount, char* argumentVector[])
         printUsage();
         exit(EXIT_FAILURE);
       }
+    } else if ((strcmp(p, "-s") == 0) ||(strcmp(p, "--symbolic") == 0)) {
+      symbolic = true;
     } else if ((strcmp(p, "-h") == 0) || (strcmp(p, "--help") == 0)) {
       printUsage();
       exit(EXIT_SUCCESS);
@@ -476,8 +515,11 @@ int main(int argumentCount, char* argumentVector[])
     }
   }
   if (debug) {
-    for (size_t i = 0; i < (sizeof(keyTable)/sizeof(keyTable[0])); i++) {
-      fprintf(stdout, "%4d : %s\n", i, keyTable[i]._name);
+    for (size_t i = 0; i < keyTableSize; i++) {
+      fprintf(stdout, "%s\n", keyTable[i]._name);
+      fprintf(stdout, "  ");
+      printRawMxfKey(keyTable[i]._key, stdout);
+      fprintf(stdout, "\n");
     }
   }
   if (mode == unspecifiedMode) {
