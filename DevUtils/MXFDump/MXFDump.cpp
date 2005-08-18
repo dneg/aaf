@@ -856,7 +856,7 @@ void printUsage(void)
   fprintf(stderr, "dump fill bytes (-f)\n");
   fprintf(stderr, "\n");
   fprintf(stderr, "--set-dump      = ");
-  fprintf(stderr, "dump local sets (-l)\n");
+  fprintf(stderr, "dump local sets (-s)\n");
   fprintf(stderr, "  --limit <n>   = ");
   fprintf(stderr, "dump only the first <n> bytes of each ");
   fprintf(stderr, "essence container (-l)\n");
@@ -875,7 +875,7 @@ void printUsage(void)
   fprintf(stderr, "                  [default n == 0]\n");
   fprintf(stderr, "\n");
   fprintf(stderr, "--symbolic      = ");
-  fprintf(stderr, "dump the names of keys if known [default] (-s)\n");
+  fprintf(stderr, "dump the names of keys if known [default] (-y)\n");
   fprintf(stderr, "--no-symbolic   = ");
   fprintf(stderr, "don't dump the names of keys (-n)\n");
   fprintf(stderr, "\n");
@@ -1777,6 +1777,21 @@ bool getInteger(int& i, char* s)
   return result;
 }
 
+// Summary of options -
+//
+// -k --klv-dump
+// -s --set-dump
+// -m --mxf-dump
+// -a --aaf-dump
+// -v --verbose
+// -f --fill
+// -e --no-limit
+// -l --limit
+// -y --symbolic
+// -n --no-symbolic
+// -h --help
+// -d --debug
+
 int main(int argumentCount, char* argumentVector[])
 {
 #if defined(MXF_USE_CONSOLE)
@@ -1793,7 +1808,7 @@ int main(int argumentCount, char* argumentVector[])
     p = argumentVector[i];
     if ((strcmp(p, "-k") == 0) || (strcmp(p, "--klv-dump") == 0)) {
       setMode(klvMode);
-    } else if ((strcmp(p, "-l") == 0) || (strcmp(p, "--set-dump") == 0)) {
+    } else if ((strcmp(p, "-s") == 0) || (strcmp(p, "--set-dump") == 0)) {
       setMode(localSetMode);
     } else if ((strcmp(p, "-m") == 0) || (strcmp(p, "--mxf-dump") == 0)) {
       setMode(mxfMode);
@@ -1828,7 +1843,7 @@ int main(int argumentCount, char* argumentVector[])
         printUsage();
         exit(EXIT_FAILURE);
       }
-    } else if ((strcmp(p, "-s") == 0) || (strcmp(p, "--symbolic") == 0)) {
+    } else if ((strcmp(p, "-y") == 0) || (strcmp(p, "--symbolic") == 0)) {
       symbolic = true;
     } else if ((strcmp(p, "-n") == 0) || (strcmp(p, "--no-symbolic") == 0)) {
       symbolic = false;
