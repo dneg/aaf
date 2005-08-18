@@ -1595,17 +1595,12 @@ void printEssenceKL(mxfKey& k, mxfLength& len)
   char* itemTypeIdName = itemTypeName(itemTypeId);
   char* elementTypeIdName = elementTypeName(itemTypeId, elementTypeId);
 
-  int elementCount = k[13];
-  int elementNumber = k[15] + 1; // zero based
-
   fprintf(stdout, "\n");
   fprintf(stdout, "[ K = ");
   fprintf(stdout, "Essence");
   fprintf(stdout,
-          " \"%s\" (%d of %d), %s (%02x), ",
+          " \"%s\", %s (%02x), ",
           itemTypeIdName,
-          elementNumber,
-          elementCount,
           elementTypeIdName,
           elementTypeId);
   fprintf(stdout,
