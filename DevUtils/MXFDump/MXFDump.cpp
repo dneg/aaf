@@ -1390,36 +1390,42 @@ void dumpMxfString(const char* label, mxfFile infile)
   delete [] buffer;
 }
 
-void dumpExtensionDefinition(const char* /* label */, mxfFile infile)
+void dumpExtensionDefinition(mxfFile infile)
 {
   dumpMxfLabel("identification", infile);
   dumpMxfString("name", infile);
   dumpMxfString("description", infile);
 }
 
-void dumpExtensionClass(const char* label, mxfFile infile)
+void dumpExtensionClass(mxfFile infile)
 {
-  dumpExtensionDefinition(label, infile);
+  fprintf(stdout, "class = [\n");
+  dumpExtensionDefinition(infile);
 
   dumpMxfLabel("parent class", infile);
   dumpMxfBoolean("concrete/abstract", "concrete", "abstract", infile);
+  fprintf(stdout, "]\n");
 }
 
-void dumpExtensionProperty(const char* label, mxfFile infile)
+void dumpExtensionProperty(mxfFile infile)
 {
-  dumpExtensionDefinition(label, infile);
+  fprintf(stdout, "property = [\n");
+  dumpExtensionDefinition(infile);
 
   dumpMxfLabel("type", infile);
   dumpMxfBoolean("required/optional", "required", "optional", infile);
   dumpMxfLabel("member of", infile);
+  fprintf(stdout, "]\n");
 }
 
-void dumpExtensionTypeInteger(const char* label, mxfFile infile)
+void dumpExtensionTypeInteger(mxfFile infile)
 {
-  dumpExtensionDefinition(label, infile);
+  fprintf(stdout, "integer type = [\n");
+  dumpExtensionDefinition(infile);
 
   dumpMxfUInt08("size", infile);
   dumpMxfBoolean("signed/unsigned", "signed", "unsigned", infile);
+  fprintf(stdout, "]\n");
 }
 
 void dumpMxfLabel(const char* label, mxfFile infile)
@@ -5272,13 +5278,13 @@ void printMetaDictionary(mxfKey& k, mxfLength& len, mxfFile infile)
     readMxfUInt08(tag, infile);
     switch (tag) {
     case 0x10:
-      dumpExtensionClass("class", infile);
+      dumpExtensionClass(infile);
       break;
     case 0x20:
-      dumpExtensionProperty("property", infile);
+      dumpExtensionProperty(infile);
       break;
     case 0x31: // integer
-      dumpExtensionTypeInteger("Integer", infile);
+      dumpExtensionTypeInteger(infile);
       break;
     default:
       mxfError("Invalid definition tag (%"MXFPRIx08").\n", tag);
