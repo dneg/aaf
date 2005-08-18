@@ -782,7 +782,9 @@ bool findAAFKey(mxfKey& k, size_t& index, char** flag);
 bool findAAFKey(mxfKey& k, size_t& index, char** flag)
 {
   bool found = lookupAAFKey(k, index);
-  if (!found) {
+  if (found) {
+    *flag = ""; // A valid SMPTE label
+  } else {
     if (aafKeysAsSets) {
       // This could be an AUID/GUID that cannot be mapped to a SMPTE label.
       // Force the mapping and try again.
@@ -790,7 +792,9 @@ bool findAAFKey(mxfKey& k, size_t& index, char** flag)
       memcpy(x, k, sizeof(x));
       x[5] = 0x53;
       found = lookupAAFKey(x, index);
-      if (!found) {
+      if (found) {
+        *flag = " +"; // A valid key but not a SMPTE label
+      } else {
         if (bogusKeysAsSets) {
           // This could be a bogus key (Intel byte order GUID)
           // Fix it up and try again.
@@ -801,17 +805,13 @@ bool findAAFKey(mxfKey& k, size_t& index, char** flag)
           }
           mxfKey b;
           aafUIDToMxfKey(b, a);
-          bool found = lookupAAFKey(b, index);
+          found = lookupAAFKey(b, index);
           if (found) {
             *flag = " -"; // A bogus key
           }
         }
-      } else {
-        *flag = " +"; // A valid key but not a SMPTE label
       }
     }
-  } else {
-    *flag = ""; // A valid SMPTE label
   }
   return found;
 }
