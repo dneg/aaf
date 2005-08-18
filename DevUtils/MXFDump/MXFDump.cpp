@@ -443,6 +443,12 @@ void mxfDumpFile(char* fileName)
                 ", l = %d (%d) ]\n",
                 length,
                 setLength);
+        if (identifier == 0) {
+          fprintf(stdout,
+                  "%s : Error : Illegal local key (%02x).\n",
+                  programName,
+                  identifier);
+        }
         init();
         for (mxfUInt16 i = 0; i < length; i++) {
           if ((setLength + i) == len) {
