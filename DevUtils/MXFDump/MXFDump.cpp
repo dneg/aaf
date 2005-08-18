@@ -257,7 +257,7 @@ void setPosition(const mxfUInt64 position, FILE* f)
 #else
   long offset = static_cast<long>(position);
   if (position != static_cast<mxfUInt64>(offset)) {
-    fprintf(stderr, "%s : Error : offset too large.\n", programName);
+    fprintf(stderr, "%s : Error : Offset too large.\n", programName);
     exit(EXIT_FAILURE);
   }
   int status = fseek(f, offset, SEEK_SET);
@@ -388,7 +388,7 @@ int readMxfLength(mxfLength& l, FILE* f)
   mxfUInt64 x;
   int bytesRead = readBERLength(x, f);
   if (bytesRead > 9) {
-    fprintf(stderr, "%s : Error : length overflow.\n", programName);
+    fprintf(stderr, "%s : Error : Length overflow.\n", programName);
   }
   l = x;
   return bytesRead;
@@ -1938,15 +1938,15 @@ void printLocalV(mxfLocalKey& identifier,
   setLength = setLength + length;
   if (setLength > len) {
       mxfLength remain = length - (setLength - len);
-      fprintf(stdout,
+      fprintf(stderr,
               "%s : Error : Wrong size (k = ",
               programName);
-      printMxfLocalKey(identifier, stdout);
-      fprintf(stdout,") size = ");
-      printField(stdout, length);
-      fprintf(stdout, ", only ");
-      printField(stdout, remain);
-      fprintf(stdout, " bytes remain in this value.\n");
+      printMxfLocalKey(identifier, stderr);
+      fprintf(stderr,") size = ");
+      printField(stderr, length);
+      fprintf(stderr, ", only ");
+      printField(stderr, remain);
+      fprintf(stderr, " bytes remain in this value.\n");
   }
 }
 
@@ -1955,7 +1955,7 @@ void checkLocalKey(mxfLocalKey& k);
 void checkLocalKey(mxfLocalKey& k)
 {
   if (k == nullMxfLocalKey) {
-    fprintf(stdout,
+    fprintf(stderr,
             "%s : Error : Illegal local key (",
             programName);
     printMxfLocalKey(k, stdout);
