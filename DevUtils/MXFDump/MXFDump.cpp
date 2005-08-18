@@ -777,6 +777,10 @@ struct {
 #include "AAFMetaDictionary.h"
   // All objects
   {"InstanceUID",          0x3c0a},
+  // Preface
+  {"Operational Pattern",  0x3b09},
+  {"Essence Containers",   0x3b0a},
+  {"DM Schemes",           0x3b0b},
   // Index Table
   {"Edit Unit Byte Count", 0x3f05},
   {"IndexSID",             0x3f06},
