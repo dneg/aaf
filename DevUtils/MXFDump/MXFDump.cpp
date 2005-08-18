@@ -4585,9 +4585,9 @@ void checkEssenceContainers(mxfPartition* p)
   }
 }
 
-void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer);
+void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfPartition* footer);
 
-void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
+void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfPartition* footer)
 {
   // Major Version
   checkField(1,
@@ -4615,13 +4615,11 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
              p->_address + headerPosition,
              "PreviousPartition");
   // FooterPartition
-  if (footer != 0) {
-    checkField(footer,
-               p->_footerPartition,
-               p->_key,
-               p->_address + headerPosition,
-               "FooterPartition");
-  }
+  checkField(footer->_address,
+             p->_footerPartition,
+             p->_key,
+             p->_address + headerPosition,
+             "FooterPartition");
   // HeaderByteCount
   checkField(p->_metadataSize,
              p->_headerByteCount,
@@ -4680,10 +4678,11 @@ void checkPartitions(PartitionList& partitions, mxfPartition* footer)
   PartitionList::const_iterator it;
   for (it = partitions.begin(); it != partitions.end(); ++it) {
     mxfPartition* p = *it;
-    checkPartition(p, previous, footer->_address);
+    checkPartition(p, previous, footer);
     previous = p->_address;
   }
 }
+
 void destroyPartitions(PartitionList& partitions);
 
 void destroyPartitions(PartitionList& partitions)
