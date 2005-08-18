@@ -19,7 +19,7 @@ key headerKey  = {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01,
 
 //
 
-void usage(void)
+void printUsage(void)
 {
   cerr << programName() << ": Usage : "
        << programName() << " <file>"
@@ -75,7 +75,7 @@ int main(int argumentCount, char* argumentVector[])
       << ": Error : Wrong number of arguments ("
       << fileCount << ")."
       << endl;
-    usage();
+    printUsage();
     exit(EXIT_FAILURE);
   }
   char* fileName = argumentVector[1];
