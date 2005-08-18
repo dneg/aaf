@@ -1410,7 +1410,7 @@ void dumpExtensionProperty(const char* label, mxfFile infile)
   dumpExtensionDefinition(label, infile);
 
   dumpMxfLabel("type", infile);
-  dumpMxfBoolean("optional/required", "optional", "required", infile);
+  dumpMxfBoolean("required/optional", "required", "optional", infile);
   dumpMxfLabel("member of", infile);
 }
 
