@@ -3635,6 +3635,17 @@ Segment* findIndexSegment(mxfPartition* p)
   return result;
 }
 
+bool hasIndex(mxfPartition* p);
+
+bool hasIndex(mxfPartition* p)
+{
+  bool result = false;
+  if (findIndexSegment(p)) {
+    result = true;
+  }
+  return result;
+}
+
 void checkField(mxfUInt64 expected,
                 mxfUInt64 actual,
                 const mxfKey& key,
