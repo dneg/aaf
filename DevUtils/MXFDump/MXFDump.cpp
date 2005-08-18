@@ -534,6 +534,20 @@ void printLocation(const mxfKey& key, mxfUInt64 keyPosition)
         keyPosition);
 }
 
+void missingProperty(const mxfKey& key,
+                     mxfUInt64 keyPosition,
+                     const char* label);
+
+void missingProperty(const mxfKey& key,
+                     mxfUInt64 keyPosition,
+                     const char* label)
+{
+  mxfError(key,
+           keyPosition,
+           "Required property \"%s\" missing",
+           label);
+}
+
 bool verbose = false;
 bool debug = false;
 
@@ -4259,34 +4273,24 @@ void validateIndexSegment(mxfIndexSegment* index);
 void validateIndexSegment(mxfIndexSegment* index)
 {
   if (!index->_hasInstanceUID) {
-    mxfError(currentKey,
-             keyPosition,
-             "Required property \"InstanceUID\" missing");
+    missingProperty(currentKey, keyPosition, "InstanceUID");
   }
 
   if (!index->_hasIndexEditRate) {
-    mxfError(currentKey,
-             keyPosition,
-             "Required property \"Index Edit Rate\" missing");
+    missingProperty(currentKey, keyPosition, "Index Edit Rate");
   }
 
   if (!index->_hasIndexStartPosition) {
-    mxfError(currentKey,
-             keyPosition,
-             "Required property \"Index Start Position\" missing");
+    missingProperty(currentKey, keyPosition, "Index Start Position");
   }
 
   if (!index->_hasIndexDuration) {
-    mxfError(currentKey,
-             keyPosition,
-             "Required property \"Index Duration\" missing");
-  };
+    missingProperty(currentKey, keyPosition, "Index Duration");
+  }
 
   if (!index->_hasBodySID) {
-    mxfError(currentKey,
-             keyPosition,
-             "Required property \"BodySID\" missing");
-  };
+    missingProperty(currentKey, keyPosition, "BodySID");
+  }
 }
 
 void dumpIndexEntryArray(mxfUInt32 entryCount,
