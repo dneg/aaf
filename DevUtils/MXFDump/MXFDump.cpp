@@ -15,6 +15,9 @@
 #if defined (_MSC_VER) && defined(_M_IX86) && defined(_WIN32)
 #define MXF_COMPILER_MSC_INTEL_WINDOWS
 #define MXF_OS_WINDOWS
+#elif defined (_MSC_VER) && defined(_M_X64) && defined(_WIN32)
+#define MXF_COMPILER_MSC_X64_WINDOWS
+#define MXF_OS_WINDOWS
 #elif defined(__GNUC__) && defined(__i386__) && defined(__linux__)
 #define MXF_COMPILER_GCC_INTEL_LINUX
 #define MXF_OS_UNIX
@@ -49,6 +52,20 @@
 #endif
 
 #if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
+typedef unsigned char          mxfUInt08;
+typedef unsigned short int     mxfUInt16;
+typedef unsigned int           mxfUInt32;
+typedef unsigned __int64       mxfUInt64;
+
+#define MXFPRIu08 "u"
+#define MXFPRIu16 "hu"
+#define MXFPRIu32 "u"
+#define MXFPRIu64 "I64u"
+#define MXFPRIx08 "x"
+#define MXFPRIx16 "hx"
+#define MXFPRIx32 "x"
+#define MXFPRIx64 "I64x"
+#elif defined(MXF_COMPILER_MSC_X64_WINDOWS)
 typedef unsigned char          mxfUInt08;
 typedef unsigned short int     mxfUInt16;
 typedef unsigned int           mxfUInt32;
