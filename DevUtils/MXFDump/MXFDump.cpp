@@ -3413,7 +3413,7 @@ void printPartitions(PartitionList& partitions)
   PartitionList::const_iterator it;
   for (it = partitions.begin(); it != partitions.end(); ++it) {
     mxfPartition* p = *it;
-    fprintf(stderr, "%"MXFPRIx64"\n", p->_address);
+    fprintf(stderr, "Partition (%016"MXFPRIx64")\n", p->_address);
   }
 }
 
