@@ -271,6 +271,11 @@ void dumpMxfUInt16(const char* label, mxfFile infile);
 void dumpMxfUInt32(const char* label, mxfFile infile);
 void dumpMxfUInt64(const char* label, mxfFile infile);
 void dumpMxfRational(const char* label, mxfFile infile);
+void dumpMxfBoolean(const char* label,
+                    const char* trueLabel,
+                    const char* falseLabel,
+                    mxfFile infile);
+void dumpMxfString(const char* label, mxfFile infile);
 void dumpMxfLabel(const char* label, mxfFile infile);
 void dumpMxfOperationalPattern(const char* label, mxfFile infile);
 
@@ -1358,15 +1363,19 @@ void dumpMxfBoolean(const char* label,
   }
 }
 
+void printString(FILE* f, mxfUInt16* str);
+
 void printString(FILE* f, mxfUInt16* str)
 {
-  fprintf(stdout, "\"");
+  fprintf(f, "\"");
   mxfUInt16 character;
   while ((character = *str++) != 0) {
-    fprintf(stdout, "%c", (char)(character)); // tjb - hack
+    fprintf(f, "%c", (char)(character)); // tjb - hack
   }
-  fprintf(stdout, "\"\n");
+  fprintf(f, "\"\n");
 }
+
+void readString(mxfUInt16* buffer, mxfUInt32 bufferSize, mxfFile infile);
 
 void readString(mxfUInt16* buffer, mxfUInt32 bufferSize, mxfFile infile)
 {
@@ -1390,12 +1399,16 @@ void dumpMxfString(const char* label, mxfFile infile)
   delete [] buffer;
 }
 
+void dumpExtensionDefinition(mxfFile infile);
+
 void dumpExtensionDefinition(mxfFile infile)
 {
   dumpMxfLabel("identification", infile);
   dumpMxfString("name", infile);
   dumpMxfString("description", infile);
 }
+
+void dumpExtensionClass(mxfFile infile);
 
 void dumpExtensionClass(mxfFile infile)
 {
@@ -1407,6 +1420,8 @@ void dumpExtensionClass(mxfFile infile)
   fprintf(stdout, "]\n");
 }
 
+void dumpExtensionProperty(mxfFile infile);
+
 void dumpExtensionProperty(mxfFile infile)
 {
   fprintf(stdout, "property = [\n");
@@ -1417,6 +1432,8 @@ void dumpExtensionProperty(mxfFile infile)
   dumpMxfLabel("member of", infile);
   fprintf(stdout, "]\n");
 }
+
+void dumpExtensionTypeInteger(mxfFile infile);
 
 void dumpExtensionTypeInteger(mxfFile infile)
 {
@@ -1930,6 +1947,8 @@ void dumpKeyTable(void)
     delete [] t;
 }
 
+void checkKeyTable(void);
+
 void checkKeyTable(void)
 {
   size_t i;
@@ -1946,6 +1965,8 @@ void checkKeyTable(void)
     }
   }
 }
+
+void checkAAFKeyTable(void);
 
 void checkAAFKeyTable(void)
 {
@@ -5267,7 +5288,7 @@ void printObjectDirectory(mxfKey& /* k */,
 
 void printMetaDictionary(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printMetaDictionary(mxfKey& k, mxfLength& len, mxfFile infile)
+void printMetaDictionary(mxfKey& /* k */, mxfLength& len, mxfFile infile)
 {
   mxfLength remaining = len;
   while (remaining > 0) {
