@@ -1260,7 +1260,7 @@ void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
   }
   flush();
   if (count < length) {
-    fprintf(stdout, "[ Truncated from ");
+    fprintf(stdout, "[ Value truncated from ");
     printField(stdout, length);
     fprintf(stdout, " bytes to ");
     printField(stdout, limit);
@@ -1462,7 +1462,7 @@ void printEssenceFrames(mxfKey& k,
     total = total + len;
   }
   if (maxFrames < frameCount) {
-    fprintf(stdout, "[ Truncated from ");
+    fprintf(stdout, "[ Essence frames truncated from ");
     printField(stdout, frameCount);
     fprintf(stdout, " frames to ");
     printField(stdout, maxFrames);
@@ -1809,7 +1809,7 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
         setLength = setLength + 11 + (4 * sliceCount);
       }
       if (count < entryCount) {
-        fprintf(stdout, "[ Truncated from ");
+        fprintf(stdout, "[ Index table truncated from ");
         printField(stdout, entryCount);
         fprintf(stdout, " entries to ");
         printField(stdout, maxIndex);
