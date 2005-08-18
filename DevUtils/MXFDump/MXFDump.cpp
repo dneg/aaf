@@ -1640,9 +1640,7 @@ void decode(mxfKey& label, FILE* outfile)
   tag2 = tag2 + (label[14] << 8);
   tag2 = tag2 + (label[15] << 0);
 
-  fprintf(outfile, " - [ ");
   decode(tag1, tag2, outfile);
-  fprintf(outfile, " ]");
 }
 
 mxfByte privatePfx[] = {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01,
@@ -1659,21 +1657,22 @@ void printEssenceContainerLabelName(mxfKey& label, FILE* outfile)
   } else if (memcmp(&label, &eclPfx2, sizeof(eclPfx2)) == 0) {
     decode(label, outfile);
   } else if (memcmp(&label, &privatePfx, sizeof(privatePfx)) == 0) {
-    fprintf(outfile, " - [ Private ]");
+    fprintf(outfile, "Private");
   } else {
-    fprintf(outfile, " - [ Invalid ]");
+    fprintf(outfile, "Invalid");
   }
 }
 
 void printEssenceContainerLabel(mxfKey& label, mxfUInt32 index, FILE* outfile)
 {
-//fprintf(stdout, "  ");
-//printDecField(stdout, index);
-  fprintf(stdout, "%3"MXFPRIu32, index);
-  fprintf(stdout, " : ");
+  fprintf(stdout, "          ");
+  printDecField(stdout, index);
+  fprintf(stdout, " = ");
   printMxfKey(label, outfile);
-  printEssenceContainerLabelName(label, outfile);
   fprintf(stdout, "\n");
+  fprintf(stdout, "                     = [ ");
+  printEssenceContainerLabelName(label, outfile);
+  fprintf(stdout, " ]\n");
 }
 
 bool reorder(void)
