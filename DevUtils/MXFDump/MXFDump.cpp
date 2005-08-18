@@ -1413,6 +1413,40 @@ void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
   }
 }
 
+char* elementTypeIdName(mxfByte itemTypeId);
+
+char* elementTypeIdName(mxfByte itemTypeId)
+{
+  char* result;
+  switch (itemTypeId) {
+  case 0x05:
+    result = "CP Picture";
+    break;
+  case 0x06:
+    result = "CP Sound";
+    break;
+  case 0x07:
+    result = "CP Data";
+    break;
+  case 0x15:
+    result = "GC Picture";
+    break;
+  case 0x16:
+    result = "GC Sound";
+    break;
+  case 0x17:
+    result = "GC Data";
+    break;
+  case 0x18:
+    result = "GC Compound";
+    break;
+  default:
+    result = "Unknown";
+    break;
+  }
+  return result;
+}
+
 char* elementTypeName(mxfByte itemTypeId, mxfByte type);
 
 char* elementTypeName(mxfByte itemTypeId, mxfByte type)
