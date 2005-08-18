@@ -2497,11 +2497,7 @@ void printKL(mxfKey& k, mxfLength& l);
 
 void printKL(mxfKey& k, mxfLength& l)
 {
-  if (darkItems > 0) {
-    fprintf(stdout, "\n");
-    fprintf(stdout, "[ Omitted %"MXFPRIu32" dark KLV triplets ]\n", darkItems);
-    darkItems = 0;
-  }
+  printDarkItems();
   fprintf(stdout, "\n");
   fprintf(stdout, "[ K = ");
   printMxfKeySymbol(k, stdout);
