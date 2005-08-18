@@ -2965,12 +2965,12 @@ void checkElementSize(mxfUInt32 expectedSize,
 void checkElementCount(mxfUInt32 elementCount,
                        mxfUInt32 elementSize,
                        mxfUInt64 length,
-                       mxfUInt32 fixedSize);
+                       mxfUInt64 fixedSize);
 
 void checkElementCount(mxfUInt32 elementCount,
                        mxfUInt32 elementSize,
                        mxfUInt64 length,
-                       mxfUInt32 fixedSize)
+                       mxfUInt64 fixedSize)
 {
   if (length >= fixedSize) {
     mxfUInt64 remaining = length - fixedSize;
