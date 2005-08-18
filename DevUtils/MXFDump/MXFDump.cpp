@@ -247,6 +247,7 @@ void mxfDumpFile(char* fileName);
 void aafDumpFile(char* fileName);
 
 bool lookupKey(mxfKey& k, size_t& index);
+bool isEssenceElement(mxfKey& k);
 
 bool isDark(mxfKey& k, Mode mode);
 bool isFill(mxfKey& k);
@@ -1829,6 +1830,8 @@ void printMxfKeySymbol(mxfKey& k)
   bool found = lookupKey(k, i);
   if (found) {
     fprintf(stdout, "%s", keyTable[i]._name);
+  } else if (isEssenceElement(k)) {
+    fprintf(stdout, "Essence Element");
   } else {
     fprintf(stdout, "Dark");
   }
@@ -1852,6 +1855,8 @@ void printAAFKeySymbol(mxfKey& k)
     found = findAAFKey(k, i, &flag);
     if (found) {
       fprintf(stdout, "%s%s", aafKeyTable[i]._name, flag);
+    } else if (isEssenceElement(k)) {
+      fprintf(stdout, "Essence Element");
     } else {
       fprintf(stdout, "Dark");
     }
@@ -2199,8 +2204,6 @@ bool isAvidEssenceElement(mxfKey& k)
   return result;
 }
 
-bool isEssenceElement(mxfKey& k);
-
 bool isEssenceElement(mxfKey& k)
 {
   bool result;
@@ -2218,6 +2221,8 @@ void printEssenceKL(mxfKey& k, mxfLength& len);
 
 void printEssenceKL(mxfKey& k, mxfLength& len)
 {
+  printKL(k, len);
+
   mxfByte itemTypeId = k[12];
   mxfByte elementTypeId = k[14];
 
@@ -2232,40 +2237,29 @@ void printEssenceKL(mxfKey& k, mxfLength& len)
   int elementCount = k[13];
   int elementNumber = k[15];
 
-  fprintf(stdout, "\n");
-  fprintf(stdout, "[ K = Essence Element");
-  if (keyAddresses) {
-    fprintf(stdout, " ");
-    printKeyAddress(stdout, keyPosition);
-  }
-  fprintf(stdout, "\n");
+
   fprintf(stdout,
-          "  Track          = %02x.%02x.%02x.%02x,\n",
+          "  Track          = %02x.%02x.%02x.%02x\n",
           k[12],
           k[13],
           k[14],
           k[15]);
   fprintf(stdout,
-          "  Item Type      = \"%s\" (%02x),\n",
+          "  Item Type      = \"%s\" (%02x)\n",
           itemTypeIdName,
           itemTypeId);
   fprintf(stdout,
-          "  Element Type   = \"%s\" (%02x),\n",
+          "  Element Type   = \"%s\" (%02x)\n",
           elementTypeIdName,
           elementTypeId);
   fprintf(stdout,
-          "  Element Count  = %d (%02x),\n",
+          "  Element Count  = %d (%02x)\n",
           elementCount,
           elementCount);
   fprintf(stdout,
-          "  Element Number = %d (%02x),\n",
+          "  Element Number = %d (%02x)\n",
           elementNumber,
           elementNumber);
-  printMxfKey(k, stdout);
-  fprintf(stdout, ", ");
-  fprintf(stdout, "L = ");
-  printMxfLength(len, stdout);
-  fprintf(stdout, " ]\n");
 }
 
 void printEssenceFrameFill(mxfKey& k,
