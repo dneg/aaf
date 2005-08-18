@@ -4782,6 +4782,26 @@ void validateIndexSegment(mxfIndexSegment* index)
 
   // Other checks.
   //
+  if (index->_hasIndexEntryArray && index->_indexEntryCount != 0) {
+    if (index->_hasEditUnitByteCount && index->_editUnitByteCount != 0) {
+      mxfWarning(currentKey,
+                 keyPosition,
+                 "Index segment has index entries (%"MXFPRIu32")"
+                 " and edit unit byte count (%"MXFPRIu32")",
+                 index->_indexEntryCount,
+                 index->_editUnitByteCount); 
+    }
+    // else VBR index
+  } else {
+    if (!index->_hasEditUnitByteCount || index->_editUnitByteCount == 0) {
+       mxfWarning(currentKey,
+                 keyPosition,
+                 "Index segment has no index entries"
+                 " and no edit unit byte count");
+    }
+    // else CBR index
+  }
+
   if (index->_hasDeltaEntryArray) {
     validateArray(6,
                   index->_deltaEntrySize,
