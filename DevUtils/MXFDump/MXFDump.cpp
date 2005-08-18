@@ -30,6 +30,14 @@
 #error "Unknown compiler"
 #endif
 
+#if defined(MXF_OS_MACOS)
+#define MXF_USE_CONSOLE
+#endif
+
+#if defined(MXF_USE_CONSOLE)
+#include <console.h>
+#endif
+
 typedef unsigned long int mxfLength;
 typedef unsigned char mxfKey[16];
 typedef unsigned char mxfByte;
@@ -322,6 +330,10 @@ bool getInteger(int& i, char* s)
 
 int main(int argumentCount, char* argumentVector[])
 {
+#if defined(MXF_USE_CONSOLE)
+  argumentCount = ccommand(&argumentVector);
+#endif
+
   programName = baseName(argumentVector[0]);
   checkSizes();
   int fileCount = 0;
