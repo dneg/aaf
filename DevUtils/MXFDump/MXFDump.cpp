@@ -3479,6 +3479,19 @@ char* avidElementTypeName(mxfByte itemTypeId, mxfByte type)
   return result;
 }
 
+bool isSystemItem(mxfKey& k);
+
+bool isSystemItem(mxfKey& k)
+{
+  bool result;
+  if (memcmp(&k, &SystemMetadata, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;  
+}
+
 bool isPredefinedEssenceElement(mxfKey& k);
 
 bool isPredefinedEssenceElement(mxfKey& k)
