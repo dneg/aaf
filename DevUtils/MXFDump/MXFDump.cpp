@@ -12,6 +12,8 @@
 #include <string.h>
 #include <stdarg.h>
 
+#include <list>
+
 #if defined (_MSC_VER) && defined(_M_IX86) && defined(_WIN32)
 #define MXF_COMPILER_MSC_INTEL_WINDOWS
 #define MXF_OS_WINDOWS
@@ -2632,6 +2634,52 @@ void printLocalSet(mxfKey& k, mxfLength& len, mxfFile infile)
   }
 }
 
+// In memory representatonof a partition
+typedef struct PartitionTag {
+  mxfUInt64 _address; // Actual file address
+} Partition;
+
+typedef std::list<Partition*> PartitionList;
+
+void readPartition(PartitionList& partitions);
+
+void readPartition(PartitionList& partitions)
+{
+  Partition* p = new Partition;
+  p->_address = keyPosition;
+  partitions.push_back(p);
+}
+
+void printPartitions(PartitionList& partitions);
+
+void printPartitions(PartitionList& partitions)
+{
+  PartitionList::const_iterator it;
+  for (it = partitions.begin(); it != partitions.end(); ++it) {
+    Partition* p = *it;
+    fprintf(stderr, "%"MXFPRIx64"\n", p->_address);
+  }
+}
+
+void checkPartitions(PartitionList& partitions);
+
+void checkPartitions(PartitionList& partitions)
+{
+#if 0
+  printPartitions(partitions);
+#endif
+}
+void destroyPartitions(PartitionList& partitions);
+
+void destroyPartitions(PartitionList& partitions)
+{
+  PartitionList::const_iterator it;
+  for (it = partitions.begin(); it != partitions.end(); ++it) {
+    Partition* p = *it;
+    delete p;
+  }
+}
+
 // Note on partition keys -
 //
 //                              0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
@@ -3391,6 +3439,7 @@ void mxfValidate(mxfFile infile);
 
 void mxfValidate(mxfFile infile)
 {
+  PartitionList p;
   mxfUInt64 fileSize = size(infile);
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
@@ -3402,9 +3451,13 @@ void mxfValidate(mxfFile infile)
       checkPrimerLength(len);
     } else if (isPartition(k)) {
       checkPartitionLength(len);
+      readPartition(p);
     }
     skipV(len, infile);
   }
+
+  checkPartitions(p);
+  destroyPartitions(p);
 
   fprintf(stderr,
           "%s : MXF validation       - ",
