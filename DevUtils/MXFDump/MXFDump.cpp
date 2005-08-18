@@ -2643,6 +2643,35 @@ void printLocalSet(mxfKey& k, mxfLength& len, mxfFile infile)
   }
 }
 
+void checkElementSize(mxfUInt32 expectedSize,
+                      mxfUInt32 actualSize,
+                      mxfUInt32 elementCount);
+
+void checkElementSize(mxfUInt32 expectedSize,
+                      mxfUInt32 actualSize,
+                      mxfUInt32 elementCount)
+{
+  if (actualSize != expectedSize) {
+    if ((elementCount == 0) && (actualSize == 0)) {
+      warning("Incorrect element size"
+              " - expected %"MXFPRIu32", found %"MXFPRIu32""
+              " (following key at offset 0x%"MXFPRIx64").\n",
+			  expectedSize,
+              actualSize,
+              keyPosition);
+      warnings = warnings + 1;
+    } else {
+      error("Incorrect element size"
+            " - expected %"MXFPRIu32", found %"MXFPRIu32""
+            " (following key at offset 0x%"MXFPRIx64").\n",
+			expectedSize,
+            actualSize,
+            keyPosition);
+      errors = errors + 1;
+    }
+  }
+}
+
 // In-memory representaton of a partition
 typedef struct PartitionTag {
   //
@@ -2867,6 +2896,7 @@ void printPartition(mxfKey& k, mxfLength& len, mxfFile infile)
   fprintf(stdout, " ]\n");
   mxfUInt32 elementSize;
   readMxfUInt32(elementSize, infile);
+  checkElementSize(sizeof(mxfKey), elementSize, elementCount);
   for (mxfUInt32 i = 0; i < elementCount; i++) {
     mxfKey essence;
     readMxfLabel(essence, infile);
