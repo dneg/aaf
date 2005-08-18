@@ -575,6 +575,16 @@ void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
   flush();
 }
 
+void skipV(mxfLength& length, FILE* f);
+
+void skipV(mxfLength& length, FILE* f)
+{
+  for (mxfLength i = 0; i < length; i++) {
+    mxfByte b;
+    readMxfByte(b, f);
+  }
+}
+
 bool dumpFiller = false;
 
 void mxfDumpFile(char* fileName);
@@ -659,10 +669,7 @@ void mxfDumpFile(char* fileName)
         fprintf(stdout, "\n");
       }
     } else if ((memcmp(&Filler, &k, sizeof(mxfKey)) == 0) && !dumpFiller) {
-      for (mxfLength i = 0; i < len; i++) {
-        mxfByte b;
-        readMxfByte(b, infile);
-      }
+      skipV(len, infile);
     } else {
       printV(len, false, 0, infile);
     }
