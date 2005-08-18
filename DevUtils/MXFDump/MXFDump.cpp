@@ -68,7 +68,7 @@ typedef unsigned long long int mxfUInt64;
 typedef mxfUInt64 mxfLength;
 typedef mxfUInt08 mxfByte;
 typedef mxfByte mxfKey[16];
-typedef mxfByte  mxfLocalKey[2];
+typedef mxfUInt16 mxfLocalKey;
 
 typedef struct aafUIDTag {
   mxfUInt32 Data1;
@@ -230,11 +230,7 @@ void readMxfLength(mxfLength& l, FILE* f)
 
 void readMxfLocalKey(mxfLocalKey& k, FILE* f)
 {
-  int c = fread(&k, sizeof(mxfLocalKey), 1, f);
-  if (c != 1) {
-    fprintf(stderr, "%s : Error : Failed to read local key.\n", programName);
-    exit(EXIT_FAILURE);
-  }
+  readMxfUInt16(k, f);
 }
 
 void reorder(mxfUInt16& i)
@@ -410,13 +406,9 @@ void printMxfLength(mxfLength& l, FILE* f)
 
 void printMxfLocalKey(mxfLocalKey& k, FILE* f)
 {
-  for (size_t i = 0; i < sizeof(mxfLocalKey); i++) {
-    unsigned int b = k[i];
-    fprintf(f, "%02x", b);
-    if (i < (sizeof(mxfLocalKey) - 1)) {
-      fprintf(f, ".");
-    }
-  }
+  unsigned int msb = (k & 0xff00) >> 8;
+  unsigned int lsb = (k & 0x00ff);
+  fprintf(f, "%02x.%02x", msb, lsb);
 }
 
 void dumpMxfUInt16(const char* label, FILE* infile)
@@ -659,7 +651,7 @@ bool lookupAAFKey(mxfKey& k, size_t& index)
   return result;
 }
 
-const mxfLocalKey nullMxfLocalKey = {0, 0};
+const mxfLocalKey nullMxfLocalKey = 0x00;
 
 void checkSizes(void);
 
@@ -871,12 +863,8 @@ bool lookupLocalKey(mxfLocalKey& k, size_t& index);
 bool lookupLocalKey(mxfLocalKey& k, size_t& index)
 {
   bool result = false;
-  mxfUInt16 ik = reinterpret_cast<mxfUInt16&>(k);
-  if (reorder()) {
-    reorder(ik);
-  }
   for (size_t i = 0; i < localKeyTableSize; i++) {
-    if (localKeyTable[i]._key == ik) {
+    if (localKeyTable[i]._key == k) {
       index = i;
       result = true;
       break;
@@ -1175,7 +1163,7 @@ void checkLocalKey(mxfLocalKey& k);
 
 void checkLocalKey(mxfLocalKey& k)
 {
-  if (memcmp(k, nullMxfLocalKey, sizeof(mxfLocalKey))== 0) {
+  if (k == nullMxfLocalKey) {
     fprintf(stdout,
             "%s : Error : Illegal local key (",
             programName);
