@@ -317,21 +317,21 @@ void dumpMxfUInt16(const char* label, FILE* infile)
 {
   mxfUInt16 i;
   readMxfUInt16(i, infile);
-  fprintf(stdout, "%20s = %04x\n", label, i);
+  fprintf(stdout, "%20s = %4x\n", label, i);
 }
 
 void dumpMxfUInt32(const char* label, FILE* infile)
 {
   mxfUInt32 i;
   readMxfUInt32(i, infile);
-  fprintf(stdout, "%20s = %08x\n", label, i);
+  fprintf(stdout, "%20s = %8x\n", label, i);
 }
 
 void dumpMxfUInt64(const char* label, FILE* infile)
 {
   mxfUInt64 i;
   readMxfUInt64(i, infile);
-  fprintf(stdout, "%20s = %08x\n", label, i);
+  fprintf(stdout, "%20s = %8x\n", label, i);
 }
 
 void dumpMxfKey(const char* label, FILE* infile)
