@@ -344,7 +344,7 @@ const char* keyName(const mxfKey& key);
 
 void printFill(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void skipV(mxfLength& length, mxfFile infile);
+void skipV(mxfLength length, mxfFile infile);
 
 void checkPartitionLength(mxfUInt64& length);
 
@@ -3744,7 +3744,7 @@ void printEssenceElement(mxfKey& k,
   }
 }
 
-void skipV(mxfLength& length, mxfFile infile)
+void skipV(mxfLength length, mxfFile infile)
 {
   // Seek past (length - 1) bytes then read a byte
   if (length != 0) {
