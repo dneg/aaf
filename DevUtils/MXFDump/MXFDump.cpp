@@ -76,11 +76,11 @@ void readMxfLength(mxfLength& l, FILE* f)
   decodeMxfLength(l);
 }
 
-void printMxfLength(mxfLength& l);
+void printMxfLength(mxfLength& l, FILE* f);
 
-void printMxfLength(mxfLength& l)
+void printMxfLength(mxfLength& l, FILE* f)
 {
-  fprintf(stdout, "%12d (%8x)", l, l);
+  fprintf(f, "%12d (%8x)", l, l);
 }
 
 void readMxfKey(mxfKey& k, FILE* f);
@@ -94,15 +94,15 @@ void readMxfKey(mxfKey& k, FILE* f)
   }
 }
 
-void printMxfKey(mxfKey& k);
+void printMxfKey(mxfKey& k, FILE* f);
 
-void printMxfKey(mxfKey& k)
+void printMxfKey(mxfKey& k, FILE* f)
 {
   for (size_t i = 0; i < sizeof(mxfKey); i++) {
     unsigned int b = k[i];
-    fprintf(stdout, "%02x", b);
+    fprintf(f, "%02x", b);
     if (i < (sizeof(mxfKey) - 1)) {
-      fprintf(stdout, ".");
+      fprintf(f, ".");
     }
   }
 }
@@ -132,11 +132,11 @@ void rawDumpFile(char* fileName)
   while (!feof(infile)) {
     mxfKey k;
     readMxfKey(k, infile);
-    printMxfKey(k);
+    printMxfKey(k, stdout);
     fprintf(stdout, "  ");
     mxfLength len;
     readMxfLength(len, infile);
-    printMxfLength(len);
+    printMxfLength(len, stdout);
     fprintf(stdout, "\n");
 
     for (mxfLength i = 0; i < len; i++) {
