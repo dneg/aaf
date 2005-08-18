@@ -2968,6 +2968,19 @@ bool isFooter(mxfKey& key)
   return result;
 }
 
+mxfUInt64 checkFooterPosition(mxfUInt64 footer, mxfUInt64 keyPosition);
+
+mxfUInt64 checkFooterPosition(mxfUInt64 footer, mxfUInt64 keyPosition)
+{
+  if (footer != 0) {
+    error("More than one footer"
+          " (following key at offset 0x%"MXFPRIx64").\n",
+          keyPosition);
+    errors = errors + 1;
+  }
+  return keyPosition;
+}
+
 void checkPartitionLength(mxfUInt64& length)
 {
   mxfUInt64 entrySize = sizeof(mxfKey);     // Essence container label
@@ -3670,13 +3683,7 @@ void mxfValidate(mxfFile infile)
       skipV(len, infile);
     } else if (isPartition(k)) {
       if (isFooter(k)) {
-        if (footer != 0) {
-          error("More than one footer"
-                " (following key at offset 0x%"MXFPRIx64").\n",
-                keyPosition);
-          errors = errors + 1;
-        }
-        footer = keyPosition;
+        footer = checkFooterPosition(footer, keyPosition);
       }
       readPartition(p, length, infile);
     } else {
