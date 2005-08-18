@@ -153,6 +153,8 @@ bool isFill(mxfKey& k);
 
 void printFill(mxfKey& k, mxfLength& len, FILE* infile);
 
+void skipV(mxfLength& length, FILE* f);
+
 mxfUInt64 position;
 
 void readMxfUInt08(mxfByte& b, FILE* f)
@@ -1381,6 +1383,8 @@ void printEssenceKL(mxfKey& k, mxfLength& len)
 }
 
 bool frames = false;
+bool iFlag = false;
+mxfUInt32 maxFrames = 0;
 
 void printEssenceFrames(mxfKey& k,
                         mxfLength& length,
@@ -1394,6 +1398,7 @@ void printEssenceFrames(mxfKey& k,
                         mxfUInt32 limit,
                         FILE* f)
 {
+  mxfUInt32 frameCount = 0;
   mxfLength total = 0;
 
   printEssenceKL(k, length);
@@ -1403,13 +1408,34 @@ void printEssenceFrames(mxfKey& k,
     mxfLength len;
     int lengthLen = readMxfLength(len, f);
     total = total + lengthLen;
-    if (isFill(k)) {
-      printFill(k, len, f);
+    if ((frameCount < maxFrames) || !iFlag) {
+      if (isFill(k)) {
+        printFill(k, len, f);
+      } else {
+        fprintf(stdout, "\n");
+        fprintf(stdout, "Frame ");
+        printField(stdout, frameCount);
+
+        printKL(k, len);
+        printV(len, lFlag, limit, f);
+        frameCount = frameCount + 1;
+      }
     } else {
-      printKL(k, len);
-      printV(len, lFlag, limit, f);
+      if (isFill(k)) {
+        skipV(len, f);
+      } else {
+        skipV(len, f);
+        frameCount = frameCount + 1;
+      }
     }
     total = total + len;
+  }
+  if (maxFrames < frameCount) {
+    fprintf(stdout, "[ Truncated from ");
+    printField(stdout, frameCount);
+    fprintf(stdout, " frames to ");
+    printField(stdout, maxFrames);
+    fprintf(stdout, " frames ]\n");
   }
 }
 
@@ -1428,8 +1454,6 @@ void printEssence(mxfKey& k,
   printEssenceKL(k, length);
   printV(length, lFlag, limit, f);
 }
-
-void skipV(mxfLength& length, FILE* f);
 
 void skipV(mxfLength& length, FILE* f)
 {
@@ -2056,6 +2080,7 @@ int getIntegerOption(int currentArgument,
 // -l --limit-bytes
 // -c --entries
 // -p --frames
+// -i --limit-frames
 // -r --relative
 // -b --absolute
 // -t --decimal
@@ -2114,6 +2139,11 @@ int main(int argumentCount, char* argumentVector[])
     } else if ((strcmp(p, "--frames") == 0) ||
                (strcmp(p, "-p") == 0)) {
       frames = true;
+    } else if ((strcmp(p, "--limit-frames") == 0) ||
+               (strcmp(p, "-i") == 0)) {
+      maxFrames = getIntegerOption(i, argumentCount, argumentVector, "count");
+      iFlag = true;
+      i = i + 1;      
     } else if ((strcmp(p, "--relative") == 0) ||
                (strcmp(p, "-r") == 0)) {
       relative = true;
