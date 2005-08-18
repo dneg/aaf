@@ -4340,7 +4340,6 @@ void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
 {
-#if 1
   mxfUInt64 startPosition = position(infile);
   mxfIndexSegment index;
   initializeIndexSegment(&index);
@@ -4355,79 +4354,6 @@ void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
     dumpIndexEntryArray(index._indexEntryCount, index._indexEntrySize, infile);
   }
   setPosition(infile, startPosition + len);
-#else
-  mxfLength remainder = len;
-  while (remainder > 0) {
-    mxfLocalKey identifier;
-    readMxfLocalKey(identifier, infile);
-    mxfUInt16 length;
-    readMxfUInt16(length, infile);
-    remainder = remainder - 4;
-
-    if (identifier == 0x3c0a) {
-      // InstanceUID
-      dumpMxfLabel("InstanceUID", infile);
-      remainder = remainder - 16;
-    } else if (identifier == 0x3f05) {
-      // Edit Unit Byte Count
-      dumpMxfUInt32("Edit Unit Byte Count", infile);
-      remainder = remainder - 4;
-    } else if (identifier == 0x3f06) {
-      // IndexSID
-      dumpMxfUInt32("IndexSID", infile);
-      remainder = remainder - 4;
-    } else if (identifier == 0x3f07) {
-      // BodySID
-      dumpMxfUInt32("BodySID", infile);
-      remainder = remainder - 4;
-    } else if (identifier == 0x3f08) {
-      // Slice Count
-      dumpMxfUInt08("SliceCount", infile);
-      remainder = remainder - 1;
-    } else if (identifier == 0x3f0a) {
-      // Entry array
-      mxfUInt32 entryCount;
-      readMxfUInt32(entryCount, infile);
-      mxfUInt32 entrySize;
-      readMxfUInt32(entrySize, infile);
-      remainder = remainder - 8;
-      dumpIndexEntryArray(entryCount, entrySize, infile);
-      remainder = remainder - (entryCount * entrySize);
-    } else if (identifier == 0x3f0b) {
-      // Index Edit Rate
-      dumpMxfRational("Index Edit Rate", infile);
-      remainder = remainder - 8;
-    } else if (identifier == 0x3f0c) {
-      // Index Start Position
-      dumpMxfUInt64("Index Start Position", infile);
-      remainder = remainder - 8;
-    } else if (identifier == 0x3f0d) {
-      // Index Duration
-      dumpMxfUInt64("Index Duration", infile);
-      remainder = remainder - 8;
-    } else if (identifier == 0x3f0e) {
-      // Pos Table Count
-      dumpMxfUInt08("Pos Table Count", infile);
-      remainder = remainder - 1;
-    } else if (identifier == 0x3f09) {
-      // Delta Entry Array
-      mxfUInt32 entryCount;
-      readMxfUInt32(entryCount, infile);
-      mxfUInt32 entrySize;
-      readMxfUInt32(entrySize, infile);
-      remainder = remainder - 8;
-      dumpDeltaEntryArray(entryCount, entrySize, infile);
-      remainder = remainder - (entryCount * entrySize);
-    } else {
-      mxfError(k,
-               keyPosition,
-               "Local key (%04"MXFPRIx16") not recognized.",
-               identifier);
-      mxfUInt16 vLength = validateLocalV(length, remainder, infile);
-      skipBytes(vLength, infile);
-    }
-  }
-#endif
 }
 
 // Size of the fixed portion of a primer
