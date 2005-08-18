@@ -2663,7 +2663,7 @@ void printFormatOptions(void)
 
   fprintf(stderr, "  --limit-entries <n> = ");
   fprintf(stderr, "print only the first <n> ");
-  fprintf(stderr, "index table entries (-c)\n");
+  fprintf(stderr, "index table entries [default n = 0] (-c)\n");
 
   fprintf(stderr, "  --no-limit-entries  = ");
   fprintf(stderr, "print all ");
