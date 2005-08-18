@@ -1665,10 +1665,15 @@ void printEssenceContainerLabelName(mxfKey& label, FILE* outfile)
   }
 }
 
-void printEssenceContainerLabel(mxfKey& label, FILE* outfile)
+void printEssenceContainerLabel(mxfKey& label, mxfUInt32 index, FILE* outfile)
 {
+//fprintf(stdout, "  ");
+//printDecField(stdout, index);
+  fprintf(stdout, "%3"MXFPRIu32, index);
+  fprintf(stdout, " : ");
   printMxfKey(label, outfile);
   printEssenceContainerLabelName(label, outfile);
+  fprintf(stdout, "\n");
 }
 
 bool reorder(void)
@@ -4413,12 +4418,7 @@ void printPartition(mxfKey& /* k */, mxfLength& len, mxfFile infile)
   for (mxfUInt32 i = 0; i < elementCount; i++) {
     mxfKey essence;
     readMxfLabel(essence, infile);
-//  fprintf(stdout, "  ");
-//  printDecField(stdout, i);
-    fprintf(stdout, "%3"MXFPRIu32, i);
-    fprintf(stdout, " : ");
-    printEssenceContainerLabel(essence, stdout);
-    fprintf(stdout, "\n");
+    printEssenceContainerLabel(essence, i, stdout);
   }
 }
 
