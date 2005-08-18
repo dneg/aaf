@@ -1322,25 +1322,6 @@ void printKL(mxfKey& k, mxfLength& l)
   fprintf(stdout, " ]\n");
 }
 
-void printMXFKL(mxfKey& k, mxfLength& l);
-
-void printMXFKL(mxfKey& k, mxfLength& l)
-{
-  printKL(k, l);
-}
-void printAAFKL(mxfKey& k, mxfLength& l);
-
-void printAAFKL(mxfKey& k, mxfLength& l)
-{
-  fprintf(stdout, "\n");
-  fprintf(stdout, "[ K = ");
-  printAAFKeySymbol(k, stdout);
-  fprintf(stdout, ", ");
-  fprintf(stdout, "L = ");
-  printMxfLength(l, stdout);
-  fprintf(stdout, " ]\n");
-}
-
 bool relative = true;
 int base = 10;
 
@@ -1766,22 +1747,6 @@ void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
   printLocalSetV(len, infile);
 }
 
-void printMXFLocalSet(mxfKey& k, mxfLength& len, FILE* infile);
-
-void printMXFLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
-{
-  printMXFKL(k, len);
-  printLocalSetV(len, infile);
-}
-
-void printAAFLocalSet(mxfKey& k, mxfLength& len, FILE* infile);
-
-void printAAFLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
-{
-  printAAFKL(k, len);
-  printLocalSetV(len, infile);
-}
-
 void printPartition(mxfKey& k, mxfLength& len, FILE* infile);
 
 void printPartition(mxfKey& k, mxfLength& len, FILE* infile)
@@ -2138,7 +2103,7 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
   } else {
     if (!isDark(k, mode) || dumpDark) {
       if (isLocalSet(k)) {
-        printMXFLocalSet(k, len, infile);
+        printLocalSet(k, len, infile);
       } else {
         printKL(k, len);
         printV(len, false, 0, infile);
@@ -2183,7 +2148,7 @@ void aafDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
             programName);
     exit(EXIT_FAILURE);
   } else if (isAAFKey(k)) {
-    printAAFLocalSet(k, len, infile);
+    printLocalSet(k, len, infile);
   } else {
     mxfDumpKLV(k, len, infile);
   }
