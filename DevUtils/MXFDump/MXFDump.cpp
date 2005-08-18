@@ -4158,6 +4158,39 @@ void printIndexSegment(mxfIndexSegment* index);
 
 void printIndexSegment(mxfIndexSegment* index)
 {
+  // InstanceUID
+  fprintf(stdout, "%20s = ", "InstanceUID");
+  printMxfKey(index->_instanceUID, stdout);
+  fprintf(stdout, "\n");
+
+  // Index Edit Rate
+  fprintf(stdout, "%20s = ", "Index Edit Rate");
+  fprintf(stdout, "( ");
+  printDecField(stdout, index->_indexEditRate.numerator);
+  fprintf(stdout, " / ");
+  printDecField(stdout, index->_indexEditRate.denominator);
+  fprintf(stdout, " )");
+  fprintf(stdout, "\n");
+
+  // Index Start Position
+  printMxfUInt64(stdout, "Index Start Position", index->_indexStartPosition);
+
+  // Index Duration
+  printMxfUInt64(stdout, "Index Duration", index->_indexDuration);
+
+  // Edit Unit Byte Count
+  printMxfUInt32(stdout, "Edit Unit Byte Count", index->_editUnitByteCount);
+
+  // IndexSID
+  printMxfUInt32(stdout, "IndexSID", index->_indexSID);
+
+  // BodySID
+  printMxfUInt32(stdout, "BodySID", index->_bodySID);
+
+  // Slice Count
+  if (index->_hasSliceCount) {
+    printMxfUInt08(stdout, "SliceCount", index->_sliceCount);
+  }
 }
 
 void dumpIndexEntryArray(mxfUInt32 entryCount,
