@@ -294,22 +294,22 @@ void skipBytes(const mxfUInt64 byteCount, FILE* f)
 
 void readMxfUInt08(mxfByte& b, FILE* f)
 {
-  int c = fread(&b, sizeof(mxfByte), 1, f);
-  if (c != 1) {
+  int c = fread(&b, 1, sizeof(mxfByte), f);
+  if (c != sizeof(mxfByte)) {
     fprintf(stderr, "%s : Error : Failed to read byte.\n", programName);
     exit(EXIT_FAILURE);
   }
-  position = position + sizeof(mxfByte);
+  position = position + c;
 }
 
 void readMxfUInt16(mxfUInt16& i, FILE* f)
 {
-  int c = fread(&i, sizeof(mxfUInt16), 1, f);
-  if (c != 1) {
+  int c = fread(&i, 1, sizeof(mxfUInt16), f);
+  if (c != sizeof(mxfUInt16)) {
     fprintf(stderr, "%s : Error : Failed to read mxfUInt16.\n", programName);
     exit(EXIT_FAILURE);
   }
-  position = position + sizeof(mxfUInt16);
+  position = position + c;
   if (reorder()) {
     reorder(i);
   }
@@ -317,12 +317,12 @@ void readMxfUInt16(mxfUInt16& i, FILE* f)
 
 void readMxfUInt32(mxfUInt32& i, FILE* f)
 {
-  int c = fread(&i, sizeof(mxfUInt32), 1, f);
-  if (c != 1) {
+  int c = fread(&i, 1, sizeof(mxfUInt32), f);
+  if (c != sizeof(mxfUInt32)) {
     fprintf(stderr, "%s : Error : Failed to read mxfUInt32.\n", programName);
     exit(EXIT_FAILURE);
   }
-  position = position + sizeof(mxfUInt32);
+  position = position + c;
   if (reorder()) {
     reorder(i);
   }
@@ -330,12 +330,12 @@ void readMxfUInt32(mxfUInt32& i, FILE* f)
 
 void readMxfUInt64(mxfUInt64& i, FILE* f)
 {
-  int c = fread(&i, sizeof(mxfUInt64), 1, f);
-  if (c != 1) {
+  int c = fread(&i, 1, sizeof(mxfUInt64), f);
+  if (c != sizeof(mxfUInt64)) {
     fprintf(stderr, "%s : Error : Failed to read mxfUInt64.\n", programName);
     exit(EXIT_FAILURE);
   }
-  position = position + sizeof(mxfUInt64);
+  position = position + c;
   if (reorder()) {
     reorder(i);
   }
@@ -350,20 +350,20 @@ void readMxfRational(mxfRational& r, FILE* f)
 void readMxfKey(mxfKey& k, FILE* f)
 {
   keyPosition = position;
-  int c = fread(&k, sizeof(mxfKey), 1, f);
-  if (c != 1) {
+  int c = fread(&k, 1, sizeof(mxfKey), f);
+  if (c != sizeof(mxfKey)) {
     fprintf(stderr, "%s : Error : Failed to read key.\n", programName);
     exit(EXIT_FAILURE);
   }
-  position = position + sizeof(mxfKey);
+  position = position + c;
 }
 
 bool readOuterMxfKey(mxfKey& k, FILE* f)
 {
   bool result = true;
   keyPosition = position;
-  int c = fread(&k, sizeof(mxfKey), 1, f);
-  if (c != 1) {
+  int c = fread(&k, 1, sizeof(mxfKey), f);
+  if (c != sizeof(mxfKey)) {
     if (!feof(f)) {
       fprintf(stderr, "%s : Error : Failed to read key.\n", programName);
       exit(EXIT_FAILURE);
@@ -371,7 +371,7 @@ bool readOuterMxfKey(mxfKey& k, FILE* f)
       result = false;
     }
   }
-  position = position + sizeof(mxfKey);
+  position = position + c;
   return result;
 }
 
