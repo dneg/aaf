@@ -2663,6 +2663,32 @@ void printLocalSet(mxfKey& k, mxfLength& len, mxfFile infile)
 //    Open/Closed and Complete/Incomplete
 //
 
+bool isPartition(mxfKey& key)
+{
+  bool result;
+  if (memcmp(&OpenHeader, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&OpenCompleteHeader, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&ClosedHeader, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&ClosedCompleteHeader, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&OpenBodyPartition, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&OpenCompleteBodyPartition, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&ClosedBodyPartition, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&ClosedCompleteBodyPartition, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&Footer, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&CompleteFooter, &key, sizeof(mxfKey)) == 0) {
+    result = false;
+  }
+  return result;
+}
 
 
 void checkPartitionLength(mxfUInt64& length);
@@ -3357,12 +3383,30 @@ void setValidate(mxfFile /* infile */)
 
 void mxfValidate(mxfFile infile);
 
-void mxfValidate(mxfFile /* infile */)
+void mxfValidate(mxfFile infile)
 {
-  if (verbose) {
-    fprintf(stderr,
-            "%s : MXF validation       - not yet implemented.\n",
-            programName());
+  mxfUInt64 fileSize = size(infile);
+  mxfKey k;
+  while (readOuterMxfKey(k, infile)) {
+    checkKey(k);
+    mxfLength len;
+    readMxfLength(len, infile);
+    len = checkLength(len, fileSize, position(infile));
+    if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
+      checkPrimerLength(len);
+    } else if (isPartition(k)) {
+      checkPartitionLength(len);
+    }
+    skipV(len, infile);
+  }
+
+  fprintf(stderr,
+          "%s : MXF validation       - ",
+          programName());
+  if (errors == 0) {
+    fprintf(stderr, "passed.\n");
+  } else {
+    fprintf(stderr, "failed.\n");
   }
 }
 
@@ -3382,12 +3426,15 @@ void mxfValidateFile(Mode mode, mxfFile infile)
   switch (mode) {
   case aafValidateMode:
     aafValidate(infile);
+    setPosition(infile, 0);
     /* fall through */
   case mxfValidateMode:
     mxfValidate(infile);
+    setPosition(infile, 0);
     /* fall through */
   case setValidateMode:
     setValidate(infile);
+    setPosition(infile, 0);
     /* fall through */
   case klvValidateMode:
     klvValidate(infile);
