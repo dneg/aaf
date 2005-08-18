@@ -103,6 +103,13 @@ void printHexField(FILE* f, mxfUInt32& i)
 #endif
 }
 
+struct {
+  const char* _name;
+  mxfKey _value;
+} keyTable [] = {
+{"bogus", {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}}
+};
+
 const char* programName;
 
 void checkSizes(void);
@@ -218,6 +225,8 @@ void printUsage(void)
   fprintf(stderr, "print this message and exit (-h)\n");
   fprintf(stderr, "--verbose       = ");
   fprintf(stderr, "print more detailed information (-v)\n");
+  fprintf(stderr, "--debug         = ");
+  fprintf(stderr, "print information useful in debugging this program (-d)\n");
 }
 
 const char* baseName(char* fullName);
@@ -324,6 +333,7 @@ void mxfDumpFile(char* /* fileName */)
 }
 
 bool verbose = false;
+bool debug = false;
 bool lFlag;
 mxfUInt32 limit = 0;
 
@@ -445,6 +455,8 @@ int main(int argumentCount, char* argumentVector[])
     } else if ((strcmp(p, "-h") == 0) || (strcmp(p, "--help") == 0)) {
       printUsage();
       exit(EXIT_SUCCESS);
+    } else if ((strcmp(p, "-d") == 0) || (strcmp(p, "--debug") == 0)) {
+      debug = true;
     } else if (*p == '-') {
       fprintf(stderr, "%s : Error : Invalid option \"%s\".\n", programName, p);
       printUsage();
@@ -484,6 +496,11 @@ int main(int argumentCount, char* argumentVector[])
       printField(stdout, limit);
       fprintf(stdout,
               " bytes of values.\n");
+    }
+  }
+  if (debug) {
+    for (size_t i = 0; i < (sizeof(keyTable)/sizeof(keyTable[0])); i++) {
+      fprintf(stdout, "%4d : %s\n", i, keyTable[i]._name);
     }
   }
   if (mode == mxfMode) {
