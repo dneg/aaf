@@ -456,9 +456,11 @@ void mxfDumpFile(char* fileName)
         setLength = setLength + length;
         if (setLength > len) {
             fprintf(stdout,
-                    "%s : Error : Wrong size (pid = %02x) size = %d (should be %d).\n",
+                    "%s : Error : Wrong size (pid = %02x)",
                     programName,
-                    identifier,
+                    identifier);
+            fprintf(stdout,
+                    " size = %d (should be %d).\n",
                     length,
                     length - (setLength - len));
         }
