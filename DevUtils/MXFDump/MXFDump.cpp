@@ -1048,9 +1048,9 @@ void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
-void printHeaderPartition(mxfKey& k, mxfLength& len, FILE* infile);
+void printPartition(mxfKey& k, mxfLength& len, FILE* infile);
 
-void printHeaderPartition(mxfKey& k, mxfLength& len, FILE* infile)
+void printPartition(mxfKey& k, mxfLength& len, FILE* infile)
 {
   printKL(k, len);
 
@@ -1085,6 +1085,13 @@ void printHeaderPartition(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
+void printHeaderPartition(mxfKey& k, mxfLength& len, FILE* infile);
+
+void printHeaderPartition(mxfKey& k, mxfLength& len, FILE* infile)
+{
+  printPartition(k, len, infile);
+}
+
 void printPrimer(mxfKey& k, mxfLength& len, FILE* infile);
 
 void printPrimer(mxfKey& k, mxfLength& len, FILE* infile)
@@ -1111,7 +1118,7 @@ void printFooterPartition(mxfKey& k, mxfLength& len, FILE* infile);
 
 void printFooterPartition(mxfKey& k, mxfLength& len, FILE* infile)
 {
-  printHeaderPartition(k, len, infile);
+  printPartition(k, len, infile);
 }
 
 bool isLocalSet(mxfKey& k);
