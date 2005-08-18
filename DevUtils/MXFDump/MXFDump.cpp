@@ -345,7 +345,19 @@ char* programName(void);
 
 void mxfError(char* format, ...);
 
+void vmxfError(char* format, va_list ap);
+
 void mxfWarning(char* format, ...);
+
+void vmxfWarning(char* format, va_list ap);
+
+void mxfWarning(mxfUInt64 keyPosition, char* format, ...);
+
+void vmxfWarning(mxfUInt64 keyPosition, char* format, va_list ap);
+
+void mxfError(mxfUInt64 keyPosition, char* format, ...);
+
+void vmxfError(mxfUInt64 keyPosition, char* format, va_list ap);
 
 void print(char* format, ...)
 {
@@ -442,8 +454,13 @@ void mxfError(char* format, ...)
 {
   va_list ap;
   va_start(ap, format);
-  verror(format, ap);
+  vmxfError(format, ap);
   va_end(ap);
+}
+
+void vmxfError(char* format, va_list ap)
+{
+  verror(format, ap);
   errors = errors + 1;
   if (errors > 100) {
     error("More than 100 errors encountered - giving up.\n");
@@ -457,9 +474,42 @@ void mxfWarning(char* format, ...)
 {
   va_list ap;
   va_start(ap, format);
-  vwarning(format, ap);
+  vmxfWarning(format, ap);
   va_end(ap);
+}
+
+void vmxfWarning(char* format, va_list ap)
+{
+  vwarning(format, ap);
   warnings = warnings + 1;
+}
+
+void mxfWarning(mxfUInt64 keyPosition, char* format, ...)
+{
+  va_list ap;
+  va_start(ap, format);
+  vmxfWarning(keyPosition, format, ap);
+  va_end(ap);
+}
+
+void vmxfWarning(mxfUInt64 keyPosition, char* format, va_list ap)
+{
+  vmxfWarning(format, ap);
+  print(" (following key at offset 0x%"MXFPRIx64").\n", keyPosition);
+}
+
+void mxfError(mxfUInt64 keyPosition, char* format, ...)
+{
+  va_list ap;
+  va_start(ap, format);
+  vmxfError(keyPosition, format, ap);
+  va_end(ap);
+}
+
+void vmxfError(mxfUInt64 keyPosition, char* format, va_list ap)
+{
+  vmxfError(format, ap);
+  print(" (following key at offset 0x%"MXFPRIx64").\n", keyPosition);
 }
 
 bool verbose = false;
@@ -919,14 +969,10 @@ int readMxfLength(mxfLength& l, mxfFile infile)
   mxfUInt64 x = 0;
   int bytesRead = readBERLength(x, infile);
   if (bytesRead > 9) {
-    mxfError("Invalid BER encoded length"
-             " (following key at offset 0x%"MXFPRIx64").\n",
-             keyPosition);
+    mxfError(keyPosition, "Invalid BER encoded length");
   }
   if (x == 0) {
-    mxfWarning("Length is zero"
-               " (following key at offset 0x%"MXFPRIx64").\n",
-               keyPosition);
+    mxfWarning(keyPosition, "Length is zero");
   }
   l = x;
   return bytesRead;
@@ -2940,9 +2986,8 @@ void printLocalV(mxfUInt16& length,
   printV(vLength, false, 0, infile);
   remainder = remainder - vLength;
   if (vLength < length) {
-    mxfError("Local set KLV parse error - set exhausted printing value"
-             " (following key at offset 0x%"MXFPRIx64").\n",
-             keyPosition);
+    mxfError(keyPosition,
+             "Local set KLV parse error - set exhausted printing value");
   }
 }
 
@@ -2951,9 +2996,7 @@ void checkLocalKey(mxfLocalKey& k);
 void checkLocalKey(mxfLocalKey& k)
 {
   if (k == nullMxfLocalKey) {
-    mxfError("Null local key"
-             " (following key at offset 0x%"MXFPRIx64").\n",
-             keyPosition);
+    mxfError(keyPosition, "Null local key");
   }
 }
 
@@ -2968,9 +3011,7 @@ mxfUInt64 checkLength(mxfUInt64 length,
   mxfUInt64 result;
   mxfUInt64 remainder = fileSize - position;
   if (length > remainder) {
-    mxfError("Length points beyond end of file"
-             " (following key at offset 0x%"MXFPRIx64").\n",
-             keyPosition);
+    mxfError(keyPosition, "Length points beyond end of file");
     result = remainder;
   } else {
     result = length;
@@ -3034,9 +3075,7 @@ bool isFill(mxfKey& k)
 void printFill(mxfKey& /* k */, mxfLength& len, mxfFile infile)
 {
   if (memcmp(&KLVFill, &previousKey, sizeof(mxfKey)) == 0) {
-    mxfWarning("Consecutive fill items"
-               " (following key at offset 0x%"MXFPRIx64").\n",
-               keyPosition);  
+    mxfWarning(keyPosition, "Consecutive fill items");  
   }
   if (dumpFill) {
     printV(len, false, 0, infile);
@@ -3102,9 +3141,9 @@ void printLocalKey(mxfLocalKey& identifier,
     checkLocalKey(identifier);
     remainder = remainder - 2;
   } else {
-    mxfError("Local set KLV parse error - set exhausted looking for local key"
-             " (following key at offset 0x%"MXFPRIx64").\n",
-             keyPosition);
+    mxfError(keyPosition,
+             "Local set KLV parse error -"
+             " set exhausted looking for local key");
     skipBogusBytes(remainder, infile);
     remainder = 0;
   }
@@ -3122,10 +3161,9 @@ void printLocalLength(mxfUInt16& length,
     readMxfUInt16(length, infile);
     remainder = remainder - 2;
   } else {
-    mxfError("Local set KLV parse error -"
-             " set exhausted looking for local length"
-             " (following key at offset 0x%"MXFPRIx64").\n",
-             keyPosition);
+    mxfError(keyPosition,
+             "Local set KLV parse error -"
+             " set exhausted looking for local length");
     skipBogusBytes(remainder, infile);
     remainder = 0;
   }
@@ -3167,19 +3205,17 @@ void checkElementSize(mxfUInt32 expectedSize,
 {
   if (actualSize != expectedSize) {
     if ((elementCount == 0) && (actualSize == 0)) {
-      mxfWarning("Incorrect element size"
-                 " - expected %"MXFPRIu32", found %"MXFPRIu32""
-                 " (following key at offset 0x%"MXFPRIx64").\n",
+      mxfWarning(keyPosition,
+                 "Incorrect element size"
+                 " - expected %"MXFPRIu32", found %"MXFPRIu32"",
                  expectedSize,
-                 actualSize,
-                 keyPosition);
+                 actualSize);
     } else {
-      mxfError("Incorrect element size"
-               " - expected %"MXFPRIu32", found %"MXFPRIu32""
-               " (following key at offset 0x%"MXFPRIx64").\n",
+      mxfError(keyPosition,
+               "Incorrect element size"
+               " - expected %"MXFPRIu32", found %"MXFPRIu32"",
                expectedSize,
-               actualSize,
-               keyPosition);
+               actualSize);
     }
   }
 }
@@ -3198,23 +3234,21 @@ void checkElementCount(mxfUInt32 elementCount,
     mxfUInt64 remaining = length - fixedSize;
     mxfUInt64 elementBytes = elementSize * elementCount;
     if (remaining < elementBytes) {
-      mxfError("Element count too big for remaining bytes"
+      mxfError(keyPosition,
+               "Element count too big for remaining bytes"
                " - %"MXFPRIu32" elements require %"MXFPRIu64" bytes,"
-               " %"MXFPRIu64" bytes remaining"
-               " (following key at offset 0x%"MXFPRIx64").\n",
+               " %"MXFPRIu64" bytes remaining",
                elementCount,
                elementBytes,
-               remaining,
-               keyPosition);
+               remaining);
     } else if (remaining > elementBytes) {
-      mxfError("Element count too small for remaining bytes"
+      mxfError(keyPosition,
+               "Element count too small for remaining bytes"
                " - %"MXFPRIu32" elements require %"MXFPRIu64" bytes,"
-              " %"MXFPRIu64" bytes remaining"
-              " (following key at offset 0x%"MXFPRIx64").\n",
-              elementCount,
-              elementBytes,
-              remaining,
-              keyPosition);
+               " %"MXFPRIu64" bytes remaining",
+               elementCount,
+               elementBytes,
+               remaining);
     } // else correct
   } // else reported elsewhere
 }
@@ -3462,20 +3496,18 @@ void checkField(mxfUInt64 expected,
 {
   if (actual != expected) {
     if (actual == 0) {
-      mxfWarning("%s not defined"
-                 " - expected 0x%"MXFPRIx64","
-                 " (following key at offset 0x%"MXFPRIx64").\n",
+      mxfWarning(keyAddress,
+                 "%s not defined"
+                 " - expected 0x%"MXFPRIx64",",
                  label,
-                 expected,
-                 keyAddress);
+                 expected);
     } else {
-      mxfError("Incorrect value for %s"
-               " - expected 0x%"MXFPRIx64", found 0x%"MXFPRIx64""
-               " (following key at offset 0x%"MXFPRIx64").\n",
+      mxfError(keyAddress,
+               "Incorrect value for %s"
+               " - expected 0x%"MXFPRIx64", found 0x%"MXFPRIx64"",
                label,
                expected,
-               actual,
-               keyAddress);
+               actual);
     }
   }
 }
@@ -3485,9 +3517,7 @@ void checkOperationalPattern(mxfPartition* p);
 void checkOperationalPattern(mxfPartition* p)
 {
   if (!isOperationalPattern(p->_operationalPattern)) {
-    mxfError("Invalid operational pattern"
-             " (following key at offset 0x%"MXFPRIx64").\n",
-             p->_address + headerPosition);
+    mxfError(p->_address + headerPosition, "Invalid operational pattern");
   }
 }
 
@@ -3789,9 +3819,7 @@ mxfUInt64 checkFooterPosition(mxfUInt64 footer, mxfUInt64 keyPosition);
 mxfUInt64 checkFooterPosition(mxfUInt64 footer, mxfUInt64 keyPosition)
 {
   if (footer != 0) {
-    mxfError("More than one footer"
-             " (following key at offset 0x%"MXFPRIx64").\n",
-             keyPosition);
+    mxfError(keyPosition, "More than one footer");
   }
   return keyPosition;
 }
@@ -3801,20 +3829,17 @@ void checkPartitionLength(mxfUInt64& length)
   mxfUInt64 entrySize = sizeof(mxfKey);     // Essence container label
   if (length < partitionFixedSize) {
     // Valid length >= size of fixed portion
-    mxfError("Invalid partition length - length too small"
-             " (following key at offset 0x%"MXFPRIx64").\n",
-             keyPosition);
+    mxfError(keyPosition, "Invalid partition length - length too small");
   } else {
     mxfUInt64 labelBytes = length - partitionFixedSize;
     mxfUInt64 labels = labelBytes / entrySize;
     if ((labels * entrySize ) != labelBytes) {
-      mxfError("Invalid partition length -"
-               " %"MXFPRIu64" != %"MXFPRIu64" + (N * %"MXFPRIu64")"
-               " (following key at offset 0x%"MXFPRIx64").\n",
+      mxfError(keyPosition,
+               "Invalid partition length -"
+               " %"MXFPRIu64" != %"MXFPRIu64" + (N * %"MXFPRIu64")",
                length,
                partitionFixedSize,
-               entrySize,
-               keyPosition);
+               entrySize);
     }
   }
 }
@@ -4129,21 +4154,18 @@ void checkPrimerLength(mxfUInt64& length)
 
   if (length < primerFixedSize) {
     // Valid length >= size of fixed portion
-    mxfError("Invalid primer length - length is too small"
-             " (following key at offset 0x%"MXFPRIx64").\n",
-             keyPosition);
+    mxfError(keyPosition, "Invalid primer length - length is too small");
   } else {
     // Valid length == 8 + (N * 18)
     mxfUInt64 entryBytes = length - primerFixedSize;
     mxfUInt64 entries = entryBytes / entrySize;
     if ((entries * entrySize) != entryBytes) {
-      mxfError("Invalid primer length -"
-               " %"MXFPRIu64" != %"MXFPRIu64" + (N * %"MXFPRIu64")"
-               " (following key at offset 0x%"MXFPRIx64").\n",
+      mxfError(keyPosition,
+               "Invalid primer length -"
+               " %"MXFPRIu64" != %"MXFPRIu64" + (N * %"MXFPRIu64")",
                length,
                primerFixedSize,
-               entrySize,
-               keyPosition);
+               entrySize);
     }
   }
 }
