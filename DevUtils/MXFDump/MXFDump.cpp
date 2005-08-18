@@ -1257,43 +1257,11 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
     if (found) {
       fprintf(stdout, "%s\n", keyTable[i]._name);
     } else {
-      found = lookupAAFKey(k, i);
+      found = findAAFKey(k, i);
       if (found) {
         fprintf(stdout, "%s\n", aafKeyTable[i]._name);
       } else {
-        if (aafKeysAsSets) {
-          // This could be an AUID/GUID that cannot be mapped to a SMPTE label.
-          // Force the mapping and try again.
-          mxfKey x;
-          memcpy(x, k, sizeof(x));
-          x[5] = 0x53;
-          found = lookupAAFKey(x, i);
-          if (found) {
-            fprintf(stdout, "%s +\n", aafKeyTable[i]._name);
-          } else {
-            if (bogusKeysAsSets) {
-              // This could be a bogus key (Intel byte order GUID)
-              // Fix it up and try again.
-              aafUID a;
-              memcpy(&a, k, sizeof(a));
-              if (hostByteOrder() == 'B') {
-                reorder(a);
-              }
-              mxfKey b;
-              aafUIDToMxfKey(b, a);
-              bool found = lookupAAFKey(b, i);
-              if (found) {
-                fprintf(stdout, "Bogus%s\n", aafKeyTable[i]._name);
-              } else {
-                fprintf(stdout, "Unknown\n");
-              }
-            } else {
-              fprintf(stdout, "Unknown\n");
-            }
-          }
-        } else {
-          fprintf(stdout, "Unknown\n");
-        }
+        fprintf(stdout, "Unknown\n");
       }
     }
   } else {
@@ -1699,35 +1667,12 @@ bool isLocalSet(mxfKey& k)
     result = true;
   } else {
     if (aafKeysAsSets) {
-      // This could be an AUID/GUID that cannot be mapped to a SMPTE label.
-      // Force the mapping and try again.
       size_t index;
-      mxfKey x;
-      memcpy(x, k, sizeof(x));
-      x[5] = 0x53;
-      bool found = lookupAAFKey(x, index);
+      bool found = findAAFKey(k, index);
       if (found) {
         result = true;
       } else {
-        if (bogusKeysAsSets) {
-          // This could be a bogus key (Intel byte order GUID)
-          // Fix it up and try again.
-          aafUID a;
-          memcpy(&a, k, sizeof(a));
-          if (hostByteOrder() == 'B') {
-            reorder(a);
-          }
-          mxfKey b;
-          aafUIDToMxfKey(b, a);
-          bool found = lookupAAFKey(b, index);
-          if (found) {
-            result = true;
-          } else {
-            result = false;
-          }
-        } else {
-          result = false;
-        }
+        result = false;
       }
     } else {
       result = false;
