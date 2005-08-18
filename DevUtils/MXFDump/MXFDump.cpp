@@ -4323,6 +4323,10 @@ void mxfValidate(mxfFile infile)
       readPartition(p, len, infile);
     } else if (memcmp(&RandomIndexMetadata, &k, sizeof(mxfKey)) == 0) {
       readRandomIndex(rip, len, infile);
+    } else if (isEssenceElement(k)) {
+      skipV(len, infile);
+    } else if (isIndexSegment(k)) {
+      skipV(len, infile);
     } else {
       skipV(len, infile);
     }
