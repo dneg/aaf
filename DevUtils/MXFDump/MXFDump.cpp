@@ -4523,7 +4523,7 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
   } else if (memcmp(&ObjectDirectory, &k, sizeof(mxfKey)) == 0) {
     printObjectDirectory(k, len, infile);
   } else if (memcmp(&V10IndexTableSegment, &k, sizeof(mxfKey)) == 0) {
-    printV10IndexTable(k, len, infile);
+    printIndexTable(k, len, infile);
   } else if (memcmp(&IndexTableSegment, &k, sizeof(mxfKey)) == 0) {
     printIndexTable(k, len, infile);
   } else if (memcmp(&V10RandomIndexMetadata, &k, sizeof(mxfKey)) == 0) {
