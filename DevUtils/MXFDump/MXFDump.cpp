@@ -861,6 +861,21 @@ char* elementTypeName(mxfByte type)
   return result;
 }
 
+bool isEssenceElement(mxfKey& k);
+
+bool isEssenceElement(mxfKey& k)
+{
+  mxfKey ee = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01,
+               0x0d, 0x01, 0x03, 0x01, 0xff, 0xff, 0xff, 0xff};
+  bool result;
+  if (memcmp(&k, &ee, 12) == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 void printEssenceKL(mxfKey& k, mxfLength& len);
 
 void printEssenceKL(mxfKey& k, mxfLength& len)
@@ -1018,6 +1033,20 @@ void checkLocalKey(mxfLocalKey& k)
 
 bool dumpFill = false;
 
+bool isFill(mxfKey& k);
+
+bool isFill(mxfKey& k)
+{
+  bool result;
+  if (memcmp(&Fill, &k, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else if (memcmp(&BogusFill, &k, sizeof(mxfKey)) == 0) {
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 void printFill(mxfKey& k, mxfLength& len, FILE* infile);
 
 void printFill(mxfKey& k, mxfLength& len, FILE* infile)
@@ -1028,6 +1057,19 @@ void printFill(mxfKey& k, mxfLength& len, FILE* infile)
   } else {
     skipV(len, infile);
   }
+}
+
+bool isLocalSet(mxfKey& k);
+
+bool isLocalSet(mxfKey& k)
+{
+  bool result;
+  if (k[5] == 0x53) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
 }
 
 void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile);
@@ -1092,6 +1134,13 @@ void printHeaderPartition(mxfKey& k, mxfLength& len, FILE* infile)
   printPartition(k, len, infile);
 }
 
+void printFooterPartition(mxfKey& k, mxfLength& len, FILE* infile);
+
+void printFooterPartition(mxfKey& k, mxfLength& len, FILE* infile)
+{
+  printPartition(k, len, infile);
+}
+
 void printPrimer(mxfKey& k, mxfLength& len, FILE* infile);
 
 void printPrimer(mxfKey& k, mxfLength& len, FILE* infile)
@@ -1112,55 +1161,6 @@ void printPrimer(mxfKey& k, mxfLength& len, FILE* infile)
     printMxfKey(longIdentifier, stdout);
     fprintf(stdout, "\n");
   }
-}
-
-void printFooterPartition(mxfKey& k, mxfLength& len, FILE* infile);
-
-void printFooterPartition(mxfKey& k, mxfLength& len, FILE* infile)
-{
-  printPartition(k, len, infile);
-}
-
-bool isLocalSet(mxfKey& k);
-
-bool isLocalSet(mxfKey& k)
-{
-  bool result;
-  if (k[5] == 0x53) {
-    result = true;
-  } else {
-    result = false;
-  }
-  return result;
-}
-
-bool isEssenceElement(mxfKey& k);
-
-bool isEssenceElement(mxfKey& k)
-{
-  mxfKey ee = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01,
-               0x0d, 0x01, 0x03, 0x01, 0xff, 0xff, 0xff, 0xff};
-  bool result;
-  if (memcmp(&k, &ee, 12) == 0) {
-    result = true;
-  } else {
-    result = false;
-  }
-  return result;
-}
-
-bool isFill(mxfKey& k);
-
-bool isFill(mxfKey& k)
-{
-  bool result;
-  if (memcmp(&Fill, &k, sizeof(mxfKey)) == 0) {
-    result = true;
-  } else if (memcmp(&BogusFill, &k, sizeof(mxfKey)) == 0) {
-  } else {
-    result = false;
-  }
-  return result;
 }
 
 bool lFlag;
