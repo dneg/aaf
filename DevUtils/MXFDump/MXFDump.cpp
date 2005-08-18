@@ -3238,10 +3238,17 @@ void klvValidate(mxfFile infile);
 
 void klvValidate(mxfFile infile)
 {
+  mxfUInt64 fileSize = size(infile);
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
     mxfLength len;
     readMxfLength(len, infile);
+    mxfUInt64 remainder = fileSize - position(infile);
+    if (len > remainder) {
+      error("Length points beyond end of file.\n");
+      errors = errors + 1;
+      len = remainder;
+    }
     skipV(len, infile);
   }
 
