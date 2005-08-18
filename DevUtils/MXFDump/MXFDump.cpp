@@ -11,6 +11,25 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if defined (_MSC_VER) && defined(_M_IX86) && defined(_WIN32)
+#define MXF_COMPILER_MSC_INTEL_WINDOWS
+#define MXF_OS_WINDOWS
+#elif defined(__GNUC__) && defined(__i386__) && defined(__linux__)
+#define MXF_COMPILER_GCC_INTEL_LINUX
+#define MXF_OS_UNIX
+#elif defined(__MWERKS__) && defined(__POWERPC__) && defined(macintosh)
+#define MXF_COMPILER_MWERKS_PPC_MACOS
+#define MXF_OS_MACOS
+#elif defined(__MWERKS__) && defined(__MACH__)
+#define MXF_COMPILER_MWERKS_PPC_MACOSX
+#define MXF_OS_MACOSX
+#elif defined(__GNUC__) && defined(__ppc__) && defined(__APPLE__)
+#define MXF_COMPILER_GCC_PPC_MACOSX
+#define MXF_OS_MACOSX
+#else
+#error "Unknown compiler"
+#endif
+
 typedef unsigned long int mxfLength;
 typedef unsigned char mxfKey[16];
 typedef unsigned char mxfByte;
