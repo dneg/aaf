@@ -209,7 +209,7 @@ void mxfDumpFile(char* fileName);
 void mxfDumpFile(char* /* fileName */)
 {
   fprintf(stderr,
-          "%s : Error : --mxf-dump not yet implemented.\n",
+          "%s : Error : --mxf-dump not yet implemented (try --klv-dump).\n",
           programName);
   printUsage();
   exit(EXIT_FAILURE);
