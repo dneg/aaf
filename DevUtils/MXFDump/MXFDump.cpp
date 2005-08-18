@@ -4016,6 +4016,32 @@ void printFooterPartition(mxfKey& k, mxfLength& len, mxfFile infile)
   printPartition(k, len, infile);
 }
 
+typedef struct mxfIndexSegmentTag {
+  mxfKey _instanceUID;
+  mxfRational _indexEditRate;
+  mxfUInt64 _indexStartPosition;
+  mxfUInt64 _indexDuration;
+  mxfUInt32 _editUnitByteCount; // D/req
+  bool _hasEditUnitByteCount;
+  mxfUInt32 _indexSID; // D/req
+  bool _hasIndexSID;
+  mxfUInt32 _bodySID;
+  mxfUInt08 _sliceCount; // D/req
+  bool _hasSliceCount;
+  mxfUInt08 _posTableCount; // Opt
+  bool _hasPosTableCount;
+  // Delta entry array // D/req
+  mxfUInt32 _deltaEntryCount;
+  mxfUInt32 _deltaEntrySize;
+  mxfUInt64 _deltaEntryArrayPosition;
+  bool _hasDeltaEntryArray;
+  // Index Entry Array // D/req
+  mxfUInt32 _indexEntryCount;
+  mxfUInt32 _indexEntrySize;
+  mxfUInt64 _indexEntryArrayPosition;
+  bool _hasIndexEntryArray;
+} mxfIndexSegment;
+
 void dumpIndexEntryArray(mxfUInt32 entryCount,
                          mxfUInt32 entrySize,
                          mxfFile& infile);
