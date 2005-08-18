@@ -1438,6 +1438,12 @@ void printOperationalPattern(mxfKey& k, FILE* outfile)
   }
 }
 
+
+void printEssenceContainerLabel(mxfKey& label, FILE* outfile)
+{
+  printMxfKey(label, outfile);
+}
+
 bool reorder(void)
 {
   bool result;
