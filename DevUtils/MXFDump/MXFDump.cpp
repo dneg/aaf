@@ -516,8 +516,8 @@ void vmxfError(char* format, va_list ap)
 {
   verror(format, ap);
   errors = errors + 1;
-  if (errors > 100) {
-    error("More than 100 errors encountered - giving up.\n");
+  if (errors >= 100) {
+    error("Too many errors (%"MXFPRIu32") encountered - giving up.\n", errors);
     exit(mxfExitStatus(EXIT_FAILURE));
   }
 }
