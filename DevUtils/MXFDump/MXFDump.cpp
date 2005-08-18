@@ -151,7 +151,11 @@ typedef enum ModeTag {
   klvMode,
   localSetMode,
   mxfMode,
-  aafMode} Mode;
+  aafMode,
+  klvValidateMode,
+  setValidateMode,
+  mxfValidateMode,
+  aafValidateMode} Mode;
 Mode mode = unspecifiedMode;
 
 bool reorder(void);
@@ -1184,6 +1188,30 @@ void printKLVOptions(void)
   printRawOptions();
 }
 
+void printKLVValidateOptions(void);
+
+void printKLVValidateOptions(void)
+{
+}
+
+void printSetValidateOptions(void);
+
+void printSetValidateOptions(void)
+{
+}
+
+void printMXFValidateOptions(void);
+
+void printMXFValidateOptions(void)
+{
+}
+
+void printAAFValidateOptions(void);
+
+void printAAFValidateOptions(void)
+{
+}
+
 void printUsage(void);
 
 void printUsage(void)
@@ -1204,6 +1232,18 @@ void printUsage(void)
 
   fprintf(stderr, "--klv-dump            = ");
   fprintf(stderr, "dump raw KLV (-k)\n");
+
+  fprintf(stderr, "--aaf-validate        = ");
+  fprintf(stderr, "validate AAF\n");
+
+  fprintf(stderr, "--mxf-validate        = ");
+  fprintf(stderr, "validate MXF\n");
+
+  fprintf(stderr, "--set-validate        = ");
+  fprintf(stderr, "validate local sets\n");
+
+  fprintf(stderr, "--klv-validate        = ");
+  fprintf(stderr, "validate KLV\n");
 
   fprintf(stderr, "--help                = ");
   fprintf(stderr, "print detailed help (-h)\n");
@@ -1249,6 +1289,46 @@ void printKLVUsage(void)
   fprintf(stderr, "\n");
 }
 
+void printKLVValidateUsage(void);
+
+void printKLVValidateUsage(void)
+{
+  fprintf(stderr, "--klv-validate        = ");
+  fprintf(stderr, "validate KLV\n");
+  printKLVValidateOptions();
+  fprintf(stderr, "\n");
+}
+
+void printSetValidateUsage(void);
+
+void printSetValidateUsage(void)
+{
+  fprintf(stderr, "--set-validate        = ");
+  fprintf(stderr, "validate local sets\n");
+  printSetValidateOptions();
+  fprintf(stderr, "\n");
+}
+
+void printMXFValidateUsage(void);
+
+void printMXFValidateUsage(void)
+{
+  fprintf(stderr, "--mxf-validate        = ");
+  fprintf(stderr, "validate MXF\n");
+  printMXFValidateOptions();
+  fprintf(stderr, "\n");
+}
+
+void printAAFValidateUsage(void);
+
+void printAAFValidateUsage(void)
+{
+  fprintf(stderr, "--aaf-validate        = ");
+  fprintf(stderr, "validate AAF\n");
+  printAAFValidateOptions();
+  fprintf(stderr, "\n");
+}
+
 void printFullUsage(void);
 
 void printFullUsage(void)
@@ -1262,6 +1342,11 @@ void printFullUsage(void)
   printMXFUsage();
   printSetUsage();
   printKLVUsage();
+
+  printAAFValidateUsage();
+  printMXFValidateUsage();
+  printSetValidateUsage();
+  printKLVValidateUsage();
 
   printCommonOptions();
 }
@@ -1281,6 +1366,18 @@ void printHelp(void)
     printCommonOptions();
   } else if (mode == aafMode) {
     printAAFUsage();
+    printCommonOptions();
+  } else if (mode == klvValidateMode) {
+    printKLVValidateUsage();
+    printCommonOptions();
+  } else if (mode == setValidateMode) {
+    printSetValidateUsage();
+    printCommonOptions();
+  } else if (mode == mxfValidateMode) {
+    printMXFValidateUsage();
+    printCommonOptions();
+  } else if (mode == aafValidateMode) {
+    printAAFValidateUsage();
     printCommonOptions();
   } else {
     printFullUsage();
@@ -2903,6 +3000,14 @@ void aafDumpFile(char* fileName)
   fclose(infile);
 }
 
+void mxfValidateFile(Mode /* mode */, char* /* fileName */)
+{
+  fprintf(stderr,
+          "%s : Error : Validation not yet implemented.\n",
+          programName);
+  exit(EXIT_FAILURE);
+}
+
 bool verbose = false;
 bool debug = false;
 
@@ -2999,6 +3104,10 @@ int getIntegerOption(int currentArgument,
 // -h --help
 // -d --debug
 // -u --unknown-as-sets 
+//    --klv-validate
+//    --set-validate
+//    --mxf-validate
+//    --aaf-validate
 
 // Free letters - goqz
 
@@ -3029,6 +3138,14 @@ int main(int argumentCount, char* argumentVector[])
     } else if ((strcmp(p, "--aaf-dump") == 0) ||
                (strcmp(p, "-a") == 0)) {
       setMode(aafMode);
+    } else if (strcmp(p, "--klv-validate") == 0) {
+      setMode(klvValidateMode);
+    } else if (strcmp(p, "--set-validate") == 0) {
+      setMode(setValidateMode);
+    } else if (strcmp(p, "--mxf-validate") == 0) {
+      setMode(mxfValidateMode);
+    } else if (strcmp(p, "--aaf-validate") == 0) {
+      setMode(aafValidateMode);
     } else if ((strcmp(p, "--verbose") == 0) ||
                (strcmp(p, "-v") == 0)) {
       verbose = true;
@@ -3175,6 +3292,14 @@ int main(int argumentCount, char* argumentVector[])
     mxfDumpFile(fileName);
   } else if (mode == aafMode) {
     aafDumpFile(fileName);
+  } else if (mode == klvValidateMode) {
+    mxfValidateFile(mode, fileName);
+  } else if (mode == setValidateMode) {
+    mxfValidateFile(mode, fileName);
+  } else if (mode == mxfValidateMode) {
+    mxfValidateFile(mode, fileName);
+  } else if (mode == aafValidateMode) {
+    mxfValidateFile(mode, fileName);
   }
 
   return 0;  
