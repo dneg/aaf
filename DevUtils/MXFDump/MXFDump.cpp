@@ -106,7 +106,7 @@ void printHexField(FILE* f, mxfUInt32& i)
 #define MXF_LABEL(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) \
                  {a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p}
 
-#define MXF_DEFINE_PACK_KEY(n, k)
+#define MXF_DEFINE_PACK_KEY(n, k) MXF_DEFINE_KEY(n ## PackKey, k)
 #define MXF_DEFINE_SET_KEY(n, k)
 #define MXF_DEFINE_SEGEMENT_KEY(n, k)
 #define MXF_DEFINE_KEY(n, k) {#n, k},
