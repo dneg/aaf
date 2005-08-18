@@ -921,6 +921,8 @@ bool lookupKey(mxfKey& k, size_t& index)
   return result;
 }
 
+bool aafKeysAsSets = true;
+
 void printMxfKeySymbol(mxfKey& k, FILE* f);
 
 void printMxfKeySymbol(mxfKey& k, FILE* f)
@@ -935,7 +937,7 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
       if (found) {
         fprintf(stdout, "%s\n", aafKeyTable[i]._name);
       } else {
-        if (mode == aafMode) {
+        if (aafKeysAsSets) {
           mxfKey x;
           aafUIDToMxfKey(x, *reinterpret_cast<aafUID*>(&k));
           found = lookupAAFKey(x, i);
@@ -1209,8 +1211,6 @@ void printFill(mxfKey& k, mxfLength& len, FILE* infile)
     skipV(len, infile);
   }
 }
-
-bool aafKeysAsSets = true;
 
 bool isLocalSet(mxfKey& k);
 
