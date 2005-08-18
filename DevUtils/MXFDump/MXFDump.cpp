@@ -4979,12 +4979,14 @@ void printRandomIndex(mxfRandomIndex& rip)
 void checkRandomIndex(mxfUInt64 keyPosition,
                       mxfUInt64 endPosition,
                       mxfUInt64 length,
-                      mxfUInt32 overallLength);
+                      mxfUInt32 overallLength,
+                      mxfUInt64 fileSize);
 
 void checkRandomIndex(mxfUInt64 keyPosition,
                       mxfUInt64 endPosition,
                       mxfUInt64 length,
-                      mxfUInt32 overallLength)
+                      mxfUInt32 overallLength,
+                      mxfUInt64 fileSize)
 {
   // length must be (n * (8 + 4)) + 4
   //
@@ -5007,6 +5009,14 @@ void checkRandomIndex(mxfUInt64 keyPosition,
              " - expected %"MXFPRIu64", found %"MXFPRIu32"",
              (endPosition - keyPosition),
              overallLength);
+  }
+
+  // Nothing should follow the random index
+  if (endPosition < fileSize) {
+    mxfError(currentKey,
+             keyPosition,
+             "Found %"MXFPRIu64" excess bytes following random index",
+             (fileSize - endPosition));
   }
 }
 
@@ -6244,7 +6254,7 @@ void mxfValidate(mxfFile infile)
       markIndexEnd(keyPosition);
       mxfUInt32 overall;
       readRandomIndex(rip, k, len, overall, infile);
-      checkRandomIndex(keyPosition, position(infile), len, overall);
+      checkRandomIndex(keyPosition, position(infile), len, overall, fileSize);
     } else if (isEssenceElement(k) || isSystemElement(k)) {
       markMetadataEnd(keyPosition);
       markIndexEnd(keyPosition);
