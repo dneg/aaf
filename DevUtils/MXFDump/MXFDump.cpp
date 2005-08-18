@@ -2106,7 +2106,15 @@ void aafDumpKLV(mxfKey& k, mxfLength& len, FILE* infile);
 
 void aafDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
 {
-  mxfDumpKLV(k, len, infile);
+  if (isNullKey(k)) {
+    printKL(k, len);
+    fprintf(stderr,
+            "%s : Error : Null key.\n",
+            programName);
+    exit(EXIT_FAILURE);
+  } else {
+    mxfDumpKLV(k, len, infile);
+  }
 }
 
 void aafDumpFile(char* fileName)
