@@ -918,11 +918,11 @@ void printRawOptions(void)
 {
   fprintf(stderr, "  --limit <n>   = ");
   fprintf(stderr, "truncate values ");
-  fprintf(stderr, "to <n> bytes [default n = 0] (-l)\n");
+  fprintf(stderr, "to <n> bytes (-l)\n");
 
   fprintf(stderr, "  --no-limit    = ");
   fprintf(stderr, "do not truncate ");
-  fprintf(stderr, "values (-e)\n");
+  fprintf(stderr, "values [default] (-e)\n");
 }
 
 void printAAFOptions(void);
@@ -1703,7 +1703,7 @@ void printPrimer(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
-bool lFlag = true;
+bool lFlag = false;
 mxfUInt32 limit = 0;
 
 void klvDumpFile(char* fileName)
@@ -1999,6 +1999,13 @@ int main(int argumentCount, char* argumentVector[])
   }
   if (mode == unspecifiedMode) {
     mode = mxfMode;
+  }
+
+  if (mode != klvMode) {
+    if (!lFlag) {
+      lFlag = true;
+      limit = 0;
+    }
   }
 
   if (mode == klvMode) {
