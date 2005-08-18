@@ -257,7 +257,8 @@ void printMxfLength(mxfLength& l, FILE* f);
 
 void printMxfLength(mxfLength& l, FILE* f)
 {
-  fprintf(f, "%12d (%8x)", l, l);
+  printField(f, l);
+  fprintf(f, " (%8x)", l);
 }
 
 void readMxfKey(mxfKey& k, FILE* f);
