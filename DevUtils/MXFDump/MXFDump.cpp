@@ -3240,6 +3240,7 @@ typedef struct mxfPartitionTag {
   mxfUInt64 _length;
   mxfUInt64 _metadataSize;
   mxfUInt64 _indexSize;
+  SegmentList _segments; // in this partition
 } mxfPartition;
 
 typedef std::list<mxfPartition*> PartitionList;
@@ -3371,6 +3372,8 @@ void essenceSegment(mxfUInt32 sid, mxfUInt64 start, mxfUInt64 end)
   seg->_origin = start;
   s->_segments.push_back(seg);
   s->_size = s->_size + seg->_size;
+
+  currentPartition->_segments.push_back(seg);
 }
 
 void readPartition(PartitionList& partitions,
@@ -3419,6 +3422,7 @@ void printPartitions(PartitionList& partitions)
   for (it = partitions.begin(); it != partitions.end(); ++it) {
     mxfPartition* p = *it;
     fprintf(stderr, "Partition (%016"MXFPRIx64")\n", p->_address);
+    printSegments(p->_segments);
   }
 }
 
