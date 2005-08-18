@@ -3192,6 +3192,29 @@ void validateLocalLength(mxfUInt16& length,
   }
 }
 
+void validateLocalV(mxfUInt16& length,
+                    mxfLength& remainder,
+                    mxfFile infile);
+
+void validateLocalV(mxfUInt16& length,
+                    mxfLength& remainder,
+                    mxfFile infile)
+{
+  mxfLength vLength;
+  if (length < remainder) {
+    vLength = length;
+  } else {
+    vLength = remainder;
+  }
+  skipBytes(vLength, infile);
+  remainder = remainder - vLength;
+  if (vLength < length) {
+    mxfError(currentKey,
+             keyPosition,
+             "Local set KLV parse error - set exhausted printing value");
+  }
+}
+
 void printLocalSet(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void printLocalSet(mxfKey& k, mxfLength& len, mxfFile infile)
@@ -4598,7 +4621,25 @@ void validateLocalSet(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void validateLocalSet(mxfKey& k, mxfLength& len, mxfFile infile)
 {
-  skipBytes(len , infile);
+  mxfLength remainder = len;
+  while (remainder > 0) {
+    // Key (local identifier)
+    mxfLocalKey identifier;
+    validateLocalKey(identifier, remainder, infile);
+    if (remainder == 0) {
+      break;
+    }
+
+    // Length
+    mxfUInt16 length;
+    validateLocalLength(length, remainder, infile);
+    if (remainder == 0) {
+      break;
+    }
+
+    // Value
+    validateLocalV(length, remainder, infile);
+  }
 }
 
 void setValidate(mxfFile infile);
