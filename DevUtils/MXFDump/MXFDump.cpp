@@ -488,25 +488,19 @@ mxfUInt64 size(mxfFile infile)
 #elif defined(MXF_OS_MACOSX)
 mxfFile openExistingRead(char* fileName)
 {
-  FSSpec spec;
-  Str255 name;
-  CopyCStringToPascal(fileName, name);
-  OSErr status = FSMakeFSSpec(0, 0, name, &spec);
+  const UInt8* name = reinterpret_cast<UInt8*>(fileName);
+  FSRef fref;
+  OSErr status = FSPathMakeRef(name, &fref, 0);
   if (status != noErr) {
-    fatalError("FSMakeFSSpec() failed (%d).\n", status);
+    fatalError("FSPathMakeRef() failed (%d).\n", status);
   }
-  HFSUniStr255 fname;
-  status = FSGetDataForkName(&fname);
+  HFSUniStr255 fkName;
+  status = FSGetDataForkName(&fkName);
   if (status != noErr) {
     fatalError("FSGetDataForkName() failed (%d).\n", status);
   }
-  FSRef fref;
-  status = FSpMakeFSRef(&spec, &fref);
-  if (status != noErr) {
-    fatalError("FSpMakeFSRef() failed (%d).\n", status);
-  }
   SInt16 result;
-  status = FSOpenFork(&fref, fname.length, fname.unicode, fsRdPerm, &result);
+  status = FSOpenFork(&fref, fkName.length, fkName.unicode, fsRdPerm, &result);
   if (status != noErr) {
     fatalError("FSOpenFork() failed (%d).\n", status);
   }
