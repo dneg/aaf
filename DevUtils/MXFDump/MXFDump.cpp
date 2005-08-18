@@ -1839,6 +1839,40 @@ void dumpKeyTable(void)
     delete [] t;
 }
 
+void checkKeyTable(void)
+{
+  size_t i;
+  size_t j;
+  for (i = 0; i < mxfKeyTableSize; i++) {
+    for (j = 0; j < mxfKeyTableSize; j++) {
+      if (i != j) {
+        if (*mxfKeyTable[i]._key == *mxfKeyTable[j]._key) {
+          error("Duplicate keys - %s has the same key as %s.\n",
+                mxfKeyTable[i]._name,
+                mxfKeyTable[j]._name);
+        }
+      }
+    }
+  }
+}
+
+void checkAAFKeyTable(void)
+{
+  size_t i;
+  size_t j;
+  for (i = 0; i < aafKeyTableSize; i++) {
+    for (j = 0; j < aafKeyTableSize; j++) {
+      if (i != j) {
+        if (memcmp(&aafKeyTable[i]._aafKey, &aafKeyTable[j]._aafKey, sizeof(aafUID)) == 0){
+          error("Duplicate keys - %s has the same key as %s.\n",
+                aafKeyTable[i]._name,
+                aafKeyTable[j]._name);
+        }
+      }
+    }
+  }
+}
+
 int compareAAFKey(const void* k1, const void* k2);
 
 int compareAAFKey(const void* k1, const void* k2)
@@ -5839,6 +5873,9 @@ int main(int argumentCount, char* argumentVector[])
   if (debug) {
     dumpKeyTable();
     dumpAAFKeyTable();
+
+    checkKeyTable();
+    checkAAFKeyTable();
   }
   if (hFlag) {
     printHelp();
