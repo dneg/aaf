@@ -4522,7 +4522,7 @@ void validateIndexSegment(mxfIndexSegment* index)
       if (partition->_indexSID != index->_indexSID) {
         mxfError(currentKey,
                  keyPosition,
-                 "Incorrect IndexSID -"
+                 "Incorrect value for IndexSID -"
                  " partition has IndexSID = %"MXFPRIu32","
                  " index segment has IndexSID = %"MXFPRIu32".",
                  partition->_indexSID,
