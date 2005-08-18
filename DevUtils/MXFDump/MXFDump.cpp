@@ -318,7 +318,7 @@ void mxfDumpFile(char* /* fileName */)
 
 bool verbose = false;
 bool lFlag;
-mxfLength limit = 0;
+mxfUInt32 limit = 0;
 
 void klvDumpFile(char* fileName);
 
@@ -473,8 +473,10 @@ int main(int argumentCount, char* argumentVector[])
     fprintf(stdout, "file = %s\n", fileName);
     if (lFlag) {
       fprintf(stdout,
-              "dumping only the first %d bytes of values.\n",
-              limit);
+              "dumping only the first ");
+      printField(stdout, limit);
+      fprintf(stdout,
+              " bytes of values.\n");
     }
   }
   if (mode == mxfMode) {
