@@ -714,12 +714,6 @@ void printUsage(void)
           programName,
           programName);
   fprintf(stderr, "OPTIONS :\n");
-  fprintf(stderr, "--klv-dump      = ");
-  fprintf(stderr, "dump raw KLV (-k)\n");
-  fprintf(stderr, "  --limit <n>   = ");
-  fprintf(stderr, "dump only the first <n> bytes of each ");
-  fprintf(stderr, "value (-l)\n");
-  fprintf(stderr, "\n");
   fprintf(stderr, "--mxf-dump      = ");
   fprintf(stderr, "dump MXF [default] (-m)\n");
   fprintf(stderr, "  --limit <n>   = ");
@@ -727,6 +721,12 @@ void printUsage(void)
   fprintf(stderr, "essence container (-l)\n");
   fprintf(stderr, "  --fill        = ");
   fprintf(stderr, "dump fill bytes (-f)\n");
+  fprintf(stderr, "\n");
+  fprintf(stderr, "--klv-dump      = ");
+  fprintf(stderr, "dump raw KLV (-k)\n");
+  fprintf(stderr, "  --limit <n>   = ");
+  fprintf(stderr, "dump only the first <n> bytes of each ");
+  fprintf(stderr, "value (-l)\n");
   fprintf(stderr, "\n");
   fprintf(stderr, "--symbolic      = ");
   fprintf(stderr, "dump the names of keys if known [default] (-s)\n");
