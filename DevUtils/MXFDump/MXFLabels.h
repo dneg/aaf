@@ -126,3 +126,13 @@ MXF_ESSENCE_CONTAINER_END()
 MXF_ESSENCE_CONTAINER_NODE(0x02, 0x09, "MPEG Transport Stream")
 // None yet.
 MXF_ESSENCE_CONTAINER_END()
+
+// A-Law sound element mapping
+//
+MXF_ESSENCE_CONTAINER_NODE(0x02, 0x0A, "A-Law Sound Element")
+
+MXF_ESSENCE_CONTAINER_LABEL(0x01, 0x00, "A-Law Audio (frame wrapped)")
+MXF_ESSENCE_CONTAINER_LABEL(0x02, 0x00, "A-Law Audio (clip wrapped)")
+MXF_ESSENCE_CONTAINER_LABEL(0x03, 0x00, "A-Law Audio (custom wrapped)")
+
+MXF_ESSENCE_CONTAINER_END()
