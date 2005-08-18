@@ -3367,6 +3367,10 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
                "FooterPartition");
   }
   // HeaderByteCount
+  checkField(p->_metadataSize,
+             p->_headerByteCount,
+             p->_address,
+             "HeaderByteCount");
   // IndexByteCount
   // IndexSID
   // BodyOffset
@@ -4316,24 +4320,30 @@ void mxfValidate(mxfFile infile)
     mxfLength length = len;
     len = checkLength(len, fileSize, position(infile));
     if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
+      markMetadataStart(keyPosition);
       checkPrimerLength(length);
       skipV(len, infile);
     } else if (isPartition(k)) {
+      markMetadataEnd(keyPosition);
       checkPartitionLength(length);
       if (isFooter(k)) {
         footer = checkFooterPosition(footer, keyPosition);
       }
       readPartition(p, len, infile);
     } else if (memcmp(&RandomIndexMetadata, &k, sizeof(mxfKey)) == 0) {
+      markMetadataEnd(keyPosition);
       readRandomIndex(rip, len, infile);
     } else if (isEssenceElement(k)) {
+      markMetadataEnd(keyPosition);
       skipV(len, infile);
     } else if (isIndexSegment(k)) {
+      markMetadataEnd(keyPosition);
       skipV(len, infile);
     } else {
       skipV(len, infile);
     }
   }
+  markMetadataEnd(fileSize);
 
   if (footer == 0) {
     mxfError("No footer found.\n");
