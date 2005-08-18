@@ -209,7 +209,7 @@ int main(int argumentCount, char* argumentVector[])
     fprintf(stderr,
             "%s : Error : Wrong number of arguments (%d).\n",
             programName,
-            argumentCount);
+            fileCount);
     printUsage();
     exit(EXIT_FAILURE);
   }
