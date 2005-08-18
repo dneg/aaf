@@ -70,6 +70,13 @@ typedef mxfUInt08 mxfByte;
 typedef mxfByte mxfKey[16];
 typedef mxfByte  mxfLocalKey[2];
 
+typedef struct aafUIDTag {
+  mxfUInt32 Data1;
+  mxfUInt16 Data2;
+  mxfUInt16 Data3;
+  mxfUInt08 Data4[8];
+} aafUID;
+
 mxfUInt08 hostByteOrder(void);
 
 mxfUInt08 hostByteOrder(void)
@@ -150,6 +157,71 @@ struct {
 };
 
 size_t keyTableSize = (sizeof(keyTable)/sizeof(keyTable[0])) - 1;
+
+#define AAF_CLASS(name, id, parent, concrete) {#name, {0}, id},
+
+struct {
+  const char* _name;
+  mxfKey _key;
+  aafUID _aafKey;
+} aafKeyTable [] = {
+#include "AAFMetaDictionary.h"
+  {"bogus", {0}}
+};
+
+size_t aafKeyTableSize = (sizeof(aafKeyTable)/sizeof(aafKeyTable[0])) - 1;
+
+void aafUIDToMxfKey(mxfKey& key, aafUID& aafID);
+
+void aafUIDToMxfKey(mxfKey& key, aafUID& aafID)
+{
+  key[ 0] = aafID.Data4[0];
+  key[ 1] = aafID.Data4[1];
+  key[ 2] = aafID.Data4[2];
+  key[ 3] = aafID.Data4[3];
+  key[ 4] = aafID.Data4[4];
+  key[ 5] = aafID.Data4[5];
+  key[ 6] = aafID.Data4[6];
+  key[ 7] = aafID.Data4[7];
+
+  key[ 8] = (aafID.Data1 & 0xff000000) >> 24;
+  key[ 9] = (aafID.Data1 & 0x00ff0000) >> 16;
+  key[10] = (aafID.Data1 & 0x0000ff00) >>  8;
+  key[11] = (aafID.Data1 & 0x000000ff);
+
+  key[12] = (aafID.Data2 & 0xff00) >> 8;
+  key[13] = (aafID.Data2 & 0x00ff);
+
+  key[14] = (aafID.Data3 & 0xff00) >> 8;
+  key[15] = (aafID.Data3 & 0x00ff);
+
+  key[5] = 0x53;
+
+}
+
+void initAAFKeyTable(void);
+
+void initAAFKeyTable(void)
+{
+  for (size_t i = 0; i < aafKeyTableSize; i++) {
+    aafUIDToMxfKey(aafKeyTable[i]._key, aafKeyTable[i]._aafKey);
+  }
+}
+
+bool lookupAAFKey(mxfKey& k, size_t& index);
+
+bool lookupAAFKey(mxfKey& k, size_t& index)
+{
+  bool result = false;
+  for (size_t i = 0; i < aafKeyTableSize; i++) {
+    if (memcmp(k, aafKeyTable[i]._key, sizeof(mxfKey)) == 0) {
+      index = i;
+      result = true;
+      break;
+    }
+  }
+  return result;
+}
 
 const mxfLocalKey nullMxfLocalKey = {0, 0};
 
@@ -542,7 +614,12 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
     if (found) {
       fprintf(stdout, "%s\n", keyTable[i]._name);
     } else {
-      fprintf(stdout, "Unknown\n");
+      found = lookupAAFKey(k, i);
+      if (found) {
+        fprintf(stdout, "%s\n", aafKeyTable[i]._name);
+      } else {
+        fprintf(stdout, "Unknown\n");
+      }
     }
   } else {
     fprintf(stdout, "\n");
@@ -926,6 +1003,7 @@ int main(int argumentCount, char* argumentVector[])
 
   programName = baseName(argumentVector[0]);
   checkSizes();
+  initAAFKeyTable();
   int fileCount = 0;
   int fileArg = 0;
   char* p = 0;
