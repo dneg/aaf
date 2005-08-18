@@ -4918,12 +4918,16 @@ typedef struct mxfRIPEntryTag {
 
 typedef std::list<mxfRIPEntry> RandomIndex;
 
-void readRandomIndex(RandomIndex& rip,
+typedef struct mxfRandomIndexTag {
+  RandomIndex _index;
+} mxfRandomIndex;
+
+void readRandomIndex(mxfRandomIndex& rip,
                      mxfLength length,
                      mxfUInt32& overallLength,
                      mxfFile infile);
 
-void readRandomIndex(RandomIndex& rip,
+void readRandomIndex(mxfRandomIndex& rip,
                      mxfLength length,
                      mxfUInt32& overallLength,
                      mxfFile infile)
@@ -4933,19 +4937,19 @@ void readRandomIndex(RandomIndex& rip,
     mxfRIPEntry e;
     readMxfUInt32(e._sid, infile);
     readMxfUInt64(e._offset, infile);
-    rip.push_back(e);
+    rip._index.push_back(e);
   }
   readMxfUInt32(overallLength, infile);
 }
 
-void printRandomIndex(RandomIndex& rip);
+void printRandomIndex(mxfRandomIndex& rip);
 
-void printRandomIndex(RandomIndex& rip)
+void printRandomIndex(mxfRandomIndex& rip)
 {
   fprintf(stdout, "Random index\n");
   fprintf(stdout, "  SID      : Address\n");
   RandomIndex::const_iterator it;
-  for (it = rip.begin(); it != rip.end(); ++it) {
+  for (it = rip._index.begin(); it != rip._index.end(); ++it) {
     mxfRIPEntry e = *it;
     fprintf(stdout, "  %08"MXFPRIx32" : %016"MXFPRIx64"\n", e._sid, e._offset);
   }
@@ -4985,14 +4989,14 @@ void checkRandomIndex(mxfUInt64 keyPosition,
   }
 }
 
-void checkRandomIndex(RandomIndex& rip, PartitionList& partitions);
+void checkRandomIndex(mxfRandomIndex& rip, PartitionList& partitions);
 
-void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
+void checkRandomIndex(mxfRandomIndex& rip, PartitionList& partitions)
 {
   // Check that we have the correct number of partitions.
   //
   size_t expectedPartitions = partitions.size();
-  size_t actualPartitions = rip.size();
+  size_t actualPartitions = rip._index.size();
   if (actualPartitions != expectedPartitions) {
     mxfError("Invalid random index - incorrect partition count"
              " (partitions in file = %"MXFPRIu32","
@@ -5005,8 +5009,8 @@ void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
   //
   RandomIndex::const_iterator rit;
   mxfUInt64 previous;
-  for (rit = rip.begin(); rit != rip.end(); ++rit) {
-    if ((rit != rip.begin()) && (rit->_offset <= previous)) {
+  for (rit = rip._index.begin(); rit != rip._index.end(); ++rit) {
+    if ((rit != rip._index.begin()) && (rit->_offset <= previous)) {
       mxfError("Invalid random index - partitions out of order"
                " (partition address = 0x%"MXFPRIx64","
                " address of previous partition = 0x%"MXFPRIx64").\n",
@@ -5019,7 +5023,7 @@ void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
   // Check that each entry in the random index corresponds to a
   // partition in the file.
   //
-  for (rit = rip.begin(); rit != rip.end(); ++rit) {
+  for (rit = rip._index.begin(); rit != rip._index.end(); ++rit) {
     bool found = false;
     mxfRIPEntry e = *rit;
     PartitionList::const_iterator pit;
@@ -5045,7 +5049,7 @@ void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
     bool found = false;
     mxfPartition* p = *pit;
     RandomIndex::const_iterator rit;
-    for (rit = rip.begin(); rit != rip.end(); ++rit) {
+    for (rit = rip._index.begin(); rit != rip._index.end(); ++rit) {
       mxfRIPEntry e = *rit;
       if (p->_address == e._offset) {
          found = true;
@@ -6188,7 +6192,7 @@ void mxfValidate(mxfFile infile);
 void mxfValidate(mxfFile infile)
 {
   PartitionList p;
-  RandomIndex rip;
+  mxfRandomIndex rip;
   mxfPartition* footer = 0;
   mxfUInt64 fileSize = size(infile);
   mxfKey k;
@@ -6241,7 +6245,7 @@ void mxfValidate(mxfFile infile)
   }
   checkPartitions(p, footer);
 
-  if (!rip.empty()) {
+  if (!rip._index.empty()) {
     checkRandomIndex(rip, p);
     if (debug) {
       printRandomIndex(rip);
