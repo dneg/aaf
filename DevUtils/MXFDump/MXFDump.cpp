@@ -216,10 +216,10 @@ void reorder(mxfUInt32& i);
 void reorder(mxfUInt64& i);
 void reorder(aafUID& u);
 
-void printField(FILE* f, mxfUInt08& i);
-void printField(FILE* f, mxfUInt16& i);
-void printField(FILE* f, mxfUInt32& i);
-void printField(FILE* f, mxfUInt64& i);
+void printDecField(FILE* f, mxfUInt08& i);
+void printDecField(FILE* f, mxfUInt16& i);
+void printDecField(FILE* f, mxfUInt32& i);
+void printDecField(FILE* f, mxfUInt64& i);
 
 void printHexField(FILE* f, mxfUInt08& i);
 void printHexField(FILE* f, mxfUInt16& i);
@@ -893,22 +893,22 @@ void reorder(aafUID& u)
   // no need to reorder Data4
 }
 
-void printField(FILE* f, mxfUInt08& i)
+void printDecField(FILE* f, mxfUInt08& i)
 {
   fprintf(f, "%5"MXFPRIu08, i);
 }
 
-void printField(FILE* f, mxfUInt16& i)
+void printDecField(FILE* f, mxfUInt16& i)
 {
   fprintf(f, "%10"MXFPRIu16, i);
 }
 
-void printField(FILE* f, mxfUInt32& i)
+void printDecField(FILE* f, mxfUInt32& i)
 {
   fprintf(f, "%10"MXFPRIu32, i);
 }
 
-void printField(FILE* f, mxfUInt64& i)
+void printDecField(FILE* f, mxfUInt64& i)
 {
   fprintf(f, "%10"MXFPRIu64, i);
 }
@@ -951,7 +951,7 @@ void printMxfKey(const mxfKey& k, FILE* f)
 
 void printMxfLength(mxfLength& l, FILE* f)
 {
-  printField(f, l);
+  printDecField(f, l);
   fprintf(f, " ");
   fprintf(f, "(");
   printHex(f, l);
@@ -1027,9 +1027,9 @@ void dumpMxfRational(const char* label, mxfFile infile)
   readMxfRational(r, infile);
   fprintf(stdout, "%20s = ", label);
   fprintf(stdout, "( ");
-  printField(stdout, r.numerator);
+  printDecField(stdout, r.numerator);
   fprintf(stdout, " / ");
-  printField(stdout, r.denominator);
+  printDecField(stdout, r.denominator);
   fprintf(stdout, " )");
   fprintf(stdout, "\n");
 }
@@ -1505,7 +1505,7 @@ void flush(void)
 {
   if (bufferIndex > 0) {
     if (addressBase == 10) {
-      printField(stdout, address);
+      printDecField(stdout, address);
     } else {
       printHexField(stdout, address);
     }
@@ -2026,7 +2026,7 @@ void printKeyAddress(FILE* f, mxfUInt64 keyAddress)
 {
   fprintf(f, "( ");
   if (base == 10) {
-    printField(f, keyAddress);
+    printDecField(f, keyAddress);
   } else {
     printHexField(f, keyAddress);
   }
@@ -2143,9 +2143,9 @@ void printV(mxfLength& length,
   flush();
   if (count < length) {
     fprintf(stdout, "[ Value truncated from ");
-    printField(stdout, length);
+    printDecField(stdout, length);
     fprintf(stdout, " bytes to ");
-    printField(stdout, limit);
+    printDecField(stdout, limit);
     fprintf(stdout, " bytes ]\n");
 
     mxfUInt64 skipLength = (length - count) - 1;
@@ -2505,7 +2505,7 @@ void printEssenceFrameValue(mxfKey& k,
   if ((frameCount < maxFrames) || !iFlag) {
     fprintf(stdout, "\n");
     fprintf(stdout, "[ Frame = ");
-    printField(stdout, frameCount);
+    printDecField(stdout, frameCount);
     fprintf(stdout, "]");
 
     printKL(k, length);
@@ -2548,9 +2548,9 @@ void printEssenceFrames(mxfKey& k,
   }
   if (iFlag && (maxFrames < frameCount)) {
     fprintf(stdout, "[ Essence frames truncated from ");
-    printField(stdout, frameCount);
+    printDecField(stdout, frameCount);
     fprintf(stdout, " frames to ");
-    printField(stdout, maxFrames);
+    printDecField(stdout, maxFrames);
     fprintf(stdout, " frames ]\n");
   }
 }
@@ -3261,7 +3261,7 @@ void printPartition(mxfKey& k, mxfLength& len, mxfFile infile)
   mxfUInt32 elementCount;
   readMxfUInt32(elementCount, infile);
   fprintf(stdout, "[ count = ");
-  printField(stdout, elementCount);
+  printDecField(stdout, elementCount);
   fprintf(stdout, " ]\n");
   mxfUInt32 elementSize;
   readMxfUInt32(elementSize, infile);
@@ -3271,7 +3271,7 @@ void printPartition(mxfKey& k, mxfLength& len, mxfFile infile)
     mxfKey essence;
     readMxfLabel(essence, infile);
     fprintf(stdout, "  ");
-    printField(stdout, i);
+    printDecField(stdout, i);
     fprintf(stdout, " : ");
     printMxfKey(essence, stdout);
     fprintf(stdout, "\n");
@@ -3342,11 +3342,11 @@ void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
 
       fprintf(stdout, "     IndexEntryArray = ");
       fprintf(stdout, "[ Number of entries = ");
-      printField(stdout, entryCount);
+      printDecField(stdout, entryCount);
       fprintf(stdout, "\n");
       fprintf(stdout, "                       ");
       fprintf(stdout, "  Entry size        = ");
-      printField(stdout, entrySize);
+      printDecField(stdout, entrySize);
       fprintf(stdout, " ]\n");
 
       if (entryCount > 0) {
@@ -3369,16 +3369,16 @@ void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
 
         if (!cFlag || (i < maxIndex)) {
           fprintf(stdout, "    ");
-          printField(stdout, i);
+          printDecField(stdout, i);
           fprintf(stdout, " :");
           fprintf(stdout, "    ");
-          printField(stdout, temporalOffset);
+          printDecField(stdout, temporalOffset);
           fprintf(stdout, "    ");
-          printField(stdout, anchorOffset);
+          printDecField(stdout, anchorOffset);
           fprintf(stdout, "     ");
           printHexField(stdout, flags);
           fprintf(stdout, "    ");
-          printField(stdout, streamOffset);
+          printDecField(stdout, streamOffset);
           fprintf(stdout, "\n");
 
           for (mxfUInt32 s = 0; s < sliceCount; s++) {
@@ -3392,9 +3392,9 @@ void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
       }
       if (cFlag && (count < entryCount)) {
         fprintf(stdout, "[ Index table truncated from ");
-        printField(stdout, entryCount);
+        printDecField(stdout, entryCount);
         fprintf(stdout, " entries to ");
-        printField(stdout, maxIndex);
+        printDecField(stdout, maxIndex);
         fprintf(stdout, " entries ]\n");
       }
     } else if (identifier == 0x3f0b) {
@@ -3460,11 +3460,11 @@ void printV10IndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
 
       fprintf(stdout, "     IndexEntryArray = ");
       fprintf(stdout, "[ Number of entries = ");
-      printField(stdout, entryCount);
+      printDecField(stdout, entryCount);
       fprintf(stdout, "\n");
       fprintf(stdout, "                       ");
       fprintf(stdout, "  Entry size        = ");
-      printField(stdout, entrySize);
+      printDecField(stdout, entrySize);
       fprintf(stdout, " ]\n");
 
       if (entryCount > 0) {
@@ -3487,16 +3487,16 @@ void printV10IndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
 
         if (!cFlag || (i < maxIndex)) {
           fprintf(stdout, "    ");
-          printField(stdout, i);
+          printDecField(stdout, i);
           fprintf(stdout, " :");
           fprintf(stdout, "    ");
-          printField(stdout, temporalOffset);
+          printDecField(stdout, temporalOffset);
           fprintf(stdout, "    ");
-          printField(stdout, anchorOffset);
+          printDecField(stdout, anchorOffset);
           fprintf(stdout, "     ");
           printHexField(stdout, flags);
           fprintf(stdout, "    ");
-          printField(stdout, streamOffset);
+          printDecField(stdout, streamOffset);
           fprintf(stdout, "\n");
 
           for (mxfUInt32 s = 0; s < sliceCount; s++) {
@@ -3510,9 +3510,9 @@ void printV10IndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
       }
       if (cFlag && (count < entryCount)) {
         fprintf(stdout, "[ Index table truncated from ");
-        printField(stdout, entryCount);
+        printDecField(stdout, entryCount);
         fprintf(stdout, " entries to ");
-        printField(stdout, maxIndex);
+        printDecField(stdout, maxIndex);
         fprintf(stdout, " entries ]\n");
       }
     } else if (identifier == 0x3f0b) {
@@ -3587,9 +3587,9 @@ void printPrimer(mxfKey& k, mxfLength& len, mxfFile infile)
                     primerFixedSize);
 
   fprintf(stdout, "  [ Number of entries = ");
-  printField(stdout, elementCount);
+  printDecField(stdout, elementCount);
   fprintf(stdout, ", Entry size        = ");
-  printField(stdout, elementSize);
+  printDecField(stdout, elementSize);
   fprintf(stdout, " ]\n");
 
   if (elementCount > 0) {
@@ -3626,9 +3626,9 @@ void printObjectDirectory(mxfKey& k, mxfLength& len, mxfFile infile)
   readMxfUInt08(entrySize, infile);
 
   fprintf(stdout, "  [ Number of entries = ");
-  printField(stdout, entryCount);
+  printDecField(stdout, entryCount);
   fprintf(stdout, ", Entry size        = ");
-  printField(stdout, entrySize);
+  printDecField(stdout, entrySize);
   fprintf(stdout, " ]\n");
 
   if (entryCount > 0) {
@@ -3661,7 +3661,7 @@ void printRandomIndex(mxfKey& k, mxfLength& len, mxfFile infile)
 {
   mxfUInt64 entryCount = len / (sizeof(mxfUInt32) + sizeof(mxfUInt64));
   fprintf(stdout, "  [ Number of entries = ");
-  printField(stdout, entryCount );
+  printDecField(stdout, entryCount );
   fprintf(stdout, " ]\n");
   fprintf(stdout, "       Partition           SID        Offset\n");
   for (mxfUInt32 i = 0; i < entryCount; i++) {
@@ -3670,13 +3670,13 @@ void printRandomIndex(mxfKey& k, mxfLength& len, mxfFile infile)
     readMxfUInt32(sid, infile);
     readMxfUInt64(offset, infile);
     fprintf(stdout, "    ");
-    printField(stdout, i);
+    printDecField(stdout, i);
     fprintf(stdout, " :");
     fprintf(stdout, "    ");
-    printField(stdout, sid);
+    printDecField(stdout, sid);
     fprintf(stdout, "    ");
     if (base == 10) {
-      printField(stdout, offset);
+      printDecField(stdout, offset);
     } else {
       printHexField(stdout, offset);
     }
@@ -3685,7 +3685,7 @@ void printRandomIndex(mxfKey& k, mxfLength& len, mxfFile infile)
   mxfUInt32 length;
   readMxfUInt32(length, infile);
   fprintf(stdout, "  [ Overall length = ");
-  printField(stdout, length);
+  printDecField(stdout, length);
   fprintf(stdout, " ]\n");
 }
 
@@ -4248,7 +4248,7 @@ int main(int argumentCount, char* argumentVector[])
     if (limitBytes) {
       fprintf(stdout,
               "dumping only the first ");
-      printField(stdout, limit);
+      printDecField(stdout, limit);
       fprintf(stdout,
               " bytes of values.\n");
     }
