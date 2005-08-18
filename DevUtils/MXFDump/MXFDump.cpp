@@ -285,6 +285,21 @@ void setMode(Mode m)
   mode = m;
 }
 
+bool getInteger(int& i, char* s)
+{
+  bool result;
+  char* expectedEnd = &s[strlen(s)];
+  char* end;
+  int b = strtoul(s, &end, 10);
+  if (end != expectedEnd) {
+    result = false;
+  } else {
+    i = b;
+    result = true;
+  }
+  return result;
+}
+
 int main(int argumentCount, char* argumentVector[])
 {
   programName = baseName(argumentVector[0]);
@@ -304,13 +319,9 @@ int main(int argumentCount, char* argumentVector[])
       if ((i + 1 < argumentCount) && (*argumentVector[i + 1] != '-' )) {
         lFlag = true;
         i = i + 1;
-
         char* bytess = argumentVector[i];
-        char* expectedEnd = &bytess[strlen(bytess)];
-        char* end;
-        int bytes = strtoul(bytess, &end, 10);
-
-        if (end != expectedEnd) {
+        int bytes;
+        if (!getInteger(bytes, bytess)) {
           fprintf(stderr, 
                   ": Error : \"%s\" is not a valid byte count.",
                   programName,
