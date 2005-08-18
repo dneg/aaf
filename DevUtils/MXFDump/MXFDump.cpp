@@ -3966,6 +3966,10 @@ void newSegment(bool isEssence,
     streams.insert(StreamSet::value_type(sid, s));
   } else {
     s = it->second;
+    if ((s->_isEssence && !isEssence) ||
+        (!s->_isEssence && isEssence)) {
+      mxfWarning("Essence and Index have the same SID (%"MXFPRIu32").\n", sid);
+    }
   }
   mxfUInt64 size = end - start;
   Segment* seg = new Segment;
