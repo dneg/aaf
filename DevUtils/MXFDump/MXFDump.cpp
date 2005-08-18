@@ -1415,20 +1415,46 @@ void mxfDumpFile(char* fileName)
       printHeaderPartition(k, len, infile);
     } else if (memcmp(&ClosedHeaderPartition, &k, sizeof(mxfKey)) == 0) {
       printHeaderPartition(k, len, infile);
-    } else if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
-      printPrimer(k, len, infile);
     } else if (memcmp(&OpenBodyPartition, &k, sizeof(mxfKey)) == 0) {
       printBodyPartition(k, len, infile);
     } else if (memcmp(&ClosedBodyPartition, &k, sizeof(mxfKey)) == 0) {
       printBodyPartition(k, len, infile);
+    } else if (memcmp(&ClosedFooterPartition, &k, sizeof(mxfKey)) == 0) {
+      printFooterPartition(k, len, infile);
+    } else if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
+      printPrimer(k, len, infile);
+      // The following are not yet dealt with explicitly, they are either
+      // handled as their AAF equivalents or as generic local sets.
+      //
+      // Preface
+      // Identification
+      // ContentStorage
+      // EssencComtainerData
+      // MaterialPackage
+      // SourcePackage
+      // Track
+      // Sequence
+      // SourceClip
+      // Timecode12MComponent
+      // TimecodeStream12MComponent
+      // DMSegment
+      // DMSourceClip
+      // FileDescriptor
+      // GenPictureEssenceDesc
+      // CDCIEssenceDescriptor
+      // RGBAEssenceDescriptor
+      // GenSoundEssenceDesc
+      // GenDataEssenceDesc
+      // MultipleDescriptor
+      // NetworkLocator
+      // TextLocator
+      // IndexTable
+    } else if (isLocalSet(k)) {
+      printLocalSet(k, len, infile);
     } else if (isFill(k)) {
       printFill(k, len, infile);
     } else if (isEssenceElement(k)) {
       printEssence(k, len, lFlag, limit, infile);
-    } else if (memcmp(&ClosedFooterPartition, &k, sizeof(mxfKey)) == 0) {
-      printFooterPartition(k, len, infile);
-    } else if (isLocalSet(k)) {
-      printLocalSet(k, len, infile);
     } else {
       printKL(k, len);
       printV(len, false, 0, infile);
