@@ -4046,6 +4046,29 @@ void initializeIndexSegment(mxfIndexSegment* index);
 
 void initializeIndexSegment(mxfIndexSegment* index)
 {
+//index->_instanceUID = 0;
+//index->_indexEditRate = 0;
+  index->_indexStartPosition = 0;
+  index->_indexDuration = 0;
+  index->_editUnitByteCount = 0;
+  index->_hasEditUnitByteCount = false;
+  index->_indexSID = 0;
+  index->_hasIndexSID = false;
+  index->_bodySID = 0;
+  index->_sliceCount = 0;
+  index->_hasSliceCount = false;
+  index->_posTableCount = 0;
+  index->_hasPosTableCount = false;
+  // Delta entry array // D/req
+  index->_deltaEntryCount = 0;
+  index->_deltaEntrySize = 0;
+  index->_deltaEntryArrayPosition = 0;
+  index->_hasDeltaEntryArray = false;
+  // Index Entry Array // D/req
+  index->_indexEntryCount = 0;
+  index->_indexEntrySize = 0;
+  index->_indexEntryArrayPosition = 0;
+  index->_hasIndexEntryArray = false;
 }
 
 void readIndexSegment(mxfIndexSegment* index, mxfLength& len, mxfFile infile);
