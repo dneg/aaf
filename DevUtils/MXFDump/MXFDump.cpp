@@ -913,12 +913,12 @@ void reorder(aafUID& u)
 
 void printDecField(FILE* f, mxfUInt08& i)
 {
-  fprintf(f, "%5"MXFPRIu08, i);
+  fprintf(f, "%3"MXFPRIu08, i);
 }
 
 void printDecField(FILE* f, mxfUInt16& i)
 {
-  fprintf(f, "%10"MXFPRIu16, i);
+  fprintf(f, "%5"MXFPRIu16, i);
 }
 
 void printDecField(FILE* f, mxfUInt32& i)
@@ -928,17 +928,17 @@ void printDecField(FILE* f, mxfUInt32& i)
 
 void printDecField(FILE* f, mxfUInt64& i)
 {
-  fprintf(f, "%10"MXFPRIu64, i);
+  fprintf(f, "%10"MXFPRIu64, i); // tjb - should be 20
 }
 
 void printDecFieldPad(FILE* f, mxfUInt08& i)
 {
-  fprintf(f, "%05"MXFPRIu08, i);
+  fprintf(f, "%03"MXFPRIu08, i);
 }
 
 void printDecFieldPad(FILE* f, mxfUInt16& i)
 {
-  fprintf(f, "%010"MXFPRIu16, i);
+  fprintf(f, "%05"MXFPRIu16, i);
 }
 
 void printDecFieldPad(FILE* f, mxfUInt32& i)
@@ -948,7 +948,7 @@ void printDecFieldPad(FILE* f, mxfUInt32& i)
 
 void printDecFieldPad(FILE* f, mxfUInt64& i)
 {
-  fprintf(f, "%010"MXFPRIu64, i);
+  fprintf(f, "%010"MXFPRIu64, i); // tjb - should be 20
 }
 
 void printDec(FILE* f, mxfUInt08& i)
