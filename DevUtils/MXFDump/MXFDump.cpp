@@ -1462,7 +1462,19 @@ void dumpExtensionTypeInteger(mxfFile infile)
 // Rename
 // Enumerated
 // FixedArray
-// VaryingArray
+
+void dumpExtensionTypeVaryingArray(mxfFile infile);
+
+void dumpExtensionTypeVaryingArray(mxfFile infile)
+{
+  fprintf(stdout, "varying array type = [\n");
+  dumpExtensionDefinition(infile);
+
+  dumpMxfLabel("element type", infile);
+
+  fprintf(stdout, "]\n");
+}
+
 // Set
 
 void dumpExtensionTypeRecord(mxfFile infile);
@@ -5404,7 +5416,9 @@ void printMetaDictionary(mxfKey& /* k */, mxfLength& len, mxfFile infile)
       // Rename                = 35
       // Enumerated            = 36
       // FixedArray            = 37
-      // VaryingArray          = 38
+    case 0x38: // VaryingArray
+      dumpExtensionTypeVaryingArray(infile);
+      break;
       // Set                   = 39
     case 0x3a: // Record
       dumpExtensionTypeRecord(infile);
