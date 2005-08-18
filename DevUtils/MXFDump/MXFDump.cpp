@@ -1060,14 +1060,23 @@ void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f);
 void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
 {
   init();
+  mxfLength count = 0;
   for (mxfLength i = 0; i < length; i++) {
     mxfByte b;
     readMxfUInt08(b, f);
     if ((i < limit) || !lFlag) {
       dumpByte(b);
+      count = count + 1;
     }
   }
   flush();
+  if (count < length) {
+    fprintf(stdout, "[ Truncated from ");
+    printField(stdout, length);
+    fprintf(stdout, " bytes to ");
+    printField(stdout, limit);
+    fprintf(stdout, " bytes ]\n");
+  }
 }
 
 char* elementTypeName(mxfByte type);
