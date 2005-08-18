@@ -536,7 +536,7 @@ void close(mxfFile infile)
   OSErr status = FSCloseFork(infile);
   if (status != noErr) {
     fatalError("FSCloseFork() failed (%d).\n", status);
-  }  
+  }
 }
 
 void setPosition(mxfFile infile, const mxfUInt64 position)
@@ -2718,7 +2718,8 @@ void printLocalLength(mxfUInt16& length,
     readMxfUInt16(length, infile);
     remainder = remainder - 2;
   } else {
-    mxfError("Local set KLV parse error - set exhausted looking for local length"
+    mxfError("Local set KLV parse error -"
+             " set exhausted looking for local length"
              " (following key at offset 0x%"MXFPRIx64").\n",
              keyPosition);
     skipBogusBytes(remainder, infile);
