@@ -2661,6 +2661,14 @@ void printFormatOptions(void)
   fprintf(stderr, "assume essence is ");
   fprintf(stderr, "wrapped frames (-p)\n");
 
+  fprintf(stderr, "  --limit-frames <n>  = ");
+  fprintf(stderr, "truncate frame-wrapped essence ");
+  fprintf(stderr, "to <n> frames [default n = 0]\n");
+
+  fprintf(stderr, "  --no-limit-frames   = ");
+  fprintf(stderr, "do not truncate ");
+  fprintf(stderr, "frame-wrapped essence\n");
+
   fprintf(stderr, "  --limit-entries <n> = ");
   fprintf(stderr, "print only the first <n> ");
   fprintf(stderr, "index table entries [default n = 0] (-c)\n");
