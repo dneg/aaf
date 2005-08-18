@@ -1753,7 +1753,7 @@ void printEssenceFrames(mxfKey& k,
     }
     total = total + len;
   }
-  if (maxFrames < frameCount) {
+  if (iFlag && (maxFrames < frameCount)) {
     fprintf(stdout, "[ Essence frames truncated from ");
     printField(stdout, frameCount);
     fprintf(stdout, " frames to ");
