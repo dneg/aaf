@@ -1438,6 +1438,48 @@ void printOperationalPattern(mxfKey& k, FILE* outfile)
   }
 }
 
+void decodeUncompressedPicture(mxfUInt32 tag2, FILE* outfile)
+{
+  switch (tag2) {
+    case 0x0101:
+      fprintf(outfile, " - SD 525 60i 422 13.5MHz (frame wrapped)");
+      break;
+    case 0x0102:
+      fprintf(outfile, " - SD 525 60i 422 13.5MHz (clip wrapped)");
+      break;
+    case 0x0103:
+      fprintf(outfile, " - SD 525 60i 422 13.5MHz (line wrapped)");
+      break;
+    case 0x0105:
+      fprintf(outfile, " - SD 625 50i 422 13.5MHz (frame wrapped)");
+      break;
+    case 0x0106:
+      fprintf(outfile, " - SD 625 50i 422 13.5MHz (clip wrapped)");
+      break;
+    case 0x0107:
+      fprintf(outfile, " - SD 625 50i 422 13.5MHz (line wrapped)");
+      break;
+    case 0x0119:
+      fprintf(outfile, " - SD 525 60p 422 27MHz (frame wrapped)");
+      break;
+    case 0x011A:
+      fprintf(outfile, " - SD 525 60p 422 27MHz (clip wrapped)");
+      break;
+    case 0x011B:
+      fprintf(outfile, " - SD 525 60p 422 27MHz (line wrapped)");
+      break;
+    case 0x011D:
+      fprintf(outfile, " - SD 625 50p 422 27MHz (frame wrapped)");
+      break;
+    case 0x011E:
+      fprintf(outfile, " - SD 625 50p 422 27MHz (clip wrapped)");
+      break;
+    case 0x011F:
+      fprintf(outfile, " - SD 625 50p 422 27MHz (line wrapped)");
+      break;
+  }
+}
+
 void decodeAES3BWF(mxfUInt32 tag2, FILE* outfile)
 {
   switch (tag2) {
@@ -1567,6 +1609,7 @@ void decode(mxfUInt16 tag1, mxfUInt32 tag2, FILE* outfile)
     break;
   case 0x0205:
     fprintf(outfile, "Uncompressed Picture");
+    decodeUncompressedPicture(tag2, outfile);
     break;
   case 0x0206:
     fprintf(outfile, "AES3/BWF");
