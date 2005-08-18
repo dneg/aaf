@@ -1401,8 +1401,6 @@ void mxfDumpFile(char* fileName)
       printEssence(k, len, lFlag, limit, infile);
     } else if (memcmp(&ClosedFooterPartition, &k, sizeof(mxfKey)) == 0) {
       printFooterPartition(k, len, infile);
-    } else if (unknownAsSets) {
-      printLocalSet(k, len, infile);
     } else {
       printKL(k, len);
       printV(len, false, 0, infile);
