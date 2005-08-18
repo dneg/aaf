@@ -560,6 +560,21 @@ void printKL(mxfKey& k, mxfLength& l, FILE* f)
   fprintf(stdout, " ]\n");
 }
 
+void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f);
+
+void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
+{
+  init();
+  for (mxfLength i = 0; i < length; i++) {
+    mxfByte b;
+    readMxfByte(b, f);
+    if ((i < limit) || !lFlag) {
+      dumpByte(b);
+    }
+  }
+  flush();
+}
+
 bool dumpFiller = false;
 
 void mxfDumpFile(char* fileName);
@@ -649,13 +664,7 @@ void mxfDumpFile(char* fileName)
         readMxfByte(b, infile);
       }
     } else {
-      init();
-      for (mxfLength i = 0; i < len; i++) {
-        mxfByte b;
-        readMxfByte(b, infile);
-        dumpByte(b);
-      }
-      flush();
+      printV(len, false, 0, infile);
     }
   }
   fclose(infile);
@@ -686,16 +695,7 @@ void klvDumpFile(char* fileName)
     mxfLength len;
     readMxfLength(len, infile);
     printKL(k, len, stdout);
-
-    init();
-    for (mxfLength i = 0; i < len; i++) {
-      mxfByte b;
-      readMxfByte(b, infile);
-      if ((i < limit) || !lFlag) {
-        dumpByte(b);
-      }
-    }
-    flush();
+    printV(len, lFlag, limit, infile);
   }
   fclose(infile);
 }
