@@ -1676,6 +1676,16 @@ void dumpExtensionTypeIndirect(mxfFile infile)
   fprintf(stdout, "]\n");
 }
 
+void dumpExtensionTypeOpaque(mxfFile infile);
+
+void dumpExtensionTypeOpaque(mxfFile infile)
+{
+  fprintf(stdout, "opaque type = [\n");
+  dumpExtensionDefinition(infile);
+
+  fprintf(stdout, "]\n");
+}
+
 void dumpMxfLabel(const char* label, mxfFile infile)
 {
   mxfKey k;
@@ -5630,6 +5640,9 @@ void printMetaDictionary(mxfKey& /* k */, mxfLength& len, mxfFile infile)
       break;
     case 0x3e:
       dumpExtensionTypeIndirect(infile);
+      break;
+    case 0x3f:
+      dumpExtensionTypeOpaque(infile);
       break;
     default:
       mxfError("Invalid definition tag (%"MXFPRIx08").\n", tag);
