@@ -3302,7 +3302,7 @@ StreamSet streams;
 void printSegment(Segment* seg)
 {
   fprintf(stdout,
-          "    %016"MXFPRIx64" : %016"MXFPRIx64"",
+          "      %016"MXFPRIx64" : %016"MXFPRIx64"",
           seg->_origin,
           seg->_origin + seg->_size); 
   fprintf(stdout,
@@ -3314,8 +3314,8 @@ void printSegment(Segment* seg)
 void printSegments(SegmentList& segments)
 {
   if (!segments.empty()) {
-    fprintf(stdout, "  Segments\n");
-    fprintf(stdout, "    File address range");
+    fprintf(stdout, "    Segments\n");
+    fprintf(stdout, "      File address range");
     fprintf(stdout, "                  [Stream address range]\n");
     SegmentList::const_iterator it;
     for (it = segments.begin(); it != segments.end(); it++) {
@@ -3428,7 +3428,7 @@ void printPartitions(PartitionList& partitions)
   PartitionList::const_iterator it;
   for (it = partitions.begin(); it != partitions.end(); ++it) {
     mxfPartition* p = *it;
-    fprintf(stdout, "  %016"MXFPRIx64"\n", p->_address);
+    fprintf(stdout, "  Address = %016"MXFPRIx64"\n", p->_address);
     printSegments(p->_segments);
   }
 }
