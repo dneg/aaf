@@ -757,7 +757,7 @@ void checkSizes(void)
 }
 
 char map(int c);
-void init(void);
+void init(mxfUInt64 start, int base);
 void flush(void);
 void dumpByte(mxfByte byte);
 
@@ -797,19 +797,28 @@ size_t bufferIndex;
 size_t bufferStart;
 size_t align;
 mxfUInt32 address;
+size_t addressBase;
 
-void init(mxfUInt64 start)
+void init(mxfUInt64 start, int base)
 {
   bufferIndex = 0;
   bufferStart = bufferIndex;
   address = static_cast<mxfUInt32>(start);
   align = address % 16;
+  addressBase = 10;
+  if (base == 16) {
+    addressBase = 16;
+  }
 }
 
 void flush(void)
 {
   if (bufferIndex > 0) {
-    printField(stdout, address);
+    if (addressBase == 10) {
+      printField(stdout, address);
+    } else {
+      printHexField(stdout, address);
+    }
     fprintf(stdout, "  ");
     for (size_t x = 0; x < bufferStart; x++) {
       fprintf(stdout, "   ");
@@ -860,6 +869,12 @@ void printCommonOptions(void)
   fprintf(stderr, "--absolute      = ");
   fprintf(stderr, "print absolute addresses ");
   fprintf(stderr, "- the start of the file = 0 (-b)\n");
+  fprintf(stderr, "--decimal       = ");
+  fprintf(stderr, "print addresses in ");
+  fprintf(stderr, "decimal [default] (-t)\n");
+  fprintf(stderr, "--hexadecimal   = ");
+  fprintf(stderr, "print addresses in ");
+  fprintf(stderr, "hexadecimal (-x)\n");
   fprintf(stderr, "--symbolic      = ");
   fprintf(stderr, "dump the names of keys if known [default] (-y)\n");
   fprintf(stderr, "--no-symbolic   = ");
@@ -1141,6 +1156,7 @@ void printKL(mxfKey& k, mxfLength& l)
 }
 
 bool relative = true;
+int base = 10;
 
 void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f);
 
@@ -1150,7 +1166,7 @@ void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
   if (relative) {
     start = 0;
   }
-  init(start);
+  init(start, base);
 
   mxfLength count = 0;
   for (mxfLength i = 0; i < length; i++) {
@@ -1870,6 +1886,8 @@ bool getInteger(int& i, char* s)
 // -l --limit
 // -r --relative
 // -b --absolute
+// -t --decimal
+// -x --hexadecimal
 // -y --symbolic
 // -n --no-symbolic
 // -h --help
@@ -1931,6 +1949,10 @@ int main(int argumentCount, char* argumentVector[])
       relative = true;
     } else if ((strcmp(p, "-b") == 0) || (strcmp(p, "--absolute") == 0)) {
       relative = false;
+    } else if ((strcmp(p, "-t") == 0) || (strcmp(p, "--decimal") == 0)) {
+      base = 10;
+    } else if ((strcmp(p, "-x") == 0) || (strcmp(p, "--hexadecimal") == 0)) {
+      base = 16;
     } else if ((strcmp(p, "-y") == 0) || (strcmp(p, "--symbolic") == 0)) {
       symbolic = true;
     } else if ((strcmp(p, "-n") == 0) || (strcmp(p, "--no-symbolic") == 0)) {
