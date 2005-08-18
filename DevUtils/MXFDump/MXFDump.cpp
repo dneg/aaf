@@ -1447,6 +1447,77 @@ char* itemTypeName(mxfByte itemTypeId)
   return result;
 }
 
+char* CPPictureElementTypeName(mxfByte type);
+
+char* CPPictureElementTypeName(mxfByte type)
+{
+  char* result = "Unknown";
+  if (type == 0x00) {
+    result = "Illegal";
+  } else if ((type >= 0x01) && (type <= 0x0f)) {
+    if (type == 0x01) {
+      result = "MPEG-2 V-ES";
+    } else {
+      result = "Picture";
+    }
+  } else if ((type >= 0x10) && (type <= 0x1f)) {
+    if (type == 0x10) {
+      result = "AES3";
+    } else {
+      result = "Audio";
+    }
+  } else if ((type >= 0x20) && (type <= 0x77)) {
+    result = "Auxilliary";
+  } else if ((type >= 0x78) && (type <= 0x7f)) {
+    result = "System";
+  } else if ((type >= 0x80) && (type <= 0xff)) {
+    result = "System";
+  }
+  return result;
+}
+
+char* CPSoundElementTypeName(mxfByte type);
+
+char* CPSoundElementTypeName(mxfByte type)
+{
+  return CPPictureElementTypeName(type);
+}
+
+char* CPDataElementTypeName(mxfByte type);
+
+char* CPDataElementTypeName(mxfByte type)
+{
+  return CPPictureElementTypeName(type);
+}
+
+char* GCPictureElementTypeName(mxfByte type);
+
+char* GCPictureElementTypeName(mxfByte type)
+{
+  return "Unknown";
+}
+
+char* GCSoundElementTypeName(mxfByte type);
+
+char* GCSoundElementTypeName(mxfByte type)
+{
+  return "Unknown";
+}
+
+char* GCDataElementTypeName(mxfByte type);
+
+char* GCDataElementTypeName(mxfByte type)
+{
+  return "Unknown";
+}
+
+char* GCCompoundElementTypeName(mxfByte type);
+
+char* GCCompoundElementTypeName(mxfByte type)
+{
+  return "Unknown";
+}
+
 char* elementTypeName(mxfByte itemTypeId, mxfByte type);
 
 char* elementTypeName(mxfByte itemTypeId, mxfByte type)
@@ -1454,34 +1525,26 @@ char* elementTypeName(mxfByte itemTypeId, mxfByte type)
   char* result = "Unknown";
   switch (itemTypeId) {
   case 0x05: // "CP Picture"
+    result = CPPictureElementTypeName(type);
+    break;
   case 0x06: // "CP sound"
+    result = CPSoundElementTypeName(type);
+    break;
   case 0x07: // "CP Data"
-    if (type == 0x00) {
-      result = "Illegal";
-    } else if ((type >= 0x01) && (type <= 0x0f)) {
-      if (type == 0x01) {
-        result = "MPEG-2 V-ES";
-      } else {
-        result = "Picture";
-      }
-    } else if ((type >= 0x10) && (type <= 0x1f)) {
-      if (type == 0x10) {
-        result = "AES3";
-      } else {
-        result = "Audio";
-      }
-    } else if ((type >= 0x20) && (type <= 0x77)) {
-      result = "Auxilliary";
-    } else if ((type >= 0x78) && (type <= 0x7f)) {
-      result = "System";
-    } else if ((type >= 0x80) && (type <= 0xff)) {
-      result = "System";
-    }
+    result = CPDataElementTypeName(type);
     break;
   case 0x15: // "GC Picture"
+    result = GCPictureElementTypeName(type);
+    break;
   case 0x16: // "GC Sound"
+    result = GCSoundElementTypeName(type);
+    break;
   case 0x17: // "GC Data"
+    result = GCDataElementTypeName(type);
+    break;
   case 0x18: // "GC Compound"
+    result = GCCompoundElementTypeName(type);
+    break;
   default:
     break;
   }
