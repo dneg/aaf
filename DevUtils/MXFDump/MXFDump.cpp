@@ -229,11 +229,12 @@ void printUsage(void)
   fprintf(stderr, "dump raw KLV (-k)\n");
   fprintf(stderr, "  --limit <n>   = ");
   fprintf(stderr, "dump only the first <n> bytes of each value (-l)\n");
-  fprintf(stderr, "  --symbolic    = ");
-  fprintf(stderr, "dump the names of keys if known (-s)\n");
   fprintf(stderr, "\n");
   fprintf(stderr, "--mxf-dump      = ");
   fprintf(stderr, "dump MXF (-m)\n");
+  fprintf(stderr, "\n");
+  fprintf(stderr, "--symbolic      = ");
+  fprintf(stderr, "dump the names of keys if known (-s)\n");
   fprintf(stderr, "\n");
   fprintf(stderr, "--help          = ");
   fprintf(stderr, "print this message and exit (-h)\n");
