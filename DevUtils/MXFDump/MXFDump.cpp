@@ -1469,10 +1469,16 @@ void dumpExtensionTypeEnumerated(mxfFile infile)
   dumpExtensionDefinition(infile);
 
   dumpMxfLabel("element type", infile);
-
-  // ElementNames
-  // ElementValues
-
+  // ElementCount
+  mxfUInt32 count;
+  readMxfUInt32(count, infile);
+  printMxfUInt32(stdout, "element count", count);
+  for (mxfUInt32 i = 0; i < count; i++) {
+    // ElementName
+    dumpMxfString("name", infile);
+    // ElementValue
+    dumpMxfUInt64("value", infile);
+  }
   fprintf(stdout, "]\n");
 }
 
