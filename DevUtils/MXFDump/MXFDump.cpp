@@ -18,6 +18,20 @@ key headerKey  = {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01,
 
 const char* programName;
 
+void checkSizes(void)
+{
+  if (sizeof(length) != 4) {
+    cerr << programName
+      << ": Error : Wrong sizeof(length)."
+      << endl;
+  }
+    if (sizeof(key) != 16) {
+    cerr << programName
+      << ": Error : Wrong sizeof(key)."
+      << endl;
+  }
+}
+
 void printUsage(void)
 {
   cerr << programName << ": Usage : "
@@ -58,16 +72,7 @@ void dumpFile(char* fileName)
 int main(int argumentCount, char* argumentVector[])
 {
   programName = argumentVector[0];
-  if (sizeof(length) != 4) {
-    cerr << programName
-      << ": Error : Wrong sizeof(length)."
-      << endl;
-  }
-    if (sizeof(key) != 16) {
-    cerr << programName
-      << ": Error : Wrong sizeof(key)."
-      << endl;
-  }
+  checkSizes();
   int fileCount = argumentCount - 1;
   
   if (fileCount != 1) {
