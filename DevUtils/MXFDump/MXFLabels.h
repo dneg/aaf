@@ -22,7 +22,11 @@
 //
 //=---------------------------------------------------------------------=
 
-// Essence container labels
+// MXF Essence container labels
+
+// This file is hand maintained. It is based on RP224. Eventually this file,
+// or one like it, should be automatically generated from the SMPTE registry.
+//
 
 // Generic container (deprecated)
 //
