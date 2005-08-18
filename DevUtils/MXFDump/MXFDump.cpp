@@ -757,9 +757,9 @@ bool findHeader(mxfFile infile, mxfUInt64& headerPosition)
                      infile);
 }
 
-bool isMxfFile(mxfFile infile);
+bool isMxfFile(mxfFile infile, mxfUInt64& headerPosition);
 
-bool isMxfFile(mxfFile infile)
+bool isMxfFile(mxfFile infile, mxfUInt64& headerPosition)
 {
   bool result = false;
   mxfUInt64 savedPosition = position(infile);
@@ -768,9 +768,9 @@ bool isMxfFile(mxfFile infile)
   readMxfKey(k, infile);
   if (isHeader(k)) {
     result = true;
+    headerPosition = savedPosition;
   }
 
-  setPosition(infile, savedPosition);
   return result;
 }
 
@@ -4470,9 +4470,11 @@ int main(int argumentCount, char* argumentVector[])
     fatalError("File \"%s\" not found.\n", fileName);
   }
 
-  if (!isMxfFile(infile)) {
+  if (!isMxfFile(infile, headerPosition)) {
     fatalError("File \"%s\" is not an MXF file.\n", fileName);
   }
+  setPosition(infile, headerPosition);
+
   if (mode == klvMode) {
     klvDumpFile(infile);
   } else if (mode == localSetMode) {
