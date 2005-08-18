@@ -567,6 +567,9 @@ mxfKey currentKey = {0};
 mxfKey previousKey = {0};
 mxfUInt64 primerPosition = 0;
 
+mxfKey currentPartitionKey = {0};
+mxfKey previousPartitionKey = {0};
+
 mxfUInt32 indexSID = 0;
 mxfKey indexLabel = {0};
 mxfUInt64 indexPosition = 0;
@@ -5243,6 +5246,10 @@ void mxfDumpFile(mxfFile infile)
   mxfUInt64 fileSize = size(infile);
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
+    if (isPartition(k)) {
+      memcpy(&previousPartitionKey, &currentPartitionKey, sizeof(mxfKey));
+      memcpy(&currentPartitionKey, &k, sizeof(mxfKey));
+    }
     checkKey(k);
     mxfLength len;
     readMxfLength(len, infile);
