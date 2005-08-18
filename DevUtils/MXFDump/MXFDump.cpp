@@ -1634,9 +1634,14 @@ void printEssenceKL(mxfKey& k, mxfLength& len)
   int elementNumber = k[15];
 
   fprintf(stdout, "\n");
-  fprintf(stdout, "[ K = ");
+  fprintf(stdout, "[ K = Essence Element");
+  if (keyAddresses) {
+    fprintf(stdout, " ");
+    printKeyAddress(stdout, keyPosition);
+  }
+  fprintf(stdout, "\n");
   fprintf(stdout,
-          "Essence Element, Track = %02x.%02x.%02x.%02x,\n",
+          "  Track          = %02x.%02x.%02x.%02x,\n",
           k[12],
           k[13],
           k[14],
