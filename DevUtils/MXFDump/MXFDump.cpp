@@ -12,9 +12,6 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include <list>
-#include <map>
-
 #if defined (_MSC_VER) && defined(_M_IX86) && defined(_WIN32)
 #define MXF_COMPILER_MSC_INTEL_WINDOWS
 #define MXF_OS_WINDOWS
@@ -147,6 +144,15 @@ typedef unsigned long long int mxfUInt64;
 #define MXFPRIx32 "lx"
 #define MXFPRIx64 "llx"
 #endif
+
+#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
+  // - 'identifier' : identifier was truncated to 'number' characters in
+  //   the debug information
+#pragma warning(disable:4786) // Gak !
+#endif
+
+#include <list>
+#include <map>
 
 typedef mxfUInt64 mxfLength;
 typedef mxfUInt08 mxfByte;
