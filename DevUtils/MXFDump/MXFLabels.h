@@ -110,7 +110,14 @@ MXF_ESSENCE_CONTAINER_END()
 // MPEG Elementary Stream
 //
 MXF_ESSENCE_CONTAINER_NODE(0x02, 0x04, "MPEG Elementary Stream")
-// None yet
+
+  // ISO/IEC 13818-1 stream id (0x00 - 0x70) (frame wrapped)
+//MXF_ESSENCE_CONTAINER_LABEL(0xXX, 0x01, "stream id 0xXX (frame wrapped)")
+MXF_ESSENCE_CONTAINER_LABEL(0x60, 0x01, "stream id 0x60 (frame wrapped)")
+
+  // ISO/IEC 13818-1 stream id (0x00 - 0x70) (clip wrapped)
+//MXF_ESSENCE_CONTAINER_LABEL(0xXX, 0x02, "stream id 0xXX (clip wrapped)")
+
 MXF_ESSENCE_CONTAINER_END()
 
 // Uncompressed Picture
