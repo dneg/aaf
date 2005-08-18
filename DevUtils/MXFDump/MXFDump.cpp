@@ -4287,6 +4287,12 @@ void validateArray(mxfUInt32 defaultSize,
                    mxfUInt32 expectedSize,
                    mxfUInt32 actualSize,
                    mxfUInt32 elementCount,
+                   char* arrayName);
+
+void validateArray(mxfUInt32 defaultSize,
+                   mxfUInt32 expectedSize,
+                   mxfUInt32 actualSize,
+                   mxfUInt32 elementCount,
                    char* arrayName)
 {
   if (expectedSize == 0) {
