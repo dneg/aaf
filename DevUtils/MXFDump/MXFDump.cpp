@@ -2157,6 +2157,9 @@ void printCommonDumpOptions(void)
   fprintf(stderr, "don't dump the names of keys (-n)\n");
   fprintf(stderr, "\n");
 
+  fprintf(stderr, "  --statistics        = ");
+  fprintf(stderr, "print statistics\n");
+
   fprintf(stderr, "  --verbose           = ");
   fprintf(stderr, "print more detailed information (-v)\n");
   fprintf(stderr, "\n");
@@ -2686,6 +2689,8 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
   }
   printMxfKey(k, f);
 }
+
+bool printStats = false;
 
 mxfUInt32 darkItems = 0;
 
@@ -5623,6 +5628,7 @@ void printSummary(void)
 //    --set-validate
 //    --mxf-validate
 //    --aaf-validate
+//    --statistics
 
 // Free letters - goqz
 
@@ -5750,6 +5756,9 @@ int main(int argumentCount, char* argumentVector[])
       checkDumpMode(p);
       darkKeysAsSets = true;
       dumpDark = true;
+    } else if (strcmp(p, "--statistics") == 0) {
+      checkDumpMode(p);
+      printStats = true;
     } else if ((strcmp(p, "--help") == 0) ||
                (strcmp(p, "-h") == 0)) {
       hFlag = true;
