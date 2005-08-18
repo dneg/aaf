@@ -465,33 +465,33 @@ void close(mxfFile infile)
   fclose(infile);
 }
 
-void setPosition(mxfFile infile, const mxfUInt64 position)
+void seek64(mxfFile infile, const mxfUInt64 position, int whence)
 {
-#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
-  // ISO says that fpos_t is opaque,
-  // on Windows fpos_t is a 64-bit integer.
-  fpos_t pos = position;
-  int status = fsetpos(infile, &pos);
-#elif defined(MXF_COMPILER_GCC_INTEL_LINUX) && defined(MXF_SEEKO)
-  int status = fseeko(infile, position, SEEK_SET);
+#if defined(MXF_COMPILER_GCC_INTEL_LINUX) && defined(MXF_SEEKO)
+  int status = fseeko(infile, position, whence);
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
-  int status = _fseek(infile, position, SEEK_SET);
+  int status = _fseek(infile, position, whence);
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
-  int status = _fseek(infile, position, SEEK_SET);
+  int status = _fseek(infile, position, whence);
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
-  int status = fseeko(infile, position, SEEK_SET);
+  int status = fseeko(infile, position, whence);
 #elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
-  int status = fseeko64(infile, position, SEEK_SET);
+  int status = fseeko64(infile, position, whence);
 #else
   long offset = static_cast<long>(position);
   if (position != static_cast<mxfUInt64>(offset)) {
     fatalError("Offset too large.\n");
   }
-  int status = fseek(infile, offset, SEEK_SET);
+  int status = fseek(infile, offset, whence);
 #endif
   if (status != 0) {
     fatalError("Failed to seek.\n");
   }
+}
+
+void setPosition(mxfFile infile, const mxfUInt64 position)
+{
+  seek64(infile, position, SEEK_SET);
 }
 
 size_t readBytes(mxfFile infile, void* buffer, size_t count)
@@ -499,16 +499,39 @@ size_t readBytes(mxfFile infile, void* buffer, size_t count)
   return fread(buffer, 1, count, infile);
 }
 
-mxfUInt64 getPosition(mxfFile infile)
+mxfUInt64 tell64(mxfFile infile)
 {
-  // NYI
-  return 0;
+#if defined(MXF_COMPILER_GCC_INTEL_LINUX) && defined(MXF_SEEKO)
+  mxfUInt64 result = ftello(infile);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
+  mxfUInt64 result = _ftell(infile);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
+  mxfUInt64 result = _ftell(infile);
+#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
+  mxfUInt64 result = ftello(infile);
+#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
+  mxfUInt64 result = ftello64(infile);
+#else
+  mxfUInt64 result = ftell(infile);
+#endif
+  if (result == (mxfUInt64)-1) {
+    fatalError("Failed to tell.\n");
+  }
+  return result;
 }
 
-mxfUInt64 size(mxfFile /* infile */)
+mxfUInt64 getPosition(mxfFile infile)
 {
-  // NYI
-  return 0;
+  return tell64(infile);
+}
+
+mxfUInt64 size(mxfFile infile)
+{
+  mxfUInt64 savedPosition = getPosition(infile);
+  seek64(infile, 0, SEEK_END);
+  mxfUInt64 result = getPosition(infile);
+  setPosition(infile, savedPosition);
+  return result;
 }
 #endif
 
