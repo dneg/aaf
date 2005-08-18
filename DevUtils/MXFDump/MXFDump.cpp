@@ -1233,7 +1233,7 @@ void printMxfLocalKeySymbol(mxfLocalKey& k, FILE* f)
     if (found) {
       fprintf(stdout, "%s\n", localKeyTable[i]._name);
     } else {
-      fprintf(stdout, "Dark\n");
+      fprintf(stdout, "Unknown\n");
     }
   } else {
     fprintf(stdout, "\n");
