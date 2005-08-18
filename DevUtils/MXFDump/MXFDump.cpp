@@ -3374,6 +3374,8 @@ typedef struct StreamTag {
 typedef std::map<mxfUInt32, Stream*> StreamSet;
 StreamSet streams;
 
+void printSegment(Segment* seg);
+
 void printSegment(Segment* seg)
 {
   fprintf(stdout,
@@ -3385,6 +3387,8 @@ void printSegment(Segment* seg)
           seg->_start,
           seg->_start + seg->_size); 
 }
+
+void printSegments(SegmentList& segments);
 
 void printSegments(SegmentList& segments)
 {
@@ -3400,6 +3404,8 @@ void printSegments(SegmentList& segments)
   }
 }
 
+void printStream(Stream* s);
+
 void printStream(Stream* s)
 {
   fprintf(stdout, "  SID = %08"MXFPRIu32", ", s->_sid);
@@ -3407,6 +3413,8 @@ void printStream(Stream* s)
   fprintf(stdout, " Size = %016"MXFPRIu64"\n", s->_size);
   printSegments(s->_segments);
 }
+
+void printStreams(StreamSet& streams);
 
 void printStreams(StreamSet& streams)
 {
@@ -3417,6 +3425,8 @@ void printStreams(StreamSet& streams)
   }
 }
 
+void destroyStream(Stream* s);
+
 void destroyStream(Stream* s)
 {
   SegmentList::const_iterator it;
@@ -3425,6 +3435,8 @@ void destroyStream(Stream* s)
     delete seg;
   }
 }
+
+void destroyStreams(StreamSet& streams);
 
 void destroyStreams(StreamSet& streams)
 {
