@@ -302,6 +302,9 @@ bool isFooter(mxfKey& key);
 bool isClosed(const mxfKey& key);
 bool isComplete(const mxfKey& key);
 
+bool isPrivateLabel(mxfKey& key);
+void printPrivateLabel(mxfKey& k, FILE* outfile);
+
 const char* keyName(const mxfKey& key);
 
 void printFill(mxfKey& k, mxfLength& len, mxfFile infile);
@@ -1444,6 +1447,54 @@ void printOperationalPattern(mxfKey& k, FILE* outfile)
   } else {
     fprintf(outfile, "[ Invalid ]");
   }
+}
+
+mxfByte privatePrefix[] = { 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01,
+                            0x0e};
+
+bool isPrivateLabel(mxfKey& k)
+{
+  bool result = false;
+  if (memcmp(&k, &privatePrefix, sizeof(privatePrefix)) == 0) {
+    result = true;
+  }
+  return result;
+}
+
+void printPrivateLabel(mxfKey& k, FILE* outfile)
+{
+  mxfByte organization = k[9];
+  char* name = "Unknown organization";
+  switch (organization) {
+  case 1:
+    name = "DOD";
+    break;
+  case 2:
+    name = "UAV";
+    break;
+  case 3:
+    name = "RQ1A";
+    break;
+  case 4:
+    name = "Avid";
+    break;
+  case 5:
+    name = "CNN";
+    break;
+  case 6:
+    name = "Sony";
+    break;
+  case 7:
+    name = "IdeasUnlimited.TV";
+    break;
+  case 8:
+    name = "IPV Ltd";
+    break;
+  case 9:
+    name = "Dolby Laboratories Inc.";
+    break;
+  }
+  fprintf(outfile, "[ Private - %s ]", name);
 }
 
 typedef std::map<mxfUInt16, const char *> tree;
