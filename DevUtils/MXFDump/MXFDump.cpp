@@ -249,6 +249,8 @@ void aafDumpFile(mxfFile infile);
 bool lookupKey(mxfKey& k, size_t& index);
 bool isEssenceElement(mxfKey& k);
 
+void checkKey(mxfKey& k);
+bool isNullKey(mxfKey& k);
 bool isDark(mxfKey& k, Mode mode);
 bool isFill(mxfKey& k);
 
@@ -2449,6 +2451,15 @@ mxfUInt64 checkLength(mxfUInt64 length, mxfUInt64 fileSize, mxfUInt64 position)
   return result;
 }
 
+void checkKey(mxfKey& k)
+{
+  if (isNullKey(k)) {
+    error("Null key at offset 0x%"MXFPRIx64".\n",
+          keyPosition);
+    errors = errors + 1;
+  }
+}
+
 bool isDark(mxfKey& k, Mode mode)
 {
   char* flag;
@@ -2498,8 +2509,6 @@ void printFill(mxfKey& k, mxfLength& len, mxfFile infile)
     skipV(len, infile);
   }
 }
-
-bool isNullKey(mxfKey& k);
 
 bool isNullKey(mxfKey& k)
 {
@@ -3077,6 +3086,7 @@ void klvDumpFile(mxfFile infile)
 { 
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
+    checkKey(k);
     mxfLength len;
     readMxfLength(len, infile);
     printKL(k, len);
@@ -3088,6 +3098,7 @@ void setDumpFile(mxfFile infile)
 {
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
+    checkKey(k);
     mxfLength len;
     readMxfLength(len, infile);
 
@@ -3097,9 +3108,6 @@ void setDumpFile(mxfFile infile)
       printFill(k, len, infile);
     } else if (isEssenceElement(k)) {
       printEssenceElement(k, len, limitBytes, limit, infile);
-    } else if (isNullKey(k)) {
-      printKL(k, len);
-      fatalError("Null key.\n");
     } else {
       printKL(k, len);
       printV(len, false, 0, infile);
@@ -3177,9 +3185,6 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
     printFill(k, len, infile);
   } else if (isEssenceElement(k)) {
     printEssenceElement(k, len, limitBytes, limit, infile);
-  } else if (isNullKey(k)) {
-    printKL(k, len);
-    fatalError("Null key.\n");
   } else {
     if (!isDark(k, mode) || dumpDark) {
       if (isLocalSet(k)) {
@@ -3200,6 +3205,7 @@ void mxfDumpFile(mxfFile infile)
 {
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
+    checkKey(k);
     mxfLength len;
     readMxfLength(len, infile);
     mxfDumpKLV(k, len, infile);
@@ -3221,6 +3227,7 @@ void aafDumpFile(mxfFile infile)
 {
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
+    checkKey(k);
     mxfLength len;
     readMxfLength(len, infile);
     aafDumpKLV(k, len, infile);
@@ -3234,6 +3241,7 @@ void klvValidate(mxfFile infile)
   mxfUInt64 fileSize = size(infile);
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
+    checkKey(k);
     mxfLength len;
     readMxfLength(len, infile);
     len = checkLength(len, fileSize, position(infile));
