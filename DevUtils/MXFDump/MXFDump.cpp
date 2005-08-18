@@ -109,6 +109,7 @@ void readMxfLocalKey(mxfLocalKey& k, FILE* f);
 void reorder(mxfUInt16& i);
 void reorder(mxfUInt32& i);
 void reorder(mxfUInt64& i);
+void reorder(aafUID& u);
 
 void printField(FILE* f, mxfUInt08& i);
 void printField(FILE* f, mxfUInt16& i);
@@ -293,6 +294,14 @@ void reorder(mxfUInt64& i)
   temp = p[3];
   p[3] = p[4];
   p[4] = temp;
+}
+
+void reorder(aafUID& u)
+{
+  reorder(u.Data1);
+  reorder(u.Data2);
+  reorder(u.Data3);
+  // no need to reorder Data4
 }
 
 void printField(FILE* f, mxfUInt08& i)
@@ -993,7 +1002,12 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
       } else {
         if (aafKeysAsSets) {
           mxfKey x;
-          aafUIDToMxfKey(x, *reinterpret_cast<aafUID*>(&k));
+          aafUID u;
+          memcpy(&u, &k, sizeof(u));
+          if (reorder()) {
+            reorder(u);
+          }
+          aafUIDToMxfKey(x, u);
           found = lookupAAFKey(x, i);
           if (found) {
             fprintf(stdout, "%s +\n", aafKeyTable[i]._name);
@@ -1277,7 +1291,12 @@ bool isLocalSet(mxfKey& k)
     if (aafKeysAsSets) {
       size_t index;
       mxfKey x;
-      aafUIDToMxfKey(x, *reinterpret_cast<aafUID*>(&k));
+      aafUID u;
+      memcpy(&u, &k, sizeof(u));
+      if (reorder()) {
+        reorder(u);
+      }
+      aafUIDToMxfKey(x, u);
       bool found = lookupAAFKey(x, index);
       if (found) {
         result = true;
