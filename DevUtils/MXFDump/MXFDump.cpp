@@ -1386,6 +1386,49 @@ bool frames = false;
 bool iFlag = false;
 mxfUInt32 maxFrames = 0;
 
+void printEssenceFrameFill(mxfKey& k,
+                           mxfLength& length,
+                           mxfUInt32 frameCount,
+                           FILE* f);
+
+void printEssenceFrameFill(mxfKey& k,
+                           mxfLength& length,
+                           mxfUInt32 frameCount,
+                           FILE* f)
+{
+  if ((frameCount < maxFrames) || !iFlag) {
+    printFill(k, length, f);
+  } else {
+    skipV(length, f);
+  }
+}
+
+void printEssenceFrameValue(mxfKey& k,
+                            mxfLength& length,
+                            mxfUInt32 frameCount,
+                            bool lFlag,
+                            mxfUInt32 limit,
+                            FILE* f);
+
+void printEssenceFrameValue(mxfKey& k,
+                            mxfLength& length,
+                            mxfUInt32 frameCount,
+                            bool lFlag,
+                            mxfUInt32 limit,
+                            FILE* f)
+{
+  if ((frameCount < maxFrames) || !iFlag) {
+    fprintf(stdout, "\n");
+    fprintf(stdout, "Frame ");
+    printField(stdout, frameCount);
+
+    printKL(k, length);
+    printV(length, lFlag, limit, f);
+  } else {
+    skipV(length, f);
+  }
+}
+
 void printEssenceFrames(mxfKey& k,
                         mxfLength& length,
                         bool lFlag,
@@ -1410,22 +1453,9 @@ void printEssenceFrames(mxfKey& k,
     total = total + lengthLen;
 
     if (isFill(k)) {
-      if ((frameCount < maxFrames) || !iFlag) {
-        printFill(k, len, f);
-      } else {
-        skipV(len, f);
-      }
+      printEssenceFrameFill(k, len, frameCount, f);
     } else {
-      if ((frameCount < maxFrames) || !iFlag) {
-        fprintf(stdout, "\n");
-        fprintf(stdout, "Frame ");
-        printField(stdout, frameCount);
-
-        printKL(k, len);
-        printV(len, lFlag, limit, f);
-      } else {
-        skipV(len, f);
-      }
+      printEssenceFrameValue(k, len, frameCount, lFlag, limit, f);
       frameCount = frameCount + 1;
     }
     total = total + len;
