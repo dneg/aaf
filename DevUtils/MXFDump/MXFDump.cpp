@@ -2184,10 +2184,10 @@ void printObjectDirectory(mxfKey& k, mxfLength& len, FILE* infile)
   mxfUInt08 entrySize;
   readMxfUInt08(entrySize, infile);
 
-  fprintf(stdout, "  [ Root = ");
+  fprintf(stdout, "  [ Root              = ");
   printMxfKey(rootInstance, stdout);
   fprintf(stdout, ",\n");
-  fprintf(stdout, "    Root offset = ");
+  fprintf(stdout, "    Root offset       = ");
   printHexField(stdout, rootOffset);
   fprintf(stdout, ",\n");
   fprintf(stdout, "    Number of entries = ");
