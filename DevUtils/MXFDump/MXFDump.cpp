@@ -5494,34 +5494,34 @@ void printMetaDictionary(mxfKey& /* k */, mxfLength& len, mxfFile infile)
     case 0x20:
       dumpExtensionProperty(infile);
       break;
-    case 0x31: // Integer
+    case 0x31:
       dumpExtensionTypeInteger(infile);
       break;
-    case 0x32: // Character
+    case 0x32:
       dumpExtensionTypeCharacter(infile);
       break;
-    case 0x33: // StrongObjectReference
+    case 0x33:
       dumpExtensionTypeStrongObjectReference(infile);
       break;
       // WeakObjectReference   = 34
       // Rename                = 35
-    case 0x36: // Enumerated
+    case 0x36:
       dumpExtensionTypeEnumerated(infile);
       break;
       // FixedArray            = 37
-    case 0x38: // VaryingArray
+    case 0x38:
       dumpExtensionTypeVaryingArray(infile);
       break;
-    case 0x39: // Set
+    case 0x39:
       dumpExtensionTypeSet(infile);
       break;
-    case 0x3a: // Record
+    case 0x3a:
       dumpExtensionTypeRecord(infile);
       break;
-    case 0x3b: // Stream
+    case 0x3b:
       dumpExtensionTypeStream(infile);
       break;
-    case 0x3c: // String
+    case 0x3c:
       dumpExtensionTypeString(infile);
       break;
       // ExtendibleEnumeration = 3d
