@@ -575,6 +575,13 @@ void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
   flush();
 }
 
+void printEssence(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f);
+
+void printEssence(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
+{
+  printV(length, lFlag, limit, f);
+}
+
 void skipV(mxfLength& length, FILE* f);
 
 void skipV(mxfLength& length, FILE* f)
@@ -694,7 +701,24 @@ bool isLocalSet(mxfKey& k)
   return result;
 }
 
+bool isEssenceElement(mxfKey& k);
+
+bool isEssenceElement(mxfKey& k)
+{
+  mxfKey ee = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01,
+               0x0d, 0x01, 0x03, 0x01, 0xff, 0xff, 0xff, 0xff};
+  bool result;
+  if (memcmp(&k, &ee, 12) == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 bool dumpFiller = false;
+bool lFlag;
+mxfUInt32 limit = 0;
 
 void mxfDumpFile(char* fileName);
 
@@ -723,6 +747,8 @@ void mxfDumpFile(char* fileName)
       dumpPrimer(infile);
     } else if ((memcmp(&Filler, &k, sizeof(mxfKey)) == 0) && !dumpFiller) {
       skipV(len, infile);
+    } else if (isEssenceElement(k)) {
+      printEssence(len, lFlag, limit, infile);
     } else {
       printV(len, false, 0, infile);
     }
@@ -732,8 +758,6 @@ void mxfDumpFile(char* fileName)
 
 bool verbose = false;
 bool debug = false;
-bool lFlag;
-mxfUInt32 limit = 0;
 
 void klvDumpFile(char* fileName);
 
