@@ -192,8 +192,6 @@ mxfUInt64 position(mxfFile infile);
 size_t read(mxfFile infile, void* buffer, size_t count);
 mxfUInt64 size(mxfFile infile);
 
-bool endOfFile(mxfFile infile);
-
 void skipBytes(const mxfUInt64 byteCount, mxfFile infile);
 
 void readMxfUInt08(mxfByte& b, mxfFile infile);
@@ -548,11 +546,6 @@ mxfUInt64 size(mxfFile infile)
 }
 #endif
 
-bool endOfFile(mxfFile infile)
-{
-  return position(infile) == size(infile);
-}
-
 void skipBytes(const mxfUInt64 byteCount, mxfFile infile)
 {
   setPosition(infile, position(infile) + byteCount);
@@ -621,7 +614,7 @@ bool readOuterMxfKey(mxfKey& k, mxfFile infile)
   int c = read(infile, &k, sizeof(mxfKey));
   if (c == sizeof(mxfKey)) {
     result = true;
-  } else if ((c == 0) && (endOfFile(infile)) ){
+  } else if (c == 0) {
     result = false;
   } else {
     fatalError("Failed to read key.\n");
