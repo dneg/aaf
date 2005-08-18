@@ -1411,6 +1411,7 @@ void dumpExtensionProperty(const char* label, mxfFile infile)
 
   dumpMxfLabel("type", infile);
   dumpMxfBoolean("optional/required", "optional", "required", infile);
+  dumpMxfLabel("member of", infile);
 }
 
 void dumpExtensionTypeInteger(const char* label, mxfFile infile)
