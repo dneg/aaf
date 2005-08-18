@@ -33,6 +33,9 @@
 #elif defined(__GNUC__) && defined(__i386__) && defined(__FreeBSD__)
 #define MXF_COMPILER_GCC_INTEL_FREEBSD
 #define MXF_OS_UNIX
+#elif defined(__GNUC__) && defined(__i386__) && defined(__CYGWIN__)
+#define MXF_COMPILER_GCC_INTEL_CYGWIN
+#define MXF_OS_UNIX
 #else
 #error "Unknown compiler"
 #endif
@@ -130,6 +133,20 @@ typedef unsigned long long int mxfUInt64;
 #define MXFPRIx32 "lx"
 #define MXFPRIx64 "llx"
 #elif defined (MXF_COMPILER_GCC_INTEL_FREEBSD)
+typedef unsigned char          mxfUInt08;
+typedef unsigned short int     mxfUInt16;
+typedef unsigned long int      mxfUInt32;
+typedef unsigned long long int mxfUInt64;
+
+#define MXFPRIu08 "u"
+#define MXFPRIu16 "hu"
+#define MXFPRIu32 "lu"
+#define MXFPRIu64 "llu"
+#define MXFPRIx08 "x"
+#define MXFPRIx16 "hx"
+#define MXFPRIx32 "lx"
+#define MXFPRIx64 "llx"
+#elif defined(MXF_COMPILER_GCC_INTEL_CYGWIN)
 typedef unsigned char          mxfUInt08;
 typedef unsigned short int     mxfUInt16;
 typedef unsigned long int      mxfUInt32;
