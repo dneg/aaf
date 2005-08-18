@@ -1778,6 +1778,9 @@ mxfByte opPrefix1[] =
 mxfByte opPrefix2[] =
 {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x02, 0x0d, 0x01, 0x02, 0x01};
 
+mxfByte opPrefix3[] =
+{0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x03, 0x0d, 0x01, 0x02, 0x01};
+
 bool isOperationalPattern(mxfKey& k);
 
 bool isOperationalPattern(mxfKey& k)
@@ -1786,6 +1789,8 @@ bool isOperationalPattern(mxfKey& k)
   if (memcmp(&k, &opPrefix1, sizeof(opPrefix2)) == 0) {
     result = true;
   } else if (memcmp(&k, &opPrefix2, sizeof(opPrefix2)) == 0) {
+    result = true;
+  } else if (memcmp(&k, &opPrefix3, sizeof(opPrefix3)) == 0) {
     result = true;
   } else if (isPrivateLabel(k)) {
     result = true;
@@ -1894,6 +1899,7 @@ void printOperationalPattern(mxfKey& k, FILE* outfile)
 
 mxfByte pvtPrefix1[] = {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01, 0x0e};
 mxfByte pvtPrefix2[] = {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x02, 0x0e};
+mxfByte pvtPrefix3[] = {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x03, 0x0e};
 
 bool isPrivateLabel(mxfKey& k)
 {
@@ -1901,6 +1907,8 @@ bool isPrivateLabel(mxfKey& k)
   if (memcmp(&k, &pvtPrefix1, sizeof(pvtPrefix1)) == 0) {
     result = true;
   } else if (memcmp(&k, &pvtPrefix2, sizeof(pvtPrefix2)) == 0) {
+    result = true;
+  } else if (memcmp(&k, &pvtPrefix3, sizeof(pvtPrefix3)) == 0) {
     result = true;
   }
   return result;
