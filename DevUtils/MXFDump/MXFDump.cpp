@@ -1202,6 +1202,8 @@ void dumpMxfOperationalPattern(const char* label, mxfFile infile)
 mxfByte opPrefix[] =
 {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01, 0x0d, 0x01, 0x02, 0x01};
 
+bool isOperationalPattern(mxfKey& k);
+
 bool isOperationalPattern(mxfKey& k)
 {
   bool result = false;
@@ -1210,6 +1212,8 @@ bool isOperationalPattern(mxfKey& k)
   }
   return result;
 }
+
+void printGeneralizedOperationalPattern(mxfKey& k, FILE* outfile);
 
 void printGeneralizedOperationalPattern(mxfKey& k, FILE* outfile)
 {
@@ -1252,11 +1256,15 @@ void printGeneralizedOperationalPattern(mxfKey& k, FILE* outfile)
   }
 }
 
+void printAtomOperationalPattern(mxfKey& /* k */, FILE* outfile);
+
 void printAtomOperationalPattern(mxfKey& /* k */, FILE* outfile)
 {
   // tjb - should check for specific Atom patterns
   fprintf(outfile, "[ Specialized - Atom ]");
 }
+
+void printSpecializedOperationalPattern(mxfKey& k, FILE* outfile);
 
 void printSpecializedOperationalPattern(mxfKey& k, FILE* outfile)
 {
@@ -1460,12 +1468,16 @@ struct AAFKey {
 
 size_t aafKeyTableSize = (sizeof(aafKeyTable)/sizeof(aafKeyTable[0])) - 1;
 
+int compareKey(const void* k1, const void* k2);
+
 int compareKey(const void* k1, const void* k2)
 {
   const char* n1 = (*(Key**)k1)->_name;
   const char* n2 = (*(Key**)k2)->_name;
   return strcmp(n1, n2);
 }
+
+void dumpKeyTable(void);
 
 void dumpKeyTable(void)
 {
@@ -1484,12 +1496,16 @@ void dumpKeyTable(void)
     delete [] t;
 }
 
+int compareAAFKey(const void* k1, const void* k2);
+
 int compareAAFKey(const void* k1, const void* k2)
 {
   const char* n1 = (*(AAFKey**)k1)->_name;
   const char* n2 = (*(AAFKey**)k2)->_name;
   return strcmp(n1, n2);
 }
+
+void dumpAAFKeyTable(void);
 
 void dumpAAFKeyTable(void)
 {
@@ -2825,6 +2841,12 @@ void printEssenceElement(mxfKey& k,
                          mxfLength& length,
                          bool limitBytes,
                          mxfUInt32 limit,
+                         mxfFile infile);
+
+void printEssenceElement(mxfKey& k,
+                         mxfLength& length,
+                         bool limitBytes,
+                         mxfUInt32 limit,
                          mxfFile infile)
 {
   if (frames) {
@@ -2890,7 +2912,13 @@ void checkLocalKey(mxfLocalKey& k)
   }
 }
 
-mxfUInt64 checkLength(mxfUInt64 length, mxfUInt64 fileSize, mxfUInt64 position)
+mxfUInt64 checkLength(mxfUInt64 length,
+                      mxfUInt64 fileSize,
+                      mxfUInt64 position);
+
+mxfUInt64 checkLength(mxfUInt64 length,
+                      mxfUInt64 fileSize,
+                      mxfUInt64 position)
 {
   mxfUInt64 result;
   mxfUInt64 remainder = fileSize - position;
@@ -4286,6 +4314,8 @@ void aafValidate(mxfFile /* infile */)
   }
 }
 
+void mxfValidateFile(Mode mode, mxfFile infile);
+
 void mxfValidateFile(Mode mode, mxfFile infile)
 {
   switch (mode) {
@@ -4395,6 +4425,8 @@ int getIntegerOption(int currentArgument,
   }
   return result;
 }
+
+void printSummary(void);
 
 void printSummary(void)
 {
