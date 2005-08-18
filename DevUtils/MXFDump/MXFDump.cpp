@@ -3292,7 +3292,15 @@ void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
 #endif
   // Check that we have the correct number of partitions.
   //
-  // NYI
+  size_t expectedPartitions = partitions.size();
+  size_t actualPartitions = rip.size();
+  if (actualPartitions != expectedPartitions) {
+    mxfError("Invalid random index - incorrect partition count"
+             " (partitions in file = %"MXFPRIu32","
+             " partitions in random index = %"MXFPRIu32").\n",
+             expectedPartitions,
+             actualPartitions);
+  }
 
   // Check that the partitions in the random index are in the correct order.
   //
