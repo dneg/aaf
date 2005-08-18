@@ -1340,15 +1340,20 @@ void dumpMxfOperationalPattern(const char* label, mxfFile infile)
   fprintf(stdout, "\n");
 }
 
-mxfByte opPrefix[] =
+mxfByte opPrefix1[] =
 {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01, 0x0d, 0x01, 0x02, 0x01};
+
+mxfByte opPrefix2[] =
+{0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x02, 0x0d, 0x01, 0x02, 0x01};
 
 bool isOperationalPattern(mxfKey& k);
 
 bool isOperationalPattern(mxfKey& k)
 {
   bool result = false;
-  if (memcmp(&k, &opPrefix, sizeof(opPrefix)) == 0) {
+  if (memcmp(&k, &opPrefix1, sizeof(opPrefix2)) == 0) {
+    result = true;
+  } else if (memcmp(&k, &opPrefix2, sizeof(opPrefix2)) == 0) {
     result = true;
   }
   return result;
