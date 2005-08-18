@@ -1705,7 +1705,7 @@ void mxfDumpFile(char* fileName)
       // Preface
       // Identification
       // ContentStorage
-      // EssencComtainerData
+      // EssenceContainerData
       // MaterialPackage
       // SourcePackage
       // Track
@@ -1724,6 +1724,8 @@ void mxfDumpFile(char* fileName)
       // MultipleDescriptor
       // NetworkLocator
       // TextLocator
+      // SystemMetadata
+      //
     } else if (memcmp(&IndexTable, &k, sizeof(mxfKey)) == 0) {
       printIndexTable(k, len, infile);
     } else if (isLocalSet(k)) {
