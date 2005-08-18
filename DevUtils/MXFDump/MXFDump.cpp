@@ -61,6 +61,45 @@ const char* baseName(char* pathName)
   return result;
 }
 
+void readMxfLength(mxfLength& l, FILE* f);
+
+void readMxfLength(mxfLength& l, FILE* f)
+{
+  int c = fread(&l, sizeof(mxfLength), 1, f);
+  if (c != 1) {
+    cerr << programName << " : Error : Failed to read length" << endl;
+    exit(EXIT_FAILURE);
+  }
+}
+
+void printMxfLength(mxfLength& l);
+
+void printMxfLength(mxfLength& l)
+{
+  cout << l;
+}
+
+void readMxfKey(mxfKey& k, FILE* f);
+
+void readMxfKey(mxfKey& k, FILE* f)
+{
+  int c = fread(&k, sizeof(mxfKey), 1, f);
+  if (c != 1) {
+    cerr << programName << " : Error : Failed to read key" << endl;
+    exit(EXIT_FAILURE);
+  }
+}
+
+void printMxfKey(mxfKey& k);
+
+void printMxfKey(mxfKey& k)
+{
+  for (size_t i = 0; i < sizeof(mxfKey); i++) {
+    unsigned int b = k[i];
+    cout << b;
+  }
+}
+
 void mxfDumpFile(char* fileName);
 
 void mxfDumpFile(char* /* fileName */)
@@ -84,12 +123,21 @@ void rawDumpFile(char* fileName)
 
   while (!feof(infile)) {
     mxfKey k;
-    fread(&k, sizeof(mxfKey), 1, infile);
+    readMxfKey(k, infile);
+    printMxfKey(k);
+    cout << "  ";
     mxfLength len;
-    fread(&len, sizeof(mxfLength), 1, infile);
+    readMxfLength(len, infile);
+    printMxfLength(len);
+    cout << endl;
+
     for (mxfLength i = 0; i < len; i++) {
       unsigned char ch;
-      fread(&ch, sizeof(unsigned char), 1, infile);
+      int c = fread(&ch, sizeof(unsigned char), 1, infile);
+      if (c != 1) {
+        cerr << programName << " : Error : Failed to read key" << endl;
+        exit(EXIT_FAILURE);
+      }
     }
   }
   fclose(infile);
