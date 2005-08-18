@@ -1487,10 +1487,16 @@ void decodeAES3BWF(mxfUInt32 tag2, FILE* outfile)
 {
   switch (tag2) {
   case 0x0100:
-    fprintf(outfile, " - AES/BWF (frame wrapped)");
+    fprintf(outfile, " - BWF (frame wrapped)");
     break;
   case 0x0200:
-    fprintf(outfile, " - AES/BWF (clip wrapped)");
+    fprintf(outfile, " - BWF (clip wrapped)");
+    break;
+  case 0x0300:
+    fprintf(outfile, " - AES3 (frame wrapped)");
+    break;
+  case 0x0400:
+    fprintf(outfile, " - AES3 (clip wrapped)");
     break;
   default:
     fprintf(outfile, " - Not recognized");
