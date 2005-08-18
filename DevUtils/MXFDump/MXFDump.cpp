@@ -102,8 +102,8 @@ void readMxfUInt64(mxfUInt64& i, FILE* f);
 void readMxfRational(mxfRational& r, FILE* f);
 void readMxfKey(mxfKey& k, FILE* f);
 bool readOuterMxfKey(mxfKey& k, FILE* f);
-void readBERLength(mxfUInt64& i, FILE* f);
-void readMxfLength(mxfLength& l, FILE* f);
+int readBERLength(mxfUInt64& i, FILE* f);
+int readMxfLength(mxfLength& l, FILE* f);
 void readMxfLocalKey(mxfLocalKey& k, FILE* f);
 
 void reorder(mxfUInt16& i);
@@ -224,10 +224,12 @@ bool readOuterMxfKey(mxfKey& k, FILE* f)
   return result;
 }
 
-void readBERLength(mxfUInt64& i, FILE* f)
+int readBERLength(mxfUInt64& i, FILE* f)
 {
+  int bytesRead = 0;
   mxfUInt08 b;
   readMxfUInt08(b, f);
+  bytesRead = bytesRead + 1;
   if (b == 0x80) {
     // unknown length
     i = 0;
@@ -240,17 +242,20 @@ void readBERLength(mxfUInt64& i, FILE* f)
     i = 0;
     for (int k = 0; k < length; k++) {
       readMxfUInt08(b, f);
+      bytesRead = bytesRead + 1;
       i = i << 8;
       i = i + b;
     }
   }
+  return bytesRead;
 }
 
-void readMxfLength(mxfLength& l, FILE* f)
+int readMxfLength(mxfLength& l, FILE* f)
 {
   mxfUInt64 x;
-  readBERLength(x, f);
+  int bytesRead = readBERLength(x, f);
   l = x;
+  return bytesRead;
 }
 
 void readMxfLocalKey(mxfLocalKey& k, FILE* f)
@@ -1366,7 +1371,8 @@ void printEssenceFrames(mxfKey& k,
     mxfKey k;
     readMxfKey(k, f);
     mxfLength len;
-    readMxfLength(len, f);
+    int lengthLen = readMxfLength(len, f);
+    total = total + lengthLen;
     printKL(k, len);
     printV(len, lFlag, limit, f);
     total = total + len;
