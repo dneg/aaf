@@ -1452,7 +1452,10 @@ char* elementTypeName(mxfByte itemTypeId, mxfByte type);
 char* elementTypeName(mxfByte itemTypeId, mxfByte type)
 {
   char* result = "Unknown";
-  if ((itemTypeId == 0x05) || (itemTypeId == 0x06) || (itemTypeId == 0x07)) {
+  switch (itemTypeId) {
+  case 0x05:
+  case 0x06:
+  case 0x07:
     if (type == 0x00) {
       result = "Illegal";
     } else if ((type >= 0x01) && (type <= 0x0f)) {
@@ -1474,6 +1477,9 @@ char* elementTypeName(mxfByte itemTypeId, mxfByte type)
     } else if ((type >= 0x80) && (type <= 0xff)) {
       result = "System";
     }
+    break;
+  default:
+    break;
   }
   return result;
 }
