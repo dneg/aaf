@@ -1367,6 +1367,8 @@ bool isOperationalPattern(mxfKey& k)
     result = true;
   } else if (memcmp(&k, &opPrefix2, sizeof(opPrefix2)) == 0) {
     result = true;
+  } else if (isPrivateLabel(k)) {
+    result = true;
   }
   return result;
 }
