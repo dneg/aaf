@@ -2947,8 +2947,7 @@ struct {
   {"Index Start Position", 0x3f0c},
   {"Index Duration",       0x3f0d},
   {"PosTableCount",        0x3f0e},
-  // File Descriptor
-  {"Linked Track ID",      0x3006},
+  //
   // Multiple Descriptor
   {"Sub Descriptor UIDs",  0x3f01},
   // Generic Sound Essence Descriptor
