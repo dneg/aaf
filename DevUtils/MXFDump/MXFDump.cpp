@@ -3151,13 +3151,13 @@ void skipBogusBytes(const mxfUInt64 byteCount, mxfFile infile)
   printV(length, false, 0, infile);
 }
 
-void printLocalKey(mxfLocalKey& identifier,
-                   mxfLength& remainder,
-                   mxfFile infile);
+void validateLocalKey(mxfLocalKey& identifier,
+                      mxfLength& remainder,
+                      mxfFile infile);
 
-void printLocalKey(mxfLocalKey& identifier,
-                   mxfLength& remainder,
-                   mxfFile infile)
+void validateLocalKey(mxfLocalKey& identifier,
+                      mxfLength& remainder,
+                      mxfFile infile)
 {
   if (remainder > 2) {
     readMxfLocalKey(identifier, infile);
@@ -3202,7 +3202,7 @@ void printLocalSet(mxfKey& k, mxfLength& len, mxfFile infile)
   while (remainder > 0) {
     // Key (local identifier)
     mxfLocalKey identifier;
-    printLocalKey(identifier, remainder, infile);
+    validateLocalKey(identifier, remainder, infile);
     if (remainder == 0) {
       break;
     }
