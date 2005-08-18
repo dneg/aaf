@@ -38,6 +38,33 @@
 #include <console.h>
 #endif
 
+#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
+typedef unsigned char          mxfUInt08;
+typedef unsigned short int     mxfUInt16;
+typedef unsigned int           mxfUInt32;
+typedef unsigned _int64        mxfUInt64;
+#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
+typedef unsigned char          mxfUInt08;
+typedef unsigned short int     mxfUInt16;
+typedef unsigned long int      mxfUInt32;
+typedef unsigned long long int mxfUInt64;
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
+typedef unsigned char          mxfUInt08;
+typedef unsigned short int     mxfUInt16;
+typedef unsigned long int      mxfUInt32;
+typedef unsigned long long int mxfUInt64;
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
+typedef unsigned char          mxfUInt08;
+typedef unsigned short int     mxfUInt16;
+typedef unsigned long int      mxfUInt32;
+typedef unsigned long long int mxfUInt64;
+#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
+typedef unsigned char          mxfUInt08;
+typedef unsigned short int     mxfUInt16;
+typedef unsigned long int      mxfUInt32;
+typedef unsigned long long int mxfUInt64;
+#endif
+
 typedef unsigned long int mxfLength;
 typedef unsigned char mxfKey[16];
 typedef unsigned char mxfByte;
