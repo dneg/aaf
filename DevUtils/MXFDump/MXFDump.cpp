@@ -3000,12 +3000,61 @@ void aafDumpFile(char* fileName)
   fclose(infile);
 }
 
-void mxfValidateFile(Mode /* mode */, char* /* fileName */)
+void klvValidate(FILE* infile);
+
+void klvValidate(FILE* /* infile */)
 {
-  fprintf(stderr,
-          "%s : Error : Validation not yet implemented.\n",
-          programName);
-  exit(EXIT_FAILURE);
+}
+
+void setValidate(FILE* infile);
+
+void setValidate(FILE* /* infile */)
+{
+}
+
+void mxfValidate(FILE* infile);
+
+void mxfValidate(FILE* /* infile */)
+{
+}
+
+void aafValidate(FILE* infile);
+
+void aafValidate(FILE* /* infile */)
+{
+}
+
+void mxfValidateFile(Mode mode, char* fileName)
+{
+  FILE* infile;
+
+  infile = fopen(fileName, "rb");
+  if (infile == NULL) {
+    fprintf(stderr,
+            "%s : Error : File \"%s\" not found.\n",
+            programName,
+            fileName);
+    exit(EXIT_FAILURE);
+  }
+
+  switch (mode) {
+  case aafValidateMode:
+    aafValidate(infile);
+    /* fall through */
+  case mxfValidateMode:
+    mxfValidate(infile);
+    /* fall through */
+  case setValidateMode:
+    setValidate(infile);
+    /* fall through */
+  case klvValidateMode:
+    klvValidate(infile);
+    break;
+  default:
+    /* Invalid mode ? */
+    break;
+  }
+  fclose(infile);
 }
 
 bool verbose = false;
