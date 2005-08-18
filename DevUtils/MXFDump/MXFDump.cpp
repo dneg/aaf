@@ -2634,19 +2634,57 @@ void printLocalSet(mxfKey& k, mxfLength& len, mxfFile infile)
   }
 }
 
-// In memory representatonof a partition
+// In-memory representaton of a partition
 typedef struct PartitionTag {
+  //
+  mxfUInt16 _majorVersion;
+  mxfUInt16 _minorVersion;
+  mxfUInt32 _KAGSize;
+  mxfUInt64 _thisPartition;
+  mxfUInt64 _previousPartition;
+  mxfUInt64 _footerPartition;
+  mxfUInt64 _headerByteCount;
+  mxfUInt64 _indexByteCount;
+  mxfUInt32 _indexSID;
+  mxfUInt64 _bodyOffset;
+  mxfUInt32 _bodySID;
+  mxfKey _operationalPattern;
+  //
   mxfUInt64 _address; // Actual file address
 } Partition;
 
 typedef std::list<Partition*> PartitionList;
 
-void readPartition(PartitionList& partitions);
+void readPartition(PartitionList& partitions, mxfFile infile);
 
-void readPartition(PartitionList& partitions)
+void readPartition(PartitionList& partitions, mxfFile infile)
 {
   Partition* p = new Partition;
+
   p->_address = keyPosition;
+
+  readMxfUInt16(p->_majorVersion, infile);
+  readMxfUInt16(p->_minorVersion, infile);
+  readMxfUInt32(p->_KAGSize, infile);
+  readMxfUInt64(p->_thisPartition, infile);
+  readMxfUInt64(p->_previousPartition, infile);
+  readMxfUInt64(p->_footerPartition, infile);
+  readMxfUInt64(p->_headerByteCount, infile);
+  readMxfUInt64(p->_indexByteCount, infile);
+  readMxfUInt32(p->_indexSID, infile);
+  readMxfUInt64(p->_bodyOffset, infile);
+  readMxfUInt32(p->_bodySID, infile);
+  readMxfKey(p->_operationalPattern, infile);
+
+  mxfUInt32 elementCount;
+  readMxfUInt32(elementCount, infile);
+  mxfUInt32 elementSize;
+  readMxfUInt32(elementSize, infile);
+  for (mxfUInt32 i = 0; i < elementCount; i++) {
+    mxfKey essence;
+    readMxfKey(essence, infile);
+  }
+
   partitions.push_back(p);
 }
 
@@ -3449,11 +3487,13 @@ void mxfValidate(mxfFile infile)
     len = checkLength(len, fileSize, position(infile));
     if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
       checkPrimerLength(len);
+      skipV(len, infile);
     } else if (isPartition(k)) {
       checkPartitionLength(len);
-      readPartition(p);
+      readPartition(p, infile);
+    } else {
+      skipV(len, infile);
     }
-    skipV(len, infile);
   }
 
   checkPartitions(p);
