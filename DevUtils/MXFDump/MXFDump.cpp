@@ -3021,7 +3021,7 @@ void printObjectDirectory(mxfKey& k, mxfLength& len, mxfFile infile)
 
   if (entryCount > 0) { 
     fprintf(stdout, "  Object");
-	fprintf(stdout, "                                           Offset");
+    fprintf(stdout, "                                           Offset");
     fprintf(stdout, "            Flags\n");
   }
 
