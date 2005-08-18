@@ -4869,6 +4869,8 @@ bool isRandomIndex(const mxfKey& key)
   bool result;
   if (memcmp(&RandomIndexMetadata, &key, sizeof(mxfKey)) == 0) {
     result = true;
+  } else if (memcmp(&V10RandomIndexMetadata, &key, sizeof(mxfKey)) == 0) {
+    result = true;
   } else {
     result = false;
   }
