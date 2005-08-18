@@ -2230,8 +2230,6 @@ void printEssenceKL(mxfKey& k, mxfLength& len);
 
 void printEssenceKL(mxfKey& k, mxfLength& len)
 {
-  printKL(k, len);
-
   mxfByte itemTypeId = k[12];
   mxfByte elementTypeId = k[14];
 
@@ -2482,8 +2480,13 @@ bool isDark(mxfKey& k, Mode mode)
   case mxfMode:
     result = !lookupKey(k, x);
     break;
-  case aafMode:
-    result = !findAAFKey(k, x, &flag);
+  case aafMode: {
+      bool found = lookupKey(k, x);
+      if (!found) {
+        found = findAAFKey(k, x, &flag);
+      }
+      result = !found;
+    }
     break;
   default:
     result = false;
@@ -2509,7 +2512,6 @@ bool isFill(mxfKey& k)
 
 void printFill(mxfKey& k, mxfLength& len, mxfFile infile)
 {
-  printKL(k, len);
   if (dumpFill) {
     printV(len, false, 0, infile);
   } else {
@@ -2608,7 +2610,6 @@ void printLocalSet(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void printLocalSet(mxfKey& k, mxfLength& len, mxfFile infile)
 {
-  printKL(k, len);
   mxfLength remainder = len;
   while (remainder > 0) {
     // Key (local identifier)
@@ -2666,8 +2667,6 @@ void printPartition(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void printPartition(mxfKey& k, mxfLength& len, mxfFile infile)
 {
-  printKL(k, len);
-
   dumpMxfUInt16("Major Version", infile);
   dumpMxfUInt16("Minor Version", infile);
   dumpMxfUInt32("KAGSize", infile);
@@ -2731,8 +2730,6 @@ void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
 {
-  printKL(k, len);
-
   mxfLength remainder = len;
   while (remainder > 0) {
     mxfLocalKey identifier;
@@ -2851,8 +2848,6 @@ void printV10IndexTable(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void printV10IndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
 {
-  printKL(k, len);
-
   mxfLength remainder = len;
   while (remainder > 0) {
     mxfLocalKey identifier;
@@ -2971,8 +2966,6 @@ void printPrimer(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void printPrimer(mxfKey& k, mxfLength& len, mxfFile infile)
 {
-  printKL(k, len);
-
   mxfUInt32 elementCount;
   readMxfUInt32(elementCount, infile);
   mxfUInt32 elementSize;
@@ -3005,7 +2998,6 @@ void printSystemMetadata(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void printSystemMetadata(mxfKey& k, mxfLength& len, mxfFile infile)
 {
-  printKL(k, len);
   printV(len, false, 0, infile);
 }
 
@@ -3013,8 +3005,6 @@ void printObjectDirectory(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void printObjectDirectory(mxfKey& k, mxfLength& len, mxfFile infile)
 {
-  printKL(k, len);
-
   mxfUInt64 entryCount;
   readMxfUInt64(entryCount, infile);
   mxfUInt08 entrySize;
@@ -3054,8 +3044,6 @@ void printRandomIndex(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void printRandomIndex(mxfKey& k, mxfLength& len, mxfFile infile)
 {
-  printKL(k, len);
-
   mxfUInt64 entryCount = len / (sizeof(mxfUInt32) + sizeof(mxfUInt64));
   fprintf(stdout, "  [ Number of entries = ");
   printField(stdout, entryCount );
@@ -3091,23 +3079,28 @@ void printV10RandomIndex(mxfKey& k, mxfLength& len, mxfFile infile)
 
 void klvDumpFile(mxfFile infile)
 { 
+  mxfUInt64 fileSize = size(infile);
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
     checkKey(k);
     mxfLength len;
     readMxfLength(len, infile);
     printKL(k, len);
+    len = checkLength(len, fileSize, position(infile));
     printV(len, limitBytes, limit, infile);
   }
 }
 
 void setDumpFile(mxfFile infile)
 {
+  mxfUInt64 fileSize = size(infile);
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
     checkKey(k);
     mxfLength len;
     readMxfLength(len, infile);
+    printKL(k, len);
+    len = checkLength(len, fileSize, position(infile));
 
     if (isLocalSet(k)) {
       printLocalSet(k, len, infile);
@@ -3116,7 +3109,6 @@ void setDumpFile(mxfFile infile)
     } else if (isEssenceElement(k)) {
       printEssenceElement(k, len, limitBytes, limit, infile);
     } else {
-      printKL(k, len);
       printV(len, false, 0, infile);
     }
   }
@@ -3199,7 +3191,6 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
       } else if (unknownKeysAsSets) {
         printLocalSet(k, len, infile);
       } else {
-        printKL(k, len);
         printV(len, false, 0, infile);
       }
     } else {
@@ -3210,11 +3201,16 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
 
 void mxfDumpFile(mxfFile infile)
 {
+  mxfUInt64 fileSize = size(infile);
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
     checkKey(k);
     mxfLength len;
     readMxfLength(len, infile);
+    if (isEssenceElement(k) || !isDark(k, mode) || dumpDark) {
+      printKL(k, len);
+    }
+    len = checkLength(len, fileSize, position(infile));
     mxfDumpKLV(k, len, infile);
   }
 }
@@ -3232,11 +3228,16 @@ void aafDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
 
 void aafDumpFile(mxfFile infile)
 {
+  mxfUInt64 fileSize = size(infile);
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
     checkKey(k);
     mxfLength len;
     readMxfLength(len, infile);
+    if (isEssenceElement(k) || !isDark(k, mode) || dumpDark) {
+      printKL(k, len);
+    }
+    len = checkLength(len, fileSize, position(infile));
     aafDumpKLV(k, len, infile);
   }
 }
