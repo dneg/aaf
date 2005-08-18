@@ -571,10 +571,10 @@ void markIndexEnd(mxfUInt64 endKeyPosition);
 void markEssenceSegmentStart(mxfUInt32 sid, mxfUInt64 essenceKeyPosition);
 void markEssenceSegmentEnd(mxfUInt64 endKeyPosition);
 
-void essenceSegment(mxfUInt32 sid,
-                    mxfKey& label,
-                    mxfUInt64 start,
-                    mxfUInt64 end);
+void newSegment(mxfUInt32 sid,
+                mxfKey& label,
+                mxfUInt64 start,
+                mxfUInt64 end);
 
 // Frame wrapped essence
 bool frames = false;     // if true, treat essence as frame wrapped.
@@ -3421,7 +3421,7 @@ void markEssenceSegmentStart(mxfUInt32 sid, mxfUInt64 essenceKeyPosition)
 void markEssenceSegmentEnd(mxfUInt64 endKeyPosition)
 {
   if (essenceSID != 0) {
-    essenceSegment(essenceSID, essenceLabel, essencePosition, endKeyPosition);
+    newSegment(essenceSID, essenceLabel, essencePosition, endKeyPosition);
     essenceSID = 0;
   }
 }
@@ -3508,10 +3508,10 @@ void destroyStreams(StreamSet& streams)
   }
 }
 
-void essenceSegment(mxfUInt32 sid,
-                    mxfKey& label,
-                    mxfUInt64 start,
-                    mxfUInt64 end)
+void newSegment(mxfUInt32 sid,
+                mxfKey& label,
+                mxfUInt64 start,
+                mxfUInt64 end)
 {
   Stream* s;
   StreamSet::const_iterator it = streams.find(sid);
