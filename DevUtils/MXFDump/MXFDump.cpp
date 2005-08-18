@@ -687,25 +687,38 @@ mxfUInt08 hostByteOrder(void)
                  {a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p}
 
 #define MXF_DEFINE_PACK_KEY(n, k)     const mxfKey n = k;
-#define MXF_DEFINE_SET_KEY(n, k)      const mxfKey n = k;
-#define MXF_DEFINE_SEGMENT_KEY(n, k)  const mxfKey n = k;
 #define MXF_DEFINE_KEY(n, k)          const mxfKey n = k;
+#define MXF_CLASS(name, id, parent, concrete) const mxfKey name = id;
 
 #include "MXFMetaDictionary.h"
+// keys not in MXFMetaDictionary.h
+const mxfKey ObjectDirectory = 
+  {0x96, 0x13, 0xb3, 0x8a, 0x87, 0x34, 0x87, 0x46,
+   0xf1, 0x02, 0x96, 0xf0, 0x56, 0xe0, 0x4d, 0x2a};
+const mxfKey SystemMetadata =
+  {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
+   0x0d, 0x01, 0x03, 0x01, 0x04, 0x01, 0x01, 0x00};
+const mxfKey BogusFill =
+  {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
+   0x03, 0x01, 0x02, 0x10, 0x01, 0x01, 0x01, 0x00};
+const mxfKey NullKey =
+  {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 // Define map key <-> key name
 
 #define MXF_DEFINE_PACK_KEY(n, k)     {#n, &n},
-#define MXF_DEFINE_SET_KEY(n, k)      {#n, &n},
-#define MXF_DEFINE_SEGMENT_KEY(n, k)  {#n, &n},
 #define MXF_DEFINE_KEY(n, k)          {#n, &n},
+#define MXF_CLASS(name, id, parent, concrete) {#name, &name},
 
 struct Key {
   const char* _name;
   const mxfKey* _key;
 } keyTable [] = {
 #include "MXFMetaDictionary.h"
-{"bogus", 0}
+  // keys not in MXFMetaDictionary.h
+  {"ObjectDirectory", &ObjectDirectory},
+  {"bogus", 0}
 };
 
 size_t keyTableSize = (sizeof(keyTable)/sizeof(keyTable[0])) - 1;
@@ -2053,7 +2066,7 @@ bool dumpFill = false;
 bool isFill(mxfKey& k)
 {
   bool result;
-  if (memcmp(&Fill, &k, sizeof(mxfKey)) == 0) {
+  if (memcmp(&KLVFill, &k, sizeof(mxfKey)) == 0) {
     result = true;
   } else if (memcmp(&BogusFill, &k, sizeof(mxfKey)) == 0) {
     result = true;
@@ -2530,15 +2543,15 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
             "%s : Error : Null key.\n",
             programName);
     exit(EXIT_FAILURE);
-  } else if (memcmp(&OpenHeaderPartition, &k, sizeof(mxfKey)) == 0) {
+  } else if (memcmp(&OpenHeader, &k, sizeof(mxfKey)) == 0) {
     printHeaderPartition(k, len, infile);
-  } else if (memcmp(&ClosedHeaderPartition, &k, sizeof(mxfKey)) == 0) {
+  } else if (memcmp(&ClosedHeader, &k, sizeof(mxfKey)) == 0) {
     printHeaderPartition(k, len, infile);
   } else if (memcmp(&OpenBodyPartition, &k, sizeof(mxfKey)) == 0) {
     printBodyPartition(k, len, infile);
   } else if (memcmp(&ClosedBodyPartition, &k, sizeof(mxfKey)) == 0) {
     printBodyPartition(k, len, infile);
-  } else if (memcmp(&ClosedFooterPartition, &k, sizeof(mxfKey)) == 0) {
+  } else if (memcmp(&Footer, &k, sizeof(mxfKey)) == 0) {
     printFooterPartition(k, len, infile);
   } else if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
     printPrimer(k, len, infile);
@@ -2572,7 +2585,7 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
     printSystemMetadata(k, len, infile);
   } else if (memcmp(&ObjectDirectory, &k, sizeof(mxfKey)) == 0) {
     printObjectDirectory(k, len, infile);
-  } else if (memcmp(&IndexTable, &k, sizeof(mxfKey)) == 0) {
+  } else if (memcmp(&V10IndexTableSegment, &k, sizeof(mxfKey)) == 0) {
     printIndexTable(k, len, infile);
   } else if (isFill(k)) {
     printFill(k, len, infile);
