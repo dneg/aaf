@@ -287,6 +287,30 @@ void readMxfByte(mxfByte& b, FILE* f)
   }
 }
 
+void reorder(mxfUInt16& i);
+
+void reorder(mxfUInt16& i)
+{
+  mxfUInt08* p = (mxfUInt08*)&i;
+  mxfUInt08 temp;
+
+  temp = p[0];
+  p[0] = p[1];
+  p[1] = temp;
+}
+
+void readMxfUInt16(mxfUInt16& i, FILE* f);
+
+void readMxfUInt16(mxfUInt16& i, FILE* f)
+{
+  int c = fread(&i, sizeof(mxfUInt16), 1, f);
+  if (c != 1) {
+    fprintf(stderr, "%s : Error : Failed to read mxfUInt16.\n", programName);
+    exit(EXIT_FAILURE);
+  }
+  reorder(i);
+}
+
 void readMxfLength(mxfLength& l, FILE* f);
 
 void readMxfLength(mxfLength& l, FILE* f)
@@ -371,13 +395,75 @@ void printMxfKey(mxfKey& k, FILE* f)
 
 void mxfDumpFile(char* fileName);
 
-void mxfDumpFile(char* /* fileName */)
+void mxfDumpFile(char* fileName)
 {
-  fprintf(stderr,
-          "%s : Error : --mxf-dump not yet implemented (try --klv-dump).\n",
-          programName);
-  printUsage();
-  exit(EXIT_FAILURE);
+  FILE* infile;
+
+  infile = fopen(fileName, "rb");
+  if (infile == NULL) {
+    fprintf(stderr,
+            "%s : Error : File \"%s\" not found.\n",
+            programName,
+            fileName);
+    exit(EXIT_FAILURE);
+  }
+
+  while (!feof(infile)) {
+    mxfKey k;
+    readMxfKey(k, infile);
+    fprintf(stdout, "[ k = ");
+    printMxfKey(k, stdout);
+    fprintf(stdout, ",  ");
+    mxfLength len;
+    readMxfLength(len, infile);
+    fprintf(stdout, "l = ");
+    printMxfLength(len, stdout);
+    fprintf(stdout, "]\n");
+
+    if (k[5] == 0x53) {
+      mxfLength setLength = 0;
+      while (setLength < len) {
+        mxfUInt16 identifier;
+        readMxfUInt16(identifier, infile);
+        mxfUInt16 length;
+        readMxfUInt16(length, infile);
+        setLength = setLength + 4;
+        fprintf(stdout,
+                "[ p = %04x, l = %d (%d)\n",
+                identifier,
+                length,
+                setLength);
+        init();
+        for (mxfUInt16 i = 0; i < length; i++) {
+          if ((setLength + i) == len) {
+            break;
+          }
+          mxfByte b;
+          readMxfByte(b, infile);
+          dumpByte(b);
+        }
+        flush();
+        setLength = setLength + length;
+        if (setLength > len) {
+            fprintf(stdout,
+                    "%s : Error : Wrong size (pid = %02x) size = %d (should be %d).\n",
+                    programName,
+                    identifier,
+                    length,
+                    length - (setLength - len));
+        }
+      }
+    } else {
+      init();
+      for (mxfUInt16 i = 0; i < len; i++) {
+        mxfByte b;
+        readMxfByte(b, infile);
+        dumpByte(b);
+      }
+      flush();
+    }
+  }
+  fclose(infile);
 }
 
 bool verbose = false;
