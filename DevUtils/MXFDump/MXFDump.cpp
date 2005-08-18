@@ -775,16 +775,19 @@ struct {
   mxfUInt16 _key;
 } localKeyTable [] = {
 #include "AAFMetaDictionary.h"
+  // All objects
   {"InstanceUID",          0x3c0a},
-  {"Index Edit Rate",      0x3f0b},
-  {"Index Start Position", 0x3f0c},
-  {"Index Duration",       0x3f0d},
+  // Index Table
   {"Edit Unit Byte Count", 0x3f05},
   {"IndexSID",             0x3f06},
   {"BodySID",              0x3f07},
   {"Slice Count",          0x3f08},
   {"Delta Entry Array",    0x3f09},
   {"Index Entry Array",    0x3f0a},
+  {"Index Edit Rate",      0x3f0b},
+  {"Index Start Position", 0x3f0c},
+  {"Index Duration",       0x3f0d},
+  // Sentinel
   {"bogus",                0x00}
 };
 
