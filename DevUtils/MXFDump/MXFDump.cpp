@@ -4615,11 +4615,13 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfPartition* footer)
              p->_address + headerPosition,
              "PreviousPartition");
   // FooterPartition
-  checkField(footer->_address,
-             p->_footerPartition,
-             p->_key,
-             p->_address + headerPosition,
-             "FooterPartition");
+  if (footer != 0) {
+    checkField(footer->_address,
+               p->_footerPartition,
+               p->_key,
+               p->_address + headerPosition,
+               "FooterPartition");
+  }
   // HeaderByteCount
   checkField(p->_metadataSize,
              p->_headerByteCount,
@@ -6192,11 +6194,10 @@ void mxfValidate(mxfFile infile)
   markMetadataEnd(fileSize);
   markIndexEnd(fileSize);
 
-  if (footer != 0) {
-    checkPartitions(p, footer);
-  } else {
+  if (footer == 0) {
     mxfError("No footer found.\n");
   }
+  checkPartitions(p, footer);
 
   if (!rip.empty()) {
     checkRandomIndex(rip, p);
