@@ -666,12 +666,32 @@ void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
   flush();
 }
 
+char* elementTypeName(mxfByte type);
+
+char* elementTypeName(mxfByte type)
+{
+  char* result;
+  if (type == 0x00) {
+    result = "Illegal";
+  } else if ((type >= 0x01) && (type <= 0x0f)) {
+    result = "Picture";
+  } else if ((type >= 0x10) && (type <= 0x1f)) {
+    result = "Audio";
+  } else if ((type >= 0x20) && (type <= 0x77)) {
+    result = "Auxilliary";
+  } else if ((type >= 0x78) && (type <= 0x7f)) {
+    result = "System";
+  } else if ((type >= 0x80) && (type <= 0xff)) {
+    result = "System";
+  }
+  return result;
+}
+
 void printEssenceKL(mxfKey& k, mxfLength& len);
 
 void printEssenceKL(mxfKey& k, mxfLength& len)
 {
   char* itemType;
-  char* typeName = "Unknown";
   switch (k[12]) {
   case 0x05:
     itemType = "CP Picture";
@@ -701,6 +721,7 @@ void printEssenceKL(mxfKey& k, mxfLength& len)
   int elementCount = k[13];
   int elementType = k[14];
   int elementNumber = k[15] + 1; // zero based
+  char* typeName = elementTypeName(elementType);
   fprintf(stdout, "\n");
   fprintf(stdout, "[ K = ");
   fprintf(stdout, "Essence");
