@@ -4610,7 +4610,7 @@ void checkFill(const mxfKey& key,
                const mxfKey& previousKey)
 {
   if (memcmp(&KLVFill, &previousKey, sizeof(mxfKey)) == 0) {
-    mxfWarning(key, keyPosition, "Consecutive fill items");
+    mxfError(key, keyPosition, "Consecutive fill items");
   }
 }
 
