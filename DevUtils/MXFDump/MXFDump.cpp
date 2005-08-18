@@ -68,7 +68,7 @@ typedef unsigned long long int mxfUInt64;
 typedef mxfUInt32 mxfLength;
 typedef mxfUInt08 mxfByte;
 typedef mxfByte mxfKey[16];
-typedef mxfUInt16 mxfLocalKey;
+typedef mxfByte  mxfLocalKey[2];
 
 mxfUInt08 hostByteOrder(void);
 
@@ -439,7 +439,7 @@ void printMxfKey(mxfKey& k, FILE* f)
 
 struct {
   const char* _name;
-  mxfLocalKey _key;
+  mxfUInt16 _key;
 } localKeyTable [] = {
 #include "AAFMetaDictionary.h"
 {"bogus", 0x00}
@@ -453,8 +453,12 @@ bool lookupLocalKey(mxfLocalKey& k, size_t& index);
 bool lookupLocalKey(mxfLocalKey& k, size_t& index)
 {
   bool result = false;
+  mxfUInt16 ik = reinterpret_cast<mxfUInt16&>(k);
+  if (reorder()) {
+    reorder(ik);
+  }
   for (size_t i = 0; i < localKeyTableSize; i++) {
-    if (localKeyTable[i]._key == k) {
+    if (localKeyTable[i]._key == ik) {
       index = i;
       result = true;
       break;
@@ -463,12 +467,28 @@ bool lookupLocalKey(mxfLocalKey& k, size_t& index)
   return result;
 }
 
+void readMxfLocalKey(mxfLocalKey& k, FILE* f);
+
+void readMxfLocalKey(mxfLocalKey& k, FILE* f)
+{
+  int c = fread(&k, sizeof(mxfLocalKey), 1, f);
+  if (c != 1) {
+    fprintf(stderr, "%s : Error : Failed to read local key.\n", programName);
+    exit(EXIT_FAILURE);
+  }
+}
+
 void printMxfLocalKey(mxfLocalKey& k, FILE* f);
 
 void printMxfLocalKey(mxfLocalKey& k, FILE* f)
 {
-  mxfByte* p = (mxfByte*)&k;
-  fprintf(f, "%02x.%02x", p[1], p[0]);
+  for (size_t i = 0; i < sizeof(mxfLocalKey); i++) {
+    unsigned int b = k[i];
+    fprintf(f, "%02x", b);
+    if (i < (sizeof(mxfLocalKey) - 1)) {
+      fprintf(f, ".");
+    }
+  }
 }
 
 bool symbolic = false;
@@ -557,8 +577,8 @@ void mxfDumpFile(char* fileName)
     if (k[5] == 0x53) {
       mxfLength setLength = 0;
       while (setLength < len) {
-        mxfUInt16 identifier;
-        readMxfUInt16(identifier, infile);
+        mxfLocalKey identifier;
+        readMxfLocalKey(identifier, infile);
         mxfUInt16 length;
         readMxfUInt16(length, infile);
         setLength = setLength + 4;
@@ -605,7 +625,7 @@ void mxfDumpFile(char* fileName)
       readMxfUInt32(elementSize, infile);
       for (mxfUInt32 j = 0; j < elementCount; j++) {
         mxfLocalKey identifier;
-        readMxfUInt16(identifier, infile);
+        readMxfLocalKey(identifier, infile);
         mxfKey longIdentifier;
         readMxfKey(longIdentifier, infile);
         fprintf(stdout, "  ");
