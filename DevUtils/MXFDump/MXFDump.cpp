@@ -560,36 +560,28 @@ void dumpMxfUInt08(const char* label, FILE* infile)
 {
   mxfUInt08 i;
   readMxfUInt08(i, infile);
-  fprintf(stdout, "%20s = ", label);
-  printHexField(stdout, i);
-  fprintf(stdout, "\n");
+  printMxfUInt08(stdout, label, i);
 }
 
 void dumpMxfUInt16(const char* label, FILE* infile)
 {
   mxfUInt16 i;
   readMxfUInt16(i, infile);
-  fprintf(stdout, "%20s = ", label);
-  printHexField(stdout, i);
-  fprintf(stdout, "\n");
+  printMxfUInt16(stdout, label, i);
 }
 
 void dumpMxfUInt32(const char* label, FILE* infile)
 {
   mxfUInt32 i;
   readMxfUInt32(i, infile);
-  fprintf(stdout, "%20s = ", label);
-  printHexField(stdout, i);
-  fprintf(stdout, "\n");
+  printMxfUInt32(stdout, label, i);
 }
 
 void dumpMxfUInt64(const char* label, FILE* infile)
 {
   mxfUInt64 i;
   readMxfUInt64(i, infile);
-  fprintf(stdout, "%20s = ", label);
-  printHexField(stdout, i);
-  fprintf(stdout, "\n");
+  printMxfUInt64(stdout, label, i);
 }
 
 void dumpMxfRational(const char* label, FILE* infile)
