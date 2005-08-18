@@ -3008,11 +3008,9 @@ void klvValidate(FILE* infile);
 void klvValidate(FILE* /* infile */)
 {
   if (verbose) {
-    fprintf(stderr, "%s : KLV validation       - ", programName);
-  }
-
-  if (verbose) {
-    fprintf(stderr, "not yet implemented.\n");
+    fprintf(stderr,
+            "%s : local set validation - not yet implemented.\n",
+            programName);
   }
 }
 
@@ -3021,11 +3019,9 @@ void setValidate(FILE* infile);
 void setValidate(FILE* /* infile */)
 {
   if (verbose) {
-    fprintf(stderr, "%s : local set validation - ", programName);
-  }
-
-  if (verbose) {
-    fprintf(stderr, "not yet implemented.\n");
+    fprintf(stderr,
+            "%s : KLV validation       - not yet implemented.\n",
+            programName);
   }
 }
 
@@ -3034,11 +3030,9 @@ void mxfValidate(FILE* infile);
 void mxfValidate(FILE* /* infile */)
 {
   if (verbose) {
-    fprintf(stderr, "%s : MXF validation       - ", programName);
-  }
-
-  if (verbose) {
-    fprintf(stderr, "not yet implemented.\n");
+    fprintf(stderr,
+            "%s : MXF validation       - not yet implemented.\n",
+            programName);
   }
 }
 
@@ -3047,11 +3041,9 @@ void aafValidate(FILE* infile);
 void aafValidate(FILE* /* infile */)
 {
   if (verbose) {
-    fprintf(stderr, "%s : AAF validation       - ", programName);
-  }
-
-  if (verbose) {
-    fprintf(stderr, "not yet implemented.\n");
+    fprintf(stderr,
+            "%s : AAF validation       - not yet implemented.\n",
+            programName);
   }
 }
 
