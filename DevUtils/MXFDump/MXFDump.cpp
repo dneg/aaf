@@ -5273,6 +5273,7 @@ void mxfDumpFile(mxfFile infile)
     if (isPartition(k)) {
       memcpy(&previousPartitionKey, &currentPartitionKey, sizeof(mxfKey));
       memcpy(&currentPartitionKey, &k, sizeof(mxfKey));
+      printObjectCount(previousPartitionKey);
     }
     checkKey(k);
     mxfLength len;
@@ -5284,6 +5285,7 @@ void mxfDumpFile(mxfFile infile)
     mxfDumpKLV(k, len, infile);
   }
   printDarkItems();
+  printObjectCount(currentPartitionKey);
 }
 
 void aafDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile);
