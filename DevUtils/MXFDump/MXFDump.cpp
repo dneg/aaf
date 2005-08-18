@@ -40,6 +40,24 @@ void printUsage(void)
                       << endl;
 }
 
+const char* baseName(char* pathName);
+
+const char* baseName(char* pathName)
+{
+  const char* result;
+  const int delimiter = '\\';
+  result = strrchr(pathName, delimiter);
+  if (result == 0) {
+    result = pathName;
+  } else if (strlen(result) == 0) {
+    result = pathName;
+  } else {
+    result++;
+  }
+
+  return result;
+}
+
 void dumpFile(char* fileName)
 { 
   FILE* infile;
@@ -72,7 +90,7 @@ void dumpFile(char* fileName)
 
 int main(int argumentCount, char* argumentVector[])
 {
-  programName = argumentVector[0];
+  programName = baseName(argumentVector[0]);
   checkSizes();
   int fileCount = argumentCount - 1;
   
