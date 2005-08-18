@@ -1526,7 +1526,7 @@ void printGeneralizedOperationalPattern(mxfKey& k, FILE* outfile)
      break;
     }
     // mxfByte qualifiers = k[14]; // tjb not yet decoded
-    fprintf(outfile, "[ %s, %s ]", itemCplxName, packageCplxName);
+    fprintf(outfile, "%s, %s", itemCplxName, packageCplxName);
   }
 }
 
@@ -1535,7 +1535,7 @@ void printAtomOperationalPattern(mxfKey& /* k */, FILE* outfile);
 void printAtomOperationalPattern(mxfKey& /* k */, FILE* outfile)
 {
   // tjb - should check for specific Atom patterns
-  fprintf(outfile, "[ Specialized - Atom ]");
+  fprintf(outfile, "Specialized - Atom");
 }
 
 void printSpecializedOperationalPattern(mxfKey& k, FILE* outfile);
@@ -1546,23 +1546,28 @@ void printSpecializedOperationalPattern(mxfKey& k, FILE* outfile)
   if (itemComplexity == 0x10) {
     printAtomOperationalPattern(k, outfile);
   } else {
-    fprintf(outfile, "[ Specialized - Unknown ]");
+    fprintf(outfile, "Specialized - Unknown");
   }
 }
 
 void printOperationalPattern(mxfKey& k, FILE* outfile)
 {
   if (isOperationalPattern(k)) {
+    fprintf(outfile, "[ ");
     mxfByte itemComplexity = k[12];
     if ((itemComplexity >= 1) && (itemComplexity <= 3)) {
       printGeneralizedOperationalPattern(k, outfile);
     } else if ((itemComplexity >= 0x10) && (itemComplexity <= 0x7f)) {
       printSpecializedOperationalPattern(k, outfile);
-    } else if (isPrivateLabel(k)) {
-       printPrivateLabel(k, outfile);
     } else {
-      fprintf(outfile, "[ Unknown ]");
+      fprintf(outfile, "Unknown");
     }
+    if (isPrivateLabel(k)) {
+      fprintf(outfile, " (");
+      printPrivateLabelName(k, outfile);
+      fprintf(outfile, ")");
+    }
+    fprintf(outfile, " ]");
   } else {
     fprintf(outfile, "[ Invalid ]");
   }
