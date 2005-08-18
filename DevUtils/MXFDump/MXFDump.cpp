@@ -1758,10 +1758,7 @@ void printEssence(mxfKey& k,
 
 void skipV(mxfLength& length, FILE* f)
 {
-  for (mxfLength i = 0; i < length; i++) {
-    mxfByte b;
-    readMxfUInt08(b, f);
-  }
+  movePosition(length, f);
 }
 
 void printLocalKL(mxfLocalKey& k, mxfUInt16& l, mxfKey& enclosing);
