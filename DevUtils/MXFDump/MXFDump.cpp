@@ -1244,31 +1244,49 @@ bool lookupLocalKey(mxfLocalKey& k, size_t& index)
 
 bool symbolic = true;
 
+void printMxfLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing);
+
+void printMxfLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing)
+{
+  if (isMxfKey(enclosing)) {
+    size_t i;
+    bool found = lookupLocalKey(k, i);
+    if (found) {
+      fprintf(stdout, "%s\n", localKeyTable[i]._name);
+    } else {
+      fprintf(stdout, "Unknown\n");
+    }
+  } else {
+    fprintf(stdout, "Unknown\n");
+  }
+}
+
+void printAAFLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing);
+
+void printAAFLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing)
+{
+  if (isAAFKey(enclosing)) {
+    size_t i;
+    bool found = lookupLocalKey(k, i);
+    if (found) {
+      fprintf(stdout, "%s\n", localKeyTable[i]._name);
+    } else {
+      fprintf(stdout, "Unknown\n");
+    }
+  } else {
+    fprintf(stdout, "Unknown\n");
+  }
+}
+
 void printMxfLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing, FILE* f);
 
 void printMxfLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing, FILE* f)
 {
   if (symbolic) {
     if (mode == aafMode) {
-      size_t i;
-      bool found = lookupLocalKey(k, i);
-      if (found) {
-        fprintf(stdout, "%s\n", localKeyTable[i]._name);
-      } else {
-        fprintf(stdout, "Unknown\n");
-      }
+      printAAFLocalKeySymbol(k, enclosing);
     } else if (mode == mxfMode) {
-      if (isMxfKey(enclosing)) {
-        size_t i;
-        bool found = lookupLocalKey(k, i);
-        if (found) {
-          fprintf(stdout, "%s\n", localKeyTable[i]._name);
-        } else {
-          fprintf(stdout, "Unknown\n");
-        }
-      } else {
-        fprintf(stdout, "Unknown\n");
-      }
+      printMxfLocalKeySymbol(k, enclosing);
     } else {
       fprintf(stdout, "Unknown\n");
     }
