@@ -445,9 +445,10 @@ void mxfDumpFile(char* fileName)
                 setLength);
         if (identifier == 0) {
           fprintf(stdout,
-                  "%s : Error : Illegal local key (%02x).\n",
-                  programName,
-                  identifier);
+                  "%s : Error : Illegal local key (",
+                  programName);
+          printMxfLocalKey(identifier, stdout);
+          fprintf(stdout, ").\n");
         }
         init();
         for (mxfUInt16 i = 0; i < length; i++) {
