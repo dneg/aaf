@@ -256,6 +256,7 @@ bool lookupMXFKey(mxfKey& k, size_t& index);
 bool lookupAAFKey(mxfKey& k, size_t& index);
 bool findAAFKey(mxfKey& k, size_t& index, char** flag);
 
+bool lookupMXFLocalKey(mxfLocalKey& k, size_t& index);
 bool lookupAAFLocalKey(mxfLocalKey& k, size_t& index);
 
 bool isEssenceElement(mxfKey& k);
@@ -1173,6 +1174,34 @@ struct Key {
 };
 
 size_t mxfKeyTableSize = (sizeof(mxfKeyTable)/sizeof(mxfKeyTable[0])) - 1;
+
+#define MXF_PROPERTY(name, id, tag, type, mandatory, isuid, container) \
+{#name, tag},
+
+struct {
+  const char* _name;
+  mxfUInt16 _key;
+} mxfLocalKeyTable [] = {
+#include "MXFMetaDictionary.h"
+  // Sentinel
+  {"bogus",                0x00}
+};
+
+size_t mxfLocalKeyTableSize =
+                    (sizeof(mxfLocalKeyTable)/sizeof(mxfLocalKeyTable[0])) - 1;
+
+bool lookupMXFLocalKey(mxfLocalKey& k, size_t& index)
+{
+  bool result = false;
+  for (size_t i = 0; i < mxfLocalKeyTableSize; i++) {
+    if (mxfLocalKeyTable[i]._key == k) {
+      index = i;
+      result = true;
+      break;
+    }
+  }
+  return result;
+}
 
 #define AAF_CLASS(name, id, parent, concrete) {#name, {0}, id},
 
