@@ -3956,6 +3956,14 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
     mxfWarning(p->_key,
                p->_address,
                "Partition is open and incomplete");
+  } else if (!isClosed(p->_key)) {
+    mxfWarning(p->_key,
+               p->_address,
+               "Partition is open");
+  } else if (!isComplete(p->_key)) {
+    mxfWarning(p->_key,
+               p->_address,
+               "Partition is incomplete");
   }
 }
 
