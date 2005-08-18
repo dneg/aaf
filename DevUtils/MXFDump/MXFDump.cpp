@@ -4137,6 +4137,10 @@ void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
       // Index Duration
       dumpMxfUInt64("Index Duration", infile);
       remainder = remainder - 8;
+    } else if (identifier == 0x3f0e) {
+      // Pos Table Count
+      dumpMxfUInt08("Pos Table Count", infile);
+      remainder = remainder - 1;
     } else {
       checkLocalKey(identifier);
       printLocalKL(identifier, length, k);
