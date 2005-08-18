@@ -1496,7 +1496,17 @@ void dumpExtensionTypeVaryingArray(mxfFile infile)
   fprintf(stdout, "]\n");
 }
 
-// Set
+void dumpExtensionTypeSet(mxfFile infile);
+
+void dumpExtensionTypeSet(mxfFile infile)
+{
+  fprintf(stdout, "set type = [\n");
+  dumpExtensionDefinition(infile);
+
+  dumpMxfLabel("element type", infile);
+
+  fprintf(stdout, "]\n");
+}
 
 void dumpExtensionTypeRecord(mxfFile infile);
 
@@ -5450,7 +5460,9 @@ void printMetaDictionary(mxfKey& /* k */, mxfLength& len, mxfFile infile)
     case 0x38: // VaryingArray
       dumpExtensionTypeVaryingArray(infile);
       break;
-      // Set                   = 39
+    case 0x39: // Set
+      dumpExtensionTypeSet(infile);
+      break;
     case 0x3a: // Record
       dumpExtensionTypeRecord(infile);
       break;
