@@ -1396,9 +1396,9 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
       fprintf(stdout, " ]\n");
 
       fprintf(stdout, "         ");
-      fprintf(stdout, "index : temporal   anchor  flags        stream\n");
+      fprintf(stdout, "        Temporal   Anchor  Flags        Stream\n");
       fprintf(stdout, "         ");
-      fprintf(stdout, "          offset   offset               offset\n");
+      fprintf(stdout, "          Offset   Offset               Offset\n");
 
       for (mxfUInt32 i = 0; i < entryCount; i++) {
         mxfUInt08 temporalOffset; // signed
