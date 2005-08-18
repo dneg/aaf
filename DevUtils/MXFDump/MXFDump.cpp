@@ -1297,6 +1297,19 @@ void printFill(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
+bool isNullKey(mxfKey& k);
+
+bool isNullKey(mxfKey& k)
+{
+  bool result;
+  if (memcmp(NullKey, k, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 bool isLocalSet(mxfKey& k);
 
 bool isLocalSet(mxfKey& k)
