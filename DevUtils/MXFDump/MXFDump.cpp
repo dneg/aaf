@@ -714,6 +714,14 @@ void printUsage(void)
           programName,
           programName);
   fprintf(stderr, "OPTIONS :\n");
+  fprintf(stderr, "--aaf-dump      = ");
+  fprintf(stderr, "dump AAF (-a)\n");
+  fprintf(stderr, "  --limit <n>   = ");
+  fprintf(stderr, "dump only the first <n> bytes of each ");
+  fprintf(stderr, "essence container (-l)\n");
+  fprintf(stderr, "  --fill        = ");
+  fprintf(stderr, "dump fill bytes (-f)\n");
+  fprintf(stderr, "\n");
   fprintf(stderr, "--mxf-dump      = ");
   fprintf(stderr, "dump MXF [default] (-m)\n");
   fprintf(stderr, "  --limit <n>   = ");
@@ -1387,6 +1395,8 @@ int main(int argumentCount, char* argumentVector[])
     } else if ((strcmp(p, "-l") == 0) || (strcmp(p, "--set-dump") == 0)) {
       setMode(mxfMode);
     } else if ((strcmp(p, "-m") == 0) || (strcmp(p, "--mxf-dump") == 0)) {
+      setMode(mxfMode);
+    } else if ((strcmp(p, "-a") == 0) || (strcmp(p, "--aaf-dump") == 0)) {
       setMode(mxfMode);
     } else if ((strcmp(p, "-v") == 0) || (strcmp(p, "--verbose") == 0)) {
       verbose = true;
