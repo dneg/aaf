@@ -728,6 +728,8 @@ void aafUIDToMxfKey(mxfKey& key, aafUID& aafID);
 
 void aafUIDToMxfKey(mxfKey& key, aafUID& aafID)
 {
+  // Bottom half of key <- top half of aafID
+  //
   key[ 0] = aafID.Data4[0];
   key[ 1] = aafID.Data4[1];
   key[ 2] = aafID.Data4[2];
@@ -737,6 +739,8 @@ void aafUIDToMxfKey(mxfKey& key, aafUID& aafID)
   key[ 6] = aafID.Data4[6];
   key[ 7] = aafID.Data4[7];
 
+  // Top half of key <- bottom half of aafID
+  //
   key[ 8] = (aafID.Data1 & 0xff000000) >> 24;
   key[ 9] = (aafID.Data1 & 0x00ff0000) >> 16;
   key[10] = (aafID.Data1 & 0x0000ff00) >>  8;
@@ -748,8 +752,12 @@ void aafUIDToMxfKey(mxfKey& key, aafUID& aafID)
   key[14] = (aafID.Data3 & 0xff00) >> 8;
   key[15] = (aafID.Data3 & 0x00ff);
 
-  key[5] = 0x53;
-
+  // If aafID is an AAF class AUID, map it to a SMPTE 336M local set key
+  //
+  mxfByte classIdPrefix[] = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06};
+  if (memcmp(&key, &classIdPrefix, sizeof(classIdPrefix)) == 0) {
+    key[5]  = 0x53;
+  }
 }
 
 void initAAFKeyTable(void);
