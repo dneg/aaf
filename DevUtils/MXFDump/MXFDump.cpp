@@ -4592,14 +4592,38 @@ void klvValidate(mxfFile infile)
   }
 }
 
+void validateLocalSet(mxfKey& k, mxfLength& len, mxfFile infile);
+
+void validateLocalSet(mxfKey& k, mxfLength& len, mxfFile infile)
+{
+  skipBytes(len , infile);
+}
+
 void setValidate(mxfFile infile);
 
-void setValidate(mxfFile /* infile */)
+void setValidate(mxfFile infile)
 {
-  if (verbose) {
-    fprintf(stderr,
-            "%s : local set validation - not yet implemented.\n",
-            programName());
+  mxfUInt64 fileSize = size(infile);
+  mxfKey k;
+  while (readOuterMxfKey(k, infile)) {
+    checkKey(k);
+    mxfLength len;
+    readMxfLength(len, infile);
+    len = checkLength(len, fileSize, position(infile));
+    if (isLocalSet(k)) {
+      validateLocalSet(k, len, infile);
+    } else {
+      skipV(len, infile);
+    }
+  }
+
+  fprintf(stderr,
+          "%s : local set validation - ",
+          programName());
+  if (errors == 0) {
+    fprintf(stderr, "passed.\n");
+  } else {
+    fprintf(stderr, "failed.\n");
   }
 }
 
