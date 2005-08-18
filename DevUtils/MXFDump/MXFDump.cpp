@@ -4017,16 +4017,16 @@ void printFooterPartition(mxfKey& k, mxfLength& len, mxfFile infile)
 }
 
 typedef struct mxfIndexSegmentTag {
-  mxfKey _instanceUID;
+  mxfKey _instanceUID; // Req
   bool _hasInstanceUID;
 
-  mxfRational _indexEditRate;
+  mxfRational _indexEditRate; //  Req
   bool _hasIndexEditRate;
 
-  mxfUInt64 _indexStartPosition;
+  mxfUInt64 _indexStartPosition; // Req
   bool _hasIndexStartPosition;
 
-  mxfUInt64 _indexDuration;
+  mxfUInt64 _indexDuration; // Req
   bool _hasIndexDuration;
 
   mxfUInt32 _editUnitByteCount; // D/req
@@ -4035,7 +4035,7 @@ typedef struct mxfIndexSegmentTag {
   mxfUInt32 _indexSID; // D/req
   bool _hasIndexSID;
 
-  mxfUInt32 _bodySID;
+  mxfUInt32 _bodySID; // Req
   bool _hasBodySID;
 
   mxfUInt08 _sliceCount; // D/req
@@ -4044,7 +4044,7 @@ typedef struct mxfIndexSegmentTag {
   mxfUInt08 _posTableCount; // Opt
   bool _hasPosTableCount;
 
-  // Delta entry array // D/req
+  // Delta entry array // Opt
   mxfUInt32 _deltaEntryCount;
   mxfUInt32 _deltaEntrySize;
   mxfUInt64 _deltaEntryArrayPosition;
@@ -4091,13 +4091,11 @@ void initializeIndexSegment(mxfIndexSegment* index, mxfKey& key)
   index->_posTableCount = 0;
   index->_hasPosTableCount = false;
 
-  // Delta entry array // D/req
   index->_deltaEntryCount = 0;
   index->_deltaEntrySize = 0;
   index->_deltaEntryArrayPosition = 0;
   index->_hasDeltaEntryArray = false;
 
-  // Index Entry Array // D/req
   index->_indexEntryCount = 0;
   index->_indexEntrySize = 0;
   index->_indexEntryArrayPosition = 0;
@@ -4256,6 +4254,41 @@ void printIndexSegment(mxfIndexSegment* index)
   }
 }
 
+void validateIndexSegment(mxfIndexSegment* index);
+
+void validateIndexSegment(mxfIndexSegment* index)
+{
+  if (!index->_hasInstanceUID) {
+    mxfError(currentKey,
+             keyPosition,
+             "Required property \"InstanceUID\" missing");
+  }
+
+  if (!index->_hasIndexEditRate) {
+    mxfError(currentKey,
+             keyPosition,
+             "Required property \"Index Edit Rate\" missing");
+  }
+
+  if (!index->_hasIndexStartPosition) {
+    mxfError(currentKey,
+             keyPosition,
+             "Required property \"Index Start Position\" missing");
+  }
+
+  if (!index->_hasIndexDuration) {
+    mxfError(currentKey,
+             keyPosition,
+             "Required property \"Index Duration\" missing");
+  };
+
+  if (!index->_hasBodySID) {
+    mxfError(currentKey,
+             keyPosition,
+             "Required property \"BodySID\" missing");
+  };
+}
+
 void dumpIndexEntryArray(mxfUInt32 entryCount,
                          mxfUInt32 entrySize,
                          mxfFile& infile);
@@ -4376,6 +4409,7 @@ void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
   mxfIndexSegment index;
   initializeIndexSegment(&index, k);
   readIndexSegment(&index, len, infile);
+  validateIndexSegment(&index);
   printIndexSegment(&index);
   if (index._hasDeltaEntryArray) {
     setPosition(infile, index._deltaEntryArrayPosition);
