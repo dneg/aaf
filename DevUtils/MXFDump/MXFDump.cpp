@@ -2561,13 +2561,6 @@ int main(int argumentCount, char* argumentVector[])
     mode = mxfMode;
   }
 
-  if (mode != klvMode) {
-    if (!lFlag) {
-      lFlag = true;
-      limit = 0;
-    }
-  }
-
   if (mode == klvMode) {
     if (dumpFill) {
       fprintf(stderr,
