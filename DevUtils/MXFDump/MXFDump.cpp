@@ -4287,7 +4287,7 @@ void validateArray(mxfUInt32 defaultSize,
                    mxfUInt32 expectedSize,
                    mxfUInt32 actualSize,
                    mxfUInt32 elementCount,
-                   char* /* arrayName */)
+                   char* arrayName)
 {
   if (expectedSize == 0) {
     expectedSize = defaultSize;
@@ -4295,6 +4295,19 @@ void validateArray(mxfUInt32 defaultSize,
   checkElementSize(expectedSize,
                    actualSize,
                    elementCount);
+  // (16-bits - (4-byte element count + 4-byte element size)) / element size
+  mxfUInt64 maximumElementCount = (65535 - 8) / expectedSize;
+  if (elementCount > maximumElementCount) {
+    mxfError(currentKey,
+             keyPosition,
+             "Invalid element count for %s -"
+             " element count (%"MXFPRIu32") exceeds maximum allowed"
+             " (%"MXFPRIu64" at %"MXFPRIu32" bytes each) in a local set.",
+             arrayName,
+             elementCount,
+             maximumElementCount,
+             expectedSize);
+  }
 }
 
 void validateIndexSegment(mxfIndexSegment* index);
