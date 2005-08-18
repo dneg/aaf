@@ -231,6 +231,11 @@ void printDec(FILE* f, mxfUInt16& i);
 void printDec(FILE* f, mxfUInt32& i);
 void printDec(FILE* f, mxfUInt64& i);
 
+void printHexField(FILE* f, mxfUInt08& i);
+void printHexField(FILE* f, mxfUInt16& i);
+void printHexField(FILE* f, mxfUInt32& i);
+void printHexField(FILE* f, mxfUInt64& i);
+
 void printHexFieldPad(FILE* f, mxfUInt08& i);
 void printHexFieldPad(FILE* f, mxfUInt16& i);
 void printHexFieldPad(FILE* f, mxfUInt32& i);
@@ -964,6 +969,26 @@ void printDec(FILE* f, mxfUInt32& i)
 void printDec(FILE* f, mxfUInt64& i)
 {
   fprintf(f, "%"MXFPRIu64, i);
+}
+
+void printHexField(FILE* f, mxfUInt08& i)
+{
+  fprintf(f, "%2"MXFPRIx08, i);
+}
+
+void printHexField(FILE* f, mxfUInt16& i)
+{
+  fprintf(f, "%4"MXFPRIx16, i);
+}
+
+void printHexField(FILE* f, mxfUInt32& i)
+{
+  fprintf(f, "%8"MXFPRIx32, i);
+}
+
+void printHexField(FILE* f, mxfUInt64& i)
+{
+  fprintf(f, "%16"MXFPRIx64, i);
 }
 
 void printHexFieldPad(FILE* f, mxfUInt08& i)
