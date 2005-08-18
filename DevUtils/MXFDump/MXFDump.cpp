@@ -1127,6 +1127,15 @@ const mxfKey NullKey =
 
 #include "MXFMetaDictionary.h"
 // keys not in MXFMetaDictionary.h
+const mxfKey GenericAudioEssenceDescriptor =
+  {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x53, 0x01, 0x01,
+   0x0d, 0x01, 0x01, 0x01, 0x01, 0x01, 0x42, 0x00};
+const mxfKey WaveAudioEssenceDescriptor = 
+  {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x53, 0x01, 0x01,
+   0x0d, 0x01, 0x01, 0x01, 0x01, 0x01, 0x48, 0x00};
+const mxfKey AES3AudioEssenceDescriptor = 
+  {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x53, 0x01, 0x01,
+   0x0d, 0x01, 0x01, 0x01, 0x01, 0x01, 0x47, 0x00};
 const mxfKey ObjectDirectory =
   {0x96, 0x13, 0xb3, 0x8a, 0x87, 0x34, 0x87, 0x46,
    0xf1, 0x02, 0x96, 0xf0, 0x56, 0xe0, 0x4d, 0x2a};
@@ -1149,6 +1158,9 @@ struct Key {
 } keyTable [] = {
 #include "MXFMetaDictionary.h"
   // keys not in MXFMetaDictionary.h
+  {"GenericAudioEssenceDescriptor", &GenericAudioEssenceDescriptor},
+  {"WaveAudioEssenceDescriptor", &WaveAudioEssenceDescriptor},
+  {"AES3AudioEssenceDescriptor", &AES3AudioEssenceDescriptor},
   {"ObjectDirectory", &ObjectDirectory},
   {"SystemMetadata", &SystemMetadata},
   {"BogusFill", &BogusFill},
@@ -1870,7 +1882,25 @@ struct {
   {"Locked/Unlocked",      0x3d02},
   {"Audio Ref level",      0x3d04},
   {"Audio Sampling Rate",  0x3d03},
+  {"Electro Spatial",      0x3d05},
   {"Channel Count",        0x3d07},
+  {"Dial Norm",            0x3d0c},
+  //
+  {"Compression",          0x3D06},
+  {"Locked (Bogus)",       0x3D32}, // Bogus
+  //
+  {"BlockAlign",           0x3D0A},
+  {"SequenceOffset",       0x3D0B},
+  {"AverageBPS",           0x3D09},
+  {"PeakEnvelopeVersion",  0x3D29},
+  {"PeakEnvelopeFormat",   0x3D2A},
+  {"PointsPerPeakValue",   0x3D2B},
+  {"PeakEnvelopeBlockSize",0x3D2C},
+  {"PeakChannels",         0x3D2D},
+  {"PeakFrames",           0x3D2E},
+  {"PeakOfPeaksPosition",  0x3D2F},
+  {"PeakEnvelopeTimestamp",0x3D30},
+  {"PeakEnvelopeData",     0x3D0E},
   // Generic Picture Essence Descriptor
   {"Signal Standard",      0x3215},
   {"Stored F2 Offset",     0x3216},
