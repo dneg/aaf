@@ -4672,15 +4672,15 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
   }
 }
 
-void checkPartitions(PartitionList& partitions, mxfUInt64 footer);
+void checkPartitions(PartitionList& partitions, mxfPartition* footer);
 
-void checkPartitions(PartitionList& partitions, mxfUInt64 footer)
+void checkPartitions(PartitionList& partitions, mxfPartition* footer)
 {
   mxfUInt64 previous = 0;
   PartitionList::const_iterator it;
   for (it = partitions.begin(); it != partitions.end(); ++it) {
     mxfPartition* p = *it;
-    checkPartition(p, previous, footer);
+    checkPartition(p, previous, footer->_address);
     previous = p->_address;
   }
 }
@@ -6193,10 +6193,12 @@ void mxfValidate(mxfFile infile)
   markMetadataEnd(fileSize);
   markIndexEnd(fileSize);
 
-  if (footer == 0) {
+  if (footer != 0) {
+    checkPartitions(p, footer);
+  } else {
     mxfError("No footer found.\n");
   }
-  checkPartitions(p, footer->_address);
+
   if (!rip.empty()) {
     checkRandomIndex(rip, p);
     if (debug) {
