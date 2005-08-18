@@ -650,7 +650,6 @@ void mxfDumpFile(char* fileName)
           printMxfLocalKey(identifier, stdout);
           fprintf(stdout, ").\n");
         }
-#if 1
         mxfLength vLength;
         if ((setLength + length) < len) {
           vLength = length;
@@ -658,18 +657,6 @@ void mxfDumpFile(char* fileName)
           vLength = len - setLength;
         }
         printV(vLength, false, 0, infile);
-#else
-        init();
-        for (mxfUInt16 i = 0; i < length; i++) {
-          if ((setLength + i) == len) {
-            break;
-          }
-          mxfByte b;
-          readMxfByte(b, infile);
-          dumpByte(b);
-        }
-        flush();
-#endif
         setLength = setLength + length;
         if (setLength > len) {
             mxfUInt16 remain = length - (setLength - len);
