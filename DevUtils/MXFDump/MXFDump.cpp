@@ -2033,10 +2033,6 @@ mxfUInt08 hostByteOrder(void)
   return result;
 }
 
-const mxfKey NullKey =
-  {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-
 // Define values of MXF keys
 
 #define MXF_LABEL(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) \
@@ -3825,7 +3821,7 @@ void printFill(mxfKey& k, mxfLength& len, mxfFile infile)
 bool isNullKey(const mxfKey& k)
 {
   bool result;
-  if (memcmp(&NullKey, &k, sizeof(mxfKey)) == 0) {
+  if (memcmp(&nullMxfKey, &k, sizeof(mxfKey)) == 0) {
     result = true;
   } else {
     result = false;
@@ -5027,7 +5023,7 @@ void initializeIndexSegment(mxfIndexSegment* index, mxfKey& key)
 {
   index->_partition = 0;
 
-  memcpy(&index->_instanceUID, &NullKey, sizeof(mxfKey));
+  memcpy(&index->_instanceUID, &nullMxfKey, sizeof(mxfKey));
   index->_hasInstanceUID = false;
 
   index->_indexEditRate.numerator = 0;
