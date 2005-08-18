@@ -1487,7 +1487,17 @@ void dumpExtensionTypeCharacter(mxfFile infile)
   fprintf(stdout, "]\n");
 }
 
-// StrongObjectReference
+void dumpExtensionTypeStrongObjectReference(mxfFile infile);
+
+void dumpExtensionTypeStrongObjectReference(mxfFile infile)
+{
+  fprintf(stdout, "strong object reference type = [\n");
+  dumpExtensionDefinition(infile);
+
+  dumpMxfLabel("referenced type", infile);
+  fprintf(stdout, "]\n");
+}
+
 // WeakObjectReference
 // Rename
 
@@ -5490,7 +5500,9 @@ void printMetaDictionary(mxfKey& /* k */, mxfLength& len, mxfFile infile)
     case 0x32: // Character
       dumpExtensionTypeCharacter(infile);
       break;
-      // StrongObjectReference = 33
+    case 0x33: // StrongObjectReference
+      dumpExtensionTypeStrongObjectReference(infile);
+      break;
       // WeakObjectReference   = 34
       // Rename                = 35
     case 0x36: // Enumerated
