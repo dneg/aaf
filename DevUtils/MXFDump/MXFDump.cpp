@@ -122,6 +122,9 @@ struct {
 
 size_t keyTableSize = (sizeof(keyTable)/sizeof(keyTable[0])) - 1;
 
+const mxfKey Primer = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
+                       0x0d, 0x01, 0x02, 0x01, 0x01, 0x05, 0x01, 0x00};
+
 const char* programName;
 
 void checkSizes(void);
@@ -308,6 +311,34 @@ void readMxfUInt16(mxfUInt16& i, FILE* f)
   int c = fread(&i, sizeof(mxfUInt16), 1, f);
   if (c != 1) {
     fprintf(stderr, "%s : Error : Failed to read mxfUInt16.\n", programName);
+    exit(EXIT_FAILURE);
+  }
+  reorder(i);
+}
+
+void reorder(mxfUInt32& i);
+
+void reorder(mxfUInt32& i)
+{
+  mxfUInt08* p = (mxfUInt08*)&i;
+  mxfUInt08 temp;
+
+  temp = p[0];
+  p[0] = p[3];
+  p[3] = temp;
+
+  temp = p[1];
+  p[1] = p[2];
+  p[2] = temp;
+}
+
+void readMxfUInt32(mxfUInt32& i, FILE* f);
+
+void readMxfUInt32(mxfUInt32& i, FILE* f)
+{
+  int c = fread(&i, sizeof(mxfUInt32), 1, f);
+  if (c != 1) {
+    fprintf(stderr, "%s : Error : Failed to read mxfUInt32.\n", programName);
     exit(EXIT_FAILURE);
   }
   reorder(i);
@@ -522,6 +553,22 @@ void mxfDumpFile(char* fileName)
                     length,
                     remain);
         }
+      }
+    } else if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
+      mxfUInt32 elementCount;
+      readMxfUInt32(elementCount, infile);
+      mxfUInt32 elementSize;
+      readMxfUInt32(elementSize, infile);
+      for (mxfUInt32 j = 0; j < elementCount; j++) {
+        mxfLocalKey identifier;
+        readMxfUInt16(identifier, infile);
+        mxfKey longIdentifier;
+        readMxfKey(longIdentifier, infile);
+        fprintf(stdout, "  ");
+        printMxfLocalKey(identifier, stdout);
+        fprintf(stdout, " : ");
+        printMxfKey(longIdentifier, stdout);
+        fprintf(stdout, "\n");
       }
     } else {
       init();
