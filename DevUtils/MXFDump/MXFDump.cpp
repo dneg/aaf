@@ -3166,7 +3166,11 @@ void printRandomIndex(mxfKey& k, mxfLength& len, mxfFile infile)
     fprintf(stdout, "    ");
     printField(stdout, sid);
     fprintf(stdout, "    ");
-    printField(stdout, offset);
+    if (base == 10) {
+      printField(stdout, offset);
+    } else {
+      printHexField(stdout, offset);
+    }
     fprintf(stdout, "\n");
   }
   mxfUInt32 length;
