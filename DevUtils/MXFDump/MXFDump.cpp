@@ -628,7 +628,7 @@ void newSegment(bool isEssence,
 void newEssenceSegment(mxfUInt32 sid,
                        mxfKey& label,
                        mxfUInt64 start,
-                       mxfUInt64 end);
+                       mxfUInt64 size);
 
 void newIndexSegment(mxfUInt32 sid,
                      mxfKey& label,
@@ -4167,7 +4167,7 @@ void markEssenceSegmentEnd(mxfUInt64 endKeyPosition)
     newEssenceSegment(essenceSID,
                       essenceLabel,
                       essencePosition,
-                      endKeyPosition);
+                      endKeyPosition - essencePosition);
     inEssence = false;
     essenceSID = 0;
   } // else error - ending essence that wasn't started
@@ -4301,9 +4301,9 @@ void newSegment(bool isEssence,
 void newEssenceSegment(mxfUInt32 sid,
                        mxfKey& label,
                        mxfUInt64 start,
-                       mxfUInt64 end)
+                       mxfUInt64 size)
 {
-  newSegment(true, sid, label, start, end - start);
+  newSegment(true, sid, label, start, size);
 }
 
 void newIndexSegment(mxfUInt32 sid,
