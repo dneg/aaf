@@ -363,6 +363,9 @@ int readMxfLength(mxfLength& l, FILE* f)
 {
   mxfUInt64 x;
   int bytesRead = readBERLength(x, f);
+  if (bytesRead > 9) {
+    fprintf(stderr, "%s : Error : length overflow.\n", programName);
+  }
   l = x;
   return bytesRead;
 }
