@@ -1023,6 +1023,46 @@ void printUsage(void)
   fprintf(stderr, "print detailed help (-h)\n");
 }
 
+void printAAFUsage(void);
+
+void printAAFUsage(void)
+{
+  fprintf(stderr, "--aaf-dump            = ");
+  fprintf(stderr, "dump AAF (-a)\n");
+  printAAFOptions();
+  fprintf(stderr, "\n");
+}
+
+void printMXFUsage(void);
+
+void printMXFUsage(void)
+{
+  fprintf(stderr, "--mxf-dump            = ");
+  fprintf(stderr, "dump MXF [default] (-m)\n");
+  printMXFOptions();
+  fprintf(stderr, "\n");
+}
+
+void printSetUsage(void);
+
+void printSetUsage(void)
+{
+  fprintf(stderr, "--set-dump            = ");
+  fprintf(stderr, "dump local sets (-s)\n");
+  printSetOptions();
+  fprintf(stderr, "\n");
+}
+
+void printKLVUsage(void);
+
+void printKLVUsage(void)
+{
+  fprintf(stderr, "--klv-dump            = ");
+  fprintf(stderr, "dump raw KLV (-k)\n");
+  printKLVOptions();
+  fprintf(stderr, "\n");
+}
+
 void printFullUsage(void);
 
 void printFullUsage(void)
@@ -1032,25 +1072,10 @@ void printFullUsage(void)
           programName,
           programName);
 
-  fprintf(stderr, "--aaf-dump            = ");
-  fprintf(stderr, "dump AAF (-a)\n");
-  printAAFOptions();
-  fprintf(stderr, "\n");
-
-  fprintf(stderr, "--mxf-dump            = ");
-  fprintf(stderr, "dump MXF [default] (-m)\n");
-  printMXFOptions();
-  fprintf(stderr, "\n");
-
-  fprintf(stderr, "--set-dump            = ");
-  fprintf(stderr, "dump local sets (-s)\n");
-  printSetOptions();
-  fprintf(stderr, "\n");
-
-  fprintf(stderr, "--klv-dump            = ");
-  fprintf(stderr, "dump raw KLV (-k)\n");
-  printKLVOptions();
-  fprintf(stderr, "\n");
+  printAAFUsage();
+  printMXFUsage();
+  printSetUsage();
+  printKLVUsage();
 
   printCommonOptions();
 }
