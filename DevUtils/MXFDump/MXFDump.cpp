@@ -4046,8 +4046,9 @@ void initializeIndexSegment(mxfIndexSegment* index);
 
 void initializeIndexSegment(mxfIndexSegment* index)
 {
-//index->_instanceUID = 0;
-//index->_indexEditRate = 0;
+  memcpy(&index->_instanceUID, &NullKey, sizeof(mxfKey));
+  index->_indexEditRate.numerator = 0;;
+  index->_indexEditRate.denominator = 0;;
   index->_indexStartPosition = 0;
   index->_indexDuration = 0;
   index->_editUnitByteCount = 0;
@@ -4179,10 +4180,14 @@ void printIndexSegment(mxfIndexSegment* index)
   printMxfUInt64(stdout, "Index Duration", index->_indexDuration);
 
   // Edit Unit Byte Count
-  printMxfUInt32(stdout, "Edit Unit Byte Count", index->_editUnitByteCount);
+  if (index->_hasEditUnitByteCount) {
+    printMxfUInt32(stdout, "Edit Unit Byte Count", index->_editUnitByteCount);
+  }
 
   // IndexSID
-  printMxfUInt32(stdout, "IndexSID", index->_indexSID);
+  if (index->_hasIndexSID) {
+    printMxfUInt32(stdout, "IndexSID", index->_indexSID);
+  }
 
   // BodySID
   printMxfUInt32(stdout, "BodySID", index->_bodySID);
@@ -4190,6 +4195,11 @@ void printIndexSegment(mxfIndexSegment* index)
   // Slice Count
   if (index->_hasSliceCount) {
     printMxfUInt08(stdout, "SliceCount", index->_sliceCount);
+  }
+
+  // Pos Table Count
+  if (index->_hasPosTableCount) {
+    printMxfUInt08(stdout, "Pos Table Count", index->_posTableCount);
   }
 }
 
