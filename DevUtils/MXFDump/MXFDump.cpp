@@ -4710,6 +4710,8 @@ const char* keyName(const mxfKey& key)
     found = lookupMXFKey(const_cast<mxfKey&>(key), x);
     if (found) {
       result = mxfKeyTable[x]._name;
+    } else if (isEssenceElement(const_cast<mxfKey&>(key))) {
+      result = "Essence Element";
     } else if (isNullKey(key)) {
       result = "Null";
     } else {
@@ -4725,6 +4727,8 @@ const char* keyName(const mxfKey& key)
       found = lookupAAFKey(const_cast<mxfKey&>(key), x);
       if (found) {
         result = aafKeyTable[x]._name;
+      } else if (isEssenceElement(const_cast<mxfKey&>(key))) {
+        result = "Essence Element";
       } else if (isNullKey(key)) {
         result = "Null";
       } else {
