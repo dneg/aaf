@@ -4272,6 +4272,9 @@ void validateIndexSegment(mxfIndexSegment* index);
 
 void validateIndexSegment(mxfIndexSegment* index)
 {
+
+  // Check that all required properties are present.
+  //
   if (!index->_hasInstanceUID) {
     missingProperty(currentKey, keyPosition, "InstanceUID");
   }
@@ -4290,6 +4293,19 @@ void validateIndexSegment(mxfIndexSegment* index)
 
   if (!index->_hasBodySID) {
     missingProperty(currentKey, keyPosition, "BodySID");
+  }
+
+  // Other checks.
+  //
+  if (index->_hasIndexDuration) {
+    if (index->_indexEntryCount > index->_indexDuration) {
+      mxfWarning(currentKey,
+                 keyPosition,
+                 "Index entry count (%"MXFPRIu32") greater than"
+                 " index duration (%"MXFPRIu64")",
+                 index->_indexEntryCount,
+                 index->_indexDuration); 
+    }
   }
 }
 
