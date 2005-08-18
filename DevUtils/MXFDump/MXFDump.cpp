@@ -4867,7 +4867,7 @@ bool isComplete(const mxfKey& key)
 bool isRandomIndex(const mxfKey& key)
 {
   bool result;
-  if (memcmp(&IndexTableSegment, &key, sizeof(mxfKey)) == 0) {
+  if (memcmp(&RandomIndexMetadata, &key, sizeof(mxfKey)) == 0) {
     result = true;
   } else {
     result = false;
