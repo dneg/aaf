@@ -5281,6 +5281,7 @@ void printMetaDictionary(mxfKey& k, mxfLength& len, mxfFile infile)
       break;
     default:
       mxfError("Invalid definition tag (%"MXFPRIx08").\n", tag);
+      skipBytes(length - 1, infile);
       break;
     }
     fprintf(stdout, "\n");
