@@ -1322,6 +1322,7 @@ bool getInteger(int& i, char* s)
   }
   return result;
 }
+const char* VERSION ="$Revision$";
 
 int main(int argumentCount, char* argumentVector[])
 {
@@ -1375,6 +1376,9 @@ int main(int argumentCount, char* argumentVector[])
       exit(EXIT_SUCCESS);
     } else if ((strcmp(p, "-d") == 0) || (strcmp(p, "--debug") == 0)) {
       debug = true;
+    } else if (strcmp(p, "--version") == 0) {
+      fprintf(stdout, "%s : version %s\n", programName, VERSION);
+      exit(EXIT_SUCCESS);
     } else if (*p == '-') {
       fprintf(stderr, "%s : Error : Invalid option \"%s\".\n", programName, p);
       printUsage();
