@@ -3291,9 +3291,9 @@ void markEssenceSegmentEnd(mxfUInt64 endKeyPosition)
 }
 
 typedef struct StreamTag {
-  mxfUInt32 _sid;
-  mxfUInt64 _size;
   SegmentList _segments;
+  mxfUInt64 _size;
+  mxfUInt32 _sid;
 } Stream;
 
 typedef std::map<mxfUInt32, Stream*> StreamSet;
@@ -3365,8 +3365,8 @@ void essenceSegment(mxfUInt32 sid, mxfUInt64 start, mxfUInt64 end)
   StreamSet::const_iterator it = streams.find(sid);
   if (it == streams.end()) {
     s = new Stream();
-    s->_sid = sid;
     s->_size = 0;
+    s->_sid = sid;
     streams.insert(StreamSet::value_type(sid, s));
   } else {
     s = it->second;
