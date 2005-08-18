@@ -998,6 +998,9 @@ void printFormatOptions(void)
 
   fprintf(stderr, "  --show-fill         = ");
   fprintf(stderr, "dump fill bytes (-f)\n");
+
+  fprintf(stderr, "  --show-dark         = ");
+  fprintf(stderr, "dump dark data (-w)\n");
 }
 
 void printRawOptions(void);
@@ -2000,6 +2003,8 @@ void setDumpFile(char* fileName)
   fclose(infile);
 }
 
+bool dumpDark = false;
+
 void mxfDumpFile(char* fileName)
 {
   FILE* infile;
@@ -2168,6 +2173,7 @@ int getIntegerOption(int currentArgument,
 // -a --aaf-dump
 // -v --verbose
 // -f --show-fill
+// -w --show-dark
 // -e --no-limit-bytes
 // -l --limit-bytes
 // -c --limit-entries
@@ -2217,6 +2223,9 @@ int main(int argumentCount, char* argumentVector[])
     } else if ((strcmp(p, "--show-fill") == 0) ||
                (strcmp(p, "-f") == 0)) {
       dumpFill = true;
+    } else if ((strcmp(p, "--show-dark") == 0) ||
+               (strcmp(p, "-w") == 0)) {
+      dumpDark = true;
     } else if ((strcmp(p, "--no-limit-bytes") == 0) ||
                (strcmp(p, "-e") == 0)) {
       lFlag = false;
