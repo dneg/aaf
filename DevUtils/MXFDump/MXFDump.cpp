@@ -1359,18 +1359,31 @@ void printEssenceFrames(mxfKey& k,
                         mxfUInt32 limit,
                         FILE* f)
 {
+#if 1
+  mxfUInt64 nextPosition = 0;
+#endif
   printEssenceKL(k, length);
   mxfLength total = 0;
   while (total < length) {
+#if 1
+    fprintf(stdout, "\n");
+    fprintf(stdout, "Address of next key   = ");
+    printHexField(stdout, position);
+#endif
     mxfKey k;
     readMxfKey(k, f);
     mxfLength len;
     readMxfLength(len, f);
     printKL(k, len);
 #if 1
-    fprintf(stdout, "Address = ");
-    printField(stdout, position);
     fprintf(stdout, "\n");
+    fprintf(stdout, "Address of next value = ");
+    printHexField(stdout, position);
+    fprintf(stdout, " [");
+    printHexField(stdout, nextPosition);
+    fprintf(stdout, "]");
+    fprintf(stdout, "\n");
+    nextPosition = nextPosition + len;
 #endif
     printV(len, lFlag, limit, f);
     total = total + len;
