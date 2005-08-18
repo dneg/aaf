@@ -201,6 +201,7 @@ void readMxfUInt16(mxfUInt16& i, mxfFile infile);
 void readMxfUInt32(mxfUInt32& i, mxfFile infile);
 void readMxfUInt64(mxfUInt64& i, mxfFile infile);
 void readMxfRational(mxfRational& r, mxfFile infile);
+void readMxfLabel(mxfKey& k, mxfFile infile);
 void readMxfKey(mxfKey& k, mxfFile infile);
 bool readOuterMxfKey(mxfKey& k, mxfFile infile);
 int readBERLength(mxfUInt64& i, mxfFile infile);
@@ -238,7 +239,7 @@ void dumpMxfUInt16(const char* label, mxfFile infile);
 void dumpMxfUInt32(const char* label, mxfFile infile);
 void dumpMxfUInt64(const char* label, mxfFile infile);
 void dumpMxfRational(const char* label, mxfFile infile);
-void dumpMxfKey(const char* label, mxfFile infile);
+void dumpMxfLabel(const char* label, mxfFile infile);
 void dumpMxfOperationalPattern(const char* label, mxfFile infile);
 
 void printOperationalPattern(mxfKey& k, FILE* outfile);
@@ -603,6 +604,14 @@ void readMxfRational(mxfRational& r, mxfFile infile)
   readMxfUInt32(r.denominator, infile);
 }
 
+void readMxfLabel(mxfKey& k, mxfFile infile)
+{
+  int c = read(infile, &k, sizeof(mxfKey));
+  if (c != sizeof(mxfKey)) {
+    fatalError("Failed to read label.\n");
+  }
+}
+
 void readMxfKey(mxfKey& k, mxfFile infile)
 {
   keyPosition = position(infile);
@@ -873,10 +882,10 @@ void dumpMxfRational(const char* label, mxfFile infile)
   fprintf(stdout, "\n");
 }
 
-void dumpMxfKey(const char* label, mxfFile infile)
+void dumpMxfLabel(const char* label, mxfFile infile)
 {
   mxfKey k;
-  readMxfKey(k, infile);
+  readMxfLabel(k, infile);
   fprintf(stdout, "%20s = ", label);
   printMxfKey(k, stdout);
   fprintf(stdout, "\n");
@@ -885,7 +894,7 @@ void dumpMxfKey(const char* label, mxfFile infile)
 void dumpMxfOperationalPattern(const char* label, mxfFile infile)
 {
   mxfKey k;
-  readMxfKey(k, infile);
+  readMxfLabel(k, infile);
   fprintf(stdout, "%20s = ", label);
   printMxfKey(k, stdout);
   fprintf(stdout, "\n");
@@ -2674,7 +2683,7 @@ void readPartition(PartitionList& partitions, mxfFile infile)
   readMxfUInt32(p->_indexSID, infile);
   readMxfUInt64(p->_bodyOffset, infile);
   readMxfUInt32(p->_bodySID, infile);
-  readMxfKey(p->_operationalPattern, infile);
+  readMxfLabel(p->_operationalPattern, infile);
 
   mxfUInt32 elementCount;
   readMxfUInt32(elementCount, infile);
@@ -2682,7 +2691,7 @@ void readPartition(PartitionList& partitions, mxfFile infile)
   readMxfUInt32(elementSize, infile);
   for (mxfUInt32 i = 0; i < elementCount; i++) {
     mxfKey essence;
-    readMxfKey(essence, infile);
+    readMxfLabel(essence, infile);
   }
 
   partitions.push_back(p);
@@ -2860,7 +2869,7 @@ void printPartition(mxfKey& k, mxfLength& len, mxfFile infile)
   readMxfUInt32(elementSize, infile);
   for (mxfUInt32 i = 0; i < elementCount; i++) {
     mxfKey essence;
-    readMxfKey(essence, infile);
+    readMxfLabel(essence, infile);
     fprintf(stdout, "  ");
     printField(stdout, i);
     fprintf(stdout, " : ");
@@ -2904,7 +2913,7 @@ void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
 
     if (identifier == 0x3c0a) {
       // InstanceUID
-      dumpMxfKey("InstanceUID", infile);
+      dumpMxfLabel("InstanceUID", infile);
       remainder = remainder - 16;
     } else if (identifier == 0x3f05) {
       // Edit Unit Byte Count
@@ -3022,7 +3031,7 @@ void printV10IndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
 
     if (identifier == 0x3c0a) {
       // InstanceUID
-      dumpMxfKey("InstanceUID", infile);
+      dumpMxfLabel("InstanceUID", infile);
       remainder = remainder - 16;
     } else if (identifier == 0x3f05) {
       // Edit Unit Byte Count
@@ -3183,7 +3192,7 @@ void printPrimer(mxfKey& k, mxfLength& len, mxfFile infile)
     mxfLocalKey identifier;
     readMxfLocalKey(identifier, infile);
     mxfKey longIdentifier;
-    readMxfKey(longIdentifier, infile);
+    readMxfLabel(longIdentifier, infile);
     fprintf(stdout, "  ");
     printMxfLocalKey(identifier, stdout);
     fprintf(stdout, "     :    ");
@@ -3222,7 +3231,7 @@ void printObjectDirectory(mxfKey& k, mxfLength& len, mxfFile infile)
 
   for (mxfUInt64 i = 0; i < entryCount; i++) {
     mxfKey instance;
-    readMxfKey(instance, infile);
+    readMxfLabel(instance, infile);
     mxfUInt64 offset;
     readMxfUInt64(offset, infile);
     mxfUInt08 flags;
