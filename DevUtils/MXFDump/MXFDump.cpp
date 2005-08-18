@@ -996,7 +996,7 @@ void printFormatOptions(void)
   fprintf(stderr, "print only the first <n> ");
   fprintf(stderr, "index table entries (-c)\n");
 
-  fprintf(stderr, "  --fill              = ");
+  fprintf(stderr, "  --show-fill         = ");
   fprintf(stderr, "dump fill bytes (-f)\n");
 }
 
@@ -2167,7 +2167,7 @@ int getIntegerOption(int currentArgument,
 // -m --mxf-dump
 // -a --aaf-dump
 // -v --verbose
-// -f --fill
+// -f --show-fill
 // -e --no-limit-bytes
 // -l --limit-bytes
 // -c --limit-entries
@@ -2214,7 +2214,7 @@ int main(int argumentCount, char* argumentVector[])
     } else if ((strcmp(p, "--verbose") == 0) ||
                (strcmp(p, "-v") == 0)) {
       verbose = true;
-    } else if ((strcmp(p, "--fill") == 0) ||
+    } else if ((strcmp(p, "--show-fill") == 0) ||
                (strcmp(p, "-f") == 0)) {
       dumpFill = true;
     } else if ((strcmp(p, "--no-limit-bytes") == 0) ||
@@ -2304,7 +2304,7 @@ int main(int argumentCount, char* argumentVector[])
   if (mode == klvMode) {
     if (dumpFill) {
       fprintf(stderr,
-              "%s : Error : --fill not valid with --klv-dump.\n",
+              "%s : Error : --show-fill not valid with --klv-dump.\n",
               programName);
       printUsage();
       exit(EXIT_FAILURE);
