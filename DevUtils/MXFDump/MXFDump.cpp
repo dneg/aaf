@@ -2220,7 +2220,21 @@ int main(int argumentCount, char* argumentVector[])
       symbolic = false;
     } else if ((strcmp(p, "--help") == 0) ||
                (strcmp(p, "-h") == 0)) {
-      printFullUsage();
+      if (mode == klvMode) {
+        printKLVUsage();
+        printCommonOptions();
+      } else if (mode == localSetMode) {
+        printSetUsage();
+        printCommonOptions();
+      } else if (mode == mxfMode) {
+        printMXFUsage();
+        printCommonOptions();
+      } else if (mode == aafMode) {
+        printAAFUsage();
+        printCommonOptions();
+      } else {
+        printFullUsage();
+      }
       exit(EXIT_SUCCESS);
     } else if ((strcmp(p, "--debug") == 0) ||
                (strcmp(p, "-d") == 0)) {
