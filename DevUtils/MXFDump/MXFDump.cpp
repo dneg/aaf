@@ -2685,6 +2685,8 @@ bool isPartition(mxfKey& key)
   } else if (memcmp(&Footer, &key, sizeof(mxfKey)) == 0) {
     result = true;
   } else if (memcmp(&CompleteFooter, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else {
     result = false;
   }
   return result;
