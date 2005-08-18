@@ -446,7 +446,8 @@ struct {
   mxfUInt16 _key;
 } localKeyTable [] = {
 #include "AAFMetaDictionary.h"
-{"bogus", 0x00}
+  {"InstanceUID", 0x3c0a},
+  {"bogus", 0x00}
 };
 
 size_t
