@@ -900,36 +900,36 @@ void printCommonOptions(void);
 
 void printCommonOptions(void)
 {
-  fprintf(stderr, "--relative          = ");
-  fprintf(stderr, "print relative addresses ");
+  fprintf(stderr, "--relative            = ");
+  fprintf(stderr, "relative addresses ");
   fprintf(stderr, "- value start = 0 [default] (-r)\n");
 
-  fprintf(stderr, "--absolute          = ");
-  fprintf(stderr, "print absolute addresses ");
+  fprintf(stderr, "--absolute            = ");
+  fprintf(stderr, "absolute addresses ");
   fprintf(stderr, "- file start = 0 (-b)\n");
 
-  fprintf(stderr, "--decimal           = ");
+  fprintf(stderr, "--decimal             = ");
   fprintf(stderr, "print addresses in ");
   fprintf(stderr, "decimal [default] (-t)\n");
 
-  fprintf(stderr, "--hexadecimal       = ");
+  fprintf(stderr, "--hexadecimal         = ");
   fprintf(stderr, "print addresses in ");
   fprintf(stderr, "hexadecimal (-x)\n");
 
-  fprintf(stderr, "--symbolic          = ");
+  fprintf(stderr, "--symbolic            = ");
   fprintf(stderr, "dump the names of keys if known [default] (-y)\n");
 
-  fprintf(stderr, "--no-symbolic       = ");
+  fprintf(stderr, "--no-symbolic         = ");
   fprintf(stderr, "don't dump the names of keys (-n)\n");
   fprintf(stderr, "\n");
 
-  fprintf(stderr, "--help              = ");
+  fprintf(stderr, "--help                = ");
   fprintf(stderr, "print this message and exit (-h)\n");
 
-  fprintf(stderr, "--verbose           = ");
+  fprintf(stderr, "--verbose             = ");
   fprintf(stderr, "print more detailed information (-v)\n");
 
-  fprintf(stderr, "--debug             = ");
+  fprintf(stderr, "--debug               = ");
   fprintf(stderr, "print information useful in debugging this program (-d)\n");
 }
 
@@ -937,23 +937,23 @@ void printFormatOptions(void);
 
 void printFormatOptions(void)
 {
-  fprintf(stderr, "  --limit-bytes <n> = ");
+  fprintf(stderr, "  --limit-bytes <n>   = ");
   fprintf(stderr, "truncate essence ");
   fprintf(stderr, "to <n> bytes [default n = 0] (-l)\n");
 
-  fprintf(stderr, "  --no-limit-bytes  = ");
+  fprintf(stderr, "  --no-limit-bytes    = ");
   fprintf(stderr, "do not truncate ");
   fprintf(stderr, "essence (-e)\n");
 
-  fprintf(stderr, "  --frames          = ");
+  fprintf(stderr, "  --frames            = ");
   fprintf(stderr, "assume essence is ");
   fprintf(stderr, "wrapped frames (-p)\n");
 
-  fprintf(stderr, "  --entries <n>     = ");
+  fprintf(stderr, "  --limit-entries <n> = ");
   fprintf(stderr, "print only the first <n> ");
   fprintf(stderr, "index table entries (-c)\n");
 
-  fprintf(stderr, "  --fill            = ");
+  fprintf(stderr, "  --fill              = ");
   fprintf(stderr, "dump fill bytes (-f)\n");
 }
 
@@ -961,11 +961,11 @@ void printRawOptions(void);
 
 void printRawOptions(void)
 {
-  fprintf(stderr, "  --limit-bytes <n> = ");
+  fprintf(stderr, "  --limit-bytes <n>   = ");
   fprintf(stderr, "truncate values ");
   fprintf(stderr, "to <n> bytes (-l)\n");
 
-  fprintf(stderr, "  --no-limit-bytes  = ");
+  fprintf(stderr, "  --no-limit-bytes    = ");
   fprintf(stderr, "do not truncate ");
   fprintf(stderr, "values [default] (-e)\n");
 }
@@ -1007,19 +1007,19 @@ void printUsage(void)
           programName,
           programName);
 
-  fprintf(stderr, "--aaf-dump          = ");
+  fprintf(stderr, "--aaf-dump            = ");
   fprintf(stderr, "dump AAF (-a)\n");
 
-  fprintf(stderr, "--mxf-dump          = ");
+  fprintf(stderr, "--mxf-dump            = ");
   fprintf(stderr, "dump MXF [default] (-m)\n");
 
-  fprintf(stderr, "--set-dump          = ");
+  fprintf(stderr, "--set-dump            = ");
   fprintf(stderr, "dump local sets (-s)\n");
 
-  fprintf(stderr, "--klv-dump          = ");
+  fprintf(stderr, "--klv-dump            = ");
   fprintf(stderr, "dump raw KLV (-k)\n");
 
-  fprintf(stderr, "--help              = ");
+  fprintf(stderr, "--help                = ");
   fprintf(stderr, "print detailed help (-h)\n");
 }
 
@@ -1032,22 +1032,22 @@ void printFullUsage(void)
           programName,
           programName);
 
-  fprintf(stderr, "--aaf-dump          = ");
+  fprintf(stderr, "--aaf-dump            = ");
   fprintf(stderr, "dump AAF (-a)\n");
   printAAFOptions();
   fprintf(stderr, "\n");
 
-  fprintf(stderr, "--mxf-dump          = ");
+  fprintf(stderr, "--mxf-dump            = ");
   fprintf(stderr, "dump MXF [default] (-m)\n");
   printMXFOptions();
   fprintf(stderr, "\n");
 
-  fprintf(stderr, "--set-dump          = ");
+  fprintf(stderr, "--set-dump            = ");
   fprintf(stderr, "dump local sets (-s)\n");
   printSetOptions();
   fprintf(stderr, "\n");
 
-  fprintf(stderr, "--klv-dump          = ");
+  fprintf(stderr, "--klv-dump            = ");
   fprintf(stderr, "dump raw KLV (-k)\n");
   printKLVOptions();
   fprintf(stderr, "\n");
@@ -2109,7 +2109,7 @@ int getIntegerOption(int currentArgument,
 // -f --fill
 // -e --no-limit-bytes
 // -l --limit-bytes
-// -c --entries
+// -c --limit-entries
 // -p --frames
 // -i --limit-frames
 // -r --relative
@@ -2162,7 +2162,7 @@ int main(int argumentCount, char* argumentVector[])
       limit = getIntegerOption(i, argumentCount, argumentVector, "byte count");
       lFlag = true;
       i = i + 1;
-    } else if ((strcmp(p, "--entries") == 0) ||
+    } else if ((strcmp(p, "--limit-entries") == 0) ||
                (strcmp(p, "-c") == 0)) {
       maxIndex = getIntegerOption(i, argumentCount, argumentVector, "count");
       cFlag = true;
