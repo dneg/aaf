@@ -4256,16 +4256,28 @@ void setMode(Mode m)
   mode = m;
 }
 
+bool isDumpMode(Mode mode);
+
+bool isDumpMode(Mode mode)
+{
+  bool result = false;
+  if ((mode == klvMode) ||
+      (mode == localSetMode) ||
+      (mode == mxfMode) ||
+      (mode == aafMode)) {
+    result = true;
+  }
+  return result;
+}
+
 void checkDumpMode(const char* option);
 
 void checkDumpMode(const char* option)
 {
-  if ((mode == klvMode) ||
-      (mode == localSetMode) ||
-      (mode == mxfMode) ||
-      (mode  == aafMode)) {
-  } else {
-    error("%s not valid with --aaf-validate, --mxf-validate, --set-validate, --klv-validate.\n", option);
+  if (!isDumpMode(mode)) {
+    error("%s not valid with "
+          "--aaf-validate, --mxf-validate, --set-validate, --klv-validate.\n",
+          option);
     printUsage();
     exit(EXIT_FAILURE);
   }
@@ -4560,10 +4572,7 @@ int main(int argumentCount, char* argumentVector[])
   if (!isMxfFile(infile, headerPosition)) {
     fatalError("File \"%s\" is not an MXF file.\n", fileName);
   }
-  if ((mode == klvMode) ||
-      (mode == localSetMode) ||
-      (mode == mxfMode) ||
-      (mode  == aafMode)) {
+  if (isDumpMode(mode)) {
     if (headerPosition != 0) {
       if (dumpRunIn) {
         printRunIn(headerPosition, limitBytes, limit, infile);
