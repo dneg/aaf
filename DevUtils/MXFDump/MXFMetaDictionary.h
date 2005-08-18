@@ -2,7 +2,7 @@
 //
 // Meta definition of the MXF object model.
 //
-// This file was generated on Mon Oct 13 13:15:13 EDT 2003
+// This file was generated on Mon Oct 13 13:58:27 EDT 2003
 
 //
 // MXF_LABEL(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)
@@ -342,7 +342,7 @@ MXF_CLASS(IndexTableSegment,
     // 06.0e.2b.34.01.01.01.05.04.04.04.01.07.00.00.00
     MXF_LABEL(0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05,
               0x04, 0x04, 0x04, 0x01, 0x07, 0x00, 0x00, 0x00),
-    0x3f08,
+    0x3f0e,
     UInt8,
     optional,
     false,
