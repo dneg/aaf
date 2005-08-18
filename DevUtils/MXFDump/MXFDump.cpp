@@ -6228,7 +6228,7 @@ void mxfValidate(mxfFile infile)
       if (isFooter(k)) {
         footer = checkFooterPartition(footer, currentPartition);
       }
-    } else if (memcmp(&RandomIndexMetadata, &k, sizeof(mxfKey)) == 0) {
+    } else if (isRandomIndex(k)) {
       markMetadataEnd(keyPosition);
       markIndexEnd(keyPosition);
       mxfUInt32 overall;
