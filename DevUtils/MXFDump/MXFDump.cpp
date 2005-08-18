@@ -429,7 +429,7 @@ void mxfDumpFile(char* fileName)
         readMxfUInt16(length, infile);
         setLength = setLength + 4;
         fprintf(stdout,
-                "[ p = %04x, l = %d (%d)\n",
+                "[ k = %04x, l = %d (%d) ]\n",
                 identifier,
                 length,
                 setLength);
