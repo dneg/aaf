@@ -86,7 +86,8 @@ void readMxfUInt08(mxfByte& b, FILE* f);
 void readMxfUInt16(mxfUInt16& i, FILE* f);
 void readMxfUInt32(mxfUInt32& i, FILE* f);
 void readMxfUInt64(mxfUInt64& i, FILE* f);
-bool readMxfKey(mxfKey& k, FILE* f);
+void readMxfKey(mxfKey& k, FILE* f);
+bool readOuterMxfKey(mxfKey& k, FILE* f);
 void readBERLength(mxfUInt64& i, FILE* f);
 void readMxfLength(mxfLength& l, FILE* f);
 void readMxfLocalKey(mxfLocalKey& k, FILE* f);
@@ -159,7 +160,16 @@ void readMxfUInt64(mxfUInt64& i, FILE* f)
   }
 }
 
-bool readMxfKey(mxfKey& k, FILE* f)
+void readMxfKey(mxfKey& k, FILE* f)
+{
+  int c = fread(&k, sizeof(mxfKey), 1, f);
+  if (c != 1) {
+    fprintf(stderr, "%s : Error : Failed to read key.\n", programName);
+    exit(EXIT_FAILURE);
+  }
+}
+
+bool readOuterMxfKey(mxfKey& k, FILE* f)
 {
   bool result = true;
   int c = fread(&k, sizeof(mxfKey), 1, f);
@@ -1156,7 +1166,7 @@ void mxfDumpFile(char* fileName)
   }
 
   mxfKey k;
-  while (readMxfKey(k, infile)) {
+  while (readOuterMxfKey(k, infile)) {
     mxfLength len;
     readMxfLength(len, infile);
 
@@ -1199,7 +1209,7 @@ void klvDumpFile(char* fileName)
   }
 
   mxfKey k;
-  while (readMxfKey(k, infile)) {
+  while (readOuterMxfKey(k, infile)) {
     mxfLength len;
     readMxfLength(len, infile);
     printKL(k, len);
