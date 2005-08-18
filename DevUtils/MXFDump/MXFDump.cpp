@@ -1796,6 +1796,11 @@ void printCommonOptions(void)
   fprintf(stderr, "search <n> bytes of run-in");
   fprintf(stderr, "[default n = 64k]\n");
 
+
+  fprintf(stderr, "  --debug               = ");
+  fprintf(stderr, "print debuging information (-d)\n");
+  fprintf(stderr, "\n");
+
   fprintf(stderr, "--help                = ");
   fprintf(stderr, "print this message and exit (-h)\n");
   fprintf(stderr, "\n");
@@ -1837,9 +1842,6 @@ void printCommonDumpOptions(void)
 
   fprintf(stderr, "  --verbose           = ");
   fprintf(stderr, "print more detailed information (-v)\n");
-
-  fprintf(stderr, "  --debug             = ");
-  fprintf(stderr, "print information useful in debugging this program (-d)\n");
   fprintf(stderr, "\n");
 }
 
