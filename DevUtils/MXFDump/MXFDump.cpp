@@ -9,6 +9,8 @@ typedef unsigned char mxfKey[16];
 
 const char* programName;
 
+void checkSizes(void);
+
 void checkSizes(void)
 {
   if (sizeof(mxfLength) != 4) {
@@ -22,6 +24,8 @@ void checkSizes(void)
       << endl;
   }
 }
+
+void printUsage(void);
 
 void printUsage(void)
 {
@@ -71,29 +75,24 @@ void rawDumpFile(char* fileName)
   FILE* infile;
 
   infile = fopen(fileName, "rb");
-  if (infile != NULL) {
-//
-    unsigned char buffer[76];
-    fread(buffer, sizeof(buffer), 1, infile);
-    
-    while (!feof(infile)) {
-      mxfKey k;
-      fread(&k, sizeof(mxfKey), 1, infile);
-      mxfLength len;
-      fread(&len, sizeof(mxfLength), 1, infile);
-      for (mxfLength i = 0; i < len; i++) {
-        unsigned char ch;
-        fread(&ch, sizeof(unsigned char), 1, infile);
-      }
-    }
-//
-    fclose(infile);
-  } else {
+  if (infile == NULL) {
     cerr << programName <<": Error: "
          << "File \"" << fileName << "\" not found."
          << endl;
     exit(EXIT_FAILURE);
   }
+
+  while (!feof(infile)) {
+    mxfKey k;
+    fread(&k, sizeof(mxfKey), 1, infile);
+    mxfLength len;
+    fread(&len, sizeof(mxfLength), 1, infile);
+    for (mxfLength i = 0; i < len; i++) {
+      unsigned char ch;
+      fread(&ch, sizeof(unsigned char), 1, infile);
+    }
+  }
+  fclose(infile);
 }
 
 bool verbose = false;
