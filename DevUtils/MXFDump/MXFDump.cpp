@@ -5260,6 +5260,16 @@ void validateIndexSegment(mxfIndexSegment* index)
   }
 }
 
+void dumpFlags(mxfUInt08 flags);
+
+void dumpFlags(mxfUInt08 flags)
+{
+  char symbols[] = "IBPB";
+  mxfUInt08 prediction = (flags & 0x30) >> 4;
+  char ch = symbols[prediction];
+  fprintf(stdout, " %c ", ch);
+}
+
 void dumpIndexEntryArray(mxfUInt32 entryCount,
                          mxfUInt32 entrySize,
                          mxfFile& infile);
@@ -5306,7 +5316,8 @@ void dumpIndexEntryArray(mxfUInt32 entryCount,
       printDecField(stdout, anchorOffset);
       fprintf(stdout, "     ");
       printHexFieldPad(stdout, flags);
-      fprintf(stdout, "    ");
+      fprintf(stdout, " ");
+      dumpFlags(flags);
       printDecField(stdout, streamOffset);
       fprintf(stdout, "\n");
 
