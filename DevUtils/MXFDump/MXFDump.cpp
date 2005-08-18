@@ -1402,6 +1402,7 @@ int main(int argumentCount, char* argumentVector[])
       setMode(mxfMode);
     } else if ((strcmp(p, "-a") == 0) || (strcmp(p, "--aaf-dump") == 0)) {
       setMode(aafMode);
+      unknownAsSets = true;
     } else if ((strcmp(p, "-v") == 0) || (strcmp(p, "--verbose") == 0)) {
       verbose = true;
     } else if ((strcmp(p, "-f") == 0) || (strcmp(p, "--fill") == 0)) {
@@ -1433,9 +1434,6 @@ int main(int argumentCount, char* argumentVector[])
       symbolic = true;
     } else if ((strcmp(p, "-n") == 0) || (strcmp(p, "--no-symbolic") == 0)) {
       symbolic = false;
-    } else if ((strcmp(p, "-u") == 0) ||
-               (strcmp(p, "--unknown-as-sets") == 0)) {
-      unknownAsSets = true;
     } else if ((strcmp(p, "-h") == 0) || (strcmp(p, "--help") == 0)) {
       printUsage();
       exit(EXIT_SUCCESS);
