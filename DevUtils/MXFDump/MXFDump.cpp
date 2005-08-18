@@ -241,10 +241,10 @@ void dumpMxfOperationalPattern(const char* label, mxfFile infile);
 
 void printOperationalPattern(mxfKey& k, FILE* outfile);
 
-void klvDumpFile(char* fileName);
-void setDumpFile(char* fileName);
-void mxfDumpFile(char* fileName);
-void aafDumpFile(char* fileName);
+void klvDumpFile(mxfFile infile);
+void setDumpFile(mxfFile infile);
+void mxfDumpFile(mxfFile infile);
+void aafDumpFile(mxfFile infile);
 
 bool lookupKey(mxfKey& k, size_t& index);
 bool isEssenceElement(mxfKey& k);
@@ -3073,15 +3073,8 @@ void printV10RandomIndex(mxfKey& k, mxfLength& len, mxfFile infile)
   printRandomIndex(k, len, infile);
 }
 
-void klvDumpFile(char* fileName)
+void klvDumpFile(mxfFile infile)
 { 
-  mxfFile infile;
-
-  infile = openExistingRead(fileName);
-  if (infile == NULL) {
-    fatalError("File \"%s\" not found.\n", fileName);
-  }
-
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
     mxfLength len;
@@ -3089,18 +3082,10 @@ void klvDumpFile(char* fileName)
     printKL(k, len);
     printV(len, limitBytes, limit, infile);
   }
-  close(infile);
 }
 
-void setDumpFile(char* fileName)
+void setDumpFile(mxfFile infile)
 {
-  mxfFile infile;
-
-  infile = openExistingRead(fileName);
-  if (infile == NULL) {
-    fatalError("File \"%s\" not found.\n", fileName);
-  }
-
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
     mxfLength len;
@@ -3120,7 +3105,6 @@ void setDumpFile(char* fileName)
       printV(len, false, 0, infile);
     }
   }
-  close(infile);
 }
 
 bool dumpDark = false;
@@ -3212,23 +3196,14 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
   }
 }
 
-void mxfDumpFile(char* fileName)
+void mxfDumpFile(mxfFile infile)
 {
-  mxfFile infile;
-
-  infile = openExistingRead(fileName);
-  if (infile == NULL) {
-    fatalError("File \"%s\" not found.\n", fileName);
-  }
-
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
     mxfLength len;
     readMxfLength(len, infile);
     mxfDumpKLV(k, len, infile);
   }
-
-  close(infile);
 }
 
 void aafDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile);
@@ -3245,23 +3220,14 @@ void aafDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
   }
 }
 
-void aafDumpFile(char* fileName)
+void aafDumpFile(mxfFile infile)
 {
-  mxfFile infile;
-
-  infile = openExistingRead(fileName);
-  if (infile == NULL) {
-    fatalError("File \"%s\" not found.\n", fileName);
-  }
-
   mxfKey k;
   while (readOuterMxfKey(k, infile)) {
     mxfLength len;
     readMxfLength(len, infile);
     aafDumpKLV(k, len, infile);
   }
-
-  close(infile);
 }
 
 void klvValidate(mxfFile infile);
@@ -3320,15 +3286,8 @@ void aafValidate(mxfFile /* infile */)
   }
 }
 
-void mxfValidateFile(Mode mode, char* fileName)
+void mxfValidateFile(Mode mode, mxfFile infile)
 {
-  mxfFile infile;
-
-  infile = openExistingRead(fileName);
-  if (infile == NULL) {
-    fatalError("File \"%s\" not found.\n", fileName);
-  }
-
   switch (mode) {
   case aafValidateMode:
     aafValidate(infile);
@@ -3346,7 +3305,6 @@ void mxfValidateFile(Mode mode, char* fileName)
     /* Invalid mode ? */
     break;
   }
-  close(infile);
 }
 
 void setMode(Mode m);
@@ -3619,23 +3577,29 @@ int main(int argumentCount, char* argumentVector[])
     }
   }
 
-  if (mode == klvMode) {
-    klvDumpFile(fileName);
-  } else if (mode == localSetMode) {
-    setDumpFile(fileName);
-  } else if (mode == mxfMode) {
-    mxfDumpFile(fileName);
-  } else if (mode == aafMode) {
-    aafDumpFile(fileName);
-  } else if (mode == klvValidateMode) {
-    mxfValidateFile(mode, fileName);
-  } else if (mode == setValidateMode) {
-    mxfValidateFile(mode, fileName);
-  } else if (mode == mxfValidateMode) {
-    mxfValidateFile(mode, fileName);
-  } else if (mode == aafValidateMode) {
-    mxfValidateFile(mode, fileName);
+  mxfFile infile = openExistingRead(fileName);
+  if (infile == NULL) {
+    fatalError("File \"%s\" not found.\n", fileName);
   }
+
+  if (mode == klvMode) {
+    klvDumpFile(infile);
+  } else if (mode == localSetMode) {
+    setDumpFile(infile);
+  } else if (mode == mxfMode) {
+    mxfDumpFile(infile);
+  } else if (mode == aafMode) {
+    aafDumpFile(infile);
+  } else if (mode == klvValidateMode) {
+    mxfValidateFile(mode, infile);
+  } else if (mode == setValidateMode) {
+    mxfValidateFile(mode, infile);
+  } else if (mode == mxfValidateMode) {
+    mxfValidateFile(mode, infile);
+  } else if (mode == aafValidateMode) {
+    mxfValidateFile(mode, infile);
+  }
+  close(infile);
 
   int result = EXIT_SUCCESS;
   if ((errors != 0) || (warnings != 0)) {
