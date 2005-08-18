@@ -4179,6 +4179,8 @@ void printFooterPartition(mxfKey& k, mxfLength& len, mxfFile infile)
 }
 
 typedef struct mxfIndexSegmentTag {
+  mxfPartition* _partition;
+
   mxfKey _instanceUID; // Req
   bool _hasInstanceUID;
 
@@ -4225,6 +4227,8 @@ void initializeIndexSegment(mxfIndexSegment* index, mxfKey& key);
 
 void initializeIndexSegment(mxfIndexSegment* index, mxfKey& key)
 {
+  index->_partition = 0;
+
   memcpy(&index->_instanceUID, &NullKey, sizeof(mxfKey));
   index->_hasInstanceUID = false;
 
@@ -4274,6 +4278,7 @@ void readIndexSegment(mxfIndexSegment* index, mxfLength& len, mxfFile infile);
 
 void readIndexSegment(mxfIndexSegment* index, mxfLength& len, mxfFile infile)
 {
+  index->_partition = currentPartition;
   mxfLength remainder = len;
   while (remainder > 0) {
     mxfLocalKey identifier;
@@ -4495,6 +4500,22 @@ void validateIndexSegment(mxfIndexSegment* index)
                  " index duration (%"MXFPRIu64")",
                  index->_indexEntryCount,
                  index->_indexDuration); 
+    }
+  }
+
+  mxfPartition* partition = index->_partition;
+  if (partition != 0) {
+    // we're in validation mode
+    if (index->_hasIndexSID) {
+      if (partition->_indexSID != index->_indexSID) {
+        mxfError(currentKey,
+                 keyPosition,
+                 "Incorrect IndexSID -"
+                 " partition has IndexSID = %"MXFPRIu32","
+                 " index segment has IndexSID = %"MXFPRIu32".",
+                 partition->_indexSID,
+                 index->_indexSID);
+      }
     }
   }
 }
