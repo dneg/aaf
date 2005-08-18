@@ -475,14 +475,9 @@ void markMetadataEnd(mxfUInt64 endKeyPosition);
 void markIndexStart(mxfUInt64 indexKeyPosition);
 void markIndexEnd(mxfUInt64 endKeyPosition);
 void markEssenceSegmentStart(mxfUInt32 sid, mxfUInt64 essenceKeyPosition);
-void markEssenceSegmentEnd(mxfUInt32 sid,
-                           mxfUInt64 start,
-                           mxfUInt64 endKeyPosition);
+void markEssenceSegmentEnd(mxfUInt64 endKeyPosition);
 
-void essenceSegment(mxfUInt32 sid,
-                    mxfUInt64 start,
-                    mxfUInt64 size,
-                    mxfUInt64 origin);
+void essenceSegment(mxfUInt32 sid, mxfUInt64 start, mxfUInt64 end);
 
 // Frame wrapped essence
 bool frames = false;     // if true, treat essence as frame wrapped.
@@ -3278,13 +3273,10 @@ void markEssenceSegmentStart(mxfUInt32 sid, mxfUInt64 essenceKeyPosition)
   essencePosition = essenceKeyPosition;
 }
 
-void markEssenceSegmentEnd(mxfUInt32 sid,
-                           mxfUInt64 start,
-                           mxfUInt64 endKeyPosition)
+void markEssenceSegmentEnd(mxfUInt64 endKeyPosition)
 {
   if (essenceSID != 0) {
-    mxfUInt64 size = endKeyPosition - essencePosition;
-    essenceSegment(sid, start, size, essencePosition);
+    essenceSegment(essenceSID, essencePosition, endKeyPosition);
     essenceSID = 0;
   }
 }
@@ -3299,6 +3291,7 @@ typedef std::list<Segment*> SegmentList;
 
 typedef struct StreamTag {
   mxfUInt32 _sid;
+  mxfUInt64 _size;
   SegmentList _segments;
 } Stream;
 
@@ -3319,7 +3312,8 @@ void printSegment(Segment* seg)
 
 void printStream(Stream* s)
 {
-  fprintf(stdout, "Stream %08"MXFPRIu32"\n", s->_sid);
+  fprintf(stdout, "Stream %08"MXFPRIu32" ", s->_sid);
+  fprintf(stdout, "(%016"MXFPRIu64")\n", s->_size);
   SegmentList::const_iterator it;
   for (it = s->_segments.begin(); it != s->_segments.end(); it++) {
     Segment* seg = *it;
@@ -3353,25 +3347,25 @@ void destroyStreams(StreamSet& streams)
   }
 }
 
-void essenceSegment(mxfUInt32 sid,
-                    mxfUInt64 start,
-                    mxfUInt64 size,
-                    mxfUInt64 origin)
+void essenceSegment(mxfUInt32 sid, mxfUInt64 start, mxfUInt64 end)
 {
   Stream* s;
   StreamSet::const_iterator it = streams.find(sid);
   if (it == streams.end()) {
     s = new Stream();
     s->_sid = sid;
+    s->_size = 0;
     streams.insert(StreamSet::value_type(sid, s));
   } else {
     s = it->second;
   }
+  mxfUInt64 size = end - start;
   Segment* seg = new Segment;
-  seg->_start = start;
+  seg->_start = s->_size;
   seg->_size = size;
-  seg->_origin = origin;
+  seg->_origin = start;
   s->_segments.push_back(seg);
+  s->_size = s->_size + seg->_size;
 }
 
 void readPartition(PartitionList& partitions,
@@ -4463,11 +4457,7 @@ void mxfValidate(mxfFile infile)
     } else if (isPartition(k)) {
       markMetadataEnd(keyPosition);
       markIndexEnd(keyPosition);
-      if (currentPartition != 0) {
-        markEssenceSegmentEnd(currentPartition->_bodySID,
-                              currentPartition->_bodyOffset,
-                              keyPosition);
-      }
+      markEssenceSegmentEnd(keyPosition);
       checkPartitionLength(length);
       if (isFooter(k)) {
         footer = checkFooterPosition(footer, keyPosition);
