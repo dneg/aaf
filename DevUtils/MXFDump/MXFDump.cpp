@@ -1408,25 +1408,25 @@ void printEssenceFrames(mxfKey& k,
     mxfLength len;
     int lengthLen = readMxfLength(len, f);
     total = total + lengthLen;
-    if ((frameCount < maxFrames) || !iFlag) {
-      if (isFill(k)) {
+
+    if (isFill(k)) {
+      if ((frameCount < maxFrames) || !iFlag) {
         printFill(k, len, f);
       } else {
+        skipV(len, f);
+      }
+    } else {
+      if ((frameCount < maxFrames) || !iFlag) {
         fprintf(stdout, "\n");
         fprintf(stdout, "Frame ");
         printField(stdout, frameCount);
 
         printKL(k, len);
         printV(len, lFlag, limit, f);
-        frameCount = frameCount + 1;
-      }
-    } else {
-      if (isFill(k)) {
-        skipV(len, f);
       } else {
         skipV(len, f);
-        frameCount = frameCount + 1;
       }
+      frameCount = frameCount + 1;
     }
     total = total + len;
   }
