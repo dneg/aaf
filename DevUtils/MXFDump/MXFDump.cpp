@@ -1854,7 +1854,7 @@ void printAtomOperationalPattern(mxfKey& /* k */, FILE* outfile);
 void printAtomOperationalPattern(mxfKey& /* k */, FILE* outfile)
 {
   // tjb - should check for specific Atom patterns
-  fprintf(outfile, "Specialized - Atom");
+  fprintf(outfile, "Atom");
 }
 
 void printSpecializedOperationalPattern(mxfKey& k, FILE* outfile);
@@ -1865,7 +1865,7 @@ void printSpecializedOperationalPattern(mxfKey& k, FILE* outfile)
   if (itemComplexity == 0x10) {
     printAtomOperationalPattern(k, outfile);
   } else {
-    fprintf(outfile, "Specialized - Unknown");
+    fprintf(outfile, "Unknown");
   }
 }
 
