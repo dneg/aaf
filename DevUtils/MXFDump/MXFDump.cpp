@@ -77,7 +77,7 @@ void printMxfLength(mxfLength& l);
 
 void printMxfLength(mxfLength& l)
 {
-  cout << l;
+  cout << hex << setw(8) << setfill('0') << l;
 }
 
 void readMxfKey(mxfKey& k, FILE* f);
