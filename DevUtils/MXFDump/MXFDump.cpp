@@ -1795,6 +1795,14 @@ void printPrimer(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
+void printSystemMetadata(mxfKey& k, mxfLength& len, FILE* infile);
+
+void printSystemMetadata(mxfKey& k, mxfLength& len, FILE* infile)
+{
+  printKL(k, len);
+  printV(len, false, 0, infile);
+}
+
 bool lFlag = false;
 mxfUInt32 limit = 0;
 
@@ -1924,8 +1932,9 @@ void mxfDumpFile(char* fileName)
       // MultipleDescriptor
       // NetworkLocator
       // TextLocator
-      // SystemMetadata
       //
+    } else if (memcmp(&SystemMetadata, &k, sizeof(mxfKey)) == 0) {
+      printSystemMetadata(k, len, infile);
     } else if (memcmp(&IndexTable, &k, sizeof(mxfKey)) == 0) {
       printIndexTable(k, len, infile);
     } else if (isLocalSet(k)) {
