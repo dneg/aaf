@@ -3008,6 +3008,26 @@ void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
 #if 0
   printRandomIndex(rip);
 #endif
+  RandomIndex::const_iterator rit;
+  for (rit = rip.begin(); rit != rip.end(); ++rit) {
+    bool found = false;
+    RandomIndexEntry e = *rit;
+    PartitionList::const_iterator pit;
+    for (pit = partitions.begin(); pit != partitions.end(); ++pit) {
+      Partition* p = *pit;
+      if (e._offset == p->_address) {
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      error("Invalid random index entry - no such partition"
+            " (SID = %"MXFPRIu32", address = 0x%"MXFPRIx64".\n",
+            e._sid,
+            e._offset);
+      errors = errors + 1;
+    }
+  }
 }
 
 mxfUInt64 checkFooterPosition(mxfUInt64 footer, mxfUInt64 keyPosition);
