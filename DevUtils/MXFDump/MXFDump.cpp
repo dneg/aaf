@@ -462,11 +462,11 @@ void mxfDumpFile(char* fileName)
         setLength = setLength + length;
         if (setLength > len) {
             fprintf(stdout,
-                    "%s : Error : Wrong size (pid = %02x)",
-                    programName,
-                    identifier);
+                    "%s : Error : Wrong size (k = ",
+                    programName);
+            printMxfLocalKey(identifier, stdout);
             fprintf(stdout,
-                    " size = %d (should be %d).\n",
+                    ") size = %d (should be %d).\n",
                     length,
                     length - (setLength - len));
         }
