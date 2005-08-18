@@ -36,8 +36,17 @@ void checkSizes(void)
 void printUsage(void)
 {
   cerr << programName << ": Usage : "
-       << programName << " <file>"
+       << programName << " OPTIONS <file>"
                       << endl;
+  cerr << "OPTIONS :" << endl;
+  cerr << "--raw-dump      = ";
+  cerr << "dump raw KLV (-r)" << endl;
+  cerr << "--mxf-dump      = ";
+  cerr << "dump MXF (-m)" << endl;
+  cerr << "--help          = ";
+  cerr << "print this messsage and exit (-h)" << endl;
+  cerr << "--verbose       = ";
+  cerr << "print more detailed information (-v)" << endl;
 }
 
 const char* baseName(char* pathName);
