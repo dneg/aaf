@@ -694,9 +694,9 @@ int main(int argumentCount, char* argumentVector[])
       setMode(mxfMode);
     } else if ((strcmp(p, "-v") == 0) || (strcmp(p, "--verbose") == 0)) {
       verbose = true;
-    } else if ((strcmp(p, "-f") == 0) ||(strcmp(p, "--filler") == 0)) {
+    } else if ((strcmp(p, "-f") == 0) || (strcmp(p, "--filler") == 0)) {
       dumpFiller = true;
-    } else if ((strcmp(p, "-l") == 0) ||(strcmp(p, "--limit") == 0)) {
+    } else if ((strcmp(p, "-l") == 0) || (strcmp(p, "--limit") == 0)) {
       if ((i + 1 < argumentCount) && (*argumentVector[i + 1] != '-' )) {
         lFlag = true;
         i = i + 1;
@@ -719,7 +719,7 @@ int main(int argumentCount, char* argumentVector[])
         printUsage();
         exit(EXIT_FAILURE);
       }
-    } else if ((strcmp(p, "-s") == 0) ||(strcmp(p, "--symbolic") == 0)) {
+    } else if ((strcmp(p, "-s") == 0) || (strcmp(p, "--symbolic") == 0)) {
       symbolic = true;
     } else if ((strcmp(p, "-h") == 0) || (strcmp(p, "--help") == 0)) {
       printUsage();
