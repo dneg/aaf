@@ -885,9 +885,9 @@ void dumpLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
-void dumpPrimer(mxfKey& k, mxfLength& len, FILE* infile);
+void printPrimer(mxfKey& k, mxfLength& len, FILE* infile);
 
-void dumpPrimer(mxfKey& k, mxfLength& len, FILE* infile)
+void printPrimer(mxfKey& k, mxfLength& len, FILE* infile)
 {
   printKL(k, len);
   mxfUInt32 elementCount;
@@ -975,7 +975,7 @@ void mxfDumpFile(char* fileName)
     if (isLocalSet(k)) {
       dumpLocalSet(k, len, infile);
     } else if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
-      dumpPrimer(k, len, infile);
+      printPrimer(k, len, infile);
     } else if (isFill(k)) {
       printFill(k, len, infile);
     } else if (isEssenceElement(k)) {
