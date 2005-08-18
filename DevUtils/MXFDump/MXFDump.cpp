@@ -2602,7 +2602,7 @@ void printCommonOptions(void)
 {
   fprintf(stderr, "  --search-run-in <n> = ");
   fprintf(stderr, "search <n> bytes of run-in");
-  fprintf(stderr, "[default n = 64k]\n");
+  fprintf(stderr, "[default, n = 64k]\n");
 
   fprintf(stderr, "  --verbose           = ");
   fprintf(stderr, "print more detailed information (-v)\n");
@@ -2667,7 +2667,7 @@ void printFormatOptions(void)
 {
   fprintf(stderr, "  --limit-bytes <n>   = ");
   fprintf(stderr, "truncate essence ");
-  fprintf(stderr, "to <n> bytes (-l) [default n = 0]\n");
+  fprintf(stderr, "to <n> bytes (-l) [default, n = 0]\n");
 
   fprintf(stderr, "  --no-limit-bytes    = ");
   fprintf(stderr, "do not truncate ");
@@ -2681,7 +2681,7 @@ void printFormatOptions(void)
   fprintf(stderr, "truncate frame-wrapped essence ");
   fprintf(stderr, "to <n> frames\n");
   fprintf(stderr, "                        ");
-  fprintf(stderr, "[default n = 0]\n");
+  fprintf(stderr, "[default, n = 0]\n");
 
   fprintf(stderr, "  --no-limit-frames   = ");
   fprintf(stderr, "do not truncate ");
@@ -2691,7 +2691,7 @@ void printFormatOptions(void)
   fprintf(stderr, "print only the first <n> ");
   fprintf(stderr, "index table entries (-c)\n");
   fprintf(stderr, "                        ");
-  fprintf(stderr, "[default n = 0]\n");
+  fprintf(stderr, "[default, n = 0]\n");
 
   fprintf(stderr, "  --no-limit-entries  = ");
   fprintf(stderr, "print all ");
