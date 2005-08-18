@@ -183,6 +183,9 @@ mxfUInt08 hostByteOrder(void);
 #if defined(MXF_OS_WINDOWS)
 #include <windows.h>
 typedef HANDLE mxfFile;
+#elif defined(MXF_OS_MACOSX)
+#include <CoreServices/CoreServices.h>
+typedef SInt16 mxfFile;
 #else
 typedef FILE* mxfFile;
 #endif
@@ -479,6 +482,83 @@ mxfUInt64 size(mxfFile infile)
     fatalError("GetFileSize() failed.\n");
   }
   result = li.QuadPart;
+  return result;
+}
+
+#elif defined(MXF_OS_MACOSX)
+mxfFile openExistingRead(char* fileName)
+{
+  FSSpec spec;
+  Str255 name;
+  CopyCStringToPascal(fileName, name);
+  OSErr status = FSMakeFSSpec(0, 0, name, &spec);
+  if (status != noErr) {
+    fatalError("FSMakeFSSpec() failed (%d).\n", status);
+  }
+  HFSUniStr255 fname;
+  status = FSGetDataForkName(&fname);
+  if (status != noErr) {
+    fatalError("FSGetDataForkName() failed (%d).\n", status);
+  }
+  FSRef fref;
+  status = FSpMakeFSRef(&spec, &fref);
+  if (status != noErr) {
+    fatalError("FSpMakeFSRef() failed (%d).\n", status);
+  }
+  SInt16 result;
+  status = FSOpenFork(&fref, fname.length, fname.unicode, fsRdPerm, &result);
+  if (status != noErr) {
+    fatalError("FSOpenFork() failed (%d).\n", status);
+  }
+  return result;
+}
+
+void close(mxfFile infile)
+{
+  OSErr status = FSCloseFork(infile);
+  if (status != noErr) {
+    fatalError("FSCloseFork() failed (%d).\n", status);
+  }  
+}
+
+void setPosition(mxfFile infile, const mxfUInt64 position)
+{
+  SInt64 pos = position;
+  OSErr status = FSSetForkPosition(infile, fsFromMark, pos);
+  if (status != noErr) {
+    fatalError("FSSetForkPosition() failed (%d).\n", status);
+  }
+}
+
+size_t read(mxfFile infile, void* buffer, size_t count)
+{
+  ByteCount bytesRead;
+  OSErr status = FSReadFork(infile, fsAtMark, 0, count, buffer, &bytesRead);
+  if ((status != eofErr) && (status != noErr)) {
+    fatalError("FSReadFork() failed (%d).\n", status);
+  }
+  return bytesRead;
+}
+
+mxfUInt64 position(mxfFile infile)
+{
+  SInt64 position;
+  OSErr status = FSGetForkPosition(infile, &position);
+  if (status != noErr) {
+    fatalError("FSGetForkPosition() failed (%d).\n", status);
+  }
+  mxfUInt64 result = 0;
+  return result;
+}
+
+mxfUInt64 size(mxfFile infile)
+{
+  SInt64 size;
+  OSErr status = FSGetForkSize(infile, &size);
+  if (status != noErr) {
+    fatalError("FSGetForkSize() failed (%d).\n", status);
+  }
+  mxfUInt64 result = size;
   return result;
 }
 
