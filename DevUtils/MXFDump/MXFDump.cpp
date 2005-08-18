@@ -155,7 +155,7 @@ const mxfLocalKey nullMxfLocalKey = {0, 0};
 
 const mxfKey Primer = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
                        0x0d, 0x01, 0x02, 0x01, 0x01, 0x05, 0x01, 0x00};
-const mxfKey Filler = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
+const mxfKey Fill   = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
                        0x03, 0x01, 0x02, 0x10, 0x01, 0x00, 0x00, 0x00};
 
 const char* programName;
@@ -268,8 +268,8 @@ void printUsage(void)
   fprintf(stderr, "\n");
   fprintf(stderr, "--mxf-dump      = ");
   fprintf(stderr, "dump MXF (-m)\n");
-  fprintf(stderr, "  --filler      = ");
-  fprintf(stderr, "dump filler bytes (-f)\n");
+  fprintf(stderr, "  --fill        = ");
+  fprintf(stderr, "dump fill bytes (-f)\n");
   fprintf(stderr, "\n");
   fprintf(stderr, "--symbolic      = ");
   fprintf(stderr, "dump the names of keys if known (-s)\n");
@@ -575,19 +575,12 @@ void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
   flush();
 }
 
-void printEssence(mxfKey& k,
-                  mxfLength& length,
-                  bool lFlag,
-                  mxfUInt32 limit,
-                  FILE* f);
+void printEssenceKL(mxfKey& k, mxfLength& len);
 
-void printEssence(mxfKey& k,
-                  mxfLength& length,
-                  bool lFlag,
-                  mxfUInt32 limit,
-                  FILE* f)
+void printEssenceKL(mxfKey& k, mxfLength& len)
 {
   char* itemType;
+  char* typeName = "Unknown";
   switch (k[12]) {
   case 0x05:
     itemType = "CP Picture";
@@ -617,12 +610,42 @@ void printEssence(mxfKey& k,
   int elementCount = k[13];
   int elementType = k[14];
   int elementNumber = k[15] + 1; // zero based
+  fprintf(stdout, "\n");
+  fprintf(stdout, "[ K = ");
+  fprintf(stdout, "Essence");
   fprintf(stdout,
-          "[ K = %s (%d of %d) (type = %x) ]\n",
+          " \"%s\" (%d of %d), type = %s (%02x), ",
           itemType,
           elementNumber,
           elementCount,
+          typeName,
           elementType);
+  fprintf(stdout,
+          "track = %02x.%02x.%02x.%02x\n",
+          k[12],
+          k[13],
+          k[14],
+          k[15]);
+  printMxfKey(k, stdout);
+  fprintf(stdout, ", ");
+  fprintf(stdout, "L = ");
+  printMxfLength(len, stdout);
+  fprintf(stdout, " ]\n");
+}
+
+void printEssence(mxfKey& k,
+                  mxfLength& length,
+                  bool lFlag,
+                  mxfUInt32 limit,
+                  FILE* f);
+
+void printEssence(mxfKey& k,
+                  mxfLength& length,
+                  bool lFlag,
+                  mxfUInt32 limit,
+                  FILE* f)
+{
+  printEssenceKL(k, length);
   printV(length, lFlag, limit, f);
 }
 
@@ -694,23 +717,25 @@ void checkLocalKey(mxfLocalKey& k)
   }
 }
 
-bool dumpFiller = false;
+bool dumpFill = false;
 
-void printFiller(mxfLength& len, FILE* infile);
+void printFill(mxfKey& k, mxfLength& len, FILE* infile);
 
-void printFiller(mxfLength& len, FILE* infile)
+void printFill(mxfKey& k, mxfLength& len, FILE* infile)
 {
-  if (dumpFiller) {
+  printKL(k, len);
+  if (dumpFill) {
     printV(len, false, 0, infile);
   } else {
     skipV(len, infile);
   }
 }
 
-void dumpLocalSet(mxfLength& len, FILE* infile);
+void dumpLocalSet(mxfKey& k, mxfLength& len, FILE* infile);
 
-void dumpLocalSet(mxfLength& len, FILE* infile)
+void dumpLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
 {
+  printKL(k, len);
   mxfLength setLength = 0;
   while (setLength < len) {
     mxfLocalKey identifier;
@@ -724,10 +749,11 @@ void dumpLocalSet(mxfLength& len, FILE* infile)
   }
 }
 
-void dumpPrimer(FILE* infile);
+void dumpPrimer(mxfKey& k, mxfLength& len, FILE* infile);
 
-void dumpPrimer(FILE* infile)
+void dumpPrimer(mxfKey& k, mxfLength& len, FILE* infile)
 {
+  printKL(k, len);
   mxfUInt32 elementCount;
   readMxfUInt32(elementCount, infile);
   mxfUInt32 elementSize;
@@ -797,14 +823,11 @@ void mxfDumpFile(char* fileName)
     readMxfLength(len, infile);
 
     if (isLocalSet(k)) {
-      printKL(k, len);
-      dumpLocalSet(len, infile);
+      dumpLocalSet(k, len, infile);
     } else if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
-      printKL(k, len);
-      dumpPrimer(infile);
-    } else if (memcmp(&Filler, &k, sizeof(mxfKey)) == 0) {
-      printKL(k, len);
-      printFiller(len, infile);
+      dumpPrimer(k, len, infile);
+    } else if (memcmp(&Fill, &k, sizeof(mxfKey)) == 0) {
+      printFill(k, len, infile);
     } else if (isEssenceElement(k)) {
       printEssence(k, len, lFlag, limit, infile);
     } else {
@@ -897,8 +920,8 @@ int main(int argumentCount, char* argumentVector[])
       setMode(mxfMode);
     } else if ((strcmp(p, "-v") == 0) || (strcmp(p, "--verbose") == 0)) {
       verbose = true;
-    } else if ((strcmp(p, "-f") == 0) || (strcmp(p, "--filler") == 0)) {
-      dumpFiller = true;
+    } else if ((strcmp(p, "-f") == 0) || (strcmp(p, "--fill") == 0)) {
+      dumpFill = true;
     } else if ((strcmp(p, "-l") == 0) || (strcmp(p, "--limit") == 0)) {
       if ((i + 1 < argumentCount) && (*argumentVector[i + 1] != '-' )) {
         lFlag = true;
@@ -958,9 +981,9 @@ int main(int argumentCount, char* argumentVector[])
       exit(EXIT_FAILURE);
     }
   } else { // mode == klvMode
-    if (dumpFiller) {
+    if (dumpFill) {
       fprintf(stderr,
-              "%s : Error : --filler not valid with --klv-dump.\n",
+              "%s : Error : --fill not valid with --klv-dump.\n",
               programName);
       printUsage();
       exit(EXIT_FAILURE);
