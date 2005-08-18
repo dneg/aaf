@@ -371,15 +371,21 @@ void printMxfLength(mxfLength& l, FILE* f)
   fprintf(f, ")");
 }
 
-void readMxfKey(mxfKey& k, FILE* f);
+bool readMxfKey(mxfKey& k, FILE* f);
 
-void readMxfKey(mxfKey& k, FILE* f)
+bool readMxfKey(mxfKey& k, FILE* f)
 {
+  bool result = true;
   int c = fread(&k, sizeof(mxfKey), 1, f);
   if (c != 1) {
-    fprintf(stderr, "%s : Error : Failed to read key.\n", programName);
-    exit(EXIT_FAILURE);
+    if (!feof(f)) {
+      fprintf(stderr, "%s : Error : Failed to read key.\n", programName);
+      exit(EXIT_FAILURE);
+    } else {
+      result = false;
+    }
   }
+  return result;
 }
 
 void printMxfKey(mxfKey& k, FILE* f);
@@ -503,9 +509,8 @@ void mxfDumpFile(char* fileName)
     exit(EXIT_FAILURE);
   }
 
-  while (!feof(infile)) {
-    mxfKey k;
-    readMxfKey(k, infile);
+  mxfKey k;
+  while (readMxfKey(k, infile)) {
     fprintf(stdout, "\n");
     fprintf(stdout, "[ K = ");
     printMxfKeySymbol(k, stdout);
@@ -614,9 +619,8 @@ void klvDumpFile(char* fileName)
     exit(EXIT_FAILURE);
   }
 
-  while (!feof(infile)) {
-    mxfKey k;
-    readMxfKey(k, infile);
+  mxfKey k;
+  while (readMxfKey(k, infile)) {
     fprintf(stdout, "\n");
     fprintf(stdout, "[ K = ");
     printMxfKeySymbol(k, stdout);
