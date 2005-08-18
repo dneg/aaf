@@ -2,7 +2,7 @@
 //
 // Meta definition of the MXF object model.
 //
-// This file was generated on Wed Jul 09 16:22:39 EDT 2003
+// This file was generated on Fri Oct 10 23:36:21 EDT 2003
 
 //
 // MXF_LABEL(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)
@@ -1516,8 +1516,8 @@ MXF_CLASS(GenericPictureEssenceDescriptor,
     false,
     GenericPictureEssenceDescriptor)
   MXF_PROPERTY(Gamma,
-    // 06.0e.2b.34.01.01.01.01.04.01.02.01.01.01.02.00
-    MXF_LABEL(0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
+    // 06.0e.2b.34.01.01.01.02.04.01.02.01.01.01.02.00
+    MXF_LABEL(0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02,
               0x04, 0x01, 0x02, 0x01, 0x01, 0x01, 0x02, 0x00),
     0x3210,
     Label,
