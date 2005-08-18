@@ -3206,6 +3206,7 @@ const char* aafKeyName(const mxfKey& k)
 bool printStats = false;
 
 mxfUInt32 objectCount = 0;
+mxfUInt64 objectBytes = 0;
 
 void printObjectCount(const mxfKey& key);
 
@@ -3215,10 +3216,13 @@ void printObjectCount(const mxfKey& key)
     if (objectCount > 0) {
       fprintf(stdout, "\n");
       fprintf(stdout,
-              "[ %"MXFPRIu32" objects found in %s partition ]\n",
+              "[ %"MXFPRIu32" objects (%"MXFPRIu64" bytes)"
+              " found in %s partition ]\n",
               objectCount,
+              objectBytes,
               keyName(key));
       objectCount = 0;
+      objectBytes = 0;
     }
   }
 }
@@ -6022,6 +6026,7 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
       skipV(len, infile);
     }
     objectCount = objectCount + 1;
+    objectBytes = objectBytes + (position(infile) - keyPosition);
   }
 }
 
