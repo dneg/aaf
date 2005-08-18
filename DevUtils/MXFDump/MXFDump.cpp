@@ -778,6 +778,7 @@ bool lookupAAFKey(mxfKey& k, size_t& index)
 
 bool aafKeysAsSets = true;
 bool bogusKeysAsSets = true;
+bool unknownKeysAsSets = false;
 
 bool findAAFKey(mxfKey& k, size_t& index, char** flag);
 
@@ -2278,6 +2279,8 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
     if (!isDark(k, mode) || dumpDark) {
       if (isLocalSet(k)) {
         printLocalSet(k, len, infile);
+      } else if (unknownKeysAsSets) {
+        printLocalSet(k, len, infile);
       } else {
         printKL(k, len);
         printV(len, false, 0, infile);
@@ -2438,6 +2441,7 @@ int getIntegerOption(int currentArgument,
 // -n --no-symbolic
 // -h --help
 // -d --debug
+// -u --unknown-as-sets 
 
 bool hFlag = false;
 
@@ -2516,6 +2520,9 @@ int main(int argumentCount, char* argumentVector[])
     } else if ((strcmp(p, "--no-symbolic") == 0) ||
                (strcmp(p, "-n") == 0)) {
       symbolic = false;
+    } else if ((strcmp(p, "-u") == 0) ||
+               (strcmp(p, "--unknown-as-sets") == 0)) {
+      unknownKeysAsSets = true;
     } else if ((strcmp(p, "--help") == 0) ||
                (strcmp(p, "-h") == 0)) {
       hFlag = true;
