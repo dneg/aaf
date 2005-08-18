@@ -1270,13 +1270,17 @@ void printSpecializedOperationalPattern(mxfKey& k, FILE* outfile)
 
 void printOperationalPattern(mxfKey& k, FILE* outfile)
 {
-  mxfByte itemComplexity = k[12];
-  if ((itemComplexity >= 1) && (itemComplexity <= 3)) {
-    printGeneralizedOperationalPattern(k, outfile);
-  } else if ((itemComplexity >= 0x10) && (itemComplexity <= 0x7f)) {
-    printSpecializedOperationalPattern(k, outfile);
+  if (isOperationalPattern(k)) {
+    mxfByte itemComplexity = k[12];
+    if ((itemComplexity >= 1) && (itemComplexity <= 3)) {
+      printGeneralizedOperationalPattern(k, outfile);
+    } else if ((itemComplexity >= 0x10) && (itemComplexity <= 0x7f)) {
+      printSpecializedOperationalPattern(k, outfile);
+    } else {
+      fprintf(outfile, "[Unknown]");
+    }
   } else {
-    fprintf(outfile, "[Unknown]");
+    fprintf(outfile, "[Invalid]");
   }
 }
 
@@ -3243,8 +3247,8 @@ void checkOperationalPattern(mxfPartition* p);
 
 void checkOperationalPattern(mxfPartition* p)
 {
-  if (isNullKey(p->_operationalPattern)) {
-    mxfError("Null operational pattern"
+  if (!isOperationalPattern(p->_operationalPattern)) {
+    mxfError("Invalid operational pattern"
              " (following key at offset 0x%"MXFPRIx64").\n",
              p->_address + headerPosition);
   }
