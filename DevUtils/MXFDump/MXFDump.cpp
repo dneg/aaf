@@ -2690,6 +2690,19 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
   printMxfKey(k, f);
 }
 
+const char* mxfKeyName(const mxfKey& k);
+
+const char* mxfKeyName(const mxfKey& k)
+{
+  const char* result = "Unknown";
+  size_t i;
+  bool found = lookupMXFKey(const_cast<mxfKey&>(k), i);
+  if (found) {
+    result = mxfKeyTable[i]._name;
+  }
+  return result;
+}
+
 bool printStats = false;
 
 mxfUInt32 objectCount = 0;
