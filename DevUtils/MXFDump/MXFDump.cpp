@@ -1599,16 +1599,16 @@ void printEssenceKL(mxfKey& k, mxfLength& len)
   fprintf(stdout, "[ K = ");
   fprintf(stdout, "Essence");
   fprintf(stdout,
-          " \"%s\", %s (%02x), ",
-          itemTypeIdName,
-          elementTypeIdName,
-          elementTypeId);
-  fprintf(stdout,
-          "track = %02x.%02x.%02x.%02x\n",
+          ", track = %02x.%02x.%02x.%02x",
           k[12],
           k[13],
           k[14],
           k[15]);
+  fprintf(stdout,
+          ", \"%s\", %s (%02x),\n",
+          itemTypeIdName,
+          elementTypeIdName,
+          elementTypeId);
   printMxfKey(k, stdout);
   fprintf(stdout, ", ");
   fprintf(stdout, "L = ");
