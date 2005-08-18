@@ -1413,9 +1413,9 @@ void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
   }
 }
 
-char* elementTypeIdName(mxfByte itemTypeId);
+char* itemTypeName(mxfByte itemTypeId);
 
-char* elementTypeIdName(mxfByte itemTypeId)
+char* itemTypeName(mxfByte itemTypeId)
 {
   char* result;
   switch (itemTypeId) {
@@ -1500,7 +1500,7 @@ void printEssenceKL(mxfKey& k, mxfLength& len)
   mxfByte itemTypeId = k[12];
   mxfByte elementTypeId = k[14];
 
-  char* itemTypeIdName = elementTypeIdName(itemTypeId);
+  char* itemTypeIdName = itemTypeName(itemTypeId);
   char* elementTypeIdName = elementTypeName(itemTypeId, elementTypeId);
 
   int elementCount = k[13];
