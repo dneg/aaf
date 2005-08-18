@@ -172,7 +172,7 @@ void init(void)
 void flush(void)
 {
   printField(stdout, address);
-  fprintf(stdout, "    ");
+  fprintf(stdout, "   ");
   for (size_t i = 0; i < bufferIndex; i++) {
     fprintf(stdout, "%02x ", buffer[i]);
   }
