@@ -4349,7 +4349,7 @@ Segment* findEssenceSegment(mxfPartition* p)
     SegmentList::const_iterator it;
     for (it = p->_segments.begin(); it != p->_segments.end(); it++) {
       Segment* seg = *it;
-      if (isEssenceElement(seg->_label)) {
+      if (isEssenceElement(seg->_label) || isSystemElement(seg->_label)) {
         result = seg;
         break;
       }
@@ -6034,7 +6034,7 @@ void mxfValidate(mxfFile infile)
       markMetadataEnd(keyPosition);
       markIndexEnd(keyPosition);
       readRandomIndex(rip, len, infile);
-    } else if (isEssenceElement(k)) {
+    } else if (isEssenceElement(k) || isSystemElement(k)) {
       markMetadataEnd(keyPosition);
       markIndexEnd(keyPosition);
       markEssenceSegmentStart(currentPartition->_bodySID, keyPosition);
