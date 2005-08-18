@@ -158,6 +158,7 @@ bool reorder(void);
 mxfUInt08 hostByteOrder(void);
 
 void setPosition(const mxfUInt64 newPosition, FILE* f);
+void skipBytes(const mxfUInt64 byteCount, FILE* f);
 
 void readMxfUInt08(mxfByte& b, FILE* f);
 void readMxfUInt16(mxfUInt16& i, FILE* f);
@@ -219,10 +220,10 @@ void skipV(mxfLength& length, FILE* f);
 mxfUInt64 position;
 mxfUInt64 keyPosition;
 
-void setPosition(const mxfUInt64 newPosition, FILE* f)
+void setPosition(const mxfUInt64 position, FILE* f)
 {
-  long offset = static_cast<long>(newPosition);
-  if (newPosition != static_cast<mxfUInt64>(offset)) {
+  long offset = static_cast<long>(position);
+  if (position != static_cast<mxfUInt64>(offset)) {
     fprintf(stderr, "%s : Error : offset too large.\n", programName);
     exit(EXIT_FAILURE);
   }
@@ -231,7 +232,12 @@ void setPosition(const mxfUInt64 newPosition, FILE* f)
     fprintf(stderr, "%s : Error : Failed to seek.\n", programName);
     exit(EXIT_FAILURE);
   }
-  position = newPosition;
+}
+
+void skipBytes(const mxfUInt64 byteCount, FILE* f)
+{
+  setPosition(position + byteCount, f);
+  position = position + byteCount;
 }
 
 void readMxfUInt08(mxfByte& b, FILE* f)
@@ -1768,7 +1774,7 @@ void printEssence(mxfKey& k,
 
 void skipV(mxfLength& length, FILE* f)
 {
-  setPosition(position + length, f);
+  skipBytes(length, f);
 }
 
 void printLocalKL(mxfLocalKey& k, mxfUInt16& l, mxfKey& enclosing);
