@@ -2669,7 +2669,7 @@ char* GCPictureElementTypeName(mxfByte type)
     result = "Compressed HD (D11)";
   } else if (type == 0x02) {
     result = "Uncompressed (Frame Wrapped)";
-  } else if (type == 0x02) {
+  } else if (type == 0x03) {
     result = "Uncompressed (Clip Wrapped)";
   } else if (type == 0x04) {
     result = "Uncompressed (Line Wrapped)";
