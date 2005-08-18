@@ -762,13 +762,14 @@ bool isMxfFile(mxfFile infile, mxfUInt64& headerPosition);
 bool isMxfFile(mxfFile infile, mxfUInt64& headerPosition)
 {
   bool result = false;
-  mxfUInt64 savedPosition = position(infile);
 
-  mxfKey k;
-  readMxfKey(k, infile);
-  if (isHeader(k)) {
-    result = true;
-    headerPosition = savedPosition;
+  if (findHeader(infile, headerPosition)) {
+    setPosition(infile, headerPosition);
+    mxfKey k;
+    readMxfKey(k, infile);
+    if (isHeader(k)) {
+      result = true;
+    }
   }
 
   return result;
