@@ -4225,7 +4225,8 @@ void setMode(Mode m)
 {
   if (mode != unspecifiedMode) {
     error("Specify only one of "
-          "--klv-dump, --set-dump, --mxf-dump, --aaf-dump.\n");
+          "--klv-dump, --set-dump, --mxf-dump, --aaf-dump, "
+          "--aaf-validate, --mxf-validate, --set-validate, --klv-validate.\n");
     printUsage();
     exit(EXIT_FAILURE);
   }
