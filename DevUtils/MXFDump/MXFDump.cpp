@@ -3951,6 +3951,12 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
   checkOperationalPattern(p);
   // EssenceContainers
   checkEssenceContainers(p);
+
+  if ((!isClosed(p->_key)) && (!isComplete(p->_key))) {
+    mxfWarning(p->_key,
+               p->_address,
+               "Partition is open and incomplete");
+  }
 }
 
 void checkPartitions(PartitionList& partitions, mxfUInt64 footer);
