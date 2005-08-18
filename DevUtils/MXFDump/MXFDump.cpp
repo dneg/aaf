@@ -220,8 +220,8 @@ void printFill(mxfKey& k, mxfLength& len, FILE* infile);
 
 void skipV(mxfLength& length, FILE* f);
 
-mxfUInt64 position;
-mxfUInt64 keyPosition;
+mxfUInt64 position;      // current position in the file
+mxfUInt64 keyPosition;   // position/address of current key
 
 // Frame wrapped essence
 bool frames = false;     // if true, treat essence as frame wrapped.
@@ -2146,7 +2146,14 @@ void printPartition(mxfKey& k, mxfLength& len, FILE* infile)
   dumpMxfUInt16("Major Version", infile);
   dumpMxfUInt16("Minor Version", infile);
   dumpMxfUInt32("KAGSize", infile);
-  dumpMxfUInt64("ThisPartition", infile);
+  mxfUInt64 thisPartition;
+  readMxfUInt64(thisPartition, infile);
+  printMxfUInt64(stdout, "ThisPartition", thisPartition);
+  if (thisPartition != keyPosition) {
+    fprintf(stderr, "%s : Error : ", programName);
+    fprintf(stderr, "Incorrect value for ThisPartition.\n");
+    printMxfUInt64(stderr, "Expected", keyPosition);
+  }
   dumpMxfUInt64("PreviousPartition", infile);
   dumpMxfUInt64("FooterPartition", infile);
   dumpMxfUInt64("HeaderByteCount", infile);
