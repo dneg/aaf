@@ -222,7 +222,7 @@ mxfUInt64 keyPosition;
 void movePosition(const mxfUInt64 move, FILE* f)
 {
   long offset = static_cast<long>(move);
-  if (move != offset) {
+  if (move != static_cast<mxfUInt64>(offset)) {
     fprintf(stderr, "%s : Error : offset too large.\n", programName);
     exit(EXIT_FAILURE);
   }
@@ -237,7 +237,7 @@ void movePosition(const mxfUInt64 move, FILE* f)
 void setPosition(const mxfUInt64 newPosition, FILE* f)
 {
   long offset = static_cast<long>(newPosition);
-  if (newPosition != offset) {
+  if (newPosition != static_cast<mxfUInt64>(offset)) {
     fprintf(stderr, "%s : Error : offset too large.\n", programName);
     exit(EXIT_FAILURE);
   }
