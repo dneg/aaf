@@ -4604,6 +4604,19 @@ void checkOperationalPattern(mxfPartition* p)
   }
 }
 
+void checkFill(const mxfKey& key,
+               mxfUInt64 keyPosition,
+               const mxfKey& previousKey);
+
+void checkFill(const mxfKey& key,
+               mxfUInt64 keyPosition,
+               const mxfKey& previousKey)
+{
+  if (memcmp(&KLVFill, &previousKey, sizeof(mxfKey)) == 0) {
+    mxfWarning(key, keyPosition, "Consecutive fill items");
+  }
+}
+
 void checkEssenceContainers(mxfPartition* p);
 
 void checkEssenceContainers(mxfPartition* p)
