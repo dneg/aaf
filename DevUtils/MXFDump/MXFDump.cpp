@@ -1536,6 +1536,18 @@ struct {
   mxfUInt16 _key;
 } mxfLocalKeyTable [] = {
 #include "MXFMetaDictionary.h"
+  // local keys not in MXFMetaDictionary.h
+  // Index Table (not a metadata set)
+  {"EditUnitByteCount",    0x3f05},
+  {"IndexSID",             0x3f06},
+  {"BodySID",              0x3f07},
+  {"SliceCount",           0x3f08},
+  {"DeltaEntryArray",      0x3f09},
+  {"IndexEntryArray",      0x3f0a},
+  {"IndexEditRate",        0x3f0b},
+  {"IndexStartPosition",   0x3f0c},
+  {"IndexDuration",        0x3f0d},
+  {"PosTableCount",        0x3f0e},
   // Sentinel
   {"bogus",                0x00}
 };
