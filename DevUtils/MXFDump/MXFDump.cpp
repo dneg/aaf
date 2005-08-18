@@ -2622,14 +2622,14 @@ void printCommonDumpOptions(void)
 {
   fprintf(stderr, "  --key-addresses     = ");
   fprintf(stderr, "print key addresses ");
-  fprintf(stderr, "- always absolute [default] (-j)\n");
+  fprintf(stderr, "- always absolute (-j) [default]\n");
 
   fprintf(stderr, "  --no-key-addresses  = ");
   fprintf(stderr, "don't print key addresses\n");
 
   fprintf(stderr, "  --relative          = ");
   fprintf(stderr, "relative addresses ");
-  fprintf(stderr, "- value start = 0 [default] (-r)\n");
+  fprintf(stderr, "- value start = 0 (-r) [default]\n");
 
   fprintf(stderr, "  --absolute          = ");
   fprintf(stderr, "absolute addresses ");
@@ -2641,10 +2641,10 @@ void printCommonDumpOptions(void)
 
   fprintf(stderr, "  --hexadecimal       = ");
   fprintf(stderr, "print addresses in ");
-  fprintf(stderr, "hexadecimal [default] (-x)\n");
+  fprintf(stderr, "hexadecimal (-x) [default]\n");
 
   fprintf(stderr, "  --symbolic          = ");
-  fprintf(stderr, "dump the names of keys if known [default] (-y)\n");
+  fprintf(stderr, "dump the names of keys if known (-y) [default]\n");
 
   fprintf(stderr, "  --no-symbolic       = ");
   fprintf(stderr, "don't dump the names of keys (-n)\n");
@@ -2667,7 +2667,7 @@ void printFormatOptions(void)
 {
   fprintf(stderr, "  --limit-bytes <n>   = ");
   fprintf(stderr, "truncate essence ");
-  fprintf(stderr, "to <n> bytes [default n = 0] (-l)\n");
+  fprintf(stderr, "to <n> bytes (-l) [default n = 0]\n");
 
   fprintf(stderr, "  --no-limit-bytes    = ");
   fprintf(stderr, "do not truncate ");
@@ -2687,7 +2687,7 @@ void printFormatOptions(void)
 
   fprintf(stderr, "  --limit-entries <n> = ");
   fprintf(stderr, "print only the first <n> ");
-  fprintf(stderr, "index table entries [default n = 0] (-c)\n");
+  fprintf(stderr, "index table entries (-c) [default n = 0]\n");
 
   fprintf(stderr, "  --no-limit-entries  = ");
   fprintf(stderr, "print all ");
@@ -2713,7 +2713,7 @@ void printRawOptions(void)
 
   fprintf(stderr, "  --no-limit-bytes    = ");
   fprintf(stderr, "do not truncate ");
-  fprintf(stderr, "values [default] (-e)\n");
+  fprintf(stderr, "values (-e) [default]\n");
 }
 
 void printAAFOptions(void);
@@ -2781,7 +2781,7 @@ void printUsage(void)
   fprintf(stderr, "dump AAF (-a)\n");
 
   fprintf(stderr, "--mxf-dump            = ");
-  fprintf(stderr, "dump MXF [default] (-m)\n");
+  fprintf(stderr, "dump MXF (-m) [default]\n");
 
   fprintf(stderr, "--set-dump            = ");
   fprintf(stderr, "dump local sets (-s)\n");
@@ -2820,7 +2820,7 @@ void printMXFUsage(void);
 void printMXFUsage(void)
 {
   fprintf(stderr, "--mxf-dump            = ");
-  fprintf(stderr, "dump MXF [default] (-m)\n");
+  fprintf(stderr, "dump MXF (-m) [default]\n");
   printMXFOptions();
   fprintf(stderr, "\n");
 }
