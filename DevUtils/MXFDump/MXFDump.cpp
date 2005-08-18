@@ -464,6 +464,10 @@ bool debug = false;
 mxfUInt64 keyPosition;   // position/address of current key
 mxfKey currentKey = {0};
 mxfKey previousKey = {0};
+mxfUInt64 primerPosition = 0;
+
+void markMetadataStart(mxfUInt64 primerKeyPosition);
+void markMetadataEnd(mxfUInt64 essenceKeyPosition);
 
 // Frame wrapped essence
 bool frames = false;     // if true, treat essence as frame wrapped.
@@ -3213,11 +3217,27 @@ typedef struct mxfPartitionTag {
   // As computed
   mxfUInt64 _address; // Address of partition relative to header
   mxfUInt64 _length;
+  mxfUInt64 _metadataSize;
 } mxfPartition;
 
 typedef std::list<mxfPartition*> PartitionList;
 
+mxfPartition* currentPartition = 0;
 mxfUInt64 headerPosition = 0;
+
+void markMetadataStart(mxfUInt64 primerKeyPosition)
+{
+  primerPosition = primerKeyPosition;
+}
+
+void markMetadataEnd(mxfUInt64 essenceKeyPosition)
+{
+  if (primerPosition != 0) {
+    mxfUInt64 headerByteCount = essenceKeyPosition - primerPosition;
+    currentPartition->_metadataSize = headerByteCount;
+    primerPosition = 0;
+  }
+}
 
 void readPartition(PartitionList& partitions,
                    mxfUInt64 length,
@@ -3231,6 +3251,7 @@ void readPartition(PartitionList& partitions,
 
   p->_address = keyPosition - headerPosition;
   p->_length = length;
+  p->_metadataSize = 0;
 
   readMxfUInt16(p->_majorVersion, infile);
   readMxfUInt16(p->_minorVersion, infile);
@@ -3252,6 +3273,7 @@ void readPartition(PartitionList& partitions,
   skipBytes(remaining, infile);
 
   partitions.push_back(p);
+  currentPartition = p;
 }
 
 void printPartitions(PartitionList& partitions);
