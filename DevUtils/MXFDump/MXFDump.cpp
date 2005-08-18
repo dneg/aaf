@@ -345,6 +345,15 @@ int main(int argumentCount, char* argumentVector[])
   if (mode == unspecifiedMode) {
     mode = mxfMode;
   }
+  if (mode == mxfMode) {
+    if (lFlag) {
+      fprintf(stderr,
+              "%s : Error : --limit not valid with --mxf-dump.\n",
+              programName);
+      printUsage();
+      exit(EXIT_FAILURE);
+    }
+  }
   int expectedFiles = 1;
   if (fileCount != expectedFiles) {
     fprintf(stderr,
