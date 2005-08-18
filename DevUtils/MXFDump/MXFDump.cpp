@@ -58,7 +58,11 @@ const char* baseName(char* pathName)
   return result;
 }
 
-void dumpFile(char* fileName)
+void mxfDumpFile(char* fileName)
+{
+}
+
+void rawDumpFile(char* fileName)
 { 
   FILE* infile;
 
@@ -88,22 +92,76 @@ void dumpFile(char* fileName)
   }
 }
 
+bool verbose = false;
+
+typedef enum ModeTag {
+  unspecifiedMode,
+  rawMode,
+  mxfMode} Mode;
+Mode mode = unspecifiedMode;
+
+void setMode(Mode m);
+
+void setMode(Mode m)
+{
+  if (mode != unspecifiedMode) {
+    cerr << programName
+         << " : Error : Multiple modes specified"
+         << endl;
+    printUsage();
+    exit(EXIT_FAILURE);
+  }
+  mode = m;
+}
+
 int main(int argumentCount, char* argumentVector[])
 {
   programName = baseName(argumentVector[0]);
   checkSizes();
-  int fileCount = argumentCount - 1;
-  
-  if (fileCount != 1) {
+  int fileCount = 0;
+  int fileArg = 0;
+  char* p = 0;
+  for (int i = 1; i < argumentCount; i++) {
+    p = argumentVector[i];
+    if ((strcmp(p, "-r") == 0) || (strcmp(p, "--raw-dump") == 0)) {
+      setMode(rawMode);
+    } else if ((strcmp(p, "-m") == 0) || (strcmp(p, "--mxf-dump") == 0)) {
+      setMode(mxfMode);
+    } else if ((strcmp(p, "-v") == 0) || (strcmp(p, "--verbose") == 0)) {
+      verbose = true;
+    } else if ((strcmp(p, "-h") == 0) || (strcmp(p, "--help") == 0)) {
+      printUsage();
+      exit(EXIT_SUCCESS);
+    } else if (*p == '-') {
+      cerr << programName
+           << " : Error : Invalid option \""
+           << p << "\""
+           << endl;
+      printUsage();
+      exit(EXIT_FAILURE);
+    } else {
+      fileCount = fileCount + 1;
+      fileArg = i;
+    }
+  }
+  if (mode == unspecifiedMode) {
+    mode = mxfMode;
+  }
+  int expectedFiles = 1;
+  if (fileCount > expectedFiles) {
     cerr << programName
-      << ": Error : Wrong number of arguments ("
-      << fileCount << ")."
-      << endl;
+         << " : Error : Wrong number of arguments ("
+         << argumentCount
+         << ")"
+         << endl;
     printUsage();
     exit(EXIT_FAILURE);
   }
-  char* fileName = argumentVector[1];
-  dumpFile(fileName);
-
+  char* fileName = argumentVector[fileArg];
+  if (mode == mxfMode) {
+    mxfDumpFile(fileName);
+  } else {
+    rawDumpFile(fileName);
+  }
   return 0;  
 }
