@@ -303,6 +303,7 @@ bool isClosed(const mxfKey& key);
 bool isComplete(const mxfKey& key);
 
 bool isPrivateLabel(mxfKey& key);
+void printPrivateLabelName(mxfKey& k, FILE* outfile);
 void printPrivateLabel(mxfKey& k, FILE* outfile);
 
 const char* keyName(const mxfKey& key);
@@ -1463,7 +1464,7 @@ bool isPrivateLabel(mxfKey& k)
   return result;
 }
 
-void printPrivateLabel(mxfKey& k, FILE* outfile)
+void printPrivateLabelName(mxfKey& k, FILE* outfile)
 {
   mxfByte organization = k[9];
   char* name = "Unknown organization";
@@ -1496,7 +1497,14 @@ void printPrivateLabel(mxfKey& k, FILE* outfile)
     name = "Dolby Laboratories Inc.";
     break;
   }
-  fprintf(outfile, "[ Private - %s ]", name);
+  fprintf(outfile, "Private - %s", name);
+}
+
+void printPrivateLabel(mxfKey& k, FILE* outfile)
+{
+  fprintf(outfile, "[ ");
+  printPrivateLabelName(k, outfile);
+  fprintf(outfile, " ]");
 }
 
 typedef std::map<mxfUInt16, const char *> tree;
