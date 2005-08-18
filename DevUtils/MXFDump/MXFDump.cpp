@@ -6013,7 +6013,9 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
   } else if (isEssenceElement(k)) {
     printEssenceElement(k, len, limitBytes, limit, infile);
   } else {
-    if (!isDark(k, mode) || dumpDark) {
+    if ((mode == aafMode) && isAAFKey(k)) {
+      printLocalSet(k, len, infile);
+    } else if (!isDark(k, mode) || dumpDark) {
       if (isLocalSet(k)) {
         printLocalSet(k, len, infile);
       } else if (darkKeysAsSets) {
@@ -6057,11 +6059,7 @@ void aafDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void aafDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
 {
-  if (isAAFKey(k)) {
-    printLocalSet(k, len, infile);
-  } else {
-    mxfDumpKLV(k, len, infile);
-  }
+  mxfDumpKLV(k, len, infile);
 }
 
 void aafDumpFile(mxfFile infile)
