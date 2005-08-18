@@ -6514,6 +6514,7 @@ int main(int argumentCount, char* argumentVector[])
 
     checkKeyTable();
     checkAAFKeyTable();
+    checkAAFLocalKeyTable();
   }
   if (hFlag) {
     printHelp();
