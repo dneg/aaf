@@ -1133,6 +1133,9 @@ const mxfKey NullKey =
 
 #include "MXFMetaDictionary.h"
 // keys not in MXFMetaDictionary.h
+const mxfKey V10RandomIndexMetadata =
+  {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
+   0x0d, 0x01, 0x02, 0x01, 0x01, 0x11, 0x00, 0x00};
 const mxfKey V10IndexTableSegment =
   {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x53, 0x01, 0x01,
    0x0d, 0x01, 0x02, 0x01, 0x01, 0x10, 0x00, 0x00};
@@ -1167,6 +1170,7 @@ struct Key {
 } mxfKeyTable [] = {
 #include "MXFMetaDictionary.h"
   // keys not in MXFMetaDictionary.h
+  {"V10RandomIndexMetadata", &V10RandomIndexMetadata},
   {"V10IndexTableSegment", &V10IndexTableSegment},
   {"GenericAudioEssenceDescriptor", &GenericAudioEssenceDescriptor},
   {"WaveAudioEssenceDescriptor", &WaveAudioEssenceDescriptor},
@@ -3791,7 +3795,7 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
     printV10IndexTable(k, len, infile);
   } else if (memcmp(&IndexTableSegment, &k, sizeof(mxfKey)) == 0) {
     printIndexTable(k, len, infile);
-  } else if (memcmp(&RandomIndexMetadataV10, &k, sizeof(mxfKey)) == 0) {
+  } else if (memcmp(&V10RandomIndexMetadata, &k, sizeof(mxfKey)) == 0) {
     printV10RandomIndex(k, len, infile);
   } else if (memcmp(&RandomIndexMetadata, &k, sizeof(mxfKey)) == 0) {
     printRandomIndex(k, len, infile);
