@@ -4932,6 +4932,7 @@ typedef struct mxfRIPEntryTag {
 typedef std::list<mxfRIPEntry> RandomIndex;
 
 typedef struct mxfRandomIndexTag {
+  mxfKey _key;
   RandomIndex _index;
 } mxfRandomIndex;
 
@@ -4947,6 +4948,7 @@ void readRandomIndex(mxfRandomIndex& rip,
                      mxfUInt32& overallLength,
                      mxfFile infile)
 {
+  rip._key = key;
   mxfUInt64 entryCount = length / (sizeof(mxfUInt32) + sizeof(mxfUInt64));
   for (mxfUInt32 i = 0; i < entryCount; i++) {
     mxfRIPEntry e;
