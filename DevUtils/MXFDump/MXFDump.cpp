@@ -1338,7 +1338,10 @@ void printCommonOptions(void)
 {
   fprintf(stderr, "--key-addresses       = ");
   fprintf(stderr, "print key addresses ");
-  fprintf(stderr, "- always absolute (-j)\n");
+  fprintf(stderr, "- always absolute [default] (-j)\n");
+
+  fprintf(stderr, "--no-key-addresses    = ");
+  fprintf(stderr, "don't print key addresses\n");
 
   fprintf(stderr, "--relative            = ");
   fprintf(stderr, "relative addresses ");
@@ -1350,11 +1353,11 @@ void printCommonOptions(void)
 
   fprintf(stderr, "--decimal             = ");
   fprintf(stderr, "print addresses in ");
-  fprintf(stderr, "decimal [default] (-t)\n");
+  fprintf(stderr, "decimal (-t)\n");
 
   fprintf(stderr, "--hexadecimal         = ");
   fprintf(stderr, "print addresses in ");
-  fprintf(stderr, "hexadecimal (-x)\n");
+  fprintf(stderr, "hexadecimal [default] (-x)\n");
 
   fprintf(stderr, "--symbolic            = ");
   fprintf(stderr, "dump the names of keys if known [default] (-y)\n");
@@ -1801,9 +1804,9 @@ bool lookupKey(mxfKey& k, size_t& index)
   return result;
 }
 
-bool keyAddresses = false; // Print addresses of keys
+bool keyAddresses = true;  // Print addresses of keys
 bool relative = true;      // Print relative (not absolute) addresses
-int base = 10;             // Base for key addreses
+int base = 16;             // Base for key addreses
 
 void printKeyAddress(FILE* f, mxfUInt64 keyAddress);
 
@@ -3422,6 +3425,7 @@ void printSummary(void)
 // -p --frames
 // -i --limit-frames
 // -j --key-addresses
+//    --no-key-addresses
 // -r --relative
 // -b --absolute
 // -t --decimal
@@ -3510,6 +3514,8 @@ int main(int argumentCount, char* argumentVector[])
     } else if ((strcmp(p, "--key-addresses") == 0) ||
                (strcmp(p, "-j") == 0)) {
       keyAddresses = true;
+    } else if (strcmp(p, "--no-key-addresses") == 0) {
+      keyAddresses = false;
     } else if ((strcmp(p, "--relative") == 0) ||
                (strcmp(p, "-r") == 0)) {
       relative = true;
