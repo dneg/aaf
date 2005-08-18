@@ -4498,10 +4498,11 @@ void mxfValidate(mxfFile infile)
   } else {
     mxfWarning("No random index found.\n");
   }
-#if 0
-  printPartitions(p);
-  printStreams(streams);
-#endif
+
+  if (verbose) {
+    printPartitions(p);
+    printStreams(streams);
+  }
   destroyPartitions(p);
   destroyStreams(streams);
 
@@ -4724,7 +4725,6 @@ int main(int argumentCount, char* argumentVector[])
       setMode(aafValidateMode);
     } else if ((strcmp(p, "--verbose") == 0) ||
                (strcmp(p, "-v") == 0)) {
-      checkDumpMode(p);
       verbose = true;
     } else if ((strcmp(p, "--show-fill") == 0) ||
                (strcmp(p, "-f") == 0)) {
