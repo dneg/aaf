@@ -22,7 +22,7 @@
 #define __REFRESOLVER_h__
 
 //project files
-#include "Test.h"
+#include <Test.h>
 
 namespace aafanalyzer {
 

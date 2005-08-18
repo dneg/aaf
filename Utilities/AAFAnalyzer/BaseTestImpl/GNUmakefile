@@ -40,14 +40,14 @@ include $(AAFBASE)/build/common.mk
 INCLUDES = -I. -I$(AAFSDKINCLUDEDIR) -I$(AAFBASE)/examples2/axLib -I../AAFAnalyzerBase -I../TestPhaseLib
 
 .PHONY : all
-all : AAFAnalyzerBase
+all : BaseTest
 
 
-.PHONY : AAFAnalyzerBase
-AAFAnalyzerBase : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libAAFAnalyzerBase$(LIB)
+.PHONY : BaseTest
+BaseTest : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libBaseTest$(LIB)
 
 
-$(LIBDIR)/libAAFAnalyzerBase$(LIB) : $(CXXOBJS)
+$(LIBDIR)/libBaseTest$(LIB) : $(CXXOBJS)
 	$(LD_STAT_LIB) $@ $(CXXOBJS)
 
 
@@ -55,7 +55,7 @@ $(LIBDIR)/libAAFAnalyzerBase$(LIB) : $(CXXOBJS)
 clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(DEPS)
-	@$(RM) $(LIBDIR)/libAAFAnalyzerBase$(LIB)
+	@$(RM) $(LIBDIR)/libBaseTest$(LIB)
 	@$(RMDIR) $(OBJDIR)/ii_files
 
 .PHONY : realclean

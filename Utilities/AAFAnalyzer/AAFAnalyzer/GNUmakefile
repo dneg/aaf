@@ -22,44 +22,7 @@
 #
 ###############################################################################
 
-PACKAGE = AAFAnalyzer
-export PACKAGE
 
-AAFBASE ?= ../../..
+PROGNAME = AAFAnalyzerTest
 
-ifeq ($(shell uname), IRIX)
-# Warnings turned off:
-# 1107 - signed bit field has length of 1 bit in various stl files
-# 1682 - partial overide of AxPropertyValuePrtcl::process
-MODULE_PLATFORM_CFLAGS = -LANG:std -woff 1107,1682
-endif
-
-# Common definitions
-include $(AAFBASE)/build/common.mk
-
-INCLUDES = -I. -I$(AAFSDKINCLUDEDIR) -I$(AAFBASE)/examples2/axLib -I../AAFAnalyzerBase -I../TestPhaseLib
-
-.PHONY : all
-all : EditProtocolTest
-
-
-.PHONY : EditProtocolTest
-EditProtocolTest : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libEditProtocolTest$(LIB)
-
-
-$(LIBDIR)/libEditProtocolTest$(LIB) : $(CXXOBJS)
-	$(LD_STAT_LIB) $@ $(CXXOBJS)
-
-
-.PHONY : clean
-clean :
-	@$(RM) $(CXXOBJS)
-	@$(RM) $(DEPS)
-	@$(RM) $(LIBDIR)/libEditProtocolTest$(LIB)
-	@$(RMDIR) $(OBJDIR)/ii_files
-
-.PHONY : realclean
-realclean : clean
-
-include $(AAFBASE)/build/rules.mk
-
+include ../aafanalyzer.mk

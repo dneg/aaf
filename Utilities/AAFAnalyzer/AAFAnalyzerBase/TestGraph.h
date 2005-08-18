@@ -35,7 +35,6 @@ class TestGraph
    
   // The default copy constructor is okay.
   TestGraph(boost::shared_ptr<EdgeMap> spEdgeMap, boost::shared_ptr<Node> spRootNode);
-  //TestGraph& operator=(const TestGraph& graph);
   ~TestGraph();
 
   boost::shared_ptr<EdgeMap> GetEdgeMap() const;
@@ -47,7 +46,7 @@ class TestGraph
 
   // prohibited
   TestGraph();
-
+  TestGraph& operator=(const TestGraph& graph);
 };
 
 } // end of namespace diskstream

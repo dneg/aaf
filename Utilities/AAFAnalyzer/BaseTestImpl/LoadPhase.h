@@ -22,7 +22,7 @@
 #define __LOADPHASE_h__
 
 //test files
-#include "TestPhase.h"
+#include <TestPhase.h>
 #include "FileLoad.h"
 #include "RefResolver.h"
 #include "AcyclicAnalysis.h"

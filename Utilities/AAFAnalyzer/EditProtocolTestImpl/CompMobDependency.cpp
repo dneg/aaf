@@ -23,6 +23,7 @@
 #include <DepthFirstTraversal.h>
 #include <CompositionMobVisitor.h>
 
+
 namespace {
 
 using namespace aafanalyzer;
@@ -50,7 +51,7 @@ CompMobDependency::~CompMobDependency()
 TestResult CompMobDependency::Execute()
 {
   TestResult result;
-  boost::shared_ptr<CompositionMobVisitor> spVisitor(new CompositionMobVisitor(GetOutStream()));
+  boost::shared_ptr<CompositionMobVisitor> spVisitor(new CompositionMobVisitor(GetOutStream(), result));
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
 
   //output to screen

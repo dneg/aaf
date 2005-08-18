@@ -32,6 +32,8 @@
 #include <NodeFactory.h>
 #include <NodeFactoryImpl.h>
 
+#include <TestResult.h>
+
 #include <AxEx.h>
 
 #include <boost/shared_ptr.hpp>
@@ -41,8 +43,8 @@
 
 using namespace aafanalyzer;
 
-//a test harness: a second main method, commented out below, is for testing
-void BasicDataStructureTest()
+//used to test the basic data structures of the software architecture
+int main()
 {
   //boost::shared_ptr<Node> parentOne(new AAFTypedObjNode<IAAFObject>(L"Header"));
   boost::shared_ptr<Node> parentOne(new Node());
@@ -73,6 +75,7 @@ void BasicDataStructureTest()
   assert(theChildrenTwo->front()->GetChildNode()->GetLID() == childTwo->GetLID());//child of parentTwo
 
   //test the DepthFirstTraversal class
+  TestResult result;
   boost::shared_ptr<Visitor> spVisitor(new TestVisitor());  
   boost::shared_ptr<Node> fooOne(new Node());
   boost::shared_ptr<Node> fooTwo(new Node());  
@@ -86,59 +89,14 @@ void BasicDataStructureTest()
 
   //test the Acyclic Visitor
   std::cout << "***CYCLE TESTER (no cycles)***" << std::endl;
-  //spVisitor.reset(new AcyclicVisitor());
-  //dfs.TraverseDown(spVisitor, parentOne);
+  spVisitor.reset(new AcyclicVisitor(std::cout, result));
+  dfs.TraverseDown(spVisitor, parentOne);
   
   std::cout << "***CYCLE TESTER (w/ cycle present)***" << std::endl;
   spEdgeMap->AddEdge(boost::shared_ptr<Edge>(new Edge(fooTwo, parentTwo)));//adds a cycle
   dfs.TraverseDown(spVisitor, parentOne);
 
   std::cout << "Completed Basic Testing Successfully!" << std::endl << std::endl;
-}
 
-
-int blah()
-{
-  GraphBuilder graphBuild;
-  boost::shared_ptr<Visitor> spVisitor;
-  boost::shared_ptr<NodeFactory> spFactory(new NodeFactoryImpl());
-  const std::basic_string<wchar_t> file = L"test.aaf";  
-
-  try
-  {
-    BasicDataStructureTest();
-
-    if(AAFLoad(getenv("AX_AAF_COMAPI")) == 0)
-    {
-      TestGraph testGraph(graphBuild.CreateGraph(file, spFactory));
-      DepthFirstTraversal dfs(testGraph.GetEdgeMap(), testGraph.GetRootNode()); 
-      
-      //resolve the references
-      //spVisitor.reset(new ResolveRefVisitor(testGraph.GetEdgeMap())); 
-      //dfs.TraverseDown(spVisitor, testGraph.GetRootNode());
-
-      //check for cycles
-      //spVisitor.reset(new AcyclicVisitor());
-      //dfs.TraverseDown(spVisitor, testGraph.GetRootNode());
-      
-      //now dump the objects to the console
-      spVisitor.reset(new TestVisitor());
-      dfs.TraverseDown(spVisitor, testGraph.GetRootNode());
-
-      AAFUnload();
-    }
-    else
-      std::cout << "Failed to load library!" << std::endl;
-  }
-  catch ( const AxExHResult& ex )
-  {
-    std::wcout << L"Error: " << ex.what() << std::endl;
-  }
-  catch ( ... )
-  {
-    std::cout << "Error: unhandled exeption" << std::endl;
-  }
-
-  std::cout << "Completed Graph Testing!" << std::endl << std::endl;
   return 0;
 }

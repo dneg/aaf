@@ -22,7 +22,7 @@
 #define __DUMPPHASE_h__
 
 //test files
-#include "TestPhase.h"
+#include <TestPhase.h>
 
 namespace aafanalyzer {
 
