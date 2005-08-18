@@ -968,6 +968,31 @@ void printUsage(void)
 
   fprintf(stderr, "--aaf-dump      = ");
   fprintf(stderr, "dump AAF (-a)\n");
+
+  fprintf(stderr, "--mxf-dump      = ");
+  fprintf(stderr, "dump MXF [default] (-m)\n");
+
+  fprintf(stderr, "--set-dump      = ");
+  fprintf(stderr, "dump local sets (-s)\n");
+
+  fprintf(stderr, "--klv-dump      = ");
+  fprintf(stderr, "dump raw KLV (-k)\n");
+
+  fprintf(stderr, "--help          = ");
+  fprintf(stderr, "print detailed help (-h)\n");
+}
+
+void printFullUsage(void);
+
+void printFullUsage(void)
+{
+  fprintf(stderr,
+          "%s : Usage : %s OPTIONS <file>\n",
+          programName,
+          programName);
+
+  fprintf(stderr, "--aaf-dump      = ");
+  fprintf(stderr, "dump AAF (-a)\n");
   printAAFOptions();
   fprintf(stderr, "\n");
 
@@ -2013,7 +2038,7 @@ int main(int argumentCount, char* argumentVector[])
     } else if ((strcmp(p, "-n") == 0) || (strcmp(p, "--no-symbolic") == 0)) {
       symbolic = false;
     } else if ((strcmp(p, "-h") == 0) || (strcmp(p, "--help") == 0)) {
-      printUsage();
+      printFullUsage();
       exit(EXIT_SUCCESS);
     } else if ((strcmp(p, "-d") == 0) || (strcmp(p, "--debug") == 0)) {
       debug = true;
