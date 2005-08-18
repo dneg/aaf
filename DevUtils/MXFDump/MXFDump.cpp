@@ -681,6 +681,19 @@ void dumpPrimer(FILE* infile)
   }
 }
 
+bool isLocalSet(mxfKey& k);
+
+bool isLocalSet(mxfKey& k)
+{
+  bool result;
+  if (k[5] == 0x53) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 bool dumpFiller = false;
 
 void mxfDumpFile(char* fileName);
@@ -704,7 +717,7 @@ void mxfDumpFile(char* fileName)
     readMxfLength(len, infile);
     printKL(k, len);
 
-    if (k[5] == 0x53) {
+    if (isLocalSet(k)) {
       dumpLocalSet(len, infile);
     } else if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
       dumpPrimer(infile);
