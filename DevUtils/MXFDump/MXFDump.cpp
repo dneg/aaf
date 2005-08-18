@@ -3327,15 +3327,14 @@ void printSegments(SegmentList& segments)
 
 void printStream(Stream* s)
 {
-  fprintf(stdout, "  %08"MXFPRIu32" : ", s->_sid);
-  fprintf(stdout, "%016"MXFPRIu64"\n", s->_size);
+  fprintf(stdout, "  SID = %08"MXFPRIu32", ", s->_sid);
+  fprintf(stdout, " Size = %016"MXFPRIu64"\n", s->_size);
   printSegments(s->_segments);
 }
 
 void printStreams(StreamSet& streams)
 {
   fprintf(stdout, "Streams\n");
-  fprintf(stdout, "  SID      : Address\n");
   StreamSet::const_iterator it;
   for (it = streams.begin(); it != streams.end(); it++) {
     printStream(it->second);
