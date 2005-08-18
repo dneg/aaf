@@ -3761,8 +3761,12 @@ void mxfValidate(mxfFile infile)
     errors = errors + 1;
   }
   checkPartitions(p, footer);
-  checkRandomIndex(rip, p);
-
+  if (!rip.empty()) {
+    checkRandomIndex(rip, p);
+  } else {
+    warning("No random index found.\n");
+    warnings = warnings + 1;
+  }
   destroyPartitions(p);
 
   fprintf(stderr,
