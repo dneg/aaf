@@ -216,7 +216,7 @@ typedef SInt16 mxfFile;
 typedef FILE* mxfFile;
 #endif
 
-void mxfExit(void);
+int mxfExitStatus(int status);
 
 mxfFile openExistingRead(char* fileName);
 void close(mxfFile infile);
@@ -6307,17 +6307,17 @@ void printSummary(void)
   }
 }
 
-void mxfExit(void)
+int mxfExitStatus(int status)
 {
   int result;
   if (errors != 0) {
-    result = 2; // Errors, possibly also warnings
+    result = 2;      // Errors, possibly also warnings
   } else if (warnings != 0) {
-    result = 1; // Warnings only
+    result = 1;      // Warnings only
   } else {
-    result = 0; // No errors or warnings
+    result = status; // No errors or warnings
   }
-  exit(result);
+  return result;
 }
 
 // Summary of options -
