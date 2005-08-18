@@ -633,7 +633,7 @@ void newEssenceSegment(mxfUInt32 sid,
 void newIndexSegment(mxfUInt32 sid,
                      mxfKey& label,
                      mxfUInt64 start,
-                     mxfUInt64 end);
+                     mxfUInt64 size);
 
 // Frame wrapped essence
 bool frames = false;     // if true, treat essence as frame wrapped.
@@ -4144,7 +4144,7 @@ void markIndexEnd(mxfUInt64 endKeyPosition)
     newIndexSegment(indexSID,
                     indexLabel,
                     indexPosition,
-                    endKeyPosition);
+                    endKeyPosition - indexPosition);
     indexPosition = 0;
     inIndex = false;
     indexSID = 0;
@@ -4309,9 +4309,9 @@ void newEssenceSegment(mxfUInt32 sid,
 void newIndexSegment(mxfUInt32 sid,
                      mxfKey& label,
                      mxfUInt64 start,
-                     mxfUInt64 end)
+                     mxfUInt64 size)
 {
-  newSegment(false, sid, label, start, end - start);
+  newSegment(false, sid, label, start, size);
 }
 
 void readPartition(PartitionList& partitions,
