@@ -2679,7 +2679,9 @@ void printFormatOptions(void)
 
   fprintf(stderr, "  --limit-frames <n>  = ");
   fprintf(stderr, "truncate frame-wrapped essence ");
-  fprintf(stderr, "to <n> frames [default n = 0]\n");
+  fprintf(stderr, "to <n> frames\n");
+  fprintf(stderr, "                        ");
+  fprintf(stderr, "[default n = 0]\n");
 
   fprintf(stderr, "  --no-limit-frames   = ");
   fprintf(stderr, "do not truncate ");
@@ -2687,7 +2689,9 @@ void printFormatOptions(void)
 
   fprintf(stderr, "  --limit-entries <n> = ");
   fprintf(stderr, "print only the first <n> ");
-  fprintf(stderr, "index table entries (-c) [default n = 0]\n");
+  fprintf(stderr, "index table entries (-c)\n");
+  fprintf(stderr, "                        ");
+  fprintf(stderr, "[default n = 0]\n");
 
   fprintf(stderr, "  --no-limit-entries  = ");
   fprintf(stderr, "print all ");
