@@ -866,24 +866,32 @@ void printCommonOptions(void)
   fprintf(stderr, "--relative      = ");
   fprintf(stderr, "print relative addresses ");
   fprintf(stderr, "- the start of the value = 0 (-r)\n");
+
   fprintf(stderr, "--absolute      = ");
   fprintf(stderr, "print absolute addresses ");
   fprintf(stderr, "- the start of the file = 0 (-b)\n");
+
   fprintf(stderr, "--decimal       = ");
   fprintf(stderr, "print addresses in ");
   fprintf(stderr, "decimal [default] (-t)\n");
+
   fprintf(stderr, "--hexadecimal   = ");
   fprintf(stderr, "print addresses in ");
   fprintf(stderr, "hexadecimal (-x)\n");
+
   fprintf(stderr, "--symbolic      = ");
   fprintf(stderr, "dump the names of keys if known [default] (-y)\n");
+
   fprintf(stderr, "--no-symbolic   = ");
   fprintf(stderr, "don't dump the names of keys (-n)\n");
   fprintf(stderr, "\n");
+
   fprintf(stderr, "--help          = ");
   fprintf(stderr, "print this message and exit (-h)\n");
+
   fprintf(stderr, "--verbose       = ");
   fprintf(stderr, "print more detailed information (-v)\n");
+
   fprintf(stderr, "--debug         = ");
   fprintf(stderr, "print information useful in debugging this program (-d)\n");
 }
@@ -895,9 +903,11 @@ void printFormatOptions(void)
   fprintf(stderr, "  --limit <n>   = ");
   fprintf(stderr, "truncate essence containers ");
   fprintf(stderr, "to <n> bytes [default n = 0] (-l)\n");
+
   fprintf(stderr, "  --no-limit    = ");
   fprintf(stderr, "do not truncate ");
   fprintf(stderr, "essence containers (-e)\n");
+
   fprintf(stderr, "  --fill        = ");
   fprintf(stderr, "dump fill bytes (-f)\n");
 }
@@ -909,6 +919,7 @@ void printRawOptions(void)
   fprintf(stderr, "  --limit <n>   = ");
   fprintf(stderr, "truncate values ");
   fprintf(stderr, "to <n> bytes [default n = 0] (-l)\n");
+
   fprintf(stderr, "  --no-limit    = ");
   fprintf(stderr, "do not truncate ");
   fprintf(stderr, "values (-e)\n");
