@@ -67,9 +67,14 @@ const char* baseName(char* pathName)
   return result;
 }
 
-void mxfDumpFile(char* fileName)
+void mxfDumpFile(char* fileName);
+
+void mxfDumpFile(char* /* fileName */)
 {
+  cout << "MXF dump not yet implemented." << endl;
 }
+
+void rawDumpFile(char* fileName);
 
 void rawDumpFile(char* fileName)
 { 
