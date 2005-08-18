@@ -74,7 +74,7 @@ void init(void)
 
 void flush(void)
 {
-  fprintf(stdout, "%8l", address);
+  fprintf(stdout, "%8d", address);
   fprintf(stdout, "    ");
   for (size_t i = 0; i < bufferIndex; i++) {
     fprintf(stdout, "%02x ", buffer[i]);
@@ -225,14 +225,17 @@ void rawDumpFile(char* fileName)
     printMxfLength(len, stdout);
     fprintf(stdout, "\n");
 
+    init();
     for (mxfLength i = 0; i < len; i++) {
-      unsigned char ch;
-      int c = fread(&ch, sizeof(unsigned char), 1, infile);
+      mxfByte b;
+      int c = fread(&b, sizeof(mxfByte), 1, infile);
       if (c != 1) {
         fprintf(stderr, "%s : Error : Failed to read value.\n", programName);
         exit(EXIT_FAILURE);
       }
+      dumpByte(b);
     }
+    flush();
   }
   fclose(infile);
 }
