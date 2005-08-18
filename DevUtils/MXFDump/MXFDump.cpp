@@ -3684,6 +3684,10 @@ void mxfValidate(mxfFile infile)
     }
   }
 
+  if (footer == 0) {
+    error("No footer found.\n");
+    errors = errors + 1;
+  }
   checkPartitions(p, footer);
   destroyPartitions(p);
 
