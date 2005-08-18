@@ -1610,6 +1610,17 @@ char* GCSoundElementTypeName(mxfByte type)
   return result;
 }
 
+char* avidSoundElementTypeName(mxfByte type);
+
+char* avidSoundElementTypeName(mxfByte type)
+{
+  char* result = "Unknown Sound";
+  if (type == 0x20) {
+    result = "Avid Sound";
+  }
+  return result;
+}
+
 char* GCDataElementTypeName(mxfByte type);
 
 char* GCDataElementTypeName(mxfByte type)
@@ -1677,6 +1688,9 @@ char* avidElementTypeName(mxfByte itemTypeId, mxfByte type)
   switch (itemTypeId) {
   case 0x15: // "GC Picture"
     result = avidPictureElementTypeName(type);
+    break;
+  case 0x16: // "GC Sound"
+    result = avidSoundElementTypeName(type);
     break;
   default:
     break;
