@@ -1413,7 +1413,7 @@ void dumpExtensionProperty(const char* label, mxfFile infile)
   dumpMxfBoolean("optional/required", "optional", "required", infile);
 }
 
-void dumpIntegerType(const char* label, mxfFile infile)
+void dumpExtensionTypeInteger(const char* label, mxfFile infile)
 {
   dumpExtensionDefinition(label, infile);
 
@@ -5277,7 +5277,7 @@ void printMetaDictionary(mxfKey& k, mxfLength& len, mxfFile infile)
       dumpExtensionProperty("property", infile);
       break;
     case 0x31: // integer
-      dumpIntegerType("Integer", infile);
+      dumpExtensionTypeInteger("Integer", infile);
       break;
     default:
       mxfError("Invalid definition tag (%"MXFPRIx08").\n", tag);
