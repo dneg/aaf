@@ -2177,12 +2177,23 @@ void printObjectDirectory(mxfKey& k, mxfLength& len, FILE* infile);
 void printObjectDirectory(mxfKey& k, mxfLength& len, FILE* infile)
 {
   printKL(k, len);
+  mxfKey rootInstance;
+  readMxfKey(rootInstance, infile);
+  mxfUInt64 rootOffset;
+  readMxfUInt64(rootOffset, infile);
+
   mxfUInt64 entryCount;
   readMxfUInt64(entryCount, infile);
   mxfUInt08 entrySize;
   readMxfUInt08(entrySize, infile);
 
-  fprintf(stdout, "  [ Number of entries = ");
+  fprintf(stdout, "  [ Root = ");
+  printMxfKey(rootInstance, stdout);
+  fprintf(stdout, ",\n");
+  fprintf(stdout, "    Root offset = ");
+  printHexField(stdout, rootOffset);
+  fprintf(stdout, ",\n");
+  fprintf(stdout, "    Number of entries = ");
   printField(stdout, entryCount);
   fprintf(stdout, ", Entry size        = ");
   printField(stdout, entrySize);
