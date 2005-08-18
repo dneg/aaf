@@ -4,6 +4,7 @@
 
 typedef unsigned long int mxfLength;
 typedef unsigned char mxfKey[16];
+typedef unsigned char mxfByte;
 
 const char* programName;
 
@@ -19,6 +20,84 @@ void checkSizes(void)
     fprintf(stderr, "%s : Error : Wrong sizeof(mxfKey).\n", programName);
     exit(EXIT_FAILURE);
   }
+  if (sizeof(mxfByte) != 1) {
+    fprintf(stderr, "%s : Error : Wrong sizeof(mxfByte).\n", programName);
+    exit(EXIT_FAILURE);
+  }
+}
+
+char map(int c);
+void init(void);
+void flush(void);
+void dumpByte(mxfByte byte);
+
+// Interpret values 0x00 - 0x7f as ASCII characters.
+//
+static const char table[128] = {
+'.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+'.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+'.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+'.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+' ',  '!',  '"',  '#',  '$',  '%',  '&', '\'',
+'(',  ')',  '*',  '+',  ',',  '-',  '.',  '/',
+'0',  '1',  '2',  '3',  '4',  '5',  '6',  '7',
+'8',  '9',  ':',  ';',  '<',  '=',  '>',  '?',
+'@',  'A',  'B',  'C',  'D',  'E',  'F',  'G',
+'H',  'I',  'J',  'K',  'L',  'M',  'N',  'O',
+'P',  'Q',  'R',  'S',  'T',  'U',  'V',  'W',
+'X',  'Y',  'Z',  '[', '\\',  ']',  '^',  '_',
+'`',  'a',  'b',  'c',  'd',  'e',  'f',  'g',
+'h',  'i',  'j',  'k',  'l',  'm',  'n',  'o',
+'p',  'q',  'r',  's',  't',  'u',  'v',  'w',
+'x',  'y',  'z',  '{',  '|',  '}',  '~',  '.'};
+
+char map(int c)
+{
+  char result;
+  if (c < 0x80) {
+    result = table[c & 0x7f];
+  } else {
+    result = '.';
+  }
+  return result;
+}
+
+unsigned char buffer[16];
+size_t bufferIndex;
+size_t address;
+
+void init(void)
+{
+  bufferIndex = 0;
+  address = 0;
+}
+
+void flush(void)
+{
+  fprintf(stdout, "%8l", address);
+  fprintf(stdout, "    ");
+  for (size_t i = 0; i < bufferIndex; i++) {
+    fprintf(stdout, "%02x ", buffer[i]);
+  }
+  fprintf(stdout, "   ");
+  for (size_t j = 0; j < 16 - bufferIndex; j++) {
+    fprintf(stdout, "   ");
+  }
+  for (size_t k = 0; k < bufferIndex; k++) {
+    char c = map(buffer[k]);
+    fprintf(stdout, "%c", c);
+  }
+  fprintf(stdout, "\n");
+}
+
+void dumpByte(mxfByte byte)
+{
+  if (bufferIndex == 16) {
+    flush();
+    bufferIndex = 0;
+    address = address + 16;
+  }
+  buffer[bufferIndex++] = byte;
 }
 
 void printUsage(void);
