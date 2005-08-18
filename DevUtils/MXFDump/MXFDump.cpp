@@ -1421,6 +1421,7 @@ int main(int argumentCount, char* argumentVector[])
       setMode(localSetMode);
     } else if ((strcmp(p, "-m") == 0) || (strcmp(p, "--mxf-dump") == 0)) {
       setMode(mxfMode);
+      unknownAsSets = true;
     } else if ((strcmp(p, "-a") == 0) || (strcmp(p, "--aaf-dump") == 0)) {
       setMode(aafMode);
       unknownAsSets = true;
