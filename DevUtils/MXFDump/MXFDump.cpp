@@ -89,6 +89,7 @@ void readMxfUInt64(mxfUInt64& i, FILE* f);
 bool readMxfKey(mxfKey& k, FILE* f);
 void readBERLength(mxfUInt64& i, FILE* f);
 void readMxfLength(mxfLength& l, FILE* f);
+void readMxfLocalKey(mxfLocalKey& k, FILE* f);
 
 void reorder(mxfUInt16& i);
 void reorder(mxfUInt32& i);
@@ -100,6 +101,7 @@ void printHexField(FILE* f, mxfUInt32& i);
 
 void printMxfKey(const mxfKey& k, FILE* f);
 void printMxfLength(mxfLength& l, FILE* f);
+void printMxfLocalKey(mxfLocalKey& k, FILE* f);
 
 void dumpMxfUInt16(const char* label, FILE* infile);
 void dumpMxfUInt32(const char* label, FILE* infile);
@@ -193,6 +195,15 @@ void readMxfLength(mxfLength& l, FILE* f)
   mxfUInt64 x;
   readBERLength(x, f);
   l = static_cast<mxfLength>(x);
+}
+
+void readMxfLocalKey(mxfLocalKey& k, FILE* f)
+{
+  int c = fread(&k, sizeof(mxfLocalKey), 1, f);
+  if (c != 1) {
+    fprintf(stderr, "%s : Error : Failed to read local key.\n", programName);
+    exit(EXIT_FAILURE);
+  }
 }
 
 void reorder(mxfUInt16& i)
@@ -289,6 +300,17 @@ void printMxfLength(mxfLength& l, FILE* f)
   fprintf(f, "(");
   printHexField(f, l);
   fprintf(f, ")");
+}
+
+void printMxfLocalKey(mxfLocalKey& k, FILE* f)
+{
+  for (size_t i = 0; i < sizeof(mxfLocalKey); i++) {
+    unsigned int b = k[i];
+    fprintf(f, "%02x", b);
+    if (i < (sizeof(mxfLocalKey) - 1)) {
+      fprintf(f, ".");
+    }
+  }
 }
 
 void dumpMxfUInt16(const char* label, FILE* infile)
@@ -624,30 +646,6 @@ bool lookupLocalKey(mxfLocalKey& k, size_t& index)
     }
   }
   return result;
-}
-
-void readMxfLocalKey(mxfLocalKey& k, FILE* f);
-
-void readMxfLocalKey(mxfLocalKey& k, FILE* f)
-{
-  int c = fread(&k, sizeof(mxfLocalKey), 1, f);
-  if (c != 1) {
-    fprintf(stderr, "%s : Error : Failed to read local key.\n", programName);
-    exit(EXIT_FAILURE);
-  }
-}
-
-void printMxfLocalKey(mxfLocalKey& k, FILE* f);
-
-void printMxfLocalKey(mxfLocalKey& k, FILE* f)
-{
-  for (size_t i = 0; i < sizeof(mxfLocalKey); i++) {
-    unsigned int b = k[i];
-    fprintf(f, "%02x", b);
-    if (i < (sizeof(mxfLocalKey) - 1)) {
-      fprintf(f, ".");
-    }
-  }
 }
 
 bool symbolic = false;
