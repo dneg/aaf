@@ -954,13 +954,13 @@ void dumpByte(mxfByte byte)
 
 void printKeyAddress(FILE* f, mxfUInt64 keyAddress)
 {
-  fprintf(stdout, "( ");
+  fprintf(f, "( ");
   if (addressBase == 10) {
-    printField(stdout, keyAddress);
+    printField(f, keyAddress);
   } else {
-    printHexField(stdout, keyAddress);
+    printHexField(f, keyAddress);
   }
-  fprintf(stdout, " )");
+  fprintf(f, " )");
 }
 
 void printCommonOptions(void);
