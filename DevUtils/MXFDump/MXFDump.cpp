@@ -2306,6 +2306,7 @@ struct {
   {"Index Edit Rate",      0x3f0b},
   {"Index Start Position", 0x3f0c},
   {"Index Duration",       0x3f0d},
+  {"PosTableCount",        0x3f0e},
   // File Descriptor
   {"Linked Track ID",      0x3006},
   // Multiple Descriptor
