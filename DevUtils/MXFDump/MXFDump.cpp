@@ -1507,7 +1507,7 @@ void printEssenceContainerLabelName(mxfKey& label, FILE* outfile)
 void printEssenceContainerLabel(mxfKey& label, FILE* outfile)
 {
   printMxfKey(label, outfile);
-//printEssenceContainerLabelName(label, outfile);
+  printEssenceContainerLabelName(label, outfile);
 }
 
 bool reorder(void)
