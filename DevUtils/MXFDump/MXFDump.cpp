@@ -460,6 +460,8 @@ bool verbose = false;
 bool debug = false;
 
 mxfUInt64 keyPosition;   // position/address of current key
+mxfKey currentKey = {0};
+mxfKey previousKey = {0};
 
 // Frame wrapped essence
 bool frames = false;     // if true, treat essence as frame wrapped.
@@ -856,6 +858,8 @@ bool readOuterMxfKey(mxfKey& k, mxfFile infile)
   } else {
     fatalError("Failed to read key.\n");
   }
+  memcpy(&previousKey, &currentKey, sizeof(mxfKey));
+  memcpy(&currentKey, &k, sizeof(mxfKey));
   return result;
 }
 
@@ -2988,6 +2992,11 @@ bool isFill(mxfKey& k)
 
 void printFill(mxfKey& /* k */, mxfLength& len, mxfFile infile)
 {
+  if (memcmp(&KLVFill, &previousKey, sizeof(mxfKey)) == 0) {
+    mxfWarning("Consecutive fill items"
+               " (following key at offset 0x%"MXFPRIx64").\n",
+               keyPosition);  
+  }
   if (dumpFill) {
     printV(len, false, 0, infile);
   } else {
