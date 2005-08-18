@@ -1067,9 +1067,11 @@ void printHeaderPartition(mxfKey& k, mxfLength& len, FILE* infile)
   dumpMxfUInt32("BodySID", infile);
   dumpMxfKey("Operational Pattern", infile);
   fprintf(stdout, "%20s = ", "EssenceContainers");
-  fprintf(stdout, "\n");
   mxfUInt32 elementCount;
   readMxfUInt32(elementCount, infile);
+  fprintf(stdout, "[ count = ");
+  printField(stdout, elementCount);
+  fprintf(stdout, " ]\n");
   mxfUInt32 elementSize;
   readMxfUInt32(elementSize, infile);
   for (mxfUInt32 i = 0; i < elementCount; i++) {
