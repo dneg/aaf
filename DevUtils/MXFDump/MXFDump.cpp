@@ -1348,16 +1348,21 @@ void printAAFKeySymbol(mxfKey& k)
   size_t i;
   bool found = lookupKey(k, i);
   if (found) {
-    fprintf(stdout, "%s\n", keyTable[i]._name);
+    fprintf(stdout, "%s", keyTable[i]._name);
   } else {
     char* flag;
     found = findAAFKey(k, i, &flag);
     if (found) {
-      fprintf(stdout, "%s%s\n", aafKeyTable[i]._name, flag);
+      fprintf(stdout, "%s%s", aafKeyTable[i]._name, flag);
     } else {
-      fprintf(stdout, "Dark\n");
+      fprintf(stdout, "Dark");
     }
   }
+  if (keyAddresses) {
+    fprintf(stdout, " ");
+    printKeyAddress(stdout, keyPosition);
+  }
+  fprintf(stdout, "\n");
 }
 
 void printMxfKeySymbol(mxfKey& k, FILE* f);
