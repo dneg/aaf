@@ -4455,22 +4455,25 @@ void checkSID(Segment* seg,
       mxfError(key,
                keyAddress,
                "Incorrect value for %s"
-               " - partition contains %s,"
-               " expected != 0x0, found 0x%"MXFPRIx32"",
+               " - expected %s, found 0x%"MXFPRIx32""
+               " - partition contains %"MXFPRIu64" bytes of %s,",
                label,
-               kind,
-               actual);
+               "non-zero",
+               actual,
+               seg->_size,
+               kind);
     }
   } else {
     if (actual != 0) {
       mxfError(key,
                keyAddress,
                "Incorrect value for %s"
-               " - partition does not contain %s,"
-               " expected 0x0, found 0x%"MXFPRIx32"",
+               " - expected 0x%"MXFPRIx32", found 0x%"MXFPRIx32""
+               " - partition does not contain %s,",
                label,
-               kind,
-               actual);
+               0,
+               actual,
+               kind);
     }
   }
 }
