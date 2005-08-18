@@ -2955,12 +2955,12 @@ bool isFooter(mxfKey& key)
   return result;
 }
 
-typedef struct RandomIndexEntryTag {
+typedef struct mxfRandomIndexEntryTag {
   mxfUInt32 _sid;
   mxfUInt64 _offset;
-} RandomIndexEntry;
+} mxfRandomIndexEntry;
 
-typedef std::list<RandomIndexEntry> RandomIndex;
+typedef std::list<mxfRandomIndexEntry> RandomIndex;
 
 void readRandomIndex(RandomIndex& rip, mxfLength length, mxfFile infile);
 
@@ -2969,7 +2969,7 @@ void readRandomIndex(RandomIndex& rip, mxfLength length, mxfFile infile)
 {
   mxfUInt64 entryCount = length / (sizeof(mxfUInt32) + sizeof(mxfUInt64));
   for (mxfUInt32 i = 0; i < entryCount; i++) {
-    RandomIndexEntry e;
+    mxfRandomIndexEntry e;
     readMxfUInt32(e._sid, infile);
     readMxfUInt64(e._offset, infile);
     rip.push_back(e);
@@ -2983,7 +2983,7 @@ void printRandomIndex(RandomIndex& rip)
 {
   RandomIndex::const_iterator it;
   for (it = rip.begin(); it != rip.end(); ++it) {
-    RandomIndexEntry e = *it;
+    mxfRandomIndexEntry e = *it;
     fprintf(stderr, "%"MXFPRIx32" : %"MXFPRIx64"\n", e._sid, e._offset);
   }
 }
@@ -2998,7 +2998,7 @@ void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
   RandomIndex::const_iterator rit;
   for (rit = rip.begin(); rit != rip.end(); ++rit) {
     bool found = false;
-    RandomIndexEntry e = *rit;
+    mxfRandomIndexEntry e = *rit;
     PartitionList::const_iterator pit;
     for (pit = partitions.begin(); pit != partitions.end(); ++pit) {
       mxfPartition* p = *pit;
