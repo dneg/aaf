@@ -597,6 +597,19 @@ void printLocalKL(mxfLocalKey& k, mxfUInt16& l)
           l);
 }
 
+void checkLocalKey(mxfLocalKey& k);
+
+void checkLocalKey(mxfLocalKey& k)
+{
+  if (memcmp(k, nullMxfLocalKey, sizeof(mxfLocalKey))== 0) {
+    fprintf(stdout,
+            "%s : Error : Illegal local key (",
+            programName);
+    printMxfLocalKey(k, stdout);
+    fprintf(stdout, ").\n");
+  }
+}
+
 void dumpLocalSet(mxfLength& len, FILE* infile);
 
 void dumpLocalSet(mxfLength& len, FILE* infile)
@@ -609,13 +622,7 @@ void dumpLocalSet(mxfLength& len, FILE* infile)
     readMxfUInt16(length, infile);
     setLength = setLength + 4;
     printLocalKL(identifier, length);
-    if (memcmp(identifier, nullMxfLocalKey, sizeof(mxfLocalKey))== 0) {
-      fprintf(stdout,
-              "%s : Error : Illegal local key (",
-              programName);
-      printMxfLocalKey(identifier, stdout);
-      fprintf(stdout, ").\n");
-    }
+    checkLocalKey(identifier);
     mxfLength vLength;
     if ((setLength + length) < len) {
       vLength = length;
