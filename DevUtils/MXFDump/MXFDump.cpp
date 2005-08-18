@@ -3221,11 +3221,11 @@ mxfUInt16 validateLocalV(mxfUInt16& length,
                          mxfLength& remainder,
                          mxfFile /* infile */)
 {
-  mxfLength vLength;
+  mxfUInt16 vLength;
   if (length < remainder) {
     vLength = length;
   } else {
-    vLength = remainder;
+    vLength = static_cast<mxfUInt16>(remainder);
   }
   remainder = remainder - vLength;
   if (vLength < length) {
