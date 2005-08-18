@@ -612,12 +612,17 @@ mxfUInt32 essenceSID = 0;
 mxfKey essenceLabel = nullMxfKey;
 mxfUInt64 essencePosition = 0;
 
+mxfUInt64 fillStart = 0;
+mxfUInt64 fillEnd = 0;
+
 void markMetadataStart(mxfUInt64 primerKeyPosition);
 void markMetadataEnd(mxfUInt64 endKeyPosition);
 void markIndexStart(mxfUInt32 sid, mxfUInt64 indexKeyPosition);
 void markIndexEnd(mxfUInt64 endKeyPosition);
 void markEssenceSegmentStart(mxfUInt32 sid, mxfUInt64 essenceKeyPosition);
 void markEssenceSegmentEnd(mxfUInt64 endKeyPosition);
+void markFill(mxfUInt64 fillKeyPosition,
+              mxfUInt64 fillEndPosition);
 
 void newSegment(bool isEssence,
                 mxfUInt32 sid,
@@ -4142,13 +4147,17 @@ void markIndexStart(mxfUInt32 sid, mxfUInt64 indexKeyPosition)
 void markIndexEnd(mxfUInt64 endKeyPosition)
 {
   if (inIndex) {
+    mxfUInt64 free = 0;
+    if (endKeyPosition == fillEnd) {
+      free = fillEnd - fillStart;
+    }
     mxfUInt64 indexByteCount = endKeyPosition - indexPosition;
     currentPartition->_indexSize = indexByteCount;
     newIndexSegment(indexSID,
                     indexLabel,
                     indexPosition,
                     endKeyPosition - indexPosition,
-                    0);
+                    free);
     indexPosition = 0;
     inIndex = false;
     indexSID = 0;
@@ -4168,14 +4177,25 @@ void markEssenceSegmentStart(mxfUInt32 sid, mxfUInt64 essenceKeyPosition)
 void markEssenceSegmentEnd(mxfUInt64 endKeyPosition)
 {
   if (inEssence) {
+    mxfUInt64 free = 0;
+    if (endKeyPosition == fillEnd) {
+      free = fillEnd - fillStart;
+    }
     newEssenceSegment(essenceSID,
                       essenceLabel,
                       essencePosition,
                       endKeyPosition - essencePosition,
-                      0);
+                      free);
     inEssence = false;
     essenceSID = 0;
   } // else error - ending essence that wasn't started
+}
+
+void markFill(mxfUInt64 fillKeyPosition,
+              mxfUInt64 fillEndPosition)
+{
+  fillStart = fillKeyPosition;
+  fillEnd = fillEndPosition;
 }
 
 typedef struct StreamTag {
@@ -6096,6 +6116,7 @@ void mxfValidate(mxfFile infile)
       validateIndexSegment(k, len, infile);
     } else if (isFill(k)) {
       skipV(len, infile);
+      markFill(keyPosition, position(infile));
     } else {
       skipV(len, infile);
     }
