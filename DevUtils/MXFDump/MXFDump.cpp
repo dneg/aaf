@@ -1518,7 +1518,17 @@ void dumpExtensionTypeWeakObjectReference(mxfFile infile)
   fprintf(stdout, "]\n");
 }
 
-// Rename
+void dumpExtensionTypeRename(mxfFile infile);
+
+void dumpExtensionTypeRename(mxfFile infile)
+{
+  fprintf(stdout, "rename type = [\n");
+  dumpExtensionDefinition(infile);
+
+  // RenamedType
+  dumpMxfLabel("renamed type", infile);
+  fprintf(stdout, "]\n");
+}
 
 void dumpExtensionTypeEnumerated(mxfFile infile);
 
@@ -5568,7 +5578,9 @@ void printMetaDictionary(mxfKey& /* k */, mxfLength& len, mxfFile infile)
     case 0x34:
       dumpExtensionTypeWeakObjectReference(infile);
       break;
-      // Rename                = 35
+    case 0x35:
+      dumpExtensionTypeRename(infile);
+      break;
     case 0x36:
       dumpExtensionTypeEnumerated(infile);
       break;
