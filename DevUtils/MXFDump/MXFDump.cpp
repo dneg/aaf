@@ -2694,6 +2694,22 @@ bool printStats = false;
 
 mxfUInt32 objectCount = 0;
 
+void printObjectCount(const mxfKey& key);
+
+void printObjectCount(const mxfKey& key)
+{
+  if (printStats) {
+    if (objectCount > 0) {
+      fprintf(stdout, "\n");
+      fprintf(stdout,
+              "[ %"MXFPRIu32" objects found in %s partition ]\n",
+              objectCount,
+              keyName(key));
+      objectCount = 0;
+    }
+  }
+}
+
 mxfUInt32 darkItems = 0;
 
 void printDarkItems(void);
