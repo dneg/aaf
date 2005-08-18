@@ -3583,7 +3583,7 @@ void printRandomIndex(mxfKey& k, mxfLength& len, mxfFile infile)
   fprintf(stdout, "  [ Number of entries = ");
   printField(stdout, entryCount );
   fprintf(stdout, " ]\n");
-  fprintf(stdout, "                           SID        Offset\n");
+  fprintf(stdout, "       Partition           SID        Offset\n");
   for (mxfUInt32 i = 0; i < entryCount; i++) {
     mxfUInt32 sid;
     mxfUInt64 offset;
