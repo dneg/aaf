@@ -70,6 +70,22 @@ typedef mxfUInt08 mxfByte;
 typedef mxfByte mxfKey[16];
 typedef mxfUInt16 mxfLocalKey;
 
+mxfUInt08 hostByteOrder(void);
+
+mxfUInt08 hostByteOrder(void)
+{
+  mxfUInt16 word = 0x1234;
+  mxfUInt08  byte = *((mxfUInt08*)&word);
+  mxfUInt08 result;
+
+  if (byte == 0x12) {
+    result = 'B';
+  } else {
+    result = 'L';
+  }
+  return result;
+}
+
 void printField(FILE* f, mxfUInt32& i);
 
 void printField(FILE* f, mxfUInt32& i)
@@ -317,7 +333,9 @@ void readMxfUInt16(mxfUInt16& i, FILE* f)
     fprintf(stderr, "%s : Error : Failed to read mxfUInt16.\n", programName);
     exit(EXIT_FAILURE);
   }
-  reorder(i);
+  if (hostByteOrder() != 'B') {
+    reorder(i);
+  }
 }
 
 void reorder(mxfUInt32& i);
@@ -345,7 +363,9 @@ void readMxfUInt32(mxfUInt32& i, FILE* f)
     fprintf(stderr, "%s : Error : Failed to read mxfUInt32.\n", programName);
     exit(EXIT_FAILURE);
   }
-  reorder(i);
+  if (hostByteOrder() != 'B') {
+    reorder(i);
+  }
 }
 
 void readMxfLength(mxfLength& l, FILE* f);
