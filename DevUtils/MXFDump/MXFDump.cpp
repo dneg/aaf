@@ -3606,6 +3606,17 @@ Segment* findEssenceSegment(mxfPartition* p)
   return result;
 }
 
+bool hasEssence(mxfPartition* p);
+
+bool hasEssence(mxfPartition* p)
+{
+  bool result = false;
+  if (findEssenceSegment(p)) {
+    result = true;
+  }
+  return result;
+}
+
 void checkField(mxfUInt64 expected,
                 mxfUInt64 actual,
                 const mxfKey& key,
