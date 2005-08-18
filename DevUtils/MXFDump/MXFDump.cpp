@@ -3168,7 +3168,6 @@ void validateLocalKey(mxfLocalKey& identifier,
              keyPosition,
              "Local set KLV parse error -"
              " set exhausted looking for local key");
-    skipBogusBytes(remainder, infile);
     remainder = 0;
   }
 }
@@ -3189,7 +3188,6 @@ void validateLocalLength(mxfUInt16& length,
              keyPosition,
              "Local set KLV parse error -"
              " set exhausted looking for local length");
-    skipBogusBytes(remainder, infile);
     remainder = 0;
   }
 }
@@ -3202,15 +3200,19 @@ void printLocalSet(mxfKey& k, mxfLength& len, mxfFile infile)
   while (remainder > 0) {
     // Key (local identifier)
     mxfLocalKey identifier;
+    mxfLength excess = remainder;
     validateLocalKey(identifier, remainder, infile);
     if (remainder == 0) {
+      skipBogusBytes(excess, infile);
       break;
     }
 
     // Length
     mxfUInt16 length;
+    excess = remainder;
     validateLocalLength(length, remainder, infile);
     if (remainder == 0) {
+      skipBogusBytes(excess, infile);
       break;
     }
 
