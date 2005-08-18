@@ -317,7 +317,9 @@ bool lookupAAFKey(mxfKey& k, size_t& index);
 bool findAAFKey(mxfKey& k, size_t& index, char** flag);
 
 bool lookupMXFLocalKey(mxfLocalKey& k, size_t& index);
+void checkLocalKeyTable(void);
 bool lookupAAFLocalKey(mxfLocalKey& k, size_t& index);
+void checkAAFLocalKeyTable(void);
 
 const char* aafKeyName(const mxfKey& k);
 const char* mxfKeyName(const mxfKey& k);
