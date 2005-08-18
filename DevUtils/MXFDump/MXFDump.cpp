@@ -2111,8 +2111,6 @@ void mxfDumpFile(char* fileName)
       printSystemMetadata(k, len, infile);
     } else if (memcmp(&IndexTable, &k, sizeof(mxfKey)) == 0) {
       printIndexTable(k, len, infile);
-    } else if (isLocalSet(k)) {
-      printLocalSet(k, len, infile);
     } else if (isFill(k)) {
       printFill(k, len, infile);
     } else if (isEssenceElement(k)) {
@@ -2122,8 +2120,16 @@ void mxfDumpFile(char* fileName)
         printEssence(k, len, lFlag, limit, infile);
       }
     } else {
-      printKL(k, len);
-      printV(len, false, 0, infile);
+      if (!isDark(k, mode)) {
+        if (isLocalSet(k)) {
+          printLocalSet(k, len, infile);
+        } else {
+          printKL(k, len);
+          printV(len, false, 0, infile);
+		}
+      } else {
+        skipV(len, infile);
+      } 
     }
   }
   fclose(infile);
