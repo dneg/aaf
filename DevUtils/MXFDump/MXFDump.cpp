@@ -192,8 +192,6 @@ void printMxfKey(const mxfKey& k, FILE* f);
 void printMxfLength(mxfLength& l, FILE* f);
 void printMxfLocalKey(mxfLocalKey& k, FILE* f);
 
-void printKeyAddress(FILE* f, mxfUInt64 keyAddress);
-
 void dumpMxfUInt08(const char* label, FILE* infile);
 void dumpMxfUInt16(const char* label, FILE* infile);
 void dumpMxfUInt32(const char* label, FILE* infile);
@@ -980,17 +978,6 @@ void dumpByte(mxfByte byte)
   buffer[bufferIndex++] = byte;
 }
 
-void printKeyAddress(FILE* f, mxfUInt64 keyAddress)
-{
-  fprintf(f, "( ");
-  if (addressBase == 10) {
-    printField(f, keyAddress);
-  } else {
-    printHexField(f, keyAddress);
-  }
-  fprintf(f, " )");
-}
-
 void printCommonOptions(void);
 
 void printCommonOptions(void)
@@ -1353,7 +1340,22 @@ bool lookupKey(mxfKey& k, size_t& index)
   return result;
 }
 
-bool keyAddresses = false;
+bool keyAddresses = false; // Print addresses of keys
+bool relative = true;      // Print relative (not absolute) addresses
+int base = 10;             // Base for key addreses
+
+void printKeyAddress(FILE* f, mxfUInt64 keyAddress);
+
+void printKeyAddress(FILE* f, mxfUInt64 keyAddress)
+{
+  fprintf(f, "( ");
+  if (base == 10) {
+    printField(f, keyAddress);
+  } else {
+    printHexField(f, keyAddress);
+  }
+  fprintf(f, " )");
+}
 
 void printMxfKeySymbol(mxfKey& k);
 
@@ -1431,9 +1433,6 @@ void printKL(mxfKey& k, mxfLength& l)
   printMxfLength(l, stdout);
   fprintf(stdout, " ]\n");
 }
-
-bool relative = true;
-int base = 10;
 
 void printV(mxfLength& length, bool limitBytes, mxfUInt32 limit, FILE* f);
 
