@@ -623,17 +623,20 @@ void newSegment(bool isEssence,
                 mxfUInt32 sid,
                 mxfKey& label,
                 mxfUInt64 start,
-                mxfUInt64 size);
+                mxfUInt64 size,
+                mxfUInt64 free);
 
 void newEssenceSegment(mxfUInt32 sid,
                        mxfKey& label,
                        mxfUInt64 start,
-                       mxfUInt64 size);
+                       mxfUInt64 size,
+                       mxfUInt64 free);
 
 void newIndexSegment(mxfUInt32 sid,
                      mxfKey& label,
                      mxfUInt64 start,
-                     mxfUInt64 size);
+                     mxfUInt64 size,
+                     mxfUInt64 free);
 
 // Frame wrapped essence
 bool frames = false;     // if true, treat essence as frame wrapped.
@@ -4144,7 +4147,8 @@ void markIndexEnd(mxfUInt64 endKeyPosition)
     newIndexSegment(indexSID,
                     indexLabel,
                     indexPosition,
-                    endKeyPosition - indexPosition);
+                    endKeyPosition - indexPosition,
+                    0);
     indexPosition = 0;
     inIndex = false;
     indexSID = 0;
@@ -4167,7 +4171,8 @@ void markEssenceSegmentEnd(mxfUInt64 endKeyPosition)
     newEssenceSegment(essenceSID,
                       essenceLabel,
                       essencePosition,
-                      endKeyPosition - essencePosition);
+                      endKeyPosition - essencePosition,
+                      0);
     inEssence = false;
     essenceSID = 0;
   } // else error - ending essence that wasn't started
@@ -4260,7 +4265,8 @@ void newSegment(bool isEssence,
                 mxfUInt32 sid,
                 mxfKey& label,
                 mxfUInt64 start,
-                mxfUInt64 size)
+                mxfUInt64 size,
+                mxfUInt64 /* free */)
 {
   Stream* s;
   StreamSet::const_iterator it = streams.find(sid);
@@ -4301,17 +4307,19 @@ void newSegment(bool isEssence,
 void newEssenceSegment(mxfUInt32 sid,
                        mxfKey& label,
                        mxfUInt64 start,
-                       mxfUInt64 size)
+                       mxfUInt64 size,
+                       mxfUInt64 free)
 {
-  newSegment(true, sid, label, start, size);
+  newSegment(true, sid, label, start, size, free);
 }
 
 void newIndexSegment(mxfUInt32 sid,
                      mxfKey& label,
                      mxfUInt64 start,
-                     mxfUInt64 size)
+                     mxfUInt64 size,
+                     mxfUInt64 free)
 {
-  newSegment(false, sid, label, start, size);
+  newSegment(false, sid, label, start, size, free);
 }
 
 void readPartition(PartitionList& partitions,
