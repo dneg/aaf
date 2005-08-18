@@ -1878,29 +1878,8 @@ struct {
   // Multiple Descriptor
   {"Sub Descriptor UIDs",  0x3f01},
   // Generic Sound Essence Descriptor
-  {"Quantization Bits",    0x3d01},
   {"Locked/Unlocked",      0x3d02},
-  {"Audio Ref level",      0x3d04},
-  {"Audio Sampling Rate",  0x3d03},
-  {"Electro Spatial",      0x3d05},
-  {"Channel Count",        0x3d07},
-  {"Dial Norm",            0x3d0c},
   //
-  {"Compression",          0x3D06},
-  {"Locked (Bogus)",       0x3D32}, // Bogus
-  //
-  {"BlockAlign",           0x3D0A},
-  {"SequenceOffset",       0x3D0B},
-  {"AverageBPS",           0x3D09},
-  {"PeakEnvelopeVersion",  0x3D29},
-  {"PeakEnvelopeFormat",   0x3D2A},
-  {"PointsPerPeakValue",   0x3D2B},
-  {"PeakEnvelopeBlockSize",0x3D2C},
-  {"PeakChannels",         0x3D2D},
-  {"PeakFrames",           0x3D2E},
-  {"PeakOfPeaksPosition",  0x3D2F},
-  {"PeakEnvelopeTimestamp",0x3D30},
-  {"PeakEnvelopeData",     0x3D0E},
   // Generic Picture Essence Descriptor
   {"Signal Standard",      0x3215},
   {"Stored F2 Offset",     0x3216},
