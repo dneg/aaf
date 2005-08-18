@@ -65,7 +65,7 @@ typedef unsigned long int      mxfUInt32;
 typedef unsigned long long int mxfUInt64;
 #endif
 
-typedef unsigned long int mxfLength;
+typedef mxfUInt32 mxfLength;
 typedef mxfUInt08 mxfByte;
 typedef mxfByte mxfKey[16];
 
