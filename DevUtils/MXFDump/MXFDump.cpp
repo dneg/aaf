@@ -1527,7 +1527,7 @@ char* elementTypeName(mxfByte itemTypeId, mxfByte type)
   case 0x05: // "CP Picture"
     result = CPPictureElementTypeName(type);
     break;
-  case 0x06: // "CP sound"
+  case 0x06: // "CP Sound"
     result = CPSoundElementTypeName(type);
     break;
   case 0x07: // "CP Data"
