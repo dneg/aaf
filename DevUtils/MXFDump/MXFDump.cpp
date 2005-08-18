@@ -185,11 +185,11 @@ typedef HANDLE mxfFile;
 typedef FILE* mxfFile;
 #endif
 
-mxfFile openRead(char* fileName);
+mxfFile openExistingRead(char* fileName);
 void close(mxfFile infile);
 void setPosition(mxfFile infile, const mxfUInt64 position);
-mxfUInt64 getPosition(mxfFile infile);
-size_t readBytes(mxfFile infile, void* buffer, size_t count);
+mxfUInt64 position(mxfFile infile);
+size_t read(mxfFile infile, void* buffer, size_t count);
 mxfUInt64 size(mxfFile infile);
 
 bool endOfFile(mxfFile infile);
@@ -391,7 +391,7 @@ mxfUInt32 limit = 0;
 bool hFlag = false;
 
 #if defined(MXF_OS_WINDOWS)
-mxfFile openRead(char* fileName)
+mxfFile openExistingRead(char* fileName)
 {
   HANDLE result = CreateFile(fileName,
                              GENERIC_READ,
@@ -424,7 +424,7 @@ void setPosition(mxfFile infile, const mxfUInt64 position)
   }
 }
 
-size_t readBytes(mxfFile infile, void* buffer, size_t count)
+size_t read(mxfFile infile, void* buffer, size_t count)
 {
   DWORD bytesRead;
   BOOL result = ReadFile(infile, buffer, count, &bytesRead, 0);
@@ -434,7 +434,7 @@ size_t readBytes(mxfFile infile, void* buffer, size_t count)
   return bytesRead;
 }
 
-mxfUInt64 getPosition(mxfFile infile)
+mxfUInt64 position(mxfFile infile)
 {
   mxfUInt64 result;
   LARGE_INTEGER li;
@@ -468,7 +468,7 @@ mxfUInt64 size(mxfFile infile)
 #endif
 #endif
 
-mxfFile openRead(char* fileName)
+mxfFile openExistingRead(char* fileName)
 {
   return  fopen(fileName, "rb");
 }
@@ -507,7 +507,7 @@ void setPosition(mxfFile infile, const mxfUInt64 position)
   seek64(infile, position, SEEK_SET);
 }
 
-size_t readBytes(mxfFile infile, void* buffer, size_t count)
+size_t read(mxfFile infile, void* buffer, size_t count)
 {
   return fread(buffer, 1, count, infile);
 }
@@ -533,16 +533,16 @@ mxfUInt64 tell64(mxfFile infile)
   return result;
 }
 
-mxfUInt64 getPosition(mxfFile infile)
+mxfUInt64 position(mxfFile infile)
 {
   return tell64(infile);
 }
 
 mxfUInt64 size(mxfFile infile)
 {
-  mxfUInt64 savedPosition = getPosition(infile);
+  mxfUInt64 savedPosition = position(infile);
   seek64(infile, 0, SEEK_END);
-  mxfUInt64 result = getPosition(infile);
+  mxfUInt64 result = position(infile);
   setPosition(infile, savedPosition);
   return result;
 }
@@ -550,17 +550,17 @@ mxfUInt64 size(mxfFile infile)
 
 bool endOfFile(mxfFile infile)
 {
-  return getPosition(infile) == size(infile);
+  return position(infile) == size(infile);
 }
 
 void skipBytes(const mxfUInt64 byteCount, mxfFile infile)
 {
-  setPosition(infile, getPosition(infile) + byteCount);
+  setPosition(infile, position(infile) + byteCount);
 }
 
 void readMxfUInt08(mxfByte& b, mxfFile infile)
 {
-  int c = readBytes(infile, &b, sizeof(mxfByte));
+  int c = read(infile, &b, sizeof(mxfByte));
   if (c != sizeof(mxfByte)) {
     fatalError("Failed to read byte.\n");
   }
@@ -568,7 +568,7 @@ void readMxfUInt08(mxfByte& b, mxfFile infile)
 
 void readMxfUInt16(mxfUInt16& i, mxfFile infile)
 {
-  int c = readBytes(infile, &i, sizeof(mxfUInt16));
+  int c = read(infile, &i, sizeof(mxfUInt16));
   if (c != sizeof(mxfUInt16)) {
     fatalError("Failed to read mxfUInt16.\n");
   }
@@ -579,7 +579,7 @@ void readMxfUInt16(mxfUInt16& i, mxfFile infile)
 
 void readMxfUInt32(mxfUInt32& i, mxfFile infile)
 {
-  int c = readBytes(infile, &i, sizeof(mxfUInt32));
+  int c = read(infile, &i, sizeof(mxfUInt32));
   if (c != sizeof(mxfUInt32)) {
     fatalError("Failed to read mxfUInt32.\n");
   }
@@ -590,7 +590,7 @@ void readMxfUInt32(mxfUInt32& i, mxfFile infile)
 
 void readMxfUInt64(mxfUInt64& i, mxfFile infile)
 {
-  int c = readBytes(infile, &i, sizeof(mxfUInt64));
+  int c = read(infile, &i, sizeof(mxfUInt64));
   if (c != sizeof(mxfUInt64)) {
     fatalError("Failed to read mxfUInt64.\n");
   }
@@ -607,8 +607,8 @@ void readMxfRational(mxfRational& r, mxfFile infile)
 
 void readMxfKey(mxfKey& k, mxfFile infile)
 {
-  keyPosition = getPosition(infile);
-  int c = readBytes(infile, &k, sizeof(mxfKey));
+  keyPosition = position(infile);
+  int c = read(infile, &k, sizeof(mxfKey));
   if (c != sizeof(mxfKey)) {
     fatalError("Failed to read key.\n");
   }
@@ -617,8 +617,8 @@ void readMxfKey(mxfKey& k, mxfFile infile)
 bool readOuterMxfKey(mxfKey& k, mxfFile infile)
 {
   bool result = true;
-  keyPosition = getPosition(infile);
-  int c = readBytes(infile, &k, sizeof(mxfKey));
+  keyPosition = position(infile);
+  int c = read(infile, &k, sizeof(mxfKey));
   if (c == sizeof(mxfKey)) {
     result = true;
   } else if ((c == 0) && (endOfFile(infile)) ){
@@ -1908,7 +1908,7 @@ void printV(mxfLength& length,
             mxfUInt32 limit,
             mxfFile infile)
 {
-  mxfUInt64 start = getPosition(infile);
+  mxfUInt64 start = position(infile);
   if (relative) {
     start = 0;
   }
@@ -3046,7 +3046,7 @@ void klvDumpFile(char* fileName)
 { 
   mxfFile infile;
 
-  infile = openRead(fileName);
+  infile = openExistingRead(fileName);
   if (infile == NULL) {
     fatalError("File \"%s\" not found.\n", fileName);
   }
@@ -3065,7 +3065,7 @@ void setDumpFile(char* fileName)
 {
   mxfFile infile;
 
-  infile = openRead(fileName);
+  infile = openExistingRead(fileName);
   if (infile == NULL) {
     fatalError("File \"%s\" not found.\n", fileName);
   }
@@ -3193,7 +3193,7 @@ void mxfDumpFile(char* fileName)
 {
   mxfFile infile;
 
-  infile = openRead(fileName);
+  infile = openExistingRead(fileName);
   if (infile == NULL) {
     fatalError("File \"%s\" not found.\n", fileName);
   }
@@ -3226,7 +3226,7 @@ void aafDumpFile(char* fileName)
 {
   mxfFile infile;
 
-  infile = openRead(fileName);
+  infile = openExistingRead(fileName);
   if (infile == NULL) {
     fatalError("File \"%s\" not found.\n", fileName);
   }
@@ -3299,7 +3299,7 @@ void mxfValidateFile(Mode mode, char* fileName)
 {
   mxfFile infile;
 
-  infile = openRead(fileName);
+  infile = openExistingRead(fileName);
   if (infile == NULL) {
     fatalError("File \"%s\" not found.\n", fileName);
   }
