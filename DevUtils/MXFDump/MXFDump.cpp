@@ -249,7 +249,7 @@ void setPosition(const mxfUInt64 position, FILE* f)
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
   int status = _fseek(f, position, SEEK_SET);
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
-  int status = fseeko(f, position, SEEK_SET);
+  int status = _fseek(f, position, SEEK_SET);
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
   int status = fseeko(f, position, SEEK_SET);
 #elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
