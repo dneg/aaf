@@ -850,6 +850,45 @@ void dumpByte(mxfByte byte)
   buffer[bufferIndex++] = byte;
 }
 
+void printKLVOptions(void);
+
+void printKLVOptions(void)
+{
+  fprintf(stderr, "  --limit <n>   = ");
+  fprintf(stderr, "dump only the first <n> bytes of each ");
+  fprintf(stderr, "value (-l)\n");
+  fprintf(stderr, "                  [default n == 0]\n");
+  fprintf(stderr, "  --no-limit    = ");
+  fprintf(stderr, "dump all the bytes of each ");
+  fprintf(stderr, "value (-e)\n");
+  fprintf(stderr, "  --relative    = ");
+  fprintf(stderr, "print relative addresses ");
+  fprintf(stderr, "- the start of the value == 0 (-r)\n");
+  fprintf(stderr, "  --absolute    = ");
+  fprintf(stderr, "print absolute addresses ");
+  fprintf(stderr, "- the start of the file == 0 (-b)\n");
+}
+void printCommonOptions(void);
+
+void printCommonOptions(void)
+{
+  fprintf(stderr, "  --limit <n>   = ");
+  fprintf(stderr, "dump only the first <n> bytes of each ");
+  fprintf(stderr, "essence container (-l)\n");
+  fprintf(stderr, "                  [default n == 0]\n");
+  fprintf(stderr, "  --no-limit    = ");
+  fprintf(stderr, "dump all the bytes of each ");
+  fprintf(stderr, "essence container (-e)\n");
+  fprintf(stderr, "  --relative    = ");
+  fprintf(stderr, "print relative addresses ");
+  fprintf(stderr, "- the start of the value == 0 (-r)\n");
+  fprintf(stderr, "  --absolute    = ");
+  fprintf(stderr, "print absolute addresses ");
+  fprintf(stderr, "- the start of the file == 0 (-b)\n");
+  fprintf(stderr, "  --fill        = ");
+  fprintf(stderr, "dump fill bytes (-f)\n");
+}
+
 void printUsage(void);
 
 void printUsage(void)
@@ -859,73 +898,27 @@ void printUsage(void)
           programName,
           programName);
   fprintf(stderr, "OPTIONS :\n");
+
   fprintf(stderr, "--aaf-dump      = ");
   fprintf(stderr, "dump AAF (-a)\n");
-  fprintf(stderr, "  --limit <n>   = ");
-  fprintf(stderr, "dump only the first <n> bytes of each ");
-  fprintf(stderr, "essence container (-l)\n");
-  fprintf(stderr, "                  [default n == 0]\n");
-  fprintf(stderr, "  --no-limit    = ");
-  fprintf(stderr, "dump all the bytes of each ");
-  fprintf(stderr, "essence container (-e)\n");
-  fprintf(stderr, "  --relative    = ");
-  fprintf(stderr, "print relative addresses ");
-  fprintf(stderr, "- the start of the value == 0 (-r)\n");
-  fprintf(stderr, "  --absolute    = ");
-  fprintf(stderr, "print absolute addresses ");
-  fprintf(stderr, "- the start of the file == 0 (-b)\n");
-  fprintf(stderr, "  --fill        = ");
-  fprintf(stderr, "dump fill bytes (-f)\n");
+  printCommonOptions();
   fprintf(stderr, "\n");
+
   fprintf(stderr, "--mxf-dump      = ");
   fprintf(stderr, "dump MXF [default] (-m)\n");
-  fprintf(stderr, "  --limit <n>   = ");
-  fprintf(stderr, "dump only the first <n> bytes of each ");
-  fprintf(stderr, "essence container (-l)\n");
-  fprintf(stderr, "                  [default n == 0]\n");
-  fprintf(stderr, "  --no-limit    = ");
-  fprintf(stderr, "dump all the bytes of each ");
-  fprintf(stderr, "essence container (-e)\n");
-  fprintf(stderr, "  --relative    = ");
-  fprintf(stderr, "print relative addresses ");
-  fprintf(stderr, "- the start of the value == 0 (-r)\n");
-  fprintf(stderr, "  --absolute    = ");
-  fprintf(stderr, "print absolute addresses ");
-  fprintf(stderr, "- the start of the file == 0 (-b)\n");
-  fprintf(stderr, "  --fill        = ");
-  fprintf(stderr, "dump fill bytes (-f)\n");
+  printCommonOptions();
   fprintf(stderr, "\n");
+
   fprintf(stderr, "--set-dump      = ");
   fprintf(stderr, "dump local sets (-s)\n");
-  fprintf(stderr, "  --limit <n>   = ");
-  fprintf(stderr, "dump only the first <n> bytes of each ");
-  fprintf(stderr, "essence container (-l)\n");
-  fprintf(stderr, "                  [default n == 0]\n");
-  fprintf(stderr, "  --no-limit    = ");
-  fprintf(stderr, "dump all the bytes of each ");
-  fprintf(stderr, "essence container (-e)\n");
-  fprintf(stderr, "  --relative    = ");
-  fprintf(stderr, "print relative addresses ");
-  fprintf(stderr, "- the start of the value == 0 (-r)\n");
-  fprintf(stderr, "  --absolute    = ");
-  fprintf(stderr, "print absolute addresses ");
-  fprintf(stderr, "- the start of the file == 0 (-b)\n");
-  fprintf(stderr, "  --fill        = ");
-  fprintf(stderr, "dump fill bytes (-f)\n");
+  printCommonOptions();
   fprintf(stderr, "\n");
+
   fprintf(stderr, "--klv-dump      = ");
   fprintf(stderr, "dump raw KLV (-k)\n");
-  fprintf(stderr, "  --limit <n>   = ");
-  fprintf(stderr, "dump only the first <n> bytes of each ");
-  fprintf(stderr, "value (-l)\n");
-  fprintf(stderr, "                  [default n == 0]\n");
-  fprintf(stderr, "  --relative    = ");
-  fprintf(stderr, "print relative addresses ");
-  fprintf(stderr, "- the start of the value == 0 (-r)\n");
-  fprintf(stderr, "  --absolute    = ");
-  fprintf(stderr, "print absolute addresses ");
-  fprintf(stderr, "- the start of the file == 0 (-b)\n");
+  printKLVOptions();
   fprintf(stderr, "\n");
+
   fprintf(stderr, "--symbolic      = ");
   fprintf(stderr, "dump the names of keys if known [default] (-y)\n");
   fprintf(stderr, "--no-symbolic   = ");
