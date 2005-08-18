@@ -3191,7 +3191,7 @@ mxfUInt16 validateLocalV(mxfUInt16& length,
   if (vLength < length) {
     mxfError(currentKey,
              keyPosition,
-             "Local set KLV parse error - set exhausted printing value");
+             "Local set KLV parse error - length points beyond end of set");
   }
   return vLength;
 }
