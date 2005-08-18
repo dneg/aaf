@@ -1221,6 +1221,7 @@ void printPrimer(mxfKey& k, mxfLength& len, FILE* infile)
 
 bool lFlag;
 mxfUInt32 limit = 0;
+bool unknownAsSets = false;
 
 void mxfDumpFile(char* fileName);
 
@@ -1256,6 +1257,8 @@ void mxfDumpFile(char* fileName)
       printEssence(k, len, lFlag, limit, infile);
     } else if (memcmp(&ClosedFooterPartition, &k, sizeof(mxfKey)) == 0) {
       printFooterPartition(k, len, infile);
+    } else if (unknownAsSets) {
+      printLocalSet(k, len, infile);
     } else {
       printKL(k, len);
       printV(len, false, 0, infile);
@@ -1378,6 +1381,9 @@ int main(int argumentCount, char* argumentVector[])
       symbolic = true;
     } else if ((strcmp(p, "-n") == 0) || (strcmp(p, "--no-symbolic") == 0)) {
       symbolic = false;
+    } else if ((strcmp(p, "-u") == 0) ||
+               (strcmp(p, "--unknown-as-sets") == 0)) {
+      unknownAsSets = true;
     } else if ((strcmp(p, "-h") == 0) || (strcmp(p, "--help") == 0)) {
       printUsage();
       exit(EXIT_SUCCESS);
