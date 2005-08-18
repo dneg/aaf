@@ -4082,7 +4082,8 @@ void checkElementCount(mxfUInt32 elementCount,
 
 typedef struct SegmentTag {
   mxfUInt64 _start;
-  mxfUInt64 _size;
+  mxfUInt64 _size; // allocated
+  mxfUInt64 _free; // free within allocated
   mxfUInt64 _origin;
   mxfKey _label;
 } Segment;
@@ -4200,7 +4201,8 @@ void markFill(mxfUInt64 fillKeyPosition,
 
 typedef struct StreamTag {
   SegmentList _segments;
-  mxfUInt64 _size;
+  mxfUInt64 _size; // allocated
+  mxfUInt64 _used; // in use
   mxfUInt32 _sid;
   bool _isEssence; // _sid is body sid
 } Stream;
@@ -4244,7 +4246,10 @@ void printStream(Stream* s)
 {
   fprintf(stdout, "  SID = %08"MXFPRIu32", ", s->_sid);
 
-  fprintf(stdout, " Size = %016"MXFPRIu64"\n", s->_size);
+  fprintf(stdout, " Size = %016"MXFPRIu64", ", s->_size);
+
+  fprintf(stdout, " Used = %016"MXFPRIu64"\n", s->_used);
+
   printSegments(s->_segments);
 }
 
@@ -4286,13 +4291,14 @@ void newSegment(bool isEssence,
                 mxfKey& label,
                 mxfUInt64 start,
                 mxfUInt64 size,
-                mxfUInt64 /* free */)
+                mxfUInt64 free)
 {
   Stream* s;
   StreamSet::const_iterator it = streams.find(sid);
   if (it == streams.end()) {
     s = new Stream();
     s->_size = 0;
+    s->_used = 0;
     s->_sid = sid;
     s->_isEssence = isEssence;
 
@@ -4316,10 +4322,12 @@ void newSegment(bool isEssence,
   Segment* seg = new Segment;
   seg->_start = s->_size;
   seg->_size = size;
+  seg->_free = free;
   seg->_origin = start;
   memcpy(&seg->_label, &label, sizeof(mxfKey));
   s->_segments.push_back(seg);
   s->_size = s->_size + seg->_size;
+  s->_used = s->_used + (seg->_size - seg->_free);
 
   currentPartition->_segments.push_back(seg);
 }
