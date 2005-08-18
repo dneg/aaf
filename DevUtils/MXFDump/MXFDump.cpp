@@ -2221,6 +2221,37 @@ void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
+// Note on partition keys -
+//
+//                              0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+// OpenHeader                  06 0e 2b 34 02 05 01 01 0d 01 02 01 01 02 01 00
+// ClosedHeader                06 0e 2b 34 02 05 01 01 0d 01 02 01 01 02 02 00
+// OpenCompleteHeader          06 0e 2b 34 02 05 01 01 0d 01 02 01 01 02 03 00
+// ClosedCompleteHeader        06 0e 2b 34 02 05 01 01 0d 01 02 01 01 02 04 00
+//
+// OpenBodyPartition           06 0e 2b 34 02 05 01 01 0d 01 02 01 01 03 01 00
+// ClosedBodyPartition         06 0e 2b 34 02 05 01 01 0d 01 02 01 01 03 02 00
+// OpenCompleteBodyPartition   06 0e 2b 34 02 05 01 01 0d 01 02 01 01 03 03 00
+// ClosedCompleteBodyPartition 06 0e 2b 34 02 05 01 01 0d 01 02 01 01 03 04 00
+//
+// Footer                      06 0e 2b 34 02 05 01 01 0d 01 02 01 01 04 02 00
+// CompleteFooter              06 0e 2b 34 02 05 01 01 0d 01 02 01 01 04 04 00
+//
+//
+// 1) The Footer may not be Open, so the following are illegal -
+//
+//    OpenFooter          = illegal
+//    OpenCompleteFooter  = illegal
+//
+// 2) Since the Footer may not be Open, we omit Closed from these names -
+//
+//    Footer              = ClosedFooter
+//    CompleteFooter      = ClosedCompleteFooter
+//
+// 3) The values are coded such that there aren't separate bits that indicate
+//    Open/Closed and Complete/Incomplete
+//
+
 void printPartition(mxfKey& k, mxfLength& len, FILE* infile);
 
 void printPartition(mxfKey& k, mxfLength& len, FILE* infile)
@@ -2688,13 +2719,23 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
     exit(EXIT_FAILURE);
   } else if (memcmp(&OpenHeader, &k, sizeof(mxfKey)) == 0) {
     printHeaderPartition(k, len, infile);
+  } else if (memcmp(&OpenCompleteHeader, &k, sizeof(mxfKey)) == 0) {
+    printHeaderPartition(k, len, infile);
   } else if (memcmp(&ClosedHeader, &k, sizeof(mxfKey)) == 0) {
+    printHeaderPartition(k, len, infile);
+  } else if (memcmp(&ClosedCompleteHeader, &k, sizeof(mxfKey)) == 0) {
     printHeaderPartition(k, len, infile);
   } else if (memcmp(&OpenBodyPartition, &k, sizeof(mxfKey)) == 0) {
     printBodyPartition(k, len, infile);
+  } else if (memcmp(&OpenCompleteBodyPartition, &k, sizeof(mxfKey)) == 0) {
+    printBodyPartition(k, len, infile);
   } else if (memcmp(&ClosedBodyPartition, &k, sizeof(mxfKey)) == 0) {
     printBodyPartition(k, len, infile);
+  } else if (memcmp(&ClosedCompleteBodyPartition, &k, sizeof(mxfKey)) == 0) {
+    printBodyPartition(k, len, infile);
   } else if (memcmp(&Footer, &k, sizeof(mxfKey)) == 0) {
+    printFooterPartition(k, len, infile);
+  } else if (memcmp(&CompleteFooter, &k, sizeof(mxfKey)) == 0) {
     printFooterPartition(k, len, infile);
   } else if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
     printPrimer(k, len, infile);
