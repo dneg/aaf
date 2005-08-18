@@ -3309,8 +3309,8 @@ void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
   for (rit = rip.begin(); rit != rip.end(); ++rit) {
     if ((rit != rip.begin()) && (rit->_offset <= previous)) {
       mxfError("Invalid random index - partitions out of order"
-               " (partition address = %"MXFPRIx64","
-               " address of previous partition = %"MXFPRIx64").\n",
+               " (partition address = 0x%"MXFPRIx64","
+               " address of previous partition = 0x%"MXFPRIx64").\n",
                rit->_offset,
                previous);
     }
@@ -3333,7 +3333,7 @@ void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
     }
     if (!found) {
       mxfError("Invalid random index entry - no such partition"
-               " (SID = %"MXFPRIu32", address = 0x%"MXFPRIx64".\n",
+               " (SID = %"MXFPRIu32", address = 0x%"MXFPRIx64").\n",
                e._sid,
                e._offset);
     }
@@ -3355,7 +3355,7 @@ void checkRandomIndex(RandomIndex& rip, PartitionList& partitions)
     }
     if (!found) {
       mxfError("Invalid random index - missing partition",
-               " (partition address = %"MXFPRIx64").\n",
+               " (partition address = 0x%"MXFPRIx64").\n",
                p->_address);
     }
   }
