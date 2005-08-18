@@ -1250,8 +1250,6 @@ void mxfDumpFile(char* fileName)
       printFill(k, len, infile);
     } else if (isEssenceElement(k)) {
       printEssence(k, len, lFlag, limit, infile);
-    } else if (memcmp(&OpenFooterPartition, &k, sizeof(mxfKey)) == 0) {
-      printFooterPartition(k, len, infile);
     } else if (memcmp(&ClosedFooterPartition, &k, sizeof(mxfKey)) == 0) {
       printFooterPartition(k, len, infile);
     } else {
