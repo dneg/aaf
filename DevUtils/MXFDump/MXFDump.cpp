@@ -547,6 +547,19 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
   printMxfKey(k, f);
 }
 
+void printKL(mxfKey& k, mxfLength& l, FILE* f);
+
+void printKL(mxfKey& k, mxfLength& l, FILE* f)
+{
+  fprintf(stdout, "\n");
+  fprintf(stdout, "[ K = ");
+  printMxfKeySymbol(k, f);
+  fprintf(stdout, ", ");
+  fprintf(stdout, "L = ");
+  printMxfLength(l, f);
+  fprintf(stdout, " ]\n");
+}
+
 bool dumpFiller = false;
 
 void mxfDumpFile(char* fileName);
@@ -568,13 +581,7 @@ void mxfDumpFile(char* fileName)
   while (readMxfKey(k, infile)) {
     mxfLength len;
     readMxfLength(len, infile);
-    fprintf(stdout, "\n");
-    fprintf(stdout, "[ K = ");
-    printMxfKeySymbol(k, stdout);
-    fprintf(stdout, ", ");
-    fprintf(stdout, "L = ");
-    printMxfLength(len, stdout);
-    fprintf(stdout, " ]\n");
+    printKL(k, len, stdout);
 
     if (k[5] == 0x53) {
       mxfLength setLength = 0;
@@ -678,13 +685,7 @@ void klvDumpFile(char* fileName)
   while (readMxfKey(k, infile)) {
     mxfLength len;
     readMxfLength(len, infile);
-    fprintf(stdout, "\n");
-    fprintf(stdout, "[ K = ");
-    printMxfKeySymbol(k, stdout);
-    fprintf(stdout, ", ");
-    fprintf(stdout, "L = ");
-    printMxfLength(len, stdout);
-    fprintf(stdout, " ]\n");
+    printKL(k, len, stdout);
 
     init();
     for (mxfLength i = 0; i < len; i++) {
