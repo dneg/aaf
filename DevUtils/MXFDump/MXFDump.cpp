@@ -935,7 +935,6 @@ void printUsage(void)
           "%s : Usage : %s OPTIONS <file>\n",
           programName,
           programName);
-  fprintf(stderr, "OPTIONS :\n");
 
   fprintf(stderr, "--aaf-dump      = ");
   fprintf(stderr, "dump AAF (-a)\n");
