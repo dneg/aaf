@@ -244,23 +244,15 @@ void rawDumpFile(char* fileName)
     printMxfLength(len, stdout);
     fprintf(stdout, "\n");
 
-    mxfLength count = len;
-    if (lFlag) {
-      count = limit;
-    }
     init();
-    for (mxfLength i = 0; i < count; i++) {
+    for (mxfLength i = 0; i < len; i++) {
       mxfByte b;
       readMxfByte(b, infile);
-      dumpByte(b);
-    }
-    flush();
-    if (count < len) {
-      for (mxfLength i = count; i < len; i++) {
-        mxfByte b;
-        readMxfByte(b, infile);
+      if ((i < limit) || !lFlag) {
+        dumpByte(b);
       }
     }
+    flush();
   }
   fclose(infile);
 }
