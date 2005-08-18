@@ -2254,7 +2254,7 @@ void checkLocalKeyTable(void)
   }
 }
 
-#define AAF_CLASS(name, id, parent, concrete) {"AAF"#name, nullMxfKey, id},
+#define AAF_CLASS(name, id, parent, concrete) {"AAF"#name, {0}, id},
 
 struct AAFKey {
   const char* _name;
@@ -2263,44 +2263,44 @@ struct AAFKey {
 } aafKeyTable [] = {
 #include "AAFMetaDictionary.h"
   // keys not in AAFMetaDictionary.h
-  {"Root", nullMxfKey,
+  {"Root", {0},
 // {B3B398A5-1C90-11d4-8053-080036210804}
 {0xb3b398a5, 0x1c90, 0x11d4,{0x80, 0x53, 0x08, 0x00, 0x36, 0x21, 0x08, 0x04}}},
   //
-  {"AAFMPEG2VideoDescriptor", nullMxfKey,
+  {"AAFMPEG2VideoDescriptor", {0},
 // {0D010101-0101-5100-060E-2B3402060101}
 // 06.0E.2B.34.02.53.01.01.0D.01.01.01.01.01.51.00
 {0x0d010101, 0x0101, 0x5100,{0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}}},
   // Avid specific class extensions
 // {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}
-  {"AvidRLEDescriptor", nullMxfKey,
+  {"AvidRLEDescriptor", {0},
 {0xb54e6c75, 0xdf3a, 0x11d3,{0xa0, 0x78, 0x00, 0x60, 0x94, 0xeb, 0x75, 0xcb}}},
 // {AD7212AF-21F4-11d5-B3B7-0006294303FA}
-  {"AvidMPGIDescriptor", nullMxfKey,
+  {"AvidMPGIDescriptor", {0},
 {0xad7212af, 0x21f4, 0x11d5,{0xb3, 0xb7, 0x00, 0x06, 0x29, 0x43, 0x03, 0xfa}}},
 // {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}
-  {"AvidSD2Descriptor", nullMxfKey,
+  {"AvidSD2Descriptor", {0},
 {0xf0c92c05, 0xefad, 0x11d3,{0xa0, 0x7a, 0x00, 0x60, 0x94, 0xeb, 0x75, 0xcb}}},
 // {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}
-  {"AvidMCMobReference", nullMxfKey,
+  {"AvidMCMobReference", {0},
 {0x6619f8e0, 0xfe77, 0x11d3,{0xa0, 0x84, 0x00, 0x60, 0x94, 0xeb, 0x75, 0xcb}}},
 // {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}
-  {"AvidAttrEffect", nullMxfKey,
+  {"AvidAttrEffect", {0},
 {0xc1be981a, 0x0037, 0x11d4,{0xa0, 0x85, 0x00, 0x60, 0x94, 0xeb, 0x75, 0xcb}}},
 // {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}
-  {"AvidCCParamObject", nullMxfKey,
+  {"AvidCCParamObject", {0},
 {0xd0541d8c, 0x00ec, 0x11d4,{0xa0, 0x86, 0x00, 0x60, 0x94, 0xeb, 0x75, 0xcb}}},
 // {13E0A981-0412-11d4-9FF9-0004AC969F50}
-  {"AvidTKMNTrackerData", nullMxfKey,
+  {"AvidTKMNTrackerData", {0},
 {0x13e0a981, 0x0412, 0x11d4,{0x9f, 0xf9, 0x00, 0x04, 0xac, 0x96, 0x9f, 0x50}}},
 // {30A42454-069E-11d4-9FFB-0004AC969F50}
-  {"AvidTKMNTrackedParam", nullMxfKey,
+  {"AvidTKMNTrackedParam", {0},
 {0x30a42454, 0x069e, 0x11d4,{0x9f, 0xfb, 0x00, 0x04, 0xac, 0x96, 0x9f, 0x50}}},
 // {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}
-  {"AvidSourceFileDescriptor", nullMxfKey,
+  {"AvidSourceFileDescriptor", {0},
 {0xa4d2a4a6, 0x04bc, 0x11d4,{0xa0, 0x87, 0x00, 0x60, 0x94, 0xeb, 0x75, 0xcb}}},
   // Sentinel
-  {"bogus", nullMxfKey,
+  {"bogus", {0},
 // {00000000-0000-0000-0000-000000000000}
 {0x00000000, 0x0000, 0x0000,{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}}}
 };
