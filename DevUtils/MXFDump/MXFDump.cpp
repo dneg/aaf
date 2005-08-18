@@ -167,6 +167,9 @@ int main(int argumentCount, char* argumentVector[])
     exit(EXIT_FAILURE);
   }
   char* fileName = argumentVector[fileArg];
+  if (verbose) {
+    cout << "file = " << fileName << endl;
+  }
   if (mode == mxfMode) {
     mxfDumpFile(fileName);
   } else {
