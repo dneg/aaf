@@ -1944,9 +1944,9 @@ void printMxfLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing)
 {
   if (isMxfKey(enclosing)) {
     size_t i;
-    bool found = lookupAAFLocalKey(k, i); // tjb ???
+    bool found = lookupMXFLocalKey(k, i);
     if (found) {
-      fprintf(stdout, "%s\n", aafLocalKeyTable[i]._name);
+      fprintf(stdout, "%s\n", mxfLocalKeyTable[i]._name);
     } else {
       fprintf(stdout, "Dark\n");
     }
