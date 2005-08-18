@@ -241,6 +241,8 @@ void rawDumpFile(char* fileName)
 }
 
 bool verbose = false;
+bool lFlag;
+mxfLength limit = 0;
 
 typedef enum ModeTag {
   unspecifiedMode,
@@ -277,6 +279,33 @@ int main(int argumentCount, char* argumentVector[])
       setMode(mxfMode);
     } else if ((strcmp(p, "-v") == 0) || (strcmp(p, "--verbose") == 0)) {
       verbose = true;
+    } else if ((strcmp(p, "-l") == 0) ||(strcmp(p, "--limit") == 0)) {
+      if ((i + 1 < argumentCount) && (*argumentVector[i + 1] != '-' )) {
+        lFlag = true;
+        i = i + 1;
+
+        char* bytess = argumentVector[i];
+        char* expectedEnd = &bytess[strlen(bytess)];
+        char* end;
+        int bytes = strtoul(bytess, &end, 10);
+
+        if (end != expectedEnd) {
+          fprintf(stderr, 
+                  ": Error : \"%s\" is not a valid byte count.",
+                  programName,
+                  bytess);
+          printUsage();
+          exit(EXIT_FAILURE);
+        }
+        limit = bytes;
+      } else {
+        fprintf(stderr,
+                "%s : Error : \"%s\" must be followed by a byte count.",
+                programName,
+                p);
+        printUsage();
+        exit(EXIT_FAILURE);
+      }
     } else if ((strcmp(p, "-h") == 0) || (strcmp(p, "--help") == 0)) {
       printUsage();
       exit(EXIT_SUCCESS);
@@ -304,6 +333,11 @@ int main(int argumentCount, char* argumentVector[])
   char* fileName = argumentVector[fileArg];
   if (verbose) {
     fprintf(stdout, "file = %s\n", fileName);
+    if (lFlag) {
+      fprintf(stdout,
+              "dumping only the first %d bytes of values.\n",
+              limit);
+    }
   }
   if (mode == mxfMode) {
     mxfDumpFile(fileName);
