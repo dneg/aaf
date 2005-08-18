@@ -1605,8 +1605,9 @@ void printEssenceKL(mxfKey& k, mxfLength& len)
           k[14],
           k[15]);
   fprintf(stdout,
-          "  Item Type = \"%s\", Element Type = %s (%02x),\n",
+          "  Item Type = \"%s\" (%02x), Element Type = \"%s\" (%02x),\n",
           itemTypeIdName,
+          itemTypeId,
           elementTypeIdName,
           elementTypeId);
   printMxfKey(k, stdout);
