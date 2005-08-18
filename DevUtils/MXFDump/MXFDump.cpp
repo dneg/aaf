@@ -1252,7 +1252,7 @@ void printGeneralizedOperationalPattern(mxfKey& k, FILE* outfile)
   }
 }
 
-void printAtomOperationalPattern(mxfKey& k, FILE* outfile)
+void printAtomOperationalPattern(mxfKey& /* k */, FILE* outfile)
 {
   // tjb - should check for specific Atom patterns
   fprintf(outfile, "[ Specialized - Atom ]");
@@ -2958,7 +2958,7 @@ bool isFill(mxfKey& k)
   return result;
 }
 
-void printFill(mxfKey& k, mxfLength& len, mxfFile infile)
+void printFill(mxfKey& /* k */, mxfLength& len, mxfFile infile)
 {
   if (dumpFill) {
     printV(len, false, 0, infile);
@@ -3565,7 +3565,7 @@ void checkPartitionLength(mxfUInt64& length)
 
 void printPartition(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printPartition(mxfKey& k, mxfLength& len, mxfFile infile)
+void printPartition(mxfKey& /* k */, mxfLength& len, mxfFile infile)
 {
   checkPartitionLength(len);
   dumpMxfUInt16("Major Version", infile);
@@ -3894,7 +3894,7 @@ void checkPrimerLength(mxfUInt64& length)
 
 void printPrimer(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printPrimer(mxfKey& k, mxfLength& len, mxfFile infile)
+void printPrimer(mxfKey& /* k */, mxfLength& len, mxfFile infile)
 {
   checkPrimerLength(len);
   mxfUInt32 elementCount;
@@ -3934,14 +3934,14 @@ void printPrimer(mxfKey& k, mxfLength& len, mxfFile infile)
 
 void printSystemMetadata(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printSystemMetadata(mxfKey& k, mxfLength& len, mxfFile infile)
+void printSystemMetadata(mxfKey& /* k */, mxfLength& len, mxfFile infile)
 {
   printV(len, false, 0, infile);
 }
 
 void printObjectDirectory(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printObjectDirectory(mxfKey& k, mxfLength& len, mxfFile infile)
+void printObjectDirectory(mxfKey& /* k */, mxfLength& len, mxfFile infile)
 {
   mxfUInt64 entryCount;
   readMxfUInt64(entryCount, infile);
@@ -3980,7 +3980,7 @@ void printObjectDirectory(mxfKey& k, mxfLength& len, mxfFile infile)
 
 void printRandomIndex(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printRandomIndex(mxfKey& k, mxfLength& len, mxfFile infile)
+void printRandomIndex(mxfKey& /* k */, mxfLength& len, mxfFile infile)
 {
   mxfUInt64 entryCount = len / (sizeof(mxfUInt32) + sizeof(mxfUInt64));
   fprintf(stdout, "  [ Number of entries = ");
