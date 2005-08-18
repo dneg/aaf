@@ -1444,6 +1444,8 @@ void printOperationalPattern(mxfKey& k, FILE* outfile)
     } else {
       fprintf(outfile, "[ Unknown ]");
     }
+  } else if (isPrivateLabel(k)) {
+     printPrivateLabel(k, outfile);
   } else {
     fprintf(outfile, "[ Invalid ]");
   }
