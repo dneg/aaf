@@ -1,4 +1,7 @@
+
 #include "OMCommandLine.h"
+#include "OMCommandLineUtilities.h"
+
 #include <iostream.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,28 +26,6 @@ void usage(void)
   cerr << programName << ": Usage : "
        << programName << " <file>"
                       << endl;
-}
-
-char* baseName(char* fullName)
-{
-  char* result;
-#if defined(WIN32)
-  const int delimiter = '\\';
-#elif defined(_MAC) || defined(macintosh)
-  const int delimiter = ':';
-#else
-  const int delimiter = '/';
-#endif
-  result = strrchr(fullName, delimiter);
-  if (result == 0) {
-    result = fullName;
-  } else if (strlen(result) == 0) {
-    result = fullName;
-  } else {
-    result++;
-  }
-
-  return result;
 }
 
 void dumpFile(char* fileName)
