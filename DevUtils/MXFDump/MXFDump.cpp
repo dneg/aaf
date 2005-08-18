@@ -1002,12 +1002,7 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
       } else {
         if (aafKeysAsSets) {
           mxfKey x;
-          aafUID u;
-          memcpy(&u, &k, sizeof(u));
-          if (reorder()) {
-            reorder(u);
-          }
-          aafUIDToMxfKey(x, u);
+          aafUIDToMxfKey(x, *reinterpret_cast<aafUID*>(&k));
           found = lookupAAFKey(x, i);
           if (found) {
             fprintf(stdout, "%s +\n", aafKeyTable[i]._name);
@@ -1291,12 +1286,7 @@ bool isLocalSet(mxfKey& k)
     if (aafKeysAsSets) {
       size_t index;
       mxfKey x;
-      aafUID u;
-      memcpy(&u, &k, sizeof(u));
-      if (reorder()) {
-        reorder(u);
-      }
-      aafUIDToMxfKey(x, u);
+      aafUIDToMxfKey(x, *reinterpret_cast<aafUID*>(&k));
       bool found = lookupAAFKey(x, index);
       if (found) {
         result = true;
