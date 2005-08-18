@@ -2167,6 +2167,8 @@ int getIntegerOption(int currentArgument,
 // -h --help
 // -d --debug
 
+bool hFlag = false;
+
 int main(int argumentCount, char* argumentVector[])
 {
 #if defined(MXF_USE_CONSOLE)
@@ -2241,8 +2243,7 @@ int main(int argumentCount, char* argumentVector[])
       symbolic = false;
     } else if ((strcmp(p, "--help") == 0) ||
                (strcmp(p, "-h") == 0)) {
-      printHelp();
-      exit(EXIT_SUCCESS);
+      hFlag = true;
     } else if ((strcmp(p, "--debug") == 0) ||
                (strcmp(p, "-d") == 0)) {
       debug = true;
@@ -2269,6 +2270,10 @@ int main(int argumentCount, char* argumentVector[])
       printMxfKey(aafKeyTable[i]._key, stdout);
       fprintf(stdout, "\n");
     }
+  }
+  if (hFlag) {
+    printHelp();
+    exit(EXIT_SUCCESS);
   }
   if (mode == unspecifiedMode) {
     mode = mxfMode;
