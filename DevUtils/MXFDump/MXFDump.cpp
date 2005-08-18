@@ -3686,6 +3686,45 @@ void checkField(mxfUInt64 expected,
   }
 }
 
+void checkSID(Segment* seg,
+              mxfUInt64 actual,
+              const mxfKey& key,
+              mxfUInt64 keyAddress,
+              char* label,
+              char* kind);
+
+void checkSID(Segment* seg,
+              mxfUInt64 actual,
+              const mxfKey& key,
+              mxfUInt64 keyAddress,
+              char* label,
+              char* kind)
+{
+  if (seg != 0) {
+    if (actual == 0) {
+      mxfError(key,
+               keyAddress,
+               "Incorrect value for %s"
+               " - partition contains %s,"
+               " expected != 0x0, found 0x%"MXFPRIx32"",
+               label,
+               kind,
+               actual);
+    }
+  } else {
+    if (actual != 0) {
+      mxfError(key,
+               keyAddress,
+               "Incorrect value for %s"
+               " - partition does not contain %s,"
+               " expected 0x0, found 0x%"MXFPRIx32"",
+               label,
+               kind,
+               actual);
+    }
+  }
+}
+
 void checkOperationalPattern(mxfPartition* p);
 
 void checkOperationalPattern(mxfPartition* p)
