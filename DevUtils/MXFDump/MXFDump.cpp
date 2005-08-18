@@ -1477,6 +1477,9 @@ void decodeUncompressedPicture(mxfUInt32 tag2, FILE* outfile)
     case 0x011F:
       fprintf(outfile, " - SD 625 50p 422 27MHz (line wrapped)");
       break;
+    default:
+      fprintf(outfile, " - Not recognized");
+      break;
   }
 }
 
@@ -1488,6 +1491,9 @@ void decodeAES3BWF(mxfUInt32 tag2, FILE* outfile)
     break;
   case 0x0200:
     fprintf(outfile, " - AES/BWF (clip wrapped)");
+    break;
+  default:
+    fprintf(outfile, " - Not recognized");
     break;
   }
 }
@@ -1518,6 +1524,9 @@ void decodeDV(mxfUInt32 tag2, FILE* outfile)
     break;
   case 0x6302:
     fprintf(outfile, " - 100Mbps 720/50p (clip wrapped)");
+    break;
+  default:
+    fprintf(outfile, " - Not recognized");
     break;
   }
 }
@@ -1583,6 +1592,9 @@ void decodeD10(mxfUInt32 tag2, FILE* outfile)
     break;
   case 0x067f:
     fprintf(outfile, " - 30Mbps 525/60i (picture only)");
+    break;
+  default:
+    fprintf(outfile, " - Not recognized");
     break;
   }
 }
