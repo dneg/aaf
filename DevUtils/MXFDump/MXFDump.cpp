@@ -69,6 +69,23 @@ typedef mxfUInt32 mxfLength;
 typedef mxfUInt08 mxfByte;
 typedef mxfByte mxfKey[16];
 
+void printField(FILE* f, mxfUInt32& i);
+
+void printField(FILE* f, mxfUInt32& i)
+{
+#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
+  fprintf(f, "%4u", i);
+#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
+  fprintf(f, "%4lu", i);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
+  fprintf(f, "%4lu", i);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
+  fprintf(f, "%4lu", i);
+#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
+  fprintf(f, "%4lu", i);
+#endif
+}
+
 const char* programName;
 
 void checkSizes(void);
