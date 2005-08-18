@@ -4887,7 +4887,8 @@ int main(int argumentCount, char* argumentVector[])
   // Apply --limit-bytes default
   if (!lFlag) {
     if (mode == klvMode) {
-      limitBytes = false;
+      limitBytes = true;
+      limit = 0;
     } else if (mode == localSetMode) {
       limitBytes = true;
       limit = 0;
