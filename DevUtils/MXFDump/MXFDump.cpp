@@ -618,7 +618,7 @@ void printEssence(mxfKey& k,
   int elementType = k[14];
   int elementNumber = k[15] + 1; // zero based
   fprintf(stdout,
-          "  [ %s (%d of %d) (type = %x) ]\n",
+          "[ K = %s (%d of %d) (type = %x) ]\n",
           itemType,
           elementNumber,
           elementCount,
@@ -795,17 +795,20 @@ void mxfDumpFile(char* fileName)
   while (readMxfKey(k, infile)) {
     mxfLength len;
     readMxfLength(len, infile);
-    printKL(k, len);
 
     if (isLocalSet(k)) {
+      printKL(k, len);
       dumpLocalSet(len, infile);
     } else if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
+      printKL(k, len);
       dumpPrimer(infile);
     } else if (memcmp(&Filler, &k, sizeof(mxfKey)) == 0) {
+      printKL(k, len);
       printFiller(len, infile);
     } else if (isEssenceElement(k)) {
       printEssence(k, len, lFlag, limit, infile);
     } else {
+      printKL(k, len);
       printV(len, false, 0, infile);
     }
   }
