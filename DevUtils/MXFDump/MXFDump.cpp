@@ -6447,7 +6447,7 @@ int main(int argumentCount, char* argumentVector[])
   }
 
   mxfFile infile = openExistingRead(fileName);
-  if (infile == NULL) {
+  if (infile == 0) {
     fatalError("File \"%s\" not found.\n", fileName);
   }
 
