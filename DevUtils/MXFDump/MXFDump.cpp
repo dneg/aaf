@@ -3781,7 +3781,17 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer);
 void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
 {
   // Major Version
+  checkField(1,
+             p->_majorVersion,
+             p->_key,
+             p->_address + headerPosition,
+             "MajorVersion");
   // Minor Version
+  checkField(2,
+             p->_minorVersion,
+             p->_key,
+             p->_address + headerPosition,
+             "MinorVersion");
   // KAGSize
   // ThisPartition
   checkField(p->_address,
