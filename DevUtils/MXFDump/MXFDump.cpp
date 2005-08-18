@@ -1619,7 +1619,13 @@ void setDumpFile(char* fileName)
     mxfLength len;
     readMxfLength(len, infile);
 
-    if (isLocalSet(k)) {
+    if (isNullKey(k)) {
+      printKL(k, len);
+      fprintf(stderr,
+              "%s : Error : Null key.\n",
+              programName);
+      exit(EXIT_FAILURE);
+    } else if (isLocalSet(k)) {
       printLocalSet(k, len, infile);
     } else if (isFill(k)) {
       printFill(k, len, infile);
@@ -1651,7 +1657,13 @@ void mxfDumpFile(char* fileName)
     mxfLength len;
     readMxfLength(len, infile);
 
-    if (memcmp(&OpenHeaderPartition, &k, sizeof(mxfKey)) == 0) {
+    if (isNullKey(k)) {
+      printKL(k, len);
+      fprintf(stderr,
+              "%s : Error : Null key.\n",
+              programName);
+      exit(EXIT_FAILURE);
+    } else if (memcmp(&OpenHeaderPartition, &k, sizeof(mxfKey)) == 0) {
       printHeaderPartition(k, len, infile);
     } else if (memcmp(&ClosedHeaderPartition, &k, sizeof(mxfKey)) == 0) {
       printHeaderPartition(k, len, infile);
