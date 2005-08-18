@@ -3423,11 +3423,11 @@ void printPartitions(PartitionList& partitions);
 
 void printPartitions(PartitionList& partitions)
 {
-  fprintf(stderr, "Partitions\n");
+  fprintf(stdout, "Partitions\n");
   PartitionList::const_iterator it;
   for (it = partitions.begin(); it != partitions.end(); ++it) {
     mxfPartition* p = *it;
-    fprintf(stderr, "  %016"MXFPRIx64"\n", p->_address);
+    fprintf(stdout, "  %016"MXFPRIx64"\n", p->_address);
     printSegments(p->_segments);
   }
 }
@@ -3666,12 +3666,12 @@ void printRandomIndex(RandomIndex& rip);
 
 void printRandomIndex(RandomIndex& rip)
 {
-  fprintf(stderr, "Random index\n");
-  fprintf(stderr, "  SID      : Address\n");
+  fprintf(stdout, "Random index\n");
+  fprintf(stdout, "  SID      : Address\n");
   RandomIndex::const_iterator it;
   for (it = rip.begin(); it != rip.end(); ++it) {
     mxfRIPEntry e = *it;
-    fprintf(stderr, "  %08"MXFPRIx32" : %016"MXFPRIx64"\n", e._sid, e._offset);
+    fprintf(stdout, "  %08"MXFPRIx32" : %016"MXFPRIx64"\n", e._sid, e._offset);
   }
 }
 
