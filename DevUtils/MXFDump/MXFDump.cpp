@@ -31,7 +31,7 @@ void printUsage(void)
           programName);
   fprintf(stderr, "OPTIONS :\n");
   fprintf(stderr, "--raw-dump      = ");
-  fprintf(stderr, "dump raw KLV (-r)");
+  fprintf(stderr, "dump raw KLV (-r)\n");
   fprintf(stderr, "--mxf-dump      = ");
   fprintf(stderr, "dump MXF (-m)\n");
   fprintf(stderr, "--help          = ");
