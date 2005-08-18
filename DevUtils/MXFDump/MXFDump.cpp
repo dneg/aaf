@@ -192,6 +192,11 @@ void printMxfKey(const mxfKey& k, FILE* f);
 void printMxfLength(mxfLength& l, FILE* f);
 void printMxfLocalKey(mxfLocalKey& k, FILE* f);
 
+void printMxfUInt08(FILE* f, const char* label, mxfUInt08& i);
+void printMxfUInt16(FILE* f, const char* label, mxfUInt16& i);
+void printMxfUInt32(FILE* f, const char* label, mxfUInt32& i);
+void printMxfUInt64(FILE* f, const char* label, mxfUInt64& i);
+
 void dumpMxfUInt08(const char* label, FILE* infile);
 void dumpMxfUInt16(const char* label, FILE* infile);
 void dumpMxfUInt32(const char* label, FILE* infile);
@@ -521,6 +526,34 @@ void printMxfLocalKey(mxfLocalKey& k, FILE* f)
   unsigned int msb = (k & 0xff00) >> 8;
   unsigned int lsb = (k & 0x00ff);
   fprintf(f, "%02x.%02x", msb, lsb);
+}
+
+void printMxfUInt08(FILE* f, const char* label, mxfUInt08& i)
+{
+  fprintf(f, "%20s = ", label);
+  printHexField(f, i);
+  fprintf(f, "\n");
+}
+
+void printMxfUInt16(FILE* f, const char* label, mxfUInt16& i)
+{
+  fprintf(f, "%20s = ", label);
+  printHexField(f, i);
+  fprintf(f, "\n");
+}
+
+void printMxfUInt32(FILE* f, const char* label, mxfUInt32& i)
+{
+  fprintf(f, "%20s = ", label);
+  printHexField(f, i);
+  fprintf(f, "\n");
+}
+
+void printMxfUInt64(FILE* f, const char* label, mxfUInt64& i)
+{
+  fprintf(f, "%20s = ", label);
+  printHexField(f, i);
+  fprintf(f, "\n");
 }
 
 void dumpMxfUInt08(const char* label, FILE* infile)
