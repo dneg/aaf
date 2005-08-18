@@ -3756,6 +3756,26 @@ void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer)
              p->_address,
              "IndexByteCount");
   // IndexSID
+  Segment* iseg = findIndexSegment(p);
+  if (iseg != 0) {
+    if (p->_indexSID == 0) {
+      mxfError(p->_key,
+               p->_address,
+               "Incorrect value for IndexSID"
+               " - partition contains index,"
+               " expected != 0x0, found 0x%"MXFPRIx32"",
+               p->_indexSID);
+    }
+  } else {
+    if (p->_indexSID != 0) {
+      mxfError(p->_key,
+               p->_address,
+               "Incorrect value for IndexSID"
+               " - partition does not contain index,"
+               " expected 0x0, found 0x%"MXFPRIx32"",
+               p->_indexSID);
+    }
+  }
   // BodyOffset
   mxfUInt64 bodyOffset = 0;
   Segment* seg = findEssenceSegment(p);
