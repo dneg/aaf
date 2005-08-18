@@ -3633,6 +3633,25 @@ void checkEssenceContainers(mxfPartition* p)
                     sizeof(mxfKey),
                     p->_length,
                     partitionFixedSize);
+  bool hasEssence = false;
+  if (!p->_segments.empty()) {
+    SegmentList::const_iterator it;
+    for (it = p->_segments.begin(); it != p->_segments.end(); it++) {
+      Segment* seg = *it;
+      if (isEssenceElement(seg->_label)) {
+        hasEssence = true;
+        break;
+      }
+    }
+  }
+  if (hasEssence) {
+    if (p->_elementCount == 0) {
+      mxfError(p->_key,
+               p->_address,
+               "Partition contains essence "
+               "but there are no essence container labels.");
+    }
+  }
 }
 
 void checkPartition(mxfPartition* p, mxfUInt64 previous, mxfUInt64 footer);
