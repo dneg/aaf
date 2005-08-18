@@ -1458,6 +1458,8 @@ char* CPPictureElementTypeName(mxfByte type)
     result = "JFIF";
   } else if (type == 0x42) {
     result = "TIFF";
+  } else if ((type < 0x01) || (type > 0x7f)) {
+    result = "Illegal";
   }
   return result;
 }
@@ -1471,6 +1473,8 @@ char* CPSoundElementTypeName(mxfByte type)
     result = "AES3";
   } else if (type == 0x40) {
     result = "WAVE";
+  } else if ((type < 0x01) || (type > 0x7f)) {
+    result = "Illegal";
   }
   return result;
 }
@@ -1480,6 +1484,9 @@ char* CPDataElementTypeName(mxfByte type);
 char* CPDataElementTypeName(mxfByte type)
 {
   char* result = "Unknown Data";
+  if ((type < 0x01) || (type > 0x7f)) {
+    result = "Illegal";
+  }
   return result;
 }
 
@@ -1496,6 +1503,8 @@ char* GCPictureElementTypeName(mxfByte type)
     result = "Uncompressed (Clip Wrapped)";
   } else if (type == 0x04) {
     result = "Uncompressed (Line Wrapped)";
+  } else if ((type < 0x01) || (type > 0x7f)) {
+    result = "Illegal";
   }
   return result;
 }
@@ -1513,6 +1522,8 @@ char* GCSoundElementTypeName(mxfByte type)
     result = "AES3( Frame Wrapped)";
   } else if (type == 0x04) {
     result = "AES3 (Clip Wrapped)";
+  } else if ((type < 0x01) || (type > 0x7f)) {
+    result = "Illegal";
   }
   return result;
 }
@@ -1521,7 +1532,11 @@ char* GCDataElementTypeName(mxfByte type);
 
 char* GCDataElementTypeName(mxfByte type)
 {
-  return "Unknown Data";
+  char* result = "Unknown Data";
+  if ((type < 0x01) || (type > 0x7f)) {
+    result = "Illegal";
+  }
+  return result;
 }
 
 char* GCCompoundElementTypeName(mxfByte type);
@@ -1533,6 +1548,8 @@ char* GCCompoundElementTypeName(mxfByte type)
     result = "DV-DIF (Frame Wrapped)";
   } else if (type == 0x02) {
     result = "DV-DIF (Clip Wrapped)";
+  } else if ((type < 0x01) || (type > 0x7f)) {
+    result = "Illegal";
   }
   return result;
 }
