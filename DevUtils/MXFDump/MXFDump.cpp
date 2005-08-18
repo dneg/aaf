@@ -346,7 +346,7 @@ void readMxfUInt16(mxfUInt16& i, FILE* f)
     fprintf(stderr, "%s : Error : Failed to read mxfUInt16.\n", programName);
     exit(EXIT_FAILURE);
   }
-  if (hostByteOrder() != 'B') {
+  if (reorder()) {
     reorder(i);
   }
 }
@@ -376,7 +376,7 @@ void readMxfUInt32(mxfUInt32& i, FILE* f)
     fprintf(stderr, "%s : Error : Failed to read mxfUInt32.\n", programName);
     exit(EXIT_FAILURE);
   }
-  if (hostByteOrder() != 'B') {
+  if (reorder()) {
     reorder(i);
   }
 }
