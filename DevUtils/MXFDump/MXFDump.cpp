@@ -336,6 +336,8 @@ bool isFooter(mxfKey& key);
 bool isClosed(const mxfKey& key);
 bool isComplete(const mxfKey& key);
 
+bool isRandomIndex(const mxfKey& key);
+
 bool isPrivateLabel(mxfKey& key);
 void printPrivateLabelName(mxfKey& k, FILE* outfile);
 void printPrivateLabel(mxfKey& k, FILE* outfile);
@@ -4855,6 +4857,17 @@ bool isComplete(const mxfKey& key)
   } else if (memcmp(&Body, &key, sizeof(mxfKey)) == 0) {
     result = true;
   } else if (memcmp(&Footer, &key, sizeof(mxfKey)) == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+bool isRandomIndex(const mxfKey& key)
+{
+  bool result;
+  if (memcmp(&IndexTableSegment, &key, sizeof(mxfKey)) == 0) {
     result = true;
   } else {
     result = false;
