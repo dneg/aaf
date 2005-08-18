@@ -1471,10 +1471,12 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
       printField(stdout, entrySize);
       fprintf(stdout, " ]\n");
 
-      fprintf(stdout, "         ");
-      fprintf(stdout, "        Temporal   Anchor  Flags        Stream\n");
-      fprintf(stdout, "         ");
-      fprintf(stdout, "          Offset   Offset               Offset\n");
+      if (entryCount > 0) {
+        fprintf(stdout, "         ");
+        fprintf(stdout, "        Temporal   Anchor  Flags        Stream\n");
+        fprintf(stdout, "         ");
+        fprintf(stdout, "          Offset   Offset               Offset\n");
+      }
 
       for (mxfUInt32 i = 0; i < entryCount; i++) {
         mxfUInt08 temporalOffset; // signed
@@ -1543,7 +1545,9 @@ void printPrimer(mxfKey& k, mxfLength& len, FILE* infile)
   printField(stdout, elementSize);
   fprintf(stdout, " ]\n");
 
-  fprintf(stdout, "  Local Tag      UID\n");
+  if (elementCount > 0) { 
+    fprintf(stdout, "  Local Tag      UID\n");
+  }
 
   for (mxfUInt32 j = 0; j < elementCount; j++) {
     mxfLocalKey identifier;
