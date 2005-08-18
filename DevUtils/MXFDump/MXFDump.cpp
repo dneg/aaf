@@ -216,6 +216,8 @@ typedef SInt16 mxfFile;
 typedef FILE* mxfFile;
 #endif
 
+void mxfExit(void);
+
 mxfFile openExistingRead(char* fileName);
 void close(mxfFile infile);
 void setPosition(mxfFile infile, const mxfUInt64 position);
@@ -6303,6 +6305,19 @@ void printSummary(void)
                warnings);
     }
   }
+}
+
+void mxfExit(void)
+{
+  int result;
+  if (errors != 0) {
+    result = 2; // Errors, possibly also warnings
+  } else if (warnings != 0) {
+    result = 1; // Warnings only
+  } else {
+    result = 0; // No errors or warnings
+  }
+  exit(result);
 }
 
 // Summary of options -
