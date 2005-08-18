@@ -3629,9 +3629,11 @@ void markMetadataEnd(mxfUInt64 endKeyPosition)
 
 void markIndexStart(mxfUInt32 sid, mxfUInt64 indexKeyPosition)
 {
-  indexSID = sid;
-  memcpy(&indexLabel, &currentKey, sizeof(mxfKey));
-  indexPosition = indexKeyPosition;
+  if (indexSID == 0) {
+    indexSID = sid;
+    memcpy(&indexLabel, &currentKey, sizeof(mxfKey));
+    indexPosition = indexKeyPosition;
+  }
 }
 
 void markIndexEnd(mxfUInt64 endKeyPosition)
@@ -3647,9 +3649,11 @@ void markIndexEnd(mxfUInt64 endKeyPosition)
 
 void markEssenceSegmentStart(mxfUInt32 sid, mxfUInt64 essenceKeyPosition)
 {
-  essenceSID = sid;
-  memcpy(&essenceLabel, &currentKey, sizeof(mxfKey));
-  essencePosition = essenceKeyPosition;
+  if (essenceSID == 0) {
+    essenceSID = sid;
+    memcpy(&essenceLabel, &currentKey, sizeof(mxfKey));
+    essencePosition = essenceKeyPosition;
+  }
 }
 
 void markEssenceSegmentEnd(mxfUInt64 endKeyPosition)
