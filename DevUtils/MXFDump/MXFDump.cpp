@@ -2680,7 +2680,7 @@ bool isEssenceElement(mxfKey& k)
 
 void printEssenceKL(mxfKey& k, mxfLength& len);
 
-void printEssenceKL(mxfKey& k, mxfLength& len)
+void printEssenceKL(mxfKey& k, mxfLength& /* len */)
 {
   mxfByte itemTypeId = k[12];
   mxfByte elementTypeId = k[14];
@@ -3941,7 +3941,9 @@ void printSystemMetadata(mxfKey& /* k */, mxfLength& len, mxfFile infile)
 
 void printObjectDirectory(mxfKey& k, mxfLength& len, mxfFile infile);
 
-void printObjectDirectory(mxfKey& /* k */, mxfLength& len, mxfFile infile)
+void printObjectDirectory(mxfKey& /* k */,
+                          mxfLength& /* len */,
+                          mxfFile infile)
 {
   mxfUInt64 entryCount;
   readMxfUInt64(entryCount, infile);
