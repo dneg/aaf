@@ -3492,6 +3492,13 @@ bool isSystemElement(mxfKey& k)
   return result;  
 }
 
+bool isDataElement(mxfKey& k);
+
+bool isDataElement(mxfKey& /* k */)
+{
+  return false;
+}
+
 bool isPredefinedEssenceElement(mxfKey& k);
 
 bool isPredefinedEssenceElement(mxfKey& k)
