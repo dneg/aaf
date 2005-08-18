@@ -1850,7 +1850,7 @@ const char* baseName(char* fullName)
 struct {
   const char* _name;
   mxfUInt16 _key;
-} localKeyTable [] = {
+} aafLocalKeyTable [] = {
 #include "AAFMetaDictionary.h"
   // local keys not in AAFMetaDictionary.h
   {"MetaDictionary",       0x0001},
@@ -1890,15 +1890,15 @@ struct {
 };
 
 size_t
-localKeyTableSize = (sizeof(localKeyTable)/sizeof(localKeyTable[0])) - 1;
+aafLocalKeyTableSize = (sizeof(aafLocalKeyTable)/sizeof(aafLocalKeyTable[0])) - 1;
 
 bool lookupLocalKey(mxfLocalKey& k, size_t& index);
 
 bool lookupLocalKey(mxfLocalKey& k, size_t& index)
 {
   bool result = false;
-  for (size_t i = 0; i < localKeyTableSize; i++) {
-    if (localKeyTable[i]._key == k) {
+  for (size_t i = 0; i < aafLocalKeyTableSize; i++) {
+    if (aafLocalKeyTable[i]._key == k) {
       index = i;
       result = true;
       break;
@@ -1917,7 +1917,7 @@ void printMxfLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing)
     size_t i;
     bool found = lookupLocalKey(k, i);
     if (found) {
-      fprintf(stdout, "%s\n", localKeyTable[i]._name);
+      fprintf(stdout, "%s\n", aafLocalKeyTable[i]._name);
     } else {
       fprintf(stdout, "Dark\n");
     }
@@ -1934,7 +1934,7 @@ void printAAFLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing)
     size_t i;
     bool found = lookupLocalKey(k, i);
     if (found) {
-      fprintf(stdout, "%s\n", localKeyTable[i]._name);
+      fprintf(stdout, "%s\n", aafLocalKeyTable[i]._name);
     } else {
       fprintf(stdout, "Dark\n");
     }
