@@ -1703,44 +1703,57 @@ void printCommonOptions(void);
 
 void printCommonOptions(void)
 {
-  fprintf(stderr, "--key-addresses       = ");
+  fprintf(stderr, "--help                = ");
+  fprintf(stderr, "print this message and exit (-h)\n");
+  fprintf(stderr, "\n");
+}
+
+void printCommonDumpOptions(void);
+
+void printCommonDumpOptions(void)
+{
+  fprintf(stderr, "  --key-addresses     = ");
   fprintf(stderr, "print key addresses ");
   fprintf(stderr, "- always absolute [default] (-j)\n");
 
-  fprintf(stderr, "--no-key-addresses    = ");
+  fprintf(stderr, "  --no-key-addresses  = ");
   fprintf(stderr, "don't print key addresses\n");
 
-  fprintf(stderr, "--relative            = ");
+  fprintf(stderr, "  --relative          = ");
   fprintf(stderr, "relative addresses ");
   fprintf(stderr, "- value start = 0 [default] (-r)\n");
 
-  fprintf(stderr, "--absolute            = ");
+  fprintf(stderr, "  --absolute          = ");
   fprintf(stderr, "absolute addresses ");
   fprintf(stderr, "- file start = 0 (-b)\n");
 
-  fprintf(stderr, "--decimal             = ");
+  fprintf(stderr, "  --decimal           = ");
   fprintf(stderr, "print addresses in ");
   fprintf(stderr, "decimal (-t)\n");
 
-  fprintf(stderr, "--hexadecimal         = ");
+  fprintf(stderr, "  --hexadecimal       = ");
   fprintf(stderr, "print addresses in ");
   fprintf(stderr, "hexadecimal [default] (-x)\n");
 
-  fprintf(stderr, "--symbolic            = ");
+  fprintf(stderr, "  --symbolic          = ");
   fprintf(stderr, "dump the names of keys if known [default] (-y)\n");
 
-  fprintf(stderr, "--no-symbolic         = ");
+  fprintf(stderr, "  --no-symbolic       = ");
   fprintf(stderr, "don't dump the names of keys (-n)\n");
   fprintf(stderr, "\n");
 
-  fprintf(stderr, "--help                = ");
-  fprintf(stderr, "print this message and exit (-h)\n");
-
-  fprintf(stderr, "--verbose             = ");
+  fprintf(stderr, "  --verbose           = ");
   fprintf(stderr, "print more detailed information (-v)\n");
 
-  fprintf(stderr, "--debug               = ");
+  fprintf(stderr, "  --debug             = ");
   fprintf(stderr, "print information useful in debugging this program (-d)\n");
+  fprintf(stderr, "\n");
+}
+
+void printCommonValidateOptions(void);
+
+void printCommonValidateOptions(void)
+{
 }
 
 void printFormatOptions(void);
@@ -1973,6 +1986,8 @@ void printFullUsage(void)
   printSetUsage();
   printKLVUsage();
 
+  printCommonDumpOptions();
+
   printAAFValidateUsage();
   printMXFValidateUsage();
   printSetValidateUsage();
@@ -1987,27 +2002,35 @@ void printHelp(void)
 {
   if (mode == klvMode) {
     printKLVUsage();
+    printCommonDumpOptions();
     printCommonOptions();
   } else if (mode == localSetMode) {
     printSetUsage();
+    printCommonDumpOptions();
     printCommonOptions();
   } else if (mode == mxfMode) {
     printMXFUsage();
+    printCommonDumpOptions();
     printCommonOptions();
   } else if (mode == aafMode) {
     printAAFUsage();
+    printCommonDumpOptions();
     printCommonOptions();
   } else if (mode == klvValidateMode) {
     printKLVValidateUsage();
+    printCommonValidateOptions();
     printCommonOptions();
   } else if (mode == setValidateMode) {
     printSetValidateUsage();
+    printCommonValidateOptions();
     printCommonOptions();
   } else if (mode == mxfValidateMode) {
     printMXFValidateUsage();
+    printCommonValidateOptions();
     printCommonOptions();
   } else if (mode == aafValidateMode) {
     printAAFValidateUsage();
+    printCommonValidateOptions();
     printCommonOptions();
   } else {
     printFullUsage();
