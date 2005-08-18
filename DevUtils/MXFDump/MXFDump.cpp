@@ -1903,6 +1903,36 @@ bool getInteger(int& i, char* s)
   return result;
 }
 
+int getIntegerOption(int currentArgument,
+                     int argumentCount,
+                     char* argumentVector[],
+                     const char* label)
+{
+  char* option = argumentVector[currentArgument];
+  int result = 0;
+  if (currentArgument + 1 < argumentCount) {
+    char* value = argumentVector[currentArgument + 1];
+    if (!getInteger(result, value)) {
+      fprintf(stderr, 
+              "%s : Error : \"%s\" is not a valid %s.\n",
+              programName,
+              value,
+              label);
+      printUsage();
+      exit(EXIT_FAILURE);
+    }
+  } else {
+    fprintf(stderr,
+            "%s : Error : \"%s\" must be followed by a %s.\n",
+            programName,
+            option,
+            label);
+    printUsage();
+    exit(EXIT_FAILURE);
+  }
+  return result;
+}
+
 // Summary of options -
 //
 // -k --klv-dump
@@ -1954,49 +1984,21 @@ int main(int argumentCount, char* argumentVector[])
       lFlag = false;
     } else if ((strcmp(p, "-l") == 0) || (strcmp(p, "--limit") == 0)) {
       if ((i + 1 < argumentCount) && (*argumentVector[i + 1] != '-' )) {
+        limit = getIntegerOption(i,
+                                 argumentCount,
+                                 argumentVector,
+                                 "byte count");
         lFlag = true;
         i = i + 1;
-        char* bytess = argumentVector[i];
-        int bytes;
-        if (!getInteger(bytes, bytess)) {
-          fprintf(stderr, 
-                  "%s : Error : \"%s\" is not a valid byte count.\n",
-                  programName,
-                  bytess);
-          printUsage();
-          exit(EXIT_FAILURE);
-        }
-        limit = bytes;
-      } else {
-        fprintf(stderr,
-                "%s : Error : \"%s\" must be followed by a byte count.\n",
-                programName,
-                p);
-        printUsage();
-        exit(EXIT_FAILURE);
       }
     } else if ((strcmp(p, "-c") == 0) || (strcmp(p, "--entries") == 0)) {
       if ((i + 1 < argumentCount) && (*argumentVector[i + 1] != '-' )) {
+        maxIndexEntries = getIntegerOption(i,
+                                           argumentCount,
+                                           argumentVector,
+                                           "count");
         cFlag = true;
         i = i + 1;
-        char* counts = argumentVector[i];
-        int count;
-        if (!getInteger(count, counts)) {
-          fprintf(stderr, 
-                  "%s : Error : \"%s\" is not a valid count.\n",
-                  programName,
-                  counts);
-          printUsage();
-          exit(EXIT_FAILURE);
-        }
-        maxIndexEntries = count;
-      } else {
-        fprintf(stderr,
-                "%s : Error : \"%s\" must be followed by a count.\n",
-                programName,
-                p);
-        printUsage();
-        exit(EXIT_FAILURE);
       }
     } else if ((strcmp(p, "-r") == 0) || (strcmp(p, "--relative") == 0)) {
       relative = true;
