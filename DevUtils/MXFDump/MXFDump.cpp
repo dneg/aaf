@@ -262,6 +262,8 @@ void printMxfUInt16(FILE* f, const char* label, mxfUInt16& i);
 void printMxfUInt32(FILE* f, const char* label, mxfUInt32& i);
 void printMxfUInt64(FILE* f, const char* label, mxfUInt64& i);
 
+void printMxfRational(FILE* f, const char* label, mxfRational& r);
+
 void dumpMxfUInt08(const char* label, mxfFile infile);
 void dumpMxfUInt16(const char* label, mxfFile infile);
 void dumpMxfUInt32(const char* label, mxfFile infile);
@@ -1246,6 +1248,17 @@ void printMxfUInt64(FILE* f, const char* label, mxfUInt64& i)
   fprintf(f, "%20s = ", label);
   printHexFieldPad(f, i);
   fprintf(f, "\n");
+}
+
+void printMxfRational(FILE* f, const char* label, mxfRational& r)
+{
+  fprintf(stdout, "%20s = ", label);
+  fprintf(stdout, "( ");
+  printDecField(stdout, r.numerator);
+  fprintf(stdout, " / ");
+  printDecField(stdout, r.denominator);
+  fprintf(stdout, " )");
+  fprintf(stdout, "\n");
 }
 
 void dumpMxfUInt08(const char* label, mxfFile infile)
