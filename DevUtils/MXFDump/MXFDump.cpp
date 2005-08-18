@@ -157,7 +157,7 @@ Mode mode = unspecifiedMode;
 bool reorder(void);
 mxfUInt08 hostByteOrder(void);
 
-void setPosition(const mxfUInt64 newPosition, FILE* f);
+void setPosition(const mxfUInt64 position, FILE* f);
 void skipBytes(const mxfUInt64 byteCount, FILE* f);
 
 void readMxfUInt08(mxfByte& b, FILE* f);
@@ -222,12 +222,29 @@ mxfUInt64 keyPosition;
 
 void setPosition(const mxfUInt64 position, FILE* f)
 {
+#if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
+  // ISO says that fpos_t is opaque,
+  // on Windows fpos_t is a 64-bit integer.
+  fpos_t pos = position;
+  int status = fsetpos(f, &pos);
+#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
+  int status = fseeko(f, offset, SEEK_SET);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
+  int status = _fseek(f, offset, SEEK_SET);
+#elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
+  int status = _fseek(f, offset, SEEK_SET);
+#elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
+  int status = fseeko(f, offset, SEEK_SET);
+#elif defined(MXF_COMPILER_SGICC_MIPS_SGI)
+  int status = fseeko64(f, offset, SEEK_SET);
+#else
   long offset = static_cast<long>(position);
   if (position != static_cast<mxfUInt64>(offset)) {
     fprintf(stderr, "%s : Error : offset too large.\n", programName);
     exit(EXIT_FAILURE);
   }
   int status = fseek(f, offset, SEEK_SET);
+#endif
   if (status != 0) {
     fprintf(stderr, "%s : Error : Failed to seek.\n", programName);
     exit(EXIT_FAILURE);
