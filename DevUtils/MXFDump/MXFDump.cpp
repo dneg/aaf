@@ -1413,9 +1413,9 @@ void printV(mxfLength& length, bool lFlag, mxfUInt32 limit, FILE* f)
   }
 }
 
-char* elementTypeName(mxfByte type);
+char* elementTypeName(mxfByte itemTypeId, mxfByte type);
 
-char* elementTypeName(mxfByte type)
+char* elementTypeName(mxfByte /* itemTypeId */, mxfByte type)
 {
   char* result;
   if (type == 0x00) {
@@ -1469,15 +1469,15 @@ void printEssenceKL(mxfKey& k, mxfLength& len)
   switch (itemTypeId) {
   case 0x05:
     itemTypeIdName = "CP Picture";
-    elementTypeIdName = elementTypeName(elementTypeId);
+    elementTypeIdName = elementTypeName(itemTypeId, elementTypeId);
     break;
   case 0x06:
     itemTypeIdName = "CP Sound";
-    elementTypeIdName = elementTypeName(elementTypeId);
+    elementTypeIdName = elementTypeName(itemTypeId, elementTypeId);
     break;
   case 0x07:
     itemTypeIdName = "CP Data";
-    elementTypeIdName = elementTypeName(elementTypeId);
+    elementTypeIdName = elementTypeName(itemTypeId, elementTypeId);
     break;
   case 0x15:
     itemTypeIdName = "GC Picture";
