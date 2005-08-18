@@ -1277,6 +1277,24 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
     if (found) {
       fprintf(stdout, "%s\n", keyTable[i]._name);
     } else {
+      fprintf(stdout, "Dark\n");
+    }
+  } else {
+    fprintf(stdout, "\n");
+  }
+  printMxfKey(k, f);
+}
+
+void printAAFKeySymbol(mxfKey& k, FILE* f);
+
+void printAAFKeySymbol(mxfKey& k, FILE* f)
+{
+  if (symbolic) {
+    size_t i;
+    bool found = lookupKey(k, i);
+    if (found) {
+      fprintf(stdout, "%s\n", keyTable[i]._name);
+    } else {
       char* flag;
       found = findAAFKey(k, i, &flag);
       if (found) {
@@ -1298,6 +1316,31 @@ void printKL(mxfKey& k, mxfLength& l)
   fprintf(stdout, "\n");
   fprintf(stdout, "[ K = ");
   printMxfKeySymbol(k, stdout);
+  fprintf(stdout, ", ");
+  fprintf(stdout, "L = ");
+  printMxfLength(l, stdout);
+  fprintf(stdout, " ]\n");
+}
+
+void printMXFKL(mxfKey& k, mxfLength& l);
+
+void printMXFKL(mxfKey& k, mxfLength& l)
+{
+  fprintf(stdout, "\n");
+  fprintf(stdout, "[ K = ");
+  printMxfKeySymbol(k, stdout);
+  fprintf(stdout, ", ");
+  fprintf(stdout, "L = ");
+  printMxfLength(l, stdout);
+  fprintf(stdout, " ]\n");
+}
+void printAAFKL(mxfKey& k, mxfLength& l);
+
+void printAAFKL(mxfKey& k, mxfLength& l)
+{
+  fprintf(stdout, "\n");
+  fprintf(stdout, "[ K = ");
+  printAAFKeySymbol(k, stdout);
   fprintf(stdout, ", ");
   fprintf(stdout, "L = ");
   printMxfLength(l, stdout);
@@ -1733,7 +1776,7 @@ void printMXFLocalSet(mxfKey& k, mxfLength& len, FILE* infile);
 
 void printMXFLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
 {
-  printKL(k, len);
+  printMXFKL(k, len);
   printLocalSetV(len, infile);
 }
 
@@ -1741,7 +1784,7 @@ void printAAFLocalSet(mxfKey& k, mxfLength& len, FILE* infile);
 
 void printAAFLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
 {
-  printKL(k, len);
+  printAAFKL(k, len);
   printLocalSetV(len, infile);
 }
 
@@ -2099,7 +2142,7 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
       printEssence(k, len, lFlag, limit, infile);
     }
   } else {
-    if (!isDark(k, mode)) {
+    if (!isDark(k, mode) || dumpDark) {
       if (isLocalSet(k)) {
         printMXFLocalSet(k, len, infile);
       } else {
