@@ -237,6 +237,8 @@ void printUsage(void)
   fprintf(stderr, "\n");
   fprintf(stderr, "--mxf-dump      = ");
   fprintf(stderr, "dump MXF (-m)\n");
+  fprintf(stderr, "  --filler      = ");
+  fprintf(stderr, "dump filler bytes (-f)\n");
   fprintf(stderr, "\n");
   fprintf(stderr, "--symbolic      = ");
   fprintf(stderr, "dump the names of keys if known (-s)\n");
@@ -484,6 +486,8 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
   printMxfKey(k, f);
 }
 
+bool dumpFiller = false;
+
 void mxfDumpFile(char* fileName);
 
 void mxfDumpFile(char* fileName)
@@ -572,7 +576,7 @@ void mxfDumpFile(char* fileName)
         printMxfKey(longIdentifier, stdout);
         fprintf(stdout, "\n");
       }
-    } else if (memcmp(&Filler, &k, sizeof(mxfKey)) == 0) {
+    } else if ((memcmp(&Filler, &k, sizeof(mxfKey)) == 0) && !dumpFiller) {
       for (mxfUInt16 i = 0; i < len; i++) {
         mxfByte b;
         readMxfByte(b, infile);
@@ -690,6 +694,8 @@ int main(int argumentCount, char* argumentVector[])
       setMode(mxfMode);
     } else if ((strcmp(p, "-v") == 0) || (strcmp(p, "--verbose") == 0)) {
       verbose = true;
+    } else if ((strcmp(p, "-f") == 0) ||(strcmp(p, "--filler") == 0)) {
+      dumpFiller = true;
     } else if ((strcmp(p, "-l") == 0) ||(strcmp(p, "--limit") == 0)) {
       if ((i + 1 < argumentCount) && (*argumentVector[i + 1] != '-' )) {
         lFlag = true;
@@ -744,6 +750,14 @@ int main(int argumentCount, char* argumentVector[])
     if (lFlag) {
       fprintf(stderr,
               "%s : Error : --limit not valid with --mxf-dump.\n",
+              programName);
+      printUsage();
+      exit(EXIT_FAILURE);
+    }
+  } else { // mode == klvMode
+    if (dumpFiller) {
+      fprintf(stderr,
+              "%s : Error : --filler not valid with --klv-dump.\n",
               programName);
       printUsage();
       exit(EXIT_FAILURE);
