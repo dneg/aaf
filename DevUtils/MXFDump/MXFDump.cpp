@@ -252,7 +252,10 @@ void setDumpFile(mxfFile infile);
 void mxfDumpFile(mxfFile infile);
 void aafDumpFile(mxfFile infile);
 
-bool lookupKey(mxfKey& k, size_t& index);
+bool lookupMXFKey(mxfKey& k, size_t& index);
+bool lookupAAFKey(mxfKey& k, size_t& index);
+bool findAAFKey(mxfKey& k, size_t& index, char** flag);
+
 bool isEssenceElement(mxfKey& k);
 
 void checkKey(mxfKey& k);
@@ -1314,8 +1317,6 @@ void initAAFKeyTable(void)
   }
 }
 
-bool lookupAAFKey(mxfKey& k, size_t& index);
-
 bool lookupAAFKey(mxfKey& k, size_t& index)
 {
   bool result = false;
@@ -1332,8 +1333,6 @@ bool lookupAAFKey(mxfKey& k, size_t& index)
 bool aafKeysAsSets = true;
 bool bogusKeysAsSets = true;
 bool darkKeysAsSets = false;
-
-bool findAAFKey(mxfKey& k, size_t& index, char** flag);
 
 bool findAAFKey(mxfKey& k, size_t& index, char** flag)
 {
@@ -1377,7 +1376,7 @@ bool isMxfKey(mxfKey& k);
 bool isMxfKey(mxfKey& k)
 {
   size_t index;
-  bool result = lookupKey(k, index);
+  bool result = lookupMXFKey(k, index);
   return result;
 }
 
@@ -1967,7 +1966,7 @@ void printMxfLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing, FILE* f)
   printMxfLocalKey(k, f);
 }
 
-bool lookupKey(mxfKey& k, size_t& index)
+bool lookupMXFKey(mxfKey& k, size_t& index)
 {
   bool result = false;
   for (size_t i = 0; i < keyTableSize; i++) {
@@ -2002,7 +2001,7 @@ void printMxfKeySymbol(mxfKey& k);
 void printMxfKeySymbol(mxfKey& k)
 {
   size_t i;
-  bool found = lookupKey(k, i);
+  bool found = lookupMXFKey(k, i);
   if (found) {
     fprintf(stdout, "%s", keyTable[i]._name);
   } else if (isEssenceElement(k)) {
@@ -2022,7 +2021,7 @@ void printAAFKeySymbol(mxfKey& k);
 void printAAFKeySymbol(mxfKey& k)
 {
   size_t i;
-  bool found = lookupKey(k, i);
+  bool found = lookupMXFKey(k, i); // tjb ???
   if (found) {
     fprintf(stdout, "%s", keyTable[i]._name);
   } else {
@@ -2640,10 +2639,10 @@ bool isDark(mxfKey& k, Mode mode)
     result = false;
     break;
   case mxfMode:
-    result = !lookupKey(k, x);
+    result = !lookupMXFKey(k, x);
     break;
   case aafMode: {
-      bool found = lookupKey(k, x);
+      bool found = lookupMXFKey(k, x); // tjb ???
       if (!found) {
         found = findAAFKey(k, x, &flag);
       }
