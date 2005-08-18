@@ -3836,7 +3836,10 @@ void markIndexEnd(mxfUInt64 endKeyPosition)
   if (indexSID != 0) {
     mxfUInt64 indexByteCount = endKeyPosition - indexPosition;
     currentPartition->_indexSize = indexByteCount;
-    newSegment(indexSID, indexLabel, indexPosition, endKeyPosition);
+    newIndexSegment(indexSID,
+                    indexLabel,
+                    indexPosition,
+                    endKeyPosition);
     indexPosition = 0;
     indexSID = 0;
   }
@@ -3854,7 +3857,10 @@ void markEssenceSegmentStart(mxfUInt32 sid, mxfUInt64 essenceKeyPosition)
 void markEssenceSegmentEnd(mxfUInt64 endKeyPosition)
 {
   if (essenceSID != 0) {
-    newSegment(essenceSID, essenceLabel, essencePosition, endKeyPosition);
+    newEssenceSegment(essenceSID,
+                      essenceLabel,
+                      essencePosition,
+                      endKeyPosition);
     essenceSID = 0;
   }
 }
