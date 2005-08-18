@@ -2100,7 +2100,7 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
         }
         setLength = setLength + 11 + (4 * sliceCount);
       }
-      if (count < entryCount) {
+      if (cFlag && (count < entryCount)) {
         fprintf(stdout, "[ Index table truncated from ");
         printField(stdout, entryCount);
         fprintf(stdout, " entries to ");
