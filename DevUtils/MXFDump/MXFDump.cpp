@@ -156,6 +156,9 @@ Mode mode = unspecifiedMode;
 bool reorder(void);
 mxfUInt08 hostByteOrder(void);
 
+void movePosition(const mxfUInt64 move, FILE* f);
+void setPosition(const mxfUInt64 newPosition, FILE* f);
+
 void readMxfUInt08(mxfByte& b, FILE* f);
 void readMxfUInt16(mxfUInt16& i, FILE* f);
 void readMxfUInt32(mxfUInt32& i, FILE* f);
@@ -213,6 +216,36 @@ void skipV(mxfLength& length, FILE* f);
 
 mxfUInt64 position;
 mxfUInt64 keyPosition;
+
+void movePosition(const mxfUInt64 move, FILE* f)
+{
+  long offset = static_cast<long>(move);
+  if (move != offset) {
+    fprintf(stderr, "%s : Error : offset too large.\n", programName);
+    exit(EXIT_FAILURE);
+  }
+  int status = fseek(f, offset, SEEK_CUR);
+  if (status != 0) {
+    fprintf(stderr, "%s : Error : Failed to seek.\n", programName);
+    exit(EXIT_FAILURE);
+  }
+  position = position + move;
+}
+
+void setPosition(const mxfUInt64 newPosition, FILE* f)
+{
+  long offset = static_cast<long>(newPosition);
+  if (newPosition != offset) {
+    fprintf(stderr, "%s : Error : offset too large.\n", programName);
+    exit(EXIT_FAILURE);
+  }
+  int status = fseek(f, offset, SEEK_SET);
+  if (status != 0) {
+    fprintf(stderr, "%s : Error : Failed to seek.\n", programName);
+    exit(EXIT_FAILURE);
+  }
+  position = newPosition;
+}
 
 void readMxfUInt08(mxfByte& b, FILE* f)
 {
