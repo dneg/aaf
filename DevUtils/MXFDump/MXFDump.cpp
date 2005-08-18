@@ -4059,9 +4059,9 @@ typedef struct mxfIndexSegmentTag {
   bool _isV10Index;
 } mxfIndexSegment;
 
-void initializeIndexSegment(mxfIndexSegment* index);
+void initializeIndexSegment(mxfIndexSegment* index, mxfKey& key);
 
-void initializeIndexSegment(mxfIndexSegment* index)
+void initializeIndexSegment(mxfIndexSegment* index, mxfKey& key)
 {
   memcpy(&index->_instanceUID, &NullKey, sizeof(mxfKey));
   index->_hasInstanceUID = false;
@@ -4102,6 +4102,12 @@ void initializeIndexSegment(mxfIndexSegment* index)
   index->_indexEntrySize = 0;
   index->_indexEntryArrayPosition = 0;
   index->_hasIndexEntryArray = false;
+
+  if (memcmp(&key, &V10IndexTableSegment, sizeof(mxfKey)) == 0) {
+    index->_isV10Index = true;
+  } else {
+    index->_isV10Index = false;
+  }
 }
 
 void readIndexSegment(mxfIndexSegment* index, mxfLength& len, mxfFile infile);
@@ -4368,7 +4374,7 @@ void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
 {
   mxfUInt64 startPosition = position(infile);
   mxfIndexSegment index;
-  initializeIndexSegment(&index);
+  initializeIndexSegment(&index, k);
   readIndexSegment(&index, len, infile);
   printIndexSegment(&index);
   if (index._hasDeltaEntryArray) {
