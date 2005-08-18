@@ -405,6 +405,10 @@ void mxfError(char* format, ...)
   verror(format, ap);
   va_end(ap);
   errors = errors + 1;
+  if (errors > 100) {
+    error("More than 100 errors encountered - giving up.\n");
+    exit(EXIT_FAILURE);
+  }
 }
 
 mxfUInt32 warnings = 0;
