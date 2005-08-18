@@ -465,6 +465,47 @@ mxfUInt08 hostByteOrder(void)
   return result;
 }
 
+void printOperationalPattern(mxfKey& k, FILE* outfile);
+
+void printOperationalPattern(mxfKey& k, FILE* outfile)
+{
+  fprintf(stdout, "%20s = ", "");
+  mxfByte itemComplexity = k[12];
+  char* itemCplxName;
+  switch (itemComplexity) {
+  case 1:
+    itemCplxName = "Single Item";
+    break;
+  case 2:
+    itemCplxName = "Play-list Items";
+    break;
+  case 3:
+    itemCplxName = "Edit Items";
+    break;
+  default:
+    itemCplxName = "Unknown";
+    break;
+  }
+
+  mxfByte packageComplexity = k[13];
+  char* packageCplxName;
+  switch (packageComplexity) {
+  case 1:
+    packageCplxName = "Single Package";
+    break;
+  case 2:
+    packageCplxName = "Ganged Packages";
+    break;
+  case 3:
+    packageCplxName = "Alternate Versions";
+    break;
+  default:
+    packageCplxName = "Unknown";
+    break;
+  }
+  fprintf(outfile, "[%s, %s]", itemCplxName, packageCplxName);
+}
+
 // Define values of MXF keys
 
 #define MXF_LABEL(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) \
@@ -1107,7 +1148,17 @@ void printPartition(mxfKey& k, mxfLength& len, FILE* infile)
   dumpMxfUInt32("IndexSID", infile);
   dumpMxfUInt64("BodyOffset", infile);
   dumpMxfUInt32("BodySID", infile);
+#if 1
+  mxfKey op;
+  readMxfKey(op, infile);
+  fprintf(stdout, "%20s = ", "Operational Pattern");
+  printMxfKey(op, stdout);
+  fprintf(stdout, "\n");
+  printOperationalPattern(op, stdout);
+  fprintf(stdout, "\n");
+#else
   dumpMxfKey("Operational Pattern", infile);
+#endif
   fprintf(stdout, "%20s = ", "EssenceContainers");
   mxfUInt32 elementCount;
   readMxfUInt32(elementCount, infile);
