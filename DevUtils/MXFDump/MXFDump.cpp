@@ -114,6 +114,8 @@ void dumpMxfUInt16(const char* label, FILE* infile);
 void dumpMxfUInt32(const char* label, FILE* infile);
 void dumpMxfUInt64(const char* label, FILE* infile);
 void dumpMxfKey(const char* label, FILE* infile);
+void dumpMxfOperationalPattern(const char* label, FILE* infile);
+void printOperationalPattern(mxfKey& k, FILE* outfile);
 
 void readMxfUInt08(mxfByte& b, FILE* f)
 {
@@ -440,36 +442,20 @@ void dumpMxfKey(const char* label, FILE* infile)
   fprintf(stdout, "\n");
 }
 
-bool reorder(void)
+void dumpMxfOperationalPattern(const char* label, FILE* infile)
 {
-  bool result;
-  if (hostByteOrder() == 'B') {
-    result = false;
-  } else {
-    result = true;
-  }
-  return result;
+  mxfKey k;
+  readMxfKey(k, infile);
+  fprintf(stdout, "%20s = ", label);
+  printMxfKey(k, stdout);
+  fprintf(stdout, "\n");
+  fprintf(stdout, "%20s = ", "");
+  printOperationalPattern(k, stdout);
+  fprintf(stdout, "\n");
 }
-
-mxfUInt08 hostByteOrder(void)
-{
-  mxfUInt16 word = 0x1234;
-  mxfUInt08  byte = *((mxfUInt08*)&word);
-  mxfUInt08 result;
-
-  if (byte == 0x12) {
-    result = 'B';
-  } else {
-    result = 'L';
-  }
-  return result;
-}
-
-void printOperationalPattern(mxfKey& k, FILE* outfile);
 
 void printOperationalPattern(mxfKey& k, FILE* outfile)
 {
-  fprintf(stdout, "%20s = ", "");
   mxfByte itemComplexity = k[12];
   char* itemCplxName;
   switch (itemComplexity) {
@@ -504,6 +490,31 @@ void printOperationalPattern(mxfKey& k, FILE* outfile)
     break;
   }
   fprintf(outfile, "[%s, %s]", itemCplxName, packageCplxName);
+}
+
+bool reorder(void)
+{
+  bool result;
+  if (hostByteOrder() == 'B') {
+    result = false;
+  } else {
+    result = true;
+  }
+  return result;
+}
+
+mxfUInt08 hostByteOrder(void)
+{
+  mxfUInt16 word = 0x1234;
+  mxfUInt08  byte = *((mxfUInt08*)&word);
+  mxfUInt08 result;
+
+  if (byte == 0x12) {
+    result = 'B';
+  } else {
+    result = 'L';
+  }
+  return result;
 }
 
 // Define values of MXF keys
@@ -1148,17 +1159,7 @@ void printPartition(mxfKey& k, mxfLength& len, FILE* infile)
   dumpMxfUInt32("IndexSID", infile);
   dumpMxfUInt64("BodyOffset", infile);
   dumpMxfUInt32("BodySID", infile);
-#if 1
-  mxfKey op;
-  readMxfKey(op, infile);
-  fprintf(stdout, "%20s = ", "Operational Pattern");
-  printMxfKey(op, stdout);
-  fprintf(stdout, "\n");
-  printOperationalPattern(op, stdout);
-  fprintf(stdout, "\n");
-#else
-  dumpMxfKey("Operational Pattern", infile);
-#endif
+  dumpMxfOperationalPattern("Operational Pattern", infile);
   fprintf(stdout, "%20s = ", "EssenceContainers");
   mxfUInt32 elementCount;
   readMxfUInt32(elementCount, infile);
