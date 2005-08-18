@@ -74,15 +74,15 @@ void printField(FILE* f, mxfUInt32& i);
 void printField(FILE* f, mxfUInt32& i)
 {
 #if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
-  fprintf(f, "%4u", i);
+  fprintf(f, "%10u", i);
 #elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
-  fprintf(f, "%4lu", i);
+  fprintf(f, "%10lu", i);
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
-  fprintf(f, "%4lu", i);
+  fprintf(f, "%10lu", i);
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOSX)
-  fprintf(f, "%4lu", i);
+  fprintf(f, "%10lu", i);
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
-  fprintf(f, "%4lu", i);
+  fprintf(f, "%10lu", i);
 #endif
 }
 
