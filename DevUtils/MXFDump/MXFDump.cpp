@@ -4696,7 +4696,7 @@ bool isComplete(const mxfKey& key)
 
 const char* keyName(const mxfKey& key)
 {
-  const char* result = "Unknown";
+  const char* result = "Dark";
   size_t x;
   bool found;
 
@@ -4715,7 +4715,7 @@ const char* keyName(const mxfKey& key)
     } else if (isNullKey(key)) {
       result = "Null";
     } else {
-      result = "Unknown";
+      result = "Dark";
     }
     break;
   case aafMode:
@@ -4732,7 +4732,7 @@ const char* keyName(const mxfKey& key)
       } else if (isNullKey(key)) {
         result = "Null";
       } else {
-        result = "Unknown";
+        result = "Dark";
       }
     }
     break;
