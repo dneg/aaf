@@ -221,10 +221,10 @@ void printDecField(FILE* f, mxfUInt16& i);
 void printDecField(FILE* f, mxfUInt32& i);
 void printDecField(FILE* f, mxfUInt64& i);
 
-void printHexField(FILE* f, mxfUInt08& i);
-void printHexField(FILE* f, mxfUInt16& i);
-void printHexField(FILE* f, mxfUInt32& i);
-void printHexField(FILE* f, mxfUInt64& i);
+void printHexFieldPad(FILE* f, mxfUInt08& i);
+void printHexFieldPad(FILE* f, mxfUInt16& i);
+void printHexFieldPad(FILE* f, mxfUInt32& i);
+void printHexFieldPad(FILE* f, mxfUInt64& i);
 
 void printHex(FILE* f, mxfUInt64& i);
 
@@ -913,22 +913,22 @@ void printDecField(FILE* f, mxfUInt64& i)
   fprintf(f, "%10"MXFPRIu64, i);
 }
 
-void printHexField(FILE* f, mxfUInt08& i)
+void printHexFieldPad(FILE* f, mxfUInt08& i)
 {
   fprintf(f, "%02"MXFPRIx08, i);
 }
 
-void printHexField(FILE* f, mxfUInt16& i)
+void printHexFieldPad(FILE* f, mxfUInt16& i)
 {
   fprintf(f, "%04"MXFPRIx16, i);
 }
 
-void printHexField(FILE* f, mxfUInt32& i)
+void printHexFieldPad(FILE* f, mxfUInt32& i)
 {
   fprintf(f, "%08"MXFPRIx32, i);
 }
 
-void printHexField(FILE* f, mxfUInt64& i)
+void printHexFieldPad(FILE* f, mxfUInt64& i)
 {
   fprintf(f, "%016"MXFPRIx64, i);
 }
@@ -968,28 +968,28 @@ void printMxfLocalKey(mxfLocalKey& k, FILE* f)
 void printMxfUInt08(FILE* f, const char* label, mxfUInt08& i)
 {
   fprintf(f, "%20s = ", label);
-  printHexField(f, i);
+  printHexFieldPad(f, i);
   fprintf(f, "\n");
 }
 
 void printMxfUInt16(FILE* f, const char* label, mxfUInt16& i)
 {
   fprintf(f, "%20s = ", label);
-  printHexField(f, i);
+  printHexFieldPad(f, i);
   fprintf(f, "\n");
 }
 
 void printMxfUInt32(FILE* f, const char* label, mxfUInt32& i)
 {
   fprintf(f, "%20s = ", label);
-  printHexField(f, i);
+  printHexFieldPad(f, i);
   fprintf(f, "\n");
 }
 
 void printMxfUInt64(FILE* f, const char* label, mxfUInt64& i)
 {
   fprintf(f, "%20s = ", label);
-  printHexField(f, i);
+  printHexFieldPad(f, i);
   fprintf(f, "\n");
 }
 
@@ -1507,7 +1507,7 @@ void flush(void)
     if (addressBase == 10) {
       printDecField(stdout, address);
     } else {
-      printHexField(stdout, address);
+      printHexFieldPad(stdout, address);
     }
     fprintf(stdout, "  ");
     for (size_t x = 0; x < bufferStart; x++) {
@@ -2028,7 +2028,7 @@ void printKeyAddress(FILE* f, mxfUInt64 keyAddress)
   if (base == 10) {
     printDecField(f, keyAddress);
   } else {
-    printHexField(f, keyAddress);
+    printHexFieldPad(f, keyAddress);
   }
   fprintf(f, " )");
 }
@@ -3376,7 +3376,7 @@ void printIndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
           fprintf(stdout, "    ");
           printDecField(stdout, anchorOffset);
           fprintf(stdout, "     ");
-          printHexField(stdout, flags);
+          printHexFieldPad(stdout, flags);
           fprintf(stdout, "    ");
           printDecField(stdout, streamOffset);
           fprintf(stdout, "\n");
@@ -3494,7 +3494,7 @@ void printV10IndexTable(mxfKey& k, mxfLength& len, mxfFile infile)
           fprintf(stdout, "    ");
           printDecField(stdout, anchorOffset);
           fprintf(stdout, "     ");
-          printHexField(stdout, flags);
+          printHexFieldPad(stdout, flags);
           fprintf(stdout, "    ");
           printDecField(stdout, streamOffset);
           fprintf(stdout, "\n");
@@ -3648,9 +3648,9 @@ void printObjectDirectory(mxfKey& k, mxfLength& len, mxfFile infile)
     fprintf(stdout, "  ");
     printMxfKey(instance, stdout);
     fprintf(stdout, "  ");
-    printHexField(stdout, offset);
+    printHexFieldPad(stdout, offset);
     fprintf(stdout, "  ");
-    printHexField(stdout, flags);
+    printHexFieldPad(stdout, flags);
     fprintf(stdout, "\n");
   }
 }
@@ -3678,7 +3678,7 @@ void printRandomIndex(mxfKey& k, mxfLength& len, mxfFile infile)
     if (base == 10) {
       printDecField(stdout, offset);
     } else {
-      printHexField(stdout, offset);
+      printHexFieldPad(stdout, offset);
     }
     fprintf(stdout, "\n");
   }
