@@ -777,9 +777,9 @@ bool lookupAAFKey(mxfKey& k, size_t& index)
 bool aafKeysAsSets = true;
 bool bogusKeysAsSets = true;
 
-bool findAAFKey(mxfKey& k, size_t& index);
+bool findAAFKey(mxfKey& k, size_t& index, char** flag);
 
-bool findAAFKey(mxfKey& k, size_t& index)
+bool findAAFKey(mxfKey& k, size_t& index, char** flag)
 {
   bool found = lookupAAFKey(k, index);
   if (!found) {
@@ -802,9 +802,16 @@ bool findAAFKey(mxfKey& k, size_t& index)
           mxfKey b;
           aafUIDToMxfKey(b, a);
           bool found = lookupAAFKey(b, index);
+          if (found) {
+            *flag = " -"; // A bogus key
+          }
         }
+      } else {
+        *flag = " +"; // A valid key but not a SMPTE label
       }
     }
+  } else {
+    *flag = ""; // A valid SMPTE label
   }
   return found;
 }
@@ -1257,9 +1264,10 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
     if (found) {
       fprintf(stdout, "%s\n", keyTable[i]._name);
     } else {
-      found = findAAFKey(k, i);
+      char* flag;
+      found = findAAFKey(k, i, &flag);
       if (found) {
-        fprintf(stdout, "%s\n", aafKeyTable[i]._name);
+        fprintf(stdout, "%s%s\n", aafKeyTable[i]._name, flag);
       } else {
         fprintf(stdout, "Unknown\n");
       }
@@ -1602,6 +1610,7 @@ void checkLocalKey(mxfLocalKey& k)
 
 bool isDark(mxfKey& k, Mode mode)
 {
+  char* flag;
   bool result = false;
   size_t x;
   switch (mode) {
@@ -1615,7 +1624,7 @@ bool isDark(mxfKey& k, Mode mode)
     result = !lookupKey(k, x);
     break;
   case aafMode:
-    result = !findAAFKey(k, x);
+    result = !findAAFKey(k, x, &flag);
     break;
   }
   return result;
@@ -1662,13 +1671,14 @@ bool isLocalSet(mxfKey& k);
 
 bool isLocalSet(mxfKey& k)
 {
+  char* flag;
   bool result;
   if (k[5] == 0x53) {
     result = true;
   } else {
     if (aafKeysAsSets) {
       size_t index;
-      bool found = findAAFKey(k, index);
+      bool found = findAAFKey(k, index, &flag);
       if (found) {
         result = true;
       } else {
