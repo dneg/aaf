@@ -985,6 +985,7 @@ bool lookupKey(mxfKey& k, size_t& index)
 }
 
 bool aafKeysAsSets = true;
+bool bogusKeysAsSets = true;
 
 void printMxfKeySymbol(mxfKey& k, FILE* f);
 
@@ -1001,6 +1002,8 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
         fprintf(stdout, "%s\n", aafKeyTable[i]._name);
       } else {
         if (aafKeysAsSets) {
+          // This could be an AUID/GUID that cannot be mapped to a SMPTE label.
+          // Force the mapping and try again.
           mxfKey x;
           memcpy(x, k, sizeof(x));
           x[5] = 0x53;
@@ -1008,7 +1011,25 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
           if (found) {
             fprintf(stdout, "%s +\n", aafKeyTable[i]._name);
           } else {
-            fprintf(stdout, "Unknown\n");
+            if (bogusKeysAsSets) {
+              // This could be a bogus key (Intel byte order GUID)
+              // Fix it up and try again.
+              aafUID a;
+              memcpy(&a, k, sizeof(a));
+              if (hostByteOrder() == 'B') {
+                reorder(a);
+              }
+              mxfKey b;
+              aafUIDToMxfKey(b, a);
+              bool found = lookupAAFKey(b, i);
+              if (found) {
+                fprintf(stdout, "Bogus%s\n", aafKeyTable[i]._name);
+              } else {
+                fprintf(stdout, "Unknown\n");
+              }
+            } else {
+              fprintf(stdout, "Unknown\n");
+            }
           }
         } else {
           fprintf(stdout, "Unknown\n");
@@ -1285,6 +1306,8 @@ bool isLocalSet(mxfKey& k)
     result = true;
   } else {
     if (aafKeysAsSets) {
+      // This could be an AUID/GUID that cannot be mapped to a SMPTE label.
+      // Force the mapping and try again.
       size_t index;
       mxfKey x;
       memcpy(x, k, sizeof(x));
@@ -1293,7 +1316,25 @@ bool isLocalSet(mxfKey& k)
       if (found) {
         result = true;
       } else {
-        result = false;
+        if (bogusKeysAsSets) {
+          // This could be a bogus key (Intel byte order GUID)
+          // Fix it up and try again.
+          aafUID a;
+          memcpy(&a, k, sizeof(a));
+          if (hostByteOrder() == 'B') {
+            reorder(a);
+          }
+          mxfKey b;
+          aafUIDToMxfKey(b, a);
+          bool found = lookupAAFKey(b, index);
+          if (found) {
+            result = true;
+          } else {
+            result = false;
+          }
+        } else {
+          result = false;
+        }
       }
     } else {
       result = false;
