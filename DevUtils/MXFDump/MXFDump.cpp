@@ -1888,9 +1888,7 @@ void printOperationalPattern(mxfKey& k, FILE* outfile)
         fprintf(outfile, "Unknown");
       }
     } else {
-      fprintf(outfile, " (");
       printPrivateLabelName(k, outfile);
-      fprintf(outfile, ")");
     }
     fprintf(outfile, " ]");
   } else {
