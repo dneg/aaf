@@ -301,6 +301,8 @@ void dumpOptionalMxfString(const char* label, mxfFile infile);
 void dumpMxfLabel(const char* label, mxfFile infile);
 void dumpMxfOperationalPattern(const char* label, mxfFile infile);
 
+void dumpMxfUInt08Array(const char* label, size_t count, mxfFile infile);
+
 void printOperationalPattern(mxfKey& k, FILE* outfile);
 
 void klvDumpFile(mxfFile infile);
@@ -1725,6 +1727,28 @@ void dumpMxfLabel(const char* label, mxfFile infile)
   readMxfLabel(k, infile);
   fprintf(stdout, "%20s = ", label);
   printMxfKey(k, stdout);
+  fprintf(stdout, "\n");
+}
+
+void dumpMxfUInt08Array(const char* label, size_t count, mxfFile infile)
+{
+  for (size_t i = 0; i < count; i++) {
+    if ((i % 16) == 0) {
+      if (i == 0) {
+        fprintf(stdout, "%20s = ", label);
+      } else {
+        fprintf(stdout, "%20s   ", "");
+      }
+    }
+    mxfUInt08 b;
+    readMxfUInt08(b, infile);
+    printHexFieldPad(stdout, b);
+    if ((i % 16) == 15) {
+      fprintf(stdout, "\n");
+    } else {
+      fprintf(stdout, " ");
+    }
+  }
   fprintf(stdout, "\n");
 }
 
