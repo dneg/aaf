@@ -256,6 +256,8 @@ bool lookupMXFKey(mxfKey& k, size_t& index);
 bool lookupAAFKey(mxfKey& k, size_t& index);
 bool findAAFKey(mxfKey& k, size_t& index, char** flag);
 
+bool lookupAAFLocalKey(mxfLocalKey& k, size_t& index);
+
 bool isEssenceElement(mxfKey& k);
 
 void checkKey(mxfKey& k);
@@ -1889,12 +1891,10 @@ struct {
   {"bogus",                0x00}
 };
 
-size_t
-aafLocalKeyTableSize = (sizeof(aafLocalKeyTable)/sizeof(aafLocalKeyTable[0])) - 1;
+size_t aafLocalKeyTableSize =
+                    (sizeof(aafLocalKeyTable)/sizeof(aafLocalKeyTable[0])) - 1;
 
-bool lookupLocalKey(mxfLocalKey& k, size_t& index);
-
-bool lookupLocalKey(mxfLocalKey& k, size_t& index)
+bool lookupAAFLocalKey(mxfLocalKey& k, size_t& index)
 {
   bool result = false;
   for (size_t i = 0; i < aafLocalKeyTableSize; i++) {
@@ -1915,7 +1915,7 @@ void printMxfLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing)
 {
   if (isMxfKey(enclosing)) {
     size_t i;
-    bool found = lookupLocalKey(k, i);
+    bool found = lookupAAFLocalKey(k, i); // tjb ???
     if (found) {
       fprintf(stdout, "%s\n", aafLocalKeyTable[i]._name);
     } else {
@@ -1932,7 +1932,7 @@ void printAAFLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing)
 {
   if (isAAFKey(enclosing)) {
     size_t i;
-    bool found = lookupLocalKey(k, i);
+    bool found = lookupAAFLocalKey(k, i);
     if (found) {
       fprintf(stdout, "%s\n", aafLocalKeyTable[i]._name);
     } else {
