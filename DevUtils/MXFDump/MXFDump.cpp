@@ -3180,7 +3180,7 @@ void checkElementCount(mxfUInt32 elementCount,
 
 // In-memory representaton of a partition
 typedef struct mxfPartitionTag {
-  //
+  // As read from the file
   mxfUInt16 _majorVersion;
   mxfUInt16 _minorVersion;
   mxfUInt32 _KAGSize;
@@ -3195,7 +3195,7 @@ typedef struct mxfPartitionTag {
   mxfKey _operationalPattern;
   mxfUInt32 _elementCount;
   mxfUInt32 _elementSize;
-  //
+  // As computed
   mxfUInt64 _address; // Address of partition relative to header
   mxfUInt64 _length;
 } mxfPartition;
