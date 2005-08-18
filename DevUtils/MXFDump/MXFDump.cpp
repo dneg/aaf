@@ -154,7 +154,7 @@ void init(void)
 
 void flush(void)
 {
-  fprintf(stdout, "%8d", address);
+  printField(stdout, address);
   fprintf(stdout, "    ");
   for (size_t i = 0; i < bufferIndex; i++) {
     fprintf(stdout, "%02x ", buffer[i]);
