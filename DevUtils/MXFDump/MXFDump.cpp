@@ -1,5 +1,6 @@
 
 #include <iostream.h>
+#include <iomanip.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -96,7 +97,7 @@ void printMxfKey(mxfKey& k)
 {
   for (size_t i = 0; i < sizeof(mxfKey); i++) {
     unsigned int b = k[i];
-    cout << b;
+    cout << hex << setw(2) << setfill('0') << b;
   }
 }
 
