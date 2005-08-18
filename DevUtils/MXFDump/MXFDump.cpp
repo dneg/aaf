@@ -120,6 +120,7 @@ void printMxfKey(const mxfKey& k, FILE* f);
 void printMxfLength(mxfLength& l, FILE* f);
 void printMxfLocalKey(mxfLocalKey& k, FILE* f);
 
+void dumpMxfUInt08(const char* label, FILE* infile);
 void dumpMxfUInt16(const char* label, FILE* infile);
 void dumpMxfUInt32(const char* label, FILE* infile);
 void dumpMxfUInt64(const char* label, FILE* infile);
@@ -441,6 +442,15 @@ void printMxfLocalKey(mxfLocalKey& k, FILE* f)
   unsigned int msb = (k & 0xff00) >> 8;
   unsigned int lsb = (k & 0x00ff);
   fprintf(f, "%02x.%02x", msb, lsb);
+}
+
+void dumpMxfUInt08(const char* label, FILE* infile)
+{
+  mxfUInt08 i;
+  readMxfUInt08(i, infile);
+  fprintf(stdout, "%20s = ", label);
+  printHexField(stdout, i);
+  fprintf(stdout, "\n");
 }
 
 void dumpMxfUInt16(const char* label, FILE* infile)
@@ -1338,6 +1348,7 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile);
 void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
 {
   printKL(k, len);
+
   mxfLength setLength = 0;
   while (setLength < len) {
     mxfLocalKey identifier;
@@ -1345,19 +1356,42 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
     mxfUInt16 length;
     readMxfUInt16(length, infile);
     setLength = setLength + 4;
-    if (identifier == 0x3f0a) {
+
+    if (identifier == 0x3c0a) {
+      // InstanceUID
+      dumpMxfKey("InstanceUID", infile);
+      setLength = setLength + 16;
+    } else if (identifier == 0x3f05) {
+      // Edit Unit Byte Count
+      dumpMxfUInt32("Edit Unit Byte Count", infile);
+      setLength = setLength + 4;
+    } else if (identifier == 0x3f06) {
+      // IndexSID
+      dumpMxfUInt32("IndexSID", infile);
+      setLength = setLength + 4;
+    } else if (identifier == 0x3f07) {
+      // BodySID
+      dumpMxfUInt32("BodySID", infile);
+      setLength = setLength + 4;
+    } else if (identifier == 0x3f08) {
+      // Slice Count
+      dumpMxfUInt08("SliceCount", infile);
+      setLength = setLength + 1;
+    } else if (identifier == 0x3f0a) {
       // Entry array
       mxfUInt32 entryCount;
       readMxfUInt32(entryCount, infile);
       mxfUInt32 entrySize;
       readMxfUInt32(entrySize, infile);
-      mxfUInt32 sliceCount = entrySize - 11;
+      mxfUInt32 sliceCount = (entrySize - 11) / 4;
       setLength = setLength + 8;
 
-      fprintf(stdout, "  IndexEntryArray = ");
-      fprintf(stdout, "[ count = ");
+      fprintf(stdout, "     IndexEntryArray = ");
+      fprintf(stdout, "[ Number of entries = ");
       printField(stdout, entryCount);
-      fprintf(stdout, ", size = ");
+      fprintf(stdout, "\n");
+      fprintf(stdout, "                       ");
+      fprintf(stdout, "  Entry size        = ");
       printField(stdout, entrySize);
       fprintf(stdout, " ]\n");
 
@@ -1367,9 +1401,9 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
       fprintf(stdout, "          offset   offset               offset\n");
 
       for (mxfUInt32 i = 0; i < entryCount; i++) {
-        mxfUInt08 temporalOffset;
+        mxfUInt08 temporalOffset; // signed
         readMxfUInt08(temporalOffset, infile);
-        mxfUInt08 anchorOffset;
+        mxfUInt08 anchorOffset; // signed
         readMxfUInt08(anchorOffset, infile);
         mxfUInt08 flags;
         readMxfUInt08(flags, infile);
@@ -1392,9 +1426,22 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
         for (mxfUInt32 s = 0; s < sliceCount; s++) {
           mxfUInt32 sliceOffset;
           readMxfUInt32(sliceOffset, infile);
+          // Not yet printed
         }
         setLength = setLength + 11 + (4 * sliceCount);
       }
+    } else if (identifier == 0x3f0b) {
+      // Index Edit Rate
+      dumpMxfUInt64("Index Edit Rate", infile); // rational
+      setLength = setLength + 8;
+    } else if (identifier == 0x3f0c) {
+      // Index Start Position
+      dumpMxfUInt64("Index Start Position", infile);
+      setLength = setLength + 8;
+    } else if (identifier == 0x3f0d) {
+      // Index Duration
+      dumpMxfUInt64("Index Duration", infile);
+      setLength = setLength + 8;
     } else {
       checkLocalKey(identifier);
       printLocalKL(identifier, length);
@@ -1538,7 +1585,8 @@ void mxfDumpFile(char* fileName)
       // MultipleDescriptor
       // NetworkLocator
       // TextLocator
-      // IndexTable
+    } else if (memcmp(&IndexTable, &k, sizeof(mxfKey)) == 0) {
+      printIndexTable(k, len, infile);
     } else if (isLocalSet(k)) {
       printLocalSet(k, len, infile);
     } else if (isFill(k)) {
