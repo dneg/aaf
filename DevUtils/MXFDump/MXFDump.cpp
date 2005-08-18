@@ -4499,12 +4499,10 @@ void mxfValidate(mxfFile infile)
     mxfWarning("No random index found.\n");
   }
 #if 0
-  printPartitions(partitions);
-#endif
-  destroyPartitions(p);
-#if 0
+  printPartitions(p);
   printStreams(streams);
 #endif
+  destroyPartitions(p);
   destroyStreams(streams);
 
   fprintf(stderr,
