@@ -2076,64 +2076,64 @@ int main(int argumentCount, char* argumentVector[])
   char* p = 0;
   for (int i = 1; i < argumentCount; i++) {
     p = argumentVector[i];
-    if ((strcmp(p, "-k") == 0) ||
-        (strcmp(p, "--klv-dump") == 0)) {
+    if ((strcmp(p, "--klv-dump") == 0) ||
+        (strcmp(p, "-k") == 0)) {
       setMode(klvMode);
-    } else if ((strcmp(p, "-s") == 0) ||
-               (strcmp(p, "--set-dump") == 0)) {
+    } else if ((strcmp(p, "--set-dump") == 0) ||
+               (strcmp(p, "-s") == 0)) {
       setMode(localSetMode);
-    } else if ((strcmp(p, "-m") == 0) ||
-               (strcmp(p, "--mxf-dump") == 0)) {
+    } else if ((strcmp(p, "--mxf-dump") == 0) ||
+               (strcmp(p, "-m") == 0)) {
       setMode(mxfMode);
-    } else if ((strcmp(p, "-a") == 0) ||
-               (strcmp(p, "--aaf-dump") == 0)) {
+    } else if ((strcmp(p, "--aaf-dump") == 0) ||
+               (strcmp(p, "-a") == 0)) {
       setMode(aafMode);
-    } else if ((strcmp(p, "-v") == 0) ||
-               (strcmp(p, "--verbose") == 0)) {
+    } else if ((strcmp(p, "--verbose") == 0) ||
+               (strcmp(p, "-v") == 0)) {
       verbose = true;
-    } else if ((strcmp(p, "-f") == 0) ||
-               (strcmp(p, "--fill") == 0)) {
+    } else if ((strcmp(p, "--fill") == 0) ||
+               (strcmp(p, "-f") == 0)) {
       dumpFill = true;
-    } else if ((strcmp(p, "-e") == 0) ||
-               (strcmp(p, "--no-limit-bytes") == 0)) {
+    } else if ((strcmp(p, "--no-limit-bytes") == 0) ||
+               (strcmp(p, "-e") == 0)) {
       lFlag = false;
-    } else if ((strcmp(p, "-l") == 0) ||
-               (strcmp(p, "--limit-bytes") == 0)) {
+    } else if ((strcmp(p, "--limit-bytes") == 0) ||
+               (strcmp(p, "-l") == 0)) {
       limit = getIntegerOption(i, argumentCount, argumentVector, "byte count");
       lFlag = true;
       i = i + 1;
-    } else if ((strcmp(p, "-c") == 0) ||
-               (strcmp(p, "--entries") == 0)) {
+    } else if ((strcmp(p, "--entries") == 0) ||
+               (strcmp(p, "-c") == 0)) {
       maxIndex = getIntegerOption(i, argumentCount, argumentVector, "count");
       cFlag = true;
       i = i + 1;
-    } else if ((strcmp(p, "-p") == 0) ||
-               (strcmp(p, "--frames") == 0)) {
+    } else if ((strcmp(p, "--frames") == 0) ||
+               (strcmp(p, "-p") == 0)) {
       frames = true;
-    } else if ((strcmp(p, "-r") == 0) ||
-               (strcmp(p, "--relative") == 0)) {
+    } else if ((strcmp(p, "--relative") == 0) ||
+               (strcmp(p, "-r") == 0)) {
       relative = true;
-    } else if ((strcmp(p, "-b") == 0) ||
-               (strcmp(p, "--absolute") == 0)) {
+    } else if ((strcmp(p, "--absolute") == 0) ||
+               (strcmp(p, "-b") == 0)) {
       relative = false;
-    } else if ((strcmp(p, "-t") == 0) ||
-               (strcmp(p, "--decimal") == 0)) {
+    } else if ((strcmp(p, "--decimal") == 0) ||
+               (strcmp(p, "-t") == 0)) {
       base = 10;
-    } else if ((strcmp(p, "-x") == 0) ||
-               (strcmp(p, "--hexadecimal") == 0)) {
+    } else if ((strcmp(p, "--hexadecimal") == 0) ||
+               (strcmp(p, "-x") == 0)) {
       base = 16;
-    } else if ((strcmp(p, "-y") == 0) ||
-               (strcmp(p, "--symbolic") == 0)) {
+    } else if ((strcmp(p, "--symbolic") == 0) ||
+               (strcmp(p, "-y") == 0)) {
       symbolic = true;
-    } else if ((strcmp(p, "-n") == 0) ||
-               (strcmp(p, "--no-symbolic") == 0)) {
+    } else if ((strcmp(p, "--no-symbolic") == 0) ||
+               (strcmp(p, "-n") == 0)) {
       symbolic = false;
-    } else if ((strcmp(p, "-h") == 0) ||
-               (strcmp(p, "--help") == 0)) {
+    } else if ((strcmp(p, "--help") == 0) ||
+               (strcmp(p, "-h") == 0)) {
       printFullUsage();
       exit(EXIT_SUCCESS);
-    } else if ((strcmp(p, "-d") == 0) ||
-               (strcmp(p, "--debug") == 0)) {
+    } else if ((strcmp(p, "--debug") == 0) ||
+               (strcmp(p, "-d") == 0)) {
       debug = true;
     } else if (*p == '-') {
       fprintf(stderr, "%s : Error : Invalid option \"%s\".\n", programName, p);
