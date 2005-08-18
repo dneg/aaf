@@ -1,6 +1,3 @@
-
-#include <iostream.h>
-#include <iomanip.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,14 +12,12 @@ void checkSizes(void);
 void checkSizes(void)
 {
   if (sizeof(mxfLength) != 4) {
-    cerr << programName
-      << ": Error : Wrong sizeof(mxfLength)."
-      << endl;
+    fprintf(stderr, "%s : Error : Wrong sizeof(mxfLength).\n", programName);
+    exit(EXIT_FAILURE);
   }
-    if (sizeof(mxfKey) != 16) {
-    cerr << programName
-      << ": Error : Wrong sizeof(mxfKey)."
-      << endl;
+  if (sizeof(mxfKey) != 16) {
+    fprintf(stderr, "%s : Error : Wrong sizeof(mxfKey).\n", programName);
+    exit(EXIT_FAILURE);
   }
 }
 
@@ -30,18 +25,16 @@ void printUsage(void);
 
 void printUsage(void)
 {
-  cerr << programName << ": Usage : "
-       << programName << " OPTIONS <file>"
-                      << endl;
-  cerr << "OPTIONS :" << endl;
-  cerr << "--raw-dump      = ";
-  cerr << "dump raw KLV (-r)" << endl;
-  cerr << "--mxf-dump      = ";
-  cerr << "dump MXF (-m)" << endl;
-  cerr << "--help          = ";
-  cerr << "print this messsage and exit (-h)" << endl;
-  cerr << "--verbose       = ";
-  cerr << "print more detailed information (-v)" << endl;
+  fprintf(stderr, "% : Usage : %s OPTIONS <file>\n", programName, programName);
+  fprintf(stderr, "OPTIONS :\n");
+  fprintf(stderr, "--raw-dump      = ");
+  fprintf(stderr, "dump raw KLV (-r)");
+  fprintf(stderr, "--mxf-dump      = ");
+  fprintf(stderr, "dump MXF (-m)\n");
+  fprintf(stderr, "--help          = ");
+  fprintf(stderr, "print this messsage and exit (-h)\n");
+  fprintf(stderr, "--verbose       = ");
+  fprintf(stderr, "print more detailed information (-v)\n");
 }
 
 const char* baseName(char* pathName);
@@ -58,7 +51,6 @@ const char* baseName(char* pathName)
   } else {
     result++;
   }
-
   return result;
 }
 
@@ -78,7 +70,7 @@ void readMxfLength(mxfLength& l, FILE* f)
 {
   int c = fread(&l, sizeof(mxfLength), 1, f);
   if (c != 1) {
-    cerr << programName << " : Error : Failed to read length" << endl;
+    fprintf(stderr, "%s : Error : Failed to read length.\n", programName);
     exit(EXIT_FAILURE);
   }
   decodeMxfLength(l);
@@ -88,7 +80,7 @@ void printMxfLength(mxfLength& l);
 
 void printMxfLength(mxfLength& l)
 {
-  cout << hex << setw(8) << setfill('0') << l;
+  fprintf(stdout, "%08x", l);
 }
 
 void readMxfKey(mxfKey& k, FILE* f);
@@ -97,7 +89,7 @@ void readMxfKey(mxfKey& k, FILE* f)
 {
   int c = fread(&k, sizeof(mxfKey), 1, f);
   if (c != 1) {
-    cerr << programName << " : Error : Failed to read key" << endl;
+    fprintf(stderr, "%s : Error : Failed to read key.\n", programName);
     exit(EXIT_FAILURE);
   }
 }
@@ -108,7 +100,7 @@ void printMxfKey(mxfKey& k)
 {
   for (size_t i = 0; i < sizeof(mxfKey); i++) {
     unsigned int b = k[i];
-    cout << hex << setw(2) << setfill('0') << b;
+    fprintf(stdout, "%02x", b);
   }
 }
 
@@ -116,7 +108,7 @@ void mxfDumpFile(char* fileName);
 
 void mxfDumpFile(char* /* fileName */)
 {
-  cout << "MXF dump not yet implemented." << endl;
+  fprintf(stdout, "MXF dump not yet implemented\n.");
 }
 
 void rawDumpFile(char* fileName);
@@ -127,9 +119,10 @@ void rawDumpFile(char* fileName)
 
   infile = fopen(fileName, "rb");
   if (infile == NULL) {
-    cerr << programName <<": Error: "
-         << "File \"" << fileName << "\" not found."
-         << endl;
+    fprintf(stderr,
+            "%s : Error : File \"%s\" not found.\n",
+            programName,
+            fileName);
     exit(EXIT_FAILURE);
   }
 
@@ -137,17 +130,17 @@ void rawDumpFile(char* fileName)
     mxfKey k;
     readMxfKey(k, infile);
     printMxfKey(k);
-    cout << "  ";
+    fprintf(stdout, "  ");
     mxfLength len;
     readMxfLength(len, infile);
     printMxfLength(len);
-    cout << endl;
+    fprintf(stdout, "\n");
 
     for (mxfLength i = 0; i < len; i++) {
       unsigned char ch;
       int c = fread(&ch, sizeof(unsigned char), 1, infile);
       if (c != 1) {
-        cerr << programName << " : Error : Failed to read value" << endl;
+        fprintf(stderr, "%s : Error : Failed to read key.\n", programName);
         exit(EXIT_FAILURE);
       }
     }
@@ -168,9 +161,7 @@ void setMode(Mode m);
 void setMode(Mode m)
 {
   if (mode != unspecifiedMode) {
-    cerr << programName
-         << " : Error : Multiple modes specified"
-         << endl;
+    fprintf(stderr, "%s : Error : Multiple modes specified.\n", programName);
     printUsage();
     exit(EXIT_FAILURE);
   }
@@ -196,10 +187,7 @@ int main(int argumentCount, char* argumentVector[])
       printUsage();
       exit(EXIT_SUCCESS);
     } else if (*p == '-') {
-      cerr << programName
-           << " : Error : Invalid option \""
-           << p << "\""
-           << endl;
+      fprintf(stderr, "%s : Error : Invalid option \"%s\".\n", programName, p);
       printUsage();
       exit(EXIT_FAILURE);
     } else {
@@ -212,17 +200,16 @@ int main(int argumentCount, char* argumentVector[])
   }
   int expectedFiles = 1;
   if (fileCount > expectedFiles) {
-    cerr << programName
-         << " : Error : Wrong number of arguments ("
-         << argumentCount
-         << ")"
-         << endl;
+    fprintf(stderr,
+            "%s : Error : Wrong number of arguments (%d).\n",
+            programName,
+            argumentCount);
     printUsage();
     exit(EXIT_FAILURE);
   }
   char* fileName = argumentVector[fileArg];
   if (verbose) {
-    cout << "file = " << fileName << endl;
+    fprintf(stdout, "file = %s\n", fileName);
   }
   if (mode == mxfMode) {
     mxfDumpFile(fileName);
