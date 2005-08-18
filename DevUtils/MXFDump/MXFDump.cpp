@@ -3210,6 +3210,14 @@ void checkElementCount(mxfUInt32 elementCount,
   } // else reported elsewhere
 }
 
+typedef struct SegmentTag {
+  mxfUInt64 _start;
+  mxfUInt64 _size;
+  mxfUInt64 _origin;
+} Segment;
+
+typedef std::list<Segment*> SegmentList;
+
 // In-memory representaton of a partition
 typedef struct mxfPartitionTag {
   // As read from the file
@@ -3280,14 +3288,6 @@ void markEssenceSegmentEnd(mxfUInt64 endKeyPosition)
     essenceSID = 0;
   }
 }
-
-typedef struct SegmentTag {
-  mxfUInt64 _start;
-  mxfUInt64 _size;
-  mxfUInt64 _origin;
-} Segment;
-
-typedef std::list<Segment*> SegmentList;
 
 typedef struct StreamTag {
   mxfUInt32 _sid;
