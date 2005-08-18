@@ -1585,8 +1585,6 @@ void decode(mxfKey& label, FILE* outfile)
   decode(tag1, tag2, outfile);
 }
 
-mxfByte privatePfx[] = {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01,
-                        0x0e};
 mxfByte eclPfx1[]    = {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01,
                         0x0d, 0x01, 0x03, 0x01};
 mxfByte eclPfx2[]    = {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x02,
@@ -1598,8 +1596,8 @@ void printEssenceContainerLabelName(mxfKey& label, FILE* outfile)
     decode(label, outfile);
   } else if (memcmp(&label, &eclPfx2, sizeof(eclPfx2)) == 0) {
     decode(label, outfile);
-  } else if (memcmp(&label, &privatePfx, sizeof(privatePfx)) == 0) {
-    fprintf(outfile, "Private");
+  } else if (isPrivateLabel(label)) {
+    printPrivateLabelName(label, outfile);
   } else {
     fprintf(outfile, "Invalid");
   }
