@@ -5869,7 +5869,11 @@ int main(int argumentCount, char* argumentVector[])
       // We searched less than 64k bytes
       warning("Searched only %"MXFPRIu32" bytes of run-in.\n", runInLimit);
     }
-    fatalError("File \"%s\" is not an MXF file.\n", fileName);
+    if ((mode == klvMode) || (mode == klvValidateMode)) {
+      warning("File \"%s\" is not an MXF file.\n", fileName);
+    } else {
+      fatalError("File \"%s\" is not an MXF file.\n", fileName);
+    }
   } else if (headerPosition > 64 * 1024) {
     // We found the header but the run-in was too big
     mxfError("Run-in too large [ %"MXFPRIu64" bytes ].\n", headerPosition);
