@@ -360,11 +360,33 @@ void printMxfKey(mxfKey& k, FILE* f)
   }
 }
 
+#define AAF_PROPERTY(name, id, tag, type, mandatory, uid, container) \
+{#name, tag},
+
+struct {
+  const char* _name;
+  mxfLocalKey _key;
+} localKeyTable [] = {
+#include "AAFMetaDictionary.h"
+{"bogus", 0x00}
+};
+
+size_t
+localKeyTableSize = (sizeof(localKeyTable)/sizeof(localKeyTable[0])) - 1;
+
 bool lookupLocalKey(mxfLocalKey& k, size_t& index);
 
-bool lookupLocalKey(mxfLocalKey& /* k */, size_t& /* index */)
+bool lookupLocalKey(mxfLocalKey& k, size_t& index)
 {
-  return false;
+  bool result = false;
+  for (size_t i = 0; i < localKeyTableSize; i++) {
+    if (localKeyTable[i]._key == k) {
+      index = i;
+      result = true;
+      break;
+    }
+  }
+  return result;
 }
 
 void printMxfLocalKey(mxfLocalKey& k, FILE* f);
@@ -385,7 +407,7 @@ void printMxfLocalKeySymbol(mxfLocalKey& k, FILE* f)
     size_t i;
     bool found = lookupLocalKey(k, i);
     if (found) {
-      fprintf(stdout, "%s\n", keyTable[i]._name);
+      fprintf(stdout, "%s\n", localKeyTable[i]._name);
     } else {
       fprintf(stdout, "Unknown\n");
     }
