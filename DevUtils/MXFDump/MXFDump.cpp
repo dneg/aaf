@@ -2005,6 +2005,80 @@ void setDumpFile(char* fileName)
 
 bool dumpDark = false;
 
+void mxfDumpKLV(mxfKey& k, mxfLength& len, FILE* infile);
+
+void mxfDumpKLV(mxfKey& k, mxfLength& len, FILE* infile)
+{
+  if (isNullKey(k)) {
+    printKL(k, len);
+    fprintf(stderr,
+            "%s : Error : Null key.\n",
+            programName);
+    exit(EXIT_FAILURE);
+  } else if (memcmp(&OpenHeaderPartition, &k, sizeof(mxfKey)) == 0) {
+    printHeaderPartition(k, len, infile);
+  } else if (memcmp(&ClosedHeaderPartition, &k, sizeof(mxfKey)) == 0) {
+    printHeaderPartition(k, len, infile);
+  } else if (memcmp(&OpenBodyPartition, &k, sizeof(mxfKey)) == 0) {
+    printBodyPartition(k, len, infile);
+  } else if (memcmp(&ClosedBodyPartition, &k, sizeof(mxfKey)) == 0) {
+    printBodyPartition(k, len, infile);
+  } else if (memcmp(&ClosedFooterPartition, &k, sizeof(mxfKey)) == 0) {
+    printFooterPartition(k, len, infile);
+  } else if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
+    printPrimer(k, len, infile);
+    // The following are not yet dealt with explicitly, they are either
+    // handled as their AAF equivalents or as generic local sets.
+    //
+    // Preface
+    // Identification
+    // ContentStorage
+    // EssenceContainerData
+    // MaterialPackage
+    // SourcePackage
+    // Track
+    // Sequence
+    // SourceClip
+    // Timecode12MComponent
+    // TimecodeStream12MComponent
+    // DMSegment
+    // DMSourceClip
+    // FileDescriptor
+    // GenPictureEssenceDesc
+    // CDCIEssenceDescriptor
+    // RGBAEssenceDescriptor
+    // GenSoundEssenceDesc
+    // GenDataEssenceDesc
+    // MultipleDescriptor
+    // NetworkLocator
+    // TextLocator
+    //
+  } else if (memcmp(&SystemMetadata, &k, sizeof(mxfKey)) == 0) {
+    printSystemMetadata(k, len, infile);
+  } else if (memcmp(&IndexTable, &k, sizeof(mxfKey)) == 0) {
+    printIndexTable(k, len, infile);
+  } else if (isFill(k)) {
+    printFill(k, len, infile);
+  } else if (isEssenceElement(k)) {
+    if (frames) {
+      printEssenceFrames(k, len, lFlag, limit, infile);
+    } else {
+      printEssence(k, len, lFlag, limit, infile);
+    }
+  } else {
+    if (!isDark(k, mode)) {
+      if (isLocalSet(k)) {
+        printLocalSet(k, len, infile);
+      } else {
+        printKL(k, len);
+        printV(len, false, 0, infile);
+		}
+    } else {
+      skipV(len, infile);
+    } 
+  }
+}
+
 void mxfDumpFile(char* fileName)
 {
   FILE* infile;
@@ -2022,76 +2096,9 @@ void mxfDumpFile(char* fileName)
   while (readOuterMxfKey(k, infile)) {
     mxfLength len;
     readMxfLength(len, infile);
-
-    if (isNullKey(k)) {
-      printKL(k, len);
-      fprintf(stderr,
-              "%s : Error : Null key.\n",
-              programName);
-      exit(EXIT_FAILURE);
-    } else if (memcmp(&OpenHeaderPartition, &k, sizeof(mxfKey)) == 0) {
-      printHeaderPartition(k, len, infile);
-    } else if (memcmp(&ClosedHeaderPartition, &k, sizeof(mxfKey)) == 0) {
-      printHeaderPartition(k, len, infile);
-    } else if (memcmp(&OpenBodyPartition, &k, sizeof(mxfKey)) == 0) {
-      printBodyPartition(k, len, infile);
-    } else if (memcmp(&ClosedBodyPartition, &k, sizeof(mxfKey)) == 0) {
-      printBodyPartition(k, len, infile);
-    } else if (memcmp(&ClosedFooterPartition, &k, sizeof(mxfKey)) == 0) {
-      printFooterPartition(k, len, infile);
-    } else if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
-      printPrimer(k, len, infile);
-      // The following are not yet dealt with explicitly, they are either
-      // handled as their AAF equivalents or as generic local sets.
-      //
-      // Preface
-      // Identification
-      // ContentStorage
-      // EssenceContainerData
-      // MaterialPackage
-      // SourcePackage
-      // Track
-      // Sequence
-      // SourceClip
-      // Timecode12MComponent
-      // TimecodeStream12MComponent
-      // DMSegment
-      // DMSourceClip
-      // FileDescriptor
-      // GenPictureEssenceDesc
-      // CDCIEssenceDescriptor
-      // RGBAEssenceDescriptor
-      // GenSoundEssenceDesc
-      // GenDataEssenceDesc
-      // MultipleDescriptor
-      // NetworkLocator
-      // TextLocator
-      //
-    } else if (memcmp(&SystemMetadata, &k, sizeof(mxfKey)) == 0) {
-      printSystemMetadata(k, len, infile);
-    } else if (memcmp(&IndexTable, &k, sizeof(mxfKey)) == 0) {
-      printIndexTable(k, len, infile);
-    } else if (isFill(k)) {
-      printFill(k, len, infile);
-    } else if (isEssenceElement(k)) {
-      if (frames) {
-        printEssenceFrames(k, len, lFlag, limit, infile);
-      } else {
-        printEssence(k, len, lFlag, limit, infile);
-      }
-    } else {
-      if (!isDark(k, mode)) {
-        if (isLocalSet(k)) {
-          printLocalSet(k, len, infile);
-        } else {
-          printKL(k, len);
-          printV(len, false, 0, infile);
-		}
-      } else {
-        skipV(len, infile);
-      } 
-    }
+    mxfDumpKLV(k, len, infile);
   }
+
   fclose(infile);
 }
 
