@@ -351,7 +351,7 @@ void print(char* format, ...)
 {
   va_list ap;
   va_start(ap, format);
-  vfprintf(stderr, format, ap);
+  vprint(format, ap);
   va_end(ap);
 }
 
@@ -364,8 +364,7 @@ void error(char* format, ...)
 {
   va_list ap;
   va_start(ap, format);
-  fprintf(stderr, "%s : Error : ", programName());
-  vfprintf(stderr, format, ap);
+  verror(format, ap);
   va_end(ap);
 }
 
@@ -389,8 +388,7 @@ void warning(char* format, ...)
 {
   va_list ap;
   va_start(ap, format);
-  fprintf(stderr, "%s : Warning : ", programName());
-  vfprintf(stderr, format, ap);
+  vwarning(format, ap);
   va_end(ap);
 }
 
@@ -404,8 +402,7 @@ void message(char* format, ...)
 {
   va_list ap;
   va_start(ap, format);
-  fprintf(stderr, "%s : ", programName());
-  vfprintf(stderr, format, ap);
+  vmessage(format, ap);
   va_end(ap);
 }
 
