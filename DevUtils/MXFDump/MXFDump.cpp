@@ -3,10 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if defined(_MAC) || defined(macintosh)
-#include <console.h>
-#endif
-
 //
 //
 typedef unsigned long int length;
@@ -92,10 +88,6 @@ int main(int argumentCount, char* argumentVector[])
       << ": Error : Wrong sizeof(key)."
       << endl;
   }
-
-#ifdef __MWERKS__
-  argumentCount = ccommand(&argumentVector); // console window for mac
-#endif
   programName = baseName(argumentVector[0]);
   
   int fileCount = argumentCount - 1;
