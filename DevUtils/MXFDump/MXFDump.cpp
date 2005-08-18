@@ -5666,28 +5666,6 @@ void printSystemMetadata(mxfKey& /* k */, mxfLength& len, mxfFile infile)
   }
 }
 
-mxfByte packageMetadataPrefix[] =
-  {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x43, 0x01, 0x01,
-   0x0d, 0x01, 0x03, 0x01, 0x04, 0x01, 0x02};
-
-bool isPackageMetadata(mxfKey& k);
-
-bool isPackageMetadata(mxfKey& k)
-{
-  bool result = false;
-  if (memcmp(&k, &packageMetadataPrefix, sizeof(packageMetadataPrefix)) == 0) {
-    result = true;
-  }
-  return result;
-}
-
-void printPackageMetadata(mxfKey& k, mxfLength& len, mxfFile infile);
-
-void printPackageMetadata(mxfKey& k, mxfLength& len, mxfFile infile)
-{
-  printV(len, false, 0, infile);
-}
-
 void printObjectDirectory(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void printObjectDirectory(mxfKey& /* k */,
