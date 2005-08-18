@@ -1774,17 +1774,9 @@ const mxfKey ObjectDirectory =
   {0x96, 0x13, 0xb3, 0x8a, 0x87, 0x34, 0x87, 0x46,
    0xf1, 0x02, 0x96, 0xf0, 0x56, 0xe0, 0x4d, 0x2a};
 
-const mxfKey ClassExtensions = 
-  {0x87 ,0x3D ,0xAC ,0x1D ,0xEA ,0xBA ,0x35 ,0x46,
-   0x6F ,0xFB ,0x42 ,0xAE ,0x75 ,0xDA ,0x7A ,0x4D};
-
-const mxfKey PropertyExtensions =
-  {0x84, 0xb1, 0x3f, 0xa2, 0xfd, 0x65, 0x80, 0x13,
-   0x03, 0x6d, 0x56, 0x90, 0xaa, 0x97, 0xca, 0x43};
-
-const mxfKey TypeExtensions =
-  {0x82, 0x3B, 0x0B, 0xEA, 0x9E, 0xA3, 0x55, 0xDD,
-   0x4A, 0x40, 0xDC, 0x02, 0x7A, 0x75, 0x87, 0x45};
+const mxfKey MetaDictionary =
+  {0x8A, 0xE5, 0x95, 0x9D, 0x57, 0xB3, 0xDA, 0x33,
+   0x8A, 0x5F, 0xB4, 0x11, 0x4D, 0x66, 0x4B, 0x40};
 
 // Define map key <-> key name
 
@@ -1808,9 +1800,7 @@ struct Key {
   {"MXFAES3AudioEssenceDescriptor", &MXFAES3AudioEssenceDescriptor},
   //
   {"ObjectDirectory", &ObjectDirectory},
-  {"ClassExtensions", &ClassExtensions},
-  {"PropertyExtensions", &PropertyExtensions},
-  {"TypeExtensions", &TypeExtensions},
+  {"MetaDictionary", &MetaDictionary},
   //
   {"bogus", 0}
 };
@@ -5268,6 +5258,36 @@ void printObjectDirectory(mxfKey& /* k */,
   }
 }
 
+void printMetaDictionary(mxfKey& k, mxfLength& len, mxfFile infile);
+
+void printMetaDictionary(mxfKey& k, mxfLength& len, mxfFile infile)
+{
+  mxfLength remaining = len;
+  while (remaining > 0) {
+    mxfUInt16 length;
+    readMxfUInt16(length, infile);
+    remaining = remaining - sizeof(mxfUInt16);
+    mxfByte tag;
+    readMxfUInt08(tag, infile);
+    switch (tag) {
+    case 0x10:
+      dumpExtensionClass("class", infile);
+      break;
+    case 0x20:
+      dumpExtensionProperty("property", infile);
+      break;
+    case 0x31: // integer
+      dumpIntegerType("Integer", infile);
+      break;
+    default:
+      mxfError("Invalid definition tag (%"MXFPRIx08").\n", tag);
+      break;
+    }
+    fprintf(stdout, "\n");
+    remaining = remaining - length;
+  }
+}
+
 void printClassExtensions(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void printClassExtensions(mxfKey& /* k */,
@@ -5481,12 +5501,8 @@ void mxfDumpKLV(mxfKey& k, mxfLength& len, mxfFile infile)
     printSystemMetadata(k, len, infile);
   } else if (memcmp(&ObjectDirectory, &k, sizeof(mxfKey)) == 0) {
     printObjectDirectory(k, len, infile);
-  } else if (memcmp(&ClassExtensions, &k, sizeof(mxfKey)) == 0) {
-    printClassExtensions(k, len, infile);
-  } else if (memcmp(&PropertyExtensions, &k, sizeof(mxfKey)) == 0) {
-    printPropertyExtensions(k, len, infile);
-  } else if (memcmp(&TypeExtensions, &k, sizeof(mxfKey)) == 0) {
-    printTypeExtensions(k, len, infile);
+  } else if (memcmp(&MetaDictionary, &k, sizeof(mxfKey)) == 0) {
+    printMetaDictionary(k, len, infile);
   } else if (memcmp(&V10IndexTableSegment, &k, sizeof(mxfKey)) == 0) {
     printIndexTable(k, len, infile);
   } else if (memcmp(&IndexTableSegment, &k, sizeof(mxfKey)) == 0) {
