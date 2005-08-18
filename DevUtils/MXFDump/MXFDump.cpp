@@ -68,6 +68,7 @@ typedef unsigned long long int mxfUInt64;
 typedef mxfUInt32 mxfLength;
 typedef mxfUInt08 mxfByte;
 typedef mxfByte mxfKey[16];
+typedef mxfUInt16 mxfLocalKey;
 
 void printField(FILE* f, mxfUInt32& i);
 
@@ -358,6 +359,14 @@ void printRawMxfKey(mxfKey& k, FILE* f)
   }
 }
 
+void printMxfLocalKey(mxfLocalKey& k, FILE* f);
+
+void printMxfLocalKey(mxfLocalKey& k, FILE* f)
+{
+  mxfByte* p = (mxfByte*)&k;
+  fprintf(f, "%02x.%02x", p[1], p[0]);
+}
+
 bool lookupKey(mxfKey& k, size_t& index);
 
 bool lookupKey(mxfKey& k, size_t& index)
@@ -428,9 +437,10 @@ void mxfDumpFile(char* fileName)
         mxfUInt16 length;
         readMxfUInt16(length, infile);
         setLength = setLength + 4;
+        fprintf(stdout, "[ k = ");
+        printMxfLocalKey(identifier, stdout);
         fprintf(stdout,
-                "[ k = %04x, l = %d (%d) ]\n",
-                identifier,
+                ", l = %d (%d) ]\n",
                 length,
                 setLength);
         init();
