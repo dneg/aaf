@@ -593,7 +593,8 @@ void markIndexEnd(mxfUInt64 endKeyPosition);
 void markEssenceSegmentStart(mxfUInt32 sid, mxfUInt64 essenceKeyPosition);
 void markEssenceSegmentEnd(mxfUInt64 endKeyPosition);
 
-void newSegment(mxfUInt32 sid,
+void newSegment(bool isEssence,
+                mxfUInt32 sid,
                 mxfKey& label,
                 mxfUInt64 start,
                 mxfUInt64 end);
@@ -3869,6 +3870,7 @@ typedef struct StreamTag {
   SegmentList _segments;
   mxfUInt64 _size;
   mxfUInt32 _sid;
+  bool _isEssence; // _sid is body sid
 } Stream;
 
 typedef std::map<mxfUInt32, Stream*> StreamSet;
@@ -3947,7 +3949,8 @@ void destroyStreams(StreamSet& streams)
   }
 }
 
-void newSegment(mxfUInt32 sid,
+void newSegment(bool isEssence,
+                mxfUInt32 sid,
                 mxfKey& label,
                 mxfUInt64 start,
                 mxfUInt64 end)
@@ -3958,6 +3961,7 @@ void newSegment(mxfUInt32 sid,
     s = new Stream();
     s->_size = 0;
     s->_sid = sid;
+    s->_isEssence = isEssence;
 
     streams.insert(StreamSet::value_type(sid, s));
   } else {
@@ -3980,7 +3984,7 @@ void newEssenceSegment(mxfUInt32 sid,
                        mxfUInt64 start,
                        mxfUInt64 end)
 {
-  newSegment(sid, label, start, end);
+  newSegment(true, sid, label, start, end);
 }
 
 void newIndexSegment(mxfUInt32 sid,
@@ -3988,7 +3992,7 @@ void newIndexSegment(mxfUInt32 sid,
                      mxfUInt64 start,
                      mxfUInt64 end)
 {
-  newSegment(sid, label, start, end);
+  newSegment(false, sid, label, start, end);
 }
 
 void readPartition(PartitionList& partitions,
