@@ -79,6 +79,14 @@ typedef struct aafUIDTag {
 
 const char* programName;
 
+typedef enum ModeTag {
+  unspecifiedMode,
+  klvMode,
+  localSetMode,
+  mxfMode,
+  aafMode} Mode;
+Mode mode = unspecifiedMode;
+
 bool reorder(void);
 mxfUInt08 hostByteOrder(void);
 
@@ -884,7 +892,18 @@ void printMxfKeySymbol(mxfKey& k, FILE* f)
       if (found) {
         fprintf(stdout, "%s\n", aafKeyTable[i]._name);
       } else {
-        fprintf(stdout, "Unknown\n");
+        if (mode == aafMode) {
+          mxfKey x;
+          aafUIDToMxfKey(x, *reinterpret_cast<aafUID*>(&k));
+          found = lookupAAFKey(x, i);
+          if (found) {
+            fprintf(stdout, "%s +\n", aafKeyTable[i]._name);
+          } else {
+            fprintf(stdout, "Unknown\n");
+          }
+        } else {
+          fprintf(stdout, "Unknown\n");
+        }
       }
     }
   } else {
@@ -1338,14 +1357,6 @@ void klvDumpFile(char* fileName)
   }
   fclose(infile);
 }
-
-typedef enum ModeTag {
-  unspecifiedMode,
-  klvMode,
-  localSetMode,
-  mxfMode,
-  aafMode} Mode;
-Mode mode = unspecifiedMode;
 
 void setMode(Mode m);
 
