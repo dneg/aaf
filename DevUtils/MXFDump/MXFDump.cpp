@@ -1202,39 +1202,52 @@ void dumpMxfOperationalPattern(const char* label, mxfFile infile)
 void printOperationalPattern(mxfKey& k, FILE* outfile)
 {
   mxfByte itemComplexity = k[12];
-  char* itemCplxName;
-  switch (itemComplexity) {
-  case 1:
-    itemCplxName = "Single Item";
-    break;
-  case 2:
-    itemCplxName = "Play-list Items";
-    break;
-  case 3:
-    itemCplxName = "Edit Items";
-    break;
-  default:
-    itemCplxName = "Unknown";
-    break;
+  if ((itemComplexity >= 1) && (itemComplexity <= 3)) {
+    char* itemCplxName;
+    switch (itemComplexity) {
+    case 1:
+      itemCplxName = "Single Item";
+      break;
+    case 2:
+      itemCplxName = "Play-list Items";
+      break;
+    case 3:
+      itemCplxName = "Edit Items";
+      break;
+    default:
+      itemCplxName = "Unknown";
+      break;
+    }
+
+    mxfByte packageComplexity = k[13];
+    char* packageCplxName;
+    switch (packageComplexity) {
+    case 1:
+      packageCplxName = "Single Package";
+      break;
+    case 2:
+      packageCplxName = "Ganged Packages";
+      break;
+    case 3:
+      packageCplxName = "Alternate Versions";
+      break;
+    default:
+      packageCplxName = "Unknown";
+     break;
+    }
+    // mxfByte qualifiers = k[14]; // tjb not yet decoded
+    fprintf(outfile, "[%s, %s]", itemCplxName, packageCplxName);
+  } else if ((itemComplexity >= 0x10) && (itemComplexity <= 0x7f)) {
+    if (itemComplexity == 0x10) {
+      // tjb - should check for specific Atol patterns
+      fprintf(outfile, "[Specialized - Atom]");
+    } else {
+      fprintf(outfile, "[Specialized - Unknown]");
+    }
+  } else {
+    fprintf(outfile, "[Unknown]");
   }
 
-  mxfByte packageComplexity = k[13];
-  char* packageCplxName;
-  switch (packageComplexity) {
-  case 1:
-    packageCplxName = "Single Package";
-    break;
-  case 2:
-    packageCplxName = "Ganged Packages";
-    break;
-  case 3:
-    packageCplxName = "Alternate Versions";
-    break;
-  default:
-    packageCplxName = "Unknown";
-    break;
-  }
-  fprintf(outfile, "[%s, %s]", itemCplxName, packageCplxName);
 }
 
 bool reorder(void)
