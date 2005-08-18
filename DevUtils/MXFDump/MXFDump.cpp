@@ -1210,7 +1210,7 @@ void printFill(mxfKey& k, mxfLength& len, FILE* infile)
   }
 }
 
-bool unknownAsSets = false;
+bool aafKeysAsSets = true;
 
 bool isLocalSet(mxfKey& k);
 
@@ -1220,7 +1220,7 @@ bool isLocalSet(mxfKey& k)
   if (k[5] == 0x53) {
     result = true;
   } else {
-    if (unknownAsSets) {
+    if (aafKeysAsSets) {
       size_t index;
       mxfKey x;
       aafUIDToMxfKey(x, *reinterpret_cast<aafUID*>(&k));
@@ -1522,13 +1522,10 @@ int main(int argumentCount, char* argumentVector[])
       setMode(klvMode);
     } else if ((strcmp(p, "-l") == 0) || (strcmp(p, "--set-dump") == 0)) {
       setMode(localSetMode);
-      unknownAsSets = true;
     } else if ((strcmp(p, "-m") == 0) || (strcmp(p, "--mxf-dump") == 0)) {
       setMode(mxfMode);
-      unknownAsSets = true;
     } else if ((strcmp(p, "-a") == 0) || (strcmp(p, "--aaf-dump") == 0)) {
       setMode(aafMode);
-      unknownAsSets = true;
     } else if ((strcmp(p, "-v") == 0) || (strcmp(p, "--verbose") == 0)) {
       verbose = true;
     } else if ((strcmp(p, "-f") == 0) || (strcmp(p, "--fill") == 0)) {
