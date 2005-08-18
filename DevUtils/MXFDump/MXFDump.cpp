@@ -149,6 +149,8 @@ void setDumpFile(char* fileName);
 void mxfDumpFile(char* fileName);
 void aafDumpFile(char* fileName);
 
+bool lookupKey(mxfKey& k, size_t& index);
+
 bool isDark(mxfKey& k, Mode mode);
 bool isFill(mxfKey& k);
 
@@ -816,6 +818,15 @@ bool findAAFKey(mxfKey& k, size_t& index, char** flag)
   return found;
 }
 
+bool isMxfKey(mxfKey& k);
+
+bool isMxfKey(mxfKey& k)
+{
+  size_t index;
+  bool result = lookupKey(k, index);
+  return result;
+}
+
 bool isAAFKey(mxfKey& k);
 
 bool isAAFKey(mxfKey& k)
@@ -1233,15 +1244,31 @@ bool lookupLocalKey(mxfLocalKey& k, size_t& index)
 
 bool symbolic = true;
 
-void printMxfLocalKeySymbol(mxfLocalKey& k, FILE* f);
+void printMxfLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing, FILE* f);
 
-void printMxfLocalKeySymbol(mxfLocalKey& k, FILE* f)
+void printMxfLocalKeySymbol(mxfLocalKey& k, mxfKey& enclosing, FILE* f)
 {
   if (symbolic) {
-    size_t i;
-    bool found = lookupLocalKey(k, i);
-    if (found) {
-      fprintf(stdout, "%s\n", localKeyTable[i]._name);
+    if (mode == aafMode) {
+      size_t i;
+      bool found = lookupLocalKey(k, i);
+      if (found) {
+        fprintf(stdout, "%s\n", localKeyTable[i]._name);
+      } else {
+        fprintf(stdout, "Unknown\n");
+      }
+    } else if (mode == mxfMode) {
+      if (isMxfKey(enclosing)) {
+        size_t i;
+        bool found = lookupLocalKey(k, i);
+        if (found) {
+          fprintf(stdout, "%s\n", localKeyTable[i]._name);
+        } else {
+          fprintf(stdout, "Unknown\n");
+        }
+      } else {
+        fprintf(stdout, "Unknown\n");
+      }
     } else {
       fprintf(stdout, "Unknown\n");
     }
@@ -1251,8 +1278,6 @@ void printMxfLocalKeySymbol(mxfLocalKey& k, FILE* f)
   fprintf(stdout, "  ");
   printMxfLocalKey(k, f);
 }
-
-bool lookupKey(mxfKey& k, size_t& index);
 
 bool lookupKey(mxfKey& k, size_t& index)
 {
@@ -1580,12 +1605,12 @@ void skipV(mxfLength& length, FILE* f)
   }
 }
 
-void printLocalKL(mxfLocalKey& k, mxfUInt16& l);
+void printLocalKL(mxfLocalKey& k, mxfUInt16& l, mxfKey& enclosing);
 
-void printLocalKL(mxfLocalKey& k, mxfUInt16& l)
+void printLocalKL(mxfLocalKey& k, mxfUInt16& l, mxfKey& enclosing)
 {
   fprintf(stdout, "  [ k = ");
-  printMxfLocalKeySymbol(k, stdout);
+  printMxfLocalKeySymbol(k, enclosing, stdout);
   fprintf(stdout,
           ", l = %5d (%04x) ]\n",
           l,
@@ -1734,7 +1759,7 @@ void printLocalSet(mxfKey& k, mxfLength& len, FILE* infile)
     mxfUInt16 length;
     readMxfUInt16(length, infile);
     setLength = setLength + 4;
-    printLocalKL(identifier, length);
+    printLocalKL(identifier, length, k);
     checkLocalKey(identifier);
     printLocalV(identifier, length, len, setLength, infile);
   }
@@ -1915,7 +1940,7 @@ void printIndexTable(mxfKey& k, mxfLength& len, FILE* infile)
       setLength = setLength + 8;
     } else {
       checkLocalKey(identifier);
-      printLocalKL(identifier, length);
+      printLocalKL(identifier, length, k);
       printLocalV(identifier, length, len, setLength, infile);
     }
   }
