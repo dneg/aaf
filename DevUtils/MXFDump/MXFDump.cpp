@@ -468,9 +468,9 @@ mxfUInt64 primerPosition = 0;
 mxfUInt64 indexPosition = 0;
 
 void markMetadataStart(mxfUInt64 primerKeyPosition);
-void markMetadataEnd(mxfUInt64 essenceKeyPosition);
+void markMetadataEnd(mxfUInt64 endKeyPosition);
 void markIndexStart(mxfUInt64 indexKeyPosition);
-void markIndexEnd(mxfUInt64 essenceKeyPosition);
+void markIndexEnd(mxfUInt64 endKeyPosition);
 
 // Frame wrapped essence
 bool frames = false;     // if true, treat essence as frame wrapped.
@@ -3237,10 +3237,10 @@ void markMetadataStart(mxfUInt64 primerKeyPosition)
   primerPosition = primerKeyPosition;
 }
 
-void markMetadataEnd(mxfUInt64 essenceKeyPosition)
+void markMetadataEnd(mxfUInt64 endKeyPosition)
 {
   if (primerPosition != 0) {
-    mxfUInt64 headerByteCount = essenceKeyPosition - primerPosition;
+    mxfUInt64 headerByteCount = endKeyPosition - primerPosition;
     currentPartition->_metadataSize = headerByteCount;
     primerPosition = 0;
   }
@@ -3251,10 +3251,10 @@ void markIndexStart(mxfUInt64 indexKeyPosition)
   indexPosition = indexKeyPosition;
 }
 
-void markIndexEnd(mxfUInt64 essenceKeyPosition)
+void markIndexEnd(mxfUInt64 endKeyPosition)
 {
   if (indexPosition != 0) {
-    mxfUInt64 indexByteCount = essenceKeyPosition - indexPosition;
+    mxfUInt64 indexByteCount = endKeyPosition - indexPosition;
     currentPartition->_indexSize = indexByteCount;
     indexPosition = 0;
   }
