@@ -93,6 +93,7 @@ typedef unsigned long long int mxfUInt64;
 #define MXFPRIu16 "hu"
 #define MXFPRIu32 "lu"
 #define MXFPRIu64 "llu"
+#define MXFPRIx08 "x"
 #define MXFPRIx16 "hx"
 #define MXFPRIx32 "lx"
 #define MXFPRIx64 "llx"
