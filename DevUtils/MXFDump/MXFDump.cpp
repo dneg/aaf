@@ -1453,9 +1453,9 @@ char* elementTypeName(mxfByte itemTypeId, mxfByte type)
 {
   char* result = "Unknown";
   switch (itemTypeId) {
-  case 0x05:
-  case 0x06:
-  case 0x07:
+  case 0x05: // "CP Picture"
+  case 0x06: // "CP sound"
+  case 0x07: // "CP Data"
     if (type == 0x00) {
       result = "Illegal";
     } else if ((type >= 0x01) && (type <= 0x0f)) {
@@ -1478,6 +1478,10 @@ char* elementTypeName(mxfByte itemTypeId, mxfByte type)
       result = "System";
     }
     break;
+  case 0x15: // "GC Picture"
+  case 0x16: // "GC Sound"
+  case 0x17: // "GC Data"
+  case 0x18: // "GC Compound"
   default:
     break;
   }
