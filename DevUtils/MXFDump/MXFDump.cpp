@@ -118,7 +118,7 @@ void printUsage(void)
   fprintf(stderr, "dump MXF (-m)\n");
   fprintf(stderr, "\n");
   fprintf(stderr, "--help          = ");
-  fprintf(stderr, "print this messsage and exit (-h)\n");
+  fprintf(stderr, "print this message and exit (-h)\n");
   fprintf(stderr, "--verbose       = ");
   fprintf(stderr, "print more detailed information (-v)\n");
 }
