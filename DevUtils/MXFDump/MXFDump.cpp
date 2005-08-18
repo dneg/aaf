@@ -240,6 +240,13 @@ mxfUInt32 limit = 0;
 // Help
 bool hFlag = false;
 
+#if defined(__GLIBC__) && defined(__GNUC_MINOR__)
+#if (__GLIBC__ >= 2) && (__GLIBC_MINOR__ >=3)
+// fseeko present in 2.3 but not in 2.2
+#define MXF_SEEKO
+#endif
+#endif
+
 void setPosition(const mxfUInt64 position, FILE* f)
 {
 #if defined(MXF_COMPILER_MSC_INTEL_WINDOWS)
@@ -247,7 +254,7 @@ void setPosition(const mxfUInt64 position, FILE* f)
   // on Windows fpos_t is a 64-bit integer.
   fpos_t pos = position;
   int status = fsetpos(f, &pos);
-#elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
+#elif defined(MXF_COMPILER_GCC_INTEL_LINUX) && defined(MXF_SEEKO)
   int status = fseeko(f, position, SEEK_SET);
 #elif defined(MXF_COMPILER_MWERKS_PPC_MACOS)
   int status = _fseek(f, position, SEEK_SET);
