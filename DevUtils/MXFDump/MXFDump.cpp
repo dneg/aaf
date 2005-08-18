@@ -1339,11 +1339,14 @@ struct {
   {"Index Edit Rate",      0x3f0b},
   {"Index Start Position", 0x3f0c},
   {"Index Duration",       0x3f0d},
+  // File Descriptor
+  {"Linked Track ID",      0x3006},
   // Multiple Descriptor
   {"Sub Descriptor UIDs",  0x3f01},
   // Generic Sound Essence Descriptor
   {"Quantization Bits",    0x3d01},
   {"Locked/Unlocked",      0x3d02},
+  {"Audio Ref level",      0x3d04},
   {"Audio Sampling Rate",  0x3d03},
   {"Channel Count",        0x3d07},
   // Generic Picture Essence Descriptor
