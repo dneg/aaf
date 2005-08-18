@@ -293,7 +293,7 @@ bool isEssenceElement(mxfKey& k);
 bool isIndexSegment(mxfKey& k);
 
 void checkKey(mxfKey& k);
-bool isNullKey(mxfKey& k);
+bool isNullKey(const mxfKey& k);
 bool isDark(mxfKey& k, Mode mode);
 bool isFill(mxfKey& k);
 bool isPartition(mxfKey& key);
@@ -3264,7 +3264,7 @@ void printFill(mxfKey& k, mxfLength& len, mxfFile infile)
   }
 }
 
-bool isNullKey(mxfKey& k)
+bool isNullKey(const mxfKey& k)
 {
   bool result;
   if (memcmp(NullKey, k, sizeof(mxfKey)) == 0) {
