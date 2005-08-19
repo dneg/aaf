@@ -170,23 +170,16 @@ void OMMXFStorage::writeHeaderPartition(void)
   TRACE("OMMXFStorage::writeHeaderPartition");
 
   OMUInt64 currentPosition = position();
-  _currentPartition = currentPosition;
-  writePartition(ClosedHeaderPartitionPackKey, KAGSize);
+  writePartition(ClosedHeaderPartitionPackKey, 0, defaultKAGSize);
   currentPosition = position();
-  fillAlignK(currentPosition, KAGSize);
-  currentPosition = position();
-  OMUInt64 headerByteCount = bodyPartitionOffset - currentPosition;
-  definition(headerByteCount, FUT_HEADERBYTECOUNT);
-  fixup(FUT_HEADERBYTECOUNT);
-  definition(0, FUT_HEADERBYTECOUNT);
+  fillAlignK(currentPosition, defaultKAGSize);
 }
 
-void OMMXFStorage::writeBodyPartition(void)
+void OMMXFStorage::writeBodyPartition(OMUInt32 bodySID, OMUInt32 KAGSize)
 {
   TRACE("OMMXFStorage::writeBodyPartition");
 
-  OMUInt32 KAGSize = 0x200; // Different than the default
-  writePartition(ClosedBodyPartitionPackKey, KAGSize);
+  writePartition(ClosedBodyPartitionPackKey, bodySID, KAGSize);
   OMUInt64 currentPosition = position();
   fillAlignV(currentPosition, KAGSize);
 }
@@ -195,20 +188,51 @@ void OMMXFStorage::writeFooterPartition(void)
 {
   TRACE("OMMXFStorage::writeFooterPartition");
 
-  OMUInt64 footer = position();
-  writePartition(ClosedFooterPartitionPackKey, KAGSize);
-  definition(footer, FUT_FOOTER);
+  writePartition(ClosedFooterPartitionPackKey, 0, defaultKAGSize);
 
   fixup();
+
+  size_t count = _partitions.count();
+  Partition* footerPartition = _partitions.valueAt(count - 1);
+  OMUInt64 footer = footerPartition->_address;
+  OMUInt64 previous = 0;
+  for (size_t i = 0; i < count; i++) {
+    Partition* p = _partitions.valueAt(i);
+    OMUInt64 address = p->_address;
+#if defined(BER9)
+    fixupReference(address + sizeof(OMKLVKey) + 8 + 1 + 16, previous);
+#else
+    fixupReference(address + sizeof(OMKLVKey) + 3 + 1 + 16, previous);
+#endif
+#if defined(BER9)
+    fixupReference(address + sizeof(OMKLVKey) + 8 + 1 + 24, footer);
+#else
+    fixupReference(address + sizeof(OMKLVKey) + 3 + 1 + 24, footer);
+#endif
+    previous = address;
+  }
 }
 
-void OMMXFStorage::writePartition(const OMKLVKey& key, OMUInt32 KAGSize)
+void OMMXFStorage::writePartition(const OMKLVKey& key,
+                                  OMUInt32 bodySID,
+                                  OMUInt32 KAGSize)
 {
   TRACE("OMMXFStorage::writePartition");
 
   OMUInt64 currentPosition = position();
-  OMUInt64 previousPartition = currentPosition - _currentPartition;
-  _currentPartition = currentPosition;
+  size_t count = _partitions.count();
+  size_t i;
+  for (i = 0; i < count; i++) {
+    Partition* p = _partitions.valueAt(i);
+    if (p->_address > currentPosition) {
+      break;
+    }
+  }
+  Partition* newPartition = new Partition;
+  ASSERT("Valid heap pointer", newPartition != 0);
+  newPartition->_address = currentPosition;
+  newPartition->_sid = bodySID;
+  _partitions.insertAt(newPartition, i);
 
   OMUInt32 elementSize = sizeof(OMKLVKey);
   LabelSetIterator* iter = essenceContainerLabels();
@@ -228,21 +252,20 @@ void OMMXFStorage::writePartition(const OMKLVKey& key, OMUInt32 KAGSize)
   write(KAGSize, _reorderBytes);
   OMUInt64 thisPartition = currentPosition;
   write(thisPartition, _reorderBytes);
+  OMUInt64 previousPartition = 0;
   write(previousPartition, _reorderBytes);
-  reference(position(), FUT_FOOTER);
   OMUInt64 footerPartition = 0;
   write(footerPartition, _reorderBytes);
-  reference(position(), FUT_HEADERBYTECOUNT);
   OMUInt64 headerByteCount = 0;
   write(headerByteCount, _reorderBytes);
   OMUInt64 indexByteCount = 0;
   write(indexByteCount, _reorderBytes);
-  OMUInt32 indexSID = 1;
+  OMUInt32 indexSID = 0;
   write(indexSID, _reorderBytes);
   OMUInt64 bodyOffset = 0;
   write(bodyOffset, _reorderBytes);
-  OMUInt32 bodySID = 2;
-  write(bodySID, _reorderBytes);
+  OMUInt32 b = bodySID;
+  write(b, _reorderBytes);
   writeKLVKey(_operationalPattern);
   write(elementCount, _reorderBytes);
   write(elementSize, _reorderBytes);
@@ -563,21 +586,17 @@ void OMMXFStorage::berEncode(OMByte* berValueBuffer,
   }
 }
 
-void OMMXFStorage::readPartition(OMUInt32& bodySID, OMUInt32& indexSID)
+void OMMXFStorage::readPartition(OMUInt32& bodySID,
+                                 OMUInt32& indexSID,
+                                 OMUInt32& KAGSize)
 {
   TRACE("OMMXFStorage::readPartition");
 
-#if 0
-  OMKLVKey k;
-  readKLVKey(k);
-  k.octet14 = 0x02;
-#endif
   readKLVLength();
   OMUInt16 majorVersion;
   read(majorVersion, _reorderBytes);
   OMUInt16 minorVersion;
   read(minorVersion, _reorderBytes);
-  OMUInt32 KAGSize;
   read(KAGSize, _reorderBytes);
   OMUInt64 thisPartition;
   read(thisPartition, _reorderBytes);
