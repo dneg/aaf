@@ -49,6 +49,8 @@
   // @mfunc Constructor.
 OMMXFStorage::OMMXFStorage(OMRawStorage* store)
   : OMWrappedRawStorage(store),
+  _primerPosition(0),
+  _headerByteCount(0),
   _fixups(),
   _reorderBytes(false),
   _operationalPattern(nullOMKLVKey),
@@ -2074,14 +2076,19 @@ bool OMMXFStorage::findPattern(const OMRawStorage* store,
 
 void OMMXFStorage::markMetadataStart(OMUInt64 primerKeyPosition)
 {
-  TRACE("OMMXFStorage::");
-  ASSERT("Unimplemented code not reached", false);
+  TRACE("OMMXFStorage::markMetadataStart");
+
+  _primerPosition = primerKeyPosition;
 }
 
 void OMMXFStorage::markMetadataEnd(OMUInt64 endKeyPosition)
 {
   TRACE("OMMXFStorage::markMetadataEnd");
-  ASSERT("Unimplemented code not reached", false);
+
+  if (_primerPosition != 0) {
+    _headerByteCount = endKeyPosition - _primerPosition;
+    _primerPosition = 0;
+  }
 }
 
 void OMMXFStorage::markIndexStart(OMUInt32 sid, OMUInt64 indexKeyPosition)
