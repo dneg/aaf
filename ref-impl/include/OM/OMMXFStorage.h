@@ -438,6 +438,20 @@ public:
                              OMUInt32 bufferCount,
                              OMUInt32& bytesWritten);
 
+  virtual void streamWriteAt(OMUInt32 sid,
+                             OMUInt64 position,
+                             const OMByte* buffer,
+                             const OMUInt32 bytes,
+                             void* /* */ completion,
+                             const void* clientArgument);
+
+  virtual void streamWriteAt(OMUInt32 sid,
+                             OMUInt64 position,
+                             const OMIOBufferDescriptor* buffers,
+                             OMUInt32 bufferCount,
+                             void* /* */ completion,
+                             const void* clientArgument);
+
   virtual void streamRawRead(OMUInt32 sid,
                              OMUInt64 rawPosition,
                              OMByte* rawBytes,
@@ -460,6 +474,20 @@ public:
                             OMIOBufferDescriptor* buffers,
                             OMUInt32 bufferCount,
                             OMUInt32& bytesRead);
+
+  virtual void streamReadAt(OMUInt32 sid,
+                            OMUInt64 position,
+                            OMByte* buffer,
+                            const OMUInt32 bytes,
+                            void* /* */ completion,
+                            const void* clientArgument);
+
+  virtual void streamReadAt(OMUInt32 sid,
+                            OMUInt64 position,
+                            OMIOBufferDescriptor* buffers,
+                            OMUInt32 bufferCount,
+                            void* /* */ completion,
+                            const void* clientArgument);
 
   virtual void streamRestoreSegment(OMUInt32 sid,
                                     OMUInt64 start,
