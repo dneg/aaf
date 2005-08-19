@@ -178,16 +178,9 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
 {
   TRACE("OMMXFStorage::writePartition");
 
-  OMKLVKey operationalPattern =
-    {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01,
-     0x0d, 0x01, 0x02, 0x01, 0x01, 0x01, 0x09, 0x00};
-
-  OMKLVKey essenceContainers[] = {
-    {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01,
-     0x0d, 0x01, 0x03, 0x01, 0x02, 0x01, 0x02, 0x01}
-  };
   OMUInt32 elementSize = sizeof(OMKLVKey);
-  OMUInt32 elementCount = sizeof(essenceContainers) / elementSize;
+  LabelSetIterator* iter = essenceContainerLabels();
+  OMUInt32 elementCount = iter->count();
 
   writeKLVKey(key);
   OMUInt64 sizeOfFixedPortion = 88;
@@ -218,12 +211,14 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
   write(bodyOffset, reorderBytes);
   OMUInt32 bodySID = 2;
   write(bodySID, reorderBytes);
-  writeKLVKey(operationalPattern);
+  writeKLVKey(_operationalPattern);
   write(elementCount, reorderBytes);
   write(elementSize, reorderBytes);
-  for (OMUInt32 i = 0; i < elementCount; i++) {
-    writeKLVKey(essenceContainers[i]);
+  while (++(*iter)) {
+    OMKLVKey label = iter->value();
+    writeKLVKey(label);
   }
+  delete iter;
 }
 
   // @cmember Write fill so that the next key is page aligned.
