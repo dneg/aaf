@@ -1110,7 +1110,7 @@ void OMKLVStoredObject::restore(OMWeakReference& singleton,
   OMUniqueObjectIdentification id;
   _storage->read(id, _reorderBytes);
 
-  OMWeakObjectReference newReference(&singleton, id, 0);
+  OMWeakObjectReference newReference(&singleton, id, nullOMPropertyTag);
   singleton.reference() = newReference;
 }
 
@@ -1589,7 +1589,7 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
           OMUniqueObjectIdentification id;
           _storage->read(id, _reorderBytes);
 
-          OMWeakReferenceVectorElement element(v, id, 0);
+          OMWeakReferenceVectorElement element(v, id, nullOMPropertyTag);
           v->insert(i, element);
         }
       }
@@ -1607,7 +1607,7 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
           OMUniqueObjectIdentification id;
           _storage->read(id, _reorderBytes);
 
-          OMWeakReferenceSetElement element(s, id, 0);
+          OMWeakReferenceSetElement element(s, id, nullOMPropertyTag);
           s->insert(&id, element);
         }
       }
@@ -1863,7 +1863,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
             ASSERT("Consistent sizes", kp->bitsSize() == sizeof(key));
             kp->getBits(reinterpret_cast<OMByte*>(&key), sizeof(key));
 
-            OMWeakReferenceSetElement element(s, key, 0);
+            OMWeakReferenceSetElement element(s, key, nullOMPropertyTag);
 #if defined(USETAGTABLE)
             OMPropertyTag tag = findTag(s->targetName());
             OMWeakObjectReference newReference(s, key, tag);
