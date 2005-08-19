@@ -1943,3 +1943,46 @@ void OMMXFStorage::destroySegmentMap(void)
     _segmentMap = 0;
   }
 }
+
+void OMMXFStorage::destroyPartitions(void)
+{
+  TRACE("OMMXFStorage::destroyPartitions");
+
+  size_t count = _partitions.count();
+  for (size_t i = 0; i < count; i++) {
+    Partition* p = _partitions.valueAt(i);
+    delete p;
+  }
+  _partitions.clear();
+  POSTCONDITION("No partitions", _partitions.count() == 0);
+}
+
+bool OMMXFStorage::findPartition(OMUInt64 address, OMUInt32& index)
+{
+  TRACE("OMMXFStorage::findPartition");
+
+  bool result = false;
+  size_t count = _partitions.count();
+  for (OMUInt32 i = 0; i < count; i++) {
+    Partition* p = _partitions.valueAt(i);
+    if (p->_address == address) {
+      index = i;
+      result = true;
+      break;
+    }
+  }
+  return result;
+}
+
+void OMMXFStorage::addPartition(OMUInt64 address,
+                                OMUInt32 bodySID,
+                                OMUInt32 index)
+{
+  TRACE("OMMXFStorage::addPartition");
+
+  Partition* newPartition = new Partition;
+  ASSERT("Valid heap pointer", newPartition != 0);
+  newPartition->_address = address;
+  newPartition->_sid = bodySID;
+  _partitions.insertAt(newPartition, index);
+}
