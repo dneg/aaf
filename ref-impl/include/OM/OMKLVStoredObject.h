@@ -256,10 +256,6 @@ public:
 
   OMUInt64 restoreObjectDirectoryReference(OMUniqueObjectIdentification& id);
 
-  static void convert(OMKLVKey& key, const OMUniqueObjectIdentification& id);
-
-  static void convert(OMUniqueObjectIdentification& id, const OMKLVKey& key);
-
   static bool metaDataOnly;
 
 private:
