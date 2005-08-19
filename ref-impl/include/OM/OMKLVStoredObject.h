@@ -251,6 +251,13 @@ public:
   virtual void restore(OMDataStream& stream,
                        size_t externalSize);
 
+  static void reorderString(OMCharacter* string,
+                            size_t characterCount);
+
+  static void externalizeString(const wchar_t* internalString,
+                                OMCharacter* externalString,
+                                size_t characterCount);
+
   virtual void write(const wchar_t* string);
   virtual void write(bool b);
 
