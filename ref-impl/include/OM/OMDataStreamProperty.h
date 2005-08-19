@@ -169,13 +169,13 @@ public:
 
   OMDataStreamAccess* streamAccess(void) const;
 
+  OMStoredStream* stream(void) const; // tjb should be private
+
 protected:
 
   virtual const wchar_t* storedName(void) const;
 
 private:
-
-  OMStoredStream* stream(void) const;
 
   void open(void);
   void create(void);
