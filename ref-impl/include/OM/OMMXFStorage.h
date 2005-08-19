@@ -105,8 +105,8 @@ static const OMUInt64 bodyPartitionOffset = preallocatedMetadataSize +
 
 static const OMUInt32 defaultKAGSize = 0x100;
 
-static const OMUInt16 currentMajorVersion = 0xffff;
-static const OMUInt16 currentMinorVersion = 0xfff6;
+static const OMUInt16 currentMajorVersion = 0x0001;
+static const OMUInt16 currentMinorVersion = 0x0002;
 
 // Total size of the fixed-size portions of a partition value
 static const OMUInt32 fixedPartitionSize =
@@ -130,7 +130,7 @@ static const OMPropertyId PID_InterchangeObject_InstanceUID = 0x3c0a;
 static const OMPropertyId PID_Root_ObjectDirectory = 0x003;
 static const OMPropertyId PID_Root_FormatVersion   = 0x004;
 
-static const OMUInt32 formatVersion = 0x004;
+static const OMUInt32 formatVersion = 0x005;
 
 static const OMKLVKey objectDirectoryKey =
   {0x96, 0x13, 0xb3, 0x8a, 0x87, 0x34, 0x87, 0x46,
