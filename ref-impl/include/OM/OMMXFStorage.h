@@ -280,6 +280,8 @@ public:
 
   virtual void readKLVKey(OMKLVKey& key) const;
 
+  virtual bool readOuterKLVKey(OMKLVKey& key) const;
+
   virtual OMUInt64 readKLVLength(void) const;
 
   virtual void readKLVFill(void) const;
