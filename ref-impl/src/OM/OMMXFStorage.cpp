@@ -42,6 +42,8 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
   _operationalPattern(nullOMKLVKey),
   _essenceContainerLabels(),
   _generation(nullOMUniqueObjectIdentification),
+  _objectDirectory(0),
+  _objectDirectoryReference(0),
   _instanceIdToObject(0),
   _objectToInstanceId(0)
 {
@@ -768,7 +770,7 @@ OMUInt64 OMMXFStorage::readBerLength(const OMRawStorage* store)
   return result;
 }
 
-OMUInt64 OMMXFStorage::saveObjectDirectory(void)
+void OMMXFStorage::saveObjectDirectory(void)
 {
   TRACE("OMMXFStorage::saveObjectDirectory");
 
@@ -778,7 +780,7 @@ OMUInt64 OMMXFStorage::saveObjectDirectory(void)
   } else {
     reorderBytes = true;
   }
-  OMUInt64 result = position();
+  _objectDirectory = position();
 
   writeKLVKey(objectDirectoryKey);
   OMUInt64 entries = _instanceIdToObject->count();
@@ -801,14 +803,15 @@ OMUInt64 OMMXFStorage::saveObjectDirectory(void)
     write(e._offset, reorderBytes);
     write(e._flags);
   }
-  return result;
+  // Now we know where it lives, fixup the reference
+  fixupReference(_objectDirectoryReference, _objectDirectory);
 }
 
-void OMMXFStorage::restoreObjectDirectory(OMUInt64 objectDirectoryOffset)
+void OMMXFStorage::fixupReference(OMUInt64 patchOffset, OMUInt64 patchValue)
 {
-  TRACE("OMMXFStorage::restoreObjectDirectory");
-  PRECONDITION("Valid metadata directory", _instanceIdToObject != 0);
-  PRECONDITION("Valid metadata directory offset", objectDirectoryOffset != 0);
+  TRACE("OMMXFStorage::fixupReference");
+  PRECONDITION("Valid patch offset", patchOffset != 0);
+  PRECONDITION("Valid patch value", patchValue!= 0);
 
   bool reorderBytes;
   if (hostByteOrder() == bigEndian) {
@@ -817,7 +820,25 @@ void OMMXFStorage::restoreObjectDirectory(OMUInt64 objectDirectoryOffset)
     reorderBytes = true;
   }
   OMUInt64 savedPosition = position();
-  setPosition(objectDirectoryOffset);
+  setPosition(patchOffset);
+  write(patchValue, reorderBytes);
+  setPosition(savedPosition);
+}
+
+void OMMXFStorage::restoreObjectDirectory(void)
+{
+  TRACE("OMMXFStorage::restoreObjectDirectory");
+  PRECONDITION("Valid metadata directory", _instanceIdToObject != 0);
+  PRECONDITION("Valid metadata directory offset", _objectDirectory != 0);
+
+  bool reorderBytes;
+  if (hostByteOrder() == bigEndian) {
+    reorderBytes = false;
+  } else {
+    reorderBytes = true;
+  }
+  OMUInt64 savedPosition = position();
+  setPosition(_objectDirectory);
 
   OMKLVKey k;
   readKLVKey(k);
@@ -850,6 +871,19 @@ void OMMXFStorage::restoreObjectDirectory(OMUInt64 objectDirectoryOffset)
   }
 
   setPosition(savedPosition);
+}
+
+void
+OMMXFStorage::setObjectDirectoryReference(OMUInt64 objectDirectoryReference)
+{
+  TRACE("OMMXFStorage::setObjectDirectoryReference");
+  _objectDirectoryReference = objectDirectoryReference;
+}
+
+void OMMXFStorage::setObjectDirectoryOffset(OMUInt64 objectDirectoryOffset)
+{
+  TRACE("OMMXFStorage::setObjectDirectoryOffset");
+  _objectDirectory = objectDirectoryOffset;
 }
 
 OMMXFStorage::ObjectDirectory* OMMXFStorage::instanceIdToObject(void)
