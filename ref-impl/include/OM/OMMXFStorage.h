@@ -30,6 +30,7 @@
 #include "OMDataStream.h"
 #include "OMList.h"
 #include "OMListIterator.h"
+#include "OMVector.h"
 
 static const OMKLVKey ClosedHeaderPartitionPackKey =
   {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
@@ -54,6 +55,10 @@ static const OMKLVKey fillKey =
 static const OMKLVKey IndexTableSegmentKey =
   {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x53, 0x01, 0x01,
    0x0d, 0x01, 0x02, 0x01, 0x01, 0x10, 0x00, 0x00};
+
+static const OMKLVKey RandomIndexMetadataKey =
+  {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
+   0x0d, 0x01, 0x02, 0x01, 0x01, 0x11, 0x01, 0x00};
 
 static const OMUInt32 bodyPartitionOffset = 0x20000;
 
@@ -146,6 +151,10 @@ public:
   virtual void writeBodyPartition(void);
   virtual void writeFooterPartition(void);
   virtual void writePartition(const OMKLVKey& key, OMUInt32 KAGSize);
+
+  virtual void writeRandomIndex(void);
+
+  virtual void readRandomIndex(void);
 
     // @cmember Write a fill key, a BER encoded length and
     //          <p length> bytes of fill.
@@ -318,6 +327,11 @@ private:
   OMSet<OMDataStream*, OMUniqueObjectIdentification>* _streamToStreamId;
   OMSet<OMUniqueObjectIdentification, OMDataStream*>* _streamIdToStream;
 
+  struct Partition {
+    OMUInt64 _address;
+    OMUInt32 _sid;
+  };
+  OMVector<Partition*> _partitions;
 };
 
 #endif
