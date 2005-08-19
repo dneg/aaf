@@ -123,12 +123,12 @@ OMUInt64 OMKLVStoredStream::position(void) const
   return _position;
 }
 
-void OMKLVStoredStream::setPosition(const OMUInt64 offset)
+void OMKLVStoredStream::setPosition(const OMUInt64 offset) const
 {
   TRACE("OMKLVStoredStream::setPosition");
   PRECONDITION("Valid store", _store != 0);
 
-  _position = offset;
+  const_cast<OMKLVStoredStream*>(this)->_position = offset;
 }
 
 void OMKLVStoredStream::close(void)
@@ -194,7 +194,7 @@ OMUInt64 OMKLVStoredStream::fileOffset(void) const
   return _fileOffset;
 }
 
-bool OMKLVStoredStream::readKLVKey(OMStoredStream& stream, OMKLVKey& key)
+bool OMKLVStoredStream::readKLVKey(const OMStoredStream& stream, OMKLVKey& key)
 {
   TRACE("OMKLVStoredStream::readKLVKey");
 
@@ -211,7 +211,8 @@ bool OMKLVStoredStream::readKLVKey(OMStoredStream& stream, OMKLVKey& key)
   return result;
 }
 
-bool OMKLVStoredStream::readKLVLength(OMStoredStream& stream, OMUInt64& length)
+bool OMKLVStoredStream::readKLVLength(const OMStoredStream& stream,
+                                      OMUInt64& length)
 {
   TRACE("OMKLVStoredStream::readKLVLength");
   // Bah ! should reuse code in OMMXFStorage - tjb
