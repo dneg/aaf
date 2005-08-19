@@ -377,9 +377,6 @@ void OMKLVStoredObject::save(OMFile& file)
   //
   _storage->writeHeaderPartition(0, 0, defaultKAGSize);
 
-  OMUInt64 pos = _storage->position();
-  _storage->setPosition(pos);
-
   // Write the primer
   writePrimerPack(file.dictionary());
   _storage->fillAlignK(_storage->position(), defaultKAGSize);
