@@ -267,7 +267,8 @@ void OMWrappedRawStorage::streamReadAt(OMUInt64 position,
                                        OMUInt32& bytesRead) const
 {
   TRACE("OMWrappedRawStorage::");
-  ASSERT("Unimplemented code not reached", false);
+
+  _store->streamReadAt(position, bytes, byteCount, bytesRead);
 }
 
 void OMWrappedRawStorage::streamRead(OMIOVector buffers,
