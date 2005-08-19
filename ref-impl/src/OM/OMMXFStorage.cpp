@@ -61,7 +61,8 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
   _segmentMap(0),
   _segments(0),
   _fileSize(0),
-  _primerOffset(0)
+  _primerOffset(0),
+  _metadataEnd(0)
 {
   TRACE("OMMXFStorage::OMMXFStorage");
 
@@ -149,8 +150,8 @@ void OMMXFStorage::close(void)
     previous = address;
   }
   // Set the HeaderByteCount field of the header
-  ASSERT("Valid primer offset", _primerOffset < bodyPartitionOffset);
-  OMUInt64 metadataSize = bodyPartitionOffset - _primerOffset;
+  ASSERT("Valid primer offset", _primerOffset < _metadataEnd);
+  OMUInt64 metadataSize = _metadataEnd - _primerOffset;
   fixupReference(0 + sizeof(OMKLVKey) + 8 + 1 + 32, metadataSize);
 
   writeRandomIndex();
@@ -1550,22 +1551,28 @@ void OMMXFStorage::saveStreams(void)
 {
   TRACE("OMMXFStorage::saveStreams");
 
-  // We expect to be positioned in the pre-allocated header
-  // space just after the last metadata object
-  if (position() >= bodyPartitionOffset) {
-    throw OMException("Preallocated metadata space exhausted.");
-  }
-
-  // fill remainder of pre-allocated space
-  OMUInt32 fillAlignment = bodyPartitionOffset;
-  fillAlignK(position(), fillAlignment);
-
-  // Write header partition and alignment fill.
+  // Streams, if any, follow the metadata
   //
-  setPosition(0);
-  writeHeaderPartition(0, 0, defaultKAGSize);
+  _metadataEnd = position();
 
   if (_segments != 0) {
+    // The file contains streams
+
+    // We expect to be positioned in the pre-allocated header
+    // space just after the last metadata object
+    if (_metadataEnd >= bodyPartitionOffset) {
+      throw OMException("Preallocated metadata space exhausted.");
+    }
+
+    // fill remainder of pre-allocated space
+    OMUInt32 fillAlignment = bodyPartitionOffset;
+    fillAlignK(_metadataEnd, fillAlignment);
+
+    // Write header partition and alignment fill.
+    //
+    setPosition(0);
+    writeHeaderPartition(0, 0, defaultKAGSize);
+
     const Segment* lastFileSegment = _segments->last().value();
     OMUInt64 previous = 0;
     SegmentListIterator sl(*_segments, OMBefore);
@@ -1630,7 +1637,16 @@ void OMMXFStorage::saveStreams(void)
       writePartition(CompleteFooterKey, 0, 0, defaultKAGSize);
     }
   } else {
-    setPosition(_fileSize + fillBufferZoneSize);
+    // The file does not contain streams
+ 
+    // Write header partition and alignment fill.
+    //
+    setPosition(0);
+    writeHeaderPartition(0, 0, defaultKAGSize);
+
+    // Write footer
+    //
+    setPosition(_metadataEnd);
     writePartition(CompleteFooterKey, 0, 0, defaultKAGSize);
   }
 }
