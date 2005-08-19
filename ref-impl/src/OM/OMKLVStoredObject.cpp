@@ -2091,19 +2091,6 @@ void OMKLVStoredObject::skipLV(OMRawStorage* store)
   store->setPosition(newPosition);
 }
  
-void OMKLVStoredObject::skipKLVFill(OMRawStorage* store)
-{
-  TRACE("OMKLVStoredObject::skipKLVFill");
-  OMKLVKey fillKey =
-    {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
-     0x03, 0x01, 0x02, 0x10, 0x01, 0x00, 0x00, 0x00};
-
-  OMKLVKey k;
-  readKLVKey(store, k);
-  ASSERT("Fill key", memcmp(&fillKey, &k, sizeof(OMKLVKey)) == 0);
-  skipLV(store);
-}
-
 void OMKLVStoredObject::read(OMRawStorage* store, OMUInt8& i)
 {
   TRACE("OMKLVStoredObject::read");
