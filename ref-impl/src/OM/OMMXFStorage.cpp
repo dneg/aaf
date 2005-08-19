@@ -186,9 +186,9 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
   OMUInt64 sizeOfFixedPortion = 88;
   OMUInt64 length = sizeOfFixedPortion + (elementCount * elementSize);
 #if defined(BER9)
-  OMKLVStoredObject::writeKLVLength(this, length);
+  writeKLVLength(length);
 #else
-  OMKLVStoredObject::writeBerLength(this, 3, length);
+  writeBerLength(3, length);
 #endif
   OMUInt16 majorVersion = currentMajorVersion;
   write(majorVersion, reorderBytes);
@@ -368,6 +368,52 @@ void OMMXFStorage::writeKLVKey(const OMKLVKey& key)
   write(src, sizeof(OMKLVKey), x);
 
   POSTCONDITION("All bytes written", x == sizeof(OMKLVKey));
+}
+
+void OMMXFStorage::writeKLVLength(const OMUInt8& length)
+{
+  TRACE("OMMXFStorage::writeKLVLength");
+
+  writeBerLength(sizeof(OMUInt8), length);
+}
+
+void OMMXFStorage::writeKLVLength(const OMUInt16& length)
+{
+  TRACE("OMMXFStorage::writeKLVLength");
+
+  writeBerLength(sizeof(OMUInt16), length);
+}
+
+void OMMXFStorage::writeKLVLength(const OMUInt32& length)
+{
+  TRACE("OMMXFStorage::writeKLVLength");
+
+  writeBerLength(sizeof(OMUInt32), length);
+}
+
+void OMMXFStorage::writeKLVLength(const OMUInt64& length)
+{
+  TRACE("OMMXFStorage::writeKLVLength");
+
+  writeBerLength(sizeof(OMUInt64), length);
+}
+
+void OMMXFStorage::writeBerLength(OMUInt32 lengthSize, const OMUInt64& length)
+{
+  TRACE("OMMXFStorage::writeBerLength");
+
+  PRECONDITION("Valid size", lengthSize > 0);
+
+  OMByte berLength[sizeof(OMUInt64) + 1]; // Max
+
+  OMKLVStoredObject::berEncode(berLength,
+                               sizeof(berLength),
+                               lengthSize,
+                               length);
+  OMUInt32 x;
+  write(berLength, lengthSize + 1, x);
+
+  POSTCONDITION("All bytes written", x == (lengthSize + 1));
 }
 
 OMMXFStorage::ObjectDirectory* OMMXFStorage::instanceIdToObject(void)
