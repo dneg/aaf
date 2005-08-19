@@ -104,6 +104,18 @@ bool OMMXFStorage::containsEssenceContainerLabel(const OMKLVKey& label) const
   return result;
 }
 
+  // @mfunc Create an iterator over the set of essence container labels.
+  //  @rdesc The newly created iterator.
+OMMXFStorage::LabelSetIterator* OMMXFStorage::containerLabels(void) const
+{
+  TRACE("OMMXFStorage::containerLabels");
+
+  LabelSetIterator* result = new LabelSetIterator(_essenceContainerLabels,
+                                                  OMBefore);
+  ASSERT("Valid heap pointer", result != 0);
+  return result;
+}
+
 OMMXFStorage::ObjectDirectory* OMMXFStorage::instanceIdToObject(void)
 {
   TRACE("OMMXFStorage::instanceIdToObject");
