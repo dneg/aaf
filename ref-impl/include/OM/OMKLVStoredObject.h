@@ -268,7 +268,6 @@ public:
 
   virtual void flatRestore(const OMPropertySet& properties);
   virtual void deepRestore(const OMPropertySet& properties);
-  virtual void streamRestore(void);
 
   virtual void referenceRestore(OMStorable* object, OMPropertyId pid);
 
