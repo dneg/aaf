@@ -384,7 +384,7 @@ void OMKLVStoredObject::save(OMFile& file)
   _storage->setPosition(pos);
 
   // Write the primer
-  writePrimerPack(_storage, file.dictionary(), _reorderBytes);
+  writePrimerPack(file.dictionary());
 
   // Save the rest of the file
   file.root()->save();
@@ -407,10 +407,10 @@ void OMKLVStoredObject::save(OMFile& file)
     fillAlignment = bodyPartitionOffset;
   }
   OMUInt64 currentPosition = _storage->position();
-  fillAlignK(_storage, currentPosition, fillAlignment);
+  _storage->fillAlignK(currentPosition, fillAlignment);
 
   if (!metaDataOnly) {
-    writeBodyPartition(_storage);
+    _storage->writeBodyPartition();
   }
 
   if (!metaDataOnly) {
@@ -630,12 +630,12 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
 #endif
 
   // Read the header partition
-  readHeaderPartition(_storage);
+  _storage->readHeaderPartition();
 
   readKLVFill(_storage);
 
   // Read the primer
-  readPrimerPack(_storage, file.dictionary(), _reorderBytes);
+  readPrimerPack(file.dictionary());
 
   file.setLoadMode(OMFile::lazyLoad);
 
@@ -1832,102 +1832,6 @@ void OMKLVStoredObject::referenceRestore(OMStorable* object,
   ASSERT("Identifier present", instanceIdToObject()->contains(iid));
 }
 
-void OMKLVStoredObject::writeHeaderPartition(void)
-{
-  OMKLVKey headerPartitionPackKey =
-    {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
-     0x0d, 0x01, 0x02, 0x01, 0x01, 0x02, 0x02, 0x00};
-  OMUInt32 KAGSize = 0x100;
-  writePartition(_storage, headerPartitionPackKey, KAGSize, _reorderBytes);
-  OMUInt64 currentPosition = _storage->position();
-  fillAlignK(_storage, currentPosition, KAGSize);
-}
-
-void OMKLVStoredObject::writeBodyPartition(OMRawStorage* store)
-{
-  bool reorderBytes;
-  if (hostByteOrder() == bigEndian) {
-    reorderBytes = false;
-  } else {
-    reorderBytes = true;
-  }
-  OMKLVKey ClosedBodyPartitionPackKey =
-    {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
-     0x0d, 0x01, 0x02, 0x01, 0x01, 0x03, 0x02, 0x00};
-  OMUInt32 KAGSize = 0x200;
-  writePartition(store, ClosedBodyPartitionPackKey, KAGSize, reorderBytes);
-  OMUInt64 currentPosition = store->position();
-  fillAlignV(store, currentPosition, KAGSize);
-}
-
-void OMKLVStoredObject::writeFooterPartition(OMRawStorage* store)
-{
-  bool reorderBytes;
-  if (hostByteOrder() == bigEndian) {
-    reorderBytes = false;
-  } else {
-    reorderBytes = true;
-  }
-  OMKLVKey ClosedFooterPartitionPackKey =
-    {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
-     0x0d, 0x01, 0x02, 0x01, 0x01, 0x04, 0x02, 0x00};
-  OMUInt32 KAGSize = 0x100;
-  writePartition(store, ClosedFooterPartitionPackKey, KAGSize, reorderBytes);
-}
-
-void OMKLVStoredObject::writePartition(OMRawStorage* store,
-                                       const OMKLVKey& key,
-                                       OMUInt32 KAGSize,
-                                       bool reorderBytes)
-{
-  OMKLVKey operationalPattern =
-    {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01,
-     0x0d, 0x01, 0x02, 0x01, 0x01, 0x01, 0x09, 0x00};
-
-  OMKLVKey essenceContainers[] = {
-    {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01,
-     0x0d, 0x01, 0x03, 0x01, 0x02, 0x01, 0x02, 0x01}
-  };
-  OMUInt32 elementSize = sizeof(OMKLVKey);
-  OMUInt32 elementCount = sizeof(essenceContainers) / elementSize;
-
-  writeKLVKey(store, key);
-  OMUInt64 sizeOfFixedPortion = 88;
-  OMUInt64 length = sizeOfFixedPortion + (elementCount * elementSize);
-#if defined(BER9)
-  writeKLVLength(store, length);
-#else
-  writeBerLength(store, 3, length);
-#endif
-  OMUInt16 majorVersion = currentMajorVersion;
-  write(store, majorVersion, reorderBytes);
-  OMUInt16 minorVersion = currentMinorVersion;
-  write(store, minorVersion, reorderBytes);
-  write(store, KAGSize, reorderBytes);
-  OMUInt64 thisPartition = 0;
-  write(store, thisPartition, reorderBytes);
-  OMUInt64 previousPartition = 0;
-  write(store, previousPartition, reorderBytes);
-  OMUInt64 footerPartition = 0;
-  write(store, footerPartition, reorderBytes);
-  OMUInt64 headerByteCount = 0;
-  write(store, headerByteCount, reorderBytes);
-  OMUInt64 indexByteCount = 0;
-  write(store, indexByteCount, reorderBytes);
-  OMUInt32 indexSID = 1;
-  write(store, indexSID, reorderBytes);
-  OMUInt64 bodyOffset = 0;
-  write(store, bodyOffset, reorderBytes);
-  OMUInt32 bodySID = 2;
-  write(store, bodySID, reorderBytes);
-  writeKLVKey(store, operationalPattern);
-  write(store, elementCount, reorderBytes);
-  write(store, elementSize, reorderBytes);
-  for (OMUInt32 i = 0; i < elementCount; i++) {
-    writeKLVKey(store, essenceContainers[i]);
-  }
-}
-
 void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
 {
   TRACE("OMKLVStoredObject::writePrimerPack");
@@ -1988,129 +1892,6 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
     delete properties;
   }
   delete classes;
-}
-
-void OMKLVStoredObject::writePrimerPack(OMRawStorage* store,
-                                        const OMDictionary* dictionary,
-                                        bool reorderBytes)
-{
-  TRACE("OMKLVStoredObject::writePrimerPack");
-
-  OMKLVKey primerPackKey =
-    {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
-     0x0d, 0x01, 0x02, 0x01, 0x01, 0x05, 0x01, 0x00};
-
-  OMUInt32 KAGSize = 0x100;
-
-  OMUInt32 elementCount = 0;
-  ClassDefinitionsIterator* classes = dictionary->classDefinitions();
-  while (++(*classes)) {
-    OMObject* obj = classes->currentObject();
-    OMClassDefinition* classDefinition = dynamic_cast<OMClassDefinition*>(obj);
-    ASSERT("Object is correct type", classDefinition != 0);
-    PropertyDefinitionsIterator*
-                           properties = classDefinition->propertyDefinitions();
-    while (++(*properties)) {
-      OMObject* obj = properties->currentObject();
-      OMPropertyDefinition* propertyDefinition =
-                                      dynamic_cast<OMPropertyDefinition*>(obj);
-      ASSERT("Object is correct type", propertyDefinition != 0);
-      OMPropertyId pid = propertyDefinition->localIdentification();
-      if (pid >= 0x8000) {
-        elementCount = elementCount + 1;
-      }
-    }
-    delete properties;
-  }
-  delete classes;
-
-  OMUInt32 elementSize = sizeof(OMPropertyId) +
-                         sizeof(OMUniqueObjectIdentification);
-  writeKLVKey(store, primerPackKey);
-  OMUInt64 sizeOfFixedPortion = 8;
-  OMUInt64 length = sizeOfFixedPortion + (elementCount * elementSize);
-  writeKLVLength(store, length);
-  write(store, elementCount, reorderBytes);
-  write(store, elementSize, reorderBytes);
-
-  classes = dictionary->classDefinitions();
-  while (++(*classes)) {
-    OMObject* obj = classes->currentObject();
-    OMClassDefinition* classDefinition = dynamic_cast<OMClassDefinition*>(obj);
-    ASSERT("Object is correct type", classDefinition != 0);
-    PropertyDefinitionsIterator*
-                           properties = classDefinition->propertyDefinitions();
-    while (++(*properties)) {
-      OMObject* obj = properties->currentObject();
-      OMPropertyDefinition* propertyDefinition =
-                                      dynamic_cast<OMPropertyDefinition*>(obj);
-      ASSERT("Object is correct type", propertyDefinition != 0);
-      OMPropertyId pid = propertyDefinition->localIdentification();
-      if (pid >= 0x8000) {
-        write(store, pid, reorderBytes);
-        OMUniqueObjectIdentification id =
-                                    propertyDefinition->uniqueIdentification();
-        OMKLVKey k;
-        convert(k, id);
-        writeKLVKey(store, k);
-      }
-    }
-    delete properties;
-  }
-  delete classes;
-
-  OMUInt64 currentPosition = store->position();
-  fillAlignK(store, currentPosition, KAGSize);
-}
-
-  // @cmember Write fill so that the next key is page aligned.
-  //   @parm The <c OMRawStorage> on which to write.
-  //   @parm The current position.
-  //   @parm The page/KAG size.
-void OMKLVStoredObject::fillAlignK(OMRawStorage* store,
-                                   const OMUInt64& currentPosition,
-                                   const OMUInt32& KAGSize)
-{
-  TRACE("OMKLVStoredObject::fillAlignK");
-
-#if defined(BER9)
-  OMUInt64 minimumFill = sizeof(OMKLVKey) + sizeof(OMUInt64) + 1;
-#else
-  OMUInt64 minimumFill = sizeof(OMKLVKey) + 3 + 1;
-#endif
-  OMUInt64 nextPage = (currentPosition / KAGSize) + 1;
-  OMUInt64 remainder = (nextPage * KAGSize) - currentPosition;
-  if (remainder < minimumFill) {
-    remainder = remainder + KAGSize;
-  }
-  remainder = remainder - minimumFill; // Subtract key and length of fill
-  writeKLVFill(store, remainder);
-}
-
-  // @mfunc Write fill so that the next value is page aligned.
-  //   @parm The <c OMRawStorage> on which to write.
-  //   @parm The current position.
-  //   @parm The page/KAG size.
-void OMKLVStoredObject::fillAlignV(OMRawStorage* store,
-                                   const OMUInt64& currentPosition,
-                                   const OMUInt32& KAGSize)
-{
-  TRACE("OMKLVStoredObject::fillAlignV");
-
-#if defined(BER9)
-  OMUInt64 minimumFill = sizeof(OMKLVKey) + sizeof(OMUInt64) + 1;
-#else
-  OMUInt64 minimumFill = sizeof(OMKLVKey) + 3 + 1;
-#endif
-  OMUInt64 nextPage = (currentPosition / KAGSize) + 1;
-  OMUInt64 remainder = (nextPage * KAGSize) - currentPosition;
-  // Subtract key and length of triplet following this fill
-  remainder = remainder - (sizeof(OMKLVKey) + sizeof(OMUInt64) + 1);
-  if (remainder < minimumFill) {
-    remainder = remainder + KAGSize;
-  }
-  remainder = remainder - minimumFill; // Subtract key and length of fill
-  writeKLVFill(store, remainder);
 }
 
 void OMKLVStoredObject::writeKLVKey(OMRawStorage* store, const OMKLVKey& key)
@@ -2382,77 +2163,6 @@ OMUInt64 OMKLVStoredObject::readBerLength(OMRawStorage* store)
   return result;
 }
 
-bool OMKLVStoredObject::readHeaderPartition(OMRawStorage* store)
-{
-  TRACE("OMKLVStoredObject::readHeaderPartition");
-
-  bool reorderBytes;
-  if (hostByteOrder() == bigEndian) {
-    reorderBytes = false;
-  } else {
-    reorderBytes = true;
-  }
-  OMKLVKey headerPartitionPackKey =
-    {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
-     0x0d, 0x01, 0x02, 0x01, 0x01, 0x02, 0x00, 0x00};
-  OMKLVKey k;
-  bool result = true;
-#if 0
-  readKLVKey(store, k);
-#else
-  OMUInt32 bytesRead;
-  store->read(reinterpret_cast<OMByte*>(&k), sizeof(OMKLVKey), bytesRead);
-  if (bytesRead != sizeof(OMKLVKey)) {
-    memset(&k, 0, sizeof(k));
-  }
-#endif
-  k.octet14 = 0x00;
-  if (memcmp(&k, &headerPartitionPackKey, sizeof(OMKLVKey)) == 0) {
-    readKLVLength(store);
-    OMUInt16 majorVersion;
-    read(store, majorVersion, reorderBytes);
-    if (majorVersion != currentMajorVersion) {
-      result = false;
-    }
-    OMUInt16 minorVersion;
-    read(store, minorVersion, reorderBytes);
-    if (minorVersion != currentMinorVersion) {
-      result = false;
-    }
-    OMUInt32 KAGSize;
-    read(store, KAGSize, reorderBytes);
-    OMUInt64 thisPartition;
-    read(store, thisPartition, reorderBytes);
-    OMUInt64 previousPartition;
-    read(store, previousPartition, reorderBytes);
-    OMUInt64 footerPartition;
-    read(store, footerPartition, reorderBytes);
-    OMUInt64 headerByteCount;
-    read(store, headerByteCount, reorderBytes);
-    OMUInt64 indexByteCount;
-    read(store, indexByteCount, reorderBytes);
-    OMUInt32 indexSID;
-    read(store, indexSID, reorderBytes);
-    OMUInt64 bodyOffset;
-    read(store, bodyOffset, reorderBytes);
-    OMUInt32 bodySID;
-    read(store, bodySID, reorderBytes);
-    OMKLVKey operationalPattern;
-    readKLVKey(store, operationalPattern);
-    OMUInt32 elementCount;
-    read(store, elementCount, reorderBytes);
-    OMUInt32 elementSize;
-    read(store, elementSize, reorderBytes);
-    OMKLVKey essenceContainer;
-    for (OMUInt32 i = 0; i < elementCount; i++) {
-      readKLVKey(store, essenceContainer);
-    }
-  } else {
-    result = false;
-  }
-  return result;
-}
-
 void OMKLVStoredObject::readPrimerPack(OMDictionary* /* dictionary */)
 {
   TRACE("OMKLVStoredObject::readPrimerPack");
@@ -2472,36 +2182,6 @@ void OMKLVStoredObject::readPrimerPack(OMDictionary* /* dictionary */)
     _storage->read(pid, _reorderBytes);
     OMKLVKey x;
     _storage->readKLVKey(x);
-    OMUniqueObjectIdentification id;
-    convert(id, x);
-  }
-}
-
-void OMKLVStoredObject::readPrimerPack(OMRawStorage* store,
-                                       OMDictionary* /* dictionary */,
-                                       bool reorderBytes)
-{
-  TRACE("OMKLVStoredObject::readPrimerPack");
-
-  OMKLVKey primerPackKey =
-    {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
-     0x0d, 0x01, 0x02, 0x01, 0x01, 0x05, 0x01, 0x00};
-
-  OMKLVKey k;
-  readKLVKey(store, k);
-  ASSERT("Primer key", memcmp(&primerPackKey, &k, sizeof(OMKLVKey)) == 0);
-  readKLVLength(store);
-  OMUInt32 elementCount;
-  read(store, elementCount, reorderBytes);
-  OMUInt32 elementSize;
-  read(store, elementSize, reorderBytes);
-  ASSERT("Valid element size",
-                       elementSize == sizeof(OMKLVKey) + sizeof(OMPropertyId));
-  for (OMUInt32 i = 0; i < elementCount; i++) {
-    OMPropertyId pid;
-    read(store, pid, reorderBytes);
-    OMKLVKey x;
-    readKLVKey(store, x);
     OMUniqueObjectIdentification id;
     convert(id, x);
   }
