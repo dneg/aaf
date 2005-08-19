@@ -27,6 +27,7 @@
 #include "OMUtilities.h"
 #include "OMAssertions.h"
 #include "OMDiskRawStorage.h"
+#include "OMMXFStorage.h"
 
   // @mfunc Constructor.
 OMKLVStoredObjectFactory::OMKLVStoredObjectFactory(
@@ -68,7 +69,9 @@ OMStoredObject*
 OMKLVStoredObjectFactory::openRead(OMRawStorage* rawStorage)
 {
   TRACE("OMKLVStoredObjectFactory::openRead");
-  return OMKLVStoredObject::openRead(rawStorage);
+  OMMXFStorage* storage = new OMMXFStorage(rawStorage);
+  ASSERT("Valid heap pointer", storage != 0);
+  return OMKLVStoredObject::openRead(storage);
 }
 
   // @mfunc Open the root <c OMKLVStoredObject> in the raw storage
@@ -79,7 +82,9 @@ OMStoredObject*
 OMKLVStoredObjectFactory::openModify(OMRawStorage* rawStorage)
 {
   TRACE("OMKLVStoredObjectFactory::openModify");
-  return OMKLVStoredObject::openModify(rawStorage);
+  OMMXFStorage* storage = new OMMXFStorage(rawStorage);
+  ASSERT("Valid heap pointer", storage != 0);
+  return OMKLVStoredObject::openModify(storage);
 }
 
   // @mfunc Create a new root <c OMKLVStoredObject> in the raw storage
@@ -94,7 +99,9 @@ OMKLVStoredObjectFactory::createWrite(OMRawStorage* rawStorage,
 {
   TRACE("OMKLVStoredObjectFactory::createWrite");
 
-  OMKLVStoredObject* result = OMKLVStoredObject::createWrite(rawStorage,
+  OMMXFStorage* storage = new OMMXFStorage(rawStorage);
+  ASSERT("Valid heap pointer", storage != 0);
+  OMKLVStoredObject* result = OMKLVStoredObject::createWrite(storage,
                                                              byteOrder);
   if (!OMKLVStoredObject::metaDataOnly) {
     result->writeHeaderPartition();
@@ -114,7 +121,9 @@ OMKLVStoredObjectFactory::createModify(OMRawStorage* rawStorage,
 {
   TRACE("OMKLVStoredObjectFactory::createModify");
 
-  OMKLVStoredObject* result = OMKLVStoredObject::createModify(rawStorage,
+  OMMXFStorage* storage = new OMMXFStorage(rawStorage);
+  ASSERT("Valid heap pointer", storage != 0);
+  OMKLVStoredObject* result = OMKLVStoredObject::createModify(storage,
                                                               byteOrder);
   if (!OMKLVStoredObject::metaDataOnly) {
     result->writeHeaderPartition();
@@ -132,7 +141,9 @@ OMKLVStoredObjectFactory::openRead(const wchar_t* fileName)
 {
   TRACE("OMKLVStoredObjectFactory::openRead");
   OMDiskRawStorage* rawStorage = OMDiskRawStorage::openExistingRead(fileName);
-  OMStoredObject* result = OMKLVStoredObject::openRead(rawStorage);
+  OMMXFStorage* storage = new OMMXFStorage(rawStorage);
+  ASSERT("Valid heap pointer", storage != 0);
+  OMStoredObject* result = OMKLVStoredObject::openRead(storage);
   return result;
 }
 
