@@ -56,7 +56,7 @@ void OMKLVStoredStream::read(void* ANAME(data), size_t ANAME(size)) const
 
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
-
+#if 0 // tjb not yet
   // @mfunc Attempt to read the vector of buffers given by <p buffers>
   //        from this <c OMKLVStoredStream>. This is "read scatter". The
   //        <p bufferCount> buffers are read in order until all have
@@ -88,7 +88,7 @@ void OMKLVStoredStream::probe(OMUInt64 /* position */,
   TRACE("OMKLVStoredStream::probe");
   ASSERT("Unimplemented code not reached", false);
 }
-
+#endif
 void OMKLVStoredStream::read(OMByte* data,
                              const OMUInt32 bytes,
                              OMUInt32& bytesRead) const
@@ -102,7 +102,7 @@ void OMKLVStoredStream::read(OMByte* data,
   OMKLVStoredStream* nonConstThis = const_cast<OMKLVStoredStream*>(this);
   nonConstThis->_position = _position + bytesRead;
 }
-
+#if 0 // tjb not yet
   // Asynchronous read - single buffer
 void OMKLVStoredStream::read(OMUInt64 position,
                              OMByte* buffer,
@@ -142,7 +142,7 @@ void OMKLVStoredStream::read(OMUInt64 position,
                        completion,
                        clientArgument);
 }
-
+#endif
 void OMKLVStoredStream::write(void* ANAME(data), size_t ANAME(size))
 {
   TRACE("OMKLVStoredStream::write");
@@ -169,7 +169,7 @@ void OMKLVStoredStream::write(const OMByte* data,
                         bytesWritten);
   _position = _position + bytesWritten;
 }
-
+#if 0 // tjb not yet
   // @cmember Attempt to write the vector of buffers given by <p buffers>
   //          to this <c OMKLVStoredStream>. This is "write gather". The
   //          <p bufferCount> buffers are written in order until all have
@@ -232,7 +232,7 @@ void OMKLVStoredStream::write(OMUInt64 position,
                         completion,
                         clientArgument);
 }
-
+#endif
 OMUInt64 OMKLVStoredStream::size(void) const
 {
   TRACE("OMKLVStoredStream::size");

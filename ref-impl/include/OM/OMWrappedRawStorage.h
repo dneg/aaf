@@ -172,7 +172,7 @@ public:
                             OMByte* bytes,
                             OMUInt32 byteCount,
                             OMUInt32& bytesRead) const;
-
+#if 0 // tjb not yet
     // @cmember Attempt to fill the vector of buffers given by <p buffers>
     //          with stream data read from offset <p position> in
     //          this <c OMWrappedRawStorage>. This is "read scatter".
@@ -199,7 +199,7 @@ public:
                             OMUInt32 bufferCount,
                             void* /* */ completion,
                             const void* clientArgument) const;
-
+#endif
     // @cmember Attempt to write the number of stream data bytes given by
     //          <p byteCount> to offset  <p position> in this
     //          <c OMWrappedRawStorage>
@@ -210,7 +210,7 @@ public:
                              const OMByte* bytes,
                              OMUInt32 byteCount,
                              OMUInt32& bytesWritten);
-
+#if 0 // tjb not yet
     // @cmember Attempt to write the vector of buffers given by <p buffers>
     //          to this <c OMWrappedRawStorage>. Stream data bytes are written
     //          starting at offset <p position> in this
@@ -239,7 +239,7 @@ public:
                              OMUInt32 bufferCount,
                              void* /* */ completion,
                              const void* clientArgument);
-
+#endif
 private:
   OMRawStorage* _store;
 };

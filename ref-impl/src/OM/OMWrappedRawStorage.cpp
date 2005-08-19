@@ -252,7 +252,7 @@ void OMWrappedRawStorage::setPosition(OMUInt64 newPosition) const
 
   _store->setPosition(newPosition);
 }
-
+#if 0 // tjb not yet
 void OMWrappedRawStorage::streamReadAt(OMUInt64 position,
                                        OMByte* bytes,
                                        OMUInt32 byteCount,
@@ -344,3 +344,4 @@ void OMWrappedRawStorage::streamWriteAt(OMUInt64 position,
                         completion,
                         clientArgument);
 }
+#endif
