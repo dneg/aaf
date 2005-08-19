@@ -301,12 +301,21 @@ public:
   static OMStorable* object(const OMUniqueObjectIdentification& instanceId);
 
   static OMSet<OMStorable*, OMUniqueObjectIdentification>* _objectToInstanceId;
-  static OMSet<OMUniqueObjectIdentification, OMStorable*>* _instanceIdToObject;
+
+  struct ObjectDirectoryEntry {
+    OMStorable* _object;
+    OMUInt64 _offset;
+    OMUInt8 _flags;
+  };
+
+  static OMSet<OMUniqueObjectIdentification,
+               ObjectDirectoryEntry>* _instanceIdToObject;
 
   static OMSet<OMStorable*, OMUniqueObjectIdentification>* objectToInstanceId(
                                                                          void);
-  static OMSet<OMUniqueObjectIdentification, OMStorable*>* instanceIdToObject(
-                                                                         void);
+  static OMSet<OMUniqueObjectIdentification,
+               ObjectDirectoryEntry>* instanceIdToObject(void);
+
     // Stream -> streamId
   static OMKLVKey streamId(OMDataStream* stream);
 
