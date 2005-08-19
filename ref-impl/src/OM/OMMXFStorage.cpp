@@ -23,16 +23,18 @@
 // @doc OMINTERNAL
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMMXFStorage
 
+#include "OMMXFStorage.h"
+
 #include "OMRawStorage.h"
 #include "OMAssertions.h"
 #include "OMExceptions.h"
 #include "OMUtilities.h"
-
-#include "OMMXFStorage.h"
+#include "OMSet.h"
 
   // @mfunc Constructor.
 OMMXFStorage::OMMXFStorage(OMRawStorage* store)
-: OMWrappedRawStorage(store)
+: OMWrappedRawStorage(store),
+  _instanceIdToObject(0)
 {
   TRACE("OMMXFStorage::OMMXFStorage");
 }
@@ -41,4 +43,20 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
 OMMXFStorage::~OMMXFStorage(void)
 {
   TRACE("OMMXFStorage::~OMMXFStorage");
+
+  if (_instanceIdToObject != 0) {
+    _instanceIdToObject->clear();
+    delete _instanceIdToObject;
+    _instanceIdToObject = 0;
+  }
+}
+
+OMMXFStorage::ObjectDirectory* OMMXFStorage::instanceIdToObject(void)
+{
+  TRACE("OMMXFStorage::instanceIdToObject");
+  if (_instanceIdToObject == 0) {
+    _instanceIdToObject = new ObjectDirectory();
+    ASSERT("Valid heap pointer", _instanceIdToObject != 0);
+  }
+  return _instanceIdToObject;
 }
