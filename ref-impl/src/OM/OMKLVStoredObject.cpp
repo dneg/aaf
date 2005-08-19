@@ -626,12 +626,10 @@ void OMKLVStoredObject::save(const OMPropertyTable* /* table */)
   // @mfunc Save the <c OMDataStream> <p stream> in this
   //        <c OMKLVStoredObject>.
   //   @parm The <c OMDataStream> to save.
-void OMKLVStoredObject::save(const OMDataStream& stream)
+void OMKLVStoredObject::save(const OMDataStream& /* stream */)
 {
   TRACE("OMKLVStoredObject::save(OMDataStream)");
-
-  OMDataStream* ds = const_cast<OMDataStream*>(&stream);
-  _storage->streamSave(ds);
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
 OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
@@ -1326,67 +1324,6 @@ void OMKLVStoredObject::deepSave(const OMPropertySet& properties) const
       case SF_STRONG_OBJECT_REFERENCE:
       case SF_STRONG_OBJECT_REFERENCE_VECTOR:
       case SF_STRONG_OBJECT_REFERENCE_SET: {
-        p->save();
-        break;
-      }
-      default:
-        break;
-      }
-    }
-  }
-}
-
-void OMKLVStoredObject::streamSave(const OMPropertySet& properties) const
-{
-  TRACE("OMKLVStoredObject::streamSave");
-
-  OMPropertySetIterator iterator(properties, OMBefore);
-  while (++iterator) {
-    OMProperty* p = iterator.property();
-    ASSERT("Valid property", p != 0);
-    ASSERT("Property has a definition", p->definition() != 0);
-    if (!p->isOptional() || p->isPresent()) {
-      switch (p->storedForm()) {
-      case SF_STRONG_OBJECT_REFERENCE: {
-        OMStrongReference* sr = dynamic_cast<OMStrongReference*>(p);
-        ASSERT("Valid type", sr != 0);
-        OMStrongObjectReference& r = sr->reference();
-        OMStorable* object = r.getValue();
-        ASSERT("Valid object", object != 0);
-        streamSave(*object->propertySet());
-        break;
-      }
-      case SF_STRONG_OBJECT_REFERENCE_VECTOR: {
-        OMStrongReferenceVector* v = dynamic_cast<OMStrongReferenceVector*>(p);
-        ASSERT("Valid type", v != 0);
-        OMContainerIterator<OMStrongReferenceVectorElement>& iterator =
-                                                                *v->iterator();
-        while (++iterator) {
-          OMStrongReferenceVectorElement& element = iterator.value();
-          OMStrongObjectReference& r = element.reference();
-          OMStorable* object = r.getValue();
-          ASSERT("Valid object", object != 0);
-          streamSave(*object->propertySet());
-        }
-        delete &iterator;
-        break;
-      }
-      case SF_STRONG_OBJECT_REFERENCE_SET: {
-        OMStrongReferenceSet* s = dynamic_cast<OMStrongReferenceSet*>(p);
-        ASSERT("Valid type", s != 0);
-        OMContainerIterator<OMStrongReferenceSetElement>& iterator =
-                                                                *s->iterator();
-        while (++iterator) {
-          OMStrongReferenceSetElement& element = iterator.value();
-          OMStrongObjectReference& r = element.reference();
-          OMStorable* object = r.getValue();
-          ASSERT("Valid object", object != 0);
-          streamSave(*object->propertySet());
-        }
-        delete &iterator;
-        break;
-      }
-      case SF_DATA_STREAM: {
         p->save();
         break;
       }
