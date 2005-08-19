@@ -851,9 +851,6 @@ void OMMXFStorage::readKLVFill(void) const
 {
   TRACE("OMMXFStorage::readKLVFill");
 
-  OMKLVKey k;
-  readKLVKey(k);
-  ASSERT("Fill key", k == fillKey);
   OMUInt64 length = readKLVLength();
   for (OMUInt64 i = 0; i < length; i++) {
     OMByte b;
