@@ -86,15 +86,15 @@ OMKLVStoredObject* OMKLVStoredObject::openRead(OMMXFStorage* rawStorage)
   //   @parm The raw storage in which to open the file.
   //   @rdesc An <c OMKLVStoredObject> representing the root object.
   //        <p rawStorage> for modification.
-OMKLVStoredObject* OMKLVStoredObject::openModify(
-                                               OMMXFStorage* ANAME(rawStorage))
+OMKLVStoredObject* OMKLVStoredObject::openModify(OMMXFStorage* rawStorage)
 {
   TRACE("OMKLVStoredObject::openModify");
   PRECONDITION("Compatible raw storage access mode",
                          rawStorage->isReadable() && rawStorage->isWritable());
   PRECONDITION("Compatible raw storage", rawStorage->isPositionable());
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  return 0;
+  OMKLVStoredObject* result = new OMKLVStoredObject(rawStorage, littleEndian);
+  ASSERT("Valid heap pointer", result != 0);
+  return result;
 }
 
   // @mfunc Create a new root <c OMKLVStoredObject> in the raw storage
