@@ -329,13 +329,8 @@ void OMMXFStorage::writeKLVFill(const OMUInt64& length)
   writeKLVKey(fillKey);
   writeKLVLength(length);
   for (OMUInt64 i = 0; i < length; i++) {
-#if defined(OM_DEBUG)
-    const OMByte fillPattern[] = "FFFF.FFFB ";
-    write(fillPattern[i % (sizeof(fillPattern) - 1)]);
-#else
     const OMByte fillPattern = 0;
     write(fillPattern);
-#endif
   }
 }
 
