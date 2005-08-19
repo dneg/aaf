@@ -43,6 +43,12 @@
 #include "OMStorable.h"
 #include "OMClassFactory.h"
 
+//#define OM_MXFDEBUG
+
+#if defined(OM_MXFDEBUG)
+#include "OMOStream.h"
+#endif
+
 //#define INSTANCEID_DEBUG 1
 //#define OMONLY 1
 
@@ -166,6 +172,10 @@ void OMMXFStorage::close(void)
   fixupReference(0 + sizeof(OMKLVKey) + 8 + 1 + 32, metadataSize);
 
   writeRandomIndex();
+#if defined(OM_MXFDEBUG)
+  printPartitions();
+  printStreams();
+#endif
 }
 
   // @mfunc Set the operational pattern to <p pattern>.
@@ -1931,6 +1941,10 @@ void OMMXFStorage::restoreStreams(void)
                          gridSize);
   }
 #endif
+#if defined(OM_MXFDEBUG)
+  printPartitions();
+  printStreams();
+#endif
 }
 
 OMMXFStorage::SegmentListIterator*
@@ -2395,4 +2409,57 @@ void OMMXFStorage::addPartition(OMUInt64 address,
   newPartition->_address = address;
   newPartition->_sid = bodySID;
   _partitions.insertAt(newPartition, index);
+}
+
+void OMMXFStorage::printPartitions(void)
+{
+  TRACE("OMMXFStorage::printPartitions");
+#if defined(OM_MXFDEBUG)
+  size_t count = _partitions.count();
+  for (OMUInt32 i = 0; i < count; i++) {
+    Partition* p = _partitions.valueAt(i);
+    omout << p->_sid;
+    omout << " : ";
+    omout << hex << setw(8) << p->_address;
+    omout << endl;
+  }
+#endif
+}
+
+void OMMXFStorage::printStreams(void)
+{
+  TRACE("OMMXFStorage::printStreams");
+#if defined(OM_MXFDEBUG)
+  if (_segmentMap != 0) {
+    SegmentMapIterator iter(*_segmentMap, OMBefore);
+    while (++iter) {
+      Stream* s = iter.value();
+      omout << "sid = " << s->_sid << endl; // _size, _label, _gridSize
+      if (s->_segments != 0) {
+        SegmentListIterator siter(*s->_segments, OMBefore);
+        while (++siter) {
+          Segment* seg = siter.value();
+          OMUInt64 len;
+          if (s->_size > seg->_start + seg->_size) {
+            // eos in later segment
+            len = seg->_size;
+          } else if (s->_size < seg->_start) {
+            // eos in earlier segment
+            len = 0;
+          } else {
+            // eos in this segment
+            len = s->_size - seg->_start;
+          }
+
+          omout << "[ start = " << hex << setw(8) << seg->_start
+                << ", size = " << hex << setw(8) << seg->_size
+                << " (used = " << hex << setw(8) << len
+                << "), origin = " << hex << setw(8) << seg->_origin
+                << " ]" << endl;
+        }
+      }
+    }
+  }
+  omout << "File size = " << hex << setw(8) << _fileSize << endl;
+#endif
 }
