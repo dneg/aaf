@@ -286,6 +286,18 @@ bool OMMXFStorage::isFooter(const OMKLVKey& k)
   return result;
 }
 
+bool OMMXFStorage::isIndex(const OMKLVKey& k)
+{
+  TRACE("OMMXFStorage::isIndex");
+  bool result;
+  if (memcmp(&IndexTableSegmentKey, &k, sizeof(k)) == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 void OMMXFStorage::writeHeaderPartition(OMUInt32 bodySID,
                                         OMUInt32 indexSID,
                                         OMUInt32 KAGSize)
