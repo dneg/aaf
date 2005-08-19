@@ -402,9 +402,10 @@ void OMKLVStoredObject::save(OMFile& file)
     // fill remainder of pre-allocated space
     fillAlignment = bodyPartitionOffset;
   }
-  _storage->fillAlignK(_storage->position(), fillAlignment);
 
   if (!metaDataOnly) {
+    _storage->fillAlignK(_storage->position(), fillAlignment);
+
     // Save streams
     //
     streamSave(*file.root()->propertySet());
@@ -414,6 +415,9 @@ void OMKLVStoredObject::save(OMFile& file)
     OMUInt64 position = _storage->size();
     _storage->setPosition(position);
     _storage->writeFooterPartition();
+  } else {
+    _storage->fixup();
+    _storage->fillAlignK(_storage->position(), fillAlignment);
   }
 }
 
