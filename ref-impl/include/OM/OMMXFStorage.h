@@ -196,6 +196,9 @@ public:
     // Object -> instanceId
   OMUniqueObjectIdentification instanceId(OMStorable* object);
 
+    // instanceId -> object
+  OMStorable* object(const OMUniqueObjectIdentification& instanceId);
+
   typedef OMSet<OMUniqueObjectIdentification,
                 ObjectDirectoryEntry> ObjectDirectory;
   typedef OMSetIterator<OMUniqueObjectIdentification,
