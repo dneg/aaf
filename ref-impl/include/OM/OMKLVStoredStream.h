@@ -82,6 +82,14 @@ public:
                     void* /* */ completion,
                     const void* clientArgument) const;
 
+    // @cmember Find out if <p bytesRequired> contiguous bytes, starting at
+    //          <p position>, in this <c OMKLVStoredStream> are available for
+    //          writing. The actual number of bytes available is returned
+    //          in <p bytesAvailable>.
+  virtual void probe(OMUInt64 position,
+                     OMUInt32 bytesRequired,
+                     OMUInt32& bytesAvailable) const;
+
     // @cmember Write <p size> bytes from the buffer at address
     //          <p data> to this <c OMKLVStoredStream>.
   virtual void write(void* data, size_t size);
