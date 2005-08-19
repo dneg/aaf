@@ -1683,7 +1683,9 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
   while (++iterator) {
     OMProperty* p = iterator.property();
     ASSERT("Valid property", p != 0);
+#if 0 // HACK4MEIP2
     ASSERT("Property has a definition", p->definition() != 0);
+#endif
     if (!p->isOptional() || p->isPresent()) {
       switch (p->storedForm()) {
       case SF_STRONG_OBJECT_REFERENCE: {
