@@ -106,7 +106,7 @@ static const OMUInt64 bodyPartitionOffset = preallocatedMetadataSize +
 static const OMUInt32 defaultKAGSize = 0x100;
 
 static const OMUInt16 currentMajorVersion = 0xffff;
-static const OMUInt16 currentMinorVersion = 0xfff7;
+static const OMUInt16 currentMinorVersion = 0xfff6;
 
 // Total size of the fixed-size portions of a partition value
 static const OMUInt32 fixedPartitionSize =
