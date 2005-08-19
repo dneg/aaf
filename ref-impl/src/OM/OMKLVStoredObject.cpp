@@ -43,6 +43,15 @@
 #include "OMContainerElement.h"
 #include "OMDataStream.h"
 #include "OMIntegerType.h"
+#include "OMCharacterType.h"
+#include "OMStringType.h"
+#include "OMEnumeratedType.h"
+#include "OMObjectReferenceType.h"
+#include "OMRenamedType.h"
+#include "OMStreamType.h"
+#include "OMOpaqueType.h"
+#include "OMExtendibleEnumeratedType.h"
+#include "OMIndirectType.h"
 #include "OMUniqueObjectIdentType.h"
 #include "OMRootStorable.h"
 #include "OMVector.h"
@@ -2078,6 +2087,26 @@ OMKLVStoredObject::restoreObjectDirectoryReference(
   OMUInt64 offset;
   _storage->read(offset, _reorderBytes);
   return offset;
+}
+
+void OMKLVStoredObject::writeMetaDictionary(const OMDictionary* dictionary)
+{
+  TRACE("OMKLVStoredObject::writeMetaDictionary");
+}
+
+void OMKLVStoredObject::writeClassDefinition(const OMClassDefinition* cd)
+{
+  TRACE(" OMKLVStoredObject::writeClassDefinition");
+}
+
+void OMKLVStoredObject::writePropertyDefinition(const OMPropertyDefinition* pd)
+{
+  TRACE("OMKLVStoredObject::writePropertyDefinition");
+}
+
+void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
+{
+  TRACE("OMKLVStoredObject::writeTypeDefinition");
 }
 
   // @mfunc Constructor.
