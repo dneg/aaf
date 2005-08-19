@@ -28,7 +28,7 @@
 #include "OMAssertions.h"
 #include "OMDiskRawStorage.h"
 
-static bool metaDataOnly = false;
+static bool metaDataOnly = true;
 
   // @mfunc Constructor.
 OMKLVStoredObjectFactory::OMKLVStoredObjectFactory(
