@@ -34,7 +34,8 @@
   // @mfunc Constructor.
 OMMXFStorage::OMMXFStorage(OMRawStorage* store)
 : OMWrappedRawStorage(store),
-  _instanceIdToObject(0)
+  _instanceIdToObject(0),
+  _objectToInstanceId(0)
 {
   TRACE("OMMXFStorage::OMMXFStorage");
 }
@@ -49,6 +50,12 @@ OMMXFStorage::~OMMXFStorage(void)
     delete _instanceIdToObject;
     _instanceIdToObject = 0;
   }
+
+  if (_objectToInstanceId != 0) {
+    _objectToInstanceId->clear();
+    delete _objectToInstanceId;
+    _objectToInstanceId = 0;
+  }
 }
 
 OMMXFStorage::ObjectDirectory* OMMXFStorage::instanceIdToObject(void)
@@ -59,4 +66,15 @@ OMMXFStorage::ObjectDirectory* OMMXFStorage::instanceIdToObject(void)
     ASSERT("Valid heap pointer", _instanceIdToObject != 0);
   }
   return _instanceIdToObject;
+}
+
+OMMXFStorage::ObjectSet* OMMXFStorage::objectToInstanceId(void)
+{
+  TRACE("OMMXFStorage::objectToInstanceId");
+
+  if (_objectToInstanceId == 0) {
+    _objectToInstanceId = new ObjectSet();
+    ASSERT("Valid heap pointer", _objectToInstanceId != 0);
+  }
+  return _objectToInstanceId;
 }
