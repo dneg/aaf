@@ -864,7 +864,7 @@ void OMKLVStoredObject::restore(OMPropertyTable*& /* table */)
   //        <c OMKLVStoredObject>.
   //   @parm The newly restored <c OMDataStream>.
   //   @parm The external size.
-void OMKLVStoredObject::restore(OMDataStream& stream,
+void OMKLVStoredObject::restore(OMDataStream& /* stream */,
                                 size_t /* externalSize */)
 {
   TRACE("OMKLVStoredObject::restore(OMDataStream)");
