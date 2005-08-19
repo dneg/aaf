@@ -223,6 +223,7 @@ public:
 
   virtual void flatRestore(const OMPropertySet& properties);
   virtual void deepRestore(const OMPropertySet& properties);
+  virtual void streamRestore(OMRawStorage* store);
 
   virtual void referenceRestore(OMStorable* object, OMPropertyId pid);
 
