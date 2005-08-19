@@ -577,6 +577,86 @@ void OMMXFStorage::writeKLVLength(const OMUInt64& length)
   writeBerLength(sizeof(OMUInt64), length);
 }
 
+OMUInt64 OMMXFStorage::reserveKLVLength(void)
+{
+  TRACE("OMMXFStorage::reserveKLVLength");
+
+  OMUInt64 lengthPosition = position();
+  OMUInt64 length = 0;
+  writeKLVLength(length); // must be fixed up later
+  return lengthPosition;
+}
+
+OMUInt64 OMMXFStorage::reserve(OMUInt32 size)
+{
+  TRACE("OMMXFStorage::reserve");
+
+  PRECONDITION("Valid size", (size == 1) || (size == 2) ||
+                             (size == 4) || (size == 8));
+  OMUInt64 result = position();
+  for (OMUInt32 i = 0; i < size; i++) {
+    OMByte b = 0;
+    write(b);
+  }
+  return result;
+}
+
+void OMMXFStorage::fixup(const OMUInt64& patchOffset,
+                         const OMUInt8& patchValue)
+{
+  TRACE("OMMXFStorage::fixup");
+
+  OMUInt64 savedPosition = position();
+  setPosition(patchOffset);
+  write(patchValue);
+  setPosition(savedPosition);
+}
+
+void OMMXFStorage::fixup(const OMUInt64& patchOffset,
+                         const OMUInt16& patchValue)
+{
+  TRACE("OMMXFStorage::fixup");
+
+  OMUInt64 savedPosition = position();
+  setPosition(patchOffset);
+  write(patchValue, _reorderBytes);
+  setPosition(savedPosition);
+}
+
+void OMMXFStorage::fixup(const OMUInt64& patchOffset,
+                         const OMUInt32& patchValue)
+{
+  TRACE("OMMXFStorage::fixup");
+
+  OMUInt64 savedPosition = position();
+  setPosition(patchOffset);
+  write(patchValue, _reorderBytes);
+  setPosition(savedPosition);
+}
+
+void OMMXFStorage::fixup(const OMUInt64& patchOffset,
+                         const OMUInt64& patchValue)
+{
+  TRACE("OMMXFStorage::fixup");
+
+  OMUInt64 savedPosition = position();
+  setPosition(patchOffset);
+  write(patchValue, _reorderBytes);
+  setPosition(savedPosition);
+}
+
+void OMMXFStorage::fixupKLVLength(const OMUInt64 lengthPosition)
+{
+  TRACE("OMMXFStorage::fixupKLVLength");
+
+  OMUInt64 endPosition = position();
+  ASSERT("Proper position", endPosition >= (lengthPosition + 8 + 1));
+  OMUInt64 length = endPosition - (lengthPosition + 8 + 1);
+  setPosition(lengthPosition);
+  writeKLVLength(length);
+  setPosition(endPosition);
+}
+
 void OMMXFStorage::writeBerLength(OMUInt32 lengthSize, const OMUInt64& length)
 {
   TRACE("OMMXFStorage::writeBerLength");
