@@ -114,6 +114,18 @@ OMByteOrder OMKLVStoredObject::byteOrder(void) const
   return unspecified;
 }
 
+void OMKLVStoredObject::save(OMFile& file)
+{
+  TRACE("OMKLVStoredObject::save(OMFile)");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
+void OMKLVStoredObject::save(OMStorable& object)
+{
+  TRACE("OMKLVStoredObject::save(OMFile)");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
   // @mfunc Save the <c OMStoredObjectIdentification> <p id>
   //        in this <c OMKLVStoredObject>.
   //   @parm The <t OMStoredObjectIdentification> to save.
