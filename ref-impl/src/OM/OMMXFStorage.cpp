@@ -473,6 +473,15 @@ void OMMXFStorage::readRandomIndex(OMUInt64 length)
   read(overallLength, _reorderBytes);
 }
 
+bool OMMXFStorage::isRandomIndex(OMUInt64 fileSize, OMUInt32 ripSize)
+{
+  TRACE("OMMXFStorage::isRandomIndex");
+  
+  ASSERT("Unimplemented code not reached", false);
+  bool result = false;
+  return result;
+}
+
   // @mfunc Write a fill key, a BER encoded length and
   //        <p length> bytes of fill.
   //   @parm The number of bytes of fill to write.
