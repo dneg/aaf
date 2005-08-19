@@ -2373,6 +2373,167 @@ OMDataStream* OMKLVStoredObject::stream(const OMKLVKey& streamId)
   return result;
 }
 
+OMUInt64 OMKLVStoredObject::save(OMSet<OMUniqueObjectIdentification,
+                                       ObjectDirectoryEntry>* objectTable,
+                                 const OMUniqueObjectIdentification& root)
+{
+  TRACE("OMKLVStoredObject::save");
+
+  OMUInt64 result = _storage->position();
+
+  // {F10296F0-56E0-4d2a-9613-B38A87348746}
+  OMUniqueObjectIdentification id =
+  { 0xf10296f0, 0x56e0, 0x4d2a,
+  { 0x96, 0x13, 0xb3, 0x8a, 0x87, 0x34, 0x87, 0x46 } };
+  OMKLVKey k;
+  convert(k, id);
+  writeKLVKey(_storage, k);
+  OMUInt64 entries = objectTable->count();
+  ASSERT("At least one object", entries > 0);
+  entries = entries - 1; // root not included
+  const OMUInt8 entrySize = sizeof(OMUniqueObjectIdentification) + // iid
+                            sizeof(OMUInt64) +                     // offset
+                            sizeof(OMUInt8);                       // flags
+  OMUInt64 length = sizeof(OMUniqueObjectIdentification) + // root iid
+                    sizeof(OMUInt64) +                     // root offset
+                    sizeof(OMUInt64) +                     // entry count
+                    sizeof(OMUInt8) +                      // entry size
+                    (entries * entrySize);                 // entries
+  writeKLVLength(_storage, length);
+
+  ASSERT("Root iid known", objectTable->contains(root));
+  ObjectDirectoryEntry re;
+  objectTable->find(root, re);
+  write(_storage, root, _reorderBytes);
+  write(_storage, re._offset, _reorderBytes);
+
+  objectTable->remove(root);
+
+  write(_storage, entries, _reorderBytes);
+  write(_storage, entrySize);
+
+  OMSetIterator<OMUniqueObjectIdentification, ObjectDirectoryEntry>
+                                      iterator(*_instanceIdToObject, OMBefore);
+  while (++iterator) {
+    OMUniqueObjectIdentification id = iterator.key();
+    ObjectDirectoryEntry e = iterator.value();
+    write(_storage, id, _reorderBytes);
+    write(_storage, e._offset, _reorderBytes);
+    write(_storage, e._flags);
+  }
+  return result;
+}
+
+void OMKLVStoredObject::restore(OMSet<OMUniqueObjectIdentification,
+                                      ObjectDirectoryEntry>* objectTable)
+{
+  TRACE("restore");
+  PRECONDITION("Valid metadata directory", objectTable != 0);
+  PRECONDITION("Valid metadata directory offset", _objectDirectory != 0);
+
+  OMUInt64 savedPosition = _storage->position();
+  _storage->setPosition(_objectDirectory);
+
+  // {F10296F0-56E0-4d2a-9613-B38A87348746}
+  OMUniqueObjectIdentification id =
+  { 0xf10296f0, 0x56e0, 0x4d2a,
+  { 0x96, 0x13, 0xb3, 0x8a, 0x87, 0x34, 0x87, 0x46 } };
+  OMKLVKey objectDirectoryKey;
+  convert(objectDirectoryKey, id);
+  OMKLVKey k;
+  readKLVKey(_storage, k);
+  ASSERT("Expected key", k == objectDirectoryKey); // tjb - error
+  OMUInt64 setLength = readKLVLength(_storage);
+  OMUInt64 entries;
+  OMUInt8 entrySize;
+  ASSERT("Valid length", setLength > sizeof(entries) + sizeof(entrySize));
+
+  OMUniqueObjectIdentification root;
+  OMUInt64 rootOffset;
+  read(_storage, root, _reorderBytes);
+  read(_storage, rootOffset, _reorderBytes);
+
+  read(_storage, entries, _reorderBytes);
+  read(_storage, entrySize);
+  ASSERT("Valid entry size",
+                           entrySize == (sizeof(OMUniqueObjectIdentification) +
+                                         sizeof(OMUInt64) +
+                                         sizeof(OMUInt8)));
+  ASSERT("Consistent length and entry count",
+             setLength == sizeof(root) + sizeof(rootOffset) + sizeof(entries) +
+                          sizeof(entrySize) + (entries * entrySize));
+
+  for (OMUInt64 i = 0; i < entries; i++) {
+    OMUniqueObjectIdentification id;
+    ObjectDirectoryEntry e;
+
+    read(_storage, id, _reorderBytes);
+    e._object = 0;
+    read(_storage, e._offset, _reorderBytes);
+    read(_storage, e._flags);
+
+    objectTable->insert(id, e);
+  }
+
+  _storage->setPosition(savedPosition);
+}
+
+OMUInt64 OMKLVStoredObject::saveObjectDirectoryReference(
+                                        const OMUniqueObjectIdentification& id)
+{
+  OMPropertySize size = sizeof(OMUniqueObjectIdentification) +
+                        sizeof(OMUInt64);
+  // pid
+  OMPropertyId pid = 0x0003;
+  write(_storage, pid, _reorderBytes);
+  // size
+  write(_storage, size, _reorderBytes);
+  // id
+  write(_storage, id, _reorderBytes);
+  // offset (not yet known, will patch later)
+  OMUInt64 patch = _storage->position();
+  OMUInt64 offset = 0;
+  write(_storage, offset, _reorderBytes);
+  return patch;
+}
+
+void
+OMKLVStoredObject::fixupObjectDirectoryReference(OMUInt64 patchOffset,
+                                                 OMUInt64 patchValue)
+{
+  TRACE("fixupObjectDirectoryReference");
+  PRECONDITION("Valid patch offset", patchOffset != 0);
+  PRECONDITION("Valid patch value", patchValue!= 0);
+
+  OMUInt64 savedPosition = _storage->position();
+  _storage->setPosition(patchOffset);
+  write(_storage, patchValue, _reorderBytes);
+  _storage->setPosition(savedPosition);
+}
+
+OMUInt64
+OMKLVStoredObject::restoreObjectDirectoryReference(
+                                              OMUniqueObjectIdentification& id)
+{
+  TRACE("OMKLVStoredObject::restoreObjectDirectoryReference");
+
+  // pid
+  OMPropertyId pid;
+  read(_storage, pid, _reorderBytes);
+  ASSERT("Expected pid", pid == 0x0003);
+  // size
+  OMPropertySize size;
+  read(_storage, size, _reorderBytes);
+  ASSERT("Expected size",
+            size == (sizeof(OMUniqueObjectIdentification) + sizeof(OMUInt64)));
+  // id
+  read(_storage, id, _reorderBytes);
+  // offset
+  OMUInt64 offset;
+  read(_storage, offset, _reorderBytes);
+  return offset;
+}
+
 void OMKLVStoredObject::convert(OMKLVKey& key,
                                 const OMUniqueObjectIdentification& id)
 {
@@ -2489,7 +2650,9 @@ bool OMKLVStoredObject::metaDataOnly = true;
 OMKLVStoredObject::OMKLVStoredObject(OMRawStorage* s, OMByteOrder byteOrder)
 : _storage(s),
   _byteOrder(byteOrder),
-  _reorderBytes(false)
+  _reorderBytes(false),
+  _objectDirectory(0),
+  _objectDirectoryReference(0)
 {
   TRACE("OMKLVStoredObject::OMKLVStoredObject");
 
