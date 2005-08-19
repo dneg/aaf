@@ -1543,7 +1543,7 @@ void OMKLVStoredObject::referenceRestore(OMStorable* object,
   read(_storage, rPid, _reorderBytes);
   ASSERT("Property is reference/instance UID", rPid == pid);
   read(_storage, length, _reorderBytes);
-  ASSERT("Valid length", length = sizeof(OMUniqueObjectIdentification));
+  ASSERT("Valid length", length == sizeof(OMUniqueObjectIdentification));
   OMUniqueObjectIdentification iid;
   read(_storage, iid, _reorderBytes);
   ASSERT("Object not present", !objectToInstanceId()->contains(object));
