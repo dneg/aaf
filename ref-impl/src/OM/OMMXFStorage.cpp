@@ -46,7 +46,6 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
   _generation(nullOMUniqueObjectIdentification),
   _currentPartition(0),
   _objectDirectoryOffset(0),
-  _objectDirectoryReference(0),
   _instanceIdToObject(0),
   _objectToInstanceId(0),
   _streamToStreamId(0),
@@ -917,8 +916,6 @@ void OMMXFStorage::saveObjectDirectory(void)
     write(e._offset, reorderBytes);
     write(e._flags);
   }
-  // Now we know where it lives, fixup the reference
-  fixupReference(_objectDirectoryReference, _objectDirectoryOffset);
 }
 
 void OMMXFStorage::fixupReference(OMUInt64 patchOffset, OMUInt64 patchValue)
@@ -983,13 +980,6 @@ void OMMXFStorage::restoreObjectDirectory(void)
   }
 
   setPosition(savedPosition);
-}
-
-void
-OMMXFStorage::setObjectDirectoryReference(OMUInt64 objectDirectoryReference)
-{
-  TRACE("OMMXFStorage::setObjectDirectoryReference");
-  _objectDirectoryReference = objectDirectoryReference;
 }
 
 void OMMXFStorage::setObjectDirectoryOffset(OMUInt64 objectDirectoryOffset)
