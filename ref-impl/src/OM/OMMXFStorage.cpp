@@ -44,6 +44,7 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
   _operationalPattern(nullOMKLVKey),
   _essenceContainerLabels(),
   _generation(nullOMUniqueObjectIdentification),
+  _currentPartition(0),
   _objectDirectoryOffset(0),
   _objectDirectoryReference(0),
   _instanceIdToObject(0),
@@ -152,6 +153,7 @@ void OMMXFStorage::writeHeaderPartition(void)
   OMUInt32 lengthSize = 4;
 #endif
   OMUInt64 currentPosition = position();
+  _currentPartition = currentPosition;
   OMUInt64 headerByteCountReference = currentPosition +
                                       sizeof(OMKLVKey) + // Key
                                       lengthSize +       // Length
@@ -203,6 +205,9 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
   TRACE("OMMXFStorage::writePartition");
 
   OMUInt64 currentPosition = position();
+  OMUInt64 previousPartition = currentPosition - _currentPartition;
+  _currentPartition = currentPosition;
+
   OMUInt32 elementSize = sizeof(OMKLVKey);
   LabelSetIterator* iter = essenceContainerLabels();
   OMUInt32 elementCount = iter->count();
@@ -221,7 +226,6 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
   write(KAGSize, reorderBytes);
   OMUInt64 thisPartition = currentPosition;
   write(thisPartition, reorderBytes);
-  OMUInt64 previousPartition = 0;
   write(previousPartition, reorderBytes);
   OMUInt64 footerPartition = 0;
   write(footerPartition, reorderBytes);
