@@ -148,45 +148,30 @@ OMKLVStoredObject::isRecognized(OMRawStorage* rawStorage)
   } else {
     reorderBytes = true;
   }
-  bool result = true;
+  bool result = false;
   OMUInt64 headerPosition;
   bool foundHeader = OMMXFStorage::findHeader(rawStorage, headerPosition);
-  if (!foundHeader) {
-    return false;
-  }
-  rawStorage->setPosition(headerPosition);
-  OMKLVKey k;
-  if (OMMXFStorage::read(rawStorage, k)) {
-    if (OMMXFStorage::isHeader(k)) {
-      OMUInt64 length;
-      if (OMMXFStorage::readKLVLength(rawStorage, length)) {
-        OMUInt16 majorVersion;
-        if (OMMXFStorage::read(rawStorage, majorVersion, reorderBytes)) {
-          if (majorVersion == currentMajorVersion) {
-            OMUInt16 minorVersion;
-            if (OMMXFStorage::read(rawStorage, minorVersion, reorderBytes)) {
-              if (minorVersion == currentMinorVersion) {
-                result = true;
-              } else {
-                result = false;  // Minor version number doesn't match
+  if (foundHeader) {
+    rawStorage->setPosition(headerPosition);
+    OMKLVKey k;
+    if (OMMXFStorage::read(rawStorage, k)) {
+      if (OMMXFStorage::isHeader(k)) {
+        OMUInt64 length;
+        if (OMMXFStorage::readKLVLength(rawStorage, length)) {
+          OMUInt16 majorVersion;
+          if (OMMXFStorage::read(rawStorage, majorVersion, reorderBytes)) {
+            if (majorVersion == currentMajorVersion) {
+              OMUInt16 minorVersion;
+              if (OMMXFStorage::read(rawStorage, minorVersion, reorderBytes)) {
+                if (minorVersion == currentMinorVersion) {
+                  result = true;
+                }
               }
-            } else {
-              result = false; // Couldn't read minor version
             }
-          } else {
-            result = false; // Major version number doesn't match
           }
-        } else {
-          result = false; // Couldn't read major version
         }
-      } else {
-        result = false; // Couldn't read length
       }
-    } else {
-      result = false; //  Not HeaderPartition key
     }
-  } else {
-    result = false; // Couldn't read key
   }
   rawStorage->setPosition(0);
   return result;
