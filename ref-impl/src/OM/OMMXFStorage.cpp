@@ -21,27 +21,27 @@
 //=---------------------------------------------------------------------=
 
 // @doc OMINTERNAL
-// @author Tim Bingham | tjb | Avid Technology, Inc. | OMMXFRawStorage
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMMXFStorage
 
 #include "OMRawStorage.h"
 #include "OMAssertions.h"
 #include "OMExceptions.h"
 #include "OMUtilities.h"
 
-#include "OMMXFRawStorage.h"
+#include "OMMXFStorage.h"
 
   // @mfunc Constructor.
-OMMXFRawStorage::OMMXFRawStorage(OMRawStorage* store)
+OMMXFStorage::OMMXFStorage(OMRawStorage* store)
 : _store(store)
 {
-  TRACE("OMMXFRawStorage::OMMXFRawStorage");
+  TRACE("OMMXFStorage::OMMXFStorage");
   PRECONDITION("Valid store", _store != 0);
 }
 
   // @mfunc Destructor.
-OMMXFRawStorage::~OMMXFRawStorage(void)
+OMMXFStorage::~OMMXFStorage(void)
 {
-  TRACE("OMMXFRawStorage::~OMMXFRawStorage");
+  TRACE("OMMXFStorage::~OMMXFStorage");
 
   PRECONDITION("Valid store", _store != 0);
 
@@ -49,43 +49,43 @@ OMMXFRawStorage::~OMMXFRawStorage(void)
   _store = 0;
 }
 
-  // @mfunc Is it possible to read from this <c OMMXFRawStorage> ?
-  //  @rdesc True if this <c OMMXFRawStorage> is readable, false otherwise.
+  // @mfunc Is it possible to read from this <c OMMXFStorage> ?
+  //  @rdesc True if this <c OMMXFStorage> is readable, false otherwise.
   //  @this const
-bool OMMXFRawStorage::isReadable(void) const
+bool OMMXFStorage::isReadable(void) const
 {
-  TRACE("OMMXFRawStorage::isReadable");
+  TRACE("OMMXFStorage::isReadable");
 
   return _store->isReadable();
 }
 
   // @mfunc Attempt to read the number of bytes given by <p byteCount>
-  //        from the current position in this <c OMMXFRawStorage>
+  //        from the current position in this <c OMMXFStorage>
   //        into the buffer at address <p bytes>.
   //        The actual number of bytes read is returned in <p bytesRead>.
   //        Reading from positions greater than
-  //        <mf OMMXFRawStorage::size> causes <p bytesRead> to be less
+  //        <mf OMMXFStorage::size> causes <p bytesRead> to be less
   //        than <p byteCount>. Reading bytes that have never been written
   //        returns undefined data in <p bytes>.
   //   @parm The buffer into which the bytes are to be read.
   //   @parm The number of bytes to read.
   //   @parm The number of bytes actually read.
   //   @this const
-void OMMXFRawStorage::read(OMByte* bytes,
-                           OMUInt32 byteCount,
-                           OMUInt32& bytesRead) const
+void OMMXFStorage::read(OMByte* bytes,
+                        OMUInt32 byteCount,
+                        OMUInt32& bytesRead) const
 {
-  TRACE("OMMXFRawStorage::read");
+  TRACE("OMMXFStorage::read");
 
   _store->read(bytes, byteCount, bytesRead);
 }
 
   // @mfunc Attempt to read the number of bytes given by <p byteCount>
-  //        from offset <p position> in this <c OMMXFRawStorage>
+  //        from offset <p position> in this <c OMMXFStorage>
   //        into the buffer at address <p bytes>.
   //        The actual number of bytes read is returned in <p bytesRead>.
   //        Reading from positions greater than
-  //        <mf OMMXFRawStorage::size> causes <p bytesRead> to be less
+  //        <mf OMMXFStorage::size> causes <p bytesRead> to be less
   //        than <p byteCount>. Reading bytes that have never been written
   //        returns undefined data in <p bytes>.
   //   @parm The position from which the bytes are to be read.
@@ -93,159 +93,159 @@ void OMMXFRawStorage::read(OMByte* bytes,
   //   @parm The number of bytes to read.
   //   @parm The number of bytes actually read.
   //   @this const
-void OMMXFRawStorage::readAt(OMUInt64 position,
-                             OMByte* bytes,
-                             OMUInt32 byteCount,
-                             OMUInt32& bytesRead) const
+void OMMXFStorage::readAt(OMUInt64 position,
+                          OMByte* bytes,
+                          OMUInt32 byteCount,
+                          OMUInt32& bytesRead) const
 {
-  TRACE("OMMXFRawStorage::readAt");
+  TRACE("OMMXFStorage::readAt");
 
   _store->readAt(position, bytes, byteCount, bytesRead);
 }
 
-  // @mfunc Is it possible to write to this <c OMMXFRawStorage> ?
-  //  @rdesc True if this <c OMMXFRawStorage> is writable, false otherwise.
+  // @mfunc Is it possible to write to this <c OMMXFStorage> ?
+  //  @rdesc True if this <c OMMXFStorage> is writable, false otherwise.
   //  @this const
-bool OMMXFRawStorage::isWritable(void) const
+bool OMMXFStorage::isWritable(void) const
 {
-  TRACE("OMMXFRawStorage::isWritable");
+  TRACE("OMMXFStorage::isWritable");
 
   return _store->isWritable();
 }
 
   // @mfunc Attempt to write the number of bytes given by <p byteCount>
-  //        to the current position in this <c OMMXFRawStorage>
+  //        to the current position in this <c OMMXFStorage>
   //        from the buffer at address <p bytes>.
   //        The actual number of bytes written is returned in
   //        <p bytesWritten>.
   //        Writing to positions greater than
-  //        <mf OMMXFRawStorage::size> causes this <c OMMXFRawStorage>
+  //        <mf OMMXFStorage::size> causes this <c OMMXFStorage>
   //        to be extended, however such extension can fail, causing
   //        <p bytesWritten> to be less than <p byteCount>.
   //   @parm The buffer from which the bytes are to be written.
   //   @parm The number of bytes to write.
   //   @parm The actual number of bytes written.
-void OMMXFRawStorage::write(const OMByte* bytes,
-                            OMUInt32 byteCount,
-                            OMUInt32& bytesWritten)
+void OMMXFStorage::write(const OMByte* bytes,
+                         OMUInt32 byteCount,
+                         OMUInt32& bytesWritten)
 {
-  TRACE("OMMXFRawStorage::write");
+  TRACE("OMMXFStorage::write");
 
   _store->write(bytes, byteCount, bytesWritten);
 }
 
   // @mfunc Attempt to write the number of bytes given by <p byteCount>
-  //        to offset <p position> in this <c OMMXFRawStorage>
+  //        to offset <p position> in this <c OMMXFStorage>
   //        from the buffer at address <p bytes>.
   //        The actual number of bytes written is returned in
   //        <p bytesWritten>.
   //        Writing to positions greater than
-  //        <mf OMMXFRawStorage::size> causes this <c OMMXFRawStorage>
+  //        <mf OMMXFStorage::size> causes this <c OMMXFStorage>
   //        to be extended, however such extension can fail, causing
   //        <p bytesWritten> to be less than <p byteCount>.
   //   @parm The position to which the bytes are to be written.
   //   @parm The buffer from which the bytes are to be written.
   //   @parm The number of bytes to write.
   //   @parm The actual number of bytes written.
-void OMMXFRawStorage::writeAt(OMUInt64 position,
-                              const OMByte* bytes,
-                              OMUInt32 byteCount,
-                              OMUInt32& bytesWritten)
+void OMMXFStorage::writeAt(OMUInt64 position,
+                           const OMByte* bytes,
+                           OMUInt32 byteCount,
+                           OMUInt32& bytesWritten)
 {
-  TRACE("OMMXFRawStorage::writeAt");
+  TRACE("OMMXFStorage::writeAt");
 
   _store->writeAt(position, bytes, byteCount, bytesWritten);
 }
 
-  // @mfunc May this <c OMMXFRawStorage> be changed in size ?
-  //  @rdesc True if this <c OMMXFRawStorage> is extendible, false otherwise.
+  // @mfunc May this <c OMMXFStorage> be changed in size ?
+  //  @rdesc True if this <c OMMXFStorage> is extendible, false otherwise.
   //   @this const
-bool OMMXFRawStorage::isExtendible(void) const
+bool OMMXFStorage::isExtendible(void) const
 {
-  TRACE("OMMXFRawStorage::isExtendible");
+  TRACE("OMMXFStorage::isExtendible");
 
   return _store->isExtendible();
 }
 
-  // @mfunc The current extent of this <c OMMXFRawStorage> in bytes.
+  // @mfunc The current extent of this <c OMMXFStorage> in bytes.
   //        precondition - isPositionable()
-  //   @rdesc The current extent of this <c OMMXFRawStorage> in bytes.
+  //   @rdesc The current extent of this <c OMMXFStorage> in bytes.
   //   @this const
-OMUInt64 OMMXFRawStorage::extent(void) const
+OMUInt64 OMMXFStorage::extent(void) const
 {
-  TRACE("OMMXFRawStorage::extent");
+  TRACE("OMMXFStorage::extent");
 
   return _store->extent();
 }
 
-  // @mfunc Set the size of this <c OMMXFRawStorage> to <p newSize> bytes.
-  //        If <p newSize> is greater than <mf OMMXFRawStorage::size>
-  //        then this <c OMMXFRawStorage> is extended. If <p newSize>
-  //        is less than <mf OMMXFRawStorage::size> then this
-  //        <c OMMXFRawStorage> is truncated. Truncation may also result
+  // @mfunc Set the size of this <c OMMXFStorage> to <p newSize> bytes.
+  //        If <p newSize> is greater than <mf OMMXFStorage::size>
+  //        then this <c OMMXFStorage> is extended. If <p newSize>
+  //        is less than <mf OMMXFStorage::size> then this
+  //        <c OMMXFStorage> is truncated. Truncation may also result
   //        in the current position for <f read()> and <f write()>
-  //        being set to <mf OMMXFRawStorage::size>.
+  //        being set to <mf OMMXFStorage::size>.
   //        precondition - isExtendible()
-  //   @parm The new size of this <c OMMXFRawStorage> in bytes.
-void OMMXFRawStorage::extend(OMUInt64 newSize)
+  //   @parm The new size of this <c OMMXFStorage> in bytes.
+void OMMXFStorage::extend(OMUInt64 newSize)
 {
-  TRACE("OMMXFRawStorage::extend");
+  TRACE("OMMXFStorage::extend");
 
   _store->extend(newSize);
 }
 
-  // @mfunc The current size of this <c OMMXFRawStorage> in bytes.
+  // @mfunc The current size of this <c OMMXFStorage> in bytes.
   //        precondition - isPositionable()
-  //   @rdesc The current size of this <c OMMXFRawStorage> in bytes.
+  //   @rdesc The current size of this <c OMMXFStorage> in bytes.
   //   @this const
-OMUInt64 OMMXFRawStorage::size(void) const
+OMUInt64 OMMXFStorage::size(void) const
 {
-  TRACE("OMMXFRawStorage::size");
+  TRACE("OMMXFStorage::size");
 
   return _store->size();
 }
 
   // @mfunc May the current position, for <f read()> and <f write()>,
-  //        of this <c OMMXFRawStorage> be changed ?
-  //  @rdesc True if this <c OMMXFRawStorage> is positionable, false otherwise.
+  //        of this <c OMMXFStorage> be changed ?
+  //  @rdesc True if this <c OMMXFStorage> is positionable, false otherwise.
   //   @this const
-bool OMMXFRawStorage::isPositionable(void) const
+bool OMMXFStorage::isPositionable(void) const
 {
-  TRACE("OMMXFRawStorage::isPositionable");
+  TRACE("OMMXFStorage::isPositionable");
 
   return _store->isPositionable();
 }
 
-  // @mfunc Synchronize this <c OMMXFRawStorage> with its external
+  // @mfunc Synchronize this <c OMMXFStorage> with its external
   //        representation.
-void OMMXFRawStorage::synchronize(void)
+void OMMXFStorage::synchronize(void)
 {
-  TRACE("OMMXFRawStorage::synchronize");
+  TRACE("OMMXFStorage::synchronize");
 
   _store->synchronize();
 }
 
   // @mfunc The current position for <f read()> and <f write()>, as an
   //        offset in bytes from the beginning of this
-  //        <c OMMXFRawStorage>.
+  //        <c OMMXFStorage>.
   //   @rdesc The current position for <f read()> and <f write()>.
   //   @this const
-OMUInt64 OMMXFRawStorage::position(void) const
+OMUInt64 OMMXFStorage::position(void) const
 {
-  TRACE("OMMXFRawStorage::position");
+  TRACE("OMMXFStorage::position");
 
   return _store->position();
 }
 
   // @mfunc Set the current position for <f read()> and <f write()>, as an
   //        offset in bytes from the beginning of this
-  //        <c OMMXFRawStorage>.
+  //        <c OMMXFStorage>.
   //        precondition - isPositionable()
   //   @parm The new position.
   //   @this const
-void OMMXFRawStorage::setPosition(OMUInt64 newPosition) const
+void OMMXFStorage::setPosition(OMUInt64 newPosition) const
 {
-  TRACE("OMMXFRawStorage::setPosition");
+  TRACE("OMMXFStorage::setPosition");
 
   _store->setPosition(newPosition);
 }
