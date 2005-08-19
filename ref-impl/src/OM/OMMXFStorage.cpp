@@ -90,6 +90,19 @@ OMMXFStorage::~OMMXFStorage(void)
     _objectToInstanceId = 0;
   }
 
+  if (_streamToSid != 0) {
+    _streamToSid->clear();
+    delete _streamToSid;
+    _streamToSid = 0;
+  }
+
+  if (_sidToStream != 0) {
+    _sidToStream->clear();
+    delete _sidToStream;
+    _sidToStream = 0;
+  }
+
+  destroySegmentMap();
   destroyFixups();
 
   size_t count = _partitions.count();
@@ -1540,6 +1553,7 @@ void OMMXFStorage::destroyFixups(void)
     ASSERT("Resolved", f->_tag == FUT_RESOLVED);
     delete f;
   }
+//_fixups.clear();
 }
 
 OMMXFStorage::Stream* OMMXFStorage::createStream(OMUInt32 sid,
@@ -1660,4 +1674,30 @@ OMMXFStorage::SegmentMap* OMMXFStorage::segmentMap(void)
     ASSERT("Valid heap pointer", _segmentMap != 0);
   }
   return _segmentMap;
+}
+
+void OMMXFStorage::destroySegmentMap(void)
+{
+  TRACE("OMMXFStorage::destroySegmentMap");
+
+  if (_segmentMap != 0) {
+    SegmentMapIterator iter(*_segmentMap, OMBefore);
+    while (++iter) {
+      Stream* s = iter.value();
+      if (s->_segments != 0) {
+        SegmentListIterator siter(*s->_segments, OMBefore);
+        while (++siter) {
+          Segment* seg = siter.value();
+          delete seg;
+        }
+//      s->_segments->clear();
+        delete s->_segments;
+        s->_segments = 0;
+      }
+      delete s;
+    }
+//  _segmentMap->clear();
+    delete _segmentMap;
+    _segmentMap = 0;
+  }
 }
