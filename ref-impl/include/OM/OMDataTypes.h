@@ -256,6 +256,9 @@ inline bool operator > (const OMKLVKey& lhs,
   return memcmp(&lhs, &rhs, sizeof(OMKLVKey)) > 0;
 }
 
+const OMKLVKey nullOMKLVKey =
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
 // Stored object encodings
 //
 typedef OMObjectIdentification OMStoredObjectEncoding;
