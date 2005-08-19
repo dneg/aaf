@@ -1778,6 +1778,7 @@ OMMXFStorage::addSegment(Stream* s,
   result->_start = start;
   result->_size = size;
   result->_origin = origin;
+  result->_stream = s;
   s->_segments->append(result);
   _fileSize = _fileSize + size;
   return result;
