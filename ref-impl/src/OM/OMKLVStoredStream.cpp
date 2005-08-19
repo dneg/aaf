@@ -108,7 +108,7 @@ void OMKLVStoredStream::read(OMUInt64 position,
   PRECONDITION("Valid size", bytes > 0);
 
   _store->streamReadAt(_sid,
-                       _position,
+                       position,
                        buffer,
                        bytes,
                        completion,
