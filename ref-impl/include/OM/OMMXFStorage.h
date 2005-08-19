@@ -160,7 +160,9 @@ public:
 
   virtual OMUniqueObjectIdentification generation(void) const;
 
-  virtual void writeHeaderPartition(void);
+  virtual void writeHeaderPartition(OMUInt32 bodySID,
+                                    OMUInt32 indexSID,
+                                    OMUInt32 KAGSize);
   virtual void writeBodyPartition(OMUInt32 bodySID,
                                   OMUInt32 indexSID,
                                   OMUInt32 KAGSize);
