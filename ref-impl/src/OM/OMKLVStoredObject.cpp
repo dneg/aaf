@@ -372,11 +372,10 @@ void OMKLVStoredObject::save(OMFile& file)
 {
   TRACE("OMKLVStoredObject::save(OMFile)");
 
-  _storage->setPosition(0);
-  // Write header partition and alignment fill.
-  //
-  _storage->writeHeaderPartition(0, 0, defaultKAGSize);
+  _storage->open();
 
+  OMUInt64 pos = _storage->primerOffset();
+  _storage->setPosition(pos);
   // Write the primer
   writePrimerPack(file.dictionary());
   _storage->fillAlignK(_storage->position(), defaultKAGSize);
