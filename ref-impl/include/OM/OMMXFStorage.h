@@ -423,7 +423,8 @@ public:
 
   virtual void streamRestoreSegment(OMUInt32 sid,
                                     OMUInt64 start,
-                                    OMUInt64 size,
+                                    OMUInt64 allocatedSize,
+                                    OMUInt64 occupiedSize,
                                     OMKLVKey label,
                                     OMUInt32 gridSize);
 
