@@ -484,10 +484,54 @@ void OMKLVStoredObject::save(const OMSimpleProperty& property)
   delete [] buffer;
 }
 
-void OMKLVStoredObject::save(const OMDataVector& /* property */)
+void OMKLVStoredObject::save(const OMDataVector& property)
 {
   TRACE("OMKLVStoredObject::save(OMDataVector)");
-  ASSERT("Unimplemented code not reached", false);
+
+  OMPropertySize size = property.bitsSize();
+  OMByte* bits = property.bits();
+  const OMType* propertyType = property.type();
+  ASSERT("Valid property type", propertyType != 0);
+
+  // Allocate buffer for property value
+  OMPropertySize externalBytesSize = propertyType->externalSize(bits, size);
+  OMByte* buffer = new OMByte[externalBytesSize];
+  ASSERT("Valid heap pointer", buffer != 0);
+
+  // Externalize property value
+  propertyType->externalize(bits,
+                            size,
+                            buffer,
+                            externalBytesSize,
+                            hostByteOrder());
+
+  // Reorder property value
+  if (_reorderBytes) {
+    propertyType->reorder(buffer, externalBytesSize);
+  }
+
+  // size
+  OMPropertySize propertySize = externalBytesSize;
+  propertySize = propertySize + sizeof(OMUInt32) + sizeof(OMUInt32);
+  _storage->write(propertySize, _reorderBytes);
+
+  const OMArrayType* at = dynamic_cast<const OMArrayType*>(propertyType);
+  ASSERT("Correct type", at != 0);
+
+  // element count
+  OMType* et = at->elementType();
+  ASSERT("Fixed size elements", et->isFixedSize());
+  OMUInt32 elementSize = et->externalSize();
+  OMUInt32 count = externalBytesSize / elementSize;
+  _storage->write(count, _reorderBytes);
+
+  // element size
+  _storage->write(elementSize, _reorderBytes);
+
+  // value
+  _storage->write(buffer, externalBytesSize);
+
+  delete [] buffer;
 }
 
   // @mfunc Save the <c OMStrongReference> <p singleton> in this
@@ -781,11 +825,39 @@ void OMKLVStoredObject::restore(OMSimpleProperty& property,
   //        <c OMKLVStoredObject>.
   //   @parm The newly restored <c OMDataVector>
   //   @parm The external size.
-void OMKLVStoredObject::restore(OMDataVector& /* property */,
-                                size_t /* externalSize */)
+void OMKLVStoredObject::restore(OMDataVector& property,
+                                size_t externalSize)
 {
   TRACE("OMKLVStoredObject::restore(OMDataVector)");
-  ASSERT("Unimplemented code not reached", false);
+
+  const OMType* propertyType = property.type();
+  ASSERT("Valid property type", propertyType != 0);
+
+  // Allocate buffer for property value
+  OMByte* buffer = new OMByte[externalSize];
+  ASSERT("Valid heap pointer", buffer != 0);
+
+  _storage->read(buffer, externalSize);
+
+  // Reorder property value
+  if (_reorderBytes) {
+    propertyType->reorder(buffer, externalSize);
+  }
+
+  // Internalize property value
+  size_t requiredBytesSize = propertyType->internalSize(buffer,
+                                                        externalSize);
+
+  property.setSize(requiredBytesSize);
+  ASSERT("Property value buffer large enough",
+                                       property.size() >= requiredBytesSize);
+  OMByte* bits = property.bits();
+  propertyType->internalize(buffer,
+                            externalSize,
+                            bits,
+                            requiredBytesSize,
+                            hostByteOrder());
+  delete [] buffer;
 }
 
   // @mfunc Restore the <c OMStrongReference> <p singleton> into this
