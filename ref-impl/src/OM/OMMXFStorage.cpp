@@ -791,6 +791,21 @@ OMUniqueObjectIdentification OMMXFStorage::instanceId(OMStorable* object)
   return result;
 }
 
+OMStorable*
+OMMXFStorage::object(const OMUniqueObjectIdentification& instanceId)
+{
+  TRACE("OMMXFStorage::object");
+
+  OMStorable* result;
+  ObjectDirectoryEntry e;
+  if (!instanceIdToObject()->find(instanceId, e)) {
+    result = 0;
+  } else {
+    result = e._object;
+  }
+  return result;
+}
+
 void OMMXFStorage::saveObjectDirectory(void)
 {
   TRACE("OMMXFStorage::saveObjectDirectory");
