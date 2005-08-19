@@ -806,6 +806,21 @@ OMMXFStorage::object(const OMUniqueObjectIdentification& instanceId)
   return result;
 }
 
+void OMMXFStorage::enterObject(OMStorable& object, OMUInt64 position)
+{
+  TRACE("OMMXFStorage::enterObject");
+
+  OMUniqueObjectIdentification iid = instanceId(&object);
+  if (!instanceIdToObject()->contains(iid)) {
+    // This object has never been saved
+    ObjectDirectoryEntry e;
+    e._object = &object;
+    e._offset = position;
+    e._flags = 0;
+    instanceIdToObject()->insert(iid, e);
+  }
+}
+
 void OMMXFStorage::saveObjectDirectory(void)
 {
   TRACE("OMMXFStorage::saveObjectDirectory");
