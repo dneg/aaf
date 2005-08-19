@@ -844,6 +844,13 @@ void OMMXFStorage::enterObject(OMStorable& object, OMUInt64 position)
   }
 }
 
+void OMMXFStorage::removeObject(OMStorable& object)
+{
+  TRACE("OMMXFStorage::removeObject");
+
+  instanceIdToObject()->remove(instanceId(&object));
+}
+
 bool
 OMMXFStorage::containsObject(const OMUniqueObjectIdentification& instanceId)
 {
