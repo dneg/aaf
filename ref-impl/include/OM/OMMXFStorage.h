@@ -117,6 +117,10 @@ public:
                               OMUInt32 KAGSize,
                               bool reorderBytes);
 
+    // @cmember Write a fill key, a BER encoded length and
+    //          <p length> bytes of fill.
+  virtual void writeKLVFill(const OMUInt64& length);
+
     // @cmember Write fill so that the next key is page aligned.
   virtual void fillAlignK(const OMUInt64& currentPosition,
                           const OMUInt32& KAGSize);
