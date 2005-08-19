@@ -80,8 +80,6 @@ OMMXFStorage::~OMMXFStorage(void)
 {
   TRACE("OMMXFStorage::~OMMXFStorage");
 
-  clearObjectDirectory();
-
   if (_instanceIdToObject != 0) {
     _instanceIdToObject->clear();
     delete _instanceIdToObject;
