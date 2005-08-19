@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2003, Licensor of the
+// The Original Code of this file is Copyright 1998-2004, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -99,7 +99,9 @@ static const OMUInt64 minimumFill = sizeof(OMKLVKey) + 1 + sizeof(OMUInt64);
 //
 static const OMUInt64 fillBufferZoneSize = 32;
 
-static const OMUInt64 bodyPartitionOffset = 0x20000 + fillBufferZoneSize;
+static const OMUInt32 preallocatedMetadataSize = 0x20000;
+static const OMUInt64 bodyPartitionOffset = preallocatedMetadataSize +
+                                            fillBufferZoneSize;
 
 static const OMUInt32 defaultKAGSize = 0x100;
 
