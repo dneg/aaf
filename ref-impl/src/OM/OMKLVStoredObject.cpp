@@ -1576,7 +1576,7 @@ void OMKLVStoredObject::writeFooterPartition(OMRawStorage* store)
 }
 
 OMUInt16 currentMajorVersion = 0xffff;
-OMUInt16 currentMinorVersion = 0xffff;
+OMUInt16 currentMinorVersion = 0xfffe;
 
 void OMKLVStoredObject::writePartition(OMRawStorage* store,
                                        const OMKLVKey& key,
@@ -2178,8 +2178,27 @@ void OMKLVStoredObject::convert(OMKLVKey& key,
 {
   TRACE("OMKLVStoredObject::convert");
 
-  memcpy(&key, &id, sizeof(OMKLVKey));
-  //key[5] = 0x53; // tjb !!
+  key[ 0] = id.Data4[0];
+  key[ 1] = id.Data4[1];
+  key[ 2] = id.Data4[2];
+  key[ 3] = id.Data4[3];
+  key[ 4] = id.Data4[4];
+  key[ 5] = id.Data4[5];
+  key[ 6] = id.Data4[6];
+  key[ 7] = id.Data4[7];
+
+  key[ 8] = (OMByte)((id.Data1 & 0xff000000) >> 24);
+  key[ 9] = (OMByte)((id.Data1 & 0x00ff0000) >> 16);
+  key[10] = (OMByte)((id.Data1 & 0x0000ff00) >>  8);
+  key[11] = (OMByte)((id.Data1 & 0x000000ff));
+
+  key[12] = (OMByte)((id.Data2 & 0xff00) >> 8);
+  key[13] = (OMByte)((id.Data2 & 0x00ff));
+
+  key[14] = (OMByte)((id.Data3 & 0xff00) >> 8);
+  key[15] = (OMByte)((id.Data3 & 0x00ff));
+
+//key[5] = 0x53; // tjb !!
 }
 
 void OMKLVStoredObject::convert(OMUniqueObjectIdentification& id,
@@ -2187,8 +2206,33 @@ void OMKLVStoredObject::convert(OMUniqueObjectIdentification& id,
 {
   TRACE("OMKLVStoredObject::convert");
 
-  memcpy(&id, &key, sizeof(OMUniqueObjectIdentification));
-  //key[5] = 0x??; // tjb !!
+  id.Data4[0] = key[0];
+  id.Data4[1] = key[1];
+  id.Data4[2] = key[2];
+  id.Data4[3] = key[3];
+  id.Data4[4] = key[4];
+  id.Data4[5] = key[5];
+  id.Data4[6] = key[6];
+  id.Data4[7] = key[7];
+
+  OMUInt32 d1 = 0;
+  d1 = d1 + (key[ 8] << 24);
+  d1 = d1 + (key[ 9] << 16);
+  d1 = d1 + (key[10] <<  8);
+  d1 = d1 + (key[11]);
+  id.Data1 = d1;
+
+  OMUInt16 d2 = 0;
+  d2 = d2 + (key[12] << 8);
+  d2 = d2 + (key[13]);
+  id.Data2 = d2;
+
+  OMUInt16 d3 = 0;
+  d3 = d3 + (key[14] << 8);
+  d3 = d3 + (key[15]);
+  id.Data3 = d3;
+
+  //key[5] = 0x06; // tjb !!
 }
 
 void OMKLVStoredObject::finalize(void)
