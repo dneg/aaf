@@ -2075,37 +2075,44 @@ bool OMMXFStorage::findPattern(const OMRawStorage* store,
 void OMMXFStorage::markMetadataStart(OMUInt64 primerKeyPosition)
 {
   TRACE("OMMXFStorage::");
+  ASSERT("Unimplemented code not reached", false);
 }
 
 void OMMXFStorage::markMetadataEnd(OMUInt64 endKeyPosition)
 {
   TRACE("OMMXFStorage::markMetadataEnd");
+  ASSERT("Unimplemented code not reached", false);
 }
 
 void OMMXFStorage::markIndexStart(OMUInt32 sid, OMUInt64 indexKeyPosition)
 {
   TRACE("OMMXFStorage::markIndexStart");
+  ASSERT("Unimplemented code not reached", false);
 }
 
 void OMMXFStorage::markIndexEnd(OMUInt64 endKeyPosition)
 {
   TRACE("OMMXFStorage::markIndexEnd");
+  ASSERT("Unimplemented code not reached", false);
 }
 
 void OMMXFStorage::markEssenceSegmentStart(OMUInt32 sid,
                                            OMUInt64 essenceKeyPosition)
 {
   TRACE("OMMXFStorage::markEssenceSegmentStart");
+  ASSERT("Unimplemented code not reached", false);
 }
 
 void OMMXFStorage::markEssenceSegmentEnd(OMUInt64 endKeyPosition)
 {
   TRACE("OMMXFStorage::markEssenceSegmentEnd");
+  ASSERT("Unimplemented code not reached", false);
 }
 
 void OMMXFStorage::markFill(OMUInt64 fillKeyPosition, OMUInt64 fillEndPosition)
 {
   TRACE("OMMXFStorage::markFill");
+  ASSERT("Unimplemented code not reached", false);
 }
 
 OMMXFStorage::Stream* OMMXFStorage::createStream(OMUInt32 sid,
