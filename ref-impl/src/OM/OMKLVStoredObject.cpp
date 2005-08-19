@@ -21,6 +21,7 @@
 //=---------------------------------------------------------------------=
 
 // @doc OMINTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMKLVStoredObject
 #include "OMKLVStoredObject.h"
 
 #include "OMRawStorage.h"
@@ -83,6 +84,51 @@ OMKLVStoredObject* OMKLVStoredObject::createModify(OMRawStorage* rawStorage,
   PRECONDITION("Compatible raw storage", rawStorage->isPositionable());
   OMKLVStoredObject* result= new OMKLVStoredObject(rawStorage, byteOrder);
   ASSERT("Valid heap pointer", result != 0);
+  return result;
+}
+
+  // @mfunc Is the file named <p fileName> a recognized file ?
+  //        If so, the result is true, and the signature is returned
+  //        in <p signature>.
+  //   @parm The name of the file to check.
+  //   @parm If recognized, the file signature.
+  //   @rdesc True if the file is recognized, false otherwise.
+bool OMKLVStoredObject::isRecognized(const wchar_t* ANAME(fileName),
+                                     OMFileSignature& /* signature */)
+{
+  TRACE("OMKLVStoredObject::isRecognized");
+  PRECONDITION("Valid file name", validWideString(fileName));
+  bool result = false;
+  // ASSERT("Unimplemented code not reached", false);
+  return result;
+}
+
+  // @mfunc Does <p rawStorage> contain a recognized file ?
+  //        If so, the result is true, and the signature is returned
+  //        in <p signature>.
+  //   @parm The <c OMRawStorage> to check.
+  //   @parm If recognized, the file signature.
+  //   @rdesc True if the <c OMRawStorage> contains a recognized
+  //          file, false otherwise.
+bool OMKLVStoredObject::isRecognized(OMRawStorage* ANAME(rawStorage),
+                                     OMFileSignature& /* signature */)
+{
+  TRACE("OMKLVStoredObject::isRecognized");
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+  bool result = false;
+  // ASSERT("Unimplemented code not reached", false);
+  return result;
+}
+
+  // @mfunc Is <p signature> recognized ?
+  //        If so, the result is true.
+  //   @parm The signature to check.
+  //   @rdesc True if the signature is recognized, false otherwise.
+bool OMKLVStoredObject::isRecognized(const OMFileSignature& /* signature */)
+{
+  TRACE("OMKLVStoredObject::isRecognized");
+  bool result = false;
+  // ASSERT("Unimplemented code not reached", false);
   return result;
 }
 
