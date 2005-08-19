@@ -135,14 +135,11 @@ OMKLVStoredObjectFactory::createModify(OMRawStorage* rawStorage,
   //   @rdesc An <c OMKLVStoredObject> representing the root object in
   //          the disk file.
 OMStoredObject*
-OMKLVStoredObjectFactory::openRead(const wchar_t* fileName)
+OMKLVStoredObjectFactory::openRead(const wchar_t* NNAME(fileName))
 {
   TRACE("OMKLVStoredObjectFactory::openRead");
-  OMDiskRawStorage* rawStorage = OMDiskRawStorage::openExistingRead(fileName);
-  OMMXFStorage* storage = new OMMXFStorage(rawStorage);
-  ASSERT("Valid heap pointer", storage != 0);
-  OMStoredObject* result = OMKLVStoredObject::openRead(storage);
-  return result;
+  ASSERT("Unimplemented code not reached", false);
+  return 0;
 }
 
   // @mfunc Open the root <c OMKLVStoredObject> in the disk file
@@ -151,11 +148,10 @@ OMKLVStoredObjectFactory::openRead(const wchar_t* fileName)
   //   @rdesc An <c OMKLVStoredObject> representing the root object in
   //          the disk file.
 OMStoredObject*
-OMKLVStoredObjectFactory::openModify(const wchar_t* /* fileName */)
+OMKLVStoredObjectFactory::openModify(const wchar_t* NNAME(fileName))
 {
   TRACE("OMKLVStoredObjectFactory::openModify");
   ASSERT("Unimplemented code not reached", false);
-//return OMKLVStoredObject::openModify(fileName);
   return 0;
 }
 
@@ -167,12 +163,11 @@ OMKLVStoredObjectFactory::openModify(const wchar_t* /* fileName */)
   //   @rdesc An <c OMKLVStoredObject> representing the root object in
   //          the disk file.
 OMStoredObject*
-OMKLVStoredObjectFactory::createModify(const wchar_t* /* fileName */,
-                                       const OMByteOrder /* byteOrder */)
+OMKLVStoredObjectFactory::createModify(const wchar_t* NNAME(fileName),
+                                       const OMByteOrder NNAME(byteOrder))
 {
   TRACE("OMKLVStoredObjectFactory::creatModify");
   ASSERT("Unimplemented code not reached", false);
-//return OMKLVStoredObject::createModify(fileName, byteOrder);
   return 0;
 }
 
@@ -184,12 +179,11 @@ OMKLVStoredObjectFactory::createModify(const wchar_t* /* fileName */,
   //   @rdesc An <c OMKLVStoredObject> representing the root object in
   //          the disk file.
 OMStoredObject*
-OMKLVStoredObjectFactory::createWrite(const wchar_t* /* fileName */,
-                                      const OMByteOrder /* byteOrder */)
+OMKLVStoredObjectFactory::createWrite(const wchar_t* NNAME(fileName),
+                                      const OMByteOrder NNAME(byteOrder))
 {
   TRACE("OMKLVStoredObjectFactory::creatWrite");
   ASSERT("Unimplemented code not reached", false);
-//return OMKLVStoredObject::createWrite(fileName, byteOrder);
   return 0;
 }
 
@@ -253,7 +247,9 @@ bool OMKLVStoredObjectFactory::compatibleNamedFile(
 {
   TRACE("OMKLVStoredObjectFactory::compatibleNamedFile");
 
-  // tjb -- missing checks ?
+  // Directly accessed named files are not supported regardless of the
+  // access mode. Named files are supported via a disk file based
+  // implementation of OMRawStorage.
   bool result = false;
   return result;
 }
