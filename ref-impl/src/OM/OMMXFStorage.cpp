@@ -556,6 +556,28 @@ bool OMMXFStorage::readHeaderPartition(void)
   return result;
 }
 
+bool OMMXFStorage::read(const OMRawStorage* store,
+                        OMUInt16& i,
+                        bool reorderBytes)
+{
+  TRACE("OMMXFStorage::read");
+  bool result;
+  OMUInt16 val;
+  OMUInt32 bytesRead;
+  OMByte* dest = reinterpret_cast<OMByte*>(&val);
+  store->read(dest, sizeof(OMUInt16), bytesRead);
+  if (bytesRead == sizeof(OMUInt16)) {
+    if (reorderBytes) {
+      OMType::reorderInteger(dest, sizeof(OMUInt16));
+    }
+    i = val;
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 void OMMXFStorage::read(OMUInt8& i) const
 {
   TRACE("OMMXFStorage::read");
