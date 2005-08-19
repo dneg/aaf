@@ -199,6 +199,10 @@ public:
     // instanceId -> object
   OMStorable* object(const OMUniqueObjectIdentification& instanceId);
 
+    // object <-> instanceId
+  void associate(OMStorable* object,
+                 const OMUniqueObjectIdentification& instanceId);
+
     // enter object into object directory
   void enterObject(OMStorable& object, OMUInt64 position);
 
