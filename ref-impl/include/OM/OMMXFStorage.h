@@ -138,7 +138,8 @@ static const OMPropertyId PID_Root_FormatVersion   = 0x004;
 //
 // 0x005 - First forwards and backwards compatible version
 // 0x006 - Use closed and complete keys for body and footer
-static const OMUInt32 formatVersion = 0x006;
+// 0x007 - Fill in index byte count in the footer
+static const OMUInt32 formatVersion = 0x007;
 
 static const OMKLVKey objectDirectoryKey =
   {0x96, 0x13, 0xb3, 0x8a, 0x87, 0x34, 0x87, 0x46,
