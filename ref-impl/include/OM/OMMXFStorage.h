@@ -62,7 +62,7 @@ static const OMKLVKey RandomIndexMetadataKey =
 
 static const OMUInt32 bodyPartitionOffset = 0x20000;
 
-static const OMUInt32 KAGSize = 0x100;
+static const OMUInt32 defaultKAGSize = 0x100;
 
 static const OMUInt16 currentMajorVersion = 0xffff;
 static const OMUInt16 currentMinorVersion = 0xfffb;
@@ -99,10 +99,7 @@ static const OMKLVKey objectDirectoryKey =
 static const OMUInt8 FUT_UNDEFINED       = 0x80;
 static const OMUInt8 FUT_RESOLVED        = 0x81;
 
-static const OMUInt8 FUT_FOOTER          = 0x01;
-static const OMUInt8 FUT_HEADERBYTECOUNT = 0x02;
-
-static const OMUInt8 FUT_OBJECTDIRECTORY = 0x41;
+static const OMUInt8 FUT_OBJECTDIRECTORY = 0xff;
 
 class OMStorable;
 template <typename Key, typename Element>
@@ -150,9 +147,11 @@ public:
   virtual OMUniqueObjectIdentification generation(void) const;
 
   virtual void writeHeaderPartition(void);
-  virtual void writeBodyPartition(void);
+  virtual void writeBodyPartition(OMUInt32 bodySID, OMUInt32 KAGSize);
   virtual void writeFooterPartition(void);
-  virtual void writePartition(const OMKLVKey& key, OMUInt32 KAGSize);
+  virtual void writePartition(const OMKLVKey& key,
+                              OMUInt32 bodySID,
+                              OMUInt32 KAGSize);
 
   virtual void writeRandomIndex(void);
 
@@ -201,7 +200,9 @@ public:
                         const OMUInt32& berValueSize,
                         const OMUInt64& value);
 
-  virtual void readPartition(OMUInt32& bodySID, OMUInt32& indexSID);
+  virtual void readPartition(OMUInt32& bodySID,
+                             OMUInt32& indexSID,
+                             OMUInt32& KAGSize);
 
   virtual bool readHeaderPartition(void);
 
