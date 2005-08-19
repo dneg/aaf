@@ -404,6 +404,7 @@ void OMKLVStoredObject::save(OMFile& file)
   //
   _storage->writeFooterPartition();
   _storage->writeRandomIndex();
+  _storage->close();
 }
 
 void OMKLVStoredObject::save(OMStorable& object)
