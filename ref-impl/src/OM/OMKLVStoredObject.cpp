@@ -2023,11 +2023,6 @@ void OMKLVStoredObject::convert(OMUniqueObjectIdentification& id,
   }
 }
 
-void OMKLVStoredObject::finalize(void)
-{
-  TRACE("OMKLVStoredObject::finalize");
-}
-
 bool OMKLVStoredObject::metaDataOnly = true;
 
   // @mfunc Constructor.
