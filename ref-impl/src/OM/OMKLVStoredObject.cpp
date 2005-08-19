@@ -54,8 +54,6 @@
 
 #define USETAGTABLE 1
 //#define INSTANCEID_DEBUG 1
-//#define PERSIST_OBJECT_DIRECTORY 1
-//#define MAP_CLASSIDS 1
 
   // @mfunc Open the root <c OMKLVStoredObject> in the raw storage
   //        <p rawStorage> for reading only.
@@ -238,13 +236,11 @@ void OMKLVStoredObject::save(OMFile& file)
   // Save the rest of the file
   file.root()->save();
 
-#if defined(PERSIST_OBJECT_DIRECTORY)
   // Save the meta object directory
   _objectDirectory = save(instanceIdToObject());
 
   // Now we know where it lives, fixup the reference
   fixupObjectDirectoryReference(_objectDirectoryReference, _objectDirectory);
-#endif
 
   // Insert alignment fill
   OMUInt32 bodyPartitionOffset = 0x20000; // Get this from header ?
@@ -273,7 +269,7 @@ void OMKLVStoredObject::save(OMFile& file)
 void OMKLVStoredObject::save(OMStorable& object)
 {
   TRACE("OMKLVStoredObject::save(OMFile)");
-#if defined(PERSIST_OBJECT_DIRECTORY)
+
   OMUniqueObjectIdentification iid = instanceId(&object);
   if (!instanceIdToObject()->contains(iid)) {
     // This object has never been saved
@@ -283,7 +279,7 @@ void OMKLVStoredObject::save(OMStorable& object)
     e._flags = 0;
     instanceIdToObject()->insert(iid, e);
   }
-#endif
+
   save(object.classId());
   save(*object.propertySet());
 }
@@ -511,10 +507,8 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
 
   // restore the meta object directory
   //
-#if defined(PERSIST_OBJECT_DIRECTORY)
   instanceIdToObject()->remove(instanceId(root));
   restore(instanceIdToObject());
-#endif
 
   // restore the meta dictionary
   //
@@ -826,7 +820,7 @@ OMUInt64 OMKLVStoredObject::length(const OMPropertySet& properties) const
   // All objects include a hidden instance UID
   length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
                   + sizeof(OMUniqueObjectIdentification);
-#if defined(PERSIST_OBJECT_DIRECTORY)
+
   if (properties.container()->classId() == Class_Root) {
     // Root object includes a hidden reference to the object directory
     length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
@@ -835,7 +829,6 @@ OMUInt64 OMKLVStoredObject::length(const OMPropertySet& properties) const
     length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
                     + sizeof(OMUInt32);
   }
-#endif
 
   OMPropertySetIterator iterator(properties, OMBefore);
   while (++iterator) {
@@ -922,7 +915,6 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
 
   referenceSave(properties.container(), 0x3c0a);
 
-#if defined(PERSIST_OBJECT_DIRECTORY)
   if (properties.container()->classId() == Class_Root) {
     OMKLVStoredObject* This = const_cast<OMKLVStoredObject*>(this);
     OMUniqueObjectIdentification id = {0};
@@ -932,7 +924,6 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
     OMUInt32 version = 0x00000004;
     This->writeProperty(pid, version);
   }
-#endif
 
   OMPropertySetIterator iterator(properties, OMBefore);
   while (++iterator) {
@@ -1196,7 +1187,6 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
   const OMUInt16 overhead = sizeof(OMPropertyId) + sizeof(OMPropertySize);
   setLength = setLength - (overhead + sizeof(OMUniqueObjectIdentification));
 
-#if defined(PERSIST_OBJECT_DIRECTORY)
   if (properties.container()->classId() == Class_Root) {
     OMUniqueObjectIdentification id;
     _objectDirectory = restoreObjectDirectoryReference(id);
@@ -1209,7 +1199,6 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
 
     setLength = setLength - (overhead + sizeof(OMUInt32));
   }
-#endif
 
   while (setLength > 0) {
     OMPropertyId pid;
@@ -1726,7 +1715,7 @@ void OMKLVStoredObject::writeFooterPartition(OMRawStorage* store)
 }
 
 OMUInt16 currentMajorVersion = 0xffff;
-OMUInt16 currentMinorVersion = 0xfffc;
+OMUInt16 currentMinorVersion = 0xfffb;
 
 void OMKLVStoredObject::writePartition(OMRawStorage* store,
                                        const OMKLVKey& key,
@@ -2711,12 +2700,10 @@ void OMKLVStoredObject::convert(OMKLVKey& key,
 
   // If id is an AAF class AUID, map it to a SMPTE 336M local set key
   //
-#if defined(MAP_CLASSIDS)
   OMByte classIdPrefix[] = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06};
   if (memcmp(&key, &classIdPrefix, sizeof(classIdPrefix)) == 0) {
     key.octet5  = 0x53;
   }
-#endif
 }
 
   // @mfunc Convert the <c OMKLVKey> key
@@ -2760,12 +2747,10 @@ void OMKLVStoredObject::convert(OMUniqueObjectIdentification& id,
 
   // If key is a SMPTE 336M local set key, map it to an AAF class AUID
   //
-#if defined(MAP_CLASSIDS)
   OMByte localSetPrefix[] = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x53};
   if (memcmp(&key, &localSetPrefix, sizeof(localSetPrefix)) == 0) {
     id.Data4[5] = 0x06;
   }
-#endif
 }
 
 void OMKLVStoredObject::finalize(void)
