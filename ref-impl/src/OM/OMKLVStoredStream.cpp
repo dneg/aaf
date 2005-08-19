@@ -131,7 +131,12 @@ void OMKLVStoredStream::write(OMIOVector buffers,
                               OMUInt32& bytesWritten)
 {
   TRACE("OMKLVStoredStream::write");
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Valid store", _store != 0);
+  PRECONDITION("Valid buffers", buffers != 0);
+  PRECONDITION("Valid buffer count", bufferCount > 0);
+
+  _store->streamWriteAt(_sid, _position, buffers, bufferCount, bytesWritten);
+  _position = _position + bytesWritten;
 }
 
 OMUInt64 OMKLVStoredStream::size(void) const
