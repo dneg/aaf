@@ -120,7 +120,6 @@ void OMMXFStorage::close(void)
 {
   TRACE("OMMXFStorage::close");
 
-  writeRandomIndex();
   fixup();
 
   size_t count = _partitions.count();
@@ -138,6 +137,8 @@ void OMMXFStorage::close(void)
   ASSERT("Valid primer offset", _primerOffset < bodyPartitionOffset);
   OMUInt64 metadataSize = bodyPartitionOffset - _primerOffset;
   fixupReference(0 + sizeof(OMKLVKey) + 8 + 1 + 32, metadataSize);
+
+  writeRandomIndex();
 }
 
   // @mfunc Set the operational pattern to <p pattern>.
