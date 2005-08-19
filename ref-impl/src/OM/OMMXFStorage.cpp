@@ -2491,7 +2491,10 @@ void OMMXFStorage::restoreStreams(void)
     readOuterKLVKey(k);
   }
 #endif
-  ASSERT("Read footer", isFooter(k));
+  //ASSERT("Read footer", isFooter(k));
+  if (!isFooter(k)) {
+    throw OMException("Footer not found.");
+  }
   length = readKLVLength();
   readPartition(length, bodySID, indexSID, gridSize, previous, here, footer);
   p = new Partition;
