@@ -189,7 +189,7 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
   OMUInt32 elementSize = sizeof(OMKLVKey);
   OMUInt32 elementCount = sizeof(essenceContainers) / elementSize;
 
-  OMKLVStoredObject::writeKLVKey(this, key);
+  write(key);
   OMUInt64 sizeOfFixedPortion = 88;
   OMUInt64 length = sizeOfFixedPortion + (elementCount * elementSize);
 #if defined(BER9)
@@ -218,11 +218,11 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
   write(bodyOffset, reorderBytes);
   OMUInt32 bodySID = 2;
   write(bodySID, reorderBytes);
-  OMKLVStoredObject::writeKLVKey(this, operationalPattern);
+  write(operationalPattern);
   write(elementCount, reorderBytes);
   write(elementSize, reorderBytes);
   for (OMUInt32 i = 0; i < elementCount; i++) {
-    OMKLVStoredObject::writeKLVKey(this, essenceContainers[i]);
+    write(essenceContainers[i]);
   }
 }
 
