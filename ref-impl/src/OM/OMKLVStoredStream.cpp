@@ -29,6 +29,8 @@
 
 OMKLVStoredStream::OMKLVStoredStream(OMRawStorage* store)
 : _essenceElementLabel(nullOMKLVKey),
+  _blockSize(0),
+  _fileOffset(0),
   _store(store),
   _position(0)
 {
