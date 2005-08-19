@@ -1552,7 +1552,9 @@ void OMMXFStorage::saveStreams(void)
 
   // We expect to be positioned in the pre-allocated header
   // space just after the last metadata object
-  ASSERT("Valid position", position() < bodyPartitionOffset);
+  if (position() >= bodyPartitionOffset) {
+    throw OMException("Preallocated metadata space exhausted.");
+  }
 
   // fill remainder of pre-allocated space
   OMUInt32 fillAlignment = bodyPartitionOffset;
