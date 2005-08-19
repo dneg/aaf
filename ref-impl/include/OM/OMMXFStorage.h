@@ -48,10 +48,19 @@ static const OMKLVKey fillKey =
   {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
    0x03, 0x01, 0x02, 0x10, 0x01, 0x00, 0x00, 0x00};
 
+static const OMUInt32 bodyPartitionOffset = 0x20000;
+
 static const OMUInt32 KAGSize = 0x100;
 
 static const OMUInt16 currentMajorVersion = 0xffff;
 static const OMUInt16 currentMinorVersion = 0xfffc;
+
+static const OMPropertyId PID_InterchangeObject_InstanceUID = 0x3c0a;
+
+static const OMPropertyId PID_Root_ObjectDirectory = 0x003;
+static const OMPropertyId PID_Root_FormatVersion   = 0x004;
+
+static const OMUInt32 formatVersion = 0x004;
 
 static const OMKLVKey objectDirectoryKey =
   {0x96, 0x13, 0xb3, 0x8a, 0x87, 0x34, 0x87, 0x46,
