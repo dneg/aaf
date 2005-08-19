@@ -270,7 +270,7 @@ void OMKLVStoredObject::save(OMFile& file)
 
   // Insert alignment filler
   OMUInt32 bodyPartitionOffset = 0x20000; // Get this from header ?
-  OMUInt32 KAGSize = 0x200;
+  OMUInt32 KAGSize = 0x100;
   OMUInt32 fillAlignment;
   if (metaDataOnly) {
     // fill to next KAG
@@ -1759,7 +1759,7 @@ void OMKLVStoredObject::writePartition(OMRawStorage* store,
   write(store, majorVersion, reorderBytes);
   OMUInt16 minorVersion = currentMinorVersion;
   write(store, minorVersion, reorderBytes);
-  OMUInt32 KAGSize = 0x200;
+  OMUInt32 KAGSize = 0x100;
   write(store, KAGSize, reorderBytes);
   OMUInt64 thisPartition = 0;
   write(store, thisPartition, reorderBytes);
@@ -1798,7 +1798,7 @@ void OMKLVStoredObject::writePrimerPack(OMRawStorage* store,
     {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
      0x0d, 0x01, 0x02, 0x01, 0x01, 0x05, 0x01, 0x00};
 
-  OMUInt32 KAGSize = 0x200;
+  OMUInt32 KAGSize = 0x100;
 
   OMUInt32 elementCount = 0;
   ClassDefinitionsIterator* classes = dictionary->classDefinitions();
