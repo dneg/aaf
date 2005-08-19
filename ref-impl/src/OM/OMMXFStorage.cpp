@@ -30,11 +30,13 @@
 #include "OMExceptions.h"
 #include "OMUtilities.h"
 #include "OMSet.h"
+#include "OMIdentitySet.h"
 
   // @mfunc Constructor.
 OMMXFStorage::OMMXFStorage(OMRawStorage* store)
 : OMWrappedRawStorage(store),
   _operationalPattern(nullOMKLVKey),
+  _essenceContainerLabels(),
   _instanceIdToObject(0),
   _objectToInstanceId(0)
 {
@@ -73,6 +75,33 @@ OMKLVKey OMMXFStorage::operationalPattern(void) const
 {
   TRACE("OMMXFStorage::operationalPattern");
   return _operationalPattern;
+}
+
+  // @mfunc Add <p label> to the set of essence container labels.
+  //   @parm The essence container label.
+void OMMXFStorage::addEssenceContainerLabel(const OMKLVKey& label)
+{
+  TRACE("OMMXFStorage::addEssenceContainerLabel");
+  PRECONDITION("Label not present", !containsEssenceContainerLabel(label));
+
+  _essenceContainerLabels.insert(label);
+}
+
+  // @mfunc Is <p label> present in the set of essence container labels.
+  //   @parm The essence container label.
+  //   @rdesc <e bool.true> if <p label> is present,
+  //          <e bool.false> otherwise.
+bool OMMXFStorage::containsEssenceContainerLabel(const OMKLVKey& label) const
+{
+  TRACE("OMMXFStorage::containsEssenceContainerLabel");
+
+  bool result;
+  if (_essenceContainerLabels.contains(label)) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
 }
 
 OMMXFStorage::ObjectDirectory* OMMXFStorage::instanceIdToObject(void)
