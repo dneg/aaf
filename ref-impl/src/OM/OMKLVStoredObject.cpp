@@ -243,6 +243,9 @@ void OMKLVStoredObject::save(OMFile& file)
   readHeaderPartition(_storage);
   readKLVFill(_storage);
 
+  OMUInt64 pos = _storage->position();
+  _storage->setPosition(pos);
+
   // Write the primer
   writePrimerPack(_storage, file.dictionary(), _reorderBytes);
 
@@ -1320,9 +1323,11 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
               if (instanceIdToObject()->contains(id)) {
                 objects.insert(id);
               }
+
               void* k = new OMByte[keySize];
               memcpy(k, element.identification(), keySize);
               keys.insert(k);
+
             }
             delete [] cName;
           }
