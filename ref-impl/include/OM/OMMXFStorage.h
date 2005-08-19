@@ -162,8 +162,10 @@ public:
 
   virtual bool readHeaderPartition(void);
 
+  static bool read(const OMRawStorage* store, OMUInt8& i);
   static bool read(const OMRawStorage* store, OMUInt16& i, bool reorderBytes);
   static bool read(const OMRawStorage* store, OMKLVKey& key);
+  static bool readKLVLength(const OMRawStorage* store, OMUInt64& length);
 
   virtual void read(OMUInt8& i) const;
   virtual void read(OMUInt16& i, bool reorderBytes) const;
@@ -183,7 +185,7 @@ public:
 
   virtual void skipLV(void) const;
 
-  virtual OMUInt64 readBerLength(void) const;
+  static OMUInt64 readBerLength(const OMRawStorage* store);
 
   struct ObjectDirectoryEntry {
     OMStorable* _object;
