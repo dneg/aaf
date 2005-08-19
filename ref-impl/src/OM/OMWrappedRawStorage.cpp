@@ -280,7 +280,8 @@ void OMWrappedRawStorage::streamReadAt(OMUInt64 position,
                                        const void* clientArgument) const
 {
   TRACE("OMWrappedRawStorage::streamReadAt");
-  ASSERT("Unimplemented code not reached", false);
+
+  _store->streamReadAt(position, buffer, bytes, completion, clientArgument);
 }
 
 void OMWrappedRawStorage::streamReadAt(OMUInt64 position,
@@ -290,7 +291,12 @@ void OMWrappedRawStorage::streamReadAt(OMUInt64 position,
                                        const void* clientArgument) const
 {
   TRACE("OMWrappedRawStorage::streamReadAt");
-  ASSERT("Unimplemented code not reached", false);
+
+  _store->streamReadAt(position,
+                       buffers,
+                       bufferCount,
+                       completion,
+                       clientArgument);
 }
 
 void OMWrappedRawStorage::streamWriteAt(OMUInt64 position,
@@ -320,7 +326,8 @@ void OMWrappedRawStorage::streamWriteAt(OMUInt64 position,
                                         const void* clientArgument)
 {
   TRACE("OMWrappedRawStorage::streamWriteAt");
-  ASSERT("Unimplemented code not reached", false);
+
+  _store->streamWriteAt(position, buffer, bytes, completion, clientArgument);
 }
 
 void OMWrappedRawStorage::streamWriteAt(OMUInt64 position,
@@ -330,5 +337,10 @@ void OMWrappedRawStorage::streamWriteAt(OMUInt64 position,
                                         const void* clientArgument)
 {
   TRACE("OMWrappedRawStorage::streamWriteAt");
-  ASSERT("Unimplemented code not reached", false);
+
+  _store->streamWriteAt(position,
+                        buffers,
+                        bufferCount,
+                        completion,
+                        clientArgument);
 }
