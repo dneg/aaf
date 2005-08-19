@@ -250,66 +250,7 @@ public:
 
   virtual void writePrimerPack(const OMDictionary* dictionary);
 
-  static void writeKLVKey(OMRawStorage* store, const OMKLVKey& key);
-
-  static void writeKLVLength(OMRawStorage* store, const OMUInt8& length);
-  static void writeKLVLength(OMRawStorage* store, const OMUInt16& length);
-  static void writeKLVLength(OMRawStorage* store, const OMUInt32& length);
-  static void writeKLVLength(OMRawStorage* store, const OMUInt64& length);
-
-  static void writeBerLength(OMRawStorage* store,
-                             OMUInt32 lengthSize,
-                             const OMUInt64& length);
-
-    // @cmember Write a fill key, a BER encoded length and
-    //          <p length> bytes of fill.
-  static void writeKLVFill(OMRawStorage* store, const OMUInt64& length);
-
-  static void write(OMRawStorage* store, const OMUInt8& i);
-  static void write(OMRawStorage* store, const OMUInt16& i, bool reorderBytes);
-  static void write(OMRawStorage* store, const OMUInt32& i, bool reorderBytes);
-  static void write(OMRawStorage* store, const OMUInt64& i, bool reorderBytes);
-  static void write(OMRawStorage* store,
-                    const OMUniqueObjectIdentification& id,
-                    bool reorderBytes);
-
-  static void write(OMRawStorage* store,
-                    const OMByte* buffer,
-                    const OMUInt32& bufferSize);
-
-    // @cmember The minimum size of <p i> when encoded using <f berEncode>.
-    //          The returned size includes the BER length byte.
-  static size_t berEncodedSize(const OMUInt64 i);
-
-    // @cmember BER encode <p value> into <p berValueBuffer>.
-  static void berEncode(OMByte* berValueBuffer,
-                        size_t berValueBufferSize,
-                        const OMUInt32& berValueSize,
-                        const OMUInt64& value);
-
-  static OMUInt64 readBerLength(OMRawStorage* store);
-
   virtual void readPrimerPack(OMDictionary* dictionary);
-
-  static void readKLVKey(OMRawStorage* store, OMKLVKey& key);
-
-  static OMUInt64 readKLVLength(OMRawStorage* store);
-
-  static void readKLVFill(OMRawStorage* store);
-
-  static void skipLV(OMRawStorage* store);
-
-  static void read(OMRawStorage* store, OMUInt8& i);
-  static void read(OMRawStorage* store, OMUInt16& i, bool reorderBytes);
-  static void read(OMRawStorage* store, OMUInt32& i, bool reorderBytes);
-  static void read(OMRawStorage* store, OMUInt64& i, bool reorderBytes);
-  static void read(OMRawStorage* store,
-                    OMUniqueObjectIdentification& id,
-                    bool reorderBytes);
-
-  static void read(OMRawStorage* store,
-                   OMByte* buffer,
-                   const OMUInt32& bufferSize);
 
     // Object -> instanceId
   static OMUniqueObjectIdentification instanceId(OMStorable* object);
