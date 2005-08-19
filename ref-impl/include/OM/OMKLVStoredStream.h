@@ -92,12 +92,6 @@ public:
     // @cmember Get the label.
   virtual OMKLVKey label(void) const;
 
-    // @cmember Set the essence element label to <p label>.
-  virtual void setEssenceElementLabel(const OMKLVKey& label);
-
-    // @cmember Get the essence element label.
-  virtual OMKLVKey essenceElementLabel(void) const;
-
     // @cmember Set the block size (alignment) of this essence element.
   virtual void setBlockSize(OMUInt32 blockSize);
 
