@@ -212,7 +212,12 @@ public:
     //          <p stream> contained within this <c OMKLVStoredObject>.
   virtual OMStoredStream* createStoredStream(const OMDataStream& property);
 
+  virtual void writeHeaderPartition(void);
+  static void writeFooterPartition(OMRawStorage* store);
+
   static bool readHeaderPartition(OMRawStorage* store);
+
+  static void finalize(void);
 
 private:
   // @access Private members.
