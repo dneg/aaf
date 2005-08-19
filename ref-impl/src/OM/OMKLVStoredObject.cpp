@@ -1110,7 +1110,10 @@ void OMKLVStoredObject::restore(OMWeakReference& singleton,
   OMUniqueObjectIdentification id;
   _storage->read(id, _reorderBytes);
 
-  OMWeakObjectReference newReference(&singleton, id, nullOMPropertyTag);
+  OMWeakObjectReference<OMUniqueObjectIdentification> newReference(
+                                                            &singleton,
+                                                            id,
+                                                            nullOMPropertyTag);
   singleton.reference() = newReference;
 }
 
@@ -1315,7 +1318,8 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
       case SF_WEAK_OBJECT_REFERENCE: {
         OMWeakReference* wr = dynamic_cast<OMWeakReference*>(p);
         ASSERT("Valid type", wr != 0);
-        OMWeakObjectReference& r = wr->reference();
+        OMWeakObjectReference<OMUniqueObjectIdentification>& r =
+                                                               wr->reference();
         OMStorable* object = r.getValue();
         ASSERT("Valid object", object != 0);
         referenceSave(object, id);
@@ -1337,7 +1341,8 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
                                                                 *v->iterator();
         while (++iterator) {
           OMWeakReferenceVectorElement& element = iterator.value();
-          OMWeakObjectReference& r = element.reference();
+          OMWeakObjectReference<OMUniqueObjectIdentification>& r =
+                                                           element.reference();
           OMStorable* object = r.getValue();
           ASSERT("Valid object", object != 0);
           OMUniqueObjectIdentification id = _storage->instanceId(object);
@@ -1362,7 +1367,8 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
                                                                 *s->iterator();
         while (++iterator) {
           OMWeakReferenceSetElement& element = iterator.value();
-          OMWeakObjectReference& r = element.reference();
+          OMWeakObjectReference<OMUniqueObjectIdentification>& r =
+                                                           element.reference();
           OMStorable* object = r.getValue();
           ASSERT("Valid object", object != 0);
           OMUniqueObjectIdentification id = _storage->instanceId(object);
@@ -1748,7 +1754,8 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
       case SF_WEAK_OBJECT_REFERENCE: {
         OMWeakReference* wr = dynamic_cast<OMWeakReference*>(p);
         ASSERT("Valid type", wr != 0);
-        OMWeakObjectReference& r = wr->reference();
+        OMWeakObjectReference<OMUniqueObjectIdentification>& r =
+                                                               wr->reference();
         OMUniqueObjectIdentification id = r.identification();
         OMStorable* obj = _storage->object(id);
 #if defined(USETAGTABLE)
@@ -1765,7 +1772,9 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
         kp->getBits(reinterpret_cast<OMByte*>(&k), sizeof(k));
 #if defined(USETAGTABLE)
         OMPropertyTag tag = findTag(wr->targetName());
-        OMWeakObjectReference newReference(p, k, tag);
+        OMWeakObjectReference<OMUniqueObjectIdentification> newReference(p,
+                                                                         k,
+                                                                         tag);
         wr->reference() = newReference;
 #else
         wr->reference().setValue(id, obj);
@@ -1801,7 +1810,8 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
                                                                 *v->iterator();
         while (++iterator) {
           OMWeakReferenceVectorElement& element = iterator.value();
-          OMWeakObjectReference& r = element.reference();
+          OMWeakObjectReference<OMUniqueObjectIdentification>& r =
+                                                           element.reference();
           OMUniqueObjectIdentification id = r.identification();
           OMStorable* obj = _storage->object(id);
 #if defined(USETAGTABLE)
@@ -1815,7 +1825,10 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
           kp->getBits(reinterpret_cast<OMByte*>(&k), sizeof(k));
 #if defined(USETAGTABLE)
           OMPropertyTag tag = findTag(v->targetName());
-          OMWeakObjectReference newReference(v, k, tag);
+          OMWeakObjectReference<OMUniqueObjectIdentification> newReference(
+                                                                          v,
+                                                                          k,
+                                                                          tag);
           r = newReference;
 #else
           r.setValue(k, obj);
@@ -1844,7 +1857,8 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
           objects.grow(count);
           while (++iterator) {
             OMWeakReferenceSetElement& element = iterator.value();
-            OMWeakObjectReference& r = element.reference();
+            OMWeakObjectReference<OMUniqueObjectIdentification>& r =
+                                                           element.reference();
             OMUniqueObjectIdentification id = r.identification();
             objects.insert(id);
           }
@@ -1866,7 +1880,10 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
             OMWeakReferenceSetElement element(s, key, nullOMPropertyTag);
 #if defined(USETAGTABLE)
             OMPropertyTag tag = findTag(s->targetName());
-            OMWeakObjectReference newReference(s, key, tag);
+            OMWeakObjectReference<OMUniqueObjectIdentification> newReference(
+                                                                          s,
+                                                                          key,
+                                                                          tag);
             element.reference() = newReference;
 #else
             element.setValue(key, obj);
