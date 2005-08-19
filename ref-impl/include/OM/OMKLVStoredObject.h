@@ -245,7 +245,14 @@ public:
 
   static void writeKLVKey(OMRawStorage* store, const OMKLVKey& key);
 
+  static void writeKLVLength(OMRawStorage* store, const OMUInt8& length);
+  static void writeKLVLength(OMRawStorage* store, const OMUInt16& length);
+  static void writeKLVLength(OMRawStorage* store, const OMUInt32& length);
   static void writeKLVLength(OMRawStorage* store, const OMUInt64& length);
+
+  static void writeBerLength(OMRawStorage* store,
+                             OMUInt32 lengthSize,
+                             const OMUInt64& length);
 
   static void writeKLVFill(OMRawStorage* store, const OMUInt64& length);
 
@@ -261,11 +268,14 @@ public:
                     const OMByte* buffer,
                     const OMUInt32& bufferSize);
 
+    // @cmember The minimum size of <p i> when encoded using <f berEncode>.
+    //          The returned size includes the BER length byte.
   static size_t berEncodedSize(const OMUInt64 i);
 
-  static void berEncode(OMByte* berValue,
+    // @cmember BER encode <p value> into <p berValueBuffer>.
+  static void berEncode(OMByte* berValueBuffer,
                         size_t berValueBufferSize,
-                        OMUInt32& berValueSize,
+                        const OMUInt32& berValueSize,
                         const OMUInt64& value);
 
   static OMUInt64 readBerLength(OMRawStorage* store);
