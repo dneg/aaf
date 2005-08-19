@@ -1914,8 +1914,13 @@ void OMKLVStoredObject::writeKLVFill(OMRawStorage* store,
   writeKLVKey(store, fillKey);
   writeKLVLength(store, length);
   for (OMUInt64 i = 0; i < length; i++) {
-    const OMByte fillPattern[] = "FFFF.FFFC TIM MEC HEHT GEWYRCAN ";
+#if defined(OM_DEBUG)
+    const OMByte fillPattern[] = "FFFF.FFFC ";
     write(store, fillPattern[i % (sizeof(fillPattern) - 1)]);
+#else
+    const OMByte fillPattern = 0;
+    write(store, fillPattern);
+#endif
   }
 }
 
