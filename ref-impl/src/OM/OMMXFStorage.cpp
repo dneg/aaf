@@ -872,6 +872,19 @@ void OMMXFStorage::readPartition(OMUInt64 ANAME(length),
   }
 }
 
+void OMMXFStorage::readPartition(OMUInt64 ANAME(length),
+                                 OMUInt32& bodySID,
+                                 OMUInt32& indexSID,
+                                 OMUInt32& KAGSize,
+                                 OMUInt64& previousPartition,
+                                 OMUInt64& thisPartition,
+                                 OMUInt64& footerPartition)
+{
+  TRACE("OMMXFStorage::readPartition");
+
+  ASSERT("Unimplemented code not reached", false);
+}
+
 void OMMXFStorage::readHeaderPartition(void)
 {
   TRACE("OMMXFStorage::readHeaderPartition");
