@@ -1237,7 +1237,7 @@ void OMKLVStoredObject::write(const wchar_t* string)
   size_t characterCount = lengthOfWideString(string) + 1;
   OMPropertySize externalBytesSize = characterCount * 2;
   ASSERT("Valid length", externalBytesSize <= (size_t)OMINT16_MAX);
-  OMUInt16 len = externalBytesSize;
+  OMUInt16 len = characterCount;
   _storage->write(len, _reorderBytes);
 
   OMCharacter* buffer = new OMCharacter[characterCount];
