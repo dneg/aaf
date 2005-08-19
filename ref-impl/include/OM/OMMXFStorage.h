@@ -337,7 +337,7 @@ public:
 
   virtual void skipLV(void) const;
 
-  virtual void skipV(OMUInt64& length) const;
+  virtual void skipV(OMUInt64 length) const;
 
   static OMUInt64 readBerLength(const OMRawStorage* store);
 
