@@ -1458,8 +1458,9 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
 
   OMUInt64 setLength = _storage->readKLVLength();
 
-  referenceRestore(properties.container(), PID_InterchangeObject_InstanceUID);
   const OMUInt16 overhead = sizeof(OMPropertyId) + sizeof(OMPropertySize);
+
+  referenceRestore(properties.container(), PID_InterchangeObject_InstanceUID);
   setLength = setLength - (overhead + sizeof(OMUniqueObjectIdentification));
 
   if (properties.container()->classId() == Class_Root) {
