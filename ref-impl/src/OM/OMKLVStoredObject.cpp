@@ -350,7 +350,7 @@ void OMKLVStoredObject::restore(OMDataStream& /* stream */,
   //   @parm The <c OMDataStream> to be opened.
   //   @rdesc The newly created <c OMStoredStream>.
 OMStoredStream* OMKLVStoredObject::openStoredStream(
-											const OMDataStream& /* property */)
+                                            const OMDataStream& /* property */)
 {
   TRACE("OMKLVStoredObject::openStoredStream");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
@@ -362,7 +362,7 @@ OMStoredStream* OMKLVStoredObject::openStoredStream(
   //   @parm The <c OMDataStream> to be created.
   //   @rdesc The newly created <c OMStoredStream>.
 OMStoredStream* OMKLVStoredObject::createStoredStream(
-											const OMDataStream& /* property */)
+                                            const OMDataStream& /* property */)
 {
   TRACE("OMKLVStoredObject::createStoredStream");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
