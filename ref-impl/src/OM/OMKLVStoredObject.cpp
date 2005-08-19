@@ -258,9 +258,19 @@ void OMKLVStoredObject::save(OMFile& file)
   // Save the rest of the file
   file.root()->save();
 
+  // Insert alignment filler
+  OMUInt32 bodyPartitionOffset = 0x20000; // Get this from header ?
   OMUInt32 KAGSize = 0x200;
+  OMUInt32 fillAlignment;
+  if (metaDataOnly) {
+    // fill to next KAG
+    fillAlignment = KAGSize;
+  } else {
+    // fill remainder of pre-allocated space
+    fillAlignment = bodyPartitionOffset;
+  }
   OMUInt64 currentPosition = _storage->position();
-  fill(_storage, currentPosition, KAGSize);
+  fill(_storage, currentPosition, fillAlignment);
 
   // Save streams
   if (!metaDataOnly) {
