@@ -1821,14 +1821,7 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
     PropertyDefinitionsIterator*
                            properties = classDefinition->propertyDefinitions();
     while (++(*properties)) {
-      OMObject* obj = properties->currentObject();
-      OMPropertyDefinition* propertyDefinition =
-                                      dynamic_cast<OMPropertyDefinition*>(obj);
-      ASSERT("Object is correct type", propertyDefinition != 0);
-      OMPropertyId pid = propertyDefinition->localIdentification();
-      if (pid >= 0x8000) {
-        elementCount = elementCount + 1;
-      }
+      elementCount = elementCount + 1;
     }
     delete properties;
   }
@@ -1856,14 +1849,14 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
                                       dynamic_cast<OMPropertyDefinition*>(obj);
       ASSERT("Object is correct type", propertyDefinition != 0);
       OMPropertyId pid = propertyDefinition->localIdentification();
-      if (pid >= 0x8000) {
-        _storage->write(pid, _reorderBytes);
-        OMUniqueObjectIdentification id =
+ 
+      _storage->write(pid, _reorderBytes);
+      OMUniqueObjectIdentification id =
                                     propertyDefinition->uniqueIdentification();
-        OMKLVKey k;
-        convert(k, id);
-        _storage->writeKLVKey(k);
-      }
+      OMKLVKey k;
+      convert(k, id);
+      _storage->writeKLVKey(k);
+ 
     }
     delete properties;
   }
