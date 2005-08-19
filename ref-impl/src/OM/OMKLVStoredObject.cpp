@@ -367,13 +367,18 @@ void OMKLVStoredObject::save(OMFile& file)
 {
   TRACE("OMKLVStoredObject::save(OMFile)");
 
-  // The header partition has already been written,
-  // start saving immediately after the header partition
-  // and any fill.
-  //
-  _storage->setPosition(0);
-  readHeaderPartition(_storage);
-  readKLVFill(_storage);
+  if (metaDataOnly) {
+    // The header partition has already been written,
+    // start saving immediately after the header partition
+    // and any fill.
+    //
+    _storage->readHeaderPartition();
+    _storage->readKLVFill();
+  } else {
+    // Write header partition and alignment fill.
+    //
+    _storage->writeHeaderPartition();
+  }
 
   OMUInt64 pos = _storage->position();
   _storage->setPosition(pos);
@@ -408,9 +413,16 @@ void OMKLVStoredObject::save(OMFile& file)
     writeBodyPartition(_storage);
   }
 
-  // Save streams
   if (!metaDataOnly) {
+    // Save streams
+    //
     streamSave(*file.root()->propertySet());
+
+    // Write the footer
+    //
+    OMUInt64 position = _storage->size();
+    _storage->setPosition(position);
+    _storage->writeFooterPartition();
   }
 }
 
