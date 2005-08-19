@@ -1722,6 +1722,16 @@ void OMMXFStorage::streamReadAt(OMUInt32 sid,
   }
 }
 
+void OMMXFStorage::streamReadAt(OMUInt32 sid,
+                                OMUInt64 position,
+                                OMIOVector buffers,
+                                OMUInt32 bufferCount,
+                                OMUInt32& bytesRead)
+{
+  TRACE("OMMXFStorage::streamReadAt");
+  ASSERT("Unimplemented code not reached", false);
+}
+
 void OMMXFStorage::streamRestoreSegment(OMUInt32 sid,
                                         OMUInt64 start,
                                         OMUInt64 allocatedSize,
