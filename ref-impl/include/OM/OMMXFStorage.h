@@ -170,6 +170,8 @@ public:
                     OMUInt32 byteCount,
                     OMUInt32& bytesRead) const;
 
+  virtual OMUInt64 readBerLength(void) const;
+
   struct ObjectDirectoryEntry {
     OMStorable* _object;
     OMUInt64 _offset;
