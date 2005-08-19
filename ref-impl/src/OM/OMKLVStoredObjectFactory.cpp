@@ -273,3 +273,11 @@ void OMKLVStoredObjectFactory::close(OMRawStorage* /* rawStorage */,
 {
   TRACE("OMKLVStoredObjectFactory::close");
 }
+
+  // @mfunc Perform any necessary actions when <p file> is closed.
+  //   @parm The <c OMFile>
+void OMKLVStoredObjectFactory::close(OMFile* /* file */)
+{
+  TRACE("OMKLVStoredObjectFactory::close");
+  // Nothing to do.
+}
