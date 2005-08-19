@@ -690,8 +690,8 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   // restore the client root
   //
   root->setClassFactory(dictionary);
-  while (memcmp(&k, &objectDirectoryKey, sizeof(OMKLVKey)) != 0) {
-    convert(cid, k);
+  convert(cid, k);
+  while (dictionary->isRegistered(cid)) {
     OMStorable* object = dictionary->create(cid);
     ASSERT("Registered class id", object != 0);
     ASSERT("Valid class factory", dictionary == object->classFactory());
@@ -706,6 +706,7 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
     flatRestore(*object->propertySet());
 
     _storage->readKLVKey(k);
+    convert(cid, k);
   }
   OMProperty* hp = root->propertySet()->get(PID_Root_Header);
   OMStrongReference* hsr = dynamic_cast<OMStrongReference*>(hp);
