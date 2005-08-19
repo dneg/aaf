@@ -26,6 +26,9 @@
 #include "OMKLVStoredObject.h"
 #include "OMUtilities.h"
 #include "OMAssertions.h"
+#include "OMDiskRawStorage.h"
+
+#define METADATAONLY 1
 
   // @mfunc Constructor.
 OMKLVStoredObjectFactory::OMKLVStoredObjectFactory(
@@ -92,7 +95,13 @@ OMKLVStoredObjectFactory::createWrite(OMRawStorage* rawStorage,
                                       const OMByteOrder byteOrder)
 {
   TRACE("OMKLVStoredObjectFactory::createWrite");
-  return OMKLVStoredObject::createWrite(rawStorage, byteOrder);
+
+  OMKLVStoredObject* result = OMKLVStoredObject::createWrite(rawStorage,
+                                                             byteOrder);
+#if !defined(METADATAONLY)
+  result->writeHeaderPartition();
+#endif
+  return result;
 }
 
   // @mfunc Create a new root <c OMKLVStoredObject> in the raw storage
@@ -106,7 +115,13 @@ OMKLVStoredObjectFactory::createModify(OMRawStorage* rawStorage,
                                        const OMByteOrder byteOrder)
 {
   TRACE("OMKLVStoredObjectFactory::createModify");
-  return OMKLVStoredObject::createModify(rawStorage, byteOrder);
+
+  OMKLVStoredObject* result = OMKLVStoredObject::createModify(rawStorage,
+                                                              byteOrder);
+#if !defined(METADATAONLY)
+  result->writeHeaderPartition();
+#endif
+  return result;
 }
 
   // @mfunc Open the root <c OMKLVStoredObject> in the disk file
@@ -115,12 +130,12 @@ OMKLVStoredObjectFactory::createModify(OMRawStorage* rawStorage,
   //   @rdesc An <c OMKLVStoredObject> representing the root object in
   //          the disk file.
 OMStoredObject*
-OMKLVStoredObjectFactory::openRead(const wchar_t* /* fileName */)
+OMKLVStoredObjectFactory::openRead(const wchar_t* fileName)
 {
   TRACE("OMKLVStoredObjectFactory::openRead");
-  ASSERT("Unimplemented code not reached", false);
-//return OMKLVStoredObject::openRead(fileName);
-  return 0;
+  OMDiskRawStorage* rawStorage = OMDiskRawStorage::openExistingRead(fileName);
+  OMStoredObject* result = OMKLVStoredObject::openRead(rawStorage);
+  return result;
 }
 
   // @mfunc Open the root <c OMKLVStoredObject> in the disk file
@@ -176,11 +191,18 @@ OMKLVStoredObjectFactory::createWrite(const wchar_t* /* fileName */,
   //   @parm The name of the file.
   //   @rdesc True if the file is recognized, false otherwise.
 bool
-OMKLVStoredObjectFactory::isRecognized(const wchar_t* /* fileName */)
+OMKLVStoredObjectFactory::isRecognized(const wchar_t* fileName)
 {
   TRACE("OMKLVStoredObjectFactory::isRecognized");
-//ASSERT("Unimplemented code not reached", false);
-  return false;
+  bool result;
+  OMRawStorage* rawStorage = OMDiskRawStorage::openExistingRead(fileName);
+  if (rawStorage != 0) {
+    result = isRecognized(rawStorage);
+    delete rawStorage;
+  } else {
+    result = false;
+  }
+  return result;
 }
 
   // @mfunc Does <p rawStorage> contain a recognized file ?
@@ -188,11 +210,15 @@ OMKLVStoredObjectFactory::isRecognized(const wchar_t* /* fileName */)
   //   @parm The raw storage.
   //   @rdesc True if the file is recognized, false otherwise.
 bool
-OMKLVStoredObjectFactory::isRecognized(OMRawStorage* /* rawStorage */)
+OMKLVStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
 {
   TRACE("OMKLVStoredObjectFactory::isRecognized");
-//ASSERT("Unimplemented code not reached", false);
-  return false;
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Positionable raw storage", rawStorage->isPositionable());
+
+  bool result = OMKLVStoredObject::readHeaderPartition(rawStorage);
+  rawStorage->setPosition(0);
+  return result;
 }
 
   // @mfunc Can a file be created successfully on the given
@@ -202,12 +228,13 @@ OMKLVStoredObjectFactory::isRecognized(OMRawStorage* /* rawStorage */)
   //   @parm The <t OMAccessMode>.
   //   @rdesc True if the file can be created, false otherwise.
 bool OMKLVStoredObjectFactory::compatibleRawStorage(
-                                   const OMRawStorage* /* rawStorage */,
-                                   const OMFile::OMAccessMode /* accessMode */)
+                                  const OMRawStorage* NNAME(rawStorage),
+                                  const OMFile::OMAccessMode NNAME(accessMode))
 {
   TRACE("OMKLVStoredObjectFactory::compatibleRawStorage");
-  bool result = false;
-  ASSERT("Unimplemented code not reached", false);
+
+  // tjb -- missing checks ?
+  bool result = true;
   return result;
 }
 
@@ -216,11 +243,12 @@ bool OMKLVStoredObjectFactory::compatibleRawStorage(
   //   @parm The <t OMAccessMode>.
   //   @rdesc True if the file can be created, false otherwise.
 bool OMKLVStoredObjectFactory::compatibleNamedFile(
-                                   const OMFile::OMAccessMode /* accessMode */)
+                                  const OMFile::OMAccessMode NNAME(accessMode))
 {
   TRACE("OMKLVStoredObjectFactory::compatibleNamedFile");
+
+  // tjb -- missing checks ?
   bool result = false;
-  ASSERT("Unimplemented code not reached", false);
   return result;
 }
 
@@ -236,8 +264,11 @@ void OMKLVStoredObjectFactory::close(const wchar_t* /* fileName */)
   // @mfunc Perform any necessary actions when the file
   //        contained in <p rawStorage> is closed.
   //   @parm The <c OMRawStorage>
-void OMKLVStoredObjectFactory::close(OMRawStorage* /* rawStorage */)
+void OMKLVStoredObjectFactory::close(OMRawStorage* rawStorage)
 {
   TRACE("OMKLVStoredObjectFactory::close");
-  ASSERT("Unimplemented code not reached", false);
+#if !defined(METADATAONLY)
+  OMKLVStoredObject::writeFooterPartition(rawStorage);
+  OMKLVStoredObject::finalize();
+#endif
 }
