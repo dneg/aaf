@@ -227,7 +227,7 @@ public:
                              OMUInt32& indexSID,
                              OMUInt32& KAGSize);
 
-  virtual bool readHeaderPartition(void);
+  virtual void readHeaderPartition(void);
 
   static bool read(const OMRawStorage* store, OMUInt8& i);
   static bool read(const OMRawStorage* store, OMUInt16& i, bool reorderBytes);
