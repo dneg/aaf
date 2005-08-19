@@ -1106,8 +1106,9 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         ASSERT("Valid type", v != 0);
         OMUInt32 elementCount = v->count();
         OMUInt32 elementSize = sizeof(OMUniqueObjectIdentification);
-        OMPropertySize size = sizeof(OMUInt32) + sizeof(OMUInt32)
-                              + (elementCount * elementSize);
+        OMPropertySize size = static_cast<OMPropertySize>(
+                                sizeof(OMUInt32) + sizeof(OMUInt32)
+                                + (elementCount * elementSize));
         _storage->write(size, _reorderBytes);
         _storage->write(elementCount, _reorderBytes);
         _storage->write(elementSize, _reorderBytes);
@@ -1131,8 +1132,9 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         ASSERT("Valid type", s != 0);
         OMUInt32 elementCount = s->count();
         OMUInt32 elementSize = sizeof(OMUniqueObjectIdentification);
-        OMPropertySize size = sizeof(OMUInt32) + sizeof(OMUInt32)
-                              + (elementCount * elementSize);
+        OMPropertySize size = static_cast<OMPropertySize>(
+                                sizeof(OMUInt32) + sizeof(OMUInt32)
+                                + (elementCount * elementSize));
         _storage->write(size, _reorderBytes);
         _storage->write(elementCount, _reorderBytes);
         _storage->write(elementSize, _reorderBytes);
@@ -1166,8 +1168,9 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         ASSERT("Valid type", v != 0);
         OMUInt32 elementCount = v->count();
         OMUInt32 elementSize = sizeof(OMUniqueObjectIdentification);
-        OMPropertySize size = sizeof(OMUInt32) + sizeof(OMUInt32)
-                              + (elementCount * elementSize);
+        OMPropertySize size = static_cast<OMPropertySize>(
+                                sizeof(OMUInt32) + sizeof(OMUInt32)
+                                + (elementCount * elementSize));
         _storage->write(size, _reorderBytes);
         _storage->write(elementCount, _reorderBytes);
         _storage->write(elementSize, _reorderBytes);
@@ -1191,8 +1194,9 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         ASSERT("Valid type", s != 0);
         OMUInt32 elementCount = s->count();
         OMUInt32 elementSize = sizeof(OMUniqueObjectIdentification);
-        OMPropertySize size = sizeof(OMUInt32) + sizeof(OMUInt32)
-                              + (elementCount * elementSize);
+        OMPropertySize size = static_cast<OMPropertySize>(
+                                sizeof(OMUInt32) + sizeof(OMUInt32)
+                                + (elementCount * elementSize));
         _storage->write(size, _reorderBytes);
         _storage->write(elementCount, _reorderBytes);
         _storage->write(elementSize, _reorderBytes);
