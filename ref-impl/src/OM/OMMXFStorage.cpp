@@ -115,6 +115,13 @@ OMMXFStorage::~OMMXFStorage(void)
   }
 }
 
+  // @mfunc Open this <c OMMXFStorage>.
+void OMMXFStorage::open(void)
+{
+  TRACE("OMMXFStorage:open");
+  ASSERT("Unimplemented code not reached", false);
+}
+
   // @mfunc Close this <c OMMXFStorage>.
 void OMMXFStorage::close(void)
 {
