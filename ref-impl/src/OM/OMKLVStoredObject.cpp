@@ -385,12 +385,6 @@ void OMKLVStoredObject::save(OMFile& file)
   // Save the meta object directory
   _storage->saveObjectDirectory();
 
-  // Insert alignment fill
-  OMUInt32 fillAlignment;
-  // fill remainder of pre-allocated space
-  fillAlignment = bodyPartitionOffset;
-  _storage->fillAlignK(_storage->position(), fillAlignment);
-
   // Save streams
   //
   _storage->saveStreams();
