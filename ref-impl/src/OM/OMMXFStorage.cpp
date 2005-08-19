@@ -247,6 +247,37 @@ void OMMXFStorage::writePartition(const OMKLVKey& key, OMUInt32 KAGSize)
   delete iter;
 }
 
+void OMMXFStorage::writeRandomIndex(void)
+{
+  TRACE("OMMXFStorage::writeRandomIndex");
+
+  OMUInt32 entrySize = sizeof(OMUInt32) + sizeof(OMUInt64);
+  writeKLVKey(RandomIndexMetadataKey);
+  OMUInt32 count = _partitions.count();
+  OMUInt32 length = (count * entrySize) + sizeof(OMUInt32);
+  writeKLVLength(length);
+  for (size_t i = 0; i < count; i++) {
+    Partition* p = _partitions.valueAt(i);
+    write(p->_sid, _reorderBytes);
+    write(p->_address, _reorderBytes);
+  }
+  OMUInt32 overallLength = length + sizeof(OMKLVKey) + sizeof(OMUInt64) + 1;
+  write(overallLength, _reorderBytes);
+}
+
+void OMMXFStorage::readRandomIndex(void)
+{
+  TRACE("OMMXFStorage::readRandomIndex");
+  OMUInt64 length = readKLVLength();
+  OMUInt64 entryCount = length / (sizeof(OMUInt32) + sizeof(OMUInt64));
+  for (OMUInt32 i = 0; i < entryCount; i++) {
+    OMUInt32 sid;
+    read(sid, _reorderBytes);
+    OMUInt64 offset;
+    read(offset, _reorderBytes);
+  }
+}
+
   // @mfunc Write a fill key, a BER encoded length and
   //        <p length> bytes of fill.
   //   @parm The number of bytes of fill to write.
