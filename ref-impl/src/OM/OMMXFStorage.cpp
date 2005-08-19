@@ -32,6 +32,7 @@
 #include "OMSet.h"
 #include "OMIdentitySet.h"
 #include "OMIdentitySetIter.h"
+#include "OMKLVStoredObject.h"
 
   // @mfunc Constructor.
 OMMXFStorage::OMMXFStorage(OMRawStorage* store)
@@ -126,6 +127,147 @@ OMMXFStorage::setGeneration(const OMUniqueObjectIdentification& generation)
 {
   TRACE("OMMXFStorage::setGeneration");
   _generation = generation;
+}
+
+void OMMXFStorage::writeHeaderPartition(void)
+{
+  TRACE("OMMXFStorage::writeHeaderPartition");
+  bool reorderBytes;
+  if (hostByteOrder() == bigEndian) {
+    reorderBytes = false;
+  } else {
+    reorderBytes = true;
+  }
+  writePartition(ClosedHeaderPartitionPackKey, KAGSize, reorderBytes);
+  OMUInt64 currentPosition = position();
+  fillAlignK(currentPosition, KAGSize);
+}
+
+void OMMXFStorage::writeBodyPartition(void)
+{
+  TRACE("OMMXFStorage::writeBodyPartition");
+  bool reorderBytes;
+  if (hostByteOrder() == bigEndian) {
+    reorderBytes = false;
+  } else {
+    reorderBytes = true;
+  }
+  OMUInt32 KAGSize = 0x200; // Different than the default
+  writePartition(ClosedBodyPartitionPackKey, KAGSize, reorderBytes);
+  OMUInt64 currentPosition = position();
+  fillAlignV(currentPosition, KAGSize);
+}
+
+void OMMXFStorage::writeFooterPartition(void)
+{
+  TRACE("OMMXFStorage::writeFooterPartition");
+  bool reorderBytes;
+  if (hostByteOrder() == bigEndian) {
+    reorderBytes = false;
+  } else {
+    reorderBytes = true;
+  }
+  writePartition(ClosedFooterPartitionPackKey, KAGSize, reorderBytes);
+}
+
+void OMMXFStorage::writePartition(const OMKLVKey& key,
+                                  OMUInt32 KAGSize,
+                                  bool reorderBytes)
+{
+  TRACE("OMMXFStorage::writePartition");
+
+  OMKLVKey operationalPattern =
+    {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01,
+     0x0d, 0x01, 0x02, 0x01, 0x01, 0x01, 0x09, 0x00};
+
+  OMKLVKey essenceContainers[] = {
+    {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01,
+     0x0d, 0x01, 0x03, 0x01, 0x02, 0x01, 0x02, 0x01}
+  };
+  OMUInt32 elementSize = sizeof(OMKLVKey);
+  OMUInt32 elementCount = sizeof(essenceContainers) / elementSize;
+
+  OMKLVStoredObject::writeKLVKey(this, key);
+  OMUInt64 sizeOfFixedPortion = 88;
+  OMUInt64 length = sizeOfFixedPortion + (elementCount * elementSize);
+#if defined(BER9)
+  OMKLVStoredObject::writeKLVLength(this, length);
+#else
+  OMKLVStoredObject::writeBerLength(this, 3, length);
+#endif
+  OMUInt16 majorVersion = currentMajorVersion;
+  OMKLVStoredObject::write(this, majorVersion, reorderBytes);
+  OMUInt16 minorVersion = currentMinorVersion;
+  OMKLVStoredObject::write(this, minorVersion, reorderBytes);
+  OMKLVStoredObject::write(this, KAGSize, reorderBytes);
+  OMUInt64 thisPartition = 0;
+  OMKLVStoredObject::write(this, thisPartition, reorderBytes);
+  OMUInt64 previousPartition = 0;
+  OMKLVStoredObject::write(this, previousPartition, reorderBytes);
+  OMUInt64 footerPartition = 0;
+  OMKLVStoredObject::write(this, footerPartition, reorderBytes);
+  OMUInt64 headerByteCount = 0;
+  OMKLVStoredObject::write(this, headerByteCount, reorderBytes);
+  OMUInt64 indexByteCount = 0;
+  OMKLVStoredObject::write(this, indexByteCount, reorderBytes);
+  OMUInt32 indexSID = 1;
+  OMKLVStoredObject::write(this, indexSID, reorderBytes);
+  OMUInt64 bodyOffset = 0;
+  OMKLVStoredObject::write(this, bodyOffset, reorderBytes);
+  OMUInt32 bodySID = 2;
+  OMKLVStoredObject::write(this, bodySID, reorderBytes);
+  OMKLVStoredObject::writeKLVKey(this, operationalPattern);
+  OMKLVStoredObject::write(this, elementCount, reorderBytes);
+  OMKLVStoredObject::write(this, elementSize, reorderBytes);
+  for (OMUInt32 i = 0; i < elementCount; i++) {
+    OMKLVStoredObject::writeKLVKey(this, essenceContainers[i]);
+  }
+}
+
+  // @cmember Write fill so that the next key is page aligned.
+  //   @parm The current position.
+  //   @parm The page/KAG size.
+void OMMXFStorage::fillAlignK(const OMUInt64& currentPosition,
+                              const OMUInt32& KAGSize)
+{
+  TRACE("OMMXFStorage::fillAlignK");
+
+#if defined(BER9)
+  OMUInt64 minimumFill = sizeof(OMKLVKey) + sizeof(OMUInt64) + 1;
+#else
+  OMUInt64 minimumFill = sizeof(OMKLVKey) + 3 + 1;
+#endif
+  OMUInt64 nextPage = (currentPosition / KAGSize) + 1;
+  OMUInt64 remainder = (nextPage * KAGSize) - currentPosition;
+  if (remainder < minimumFill) {
+    remainder = remainder + KAGSize;
+  }
+  remainder = remainder - minimumFill; // Subtract key and length of fill
+  OMKLVStoredObject::writeKLVFill(this, remainder);
+}
+
+  // @mfunc Write fill so that the next value is page aligned.
+  //   @parm The current position.
+  //   @parm The page/KAG size.
+void OMMXFStorage::fillAlignV(const OMUInt64& currentPosition,
+                              const OMUInt32& KAGSize)
+{
+  TRACE("OMMXFStorage::fillAlignV");
+
+#if defined(BER9)
+  OMUInt64 minimumFill = sizeof(OMKLVKey) + sizeof(OMUInt64) + 1;
+#else
+  OMUInt64 minimumFill = sizeof(OMKLVKey) + 3 + 1;
+#endif
+  OMUInt64 nextPage = (currentPosition / KAGSize) + 1;
+  OMUInt64 remainder = (nextPage * KAGSize) - currentPosition;
+  // Subtract key and length of triplet following this fill
+  remainder = remainder - (sizeof(OMKLVKey) + sizeof(OMUInt64) + 1);
+  if (remainder < minimumFill) {
+    remainder = remainder + KAGSize;
+  }
+  remainder = remainder - minimumFill; // Subtract key and length of fill
+  OMKLVStoredObject::writeKLVFill(this, remainder);
 }
 
 OMMXFStorage::ObjectDirectory* OMMXFStorage::instanceIdToObject(void)
