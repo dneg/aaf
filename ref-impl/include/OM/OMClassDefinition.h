@@ -31,6 +31,9 @@
 class OMPropertyDefinition;
 class OMStorable;
 
+class OMReferenceContainerIterator;
+typedef OMReferenceContainerIterator PropertyDefinitionsIterator;
+
   // @class Abstract base class used to define persistent classes
   //        supported by the Object Manager.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
@@ -49,6 +52,8 @@ public:
   virtual const OMPropertyDefinition* propertyDefinition(
 			     const  OMStorable* pDstStorable,
 			     const OMPropertyDefinition* pSrcProperty ) = 0;
+
+  virtual PropertyDefinitionsIterator* propertyDefinitions(void) const = 0;
 
 };
 

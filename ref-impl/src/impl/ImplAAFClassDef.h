@@ -208,6 +208,8 @@ public:
 			     const OMStorable* pDstStorable,
 				 const OMPropertyDefinition* pSrcPropertyDef );
 
+   virtual PropertyDefinitionsIterator* propertyDefinitions(void) const;
+
 public:
 
 	bool

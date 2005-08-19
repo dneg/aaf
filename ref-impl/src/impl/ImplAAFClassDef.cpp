@@ -716,6 +716,11 @@ const OMPropertyDefinition* ImplAAFClassDef::propertyDefinition(
   return pDstPropertyDef;
 }
 
+PropertyDefinitionsIterator* ImplAAFClassDef::propertyDefinitions(void) const
+{
+  return _Properties.createIterator();
+}
+
 // Find the unique identifier property defintion for this class or any parent class
 // (RECURSIVE)
 ImplAAFPropertyDef * ImplAAFClassDef::pvtGetUniqueIdentifier(void) // result is NOT reference counted.
