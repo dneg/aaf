@@ -487,8 +487,18 @@ bool OMMXFStorage::isRandomIndex(OMUInt64 fileSize, OMUInt32 ripSize)
 {
   TRACE("OMMXFStorage::isRandomIndex");
   
-  ASSERT("Unimplemented code not reached", false);
   bool result = false;
+  // How do we check for a reasonable size ?
+  if ((ripSize > 21) && (ripSize < fileSize)) {
+    setPosition(fileSize - ripSize);
+    OMKLVKey k;
+    if (readOuterKLVKey(k)) {
+      if (k == RandomIndexMetadataKey) {
+        // Also check length ?
+        result = true;
+      }
+    }
+  }
   return result;
 }
 
