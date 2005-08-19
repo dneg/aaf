@@ -36,23 +36,23 @@ AAFAnalyzerBase:
 	cd AAFAnalyzerBase && $(MAKE)
 
 .PHONY: TestPhaseLib
-TestPhaseLib:
+TestPhaseLib: AAFAnalyzerBase
 	cd TestPhaseLib && $(MAKE)
 
 .PHONY: RegressionTest
-RegressionTest:
+RegressionTest: AAFAnalyzerBase TestPhaseLib
 	cd RegressionTest && $(MAKE)
 
 .PHONY: BaseTestImpl
-BaseTestImpl:
+BaseTestImpl: AAFAnalyzerBase TestPhaseLib
 	cd BaseTestImpl && $(MAKE)
 
 .PHONY: EditProtocolTestImpl
-EditProtocolTestImpl:
+EditProtocolTestImpl: AAFAnalyzerBase TestPhaseLib
 	cd EditProtocolTestImpl && $(MAKE)
 
 .PHONY: AAFAnalyzer
-AAFAnalyzer:
+AAFAnalyzer: EditProtocolTestImpl AAFAnalyzerBase TestPhaseLib
 	cd AAFAnalyzer && $(MAKE)
 
 .PHONY: clean
