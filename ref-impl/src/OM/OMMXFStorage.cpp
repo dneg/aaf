@@ -1667,6 +1667,8 @@ void OMMXFStorage::saveStreams(void)
 {
   TRACE("OMMXFStorage::saveStreams");
 
+  destroyPartitions();
+
   if (_segments != 0) {
     // The file contains streams
 
