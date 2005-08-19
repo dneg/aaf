@@ -276,8 +276,20 @@ void OMKLVStoredObjectFactory::close(OMRawStorage* /* rawStorage */,
 
   // @mfunc Perform any necessary actions when <p file> is closed.
   //   @parm The <c OMFile>
-void OMKLVStoredObjectFactory::close(OMFile* /* file */)
+void OMKLVStoredObjectFactory::close(OMFile* file)
 {
   TRACE("OMKLVStoredObjectFactory::close");
-  // Nothing to do.
+
+  PRECONDITION("Valid file", file != 0);
+
+  OMRawStorage* store = file->rawStorage();
+  if (store != 0) {
+    store->synchronize();
+  }
+
+  if (OMKLVStoredObject::hasMxfStorage(file)) {
+    OMMXFStorage* store = OMKLVStoredObject::mxfStorage(file);
+    ASSERT("Valid store", store != 0);
+    delete store;
+  }
 }
