@@ -268,7 +268,7 @@ void OMKLVStoredObject::save(OMFile& file)
 
 void OMKLVStoredObject::save(OMStorable& object)
 {
-  TRACE("OMKLVStoredObject::save(OMFile)");
+  TRACE("OMKLVStoredObject::save(OMStorable)");
 
   OMUniqueObjectIdentification iid = instanceId(&object);
   if (!instanceIdToObject()->contains(iid)) {
@@ -279,7 +279,6 @@ void OMKLVStoredObject::save(OMStorable& object)
     e._flags = 0;
     instanceIdToObject()->insert(iid, e);
   }
-
   save(object.classId());
   save(*object.propertySet());
 }
@@ -485,6 +484,9 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   OMKLVKey fillKey =
     {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
      0x03, 0x01, 0x02, 0x10, 0x01, 0x00, 0x00, 0x00};
+  OMKLVKey objectDirectoryKey =
+    {0x96, 0x13, 0xb3, 0x8a, 0x87, 0x34, 0x87, 0x46,
+     0xf1, 0x02, 0x96, 0xf0, 0x56, 0xe0, 0x4d, 0x2a};
 
   // For restoring meta objects
   OMDictionary* metaDictionary = file.dictionary();
@@ -543,7 +545,7 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   // restore the client root
   //
   root->setClassFactory(dictionary);
-  while (memcmp(&k, &fillKey, sizeof(OMKLVKey)) != 0) {
+  while (memcmp(&k, &objectDirectoryKey, sizeof(OMKLVKey)) != 0) {
     convert(cid, k);
     OMStorable* object = dictionary->create(cid);
     ASSERT("Registered class id", object != 0);
