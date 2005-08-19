@@ -32,7 +32,6 @@
 #include "OMSet.h"
 #include "OMIdentitySet.h"
 #include "OMIdentitySetIter.h"
-#include "OMKLVStoredObject.h" // tjb -- temporary
 #include "OMType.h"
 #include "OMUniqueObjectIdentType.h"
 
@@ -430,14 +429,71 @@ void OMMXFStorage::writeBerLength(OMUInt32 lengthSize, const OMUInt64& length)
 
   OMByte berLength[sizeof(OMUInt64) + 1]; // Max
 
-  OMKLVStoredObject::berEncode(berLength,
-                               sizeof(berLength),
-                               lengthSize,
-                               length);
+  berEncode(berLength, sizeof(berLength), lengthSize, length);
   OMUInt32 x;
   write(berLength, lengthSize + 1, x);
 
   POSTCONDITION("All bytes written", x == (lengthSize + 1));
+}
+
+  // @mfunc The minimum size of <p i> when encoded using <f berEncode>.
+  //        The returned size includes the BER length byte.
+  //   @parm The value to encode.
+  //   @rdesc The encoded size.
+size_t OMMXFStorage::berEncodedSize(const OMUInt64 i)
+{
+  TRACE("OMMXFStorage::berEncodedSize");
+
+  size_t result;
+  if (i != 0) {
+    result = sizeof(i);
+    OMUInt64 v = i;
+    while (((v & 0xff00000000000000) >> 56) == 0) {
+      v = v << 8;
+      result = result - 1;
+    }
+  } else {
+    result = 1;
+  }
+  result = result + 1; // account for length byte
+  return result;
+}
+
+  // @mfunc BER encode <p value> into <p berValueBuffer>.
+  //   @parm OMByte* | berValueBuffer | The buffer in which to place the BER
+  //         encoded value.
+  //   @parm size_t | berValueBufferSize | The size of the buffer.
+  //   @parm const OMUInt32& | berValueSize | The desired encoding size 1-8
+  //         (does not include the BER length byte). e.g for a value that fits
+  //         in an OMUInt32, 4 is sufficient.
+  //   @parm const OMUInt64& | value | The value to encode.
+void OMMXFStorage::berEncode(OMByte* berValueBuffer,
+                                  size_t ANAME(berValueBufferSize),
+                                  const OMUInt32& berValueSize,
+                                  const OMUInt64& value)
+{
+  TRACE("OMMXFStorage::berEncode");
+  PRECONDITION("Valid output buffer", berValueBuffer != 0);
+  PRECONDITION("Valid output buffer size",
+                              berValueBufferSize >= berEncodedSize(value));
+  PRECONDITION("Valid size", berValueSize <= sizeof(OMUInt64));
+  PRECONDITION("Valid size", berValueSize > 0);
+  PRECONDITION("Valid size", berValueSize >= (berEncodedSize(value) - 1));
+
+  OMByte* p = berValueBuffer;
+  OMByte b = 0x80 | (OMByte)berValueSize;
+  *p++ = b;
+  size_t skip = sizeof(OMUInt64) - berValueSize;
+  size_t i;
+  OMUInt64 v = value;
+  for (i = 0; i < skip; i++) {
+    v = v << 8;
+  }
+  for (i = i; i < sizeof(OMUInt64); i++) {
+    b = (OMByte)((v & 0xff00000000000000) >> 56);
+    *p++ = b;
+    v = v << 8;
+  }
 }
 
 OMMXFStorage::ObjectDirectory* OMMXFStorage::instanceIdToObject(void)
