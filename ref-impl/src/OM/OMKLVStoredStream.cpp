@@ -169,7 +169,7 @@ void OMKLVStoredStream::setBlockSize(OMUInt32 blockSize)
 }
 
   // @mfunc The block size (alignment) of this essence element.
-  //   @rdecs The block size.
+  //   @rdesc The block size.
 OMUInt32 OMKLVStoredStream::blockSize(void) const
 {
   TRACE("OMKLVStoredStream::blockSize");
