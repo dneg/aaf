@@ -487,10 +487,14 @@ private:
   void markMetadataStart(OMUInt64 primerKeyPosition);
   void markMetadataEnd(OMUInt64 endKeyPosition);
 
-  void markIndexStart(OMUInt32 sid, OMUInt64 indexKeyPosition);
+  void markIndexStart(OMKLVKey key,
+                      OMUInt32 sid,
+                      OMUInt64 indexKeyPosition);
   void markIndexEnd(OMUInt64 endKeyPosition);
 
-  void markEssenceSegmentStart(OMUInt32 sid, OMUInt64 essenceKeyPosition);
+  void markEssenceSegmentStart(OMKLVKey key,
+                               OMUInt32 sid,
+                               OMUInt64 essenceKeyPosition);
   void markEssenceSegmentEnd(OMUInt64 endKeyPosition);
 
   void markFill(OMUInt64 fillKeyPosition, OMUInt64 fillEndPosition);
