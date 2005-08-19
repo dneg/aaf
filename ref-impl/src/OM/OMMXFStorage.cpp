@@ -1691,17 +1691,20 @@ OMMXFStorage::streamSegment(OMUInt32 sid, OMUInt64 position)
     // Find the last segment in the stream
     Segment* last = findLastSegment(s);
     ASSERT("Last segment found", last != 0);
+    // Calculate number of bytes to grow segment
+    OMUInt64 grids = (position / s->_gridSize) + 1;
+    OMUInt64 grow = (grids * s->_gridSize) - (last->_start + last->_size);
     // Is the last segment at the end of the file
     if (last->_origin + last->_size == _fileSize) {
       // Yes, grow the last segment
-      last->_size = last->_size + s->_gridSize;
+      last->_size = last->_size + grow;
       result = last;
     } else {
       // No, add a new segment at the end of the file
       // tjb - segmented streams not yet implemented
       ASSERT("Unimplemented code not reached", false);
     }
-    _fileSize = _fileSize + s->_gridSize;
+    _fileSize = _fileSize + grow;
   }
   POSTCONDITION("Valid result", result != 0);
   POSTCONDITION("Valid result", position >= result->_start);
