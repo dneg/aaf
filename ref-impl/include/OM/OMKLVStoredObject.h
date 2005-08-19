@@ -256,8 +256,6 @@ public:
 
   OMUInt64 restoreObjectDirectoryReference(OMUniqueObjectIdentification& id);
 
-  static bool metaDataOnly;
-
 private:
   // @access Private members.
 
