@@ -1576,7 +1576,7 @@ void OMKLVStoredObject::writeFooterPartition(OMRawStorage* store)
 }
 
 OMUInt16 currentMajorVersion = 0xffff;
-OMUInt16 currentMinorVersion = 0xfffe;
+OMUInt16 currentMinorVersion = 0xfffd;
 
 void OMKLVStoredObject::writePartition(OMRawStorage* store,
                                        const OMKLVKey& key,
@@ -1690,7 +1690,9 @@ void OMKLVStoredObject::writePrimerPack(OMRawStorage* store,
         write(store, pid, reorderBytes);
         OMUniqueObjectIdentification id =
                                     propertyDefinition->uniqueIdentification();
-        write(store, id, reorderBytes);
+        OMKLVKey k;
+        convert(k, id);
+        writeKLVKey(store, k);
       }
     }
     delete properties;
@@ -1753,7 +1755,7 @@ void OMKLVStoredObject::writeKLVFill(OMRawStorage* store,
   writeKLVKey(store, fillKey);
   writeKLVLength(store, length);
   for (OMUInt64 i = 0; i < length; i++) {
-    const OMByte fillPattern[] = "FFFF.FFFE TIM MEC HEHT GEWYRCAN ";
+    const OMByte fillPattern[] = "FFFF.FFFD TIM MEC HEHT GEWYRCAN ";
     write(store, fillPattern[i % (sizeof(fillPattern) - 1)]);
   }
 }
@@ -2000,6 +2002,8 @@ void OMKLVStoredObject::readPrimerPack(OMRawStorage* store,
     read(store, pid, reorderBytes);
     OMKLVKey x;
     readKLVKey(store, x);
+    OMUniqueObjectIdentification id;
+    convert(id, x);
   }
 }
 
