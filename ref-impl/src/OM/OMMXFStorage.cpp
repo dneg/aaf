@@ -1566,6 +1566,7 @@ void OMMXFStorage::saveStreams(void)
   writeHeaderPartition(0, 0, defaultKAGSize);
 
   if (_segments != 0) {
+    const Segment* lastFileSegment = _segments->last().value();
     OMUInt64 previous = 0;
     SegmentListIterator sl(*_segments, OMBefore);
     while (++sl) {
@@ -1591,7 +1592,14 @@ void OMMXFStorage::saveStreams(void)
 
       // Write partition pack
       setPosition(pos);
-      writeBodyPartition(s->_sid, 0, s->_gridSize);
+      if (lastFileSegment == seg  &&  s->_label == IndexTableSegmentKey) {
+        // This is the last stream segment in the file
+        // and it's a part of an index stream - put it
+        // in the footer partition.
+        writeFooterPartition(s->_sid, s->_gridSize);
+      } else {
+        writeBodyPartition(s->_sid, 0, s->_gridSize);
+      }
 
       // Write essence element label
       writeKLVKey(s->_label);
@@ -1609,11 +1617,15 @@ void OMMXFStorage::saveStreams(void)
 
       previous = seg->_origin;
     }
+
+    if (lastFileSegment->_stream->_label != IndexTableSegmentKey) {
+      setPosition(_fileSize + fillBufferZoneSize);
+      writePartition(FooterKey, 0, 0, defaultKAGSize);
+    }
+  } else {
+    setPosition(_fileSize + fillBufferZoneSize);
+    writePartition(FooterKey, 0, 0, defaultKAGSize);
   }
-  // Write the footer
-  //
-  setPosition(_fileSize + fillBufferZoneSize);
-  writePartition(FooterKey, 0, 0, defaultKAGSize);
 }
 
 OMMXFStorage::SegmentListIterator*
