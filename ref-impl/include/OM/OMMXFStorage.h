@@ -134,6 +134,9 @@ public:
     // @cmember Destructor.
   virtual ~OMMXFStorage(void);
 
+    // @cmember Close this <c OMMXFStorage>.
+  virtual void close(void);
+
     // @cmember Set the operational pattern to <p pattern>.
   virtual void setOperationalPattern(const OMKLVKey& pattern);
 
