@@ -158,7 +158,7 @@ void OMMXFRawStorage::writeAt(OMUInt64 position,
 }
 
   // @mfunc May this <c OMMXFRawStorage> be changed in size ?
-  //   @rdesc Always <e bool.true>.
+  //  @rdesc True if this <c OMMXFRawStorage> is extendible, false otherwise.
   //   @this const
 bool OMMXFRawStorage::isExtendible(void) const
 {
@@ -187,7 +187,6 @@ OMUInt64 OMMXFRawStorage::extent(void) const
   //        being set to <mf OMMXFRawStorage::size>.
   //        precondition - isExtendible()
   //   @parm The new size of this <c OMMXFRawStorage> in bytes.
-  //   @devnote There is no ISO way of truncating a file in place.
 void OMMXFRawStorage::extend(OMUInt64 newSize)
 {
   TRACE("OMMXFRawStorage::extend");
@@ -208,7 +207,7 @@ OMUInt64 OMMXFRawStorage::size(void) const
 
   // @mfunc May the current position, for <f read()> and <f write()>,
   //        of this <c OMMXFRawStorage> be changed ?
-  //   @rdesc Always <e bool.true>.
+  //  @rdesc True if this <c OMMXFRawStorage> is positionable, false otherwise.
   //   @this const
 bool OMMXFRawStorage::isPositionable(void) const
 {
@@ -244,8 +243,6 @@ OMUInt64 OMMXFRawStorage::position(void) const
   //        precondition - isPositionable()
   //   @parm The new position.
   //   @this const
-  //   @devnote fseek takes a long int for offset this may not be sufficient
-  //            for 64-bit offsets.
 void OMMXFRawStorage::setPosition(OMUInt64 newPosition) const
 {
   TRACE("OMMXFRawStorage::setPosition");
