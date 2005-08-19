@@ -71,6 +71,7 @@ OMMXFStorage::~OMMXFStorage(void)
     delete _objectToInstanceId;
     _objectToInstanceId = 0;
   }
+  destroyFixups();
 }
 
   // @mfunc Set the operational pattern to <p pattern>.
@@ -147,28 +148,16 @@ void OMMXFStorage::writeHeaderPartition(void)
   } else {
     reorderBytes = true;
   }
-#if defined(BER9)
-  OMUInt32 lengthSize = 9;
-#else
-  OMUInt32 lengthSize = 4;
-#endif
+
   OMUInt64 currentPosition = position();
   _currentPartition = currentPosition;
-  OMUInt64 headerByteCountReference = currentPosition +
-                                      sizeof(OMKLVKey) + // Key
-                                      lengthSize +       // Length
-                                      sizeof(OMUInt16) + // Major Version
-                                      sizeof(OMUInt16) + // Minor Version
-                                      sizeof(OMUInt32) + // KAGSize
-                                      sizeof(OMUInt64) + // ThisPartition
-                                      sizeof(OMUInt64) + // PreviousPartition
-                                      sizeof(OMUInt64);  // FooterPartition
   writePartition(ClosedHeaderPartitionPackKey, KAGSize, reorderBytes);
   currentPosition = position();
   fillAlignK(currentPosition, KAGSize);
   currentPosition = position();
   OMUInt64 headerByteCount = bodyPartitionOffset - currentPosition;
-  fixupReference(headerByteCountReference, headerByteCount);
+  definition(headerByteCount, FUT_HEADERBYTECOUNT);
+  fixup(FUT_HEADERBYTECOUNT);
 }
 
 void OMMXFStorage::writeBodyPartition(void)
@@ -184,6 +173,7 @@ void OMMXFStorage::writeBodyPartition(void)
   writePartition(ClosedBodyPartitionPackKey, KAGSize, reorderBytes);
   OMUInt64 currentPosition = position();
   fillAlignV(currentPosition, KAGSize);
+  definition(0, FUT_HEADERBYTECOUNT);
 }
 
 void OMMXFStorage::writeFooterPartition(void)
@@ -195,7 +185,12 @@ void OMMXFStorage::writeFooterPartition(void)
   } else {
     reorderBytes = true;
   }
+  OMUInt64 footer = position();
   writePartition(ClosedFooterPartitionPackKey, KAGSize, reorderBytes);
+  definition(0, FUT_HEADERBYTECOUNT);
+  definition(footer, FUT_FOOTER);
+
+  fixup();
 }
 
 void OMMXFStorage::writePartition(const OMKLVKey& key,
@@ -227,8 +222,10 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
   OMUInt64 thisPartition = currentPosition;
   write(thisPartition, reorderBytes);
   write(previousPartition, reorderBytes);
+  reference(position(), FUT_FOOTER);
   OMUInt64 footerPartition = 0;
   write(footerPartition, reorderBytes);
+  reference(position(), FUT_HEADERBYTECOUNT);
   OMUInt64 headerByteCount = 0;
   write(headerByteCount, reorderBytes);
   OMUInt64 indexByteCount = 0;
@@ -897,6 +894,7 @@ void OMMXFStorage::saveObjectDirectory(void)
     reorderBytes = true;
   }
   _objectDirectoryOffset = position();
+  definition(position(), FUT_OBJECTDIRECTORY);
 
   writeKLVKey(objectDirectoryKey);
   OMUInt64 entries = _instanceIdToObject->count();
@@ -926,8 +924,6 @@ void OMMXFStorage::saveObjectDirectory(void)
 void OMMXFStorage::fixupReference(OMUInt64 patchOffset, OMUInt64 patchValue)
 {
   TRACE("OMMXFStorage::fixupReference");
-  PRECONDITION("Valid patch offset", patchOffset != 0);
-  PRECONDITION("Valid patch value", patchValue!= 0);
 
   bool reorderBytes;
   if (hostByteOrder() == bigEndian) {
