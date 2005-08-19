@@ -248,29 +248,7 @@ public:
 
   virtual void referenceRestore(OMStorable* object, OMPropertyId pid);
 
-  virtual void writeHeaderPartition(void);
-  static void writeBodyPartition(OMRawStorage* store);
-  static void writeFooterPartition(OMRawStorage* store);
-  static void writePartition(OMRawStorage* store,
-                             const OMKLVKey& key,
-                             OMUInt32 KAGSize,
-                             bool reorderBytes);
-
   virtual void writePrimerPack(const OMDictionary* dictionary);
-
-  static void writePrimerPack(OMRawStorage* store,
-                              const OMDictionary* dictionary,
-                              bool reorderBytes);
-
-    // @cmember Write fill so that the next key is page aligned.
-  static void fillAlignK(OMRawStorage* store,
-                         const OMUInt64& currentPosition,
-                         const OMUInt32& KAGSize);
-
-    // @cmember Write fill so that the next value is page aligned.
-  static void fillAlignV(OMRawStorage* store,
-                         const OMUInt64& currentPosition,
-                         const OMUInt32& KAGSize);
 
   static void writeKLVKey(OMRawStorage* store, const OMKLVKey& key);
 
@@ -311,13 +289,7 @@ public:
 
   static OMUInt64 readBerLength(OMRawStorage* store);
 
-  static bool readHeaderPartition(OMRawStorage* store);
-
   virtual void readPrimerPack(OMDictionary* dictionary);
-
-  static void readPrimerPack(OMRawStorage* store,
-                             OMDictionary* dictionary,
-                             bool reorderBytes);
 
   static void readKLVKey(OMRawStorage* store, OMKLVKey& key);
 
