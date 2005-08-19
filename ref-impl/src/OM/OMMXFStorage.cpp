@@ -555,6 +555,9 @@ bool OMMXFStorage::readHeaderPartition(void)
     OMKLVKey essenceContainer;
     for (OMUInt32 i = 0; i < elementCount; i++) {
       readKLVKey(essenceContainer);
+      if (!containsEssenceContainerLabel(essenceContainer)) {
+        addEssenceContainerLabel(essenceContainer);
+      }
     }
   } else {
     result = false;
