@@ -87,51 +87,6 @@ OMKLVStoredObject* OMKLVStoredObject::createModify(OMRawStorage* rawStorage,
   return result;
 }
 
-  // @mfunc Is the file named <p fileName> a recognized file ?
-  //        If so, the result is true, and the signature is returned
-  //        in <p signature>.
-  //   @parm The name of the file to check.
-  //   @parm If recognized, the file signature.
-  //   @rdesc True if the file is recognized, false otherwise.
-bool OMKLVStoredObject::isRecognized(const wchar_t* ANAME(fileName),
-                                     OMFileSignature& /* signature */)
-{
-  TRACE("OMKLVStoredObject::isRecognized");
-  PRECONDITION("Valid file name", validWideString(fileName));
-  bool result = false;
-  // ASSERT("Unimplemented code not reached", false);
-  return result;
-}
-
-  // @mfunc Does <p rawStorage> contain a recognized file ?
-  //        If so, the result is true, and the signature is returned
-  //        in <p signature>.
-  //   @parm The <c OMRawStorage> to check.
-  //   @parm If recognized, the file signature.
-  //   @rdesc True if the <c OMRawStorage> contains a recognized
-  //          file, false otherwise.
-bool OMKLVStoredObject::isRecognized(OMRawStorage* ANAME(rawStorage),
-                                     OMFileSignature& /* signature */)
-{
-  TRACE("OMKLVStoredObject::isRecognized");
-  PRECONDITION("Valid raw storage", rawStorage != 0);
-  bool result = false;
-  // ASSERT("Unimplemented code not reached", false);
-  return result;
-}
-
-  // @mfunc Is <p signature> recognized ?
-  //        If so, the result is true.
-  //   @parm The signature to check.
-  //   @rdesc True if the signature is recognized, false otherwise.
-bool OMKLVStoredObject::isRecognized(const OMFileSignature& /* signature */)
-{
-  TRACE("OMKLVStoredObject::isRecognized");
-  bool result = false;
-  // ASSERT("Unimplemented code not reached", false);
-  return result;
-}
-
   // @mfunc Destructor.
 OMKLVStoredObject::~OMKLVStoredObject(void)
 {
@@ -165,12 +120,6 @@ OMStoredObject* OMKLVStoredObject::open(const wchar_t* /* name */)
 
   // @mfunc Close this <c OMKLVStoredObject>.
 void OMKLVStoredObject::close(void)
-{
-  TRACE("OMKLVStoredObject::close");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-}
-
-void OMKLVStoredObject::close(OMFile& /* file */)
 {
   TRACE("OMKLVStoredObject::close");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
@@ -295,6 +244,14 @@ void OMKLVStoredObject::save(const OMDataStream& /* stream */)
 {
   TRACE("OMKLVStoredObject::save(OMDataStream)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
+OMRootStorable* OMKLVStoredObject::restore(OMFile& /* file */)
+{
+  TRACE("OMKLVStoredObject::restore(OMFile)");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  OMRootStorable* result = 0;
+  return result;
 }
 
   // @mfunc Restore the <c OMStoredObjectIdentification>
