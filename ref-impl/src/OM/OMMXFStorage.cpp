@@ -205,12 +205,14 @@ OMUniqueObjectIdentification OMMXFStorage::generation(void) const
   return _generation;
 }
 
-void OMMXFStorage::writeHeaderPartition(void)
+void OMMXFStorage::writeHeaderPartition(OMUInt32 bodySID,
+                                        OMUInt32 indexSID,
+                                        OMUInt32 KAGSize)
 {
   TRACE("OMMXFStorage::writeHeaderPartition");
 
   OMUInt64 currentPosition = position();
-  writePartition(ClosedHeaderPartitionPackKey, 0, 0, defaultKAGSize);
+  writePartition(ClosedHeaderPartitionPackKey, bodySID, indexSID, KAGSize);
   currentPosition = position();
   fillAlignK(currentPosition, defaultKAGSize);
 }
