@@ -263,7 +263,6 @@ void OMKLVStoredObjectFactory::close(const wchar_t* /* fileName */,
   TRACE("OMKLVStoredObjectFactory::close");
 
   // tjb - footer in named files ?
-  OMKLVStoredObject::finalize();
 }
 
   // @mfunc Perform any necessary actions when the file
@@ -273,6 +272,4 @@ void OMKLVStoredObjectFactory::close(OMRawStorage* /* rawStorage */,
                                      bool /* isWritable */)
 {
   TRACE("OMKLVStoredObjectFactory::close");
-
-  OMKLVStoredObject::finalize();
 }
