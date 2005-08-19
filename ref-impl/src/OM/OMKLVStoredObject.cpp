@@ -690,6 +690,8 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
 
   streamRestore();
 
+  _storage->clearObjectDirectory();
+
   return root;
 }
 
@@ -704,6 +706,7 @@ OMKLVStoredObject::restoreObject(const OMStrongObjectReference& reference)
   delete [] cName;
   OMStorable* result = _storage->object(id);
   ASSERT("Object found", result != 0);
+  _storage->resolve(id);
     // Attach the object.
   OMProperty* property = reference.property();
   OMStorable* containingObject = property->propertySet()->container();
@@ -1558,17 +1561,8 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
               element.setValue(key, obj);
               s->insert(key, element);
               delete [] name;
-            } else {
-              // key already present
-              OMStorable* e = 0;
-              s->find(key, e);
-              ASSERT("Object found", e != 0);
-
-              _storage->removeObject(*obj);
-              delete obj;
-
-              _storage->associate(e, id);
-            }
+              _storage->resolve(id);
+            } // else key already present
             localKey = localKey + 1;
           }
           delete [] key;
