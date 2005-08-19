@@ -244,6 +244,7 @@ public:
 
   virtual void flatRestore(const OMPropertySet& properties);
   virtual void deepRestore(const OMPropertySet& properties);
+  virtual void streamRestore(void);
   virtual void streamRestore(OMRawStorage* store);
 
   virtual void referenceRestore(OMStorable* object, OMPropertyId pid);
@@ -255,6 +256,8 @@ public:
                              const OMKLVKey& key,
                              OMUInt32 KAGSize,
                              bool reorderBytes);
+
+  virtual void writePrimerPack(const OMDictionary* dictionary);
 
   static void writePrimerPack(OMRawStorage* store,
                               const OMDictionary* dictionary,
@@ -310,6 +313,8 @@ public:
   static OMUInt64 readBerLength(OMRawStorage* store);
 
   static bool readHeaderPartition(OMRawStorage* store);
+
+  virtual void readPrimerPack(OMDictionary* dictionary);
 
   static void readPrimerPack(OMRawStorage* store,
                              OMDictionary* dictionary,
