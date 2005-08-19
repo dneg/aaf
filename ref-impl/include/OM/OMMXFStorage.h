@@ -166,7 +166,8 @@ public:
   virtual void writeBodyPartition(OMUInt32 bodySID,
                                   OMUInt32 indexSID,
                                   OMUInt32 KAGSize);
-  virtual void writeFooterPartition(void);
+  virtual void writeFooterPartition(OMUInt32 indexSID,
+                                    OMUInt32 KAGSize);
   virtual void writePartition(const OMKLVKey& key,
                               OMUInt32 bodySID,
                               OMUInt32 indexSID,
