@@ -71,7 +71,7 @@ static const OMUInt64 minimumFill = sizeof(OMKLVKey) + 1 + sizeof(OMUInt64);
 //
 static const OMUInt64 fillBufferZoneSize = 32;
 
-static const OMUInt64 bodyPartitionOffset = 0x20000;
+static const OMUInt64 bodyPartitionOffset = 0x20000 + fillBufferZoneSize;
 
 static const OMUInt32 defaultKAGSize = 0x100;
 
