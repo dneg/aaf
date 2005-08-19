@@ -252,28 +252,6 @@ public:
 
   virtual void readPrimerPack(OMDictionary* dictionary);
 
-    // Object -> instanceId
-  static OMUniqueObjectIdentification instanceId(OMStorable* object);
-
-    // instanceId -> object
-  static OMStorable* object(const OMUniqueObjectIdentification& instanceId);
-
-  static OMSet<OMStorable*, OMUniqueObjectIdentification>* _objectToInstanceId;
-
-  struct ObjectDirectoryEntry {
-    OMStorable* _object;
-    OMUInt64 _offset;
-    OMUInt8 _flags;
-  };
-
-  static OMSet<OMUniqueObjectIdentification,
-               ObjectDirectoryEntry>* _instanceIdToObject;
-
-  static OMSet<OMStorable*, OMUniqueObjectIdentification>* objectToInstanceId(
-                                                                         void);
-  static OMSet<OMUniqueObjectIdentification,
-               ObjectDirectoryEntry>* instanceIdToObject(void);
-
     // Stream -> streamId
   static OMKLVKey streamId(OMDataStream* stream);
 
@@ -286,17 +264,8 @@ public:
   static OMSet<OMDataStream*, OMKLVKey>* streamToStreamId(void);
   static OMSet<OMKLVKey, OMDataStream*>* streamIdToStream(void);
 
-  OMUInt64 save(OMSet<OMUniqueObjectIdentification,
-                      ObjectDirectoryEntry>* objectTable);
-
-  void restore(OMSet<OMUniqueObjectIdentification,
-                     ObjectDirectoryEntry>* objectTable);
-
   OMUInt64 saveObjectDirectoryReference(
                                        const OMUniqueObjectIdentification& id);
-
-  void fixupObjectDirectoryReference(OMUInt64 patchOffset,
-                                     OMUInt64 patchValue);
 
   OMUInt64 restoreObjectDirectoryReference(OMUniqueObjectIdentification& id);
 
@@ -323,8 +292,6 @@ private:
   OMMXFStorage* _storage;
   OMByteOrder _byteOrder;
   bool _reorderBytes;
-  OMUInt64 _objectDirectory;          // offset of object directory
-  OMUInt64 _objectDirectoryReference; // offset object directory reference
 };
 
 #endif
