@@ -2134,7 +2134,8 @@ void OMMXFStorage::restoreStreams(void)
     readPartition(length, bodySID, indexSID, gridSize);
     while (needBody || needIndex) {
       keyPosition = position();
-      readOuterKLVKey(k);
+      bool b = readOuterKLVKey(k);
+      ASSERT("Read key", b);
       length = readKLVLength();
       if (k == primerKey) {
         markMetadataStart(keyPosition);
