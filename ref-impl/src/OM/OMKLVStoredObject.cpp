@@ -2275,6 +2275,12 @@ void OMKLVStoredObject::writeMetaDictionary(const OMDictionary* dictionary)
   } // else no extensions - no dictionary
 }
 
+void OMKLVStoredObject::writeDefinition(const OMDefinition* /* d */)
+{
+  TRACE("OMKLVStoredObject::writeDefinition");
+  ASSERT("Unimplemented code not reached", false);
+}
+
 void OMKLVStoredObject::writeClassDefinition(const OMClassDefinition* cd)
 {
   TRACE(" OMKLVStoredObject::writeClassDefinition");
