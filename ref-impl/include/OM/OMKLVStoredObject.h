@@ -261,7 +261,6 @@ public:
 
   // KLV functions
 
-  virtual OMUInt64 length(const OMPropertySet& properties) const;
   virtual void flatSave(const OMPropertySet& properties) const;
   virtual void deepSave(const OMPropertySet& properties) const;
 
