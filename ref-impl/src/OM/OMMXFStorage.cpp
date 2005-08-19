@@ -2654,6 +2654,8 @@ void OMMXFStorage::addPartition(OMUInt64 address,
   ASSERT("Valid heap pointer", newPartition != 0);
   newPartition->_address = address;
   newPartition->_bodySID = bodySID;
+  newPartition->_previous = 0;
+  newPartition->_indexSID = 0;
   _partitions.insertAt(newPartition, index);
 }
 
