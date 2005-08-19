@@ -245,7 +245,7 @@ void OMKLVStoredObject::save(OMFile& file)
 
   // The header partition has already been written,
   // start saving immediately after the header partition
-  // and any filler.
+  // and any fill.
   //
   _storage->setPosition(0);
   readHeaderPartition(_storage);
@@ -268,7 +268,7 @@ void OMKLVStoredObject::save(OMFile& file)
   fixupObjectDirectoryReference(_objectDirectoryReference, _objectDirectory);
 #endif
 
-  // Insert alignment filler
+  // Insert alignment fill
   OMUInt32 bodyPartitionOffset = 0x20000; // Get this from header ?
   OMUInt32 KAGSize = 0x100;
   OMUInt32 fillAlignment;
@@ -1961,7 +1961,7 @@ void OMKLVStoredObject::writeBerLength(OMRawStorage* store,
 }
 
   // @mfunc Write a fill key, a BER encoded length and
-  //        <p length> bytes of filler.
+  //        <p length> bytes of fill.
   //   @parm The <c OMRawStorage> on which to write.
   //   @parm The number of bytes of fill to write.
 void OMKLVStoredObject::writeKLVFill(OMRawStorage* store,
