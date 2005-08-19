@@ -259,18 +259,23 @@ void OMKLVStoredObjectFactory::close(const wchar_t* /* fileName */,
                                      bool /* isWritable */)
 {
   TRACE("OMKLVStoredObjectFactory::close");
-  ASSERT("Unimplemented code not reached", false);
+
+  // tjb - footer in named files ?
+  OMKLVStoredObject::finalize();
 }
 
   // @mfunc Perform any necessary actions when the file
   //        contained in <p rawStorage> is closed.
   //   @parm The <c OMRawStorage>
 void OMKLVStoredObjectFactory::close(OMRawStorage* rawStorage,
-                                     bool /* isWritable */)
+                                     bool isWritable)
 {
   TRACE("OMKLVStoredObjectFactory::close");
-  if (!metaDataOnly) {
-    OMKLVStoredObject::writeFooterPartition(rawStorage);
+
+  if (isWritable) {
+    if (!metaDataOnly) {
+      OMKLVStoredObject::writeFooterPartition(rawStorage);
+    }
   }
   OMKLVStoredObject::finalize();
 }
