@@ -5,15 +5,15 @@
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-// 
+//
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-// 
+//
 // The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
-// 
+//
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -431,7 +431,7 @@ void OMKLVStoredObject::save(const OMStrongReferenceSet& set)
 
     // Save elements that are sticky or that are referenced.
     if (element.isSticky() || element.referenceCount() > 0) {
-  
+
       // object
       element.save();
     }
@@ -1185,7 +1185,7 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
   referenceRestore(properties.container(), 0x3c0a);
   const OMUInt16 overhead = sizeof(OMPropertyId) + sizeof(OMPropertySize);
   setLength = setLength - (overhead + sizeof(OMUniqueObjectIdentification));
-  
+
   while (setLength > 0) {
     OMPropertyId pid;
     read(_storage, pid, _reorderBytes);
@@ -1403,7 +1403,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
           }
 
           OMUInt32 localKey = 0;
-          OMVectorIterator<OMUniqueObjectIdentification> viter(objects, 
+          OMVectorIterator<OMUniqueObjectIdentification> viter(objects,
                                                                OMBefore);
           while (++viter) {
             OMUniqueObjectIdentification id = viter.value();
@@ -1475,7 +1475,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
 #if defined(USETAGTABLE)
         } else {
           OMPropertyTag tag = findTag(wr->targetName());
-          wr->reference().setTargetTag(tag); 
+          wr->reference().setTargetTag(tag);
         }
 #endif
         break;
@@ -1525,7 +1525,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
 #if defined(USETAGTABLE)
         } else {
           OMPropertyTag tag = findTag(v->targetName());
-          r.setTargetTag(tag); 
+          r.setTargetTag(tag);
         }
 #endif
         }
@@ -1551,7 +1551,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
             objects.insert(id);
           }
           s->removeAllObjects();
-          OMVectorIterator<OMUniqueObjectIdentification> viter(objects, 
+          OMVectorIterator<OMUniqueObjectIdentification> viter(objects,
                                                                OMBefore);
           while (++viter) {
             OMUniqueObjectIdentification id = viter.value();
@@ -1577,7 +1577,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
 #if defined(USETAGTABLE)
             } else {
               OMPropertyTag tag = findTag(s->targetName());
-              //element.reference().setTargetTag(tag); 
+              //element.reference().setTargetTag(tag);
             }
 #endif
           }
@@ -1675,7 +1675,7 @@ void OMKLVStoredObject::writePartition(OMRawStorage* store,
                                        const OMKLVKey& key,
                                        bool reorderBytes)
 {
-  OMKLVKey operationalPattern = 
+  OMKLVKey operationalPattern =
     {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01,
      0x0d, 0x01, 0x02, 0x01, 0x01, 0x01, 0x09, 0x00};
 
@@ -2146,7 +2146,7 @@ void OMKLVStoredObject::skipLV(OMRawStorage* store)
   OMUInt64 newPosition = position + length;
   store->setPosition(newPosition);
 }
- 
+
 void OMKLVStoredObject::read(OMRawStorage* store, OMUInt8& i)
 {
   TRACE("OMKLVStoredObject::read");
@@ -2330,7 +2330,7 @@ OMKLVKey OMKLVStoredObject::streamId(OMDataStream* stream)
 
   OMKLVKey result;
   if (!streamToStreamId()->find(stream, result)) {
- 
+
     OMKLVKey e =
       {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01,
        0x0d, 0x01, 0x03, 0x01, 0xff, 0xff, 0xff, 0xff};
