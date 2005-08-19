@@ -149,10 +149,6 @@ OMStoredObject* OMKLVStoredObject::create(const wchar_t* /* name */)
 OMStoredObject* OMKLVStoredObject::open(const wchar_t* name)
 {
   TRACE("OMKLVStoredObject::open");
-  OMUniqueObjectIdentification id;
-  char* cName = convertWideString(name);
-  fromString(id, cName);
-  delete [] cName;
   OMStoredObject* result = new OMKLVStoredObject(_storage, _byteOrder);
   ASSERT("Valid heap pointer", result != 0);
   return result;
