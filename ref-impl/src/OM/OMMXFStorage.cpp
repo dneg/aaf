@@ -267,7 +267,7 @@ void OMMXFStorage::writeFooterPartition(OMUInt32 indexSID,
   TRACE("OMMXFStorage::writeFooterPartition");
 
   // Essence (body) not allowed in footer
-  writePartition(ClosedFooterPartitionKey, 0, indexSID, KAGSize);
+  writePartition(FooterKey, 0, indexSID, KAGSize);
 }
 
 void OMMXFStorage::writePartition(const OMKLVKey& key,
