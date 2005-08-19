@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -402,7 +402,27 @@ OMStoredStream* OMKLVStoredObject::createStoredStream(
   return 0;
 }
 
-  // @mfunc Constructor.
+void OMKLVStoredObject::writeHeaderPartition(void)
+{
+}
+
+void OMKLVStoredObject::writeFooterPartition(OMRawStorage* /* store */)
+{
+}
+
+bool OMKLVStoredObject::readHeaderPartition(OMRawStorage* /* store */)
+{
+  TRACE("OMKLVStoredObject::readHeaderPartition");
+  bool result = false;
+  return result;
+}
+
+void OMKLVStoredObject::finalize(void)
+{
+  TRACE("OMKLVStoredObject::finalize");
+}
+
+ // @mfunc Constructor.
   //   @parm The <c OMRawStorage> on which this <c OMKLVStoredObject> resides.
   //   @parm TBS
 OMKLVStoredObject::OMKLVStoredObject(OMRawStorage* s, OMByteOrder byteOrder)
