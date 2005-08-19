@@ -1123,3 +1123,87 @@ OMMXFStorage::streamIdToStream(void)
   }
   return _streamIdToStream;
 }
+
+  // @mfunc Record a reference to <p tag> at <p address>.
+  //   @parm The file address of the reference.
+  //   @parm The tag.
+void OMMXFStorage::reference(OMUInt64 address, OMUInt8 tag)
+{
+  TRACE("OMMXFStorage::reference");
+  PRECONDITION("Valid tag", tag != FUT_UNDEFINED);
+
+  Fixup* f = new Fixup();
+  ASSERT("Valid heap pointer", f != 0);
+  f->_address = address;
+  f->_value = 0;
+  f->_tag = tag;
+  _fixups.append(f);
+}
+
+  // @mfunc Provide a definition for <p tag> of <p value>.
+  //   @parm The value to resolve all reference with the same tag.
+  //   @parm The tag.
+void OMMXFStorage::definition(OMUInt64 value, OMUInt8 tag)
+{
+  TRACE("OMMXFStorage::definition");
+  PRECONDITION("Valid tag", tag != FUT_UNDEFINED);
+
+  FixupListIterator iterator(_fixups, OMBefore);
+  while (++iterator) {
+    Fixup* f = iterator.value();
+    ASSERT("Valid value", f != 0);
+    if (f->_tag == tag) {
+      f->_value = value;
+    }
+  }
+}
+
+  // @mfunc Apply <c Fixup>s for <p tag>.
+  //   @parm The tag.
+void OMMXFStorage::fixup(OMUInt8 tag)
+{
+  TRACE("OMMXFStorage::fixup");
+
+  FixupListIterator iterator(_fixups, OMBefore);
+  while (++iterator) {
+    Fixup* f = iterator.value();
+    ASSERT("Valid value", f != 0);
+    ASSERT("Defined", f->_tag != FUT_UNDEFINED);
+    if (f->_tag == tag) {
+      fixupReference(f->_address, f->_value);
+      f->_tag = FUT_RESOLVED;
+    }
+  }
+}
+
+  // @mfunc Apply all <c Fixup>s.
+void OMMXFStorage::fixup(void)
+{
+  TRACE("OMMXFStorage::fixup");
+
+  FixupListIterator iterator(_fixups, OMBefore);
+  while (++iterator) {
+    Fixup* f = iterator.value();
+    ASSERT("Valid value", f != 0);
+    ASSERT("Defined", f->_tag != FUT_UNDEFINED);
+    if (f->_tag != FUT_RESOLVED) {
+      fixupReference(f->_address, f->_value);
+      f->_tag = FUT_RESOLVED;
+    }
+  }
+}
+
+  // @mfunc Destroy all <c Fixup>s.
+void OMMXFStorage::destroyFixups(void)
+{
+  TRACE("OMMXFStorage::destroyFixups");
+
+  FixupListIterator iterator(_fixups, OMBefore);
+  while (++iterator) {
+    Fixup* f = iterator.value();
+    ASSERT("Valid value", f != 0);
+    ASSERT("Resolved", f->_tag == FUT_RESOLVED);
+    delete f;
+  }
+  _fixups.clear();
+}
