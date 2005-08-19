@@ -497,7 +497,7 @@ bool OMMXFStorage::findRandomIndex(OMUInt64 fileSize,
 bool OMMXFStorage::isRandomIndex(OMUInt64 fileSize, OMUInt32 ripSize)
 {
   TRACE("OMMXFStorage::isRandomIndex");
-  
+
   bool result = false;
   // How do we check for a reasonable size ?
   if ((ripSize > 21) && (ripSize < fileSize)) {
@@ -2198,8 +2198,7 @@ void OMMXFStorage::checkStreams(void)
         skipV(length);
       }
       OMUInt64 pos = position();
- 
-     ASSERT("Segment is KLV consistent", pos == end);
+      ASSERT("Segment is KLV consistent", pos == end);
     }
   }
 #endif
