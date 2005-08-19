@@ -175,6 +175,8 @@ public:
 
   virtual OMUniqueObjectIdentification generation(void) const;
 
+  static bool isHeader(const OMKLVKey& k);
+
   virtual void writeHeaderPartition(OMUInt32 bodySID,
                                     OMUInt32 indexSID,
                                     OMUInt32 KAGSize);
