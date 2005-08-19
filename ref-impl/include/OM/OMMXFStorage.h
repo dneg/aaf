@@ -50,9 +50,13 @@ static const OMKLVKey fillKey =
 
 static const OMUInt32 KAGSize = 0x100;
 
+static const OMUInt16 currentMajorVersion = 0xffff;
+static const OMUInt16 currentMinorVersion = 0xfffc;
+
 static const OMKLVKey objectDirectoryKey =
   {0x96, 0x13, 0xb3, 0x8a, 0x87, 0x34, 0x87, 0x46,
    0xf1, 0x02, 0x96, 0xf0, 0x56, 0xe0, 0x4d, 0x2a};
+
 
 class OMStorable;
 template <typename Key, typename Element>
