@@ -1543,7 +1543,16 @@ void OMMXFStorage::streamGrow(OMUInt32 sid, OMUInt64 growBytes)
 void OMMXFStorage::saveStreams(void)
 {
   TRACE("OMMXFStorage::saveStreams");
-  ASSERT("Unimplemnted code not reached", false);
+
+  if (_segmentMap != 0) {
+    SegmentMapIterator iter(*_segmentMap, OMBefore);
+    while (++iter) {
+      OMUInt32 sid = iter.key();
+      OMDataStream* sp = stream(sid);
+      ASSERT("Found stream", sp != 0);
+      streamSave(sp);
+    }
+  }
 }
 
 OMMXFStorage::SegmentListIterator*
