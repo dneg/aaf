@@ -2404,8 +2404,8 @@ void OMMXFStorage::markIndexEnd(OMUInt64 endKeyPosition)
     OMUInt64 indexByteCount = endKeyPosition - _indexPosition;
     streamRestoreSegment(_indexSID,
                          _indexPosition,
-                         indexByteCount + free,
                          indexByteCount,
+                         indexByteCount - free,
                          _indexKey,
                          _gridSize);
 
@@ -2445,8 +2445,8 @@ void OMMXFStorage::markEssenceSegmentEnd(OMUInt64 endKeyPosition)
     OMUInt64 essenceByteCount = endKeyPosition - _essencePosition;
     streamRestoreSegment(_essenceSID,
                          _essencePosition,
-                         essenceByteCount + free,
                          essenceByteCount,
+                         essenceByteCount - free,
                          _essenceKey,
                          _gridSize);
 
