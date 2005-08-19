@@ -389,10 +389,12 @@ public:
 
   virtual void saveStreams(void);
 
+  struct Stream;
   struct Segment {
     OMUInt64 _start;   // Stream position of this Segment
     OMUInt64 _size;    // Size of this Segment in bytes
     OMUInt64 _origin;  // File position of this Segment
+    Stream* _stream;   // Stream to which this segment belongs
   };
   typedef OMList<Segment*> SegmentList;
   typedef OMListIterator<Segment*> SegmentListIterator;
