@@ -212,10 +212,100 @@ public:
     //          <p stream> contained within this <c OMKLVStoredObject>.
   virtual OMStoredStream* createStoredStream(const OMDataStream& property);
 
+  // KLV functions
+
+  virtual OMUInt64 length(const OMPropertySet& properties) const;
+  virtual void flatSave(const OMPropertySet& properties) const;
+  virtual void deepSave(const OMPropertySet& properties) const;
+  virtual void streamSave(const OMPropertySet& properties) const;
+
+  virtual void referenceSave(OMStorable* object, OMPropertyId pid) const;
+
+  virtual void flatRestore(const OMPropertySet& properties);
+  virtual void deepRestore(const OMPropertySet& properties);
+
+  virtual void referenceRestore(OMStorable* object, OMPropertyId pid);
+
   virtual void writeHeaderPartition(void);
   static void writeFooterPartition(OMRawStorage* store);
+  static void writePartition(OMRawStorage* store,
+                             const OMKLVKey& key,
+                             bool reorderBytes);
+
+  static void writePrimerPack(OMRawStorage* store,
+                              const OMDictionary* dictionary,
+                              bool reorderBytes);
+
+  static void fill(OMRawStorage* store,
+                   const OMUInt64& currentPosition,
+                   const OMUInt32& KAGSize);
+
+  static void writeKLVKey(OMRawStorage* store, const OMKLVKey& key);
+
+  static void writeKLVLength(OMRawStorage* store, const OMUInt64& length);
+
+  static void writeKLVFill(OMRawStorage* store, const OMUInt64& length);
+
+  static void write(OMRawStorage* store, const OMUInt8& i);
+  static void write(OMRawStorage* store, const OMUInt16& i, bool reorderBytes);
+  static void write(OMRawStorage* store, const OMUInt32& i, bool reorderBytes);
+  static void write(OMRawStorage* store, const OMUInt64& i, bool reorderBytes);
+  static void write(OMRawStorage* store,
+                    const OMUniqueObjectIdentification& id,
+                    bool reorderBytes);
+
+  static void write(OMRawStorage* store,
+                    const OMByte* buffer,
+                    const OMUInt32& bufferSize);
+
+  static void berEncode(OMByte* berValue,
+                        size_t berValueBufferSize,
+                        OMUInt32& berValueSize,
+                        const OMUInt64& value);
+
+  static OMUInt64 readBerLength(OMRawStorage* store);
 
   static bool readHeaderPartition(OMRawStorage* store);
+
+  static void readPrimerPack(OMRawStorage* store,
+                             OMDictionary* dictionary,
+                             bool reorderBytes);
+
+  static void readKLVKey(OMRawStorage* store, OMKLVKey& key);
+
+  static OMUInt64 readKLVLength(OMRawStorage* store);
+
+  static void readKLVFill(OMRawStorage* store);
+
+  static void read(OMRawStorage* store, OMUInt8& i);
+  static void read(OMRawStorage* store, OMUInt16& i, bool reorderBytes);
+  static void read(OMRawStorage* store, OMUInt32& i, bool reorderBytes);
+  static void read(OMRawStorage* store, OMUInt64& i, bool reorderBytes);
+  static void read(OMRawStorage* store,
+                    OMUniqueObjectIdentification& id,
+                    bool reorderBytes);
+
+  static void read(OMRawStorage* store,
+                   OMByte* buffer,
+                   const OMUInt32& bufferSize);
+
+    // Object -> instanceId
+  static OMUniqueObjectIdentification instanceId(OMStorable* object);
+
+    // instanceId -> object 
+  static OMStorable* object(const OMUniqueObjectIdentification& instanceId);
+
+  static OMSet<OMStorable*, OMUniqueObjectIdentification>* _objectToInstanceId;
+  static OMSet<OMUniqueObjectIdentification, OMStorable*>* _instanceIdToObject;
+
+  static OMSet<OMStorable*, OMUniqueObjectIdentification>* objectToInstanceId(
+                                                                         void);
+  static OMSet<OMUniqueObjectIdentification, OMStorable*>* instanceIdToObject(
+                                                                         void);
+
+  static void convert(OMKLVKey& key, const OMUniqueObjectIdentification& id);
+
+  static void convert(OMUniqueObjectIdentification& id, const OMKLVKey& key);
 
   static void finalize(void);
 
@@ -227,6 +317,7 @@ private:
 
   OMRawStorage* _storage;
   OMByteOrder _byteOrder;
+  bool _reorderBytes;
 
 };
 
