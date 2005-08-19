@@ -1591,7 +1591,7 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
                (properties.container()->classId() == Class_Root)) {
       OMUInt32 version; // Not yet used
       _storage->read(version, _reorderBytes);
-    } else if ((!properties.isAllowed(pid)) && (pid > 0x8000)) { // HACK4MEIP2
+    } else if ((!properties.isAllowed(pid)) && (pid >= 0x8000)) { // HACK4MEIP2
       // Dark extension
       _storage->skipV(length);  // discard value !! tjb
     } else if (pid == 0x3b08) { // Preface::PrimaryPackage
