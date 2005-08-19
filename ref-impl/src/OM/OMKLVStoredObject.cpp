@@ -176,7 +176,23 @@ OMKLVStoredObject::isRecognized(OMRawStorage* rawStorage)
               OMUInt16 minorVersion;
               if (OMMXFStorage::read(rawStorage, minorVersion, reorderBytes)) {
                 if (minorVersion == currentMinorVersion) {
-                  result = true;
+                  // Skip up to count of essence container labels.
+                  OMUInt64 skip = fixedPartitionSize -
+                                  (2 * sizeof(OMUInt16)) - // major/minor
+                                  (2 * sizeof(OMUInt32));  // ecl count/size
+                  OMMXFStorage::skipBytes(rawStorage, skip);
+                  // Read essence container label count and size.
+                  OMUInt32 elementCount;
+                  OMMXFStorage::read(rawStorage, elementCount, reorderBytes);
+                  OMUInt32 elementSize;
+                  OMMXFStorage::read(rawStorage, elementSize, reorderBytes);
+                  // Check for consistency between partition length and essence
+                  // container label count and size.
+                  OMUInt64 expectedLength = fixedPartitionSize +
+                                            (elementCount * elementSize);
+                  if (length == expectedLength) {
+                    result = true;
+                  }
                 }
               }
             }
