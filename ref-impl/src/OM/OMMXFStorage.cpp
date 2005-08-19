@@ -1744,18 +1744,8 @@ void OMMXFStorage::saveStreams(void)
       ASSERT("Segments in file address order", seg->_origin > previous);
       Stream* s = seg->_stream;
       ASSERT("Valid stream", s != 0);
-      OMUInt64 len; // length of valid portion of segment
-      if (s->_size > seg->_start + seg->_size) {
-        // eos in later segment
-        len = seg->_size;
-      } else if (s->_size < seg->_start) {
-        // eos in earlier segment
-        len = 0;
-      } else {
-        // eos in this segment
-        len = s->_size - seg->_start;
-      }
-      ASSERT("Valid length", len <= seg->_size);
+
+      OMUInt64 len = validSize(seg); // length of valid portion of segment
 
       // For body partition and filler
       OMUInt64 pos = seg->_origin - s->_gridSize + fillBufferZoneSize;
@@ -2467,17 +2457,7 @@ void OMMXFStorage::printStreams(void)
         SegmentListIterator siter(*s->_segments, OMBefore);
         while (++siter) {
           Segment* seg = siter.value();
-          OMUInt64 len;
-          if (s->_size > seg->_start + seg->_size) {
-            // eos in later segment
-            len = seg->_size;
-          } else if (s->_size < seg->_start) {
-            // eos in earlier segment
-            len = 0;
-          } else {
-            // eos in this segment
-            len = s->_size - seg->_start;
-          }
+          OMUInt64 len = validSize(seg);
 
           omout << "[ start = " << hex << setw(8) << seg->_start
                 << ", size = " << hex << setw(8) << seg->_size
