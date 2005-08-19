@@ -286,6 +286,22 @@ bool OMMXFStorage::isFooter(const OMKLVKey& k)
   return result;
 }
 
+bool OMMXFStorage::isPartition(const OMKLVKey& k)
+{
+  TRACE("OMMXFStorage::isPartition");
+  bool result;
+  if (isHeader(k)) {
+    result = true;
+  } else if (isBody(k)) {
+    result = true;
+  } else if (isFooter(k)) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 bool OMMXFStorage::isIndex(const OMKLVKey& k)
 {
   TRACE("OMMXFStorage::isIndex");
