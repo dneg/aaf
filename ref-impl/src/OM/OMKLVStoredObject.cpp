@@ -596,9 +596,11 @@ void OMKLVStoredObject::save(const OMDataStream& stream)
   TRACE("OMKLVStoredObject::save(OMDataStream)");
 
   OMDataStream* s = const_cast<OMDataStream*>(&stream);
-  OMKLVKey id = streamId(s);
+  OMKLVKey k;
+  OMUniqueObjectIdentification sid = _storage->streamId(s);
+  convert(k, sid);
 
-  _storage->writeKLVKey(id);
+  _storage->writeKLVKey(k);
   OMUInt64 length = stream.size();
   _storage->writeKLVLength(length);
 
@@ -1222,8 +1224,10 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         _storage->write(s, _reorderBytes);
         OMByteOrder bo = stream->storedByteOrder();
         _storage->write(bo);
-        OMKLVKey sid = streamId(stream);
-        _storage->writeKLVKey(sid);
+        OMKLVKey k;
+        OMUniqueObjectIdentification sid = _storage->streamId(stream);
+        convert(k, sid);
+        _storage->writeKLVKey(k);
         break;
       }
       default:
@@ -1489,13 +1493,12 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
       OMByteOrder bo;
       _storage->read(bo);
       stream->setStoredByteOrder(bo);
-      OMKLVKey sid;
-      _storage->readKLVKey(sid);
+      OMUniqueObjectIdentification sid;
+      OMKLVKey k;
+      _storage->readKLVKey(k);
+      convert(sid, k);
       //p->setPresent();
-      ASSERT("Stream not present", !streamToStreamId()->contains(stream));
-      streamToStreamId()->insert(stream, sid);
-      ASSERT("Identifier not present", !streamIdToStream()->contains(sid));
-      streamIdToStream()->insert(sid, stream);
+      _storage->associate(stream, sid);
       break;
     }
     default:
@@ -1896,67 +1899,6 @@ void OMKLVStoredObject::readPrimerPack(OMDictionary* /* dictionary */)
   }
 }
 
-OMSet<OMDataStream*, OMKLVKey>* OMKLVStoredObject::_streamToStreamId = 0;
-
-OMSet<OMKLVKey, OMDataStream*>* OMKLVStoredObject::_streamIdToStream = 0;
-
-OMSet<OMDataStream*, OMKLVKey>* OMKLVStoredObject::streamToStreamId(void)
-{
-  TRACE("OMKLVStoredObject::streamToStreamId");
-
-  if (_streamToStreamId == 0) {
-    _streamToStreamId = new OMSet<OMDataStream*, OMKLVKey>();
-    ASSERT("Valid heap pointer", _streamToStreamId != 0);
-  }
-  return _streamToStreamId;
-}
-
-OMSet<OMKLVKey, OMDataStream*>* OMKLVStoredObject::streamIdToStream(void)
-{
-  TRACE("streamIdToStream");
-
-  if (_streamIdToStream == 0) {
-    _streamIdToStream = new OMSet<OMKLVKey, OMDataStream*>();
-    ASSERT("Valid heap pointer", _streamIdToStream != 0);
-  }
-  return _streamIdToStream;
-}
-
-OMKLVKey OMKLVStoredObject::streamId(OMDataStream* stream)
-{
-  TRACE("OMKLVStoredObject::streamId");
-  PRECONDITION("Valid stream", stream != 0);
-
-  OMKLVKey result;
-  if (!streamToStreamId()->find(stream, result)) {
-
-    OMKLVKey e =
-      {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01,
-       0x0d, 0x01, 0x03, 0x01, 0xff, 0xff, 0xff, 0xff};
-
-    static OMUInt8 seed = 0;
-    e.octet12 = 0x17;   // Item type = GC Data
-    e.octet13 = 0x01;   // Essence element count
-    e.octet14 = 0x01;   // Essence element type = Unknown data
-    e.octet15 = ++seed; // Essence element number
-    memcpy(&result, &e, sizeof(result));
-    streamToStreamId()->insert(stream, result);
-  }
-  return result;
-}
-
-OMDataStream* OMKLVStoredObject::stream(const OMKLVKey& streamId)
-{
-  TRACE("OMKLVStoredObject::stream");
-
-  OMDataStream* result;
-  if (!streamIdToStream()->find(streamId, result)) {
-    result = 0;
-  }
-
-  return result;
-}
-
 OMUInt64 OMKLVStoredObject::saveObjectDirectoryReference(
                                         const OMUniqueObjectIdentification& id)
 {
@@ -2090,18 +2032,6 @@ void OMKLVStoredObject::convert(OMUniqueObjectIdentification& id,
 void OMKLVStoredObject::finalize(void)
 {
   TRACE("OMKLVStoredObject::finalize");
-
-  if (_streamToStreamId != 0) {
-    _streamToStreamId->clear();
-    delete _streamToStreamId;
-    _streamToStreamId = 0;
-  }
-
-  if (_streamIdToStream != 0) {
-    _streamIdToStream->clear();
-    delete _streamIdToStream;
-    _streamIdToStream = 0;
-  }
 }
 
 bool OMKLVStoredObject::metaDataOnly = true;
