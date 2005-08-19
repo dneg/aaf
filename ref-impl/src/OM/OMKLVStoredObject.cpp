@@ -594,9 +594,7 @@ void OMKLVStoredObject::save(const OMDataStream& stream)
   TRACE("OMKLVStoredObject::save(OMDataStream)");
 
   OMDataStream* s = const_cast<OMDataStream*>(&stream);
-  OMKLVKey k;
-  OMUniqueObjectIdentification sid = _storage->streamId(s);
-  convert(k, sid);
+  OMKLVKey  k = {0}; // tjb !!!
 
   if (!metaDataOnly) {
     _storage->writeBodyPartition(0, defaultKAGSize);
@@ -1215,18 +1213,17 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
       }
       case SF_DATA_STREAM: {
         OMPropertyId id = p->propertyId();
-        OMDataStream* stream = dynamic_cast<OMDataStream*>(p);
+        OMDataStreamProperty* stream = dynamic_cast<OMDataStreamProperty*>(p);
         ASSERT("Valid type", stream != 0);
         _storage->write(id, _reorderBytes);
-        OMPropertySize s = sizeof(OMByteOrder) +
-                           sizeof(OMKLVKey);
+        OMPropertySize s = sizeof(OMUInt32);
         _storage->write(s, _reorderBytes);
-        OMByteOrder bo = stream->storedByteOrder();
-        _storage->write(bo);
-        OMKLVKey k;
-        OMUniqueObjectIdentification sid = _storage->streamId(stream);
-        convert(k, sid);
-        _storage->writeKLVKey(k);
+        OMStoredStream* ss = stream->stream();
+        ASSERT("Valid stream", ss != 0);
+        OMKLVStoredStream* kss = dynamic_cast<OMKLVStoredStream*>(ss);
+        ASSERT("Valid type", kss != 0);
+        OMUInt32 sid = 0; // tjb !!!
+        _storage->write(sid, _reorderBytes);
         break;
       }
       default:
@@ -1486,17 +1483,13 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
       break;
     }
     case SF_DATA_STREAM: {
-      // tjb -- NYI
       OMDataStream* stream = dynamic_cast<OMDataStream*>(p);
       ASSERT("Valid type", stream != 0);
-      OMByteOrder bo;
-      _storage->read(bo);
-      stream->setStoredByteOrder(bo);
-      OMUniqueObjectIdentification sid;
-      OMKLVKey k;
-      _storage->readKLVKey(k);
-      convert(sid, k);
-      //p->setPresent();
+      OMUInt32 sid;
+      _storage->read(sid, _reorderBytes);
+//    stream->setStoredByteOrder(bigEndian);
+      stream->setStoredByteOrder(hostByteOrder());
+      p->setPresent();
       _storage->associate(stream, sid);
       break;
     }
@@ -1771,15 +1764,19 @@ void OMKLVStoredObject::streamRestore(void)
 {
   TRACE("OMKLVStoredObject::streamRestore")
 
-  OMUniqueObjectIdentification sid;
   OMKLVKey k;
   _storage->readKLVKey(k);
-  convert(sid, k);
 
-  while (k != ClosedFooterPartitionPackKey) {
-    if (_storage->containsStream(sid)) {
+  while (k != RandomIndexMetadataKey) {
+    if (k == ClosedBodyPartitionPackKey) {
+      OMUInt32 bodySID;
+      OMUInt32 indexSID;
+      OMUInt32 gridSize;
+      _storage->readPartition(bodySID, indexSID, gridSize);
+      _storage->readKLVFill();
+       _storage->readKLVKey(k);
       OMUInt64 length = OMMXFStorage::readBerLength(_storage);
-      OMDataStream* s = _storage->stream(sid);
+      OMDataStream* s = _storage->stream(bodySID);
       s->setPosition(0);
       for (OMUInt64 i = 0; i < length; i++) {
         OMByte b;
@@ -1792,7 +1789,6 @@ void OMKLVStoredObject::streamRestore(void)
       _storage->skipLV();
     }
     _storage->readKLVKey(k);
-    convert(sid, k);
   }
 }
 
