@@ -901,7 +901,33 @@ void OMMXFStorage::readPartition(OMUInt64 ANAME(length),
 {
   TRACE("OMMXFStorage::readPartition");
 
-  ASSERT("Unimplemented code not reached", false);
+  OMUInt16 majorVersion;
+  read(majorVersion, _reorderBytes);
+  OMUInt16 minorVersion;
+  read(minorVersion, _reorderBytes);
+  read(KAGSize, _reorderBytes);
+  read(thisPartition, _reorderBytes);
+  read(previousPartition, _reorderBytes);
+  read(footerPartition, _reorderBytes);
+  OMUInt64 headerByteCount;
+  read(headerByteCount, _reorderBytes);
+  OMUInt64 indexByteCount;
+  read(indexByteCount, _reorderBytes);
+  read(indexSID, _reorderBytes);
+  OMUInt64 bodyOffset;
+  read(bodyOffset, _reorderBytes);
+  read(bodySID, _reorderBytes);
+  readKLVKey(_operationalPattern);
+  OMUInt32 elementCount;
+  read(elementCount, _reorderBytes);
+  OMUInt32 elementSize;
+  read(elementSize, _reorderBytes);
+  ASSERT("Consistent length",
+         length == fixedPartitionSize + (elementCount * elementSize));
+  OMKLVKey essenceContainer;
+  for (OMUInt32 i = 0; i < elementCount; i++) {
+    readKLVKey(essenceContainer);
+  }
 }
 
 void OMMXFStorage::readHeaderPartition(void)
