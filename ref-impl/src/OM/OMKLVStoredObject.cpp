@@ -631,9 +631,12 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   initializeMap(file);
 #endif
 
-  // Read the header partition
-  _storage->readHeaderPartition();
-
+  OMKLVKey k;
+  _storage->readKLVKey(k);
+  if (k == ClosedHeaderPartitionPackKey) {
+    // Read the header partition
+    _storage->readHeaderPartition();
+  }
   _storage->readKLVFill();
 
   // Read the primer
@@ -650,7 +653,6 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
 
   // restore the root
   //
-  OMKLVKey k;
   _storage->readKLVKey(k);
   OMClassId cid;
   convert(cid, k);
