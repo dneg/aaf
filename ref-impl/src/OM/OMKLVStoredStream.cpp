@@ -28,7 +28,7 @@
 #include "OMRawStorage.h"
 
 OMKLVStoredStream::OMKLVStoredStream(OMRawStorage* store)
-: _essenceElementLabel(nullOMKLVKey),
+: _label(nullOMKLVKey),
   _blockSize(0),
   _fileOffset(0),
   _store(store),
@@ -136,12 +136,28 @@ void OMKLVStoredStream::close(void)
   _store = 0;
 }
 
+  // @mfunc Set the label to <p label>.
+  //   @parm The new label.
+void OMKLVStoredStream::setLabel(const OMKLVKey& label)
+{
+  TRACE("OMKLVStoredStream::setLabel");
+  _label = label;
+}
+
+  // @mfunc Get the label.
+  //   @rdesc The label.
+OMKLVKey OMKLVStoredStream::label(void) const
+{
+  TRACE("OMKLVStoredStream::label");
+  return _label;
+}
+
   // @mfunc Set the essence element label to <p label>.
   //   @parm The new label.
 void OMKLVStoredStream::setEssenceElementLabel(const OMKLVKey& label)
 {
   TRACE("OMKLVStoredStream::setEssenceElementLabel");
-  _essenceElementLabel = label;
+  setLabel(label);
 }
 
   // @mfunc Get the essence element label.
@@ -149,7 +165,7 @@ void OMKLVStoredStream::setEssenceElementLabel(const OMKLVKey& label)
 OMKLVKey OMKLVStoredStream::essenceElementLabel(void) const
 {
   TRACE("OMKLVStoredStream::essenceElementLabel");
-  return _essenceElementLabel;
+  return label();
 }
 
   // @mfunc Set the block size (alignment) of this essence element.
