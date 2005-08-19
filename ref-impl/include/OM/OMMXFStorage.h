@@ -402,6 +402,8 @@ private:
                               OMUInt64 size,
                               OMUInt64 origin);
   virtual Segment* findSegment(Stream* s, OMUInt64 position);
+  virtual Segment* findLastSegment(Stream* s);
+  virtual OMUInt64 allocatedSize(Stream* s);
   virtual Segment* streamSegment(OMUInt32 sid, OMUInt64 position);
 
   struct Stream {
