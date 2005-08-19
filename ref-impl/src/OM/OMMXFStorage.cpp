@@ -120,12 +120,9 @@ void OMMXFStorage::open(void)
 {
   TRACE("OMMXFStorage:open");
 
-  setPosition(0);
-  // Write header partition and alignment fill.
-  //
-  writeHeaderPartition(0, 0, defaultKAGSize);
-  // This is done here because the next thing we write is the primer.
-  _primerOffset = position();
+  // Leave one KAG block of space for the header
+  // partition pack and following fill.
+  _primerOffset = defaultKAGSize;
 }
 
   // @mfunc Close this <c OMMXFStorage>.
@@ -1505,6 +1502,11 @@ void OMMXFStorage::streamGrow(OMUInt32 sid, OMUInt64 growBytes)
 void OMMXFStorage::saveStreams(void)
 {
   TRACE("OMMXFStorage::saveStreams");
+
+  // Write header partition and alignment fill.
+  //
+  setPosition(0);
+  writeHeaderPartition(0, 0, defaultKAGSize);
 
   if (_segmentMap != 0) {
     SegmentMapIterator iter(*_segmentMap, OMBefore);
