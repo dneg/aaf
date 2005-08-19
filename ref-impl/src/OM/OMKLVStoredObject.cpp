@@ -24,18 +24,53 @@
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMKLVStoredObject
 #include "OMKLVStoredObject.h"
 
+#include "OMCachedDiskRawStorage.h"
+#include "OMKLVStoredStream.h"
+#include "OMProperty.h"
+#include "OMPropertySetIterator.h"
+#include "OMStrongRefProperty.h"
+#include "OMStrongReference.h"
+#include "OMStrongReferenceSet.h"
+#include "OMStrongReferenceVector.h"
+#include "OMObjectReference.h"
+#include "OMContainerElement.h"
+#include "OMDataStream.h"
+#include "OMIntegerType.h"
+#include "OMUniqueObjectIdentType.h"
+#include "OMRootStorable.h"
+#include "OMVector.h"
+#include "OMVectorIterator.h"
+#include "OMWeakReference.h"
+#include "OMWeakReferenceVector.h"
+#include "OMWeakReferenceSet.h"
+#include "OMPropertyTable.h"
+#include "OMStrongReferenceSetIter.h"
+#include "OMClassDefinition.h"
+#include "OMPropertyDefinition.h"
+
+#include "OMUtilities.h"
+
 #include "OMRawStorage.h"
+
+#define USETAGTABLE 1
+//#define INSTANCEID_DEBUG 1
+
+#if defined(INSTANCEID_DEBUG)
+#include <iostream.h>
+#include <iomanip.h>
+#endif
 
   // @mfunc Open the root <c OMKLVStoredObject> in the raw storage
   //        <p rawStorage> for reading only.
   //   @parm The raw storage in which to open the file.
   //   @rdesc An <c OMKLVStoredObject> representing the root object.
-OMKLVStoredObject* OMKLVStoredObject::openRead(OMRawStorage* ANAME(rawStorage))
+OMKLVStoredObject* OMKLVStoredObject::openRead(OMRawStorage* rawStorage)
 {
   TRACE("OMKLVStoredObject::openRead");
   PRECONDITION("Compatible raw storage access mode", rawStorage->isReadable());
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  return 0;
+  OMKLVStoredObject* result = new OMKLVStoredObject(rawStorage, littleEndian);
+  ASSERT("Valid heap pointer", result != 0);
+  return result;
 }
 
   // @mfunc Open the root <c OMKLVStoredObject> in the raw storage
@@ -91,7 +126,6 @@ OMKLVStoredObject* OMKLVStoredObject::createModify(OMRawStorage* rawStorage,
 OMKLVStoredObject::~OMKLVStoredObject(void)
 {
   TRACE("OMKLVStoredObject::~OMKLVStoredObject");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
   // @mfunc Create a new <c OMKLVStoredObject>, named <p name>,
@@ -102,8 +136,9 @@ OMKLVStoredObject::~OMKLVStoredObject(void)
 OMStoredObject* OMKLVStoredObject::create(const wchar_t* /* name */)
 {
   TRACE("OMKLVStoredObject::create");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  return 0;
+  OMStoredObject* result = new OMKLVStoredObject(_storage, _byteOrder);
+  ASSERT("Valid heap pointer", result != 0);
+  return result;
 }
 
   // @mfunc Open an exsiting <c OMKLVStoredObject>, named <p name>,
@@ -111,18 +146,22 @@ OMStoredObject* OMKLVStoredObject::create(const wchar_t* /* name */)
   //   @parm The name of the existing <c OMKLVStoredObject>.
   //   @rdesc The existing <c OMKLVStoredObject> contained by this
   //          <c OMKLVStoredObject>.
-OMStoredObject* OMKLVStoredObject::open(const wchar_t* /* name */)
+OMStoredObject* OMKLVStoredObject::open(const wchar_t* name)
 {
   TRACE("OMKLVStoredObject::open");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  return 0;
+  OMUniqueObjectIdentification id;
+  char* cName = convertWideString(name);
+  fromString(id, cName);
+  delete [] cName;
+  OMStoredObject* result = new OMKLVStoredObject(_storage, _byteOrder);
+  ASSERT("Valid heap pointer", result != 0);
+  return result;
 }
 
   // @mfunc Close this <c OMKLVStoredObject>.
 void OMKLVStoredObject::close(void)
 {
   TRACE("OMKLVStoredObject::close");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
   // @mfunc The byte order of this <c OMKLVStoredObject>.
@@ -131,74 +170,220 @@ void OMKLVStoredObject::close(void)
 OMByteOrder OMKLVStoredObject::byteOrder(void) const
 {
   TRACE("OMKLVStoredObject::byteOrder");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  return unspecified;
+
+  return _byteOrder;
 }
 
-void OMKLVStoredObject::save(OMFile& /* file */)
+#if defined(USETAGTABLE)
+static struct {
+  OMPropertyTag _tag;
+  OMUInt16 _pids[4];
+  wchar_t* _path;
+} map [] = {
+  {0xffff,
+   {0x0001, 0x0003},         L"/MetaDictionary/ClassDefinitions"},
+  {0xffff,
+   {0x0001, 0x0004},         L"/MetaDictionary/TypeDefinitions"},
+  {0xffff,
+   {0x0002, 0x3b04, 0x2605}, L"/Header/Dictionary/DataDefinitions"},
+  {0xffff,
+   {0x0002, 0x3b04, 0x2608}, L"/Header/Dictionary/ContainerDefinitions"},
+  {0xffff,
+   {0x0002, 0x3b04, 0x2607}, L"/Header/Dictionary/CodecDefinitions"},
+  {0xffff,
+   {0x0002, 0x3b04, 0x2603}, L"/Header/Dictionary/OperationDefinitions"},
+  {0xffff,
+   {0x0002, 0x3b04, 0x2609}, L"/Header/Dictionary/InterpolationDefinitions"},
+  {0xffff,
+   {0x0002, 0x3b04, 0x2604}, L"/Header/Dictionary/ParameterDefinitions"},
+};
+
+static size_t mapSize = sizeof(map)  / sizeof(map[0]);
+static size_t pidsSize = sizeof(map[0]._pids) / sizeof(map[0]._pids[0]);
+
+static void initializeMap(OMFile& file)
 {
-  TRACE("OMKLVStoredObject::save(OMFile)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  for (size_t i = 0; i < mapSize; i++) {
+    OMPropertyTag tag = file.referencedProperties()->insert(map[i]._pids);
+    map[i]._tag = tag;
+  }
 }
 
-void OMKLVStoredObject::save(OMStorable& /* object */)
+static OMPropertyTag findTag(const wchar_t* path)
+{
+  TRACE("findTag");
+  OMPropertyTag result =  nullOMPropertyTag;
+  for (size_t i = 0; i < mapSize; i++) {
+    if (compareWideString(path, map[i]._path) == 0) {
+      result = map[i]._tag;
+      break;
+    }
+  }
+  POSTCONDITION("", result != nullOMPropertyTag);
+  return result;
+}
+#endif
+
+void OMKLVStoredObject::save(OMFile& file)
 {
   TRACE("OMKLVStoredObject::save(OMFile)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+
+#if defined(INSTANCEID_DEBUG)
+  cout << endl;
+  for (size_t i = 0; i < mapSize; i++) {
+    cout << i << " ";
+    for (size_t k = 0; k < pidsSize; k++) {
+      cout << hex << setw(4) << setfill('0') << map[i]._pids[k] << " ";
+    }
+    cout << map[i]._path << endl;
+  }
+#endif
+
+  // The header partition has already been written,
+  // start saving immediately after the header partition
+  // and any filler.
+  //
+  _storage->setPosition(0);
+  readHeaderPartition(_storage);
+  readKLVFill(_storage);
+
+  // Write the primer
+  writePrimerPack(_storage, file.dictionary(), _reorderBytes);
+
+  // Save the rest of the file
+  file.root()->save();
+
+  OMUInt32 KAGSize = 0x200;
+  OMUInt64 currentPosition = _storage->position();
+  fill(_storage, currentPosition, KAGSize);
+
+  // Save streams
+  streamSave(*file.root()->propertySet());
+}
+
+void OMKLVStoredObject::save(OMStorable& object)
+{
+  TRACE("OMKLVStoredObject::save(OMFile)");
+  save(object.classId());
+  save(*object.propertySet());
 }
 
   // @mfunc Save the <c OMStoredObjectIdentification> <p id>
   //        in this <c OMKLVStoredObject>.
   //   @parm The <t OMStoredObjectIdentification> to save.
-void OMKLVStoredObject::save(const OMStoredObjectIdentification& /* id */)
+void OMKLVStoredObject::save(const OMStoredObjectIdentification& id)
 {
   TRACE("OMKLVStoredObject::save(OMStoredObjectIdentification)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+
+  OMKLVKey k;
+  convert(k, id);
+  writeKLVKey(_storage, k);
 }
 
   // @mfunc Save the <c OMPropertySet> <p properties> in this
   //        <c OMKLVStoredObject>.
   //   @parm The <c OMPropertySet> to save.
-void OMKLVStoredObject::save(const OMPropertySet& /* properties */)
+void OMKLVStoredObject::save(const OMPropertySet& properties)
 {
   TRACE("OMKLVStoredObject::save(OMPropertySet)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+
+  // Length
+  OMUInt64 setLength = length(properties);
+  writeKLVLength(_storage, setLength);
+
+  // Flat properties
+  flatSave(properties);
+
+  // Deep properties
+  deepSave(properties);
 }
 
   // @mfunc Save the <c OMSimpleProperty> <p property> in this
   //        <c OMKLVStoredObject>.
   //   @parm The <c OMSimpleProperty> to save.
-void OMKLVStoredObject::save(const OMSimpleProperty& /* property */)
+void OMKLVStoredObject::save(const OMSimpleProperty& property)
 {
   TRACE("OMKLVStoredObject::save(OMSimpleProperty)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+
+  OMPropertySize size = property.bitsSize();
+  OMByte* bits = property.bits();
+  const OMType* propertyType = property.type();
+  ASSERT("Valid property type", propertyType != 0);
+
+  // Allocate buffer for property value
+  OMPropertySize externalBytesSize = propertyType->externalSize(bits, size);
+  OMByte* buffer = new OMByte[externalBytesSize];
+  ASSERT("Valid heap pointer", buffer != 0);
+
+  // Externalize property value
+  propertyType->externalize(bits,
+                            size,
+                            buffer,
+                            externalBytesSize,
+                            hostByteOrder());
+
+  // Reorder property value
+  if (_reorderBytes) {
+    propertyType->reorder(buffer, externalBytesSize);
+  }
+
+  // size
+  write(_storage, externalBytesSize, _reorderBytes);
+  // value
+  write(_storage, buffer, externalBytesSize);
+
+  delete [] buffer;
 }
 
   // @mfunc Save the <c OMStrongReference> <p singleton> in this
   //        <c OMKLVStoredObject>.
   //   @parm The <c OMStrongReference> to save.
-void OMKLVStoredObject::save(const OMStrongReference& /* singleton */)
+void OMKLVStoredObject::save(const OMStrongReference& singleton)
 {
   TRACE("OMKLVStoredObject::save(OMStrongReference)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  singleton.reference().save();
 }
 
   // @mfunc Save the <c OMStrongReferenceVector> <p vector> in this
   //        <c OMKLVStoredObject>.
   //   @parm The <c OMStrongReferenceVector> to save.
-void OMKLVStoredObject::save(const OMStrongReferenceVector& /* vector */)
+void OMKLVStoredObject::save(const OMStrongReferenceVector& vector)
 {
   TRACE("OMKLVStoredObject::save(OMStrongReferenceVector)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+
+  OMContainerIterator<OMStrongReferenceVectorElement>& iterator =
+                                                            *vector.iterator();
+  while (++iterator) {
+
+    OMStrongReferenceVectorElement& element = iterator.value();
+
+    // save the object
+    //
+    element.save();
+
+  }
+  delete &iterator;
 }
 
   // @mfunc Save the <c OMStrongReferenceSet> <p set> in this
   //        <c OMKLVStoredObject>.
   //   @parm The <c OMStrongReference> to save.
-void OMKLVStoredObject::save(const OMStrongReferenceSet& /* set */)
+void OMKLVStoredObject::save(const OMStrongReferenceSet& set)
 {
   TRACE("OMKLVStoredObject::save(OMStrongReferenceSet)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+
+  OMContainerIterator<OMStrongReferenceSetElement>& iterator = *set.iterator();
+  while (++iterator) {
+    OMStrongReferenceSetElement& element = iterator.value();
+
+    // Save elements that are sticky or that are referenced.
+    if (element.isSticky() || element.referenceCount() > 0) {
+  
+      // object
+      element.save();
+    }
+  }
+  delete &iterator;
 }
 
   // @mfunc Save the <c OMWeakReference> <p singleton> in this
@@ -240,27 +425,167 @@ void OMKLVStoredObject::save(const OMPropertyTable* /* table */)
   // @mfunc Save the <c OMDataStream> <p stream> in this
   //        <c OMKLVStoredObject>.
   //   @parm The <c OMDataStream> to save.
-void OMKLVStoredObject::save(const OMDataStream& /* stream */)
+void OMKLVStoredObject::save(const OMDataStream& stream)
 {
   TRACE("OMKLVStoredObject::save(OMDataStream)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+
+  OMKLVKey e =
+    {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01,
+     0x0d, 0x01, 0x03, 0x01, 0xff, 0xff, 0xff, 0xff};
+
+  writeKLVKey(_storage, e);
+  OMUInt64 length = stream.size();
+  writeKLVLength(_storage, length);
+
+  // value
+  stream.setPosition(0);
+  for (OMUInt64 i = 0; i < length; i++) {
+    OMByte b;
+    OMUInt32 x;
+    stream.read(&b, 1, x);
+    write(_storage, b);
+  }
 }
 
-OMRootStorable* OMKLVStoredObject::restore(OMFile& /* file */)
+OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
 {
   TRACE("OMKLVStoredObject::restore(OMFile)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  OMRootStorable* result = 0;
-  return result;
+
+#if defined(USETAGTABLE)
+  initializeMap(file);
+#endif
+
+  // Read the header partition
+  readHeaderPartition(_storage);
+
+  readKLVFill(_storage);
+
+  // Read the primer
+  readPrimerPack(_storage, file.dictionary(), _reorderBytes);
+
+  file.setLoadMode(OMFile::lazyLoad);
+
+  readKLVFill(_storage);
+
+  OMKLVKey fillKey =
+    {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
+     0x03, 0x01, 0x02, 0x10, 0x01, 0x00, 0x00, 0x00};
+
+  // For restoring meta objects
+  OMDictionary* metaDictionary = file.dictionary();
+  // For restoring objects
+  const OMClassFactory* dictionary = file.classFactory();
+
+  // restore the root
+  //
+  OMKLVKey k;
+  readKLVKey(_storage, k);
+  OMClassId cid;
+  convert(cid, k);
+  ASSERT("Root object", cid == OMRootStorable::_rootClassId);
+  OMRootStorable* root = new OMRootStorable();
+  ASSERT("Valid heap pointer", root != 0);
+  root->attach(&file);
+  root->setStore(file.rootStore());
+  root->setClassFactory(metaDictionary);
+  flatRestore(*root->propertySet());
+
+  // restore the meta dictionary
+  //
+  readKLVKey(_storage, k);
+  convert(cid, k);
+
+  while (metaDictionary->isMeta(cid)) {
+    OMStorable* object = metaDictionary->create(cid);
+    ASSERT("Registered class id", object != 0);
+    ASSERT("Valid class factory", metaDictionary == object->classFactory());
+#if !defined(OM_NO_VALIDATE_DEFINITIONS)
+    ASSERT("Valid class definition", object->definition() != 0);
+#endif
+    // Attach the object.
+    // tjb !!! object->attach(containingObject, name);
+    // tjb !!! object->setStore(this);
+    object->onRestore(file.clientOnSaveContext());
+
+    flatRestore(*object->propertySet());
+
+    readKLVKey(_storage, k);
+    convert(cid, k);
+  }
+  OMProperty* mdp = root->propertySet()->get(0x0001);
+  OMStrongReference* mdsr = dynamic_cast<OMStrongReference*>(mdp);
+  ASSERT("Valid type", mdsr != 0);
+  OMStrongObjectReference& mdr = mdsr->reference();
+  OMStorable* mdo = mdr.getValue();
+  ASSERT("Valid object", mdo != 0);
+  deepRestore(*mdo->propertySet());
+
+  // restore the client root
+  //
+  root->setClassFactory(dictionary);
+  while (memcmp(&k, &fillKey, sizeof(OMKLVKey)) != 0) {
+    convert(cid, k);
+    OMStorable* object = dictionary->create(cid);
+    ASSERT("Registered class id", object != 0);
+    ASSERT("Valid class factory", dictionary == object->classFactory());
+#if !defined(OM_NO_VALIDATE_DEFINITIONS)
+    ASSERT("Valid class definition", object->definition() != 0);
+#endif
+    // Attach the object.
+    // tjb !!! object->attach(containingObject, name);
+    // tjb !!! object->setStore(this);
+    object->onRestore(file.clientOnSaveContext());
+
+    flatRestore(*object->propertySet());
+
+    readKLVKey(_storage, k);
+  }
+  OMProperty* hp = root->propertySet()->get(0x0002);
+  OMStrongReference* hsr = dynamic_cast<OMStrongReference*>(hp);
+  ASSERT("Valid type", hsr != 0);
+  OMStrongObjectReference& hr = hsr->reference();
+  OMStorable* ho = hr.getValue();
+  ASSERT("Valid object", ho != 0);
+  deepRestore(*ho->propertySet());
+
+#if defined(INSTANCEID_DEBUG)
+
+  if (_instanceIdToObject != 0) {
+
+    OMUInt32 n = _instanceIdToObject->count();
+    cout << dec << n << " objects" << endl;
+
+    OMSetIterator<OMUniqueObjectIdentification, OMStorable*>
+                                      iterator(*_instanceIdToObject, OMBefore);
+    while (++iterator) {
+      OMStorable* object = iterator.value();
+      OMUniqueObjectIdentification id = iterator.key();
+      char buffer[OMObjectIdentificationStringBufferSize];
+      toString(id, buffer);
+      cout << buffer << " -> " << object << endl;
+    }
+  }
+#endif
+
+  return root;
 }
 
 OMStorable*
-OMKLVStoredObject::restoreObject(
-                                const OMStrongObjectReference& /* reference */)
+OMKLVStoredObject::restoreObject(const OMStrongObjectReference& reference)
 {
   TRACE("OMKLVStoredObject::restoreObject");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  OMStorable* result = 0;
+  const wchar_t* name = reference.name();
+  char* cName = convertWideString(name);
+  OMUniqueObjectIdentification id;
+  fromString(id, cName);
+  delete [] cName;
+  OMStorable* result = object(id);
+  ASSERT("Object found", result != 0);
+    // Attach the object.
+  OMProperty* property = reference.property();
+  OMStorable* containingObject = property->propertySet()->container();
+  result->attach(containingObject, name);
+  result->setStore(this);
   return result;
 }
 
@@ -286,22 +611,61 @@ void OMKLVStoredObject::restore(OMPropertySet& /* properties */)
   //        <c OMKLVStoredObject>.
   //   @parm The newly restored <c OMSimpleProperty>
   //   @parm The external size.
-void OMKLVStoredObject::restore(OMSimpleProperty& /* property */,
-                                size_t /* externalSize */)
+void OMKLVStoredObject::restore(OMSimpleProperty& property,
+                                size_t externalSize)
 {
   TRACE("OMKLVStoredObject::restore(OMSimpleProperty)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+
+  const OMType* propertyType = property.type();
+  ASSERT("Valid property type", propertyType != 0);
+
+  // Allocate buffer for property value
+  OMByte* buffer = new OMByte[externalSize];
+  ASSERT("Valid heap pointer", buffer != 0);
+
+  read(_storage, buffer, externalSize);
+
+  // Reorder property value
+  if (_reorderBytes) {
+    propertyType->reorder(buffer, externalSize);
+  }
+
+  // Internalize property value
+  size_t requiredBytesSize = propertyType->internalSize(buffer,
+                                                        externalSize);
+
+  property.setSize(requiredBytesSize);
+  ASSERT("Property value buffer large enough",
+                                       property.size() >= requiredBytesSize);
+  OMByte* bits = property.bits();
+  propertyType->internalize(buffer,
+                            externalSize,
+                            bits,
+                            requiredBytesSize,
+                            hostByteOrder());
+  delete [] buffer;
 }
 
   // @mfunc Restore the <c OMStrongReference> <p singleton> into this
   //        <c OMKLVStoredObject>.
   //   @parm The newly restored <c OMStrongReference>.
   //   @parm The external size.
-void OMKLVStoredObject::restore(OMStrongReference& /* singleton */,
-                                size_t /* externalSize */)
+void OMKLVStoredObject::restore(OMStrongReference& singleton ,
+                                size_t ANAME(externalSize))
 {
   TRACE("OMKLVStoredObject::restore(OMStrongReference)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+
+  ASSERT("Valid size", externalSize == sizeof(OMUniqueObjectIdentification));
+  OMUniqueObjectIdentification id;
+  read(_storage, id, _reorderBytes);
+
+  char idString[OMObjectIdentificationStringBufferSize];
+  toString(id, idString);
+
+  wchar_t* name = convertString(idString);
+  OMStrongObjectReference newReference(&singleton, name, false);
+  delete [] name;
+  singleton.reference() = newReference;
 }
 
   // @mfunc Restore the <c OMStrongReferenceVector> <p vector> into this
@@ -330,11 +694,17 @@ void OMKLVStoredObject::restore(OMStrongReferenceSet& /* set */,
   //        <c OMKLVStoredObject>.
   //   @parm The newly restored <c OMWeakReference>.
   //   @parm The external size.
-void OMKLVStoredObject::restore(OMWeakReference& /* singleton */,
-                                size_t /* externalSize */)
+void OMKLVStoredObject::restore(OMWeakReference& singleton,
+                                size_t ANAME(externalSize))
 {
   TRACE("OMKLVStoredObject::restore(OMWeakReference)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+
+  ASSERT("Valid size", externalSize == sizeof(OMUniqueObjectIdentification));
+  OMUniqueObjectIdentification id;
+  read(_storage, id, _reorderBytes);
+
+  OMWeakObjectReference newReference(&singleton, id, 0);
+  singleton.reference() = newReference;
 }
 
   // @mfunc Restore the <c OMWeakReferenceVector> <p vector> into this
@@ -398,36 +768,1479 @@ OMStoredStream* OMKLVStoredObject::createStoredStream(
                                             const OMDataStream& /* property */)
 {
   TRACE("OMKLVStoredObject::createStoredStream");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  return 0;
+
+  OMRawStorage* store = OMCachedDiskRawStorage::openNewModify();
+  OMKLVStoredStream* result = new OMKLVStoredStream(store);
+  ASSERT("Valid heap pointer", result != 0);
+  return result;
+}
+
+OMUInt64 OMKLVStoredObject::length(const OMPropertySet& properties) const
+{
+  TRACE("OMKLVStoredObject::length");
+
+  OMUInt64 length = 0;
+  length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
+                  + sizeof(OMUniqueObjectIdentification);
+  OMPropertySetIterator iterator(properties, OMBefore);
+  while (++iterator) {
+    OMProperty* p = iterator.property();
+    ASSERT("Valid property", p != 0);
+    ASSERT("Property has a definition", p->definition() != 0);
+    if (!p->isOptional() || p->isPresent()) {
+      switch (p->storedForm()) {
+      case SF_DATA: {
+        OMSimpleProperty* sp = dynamic_cast<OMSimpleProperty*>(p);
+        ASSERT("Correct type", sp != 0);
+        OMSimpleProperty& property = *sp;
+        OMPropertySize size = property.bitsSize();
+        OMByte* bits = property.bits();
+        const OMType* type = property.type();
+        ASSERT("Valid property type", type != 0);
+        OMPropertySize s = type->externalSize(bits, size);
+        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize) + s;
+        break;
+      }
+      case SF_STRONG_OBJECT_REFERENCE: {
+        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
+                        + sizeof(OMUniqueObjectIdentification);
+        break;
+      }
+      case SF_STRONG_OBJECT_REFERENCE_VECTOR: {
+        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
+                        + sizeof(OMUInt32) + sizeof(OMUInt32);
+        OMStrongReferenceVector* v = dynamic_cast<OMStrongReferenceVector*>(p);
+        ASSERT("Valid type", v != 0);
+        OMUInt32 elements = v->count();
+        length = length + (elements * sizeof(OMUniqueObjectIdentification));
+        break;
+      }
+      case SF_STRONG_OBJECT_REFERENCE_SET: {
+        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
+                        + sizeof(OMUInt32) + sizeof(OMUInt32);
+        OMStrongReferenceSet* s = dynamic_cast<OMStrongReferenceSet*>(p);
+        ASSERT("Valid type", s != 0);
+        OMUInt32 elements = s->count();
+        length = length + (elements * sizeof(OMUniqueObjectIdentification));
+        break;
+      }
+      case SF_WEAK_OBJECT_REFERENCE: {
+        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
+                        + sizeof(OMUniqueObjectIdentification);
+        break;
+      }
+      case SF_WEAK_OBJECT_REFERENCE_VECTOR: {
+        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
+                        + sizeof(OMUInt32) + sizeof(OMUInt32);
+        OMWeakReferenceVector* v = dynamic_cast<OMWeakReferenceVector*>(p);
+        ASSERT("Valid type", v != 0);
+        OMUInt32 elements = v->count();
+        length = length + (elements * sizeof(OMUniqueObjectIdentification));
+        break;
+      }
+      case SF_WEAK_OBJECT_REFERENCE_SET: {
+        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
+                        + sizeof(OMUInt32) + sizeof(OMUInt32);
+        OMWeakReferenceSet* s = dynamic_cast<OMWeakReferenceSet*>(p);
+        ASSERT("Valid type", s != 0);
+        OMUInt32 elements = s->count();
+        length = length + (elements * sizeof(OMUniqueObjectIdentification));
+        break;
+      }
+      case SF_DATA_STREAM: {
+        // tjb -- NYI
+        OMPropertySize s = p->bitsSize();
+        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize) + s;
+        break;
+      }
+      default:
+        break;
+      }
+    }
+  }
+  return length;
+}
+
+void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
+{
+  TRACE("OMKLVStoredObject::flatSave");
+
+  referenceSave(properties.container(), 0x3c0a);
+
+  OMPropertySetIterator iterator(properties, OMBefore);
+  while (++iterator) {
+    OMProperty* p = iterator.property();
+    ASSERT("Valid property", p != 0);
+    ASSERT("Property has a definition", p->definition() != 0);
+    if (!p->isOptional() || p->isPresent()) {
+      switch (p->storedForm()) {
+      case SF_DATA: {
+        OMPropertyId id = p->propertyId();
+        write(_storage, id, _reorderBytes);
+        p->save();
+        break;
+      }
+      case SF_STRONG_OBJECT_REFERENCE: {
+        OMStrongReference* sr = dynamic_cast<OMStrongReference*>(p);
+        ASSERT("Valid type", sr != 0);
+        OMStrongObjectReference& r = sr->reference();
+        OMStorable* object = r.getValue();
+        ASSERT("Valid object", object != 0);
+        OMPropertyId pid = p->propertyId();
+        referenceSave(object, pid);
+        break;
+      }
+      case SF_STRONG_OBJECT_REFERENCE_VECTOR: {
+        OMPropertyId id = p->propertyId();
+        write(_storage, id, _reorderBytes);
+        OMStrongReferenceVector* v = dynamic_cast<OMStrongReferenceVector*>(p);
+        ASSERT("Valid type", v != 0);
+        OMUInt32 elementCount = v->count();
+        OMUInt32 elementSize = sizeof(OMUniqueObjectIdentification);
+        OMPropertySize size = sizeof(OMUInt32) + sizeof(OMUInt32)
+                              + (elementCount * elementSize);
+        write(_storage, size, _reorderBytes);
+        write(_storage, elementCount, _reorderBytes);
+        write(_storage, elementSize, _reorderBytes);
+        OMContainerIterator<OMStrongReferenceVectorElement>& iterator =
+                                                                *v->iterator();
+        while (++iterator) {
+          OMStrongReferenceVectorElement& element = iterator.value();
+          OMStrongObjectReference& r = element.reference();
+          OMStorable* object = r.getValue();
+          ASSERT("Valid object", object != 0);
+          OMUniqueObjectIdentification id = instanceId(object);
+          write(_storage, id, _reorderBytes);
+        }
+        delete &iterator;
+        break;
+      }
+      case SF_STRONG_OBJECT_REFERENCE_SET: {
+        OMPropertyId id = p->propertyId();
+        write(_storage, id, _reorderBytes);
+        OMStrongReferenceSet* s = dynamic_cast<OMStrongReferenceSet*>(p);
+        ASSERT("Valid type", s != 0);
+        OMUInt32 elementCount = s->count();
+        OMUInt32 elementSize = sizeof(OMUniqueObjectIdentification);
+        OMPropertySize size = sizeof(OMUInt32) + sizeof(OMUInt32)
+                              + (elementCount * elementSize);
+        write(_storage, size, _reorderBytes);
+        write(_storage, elementCount, _reorderBytes);
+        write(_storage, elementSize, _reorderBytes);
+        OMContainerIterator<OMStrongReferenceSetElement>& iterator =
+                                                                *s->iterator();
+        while (++iterator) {
+          OMStrongReferenceSetElement& element = iterator.value();
+          OMStrongObjectReference& r = element.reference();
+          OMStorable* object = r.getValue();
+          ASSERT("Valid object", object != 0);
+          OMUniqueObjectIdentification id = instanceId(object);
+          write(_storage, id, _reorderBytes);
+        }
+        delete &iterator;
+        break;
+      }
+      case SF_WEAK_OBJECT_REFERENCE: {
+        OMWeakReference* wr = dynamic_cast<OMWeakReference*>(p);
+        ASSERT("Valid type", wr != 0);
+        OMWeakObjectReference& r = wr->reference();
+        OMStorable* object = r.getValue();
+        ASSERT("Valid object", object != 0);
+        OMPropertyId pid = p->propertyId();
+        referenceSave(object, pid);
+        break;
+      }
+      case SF_WEAK_OBJECT_REFERENCE_VECTOR: {
+        OMPropertyId id = p->propertyId();
+        write(_storage, id, _reorderBytes);
+        OMWeakReferenceVector* v = dynamic_cast<OMWeakReferenceVector*>(p);
+        ASSERT("Valid type", v != 0);
+        OMUInt32 elementCount = v->count();
+        OMUInt32 elementSize = sizeof(OMUniqueObjectIdentification);
+        OMPropertySize size = sizeof(OMUInt32) + sizeof(OMUInt32)
+                              + (elementCount * elementSize);
+        write(_storage, size, _reorderBytes);
+        write(_storage, elementCount, _reorderBytes);
+        write(_storage, elementSize, _reorderBytes);
+        OMContainerIterator<OMWeakReferenceVectorElement>& iterator =
+                                                                *v->iterator();
+        while (++iterator) {
+          OMWeakReferenceVectorElement& element = iterator.value();
+          OMWeakObjectReference& r = element.reference();
+          OMStorable* object = r.getValue();
+          ASSERT("Valid object", object != 0);
+          OMUniqueObjectIdentification id = instanceId(object);
+          write(_storage, id, _reorderBytes);
+        }
+        delete &iterator;
+        break;
+      }
+      case SF_WEAK_OBJECT_REFERENCE_SET: {
+        OMPropertyId id = p->propertyId();
+        write(_storage, id, _reorderBytes);
+        OMWeakReferenceSet* s = dynamic_cast<OMWeakReferenceSet*>(p);
+        ASSERT("Valid type", s != 0);
+        OMUInt32 elementCount = s->count();
+        OMUInt32 elementSize = sizeof(OMUniqueObjectIdentification);
+        OMPropertySize size = sizeof(OMUInt32) + sizeof(OMUInt32)
+                              + (elementCount * elementSize);
+        write(_storage, size, _reorderBytes);
+        write(_storage, elementCount, _reorderBytes);
+        write(_storage, elementSize, _reorderBytes);
+        OMContainerIterator<OMWeakReferenceSetElement>& iterator =
+                                                                *s->iterator();
+        while (++iterator) {
+          OMWeakReferenceSetElement& element = iterator.value();
+          OMWeakObjectReference& r = element.reference();
+          OMStorable* object = r.getValue();
+          ASSERT("Valid object", object != 0);
+          OMUniqueObjectIdentification id = instanceId(object);
+          write(_storage, id, _reorderBytes);
+        }
+        delete &iterator;
+        break;
+      }
+      case SF_DATA_STREAM: {
+        // tjb -- NYI
+        OMPropertyId id = p->propertyId();
+        write(_storage, id, _reorderBytes);
+        OMPropertySize s = p->bitsSize();
+        write(_storage, s, _reorderBytes);
+        for (size_t i = 0; i < s; i++) {
+          const OMByte fill[] = "deadbeef";
+          OMByte b = fill[i % (sizeof(fill) - 1)];
+          write(_storage, b);
+        }
+        break;
+      }
+      default:
+        break;
+      }
+    }
+  }
+}
+
+void OMKLVStoredObject::deepSave(const OMPropertySet& properties) const
+{
+  TRACE("OMKLVStoredObject::deepSave");
+
+  OMPropertySetIterator iterator(properties, OMBefore);
+  while (++iterator) {
+    OMProperty* p = iterator.property();
+    ASSERT("Valid property", p != 0);
+    ASSERT("Property has a definition", p->definition() != 0);
+    if (!p->isOptional() || p->isPresent()) {
+      switch (p->storedForm()) {
+      case SF_STRONG_OBJECT_REFERENCE:
+      case SF_STRONG_OBJECT_REFERENCE_VECTOR:
+      case SF_STRONG_OBJECT_REFERENCE_SET: {
+        p->save();
+        break;
+      }
+      default:
+        break;
+      }
+    }
+  }
+}
+
+void OMKLVStoredObject::streamSave(const OMPropertySet& properties) const
+{
+  TRACE("OMKLVStoredObject::streamSave");
+
+  OMPropertySetIterator iterator(properties, OMBefore);
+  while (++iterator) {
+    OMProperty* p = iterator.property();
+    ASSERT("Valid property", p != 0);
+    ASSERT("Property has a definition", p->definition() != 0);
+    if (!p->isOptional() || p->isPresent()) {
+      switch (p->storedForm()) {
+      case SF_STRONG_OBJECT_REFERENCE: {
+        OMStrongReference* sr = dynamic_cast<OMStrongReference*>(p);
+        ASSERT("Valid type", sr != 0);
+        OMStrongObjectReference& r = sr->reference();
+        OMStorable* object = r.getValue();
+        ASSERT("Valid object", object != 0);
+        streamSave(*object->propertySet());
+        break;
+      }
+      case SF_STRONG_OBJECT_REFERENCE_VECTOR: {
+        OMStrongReferenceVector* v = dynamic_cast<OMStrongReferenceVector*>(p);
+        ASSERT("Valid type", v != 0);
+        OMContainerIterator<OMStrongReferenceVectorElement>& iterator =
+                                                                *v->iterator();
+        while (++iterator) {
+          OMStrongReferenceVectorElement& element = iterator.value();
+          OMStrongObjectReference& r = element.reference();
+          OMStorable* object = r.getValue();
+          ASSERT("Valid object", object != 0);
+          streamSave(*object->propertySet());
+        }
+        delete &iterator;
+        break;
+      }
+      case SF_STRONG_OBJECT_REFERENCE_SET: {
+        OMStrongReferenceSet* s = dynamic_cast<OMStrongReferenceSet*>(p);
+        ASSERT("Valid type", s != 0);
+        OMContainerIterator<OMStrongReferenceSetElement>& iterator =
+                                                                *s->iterator();
+        while (++iterator) {
+          OMStrongReferenceSetElement& element = iterator.value();
+          OMStrongObjectReference& r = element.reference();
+          OMStorable* object = r.getValue();
+          ASSERT("Valid object", object != 0);
+          streamSave(*object->propertySet());
+        }
+        delete &iterator;
+        break;
+      }
+      case SF_DATA_STREAM: {
+        p->save();
+        break;
+      }
+      default:
+        break;
+      }
+    }
+  }
+}
+
+void OMKLVStoredObject::referenceSave(OMStorable* object,
+                                      OMPropertyId pid) const
+{
+  TRACE("OMKLVStoredObject::referenceSave");
+  PRECONDITION("Valid object", object != 0);
+
+  OMUniqueObjectIdentification oid = instanceId(object);
+  write(_storage, pid, _reorderBytes);
+  OMPropertySize s = sizeof(OMUniqueObjectIdentification);
+  write(_storage, s, _reorderBytes);
+  write(_storage, oid, _reorderBytes);
+}
+
+void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
+{
+  TRACE("OMKLVStoredObject::flatRestore");
+
+  OMUInt64 setLength = readKLVLength(_storage);
+
+  referenceRestore(properties.container(), 0x3c0a);
+  const OMUInt16 overhead = sizeof(OMPropertyId) + sizeof(OMPropertySize);
+  setLength = setLength - (overhead + sizeof(OMUniqueObjectIdentification));
+  
+  while (setLength > 0) {
+    OMPropertyId pid;
+    read(_storage, pid, _reorderBytes);
+    OMPropertySize length;
+    read(_storage, length, _reorderBytes);
+
+    OMProperty* p = properties.get(pid);
+    ASSERT("Valid property", p != 0);
+
+    switch (p->storedForm()) {
+    case SF_DATA: {
+      // p->restore(length);
+      OMSimpleProperty* sp = dynamic_cast<OMSimpleProperty*>(p);
+      ASSERT("Correct type", sp != 0);
+      restore(*sp, length);
+      p->setPresent();
+      break;
+    }
+    case SF_STRONG_OBJECT_REFERENCE: {
+      // p->restore(length);
+      OMStrongReference* sr = dynamic_cast<OMStrongReference*>(p);
+      ASSERT("Valid type", sr != 0);
+      restore(*sr, length);
+      p->setPresent();
+      break;
+    }
+    case SF_STRONG_OBJECT_REFERENCE_VECTOR: {
+      OMUInt32 elementCount;
+      OMUInt32 elementSize;
+      read(_storage, elementCount, _reorderBytes);
+      read(_storage, elementSize, _reorderBytes);
+      OMStrongReferenceVector* v = dynamic_cast<OMStrongReferenceVector*>(p);
+      if (elementCount > 0) {
+        v->grow(elementCount);
+        for (OMUInt32 i = 0; i < elementCount; i++) {
+          OMUniqueObjectIdentification id;
+          read(_storage, id, _reorderBytes);
+
+          char idString[OMObjectIdentificationStringBufferSize];
+          toString(id, idString);
+
+          wchar_t* name = convertString(idString);
+          OMStrongObjectReference newReference(v, name, false);
+          OMStrongReferenceVectorElement element(v, name, i);
+          element.reference() = newReference;
+          delete [] name;
+          v->insert(i, element);
+        }
+      }
+      p->setPresent();
+      break;
+    }
+    case SF_STRONG_OBJECT_REFERENCE_SET: {
+      OMUInt32 elementCount;
+      OMUInt32 elementSize;
+      read(_storage, elementCount, _reorderBytes);
+      read(_storage, elementSize, _reorderBytes);
+      OMStrongReferenceSet* s = dynamic_cast<OMStrongReferenceSet*>(p);
+      OMKeySize keySize = s->keySize();
+      OMByte* key = new OMByte[keySize];
+      ASSERT("Valid heap pointer", key != 0);
+      OMUInt32* keyI = (OMUInt32*)key;
+      memset(key, 0, keySize);
+
+      for (OMUInt32 i = 0; i < elementCount; i++) {
+        *keyI = i + 1; // Temporary unique key 1..N
+        OMUniqueObjectIdentification id;
+        read(_storage, id, _reorderBytes);
+
+        char idString[OMObjectIdentificationStringBufferSize];
+        toString(id, idString);
+
+        wchar_t* name = convertString(idString);
+        OMStrongObjectReference newReference(s, name, false);
+        OMStrongReferenceSetElement element(s, name, i, key, keySize);
+        element.reference() = newReference;
+        delete [] name;
+        s->insert(key, element);
+      }
+      delete [] key;
+      p->setPresent();
+      break;
+    }
+    case SF_WEAK_OBJECT_REFERENCE: {
+      OMWeakReference* wr = dynamic_cast<OMWeakReference*>(p);
+      ASSERT("Valid type", wr != 0);
+      restore(*wr, length);
+      p->setPresent();
+      break;
+    }
+    case SF_WEAK_OBJECT_REFERENCE_VECTOR: {
+      OMUInt32 elementCount;
+      OMUInt32 elementSize;
+      read(_storage, elementCount, _reorderBytes);
+      read(_storage, elementSize, _reorderBytes);
+      OMWeakReferenceVector* v = dynamic_cast<OMWeakReferenceVector*>(p);
+      if (elementCount > 0) {
+        v->grow(elementCount);
+        for (OMUInt32 i = 0; i < elementCount; i++) {
+          OMUniqueObjectIdentification id;
+          read(_storage, id, _reorderBytes);
+
+          OMWeakReferenceVectorElement element(v, id, 0);
+          v->insert(i, element);
+        }
+      }
+      p->setPresent();
+      break;
+    }
+    case SF_WEAK_OBJECT_REFERENCE_SET: {
+      OMUInt32 elementCount;
+      OMUInt32 elementSize;
+      read(_storage, elementCount, _reorderBytes);
+      read(_storage, elementSize, _reorderBytes);
+      OMWeakReferenceSet* s = dynamic_cast<OMWeakReferenceSet*>(p);
+      if (elementCount > 0) {
+        for (OMUInt32 i = 0; i < elementCount; i++) {
+          OMUniqueObjectIdentification id;
+          read(_storage, id, _reorderBytes);
+
+          OMWeakReferenceSetElement element(s, id, 0);
+          s->insert(&id, element);
+        }
+      }
+      p->setPresent();
+      break;
+    }
+    case SF_DATA_STREAM: {
+      // tjb -- NYI
+      if (length > 0) {
+        OMByte* buffer = new OMByte[length];
+        OMUInt32 x;
+        _storage->read(buffer, length, x);
+        ASSERT("All bytes read", length == x);
+        delete [] buffer;
+      }
+      //p->setPresent();
+      break;
+    }
+    default:
+      break;
+    }
+    setLength = setLength - (overhead + length);
+  }
+}
+
+void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
+{
+  TRACE("OMKLVStoredObject::deepRestore");
+
+  OMPropertySetIterator iterator(properties, OMBefore);
+  while (++iterator) {
+    OMProperty* p = iterator.property();
+    ASSERT("Valid property", p != 0);
+    ASSERT("Property has a definition", p->definition() != 0);
+    if (!p->isOptional() || p->isPresent()) {
+      switch (p->storedForm()) {
+      case SF_STRONG_OBJECT_REFERENCE: {
+        OMStrongReference* sr = dynamic_cast<OMStrongReference*>(p);
+        ASSERT("Valid type", sr != 0);
+        OMStrongObjectReference& r = sr->reference();
+        OMStorable* object = r.getValue();
+        ASSERT("Valid object", object != 0);
+        deepRestore(*object->propertySet());
+        break;
+      }
+      case SF_STRONG_OBJECT_REFERENCE_SET: {
+        OMStrongReferenceSet* s = dynamic_cast<OMStrongReferenceSet*>(p);
+        ASSERT("Valid type", s != 0);
+        OMUInt32 count = s->count();
+        if (count > 0) {
+          OMContainerIterator<OMStrongReferenceSetElement>& iterator =
+                                                                *s->iterator();
+          OMKeySize keySize = s->keySize();
+          OMPropertyId keyPid = s->keyPropertyId();
+          if (p->propertyId() == 0x0b03) {
+            keyPid = 0x4c01;
+          }
+          OMByte* key = new OMByte[keySize];
+          ASSERT("Valid heap pointer", key != 0);
+          OMVector<OMUniqueObjectIdentification> objects;
+#if 1
+          OMVector<void*> keys;
+#endif
+
+          objects.grow(count);
+#if 1
+          keys.grow(count);
+#endif
+          while (++iterator) {
+            OMStrongReferenceSetElement& element = iterator.value();
+            OMStrongObjectReference& r = element.reference();
+            const wchar_t* name = r.name();
+            OMUniqueObjectIdentification id;
+            char* cName = convertWideString(name);
+            if (isValidObjectIdentificationString(cName)) {
+              fromString(id, cName);
+              if (instanceIdToObject()->contains(id)) {
+                objects.insert(id);
+              }
+#if 1
+              void* k = new OMByte[keySize];
+              memcpy(k, element.identification(), keySize);
+              keys.insert(k);
+#endif
+            }
+            delete [] cName;
+          }
+#if 1
+          OMVectorIterator<void*> kiter(keys, OMBefore);
+          while (++kiter) {
+            void* k = kiter.value();
+            s->remove(k);
+            //delete [] k;
+          }
+#else
+          s->removeAllObjects();
+#endif
+          OMUInt32 localKey = 0;
+          OMVectorIterator<OMUniqueObjectIdentification> viter(objects, 
+                                                               OMBefore);
+          while (++viter) {
+            OMUniqueObjectIdentification id = viter.value();
+            OMStorable* obj = object(id);
+            ASSERT("Valid object", obj != 0);
+            OMProperty* kp = obj->propertySet()->get(keyPid);
+            ASSERT("Valid property", kp != 0);
+            ASSERT("Consistent sizes", keySize == kp->bitsSize());
+            kp->getBits(key, keySize);
+
+#if 1
+            if (!s->contains(key)) {
+#endif
+            char idString[OMObjectIdentificationStringBufferSize];
+            toString(id, idString);
+            wchar_t* name = convertString(idString);
+
+            OMStrongReferenceSetElement element(s,
+                                                name,
+                                                localKey,
+                                                key,
+                                                keySize);
+            element.setValue(key, obj);
+            s->insert(key, element);
+            delete [] name;
+#if 1
+            }
+#endif
+            localKey = localKey + 1;
+          }
+          delete [] key;
+          delete &iterator;
+
+          OMContainerIterator<OMStrongReferenceSetElement>& iter =
+                                                                *s->iterator();
+          while (++iter) {
+            OMStrongReferenceSetElement& element = iter.value();
+            OMStrongObjectReference& r = element.reference();
+            OMStorable* object = r.getValue();
+            ASSERT("Valid object", object != 0);
+            deepRestore(*object->propertySet());
+          }
+          delete &iter;
+
+        }
+        break;
+      }
+      case SF_WEAK_OBJECT_REFERENCE: {
+        OMWeakReference* wr = dynamic_cast<OMWeakReference*>(p);
+        ASSERT("Valid type", wr != 0);
+        OMWeakObjectReference& r = wr->reference();
+        OMUniqueObjectIdentification id = r.identification();
+        OMStorable* obj = object(id);
+#if 1
+        if (obj != 0) {
+#endif
+        ASSERT("Valid object", obj != 0);
+        // get key property from object
+        OMPropertyId keyPid = wr->keyPropertyId();
+        // build new reference from key and object
+        OMProperty* kp = obj->propertySet()->get(keyPid);
+        ASSERT("Valid property", kp != 0);
+        OMUniqueObjectIdentification k;
+        ASSERT("Consistent sizes", kp->bitsSize() == sizeof(k));
+        kp->getBits(reinterpret_cast<OMByte*>(&k), sizeof(k));
+#if defined(USETAGTABLE)
+        OMPropertyTag tag = findTag(wr->targetName());
+        OMWeakObjectReference newReference(p, k, tag);
+        wr->reference() = newReference;
+#else
+        wr->reference().setValue(id, obj);
+#endif
+#if 1
+        } else {
+          OMPropertyTag tag = findTag(wr->targetName());
+          wr->reference().setTargetTag(tag); 
+        }
+#endif
+        break;
+      }
+      case SF_STRONG_OBJECT_REFERENCE_VECTOR: {
+        OMStrongReferenceVector* v = dynamic_cast<OMStrongReferenceVector*>(p);
+        ASSERT("Valid type", v != 0);
+        OMContainerIterator<OMStrongReferenceVectorElement>& iterator =
+                                                                *v->iterator();
+        while (++iterator) {
+          OMStrongReferenceVectorElement& element = iterator.value();
+          OMStrongObjectReference& r = element.reference();
+          OMStorable* object = r.getValue();
+          ASSERT("Valid object", object != 0);
+          deepRestore(*object->propertySet());
+        }
+        delete &iterator;
+        break;
+      }
+      case SF_WEAK_OBJECT_REFERENCE_VECTOR: {
+        OMWeakReferenceVector* v = dynamic_cast<OMWeakReferenceVector*>(p);
+        ASSERT("Valid type", v != 0);
+        OMPropertyId keyPid = v->keyPropertyId();
+        OMContainerIterator<OMWeakReferenceVectorElement>& iterator =
+                                                                *v->iterator();
+        while (++iterator) {
+          OMWeakReferenceVectorElement& element = iterator.value();
+          OMWeakObjectReference& r = element.reference();
+          OMUniqueObjectIdentification id = r.identification();
+          OMStorable* obj = object(id);
+#if 1
+        if (obj != 0) {
+#endif
+          ASSERT("Valid object", obj != 0);
+          OMProperty* kp = obj->propertySet()->get(keyPid);
+          ASSERT("Valid property", kp != 0);
+          OMUniqueObjectIdentification k;
+          ASSERT("Consistent sizes", kp->bitsSize() == sizeof(k));
+          kp->getBits(reinterpret_cast<OMByte*>(&k), sizeof(k));
+#if defined(USETAGTABLE)
+          OMPropertyTag tag = findTag(v->targetName());
+          OMWeakObjectReference newReference(v, k, tag);
+          r = newReference;
+#else
+          r.setValue(k, obj);
+#endif
+#if 1
+        } else {
+          OMPropertyTag tag = findTag(v->targetName());
+          r.setTargetTag(tag); 
+        }
+#endif
+        }
+        delete &iterator;
+        break;
+      }
+      case SF_WEAK_OBJECT_REFERENCE_SET: {
+        OMWeakReferenceSet* s = dynamic_cast<OMWeakReferenceSet*>(p);
+        ASSERT("Valid type", s != 0);
+        OMUInt32 count = s->count();
+        if (count > 0) {
+          OMContainerIterator<OMWeakReferenceSetElement>& iterator =
+                                                                *s->iterator();
+          OMPropertyId keyPid = s->keyPropertyId();
+          OMUniqueObjectIdentification key;
+          OMVector<OMUniqueObjectIdentification> objects;
+
+          objects.grow(count);
+          while (++iterator) {
+            OMWeakReferenceSetElement& element = iterator.value();
+            OMWeakObjectReference& r = element.reference();
+            OMUniqueObjectIdentification id = r.identification();
+            objects.insert(id);
+          }
+          s->removeAllObjects();
+          OMVectorIterator<OMUniqueObjectIdentification> viter(objects, 
+                                                               OMBefore);
+          while (++viter) {
+            OMUniqueObjectIdentification id = viter.value();
+            OMStorable* obj = object(id);
+#if 1
+            if (obj != 0) {
+#endif
+            ASSERT("Valid object", obj != 0);
+            OMProperty* kp = obj->propertySet()->get(keyPid);
+            ASSERT("Valid property", kp != 0);
+            ASSERT("Consistent sizes", kp->bitsSize() == sizeof(key));
+            kp->getBits(reinterpret_cast<OMByte*>(&key), sizeof(key));
+
+            OMWeakReferenceSetElement element(s, key, 0);
+#if defined(USETAGTABLE)
+            OMPropertyTag tag = findTag(s->targetName());
+            OMWeakObjectReference newReference(s, key, tag);
+            element.reference() = newReference;
+#else
+            element.setValue(key, obj);
+#endif
+            s->insert(&key, element);
+#if 1
+            } else {
+              OMPropertyTag tag = findTag(s->targetName());
+              //element.reference().setTargetTag(tag); 
+            }
+#endif
+          }
+          delete &iterator;
+        }
+        break;
+      }
+      case SF_DATA:
+      case SF_DATA_STREAM:
+        // tjb -- NYI
+        break;
+      default:
+        break;
+      }
+    }
+  }
+}
+
+void OMKLVStoredObject::referenceRestore(OMStorable* object,
+                                         OMPropertyId ANAME(pid))
+{
+  TRACE("OMKLVStoredObject::referenceRestore");
+
+  OMPropertySize length;
+  OMPropertyId rPid;
+  read(_storage, rPid, _reorderBytes);
+  ASSERT("Property is reference/instance UID", rPid == pid);
+  read(_storage, length, _reorderBytes);
+  ASSERT("Valid length", length = sizeof(OMUniqueObjectIdentification));
+  OMUniqueObjectIdentification iid;
+  read(_storage, iid, _reorderBytes);
+  ASSERT("Object not present", !objectToInstanceId()->contains(object));
+  objectToInstanceId()->insert(object, iid);
+  ASSERT("Identifier not present", !instanceIdToObject()->contains(iid));
+  instanceIdToObject()->insert(iid, object);
 }
 
 void OMKLVStoredObject::writeHeaderPartition(void)
 {
+  OMKLVKey headerPartitionPackKey =
+    {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
+     0x0d, 0x01, 0x02, 0x01, 0x01, 0x02, 0x02, 0x00};
+
+  writePartition(_storage, headerPartitionPackKey, _reorderBytes);
 }
 
-void OMKLVStoredObject::writeFooterPartition(OMRawStorage* /* store */)
+void OMKLVStoredObject::writeFooterPartition(OMRawStorage* store)
 {
+  bool reorderBytes;
+  if (hostByteOrder() == bigEndian) {
+    reorderBytes = false;
+  } else {
+    reorderBytes = true;
+  }
+  OMKLVKey ClosedFooterPartitionPackKey =
+    {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
+     0x0d, 0x01, 0x02, 0x01, 0x01, 0x04, 0x02, 0x00};
+  writePartition(store, ClosedFooterPartitionPackKey, reorderBytes);
 }
 
-bool OMKLVStoredObject::readHeaderPartition(OMRawStorage* /* store */)
+void OMKLVStoredObject::writePartition(OMRawStorage* store,
+                                       const OMKLVKey& key,
+                                       bool reorderBytes)
+{
+  OMKLVKey operationalPattern = 
+    {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01,
+     0x0d, 0x01, 0x02, 0x01, 0x01, 0x01, 0x09, 0x00};
+
+  OMKLVKey essenceContainers[] = {
+    {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01,
+     0x0d, 0x01, 0x03, 0x01, 0x02, 0x01, 0x02, 0x01}
+  };
+  OMUInt32 elementSize = sizeof(OMKLVKey);
+  OMUInt32 elementCount = sizeof(essenceContainers) / elementSize;
+
+  writeKLVKey(store, key);
+  OMUInt64 sizeOfFixedPortion = 88;
+  OMUInt64 length = sizeOfFixedPortion + (elementCount * elementSize);
+  writeKLVLength(store, length);
+  OMUInt16 majorVersion = 0xffff;
+  write(store, majorVersion, reorderBytes);
+  OMUInt16 minorVersion = 0xffff;
+  write(store, minorVersion, reorderBytes);
+  OMUInt32 KAGSize = 0x200;
+  write(store, KAGSize, reorderBytes);
+  OMUInt64 thisPartition = 0;
+  write(store, thisPartition, reorderBytes);
+  OMUInt64 previousPartition = 0;
+  write(store, previousPartition, reorderBytes);
+  OMUInt64 footerPartition = 0;
+  write(store, footerPartition, reorderBytes);
+  OMUInt64 headerByteCount = 0;
+  write(store, headerByteCount, reorderBytes);
+  OMUInt64 indexByteCount = 0;
+  write(store, indexByteCount, reorderBytes);
+  OMUInt32 indexSID = 1;
+  write(store, indexSID, reorderBytes);
+  OMUInt64 bodyOffset = 0;
+  write(store, bodyOffset, reorderBytes);
+  OMUInt32 bodySID = 2;
+  write(store, bodySID, reorderBytes);
+  writeKLVKey(store, operationalPattern);
+  write(store, elementCount, reorderBytes);
+  write(store, elementSize, reorderBytes);
+  for (OMUInt32 i = 0; i < elementCount; i++) {
+    writeKLVKey(store, essenceContainers[i]);
+  }
+
+  OMUInt64 currentPosition = store->position();
+  fill(store, currentPosition, KAGSize);
+}
+
+void OMKLVStoredObject::writePrimerPack(OMRawStorage* store,
+                                        const OMDictionary* dictionary,
+                                        bool reorderBytes)
+{
+  TRACE("OMKLVStoredObject::writePrimerPack");
+
+  OMKLVKey primerPackKey =
+    {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
+     0x0d, 0x01, 0x02, 0x01, 0x01, 0x05, 0x01, 0x00};
+
+  OMUInt32 KAGSize = 0x200;
+
+  OMUInt32 elementCount = 0;
+  ClassDefinitionsIterator& classes = *dictionary->classDefinitions();
+  while (++classes) {
+    OMObject* obj = classes.currentObject();
+    OMClassDefinition* classDefinition = dynamic_cast<OMClassDefinition*>(obj);
+    ASSERT("Object is correct type", classDefinition != 0);
+    PropertyDefinitionsIterator&
+                          properties = *classDefinition->propertyDefinitions();
+    while (++properties) {
+      OMObject* obj = properties.currentObject();
+      OMPropertyDefinition* propertyDefinition =
+                                      dynamic_cast<OMPropertyDefinition*>(obj);
+      ASSERT("Object is correct type", propertyDefinition != 0);
+      OMPropertyId pid = propertyDefinition->localIdentification();
+      if (pid >= 0x8000) {
+        elementCount = elementCount + 1;
+      }
+    }
+    delete &properties;
+  }
+  delete &classes;
+
+  OMUInt32 elementSize = sizeof(OMPropertyId) +
+                         sizeof(OMUniqueObjectIdentification);
+  writeKLVKey(store, primerPackKey);
+  OMUInt64 sizeOfFixedPortion = 8;
+  OMUInt64 length = sizeOfFixedPortion + (elementCount * elementSize);
+  writeKLVLength(store, length);
+  write(store, elementCount, reorderBytes);
+  write(store, elementSize, reorderBytes);
+
+  classes = *dictionary->classDefinitions();
+  while (++classes) {
+    OMObject* obj = classes.currentObject();
+    OMClassDefinition* classDefinition = dynamic_cast<OMClassDefinition*>(obj);
+    ASSERT("Object is correct type", classDefinition != 0);
+    PropertyDefinitionsIterator&
+                          properties = *classDefinition->propertyDefinitions();
+    while (++properties) {
+      OMObject* obj = properties.currentObject();
+      OMPropertyDefinition* propertyDefinition =
+                                      dynamic_cast<OMPropertyDefinition*>(obj);
+      ASSERT("Object is correct type", propertyDefinition != 0);
+      OMPropertyId pid = propertyDefinition->localIdentification();
+      if (pid >= 0x8000) {
+        write(store, pid, reorderBytes);
+        OMUniqueObjectIdentification id =
+                                    propertyDefinition->uniqueIdentification();
+        write(store, id, reorderBytes);
+      }
+    }
+    delete &properties;
+  }
+  delete &classes;
+
+  OMUInt64 currentPosition = store->position();
+  fill(store, currentPosition, KAGSize);
+}
+
+void OMKLVStoredObject::fill(OMRawStorage* store,
+                             const OMUInt64& currentPosition,
+                             const OMUInt32& KAGSize)
+{
+  TRACE("OMKLVStoredObject::fill");
+
+  OMUInt64 minimumFill = sizeof(OMKLVKey) + sizeof(OMUInt64) + 1;
+  OMUInt64 nextPage = (currentPosition / KAGSize) + 1;
+  OMUInt64 remainder = (nextPage * KAGSize) - currentPosition;
+  if (remainder < minimumFill) {
+    remainder = remainder + KAGSize;
+  }
+  remainder = remainder - minimumFill;
+  writeKLVFill(store, remainder);
+}
+
+void OMKLVStoredObject::writeKLVKey(OMRawStorage* store, const OMKLVKey& key)
+{
+  TRACE("OMKLVStoredObject::writeKLVKey");
+
+  OMUInt32 x;
+  store->write(key, sizeof(OMKLVKey), x);
+
+  POSTCONDITION("All bytes written", x == sizeof(OMKLVKey));
+}
+
+void OMKLVStoredObject::writeKLVLength(OMRawStorage* store,
+                                       const OMUInt64& length)
+{
+  TRACE("OMKLVStoredObject::writeKLVLength");
+
+  OMByte berLength[sizeof(OMUInt64) + 1];
+  OMUInt32 berLengthSize;
+  berEncode(berLength, sizeof(berLength), berLengthSize, length);
+  OMUInt32 x;
+  store->write(berLength, berLengthSize, x);
+
+  POSTCONDITION("All bytes written", x == berLengthSize);
+}
+
+void OMKLVStoredObject::writeKLVFill(OMRawStorage* store,
+                                     const OMUInt64& length)
+{
+  TRACE("OMKLVStoredObject::writeKLVFill");
+
+  OMKLVKey fillKey =
+    {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
+     0x03, 0x01, 0x02, 0x10, 0x01, 0x00, 0x00, 0x00};
+
+  writeKLVKey(store, fillKey);
+  writeKLVLength(store, length);
+  for (OMUInt64 i = 0; i < length; i++) {
+    const OMByte fillPattern[] = "FFFF.FFFF TIM MEC HEHT GEWYRCAN ";
+    write(store, fillPattern[i % (sizeof(fillPattern) - 1)]);
+  }
+}
+
+void OMKLVStoredObject::write(OMRawStorage* store, const OMUInt8& i)
+{
+  TRACE("OMKLVStoredObject::write");
+
+  OMUInt32 x;
+  store->write(&i, sizeof(OMUInt8), x);
+
+  POSTCONDITION("All bytes written", x == sizeof(OMUInt8));
+}
+
+void OMKLVStoredObject::write(OMRawStorage* store,
+                              const OMUInt16& i,
+                              bool reorderBytes)
+{
+  TRACE("OMKLVStoredObject::write");
+
+  OMUInt16 si = i;
+  OMByte* src = reinterpret_cast<OMByte*>(&si);
+  if (reorderBytes) {
+    OMType::reorderInteger(src, sizeof(OMUInt16));
+  }
+  OMUInt32 x;
+  store->write(src, sizeof(OMUInt16), x);
+
+  POSTCONDITION("All bytes written", x == sizeof(OMUInt16));
+}
+
+void OMKLVStoredObject::write(OMRawStorage* store,
+                              const OMUInt32& i,
+                              bool reorderBytes)
+{
+  TRACE("OMKLVStoredObject::write");
+
+  OMUInt32 si = i;
+  OMByte* src = reinterpret_cast<OMByte*>(&si);
+  if (reorderBytes) {
+    OMType::reorderInteger(src, sizeof(OMUInt32));
+  }
+  OMUInt32 x;
+  store->write(src, sizeof(OMUInt32), x);
+
+  POSTCONDITION("All bytes written", x == sizeof(OMUInt32));
+}
+
+void OMKLVStoredObject::write(OMRawStorage* store,
+                              const OMUInt64& i,
+                              bool reorderBytes)
+{
+  TRACE("OMKLVStoredObject::write");
+
+  OMUInt64 si = i;
+  OMByte* src = reinterpret_cast<OMByte*>(&si);
+  if (reorderBytes) {
+    OMInteger64Type::instance()->reorder(src, sizeof(OMUInt64));
+  }
+  OMUInt32 x;
+  store->write(src, sizeof(OMUInt64), x);
+
+  POSTCONDITION("All bytes written", x == sizeof(OMUInt64));
+}
+
+void OMKLVStoredObject::write(OMRawStorage* store,
+                              const OMUniqueObjectIdentification& id,
+                              bool reorderBytes)
+{
+  TRACE("OMKLVStoredObject::write");
+
+  OMUniqueObjectIdentification sid = id;
+  OMByte* src = reinterpret_cast<OMByte*>(&sid);
+  if (reorderBytes) {
+    OMUniqueObjectIdentificationType::instance()->reorder(
+                                         src,
+                                         sizeof(OMUniqueObjectIdentification));
+  }
+  OMUInt32 x;
+  store->write(src, sizeof(OMUniqueObjectIdentification), x);
+
+  POSTCONDITION("All bytes written",
+                                    x == sizeof(OMUniqueObjectIdentification));
+}
+
+void OMKLVStoredObject::write(OMRawStorage* store,
+                              const OMByte* buffer,
+                              const OMUInt32& bufferSize)
+{
+  TRACE("OMKLVStoredObject::write");
+
+  OMUInt32 x;
+  store->write(buffer, bufferSize, x);
+
+  POSTCONDITION("All bytes written", x == bufferSize);
+}
+
+void OMKLVStoredObject::berEncode(OMByte* berValue,
+                                  size_t ANAME(berValueBufferSize),
+                                  OMUInt32& berValueSize,
+                                  const OMUInt64& value)
+{
+  TRACE("OMKLVStoredObject::berEncode");
+  PRECONDITION("Valid output buffer", berValue != 0);
+  PRECONDITION("Valid output buffer size",
+                                   berValueBufferSize >= sizeof(OMUInt64) + 1);
+
+  OMByte* p = berValue;
+  OMByte b = 0x80 | sizeof(OMUInt64);
+  *p++ = b;
+  OMUInt64 v = value;
+  for (size_t i = 0; i < sizeof(OMUInt64); i++) {
+    b = (OMByte)((v & 0xff00000000000000) >> 56);
+    *p++ = b;
+    v = v << 8;
+  }
+  berValueSize = sizeof(OMUInt64) + 1;
+}
+
+OMUInt64 OMKLVStoredObject::readBerLength(OMRawStorage* store)
+{
+  TRACE("OMKLVStoredObject::readBerLength");
+
+  OMUInt64 result;
+  OMUInt8 b;
+  read(store, b);
+  if (b == 0x80) {
+    // unknown length
+    result = 0;
+  } else if ((b & 0x80) != 0x80) {
+    // short form
+    result = b;
+  } else {
+    // long form
+    int length = b & 0x7f;
+    result = 0;
+    for (int k = 0; k < length; k++) {
+      read(store, b);
+      result = result << 8;
+      result = result + b;
+    }
+  }
+  return result;
+}
+
+bool OMKLVStoredObject::readHeaderPartition(OMRawStorage* store)
 {
   TRACE("OMKLVStoredObject::readHeaderPartition");
-  bool result = false;
+
+  bool reorderBytes;
+  if (hostByteOrder() == bigEndian) {
+    reorderBytes = false;
+  } else {
+    reorderBytes = true;
+  }
+  OMKLVKey headerPartitionPackKey =
+    {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
+     0x0d, 0x01, 0x02, 0x01, 0x01, 0x02, 0x02, 0x00};
+  OMKLVKey k;
+  bool result;
+  readKLVKey(store, k);
+  if (memcmp(k, headerPartitionPackKey, sizeof(OMKLVKey)) == 0) {
+    readKLVLength(store);
+    OMUInt16 majorVersion;
+    read(store, majorVersion, reorderBytes);
+    OMUInt16 minorVersion;
+    read(store, minorVersion, reorderBytes);
+    OMUInt32 KAGSize;
+    read(store, KAGSize, reorderBytes);
+    OMUInt64 thisPartition;
+    read(store, thisPartition, reorderBytes);
+    OMUInt64 previousPartition;
+    read(store, previousPartition, reorderBytes);
+    OMUInt64 footerPartition;
+    read(store, footerPartition, reorderBytes);
+    OMUInt64 headerByteCount;
+    read(store, headerByteCount, reorderBytes);
+    OMUInt64 indexByteCount;
+    read(store, indexByteCount, reorderBytes);
+    OMUInt32 indexSID;
+    read(store, indexSID, reorderBytes);
+    OMUInt64 bodyOffset;
+    read(store, bodyOffset, reorderBytes);
+    OMUInt32 bodySID;
+    read(store, bodySID, reorderBytes);
+    OMKLVKey operationalPattern;
+    readKLVKey(store, operationalPattern);
+    OMUInt32 elementCount;
+    read(store, elementCount, reorderBytes);
+    OMUInt32 elementSize;
+    read(store, elementSize, reorderBytes);
+    OMKLVKey essenceContainer;
+    for (OMUInt32 i = 0; i < elementCount; i++) {
+      readKLVKey(store, essenceContainer);
+    }
+    result = true;
+  } else {
+    result = false;
+  }
   return result;
+}
+
+void OMKLVStoredObject::readPrimerPack(OMRawStorage* store,
+                                       OMDictionary* /* dictionary */,
+                                       bool reorderBytes)
+{
+  TRACE("OMKLVStoredObject::readPrimerPack");
+
+  OMKLVKey primerPackKey =
+    {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
+     0x0d, 0x01, 0x02, 0x01, 0x01, 0x05, 0x01, 0x00};
+
+  OMKLVKey k;
+  readKLVKey(store, k);
+  ASSERT("Primer key", memcmp(&primerPackKey, &k, sizeof(OMKLVKey)) == 0);
+  readKLVLength(store);
+  OMUInt32 elementCount;
+  read(store, elementCount, reorderBytes);
+  OMUInt32 elementSize;
+  read(store, elementSize, reorderBytes);
+  ASSERT("Valid element size",
+                       elementSize == sizeof(OMKLVKey) + sizeof(OMPropertyId));
+  for (OMUInt32 i = 0; i < elementCount; i++) {
+    OMPropertyId pid;
+    read(store, pid, reorderBytes);
+    OMKLVKey x;
+    readKLVKey(store, x);
+  }
+}
+
+void OMKLVStoredObject::readKLVKey(OMRawStorage* store, OMKLVKey& key)
+{
+  TRACE("OMKLVStoredObject::readKLVKey");
+
+  OMUInt32 x;
+  store->read(key, sizeof(OMKLVKey), x);
+
+  POSTCONDITION("All bytes read", x == sizeof(OMKLVKey));
+}
+
+OMUInt64 OMKLVStoredObject::readKLVLength(OMRawStorage* store)
+{
+  TRACE("OMKLVStoredObject::readKLVLength");
+  OMUInt64 result = readBerLength(store);
+  return result;
+}
+
+void OMKLVStoredObject::readKLVFill(OMRawStorage* store)
+{
+  TRACE("OMKLVStoredObject::readKLVFill");
+  OMKLVKey fillKey =
+    {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
+     0x03, 0x01, 0x02, 0x10, 0x01, 0x00, 0x00, 0x00};
+
+  OMKLVKey k;
+  readKLVKey(store, k);
+  ASSERT("Fill key", memcmp(&fillKey, &k, sizeof(OMKLVKey)) == 0);
+  OMUInt64 length = readKLVLength(store);
+  for (OMUInt64 i = 0; i < length; i++) {
+    OMByte b;
+    read(store, b);
+  }
+}
+
+void OMKLVStoredObject::read(OMRawStorage* store, OMUInt8& i)
+{
+  TRACE("OMKLVStoredObject::read");
+  OMUInt8 result;
+  OMUInt32 x;
+  store->read(&result, sizeof(OMUInt8), x);
+  ASSERT("All bytes read", x == sizeof(OMUInt8));
+  i = result;
+}
+
+void OMKLVStoredObject::read(OMRawStorage* store,
+                             OMUInt16& i,
+                             bool reorderBytes)
+{
+  TRACE("OMKLVStoredObject::read");
+  OMUInt16 result;
+  OMUInt32 x;
+  OMByte* dest = reinterpret_cast<OMByte*>(&result);
+  store->read(dest, sizeof(OMUInt16), x);
+  ASSERT("All bytes read", x == sizeof(OMUInt16));
+  if (reorderBytes) {
+    OMInteger16Type::instance()->reorder(dest, sizeof(OMUInt16));
+  }
+  i = result;
+}
+
+void OMKLVStoredObject::read(OMRawStorage* store,
+                             OMUInt32& i,
+                             bool reorderBytes)
+{
+  TRACE("OMKLVStoredObject::read");
+  OMUInt32 result;
+  OMUInt32 x;
+  OMByte* dest = reinterpret_cast<OMByte*>(&result);
+  store->read(dest, sizeof(OMUInt32), x);
+  ASSERT("All bytes read", x == sizeof(OMUInt32));
+  if (reorderBytes) {
+    OMInteger32Type::instance()->reorder(dest, sizeof(OMUInt32));
+  }
+  i = result;
+}
+
+void OMKLVStoredObject::read(OMRawStorage* store,
+                             OMUInt64& i,
+                             bool reorderBytes)
+{
+  TRACE("OMKLVStoredObject::read");
+  OMUInt64 result;
+  OMUInt32 x;
+  OMByte* dest = reinterpret_cast<OMByte*>(&result);
+  store->read(dest, sizeof(OMUInt64), x);
+  ASSERT("All bytes read", x == sizeof(OMUInt64));
+  if (reorderBytes) {
+    OMInteger64Type::instance()->reorder(dest, sizeof(OMUInt64));
+  }
+  i = result;
+}
+
+void OMKLVStoredObject::read(OMRawStorage* store,
+                             OMUniqueObjectIdentification& id,
+                             bool reorderBytes)
+{
+  TRACE("OMKLVStoredObject::read");
+  OMUniqueObjectIdentification result;
+  OMUInt32 x;
+  OMByte* dest = reinterpret_cast<OMByte*>(&result);
+  store->read(dest, sizeof(OMUniqueObjectIdentification), x);
+  ASSERT("All bytes read", x == sizeof(OMUniqueObjectIdentification));
+  if (reorderBytes) {
+    OMUniqueObjectIdentificationType::instance()->reorder(
+                                         dest,
+                                         sizeof(OMUniqueObjectIdentification));
+  }
+  id = result;
+}
+
+void OMKLVStoredObject::read(OMRawStorage* store,
+                             OMByte* buffer,
+                             const OMUInt32& bufferSize)
+{
+  TRACE("OMKLVStoredObject::read");
+  OMUInt32 x;
+  store->read(buffer, bufferSize, x);
+  ASSERT("All bytes read", x == bufferSize);
+}
+
+OMUniqueObjectIdentification
+OMKLVStoredObject::instanceId(OMStorable* object)
+{
+  TRACE("OMKLVStoredObject::instanceId");
+  PRECONDITION("Valid object", object != 0);
+
+  OMUniqueObjectIdentification result;
+  if (!objectToInstanceId()->find(object, result)) {
+#if defined(INSTANCEID_DEBUG)
+    static OMUInt32 seed = 0;
+    memset(&result, 0, sizeof(result));
+    result.Data1 = ++seed;
+#else
+    result = createUniqueIdentifier();
+#endif
+    objectToInstanceId()->insert(object, result);
+  }
+  return result;
+}
+
+OMStorable*
+OMKLVStoredObject::object(const OMUniqueObjectIdentification& instanceId)
+{
+  TRACE("OMKLVStoredObject::object");
+
+  OMStorable* result;
+  if (!instanceIdToObject()->find(instanceId, result)) {
+    result = 0;
+  }
+  return result;
+}
+
+OMSet<OMStorable*, OMUniqueObjectIdentification>*
+OMKLVStoredObject::_objectToInstanceId = 0;
+
+OMSet<OMUniqueObjectIdentification, OMStorable*>*
+OMKLVStoredObject::_instanceIdToObject = 0;
+
+OMSet<OMStorable*, OMUniqueObjectIdentification>*
+OMKLVStoredObject::objectToInstanceId(void)
+{
+  TRACE("OMKLVStoredObject::objectToInstanceId");
+
+  if (_objectToInstanceId == 0) {
+    _objectToInstanceId = new OMSet<OMStorable*,
+                                    OMUniqueObjectIdentification>();
+    ASSERT("Valid heap pointer", _objectToInstanceId != 0);
+  }
+  return _objectToInstanceId;
+}
+
+OMSet<OMUniqueObjectIdentification, OMStorable*>*
+OMKLVStoredObject::instanceIdToObject(void)
+{
+  TRACE("OMKLVStoredObject::instanceIdToObject");
+
+  if (_instanceIdToObject == 0) {
+    _instanceIdToObject = new OMSet<OMUniqueObjectIdentification,
+                                    OMStorable*>();
+    ASSERT("Valid heap pointer", _instanceIdToObject != 0);
+  }
+  return _instanceIdToObject;
+}
+
+void OMKLVStoredObject::convert(OMKLVKey& key,
+                                const OMUniqueObjectIdentification& id)
+{
+  TRACE("OMKLVStoredObject::convert");
+
+  memcpy(&key, &id, sizeof(OMKLVKey));
+  //key[5] = 0x53; // tjb !!
+}
+
+void OMKLVStoredObject::convert(OMUniqueObjectIdentification& id,
+                                const OMKLVKey& key)
+{
+  TRACE("OMKLVStoredObject::convert");
+
+  memcpy(&id, &key, sizeof(OMUniqueObjectIdentification));
+  //key[5] = 0x??; // tjb !!
 }
 
 void OMKLVStoredObject::finalize(void)
 {
   TRACE("OMKLVStoredObject::finalize");
+#if defined(INSTANCEID_DEBUG)
+
+  if (_instanceIdToObject != 0) {
+
+    OMUInt32 n = _instanceIdToObject->count();
+    cout << dec << n << " objects" << endl;
+
+    OMSetIterator<OMUniqueObjectIdentification, OMStorable*>
+                                      iterator(*_instanceIdToObject, OMBefore);
+    while (++iterator) {
+      OMStorable* object = iterator.value();
+      OMUniqueObjectIdentification id = iterator.key();
+      char buffer[OMObjectIdentificationStringBufferSize];
+      toString(id, buffer);
+      cout << buffer << " -> " << object << endl;
+    }
+  }
+#endif
+  if (_objectToInstanceId != 0) {
+    _objectToInstanceId->clear();
+    delete _objectToInstanceId;
+    _objectToInstanceId = 0;
+  }
+
+  if (_instanceIdToObject != 0) {
+    _instanceIdToObject->clear();
+    delete _instanceIdToObject;
+    _instanceIdToObject = 0;
+  }
 }
 
- // @mfunc Constructor.
+  // @mfunc Constructor.
   //   @parm The <c OMRawStorage> on which this <c OMKLVStoredObject> resides.
   //   @parm TBS
 OMKLVStoredObject::OMKLVStoredObject(OMRawStorage* s, OMByteOrder byteOrder)
 : _storage(s),
-  _byteOrder(byteOrder)
+  _byteOrder(byteOrder),
+  _reorderBytes(false)
 {
   TRACE("OMKLVStoredObject::OMKLVStoredObject");
+
+  if (hostByteOrder() == bigEndian) {
+    _reorderBytes = false;
+  } else {
+    _reorderBytes = true;
+  }
 }
