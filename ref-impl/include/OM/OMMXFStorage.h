@@ -170,6 +170,14 @@ public:
                     OMUInt32 byteCount,
                     OMUInt32& bytesRead) const;
 
+  virtual void readKLVKey(OMKLVKey& key) const;
+
+  virtual OMUInt64 readKLVLength(void) const;
+
+  virtual void readKLVFill(void) const;
+
+  virtual void skipLV(void) const;
+
   virtual OMUInt64 readBerLength(void) const;
 
   struct ObjectDirectoryEntry {
