@@ -222,6 +222,23 @@ OMUniqueObjectIdentification OMMXFStorage::generation(void) const
   return _generation;
 }
 
+bool OMMXFStorage::isHeader(const OMKLVKey& k)
+{
+  bool result;
+  if (memcmp(&OpenHeaderPartitionKey, &k, sizeof(k)) == 0) {
+    result = true;
+  } else if (memcmp(&OpenCompleteHeaderPartitionKey, &k, sizeof(k)) == 0) {
+    result = true;
+  } else if (memcmp(&ClosedHeaderPartitionKey, &k, sizeof(k)) == 0) {
+    result = true;
+  } else if (memcmp(&ClosedCompleteHeaderPartitionKey, &k, sizeof(k)) == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 void OMMXFStorage::writeHeaderPartition(OMUInt32 bodySID,
                                         OMUInt32 indexSID,
                                         OMUInt32 KAGSize)
