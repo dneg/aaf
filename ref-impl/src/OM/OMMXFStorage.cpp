@@ -228,7 +228,7 @@ void OMMXFStorage::writeHeaderPartition(OMUInt32 bodySID,
 {
   TRACE("OMMXFStorage::writeHeaderPartition");
 
-  writePartition(ClosedHeaderPartitionPackKey, bodySID, indexSID, KAGSize);
+  writePartition(ClosedHeaderPartitionKey, bodySID, indexSID, KAGSize);
   OMUInt64 currentPosition = position();
   fillAlignK(currentPosition, defaultKAGSize);
 }
@@ -239,7 +239,7 @@ void OMMXFStorage::writeBodyPartition(OMUInt32 bodySID,
 {
   TRACE("OMMXFStorage::writeBodyPartition");
 
-  writePartition(ClosedBodyPartitionPackKey, bodySID, indexSID, KAGSize);
+  writePartition(ClosedBodyPartitionKey, bodySID, indexSID, KAGSize);
   OMUInt64 currentPosition = position();
   fillAlignV(currentPosition, KAGSize);
 }
@@ -250,7 +250,7 @@ void OMMXFStorage::writeFooterPartition(OMUInt32 indexSID,
   TRACE("OMMXFStorage::writeFooterPartition");
 
   // Essence (body) not allowed in footer
-  writePartition(ClosedFooterPartitionPackKey, 0, indexSID, KAGSize);
+  writePartition(ClosedFooterPartitionKey, 0, indexSID, KAGSize);
 }
 
 void OMMXFStorage::writePartition(const OMKLVKey& key,
