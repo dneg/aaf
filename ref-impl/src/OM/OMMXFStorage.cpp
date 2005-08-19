@@ -239,6 +239,23 @@ bool OMMXFStorage::isHeader(const OMKLVKey& k)
   return result;
 }
 
+bool OMMXFStorage::isBody(const OMKLVKey& k)
+{
+  bool result;
+  if (memcmp(&OpenBodyPartitionKey, &k, sizeof(k)) == 0) {
+    result = true;
+  } else if (memcmp(&OpenCompleteBodyPartitionKey, &k, sizeof(k)) == 0) {
+    result = true;
+  } else if (memcmp(&ClosedBodyPartitionKey, &k, sizeof(k)) == 0) {
+    result = true;
+  } else if (memcmp(&ClosedCompleteBodyPartitionKey, &k, sizeof(k)) == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 void OMMXFStorage::writeHeaderPartition(OMUInt32 bodySID,
                                         OMUInt32 indexSID,
                                         OMUInt32 KAGSize)
