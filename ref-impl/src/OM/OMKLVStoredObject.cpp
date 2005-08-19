@@ -1575,6 +1575,9 @@ void OMKLVStoredObject::writeFooterPartition(OMRawStorage* store)
   writePartition(store, ClosedFooterPartitionPackKey, reorderBytes);
 }
 
+OMUInt16 currentMajorVersion = 0xffff;
+OMUInt16 currentMinorVersion = 0xffff;
+
 void OMKLVStoredObject::writePartition(OMRawStorage* store,
                                        const OMKLVKey& key,
                                        bool reorderBytes)
@@ -1594,9 +1597,9 @@ void OMKLVStoredObject::writePartition(OMRawStorage* store,
   OMUInt64 sizeOfFixedPortion = 88;
   OMUInt64 length = sizeOfFixedPortion + (elementCount * elementSize);
   writeKLVLength(store, length);
-  OMUInt16 majorVersion = 0xffff;
+  OMUInt16 majorVersion = currentMajorVersion;
   write(store, majorVersion, reorderBytes);
-  OMUInt16 minorVersion = 0xffff;
+  OMUInt16 minorVersion = currentMinorVersion;
   write(store, minorVersion, reorderBytes);
   OMUInt32 KAGSize = 0x200;
   write(store, KAGSize, reorderBytes);
@@ -1910,14 +1913,20 @@ bool OMKLVStoredObject::readHeaderPartition(OMRawStorage* store)
     {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
      0x0d, 0x01, 0x02, 0x01, 0x01, 0x02, 0x02, 0x00};
   OMKLVKey k;
-  bool result;
+  bool result = true;
   readKLVKey(store, k);
   if (memcmp(k, headerPartitionPackKey, sizeof(OMKLVKey)) == 0) {
     readKLVLength(store);
     OMUInt16 majorVersion;
     read(store, majorVersion, reorderBytes);
+    if (majorVersion != currentMajorVersion) {
+      result = false;
+    }
     OMUInt16 minorVersion;
     read(store, minorVersion, reorderBytes);
+    if (minorVersion != currentMinorVersion) {
+      result = false;
+    }
     OMUInt32 KAGSize;
     read(store, KAGSize, reorderBytes);
     OMUInt64 thisPartition;
@@ -1946,7 +1955,6 @@ bool OMKLVStoredObject::readHeaderPartition(OMRawStorage* store)
     for (OMUInt32 i = 0; i < elementCount; i++) {
       readKLVKey(store, essenceContainer);
     }
-    result = true;
   } else {
     result = false;
   }
