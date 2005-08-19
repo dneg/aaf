@@ -226,6 +226,19 @@ OMUniqueObjectIdentification OMMXFStorage::generation(void) const
   return _generation;
 }
 
+bool OMMXFStorage::findHeader(const OMRawStorage* store,
+                              OMUInt64& headerPosition)
+{
+  OMUInt64 startPosition = 0;
+  store->setPosition(startPosition);
+  return findPattern(store,
+                     startPosition,
+                     headerPosition,
+                     HeaderPrefix,
+                     sizeof(HeaderPrefix),
+                     RunInLimit);
+}
+
 bool OMMXFStorage::isHeader(const OMKLVKey& k)
 {
   bool result;
