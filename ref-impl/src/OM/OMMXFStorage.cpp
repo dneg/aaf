@@ -1770,6 +1770,28 @@ void OMMXFStorage::streamWriteAt(OMUInt32 sid,
 #endif
 }
 
+void OMMXFStorage::streamWriteAt(OMUInt32 sid,
+                                 OMUInt64 position,
+                                 const OMByte* buffer,
+                                 const OMUInt32 bytes,
+                                 void* /* */ completion,
+                                 const void* clientArgument)
+{
+  TRACE("OMMXFStorage::streamWriteAt");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+void OMMXFStorage::streamWriteAt(OMUInt32 sid,
+                                 OMUInt64 position,
+                                 const OMIOBufferDescriptor* buffers,
+                                 OMUInt32 bufferCount,
+                                 void* /* */ completion,
+                                 const void* clientArgument)
+{
+  TRACE("OMMXFStorage::streamWriteAt");
+  ASSERT("Unimplemented code not reached", false);
+}
+
 void OMMXFStorage::streamRawRead(OMUInt32 /* sid */,
                                  OMUInt64 rawPosition,
                                  OMByte* rawBytes,
@@ -1927,6 +1949,28 @@ void OMMXFStorage::streamReadAt(OMUInt32 sid,
   }
   bytesRead = totalBytesRead;
 #endif
+}
+
+void OMMXFStorage::streamReadAt(OMUInt32 sid,
+                                OMUInt64 position,
+                                OMByte* buffer,
+                                const OMUInt32 bytes,
+                                void* /* */ completion,
+                                const void* clientArgument)
+{
+  TRACE("OMMXFStorage::streamReadAt");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+void OMMXFStorage::streamReadAt(OMUInt32 sid,
+                                OMUInt64 position,
+                                OMIOBufferDescriptor* buffers,
+                                OMUInt32 bufferCount,
+                                void* /* */ completion,
+                                const void* clientArgument)
+{
+  TRACE("OMMXFStorage::streamReadAt");
+  ASSERT("Unimplemented code not reached", false);
 }
 
 void OMMXFStorage::streamRestoreSegment(OMUInt32 sid,
