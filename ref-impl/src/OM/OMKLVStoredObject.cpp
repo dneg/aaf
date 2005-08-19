@@ -1647,15 +1647,15 @@ void OMKLVStoredObject::writePrimerPack(OMRawStorage* store,
   OMUInt32 KAGSize = 0x200;
 
   OMUInt32 elementCount = 0;
-  ClassDefinitionsIterator& classes = *dictionary->classDefinitions();
-  while (++classes) {
-    OMObject* obj = classes.currentObject();
+  ClassDefinitionsIterator* classes = dictionary->classDefinitions();
+  while (++(*classes)) {
+    OMObject* obj = classes->currentObject();
     OMClassDefinition* classDefinition = dynamic_cast<OMClassDefinition*>(obj);
     ASSERT("Object is correct type", classDefinition != 0);
-    PropertyDefinitionsIterator&
-                          properties = *classDefinition->propertyDefinitions();
-    while (++properties) {
-      OMObject* obj = properties.currentObject();
+    PropertyDefinitionsIterator*
+                           properties = classDefinition->propertyDefinitions();
+    while (++(*properties)) {
+      OMObject* obj = properties->currentObject();
       OMPropertyDefinition* propertyDefinition =
                                       dynamic_cast<OMPropertyDefinition*>(obj);
       ASSERT("Object is correct type", propertyDefinition != 0);
@@ -1664,9 +1664,9 @@ void OMKLVStoredObject::writePrimerPack(OMRawStorage* store,
         elementCount = elementCount + 1;
       }
     }
-    delete &properties;
+    delete properties;
   }
-  delete &classes;
+  delete classes;
 
   OMUInt32 elementSize = sizeof(OMPropertyId) +
                          sizeof(OMUniqueObjectIdentification);
@@ -1677,15 +1677,15 @@ void OMKLVStoredObject::writePrimerPack(OMRawStorage* store,
   write(store, elementCount, reorderBytes);
   write(store, elementSize, reorderBytes);
 
-  classes = *dictionary->classDefinitions();
-  while (++classes) {
-    OMObject* obj = classes.currentObject();
+  classes = dictionary->classDefinitions();
+  while (++(*classes)) {
+    OMObject* obj = classes->currentObject();
     OMClassDefinition* classDefinition = dynamic_cast<OMClassDefinition*>(obj);
     ASSERT("Object is correct type", classDefinition != 0);
-    PropertyDefinitionsIterator&
-                          properties = *classDefinition->propertyDefinitions();
-    while (++properties) {
-      OMObject* obj = properties.currentObject();
+    PropertyDefinitionsIterator*
+                           properties = classDefinition->propertyDefinitions();
+    while (++(*properties)) {
+      OMObject* obj = properties->currentObject();
       OMPropertyDefinition* propertyDefinition =
                                       dynamic_cast<OMPropertyDefinition*>(obj);
       ASSERT("Object is correct type", propertyDefinition != 0);
@@ -1697,9 +1697,9 @@ void OMKLVStoredObject::writePrimerPack(OMRawStorage* store,
         write(store, id, reorderBytes);
       }
     }
-    delete &properties;
+    delete properties;
   }
-  delete &classes;
+  delete classes;
 
   OMUInt64 currentPosition = store->position();
   fill(store, currentPosition, KAGSize);
