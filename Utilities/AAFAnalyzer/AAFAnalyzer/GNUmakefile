@@ -23,6 +23,8 @@
 ###############################################################################
 
 
-PROGNAME = AAFAnalyzerTest
+PROGNAME = AAFAnalyzer
+
+PROGLIBS = -lBaseTest -lEditProtocolTest -lAAFAnalyzerBase -lTestPhaseLib 
 
 include ../aafanalyzer.mk

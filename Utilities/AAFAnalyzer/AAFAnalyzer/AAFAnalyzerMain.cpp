@@ -46,9 +46,9 @@ int main()
       OutputResultMsgs(results);
 
       //dump phase
-      DumpPhase dump(std::cout, load.GetTestGraph());
+      /*DumpPhase dump(std::cout, load.GetTestGraph());
       results = dump.Execute();
-      OutputResultMsgs(results);
+      OutputResultMsgs(results);*/
 
       AAFUnload();
     }
