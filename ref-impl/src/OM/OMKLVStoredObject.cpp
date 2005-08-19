@@ -375,7 +375,7 @@ void OMKLVStoredObject::save(OMFile& file)
   _storage->setPosition(0);
   // Write header partition and alignment fill.
   //
-  _storage->writeHeaderPartition();
+  _storage->writeHeaderPartition(0, 0, defaultKAGSize);
 
   OMUInt64 pos = _storage->position();
   _storage->setPosition(pos);
