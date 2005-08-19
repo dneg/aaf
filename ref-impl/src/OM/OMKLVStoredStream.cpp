@@ -45,7 +45,7 @@ OMKLVStoredStream::~OMKLVStoredStream(void)
   PRECONDITION("Stream not open", _store == 0);
 }
 
-void OMKLVStoredStream::read(void* data, size_t size) const
+void OMKLVStoredStream::read(void* ANAME(data), size_t ANAME(size)) const
 {
   TRACE("OMKLVStoredStream::read");
   PRECONDITION("Valid store", _store != 0);
@@ -55,9 +55,9 @@ void OMKLVStoredStream::read(void* data, size_t size) const
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
-void OMKLVStoredStream::read(OMByte* data,
-                             const OMUInt32 bytes,
-                             OMUInt32& bytesRead) const
+void OMKLVStoredStream::read(OMByte* ANAME(data),
+                             const OMUInt32 ANAME(bytes),
+                             OMUInt32& /* bytesRead */) const
 {
   TRACE("OMKLVStoredStream::read");
   PRECONDITION("Valid store", _store != 0);
@@ -67,7 +67,7 @@ void OMKLVStoredStream::read(OMByte* data,
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
-void OMKLVStoredStream::write(void* data, size_t size)
+void OMKLVStoredStream::write(void* ANAME(data), size_t ANAME(size))
 {
   TRACE("OMKLVStoredStream::write");
   PRECONDITION("Valid store", _store != 0);
@@ -77,9 +77,9 @@ void OMKLVStoredStream::write(void* data, size_t size)
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
-void OMKLVStoredStream::write(const OMByte* data,
-                              const OMUInt32 bytes,
-                              OMUInt32& bytesWritten)
+void OMKLVStoredStream::write(const OMByte* ANAME(data),
+                              const OMUInt32 ANAME(bytes),
+                              OMUInt32& /* bytesWritten */)
 {
   TRACE("OMKLVStoredStream::write");
   PRECONDITION("Valid store", _store != 0);
@@ -99,7 +99,7 @@ OMUInt64 OMKLVStoredStream::size(void) const
   return result;
 }
 
-void OMKLVStoredStream::setSize(const OMUInt64 newSize)
+void OMKLVStoredStream::setSize(const OMUInt64 /* newSize */)
 {
   TRACE("OMKLVStoredStream::setSize");
   PRECONDITION("Valid store", _store != 0);
@@ -116,7 +116,7 @@ OMUInt64 OMKLVStoredStream::position(void) const
   return 0;
 }
 
-void OMKLVStoredStream::setPosition(const OMUInt64 offset)
+void OMKLVStoredStream::setPosition(const OMUInt64 /* offset */)
 {
   TRACE("OMKLVStoredStream::setPosition");
   PRECONDITION("Valid store", _store != 0);
