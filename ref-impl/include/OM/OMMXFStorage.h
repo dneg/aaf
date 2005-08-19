@@ -502,6 +502,11 @@ private:
   OMUInt64 _primerPosition;
   OMUInt64 _headerByteCount;
 
+  bool _inIndex;
+  OMUInt32 _indexSID;
+  OMKLVKey _indexKey;
+  OMUInt64 _indexPosition;
+
   OMUInt64 _fillStart;
   OMUInt64 _fillEnd;
 
