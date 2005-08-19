@@ -455,16 +455,24 @@ void OMKLVStoredObject::save(const OMSimpleProperty& property)
   OMByte* buffer = new OMByte[externalBytesSize];
   ASSERT("Valid heap pointer", buffer != 0);
 
-  // Externalize property value
-  propertyType->externalize(bits,
-                            size,
-                            buffer,
-                            externalBytesSize,
-                            hostByteOrder());
+  if (propertyType->identification() == Type_UniqueObjectIdentification) {
+    // UniqueObjectIdentification properties are stored
+    // as SMPTE universal labels in KLV-encoded files
+    const OMUniqueObjectIdentification& id =
+        *(OMUniqueObjectIdentification*)bits;
+    convert(*(OMKLVKey*)buffer, id);
+  } else {
+    // Externalize property value
+    propertyType->externalize(bits,
+                              size,
+                              buffer,
+                              externalBytesSize,
+                              hostByteOrder());
 
-  // Reorder property value
-  if (_reorderBytes) {
-    propertyType->reorder(buffer, externalBytesSize);
+    // Reorder property value
+    if (_reorderBytes) {
+      propertyType->reorder(buffer, externalBytesSize);
+    }
   }
 
   // size
@@ -512,17 +520,24 @@ void OMKLVStoredObject::save(const OMDataVector& property)
     // Get a pointer to the element
     const OMByte* bits = it->currentElement();
 
+    if (elementType->identification() == Type_UniqueObjectIdentification) {
+      // UniqueObjectIdentification properties are stored
+      // as SMPTE universal labels in KLV-encoded files
+      const OMUniqueObjectIdentification& id =
+          *(OMUniqueObjectIdentification*)bits;
+      convert(*(OMKLVKey*)buffer, id);
+    } else {
+      // Externalize element
+      elementType->externalize(bits,
+                               elementSize,
+                               buffer,
+                               elementSize,
+                               hostByteOrder());
 
-    // Externalize element
-    elementType->externalize(bits,
-                             elementSize,
-                             buffer,
-                             elementSize,
-                             hostByteOrder());
-
-    // Reorder element
-    if (_reorderBytes) {
-      elementType->reorder(buffer, elementSize);
+      // Reorder element
+      if (_reorderBytes) {
+        elementType->reorder(buffer, elementSize);
+      }
     }
 
     // value
@@ -571,16 +586,24 @@ void OMKLVStoredObject::save(const OMDataSet& property)
     const OMByte* bits = it->currentElement();
 
 
-    // Externalize element
-    elementType->externalize(bits,
-                             elementSize,
-                             buffer,
-                             elementSize,
-                             hostByteOrder());
+    if (elementType->identification() == Type_UniqueObjectIdentification) {
+      // UniqueObjectIdentification properties are stored
+      // as SMPTE universal labels in KLV-encoded files
+      const OMUniqueObjectIdentification& id =
+          *(OMUniqueObjectIdentification*)bits;
+      convert(*(OMKLVKey*)buffer, id);
+    } else {
+      // Externalize element
+      elementType->externalize(bits,
+                               elementSize,
+                               buffer,
+                               elementSize,
+                               hostByteOrder());
 
-    // Reorder element
-    if (_reorderBytes) {
-      elementType->reorder(buffer, elementSize);
+      // Reorder element
+      if (_reorderBytes) {
+        elementType->reorder(buffer, elementSize);
+      }
     }
 
     // value
@@ -866,24 +889,40 @@ void OMKLVStoredObject::restore(OMSimpleProperty& property,
 
   _storage->read(buffer, externalSize);
 
-  // Reorder property value
-  if (_reorderBytes) {
-    propertyType->reorder(buffer, externalSize);
+  if (propertyType->identification() == Type_UniqueObjectIdentification) {
+    // UniqueObjectIdentification properties are stored
+    // as SMPTE universal labels in KLV-encoded files.
+    const OMKLVKey* key = (OMKLVKey*)buffer;
+    OMUniqueObjectIdentification* id =
+                                (OMUniqueObjectIdentification*)property.bits();
+
+    const size_t internalSize = sizeof(OMUniqueObjectIdentification);
+    property.setSize(internalSize);
+    ASSERT("Property value buffer large enough",
+                                              property.size() >= internalSize);
+    convert(*id, *key);
+
+  } else {
+    // Reorder property value
+    if (_reorderBytes) {
+      propertyType->reorder(buffer, externalSize);
+    }
+
+    // Internalize property value
+    size_t requiredBytesSize = propertyType->internalSize(buffer,
+                                                          externalSize);
+
+    property.setSize(requiredBytesSize);
+    ASSERT("Property value buffer large enough",
+                                         property.size() >= requiredBytesSize);
+    OMByte* bits = property.bits();
+    propertyType->internalize(buffer,
+                              externalSize,
+                              bits,
+                              requiredBytesSize,
+                              hostByteOrder());
   }
 
-  // Internalize property value
-  size_t requiredBytesSize = propertyType->internalSize(buffer,
-                                                        externalSize);
-
-  property.setSize(requiredBytesSize);
-  ASSERT("Property value buffer large enough",
-                                       property.size() >= requiredBytesSize);
-  OMByte* bits = property.bits();
-  propertyType->internalize(buffer,
-                            externalSize,
-                            bits,
-                            requiredBytesSize,
-                            hostByteOrder());
   delete [] buffer;
 }
 
@@ -919,17 +958,27 @@ void OMKLVStoredObject::restore(OMDataVector& property,
     // Read one element
     _storage->read(buffer, elementSize);
 
-    // Reorder element
-    if (_reorderBytes) {
-      elementType->reorder(buffer, elementSize);
+    if (elementType->identification() == Type_UniqueObjectIdentification) {
+      // UniqueObjectIdentification properties are stored
+      // as SMPTE universal labels in KLV-encoded files.
+      const OMKLVKey* key = (OMKLVKey*)buffer;
+      OMUniqueObjectIdentification* id = (OMUniqueObjectIdentification*)value;
+      convert(*id, *key);
+
+    } else {
+      // Reorder element
+      if (_reorderBytes) {
+        elementType->reorder(buffer, elementSize);
+      }
+
+      // Internalize element
+      elementType->internalize(buffer,
+                               elementSize,
+                               value,
+                               elementSize,
+                               hostByteOrder());
     }
 
-    // Internalize element
-    elementType->internalize(buffer,
-                             elementSize,
-                             value,
-                             elementSize,
-                             hostByteOrder());
     property.appendValue(value);
   }
   delete [] buffer;
@@ -964,17 +1013,26 @@ void OMKLVStoredObject::restore(OMDataSet& property,
     // Read one element
     _storage->read(buffer, elementSize);
 
-    // Reorder element
-    if (_reorderBytes) {
-      elementType->reorder(buffer, elementSize);
-    }
+    if (elementType->identification() == Type_UniqueObjectIdentification) {
+      // UniqueObjectIdentification properties are stored
+      // as SMPTE universal labels in KLV-encoded files.
+      const OMKLVKey* key = (OMKLVKey*)buffer;
+      OMUniqueObjectIdentification* id = (OMUniqueObjectIdentification*)value;
+      convert(*id, *key);
 
-    // Internalize element
-    elementType->internalize(buffer,
-                             elementSize,
-                             value,
-                             elementSize,
-                             hostByteOrder());
+    } else {
+      // Reorder element
+      if (_reorderBytes) {
+        elementType->reorder(buffer, elementSize);
+      }
+
+      // Internalize element
+      elementType->internalize(buffer,
+                               elementSize,
+                               value,
+                               elementSize,
+                               hostByteOrder());
+    }
     property.insert(value);
   }
   delete [] buffer;
