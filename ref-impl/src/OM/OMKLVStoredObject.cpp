@@ -1906,17 +1906,52 @@ void OMKLVStoredObject::writeKLVKey(OMRawStorage* store, const OMKLVKey& key)
 }
 
 void OMKLVStoredObject::writeKLVLength(OMRawStorage* store,
+                                       const OMUInt8& length)
+{
+  TRACE("OMKLVStoredObject::writeKLVLength");
+
+  writeBerLength(store, sizeof(OMUInt8), length);
+}
+
+void OMKLVStoredObject::writeKLVLength(OMRawStorage* store,
+                                       const OMUInt16& length)
+{
+  TRACE("OMKLVStoredObject::writeKLVLength");
+
+  writeBerLength(store, sizeof(OMUInt16), length);
+}
+
+void OMKLVStoredObject::writeKLVLength(OMRawStorage* store,
+                                       const OMUInt32& length)
+{
+  TRACE("OMKLVStoredObject::writeKLVLength");
+
+  writeBerLength(store, sizeof(OMUInt32), length);
+}
+
+void OMKLVStoredObject::writeKLVLength(OMRawStorage* store,
                                        const OMUInt64& length)
 {
   TRACE("OMKLVStoredObject::writeKLVLength");
 
-  OMByte berLength[sizeof(OMUInt64) + 1];
-  OMUInt32 berLengthSize;
-  berEncode(berLength, sizeof(berLength), berLengthSize, length);
-  OMUInt32 x;
-  store->write(berLength, berLengthSize, x);
+  writeBerLength(store, sizeof(OMUInt64), length);
+}
 
-  POSTCONDITION("All bytes written", x == berLengthSize);
+void OMKLVStoredObject::writeBerLength(OMRawStorage* store,
+                                       OMUInt32 lengthSize,
+                                       const OMUInt64& length)
+{
+  TRACE("OMKLVStoredObject::writeBerLength");
+
+  PRECONDITION("Valid size", lengthSize > 0);
+
+  OMByte berLength[sizeof(OMUInt64) + 1]; // Max
+
+  berEncode(berLength, sizeof(berLength), lengthSize, length);
+  OMUInt32 x;
+  store->write(berLength, lengthSize + 1, x);
+
+  POSTCONDITION("All bytes written", x == (lengthSize + 1));
 }
 
 void OMKLVStoredObject::writeKLVFill(OMRawStorage* store,
@@ -2034,40 +2069,64 @@ void OMKLVStoredObject::write(OMRawStorage* store,
   POSTCONDITION("All bytes written", x == bufferSize);
 }
 
+  // @mfunc The minimum size of <p i> when encoded using <f berEncode>.
+  //        The returned size includes the BER length byte.
+  //   @parm The value to encode.
+  //   @rdesc The encoded size.
 size_t OMKLVStoredObject::berEncodedSize(const OMUInt64 i)
 {
   TRACE("OMKLVStoredObject::berEncodedSize");
-  PRECONDITION("Non zero", i != 0);
 
-  size_t result = sizeof(i);
-  OMUInt64 v = i;
-  while (((v & 0xff00000000000000) >> 56) == 0) {
-    v = v << 8;
-    result = result - 1;
+  size_t result;
+  if (i != 0) {
+    result = sizeof(i);
+    OMUInt64 v = i;
+    while (((v & 0xff00000000000000) >> 56) == 0) {
+      v = v << 8;
+      result = result - 1;
+    }
+  } else {
+    result = 1;
   }
+  result = result + 1; // account for length byte
   return result;
 }
 
-void OMKLVStoredObject::berEncode(OMByte* berValue,
+  // @mfunc BER encode <p value> into <p berValueBuffer>.
+  //   @parm OMByte* | berValueBuffer | The buffer in which to place the BER
+  //         encoded value.
+  //   @parm size_t | berValueBufferSize | The size of the buffer.
+  //   @parm const OMUInt32& | berValueSize | The desired encoding size 1-8
+  //         (does not include the BER length byte). e.g for a value that fits
+  //         in an OMUInt32, 4 is sufficient.
+  //   @parm const OMUInt64& | value | The value to encode.
+void OMKLVStoredObject::berEncode(OMByte* berValueBuffer,
                                   size_t ANAME(berValueBufferSize),
-                                  OMUInt32& berValueSize,
+                                  const OMUInt32& berValueSize,
                                   const OMUInt64& value)
 {
   TRACE("OMKLVStoredObject::berEncode");
-  PRECONDITION("Valid output buffer", berValue != 0);
+  PRECONDITION("Valid output buffer", berValueBuffer != 0);
   PRECONDITION("Valid output buffer size",
-                                   berValueBufferSize >= sizeof(OMUInt64) + 1);
+                              berValueBufferSize >= berEncodedSize(value));
+  PRECONDITION("Valid size", berValueSize <= sizeof(OMUInt64));
+  PRECONDITION("Valid size", berValueSize > 0);
+  PRECONDITION("Valid size", berValueSize >= (berEncodedSize(value) - 1));
 
-  OMByte* p = berValue;
-  OMByte b = 0x80 | sizeof(OMUInt64);
+  OMByte* p = berValueBuffer;
+  OMByte b = 0x80 | (OMByte)berValueSize;
   *p++ = b;
+  size_t skip = sizeof(OMUInt64) - berValueSize;
+  size_t i;
   OMUInt64 v = value;
-  for (size_t i = 0; i < sizeof(OMUInt64); i++) {
+  for (i = 0; i < skip; i++) {
+    v = v << 8;
+  }
+  for (i = i; i < sizeof(OMUInt64); i++) {
     b = (OMByte)((v & 0xff00000000000000) >> 56);
     *p++ = b;
     v = v << 8;
   }
-  berValueSize = sizeof(OMUInt64) + 1;
 }
 
 OMUInt64 OMKLVStoredObject::readBerLength(OMRawStorage* store)
