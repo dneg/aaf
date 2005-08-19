@@ -733,7 +733,7 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   skipLV(_storage); // This V is fill
 
   if (!metaDataOnly) {
-    streamRestore(_storage);
+    streamRestore();
   }
 
   return root;
@@ -1798,36 +1798,6 @@ void OMKLVStoredObject::streamRestore(void)
     }
     _storage->readKLVKey(k);
     convert(sid, k);
-  }
-}
-
-void OMKLVStoredObject::streamRestore(OMRawStorage* store)
-{
-  TRACE("OMKLVStoredObject::streamRestore")
-
-  OMKLVKey ClosedFooterPartitionPackKey =
-    {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
-     0x0d, 0x01, 0x02, 0x01, 0x01, 0x04, 0x02, 0x00};
-
-  OMKLVKey k;
-  readKLVKey(store, k);
-
-  while (memcmp(&k, &ClosedFooterPartitionPackKey, sizeof(OMKLVKey)) != 0) {
-    if (streamIdToStream()->contains(k)) {
-      OMUInt64 length = readBerLength(store);
-      OMDataStream* s = stream(k);
-      s->setPosition(0);
-      for (OMUInt64 i = 0; i < length; i++) {
-        OMByte b;
-        OMUInt32 x;
-        read(store, b);
-        s->write(&b, 1, x);
-      }
-      s->setPosition(0);
-    } else {
-      skipLV(store);
-    }
-    readKLVKey(store, k);
   }
 }
 
