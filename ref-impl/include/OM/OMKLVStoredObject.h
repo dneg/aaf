@@ -246,6 +246,9 @@ public:
   virtual void restore(OMDataStream& stream,
                        size_t externalSize);
 
+  virtual void write(const wchar_t* string);
+  virtual void write(bool b);
+
   virtual void writeProperty(OMPropertyId pid, const OMUInt32& value);
   virtual void readProperty(const OMPropertyId& pid, OMUInt32& value);
 
