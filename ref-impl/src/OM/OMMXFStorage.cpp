@@ -1776,8 +1776,7 @@ void OMMXFStorage::streamGrow(OMUInt32 sid, OMUInt64 growBytes)
     ASSERT("Valid increment", increment >= growBytes);
 #if defined(OM_NEW_STREAM_WRITING)
     _fileSize = _fileSize + s->_gridSize - 25;
-    addSegment(s, start, increment + 25 + fillBufferZoneSize, _fileSize);
-    _fileSize = _fileSize - fillBufferZoneSize;
+    addSegment(s, start, increment + 25, _fileSize);
 #else
     _fileSize = _fileSize + s->_gridSize; // For body partition and filler
     addSegment(s, start, increment, _fileSize);
@@ -1789,11 +1788,10 @@ void OMMXFStorage::streamGrow(OMUInt32 sid, OMUInt64 growBytes)
     increment = (((growBytes - 1) / s->_gridSize) + 1) * s->_gridSize;
     ASSERT("Valid increment", increment >= growBytes);
 #if defined(OM_NEW_STREAM_WRITING)
-    if ((last->_origin + last->_size - fillBufferZoneSize) != _fileSize) {
+    if ((last->_origin + last->_size) != _fileSize) {
       // Last segment not at end of file - add a new one
       _fileSize = _fileSize + s->_gridSize - 25;
-      addSegment(s, start, increment + 25 + fillBufferZoneSize, _fileSize);
-      _fileSize = _fileSize - fillBufferZoneSize;
+      addSegment(s, start, increment + 25, _fileSize);
 #else
     if ((last->_origin + last->_size) != _fileSize) {
       // Last segment not at end of file - add a new one
@@ -2310,6 +2308,10 @@ void OMMXFStorage::checkStreams(void)
       Segment* seg = sl.value();
       OMUInt64 start = seg->_origin;
       OMUInt64 end = seg->_origin + seg->_size;
+#if !defined(OM_NEW_STREAM_PARSING) && !defined(OM_FASTER_STREAM_PARSING)
+      start = start - (sizeof(OMKLVKey) + 1 + sizeof(OMUInt64));
+      end = end + fillBufferZoneSize;
+#endif
       setPosition(start);
       while (position() < end) {
         OMKLVKey k;
