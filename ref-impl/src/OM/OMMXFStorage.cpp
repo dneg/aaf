@@ -1598,11 +1598,13 @@ void OMMXFStorage::streamRestoreSegment(OMUInt32 sid,
   Stream* s = 0;
   if (!segmentMap()->find(sid, s)) {
     s = createStream(sid, 0, label, gridSize);
+    _fileSize = start;
     addSegment(s, 0, allocatedSize, start);
     s->_size = s->_size + occupiedSize;
   } else {
     Segment* last = findLastSegment(s);
     ASSERT("Last segment found", last != 0);
+    _fileSize = start;
     addSegment(s, last->_start + last->_size, allocatedSize, start);
     s->_size = s->_size + occupiedSize;
   }
