@@ -51,6 +51,8 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
   : OMWrappedRawStorage(store),
   _primerPosition(0),
   _headerByteCount(0),
+  _fillStart(0),
+  _fillEnd(0),
   _fixups(),
   _reorderBytes(false),
   _operationalPattern(nullOMKLVKey),
@@ -2119,7 +2121,9 @@ void OMMXFStorage::markEssenceSegmentEnd(OMUInt64 endKeyPosition)
 void OMMXFStorage::markFill(OMUInt64 fillKeyPosition, OMUInt64 fillEndPosition)
 {
   TRACE("OMMXFStorage::markFill");
-  ASSERT("Unimplemented code not reached", false);
+
+  _fillStart = fillKeyPosition;
+  _fillEnd = fillEndPosition;
 }
 
 OMMXFStorage::Stream* OMMXFStorage::createStream(OMUInt32 sid,
