@@ -199,29 +199,29 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
   OMKLVStoredObject::writeBerLength(this, 3, length);
 #endif
   OMUInt16 majorVersion = currentMajorVersion;
-  OMKLVStoredObject::write(this, majorVersion, reorderBytes);
+  write(majorVersion, reorderBytes);
   OMUInt16 minorVersion = currentMinorVersion;
-  OMKLVStoredObject::write(this, minorVersion, reorderBytes);
-  OMKLVStoredObject::write(this, KAGSize, reorderBytes);
+  write(minorVersion, reorderBytes);
+  write(KAGSize, reorderBytes);
   OMUInt64 thisPartition = 0;
-  OMKLVStoredObject::write(this, thisPartition, reorderBytes);
+  write(thisPartition, reorderBytes);
   OMUInt64 previousPartition = 0;
-  OMKLVStoredObject::write(this, previousPartition, reorderBytes);
+  write(previousPartition, reorderBytes);
   OMUInt64 footerPartition = 0;
-  OMKLVStoredObject::write(this, footerPartition, reorderBytes);
+  write(footerPartition, reorderBytes);
   OMUInt64 headerByteCount = 0;
-  OMKLVStoredObject::write(this, headerByteCount, reorderBytes);
+  write(headerByteCount, reorderBytes);
   OMUInt64 indexByteCount = 0;
-  OMKLVStoredObject::write(this, indexByteCount, reorderBytes);
+  write(indexByteCount, reorderBytes);
   OMUInt32 indexSID = 1;
-  OMKLVStoredObject::write(this, indexSID, reorderBytes);
+  write(indexSID, reorderBytes);
   OMUInt64 bodyOffset = 0;
-  OMKLVStoredObject::write(this, bodyOffset, reorderBytes);
+  write(bodyOffset, reorderBytes);
   OMUInt32 bodySID = 2;
-  OMKLVStoredObject::write(this, bodySID, reorderBytes);
+  write(bodySID, reorderBytes);
   OMKLVStoredObject::writeKLVKey(this, operationalPattern);
-  OMKLVStoredObject::write(this, elementCount, reorderBytes);
-  OMKLVStoredObject::write(this, elementSize, reorderBytes);
+  write(elementCount, reorderBytes);
+  write(elementSize, reorderBytes);
   for (OMUInt32 i = 0; i < elementCount; i++) {
     OMKLVStoredObject::writeKLVKey(this, essenceContainers[i]);
   }
