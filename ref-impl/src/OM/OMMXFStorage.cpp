@@ -1559,22 +1559,20 @@ void OMMXFStorage::saveStreams(void)
 {
   TRACE("OMMXFStorage::saveStreams");
 
-  // Streams, if any, follow the metadata
-  //
-  _metadataEnd = position();
-
   if (_segments != 0) {
     // The file contains streams
 
     // We expect to be positioned in the pre-allocated header
     // space just after the last metadata object
-    if (_metadataEnd >= bodyPartitionOffset) {
-      throw OMException("Preallocated metadata space exhausted.");
-    }
+    ASSERT("Valid position", position() < bodyPartitionOffset);
 
     // fill remainder of pre-allocated space
     OMUInt32 fillAlignment = bodyPartitionOffset;
-    fillAlignK(_metadataEnd, fillAlignment);
+    fillAlignK(position(), fillAlignment);
+
+    // Remember the end of the metadata
+    //
+    _metadataEnd = position();
 
     // Write header partition and alignment fill.
     //
@@ -1646,6 +1644,10 @@ void OMMXFStorage::saveStreams(void)
     }
   } else {
     // The file does not contain streams
+
+    // Remember the end of the metadata
+    //
+    _metadataEnd = position();
 
     // Write header partition and alignment fill.
     //
