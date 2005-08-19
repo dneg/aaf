@@ -260,8 +260,6 @@ public:
 
   static void convert(OMUniqueObjectIdentification& id, const OMKLVKey& key);
 
-  static void finalize(void);
-
   static bool metaDataOnly;
 
 private:
