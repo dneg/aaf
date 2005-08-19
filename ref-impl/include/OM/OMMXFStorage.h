@@ -484,6 +484,20 @@ private:
                           OMUInt64 patternSize,
                           OMUInt32 limit);
 
+  void markMetadataStart(OMUInt64 primerKeyPosition);
+  void markMetadataEnd(OMUInt64 endKeyPosition);
+
+  void markIndexStart(OMUInt32 sid, OMUInt64 indexKeyPosition);
+  void markIndexEnd(OMUInt64 endKeyPosition);
+
+  void markEssenceSegmentStart(OMUInt32 sid, OMUInt64 essenceKeyPosition);
+  void markEssenceSegmentEnd(OMUInt64 endKeyPosition);
+
+  void markFill(OMUInt64 fillKeyPosition, OMUInt64 fillEndPosition);
+
+  OMUInt64 _primerPosition;
+  OMUInt64 _headerByteCount;
+
   struct ObjectDirectoryEntry {
     OMStorable* _object;
     OMUInt64 _offset;
