@@ -829,6 +829,9 @@ OMUInt64 OMKLVStoredObject::length(const OMPropertySet& properties) const
     // Root object includes a hidden reference to the object directory
     length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
                     + sizeof(OMUniqueObjectIdentification) + sizeof(OMUInt64);
+    // Root object includes a hidden 32-bit version number
+    length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
+                    + sizeof(OMUInt32);
   }
 #endif
 
@@ -922,6 +925,10 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
     OMKLVStoredObject* This = const_cast<OMKLVStoredObject*>(this);
     OMUniqueObjectIdentification id = {0};
     This->_objectDirectoryReference = This->saveObjectDirectoryReference(id);
+
+    OMPropertyId pid = 0x0004;
+    OMUInt32 version = 0x09111956;
+    This->writeProperty(pid, version);
   }
 #endif
 
@@ -1193,6 +1200,12 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
     _objectDirectory = restoreObjectDirectoryReference(id);
     setLength = setLength - (overhead + sizeof(OMUniqueObjectIdentification) +
                                         sizeof(OMUInt64));
+
+    OMPropertyId pid = 0x0004;
+    OMUInt32 version;
+    readProperty(pid, version);
+
+    setLength = setLength - (overhead + sizeof(OMUInt32));
   }
 #endif
 
