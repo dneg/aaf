@@ -496,6 +496,66 @@ void OMMXFStorage::berEncode(OMByte* berValueBuffer,
   }
 }
 
+bool OMMXFStorage::readHeaderPartition(void)
+{
+  TRACE("OMMXFStorage::readHeaderPartition");
+
+  bool reorderBytes;
+  if (hostByteOrder() == bigEndian) {
+    reorderBytes = false;
+  } else {
+    reorderBytes = true;
+  }
+  OMKLVKey k;
+  bool result = true;
+  readKLVKey(k);
+  k.octet14 = 0x02;
+  if (k == ClosedHeaderPartitionPackKey) {
+    readKLVLength();
+    OMUInt16 majorVersion;
+    read(majorVersion, reorderBytes);
+    if (majorVersion != currentMajorVersion) {
+      result = false;
+    }
+    OMUInt16 minorVersion;
+    read(minorVersion, reorderBytes);
+    if (minorVersion != currentMinorVersion) {
+      result = false;
+    }
+    OMUInt32 KAGSize;
+    read(KAGSize, reorderBytes);
+    OMUInt64 thisPartition;
+    read(thisPartition, reorderBytes);
+    OMUInt64 previousPartition;
+    read(previousPartition, reorderBytes);
+    OMUInt64 footerPartition;
+    read(footerPartition, reorderBytes);
+    OMUInt64 headerByteCount;
+    read(headerByteCount, reorderBytes);
+    OMUInt64 indexByteCount;
+    read(indexByteCount, reorderBytes);
+    OMUInt32 indexSID;
+    read(indexSID, reorderBytes);
+    OMUInt64 bodyOffset;
+    read(bodyOffset, reorderBytes);
+    OMUInt32 bodySID;
+    read(bodySID, reorderBytes);
+    OMKLVKey operationalPattern;
+    readKLVKey(operationalPattern);
+    OMUInt32 elementCount;
+    read(elementCount, reorderBytes);
+    OMUInt32 elementSize;
+    read(elementSize, reorderBytes);
+    OMKLVKey essenceContainer;
+    for (OMUInt32 i = 0; i < elementCount; i++) {
+      readKLVKey(essenceContainer);
+    }
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 void OMMXFStorage::read(OMUInt8& i) const
 {
   TRACE("OMMXFStorage::read");
