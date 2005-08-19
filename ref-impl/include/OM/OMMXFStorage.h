@@ -28,6 +28,8 @@
 #include "OMDataTypes.h"
 #include "OMIdentitySet.h"
 #include "OMDataStream.h"
+#include "OMList.h"
+#include "OMListIterator.h"
 
 static const OMKLVKey ClosedHeaderPartitionPackKey =
   {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
@@ -84,6 +86,14 @@ static const OMKLVKey objectDirectoryKey =
   {0x96, 0x13, 0xb3, 0x8a, 0x87, 0x34, 0x87, 0x46,
    0xf1, 0x02, 0x96, 0xf0, 0x56, 0xe0, 0x4d, 0x2a};
 
+// Fixup tags
+static const OMUInt8 FUT_UNDEFINED       = 0x80;
+static const OMUInt8 FUT_RESOLVED        = 0x81;
+
+static const OMUInt8 FUT_FOOTER          = 0x01;
+static const OMUInt8 FUT_HEADERBYTECOUNT = 0x02;
+
+static const OMUInt8 FUT_OBJECTDIRECTORY = 0x41;
 
 class OMStorable;
 template <typename Key, typename Element>
@@ -246,6 +256,21 @@ public:
     // streamId -> Stream
   virtual OMDataStream* stream(const OMUniqueObjectIdentification& sid);
 
+    // @cmember Record a reference to <p tag> at <p address>.
+  void reference(OMUInt64 address, OMUInt8 tag);
+
+    // @cmember Provide a definition for <p tag> of <p value>.
+  void definition(OMUInt64 value, OMUInt8 tag);
+
+    // @cmember Apply <c Fixup>s for <p tag>.
+  void fixup(OMUInt8 tag);
+
+    // @cmember Apply all <c Fixup>s.
+  void fixup(void);
+
+    // @cmember Destrpy all <c Fixup>s.
+  void destroyFixups(void);
+
 private:
   // @access Private members.
 
@@ -267,6 +292,18 @@ private:
 
   OMSet<OMDataStream*, OMUniqueObjectIdentification>* streamToStreamId(void);
   OMSet<OMUniqueObjectIdentification, OMDataStream*>* streamIdToStream(void);
+
+  struct Fixup;
+  typedef OMList<Fixup*> FixupList;
+  typedef OMListIterator<Fixup*> FixupListIterator;
+
+  struct Fixup {
+    OMUInt64 _address; // File address
+    OMUInt64 _value;   // Value to write to address
+    OMUInt8  _tag;     // Identifies the reference
+  };
+
+  FixupList _fixups;
 
   OMKLVKey _operationalPattern;
   LabelSet _essenceContainerLabels;
