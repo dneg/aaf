@@ -198,9 +198,15 @@ public:
   typedef OMSetIterator<OMUniqueObjectIdentification,
                         ObjectDirectoryEntry> ObjectDirectoryIterator;
 
-  virtual OMUInt64 saveObjectDirectory(void);
+  virtual void saveObjectDirectory(void);
 
-  virtual void restoreObjectDirectory(OMUInt64 objectDirectoryOffset);
+  virtual void fixupReference(OMUInt64 patchOffset, OMUInt64 patchValue);
+
+  virtual void restoreObjectDirectory(void);
+
+  virtual void setObjectDirectoryReference(OMUInt64 objectDirectoryReference);
+
+  virtual void setObjectDirectoryOffset(OMUInt64 objectDirectoryOffset);
 
   ObjectDirectory* instanceIdToObject(void);
 
@@ -214,6 +220,8 @@ private:
   OMKLVKey _operationalPattern;
   LabelSet _essenceContainerLabels;
   OMUniqueObjectIdentification _generation;
+  OMUInt64 _objectDirectory;          // offset of object directory
+  OMUInt64 _objectDirectoryReference; // offset object directory reference
   ObjectDirectory* _instanceIdToObject;
   ObjectSet* _objectToInstanceId;
 
