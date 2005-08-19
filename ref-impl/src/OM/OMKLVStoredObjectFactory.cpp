@@ -103,9 +103,6 @@ OMKLVStoredObjectFactory::createWrite(OMRawStorage* rawStorage,
   ASSERT("Valid heap pointer", storage != 0);
   OMKLVStoredObject* result = OMKLVStoredObject::createWrite(storage,
                                                              byteOrder);
-  if (!OMKLVStoredObject::metaDataOnly) {
-    result->writeHeaderPartition();
-  }
   return result;
 }
 
@@ -125,9 +122,6 @@ OMKLVStoredObjectFactory::createModify(OMRawStorage* rawStorage,
   ASSERT("Valid heap pointer", storage != 0);
   OMKLVStoredObject* result = OMKLVStoredObject::createModify(storage,
                                                               byteOrder);
-  if (!OMKLVStoredObject::metaDataOnly) {
-    result->writeHeaderPartition();
-  }
   return result;
 }
 
@@ -225,8 +219,7 @@ OMKLVStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
   PRECONDITION("Valid raw storage", rawStorage != 0);
   PRECONDITION("Positionable raw storage", rawStorage->isPositionable());
 
-  bool result = OMKLVStoredObject::readHeaderPartition(rawStorage);
-  rawStorage->setPosition(0);
+  bool result = OMKLVStoredObject::isRecognized(rawStorage);
   return result;
 }
 
@@ -276,15 +269,10 @@ void OMKLVStoredObjectFactory::close(const wchar_t* /* fileName */,
   // @mfunc Perform any necessary actions when the file
   //        contained in <p rawStorage> is closed.
   //   @parm The <c OMRawStorage>
-void OMKLVStoredObjectFactory::close(OMRawStorage* rawStorage,
-                                     bool isWritable)
+void OMKLVStoredObjectFactory::close(OMRawStorage* /* rawStorage */,
+                                     bool /* isWritable */)
 {
   TRACE("OMKLVStoredObjectFactory::close");
 
-  if (isWritable) {
-    if (!OMKLVStoredObject::metaDataOnly) {
-      OMKLVStoredObject::writeFooterPartition(rawStorage);
-    }
-  }
   OMKLVStoredObject::finalize();
 }
