@@ -55,7 +55,6 @@
 #include "OMRawStorage.h"
 
 #define USETAGTABLE 1
-//#define INSTANCEID_DEBUG 1
 
   // @mfunc Open the root <c OMKLVStoredObject> in the raw storage
   //        <p rawStorage> for reading only.
