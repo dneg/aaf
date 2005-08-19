@@ -95,6 +95,28 @@ void OMKLVStoredStream::read(OMByte* data,
   nonConstThis->_position = _position + bytesRead;
 }
 
+  // Asynchronous read - single buffer
+void OMKLVStoredStream::read(OMUInt64 position,
+                             OMByte* buffer,
+                             const OMUInt32 bytes,
+                             void* /* */ completion,
+                             const void* clientArgument)
+{
+  TRACE("OMKLVStoredStream::read");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // Asynchronous read - multiple buffers
+void OMKLVStoredStream::read(OMUInt64 position,
+                             OMIOBufferDescriptor* buffers,
+                             OMUInt32 bufferCount,
+                             void* /* */ completion,
+                             const void* clientArgument) const
+{
+  TRACE("OMKLVStoredStream::read");
+  ASSERT("Unimplemented code not reached", false);
+}
+
 void OMKLVStoredStream::write(void* ANAME(data), size_t ANAME(size))
 {
   TRACE("OMKLVStoredStream::write");
@@ -143,6 +165,28 @@ void OMKLVStoredStream::write(OMIOBufferDescriptor* buffers,
 
   _store->streamWriteAt(_sid, _position, buffers, bufferCount, bytesWritten);
   _position = _position + bytesWritten;
+}
+
+  // Asynchronous write - single buffer
+void OMKLVStoredStream::write(OMUInt64 position,
+                              const OMByte* buffer,
+                              const OMUInt32 bytes,
+                              void* /* */ completion,
+                              const void* clientArgument)
+{
+  TRACE("OMKLVStoredStream::write");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // Asynchronous write - multiple buffers
+void OMKLVStoredStream::write(OMUInt64 position,
+                              const OMIOBufferDescriptor* buffers,
+                              OMUInt32 bufferCount,
+                              void* /* */ completion,
+                              const void* clientArgument)
+{
+  TRACE("OMKLVStoredStream::write");
+  ASSERT("Unimplemented code not reached", false);
 }
 
 OMUInt64 OMKLVStoredStream::size(void) const
