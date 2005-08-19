@@ -221,6 +221,30 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
   delete iter;
 }
 
+  // @mfunc Write a fill key, a BER encoded length and
+  //        <p length> bytes of fill.
+  //   @parm The number of bytes of fill to write.
+void OMMXFStorage::writeKLVFill(const OMUInt64& length)
+{
+  TRACE("OMMXFStorage::writeKLVFill");
+
+  writeKLVKey(fillKey);
+#if defined(BER9)
+  writeKLVLength(length);
+#else
+  writeBerLength(3, length);
+#endif
+  for (OMUInt64 i = 0; i < length; i++) {
+#if defined(OM_DEBUG)
+    const OMByte fillPattern[] = "FFFF.FFFC ";
+    write(fillPattern[i % (sizeof(fillPattern) - 1)]);
+#else
+    const OMByte fillPattern = 0;
+    write(fillPattern);
+#endif
+  }
+}
+
   // @cmember Write fill so that the next key is page aligned.
   //   @parm The current position.
   //   @parm The page/KAG size.
@@ -240,7 +264,7 @@ void OMMXFStorage::fillAlignK(const OMUInt64& currentPosition,
     remainder = remainder + KAGSize;
   }
   remainder = remainder - minimumFill; // Subtract key and length of fill
-  OMKLVStoredObject::writeKLVFill(this, remainder);
+  writeKLVFill(remainder);
 }
 
   // @mfunc Write fill so that the next value is page aligned.
@@ -264,7 +288,7 @@ void OMMXFStorage::fillAlignV(const OMUInt64& currentPosition,
     remainder = remainder + KAGSize;
   }
   remainder = remainder - minimumFill; // Subtract key and length of fill
-  OMKLVStoredObject::writeKLVFill(this, remainder);
+  writeKLVFill(remainder);
 }
 
 void OMMXFStorage::write(const OMByte* bytes,
