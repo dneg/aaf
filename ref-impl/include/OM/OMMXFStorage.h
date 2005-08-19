@@ -434,7 +434,7 @@ public:
 
   virtual void streamWriteAt(OMUInt32 sid,
                              OMUInt64 position,
-                             OMIOVector buffers,
+                             OMIOBufferDescriptor* buffers,
                              OMUInt32 bufferCount,
                              OMUInt32& bytesWritten);
 
@@ -457,7 +457,7 @@ public:
 
   virtual void streamReadAt(OMUInt32 sid,
                             OMUInt64 position,
-                            OMIOVector buffers,
+                            OMIOBufferDescriptor* buffers,
                             OMUInt32 bufferCount,
                             OMUInt32& bytesRead);
 
