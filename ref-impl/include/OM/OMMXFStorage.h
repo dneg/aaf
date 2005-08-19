@@ -34,8 +34,8 @@
 #include "OMListIterator.h"
 #include "OMVector.h"
 
-#define OM_NEW_STREAM_PARSING
-//#define OM_FASTER_STREAM_PARSING
+//#define OM_NEW_STREAM_PARSING
+#define OM_FASTER_STREAM_PARSING
 //#define OM_NEW_STREAM_WRITING
 
 static const OMKLVKey OpenIncompleteHeaderPartitionKey =
