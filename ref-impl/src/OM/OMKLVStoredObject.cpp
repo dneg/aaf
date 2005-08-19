@@ -756,6 +756,7 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   _storage->readKLVKey(k);
   if (k == fillKey) {
     _storage->readKLVFill();
+    _storage->readKLVKey(k);
   }
 
   // For restoring meta objects
@@ -765,26 +766,28 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
 
   // restore the root
   //
-  _storage->readKLVKey(k);
   OMClassId cid;
   convert(cid, k);
-  ASSERT("Root object", cid == OMRootStorable::_rootClassId);
   OMRootStorable* root = new OMRootStorable();
   ASSERT("Valid heap pointer", root != 0);
   root->attach(&file);
   root->setStore(file.rootStore());
   root->setClassFactory(metaDictionary);
-  flatRestore(*root->propertySet());
-
-  // restore the meta object directory
-  //
-  _storage->removeObject(*root);
-  _storage->restoreObjectDirectory();
+  // HACK4MEIP2
+  if (cid == OMRootStorable::_rootClassId) {
+    flatRestore(*root->propertySet());
+    _storage->removeObject(*root);
+    // restore the meta object directory
+    //
+    _storage->restoreObjectDirectory();
+    _storage->readKLVKey(k);
+    convert(cid, k);
+  } else {
+    // tjb - what ?
+  }
 
   // restore the meta dictionary
   //
-  _storage->readKLVKey(k);
-  convert(cid, k);
 
   while (metaDictionary->isMeta(cid)) {
     OMStorable* object = metaDictionary->create(cid);
@@ -808,11 +811,17 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   ASSERT("Valid type", mdsr != 0);
   OMStrongObjectReference& mdr = mdsr->reference();
   OMStorable* mdo = mdr.getValue();
-  ASSERT("Valid object", mdo != 0);
-  deepRestore(*mdo->propertySet());
+  // HACK4MEIP2
+  if (mdo != 0) {
+    ASSERT("Valid object", mdo != 0);
+    deepRestore(*mdo->propertySet());
+  } else {
+    // tjb - what ?
+  }
 
   // restore the client root
   //
+  OMStorable* r = 0;
   root->setClassFactory(dictionary);
   convert(cid, k);
   while (dictionary->isRegistered(cid)) {
@@ -822,6 +831,9 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
 #if !defined(OM_NO_VALIDATE_DEFINITIONS)
     ASSERT("Valid class definition", object->definition() != 0);
 #endif
+    if (r == 0) {
+      r = object; // HACK4MEIP2 - First object is root
+    }
     // Attach the object.
     // tjb !!! object->attach(containingObject, name);
     // tjb !!! object->setStore(this);
@@ -837,8 +849,15 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   ASSERT("Valid type", hsr != 0);
   OMStrongObjectReference& hr = hsr->reference();
   OMStorable* ho = hr.getValue();
-  ASSERT("Valid object", ho != 0);
-  deepRestore(*ho->propertySet());
+  // HACK4MEIP2
+  if (ho != 0) {
+    ASSERT("Valid object", ho != 0);
+    deepRestore(*ho->propertySet());
+  } else {
+    hr.setValue(r);
+    deepRestore(*r->propertySet());
+    _storage->removeObject(*r);
+  }
 
   _storage->skipLV(); // This V is fill
 
@@ -1657,8 +1676,13 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
         ASSERT("Valid type", sr != 0);
         OMStrongObjectReference& r = sr->reference();
         OMStorable* object = r.getValue();
-        ASSERT("Valid object", object != 0);
-        deepRestore(*object->propertySet());
+        // HACK4MEIP2
+        if (object != 0) {
+          ASSERT("Valid object", object != 0);
+          deepRestore(*object->propertySet());
+        } else {
+          // tjb - what ?
+        }
         break;
       }
       case SF_STRONG_OBJECT_REFERENCE_SET: {
