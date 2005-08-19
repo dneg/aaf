@@ -339,6 +339,7 @@ public:
   static bool read(const OMRawStorage* store, OMUInt64& i, bool reorderBytes);
   static bool read(const OMRawStorage* store, OMKLVKey& key);
   static bool readKLVLength(const OMRawStorage* store, OMUInt64& length);
+  static bool skipBytes(const OMRawStorage* store, OMUInt64 length);
 
   virtual void read(OMUInt8& i) const;
   virtual void read(OMUInt16& i, bool reorderBytes) const;
