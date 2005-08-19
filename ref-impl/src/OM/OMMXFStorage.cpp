@@ -210,7 +210,7 @@ void OMMXFStorage::writeHeaderPartition(void)
   TRACE("OMMXFStorage::writeHeaderPartition");
 
   OMUInt64 currentPosition = position();
-  writePartition(ClosedHeaderPartitionPackKey, 0, defaultKAGSize);
+  writePartition(ClosedHeaderPartitionPackKey, 0, 0, defaultKAGSize);
   currentPosition = position();
   fillAlignK(currentPosition, defaultKAGSize);
 }
@@ -219,7 +219,7 @@ void OMMXFStorage::writeBodyPartition(OMUInt32 bodySID, OMUInt32 KAGSize)
 {
   TRACE("OMMXFStorage::writeBodyPartition");
 
-  writePartition(ClosedBodyPartitionPackKey, bodySID, KAGSize);
+  writePartition(ClosedBodyPartitionPackKey, bodySID, 0, KAGSize);
   OMUInt64 currentPosition = position();
   fillAlignV(currentPosition, KAGSize);
 }
@@ -229,11 +229,12 @@ void OMMXFStorage::writeFooterPartition(void)
   TRACE("OMMXFStorage::writeFooterPartition");
 
   setPosition(_fileSize + fillBufferZoneSize);
-  writePartition(ClosedFooterPartitionPackKey, 0, defaultKAGSize);
+  writePartition(ClosedFooterPartitionPackKey, 0, 0, defaultKAGSize);
 }
 
 void OMMXFStorage::writePartition(const OMKLVKey& key,
                                   OMUInt32 bodySID,
+                                  OMUInt32 indexSID,
                                   OMUInt32 KAGSize)
 {
   TRACE("OMMXFStorage::writePartition");
@@ -275,8 +276,8 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
   write(headerByteCount, _reorderBytes);
   OMUInt64 indexByteCount = 0;
   write(indexByteCount, _reorderBytes);
-  OMUInt32 indexSID = 0;
-  write(indexSID, _reorderBytes);
+  OMUInt32 is = indexSID;
+  write(is, _reorderBytes);
   OMUInt64 bodyOffset = 0;
   write(bodyOffset, _reorderBytes);
   OMUInt32 b = bodySID;
