@@ -348,6 +348,8 @@ public:
 
   virtual void streamGrow(OMUInt32 sid, OMUInt64 growBytes);
 
+  virtual void saveStreams(void);
+
   struct Segment {
     OMUInt64 _start;   // Stream position of this Segment
     OMUInt64 _size;    // Size of this Segment in bytes
