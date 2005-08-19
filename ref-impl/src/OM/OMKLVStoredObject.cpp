@@ -60,7 +60,7 @@
   //        <p rawStorage> for reading only.
   //   @parm The raw storage in which to open the file.
   //   @rdesc An <c OMKLVStoredObject> representing the root object.
-OMKLVStoredObject* OMKLVStoredObject::openRead(OMRawStorage* rawStorage)
+OMKLVStoredObject* OMKLVStoredObject::openRead(OMMXFStorage* rawStorage)
 {
   TRACE("OMKLVStoredObject::openRead");
   PRECONDITION("Compatible raw storage access mode", rawStorage->isReadable());
@@ -74,7 +74,7 @@ OMKLVStoredObject* OMKLVStoredObject::openRead(OMRawStorage* rawStorage)
   //   @rdesc An <c OMKLVStoredObject> representing the root object.
   //        <p rawStorage> for modification.
 OMKLVStoredObject* OMKLVStoredObject::openModify(
-                                               OMRawStorage* ANAME(rawStorage))
+                                               OMMXFStorage* ANAME(rawStorage))
 {
   TRACE("OMKLVStoredObject::openModify");
   PRECONDITION("Compatible raw storage access mode",
@@ -90,7 +90,7 @@ OMKLVStoredObject* OMKLVStoredObject::openModify(
   //   @parm The raw storage in which to create the file.
   //   @parm The desired byte ordering for the new file.
   //   @rdesc An <c OMKLVStoredObject> representing the root object.
-OMKLVStoredObject* OMKLVStoredObject::createWrite(OMRawStorage* rawStorage,
+OMKLVStoredObject* OMKLVStoredObject::createWrite(OMMXFStorage* rawStorage,
                                                   const OMByteOrder byteOrder)
 {
   TRACE("OMKLVStoredObject::createWrite");
@@ -106,7 +106,7 @@ OMKLVStoredObject* OMKLVStoredObject::createWrite(OMRawStorage* rawStorage,
   //   @parm The raw storage in which to create the file.
   //   @parm The desired byte ordering for the new file.
   //   @rdesc An <c OMKLVStoredObject> representing the root object.
-OMKLVStoredObject* OMKLVStoredObject::createModify(OMRawStorage* rawStorage,
+OMKLVStoredObject* OMKLVStoredObject::createModify(OMMXFStorage* rawStorage,
                                                    const OMByteOrder byteOrder)
 {
   TRACE("OMKLVStoredObject::createModify");
@@ -2787,7 +2787,7 @@ bool OMKLVStoredObject::metaDataOnly = true;
   // @mfunc Constructor.
   //   @parm The <c OMRawStorage> on which this <c OMKLVStoredObject> resides.
   //   @parm TBS
-OMKLVStoredObject::OMKLVStoredObject(OMRawStorage* s, OMByteOrder byteOrder)
+OMKLVStoredObject::OMKLVStoredObject(OMMXFStorage* s, OMByteOrder byteOrder)
 : _storage(s),
   _byteOrder(byteOrder),
   _reorderBytes(false),
