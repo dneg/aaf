@@ -457,6 +457,8 @@ public:
   virtual void saveStreams(void);
   virtual void restoreStreams(void);
 
+  virtual void checkStreams(void);
+
   struct Stream;
   struct Segment {
     OMUInt64 _start;   // Stream position of this Segment
