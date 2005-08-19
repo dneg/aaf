@@ -454,6 +454,13 @@ public:
 private:
   // @access Private members.
 
+  static bool findPattern(const OMRawStorage* store,
+                          OMUInt64 currentPosition,
+                          OMUInt64& patternPosition,
+                          const OMByte* pattern,
+                          OMUInt64 patternSize,
+                          OMUInt32 limit);
+
   struct ObjectDirectoryEntry {
     OMStorable* _object;
     OMUInt64 _offset;
