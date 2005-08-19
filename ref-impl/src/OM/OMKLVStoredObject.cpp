@@ -2105,6 +2105,7 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
     delete properties;
   }
   delete classes;
+  elementCount = elementCount + 1; // For InstanceUID
 
   OMUInt32 elementSize = sizeof(OMPropertyId) +
                          sizeof(OMUniqueObjectIdentification);
@@ -2114,6 +2115,12 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
   _storage->writeKLVLength(length);
   _storage->write(elementCount, _reorderBytes);
   _storage->write(elementSize, _reorderBytes);
+
+  // Instance UID
+  _storage->write(PID_InterchangeObject_InstanceUID, _reorderBytes);
+  OMKLVKey iuidk;
+  convert(iuidk, Property_InterchangeObject_InstanceUID);
+  _storage->writeKLVKey(iuidk);
 
   classes = dictionary->classDefinitions();
   while (++(*classes)) {
