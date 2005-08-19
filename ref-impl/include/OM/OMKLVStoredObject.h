@@ -30,6 +30,7 @@
 
 class OMSimpleProperty;
 class OMDataStream;
+class OMMXFStorage;
 class OMStrongReference;
 class OMStrongReferenceSet;
 class OMStrongReferenceVector;
@@ -48,22 +49,22 @@ public:
 
     // @cmember Open the root <c OMKLVStoredObject> in the raw storage
     //          <p rawStorage> for reading only.
-  static OMKLVStoredObject* openRead(OMRawStorage* rawStorage);
+  static OMKLVStoredObject* openRead(OMMXFStorage* rawStorage);
 
     // @cmember Open the root <c OMKLVStoredObject> in the raw storage
     //          <p rawStorage> for modification.
-  static OMKLVStoredObject* openModify(OMRawStorage* rawStorage);
+  static OMKLVStoredObject* openModify(OMMXFStorage* rawStorage);
 
     // @cmember Create a new root <c OMKLVStoredObject> in the raw storage
     //          <p rawStorage>. The byte order of the newly created root
     //          is given by <p byteOrder>.
-  static OMKLVStoredObject* createWrite(OMRawStorage* rawStorage,
+  static OMKLVStoredObject* createWrite(OMMXFStorage* rawStorage,
                                         const OMByteOrder byteOrder);
 
     // @cmember Create a new root <c OMKLVStoredObject> in the raw storage
     //          <p rawStorage>. The byte order of the newly created root
     //          is given by <p byteOrder>.
-  static OMKLVStoredObject* createModify(OMRawStorage* rawStorage,
+  static OMKLVStoredObject* createModify(OMMXFStorage* rawStorage,
                                          const OMByteOrder byteOrder);
 
   // @access Public members.
@@ -377,9 +378,9 @@ private:
   // @access Private members.
 
     // @cmember Constructor.
-  OMKLVStoredObject(OMRawStorage* s, OMByteOrder byteOrder);
+  OMKLVStoredObject(OMMXFStorage* s, OMByteOrder byteOrder);
 
-  OMRawStorage* _storage;
+  OMMXFStorage* _storage;
   OMByteOrder _byteOrder;
   bool _reorderBytes;
   OMUInt64 _objectDirectory;          // offset of object directory
