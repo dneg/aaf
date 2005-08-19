@@ -2136,6 +2136,7 @@ void OMMXFStorage::restoreStreams(void)
       keyPosition = position();
       bool b = readOuterKLVKey(k);
       ASSERT("Read key", b);
+      ASSERT("Key is not a partition key", !isPartition(k));
       length = readKLVLength();
       if (k == primerKey) {
         markMetadataStart(keyPosition);
