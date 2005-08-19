@@ -106,6 +106,10 @@ public:
     // @cmember The file offset of this essence element.
   virtual OMUInt64 fileOffset(void) const;
 
+  static bool readKLVKey(OMStoredStream& stream, OMKLVKey& key);
+
+  static bool readKLVLength(OMStoredStream& stream, OMUInt64& length);
+
 private:
   // @access Private members.
   OMKLVKey _label;
