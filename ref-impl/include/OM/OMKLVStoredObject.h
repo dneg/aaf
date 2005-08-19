@@ -309,6 +309,17 @@ public:
                                                                          void);
   static OMSet<OMUniqueObjectIdentification, OMStorable*>* instanceIdToObject(
                                                                          void);
+    // Stream -> streamId
+  static OMKLVKey streamId(OMDataStream* stream);
+
+    // streamId -> Stream
+  static OMDataStream* stream(const OMKLVKey& streamId);
+
+  static OMSet<OMDataStream*, OMKLVKey>* _streamToStreamId;
+  static OMSet<OMKLVKey, OMDataStream*>* _streamIdToStream;
+
+  static OMSet<OMDataStream*, OMKLVKey>* streamToStreamId(void);
+  static OMSet<OMKLVKey, OMDataStream*>* streamIdToStream(void);
 
   static void convert(OMKLVKey& key, const OMUniqueObjectIdentification& id);
 
