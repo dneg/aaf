@@ -1297,17 +1297,19 @@ void OMMXFStorage::streamWriteAt(OMUInt32 sid,
 
   PRECONDITION("Valid buffer", bytes != 0);
   PRECONDITION("Buffer not empty", byteCount != 0);
+
+  OMUInt32 writeCount = byteCount;
+  bytesWritten = byteCount;
+
   const OMByte* p = bytes;
   OMUInt64 pos = position;
-  OMUInt32 remaining = byteCount;
-  while (remaining > 0) {
+  while (writeCount > 0) {
     OMUInt32 w;
-    streamWriteFragment(sid, pos, p, remaining, w);
-    remaining = remaining - w;
+    streamWriteFragment(sid, pos, p, writeCount, w);
+    writeCount = writeCount - w;
     pos = pos + w;
     p = p + w;
   }
-  bytesWritten = byteCount;
 }
 
 void OMMXFStorage::streamRawRead(OMUInt32 /* sid */,
@@ -1357,17 +1359,19 @@ void OMMXFStorage::streamReadAt(OMUInt32 sid,
 
   PRECONDITION("Valid buffer", bytes != 0);
   PRECONDITION("Buffer not empty", byteCount != 0);
+
+  OMUInt32 readCount = byteCount;
+  bytesRead = byteCount;
+
   OMByte* p = bytes;
   OMUInt64 pos = position;
-  OMUInt32 remaining = byteCount;
-  while (remaining > 0) {
-    OMUInt32 w;
-    streamReadFragment(sid, pos, p, remaining, w);
-    remaining = remaining - w;
-    pos = pos + w;
-    p = p + w;
+  while (readCount > 0) {
+    OMUInt32 r;
+    streamReadFragment(sid, pos, p, readCount, r);
+    readCount = readCount - r;
+    pos = pos + r;
+    p = p + r;
   }
-  bytesRead = byteCount;
 }
 
 void OMMXFStorage::streamSave(OMDataStream* stream)
