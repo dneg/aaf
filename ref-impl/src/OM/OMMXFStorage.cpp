@@ -117,6 +117,21 @@ OMMXFStorage::~OMMXFStorage(void)
   // @mfunc Close this <c OMMXFStorage>.
 void OMMXFStorage::close(void)
 {
+  TRACE("OMMXFStorage::close");
+
+  fixup();
+
+  size_t count = _partitions.count();
+  Partition* footerPartition = _partitions.valueAt(count - 1);
+  OMUInt64 footer = footerPartition->_address;
+  OMUInt64 previous = 0;
+  for (size_t i = 0; i < count; i++) {
+    Partition* p = _partitions.valueAt(i);
+    OMUInt64 address = p->_address;
+    fixupReference(address + sizeof(OMKLVKey) + 8 + 1 + 16, previous);
+    fixupReference(address + sizeof(OMKLVKey) + 8 + 1 + 24, footer);
+    previous = address;
+  }
 }
 
   // @mfunc Set the operational pattern to <p pattern>.
@@ -215,20 +230,6 @@ void OMMXFStorage::writeFooterPartition(void)
 
   setPosition(_fileSize + fillBufferZoneSize);
   writePartition(ClosedFooterPartitionPackKey, 0, defaultKAGSize);
-
-  fixup();
-
-  size_t count = _partitions.count();
-  Partition* footerPartition = _partitions.valueAt(count - 1);
-  OMUInt64 footer = footerPartition->_address;
-  OMUInt64 previous = 0;
-  for (size_t i = 0; i < count; i++) {
-    Partition* p = _partitions.valueAt(i);
-    OMUInt64 address = p->_address;
-    fixupReference(address + sizeof(OMKLVKey) + 8 + 1 + 16, previous);
-    fixupReference(address + sizeof(OMKLVKey) + 8 + 1 + 24, footer);
-    previous = address;
-  }
 }
 
 void OMMXFStorage::writePartition(const OMKLVKey& key,
