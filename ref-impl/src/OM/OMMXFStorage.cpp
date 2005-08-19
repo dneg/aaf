@@ -443,11 +443,10 @@ void OMMXFStorage::writeRandomIndex(void)
   write(overallLength, _reorderBytes);
 }
 
-void OMMXFStorage::readRandomIndex(void)
+void OMMXFStorage::readRandomIndex(OMUInt64 length)
 {
   TRACE("OMMXFStorage::readRandomIndex");
   OMUInt32 entrySize = sizeof(OMUInt32) + sizeof(OMUInt64);
-  OMUInt64 length = readKLVLength();
   OMUInt64 entryCount = (length - sizeof(OMUInt32)) / entrySize;
   for (OMUInt32 i = 0; i < entryCount; i++) {
     OMUInt32 sid;
@@ -1836,7 +1835,7 @@ void OMMXFStorage::restoreStreams(void)
     } else if (k == RandomIndexMetadataKey) {
       markMetadataEnd(keyPosition);
       markIndexEnd(keyPosition);
-      readRandomIndex();
+      readRandomIndex(length);
     } else if (isEssence(k) || k == SystemMetadataKey) {
       markMetadataEnd(keyPosition);
       markIndexEnd(keyPosition);
@@ -1912,7 +1911,8 @@ void OMMXFStorage::restoreStreams(void)
       essenceKey = k;
       skipV(essenceLength);
     } else if (k == RandomIndexMetadataKey) {
-      readRandomIndex();
+      OMUInt64 randomIndexLength = readKLVLength();
+      readRandomIndex(randomIndexLength);
     } else {
       skipLV();
     }
