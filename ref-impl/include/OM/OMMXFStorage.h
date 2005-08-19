@@ -27,6 +27,7 @@
 #include "OMWrappedRawStorage.h"
 #include "OMDataTypes.h"
 #include "OMIdentitySet.h"
+#include "OMIdentitySetIter.h"
 
 class OMStorable;
 template <typename Key, typename Element>
@@ -54,11 +55,17 @@ public:
     // @cmember Get the operational pattern.
   virtual OMKLVKey operationalPattern(void) const;
 
+  typedef OMIdentitySet<OMKLVKey> LabelSet;
+  typedef OMIdentitySetIterator<OMKLVKey> LabelSetIterator;
+
     // @cmember Add <p label> to the set of essence container labels.
   virtual void addEssenceContainerLabel(const OMKLVKey& label);
 
     // @cmember Is <p label> present in the set of essence container labels.
   virtual bool containsEssenceContainerLabel(const OMKLVKey& label) const;
+
+    // @cmember Create an iterator over the set of essence container labels.
+  virtual LabelSetIterator* containerLabels(void) const;
 
   struct ObjectDirectoryEntry {
     OMStorable* _object;
@@ -81,7 +88,7 @@ private:
   // @access Private members.
 
   OMKLVKey _operationalPattern;
-  OMIdentitySet<OMKLVKey> _essenceContainerLabels;
+  LabelSet _essenceContainerLabels;
   ObjectDirectory* _instanceIdToObject;
   ObjectSet* _objectToInstanceId;
 
