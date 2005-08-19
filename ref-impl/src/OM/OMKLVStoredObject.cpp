@@ -1724,7 +1724,8 @@ void OMKLVStoredObject::writeKLVKey(OMRawStorage* store, const OMKLVKey& key)
   TRACE("OMKLVStoredObject::writeKLVKey");
 
   OMUInt32 x;
-  store->write(key, sizeof(OMKLVKey), x);
+  const OMByte* src = reinterpret_cast<const OMByte*>(&key);
+  store->write(src, sizeof(OMKLVKey), x);
 
   POSTCONDITION("All bytes written", x == sizeof(OMKLVKey));
 }
@@ -1931,7 +1932,7 @@ bool OMKLVStoredObject::readHeaderPartition(OMRawStorage* store)
   OMKLVKey k;
   bool result = true;
   readKLVKey(store, k);
-  if (memcmp(k, headerPartitionPackKey, sizeof(OMKLVKey)) == 0) {
+  if (memcmp(&k, &headerPartitionPackKey, sizeof(OMKLVKey)) == 0) {
     readKLVLength(store);
     OMUInt16 majorVersion;
     read(store, majorVersion, reorderBytes);
@@ -2012,7 +2013,8 @@ void OMKLVStoredObject::readKLVKey(OMRawStorage* store, OMKLVKey& key)
   TRACE("OMKLVStoredObject::readKLVKey");
 
   OMUInt32 x;
-  store->read(key, sizeof(OMKLVKey), x);
+  OMByte* dest = reinterpret_cast<OMByte*>(&key);
+  store->read(dest, sizeof(OMKLVKey), x);
 
   POSTCONDITION("All bytes read", x == sizeof(OMKLVKey));
 }
@@ -2196,27 +2198,27 @@ void OMKLVStoredObject::convert(OMKLVKey& key,
 {
   TRACE("OMKLVStoredObject::convert");
 
-  key[ 0] = id.Data4[0];
-  key[ 1] = id.Data4[1];
-  key[ 2] = id.Data4[2];
-  key[ 3] = id.Data4[3];
-  key[ 4] = id.Data4[4];
-  key[ 5] = id.Data4[5];
-  key[ 6] = id.Data4[6];
-  key[ 7] = id.Data4[7];
+  key.octet0  = id.Data4[0];
+  key.octet1  = id.Data4[1];
+  key.octet2  = id.Data4[2];
+  key.octet3  = id.Data4[3];
+  key.octet4  = id.Data4[4];
+  key.octet5  = id.Data4[5];
+  key.octet6  = id.Data4[6];
+  key.octet7  = id.Data4[7];
 
-  key[ 8] = (OMByte)((id.Data1 & 0xff000000) >> 24);
-  key[ 9] = (OMByte)((id.Data1 & 0x00ff0000) >> 16);
-  key[10] = (OMByte)((id.Data1 & 0x0000ff00) >>  8);
-  key[11] = (OMByte)((id.Data1 & 0x000000ff));
+  key.octet8  = (OMByte)((id.Data1 & 0xff000000) >> 24);
+  key.octet9  = (OMByte)((id.Data1 & 0x00ff0000) >> 16);
+  key.octet10 = (OMByte)((id.Data1 & 0x0000ff00) >>  8);
+  key.octet11 = (OMByte)((id.Data1 & 0x000000ff));
 
-  key[12] = (OMByte)((id.Data2 & 0xff00) >> 8);
-  key[13] = (OMByte)((id.Data2 & 0x00ff));
+  key.octet12 = (OMByte)((id.Data2 & 0xff00) >> 8);
+  key.octet13 = (OMByte)((id.Data2 & 0x00ff));
 
-  key[14] = (OMByte)((id.Data3 & 0xff00) >> 8);
-  key[15] = (OMByte)((id.Data3 & 0x00ff));
+  key.octet14 = (OMByte)((id.Data3 & 0xff00) >> 8);
+  key.octet15 = (OMByte)((id.Data3 & 0x00ff));
 
-//key[5] = 0x53; // tjb !!
+//key.octet5  = 0x53; // tjb !!
 }
 
 void OMKLVStoredObject::convert(OMUniqueObjectIdentification& id,
@@ -2224,33 +2226,33 @@ void OMKLVStoredObject::convert(OMUniqueObjectIdentification& id,
 {
   TRACE("OMKLVStoredObject::convert");
 
-  id.Data4[0] = key[0];
-  id.Data4[1] = key[1];
-  id.Data4[2] = key[2];
-  id.Data4[3] = key[3];
-  id.Data4[4] = key[4];
-  id.Data4[5] = key[5];
-  id.Data4[6] = key[6];
-  id.Data4[7] = key[7];
+  id.Data4[0] = key.octet0;
+  id.Data4[1] = key.octet1;
+  id.Data4[2] = key.octet2;
+  id.Data4[3] = key.octet3;
+  id.Data4[4] = key.octet4;
+  id.Data4[5] = key.octet5;
+  id.Data4[6] = key.octet6;
+  id.Data4[7] = key.octet7;
 
   OMUInt32 d1 = 0;
-  d1 = d1 + (key[ 8] << 24);
-  d1 = d1 + (key[ 9] << 16);
-  d1 = d1 + (key[10] <<  8);
-  d1 = d1 + (key[11]);
+  d1 = d1 + (key.octet8  << 24);
+  d1 = d1 + (key.octet9  << 16);
+  d1 = d1 + (key.octet10 <<  8);
+  d1 = d1 + (key.octet11);
   id.Data1 = d1;
 
   OMUInt16 d2 = 0;
-  d2 = d2 + (key[12] << 8);
-  d2 = d2 + (key[13]);
+  d2 = d2 + (key.octet12 << 8);
+  d2 = d2 + (key.octet13);
   id.Data2 = d2;
 
   OMUInt16 d3 = 0;
-  d3 = d3 + (key[14] << 8);
-  d3 = d3 + (key[15]);
+  d3 = d3 + (key.octet14 << 8);
+  d3 = d3 + (key.octet15);
   id.Data3 = d3;
 
-  //key[5] = 0x06; // tjb !!
+  //key.octet5 = 0x06; // tjb !!
 }
 
 void OMKLVStoredObject::finalize(void)
