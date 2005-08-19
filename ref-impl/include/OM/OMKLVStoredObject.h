@@ -258,6 +258,8 @@ public:
                     const OMByte* buffer,
                     const OMUInt32& bufferSize);
 
+  static size_t berEncodedSize(const OMUInt64 i);
+
   static void berEncode(OMByte* berValue,
                         size_t berValueBufferSize,
                         OMUInt32& berValueSize,
