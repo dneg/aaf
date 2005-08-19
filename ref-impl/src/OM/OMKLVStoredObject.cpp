@@ -146,7 +146,7 @@ OMStoredObject* OMKLVStoredObject::create(const wchar_t* /* name */)
   //   @parm The name of the existing <c OMKLVStoredObject>.
   //   @rdesc The existing <c OMKLVStoredObject> contained by this
   //          <c OMKLVStoredObject>.
-OMStoredObject* OMKLVStoredObject::open(const wchar_t* name)
+OMStoredObject* OMKLVStoredObject::open(const wchar_t* /* name */)
 {
   TRACE("OMKLVStoredObject::open");
   OMStoredObject* result = new OMKLVStoredObject(_storage, _byteOrder);
