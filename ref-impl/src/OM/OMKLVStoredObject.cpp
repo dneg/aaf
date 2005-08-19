@@ -911,6 +911,7 @@ void OMKLVStoredObject::restore(OMDataVector& property,
   OMByte* value = new OMByte[elementSize];
   ASSERT("Valid heap pointer", value != 0);
 
+  property.clear();
   OMUInt32 elementCount = externalSize / elementSize;
 
   for (OMUInt32 i = 0; i < elementCount; i++) {
@@ -955,6 +956,7 @@ void OMKLVStoredObject::restore(OMDataSet& property,
   OMByte* value = new OMByte[elementSize];
   ASSERT("Valid heap pointer", value != 0);
 
+  property.clear();
   OMUInt32 elementCount = externalSize / elementSize;
 
   for (OMUInt32 i = 0; i < elementCount; i++) {
