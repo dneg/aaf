@@ -47,6 +47,12 @@ public:
     // @cmember Destructor.
   virtual ~OMMXFStorage(void);
 
+    // @cmember Set the operational pattern to <p pattern>.
+  virtual void setOperationalPattern(const OMObjectIdentification& pattern);
+
+    // @cmember Get the operational pattern.
+  virtual OMObjectIdentification operationalPattern(void) const;
+
   struct ObjectDirectoryEntry {
     OMStorable* _object;
     OMUInt64 _offset;
@@ -67,6 +73,7 @@ public:
 private:
   // @access Private members.
 
+  OMObjectIdentification _operationalPattern;
   ObjectDirectory* _instanceIdToObject;
   ObjectSet* _objectToInstanceId;
 
