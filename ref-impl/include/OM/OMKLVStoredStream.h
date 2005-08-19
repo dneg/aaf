@@ -26,7 +26,7 @@
 
 #include "OMStoredStream.h"
 
-class OMRawStorage;
+class OMMXFStorage;
 
   // @class Implementation of <c OMStoredStream> for
   //        SMPTE (Society of Motion Picture and Television Engineers)
@@ -38,7 +38,7 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMKLVStoredStream(OMRawStorage* store);
+  OMKLVStoredStream(OMMXFStorage* store, OMUInt32 sid);
 
     // @cmember Destructor.
   ~OMKLVStoredStream(void);
@@ -84,6 +84,8 @@ public:
     // @cmember Close this <c OMXMLStoredStream>.
   virtual void close(void);
 
+  virtual OMUInt32 streamIdentification(void) const;
+
     // @cmember Set the label to <p label>.
   virtual void setLabel(const OMKLVKey& label);
 
@@ -113,7 +115,8 @@ private:
   OMKLVKey _label;
   OMUInt32 _blockSize;
   OMUInt64 _fileOffset;
-  OMRawStorage* _store;
+  OMMXFStorage* _store;
+  OMUInt32 _sid;
   OMUInt64 _position;
 
 };
