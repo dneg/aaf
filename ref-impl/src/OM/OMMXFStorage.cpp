@@ -157,6 +157,7 @@ void OMMXFStorage::writeHeaderPartition(void)
   OMUInt64 headerByteCount = bodyPartitionOffset - currentPosition;
   definition(headerByteCount, FUT_HEADERBYTECOUNT);
   fixup(FUT_HEADERBYTECOUNT);
+  definition(0, FUT_HEADERBYTECOUNT);
 }
 
 void OMMXFStorage::writeBodyPartition(void)
@@ -172,7 +173,6 @@ void OMMXFStorage::writeBodyPartition(void)
   writePartition(ClosedBodyPartitionPackKey, KAGSize, reorderBytes);
   OMUInt64 currentPosition = position();
   fillAlignV(currentPosition, KAGSize);
-  definition(0, FUT_HEADERBYTECOUNT);
 }
 
 void OMMXFStorage::writeFooterPartition(void)
@@ -186,7 +186,6 @@ void OMMXFStorage::writeFooterPartition(void)
   }
   OMUInt64 footer = position();
   writePartition(ClosedFooterPartitionPackKey, KAGSize, reorderBytes);
-  definition(0, FUT_HEADERBYTECOUNT);
   definition(footer, FUT_FOOTER);
 
   fixup();
