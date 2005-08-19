@@ -799,13 +799,13 @@ void OMMXFStorage::berEncode(OMByte* berValueBuffer,
   }
 }
 
-void OMMXFStorage::readPartition(OMUInt32& bodySID,
+void OMMXFStorage::readPartition(OMUInt64 ANAME(length),
+                                 OMUInt32& bodySID,
                                  OMUInt32& indexSID,
                                  OMUInt32& KAGSize)
 {
   TRACE("OMMXFStorage::readPartition");
 
-  readKLVLength();
   OMUInt16 majorVersion;
   read(majorVersion, _reorderBytes);
   OMUInt16 minorVersion;
@@ -830,6 +830,8 @@ void OMMXFStorage::readPartition(OMUInt32& bodySID,
   read(elementCount, _reorderBytes);
   OMUInt32 elementSize;
   read(elementSize, _reorderBytes);
+  ASSERT("Consistent length",
+         length == fixedPartitionSize + (elementCount * elementSize));
   OMKLVKey essenceContainer;
   for (OMUInt32 i = 0; i < elementCount; i++) {
     readKLVKey(essenceContainer);
@@ -1831,7 +1833,7 @@ void OMMXFStorage::restoreStreams(void)
       markMetadataEnd(keyPosition);
       markIndexEnd(keyPosition);
       markEssenceSegmentEnd(keyPosition);
-      readPartition(bodySID, indexSID, gridSize);
+      readPartition(length, bodySID, indexSID, gridSize);
     } else if (k == RandomIndexMetadataKey) {
       markMetadataEnd(keyPosition);
       markIndexEnd(keyPosition);
@@ -1899,7 +1901,8 @@ void OMMXFStorage::restoreStreams(void)
                              essenceKey,
                              gridSize);
       }
-      readPartition(bodySID, indexSID, gridSize);
+      OMUInt64 partitionLength = readKLVLength();
+      readPartition(partitionLength, bodySID, indexSID, gridSize);
     } else if (isIndex(k)) {
       indexLength = readKLVLength();
       indexStart = position();
