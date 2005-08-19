@@ -1882,6 +1882,11 @@ void OMKLVStoredObject::writePrimerPack(OMRawStorage* store,
   fill(store, currentPosition, KAGSize);
 }
 
+  // @mfunc Write fill so that the next byte to be written is the
+  //        first byte of a page <p KAGSize> bytes in size.
+  //   @parm The <c OMRawStorage> on which to write.
+  //   @parm The current position. 
+  //   @parm The page/KAG size.
 void OMKLVStoredObject::fill(OMRawStorage* store,
                              const OMUInt64& currentPosition,
                              const OMUInt32& KAGSize)
@@ -1962,6 +1967,10 @@ void OMKLVStoredObject::writeBerLength(OMRawStorage* store,
   POSTCONDITION("All bytes written", x == (lengthSize + 1));
 }
 
+  // @mfunc Write a fill key, a BER encoded length and
+  //        <p length> bytes of filler.
+  //   @parm The <c OMRawStorage> on which to write.
+  //   @parm The number of bytes of fill to write.
 void OMKLVStoredObject::writeKLVFill(OMRawStorage* store,
                                      const OMUInt64& length)
 {
