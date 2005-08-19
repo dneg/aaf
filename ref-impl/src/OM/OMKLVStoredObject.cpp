@@ -525,10 +525,62 @@ void OMKLVStoredObject::save(const OMDataVector& property)
   delete [] buffer;
 }
 
-void OMKLVStoredObject::save(const OMDataSet& /* property */)
+void OMKLVStoredObject::save(const OMDataSet& property)
 {
   TRACE("OMKLVStoredObject::save(OMDataSet)");
-  ASSERT("Unimplemented code not reached", false);
+
+  const OMType* propertyType = property.type();
+  ASSERT("Valid property type", propertyType != 0);
+  const OMSetType* st = dynamic_cast<const OMSetType*>(propertyType);
+  ASSERT("Correct type", st != 0);
+  OMType* elementType = st->elementType();
+  ASSERT("Fixed size elements", elementType->isFixedSize());
+  OMUInt32 elementSize = elementType->externalSize();
+  OMUInt32 elementCount = property.count();
+
+    // Allocate buffer for one element
+  OMByte* buffer = new OMByte[elementSize];
+  ASSERT("Valid heap pointer", buffer != 0);
+
+  // size
+  // Doh! 32-bit size and count but 16-bit property size
+  OMUInt64 size = elementSize * elementCount;
+  // ASSERT("Valid size"); // tjb
+  OMPropertySize propertySize = static_cast<OMPropertySize>(size);
+  propertySize = propertySize + sizeof(OMUInt32) + sizeof(OMUInt32);
+  _storage->write(propertySize, _reorderBytes);
+
+  // element count
+  _storage->write(elementCount, _reorderBytes);
+
+  // element size
+  _storage->write(elementSize, _reorderBytes);
+
+  OMDataContainerIterator* it = property.createIterator();
+  while (++(*it)) {
+
+    // Get a pointer to the element
+    const OMByte* bits = it->currentElement();
+
+
+    // Externalize element
+    elementType->externalize(bits,
+                             elementSize,
+                             buffer,
+                             elementSize,
+                             hostByteOrder());
+
+    // Reorder element
+    if (_reorderBytes) {
+      elementType->reorder(buffer, elementSize);
+    }
+
+    // value
+    _storage->write(buffer, elementSize);
+
+  }
+  delete it;
+  delete [] buffer;
 }
 
   // @mfunc Save the <c OMStrongReference> <p singleton> in this
@@ -866,11 +918,48 @@ void OMKLVStoredObject::restore(OMDataVector& property,
   delete [] buffer;
 }
 
-void OMKLVStoredObject::restore(OMDataSet& /* property */,
-                                size_t /* externalSize */)
+void OMKLVStoredObject::restore(OMDataSet& property,
+                                size_t externalSize)
 {
   TRACE("OMKLVStoredObject::restore(OMDataSet)");
-  ASSERT("Unimplemented code not reached", false);
+
+  const OMType* propertyType = property.type();
+  ASSERT("Valid property type", propertyType != 0);
+  const OMSetType* st = dynamic_cast<const OMSetType*>(propertyType);
+  ASSERT("Correct type", st != 0);
+  OMType* elementType = st->elementType();
+  ASSERT("Fixed size elements", elementType->isFixedSize());
+  OMUInt32 elementSize = elementType->externalSize();
+  ASSERT("Consistent element size", elementSize = property.elementSize());
+
+  // Allocate buffer for one element
+  OMByte* buffer = new OMByte[elementSize];
+  ASSERT("Valid heap pointer", buffer != 0);
+  OMByte* value = new OMByte[elementSize];
+  ASSERT("Valid heap pointer", value != 0);
+
+  OMUInt32 elementCount = externalSize / elementSize;
+
+  for (OMUInt32 i = 0; i < elementCount; i++) {
+
+    // Read one element
+    _storage->read(buffer, elementSize);
+
+    // Reorder element
+    if (_reorderBytes) {
+      elementType->reorder(buffer, elementSize);
+    }
+
+    // Internalize element
+    elementType->internalize(buffer,
+                             elementSize,
+                             value,
+                             elementSize,
+                             hostByteOrder());
+    property.insert(value);
+  }
+  delete [] buffer;
+  delete [] value;
 }
 
   // @mfunc Restore the <c OMStrongReference> <p singleton> into this
@@ -1083,6 +1172,26 @@ OMUInt64 OMKLVStoredObject::length(const OMPropertySet& properties) const
         length = length + sizeof(OMUInt32) + sizeof(OMUInt32);
         break;
       }
+      case SF_DATA_SET: {
+        OMDataSet* ds = dynamic_cast<OMDataSet*>(p);
+        ASSERT("Correct type", ds != 0);
+        OMDataSet& property = *ds;
+        const OMType* type = property.type();
+        ASSERT("Valid property type", type != 0);
+        const OMSetType* st = dynamic_cast<const OMSetType*>(type);
+        ASSERT("Correct type", st != 0);
+        OMType* et = st->elementType();
+        ASSERT("Fixed size elements", et->isFixedSize());
+        OMUInt32 elementSize = et->externalSize();
+        OMUInt32 elementCount = property.count();
+        // Doh! 32-bit size and count but 16-bit property size
+        OMUInt64 size = elementSize * elementCount;
+        // ASSERT("Valid size"); // tjb
+        OMPropertySize s = static_cast<OMPropertySize>(size);
+        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize) + s;
+        length = length + sizeof(OMUInt32) + sizeof(OMUInt32);
+        break;
+      }
      case SF_STRONG_OBJECT_REFERENCE: {
         length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
                         + sizeof(OMUniqueObjectIdentification);
@@ -1172,6 +1281,12 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         break;
       }
       case SF_DATA_VECTOR: {
+        OMPropertyId id = p->propertyId();
+        _storage->write(id, _reorderBytes);
+        p->save();
+        break;
+      }
+      case SF_DATA_SET: {
         OMPropertyId id = p->propertyId();
         _storage->write(id, _reorderBytes);
         p->save();
@@ -1418,6 +1533,20 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
       size_t externalSize = length - (sizeof(OMUInt32) + sizeof(OMUInt32));
       ASSERT("Consistent size", externalSize == entryCount * entrySize);
       restore(*dv, externalSize);
+      p->setPresent();
+      break;
+    }
+    case SF_DATA_SET: {
+      // p->restore(length);
+      OMDataSet* ds = dynamic_cast<OMDataSet*>(p);
+      ASSERT("Correct type", ds != 0);
+      OMUInt32 entryCount;
+      _storage->read(entryCount, _reorderBytes);
+      OMUInt32 entrySize;
+      _storage->read(entrySize, _reorderBytes);
+      size_t externalSize = length - (sizeof(OMUInt32) + sizeof(OMUInt32));
+      ASSERT("Consistent size", externalSize == entryCount * entrySize);
+      restore(*ds, externalSize);
       p->setPresent();
       break;
     }
