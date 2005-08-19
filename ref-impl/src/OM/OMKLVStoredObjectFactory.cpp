@@ -1,21 +1,19 @@
 //=---------------------------------------------------------------------=
 //
-// $Id$ $Name$
-//
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-//
+// 
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-//
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// 
+// The Original Code of this file is Copyright 1998-2001, Licensor of the
 // AAF Association.
-//
+// 
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -31,16 +29,13 @@
 
   // @mfunc Constructor.
 OMKLVStoredObjectFactory::OMKLVStoredObjectFactory(
-                                 const OMStoredObjectEncoding& encoding,
-                                 const OMUniqueObjectIdentification& signature,
-                                 const wchar_t* name,
-                                 const wchar_t* description)
-: OMStoredObjectFactory(encoding, signature, name, description)
+                                        const OMStoredObjectEncoding& encoding,
+                                        const wchar_t* name)
+: OMStoredObjectFactory(encoding, name)
 {
   TRACE("OMKLVStoredObjectFactory::OMKLVStoredObjectFactory");
 
   PRECONDITION("Valid name", validWideString(name));
-  PRECONDITION("Valid name", validWideString(description));
   PRECONDITION("Valid encoding", encoding != nullOMStoredObjectEncoding);
 }
 
@@ -230,8 +225,7 @@ bool OMKLVStoredObjectFactory::compatibleNamedFile(
   // @mfunc Perform any necessary actions when the file
   //        contained in <p fileName> is closed.
   //   @parm The file name.
-void OMKLVStoredObjectFactory::close(const wchar_t* /* fileName */,
-                                     bool /* isWritable */)
+void OMKLVStoredObjectFactory::close(const wchar_t* /* fileName */)
 {
   TRACE("OMKLVStoredObjectFactory::close");
   ASSERT("Unimplemented code not reached", false);
@@ -240,8 +234,7 @@ void OMKLVStoredObjectFactory::close(const wchar_t* /* fileName */,
   // @mfunc Perform any necessary actions when the file
   //        contained in <p rawStorage> is closed.
   //   @parm The <c OMRawStorage>
-void OMKLVStoredObjectFactory::close(OMRawStorage* /* rawStorage */,
-                                     bool /* isWritable */)
+void OMKLVStoredObjectFactory::close(OMRawStorage* /* rawStorage */)
 {
   TRACE("OMKLVStoredObjectFactory::close");
   ASSERT("Unimplemented code not reached", false);
