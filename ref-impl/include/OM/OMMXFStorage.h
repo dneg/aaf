@@ -371,7 +371,7 @@ public:
 
   virtual void fixupReference(OMUInt64 patchOffset, OMUInt64 patchValue);
 
-  virtual void restoreObjectDirectory(void);
+  virtual void restoreObjectDirectory(OMUInt64 headerOffset);
 
   virtual void setObjectDirectoryOffset(OMUInt64 objectDirectoryOffset);
 
