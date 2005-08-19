@@ -250,7 +250,6 @@ public:
   virtual OMUInt64 length(const OMPropertySet& properties) const;
   virtual void flatSave(const OMPropertySet& properties) const;
   virtual void deepSave(const OMPropertySet& properties) const;
-  virtual void streamSave(const OMPropertySet& properties) const;
 
   virtual void referenceSave(OMStorable* object, OMPropertyId pid) const;
 
