@@ -1299,21 +1299,19 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
     ASSERT("Valid property", p != 0);
     ASSERT("Property has a definition", p->definition() != 0);
     if (!p->isOptional() || p->isPresent()) {
+      OMPropertyId id = p->propertyId();
       switch (p->storedForm()) {
       case SF_DATA: {
-        OMPropertyId id = p->propertyId();
         _storage->write(id, _reorderBytes);
         p->save();
         break;
       }
       case SF_DATA_VECTOR: {
-        OMPropertyId id = p->propertyId();
         _storage->write(id, _reorderBytes);
         p->save();
         break;
       }
       case SF_DATA_SET: {
-        OMPropertyId id = p->propertyId();
         _storage->write(id, _reorderBytes);
         p->save();
         break;
@@ -1324,12 +1322,10 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         OMStrongObjectReference& r = sr->reference();
         OMStorable* object = r.getValue();
         ASSERT("Valid object", object != 0);
-        OMPropertyId pid = p->propertyId();
-        referenceSave(object, pid);
+        referenceSave(object, id);
         break;
       }
       case SF_STRONG_OBJECT_REFERENCE_VECTOR: {
-        OMPropertyId id = p->propertyId();
         _storage->write(id, _reorderBytes);
         OMStrongReferenceVector* v = dynamic_cast<OMStrongReferenceVector*>(p);
         ASSERT("Valid type", v != 0);
@@ -1355,7 +1351,6 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         break;
       }
       case SF_STRONG_OBJECT_REFERENCE_SET: {
-        OMPropertyId id = p->propertyId();
         _storage->write(id, _reorderBytes);
         OMStrongReferenceSet* s = dynamic_cast<OMStrongReferenceSet*>(p);
         ASSERT("Valid type", s != 0);
@@ -1386,12 +1381,10 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         OMWeakObjectReference& r = wr->reference();
         OMStorable* object = r.getValue();
         ASSERT("Valid object", object != 0);
-        OMPropertyId pid = p->propertyId();
-        referenceSave(object, pid);
+        referenceSave(object, id);
         break;
       }
       case SF_WEAK_OBJECT_REFERENCE_VECTOR: {
-        OMPropertyId id = p->propertyId();
         _storage->write(id, _reorderBytes);
         OMWeakReferenceVector* v = dynamic_cast<OMWeakReferenceVector*>(p);
         ASSERT("Valid type", v != 0);
@@ -1417,7 +1410,6 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         break;
       }
       case SF_WEAK_OBJECT_REFERENCE_SET: {
-        OMPropertyId id = p->propertyId();
         _storage->write(id, _reorderBytes);
         OMWeakReferenceSet* s = dynamic_cast<OMWeakReferenceSet*>(p);
         ASSERT("Valid type", s != 0);
@@ -1443,7 +1435,6 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         break;
       }
       case SF_DATA_STREAM: {
-        OMPropertyId id = p->propertyId();
         OMDataStreamProperty* stream = dynamic_cast<OMDataStreamProperty*>(p);
         ASSERT("Valid type", stream != 0);
         _storage->write(id, _reorderBytes);
