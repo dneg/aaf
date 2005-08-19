@@ -228,12 +228,14 @@ void OMMXFStorage::writeBodyPartition(OMUInt32 bodySID,
   fillAlignV(currentPosition, KAGSize);
 }
 
-void OMMXFStorage::writeFooterPartition(void)
+void OMMXFStorage::writeFooterPartition(OMUInt32 indexSID,
+                                        OMUInt32 KAGSize)
 {
   TRACE("OMMXFStorage::writeFooterPartition");
 
   setPosition(_fileSize + fillBufferZoneSize);
-  writePartition(ClosedFooterPartitionPackKey, 0, 0, defaultKAGSize);
+  // Essence (body) not allowed in footer
+  writePartition(ClosedFooterPartitionPackKey, 0, indexSID, KAGSize);
 }
 
 void OMMXFStorage::writePartition(const OMKLVKey& key,
