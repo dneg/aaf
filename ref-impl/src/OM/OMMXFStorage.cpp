@@ -552,11 +552,12 @@ size_t OMMXFStorage::berEncodedSize(const OMUInt64 i)
 {
   TRACE("OMMXFStorage::berEncodedSize");
 
+  const OMUInt64 mask = ((OMUInt64)0xff << 56);
   size_t result;
   if (i != 0) {
     result = sizeof(i);
     OMUInt64 v = i;
-    while (((v & 0xff00000000000000) >> 56) == 0) {
+    while (((v & mask) >> 56) == 0) {
       v = v << 8;
       result = result - 1;
     }
@@ -597,8 +598,9 @@ void OMMXFStorage::berEncode(OMByte* berValueBuffer,
   for (i = 0; i < skip; i++) {
     v = v << 8;
   }
+  const OMUInt64 mask = ((OMUInt64)0xff << 56);
   for (i = i; i < sizeof(OMUInt64); i++) {
-    b = (OMByte)((v & 0xff00000000000000) >> 56);
+    b = (OMByte)((v & mask) >> 56);
     *p++ = b;
     v = v << 8;
   }
