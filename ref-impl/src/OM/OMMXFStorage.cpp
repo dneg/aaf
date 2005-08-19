@@ -354,6 +354,17 @@ void OMMXFStorage::write(const OMUniqueObjectIdentification& id,
                                     x == sizeof(OMUniqueObjectIdentification));
 }
 
+void OMMXFStorage::write(const OMKLVKey& key)
+{
+  TRACE("OMMXFStorage::write");
+
+  OMUInt32 x;
+  const OMByte* src = reinterpret_cast<const OMByte*>(&key);
+  write(src, sizeof(OMKLVKey), x);
+
+  POSTCONDITION("All bytes written", x == sizeof(OMKLVKey));
+}
+
 void OMMXFStorage::write(const OMByte* buffer, const OMUInt32& bufferSize)
 {
   TRACE("OMMXFStorage::write");
