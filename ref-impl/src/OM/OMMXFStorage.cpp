@@ -652,10 +652,8 @@ void OMMXFStorage::readHeaderPartition(void)
   readKLVLength();
   OMUInt16 majorVersion;
   read(majorVersion, _reorderBytes);
-  ASSERT("Expected major version", majorVersion == currentMajorVersion);
   OMUInt16 minorVersion;
   read(minorVersion, _reorderBytes);
-  ASSERT("Expected minor version", minorVersion == currentMinorVersion);
   OMUInt32 KAGSize;
   read(KAGSize, _reorderBytes);
   OMUInt64 thisPartition;
