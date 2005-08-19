@@ -1075,7 +1075,7 @@ void OMMXFStorage::skipLV(void) const
   skipV(length);
 }
 
-void OMMXFStorage::skipV(OMUInt64& length) const
+void OMMXFStorage::skipV(OMUInt64 length) const
 {
   TRACE("OMMXFStorage::skipV");
 
