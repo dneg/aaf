@@ -250,6 +250,10 @@ public:
 
   bool containsObject(const OMUniqueObjectIdentification& instanceId);
 
+  void resolve(const OMUniqueObjectIdentification& instanceId);
+
+  virtual void clearObjectDirectory(void);
+
   virtual void saveObjectDirectory(void);
 
   virtual void fixupReference(OMUInt64 patchOffset, OMUInt64 patchValue);
