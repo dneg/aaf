@@ -2184,30 +2184,30 @@ void OMKLVStoredObject::writeMetaDictionary(const OMDictionary* dictionary)
                            properties = classDefinition->propertyDefinitions();
     while (++(*properties)) {
       OMObject* pdef = properties->currentObject();
+      ASSERT("Valid object", pdef != 0);
       OMPropertyDefinition* propertyDefinition =
                                      dynamic_cast<OMPropertyDefinition*>(pdef);
       ASSERT("Object is correct type", propertyDefinition != 0);
       if (!propertyDefinition->isPredefined()) {
         OMUniqueObjectIdentification id = propertyDefinition->identification();
+        ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
         if (!extensionProperties.contains(id)) {
           // Add propertyDefinition to output set
           extensionProperties.insert(propertyDefinition->identification(),
                                      propertyDefinition);
 
           const OMType* typeDefinition = propertyDefinition->type();
-          // ASSERT("Valid type", typeDefinition != 0);
-          if (typeDefinition != 0) { // tjb - wtf ?
-            if (!typeDefinition->isPredefined()) {
-              if (!extensionTypes.contains(typeDefinition->identification())) {
-                //  Add type Definition to output set
-                extensionTypes.insert(typeDefinition->identification(),
-                                      typeDefinition);
+          ASSERT("Valid type", typeDefinition != 0);
+          if (!typeDefinition->isPredefined()) {
+            if (!extensionTypes.contains(typeDefinition->identification())) {
+              //  Add type Definition to output set
+              extensionTypes.insert(typeDefinition->identification(),
+                                    typeDefinition);
 
-                // Process (recursively) dependendant types
-                //
-                TypeCollector tc(extensionTypes);
-                typeDefinition->accept(tc);
-              }
+              // Process (recursively) dependendant types
+              //
+              TypeCollector tc(extensionTypes);
+              typeDefinition->accept(tc);
             }
           }
         }
@@ -2270,6 +2270,8 @@ void OMKLVStoredObject::writeClassDefinition(const OMClassDefinition* cd)
 {
   TRACE(" OMKLVStoredObject::writeClassDefinition");
 
+  ASSERT("Valid class definition", cd != 0);
+
   // length
   OMUInt64 p = _storage->reserve(sizeof(OMUInt16));
 
@@ -2279,6 +2281,7 @@ void OMKLVStoredObject::writeClassDefinition(const OMClassDefinition* cd)
 
   // identification (key)
   OMUniqueObjectIdentification id = cd->identification();
+  ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
   OMKLVKey k;
   convert(k, id);
   _storage->writeKLVKey(k);
@@ -2287,8 +2290,9 @@ void OMKLVStoredObject::writeClassDefinition(const OMClassDefinition* cd)
   const wchar_t* className = cd->name();
   write(className);
 
-  // description (string)
+  // description (string) [optional]
   if (cd->hasDescription()) {
+    // Present
     const wchar_t* classDescription = cd->description();
     ASSERT("Valid class description", classDescription != 0);
     write(classDescription);
@@ -2299,13 +2303,13 @@ void OMKLVStoredObject::writeClassDefinition(const OMClassDefinition* cd)
   }
 
   // parent (key)
+  // An extension cannot be a root
+  ASSERT("Class is not a root", !cd->hasParent());
   const OMClassDefinition* pc = cd->parent();
-  if (pc != 0) {
-    id = pc->identification();
-    convert(k, id);
-  } else {
-    memset(&k, 0, sizeof(OMKLVKey)); // tjb - or loop ?
-  }
+  ASSERT("Valid parent class definition", pc != 0);
+  id = pc->identification();
+  ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
+  convert(k, id);
   _storage->writeKLVKey(k);
 
   // properties [not in this flat dictionary]
@@ -2327,6 +2331,8 @@ void OMKLVStoredObject::writePropertyDefinition(const OMPropertyDefinition* pd)
 {
   TRACE("OMKLVStoredObject::writePropertyDefinition");
 
+  ASSERT("Valid property definition", pd != 0);
+
   // length
   OMUInt64 p = _storage->reserve(sizeof(OMUInt16));
 
@@ -2336,6 +2342,7 @@ void OMKLVStoredObject::writePropertyDefinition(const OMPropertyDefinition* pd)
 
   // identification (key)
   OMUniqueObjectIdentification id = pd->identification();
+  ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
   OMKLVKey k;
   convert(k, id);
   _storage->writeKLVKey(k);
@@ -2357,12 +2364,10 @@ void OMKLVStoredObject::writePropertyDefinition(const OMPropertyDefinition* pd)
 
   // type (key)
   const OMType* t = pd->type();
-  if (t != 0) { // tjb - wtf
-    id = t->identification();
-    convert(k, id);
-  } else {
-    memset(&k, 0, sizeof(OMKLVKey));
-  }
+  ASSERT("Valid type", t != 0);
+  id = t->identification();
+  ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
+  convert(k, id);
   _storage->writeKLVKey(k);
 
   // isRequired (boolean)
@@ -2371,7 +2376,10 @@ void OMKLVStoredObject::writePropertyDefinition(const OMPropertyDefinition* pd)
   // localIdentification (UInt16) [not here - already in primer]
 
   // member of (key) [not in other (unflattened) dictionaries]
-  memset(&id, 0, sizeof(OMUniqueObjectIdentification)); // tjb
+  OMClassDefinition* cd = pd->containingClass();
+  ASSERT("Valid class definition", cd != 0);
+  id = cd->identification();
+  ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
   convert(k, id);
   _storage->writeKLVKey(k);
 
@@ -2389,6 +2397,8 @@ void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
 {
   TRACE("OMKLVStoredObject::writeTypeDefinition");
 
+  ASSERT("Valid type definition", td != 0);
+
   // length
   OMUInt64 p = _storage->reserve(sizeof(OMUInt16));
 
@@ -2398,6 +2408,7 @@ void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
 
   // identification (key)
   OMUniqueObjectIdentification id = td->identification();
+  ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
   OMKLVKey k;
   convert(k, id);
   _storage->writeKLVKey(k);
@@ -2425,8 +2436,8 @@ void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
     OMUInt8 sz = it->size();
     _storage->write(sz);
     // IsSigned
-    bool isSigned = false;
-    write(isSigned);
+    bool sign = it->isSigned();
+    write(sign);
     break;
     }
   case OMType::OMTTCharacter: {
@@ -2441,6 +2452,7 @@ void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
     ASSERT("Correct type", rt != 0);
     // ReferencedType
     OMUniqueObjectIdentification id = rt->referencedType();
+    ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
     OMKLVKey k;
     convert(k, id);
     _storage->writeKLVKey(k);
@@ -2452,6 +2464,7 @@ void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
     ASSERT("Correct type", rt != 0);
     // ReferencedType
     OMUniqueObjectIdentification id = rt->referencedType();
+    ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
     OMKLVKey k;
     convert(k, id);
     _storage->writeKLVKey(k);
@@ -2461,6 +2474,7 @@ void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
     // TargetPath
     for (OMUInt32 i = 0; i < count; i++) {
       const OMUniqueObjectIdentification& element = rt->targetPathElement(i);
+      ASSERT("Valid identification", element != nullOMUniqueObjectIdentification);
       convert(k, element);
       _storage->writeKLVKey(k);
     }
@@ -2471,7 +2485,9 @@ void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
     ASSERT("Correct type", rt != 0);
     // RenamedType
     OMType* renType = rt->renamedType();
+    ASSERT("Valid renamed type", renType != 0);
     OMUniqueObjectIdentification id = renType->identification();
+    ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
     OMKLVKey k;
     convert(k, id);
     _storage->writeKLVKey(k);
@@ -2482,7 +2498,9 @@ void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
     ASSERT("Correct type", et != 0);
     // ElementType
     OMType* elType = et->elementType();
+    ASSERT("Valid element type", elType != 0);
     OMUniqueObjectIdentification id = elType->identification();
+    ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
     OMKLVKey k;
     convert(k, id);
     _storage->writeKLVKey(k);
@@ -2505,7 +2523,9 @@ void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
     ASSERT("Correct type", at != 0);
     // ElementType
     OMType* elType = at->elementType();
+    ASSERT("Valid element type", elType != 0);
     OMUniqueObjectIdentification id = elType->identification();
+    ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
     OMKLVKey k;
     convert(k, id);
     _storage->writeKLVKey(k);
@@ -2519,7 +2539,9 @@ void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
     ASSERT("Correct type", at != 0);
     // ElementType
     OMType* elType = at->elementType();
+    ASSERT("Valid element type", elType != 0);
     OMUniqueObjectIdentification id = elType->identification();
+    ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
     OMKLVKey k;
     convert(k, id);
     _storage->writeKLVKey(k);
@@ -2530,7 +2552,9 @@ void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
     ASSERT("Correct type", st != 0);
     // ElementType
     OMType* elType = st->elementType();
+    ASSERT("Valid element type", elType != 0);
     OMUniqueObjectIdentification id = elType->identification();
+    ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
     OMKLVKey k;
     convert(k, id);
     _storage->writeKLVKey(k);
@@ -2547,6 +2571,7 @@ void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
       // MemberType
       OMType* mType = member._type;
       OMUniqueObjectIdentification id = mType->identification();
+      ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
       OMKLVKey k;
       convert(k, id);
       _storage->writeKLVKey(k);
@@ -2567,7 +2592,9 @@ void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
     ASSERT("Correct type", st != 0);
     // ElementType
     OMType* elType = st->elementType();
+    ASSERT("Valid element type", elType != 0);
     OMUniqueObjectIdentification id = elType->identification();
+    ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
     OMKLVKey k;
     convert(k, id);
     _storage->writeKLVKey(k);
@@ -2587,6 +2614,7 @@ void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
       write(eName);
       // ElementValue
       OMUniqueObjectIdentification id = element._value;
+      ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
       OMKLVKey k;
       convert(k, id);
       _storage->writeKLVKey(k);
