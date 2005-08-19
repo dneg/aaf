@@ -261,7 +261,7 @@ public:
                              const OMUInt64& length);
 
     // @cmember Write a fill key, a BER encoded length and
-    //          <p length> bytes of filler.
+    //          <p length> bytes of fill.
   static void writeKLVFill(OMRawStorage* store, const OMUInt64& length);
 
   static void write(OMRawStorage* store, const OMUInt8& i);
