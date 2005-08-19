@@ -1935,6 +1935,15 @@ void OMMXFStorage::restoreStreams(void)
   setPosition(footer + header);
   current = footer + header;
   readOuterKLVKey(k);
+#if 1
+  if (!isFooter(k)) {
+    OMUInt64 last = size();
+    footer = (last & ~(OMUInt64)0xffffffff) + footer;
+    setPosition(footer + header);
+    current = footer + header;
+    readOuterKLVKey(k);
+  }
+#endif
   ASSERT("Read footer", isFooter(k));
   length = readKLVLength();
   readPartition(length, bodySID, indexSID, gridSize, previous, here, footer);
