@@ -271,11 +271,11 @@ private:
     // @cmember The root storage of <p file>.
   static OMKLVStoredObject* root(const OMFile* file);
 
-    // @cmember Constructor.
-  OMKLVStoredObject(OMMXFStorage* s, OMByteOrder byteOrder);
-
     // @cmember The <c OMKLVStoredStream> associated with <p stream>
   static OMKLVStoredStream* mxfStream(const OMDataStreamProperty* stream);
+
+    // @cmember Constructor.
+  OMKLVStoredObject(OMMXFStorage* s, OMByteOrder byteOrder);
 
   OMMXFStorage* _storage;
   OMByteOrder _byteOrder;
