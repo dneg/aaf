@@ -328,6 +328,21 @@ public:
   static OMSet<OMDataStream*, OMKLVKey>* streamToStreamId(void);
   static OMSet<OMKLVKey, OMDataStream*>* streamIdToStream(void);
 
+  OMUInt64 save(OMSet<OMUniqueObjectIdentification,
+                      ObjectDirectoryEntry>* objectTable,
+                const OMUniqueObjectIdentification& root);
+
+  void restore(OMSet<OMUniqueObjectIdentification,
+                     ObjectDirectoryEntry>* objectTable);
+
+  OMUInt64 saveObjectDirectoryReference(
+                                       const OMUniqueObjectIdentification& id);
+
+  void fixupObjectDirectoryReference(OMUInt64 patchOffset,
+                                     OMUInt64 patchValue);
+
+  OMUInt64 restoreObjectDirectoryReference(OMUniqueObjectIdentification& id);
+
   static void convert(OMKLVKey& key, const OMUniqueObjectIdentification& id);
 
   static void convert(OMUniqueObjectIdentification& id, const OMKLVKey& key);
@@ -345,7 +360,8 @@ private:
   OMRawStorage* _storage;
   OMByteOrder _byteOrder;
   bool _reorderBytes;
-
+  OMUInt64 _objectDirectory;          // offset of object directory
+  OMUInt64 _objectDirectoryReference; // offset object directory reference
 };
 
 #endif
