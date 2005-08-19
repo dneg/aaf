@@ -956,7 +956,8 @@ void OMKLVStoredObject::restore(OMDataVector& property,
   OMType* elementType = at->elementType();
   ASSERT("Fixed size elements", elementType->isFixedSize());
   OMUInt32 elementSize = elementType->externalSize();
-  ASSERT("Consistent element size", elementSize = property.elementSize());
+
+  ASSERT("Consistent element size", elementSize == property.elementSize());
 
   // Allocate buffer for one element
   OMByte* buffer = new OMByte[elementSize];
@@ -1011,7 +1012,7 @@ void OMKLVStoredObject::restore(OMDataSet& property,
   OMType* elementType = st->elementType();
   ASSERT("Fixed size elements", elementType->isFixedSize());
   OMUInt32 elementSize = elementType->externalSize();
-  ASSERT("Consistent element size", elementSize = property.elementSize());
+  ASSERT("Consistent element size", elementSize == property.elementSize());
 
   // Allocate buffer for one element
   OMByte* buffer = new OMByte[elementSize];
