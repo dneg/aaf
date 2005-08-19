@@ -226,6 +226,8 @@ public:
 
   static bool isFooter(const OMKLVKey& k);
 
+  static bool isPartition(const OMKLVKey& k);
+
   static bool isIndex(const OMKLVKey& k);
 
   static bool isEssence(const OMKLVKey& k);
