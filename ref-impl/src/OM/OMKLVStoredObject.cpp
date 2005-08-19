@@ -54,6 +54,7 @@
 
 #define USETAGTABLE 1
 //#define INSTANCEID_DEBUG 1
+//#define MAP_CLASSIDS 1
 
 #if defined(INSTANCEID_DEBUG)
 #include <iostream>
@@ -2534,11 +2535,17 @@ OMKLVStoredObject::restoreObjectDirectoryReference(
   return offset;
 }
 
+  // @mfunc Convert the <c OMUniqueObjectIdentification> id
+  //        into the <c OMKLVKey> key.
+  //   @parm The resulting <c OMKLVKey>.
+  //   @parm The input <c OMUniqueObjectIdentification>.
 void OMKLVStoredObject::convert(OMKLVKey& key,
                                 const OMUniqueObjectIdentification& id)
 {
   TRACE("OMKLVStoredObject::convert");
 
+  // Bottom half of key <- top half of id
+  //
   key.octet0  = id.Data4[0];
   key.octet1  = id.Data4[1];
   key.octet2  = id.Data4[2];
@@ -2548,6 +2555,8 @@ void OMKLVStoredObject::convert(OMKLVKey& key,
   key.octet6  = id.Data4[6];
   key.octet7  = id.Data4[7];
 
+  // Top half of key <- bottom half of id
+  //
   key.octet8  = (OMByte)((id.Data1 & 0xff000000) >> 24);
   key.octet9  = (OMByte)((id.Data1 & 0x00ff0000) >> 16);
   key.octet10 = (OMByte)((id.Data1 & 0x0000ff00) >>  8);
@@ -2559,14 +2568,27 @@ void OMKLVStoredObject::convert(OMKLVKey& key,
   key.octet14 = (OMByte)((id.Data3 & 0xff00) >> 8);
   key.octet15 = (OMByte)((id.Data3 & 0x00ff));
 
-//key.octet5  = 0x53; // tjb !!
+  // If id is an AAF class AUID, map it to a SMPTE 336M local set key
+  //
+#if defined(MAP_CLASSIDS)
+  OMByte classIdPrefix[] = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06};
+  if (memcmp(&key, &classIdPrefix, sizeof(classIdPrefix)) == 0) {
+    key.octet5  = 0x53;
+  }
+#endif
 }
 
+  // @mfunc Convert the <c OMKLVKey> key
+  //        into the <c OMUniqueObjectIdentification> id.
+  //   @parm The resulting <c OMUniqueObjectIdentification>.
+  //   @parm The input <c OMKLVKey>.
 void OMKLVStoredObject::convert(OMUniqueObjectIdentification& id,
                                 const OMKLVKey& key)
 {
   TRACE("OMKLVStoredObject::convert");
 
+  // Bottom half of id <- top half of key
+  //
   id.Data4[0] = key.octet0;
   id.Data4[1] = key.octet1;
   id.Data4[2] = key.octet2;
@@ -2576,6 +2598,8 @@ void OMKLVStoredObject::convert(OMUniqueObjectIdentification& id,
   id.Data4[6] = key.octet6;
   id.Data4[7] = key.octet7;
 
+  // Top half of id <- bottom half of key
+  //
   OMUInt32 d1 = 0;
   d1 = d1 + (key.octet8  << 24);
   d1 = d1 + (key.octet9  << 16);
@@ -2593,7 +2617,14 @@ void OMKLVStoredObject::convert(OMUniqueObjectIdentification& id,
   d3 = d3 + (key.octet15);
   id.Data3 = d3;
 
-  //key.octet5 = 0x06; // tjb !!
+  // If key is a SMPTE 336M local set key, map it to an AAF class AUID
+  //
+#if defined(MAP_CLASSIDS)
+  OMByte localSetPrefix[] = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x53};
+  if (memcmp(&key, &localSetPrefix, sizeof(localSetPrefix)) == 0) {
+    id.Data4[5] = 0x06;
+  }
+#endif
 }
 
 void OMKLVStoredObject::finalize(void)
