@@ -231,6 +231,7 @@ public:
   static void writeFooterPartition(OMRawStorage* store);
   static void writePartition(OMRawStorage* store,
                              const OMKLVKey& key,
+                             OMUInt32 KAGSize,
                              bool reorderBytes);
 
   static void writePrimerPack(OMRawStorage* store,
