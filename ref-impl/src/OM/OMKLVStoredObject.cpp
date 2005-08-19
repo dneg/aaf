@@ -1775,7 +1775,7 @@ void OMKLVStoredObject::writePartition(OMRawStorage* store,
   writeKLVKey(store, key);
   OMUInt64 sizeOfFixedPortion = 88;
   OMUInt64 length = sizeOfFixedPortion + (elementCount * elementSize);
-#if 0
+#if defined(BER9)
   writeKLVLength(store, length);
 #else
   writeBerLength(store, 3, length);
@@ -1888,7 +1888,11 @@ void OMKLVStoredObject::fill(OMRawStorage* store,
 {
   TRACE("OMKLVStoredObject::fill");
 
+#if defined(BER9)
   OMUInt64 minimumFill = sizeof(OMKLVKey) + sizeof(OMUInt64) + 1;
+#else
+  OMUInt64 minimumFill = sizeof(OMKLVKey) + 3 + 1;
+#endif
   OMUInt64 nextPage = (currentPosition / KAGSize) + 1;
   OMUInt64 remainder = (nextPage * KAGSize) - currentPosition;
   if (remainder < minimumFill) {
@@ -1968,7 +1972,7 @@ void OMKLVStoredObject::writeKLVFill(OMRawStorage* store,
      0x03, 0x01, 0x02, 0x10, 0x01, 0x00, 0x00, 0x00};
 
   writeKLVKey(store, fillKey);
-#if 0
+#if defined(BER9)
   writeKLVLength(store, length);
 #else
   writeBerLength(store, 3, length);
