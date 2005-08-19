@@ -1613,6 +1613,13 @@ void OMMXFStorage::saveStreams(void)
       setPosition(fillStart);
       writeKLVFill(fillSize - minimumFill);
 
+      // If we wrote index, fill in the index bye count
+      if (s->_label == IndexTableSegmentKey) {
+        OMUInt64 ibc = seg->_size + fillBufferZoneSize;
+        ibc = ibc + sizeof(OMKLVKey) + 8 + 1;
+        fixupReference(pos + sizeof(OMKLVKey) + 8 + 1 + 40, ibc);
+      }
+
       previous = seg->_origin;
     }
 
