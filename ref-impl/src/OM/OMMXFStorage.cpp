@@ -248,13 +248,13 @@ bool OMMXFStorage::isHeader(const OMKLVKey& k)
 bool OMMXFStorage::isBody(const OMKLVKey& k)
 {
   bool result;
-  if (memcmp(&OpenBodyPartitionKey, &k, sizeof(k)) == 0) {
+  if (memcmp(&OpenIncompleteBodyPartitionKey, &k, sizeof(k)) == 0) {
     result = true;
-  } else if (memcmp(&OpenCompleteBodyPartitionKey, &k, sizeof(k)) == 0) {
+  } else if (memcmp(&IncompleteBodyPartitionKey, &k, sizeof(k)) == 0) {
     result = true;
-  } else if (memcmp(&ClosedBodyPartitionKey, &k, sizeof(k)) == 0) {
+  } else if (memcmp(&OpenBodyPartitionKey, &k, sizeof(k)) == 0) {
     result = true;
-  } else if (memcmp(&ClosedCompleteBodyPartitionKey, &k, sizeof(k)) == 0) {
+  } else if (memcmp(&BodyPartitionKey, &k, sizeof(k)) == 0) {
     result = true;
   } else {
     result = false;
@@ -292,7 +292,7 @@ void OMMXFStorage::writeBodyPartition(OMUInt32 bodySID,
 {
   TRACE("OMMXFStorage::writeBodyPartition");
 
-  writePartition(ClosedCompleteBodyPartitionKey, bodySID, indexSID, KAGSize);
+  writePartition(BodyPartitionKey, bodySID, indexSID, KAGSize);
   OMUInt64 currentPosition = position();
   fillAlignV(currentPosition, KAGSize);
 }
