@@ -523,6 +523,47 @@ void OMMXFStorage::berEncode(OMByte* berValueBuffer,
   }
 }
 
+void OMMXFStorage::readPartition(OMUInt32& bodySID, OMUInt32& indexSID)
+{
+  TRACE("OMMXFStorage::readPartition");
+
+#if 0
+  OMKLVKey k;
+  readKLVKey(k);
+  k.octet14 = 0x02;
+#endif
+  readKLVLength();
+  OMUInt16 majorVersion;
+  read(majorVersion, _reorderBytes);
+  OMUInt16 minorVersion;
+  read(minorVersion, _reorderBytes);
+  OMUInt32 KAGSize;
+  read(KAGSize, _reorderBytes);
+  OMUInt64 thisPartition;
+  read(thisPartition, _reorderBytes);
+  OMUInt64 previousPartition;
+  read(previousPartition, _reorderBytes);
+  OMUInt64 footerPartition;
+  read(footerPartition, _reorderBytes);
+  OMUInt64 headerByteCount;
+  read(headerByteCount, _reorderBytes);
+  OMUInt64 indexByteCount;
+  read(indexByteCount, _reorderBytes);
+  read(indexSID, _reorderBytes);
+  OMUInt64 bodyOffset;
+  read(bodyOffset, _reorderBytes);
+  read(bodySID, _reorderBytes);
+  readKLVKey(_operationalPattern);
+  OMUInt32 elementCount;
+  read(elementCount, _reorderBytes);
+  OMUInt32 elementSize;
+  read(elementSize, _reorderBytes);
+  OMKLVKey essenceContainer;
+  for (OMUInt32 i = 0; i < elementCount; i++) {
+    readKLVKey(essenceContainer);
+  }
+}
+
 bool OMMXFStorage::readHeaderPartition(void)
 {
   TRACE("OMMXFStorage::readHeaderPartition");
