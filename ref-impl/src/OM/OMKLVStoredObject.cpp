@@ -2586,12 +2586,11 @@ void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
     OMUInt32 count = ot->elementCount();
     _storage->write(count, _reorderBytes);
     for (OMUInt32 i = 0; i < count; i++) {
-      const OMExtendibleEnumeratedType::Element element = ot->element(i);
       // ElementName
-      const wchar_t* eName = element._name;
+      const wchar_t* eName = ot->elementName(i);
       write(eName);
       // ElementValue
-      OMUniqueObjectIdentification id = element._value;
+      OMUniqueObjectIdentification id = ot->elementValue(i);
       ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
       OMKLVKey k;
       convert(k, id);
