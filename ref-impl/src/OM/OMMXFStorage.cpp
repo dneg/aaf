@@ -359,19 +359,21 @@ void OMMXFStorage::fillAlignK(const OMUInt64& currentPosition,
                               const OMUInt32& KAGSize)
 {
   TRACE("OMMXFStorage::fillAlignK");
+  PRECONDITION("Valid KAG sise", KAGSize > 0);
 
 #if defined(BER9)
   OMUInt64 minimumFill = sizeof(OMKLVKey) + sizeof(OMUInt64) + 1;
 #else
   OMUInt64 minimumFill = sizeof(OMKLVKey) + 3 + 1;
 #endif
-  OMUInt64 nextPage = (currentPosition / KAGSize) + 1;
-  OMUInt64 remainder = (nextPage * KAGSize) - currentPosition;
-  if (remainder < minimumFill) {
-    remainder = remainder + KAGSize;
-  }
-  remainder = remainder - minimumFill; // Subtract key and length of fill
-  writeKLVFill(remainder);
+  // K fill, L fill
+  OMUInt64 overhead = minimumFill;
+  OMUInt64 position = currentPosition + overhead;
+  OMUInt64 nextPage = (position / KAGSize) + 1;
+  OMUInt64 totalSize = (nextPage * KAGSize) - currentPosition;
+  ASSERT("Valid total size", totalSize >= overhead);
+  OMUInt64 length = totalSize - overhead;
+  writeKLVFill(length);
 }
 
   // @mfunc Write fill so that the next value is page aligned.
@@ -381,21 +383,22 @@ void OMMXFStorage::fillAlignV(const OMUInt64& currentPosition,
                               const OMUInt32& KAGSize)
 {
   TRACE("OMMXFStorage::fillAlignV");
+  PRECONDITION("Valid KAG sise", KAGSize > 0);
 
 #if defined(BER9)
   OMUInt64 minimumFill = sizeof(OMKLVKey) + sizeof(OMUInt64) + 1;
 #else
   OMUInt64 minimumFill = sizeof(OMKLVKey) + 3 + 1;
 #endif
-  OMUInt64 nextPage = (currentPosition / KAGSize) + 1;
-  OMUInt64 remainder = (nextPage * KAGSize) - currentPosition;
-  // Subtract key and length of triplet following this fill
-  remainder = remainder - (sizeof(OMKLVKey) + sizeof(OMUInt64) + 1);
-  if (remainder < minimumFill) {
-    remainder = remainder + KAGSize;
-  }
-  remainder = remainder - minimumFill; // Subtract key and length of fill
-  writeKLVFill(remainder);
+  // K fill, L fill, K next, L next
+//OMUInt64 overhead = minimumFill + minimumFill;
+  OMUInt64 overhead = minimumFill + (sizeof(OMKLVKey) + sizeof(OMUInt64) + 1);
+  OMUInt64 position = currentPosition + overhead;
+  OMUInt64 nextPage = (position / KAGSize) + 1;
+  OMUInt64 totalSize = (nextPage * KAGSize) - currentPosition;
+  ASSERT("Valid total size", totalSize >= overhead);
+  OMUInt64 length = totalSize - overhead;
+  writeKLVFill(length);
 }
 
 void OMMXFStorage::write(const OMByte* bytes,
