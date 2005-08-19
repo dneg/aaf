@@ -446,7 +446,7 @@ void OMMXFStorage::writeRandomIndex(void)
   OMUInt32 count = _partitions.count();
   for (size_t i = 0; i < count; i++) {
     Partition* p = _partitions.valueAt(i);
-    write(p->_sid, _reorderBytes);
+    write(p->_bodySID, _reorderBytes);
     write(p->_address, _reorderBytes);
   }
 
@@ -1926,7 +1926,7 @@ void OMMXFStorage::restoreStreams(void)
   p = new Partition;
   ASSERT("Valid heap pointer", p != 0);
   p->_address = current;
-  p->_sid = bodySID;
+  p->_bodySID = bodySID;
   p->_previous = previous;
   p->_indexSID = indexSID;
   _partitions.prepend(p);
@@ -1941,7 +1941,7 @@ void OMMXFStorage::restoreStreams(void)
   p = new Partition;
   ASSERT("Valid heap pointer", p != 0);
   p->_address = current;
-  p->_sid = bodySID;
+  p->_bodySID = bodySID;
   p->_previous = previous;
   p->_indexSID = indexSID;
   _partitions.append(p);
@@ -1956,7 +1956,7 @@ void OMMXFStorage::restoreStreams(void)
     p = new Partition;
     ASSERT("Valid heap pointer", p != 0);
     p->_address = current;
-    p->_sid = bodySID;
+    p->_bodySID = bodySID;
     p->_previous = previous;
     p->_indexSID = indexSID;
     _partitions.insertAt(p, 1); // After header
@@ -1990,7 +1990,7 @@ void OMMXFStorage::restoreStreams(void)
   for (size_t i = 0; i < count; i++) {
     p = _partitions.valueAt(i);
     bool needBody = false;
-    if (p->_sid != 0) {
+    if (p->_bodySID != 0) {
       needBody = true;
     }
     bool needIndex = false;
@@ -2653,7 +2653,7 @@ void OMMXFStorage::addPartition(OMUInt64 address,
   Partition* newPartition = new Partition;
   ASSERT("Valid heap pointer", newPartition != 0);
   newPartition->_address = address;
-  newPartition->_sid = bodySID;
+  newPartition->_bodySID = bodySID;
   _partitions.insertAt(newPartition, index);
 }
 
@@ -2664,7 +2664,7 @@ void OMMXFStorage::printPartitions(void)
   size_t count = _partitions.count();
   for (OMUInt32 i = 0; i < count; i++) {
     Partition* p = _partitions.valueAt(i);
-    omout << p->_sid;
+    omout << p->_bodySID;
     omout << " : ";
     omout << hex << setw(8) << p->_address;
     omout << endl;
