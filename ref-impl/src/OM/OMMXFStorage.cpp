@@ -473,6 +473,16 @@ void OMMXFStorage::readRandomIndex(OMUInt64 length)
   read(overallLength, _reorderBytes);
 }
 
+bool OMMXFStorage::findRandomIndex(OMUInt64 fileSize,
+                                   OMUInt64& indexPosition)
+{
+  TRACE("OMMXFStorage::findRandomIndex");
+
+  ASSERT("Unimplemented code not reached", false);
+  bool result = false;
+  return result;
+}
+
 bool OMMXFStorage::isRandomIndex(OMUInt64 fileSize, OMUInt32 ripSize)
 {
   TRACE("OMMXFStorage::isRandomIndex");
