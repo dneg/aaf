@@ -124,6 +124,8 @@ void OMMXFStorage::open(void)
   // Write header partition and alignment fill.
   //
   writeHeaderPartition(0, 0, defaultKAGSize);
+  // This is done here because the next thing we write is the primer.
+  _primerOffset = position();
 }
 
   // @mfunc Close this <c OMMXFStorage>.
@@ -233,8 +235,6 @@ void OMMXFStorage::writeHeaderPartition(OMUInt32 bodySID,
   writePartition(ClosedHeaderPartitionPackKey, bodySID, indexSID, KAGSize);
   currentPosition = position();
   fillAlignK(currentPosition, defaultKAGSize);
-  // This is done here because the next thing we write is the primer.
-  _primerOffset = position();
 }
 
 void OMMXFStorage::writeBodyPartition(OMUInt32 bodySID,
