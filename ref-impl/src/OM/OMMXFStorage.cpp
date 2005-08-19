@@ -190,8 +190,7 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
   OMUInt32 elementCount = iter->count();
 
   writeKLVKey(key);
-  OMUInt64 sizeOfFixedPortion = 88;
-  OMUInt64 length = sizeOfFixedPortion + (elementCount * elementSize);
+  OMUInt64 length = fixedPartitionSize + (elementCount * elementSize);
 #if defined(BER9)
   writeKLVLength(length);
 #else
