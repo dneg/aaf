@@ -581,6 +581,32 @@ void OMMXFStorage::read(OMByte* bytes,
   OMWrappedRawStorage::read(bytes, byteCount, bytesRead);
 }
 
+OMUInt64 OMMXFStorage::readBerLength(void) const
+{
+  TRACE("OMMXFStorage::readBerLength");
+
+  OMUInt64 result;
+  OMUInt8 b;
+  read(b);
+  if (b == 0x80) {
+    // unknown length
+    result = 0;
+  } else if ((b & 0x80) != 0x80) {
+    // short form
+    result = b;
+  } else {
+    // long form
+    int length = b & 0x7f;
+    result = 0;
+    for (int k = 0; k < length; k++) {
+      read(b);
+      result = result << 8;
+      result = result + b;
+    }
+  }
+  return result;
+}
+
 OMMXFStorage::ObjectDirectory* OMMXFStorage::instanceIdToObject(void)
 {
   TRACE("OMMXFStorage::instanceIdToObject");
