@@ -271,6 +271,7 @@ private:
   OMKLVKey _operationalPattern;
   LabelSet _essenceContainerLabels;
   OMUniqueObjectIdentification _generation;
+  OMUInt64 _currentPartition;         // offset of current partition
   OMUInt64 _objectDirectoryOffset;    // offset of object directory
   OMUInt64 _objectDirectoryReference; // offset of object directory offset
   ObjectDirectory* _instanceIdToObject;
