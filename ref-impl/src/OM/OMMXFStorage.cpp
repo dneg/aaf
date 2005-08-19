@@ -496,6 +496,91 @@ void OMMXFStorage::berEncode(OMByte* berValueBuffer,
   }
 }
 
+void OMMXFStorage::read(OMUInt8& i) const
+{
+  TRACE("OMMXFStorage::read");
+  OMUInt8 result;
+  OMUInt32 x;
+  read(&result, sizeof(OMUInt8), x);
+  ASSERT("All bytes read", x == sizeof(OMUInt8));
+  i = result;
+}
+
+void OMMXFStorage::read(OMUInt16& i, bool reorderBytes) const
+{
+  TRACE("OMMXFStorage::read");
+  OMUInt16 result;
+  OMUInt32 x;
+  OMByte* dest = reinterpret_cast<OMByte*>(&result);
+  read(dest, sizeof(OMUInt16), x);
+  ASSERT("All bytes read", x == sizeof(OMUInt16));
+  if (reorderBytes) {
+    OMType::reorderInteger(dest, sizeof(OMUInt16));
+  }
+  i = result;
+}
+
+void OMMXFStorage::read(OMUInt32& i, bool reorderBytes) const
+{
+  TRACE("OMMXFStorage::read");
+  OMUInt32 result;
+  OMUInt32 x;
+  OMByte* dest = reinterpret_cast<OMByte*>(&result);
+  read(dest, sizeof(OMUInt32), x);
+  ASSERT("All bytes read", x == sizeof(OMUInt32));
+  if (reorderBytes) {
+    OMType::reorderInteger(dest, sizeof(OMUInt32));
+  }
+  i = result;
+}
+
+void OMMXFStorage::read(OMUInt64& i, bool reorderBytes) const
+{
+  TRACE("OMMXFStorage::read");
+  OMUInt64 result;
+  OMUInt32 x;
+  OMByte* dest = reinterpret_cast<OMByte*>(&result);
+  read(dest, sizeof(OMUInt64), x);
+  ASSERT("All bytes read", x == sizeof(OMUInt64));
+  if (reorderBytes) {
+    OMType::reorderInteger(dest, sizeof(OMUInt64));
+  }
+  i = result;
+}
+
+void OMMXFStorage::read(OMUniqueObjectIdentification& id,
+                        bool reorderBytes) const
+{
+  TRACE("OMMXFStorage::read");
+  OMUniqueObjectIdentification result;
+  OMUInt32 x;
+  OMByte* dest = reinterpret_cast<OMByte*>(&result);
+  read(dest, sizeof(OMUniqueObjectIdentification), x);
+  ASSERT("All bytes read", x == sizeof(OMUniqueObjectIdentification));
+  if (reorderBytes) {
+    OMUniqueObjectIdentificationType::instance()->reorder(
+                                         dest,
+                                         sizeof(OMUniqueObjectIdentification));
+  }
+  id = result;
+}
+
+void OMMXFStorage::read(OMByte* buffer, const OMUInt32& bufferSize) const
+{
+  TRACE("OMMXFStorage::read");
+  OMUInt32 x;
+  read(buffer, bufferSize, x);
+  ASSERT("All bytes read", x == bufferSize);
+}
+
+void OMMXFStorage::read(OMByte* bytes,
+                        OMUInt32 byteCount,
+                        OMUInt32& bytesRead) const
+{
+  TRACE("OMMXFStorage::read");
+  OMWrappedRawStorage::read(bytes, byteCount, bytesRead);
+}
+
 OMMXFStorage::ObjectDirectory* OMMXFStorage::instanceIdToObject(void)
 {
   TRACE("OMMXFStorage::instanceIdToObject");
