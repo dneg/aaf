@@ -258,12 +258,16 @@ OMUInt64 OMKLVStoredStream::position(void) const
   return _position;
 }
 
-void OMKLVStoredStream::setPosition(const OMUInt64 offset) const
+void OMKLVStoredStream::setPosition(const OMUInt64 offset)
 {
   TRACE("OMKLVStoredStream::setPosition");
   PRECONDITION("Valid store", _store != 0);
 
+#if 0 // tjb not yet
   const_cast<OMKLVStoredStream*>(this)->_position = offset;
+#else
+  _position = offset;
+#endif
 }
 
 void OMKLVStoredStream::close(void)
