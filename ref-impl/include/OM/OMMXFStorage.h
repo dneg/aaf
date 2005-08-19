@@ -147,6 +147,8 @@ public:
     // @cmember Set the file generation.
   virtual void setGeneration(const OMUniqueObjectIdentification& generation);
 
+  virtual OMUniqueObjectIdentification generation(void) const;
+
   virtual void writeHeaderPartition(void);
   virtual void writeBodyPartition(void);
   virtual void writeFooterPartition(void);
