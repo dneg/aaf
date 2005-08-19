@@ -193,6 +193,9 @@ public:
     OMUInt8 _flags;
   };
 
+    // Object -> instanceId
+  OMUniqueObjectIdentification instanceId(OMStorable* object);
+
   typedef OMSet<OMUniqueObjectIdentification,
                 ObjectDirectoryEntry> ObjectDirectory;
   typedef OMSetIterator<OMUniqueObjectIdentification,
