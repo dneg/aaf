@@ -1715,8 +1715,10 @@ void OMKLVStoredObject::writeHeaderPartition(void)
   OMKLVKey headerPartitionPackKey =
     {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
      0x0d, 0x01, 0x02, 0x01, 0x01, 0x02, 0x02, 0x00};
-
+  OMUInt32 KAGSize = 0x100;
   writePartition(_storage, headerPartitionPackKey, _reorderBytes);
+  OMUInt64 currentPosition = _storage->position();
+  fill(_storage, currentPosition, KAGSize);
 }
 
 void OMKLVStoredObject::writeFooterPartition(OMRawStorage* store)
@@ -1730,6 +1732,7 @@ void OMKLVStoredObject::writeFooterPartition(OMRawStorage* store)
   OMKLVKey ClosedFooterPartitionPackKey =
     {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
      0x0d, 0x01, 0x02, 0x01, 0x01, 0x04, 0x02, 0x00};
+  OMUInt32 KAGSize = 0x100;
   writePartition(store, ClosedFooterPartitionPackKey, reorderBytes);
 }
 
@@ -1783,9 +1786,6 @@ void OMKLVStoredObject::writePartition(OMRawStorage* store,
   for (OMUInt32 i = 0; i < elementCount; i++) {
     writeKLVKey(store, essenceContainers[i]);
   }
-
-  OMUInt64 currentPosition = store->position();
-  fill(store, currentPosition, KAGSize);
 }
 
 void OMKLVStoredObject::writePrimerPack(OMRawStorage* store,
