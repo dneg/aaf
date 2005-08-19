@@ -208,6 +208,7 @@ void OMMXFStorage::writeFooterPartition(void)
 {
   TRACE("OMMXFStorage::writeFooterPartition");
 
+  setPosition(_fileSize);
   writePartition(ClosedFooterPartitionPackKey, 0, defaultKAGSize);
 
   fixup();
