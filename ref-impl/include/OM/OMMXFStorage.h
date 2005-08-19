@@ -60,10 +60,15 @@ public:
 
   ObjectDirectory* instanceIdToObject(void);
 
+  typedef OMSet<OMStorable*, OMUniqueObjectIdentification> ObjectSet;
+
+  ObjectSet* objectToInstanceId(void);
+
 private:
   // @access Private members.
 
   ObjectDirectory* _instanceIdToObject;
+  ObjectSet* _objectToInstanceId;
 
 };
 
