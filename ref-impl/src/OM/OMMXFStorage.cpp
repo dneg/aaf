@@ -47,7 +47,9 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
   _objectDirectoryOffset(0),
   _objectDirectoryReference(0),
   _instanceIdToObject(0),
-  _objectToInstanceId(0)
+  _objectToInstanceId(0),
+  _streamToStreamId(0),
+  _streamIdToStream(0)
 {
   TRACE("OMMXFStorage::OMMXFStorage");
 }
@@ -995,4 +997,105 @@ OMMXFStorage::ObjectSet* OMMXFStorage::objectToInstanceId(void)
     ASSERT("Valid heap pointer", _objectToInstanceId != 0);
   }
   return _objectToInstanceId;
+}
+
+void OMMXFStorage::associate(OMDataStream* stream,
+                             const OMUniqueObjectIdentification& sid)
+{
+  TRACE("OMMXFStorage::associate");
+
+  PRECONDITION("Stream not present", !containsStream(stream));
+  PRECONDITION("Identifier not present", !containsStream(sid));
+
+  streamToStreamId()->insert(stream, sid);
+  streamIdToStream()->insert(sid, stream);
+}
+
+bool OMMXFStorage::containsStream(OMDataStream* stream)
+{
+  TRACE("OMMXFStorage::containsStream");
+
+  return streamToStreamId()->contains(stream);
+}
+
+bool OMMXFStorage::containsStream(const OMUniqueObjectIdentification& sid)
+{
+  TRACE("OMMXFStorage::containsStream");
+
+  return streamIdToStream()->contains(sid);
+}
+
+OMUniqueObjectIdentification OMMXFStorage::streamId(OMDataStream* stream)
+{
+  TRACE("OMMXFStorage::streamId");
+  PRECONDITION("Valid stream", stream != 0);
+
+  OMUniqueObjectIdentification result;
+  if (!streamToStreamId()->find(stream, result)) {
+
+#if 0
+    OMKLVKey e =
+      {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01,
+       0x0d, 0x01, 0x03, 0x01, 0xff, 0xff, 0xff, 0xff};
+
+    static OMUInt8 seed = 0;
+    e.octet12 = 0x17;   // Item type = GC Data
+    e.octet13 = 0x01;   // Essence element count
+    e.octet14 = 0x01;   // Essence element type = Unknown data
+    e.octet15 = ++seed; // Essence element number
+    memcpy(&result, &e, sizeof(result));
+#else
+#if defined(STREAMID_DEBUG)
+    OMUniqueObjectIdentification id = {0};
+    static OMUInt32 seed = 0;
+    id.Data1 = ++seed;
+    result= id;
+#else
+    OMUniqueObjectIdentification id = createUniqueIdentifier();
+    result = id;
+#endif
+#endif
+    streamToStreamId()->insert(stream, result);
+    ASSERT("Identifier not present", !streamIdToStream()->contains(result));
+    streamIdToStream()->insert(result, stream);
+  }
+  return result;
+}
+
+OMDataStream* OMMXFStorage::stream(const OMUniqueObjectIdentification& sid)
+{
+  TRACE("OMMXFStorage::stream");
+
+  OMDataStream* result;
+  if (!streamIdToStream()->find(sid, result)) {
+    result = 0;
+  }
+
+  return result;
+}
+
+OMSet<OMDataStream*, OMUniqueObjectIdentification>*
+OMMXFStorage::streamToStreamId(void)
+{
+  TRACE("OMMXFStorage::streamToStreamId");
+
+  if (_streamToStreamId == 0) {
+    _streamToStreamId = new OMSet<OMDataStream*,
+                                  OMUniqueObjectIdentification>();
+    ASSERT("Valid heap pointer", _streamToStreamId != 0);
+  }
+  return _streamToStreamId;
+}
+
+OMSet<OMUniqueObjectIdentification, OMDataStream*>*
+OMMXFStorage::streamIdToStream(void)
+{
+  TRACE("OMMXFStorage::streamIdToStream");
+
+  if (_streamIdToStream == 0) {
+    _streamIdToStream = new OMSet<OMUniqueObjectIdentification,
+                                  OMDataStream*>();
+    ASSERT("Valid heap pointer", _streamIdToStream != 0);
+  }
+  return _streamIdToStream;
 }
