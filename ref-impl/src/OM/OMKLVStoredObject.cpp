@@ -640,10 +640,13 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   }
   if (k == fillKey) {
     _storage->readKLVFill();
+    _storage->readKLVKey(k);
   }
 
   // Read the primer
-  readPrimerPack(file.dictionary());
+  if (k == primerPackKey) {
+    readPrimerPack(file.dictionary());
+  }
 
   file.setLoadMode(OMFile::lazyLoad);
 
@@ -1900,9 +1903,6 @@ void OMKLVStoredObject::readPrimerPack(OMDictionary* /* dictionary */)
 {
   TRACE("OMKLVStoredObject::readPrimerPack");
 
-  OMKLVKey k;
-  _storage->readKLVKey(k);
-  ASSERT("Primer key", k == primerPackKey);
   _storage->readKLVLength();
   OMUInt32 elementCount;
   _storage->read(elementCount, _reorderBytes);
