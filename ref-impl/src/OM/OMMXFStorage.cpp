@@ -49,6 +49,7 @@
   // @mfunc Constructor.
 OMMXFStorage::OMMXFStorage(OMRawStorage* store)
   : OMWrappedRawStorage(store),
+  _gridSize(0),
   _primerPosition(0),
   _headerByteCount(0),
   _inIndex(false),
@@ -1835,11 +1836,11 @@ void OMMXFStorage::restoreStreams(void)
     } else if (isEssence(k) || k == SystemMetadataKey) {
       markMetadataEnd(keyPosition);
       markIndexEnd(keyPosition);
-      markEssenceSegmentStart(k, bodySID, keyPosition);
+      markEssenceSegmentStart(k, bodySID, gridSize, keyPosition);
       skipV(length);
     } else if (isIndex(k)) {
       markMetadataEnd(keyPosition);
-      markIndexStart(k, indexSID, keyPosition);
+      markIndexStart(k, indexSID, gridSize, keyPosition);
     } else if (k == fillKey) {
       skipV(length);
       markFill(keyPosition, position());
@@ -2099,6 +2100,7 @@ void OMMXFStorage::markMetadataEnd(OMUInt64 endKeyPosition)
 
 void OMMXFStorage::markIndexStart(OMKLVKey key,
                                   OMUInt32 sid,
+                                  OMUInt32 gridSize,
                                   OMUInt64 indexKeyPosition)
 {
   TRACE("OMMXFStorage::markIndexStart");
@@ -2109,6 +2111,8 @@ void OMMXFStorage::markIndexStart(OMKLVKey key,
   _indexSID = sid;
   _indexKey = key;
   _indexPosition = indexKeyPosition;
+
+  _gridSize = gridSize;
 }
 
 void OMMXFStorage::markIndexEnd(OMUInt64 endKeyPosition)
@@ -2126,7 +2130,7 @@ void OMMXFStorage::markIndexEnd(OMUInt64 endKeyPosition)
                          indexByteCount + free,
                          indexByteCount,
                          _indexKey,
-                         /* gridSize */ 512);
+                         _gridSize);
 
     _inIndex = false;
     _indexSID = 0;
@@ -2137,6 +2141,7 @@ void OMMXFStorage::markIndexEnd(OMUInt64 endKeyPosition)
 
 void OMMXFStorage::markEssenceSegmentStart(OMKLVKey key,
                                            OMUInt32 sid,
+                                           OMUInt32 gridSize,
                                            OMUInt64 essenceKeyPosition)
 {
   TRACE("OMMXFStorage::markEssenceSegmentStart");
