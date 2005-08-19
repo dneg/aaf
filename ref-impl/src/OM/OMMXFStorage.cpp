@@ -831,6 +831,13 @@ void OMMXFStorage::skipLV(void) const
   TRACE("OMMXFStorage::skipLV");
 
   OMUInt64 length = readKLVLength();
+  skipV(length);
+}
+
+void OMMXFStorage::skipV(OMUInt64& length) const
+{
+  TRACE("OMMXFStorage::skipV");
+
   OMUInt64 pos = position();
   OMUInt64 newPosition = pos + length;
   setPosition(newPosition);
