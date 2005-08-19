@@ -264,7 +264,7 @@ void OMWrappedRawStorage::streamReadAt(OMUInt64 position,
 }
 
 void OMWrappedRawStorage::streamReadAt(OMUInt64 position,
-                                       OMIOVector buffers,
+                                       OMIOBufferDescriptor* buffers,
                                        OMUInt32 bufferCount,
                                        OMUInt32& bytesRead) const
 {
@@ -284,7 +284,7 @@ void OMWrappedRawStorage::streamWriteAt(OMUInt64 position,
 }
 
 void OMWrappedRawStorage::streamWriteAt(OMUInt64 position,
-                                        OMIOVector buffers,
+                                        OMIOBufferDescriptor* buffers,
                                         OMUInt32 bufferCount,
                                         OMUInt32& bytesWritten)
 {
