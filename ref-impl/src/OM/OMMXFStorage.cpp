@@ -1462,6 +1462,11 @@ void OMMXFStorage::streamRestoreSegment(OMUInt32 sid,
   kss->setBlockSize(gridSize);
 }
 
+void OMMXFStorage::streamGrow(OMUInt32 /* sid */, OMUInt64 /* growBytes */)
+{
+  TRACE("OMMXFStorage::streamGrow");
+}
+
 OMMXFStorage::SegmentListIterator*
 OMMXFStorage::streamSegments(OMUInt32 sid) const
 {
