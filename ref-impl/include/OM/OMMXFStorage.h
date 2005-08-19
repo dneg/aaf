@@ -65,7 +65,7 @@ static const OMUInt32 bodyPartitionOffset = 0x20000;
 static const OMUInt32 defaultKAGSize = 0x100;
 
 static const OMUInt16 currentMajorVersion = 0xffff;
-static const OMUInt16 currentMinorVersion = 0xfffb;
+static const OMUInt16 currentMinorVersion = 0xfffa;
 
 // Total size of the fixed-size portions of a partition value
 static const OMUInt32 fixedPartitionSize =
@@ -270,6 +270,68 @@ public:
 
   virtual bool containsStream(OMDataStream* stream);
 
+  virtual OMUInt64 streamSize(OMUInt32 sid);
+
+  virtual void streamSetSize(OMUInt32 sid, OMUInt64 newSize);
+
+  virtual void streamRawWrite(OMUInt32 sid,
+                              OMUInt64 rawPosition,
+                              const OMByte* rawBytes,
+                              OMUInt32 rawByteCount);
+
+  virtual void streamFragment(OMUInt32 sid,
+                              OMUInt64 position,
+                              OMUInt32 byteCount,
+                              OMUInt64& rawPosition,
+                              OMUInt32& rawByteCount);
+
+  virtual void streamWriteFragment(OMUInt32 sid,
+                                   OMUInt64 position,
+                                   const OMByte* bytes,
+                                   OMUInt32 byteCount,
+                                   OMUInt32& bytesWritten);
+
+  virtual void streamWriteAt(OMUInt32 sid,
+                             OMUInt64 position,
+                             const OMByte* bytes,
+                             OMUInt32 byteCount,
+                             OMUInt32& bytesWritten);
+
+  virtual void streamRawRead(OMUInt32 sid,
+                             OMUInt64 rawPosition,
+                             OMByte* rawBytes,
+                             OMUInt32 rawByteCount);
+
+  virtual void streamReadFragment(OMUInt32 sid,
+                                  OMUInt64 position,
+                                  OMByte* bytes,
+                                  OMUInt32 byteCount,
+                                  OMUInt32& bytesRead);
+
+  virtual void streamReadAt(OMUInt32 sid,
+                            OMUInt64 position,
+                            OMByte* bytes,
+                            OMUInt32 byteCount,
+                            OMUInt32& bytesRead);
+
+  virtual void streamSave(OMDataStream* stream);
+
+  virtual void streamRestoreSegment(OMUInt32 sid,
+                                    OMUInt64 start,
+                                    OMUInt64 size,
+                                    OMKLVKey label,
+                                    OMUInt32 gridSize);
+
+  struct Segment {
+    OMUInt64 _start;   // Stream position of this Segment
+    OMUInt64 _size;    // Size of this Segment in bytes
+    OMUInt64 _origin;  // File position of this Segment
+  };
+  typedef OMList<Segment*> SegmentList;
+  typedef OMListIterator<Segment*> SegmentListIterator;
+
+  virtual SegmentListIterator* streamSegments(OMUInt32 sid) const;
+
     // @cmember Record a reference to <p tag> at <p address>.
   void reference(OMUInt64 address, OMUInt8 tag);
 
@@ -323,7 +385,6 @@ private:
   OMKLVKey _operationalPattern;
   LabelSet _essenceContainerLabels;
   OMUniqueObjectIdentification _generation;
-  OMUInt64 _currentPartition;         // offset of current partition
   OMUInt64 _objectDirectoryOffset;    // offset of object directory
   ObjectDirectory* _instanceIdToObject;
   ObjectSet* _objectToInstanceId;
@@ -331,6 +392,28 @@ private:
   OMSet<OMUInt32, OMDataStream*>* _sidToStream;
   OMUInt32 _maxSid;
 
+  struct Stream;
+  virtual Stream* createStream(OMUInt32 sid,
+                               OMUInt64 size,
+                               OMKLVKey label,
+                               OMUInt32 gridSize);
+  virtual Segment* addSegment(Stream* s,
+                              OMUInt64 start,
+                              OMUInt64 size,
+                              OMUInt64 origin);
+  virtual Segment* findSegment(Stream* s, OMUInt64 position);
+  virtual Segment* streamSegment(OMUInt32 sid, OMUInt64 position);
+
+  struct Stream {
+    SegmentList* _segments;
+    OMUInt64 _size;
+    OMKLVKey _label;
+    OMUInt32 _gridSize;
+  };
+
+  typedef OMSet<OMUInt32, Stream*> SegmentMap;
+  virtual SegmentMap* segmentMap(void);
+  SegmentMap* _segmentMap;
   OMUInt64 _fileSize;
 
   struct Partition {
