@@ -169,3 +169,11 @@ void OMType::copy(const OMByte* inputBytes,
 
   memcpy(op, ip, bytesSize);
 }
+
+const OMUniqueObjectIdentification& OMType::identification(void) const
+{
+  // tjb this is only here so that the library compiles and links
+  TRACE("OMType::identification");
+  ASSERT("Code not reached", false);
+  return nullOMUniqueObjectIdentification;
+}
