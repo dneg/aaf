@@ -1939,7 +1939,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
 
 void OMKLVStoredObject::streamRestore(void)
 {
-  TRACE("OMKLVStoredObject::streamRestore")
+  TRACE("OMKLVStoredObject::streamRestore");
 
 #if 1 // HACK4MEIP2
   OMUInt64 headerPosition;
@@ -1947,46 +1947,39 @@ void OMKLVStoredObject::streamRestore(void)
   _storage->setPosition(headerPosition);
 #endif
 
+  OMUInt32 bodySID = 0;
+  OMUInt32 indexSID = 0;
+  OMUInt32 gridSize = 0;
   OMKLVKey k;
   while (_storage->readOuterKLVKey(k)) {
     if (OMMXFStorage::isBody(k)) {
-      OMUInt32 bodySID;
-      OMUInt32 indexSID;
-      OMUInt32 gridSize;
       _storage->readPartition(bodySID, indexSID, gridSize);
-      _storage->readKLVKey(k);
-      if (k == fillKey) {
-        _storage->readKLVFill();
-        _storage->readKLVKey(k);
-      }
-      OMUInt64 length = _storage->readKLVLength();
-      // Restore stream segment if present
-      if (bodySID != 0) {
-        _storage->streamRestoreSegment(bodySID,
-                                       _storage->position(),
-                                       length,
-                                       k,
-                                       gridSize);
-      }
-      _storage->skipV(length);
+    } else if (OMMXFStorage::isHeader(k)) {
+      _storage->readPartition(bodySID, indexSID, gridSize);
     } else if (OMMXFStorage::isFooter(k)) {
-      OMUInt32 bodySID;
-      OMUInt32 indexSID;
-      OMUInt32 gridSize;
       _storage->readPartition(bodySID, indexSID, gridSize);
-      _storage->readKLVKey(k);
-      if (k == fillKey) {
-        _storage->readKLVFill();
-        _storage->readKLVKey(k);
-      }
+    } else if (OMMXFStorage::isIndex(k)) {
       OMUInt64 length = _storage->readKLVLength();
-      // Restore stream segment if present
+      // Restore index stream segment
       if (indexSID != 0) {
         _storage->streamRestoreSegment(indexSID,
                                        _storage->position(),
                                        length,
                                        k,
                                        gridSize);
+        indexSID = 0;
+      }
+      _storage->skipV(length);
+    } else if (OMMXFStorage::isEssence(k)) {
+      OMUInt64 length = _storage->readKLVLength();
+      // Restore essence stream segment
+      if (bodySID != 0) {
+        _storage->streamRestoreSegment(bodySID,
+                                       _storage->position(),
+                                       length,
+                                       k,
+                                       gridSize);
+        bodySID = 0;
       }
       _storage->skipV(length);
     } else if (k == RandomIndexMetadataKey) {
@@ -1995,7 +1988,6 @@ void OMKLVStoredObject::streamRestore(void)
       _storage->skipLV();
     }
   }
-
 }
 
 void OMKLVStoredObject::referenceRestore(OMStorable* object,
