@@ -145,7 +145,7 @@ OMKLVStoredObject::isRecognized(OMRawStorage* rawStorage)
   OMKLVKey k;
   if (OMMXFStorage::read(rawStorage, k)) {
     k.octet14 = 0x02;
-    if (k == ClosedHeaderPartitionPackKey) {
+    if (k == ClosedHeaderPartitionKey) {
       OMUInt64 length;
       if (OMMXFStorage::readKLVLength(rawStorage, length)) {
         OMUInt16 majorVersion;
@@ -171,7 +171,7 @@ OMKLVStoredObject::isRecognized(OMRawStorage* rawStorage)
         result = false; // Couldn't read length
       }
     } else {
-      result = false; //  Not HeaderPartitionPack key
+      result = false; //  Not HeaderPartition key
     }
   } else {
     result = false; // Couldn't read key
@@ -633,7 +633,7 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
 
   OMKLVKey k;
   _storage->readKLVKey(k);
-  if (k == ClosedHeaderPartitionPackKey) {
+  if (k == ClosedHeaderPartitionKey) {
     // Read the header partition
     _storage->readHeaderPartition();
     _storage->readKLVKey(k);
@@ -644,7 +644,7 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   }
 
   // Read the primer
-  if (k == primerPackKey) {
+  if (k == primerKey) {
     readPrimerPack(file.dictionary());
   }
 
@@ -1801,7 +1801,7 @@ void OMKLVStoredObject::streamRestore(void)
   _storage->readKLVKey(k);
 
   while (k != RandomIndexMetadataKey) {
-    if (k == ClosedBodyPartitionPackKey) {
+    if (k == ClosedBodyPartitionKey) {
       OMUInt32 bodySID;
       OMUInt32 indexSID;
       OMUInt32 gridSize;
@@ -1863,7 +1863,7 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
 
   OMUInt32 elementSize = sizeof(OMPropertyId) +
                          sizeof(OMUniqueObjectIdentification);
-  _storage->writeKLVKey(primerPackKey);
+  _storage->writeKLVKey(primerKey);
   OMUInt64 sizeOfFixedPortion = 8;
   OMUInt64 length = sizeOfFixedPortion + (elementCount * elementSize);
   _storage->writeKLVLength(length);
