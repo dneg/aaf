@@ -510,6 +510,9 @@ private:
     OMUInt64 _address;
     OMUInt32 _sid;
   };
+  void destroyPartitions(void);
+  bool findPartition(OMUInt64 address, OMUInt32& index);
+  void addPartition(OMUInt64 address,  OMUInt32 bodySID, OMUInt32 index);
   OMVector<Partition*> _partitions;
   OMUInt64 _primerOffset;
   OMUInt64 _metadataEnd;
