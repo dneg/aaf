@@ -53,6 +53,7 @@
 #include "OMClassDefinition.h"
 #include "OMPropertyDefinition.h"
 #include "OMDataStreamProperty.h"
+#include "OMArrayType.h"
 
 #include "OMUtilities.h"
 
@@ -483,6 +484,12 @@ void OMKLVStoredObject::save(const OMSimpleProperty& property)
   delete [] buffer;
 }
 
+void OMKLVStoredObject::save(const OMDataVector& /* property */)
+{
+  TRACE("OMKLVStoredObject::save(OMDataVector)");
+  ASSERT("Unimplemented code not reached", false);
+}
+
   // @mfunc Save the <c OMStrongReference> <p singleton> in this
   //        <c OMKLVStoredObject>.
   //   @parm The <c OMStrongReference> to save.
@@ -770,6 +777,17 @@ void OMKLVStoredObject::restore(OMSimpleProperty& property,
   delete [] buffer;
 }
 
+  // @mfunc Restore the <c OMDataVector> <p property> into this
+  //        <c OMKLVStoredObject>.
+  //   @parm The newly restored <c OMDataVector>
+  //   @parm The external size.
+void OMKLVStoredObject::restore(OMDataVector& /* property */,
+                                size_t /* externalSize */)
+{
+  TRACE("OMKLVStoredObject::restore(OMDataVector)");
+  ASSERT("Unimplemented code not reached", false);
+}
+
   // @mfunc Restore the <c OMStrongReference> <p singleton> into this
   //        <c OMKLVStoredObject>.
   //   @parm The newly restored <c OMStrongReference>.
@@ -967,7 +985,20 @@ OMUInt64 OMKLVStoredObject::length(const OMPropertySet& properties) const
         length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize) + s;
         break;
       }
-      case SF_STRONG_OBJECT_REFERENCE: {
+      case SF_DATA_VECTOR: {
+        OMDataVector* dv = dynamic_cast<OMDataVector*>(p);
+        ASSERT("Correct type", dv != 0);
+        OMDataVector& property = *dv;
+        OMPropertySize size = property.bitsSize();
+        OMByte* bits = property.bits();
+        const OMType* type = property.type();
+        ASSERT("Valid property type", type != 0);
+        OMPropertySize s = type->externalSize(bits, size);
+        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize) + s;
+        length = length + sizeof(OMUInt32) + sizeof(OMUInt32);
+        break;
+      }
+     case SF_STRONG_OBJECT_REFERENCE: {
         length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
                         + sizeof(OMUniqueObjectIdentification);
         break;
@@ -1050,6 +1081,12 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
     if (!p->isOptional() || p->isPresent()) {
       switch (p->storedForm()) {
       case SF_DATA: {
+        OMPropertyId id = p->propertyId();
+        _storage->write(id, _reorderBytes);
+        p->save();
+        break;
+      }
+      case SF_DATA_VECTOR: {
         OMPropertyId id = p->propertyId();
         _storage->write(id, _reorderBytes);
         p->save();
@@ -1338,6 +1375,20 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
       OMSimpleProperty* sp = dynamic_cast<OMSimpleProperty*>(p);
       ASSERT("Correct type", sp != 0);
       restore(*sp, length);
+      p->setPresent();
+      break;
+    }
+    case SF_DATA_VECTOR: {
+      // p->restore(length);
+      OMDataVector* dv = dynamic_cast<OMDataVector*>(p);
+      ASSERT("Correct type", dv != 0);
+      OMUInt32 entryCount;
+      _storage->read(entryCount, _reorderBytes);
+      OMUInt32 entrySize;
+      _storage->read(entrySize, _reorderBytes);
+      size_t externalSize = length - (sizeof(OMUInt32) + sizeof(OMUInt32));
+      ASSERT("Consistent size", externalSize == entryCount * entrySize);
+      restore(*dv, externalSize);
       p->setPresent();
       break;
     }
