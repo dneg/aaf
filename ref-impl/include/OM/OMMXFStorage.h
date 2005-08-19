@@ -127,6 +127,10 @@ static const OMUInt32 fixedPartitionSize =
 
 static const OMPropertyId PID_InterchangeObject_InstanceUID = 0x3c0a;
 
+// {01011502-0000-0000-060E-2B3401010101}
+static const OMObjectIdentification Property_InterchangeObject_InstanceUID =
+{0x01011502, 0x0000, 0x0000, {0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x01}};
+
 static const OMPropertyId PID_Root_ObjectDirectory = 0x003;
 static const OMPropertyId PID_Root_FormatVersion   = 0x004;
 
@@ -139,7 +143,8 @@ static const OMPropertyId PID_Root_FormatVersion   = 0x004;
 // 0x005 - First forwards and backwards compatible version
 // 0x006 - Use closed and complete keys for body and footer
 // 0x007 - Fill in index byte count in the footer
-static const OMUInt32 formatVersion = 0x007;
+// 0x008 - Add InterchangeObject::InstanceUID to primer
+static const OMUInt32 formatVersion = 0x008;
 
 static const OMKLVKey objectDirectoryKey =
   {0x96, 0x13, 0xb3, 0x8a, 0x87, 0x34, 0x87, 0x46,
