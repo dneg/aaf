@@ -333,6 +333,8 @@ bool OMMXFStorage::isIndex(const OMKLVKey& k)
   bool result;
   if (memcmp(&IndexTableSegmentKey, &k, sizeof(k)) == 0) {
     result = true;
+  } else if (memcmp(&V10IndexTableSegmentKey, &k, sizeof(k)) == 0) {
+    result = true;
   } else {
     result = false;
   }
