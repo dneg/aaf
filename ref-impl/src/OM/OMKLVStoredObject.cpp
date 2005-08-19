@@ -1641,8 +1641,20 @@ void OMKLVStoredObject::referenceRestore(OMStorable* object,
   read(_storage, iid, _reorderBytes);
   ASSERT("Object not present", !objectToInstanceId()->contains(object));
   objectToInstanceId()->insert(object, iid);
-  ASSERT("Identifier not present", !instanceIdToObject()->contains(iid));
-  instanceIdToObject()->insert(iid, object);
+  ObjectDirectoryEntry* ep = 0;
+  if (instanceIdToObject()->find(iid, &ep)) {
+    ASSERT("No previous entry", ep->_object == 0);
+    ep->_object = object;
+  } else {
+    // Root object
+    ObjectDirectoryEntry e;
+    e._object = object;
+    e._offset = 0;
+    e._flags = 0;
+    ASSERT("Identifier not present", !instanceIdToObject()->contains(iid));
+    instanceIdToObject()->insert(iid, e);
+  }
+  ASSERT("Identifier present", instanceIdToObject()->contains(iid));
 }
 
 void OMKLVStoredObject::writeHeaderPartition(void)
@@ -2259,8 +2271,11 @@ OMKLVStoredObject::object(const OMUniqueObjectIdentification& instanceId)
   TRACE("OMKLVStoredObject::object");
 
   OMStorable* result;
-  if (!instanceIdToObject()->find(instanceId, result)) {
+  ObjectDirectoryEntry e;
+  if (!instanceIdToObject()->find(instanceId, e)) {
     result = 0;
+  } else {
+    result = e._object;
   }
   return result;
 }
@@ -2268,7 +2283,7 @@ OMKLVStoredObject::object(const OMUniqueObjectIdentification& instanceId)
 OMSet<OMStorable*, OMUniqueObjectIdentification>*
 OMKLVStoredObject::_objectToInstanceId = 0;
 
-OMSet<OMUniqueObjectIdentification, OMStorable*>*
+OMSet<OMUniqueObjectIdentification, OMKLVStoredObject::ObjectDirectoryEntry>*
 OMKLVStoredObject::_instanceIdToObject = 0;
 
 OMSet<OMStorable*, OMUniqueObjectIdentification>*
@@ -2284,14 +2299,14 @@ OMKLVStoredObject::objectToInstanceId(void)
   return _objectToInstanceId;
 }
 
-OMSet<OMUniqueObjectIdentification, OMStorable*>*
+OMSet<OMUniqueObjectIdentification, OMKLVStoredObject::ObjectDirectoryEntry>*
 OMKLVStoredObject::instanceIdToObject(void)
 {
   TRACE("OMKLVStoredObject::instanceIdToObject");
 
   if (_instanceIdToObject == 0) {
     _instanceIdToObject = new OMSet<OMUniqueObjectIdentification,
-                                    OMStorable*>();
+                                    OMKLVStoredObject::ObjectDirectoryEntry>();
     ASSERT("Valid heap pointer", _instanceIdToObject != 0);
   }
   return _instanceIdToObject;
