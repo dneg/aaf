@@ -25,13 +25,14 @@
 #include "OMKLVStoredStream.h"
 
 #include "OMAssertions.h"
-#include "OMRawStorage.h"
+#include "OMMXFStorage.h"
 
-OMKLVStoredStream::OMKLVStoredStream(OMRawStorage* store)
+OMKLVStoredStream::OMKLVStoredStream(OMMXFStorage* store, OMUInt32 sid)
 : _label(nullOMKLVKey),
   _blockSize(0),
   _fileOffset(0),
   _store(store),
+  _sid(sid),
   _position(0)
 {
   TRACE("OMKLVStoredStream::OMKLVStoredStream");
@@ -63,7 +64,7 @@ void OMKLVStoredStream::read(OMByte* data,
   PRECONDITION("Valid data buffer", data != 0);
   PRECONDITION("Valid size", bytes > 0);
 
-  _store->readAt(_position, data, bytes, bytesRead);
+  _store->streamReadAt(_sid, _position, data, bytes, bytesRead);
   OMKLVStoredStream* nonConstThis = const_cast<OMKLVStoredStream*>(this);
   nonConstThis->_position = _position + bytesRead;
 }
@@ -87,10 +88,11 @@ void OMKLVStoredStream::write(const OMByte* data,
   PRECONDITION("Valid data", data != 0);
   PRECONDITION("Valid size", bytes > 0);
 
-  _store->writeAt(_position,
-                  reinterpret_cast<const OMByte*>(data),
-                  bytes,
-                  bytesWritten);
+  _store->streamWriteAt(_sid,
+                        _position,
+                        reinterpret_cast<const OMByte*>(data),
+                        bytes,
+                        bytesWritten);
   _position = _position + bytesWritten;
 }
 
@@ -99,7 +101,7 @@ OMUInt64 OMKLVStoredStream::size(void) const
   TRACE("OMKLVStoredStream::size");
   PRECONDITION("Valid store", _store != 0);
 
-  OMUInt64 result = _store->size();
+  OMUInt64 result = _store->streamSize(_sid);
   return result;
 }
 
@@ -108,7 +110,7 @@ void OMKLVStoredStream::setSize(const OMUInt64 newSize)
   TRACE("OMKLVStoredStream::setSize");
   PRECONDITION("Valid store", _store != 0);
 
-  _store->extend(newSize);
+  _store->streamSetSize(_sid, newSize);
 }
 
 OMUInt64 OMKLVStoredStream::position(void) const
@@ -132,8 +134,14 @@ void OMKLVStoredStream::close(void)
   TRACE("OMKLVStoredStream::close");
   PRECONDITION("Valid store", _store != 0);
 
-  delete _store;
+  // We don't own _store
   _store = 0;
+}
+
+OMUInt32 OMKLVStoredStream::streamIdentification(void) const
+{
+  TRACE("OMKLVStoredStream::streamIdentification");
+  return _sid;
 }
 
   // @mfunc Set the label to <p label>.
