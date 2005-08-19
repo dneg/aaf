@@ -1990,8 +1990,7 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
 #if defined(OMONLY)
       OMUniqueObjectIdentification id = propertyDefinition->identification();
 #else
-      OMUniqueObjectIdentification id =
-                                    propertyDefinition->uniqueIdentification();
+      OMUniqueObjectIdentification id = propertyDefinition->identification();
 #endif
       OMDictionary::mapToKLV(id);
       OMKLVKey k;
