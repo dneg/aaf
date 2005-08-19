@@ -1588,14 +1588,12 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
       _storage->read(version, _reorderBytes);
     } else if ((!properties.isAllowed(pid)) && (pid > 0x8000)) { // HACK4MEIP2
       // Dark extension
-      OMUInt64 len = length;
-      _storage->skipV(len);  // discard value !! tjb
+      _storage->skipV(length);  // discard value !! tjb
     } else if (pid == 0x3b08) { // Preface::PrimaryPackage
       // HACK4MXFLIB
       // Temporary hack - ignore this property - we don't yet have
       // compiled-in knowlege of its 'type'
-      OMUInt64 len = length;
-      _storage->skipV(len);
+      _storage->skipV(length);
     } else {
     OMProperty* p = properties.get(pid);
     ASSERT("Valid property", p != 0);
