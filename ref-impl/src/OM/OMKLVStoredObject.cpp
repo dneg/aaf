@@ -54,7 +54,7 @@
 #include "OMPropertyDefinition.h"
 #include "OMDataStreamProperty.h"
 #include "OMArrayType.h"
-//#include "OMSetType.h"
+#include "OMSetType.h"
 #include "OMDataSet.h"
 #include "OMDataVector.h"
 #include "OMDataContainer.h"
