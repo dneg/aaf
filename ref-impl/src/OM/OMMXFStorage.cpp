@@ -821,6 +821,15 @@ void OMMXFStorage::enterObject(OMStorable& object, OMUInt64 position)
   }
 }
 
+bool
+OMMXFStorage::containsObject(const OMUniqueObjectIdentification& instanceId)
+{
+  TRACE("OMMXFStorage::containsObject");
+
+  bool result = instanceIdToObject()->contains(instanceId);
+  return result;
+}
+
 void OMMXFStorage::saveObjectDirectory(void)
 {
   TRACE("OMMXFStorage::saveObjectDirectory");
