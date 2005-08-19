@@ -35,9 +35,11 @@
 #include "OMIdentitySetIter.h"
 #include "OMType.h"
 #include "OMUniqueObjectIdentType.h"
-
-#include "OMKLVStoredStream.h" // tjb - we shouldn't depend on this
 #include "OMDataStreamProperty.h"
+
+#include "OMKLVStoredStream.h" // tjb - we shouldn't depend on these
+#include "OMStorable.h"
+#include "OMClassFactory.h"
 
 //#define INSTANCEID_DEBUG 1
 //#define OMONLY 1
@@ -77,6 +79,8 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
 OMMXFStorage::~OMMXFStorage(void)
 {
   TRACE("OMMXFStorage::~OMMXFStorage");
+
+  clearObjectDirectory();
 
   if (_instanceIdToObject != 0) {
     _instanceIdToObject->clear();
@@ -1014,6 +1018,35 @@ OMMXFStorage::containsObject(const OMUniqueObjectIdentification& instanceId)
 
   bool result = instanceIdToObject()->contains(instanceId);
   return result;
+}
+
+void OMMXFStorage::resolve(const OMUniqueObjectIdentification& instanceId)
+{
+  TRACE("OMMXFStorage::resolve");
+  ASSERT("Identifier present", containsObject(instanceId));
+  ObjectDirectoryEntry* ep = 0;
+  instanceIdToObject()->find(instanceId, &ep);
+  ASSERT("Object directory entry found", ep != 0);
+  ep->_flags = 1;
+}
+
+void OMMXFStorage::clearObjectDirectory(void)
+{
+  TRACE("OMMXFStorage::clearObjectDirectory");
+
+  if (_instanceIdToObject != 0) {
+    ObjectDirectoryIterator iterator(*_instanceIdToObject, OMBefore);
+    while (++iterator) {
+      ObjectDirectoryEntry e = iterator.value();
+      if (e._flags != 1) {
+        if (e._object != 0) {
+          OMClassFactory* factory = e._object->classFactory();
+          factory->destroy(e._object);
+          e._object = 0;
+        }
+      }
+    }
+  }
 }
 
 void OMMXFStorage::saveObjectDirectory(void)
