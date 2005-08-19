@@ -1691,6 +1691,7 @@ OMMXFStorage::addSegment(Stream* s,
   TRACE("OMMXFStorage::addSegment");
   PRECONDITION("Valid stream", s != 0);
   PRECONDITION("Valid list", s->_segments != 0);
+  PRECONDITION("Valid size", size != 0);
 
   Segment* result = new Segment();
   ASSERT("Valid heap pointer", result != 0);
