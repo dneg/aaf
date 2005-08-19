@@ -397,6 +397,13 @@ public:
   typedef OMList<Segment*> SegmentList;
   typedef OMListIterator<Segment*> SegmentListIterator;
 
+  struct Stream {
+    SegmentList* _segments;
+    OMUInt64 _size;
+    OMKLVKey _label;
+    OMUInt32 _gridSize;
+  };
+
   virtual SegmentListIterator* streamSegments(OMUInt32 sid) const;
 
     // @cmember Record a reference to <p tag> at <p address>.
@@ -459,7 +466,6 @@ private:
   OMSet<OMUInt32, OMDataStream*>* _sidToStream;
   OMUInt32 _maxSid;
 
-  struct Stream;
   virtual Stream* createStream(OMUInt32 sid,
                                OMUInt64 size,
                                OMKLVKey label,
@@ -472,13 +478,6 @@ private:
   virtual Segment* findLastSegment(Stream* s);
   virtual OMUInt64 allocatedSize(Stream* s);
   virtual Segment* streamSegment(OMUInt32 sid, OMUInt64 position);
-
-  struct Stream {
-    SegmentList* _segments;
-    OMUInt64 _size;
-    OMKLVKey _label;
-    OMUInt32 _gridSize;
-  };
 
   typedef OMSet<OMUInt32, Stream*> SegmentMap;
   typedef OMSetIterator<OMUInt32, Stream*> SegmentMapIterator;
