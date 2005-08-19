@@ -432,6 +432,12 @@ public:
                              OMUInt32 byteCount,
                              OMUInt32& bytesWritten);
 
+  virtual void streamWriteAt(OMUInt32 sid,
+                             OMUInt64 position,
+                             OMIOVector buffers,
+                             OMUInt32 bufferCount,
+                             OMUInt32& bytesWritten);
+
   virtual void streamRawRead(OMUInt32 sid,
                              OMUInt64 rawPosition,
                              OMByte* rawBytes,
