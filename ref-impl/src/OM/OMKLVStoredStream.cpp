@@ -76,7 +76,7 @@ void OMKLVStoredStream::read(OMIOBufferDescriptor* buffers,
   PRECONDITION("Valid buffers", buffers != 0);
   PRECONDITION("Valid buffer count", bufferCount > 0);
 
-  _store->streamReadAt(_sid, _position, buffers, bufferCount, bytesRead);
+  _store->readStreamAt(_sid, _position, buffers, bufferCount, bytesRead);
   OMKLVStoredStream* nonConstThis = const_cast<OMKLVStoredStream*>(this);
   nonConstThis->_position = _position + bytesRead;
 }
@@ -90,7 +90,7 @@ void OMKLVStoredStream::read(OMByte* data,
   PRECONDITION("Valid data buffer", data != 0);
   PRECONDITION("Valid size", bytes > 0);
 
-  _store->streamReadAt(_sid, _position, data, bytes, bytesRead);
+  _store->readStreamAt(_sid, _position, data, bytes, bytesRead);
   OMKLVStoredStream* nonConstThis = const_cast<OMKLVStoredStream*>(this);
   nonConstThis->_position = _position + bytesRead;
 }
@@ -107,7 +107,7 @@ void OMKLVStoredStream::read(OMUInt64 position,
   PRECONDITION("Valid data buffer", buffer != 0);
   PRECONDITION("Valid size", bytes > 0);
 
-  _store->streamReadAt(_sid,
+  _store->readStreamAt(_sid,
                        position,
                        buffer,
                        bytes,
@@ -127,7 +127,7 @@ void OMKLVStoredStream::read(OMUInt64 position,
   PRECONDITION("Valid buffers", buffers != 0);
   PRECONDITION("Valid buffer count", bufferCount > 0);
 
-  _store->streamReadAt(_sid,
+  _store->readStreamAt(_sid,
                        position,
                        buffers,
                        bufferCount,
@@ -154,7 +154,7 @@ void OMKLVStoredStream::write(const OMByte* data,
   PRECONDITION("Valid data", data != 0);
   PRECONDITION("Valid size", bytes > 0);
 
-  _store->streamWriteAt(_sid,
+  _store->writeStreamAt(_sid,
                         _position,
                         reinterpret_cast<const OMByte*>(data),
                         bytes,
@@ -181,7 +181,7 @@ void OMKLVStoredStream::write(OMIOBufferDescriptor* buffers,
   PRECONDITION("Valid buffers", buffers != 0);
   PRECONDITION("Valid buffer count", bufferCount > 0);
 
-  _store->streamWriteAt(_sid, _position, buffers, bufferCount, bytesWritten);
+  _store->writeStreamAt(_sid, _position, buffers, bufferCount, bytesWritten);
   _position = _position + bytesWritten;
 }
 
@@ -197,7 +197,7 @@ void OMKLVStoredStream::write(OMUInt64 position,
   PRECONDITION("Valid data", buffer != 0);
   PRECONDITION("Valid size", bytes > 0);
 
-  _store->streamWriteAt(_sid,
+  _store->writeStreamAt(_sid,
                         position,
                         buffer,
                         bytes,
@@ -217,7 +217,7 @@ void OMKLVStoredStream::write(OMUInt64 position,
   PRECONDITION("Valid buffers", buffers != 0);
   PRECONDITION("Valid buffer count", bufferCount > 0);
 
-  _store->streamWriteAt(_sid,
+  _store->writeStreamAt(_sid,
                         position,
                         buffers,
                         bufferCount,
