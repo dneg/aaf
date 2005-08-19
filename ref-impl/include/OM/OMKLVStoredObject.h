@@ -239,11 +239,10 @@ public:
                               const OMDictionary* dictionary,
                               bool reorderBytes);
 
-    // @cmember Write fill so that the next byte to be written is the
-    //          first byte of a page <p KAGSize> bytes in size.
-  static void fill(OMRawStorage* store,
-                   const OMUInt64& currentPosition,
-                   const OMUInt32& KAGSize);
+    // @cmember Write fill so that the next key is page aligned.
+  static void fillAlignK(OMRawStorage* store,
+                         const OMUInt64& currentPosition,
+                         const OMUInt32& KAGSize);
 
     // @cmember Write fill so that the next value is page aligned.
   static void fillAlignV(OMRawStorage* store,
