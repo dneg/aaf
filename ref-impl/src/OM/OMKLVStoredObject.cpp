@@ -1760,6 +1760,35 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
   }
 }
 
+void OMKLVStoredObject::streamRestore(void)
+{
+  TRACE("OMKLVStoredObject::streamRestore")
+
+  OMUniqueObjectIdentification sid;
+  OMKLVKey k;
+  _storage->readKLVKey(k);
+  convert(sid, k);
+
+  while (k != ClosedFooterPartitionPackKey) {
+    if (_storage->containsStream(sid)) {
+      OMUInt64 length = OMMXFStorage::readBerLength(_storage);
+      OMDataStream* s = _storage->stream(sid);
+      s->setPosition(0);
+      for (OMUInt64 i = 0; i < length; i++) {
+        OMByte b;
+        OMUInt32 x;
+        _storage->read(b);
+        s->write(&b, 1, x);
+      }
+      s->setPosition(0);
+    } else {
+      _storage->skipLV();
+    }
+    _storage->readKLVKey(k);
+    convert(sid, k);
+  }
+}
+
 void OMKLVStoredObject::streamRestore(OMRawStorage* store)
 {
   TRACE("OMKLVStoredObject::streamRestore")
@@ -1915,6 +1944,68 @@ void OMKLVStoredObject::writePartition(OMRawStorage* store,
   for (OMUInt32 i = 0; i < elementCount; i++) {
     writeKLVKey(store, essenceContainers[i]);
   }
+}
+
+void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
+{
+  TRACE("OMKLVStoredObject::writePrimerPack");
+
+  OMUInt32 elementCount = 0;
+  ClassDefinitionsIterator* classes = dictionary->classDefinitions();
+  while (++(*classes)) {
+    OMObject* obj = classes->currentObject();
+    OMClassDefinition* classDefinition = dynamic_cast<OMClassDefinition*>(obj);
+    ASSERT("Object is correct type", classDefinition != 0);
+    PropertyDefinitionsIterator*
+                           properties = classDefinition->propertyDefinitions();
+    while (++(*properties)) {
+      OMObject* obj = properties->currentObject();
+      OMPropertyDefinition* propertyDefinition =
+                                      dynamic_cast<OMPropertyDefinition*>(obj);
+      ASSERT("Object is correct type", propertyDefinition != 0);
+      OMPropertyId pid = propertyDefinition->localIdentification();
+      if (pid >= 0x8000) {
+        elementCount = elementCount + 1;
+      }
+    }
+    delete properties;
+  }
+  delete classes;
+
+  OMUInt32 elementSize = sizeof(OMPropertyId) +
+                         sizeof(OMUniqueObjectIdentification);
+  _storage->writeKLVKey(primerPackKey);
+  OMUInt64 sizeOfFixedPortion = 8;
+  OMUInt64 length = sizeOfFixedPortion + (elementCount * elementSize);
+  _storage->writeKLVLength(length);
+  _storage->write(elementCount, _reorderBytes);
+  _storage->write(elementSize, _reorderBytes);
+
+  classes = dictionary->classDefinitions();
+  while (++(*classes)) {
+    OMObject* obj = classes->currentObject();
+    OMClassDefinition* classDefinition = dynamic_cast<OMClassDefinition*>(obj);
+    ASSERT("Object is correct type", classDefinition != 0);
+    PropertyDefinitionsIterator*
+                           properties = classDefinition->propertyDefinitions();
+    while (++(*properties)) {
+      OMObject* obj = properties->currentObject();
+      OMPropertyDefinition* propertyDefinition =
+                                      dynamic_cast<OMPropertyDefinition*>(obj);
+      ASSERT("Object is correct type", propertyDefinition != 0);
+      OMPropertyId pid = propertyDefinition->localIdentification();
+      if (pid >= 0x8000) {
+        _storage->write(pid, _reorderBytes);
+        OMUniqueObjectIdentification id =
+                                    propertyDefinition->uniqueIdentification();
+        OMKLVKey k;
+        convert(k, id);
+        _storage->writeKLVKey(k);
+      }
+    }
+    delete properties;
+  }
+  delete classes;
 }
 
 void OMKLVStoredObject::writePrimerPack(OMRawStorage* store,
@@ -2378,6 +2469,30 @@ bool OMKLVStoredObject::readHeaderPartition(OMRawStorage* store)
     result = false;
   }
   return result;
+}
+
+void OMKLVStoredObject::readPrimerPack(OMDictionary* /* dictionary */)
+{
+  TRACE("OMKLVStoredObject::readPrimerPack");
+
+  OMKLVKey k;
+  _storage->readKLVKey(k);
+  ASSERT("Primer key", k == primerPackKey);
+  _storage->readKLVLength();
+  OMUInt32 elementCount;
+  _storage->read(elementCount, _reorderBytes);
+  OMUInt32 elementSize;
+  _storage->read(elementSize, _reorderBytes);
+  ASSERT("Valid element size",
+                       elementSize == sizeof(OMKLVKey) + sizeof(OMPropertyId));
+  for (OMUInt32 i = 0; i < elementCount; i++) {
+    OMPropertyId pid;
+    _storage->read(pid, _reorderBytes);
+    OMKLVKey x;
+    _storage->readKLVKey(x);
+    OMUniqueObjectIdentification id;
+    convert(id, x);
+  }
 }
 
 void OMKLVStoredObject::readPrimerPack(OMRawStorage* store,
