@@ -1051,8 +1051,12 @@ void OMMXFStorage::removeObject(OMStorable& object)
   PRECONDITION("Object set exists", _objectToInstanceId != 0);
 
   OMUniqueObjectIdentification k;
+#if defined(OM_DEBUG)
   bool found = objectToInstanceId()->find(&object, k);
   ASSERT("Object found", found);
+#else
+  objectToInstanceId()->find(&object, k);
+#endif
 
   objectToInstanceId()->remove(&object);
   instanceIdToObject()->remove(k);
@@ -1154,10 +1158,14 @@ void OMMXFStorage::restoreObjectDirectory(void)
   OMKLVKey k;
   readKLVKey(k);
   ASSERT("Expected key", k == objectDirectoryKey); // tjb - error
-  OMUInt64 setLength = readKLVLength();
   OMUInt64 entries;
   OMUInt8 entrySize;
+#if defined(OM_DEBUG)
+  OMUInt64 setLength = readKLVLength();
   ASSERT("Valid length", setLength > sizeof(entries) + sizeof(entrySize));
+#else
+  readKLVLength();
+#endif
 
   read(entries, _reorderBytes);
   read(entrySize);
@@ -1638,7 +1646,7 @@ void OMMXFStorage::saveStreams(void)
     }
   } else {
     // The file does not contain streams
- 
+
     // Write header partition and alignment fill.
     //
     setPosition(0);
