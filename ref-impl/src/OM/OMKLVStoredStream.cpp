@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -57,6 +57,24 @@ void OMKLVStoredStream::read(void* ANAME(data), size_t ANAME(size)) const
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
+  // @mfunc Attempt to read the vector of buffers given by <p buffers>
+  //        from this <c OMKLVStoredStream>. This is "read scatter". The
+  //        <p bufferCount> buffers are read in order until all have
+  //        been successfully read or an error is encountered. Once
+  //        an error has been encountered on one buffer no additional
+  //        buffers are read.
+  //        The number of bytes read is returned in <p bytesRead>.
+  //   @parm The vector of buffers into which the bytes are to be read.
+  //   @parm The count of buffers.
+  //   @parm The actual number of bytes that were read.
+void OMKLVStoredStream::read(OMIOVector buffers,
+                             OMUInt32 bufferCount,
+                             OMUInt32& bytesRead) const
+{
+  TRACE("OMKLVStoredStream::read");
+  ASSERT("Unimplemented code not reached", false);
+}
+
 void OMKLVStoredStream::read(OMByte* data,
                              const OMUInt32 bytes,
                              OMUInt32& bytesRead) const
@@ -96,6 +114,24 @@ void OMKLVStoredStream::write(const OMByte* data,
                         bytes,
                         bytesWritten);
   _position = _position + bytesWritten;
+}
+
+  // @cmember Attempt to write the vector of buffers given by <p buffers>
+  //          to this <c OMKLVStoredStream>. This is "write gather". The
+  //          <p bufferCount> buffers are written in order until all have
+  //          been successfully written or an error is encountered. Once
+  //          an error has been encountered on one buffer no additional
+  //          buffers are written.
+  //          The number of bytes written is returned in <p bytesWritten>.
+  //   @parm The vector of buffers from which the bytes are to be written.
+  //   @parm The count of buffers.
+  //   @parm The actual number of bytes that were written.
+void OMKLVStoredStream::write(OMIOVector buffers,
+                              OMUInt32 bufferCount,
+                              OMUInt32& bytesWritten)
+{
+  TRACE("OMKLVStoredStream::write");
+  ASSERT("Unimplemented code not reached", false);
 }
 
 OMUInt64 OMKLVStoredStream::size(void) const
