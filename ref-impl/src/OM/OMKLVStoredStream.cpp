@@ -81,6 +81,14 @@ void OMKLVStoredStream::read(OMIOBufferDescriptor* buffers,
   nonConstThis->_position = _position + bytesRead;
 }
 
+void OMKLVStoredStream::probe(OMUInt64 /* position */,
+                              OMUInt32 /* bytesRequired */,
+                              OMUInt32& /* bytesAvailable */) const
+{
+  TRACE("OMKLVStoredStream::probe");
+  ASSERT("Unimplemented code not reached", false);
+}
+
 void OMKLVStoredStream::read(OMByte* data,
                              const OMUInt32 bytes,
                              OMUInt32& bytesRead) const
