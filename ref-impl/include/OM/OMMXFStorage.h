@@ -162,6 +162,8 @@ public:
 
   virtual bool readHeaderPartition(void);
 
+  static bool read(const OMRawStorage* store, OMUInt16& i, bool reorderBytes);
+
   virtual void read(OMUInt8& i) const;
   virtual void read(OMUInt16& i, bool reorderBytes) const;
   virtual void read(OMUInt32& i, bool reorderBytes) const;
