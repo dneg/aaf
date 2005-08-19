@@ -272,6 +272,42 @@ void OMKLVStoredObject::save(OMFile& file)
   OMUInt64 currentPosition = _storage->position();
   fill(_storage, currentPosition, fillAlignment);
 
+  OMKLVKey bodyPartitionPackKey =
+    {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
+     0x0d, 0x01, 0x02, 0x01, 0x01, 0x03, 0x00, 0x00};
+
+  OMKLVKey fillKey =
+    {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
+     0x03, 0x01, 0x02, 0x10, 0x01, 0x00, 0x00, 0x00};
+
+  if (!metaDataOnly) {
+    // Skip body partition and any following fill
+    //
+    if (bodyPartitionOffset < _storage->size() ) {
+      OMUInt64 savedPosition = _storage->position();
+      _storage->setPosition(bodyPartitionOffset);
+      // skip body partition
+      OMKLVKey k;
+      readKLVKey(_storage, k);
+      k.octet14 = 0x00;
+      if (memcmp(&k, &bodyPartitionPackKey, sizeof(OMKLVKey)) == 0) {
+        OMUInt64 length = readKLVLength(_storage);
+        OMUInt64 currentPosition = _storage->position();
+        _storage->setPosition(currentPosition + length);
+        // skip fill
+        OMKLVKey fk;
+        readKLVKey(_storage, fk);
+        if (memcmp(&fk, &fillKey, sizeof(OMKLVKey)) == 0) {
+          skipLV(_storage);
+        } else {
+          _storage->setPosition(currentPosition + length);
+        }
+      } else {
+        _storage->setPosition(savedPosition);
+      }
+    }
+  }
+
   // Save streams
   if (!metaDataOnly) {
     streamSave(*file.root()->propertySet());
