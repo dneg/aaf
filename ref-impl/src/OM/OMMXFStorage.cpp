@@ -562,15 +562,28 @@ bool OMMXFStorage::read(const OMRawStorage* store,
 {
   TRACE("OMMXFStorage::read");
   bool result;
-  OMUInt16 val;
   OMUInt32 bytesRead;
-  OMByte* dest = reinterpret_cast<OMByte*>(&val);
+  OMByte* dest = reinterpret_cast<OMByte*>(&i);
   store->read(dest, sizeof(OMUInt16), bytesRead);
   if (bytesRead == sizeof(OMUInt16)) {
     if (reorderBytes) {
       OMType::reorderInteger(dest, sizeof(OMUInt16));
     }
-    i = val;
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+bool OMMXFStorage::read(const OMRawStorage* store, OMKLVKey& key)
+{
+  TRACE("OMMXFStorage::read");
+  bool result;
+  OMUInt32 bytesRead;
+  OMByte* dest = reinterpret_cast<OMByte*>(&key);
+  store->read(dest, sizeof(OMKLVKey), bytesRead);
+  if (bytesRead == sizeof(OMKLVKey)) {
     result = true;
   } else {
     result = false;
