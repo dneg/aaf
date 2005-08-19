@@ -198,6 +198,8 @@ public:
   typedef OMSetIterator<OMUniqueObjectIdentification,
                         ObjectDirectoryEntry> ObjectDirectoryIterator;
 
+  virtual OMUInt64 saveObjectDirectory(void);
+
   ObjectDirectory* instanceIdToObject(void);
 
   typedef OMSet<OMStorable*, OMUniqueObjectIdentification> ObjectSet;
