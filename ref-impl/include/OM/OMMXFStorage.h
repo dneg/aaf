@@ -56,6 +56,23 @@ static const OMUInt32 KAGSize = 0x100;
 static const OMUInt16 currentMajorVersion = 0xffff;
 static const OMUInt16 currentMinorVersion = 0xfffb;
 
+// Total size of the fixed-size portions of a partition value
+static const OMUInt32 fixedPartitionSize =
+  sizeof(OMUInt16) + // Major Version
+  sizeof(OMUInt16) + // Minor Version
+  sizeof(OMUInt32) + // KAGSize
+  sizeof(OMUInt64) + // ThisPartition
+  sizeof(OMUInt64) + // PreviousPartition
+  sizeof(OMUInt64) + // FooterPartition
+  sizeof(OMUInt64) + // HeaderByteCount
+  sizeof(OMUInt64) + // IndexByteCount
+  sizeof(OMUInt32) + // IndexSID
+  sizeof(OMUInt64) + // BodyOffset
+  sizeof(OMUInt32) + // BodySID
+  sizeof(OMKLVKey) + // Operational Pattern
+  sizeof(OMUInt32) + // count of essence container labels
+  sizeof(OMUInt32);  // size of each essence container label
+
 static const OMPropertyId PID_InterchangeObject_InstanceUID = 0x3c0a;
 
 static const OMPropertyId PID_Root_ObjectDirectory = 0x003;
