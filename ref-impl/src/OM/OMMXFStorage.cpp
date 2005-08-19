@@ -1845,6 +1845,7 @@ void OMMXFStorage::restoreStreams(void)
     } else if (isIndex(k)) {
       markMetadataEnd(keyPosition);
       markIndexStart(k, indexSID, gridSize, keyPosition);
+      skipV(length);
     } else if (k == fillKey) {
       skipV(length);
       markFill(keyPosition, position());
