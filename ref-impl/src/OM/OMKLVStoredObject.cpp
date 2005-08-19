@@ -149,6 +149,12 @@ OMKLVStoredObject::isRecognized(OMRawStorage* rawStorage)
     reorderBytes = true;
   }
   bool result = true;
+  OMUInt64 headerPosition;
+  bool foundHeader = OMMXFStorage::findHeader(rawStorage, headerPosition);
+  if (!foundHeader) {
+    return false;
+  }
+  rawStorage->setPosition(headerPosition);
   OMKLVKey k;
   if (OMMXFStorage::read(rawStorage, k)) {
     if (OMMXFStorage::isHeader(k)) {
@@ -722,6 +728,10 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   initializeMap(file);
 #endif
 
+  OMUInt64 headerPosition;
+  OMMXFStorage::findHeader(_storage, headerPosition);
+  _storage->setPosition(headerPosition);
+
   OMKLVKey k;
   _storage->readKLVKey(k);
   if (OMMXFStorage::isHeader(k)) {
@@ -1201,142 +1211,6 @@ OMStoredStream* OMKLVStoredObject::createStoredStream(
   OMKLVStoredStream* result = new OMKLVStoredStream(_storage, sid);
   ASSERT("Valid heap pointer", result != 0);
   return result;
-}
-
-OMUInt64 OMKLVStoredObject::length(const OMPropertySet& properties) const
-{
-  TRACE("OMKLVStoredObject::length");
-
-  OMUInt64 length = 0;
-  // All objects include a hidden instance UID
-  length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
-                  + sizeof(OMUniqueObjectIdentification);
-
-  if (properties.container()->classId() == Class_Root) {
-    // Root object includes a hidden reference to the object directory
-    length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
-                    + sizeof(OMUniqueObjectIdentification) + sizeof(OMUInt64);
-    // Root object includes a hidden 32-bit version number
-    length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
-                    + sizeof(OMUInt32);
-  }
-
-  OMPropertySetIterator iterator(properties, OMBefore);
-  while (++iterator) {
-    OMProperty* p = iterator.property();
-    ASSERT("Valid property", p != 0);
-    ASSERT("Property has a definition", p->definition() != 0);
-    if (!p->isOptional() || p->isPresent()) {
-      switch (p->storedForm()) {
-      case SF_DATA: {
-        OMSimpleProperty* sp = dynamic_cast<OMSimpleProperty*>(p);
-        ASSERT("Correct type", sp != 0);
-        OMSimpleProperty& property = *sp;
-        OMPropertySize size = property.bitsSize();
-        OMByte* bits = property.bits();
-        const OMType* type = property.type();
-        ASSERT("Valid property type", type != 0);
-        OMPropertySize s = type->externalSize(bits, size);
-        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize) + s;
-        break;
-      }
-      case SF_DATA_VECTOR: {
-        OMDataVector* dv = dynamic_cast<OMDataVector*>(p);
-        ASSERT("Correct type", dv != 0);
-        OMDataVector& property = *dv;
-        const OMType* type = property.type();
-        ASSERT("Valid property type", type != 0);
-        const OMArrayType* at = dynamic_cast<const OMArrayType*>(type);
-        ASSERT("Correct type", at != 0);
-        OMType* et = at->elementType();
-        ASSERT("Fixed size elements", et->isFixedSize());
-        OMUInt32 elementSize = et->externalSize();
-        OMUInt32 elementCount = property.count();
-        // Doh! 32-bit size and count but 16-bit property size
-        OMUInt64 size = elementSize * elementCount;
-        // ASSERT("Valid size"); // tjb
-        OMPropertySize s = static_cast<OMPropertySize>(size);
-        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize) + s;
-        length = length + sizeof(OMUInt32) + sizeof(OMUInt32);
-        break;
-      }
-      case SF_DATA_SET: {
-        OMDataSet* ds = dynamic_cast<OMDataSet*>(p);
-        ASSERT("Correct type", ds != 0);
-        OMDataSet& property = *ds;
-        const OMType* type = property.type();
-        ASSERT("Valid property type", type != 0);
-        const OMSetType* st = dynamic_cast<const OMSetType*>(type);
-        ASSERT("Correct type", st != 0);
-        OMType* et = st->elementType();
-        ASSERT("Fixed size elements", et->isFixedSize());
-        OMUInt32 elementSize = et->externalSize();
-        OMUInt32 elementCount = property.count();
-        // Doh! 32-bit size and count but 16-bit property size
-        OMUInt64 size = elementSize * elementCount;
-        // ASSERT("Valid size"); // tjb
-        OMPropertySize s = static_cast<OMPropertySize>(size);
-        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize) + s;
-        length = length + sizeof(OMUInt32) + sizeof(OMUInt32);
-        break;
-      }
-      case SF_STRONG_OBJECT_REFERENCE: {
-        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
-                        + sizeof(OMUniqueObjectIdentification);
-        break;
-      }
-      case SF_STRONG_OBJECT_REFERENCE_VECTOR: {
-        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
-                        + sizeof(OMUInt32) + sizeof(OMUInt32);
-        OMStrongReferenceVector* v = dynamic_cast<OMStrongReferenceVector*>(p);
-        ASSERT("Valid type", v != 0);
-        OMUInt32 elements = v->count();
-        length = length + (elements * sizeof(OMUniqueObjectIdentification));
-        break;
-      }
-      case SF_STRONG_OBJECT_REFERENCE_SET: {
-        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
-                        + sizeof(OMUInt32) + sizeof(OMUInt32);
-        OMStrongReferenceSet* s = dynamic_cast<OMStrongReferenceSet*>(p);
-        ASSERT("Valid type", s != 0);
-        OMUInt32 elements = s->count();
-        length = length + (elements * sizeof(OMUniqueObjectIdentification));
-        break;
-      }
-      case SF_WEAK_OBJECT_REFERENCE: {
-        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
-                        + sizeof(OMUniqueObjectIdentification);
-        break;
-      }
-      case SF_WEAK_OBJECT_REFERENCE_VECTOR: {
-        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
-                        + sizeof(OMUInt32) + sizeof(OMUInt32);
-        OMWeakReferenceVector* v = dynamic_cast<OMWeakReferenceVector*>(p);
-        ASSERT("Valid type", v != 0);
-        OMUInt32 elements = v->count();
-        length = length + (elements * sizeof(OMUniqueObjectIdentification));
-        break;
-      }
-      case SF_WEAK_OBJECT_REFERENCE_SET: {
-        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
-                        + sizeof(OMUInt32) + sizeof(OMUInt32);
-        OMWeakReferenceSet* s = dynamic_cast<OMWeakReferenceSet*>(p);
-        ASSERT("Valid type", s != 0);
-        OMUInt32 elements = s->count();
-        length = length + (elements * sizeof(OMUniqueObjectIdentification));
-        break;
-      }
-      case SF_DATA_STREAM: {
-        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
-                        + sizeof(OMUInt32);
-        break;
-      }
-      default:
-        break;
-      }
-    }
-  }
-  return length;
 }
 
 void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
@@ -2096,6 +1970,20 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
   TRACE("OMKLVStoredObject::writePrimerPack");
 
   OMUInt32 elementCount = 0;
+  OMUInt32 elementSize = sizeof(OMPropertyId) +
+                         sizeof(OMUniqueObjectIdentification);
+  _storage->writeKLVKey(primerKey);
+  OMUInt64 lengthPosition = _storage->reserveKLVLength();
+  OMUInt64 elementCountPosition = _storage->reserve(sizeof(elementCount));
+  _storage->write(elementSize, _reorderBytes);
+
+  // Instance UID
+  _storage->write(PID_InterchangeObject_InstanceUID, _reorderBytes);
+  OMKLVKey iuidk;
+  convert(iuidk, Property_InterchangeObject_InstanceUID);
+  _storage->writeKLVKey(iuidk);
+  elementCount = elementCount + 1;
+
   ClassDefinitionsIterator* classes = dictionary->classDefinitions();
   while (++(*classes)) {
     OMObject* obj = classes->currentObject();
@@ -2105,35 +1993,6 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
                            properties = classDefinition->propertyDefinitions();
     while (++(*properties)) {
       elementCount = elementCount + 1;
-    }
-    delete properties;
-  }
-  delete classes;
-  elementCount = elementCount + 1; // For InstanceUID
-
-  OMUInt32 elementSize = sizeof(OMPropertyId) +
-                         sizeof(OMUniqueObjectIdentification);
-  _storage->writeKLVKey(primerKey);
-  OMUInt64 sizeOfFixedPortion = 8;
-  OMUInt64 length = sizeOfFixedPortion + (elementCount * elementSize);
-  _storage->writeKLVLength(length);
-  _storage->write(elementCount, _reorderBytes);
-  _storage->write(elementSize, _reorderBytes);
-
-  // Instance UID
-  _storage->write(PID_InterchangeObject_InstanceUID, _reorderBytes);
-  OMKLVKey iuidk;
-  convert(iuidk, Property_InterchangeObject_InstanceUID);
-  _storage->writeKLVKey(iuidk);
-
-  classes = dictionary->classDefinitions();
-  while (++(*classes)) {
-    OMObject* obj = classes->currentObject();
-    OMClassDefinition* classDefinition = dynamic_cast<OMClassDefinition*>(obj);
-    ASSERT("Object is correct type", classDefinition != 0);
-    PropertyDefinitionsIterator*
-                           properties = classDefinition->propertyDefinitions();
-    while (++(*properties)) {
       OMObject* obj = properties->currentObject();
       OMPropertyDefinition* propertyDefinition =
                                       dynamic_cast<OMPropertyDefinition*>(obj);
@@ -2155,6 +2014,10 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
     delete properties;
   }
   delete classes;
+
+  // patch length and elementCount
+  _storage->fixupKLVLength(lengthPosition);
+  _storage->fixup(elementCountPosition, elementCount);
 }
 
 void OMKLVStoredObject::readPrimerPack(OMDictionary* /* dictionary */)
