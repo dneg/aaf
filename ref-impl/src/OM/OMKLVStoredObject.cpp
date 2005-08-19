@@ -1192,7 +1192,7 @@ OMUInt64 OMKLVStoredObject::length(const OMPropertySet& properties) const
         length = length + sizeof(OMUInt32) + sizeof(OMUInt32);
         break;
       }
-     case SF_STRONG_OBJECT_REFERENCE: {
+      case SF_STRONG_OBJECT_REFERENCE: {
         length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
                         + sizeof(OMUniqueObjectIdentification);
         break;
