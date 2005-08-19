@@ -806,6 +806,29 @@ OMMXFStorage::object(const OMUniqueObjectIdentification& instanceId)
   return result;
 }
 
+void OMMXFStorage::associate(OMStorable* object,
+                             const OMUniqueObjectIdentification& instanceId)
+{
+  TRACE("OMMXFStorage::associate");
+
+  ASSERT("Object not present", !objectToInstanceId()->contains(object));
+  objectToInstanceId()->insert(object, instanceId);
+  ObjectDirectoryEntry* ep = 0;
+  if (instanceIdToObject()->find(instanceId, &ep)) {
+    ASSERT("No previous entry", ep->_object == 0);
+    ep->_object = object;
+  } else {
+    // Root object is restored before the object directory
+    ObjectDirectoryEntry e;
+    e._object = object;
+    e._offset = 0;
+    e._flags = 0;
+    ASSERT("Identifier not present", !containsObject(instanceId));
+    instanceIdToObject()->insert(instanceId, e);
+  }
+  ASSERT("Identifier present", containsObject(instanceId));
+}
+
 void OMMXFStorage::enterObject(OMStorable& object, OMUInt64 position)
 {
   TRACE("OMMXFStorage::enterObject");
