@@ -489,15 +489,19 @@ private:
 
   void markIndexStart(OMKLVKey key,
                       OMUInt32 sid,
+                      OMUInt32 gridSize,
                       OMUInt64 indexKeyPosition);
   void markIndexEnd(OMUInt64 endKeyPosition);
 
   void markEssenceSegmentStart(OMKLVKey key,
                                OMUInt32 sid,
+                               OMUInt32 gridSize,
                                OMUInt64 essenceKeyPosition);
   void markEssenceSegmentEnd(OMUInt64 endKeyPosition);
 
   void markFill(OMUInt64 fillKeyPosition, OMUInt64 fillEndPosition);
+
+  OMUInt32 _gridSize;
 
   OMUInt64 _primerPosition;
   OMUInt64 _headerByteCount;
