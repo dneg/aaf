@@ -1386,8 +1386,8 @@ void OMMXFStorage::clearObjectDirectory(void)
       ObjectDirectoryEntry e = iterator.value();
       if (e._flags != 1) {
         if (e._object != 0) {
-          OMClassFactory* factory = e._object->classFactory();
 #if 0 // tjb not yet
+          OMClassFactory* factory = e._object->classFactory();
           factory->destroy(e._object);
 #else
           // leak like a sieve
