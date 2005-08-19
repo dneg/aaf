@@ -1390,7 +1390,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
         OMWeakObjectReference& r = wr->reference();
         OMUniqueObjectIdentification id = r.identification();
         OMStorable* obj = object(id);
-#if 1
+#if defined(USETAGTABLE)
         if (obj != 0) {
 #endif
         ASSERT("Valid object", obj != 0);
@@ -1409,7 +1409,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
 #else
         wr->reference().setValue(id, obj);
 #endif
-#if 1
+#if defined(USETAGTABLE)
         } else {
           OMPropertyTag tag = findTag(wr->targetName());
           wr->reference().setTargetTag(tag); 
@@ -1443,7 +1443,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
           OMWeakObjectReference& r = element.reference();
           OMUniqueObjectIdentification id = r.identification();
           OMStorable* obj = object(id);
-#if 1
+#if defined(USETAGTABLE)
         if (obj != 0) {
 #endif
           ASSERT("Valid object", obj != 0);
@@ -1459,7 +1459,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
 #else
           r.setValue(k, obj);
 #endif
-#if 1
+#if defined(USETAGTABLE)
         } else {
           OMPropertyTag tag = findTag(v->targetName());
           r.setTargetTag(tag); 
@@ -1493,7 +1493,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
           while (++viter) {
             OMUniqueObjectIdentification id = viter.value();
             OMStorable* obj = object(id);
-#if 1
+#if defined(USETAGTABLE)
             if (obj != 0) {
 #endif
             ASSERT("Valid object", obj != 0);
@@ -1511,7 +1511,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
             element.setValue(key, obj);
 #endif
             s->insert(&key, element);
-#if 1
+#if defined(USETAGTABLE)
             } else {
               OMPropertyTag tag = findTag(s->targetName());
               //element.reference().setTargetTag(tag); 
