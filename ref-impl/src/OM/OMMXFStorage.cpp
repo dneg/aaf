@@ -114,11 +114,7 @@ OMMXFStorage::~OMMXFStorage(void)
   destroySegmentMap();
   destroyFixups();
 
-  size_t count = _partitions.count();
-  for (size_t i = 0; i < count; i++) {
-    Partition* p = _partitions.valueAt(i);
-    delete p;
-  }
+  destroyPartitions();
 }
 
   // @mfunc Open this <c OMMXFStorage>.
@@ -316,19 +312,12 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
   TRACE("OMMXFStorage::writePartition");
 
   OMUInt64 currentPosition = position();
-  size_t count = _partitions.count();
-  size_t i;
-  for (i = 0; i < count; i++) {
-    Partition* p = _partitions.valueAt(i);
-    if (p->_address > currentPosition) {
-      break;
-    }
-  }
-  Partition* newPartition = new Partition;
-  ASSERT("Valid heap pointer", newPartition != 0);
-  newPartition->_address = currentPosition;
-  newPartition->_sid = bodySID;
-  _partitions.insertAt(newPartition, i);
+  OMUInt32 i;
+  bool found = findPartition(currentPosition, i);
+  ASSERT("Partition not found", !found);
+  i = _partitions.count();
+
+  addPartition(currentPosition, bodySID, i);
 
   OMUInt32 elementSize = sizeof(OMKLVKey);
   LabelSetIterator* iter = essenceContainerLabels();
