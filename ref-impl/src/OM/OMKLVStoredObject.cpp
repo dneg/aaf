@@ -2178,7 +2178,15 @@ bool OMKLVStoredObject::readHeaderPartition(OMRawStorage* store)
      0x0d, 0x01, 0x02, 0x01, 0x01, 0x02, 0x00, 0x00};
   OMKLVKey k;
   bool result = true;
+#if 0
   readKLVKey(store, k);
+#else
+  OMUInt32 bytesRead;
+  store->read(reinterpret_cast<OMByte*>(&k), sizeof(OMKLVKey), bytesRead);
+  if (bytesRead != sizeof(OMKLVKey)) {
+    memset(&k, 0, sizeof(k));
+  }
+#endif
   k.octet14 = 0x00;
   if (memcmp(&k, &headerPartitionPackKey, sizeof(OMKLVKey)) == 0) {
     readKLVLength(store);
