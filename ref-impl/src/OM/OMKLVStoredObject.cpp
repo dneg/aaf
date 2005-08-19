@@ -1358,6 +1358,7 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
     ASSERT("Property has a definition", p->definition() != 0);
     if (!p->isOptional() || p->isPresent()) {
       OMPropertyId id = p->propertyId();
+      OMDictionary::mapToKLV(id);
       switch (p->storedForm()) {
       case SF_DATA: {
         _storage->write(id, _reorderBytes);
@@ -1582,6 +1583,7 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
   while (setLength > 0) {
     OMPropertyId pid;
     _storage->read(pid, _reorderBytes);
+    OMDictionary::mapFromKLV(pid);
     OMPropertySize length;
     _storage->read(length, _reorderBytes);
 
@@ -2126,6 +2128,7 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
                                       dynamic_cast<OMPropertyDefinition*>(obj);
       ASSERT("Object is correct type", propertyDefinition != 0);
       OMPropertyId pid = propertyDefinition->localIdentification();
+      OMDictionary::mapToKLV(pid);
       _storage->write(pid, _reorderBytes);
 #if defined(OMONLY)
       OMUniqueObjectIdentification id = propertyDefinition->identification();
@@ -2133,6 +2136,7 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
       OMUniqueObjectIdentification id =
                                     propertyDefinition->uniqueIdentification();
 #endif
+      OMDictionary::mapToKLV(id);
       OMKLVKey k;
       convert(k, id);
       _storage->writeKLVKey(k);
@@ -2156,10 +2160,12 @@ void OMKLVStoredObject::readPrimerPack(OMDictionary* /* dictionary */)
   for (OMUInt32 i = 0; i < elementCount; i++) {
     OMPropertyId pid;
     _storage->read(pid, _reorderBytes);
+    OMDictionary::mapFromKLV(pid);
     OMKLVKey x;
     _storage->readKLVKey(x);
     OMUniqueObjectIdentification id;
     convert(id, x);
+    OMDictionary::mapFromKLV(id);
   }
 }
 
