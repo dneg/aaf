@@ -451,6 +451,7 @@ private:
     OMUInt32 _sid;
   };
   OMVector<Partition*> _partitions;
+  OMUInt64 _primerOffset;
 };
 
 #endif
