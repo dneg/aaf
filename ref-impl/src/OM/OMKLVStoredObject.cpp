@@ -1204,10 +1204,10 @@ void OMKLVStoredObject::restore(OMDataStream& /* stream */,
   ASSERT("NYI", false);
 }
 
+#if defined(OM_EXTENSIONSONLY)
 void OMKLVStoredObject::write(const wchar_t* string)
 {
   TRACE("OMKLVStoredObject::write");
-#if defined(OM_EXTENSIONSONLY)
 
   PRECONDITION("Valid string", string != 0); // L"" is OK
 
@@ -1237,13 +1237,17 @@ void OMKLVStoredObject::write(const wchar_t* string)
   }
   _storage->write(buffer, externalBytesSize);
   delete [] buffer;
-#endif
 }
+#else
+void OMKLVStoredObject::write(const wchar_t* /* string */)
+{
+}
+#endif
 
+#if defined(OM_EXTENSIONSONLY)
 void OMKLVStoredObject::write(bool b)
 {
   TRACE("OMKLVStoredObject::write");
-#if defined(OM_EXTENSIONSONLY)
 
   OMByte byte;
   if (b) {
@@ -1252,8 +1256,12 @@ void OMKLVStoredObject::write(bool b)
     byte = 0x00; // false
   }
   _storage->write(byte);
-#endif
 }
+#else
+void OMKLVStoredObject::write(bool /* b */)
+{
+}
+#endif
 
 void OMKLVStoredObject::writeProperty(OMPropertyId pid, const OMUInt32& value)
 {
@@ -2150,10 +2158,11 @@ OMKLVStoredObject::restoreObjectDirectoryReference(
   return offset;
 }
 
+#if defined(OM_EXTENSIONSONLY)
 void OMKLVStoredObject::writeMetaDictionary(const OMDictionary* dictionary)
 {
   TRACE("OMKLVStoredObject::writeMetaDictionary");
-#if defined(OM_EXTENSIONSONLY)
+
   OMSet<OMUniqueObjectIdentification,
         const OMClassDefinition*> extensionClasses;
   OMSet<OMUniqueObjectIdentification,
@@ -2249,13 +2258,17 @@ void OMKLVStoredObject::writeMetaDictionary(const OMDictionary* dictionary)
     _storage->fixupKLVLength(lengthPosition);
 
   } // else no extensions - no dictionary
-#endif
 }
+#else
+void OMKLVStoredObject::writeMetaDictionary(const OMDictionary* /* dictionary */)
+{
+}
+#endif
 
+#if defined(OM_EXTENSIONSONLY)
 void OMKLVStoredObject::writeClassDefinition(const OMClassDefinition* cd)
 {
   TRACE(" OMKLVStoredObject::writeClassDefinition");
-#if defined(OM_EXTENSIONSONLY)
 
   // length
   OMUInt64 p = _storage->reserve(sizeof(OMUInt16));
@@ -2302,13 +2315,17 @@ void OMKLVStoredObject::writeClassDefinition(const OMClassDefinition* cd)
 
   // fixup length
   _storage->fixup(p, (OMUInt16)(_storage->position() - p - sizeof(OMUInt16)));
-#endif
 }
+#else
+void OMKLVStoredObject::writeClassDefinition(const OMClassDefinition* /* cd */)
+{
+}
+#endif
 
+#if defined(OM_EXTENSIONSONLY)
 void OMKLVStoredObject::writePropertyDefinition(const OMPropertyDefinition* pd)
 {
   TRACE("OMKLVStoredObject::writePropertyDefinition");
-#if defined(OM_EXTENSIONSONLY)
 
   // length
   OMUInt64 p = _storage->reserve(sizeof(OMUInt16));
@@ -2360,13 +2377,17 @@ void OMKLVStoredObject::writePropertyDefinition(const OMPropertyDefinition* pd)
 
   // fixup length
   _storage->fixup(p, (OMUInt16)(_storage->position() - p - sizeof(OMUInt16)));
-#endif
 }
+#else
+void OMKLVStoredObject::writePropertyDefinition(const OMPropertyDefinition* /* pd */)
+{
+}
+#endif
 
+#if defined(OM_EXTENSIONSONLY)
 void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
 {
   TRACE("OMKLVStoredObject::writeTypeDefinition");
-#if defined(OM_EXTENSIONSONLY)
 
   // length
   OMUInt64 p = _storage->reserve(sizeof(OMUInt16));
@@ -2590,8 +2611,12 @@ void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
   }
   // fixup length
   _storage->fixup(p, (OMUInt16)(_storage->position() - p - sizeof(OMUInt16)));
-#endif
 }
+#else
+void OMKLVStoredObject::writeTypeDefinition(const OMType* /* td */)
+{
+}
+#endif
 
   // @mfunc Constructor.
   //   @parm The <c OMRawStorage> on which this <c OMKLVStoredObject> resides.
