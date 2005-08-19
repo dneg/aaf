@@ -938,7 +938,11 @@ void OMMXFStorage::readHeaderPartition(void)
 {
   TRACE("OMMXFStorage::readHeaderPartition");
 
+#if defined(OM_DEBUG)
+  OMUInt64 length = readKLVLength();
+#else
   readKLVLength();
+#endif
   OMUInt16 majorVersion;
   read(majorVersion, _reorderBytes);
   OMUInt16 minorVersion;
@@ -966,6 +970,8 @@ void OMMXFStorage::readHeaderPartition(void)
   read(elementCount, _reorderBytes);
   OMUInt32 elementSize;
   read(elementSize, _reorderBytes);
+  ASSERT("Consistent length",
+         length == fixedPartitionSize + (elementCount * elementSize));
   OMKLVKey essenceContainer;
   for (OMUInt32 i = 0; i < elementCount; i++) {
     readKLVKey(essenceContainer);
