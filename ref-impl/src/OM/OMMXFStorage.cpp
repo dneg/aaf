@@ -1404,63 +1404,6 @@ void OMMXFStorage::streamReadAt(OMUInt32 sid,
   }
 }
 
-void OMMXFStorage::streamSave(OMDataStream* stream)
-{
-  TRACE("OMMXFStorage::streamSave");
-  PRECONDITION("Valid stream", stream != 0);
-
-  OMUInt32 sid;
-  streamToSid()->find(stream, sid);
-  Stream* s = 0;
-  segmentMap()->find(sid, s);
-  if (s != 0) {
-    OMUInt64 savedPosition = position();
-
-    OMUInt64 length = stream->size();
-    ASSERT("Stream not empty", length > 0);
-    OMUInt64 remaining = length;
-
-    ASSERT("Valid segment list", s->_segments != 0);
-    SegmentListIterator iterator(*s->_segments, OMBefore);
-    while (++iterator) {
-      Segment* seg = iterator.value();
-      ASSERT("Valid segment", seg != 0);
-
-      // Compute length
-      OMUInt64 len;
-      if (remaining > seg->_size) {
-        len = seg->_size;
-      } else {
-        len = remaining;
-      }
-
-      // For body partition and filler
-      OMUInt64 pos = seg->_origin - s->_gridSize + fillBufferZoneSize;
-
-      // Write partition pack
-      setPosition(pos);
-      writeBodyPartition(sid, 0, s->_gridSize);
-
-      // Write essence element label
-      writeKLVKey(s->_label);
-      writeKLVLength(len);
-
-      ASSERT("Consistent origin", seg->_origin == position());
-
-      // Fill end of segment
-      OMUInt64 fillSize = seg->_size + fillBufferZoneSize - len;
-      OMUInt64 p = (seg->_origin + seg->_size + fillBufferZoneSize) - fillSize;
-      ASSERT("Can fill", fillSize >= minimumFill);
-      setPosition(p);
-      writeKLVFill(fillSize - minimumFill);
-
-      ASSERT("Sane segment size", remaining >= len);
-      remaining = remaining - len;
-      setPosition(savedPosition);
-    }
-  } // else stream exists but was never written to
-}
-
 void OMMXFStorage::streamRestoreSegment(OMUInt32 sid,
                                         OMUInt64 start,
                                         OMUInt64 size,
