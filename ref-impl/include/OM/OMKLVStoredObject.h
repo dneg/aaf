@@ -228,6 +228,7 @@ public:
   virtual void referenceRestore(OMStorable* object, OMPropertyId pid);
 
   virtual void writeHeaderPartition(void);
+  static void writeBodyPartition(OMRawStorage* store);
   static void writeFooterPartition(OMRawStorage* store);
   static void writePartition(OMRawStorage* store,
                              const OMKLVKey& key,
