@@ -34,7 +34,7 @@
   // @mfunc Constructor.
 OMMXFStorage::OMMXFStorage(OMRawStorage* store)
 : OMWrappedRawStorage(store),
-  _operationalPattern(nullOMUniqueObjectIdentification),
+  _operationalPattern(nullOMKLVKey),
   _instanceIdToObject(0),
   _objectToInstanceId(0)
 {
@@ -61,7 +61,7 @@ OMMXFStorage::~OMMXFStorage(void)
 
   // @mfunc Set the operational pattern to <p pattern>.
   //   @parm The operational pattern.
-void OMMXFStorage::setOperationalPattern(const OMObjectIdentification& pattern)
+void OMMXFStorage::setOperationalPattern(const OMKLVKey& pattern)
 {
   TRACE("OMMXFStorage::setOperationalPattern");
   _operationalPattern = pattern;
@@ -69,7 +69,7 @@ void OMMXFStorage::setOperationalPattern(const OMObjectIdentification& pattern)
 
   // @mfunc Get the operational pattern.
   //   @rdesc The operational pattern.
-OMObjectIdentification OMMXFStorage::operationalPattern(void) const
+OMKLVKey OMMXFStorage::operationalPattern(void) const
 {
   TRACE("OMMXFStorage::operationalPattern");
   return _operationalPattern;
