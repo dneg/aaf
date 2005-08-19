@@ -280,7 +280,7 @@ void OMKLVStoredObject::save(OMFile& file)
     fillAlignment = bodyPartitionOffset;
   }
   OMUInt64 currentPosition = _storage->position();
-  fill(_storage, currentPosition, fillAlignment);
+  fillAlignK(_storage, currentPosition, fillAlignment);
 
   OMKLVKey bodyPartitionPackKey =
     {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
@@ -1718,7 +1718,7 @@ void OMKLVStoredObject::writeHeaderPartition(void)
   OMUInt32 KAGSize = 0x100;
   writePartition(_storage, headerPartitionPackKey, KAGSize, _reorderBytes);
   OMUInt64 currentPosition = _storage->position();
-  fill(_storage, currentPosition, KAGSize);
+  fillAlignK(_storage, currentPosition, KAGSize);
 }
 
 void OMKLVStoredObject::writeBodyPartition(OMRawStorage* store)
@@ -1735,7 +1735,7 @@ void OMKLVStoredObject::writeBodyPartition(OMRawStorage* store)
   OMUInt32 KAGSize = 0x200;
   writePartition(store, ClosedBodyPartitionPackKey, KAGSize, reorderBytes);
   OMUInt64 currentPosition = store->position();
-  fill(store, currentPosition, KAGSize);
+  fillAlignV(store, currentPosition, KAGSize);
 }
 
 void OMKLVStoredObject::writeFooterPartition(OMRawStorage* store)
@@ -1879,19 +1879,18 @@ void OMKLVStoredObject::writePrimerPack(OMRawStorage* store,
   delete classes;
 
   OMUInt64 currentPosition = store->position();
-  fill(store, currentPosition, KAGSize);
+  fillAlignK(store, currentPosition, KAGSize);
 }
 
-  // @mfunc Write fill so that the next byte to be written is the
-  //        first byte of a page <p KAGSize> bytes in size.
+  // @cmember Write fill so that the next key is page aligned.
   //   @parm The <c OMRawStorage> on which to write.
-  //   @parm The current position. 
+  //   @parm The current position.
   //   @parm The page/KAG size.
-void OMKLVStoredObject::fill(OMRawStorage* store,
-                             const OMUInt64& currentPosition,
-                             const OMUInt32& KAGSize)
+void OMKLVStoredObject::fillAlignK(OMRawStorage* store,
+                                   const OMUInt64& currentPosition,
+                                   const OMUInt32& KAGSize)
 {
-  TRACE("OMKLVStoredObject::fill");
+  TRACE("OMKLVStoredObject::fillAlignK");
 
 #if defined(BER9)
   OMUInt64 minimumFill = sizeof(OMKLVKey) + sizeof(OMUInt64) + 1;
@@ -1903,7 +1902,7 @@ void OMKLVStoredObject::fill(OMRawStorage* store,
   if (remainder < minimumFill) {
     remainder = remainder + KAGSize;
   }
-  remainder = remainder - minimumFill;
+  remainder = remainder - minimumFill; // Subtract key and length of fill
   writeKLVFill(store, remainder);
 }
 
