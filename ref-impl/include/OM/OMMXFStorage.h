@@ -577,7 +577,7 @@ private:
   virtual Segment* findLastSegment(Stream* s);
   virtual OMUInt64 allocatedSize(Stream* s);
   virtual Segment* streamSegment(OMUInt32 sid, OMUInt64 position);
-  virtual OMUInt64 OMMXFStorage::validSize(Segment* segment);
+  virtual OMUInt64 validSize(Segment* segment);
 
     // debugging
   void printPartitions(void);
