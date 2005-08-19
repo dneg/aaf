@@ -1515,8 +1515,6 @@ void OMMXFStorage::saveStreams(void)
       OMDataStream* sp = stream(sid);
       ASSERT("Found stream", sp != 0);
 
-      OMUInt64 savedPosition = position();
-
       OMUInt64 length = sp->size();
       ASSERT("Stream not empty", length > 0);
       OMUInt64 remaining = length;
@@ -1557,7 +1555,6 @@ void OMMXFStorage::saveStreams(void)
 
         ASSERT("Sane segment size", remaining >= len);
         remaining = remaining - len;
-        setPosition(savedPosition);
       }
     }
   }
