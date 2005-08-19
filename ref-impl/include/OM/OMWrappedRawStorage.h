@@ -182,9 +182,23 @@ public:
     //          buffers are read.
     //          The number of bytes read is returned in <p bytesRead>.
   virtual void streamReadAt(OMUInt64 position,
-                            OMIOVector buffers,
+                            OMIOBufferDescriptor* buffers,
                             OMUInt32 bufferCount,
                             OMUInt32& bytesRead) const;
+
+    // Asynchronous read - single buffer
+  virtual void streamReadAt(OMUInt64 position,
+                            OMByte* buffer,
+                            const OMUInt32 bytes,
+                            void* /* */ completion,
+                            const void* clientArgument) const;
+
+    // Asynchronous read - multiple buffers
+  virtual void streamReadAt(OMUInt64 position,
+                            OMIOBufferDescriptor* buffers,
+                            OMUInt32 bufferCount,
+                            void* /* */ completion,
+                            const void* clientArgument) const;
 
     // @cmember Attempt to write the number of stream data bytes given by
     //          <p byteCount> to offset  <p position> in this
@@ -208,9 +222,23 @@ public:
     //          buffers are written.
     //          The number of bytes written is returned in <p bytesWritten>.
   virtual void streamWriteAt(OMUInt64 position,
-                             OMIOVector buffers,
+                             OMIOBufferDescriptor* buffers,
                              OMUInt32 bufferCount,
                              OMUInt32& bytesWritten);
+
+    // Asynchronous write - single buffer
+  virtual void streamWriteAt(OMUInt64 position,
+                             const OMByte* buffer,
+                             const OMUInt32 bytes,
+                             void* /* */ completion,
+                             const void* clientArgument);
+
+    // Asynchronous write - multiple buffers
+  virtual void streamWriteAt(OMUInt64 position,
+                             const OMIOBufferDescriptor* buffers,
+                             OMUInt32 bufferCount,
+                             void* /* */ completion,
+                             const void* clientArgument);
 
 private:
   OMRawStorage* _store;
