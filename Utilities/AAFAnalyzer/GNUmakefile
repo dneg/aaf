@@ -55,6 +55,10 @@ EditProtocolTestImpl: AAFAnalyzerBase TestPhaseLib
 AAFAnalyzer: EditProtocolTestImpl AAFAnalyzerBase TestPhaseLib
 	cd AAFAnalyzer && $(MAKE)
 
+.PHONY : check
+check : RegressionTest
+	cd RegressionTest && $(MAKE) $@
+
 .PHONY: clean
 clean:
 	cd AAFAnalyzerBase && $(MAKE) GENDEPS=0 $@
