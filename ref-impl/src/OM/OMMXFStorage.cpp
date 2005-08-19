@@ -31,6 +31,7 @@
 #include "OMUtilities.h"
 #include "OMSet.h"
 #include "OMIdentitySet.h"
+#include "OMIdentitySetIter.h"
 
   // @mfunc Constructor.
 OMMXFStorage::OMMXFStorage(OMRawStorage* store)
