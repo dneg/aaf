@@ -193,3 +193,50 @@ OMUInt64 OMKLVStoredStream::fileOffset(void) const
   TRACE("OMKLVStoredStream::fileOffset");
   return _fileOffset;
 }
+
+bool OMKLVStoredStream::readKLVKey(OMStoredStream& stream, OMKLVKey& key)
+{
+  TRACE("OMKLVStoredStream::readKLVKey");
+
+  bool result;
+  OMKLVKey k;
+  OMUInt32 bytesRead;
+  stream.read(reinterpret_cast<OMByte*>(&k), sizeof(OMKLVKey), bytesRead);
+  if (bytesRead == sizeof(OMKLVKey)) {
+    key = k;
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+bool OMKLVStoredStream::readKLVLength(OMStoredStream& stream, OMUInt64& length)
+{
+  TRACE("OMKLVStoredStream::readKLVLength");
+  // Bah ! should reuse code in OMMXFStorage - tjb
+  bool result = true;
+  OMUInt32 x;
+  OMUInt8 b;
+  stream.read(&b, 1, x);
+  if (b == 0x80) {
+    // unknown length
+    result = false;
+  } else if ((b & 0x80) != 0x80) {
+    // short form
+    length = b;
+    result = true;
+  } else {
+    // long form
+    int lenlen = b & 0x7f;
+    OMUInt64 len = 0;
+    for (int k = 0; k < lenlen; k++) {
+      stream.read(&b, 1, x);
+      len = len << 8;
+      len = len + b;
+    }
+    length = len;
+    result = true;
+  }
+  return result;
+}
