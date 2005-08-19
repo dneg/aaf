@@ -577,6 +577,10 @@ private:
   virtual OMUInt64 allocatedSize(Stream* s);
   virtual Segment* streamSegment(OMUInt32 sid, OMUInt64 position);
 
+    // debugging
+  void printPartitions(void);
+  void printStreams(void);
+
   typedef OMSet<OMUInt32, Stream*> SegmentMap;
   typedef OMSetIterator<OMUInt32, Stream*> SegmentMapIterator;
   virtual SegmentMap* segmentMap(void);
