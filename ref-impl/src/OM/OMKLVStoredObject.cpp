@@ -42,6 +42,7 @@
 #include "OMObjectReference.h"
 #include "OMContainerElement.h"
 #include "OMDataStream.h"
+#include "OMDataStreamAccess.h"  // !!! tjb
 #include "OMIntegerType.h"
 #include "OMCharacterType.h"
 #include "OMStringType.h"
@@ -1499,6 +1500,22 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         ASSERT("Supported stream byte order",
                                   (stream->storedByteOrder() == unspecified) ||
                                   (stream->storedByteOrder() == bigEndian));
+        // !!! tjb bug fix repeated code from OMDataStreamProperty::save()
+        if (stream->hasStreamAccess()) {
+          OMUInt64 savedPosition = _storage->position();
+          // Set the current position to the end of the stream
+          //
+          OMUInt64 lastPosition = stream->size();
+          OMUInt64 currentPosition = stream->position();
+          if (currentPosition != lastPosition) {
+            stream->setPosition(lastPosition);
+          }
+          // Allow clients to write to the stream
+          //
+          stream->streamAccess()->save(*stream);
+          _storage->setPosition(savedPosition);
+        }
+        // !!! tjb
         break;
       }
       default:
