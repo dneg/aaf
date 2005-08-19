@@ -239,6 +239,8 @@ public:
                               const OMDictionary* dictionary,
                               bool reorderBytes);
 
+    // @cmember Write fill so that the next byte to be written is the
+    //          first byte of a page <p KAGSize> bytes in size.
   static void fill(OMRawStorage* store,
                    const OMUInt64& currentPosition,
                    const OMUInt32& KAGSize);
@@ -254,6 +256,8 @@ public:
                              OMUInt32 lengthSize,
                              const OMUInt64& length);
 
+    // @cmember Write a fill key, a BER encoded length and
+    //          <p length> bytes of filler.
   static void writeKLVFill(OMRawStorage* store, const OMUInt64& length);
 
   static void write(OMRawStorage* store, const OMUInt8& i);
