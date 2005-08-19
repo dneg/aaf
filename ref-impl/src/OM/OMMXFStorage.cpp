@@ -649,10 +649,6 @@ void OMMXFStorage::readHeaderPartition(void)
 {
   TRACE("OMMXFStorage::readHeaderPartition");
 
-  OMKLVKey k;
-  readKLVKey(k);
-  k.octet14 = 0x02;
-  ASSERT("Header key", k == ClosedHeaderPartitionPackKey);
   readKLVLength();
   OMUInt16 majorVersion;
   read(majorVersion, _reorderBytes);
