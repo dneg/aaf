@@ -344,7 +344,7 @@ public:
     // @cmember Apply all <c Fixup>s.
   void fixup(void);
 
-    // @cmember Destrpy all <c Fixup>s.
+    // @cmember Destroy all <c Fixup>s.
   void destroyFixups(void);
 
 private:
@@ -412,7 +412,9 @@ private:
   };
 
   typedef OMSet<OMUInt32, Stream*> SegmentMap;
+  typedef OMSetIterator<OMUInt32, Stream*> SegmentMapIterator;
   virtual SegmentMap* segmentMap(void);
+  void destroySegmentMap(void);
   SegmentMap* _segmentMap;
   OMUInt64 _fileSize;
 
