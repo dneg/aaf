@@ -245,6 +245,18 @@ void fromString(OMObjectIdentification& id, const char* idString);
   // Does idString represent a vaild OMObjectIdentification ?
 bool isValidObjectIdentificationString(const char* idString);
 
+  // @func Convert the <c OMUniqueObjectIdentification> id
+  //       into the <c OMKLVKey> key.
+  //   @parm The resulting <c OMKLVKey>.
+  //   @parm The input <c OMUniqueObjectIdentification>.
+void convert(OMKLVKey& key, const OMUniqueObjectIdentification& id);
+
+  // @func Convert the <c OMKLVKey> key
+  //       into the <c OMUniqueObjectIdentification> id.
+  //   @parm The resulting <c OMUniqueObjectIdentification>.
+  //   @parm The input <c OMKLVKey>.
+void convert(OMUniqueObjectIdentification& id, const OMKLVKey& key);
+
   // Check of types
 
 void checkTypes(void);
