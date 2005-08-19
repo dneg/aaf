@@ -68,6 +68,20 @@ public:
                     OMUInt32 bufferCount,
                     OMUInt32& bytesRead) const;
 
+    // Asynchronous read - single buffer
+  virtual void read(OMUInt64 position,
+                    OMByte* buffer,
+                    const OMUInt32 bytes,
+                    void* /* */ completion,
+                    const void* clientArgument);
+
+    // Asynchronous read - multiple buffers
+  virtual void read(OMUInt64 position,
+                    OMIOBufferDescriptor* buffers,
+                    OMUInt32 bufferCount,
+                    void* /* */ completion,
+                    const void* clientArgument) const;
+
     // @cmember Write <p size> bytes from the buffer at address
     //          <p data> to this <c OMKLVStoredStream>.
   virtual void write(void* data, size_t size);
@@ -89,6 +103,20 @@ public:
   virtual void write(OMIOBufferDescriptor* buffers,
                      OMUInt32 bufferCount,
                      OMUInt32& bytesWritten);
+
+    // Asynchronous write - single buffer
+  virtual void write(OMUInt64 position,
+                     const OMByte* buffer,
+                     const OMUInt32 bytes,
+                     void* /* */ completion,
+                     const void* clientArgument);
+
+    // Asynchronous write - multiple buffers
+  virtual void write(OMUInt64 position,
+                     const OMIOBufferDescriptor* buffers,
+                     OMUInt32 bufferCount,
+                     void* /* */ completion,
+                     const void* clientArgument);
 
     // @cmember The size of this <c OMKLVStoredStream> in bytes.
   virtual OMUInt64 size(void) const;
