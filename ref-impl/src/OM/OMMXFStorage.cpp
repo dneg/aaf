@@ -1079,6 +1079,15 @@ bool OMMXFStorage::readKLVLength(const OMRawStorage* store, OMUInt64& length)
   return true; // tjb
 }
 
+bool OMMXFStorage::skipBytes(const OMRawStorage* store, OMUInt64 length)
+{
+  TRACE("OMMXFStorage::skipBytes");
+  OMUInt64 pos = store->position();
+  OMUInt64 newPosition = pos + length;
+  store->setPosition(newPosition);
+  return true; // tjb
+}
+
 void OMMXFStorage::read(OMUInt8& i) const
 {
   TRACE("OMMXFStorage::read");
