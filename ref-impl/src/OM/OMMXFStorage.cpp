@@ -34,7 +34,6 @@
 #include "OMIdentitySetIter.h"
 #include "OMKLVStoredObject.h" // tjb -- temporary
 #include "OMType.h"
-#include "OMIntegerType.h"
 #include "OMUniqueObjectIdentType.h"
 
   // @mfunc Constructor.
@@ -328,7 +327,7 @@ void OMMXFStorage::write(const OMUInt64& i, bool reorderBytes)
   OMUInt64 si = i;
   OMByte* src = reinterpret_cast<OMByte*>(&si);
   if (reorderBytes) {
-    OMInteger64Type::instance()->reorder(src, sizeof(OMUInt64));
+    OMType::reorderInteger(src, sizeof(OMUInt64));
   }
   OMUInt32 x;
   write(src, sizeof(OMUInt64), x);
