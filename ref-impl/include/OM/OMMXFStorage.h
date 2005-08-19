@@ -498,6 +498,9 @@ private:
   OMUInt64 _primerPosition;
   OMUInt64 _headerByteCount;
 
+  OMUInt64 _fillStart;
+  OMUInt64 _fillEnd;
+
   struct ObjectDirectoryEntry {
     OMStorable* _object;
     OMUInt64 _offset;
