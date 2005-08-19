@@ -193,6 +193,8 @@ public:
 
   static bool isHeader(const OMKLVKey& k);
 
+  static bool isBody(const OMKLVKey& k);
+
   virtual void writeHeaderPartition(OMUInt32 bodySID,
                                     OMUInt32 indexSID,
                                     OMUInt32 KAGSize);
