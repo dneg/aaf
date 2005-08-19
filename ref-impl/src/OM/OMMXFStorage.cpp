@@ -1431,12 +1431,10 @@ void OMMXFStorage::streamRestoreSegment(OMUInt32 sid,
   if (!segmentMap()->find(sid, s)) {
     s = createStream(sid, size, label, gridSize);
     addSegment(s, 0, size, start);
-    _fileSize = _fileSize + size;
   } else {
     Segment* last = findLastSegment(s);
     ASSERT("Last segment found", last != 0);
     addSegment(s, last->_start + last->_size, size, start);
-    _fileSize = _fileSize + size;
     s->_size = s->_size + size;
   }
   OMDataStream* sp = stream(sid);
@@ -1494,9 +1492,9 @@ void OMMXFStorage::streamGrow(OMUInt32 sid, OMUInt64 growBytes)
     } else {
       // Last segment at end of file - grow it
       last->_size = last->_size + increment;
+      _fileSize = _fileSize + increment;
     }
   }
-  _fileSize = _fileSize + increment;
 }
 
 void OMMXFStorage::saveStreams(void)
@@ -1740,6 +1738,7 @@ OMMXFStorage::addSegment(Stream* s,
   result->_size = size;
   result->_origin = origin;
   s->_segments->append(result);
+  _fileSize = _fileSize + size;
   return result;
 }
 
