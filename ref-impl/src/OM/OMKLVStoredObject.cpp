@@ -1962,39 +1962,49 @@ void OMKLVStoredObject::streamRestore(void)
   OMMXFStorage::findHeader(_storage, headerPosition);
   _storage->setPosition(headerPosition);
 
+  bool inEssence = false;
+  bool inIndex = false;
   OMUInt32 bodySID = 0;
   OMUInt32 indexSID = 0;
   OMUInt32 gridSize = 0;
   OMKLVKey k;
   while (_storage->readOuterKLVKey(k)) {
     if (OMMXFStorage::isBody(k)) {
+      inEssence = false;
+      inIndex = false;
       _storage->readPartition(bodySID, indexSID, gridSize);
     } else if (OMMXFStorage::isHeader(k)) {
+      inEssence = false;
+      inIndex = false;
       _storage->readPartition(bodySID, indexSID, gridSize);
     } else if (OMMXFStorage::isFooter(k)) {
+      inEssence = false;
+      inIndex = false;
       _storage->readPartition(bodySID, indexSID, gridSize);
     } else if (OMMXFStorage::isIndex(k)) {
       OMUInt64 length = _storage->readKLVLength();
       // Restore index stream segment
-      if (indexSID != 0) {
+      inIndex = true;
+      inEssence = false;
+      if ((indexSID != 0) && (inIndex)) {
         _storage->streamRestoreSegment(indexSID,
                                        _storage->position(),
                                        length,
                                        k,
                                        gridSize);
-        indexSID = 0;
       }
       _storage->skipV(length);
     } else if (OMMXFStorage::isEssence(k)) {
       OMUInt64 length = _storage->readKLVLength();
       // Restore essence stream segment
-      if (bodySID != 0) {
+      inEssence = true;
+      inIndex = false;
+      if ((bodySID != 0) && (inEssence)) {
         _storage->streamRestoreSegment(bodySID,
                                        _storage->position(),
                                        length,
                                        k,
                                        gridSize);
-        bodySID = 0;
       }
       _storage->skipV(length);
     } else if (k == RandomIndexMetadataKey) {
