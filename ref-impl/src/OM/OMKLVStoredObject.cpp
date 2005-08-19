@@ -24,6 +24,7 @@
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMKLVStoredObject
 #include "OMKLVStoredObject.h"
 
+#include "OMMXFStorage.h"
 #include "OMCachedDiskRawStorage.h"
 #include "OMKLVStoredStream.h"
 #include "OMProperty.h"
@@ -47,7 +48,7 @@
 #include "OMStrongReferenceSetIter.h"
 #include "OMClassDefinition.h"
 #include "OMPropertyDefinition.h"
-#include "OMMXFStorage.h"
+#include "OMDataStreamProperty.h"
 
 #include "OMUtilities.h"
 
@@ -115,6 +116,152 @@ OMKLVStoredObject* OMKLVStoredObject::createModify(OMMXFStorage* rawStorage,
   PRECONDITION("Compatible raw storage", rawStorage->isPositionable());
   OMKLVStoredObject* result= new OMKLVStoredObject(rawStorage, byteOrder);
   ASSERT("Valid heap pointer", result != 0);
+  return result;
+}
+
+  // @mfunc Does <p rawStorage> contain a recognized file ?
+  //        If so, the result is true.
+  //   @parm The raw storage.
+  //   @rdesc True if the file is recognized, false otherwise.
+bool
+OMKLVStoredObject::isRecognized(OMRawStorage* rawStorage)
+{
+  TRACE("OMKLVStoredObject::isRecognized");
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Positionable raw storage", rawStorage->isPositionable());
+
+  bool reorderBytes;
+  if (hostByteOrder() == bigEndian) {
+    reorderBytes = false;
+  } else {
+    reorderBytes = true;
+  }
+  bool result = true;
+  OMKLVKey k;
+  if (OMMXFStorage::read(rawStorage, k)) {
+    k.octet14 = 0x02;
+    if (k == ClosedHeaderPartitionPackKey) {
+      OMUInt64 length;
+      if (OMMXFStorage::readKLVLength(rawStorage, length)) {
+        OMUInt16 majorVersion;
+        if (OMMXFStorage::read(rawStorage, majorVersion, reorderBytes)) {
+          if (majorVersion == currentMajorVersion) {
+            OMUInt16 minorVersion;
+            if (OMMXFStorage::read(rawStorage, minorVersion, reorderBytes)) {
+              if (minorVersion == currentMinorVersion) {
+                result = true;
+              } else {
+                result = false;  // Minor version number doesn't match
+              }
+            } else {
+              result = false; // Couldn't read minor version
+            }
+          } else {
+            result = false; // Major version number doesn't match
+          }
+        } else {
+          result = false; // Couldn't read major version
+        }
+      } else {
+        result = false; // Couldn't read length
+      }
+    } else {
+      result = false; //  Not HeaderPartitionPack key
+    }
+  } else {
+    result = false; // Couldn't read key
+  }
+  rawStorage->setPosition(0);
+  return result;
+}
+
+  // @mfunc Does <p file> have an <c OMMXFStorage>.
+  //   @parm The <c OMFile>
+  //   @rdesc <e bool.true> if the given <c OMFile> has an
+  //          <c OMMXFStorage>, <e bool.false> otherwise.
+bool OMKLVStoredObject::hasMxfStorage(const OMFile* file)
+{
+  TRACE("OMKLVStoredObject::hasMxfStorage");
+  PRECONDITION("Valid file", file != 0);
+
+  bool result = false;
+  OMKLVStoredObject* r = root(file);
+  if (r != 0) {
+    result = true;
+  }
+  return result;
+}
+
+  // @mfunc The <c OMMXFStorage> associated with <p file>.
+  //   @parm The <c OMFile>
+  //   @rdesc The <c OMMXFStorage>
+OMMXFStorage* OMKLVStoredObject::mxfStorage(const OMFile* file)
+{
+  TRACE("OMKLVStoredObject::mxfStorage");
+  PRECONDITION("Valid file", file != 0);
+  PRECONDITION("File has MXF storage", hasMxfStorage(file));
+
+  OMKLVStoredObject* r = root(file);
+  OMMXFStorage* result = r->_storage;
+
+  return result;
+}
+
+  // @mfunc The root storage of <p file>.
+  //   @parm The <c OMFile>
+  //   @rdesc The root <c OMKLVStoredObject> if <p file> is KLV encoded,
+  //          0 otherwise.
+OMKLVStoredObject* OMKLVStoredObject::root(const OMFile* file)
+{
+  TRACE("OMKLVStoredObject::root");
+  OMKLVStoredObject* result = 0;
+  OMStoredObject* r = const_cast<OMFile*>(file)->rootStore();
+  if (r != 0) {
+    result = dynamic_cast<OMKLVStoredObject*>(r);
+  }
+  return result;
+}
+
+  // @mfunc Does <p stream> represent MXF essence ?
+  //   @parm The <c OMDataStreamProperty>
+  //   @rdesc <e bool.true> if the given <c OMDataStreamProperty> has an
+  //          <c OMMXFStorage>, <e bool.false> otherwise.
+bool OMKLVStoredObject::isMxfEssence(const OMDataStreamProperty* stream)
+{
+  TRACE("OMKLVStoredObject::isMxfEssence");
+  PRECONDITION("Valid stream", stream != 0);
+  bool result = false;
+  OMKLVStoredStream* s = mxfStream(stream);
+  if (s != 0) {
+    result = true;
+  }
+  return result;
+}
+
+  // @mfunc The <c OMKLVStoredStream> associated with <p stream>.
+  //   @parm The <c OMDataStreamProperty>
+  //   @rdesc The <c OMKLVStoredStream>
+OMKLVStoredStream*
+OMKLVStoredObject::mxfEssence(const OMDataStreamProperty* stream)
+{
+  TRACE("OMKLVStoredObject::mxfEssence");
+  PRECONDITION("Valid stream", stream != 0);
+  PRECONDITION("MXF essence", isMxfEssence(stream));
+  OMKLVStoredStream* result = mxfStream(stream);
+  return result;
+}
+
+  // @mfunc The <c OMKLVStoredStream> associated with <p stream>
+  //   @parm The <c OMDataStreamProperty>
+  //   @rdesc The <c OMKLVStoredStream> if <p stream> is KLV encoded,
+  //          0 otherwise.
+OMKLVStoredStream*
+OMKLVStoredObject::mxfStream(const OMDataStreamProperty* stream)
+{
+  TRACE("OMKLVStoredObject::mxfStream");
+  PRECONDITION("Valid stream", stream != 0);
+  OMStoredStream* s = stream->stream();
+  OMKLVStoredStream* result = dynamic_cast<OMKLVStoredStream*>(s);
   return result;
 }
 
