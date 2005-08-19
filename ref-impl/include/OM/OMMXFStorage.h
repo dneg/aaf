@@ -511,6 +511,11 @@ private:
   OMKLVKey _indexKey;
   OMUInt64 _indexPosition;
 
+  bool _inEssence;
+  OMUInt32 _essenceSID;
+  OMKLVKey _essenceKey;
+  OMUInt64 _essencePosition;
+
   OMUInt64 _fillStart;
   OMUInt64 _fillEnd;
 
