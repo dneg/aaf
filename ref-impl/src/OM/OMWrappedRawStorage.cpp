@@ -318,5 +318,6 @@ void OMWrappedRawStorage::streamWriteAt(OMUInt64 position,
                                         OMUInt32& bytesWritten)
 {
   TRACE("OMWrappedRawStorage::streamWriteAt");
-  ASSERT("Unimplemented code not reached", false);
+
+  _store->streamWriteAt(position, buffers, bufferCount, bytesWritten);
 }
