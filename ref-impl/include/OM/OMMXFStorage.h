@@ -165,6 +165,7 @@ public:
   virtual void writeFooterPartition(void);
   virtual void writePartition(const OMKLVKey& key,
                               OMUInt32 bodySID,
+                              OMUInt32 indexSID,
                               OMUInt32 KAGSize);
 
   virtual void writeRandomIndex(void);
