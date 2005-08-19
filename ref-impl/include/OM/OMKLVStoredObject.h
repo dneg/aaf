@@ -66,21 +66,6 @@ public:
   static OMKLVStoredObject* createModify(OMRawStorage* rawStorage,
                                          const OMByteOrder byteOrder);
 
-     // @cmember Is the file named <p fileName> a recognized file ?
-     //          If so, the result is true, and the signature is returned
-     //          in <p signature>.
-  static bool isRecognized(const wchar_t* fileName,
-                           OMFileSignature& signature);
-
-     // @cmember Does <p rawStorage> contain a recognized file ?
-     //          If so, the result is true, and the signature is returned
-     //          in <p signature>.
-  static bool isRecognized(OMRawStorage* rawStorage,
-                           OMFileSignature& signature);
-
-     // @cmember Is <p signature> recognized ?
-  static bool isRecognized(const OMFileSignature& signature);
-
   // @access Public members.
 
     // @cmember Destructor.
@@ -100,8 +85,6 @@ public:
 
     // @cmember Close this <c OMKLVStoredObject>.
   virtual void close(void);
-
-  virtual void close(OMFile& file);
 
     // @cmember The byte order of this <c OMKLVStoredObject>.
     //   @devnote This member function doesn't make sense for all
@@ -159,6 +142,8 @@ public:
     // @cmember Save the <c OMDataStream> <p stream> in this
     //          <c OMKLVStoredObject>.
   virtual void save(const OMDataStream& stream);
+
+  virtual OMRootStorable* restore(OMFile& file);
 
     // @cmember Restore the <c OMStoredObjectIdentification>
     //          of this <c OMKLVStoredObject> into <p id>.
