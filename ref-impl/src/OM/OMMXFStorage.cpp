@@ -1625,13 +1625,13 @@ void OMMXFStorage::streamWriteFragment(OMUInt32 sid,
   }
 }
 
-void OMMXFStorage::streamWriteAt(OMUInt32 sid,
+void OMMXFStorage::writeStreamAt(OMUInt32 sid,
                                  OMUInt64 position,
                                  const OMByte* bytes,
                                  OMUInt32 byteCount,
                                  OMUInt32& bytesWritten)
 {
-  TRACE("OMMXFStorage::streamWriteAt");
+  TRACE("OMMXFStorage::writeStreamAt");
 
   PRECONDITION("Valid buffer", bytes != 0);
   PRECONDITION("Buffer not empty", byteCount != 0);
@@ -1694,13 +1694,13 @@ void OMMXFStorage::streamWriteAt(OMUInt32 sid,
 #endif
 }
 
-void OMMXFStorage::streamWriteAt(OMUInt32 sid,
+void OMMXFStorage::writeStreamAt(OMUInt32 sid,
                                  OMUInt64 position,
                                  OMIOBufferDescriptor* buffers,
                                  OMUInt32 bufferCount,
                                  OMUInt32& bytesWritten)
 {
-  TRACE("OMMXFStorage::streamWriteAt");
+  TRACE("OMMXFStorage::writeStreamAt");
   PRECONDITION("Valid buffers", buffers != 0);
   PRECONDITION("Valid buffer count", bufferCount != 0);
 #if 1
@@ -1755,7 +1755,7 @@ void OMMXFStorage::streamWriteAt(OMUInt32 sid,
   OMUInt64 pos = position;
   for (OMUInt32 i = 0; i < bufferCount; i++) {
     OMUInt32 writeCount;
-    streamWriteAt(sid,
+    writeStreamAt(sid,
                   pos,
                   buffers[i]._buffer,
                   buffers[i]._bufferSize,
@@ -1770,14 +1770,14 @@ void OMMXFStorage::streamWriteAt(OMUInt32 sid,
 #endif
 }
 
-void OMMXFStorage::streamWriteAt(OMUInt32 sid,
+void OMMXFStorage::writeStreamAt(OMUInt32 sid,
                                  OMUInt64 position,
                                  const OMByte* buffer,
                                  const OMUInt32 bytes,
                                  void* /* */ completion,
                                  const void* clientArgument)
 {
-  TRACE("OMMXFStorage::streamWriteAt");
+  TRACE("OMMXFStorage::writeStreamAt");
   PRECONDITION("Valid buffer", buffer != 0);
   PRECONDITION("Buffer not empty", bytes != 0);
 
@@ -1818,14 +1818,14 @@ void OMMXFStorage::streamWriteAt(OMUInt32 sid,
   }
 }
 
-void OMMXFStorage::streamWriteAt(OMUInt32 sid,
+void OMMXFStorage::writeStreamAt(OMUInt32 sid,
                                  OMUInt64 position,
                                  const OMIOBufferDescriptor* buffers,
                                  OMUInt32 bufferCount,
                                  void* /* */ completion,
                                  const void* clientArgument)
 {
-  TRACE("OMMXFStorage::streamWriteAt");
+  TRACE("OMMXFStorage::writeStreamAt");
   PRECONDITION("Valid buffers", buffers != 0);
   PRECONDITION("Valid buffer count", bufferCount != 0);
 
@@ -1917,13 +1917,13 @@ void OMMXFStorage::streamReadFragment(OMUInt32 sid,
   bytesRead = rawByteCount;
 }
 
-void OMMXFStorage::streamReadAt(OMUInt32 sid,
+void OMMXFStorage::readStreamAt(OMUInt32 sid,
                                 OMUInt64 position,
                                 OMByte* bytes,
                                 OMUInt32 byteCount,
                                 OMUInt32& bytesRead)
 {
-  TRACE("OMMXFStorage::streamReadAt");
+  TRACE("OMMXFStorage::readStreamAt");
 
   PRECONDITION("Valid buffer", bytes != 0);
   PRECONDITION("Buffer not empty", byteCount != 0);
@@ -1973,13 +1973,13 @@ void OMMXFStorage::streamReadAt(OMUInt32 sid,
 #endif
 }
 
-void OMMXFStorage::streamReadAt(OMUInt32 sid,
+void OMMXFStorage::readStreamAt(OMUInt32 sid,
                                 OMUInt64 position,
                                 OMIOBufferDescriptor* buffers,
                                 OMUInt32 bufferCount,
                                 OMUInt32& bytesRead)
 {
-  TRACE("OMMXFStorage::streamReadAt");
+  TRACE("OMMXFStorage::readStreamAt");
   PRECONDITION("Valid buffers", buffers != 0);
   PRECONDITION("Valid buffer count", bufferCount != 0);
 #if 1
@@ -2024,7 +2024,7 @@ void OMMXFStorage::streamReadAt(OMUInt32 sid,
   OMUInt64 pos = position;
   for (OMUInt32 i = 0; i < bufferCount; i++) {
     OMUInt32 readCount;
-    streamReadAt(sid,
+    readStreamAt(sid,
                  pos,
                  buffers[i]._buffer,
                  buffers[i]._bufferSize,
@@ -2039,14 +2039,14 @@ void OMMXFStorage::streamReadAt(OMUInt32 sid,
 #endif
 }
 
-void OMMXFStorage::streamReadAt(OMUInt32 sid,
+void OMMXFStorage::readStreamAt(OMUInt32 sid,
                                 OMUInt64 position,
                                 OMByte* buffer,
                                 const OMUInt32 bytes,
                                 void* /* */ completion,
                                 const void* clientArgument)
 {
-  TRACE("OMMXFStorage::streamReadAt");
+  TRACE("OMMXFStorage::readStreamAt");
 
   PRECONDITION("Valid buffer", buffer != 0);
   PRECONDITION("Buffer not empty", bytes != 0);
@@ -2078,14 +2078,14 @@ void OMMXFStorage::streamReadAt(OMUInt32 sid,
   // The I/O hasn't happened yet
 }
 
-void OMMXFStorage::streamReadAt(OMUInt32 sid,
+void OMMXFStorage::readStreamAt(OMUInt32 sid,
                                 OMUInt64 position,
                                 OMIOBufferDescriptor* buffers,
                                 OMUInt32 bufferCount,
                                 void* /* */ completion,
                                 const void* clientArgument)
 {
-  TRACE("OMMXFStorage::streamReadAt");
+  TRACE("OMMXFStorage::readStreamAt");
   PRECONDITION("Valid buffers", buffers != 0);
   PRECONDITION("Valid buffer count", bufferCount != 0);
 
