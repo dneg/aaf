@@ -402,7 +402,7 @@ void OMKLVStoredObject::save(OMFile& file)
 
   // Write the footer
   //
-  _storage->writeFooterPartition();
+  _storage->writeFooterPartition(0, defaultKAGSize);
   _storage->writeRandomIndex();
   _storage->close();
 }
