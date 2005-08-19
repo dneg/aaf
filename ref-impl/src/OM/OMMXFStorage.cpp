@@ -557,6 +557,22 @@ bool OMMXFStorage::readHeaderPartition(void)
 }
 
 bool OMMXFStorage::read(const OMRawStorage* store,
+                        OMUInt8& i)
+{
+  TRACE("OMMXFStorage::read");
+  bool result;
+  OMUInt32 bytesRead;
+  OMByte* dest = reinterpret_cast<OMByte*>(&i);
+  store->read(dest, sizeof(OMUInt8), bytesRead);
+  if (bytesRead == sizeof(OMUInt8)) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+bool OMMXFStorage::read(const OMRawStorage* store,
                         OMUInt16& i,
                         bool reorderBytes)
 {
@@ -589,6 +605,13 @@ bool OMMXFStorage::read(const OMRawStorage* store, OMKLVKey& key)
     result = false;
   }
   return result;
+}
+
+bool OMMXFStorage::readKLVLength(const OMRawStorage* store, OMUInt64& length)
+{
+  TRACE("OMMXFStorage::readKLVLength");
+  length = readBerLength(store);
+  return true; // tjb
 }
 
 void OMMXFStorage::read(OMUInt8& i) const
@@ -690,7 +713,7 @@ void OMMXFStorage::readKLVKey(OMKLVKey& key) const
 OMUInt64 OMMXFStorage::readKLVLength(void) const
 {
   TRACE("OMMXFStorage::readKLVLength");
-  OMUInt64 result = readBerLength();
+  OMUInt64 result = readBerLength(this);
   return result;
 }
 
@@ -718,13 +741,13 @@ void OMMXFStorage::skipLV(void) const
   setPosition(newPosition);
 }
 
-OMUInt64 OMMXFStorage::readBerLength(void) const
+OMUInt64 OMMXFStorage::readBerLength(const OMRawStorage* store)
 {
   TRACE("OMMXFStorage::readBerLength");
 
   OMUInt64 result;
   OMUInt8 b;
-  read(b);
+  read(store, b);
   if (b == 0x80) {
     // unknown length
     result = 0;
@@ -736,7 +759,7 @@ OMUInt64 OMMXFStorage::readBerLength(void) const
     int length = b & 0x7f;
     result = 0;
     for (int k = 0; k < length; k++) {
-      read(b);
+      read(store, b);
       result = result << 8;
       result = result + b;
     }
