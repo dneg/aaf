@@ -56,6 +56,10 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
   _indexSID(0),
   _indexKey(nullOMKLVKey),
   _indexPosition(0),
+  _inEssence(false),
+  _essenceSID(0),
+  _essenceKey(nullOMKLVKey),
+  _essencePosition(0),
   _fillStart(0),
   _fillEnd(0),
   _fixups(),
@@ -2145,13 +2149,39 @@ void OMMXFStorage::markEssenceSegmentStart(OMKLVKey key,
                                            OMUInt64 essenceKeyPosition)
 {
   TRACE("OMMXFStorage::markEssenceSegmentStart");
-  ASSERT("Unimplemented code not reached", false);
+
+  ASSERT("Not in essence", !_inEssence);
+
+  _inEssence = true;
+  _essenceSID = sid;
+  _essenceKey = key;
+  _essencePosition = essenceKeyPosition;
+
+  _gridSize = gridSize;
 }
 
 void OMMXFStorage::markEssenceSegmentEnd(OMUInt64 endKeyPosition)
 {
   TRACE("OMMXFStorage::markEssenceSegmentEnd");
-  ASSERT("Unimplemented code not reached", false);
+
+  if (_inEssence) {
+    OMUInt64 free = 0;
+    if (endKeyPosition == _fillEnd) {
+      free = _fillEnd - _fillStart;
+    }
+    OMUInt64 essenceByteCount = endKeyPosition - _essencePosition;
+    streamRestoreSegment(_essenceSID,
+                         _essencePosition,
+                         essenceByteCount + free,
+                         essenceByteCount,
+                         _essenceKey,
+                         _gridSize);
+
+    _inEssence = false;
+    _essenceSID = 0;
+    _essenceKey = nullOMKLVKey;
+    _essencePosition = 0;
+  }
 }
 
 void OMMXFStorage::markFill(OMUInt64 fillKeyPosition, OMUInt64 fillEndPosition)
