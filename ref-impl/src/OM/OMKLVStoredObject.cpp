@@ -1775,7 +1775,11 @@ void OMKLVStoredObject::writePartition(OMRawStorage* store,
   writeKLVKey(store, key);
   OMUInt64 sizeOfFixedPortion = 88;
   OMUInt64 length = sizeOfFixedPortion + (elementCount * elementSize);
+#if 0
   writeKLVLength(store, length);
+#else
+  writeBerLength(store, 3, length);
+#endif
   OMUInt16 majorVersion = currentMajorVersion;
   write(store, majorVersion, reorderBytes);
   OMUInt16 minorVersion = currentMinorVersion;
@@ -1964,7 +1968,11 @@ void OMKLVStoredObject::writeKLVFill(OMRawStorage* store,
      0x03, 0x01, 0x02, 0x10, 0x01, 0x00, 0x00, 0x00};
 
   writeKLVKey(store, fillKey);
+#if 0
   writeKLVLength(store, length);
+#else
+  writeBerLength(store, 3, length);
+#endif
   for (OMUInt64 i = 0; i < length; i++) {
 #if defined(OM_DEBUG)
     const OMByte fillPattern[] = "FFFF.FFFC ";
