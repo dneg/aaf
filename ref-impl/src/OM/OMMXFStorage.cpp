@@ -1540,6 +1540,12 @@ void OMMXFStorage::streamGrow(OMUInt32 sid, OMUInt64 growBytes)
   _fileSize = _fileSize + increment;
 }
 
+void OMMXFStorage::saveStreams(void)
+{
+  TRACE("OMMXFStorage::saveStreams");
+  ASSERT("Unimplemnted code not reached", false);
+}
+
 OMMXFStorage::SegmentListIterator*
 OMMXFStorage::streamSegments(OMUInt32 sid) const
 {
