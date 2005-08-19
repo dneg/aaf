@@ -189,7 +189,7 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
   OMUInt32 elementSize = sizeof(OMKLVKey);
   OMUInt32 elementCount = sizeof(essenceContainers) / elementSize;
 
-  write(key);
+  writeKLVKey(key);
   OMUInt64 sizeOfFixedPortion = 88;
   OMUInt64 length = sizeOfFixedPortion + (elementCount * elementSize);
 #if defined(BER9)
@@ -218,11 +218,11 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
   write(bodyOffset, reorderBytes);
   OMUInt32 bodySID = 2;
   write(bodySID, reorderBytes);
-  write(operationalPattern);
+  writeKLVKey(operationalPattern);
   write(elementCount, reorderBytes);
   write(elementSize, reorderBytes);
   for (OMUInt32 i = 0; i < elementCount; i++) {
-    write(essenceContainers[i]);
+    writeKLVKey(essenceContainers[i]);
   }
 }
 
@@ -354,17 +354,6 @@ void OMMXFStorage::write(const OMUniqueObjectIdentification& id,
                                     x == sizeof(OMUniqueObjectIdentification));
 }
 
-void OMMXFStorage::write(const OMKLVKey& key)
-{
-  TRACE("OMMXFStorage::write");
-
-  OMUInt32 x;
-  const OMByte* src = reinterpret_cast<const OMByte*>(&key);
-  write(src, sizeof(OMKLVKey), x);
-
-  POSTCONDITION("All bytes written", x == sizeof(OMKLVKey));
-}
-
 void OMMXFStorage::write(const OMByte* buffer, const OMUInt32& bufferSize)
 {
   TRACE("OMMXFStorage::write");
@@ -373,6 +362,17 @@ void OMMXFStorage::write(const OMByte* buffer, const OMUInt32& bufferSize)
   write(buffer, bufferSize, x);
 
   POSTCONDITION("All bytes written", x == bufferSize);
+}
+
+void OMMXFStorage::writeKLVKey(const OMKLVKey& key)
+{
+  TRACE("OMMXFStorage::writeKLVKey");
+
+  OMUInt32 x;
+  const OMByte* src = reinterpret_cast<const OMByte*>(&key);
+  write(src, sizeof(OMKLVKey), x);
+
+  POSTCONDITION("All bytes written", x == sizeof(OMKLVKey));
 }
 
 OMMXFStorage::ObjectDirectory* OMMXFStorage::instanceIdToObject(void)
