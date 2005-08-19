@@ -54,6 +54,7 @@
 
 #define USETAGTABLE 1
 //#define INSTANCEID_DEBUG 1
+//#define PERSIST_OBJECT_DIRECTORY 1
 //#define MAP_CLASSIDS 1
 
 #if defined(INSTANCEID_DEBUG)
@@ -259,6 +260,14 @@ void OMKLVStoredObject::save(OMFile& file)
   // Save the rest of the file
   file.root()->save();
 
+#if defined(PERSIST_OBJECT_DIRECTORY)
+  // Save the meta object directory
+  _objectDirectory = save(instanceIdToObject());
+
+  // Now we know where it lives, fixup the reference
+  fixupObjectDirectoryReference(_objectDirectoryReference, _objectDirectory);
+#endif
+
   // Insert alignment filler
   OMUInt32 bodyPartitionOffset = 0x20000; // Get this from header ?
   OMUInt32 KAGSize = 0x200;
@@ -318,6 +327,13 @@ void OMKLVStoredObject::save(OMFile& file)
 void OMKLVStoredObject::save(OMStorable& object)
 {
   TRACE("OMKLVStoredObject::save(OMFile)");
+#if defined(PERSIST_OBJECT_DIRECTORY)
+  ObjectDirectoryEntry e;
+  e._object = &object;
+  e._offset = _storage->position();
+  e._flags = 0;
+  instanceIdToObject()->insert(instanceId(&object), e);
+#endif
   save(object.classId());
   save(*object.propertySet());
 }
@@ -543,6 +559,15 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   root->setClassFactory(metaDictionary);
   flatRestore(*root->propertySet());
 
+  // restore the meta object directory
+  //
+#if defined(PERSIST_OBJECT_DIRECTORY)
+#if 1
+  instanceIdToObject()->remove(instanceId(root));
+  restore(instanceIdToObject());
+#endif
+#endif
+
   // restore the meta dictionary
   //
   readKLVKey(_storage, k);
@@ -606,6 +631,7 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   if (!metaDataOnly) {
     streamRestore(_storage);
   }
+
 #if defined(INSTANCEID_DEBUG)
 
   if (_instanceIdToObject != 0) {
@@ -838,8 +864,17 @@ OMUInt64 OMKLVStoredObject::length(const OMPropertySet& properties) const
   TRACE("OMKLVStoredObject::length");
 
   OMUInt64 length = 0;
+  // All objects include a hidden instance UID
   length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
                   + sizeof(OMUniqueObjectIdentification);
+#if defined(PERSIST_OBJECT_DIRECTORY)
+  if (properties.container()->classId() == Class_Root) {
+    // Root object includes a hidden reference to the object directory
+    length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
+                    + sizeof(OMUniqueObjectIdentification) + sizeof(OMUInt64);
+  }
+#endif
+
   OMPropertySetIterator iterator(properties, OMBefore);
   while (++iterator) {
     OMProperty* p = iterator.property();
@@ -924,6 +959,14 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
   TRACE("OMKLVStoredObject::flatSave");
 
   referenceSave(properties.container(), 0x3c0a);
+
+#if defined(PERSIST_OBJECT_DIRECTORY)
+  if (properties.container()->classId() == Class_Root) {
+    OMKLVStoredObject* This = const_cast<OMKLVStoredObject*>(this);
+    OMUniqueObjectIdentification id = {0};
+    This->_objectDirectoryReference = This->saveObjectDirectoryReference(id);
+  }
+#endif
 
   OMPropertySetIterator iterator(properties, OMBefore);
   while (++iterator) {
@@ -1186,6 +1229,15 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
   referenceRestore(properties.container(), 0x3c0a);
   const OMUInt16 overhead = sizeof(OMPropertyId) + sizeof(OMPropertySize);
   setLength = setLength - (overhead + sizeof(OMUniqueObjectIdentification));
+
+#if defined(PERSIST_OBJECT_DIRECTORY)
+  if (properties.container()->classId() == Class_Root) {
+    OMUniqueObjectIdentification id;
+    _objectDirectory = restoreObjectDirectoryReference(id);
+    setLength = setLength - (overhead + sizeof(OMUniqueObjectIdentification) +
+                                        sizeof(OMUInt64));
+  }
+#endif
 
   while (setLength > 0) {
     OMPropertyId pid;
