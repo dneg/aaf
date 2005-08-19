@@ -28,8 +28,6 @@
 #include "OMAssertions.h"
 #include "OMDiskRawStorage.h"
 
-static bool metaDataOnly = true;
-
   // @mfunc Constructor.
 OMKLVStoredObjectFactory::OMKLVStoredObjectFactory(
                                         const OMStoredObjectEncoding& encoding,
@@ -98,7 +96,7 @@ OMKLVStoredObjectFactory::createWrite(OMRawStorage* rawStorage,
 
   OMKLVStoredObject* result = OMKLVStoredObject::createWrite(rawStorage,
                                                              byteOrder);
-  if (!metaDataOnly) {
+  if (!OMKLVStoredObject::metaDataOnly) {
     result->writeHeaderPartition();
   }
   return result;
@@ -118,7 +116,7 @@ OMKLVStoredObjectFactory::createModify(OMRawStorage* rawStorage,
 
   OMKLVStoredObject* result = OMKLVStoredObject::createModify(rawStorage,
                                                               byteOrder);
-  if (!metaDataOnly) {
+  if (!OMKLVStoredObject::metaDataOnly) {
     result->writeHeaderPartition();
   }
   return result;
@@ -273,7 +271,7 @@ void OMKLVStoredObjectFactory::close(OMRawStorage* rawStorage,
   TRACE("OMKLVStoredObjectFactory::close");
 
   if (isWritable) {
-    if (!metaDataOnly) {
+    if (!OMKLVStoredObject::metaDataOnly) {
       OMKLVStoredObject::writeFooterPartition(rawStorage);
     }
   }
