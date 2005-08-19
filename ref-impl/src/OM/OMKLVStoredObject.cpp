@@ -525,6 +525,12 @@ void OMKLVStoredObject::save(const OMDataVector& property)
   delete [] buffer;
 }
 
+void OMKLVStoredObject::save(const OMDataSet& /* property */)
+{
+  TRACE("OMKLVStoredObject::save(OMDataSet)");
+  ASSERT("Unimplemented code not reached", false);
+}
+
   // @mfunc Save the <c OMStrongReference> <p singleton> in this
   //        <c OMKLVStoredObject>.
   //   @parm The <c OMStrongReference> to save.
@@ -858,6 +864,13 @@ void OMKLVStoredObject::restore(OMDataVector& property,
                             requiredBytesSize,
                             hostByteOrder());
   delete [] buffer;
+}
+
+void OMKLVStoredObject::restore(OMDataSet& /* property */,
+                                size_t /* externalSize */)
+{
+  TRACE("OMKLVStoredObject::restore(OMDataSet)");
+  ASSERT("Unimplemented code not reached", false);
 }
 
   // @mfunc Restore the <c OMStrongReference> <p singleton> into this
