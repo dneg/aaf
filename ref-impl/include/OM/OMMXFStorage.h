@@ -608,10 +608,8 @@ private:
   struct Partition {
     OMUInt64 _address;
     OMUInt32 _bodySID;
-#if defined(OM_FASTER_STREAM_PARSING)
     OMUInt64 _previous;
     OMUInt32 _indexSID;
-#endif
   };
   void destroyPartitions(void);
   bool findPartition(OMUInt64 address, OMUInt32& index);
