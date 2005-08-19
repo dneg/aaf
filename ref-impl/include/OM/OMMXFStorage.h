@@ -190,6 +190,8 @@ public:
                         const OMUInt32& berValueSize,
                         const OMUInt64& value);
 
+  virtual void readPartition(OMUInt32& bodySID, OMUInt32& indexSID);
+
   virtual bool readHeaderPartition(void);
 
   static bool read(const OMRawStorage* store, OMUInt8& i);
