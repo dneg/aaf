@@ -2375,8 +2375,7 @@ OMDataStream* OMKLVStoredObject::stream(const OMKLVKey& streamId)
 }
 
 OMUInt64 OMKLVStoredObject::save(OMSet<OMUniqueObjectIdentification,
-                                       ObjectDirectoryEntry>* objectTable,
-                                 const OMUniqueObjectIdentification& root)
+                                       ObjectDirectoryEntry>* objectTable)
 {
   TRACE("OMKLVStoredObject::save");
 
@@ -2390,25 +2389,13 @@ OMUInt64 OMKLVStoredObject::save(OMSet<OMUniqueObjectIdentification,
   convert(k, id);
   writeKLVKey(_storage, k);
   OMUInt64 entries = objectTable->count();
-  ASSERT("At least one object", entries > 0);
-  entries = entries - 1; // root not included
   const OMUInt8 entrySize = sizeof(OMUniqueObjectIdentification) + // iid
                             sizeof(OMUInt64) +                     // offset
                             sizeof(OMUInt8);                       // flags
-  OMUInt64 length = sizeof(OMUniqueObjectIdentification) + // root iid
-                    sizeof(OMUInt64) +                     // root offset
-                    sizeof(OMUInt64) +                     // entry count
+  OMUInt64 length = sizeof(OMUInt64) +                     // entry count
                     sizeof(OMUInt8) +                      // entry size
                     (entries * entrySize);                 // entries
   writeKLVLength(_storage, length);
-
-  ASSERT("Root iid known", objectTable->contains(root));
-  ObjectDirectoryEntry re;
-  objectTable->find(root, re);
-  write(_storage, root, _reorderBytes);
-  write(_storage, re._offset, _reorderBytes);
-
-  objectTable->remove(root);
 
   write(_storage, entries, _reorderBytes);
   write(_storage, entrySize);
@@ -2449,11 +2436,6 @@ void OMKLVStoredObject::restore(OMSet<OMUniqueObjectIdentification,
   OMUInt8 entrySize;
   ASSERT("Valid length", setLength > sizeof(entries) + sizeof(entrySize));
 
-  OMUniqueObjectIdentification root;
-  OMUInt64 rootOffset;
-  read(_storage, root, _reorderBytes);
-  read(_storage, rootOffset, _reorderBytes);
-
   read(_storage, entries, _reorderBytes);
   read(_storage, entrySize);
   ASSERT("Valid entry size",
@@ -2461,7 +2443,7 @@ void OMKLVStoredObject::restore(OMSet<OMUniqueObjectIdentification,
                                          sizeof(OMUInt64) +
                                          sizeof(OMUInt8)));
   ASSERT("Consistent length and entry count",
-             setLength == sizeof(root) + sizeof(rootOffset) + sizeof(entries) +
+             setLength == sizeof(entries) +
                           sizeof(entrySize) + (entries * entrySize));
 
   for (OMUInt64 i = 0; i < entries; i++) {
