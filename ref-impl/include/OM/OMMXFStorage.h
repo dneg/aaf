@@ -107,6 +107,9 @@ public:
     // @cmember Create an iterator over the set of essence container labels.
   virtual LabelSetIterator* essenceContainerLabels(void) const;
 
+    // @cmember Set the file generation.
+  virtual void setGeneration(const OMUniqueObjectIdentification& generation);
+
   struct ObjectDirectoryEntry {
     OMStorable* _object;
     OMUInt64 _offset;
@@ -129,6 +132,7 @@ private:
 
   OMKLVKey _operationalPattern;
   LabelSet _essenceContainerLabels;
+  OMUniqueObjectIdentification _generation;
   ObjectDirectory* _instanceIdToObject;
   ObjectSet* _objectToInstanceId;
 
