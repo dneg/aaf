@@ -479,49 +479,57 @@ void OMKLVStoredObject::save(const OMDataVector& property)
 {
   TRACE("OMKLVStoredObject::save(OMDataVector)");
 
-  OMPropertySize size = property.bitsSize();
-  OMByte* bits = property.bits();
   const OMType* propertyType = property.type();
   ASSERT("Valid property type", propertyType != 0);
+  const OMArrayType* at = dynamic_cast<const OMArrayType*>(propertyType);
+  ASSERT("Correct type", at != 0);
+  OMType* elementType = at->elementType();
+  ASSERT("Fixed size elements", elementType->isFixedSize());
+  OMUInt32 elementSize = elementType->externalSize();
+  OMUInt32 elementCount = property.count();
 
-  // Allocate buffer for property value
-  OMPropertySize externalBytesSize = propertyType->externalSize(bits, size);
-  OMByte* buffer = new OMByte[externalBytesSize];
+    // Allocate buffer for one element
+  OMByte* buffer = new OMByte[elementSize];
   ASSERT("Valid heap pointer", buffer != 0);
 
-  // Externalize property value
-  propertyType->externalize(bits,
-                            size,
-                            buffer,
-                            externalBytesSize,
-                            hostByteOrder());
-
-  // Reorder property value
-  if (_reorderBytes) {
-    propertyType->reorder(buffer, externalBytesSize);
-  }
-
   // size
-  OMPropertySize propertySize = externalBytesSize;
+  // Doh! 32-bit size and count but 16-bit property size
+  OMUInt64 size = elementSize * elementCount;
+  // ASSERT("Valid size"); // tjb
+  OMPropertySize propertySize = static_cast<OMPropertySize>(size);
   propertySize = propertySize + sizeof(OMUInt32) + sizeof(OMUInt32);
   _storage->write(propertySize, _reorderBytes);
 
-  const OMArrayType* at = dynamic_cast<const OMArrayType*>(propertyType);
-  ASSERT("Correct type", at != 0);
-
   // element count
-  OMType* et = at->elementType();
-  ASSERT("Fixed size elements", et->isFixedSize());
-  OMUInt32 elementSize = et->externalSize();
-  OMUInt32 count = externalBytesSize / elementSize;
-  _storage->write(count, _reorderBytes);
+  _storage->write(elementCount, _reorderBytes);
 
   // element size
   _storage->write(elementSize, _reorderBytes);
 
-  // value
-  _storage->write(buffer, externalBytesSize);
+  OMDataContainerIterator* it = property.createIterator();
+  while (++(*it)) {
 
+    // Get a pointer to the element
+    const OMByte* bits = it->currentElement();
+
+
+    // Externalize element
+    elementType->externalize(bits,
+                             elementSize,
+                             buffer,
+                             elementSize,
+                             hostByteOrder());
+
+    // Reorder element
+    if (_reorderBytes) {
+      elementType->reorder(buffer, elementSize);
+    }
+
+    // value
+    _storage->write(buffer, elementSize);
+
+  }
+  delete it;
   delete [] buffer;
 }
 
