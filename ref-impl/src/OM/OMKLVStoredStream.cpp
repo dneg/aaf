@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -28,7 +28,8 @@
 #include "OMRawStorage.h"
 
 OMKLVStoredStream::OMKLVStoredStream(OMRawStorage* store)
-: _store(store)
+: _store(store),
+  _position(0)
 {
   TRACE("OMKLVStoredStream::OMKLVStoredStream");
   PRECONDITION("Valid store", _store != 0);
@@ -50,16 +51,18 @@ void OMKLVStoredStream::read(void* ANAME(data), size_t ANAME(size)) const
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
-void OMKLVStoredStream::read(OMByte* ANAME(data),
-                             const OMUInt32 ANAME(bytes),
-                             OMUInt32& /* bytesRead */) const
+void OMKLVStoredStream::read(OMByte* data,
+                             const OMUInt32 bytes,
+                             OMUInt32& bytesRead) const
 {
   TRACE("OMKLVStoredStream::read");
   PRECONDITION("Valid store", _store != 0);
   PRECONDITION("Valid data buffer", data != 0);
   PRECONDITION("Valid size", bytes > 0);
 
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  _store->readAt(_position, data, bytes, bytesRead);
+  OMKLVStoredStream* nonConstThis = const_cast<OMKLVStoredStream*>(this);
+  nonConstThis->_position = _position + bytesRead;
 }
 
 void OMKLVStoredStream::write(void* ANAME(data), size_t ANAME(size))
@@ -72,16 +75,20 @@ void OMKLVStoredStream::write(void* ANAME(data), size_t ANAME(size))
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
-void OMKLVStoredStream::write(const OMByte* ANAME(data),
-                              const OMUInt32 ANAME(bytes),
-                              OMUInt32& /* bytesWritten */)
+void OMKLVStoredStream::write(const OMByte* data,
+                              const OMUInt32 bytes,
+                              OMUInt32& bytesWritten)
 {
   TRACE("OMKLVStoredStream::write");
   PRECONDITION("Valid store", _store != 0);
   PRECONDITION("Valid data", data != 0);
   PRECONDITION("Valid size", bytes > 0);
 
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  _store->writeAt(_position,
+                  reinterpret_cast<const OMByte*>(data),
+                  bytes,
+                  bytesWritten);
+  _position = _position + bytesWritten;
 }
 
 OMUInt64 OMKLVStoredStream::size(void) const
@@ -89,17 +96,16 @@ OMUInt64 OMKLVStoredStream::size(void) const
   TRACE("OMKLVStoredStream::size");
   PRECONDITION("Valid store", _store != 0);
 
-  OMUInt64 result = 0;
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  OMUInt64 result = _store->size();
   return result;
 }
 
-void OMKLVStoredStream::setSize(const OMUInt64 /* newSize */)
+void OMKLVStoredStream::setSize(const OMUInt64 newSize)
 {
   TRACE("OMKLVStoredStream::setSize");
   PRECONDITION("Valid store", _store != 0);
 
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  _store->extend(newSize);
 }
 
 OMUInt64 OMKLVStoredStream::position(void) const
@@ -107,16 +113,15 @@ OMUInt64 OMKLVStoredStream::position(void) const
   TRACE("OMKLVStoredStream::position");
   PRECONDITION("Valid store", _store != 0);
 
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  return 0;
+  return _position;
 }
 
-void OMKLVStoredStream::setPosition(const OMUInt64 /* offset */)
+void OMKLVStoredStream::setPosition(const OMUInt64 offset)
 {
   TRACE("OMKLVStoredStream::setPosition");
   PRECONDITION("Valid store", _store != 0);
 
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  _position = offset;
 }
 
 void OMKLVStoredStream::close(void)
