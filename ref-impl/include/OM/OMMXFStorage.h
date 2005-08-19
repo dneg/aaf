@@ -27,6 +27,11 @@
 #include "OMWrappedRawStorage.h"
 #include "OMDataTypes.h"
 
+class OMStorable;
+template <typename Key, typename Element>
+class OMSet;
+template <typename Key, typename Element>
+class OMSetIterator;
 
   // @class Class supporting access to the raw bytes of MXF
   //        files supported by the Object Manager.
@@ -41,6 +46,24 @@ public:
 
     // @cmember Destructor.
   virtual ~OMMXFStorage(void);
+
+  struct ObjectDirectoryEntry {
+    OMStorable* _object;
+    OMUInt64 _offset;
+    OMUInt8 _flags;
+  };
+
+  typedef OMSet<OMUniqueObjectIdentification,
+                ObjectDirectoryEntry> ObjectDirectory;
+  typedef OMSetIterator<OMUniqueObjectIdentification,
+                        ObjectDirectoryEntry> ObjectDirectoryIterator;
+
+  ObjectDirectory* instanceIdToObject(void);
+
+private:
+  // @access Private members.
+
+  ObjectDirectory* _instanceIdToObject;
 
 };
 
