@@ -1026,6 +1026,12 @@ void OMMXFStorage::resolve(const OMUniqueObjectIdentification& instanceId)
   ep->_flags = 1;
 }
 
+OMUInt64 OMMXFStorage::primerOffset(void)
+{
+  TRACE("OMMXFStorage::primerOffset");
+  return _primerOffset;
+}
+
 void OMMXFStorage::clearObjectDirectory(void)
 {
   TRACE("OMMXFStorage::clearObjectDirectory");
