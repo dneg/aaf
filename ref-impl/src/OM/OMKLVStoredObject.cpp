@@ -28,13 +28,16 @@
 // @doc OMINTERNAL
 #include "OMKLVStoredObject.h"
 
+#include "OMRawStorage.h"
+
   // @mfunc Open the root <c OMKLVStoredObject> in the raw storage
   //        <p rawStorage> for reading only.
   //   @parm The raw storage in which to open the file.
   //   @rdesc An <c OMKLVStoredObject> representing the root object.
-OMKLVStoredObject* OMKLVStoredObject::openRead(OMRawStorage* /* rawStorage */)
+OMKLVStoredObject* OMKLVStoredObject::openRead(OMRawStorage* ANAME(rawStorage))
 {
   TRACE("OMKLVStoredObject::openRead");
+  PRECONDITION("Compatible raw storage access mode", rawStorage->isReadable());
   ASSERT("Unimplemented code not reached", false); // tjb TBS
   return 0;
 }
@@ -44,9 +47,12 @@ OMKLVStoredObject* OMKLVStoredObject::openRead(OMRawStorage* /* rawStorage */)
   //   @rdesc An <c OMKLVStoredObject> representing the root object.
   //        <p rawStorage> for modification.
 OMKLVStoredObject* OMKLVStoredObject::openModify(
-                                                OMRawStorage* /* rawStorage */)
+                                               OMRawStorage* ANAME(rawStorage))
 {
   TRACE("OMKLVStoredObject::openModify");
+  PRECONDITION("Compatible raw storage access mode",
+                         rawStorage->isReadable() && rawStorage->isWritable());
+  PRECONDITION("Compatible raw storage", rawStorage->isPositionable());
   ASSERT("Unimplemented code not reached", false); // tjb TBS
   return 0;
 }
@@ -61,6 +67,7 @@ OMKLVStoredObject* OMKLVStoredObject::createWrite(OMRawStorage* rawStorage,
                                                   const OMByteOrder byteOrder)
 {
   TRACE("OMKLVStoredObject::createWrite");
+  PRECONDITION("Compatible raw storage access mode", rawStorage->isWritable());
   OMKLVStoredObject* result= new OMKLVStoredObject(rawStorage, byteOrder);
   ASSERT("Valid heap pointer", result != 0);
   return result;
@@ -76,6 +83,9 @@ OMKLVStoredObject* OMKLVStoredObject::createModify(OMRawStorage* rawStorage,
                                                    const OMByteOrder byteOrder)
 {
   TRACE("OMKLVStoredObject::createModify");
+  PRECONDITION("Compatible raw storage access mode",
+                         rawStorage->isReadable() && rawStorage->isWritable());
+  PRECONDITION("Compatible raw storage", rawStorage->isPositionable());
   OMKLVStoredObject* result= new OMKLVStoredObject(rawStorage, byteOrder);
   ASSERT("Valid heap pointer", result != 0);
   return result;
