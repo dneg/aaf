@@ -1537,6 +1537,8 @@ OMUInt64 OMMXFStorage::streamSize(OMUInt32 sid)
 
 void OMMXFStorage::streamSetSize(OMUInt32 /* sid */, OMUInt64 /* newSize */)
 {
+  TRACE("OMMXFStorage::streamSetSize");
+  ASSERT("Unimplemented code not reached", false);
 }
 
 void OMMXFStorage::streamRawWrite(OMUInt32 /* sid */,
