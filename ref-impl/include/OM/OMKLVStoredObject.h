@@ -259,6 +259,10 @@ public:
                                 OMCharacter* externalString,
                                 size_t characterCount);
 
+  static void internalizeString(const OMCharacter* externalString,
+                                wchar_t* internalString,
+                                size_t characterCount);
+
   virtual void write(const wchar_t* string);
   virtual void write(bool b);
 
