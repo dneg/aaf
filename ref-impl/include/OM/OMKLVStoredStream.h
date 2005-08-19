@@ -81,7 +81,7 @@ public:
     // @cmember Set the current position for <f read()> and
     //          <f write()>, as an offset in bytes from the
     //          begining of this <c OMXMLStoredStream>.
-  virtual void setPosition(const OMUInt64 offset);
+  virtual void setPosition(const OMUInt64 offset) const;
 
     // @cmember Close this <c OMXMLStoredStream>.
   virtual void close(void);
@@ -106,9 +106,9 @@ public:
     // @cmember The file offset of this essence element.
   virtual OMUInt64 fileOffset(void) const;
 
-  static bool readKLVKey(OMStoredStream& stream, OMKLVKey& key);
+  static bool readKLVKey(const OMStoredStream& stream, OMKLVKey& key);
 
-  static bool readKLVLength(OMStoredStream& stream, OMUInt64& length);
+  static bool readKLVLength(const OMStoredStream& stream, OMUInt64& length);
 
 private:
   // @access Private members.
