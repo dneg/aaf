@@ -305,7 +305,8 @@ public:
                         const OMUInt32& berValueSize,
                         const OMUInt64& value);
 
-  virtual void readPartition(OMUInt32& bodySID,
+  virtual void readPartition(OMUInt64 length,
+                             OMUInt32& bodySID,
                              OMUInt32& indexSID,
                              OMUInt32& KAGSize);
 
