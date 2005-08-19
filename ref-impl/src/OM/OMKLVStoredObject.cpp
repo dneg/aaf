@@ -367,6 +367,7 @@ void OMKLVStoredObject::save(OMFile& file)
 {
   TRACE("OMKLVStoredObject::save(OMFile)");
 
+  _storage->setPosition(0);
   if (metaDataOnly) {
     // The header partition has already been written,
     // start saving immediately after the header partition
@@ -385,6 +386,7 @@ void OMKLVStoredObject::save(OMFile& file)
 
   // Write the primer
   writePrimerPack(file.dictionary());
+  _storage->fillAlignK(_storage->position(), KAGSize);
 
   // Save the rest of the file
   file.root()->save();
@@ -393,8 +395,6 @@ void OMKLVStoredObject::save(OMFile& file)
   _storage->saveObjectDirectory();
 
   // Insert alignment fill
-  OMUInt32 bodyPartitionOffset = 0x20000; // Get this from header ?
-  OMUInt32 KAGSize = 0x100;
   OMUInt32 fillAlignment;
   if (metaDataOnly) {
     // fill to next KAG
@@ -403,8 +403,7 @@ void OMKLVStoredObject::save(OMFile& file)
     // fill remainder of pre-allocated space
     fillAlignment = bodyPartitionOffset;
   }
-  OMUInt64 currentPosition = _storage->position();
-  _storage->fillAlignK(currentPosition, fillAlignment);
+  _storage->fillAlignK(_storage->position(), fillAlignment);
 
   if (!metaDataOnly) {
     _storage->writeBodyPartition();
@@ -633,13 +632,6 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   file.setLoadMode(OMFile::lazyLoad);
 
   _storage->readKLVFill();
-
-  OMKLVKey fillKey =
-    {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
-     0x03, 0x01, 0x02, 0x10, 0x01, 0x00, 0x00, 0x00};
-  OMKLVKey objectDirectoryKey =
-    {0x96, 0x13, 0xb3, 0x8a, 0x87, 0x34, 0x87, 0x46,
-     0xf1, 0x02, 0x96, 0xf0, 0x56, 0xe0, 0x4d, 0x2a};
 
   // For restoring meta objects
   OMDictionary* metaDictionary = file.dictionary();
