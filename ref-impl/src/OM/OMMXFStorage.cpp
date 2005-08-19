@@ -477,9 +477,18 @@ bool OMMXFStorage::findRandomIndex(OMUInt64 fileSize,
                                    OMUInt64& indexPosition)
 {
   TRACE("OMMXFStorage::findRandomIndex");
-
-  ASSERT("Unimplemented code not reached", false);
   bool result = false;
+
+  OMUInt32 ripSize;
+  setPosition(fileSize - sizeof(ripSize));
+  read(ripSize, _reorderBytes);
+  if (isRandomIndex(fileSize, ripSize)) {
+    indexPosition = fileSize - ripSize;
+    result = true;
+  } else if (isRandomIndex(fileSize, ripSize - 4)) { // for buggy files
+    indexPosition = fileSize - (ripSize - 4);
+    result = true;
+  }
   return result;
 }
 
