@@ -430,6 +430,7 @@ public:
   virtual void streamGrow(OMUInt32 sid, OMUInt64 growBytes);
 
   virtual void saveStreams(void);
+  virtual void restoreStreams(void);
 
   struct Stream;
   struct Segment {
