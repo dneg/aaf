@@ -1588,20 +1588,23 @@ void OMMXFStorage::streamReadAt(OMUInt32 sid,
 
 void OMMXFStorage::streamRestoreSegment(OMUInt32 sid,
                                         OMUInt64 start,
-                                        OMUInt64 size,
+                                        OMUInt64 allocatedSize,
+                                        OMUInt64 occupiedSize,
                                         OMKLVKey label,
                                         OMUInt32 gridSize)
 {
   TRACE("OMMXFStorage::streamRestoreSegment");
+  PRECONDITION("Valid sizes", occupiedSize <= allocatedSize);
   Stream* s = 0;
   if (!segmentMap()->find(sid, s)) {
-    s = createStream(sid, size, label, gridSize);
-    addSegment(s, 0, size, start);
+    s = createStream(sid, 0, label, gridSize);
+    addSegment(s, 0, allocatedSize, start);
+    s->_size = s->_size + occupiedSize;
   } else {
     Segment* last = findLastSegment(s);
     ASSERT("Last segment found", last != 0);
-    addSegment(s, last->_start + last->_size, size, start);
-    s->_size = s->_size + size;
+    addSegment(s, last->_start + last->_size, allocatedSize, start);
+    s->_size = s->_size + occupiedSize;
   }
   OMDataStream* sp = stream(sid);
   ASSERT("Found stream", sp != 0);
@@ -1807,6 +1810,7 @@ void OMMXFStorage::restoreStreams(void)
         streamRestoreSegment(indexSID,
                              position(),
                              length,
+                             length,
                              k,
                              gridSize);
       }
@@ -1819,6 +1823,7 @@ void OMMXFStorage::restoreStreams(void)
       if ((bodySID != 0) && (inEssence)) {
         streamRestoreSegment(bodySID,
                              position(),
+                             length,
                              length,
                              k,
                              gridSize);
