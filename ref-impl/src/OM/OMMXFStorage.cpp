@@ -547,8 +547,7 @@ bool OMMXFStorage::readHeaderPartition(void)
     read(bodyOffset, reorderBytes);
     OMUInt32 bodySID;
     read(bodySID, reorderBytes);
-    OMKLVKey operationalPattern;
-    readKLVKey(operationalPattern);
+    readKLVKey(_operationalPattern);
     OMUInt32 elementCount;
     read(elementCount, reorderBytes);
     OMUInt32 elementSize;
