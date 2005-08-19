@@ -1302,6 +1302,11 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         ASSERT("Valid type", kss != 0);
         OMUInt32 sid = kss->streamIdentification();
         _storage->write(sid, _reorderBytes);
+        // There's no place in the file to put the stored byte order
+        // until we have metadata streams.
+        ASSERT("Supported stream byte order",
+                                  (stream->storedByteOrder() == unspecified) ||
+                                  (stream->storedByteOrder() == bigEndian));
         break;
       }
       default:
@@ -1518,8 +1523,9 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
       ASSERT("Valid type", stream != 0);
       OMUInt32 sid;
       _storage->read(sid, _reorderBytes);
-//    stream->setStoredByteOrder(bigEndian);
-      stream->setStoredByteOrder(hostByteOrder());
+      // There's no place in the file from which to get the stored byte order
+      // until we have metadata streams.
+      stream->setStoredByteOrder(bigEndian);
       p->setPresent();
       _storage->associate(stream, sid);
       break;
