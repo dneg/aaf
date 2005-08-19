@@ -57,17 +57,6 @@
 //#define PERSIST_OBJECT_DIRECTORY 1
 //#define MAP_CLASSIDS 1
 
-#if defined(INSTANCEID_DEBUG)
-#include <iostream>
-#include <iomanip>
-using std::cout;
-using std::endl;
-using std::hex;
-using std::setw;
-using std::setfill;
-using std::dec;
-#endif
-
   // @mfunc Open the root <c OMKLVStoredObject> in the raw storage
   //        <p rawStorage> for reading only.
   //   @parm The raw storage in which to open the file.
@@ -231,17 +220,6 @@ static OMPropertyTag findTag(const wchar_t* path)
 void OMKLVStoredObject::save(OMFile& file)
 {
   TRACE("OMKLVStoredObject::save(OMFile)");
-
-#if defined(INSTANCEID_DEBUG)
-  cout << endl;
-  for (size_t i = 0; i < mapSize; i++) {
-    cout << i << " ";
-    for (size_t k = 0; k < pidsSize; k++) {
-      cout << hex << setw(4) << setfill('0') << map[i]._pids[k] << " ";
-    }
-    cout << map[i]._path << endl;
-  }
-#endif
 
   // The header partition has already been written,
   // start saving immediately after the header partition
@@ -599,25 +577,6 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   if (!metaDataOnly) {
     streamRestore(_storage);
   }
-
-#if defined(INSTANCEID_DEBUG)
-
-  if (_instanceIdToObject != 0) {
-
-    OMUInt32 n = _instanceIdToObject->count();
-    cout << dec << n << " objects" << endl;
-
-    OMSetIterator<OMUniqueObjectIdentification, OMStorable*>
-                                      iterator(*_instanceIdToObject, OMBefore);
-    while (++iterator) {
-      OMStorable* object = iterator.value();
-      OMUniqueObjectIdentification id = iterator.key();
-      char buffer[OMObjectIdentificationStringBufferSize];
-      toString(id, buffer);
-      cout << buffer << " -> " << object << endl;
-    }
-  }
-#endif
 
   return root;
 }
@@ -2797,24 +2756,7 @@ void OMKLVStoredObject::convert(OMUniqueObjectIdentification& id,
 void OMKLVStoredObject::finalize(void)
 {
   TRACE("OMKLVStoredObject::finalize");
-#if defined(INSTANCEID_DEBUG)
 
-  if (_instanceIdToObject != 0) {
-
-    OMUInt32 n = _instanceIdToObject->count();
-    cout << dec << n << " objects" << endl;
-
-    OMSetIterator<OMUniqueObjectIdentification, OMStorable*>
-                                      iterator(*_instanceIdToObject, OMBefore);
-    while (++iterator) {
-      OMStorable* object = iterator.value();
-      OMUniqueObjectIdentification id = iterator.key();
-      char buffer[OMObjectIdentificationStringBufferSize];
-      toString(id, buffer);
-      cout << buffer << " -> " << object << endl;
-    }
-  }
-#endif
   if (_objectToInstanceId != 0) {
     _objectToInstanceId->clear();
     delete _objectToInstanceId;
