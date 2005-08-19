@@ -27,13 +27,14 @@
 #include "OMWrappedRawStorage.h"
 #include "OMDataTypes.h"
 #include "OMIdentitySet.h"
-#include "OMIdentitySetIter.h"
 
 class OMStorable;
 template <typename Key, typename Element>
 class OMSet;
 template <typename Key, typename Element>
 class OMSetIterator;
+template <typename Element>
+class OMIdentitySetIterator;
 
   // @class Class supporting access to the raw bytes of MXF
   //        files supported by the Object Manager.
