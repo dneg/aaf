@@ -275,6 +275,8 @@ public:
 
   void resolve(const OMUniqueObjectIdentification& instanceId);
 
+  virtual OMUInt64 primerOffset(void);
+
   virtual void clearObjectDirectory(void);
 
   virtual void saveObjectDirectory(void);
