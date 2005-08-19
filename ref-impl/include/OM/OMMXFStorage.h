@@ -319,6 +319,14 @@ public:
                              OMUInt32& indexSID,
                              OMUInt32& KAGSize);
 
+  virtual void readPartition(OMUInt64 length,
+                             OMUInt32& bodySID,
+                             OMUInt32& indexSID,
+                             OMUInt32& KAGSize,
+                             OMUInt64& previousPartition,
+                             OMUInt64& thisPartition,
+                             OMUInt64& footerPartition);
+
   virtual void readHeaderPartition(void);
 
   static bool read(const OMRawStorage* store, OMUInt8& i);
