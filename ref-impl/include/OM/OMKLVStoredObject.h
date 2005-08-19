@@ -325,6 +325,8 @@ public:
 
   static void finalize(void);
 
+  static bool metaDataOnly;
+
 private:
   // @access Private members.
 
