@@ -257,6 +257,8 @@ public:
 
   virtual void readRandomIndex(OMUInt64 length);
 
+  virtual bool isRandomIndex(OMUInt64 fileSize, OMUInt32 ripSize);
+
     // @cmember Write a fill key, a BER encoded length and
     //          <p length> bytes of fill.
   virtual void writeKLVFill(const OMUInt64& length);
