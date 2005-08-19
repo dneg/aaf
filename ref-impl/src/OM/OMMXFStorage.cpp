@@ -219,16 +219,8 @@ void OMMXFStorage::writeFooterPartition(void)
   for (size_t i = 0; i < count; i++) {
     Partition* p = _partitions.valueAt(i);
     OMUInt64 address = p->_address;
-#if defined(BER9)
     fixupReference(address + sizeof(OMKLVKey) + 8 + 1 + 16, previous);
-#else
-    fixupReference(address + sizeof(OMKLVKey) + 3 + 1 + 16, previous);
-#endif
-#if defined(BER9)
     fixupReference(address + sizeof(OMKLVKey) + 8 + 1 + 24, footer);
-#else
-    fixupReference(address + sizeof(OMKLVKey) + 3 + 1 + 24, footer);
-#endif
     previous = address;
   }
 }
@@ -260,11 +252,7 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
 
   writeKLVKey(key);
   OMUInt64 length = fixedPartitionSize + (elementCount * elementSize);
-#if defined(BER9)
   writeKLVLength(length);
-#else
-  writeBerLength(3, length);
-#endif
   OMUInt16 majorVersion = currentMajorVersion;
   write(majorVersion, _reorderBytes);
   OMUInt16 minorVersion = currentMinorVersion;
@@ -338,11 +326,7 @@ void OMMXFStorage::writeKLVFill(const OMUInt64& length)
   TRACE("OMMXFStorage::writeKLVFill");
 
   writeKLVKey(fillKey);
-#if defined(BER9)
   writeKLVLength(length);
-#else
-  writeBerLength(3, length);
-#endif
   for (OMUInt64 i = 0; i < length; i++) {
 #if defined(OM_DEBUG)
     const OMByte fillPattern[] = "FFFF.FFFB ";
@@ -363,11 +347,7 @@ void OMMXFStorage::fillAlignK(const OMUInt64& currentPosition,
   TRACE("OMMXFStorage::fillAlignK");
   PRECONDITION("Valid KAG sise", KAGSize > 0);
 
-#if defined(BER9)
   OMUInt64 minimumFill = sizeof(OMKLVKey) + sizeof(OMUInt64) + 1;
-#else
-  OMUInt64 minimumFill = sizeof(OMKLVKey) + 3 + 1;
-#endif
   // K fill, L fill
   OMUInt64 overhead = minimumFill;
   OMUInt64 position = currentPosition + overhead;
@@ -387,14 +367,9 @@ void OMMXFStorage::fillAlignV(const OMUInt64& currentPosition,
   TRACE("OMMXFStorage::fillAlignV");
   PRECONDITION("Valid KAG sise", KAGSize > 0);
 
-#if defined(BER9)
   OMUInt64 minimumFill = sizeof(OMKLVKey) + sizeof(OMUInt64) + 1;
-#else
-  OMUInt64 minimumFill = sizeof(OMKLVKey) + 3 + 1;
-#endif
   // K fill, L fill, K next, L next
-//OMUInt64 overhead = minimumFill + minimumFill;
-  OMUInt64 overhead = minimumFill + (sizeof(OMKLVKey) + sizeof(OMUInt64) + 1);
+  OMUInt64 overhead = minimumFill + minimumFill;
   OMUInt64 position = currentPosition + overhead;
   OMUInt64 nextPage = (position / KAGSize) + 1;
   OMUInt64 totalSize = (nextPage * KAGSize) - currentPosition;
