@@ -291,7 +291,7 @@ void OMMXFStorage::writeBodyPartition(OMUInt32 bodySID,
 {
   TRACE("OMMXFStorage::writeBodyPartition");
 
-  writePartition(ClosedBodyPartitionKey, bodySID, indexSID, KAGSize);
+  writePartition(ClosedCompleteBodyPartitionKey, bodySID, indexSID, KAGSize);
   OMUInt64 currentPosition = position();
   fillAlignV(currentPosition, KAGSize);
 }
@@ -302,7 +302,7 @@ void OMMXFStorage::writeFooterPartition(OMUInt32 indexSID,
   TRACE("OMMXFStorage::writeFooterPartition");
 
   // Essence (body) not allowed in footer
-  writePartition(FooterKey, 0, indexSID, KAGSize);
+  writePartition(CompleteFooterKey, 0, indexSID, KAGSize);
   OMUInt64 currentPosition = position();
   fillAlignV(currentPosition, KAGSize);
 }
@@ -1618,11 +1618,11 @@ void OMMXFStorage::saveStreams(void)
 
     if (lastFileSegment->_stream->_label != IndexTableSegmentKey) {
       setPosition(_fileSize + fillBufferZoneSize);
-      writePartition(FooterKey, 0, 0, defaultKAGSize);
+      writePartition(CompleteFooterKey, 0, 0, defaultKAGSize);
     }
   } else {
     setPosition(_fileSize + fillBufferZoneSize);
-    writePartition(FooterKey, 0, 0, defaultKAGSize);
+    writePartition(CompleteFooterKey, 0, 0, defaultKAGSize);
   }
 }
 
