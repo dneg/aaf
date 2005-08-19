@@ -120,6 +120,7 @@ void OMMXFStorage::close(void)
 {
   TRACE("OMMXFStorage::close");
 
+  writeRandomIndex();
   fixup();
 
   size_t count = _partitions.count();
