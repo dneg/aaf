@@ -41,6 +41,7 @@
   // @mfunc Constructor.
 OMMXFStorage::OMMXFStorage(OMRawStorage* store)
   : OMWrappedRawStorage(store),
+  _fixups(),
   _reorderBytes(false),
   _operationalPattern(nullOMKLVKey),
   _essenceContainerLabels(),
