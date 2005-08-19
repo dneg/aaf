@@ -581,6 +581,48 @@ void OMMXFStorage::read(OMByte* bytes,
   OMWrappedRawStorage::read(bytes, byteCount, bytesRead);
 }
 
+void OMMXFStorage::readKLVKey(OMKLVKey& key) const
+{
+  TRACE("OMMXFStorage::readKLVKey");
+
+  OMUInt32 x;
+  OMByte* dest = reinterpret_cast<OMByte*>(&key);
+  read(dest, sizeof(OMKLVKey), x);
+
+  POSTCONDITION("All bytes read", x == sizeof(OMKLVKey));
+}
+
+OMUInt64 OMMXFStorage::readKLVLength(void) const
+{
+  TRACE("OMMXFStorage::readKLVLength");
+  OMUInt64 result = readBerLength();
+  return result;
+}
+
+void OMMXFStorage::readKLVFill(void) const
+{
+  TRACE("OMMXFStorage::readKLVFill");
+
+  OMKLVKey k;
+  readKLVKey(k);
+  ASSERT("Fill key", k == fillKey);
+  OMUInt64 length = readKLVLength();
+  for (OMUInt64 i = 0; i < length; i++) {
+    OMByte b;
+    read(b);
+  }
+}
+
+void OMMXFStorage::skipLV(void) const
+{
+  TRACE("OMMXFStorage::skipLV");
+
+  OMUInt64 length = readKLVLength();
+  OMUInt64 pos = position();
+  OMUInt64 newPosition = pos + length;
+  setPosition(newPosition);
+}
+
 OMUInt64 OMMXFStorage::readBerLength(void) const
 {
   TRACE("OMMXFStorage::readBerLength");
