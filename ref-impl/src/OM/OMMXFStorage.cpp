@@ -305,6 +305,8 @@ void OMMXFStorage::writeFooterPartition(OMUInt32 indexSID,
 
   // Essence (body) not allowed in footer
   writePartition(FooterKey, 0, indexSID, KAGSize);
+  OMUInt64 currentPosition = position();
+  fillAlignV(currentPosition, KAGSize);
 }
 
 void OMMXFStorage::writePartition(const OMKLVKey& key,
