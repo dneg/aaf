@@ -398,12 +398,13 @@ void OMKLVStoredObject::save(OMFile& file)
 
   // Save streams
   //
-  streamSave(*file.root()->propertySet());
+  _storage->saveStreams();
 
   // Write the footer
   //
   _storage->writeFooterPartition(0, defaultKAGSize);
   _storage->writeRandomIndex();
+
   _storage->close();
 }
 
