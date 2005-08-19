@@ -51,6 +51,7 @@
 
 //#define INSTANCEID_DEBUG 1
 //#define OMONLY 1
+//#define OM_CHECK_STREAMS
 
   // @mfunc Constructor.
 OMMXFStorage::OMMXFStorage(OMRawStorage* store)
@@ -2181,7 +2182,7 @@ void OMMXFStorage::restoreStreams(void)
 void OMMXFStorage::checkStreams(void)
 {
   TRACE("OMMXFStorage::checkStreams");
-#if defined(OM_DEBUG)
+#if defined(OM_CHECK_STREAMS)
   if (_segments != 0) {
     SegmentListIterator sl(*_segments, OMBefore);
     while (++sl) {
