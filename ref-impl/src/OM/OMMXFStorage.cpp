@@ -40,7 +40,8 @@
 
   // @mfunc Constructor.
 OMMXFStorage::OMMXFStorage(OMRawStorage* store)
-: OMWrappedRawStorage(store),
+  : OMWrappedRawStorage(store),
+  _reorderBytes(false),
   _operationalPattern(nullOMKLVKey),
   _essenceContainerLabels(),
   _generation(nullOMUniqueObjectIdentification),
@@ -52,6 +53,12 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
   _streamIdToStream(0)
 {
   TRACE("OMMXFStorage::OMMXFStorage");
+
+  if (hostByteOrder() == bigEndian) {
+    _reorderBytes = false;
+  } else {
+    _reorderBytes = true;
+  }
 }
 
   // @mfunc Destructor.
@@ -141,16 +148,10 @@ OMMXFStorage::setGeneration(const OMUniqueObjectIdentification& generation)
 void OMMXFStorage::writeHeaderPartition(void)
 {
   TRACE("OMMXFStorage::writeHeaderPartition");
-  bool reorderBytes;
-  if (hostByteOrder() == bigEndian) {
-    reorderBytes = false;
-  } else {
-    reorderBytes = true;
-  }
 
   OMUInt64 currentPosition = position();
   _currentPartition = currentPosition;
-  writePartition(ClosedHeaderPartitionPackKey, KAGSize, reorderBytes);
+  writePartition(ClosedHeaderPartitionPackKey, KAGSize);
   currentPosition = position();
   fillAlignK(currentPosition, KAGSize);
   currentPosition = position();
@@ -163,14 +164,9 @@ void OMMXFStorage::writeHeaderPartition(void)
 void OMMXFStorage::writeBodyPartition(void)
 {
   TRACE("OMMXFStorage::writeBodyPartition");
-  bool reorderBytes;
-  if (hostByteOrder() == bigEndian) {
-    reorderBytes = false;
-  } else {
-    reorderBytes = true;
-  }
+
   OMUInt32 KAGSize = 0x200; // Different than the default
-  writePartition(ClosedBodyPartitionPackKey, KAGSize, reorderBytes);
+  writePartition(ClosedBodyPartitionPackKey, KAGSize);
   OMUInt64 currentPosition = position();
   fillAlignV(currentPosition, KAGSize);
 }
@@ -178,22 +174,15 @@ void OMMXFStorage::writeBodyPartition(void)
 void OMMXFStorage::writeFooterPartition(void)
 {
   TRACE("OMMXFStorage::writeFooterPartition");
-  bool reorderBytes;
-  if (hostByteOrder() == bigEndian) {
-    reorderBytes = false;
-  } else {
-    reorderBytes = true;
-  }
+
   OMUInt64 footer = position();
-  writePartition(ClosedFooterPartitionPackKey, KAGSize, reorderBytes);
+  writePartition(ClosedFooterPartitionPackKey, KAGSize);
   definition(footer, FUT_FOOTER);
 
   fixup();
 }
 
-void OMMXFStorage::writePartition(const OMKLVKey& key,
-                                  OMUInt32 KAGSize,
-                                  bool reorderBytes)
+void OMMXFStorage::writePartition(const OMKLVKey& key, OMUInt32 KAGSize)
 {
   TRACE("OMMXFStorage::writePartition");
 
@@ -213,30 +202,30 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
   writeBerLength(3, length);
 #endif
   OMUInt16 majorVersion = currentMajorVersion;
-  write(majorVersion, reorderBytes);
+  write(majorVersion, _reorderBytes);
   OMUInt16 minorVersion = currentMinorVersion;
-  write(minorVersion, reorderBytes);
-  write(KAGSize, reorderBytes);
+  write(minorVersion, _reorderBytes);
+  write(KAGSize, _reorderBytes);
   OMUInt64 thisPartition = currentPosition;
-  write(thisPartition, reorderBytes);
-  write(previousPartition, reorderBytes);
+  write(thisPartition, _reorderBytes);
+  write(previousPartition, _reorderBytes);
   reference(position(), FUT_FOOTER);
   OMUInt64 footerPartition = 0;
-  write(footerPartition, reorderBytes);
+  write(footerPartition, _reorderBytes);
   reference(position(), FUT_HEADERBYTECOUNT);
   OMUInt64 headerByteCount = 0;
-  write(headerByteCount, reorderBytes);
+  write(headerByteCount, _reorderBytes);
   OMUInt64 indexByteCount = 0;
-  write(indexByteCount, reorderBytes);
+  write(indexByteCount, _reorderBytes);
   OMUInt32 indexSID = 1;
-  write(indexSID, reorderBytes);
+  write(indexSID, _reorderBytes);
   OMUInt64 bodyOffset = 0;
-  write(bodyOffset, reorderBytes);
+  write(bodyOffset, _reorderBytes);
   OMUInt32 bodySID = 2;
-  write(bodySID, reorderBytes);
+  write(bodySID, _reorderBytes);
   writeKLVKey(_operationalPattern);
-  write(elementCount, reorderBytes);
-  write(elementSize, reorderBytes);
+  write(elementCount, _reorderBytes);
+  write(elementSize, _reorderBytes);
   while (++(*iter)) {
     OMKLVKey label = iter->value();
     writeKLVKey(label);
@@ -524,12 +513,6 @@ bool OMMXFStorage::readHeaderPartition(void)
 {
   TRACE("OMMXFStorage::readHeaderPartition");
 
-  bool reorderBytes;
-  if (hostByteOrder() == bigEndian) {
-    reorderBytes = false;
-  } else {
-    reorderBytes = true;
-  }
   OMKLVKey k;
   bool result = true;
   readKLVKey(k);
@@ -537,38 +520,38 @@ bool OMMXFStorage::readHeaderPartition(void)
   if (k == ClosedHeaderPartitionPackKey) {
     readKLVLength();
     OMUInt16 majorVersion;
-    read(majorVersion, reorderBytes);
+    read(majorVersion, _reorderBytes);
     if (majorVersion != currentMajorVersion) {
       result = false;
     }
     OMUInt16 minorVersion;
-    read(minorVersion, reorderBytes);
+    read(minorVersion, _reorderBytes);
     if (minorVersion != currentMinorVersion) {
       result = false;
     }
     OMUInt32 KAGSize;
-    read(KAGSize, reorderBytes);
+    read(KAGSize, _reorderBytes);
     OMUInt64 thisPartition;
-    read(thisPartition, reorderBytes);
+    read(thisPartition, _reorderBytes);
     OMUInt64 previousPartition;
-    read(previousPartition, reorderBytes);
+    read(previousPartition, _reorderBytes);
     OMUInt64 footerPartition;
-    read(footerPartition, reorderBytes);
+    read(footerPartition, _reorderBytes);
     OMUInt64 headerByteCount;
-    read(headerByteCount, reorderBytes);
+    read(headerByteCount, _reorderBytes);
     OMUInt64 indexByteCount;
-    read(indexByteCount, reorderBytes);
+    read(indexByteCount, _reorderBytes);
     OMUInt32 indexSID;
-    read(indexSID, reorderBytes);
+    read(indexSID, _reorderBytes);
     OMUInt64 bodyOffset;
-    read(bodyOffset, reorderBytes);
+    read(bodyOffset, _reorderBytes);
     OMUInt32 bodySID;
-    read(bodySID, reorderBytes);
+    read(bodySID, _reorderBytes);
     readKLVKey(_operationalPattern);
     OMUInt32 elementCount;
-    read(elementCount, reorderBytes);
+    read(elementCount, _reorderBytes);
     OMUInt32 elementSize;
-    read(elementSize, reorderBytes);
+    read(elementSize, _reorderBytes);
     OMKLVKey essenceContainer;
     for (OMUInt32 i = 0; i < elementCount; i++) {
       readKLVKey(essenceContainer);
@@ -885,12 +868,6 @@ void OMMXFStorage::saveObjectDirectory(void)
 {
   TRACE("OMMXFStorage::saveObjectDirectory");
 
-  bool reorderBytes;
-  if (hostByteOrder() == bigEndian) {
-    reorderBytes = false;
-  } else {
-    reorderBytes = true;
-  }
   _objectDirectoryOffset = position();
   definition(position(), FUT_OBJECTDIRECTORY);
 
@@ -904,15 +881,15 @@ void OMMXFStorage::saveObjectDirectory(void)
                     (entries * entrySize);                 // entries
   writeKLVLength(length);
 
-  write(entries, reorderBytes);
+  write(entries, _reorderBytes);
   write(entrySize);
 
   ObjectDirectoryIterator iterator(*_instanceIdToObject, OMBefore);
   while (++iterator) {
     OMUniqueObjectIdentification id = iterator.key();
     ObjectDirectoryEntry e = iterator.value();
-    write(id, reorderBytes);
-    write(e._offset, reorderBytes);
+    write(id, _reorderBytes);
+    write(e._offset, _reorderBytes);
     write(e._flags);
   }
 }
@@ -921,15 +898,9 @@ void OMMXFStorage::fixupReference(OMUInt64 patchOffset, OMUInt64 patchValue)
 {
   TRACE("OMMXFStorage::fixupReference");
 
-  bool reorderBytes;
-  if (hostByteOrder() == bigEndian) {
-    reorderBytes = false;
-  } else {
-    reorderBytes = true;
-  }
   OMUInt64 savedPosition = position();
   setPosition(patchOffset);
-  write(patchValue, reorderBytes);
+  write(patchValue, _reorderBytes);
   setPosition(savedPosition);
 }
 
@@ -939,12 +910,6 @@ void OMMXFStorage::restoreObjectDirectory(void)
   PRECONDITION("Valid metadata directory", _instanceIdToObject != 0);
   PRECONDITION("Valid metadata directory offset", _objectDirectoryOffset != 0);
 
-  bool reorderBytes;
-  if (hostByteOrder() == bigEndian) {
-    reorderBytes = false;
-  } else {
-    reorderBytes = true;
-  }
   OMUInt64 savedPosition = position();
   setPosition(_objectDirectoryOffset);
 
@@ -956,7 +921,7 @@ void OMMXFStorage::restoreObjectDirectory(void)
   OMUInt8 entrySize;
   ASSERT("Valid length", setLength > sizeof(entries) + sizeof(entrySize));
 
-  read(entries, reorderBytes);
+  read(entries, _reorderBytes);
   read(entrySize);
   ASSERT("Valid entry size",
                            entrySize == (sizeof(OMUniqueObjectIdentification) +
@@ -970,9 +935,9 @@ void OMMXFStorage::restoreObjectDirectory(void)
     OMUniqueObjectIdentification id;
     OMMXFStorage::ObjectDirectoryEntry e;
 
-    read(id, reorderBytes);
+    read(id, _reorderBytes);
     e._object = 0;
-    read(e._offset, reorderBytes);
+    read(e._offset, _reorderBytes);
     read(e._flags);
 
     _instanceIdToObject->insert(id, e);
