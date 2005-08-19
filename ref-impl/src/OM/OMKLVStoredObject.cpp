@@ -1351,24 +1351,20 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
             ASSERT("Consistent sizes", keySize == kp->bitsSize());
             kp->getBits(key, keySize);
 
-#if 1
             if (!s->contains(key)) {
-#endif
-            char idString[OMObjectIdentificationStringBufferSize];
-            toString(id, idString);
-            wchar_t* name = convertString(idString);
+              char idString[OMObjectIdentificationStringBufferSize];
+              toString(id, idString);
+              wchar_t* name = convertString(idString);
 
-            OMStrongReferenceSetElement element(s,
-                                                name,
-                                                localKey,
-                                                key,
-                                                keySize);
-            element.setValue(key, obj);
-            s->insert(key, element);
-            delete [] name;
-#if 1
+              OMStrongReferenceSetElement element(s,
+                                                  name,
+                                                  localKey,
+                                                  key,
+                                                  keySize);
+              element.setValue(key, obj);
+              s->insert(key, element);
+              delete [] name;
             }
-#endif
             localKey = localKey + 1;
           }
           delete [] key;
