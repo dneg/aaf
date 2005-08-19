@@ -1,21 +1,19 @@
 //=---------------------------------------------------------------------=
 //
-// $Id$ $Name$
-//
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-//
+// 
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-//
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// 
+// The Original Code of this file is Copyright 1998-2001, Licensor of the
 // AAF Association.
-//
+// 
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -40,9 +38,7 @@ public:
 
     // @cmember Constructor.
   OMKLVStoredObjectFactory(const OMStoredObjectEncoding& encoding,
-                           const OMUniqueObjectIdentification& signature,
-                           const wchar_t* name,
-                           const wchar_t* description);
+                           const wchar_t* name);
 
     // @cmember Destructor.
   virtual ~OMKLVStoredObjectFactory(void);
@@ -113,11 +109,11 @@ public:
 
     // @cmember Perform any necessary actions when the file
     //          contained in <p fileName> is closed.
-  virtual void close(const wchar_t* fileName, bool isWritable);
+  virtual void close(const wchar_t* fileName);
 
     // @cmember Perform any necessary actions when the file
     //          contained in <p rawStorage> is closed.
-  virtual void close(OMRawStorage* rawStorage, bool isWritable);
+  virtual void close(OMRawStorage* rawStorage);
 
 };
 
