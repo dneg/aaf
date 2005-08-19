@@ -208,7 +208,7 @@ void OMMXFStorage::writeFooterPartition(void)
 {
   TRACE("OMMXFStorage::writeFooterPartition");
 
-  setPosition(_fileSize);
+  setPosition(_fileSize + fillBufferZoneSize);
   writePartition(ClosedFooterPartitionPackKey, 0, defaultKAGSize);
 
   fixup();
@@ -1420,7 +1420,7 @@ void OMMXFStorage::streamSave(OMDataStream* stream)
       }
 
       // For body partition and filler
-      OMUInt64 pos = seg->_origin - s->_gridSize;
+      OMUInt64 pos = seg->_origin - s->_gridSize + fillBufferZoneSize;
 
       // Write partition pack
       setPosition(pos);
@@ -1431,20 +1431,18 @@ void OMMXFStorage::streamSave(OMDataStream* stream)
       writeKLVLength(len);
 
       ASSERT("Consistent origin", seg->_origin == position());
+
+      // Fill end of segment
+      OMUInt64 fillSize = seg->_size + fillBufferZoneSize - len;
+      OMUInt64 p = (seg->_origin + seg->_size + fillBufferZoneSize) - fillSize;
+      ASSERT("Can fill", fillSize >= minimumFill);
+      setPosition(p);
+      writeKLVFill(fillSize - minimumFill);
+
       ASSERT("Sane segment size", remaining >= len);
       remaining = remaining - len;
+      setPosition(savedPosition);
     }
-    // Fill end of last segment
-    OMUInt64 allocated = allocatedSize(s);
-    if (allocated > length) {
-      OMUInt64 fillSize = allocated - length;
-      Segment* last = findLastSegment(s);
-      OMUInt64 p = (last->_origin + last->_size) - fillSize;
-      // tjb - if count < minimum fill size this will use another block
-      setPosition(p);
-      fillAlignK(p, s->_gridSize);
-    }
-    setPosition(savedPosition);
   } // else stream exists but was never written to
 }
 
