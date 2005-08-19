@@ -173,6 +173,7 @@ void OMMXFStorage::close(void)
 
   writeRandomIndex();
 #if defined(OM_MXFDEBUG)
+  omout << "OMMXFStorage::close" << endl;
   printPartitions();
   printStreams();
 #endif
@@ -1794,6 +1795,12 @@ void OMMXFStorage::saveStreams(void)
 {
   TRACE("OMMXFStorage::saveStreams");
 
+#if defined(OM_MXFDEBUG)
+  omout << "OMMXFStorage::saveStreams" << endl;
+  printPartitions();
+  printStreams();
+#endif
+
   destroyPartitions();
 
   if (_segments != 0) {
@@ -2165,6 +2172,7 @@ void OMMXFStorage::restoreStreams(void)
   }
 #endif
 #if defined(OM_MXFDEBUG)
+  omout << "OMMXFStorage::restoreStreams" << endl;
   printPartitions();
   printStreams();
 #endif
@@ -2664,6 +2672,7 @@ void OMMXFStorage::printPartitions(void)
 {
   TRACE("OMMXFStorage::printPartitions");
 #if defined(OM_MXFDEBUG)
+  omout << "partitions" << endl;
   size_t count = _partitions.count();
   for (OMUInt32 i = 0; i < count; i++) {
     Partition* p = _partitions.valueAt(i);
@@ -2679,6 +2688,7 @@ void OMMXFStorage::printStreams(void)
 {
   TRACE("OMMXFStorage::printStreams");
 #if defined(OM_MXFDEBUG)
+  omout << "segments" << endl;
   if (_segmentMap != 0) {
     SegmentMapIterator iter(*_segmentMap, OMBefore);
     while (++iter) {
