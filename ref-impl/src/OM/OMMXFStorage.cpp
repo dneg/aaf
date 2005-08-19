@@ -1855,6 +1855,37 @@ void OMMXFStorage::destroyFixups(void)
 //_fixups.clear();
 }
 
+bool OMMXFStorage::findPattern(const OMRawStorage* store,
+                               OMUInt64 currentPosition,
+                               OMUInt64& patternPosition,
+                               const OMByte* pattern,
+                               OMUInt64 patternSize,
+                               OMUInt32 limit)
+{
+  bool found = false;
+  OMUInt64 pos = currentPosition;
+  OMUInt32 c = 0;
+  size_t i = 0;
+  do {
+    OMByte b;
+    store->read(&b, 1, c);
+    if (c == 1) {
+      if (b != pattern[i]) {
+        pos = pos + i + 1;
+        i = 0;
+      } else {
+        if (i < patternSize - 1) {
+          i = i + 1;
+        } else {
+          patternPosition = pos;
+          found = true;
+        }
+      }
+    }
+  } while ((!found) && (pos < limit) && (c == 1));
+  return found;
+}
+
 OMMXFStorage::Stream* OMMXFStorage::createStream(OMUInt32 sid,
                                                  OMUInt64 size,
                                                  OMKLVKey label,
