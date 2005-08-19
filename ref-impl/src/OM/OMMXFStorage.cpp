@@ -1401,43 +1401,52 @@ void OMMXFStorage::streamSave(OMDataStream* stream)
   TRACE("OMMXFStorage::streamSave");
   PRECONDITION("Valid stream", stream != 0);
 
-  OMUInt64 length = stream->size();
-
   OMUInt32 sid;
   streamToSid()->find(stream, sid);
-
   Stream* s = 0;
   segmentMap()->find(sid, s);
   if (s != 0) {
-    ASSERT("Valid segment list", s->_segments != 0);
-    ASSERT("Stream not segmented", s->_segments->count() == 1);
-    OMUInt64 allocatedLength = allocatedSize(s);
-
-    ASSERT("Sane length", allocatedLength >= length);
-    // insert fill - tjb
     OMUInt64 savedPosition = position();
 
-    // Find first segment
-    Segment* seg = findSegment(s, 0);;
-    ASSERT("Valid segment", seg != 0);
-    OMUInt64 pos = seg->_origin - s->_gridSize;
+    OMUInt64 length = stream->size();
+    ASSERT("Stream not empty", length > 0);
+    OMUInt64 remaining = length;
 
-    // Write partition pack
-    setPosition(pos);
-    writeBodyPartition(sid, s->_gridSize);
+    ASSERT("Valid segment list", s->_segments != 0);
+    SegmentListIterator iterator(*s->_segments, OMBefore);
+    while (++iterator) {
+      Segment* seg = iterator.value();
+      ASSERT("Valid segment", seg != 0);
 
-    // Write essence element label
-    writeKLVKey(s->_label);
-    writeKLVLength(length);
+      // Compute length
+      OMUInt64 len;
+      if (remaining > seg->_size) {
+        len = seg->_size;
+      } else {
+        len = remaining;
+      }
 
-    // Find last segment
-    seg = findSegment(s, length - 1);
-    ASSERT("Valid segment", seg != 0);
+      // For body partition and filler
+      OMUInt64 pos = seg->_origin - s->_gridSize;
 
-    OMUInt64 p = (length - seg->_start) + seg->_origin;
-    ASSERT("Valid length", allocatedLength >= length);
-    OMUInt64 count = allocatedLength - length;
-    if (count > 0) {
+      // Write partition pack
+      setPosition(pos);
+      writeBodyPartition(sid, s->_gridSize);
+
+      // Write essence element label
+      writeKLVKey(s->_label);
+      writeKLVLength(len);
+
+      ASSERT("Consistent origin", seg->_origin == position());
+      ASSERT("Sane segment size", remaining >= len);
+      remaining = remaining - len;
+    }
+    // Fill end of last segment
+    OMUInt64 allocated = allocatedSize(s);
+    if (allocated > length) {
+      OMUInt64 fillSize = allocated - length;
+      Segment* last = findLastSegment(s);
+      OMUInt64 p = (last->_origin + last->_size) - fillSize;
       // tjb - if count < minimum fill size this will use another block
       setPosition(p);
       fillAlignK(p, s->_gridSize);
@@ -1458,6 +1467,12 @@ void OMMXFStorage::streamRestoreSegment(OMUInt32 sid,
     s = createStream(sid, size, label, gridSize);
     addSegment(s, 0, size, start);
     _fileSize = _fileSize + size;
+  } else {
+    Segment* last = findLastSegment(s);
+    ASSERT("Last segment found", last != 0);
+    addSegment(s, last->_start + last->_size, size, start);
+    _fileSize = _fileSize + size;
+    s->_size = s->_size + size;
   }
   OMDataStream* sp = stream(sid);
   ASSERT("Found stream", sp != 0);
@@ -1735,8 +1750,8 @@ OMMXFStorage::streamSegment(OMUInt32 sid, OMUInt64 position)
       result = last;
     } else {
       // No, add a new segment at the end of the file
-      // tjb - segmented streams not yet implemented
-      ASSERT("Unimplemented code not reached", false);
+      _fileSize = _fileSize + s->_gridSize; // For body partition and filler
+      result = addSegment(s, last->_start + last->_size, grow, _fileSize);
     }
     _fileSize = _fileSize + grow;
   }
