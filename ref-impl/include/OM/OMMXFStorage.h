@@ -60,6 +60,12 @@ static const OMKLVKey RandomIndexMetadataKey =
   {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
    0x0d, 0x01, 0x02, 0x01, 0x01, 0x11, 0x01, 0x00};
 
+// Minimum size of a fill KLV triplet (when L not known a priori)
+// K (16 bytes)
+// L (1 + 8 bytes BER encoded)
+// V (0 fill bytes)
+static const OMUInt64 minimumFill = sizeof(OMKLVKey) + 1 + sizeof(OMUInt64);
+
 // Coalesced with preceeding fill of any size.
 // (value of fillBufferZoneSize must be > minimumFill)
 //
