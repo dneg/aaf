@@ -428,11 +428,10 @@ void OMKLVStoredObject::save(const OMDataStream& stream)
 {
   TRACE("OMKLVStoredObject::save(OMDataStream)");
 
-  OMKLVKey e =
-    {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01,
-     0x0d, 0x01, 0x03, 0x01, 0xff, 0xff, 0xff, 0xff};
+  OMDataStream* s = const_cast<OMDataStream*>(&stream);
+  OMKLVKey id = streamId(s);
 
-  writeKLVKey(_storage, e);
+  writeKLVKey(_storage, id);
   OMUInt64 length = stream.size();
   writeKLVLength(_storage, length);
 
@@ -546,6 +545,10 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   OMStorable* ho = hr.getValue();
   ASSERT("Valid object", ho != 0);
   deepRestore(*ho->propertySet());
+
+  skipLV(_storage); // This V is fill
+
+  streamRestore(_storage);
 
 #if defined(INSTANCEID_DEBUG)
 
@@ -847,9 +850,9 @@ OMUInt64 OMKLVStoredObject::length(const OMPropertySet& properties) const
         break;
       }
       case SF_DATA_STREAM: {
-        // tjb -- NYI
-        OMPropertySize s = p->bitsSize();
-        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize) + s;
+        length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
+                        + sizeof(OMByteOrder)
+                        + sizeof(OMKLVKey);
         break;
       }
       default:
@@ -1000,16 +1003,17 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         break;
       }
       case SF_DATA_STREAM: {
-        // tjb -- NYI
         OMPropertyId id = p->propertyId();
+        OMDataStream* stream = dynamic_cast<OMDataStream*>(p);
+        ASSERT("Valid type", stream != 0);
         write(_storage, id, _reorderBytes);
-        OMPropertySize s = p->bitsSize();
+        OMPropertySize s = sizeof(OMByteOrder) +
+                           sizeof(OMKLVKey);
         write(_storage, s, _reorderBytes);
-        for (size_t i = 0; i < s; i++) {
-          const OMByte fill[] = "deadbeef";
-          OMByte b = fill[i % (sizeof(fill) - 1)];
-          write(_storage, b);
-        }
+        OMByteOrder bo = stream->storedByteOrder();
+        write(_storage, bo);
+        OMKLVKey sid = streamId(stream);
+        writeKLVKey(_storage, sid);
         break;
       }
       default:
@@ -1256,14 +1260,18 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
     }
     case SF_DATA_STREAM: {
       // tjb -- NYI
-      if (length > 0) {
-        OMByte* buffer = new OMByte[length];
-        OMUInt32 x;
-        _storage->read(buffer, length, x);
-        ASSERT("All bytes read", length == x);
-        delete [] buffer;
-      }
+      OMDataStream* stream = dynamic_cast<OMDataStream*>(p);
+      ASSERT("Valid type", stream != 0);
+      OMByteOrder bo;
+      read(_storage, bo);
+      stream->setStoredByteOrder(bo);
+      OMKLVKey sid;
+      readKLVKey(_storage, sid);
       //p->setPresent();
+      ASSERT("Stream not present", !streamToStreamId()->contains(stream));
+      streamToStreamId()->insert(stream, sid);
+      ASSERT("Identifier not present", !streamIdToStream()->contains(sid));
+      streamIdToStream()->insert(sid, stream);
       break;
     }
     default:
@@ -1533,9 +1541,34 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
   }
 }
 
-void OMKLVStoredObject::streamRestore(OMRawStorage* /* store */)
+void OMKLVStoredObject::streamRestore(OMRawStorage* store)
 {
   TRACE("OMKLVStoredObject::streamRestore")
+
+  OMKLVKey ClosedFooterPartitionPackKey =
+    {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
+     0x0d, 0x01, 0x02, 0x01, 0x01, 0x04, 0x02, 0x00};
+
+  OMKLVKey k;
+  readKLVKey(store, k);
+
+  while (memcmp(&k, &ClosedFooterPartitionPackKey, sizeof(OMKLVKey)) != 0) {
+    if (streamIdToStream()->contains(k)) {
+      OMUInt64 length = readBerLength(store);
+      OMDataStream* s = stream(k);
+      s->setPosition(0);
+      for (OMUInt64 i = 0; i < length; i++) {
+        OMByte b;
+        OMUInt32 x;
+        read(store, b);
+        s->write(&b, 1, x);
+      }
+      s->setPosition(0);
+    } else {
+      skipLV(store);
+    }
+    readKLVKey(store, k);
+  }
 }
 
 void OMKLVStoredObject::referenceRestore(OMStorable* object,
@@ -1581,7 +1614,7 @@ void OMKLVStoredObject::writeFooterPartition(OMRawStorage* store)
 }
 
 OMUInt16 currentMajorVersion = 0xffff;
-OMUInt16 currentMinorVersion = 0xfffd;
+OMUInt16 currentMinorVersion = 0xfffc;
 
 void OMKLVStoredObject::writePartition(OMRawStorage* store,
                                        const OMKLVKey& key,
@@ -1761,7 +1794,7 @@ void OMKLVStoredObject::writeKLVFill(OMRawStorage* store,
   writeKLVKey(store, fillKey);
   writeKLVLength(store, length);
   for (OMUInt64 i = 0; i < length; i++) {
-    const OMByte fillPattern[] = "FFFF.FFFD TIM MEC HEHT GEWYRCAN ";
+    const OMByte fillPattern[] = "FFFF.FFFC TIM MEC HEHT GEWYRCAN ";
     write(store, fillPattern[i % (sizeof(fillPattern) - 1)]);
   }
 }
@@ -2375,6 +2408,18 @@ void OMKLVStoredObject::finalize(void)
     _instanceIdToObject->clear();
     delete _instanceIdToObject;
     _instanceIdToObject = 0;
+  }
+
+  if (_streamToStreamId != 0) {
+    _streamToStreamId->clear();
+    delete _streamToStreamId;
+    _streamToStreamId = 0;
+  }
+
+  if (_streamIdToStream != 0) {
+    _streamIdToStream->clear();
+    delete _streamIdToStream;
+    _streamIdToStream = 0;
   }
 }
 
