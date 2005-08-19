@@ -1758,6 +1758,7 @@ OMMXFStorage::Stream* OMMXFStorage::createStream(OMUInt32 sid,
   result->_size = size;
   result->_label = label;
   result->_gridSize = gridSize;
+  result->_sid = sid;
   segmentMap()->insert(sid, result);
   return result;
 }
