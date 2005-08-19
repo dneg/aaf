@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2003, Licensor of the
+// The Original Code of this file is Copyright 1998-2004, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -70,11 +70,9 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
   } else {
     _reorderBytes = true;
   }
-  //  // Allocate 128k bytes on stream 0 (the header)
-  //  for (size_t i = 0; i < 128 * 1024; i = i + 512) {
-  //    streamSegment(0, i);
-  //  }
-  _fileSize = 128 * 1024;
+
+  // Pre-allocate space for the header metadata
+  _fileSize = preallocatedMetadataSize;
 }
 
   // @mfunc Destructor.
