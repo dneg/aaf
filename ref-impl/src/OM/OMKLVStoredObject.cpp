@@ -1204,6 +1204,28 @@ void OMKLVStoredObject::restore(OMDataStream& /* stream */,
   ASSERT("NYI", false);
 }
 
+void OMKLVStoredObject::reorderString(OMCharacter* string,
+                                      size_t characterCount)
+{
+  TRACE("OMKLVStoredObject::reorderString");
+
+  for (size_t i = 0; i < characterCount; i++) {
+    OMByte* src = reinterpret_cast<OMByte*>(&string[i]);
+    OMType::reorderInteger(src, sizeof(OMUInt16));
+  }
+}
+
+void OMKLVStoredObject::externalizeString(const wchar_t* internalString,
+                                          OMCharacter* externalString,
+                                          size_t characterCount)
+{
+  TRACE("OMKLVStoredObject::externalizeString");
+
+  for (size_t i = 0; i < characterCount; i++) {
+    externalString[i] = internalString[i];
+  }
+}
+
 #if defined(OM_EXTENSIONSONLY)
 void OMKLVStoredObject::write(const wchar_t* string)
 {
