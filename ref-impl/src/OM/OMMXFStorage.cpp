@@ -30,6 +30,7 @@
 #include "OMExceptions.h"
 #include "OMUtilities.h"
 #include "OMSet.h"
+#include "OMSetIterator.h"
 #include "OMIdentitySet.h"
 #include "OMIdentitySetIter.h"
 #include "OMType.h"
@@ -763,6 +764,42 @@ OMUInt64 OMMXFStorage::readBerLength(const OMRawStorage* store)
       result = result << 8;
       result = result + b;
     }
+  }
+  return result;
+}
+
+OMUInt64 OMMXFStorage::saveObjectDirectory(void)
+{
+  TRACE("OMMXFStorage::save");
+
+  bool reorderBytes;
+  if (hostByteOrder() == bigEndian) {
+    reorderBytes = false;
+  } else {
+    reorderBytes = true;
+  }
+  OMUInt64 result = position();
+
+  writeKLVKey(objectDirectoryKey);
+  OMUInt64 entries = _instanceIdToObject->count();
+  const OMUInt8 entrySize = sizeof(OMUniqueObjectIdentification) + // iid
+                            sizeof(OMUInt64) +                     // offset
+                            sizeof(OMUInt8);                       // flags
+  OMUInt64 length = sizeof(OMUInt64) +                     // entry count
+                    sizeof(OMUInt8) +                      // entry size
+                    (entries * entrySize);                 // entries
+  writeKLVLength(length);
+
+  write(entries, reorderBytes);
+  write(entrySize);
+
+  ObjectDirectoryIterator iterator(*_instanceIdToObject, OMBefore);
+  while (++iterator) {
+    OMUniqueObjectIdentification id = iterator.key();
+    ObjectDirectoryEntry e = iterator.value();
+    write(id, reorderBytes);
+    write(e._offset, reorderBytes);
+    write(e._flags);
   }
   return result;
 }
