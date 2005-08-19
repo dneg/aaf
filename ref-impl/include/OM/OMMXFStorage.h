@@ -200,6 +200,8 @@ public:
 
   virtual OMUInt64 saveObjectDirectory(void);
 
+  virtual void restoreObjectDirectory(OMUInt64 objectDirectoryOffset);
+
   ObjectDirectory* instanceIdToObject(void);
 
   typedef OMSet<OMStorable*, OMUniqueObjectIdentification> ObjectSet;
