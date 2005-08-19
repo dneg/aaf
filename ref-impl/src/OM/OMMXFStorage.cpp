@@ -1829,7 +1829,11 @@ void OMMXFStorage::restoreStreams(void)
       // Restore essence stream segment
       //
       if (bodySID != 0) {
-        OMUInt64 essenceSize = partitionStart - essenceStart - fillBufferZoneSize;
+        OMUInt64 essenceSize = partitionStart - essenceStart;
+        // HACK4MEIP2
+        if (essenceLength <= (essenceSize - fillBufferZoneSize)) {
+          essenceSize = essenceSize - fillBufferZoneSize;
+        }
         streamRestoreSegment(bodySID,
                              essenceStart,
                              essenceSize,
