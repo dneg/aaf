@@ -1772,18 +1772,32 @@ void OMMXFStorage::streamGrow(OMUInt32 sid, OMUInt64 growBytes)
     start = 0;
     increment = (((growBytes - 1) / s->_gridSize) + 1) * s->_gridSize;
     ASSERT("Valid increment", increment >= growBytes);
+#if defined(OM_NEW_STREAM_WRITING)
+    _fileSize = _fileSize + s->_gridSize - 25;
+    addSegment(s, start, increment + 25 + fillBufferZoneSize, _fileSize);
+    _fileSize = _fileSize - fillBufferZoneSize;
+#else
     _fileSize = _fileSize + s->_gridSize; // For body partition and filler
     addSegment(s, start, increment, _fileSize);
+#endif
   } else {
     Segment* last = findLastSegment(s);
     ASSERT("Last segment found", last != 0);
     start = last->_start + last->_size;
     increment = (((growBytes - 1) / s->_gridSize) + 1) * s->_gridSize;
     ASSERT("Valid increment", increment >= growBytes);
+#if defined(OM_NEW_STREAM_WRITING)
+    if ((last->_origin + last->_size - fillBufferZoneSize) != _fileSize) {
+      // Last segment not at end of file - add a new one
+      _fileSize = _fileSize + s->_gridSize - 25;
+      addSegment(s, start, increment + 25 + fillBufferZoneSize, _fileSize);
+      _fileSize = _fileSize - fillBufferZoneSize;
+#else
     if ((last->_origin + last->_size) != _fileSize) {
       // Last segment not at end of file - add a new one
       _fileSize = _fileSize + s->_gridSize; // For body partition and filler
       addSegment(s, start, increment, _fileSize);
+#endif
     } else {
       // Last segment at end of file - grow it
       last->_size = last->_size + increment;
@@ -1802,6 +1816,108 @@ void OMMXFStorage::saveStreams(void)
   printStreams();
 #endif
 
+#if defined(OM_NEW_STREAM_WRITING)
+  destroyPartitions();
+
+  if (_segments != 0) {
+    // The file contains streams
+
+    // We expect to be positioned in the pre-allocated header
+    // space just after the last metadata object
+    if (position() >= bodyPartitionOffset) {
+      throw OMException("Preallocated metadata space exhausted.");
+    }
+
+    // fill remainder of pre-allocated space
+    OMUInt32 fillAlignment = bodyPartitionOffset;
+    fillAlignK(position(), fillAlignment);
+
+    // Remember the end of the metadata
+    //
+    _metadataEnd = position();
+
+    // Write header partition and alignment fill.
+    //
+    setPosition(0);
+    writeHeaderPartition(0, 0, defaultKAGSize);
+
+    // Iterate over the segments, we need to -
+    //  - write the partition pack that preceeds this segment
+    //    (it terminates the previous segment)
+    //  - write fill in any unused space at the end of this segment
+    //
+    const Segment* last = _segments->last().value();
+    Segment* previous = 0;
+    SegmentListIterator sl(*_segments, OMBefore);
+    while (++sl) {
+      Segment* seg = sl.value();
+
+      Stream* s = seg->_stream;
+      ASSERT("Valid stream", s != 0);
+
+      // Write body partition pack that preceeds this segment
+      OMUInt64 pos;
+      if (previous == 0) {
+        pos = _metadataEnd;
+      } else {
+        pos = previous->_origin + previous->_size;
+      }
+      ASSERT("Segments in file address order", seg->_origin > pos);
+      setPosition(pos);
+      if ((seg == last) &&  (seg->_stream->_label == IndexTableSegmentKey)) {
+        // If the last segment is index - put it in the footer.
+        writeFooterPartition(s->_sid, s->_gridSize);
+      } else {
+        // Otherwise this segment gets its own body
+        writeBodyPartition(s->_sid, 0, s->_gridSize);
+      }
+
+      // If we wrote index, fill in the index bye count
+      if (s->_label == IndexTableSegmentKey) {
+        OMUInt64 ibc = seg->_size;
+        ibc = ibc + sizeof(OMKLVKey) + 8 + 1;
+        fixupReference(pos + sizeof(OMKLVKey) + 8 + 1 + 40, ibc);
+      }
+      ASSERT("Consistent origin", seg->_origin == position());
+
+      // Fill end of segment
+      OMUInt64 len = validSize(seg); // length of valid portion of segment
+      OMUInt64 fillSize = seg->_size - len;
+      if (fillSize > 0) {
+        ASSERT("Can fill", fillSize >= minimumFill);
+        OMUInt64 fillEnd = seg->_origin + seg->_size;
+        OMUInt64 fillStart = fillEnd - fillSize;
+        setPosition(fillStart);
+        writeKLVFill(fillSize - minimumFill);
+      }
+      ASSERT("Consistent size", seg->_size == len + fillSize);
+
+      previous = seg;
+    }
+
+    if (last->_stream->_label != IndexTableSegmentKey) {
+      setPosition(last->_origin + last->_size);
+      writePartition(FooterKey, 0, 0, defaultKAGSize);
+    }
+
+  } else {
+    // The file does not contain streams
+
+    // Remember the end of the metadata
+    //
+    _metadataEnd = position();
+
+    // Write header partition and alignment fill.
+    //
+    setPosition(0);
+    writeHeaderPartition(0, 0, defaultKAGSize);
+
+    // Write footer
+    //
+    setPosition(_metadataEnd);
+    writePartition(FooterKey, 0, 0, defaultKAGSize);
+  }
+#else
   destroyPartitions();
 
   if (_segments != 0) {
@@ -1896,6 +2012,7 @@ void OMMXFStorage::saveStreams(void)
     setPosition(_metadataEnd);
     writePartition(FooterKey, 0, 0, defaultKAGSize);
   }
+#endif
 }
 
 void OMMXFStorage::restoreStreams(void)
