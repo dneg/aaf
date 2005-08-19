@@ -249,7 +249,6 @@ void OMMXFStorage::writeFooterPartition(OMUInt32 indexSID,
 {
   TRACE("OMMXFStorage::writeFooterPartition");
 
-  setPosition(_fileSize + fillBufferZoneSize);
   // Essence (body) not allowed in footer
   writePartition(ClosedFooterPartitionPackKey, 0, indexSID, KAGSize);
 }
@@ -1559,6 +1558,7 @@ void OMMXFStorage::saveStreams(void)
   }
   // Write the footer
   //
+  setPosition(_fileSize + fillBufferZoneSize);
   writeFooterPartition(0, defaultKAGSize);
 }
 
