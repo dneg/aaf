@@ -134,6 +134,9 @@ public:
     // @cmember Destructor.
   virtual ~OMMXFStorage(void);
 
+    // @cmember Open this <c OMMXFStorage>.
+  virtual void open(void);
+
     // @cmember Close this <c OMMXFStorage>.
   virtual void close(void);
 
