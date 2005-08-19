@@ -272,6 +272,7 @@ void OMKLVStoredObjectFactory::close(OMFile* file)
   if (OMKLVStoredObject::hasMxfStorage(file)) {
     OMMXFStorage* store = OMKLVStoredObject::mxfStorage(file);
     ASSERT("Valid store", store != 0);
+    store->checkStreams();
     delete store;
   }
 }
