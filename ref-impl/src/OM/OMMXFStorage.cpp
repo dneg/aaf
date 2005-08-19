@@ -770,7 +770,7 @@ OMUInt64 OMMXFStorage::readBerLength(const OMRawStorage* store)
 
 OMUInt64 OMMXFStorage::saveObjectDirectory(void)
 {
-  TRACE("OMMXFStorage::save");
+  TRACE("OMMXFStorage::saveObjectDirectory");
 
   bool reorderBytes;
   if (hostByteOrder() == bigEndian) {
@@ -802,6 +802,54 @@ OMUInt64 OMMXFStorage::saveObjectDirectory(void)
     write(e._flags);
   }
   return result;
+}
+
+void OMMXFStorage::restoreObjectDirectory(OMUInt64 objectDirectoryOffset)
+{
+  TRACE("OMMXFStorage::restoreObjectDirectory");
+  PRECONDITION("Valid metadata directory", _instanceIdToObject != 0);
+  PRECONDITION("Valid metadata directory offset", objectDirectoryOffset != 0);
+
+  bool reorderBytes;
+  if (hostByteOrder() == bigEndian) {
+    reorderBytes = false;
+  } else {
+    reorderBytes = true;
+  }
+  OMUInt64 savedPosition = position();
+  setPosition(objectDirectoryOffset);
+
+  OMKLVKey k;
+  readKLVKey(k);
+  ASSERT("Expected key", k == objectDirectoryKey); // tjb - error
+  OMUInt64 setLength = readKLVLength();
+  OMUInt64 entries;
+  OMUInt8 entrySize;
+  ASSERT("Valid length", setLength > sizeof(entries) + sizeof(entrySize));
+
+  read(entries, reorderBytes);
+  read(entrySize);
+  ASSERT("Valid entry size",
+                           entrySize == (sizeof(OMUniqueObjectIdentification) +
+                                         sizeof(OMUInt64) +
+                                         sizeof(OMUInt8)));
+  ASSERT("Consistent length and entry count",
+             setLength == sizeof(entries) +
+                          sizeof(entrySize) + (entries * entrySize));
+
+  for (OMUInt64 i = 0; i < entries; i++) {
+    OMUniqueObjectIdentification id;
+    OMMXFStorage::ObjectDirectoryEntry e;
+
+    read(id, reorderBytes);
+    e._object = 0;
+    read(e._offset, reorderBytes);
+    read(e._flags);
+
+    _instanceIdToObject->insert(id, e);
+  }
+
+  setPosition(savedPosition);
 }
 
 OMMXFStorage::ObjectDirectory* OMMXFStorage::instanceIdToObject(void)
