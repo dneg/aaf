@@ -452,7 +452,7 @@ void OMKLVStoredObject::save(const OMStoredObjectIdentification& id)
 
   OMKLVKey k;
   convert(k, id);
-  writeKLVKey(_storage, k);
+  _storage->writeKLVKey(k);
 }
 
   // @mfunc Save the <c OMPropertySet> <p properties> in this
@@ -464,7 +464,7 @@ void OMKLVStoredObject::save(const OMPropertySet& properties)
 
   // Length
   OMUInt64 setLength = length(properties);
-  writeKLVLength(_storage, setLength);
+  _storage->writeKLVLength(setLength);
 
   // Flat properties
   flatSave(properties);
@@ -503,9 +503,9 @@ void OMKLVStoredObject::save(const OMSimpleProperty& property)
   }
 
   // size
-  write(_storage, externalBytesSize, _reorderBytes);
+  _storage->write(externalBytesSize, _reorderBytes);
   // value
-  write(_storage, buffer, externalBytesSize);
+  _storage->write(buffer, externalBytesSize);
 
   delete [] buffer;
 }
@@ -607,9 +607,9 @@ void OMKLVStoredObject::save(const OMDataStream& stream)
   OMDataStream* s = const_cast<OMDataStream*>(&stream);
   OMKLVKey id = streamId(s);
 
-  writeKLVKey(_storage, id);
+  _storage->writeKLVKey(id);
   OMUInt64 length = stream.size();
-  writeKLVLength(_storage, length);
+  _storage->writeKLVLength(length);
 
   // value
   stream.setPosition(0);
@@ -617,7 +617,7 @@ void OMKLVStoredObject::save(const OMDataStream& stream)
     OMByte b;
     OMUInt32 x;
     stream.read(&b, 1, x);
-    write(_storage, b);
+    _storage->write(b);
   }
 }
 
@@ -632,14 +632,14 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   // Read the header partition
   _storage->readHeaderPartition();
 
-  readKLVFill(_storage);
+  _storage->readKLVFill();
 
   // Read the primer
   readPrimerPack(file.dictionary());
 
   file.setLoadMode(OMFile::lazyLoad);
 
-  readKLVFill(_storage);
+  _storage->readKLVFill();
 
   OMKLVKey fillKey =
     {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x01,
@@ -656,7 +656,7 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   // restore the root
   //
   OMKLVKey k;
-  readKLVKey(_storage, k);
+  _storage->readKLVKey(k);
   OMClassId cid;
   convert(cid, k);
   ASSERT("Root object", cid == OMRootStorable::_rootClassId);
@@ -674,7 +674,7 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
 
   // restore the meta dictionary
   //
-  readKLVKey(_storage, k);
+  _storage->readKLVKey(k);
   convert(cid, k);
 
   while (metaDictionary->isMeta(cid)) {
@@ -691,7 +691,7 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
 
     flatRestore(*object->propertySet());
 
-    readKLVKey(_storage, k);
+    _storage->readKLVKey(k);
     convert(cid, k);
   }
   OMProperty* mdp = root->propertySet()->get(0x0001);
@@ -720,7 +720,7 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
 
     flatRestore(*object->propertySet());
 
-    readKLVKey(_storage, k);
+    _storage->readKLVKey(k);
   }
   OMProperty* hp = root->propertySet()->get(0x0002);
   OMStrongReference* hsr = dynamic_cast<OMStrongReference*>(hp);
@@ -792,7 +792,7 @@ void OMKLVStoredObject::restore(OMSimpleProperty& property,
   OMByte* buffer = new OMByte[externalSize];
   ASSERT("Valid heap pointer", buffer != 0);
 
-  read(_storage, buffer, externalSize);
+  _storage->read(buffer, externalSize);
 
   // Reorder property value
   if (_reorderBytes) {
@@ -826,7 +826,7 @@ void OMKLVStoredObject::restore(OMStrongReference& singleton ,
 
   ASSERT("Valid size", externalSize == sizeof(OMUniqueObjectIdentification));
   OMUniqueObjectIdentification id;
-  read(_storage, id, _reorderBytes);
+  _storage->read(id, _reorderBytes);
 
   char idString[OMObjectIdentificationStringBufferSize];
   toString(id, idString);
@@ -870,7 +870,7 @@ void OMKLVStoredObject::restore(OMWeakReference& singleton,
 
   ASSERT("Valid size", externalSize == sizeof(OMUniqueObjectIdentification));
   OMUniqueObjectIdentification id;
-  read(_storage, id, _reorderBytes);
+  _storage->read(id, _reorderBytes);
 
   OMWeakObjectReference newReference(&singleton, id, 0);
   singleton.reference() = newReference;
@@ -922,12 +922,12 @@ void OMKLVStoredObject::writeProperty(OMPropertyId pid, const OMUInt32& value)
   TRACE("OMKLVStoredObject::writeProperty");
 
   // pid
-  write(_storage, pid, _reorderBytes);
+  _storage->write(pid, _reorderBytes);
   // size
   OMPropertySize size = sizeof(value);
-  write(_storage, size, _reorderBytes);
+  _storage->write(size, _reorderBytes);
   // value
-  write(_storage, value, _reorderBytes);
+  _storage->write(value, _reorderBytes);
 }
 
 void OMKLVStoredObject::readProperty(const OMPropertyId& ANAME(pid),
@@ -937,14 +937,14 @@ void OMKLVStoredObject::readProperty(const OMPropertyId& ANAME(pid),
 
   // pid
   OMPropertyId p;
-  read(_storage, p, _reorderBytes);
+  _storage->read(p, _reorderBytes);
   ASSERT("Expected pid", p == pid);
   // size
   OMPropertySize size;
-  read(_storage, size, _reorderBytes);
+  _storage->read(size, _reorderBytes);
   ASSERT("Expected size", size == sizeof(value));
   // value
-  read(_storage, value, _reorderBytes);
+  _storage->read(value, _reorderBytes);
 }
 
   // @mfunc Open the <c OMStoredStream> representing the property
@@ -1096,7 +1096,7 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
       switch (p->storedForm()) {
       case SF_DATA: {
         OMPropertyId id = p->propertyId();
-        write(_storage, id, _reorderBytes);
+        _storage->write(id, _reorderBytes);
         p->save();
         break;
       }
@@ -1112,16 +1112,16 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
       }
       case SF_STRONG_OBJECT_REFERENCE_VECTOR: {
         OMPropertyId id = p->propertyId();
-        write(_storage, id, _reorderBytes);
+        _storage->write(id, _reorderBytes);
         OMStrongReferenceVector* v = dynamic_cast<OMStrongReferenceVector*>(p);
         ASSERT("Valid type", v != 0);
         OMUInt32 elementCount = v->count();
         OMUInt32 elementSize = sizeof(OMUniqueObjectIdentification);
         OMPropertySize size = sizeof(OMUInt32) + sizeof(OMUInt32)
                               + (elementCount * elementSize);
-        write(_storage, size, _reorderBytes);
-        write(_storage, elementCount, _reorderBytes);
-        write(_storage, elementSize, _reorderBytes);
+        _storage->write(size, _reorderBytes);
+        _storage->write(elementCount, _reorderBytes);
+        _storage->write(elementSize, _reorderBytes);
         OMContainerIterator<OMStrongReferenceVectorElement>& iterator =
                                                                 *v->iterator();
         while (++iterator) {
@@ -1130,23 +1130,23 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
           OMStorable* object = r.getValue();
           ASSERT("Valid object", object != 0);
           OMUniqueObjectIdentification id = instanceId(object);
-          write(_storage, id, _reorderBytes);
+          _storage->write(id, _reorderBytes);
         }
         delete &iterator;
         break;
       }
       case SF_STRONG_OBJECT_REFERENCE_SET: {
         OMPropertyId id = p->propertyId();
-        write(_storage, id, _reorderBytes);
+        _storage->write(id, _reorderBytes);
         OMStrongReferenceSet* s = dynamic_cast<OMStrongReferenceSet*>(p);
         ASSERT("Valid type", s != 0);
         OMUInt32 elementCount = s->count();
         OMUInt32 elementSize = sizeof(OMUniqueObjectIdentification);
         OMPropertySize size = sizeof(OMUInt32) + sizeof(OMUInt32)
                               + (elementCount * elementSize);
-        write(_storage, size, _reorderBytes);
-        write(_storage, elementCount, _reorderBytes);
-        write(_storage, elementSize, _reorderBytes);
+        _storage->write(size, _reorderBytes);
+        _storage->write(elementCount, _reorderBytes);
+        _storage->write(elementSize, _reorderBytes);
         OMContainerIterator<OMStrongReferenceSetElement>& iterator =
                                                                 *s->iterator();
         while (++iterator) {
@@ -1155,7 +1155,7 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
           OMStorable* object = r.getValue();
           ASSERT("Valid object", object != 0);
           OMUniqueObjectIdentification id = instanceId(object);
-          write(_storage, id, _reorderBytes);
+          _storage->write(id, _reorderBytes);
         }
         delete &iterator;
         break;
@@ -1172,16 +1172,16 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
       }
       case SF_WEAK_OBJECT_REFERENCE_VECTOR: {
         OMPropertyId id = p->propertyId();
-        write(_storage, id, _reorderBytes);
+        _storage->write(id, _reorderBytes);
         OMWeakReferenceVector* v = dynamic_cast<OMWeakReferenceVector*>(p);
         ASSERT("Valid type", v != 0);
         OMUInt32 elementCount = v->count();
         OMUInt32 elementSize = sizeof(OMUniqueObjectIdentification);
         OMPropertySize size = sizeof(OMUInt32) + sizeof(OMUInt32)
                               + (elementCount * elementSize);
-        write(_storage, size, _reorderBytes);
-        write(_storage, elementCount, _reorderBytes);
-        write(_storage, elementSize, _reorderBytes);
+        _storage->write(size, _reorderBytes);
+        _storage->write(elementCount, _reorderBytes);
+        _storage->write(elementSize, _reorderBytes);
         OMContainerIterator<OMWeakReferenceVectorElement>& iterator =
                                                                 *v->iterator();
         while (++iterator) {
@@ -1190,23 +1190,23 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
           OMStorable* object = r.getValue();
           ASSERT("Valid object", object != 0);
           OMUniqueObjectIdentification id = instanceId(object);
-          write(_storage, id, _reorderBytes);
+          _storage->write(id, _reorderBytes);
         }
         delete &iterator;
         break;
       }
       case SF_WEAK_OBJECT_REFERENCE_SET: {
         OMPropertyId id = p->propertyId();
-        write(_storage, id, _reorderBytes);
+        _storage->write(id, _reorderBytes);
         OMWeakReferenceSet* s = dynamic_cast<OMWeakReferenceSet*>(p);
         ASSERT("Valid type", s != 0);
         OMUInt32 elementCount = s->count();
         OMUInt32 elementSize = sizeof(OMUniqueObjectIdentification);
         OMPropertySize size = sizeof(OMUInt32) + sizeof(OMUInt32)
                               + (elementCount * elementSize);
-        write(_storage, size, _reorderBytes);
-        write(_storage, elementCount, _reorderBytes);
-        write(_storage, elementSize, _reorderBytes);
+        _storage->write(size, _reorderBytes);
+        _storage->write(elementCount, _reorderBytes);
+        _storage->write(elementSize, _reorderBytes);
         OMContainerIterator<OMWeakReferenceSetElement>& iterator =
                                                                 *s->iterator();
         while (++iterator) {
@@ -1215,7 +1215,7 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
           OMStorable* object = r.getValue();
           ASSERT("Valid object", object != 0);
           OMUniqueObjectIdentification id = instanceId(object);
-          write(_storage, id, _reorderBytes);
+          _storage->write(id, _reorderBytes);
         }
         delete &iterator;
         break;
@@ -1224,14 +1224,14 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         OMPropertyId id = p->propertyId();
         OMDataStream* stream = dynamic_cast<OMDataStream*>(p);
         ASSERT("Valid type", stream != 0);
-        write(_storage, id, _reorderBytes);
+        _storage->write(id, _reorderBytes);
         OMPropertySize s = sizeof(OMByteOrder) +
                            sizeof(OMKLVKey);
-        write(_storage, s, _reorderBytes);
+        _storage->write(s, _reorderBytes);
         OMByteOrder bo = stream->storedByteOrder();
-        write(_storage, bo);
+        _storage->write(bo);
         OMKLVKey sid = streamId(stream);
-        writeKLVKey(_storage, sid);
+        _storage->writeKLVKey(sid);
         break;
       }
       default:
@@ -1333,17 +1333,17 @@ void OMKLVStoredObject::referenceSave(OMStorable* object,
   PRECONDITION("Valid object", object != 0);
 
   OMUniqueObjectIdentification oid = instanceId(object);
-  write(_storage, pid, _reorderBytes);
+  _storage->write(pid, _reorderBytes);
   OMPropertySize s = sizeof(OMUniqueObjectIdentification);
-  write(_storage, s, _reorderBytes);
-  write(_storage, oid, _reorderBytes);
+  _storage->write(s, _reorderBytes);
+  _storage->write(oid, _reorderBytes);
 }
 
 void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
 {
   TRACE("OMKLVStoredObject::flatRestore");
 
-  OMUInt64 setLength = readKLVLength(_storage);
+  OMUInt64 setLength = _storage->readKLVLength();
 
   referenceRestore(properties.container(), 0x3c0a);
   const OMUInt16 overhead = sizeof(OMPropertyId) + sizeof(OMPropertySize);
@@ -1364,9 +1364,9 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
 
   while (setLength > 0) {
     OMPropertyId pid;
-    read(_storage, pid, _reorderBytes);
+    _storage->read(pid, _reorderBytes);
     OMPropertySize length;
-    read(_storage, length, _reorderBytes);
+    _storage->read(length, _reorderBytes);
 
     OMProperty* p = properties.get(pid);
     ASSERT("Valid property", p != 0);
@@ -1391,14 +1391,14 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
     case SF_STRONG_OBJECT_REFERENCE_VECTOR: {
       OMUInt32 elementCount;
       OMUInt32 elementSize;
-      read(_storage, elementCount, _reorderBytes);
-      read(_storage, elementSize, _reorderBytes);
+      _storage->read(elementCount, _reorderBytes);
+      _storage->read(elementSize, _reorderBytes);
       OMStrongReferenceVector* v = dynamic_cast<OMStrongReferenceVector*>(p);
       if (elementCount > 0) {
         v->grow(elementCount);
         for (OMUInt32 i = 0; i < elementCount; i++) {
           OMUniqueObjectIdentification id;
-          read(_storage, id, _reorderBytes);
+          _storage->read(id, _reorderBytes);
 
           char idString[OMObjectIdentificationStringBufferSize];
           toString(id, idString);
@@ -1417,8 +1417,8 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
     case SF_STRONG_OBJECT_REFERENCE_SET: {
       OMUInt32 elementCount;
       OMUInt32 elementSize;
-      read(_storage, elementCount, _reorderBytes);
-      read(_storage, elementSize, _reorderBytes);
+      _storage->read(elementCount, _reorderBytes);
+      _storage->read(elementSize, _reorderBytes);
       OMStrongReferenceSet* s = dynamic_cast<OMStrongReferenceSet*>(p);
       OMKeySize keySize = s->keySize();
       OMByte* key = new OMByte[keySize];
@@ -1429,7 +1429,7 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
       for (OMUInt32 i = 0; i < elementCount; i++) {
         *keyI = i + 1; // Temporary unique key 1..N
         OMUniqueObjectIdentification id;
-        read(_storage, id, _reorderBytes);
+        _storage->read(id, _reorderBytes);
 
         char idString[OMObjectIdentificationStringBufferSize];
         toString(id, idString);
@@ -1455,14 +1455,14 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
     case SF_WEAK_OBJECT_REFERENCE_VECTOR: {
       OMUInt32 elementCount;
       OMUInt32 elementSize;
-      read(_storage, elementCount, _reorderBytes);
-      read(_storage, elementSize, _reorderBytes);
+      _storage->read(elementCount, _reorderBytes);
+      _storage->read(elementSize, _reorderBytes);
       OMWeakReferenceVector* v = dynamic_cast<OMWeakReferenceVector*>(p);
       if (elementCount > 0) {
         v->grow(elementCount);
         for (OMUInt32 i = 0; i < elementCount; i++) {
           OMUniqueObjectIdentification id;
-          read(_storage, id, _reorderBytes);
+          _storage->read(id, _reorderBytes);
 
           OMWeakReferenceVectorElement element(v, id, 0);
           v->insert(i, element);
@@ -1474,13 +1474,13 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
     case SF_WEAK_OBJECT_REFERENCE_SET: {
       OMUInt32 elementCount;
       OMUInt32 elementSize;
-      read(_storage, elementCount, _reorderBytes);
-      read(_storage, elementSize, _reorderBytes);
+      _storage->read(elementCount, _reorderBytes);
+      _storage->read(elementSize, _reorderBytes);
       OMWeakReferenceSet* s = dynamic_cast<OMWeakReferenceSet*>(p);
       if (elementCount > 0) {
         for (OMUInt32 i = 0; i < elementCount; i++) {
           OMUniqueObjectIdentification id;
-          read(_storage, id, _reorderBytes);
+          _storage->read(id, _reorderBytes);
 
           OMWeakReferenceSetElement element(s, id, 0);
           s->insert(&id, element);
@@ -1494,10 +1494,10 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
       OMDataStream* stream = dynamic_cast<OMDataStream*>(p);
       ASSERT("Valid type", stream != 0);
       OMByteOrder bo;
-      read(_storage, bo);
+      _storage->read(bo);
       stream->setStoredByteOrder(bo);
       OMKLVKey sid;
-      readKLVKey(_storage, sid);
+      _storage->readKLVKey(sid);
       //p->setPresent();
       ASSERT("Stream not present", !streamToStreamId()->contains(stream));
       streamToStreamId()->insert(stream, sid);
@@ -1808,12 +1808,12 @@ void OMKLVStoredObject::referenceRestore(OMStorable* object,
 
   OMPropertySize length;
   OMPropertyId rPid;
-  read(_storage, rPid, _reorderBytes);
+  _storage->read(rPid, _reorderBytes);
   ASSERT("Property is reference/instance UID", rPid == pid);
-  read(_storage, length, _reorderBytes);
+  _storage->read(length, _reorderBytes);
   ASSERT("Valid length", length == sizeof(OMUniqueObjectIdentification));
   OMUniqueObjectIdentification iid;
-  read(_storage, iid, _reorderBytes);
+  _storage->read(iid, _reorderBytes);
   ASSERT("Object not present", !objectToInstanceId()->contains(object));
   objectToInstanceId()->insert(object, iid);
   ObjectDirectoryEntry* ep = 0;
@@ -2459,7 +2459,7 @@ OMUInt64 OMKLVStoredObject::save(OMSet<OMUniqueObjectIdentification,
   { 0x96, 0x13, 0xb3, 0x8a, 0x87, 0x34, 0x87, 0x46 } };
   OMKLVKey k;
   convert(k, id);
-  writeKLVKey(_storage, k);
+  _storage->writeKLVKey(k);
   OMUInt64 entries = objectTable->count();
   const OMUInt8 entrySize = sizeof(OMUniqueObjectIdentification) + // iid
                             sizeof(OMUInt64) +                     // offset
@@ -2467,19 +2467,19 @@ OMUInt64 OMKLVStoredObject::save(OMSet<OMUniqueObjectIdentification,
   OMUInt64 length = sizeof(OMUInt64) +                     // entry count
                     sizeof(OMUInt8) +                      // entry size
                     (entries * entrySize);                 // entries
-  writeKLVLength(_storage, length);
+  _storage->writeKLVLength(length);
 
-  write(_storage, entries, _reorderBytes);
-  write(_storage, entrySize);
+  _storage->write(entries, _reorderBytes);
+  _storage->write(entrySize);
 
   OMSetIterator<OMUniqueObjectIdentification, ObjectDirectoryEntry>
                                       iterator(*_instanceIdToObject, OMBefore);
   while (++iterator) {
     OMUniqueObjectIdentification id = iterator.key();
     ObjectDirectoryEntry e = iterator.value();
-    write(_storage, id, _reorderBytes);
-    write(_storage, e._offset, _reorderBytes);
-    write(_storage, e._flags);
+    _storage->write(id, _reorderBytes);
+    _storage->write(e._offset, _reorderBytes);
+    _storage->write(e._flags);
   }
   return result;
 }
@@ -2501,15 +2501,15 @@ void OMKLVStoredObject::restore(OMSet<OMUniqueObjectIdentification,
   OMKLVKey objectDirectoryKey;
   convert(objectDirectoryKey, id);
   OMKLVKey k;
-  readKLVKey(_storage, k);
+  _storage->readKLVKey(k);
   ASSERT("Expected key", k == objectDirectoryKey); // tjb - error
-  OMUInt64 setLength = readKLVLength(_storage);
+  OMUInt64 setLength = _storage->readKLVLength();
   OMUInt64 entries;
   OMUInt8 entrySize;
   ASSERT("Valid length", setLength > sizeof(entries) + sizeof(entrySize));
 
-  read(_storage, entries, _reorderBytes);
-  read(_storage, entrySize);
+  _storage->read(entries, _reorderBytes);
+  _storage->read(entrySize);
   ASSERT("Valid entry size",
                            entrySize == (sizeof(OMUniqueObjectIdentification) +
                                          sizeof(OMUInt64) +
@@ -2522,10 +2522,10 @@ void OMKLVStoredObject::restore(OMSet<OMUniqueObjectIdentification,
     OMUniqueObjectIdentification id;
     ObjectDirectoryEntry e;
 
-    read(_storage, id, _reorderBytes);
+    _storage->read(id, _reorderBytes);
     e._object = 0;
-    read(_storage, e._offset, _reorderBytes);
-    read(_storage, e._flags);
+    _storage->read(e._offset, _reorderBytes);
+    _storage->read(e._flags);
 
     objectTable->insert(id, e);
   }
@@ -2540,15 +2540,15 @@ OMUInt64 OMKLVStoredObject::saveObjectDirectoryReference(
                         sizeof(OMUInt64);
   // pid
   OMPropertyId pid = 0x0003;
-  write(_storage, pid, _reorderBytes);
+  _storage->write(pid, _reorderBytes);
   // size
-  write(_storage, size, _reorderBytes);
+  _storage->write(size, _reorderBytes);
   // id
-  write(_storage, id, _reorderBytes);
+  _storage->write(id, _reorderBytes);
   // offset (not yet known, will patch later)
   OMUInt64 patch = _storage->position();
   OMUInt64 offset = 0;
-  write(_storage, offset, _reorderBytes);
+  _storage->write(offset, _reorderBytes);
   return patch;
 }
 
@@ -2562,7 +2562,7 @@ OMKLVStoredObject::fixupObjectDirectoryReference(OMUInt64 patchOffset,
 
   OMUInt64 savedPosition = _storage->position();
   _storage->setPosition(patchOffset);
-  write(_storage, patchValue, _reorderBytes);
+  _storage->write(patchValue, _reorderBytes);
   _storage->setPosition(savedPosition);
 }
 
@@ -2574,18 +2574,18 @@ OMKLVStoredObject::restoreObjectDirectoryReference(
 
   // pid
   OMPropertyId pid;
-  read(_storage, pid, _reorderBytes);
+  _storage->read(pid, _reorderBytes);
   ASSERT("Expected pid", pid == 0x0003);
   // size
   OMPropertySize size;
-  read(_storage, size, _reorderBytes);
+  _storage->read(size, _reorderBytes);
   ASSERT("Expected size",
             size == (sizeof(OMUniqueObjectIdentification) + sizeof(OMUInt64)));
   // id
-  read(_storage, id, _reorderBytes);
+  _storage->read(id, _reorderBytes);
   // offset
   OMUInt64 offset;
-  read(_storage, offset, _reorderBytes);
+  _storage->read(offset, _reorderBytes);
   return offset;
 }
 
