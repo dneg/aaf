@@ -159,6 +159,12 @@ OMMXFStorage::setGeneration(const OMUniqueObjectIdentification& generation)
   _generation = generation;
 }
 
+OMUniqueObjectIdentification OMMXFStorage::generation(void) const
+{
+  TRACE("OMMXFStorage::generation");
+  return _generation;
+}
+
 void OMMXFStorage::writeHeaderPartition(void)
 {
   TRACE("OMMXFStorage::writeHeaderPartition");
