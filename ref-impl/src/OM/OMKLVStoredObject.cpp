@@ -1182,11 +1182,18 @@ OMUInt64 OMKLVStoredObject::length(const OMPropertySet& properties) const
         OMDataVector* dv = dynamic_cast<OMDataVector*>(p);
         ASSERT("Correct type", dv != 0);
         OMDataVector& property = *dv;
-        OMPropertySize size = property.bitsSize();
-        OMByte* bits = property.bits();
         const OMType* type = property.type();
         ASSERT("Valid property type", type != 0);
-        OMPropertySize s = type->externalSize(bits, size);
+        const OMArrayType* at = dynamic_cast<const OMArrayType*>(type);
+        ASSERT("Correct type", at != 0);
+        OMType* et = at->elementType();
+        ASSERT("Fixed size elements", et->isFixedSize());
+        OMUInt32 elementSize = et->externalSize();
+        OMUInt32 elementCount = property.count();
+        // Doh! 32-bit size and count but 16-bit property size
+        OMUInt64 size = elementSize * elementCount;
+        // ASSERT("Valid size"); // tjb
+        OMPropertySize s = static_cast<OMPropertySize>(size);
         length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize) + s;
         length = length + sizeof(OMUInt32) + sizeof(OMUInt32);
         break;
