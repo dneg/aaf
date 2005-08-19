@@ -36,7 +36,11 @@
 #include "OMType.h"
 #include "OMUniqueObjectIdentType.h"
 
+#include "OMKLVStoredStream.h" // tjb - we shouldn't depend on this
+#include "OMDataStreamProperty.h"
+
 //#define INSTANCEID_DEBUG 1
+//#define OMONLY 1
 
   // @mfunc Constructor.
 OMMXFStorage::OMMXFStorage(OMRawStorage* store)
@@ -52,6 +56,7 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
   _streamToSid(0),
   _sidToStream(0),
   _maxSid(0),
+  _segmentMap(0),
   _fileSize(0)
 {
   TRACE("OMMXFStorage::OMMXFStorage");
@@ -61,6 +66,11 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
   } else {
     _reorderBytes = true;
   }
+  //  // Allocate 128k bytes on stream 0 (the header)
+  //  for (size_t i = 0; i < 128 * 1024; i = i + 512) {
+  //    streamSegment(0, i);
+  //  }
+  _fileSize = 128 * 1024;
 }
 
   // @mfunc Destructor.
@@ -81,6 +91,12 @@ OMMXFStorage::~OMMXFStorage(void)
   }
 
   destroyFixups();
+
+  size_t count = _partitions.count();
+  for (size_t i = 0; i < count; i++) {
+    Partition* p = _partitions.valueAt(i);
+    delete p;
+  }
 }
 
   // @mfunc Set the operational pattern to <p pattern>.
@@ -314,7 +330,7 @@ void OMMXFStorage::writeKLVFill(const OMUInt64& length)
 #endif
   for (OMUInt64 i = 0; i < length; i++) {
 #if defined(OM_DEBUG)
-    const OMByte fillPattern[] = "FFFF.FFFC ";
+    const OMByte fillPattern[] = "FFFF.FFFB ";
     write(fillPattern[i % (sizeof(fillPattern) - 1)]);
 #else
     const OMByte fillPattern = 0;
@@ -1136,11 +1152,14 @@ void OMMXFStorage::associate(OMDataStream* stream, OMUInt32 sid)
 {
   TRACE("OMMXFStorage::associate");
 
-  PRECONDITION("Stream not present", !containsStream(stream));
-  PRECONDITION("Identifier not present", !containsStream(sid));
+  PRECONDITION("Stream not present", !streamToSid()->contains(stream));
+  PRECONDITION("Identifier not present", !sidToStream()->contains(sid));
 
   streamToSid()->insert(stream, sid);
   sidToStream()->insert(sid, stream);
+  if (sid > _maxSid) {
+    _maxSid = sid;
+  }
 }
 
 bool OMMXFStorage::containsStream(OMUInt32 sid)
@@ -1155,6 +1174,289 @@ bool OMMXFStorage::containsStream(OMDataStream* stream)
   TRACE("OMMXFStorage::containsStream");
 
   return streamToSid()->contains(stream);
+}
+
+OMUInt64 OMMXFStorage::streamSize(OMUInt32 sid)
+{
+  TRACE("OMMXFStorage::streamSize");
+  OMUInt64 result = 0;
+
+  Stream* s = 0;
+  if (segmentMap()->find(sid, s)) {
+    // tjb - why would't we know about this stream ?
+    result = s->_size;
+  }
+  return result;
+}
+
+void OMMXFStorage::streamSetSize(OMUInt32 sid, OMUInt64 newSize)
+{
+}
+
+void OMMXFStorage::streamRawWrite(OMUInt32 /* sid */,
+                                  OMUInt64 rawPosition,
+                                  const OMByte* rawBytes,
+                                  OMUInt32 rawByteCount)
+{
+  TRACE("OMMXFStorage::streamRawWrite");
+
+  PRECONDITION("Valid buffer", rawBytes != 0);
+  PRECONDITION("Buffer not empty", rawByteCount != 0);
+
+  OMUInt32 bytesWritten;
+  writeAt(rawPosition, rawBytes, rawByteCount, bytesWritten);
+  POSTCONDITION("All bytes written", bytesWritten == rawByteCount);
+}
+
+void OMMXFStorage::streamFragment(OMUInt32 sid,
+                                  OMUInt64 position,
+                                  OMUInt32 byteCount,
+                                  OMUInt64& rawPosition,
+                                  OMUInt32& rawByteCount)
+{
+  TRACE("OMMXFStorage::streamFragment");
+
+  PRECONDITION("Valid byte count", byteCount != 0);
+
+  Segment* seg = streamSegment(sid, position);
+  ASSERT("Valid segment", seg != 0);
+  OMUInt64 fragmentSize = (seg->_start + seg->_size) - position;
+  rawPosition = (position - seg->_start) + seg->_origin;
+  if (byteCount > fragmentSize) {
+    rawByteCount = static_cast<OMUInt32>(fragmentSize);
+  } else {
+    rawByteCount = byteCount;
+  }
+  POSTCONDITION("Valid position",
+                (rawPosition >= seg->_origin) &&
+                (rawPosition < (seg->_origin + seg->_size)));
+  POSTCONDITION("Valid byte count", rawByteCount != 0);
+}
+
+void OMMXFStorage::streamWriteFragment(OMUInt32 sid,
+                                       OMUInt64 position,
+                                       const OMByte* bytes,
+                                       OMUInt32 byteCount,
+                                       OMUInt32& bytesWritten)
+{
+  TRACE("OMMXFStorage::streamWriteFragment");
+
+  PRECONDITION("Valid buffer", bytes != 0);
+  PRECONDITION("Buffer not empty", byteCount != 0);
+
+  // Get largest contiguous fragment
+  //
+  OMUInt64 rawPosition;
+  OMUInt32 rawByteCount;
+  streamFragment(sid, position, byteCount, rawPosition, rawByteCount);
+
+  // Write to the fragment
+  streamRawWrite(sid, rawPosition, bytes, rawByteCount);
+  bytesWritten = rawByteCount;
+
+  // Update stream size
+  Stream* s = 0;
+  segmentMap()->find(sid, s);
+  ASSERT("Stream found", s != 0);
+  OMUInt64 newPosition = position + bytesWritten;
+  if (newPosition > s->_size) {
+    s->_size = newPosition;
+  }
+}
+
+void OMMXFStorage::streamWriteAt(OMUInt32 sid,
+                                 OMUInt64 position,
+                                 const OMByte* bytes,
+                                 OMUInt32 byteCount,
+                                 OMUInt32& bytesWritten)
+{
+  TRACE("OMMXFStorage::streamWriteAt");
+
+  PRECONDITION("Valid buffer", bytes != 0);
+  PRECONDITION("Buffer not empty", byteCount != 0);
+  const OMByte* p = bytes;
+  OMUInt64 pos = position;
+  OMUInt32 remaining = byteCount;
+  while (remaining > 0) {
+    OMUInt32 w;
+    streamWriteFragment(sid, pos, p, remaining, w);
+    remaining = remaining - w;
+    pos = pos + w;
+    p = p + w;
+  }
+  bytesWritten = byteCount;
+}
+
+void OMMXFStorage::streamRawRead(OMUInt32 /* sid */,
+                                 OMUInt64 rawPosition,
+                                 OMByte* rawBytes,
+                                 OMUInt32 rawByteCount)
+{
+  TRACE("OMMXFStorage::streamRawRead");
+
+  PRECONDITION("Valid buffer", rawBytes != 0);
+  PRECONDITION("Buffer not empty", rawByteCount != 0);
+
+  OMUInt32 bytesRead;
+  readAt(rawPosition, rawBytes, rawByteCount, bytesRead);
+  POSTCONDITION("All bytes read", bytesRead == rawByteCount);
+}
+
+void OMMXFStorage::streamReadFragment(OMUInt32 sid,
+                                      OMUInt64 position,
+                                      OMByte* bytes,
+                                      OMUInt32 byteCount,
+                                      OMUInt32& bytesRead)
+{
+  TRACE("OMMXFStorage::streamReadFragment");
+
+  PRECONDITION("Valid buffer", bytes != 0);
+  PRECONDITION("Buffer not empty", byteCount != 0);
+
+  // Get largest contiguous fragment
+  //
+  OMUInt64 rawPosition;
+  OMUInt32 rawByteCount;
+  streamFragment(sid, position, byteCount, rawPosition, rawByteCount);
+
+  // Read from the fragment
+  streamRawRead(sid, rawPosition, bytes, rawByteCount);
+  bytesRead = rawByteCount;
+}
+
+void OMMXFStorage::streamReadAt(OMUInt32 sid,
+                                OMUInt64 position,
+                                OMByte* bytes,
+                                OMUInt32 byteCount,
+                                OMUInt32& bytesRead)
+{
+  TRACE("OMMXFStorage::streamReadAt");
+
+  PRECONDITION("Valid buffer", bytes != 0);
+  PRECONDITION("Buffer not empty", byteCount != 0);
+  OMByte* p = bytes;
+  OMUInt64 pos = position;
+  OMUInt32 remaining = byteCount;
+  while (remaining > 0) {
+    OMUInt32 w;
+    streamReadFragment(sid, pos, p, remaining, w);
+    remaining = remaining - w;
+    pos = pos + w;
+    p = p + w;
+  }
+  bytesRead = byteCount;
+}
+
+void OMMXFStorage::streamSave(OMDataStream* stream)
+{
+  TRACE("OMMXFStorage::streamSave");
+  PRECONDITION("Valid stream", stream != 0);
+
+  OMUInt64 length = stream->size();
+
+  OMUInt32 sid;
+  streamToSid()->find(stream, sid);
+
+  Stream* s = 0;
+  segmentMap()->find(sid, s);
+  if (s != 0) {
+    OMUInt64 allocatedLength = s->_segments->count() * s->_gridSize;
+
+    ASSERT("Sane length", allocatedLength >= length);
+    // insert fill - tjb
+    OMUInt64 savedPosition = position();
+
+    // Find first segment
+    Segment* seg = findSegment(s, 0);;
+    ASSERT("Valid segment", seg != 0);
+    OMUInt64 pos = seg->_origin - s->_gridSize;
+
+    // Write partition pack
+    setPosition(pos);
+    writeBodyPartition(sid, s->_gridSize);
+
+    // Write essence element label
+    writeKLVKey(s->_label);
+    writeKLVLength(length);
+
+    // Find last segment
+    seg = findSegment(s, length - 1);
+    ASSERT("Valid segment", seg != 0);
+
+    OMUInt64 p = (length - seg->_start) + seg->_origin;
+    ASSERT("Valid length", allocatedLength >= length);
+    OMUInt64 count = allocatedLength - length;
+    if (count > 0) {
+      // tjb - if count < minimum fill size this will use another block
+      setPosition(p);
+      fillAlignK(p, s->_gridSize);
+    }
+    setPosition(savedPosition);
+  } // else stream exists but was never written to
+}
+
+void OMMXFStorage::streamRestoreSegment(OMUInt32 sid,
+                                        OMUInt64 start,
+                                        OMUInt64 size,
+                                        OMKLVKey label,
+                                        OMUInt32 gridSize)
+{
+  TRACE("OMMXFStorage::streamRestoreSegment");
+  Stream* s = 0;
+  if (!segmentMap()->find(sid, s)) {
+    s = createStream(sid, size, label, gridSize);
+    addSegment(s, 0, size, start);
+    _fileSize = _fileSize + size;
+  }
+  OMDataStream* sp = stream(sid);
+  ASSERT("Found stream", sp != 0);
+  OMDataStreamProperty* ds = dynamic_cast<OMDataStreamProperty*>(sp);
+  ASSERT("Valid type", ds != 0);
+  OMStoredStream* ss = ds->stream();
+  ASSERT("Valid stream", ss != 0);
+  OMKLVStoredStream* kss = dynamic_cast<OMKLVStoredStream*>(ss);
+  ASSERT("Valid type", kss != 0);
+  kss->setLabel(label);
+  kss->setBlockSize(gridSize);
+}
+
+OMMXFStorage::SegmentListIterator*
+OMMXFStorage::streamSegments(OMUInt32 sid) const
+{
+  TRACE("OMMXFStorage::streamSegments");
+
+  SegmentListIterator* result = 0;
+  Stream* s = 0;
+  OMMXFStorage* nonConstThis = const_cast<OMMXFStorage*>(this);
+  if (nonConstThis->segmentMap()->find(sid, s)) {
+    result = new SegmentListIterator(*(s->_segments), OMBefore);
+    ASSERT("Valid heap pointer", result != 0);
+  }
+  return result;
+}
+
+OMSet<OMDataStream*, OMUInt32>*
+OMMXFStorage::streamToSid(void)
+{
+  TRACE("OMMXFStorage::streamToSid");
+
+  if (_streamToSid == 0) {
+    _streamToSid = new OMSet<OMDataStream*, OMUInt32>();
+    ASSERT("Valid heap pointer", _streamToSid != 0);
+  }
+  return _streamToSid;
+}
+
+OMSet<OMUInt32, OMDataStream*>*
+OMMXFStorage::sidToStream(void)
+{
+  TRACE("OMMXFStorage::sidToStream");
+
+  if (_sidToStream == 0) {
+    _sidToStream = new OMSet<OMUInt32, OMDataStream*>();
+    ASSERT("Valid heap pointer", _sidToStream != 0);
+  }
+  return _sidToStream;
 }
 
   // @mfunc Record a reference to <p tag> at <p address>.
@@ -1238,4 +1540,124 @@ void OMMXFStorage::destroyFixups(void)
     ASSERT("Resolved", f->_tag == FUT_RESOLVED);
     delete f;
   }
+}
+
+OMMXFStorage::Stream* OMMXFStorage::createStream(OMUInt32 sid,
+                                                 OMUInt64 size,
+                                                 OMKLVKey label,
+                                                 OMUInt32 gridSize)
+{
+  TRACE("OMMXFStorage::createStream");
+#if defined (OMONLY)
+  PRECONDITION("Valid label", label != nullOMKLVKey);
+  PRECONDITION("Valid KAG size", gridSize != 0);
+  PRECONDITION("Reasonable KAG size", gridSize > 128);
+#else
+  if (label == nullOMKLVKey) {
+    OMKLVKey k = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01,
+                  0x0e, 0x04, 0x03, 0x01, 0xff, 0xff, 0xff, 0xff};
+    label = k;
+  }
+  if (gridSize == 0) {
+    gridSize = 0x200;
+  }
+#endif
+
+  Stream* result = new Stream();
+  ASSERT("Valid heap pointer", result != 0);
+  result->_segments = new SegmentList();
+  ASSERT("Valid heap pointer", result->_segments != 0);
+  result->_size = size;
+  result->_label = label;
+  result->_gridSize = gridSize;
+  segmentMap()->insert(sid, result);
+  return result;
+}
+
+OMMXFStorage::Segment*
+OMMXFStorage::addSegment(Stream* s,
+                         OMUInt64 start,
+                         OMUInt64 size,
+                         OMUInt64 origin)
+{
+  TRACE("OMMXFStorage::addSegment");
+  PRECONDITION("Valid stream", s != 0);
+  PRECONDITION("Valid list", s->_segments != 0);
+
+  Segment* result = new Segment();
+  ASSERT("Valid heap pointer", result != 0);
+  result->_start = start;
+  result->_size = size;
+  result->_origin = origin;
+  s->_segments->append(result);
+  return result;
+}
+
+OMMXFStorage::Segment*
+OMMXFStorage::findSegment(Stream* s, OMUInt64 position)
+{
+  TRACE("OMMXFStorage::findSegment");
+  PRECONDITION("Valid stream", s != 0);
+
+  ASSERT("Valid list", s->_segments != 0);
+  Segment* result = 0;
+  SegmentListIterator iterator(*s->_segments, OMBefore);
+  while (++iterator) {
+    Segment* c = iterator.value();
+    OMUInt64 start = c->_start;
+    OMUInt64 size = c->_size;
+    if ((position >= start) && (position < start + size)) {
+      result = c;
+      break;
+    }
+   }
+  return result;
+}
+
+OMMXFStorage::Segment*
+OMMXFStorage::streamSegment(OMUInt32 sid, OMUInt64 position)
+{
+  TRACE("OMMXFStorage::streamSegment");
+
+  Stream* s = 0;
+  if (!segmentMap()->find(sid, s)) {
+#if 1
+    // tjb we shouldn't know about OMKLVStoredStream here
+    OMDataStream* sp = stream(sid);
+    ASSERT("Found stream", sp != 0);
+    OMDataStreamProperty* ds = dynamic_cast<OMDataStreamProperty*>(sp);
+    ASSERT("Valid type", ds != 0);
+    OMStoredStream* ss = ds->stream();
+    ASSERT("Valid stream", ss != 0);
+    OMKLVStoredStream* kss = dynamic_cast<OMKLVStoredStream*>(ss);
+    ASSERT("Valid type", kss != 0);
+    OMKLVKey label = kss->label();
+    OMUInt32 gridSize = kss->blockSize();
+#endif
+    s = createStream(sid, 0, label, gridSize);
+    _fileSize = _fileSize + s->_gridSize; // For body partition and filler
+    addSegment(s, 0, s->_gridSize, _fileSize);
+    _fileSize = _fileSize + s->_gridSize;
+  }
+
+  Segment* result = findSegment(s, position);
+  if (result == 0) {
+    // Extend stream
+    result = addSegment(s, s->_size, s->_gridSize, _fileSize);
+    _fileSize = _fileSize + s->_gridSize;
+  }
+  POSTCONDITION("Valid result", result != 0);
+  POSTCONDITION("Valid result", position >= result->_start);
+//POSTCONDITION("Valid result", position <= result->_start + result->_size);
+  return result;
+}
+
+OMMXFStorage::SegmentMap* OMMXFStorage::segmentMap(void)
+{
+  TRACE("OMMXFStorage::segmentMap");
+  if (_segmentMap == 0) {
+    _segmentMap = new SegmentMap();
+    ASSERT("Valid heap pointer", _segmentMap != 0);
+  }
+  return _segmentMap;
 }
