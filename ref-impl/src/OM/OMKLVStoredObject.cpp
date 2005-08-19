@@ -1972,10 +1972,11 @@ bool OMKLVStoredObject::readHeaderPartition(OMRawStorage* store)
   }
   OMKLVKey headerPartitionPackKey =
     {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
-     0x0d, 0x01, 0x02, 0x01, 0x01, 0x02, 0x02, 0x00};
+     0x0d, 0x01, 0x02, 0x01, 0x01, 0x02, 0x00, 0x00};
   OMKLVKey k;
   bool result = true;
   readKLVKey(store, k);
+  k.octet14 = 0x00;
   if (memcmp(&k, &headerPartitionPackKey, sizeof(OMKLVKey)) == 0) {
     readKLVLength(store);
     OMUInt16 majorVersion;
