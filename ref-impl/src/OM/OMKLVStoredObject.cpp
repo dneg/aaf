@@ -636,15 +636,21 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   if (k == ClosedHeaderPartitionPackKey) {
     // Read the header partition
     _storage->readHeaderPartition();
+    _storage->readKLVKey(k);
   }
-  _storage->readKLVFill();
+  if (k == fillKey) {
+    _storage->readKLVFill();
+  }
 
   // Read the primer
   readPrimerPack(file.dictionary());
 
   file.setLoadMode(OMFile::lazyLoad);
 
-  _storage->readKLVFill();
+  _storage->readKLVKey(k);
+  if (k == fillKey) {
+    _storage->readKLVFill();
+  }
 
   // For restoring meta objects
   OMDictionary* metaDictionary = file.dictionary();
@@ -1797,7 +1803,10 @@ void OMKLVStoredObject::streamRestore(void)
       OMUInt32 indexSID;
       OMUInt32 gridSize;
       _storage->readPartition(bodySID, indexSID, gridSize);
-      _storage->readKLVFill();
+      _storage->readKLVKey(k);
+      if (k == fillKey) {
+        _storage->readKLVFill();
+      }
       _storage->readKLVKey(k);
       OMUInt64 length = _storage->readKLVLength();
       _storage->streamRestoreSegment(bodySID,
