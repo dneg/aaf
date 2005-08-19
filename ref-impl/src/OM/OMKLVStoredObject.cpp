@@ -2417,6 +2417,8 @@ void OMKLVStoredObject::finalize(void)
   }
 }
 
+bool OMKLVStoredObject::metaDataOnly = true;
+
   // @mfunc Constructor.
   //   @parm The <c OMRawStorage> on which this <c OMKLVStoredObject> resides.
   //   @parm TBS
