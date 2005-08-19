@@ -800,6 +800,36 @@ void OMKLVStoredObject::restore(OMDataStream& /* stream */,
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
+void OMKLVStoredObject::writeProperty(OMPropertyId pid, const OMUInt32& value)
+{
+  TRACE("OMKLVStoredObject::writeProperty");
+
+  // pid
+  write(_storage, pid, _reorderBytes);
+  // size
+  OMPropertySize size = sizeof(value);
+  write(_storage, size, _reorderBytes);
+  // value
+  write(_storage, value, _reorderBytes);
+}
+
+void OMKLVStoredObject::readProperty(const OMPropertyId& ANAME(pid),
+                                     OMUInt32& value)
+{
+  TRACE("OMKLVStoredObject::readProperty");
+
+  // pid
+  OMPropertyId p;
+  read(_storage, p, _reorderBytes);
+  ASSERT("Expected pid", p == pid);
+  // size
+  OMPropertySize size;
+  read(_storage, size, _reorderBytes);
+  ASSERT("Expected size", size == sizeof(value));
+  // value
+  read(_storage, value, _reorderBytes);
+}
+
   // @mfunc Open the <c OMStoredStream> representing the property
   //        <p stream> contained within this <c OMKLVStoredObject>.
   //   @parm The <c OMDataStream> to be opened.
