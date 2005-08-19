@@ -1644,6 +1644,16 @@ void OMMXFStorage::streamWriteAt(OMUInt32 sid,
   }
 }
 
+void OMMXFStorage::streamWriteAt(OMUInt32 sid,
+                                 OMUInt64 position,
+                                 OMIOVector buffers,
+                                 OMUInt32 bufferCount,
+                                 OMUInt32& bytesWritten)
+{
+  TRACE("OMMXFStorage::streamWriteAt");
+  ASSERT("Unimplemented code not reached", false);
+}
+
 void OMMXFStorage::streamRawRead(OMUInt32 /* sid */,
                                  OMUInt64 rawPosition,
                                  OMByte* rawBytes,
