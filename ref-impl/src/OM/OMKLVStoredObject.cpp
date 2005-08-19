@@ -2171,7 +2171,7 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
   _storage->fixup(elementCountPosition, elementCount);
 }
 
-void OMKLVStoredObject::readPrimerPack(OMDictionary* /* dictionary */)
+void OMKLVStoredObject::readPrimerPack(OMDictionary* dictionary)
 {
   TRACE("OMKLVStoredObject::readPrimerPack");
 
@@ -2191,6 +2191,7 @@ void OMKLVStoredObject::readPrimerPack(OMDictionary* /* dictionary */)
     OMUniqueObjectIdentification id;
     convert(id, x);
     OMDictionary::mapFromKLV(id);
+    dictionary->associate(id, pid);
   }
 }
 
