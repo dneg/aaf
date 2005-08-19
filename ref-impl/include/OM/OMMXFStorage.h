@@ -141,9 +141,7 @@ public:
   virtual void writeHeaderPartition(void);
   virtual void writeBodyPartition(void);
   virtual void writeFooterPartition(void);
-  virtual void writePartition(const OMKLVKey& key,
-                              OMUInt32 KAGSize,
-                              bool reorderBytes);
+  virtual void writePartition(const OMKLVKey& key, OMUInt32 KAGSize);
 
     // @cmember Write a fill key, a BER encoded length and
     //          <p length> bytes of fill.
@@ -303,6 +301,7 @@ private:
 
   FixupList _fixups;
 
+  bool _reorderBytes;
   OMKLVKey _operationalPattern;
   LabelSet _essenceContainerLabels;
   OMUniqueObjectIdentification _generation;
