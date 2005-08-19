@@ -1299,7 +1299,16 @@ void OMMXFStorage::streamWriteAt(OMUInt32 sid,
   PRECONDITION("Buffer not empty", byteCount != 0);
 
   OMUInt32 writeCount = byteCount;
-  bytesWritten = byteCount;
+  OMUInt64 streamBytes = 0;
+  Stream* s = 0;
+  segmentMap()->find(sid, s);
+  if (s != 0) {
+    streamBytes = allocatedSize(s);
+  }
+  if ((position + byteCount) > streamBytes) {
+    streamGrow(sid, (position + byteCount) - streamBytes);
+  }
+  bytesWritten = writeCount;
 
   const OMByte* p = bytes;
   OMUInt64 pos = position;
@@ -1470,9 +1479,52 @@ void OMMXFStorage::streamRestoreSegment(OMUInt32 sid,
   kss->setBlockSize(gridSize);
 }
 
-void OMMXFStorage::streamGrow(OMUInt32 /* sid */, OMUInt64 /* growBytes */)
+void OMMXFStorage::streamGrow(OMUInt32 sid, OMUInt64 growBytes)
 {
   TRACE("OMMXFStorage::streamGrow");
+  PRECONDITION("Valid grow bytes", growBytes > 0);
+
+  OMUInt64 start;
+  OMUInt64 increment;
+  Stream* s = 0;
+  if (!segmentMap()->find(sid, s)) {
+    // First segment
+
+#if 1
+    // tjb we shouldn't know about OMKLVStoredStream here
+    OMDataStream* sp = stream(sid);
+    ASSERT("Found stream", sp != 0);
+    OMDataStreamProperty* ds = dynamic_cast<OMDataStreamProperty*>(sp);
+    ASSERT("Valid type", ds != 0);
+    OMStoredStream* ss = ds->stream();
+    ASSERT("Valid stream", ss != 0);
+    OMKLVStoredStream* kss = dynamic_cast<OMKLVStoredStream*>(ss);
+    ASSERT("Valid type", kss != 0);
+    OMKLVKey label = kss->label();
+    OMUInt32 gridSize = kss->blockSize();
+#endif
+    s = createStream(sid, 0, label, gridSize);
+    start = 0;
+    increment = (((growBytes - 1) / s->_gridSize) + 1) * s->_gridSize;
+    ASSERT("Valid increment", increment >= growBytes);
+    _fileSize = _fileSize + s->_gridSize; // For body partition and filler
+    addSegment(s, start, increment, _fileSize);
+  } else {
+    Segment* last = findLastSegment(s);
+    ASSERT("Last segment found", last != 0);
+    start = last->_start + last->_size;
+    increment = (((growBytes - 1) / s->_gridSize) + 1) * s->_gridSize;
+    ASSERT("Valid increment", increment >= growBytes);
+    if ((last->_origin + last->_size) != _fileSize) {
+      // Last segment not at end of file - add a new one
+      _fileSize = _fileSize + s->_gridSize; // For body partition and filler
+      addSegment(s, start, increment, _fileSize);
+    } else {
+      // Last segment at end of file - grow it
+      last->_size = last->_size + increment;
+    }
+  }
+  _fileSize = _fileSize + increment;
 }
 
 OMMXFStorage::SegmentListIterator*
@@ -1703,47 +1755,9 @@ OMMXFStorage::streamSegment(OMUInt32 sid, OMUInt64 position)
   TRACE("OMMXFStorage::streamSegment");
 
   Stream* s = 0;
-  if (!segmentMap()->find(sid, s)) {
-#if 1
-    // tjb we shouldn't know about OMKLVStoredStream here
-    OMDataStream* sp = stream(sid);
-    ASSERT("Found stream", sp != 0);
-    OMDataStreamProperty* ds = dynamic_cast<OMDataStreamProperty*>(sp);
-    ASSERT("Valid type", ds != 0);
-    OMStoredStream* ss = ds->stream();
-    ASSERT("Valid stream", ss != 0);
-    OMKLVStoredStream* kss = dynamic_cast<OMKLVStoredStream*>(ss);
-    ASSERT("Valid type", kss != 0);
-    OMKLVKey label = kss->label();
-    OMUInt32 gridSize = kss->blockSize();
-#endif
-    s = createStream(sid, 0, label, gridSize);
-    _fileSize = _fileSize + s->_gridSize; // For body partition and filler
-    addSegment(s, 0, s->_gridSize, _fileSize);
-    _fileSize = _fileSize + s->_gridSize;
-  }
-
+  segmentMap()->find(sid, s);
+  ASSERT("Stream found", s != 0);
   Segment* result = findSegment(s, position);
-  if (result == 0) {
-    // Extend stream
-    // Find the last segment in the stream
-    Segment* last = findLastSegment(s);
-    ASSERT("Last segment found", last != 0);
-    // Calculate number of bytes to grow segment
-    OMUInt64 grids = (position / s->_gridSize) + 1;
-    OMUInt64 grow = (grids * s->_gridSize) - (last->_start + last->_size);
-    // Is the last segment at the end of the file
-    if (last->_origin + last->_size == _fileSize) {
-      // Yes, grow the last segment
-      last->_size = last->_size + grow;
-      result = last;
-    } else {
-      // No, add a new segment at the end of the file
-      _fileSize = _fileSize + s->_gridSize; // For body partition and filler
-      result = addSegment(s, last->_start + last->_size, grow, _fileSize);
-    }
-    _fileSize = _fileSize + grow;
-  }
   POSTCONDITION("Valid result", result != 0);
   POSTCONDITION("Valid result", position >= result->_start);
   POSTCONDITION("Valid result", position <= result->_start + result->_size);
