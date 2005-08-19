@@ -184,6 +184,7 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
 {
   TRACE("OMMXFStorage::writePartition");
 
+  OMUInt64 currentPosition = position();
   OMUInt32 elementSize = sizeof(OMKLVKey);
   LabelSetIterator* iter = essenceContainerLabels();
   OMUInt32 elementCount = iter->count();
@@ -201,7 +202,7 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
   OMUInt16 minorVersion = currentMinorVersion;
   write(minorVersion, reorderBytes);
   write(KAGSize, reorderBytes);
-  OMUInt64 thisPartition = 0;
+  OMUInt64 thisPartition = currentPosition;
   write(thisPartition, reorderBytes);
   OMUInt64 previousPartition = 0;
   write(previousPartition, reorderBytes);
