@@ -252,8 +252,7 @@ public:
 
   virtual void readPrimerPack(OMDictionary* dictionary);
 
-  OMUInt64 saveObjectDirectoryReference(
-                                       const OMUniqueObjectIdentification& id);
+  void saveObjectDirectoryReference(const OMUniqueObjectIdentification& id);
 
   OMUInt64 restoreObjectDirectoryReference(OMUniqueObjectIdentification& id);
 
