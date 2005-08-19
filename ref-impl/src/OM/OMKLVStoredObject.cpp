@@ -56,8 +56,14 @@
 //#define INSTANCEID_DEBUG 1
 
 #if defined(INSTANCEID_DEBUG)
-#include <iostream.h>
-#include <iomanip.h>
+#include <iostream>
+#include <iomanip>
+using std::cout;
+using std::endl;
+using std::hex;
+using std::setw;
+using std::setfill;
+using std::dec;
 #endif
 
   // @mfunc Open the root <c OMKLVStoredObject> in the raw storage
