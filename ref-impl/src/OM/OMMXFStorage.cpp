@@ -2336,6 +2336,30 @@ OMMXFStorage::streamSegment(OMUInt32 sid, OMUInt64 position)
   return result;
 }
 
+
+OMUInt64 OMMXFStorage::validSize(Segment* segment)
+{
+  TRACE("OMMXFStorage::validSize");
+
+  PRECONDITION("Valid segment", segment != 0);
+  Stream* stream = segment->_stream;
+  ASSERT("Valid stream", stream != 0);
+
+  OMUInt64 result; // length of valid portion of segment
+  if (stream->_size > segment->_start + segment->_size) {
+    // eos in later segment
+    result = segment->_size;
+  } else if (stream->_size < segment->_start) {
+    // eos in earlier segment
+    result = 0;
+  } else {
+    // eos in this segment
+    result = stream->_size - segment->_start;
+  }
+  ASSERT("Valid length", result <= segment->_size);
+  return result;
+}
+
 OMMXFStorage::SegmentMap* OMMXFStorage::segmentMap(void)
 {
   TRACE("OMMXFStorage::segmentMap");
