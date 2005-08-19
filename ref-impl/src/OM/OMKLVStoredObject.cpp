@@ -1815,6 +1815,23 @@ void OMKLVStoredObject::streamRestore(void)
                                      k,
                                      gridSize);
       _storage->skipV(length);
+    } else if (OMMXFStorage::isFooter(k)) {
+      OMUInt32 bodySID;
+      OMUInt32 indexSID;
+      OMUInt32 gridSize;
+      _storage->readPartition(bodySID, indexSID, gridSize);
+      _storage->readKLVKey(k);
+      if (k == fillKey) {
+        _storage->readKLVFill();
+        _storage->readKLVKey(k);
+      }
+      OMUInt64 length = _storage->readKLVLength();
+      _storage->streamRestoreSegment(indexSID,
+                                     _storage->position(),
+                                     length,
+                                     k,
+                                     gridSize);
+      _storage->skipV(length);
     } else if (k == RandomIndexMetadataKey) {
       _storage->readRandomIndex();
     } else {
