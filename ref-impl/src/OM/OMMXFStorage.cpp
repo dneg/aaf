@@ -38,6 +38,7 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
 : OMWrappedRawStorage(store),
   _operationalPattern(nullOMKLVKey),
   _essenceContainerLabels(),
+  _generation(nullOMUniqueObjectIdentification),
   _instanceIdToObject(0),
   _objectToInstanceId(0)
 {
@@ -116,6 +117,15 @@ OMMXFStorage::essenceContainerLabels(void) const
                                                   OMBefore);
   ASSERT("Valid heap pointer", result != 0);
   return result;
+}
+
+  // @mfunc Set the file generation.
+  //   @parem The file generation.
+void
+OMMXFStorage::setGeneration(const OMUniqueObjectIdentification& generation)
+{
+  TRACE("OMMXFStorage::setGeneration");
+  _generation = generation;
 }
 
 OMMXFStorage::ObjectDirectory* OMMXFStorage::instanceIdToObject(void)
