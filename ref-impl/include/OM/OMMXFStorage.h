@@ -220,8 +220,8 @@ private:
   OMKLVKey _operationalPattern;
   LabelSet _essenceContainerLabels;
   OMUniqueObjectIdentification _generation;
-  OMUInt64 _objectDirectory;          // offset of object directory
-  OMUInt64 _objectDirectoryReference; // offset object directory reference
+  OMUInt64 _objectDirectoryOffset;    // offset of object directory
+  OMUInt64 _objectDirectoryReference; // offset of object directory offset
   ObjectDirectory* _instanceIdToObject;
   ObjectSet* _objectToInstanceId;
 
