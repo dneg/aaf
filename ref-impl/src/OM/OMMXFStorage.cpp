@@ -645,60 +645,51 @@ void OMMXFStorage::readPartition(OMUInt32& bodySID,
   }
 }
 
-bool OMMXFStorage::readHeaderPartition(void)
+void OMMXFStorage::readHeaderPartition(void)
 {
   TRACE("OMMXFStorage::readHeaderPartition");
 
   OMKLVKey k;
-  bool result = true;
   readKLVKey(k);
   k.octet14 = 0x02;
-  if (k == ClosedHeaderPartitionPackKey) {
-    readKLVLength();
-    OMUInt16 majorVersion;
-    read(majorVersion, _reorderBytes);
-    if (majorVersion != currentMajorVersion) {
-      result = false;
-    }
-    OMUInt16 minorVersion;
-    read(minorVersion, _reorderBytes);
-    if (minorVersion != currentMinorVersion) {
-      result = false;
-    }
-    OMUInt32 KAGSize;
-    read(KAGSize, _reorderBytes);
-    OMUInt64 thisPartition;
-    read(thisPartition, _reorderBytes);
-    OMUInt64 previousPartition;
-    read(previousPartition, _reorderBytes);
-    OMUInt64 footerPartition;
-    read(footerPartition, _reorderBytes);
-    OMUInt64 headerByteCount;
-    read(headerByteCount, _reorderBytes);
-    OMUInt64 indexByteCount;
-    read(indexByteCount, _reorderBytes);
-    OMUInt32 indexSID;
-    read(indexSID, _reorderBytes);
-    OMUInt64 bodyOffset;
-    read(bodyOffset, _reorderBytes);
-    OMUInt32 bodySID;
-    read(bodySID, _reorderBytes);
-    readKLVKey(_operationalPattern);
-    OMUInt32 elementCount;
-    read(elementCount, _reorderBytes);
-    OMUInt32 elementSize;
-    read(elementSize, _reorderBytes);
-    OMKLVKey essenceContainer;
-    for (OMUInt32 i = 0; i < elementCount; i++) {
-      readKLVKey(essenceContainer);
-      if (!containsEssenceContainerLabel(essenceContainer)) {
-        addEssenceContainerLabel(essenceContainer);
-      }
-    }
-  } else {
-    result = false;
+  ASSERT("Header key", k == ClosedHeaderPartitionPackKey);
+  readKLVLength();
+  OMUInt16 majorVersion;
+  read(majorVersion, _reorderBytes);
+  ASSERT("Expected major version", majorVersion == currentMajorVersion);
+  OMUInt16 minorVersion;
+  read(minorVersion, _reorderBytes);
+  ASSERT("Expected minor version", minorVersion == currentMinorVersion);
+  OMUInt32 KAGSize;
+  read(KAGSize, _reorderBytes);
+  OMUInt64 thisPartition;
+  read(thisPartition, _reorderBytes);
+  OMUInt64 previousPartition;
+  read(previousPartition, _reorderBytes);
+  OMUInt64 footerPartition;
+  read(footerPartition, _reorderBytes);
+  OMUInt64 headerByteCount;
+  read(headerByteCount, _reorderBytes);
+  OMUInt64 indexByteCount;
+  read(indexByteCount, _reorderBytes);
+  OMUInt32 indexSID;
+  read(indexSID, _reorderBytes);
+  OMUInt64 bodyOffset;
+  read(bodyOffset, _reorderBytes);
+  OMUInt32 bodySID;
+  read(bodySID, _reorderBytes);
+  readKLVKey(_operationalPattern);
+  OMUInt32 elementCount;
+  read(elementCount, _reorderBytes);
+  OMUInt32 elementSize;
+  read(elementSize, _reorderBytes);
+  OMKLVKey essenceContainer;
+  for (OMUInt32 i = 0; i < elementCount; i++) {
+    readKLVKey(essenceContainer);
+    if (!containsEssenceContainerLabel(essenceContainer)) {
+      addEssenceContainerLabel(essenceContainer);
+     }
   }
-  return result;
 }
 
 bool OMMXFStorage::read(const OMRawStorage* store,
