@@ -1778,7 +1778,44 @@ void OMMXFStorage::streamWriteAt(OMUInt32 sid,
                                  const void* clientArgument)
 {
   TRACE("OMMXFStorage::streamWriteAt");
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Valid buffer", buffer != 0);
+  PRECONDITION("Buffer not empty", bytes != 0);
+
+  // Grow stream if needed
+  OMUInt64 streamBytes = 0;
+  Stream* s = 0;
+  segmentMap()->find(sid, s);
+  if (s != 0) {
+    streamBytes = allocatedSize(s);
+  }
+  if ((position + bytes) > streamBytes) {
+    streamGrow(sid, (position + bytes) - streamBytes);
+  }
+  // Map position (and check that we don't split buffers)
+  OMUInt64 rawPosition;
+  OMUInt32 rawByteCount;
+  streamFragment(sid,
+                 position,
+                 bytes,
+                 rawPosition,
+                 rawByteCount);
+  ASSERT("Buffer not split", bytes == rawByteCount);
+  // Write through the raw storage
+  OMWrappedRawStorage::streamWriteAt(rawPosition,
+                                     buffer,
+                                     bytes,
+                                     completion,
+                                     clientArgument);
+  // The I/O hasn't happened yet, we can't predict whethter or not it will
+  // succeed, in any case this range of bytes becomes part of the stream
+  OMUInt32 bytesWritten = bytes;
+  // Update stream size
+  segmentMap()->find(sid, s);
+  ASSERT("Stream found", s != 0);
+  OMUInt64 newPosition = position + bytesWritten;
+  if (newPosition > s->_size) {
+    s->_size = newPosition;
+  }
 }
 
 void OMMXFStorage::streamWriteAt(OMUInt32 sid,
