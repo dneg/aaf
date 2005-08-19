@@ -1294,14 +1294,14 @@ void OMMXFStorage::fixupReference(OMUInt64 patchOffset, OMUInt64 patchValue)
   setPosition(savedPosition);
 }
 
-void OMMXFStorage::restoreObjectDirectory(void)
+void OMMXFStorage::restoreObjectDirectory(OMUInt64 headerOffset)
 {
   TRACE("OMMXFStorage::restoreObjectDirectory");
   PRECONDITION("Valid metadata directory", _instanceIdToObject != 0);
   PRECONDITION("Valid metadata directory offset", _objectDirectoryOffset != 0);
 
   OMUInt64 savedPosition = position();
-  setPosition(_objectDirectoryOffset);
+  setPosition(_objectDirectoryOffset + headerOffset);
 
   OMKLVKey k;
   readKLVKey(k);
