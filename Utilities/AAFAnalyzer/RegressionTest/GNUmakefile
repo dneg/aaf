@@ -23,6 +23,8 @@
 ###############################################################################
 
 
-PROGNAME = AAFAnalyzerTest
+PROGNAME = RegressionTest
+
+PROGLIBS = -lAAFAnalyzerBase -lTestPhaseLib
 
 include ../aafanalyzer.mk
