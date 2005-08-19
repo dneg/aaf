@@ -45,45 +45,45 @@ public:
     // @cmember Destructor.
   ~OMKLVStoredStream(void);
 
-    // @cmember Read <p size> bytes from this <c OMXMLStoredStream>
+    // @cmember Read <p size> bytes from this <c OMKLVStoredStream>
     //          into the buffer at address <p data>.
   virtual void read(void* data, size_t size) const;
 
     // @cmember Attempt to read <p bytes> bytes from this
-    //          <c OMXMLStoredStream> into the buffer at address <p data>.
+    //          <c OMKLVStoredStream> into the buffer at address <p data>.
     //          The actual number of bytes read is returned in <p bytesRead>.
   virtual void read(OMByte* data,
                     const OMUInt32 bytes,
                     OMUInt32& bytesRead) const;
 
     // @cmember Write <p size> bytes from the buffer at address
-    //          <p data> to this <c OMXMLStoredStream>.
+    //          <p data> to this <c OMKLVStoredStream>.
   virtual void write(void* data, size_t size);
 
     // @cmember Attempt to write <p bytes> bytes from the buffer at
-    //          address <p data> to this <c OMXMLStoredStream>. The actual
+    //          address <p data> to this <c OMKLVStoredStream>. The actual
     //          number of bytes written is returned in <p bytesWritten>.
   virtual void write(const OMByte* data,
                      const OMUInt32 bytes,
                      OMUInt32& bytesWritten);
 
-    // @cmember The size of this <c OMXMLStoredStream> in bytes.
+    // @cmember The size of this <c OMKLVStoredStream> in bytes.
   virtual OMUInt64 size(void) const;
 
-    // @cmember Set the size of this <c OMXMLStoredStream> to <p bytes>.
+    // @cmember Set the size of this <c OMKLVStoredStream> to <p bytes>.
   virtual void setSize(const OMUInt64 newSize);
 
     // @cmember The current position for <f read()> and
     //          <f write()>, as an offset in bytes from the
-    //          begining of this <c OMXMLStoredStream>.
+    //          begining of this <c OMKLVStoredStream>.
   virtual OMUInt64 position(void) const;
 
     // @cmember Set the current position for <f read()> and
     //          <f write()>, as an offset in bytes from the
-    //          begining of this <c OMXMLStoredStream>.
+    //          begining of this <c OMKLVStoredStream>.
   virtual void setPosition(const OMUInt64 offset) const;
 
-    // @cmember Close this <c OMXMLStoredStream>.
+    // @cmember Close this <c OMKLVStoredStream>.
   virtual void close(void);
 
   virtual OMUInt32 streamIdentification(void) const;
