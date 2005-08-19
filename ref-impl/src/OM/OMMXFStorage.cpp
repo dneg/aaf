@@ -36,6 +36,8 @@
 #include "OMType.h"
 #include "OMUniqueObjectIdentType.h"
 
+//#define INSTANCEID_DEBUG 1
+
   // @mfunc Constructor.
 OMMXFStorage::OMMXFStorage(OMRawStorage* store)
 : OMWrappedRawStorage(store),
@@ -766,6 +768,25 @@ OMUInt64 OMMXFStorage::readBerLength(const OMRawStorage* store)
       result = result << 8;
       result = result + b;
     }
+  }
+  return result;
+}
+
+OMUniqueObjectIdentification OMMXFStorage::instanceId(OMStorable* object)
+{
+  TRACE("OMMXFStorage::instanceId");
+  PRECONDITION("Valid object", object != 0);
+
+  OMUniqueObjectIdentification result;
+  if (!objectToInstanceId()->find(object, result)) {
+#if defined(INSTANCEID_DEBUG)
+    static OMUInt32 seed = 0;
+    memset(&result, 0, sizeof(result));
+    result.Data1 = ++seed;
+#else
+    result = createUniqueIdentifier();
+#endif
+    objectToInstanceId()->insert(object, result);
   }
   return result;
 }
