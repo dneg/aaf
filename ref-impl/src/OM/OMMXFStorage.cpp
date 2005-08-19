@@ -256,6 +256,19 @@ bool OMMXFStorage::isBody(const OMKLVKey& k)
   return result;
 }
 
+bool OMMXFStorage::isFooter(const OMKLVKey& k)
+{
+  bool result;
+  if (memcmp(&FooterKey, &k, sizeof(k)) == 0) {
+    result = true;
+  } else if (memcmp(&CompleteFooterKey, &k, sizeof(k)) == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 void OMMXFStorage::writeHeaderPartition(OMUInt32 bodySID,
                                         OMUInt32 indexSID,
                                         OMUInt32 KAGSize)
