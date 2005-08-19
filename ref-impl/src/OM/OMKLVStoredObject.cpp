@@ -2547,16 +2547,15 @@ void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
     OMUInt32 count = rt->memberCount();
     _storage->write(count, _reorderBytes);
     for (OMUInt32 i = 0; i < count; i++) {
-      const OMRecordType::Member member = rt->member(i);
       // MemberType
-      const OMType* mType = member._type;
+      const OMType* mType = rt->memberType(i);
       OMUniqueObjectIdentification id = mType->identification();
       ASSERT("Valid identification", id != nullOMUniqueObjectIdentification);
       OMKLVKey k;
       convert(k, id);
       _storage->writeKLVKey(k);
       // MemberName
-      const wchar_t* mName = member._name;
+      const wchar_t* mName = rt->memberName(i);
       write(mName);
     }
     break;
