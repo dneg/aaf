@@ -279,6 +279,10 @@ public:
 
   static void readKLVFill(OMRawStorage* store);
 
+  static void skipLV(OMRawStorage* store);
+
+  static void skipKLVFill(OMRawStorage* store);
+
   static void read(OMRawStorage* store, OMUInt8& i);
   static void read(OMRawStorage* store, OMUInt16& i, bool reorderBytes);
   static void read(OMRawStorage* store, OMUInt32& i, bool reorderBytes);
