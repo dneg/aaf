@@ -1202,7 +1202,7 @@ OMUInt64 OMMXFStorage::streamSize(OMUInt32 sid)
   return result;
 }
 
-void OMMXFStorage::streamSetSize(OMUInt32 sid, OMUInt64 newSize)
+void OMMXFStorage::streamSetSize(OMUInt32 /* sid */, OMUInt64 /* newSize */)
 {
 }
 
