@@ -45,6 +45,11 @@ class OMStoredStream;
 class OMDataStreamProperty;
 class OMKLVStoredStream;
 
+class OMDictionary;
+class OMClassDefinition;
+class OMPropertyDefinition;
+class OMType;
+
   // @class In-memory representation of an object persisted in a
   //        SMPTE (Society of Motion Picture and Television Engineers)
   //        Key Length Value (KLV) binary file.
@@ -281,6 +286,14 @@ public:
   void saveObjectDirectoryReference(const OMUniqueObjectIdentification& id);
 
   OMUInt64 restoreObjectDirectoryReference(OMUniqueObjectIdentification& id);
+
+  void writeMetaDictionary(const OMDictionary* dictionary);
+
+  void writeClassDefinition(const OMClassDefinition* cd);
+
+  void writePropertyDefinition(const OMPropertyDefinition* pd);
+
+  void writeTypeDefinition(const OMType* td);
 
 private:
   // @access Private members.
