@@ -245,6 +245,11 @@ public:
                    const OMUInt64& currentPosition,
                    const OMUInt32& KAGSize);
 
+    // @cmember Write fill so that the next value is page aligned.
+  static void fillAlignV(OMRawStorage* store,
+                         const OMUInt64& currentPosition,
+                         const OMUInt32& KAGSize);
+
   static void writeKLVKey(OMRawStorage* store, const OMKLVKey& key);
 
   static void writeKLVLength(OMRawStorage* store, const OMUInt8& length);
