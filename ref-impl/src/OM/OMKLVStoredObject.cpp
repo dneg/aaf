@@ -1207,11 +1207,52 @@ void OMKLVStoredObject::restore(OMDataStream& /* stream */,
 void OMKLVStoredObject::write(const wchar_t* string)
 {
   TRACE("OMKLVStoredObject::write");
+#if defined(OM_EXTENSIONSONLY)
+
+  PRECONDITION("Valid string", string != 0); // L"" is OK
+
+  // include terminating null
+  size_t characterCount = lengthOfWideString(string) + 1;
+  const OMByte* bits = reinterpret_cast<const OMByte*>(string);
+  OMType* stringType = OMStringType::instance();
+
+  OMPropertySize internalBytesSize = characterCount * sizeof(wchar_t);
+  OMPropertySize externalBytesSize =
+    stringType->externalSize(bits, internalBytesSize);
+
+  ASSERT("Valid length", externalBytesSize <= (size_t)OMINT16_MAX);
+  OMUInt16 len = externalBytesSize;
+  _storage->write(len, _reorderBytes);
+
+  OMByte* buffer = new OMByte[externalBytesSize];
+  ASSERT("Valid heap pointer", buffer != 0);
+
+  stringType->externalize(bits,
+                          internalBytesSize,
+                          buffer,
+                          externalBytesSize,
+                          hostByteOrder());
+  if (_reorderBytes) {
+    stringType->reorder(buffer, externalBytesSize);
+  }
+  _storage->write(buffer, externalBytesSize);
+  delete [] buffer;
+#endif
 }
 
 void OMKLVStoredObject::write(bool b)
 {
   TRACE("OMKLVStoredObject::write");
+#if defined(OM_EXTENSIONSONLY)
+
+  OMByte byte;
+  if (b) {
+    byte = 0xff; // true
+  } else {
+    byte = 0x00; // false
+  }
+  _storage->write(byte);
+#endif
 }
 
 void OMKLVStoredObject::writeProperty(OMPropertyId pid, const OMUInt32& value)
@@ -2112,21 +2153,444 @@ OMKLVStoredObject::restoreObjectDirectoryReference(
 void OMKLVStoredObject::writeMetaDictionary(const OMDictionary* dictionary)
 {
   TRACE("OMKLVStoredObject::writeMetaDictionary");
+#if defined(OM_EXTENSIONSONLY)
+  OMSet<OMUniqueObjectIdentification,
+        const OMClassDefinition*> extensionClasses;
+  OMSet<OMUniqueObjectIdentification,
+        const OMPropertyDefinition*> extensionProperties;
+  OMSet<OMUniqueObjectIdentification,
+        const OMType*> extensionTypes;
+  ClassDefinitionsIterator* classes = dictionary->classDefinitions();
+  while (++(*classes)) {
+    OMObject* cdef = classes->currentObject();
+    OMClassDefinition* classDefinition =
+                                        dynamic_cast<OMClassDefinition*>(cdef);
+    ASSERT("Object is correct type", classDefinition != 0);
+    if (!classDefinition->isPredefined()) {
+      // Add classDefinition to output set
+      extensionClasses.insert(classDefinition->identification(),
+                              classDefinition);
+    }
+    PropertyDefinitionsIterator*
+                           properties = classDefinition->propertyDefinitions();
+    while (++(*properties)) {
+      OMObject* pdef = properties->currentObject();
+      OMPropertyDefinition* propertyDefinition =
+                                     dynamic_cast<OMPropertyDefinition*>(pdef);
+      ASSERT("Object is correct type", propertyDefinition != 0);
+      if (!propertyDefinition->isPredefined()) {
+        OMUniqueObjectIdentification id = propertyDefinition->identification();
+        if (!extensionProperties.contains(id)) {
+          // Add propertyDefinition to output set
+          extensionProperties.insert(propertyDefinition->identification(),
+                                     propertyDefinition);
+
+          const OMType* typeDefinition = propertyDefinition->type();
+          // ASSERT("Valid type", typeDefinition != 0);
+          if (typeDefinition != 0) { // tjb - wtf ?
+            if (!typeDefinition->isPredefined()) {
+              if (!extensionTypes.contains(typeDefinition->identification())) {
+                //  Add type Definition to output set
+                extensionTypes.insert(typeDefinition->identification(),
+                                      typeDefinition);
+
+                // Process (recursively) dependendant types
+                //
+                TypeCollector tc(extensionTypes);
+                typeDefinition->accept(tc);
+              }
+            }
+          }
+        }
+      }
+    }
+    delete properties;
+  }
+  delete classes;
+
+  // Output extension definitions
+  OMSetIterator<OMUniqueObjectIdentification,
+                const OMClassDefinition*> extcl(extensionClasses, OMBefore);
+  OMSetIterator<OMUniqueObjectIdentification,
+                const OMPropertyDefinition*> extprop(extensionProperties,
+                                                     OMBefore);
+  OMSetIterator<OMUniqueObjectIdentification,
+                const OMType*> exttype(extensionTypes, OMBefore);
+
+  size_t total = extcl.count() + extprop.count() + exttype.count();
+  if (total != 0) {
+
+    // Output KL for meta dictionary
+    OMKLVKey metaDictionary =
+      {0x8A, 0xE5, 0x95, 0x9D, 0x57, 0xB3, 0xDA, 0x33,
+       0x8A, 0x5F, 0xB4, 0x11, 0x4D, 0x66, 0x4B, 0x40};
+    _storage->writeKLVKey(metaDictionary);
+    OMUInt64 lengthPosition = _storage->reserveKLVLength();
+
+    // Output set of extension classes
+    while (++extcl) {
+      const OMClassDefinition* cd = extcl.value();
+      writeClassDefinition(cd);
+    }
+
+    // Output set of extension properties
+    while (++extprop) {
+      const OMPropertyDefinition* pd = extprop.value();
+      writePropertyDefinition(pd);
+    }
+
+    // Output set of extension types
+    while (++exttype) {
+      const OMType* td = exttype.value();
+      writeTypeDefinition(td);
+    }
+
+    // fixup length of KLV packet
+    _storage->fixupKLVLength(lengthPosition);
+
+  } // else no extensions - no dictionary
+#endif
 }
 
 void OMKLVStoredObject::writeClassDefinition(const OMClassDefinition* cd)
 {
   TRACE(" OMKLVStoredObject::writeClassDefinition");
+#if defined(OM_EXTENSIONSONLY)
+
+  // length
+  OMUInt64 p = _storage->reserve(sizeof(OMUInt16));
+
+  // tag
+  OMByte classTag = 0x10;
+  _storage->write(classTag);
+
+  // identification (key)
+  OMUniqueObjectIdentification id = cd->identification();
+  OMKLVKey k;
+  convert(k, id);
+  _storage->writeKLVKey(k);
+
+  // name (string)
+  const wchar_t* className = cd->name();
+  write(className);
+
+  // description (string)
+  if (cd->hasDescription()) {
+    const wchar_t* classDescription = cd->description();
+    ASSERT("Valid class description", classDescription != 0);
+    write(classDescription);
+  } else {
+    // Not present
+    OMUInt16 len = 0;
+    _storage->write(len, _reorderBytes);
+  }
+
+  // parent (key)
+  const OMClassDefinition* pc = cd->parent();
+  if (pc != 0) {
+    id = pc->identification();
+    convert(k, id);
+  } else {
+    memset(&k, 0, sizeof(OMKLVKey)); // tjb - or loop ?
+  }
+  _storage->writeKLVKey(k);
+
+  // properties [not in this flat dictionary]
+
+  // isConcrete (boolean)
+  write(cd->isConcrete());
+
+  // fixup length
+  _storage->fixup(p, (OMUInt16)(_storage->position() - p - sizeof(OMUInt16)));
+#endif
 }
 
 void OMKLVStoredObject::writePropertyDefinition(const OMPropertyDefinition* pd)
 {
   TRACE("OMKLVStoredObject::writePropertyDefinition");
+#if defined(OM_EXTENSIONSONLY)
+
+  // length
+  OMUInt64 p = _storage->reserve(sizeof(OMUInt16));
+
+  // tag
+  OMByte propertyTag = 0x20;
+  _storage->write(propertyTag);
+
+  // identification (key)
+  OMUniqueObjectIdentification id = pd->identification();
+  OMKLVKey k;
+  convert(k, id);
+  _storage->writeKLVKey(k);
+
+  // name (string)
+  const wchar_t* propertyName = pd->name();
+  write(propertyName);
+
+  // description (string)
+  if (pd->hasDescription()) {
+    const wchar_t* propertyDescription = pd->description();
+    ASSERT("Valid property description", propertyDescription != 0);
+    write(propertyDescription);
+  } else {
+    // Not present
+    OMUInt16 len = 0;
+    _storage->write(len, _reorderBytes);
+  }
+
+  // type (key)
+  const OMType* t = pd->type();
+  if (t != 0) { // tjb - wtf
+    id = t->identification();
+    convert(k, id);
+  } else {
+    memset(&k, 0, sizeof(OMKLVKey));
+  }
+  _storage->writeKLVKey(k);
+
+  // isRequired (boolean)
+  write(!pd->isOptional());
+
+  // localIdentification (UInt16) [not here - already in primer]
+
+  // member of (key) [not in other (unflattened) dictionaries]
+  memset(&id, 0, sizeof(OMUniqueObjectIdentification)); // tjb
+  convert(k, id);
+  _storage->writeKLVKey(k);
+
+  // fixup length
+  _storage->fixup(p, (OMUInt16)(_storage->position() - p - sizeof(OMUInt16)));
+#endif
 }
 
 void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
 {
   TRACE("OMKLVStoredObject::writeTypeDefinition");
+#if defined(OM_EXTENSIONSONLY)
+
+  // length
+  OMUInt64 p = _storage->reserve(sizeof(OMUInt16));
+
+  // tag
+  OMByte typeTag = td->tag();
+  _storage->write(typeTag + 0x30);
+
+  // identification (key)
+  OMUniqueObjectIdentification id = td->identification();
+  OMKLVKey k;
+  convert(k, id);
+  _storage->writeKLVKey(k);
+
+  // name (string)
+  const wchar_t* typeName = td->name();
+  write(typeName);
+
+  // description (string)
+  if (td->hasDescription()) {
+    const wchar_t* typeDescription = td->description();
+    ASSERT("Valid type description", typeDescription != 0);
+    write(typeDescription);
+  } else {
+    // Not present
+    OMUInt16 len = 0;
+    _storage->write(len, _reorderBytes);
+  }
+
+  switch(typeTag) {
+  case OMType::OMTTInteger: {
+    const OMIntegerType* it = dynamic_cast<const OMIntegerType*>(td);
+    ASSERT("Correct type", it != 0);
+    // Size
+    OMUInt8 sz = it->size();
+    _storage->write(sz);
+    // IsSigned
+    bool isSigned = false;
+    write(isSigned);
+    break;
+    }
+  case OMType::OMTTCharacter: {
+    const OMCharacterType* ct = dynamic_cast<const OMCharacterType*>(td);
+    ASSERT("Correct type", ct != 0);
+    // No additional attributes
+    break;
+    }
+  case OMType::OMTTStrongObjectReference: {
+    const OMStrongObjectReferenceType* rt =
+                          dynamic_cast<const OMStrongObjectReferenceType*>(td);
+    ASSERT("Correct type", rt != 0);
+    // ReferencedType
+    OMUniqueObjectIdentification id = rt->referencedType();
+    OMKLVKey k;
+    convert(k, id);
+    _storage->writeKLVKey(k);
+    break;
+    }
+  case OMType::OMTTWeakObjectReference: {
+    const OMWeakObjectReferenceType* rt =
+                            dynamic_cast<const OMWeakObjectReferenceType*>(td);
+    ASSERT("Correct type", rt != 0);
+    // ReferencedType
+    OMUniqueObjectIdentification id = rt->referencedType();
+    OMKLVKey k;
+    convert(k, id);
+    _storage->writeKLVKey(k);
+    // TargetPathElementCount
+    OMUInt32 count = rt->targetPathElementCount();
+    _storage->write(count, _reorderBytes);
+    // TargetPath
+    for (OMUInt32 i = 0; i < count; i++) {
+      const OMUniqueObjectIdentification& element = rt->targetPathElement(i);
+      convert(k, element);
+      _storage->writeKLVKey(k);
+    }
+    break;
+    }
+  case OMType::OMTTRename: {
+    const OMRenamedType* rt = dynamic_cast<const OMRenamedType*>(td);
+    ASSERT("Correct type", rt != 0);
+    // RenamedType
+    OMType* renType = rt->renamedType();
+    OMUniqueObjectIdentification id = renType->identification();
+    OMKLVKey k;
+    convert(k, id);
+    _storage->writeKLVKey(k);
+    break;
+    }
+  case OMType::OMTTEnumerated: {
+    const OMEnumeratedType* et = dynamic_cast<const OMEnumeratedType*>(td);
+    ASSERT("Correct type", et != 0);
+    // ElementType
+    OMType* elType = et->elementType();
+    OMUniqueObjectIdentification id = elType->identification();
+    OMKLVKey k;
+    convert(k, id);
+    _storage->writeKLVKey(k);
+    // ElementCount
+    OMUInt32 count = et->elementCount();
+    _storage->write(count, _reorderBytes);
+    for (OMUInt32 i = 0; i < count; i++) {
+      const OMEnumeratedType::Element& element = et->element(i);
+      // ElementName
+      const wchar_t* eName = element._name;
+      write(eName);
+      // ElementValue
+      OMUInt64 eValue = element._value;
+      _storage->write(eValue, _reorderBytes);
+    }
+    break;
+    }
+  case OMType::OMTTFixedArray: {
+    const OMFixedArrayType* at = dynamic_cast<const OMFixedArrayType*>(td);
+    ASSERT("Correct type", at != 0);
+    // ElementType
+    OMType* elType = at->elementType();
+    OMUniqueObjectIdentification id = elType->identification();
+    OMKLVKey k;
+    convert(k, id);
+    _storage->writeKLVKey(k);
+    // ElementCount
+    OMUInt32 count = at->elementCount();
+    _storage->write(count, _reorderBytes);
+    break;
+    }
+  case OMType::OMTTVaryingArray: {
+    const OMVaryingArrayType* at = dynamic_cast<const OMVaryingArrayType*>(td);
+    ASSERT("Correct type", at != 0);
+    // ElementType
+    OMType* elType = at->elementType();
+    OMUniqueObjectIdentification id = elType->identification();
+    OMKLVKey k;
+    convert(k, id);
+    _storage->writeKLVKey(k);
+    break;
+    }
+  case OMType::OMTTSet: {
+    const OMSetType* st = dynamic_cast<const OMSetType*>(td);
+    ASSERT("Correct type", st != 0);
+    // ElementType
+    OMType* elType = st->elementType();
+    OMUniqueObjectIdentification id = elType->identification();
+    OMKLVKey k;
+    convert(k, id);
+    _storage->writeKLVKey(k);
+    break;
+    }
+  case OMType::OMTTRecord: {
+    const OMRecordType* rt = dynamic_cast<const OMRecordType*>(td);
+    ASSERT("Correct type", rt != 0);
+    // MemberCount
+    OMUInt32 count = rt->memberCount();
+    _storage->write(count, _reorderBytes);
+    for (OMUInt32 i = 0; i < count; i++) {
+      const OMRecordType::Member& member = rt->member(i);
+      // MemberType
+      OMType* mType = member._type;
+      OMUniqueObjectIdentification id = mType->identification();
+      OMKLVKey k;
+      convert(k, id);
+      _storage->writeKLVKey(k);
+      // MemberName
+      const wchar_t* mName = member._name;
+      write(mName);
+    }
+    break;
+    }
+  case OMType::OMTTStream: {
+    const OMStreamType* st = dynamic_cast<const OMStreamType*>(td);
+    ASSERT("Correct type", st != 0);
+    // No additional attributes
+    break;
+    }
+  case OMType::OMTTString: {
+    const OMStringType* st = dynamic_cast<const OMStringType*>(td);
+    ASSERT("Correct type", st != 0);
+    // ElementType
+    OMType* elType = st->elementType();
+    OMUniqueObjectIdentification id = elType->identification();
+    OMKLVKey k;
+    convert(k, id);
+    _storage->writeKLVKey(k);
+    break;
+    }
+  case OMType::OMTTExtendibleEnumerated: {
+    const OMExtendibleEnumeratedType* ot =
+                           dynamic_cast<const OMExtendibleEnumeratedType*>(td);
+    ASSERT("Correct type", ot != 0);
+    // ElementCount
+    OMUInt32 count = ot->elementCount();
+    _storage->write(count, _reorderBytes);
+    for (OMUInt32 i = 0; i < count; i++) {
+      const OMExtendibleEnumeratedType::Element& element = ot->element(i);
+      // ElementName
+      const wchar_t* eName = element._name;
+      write(eName);
+      // ElementValue
+      OMUniqueObjectIdentification id = element._value;
+      OMKLVKey k;
+      convert(k, id);
+      _storage->writeKLVKey(k);
+    }
+    break;
+    }
+  case OMType::OMTTIndirect: {
+    const OMIndirectType* ot = dynamic_cast<const OMIndirectType*>(td);
+    ASSERT("Correct type", ot != 0);
+    // No additional attributes
+    break;
+    }
+  case OMType::OMTTOpaque: {
+    const OMOpaqueType* ot = dynamic_cast<const OMOpaqueType*>(td);
+    ASSERT("Correct type", ot != 0);
+    // No additional attributes
+    break;
+    }
+  default:
+    ASSERT("All cases handled", false);
+    break;
+  }
+  // fixup length
+  _storage->fixup(p, (OMUInt16)(_storage->position() - p - sizeof(OMUInt16)));
+#endif
 }
 
   // @mfunc Constructor.
