@@ -263,7 +263,9 @@ void OMKLVStoredObject::save(OMFile& file)
   fill(_storage, currentPosition, KAGSize);
 
   // Save streams
-  streamSave(*file.root()->propertySet());
+  if (!metaDataOnly) {
+    streamSave(*file.root()->propertySet());
+  }
 }
 
 void OMKLVStoredObject::save(OMStorable& object)
@@ -554,8 +556,9 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
 
   skipLV(_storage); // This V is fill
 
-  streamRestore(_storage);
-
+  if (!metaDataOnly) {
+    streamRestore(_storage);
+  }
 #if defined(INSTANCEID_DEBUG)
 
   if (_instanceIdToObject != 0) {
