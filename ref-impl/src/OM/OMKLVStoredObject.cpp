@@ -76,6 +76,9 @@
 #include "OMRawStorage.h"
 
 #define USETAGTABLE 1
+//#define OM_EXTENSIONSONLY 1
+
+#include "OMTypeVisitor.h"
 
   // @mfunc Open the root <c OMKLVStoredObject> in the raw storage
   //        <p rawStorage> for reading only.
@@ -386,7 +389,29 @@ void OMKLVStoredObject::save(OMFile& file)
   _storage->fillAlignK(_storage->position(), defaultKAGSize);
 
   // Save the rest of the file
+#if defined(OM_EXTENSIONSONLY)
+  // Get the (hidden) root object
+  OMStorable* root = file.root();
+
+  // Get the meta-dictionary and save it
+  OMProperty* mdp = root->propertySet()->get(PID_Root_MetaDictionary);
+  OMStrongReference* mdsr = dynamic_cast<OMStrongReference*>(mdp);
+  ASSERT("Valid type", mdsr != 0);
+  OMStrongObjectReference& mdr = mdsr->reference();
+  OMStorable* mdo = mdr.getValue();
+  ASSERT("Valid object", mdo != 0);
+  OMDictionary* dictionary = dynamic_cast<OMDictionary*>(mdo);
+  ASSERT("Valid dictionary", dictionary != 0);
+
+  writeMetaDictionary(dictionary);
+
+  // Get the client root and save it
+  OMStorable* cr = file.clientRoot();
+  cr->save();
+
+#else
   file.root()->save();
+#endif
 
   // Save the meta object directory
   _storage->saveObjectDirectory();
