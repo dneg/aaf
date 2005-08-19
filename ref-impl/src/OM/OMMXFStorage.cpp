@@ -59,6 +59,7 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
   _sidToStream(0),
   _maxSid(0),
   _segmentMap(0),
+  _segments(0),
   _fileSize(0),
   _primerOffset(0)
 {
@@ -103,6 +104,12 @@ OMMXFStorage::~OMMXFStorage(void)
     _sidToStream->clear();
     delete _sidToStream;
     _sidToStream = 0;
+  }
+
+  if (_segments != 0) {
+//  _segments->clear();
+    delete _segments;
+    _segments = 0;
   }
 
   destroySegmentMap();
@@ -1782,6 +1789,12 @@ OMMXFStorage::addSegment(Stream* s,
   result->_stream = s;
   s->_segments->append(result);
   _fileSize = _fileSize + size;
+
+  if (_segments == 0) {
+    _segments =  new SegmentList();
+     ASSERT("Valid heap pointer", _segments != 0);
+  }
+  _segments->append(result);
   return result;
 }
 
