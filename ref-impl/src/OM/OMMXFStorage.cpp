@@ -32,7 +32,10 @@
 #include "OMSet.h"
 #include "OMIdentitySet.h"
 #include "OMIdentitySetIter.h"
-#include "OMKLVStoredObject.h"
+#include "OMKLVStoredObject.h" // tjb -- temporary
+#include "OMType.h"
+#include "OMIntegerType.h"
+#include "OMUniqueObjectIdentType.h"
 
   // @mfunc Constructor.
 OMMXFStorage::OMMXFStorage(OMRawStorage* store)
@@ -268,6 +271,98 @@ void OMMXFStorage::fillAlignV(const OMUInt64& currentPosition,
   }
   remainder = remainder - minimumFill; // Subtract key and length of fill
   OMKLVStoredObject::writeKLVFill(this, remainder);
+}
+
+void OMMXFStorage::write(const OMByte* bytes,
+                         OMUInt32 byteCount,
+                         OMUInt32& bytesWritten)
+{
+  TRACE("OMMXFStorage::write");
+  OMWrappedRawStorage::write(bytes, byteCount, bytesWritten);
+}
+
+void OMMXFStorage::write(const OMUInt8& i)
+{
+  TRACE("OMMXFStorage::write");
+
+  OMUInt32 x;
+  write(&i, sizeof(OMUInt8), x);
+
+  POSTCONDITION("All bytes written", x == sizeof(OMUInt8));
+}
+
+void OMMXFStorage::write(const OMUInt16& i, bool reorderBytes)
+{
+  TRACE("OMMXFStorage::write");
+
+  OMUInt16 si = i;
+  OMByte* src = reinterpret_cast<OMByte*>(&si);
+  if (reorderBytes) {
+    OMType::reorderInteger(src, sizeof(OMUInt16));
+  }
+  OMUInt32 x;
+  write(src, sizeof(OMUInt16), x);
+
+  POSTCONDITION("All bytes written", x == sizeof(OMUInt16));
+}
+
+void OMMXFStorage::write(const OMUInt32& i, bool reorderBytes)
+{
+  TRACE("OMMXFStorage::write");
+
+  OMUInt32 si = i;
+  OMByte* src = reinterpret_cast<OMByte*>(&si);
+  if (reorderBytes) {
+    OMType::reorderInteger(src, sizeof(OMUInt32));
+  }
+  OMUInt32 x;
+  write(src, sizeof(OMUInt32), x);
+
+  POSTCONDITION("All bytes written", x == sizeof(OMUInt32));
+}
+
+void OMMXFStorage::write(const OMUInt64& i, bool reorderBytes)
+{
+  TRACE("OMMXFStorage::write");
+
+  OMUInt64 si = i;
+  OMByte* src = reinterpret_cast<OMByte*>(&si);
+  if (reorderBytes) {
+    OMInteger64Type::instance()->reorder(src, sizeof(OMUInt64));
+  }
+  OMUInt32 x;
+  write(src, sizeof(OMUInt64), x);
+
+  POSTCONDITION("All bytes written", x == sizeof(OMUInt64));
+}
+
+void OMMXFStorage::write(const OMUniqueObjectIdentification& id,
+                         bool reorderBytes)
+{
+  TRACE("OMMXFStorage::write");
+
+  OMUniqueObjectIdentification sid = id;
+  OMByte* src = reinterpret_cast<OMByte*>(&sid);
+  if (reorderBytes) {
+    OMUniqueObjectIdentificationType::instance()->reorder(
+                                         src,
+                                         sizeof(OMUniqueObjectIdentification));
+  }
+  OMUInt32 x;
+  write(src, sizeof(OMUniqueObjectIdentification), x);
+
+  POSTCONDITION("All bytes written",
+                                    x == sizeof(OMUniqueObjectIdentification));
+}
+
+void OMMXFStorage::write(const OMByte* buffer, const OMUInt32& bufferSize)
+{
+  TRACE("OMMXFStorage::write");
+
+  OMUInt32 x;
+  write(buffer, bufferSize, x);
+
+  POSTCONDITION("All bytes written", x == bufferSize);
 }
 
 OMMXFStorage::ObjectDirectory* OMMXFStorage::instanceIdToObject(void)
