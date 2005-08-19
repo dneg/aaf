@@ -78,6 +78,19 @@ OMMXFStorage::~OMMXFStorage(void)
     delete _objectToInstanceId;
     _objectToInstanceId = 0;
   }
+
+  if (_streamToStreamId != 0) {
+    _streamToStreamId->clear();
+    delete _streamToStreamId;
+    _streamToStreamId = 0;
+  }
+
+  if (_streamIdToStream != 0) {
+    _streamIdToStream->clear();
+    delete _streamIdToStream;
+    _streamIdToStream = 0;
+  }
+
   destroyFixups();
 }
 
