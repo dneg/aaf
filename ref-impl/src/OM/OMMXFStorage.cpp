@@ -45,6 +45,7 @@
 
 //#define INSTANCEID_DEBUG 1
 //#define OMONLY 1
+//#define OM_NEW_STREAM_PARSING
 
   // @mfunc Constructor.
 OMMXFStorage::OMMXFStorage(OMRawStorage* store)
@@ -1807,8 +1808,6 @@ void OMMXFStorage::saveStreams(void)
     writePartition(FooterKey, 0, 0, defaultKAGSize);
   }
 }
-
-//#define OM_NEW_STREAM_PARSING
 
 void OMMXFStorage::restoreStreams(void)
 {
