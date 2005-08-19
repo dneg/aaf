@@ -31,16 +31,19 @@
 
   // @mfunc Constructor.
 OMKLVStoredObjectFactory::OMKLVStoredObjectFactory(
-                                        const OMStoredObjectEncoding& encoding,
-                                        const wchar_t* name,
-                                        const wchar_t* description)
-: OMStoredObjectFactory(encoding, name, description)
+                                 const OMStoredObjectEncoding& encoding,
+                                 const OMUniqueObjectIdentification& signature,
+                                 const wchar_t* name,
+                                 const wchar_t* description)
+: OMStoredObjectFactory(encoding, signature, name, description)
 {
   TRACE("OMKLVStoredObjectFactory::OMKLVStoredObjectFactory");
 
   PRECONDITION("Valid name", validWideString(name));
   PRECONDITION("Valid name", validWideString(description));
   PRECONDITION("Valid encoding", encoding != nullOMStoredObjectEncoding);
+  PRECONDITION("Valid signature",
+                                signature != nullOMUniqueObjectIdentification);
 }
 
   // @mfunc Destructor.
