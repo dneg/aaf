@@ -42,7 +42,7 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
   _operationalPattern(nullOMKLVKey),
   _essenceContainerLabels(),
   _generation(nullOMUniqueObjectIdentification),
-  _objectDirectory(0),
+  _objectDirectoryOffset(0),
   _objectDirectoryReference(0),
   _instanceIdToObject(0),
   _objectToInstanceId(0)
@@ -780,7 +780,7 @@ void OMMXFStorage::saveObjectDirectory(void)
   } else {
     reorderBytes = true;
   }
-  _objectDirectory = position();
+  _objectDirectoryOffset = position();
 
   writeKLVKey(objectDirectoryKey);
   OMUInt64 entries = _instanceIdToObject->count();
@@ -804,7 +804,7 @@ void OMMXFStorage::saveObjectDirectory(void)
     write(e._flags);
   }
   // Now we know where it lives, fixup the reference
-  fixupReference(_objectDirectoryReference, _objectDirectory);
+  fixupReference(_objectDirectoryReference, _objectDirectoryOffset);
 }
 
 void OMMXFStorage::fixupReference(OMUInt64 patchOffset, OMUInt64 patchValue)
@@ -829,7 +829,7 @@ void OMMXFStorage::restoreObjectDirectory(void)
 {
   TRACE("OMMXFStorage::restoreObjectDirectory");
   PRECONDITION("Valid metadata directory", _instanceIdToObject != 0);
-  PRECONDITION("Valid metadata directory offset", _objectDirectory != 0);
+  PRECONDITION("Valid metadata directory offset", _objectDirectoryOffset != 0);
 
   bool reorderBytes;
   if (hostByteOrder() == bigEndian) {
@@ -838,7 +838,7 @@ void OMMXFStorage::restoreObjectDirectory(void)
     reorderBytes = true;
   }
   OMUInt64 savedPosition = position();
-  setPosition(_objectDirectory);
+  setPosition(_objectDirectoryOffset);
 
   OMKLVKey k;
   readKLVKey(k);
@@ -883,7 +883,7 @@ OMMXFStorage::setObjectDirectoryReference(OMUInt64 objectDirectoryReference)
 void OMMXFStorage::setObjectDirectoryOffset(OMUInt64 objectDirectoryOffset)
 {
   TRACE("OMMXFStorage::setObjectDirectoryOffset");
-  _objectDirectory = objectDirectoryOffset;
+  _objectDirectoryOffset = objectDirectoryOffset;
 }
 
 OMMXFStorage::ObjectDirectory* OMMXFStorage::instanceIdToObject(void)
