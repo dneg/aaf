@@ -134,9 +134,10 @@ public:
   virtual void write(const OMUInt64& i, bool reorderBytes);
   virtual void write(const OMUniqueObjectIdentification& id,
                      bool reorderBytes);
-  virtual void write(const OMKLVKey& key);
   virtual void write(const OMByte* buffer,
                      const OMUInt32& bufferSize);
+
+  virtual void writeKLVKey(const OMKLVKey& key);
 
   struct ObjectDirectoryEntry {
     OMStorable* _object;
