@@ -404,6 +404,7 @@ public:
     OMUInt64 _size;
     OMKLVKey _label;
     OMUInt32 _gridSize;
+    OMUInt32 _sid;
   };
 
   virtual SegmentListIterator* streamSegments(OMUInt32 sid) const;
