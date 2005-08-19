@@ -1797,10 +1797,8 @@ void OMKLVStoredObject::streamRestore(void)
   TRACE("OMKLVStoredObject::streamRestore")
 
   OMKLVKey k;
-  _storage->readKLVKey(k);
-
-  while (k != RandomIndexMetadataKey) {
-    if (k == ClosedBodyPartitionKey) {
+  while (_storage->readOuterKLVKey(k)) {
+    if (OMMXFStorage::isBody(k)) {
       OMUInt32 bodySID;
       OMUInt32 indexSID;
       OMUInt32 gridSize;
@@ -1808,8 +1806,8 @@ void OMKLVStoredObject::streamRestore(void)
       _storage->readKLVKey(k);
       if (k == fillKey) {
         _storage->readKLVFill();
+        _storage->readKLVKey(k);
       }
-      _storage->readKLVKey(k);
       OMUInt64 length = _storage->readKLVLength();
       _storage->streamRestoreSegment(bodySID,
                                      _storage->position(),
@@ -1817,12 +1815,13 @@ void OMKLVStoredObject::streamRestore(void)
                                      k,
                                      gridSize);
       _storage->skipV(length);
+    } else if (k == RandomIndexMetadataKey) {
+      _storage->readRandomIndex();
     } else {
       _storage->skipLV();
     }
-    _storage->readKLVKey(k);
   }
-  _storage->readRandomIndex();
+
 }
 
 void OMKLVStoredObject::referenceRestore(OMStorable* object,
