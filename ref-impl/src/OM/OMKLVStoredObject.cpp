@@ -104,6 +104,12 @@ void OMKLVStoredObject::close(void)
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
+void OMKLVStoredObject::close(OMFile& file)
+{
+  TRACE("OMKLVStoredObject::close");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
   // @mfunc The byte order of this <c OMKLVStoredObject>.
   //   @rdesc The byte order.
   //   @this const
