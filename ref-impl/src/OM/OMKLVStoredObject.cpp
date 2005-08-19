@@ -401,8 +401,6 @@ void OMKLVStoredObject::save(OMFile& file)
 
   // Write the footer
   //
-  OMUInt64 position = _storage->size();
-  _storage->setPosition(position);
   _storage->writeFooterPartition();
   _storage->writeRandomIndex();
 }
