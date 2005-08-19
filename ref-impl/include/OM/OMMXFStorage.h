@@ -160,6 +160,16 @@ public:
                         const OMUInt32& berValueSize,
                         const OMUInt64& value);
 
+  virtual void read(OMUInt8& i) const;
+  virtual void read(OMUInt16& i, bool reorderBytes) const;
+  virtual void read(OMUInt32& i, bool reorderBytes) const;
+  virtual void read(OMUInt64& i, bool reorderBytes) const;
+  virtual void read(OMUniqueObjectIdentification& id, bool reorderBytes) const;
+  virtual void read(OMByte* buffer, const OMUInt32& bufferSize) const;
+  virtual void read(OMByte* bytes,
+                    OMUInt32 byteCount,
+                    OMUInt32& bytesRead) const;
+
   struct ObjectDirectoryEntry {
     OMStorable* _object;
     OMUInt64 _offset;
