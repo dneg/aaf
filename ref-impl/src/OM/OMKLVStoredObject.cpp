@@ -1907,6 +1907,32 @@ void OMKLVStoredObject::fill(OMRawStorage* store,
   writeKLVFill(store, remainder);
 }
 
+  // @mfunc Write fill so that the next value is page aligned.
+  //   @parm The <c OMRawStorage> on which to write.
+  //   @parm The current position.
+  //   @parm The page/KAG size.
+void OMKLVStoredObject::fillAlignV(OMRawStorage* store,
+                                   const OMUInt64& currentPosition,
+                                   const OMUInt32& KAGSize)
+{
+  TRACE("OMKLVStoredObject::fillAlignV");
+
+#if defined(BER9)
+  OMUInt64 minimumFill = sizeof(OMKLVKey) + sizeof(OMUInt64) + 1;
+#else
+  OMUInt64 minimumFill = sizeof(OMKLVKey) + 3 + 1;
+#endif
+  OMUInt64 nextPage = (currentPosition / KAGSize) + 1;
+  OMUInt64 remainder = (nextPage * KAGSize) - currentPosition;
+  // Subtract key and length of triplet following this fill
+  remainder = remainder - (sizeof(OMKLVKey) + sizeof(OMUInt64) + 1);
+  if (remainder < minimumFill) {
+    remainder = remainder + KAGSize;
+  }
+  remainder = remainder - minimumFill; // Subtract key and length of fill
+  writeKLVFill(store, remainder);
+}
+
 void OMKLVStoredObject::writeKLVKey(OMRawStorage* store, const OMKLVKey& key)
 {
   TRACE("OMKLVStoredObject::writeKLVKey");
