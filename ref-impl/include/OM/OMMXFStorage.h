@@ -512,6 +512,7 @@ private:
   };
   OMVector<Partition*> _partitions;
   OMUInt64 _primerOffset;
+  OMUInt64 _metadataEnd;
 };
 
 #endif
