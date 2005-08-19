@@ -48,10 +48,10 @@ public:
   virtual ~OMMXFStorage(void);
 
     // @cmember Set the operational pattern to <p pattern>.
-  virtual void setOperationalPattern(const OMObjectIdentification& pattern);
+  virtual void setOperationalPattern(const OMKLVKey& pattern);
 
     // @cmember Get the operational pattern.
-  virtual OMObjectIdentification operationalPattern(void) const;
+  virtual OMKLVKey operationalPattern(void) const;
 
   struct ObjectDirectoryEntry {
     OMStorable* _object;
@@ -73,7 +73,7 @@ public:
 private:
   // @access Private members.
 
-  OMObjectIdentification _operationalPattern;
+  OMKLVKey _operationalPattern;
   ObjectDirectory* _instanceIdToObject;
   ObjectSet* _objectToInstanceId;
 
