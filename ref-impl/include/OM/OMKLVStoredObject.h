@@ -202,6 +202,9 @@ public:
   virtual void restore(OMDataStream& stream,
                        size_t externalSize);
 
+  virtual void writeProperty(OMPropertyId pid, const OMUInt32& value);
+  virtual void readProperty(const OMPropertyId& pid, OMUInt32& value);
+
   // Stream manipulation
 
     // @cmember Open the <c OMStoredStream> representing the property
