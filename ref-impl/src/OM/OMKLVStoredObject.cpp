@@ -2317,7 +2317,7 @@ void OMKLVStoredObject::writeClassDefinition(const OMClassDefinition* cd)
 
   // parent (key)
   // An extension cannot be a root
-  ASSERT("Class is not a root", !cd->hasParent());
+  ASSERT("Class is not a root", cd->hasParent());
   const OMClassDefinition* pc = cd->parent();
   ASSERT("Valid parent class definition", pc != 0);
   id = pc->identification();
