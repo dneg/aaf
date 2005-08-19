@@ -898,32 +898,41 @@ void OMKLVStoredObject::restore(OMDataVector& property,
 
   const OMType* propertyType = property.type();
   ASSERT("Valid property type", propertyType != 0);
+  const OMArrayType* at = dynamic_cast<const OMArrayType*>(propertyType);
+  ASSERT("Correct type", at != 0);
+  OMType* elementType = at->elementType();
+  ASSERT("Fixed size elements", elementType->isFixedSize());
+  OMUInt32 elementSize = elementType->externalSize();
+  ASSERT("Consistent element size", elementSize = property.elementSize());
 
-  // Allocate buffer for property value
-  OMByte* buffer = new OMByte[externalSize];
+  // Allocate buffer for one element
+  OMByte* buffer = new OMByte[elementSize];
   ASSERT("Valid heap pointer", buffer != 0);
+  OMByte* value = new OMByte[elementSize];
+  ASSERT("Valid heap pointer", value != 0);
 
-  _storage->read(buffer, externalSize);
+  OMUInt32 elementCount = externalSize / elementSize;
 
-  // Reorder property value
-  if (_reorderBytes) {
-    propertyType->reorder(buffer, externalSize);
+  for (OMUInt32 i = 0; i < elementCount; i++) {
+
+    // Read one element
+    _storage->read(buffer, elementSize);
+
+    // Reorder element
+    if (_reorderBytes) {
+      elementType->reorder(buffer, elementSize);
+    }
+
+    // Internalize element
+    elementType->internalize(buffer,
+                             elementSize,
+                             value,
+                             elementSize,
+                             hostByteOrder());
+    property.appendValue(value);
   }
-
-  // Internalize property value
-  size_t requiredBytesSize = propertyType->internalSize(buffer,
-                                                        externalSize);
-
-  property.setSize(requiredBytesSize);
-  ASSERT("Property value buffer large enough",
-                                       property.size() >= requiredBytesSize);
-  OMByte* bits = property.bits();
-  propertyType->internalize(buffer,
-                            externalSize,
-                            bits,
-                            requiredBytesSize,
-                            hostByteOrder());
   delete [] buffer;
+  delete [] value;
 }
 
 void OMKLVStoredObject::restore(OMDataSet& property,
