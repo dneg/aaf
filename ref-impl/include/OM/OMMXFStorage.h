@@ -110,6 +110,21 @@ public:
     // @cmember Set the file generation.
   virtual void setGeneration(const OMUniqueObjectIdentification& generation);
 
+  virtual void writeHeaderPartition(void);
+  virtual void writeBodyPartition(void);
+  virtual void writeFooterPartition(void);
+  virtual void writePartition(const OMKLVKey& key,
+                              OMUInt32 KAGSize,
+                              bool reorderBytes);
+
+    // @cmember Write fill so that the next key is page aligned.
+  virtual void fillAlignK(const OMUInt64& currentPosition,
+                          const OMUInt32& KAGSize);
+
+    // @cmember Write fill so that the next value is page aligned.
+  virtual void fillAlignV(const OMUInt64& currentPosition,
+                          const OMUInt32& KAGSize);
+
   struct ObjectDirectoryEntry {
     OMStorable* _object;
     OMUInt64 _offset;
