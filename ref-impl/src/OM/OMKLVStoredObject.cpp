@@ -430,11 +430,13 @@ void OMKLVStoredObject::save(const OMPropertySet& properties)
   TRACE("OMKLVStoredObject::save(OMPropertySet)");
 
   // Length
-  OMUInt64 setLength = length(properties);
-  _storage->writeKLVLength(setLength);
+  OMUInt64 lengthPosition = _storage->reserveKLVLength();
 
   // Flat properties
   flatSave(properties);
+
+  // patch length
+  _storage->fixupKLVLength(lengthPosition);
 
   // Deep properties
   deepSave(properties);
