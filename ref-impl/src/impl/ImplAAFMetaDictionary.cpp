@@ -306,7 +306,20 @@ void ImplAAFMetaDictionary::onRestore(void* /* clientContext */) const
 #endif // #if 0
 }
 
+void
+ImplAAFMetaDictionary::associate(const OMObjectIdentification& id,
+                                 const OMPropertyId propertyId)
+{
+#if 0 // tjb not yet
+  assert(_dataDictionary);
+  _dataDictionary->associate(*reinterpret_cast<const aafUID_t *>(&id), propertyId);
+#endif
+}
 
+ClassDefinitionsIterator* ImplAAFMetaDictionary::classDefinitions(void) const
+{
+  return _classDefinitions.createIterator();
+}
 
 // Temporary method to set the 
 void ImplAAFMetaDictionary::setDataDictionary(ImplAAFDictionary *dataDictionary)

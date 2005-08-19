@@ -122,8 +122,11 @@ public:
   virtual void onSave(void* clientContext) const;
   virtual void onRestore(void* clientContext) const;
 
+  // Overrides from OMDictionary
+  virtual void associate(const OMObjectIdentification& id,
+                         const OMPropertyId propertyId);
 
-
+  virtual ClassDefinitionsIterator* classDefinitions(void) const;
 
   //
   // Class and type access methods ...
