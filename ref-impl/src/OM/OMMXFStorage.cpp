@@ -1886,7 +1886,11 @@ void OMMXFStorage::restoreStreams(void)
       // Restore index stream segment
       //
       if (indexSID != 0) {
-        OMUInt64 indexSize = partitionStart - indexStart - fillBufferZoneSize;
+        OMUInt64 indexSize = partitionStart - indexStart;
+        // HACK4MEIP2
+        if (indexSize <= (indexSize - fillBufferZoneSize)) {
+          indexSize = indexSize - fillBufferZoneSize;
+        }
         streamRestoreSegment(indexSID,
                              indexStart,
                              indexSize,
