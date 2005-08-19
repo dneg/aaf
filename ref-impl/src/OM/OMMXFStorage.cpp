@@ -146,9 +146,27 @@ void OMMXFStorage::writeHeaderPartition(void)
   } else {
     reorderBytes = true;
   }
-  writePartition(ClosedHeaderPartitionPackKey, KAGSize, reorderBytes);
+#if defined(BER9)
+  OMUInt32 lengthSize = 9;
+#else
+  OMUInt32 lengthSize = 4;
+#endif
   OMUInt64 currentPosition = position();
+  OMUInt64 headerByteCountReference = currentPosition +
+                                      sizeof(OMKLVKey) + // Key
+                                      lengthSize +       // Length
+                                      sizeof(OMUInt16) + // Major Version
+                                      sizeof(OMUInt16) + // Minor Version
+                                      sizeof(OMUInt32) + // KAGSize
+                                      sizeof(OMUInt64) + // ThisPartition
+                                      sizeof(OMUInt64) + // PreviousPartition
+                                      sizeof(OMUInt64);  // FooterPartition
+  writePartition(ClosedHeaderPartitionPackKey, KAGSize, reorderBytes);
+  currentPosition = position();
   fillAlignK(currentPosition, KAGSize);
+  currentPosition = position();
+  OMUInt64 headerByteCount = bodyPartitionOffset - currentPosition;
+  fixupReference(headerByteCountReference, headerByteCount);
 }
 
 void OMMXFStorage::writeBodyPartition(void)
