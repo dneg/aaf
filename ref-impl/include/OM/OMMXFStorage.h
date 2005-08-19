@@ -139,6 +139,13 @@ public:
 
   virtual void writeKLVKey(const OMKLVKey& key);
 
+  virtual void writeKLVLength(const OMUInt8& length);
+  virtual void writeKLVLength(const OMUInt16& length);
+  virtual void writeKLVLength(const OMUInt32& length);
+  virtual void writeKLVLength(const OMUInt64& length);
+
+  virtual void writeBerLength(OMUInt32 lengthSize, const OMUInt64& length);
+
   struct ObjectDirectoryEntry {
     OMStorable* _object;
     OMUInt64 _offset;
