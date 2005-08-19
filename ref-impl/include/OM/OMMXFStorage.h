@@ -53,7 +53,7 @@ static const OMUInt32 bodyPartitionOffset = 0x20000;
 static const OMUInt32 KAGSize = 0x100;
 
 static const OMUInt16 currentMajorVersion = 0xffff;
-static const OMUInt16 currentMinorVersion = 0xfffc;
+static const OMUInt16 currentMinorVersion = 0xfffb;
 
 static const OMPropertyId PID_InterchangeObject_InstanceUID = 0x3c0a;
 
