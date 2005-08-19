@@ -1361,7 +1361,13 @@ void OMMXFStorage::streamReadAt(OMUInt32 sid,
   PRECONDITION("Buffer not empty", byteCount != 0);
 
   OMUInt32 readCount = byteCount;
-  bytesRead = byteCount;
+  OMUInt64 streamBytes = streamSize(sid);
+  if (position > streamBytes) {
+    readCount = 0;
+  } else if ((position + byteCount) > streamBytes) {
+    readCount = static_cast<OMUInt32>(streamBytes - position);
+  }
+  bytesRead = readCount;
 
   OMByte* p = bytes;
   OMUInt64 pos = position;
