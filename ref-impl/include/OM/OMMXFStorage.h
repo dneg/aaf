@@ -27,6 +27,7 @@
 #include "OMWrappedRawStorage.h"
 #include "OMDataTypes.h"
 #include "OMIdentitySet.h"
+#include "OMDataStream.h"
 
 static const OMKLVKey ClosedHeaderPartitionPackKey =
   {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
@@ -214,6 +215,20 @@ public:
 
   virtual void setObjectDirectoryOffset(OMUInt64 objectDirectoryOffset);
 
+    // stream <-> stream id
+  virtual void associate(OMDataStream* stream,
+                         const OMUniqueObjectIdentification& sid);
+
+  virtual bool containsStream(OMDataStream* stream);
+
+  virtual bool containsStream(const OMUniqueObjectIdentification& sid);
+
+    // Stream -> streamId
+  virtual OMUniqueObjectIdentification streamId(OMDataStream* stream);
+
+    // streamId -> Stream
+  virtual OMDataStream* stream(const OMUniqueObjectIdentification& sid);
+
 private:
   // @access Private members.
 
@@ -233,6 +248,9 @@ private:
 
   ObjectSet* objectToInstanceId(void);
 
+  OMSet<OMDataStream*, OMUniqueObjectIdentification>* streamToStreamId(void);
+  OMSet<OMUniqueObjectIdentification, OMDataStream*>* streamIdToStream(void);
+
   OMKLVKey _operationalPattern;
   LabelSet _essenceContainerLabels;
   OMUniqueObjectIdentification _generation;
@@ -240,6 +258,8 @@ private:
   OMUInt64 _objectDirectoryReference; // offset of object directory offset
   ObjectDirectory* _instanceIdToObject;
   ObjectSet* _objectToInstanceId;
+  OMSet<OMDataStream*, OMUniqueObjectIdentification>* _streamToStreamId;
+  OMSet<OMUniqueObjectIdentification, OMDataStream*>* _streamIdToStream;
 
 };
 
