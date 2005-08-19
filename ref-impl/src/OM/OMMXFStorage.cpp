@@ -265,9 +265,9 @@ bool OMMXFStorage::isBody(const OMKLVKey& k)
 bool OMMXFStorage::isFooter(const OMKLVKey& k)
 {
   bool result;
-  if (memcmp(&FooterKey, &k, sizeof(k)) == 0) {
+  if (memcmp(&IncompleteFooterKey, &k, sizeof(k)) == 0) {
     result = true;
-  } else if (memcmp(&CompleteFooterKey, &k, sizeof(k)) == 0) {
+  } else if (memcmp(&FooterKey, &k, sizeof(k)) == 0) {
     result = true;
   } else {
     result = false;
@@ -303,7 +303,7 @@ void OMMXFStorage::writeFooterPartition(OMUInt32 indexSID,
   TRACE("OMMXFStorage::writeFooterPartition");
 
   // Essence (body) not allowed in footer
-  writePartition(CompleteFooterKey, 0, indexSID, KAGSize);
+  writePartition(FooterKey, 0, indexSID, KAGSize);
   OMUInt64 currentPosition = position();
   fillAlignV(currentPosition, KAGSize);
 }
@@ -1634,7 +1634,7 @@ void OMMXFStorage::saveStreams(void)
 
     if (lastFileSegment->_stream->_label != IndexTableSegmentKey) {
       setPosition(_fileSize + fillBufferZoneSize);
-      writePartition(CompleteFooterKey, 0, 0, defaultKAGSize);
+      writePartition(FooterKey, 0, 0, defaultKAGSize);
     }
   } else {
     // The file does not contain streams
@@ -1647,7 +1647,7 @@ void OMMXFStorage::saveStreams(void)
     // Write footer
     //
     setPosition(_metadataEnd);
-    writePartition(CompleteFooterKey, 0, 0, defaultKAGSize);
+    writePartition(FooterKey, 0, 0, defaultKAGSize);
   }
 }
 
