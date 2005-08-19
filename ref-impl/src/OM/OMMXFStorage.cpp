@@ -119,7 +119,11 @@ OMMXFStorage::~OMMXFStorage(void)
 void OMMXFStorage::open(void)
 {
   TRACE("OMMXFStorage:open");
-  ASSERT("Unimplemented code not reached", false);
+
+  setPosition(0);
+  // Write header partition and alignment fill.
+  //
+  writeHeaderPartition(0, 0, defaultKAGSize);
 }
 
   // @mfunc Close this <c OMMXFStorage>.
