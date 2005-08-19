@@ -85,7 +85,6 @@ public:
     //          to be extended, however such extension can fail, causing
     //          <p bytesWritten> to be less than <p byteCount>.
     //          @precondition <f isWritable()>
-    //   @devnote How is failure to extend indicated ?
   virtual void write(const OMByte* bytes,
                      OMUInt32 byteCount,
                      OMUInt32& bytesWritten);
@@ -100,7 +99,6 @@ public:
     //          to be extended, however such extension can fail, causing
     //          <p bytesWritten> to be less than <p byteCount>.
     //          @precondition <f isWritable()> && <f isPositionable()>
-    //   @devnote How is failure to extend indicated ?
   virtual void writeAt(OMUInt64 position,
                        const OMByte* bytes,
                        OMUInt32 byteCount,
@@ -128,7 +126,6 @@ public:
     //          in the current position for <f read()> and <f write()>
     //          being set to <mf OMMXFRawStorage::size>.
     //          @precondition <f isExtendible()>
-    //   @devnote How is failure to extend indicated ?
   virtual void extend(OMUInt64 newSize);
 
     // @cmember The current size of this <c OMMXFRawStorage> in bytes.
@@ -158,11 +155,6 @@ public:
 
     // @cmember Synchronize this <c OMMXFRawStorage> with its external
     //          representation.
-    //          An implementation of <c OMMXFRawStorage> for disk files would
-    //          most probably implement this virtual function as a flush.
-    //          This virtual function would probably be implemented as a
-    //          noop in implemetations for network streams and for memory
-    //          files.
   virtual void synchronize(void);
 
 private:
