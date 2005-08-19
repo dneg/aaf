@@ -1550,6 +1550,14 @@ void OMMXFStorage::saveStreams(void)
 {
   TRACE("OMMXFStorage::saveStreams");
 
+  // We expect to be positioned in the pre-allocated header
+  // space just after the last metadata object
+  ASSERT("Valid position", position() < bodyPartitionOffset);
+
+  // fill remainder of pre-allocated space
+  OMUInt32 fillAlignment = bodyPartitionOffset;
+  fillAlignK(position(), fillAlignment);
+
   // Write header partition and alignment fill.
   //
   setPosition(0);
