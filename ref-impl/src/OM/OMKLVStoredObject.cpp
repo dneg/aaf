@@ -274,11 +274,15 @@ void OMKLVStoredObject::save(OMStorable& object)
 {
   TRACE("OMKLVStoredObject::save(OMFile)");
 #if defined(PERSIST_OBJECT_DIRECTORY)
-  ObjectDirectoryEntry e;
-  e._object = &object;
-  e._offset = _storage->position();
-  e._flags = 0;
-  instanceIdToObject()->insert(instanceId(&object), e);
+  OMUniqueObjectIdentification iid = instanceId(&object);
+  if (!instanceIdToObject()->contains(iid)) {
+    // This object has never been saved
+    ObjectDirectoryEntry e;
+    e._object = &object;
+    e._offset = _storage->position();
+    e._flags = 0;
+    instanceIdToObject()->insert(iid, e);
+  }
 #endif
   save(object.classId());
   save(*object.propertySet());
@@ -508,10 +512,8 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   // restore the meta object directory
   //
 #if defined(PERSIST_OBJECT_DIRECTORY)
-#if 1
   instanceIdToObject()->remove(instanceId(root));
   restore(instanceIdToObject());
-#endif
 #endif
 
   // restore the meta dictionary
@@ -927,7 +929,7 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
     This->_objectDirectoryReference = This->saveObjectDirectoryReference(id);
 
     OMPropertyId pid = 0x0004;
-    OMUInt32 version = 0x09111956;
+    OMUInt32 version = 0x00000004;
     This->writeProperty(pid, version);
   }
 #endif
