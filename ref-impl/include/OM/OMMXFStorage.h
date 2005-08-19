@@ -206,6 +206,8 @@ public:
     // enter object into object directory
   void enterObject(OMStorable& object, OMUInt64 position);
 
+  void removeObject(OMStorable& object);
+
   bool containsObject(const OMUniqueObjectIdentification& instanceId);
 
   typedef OMSet<OMUniqueObjectIdentification,
