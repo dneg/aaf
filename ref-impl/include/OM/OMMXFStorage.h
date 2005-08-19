@@ -338,8 +338,6 @@ public:
                             OMUInt32 byteCount,
                             OMUInt32& bytesRead);
 
-  virtual void streamSave(OMDataStream* stream);
-
   virtual void streamRestoreSegment(OMUInt32 sid,
                                     OMUInt64 start,
                                     OMUInt64 size,
