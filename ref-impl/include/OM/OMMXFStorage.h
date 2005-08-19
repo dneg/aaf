@@ -487,6 +487,7 @@ private:
   virtual SegmentMap* segmentMap(void);
   void destroySegmentMap(void);
   SegmentMap* _segmentMap;
+  SegmentList* _segments;
   OMUInt64 _fileSize;
 
   struct Partition {
