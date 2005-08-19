@@ -2112,14 +2112,14 @@ void OMMXFStorage::markIndexStart(OMKLVKey key,
 {
   TRACE("OMMXFStorage::markIndexStart");
 
-  ASSERT("Not in index", !_inIndex);
+  if (!_inIndex) {
+    _inIndex = true;
+    _indexSID = sid;
+    _indexKey = key;
+    _indexPosition = indexKeyPosition;
 
-  _inIndex = true;
-  _indexSID = sid;
-  _indexKey = key;
-  _indexPosition = indexKeyPosition;
-
-  _gridSize = gridSize;
+    _gridSize = gridSize;
+  }
 }
 
 void OMMXFStorage::markIndexEnd(OMUInt64 endKeyPosition)
@@ -2153,14 +2153,14 @@ void OMMXFStorage::markEssenceSegmentStart(OMKLVKey key,
 {
   TRACE("OMMXFStorage::markEssenceSegmentStart");
 
-  ASSERT("Not in essence", !_inEssence);
+  if (!_inEssence) {
+    _inEssence = true;
+    _essenceSID = sid;
+    _essenceKey = key;
+    _essencePosition = essenceKeyPosition;
 
-  _inEssence = true;
-  _essenceSID = sid;
-  _essenceKey = key;
-  _essencePosition = essenceKeyPosition;
-
-  _gridSize = gridSize;
+    _gridSize = gridSize;
+  }
 }
 
 void OMMXFStorage::markEssenceSegmentEnd(OMUInt64 endKeyPosition)
