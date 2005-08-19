@@ -326,6 +326,8 @@ public:
                                     OMKLVKey label,
                                     OMUInt32 gridSize);
 
+  virtual void streamGrow(OMUInt32 sid, OMUInt64 growBytes);
+
   struct Segment {
     OMUInt64 _start;   // Stream position of this Segment
     OMUInt64 _size;    // Size of this Segment in bytes
