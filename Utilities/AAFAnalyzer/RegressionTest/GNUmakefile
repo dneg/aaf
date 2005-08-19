@@ -32,6 +32,3 @@ include ../aafanalyzer.mk
 .PHONY : check
 check : $(AAFSDKBINDIR)/RegressionTest$(EXE)
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/RegressionTest$(EXE)
-
-
-#$(AAFSDKBINDIR)/RegressionTest$(EXE)
