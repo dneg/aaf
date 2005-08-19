@@ -45,8 +45,7 @@ OMWrappedRawStorage::~OMWrappedRawStorage(void)
 
   PRECONDITION("Valid store", _store != 0);
 
-  delete _store;
-  _store = 0;
+  _store = 0; // We don't own _store
 }
 
   // @mfunc Is it possible to read from this <c OMWrappedRawStorage> ?
