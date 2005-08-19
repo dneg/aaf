@@ -2086,7 +2086,46 @@ void OMMXFStorage::streamReadAt(OMUInt32 sid,
                                 const void* clientArgument)
 {
   TRACE("OMMXFStorage::streamReadAt");
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Valid buffers", buffers != 0);
+  PRECONDITION("Valid buffer count", bufferCount != 0);
+
+  // Calculate read size (not yet used)
+  OMUInt32 byteCount = 0;
+  for (OMUInt32 k = 0; k < bufferCount; k++) {
+    byteCount = byteCount + buffers[k]._bufferSize;
+  }
+  OMUInt32 readCount = byteCount;
+  OMUInt64 streamBytes = streamSize(sid);
+  if (position > streamBytes) {
+    readCount = 0;
+  } else if ((position + byteCount) > streamBytes) {
+    readCount = static_cast<OMUInt32>(streamBytes - position);
+  }
+
+  // Map position (and check that we don't split buffers)
+  OMUInt64 startPosition;
+  for (OMUInt32 i = 0; i < bufferCount; i++) {
+    OMUInt64 pos = position;
+    OMUInt64 rawPosition;
+    OMUInt32 rawByteCount;
+    streamFragment(sid,
+                   pos,
+                   buffers[i]._bufferSize,
+                   rawPosition,
+                   rawByteCount);
+    ASSERT("Buffer not split", buffers[i]._bufferSize == rawByteCount);
+    pos = pos + buffers[i]._bufferSize;
+    if (i == 0) {
+      startPosition = rawPosition;
+    }
+  }
+  // Read through the raw storage
+  OMWrappedRawStorage::streamReadAt(startPosition,
+                                    buffers,
+                                    bufferCount,
+                                    completion,
+                                    clientArgument);
+  // The I/O hasn't happened yet
 }
 
 void OMMXFStorage::streamRestoreSegment(OMUInt32 sid,
