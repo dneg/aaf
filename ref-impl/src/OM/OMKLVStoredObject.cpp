@@ -1498,6 +1498,14 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
     OMPropertySize length;
     _storage->read(length, _reorderBytes);
 
+    // HACK4MEIP2
+    if ((!properties.isAllowed(pid)) && (pid > 0x8000)) {
+      // Dark extension
+      OMByte b;
+      for (OMPropertySize i = 0; i < length; i++) {
+        _storage->read(b); // discard value !! tjb
+      }
+    } else {
     OMProperty* p = properties.get(pid);
     ASSERT("Valid property", p != 0);
 
@@ -1661,6 +1669,7 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
     }
     default:
       break;
+    }
     }
     setLength = setLength - (overhead + length);
   }
