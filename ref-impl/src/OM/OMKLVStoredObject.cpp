@@ -25,7 +25,11 @@
 #include "OMKLVStoredObject.h"
 
 #include "OMMXFStorage.h"
+#if 0
 #include "OMCachedDiskRawStorage.h"
+#else
+#include "OMMemoryRawStorage.h"
+#endif
 #include "OMKLVStoredStream.h"
 #include "OMProperty.h"
 #include "OMPropertySetIterator.h"
@@ -55,6 +59,7 @@
 #include "OMRawStorage.h"
 
 #define USETAGTABLE 1
+//#define OMONLY 1
 
   // @mfunc Open the root <c OMKLVStoredObject> in the raw storage
   //        <p rawStorage> for reading only.
@@ -367,18 +372,9 @@ void OMKLVStoredObject::save(OMFile& file)
   TRACE("OMKLVStoredObject::save(OMFile)");
 
   _storage->setPosition(0);
-  if (metaDataOnly) {
-    // The header partition has already been written,
-    // start saving immediately after the header partition
-    // and any fill.
-    //
-    _storage->readHeaderPartition();
-    _storage->readKLVFill();
-  } else {
-    // Write header partition and alignment fill.
-    //
-    _storage->writeHeaderPartition();
-  }
+  // Write header partition and alignment fill.
+  //
+  _storage->writeHeaderPartition();
 
   OMUInt64 pos = _storage->position();
   _storage->setPosition(pos);
@@ -395,30 +391,20 @@ void OMKLVStoredObject::save(OMFile& file)
 
   // Insert alignment fill
   OMUInt32 fillAlignment;
-  if (metaDataOnly) {
-    // fill to next KAG
-    fillAlignment = defaultKAGSize;
-  } else {
-    // fill remainder of pre-allocated space
-    fillAlignment = bodyPartitionOffset;
-  }
+  // fill remainder of pre-allocated space
+  fillAlignment = bodyPartitionOffset;
+  _storage->fillAlignK(_storage->position(), fillAlignment);
 
-  if (!metaDataOnly) {
-    _storage->fillAlignK(_storage->position(), fillAlignment);
+  // Save streams
+  //
+  streamSave(*file.root()->propertySet());
 
-    // Save streams
-    //
-    streamSave(*file.root()->propertySet());
-
-    // Write the footer
-    //
-    OMUInt64 position = _storage->size();
-    _storage->setPosition(position);
-    _storage->writeFooterPartition();
-  } else {
-    _storage->fixup();
-    _storage->fillAlignK(_storage->position(), fillAlignment);
-  }
+  // Write the footer
+  //
+  OMUInt64 position = _storage->size();
+  _storage->setPosition(position);
+  _storage->writeFooterPartition();
+  _storage->writeRandomIndex();
 }
 
 void OMKLVStoredObject::save(OMStorable& object)
@@ -593,25 +579,8 @@ void OMKLVStoredObject::save(const OMDataStream& stream)
 {
   TRACE("OMKLVStoredObject::save(OMDataStream)");
 
-  OMDataStream* s = const_cast<OMDataStream*>(&stream);
-  OMKLVKey  k = {0}; // tjb !!!
-
-  if (!metaDataOnly) {
-    _storage->writeBodyPartition(0, defaultKAGSize);
-  }
-
-  _storage->writeKLVKey(k);
-  OMUInt64 length = stream.size();
-  _storage->writeKLVLength(length);
-
-  // value
-  stream.setPosition(0);
-  for (OMUInt64 i = 0; i < length; i++) {
-    OMByte b;
-    OMUInt32 x;
-    stream.read(&b, 1, x);
-    _storage->write(b);
-  }
+  OMDataStream* ds = const_cast<OMDataStream*>(&stream);
+  _storage->streamSave(ds);
 }
 
 OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
@@ -719,9 +688,7 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
 
   _storage->skipLV(); // This V is fill
 
-  if (!metaDataOnly) {
-    streamRestore();
-  }
+  streamRestore();
 
   return root;
 }
@@ -897,11 +864,12 @@ void OMKLVStoredObject::restore(OMPropertyTable*& /* table */)
   //        <c OMKLVStoredObject>.
   //   @parm The newly restored <c OMDataStream>.
   //   @parm The external size.
-void OMKLVStoredObject::restore(OMDataStream& /* stream */,
+void OMKLVStoredObject::restore(OMDataStream& stream,
                                 size_t /* externalSize */)
 {
   TRACE("OMKLVStoredObject::restore(OMDataStream)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+
+  ASSERT("NYI", false);
 }
 
 void OMKLVStoredObject::writeProperty(OMPropertyId pid, const OMUInt32& value)
@@ -951,12 +919,12 @@ OMStoredStream* OMKLVStoredObject::openStoredStream(
   //   @parm The <c OMDataStream> to be created.
   //   @rdesc The newly created <c OMStoredStream>.
 OMStoredStream* OMKLVStoredObject::createStoredStream(
-                                            const OMDataStream& /* property */)
+                                                  const OMDataStream& property)
 {
   TRACE("OMKLVStoredObject::createStoredStream");
 
-  OMRawStorage* store = OMCachedDiskRawStorage::openNewModify();
-  OMKLVStoredStream* result = new OMKLVStoredStream(store);
+  OMUInt32 sid = _storage->addStream(const_cast<OMDataStream*>(&property));
+  OMKLVStoredStream* result = new OMKLVStoredStream(_storage, sid);
   ASSERT("Valid heap pointer", result != 0);
   return result;
 }
@@ -1046,8 +1014,7 @@ OMUInt64 OMKLVStoredObject::length(const OMPropertySet& properties) const
       }
       case SF_DATA_STREAM: {
         length = length + sizeof(OMPropertyId) + sizeof(OMPropertySize)
-                        + sizeof(OMByteOrder)
-                        + sizeof(OMKLVKey);
+                        + sizeof(OMUInt32);
         break;
       }
       default:
@@ -1066,7 +1033,7 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
 
   if (properties.container()->classId() == Class_Root) {
     OMKLVStoredObject* This = const_cast<OMKLVStoredObject*>(this);
-    OMUniqueObjectIdentification id = {0};
+    OMUniqueObjectIdentification id = _storage->generation();
     This->saveObjectDirectoryReference(id);
 
     OMPropertyId pid = PID_Root_FormatVersion;
@@ -1222,7 +1189,7 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         ASSERT("Valid stream", ss != 0);
         OMKLVStoredStream* kss = dynamic_cast<OMKLVStoredStream*>(ss);
         ASSERT("Valid type", kss != 0);
-        OMUInt32 sid = 0; // tjb !!!
+        OMUInt32 sid = kss->streamIdentification();
         _storage->write(sid, _reorderBytes);
         break;
       }
@@ -1591,6 +1558,16 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
               element.setValue(key, obj);
               s->insert(key, element);
               delete [] name;
+            } else {
+              // key already present
+              OMStorable* e = 0;
+              s->find(key, e);
+              ASSERT("Object found", e != 0);
+
+              _storage->removeObject(*obj);
+              delete obj;
+
+              _storage->associate(e, id);
             }
             localKey = localKey + 1;
           }
@@ -1774,22 +1751,20 @@ void OMKLVStoredObject::streamRestore(void)
       OMUInt32 gridSize;
       _storage->readPartition(bodySID, indexSID, gridSize);
       _storage->readKLVFill();
-       _storage->readKLVKey(k);
-      OMUInt64 length = OMMXFStorage::readBerLength(_storage);
-      OMDataStream* s = _storage->stream(bodySID);
-      s->setPosition(0);
-      for (OMUInt64 i = 0; i < length; i++) {
-        OMByte b;
-        OMUInt32 x;
-        _storage->read(b);
-        s->write(&b, 1, x);
-      }
-      s->setPosition(0);
+      _storage->readKLVKey(k);
+      OMUInt64 length = _storage->readKLVLength();
+      _storage->streamRestoreSegment(bodySID,
+                                     _storage->position(),
+                                     length,
+                                     k,
+                                     gridSize);
+      _storage->skipV(length);
     } else {
       _storage->skipLV();
     }
     _storage->readKLVKey(k);
   }
+  _storage->readRandomIndex();
 }
 
 void OMKLVStoredObject::referenceRestore(OMStorable* object,
@@ -1821,6 +1796,10 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
     PropertyDefinitionsIterator*
                            properties = classDefinition->propertyDefinitions();
     while (++(*properties)) {
+      OMObject* obj = properties->currentObject();
+      OMPropertyDefinition* propertyDefinition =
+                                      dynamic_cast<OMPropertyDefinition*>(obj);
+      ASSERT("Object is correct type", propertyDefinition != 0);
       elementCount = elementCount + 1;
     }
     delete properties;
@@ -1849,14 +1828,16 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
                                       dynamic_cast<OMPropertyDefinition*>(obj);
       ASSERT("Object is correct type", propertyDefinition != 0);
       OMPropertyId pid = propertyDefinition->localIdentification();
- 
       _storage->write(pid, _reorderBytes);
+#if defined(OMONLY)
+      OMUniqueObjectIdentification id = propertyDefinition->identification();
+#else
       OMUniqueObjectIdentification id =
                                     propertyDefinition->uniqueIdentification();
+#endif
       OMKLVKey k;
       convert(k, id);
       _storage->writeKLVKey(k);
- 
     }
     delete properties;
   }
@@ -1927,8 +1908,6 @@ OMKLVStoredObject::restoreObjectDirectoryReference(
   _storage->read(offset, _reorderBytes);
   return offset;
 }
-
-bool OMKLVStoredObject::metaDataOnly = true;
 
   // @mfunc Constructor.
   //   @parm The <c OMRawStorage> on which this <c OMKLVStoredObject> resides.
