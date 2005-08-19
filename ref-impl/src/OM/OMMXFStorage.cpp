@@ -1387,7 +1387,11 @@ void OMMXFStorage::clearObjectDirectory(void)
       if (e._flags != 1) {
         if (e._object != 0) {
           OMClassFactory* factory = e._object->classFactory();
+#if 0 // tjb not yet
           factory->destroy(e._object);
+#else
+          // leak like a sieve
+#endif
           e._object = 0;
         }
       }
@@ -1748,7 +1752,7 @@ void OMMXFStorage::writeStreamAt(OMUInt32 sid,
   }
 #endif
 }
-
+#if 0 // tjb not yet
 void OMMXFStorage::writeStreamAt(OMUInt32 sid,
                                  OMUInt64 position,
                                  OMIOBufferDescriptor* buffers,
@@ -1934,7 +1938,7 @@ void OMMXFStorage::writeStreamAt(OMUInt32 sid,
     s->_size = newPosition;
   }
 }
-
+#endif
 void OMMXFStorage::streamRawRead(OMUInt32 /* sid */,
                                  OMUInt64 rawPosition,
                                  OMByte* rawBytes,
@@ -2027,7 +2031,7 @@ void OMMXFStorage::readStreamAt(OMUInt32 sid,
   }
 #endif
 }
-
+#if 0 // tjb not yet
 void OMMXFStorage::readStreamAt(OMUInt32 sid,
                                 OMUInt64 position,
                                 OMIOBufferDescriptor* buffers,
@@ -2182,7 +2186,7 @@ void OMMXFStorage::readStreamAt(OMUInt32 sid,
                                     clientArgument);
   // The I/O hasn't happened yet
 }
-
+#endif
 void OMMXFStorage::streamRestoreSegment(OMUInt32 sid,
                                         OMUInt64 start,
                                         OMUInt64 allocatedSize,
