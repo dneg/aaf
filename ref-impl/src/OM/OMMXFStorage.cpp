@@ -1544,6 +1544,9 @@ void OMMXFStorage::saveStreams(void)
       }
     }
   }
+  // Write the footer
+  //
+  writeFooterPartition(0, defaultKAGSize);
 }
 
 OMMXFStorage::SegmentListIterator*
