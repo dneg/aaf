@@ -116,6 +116,9 @@ public:
     //          contained in <p rawStorage> is closed.
   virtual void close(OMRawStorage* rawStorage, bool isWritable);
 
+    // @cmember Perform any necessary actions when <p file> is closed.
+  virtual void close(OMFile* file);
+
 };
 
 #endif
