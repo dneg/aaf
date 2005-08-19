@@ -215,11 +215,13 @@ void OMMXFStorage::writeHeaderPartition(void)
   fillAlignK(currentPosition, defaultKAGSize);
 }
 
-void OMMXFStorage::writeBodyPartition(OMUInt32 bodySID, OMUInt32 KAGSize)
+void OMMXFStorage::writeBodyPartition(OMUInt32 bodySID,
+                                      OMUInt32 indexSID,
+                                      OMUInt32 KAGSize)
 {
   TRACE("OMMXFStorage::writeBodyPartition");
 
-  writePartition(ClosedBodyPartitionPackKey, bodySID, 0, KAGSize);
+  writePartition(ClosedBodyPartitionPackKey, bodySID, indexSID, KAGSize);
   OMUInt64 currentPosition = position();
   fillAlignV(currentPosition, KAGSize);
 }
@@ -1426,7 +1428,7 @@ void OMMXFStorage::streamSave(OMDataStream* stream)
 
       // Write partition pack
       setPosition(pos);
-      writeBodyPartition(sid, s->_gridSize);
+      writeBodyPartition(sid, 0, s->_gridSize);
 
       // Write essence element label
       writeKLVKey(s->_label);
