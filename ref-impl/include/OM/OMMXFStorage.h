@@ -187,12 +187,6 @@ public:
 
   static OMUInt64 readBerLength(const OMRawStorage* store);
 
-  struct ObjectDirectoryEntry {
-    OMStorable* _object;
-    OMUInt64 _offset;
-    OMUInt8 _flags;
-  };
-
     // Object -> instanceId
   OMUniqueObjectIdentification instanceId(OMStorable* object);
 
@@ -210,11 +204,6 @@ public:
 
   bool containsObject(const OMUniqueObjectIdentification& instanceId);
 
-  typedef OMSet<OMUniqueObjectIdentification,
-                ObjectDirectoryEntry> ObjectDirectory;
-  typedef OMSetIterator<OMUniqueObjectIdentification,
-                        ObjectDirectoryEntry> ObjectDirectoryIterator;
-
   virtual void saveObjectDirectory(void);
 
   virtual void fixupReference(OMUInt64 patchOffset, OMUInt64 patchValue);
@@ -225,14 +214,24 @@ public:
 
   virtual void setObjectDirectoryOffset(OMUInt64 objectDirectoryOffset);
 
-  ObjectDirectory* instanceIdToObject(void);
-
-  typedef OMSet<OMStorable*, OMUniqueObjectIdentification> ObjectSet;
-
-  ObjectSet* objectToInstanceId(void);
-
 private:
   // @access Private members.
+
+  struct ObjectDirectoryEntry {
+    OMStorable* _object;
+    OMUInt64 _offset;
+    OMUInt8 _flags;
+  };
+
+  typedef OMSet<OMUniqueObjectIdentification,
+                ObjectDirectoryEntry> ObjectDirectory;
+  typedef OMSetIterator<OMUniqueObjectIdentification,
+                        ObjectDirectoryEntry> ObjectDirectoryIterator;
+  typedef OMSet<OMStorable*, OMUniqueObjectIdentification> ObjectSet;
+
+  ObjectDirectory* instanceIdToObject(void);
+
+  ObjectSet* objectToInstanceId(void);
 
   OMKLVKey _operationalPattern;
   LabelSet _essenceContainerLabels;
