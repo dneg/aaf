@@ -1831,11 +1831,11 @@ void OMMXFStorage::restoreStreams(void)
     } else if (isEssence(k) || k == SystemMetadataKey) {
       markMetadataEnd(keyPosition);
       markIndexEnd(keyPosition);
-      markEssenceSegmentStart(bodySID, keyPosition);
+      markEssenceSegmentStart(k, bodySID, keyPosition);
       skipV(length);
     } else if (isIndex(k)) {
       markMetadataEnd(keyPosition);
-      markIndexStart(indexSID, keyPosition);
+      markIndexStart(k, indexSID, keyPosition);
     } else if (k == fillKey) {
       skipV(length);
       markFill(keyPosition, position());
@@ -2093,7 +2093,9 @@ void OMMXFStorage::markMetadataEnd(OMUInt64 endKeyPosition)
   }
 }
 
-void OMMXFStorage::markIndexStart(OMUInt32 sid, OMUInt64 indexKeyPosition)
+void OMMXFStorage::markIndexStart(OMKLVKey key,
+                                  OMUInt32 sid,
+                                  OMUInt64 indexKeyPosition)
 {
   TRACE("OMMXFStorage::markIndexStart");
   ASSERT("Unimplemented code not reached", false);
@@ -2105,7 +2107,8 @@ void OMMXFStorage::markIndexEnd(OMUInt64 endKeyPosition)
   ASSERT("Unimplemented code not reached", false);
 }
 
-void OMMXFStorage::markEssenceSegmentStart(OMUInt32 sid,
+void OMMXFStorage::markEssenceSegmentStart(OMKLVKey key,
+                                           OMUInt32 sid,
                                            OMUInt64 essenceKeyPosition)
 {
   TRACE("OMMXFStorage::markEssenceSegmentStart");
