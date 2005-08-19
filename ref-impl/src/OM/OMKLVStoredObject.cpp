@@ -400,10 +400,6 @@ void OMKLVStoredObject::save(OMFile& file)
   //
   _storage->saveStreams();
 
-  // Write the footer
-  //
-  _storage->writeFooterPartition(0, defaultKAGSize);
-
   _storage->close();
 }
 
