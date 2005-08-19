@@ -1696,7 +1696,7 @@ void OMMXFStorage::streamWriteAt(OMUInt32 sid,
 
 void OMMXFStorage::streamWriteAt(OMUInt32 sid,
                                  OMUInt64 position,
-                                 OMIOVector buffers,
+                                 OMIOBufferDescriptor* buffers,
                                  OMUInt32 bufferCount,
                                  OMUInt32& bytesWritten)
 {
@@ -1865,7 +1865,7 @@ void OMMXFStorage::streamReadAt(OMUInt32 sid,
 
 void OMMXFStorage::streamReadAt(OMUInt32 sid,
                                 OMUInt64 position,
-                                OMIOVector buffers,
+                                OMIOBufferDescriptor* buffers,
                                 OMUInt32 bufferCount,
                                 OMUInt32& bytesRead)
 {
