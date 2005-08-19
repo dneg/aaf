@@ -163,9 +163,6 @@ public:
   virtual void deepCopyTo(OMProperty* destination,
                           void* clientContext) const = 0;
 
-protected:
-  // @access Protected members.
-
     // @cmember Set the bit that indicates that this optional <c OMProperty>
     //          is present.
   void setPresent(void);
@@ -173,6 +170,9 @@ protected:
     // @cmember Clear the bit that indicates that this optional <c OMProperty>
     //          is present.
   void clearPresent(void);
+
+protected:
+  // @access Protected members.
 
     // @cmember The <c OMStoredObject> that contains the persisted
     //          representation of this <c OMProperty>.
