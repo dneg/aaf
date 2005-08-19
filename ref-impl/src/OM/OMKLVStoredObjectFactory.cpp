@@ -254,26 +254,6 @@ bool OMKLVStoredObjectFactory::compatibleNamedFile(
   return result;
 }
 
-  // @mfunc Perform any necessary actions when the file
-  //        contained in <p fileName> is closed.
-  //   @parm The file name.
-void OMKLVStoredObjectFactory::close(const wchar_t* /* fileName */,
-                                     bool /* isWritable */)
-{
-  TRACE("OMKLVStoredObjectFactory::close");
-
-  // tjb - footer in named files ?
-}
-
-  // @mfunc Perform any necessary actions when the file
-  //        contained in <p rawStorage> is closed.
-  //   @parm The <c OMRawStorage>
-void OMKLVStoredObjectFactory::close(OMRawStorage* /* rawStorage */,
-                                     bool /* isWritable */)
-{
-  TRACE("OMKLVStoredObjectFactory::close");
-}
-
   // @mfunc Perform any necessary actions when <p file> is closed.
   //   @parm The <c OMFile>
 void OMKLVStoredObjectFactory::close(OMFile* file)
