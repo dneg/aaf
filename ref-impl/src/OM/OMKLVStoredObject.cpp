@@ -1958,11 +1958,9 @@ void OMKLVStoredObject::streamRestore(void)
 {
   TRACE("OMKLVStoredObject::streamRestore");
 
-#if 1 // HACK4MEIP2
   OMUInt64 headerPosition;
   OMMXFStorage::findHeader(_storage, headerPosition);
   _storage->setPosition(headerPosition);
-#endif
 
   OMUInt32 bodySID = 0;
   OMUInt32 indexSID = 0;
