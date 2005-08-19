@@ -2488,12 +2488,11 @@ void OMKLVStoredObject::writeTypeDefinition(const OMType* td)
     OMUInt32 count = et->elementCount();
     _storage->write(count, _reorderBytes);
     for (OMUInt32 i = 0; i < count; i++) {
-      const OMEnumeratedType::Element element = et->element(i);
       // ElementName
-      const wchar_t* eName = element._name;
+      const wchar_t* eName = et->elementName(i);
       write(eName);
       // ElementValue
-      OMUInt64 eValue = element._value;
+      OMUInt64 eValue = et->elementValue(i);
       _storage->write(eValue, _reorderBytes);
     }
     break;
