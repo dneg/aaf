@@ -84,6 +84,12 @@ public:
     // @cmember Close this <c OMXMLStoredStream>.
   virtual void close(void);
 
+    // @cmember Set the label to <p label>.
+  virtual void setLabel(const OMKLVKey& label);
+
+    // @cmember Get the label.
+  virtual OMKLVKey label(void) const;
+
     // @cmember Set the essence element label to <p label>.
   virtual void setEssenceElementLabel(const OMKLVKey& label);
 
@@ -104,7 +110,7 @@ public:
 
 private:
   // @access Private members.
-  OMKLVKey _essenceElementLabel;
+  OMKLVKey _label;
   OMUInt32 _blockSize;
   OMUInt64 _fileOffset;
   OMRawStorage* _store;
