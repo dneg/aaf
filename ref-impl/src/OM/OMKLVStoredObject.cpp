@@ -47,6 +47,7 @@
 #include "OMStrongReferenceSetIter.h"
 #include "OMClassDefinition.h"
 #include "OMPropertyDefinition.h"
+#include "OMMXFStorage.h"
 
 #include "OMUtilities.h"
 
@@ -1715,9 +1716,6 @@ void OMKLVStoredObject::writeFooterPartition(OMRawStorage* store)
   OMUInt32 KAGSize = 0x100;
   writePartition(store, ClosedFooterPartitionPackKey, KAGSize, reorderBytes);
 }
-
-OMUInt16 currentMajorVersion = 0xffff;
-OMUInt16 currentMinorVersion = 0xfffb;
 
 void OMKLVStoredObject::writePartition(OMRawStorage* store,
                                        const OMKLVKey& key,
