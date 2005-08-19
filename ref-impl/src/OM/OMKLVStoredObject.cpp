@@ -1460,20 +1460,6 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
 
   const OMUInt16 overhead = sizeof(OMPropertyId) + sizeof(OMPropertySize);
 
-  if (properties.container()->classId() == Class_Root) {
-    OMUniqueObjectIdentification id;
-    OMUInt64 objectDirectoryOffset = restoreObjectDirectoryReference(id);
-    _storage->setObjectDirectoryOffset(objectDirectoryOffset);
-    setLength = setLength - (overhead + sizeof(OMUniqueObjectIdentification) +
-                                        sizeof(OMUInt64));
-
-    OMPropertyId pid = PID_Root_FormatVersion;
-    OMUInt32 version;
-    readProperty(pid, version);
-
-    setLength = setLength - (overhead + sizeof(OMUInt32));
-  }
-
   while (setLength > 0) {
     OMPropertyId pid;
     _storage->read(pid, _reorderBytes);
@@ -1484,6 +1470,17 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
     if (pid == PID_InterchangeObject_InstanceUID) {
       // The UID of this object
       referenceRestore(properties.container(), pid);
+    } else if ((pid == PID_Root_ObjectDirectory) &&
+               (properties.container()->classId() == Class_Root)) {
+      OMUniqueObjectIdentification id; // Not yet used
+      _storage->read(id, _reorderBytes);
+      OMUInt64 offset;
+      _storage->read(offset, _reorderBytes);
+      _storage->setObjectDirectoryOffset(offset);
+    } else if ((pid == PID_Root_FormatVersion) &&
+               (properties.container()->classId() == Class_Root)) {
+      OMUInt32 version; // Not yet used
+      _storage->read(version, _reorderBytes);
     } else if ((!properties.isAllowed(pid)) && (pid > 0x8000)) { // HACK4MEIP2
       // Dark extension
       OMUInt64 len = length;
