@@ -1169,5 +1169,4 @@ void OMMXFStorage::destroyFixups(void)
     ASSERT("Resolved", f->_tag == FUT_RESOLVED);
     delete f;
   }
-  _fixups.clear();
 }
