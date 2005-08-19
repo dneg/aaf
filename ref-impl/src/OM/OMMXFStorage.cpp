@@ -1809,8 +1809,8 @@ void OMMXFStorage::restoreStreams(void)
   OMUInt64 indexStart = 0;
   OMUInt64 essenceLength = 0;
   OMUInt64 indexLength = 0;
-  OMKLVKey indexKey = {0};
-  OMKLVKey essenceKey = {0};
+  OMKLVKey indexKey = nullOMKLVKey;
+  OMKLVKey essenceKey = nullOMKLVKey;
   OMKLVKey k;
   while (readOuterKLVKey(k)) {
     if (isPartition(k)) {
