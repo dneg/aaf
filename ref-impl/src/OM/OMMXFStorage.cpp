@@ -439,18 +439,23 @@ void OMMXFStorage::writeRandomIndex(void)
 {
   TRACE("OMMXFStorage::writeRandomIndex");
 
-  OMUInt32 entrySize = sizeof(OMUInt32) + sizeof(OMUInt64);
+  OMUInt64 keyPosition = position();
   writeKLVKey(RandomIndexMetadataKey);
+  OMUInt64 lengthPosition = reserveKLVLength();
+
   OMUInt32 count = _partitions.count();
-  OMUInt32 length = (count * entrySize) + sizeof(OMUInt32);
-  writeKLVLength(length);
   for (size_t i = 0; i < count; i++) {
     Partition* p = _partitions.valueAt(i);
     write(p->_sid, _reorderBytes);
     write(p->_address, _reorderBytes);
   }
-  OMUInt32 overallLength = length + sizeof(OMKLVKey) + sizeof(OMUInt64) + 1;
+
+  OMUInt64 length = position() - keyPosition + sizeof(OMUInt32);
+  ASSERT("Valid length", length < OMUINT32_MAX);
+  OMUInt32 overallLength = static_cast<OMUInt32>(length);
   write(overallLength, _reorderBytes);
+  fixupKLVLength(lengthPosition);
+  ASSERT("Correct length", overallLength == (position() - keyPosition));
 }
 
 void OMMXFStorage::readRandomIndex(OMUInt64 length)
