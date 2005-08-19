@@ -38,6 +38,8 @@ class OMWeakReference;
 class OMWeakReferenceSet;
 class OMWeakReferenceVector;
 class OMStoredStream;
+class OMDataStreamProperty;
+class OMKLVStoredStream;
 
   // @class In-memory representation of an object persisted in a
   //        SMPTE (Society of Motion Picture and Television Engineers)
@@ -66,6 +68,21 @@ public:
     //          is given by <p byteOrder>.
   static OMKLVStoredObject* createModify(OMMXFStorage* rawStorage,
                                          const OMByteOrder byteOrder);
+
+    // @cmember Does <p rawStorage> contain a recognized file ?
+  static bool isRecognized(OMRawStorage* rawStorage);
+
+    // @cmember Does <p file> have an <c OMMXFStorage>.
+  static bool hasMxfStorage(const OMFile* file);
+
+    // @cmember The <c OMMXFStorage> associated with <p file>.
+  static OMMXFStorage* mxfStorage(const OMFile* file);
+
+    // @cmember Does <p stream> represent MXF essence ?
+  static bool isMxfEssence(const OMDataStreamProperty* stream);
+
+    // @cmember The <c OMKLVStoredStream> associated with <p stream>
+  static OMKLVStoredStream* mxfEssence(const OMDataStreamProperty* stream);
 
   // @access Public members.
 
@@ -377,8 +394,14 @@ public:
 private:
   // @access Private members.
 
+    // @cmember The root storage of <p file>.
+  static OMKLVStoredObject* root(const OMFile* file);
+
     // @cmember Constructor.
   OMKLVStoredObject(OMMXFStorage* s, OMByteOrder byteOrder);
+
+    // @cmember The <c OMKLVStoredStream> associated with <p stream>
+  static OMKLVStoredStream* mxfStream(const OMDataStreamProperty* stream);
 
   OMMXFStorage* _storage;
   OMByteOrder _byteOrder;
