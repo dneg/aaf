@@ -1546,9 +1546,10 @@ void OMMXFStorage::saveStreams(void)
 
         // Fill end of segment
         OMUInt64 fillSize = seg->_size + fillBufferZoneSize - len;
-        OMUInt64 p = (seg->_origin + seg->_size + fillBufferZoneSize) - fillSize;
+        OMUInt64 fillEnd = (seg->_origin + seg->_size + fillBufferZoneSize);
+        OMUInt64 fillStart = fillEnd - fillSize;
         ASSERT("Can fill", fillSize >= minimumFill);
-        setPosition(p);
+        setPosition(fillStart);
         writeKLVFill(fillSize - minimumFill);
 
         ASSERT("Sane segment size", remaining >= len);
