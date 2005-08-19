@@ -503,16 +503,17 @@ void OMKLVStoredObject::save(const OMDataVector& property)
   ASSERT("Correct type", at != 0);
   OMType* elementType = at->elementType();
   ASSERT("Fixed size elements", elementType->isFixedSize());
-  OMUInt32 elementSize = elementType->externalSize();
+  OMUInt32 elementSize = elementType->internalSize();
+  OMUInt32 externalElementSize = elementType->externalSize();
   OMUInt32 elementCount = property.count();
 
     // Allocate buffer for one element
-  OMByte* buffer = new OMByte[elementSize];
+  OMByte* buffer = new OMByte[externalElementSize];
   ASSERT("Valid heap pointer", buffer != 0);
 
   // size
   // Doh! 32-bit size and count but 16-bit property size
-  OMUInt64 size = elementSize * elementCount;
+  OMUInt64 size = externalElementSize * elementCount;
   // ASSERT("Valid size"); // tjb
   OMPropertySize propertySize = static_cast<OMPropertySize>(size);
   propertySize = propertySize + sizeof(OMUInt32) + sizeof(OMUInt32);
@@ -522,7 +523,7 @@ void OMKLVStoredObject::save(const OMDataVector& property)
   _storage->write(elementCount, _reorderBytes);
 
   // element size
-  _storage->write(elementSize, _reorderBytes);
+  _storage->write(externalElementSize, _reorderBytes);
 
   OMDataContainerIterator* it = property.createIterator();
   while (++(*it)) {
@@ -541,17 +542,17 @@ void OMKLVStoredObject::save(const OMDataVector& property)
       elementType->externalize(bits,
                                elementSize,
                                buffer,
-                               elementSize,
+                               externalElementSize,
                                hostByteOrder());
 
       // Reorder element
       if (_reorderBytes) {
-        elementType->reorder(buffer, elementSize);
+        elementType->reorder(buffer, externalElementSize);
       }
     }
 
     // value
-    _storage->write(buffer, elementSize);
+    _storage->write(buffer, externalElementSize);
 
   }
   delete it;
@@ -568,16 +569,17 @@ void OMKLVStoredObject::save(const OMDataSet& property)
   ASSERT("Correct type", st != 0);
   OMType* elementType = st->elementType();
   ASSERT("Fixed size elements", elementType->isFixedSize());
-  OMUInt32 elementSize = elementType->externalSize();
+  OMUInt32 elementSize = elementType->internalSize();
+  OMUInt32 externalElementSize = elementType->externalSize();
   OMUInt32 elementCount = property.count();
 
     // Allocate buffer for one element
-  OMByte* buffer = new OMByte[elementSize];
+  OMByte* buffer = new OMByte[externalElementSize];
   ASSERT("Valid heap pointer", buffer != 0);
 
   // size
   // Doh! 32-bit size and count but 16-bit property size
-  OMUInt64 size = elementSize * elementCount;
+  OMUInt64 size = externalElementSize * elementCount;
   // ASSERT("Valid size"); // tjb
   OMPropertySize propertySize = static_cast<OMPropertySize>(size);
   propertySize = propertySize + sizeof(OMUInt32) + sizeof(OMUInt32);
@@ -587,7 +589,7 @@ void OMKLVStoredObject::save(const OMDataSet& property)
   _storage->write(elementCount, _reorderBytes);
 
   // element size
-  _storage->write(elementSize, _reorderBytes);
+  _storage->write(externalElementSize, _reorderBytes);
 
   OMDataContainerIterator* it = property.createIterator();
   while (++(*it)) {
@@ -607,17 +609,17 @@ void OMKLVStoredObject::save(const OMDataSet& property)
       elementType->externalize(bits,
                                elementSize,
                                buffer,
-                               elementSize,
+                               externalElementSize,
                                hostByteOrder());
 
       // Reorder element
       if (_reorderBytes) {
-        elementType->reorder(buffer, elementSize);
+        elementType->reorder(buffer, externalElementSize);
       }
     }
 
     // value
-    _storage->write(buffer, elementSize);
+    _storage->write(buffer, externalElementSize);
 
   }
   delete it;
@@ -955,23 +957,22 @@ void OMKLVStoredObject::restore(OMDataVector& property,
   ASSERT("Correct type", at != 0);
   OMType* elementType = at->elementType();
   ASSERT("Fixed size elements", elementType->isFixedSize());
-  OMUInt32 elementSize = elementType->externalSize();
-
-  ASSERT("Consistent element size", elementSize == property.elementSize());
+  OMUInt32 externalElementSize = elementType->externalSize();
+  OMUInt32 elementSize = elementType->internalSize();
 
   // Allocate buffer for one element
-  OMByte* buffer = new OMByte[elementSize];
+  OMByte* buffer = new OMByte[externalElementSize];
   ASSERT("Valid heap pointer", buffer != 0);
   OMByte* value = new OMByte[elementSize];
   ASSERT("Valid heap pointer", value != 0);
 
   property.clear();
-  OMUInt32 elementCount = externalSize / elementSize;
+  OMUInt32 elementCount = externalSize / externalElementSize;
 
   for (OMUInt32 i = 0; i < elementCount; i++) {
 
     // Read one element
-    _storage->read(buffer, elementSize);
+    _storage->read(buffer, externalElementSize);
 
     if (elementType->identification() == Type_UniqueObjectIdentification) {
       // UniqueObjectIdentification properties are stored
@@ -983,12 +984,12 @@ void OMKLVStoredObject::restore(OMDataVector& property,
     } else {
       // Reorder element
       if (_reorderBytes) {
-        elementType->reorder(buffer, elementSize);
+        elementType->reorder(buffer, externalElementSize);
       }
 
       // Internalize element
       elementType->internalize(buffer,
-                               elementSize,
+                               externalElementSize,
                                value,
                                elementSize,
                                hostByteOrder());
@@ -1011,22 +1012,22 @@ void OMKLVStoredObject::restore(OMDataSet& property,
   ASSERT("Correct type", st != 0);
   OMType* elementType = st->elementType();
   ASSERT("Fixed size elements", elementType->isFixedSize());
-  OMUInt32 elementSize = elementType->externalSize();
-  ASSERT("Consistent element size", elementSize == property.elementSize());
+  OMUInt32 externalElementSize = elementType->externalSize();
+  OMUInt32 elementSize = elementType->internalSize();
 
   // Allocate buffer for one element
-  OMByte* buffer = new OMByte[elementSize];
+  OMByte* buffer = new OMByte[externalElementSize];
   ASSERT("Valid heap pointer", buffer != 0);
   OMByte* value = new OMByte[elementSize];
   ASSERT("Valid heap pointer", value != 0);
 
   property.clear();
-  OMUInt32 elementCount = externalSize / elementSize;
+  OMUInt32 elementCount = externalSize / externalElementSize;
 
   for (OMUInt32 i = 0; i < elementCount; i++) {
 
     // Read one element
-    _storage->read(buffer, elementSize);
+    _storage->read(buffer, externalElementSize);
 
     if (elementType->identification() == Type_UniqueObjectIdentification) {
       // UniqueObjectIdentification properties are stored
@@ -1038,12 +1039,12 @@ void OMKLVStoredObject::restore(OMDataSet& property,
     } else {
       // Reorder element
       if (_reorderBytes) {
-        elementType->reorder(buffer, elementSize);
+        elementType->reorder(buffer, externalElementSize);
       }
 
       // Internalize element
       elementType->internalize(buffer,
-                               elementSize,
+                               externalElementSize,
                                value,
                                elementSize,
                                hostByteOrder());
