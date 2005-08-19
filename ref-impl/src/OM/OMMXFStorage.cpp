@@ -2178,6 +2178,32 @@ void OMMXFStorage::restoreStreams(void)
 #endif
 }
 
+void OMMXFStorage::checkStreams(void)
+{
+  TRACE("OMMXFStorage::checkStreams");
+#if defined(OM_DEBUG)
+  if (_segments != 0) {
+    SegmentListIterator sl(*_segments, OMBefore);
+    while (++sl) {
+      Segment* seg = sl.value();
+      OMUInt64 start = seg->_origin;
+      OMUInt64 end = seg->_origin + seg->_size;
+      setPosition(start);
+      while (position() < end) {
+        OMKLVKey k;
+        bool b = readOuterKLVKey(k);
+        ASSERT("Read key", b);
+        OMUInt64 length = readKLVLength();
+        skipV(length);
+      }
+      OMUInt64 pos = position();
+ 
+     ASSERT("Segment is KLV consistent", pos == end);
+    }
+  }
+#endif
+}
+
 OMMXFStorage::SegmentListIterator*
 OMMXFStorage::streamSegments(OMUInt32 sid) const
 {
