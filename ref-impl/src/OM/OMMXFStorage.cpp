@@ -1794,64 +1794,75 @@ void OMMXFStorage::saveStreams(void)
 
 void OMMXFStorage::restoreStreams(void)
 {
-  TRACE("OMKLVStoredObject::restoreStreams");
+  TRACE("OMMXFStorage::restoreStreams");
 
   OMUInt64 headerPosition;
   findHeader(this, headerPosition);
   setPosition(headerPosition);
 
-  bool inEssence = false;
-  bool inIndex = false;
   OMUInt32 bodySID = 0;
   OMUInt32 indexSID = 0;
   OMUInt32 gridSize = 0;
+  OMUInt64 essenceStart = 0;
+  OMUInt64 indexStart = 0;
+  OMUInt64 essenceLength = 0;
+  OMUInt64 indexLength = 0;
+  OMKLVKey indexKey = {0};
+  OMKLVKey essenceKey = {0};
   OMKLVKey k;
   while (readOuterKLVKey(k)) {
-    if (isBody(k)) {
-      inEssence = false;
-      inIndex = false;
-      readPartition(bodySID, indexSID, gridSize);
-    } else if (isHeader(k)) {
-      inEssence = false;
-      inIndex = false;
-      readPartition(bodySID, indexSID, gridSize);
-    } else if (isFooter(k)) {
-      inEssence = false;
-      inIndex = false;
+    if (isPartition(k)) {
+      OMUInt64 partitionStart = position() - sizeof(OMKLVKey);
+      // Restore index stream segment
+      //
+      if (indexSID != 0) {
+        OMUInt64 indexSize = partitionStart - indexStart - fillBufferZoneSize;
+        streamRestoreSegment(indexSID,
+                             indexStart,
+                             indexSize,
+                             indexLength,
+                             indexKey,
+                             gridSize);
+      }
+      // Restore essence stream segment
+      //
+      if (bodySID != 0) {
+        OMUInt64 essenceSize = partitionStart - essenceStart - fillBufferZoneSize;
+        streamRestoreSegment(bodySID,
+                             essenceStart,
+                             essenceSize,
+                             essenceLength,
+                             essenceKey,
+                             gridSize);
+      }
       readPartition(bodySID, indexSID, gridSize);
     } else if (isIndex(k)) {
-      OMUInt64 length = readKLVLength();
-      // Restore index stream segment
-      inIndex = true;
-      inEssence = false;
-      if ((indexSID != 0) && (inIndex)) {
-        streamRestoreSegment(indexSID,
-                             position(),
-                             length,
-                             length,
-                             k,
-                             gridSize);
-      }
-      skipV(length);
+      indexLength = readKLVLength();
+      indexStart = position();
+      indexKey = k;
+      skipV(indexLength);
     } else if (isEssence(k)) {
-      OMUInt64 length = readKLVLength();
-      // Restore essence stream segment
-      inEssence = true;
-      inIndex = false;
-      if ((bodySID != 0) && (inEssence)) {
-        streamRestoreSegment(bodySID,
-                             position(),
-                             length,
-                             length,
-                             k,
-                             gridSize);
-      }
-      skipV(length);
+      essenceLength = readKLVLength();
+      essenceStart = position();
+      essenceKey = k;
+      skipV(essenceLength);
     } else if (k == RandomIndexMetadataKey) {
       readRandomIndex();
     } else {
       skipLV();
     }
+  }
+  OMUInt64 fileEnd = position();
+  // Restore index stream segment
+  //
+  if (indexSID != 0) {
+    OMUInt64 indexSize = fileEnd - indexStart;
+    streamRestoreSegment(indexSID,
+                         indexStart,
+                         indexSize,
+                         indexLength,
+                         indexKey,
+                         gridSize);
   }
 }
 
