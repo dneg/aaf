@@ -28,7 +28,8 @@
 #include "OMRawStorage.h"
 
 OMKLVStoredStream::OMKLVStoredStream(OMRawStorage* store)
-: _store(store),
+: _essenceElementLabel(nullOMKLVKey),
+  _store(store),
   _position(0)
 {
   TRACE("OMKLVStoredStream::OMKLVStoredStream");
@@ -131,4 +132,52 @@ void OMKLVStoredStream::close(void)
 
   delete _store;
   _store = 0;
+}
+
+  // @mfunc Set the essence element label to <p label>.
+  //   @parm The new label.
+void OMKLVStoredStream::setEssenceElementLabel(const OMKLVKey& label)
+{
+  TRACE("OMKLVStoredStream::setEssenceElementLabel");
+  _essenceElementLabel = label;
+}
+
+  // @mfunc Get the essence element label.
+  //   @rdesc The label.
+OMKLVKey OMKLVStoredStream::essenceElementLabel(void) const
+{
+  TRACE("OMKLVStoredStream::essenceElementLabel");
+  return _essenceElementLabel;
+}
+
+  // @mfunc Set the block size (alignment) of this essence element.
+  //   @parm The block size.
+void OMKLVStoredStream::setBlockSize(OMUInt32 blockSize)
+{
+  TRACE("OMKLVStoredStream::setBlockSize");
+  _blockSize = blockSize;
+}
+
+  // @mfunc The block size (alignment) of this essence element.
+  //   @rdecs The block size.
+OMUInt32 OMKLVStoredStream::blockSize(void) const
+{
+  TRACE("OMKLVStoredStream::blockSize");
+  return _blockSize;
+}
+
+  // @mfunc Set the file offset of this essence element.
+  //   @parm The file offset.
+void OMKLVStoredStream::setFileOffset(OMUInt64 fileOffset)
+{
+  TRACE("OMKLVStoredStream::setFileOffset");
+  _fileOffset = fileOffset;
+}
+
+  // @mfunc The file offset of this essence element.
+  //   @rdesc The file offset.
+OMUInt64 OMKLVStoredStream::fileOffset(void) const
+{
+  TRACE("OMKLVStoredStream::fileOffset");
+  return _fileOffset;
 }
