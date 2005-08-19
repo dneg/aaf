@@ -258,19 +258,17 @@ public:
 
   virtual void setObjectDirectoryOffset(OMUInt64 objectDirectoryOffset);
 
-    // stream <-> stream id
-  virtual void associate(OMDataStream* stream,
-                         const OMUniqueObjectIdentification& sid);
+  virtual OMUInt32 addStream(OMDataStream* stream);
+
+  virtual OMUInt32 streamIdentification(OMDataStream* stream);
+
+  virtual OMDataStream* stream(OMUInt32 sid);
+
+  virtual void associate(OMDataStream* stream, OMUInt32 sid);
+
+  virtual bool containsStream(OMUInt32 sid);
 
   virtual bool containsStream(OMDataStream* stream);
-
-  virtual bool containsStream(const OMUniqueObjectIdentification& sid);
-
-    // Stream -> streamId
-  virtual OMUniqueObjectIdentification streamId(OMDataStream* stream);
-
-    // streamId -> Stream
-  virtual OMDataStream* stream(const OMUniqueObjectIdentification& sid);
 
     // @cmember Record a reference to <p tag> at <p address>.
   void reference(OMUInt64 address, OMUInt8 tag);
@@ -306,8 +304,8 @@ private:
 
   ObjectSet* objectToInstanceId(void);
 
-  OMSet<OMDataStream*, OMUniqueObjectIdentification>* streamToStreamId(void);
-  OMSet<OMUniqueObjectIdentification, OMDataStream*>* streamIdToStream(void);
+  OMSet<OMDataStream*, OMUInt32>* streamToSid(void);
+  OMSet<OMUInt32, OMDataStream*>* sidToStream(void);
 
   struct Fixup;
   typedef OMList<Fixup*> FixupList;
@@ -329,8 +327,11 @@ private:
   OMUInt64 _objectDirectoryOffset;    // offset of object directory
   ObjectDirectory* _instanceIdToObject;
   ObjectSet* _objectToInstanceId;
-  OMSet<OMDataStream*, OMUniqueObjectIdentification>* _streamToStreamId;
-  OMSet<OMUniqueObjectIdentification, OMDataStream*>* _streamIdToStream;
+  OMSet<OMDataStream*, OMUInt32>* _streamToSid;
+  OMSet<OMUInt32, OMDataStream*>* _sidToStream;
+  OMUInt32 _maxSid;
+
+  OMUInt64 _fileSize;
 
   struct Partition {
     OMUInt64 _address;
