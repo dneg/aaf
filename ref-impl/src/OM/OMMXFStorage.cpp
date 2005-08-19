@@ -231,13 +231,13 @@ OMUniqueObjectIdentification OMMXFStorage::generation(void) const
 bool OMMXFStorage::isHeader(const OMKLVKey& k)
 {
   bool result;
-  if (memcmp(&OpenHeaderPartitionKey, &k, sizeof(k)) == 0) {
+  if (memcmp(&OpenIncompleteHeaderPartitionKey, &k, sizeof(k)) == 0) {
     result = true;
-  } else if (memcmp(&OpenCompleteHeaderPartitionKey, &k, sizeof(k)) == 0) {
+  } else if (memcmp(&IncompleteHeaderPartitionKey, &k, sizeof(k)) == 0) {
     result = true;
-  } else if (memcmp(&ClosedHeaderPartitionKey, &k, sizeof(k)) == 0) {
+  } else if (memcmp(&OpenHeaderPartitionKey, &k, sizeof(k)) == 0) {
     result = true;
-  } else if (memcmp(&ClosedCompleteHeaderPartitionKey, &k, sizeof(k)) == 0) {
+  } else if (memcmp(&HeaderPartitionKey, &k, sizeof(k)) == 0) {
     result = true;
   } else {
     result = false;
@@ -281,7 +281,7 @@ void OMMXFStorage::writeHeaderPartition(OMUInt32 bodySID,
 {
   TRACE("OMMXFStorage::writeHeaderPartition");
 
-  writePartition(ClosedCompleteHeaderPartitionKey, bodySID, indexSID, KAGSize);
+  writePartition(HeaderPartitionKey, bodySID, indexSID, KAGSize);
   OMUInt64 currentPosition = position();
   fillAlignK(currentPosition, defaultKAGSize);
 }
