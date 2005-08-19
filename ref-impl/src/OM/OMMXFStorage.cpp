@@ -1708,7 +1708,7 @@ OMMXFStorage::streamSegment(OMUInt32 sid, OMUInt64 position)
   }
   POSTCONDITION("Valid result", result != 0);
   POSTCONDITION("Valid result", position >= result->_start);
-//POSTCONDITION("Valid result", position <= result->_start + result->_size);
+  POSTCONDITION("Valid result", position <= result->_start + result->_size);
   return result;
 }
 
