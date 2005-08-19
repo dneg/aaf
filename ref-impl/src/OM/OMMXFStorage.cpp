@@ -114,6 +114,11 @@ OMMXFStorage::~OMMXFStorage(void)
   }
 }
 
+  // @mfunc Close this <c OMMXFStorage>.
+void OMMXFStorage::close(void)
+{
+}
+
   // @mfunc Set the operational pattern to <p pattern>.
   //   @parm The operational pattern.
 void OMMXFStorage::setOperationalPattern(const OMKLVKey& pattern)
