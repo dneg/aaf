@@ -348,7 +348,6 @@ void OMMXFStorage::fillAlignK(const OMUInt64& currentPosition,
   TRACE("OMMXFStorage::fillAlignK");
   PRECONDITION("Valid KAG sise", KAGSize > 0);
 
-  OMUInt64 minimumFill = sizeof(OMKLVKey) + sizeof(OMUInt64) + 1;
   // K fill, L fill
   OMUInt64 overhead = minimumFill;
   OMUInt64 position = currentPosition + overhead;
@@ -368,7 +367,6 @@ void OMMXFStorage::fillAlignV(const OMUInt64& currentPosition,
   TRACE("OMMXFStorage::fillAlignV");
   PRECONDITION("Valid KAG sise", KAGSize > 0);
 
-  OMUInt64 minimumFill = sizeof(OMKLVKey) + sizeof(OMUInt64) + 1;
   // K fill, L fill, K next, L next
   OMUInt64 overhead = minimumFill + minimumFill;
   OMUInt64 position = currentPosition + overhead;
