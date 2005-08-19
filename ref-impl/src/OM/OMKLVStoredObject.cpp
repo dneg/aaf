@@ -144,8 +144,7 @@ OMKLVStoredObject::isRecognized(OMRawStorage* rawStorage)
   bool result = true;
   OMKLVKey k;
   if (OMMXFStorage::read(rawStorage, k)) {
-    k.octet14 = 0x02;
-    if (k == ClosedHeaderPartitionKey) {
+    if (OMMXFStorage::isHeader(k)) {
       OMUInt64 length;
       if (OMMXFStorage::readKLVLength(rawStorage, length)) {
         OMUInt16 majorVersion;
@@ -633,7 +632,7 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
 
   OMKLVKey k;
   _storage->readKLVKey(k);
-  if (k == ClosedHeaderPartitionKey) {
+  if (OMMXFStorage::isHeader(k)) {
     // Read the header partition
     _storage->readHeaderPartition();
     _storage->readKLVKey(k);
