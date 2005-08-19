@@ -1753,7 +1753,7 @@ void OMKLVStoredObject::writeKLVFill(OMRawStorage* store,
   writeKLVKey(store, fillKey);
   writeKLVLength(store, length);
   for (OMUInt64 i = 0; i < length; i++) {
-    const OMByte fillPattern[] = "FFFF.FFFF TIM MEC HEHT GEWYRCAN ";
+    const OMByte fillPattern[] = "FFFF.FFFE TIM MEC HEHT GEWYRCAN ";
     write(store, fillPattern[i % (sizeof(fillPattern) - 1)]);
   }
 }
