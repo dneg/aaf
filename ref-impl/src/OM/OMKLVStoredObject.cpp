@@ -76,7 +76,6 @@
 #include "OMRawStorage.h"
 
 #define USETAGTABLE 1
-//#define OMONLY 1
 
   // @mfunc Open the root <c OMKLVStoredObject> in the raw storage
   //        <p rawStorage> for reading only.
@@ -2006,11 +2005,7 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
       OMPropertyId pid = propertyDefinition->localIdentification();
       OMDictionary::mapToKLV(pid);
       _storage->write(pid, _reorderBytes);
-#if defined(OMONLY)
       OMUniqueObjectIdentification id = propertyDefinition->identification();
-#else
-      OMUniqueObjectIdentification id = propertyDefinition->identification();
-#endif
       OMDictionary::mapToKLV(id);
       OMKLVKey k;
       convert(k, id);
