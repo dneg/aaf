@@ -251,7 +251,7 @@ public:
 
   virtual void writeRandomIndex(void);
 
-  virtual void readRandomIndex(void);
+  virtual void readRandomIndex(OMUInt64 length);
 
     // @cmember Write a fill key, a BER encoded length and
     //          <p length> bytes of fill.
