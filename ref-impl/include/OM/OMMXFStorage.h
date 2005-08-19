@@ -150,6 +150,16 @@ public:
 
   virtual void writeBerLength(OMUInt32 lengthSize, const OMUInt64& length);
 
+    // @cmember The minimum size of <p i> when encoded using <f berEncode>.
+    //          The returned size includes the BER length byte.
+  static size_t berEncodedSize(const OMUInt64 i);
+
+    // @cmember BER encode <p value> into <p berValueBuffer>.
+  static void berEncode(OMByte* berValueBuffer,
+                        size_t berValueBufferSize,
+                        const OMUInt32& berValueSize,
+                        const OMUInt64& value);
+
   struct ObjectDirectoryEntry {
     OMStorable* _object;
     OMUInt64 _offset;
