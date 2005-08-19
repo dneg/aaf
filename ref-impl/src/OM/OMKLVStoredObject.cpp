@@ -1171,6 +1171,16 @@ void OMKLVStoredObject::restore(OMDataStream& /* stream */,
   ASSERT("NYI", false);
 }
 
+void OMKLVStoredObject::write(const wchar_t* string)
+{
+  TRACE("OMKLVStoredObject::write");
+}
+
+void OMKLVStoredObject::write(bool b)
+{
+  TRACE("OMKLVStoredObject::write");
+}
+
 void OMKLVStoredObject::writeProperty(OMPropertyId pid, const OMUInt32& value)
 {
   TRACE("OMKLVStoredObject::writeProperty");
