@@ -866,7 +866,15 @@ void OMMXFStorage::removeObject(OMStorable& object)
 {
   TRACE("OMMXFStorage::removeObject");
 
-  instanceIdToObject()->remove(instanceId(&object));
+  PRECONDITION("Object directory exists", _instanceIdToObject != 0);
+  PRECONDITION("Object set exists", _objectToInstanceId != 0);
+
+  OMUniqueObjectIdentification k;
+  bool found = objectToInstanceId()->find(&object, k);
+  ASSERT("Object found", found);
+
+  objectToInstanceId()->remove(&object);
+  instanceIdToObject()->remove(k);
 }
 
 bool
