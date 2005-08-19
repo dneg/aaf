@@ -1538,7 +1538,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
           OMByte* key = new OMByte[keySize];
           ASSERT("Valid heap pointer", key != 0);
           OMVector<OMUniqueObjectIdentification> objects;
-          OMVector<void*> keys;
+          OMVector<OMByte*> keys;
           objects.grow(count);
           keys.grow(count);
 
@@ -1554,7 +1554,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
                 objects.insert(id);
               }
 
-              void* k = new OMByte[keySize];
+              OMByte* k = new OMByte[keySize];
               memcpy(k, element.identification(), keySize);
               keys.insert(k);
 
@@ -1562,11 +1562,11 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
             delete [] cName;
           }
 
-          OMVectorIterator<void*> kiter(keys, OMBefore);
+          OMVectorIterator<OMByte*> kiter(keys, OMBefore);
           while (++kiter) {
-            void* k = kiter.value();
+            OMByte* k = kiter.value();
             s->remove(k);
-            //delete [] k;
+            delete [] k;
           }
 
           OMUInt32 localKey = 0;
