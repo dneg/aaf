@@ -125,6 +125,19 @@ public:
   virtual void fillAlignV(const OMUInt64& currentPosition,
                           const OMUInt32& KAGSize);
 
+  virtual void write(const OMByte* bytes,
+                     OMUInt32 byteCount,
+                     OMUInt32& bytesWritten);
+  virtual void write(const OMUInt8& i);
+  virtual void write(const OMUInt16& i, bool reorderBytes);
+  virtual void write(const OMUInt32& i, bool reorderBytes);
+  virtual void write(const OMUInt64& i, bool reorderBytes);
+  virtual void write(const OMUniqueObjectIdentification& id,
+                     bool reorderBytes);
+
+  virtual void write(const OMByte* buffer,
+                     const OMUInt32& bufferSize);
+
   struct ObjectDirectoryEntry {
     OMStorable* _object;
     OMUInt64 _offset;
