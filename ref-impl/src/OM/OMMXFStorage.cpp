@@ -2283,6 +2283,8 @@ void OMMXFStorage::saveStreams(void)
       if ((seg == last) &&  (seg->_stream->_label == IndexTableSegmentKey)) {
         // If the last segment is index - put it in the footer.
         writeFooterPartition(s->_sid, s->_gridSize);
+      } else if (s->_label == IndexTableSegmentKey) {
+        writeBodyPartition(0, s->_sid, s->_gridSize);
       } else {
         // Otherwise this segment gets its own body
         writeBodyPartition(s->_sid, 0, s->_gridSize);
@@ -2379,6 +2381,8 @@ void OMMXFStorage::saveStreams(void)
         // and it's a part of an index stream - put it
         // in the footer partition.
         writeFooterPartition(s->_sid, s->_gridSize);
+      } else if (s->_label == IndexTableSegmentKey) {
+        writeBodyPartition(0, s->_sid, s->_gridSize);
       } else {
         writeBodyPartition(s->_sid, 0, s->_gridSize);
       }
