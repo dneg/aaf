@@ -245,7 +245,7 @@ void OMMXFStorage::writeHeaderPartition(OMUInt32 bodySID,
 {
   TRACE("OMMXFStorage::writeHeaderPartition");
 
-  writePartition(ClosedHeaderPartitionKey, bodySID, indexSID, KAGSize);
+  writePartition(ClosedCompleteHeaderPartitionKey, bodySID, indexSID, KAGSize);
   OMUInt64 currentPosition = position();
   fillAlignK(currentPosition, defaultKAGSize);
 }
