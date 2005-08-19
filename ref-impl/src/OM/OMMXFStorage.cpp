@@ -887,6 +887,21 @@ void OMMXFStorage::readKLVKey(OMKLVKey& key) const
   POSTCONDITION("All bytes read", x == sizeof(OMKLVKey));
 }
 
+bool OMMXFStorage::readOuterKLVKey(OMKLVKey& key) const
+{
+  TRACE("OMMXFStorage::readOuterKLVKey");
+
+  OMUInt32 x;
+  OMByte* dest = reinterpret_cast<OMByte*>(&key);
+  read(dest, sizeof(OMKLVKey), x);
+  ASSERT("Read whole key or nothing", (x == 0) || (x == sizeof(OMKLVKey)));
+  bool result = false;
+  if (x == sizeof(OMKLVKey)) {
+    result = true;
+  }
+  return result;
+}
+
 OMUInt64 OMMXFStorage::readKLVLength(void) const
 {
   TRACE("OMMXFStorage::readKLVLength");
