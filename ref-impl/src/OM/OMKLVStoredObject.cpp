@@ -1533,6 +1533,11 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
   }
 }
 
+void OMKLVStoredObject::streamRestore(OMRawStorage* /* store */)
+{
+  TRACE("OMKLVStoredObject::streamRestore")
+}
+
 void OMKLVStoredObject::referenceRestore(OMStorable* object,
                                          OMPropertyId ANAME(pid))
 {
