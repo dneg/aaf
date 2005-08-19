@@ -1893,7 +1893,153 @@ void OMMXFStorage::saveStreams(void)
 void OMMXFStorage::restoreStreams(void)
 {
   TRACE("OMMXFStorage::restoreStreams");
-#if defined(OM_NEW_STREAM_PARSING)
+#if defined(OM_FASTER_STREAM_PARSING)
+
+  // 1) Find all partitions
+  //
+
+  // Find header
+  //
+  OMUInt64 header;
+  findHeader(this, header);
+
+  OMKLVKey k;
+  OMUInt64 length;
+  OMUInt64 current;
+  OMUInt64 here; // Same as current, except for bogus files
+  OMUInt64 footer;
+  OMUInt64 previous;
+
+  OMUInt32 bodySID = 0;
+  OMUInt32 indexSID = 0;
+  OMUInt32 gridSize = 0;
+  Partition* p;
+
+  // Read header
+  //
+  setPosition(header);
+  current = header;
+  readOuterKLVKey(k);
+  ASSERT("Read header", isHeader(k));
+  length = readKLVLength();
+  readPartition(length, bodySID, indexSID, gridSize, previous, here, footer);
+  p = new Partition;
+  ASSERT("Valid heap pointer", p != 0);
+  p->_address = current;
+  p->_sid = bodySID;
+  p->_previous = previous;
+  p->_indexSID = indexSID;
+  _partitions.prepend(p);
+
+  // Read the footer
+  setPosition(footer + header);
+  current = footer + header;
+  readOuterKLVKey(k);
+  ASSERT("Read footer", isFooter(k));
+  length = readKLVLength();
+  readPartition(length, bodySID, indexSID, gridSize, previous, here, footer);
+  p = new Partition;
+  ASSERT("Valid heap pointer", p != 0);
+  p->_address = current;
+  p->_sid = bodySID;
+  p->_previous = previous;
+  p->_indexSID = indexSID;
+  _partitions.append(p);
+
+  while ((previous + header) != header) {
+    setPosition(previous + header);
+    current = previous + header;
+    readOuterKLVKey(k);
+    ASSERT("Read body", isBody(k));
+    length = readKLVLength();
+    readPartition(length, bodySID, indexSID, gridSize, previous, here, footer);
+    p = new Partition;
+    ASSERT("Valid heap pointer", p != 0);
+    p->_address = current;
+    p->_sid = bodySID;
+    p->_previous = previous;
+    p->_indexSID = indexSID;
+    _partitions.insertAt(p, 1); // After header
+  }
+
+  // 2) Find the random index pack (or the end of the file);
+  OMUInt64 last = size();
+#if 1
+  OMUInt64 indexPosition;
+  if (findRandomIndex(last, indexPosition)) {
+    last = indexPosition;
+  }
+#else
+  setPosition(last - sizeof(OMUInt32));
+  OMUInt32 ripSize;
+  read(ripSize, _reorderBytes);
+  if (true) { // How do we check for a reasonable size ?
+    setPosition(last - ripSize + sizeof(OMUInt32));
+    if (readOuterKLVKey(k)) {
+      if (k == RandomIndexMetadataKey) {
+        last = last - ripSize + sizeof(OMUInt32);
+      }
+    }
+  }
+#endif
+
+  // 3) Find essence and index within the partitions
+  //
+
+  size_t count = _partitions.count();
+  for (size_t i = 0; i < count; i++) {
+    p = _partitions.valueAt(i);
+    bool needBody = false;
+    if (p->_sid != 0) {
+      needBody = true;
+    }
+    bool needIndex = false;
+    if (p->_indexSID != 0) {
+      needIndex = true;
+    }
+    setPosition(p->_address);
+    OMUInt64 keyPosition = position();
+    readOuterKLVKey(k);
+    ASSERT("Read partition", isPartition(k));
+    length = readKLVLength();
+    markMetadataEnd(keyPosition);
+    markIndexEnd(keyPosition);
+    markEssenceSegmentEnd(keyPosition);
+    readPartition(length, bodySID, indexSID, gridSize);
+    while (needBody || needIndex) {
+      keyPosition = position();
+      readOuterKLVKey(k);
+      length = readKLVLength();
+      if (k == primerKey) {
+        markMetadataStart(keyPosition);
+        skipV(length);
+      } else if (k == RandomIndexMetadataKey) {
+        markMetadataEnd(keyPosition);
+        markIndexEnd(keyPosition);
+        readRandomIndex(length);
+      } else if (isEssence(k) || k == SystemMetadataKey) {
+        markMetadataEnd(keyPosition);
+        markIndexEnd(keyPosition);
+        markEssenceSegmentStart(k, bodySID, gridSize, keyPosition);
+        needBody = false;
+        skipV(length);
+      } else if (isIndex(k)) {
+        markMetadataEnd(keyPosition);
+        markIndexStart(k, indexSID, gridSize, keyPosition);
+        needIndex = false;
+        skipV(length);
+      } else if (k == fillKey) {
+        skipV(length);
+        markFill(keyPosition, position());
+      } else {
+        skipV(length);
+      }
+    }
+  }
+  markMetadataEnd(last);
+  markIndexEnd(last);
+
+#elif defined(OM_NEW_STREAM_PARSING)
   OMUInt64 headerPosition;
   findHeader(this, headerPosition);
   setPosition(headerPosition);
