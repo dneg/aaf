@@ -103,7 +103,16 @@ void OMKLVStoredStream::read(OMUInt64 position,
                              const void* clientArgument)
 {
   TRACE("OMKLVStoredStream::read");
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Valid store", _store != 0);
+  PRECONDITION("Valid data buffer", buffer != 0);
+  PRECONDITION("Valid size", bytes > 0);
+
+  _store->streamReadAt(_sid,
+                       _position,
+                       buffer,
+                       bytes,
+                       completion,
+                       clientArgument);
 }
 
   // Asynchronous read - multiple buffers
@@ -114,7 +123,16 @@ void OMKLVStoredStream::read(OMUInt64 position,
                              const void* clientArgument) const
 {
   TRACE("OMKLVStoredStream::read");
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Valid store", _store != 0);
+  PRECONDITION("Valid buffers", buffers != 0);
+  PRECONDITION("Valid buffer count", bufferCount > 0);
+
+  _store->streamReadAt(_sid,
+                       position,
+                       buffers,
+                       bufferCount,
+                       completion,
+                       clientArgument);
 }
 
 void OMKLVStoredStream::write(void* ANAME(data), size_t ANAME(size))
@@ -175,7 +193,16 @@ void OMKLVStoredStream::write(OMUInt64 position,
                               const void* clientArgument)
 {
   TRACE("OMKLVStoredStream::write");
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Valid store", _store != 0);
+  PRECONDITION("Valid data", buffer != 0);
+  PRECONDITION("Valid size", bytes > 0);
+
+  _store->streamWriteAt(_sid,
+                        position,
+                        buffer,
+                        bytes,
+                        completion,
+                        clientArgument);
 }
 
   // Asynchronous write - multiple buffers
@@ -186,7 +213,16 @@ void OMKLVStoredStream::write(OMUInt64 position,
                               const void* clientArgument)
 {
   TRACE("OMKLVStoredStream::write");
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Valid store", _store != 0);
+  PRECONDITION("Valid buffers", buffers != 0);
+  PRECONDITION("Valid buffer count", bufferCount > 0);
+
+  _store->streamWriteAt(_sid,
+                        position,
+                        buffers,
+                        bufferCount,
+                        completion,
+                        clientArgument);
 }
 
 OMUInt64 OMKLVStoredStream::size(void) const
