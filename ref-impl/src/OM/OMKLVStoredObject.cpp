@@ -1486,10 +1486,8 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
       referenceRestore(properties.container(), pid);
     } else if ((!properties.isAllowed(pid)) && (pid > 0x8000)) { // HACK4MEIP2
       // Dark extension
-      OMByte b;
-      for (OMPropertySize i = 0; i < length; i++) {
-        _storage->read(b); // discard value !! tjb
-      }
+      OMUInt64 len = length;
+      _storage->skipV(len);  // discard value !! tjb
     } else {
     OMProperty* p = properties.get(pid);
     ASSERT("Valid property", p != 0);
