@@ -45,7 +45,6 @@
 
 //#define INSTANCEID_DEBUG 1
 //#define OMONLY 1
-//#define OM_NEW_STREAM_PARSING
 
   // @mfunc Constructor.
 OMMXFStorage::OMMXFStorage(OMRawStorage* store)
