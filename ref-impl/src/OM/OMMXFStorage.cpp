@@ -298,6 +298,18 @@ bool OMMXFStorage::isIndex(const OMKLVKey& k)
   return result;
 }
 
+bool OMMXFStorage::isEssence(const OMKLVKey& k)
+{
+  TRACE("OMMXFStorage::isEssence");
+  bool result;
+  if (memcmp(&EssenceElementPrefix, &k, sizeof(EssenceElementPrefix)) == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 void OMMXFStorage::writeHeaderPartition(OMUInt32 bodySID,
                                         OMUInt32 indexSID,
                                         OMUInt32 KAGSize)
