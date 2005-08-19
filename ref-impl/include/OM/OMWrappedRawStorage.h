@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -161,6 +161,100 @@ public:
     // @cmember Synchronize this <c OMWrappedRawStorage> with its external
     //          representation.
   virtual void synchronize(void);
+
+  // Functions for accessing stream data within this <c OMWrappedRawStorage>
+
+    // @cmember Attempt to read the number of stream data bytes given by
+    //          <p byteCount> from the current position in this
+    //          <c OMWrappedRawStorage> into the buffer at address <p bytes>.
+    //          The actual number of bytes read is returned in <p bytesRead>.
+  virtual void streamRead(OMByte* bytes,
+                          OMUInt32 byteCount,
+                          OMUInt32& bytesRead) const;
+
+    // @cmember Attempt to read the number of stream data bytes given by
+    //          <p byteCount> from offset <p position> in this
+    //          <c OMWrappedRawStorage> into the buffer at address <p bytes>.
+    //          The actual number of bytes read is returned in <p bytesRead>.
+  virtual void streamReadAt(OMUInt64 position,
+                            OMByte* bytes,
+                            OMUInt32 byteCount,
+                            OMUInt32& bytesRead) const;
+
+    // @cmember Attempt to fill the vector of buffers given by <p buffers>
+    //          with stream data read from the current position in
+    //          this <c OMWrappedRawStorage>. This is "read scatter".
+    //          The <p bufferCount> buffers are read in order until all have
+    //          been successfully read or an error is encountered. Once
+    //          an error has been encountered on one buffer no additional
+    //          buffers are read.
+    //          The number of bytes read is returned in <p bytesRead>.
+  virtual void streamRead(OMIOVector buffers,
+                          OMUInt32 bufferCount,
+                          OMUInt32& bytesRead) const;
+
+    // @cmember Attempt to fill the vector of buffers given by <p buffers>
+    //          with stream data read from offset <p position> in
+    //          this <c OMWrappedRawStorage>. This is "read scatter".
+    //          The <p bufferCount> buffers are read in order until all have
+    //          been successfully read or an error is encountered. Once
+    //          an error has been encountered on one buffer no additional
+    //          buffers are read.
+    //          The number of bytes read is returned in <p bytesRead>.
+  virtual void streamReadAt(OMUInt64 position,
+                            OMIOVector buffers,
+                            OMUInt32 bufferCount,
+                            OMUInt32& bytesRead) const;
+
+    // @cmember Attempt to write the number of stream data bytes given by
+    //          <p byteCount> to the current position in this
+    //          <c OMWrappedRawStorage>
+    //          from the buffer at address <p bytes>.
+    //          The actual number of bytes written is returned in
+    //          <p bytesWritten>.
+  virtual void streamWrite(const OMByte* bytes,
+                           OMUInt32 byteCount,
+                           OMUInt32& bytesWritten);
+
+    // @cmember Attempt to write the number of stream data bytes given by
+    //          <p byteCount> to offset  <p position> in this
+    //          <c OMWrappedRawStorage>
+    //          from the buffer at address <p bytes>.
+    //          The actual number of bytes written is returned in
+    //          <p bytesWritten>.
+  virtual void streamWriteAt(OMUInt64 position,
+                             const OMByte* bytes,
+                             OMUInt32 byteCount,
+                             OMUInt32& bytesWritten);
+
+    // @cmember Attempt to write the vector of buffers given by <p buffers>
+    //          to this <c OMWrappedRawStorage>. Stream data bytes are written
+    //          starting at the current position in this
+    //          <c OMWrappedRawStorage>.
+    //          This is "write gather".
+    //          The <p bufferCount> buffers are written in order until all have
+    //          been successfully written or an error is encountered. Once
+    //          an error has been encountered on one buffer no additional
+    //          buffers are written.
+    //          The number of bytes written is returned in <p bytesWritten>.
+  virtual void streamWrite(OMIOVector buffers,
+                           OMUInt32 bufferCount,
+                           OMUInt32& bytesWritten);
+
+    // @cmember Attempt to write the vector of buffers given by <p buffers>
+    //          to this <c OMWrappedRawStorage>. Stream data bytes are written
+    //          starting at offset <p position> in this
+    //          <c OMWrappedRawStorage>.
+    //          This is "write gather".
+    //          The <p bufferCount> buffers are written in order until all have
+    //          been successfully written or an error is encountered. Once
+    //          an error has been encountered on one buffer no additional
+    //          buffers are written.
+    //          The number of bytes written is returned in <p bytesWritten>.
+  virtual void streamWriteAt(OMUInt64 position,
+                             OMIOVector buffers,
+                             OMUInt32 bufferCount,
+                             OMUInt32& bytesWritten);
 
 private:
   OMRawStorage* _store;
