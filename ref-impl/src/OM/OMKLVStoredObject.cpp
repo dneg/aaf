@@ -1796,10 +1796,6 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
     PropertyDefinitionsIterator*
                            properties = classDefinition->propertyDefinitions();
     while (++(*properties)) {
-      OMObject* obj = properties->currentObject();
-      OMPropertyDefinition* propertyDefinition =
-                                      dynamic_cast<OMPropertyDefinition*>(obj);
-      ASSERT("Object is correct type", propertyDefinition != 0);
       elementCount = elementCount + 1;
     }
     delete properties;
