@@ -65,7 +65,7 @@ public:
   virtual bool containsEssenceContainerLabel(const OMKLVKey& label) const;
 
     // @cmember Create an iterator over the set of essence container labels.
-  virtual LabelSetIterator* containerLabels(void) const;
+  virtual LabelSetIterator* essenceContainerLabels(void) const;
 
   struct ObjectDirectoryEntry {
     OMStorable* _object;
