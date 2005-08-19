@@ -679,7 +679,7 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
     _storage->readKLVKey(k);
     convert(cid, k);
   }
-  OMProperty* mdp = root->propertySet()->get(0x0001);
+  OMProperty* mdp = root->propertySet()->get(PID_Root_MetaDictionary);
   OMStrongReference* mdsr = dynamic_cast<OMStrongReference*>(mdp);
   ASSERT("Valid type", mdsr != 0);
   OMStrongObjectReference& mdr = mdsr->reference();
@@ -707,7 +707,7 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
 
     _storage->readKLVKey(k);
   }
-  OMProperty* hp = root->propertySet()->get(0x0002);
+  OMProperty* hp = root->propertySet()->get(PID_Root_Header);
   OMStrongReference* hsr = dynamic_cast<OMStrongReference*>(hp);
   ASSERT("Valid type", hsr != 0);
   OMStrongObjectReference& hr = hsr->reference();
@@ -1060,7 +1060,7 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
 {
   TRACE("OMKLVStoredObject::flatSave");
 
-  referenceSave(properties.container(), 0x3c0a);
+  referenceSave(properties.container(), PID_InterchangeObject_InstanceUID);
 
   if (properties.container()->classId() == Class_Root) {
     OMKLVStoredObject* This = const_cast<OMKLVStoredObject*>(this);
@@ -1068,8 +1068,8 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
     OMUInt64 objectDirectoryReference = This->saveObjectDirectoryReference(id);
     _storage->setObjectDirectoryReference(objectDirectoryReference);
 
-    OMPropertyId pid = 0x0004;
-    OMUInt32 version = 0x00000004;
+    OMPropertyId pid = PID_Root_FormatVersion;
+    OMUInt32 version = formatVersion;
     This->writeProperty(pid, version);
   }
 
@@ -1333,7 +1333,7 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
 
   OMUInt64 setLength = _storage->readKLVLength();
 
-  referenceRestore(properties.container(), 0x3c0a);
+  referenceRestore(properties.container(), PID_InterchangeObject_InstanceUID);
   const OMUInt16 overhead = sizeof(OMPropertyId) + sizeof(OMPropertySize);
   setLength = setLength - (overhead + sizeof(OMUniqueObjectIdentification));
 
@@ -1344,7 +1344,7 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
     setLength = setLength - (overhead + sizeof(OMUniqueObjectIdentification) +
                                         sizeof(OMUInt64));
 
-    OMPropertyId pid = 0x0004;
+    OMPropertyId pid = PID_Root_FormatVersion;
     OMUInt32 version;
     readProperty(pid, version);
 
@@ -1897,7 +1897,7 @@ OMUInt64 OMKLVStoredObject::saveObjectDirectoryReference(
   OMPropertySize size = sizeof(OMUniqueObjectIdentification) +
                         sizeof(OMUInt64);
   // pid
-  OMPropertyId pid = 0x0003;
+  OMPropertyId pid = PID_Root_ObjectDirectory;
   _storage->write(pid, _reorderBytes);
   // size
   _storage->write(size, _reorderBytes);
@@ -1919,7 +1919,7 @@ OMKLVStoredObject::restoreObjectDirectoryReference(
   // pid
   OMPropertyId pid;
   _storage->read(pid, _reorderBytes);
-  ASSERT("Expected pid", pid == 0x0003);
+  ASSERT("Expected pid", pid == PID_Root_ObjectDirectory);
   // size
   OMPropertySize size;
   _storage->read(size, _reorderBytes);
