@@ -72,7 +72,13 @@ void OMKLVStoredStream::read(OMIOVector buffers,
                              OMUInt32& bytesRead) const
 {
   TRACE("OMKLVStoredStream::read");
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Valid store", _store != 0);
+  PRECONDITION("Valid buffers", buffers != 0);
+  PRECONDITION("Valid buffer count", bufferCount > 0);
+
+  _store->streamReadAt(_sid, _position, buffers, bufferCount, bytesRead);
+  OMKLVStoredStream* nonConstThis = const_cast<OMKLVStoredStream*>(this);
+  nonConstThis->_position = _position + bytesRead;
 }
 
 void OMKLVStoredStream::read(OMByte* data,
