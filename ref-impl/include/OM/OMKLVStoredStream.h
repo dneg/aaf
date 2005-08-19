@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -27,6 +27,7 @@
 #define OMKLVSTOREDSTREAM_H
 
 #include "OMStoredStream.h"
+#include "OMVector.h"
 
 class OMMXFStorage;
 
@@ -56,6 +57,17 @@ public:
                     const OMUInt32 bytes,
                     OMUInt32& bytesRead) const;
 
+    // @cmember Attempt to read the vector of buffers given by <p buffers>
+    //          from this <c OMKLVStoredStream>. This is "read scatter". The
+    //          <p bufferCount> buffers are read in order until all have
+    //          been successfully read or an error is encountered. Once
+    //          an error has been encountered on one buffer no additional
+    //          buffers are read.
+    //          The number of bytes read is returned in <p bytesRead>.
+  virtual void read(OMIOVector buffers,
+                    OMUInt32 bufferCount,
+                    OMUInt32& bytesRead) const;
+
     // @cmember Write <p size> bytes from the buffer at address
     //          <p data> to this <c OMKLVStoredStream>.
   virtual void write(void* data, size_t size);
@@ -65,6 +77,17 @@ public:
     //          number of bytes written is returned in <p bytesWritten>.
   virtual void write(const OMByte* data,
                      const OMUInt32 bytes,
+                     OMUInt32& bytesWritten);
+
+    // @cmember Attempt to write the vector of buffers given by <p buffers>
+    //          to this <c OMKLVStoredStream>. This is "write gather". The
+    //          <p bufferCount> buffers are written in order until all have
+    //          been successfully written or an error is encountered. Once
+    //          an error has been encountered on one buffer no additional
+    //          buffers are written.
+    //          The number of bytes written is returned in <p bytesWritten>.
+  virtual void write(OMIOVector buffers,
+                     OMUInt32 bufferCount,
                      OMUInt32& bytesWritten);
 
     // @cmember The size of this <c OMKLVStoredStream> in bytes.
