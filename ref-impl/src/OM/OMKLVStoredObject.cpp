@@ -405,10 +405,6 @@ void OMKLVStoredObject::save(OMFile& file)
   _storage->fillAlignK(_storage->position(), fillAlignment);
 
   if (!metaDataOnly) {
-    _storage->writeBodyPartition();
-  }
-
-  if (!metaDataOnly) {
     // Save streams
     //
     streamSave(*file.root()->propertySet());
@@ -597,6 +593,10 @@ void OMKLVStoredObject::save(const OMDataStream& stream)
   OMKLVKey k;
   OMUniqueObjectIdentification sid = _storage->streamId(s);
   convert(k, sid);
+
+  if (!metaDataOnly) {
+    _storage->writeBodyPartition();
+  }
 
   _storage->writeKLVKey(k);
   OMUInt64 length = stream.size();
