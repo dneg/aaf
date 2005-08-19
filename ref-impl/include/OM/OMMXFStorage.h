@@ -199,6 +199,9 @@ public:
     // instanceId -> object
   OMStorable* object(const OMUniqueObjectIdentification& instanceId);
 
+    // enter object into object directory
+  void enterObject(OMStorable& object, OMUInt64 position);
+
   typedef OMSet<OMUniqueObjectIdentification,
                 ObjectDirectoryEntry> ObjectDirectory;
   typedef OMSetIterator<OMUniqueObjectIdentification,
