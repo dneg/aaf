@@ -1375,7 +1375,9 @@ void OMMXFStorage::streamSave(OMDataStream* stream)
   Stream* s = 0;
   segmentMap()->find(sid, s);
   if (s != 0) {
-    OMUInt64 allocatedLength = s->_segments->count() * s->_gridSize;
+    ASSERT("Valid segment list", s->_segments != 0);
+    ASSERT("Stream not segmented", s->_segments->count() == 1);
+    OMUInt64 allocatedLength = allocatedSize(s);
 
     ASSERT("Sane length", allocatedLength >= length);
     // insert fill - tjb
@@ -1630,6 +1632,33 @@ OMMXFStorage::findSegment(Stream* s, OMUInt64 position)
   return result;
 }
 
+OMUInt64 OMMXFStorage::allocatedSize(Stream* s)
+{
+  TRACE("OMMXFStorage::allocatedSize");
+  PRECONDITION("Valid stream", s != 0);
+  PRECONDITION("Valid segment list", s->_segments != 0);
+
+  OMUInt64 result = 0;
+  SegmentListIterator iterator(*s->_segments, OMBefore);
+  while (++iterator) {
+    Segment* c = iterator.value();
+    result = result + c->_size;
+  }
+  return result;
+}
+
+OMMXFStorage::Segment* OMMXFStorage::findLastSegment(Stream* s)
+{
+  TRACE("OMMXFStorage::findLastSegment");
+  PRECONDITION("Valid stream", s != 0);
+  PRECONDITION("Valid segment list", s->_segments != 0);
+
+  SegmentListIterator iterator = s->_segments->last();
+  Segment* result = iterator.value();
+  POSTCONDITION("Valid result", result != 0);
+  return result;
+}
+
 OMMXFStorage::Segment*
 OMMXFStorage::streamSegment(OMUInt32 sid, OMUInt64 position)
 {
@@ -1659,7 +1688,19 @@ OMMXFStorage::streamSegment(OMUInt32 sid, OMUInt64 position)
   Segment* result = findSegment(s, position);
   if (result == 0) {
     // Extend stream
-    result = addSegment(s, s->_size, s->_gridSize, _fileSize);
+    // Find the last segment in the stream
+    Segment* last = findLastSegment(s);
+    ASSERT("Last segment found", last != 0);
+    // Is the last segment at the end of the file
+    if (last->_origin + last->_size == _fileSize) {
+      // Yes, grow the last segment
+      last->_size = last->_size + s->_gridSize;
+      result = last;
+    } else {
+      // No, add a new segment at the end of the file
+      // tjb - segmented streams not yet implemented
+      ASSERT("Unimplemented code not reached", false);
+    }
     _fileSize = _fileSize + s->_gridSize;
   }
   POSTCONDITION("Valid result", result != 0);
