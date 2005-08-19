@@ -268,14 +268,17 @@ void OMMXFStorage::writeRandomIndex(void)
 void OMMXFStorage::readRandomIndex(void)
 {
   TRACE("OMMXFStorage::readRandomIndex");
+  OMUInt32 entrySize = sizeof(OMUInt32) + sizeof(OMUInt64);
   OMUInt64 length = readKLVLength();
-  OMUInt64 entryCount = length / (sizeof(OMUInt32) + sizeof(OMUInt64));
+  OMUInt64 entryCount = (length - sizeof(OMUInt32)) / entrySize;
   for (OMUInt32 i = 0; i < entryCount; i++) {
     OMUInt32 sid;
     read(sid, _reorderBytes);
     OMUInt64 offset;
     read(offset, _reorderBytes);
   }
+  OMUInt32 overallLength;
+  read(overallLength, _reorderBytes);
 }
 
   // @mfunc Write a fill key, a BER encoded length and
