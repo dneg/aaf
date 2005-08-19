@@ -1065,8 +1065,7 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
   if (properties.container()->classId() == Class_Root) {
     OMKLVStoredObject* This = const_cast<OMKLVStoredObject*>(this);
     OMUniqueObjectIdentification id = {0};
-    OMUInt64 objectDirectoryReference = This->saveObjectDirectoryReference(id);
-    _storage->setObjectDirectoryReference(objectDirectoryReference);
+    This->saveObjectDirectoryReference(id);
 
     OMPropertyId pid = PID_Root_FormatVersion;
     OMUInt32 version = formatVersion;
@@ -1891,7 +1890,7 @@ void OMKLVStoredObject::readPrimerPack(OMDictionary* /* dictionary */)
   }
 }
 
-OMUInt64 OMKLVStoredObject::saveObjectDirectoryReference(
+void OMKLVStoredObject::saveObjectDirectoryReference(
                                         const OMUniqueObjectIdentification& id)
 {
   OMPropertySize size = sizeof(OMUniqueObjectIdentification) +
@@ -1904,10 +1903,9 @@ OMUInt64 OMKLVStoredObject::saveObjectDirectoryReference(
   // id
   _storage->write(id, _reorderBytes);
   // offset (not yet known, will patch later)
-  OMUInt64 patch = _storage->position();
   OMUInt64 offset = 0;
+  _storage->reference(_storage->position(), FUT_OBJECTDIRECTORY);
   _storage->write(offset, _reorderBytes);
-  return patch;
 }
 
 OMUInt64
