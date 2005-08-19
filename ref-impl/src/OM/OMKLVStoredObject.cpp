@@ -385,7 +385,7 @@ void OMKLVStoredObject::save(OMFile& file)
 
   // Write the primer
   writePrimerPack(file.dictionary());
-  _storage->fillAlignK(_storage->position(), KAGSize);
+  _storage->fillAlignK(_storage->position(), defaultKAGSize);
 
   // Save the rest of the file
   file.root()->save();
@@ -397,7 +397,7 @@ void OMKLVStoredObject::save(OMFile& file)
   OMUInt32 fillAlignment;
   if (metaDataOnly) {
     // fill to next KAG
-    fillAlignment = KAGSize;
+    fillAlignment = defaultKAGSize;
   } else {
     // fill remainder of pre-allocated space
     fillAlignment = bodyPartitionOffset;
@@ -599,7 +599,7 @@ void OMKLVStoredObject::save(const OMDataStream& stream)
   convert(k, sid);
 
   if (!metaDataOnly) {
-    _storage->writeBodyPartition();
+    _storage->writeBodyPartition(0, defaultKAGSize);
   }
 
   _storage->writeKLVKey(k);
