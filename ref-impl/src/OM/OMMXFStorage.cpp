@@ -1651,7 +1651,24 @@ void OMMXFStorage::streamWriteAt(OMUInt32 sid,
                                  OMUInt32& bytesWritten)
 {
   TRACE("OMMXFStorage::streamWriteAt");
-  ASSERT("Unimplemented code not reached", false);
+
+  // tjb - temporary - loop calling single buffer write
+  OMUInt32 totalBytesWritten = 0;
+  OMUInt64 pos = position;
+  for (OMUInt32 i = 0; i < bufferCount; i++) {
+    OMUInt32 writeCount;
+    streamWriteAt(sid,
+                  pos,
+                  buffers[i]._buffer,
+                  buffers[i]._bufferSize,
+                  writeCount);
+    pos = pos + writeCount;
+    totalBytesWritten = totalBytesWritten + writeCount;
+    if (writeCount != buffers[i]._bufferSize) {
+      break;
+    }
+  }
+  bytesWritten = totalBytesWritten;
 }
 
 void OMMXFStorage::streamRawRead(OMUInt32 /* sid */,
@@ -1729,7 +1746,24 @@ void OMMXFStorage::streamReadAt(OMUInt32 sid,
                                 OMUInt32& bytesRead)
 {
   TRACE("OMMXFStorage::streamReadAt");
-  ASSERT("Unimplemented code not reached", false);
+
+  // tjb - temporary - loop calling single buffer read
+  OMUInt32 totalBytesRead = 0;
+  OMUInt64 pos = position;
+  for (OMUInt32 i = 0; i < bufferCount; i++) {
+    OMUInt32 readCount;
+    streamReadAt(sid,
+                 pos,
+                 buffers[i]._buffer,
+                 buffers[i]._bufferSize,
+                 readCount);
+    pos = pos + readCount;
+    totalBytesRead = totalBytesRead + readCount;
+    if (readCount != buffers[i]._bufferSize) {
+      break;
+    }
+  }
+  bytesRead = totalBytesRead;
 }
 
 void OMMXFStorage::streamRestoreSegment(OMUInt32 sid,
