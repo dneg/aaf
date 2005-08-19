@@ -160,6 +160,8 @@ public:
                         const OMUInt32& berValueSize,
                         const OMUInt64& value);
 
+  virtual bool readHeaderPartition(void);
+
   virtual void read(OMUInt8& i) const;
   virtual void read(OMUInt16& i, bool reorderBytes) const;
   virtual void read(OMUInt32& i, bool reorderBytes) const;
