@@ -171,7 +171,7 @@ OMMXFStorage::essenceContainerLabels(void) const
 }
 
   // @mfunc Set the file generation.
-  //   @parem The file generation.
+  //   @parm The file generation.
 void
 OMMXFStorage::setGeneration(const OMUniqueObjectIdentification& generation)
 {
