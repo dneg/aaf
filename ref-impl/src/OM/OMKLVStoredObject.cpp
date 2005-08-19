@@ -390,10 +390,7 @@ void OMKLVStoredObject::save(OMFile& file)
   file.root()->save();
 
   // Save the meta object directory
-  _objectDirectory = save(instanceIdToObject());
-
-  // Now we know where it lives, fixup the reference
-  fixupObjectDirectoryReference(_objectDirectoryReference, _objectDirectory);
+  _storage->saveObjectDirectory();
 
   // Insert alignment fill
   OMUInt32 bodyPartitionOffset = 0x20000; // Get this from header ?
@@ -430,15 +427,9 @@ void OMKLVStoredObject::save(OMStorable& object)
 {
   TRACE("OMKLVStoredObject::save(OMStorable)");
 
-  OMUniqueObjectIdentification iid = instanceId(&object);
-  if (!instanceIdToObject()->contains(iid)) {
-    // This object has never been saved
-    ObjectDirectoryEntry e;
-    e._object = &object;
-    e._offset = _storage->position();
-    e._flags = 0;
-    instanceIdToObject()->insert(iid, e);
-  }
+  OMUInt64 position = _storage->position();
+  _storage->enterObject(object, position);
+
   save(object.classId());
   save(*object.propertySet());
 }
@@ -669,8 +660,8 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
 
   // restore the meta object directory
   //
-  instanceIdToObject()->remove(instanceId(root));
-  restore(instanceIdToObject());
+  _storage->removeObject(*root);
+  _storage->restoreObjectDirectory();
 
   // restore the meta dictionary
   //
@@ -748,7 +739,7 @@ OMKLVStoredObject::restoreObject(const OMStrongObjectReference& reference)
   OMUniqueObjectIdentification id;
   fromString(id, cName);
   delete [] cName;
-  OMStorable* result = object(id);
+  OMStorable* result = _storage->object(id);
   ASSERT("Object found", result != 0);
     // Attach the object.
   OMProperty* property = reference.property();
@@ -1080,7 +1071,8 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
   if (properties.container()->classId() == Class_Root) {
     OMKLVStoredObject* This = const_cast<OMKLVStoredObject*>(this);
     OMUniqueObjectIdentification id = {0};
-    This->_objectDirectoryReference = This->saveObjectDirectoryReference(id);
+    OMUInt64 objectDirectoryReference = This->saveObjectDirectoryReference(id);
+    _storage->setObjectDirectoryReference(objectDirectoryReference);
 
     OMPropertyId pid = 0x0004;
     OMUInt32 version = 0x00000004;
@@ -1129,7 +1121,7 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
           OMStrongObjectReference& r = element.reference();
           OMStorable* object = r.getValue();
           ASSERT("Valid object", object != 0);
-          OMUniqueObjectIdentification id = instanceId(object);
+          OMUniqueObjectIdentification id = _storage->instanceId(object);
           _storage->write(id, _reorderBytes);
         }
         delete &iterator;
@@ -1154,7 +1146,7 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
           OMStrongObjectReference& r = element.reference();
           OMStorable* object = r.getValue();
           ASSERT("Valid object", object != 0);
-          OMUniqueObjectIdentification id = instanceId(object);
+          OMUniqueObjectIdentification id = _storage->instanceId(object);
           _storage->write(id, _reorderBytes);
         }
         delete &iterator;
@@ -1189,7 +1181,7 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
           OMWeakObjectReference& r = element.reference();
           OMStorable* object = r.getValue();
           ASSERT("Valid object", object != 0);
-          OMUniqueObjectIdentification id = instanceId(object);
+          OMUniqueObjectIdentification id = _storage->instanceId(object);
           _storage->write(id, _reorderBytes);
         }
         delete &iterator;
@@ -1214,7 +1206,7 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
           OMWeakObjectReference& r = element.reference();
           OMStorable* object = r.getValue();
           ASSERT("Valid object", object != 0);
-          OMUniqueObjectIdentification id = instanceId(object);
+          OMUniqueObjectIdentification id = _storage->instanceId(object);
           _storage->write(id, _reorderBytes);
         }
         delete &iterator;
@@ -1332,7 +1324,7 @@ void OMKLVStoredObject::referenceSave(OMStorable* object,
   TRACE("OMKLVStoredObject::referenceSave");
   PRECONDITION("Valid object", object != 0);
 
-  OMUniqueObjectIdentification oid = instanceId(object);
+  OMUniqueObjectIdentification oid = _storage->instanceId(object);
   _storage->write(pid, _reorderBytes);
   OMPropertySize s = sizeof(OMUniqueObjectIdentification);
   _storage->write(s, _reorderBytes);
@@ -1351,7 +1343,8 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
 
   if (properties.container()->classId() == Class_Root) {
     OMUniqueObjectIdentification id;
-    _objectDirectory = restoreObjectDirectoryReference(id);
+    OMUInt64 objectDirectoryOffset = restoreObjectDirectoryReference(id);
+    _storage->setObjectDirectoryOffset(objectDirectoryOffset);
     setLength = setLength - (overhead + sizeof(OMUniqueObjectIdentification) +
                                         sizeof(OMUInt64));
 
@@ -1559,7 +1552,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
             char* cName = convertWideString(name);
             if (isValidObjectIdentificationString(cName)) {
               fromString(id, cName);
-              if (instanceIdToObject()->contains(id)) {
+              if (_storage->containsObject(id)) {
                 objects.insert(id);
               }
 
@@ -1583,7 +1576,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
                                                                OMBefore);
           while (++viter) {
             OMUniqueObjectIdentification id = viter.value();
-            OMStorable* obj = object(id);
+            OMStorable* obj = _storage->object(id);
             ASSERT("Valid object", obj != 0);
             OMProperty* kp = obj->propertySet()->get(keyPid);
             ASSERT("Valid property", kp != 0);
@@ -1628,7 +1621,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
         ASSERT("Valid type", wr != 0);
         OMWeakObjectReference& r = wr->reference();
         OMUniqueObjectIdentification id = r.identification();
-        OMStorable* obj = object(id);
+        OMStorable* obj = _storage->object(id);
 #if defined(USETAGTABLE)
         if (obj != 0) {
 #endif
@@ -1681,7 +1674,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
           OMWeakReferenceVectorElement& element = iterator.value();
           OMWeakObjectReference& r = element.reference();
           OMUniqueObjectIdentification id = r.identification();
-          OMStorable* obj = object(id);
+          OMStorable* obj = _storage->object(id);
 #if defined(USETAGTABLE)
         if (obj != 0) {
 #endif
@@ -1731,7 +1724,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
                                                                OMBefore);
           while (++viter) {
             OMUniqueObjectIdentification id = viter.value();
-            OMStorable* obj = object(id);
+            OMStorable* obj = _storage->object(id);
 #if defined(USETAGTABLE)
             if (obj != 0) {
 #endif
@@ -1814,22 +1807,7 @@ void OMKLVStoredObject::referenceRestore(OMStorable* object,
   ASSERT("Valid length", length == sizeof(OMUniqueObjectIdentification));
   OMUniqueObjectIdentification iid;
   _storage->read(iid, _reorderBytes);
-  ASSERT("Object not present", !objectToInstanceId()->contains(object));
-  objectToInstanceId()->insert(object, iid);
-  ObjectDirectoryEntry* ep = 0;
-  if (instanceIdToObject()->find(iid, &ep)) {
-    ASSERT("No previous entry", ep->_object == 0);
-    ep->_object = object;
-  } else {
-    // Root object
-    ObjectDirectoryEntry e;
-    e._object = object;
-    e._offset = 0;
-    e._flags = 0;
-    ASSERT("Identifier not present", !instanceIdToObject()->contains(iid));
-    instanceIdToObject()->insert(iid, e);
-  }
-  ASSERT("Identifier present", instanceIdToObject()->contains(iid));
+  _storage->associate(object, iid);
 }
 
 void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
@@ -1918,73 +1896,6 @@ void OMKLVStoredObject::readPrimerPack(OMDictionary* /* dictionary */)
   }
 }
 
-OMUniqueObjectIdentification
-OMKLVStoredObject::instanceId(OMStorable* object)
-{
-  TRACE("OMKLVStoredObject::instanceId");
-  PRECONDITION("Valid object", object != 0);
-
-  OMUniqueObjectIdentification result;
-  if (!objectToInstanceId()->find(object, result)) {
-#if defined(INSTANCEID_DEBUG)
-    static OMUInt32 seed = 0;
-    memset(&result, 0, sizeof(result));
-    result.Data1 = ++seed;
-#else
-    result = createUniqueIdentifier();
-#endif
-    objectToInstanceId()->insert(object, result);
-  }
-  return result;
-}
-
-OMStorable*
-OMKLVStoredObject::object(const OMUniqueObjectIdentification& instanceId)
-{
-  TRACE("OMKLVStoredObject::object");
-
-  OMStorable* result;
-  ObjectDirectoryEntry e;
-  if (!instanceIdToObject()->find(instanceId, e)) {
-    result = 0;
-  } else {
-    result = e._object;
-  }
-  return result;
-}
-
-OMSet<OMStorable*, OMUniqueObjectIdentification>*
-OMKLVStoredObject::_objectToInstanceId = 0;
-
-OMSet<OMUniqueObjectIdentification, OMKLVStoredObject::ObjectDirectoryEntry>*
-OMKLVStoredObject::_instanceIdToObject = 0;
-
-OMSet<OMStorable*, OMUniqueObjectIdentification>*
-OMKLVStoredObject::objectToInstanceId(void)
-{
-  TRACE("OMKLVStoredObject::objectToInstanceId");
-
-  if (_objectToInstanceId == 0) {
-    _objectToInstanceId = new OMSet<OMStorable*,
-                                    OMUniqueObjectIdentification>();
-    ASSERT("Valid heap pointer", _objectToInstanceId != 0);
-  }
-  return _objectToInstanceId;
-}
-
-OMSet<OMUniqueObjectIdentification, OMKLVStoredObject::ObjectDirectoryEntry>*
-OMKLVStoredObject::instanceIdToObject(void)
-{
-  TRACE("OMKLVStoredObject::instanceIdToObject");
-
-  if (_instanceIdToObject == 0) {
-    _instanceIdToObject = new OMSet<OMUniqueObjectIdentification,
-                                    OMKLVStoredObject::ObjectDirectoryEntry>();
-    ASSERT("Valid heap pointer", _instanceIdToObject != 0);
-  }
-  return _instanceIdToObject;
-}
-
 OMSet<OMDataStream*, OMKLVKey>* OMKLVStoredObject::_streamToStreamId = 0;
 
 OMSet<OMKLVKey, OMDataStream*>* OMKLVStoredObject::_streamIdToStream = 0;
@@ -2046,93 +1957,6 @@ OMDataStream* OMKLVStoredObject::stream(const OMKLVKey& streamId)
   return result;
 }
 
-OMUInt64 OMKLVStoredObject::save(OMSet<OMUniqueObjectIdentification,
-                                       ObjectDirectoryEntry>* objectTable)
-{
-  TRACE("OMKLVStoredObject::save");
-
-  OMUInt64 result = _storage->position();
-
-  // {F10296F0-56E0-4d2a-9613-B38A87348746}
-  OMUniqueObjectIdentification id =
-  { 0xf10296f0, 0x56e0, 0x4d2a,
-  { 0x96, 0x13, 0xb3, 0x8a, 0x87, 0x34, 0x87, 0x46 } };
-  OMKLVKey k;
-  convert(k, id);
-  _storage->writeKLVKey(k);
-  OMUInt64 entries = objectTable->count();
-  const OMUInt8 entrySize = sizeof(OMUniqueObjectIdentification) + // iid
-                            sizeof(OMUInt64) +                     // offset
-                            sizeof(OMUInt8);                       // flags
-  OMUInt64 length = sizeof(OMUInt64) +                     // entry count
-                    sizeof(OMUInt8) +                      // entry size
-                    (entries * entrySize);                 // entries
-  _storage->writeKLVLength(length);
-
-  _storage->write(entries, _reorderBytes);
-  _storage->write(entrySize);
-
-  OMSetIterator<OMUniqueObjectIdentification, ObjectDirectoryEntry>
-                                      iterator(*_instanceIdToObject, OMBefore);
-  while (++iterator) {
-    OMUniqueObjectIdentification id = iterator.key();
-    ObjectDirectoryEntry e = iterator.value();
-    _storage->write(id, _reorderBytes);
-    _storage->write(e._offset, _reorderBytes);
-    _storage->write(e._flags);
-  }
-  return result;
-}
-
-void OMKLVStoredObject::restore(OMSet<OMUniqueObjectIdentification,
-                                      ObjectDirectoryEntry>* objectTable)
-{
-  TRACE("restore");
-  PRECONDITION("Valid metadata directory", objectTable != 0);
-  PRECONDITION("Valid metadata directory offset", _objectDirectory != 0);
-
-  OMUInt64 savedPosition = _storage->position();
-  _storage->setPosition(_objectDirectory);
-
-  // {F10296F0-56E0-4d2a-9613-B38A87348746}
-  OMUniqueObjectIdentification id =
-  { 0xf10296f0, 0x56e0, 0x4d2a,
-  { 0x96, 0x13, 0xb3, 0x8a, 0x87, 0x34, 0x87, 0x46 } };
-  OMKLVKey objectDirectoryKey;
-  convert(objectDirectoryKey, id);
-  OMKLVKey k;
-  _storage->readKLVKey(k);
-  ASSERT("Expected key", k == objectDirectoryKey); // tjb - error
-  OMUInt64 setLength = _storage->readKLVLength();
-  OMUInt64 entries;
-  OMUInt8 entrySize;
-  ASSERT("Valid length", setLength > sizeof(entries) + sizeof(entrySize));
-
-  _storage->read(entries, _reorderBytes);
-  _storage->read(entrySize);
-  ASSERT("Valid entry size",
-                           entrySize == (sizeof(OMUniqueObjectIdentification) +
-                                         sizeof(OMUInt64) +
-                                         sizeof(OMUInt8)));
-  ASSERT("Consistent length and entry count",
-             setLength == sizeof(entries) +
-                          sizeof(entrySize) + (entries * entrySize));
-
-  for (OMUInt64 i = 0; i < entries; i++) {
-    OMUniqueObjectIdentification id;
-    ObjectDirectoryEntry e;
-
-    _storage->read(id, _reorderBytes);
-    e._object = 0;
-    _storage->read(e._offset, _reorderBytes);
-    _storage->read(e._flags);
-
-    objectTable->insert(id, e);
-  }
-
-  _storage->setPosition(savedPosition);
-}
-
 OMUInt64 OMKLVStoredObject::saveObjectDirectoryReference(
                                         const OMUniqueObjectIdentification& id)
 {
@@ -2150,20 +1974,6 @@ OMUInt64 OMKLVStoredObject::saveObjectDirectoryReference(
   OMUInt64 offset = 0;
   _storage->write(offset, _reorderBytes);
   return patch;
-}
-
-void
-OMKLVStoredObject::fixupObjectDirectoryReference(OMUInt64 patchOffset,
-                                                 OMUInt64 patchValue)
-{
-  TRACE("fixupObjectDirectoryReference");
-  PRECONDITION("Valid patch offset", patchOffset != 0);
-  PRECONDITION("Valid patch value", patchValue!= 0);
-
-  OMUInt64 savedPosition = _storage->position();
-  _storage->setPosition(patchOffset);
-  _storage->write(patchValue, _reorderBytes);
-  _storage->setPosition(savedPosition);
 }
 
 OMUInt64
@@ -2281,18 +2091,6 @@ void OMKLVStoredObject::finalize(void)
 {
   TRACE("OMKLVStoredObject::finalize");
 
-  if (_objectToInstanceId != 0) {
-    _objectToInstanceId->clear();
-    delete _objectToInstanceId;
-    _objectToInstanceId = 0;
-  }
-
-  if (_instanceIdToObject != 0) {
-    _instanceIdToObject->clear();
-    delete _instanceIdToObject;
-    _instanceIdToObject = 0;
-  }
-
   if (_streamToStreamId != 0) {
     _streamToStreamId->clear();
     delete _streamToStreamId;
@@ -2314,9 +2112,7 @@ bool OMKLVStoredObject::metaDataOnly = true;
 OMKLVStoredObject::OMKLVStoredObject(OMMXFStorage* s, OMByteOrder byteOrder)
 : _storage(s),
   _byteOrder(byteOrder),
-  _reorderBytes(false),
-  _objectDirectory(0),
-  _objectDirectoryReference(0)
+  _reorderBytes(false)
 {
   TRACE("OMKLVStoredObject::OMKLVStoredObject");
 
