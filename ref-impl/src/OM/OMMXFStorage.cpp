@@ -59,7 +59,8 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
   _sidToStream(0),
   _maxSid(0),
   _segmentMap(0),
-  _fileSize(0)
+  _fileSize(0),
+  _primerOffset(0)
 {
   TRACE("OMMXFStorage::OMMXFStorage");
 
@@ -132,6 +133,10 @@ void OMMXFStorage::close(void)
     fixupReference(address + sizeof(OMKLVKey) + 8 + 1 + 24, footer);
     previous = address;
   }
+  // Set the HeaderByteCount field of the header
+  ASSERT("Valid primer offset", _primerOffset < bodyPartitionOffset);
+  OMUInt64 metadataSize = bodyPartitionOffset - _primerOffset;
+  fixupReference(0 + sizeof(OMKLVKey) + 8 + 1 + 32, metadataSize);
 }
 
   // @mfunc Set the operational pattern to <p pattern>.
@@ -215,6 +220,8 @@ void OMMXFStorage::writeHeaderPartition(OMUInt32 bodySID,
   writePartition(ClosedHeaderPartitionPackKey, bodySID, indexSID, KAGSize);
   currentPosition = position();
   fillAlignK(currentPosition, defaultKAGSize);
+  // This is done here because the next thing we write is the primer.
+  _primerOffset = position();
 }
 
 void OMMXFStorage::writeBodyPartition(OMUInt32 bodySID,
