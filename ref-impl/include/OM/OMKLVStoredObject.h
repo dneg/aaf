@@ -329,8 +329,7 @@ public:
   static OMSet<OMKLVKey, OMDataStream*>* streamIdToStream(void);
 
   OMUInt64 save(OMSet<OMUniqueObjectIdentification,
-                      ObjectDirectoryEntry>* objectTable,
-                const OMUniqueObjectIdentification& root);
+                      ObjectDirectoryEntry>* objectTable);
 
   void restore(OMSet<OMUniqueObjectIdentification,
                      ObjectDirectoryEntry>* objectTable);
