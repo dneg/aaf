@@ -1851,6 +1851,20 @@ void OMKLVStoredObject::write(OMRawStorage* store,
   POSTCONDITION("All bytes written", x == bufferSize);
 }
 
+size_t OMKLVStoredObject::berEncodedSize(const OMUInt64 i)
+{
+  TRACE("OMKLVStoredObject::berEncodedSize");
+  PRECONDITION("Non zero", i != 0);
+
+  size_t result = sizeof(i);
+  OMUInt64 v = i;
+  while (((v & 0xff00000000000000) >> 56) == 0) {
+    v = v << 8;
+    result = result - 1;
+  }
+  return result;
+}
+
 void OMKLVStoredObject::berEncode(OMByte* berValue,
                                   size_t ANAME(berValueBufferSize),
                                   OMUInt32& berValueSize,
