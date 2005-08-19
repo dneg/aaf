@@ -160,22 +160,6 @@ OMKLVKey OMKLVStoredStream::label(void) const
   return _label;
 }
 
-  // @mfunc Set the essence element label to <p label>.
-  //   @parm The new label.
-void OMKLVStoredStream::setEssenceElementLabel(const OMKLVKey& label)
-{
-  TRACE("OMKLVStoredStream::setEssenceElementLabel");
-  setLabel(label);
-}
-
-  // @mfunc Get the essence element label.
-  //   @rdesc The label.
-OMKLVKey OMKLVStoredStream::essenceElementLabel(void) const
-{
-  TRACE("OMKLVStoredStream::essenceElementLabel");
-  return label();
-}
-
   // @mfunc Set the block size (alignment) of this essence element.
   //   @parm The block size.
 void OMKLVStoredStream::setBlockSize(OMUInt32 blockSize)
