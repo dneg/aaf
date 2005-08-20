@@ -301,7 +301,7 @@ public:
   void saveObjectDirectoryReference(const OMUniqueObjectIdentification& id);
 
   OMUInt64 restoreObjectDirectoryReference(OMUniqueObjectIdentification& id);
-
+#if 0 // tjb not yet
   void writeMetaDictionary(const OMDictionary* dictionary);
 
   void writeDefinition(const OMDefinition* d);
@@ -311,7 +311,7 @@ public:
   void writePropertyDefinition(const OMPropertyDefinition* pd);
 
   void writeTypeDefinition(const OMType* td);
-
+#endif
 private:
   // @access Private members.
 
