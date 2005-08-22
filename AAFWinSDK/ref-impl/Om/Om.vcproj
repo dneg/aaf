@@ -523,26 +523,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\ref-impl\src\OM\OMGSF_SSStoredObjectFactory.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BrowseInformation="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMIntegerType.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -1802,12 +1782,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMFixedSizePropertyT.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\include\OM\OMGSF_SSStoredObjectFactory.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\src\Om\OMGSFStructuredStorage.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMIdentitySet.h">
