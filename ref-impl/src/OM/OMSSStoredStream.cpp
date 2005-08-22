@@ -143,7 +143,7 @@ OMUInt64 OMSSStoredStream::position(void) const
   return result;
 }
 
-void OMSSStoredStream::setPosition(const OMUInt64 offset)
+void OMSSStoredStream::setPosition(const OMUInt64 offset) const
 {
   TRACE("OMSSStoredStream::setPosition");
   PRECONDITION("Valid stream", _stream != 0);

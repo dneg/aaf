@@ -79,7 +79,7 @@ public:
     // @cmember Set the current position for <f read()> and
     //          <f write()>, as an offset in bytes from the
     //          begining of this <c OMStoredStream>.
-  virtual void setPosition(const OMUInt64 offset);
+  virtual void setPosition(const OMUInt64 offset) const;
 
     // @cmember Close this <c OMStoredStream>.
   virtual void close(void);
