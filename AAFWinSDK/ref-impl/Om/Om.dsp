@@ -166,10 +166,6 @@ SOURCE="..\..\..\ref-impl\src\OM\OMFile.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMGSF_SSStoredObjectFactory.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\OM\OMIntegerType.cpp"
 # End Source File
 # Begin Source File
@@ -198,15 +194,7 @@ SOURCE="..\..\..\ref-impl\src\OM\OMMemoryRawStorage.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMSSStoredObject.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\OMSSStoredObjectFactory.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\OMSSStoredStream.cpp"
+SOURCE="..\..\..\ref-impl\src\OM\OMMS_SSStoredObjectFactory.cpp"
 # End Source File
 # Begin Source File
 
@@ -214,7 +202,7 @@ SOURCE="..\..\..\ref-impl\src\OM\OMMSStructuredStorage.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMMS_SSStoredObjectFactory.cpp"
+SOURCE="..\..\..\ref-impl\src\OM\OMMXFStorage.cpp"
 # End Source File
 # Begin Source File
 
@@ -286,15 +274,27 @@ SOURCE="..\..\..\ref-impl\src\OM\OMRootStorable.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMSS_SSStoredObjectFactory.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMSSSStorageRWInputSource.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMSSStructuredStorage.cpp"
+SOURCE="..\..\..\ref-impl\src\OM\OMSSStoredObject.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMSS_SSStoredObjectFactory.cpp"
+SOURCE="..\..\..\ref-impl\src\OM\OMSSStoredObjectFactory.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMSSStoredStream.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMSSStructuredStorage.cpp"
 # End Source File
 # Begin Source File
 
@@ -382,6 +382,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMWideStringProperty.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMWrappedRawStorage.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMXMLStoredObject.cpp"
 # End Source File
 # Begin Source File
@@ -400,6 +404,18 @@ SOURCE="..\..\..\ref-impl\src\OM\utf8.cpp"
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h"
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMArrayProperty.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMArrayPropertyIterator.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMArrayPropertyIteratorT.h"
+# End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMArrayPropertyT.h"
@@ -538,11 +554,15 @@ SOURCE="..\..\..\ref-impl\src\OM\OMFixedSizePropertyT.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\include\OM\OMGSF_SSStoredObjectFactory.h"
+SOURCE="..\..\..\ref-impl\include\OM\OMIdentitySet.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\include\OM\OMIdentitySet.h"
+SOURCE="..\..\..\ref-impl\include\OM\OMIdentitySetIter.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMIdentitySetIterT.h"
 # End Source File
 # Begin Source File
 
@@ -594,15 +614,7 @@ SOURCE="..\..\..\ref-impl\include\OM\OMMemoryRawStorage.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\include\OM\OMSSStoredObject.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\include\OM\OMSSStoredObjectFactory.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\include\OM\OMSSStoredStream.h"
+SOURCE="..\..\..\ref-impl\include\OM\OMMS_SSStoredObjectFactory.h"
 # End Source File
 # Begin Source File
 
@@ -610,7 +622,7 @@ SOURCE="..\..\..\ref-impl\src\OM\OMMSStructuredStorage.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\include\OM\OMMS_SSStoredObjectFactory.h"
+SOURCE="..\..\..\ref-impl\include\OM\OMMXFStorage.h"
 # End Source File
 # Begin Source File
 
@@ -770,6 +782,18 @@ SOURCE="..\..\..\ref-impl\src\OM\OMSetIteratorT.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMSetProperty.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMSetPropertyIterator.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMSetPropertyIteratorT.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMSetPropertyT.h"
 # End Source File
 # Begin Source File
@@ -791,6 +815,26 @@ SOURCE="..\..\..\ref-impl\src\OM\OMSingletonT.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMSS_SSStoredObjectFactory.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMSSSStorageRWInputSource.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMSSStoredObject.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMSSStoredObjectFactory.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMSSStoredStream.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMSSStructuredStorage.h"
 # End Source File
 # Begin Source File
 
@@ -991,6 +1035,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMWeakRefVectorPropertyT.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMWideStringProperty.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMWrappedRawStorage.h"
 # End Source File
 # Begin Source File
 
