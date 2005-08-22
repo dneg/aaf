@@ -114,6 +114,7 @@ public:
   //
   OMStorable* create(const OMClassId& classId) const;
 
+  void destroy(OMStorable* victim) const;
 
   //****************
   // CreateInstance()

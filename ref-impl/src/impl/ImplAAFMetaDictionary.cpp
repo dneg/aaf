@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -239,6 +239,12 @@ OMStorable* ImplAAFMetaDictionary::create(const OMClassId& classId) const
   return (storable);
 }
 
+void ImplAAFMetaDictionary::destroy(OMStorable* victim) const
+{
+  ImplAAFMetaDefinition* v = dynamic_cast<ImplAAFMetaDefinition*>(victim);
+  assert(v != 0);
+  v->ReleaseReference();
+}
 
 //
 // Define the symbol for the stored object id
