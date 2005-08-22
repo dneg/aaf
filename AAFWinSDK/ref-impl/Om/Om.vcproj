@@ -723,6 +723,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMMXFStorage.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMObjectManager.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -1603,6 +1606,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMWrappedRawStorage.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMXMLStoredObject.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -1686,6 +1692,15 @@
 		<Filter
 			Name="Header Files"
 			Filter="h">
+			<File
+				RelativePath="..\..\..\ref-impl\include\Om\OMArrayProperty.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\Om\OMArrayPropertyIterator.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMArrayPropertyIteratorT.h">
+			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMArrayPropertyT.h">
 			</File>
@@ -1792,7 +1807,16 @@
 				RelativePath="..\..\..\ref-impl\include\OM\OMGSF_SSStoredObjectFactory.h">
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMGSFStructuredStorage.h">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMIdentitySet.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\Om\OMIdentitySetIter.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMIdentitySetIterT.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMIdentitySetT.h">
@@ -1835,6 +1859,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMMSStructuredStorage.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\Om\OMMXFStorage.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMObject.h">
@@ -1954,6 +1981,15 @@
 				RelativePath="..\..\..\ref-impl\src\OM\OMSetIteratorT.h">
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\include\Om\OMSetProperty.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\Om\OMSetPropertyIterator.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMSetPropertyIteratorT.h">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMSetPropertyT.h">
 			</File>
 			<File
@@ -1972,6 +2008,9 @@
 				RelativePath="..\..\..\ref-impl\include\OM\OMSS_SSStoredObjectFactory.h">
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMSSSStorageRWInputSource.h">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMSSStoredObject.h">
 			</File>
 			<File
@@ -1979,6 +2018,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMSSStoredStream.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMSSStructuredStorage.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMStackTrace.h">
@@ -2129,6 +2171,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMWideStringProperty.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\Om\OMWrappedRawStorage.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMXMLStoredObject.h">
