@@ -93,6 +93,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ComPersonnelExtension", "ex
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ComPersonnelPluginWrite", "examples\com-api\ComPersonnelExtension\ComPersonnelPluginWrite.vcproj", "{D96CA683-9E8A-44D1-8E80-D0B89B02508A}"
 	ProjectSection(ProjectDependencies) = postProject
+		{08296C77-388B-42C6-BF97-B06B9796985A} = {08296C77-388B-42C6-BF97-B06B9796985A}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ComPropDirectAccess", "examples\com-api\ComPropDirectAccess\ComPropDirectAccess.vcproj", "{5D3C6921-3B34-4DA0-B32E-70BC99DF29EA}"
@@ -255,6 +256,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aafdump", "Utilities\aafdum
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aafextract", "Utilities\aafextract\aafextract.vcproj", "{4B2EF437-5B81-4FB8-91A7-375F0DDDDE94}"
 	ProjectSection(ProjectDependencies) = postProject
+		{08296C77-388B-42C6-BF97-B06B9796985A} = {08296C77-388B-42C6-BF97-B06B9796985A}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aafmeta2dot", "Utilities\aafviewer\aafmeta2dot\aafmeta2dot.vcproj", "{161A7BE3-BFAB-4448-A9BD-46041B60B8E2}"
