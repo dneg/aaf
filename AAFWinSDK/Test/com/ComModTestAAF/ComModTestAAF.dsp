@@ -89,6 +89,10 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFAES3PCMDescriptorTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFAIFCDescriptorTest.cpp
 # End Source File
 # Begin Source File
@@ -270,6 +274,10 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMobTest.cpp
 # Begin Source File
 
 SOURCE=..\..\..\..\test\com\ComModTestAAF\CAAFModuleTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMultipleDescriptorTest.cpp
 # End Source File
 # Begin Source File
 

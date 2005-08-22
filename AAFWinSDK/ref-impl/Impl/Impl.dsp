@@ -106,6 +106,10 @@ SOURCE="..\..\..\ref-impl\src\impl\AAFUtils.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFAES3PCMDescriptor.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFAIFCDescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -315,6 +319,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMobSlot.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFModule.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMultipleDescriptor.cpp"
 # End Source File
 # Begin Source File
 

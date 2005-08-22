@@ -106,6 +106,10 @@ SOURCE=..\..\include\AAFVersion.rc
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFAES3PCMDescriptor.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFAIFCDescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -309,6 +313,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFMobSlot.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFModule.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFMultipleDescriptor.cpp"
 # End Source File
 # Begin Source File
 
