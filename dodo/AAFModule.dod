@@ -701,6 +701,21 @@ AD_XFUNCTION7(AAFCreateAAFFileOnRawStorage,
   /// - The access or existence parameters are not set to a legal
   ///   combination of values.)
 
+AD_XFUNCTION1(AAFGetFileEncodings,
+			[out],
+			  objOut,
+			  EnumAAFFileEncodings,
+			  ppFileEncodings,
+			  Available file encodings.,
+			Returns an enumeration of file encodings supported by this version
+  /// of the library.
+  ///
+  /// This method will succeed if the following are true:
+  /// - The ppFileEncodings pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppFileEncodings\))
+
+
 AD_XFUNCTION1(AAFGetLibraryVersion,
 			[out\, retval],
 			  objPass,

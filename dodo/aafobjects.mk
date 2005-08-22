@@ -84,6 +84,7 @@ HUMAN_TYPED_IMPL="\
 	AAFEventMobSlot \
 	AAFFile \
 	AAFFileDescriptor \
+	AAFFileEncoding \
 	AAFFiller \
 	AAFFilmDescriptor \
 	AAFFindSourceInfo \
@@ -168,6 +169,7 @@ HUMAN_TYPED_IMPL="\
 	EnumAAFControlPoints \
 	EnumAAFDataDefs \
 	EnumAAFEssenceData \
+	EnumAAFFileEncodings \
 	EnumAAFIdentifications \
 	EnumAAFInterpolationDefs \
 	EnumAAFKLVData \

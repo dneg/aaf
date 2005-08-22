@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -40,16 +40,16 @@
 
 #include "AAFPrivate.h"
 #include "AAFResult.h"
-
+#include "AAFFileKinds.h"
+#include "AAFFileMode.h"
 #include "AAFSDKBuild.h"
-
 
 #include "ImplAAFPluginManager.h"
 #include "ImplAAFFile.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFRandomRawStorage.h"
+#include "ImplEnumAAFFileEncodings.h"
 
-#include "OMAssertions.h"
 #include "OMUtilities.h"
 #include "OMRawStorage.h"
 #include "OMDiskRawStorage.h"
@@ -64,6 +64,7 @@ extern "C" const aafClassID_t CLSID_AAFFile;
 extern "C" const aafClassID_t CLSID_AAFRandomFile;
 extern "C" const aafClassID_t CLSID_AAFRawStorage;
 extern "C" const aafClassID_t CLSID_AAFRandomRawStorage;
+extern "C" const aafClassID_t CLSID_EnumAAFFileEncodings;
 
 #include <assert.h>
 
@@ -76,10 +77,8 @@ extern "C" const aafClassID_t CLSID_AAFRandomRawStorage;
 
 
 #if USE_RAW_STORAGE
-#include "AAFFileKinds.h"
 #include "AAF.h"
 #endif
-
 
 //***********************************************************
 //
@@ -241,7 +240,9 @@ STDAPI ImplAAFFileOpenExistingRead (
   // Create an instance of an uninitialized file object.
   pFile = static_cast<ImplAAFFile *>(::CreateImpl(CLSID_AAFFile));
 	if(!pFile)
+	{
 		hr = AAFRESULT_NOMEMORY;
+	}
   else
   {
     // Make sure the file is initialized (not open yet...)
@@ -784,7 +785,6 @@ STDAPI ImplAAFFileIsAAFFile (
   aafUID_t * pAAFFileKind,
   aafBool *  pFileIsAAFFile)
 {
-  TRACE("AAFFileIsAAFFile");
   if (pFileName == 0)
     return AAFRESULT_NULL_PARAM;
 
@@ -1115,10 +1115,39 @@ ImplAAFCreateAAFFileOnRawStorage
   return hr;
 }
 
+STDAPI
+ImplAAFGetFileEncodings
+  (ImplEnumAAFFileEncodings** ppFileEncodings)
+{
+	  if( ppFileEncodings == 0 )
+		    {
+			        return AAFRESULT_NULL_PARAM;
+				  }
 
+
+	    HRESULT   hr = AAFRESULT_SUCCESS;
+
+
+	      ImplEnumAAFFileEncodings* p_enum_encodings =
+		          static_cast<ImplEnumAAFFileEncodings*>
+			        (::CreateImpl(CLSID_EnumAAFFileEncodings));
+
+	        if( p_enum_encodings == 0 )
+			  {
+				      hr = AAFRESULT_NOMEMORY;
+				        }
+
+
+		  if( SUCCEEDED( hr ) )
+			    {
+				        *ppFileEncodings = p_enum_encodings;
+					  }
+
+
+		    return hr;
+}
 
 extern const char AAFReferenceImplementationIdent[];
-
 const char AAFReferenceImplementationIdent[] = "@(#) " AAF_SDK_RELEASE; // for Linux and Irix
 const aafProductVersion_t AAFReferenceImplementationVersion = {AAF_MAJOR_VERSION, AAF_MINOR_VERSION, AAF_MAINT_RELEASE, AAF_PATCH_LEVEL, AAF_RELEASE_STAGE};
 

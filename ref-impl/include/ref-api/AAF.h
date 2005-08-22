@@ -69,6 +69,7 @@ interface IAAFEvent;
 interface IAAFEventMobSlot;
 interface IAAFFile;
 interface IAAFFileDescriptor;
+interface IAAFFileEncoding;
 interface IAAFFiller;
 interface IAAFFilmDescriptor;
 interface IAAFFindSourceInfo;
@@ -153,6 +154,7 @@ interface IEnumAAFContainerDefs;
 interface IEnumAAFControlPoints;
 interface IEnumAAFDataDefs;
 interface IEnumAAFEssenceData;
+interface IEnumAAFFileEncodings;
 interface IEnumAAFIdentifications;
 interface IEnumAAFInterpolationDefs;
 interface IEnumAAFKLVData;
@@ -222,6 +224,7 @@ typedef interface IAAFEvent IAAFEvent;
 typedef interface IAAFEventMobSlot IAAFEventMobSlot;
 typedef interface IAAFFile IAAFFile;
 typedef interface IAAFFileDescriptor IAAFFileDescriptor;
+typedef interface IAAFFileEncoding IAAFFileEncoding;
 typedef interface IAAFFiller IAAFFiller;
 typedef interface IAAFFilmDescriptor IAAFFilmDescriptor;
 typedef interface IAAFFindSourceInfo IAAFFindSourceInfo;
@@ -306,6 +309,7 @@ typedef interface IEnumAAFContainerDefs IEnumAAFContainerDefs;
 typedef interface IEnumAAFControlPoints IEnumAAFControlPoints;
 typedef interface IEnumAAFDataDefs IEnumAAFDataDefs;
 typedef interface IEnumAAFEssenceData IEnumAAFEssenceData;
+typedef interface IEnumAAFFileEncodings IEnumAAFFileEncodings;
 typedef interface IEnumAAFIdentifications IEnumAAFIdentifications;
 typedef interface IEnumAAFInterpolationDefs IEnumAAFInterpolationDefs;
 typedef interface IEnumAAFKLVData IEnumAAFKLVData;
@@ -8192,6 +8196,215 @@ DECLARE_INTERFACE_(IAAFFileDescriptor, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFFileDescriptor_INTERFACE_DEFINED__
+
+
+
+// IAAFFileEncoding
+
+// ************************
+//
+// Interface IAAFFileEncoding
+//
+// ************************
+
+
+
+#ifndef __IAAFFileEncoding_INTERFACE_DEFINED__
+#define __IAAFFileEncoding_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFFileEncoding;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFFileEncoding
+
+DECLARE_INTERFACE_(IAAFFileEncoding, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFFileEncoding methods *** */
+
+  //***********************************************************
+  //
+  // GetName()
+  //
+  /// Gets the name of this file encoding.
+  /// 
+  /// Writes the Name property, with a trailing null
+  /// character, into the pName buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the Name property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetNameBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pName.
+  /// 
+  /// Succeeds if:
+  /// - The pName pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   Name.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pName arg is NULL.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold Name.
+  ///
+  /// @param pName [out, string, size_is(bufSize)] buffer into which Name is to be written
+  /// @param bufSize [in] size of *pName buffer in bytes
+  ///
+  STDMETHOD(GetName) (THIS_
+    aafCharacter *  pName,
+    aafUInt32  bufSize) PURE;
+
+
+  //***********************************************************
+  //
+  // GetNameBufLen()
+  //
+  /// Returns size of buffer (in bytes) required for GetName().
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBufSize arg is NULL.
+  ///
+  /// @param pBufSize [out] size of required buffer, in bytes
+  ///
+  STDMETHOD(GetNameBufLen) (THIS_
+    aafUInt32 *  pBufSize) PURE;
+
+
+  //***********************************************************
+  //
+  // GetDescription()
+  //
+  /// Gets the description of this file encoding.
+  /// 
+  /// Writes the Description property, with a trailing null
+  /// character, into the pDescription buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the Description property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetDescriptionBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pDescription.
+  /// 
+  /// Succeeds if:
+  /// - The pDescription pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   Description.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pDescription arg is NULL.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold Description.
+  ///
+  /// @param pDescription [out, string, size_is(bufSize)] buffer into which Description is to be written
+  /// @param bufSize [in] size of *pDescription buffer in bytes
+  ///
+  STDMETHOD(GetDescription) (THIS_
+    aafCharacter *  pDescription,
+    aafUInt32  bufSize) PURE;
+
+
+  //***********************************************************
+  //
+  // GetDescriptionBufLen()
+  //
+  /// Returns size of buffer (in bytes) required for GetDescription().
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBufSize arg is NULL.
+  ///
+  /// @param pBufSize [out] size of required buffer, in bytes
+  ///
+  STDMETHOD(GetDescriptionBufLen) (THIS_
+    aafUInt32 *  pBufSize) PURE;
+
+
+
+  //***********************************************************
+  //
+  // GetFileKind()
+  //
+  /// This method returns the unique ID associated with this file encoding.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pFileKind pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pFileKind.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileKind argument is NULL.
+  ///
+  /// @param pFileKind [out] The unique file encoding ID
+  ///
+  STDMETHOD(GetFileKind) (THIS_
+    aafUID_t *  pFileKind) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFFileEncoding_INTERFACE_DEFINED__
 
 
 
@@ -32193,6 +32406,186 @@ DECLARE_INTERFACE_(IEnumAAFEssenceData, IUnknown)
 
 
 
+// IEnumAAFFileEncodings
+
+// ************************
+//
+// Interface IEnumAAFFileEncodings
+//
+// ************************
+
+
+
+
+#ifndef __IEnumAAFFileEncodings_INTERFACE_DEFINED__
+#define __IEnumAAFFileEncodings_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IEnumAAFFileEncodings;
+
+#undef  INTERFACE
+#define INTERFACE   IEnumAAFFileEncodings
+
+DECLARE_INTERFACE_(IEnumAAFFileEncodings, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IEnumAAFFileEncodings methods *** */
+
+  //***********************************************************
+  //
+  // NextOne()
+  //
+  /// Enumerates to the next element in the enumerators list. The
+  /// caller is responsible for properly releasing the returned pointer
+  /// when it is no longer needed.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppFileEncodings pointer is valid.
+  /// - there are File Encoding objects remaining to be returned.
+  /// 
+  /// If this method fails nothing is written to *ppFileEncodings.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppFileEncodings arg is NULL.
+  ///
+  /// AAFRESULT_NO_MORE_OBJECTS
+  ///   - no File Encoding objects remaining to be returned.
+  ///
+  /// @param ppFileEncodings [out,retval] The Next File Encoding
+  ///
+  STDMETHOD(NextOne) (THIS_
+    IAAFFileEncoding ** ppFileEncodings) PURE;
+
+
+  //***********************************************************
+  //
+  // Next()
+  //
+  /// Enumerates the next count elements (AAFFileEncoding pointers) in the
+  /// enumerator's list, returning them in the given array along with
+  /// the actual number of enumerated elements in pNumFetched. The caller
+  /// is responsible for properly releasing the returned pointers.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - The ppFileEncodings pointer is valid.
+  /// - The pNumFetched pointer is valid. If count is 1, pNumFetched
+  ///   can be NULL.
+  /// - There are File Encoding objects remaining to be returned.
+  /// 
+  /// If this method fails nothing is written to *ppFileEncodings or
+  /// pNumFetched.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - Either ppFileEncodings or pNumFetched arg is NULL.
+  ///
+  /// @param count [in] number of FileEncodings requested
+  /// @param ppFileEncodings [out, size_is(count), length_is(*pNumFetched)] array to receive elements
+  /// @param pNumFetched [out,ref] number of actual File Encoding objects fetched into ppFileEncodings array
+  ///
+  STDMETHOD(Next) (THIS_
+    aafUInt32  count,
+    IAAFFileEncoding ** ppFileEncodings,
+    aafUInt32 *  pNumFetched) PURE;
+
+
+  //***********************************************************
+  //
+  // Skip()
+  //
+  /// Instructs the enumerator to skip the next count elements in the
+  /// enumeration so that the next call to Next will not return those
+  /// elements.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - count is less than or equal to the number of remaining objects.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NO_MORE_OBJECTS
+  ///   - count exceeded number of remaining objects.
+  ///
+  /// @param count [in] Number of elements to skip
+  ///
+  STDMETHOD(Skip) (THIS_
+    aafUInt32  count) PURE;
+
+
+  //***********************************************************
+  //
+  // Reset()
+  //
+  /// Instructs the enumerator to position itself at the beginning of
+  /// the list of elements.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  STDMETHOD(Reset) (THIS) PURE;
+
+
+  //***********************************************************
+  //
+  // Clone()
+  //
+  /// Creates another enumerator with the same state as the current
+  /// enumerator to iterate over the same list. This method makes it
+  /// possible to record a point in the enumeration sequence in order
+  /// to return to that point at a later time.
+  ///
+  /// Note: The caller must release this new enumerator separately from
+  /// the first enumerator.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum arg is NULL.
+  ///
+  /// @param ppEnum [out,retval] new enumeration
+  ///
+  STDMETHOD(Clone) (THIS_
+    IEnumAAFFileEncodings ** ppEnum) PURE;
+
+  END_INTERFACE
+};
+#endif // __IEnumAAFFileEncodings_INTERFACE_DEFINED__
+
+
+
 // IEnumAAFIdentifications
 
 // ************************
@@ -45768,6 +46161,32 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
     aafUInt32  modeFlags,
     aafProductIdentification_constptr  pIdent,
     IAAFFile ** ppNewFile);
+
+  //***********************************************************
+  //
+  // AAFGetFileEncodings()
+  //
+  /// Returns an enumeration of file encodings supported by this version
+  /// of the library.
+  ///
+  /// This method will succeed if the following are true:
+  /// - The ppFileEncodings pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppFileEncodings arg is NULL.
+  ///
+  /// @param ppFileEncodings [out] Available file encodings.
+  /// 
+  STDAPI AAFGetFileEncodings (
+    IEnumAAFFileEncodings ** ppFileEncodings);
+
 
   //***********************************************************
   //
