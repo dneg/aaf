@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -110,6 +110,9 @@ typedef STDAPICALLTYPE HRESULT (* LPFNAAFCREATEAAFFILEONRAWSTORAGE)(
 	aafProductIdentification_constptr  pIdent,
 	IAAFFile ** ppNewFile);
 
+typedef STDAPICALLTYPE HRESULT (* LPFNAAFGETFILEENCODINGS)(
+    IEnumAAFFileEncodings ** ppFileEncodings);
+
 typedef STDAPICALLTYPE HRESULT (* LPFNAAFGETLIBRARYVERSION)(
     aafProductVersion_t *  pVersion);
 
@@ -192,6 +195,9 @@ typedef HRESULT (STDAPICALLTYPE * LPFNAAFCREATEAAFFILEONRAWSTORAGE)(
 	aafUInt32  modeFlags,
 	aafProductIdentification_constptr  pIdent,
 	IAAFFile ** ppNewFile);
+
+typedef HRESULT (STDAPICALLTYPE * LPFNAAFGETFILEENCODINGS)(
+    IEnumAAFFileEncodings ** ppFileEncodings);
 
 typedef HRESULT (STDAPICALLTYPE * LPFNAAFGETLIBRARYVERSION)(
     aafProductVersion_t *  pVersion);
@@ -317,6 +323,9 @@ public:
 	aafProductIdentification_constptr  pIdent,
 	IAAFFile ** ppNewFile);
 
+  HRESULT GetFileEncodings (
+    IEnumAAFFileEncodings ** ppFileEncodings);
+
   HRESULT GetLibraryVersion (
     aafProductVersion_t *  pVersion);
 
@@ -354,6 +363,7 @@ protected:
   LPFNAAFCREATERAWSTORAGEDISK      _pfnCreateRawStorageDisk;
   LPFNAAFCREATERAWSTORAGECACHEDDISK _pfnCreateRawStorageCachedDisk;
   LPFNAAFCREATEAAFFILEONRAWSTORAGE _pfnCreateAAFFileOnRawStorage;
+  LPFNAAFGETFILEENCODINGS          _pfnGetFileEncodings;
   LPFNAAFGETLIBRARYVERSION         _pfnGetLibraryVersion;
   LPFNAAFGETLIBRARYPATHNAMEBUFLEN  _pfnGetLibraryPathNameBufLen;
   LPFNAAFGETLIBRARYPATHNAME        _pfnGetLibraryPathName;

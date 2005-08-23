@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -21,8 +21,6 @@
 // All rights reserved.
 //
 //=---------------------------------------------------------------------=
-
-
 
 // Declare the public interface that must be implemented.
 #include "aaflib.h"
@@ -594,6 +592,39 @@ STDAPI AAFGetPluginManager (
 }
 
 
+//***********************************************************
+//
+// AAFGetFileEncodings()
+//
+STDAPI AAFGetFileEncodings (
+  IEnumAAFFileEncodings ** ppFileEncodings)
+{
+  HRESULT hr = S_OK;
+  AAFDLL *pAAFDLL = NULL;
+
+  // Get the dll wrapper
+  hr = LoadIfNecessary(&pAAFDLL);
+  if (FAILED(hr))
+    return hr;
+  
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->GetFileEncodings
+	  (ppFileEncodings);
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  return hr;
+}
+
+
+
 
 
 
@@ -814,6 +845,11 @@ HRESULT AAFDLL::Load(const char *dllname)
   // Ignore failure
 
   rc = ::AAFFindSymbol(_libHandle,
+					   "AAFGetFileEncodings",
+  					   (AAFSymbolAddr *)&_pfnGetFileEncodings);
+  // Ignore failure
+
+  rc = ::AAFFindSymbol(_libHandle,
 					   "AAFGetLibraryVersion",
   					   (AAFSymbolAddr *)&_pfnGetLibraryVersion);
 
@@ -870,6 +906,7 @@ void AAFDLL::ClearEntrypoints()
   _pfnCreateRawStorageDisk = 0;
   _pfnCreateRawStorageCachedDisk = 0;
   _pfnCreateAAFFileOnRawStorage = 0;
+  _pfnGetFileEncodings = 0;
   _pfnGetLibraryVersion = 0;
   _pfnGetLibraryPathNameBufLen = 0;
   _pfnGetLibraryPathName = 0;
@@ -1045,6 +1082,18 @@ HRESULT AAFDLL::CreateAAFFileOnRawStorage (
 	 pIdent,
 	 ppNewFile);
 }
+
+HRESULT AAFDLL::GetFileEncodings (
+		    IEnumAAFFileEncodings ** ppFileEncodings)
+{
+  // This callback did not exist in DR4 or earlier toolkits.
+  if (NULL == _pfnGetFileEncodings)
+      return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+      
+    return _pfnGetFileEncodings
+    	(ppFileEncodings);
+}
+
 
 HRESULT AAFDLL::GetLibraryVersion
   (aafProductVersion_t *  pVersion)

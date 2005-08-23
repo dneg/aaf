@@ -211,6 +211,12 @@ typedef interface IAAFFileDescriptor IAAFFileDescriptor;
 #endif 	/* __IAAFFileDescriptor_FWD_DEFINED__ */
 
 
+#ifndef __IAAFFileEncoding_FWD_DEFINED__
+#define __IAAFFileEncoding_FWD_DEFINED__
+typedef interface IAAFFileEncoding IAAFFileEncoding;
+#endif 	/* __IAAFFileEncoding_FWD_DEFINED__ */
+
+
 #ifndef __IAAFFiller_FWD_DEFINED__
 #define __IAAFFiller_FWD_DEFINED__
 typedef interface IAAFFiller IAAFFiller;
@@ -715,6 +721,12 @@ typedef interface IEnumAAFEssenceData IEnumAAFEssenceData;
 #endif 	/* __IEnumAAFEssenceData_FWD_DEFINED__ */
 
 
+#ifndef __IEnumAAFFileEncodings_FWD_DEFINED__
+#define __IEnumAAFFileEncodings_FWD_DEFINED__
+typedef interface IEnumAAFFileEncodings IEnumAAFFileEncodings;
+#endif 	/* __IEnumAAFFileEncodings_FWD_DEFINED__ */
+
+
 #ifndef __IEnumAAFIdentifications_FWD_DEFINED__
 #define __IEnumAAFIdentifications_FWD_DEFINED__
 typedef interface IEnumAAFIdentifications IEnumAAFIdentifications;
@@ -989,6 +1001,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 // AAF Interfaces.
 //=--------------------------------------------------------------------------=
 //
+
+
 
 
 
@@ -8918,6 +8932,190 @@ void __RPC_STUB IAAFFileDescriptor_GetContainerFormat_Stub(
 
 
 #endif 	/* __IAAFFileDescriptor_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFFileEncoding_INTERFACE_DEFINED__
+#define __IAAFFileEncoding_INTERFACE_DEFINED__
+
+/* interface IAAFFileEncoding */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFFileEncoding;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("56904725-a95c-40f4-a746-8754e7d16f6d")
+    IAAFFileEncoding : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE GetName( 
+            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pName,
+            /* [in] */ aafUInt32 bufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetNameBufLen( 
+            /* [out] */ aafUInt32 __RPC_FAR *pBufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetDescription( 
+            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pDescription,
+            /* [in] */ aafUInt32 bufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetDescriptionBufLen( 
+            /* [out] */ aafUInt32 __RPC_FAR *pBufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetFileKind( 
+            /* [out] */ aafUID_t __RPC_FAR *pFileKind) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFFileEncodingVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFFileEncoding __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFFileEncoding __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFFileEncoding __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
+            IAAFFileEncoding __RPC_FAR * This,
+            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pName,
+            /* [in] */ aafUInt32 bufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNameBufLen )( 
+            IAAFFileEncoding __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescription )( 
+            IAAFFileEncoding __RPC_FAR * This,
+            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pDescription,
+            /* [in] */ aafUInt32 bufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescriptionBufLen )( 
+            IAAFFileEncoding __RPC_FAR * This,
+            /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFileKind )( 
+            IAAFFileEncoding __RPC_FAR * This,
+            /* [out] */ aafUID_t __RPC_FAR *pFileKind);
+        
+        END_INTERFACE
+    } IAAFFileEncodingVtbl;
+
+    interface IAAFFileEncoding
+    {
+        CONST_VTBL struct IAAFFileEncodingVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFFileEncoding_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFFileEncoding_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFFileEncoding_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFFileEncoding_GetName(This,pName,bufSize)	\
+    (This)->lpVtbl -> GetName(This,pName,bufSize)
+
+#define IAAFFileEncoding_GetNameBufLen(This,pBufSize)	\
+    (This)->lpVtbl -> GetNameBufLen(This,pBufSize)
+
+#define IAAFFileEncoding_GetDescription(This,pDescription,bufSize)	\
+    (This)->lpVtbl -> GetDescription(This,pDescription,bufSize)
+
+#define IAAFFileEncoding_GetDescriptionBufLen(This,pBufSize)	\
+    (This)->lpVtbl -> GetDescriptionBufLen(This,pBufSize)
+
+#define IAAFFileEncoding_GetFileKind(This,pFileKind)	\
+    (This)->lpVtbl -> GetFileKind(This,pFileKind)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFFileEncoding_GetName_Proxy( 
+    IAAFFileEncoding __RPC_FAR * This,
+    /* [size_is][string][out] */ aafCharacter __RPC_FAR *pName,
+    /* [in] */ aafUInt32 bufSize);
+
+
+void __RPC_STUB IAAFFileEncoding_GetName_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFFileEncoding_GetNameBufLen_Proxy( 
+    IAAFFileEncoding __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
+
+
+void __RPC_STUB IAAFFileEncoding_GetNameBufLen_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFFileEncoding_GetDescription_Proxy( 
+    IAAFFileEncoding __RPC_FAR * This,
+    /* [size_is][string][out] */ aafCharacter __RPC_FAR *pDescription,
+    /* [in] */ aafUInt32 bufSize);
+
+
+void __RPC_STUB IAAFFileEncoding_GetDescription_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFFileEncoding_GetDescriptionBufLen_Proxy( 
+    IAAFFileEncoding __RPC_FAR * This,
+    /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
+
+
+void __RPC_STUB IAAFFileEncoding_GetDescriptionBufLen_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFFileEncoding_GetFileKind_Proxy( 
+    IAAFFileEncoding __RPC_FAR * This,
+    /* [out] */ aafUID_t __RPC_FAR *pFileKind);
+
+
+void __RPC_STUB IAAFFileEncoding_GetFileKind_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFFileEncoding_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFFiller_INTERFACE_DEFINED__
@@ -30137,6 +30335,187 @@ void __RPC_STUB IEnumAAFEssenceData_Clone_Stub(
 #endif 	/* __IEnumAAFEssenceData_INTERFACE_DEFINED__ */
 
 
+#ifndef __IEnumAAFFileEncodings_INTERFACE_DEFINED__
+#define __IEnumAAFFileEncodings_INTERFACE_DEFINED__
+
+/* interface IEnumAAFFileEncodings */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IEnumAAFFileEncodings;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("6173c2cf-9a7a-4ff1-a8fc-be0819aea2de")
+    IEnumAAFFileEncodings : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE NextOne( 
+            /* [retval][out] */ IAAFFileEncoding __RPC_FAR *__RPC_FAR *ppFileEncodings) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Next( 
+            /* [in] */ aafUInt32 count,
+            /* [length_is][size_is][out] */ IAAFFileEncoding __RPC_FAR *__RPC_FAR *ppFileEncodings,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Skip( 
+            /* [in] */ aafUInt32 count) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Clone( 
+            /* [retval][out] */ IEnumAAFFileEncodings __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IEnumAAFFileEncodingsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IEnumAAFFileEncodings __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IEnumAAFFileEncodings __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IEnumAAFFileEncodings __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NextOne )( 
+            IEnumAAFFileEncodings __RPC_FAR * This,
+            /* [retval][out] */ IAAFFileEncoding __RPC_FAR *__RPC_FAR *ppFileEncodings);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
+            IEnumAAFFileEncodings __RPC_FAR * This,
+            /* [in] */ aafUInt32 count,
+            /* [length_is][size_is][out] */ IAAFFileEncoding __RPC_FAR *__RPC_FAR *ppFileEncodings,
+            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
+            IEnumAAFFileEncodings __RPC_FAR * This,
+            /* [in] */ aafUInt32 count);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
+            IEnumAAFFileEncodings __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
+            IEnumAAFFileEncodings __RPC_FAR * This,
+            /* [retval][out] */ IEnumAAFFileEncodings __RPC_FAR *__RPC_FAR *ppEnum);
+        
+        END_INTERFACE
+    } IEnumAAFFileEncodingsVtbl;
+
+    interface IEnumAAFFileEncodings
+    {
+        CONST_VTBL struct IEnumAAFFileEncodingsVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IEnumAAFFileEncodings_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IEnumAAFFileEncodings_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IEnumAAFFileEncodings_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IEnumAAFFileEncodings_NextOne(This,ppFileEncodings)	\
+    (This)->lpVtbl -> NextOne(This,ppFileEncodings)
+
+#define IEnumAAFFileEncodings_Next(This,count,ppFileEncodings,pNumFetched)	\
+    (This)->lpVtbl -> Next(This,count,ppFileEncodings,pNumFetched)
+
+#define IEnumAAFFileEncodings_Skip(This,count)	\
+    (This)->lpVtbl -> Skip(This,count)
+
+#define IEnumAAFFileEncodings_Reset(This)	\
+    (This)->lpVtbl -> Reset(This)
+
+#define IEnumAAFFileEncodings_Clone(This,ppEnum)	\
+    (This)->lpVtbl -> Clone(This,ppEnum)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFFileEncodings_NextOne_Proxy( 
+    IEnumAAFFileEncodings __RPC_FAR * This,
+    /* [retval][out] */ IAAFFileEncoding __RPC_FAR *__RPC_FAR *ppFileEncodings);
+
+
+void __RPC_STUB IEnumAAFFileEncodings_NextOne_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFFileEncodings_Next_Proxy( 
+    IEnumAAFFileEncodings __RPC_FAR * This,
+    /* [in] */ aafUInt32 count,
+    /* [length_is][size_is][out] */ IAAFFileEncoding __RPC_FAR *__RPC_FAR *ppFileEncodings,
+    /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
+
+
+void __RPC_STUB IEnumAAFFileEncodings_Next_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFFileEncodings_Skip_Proxy( 
+    IEnumAAFFileEncodings __RPC_FAR * This,
+    /* [in] */ aafUInt32 count);
+
+
+void __RPC_STUB IEnumAAFFileEncodings_Skip_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFFileEncodings_Reset_Proxy( 
+    IEnumAAFFileEncodings __RPC_FAR * This);
+
+
+void __RPC_STUB IEnumAAFFileEncodings_Reset_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFFileEncodings_Clone_Proxy( 
+    IEnumAAFFileEncodings __RPC_FAR * This,
+    /* [retval][out] */ IEnumAAFFileEncodings __RPC_FAR *__RPC_FAR *ppEnum);
+
+
+void __RPC_STUB IEnumAAFFileEncodings_Clone_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IEnumAAFFileEncodings_INTERFACE_DEFINED__ */
+
+
 #ifndef __IEnumAAFIdentifications_INTERFACE_DEFINED__
 #define __IEnumAAFIdentifications_INTERFACE_DEFINED__
 
@@ -42764,7 +43143,7 @@ void __RPC_STUB IAAFTypeDefVariableArrayEx_InsertElement_Stub(
 #endif 	/* __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0229 */
+/* interface __MIDL_itf_AAF_0231 */
 /* [local] */ 
 
   ///***********************************************************
@@ -42849,6 +43228,8 @@ STDAPI AAFCreateAAFFileOnRawStorage (
           aafProductIdentification_constptr  pIdent,
           IAAFFile ** ppNewFile);
 
+STDAPI AAFGetFileEncodings (IEnumAAFFileEncodings ** ppFileEncodings);
+
 STDAPI AAFGetLibraryVersion (aafProductVersion_t *  pVersion);
 
 STDAPI AAFGetLibraryPathNameBufLen (aafUInt32 *  pBufSize);
@@ -42859,8 +43240,8 @@ STDAPI AAFGetLibraryPathName (
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0229_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0229_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0231_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0231_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
