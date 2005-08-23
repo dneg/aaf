@@ -21,31 +21,65 @@
 //
 //=---------------------------------------------------------------------=
 
-
 #include "AxTypes.h"
 #include "AxSmartPointer.h"
 
 #include <AAFTypes.h>
+#include "AAFSmartPointer2.h"
 
 #include <iosfwd>
 #include <vector>
 #include <memory>
 
+
+template<class Type>
+class AddrOfSmartPointer2
+{
+public:
+  AddrOfSmartPointer2( IAAFSmartPointer2<Type>* sp )
+    : _sp( sp )
+  {}
+
+  Type** GetAddrOf() const
+  {
+    return _sp->GetAddrOf();
+  }
+
+private:
+  IAAFSmartPointer2<Type>* _sp;
+};
+
+class AddrOfAafUID
+{
+public:
+  AddrOfAafUID( aafUID_t* p )
+    : _p( p )
+  {}
+
+  aafUID_t* GetAddrOf() 
+  {
+    return _p;
+  }
+
+private:
+  aafUID_t* _p;
+};
+
 // This template will work for all IAAFEnum* enumerators
 // that have the following methods:
 // NextOne(), Next(int), Reset(), Skip(), Clone()
 
-template <class Type, class EnumeratorType>
+template <class Type, class EnumeratorType, class AddrOfOperator>
 class AxIterator {
 public:
 
 	AxIterator();
-	AxIterator( const AxIterator<Type, EnumeratorType>& other );
-	AxIterator( const IAAFSmartPointer<EnumeratorType >& spEnumerator );
+	AxIterator( const AxIterator<Type, EnumeratorType, AddrOfOperator>& other );
+	AxIterator( const IAAFSmartPointer<EnumeratorType>& spEnumerator );
 
 	~AxIterator();
 
-	AxIterator& operator=( const AxIterator<Type, EnumeratorType>& rhs );
+	AxIterator& operator=( const AxIterator<Type, EnumeratorType, AddrOfOperator>& rhs );
 
 	bool NextOne( Type& );
 
@@ -55,13 +89,62 @@ public:
 
 	void Skip( aafUInt32 count );
 
-	std::auto_ptr< AxIterator<Type, EnumeratorType> > Clone();	
+	std::auto_ptr< AxIterator<Type, EnumeratorType, AddrOfOperator> > Clone();	
 
 private:
 
 	IAAFSmartPointer< EnumeratorType > _spEnumerator;
 };
 
+typedef AxIterator< IAAFSmartPointer2<IAAFProperty>,      IEnumAAFProperties,     AddrOfSmartPointer2<IAAFProperty> >
+        AxPropertyIter;
+
+typedef AxIterator< IAAFSmartPointer2<IAAFPropertyValue>, IEnumAAFPropertyValues, AddrOfSmartPointer2<IAAFPropertyValue> >
+        AxPropertyValueIter;
+
+typedef AxIterator< IAAFSmartPointer2<IAAFMob>,           IEnumAAFMobs,           AddrOfSmartPointer2<IAAFMob> >
+        AxMobIter;
+
+typedef AxIterator< IAAFSmartPointer2<IAAFEssenceData>,   IEnumAAFEssenceData,    AddrOfSmartPointer2<IAAFEssenceData> >
+        AxEssenceIter;
+
+typedef AxIterator< IAAFSmartPointer2<IAAFMobSlot>,       IEnumAAFMobSlots,       AddrOfSmartPointer2<IAAFMobSlot> >
+        AxMobSlotIter;
+
+typedef AxIterator< IAAFSmartPointer2<IAAFDataDef>,       IEnumAAFDataDefs,       AddrOfSmartPointer2<IAAFDataDef> >
+        AxDataDefsIter;
+
+typedef AxIterator< IAAFSmartPointer2<IAAFOperationDef>,  IEnumAAFOperationDefs,  AddrOfSmartPointer2<IAAFOperationDef> >
+        AxOperationDefIter;
+
+typedef AxIterator< IAAFSmartPointer2<IAAFParameterDef>,  IEnumAAFParameterDefs,  AddrOfSmartPointer2<IAAFParameterDef> >
+        AxParameterDefsIter;
+
+typedef AxIterator< aafUID_t,                             IEnumAAFCodecFlavours,  AddrOfAafUID >
+        AxCodecFlavoursIter;
+
+typedef AxIterator< aafUID_t,                             IEnumAAFLoadedPlugins,  AddrOfAafUID >
+        AxLoadedPluginsIter;
+
+typedef AxIterator< IAAFSmartPointer2<IAAFComponent>,     IEnumAAFComponents,     AddrOfSmartPointer2<IAAFComponent> >
+        AxComponentsIter;
+
+typedef AxIterator< IAAFSmartPointer2<IAAFSegment>,       IEnumAAFSegments,       AddrOfSmartPointer2<IAAFSegment> >
+        AxSegmentsIter;
+
+typedef AxIterator< IAAFSmartPointer2<IAAFClassDef>,      IEnumAAFClassDefs,      AddrOfSmartPointer2<IAAFClassDef> >
+        AxClassDefIter;
+
+typedef AxIterator< IAAFSmartPointer2<IAAFTypeDef>,       IEnumAAFTypeDefs,       AddrOfSmartPointer2<IAAFTypeDef> >
+        AxTypeDefIter;
+
+typedef AxIterator< IAAFSmartPointer2<IAAFPropertyDef>,   IEnumAAFPropertyDefs,   AddrOfSmartPointer2<IAAFPropertyDef> >
+        AxPropertyDefIter;
+
+typedef AxIterator< IAAFSmartPointer2<IAAFLocator>,       IEnumAAFLocators,       AddrOfSmartPointer2<IAAFLocator> >
+        AxLocatorIter;
+#if 0
+// the old ones
 typedef AxIterator< IAAFSmartPointer<IAAFProperty>,      IEnumAAFProperties >	  AxPropertyIter;
 typedef AxIterator< IAAFSmartPointer<IAAFPropertyValue>, IEnumAAFPropertyValues > AxPropertyValueIter;
 typedef AxIterator< IAAFSmartPointer<IAAFMob>,           IEnumAAFMobs >		      AxMobIter;
@@ -76,6 +159,7 @@ typedef AxIterator< IAAFSmartPointer<IAAFClassDef>,      IEnumAAFClassDefs >    
 typedef AxIterator< IAAFSmartPointer<IAAFTypeDef>,       IEnumAAFTypeDefs >       AxTypeDefIter;
 typedef AxIterator< IAAFSmartPointer<IAAFPropertyDef>,   IEnumAAFPropertyDefs >   AxPropertyDefIter;
 typedef AxIterator< IAAFSmartPointer<IAAFLocator>,       IEnumAAFLocators >       AxLocatorIter;
+#endif
 
 // Records contain a set of named values that must be iterated over as well,
 // but don't have any sort of native iterator.  This wrapper presents

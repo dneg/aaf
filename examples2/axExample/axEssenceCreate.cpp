@@ -91,14 +91,14 @@ void AddImageEssence( AxMasterMob& masterMob,
 	// is hanging off of slot 1.
 
 	AxMobSlotIter axMobIter( masterMob.GetSlots() );
-	IAAFMobSlotSP nextSlot;
+	IAAFSmartPointer2<IAAFMobSlot> nextSlot;
 	bool notAtEnd = axMobIter.NextOne( nextSlot );
 
 	if ( !notAtEnd ) {
 		throw AxEx( L"Expected at least on MobSlot." );
 	}
 
-	IAAFMobSlotSP unused;
+	IAAFSmartPointer2<IAAFMobSlot> unused;
 	if ( axMobIter.NextOne( unused ) ) {
 		throw AxEx( L"More MobSlots are present than expected." );
 	};
@@ -253,14 +253,14 @@ void AddAudioEssence( AxMasterMob& masterMob, AxHeader& axHeader )
 	// the WAV summary info can be set.
 		
 	AxMobSlotIter axMobIter( masterMob.GetSlots() );
-	IAAFMobSlotSP nextSlot;
+	IAAFSmartPointer2<IAAFMobSlot> nextSlot;
 	bool notAtEnd = axMobIter.NextOne( nextSlot );
 
 	if ( !notAtEnd ) {
 		throw AxEx( L"Expected at least one MobSlot." );
 	}
 
-	IAAFMobSlotSP unused;
+	IAAFSmartPointer2<IAAFMobSlot> unused;
 	if ( axMobIter.NextOne( unused ) ) {
 		throw AxEx( L"More mob slots are present than expected." );
 	};
@@ -357,7 +357,7 @@ void AxCreateEssenceExample( AxFile& axFile,
 	criteria.searchTag = kAAFByMobKind;
 	criteria.tags.mobKind = kAAFMasterMob;
 	AxMobIter axMobIter( axContentStorage.GetMobs( &criteria ) );
-	IAAFMobSP nextMob;
+	IAAFSmartPointer2<IAAFMob> nextMob;
 	bool notAtEnd;
 
 	typedef std::map< AxString, IAAFMasterMobSP > MobMap;

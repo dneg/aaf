@@ -77,7 +77,7 @@ public:
 	  // up on it.  It should be fine.
 	        IterType::TypeSP typeSP;
 #else
-		IAAFSmartPointer<IAAFType> typeSP;
+		IAAFSmartPointer2<IAAFType> typeSP;
 #endif
 		bool rc;
 		rc = _iter.NextOne( typeSP );

@@ -21,6 +21,8 @@
 #include <AxTypes.h>
 #include <AxSmartPointer.h>
 
+#include <AAFSmartPointer2.h>
+
 #include <memory>
 #include <map>
 #include <vector>
@@ -84,6 +86,13 @@ protected:
 	void SetCOM( IAAFSmartPointer<ComType> spComType ) 
 	{
 		AxQueryInterface( spComType, _spIUnknown ); 
+	}
+
+	template <class ComType>
+	void SetCOM( IAAFSmartPointer2<ComType> spComType2 ) 
+	{
+	  IAAFSmartPointer<ComType> spComType1 = spComType2;
+	  AxQueryInterface( spComType1, _spIUnknown ); 
 	}
 
 private:

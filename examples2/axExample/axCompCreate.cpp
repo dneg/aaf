@@ -55,7 +55,7 @@ CreateSourceClipToAppendToSequence( AxDictionary& axDictionary,
 
 	AxMobSlotIter axSourceMobIter( sourceMob.GetSlots() );
 
-	IAAFMobSlotSP nextSlot;
+	IAAFSmartPointer2<IAAFMobSlot> nextSlot;
 	bool notAtEnd;
 
 	// If AxTimelineMobSlot had a default ctor and assigment operator
@@ -65,7 +65,7 @@ CreateSourceClipToAppendToSequence( AxDictionary& axDictionary,
 	for( notAtEnd = axSourceMobIter.NextOne( nextSlot );
 	     notAtEnd;
 	     notAtEnd = axSourceMobIter.NextOne( nextSlot ) ) {
-		
+
 		// First of all, the slot should be a timeline slot.
 		// This will throw an exception due to a bad interface
 		// query if it is not.
@@ -127,7 +127,7 @@ void AxCreateCompositionExample( AxFile& axFile,
 	criteria.searchTag = kAAFByMobKind;
 	criteria.tags.mobKind = kAAFMasterMob;
 	AxMobIter axMobIter( axContentStorage.GetMobs( &criteria ) );
-	IAAFMobSP nextMob;
+	IAAFSmartPointer2<IAAFMob> nextMob;
 	bool notAtEnd;
 	typedef std::map< AxString, IAAFMasterMobSP > MobMap;
 	MobMap mobMap;

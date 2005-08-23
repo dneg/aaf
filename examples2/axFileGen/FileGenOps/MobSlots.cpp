@@ -223,12 +223,12 @@ void GetMobSlot::Execute( const std::vector<AxString>& argv )
 	aafSlotID_t slotIdVal = AxStringUtil::strtol( slotId );
 
 	AxMobSlotIter axSlotIter( axMob.GetSlots() );
-	IAAFMobSlotSP nextSlot;
+	IAAFSmartPointer2<IAAFMobSlot> nextSlot;
 	bool notAtEnd;
 
 	for( notAtEnd = axSlotIter.NextOne( nextSlot );
 	     notAtEnd;
-		 notAtEnd = axSlotIter.NextOne( nextSlot ) ) {
+	     notAtEnd = axSlotIter.NextOne( nextSlot ) ) {
 		AxMobSlot axSlot( nextSlot );
 		if ( slotIdVal == axSlot.GetSlotID() ) {
 			break;

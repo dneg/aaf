@@ -197,13 +197,12 @@ void FindNamedMob::Execute( const std::vector<AxString>& argv )
 
 	AxMobIter axMobIter( axHeader.GetMobs( criteria ) );
 	
-	IAAFMobSP spMob;
+	IAAFSmartPointer2<IAAFMob> spMob;
 	bool notAtEnd;
-    notAtEnd = axMobIter.NextOne( spMob );
+	notAtEnd = axMobIter.NextOne( spMob );
   	if ( !notAtEnd ) {
 		throw AxFGEx( L"Mob not found." );
 	}
-
 
 	SetCOM( spMob );
 	RegisterInstance( mobRefName );
@@ -241,9 +240,9 @@ void FindMobByDataDef::Execute( const std::vector<AxString>& argv )
 
 	AxMobIter axMobIter( axHeader.GetMobs( criteria ) );
 	
-	IAAFMobSP spMob;
+	IAAFSmartPointer2<IAAFMob> spMob;
 	bool notAtEnd;
-    notAtEnd = axMobIter.NextOne( spMob );
+	notAtEnd = axMobIter.NextOne( spMob );
   	if ( !notAtEnd ) {
 		throw AxFGEx( L"Mob not found." );
 	}

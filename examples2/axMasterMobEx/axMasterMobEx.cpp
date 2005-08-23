@@ -772,7 +772,7 @@ void open_mastermob_and_read_essence( AxHeader& axHeader,
 	criteria.searchTag = kAAFByMobKind;
 	criteria.tags.mobKind = kAAFMasterMob;
 	AxMobIter axMobIter( axContentStorage.GetMobs( &criteria ) );
-	IAAFMobSP nextMob;
+	IAAFSmartPointer2<IAAFMob> nextMob;
 	bool notAtEnd;
 
 	// Expect at least one master mob, and read the first mob found.

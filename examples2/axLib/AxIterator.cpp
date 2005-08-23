@@ -32,34 +32,35 @@
 #include "AxMetaDef.h"
 
 #include <AAFResult.h>
+#include <AAFSmartPointer2.h>
 
 //=---------------------------------------------------------------------=
 
-template <class Type, class EnumeratorType>
-AxIterator<Type, EnumeratorType>::AxIterator()
+template <class Type, class EnumeratorType, class AddrOfOperator>
+AxIterator<Type, EnumeratorType, AddrOfOperator>::AxIterator()
 :	_spEnumerator()
 {}
 
 
-template <class Type, class EnumeratorType>
-AxIterator<Type, EnumeratorType>::
+template <class Type, class EnumeratorType, class AddrOfOperator>
+AxIterator<Type, EnumeratorType, AddrOfOperator>::
 AxIterator( const IAAFSmartPointer<EnumeratorType>& spEnumerator )
 :	_spEnumerator( spEnumerator )
 {}
 
-template <class Type, class EnumeratorType>
-AxIterator<Type, EnumeratorType>::
-AxIterator( const AxIterator<Type, EnumeratorType>& other )
+template <class Type, class EnumeratorType, class AddrOfOperator>
+AxIterator<Type, EnumeratorType, AddrOfOperator>::
+AxIterator( const AxIterator<Type, EnumeratorType, AddrOfOperator>& other )
 :	_spEnumerator( other._spEnumerator )
 {}
 
-template <class Type, class EnumeratorType>
-AxIterator<Type, EnumeratorType>::~AxIterator()
+template <class Type, class EnumeratorType, class AddrOfOperator>
+AxIterator<Type, EnumeratorType, AddrOfOperator>::~AxIterator()
 {}
 
-template <class Type, class EnumeratorType>
-AxIterator<Type, EnumeratorType>& AxIterator<Type, EnumeratorType>::
-operator=( const AxIterator<Type, EnumeratorType>& rhs )
+template <class Type, class EnumeratorType, class AddrOfOperator>
+AxIterator<Type, EnumeratorType, AddrOfOperator>& AxIterator<Type, EnumeratorType, AddrOfOperator>::
+operator=( const AxIterator<Type, EnumeratorType, AddrOfOperator>& rhs )
 {
 	if ( this == &rhs ) {
 		return *this;
@@ -70,14 +71,14 @@ operator=( const AxIterator<Type, EnumeratorType>& rhs )
 	return *this;
 }
 
-template <class Type, class EnumeratorType>
-void AxIterator<Type, EnumeratorType>::Skip( aafUInt32 count )
+template <class Type, class EnumeratorType, class AddrOfOperator>
+void AxIterator<Type, EnumeratorType, AddrOfOperator>::Skip( aafUInt32 count )
 {
 	CHECK_HRESULT( _spEnumerator->Skip( count ) );
 }
 
-template <class Type, class EnumeratorType>
-void AxIterator<Type, EnumeratorType>::Reset()
+template <class Type, class EnumeratorType, class AddrOfOperator>
+void AxIterator<Type, EnumeratorType, AddrOfOperator>::Reset()
 {
 	// Reset is documented to always succeed... but who knows, maybe
 	// it will change some day, or maybe the documentation is wrong.
@@ -86,14 +87,16 @@ void AxIterator<Type, EnumeratorType>::Reset()
 }
 
 
-template <class Type, class EnumeratorType>
-bool AxIterator<Type, EnumeratorType>::NextOne( Type& ret )
+template <class Type, class EnumeratorType, class AddrOfOperator>
+bool AxIterator<Type, EnumeratorType, AddrOfOperator>::NextOne( Type& ret )
 {
 	HRESULT hr;
 
 	Type type;
 
-	hr = _spEnumerator->NextOne( &type );
+	AddrOfOperator addrOp(&type);
+
+	hr = _spEnumerator->NextOne( addrOp.GetAddrOf() );
 
 	if ( hr == AAFRESULT_NO_MORE_OBJECTS ) {
 	  return false;
@@ -105,9 +108,9 @@ bool AxIterator<Type, EnumeratorType>::NextOne( Type& ret )
 	return true;
 }
 
-template <class Type, class EnumeratorType>
+template <class Type, class EnumeratorType, class AddrOfOperator>
 std::auto_ptr< std::vector< Type > > 
-AxIterator<Type, EnumeratorType>::Next( aafUInt32 count )
+AxIterator<Type, EnumeratorType, AddrOfOperator>::Next( aafUInt32 count )
 {
 	aafUInt32 i;
 
@@ -127,11 +130,11 @@ AxIterator<Type, EnumeratorType>::Next( aafUInt32 count )
 	return typeV;
 }
 
-template <class Type, class EnumeratorType>
-std::auto_ptr< AxIterator<Type, EnumeratorType> > AxIterator<Type, EnumeratorType>::Clone()
+template <class Type, class EnumeratorType, class AddrOfOperator>
+std::auto_ptr< AxIterator<Type, EnumeratorType, AddrOfOperator> > AxIterator<Type, EnumeratorType, AddrOfOperator>::Clone()
 {
-	std::auto_ptr< AxIterator<Type, EnumeratorType> >
-		pAxIterator( new AxIterator<Type, EnumeratorType>( _spEnumerator ) ) ;
+	std::auto_ptr< AxIterator<Type, EnumeratorType, AddrOfOperator> >
+		pAxIterator( new AxIterator<Type, EnumeratorType, AddrOfOperator>( _spEnumerator ) ) ;
 
 	return pAxIterator;
 }
@@ -241,22 +244,24 @@ std::auto_ptr<AxArrayIterator<TypeDef> > AxArrayIterator<TypeDef>::Clone()
 
 //=---------------------------------------------------------------------=
 
-template class AxIterator< IAAFSmartPointer<IAAFProperty>,      IEnumAAFProperties >;
-template class AxIterator< IAAFSmartPointer<IAAFPropertyValue>, IEnumAAFPropertyValues >;
-template class AxIterator< IAAFSmartPointer<IAAFMob>,           IEnumAAFMobs >;
-template class AxIterator< IAAFSmartPointer<IAAFEssenceData>,   IEnumAAFEssenceData >;
-template class AxIterator< IAAFSmartPointer<IAAFMobSlot>,       IEnumAAFMobSlots >;
-template class AxIterator< IAAFSmartPointer<IAAFDataDef>,       IEnumAAFDataDefs >;
-template class AxIterator< IAAFSmartPointer<IAAFOperationDef>,  IEnumAAFOperationDefs >;
-template class AxIterator< IAAFSmartPointer<IAAFParameterDef>,  IEnumAAFParameterDefs >;
-template class AxIterator< aafUID_t,                            IEnumAAFCodecFlavours >;
-template class AxIterator< aafUID_t,                            IEnumAAFLoadedPlugins >;
-template class AxIterator< IAAFSmartPointer<IAAFComponent>,     IEnumAAFComponents >;
-template class AxIterator< IAAFSmartPointer<IAAFSegment>,       IEnumAAFSegments >;
-template class AxIterator< IAAFSmartPointer<IAAFClassDef>,      IEnumAAFClassDefs >;
-template class AxIterator< IAAFSmartPointer<IAAFTypeDef>,       IEnumAAFTypeDefs >;
-template class AxIterator< IAAFSmartPointer<IAAFPropertyDef>,   IEnumAAFPropertyDefs >;
-template class AxIterator< IAAFSmartPointer<IAAFLocator>,       IEnumAAFLocators >;
+//=---------------------------------------------------------------------=
+
+template class AxIterator< IAAFSmartPointer2<IAAFProperty>,      IEnumAAFProperties, AddrOfSmartPointer2<IAAFProperty> >;
+template class AxIterator< IAAFSmartPointer2<IAAFPropertyValue>, IEnumAAFPropertyValues, AddrOfSmartPointer2<IAAFPropertyValue> >;
+template class AxIterator< IAAFSmartPointer2<IAAFMob>,           IEnumAAFMobs, AddrOfSmartPointer2<IAAFMob> >;
+template class AxIterator< IAAFSmartPointer2<IAAFEssenceData>,   IEnumAAFEssenceData, AddrOfSmartPointer2<IAAFEssenceData> >;
+template class AxIterator< IAAFSmartPointer2<IAAFMobSlot>,       IEnumAAFMobSlots, AddrOfSmartPointer2<IAAFMobSlot> >;
+template class AxIterator< IAAFSmartPointer2<IAAFDataDef>,       IEnumAAFDataDefs, AddrOfSmartPointer2<IAAFDataDef> >;
+template class AxIterator< IAAFSmartPointer2<IAAFOperationDef>,  IEnumAAFOperationDefs, AddrOfSmartPointer2<IAAFOperationDef> >;
+template class AxIterator< IAAFSmartPointer2<IAAFParameterDef>,  IEnumAAFParameterDefs, AddrOfSmartPointer2<IAAFParameterDef> >;
+template class AxIterator< aafUID_t,                             IEnumAAFCodecFlavours, AddrOfAafUID >;
+template class AxIterator< aafUID_t,                             IEnumAAFLoadedPlugins, AddrOfAafUID >;
+template class AxIterator< IAAFSmartPointer2<IAAFComponent>,     IEnumAAFComponents, AddrOfSmartPointer2<IAAFComponent> >;
+template class AxIterator< IAAFSmartPointer2<IAAFSegment>,       IEnumAAFSegments, AddrOfSmartPointer2<IAAFSegment> >;
+template class AxIterator< IAAFSmartPointer2<IAAFClassDef>,      IEnumAAFClassDefs, AddrOfSmartPointer2<IAAFClassDef> >;
+template class AxIterator< IAAFSmartPointer2<IAAFTypeDef>,       IEnumAAFTypeDefs, AddrOfSmartPointer2<IAAFTypeDef> >;
+template class AxIterator< IAAFSmartPointer2<IAAFPropertyDef>,   IEnumAAFPropertyDefs, AddrOfSmartPointer2<IAAFPropertyDef> >;
+template class AxIterator< IAAFSmartPointer2<IAAFLocator>,       IEnumAAFLocators, AddrOfSmartPointer2<IAAFLocator> >;
 
 
 template class AxArrayIterator< IAAFTypeDefFixedArray >;

@@ -334,12 +334,12 @@ void AxPropertyValueDump::process( IAAFPropertyValueSP& spPropVal,
 
 			// Pluck out the value of the Name property.
 			AxPropertyIter axPropIter( axObj.GetProperties() );
-			IAAFPropertySP nextProp;
+			IAAFSmartPointer2<IAAFProperty> nextProp;
 			bool notAtEnd;
 			for ( notAtEnd = axPropIter.NextOne( nextProp );
-				notAtEnd;
-				notAtEnd = axPropIter.NextOne( nextProp ) ) {
-				AxProperty axProp ( nextProp );
+			      notAtEnd;
+ 			      notAtEnd = axPropIter.NextOne( nextProp ) ) {
+			        AxProperty axProp ( nextProp );
 				if ( L"Name" == axProp.GetName() ) {
 					AxPropertyValue axPropVal( axProp.GetValue() );
 					AxPropertyValueDump dump( _os, false, true, _s );

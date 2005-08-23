@@ -131,7 +131,7 @@ void convert_line_rgbx_to_ycrcbx( aafUInt32* linergbx,
 								  int width )
 {
 	int i;
-	for (i = 0; i < width; i++, linergbx++, lineycrcbx) {
+	for (i = 0; i < width; i++, linergbx++, lineycrcbx++) {
 		*lineycrcbx = rgb_pixel_to_ycrcb( *linergbx );
 	}
 }

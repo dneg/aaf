@@ -76,12 +76,12 @@ void ProcessEssenceKinds( AxCodecDef& axCodecDef )
 {
 	AxDataDefsIter axDataDefsIter( axCodecDef.GetEssenceKinds() );
 	bool notAtEnd;
-	IAAFDataDefSP spDataDef;
+	IAAFSmartPointer2<IAAFDataDef> spDataDef;
 
 	wcout << L"Essence Kinds:\t\t";
 	for( notAtEnd = axDataDefsIter.NextOne( spDataDef );
-		 notAtEnd;
-		 notAtEnd = axDataDefsIter.NextOne( spDataDef ) ) {
+	     notAtEnd;
+	     notAtEnd = axDataDefsIter.NextOne( spDataDef ) ) {
 
 		AxDataDef axDataDef( spDataDef );
 		
