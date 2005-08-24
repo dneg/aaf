@@ -189,8 +189,8 @@ public:
                    OMByte* outputBytes,
                    size_t bytesSize);
 
-  // tjb - temporary - should be inherited from OMDefinition
-  virtual const OMUniqueObjectIdentification& identification(void) const;
+  // tjb - temporary - should use "identification" inherited from OMDefinition
+  virtual const OMUniqueObjectIdentification& uniqueIdentification(void) const;
 
 };
 
