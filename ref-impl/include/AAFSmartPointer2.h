@@ -26,6 +26,45 @@
 
 #include "AAFSmartPointer.h"
 
+// IAAFSmartPointer2 is a replacement for IAAFSmartPointer in
+// situations where the IAAFSmartPointer::operator&() clashes with code
+// that expects the "&" operator to always return a pointer of a type
+// that mathces its operand.
+//
+// Said another way, certain code expects the following to always be
+// work: "T* px; T** ppx = &px;". If that is not true, that code breaks.
+//
+// IAAFSmartPointer is implemented such that the follow is okay:
+//
+//   "IAAFSmartPointer<T> px; T** ppx = &px;"  // okay
+//
+// .. but this is not:
+//       
+//   "IAAFSmartPointer<T> px; IAAFSmartPointer<T>* ppx = &x;"  // compile error,
+//                                                             // type mismatch,
+//                                                             // &x returns T**  
+//
+// This causes problems with generic code (read stl) that expects the
+// address-of operator to work "normally".
+//
+// The gnu stdc++ library, version 6, is an example of a library that
+// fails. With its stl implementation the following is okay:
+//
+//    "vector<IAAFSmartPointer2<IAAFWhatever> >"    // okay
+//
+//  ... but this is not:
+//
+//    "vector<IAAFSmartPointer<IAAFWhatever> >"     // fails due to type mismatch,
+//                                                  // IAAFSmartPointer<T>::operator&
+//                                                  // returns T** where
+//                                                  // IAAFSmartPointer<T>* is expected.
+//
+// IAAFSmartPointer2 and IAAFSmartPointer are highly compatible. They
+// can mixed and matched at will. The only significant interface
+// difference is that IAAFSmartPointer2::GetAddrOf() method replaces
+// IAAFSmartPointer::operator&().
+//       
+
 template <typename ReferencedType>
 class IAAFSmartPointer2
 {
@@ -34,10 +73,6 @@ class IAAFSmartPointer2
   // dtor
   ~IAAFSmartPointer2()
   {}
-
-  //
-  // This part of the interface matches IAAFSmartPointer
-  //
 
   // default ctor
   IAAFSmartPointer2()
@@ -52,10 +87,6 @@ class IAAFSmartPointer2
   IAAFSmartPointer2( const IAAFSmartPointer2& src )
     : _sp( src._sp )
   {}
-
-  //
-  // This part of the interfaces matches IAAFSmartPointerBase
-  //
 
   // assignment operator, IAAFSmartPonter2 = IAAFSmartPointer
   IAAFSmartPointer2<ReferencedType>& operator=
