@@ -172,34 +172,7 @@ public:
                             OMByte* bytes,
                             OMUInt32 byteCount,
                             OMUInt32& bytesRead) const;
-#if 0 // tjb not yet
-    // @cmember Attempt to fill the vector of buffers given by <p buffers>
-    //          with stream data read from offset <p position> in
-    //          this <c OMWrappedRawStorage>. This is "read scatter".
-    //          The <p bufferCount> buffers are read in order until all have
-    //          been successfully read or an error is encountered. Once
-    //          an error has been encountered on one buffer no additional
-    //          buffers are read.
-    //          The number of bytes read is returned in <p bytesRead>.
-  virtual void streamReadAt(OMUInt64 position,
-                            OMIOBufferDescriptor* buffers,
-                            OMUInt32 bufferCount,
-                            OMUInt32& bytesRead) const;
 
-    // Asynchronous read - single buffer
-  virtual void streamReadAt(OMUInt64 position,
-                            OMByte* buffer,
-                            const OMUInt32 bytes,
-                            void* /* */ completion,
-                            const void* clientArgument) const;
-
-    // Asynchronous read - multiple buffers
-  virtual void streamReadAt(OMUInt64 position,
-                            OMIOBufferDescriptor* buffers,
-                            OMUInt32 bufferCount,
-                            void* /* */ completion,
-                            const void* clientArgument) const;
-#endif
     // @cmember Attempt to write the number of stream data bytes given by
     //          <p byteCount> to offset  <p position> in this
     //          <c OMWrappedRawStorage>
@@ -210,36 +183,7 @@ public:
                              const OMByte* bytes,
                              OMUInt32 byteCount,
                              OMUInt32& bytesWritten);
-#if 0 // tjb not yet
-    // @cmember Attempt to write the vector of buffers given by <p buffers>
-    //          to this <c OMWrappedRawStorage>. Stream data bytes are written
-    //          starting at offset <p position> in this
-    //          <c OMWrappedRawStorage>.
-    //          This is "write gather".
-    //          The <p bufferCount> buffers are written in order until all have
-    //          been successfully written or an error is encountered. Once
-    //          an error has been encountered on one buffer no additional
-    //          buffers are written.
-    //          The number of bytes written is returned in <p bytesWritten>.
-  virtual void streamWriteAt(OMUInt64 position,
-                             OMIOBufferDescriptor* buffers,
-                             OMUInt32 bufferCount,
-                             OMUInt32& bytesWritten);
 
-    // Asynchronous write - single buffer
-  virtual void streamWriteAt(OMUInt64 position,
-                             const OMByte* buffer,
-                             const OMUInt32 bytes,
-                             void* /* */ completion,
-                             const void* clientArgument);
-
-    // Asynchronous write - multiple buffers
-  virtual void streamWriteAt(OMUInt64 position,
-                             const OMIOBufferDescriptor* buffers,
-                             OMUInt32 bufferCount,
-                             void* /* */ completion,
-                             const void* clientArgument);
-#endif
 private:
   OMRawStorage* _store;
 };
