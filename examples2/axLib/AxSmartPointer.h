@@ -216,6 +216,18 @@ AXSP_TDEF_B( SearchSource )
 AXSP_TDEF_B( EssenceMultiAccess )
 AXSP_TDEF_B( TypeDefVariableArrayEx )
 
+// New 1.1 objects.
+AXSP_TDEF_A( AuxiliaryDescriptor )
+AXSP_TDEF_A( DescriptiveFramework )
+AXSP_TDEF_A( DescriptiveMarker )
+AXSP_TDEF_A( ImportDescriptor )
+AXSP_TDEF_A( KLVDataDefinition )
+AXSP_TDEF_A( PCMDescriptor )
+AXSP_TDEF_A( PhysicalDescriptor )
+AXSP_TDEF_A( RecordingDescriptor )
+AXSP_TDEF_A( SoundDescriptor )
+AXSP_TDEF_A( TaggedValueDefinition )
+
 // plugin interfaces
 AXSP_TDEF_C( IAAFPlugin )
 AXSP_TDEF_C( IAAFClassExtension )
