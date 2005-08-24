@@ -3,7 +3,11 @@
 #include <DumpPhase.h>
 
 //Ax files
+#include <AxInit.h>
+#include <AxUtil.h>
 #include <AxEx.h>
+
+namespace {
 
 using namespace aafanalyzer;
 
@@ -31,39 +35,81 @@ void OutputResultMsgs(std::vector<TestResult>& vec)
   }
 }
 
-int main()
+//======================================================================
+
+class Usage
+{};
+
+std::ostream& operator<<( std::ostream& os, const Usage& )
+{
+  os << "AAFAnalyzer: [options] filename.aaf" << std::endl;
+  return os;
+};
+
+} // end of namespace
+
+int main( int argc, char** argv )
 {
   try
   {
-    const std::basic_string<wchar_t> FileName = L"test.aaf";  
-    std::vector<TestResult> results;
+    //
+    // Process the command line arguments.
+    //
 
-    if(AAFLoad(getenv("AX_AAF_COMAPI")) == 0)
+    AxCmdLineArgs args( argc, argv );
+
+    // Dump option
+    std::pair<bool,int> dumpArg = args.get( "-dump" );
+
+    // Filename is the last argument.
+    std::pair<bool,const char*> fileNameArg = args.get( argc-1, 1 );
+
+    if ( !fileNameArg.first )
     {
-      //first phase
-      LoadPhase load(std::cout, FileName); 
-      results = load.Execute();
-      OutputResultMsgs(results);
-
-      //dump phase
-      /*DumpPhase dump(std::cout, load.GetTestGraph());
-      results = dump.Execute();
-      OutputResultMsgs(results);*/
-
-      AAFUnload();
+      throw Usage();
     }
-    else
-      std::cout << "Failed to load library!" << std::endl;
+
+    //
+    // Execute the tests.
+    //
+
+    AxInit axInitObj;
+    
+    const std::basic_string<wchar_t> fileName = AxStringUtil::mbtowc( fileNameArg.second );
+
+    std::vector<TestResult> results;
+    
+    //first phase
+    LoadPhase load(std::cout, fileName); 
+    results = load.Execute();
+    OutputResultMsgs(results);
+    
+    // More test phases go here...
+    
+    // optional dump phase
+    if ( dumpArg.first )
+      {
+	DumpPhase dump(std::cout, load.GetTestGraph());
+	results = dump.Execute();
+	OutputResultMsgs(results);
+      }
+  }
+  catch ( const Usage& ex )
+  {
+    std::cout << ex << std::endl;
   }
   catch ( const AxExHResult& ex )
   {
-    std::wcout << L"Error: " << ex.what() << std::endl;
+    std::wcout << L"Error: " << ex.widewhat() << std::endl;
+  }
+  catch ( const std::exception& ex )
+  {
+    std::cout << "Error: " << ex.what() << std::endl;
   }
   catch ( ... )
   {
     std::cout << "Error: unhandled exeption" << std::endl;
   }
-  std::cout << "Completed Graph Testing!" << std::endl << std::endl;
-
+  
   return 0;
 }
