@@ -78,11 +78,19 @@ class IAAFSmartPointer2
 
   // Allows passing this smart ptr as argument to methods which expect
   // a ReferencedType**, in order to fill it in.
-  ReferencedType** GetAddrOf() const;
+  ReferencedType** GetAddrOf()
   {
-    return &_sp;
+    return _sp.operator&();
   }
- 
+
+#if 0
+  // Allows passing this smart ptr as argument to methods which expect
+  // a ReferencedType**, in order to fill it in.
+  ReferencedType** GetAddrOf()
+  {
+    return _sp.operator&();
+  }
+#endif
   // Allows passing this smart ptr as argument to methods which expect
   // a ReferencedType*
   operator ReferencedType * () const
@@ -108,7 +116,7 @@ class IAAFSmartPointer2
   }
 
  private:
-  IAAFSmartPointer<ReferencedType>_sp;
+  IAAFSmartPointer<ReferencedType> _sp;
 };
 
 #endif
