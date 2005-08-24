@@ -494,7 +494,7 @@ void OMKLVStoredObject::save(const OMSimpleProperty& property)
   OMByte* buffer = new OMByte[externalBytesSize];
   ASSERT("Valid heap pointer", buffer != 0);
 
-  const OMUniqueObjectIdentification& id = propertyType->identification();
+  const OMUniqueObjectIdentification id = propertyType->identification();
   if ((id == Type_UniqueObjectIdentification) ||
       (id == Type_TransferCharacteristic)) {
     // UniqueObjectIdentification properties are stored
@@ -562,7 +562,7 @@ void OMKLVStoredObject::save(const OMDataVector& property)
     // Get a pointer to the element
     const OMByte* bits = it->currentElement();
 
-    const OMUniqueObjectIdentification& id = elementType->identification();
+    const OMUniqueObjectIdentification id = elementType->identification();
     if ((id == Type_UniqueObjectIdentification) ||
         (id == Type_TransferCharacteristic)) {
       // UniqueObjectIdentification properties are stored
@@ -630,7 +630,7 @@ void OMKLVStoredObject::save(const OMDataSet& property)
     // Get a pointer to the element
     const OMByte* bits = it->currentElement();
 
-    const OMUniqueObjectIdentification& id = elementType->identification();
+    const OMUniqueObjectIdentification id = elementType->identification();
     if ((id == Type_UniqueObjectIdentification) ||
         (id == Type_TransferCharacteristic)) {
       // UniqueObjectIdentification properties are stored
@@ -958,7 +958,7 @@ void OMKLVStoredObject::restore(OMSimpleProperty& property,
 
   _storage->read(buffer, externalSize);
 
-  const OMUniqueObjectIdentification& id = propertyType->identification();
+  const OMUniqueObjectIdentification id = propertyType->identification();
   if ((id == Type_UniqueObjectIdentification) ||
       (id == Type_TransferCharacteristic)) {
     // UniqueObjectIdentification properties are stored
@@ -1029,7 +1029,7 @@ void OMKLVStoredObject::restore(OMDataVector& property,
     // Read one element
     _storage->read(buffer, externalElementSize);
 
-    const OMUniqueObjectIdentification& id = elementType->identification();
+    const OMUniqueObjectIdentification id = elementType->identification();
     if ((id == Type_UniqueObjectIdentification) ||
         (id == Type_TransferCharacteristic)) {
       // UniqueObjectIdentification properties are stored
@@ -1086,7 +1086,7 @@ void OMKLVStoredObject::restore(OMDataSet& property,
     // Read one element
     _storage->read(buffer, externalElementSize);
 
-    const OMUniqueObjectIdentification& id = elementType->identification();
+    const OMUniqueObjectIdentification id = elementType->identification();
     if ((id == Type_UniqueObjectIdentification) ||
         (id == Type_TransferCharacteristic)) {
       // UniqueObjectIdentification properties are stored
