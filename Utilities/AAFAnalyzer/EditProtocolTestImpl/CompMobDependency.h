@@ -21,14 +21,27 @@
 #ifndef __COMPMOBDEPENDENCY_h__
 #define __COMPMOBDEPENDENCY_h__
 
+#include <AAFTypedObjNode.h>
+
 //project files
 #include <Test.h>
 
+#include <vector>
+
 namespace aafanalyzer {
+
+using namespace boost;
+using namespace std;
 
 class CompMobDependency : public Test
 {
  public:
+
+  typedef AAFTypedObjNode<IAAFCompositionMob> CompMobNode;
+  typedef shared_ptr<CompMobNode> CompMobNodeSP;
+  typedef vector<CompMobNodeSP> CompMobNodeVector;
+  typedef shared_ptr<CompMobNodeVector> CompMobNodeVectorSP;
+
   CompMobDependency(std::ostream& os, boost::shared_ptr<TestGraph> spTestGraph);
   ~CompMobDependency();
 
@@ -36,11 +49,15 @@ class CompMobDependency : public Test
   std::string GetName();
   std::string GetDescription();
 
+  CompMobNodeVectorSP GetRootCompMobNodes();
+
  private:
 
   // prohibited
   CompMobDependency(const CompMobDependency&);
   CompMobDependency& operator=( const CompMobDependency& );
+
+  CompMobNodeVectorSP _spRootCompMobs;
 };
 
 } // end of namespace diskstream

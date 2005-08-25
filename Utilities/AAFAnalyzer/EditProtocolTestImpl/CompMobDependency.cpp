@@ -64,6 +64,9 @@ TestResult CompMobDependency::Execute()
   result.SetDescription(GetDescription());
 
   dfs.TraverseDown(spVisitor, GetTestGraph()->GetRootNode()); 
+
+  _spRootCompMobs = spVisitor->GetNodesWithCount(0);
+
   return result;
 }
 
@@ -79,5 +82,9 @@ std::string CompMobDependency::GetDescription()
   return description;
 }
 
+CompMobDependency::CompMobNodeVectorSP CompMobDependency::GetRootCompMobNodes()
+{
+  return _spRootCompMobs;
+}
 
 } // end of namespace diskstream

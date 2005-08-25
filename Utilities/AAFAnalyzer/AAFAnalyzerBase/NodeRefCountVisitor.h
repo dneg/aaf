@@ -23,6 +23,7 @@
 
 #include "TypedVisitor.h"
 #include "Node.h"
+#include "TempAllNodeMap.h"
 
 #include <TestResult.h>
 
@@ -33,7 +34,12 @@
 #include <vector>
 #include <map>
 
+#include <assert.h>
+
 namespace aafanalyzer {
+
+using namespace std;
+using namespace boost;
 
 // NodeRefCountVisitor is used to references to any single type of
 // node in a graph. Simply instantiate it on the desired node type and
@@ -59,6 +65,11 @@ class NodeRefCountVisitor : public TypedVisitor
   // reference count.
   typedef std::map<int, std::vector<Node::LID> > RefCountMap;
 
+  typedef AAFTypedObjNode<AAFObjType> ReferencedNode;
+  typedef shared_ptr<ReferencedNode> ReferencedNodeSP;
+  typedef vector<ReferencedNodeSP> ReferencedNodeVector;
+  typedef shared_ptr<ReferencedNodeVector> ReferencedNodeVectorSP;
+
   NodeRefCountVisitor(std::ostream& os, TestResult& result)
     : _os(os),
      _result(result)
@@ -83,6 +94,10 @@ class NodeRefCountVisitor : public TypedVisitor
     return true;
   }
 
+  // Returns a map that maps ref counts to all nodes with that ref count.
+  // i.e. map[0] = vector<Node::LID> // a vector of unreferenced nodes
+  // i.e. map[1] = vector<Node::LID> // a vector of nodes with one reference
+  // i.e. map[2] = vector<Node::LID> // a vector of nodes with three references
   boost::shared_ptr<RefCountMap> GetRefCountMap()
   {
     boost::shared_ptr<RefCountMap> spRefCountMap( new RefCountMap );
@@ -94,6 +109,30 @@ class NodeRefCountVisitor : public TypedVisitor
     }
     
     return spRefCountMap;
+  }
+
+  // Return a vector of all nodes with a particular reference count.
+
+  ReferencedNodeVectorSP GetNodesWithCount( int refCount )
+  {
+    ReferencedNodeVectorSP spNodes( new ReferencedNodeVector );
+
+    // For each node, check if the ref count matches what we are
+    // looking for if yes, then push a pointer to the node onto the
+    // spNodes vector.
+    NodeMap::const_iterator iter;
+    for( iter = _nodeMap.begin(); iter != _nodeMap.end(); ++iter )
+    {
+      if ( iter->second == refCount )
+      {
+	shared_ptr<Node> spNode =  TempAllNodeMap::GetInstance().GetNode(iter->first);
+	ReferencedNodeSP spRefNode = dynamic_pointer_cast<ReferencedNode>( spNode );
+	assert( spRefNode );
+	spNodes->push_back( spRefNode );
+      }
+    }
+    
+    return spNodes;
   }
 
  private:

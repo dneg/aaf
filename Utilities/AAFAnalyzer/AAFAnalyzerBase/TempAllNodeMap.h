@@ -21,8 +21,7 @@
 #ifndef __TEMPALLNODEMAP_h__
 #define __TEMPALLNODEMAP_h__
 
-//Ax files
-//#include <AxTypes.h>
+#include <Node.h>
 
 //boost files
 #include <boost/shared_ptr.hpp>
@@ -32,7 +31,13 @@
 
 namespace aafanalyzer {
 
-class Node;
+// This works around a small design flaw. Nodes should be able to
+// return a smart pointer to themselves so that a visitor
+// implementation can get a smart pointer to a node that is passed to
+// it by reference. We didn't think of that to begin with. Until it
+// gets implemented, this will convert an Node::LID into a smart
+// pointer to any node. Let's hope it should the "Temp" name is
+// accurate. :) (jpt)
 
 class TempAllNodeMap
 {
@@ -41,8 +46,8 @@ class TempAllNodeMap
   typedef std::map<unsigned int, boost::shared_ptr<Node> > Map;
 
   static TempAllNodeMap& GetInstance();
-  void AddNode(unsigned int id, boost::shared_ptr<Node> spNode);
-  boost::shared_ptr<Node> GetNode(unsigned int id);
+  void AddNode(Node::LID, boost::shared_ptr<Node> spNode);
+  boost::shared_ptr<Node> GetNode(Node::LID);
 
  private:
 
