@@ -59,8 +59,8 @@ public:
 	// Get index of option "opt" at or after argv[n].  True if found.
 	std::pair<bool,int> get( const char* opt, int n=0 );
 
-	// Return argv[n].  True if n < argc.
-	std::pair<bool,const char*> get( int n );
+	// Return argv[n].  True if m <= n < argc
+	std::pair<bool,const char*> get( int n, int m=0 );
 	
 private:
 	int _argc;

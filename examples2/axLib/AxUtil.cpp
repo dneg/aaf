@@ -119,11 +119,11 @@ std::pair<bool,int> AxCmdLineArgs::get( const char* opt, int i )
 	return result;
 }
 
-std::pair<bool,const char*> AxCmdLineArgs::get( int n )
+std::pair<bool,const char*> AxCmdLineArgs::get( int n, int m )
 {
 	std::pair<bool,const char*> result(false,0);
 
-	if ( n < _argc ) {
+	if ( m <= n  &&  n < _argc ) {
 		result.first = true;
 		result.second = _argv[n];
 	}
