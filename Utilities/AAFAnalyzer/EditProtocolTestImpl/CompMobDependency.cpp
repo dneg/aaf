@@ -20,9 +20,8 @@
 
 #include "CompMobDependency.h"
 
+#include <NodeRefCountVisitor.h>
 #include <DepthFirstTraversal.h>
-#include <CompositionMobVisitor.h>
-
 
 namespace {
 
@@ -51,7 +50,10 @@ CompMobDependency::~CompMobDependency()
 TestResult CompMobDependency::Execute()
 {
   TestResult result;
-  boost::shared_ptr<CompositionMobVisitor> spVisitor(new CompositionMobVisitor(GetOutStream(), result));
+
+  boost::shared_ptr<NodeRefCountVisitor<IAAFCompositionMob> > spVisitor(
+       new NodeRefCountVisitor<IAAFCompositionMob>( GetOutStream(), result) );
+
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
 
   //output to screen
