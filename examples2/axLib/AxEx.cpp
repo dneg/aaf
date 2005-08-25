@@ -159,7 +159,7 @@ AxExSmartPointer::~AxExSmartPointer() throw()
 //=---------------------------------------------------------------------=
 
 AxExBadImp::AxExBadImp( const wchar_t* what )
-:	AxEx( what )
+  :	AxEx( AxString(AxString(L"Bad implementation: ") + AxString(what)).c_str() )
 {}
 
 AxExBadImp::~AxExBadImp() throw()
