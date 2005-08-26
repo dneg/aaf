@@ -135,6 +135,9 @@ public:
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
 
+  // tjb - temporary
+  virtual const OMUniqueObjectIdentification& uniqueIdentification(void) const;
+
   // Allocate an OMProperty that can represent this type.  Implemented
   // by derived classes.
   virtual OMProperty *

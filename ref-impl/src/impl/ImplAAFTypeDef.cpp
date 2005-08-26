@@ -133,6 +133,10 @@ void ImplAAFTypeDef::internalize(const OMByte* /*externalBytes*/,
   assert (0);
 }
 
+const OMUniqueObjectIdentification& ImplAAFTypeDef::uniqueIdentification(void) const
+{
+  return identification();
+}
 
 aafBool ImplAAFTypeDef::IsFixedSize (void) const
 {
