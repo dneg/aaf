@@ -162,28 +162,6 @@ public:
     //          representation.
   virtual void synchronize(void);
 
-  // Functions for accessing stream data within this <c OMWrappedRawStorage>
-
-    // @cmember Attempt to read the number of stream data bytes given by
-    //          <p byteCount> from offset <p position> in this
-    //          <c OMWrappedRawStorage> into the buffer at address <p bytes>.
-    //          The actual number of bytes read is returned in <p bytesRead>.
-  virtual void streamReadAt(OMUInt64 position,
-                            OMByte* bytes,
-                            OMUInt32 byteCount,
-                            OMUInt32& bytesRead) const;
-
-    // @cmember Attempt to write the number of stream data bytes given by
-    //          <p byteCount> to offset  <p position> in this
-    //          <c OMWrappedRawStorage>
-    //          from the buffer at address <p bytes>.
-    //          The actual number of bytes written is returned in
-    //          <p bytesWritten>.
-  virtual void streamWriteAt(OMUInt64 position,
-                             const OMByte* bytes,
-                             OMUInt32 byteCount,
-                             OMUInt32& bytesWritten);
-
 private:
   OMRawStorage* _store;
 };
