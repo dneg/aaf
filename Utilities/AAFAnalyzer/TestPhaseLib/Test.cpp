@@ -43,19 +43,19 @@ Test::~Test()
 {
 }
 
-std::string Test::GetName()
+std::string Test::GetName() const
 {
   std::string null;
   return null;
 }
 
-std::string Test::GetDescription()
+std::string Test::GetDescription() const
 {
   std::string null;
   return null;
 }
 
-std::ostream& Test::GetOutStream()
+std::ostream& Test::GetOutStream() const
 {
   return _os;
 }

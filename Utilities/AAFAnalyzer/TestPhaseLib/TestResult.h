@@ -43,17 +43,16 @@ class TestResult
   TestResult& operator=(const TestResult& test);
   ~TestResult();
 
-  const string& GetExplanation();
-  const string& GetDocumentRef();
-  const string& GetName();
-  const string& GetDescription();
+  const string& GetExplanation() const;
+  const string& GetDocumentRef() const;
+  const string& GetName() const;
+  const string& GetDescription() const;
+  enum Result GetResult() const;
 
   void SetName(const string& name);
   void SetDescription(const string& desc);
   void SetExplanation(const string& exp);
-
   void SetResult(Result result);
-  enum Result GetResult();
 
  private:
   string _name;

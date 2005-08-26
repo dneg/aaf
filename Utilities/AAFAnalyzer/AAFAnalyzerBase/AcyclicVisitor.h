@@ -48,7 +48,7 @@ class AcyclicVisitor : public Visitor
   virtual bool PreOrderVisit(Node& node);
   virtual bool PostOrderVisit(Node& node);
 
-  TestResult GetTestResult() const;
+  const TestResult& GetTestResult() const;
 
  private:
   bool IsPresent(Node::LID lid);

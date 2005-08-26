@@ -44,12 +44,15 @@ using namespace aafanalyzer;
 //======================================================================
 namespace aafanalyzer {
 
-ResolveRefVisitor::ResolveRefVisitor(std::ostream& os, boost::shared_ptr<EdgeMap> spEdgeMap, TestResult& result)
+ResolveRefVisitor::ResolveRefVisitor(std::ostream& os, boost::shared_ptr<EdgeMap> spEdgeMap )
 : _os(os),
   _spEdgeMap(spEdgeMap),
-  _Result(result)
-{
-}
+  _result( "ReferenceResolver",
+	   "Resolve source references in an AAF file.",
+	   "-",
+	   "-",
+	   TestResult::PASS )
+{}
 
 ResolveRefVisitor::~ResolveRefVisitor()
 {
@@ -133,6 +136,11 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
 bool ResolveRefVisitor::EdgeVisit(Edge& edge)
 {
   return true;
+}
+
+const TestResult& ResolveRefVisitor::GetTestResult() const
+{
+  return _result;
 }
 
 }

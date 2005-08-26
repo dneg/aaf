@@ -52,21 +52,24 @@ FileLoad::~FileLoad()
 
 TestResult FileLoad::Execute()
 {
-  TestResult result;
   GraphBuilder graphBuild;
   boost::shared_ptr<NodeFactory> spFactory(new NodeFactoryImpl());
 
   //output to screen
   //GetOutStream() << GetName() << std::endl << GetDescription() << std::endl << std::endl;
-
-  //set result properties
-  result.SetName(GetName());
-  result.SetDescription(GetDescription());
-
+    
   //build the graph and initialize TestGraph 
   boost::shared_ptr<TestGraph> spTestGraph(new TestGraph(graphBuild.CreateGraph(_File, spFactory)));
   SetTestGraph(spTestGraph);
-
+  
+  // Set result properties.
+  // If the graph builder did not through an exception, then
+  // it succeeded, therefore, result is PASS.
+  TestResult result( "FileLoad",
+		     "Loads and AAF file and builds the test graph.",
+		     "File loaded correctly.",
+		     "-", // DOCREF
+		     TestResult::PASS );
   return result;
 }
 

@@ -52,28 +52,30 @@ RefResolver::~RefResolver()
 
 TestResult RefResolver::Execute()
 {
-  TestResult result;
-  boost::shared_ptr<ResolveRefVisitor> spVisitor(new ResolveRefVisitor(GetOutStream(), GetTestGraph()->GetEdgeMap(), result));
+  TestResult visitorResult;
+  boost::shared_ptr<ResolveRefVisitor> spVisitor(new ResolveRefVisitor(GetOutStream(), GetTestGraph()->GetEdgeMap()));
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
 
-  //output to screen
-  //GetOutStream() << GetName() << std::endl << GetDescription() << std::endl << std::endl;
-
-  //set result properties
-  result.SetName(GetName());
-  result.SetDescription(GetDescription());
-
   dfs.TraverseDown(spVisitor, GetTestGraph()->GetRootNode());
+
+  // FIXME - Result hierarch required here rather than
+  // overwrite of the phase status.
+  TestResult result( "ReferenceResolver",
+		     "Resolves source references in an AAF file.",
+		     spVisitor->GetTestResult().GetExplanation(),
+		     "-", //DOCREF
+		     spVisitor->GetTestResult().GetResult() );
+
   return result;
 }
 
-std::string RefResolver::GetName()
+std::string RefResolver::GetName() const
 {
   std::string name = "--- Reference Resolver Test ---";
   return name;
 }
 
-std::string RefResolver::GetDescription()
+std::string RefResolver::GetDescription() const
 {
   std::string description = "Test Description: Resolve all source clip references.";
   return description;

@@ -41,9 +41,9 @@ class Test
   virtual ~Test();
 
   virtual TestResult Execute() = 0;
-  virtual std::string GetName();
-  virtual std::string GetDescription();
-  std::ostream& GetOutStream();
+  virtual std::string GetName() const;
+  virtual std::string GetDescription() const;
+  std::ostream& GetOutStream() const;
   boost::shared_ptr<TestGraph> GetTestGraph();
 
 protected:

@@ -12,5 +12,10 @@
      Test results, and the details results that are created as a result
      of teh processing done by one Test.
 
-2) Some of Demitri's low level test results are not being propogated
+2) TestResult takes for strings. It's easy to mixup what's what. Can
+that be improved?  First, can the document reference be made into a
+class that stores a precise document refernce (is section, subsection,
+etc). Is it worth it?
+
+3) Some of Demitri's low level test results are not being propogated
 up. This requires review.

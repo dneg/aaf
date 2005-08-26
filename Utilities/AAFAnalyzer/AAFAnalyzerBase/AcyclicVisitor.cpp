@@ -117,7 +117,7 @@ void AcyclicVisitor::Erase(unsigned int lid)
   }  
 }
 
-TestResult AcyclicVisitor::GetTestResult() const
+const TestResult& AcyclicVisitor::GetTestResult() const
 {
   return _Result;
 }

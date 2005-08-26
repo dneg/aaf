@@ -70,24 +70,29 @@ TestResult& TestResult::operator=(const TestResult& test)
   return *this;
 }
 
-const string& TestResult::GetExplanation()
+const string& TestResult::GetExplanation() const
 {
   return _expl;
 }
 
-const string& TestResult::GetDocumentRef()
+const string& TestResult::GetDocumentRef() const
 {
   return _docRef;
 }
 
-const string& TestResult::GetName()
+const string& TestResult::GetName() const
 {
   return _name;
 }
 
-const string& TestResult::GetDescription()
+const string& TestResult::GetDescription() const
 {
   return _desc;
+}
+
+enum TestResult::Result TestResult::GetResult() const
+{
+  return _result;
 }
 
 void TestResult::SetExplanation(const string& exp)
@@ -109,11 +114,6 @@ void TestResult::SetResult(Result result)
 {
   //can only be set to success, warning, or failure
   _result = result;
-}
-
-enum TestResult::Result TestResult::GetResult()
-{
-  return _result;
 }
 
 } // end of namespace diskstream
