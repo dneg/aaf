@@ -1,0 +1,16 @@
+1) The TestResult class needs some refinement:
+   - It should stored a hiearchy of test results.
+   - We break down the tests into:
+	- A TestPhase
+	- A TestPhase executes one or more Tests.
+	- A Test is implemented (typically) using one or more Visitors.
+   - When a failure occurs, each of these have a result to report.
+   - We need to keep a record of the results from top, to bottom,
+     with increasing levels of detail.
+   - A tree of TestResults would do the job. If necessary we could
+     specialize the test results to represent TestPhase results, and
+     Test results, and the details results that are created as a result
+     of teh processing done by one Test.
+
+2) Some of Demitri's low level test results are not being propogated
+up. This requires review.

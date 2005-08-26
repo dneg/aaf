@@ -76,25 +76,30 @@ int main()
 
   //test the DepthFirstTraversal class
   TestResult result;
-  boost::shared_ptr<Visitor> spVisitor(new TestVisitor());  
+  boost::shared_ptr<TestVisitor> spTestVisitor(new TestVisitor());  
   boost::shared_ptr<Node> fooOne(new Node());
   boost::shared_ptr<Node> fooTwo(new Node());  
   spEdgeMap->AddEdge(boost::shared_ptr<Edge>(new Edge(childTwo, fooOne)));
   spEdgeMap->AddEdge(boost::shared_ptr<Edge>(new Edge(childTwo, fooTwo)));
 
   DepthFirstTraversal dfs(spEdgeMap, parentOne);
-  dfs.TraverseDown(spVisitor, parentOne);
+  dfs.TraverseDown(spTestVisitor, parentOne);
   std::cout << "********************" << std::endl;
-  dfs.TraverseUp(spVisitor, fooOne);
+  dfs.TraverseUp(spTestVisitor, fooOne);
 
   //test the Acyclic Visitor
   std::cout << "***CYCLE TESTER (no cycles)***" << std::endl;
-  spVisitor.reset(new AcyclicVisitor(std::cout, result));
-  dfs.TraverseDown(spVisitor, parentOne);
+  boost::shared_ptr<AcyclicVisitor> spAcyclicVisitorA(new AcyclicVisitor(std::cout));
+  dfs.TraverseDown(spAcyclicVisitorA, parentOne);
+  TestResult resultA = spAcyclicVisitorA->GetTestResult();
+  assert( resultA.GetResult() == TestResult::PASS );
   
   std::cout << "***CYCLE TESTER (w/ cycle present)***" << std::endl;
+  boost::shared_ptr<AcyclicVisitor> spAcyclicVisitorB(new AcyclicVisitor(std::cout));
   spEdgeMap->AddEdge(boost::shared_ptr<Edge>(new Edge(fooTwo, parentTwo)));//adds a cycle
-  dfs.TraverseDown(spVisitor, parentOne);
+  dfs.TraverseDown(spAcyclicVisitorB, parentOne);
+  TestResult resultB = spAcyclicVisitorB->GetTestResult();
+  assert( resultB.GetResult() == TestResult::FAIL );
 
   std::cout << "Completed Basic Testing Successfully!" << std::endl << std::endl;
 

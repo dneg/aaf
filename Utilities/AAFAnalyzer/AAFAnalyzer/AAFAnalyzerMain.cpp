@@ -18,19 +18,23 @@ void OutputResultMsgs(std::vector<TestResult>& vec)
     std::cout << vec.at(i).GetName() << std::endl;
     std::cout << vec.at(i).GetDescription() << std::endl;
 
-    if(vec.at(i).GetResult() == TestResult::success)
+    if(vec.at(i).GetResult() == TestResult::PASS)
       std::cout << "Test Passed!" << std::endl << std::endl;
 
-    else if(vec.at(i).GetResult() == TestResult::warning)
+    else if(vec.at(i).GetResult() == TestResult::WARN)
     {
       std::cout << "Test Passed, but with warnings!" << std::endl;
       std::cout << vec.at(i).GetExplanation() << std::endl << std::endl;
     }
 
-    else if(vec.at(i).GetResult() == TestResult::error)
+    else if(vec.at(i).GetResult() == TestResult::FAIL)
     {
       std::cout << "Test Failed!" << std::endl;
       std::cout << vec.at(i).GetExplanation() << std::endl << std::endl;
+    }
+    else
+    {
+      assert(0);
     }
   }
 }

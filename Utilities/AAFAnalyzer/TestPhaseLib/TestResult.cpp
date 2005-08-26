@@ -34,74 +34,86 @@ using namespace aafanalyzer;
 namespace aafanalyzer 
 {
 
+using namespace std;
+
+// Default result is FAIL.
+// Test implementations must explicity indicate success.
 TestResult::TestResult()
-{
-  //TestResult is successful unless found otherwise by a visitor
-  _enum_result = success;
-}
+  : _result( FAIL )
+{}
+
+TestResult::TestResult( const string& name,
+			const string& desc,
+			const string& explain,
+			const string& docRef,
+			Result defaultResult )
+  : _name( name ),
+    _desc( desc ),
+    _expl( explain ),
+    _docRef( docRef ),
+    _result( defaultResult )
+{}
 
 TestResult::~TestResult()
-{
-}
+{}
 
 TestResult& TestResult::operator=(const TestResult& test)
 {
   if(this != &test)
   {
-    _Expl = test._Expl;
-    _Name = test._Name;
-    _Desc = test._Desc;
-    _enum_result = test._enum_result;
+    _expl = test._expl;
+    _name = test._name;
+    _desc = test._desc;
+    _result = test._result;
   }
 
   return *this;
 }
 
-std::string TestResult::GetExplanation()
+const string& TestResult::GetExplanation()
 {
-  return _Expl;
+  return _expl;
 }
 
-std::string TestResult::GetDocumentRef()
+const string& TestResult::GetDocumentRef()
 {
-  std::string null = "";
-  return null;
+  return _docRef;
 }
 
-std::string TestResult::GetName()
+const string& TestResult::GetName()
 {
-  return _Name;
+  return _name;
 }
 
-std::string TestResult::GetDescription()
+const string& TestResult::GetDescription()
 {
-  return _Desc;
+  return _desc;
 }
 
-void TestResult::SetExplanation(std::string exp)
+void TestResult::SetExplanation(const string& exp)
 {
-  _Expl = exp;
+  _expl = exp;
 }
 
-void TestResult::SetName(std::string name)
+void TestResult::SetName(const string& name)
 {
-  _Name = name;
+  _name = name;
 }
 
-void TestResult::SetDescription(std::string desc)
+void TestResult::SetDescription(const string& desc)
 {
-  _Desc = desc;
+  _desc = desc;
 }
 
 void TestResult::SetResult(Result result)
 {
   //can only be set to success, warning, or failure
-  _enum_result = result;
+  _result = result;
 }
 
 enum TestResult::Result TestResult::GetResult()
 {
-  return _enum_result;
+  return _result;
 }
 
 } // end of namespace diskstream

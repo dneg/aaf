@@ -26,32 +26,41 @@
 
 namespace aafanalyzer {
 
+using namespace std;
+
 class TestResult
 {
  public:
+
+  enum Result {PASS, WARN, FAIL};
+
   TestResult();
+  TestResult( const string& name,
+	      const string& desc,
+	      const string& explain,
+	      const string& docref,
+	      Result defaultResult );
   TestResult& operator=(const TestResult& test);
   ~TestResult();
 
-  enum Result {success = 0, warning, error};
+  const string& GetExplanation();
+  const string& GetDocumentRef();
+  const string& GetName();
+  const string& GetDescription();
 
-  std::string GetExplanation();
-  std::string GetDocumentRef();
-  std::string GetName();
-  std::string GetDescription();
-
-  void SetExplanation(std::string exp);
-  void SetName(std::string name);
-  void SetDescription(std::string desc);
+  void SetName(const string& name);
+  void SetDescription(const string& desc);
+  void SetExplanation(const string& exp);
 
   void SetResult(Result result);
   enum Result GetResult();
 
  private:
-  std::string _Expl;
-  std::string _Name;
-  std::string _Desc;
-  enum Result _enum_result;
+  string _name;
+  string _desc;
+  string _expl;
+  string _docRef;
+  enum Result _result;
 
   // prohibited
 };

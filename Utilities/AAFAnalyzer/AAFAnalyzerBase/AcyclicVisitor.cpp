@@ -36,11 +36,14 @@ using namespace aafanalyzer;
 //======================================================================
 namespace aafanalyzer {
 
-AcyclicVisitor::  AcyclicVisitor(std::ostream& os, TestResult& result)
-: _os(os),
-  _Result(result)
-{
-}
+AcyclicVisitor::  AcyclicVisitor(std::ostream& os)
+  : _os(os),
+    _Result( "Acyclic analysis",
+	     "Detects cycles in an AAF object graph.",
+	     "No cycles found.",
+	     "", // DOCREF REQUIRED
+	     TestResult::PASS )
+{}
 
 AcyclicVisitor::~AcyclicVisitor()
 {
@@ -72,7 +75,7 @@ bool AcyclicVisitor::PreOrderVisit(Node& node)
  
   //a cycle was detected
   _Result.SetExplanation("Error: Cycle detected!");
-  _Result.SetResult(TestResult::error);
+  _Result.SetResult(TestResult::FAIL);
 
   std::cout << "Nodes of the cycle:" << std::endl;
   for(unsigned int i = 0; i < _Vector.size(); i++)
@@ -97,7 +100,7 @@ bool AcyclicVisitor::PostOrderVisit(Node& node)
 
   //an unkown error occured
   _Result.SetExplanation("Error: Unknown error occured during postorder visit!");
-  _Result.SetResult(TestResult::error);
+  _Result.SetResult(TestResult::FAIL);
 
   return false;
 }
@@ -114,5 +117,9 @@ void AcyclicVisitor::Erase(unsigned int lid)
   }  
 }
 
-
+TestResult AcyclicVisitor::GetTestResult() const
+{
+  return _Result;
 }
+
+} // end of namespace aafanalyzer

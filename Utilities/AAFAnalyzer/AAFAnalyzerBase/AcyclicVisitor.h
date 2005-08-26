@@ -25,6 +25,8 @@
 
 #include <TestResult.h>
 
+#include <Node.h>
+
 //stl files
 #include <vector>
 #include <iostream>
@@ -34,28 +36,27 @@
 
 namespace aafanalyzer {
 
-class Node;
-
 class AcyclicVisitor : public Visitor
 {
  public:
 
-  typedef std::vector<unsigned int> Vector;
+  typedef std::vector<Node::LID> Vector;
 
-  AcyclicVisitor(std::ostream& os, TestResult& result);
+  AcyclicVisitor(std::ostream& os);
   virtual ~AcyclicVisitor();
 
   virtual bool PreOrderVisit(Node& node);
   virtual bool PostOrderVisit(Node& node);
 
+  TestResult GetTestResult() const;
+
  private:
-  bool IsPresent(unsigned int lid);
-  void Erase(unsigned int lid);
+  bool IsPresent(Node::LID lid);
+  void Erase(Node::LID lid);
 
   std::ostream& _os;
-  TestResult& _Result;
+  TestResult _Result;
   Vector _Vector;
-  
 
   // prohibited
   AcyclicVisitor( const AcyclicVisitor& );

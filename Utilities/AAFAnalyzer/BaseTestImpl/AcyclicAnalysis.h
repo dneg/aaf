@@ -33,8 +33,8 @@ class AcyclicAnalysis : public Test
   ~AcyclicAnalysis();
 
   TestResult Execute();
-  std::string GetName();
-  std::string GetDescription();
+  std::string GetName() const;
+  std::string GetDescription() const;
 
  private:
 

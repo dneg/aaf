@@ -50,7 +50,7 @@ AcyclicAnalysis::~AcyclicAnalysis()
 TestResult AcyclicAnalysis::Execute()
 {
   TestResult result;
-  boost::shared_ptr<AcyclicVisitor> spVisitor(new AcyclicVisitor(GetOutStream(), result));
+  boost::shared_ptr<AcyclicVisitor> spVisitor(new AcyclicVisitor(GetOutStream()));
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
 
   //output to screen
@@ -61,20 +61,26 @@ TestResult AcyclicAnalysis::Execute()
   result.SetDescription(GetDescription());
 
   dfs.TraverseDown(spVisitor, GetTestGraph()->GetRootNode()); 
+
+  TestResult visitorResult = spVisitor->GetTestResult();
+
+  // FIXME - At this point we should store sub results.
+  
+  result.SetResult( visitorResult.GetResult() );
+
   return result;
 }
 
-std::string AcyclicAnalysis::GetName()
+std::string AcyclicAnalysis::GetName() const
 {
   std::string name = "--- Acyclic Analysis Test ---";
   return name;
 }
 
-std::string AcyclicAnalysis::GetDescription()
+std::string AcyclicAnalysis::GetDescription() const
 {
   std::string description = "Test Description: Traverse the directed graph and ensure it is acyclic.";
   return description;
 }
 
-
-} // end of namespace diskstream
+} // end of namespace aafanalyzer
