@@ -114,6 +114,10 @@ public:
     // @cmember Perform any necessary actions when <p file> is closed.
   virtual void close(OMFile* file);
 
+  virtual void close(const wchar_t* fileName, bool isWritable);
+
+  virtual void close(OMRawStorage* rawStorage, bool isWritable);
+
 };
 
 #endif

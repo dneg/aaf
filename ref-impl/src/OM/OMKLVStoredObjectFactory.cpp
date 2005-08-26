@@ -276,3 +276,13 @@ void OMKLVStoredObjectFactory::close(OMFile* file)
     delete store;
   }
 }
+
+void OMKLVStoredObjectFactory::close(const wchar_t* /* fileName */,
+                                     bool /* isWritable */)
+{
+}
+
+void OMKLVStoredObjectFactory::close(OMRawStorage* /* rawStorage */,
+                                     bool /* isWritable */)
+{
+}
