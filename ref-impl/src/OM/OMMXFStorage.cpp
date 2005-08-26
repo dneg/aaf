@@ -1691,7 +1691,7 @@ void OMMXFStorage::writeStreamAt(OMUInt32 sid,
   PRECONDITION("Valid buffer", bytes != 0);
   PRECONDITION("Buffer not empty", byteCount != 0);
 
-#if 1
+#if 0 // tjb not yet
   // Grow stream if needed
   OMUInt64 streamBytes = 0;
   Stream* s = 0;
@@ -1796,7 +1796,7 @@ void OMMXFStorage::readStreamAt(OMUInt32 sid,
 
   PRECONDITION("Valid buffer", bytes != 0);
   PRECONDITION("Buffer not empty", byteCount != 0);
-#if 1
+#if 0 // tjb not yet
   // Calculate read size (not yet used)
   OMUInt32 readCount = byteCount;
   OMUInt64 streamBytes = streamSize(sid);
