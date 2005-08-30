@@ -138,12 +138,12 @@ class IAAFSmartPointer2
   // member access operators (non-const and const)
   ReferencedType * operator-> ()
   {
-    return _sp->operator->();
+    return _sp.operator->();
   }
 
   const ReferencedType * operator-> () const
   {
-    return _sp->operator->();
+    return _sp.operator->();
   }
 
  private:
