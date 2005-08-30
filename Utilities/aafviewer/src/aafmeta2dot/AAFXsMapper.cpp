@@ -88,7 +88,7 @@ AAFXsMapper::MapAAFClassDef( AxClassDef &axClassDef )
 
   // map the property definitions
   AxPropertyDefIter propertyDefIter(axClassDef.GetPropertyDefs());
-  IAAFPropertyDefSP spIaafPropertyDef;
+  IAAFSmartPointer2<IAAFPropertyDef> spIaafPropertyDef;
   while (propertyDefIter.NextOne(spIaafPropertyDef))
     {
       AxPropertyDef axPropertyDef(spIaafPropertyDef);
