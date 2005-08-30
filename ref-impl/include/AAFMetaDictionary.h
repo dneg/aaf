@@ -9592,6 +9592,74 @@ AAF_INSTANCE_GROUP(CodecDefinitionInstances, CodecDefinition)
       AAF_LITERAL_AUID(0xaf4de587,
         0x23d7, 0x4c7f,
         0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+  AAF_INSTANCE_SEPARATOR()
+  AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecFlavour_DV_Based_25Mbps_525_60,CodecFlavour_DV_Based_25Mbps_525_60,"",""), 
+      // {af4de587-23d7-4c80-b37b-c1c13870e711}
+      AAF_LITERAL_AUID(0xaf4de587,
+        0x23d7, 0x4c80,
+        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11), "")
+    AAF_INSTANCE_PROPERTY(Name, String, "CodecFlavour_DV_Based_25Mbps_525_60")
+    AAF_INSTANCE_PROPERTY(Identification, AUID, 
+      // {af4de587-23d7-4c80-b37b-c1c13870e711}
+      AAF_LITERAL_AUID(0xaf4de587,
+        0x23d7, 0x4c80,
+        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+  AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecFlavour_DV_Based_25Mbps_525_60,CodecFlavour_DV_Based_25Mbps_525_60,"",""), 
+      // {af4de587-23d7-4c80-b37b-c1c13870e711}
+      AAF_LITERAL_AUID(0xaf4de587,
+        0x23d7, 0x4c80,
+        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+  AAF_INSTANCE_SEPARATOR()
+  AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecFlavour_DV_Based_25Mbps_625_50,CodecFlavour_DV_Based_25Mbps_625_50,"",""), 
+      // {af4de587-23d7-4c81-b37b-c1c13870e711}
+      AAF_LITERAL_AUID(0xaf4de587,
+        0x23d7, 0x4c81,
+        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11), "")
+    AAF_INSTANCE_PROPERTY(Name, String, "CodecFlavour_DV_Based_25Mbps_625_50")
+    AAF_INSTANCE_PROPERTY(Identification, AUID, 
+      // {af4de587-23d7-4c81-b37b-c1c13870e711}
+      AAF_LITERAL_AUID(0xaf4de587,
+        0x23d7, 0x4c81,
+        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+  AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecFlavour_DV_Based_25Mbps_625_50,CodecFlavour_DV_Based_25Mbps_625_50,"",""), 
+      // {af4de587-23d7-4c81-b37b-c1c13870e711}
+      AAF_LITERAL_AUID(0xaf4de587,
+        0x23d7, 0x4c81,
+        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+  AAF_INSTANCE_SEPARATOR()
+  AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecFlavour_DV_Based_50Mbps_525_60,CodecFlavour_DV_Based_50Mbps_525_60,"",""), 
+      // {af4de587-23d7-4c82-b37b-c1c13870e711}
+      AAF_LITERAL_AUID(0xaf4de587,
+        0x23d7, 0x4c82,
+        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11), "")
+    AAF_INSTANCE_PROPERTY(Name, String, "CodecFlavour_DV_Based_50Mbps_525_60")
+    AAF_INSTANCE_PROPERTY(Identification, AUID, 
+      // {af4de587-23d7-4c82-b37b-c1c13870e711}
+      AAF_LITERAL_AUID(0xaf4de587,
+        0x23d7, 0x4c82,
+        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+  AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecFlavour_DV_Based_50Mbps_525_60,CodecFlavour_DV_Based_50Mbps_525_60,"",""), 
+      // {af4de587-23d7-4c82-b37b-c1c13870e711}
+      AAF_LITERAL_AUID(0xaf4de587,
+        0x23d7, 0x4c82,
+        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+  AAF_INSTANCE_SEPARATOR()
+  AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecFlavour_DV_Based_50Mbps_625_50,CodecFlavour_DV_Based_50Mbps_625_50,"",""), 
+      // {af4de587-23d7-4c83-b37b-c1c13870e711}
+      AAF_LITERAL_AUID(0xaf4de587,
+        0x23d7, 0x4c83,
+        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11), "")
+    AAF_INSTANCE_PROPERTY(Name, String, "CodecFlavour_DV_Based_50Mbps_625_50")
+    AAF_INSTANCE_PROPERTY(Identification, AUID, 
+      // {af4de587-23d7-4c83-b37b-c1c13870e711}
+      AAF_LITERAL_AUID(0xaf4de587,
+        0x23d7, 0x4c83,
+        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+  AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecFlavour_DV_Based_50Mbps_625_50,CodecFlavour_DV_Based_50Mbps_625_50,"",""), 
+      // {af4de587-23d7-4c83-b37b-c1c13870e711}
+      AAF_LITERAL_AUID(0xaf4de587,
+        0x23d7, 0x4c83,
+        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
 AAF_INSTANCE_GROUP_END(CodecDefinitionInstances, CodecDefinition)
 AAF_INSTANCE_GROUP_SEPARATOR()
 AAF_INSTANCE_GROUP(CompressionDefinitionInstances, CompressionDefinition)
@@ -9678,6 +9746,74 @@ AAF_INSTANCE_GROUP(CompressionDefinitionInstances, CompressionDefinition)
       // {04010202-0201-0200-060e-2b3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0201, 0x0200,
+        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+  AAF_INSTANCE_SEPARATOR()
+  AAF_INSTANCE(CompressionDefinition, AAF_SYMBOL(CompressionDef_DV_Based_25Mbps_525_60,DV_Based_25Mbps_525_60,"",""), 
+      // {04010202-0202-0100-060e-2b3404010101}
+      AAF_LITERAL_AUID(0x04010202,
+        0x0202, 0x0100,
+        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01), "")
+    AAF_INSTANCE_PROPERTY(Name, String, "CompressionDef_DV_Based_25Mbps_525_60")
+    AAF_INSTANCE_PROPERTY(Identification, AUID, 
+      // {04010202-0202-0100-060e-2b3404010101}
+      AAF_LITERAL_AUID(0x04010202,
+        0x0202, 0x0100,
+        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+  AAF_INSTANCE_END(CompressionDefinition, AAF_SYMBOL(CompressionDef_DV_Based_25Mbps_525_60,DV_Based_25Mbps_525_60,"",""), 
+      // {04010202-0202-0100-060e-2b3404010101}
+      AAF_LITERAL_AUID(0x04010202,
+        0x0202, 0x0100,
+        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+  AAF_INSTANCE_SEPARATOR()
+  AAF_INSTANCE(CompressionDefinition, AAF_SYMBOL(CompressionDef_DV_Based_25Mbps_625_50,DV_Based_25Mbps_625_50,"",""), 
+      // {04010202-0202-0200-060e-2b3404010101}
+      AAF_LITERAL_AUID(0x04010202,
+        0x0202, 0x0200,
+        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01), "")
+    AAF_INSTANCE_PROPERTY(Name, String, "CompressionDef_DV_Based_25Mbps_625_50")
+    AAF_INSTANCE_PROPERTY(Identification, AUID, 
+      // {04010202-0202-0200-060e-2b3404010101}
+      AAF_LITERAL_AUID(0x04010202,
+        0x0202, 0x0200,
+        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+  AAF_INSTANCE_END(CompressionDefinition, AAF_SYMBOL(CompressionDef_DV_Based_25Mbps_625_50,DV_Based_25Mbps_625_50,"",""), 
+      // {04010202-0202-0200-060e-2b3404010101}
+      AAF_LITERAL_AUID(0x04010202,
+        0x0202, 0x0200,
+        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+  AAF_INSTANCE_SEPARATOR()
+  AAF_INSTANCE(CompressionDefinition, AAF_SYMBOL(CompressionDef_DV_Based_50Mbps_525_60,DV_Based_50Mbps_525_60,"",""), 
+      // {04010202-0202-0300-060e-2b3404010101}
+      AAF_LITERAL_AUID(0x04010202,
+        0x0202, 0x0300,
+        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01), "")
+    AAF_INSTANCE_PROPERTY(Name, String, "CompressionDef_DV_Based_50Mbps_525_60")
+    AAF_INSTANCE_PROPERTY(Identification, AUID, 
+      // {04010202-0202-0300-060e-2b3404010101}
+      AAF_LITERAL_AUID(0x04010202,
+        0x0202, 0x0300,
+        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+  AAF_INSTANCE_END(CompressionDefinition, AAF_SYMBOL(CompressionDef_DV_Based_50Mbps_525_60,DV_Based_50Mbps_525_60,"",""), 
+      // {04010202-0202-0300-060e-2b3404010101}
+      AAF_LITERAL_AUID(0x04010202,
+        0x0202, 0x0300,
+        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+  AAF_INSTANCE_SEPARATOR()
+  AAF_INSTANCE(CompressionDefinition, AAF_SYMBOL(CompressionDef_DV_Based_50Mbps_625_50,DV_Based_50Mbps_625_50,"",""), 
+      // {04010202-0202-0400-060e-2b3404010101}
+      AAF_LITERAL_AUID(0x04010202,
+        0x0202, 0x0400,
+        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01), "")
+    AAF_INSTANCE_PROPERTY(Name, String, "CompressionDef_DV_Based_50Mbps_625_50")
+    AAF_INSTANCE_PROPERTY(Identification, AUID, 
+      // {04010202-0202-0400-060e-2b3404010101}
+      AAF_LITERAL_AUID(0x04010202,
+        0x0202, 0x0400,
+        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+  AAF_INSTANCE_END(CompressionDefinition, AAF_SYMBOL(CompressionDef_DV_Based_50Mbps_625_50,DV_Based_50Mbps_625_50,"",""), 
+      // {04010202-0202-0400-060e-2b3404010101}
+      AAF_LITERAL_AUID(0x04010202,
+        0x0202, 0x0400,
         0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
 AAF_INSTANCE_GROUP_END(CompressionDefinitionInstances, CompressionDefinition)
 

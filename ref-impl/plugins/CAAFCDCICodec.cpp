@@ -57,11 +57,11 @@ typedef struct {
 	aafUID_t flavour;
 	aafCharacter *name;
 } FlavourInfo;
-static FlavourInfo kSupportedFlavours[5];
+static FlavourInfo kSupportedFlavours[9];
 const aafUInt32 kNumSupportedFlavours = sizeof(kSupportedFlavours);
 
 const wchar_t kDisplayName[] = L"AAF CDCI Codec";
-const wchar_t kDescription[] = L"Handles uncompressed YUV & YCbCr and (compressed) IEC 61834 DV family";
+const wchar_t kDescription[] = L"Handles uncompressed YUV & YCbCr and (compressed) IEC 61834 DV family & DV-Based family";
 
 const aafProductVersion_t kAAFPluginVersion = {1, 0, 0, 1, kAAFVersionBeta};
 const aafRational_t		kDefaultRate = { 30000, 1001 };
@@ -140,7 +140,12 @@ inline bool IsDV(const aafUID_t &compId)
 {
 	if (EqualAUID(&compId, &kAAFCompressionDef_LegacyDV) ||
 		EqualAUID(&compId, &kAAFCompressionDef_IEC_DV_625_50) ||
-		EqualAUID(&compId, &kAAFCompressionDef_IEC_DV_525_60))
+		EqualAUID(&compId, &kAAFCompressionDef_IEC_DV_525_60) ||
+		EqualAUID(&compId, &kAAFCompressionDef_DV_Based_25Mbps_525_60) ||
+		EqualAUID(&compId, &kAAFCompressionDef_DV_Based_25Mbps_625_50) ||
+		EqualAUID(&compId, &kAAFCompressionDef_DV_Based_50Mbps_525_60) ||
+		EqualAUID(&compId, &kAAFCompressionDef_DV_Based_50Mbps_625_50)
+		)
 	{
 		return true;
 	}
@@ -218,11 +223,19 @@ CAAFCDCICodec::CAAFCDCICodec (IUnknown * pControllingUnknown)
 	kSupportedFlavours[2].flavour = kAAFCodecFlavour_LegacyDV_525_60;
 	kSupportedFlavours[3].flavour = kAAFCodecFlavour_IEC_DV_625_50;
 	kSupportedFlavours[4].flavour = kAAFCodecFlavour_IEC_DV_525_60;
+	kSupportedFlavours[5].flavour = kAAFCodecFlavour_DV_Based_25Mbps_525_60;
+	kSupportedFlavours[6].flavour = kAAFCodecFlavour_DV_Based_25Mbps_625_50;
+	kSupportedFlavours[7].flavour = kAAFCodecFlavour_DV_Based_50Mbps_525_60;
+	kSupportedFlavours[8].flavour = kAAFCodecFlavour_DV_Based_50Mbps_625_50;
 	kSupportedFlavours[0].name = L"AAF CDCI Codec (no flavour)";
 	kSupportedFlavours[1].name = L"AAF CDCI Codec (LegacyDV 625 lines 50Hz)";
 	kSupportedFlavours[2].name = L"AAF CDCI Codec (LegacyDV 525 lines 60Hz)";
 	kSupportedFlavours[3].name = L"AAF CDCI Codec (IEC DV 625 lines 50Hz)";
 	kSupportedFlavours[4].name = L"AAF CDCI Codec (IEC DV 525 lines 60Hz)";
+	kSupportedFlavours[5].name = L"AAF CDCI Codec (DV-Based 25 Mbps 525 lines 60Hz)";
+	kSupportedFlavours[6].name = L"AAF CDCI Codec (DV-Based 25 Mbps 625 lines 50Hz)";
+	kSupportedFlavours[7].name = L"AAF CDCI Codec (DV-Based 50 Mbps 525 lines 60Hz)";
+	kSupportedFlavours[8].name = L"AAF CDCI Codec (DV-Based 50 Mbps 625 lines 50Hz)";
 }
 
 
@@ -372,7 +385,7 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::CreateLegacyPropDefs(
 
 	checkResult( p_did_classdef->RegisterOptionalPropertyDef( 
 	    kAAFPropID_DIDImageSize, kAAFPropName_DIDImageSize, 
-	    p_typedef_int64, &p_propdef ) );
+	    p_typedef_int32, &p_propdef ) );
 	p_propdef->Release();
 	p_propdef = NULL;
     }
@@ -765,6 +778,42 @@ HRESULT STDMETHODCALLTYPE
 		_imageWidth = _storedWidth = 720;
 		_imageHeight = _storedHeight = 240;
 		_horizontalSubsampling = 1;				// 4:1:1
+		formatPAL = false;
+	}
+	else if (flavour == kAAFCodecFlavour_DV_Based_25Mbps_625_50)
+	{
+		memcpy( &_compression, &kAAFCompressionDef_DV_Based_25Mbps_625_50, sizeof(_compression) );
+		_frameLayout = kAAFSeparateFields;
+		_imageWidth = _storedWidth = 720;
+		_imageHeight = _storedHeight = 288;
+		_horizontalSubsampling = 1;				// 4:1:1 (N.B. different to IEC DV 625_50)
+		formatPAL = true;
+	}
+	else if (flavour == kAAFCodecFlavour_DV_Based_25Mbps_525_60)
+	{
+		memcpy( &_compression, &kAAFCompressionDef_DV_Based_25Mbps_525_60, sizeof(_compression) );
+		_frameLayout = kAAFSeparateFields;
+		_imageWidth = _storedWidth = 720;
+		_imageHeight = _storedHeight = 240;
+		_horizontalSubsampling = 1;				// 4:1:1
+		formatPAL = false;
+	}
+	else if (flavour == kAAFCodecFlavour_DV_Based_50Mbps_625_50)
+	{
+		memcpy( &_compression, &kAAFCompressionDef_DV_Based_50Mbps_625_50, sizeof(_compression) );
+		_frameLayout = kAAFSeparateFields;
+		_imageWidth = _storedWidth = 720;
+		_imageHeight = _storedHeight = 288;
+		_horizontalSubsampling = 2;				// 4:2:2
+		formatPAL = true;
+	}
+	else if (flavour == kAAFCodecFlavour_DV_Based_50Mbps_525_60)
+	{
+		memcpy( &_compression, &kAAFCompressionDef_DV_Based_50Mbps_525_60, sizeof(_compression) );
+		_frameLayout = kAAFSeparateFields;
+		_imageWidth = _storedWidth = 720;
+		_imageHeight = _storedHeight = 240;
+		_horizontalSubsampling = 2;				// 4:2:2
 		formatPAL = false;
 	}
 	else
@@ -1717,24 +1766,28 @@ void CAAFCDCICodec::SetCodecState(void)
 	// Allow only supported combinations of subsampling and height
 	if (IsDV(_compression))
 	{
-		// Use attributes of known IEC DV formats to derive
-		// VerticalSubsampling
+		// Use attributes of known DV formats to derive VerticalSubsampling
 		if (_imageHeight == 288)
 		{
 			formatPAL = true;
-			_verticalSubsampling = 2;	// for IEC_DV_625_50
+			_verticalSubsampling = 2;	// for IEC_DV_625_50 (4:2:0)
 		}
 		else
 		{
 			formatPAL = false;
-			_verticalSubsampling = 1;	// for IEC_DV_525_60
+			_verticalSubsampling = 1;	// for IEC_DV_525_60 & DV-based SMPTE 314M (4:1:1)
 		}
 
-		// Only 4:2:0 and 4:1:1 DV color sampling supported by libdv
-		checkExpression( _verticalSubsampling == 1 || _verticalSubsampling == 2, AAFRESULT_BADPIXFORM );
+		// DV-Based 50Mbps formats have 4:2:2 sampling
+		if (EqualAUID(&_compression, &kAAFCompressionDef_DV_Based_50Mbps_625_50) ||
+			EqualAUID(&_compression, &kAAFCompressionDef_DV_Based_50Mbps_525_60))
+		{
+			_verticalSubsampling = 1;
+			_horizontalSubsampling = 2;
+		}
 
-		// 4:2:2 is not supported by libdv (e.g DVCPRO 50)
-		checkExpression( !(_verticalSubsampling == 1 && _horizontalSubsampling == 2), AAFRESULT_BADPIXFORM );
+		// Check sensible verticalSubsampling values
+		checkExpression( _verticalSubsampling == 1 || _verticalSubsampling == 2, AAFRESULT_BADPIXFORM );
 
 		if (EqualAUID(&_compression, &kAAFCompressionDef_LegacyDV))
 		{
@@ -1755,6 +1808,12 @@ void CAAFCDCICodec::SetCodecState(void)
 	if (_compressEnable == kAAFCompressionEnable && IsDV(_compression))
 	{
 #ifdef USE_LIBDV
+		if (EqualAUID(&_compression, &kAAFCompressionDef_DV_Based_50Mbps_625_50) ||
+			EqualAUID(&_compression, &kAAFCompressionDef_DV_Based_50Mbps_525_60))
+		{
+			// libdv does not yet support 50Mbps DV
+			throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
+		}
 		// Setup libdv encoder object, defaults and tuning parameters
 		_encoder = dv_encoder_new( FALSE, FALSE, FALSE );
 		_encoder->isPAL = formatPAL ? 1: 0;			
@@ -2087,7 +2146,12 @@ HRESULT STDMETHODCALLTYPE
 			// Only DV compressions supported for compressed CDCI
 			checkExpression (EqualAUID(&nullCompID, &param.operand.expUID) ||
 					EqualAUID(&kAAFCompressionDef_IEC_DV_625_50, &param.operand.expUID) ||
-					EqualAUID(&kAAFCompressionDef_IEC_DV_525_60, &param.operand.expUID),AAFRESULT_BADCOMPR);
+					EqualAUID(&kAAFCompressionDef_IEC_DV_525_60, &param.operand.expUID) ||
+					EqualAUID(&kAAFCompressionDef_DV_Based_25Mbps_525_60, &param.operand.expUID) ||
+					EqualAUID(&kAAFCompressionDef_DV_Based_25Mbps_625_50, &param.operand.expUID) ||
+					EqualAUID(&kAAFCompressionDef_DV_Based_50Mbps_525_60, &param.operand.expUID) ||
+					EqualAUID(&kAAFCompressionDef_DV_Based_50Mbps_625_50, &param.operand.expUID),
+					AAFRESULT_BADCOMPR);
 
 			memcpy( &_compression, &(param.operand.expUID), 
 			    sizeof(param.operand.expUID) );
