@@ -31,6 +31,8 @@
 #include "OMUtilities.h"
 #include "OMClassFactory.h"
 #include "OMMemoryRawStorage.h"
+#include "OMKLVStoredObject.h"
+#include "OMMXFStorage.h"
 
 #include "OMSSStoredObjectFactory.h"
 #include "OMMS_SSStoredObjectFactory.h"
@@ -1363,7 +1365,28 @@ void ImplAAFFile::InternalReleaseObjects()
 
 void ImplAAFFile::saveMirroredMetadata(void)
 {
-  // tjb - nothing yet
+  assert(_file != 0);
+  if (OMKLVStoredObject::hasMxfStorage(_file)) {
+    OMMXFStorage*  p_storage = OMKLVStoredObject::mxfStorage( _file );
+    assert( p_storage != 0 );
+
+    // Operational pattern
+    //
+    aafUID_t  operational_pattern;
+    AAFRESULT hr = _head->GetOperationalPattern( &operational_pattern );
+    if( hr == AAFRESULT_SUCCESS )
+    {
+      OMKLVKey operational_pattern_label;
+      convert(operational_pattern_label,
+	      *(OMUniqueObjectIdentification*)&operational_pattern );
+
+      p_storage->setOperationalPattern( operational_pattern_label );
+    }
+    else if( hr == AAFRESULT_PROP_NOT_PRESENT )
+    {
+      // should set a value meaning unconstrained here
+    }
+  }
 }
 
 void ImplAAFFile::restoreMirroredMetadata(void)
