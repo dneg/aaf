@@ -61,6 +61,7 @@ const aafInt32 DV_PAL_FRAME_SIZE = 144000;
 const aafInt32 DV_NTSC_FRAME_SIZE = 120000;
 
 bool useLegacyDV = false;
+bool formatMXF = false;
 
 #define aaf_assert(b, msg) \
 	if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
@@ -188,9 +189,22 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 	// Large sectors for new files, small sectors for legacy files
 	const aafUID_t *fileKind = useLegacyDV ? &kAAFFileKind_Aaf512Binary : &kAAFFileKind_Aaf4KBinary;
 
+	if (formatMXF)
+	  fileKind = &aafFileKindMxfKlvBinary;
+
 	// Create a new AAF file
 	check(AAFFileOpenNewModifyEx(pFileName, fileKind, 0, &ProductInfo, &pFile));
 	check(pFile->GetHeader(&pHeader));
+
+	if (formatMXF)
+	{
+	  aafUID_t kAAFOpDef_Atom = { 0x0d010201, 0x1000, 0x0000, { 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+	  IAAFHeader2* pHeader2 = 0;
+	  check(pHeader->QueryInterface(IID_IAAFHeader2, (void **)&pHeader2));
+	  check(pHeader2->SetOperationalPattern(kAAFOpDef_Atom));
+	  pHeader2->Release();
+	}
 
 	// Get the AAF Dictionary from the file
 	check(pHeader->GetDictionary(&pDictionary));
@@ -462,6 +476,11 @@ extern int main(int argc, char *argv[])
 				}
 				inpFormat = RawUYVY;
 				i++;
+			}
+			else if (!strcmp(argv[i], "-mxf"))
+			{
+			  formatMXF = true;
+			  i++;
 			}
 			else
 			{
