@@ -32,9 +32,9 @@ class RefResolver : public Test
   RefResolver(std::ostream& os, boost::shared_ptr<TestGraph> spTestGraph);
   ~RefResolver();
 
-  TestResult Execute();
-  std::string GetName() const;
-  std::string GetDescription() const;
+  boost::shared_ptr<TestResult> Execute();
+  AxString GetName() const;
+  AxString GetDescription() const;
 
  private:
 

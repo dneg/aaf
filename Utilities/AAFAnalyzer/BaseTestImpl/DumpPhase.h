@@ -35,7 +35,7 @@ class DumpPhase : public TestPhase
   ~DumpPhase();
 
   boost::shared_ptr<TestGraph> GetTestGraph();
-  std::vector<TestResult> Execute();  
+  boost::shared_ptr<TestResult> Execute();
 
  private:
   boost::shared_ptr<TestGraph> _spTestGraph;

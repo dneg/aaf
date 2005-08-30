@@ -51,16 +51,18 @@ boost::shared_ptr<TestGraph> DumpPhase::GetTestGraph()
   return _spTestGraph;
 }
 
-std::vector<TestResult> DumpPhase::Execute() 
+boost::shared_ptr<TestResult> DumpPhase::Execute()
 {
-  std::vector<TestResult> LoadTest;
+  boost::shared_ptr<TestResult> spLoadTest(new TestResult());
+  spLoadTest->SetName(L"DumpPhase");
+  spLoadTest->SetDescription(L"Output the contents of the AAF parse tree.");
 
   //dump the aaf file graph to screen
   FileDumper dumper(GetOutStream(), GetTestGraph());
-  LoadTest.push_back(dumper.Execute());
+  spLoadTest->AppendSubtestResult(dumper.Execute());
+  spLoadTest->SetResult(spLoadTest->GetAggregateResult());
 
-  return LoadTest;
+  return spLoadTest;
 }
-
 
 } // end of namespace diskstream

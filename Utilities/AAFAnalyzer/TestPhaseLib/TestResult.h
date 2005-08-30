@@ -21,8 +21,15 @@
 #ifndef __TESTRESULT_h__
 #define __TESTRESULT_h__
 
+//Ax files
+#include <AxTypes.h>
+
 //stl files
 #include <string>
+#include <vector>
+
+//boost files
+#include <boost/shared_ptr.hpp>
 
 namespace aafanalyzer {
 
@@ -35,31 +42,42 @@ class TestResult
   enum Result {PASS, WARN, FAIL};
 
   TestResult();
-  TestResult( const string& name,
-	      const string& desc,
-	      const string& explain,
-	      const string& docref,
+  TestResult( const AxString& name,
+	      const AxString& desc,
+	      const AxString& explain,
+	      const AxString& docref,
 	      Result defaultResult );
   TestResult& operator=(const TestResult& test);
   ~TestResult();
 
-  const string& GetExplanation() const;
-  const string& GetDocumentRef() const;
-  const string& GetName() const;
-  const string& GetDescription() const;
+  const AxString& GetExplanation() const;
+  const AxString& GetDocumentRef() const;
+  const AxString& GetName() const;
+  const AxString& GetDescription() const;
   enum Result GetResult() const;
 
-  void SetName(const string& name);
-  void SetDescription(const string& desc);
-  void SetExplanation(const string& exp);
+  void SetName(const AxString& name);
+  void SetDescription(const AxString& desc);
+  void SetExplanation(const AxString& exp);
   void SetResult(Result result);
+  
+  typedef std::vector< boost::shared_ptr<const TestResult> > SubtestResultVector;
+  typedef boost::shared_ptr<SubtestResultVector> SubtestResultsSP;
+
+  SubtestResultsSP GetSubtestResults() const;
+  void AppendSubtestResult( boost::shared_ptr<const TestResult> subtestResult );
+  enum Result GetAggregateResult() const;
+  bool ContainsSubtests() const;
 
  private:
-  string _name;
-  string _desc;
-  string _expl;
-  string _docRef;
+  AxString _name;
+  AxString _desc;
+  AxString _expl;
+  AxString _docRef;
   enum Result _result;
+  
+  SubtestResultsSP _spSubtestResults; 
+  enum Result _aggregateEnumResult;
 
   // prohibited
 };

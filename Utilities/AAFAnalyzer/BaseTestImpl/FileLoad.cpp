@@ -50,8 +50,9 @@ FileLoad::~FileLoad()
 {
 }
 
-TestResult FileLoad::Execute()
+boost::shared_ptr<TestResult> FileLoad::Execute()
 {
+
   GraphBuilder graphBuild;
   boost::shared_ptr<NodeFactory> spFactory(new NodeFactoryImpl());
 
@@ -65,25 +66,25 @@ TestResult FileLoad::Execute()
   // Set result properties.
   // If the graph builder did not through an exception, then
   // it succeeded, therefore, result is PASS.
-  TestResult result( "FileLoad",
-		     "Loads and AAF file and builds the test graph.",
-		     "File loaded correctly.",
-		     "-", // DOCREF
-		     TestResult::PASS );
-  return result;
+  boost::shared_ptr<TestResult> spResult(
+            new TestResult( L"FileLoad",
+                            L"Loads and AAF file and builds the test graph.",
+                            L"File loaded correctly.",
+                            L"-", // DOCREF
+                            TestResult::PASS ) );
+  return spResult;
 }
 
-std::string FileLoad::GetName()
+AxString FileLoad::GetName()
 {
-  std::string name = "--- File Load Test ---";
+  AxString name = L"--- File Load Test ---";
   return name;
 }
 
-std::string FileLoad::GetDescription()
+AxString FileLoad::GetDescription()
 {
-  std::string description = "Test Description: Load an AAF file and build a graph of contained AAF objects.";
+  AxString description = L"Test Description: Load an AAF file and build a graph of contained AAF objects.";
   return description;
 }
-
 
 } // end of namespace diskstream

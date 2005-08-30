@@ -51,27 +51,30 @@ boost::shared_ptr<TestGraph> LoadPhase::GetTestGraph()
   return _spTestGraph;
 }
 
-std::vector<TestResult> LoadPhase::Execute() 
+boost::shared_ptr<TestResult> LoadPhase::Execute() 
 {
-  std::vector<TestResult> LoadTest;
+
+  boost::shared_ptr<TestResult> spLoadTest(new TestResult());
+  spLoadTest->SetName(L"LoadPhase");
+  spLoadTest->SetDescription(L"Load an AAF file, reslove all references and ensure the graph is acyclic.");
 
   //load the AAF file and create the graph
   FileLoad load(GetOutStream(), _FileName);
-  LoadTest.push_back(load.Execute());
+  spLoadTest->AppendSubtestResult(load.Execute());
 
   //get the TestGraph object we need for other tests
   _spTestGraph = load.GetTestGraph();
 
   //resolve all the references in the AAF graph
   RefResolver ref(GetOutStream(), _spTestGraph);
-  LoadTest.push_back(ref.Execute());
+  spLoadTest->AppendSubtestResult(ref.Execute());
 
   //ensure the AAF file graph is acyclic
   AcyclicAnalysis acy(GetOutStream(), _spTestGraph);
-  LoadTest.push_back(acy.Execute());
+  spLoadTest->AppendSubtestResult(acy.Execute());
+  spLoadTest->SetResult(spLoadTest->GetAggregateResult());
 
-  return LoadTest;
+  return spLoadTest;
 }
-
 
 } // end of namespace diskstream

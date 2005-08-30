@@ -42,7 +42,7 @@ class TestPhase
 
   virtual std::string GetDescription();
   virtual std::string GetName();
-  virtual std::vector<TestResult> Execute() = 0; 
+  virtual boost::shared_ptr<TestResult> Execute() = 0; 
   std::ostream& GetOutStream(); 
 
  private:

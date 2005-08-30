@@ -42,12 +42,12 @@ class ResolveRefVisitor : public TypedVisitor
   virtual bool PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node);
   virtual bool EdgeVisit(Edge& edge);
 
-  const TestResult& GetTestResult() const;
+  boost::shared_ptr<const TestResult> GetTestResult() const;
 
  private:
   std::ostream& _os;
   boost::shared_ptr<EdgeMap> _spEdgeMap;
-  TestResult _result;
+  boost::shared_ptr< TestResult > _spResult;
 
   // prohibited
   ResolveRefVisitor( const ResolveRefVisitor& );

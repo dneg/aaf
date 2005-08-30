@@ -32,9 +32,9 @@ class FileLoad : public Test
   FileLoad(std::ostream& os, const std::basic_string<wchar_t> AAFFile);
   ~FileLoad();
 
-  TestResult Execute();
-  std::string GetName();
-  std::string GetDescription();
+  boost::shared_ptr<TestResult> Execute();
+  AxString GetName();
+  AxString GetDescription();
 
  private:
   const std::basic_string<wchar_t> _File;

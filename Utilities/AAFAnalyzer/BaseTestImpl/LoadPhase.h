@@ -41,7 +41,7 @@ class LoadPhase : public TestPhase
   ~LoadPhase();
 
   boost::shared_ptr<TestGraph> GetTestGraph();
-  std::vector<TestResult> Execute();  
+  boost::shared_ptr<TestResult> Execute();  
 
  private:
   boost::shared_ptr<TestGraph> _spTestGraph;

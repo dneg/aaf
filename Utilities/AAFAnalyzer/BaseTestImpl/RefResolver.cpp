@@ -50,36 +50,37 @@ RefResolver::~RefResolver()
 {
 }
 
-TestResult RefResolver::Execute()
+boost::shared_ptr<TestResult> RefResolver::Execute()
 {
-  TestResult visitorResult;
+  //TestResult visitorResult;
   boost::shared_ptr<ResolveRefVisitor> spVisitor(new ResolveRefVisitor(GetOutStream(), GetTestGraph()->GetEdgeMap()));
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
 
   dfs.TraverseDown(spVisitor, GetTestGraph()->GetRootNode());
 
-  // FIXME - Result hierarch required here rather than
-  // overwrite of the phase status.
-  TestResult result( "ReferenceResolver",
-		     "Resolves source references in an AAF file.",
-		     spVisitor->GetTestResult().GetExplanation(),
-		     "-", //DOCREF
-		     spVisitor->GetTestResult().GetResult() );
+  boost::shared_ptr<TestResult> spResult(
+                new TestResult( L"ReferenceResolver",
+                                L"Resolves source references in an AAF file.",
+                                spVisitor->GetTestResult()->GetExplanation(),
+                                L"-", //DOCREF
+                                spVisitor->GetTestResult()->GetResult()
+                              ) );
+  boost::shared_ptr<const TestResult> spVisitorResult(spVisitor->GetTestResult());
+  spResult->AppendSubtestResult(spVisitorResult);
 
-  return result;
+  return spResult;
 }
 
-std::string RefResolver::GetName() const
+AxString RefResolver::GetName() const
 {
-  std::string name = "--- Reference Resolver Test ---";
+  AxString name = L"--- Reference Resolver Test ---";
   return name;
 }
 
-std::string RefResolver::GetDescription() const
+AxString RefResolver::GetDescription() const
 {
-  std::string description = "Test Description: Resolve all source clip references.";
+  AxString description = L"Test Description: Resolve all source clip references.";
   return description;
 }
-
 
 } // end of namespace diskstream

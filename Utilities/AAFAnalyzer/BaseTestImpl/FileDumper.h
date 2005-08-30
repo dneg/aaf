@@ -32,9 +32,9 @@ class FileDumper : public Test
   FileDumper(std::ostream& os, boost::shared_ptr<TestGraph> spTestGraph);
   ~FileDumper();
 
-  TestResult Execute();
-  std::string GetName();
-  std::string GetDescription();
+  boost::shared_ptr<TestResult> Execute();
+  AxString GetName();
+  AxString GetDescription();
 
  private:
 

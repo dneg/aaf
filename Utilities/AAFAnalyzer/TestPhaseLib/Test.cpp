@@ -43,15 +43,15 @@ Test::~Test()
 {
 }
 
-std::string Test::GetName() const
+AxString Test::GetName() const
 {
-  std::string null;
+  AxString null;
   return null;
 }
 
-std::string Test::GetDescription() const
+AxString Test::GetDescription() const
 {
-  std::string null;
+  AxString null;
   return null;
 }
 

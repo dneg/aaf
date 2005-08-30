@@ -19,7 +19,7 @@
 //=---------------------------------------------------------------------=
 
 #include "TestResult.h"
-
+#include <iostream>
 namespace {
 
 using namespace aafanalyzer;
@@ -38,20 +38,27 @@ using namespace std;
 
 // Default result is FAIL.
 // Test implementations must explicity indicate success.
+// Default result of subtests is PASS, it is updated whenever a new subtest is
+// attached to the worst result.  It does not affect the result unless it is
+// done explicitly outside of this file.
 TestResult::TestResult()
-  : _result( FAIL )
+  : _result( FAIL ), 
+    _spSubtestResults(new SubtestResultVector()),
+    _aggregateEnumResult( PASS )
 {}
 
-TestResult::TestResult( const string& name,
-			const string& desc,
-			const string& explain,
-			const string& docRef,
+TestResult::TestResult( const AxString& name,
+			const AxString& desc,
+			const AxString& explain,
+			const AxString& docRef,
 			Result defaultResult )
   : _name( name ),
     _desc( desc ),
     _expl( explain ),
     _docRef( docRef ),
-    _result( defaultResult )
+    _result( defaultResult ),
+    _spSubtestResults(new SubtestResultVector()),
+    _aggregateEnumResult( PASS )
 {}
 
 TestResult::~TestResult()
@@ -65,27 +72,28 @@ TestResult& TestResult::operator=(const TestResult& test)
     _name = test._name;
     _desc = test._desc;
     _result = test._result;
+    _spSubtestResults = test._spSubtestResults;
   }
 
   return *this;
 }
 
-const string& TestResult::GetExplanation() const
+const AxString& TestResult::GetExplanation() const
 {
   return _expl;
 }
 
-const string& TestResult::GetDocumentRef() const
+const AxString& TestResult::GetDocumentRef() const
 {
   return _docRef;
 }
 
-const string& TestResult::GetName() const
+const AxString& TestResult::GetName() const
 {
   return _name;
 }
 
-const string& TestResult::GetDescription() const
+const AxString& TestResult::GetDescription() const
 {
   return _desc;
 }
@@ -95,17 +103,17 @@ enum TestResult::Result TestResult::GetResult() const
   return _result;
 }
 
-void TestResult::SetExplanation(const string& exp)
+void TestResult::SetExplanation(const AxString& exp)
 {
   _expl = exp;
 }
 
-void TestResult::SetName(const string& name)
+void TestResult::SetName(const AxString& name)
 {
   _name = name;
 }
 
-void TestResult::SetDescription(const string& desc)
+void TestResult::SetDescription(const AxString& desc)
 {
   _desc = desc;
 }
@@ -114,6 +122,30 @@ void TestResult::SetResult(Result result)
 {
   //can only be set to success, warning, or failure
   _result = result;
+}
+
+TestResult::SubtestResultsSP TestResult::GetSubtestResults() const {
+    return _spSubtestResults;
+}
+
+void TestResult::AppendSubtestResult( boost::shared_ptr<const TestResult> subtestResult ) {
+
+    _spSubtestResults->push_back( subtestResult );
+
+    //If the result of the appended test is worse than any other subtest then
+    //update the aggregate result.
+    if ( subtestResult->GetResult() > _aggregateEnumResult ) {
+        _aggregateEnumResult = subtestResult->GetResult();
+    }
+
+}
+
+enum TestResult::Result TestResult::GetAggregateResult() const {
+    return _aggregateEnumResult;
+}
+
+bool TestResult::ContainsSubtests() const {
+    return !_spSubtestResults->empty();
 }
 
 } // end of namespace diskstream

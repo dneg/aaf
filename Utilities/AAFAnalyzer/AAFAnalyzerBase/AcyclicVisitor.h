@@ -48,14 +48,14 @@ class AcyclicVisitor : public Visitor
   virtual bool PreOrderVisit(Node& node);
   virtual bool PostOrderVisit(Node& node);
 
-  const TestResult& GetTestResult() const;
+  boost::shared_ptr<const TestResult> GetTestResult() const;
 
  private:
   bool IsPresent(Node::LID lid);
   void Erase(Node::LID lid);
 
   std::ostream& _os;
-  TestResult _Result;
+  boost::shared_ptr< TestResult > _spResult;
   Vector _Vector;
 
   // prohibited

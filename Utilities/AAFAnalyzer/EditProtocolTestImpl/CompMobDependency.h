@@ -45,9 +45,9 @@ class CompMobDependency : public Test
   CompMobDependency(std::ostream& os, boost::shared_ptr<TestGraph> spTestGraph);
   ~CompMobDependency();
 
-  TestResult Execute();
-  std::string GetName();
-  std::string GetDescription();
+  boost::shared_ptr<TestResult> Execute();
+  AxString GetName();
+  AxString GetDescription();
 
   CompMobNodeVectorSP GetRootCompMobNodes();
 

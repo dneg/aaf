@@ -91,14 +91,14 @@ int main()
   std::cout << "***CYCLE TESTER (no cycles)***" << std::endl;
   boost::shared_ptr<AcyclicVisitor> spAcyclicVisitorA(new AcyclicVisitor(std::cout));
   dfs.TraverseDown(spAcyclicVisitorA, parentOne);
-  TestResult resultA = spAcyclicVisitorA->GetTestResult();
+  TestResult resultA = *spAcyclicVisitorA->GetTestResult();
   assert( resultA.GetResult() == TestResult::PASS );
   
   std::cout << "***CYCLE TESTER (w/ cycle present)***" << std::endl;
   boost::shared_ptr<AcyclicVisitor> spAcyclicVisitorB(new AcyclicVisitor(std::cout));
   spEdgeMap->AddEdge(boost::shared_ptr<Edge>(new Edge(fooTwo, parentTwo)));//adds a cycle
   dfs.TraverseDown(spAcyclicVisitorB, parentOne);
-  TestResult resultB = spAcyclicVisitorB->GetTestResult();
+  TestResult resultB = *spAcyclicVisitorB->GetTestResult();
   assert( resultB.GetResult() == TestResult::FAIL );
 
   std::cout << "Completed Basic Testing Successfully!" << std::endl << std::endl;

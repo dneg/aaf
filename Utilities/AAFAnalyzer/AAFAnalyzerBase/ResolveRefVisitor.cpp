@@ -47,11 +47,11 @@ namespace aafanalyzer {
 ResolveRefVisitor::ResolveRefVisitor(std::ostream& os, boost::shared_ptr<EdgeMap> spEdgeMap )
 : _os(os),
   _spEdgeMap(spEdgeMap),
-  _result( "ReferenceResolver",
-	   "Resolve source references in an AAF file.",
-	   "-",
-	   "-",
-	   TestResult::PASS )
+  _spResult( new TestResult( L"ReferenceResolver",
+                           L"Resolve source references in an AAF file.",
+                           L"-",
+                           L"-",
+                           TestResult::PASS ) )
 {}
 
 ResolveRefVisitor::~ResolveRefVisitor()
@@ -138,9 +138,9 @@ bool ResolveRefVisitor::EdgeVisit(Edge& edge)
   return true;
 }
 
-const TestResult& ResolveRefVisitor::GetTestResult() const
+boost::shared_ptr<const TestResult> ResolveRefVisitor::GetTestResult() const
 {
-  return _result;
+  return _spResult;
 }
 
 }

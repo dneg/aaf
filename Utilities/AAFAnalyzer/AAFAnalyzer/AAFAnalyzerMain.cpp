@@ -7,36 +7,57 @@
 #include <AxUtil.h>
 #include <AxEx.h>
 
+//STL files
+#include <string>
+
 namespace {
 
 using namespace aafanalyzer;
 
-void OutputResultMsgs(std::vector<TestResult>& vec)
+std::basic_string<wchar_t> LevelToIndent(unsigned int l)
 {
-  for(unsigned int i = 0; i < vec.size(); i++)
+  std::basic_string<wchar_t> indent;
+
+  for (; l > 0 ; l-- ) 
   {
-    std::cout << vec.at(i).GetName() << std::endl;
-    std::cout << vec.at(i).GetDescription() << std::endl;
+    indent += L"    ";
+  }
+  return indent;
+}
 
-    if(vec.at(i).GetResult() == TestResult::PASS)
-      std::cout << "Test Passed!" << std::endl << std::endl;
+void OutputResultMsgs(boost::shared_ptr<const TestResult> res, unsigned int level)
+{
+  std::wcout << LevelToIndent(level) << res->GetName() << std::endl;
+  std::wcout << LevelToIndent(level) << res->GetDescription() << std::endl;
+  
+  if(res->GetResult() == TestResult::PASS) {
+    std::wcout << LevelToIndent(level) << L"Test Passed!" << std::endl << std::endl;
+  }
 
-    else if(vec.at(i).GetResult() == TestResult::WARN)
-    {
-      std::cout << "Test Passed, but with warnings!" << std::endl;
-      std::cout << vec.at(i).GetExplanation() << std::endl << std::endl;
-    }
+  else if(res->GetResult() == TestResult::WARN)
+  {
+    std::wcout << LevelToIndent(level) << L"Test Passed, but with warnings!" << std::endl;
+    std::wcout << LevelToIndent(level) << res->GetExplanation() << std::endl << std::endl;
+  }
 
-    else if(vec.at(i).GetResult() == TestResult::FAIL)
-    {
-      std::cout << "Test Failed!" << std::endl;
-      std::cout << vec.at(i).GetExplanation() << std::endl << std::endl;
-    }
-    else
-    {
-      assert(0);
+  else if(res->GetResult() == TestResult::FAIL)
+  {
+    std::wcout << LevelToIndent(level) << L"Test Failed!" << std::endl;
+    std::wcout << LevelToIndent(level) << res->GetExplanation() << std::endl << std::endl;
+  }
+  else
+  {
+    assert(0);
+  }
+  
+  if ( res->ContainsSubtests() )
+  {
+    TestResult::SubtestResultsSP spSubResults = res->GetSubtestResults();
+    for (unsigned int i = 0; i < spSubResults->size(); i++) {
+        OutputResultMsgs(spSubResults->at(i), level + 1);
     }
   }
+ 
 }
 
 //======================================================================
@@ -81,22 +102,29 @@ int main( int argc, char** argv )
     
     const std::basic_string<wchar_t> fileName = AxStringUtil::mbtowc( fileNameArg.second );
 
-    std::vector<TestResult> results;
+    //Create the result object.
+    boost::shared_ptr<TestResult> spSubResult;
+    boost::shared_ptr<TestResult> spResult(new TestResult());
+    spResult->SetName(L"AAF Analyzer");
+    spResult->SetDescription(L"Run a suite of tests on an AAF file.");
     
     //first phase
     LoadPhase load(std::cout, fileName); 
-    results = load.Execute();
-    OutputResultMsgs(results);
+    spSubResult = load.Execute();
+    spResult->AppendSubtestResult(spSubResult);
     
     // More test phases go here...
     
     // optional dump phase
     if ( dumpArg.first )
-      {
-	DumpPhase dump(std::cout, load.GetTestGraph());
-	results = dump.Execute();
-	OutputResultMsgs(results);
-      }
+    {
+	  DumpPhase dump(std::cout, load.GetTestGraph());
+      spSubResult = dump.Execute();
+      spResult->AppendSubtestResult(spSubResult);
+    }
+
+    spResult->SetResult(spResult->GetAggregateResult());      
+    OutputResultMsgs(spResult, 0);
   }
   catch ( const Usage& ex )
   {

@@ -47,9 +47,9 @@ AcyclicAnalysis::~AcyclicAnalysis()
 {
 }
 
-TestResult AcyclicAnalysis::Execute()
+boost::shared_ptr<TestResult> AcyclicAnalysis::Execute()
 {
-  TestResult result;
+
   boost::shared_ptr<AcyclicVisitor> spVisitor(new AcyclicVisitor(GetOutStream()));
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
 
@@ -57,29 +57,30 @@ TestResult AcyclicAnalysis::Execute()
   //GetOutStream() << GetName() << std::endl << GetDescription() << std::endl << std::endl;
 
   //set result properties
-  result.SetName(GetName());
-  result.SetDescription(GetDescription());
+  boost::shared_ptr<TestResult> spResult(new TestResult());
+  spResult->SetName(GetName());
+  spResult->SetDescription(GetDescription());
 
   dfs.TraverseDown(spVisitor, GetTestGraph()->GetRootNode()); 
 
-  TestResult visitorResult = spVisitor->GetTestResult();
+  boost::shared_ptr<const TestResult> spVisitorResult(spVisitor->GetTestResult());
 
-  // FIXME - At this point we should store sub results.
-  
-  result.SetResult( visitorResult.GetResult() );
+  //Store sub results.
+  spResult->AppendSubtestResult(spVisitorResult);
+  spResult->SetResult( spResult->GetAggregateResult() );
 
-  return result;
+  return spResult;
 }
 
-std::string AcyclicAnalysis::GetName() const
+AxString AcyclicAnalysis::GetName() const
 {
-  std::string name = "--- Acyclic Analysis Test ---";
+  AxString name = L"--- Acyclic Analysis Test ---";
   return name;
 }
 
-std::string AcyclicAnalysis::GetDescription() const
+AxString AcyclicAnalysis::GetDescription() const
 {
-  std::string description = "Test Description: Traverse the directed graph and ensure it is acyclic.";
+  AxString description = L"Test Description: Traverse the directed graph and ensure it is acyclic.";
   return description;
 }
 

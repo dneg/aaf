@@ -47,12 +47,12 @@ CompMobDependency::~CompMobDependency()
 {
 }
 
-TestResult CompMobDependency::Execute()
+boost::shared_ptr<TestResult> CompMobDependency::Execute()
 {
-  TestResult result;
 
+  boost::shared_ptr<TestResult> spVisitorResult(new TestResult());
   boost::shared_ptr<NodeRefCountVisitor<IAAFCompositionMob> > spVisitor(
-       new NodeRefCountVisitor<IAAFCompositionMob>( GetOutStream(), result) );
+       new NodeRefCountVisitor<IAAFCompositionMob>( GetOutStream(), *spVisitorResult) );
 
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
 
@@ -60,25 +60,29 @@ TestResult CompMobDependency::Execute()
   //GetOutStream() << GetName() << std::endl << GetDescription() << std::endl << std::endl;
 
   //set result properties
-  result.SetName(GetName());
-  result.SetDescription(GetDescription());
+  boost::shared_ptr<TestResult> spResult(new TestResult());
+  spResult->SetName(GetName());
+  spResult->SetDescription(GetDescription());
 
   dfs.TraverseDown(spVisitor, GetTestGraph()->GetRootNode()); 
+  
+  spResult->AppendSubtestResult(spVisitorResult);
+  spResult->SetResult(spResult->GetAggregateResult());
 
   _spRootCompMobs = spVisitor->GetNodesWithCount(0);
 
-  return result;
+  return spResult;
 }
 
-std::string CompMobDependency::GetName()
+AxString CompMobDependency::GetName()
 {
-  std::string name = "--- CompositionMob Dependency Test ---";
+  AxString name = L"--- CompositionMob Dependency Test ---";
   return name;
 }
 
-std::string CompMobDependency::GetDescription()
+AxString CompMobDependency::GetDescription()
 {
-  std::string description = "Test Description: Traverse the directed graph and count composition mob references.";
+  AxString description = L"Test Description: Traverse the directed graph and count composition mob references.";
   return description;
 }
 
