@@ -119,7 +119,7 @@ static void CreateLegacyPropDefs(IAAFDictionary *p_dict)
 	ADD_PROPERTY_DEF( DID, ResolutionID, Int32 );
 	ADD_PROPERTY_DEF( DID, FirstFrameOffset, Int32 );
 	ADD_PROPERTY_DEF( DID, FrameSampleSize, Int32 );
-	ADD_PROPERTY_DEF( DID, ImageSize, Int64 );
+	ADD_PROPERTY_DEF( DID, ImageSize, Int32 );
 
 	if (pCDCI)
 	{
@@ -550,7 +550,7 @@ static bool addMasterMobForDVFile(
 	SET_PROPERTY_VALUE( CDCIOffsetToFrameIndexes, aafInt32, 0 );
 	SET_PROPERTY_VALUE( DIDFrameIndexByteOrder, aafUInt16, 0x4949 );
 	SET_PROPERTY_VALUE( DIDFirstFrameOffset, aafInt32, 0x0 );
-	SET_PROPERTY_VALUE( DIDImageSize, aafInt64, eslength );
+	SET_PROPERTY_VALUE( DIDImageSize, aafInt32, eslength );
 	if (formatPAL)
 	{
 		SET_PROPERTY_VALUE( DIDResolutionID, aafUInt32, 0x8d );

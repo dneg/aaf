@@ -1566,7 +1566,7 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFCDCIDescriptorHelper::SetImageSize( aafInt64 imageSize )
+    CAAFCDCIDescriptorHelper::SetImageSize( aafInt32 imageSize )
 {
 	HRESULT			hr = S_OK;
 	IAAFObject		*p_obj = NULL;

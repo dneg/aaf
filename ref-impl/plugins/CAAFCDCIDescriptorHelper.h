@@ -139,7 +139,7 @@ public:
 	STDMETHOD (SetOffsetToFrameIndexes) ( aafInt32  offsetToFrameIndexes );
 	STDMETHOD (SetFrameIndexByteOrder) ( aafInt16 frameIndexByteOrder );
 	STDMETHOD (SetFirstFrameOffset) ( aafInt32 firstFrameOffset );
-	STDMETHOD (SetImageSize) ( aafInt64 imageSize );
+	STDMETHOD (SetImageSize) ( aafInt32 imageSize );
 
 
 private:
