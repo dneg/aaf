@@ -164,7 +164,7 @@ class AAFDotInstanceMapper : public AxBaseObjRecIterListener
    std::string GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue axPropertyValue,
 			    std::string objectName, std::string propertyName );
    std::string GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue axPropertyValue );
-
+   std::string GetIntValue( AxTypeDefInt &axTypeDefInt, IAAFPropertyValueSP axPropertyValue );
 
    // find the node referenced by the scope reference. 
    // relative scope > 0 not implemented.  

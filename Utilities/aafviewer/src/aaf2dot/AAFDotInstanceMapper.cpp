@@ -30,6 +30,7 @@
 #include <AxMob.h>
 #include <AAFTypeDefUIDs.h>
 #include <AAFResult.h>
+#include <AAFSmartPointer2.h>
 
 #include <iostream>
 #include <sstream>
@@ -637,7 +638,7 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
 	 }
 
 	 AxPropertyValueIter elements( axTypeDefFixedArray.GetElements( propValue ) );
-	 IAAFPropertyValueSP elementValue;
+	 IAAFSmartPointer2<IAAFPropertyValue> elementValue;
 	 string arrayValue = "";
 	 bool isFirst = true;
 	 int maxLen = _profile.GetMaxAttributeLength();
@@ -713,7 +714,7 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
 	 }
 
 	 AxPropertyValueIter elements( axTypeDefVariableArray.GetElements( propValue ) );
-	 IAAFPropertyValueSP elementValue;
+	 IAAFSmartPointer2<IAAFPropertyValue> elementValue;
 	 string arrayValue = "";
 	 bool isFirst = true;
 	 int maxLen = _profile.GetMaxAttributeLength();
@@ -1112,6 +1113,14 @@ AAFDotInstanceMapper::MapEmptyPropertyValue()
    PushStalker( pStalker );
 }
 
+
+//-----------------------------------------------------------------------------
+string
+AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, IAAFPropertyValueSP spPropertyValue )
+{
+  AxPropertyValue axPropertyValue( spPropertyValue );
+  return GetIntValue( axTypeDefInt, axPropertyValue, false);
+}
 
 //-----------------------------------------------------------------------------
 string
