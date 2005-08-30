@@ -1884,13 +1884,13 @@ void CAAFCDCICodec::UpdateDescriptor (CAAFCDCIDescriptorHelper& descriptorHelper
 		{
 	    	checkResult( descriptorHelper.SetResolutionID( 0x8d ) );
 	    	checkResult( descriptorHelper.SetFrameSampleSize(DV_PAL_FRAME_SIZE));
-	    	checkResult( descriptorHelper.SetImageSize( _numberOfSamples * DV_PAL_FRAME_SIZE ) );
+	    	checkResult( descriptorHelper.SetImageSize( static_cast<aafInt32>(_numberOfSamples * DV_PAL_FRAME_SIZE) ) );
 		}
 		else
 		{
 	    	checkResult( descriptorHelper.SetResolutionID( 0x8c ) );
 	    	checkResult( descriptorHelper.SetFrameSampleSize( DV_NTSC_FRAME_SIZE));
-			checkResult( descriptorHelper.SetImageSize( _numberOfSamples * DV_NTSC_FRAME_SIZE ) );
+			checkResult( descriptorHelper.SetImageSize( static_cast<aafInt32>(_numberOfSamples * DV_NTSC_FRAME_SIZE) ) );
 		}
 	}
 }
