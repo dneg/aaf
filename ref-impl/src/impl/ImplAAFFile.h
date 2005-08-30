@@ -139,6 +139,14 @@ private:
     (aafUID_constptr pFileKind,
 	 aafProductIdentification_constptr pIdent);
 
+  // In order to avoid storage specific APIs in the public AAF interface
+  // some storage specific data is mirrored in the AAF metadata. Clients
+  // of the public API set and get values for this metadata. The following
+  // functions ensure that the data are synchronized.
+
+  void saveMirroredMetadata(void);
+
+  void restoreMirroredMetadata(void);
 
   aafInt32			_cookie;
   OMFile			*_file;

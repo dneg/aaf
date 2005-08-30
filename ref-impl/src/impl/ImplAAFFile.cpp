@@ -1361,6 +1361,15 @@ void ImplAAFFile::InternalReleaseObjects()
 {
 }
 
+void ImplAAFFile::saveMirroredMetadata(void)
+{
+  // tjb - nothing yet
+}
+
+void ImplAAFFile::restoreMirroredMetadata(void)
+{
+  // tjb - nothing yet
+}
 
 //***********************************************************
 // METHOD NAME: Close()
