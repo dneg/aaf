@@ -313,6 +313,10 @@ static HRESULT CreateAAFFile(
 
 class TestProgress : public IAAFProgress 
     {
+    // Defeat gcc warning about private ctor/dtor and no friends
+    // Note that this dummy function cannot itself be called because
+    // it requires a constructed TestProgress object.
+    friend void DummyveFriend(TestProgress);
     public:
         virtual HRESULT STDMETHODCALLTYPE ProgressCallback( void);
         virtual ULONG STDMETHODCALLTYPE AddRef( void);
@@ -558,7 +562,6 @@ static HRESULT NegativeTestPublicGlobalFunctions(
 
   int f = 0; // Local count of failures
   IAAFFile* pFile = 0;
-  IAAFRawStorage* pStg = 0;
   aafProductIdentification_t* id = &productID;
   aafUID_t kind = EffectiveTestFileEncoding(fileKind);
   aafUID_t k;
