@@ -16,7 +16,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -30,7 +30,7 @@
 
 #ifndef MAKE_HRESULT
 #define MAKE_HRESULT(sev,fac,code) \
-    ((HRESULT) (((unsigned int)(sev)<<31) | ((unsigned int)(fac)<<16) | ((unsigned int)(code))) )
+    ((HRESULT) (((AAFUInt32)(sev)<<31) | ((AAFUInt32)(fac)<<16) | ((AAFUInt32)(code))) )
 #endif
 
 // #define _FACILITY_AAF    FACILITY_ITF
@@ -75,6 +75,11 @@
 #define AAFRESULT_WRITE_FAILURE              MAKE_AAFHRESULT(0x0032)
 #define AAFRESULT_SYNCHRONIZE_FAILURE        MAKE_AAFHRESULT(0x0033)
 #define AAFRESULT_SET_EXTENT_FAILURE         MAKE_AAFHRESULT(0x0034)
+#define AAFRESULT_NOT_CREATABLE              MAKE_AAFHRESULT(0x0035)
+#define AAFRESULT_NOT_MODIFIABLE             MAKE_AAFHRESULT(0x0036)
+#define AAFRESULT_GETSIZE_FAILURE            MAKE_AAFHRESULT(0x0037)
+#define AAFRESULT_GETEXTENT_FAILURE          MAKE_AAFHRESULT(0x0038)
+#define AAFRESULT_SETEXTENT_FAILURE          MAKE_AAFHRESULT(0x0039)
 
 /* MEDIA Error Codes */
 #define AAFRESULT_DESCSAMPRATE              MAKE_AAFHRESULT(0x0064)
