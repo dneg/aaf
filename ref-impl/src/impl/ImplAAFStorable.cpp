@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -37,6 +37,8 @@
 
 #include "ImplAAFStorable.h"
 #include "ImplAAFClassDef.h"
+#include "ImplAAFContext.h"
+#include "ImplAAFModule.h"
 #include "assert.h"
 
 ImplAAFStorable::ImplAAFStorable ()
@@ -77,4 +79,23 @@ AAFRESULT ImplAAFStorable::GetDefinition(ImplAAFClassDef ** ppClassDef)
   *ppClassDef = pClassDef;
   pClassDef->AcquireReference();
   return AAFRESULT_SUCCESS;
+}
+
+// Call during long operations in order to give time to the calling application
+void ImplAAFStorable::Progress(void) const
+{
+  ImplAAFContext* context = ImplAAFContext::GetInstance();
+  assert(context);
+  IAAFProgress* progress = NULL;
+  context->GetProgressCallback(&progress);
+  if(progress != NULL)
+  {
+	  try
+	  {
+		(*progress).ProgressCallback();
+	  }
+	  catch(...)
+	  {
+	  }
+  }
 }

@@ -110,6 +110,9 @@ typedef STDAPICALLTYPE HRESULT (* LPFNAAFCREATEAAFFILEONRAWSTORAGE)(
 	aafProductIdentification_constptr  pIdent,
 	IAAFFile ** ppNewFile);
 
+typedef STDAPICALLTYPE HRESULT (* LPFNAAFSETPROGRESSCALLBACK)(
+    IAAFProgress * pProgress);
+
 typedef STDAPICALLTYPE HRESULT (* LPFNAAFGETFILEENCODINGS)(
     IEnumAAFFileEncodings ** ppFileEncodings);
 
@@ -195,6 +198,9 @@ typedef HRESULT (STDAPICALLTYPE * LPFNAAFCREATEAAFFILEONRAWSTORAGE)(
 	aafUInt32  modeFlags,
 	aafProductIdentification_constptr  pIdent,
 	IAAFFile ** ppNewFile);
+
+typedef HRESULT (STDAPICALLTYPE * LPFNAAFSETPROGRESSCALLBACK)(
+    IAAFProgress * pProgress);
 
 typedef HRESULT (STDAPICALLTYPE * LPFNAAFGETFILEENCODINGS)(
     IEnumAAFFileEncodings ** ppFileEncodings);
@@ -323,6 +329,9 @@ public:
 	aafProductIdentification_constptr  pIdent,
 	IAAFFile ** ppNewFile);
 
+  HRESULT SetProgressCallback (
+    IAAFProgress * pProgress);
+
   HRESULT GetFileEncodings (
     IEnumAAFFileEncodings ** ppFileEncodings);
 
@@ -363,6 +372,7 @@ protected:
   LPFNAAFCREATERAWSTORAGEDISK      _pfnCreateRawStorageDisk;
   LPFNAAFCREATERAWSTORAGECACHEDDISK _pfnCreateRawStorageCachedDisk;
   LPFNAAFCREATEAAFFILEONRAWSTORAGE _pfnCreateAAFFileOnRawStorage;
+  LPFNAAFSETPROGRESSCALLBACK       _pfnSetProgressCallback;
   LPFNAAFGETFILEENCODINGS          _pfnGetFileEncodings;
   LPFNAAFGETLIBRARYVERSION         _pfnGetLibraryVersion;
   LPFNAAFGETLIBRARYPATHNAMEBUFLEN  _pfnGetLibraryPathNameBufLen;

@@ -1,19 +1,27 @@
+
+
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
-/* File created by MIDL compiler version 5.01.0164 */
+/* File created by MIDL compiler version 6.00.0361 */
 /* at TIMESTAMP REMOVED
  */
 /* Compiler settings for ../ref-impl/include/com-api/AAFPrivate.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
+    VC __declspec() decoration level: 
+         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
+         DECLSPEC_UUID(), MIDL_INTERFACE()
 */
 //@@MIDL_FILE_HEADING(  )
+
+#pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 
 /* verify that the <rpcndr.h> version is high enough to compile this file*/
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
-#define __REQUIRED_RPCNDR_H_VERSION__ 440
+#define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
 
 #include "rpc.h"
@@ -31,9 +39,9 @@
 #ifndef __AAFPrivate_h__
 #define __AAFPrivate_h__
 
-#ifdef __cplusplus
-extern "C"{
-#endif 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -124,8 +132,12 @@ typedef interface IEnumAAFStorablePropVals IEnumAAFStorablePropVals;
 /* header files for imported files */
 #include "AAF.h"
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+#ifdef __cplusplus
+extern "C"{
+#endif 
+
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_AAFPrivate_0000 */
 /* [local] */ 
@@ -194,7 +206,7 @@ EXTERN_C const IID IID_IAAFRoot;
     {
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetImplRep( 
-            /* [retval][out] */ void __RPC_FAR *__RPC_FAR *__MIDL_0012) = 0;
+            /* [retval][out] */ void **__MIDL_0008) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE InitializeExtension( 
             REFCLSID clsid) = 0;
@@ -207,23 +219,23 @@ EXTERN_C const IID IID_IAAFRoot;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFRoot __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFRoot * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFRoot __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFRoot * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFRoot __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFRoot * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetImplRep )( 
-            IAAFRoot __RPC_FAR * This,
-            /* [retval][out] */ void __RPC_FAR *__RPC_FAR *__MIDL_0012);
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetImplRep )( 
+            IAAFRoot * This,
+            /* [retval][out] */ void **__MIDL_0008);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InitializeExtension )( 
-            IAAFRoot __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *InitializeExtension )( 
+            IAAFRoot * This,
             REFCLSID clsid);
         
         END_INTERFACE
@@ -231,7 +243,7 @@ EXTERN_C const IID IID_IAAFRoot;
 
     interface IAAFRoot
     {
-        CONST_VTBL struct IAAFRootVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAAFRootVtbl *lpVtbl;
     };
 
     
@@ -249,8 +261,8 @@ EXTERN_C const IID IID_IAAFRoot;
     (This)->lpVtbl -> Release(This)
 
 
-#define IAAFRoot_GetImplRep(This,__MIDL_0012)	\
-    (This)->lpVtbl -> GetImplRep(This,__MIDL_0012)
+#define IAAFRoot_GetImplRep(This,__MIDL_0008)	\
+    (This)->lpVtbl -> GetImplRep(This,__MIDL_0008)
 
 #define IAAFRoot_InitializeExtension(This,clsid)	\
     (This)->lpVtbl -> InitializeExtension(This,clsid)
@@ -263,8 +275,8 @@ EXTERN_C const IID IID_IAAFRoot;
 
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IAAFRoot_GetImplRep_Proxy( 
-    IAAFRoot __RPC_FAR * This,
-    /* [retval][out] */ void __RPC_FAR *__RPC_FAR *__MIDL_0012);
+    IAAFRoot * This,
+    /* [retval][out] */ void **__MIDL_0008);
 
 
 void __RPC_STUB IAAFRoot_GetImplRep_Stub(
@@ -275,7 +287,7 @@ void __RPC_STUB IAAFRoot_GetImplRep_Stub(
 
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IAAFRoot_InitializeExtension_Proxy( 
-    IAAFRoot __RPC_FAR * This,
+    IAAFRoot * This,
     REFCLSID clsid);
 
 
@@ -309,21 +321,21 @@ EXTERN_C const IID IID_IAAFHTMLClip;
             /* [string][in] */ aafCharacter_constptr pBeginAnchor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBeginAnchor( 
-            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pBeginAnchor,
+            /* [size_is][string][out] */ aafCharacter *pBeginAnchor,
             /* [in] */ aafUInt32 bufSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBeginAnchorBufLen( 
-            /* [out] */ aafUInt32 __RPC_FAR *pBufSize) = 0;
+            /* [out] */ aafUInt32 *pBufSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetEndAnchor( 
             /* [string][in] */ aafCharacter_constptr pEndAnchor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEndAnchor( 
-            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pEndAnchor,
+            /* [size_is][string][out] */ aafCharacter *pEndAnchor,
             /* [in] */ aafUInt32 bufSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEndAnchorBufLen( 
-            /* [out] */ aafUInt32 __RPC_FAR *pBufSize) = 0;
+            /* [out] */ aafUInt32 *pBufSize) = 0;
         
     };
     
@@ -333,49 +345,49 @@ EXTERN_C const IID IID_IAAFHTMLClip;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFHTMLClip __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFHTMLClip * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFHTMLClip __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFHTMLClip * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFHTMLClip __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFHTMLClip * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBeginAnchor )( 
-            IAAFHTMLClip __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetBeginAnchor )( 
+            IAAFHTMLClip * This,
             /* [string][in] */ aafCharacter_constptr pBeginAnchor);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBeginAnchor )( 
-            IAAFHTMLClip __RPC_FAR * This,
-            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pBeginAnchor,
+        HRESULT ( STDMETHODCALLTYPE *GetBeginAnchor )( 
+            IAAFHTMLClip * This,
+            /* [size_is][string][out] */ aafCharacter *pBeginAnchor,
             /* [in] */ aafUInt32 bufSize);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBeginAnchorBufLen )( 
-            IAAFHTMLClip __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
+        HRESULT ( STDMETHODCALLTYPE *GetBeginAnchorBufLen )( 
+            IAAFHTMLClip * This,
+            /* [out] */ aafUInt32 *pBufSize);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEndAnchor )( 
-            IAAFHTMLClip __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetEndAnchor )( 
+            IAAFHTMLClip * This,
             /* [string][in] */ aafCharacter_constptr pEndAnchor);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEndAnchor )( 
-            IAAFHTMLClip __RPC_FAR * This,
-            /* [size_is][string][out] */ aafCharacter __RPC_FAR *pEndAnchor,
+        HRESULT ( STDMETHODCALLTYPE *GetEndAnchor )( 
+            IAAFHTMLClip * This,
+            /* [size_is][string][out] */ aafCharacter *pEndAnchor,
             /* [in] */ aafUInt32 bufSize);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEndAnchorBufLen )( 
-            IAAFHTMLClip __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
+        HRESULT ( STDMETHODCALLTYPE *GetEndAnchorBufLen )( 
+            IAAFHTMLClip * This,
+            /* [out] */ aafUInt32 *pBufSize);
         
         END_INTERFACE
     } IAAFHTMLClipVtbl;
 
     interface IAAFHTMLClip
     {
-        CONST_VTBL struct IAAFHTMLClipVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAAFHTMLClipVtbl *lpVtbl;
     };
 
     
@@ -419,7 +431,7 @@ EXTERN_C const IID IID_IAAFHTMLClip;
 
 
 HRESULT STDMETHODCALLTYPE IAAFHTMLClip_SetBeginAnchor_Proxy( 
-    IAAFHTMLClip __RPC_FAR * This,
+    IAAFHTMLClip * This,
     /* [string][in] */ aafCharacter_constptr pBeginAnchor);
 
 
@@ -431,8 +443,8 @@ void __RPC_STUB IAAFHTMLClip_SetBeginAnchor_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IAAFHTMLClip_GetBeginAnchor_Proxy( 
-    IAAFHTMLClip __RPC_FAR * This,
-    /* [size_is][string][out] */ aafCharacter __RPC_FAR *pBeginAnchor,
+    IAAFHTMLClip * This,
+    /* [size_is][string][out] */ aafCharacter *pBeginAnchor,
     /* [in] */ aafUInt32 bufSize);
 
 
@@ -444,8 +456,8 @@ void __RPC_STUB IAAFHTMLClip_GetBeginAnchor_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IAAFHTMLClip_GetBeginAnchorBufLen_Proxy( 
-    IAAFHTMLClip __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
+    IAAFHTMLClip * This,
+    /* [out] */ aafUInt32 *pBufSize);
 
 
 void __RPC_STUB IAAFHTMLClip_GetBeginAnchorBufLen_Stub(
@@ -456,7 +468,7 @@ void __RPC_STUB IAAFHTMLClip_GetBeginAnchorBufLen_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IAAFHTMLClip_SetEndAnchor_Proxy( 
-    IAAFHTMLClip __RPC_FAR * This,
+    IAAFHTMLClip * This,
     /* [string][in] */ aafCharacter_constptr pEndAnchor);
 
 
@@ -468,8 +480,8 @@ void __RPC_STUB IAAFHTMLClip_SetEndAnchor_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IAAFHTMLClip_GetEndAnchor_Proxy( 
-    IAAFHTMLClip __RPC_FAR * This,
-    /* [size_is][string][out] */ aafCharacter __RPC_FAR *pEndAnchor,
+    IAAFHTMLClip * This,
+    /* [size_is][string][out] */ aafCharacter *pEndAnchor,
     /* [in] */ aafUInt32 bufSize);
 
 
@@ -481,8 +493,8 @@ void __RPC_STUB IAAFHTMLClip_GetEndAnchor_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IAAFHTMLClip_GetEndAnchorBufLen_Proxy( 
-    IAAFHTMLClip __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pBufSize);
+    IAAFHTMLClip * This,
+    /* [out] */ aafUInt32 *pBufSize);
 
 
 void __RPC_STUB IAAFHTMLClip_GetEndAnchorBufLen_Stub(
@@ -519,23 +531,23 @@ EXTERN_C const IID IID_IAAFHTMLDescriptor;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFHTMLDescriptor __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFHTMLDescriptor * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFHTMLDescriptor __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFHTMLDescriptor * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFHTMLDescriptor __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFHTMLDescriptor * This);
         
         END_INTERFACE
     } IAAFHTMLDescriptorVtbl;
 
     interface IAAFHTMLDescriptor
     {
-        CONST_VTBL struct IAAFHTMLDescriptorVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAAFHTMLDescriptorVtbl *lpVtbl;
     };
 
     
@@ -587,23 +599,23 @@ EXTERN_C const IID IID_IAAFMetaDictionary;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFMetaDictionary __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFMetaDictionary * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFMetaDictionary __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFMetaDictionary * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFMetaDictionary __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFMetaDictionary * This);
         
         END_INTERFACE
     } IAAFMetaDictionaryVtbl;
 
     interface IAAFMetaDictionary
     {
-        CONST_VTBL struct IAAFMetaDictionaryVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAAFMetaDictionaryVtbl *lpVtbl;
     };
 
     
@@ -655,23 +667,23 @@ EXTERN_C const IID IID_IAAFPropValData;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFPropValData __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFPropValData * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFPropValData __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFPropValData * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFPropValData __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFPropValData * This);
         
         END_INTERFACE
     } IAAFPropValDataVtbl;
 
     interface IAAFPropValData
     {
-        CONST_VTBL struct IAAFPropValDataVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAAFPropValDataVtbl *lpVtbl;
     };
 
     
@@ -723,23 +735,23 @@ EXTERN_C const IID IID_IAAFStreamPropertyValue;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFStreamPropertyValue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFStreamPropertyValue * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFStreamPropertyValue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFStreamPropertyValue * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFStreamPropertyValue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFStreamPropertyValue * This);
         
         END_INTERFACE
     } IAAFStreamPropertyValueVtbl;
 
     interface IAAFStreamPropertyValue
     {
-        CONST_VTBL struct IAAFStreamPropertyValueVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAAFStreamPropertyValueVtbl *lpVtbl;
     };
 
     
@@ -791,23 +803,23 @@ EXTERN_C const IID IID_IAAFStrongRefArrayValue;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFStrongRefArrayValue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFStrongRefArrayValue * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFStrongRefArrayValue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFStrongRefArrayValue * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFStrongRefArrayValue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFStrongRefArrayValue * This);
         
         END_INTERFACE
     } IAAFStrongRefArrayValueVtbl;
 
     interface IAAFStrongRefArrayValue
     {
-        CONST_VTBL struct IAAFStrongRefArrayValueVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAAFStrongRefArrayValueVtbl *lpVtbl;
     };
 
     
@@ -859,23 +871,23 @@ EXTERN_C const IID IID_IAAFStrongRefSetValue;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFStrongRefSetValue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFStrongRefSetValue * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFStrongRefSetValue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFStrongRefSetValue * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFStrongRefSetValue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFStrongRefSetValue * This);
         
         END_INTERFACE
     } IAAFStrongRefSetValueVtbl;
 
     interface IAAFStrongRefSetValue
     {
-        CONST_VTBL struct IAAFStrongRefSetValueVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAAFStrongRefSetValueVtbl *lpVtbl;
     };
 
     
@@ -927,23 +939,23 @@ EXTERN_C const IID IID_IAAFStrongRefValue;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFStrongRefValue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFStrongRefValue * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFStrongRefValue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFStrongRefValue * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFStrongRefValue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFStrongRefValue * This);
         
         END_INTERFACE
     } IAAFStrongRefValueVtbl;
 
     interface IAAFStrongRefValue
     {
-        CONST_VTBL struct IAAFStrongRefValueVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAAFStrongRefValueVtbl *lpVtbl;
     };
 
     
@@ -995,23 +1007,23 @@ EXTERN_C const IID IID_IAAFTextClip;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFTextClip __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFTextClip * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFTextClip __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFTextClip * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFTextClip __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFTextClip * This);
         
         END_INTERFACE
     } IAAFTextClipVtbl;
 
     interface IAAFTextClip
     {
-        CONST_VTBL struct IAAFTextClipVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAAFTextClipVtbl *lpVtbl;
     };
 
     
@@ -1063,23 +1075,23 @@ EXTERN_C const IID IID_IAAFWeakRefArrayValue;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFWeakRefArrayValue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFWeakRefArrayValue * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFWeakRefArrayValue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFWeakRefArrayValue * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFWeakRefArrayValue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFWeakRefArrayValue * This);
         
         END_INTERFACE
     } IAAFWeakRefArrayValueVtbl;
 
     interface IAAFWeakRefArrayValue
     {
-        CONST_VTBL struct IAAFWeakRefArrayValueVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAAFWeakRefArrayValueVtbl *lpVtbl;
     };
 
     
@@ -1131,23 +1143,23 @@ EXTERN_C const IID IID_IAAFWeakRefSetValue;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFWeakRefSetValue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFWeakRefSetValue * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFWeakRefSetValue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFWeakRefSetValue * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFWeakRefSetValue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFWeakRefSetValue * This);
         
         END_INTERFACE
     } IAAFWeakRefSetValueVtbl;
 
     interface IAAFWeakRefSetValue
     {
-        CONST_VTBL struct IAAFWeakRefSetValueVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAAFWeakRefSetValueVtbl *lpVtbl;
     };
 
     
@@ -1199,23 +1211,23 @@ EXTERN_C const IID IID_IAAFWeakRefValue;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFWeakRefValue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFWeakRefValue * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFWeakRefValue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFWeakRefValue * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFWeakRefValue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFWeakRefValue * This);
         
         END_INTERFACE
     } IAAFWeakRefValueVtbl;
 
     interface IAAFWeakRefValue
     {
-        CONST_VTBL struct IAAFWeakRefValueVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAAFWeakRefValueVtbl *lpVtbl;
     };
 
     
@@ -1267,23 +1279,23 @@ EXTERN_C const IID IID_IEnumAAFStorablePropVals;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumAAFStorablePropVals __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumAAFStorablePropVals * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumAAFStorablePropVals __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumAAFStorablePropVals * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumAAFStorablePropVals __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumAAFStorablePropVals * This);
         
         END_INTERFACE
     } IEnumAAFStorablePropValsVtbl;
 
     interface IEnumAAFStorablePropVals
     {
-        CONST_VTBL struct IEnumAAFStorablePropValsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumAAFStorablePropValsVtbl *lpVtbl;
     };
 
     
@@ -1321,3 +1333,5 @@ EXTERN_C const IID IID_IEnumAAFStorablePropVals;
 #endif
 
 #endif
+
+

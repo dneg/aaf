@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -53,6 +53,8 @@ typedef ImplAAFSmartPointer<ImplEnumAAFProperties> ImplEnumAAFPropertiesSP;
 #include "ImplAAFDictionary.h"
 #include "ImplAAFMetaDictionary.h"
 #include "ImplAAFClassDef.h"
+#include "ImplAAFContext.h"
+#include "ImplAAFModule.h"
 #include "ImplAAFProperty.h"
 #include "ImplAAFPropertyDef.h"
 #include "ImplAAFPropertyValue.h"
@@ -1414,6 +1416,7 @@ void ImplAAFObject::onSave(void* clientContext) const
 		  pNonConstThis->_generation = *pGen;
 		}
 	}
+  Progress();
 }
 
 
@@ -1423,6 +1426,7 @@ void ImplAAFObject::onRestore(void* /*clientContext*/) const
 
   // Cast away constness (maintaining logical constness)
   ((ImplAAFObject*) this)->setInitialized ();
+  Progress();
 }
 
 

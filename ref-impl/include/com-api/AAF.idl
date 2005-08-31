@@ -190,6 +190,7 @@ interface IAAFHeader2;
 interface IAAFMasterMob2;
 interface IAAFMasterMobEx;
 interface IAAFMob2;
+interface IAAFProgress;
 interface IAAFRGBADescriptor2;
 interface IAAFSearchSource;
 interface IAAFSourceReference2;
@@ -43738,6 +43739,52 @@ interface IAAFMob2 : IUnknown
 
 // ************************
 //
+// Interface IAAFProgress
+//
+// ************************
+///
+/// This interface is used by the toolkit
+///
+/// In addition to the specific error results listed for each method,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+
+
+[
+    object,
+    uuid(8E7B0F14-A759-416a-98FD-346242D5081F),
+    helpstring("IAAFProgress Interface"),
+    pointer_default(unique)
+]
+
+interface IAAFProgress : IUnknown
+{
+
+
+  //***********************************************************
+  //
+  // ProgressCallback()
+  //
+  /// Called frequently during OM load/save operations.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  /// 
+  HRESULT ProgressCallback ();
+}
+
+
+
+// ************************
+//
 // Interface IAAFRGBADescriptor2
 //
 // ************************
@@ -45890,6 +45937,17 @@ cpp_quote("          aafUID_constptr  pFileKind,")
 cpp_quote("          aafUInt32  modeFlags,")
 cpp_quote("          aafProductIdentification_constptr  pIdent,")
 cpp_quote("          IAAFFile ** ppNewFile);")
+cpp_quote("")
+
+  //***********************************************************
+  //
+  // AAFSetProgressCallback()
+  //
+  /// Sets a progress callback, called back during load and save.
+  ///
+  /// @param pProgress [in] Pointer to the interface of the progress interface callback. 
+  ///
+cpp_quote("STDAPI AAFSetProgressCallback (IAAFProgress*  pProgress);")
 cpp_quote("")
 
   //***********************************************************

@@ -701,6 +701,14 @@ AD_XFUNCTION7(AAFCreateAAFFileOnRawStorage,
   /// - The access or existence parameters are not set to a legal
   ///   combination of values.)
 
+AD_XFUNCTION1(AAFSetProgressCallback,
+			[in],
+			  objPass,
+			  IAAFProgress*,
+			  pProgress,
+			  Pointer to the interface of the progress interface callback.,
+			Sets a progress callback\, called back during load and save.)
+
 AD_XFUNCTION1(AAFGetFileEncodings,
 			[out],
 			  objOut,

@@ -189,6 +189,7 @@ interface IAAFHeader2;
 interface IAAFMasterMob2;
 interface IAAFMasterMobEx;
 interface IAAFMob2;
+interface IAAFProgress;
 interface IAAFRGBADescriptor2;
 interface IAAFSearchSource;
 interface IAAFSourceReference2;
@@ -344,6 +345,7 @@ typedef interface IAAFHeader2 IAAFHeader2;
 typedef interface IAAFMasterMob2 IAAFMasterMob2;
 typedef interface IAAFMasterMobEx IAAFMasterMobEx;
 typedef interface IAAFMob2 IAAFMob2;
+typedef interface IAAFProgress IAAFProgress;
 typedef interface IAAFRGBADescriptor2 IAAFRGBADescriptor2;
 typedef interface IAAFSearchSource IAAFSearchSource;
 typedef interface IAAFSourceReference2 IAAFSourceReference2;
@@ -44056,6 +44058,57 @@ DECLARE_INTERFACE_(IAAFMob2, IUnknown)
 
 
 
+// IAAFProgress
+
+// ************************
+//
+// Interface IAAFProgress
+//
+// ************************
+
+
+
+#ifndef __IAAFProgress_INTERFACE_DEFINED__
+#define __IAAFProgress_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFProgress;
+
+
+#undef  INTERFACE
+#define INTERFACE   IAAFProgress
+
+DECLARE_INTERFACE_(IAAFProgress, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFProgress methods *** */
+
+
+  //***********************************************************
+  //
+  // ProgressCallback()
+  //
+  /// Called frequently during OM load/save operations.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  STDMETHOD(ProgressCallback) (THIS) PURE;
+
+  END_INTERFACE
+};
+#endif // __IAAFProgress_INTERFACE_DEFINED__
+
+
+
 // IAAFRGBADescriptor2
 
 // ************************
@@ -46161,6 +46214,17 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
     aafUInt32  modeFlags,
     aafProductIdentification_constptr  pIdent,
     IAAFFile ** ppNewFile);
+
+  //***********************************************************
+  //
+  // AAFSetProgressCallback()
+  //
+  /// Sets a progress callback, called back during load and save.
+  ///
+  /// @param pProgress [in] Pointer to the interface of the progress interface callback.
+  /// 
+  STDAPI AAFSetProgressCallback (
+    IAAFProgress*  pProgress);
 
   //***********************************************************
   //

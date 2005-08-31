@@ -45,6 +45,7 @@
 #include "AAFSDKBuild.h"
 
 #include "ImplAAFPluginManager.h"
+#include "ImplAAFContext.h"
 #include "ImplAAFFile.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFRandomRawStorage.h"
@@ -57,6 +58,7 @@
 #include "OMMemoryRawStorage.h"
 
 #include "ImplAAFSmartPointer.h"
+#include "AAFUtils.h"
 
 typedef ImplAAFSmartPointer<ImplAAFFile> ImplAAFFileSP;
 
@@ -1112,6 +1114,23 @@ ImplAAFCreateAAFFileOnRawStorage
 		}
 	}
 
+  return hr;
+}
+
+STDAPI
+ImplAAFSetProgressCallback
+  (IAAFProgress * pProgress)
+{
+  if (pProgress == 0)
+    return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT	hr = AAFRESULT_SUCCESS;
+
+  CHECK_CLIENT_IMPLEMENTED_QI(pProgress, IID_IAAFProgress);
+
+  ImplAAFContext	*context = ImplAAFContext::GetInstance();
+  assert(context != 0);
+  hr = context->SetProgressCallback(pProgress);
   return hr;
 }
 

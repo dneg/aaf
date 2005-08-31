@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -232,6 +232,25 @@ aafRational_t RationalFromFloat(
 // URL utility functions
 void wcsconvertURLtoFilepath(wchar_t *url, wchar_t *filepath);
 void wcsconvertFilepathtoURL(wchar_t *filepath, wchar_t *url);
+
+#if defined(_DEBUG)
+#define CHECK_CLIENT_IMPLEMENTED_QI(pUnknown, IID) \
+{\
+  IUnknown* p = 0;\
+  HRESULT hr = pUnknown->QueryInterface(IID_IUnknown, (void**)&p);\
+  if (SUCCEEDED(hr))\
+    p->Release();\
+  else \
+    return hr;\
+  hr = pUnknown->QueryInterface(IID, (void**)&p);\
+  if (SUCCEEDED(hr))\
+    p->Release();\
+  else \
+    return hr;\
+}
+#else
+#define CHECK_CLIENT_IMPLEMENTED_QI(pUnknown, IID)
+#endif
 
 
 #endif				/* _AAF_UTIL_API_ */

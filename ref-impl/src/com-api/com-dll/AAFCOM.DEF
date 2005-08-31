@@ -45,6 +45,7 @@ EXPORTS		AAFCreateRawStorageMemory
 EXPORTS		AAFCreateRawStorageDisk
 EXPORTS		AAFCreateRawStorageCachedDisk
 EXPORTS		AAFCreateAAFFileOnRawStorage
+EXPORTS		AAFSetProgressCallback
 EXPORTS		AAFGetFileEncodings
 EXPORTS		AAFGetLibraryVersion
 EXPORTS		AAFGetLibraryPathNameBufLen

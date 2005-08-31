@@ -1,30 +1,43 @@
+
+
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
-/* File created by MIDL compiler version 5.01.0164 */
+/* File created by MIDL compiler version 6.00.0361 */
 /* at TIMESTAMP REMOVED
  */
 /* Compiler settings for ../ref-impl/include/com-api/AAFPluginTypes.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
+    VC __declspec() decoration level: 
+         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
+         DECLSPEC_UUID(), MIDL_INTERFACE()
 */
 //@@MIDL_FILE_HEADING(  )
+
+#pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 
 /* verify that the <rpcndr.h> version is high enough to compile this file*/
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
-#define __REQUIRED_RPCNDR_H_VERSION__ 440
+#define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
 
 #include "rpc.h"
 #include "rpcndr.h"
 
+#ifndef __RPCNDR_H_VERSION__
+#error this stub requires an updated version of <rpcndr.h>
+#endif // __RPCNDR_H_VERSION__
+
+
 #ifndef __AAFPluginTypes_h__
 #define __AAFPluginTypes_h__
 
-#ifdef __cplusplus
-extern "C"{
-#endif 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -32,8 +45,12 @@ extern "C"{
 #include "wtypes.h"
 #include "AAFTypes.h"
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+#ifdef __cplusplus
+extern "C"{
+#endif 
+
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_AAFPluginTypes_0000 */
 /* [local] */ 
@@ -80,7 +97,7 @@ typedef
 enum _aafDeinterleave_e
     {	kAAFdeinterleave	= 0,
 	kAAFleaveInterleaved	= kAAFdeinterleave + 1
-    }	aafDeinterleave_e;
+    } 	aafDeinterleave_e;
 
 typedef aafInt32 aafCheckVerbose_t;
 
@@ -88,7 +105,7 @@ typedef
 enum _aafCheckVerbose_e
     {	kAAFCheckVerbose	= 0,
 	kAAFCheckQuiet	= kAAFCheckVerbose + 1
-    }	aafCheckVerbose_e;
+    } 	aafCheckVerbose_e;
 
 typedef aafInt32 aafCheckWarnings_t;
 
@@ -96,16 +113,16 @@ typedef
 enum _aafCheckWarnings_e
     {	kAAFCheckPrintWarnings	= 0,
 	kAAFCheckNoWarnings	= kAAFCheckPrintWarnings + 1
-    }	aafCheckWarnings_e;
+    } 	aafCheckWarnings_e;
 
-typedef struct  _aafSelectInfo_t
+typedef struct _aafSelectInfo_t
     {
     aafBoolean_t hwAssisted;
     aafBoolean_t isNative;
     aafBoolean_t willHandleMDES;
     aafInt16 relativeLoss;
     aafUInt32 avgBitsPerSec;
-    }	aafSelectInfo_t;
+    } 	aafSelectInfo_t;
 
 
 
@@ -122,3 +139,5 @@ extern RPC_IF_HANDLE IAAFPluginTypes_v0_0_s_ifspec;
 #endif
 
 #endif
+
+

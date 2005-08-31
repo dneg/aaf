@@ -44,6 +44,7 @@ AAFCOMINTERFACESONLY="\
 	AAFMasterMob2 \
 	AAFMasterMobEx \
 	AAFMob2 \
+	AAFProgress \
 	AAFRGBADescriptor2 \
 	AAFSearchSource \
 	AAFSourceReference2 \

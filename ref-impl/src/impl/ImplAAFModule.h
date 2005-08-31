@@ -414,6 +414,10 @@ ImplAAFCreateAAFFileOnRawStorage
    aafProductIdentification_constptr  pIdent,
    ImplAAFFile ** ppNewFile);
 
+STDAPI
+ImplAAFSetProgressCallback
+  (IAAFProgress * pProgress);
+
 //***********************************************************
 //
 // ImplAAFGetFileEncodings()
