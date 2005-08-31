@@ -30,7 +30,7 @@
 
 #ifndef MAKE_HRESULT
 #define MAKE_HRESULT(sev,fac,code) \
-    ((HRESULT) (((AAFUInt32)(sev)<<31) | ((AAFUInt32)(fac)<<16) | ((AAFUInt32)(code))) )
+    ((HRESULT) (((aafUInt32)(sev)<<31) | ((aafUInt32)(fac)<<16) | ((aafUInt32)(code))) )
 #endif
 
 // #define _FACILITY_AAF    FACILITY_ITF
