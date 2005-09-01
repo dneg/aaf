@@ -1,4 +1,6 @@
 /*
+ *  $Id$ $Name$
+ *
  *  avilib.h
  *
  *  Copyright (C) Thomas Östreich - June 2001
