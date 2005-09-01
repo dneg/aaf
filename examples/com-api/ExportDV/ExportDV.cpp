@@ -65,6 +65,8 @@ const aafInt32 DV_NTSC_FRAME_SIZE = 120000;
 bool useLegacyDV = false;
 bool formatMXF = false;
 
+ aafUID_t kAAFOpDef_Atom = { 0x0d010201, 0x1000, 0x0000, { 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
 #define aaf_assert(b, msg) \
 	if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
 
@@ -158,6 +160,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 {
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
+	IAAFHeader2*					pHeader2 = NULL;
 	IAAFDictionary*				pDictionary = NULL;
 	IAAFMob*					pMob = NULL;
 	IAAFMasterMob*				pMasterMob = NULL;
@@ -198,15 +201,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 	check(AAFFileOpenNewModifyEx(pFileName, fileKind, 0, &ProductInfo, &pFile));
 	check(pFile->GetHeader(&pHeader));
 
-	if (formatMXF)
-	{
-	  aafUID_t kAAFOpDef_Atom = { 0x0d010201, 0x1000, 0x0000, { 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
-
-	  IAAFHeader2* pHeader2 = 0;
-	  check(pHeader->QueryInterface(IID_IAAFHeader2, (void **)&pHeader2));
-	  check(pHeader2->SetOperationalPattern(kAAFOpDef_Atom));
-	  pHeader2->Release();
-	}
+        // Set the operational pattern
+        check(pHeader->QueryInterface(IID_IAAFHeader2, (void **)&pHeader2));
+	check(pHeader2->SetOperationalPattern(kAAFOpDef_Atom));
 
 	// Get the AAF Dictionary from the file
 	check(pHeader->GetDictionary(&pDictionary));
@@ -357,6 +354,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 
 	pDictionary->Release();
 	pHeader->Release();
+	pHeader2->Release();
 
 	/* Save the AAF file */
 	pFile->Save();
