@@ -191,11 +191,18 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 	ProductInfo.productID = NIL_UID;
 	ProductInfo.platform = NULL;		// Set by SDK when saving
 
-	// Large sectors for new files, small sectors for legacy files
-	const aafUID_t *fileKind = useLegacyDV ? &kAAFFileKind_Aaf512Binary : &kAAFFileKind_Aaf4KBinary;
 
-	if (formatMXF)
+	const aafUID_t *fileKind = 0;
+	if (!formatMXF) {
+	  // Large sectors for new files, small sectors for legacy files
+          if (useLegacyDV) {
+	    fileKind = &kAAFFileKind_Aaf512Binary;
+          } else {
+            fileKind = &kAAFFileKind_Aaf4KBinary;
+	  }
+	} else {
 	  fileKind = &aafFileKindMxfKlvBinary;
+	}
 
 	// Create a new AAF file
 	check(AAFFileOpenNewModifyEx(pFileName, fileKind, 0, &ProductInfo, &pFile));
