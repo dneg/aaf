@@ -219,7 +219,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 	check(pDictionary->LookupClassDef(AUID_AAFMasterMob, &pCDMasterMob));
 
 	/* Lookup any necessary data definitions. */
-	check(pDictionary->LookupDataDef(kAAFDataDef_Picture, &pPictureDef));
+	if (useLegacyDV) {
+	  check(pDictionary->LookupDataDef(kAAFDataDef_LegacyPicture, &pPictureDef));
+        } else {
+	  check(pDictionary->LookupDataDef(kAAFDataDef_Picture, &pPictureDef));
+	}
 
 	/* Create a Mastermob */
 
