@@ -63,6 +63,7 @@ const aafInt32 DV_PAL_FRAME_SIZE = 144000;
 const aafInt32 DV_NTSC_FRAME_SIZE = 120000;
 
 bool useLegacyDV = false;
+bool useDVBased = false;
 bool formatMXF = false;
 
  aafUID_t kAAFOpDef_Atom = { 0x0d010201, 0x1000, 0x0000, { 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
@@ -282,6 +283,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 	{
 		if (useLegacyDV)
 			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_LegacyDV_625_50 );
+		else if (useDVBased)
+			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_DV_Based_25Mbps_625_50 );
 		else
 			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_IEC_DV_625_50 );
 
@@ -291,6 +294,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 	{
 		if (useLegacyDV)
 			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_LegacyDV_525_60 );
+		else if (useDVBased)
+			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_DV_Based_25Mbps_525_60 );
 		else
 			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_IEC_DV_525_60 );
 
@@ -419,22 +424,25 @@ static HRESULT RegisterRequiredPlugins(void)
 
 void printUsage(const char *progname)
 {
-	cout << "Usage : " << progname << " [-legacyDV] [-ntsc] [-rawDV|-rawYUY2|-rawUYVY input_filename]" << endl;
+	cout << "Usage : " << progname << " [-mxf] [-legacyDV|-DVBased] [-ntsc] [-o outputfile] [-rawDV|-rawYUY2|-rawUYVY input_filename]" << endl;
 	cout << endl;
 	cout << "\tWith no arguments creates ExportDV.aaf containing 10 DV frames" << endl;
 	cout << endl;
-	cout << "\t-legacyDV use the legacy Compression ID and 6 extended properties found in legacy software" << endl;
-	cout << "\t-ntsc     treat input as 525 lines 60Hz video instead of default 626 lines 50Hz" << endl;
-	cout << "\t-rawDV    input video is compressed DV frames (raw DV)" << endl;
-	cout << "\t-rawYUY2  input video is uncompressed YUY2" << endl;
-	cout << "\t-rawUYVY  input video is uncompressed UYVY" << endl;
+	cout << "\t-mxf           store AAF file as KLV encoded file (OP Atom)" << endl;
+	cout << "\t-legacyDV      use the legacy Compression ID and 6 extended properties found in legacy software" << endl;
+	cout << "\t-DVBased       use DV-Based RP244 label for Compression ID (default IEC DV RP224 label)" << endl;
+	cout << "\t-ntsc          treat input as 525 lines 60Hz video instead of default 626 lines 50Hz" << endl;
+	cout << "\t-o file        write output to specified file instead of ExportDV.aaf" << endl;
+	cout << "\t-rawDV file    specified input video is already compressed DV (raw DIF)" << endl;
+	cout << "\t-rawYUY2 file  specified input video is in raw uncompressed YUY2 format" << endl;
+	cout << "\t-rawUYVY file  specified input video is in raw uncompressed UYVY format" << endl;
 }
 
 extern int main(int argc, char *argv[])
 {
 	CAAFInitialize aafInit;
 
-	aafWChar *		pwFileName	= L"ExportDV.aaf";
+	aafWChar 		pwFileName[FILENAME_MAX] = L"ExportDV.aaf";
 	bool			compressionEnable = true;		// convert from uncomp to DV by default
 
 	int i = 1;
@@ -447,6 +455,16 @@ extern int main(int argc, char *argv[])
 				printUsage(argv[0]);
 				return 0;
 			}
+			else if (!strcmp(argv[i], "-o"))
+			{
+				if (i >= argc-1)		// -o requires filename arg
+				{
+					printUsage(argv[0]);
+					return 1;
+				}
+				mbstowcs(pwFileName, argv[i+1], sizeof(pwFileName));
+				i += 2;
+			}
 			else if (!strcmp(argv[i], "-ntsc"))
 			{
 				formatPAL = false;
@@ -455,6 +473,11 @@ extern int main(int argc, char *argv[])
 			else if (!strcmp(argv[i], "-legacyDV"))
 			{
 				useLegacyDV = true;
+				i++;
+			}
+			else if (!strcmp(argv[i], "-DVBased"))
+			{
+				useDVBased = true;
 				i++;
 			}
 			else if (!strcmp(argv[i], "-rawDV"))
