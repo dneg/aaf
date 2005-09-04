@@ -323,3 +323,25 @@ AxString AxStringUtil::mobid2Str(const aafMobID_t & mobID)
 	}    
 	return mbtowc( buf );
 }
+
+
+AxString AxTaggedValueToString( IAAFTaggedValueSP& sp )
+{
+	aafUInt32 sizeInBytes = 0;
+
+	CHECK_HRESULT( sp->GetValueBufLen( &sizeInBytes ) );
+
+	// size is in bytes!  Divide by sizeof(aafCharacter) to allocate correctly
+	// sized aafCharacter array.  Add one to account for possible rounding.
+
+	int sizeInChars = (sizeInBytes /sizeof(aafCharacter)) + 1;
+	std::vector< aafCharacter > buf( sizeInChars );
+
+	aafUInt32 bytesRead; // unused
+	CHECK_HRESULT( sp->GetValue( sizeInChars*sizeof(aafCharacter),
+				     reinterpret_cast<aafDataBuffer_t>(&buf[0]), &bytesRead ) );
+
+	AxString name( &buf[0] );
+
+	return name;
+}

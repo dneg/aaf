@@ -151,6 +151,8 @@ AxString AxNameToString( IAAFSmartPointer< Type >& sp )
 	return name;
 }
 
+AxString AxTaggedValueToString( IAAFTaggedValueSP& sp );
+
 // Function template that will return a description given a smart
 // pointer of type "Type".  Type must have a "GetDescriptionBufLen",
 // and a "GetDescription" method.
