@@ -37,7 +37,7 @@ class TestGraph;
 class LoadPhase : public TestPhase
 {
  public:
-  LoadPhase(std::ostream& os, const std::basic_string<wchar_t> AAFFile);
+  LoadPhase(std::wostream& os, const std::basic_string<wchar_t> AAFFile);
   virtual ~LoadPhase();
 
   virtual boost::shared_ptr<TestResult> Execute();  

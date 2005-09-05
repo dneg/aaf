@@ -36,15 +36,13 @@ using namespace aafanalyzer;
 namespace aafanalyzer 	
 {
 
-LoadPhase::LoadPhase(std::ostream& os, const std::basic_string<wchar_t> AAFFile) 
-: TestPhase(os),
-  _FileName(AAFFile)
-{
-}
+LoadPhase::LoadPhase(std::wostream& os, const std::basic_string<wchar_t> AAFFile) 
+  : TestPhase(os),
+    _FileName(AAFFile)
+{}
 
 LoadPhase::~LoadPhase()
-{
-}
+{}
 
 boost::shared_ptr<TestGraph> LoadPhase::GetTestGraph()
 {

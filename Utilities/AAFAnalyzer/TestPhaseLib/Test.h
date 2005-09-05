@@ -40,20 +40,20 @@ namespace aafanalyzer {
 class Test
 {
  public:
-  Test(std::ostream& os);
+  Test(std::wostream& os);
   virtual ~Test();
 
   virtual boost::shared_ptr<TestResult> Execute() = 0;
   virtual AxString GetName() const;
   virtual AxString GetDescription() const;
-  std::ostream& GetOutStream() const;
+  std::wostream& GetOutStream() const;
   boost::shared_ptr<TestGraph> GetTestGraph();
 
 protected:
   void SetTestGraph(boost::shared_ptr<TestGraph> spTestGraph);
 
  private:
-  std::ostream& _os;
+  std::wostream& _os;
   boost::shared_ptr<TestGraph> _spTestGraph;
 
   // prohibited

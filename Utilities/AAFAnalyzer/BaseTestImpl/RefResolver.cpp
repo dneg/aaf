@@ -40,7 +40,7 @@ using namespace aafanalyzer;
 namespace aafanalyzer 
 {
 
-RefResolver::RefResolver(std::ostream& os, boost::shared_ptr<TestGraph> spTestGraph)
+RefResolver::RefResolver(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph)
 : Test(os)
 {
   SetTestGraph(spTestGraph);

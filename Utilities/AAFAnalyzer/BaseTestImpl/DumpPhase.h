@@ -31,7 +31,7 @@ class TestGraph;
 class DumpPhase : public TestPhase
 {
  public:
-  DumpPhase(std::ostream& os, boost::shared_ptr<TestGraph> spTestGraph);
+  DumpPhase(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph);
   ~DumpPhase();
 
   boost::shared_ptr<TestGraph> GetTestGraph();

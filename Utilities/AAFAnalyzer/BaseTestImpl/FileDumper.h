@@ -29,12 +29,12 @@ namespace aafanalyzer {
 class FileDumper : public Test
 {
  public:
-  FileDumper(std::ostream& os, boost::shared_ptr<TestGraph> spTestGraph);
+  FileDumper(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph);
   ~FileDumper();
 
-  boost::shared_ptr<TestResult> Execute();
-  AxString GetName();
-  AxString GetDescription();
+  virtual boost::shared_ptr<TestResult> Execute();
+  virtual AxString GetName() const;
+  virtual AxString GetDescription() const;
 
  private:
 

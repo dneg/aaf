@@ -42,7 +42,7 @@ class AcyclicVisitor : public Visitor
 
   typedef std::vector<Node::LID> Vector;
 
-  AcyclicVisitor(std::ostream& os);
+  AcyclicVisitor(std::wostream& os);
   virtual ~AcyclicVisitor();
 
   virtual bool PreOrderVisit(Node& node);
@@ -54,7 +54,7 @@ class AcyclicVisitor : public Visitor
   bool IsPresent(Node::LID lid);
   void Erase(Node::LID lid);
 
-  std::ostream& _os;
+  std::wostream& _os;
   boost::shared_ptr< TestResult > _spResult;
   Vector _Vector;
 

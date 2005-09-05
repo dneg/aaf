@@ -37,16 +37,16 @@ namespace aafanalyzer {
 class TestPhase
 {
  public:
-  TestPhase(std::ostream& os);
+  TestPhase(std::wostream& os);
   virtual ~TestPhase();
 
-  virtual std::string GetDescription();
-  virtual std::string GetName();
+  virtual AxString GetDescription() const;
+  virtual AxString GetName() const;
   virtual boost::shared_ptr<TestResult> Execute() = 0; 
-  std::ostream& GetOutStream(); 
+  std::wostream& GetOutStream() const;
 
  private:
-  std::ostream& _os;
+  std::wostream& _os;
 
   // prohibited
   TestPhase();

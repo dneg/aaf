@@ -31,18 +31,18 @@ void OutputResultMsgs(boost::shared_ptr<const TestResult> res, unsigned int leve
   std::wcout << LevelToIndent(level) << res->GetDescription() << std::endl;
   
   if(res->GetResult() == TestResult::PASS) {
-    std::wcout << LevelToIndent(level) << L"Test Passed!" << std::endl << std::endl;
+    std::wcout << LevelToIndent(level) << L"Test Passed" << std::endl << std::endl;
   }
 
   else if(res->GetResult() == TestResult::WARN)
   {
-    std::wcout << LevelToIndent(level) << L"Test Passed, but with warnings!" << std::endl;
+    std::wcout << LevelToIndent(level) << L"Test Passed, but with warnings." << std::endl;
     std::wcout << LevelToIndent(level) << res->GetExplanation() << std::endl << std::endl;
   }
 
   else if(res->GetResult() == TestResult::FAIL)
   {
-    std::wcout << LevelToIndent(level) << L"Test Failed!" << std::endl;
+    std::wcout << LevelToIndent(level) << L"Test Failed" << std::endl;
     std::wcout << LevelToIndent(level) << res->GetExplanation() << std::endl << std::endl;
   }
   else
@@ -71,10 +71,17 @@ std::ostream& operator<<( std::ostream& os, const Usage& )
   return os;
 };
 
+//======================================================================
+
 } // end of namespace
+
 
 int main( int argc, char** argv )
 {
+  using namespace boost;
+  using namespace std;
+  using namespace aafanalyzer;
+
   try
   {
     //
@@ -84,10 +91,10 @@ int main( int argc, char** argv )
     AxCmdLineArgs args( argc, argv );
 
     // Dump option
-    std::pair<bool,int> dumpArg = args.get( "-dump" );
+    pair<bool,int> dumpArg = args.get( "-dump" );
 
     // Filename is the last argument.
-    std::pair<bool,const char*> fileNameArg = args.get( argc-1, 1 );
+    pair<bool,const char*> fileNameArg = args.get( argc-1, 1 );
 
     if ( !fileNameArg.first )
     {
@@ -100,16 +107,17 @@ int main( int argc, char** argv )
 
     AxInit axInitObj;
     
-    const std::basic_string<wchar_t> fileName = AxStringUtil::mbtowc( fileNameArg.second );
+    const basic_string<wchar_t> fileName = AxStringUtil::mbtowc( fileNameArg.second );
 
-    //Create the result object.
+    //Create the root result object.
     boost::shared_ptr<TestResult> spSubResult;
-    boost::shared_ptr<TestResult> spResult(new TestResult());
-    spResult->SetName(L"AAF Analyzer");
-    spResult->SetDescription(L"Run a suite of tests on an AAF file.");
+    boost::shared_ptr<TestResult> spResult( new TestResult() );
+    spResult->SetName( L"AAF Analyzer" );
+    spResult->SetDescription( L"Run a suite of tests on an AAF file." );
     
-    //first phase
-    LoadPhase load(std::cout, fileName); 
+    // First phase: load the aaf file, and build the object graph.
+    LoadPhase load( wcout, fileName );
+    shared_ptr<TestGraph> spGraph = load.GetTestGraph();
     spSubResult = load.Execute();
     spResult->AppendSubtestResult(spSubResult);
     
@@ -118,7 +126,7 @@ int main( int argc, char** argv )
     // optional dump phase
     if ( dumpArg.first )
     {
-	  DumpPhase dump(std::cout, load.GetTestGraph());
+      DumpPhase dump(wcout, load.GetTestGraph());
       spSubResult = dump.Execute();
       spResult->AppendSubtestResult(spSubResult);
     }
@@ -128,19 +136,19 @@ int main( int argc, char** argv )
   }
   catch ( const Usage& ex )
   {
-    std::cout << ex << std::endl;
+    cout << ex << endl;
   }
   catch ( const AxExHResult& ex )
   {
-    std::wcout << L"Error: " << ex.widewhat() << std::endl;
+    wcout << L"Error: " << ex.widewhat() << endl;
   }
-  catch ( const std::exception& ex )
+  catch ( const exception& ex )
   {
-    std::cout << "Error: " << ex.what() << std::endl;
+    cout << "Error: " << ex.what() << endl;
   }
   catch ( ... )
   {
-    std::cout << "Error: unhandled exeption" << std::endl;
+    cout << "Error: unhandled exeption" << endl;
   }
   
   return 0;

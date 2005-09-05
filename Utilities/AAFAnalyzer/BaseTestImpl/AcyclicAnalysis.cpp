@@ -37,7 +37,7 @@ using namespace aafanalyzer;
 namespace aafanalyzer 
 {
 
-AcyclicAnalysis::AcyclicAnalysis(std::ostream& os, boost::shared_ptr<TestGraph> spTestGraph)
+AcyclicAnalysis::AcyclicAnalysis(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph)
 : Test(os)
 {
   SetTestGraph(spTestGraph);
@@ -74,13 +74,13 @@ boost::shared_ptr<TestResult> AcyclicAnalysis::Execute()
 
 AxString AcyclicAnalysis::GetName() const
 {
-  AxString name = L"--- Acyclic Analysis Test ---";
+  AxString name = L"Acyclic Analysis Test";
   return name;
 }
 
 AxString AcyclicAnalysis::GetDescription() const
 {
-  AxString description = L"Test Description: Traverse the directed graph and ensure it is acyclic.";
+  AxString description = L"Verify that source references are not cyclic.";
   return description;
 }
 

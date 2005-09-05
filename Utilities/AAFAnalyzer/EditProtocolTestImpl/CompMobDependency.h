@@ -18,8 +18,8 @@
 //
 //=---------------------------------------------------------------------=
 
-#ifndef __COMPMOBDEPENDENCY_h__
-#define __COMPMOBDEPENDENCY_h__
+#ifndef __CompMobDependency_h__
+#define __CompMobDependency_h__
 
 #include <AAFTypedObjNode.h>
 
@@ -42,12 +42,12 @@ class CompMobDependency : public Test
   typedef vector<CompMobNodeSP> CompMobNodeVector;
   typedef shared_ptr<CompMobNodeVector> CompMobNodeVectorSP;
 
-  CompMobDependency(std::ostream& os, boost::shared_ptr<TestGraph> spTestGraph);
+  CompMobDependency(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph);
   ~CompMobDependency();
 
   boost::shared_ptr<TestResult> Execute();
-  AxString GetName();
-  AxString GetDescription();
+  AxString GetName() const;
+  AxString GetDescription() const;
 
   CompMobNodeVectorSP GetRootCompMobNodes();
 

@@ -36,15 +36,13 @@ using namespace aafanalyzer;
 namespace aafanalyzer 	
 {
 
-DumpPhase::DumpPhase(std::ostream& os, boost::shared_ptr<TestGraph> spTestGraph) 
+DumpPhase::DumpPhase(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph) 
 : TestPhase(os),
   _spTestGraph(spTestGraph)
-{
-}
+{}
 
 DumpPhase::~DumpPhase()
-{
-}
+{}
 
 boost::shared_ptr<TestGraph> DumpPhase::GetTestGraph()
 {

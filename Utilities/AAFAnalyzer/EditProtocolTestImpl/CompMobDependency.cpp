@@ -37,7 +37,7 @@ using namespace aafanalyzer;
 namespace aafanalyzer 
 {
 
-CompMobDependency::CompMobDependency(std::ostream& os, boost::shared_ptr<TestGraph> spTestGraph)
+CompMobDependency::CompMobDependency(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph)
 : Test(os)
 {
   SetTestGraph(spTestGraph);
@@ -74,15 +74,15 @@ boost::shared_ptr<TestResult> CompMobDependency::Execute()
   return spResult;
 }
 
-AxString CompMobDependency::GetName()
+AxString CompMobDependency::GetName() const
 {
-  AxString name = L"--- CompositionMob Dependency Test ---";
+  AxString name = L"CompositionMob Dependency Test";
   return name;
 }
 
-AxString CompMobDependency::GetDescription()
+AxString CompMobDependency::GetDescription() const
 {
-  AxString description = L"Test Description: Traverse the directed graph and count composition mob references.";
+  AxString description = L"Traverse the directed graph and count composition mob references.";
   return description;
 }
 

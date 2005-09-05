@@ -44,7 +44,7 @@ using namespace aafanalyzer;
 
 namespace aafanalyzer {
 
-AcyclicVisitor::  AcyclicVisitor(std::ostream& os)
+AcyclicVisitor::  AcyclicVisitor(std::wostream& os)
   : _os(os),
     _spResult( new TestResult( L"AcyclicVisitor",
                                L"Detects cycles in an AAF object graph.",

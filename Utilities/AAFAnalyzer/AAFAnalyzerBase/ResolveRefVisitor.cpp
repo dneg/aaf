@@ -44,7 +44,7 @@ using namespace aafanalyzer;
 //======================================================================
 namespace aafanalyzer {
 
-ResolveRefVisitor::ResolveRefVisitor(std::ostream& os, boost::shared_ptr<EdgeMap> spEdgeMap )
+ResolveRefVisitor::ResolveRefVisitor(std::wostream& os, boost::shared_ptr<EdgeMap> spEdgeMap )
 : _os(os),
   _spEdgeMap(spEdgeMap),
   _spResult( new TestResult( L"ResolveRefVisitor",

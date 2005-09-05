@@ -29,12 +29,12 @@ namespace aafanalyzer {
 class FileLoad : public Test
 {
  public:
-  FileLoad(std::ostream& os, const std::basic_string<wchar_t> AAFFile);
+  FileLoad(std::wostream& os, const std::basic_string<wchar_t> AAFFile);
   ~FileLoad();
 
   boost::shared_ptr<TestResult> Execute();
-  AxString GetName();
-  AxString GetDescription();
+  AxString GetName() const;
+  AxString GetDescription() const;
 
  private:
   const std::basic_string<wchar_t> _File;

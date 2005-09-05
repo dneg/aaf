@@ -40,9 +40,9 @@ using namespace aafanalyzer;
 namespace aafanalyzer 
 {
 
-FileLoad::FileLoad(std::ostream& os, const std::basic_string<wchar_t> AAFFile)
-: Test(os),
-  _File(AAFFile)
+FileLoad::FileLoad(std::wostream& os, const std::basic_string<wchar_t> AAFFile)
+  : Test(os),
+    _File(AAFFile)
 {
 }
 
@@ -75,15 +75,15 @@ boost::shared_ptr<TestResult> FileLoad::Execute()
   return spResult;
 }
 
-AxString FileLoad::GetName()
+AxString FileLoad::GetName() const
 {
-  AxString name = L"--- File Load Test ---";
+  AxString name = L"File Load Test";
   return name;
 }
 
-AxString FileLoad::GetDescription()
+AxString FileLoad::GetDescription() const
 {
-  AxString description = L"Test Description: Load an AAF file and build a graph of contained AAF objects.";
+  AxString description = L"Load an AAF file and build a graph of contained AAF objects.";
   return description;
 }
 

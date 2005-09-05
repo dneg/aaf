@@ -29,7 +29,7 @@ namespace aafanalyzer {
 class AcyclicAnalysis : public Test
 {
  public:
-  AcyclicAnalysis(std::ostream& os, boost::shared_ptr<TestGraph> spTestGraph);
+  AcyclicAnalysis(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph);
   ~AcyclicAnalysis();
 
   boost::shared_ptr<TestResult> Execute();

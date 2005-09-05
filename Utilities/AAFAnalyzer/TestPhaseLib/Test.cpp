@@ -34,7 +34,7 @@ using namespace aafanalyzer;
 namespace aafanalyzer 
 {
 
-Test::Test(std::ostream& os)
+Test::Test(std::wostream& os)
 : _os(os)
 {
 }
@@ -55,7 +55,7 @@ AxString Test::GetDescription() const
   return null;
 }
 
-std::ostream& Test::GetOutStream() const
+std::wostream& Test::GetOutStream() const
 {
   return _os;
 }

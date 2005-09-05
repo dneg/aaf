@@ -36,7 +36,7 @@ class EdgeMap;
 class ResolveRefVisitor : public TypedVisitor
 {
  public:
-  ResolveRefVisitor(std::ostream& os, boost::shared_ptr<EdgeMap> spEdgeMap);
+  ResolveRefVisitor(std::wostream& os, boost::shared_ptr<EdgeMap> spEdgeMap);
   virtual ~ResolveRefVisitor();
 
   virtual bool PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node);
@@ -45,7 +45,7 @@ class ResolveRefVisitor : public TypedVisitor
   boost::shared_ptr<const TestResult> GetTestResult() const;
 
  private:
-  std::ostream& _os;
+  std::wostream& _os;
   boost::shared_ptr<EdgeMap> _spEdgeMap;
   boost::shared_ptr< TestResult > _spResult;
 

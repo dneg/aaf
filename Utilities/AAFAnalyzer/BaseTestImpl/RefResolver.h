@@ -29,7 +29,7 @@ namespace aafanalyzer {
 class RefResolver : public Test
 {
  public:
-  RefResolver(std::ostream& os, boost::shared_ptr<TestGraph> spTestGraph);
+  RefResolver(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph);
   ~RefResolver();
 
   boost::shared_ptr<TestResult> Execute();

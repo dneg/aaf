@@ -70,7 +70,7 @@ class NodeRefCountVisitor : public TypedVisitor
   typedef vector<ReferencedNodeSP> ReferencedNodeVector;
   typedef shared_ptr<ReferencedNodeVector> ReferencedNodeVectorSP;
 
-  NodeRefCountVisitor(std::ostream& os, TestResult& result)
+  NodeRefCountVisitor(std::wostream& os, TestResult& result)
     : _os(os),
      _result(result)
   {}
@@ -147,7 +147,7 @@ class NodeRefCountVisitor : public TypedVisitor
     return iter != _nodeMap.end();
   }
 
-  std::ostream& _os;
+  std::wostream& _os;
   TestResult& _result;
   NodeMap _nodeMap;   //<LID, ref count>
 };

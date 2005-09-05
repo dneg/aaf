@@ -34,7 +34,7 @@ using namespace aafanalyzer;
 namespace aafanalyzer 
 {
 
-TestPhase::TestPhase(std::ostream& os)
+TestPhase::TestPhase(std::wostream& os)
 : _os(os)
 {
 }
@@ -43,19 +43,17 @@ TestPhase::~TestPhase()
 {
 }
 
-std::string TestPhase::GetDescription()
+AxString TestPhase::GetDescription() const
 {
-  std::string null;
-  return null;
+  return L"";
 }
 
-std::string TestPhase::GetName()
+AxString TestPhase::GetName() const
 {
-  std::string null;
-  return null;
+  return L"";
 }
 
-std::ostream& TestPhase::GetOutStream()
+std::wostream& TestPhase::GetOutStream() const
 {
   return _os;
 }
