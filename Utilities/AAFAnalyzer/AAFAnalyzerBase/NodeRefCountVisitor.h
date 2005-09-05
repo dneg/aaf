@@ -59,20 +59,24 @@ class NodeRefCountVisitor : public TypedVisitor
  public:
 
   // Map Node::LID to a reference count for that node.
-  typedef std::map<Node::LID, int> NodeMap;
+  typedef map<Node::LID, int> NodeMap;
 
   // Map a reference count value to a vector of all nodes with that
   // reference count.
-  typedef std::map<int, std::vector<Node::LID> > RefCountMap;
+  typedef map<int, vector<Node::LID> > RefCountMap;
 
   typedef AAFTypedObjNode<AAFObjType> ReferencedNode;
   typedef shared_ptr<ReferencedNode> ReferencedNodeSP;
   typedef vector<ReferencedNodeSP> ReferencedNodeVector;
   typedef shared_ptr<ReferencedNodeVector> ReferencedNodeVectorSP;
 
-  NodeRefCountVisitor(std::wostream& os, TestResult& result)
+  NodeRefCountVisitor(wostream& os)
     : _os(os),
-     _result(result)
+      _spResult( new TestResult( L"NodeRefCountVisitor",
+				 L"Counts references to nodes of a particular type.",
+				 L"", // explain
+				 L"", // docref
+				 TestResult::PASS ) )
   {}
 
   virtual ~NodeRefCountVisitor()
@@ -135,6 +139,11 @@ class NodeRefCountVisitor : public TypedVisitor
     return spNodes;
   }
 
+  shared_ptr<TestResult> GetTestResult() const
+  {
+    return _spResult;
+  }
+
  private:
 
   // prohibited
@@ -147,8 +156,8 @@ class NodeRefCountVisitor : public TypedVisitor
     return iter != _nodeMap.end();
   }
 
-  std::wostream& _os;
-  TestResult& _result;
+  wostream& _os;
+  shared_ptr<TestResult> _spResult;
   NodeMap _nodeMap;   //<LID, ref count>
 };
 

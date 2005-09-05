@@ -26,6 +26,9 @@ namespace {
 
 using namespace aafanalyzer;
 
+const wchar_t* PHASE_NAME = L"Load Phase";
+const wchar_t* PHASE_DESC = L"Load an AAF file, reslove references, and ensure the graph is acyclic.";
+
 } // end of namespace
 
 
@@ -52,10 +55,11 @@ boost::shared_ptr<TestGraph> LoadPhase::GetTestGraph()
 boost::shared_ptr<TestResult> LoadPhase::Execute() 
 {
 
-  boost::shared_ptr<TestResult> spLoadTest(new TestResult());
-  spLoadTest->SetName(L"LoadPhase");
-  spLoadTest->SetDescription(L"Load an AAF file, reslove references, and ensure the graph is acyclic.");
-
+  boost::shared_ptr<TestResult> spLoadTest(new TestResult( PHASE_NAME,
+							   PHASE_DESC,
+							   L"", // explain
+							   L"", // docref
+							   TestResult::PASS ));
   //load the AAF file and create the graph
   FileLoad load(GetOutStream(), _FileName);
   spLoadTest->AppendSubtestResult(load.Execute());

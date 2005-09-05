@@ -50,9 +50,8 @@ CompMobDependency::~CompMobDependency()
 boost::shared_ptr<TestResult> CompMobDependency::Execute()
 {
 
-  boost::shared_ptr<TestResult> spVisitorResult(new TestResult());
   boost::shared_ptr<NodeRefCountVisitor<IAAFCompositionMob> > spVisitor(
-       new NodeRefCountVisitor<IAAFCompositionMob>( GetOutStream(), *spVisitorResult) );
+       new NodeRefCountVisitor<IAAFCompositionMob>( GetOutStream() ) );
 
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
 
@@ -66,10 +65,10 @@ boost::shared_ptr<TestResult> CompMobDependency::Execute()
 
   dfs.TraverseDown(spVisitor, GetTestGraph()->GetRootNode()); 
   
-  spResult->AppendSubtestResult(spVisitorResult);
-  spResult->SetResult(spResult->GetAggregateResult());
-
   _spRootCompMobs = spVisitor->GetNodesWithCount(0);
+
+  spResult->AppendSubtestResult( spVisitor->GetTestResult() );
+  spResult->SetResult(spResult->GetAggregateResult());
 
   return spResult;
 }
