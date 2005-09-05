@@ -39,6 +39,19 @@ AxString catUnknownStr( L"unknown" );
 
 //=---------------------------------------------------------------------=
 
+// AxContants go here
+
+const aafMobID_t AxConstants::NULL_MOBID  =  { {0,0,0,0,0,0,0,0,0,0,0,0}, // SMPTELable
+					       0, // length
+					       0, // instanceHigh
+					       0, // instanceMid
+					       0, // instanceLow
+					       { 0, 0, 0, {0,0,0,0,0,0,0,0} } // material (uuid) 
+                                             };
+
+//=---------------------------------------------------------------------=
+
+
 AxTypeCatMap::AxTypeCatMap()
 {
 #define MAP_ADD( T ) _map[ kAAFTypeCat##T ] = \

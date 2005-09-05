@@ -32,6 +32,13 @@
 
 #include <map>
 
+// Useful constants that appear over and over again.
+class AxConstants
+{
+ public:
+  static const aafMobID_t NULL_MOBID;
+};
+
 // Map eAAFTypeCategory_t to string
 
 class AxTypeCatMap {
