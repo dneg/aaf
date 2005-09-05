@@ -34,11 +34,19 @@ using namespace aafanalyzer;
 //======================================================================
 //======================================================================
 //======================================================================
+
+// FIXME - General comment here: the alogorithm can be optimized here.
+// The post order visit calls erase, and erase searches the whole
+// vector.  I beleive the end of the list can simply popped (assert
+// the LID matches that of the current node.  Further, IsPresent()
+// searchers a vector.  a map would speed this up.  This will be
+// important in deep graphs (long reference chains.).
+
 namespace aafanalyzer {
 
 AcyclicVisitor::  AcyclicVisitor(std::ostream& os)
   : _os(os),
-    _spResult( new TestResult( L"Acyclic analysis",
+    _spResult( new TestResult( L"AcyclicVisitor",
                                L"Detects cycles in an AAF object graph.",
                                L"No cycles found.",
                                L"", // DOCREF REQUIRED
@@ -73,16 +81,17 @@ bool AcyclicVisitor::PreOrderVisit(Node& node)
     return true;
   }
  
-  //a cycle was detected
-  _spResult->SetExplanation(L"Error: Cycle detected!");
+  // a cycle was detected
+  _spResult->SetExplanation(L"Cycle detected.!");
   _spResult->SetResult(TestResult::FAIL);
 
-  std::cout << "Nodes of the cycle:" << std::endl;
+  // FIXME - Dump something more useful than the vector of LIDs.
+  _os << "Nodes of the cycle:" << std::endl;
   for(unsigned int i = 0; i < _Vector.size(); i++)
   {
-    std::cout << _Vector.at(i) << std::endl;
+    _os << _Vector.at(i) << std::endl;
   }
-  std::cout << lid << std::endl;
+  _os << lid << std::endl;
 
   return false;
 }

@@ -56,7 +56,7 @@ boost::shared_ptr<TestResult> LoadPhase::Execute()
 
   boost::shared_ptr<TestResult> spLoadTest(new TestResult());
   spLoadTest->SetName(L"LoadPhase");
-  spLoadTest->SetDescription(L"Load an AAF file, reslove all references and ensure the graph is acyclic.");
+  spLoadTest->SetDescription(L"Load an AAF file, reslove references, and ensure the graph is acyclic.");
 
   //load the AAF file and create the graph
   FileLoad load(GetOutStream(), _FileName);
