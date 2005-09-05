@@ -21,7 +21,7 @@
 #ifndef __TEMPLATE_h__
 #define __TEMPLATE_h__
 
-namesapce aafanalyzer {
+namespace aafanalyzer {
 
 using namespace boost;
 using namespace std;
