@@ -23,6 +23,8 @@
 #include <CompMobDependency.h>
 #include <TestResult.h>
 
+#include <sstream>
+
 namespace {
 
 using namespace aafanalyzer;
@@ -70,7 +72,21 @@ boost::shared_ptr<TestResult> EPMobDepPhase::Execute()
   shared_ptr<TestResult> depTestResult = depTest.Execute();
   spTestResult->AppendSubtestResult( depTest.Execute() );
 
-  //  spTestResult->SetResult( spTestResult->GetAggregateResult() );
+  spTestResult->SetResult( spTestResult->GetAggregateResult() );
+
+  CompMobDependency::CompMobNodeVectorSP spRootNodes = depTest.GetRootCompMobNodes();
+  wstringstream ss;
+  ss << spRootNodes->size() << L" unreferenced composition ";
+  if ( spRootNodes->size() == 1 )
+  {
+    ss << L"mob ";
+  }
+  else
+  {
+    ss << L"mobs ";
+  }
+  ss << "found.";
+  spTestResult->AddDetail( ss.str() );
 
   return spTestResult;
 }

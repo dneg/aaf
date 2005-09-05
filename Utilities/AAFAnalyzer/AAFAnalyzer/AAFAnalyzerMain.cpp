@@ -30,6 +30,7 @@
 
 //STL files
 #include <string>
+#include <algorithm>
 
 namespace {
 
@@ -46,30 +47,53 @@ std::basic_string<wchar_t> LevelToIndent(unsigned int l)
   return indent;
 }
 
+class OutputDetail
+{
+public:
+  OutputDetail( unsigned int level )
+    :  _level( level )
+  {}
+  void operator() ( const AxString& detail )
+  {
+      std::wcout << LevelToIndent( _level ) << L"Detail:\t" << detail << endl;
+  }
+private:
+  unsigned int _level;
+};
+
 void OutputResultMsgs(boost::shared_ptr<const TestResult> res, unsigned int level)
 {
-  std::wcout << LevelToIndent(level) << res->GetName() << std::endl;
-  std::wcout << LevelToIndent(level) << res->GetDescription() << std::endl;
+  std::wcout << LevelToIndent(level) << "Name:\t" << res->GetName() << std::endl;
+  std::wcout << LevelToIndent(level) << "Desc:\t" << res->GetDescription() << std::endl;
   
+  const vector<AxString>& details = res->GetDetails();
+  if ( !details.empty() )
+  {
+    for_each( details.begin(), details.end(), OutputDetail( level ) );
+  }
+
+  std::wcout << LevelToIndent(level) << "Result:\t";
   if(res->GetResult() == TestResult::PASS) {
-    std::wcout << LevelToIndent(level) << L"Test Passed" << std::endl << std::endl;
+    std::wcout << L"Passed" << std::endl;
   }
 
   else if(res->GetResult() == TestResult::WARN)
   {
-    std::wcout << LevelToIndent(level) << L"Test Passed, but with warnings." << std::endl;
-    std::wcout << LevelToIndent(level) << res->GetExplanation() << std::endl << std::endl;
+    std::wcout << L"Passed, but with warnings." << std::endl;
+    std::wcout << res->GetExplanation() << std::endl;
   }
 
   else if(res->GetResult() == TestResult::FAIL)
   {
-    std::wcout << LevelToIndent(level) << L"Test Failed" << std::endl;
-    std::wcout << LevelToIndent(level) << res->GetExplanation() << std::endl << std::endl;
+    std::wcout << L"Failed" << std::endl;
+    std::wcout << res->GetExplanation() << std::endl;
   }
   else
   {
     assert(0);
   }
+
+  std::wcout << std::endl;
   
   if ( res->ContainsSubtests() )
   {

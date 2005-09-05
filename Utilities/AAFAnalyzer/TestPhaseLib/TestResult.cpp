@@ -148,4 +148,14 @@ bool TestResult::ContainsSubtests() const {
     return !_spSubtestResults->empty();
 }
 
+void TestResult::AddDetail( AxString detail )
+{
+  _details.push_back( detail );
+}
+
+const vector<AxString>& TestResult::GetDetails() const
+{
+  return _details;
+}
+
 } // end of namespace diskstream

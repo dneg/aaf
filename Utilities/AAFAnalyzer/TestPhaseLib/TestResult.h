@@ -69,12 +69,18 @@ class TestResult
   enum Result GetAggregateResult() const;
   bool ContainsSubtests() const;
 
+  void AddDetail( AxString detail );
+  const vector<AxString>& GetDetails() const;
+
  private:
   AxString _name;
   AxString _desc;
   AxString _expl;
   AxString _docRef;
   enum Result _result;
+
+  // Arbitrary comments that can be added to any result.
+  vector<AxString> _details;
   
   SubtestResultsSP _spSubtestResults; 
   enum Result _aggregateEnumResult;
