@@ -134,7 +134,7 @@ int main( int argc, char** argv )
     boost::shared_ptr<TestResult> spSubResult;
     boost::shared_ptr<TestResult> spResult( new TestResult() );
     spResult->SetName( L"AAF Analyzer" );
-    spResult->SetDescription( L"Run a suite of tests on an AAF file." );
+    spResult->SetDescription( L"AAF Edit Protocol compliance test." );
     
     // First phase: load the aaf file, and build the object graph.
     LoadPhase load( wcout, fileName );
