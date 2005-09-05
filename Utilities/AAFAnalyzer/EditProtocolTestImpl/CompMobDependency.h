@@ -43,11 +43,11 @@ class CompMobDependency : public Test
   typedef shared_ptr<CompMobNodeVector> CompMobNodeVectorSP;
 
   CompMobDependency(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph);
-  ~CompMobDependency();
+  virtual ~CompMobDependency();
 
-  boost::shared_ptr<TestResult> Execute();
-  AxString GetName() const;
-  AxString GetDescription() const;
+  virtual boost::shared_ptr<TestResult> Execute();
+  virtual AxString GetName() const;
+  virtual AxString GetDescription() const;
 
   CompMobNodeVectorSP GetRootCompMobNodes();
 
