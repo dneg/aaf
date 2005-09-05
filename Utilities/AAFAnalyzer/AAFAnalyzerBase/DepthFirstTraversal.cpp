@@ -68,6 +68,11 @@ void DepthFirstTraversal::TraverseDown(boost::shared_ptr<Visitor> spVisitor, boo
   spNode->PostOrderVisit(spVisitor);
 }
 
+void DepthFirstTraversal::TraverseDown(boost::shared_ptr<Visitor> spVisitor )
+{
+  TraverseDown( spVisitor, _spStartNode );
+}
+
 void DepthFirstTraversal::TraverseUp(boost::shared_ptr<Visitor> spVisitor, boost::shared_ptr<Node> spNode)
 {
   EdgeMap::EdgeVectorSP theParents = _spEdgeMap->GetParents(spNode);  
@@ -85,6 +90,11 @@ void DepthFirstTraversal::TraverseUp(boost::shared_ptr<Visitor> spVisitor, boost
   }
 
   spNode->PostOrderVisit(spVisitor);
+}
+
+void DepthFirstTraversal::TraverseUp(boost::shared_ptr<Visitor> spVisitor )
+{
+  TraverseUp( spVisitor, _spStartNode );
 }
 
 

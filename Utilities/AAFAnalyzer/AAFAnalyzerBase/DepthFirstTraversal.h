@@ -37,8 +37,12 @@ class DepthFirstTraversal
   DepthFirstTraversal(boost::shared_ptr<EdgeMap> spEdgeMap, boost::shared_ptr<Node> spStartNode);
   ~DepthFirstTraversal();
 
+  // Depricated (there is no need to pass a start node here).
   void TraverseDown(boost::shared_ptr<Visitor> spVisitor, boost::shared_ptr<Node> spNode);
   void TraverseUp(boost::shared_ptr<Visitor> spVisitor, boost::shared_ptr<Node> spNode);
+
+  void TraverseDown(boost::shared_ptr<Visitor> spVisitor );
+  void TraverseUp(boost::shared_ptr<Visitor> spVisitor );
 
  private:
   boost::shared_ptr<EdgeMap> _spEdgeMap;
