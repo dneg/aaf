@@ -21,6 +21,8 @@
 #include <EPMobDepPhase.h>
 
 #include <CompMobDependency.h>
+#include <EPDerivationTest.h>
+
 #include <TestResult.h>
 
 #include <sstream>
@@ -60,7 +62,7 @@ AxString EPMobDepPhase::GetName() const
 
 boost::shared_ptr<TestResult> EPMobDepPhase::Execute()
 {
-  shared_ptr<TestResult> spTestResult( new TestResult( PHASE_NAME,        // name
+  shared_ptr<TestResult> spPhaseResult( new TestResult( PHASE_NAME,        // name
 						       PHASE_DESC,        // desc
 						       L"",               // explain
 						       L"",               // DOCREF REQUIRED
@@ -70,9 +72,9 @@ boost::shared_ptr<TestResult> EPMobDepPhase::Execute()
 
   CompMobDependency depTest( _log, _spGraph );
   shared_ptr<TestResult> depTestResult = depTest.Execute();
-  spTestResult->AppendSubtestResult( depTest.Execute() );
+  spPhaseResult->AppendSubtestResult( depTest.Execute() );
 
-  spTestResult->SetResult( spTestResult->GetAggregateResult() );
+  spPhaseResult->SetResult( spPhaseResult->GetAggregateResult() );
 
   CompMobDependency::CompMobNodeVectorSP spRootNodes = depTest.GetRootCompMobNodes();
   wstringstream ss;
@@ -86,9 +88,14 @@ boost::shared_ptr<TestResult> EPMobDepPhase::Execute()
     ss << L"mobs ";
   }
   ss << "found.";
-  spTestResult->AddDetail( ss.str() );
+  spPhaseResult->AddDetail( ss.str() );
 
-  return spTestResult;
+  // Second, run the dependency test to verify the chains starting
+  // with the identified root compositions.
+  EPDerivationTest derivationTest( _log, _spGraph, spRootNodes );
+  spPhaseResult->AppendSubtestResult( derivationTest.Execute() );
+
+  return spPhaseResult;
 }
 
 } // end of namespace aafanalyzer
