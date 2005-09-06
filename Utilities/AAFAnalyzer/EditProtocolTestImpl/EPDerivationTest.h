@@ -30,7 +30,7 @@ namespace aafanalyzer {
 using namespace boost;
 using namespace std;
 
- class EPDerivationTest : public Test
+class EPDerivationTest : public Test
 {
  public:
 
@@ -49,7 +49,6 @@ using namespace std;
   EPDerivationTest();
   EPDerivationTest( const EPDerivationTest& );
   EPDerivationTest& operator=( const EPDerivationTest& );
-
 
   shared_ptr<TestGraph> _spGraph;
   CompMobDependency::CompMobNodeVectorSP _spTopLevelCompMobs;

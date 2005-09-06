@@ -25,6 +25,9 @@
 
 #include <AxMob.h>
 
+#include <AAFExtEnum.h>
+#include <AAFResult.h>
+
 namespace {
 
 using namespace aafanalyzer;
@@ -35,40 +38,110 @@ const wchar_t* TEST_DESC = L"Verify the correctness of mob derivation chains.";
 //======================================================================
 
 // MobChainVisitor visitors all mob types. It asserts the ordering
-// conventions specified by the Edit Protocol.  Those conventions are
-// implemented by TBD.
+// conventions specified by the Edit Protocol.
+//
+// These conventions are implemented using the statemachine implemented
+// by <class to be implemented>.
+//
+// Pending the implementation of the state machine, we simple verify
+// that the root compositions are in top-level.
+//
+// About the EdgeVisit methods: To visit all mobs in the derivation
+// chain we must follow containment edges, and mob reference edges.
+// The base class follows these by default so we do nothing here. We
+// not, however, want to follow slot references or component
+// references. Doing so would be useless because we'd miss the
+// referenced mob object, further, it would be redundant if we are
+// also folloing the mob reference.
+
 
 class MobChainVisitor : public TypedVisitor
 {
 public:
   MobChainVisitor( wostream& log )
     : TypedVisitor(),
-      _log( log )
+      _log( log ),
+      _spResult( new TestResult( L"MobChainVisitor",
+				 L"Visit mobs and verify derivation order.",
+				 L"", // explain
+				 L"", // DOCREF REQUIRED
+				 TestResult::PASS ) )
   {}
 
   virtual ~MobChainVisitor()
   {}
  
-  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob> spNode )
+  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node )
   {
-    _log << L"Visit composition mob." << endl;
+    // TEMPORARY - Simply confirm that root node is top level!
+    AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
+    bool isTopLevel = true;
+    try
+    {
+      aafUID_t usageCode = axCompMob.GetUsageCode();
+      if ( kAAFUsage_TopLevel != usageCode )
+      {
+	isTopLevel = false;
+      }
+    }
+    catch ( const AxExHResult& ex )
+    {
+      if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
+      {
+	isTopLevel = false;
+      }
+      else
+      {
+	throw ex;
+      }
+    }
+
+    if ( isTopLevel )
+    {
+      _spResult->AddDetail( L"Root composition mob has correct usage code, kAAFUsage_TopLevel" );
+    }
+    else
+    {
+      _spResult->SetResult( TestResult::FAIL );
+      _spResult->AddDetail( L"Mob usage code is not kAAFUsage_TopLevel" );
+    }
+
+    // TEMPORARY - We're only checking the composition roots, so don't
+    // continue the traversal.
+    return false;
+  }
+
+  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node )
+  {
+    // Stop traversal pending full implementation.
+    return false;
+  }
+
+  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFSourceMob>& node )
+  {
+    // Stop traversal pending full implementation.
+    return false;
+  }
+
+  virtual bool EdgeVisit(AAFComponentReference& edge)
+  {
     return true;
   }
 
-  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFMasterMob> spNode )
+  virtual bool EdgeVisit(AAFSlotReference& edge)
   {
-    _log << L"Visit master mob." << endl;
     return true;
   }
-
-  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFSourceMob> spNode )
+ 
+  shared_ptr<TestResult> GetResult()
   {
-    _log << L"Visit source mob." << endl;
-    return true;
+    return _spResult;
   }
 
 private:
+
   wostream& _log;
+  shared_ptr<TestResult> _spResult;
 };
 
 //======================================================================
@@ -94,6 +167,8 @@ shared_ptr<TestResult> AnalyzeMobChain( wostream& log,
   shared_ptr<MobChainVisitor>  spVisitor( new MobChainVisitor(log) );
   dft.TraverseDown( spVisitor );
 
+  spResult->AppendSubtestResult( spVisitor->GetResult() );
+  spResult->SetResult( spResult->GetAggregateResult() );
   
   return spResult;
 }
@@ -144,13 +219,11 @@ EPDerivationTest::~EPDerivationTest()
 shared_ptr<TestResult> EPDerivationTest::Execute()
 {
   shared_ptr<TestResult> spPhaseResult( new TestResult(TEST_NAME,
-						  TEST_DESC,
-						  L"", // explain
-						  L"",  // DOCREF REQUIRED
-						  TestResult::PASS ) );
+						       TEST_DESC,
+						       L"", // explain
+						       L"",  // DOCREF REQUIRED
+						       TestResult::PASS ) );
   
-
-
   Analyzer analyzer( GetOutStream(), _spGraph, spPhaseResult );
   for_each( _spTopLevelCompMobs->begin(), _spTopLevelCompMobs->end(), analyzer );
 
