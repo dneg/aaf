@@ -40,7 +40,6 @@ class ResolveRefVisitor : public TypedVisitor
   virtual ~ResolveRefVisitor();
 
   virtual bool PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node);
-  virtual bool EdgeVisit(Edge& edge);
 
   boost::shared_ptr<const TestResult> GetTestResult() const;
 

@@ -138,11 +138,6 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
   return true;
 }
 
-bool ResolveRefVisitor::EdgeVisit(Edge& edge)
-{
-  return true;
-}
-
 boost::shared_ptr<const TestResult> ResolveRefVisitor::GetTestResult() const
 {
   return _spResult;
