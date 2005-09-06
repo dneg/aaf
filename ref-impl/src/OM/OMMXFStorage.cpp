@@ -396,6 +396,7 @@ void OMMXFStorage::writePartition(const OMKLVKey& key,
   OMUInt64 currentPosition = position();
   OMUInt32 i;
   bool found = findPartition(currentPosition, i);
+  (void)found;
   ASSERT("Partition not found", !found);
   i = _partitions.count();
 
@@ -2272,6 +2273,7 @@ void OMMXFStorage::restoreStreams(void)
     while (needBody || needIndex) {
       keyPosition = position();
       bool b = readOuterKLVKey(k);
+      (void)b;
       ASSERT("Read key", b);
       ASSERT("Key is not a partition key", !isPartition(k));
       length = readKLVLength();
