@@ -202,7 +202,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
             fileKind = &kAAFFileKind_Aaf4KBinary;
 	  }
 	} else {
-	  fileKind = &aafFileKindAafKlvBinary;
+	  fileKind = &kAAFFileKind_AafKlvBinary;
 	}
 
 	// Create a new AAF file
