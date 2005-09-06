@@ -316,7 +316,8 @@ class TestProgress : public IAAFProgress
     // Defeat gcc warning about private ctor/dtor and no friends
     // Note that this dummy function cannot itself be called because
     // it requires a constructed TestProgress object.
-    friend void DummyveFriend(TestProgress);
+    friend void dummyFriend(TestProgress);
+
     public:
         virtual HRESULT STDMETHODCALLTYPE ProgressCallback( void);
         virtual ULONG STDMETHODCALLTYPE AddRef( void);

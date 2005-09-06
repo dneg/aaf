@@ -71,17 +71,17 @@ static const aafMobID_t sMobID[] = {
   //{060c2b340205110101001000-13-00-00-00-{78de46ce-4622-11d4-8029-00104bc9156d}}
   {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00}, 
   0x13, 0x00, 0x00, 0x00, 
-   {0x78de46ce, 0x4622, 0x11d4, 0x80, 0x29, 0x00, 0x10, 0x4b, 0xc9, 0x15, 0x6d}},
+  {0x78de46ce, 0x4622, 0x11d4, {0x80, 0x29, 0x00, 0x10, 0x4b, 0xc9, 0x15, 0x6d}}},
 
   //{060c2b340205110101001000-13-00-00-00-{521B0A41-77AC-4767-BFC8-34A13AC50671}}
   {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00}, 
   0x13, 0x00, 0x00, 0x00, 
-   {0x521b0a41, 0x77ac, 0x4767, 0xbf, 0xc8, 0x34, 0xa1, 0x3a, 0xc5, 0x6, 0x71}},
+  {0x521b0a41, 0x77ac, 0x4767, {0xbf, 0xc8, 0x34, 0xa1, 0x3a, 0xc5, 0x6, 0x71}}},
 
   //{060c2b340205110101001000-13-00-00-00-{F1EE3A2E-0A3A-4c2b-A422-7BECE6AE43FA}}
   {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00}, 
   0x13, 0x00, 0x00, 0x00, 
-   {0xf1ee3a2e, 0x0a3a, 0x4c2b, 0xa4, 0x22, 0x7b, 0xec, 0xe6, 0xae, 0x43, 0xfa}}
+  {0xf1ee3a2e, 0x0a3a, 0x4c2b, {0xa4, 0x22, 0x7b, 0xec, 0xe6, 0xae, 0x43, 0xfa}}}
 };
 
 static aafCharacter_constptr sMobName[] = 
@@ -292,17 +292,6 @@ static void Test_GetTypeDefStream(
 
   CheckResult(pStreamPropertyValue->GetType(&pTypeDef));
   CheckResult(pTypeDef->QueryInterface(IID_IAAFTypeDefStream,
-                                       (void **)ppTypeDefStream));
-}
-
-static void Test_GetTypeDefStream(
-  IAAFPropertyValue *pStreamPropertyValue,
-  IAAFTypeDefStreamEx **ppTypeDefStream)
-{
-  IAAFTypeDefSP pTypeDef;
-
-  CheckResult(pStreamPropertyValue->GetType(&pTypeDef));
-  CheckResult(pTypeDef->QueryInterface(IID_IAAFTypeDefStreamEx,
                                        (void **)ppTypeDefStream));
 }
 
@@ -529,6 +518,11 @@ static void Test_EssenceStreamRead(
 class TestStreamAccess : public IAAFStreamAccess 
     {
     public:
+	// Defeat gcc warning about private ctor/dtor and no friends
+	// Note that this dummy function cannot itself be called because
+	// it requires a constructed TestStreamAccess object.
+	friend void dummyFriend(TestStreamAccess);
+
         virtual HRESULT STDMETHODCALLTYPE WriteStream( 
             IAAFPropertyValue *propertyValue,
             aafMemPtr_t pUserData);
