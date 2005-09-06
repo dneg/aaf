@@ -194,7 +194,9 @@ interface IAAFProgress;
 interface IAAFRGBADescriptor2;
 interface IAAFSearchSource;
 interface IAAFSourceReference2;
+interface IAAFStreamAccess;
 interface IAAFTimelineMobSlot2;
+interface IAAFTypeDefStreamEx;
 interface IAAFTypeDefVariableArrayEx;
 
 
@@ -29024,6 +29026,7 @@ interface IAAFTypeDefSet : IUnknown
 ///     operation.
 ///
 /// Objects that implement IAAFTypeDefStream also implement the following interfaces:
+///  - IAAFTypeDefStreamEx
 ///  - IAAFTypeDef
 ///  - IAAFMetaDefinition
 [
@@ -29034,7 +29037,6 @@ interface IAAFTypeDefSet : IUnknown
 ]
 interface IAAFTypeDefStream : IUnknown
 {
-
 
   //***********************************************************
   //
@@ -29560,8 +29562,8 @@ cpp_quote("  /// Extend in chunks of typed Elements")
     [in] aafUInt32  dataSize,
     [in, ref, size_is(dataSize)] aafMemPtr_t  pData);
 
-}
 
+}
 
 
 // ************************
@@ -44776,6 +44778,60 @@ interface IAAFSourceReference2 : IUnknown
 
 // ************************
 //
+// Interface IAAFStreamAccess
+//
+// ************************
+///
+/// This interface is used by the toolkit
+///
+/// In addition to the specific error results listed for each method,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+
+
+[
+    object,
+    uuid(065F5F69-3A64-401e-A1A6-5833268F5236),
+    helpstring("IAAFStreamAccess Interface"),
+    pointer_default(unique)
+]
+
+interface IAAFStreamAccess : IUnknown
+{
+
+
+  //***********************************************************
+  //
+  // WriteStream()
+  //
+  /// This method is called back by the AAF toolkit when a previously
+  /// defined stream property is actually being written, so that you
+  /// may write the data.
+  ///  IAAFTypeDef *pTypeDef;
+  ///  IAAFTypeDefStream *pTypeDefStream;
+  /// 
+  ///  propertyValue->GetType(&pTypeDef));
+  ///  pTypeDef->QueryInterface(IID_IAAFTypeDefStream,(void **)&pTypeDefStream));
+  ///  pTypeDefStream->Write(pStreamPropertyValue, ...);
+  ///  
+  /// 
+  /// @param propertyValue [in] One which will this data be written
+  /// @param pUserData [in] A client-supplied pointer used to extract the data
+  ///
+  HRESULT WriteStream (
+    [in] IAAFPropertyValue * propertyValue,
+    [in] aafMemPtr_t  pUserData);
+
+}
+
+
+
+// ************************
+//
 // Interface IAAFTimelineMobSlot2
 //
 // ************************
@@ -45115,6 +45171,76 @@ interface IAAFTimelineMobSlot2 : IUnknown
     [in] aafPosition_t  value);
 
 }
+
+
+
+// ************************
+//
+// Interface IAAFTypeDefStreamEx
+//
+// ************************
+///
+/// This interface is an extension to the previously definined TypeDefStream
+/// interface.  Hence the suffix "Ex" to the name. Additional methods are now included.
+///
+/// In addition to the specific error results listed for each method,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///
+/// Objects that implement IAAFTypeDefStreamEx also implement the following interfaces:
+///  - IAAFTypeDef
+///  - IAAFMetaDefinition
+[
+    object,
+    uuid(A7A76BEF-E074-4da8-B18D-07E355C60DF4 ),
+    helpstring("IAAFTypeDefStreamEx Interface"),
+    pointer_default(unique)
+]
+
+interface IAAFTypeDefStreamEx : IUnknown
+{
+
+
+
+  //***********************************************************
+  //
+  // SetCallback()
+  //
+  /// Sets a callback interface to be called when a stream is written to or
+  /// read from the file.  This allows the stream property to be built bottom up.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pPropertyValue pointer is valid.
+  /// - pCallbackIF pointer is valid.
+  /// - pUserData pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - either pPropertyValue or pCallbackIF or pUserData arg is NULL.
+  /// 
+  /// @param pPropertyValue [in] Issue the callback for this property
+  /// @param pCallbackIF [in] Interface of the callback object
+  /// @param pUserData [in] Client-specific data passed through to the callback
+  ///
+  HRESULT SetCallback (
+    [in] IAAFPropertyValue * pPropertyValue,
+    [in] IAAFStreamAccess*  pCallbackIF,
+    [in] aafMemPtr_t  pUserData);
+
+}
+
+
 
 
 

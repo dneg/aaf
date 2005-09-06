@@ -193,7 +193,9 @@ interface IAAFProgress;
 interface IAAFRGBADescriptor2;
 interface IAAFSearchSource;
 interface IAAFSourceReference2;
+interface IAAFStreamAccess;
 interface IAAFTimelineMobSlot2;
+interface IAAFTypeDefStreamEx;
 interface IAAFTypeDefVariableArrayEx;
 #else
 typedef interface IAAFAES3PCMDescriptor IAAFAES3PCMDescriptor;
@@ -349,7 +351,9 @@ typedef interface IAAFProgress IAAFProgress;
 typedef interface IAAFRGBADescriptor2 IAAFRGBADescriptor2;
 typedef interface IAAFSearchSource IAAFSearchSource;
 typedef interface IAAFSourceReference2 IAAFSourceReference2;
+typedef interface IAAFStreamAccess IAAFStreamAccess;
 typedef interface IAAFTimelineMobSlot2 IAAFTimelineMobSlot2;
+typedef interface IAAFTypeDefStreamEx IAAFTypeDefStreamEx;
 typedef interface IAAFTypeDefVariableArrayEx IAAFTypeDefVariableArrayEx;
 #endif
 
@@ -29099,7 +29103,6 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
 
   /* *** IAAFTypeDefStream methods *** */
 
-
   //***********************************************************
   //
   // GetSize()
@@ -29625,10 +29628,10 @@ DECLARE_INTERFACE_(IAAFTypeDefStream, IUnknown)
     aafMemPtr_t  pData) PURE;
 
 
+
   END_INTERFACE
 };
 #endif // __IAAFTypeDefStream_INTERFACE_DEFINED__
-
 
 
 // IAAFTypeDefString
@@ -45075,6 +45078,66 @@ DECLARE_INTERFACE_(IAAFSourceReference2, IUnknown)
 
 
 
+// IAAFStreamAccess
+
+// ************************
+//
+// Interface IAAFStreamAccess
+//
+// ************************
+
+
+
+#ifndef __IAAFStreamAccess_INTERFACE_DEFINED__
+#define __IAAFStreamAccess_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFStreamAccess;
+
+
+#undef  INTERFACE
+#define INTERFACE   IAAFStreamAccess
+
+DECLARE_INTERFACE_(IAAFStreamAccess, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFStreamAccess methods *** */
+
+
+  //***********************************************************
+  //
+  // WriteStream()
+  //
+  /// This method is called back by the AAF toolkit when a previously
+  /// defined stream property is actually being written, so that you
+  /// may write the data.
+  ///  IAAFTypeDef *pTypeDef;
+  ///  IAAFTypeDefStream *pTypeDefStream;
+  /// 
+  ///  propertyValue->GetType(&pTypeDef));
+  ///  pTypeDef->QueryInterface(IID_IAAFTypeDefStream,(void **)&pTypeDefStream));
+  ///  pTypeDefStream->Write(pStreamPropertyValue, ...);
+  ///  
+  ///
+  /// @param propertyValue [in] One which will this data be written
+  /// @param pUserData [in] A client-supplied pointer used to extract the data
+  ///
+  STDMETHOD(WriteStream) (THIS_
+    IAAFPropertyValue * propertyValue,
+    aafMemPtr_t  pUserData) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFStreamAccess_INTERFACE_DEFINED__
+
+
+
 // IAAFTimelineMobSlot2
 
 // ************************
@@ -45408,6 +45471,81 @@ DECLARE_INTERFACE_(IAAFTimelineMobSlot2, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFTimelineMobSlot2_INTERFACE_DEFINED__
+
+
+
+// IAAFTypeDefStreamEx
+
+// ************************
+//
+// Interface IAAFTypeDefStreamEx
+//
+// ************************
+
+
+
+
+
+#ifndef __IAAFTypeDefStreamEx_INTERFACE_DEFINED__
+#define __IAAFTypeDefStreamEx_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFTypeDefStreamEx;
+
+
+#undef  INTERFACE
+#define INTERFACE   IAAFTypeDefStreamEx
+
+DECLARE_INTERFACE_(IAAFTypeDefStreamEx, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFTypeDefStreamEx methods *** */
+
+
+
+  //***********************************************************
+  //
+  // SetCallback()
+  //
+  /// Sets a callback interface to be called when a stream is written to or
+  /// read from the file.  This allows the stream property to be built bottom up.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pPropertyValue pointer is valid.
+  /// - pCallbackIF pointer is valid.
+  /// - pUserData pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - either pPropertyValue or pCallbackIF or pUserData arg is NULL.
+  ///
+  /// @param pPropertyValue [in] Issue the callback for this property
+  /// @param pCallbackIF [in] Interface of the callback object
+  /// @param pUserData [in] Client-specific data passed through to the callback
+  ///
+  STDMETHOD(SetCallback) (THIS_
+    IAAFPropertyValue * pPropertyValue,
+    IAAFStreamAccess*  pCallbackIF,
+    aafMemPtr_t  pUserData) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFTypeDefStreamEx_INTERFACE_DEFINED__
+
+
 
 
 

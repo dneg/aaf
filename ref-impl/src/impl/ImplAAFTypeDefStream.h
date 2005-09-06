@@ -1,9 +1,5 @@
-//@doc
-//@class    AAFTypeDefStream | Implementation class for AAFTypeDefStream
 #ifndef __ImplAAFTypeDefStream_h__
 #define __ImplAAFTypeDefStream_h__
-
-
 //=---------------------------------------------------------------------=
 //
 // $Id$ $Name$
@@ -19,7 +15,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -28,11 +24,6 @@
 //
 //=---------------------------------------------------------------------=
 
-
-
-
-
-
 #ifndef __ImplAAFTypeDef_h__
 #include "ImplAAFTypeDef.h"
 #endif
@@ -40,7 +31,7 @@
 
 class ImplAAFPropertyValue;
 class ImplAAFStreamPropertyValue;
-
+struct IAAFStreamAccess;
 
 class ImplAAFTypeDefStream : public ImplAAFTypeDef
 {
@@ -338,7 +329,14 @@ public:
          const aafCharacter * pTypeName);
 
 
+  virtual AAFRESULT STDMETHODCALLTYPE
+	SetCallback
+		(
+		ImplAAFPropertyValue * pPropertyValue,
+        IAAFStreamAccess*  pCallbackIF,
+        aafMemPtr_t  pUserData);
 public:
+
 
   //
   // ImplAAFTypeDef methods

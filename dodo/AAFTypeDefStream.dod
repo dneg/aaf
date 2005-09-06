@@ -29,7 +29,8 @@ AAFTypeDefStream\
 AAFTypeDef\
 #endm
 #c
-#import ./AAFTypeDef.exp
+#c #import ./AAFTypeDef.exp
+#import ./AAFTypeDefStreamEx.exp
 AD_HEAD
 AD_IDL(///
 /// This interface is used to define Stream types used in AAF
@@ -42,7 +43,8 @@ AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_CLASS_UUID(307e9e6d, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(307e9e6e, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
-AD_XCLASS_BEGIN(Concrete, StoredObject)
+#c AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_COM_EXT_CLASS_BEGIN(public IAAFTypeDefStreamEx)
 
 AD_XMETHOD2(GetSize,
 			[in],
@@ -496,4 +498,6 @@ AD_XMETHOD4(AppendElements,
   /// AAFRESULT_NOT_REGISTERED
   ///  - struct offsets have not yet been registered for the element typedef.)
 AD_OVERRIDE(.method-GetTypeCategory)
-AD_XCLASS_END(Concrete, StoredObject)
+AD_COM_METH(.method-SetCallback)
+#c AD_XCLASS_END(Concrete, StoredObject)
+AD_COM_EXT_CLASS_END(AAFTypeDefStreamEx)

@@ -963,10 +963,22 @@ typedef interface IAAFSourceReference2 IAAFSourceReference2;
 #endif 	/* __IAAFSourceReference2_FWD_DEFINED__ */
 
 
+#ifndef __IAAFStreamAccess_FWD_DEFINED__
+#define __IAAFStreamAccess_FWD_DEFINED__
+typedef interface IAAFStreamAccess IAAFStreamAccess;
+#endif 	/* __IAAFStreamAccess_FWD_DEFINED__ */
+
+
 #ifndef __IAAFTimelineMobSlot2_FWD_DEFINED__
 #define __IAAFTimelineMobSlot2_FWD_DEFINED__
 typedef interface IAAFTimelineMobSlot2 IAAFTimelineMobSlot2;
 #endif 	/* __IAAFTimelineMobSlot2_FWD_DEFINED__ */
+
+
+#ifndef __IAAFTypeDefStreamEx_FWD_DEFINED__
+#define __IAAFTypeDefStreamEx_FWD_DEFINED__
+typedef interface IAAFTypeDefStreamEx IAAFTypeDefStreamEx;
+#endif 	/* __IAAFTypeDefStreamEx_FWD_DEFINED__ */
 
 
 #ifndef __IAAFTypeDefVariableArrayEx_FWD_DEFINED__
@@ -1019,6 +1031,8 @@ void __RPC_USER MIDL_user_free( void * );
 // AAF Interfaces.
 //=--------------------------------------------------------------------------=
 //
+
+
 
 
 
@@ -42796,6 +42810,99 @@ void __RPC_STUB IAAFSourceReference2_GetMonoSourceSlotIDsSize_Stub(
 #endif 	/* __IAAFSourceReference2_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFStreamAccess_INTERFACE_DEFINED__
+#define __IAAFStreamAccess_INTERFACE_DEFINED__
+
+/* interface IAAFStreamAccess */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFStreamAccess;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("065F5F69-3A64-401e-A1A6-5833268F5236")
+    IAAFStreamAccess : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE WriteStream( 
+            /* [in] */ IAAFPropertyValue *propertyValue,
+            /* [in] */ aafMemPtr_t pUserData) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFStreamAccessVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFStreamAccess * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFStreamAccess * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFStreamAccess * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *WriteStream )( 
+            IAAFStreamAccess * This,
+            /* [in] */ IAAFPropertyValue *propertyValue,
+            /* [in] */ aafMemPtr_t pUserData);
+        
+        END_INTERFACE
+    } IAAFStreamAccessVtbl;
+
+    interface IAAFStreamAccess
+    {
+        CONST_VTBL struct IAAFStreamAccessVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFStreamAccess_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFStreamAccess_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFStreamAccess_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFStreamAccess_WriteStream(This,propertyValue,pUserData)	\
+    (This)->lpVtbl -> WriteStream(This,propertyValue,pUserData)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFStreamAccess_WriteStream_Proxy( 
+    IAAFStreamAccess * This,
+    /* [in] */ IAAFPropertyValue *propertyValue,
+    /* [in] */ aafMemPtr_t pUserData);
+
+
+void __RPC_STUB IAAFStreamAccess_WriteStream_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFStreamAccess_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFTimelineMobSlot2_INTERFACE_DEFINED__
 #define __IAAFTimelineMobSlot2_INTERFACE_DEFINED__
 
@@ -43103,6 +43210,102 @@ void __RPC_STUB IAAFTimelineMobSlot2_SetUserPos_Stub(
 #endif 	/* __IAAFTimelineMobSlot2_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFTypeDefStreamEx_INTERFACE_DEFINED__
+#define __IAAFTypeDefStreamEx_INTERFACE_DEFINED__
+
+/* interface IAAFTypeDefStreamEx */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFTypeDefStreamEx;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("A7A76BEF-E074-4da8-B18D-07E355C60DF4")
+    IAAFTypeDefStreamEx : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE SetCallback( 
+            /* [in] */ IAAFPropertyValue *pPropertyValue,
+            /* [in] */ IAAFStreamAccess *pCallbackIF,
+            /* [in] */ aafMemPtr_t pUserData) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFTypeDefStreamExVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFTypeDefStreamEx * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFTypeDefStreamEx * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFTypeDefStreamEx * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetCallback )( 
+            IAAFTypeDefStreamEx * This,
+            /* [in] */ IAAFPropertyValue *pPropertyValue,
+            /* [in] */ IAAFStreamAccess *pCallbackIF,
+            /* [in] */ aafMemPtr_t pUserData);
+        
+        END_INTERFACE
+    } IAAFTypeDefStreamExVtbl;
+
+    interface IAAFTypeDefStreamEx
+    {
+        CONST_VTBL struct IAAFTypeDefStreamExVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFTypeDefStreamEx_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFTypeDefStreamEx_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFTypeDefStreamEx_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFTypeDefStreamEx_SetCallback(This,pPropertyValue,pCallbackIF,pUserData)	\
+    (This)->lpVtbl -> SetCallback(This,pPropertyValue,pCallbackIF,pUserData)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefStreamEx_SetCallback_Proxy( 
+    IAAFTypeDefStreamEx * This,
+    /* [in] */ IAAFPropertyValue *pPropertyValue,
+    /* [in] */ IAAFStreamAccess *pCallbackIF,
+    /* [in] */ aafMemPtr_t pUserData);
+
+
+void __RPC_STUB IAAFTypeDefStreamEx_SetCallback_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFTypeDefStreamEx_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__
 #define __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__
 
@@ -43249,7 +43452,7 @@ void __RPC_STUB IAAFTypeDefVariableArrayEx_InsertElement_Stub(
 #endif 	/* __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0251 */
+/* interface __MIDL_itf_AAF_0253 */
 /* [local] */ 
 
   ///***********************************************************
@@ -43348,8 +43551,8 @@ STDAPI AAFGetLibraryPathName (
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0251_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0251_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0253_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0253_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 

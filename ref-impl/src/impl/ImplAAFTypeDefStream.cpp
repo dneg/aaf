@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -21,11 +21,6 @@
 // All rights reserved.
 //
 //=---------------------------------------------------------------------=
-
-
-
-
-
 
 #ifndef __ImplAAFTypeDefStream_h__
 #include "ImplAAFTypeDefStream.h"
@@ -44,16 +39,55 @@
 #include "ImplAAFObjectCreation.h"
 
 #include "OMPropertyDefinition.h"
+#include "OMDataStreamAccess.h"
 #include "OMDataStreamProperty.h"
 #include "OMAssertions.h"
 #include "OMUtilities.h"
-
+#include "AAF.h"
+#include "AAFUtils.h"
 
 #include <assert.h>
 #include <string.h>
 
 
 extern "C" const aafClassID_t CLSID_AAFStreamPropertyValue;
+
+class ImplAAFOMDataStreamAccess : public OMDataStreamAccess {
+public:
+  // @access Public members.
+
+    // @cmember Constructor.
+  ImplAAFOMDataStreamAccess(IAAFPropertyValue *pVal, IAAFStreamAccess *access, void* context);
+
+  virtual ~ImplAAFOMDataStreamAccess();
+
+  virtual void save(OMDataStream& stream, void* context);
+
+
+private:
+  IAAFStreamAccess*		_callback;
+  IAAFPropertyValue*	_pVal;
+};
+
+ImplAAFOMDataStreamAccess::ImplAAFOMDataStreamAccess(IAAFPropertyValue *pVal, IAAFStreamAccess *access, void* context) :
+  OMDataStreamAccess(context), _callback(access), _pVal(pVal)
+{
+  if (_callback != 0) {
+    _callback->AddRef();
+  }
+}
+
+ImplAAFOMDataStreamAccess::~ImplAAFOMDataStreamAccess()
+{
+  if (_callback != 0) {
+    _callback->Release();
+  }
+}
+
+void ImplAAFOMDataStreamAccess::save(OMDataStream& /* stream */, void* context)
+{
+	(void)_callback->WriteStream(_pVal, (unsigned char*)context);
+}
 
 ImplAAFTypeDefStream::ImplAAFTypeDefStream ()
 {
@@ -205,9 +239,6 @@ AAFRESULT STDMETHODCALLTYPE
   
   return pStreamPropertyValue->Write(dataSize, pData);
 }
-
-
-
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -383,7 +414,27 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
+AAFRESULT STDMETHODCALLTYPE
+  ImplAAFTypeDefStream::SetCallback
+		(
+		ImplAAFPropertyValue * pPropertyValue,
+        IAAFStreamAccess*  pCallbackIF,
+        aafMemPtr_t  pUserData)
+{
+  ImplAAFOMDataStreamAccess	*access;
+  IAAFPropertyValue		*pvalInterface;
 
+  CHECK_CLIENT_IMPLEMENTED_QI(pCallbackIF, IID_IAAFStreamAccess);
+
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  IUnknown *iUnk = static_cast<IUnknown *> (pPropertyValue->GetContainer());
+  iUnk->QueryInterface(IID_IAAFPropertyValue, (void **)&pvalInterface);
+  access = new ImplAAFOMDataStreamAccess(pvalInterface, pCallbackIF, pUserData);
+ 
+  pStreamPropertyValue->setStreamAccess(access);
+
+  return AAFRESULT_SUCCESS;
+}
 
 //
 // Overrides of ImplAAFTypeDef
@@ -460,3 +511,4 @@ void ImplAAFTypeDefStream::onRestore(void* clientContext) const
 {
   ImplAAFTypeDef::onRestore(clientContext);
 }
+
