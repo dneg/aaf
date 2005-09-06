@@ -1,0 +1,61 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AAFAnalyzerBase", "AAFAnalyzerBase\AAFAnalyzerBase.vcproj", "{9DD45964-642A-4D06-8263-674A87C5917C}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestPhaseLib", "TestPhaseLib\TestPhaseLib.vcproj", "{8BB4CB71-479F-41C6-9117-27EB2D4AFC15}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RegressionTest", "RegressionTest\RegressionTest.vcproj", "{D40D85EC-028E-45AA-934F-31ECF34C1229}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BaseTestImpl", "BaseTestImpl\BaseTestImpl.vcproj", "{9477CAB1-75B0-4110-A7D6-0D1BD3EA81E0}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EditProtocolTestImpl", "EditProtocolTestImpl\EditProtocolTestImpl.vcproj", "{DEEB28F0-92D4-494F-A2CD-06E48B93C67F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AAFAnalyzerMain", "AAFAnalyzerMain\AAFAnalyzerMain.vcproj", "{BF106A3E-C282-476C-8014-D7575C66E8CD}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{9DD45964-642A-4D06-8263-674A87C5917C}.Debug.ActiveCfg = Debug|Win32
+		{9DD45964-642A-4D06-8263-674A87C5917C}.Debug.Build.0 = Debug|Win32
+		{9DD45964-642A-4D06-8263-674A87C5917C}.Release.ActiveCfg = Release|Win32
+		{9DD45964-642A-4D06-8263-674A87C5917C}.Release.Build.0 = Release|Win32
+		{8BB4CB71-479F-41C6-9117-27EB2D4AFC15}.Debug.ActiveCfg = Debug|Win32
+		{8BB4CB71-479F-41C6-9117-27EB2D4AFC15}.Debug.Build.0 = Debug|Win32
+		{8BB4CB71-479F-41C6-9117-27EB2D4AFC15}.Release.ActiveCfg = Release|Win32
+		{8BB4CB71-479F-41C6-9117-27EB2D4AFC15}.Release.Build.0 = Release|Win32
+		{D40D85EC-028E-45AA-934F-31ECF34C1229}.Debug.ActiveCfg = Debug|Win32
+		{D40D85EC-028E-45AA-934F-31ECF34C1229}.Debug.Build.0 = Debug|Win32
+		{D40D85EC-028E-45AA-934F-31ECF34C1229}.Release.ActiveCfg = Release|Win32
+		{D40D85EC-028E-45AA-934F-31ECF34C1229}.Release.Build.0 = Release|Win32
+		{9477CAB1-75B0-4110-A7D6-0D1BD3EA81E0}.Debug.ActiveCfg = Debug|Win32
+		{9477CAB1-75B0-4110-A7D6-0D1BD3EA81E0}.Debug.Build.0 = Debug|Win32
+		{9477CAB1-75B0-4110-A7D6-0D1BD3EA81E0}.Release.ActiveCfg = Release|Win32
+		{9477CAB1-75B0-4110-A7D6-0D1BD3EA81E0}.Release.Build.0 = Release|Win32
+		{DEEB28F0-92D4-494F-A2CD-06E48B93C67F}.Debug.ActiveCfg = Debug|Win32
+		{DEEB28F0-92D4-494F-A2CD-06E48B93C67F}.Debug.Build.0 = Debug|Win32
+		{DEEB28F0-92D4-494F-A2CD-06E48B93C67F}.Release.ActiveCfg = Release|Win32
+		{DEEB28F0-92D4-494F-A2CD-06E48B93C67F}.Release.Build.0 = Release|Win32
+		{BF106A3E-C282-476C-8014-D7575C66E8CD}.Debug.ActiveCfg = Debug|Win32
+		{BF106A3E-C282-476C-8014-D7575C66E8CD}.Debug.Build.0 = Debug|Win32
+		{BF106A3E-C282-476C-8014-D7575C66E8CD}.Release.ActiveCfg = Release|Win32
+		{BF106A3E-C282-476C-8014-D7575C66E8CD}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
