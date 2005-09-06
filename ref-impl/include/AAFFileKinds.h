@@ -75,6 +75,10 @@ const aafUID_t kAAFFileKind_AafG4KBinary = kAAFFileKind_AafG4KBinary_Value;
 { 0xc59ef56f, 0x5cb4, 0x4cb8, { 0xbd, 0xe3, 0x8d, 0x7c, 0xd9, 0x25, 0x8e, 0x18 } }
 const aafUID_t kAAFFileKind_AafXmlText = kAAFFileKind_AafXmlText_Value;
 
+// AAF files encoded as AAF SMPTE KLV (binary).
+#define kAAFFileKind_AafKlvBinary_Value \
+{0x4b464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
+const aafUID_t kAAFFileKind_AafKlvBinary = kAAFFileKind_AafKlvBinary_Value;
 
 // MXF files encoded as SMPTE KLV (binary).
 //
@@ -129,8 +133,10 @@ const aafUID_t kAAFSignature_Aaf4KBinary = kAAFSignature_Aaf4KBinary_Value;
 
 
 // Deprecated symbols, which may be removed in a future release
+
 const aafUID_t aafFileKindDontCare = kAAFFileKind_DontCare;
 const aafUID_t aafFileKindPathalogical = kAAFFileKind_Pathological;
+const aafUID_t aafFileKindAafKlvBinary = kAAFFileKind_AafKlvBinary;
 const aafUID_t aafFileKindAafMSSBinary = kAAFFileKind_AafM512Binary;
 const aafUID_t aafFileKindAafM4KBinary = kAAFFileKind_AafM4KBinary;
 const aafUID_t aafFileKindAafSSSBinary = kAAFFileKind_AafS512Binary;

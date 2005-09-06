@@ -1585,7 +1585,7 @@ OMRawStorage * ImplAAFFile::RawStorage ()
 
 // these are only prototype
 #define AAFXMLEncoding ENCODING(kAAFFileKind_AafXmlText)
-#define AAFKLVEncoding ENCODING(kAAFFileKind_MxfKlvBinary)
+#define AAFKLVEncoding ENCODING(kAAFFileKind_AafKlvBinary)
 
 // signatures from the point of view of the OM
 #define Signature_SSBin_512 ENCODING(kAAFSignature_Aaf512Binary)
