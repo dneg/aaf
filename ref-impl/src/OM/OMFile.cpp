@@ -87,16 +87,32 @@ OMFile* OMFile::openExistingRead(const wchar_t* fileName,
   ASSERT("Recognized file", result); // tjb - error
   OMStoredObjectFactory* f = findFactory(encoding);
   ASSERT("Recognized file encoding", f != 0);
-  OMStoredObject* store = f->openRead(fileName);
-  OMFile* newFile = new OMFile(fileName,
-                               clientOnRestoreContext,
-                               encoding,
-                               readOnlyMode,
-                               store,
-                               factory,
-                               dictionary,
-                               loadMode);
-  ASSERT("Valid heap pointer", newFile != 0);
+
+  OMFile* newFile = 0;
+  if (compatibleNamedFile(readOnlyMode, encoding)) {
+    OMStoredObject* store = f->openRead(fileName);
+    newFile = new OMFile(fileName,
+                         clientOnRestoreContext,
+                         encoding,
+                         readOnlyMode,
+                         store,
+                         factory,
+                         dictionary,
+                         loadMode);
+    ASSERT("Valid heap pointer", newFile != 0);
+  } else {
+    OMRawStorage* store = OMCachedDiskRawStorage::openExistingRead(fileName);
+    ASSERT("Valid raw storage", store != 0);
+    newFile = new OMFile(store,
+                         clientOnRestoreContext,
+			 nullOMStoredObjectEncoding, // don't care 
+                         readOnlyMode,
+                         factory,
+                         dictionary,
+                         loadMode);
+    ASSERT("Valid heap pointer", newFile != 0);
+    newFile->open();
+  }
   POSTCONDITION("File is open", newFile->isOpen());
   return newFile;
 }
