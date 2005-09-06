@@ -422,16 +422,41 @@ static HRESULT RegisterRequiredPlugins(void)
 	return moduleErrorTmp;
 }
 
+static void detect_format(FILE *fp)
+{
+	if (fp == NULL)
+	{
+		printf("%s:%d NULL file pointer", __FILE__, __LINE__);
+		exit(1);
+	}
+	char header[4];
+	if (fread(header, sizeof(header), 1, fp) < 1) 
+	{
+		printf("%s:%d Error reading file header", __FILE__, __LINE__);
+		exit(1);
+	}
+	if (header[3] & 0x80)
+		formatPAL = true;
+	else if (~header[3] & 0x80)
+		formatPAL = false;
+	else
+	{
+		printf("Unknown format\n");
+		exit(1);
+	}
+	printf("\nCreating output in %s format.\n",  formatPAL ? "PAL" : "NTSC" );
+	fseek(fp, 0L, SEEK_SET);
+}
+
 void printUsage(const char *progname)
 {
-	cout << "Usage : " << progname << " [-mxf] [-legacyDV|-DVBased] [-ntsc] [-o outputfile] [-rawDV|-rawYUY2|-rawUYVY input_filename]" << endl;
+	cout << "Usage : " << progname << " [-mxf] [-legacyDV|-DVBased][-o outputfile] [-rawDV|-rawYUY2|-rawUYVY] input_filename" << endl;
 	cout << endl;
 	cout << "\tWith no arguments creates ExportDV.aaf containing 10 DV frames" << endl;
 	cout << endl;
 	cout << "\t-mxf           store AAF file as KLV encoded file (OP Atom)" << endl;
 	cout << "\t-legacyDV      use the legacy Compression ID and 6 extended properties found in legacy software" << endl;
 	cout << "\t-DVBased       use DV-Based RP244 label for Compression ID (default IEC DV RP224 label)" << endl;
-	cout << "\t-ntsc          treat input as 525 lines 60Hz video instead of default 626 lines 50Hz" << endl;
 	cout << "\t-o file        write output to specified file instead of ExportDV.aaf" << endl;
 	cout << "\t-rawDV file    specified input video is already compressed DV (raw DIF)" << endl;
 	cout << "\t-rawYUY2 file  specified input video is in raw uncompressed YUY2 format" << endl;
@@ -464,11 +489,6 @@ extern int main(int argc, char *argv[])
 				}
 				mbstowcs(pwFileName, argv[i+1], sizeof(pwFileName));
 				i += 2;
-			}
-			else if (!strcmp(argv[i], "-ntsc"))
-			{
-				formatPAL = false;
-				i++;
 			}
 			else if (!strcmp(argv[i], "-legacyDV"))
 			{
@@ -538,6 +558,7 @@ extern int main(int argc, char *argv[])
 			perror(input_video);
 			return 1;
 		}
+		detect_format(input);
 	}
 	else
 	{
