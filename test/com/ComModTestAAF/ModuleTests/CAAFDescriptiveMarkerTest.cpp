@@ -1,5 +1,3 @@
-// @doc INTERNAL
-// @com This file implements the module test for CAAFDescriptiveMarker
 //=---------------------------------------------------------------------=
 //
 // This file was GENERATED for the AAF SDK
@@ -17,7 +15,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -28,13 +26,13 @@
 
 #include "ModuleTestsCommon.h"
 
-#include <ModuleTest.h>
+#include "ModuleTest.h"
 
-#include <AAF.h>
-#include <AAFResult.h>
-#include <AAFTypes.h>
-#include <AAFStoredObjectIDs.h>
-#include <AAFPropertyDefs.h>
+#include "AAF.h"
+#include "AAFResult.h"
+#include "AAFTypes.h"
+#include "AAFStoredObjectIDs.h"
+#include "AAFPropertyDefs.h"
 
 #include <iostream>
 
@@ -132,7 +130,11 @@ static void RegisterDescriptiveTestFramework( IAAFSmartPointer<IAAFDictionary>& 
 }
 
 
-static HRESULT CreateAAFFile(aafWChar * pFileName)
+static HRESULT CreateAAFFile(
+    aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
   try {
     using namespace mtc;
@@ -141,7 +143,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     IAAFSmartPointer<IAAFDictionary> pDict;
     SimpleFilePointers filePointers;
     CreateSimpleAAFFile( pFileName, 
-			 L"DescriptiveMarker",
+			 fileKind,
+			 rawStorageType,
+			 productID,
 			 &filePointers );
 
     // Add add a timeline, and add a DescriptiveMarker to the
@@ -294,39 +298,38 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 }
 
 
-HRESULT DescriptiveMarkerAndFrameworkTest( aafCharacter* pFileName,
-					   aafCharacter* pTestName,
-					   testMode_t mode )
+extern "C" HRESULT CAAFDescriptiveMarker_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFDescriptiveMarker_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
-  HRESULT hr = AAFRESULT_SUCCESS;
+	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
+	const size_t fileNameBufLen = 128;
+	aafWChar pFileName[ fileNameBufLen ] = L"";
+	GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
 
-  try {
-    if ( kAAFUnitTestReadWrite == mode ) {
-      hr = CreateAAFFile(pFileName);
-    }
-    else {
-      hr = AAFRESULT_SUCCESS;
-    }
+	try
+	{
+		if(mode == kAAFUnitTestReadWrite)
+			hr = CreateAAFFile(pFileName, fileKind, rawStorageType, productID);
+		else
+			hr = AAFRESULT_SUCCESS;
+		if (SUCCEEDED(hr))
+		
+			hr = ReadAAFFile(pFileName);
+	}
+	catch (...)
+	{
+		cerr << "CAAFDescriptiveMarker_test..."
+			 << "Caught general C++ exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
+	}
 
-    if ( AAFRESULT_SUCCESS == hr ) {
-      hr = ReadAAFFile(pFileName);
-    }
-  }
-  catch (...) {
-    cerr << pTestName << L"...Caught general C++"
-	 << " exception!" << endl; 
-    hr = AAFRESULT_TEST_FAILED;
-  }
-
-  return hr;
-}
-
-
-// Required function prototype.
-extern "C" HRESULT CAAFDescriptiveMarker_test(testMode_t mode);
-HRESULT CAAFDescriptiveMarker_test(testMode_t mode)
-{
-  return DescriptiveMarkerAndFrameworkTest( L"AAFDescriptiveMarkerTest.aaf",
-					    L"CAAFDescriptiveMarker_test",
-					    mode );
+	return hr;
 }

@@ -1,5 +1,3 @@
-// @doc INTERNAL
-// @com This file implements the module test for CEnumAAFTaggedValueDefs
 //=---------------------------------------------------------------------=
 //
 // This file was GENERATED for the AAF SDK
@@ -17,7 +15,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -26,21 +24,28 @@
 //
 //=---------------------------------------------------------------------=
 
-#include <ModuleTest.h>
+#include "ModuleTest.h"
 
 #include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
-HRESULT TaggedValueDefinitionTest( aafCharacter* pFileName,
-				   aafCharacter* pTestName,
-				   testMode_t mode );
+extern "C" HRESULT CAAFTaggedValueDefinition_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
 
 // Required function prototype.
-extern "C" HRESULT CEnumAAFTaggedValueDefs_test(testMode_t mode);
-
-HRESULT CEnumAAFTaggedValueDefs_test(testMode_t mode)
+extern "C" HRESULT CEnumAAFTaggedValueDefs_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CEnumAAFTaggedValueDefs_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
-  return TaggedValueDefinitionTest( L"EnumAAFTaggedValueDefTest.aaf", 
-				    L"CEnumAAFTaggedValueDef_test",
-				    mode );
+	return CAAFTaggedValueDefinition_test(mode, fileKind, rawStorageType, productID);
 }

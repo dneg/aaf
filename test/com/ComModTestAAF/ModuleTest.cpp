@@ -245,8 +245,9 @@ AAFRESULT CreateTestFile(
     else
     {
       // Use 'traditional' API to create a file.
-      hr = AAFFileOpenNewModify(
+      hr = AAFFileOpenNewModifyEx(
         p_file_name,
+        &use_file_kind,
         file_mode_flags,
         const_cast<aafProductIdentification_t*>( &product_identification ),
         &p_file );
@@ -343,6 +344,19 @@ AAFRESULT RemoveTestFile( const aafCharacter* p_file_name )
 }
 
 
+
+#if defined( OS_MACOS )
+#define PLATFORM_NAME		L"MacOS"
+#elif defined( OS_WINDOWS )
+#define PLATFORM_NAME		L"Win32"
+#elif defined( OS_UNIX )
+#define PLATFORM_NAME		L"Unix"
+#else
+#define PLATFORM_NAME		L"Unknown"
+#endif
+
+
+
 aafProductIdentification_t MakeProductID()
 {
     static aafProductVersion_t  product_version;
@@ -380,12 +394,26 @@ AAFRESULT FindFileEncodingByName(
     aafUID_t*           p_encoding_id )
 {
     const aafUInt32     encoding_name_length = wcslen( p_encoding_name );
+    const aafUInt32     name_buf_size = (encoding_name_length + 1) *
+                                        sizeof(aafCharacter);
     aafCharacter*       p_name_buf = new aafCharacter[encoding_name_length+1 ];
     AAFRESULT           ar = AAFRESULT_SUCCESS;
 
 
     try
     {
+        // Get an enumeration of available file encodings.
+        IEnumAAFFileEncodings*  p_enum_encodings = 0;
+        ar = AAFGetFileEncodings( &p_enum_encodings );
+
+        if( ar == AAFRESULT_DLL_SYMBOL_NOT_FOUND )
+        {
+            // Handle the case of using an old version of the AAF DLL
+            // which doesn't support enumeration over supported file
+            // encodings (AAFGetFileEncodings, IAAFFileEncoding, and
+            // IEnumAAFFileEncodings APIs).
+            // Old versions of the toolkit always provide
+            // support for MS Structured Storage encoding.
             if( wcscmp( p_encoding_name, L"AAF" ) == 0 )
             {
                 *p_encoding_id = aafFileKindAafSSBinary;
@@ -395,6 +423,64 @@ AAFRESULT FindFileEncodingByName(
             {
                 ar = AAFRESULT_NO_MORE_OBJECTS;
             }
+        }
+        else if( ar == AAFRESULT_SUCCESS )
+        {
+            // Iterate over available file encodings searching
+            // for the one with the specified name.
+            bool  found = false;
+            IAAFFileEncoding*  p_encoding = 0;
+
+            while( found == false  &&
+                   p_enum_encodings->NextOne( &p_encoding ) ==
+                   AAFRESULT_SUCCESS )
+            {
+                // Get the name of the next encoding and
+                // compare it to the requested name.
+                aafUInt32  next_name_buf_size = 0;
+                p_encoding->GetNameBufLen( &next_name_buf_size );
+
+                if( next_name_buf_size == name_buf_size )
+                {
+                    *p_name_buf = L'\0';
+
+                    ar = p_encoding->GetName( p_name_buf, name_buf_size );
+                    if( ar == AAFRESULT_SUCCESS )
+                    {
+                        if( wcscmp( p_name_buf, p_encoding_name ) == 0 )
+                        {
+                            // Names match - get the ID of found
+                            // file encoding
+                            p_encoding->GetFileKind( p_encoding_id );
+                            found = true;
+                        }
+                    }
+                }
+
+                p_encoding->Release();
+                p_encoding = 0;
+            }
+
+
+            // If the requested encoding is not found and
+            // no error occured during search set the return
+            // value to indicate success.
+            if( found == false )
+            {
+                if( ar == AAFRESULT_SUCCESS )
+                {
+                    ar = AAFRESULT_NO_MORE_OBJECTS;
+                }
+            }
+            else
+            {
+	            }
+        }
+        if (p_enum_encodings != 0)
+        {
+            p_enum_encodings->Release();
+        }
+        p_enum_encodings = 0;
     }
     catch(...)
     {
@@ -408,6 +494,126 @@ AAFRESULT FindFileEncodingByName(
 
     return ar;
 }
+
+
+
+// Given the ID searches for the first
+// file encoding with the same ID.
+AAFRESULT FindFileEncoding(
+    const aafUID_t&     encoding_id,
+    IAAFFileEncoding**  pp_encoding )
+{
+    AAFRESULT           ar = AAFRESULT_SUCCESS;
+    IAAFFileEncoding*   p_found_encoding = 0;
+
+
+    try
+    {
+        // Get an enumeration of available file encodings.
+        IEnumAAFFileEncodings*  p_enum_encodings = 0;
+        ar = AAFGetFileEncodings( &p_enum_encodings );
+
+        if( ar == AAFRESULT_DLL_SYMBOL_NOT_FOUND )
+        {
+            // Handle the case of using an old version of the AAF DLL
+            // which doesn't support enumeration over supported file
+            // encodings (AAFGetFileEncodings, IAAFFileEncoding, and
+            // IEnumAAFFileEncodings APIs).
+        }
+        else if( ar == AAFRESULT_SUCCESS )
+        {
+            // Iterate over available file encodings searching
+            // for the one with the specified ID.
+            bool  found = false;
+            IAAFFileEncoding*  p_next_encoding = 0;
+
+            while( found == false  &&
+                   p_enum_encodings->NextOne( &p_next_encoding ) ==
+                   AAFRESULT_SUCCESS )
+            {
+                // Get the ID of the next encoding and
+                // compare it to the requested ID.
+                aafUID_t  next_encoding_id;
+                p_next_encoding->GetFileKind( &next_encoding_id );
+
+                if( memcmp( reinterpret_cast<void*>(
+                                const_cast<aafUID_t*>(&encoding_id)),
+                            reinterpret_cast<void*>(&next_encoding_id),
+                            sizeof(aafUID_t) ) == 0 )
+                {
+                    found = true;
+                    p_found_encoding = p_next_encoding;
+                    p_found_encoding->AddRef();
+                }
+
+                p_next_encoding->Release();
+                p_next_encoding = 0;
+            }
+
+
+            // If the requested encoding is not found and
+            // no error occured during search set the return
+            // value to indicate success.
+            if( found == false )
+            {
+                if( ar == AAFRESULT_SUCCESS )
+                {
+                    ar = AAFRESULT_NO_MORE_OBJECTS;
+                }
+            }
+            else
+            {
+                assert( ar == AAFRESULT_SUCCESS );
+            }
+        }
+        if (p_enum_encodings != 0)
+        {
+            p_enum_encodings->Release();
+        }
+        p_enum_encodings = 0;
+    }
+    catch(...)
+    {
+        ar = AAFRESULT_INTERNAL_ERROR;
+    }
+
+
+    if( ar == AAFRESULT_SUCCESS )
+    {
+        assert( p_found_encoding != 0 );
+        *pp_encoding = p_found_encoding;
+    }
+
+
+    return ar;
+}
+
+
+
+AAFRESULT FindFileEncodingName(
+    const aafUID_t&     encoding_id,
+    aafCharacter*       p_encoding_name_buf,
+    aafUInt32           encoding_name_buf_size )
+{
+    AAFRESULT           ar = AAFRESULT_SUCCESS;
+    IAAFFileEncoding*   p_encoding = 0;
+
+
+    ar = FindFileEncoding( encoding_id, &p_encoding );
+
+    if( ar == AAFRESULT_SUCCESS )
+    {
+        ar = p_encoding->GetName( p_encoding_name_buf,
+                                  encoding_name_buf_size );
+
+        p_encoding->Release();
+        p_encoding = 0;
+    }
+
+
+    return ar;
+}
+
 
 
 // Genereates a file name based on the passed in
@@ -440,18 +646,18 @@ bool GenerateTestFileName(
     // 3. Encoding name (skip if using the default encoding)
     //
     const size_t  max_encoding_name_length = 63;
-    //const size_t  encoding_name_buffer_size =
-    //                (max_encoding_name_length+1) * sizeof(aafCharacter);
+    const size_t  encoding_name_buffer_size =
+                    (max_encoding_name_length+1) * sizeof(aafCharacter);
     aafCharacter  encoding_name_buffer[ max_encoding_name_length+1 ] = L"";
 
     // If the file encoding is specified (not default encoding)
     // add encoding name to the generated file name. Otherwise
     // use default encoding and do not change the generated name.
     if( memcmp(&file_kind, &testFileKindDefault, sizeof(aafUID_t)) != 0 )
-    { // FindFileEncodingName routine not added yet
-        //FindFileEncodingName( file_kind,
-        //                      encoding_name_buffer,
-        //                      encoding_name_buffer_size);
+    {
+        FindFileEncodingName( file_kind,
+                              encoding_name_buffer,
+                              encoding_name_buffer_size);
     }
 
     // If FindFileEncodingName() fails the
@@ -538,6 +744,7 @@ aafUID_t EffectiveTestFileEncoding( const aafUID_t& encoding )
 
     return effective_encoding;
 }
+
 
 
 AAFRESULT GetPropertyValue(

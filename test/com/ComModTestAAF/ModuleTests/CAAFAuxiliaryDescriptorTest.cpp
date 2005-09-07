@@ -26,20 +26,22 @@
 
 #include "ModuleTestsCommon.h"
 
-#include <ModuleTest.h>
+#include "ModuleTest.h"
 
-#include <AAF.h>
-#include <AAFResult.h>
-#include <AAFTypes.h>
-#include <AAFStoredObjectIDs.h>
+#include "AAF.h"
+#include "AAFResult.h"
+#include "AAFTypes.h"
+#include "AAFStoredObjectIDs.h"
+#include "AAFWideString.h"
 
-#include <assert.h>
-
-#include <wchar.h>
 #include <iostream>
 using namespace std;
 
-static HRESULT CreateAAFFile(aafWChar * pFileName)
+static HRESULT CreateAAFFile(
+    aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
   try {
     using namespace mtc;
@@ -48,7 +50,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     IAAFSmartPointer<IAAFDictionary> pDict;
     SimpleFilePointers filePointers;
     CreateSimpleAAFFile( pFileName, 
-			 L"AuxiliaryDesciptor Test",
+			 fileKind,
+			 rawStorageType,
+			 productID,
 			 &filePointers );
 
     IAAFSmartPointer<IAAFSourceMob> spSourceMob = AddChainedSourceMob( &filePointers );
@@ -104,7 +108,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
     CheckResult( pDesc->QueryInterface( IID_IAAFAuxiliaryDescriptor, (void**)&pAuxDesc ));
 
     aafCharacter stringBuf[15];
-    CheckResult( pAuxDesc->GetMimeType( stringBuf, sizeof(stringBuf) ) );
+    CheckResult( pAuxDesc->GetMimeType( stringBuf, sizeof(stringBuf)) );
     CheckExpression( ::wcscmp( stringBuf, L"Marcel Marceau" ) == 0, AAFRESULT_TEST_FAILED );
     
     CheckResult( pAuxDesc->GetCharSet( stringBuf, sizeof(stringBuf) ) );
@@ -139,30 +143,38 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 }
 
 // Required function prototype.
-extern "C" HRESULT CAAFAuxiliaryDescriptor_test(testMode_t mode);
-
-HRESULT CAAFAuxiliaryDescriptor_test(testMode_t mode)
+extern "C" HRESULT CAAFAuxiliaryDescriptor_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFAuxiliaryDescriptor_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
-  HRESULT hr = AAFRESULT_SUCCESS;
-  aafCharacter* pFileName = L"AAFAuxiliaryDescriptorTest.aaf";
+	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
+	const size_t fileNameBufLen = 128;
+	aafWChar pFileName[ fileNameBufLen ] = L"";
+	GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
 
-  try {
-    if ( kAAFUnitTestReadWrite == mode ) {
-      hr = CreateAAFFile(pFileName);
-    }
-    else {
-      hr = AAFRESULT_SUCCESS;
-    }
+	try
+	{
+		if(mode == kAAFUnitTestReadWrite)
+			hr = CreateAAFFile(pFileName, fileKind, rawStorageType, productID);
+		else
+			hr = AAFRESULT_SUCCESS;
+		if (SUCCEEDED(hr))
+		
+			hr = ReadAAFFile(pFileName);
+	}
+	catch (...)
+	{
+		cerr << "CAAFAuxiliaryDescriptor_test..."
+			 << "Caught general C++ exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
+	}
 
-    if ( AAFRESULT_SUCCESS == hr ) {
-      hr = ReadAAFFile(pFileName);
-    }
-  }
-  catch (...) {
-    cerr << "CAAFAuxiliaryDescriptor_test...Caught general C++"
-	 << " exception!" << endl; 
-    hr = AAFRESULT_TEST_FAILED;
-  }
-
-  return hr;
+	return hr;
 }

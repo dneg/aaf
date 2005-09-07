@@ -1,5 +1,3 @@
-// @doc INTERNAL
-// @com This file implements the module test for CAAFTaggedValueDefinition
 //=---------------------------------------------------------------------=
 //
 // This file was GENERATED for the AAF SDK
@@ -17,7 +15,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -30,12 +28,12 @@
 
 #include "ModuleTestsCommon.h"
 
-#include <ModuleTest.h>
+#include "ModuleTest.h"
 
-#include <AAF.h>
-#include <AAFResult.h>
-#include <AAFTypes.h>
-#include <AAFStoredObjectIDs.h>
+#include "AAF.h"
+#include "AAFResult.h"
+#include "AAFTypes.h"
+#include "AAFStoredObjectIDs.h"
 
 #include <iostream>
 using namespace std;
@@ -46,7 +44,11 @@ static const aafUID_t TaggedValueDefTestIDs[2] = {
   {0x27060b8e, 0xd496, 0x4790, {0x82, 0x00, 0xa1, 0xe0, 0x41, 0x94, 0xa7, 0xbb}},
   {0xb1d22937, 0xc0cb, 0x4ec0, {0x98, 0xa4, 0x30, 0x63, 0x29, 0xee, 0x22, 0x55}} };
 
-static HRESULT CreateAAFFile(aafWChar * pFileName)
+static HRESULT CreateAAFFile(
+    aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
   try {
     using namespace mtc;
@@ -54,8 +56,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     IAAFSmartPointer<IAAFHeader> pHeader;
     IAAFSmartPointer<IAAFDictionary> pDict;
     SimpleFilePointers filePointers;
-    CreateSimpleAAFFile( pFileName, 
-			 L"TaggedValueDataDefTest",
+    CreateSimpleAAFFile( pFileName,
+			 fileKind,
+			 rawStorageType,
+			 productID,
 			 &filePointers );
 
     IAAFSmartPointer<IAAFDictionary2> pDict2;
@@ -163,47 +167,45 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   return AAFRESULT_SUCCESS;
 }
 
-HRESULT TaggedValueDefinitionTest( aafCharacter* pFileName,
-				   aafCharacter* pTestName,
-				   testMode_t mode )
+extern "C" HRESULT CAAFTaggedValueDefinition_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFTaggedValueDefinition_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
-  HRESULT hr = AAFRESULT_SUCCESS;
+	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
+	const size_t fileNameBufLen = 128;
+	aafWChar pFileName[ fileNameBufLen ] = L"";
+	GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
 
-  try {
-    if ( kAAFUnitTestReadWrite == mode ) {
-      hr = CreateAAFFile(pFileName);
-    }
-    else {
-      hr = AAFRESULT_SUCCESS;
-    }
+	try
+	{
+		if(mode == kAAFUnitTestReadWrite)
+			hr = CreateAAFFile(pFileName, fileKind, rawStorageType, productID);
+		else
+			hr = AAFRESULT_SUCCESS;
+		if (SUCCEEDED(hr))
+		
+			hr = ReadAAFFile(pFileName);
+	}
+	catch (...)
+	{
+		cerr << "CAAFTaggedValueDefinition_test..."
+			 << "Caught general C++ exception!" << endl; 
+		hr = AAFRESULT_TEST_FAILED;
+	}
 
-    if ( AAFRESULT_SUCCESS == hr ) {
-      hr = ReadAAFFile(pFileName);
-    }
-  }
-  catch (...) {
-    cerr << pTestName << L"...Caught general C++"
-	 << " exception!" << endl; 
-    hr = AAFRESULT_TEST_FAILED;
-  }
+	if ( SUCCEEDED(hr) )
+	{
+		cout << "The following AAFTaggedValueDataDef tests have not been implemented:" << endl;
+		cout << "    {Add,Get,Count,Remove}ParentProperty" << endl;
+		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+	}
 
-  return hr;
-}
-
-// Required function prototype.
-extern "C" HRESULT CAAFTaggedValueDefinition_test(testMode_t mode);
-
-HRESULT CAAFTaggedValueDefinition_test(testMode_t mode)
-{
-  HRESULT hr = TaggedValueDefinitionTest( L"AAFTaggedValueDefTest.aaf", 
-					  L"CAAFTaggedValueDef_test",
-					  mode );
-
-  if ( SUCCEEDED(hr) ) {
-    cout << "The following AAFTaggedValueDataDef tests have not been implemented:" << endl;
-    cout << "    {Add,Get,Count,Remove}ParentProperty" << endl;
-    hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-  }
-
-  return hr;
+	return hr;
 }

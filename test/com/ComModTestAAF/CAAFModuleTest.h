@@ -22,8 +22,8 @@
 //
 //=---------------------------------------------------------------------=
 
-#ifndef __CAAFModuleTest_h__
-#define __CAAFModuleTest_h__
+#ifndef CAAFMODULETEST_H
+#define CAAFMODULETEST_H
 
 #include "AAFTypes.h"
 #include "ModuleTest.h"
@@ -38,20 +38,19 @@ public:
   // Print out a list of AAF class names, one per line, in the order that 
   // the tests will be run.
   //
-  void List(void);
-
+  void ListObjectMap() const;
+  AAFRESULT ListEncodings() const;
   //
   // Call  Module test functions.
   //
   HRESULT Test(testMode_t mode,
                aafUID_t pFileKind,
                testRawStorageType_t rawStorageType,
+               unsigned int argc = 0, 
+               const wchar_t* const* argv = NULL,
                bool filter = false, 
-               int argc = 0, 
-               const char **argv = NULL);
+			   bool terse = false);
 
 };
 
-
-
-#endif // __CAAFModuleTest_h__
+#endif // CAAFMODULETEST_H

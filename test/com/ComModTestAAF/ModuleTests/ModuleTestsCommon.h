@@ -85,7 +85,9 @@ struct SimpleFilePointers {
 
 // Deprecated
 void CreateSimpleAAFFile( aafCharacter* pFileName,
-			  aafCharacter* pCompMobName,
+			  aafUID_constref fileKind,
+			  const testRawStorageType_t rawStorageType,
+			  aafProductIdentification_constref productIdentification,
 			  SimpleFilePointers* pFilePointers );
 
 void CreateSimpleAAFFile( aafCharacter* pFileName,
