@@ -372,7 +372,7 @@ void ImplAAFOMCachedRawStorage::rawWriteAt(OMUInt64 position,
   aafUInt64 rawStorageSize = 0;
 
   IAAFRandomRawStorage* pRandomRawStorage = 0;
-  AAFRESULT hr = pRawStorage->QueryInterface(IID_IAAFRandomRawStorage,
+  pRawStorage->QueryInterface(IID_IAAFRandomRawStorage,
                                              (void **)&pRandomRawStorage);
 
   if (pRandomRawStorage)
