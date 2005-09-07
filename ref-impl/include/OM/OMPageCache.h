@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -33,6 +33,8 @@
 #include "OMList.h"
 #include "OMListIterator.h"
 
+class OMCachePageAllocator;
+
   // @class Page caches.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMPageCache {
@@ -41,6 +43,11 @@ public:
 
     // @cmember Constructor.
   OMPageCache(OMUInt32 pageSize, OMUInt32 pageCount);
+
+    // @cmember Constructor.
+  OMPageCache(OMUInt32 pageSize,
+              OMUInt32 pageCount,
+              OMCachePageAllocator* allocator);
 
     // @cmember Destructor.
   virtual ~OMPageCache(void);
@@ -130,6 +137,7 @@ private:
 
   OMUInt32 _pageSize;
   OMUInt32 _pageCount;
+  OMCachePageAllocator* _allocator;
   OMUInt32 _validPageCount;
   CacheEntry* _mruEntry;
   Cache _cache;

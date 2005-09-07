@@ -54,6 +54,7 @@ extern "C" const aafClassID_t CLSID_AAFAES3PCMDescriptor;
 extern "C" const aafClassID_t CLSID_AAFAIFCDescriptor;
 extern "C" const aafClassID_t CLSID_AAFAuxiliaryDescriptor;
 extern "C" const aafClassID_t CLSID_AAFCDCIDescriptor;
+extern "C" const aafClassID_t CLSID_AAFCachePageAllocator;
 extern "C" const aafClassID_t CLSID_AAFClassDef;
 extern "C" const aafClassID_t CLSID_AAFCodecDef;
 extern "C" const aafClassID_t CLSID_AAFCommentMarker;

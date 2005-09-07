@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -28,6 +28,8 @@
 #include <assert.h>
 
 #include "ImplAAFOMRawStorage.h"
+
+#include "OMExceptions.h"
 
 ImplAAFOMRawStorage::ImplAAFOMRawStorage (IAAFRawStorage * rep)
   : _rep (rep),
@@ -242,4 +244,145 @@ void ImplAAFOMRawStorage::synchronize(void)
   AAFRESULT hr;
   hr = _rep->Synchronize ();
   assert (AAFRESULT_SUCCEEDED (hr));
+}
+
+// ImplAAFOMCachedRawStorage methods
+
+ImplAAFOMCachedRawStorage::ImplAAFOMCachedRawStorage(IAAFRawStorage* rep,
+                                                     aafUInt32  pageCount,
+                                                     aafUInt32  pageSize,
+                                                     OMCachePageAllocator* allocator )
+: OMBaseCachedDiskRawStorage(pageSize, pageCount, getRawStorageSize(rep), allocator),
+  _rep(rep),
+  _randRep(0)
+{
+  assert (rep);
+  _rep->AddRef ();
+
+  AAFRESULT hr;
+  hr = _rep->QueryInterface(IID_IAAFRandomRawStorage, (void **)&_randRep);
+  if (AAFRESULT_FAILED (hr))
+	_randRep = 0;
+}
+
+ImplAAFOMCachedRawStorage::~ImplAAFOMCachedRawStorage()
+{
+  assert (_rep);
+  _rep->Release ();
+  _rep = 0;
+
+  if (_randRep)
+	{
+	  _randRep->Release ();
+	  _randRep = 0;
+	}
+}
+
+bool ImplAAFOMCachedRawStorage::isReadable(void) const
+{
+  assert (_rep);
+  aafBoolean_t r;
+  AAFRESULT hr;
+  hr = _rep->IsReadable (&r);
+  if (AAFRESULT_FAILED (hr)) throw OMException(hr);
+  return r ? true : false;
+}
+
+bool ImplAAFOMCachedRawStorage::isWritable(void) const
+{
+  assert (_rep);
+  aafBoolean_t r;
+  AAFRESULT hr;
+  hr = _rep->IsWriteable (&r);
+  if (AAFRESULT_FAILED (hr)) throw OMException(hr);
+  return r ? true : false;
+}
+
+bool ImplAAFOMCachedRawStorage::isExtendible(void) const
+{
+  assert (_rep);
+
+  // If not an AAFRandomRawStorage, it's definitely not extendible.
+  if (! _randRep)
+	return false;
+
+  AAFRESULT hr;
+  aafBoolean_t r;
+  hr = _randRep->IsExtendable (&r);
+  if (AAFRESULT_FAILED (hr)) throw OMException(hr);
+  return r ? true : false;
+}
+
+bool ImplAAFOMCachedRawStorage::isPositionable(void) const
+{
+  assert (_rep);
+  // If not an AAFRandomRawStorage, it's not positionable.
+  if (_randRep)
+	return true;
+  else
+	return false;
+}
+
+void ImplAAFOMCachedRawStorage::synchronize(void)
+{
+  if (isWritable()) {
+    flush();
+  }
+  assert (_rep);
+  AAFRESULT hr;
+  hr = _rep->Synchronize ();
+  if (AAFRESULT_FAILED (hr)) throw OMException(hr);
+}
+
+void ImplAAFOMCachedRawStorage::rawReadAt(OMUInt64 position,
+                                          OMUInt32 byteCount,
+                                          OMByte* destination)
+{
+  assert(_randRep);
+  assert(byteCount != 0);
+
+  OMUInt32 bytesRead = 0;
+  AAFRESULT hr = _randRep->ReadAt(position, destination, byteCount, &bytesRead);
+  if (AAFRESULT_FAILED(hr) || (bytesRead != byteCount)) {
+    throw OMException(hr);
+  }
+}
+
+
+void ImplAAFOMCachedRawStorage::rawWriteAt(OMUInt64 position,
+                                           OMUInt32 byteCount,
+                                           const OMByte* source)
+{
+  assert(_randRep);
+  assert(byteCount != 0);
+
+  OMUInt32 bytesWritten = 0;
+  AAFRESULT hr = _randRep->WriteAt(position, source, byteCount, &bytesWritten);
+  if (AAFRESULT_FAILED(hr) || (bytesWritten != byteCount)) {
+    throw OMException(hr);
+  }
+}
+
+
+/*static*/ aafUInt64 ImplAAFOMCachedRawStorage::getRawStorageSize(
+    IAAFRawStorage* pRawStorage )
+{
+  assert (pRawStorage);
+
+  aafUInt64 rawStorageSize = 0;
+
+  IAAFRandomRawStorage* pRandomRawStorage = 0;
+  AAFRESULT hr = pRawStorage->QueryInterface(IID_IAAFRandomRawStorage,
+                                             (void **)&pRandomRawStorage);
+
+  if (pRandomRawStorage)
+  {
+    pRandomRawStorage->GetSize(&rawStorageSize);
+
+    pRandomRawStorage->Release();
+    pRandomRawStorage = 0;
+  }
+
+
+  return rawStorageSize;
 }

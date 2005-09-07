@@ -16,7 +16,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -26,6 +26,13 @@
 //=---------------------------------------------------------------------=
 
 #include "OMRawStorage.h"
+#include "OMCachedRawStorage.h"
+#include "OMCachedDiskRawStorage.h"
+
+struct IAAFRawStorage;
+struct IAAFRandomRawStorage;
+struct IAAFStreamRawStorage;
+struct IAAFAsyncStreamRawStorage;
 
 struct IAAFRawStorage;
 struct IAAFRandomRawStorage;
@@ -169,6 +176,56 @@ private:
   IAAFRawStorage * _rep;
   IAAFRandomRawStorage * _randRep;
   OMUInt64 _position;
+};
+
+class OMCachePageAllocator;
+
+class ImplAAFOMCachedRawStorage : public OMBaseCachedDiskRawStorage
+{
+public:
+
+  ImplAAFOMCachedRawStorage(IAAFRawStorage* rep,
+                            aafUInt32 pageCount,
+                            aafUInt32 pageSize,
+                            OMCachePageAllocator* allocator);
+
+  virtual ~ImplAAFOMCachedRawStorage();
+
+  // OMRawStorage overrides
+
+  virtual bool isReadable(void) const;
+
+  virtual bool isWritable(void) const;
+
+  virtual bool isExtendible(void) const;
+
+  virtual bool isPositionable(void) const;
+
+  virtual void synchronize(void);
+
+private:
+
+  // OMPageCage overrides
+
+  virtual void rawReadAt(OMUInt64 position,
+                         OMUInt32 byteCount,
+                         OMByte* destination);
+
+  virtual void rawWriteAt(OMUInt64 position,
+                          OMUInt32 byteCount,
+                          const OMByte* source);
+
+  // @cmember Return the size of the specified raw storage. If the
+  //          raw storage is not IAAFRandomRawStorage the returned
+  //          size is always zero.
+  //          This utility method is used in the class constructor.
+  static aafUInt64 getRawStorageSize( IAAFRawStorage* );
+
+
+private:
+
+  IAAFRawStorage* _rep;
+  IAAFRandomRawStorage* _randRep;
 };
 
 #endif // ! __ImplAAFOMRawStorage_h__

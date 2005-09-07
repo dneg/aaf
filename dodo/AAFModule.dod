@@ -481,6 +481,80 @@ AD_XFUNCTION3(AAFRawStorageIsAAFFile,
   ///   - at least one of the pointer arguments is NULL.)
 
 
+AD_XFUNCTION3(AAFFileIsAAFFileKind,
+			[in\, string],
+			  objPass,
+			  aafCharacter_constptr,
+			  pFileName,
+			  Null-terminated string containing name of filesystem file.,
+			[in],
+			  objPass,
+			  aafUID_constptr,
+			  pAAFFileKind,
+			  Pointer to an AUID indicating the file kind to check for,
+			[out\,retval],
+			  objPass,
+			  aafBool *,
+			  pFileIsAAFFile,
+			  Returns AAFTrue if the given file is an AAF file of the specified kind\,
+  /// returns AAFFalse otherwise.,
+			Is the named file an AAF file ?
+  ///
+  /// Note that the function result is returned via the pFileIsAAFFile argument.
+  /// If this function succeeds it returns AAFRESULT_SUCCESS even if the named
+  /// file is not an AAF file of the specified kind.
+  ///
+  /// This function will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - at least one of the pointer arguments is NULL.
+  ///
+  /// AAFRESULT_FILEKIND_NOT_REGISTERED
+  ///   - the specified file kind is not supported by the toolkit.)
+
+
+AD_XFUNCTION3(AAFRawStorageIsAAFFileKind,
+			[in],
+			  objPass,
+			  IAAFRawStorage *,
+			  pRawStorage,
+			  storage containing the purported file,
+			[in],
+			  objPass,
+			  aafUID_constptr,
+			  pAAFFileKind,
+			  Pointer to an AUID indicating the file kind to check for,
+			[out\,retval],
+			  objPass,
+			  aafBool *,
+			  pRawStorageIsAAFFile,
+			  Returns AAFTrue if the given storage contains an AAF file of the
+  /// specified kind\, returns AAFFalse otherwise.,
+			Does the storage contain an AAF file ?
+  ///
+  /// Note that the function result is returned via the pRawStorageIsAAFFile argument.
+  /// If this function succeeds it returns AAFRESULT_SUCCESS even if the storage
+  /// is not an AAF file of the specified kind.
+  ///
+  /// This function will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - at least one of the pointer arguments is NULL.
+  ///
+  /// AAFRESULT_FILEKIND_NOT_REGISTERED
+  ///   - the specified file kind is not supported by the toolkit.)
+
+
 AD_XFUNCTION1(AAFGetPluginManager,
 			[out],
 			  objOut,
@@ -616,6 +690,79 @@ AD_XFUNCTION6(AAFCreateRawStorageCachedDisk,
   ///   mode\, or if neither new or existing is specified for the
   ///   existence.)
 
+AD_XFUNCTION4(AAFCreateRawStorageCached,
+			[in],
+			  objPass,
+			  IAAFRawStorage *,
+			  pRawStorage,
+			  Existing raw storage,
+			[in],
+			  objPass,
+			  aafUInt32,
+			  pageCount,
+			  Count of cache pages,
+			[in],
+			  objPass,
+			  aafUInt32,
+			  pageSize,
+			  Cache page size in bytes,
+			[out],
+			  objOut,
+			  AAFRawStorage,
+			  ppNewRawStorage,
+			  Newly created cached storage,
+			Create a new cached raw storage from an
+  /// existing raw storage.
+  ///
+  /// Succeeds if:
+  /// - The pRawStorage pointer is valid.
+  /// - The ppNewRawStorage pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pRawStorage or ppNewRawStorage\)
+  ///
+  ///   )
+
+AD_XFUNCTION5(AAFCreateRawStorageCached2,
+			[in],
+			  objPass,
+			  IAAFRawStorage *,
+			  pRawStorage,
+			  Existing raw storage,
+			[in],
+			  objPass,
+			  aafUInt32,
+			  pageCount,
+			  Count of cache pages,
+			[in],
+			  objPass,
+			  aafUInt32,
+			  pageSize,
+			  Cache page size in bytes,
+			[in],
+			  objPass,
+			  IAAFCachePageAllocator*,
+			  pCachePageAllocator,
+			  Cache page memory allocator,
+			[out],
+			  objOut,
+			  AAFRawStorage,
+			  ppNewRawStorage,
+			  Newly created cached storage,
+			Create a new cached raw storage from an
+  /// existing raw storage with control over how the cache pages are allocated.
+  ///
+  /// Note that pages are allocated as needed so that the toolkit calls
+  /// Allocate\(\) a maximum of pageCount times \(fewer than pageCount calls
+  /// will be made if the data fits entirely within the cache\).
+  /// 
+  /// Succeeds if:
+  /// - The pRawStorage pointer is valid.
+  /// - The pCachePageAllocator pointer is valid.
+  /// - The ppNewRawStorage pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pRawStorage\\\, pCachePageAllocator or ppNewRawStorage\)
+  ///
+  ///)
 
 AD_XFUNCTION7(AAFCreateAAFFileOnRawStorage,
 			[in],

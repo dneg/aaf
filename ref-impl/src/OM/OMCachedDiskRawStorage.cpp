@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -31,6 +31,87 @@
 #include "OMDiskRawStorage.h"
 
 #include "OMCachedDiskRawStorage.h"
+
+  // @mfunc Constructor.
+OMBaseCachedDiskRawStorage::OMBaseCachedDiskRawStorage(OMUInt32 pageSize,
+                                                       OMUInt32 pageCount,
+                                                       OMUInt64 size)
+: OMCachedRawStorage(pageSize, pageCount, size),
+  _validSize(size)
+{
+  TRACE("OMCachedDiskRawStorage::OMCachedDiskRawStorage");
+}
+
+  // @mfunc Constructor.
+OMBaseCachedDiskRawStorage::OMBaseCachedDiskRawStorage(
+                                               OMUInt32 pageSize,
+                                               OMUInt32 pageCount,
+                                               OMUInt64 size,
+                                               OMCachePageAllocator* allocator)
+: OMCachedRawStorage(pageSize, pageCount, size, allocator),
+  _validSize(size)
+{
+  TRACE("OMCachedDiskRawStorage::OMCachedDiskRawStorage");
+}
+
+  // @mfunc Destructor.
+OMBaseCachedDiskRawStorage::~OMBaseCachedDiskRawStorage(void)
+{
+  TRACE("OMBaseCachedDiskRawStorage::~OMBaseCachedDiskRawStorage");
+}
+
+  // @mfunc Read a page or partial page without using the cache.
+  //   @parm TBS
+  //   @parm TBS
+  //   @parm TBS
+void OMBaseCachedDiskRawStorage::readPage(OMUInt64 position,
+                                          OMUInt32 byteCount,
+                                          OMByte* destination)
+{
+  TRACE("OMBaseCachedDiskRawStorage::readPage");
+  PRECONDITION("Valid destination", destination != 0);
+
+  OMUInt64 streamSize = _validSize;
+  if (position < streamSize) {
+    OMUInt64 remaining = streamSize - position;
+    OMUInt32 readSize;
+    if (remaining < byteCount) {
+      readSize = static_cast<OMUInt32>(remaining);
+    } else {
+      readSize = byteCount;
+    }
+    ASSERT("Valid read size", readSize != 0);
+    rawReadAt(position, readSize, destination);
+  }
+}
+
+  // @mfunc Write a page or partial page without using the cache.
+  //   @parm TBS
+  //   @parm TBS
+  //   @parm TBS
+void OMBaseCachedDiskRawStorage::writePage(OMUInt64 position,
+                                           OMUInt32 byteCount,
+                                           const OMByte* source)
+{
+  TRACE("OMBaseCachedDiskRawStorage::writePage");
+  PRECONDITION("Valid source", source != 0);
+  PRECONDITION("Stream is writable", isWritable());
+
+  OMUInt64 streamSize = extent();
+  OMUInt64 remaining = streamSize - position;
+  OMUInt32 writeSize;
+  if (remaining < byteCount) {
+    writeSize = static_cast<OMUInt32>(remaining);
+  } else {
+    writeSize = byteCount;
+  }
+  ASSERT("Valid write size", writeSize != 0);
+  rawWriteAt(position, writeSize, source);
+  OMUInt64 newValidSize = position + writeSize;
+  if (newValidSize > _validSize) {
+    _validSize = newValidSize;
+  }
+}
 
   // @mfunc Create an <c OMCachedDiskRawStorage> object by opening an existing
   //        file for read-only access, the file is named <p fileName>.

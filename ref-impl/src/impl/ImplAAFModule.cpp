@@ -49,13 +49,18 @@
 #include "ImplAAFFile.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFRandomRawStorage.h"
+#include "ImplAAFOMRawStorage.h"
 #include "ImplEnumAAFFileEncodings.h"
+#include "ImplAAFCachePageAllocator.h"
+#include "ImplAAFOMCachePageAllocator.h"
 
 #include "OMUtilities.h"
 #include "OMRawStorage.h"
 #include "OMDiskRawStorage.h"
 #include "OMCachedDiskRawStorage.h"
 #include "OMMemoryRawStorage.h"
+#include "OMStoredObjectFactory.h"
+#include "OMCachePageAllocator.h"
 
 #include "ImplAAFSmartPointer.h"
 #include "AAFUtils.h"
@@ -67,6 +72,7 @@ extern "C" const aafClassID_t CLSID_AAFRandomFile;
 extern "C" const aafClassID_t CLSID_AAFRawStorage;
 extern "C" const aafClassID_t CLSID_AAFRandomRawStorage;
 extern "C" const aafClassID_t CLSID_EnumAAFFileEncodings;
+extern "C" const aafClassID_t CLSID_AAFCachePageAllocator;
 
 #include <assert.h>
 
@@ -834,6 +840,162 @@ STDAPI ImplAAFRawStorageIsAAFFile (
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
+
+//***********************************************************
+//
+// ImplAAFFileIsAAFFileKind()
+//
+STDAPI ImplAAFFileIsAAFFileKind (
+  aafCharacter_constptr  pFileName,
+  aafUID_constptr pAAFFileKind,
+  aafBool *  pFileIsAAFFile)
+{
+  if (pFileName == 0)
+    return AAFRESULT_NULL_PARAM;
+
+  if (pAAFFileKind == 0)
+    return AAFRESULT_NULL_PARAM;
+
+  if (pFileIsAAFFile == 0)
+    return AAFRESULT_NULL_PARAM;
+
+  // Crude file existance check.  May be better done in 
+  // OMSSStoredObjectFactory::isRecognized(OMRawStorage* rawStorage) but
+  // reporting the right HRESULT is difficult from there.
+  // There may also be another reason for failing to open the file than
+  // non-existance. e.g. permissions problems.
+  // A better description of the problem may be "Cannot read from file."
+  FILE* f = wfopen(pFileName, L"rb");
+  if(f == 0)
+    return AAFRESULT_FILE_NOT_FOUND;
+  
+  fclose(f);
+ 
+  HRESULT hr = S_OK;
+  aafBool is_file_kind = kAAFFalse;
+
+  const OMStoredObjectEncoding* p_om_encoding =
+      reinterpret_cast<const OMStoredObjectEncoding*>(pAAFFileKind);
+
+  const bool has_factory = OMFile::hasFactory (*p_om_encoding);
+  if (has_factory)
+  {
+    OMStoredObjectFactory* p_factory =
+        OMFile::findFactory (*p_om_encoding);
+
+    // Does the factory recognize this file?
+    if( p_factory->isRecognized( pFileName ) )
+    {
+      is_file_kind = kAAFTrue;
+    }
+    else
+    {
+      is_file_kind = kAAFFalse;
+    }
+
+    hr = S_OK;
+  }
+  else
+  {
+    is_file_kind = false;
+    hr = AAFRESULT_FILEKIND_NOT_REGISTERED;
+  }
+
+
+  if( hr == S_OK )
+  {
+    *pFileIsAAFFile = is_file_kind;
+  }
+
+
+  return hr;
+}
+
+
+//***********************************************************
+//
+// ImplAAFRawStorageIsAAFFileKind()
+//
+//
+STDAPI ImplAAFRawStorageIsAAFFileKind (
+  IAAFRawStorage *  pRawStorage,
+  aafUID_constptr pAAFFileKind,
+  aafBool *  pRawStorageIsAAFFile)
+{
+  if (pRawStorage == 0)
+    return AAFRESULT_NULL_PARAM;
+
+  if (pAAFFileKind == 0)
+    return AAFRESULT_NULL_PARAM;
+
+  if (pRawStorageIsAAFFile == 0)
+    return AAFRESULT_NULL_PARAM;
+
+  CHECK_CLIENT_IMPLEMENTED_QI(pRawStorage, IID_IAAFRawStorage);
+
+  HRESULT hr = S_OK;
+  aafBool is_file_kind = kAAFFalse;
+
+
+  // Obtain OM representation of pRawStorage.
+  IAAFRoot* p_root_object = 0;
+  hr = pRawStorage->QueryInterface( IID_IAAFRoot,
+                               reinterpret_cast<void**>(&p_root_object));
+  assert(p_root_object != 0);
+
+  ImplAAFRoot* p_impl_root_object = 0;
+  p_root_object->GetImplRep( reinterpret_cast<void**>(&p_impl_root_object) );
+  assert(p_impl_root_object != 0);
+
+  p_root_object->Release();
+  p_root_object = 0;
+
+  ImplAAFRawStorage* p_impl_raw_storage =
+                        dynamic_cast<ImplAAFRawStorage*>(p_impl_root_object);
+  assert(p_impl_raw_storage != 0);
+
+  OMRawStorage*  p_om_raw_storage = p_impl_raw_storage->GetOMStorage();
+  assert(p_om_raw_storage != 0);
+
+
+  const OMStoredObjectEncoding* p_om_encoding =
+      reinterpret_cast<const OMStoredObjectEncoding*>(pAAFFileKind);
+
+  const bool has_factory = OMFile::hasFactory (*p_om_encoding);
+  if (has_factory)
+  {
+    OMStoredObjectFactory* p_factory =
+        OMFile::findFactory (*p_om_encoding);
+
+    // Does the factory recognize this file?
+    if( p_factory->isRecognized( p_om_raw_storage ) )
+    {
+      is_file_kind = kAAFTrue;
+    }
+    else
+    {
+      is_file_kind = kAAFFalse;
+    }
+
+    hr = S_OK;
+  }
+  else
+  {
+    is_file_kind = false;
+    hr = AAFRESULT_FILEKIND_NOT_REGISTERED;
+  }
+
+
+  if( hr == S_OK )
+  {
+    *pRawStorageIsAAFFile = is_file_kind;
+  }
+
+
+  return hr;
+}
+
+
 //***********************************************************
 //
 // AAFLoadPluginManager()
@@ -1052,6 +1214,119 @@ ImplAAFCreateRawStorageCachedDisk
   return AAFRESULT_SUCCESS;
 }
 
+// not public
+STDAPI
+ImplAAFCreateBuiltinCachePageAllocator
+  (ImplAAFCachePageAllocator ** ppCachePageAllocator)
+{
+  ImplAAFCachePageAllocator* pImplAllocator = static_cast<ImplAAFCachePageAllocator*>(::CreateImpl(CLSID_AAFCachePageAllocator));
+  if (!pImplAllocator)
+	  return AAFRESULT_NOMEMORY;
+
+  *ppCachePageAllocator = pImplAllocator;
+  return AAFRESULT_SUCCESS;
+}
+
+// not public
+STDAPI
+AAFCreateBuiltinCachePageAllocator
+  (aafUInt32  /* pageCount */,
+   aafUInt32  /* pageSize */,
+   IAAFCachePageAllocator ** ppCachePageAllocator)
+{
+  ImplAAFCachePageAllocator* pImplAllocator = 0;
+  HRESULT hr = ImplAAFCreateBuiltinCachePageAllocator(&pImplAllocator);
+  if (!(AAFRESULT_SUCCEEDED (hr)))
+    return hr;
+
+  IUnknown *pUnknown = static_cast<IUnknown *>(pImplAllocator->GetContainer());
+  assert(pUnknown);
+  IAAFCachePageAllocator* pNewAllocator = 0;
+  hr = pUnknown->QueryInterface(IID_IAAFCachePageAllocator, (void **)&pNewAllocator);
+  assert (SUCCEEDED (hr));
+  pImplAllocator->ReleaseReference();
+  *ppCachePageAllocator = pNewAllocator;
+  return AAFRESULT_SUCCESS;
+}
+
+STDAPI
+ImplAAFCreateRawStorageCached
+  (IAAFRawStorage * pRawStorage,
+   aafUInt32  pageCount,
+   aafUInt32  pageSize,
+   ImplAAFRawStorage ** ppNewRawStorage)
+{
+  if (! pRawStorage)
+	return AAFRESULT_NULL_PARAM;
+  if (! ppNewRawStorage)
+	return AAFRESULT_NULL_PARAM;
+
+  IAAFCachePageAllocator * pCachePageAllocator = 0;
+  HRESULT hr = AAFCreateBuiltinCachePageAllocator(pageSize, pageCount, &pCachePageAllocator);
+  if (!AAFRESULT_SUCCEEDED(hr))
+    return hr;
+
+  return ImplAAFCreateRawStorageCached2(pRawStorage,
+                                        pageCount,
+                                        pageSize,
+                                        pCachePageAllocator,
+                                        ppNewRawStorage);
+}
+
+STDAPI
+ImplAAFCreateRawStorageCached2
+  (IAAFRawStorage * pRawStorage,
+   aafUInt32  pageCount,
+   aafUInt32  pageSize,
+   IAAFCachePageAllocator * pCachePageAllocator,
+   ImplAAFRawStorage ** ppNewRawStorage)
+{
+  if (! pRawStorage)
+	return AAFRESULT_NULL_PARAM;
+  if (! pCachePageAllocator)
+	return AAFRESULT_NULL_PARAM;
+  if (! ppNewRawStorage)
+	return AAFRESULT_NULL_PARAM;
+
+  CHECK_CLIENT_IMPLEMENTED_QI(pRawStorage, IID_IAAFRawStorage);
+  CHECK_CLIENT_IMPLEMENTED_QI(pCachePageAllocator, IID_IAAFCachePageAllocator);
+
+  HRESULT hr;
+  aafBoolean_t isReadable;
+  hr = pRawStorage->IsReadable(&isReadable);
+  if (FAILED(hr)) return hr;
+
+  aafBoolean_t isWriteable;
+  hr = pRawStorage->IsWriteable(&isWriteable);
+  if (FAILED(hr)) return hr;
+
+  aafFileAccess_t access = kAAFFileAccess_none;
+  if (isReadable && isWriteable)
+    access = kAAFFileAccess_modify;
+  else if (isReadable)
+    access = kAAFFileAccess_read;
+  else if (isWriteable)
+    access = kAAFFileAccess_write;
+
+  hr = pCachePageAllocator->Initialize(pageCount, pageSize);
+  if (FAILED(hr)) return hr;
+
+  OMCachePageAllocator* pAllocator = new ImplAAFOMCachePageAllocator(pCachePageAllocator, pageCount, pageSize);
+  assert(pAllocator);
+  ImplAAFOMCachedRawStorage* pStg = new ImplAAFOMCachedRawStorage(pRawStorage,
+                                                                  pageCount,
+                                                                  pageSize,
+                                                                  pAllocator);
+  assert(pStg);
+
+
+  ImplAAFRawStorage * prs = static_cast<ImplAAFRawStorage *>
+	  (::CreateImpl(CLSID_AAFRandomRawStorage));
+  prs->Initialize (pStg, access);
+  *ppNewRawStorage = prs;
+  return AAFRESULT_SUCCESS;
+}
+
 STDAPI
 ImplAAFCreateAAFFileOnRawStorage
   (IAAFRawStorage * pRawStorage,
@@ -1067,6 +1342,8 @@ ImplAAFCreateAAFFileOnRawStorage
 
   if (! ppNewFile)
 	return AAFRESULT_NULL_PARAM;
+
+  CHECK_CLIENT_IMPLEMENTED_QI(pRawStorage, IID_IAAFRawStorage);
 
   HRESULT hr = S_OK;
   ImplAAFFileSP pFile;
@@ -1138,32 +1415,32 @@ STDAPI
 ImplAAFGetFileEncodings
   (ImplEnumAAFFileEncodings** ppFileEncodings)
 {
-	  if( ppFileEncodings == 0 )
-		    {
-			        return AAFRESULT_NULL_PARAM;
-				  }
+  if( ppFileEncodings == 0 )
+  {
+    return AAFRESULT_NULL_PARAM;
+  }
 
 
-	    HRESULT   hr = AAFRESULT_SUCCESS;
+  HRESULT   hr = AAFRESULT_SUCCESS;
 
 
-	      ImplEnumAAFFileEncodings* p_enum_encodings =
-		          static_cast<ImplEnumAAFFileEncodings*>
-			        (::CreateImpl(CLSID_EnumAAFFileEncodings));
+  ImplEnumAAFFileEncodings* p_enum_encodings =
+    static_cast<ImplEnumAAFFileEncodings*>
+      (::CreateImpl(CLSID_EnumAAFFileEncodings));
 
-	        if( p_enum_encodings == 0 )
-			  {
-				      hr = AAFRESULT_NOMEMORY;
-				        }
-
-
-		  if( SUCCEEDED( hr ) )
-			    {
-				        *ppFileEncodings = p_enum_encodings;
-					  }
+  if( p_enum_encodings == 0 )
+  {
+    hr = AAFRESULT_NOMEMORY;
+  }
 
 
-		    return hr;
+  if( SUCCEEDED( hr ) )
+  {
+    *ppFileEncodings = p_enum_encodings;
+  }
+
+
+  return hr;
 }
 
 extern const char AAFReferenceImplementationIdent[];

@@ -37,7 +37,7 @@ using namespace std;
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-#include <wchar.h>
+#include "AAFWideString.h"
 
 #include "AAFSmartPointer.h"
 typedef IAAFSmartPointer<IAAFRawStorage>  IAAFRawStorageSP;
@@ -58,7 +58,7 @@ inline void checkExpression(bool expression, HRESULT r=AAFRESULT_TEST_FAILED)
     throw r;
 }
 
-// Function to compare COM interface pointers, taken from 
+// Function to compare COM interface pointers, taken from
 // CAAFTypeDefFixedArrayTest.cpp.
 template <class T1, class T2>
 aafBoolean_t  AreUnksSame(T1& cls1, T2& cls2)
@@ -81,10 +81,12 @@ static HRESULT checkModeFlag (aafUInt32 modeFlags,
   aafProductIdentification_t	ProductInfo = { 0 };
   HRESULT temphr;
   IAAFFile * pFile = 0;
-  temphr = AAFFileOpenNewModify(L"foo",
-								modeFlags,
-								&ProductInfo,
-								&pFile);
+  temphr = CreateTestFile( L"foo",
+                           aafFileKindAafSSBinary,
+                           kAAFNamedFile,
+                           modeFlags,
+                           ProductInfo,
+                           &pFile );
   if (expectedResult != temphr)
 	{
 	  return AAFRESULT_TEST_FAILED;
@@ -101,10 +103,6 @@ static HRESULT checkModeFlag (aafUInt32 modeFlags,
 static HRESULT checkModeFlags ()
 {
   HRESULT temphr;
-
-  temphr = checkModeFlag (AAF_FILE_MODE_LAZY_LOADING,
-						  AAFRESULT_NOT_IN_CURRENT_VERSION);
-  if (AAFRESULT_FAILED (temphr)) return temphr;
 
   temphr = checkModeFlag (AAF_FILE_MODE_REVERTABLE,
 						  AAFRESULT_NOT_IN_CURRENT_VERSION);
@@ -155,44 +153,27 @@ static const 	aafMobID_t	TEST_MobID =
 
 
 
-static aafProductVersion_t sVers =
-{
-  1,                 // major
-  0,                 // minor
-  0,                 // tertiary
-  0,                 // patchLevel
-  kAAFVersionUnknown // type
-};
-
-static aafProductIdentification_t
-sInitProductInfo (aafProductVersion_t & v)
-{
-  aafProductIdentification_t r;
-  r.companyName = L"AAF Developers Desk";
-  r.productName = L"AAFFile Test";
-  r.productVersionString = NULL;
-  r.productID = UnitTestProductID;
-  r.platform = NULL;
-  r.productVersion = &v;
-
-  return r;
-};
-
-static aafProductIdentification_t sIdent =
-  sInitProductInfo (sVers);
-
 
 //
 // Functions to open files using standard disk API
 //
 static HRESULT localOpenFileDiskWrite
   (const aafWChar * pFileName,
+   aafUID_constref fileKind,
+   aafProductIdentification_constref productID,
    IAAFFile ** ppFile)
 {
   assert (pFileName);
   assert (ppFile);
 
-  return AAFFileOpenNewModify(pFileName, 0, &sIdent, ppFile);
+  if( memcmp( &fileKind, &aafFileKindAafSSBinary, sizeof(aafUID_t) ) != 0 )
+  {
+    return AAFFileOpenNewModifyEx(pFileName, &fileKind, 0, const_cast<aafProductIdentification_t*>(&productID), ppFile);
+  }
+  else
+  {
+    return AAFFileOpenNewModify(pFileName, 0, const_cast<aafProductIdentification_t*>(&productID), ppFile);
+  }
 }
 
 
@@ -213,6 +194,8 @@ static HRESULT localOpenFileDiskRead
 //
 static HRESULT localOpenFileDiskStgWrite
   (const aafWChar * pFileName,
+   aafUID_constref fileKind,
+   aafProductIdentification_constref productID,
    IAAFFile ** ppFile)
 {
   assert (pFileName);
@@ -231,9 +214,9 @@ static HRESULT localOpenFileDiskStgWrite
 	(AAFCreateAAFFileOnRawStorage (pStg,
 								   kAAFFileExistence_new,
 								   kAAFFileAccess_modify,
-								   &kAAFFileKind_Aaf4KBinary,
+								   &fileKind,
 								   0,
-								   &sIdent,
+								   &productID,
 								   ppFile));
   assert (ppFile);
   checkExpression (0 != (*ppFile), AAFRESULT_TEST_FAILED);
@@ -279,6 +262,8 @@ const aafUInt32	CDRS_PAGE_SIZE  = 4096;
 
 static HRESULT localOpenFileCachedDiskStgWrite
   (const aafWChar * pFileName,
+   aafUID_constref fileKind,
+   aafProductIdentification_constref productID,
    IAAFFile ** ppFile)
 {
   assert (pFileName);
@@ -299,9 +284,9 @@ static HRESULT localOpenFileCachedDiskStgWrite
 	(AAFCreateAAFFileOnRawStorage (pStg,
 								   kAAFFileExistence_new,
 								   kAAFFileAccess_modify,
-								   &kAAFFileKind_Aaf4KBinary,
+								   &fileKind,
 								   0,
-								   &sIdent,
+								   &productID,
 								   ppFile));
   assert (ppFile);
   checkExpression (0 != (*ppFile), AAFRESULT_TEST_FAILED);
@@ -347,6 +332,8 @@ static HRESULT localOpenFileCachedDiskStgRead
 //
 static HRESULT localOpenFileMemStgWrite
   (const aafWChar * /* pFileName */,
+   aafUID_constref fileKind,
+   aafProductIdentification_constref productID,
    IAAFFile ** ppFile)
 {
   assert (ppFile);
@@ -362,9 +349,9 @@ static HRESULT localOpenFileMemStgWrite
 	(AAFCreateAAFFileOnRawStorage (pStg,
 								   kAAFFileExistence_new,
 								   kAAFFileAccess_modify,
-								   &kAAFFileKind_Aaf4KBinary,
+								   &fileKind,
 								   0,
-								   &sIdent,
+								   &productID,
 								   ppFile));
   assert (ppFile);
   checkExpression (0 != (*ppFile), AAFRESULT_TEST_FAILED);
@@ -612,7 +599,7 @@ public:
     GetExtent (aafUInt64 * pExtent)
     { if (! pExtent) return AAFRESULT_NULL_PARAM;
 	  *pExtent = _extent;
-	return AAFRESULT_NOT_IMPLEMENTED; }
+	return AAFRESULT_SUCCESS; }
 
   HRESULT STDMETHODCALLTYPE
     SetExtent (aafUInt64 extent)
@@ -649,6 +636,8 @@ private:
 //
 static HRESULT localOpenFileCustomStgWrite
   (const aafWChar * pFileName,
+   aafUID_constref fileKind,
+   aafProductIdentification_constref productID,
    IAAFFile ** ppFile)
 {
   assert (pFileName);
@@ -665,9 +654,9 @@ static HRESULT localOpenFileCustomStgWrite
 	(AAFCreateAAFFileOnRawStorage (pStg,
 								   kAAFFileExistence_new,
 								   kAAFFileAccess_modify,
-								   &kAAFFileKind_Aaf4KBinary,
+								   &fileKind,
 								   0,
-								   &sIdent,
+								   &productID,
 								   ppFile));
   assert (ppFile);
   checkExpression (0 != (*ppFile), AAFRESULT_TEST_FAILED);
@@ -700,6 +689,89 @@ static HRESULT localOpenFileCustomStgRead
 								   ppFile));
   assert (ppFile);
   checkExpression (0 != (*ppFile), AAFRESULT_TEST_FAILED);
+  pStg->Release ();
+  return (*ppFile)->Open();
+}
+
+//
+// Functions to open files using RawStorage API, using raw storages
+// implemented by client (in this case, implemented by our own
+// CCustomRawStorage) and which have caching added using the AAF toolkit
+// function AAFCreateRawStorageCached ().
+//
+static HRESULT localOpenFileCachedCustomStgWrite
+  (const aafWChar * pFileName,
+   aafUID_constref fileKind,
+   aafProductIdentification_constref productID,
+   IAAFFile ** ppFile)
+{
+  assert (pFileName);
+  assert (ppFile);
+
+  // Create a custom raw storage.
+  IAAFRawStorage * pStg =
+	new CCustomRawStorage (pFileName,
+						   kAAFFileAccess_modify,
+						   kAAFFileExistence_new);
+
+  // Add caching
+  IAAFRawStorage* pCachedStg = 0;
+  checkResult
+    (AAFCreateRawStorageCached (pStg,
+                                16,
+                                4 * 1024,
+                                &pCachedStg));
+
+  // create the file and open it.
+  checkResult
+	(AAFCreateAAFFileOnRawStorage (pCachedStg,
+								   kAAFFileExistence_new,
+								   kAAFFileAccess_modify,
+								   &fileKind,
+								   0,
+								   &productID,
+								   ppFile));
+  assert (ppFile);
+  checkExpression (0 != (*ppFile), AAFRESULT_TEST_FAILED);
+  pCachedStg->Release();
+  pStg->Release ();
+  return (*ppFile)->Open();
+}
+
+
+static HRESULT localOpenFileCachedCustomStgRead
+  (const aafWChar * pFileName,
+   IAAFFile ** ppFile)
+{
+  assert (pFileName);
+  assert (ppFile);
+
+  // Create a custom raw storage.
+  IAAFRawStorage * pStg =
+	new CCustomRawStorage (pFileName,
+						   kAAFFileAccess_read,
+						   kAAFFileExistence_existing);
+
+  // Add caching
+  IAAFRawStorage* pCachedStg = 0;
+  checkResult
+    (AAFCreateRawStorageCached (pStg,
+                                16,
+                                4 * 1024,
+                                &pCachedStg));
+
+  // create the file and open it.
+  checkResult
+	(AAFCreateAAFFileOnRawStorage (pCachedStg,
+								   kAAFFileExistence_existing,
+								   kAAFFileAccess_read,
+								   0,
+								   0,
+								   0,
+								   ppFile));
+  assert (ppFile);
+  checkExpression (0 != (*ppFile), AAFRESULT_TEST_FAILED);
+  pCachedStg->Release();
   pStg->Release ();
   return (*ppFile)->Open();
 }
@@ -775,6 +847,10 @@ localCloseFileMemStgWrite (const aafWChar * pFileName,
 // Table (and types it needs) to drive selection of open/close
 // functions for various types of storages.
 //
+typedef HRESULT (*fileCrtnFunc_t)(const aafWChar *,
+								  aafUID_constref,
+								  aafProductIdentification_constref,
+								  IAAFFile**);
 typedef HRESULT (*fileMgmtFunc_t)(const aafWChar *,
 								  IAAFFile**);
 //
@@ -787,10 +863,11 @@ struct fileInfo_t
 	, kStgTypeCachedDiskStg
 	, kStgTypeMemStg
 	, kStgTypeCustomStg
+	, kStgTypeCachedCustomStg
   }              storageType;
   wchar_t *      fileName;
   char *         description;
-  fileMgmtFunc_t openWriteFunc;
+  fileCrtnFunc_t openWriteFunc;
   fileMgmtFunc_t openReadFunc;
   fileMgmtFunc_t closeWriteFunc;
   fileMgmtFunc_t closeReadFunc;
@@ -801,7 +878,7 @@ static const fileInfo_t sFileDescriptions[] =
   {
 	{
 	  fileInfo_t::kStgTypeDisk,
-	  L"AAFRandomRawStgTest.aaf",
+	  L"AAFRandomRawStgTest",
 	  "Disk",
 	  localOpenFileDiskWrite,
 	  localOpenFileDiskRead,
@@ -810,7 +887,7 @@ static const fileInfo_t sFileDescriptions[] =
 	},
 	{
 	  fileInfo_t::kStgTypeDiskStg,
-	  L"AAFRandomRawStgTestDisk.aaf",
+	  L"AAFRandomRawStgTestDisk",
 	  "Disk Storage",
 	  localOpenFileDiskStgWrite,
 	  localOpenFileDiskStgRead,
@@ -819,7 +896,7 @@ static const fileInfo_t sFileDescriptions[] =
 	},
 	{
 	  fileInfo_t::kStgTypeCachedDiskStg,
-	  L"AAFRandomRawStgTestCDisk.aaf",
+	  L"AAFRandomRawStgTestCDisk",
 	  "Cached Disk Storage",
 	  localOpenFileCachedDiskStgWrite,
 	  localOpenFileCachedDiskStgRead,
@@ -828,7 +905,7 @@ static const fileInfo_t sFileDescriptions[] =
 	},
 	{
 	  fileInfo_t::kStgTypeMemStg,
-	  L"AAFRandomRawStgTestMem.aaf",
+	  L"AAFRandomRawStgTestMem",
 	  "Mem Storage",
 	  localOpenFileMemStgWrite,
 	  localOpenFileMemStgRead,
@@ -837,10 +914,19 @@ static const fileInfo_t sFileDescriptions[] =
 	},
 	{
 	  fileInfo_t::kStgTypeCustomStg,
-	  L"AAFRandomRawStgTestCstm.aaf",
+	  L"AAFRandomRawStgTestCstm",
 	  "Custom Storage",
 	  localOpenFileCustomStgWrite,
 	  localOpenFileCustomStgRead,
+	  localCloseDisk,
+	  localCloseDisk
+	},
+	{
+	  fileInfo_t::kStgTypeCachedCustomStg,
+	  L"AAFRandomRawStgTestCCstm",
+	  "Cached Custom Storage",
+	  localOpenFileCachedCustomStgWrite,
+	  localOpenFileCachedCustomStgRead,
 	  localCloseDisk,
 	  localCloseDisk
 	}
@@ -851,7 +937,11 @@ const int kNumDescriptions =
 
 
 
-static HRESULT CreateAAFFile(fileInfo_t info)
+static HRESULT CreateAAFFile(
+    fileInfo_t info,
+    const aafWChar* pFileName,
+    aafUID_constref fileKind,
+    aafProductIdentification_constref productID)
 {
   IAAFFile *       pFile = NULL;
   bool             bFileOpen = false;
@@ -863,13 +953,16 @@ static HRESULT CreateAAFFile(fileInfo_t info)
   try 
 	{
       // Remove the previous test file if any.
-      RemoveTestFile(info.fileName);
+      RemoveTestFile(pFileName);
+
+	  // Determine the file encoding to be used.
+	  aafUID_t effectiveFileKind = EffectiveTestFileEncoding( fileKind );
 
 	  // Check for illegal mode flags.
 	  checkModeFlags ();
 
 	  checkResult
-		(info.openWriteFunc (info.fileName, &pFile));
+		(info.openWriteFunc (pFileName, effectiveFileKind, productID, &pFile));
 	  bFileOpen = true;
   
 	  // We can't really do anthing in AAF without the header.
@@ -904,7 +997,7 @@ static HRESULT CreateAAFFile(fileInfo_t info)
 	  checkResult(pFile->Save());
 
 	  // Attempt to close the file.
-	  checkResult(info.closeWriteFunc(info.fileName, &pFile));
+	  checkResult(info.closeWriteFunc(pFileName, &pFile));
 	  bFileOpen = false;
     }
   catch (HRESULT& rResult)
@@ -928,7 +1021,7 @@ static HRESULT CreateAAFFile(fileInfo_t info)
 	  if (bFileOpen)
 		{
 		  pFile->Save();
-		  info.closeWriteFunc(info.fileName, &pFile);
+		  info.closeWriteFunc(pFileName, &pFile);
 		}
 	  pFile->Release();
 	}
@@ -1016,43 +1109,74 @@ static HRESULT ReadAAFFile(fileInfo_t info, wchar_t * filename)
 }
 
 // Required function prototype.
-extern "C" HRESULT CAAFRandomRawStorage_test(testMode_t mode);
+extern "C" HRESULT CAAFRandomRawStorage_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
 
-HRESULT CAAFRandomRawStorage_test(testMode_t mode)
+HRESULT CAAFRandomRawStorage_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t /*rawStorageType*/,
+    aafProductIdentification_t productID)
 {
-  HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
+  HRESULT hr = AAFRESULT_SUCCESS;
+#ifdef __MACH__		// Need to thunk back from the SS library to make this work!!!
+  if (memcmp(&fileKind, &aafFileKindAafSSBinary, sizeof(aafUID_t)) == 0)
+  	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
   try
 	{
 	  for (int wType = 0;
 		   wType < kNumDescriptions;
 		   wType++)
 		{
+		  AAFRESULT subtest_result = AAFRESULT_SUCCESS;
+		  const size_t fileNameBufLen = 128;
+		  aafWChar fileName[ fileNameBufLen ] = L"";
+		  GenerateTestFileName( sFileDescriptions[wType].fileName, fileKind, fileNameBufLen, fileName );
+
 		  if (mode == kAAFUnitTestReadWrite)
 			{
 			  cout << "  Writing "
 				   << sFileDescriptions[wType].description
 				   << endl;
-			  hr = CreateAAFFile (sFileDescriptions[wType]);
+			  subtest_result = CreateAAFFile (sFileDescriptions[wType], fileName, fileKind, productID);
 			}
 		  else
-			hr = AAFRESULT_SUCCESS;
-		  if (AAFRESULT_FAILED (hr))
-			break;
-
-		  for (int rType = 0;
-			   rType < kNumDescriptions;
-			   rType++)
+			subtest_result = AAFRESULT_SUCCESS;
+		  if (AAFRESULT_SUCCEEDED (subtest_result))
 			{
-			  cout << "    Reading "
-				   << sFileDescriptions[rType].description
-				   << endl;
-			  hr = ReadAAFFile (sFileDescriptions[rType],
-								sFileDescriptions[wType].fileName);
-			  if (AAFRESULT_FAILED (hr))
-				break;
+			  for (int rType = 0;
+				   rType < kNumDescriptions;
+				   rType++)
+				{
+				  cout << "    Reading "
+					   << sFileDescriptions[rType].description
+					   << endl;
+				  subtest_result = ReadAAFFile (sFileDescriptions[rType],
+									fileName);
+				  if (AAFRESULT_FAILED (subtest_result))
+					break;
+				}
 			}
-		  if (AAFRESULT_FAILED (hr))
-			break;
+
+
+
+		  // Update the module test status.
+		  if (AAFRESULT_FAILED (subtest_result))
+			{
+			  if (subtest_result == AAFRESULT_NOT_IMPLEMENTED)
+				{
+				  hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+				}
+			  else
+				{
+				  hr = subtest_result;
+                                  break;
+				}
+			}
 		}
 	}
   catch (...)
@@ -1061,6 +1185,5 @@ HRESULT CAAFRandomRawStorage_test(testMode_t mode)
 		   << " exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}
-
   return hr;
 }

@@ -69,6 +69,12 @@ typedef interface IAAFCDCIDescriptor IAAFCDCIDescriptor;
 #endif 	/* __IAAFCDCIDescriptor_FWD_DEFINED__ */
 
 
+#ifndef __IAAFCachePageAllocator_FWD_DEFINED__
+#define __IAAFCachePageAllocator_FWD_DEFINED__
+typedef interface IAAFCachePageAllocator IAAFCachePageAllocator;
+#endif 	/* __IAAFCachePageAllocator_FWD_DEFINED__ */
+
+
 #ifndef __IAAFClassDef_FWD_DEFINED__
 #define __IAAFClassDef_FWD_DEFINED__
 typedef interface IAAFClassDef IAAFClassDef;
@@ -1190,6 +1196,7 @@ void __RPC_USER MIDL_user_free( void * );
 
 
 
+
 extern RPC_IF_HANDLE __MIDL_itf_AAF_0000_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_AAF_0000_v0_0_s_ifspec;
 
@@ -2101,6 +2108,143 @@ void __RPC_STUB IAAFCDCIDescriptor_GetPaddingBits_Stub(
 
 
 #endif 	/* __IAAFCDCIDescriptor_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFCachePageAllocator_INTERFACE_DEFINED__
+#define __IAAFCachePageAllocator_INTERFACE_DEFINED__
+
+/* interface IAAFCachePageAllocator */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFCachePageAllocator;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("23630652-56E9-4A17-AC31-796FE6E26E80")
+    IAAFCachePageAllocator : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( 
+            /* [in] */ aafUInt32 pageCount,
+            /* [in] */ aafUInt32 pageSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Allocate( 
+            /* [out] */ aafMemPtr_t *pPage) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Deallocate( 
+            /* [in] */ aafMemPtr_t page) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFCachePageAllocatorVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFCachePageAllocator * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFCachePageAllocator * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFCachePageAllocator * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+            IAAFCachePageAllocator * This,
+            /* [in] */ aafUInt32 pageCount,
+            /* [in] */ aafUInt32 pageSize);
+        
+        HRESULT ( STDMETHODCALLTYPE *Allocate )( 
+            IAAFCachePageAllocator * This,
+            /* [out] */ aafMemPtr_t *pPage);
+        
+        HRESULT ( STDMETHODCALLTYPE *Deallocate )( 
+            IAAFCachePageAllocator * This,
+            /* [in] */ aafMemPtr_t page);
+        
+        END_INTERFACE
+    } IAAFCachePageAllocatorVtbl;
+
+    interface IAAFCachePageAllocator
+    {
+        CONST_VTBL struct IAAFCachePageAllocatorVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFCachePageAllocator_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFCachePageAllocator_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFCachePageAllocator_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFCachePageAllocator_Initialize(This,pageCount,pageSize)	\
+    (This)->lpVtbl -> Initialize(This,pageCount,pageSize)
+
+#define IAAFCachePageAllocator_Allocate(This,pPage)	\
+    (This)->lpVtbl -> Allocate(This,pPage)
+
+#define IAAFCachePageAllocator_Deallocate(This,page)	\
+    (This)->lpVtbl -> Deallocate(This,page)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFCachePageAllocator_Initialize_Proxy( 
+    IAAFCachePageAllocator * This,
+    /* [in] */ aafUInt32 pageCount,
+    /* [in] */ aafUInt32 pageSize);
+
+
+void __RPC_STUB IAAFCachePageAllocator_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCachePageAllocator_Allocate_Proxy( 
+    IAAFCachePageAllocator * This,
+    /* [out] */ aafMemPtr_t *pPage);
+
+
+void __RPC_STUB IAAFCachePageAllocator_Allocate_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFCachePageAllocator_Deallocate_Proxy( 
+    IAAFCachePageAllocator * This,
+    /* [in] */ aafMemPtr_t page);
+
+
+void __RPC_STUB IAAFCachePageAllocator_Deallocate_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFCachePageAllocator_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFClassDef_INTERFACE_DEFINED__
@@ -43452,7 +43596,7 @@ void __RPC_STUB IAAFTypeDefVariableArrayEx_InsertElement_Stub(
 #endif 	/* __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0253 */
+/* interface __MIDL_itf_AAF_0254 */
 /* [local] */ 
 
   ///***********************************************************
@@ -43508,6 +43652,16 @@ STDAPI AAFRawStorageIsAAFFile (
           aafUID_t *  pAAFFileKind,
           aafBool *  pRawStorageIsAAFFile);
 
+STDAPI AAFFileIsAAFFileKind (
+          aafCharacter_constptr  pFileName,
+          aafUID_constptr  pAAFFileKind,
+          aafBool *  pFileIsAAFFile);
+
+STDAPI AAFRawStorageIsAAFFileKind (
+          IAAFRawStorage *  pRawStorage,
+          aafUID_constptr  pAAFFileKind,
+          aafBool *  pRawStorageIsAAFFile);
+
 STDAPI AAFGetPluginManager (IAAFPluginManager ** ppPluginManager);
 
 STDAPI AAFCreateRawStorageMemory (
@@ -43526,6 +43680,19 @@ STDAPI AAFCreateRawStorageCachedDisk (
           aafFileAccess_t  access,
           aafUInt32  pageCount,
           aafUInt32  pageSize,
+          IAAFRawStorage ** ppNewRawStorage);
+
+STDAPI AAFCreateRawStorageCached (
+          IAAFRawStorage *  pRawStorage,
+          aafUInt32  pageCount,
+          aafUInt32  pageSize,
+          IAAFRawStorage ** ppNewRawStorage);
+
+STDAPI AAFCreateRawStorageCached2 (
+          IAAFRawStorage *  pRawStorage,
+          aafUInt32  pageCount,
+          aafUInt32  pageSize,
+          IAAFCachePageAllocator*  pCachePageAllocator,
           IAAFRawStorage ** ppNewRawStorage);
 
 STDAPI AAFCreateAAFFileOnRawStorage (
@@ -43551,8 +43718,8 @@ STDAPI AAFGetLibraryPathName (
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0253_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0253_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0254_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0254_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 

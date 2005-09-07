@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -29,6 +29,7 @@
 #include "OMDataTypes.h"
 #include "OMAssertions.h"
 #include "OMSetIterator.h"
+#include "OMCachePageAllocator.h"
 
 #include <string.h>
 
@@ -39,6 +40,26 @@ OMPageCache::OMPageCache(OMUInt32 pageSize,
                          OMUInt32 pageCount)
 : _pageSize(pageSize),
   _pageCount(pageCount),
+  _validPageCount(0),
+  _mruEntry(0),
+  _cache(),
+  _mruList()
+{
+  TRACE("OMPageCache::OMPageCache");
+
+  PRECONDITION("Valid page size", _pageSize > 0);
+  PRECONDITION("Valid page count", _pageCount > 0);
+}
+
+  // @mfunc Constructor.
+  //   @parm The size of each page in bytes.
+  //   @parm The number of pages.
+OMPageCache::OMPageCache(OMUInt32 pageSize,
+                         OMUInt32 pageCount,
+                         OMCachePageAllocator* allocator)
+: _pageSize(pageSize),
+  _pageCount(pageCount),
+  _allocator(allocator),
   _validPageCount(0),
   _mruEntry(0),
   _cache(),

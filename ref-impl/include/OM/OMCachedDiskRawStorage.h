@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -30,6 +30,61 @@
 #include "OMDiskRawStorage.h"
 #include "OMFile.h"
 #include "OMPageCache.h"
+#include "OMCachedRawStorage.h"
+
+class OMCachePageAllocator;
+
+  // @class Base class supporting access to the raw bytes of disk
+  //        files supported by the Object Manager. Disk pages
+  //        are cached to improve performance.
+  //
+  //   @base public | <c OMCachedRawStorage>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
+class OMBaseCachedDiskRawStorage : public OMCachedRawStorage {
+public:
+
+  // @access Public members.
+
+    // @cmember Constructor.
+  OMBaseCachedDiskRawStorage(OMUInt32 pageSize,
+                             OMUInt32 pageCount,
+                             OMUInt64 size);
+
+    // @cmember Constructor.
+  OMBaseCachedDiskRawStorage(OMUInt32 pageSize,
+                             OMUInt32 pageCount,
+                             OMUInt64 size,
+                             OMCachePageAllocator* allocator);
+
+    // @cmember Destructor.
+  virtual ~OMBaseCachedDiskRawStorage(void);
+
+private:
+  // @access Private members.
+
+    // @cmember Read bytes without using the cache.
+  virtual void rawReadAt(OMUInt64 position,
+                         OMUInt32 byteCount,
+                         OMByte* destination) = 0;
+
+    // @cmember Write bytes without using the cache.
+  virtual void rawWriteAt(OMUInt64 position,
+                          OMUInt32 byteCount,
+                          const OMByte* source) = 0;
+
+    // @cmember Read a page or partial page without using the cache.
+  virtual void readPage(OMUInt64 position,
+                        OMUInt32 byteCount,
+                        OMByte* destination);
+
+    // @cmember Write a page or partial page without using the cache.
+  virtual void writePage(OMUInt64 position,
+                         OMUInt32 byteCount,
+                         const OMByte* source);
+
+  OMUInt64 _validSize; // maximum valid position for read
+
+};
 
   // @class Class supporting access to the raw bytes of disk
   //        files supported by the Object Manager. Disk pages

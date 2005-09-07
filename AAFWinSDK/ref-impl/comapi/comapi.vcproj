@@ -307,6 +307,27 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFCachePageAllocator.cpp">
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					ForcedIncludeFiles=""/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
+					ForcedIncludeFiles=""/>
+			</FileConfiguration>
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFClassDef.cpp">
 			<FileConfiguration
 				Name="Release|Win32">

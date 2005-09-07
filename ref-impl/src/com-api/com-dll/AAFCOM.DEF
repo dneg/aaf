@@ -40,10 +40,15 @@ EXPORTS		AAFFileOpenNewModify
 EXPORTS		AAFFileOpenNewModifyEx
 EXPORTS		AAFFileOpenTransient
 EXPORTS		AAFFileIsAAFFile
+EXPORTS		AAFFileIsAAFFileKind
+EXPORTS		AAFRawStorageIsAAFFile
+EXPORTS		AAFRawStorageIsAAFFileKind
 EXPORTS		AAFGetPluginManager
 EXPORTS		AAFCreateRawStorageMemory
 EXPORTS		AAFCreateRawStorageDisk
 EXPORTS		AAFCreateRawStorageCachedDisk
+EXPORTS		AAFCreateRawStorageCached
+EXPORTS		AAFCreateRawStorageCached2
 EXPORTS		AAFCreateAAFFileOnRawStorage
 EXPORTS		AAFSetProgressCallback
 EXPORTS		AAFGetFileEncodings

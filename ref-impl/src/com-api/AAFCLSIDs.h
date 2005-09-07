@@ -53,6 +53,7 @@ EXTERN_C const CLSID CLSID_AAFAES3PCMDescriptor;
 EXTERN_C const CLSID CLSID_AAFAIFCDescriptor;
 EXTERN_C const CLSID CLSID_AAFAuxiliaryDescriptor;
 EXTERN_C const CLSID CLSID_AAFCDCIDescriptor;
+EXTERN_C const CLSID CLSID_AAFCachePageAllocator;
 EXTERN_C const CLSID CLSID_AAFClassDef;
 EXTERN_C const CLSID CLSID_AAFCodecDef;
 EXTERN_C const CLSID CLSID_AAFCommentMarker;

@@ -80,6 +80,16 @@ typedef STDAPICALLTYPE HRESULT (* LPFNAAFRAWSTORAGEISAAFFILE) (
     aafUID_t *  pAAFFileKind,
     aafBool *  pRawStorageIsAAFFile);
 
+typedef STDAPICALLTYPE HRESULT (* LPFNAAFFILEISAAFFILEKIND)(
+    aafCharacter_constptr  pFileName,
+    aafUID_constptr pAAFFileKind,
+    aafBool *  pFileIsAAFFile);
+
+typedef STDAPICALLTYPE HRESULT (* LPFNAAFRAWSTORAGEISAAFFILEKIND)(
+    IAAFRawStorage *  pStorage,
+    aafUID_constptr pAAFFileKind,
+    aafBool *  pRawStorageIsAAFFile);
+
 typedef STDAPICALLTYPE HRESULT (* LPFNAAFGETPLUGINMANAGER)(
     IAAFPluginManager ** ppPluginManager);
 
@@ -99,6 +109,19 @@ typedef STDAPICALLTYPE HRESULT (* LPFNAAFCREATERAWSTORAGECACHEDDISK)(
 	aafFileAccess_t  access,
     aafUInt32  pageCount,
     aafUInt32  pageSize,
+	IAAFRawStorage ** ppNewRawStorage);
+
+typedef STDAPICALLTYPE HRESULT (* LPFNAAFCREATERAWSTORAGECACHED)(
+    IAAFRawStorage * pRawStorage,
+    aafUInt32  pageCount,
+    aafUInt32  pageSize,
+	IAAFRawStorage ** ppNewRawStorage);
+
+typedef STDAPICALLTYPE HRESULT (* LPFNAAFCREATERAWSTORAGECACHED2)(
+    IAAFRawStorage * pRawStorage,
+    aafUInt32  pageCount,
+    aafUInt32  pageSize,
+    IAAFCachePageAllocator*  pCachePageAllocator,
 	IAAFRawStorage ** ppNewRawStorage);
 
 typedef STDAPICALLTYPE HRESULT (* LPFNAAFCREATEAAFFILEONRAWSTORAGE)(
@@ -169,6 +192,16 @@ typedef HRESULT (STDAPICALLTYPE * LPFNAAFRAWSTORAGEISAAFFILE) (
     aafUID_t *  pAAFFileKind,
     aafBool *  pRawStorageIsAAFFile);
 
+typedef HRESULT (STDAPICALLTYPE * LPFNAAFFILEISAAFFILEKIND)(
+    aafCharacter_constptr  pFileName,
+    aafUID_constptr pAAFFileKind,
+    aafBool *  pFileIsAAFFile);
+
+typedef HRESULT (STDAPICALLTYPE * LPFNAAFRAWSTORAGEISAAFFILEKIND)(
+    IAAFRawStorage *  pStorage,
+    aafUID_constptr pAAFFileKind,
+    aafBool *  pRawStorageIsAAFFile);
+
 typedef HRESULT (STDAPICALLTYPE * LPFNAAFGETPLUGINMANAGER)(
     IAAFPluginManager ** ppPluginManager);
 
@@ -188,6 +221,19 @@ typedef HRESULT (STDAPICALLTYPE * LPFNAAFCREATERAWSTORAGECACHEDDISK)(
 	aafFileAccess_t  access,
     aafUInt32  pageCount,
     aafUInt32  pageSize,
+	IAAFRawStorage ** ppNewRawStorage);
+
+typedef HRESULT (STDAPICALLTYPE * LPFNAAFCREATERAWSTORAGECACHED)(
+    IAAFRawStorage * pRawStorage,
+    aafUInt32  pageCount,
+    aafUInt32  pageSize,
+	IAAFRawStorage ** ppNewRawStorage);
+
+typedef HRESULT (STDAPICALLTYPE * LPFNAAFCREATERAWSTORAGECACHED2)(
+    IAAFRawStorage * pRawStorage,
+    aafUInt32  pageCount,
+    aafUInt32  pageSize,
+    IAAFCachePageAllocator*  pCachePageAllocator,
 	IAAFRawStorage ** ppNewRawStorage);
 
 typedef HRESULT (STDAPICALLTYPE * LPFNAAFCREATEAAFFILEONRAWSTORAGE)(
@@ -299,6 +345,16 @@ public:
     aafUID_t *  pAAFFileKind,
     aafBool *  pRawStorageIsAAFFile);
 
+  HRESULT FileIsAAFFileKind (
+    aafCharacter_constptr  pFileName,
+    aafUID_constptr pAAFFileKind,
+    aafBool *  pFileIsAAFFile);
+
+  HRESULT RawStorageIsAAFFileKind (
+    IAAFRawStorage *  pStorage,
+    aafUID_constptr pAAFFileKind,
+    aafBool *  pRawStorageIsAAFFile);
+
   HRESULT GetPluginManager (
     IAAFPluginManager ** ppPluginManager);
   
@@ -318,6 +374,19 @@ public:
 	aafFileAccess_t  access,
     aafUInt32  pageCount,
     aafUInt32  pageSize,
+	IAAFRawStorage ** ppNewRawStorage);
+
+  HRESULT CreateRawStorageCached (
+    IAAFRawStorage * pRawStorage,
+    aafUInt32  pageCount,
+    aafUInt32  pageSize,
+	IAAFRawStorage ** ppNewRawStorage);
+
+  HRESULT CreateRawStorageCached2 (
+    IAAFRawStorage * pRawStorage,
+    aafUInt32  pageCount,
+    aafUInt32  pageSize,
+    IAAFCachePageAllocator*  pCachePageAllocator,
 	IAAFRawStorage ** ppNewRawStorage);
 
   HRESULT CreateAAFFileOnRawStorage (
@@ -367,10 +436,14 @@ protected:
   LPFNAAFFILEOPENTRANSIENT         _pfnOpenTransient;
   LPFNAAFFILEISAAFFILE             _pfnIsAAFFile;
   LPFNAAFRAWSTORAGEISAAFFILE       _pfnRawStorageIsAAFFile;
+  LPFNAAFFILEISAAFFILEKIND         _pfnFileIsAAFFileKind;
+  LPFNAAFRAWSTORAGEISAAFFILEKIND   _pfnRawStorageIsAAFFileKind;
   LPFNAAFGETPLUGINMANAGER          _pfnGetPluginManager;
   LPFNAAFCREATERAWSTORAGEMEMORY    _pfnCreateRawStorageMemory;
   LPFNAAFCREATERAWSTORAGEDISK      _pfnCreateRawStorageDisk;
   LPFNAAFCREATERAWSTORAGECACHEDDISK _pfnCreateRawStorageCachedDisk;
+  LPFNAAFCREATERAWSTORAGECACHED    _pfnCreateRawStorageCached;
+  LPFNAAFCREATERAWSTORAGECACHED2   _pfnCreateRawStorageCached2;
   LPFNAAFCREATEAAFFILEONRAWSTORAGE _pfnCreateAAFFileOnRawStorage;
   LPFNAAFSETPROGRESSCALLBACK       _pfnSetProgressCallback;
   LPFNAAFGETFILEENCODINGS          _pfnGetFileEncodings;

@@ -401,6 +401,75 @@ STDAPI AAFRawStorageIsAAFFile (
 
 //***********************************************************
 //
+// AAFFileIsAAFFileKind()
+//
+STDAPI AAFFileIsAAFFileKind (
+  aafCharacter_constptr  pFileName,
+  aafUID_constptr pAAFFileKind,
+  aafBool *  pFileIsAAFFile)
+{
+  HRESULT hr = S_OK;
+  AAFDLL *pAAFDLL = NULL;
+
+  // Get the dll wrapper
+  hr = LoadIfNecessary(&pAAFDLL);
+  if (FAILED(hr))
+    return hr;
+  
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->FileIsAAFFileKind(pFileName, pAAFFileKind, pFileIsAAFFile);
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  return hr;
+}
+
+
+
+//***********************************************************
+//
+// AAFRawStorageIsAAFFileKind()
+//
+//
+STDAPI AAFRawStorageIsAAFFileKind (
+  IAAFRawStorage *  pStorage,
+  aafUID_constptr pAAFFileKind,
+  aafBool *  pRawStorageIsAAFFile)
+{
+  HRESULT hr = S_OK;
+  AAFDLL *pAAFDLL = NULL;
+
+  // Get the dll wrapper
+  hr = LoadIfNecessary(&pAAFDLL);
+  if (FAILED(hr))
+    return hr;
+  
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->RawStorageIsAAFFileKind(pStorage, pAAFFileKind, pRawStorageIsAAFFile);
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  return hr;
+}
+
+
+
+//***********************************************************
+//
 // AAFCreateRawStorageMemory()
 //
 STDAPI AAFCreateRawStorageMemory (
@@ -501,6 +570,82 @@ STDAPI AAFCreateRawStorageCachedDisk (
 	   access,
 	   pageCount,
 	   pageSize,
+	   ppNewRawStorage);
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  return hr;
+}
+
+//***********************************************************
+//
+// AAFCreateRawStorageCached()
+//
+STDAPI AAFCreateRawStorageCached (
+  IAAFRawStorage * pRawStorage,
+  aafUInt32  pageCount,
+  aafUInt32  pageSize,
+  IAAFRawStorage ** ppNewRawStorage)
+{
+  HRESULT hr = S_OK;
+  AAFDLL *pAAFDLL = NULL;
+
+  // Get the dll wrapper
+  hr = LoadIfNecessary(&pAAFDLL);
+  if (FAILED(hr))
+    return hr;
+  
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->CreateRawStorageCached
+	  (pRawStorage,
+	   pageCount,
+	   pageSize,
+	   ppNewRawStorage);
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  return hr;
+}
+
+//***********************************************************
+//
+// AAFCreateRawStorageCached2()
+//
+STDAPI AAFCreateRawStorageCached2 (
+  IAAFRawStorage * pRawStorage,
+  aafUInt32  pageCount,
+  aafUInt32  pageSize,
+  IAAFCachePageAllocator*  pCachePageAllocator,
+  IAAFRawStorage ** ppNewRawStorage)
+{
+  HRESULT hr = S_OK;
+  AAFDLL *pAAFDLL = NULL;
+
+  // Get the dll wrapper
+  hr = LoadIfNecessary(&pAAFDLL);
+  if (FAILED(hr))
+    return hr;
+  
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->CreateRawStorageCached2
+	  (pRawStorage,
+	   pageCount,
+	   pageSize,
+       pCachePageAllocator,
 	   ppNewRawStorage);
   }
   catch (...)
@@ -622,6 +767,7 @@ STDAPI AAFSetProgressCallback (
 
   return hr;
 }
+
 
 
 //***********************************************************
@@ -881,9 +1027,26 @@ HRESULT AAFDLL::Load(const char *dllname)
   // Ignore failure
 
   rc = ::AAFFindSymbol(_libHandle,
+  					   "AAFCreateRawStorageCached",
+  					   (AAFSymbolAddr *)&_pfnCreateRawStorageCached);
+  // Ignore failure
+  rc = ::AAFFindSymbol(_libHandle,
+  					   "AAFCreateRawStorageCached2",
+  					   (AAFSymbolAddr *)&_pfnCreateRawStorageCached2);
+  // Ignore failure
+
+  rc = ::AAFFindSymbol(_libHandle,
 					   "AAFGetFileEncodings",
   					   (AAFSymbolAddr *)&_pfnGetFileEncodings);
   // Ignore failure
+
+  rc = ::AAFFindSymbol(_libHandle,
+					   "AAFFileIsAAFFileKind",
+  					   (AAFSymbolAddr *)&_pfnFileIsAAFFileKind);
+
+  rc = ::AAFFindSymbol(_libHandle,
+					   "AAFRawStorageIsAAFFileKind",
+  					   (AAFSymbolAddr *)&_pfnRawStorageIsAAFFileKind);
 
   rc = ::AAFFindSymbol(_libHandle,
 					   "AAFGetLibraryVersion",
@@ -937,10 +1100,14 @@ void AAFDLL::ClearEntrypoints()
   _pfnOpenTransient = NULL;
   _pfnIsAAFFile = 0;
   _pfnRawStorageIsAAFFile = 0;
+  _pfnFileIsAAFFileKind = 0;
+  _pfnRawStorageIsAAFFileKind= 0;
   _pfnGetPluginManager = NULL;
   _pfnCreateRawStorageMemory = 0;
   _pfnCreateRawStorageDisk = 0;
   _pfnCreateRawStorageCachedDisk = 0;
+  _pfnCreateRawStorageCached = 0;
+  _pfnCreateRawStorageCached2 = 0;
   _pfnCreateAAFFileOnRawStorage = 0;
   _pfnSetProgressCallback = 0;
   _pfnGetFileEncodings = 0;
@@ -1052,6 +1219,30 @@ HRESULT AAFDLL::RawStorageIsAAFFile (
   return _pfnRawStorageIsAAFFile( pStorage, pAAFFileKind, pRawStorageIsAAFFile);
 }
 
+HRESULT AAFDLL::FileIsAAFFileKind (
+    aafCharacter_constptr  pFileName,
+    aafUID_constptr pAAFFileKind,
+    aafBool *  pFileIsAAFFile)
+{
+  // This entry point is not present in some versions of the DLL
+  if (NULL == _pfnFileIsAAFFileKind)
+    return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+
+  return _pfnFileIsAAFFileKind(pFileName, pAAFFileKind, pFileIsAAFFile);
+}
+
+HRESULT AAFDLL::RawStorageIsAAFFileKind (
+    IAAFRawStorage *  pStorage,
+    aafUID_constptr pAAFFileKind,
+    aafBool *  pRawStorageIsAAFFile)
+{
+  // This entry point is not present in some versions of the DLL
+  if (NULL == _pfnRawStorageIsAAFFileKind)
+    return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+
+  return _pfnRawStorageIsAAFFileKind(pStorage, pAAFFileKind, pRawStorageIsAAFFile);
+}
+
 HRESULT AAFDLL::CreateRawStorageMemory (
 	aafFileAccess_t  access,
 	IAAFRawStorage ** ppNewRawStorage)
@@ -1094,6 +1285,41 @@ HRESULT AAFDLL::CreateRawStorageCachedDisk (
 	 access,
 	 pageCount,
 	 pageSize,
+	 ppNewRawStorage);  
+}
+
+HRESULT AAFDLL::CreateRawStorageCached (
+    IAAFRawStorage * pRawStorage,
+    aafUInt32  pageCount,
+    aafUInt32  pageSize,
+	IAAFRawStorage ** ppNewRawStorage)
+{
+  // This callback did not exist in DR4 or earlier toolkits.
+  if (NULL == _pfnCreateRawStorageCached)
+    return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+    
+  return _pfnCreateRawStorageCached
+	(pRawStorage,
+	 pageCount,
+	 pageSize,
+	 ppNewRawStorage);  
+}
+
+HRESULT AAFDLL::CreateRawStorageCached2 (
+    IAAFRawStorage * pRawStorage,
+    aafUInt32  pageCount,
+    aafUInt32  pageSize,
+    IAAFCachePageAllocator*  pCachePageAllocator,
+	IAAFRawStorage ** ppNewRawStorage)
+{
+  if (NULL == _pfnCreateRawStorageCached2)
+    return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+    
+  return _pfnCreateRawStorageCached2
+	(pRawStorage,
+	 pageCount,
+	 pageSize,
+     pCachePageAllocator,
 	 ppNewRawStorage);  
 }
 

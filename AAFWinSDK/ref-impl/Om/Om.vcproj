@@ -203,7 +203,47 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMCachePageAllocator.cpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BrowseInformation="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMCachedDiskRawStorage.cpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BrowseInformation="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\OM\OMCachedRawStorage.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -1703,7 +1743,13 @@
 				RelativePath="..\..\..\ref-impl\include\OM\OMBufferedStream.h">
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMCachePageAllocator.h">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMCachedDiskRawStorage.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\OM\OMCachedRawStorage.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMCharacterStringProperty.h">

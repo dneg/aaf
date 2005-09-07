@@ -62,6 +62,7 @@ HUMAN_TYPED_IMPL="\
 	AAFAIFCDescriptor \
 	AAFAuxiliaryDescriptor \
 	AAFCDCIDescriptor \
+	AAFCachePageAllocator \
 	AAFClassDef \
 	AAFCodecDef \
 	AAFCommentMarker \

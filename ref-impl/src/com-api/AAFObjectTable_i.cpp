@@ -50,6 +50,7 @@
 #include "CAAFAIFCDescriptor.h"
 #include "CAAFAuxiliaryDescriptor.h"
 #include "CAAFCDCIDescriptor.h"
+#include "CAAFCachePageAllocator.h"
 #include "CAAFClassDef.h"
 #include "CAAFCodecDef.h"
 #include "CAAFCommentMarker.h"

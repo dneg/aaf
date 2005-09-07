@@ -577,6 +577,104 @@ STDAPI
 
 
 STDAPI
+    AAFFileIsAAFFileKind (aafCharacter_constptr  pFileName,
+        aafUID_constptr  pAAFFileKind,
+        aafBool *  pFileIsAAFFile)
+{
+  HRESULT hr;
+
+
+  try
+    {
+      hr = ImplAAFFileIsAAFFileKind
+       (pFileName,
+        pAAFFileKind,
+        pFileIsAAFFile);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  return hr;
+}
+
+
+
+STDAPI
+    AAFRawStorageIsAAFFileKind (IAAFRawStorage *  pRawStorage,
+        aafUID_constptr  pAAFFileKind,
+        aafBool *  pRawStorageIsAAFFile)
+{
+  HRESULT hr;
+
+
+  try
+    {
+      hr = ImplAAFRawStorageIsAAFFileKind
+       (pRawStorage,
+        pAAFFileKind,
+        pRawStorageIsAAFFile);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  return hr;
+}
+
+
+
+STDAPI
     AAFGetPluginManager (IAAFPluginManager ** ppPluginManager)
 {
   HRESULT hr;
@@ -876,6 +974,159 @@ STDAPI
   return hr;
 }
 
+
+STDAPI
+    AAFCreateRawStorageCached (IAAFRawStorage *  pRawStorage,
+        aafUInt32  pageCount,
+        aafUInt32  pageSize,
+        IAAFRawStorage ** ppNewRawStorage)
+{
+  HRESULT hr;
+
+  //
+  // set up for ppNewRawStorage
+  //
+  ImplAAFRawStorage * internalppNewRawStorage = NULL;
+  ImplAAFRawStorage ** pinternalppNewRawStorage = NULL;
+  if (ppNewRawStorage)
+    {
+      pinternalppNewRawStorage = &internalppNewRawStorage;
+    }
+
+  try
+    {
+      hr = ImplAAFCreateRawStorageCached
+       (pRawStorage,
+        pageCount,
+        pageSize,
+        pinternalppNewRawStorage);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  //
+  // cleanup for ppNewRawStorage
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalppNewRawStorage)
+        {
+          pUnknown = static_cast<IUnknown *> (internalppNewRawStorage->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IAAFRawStorage, (void **)ppNewRawStorage);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalppNewRawStorage->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+  return hr;
+}
+
+
+STDAPI
+    AAFCreateRawStorageCached2 (IAAFRawStorage *  pRawStorage,
+        aafUInt32  pageCount,
+        aafUInt32  pageSize,
+        IAAFCachePageAllocator*  pCachePageAllocator,
+        IAAFRawStorage ** ppNewRawStorage)
+{
+  HRESULT hr;
+
+  //
+  // set up for ppNewRawStorage
+  //
+  ImplAAFRawStorage * internalppNewRawStorage = NULL;
+  ImplAAFRawStorage ** pinternalppNewRawStorage = NULL;
+  if (ppNewRawStorage)
+    {
+      pinternalppNewRawStorage = &internalppNewRawStorage;
+    }
+
+  try
+    {
+      hr = ImplAAFCreateRawStorageCached2
+       (pRawStorage,
+        pageCount,
+        pageSize,
+        pCachePageAllocator,
+        pinternalppNewRawStorage);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  //
+  // cleanup for ppNewRawStorage
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalppNewRawStorage)
+        {
+          pUnknown = static_cast<IUnknown *> (internalppNewRawStorage->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IAAFRawStorage, (void **)ppNewRawStorage);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalppNewRawStorage->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+  return hr;
+}
 
 
 STDAPI

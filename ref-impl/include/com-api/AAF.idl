@@ -45,6 +45,7 @@ interface IAAFAES3PCMDescriptor;
 interface IAAFAIFCDescriptor;
 interface IAAFAuxiliaryDescriptor;
 interface IAAFCDCIDescriptor;
+interface IAAFCachePageAllocator;
 interface IAAFClassDef;
 interface IAAFCodecDef;
 interface IAAFCommentMarker;
@@ -1301,6 +1302,103 @@ interface IAAFCDCIDescriptor : IUnknown
 
 
 }
+
+
+// ************************
+//
+// Interface IAAFCachePageAllocator
+//
+// ************************
+///
+/// This interface is used by the toolkit for allocation and
+/// deallocation of pages in a page cache.
+/// It is typically implemented by clients requiring control
+/// over how memory is allocated. By implementing this interface clients are
+/// able to control aspects of memory allocation such as the source from which
+/// the memory is obtained, how the memory is aligned etc.
+///
+/// Notes for implementers -
+///
+///  - Allocate() will be called a maximum of pageCount times, it
+///    may be called fewer times.
+///
+///  - Deallocate() will be called the same number of times as
+///    Allocate().
+///
+///  - Some uses of this interface never call Allocate()
+///    after Deallocate(), implementors of this interface should not
+///    assume that this is always the case.
+///
+///  - Allocate() should indicate failure by returning AAFRESULT_NOMEMORY
+///    (and not by returning a NULL pointer.)
+///
+///  - Deallocate() should accept a NULL pointer (and do nothing) as does
+///    operator delete.
+///
+///  - It is valid to allocate all the pages during Initialize() or during
+///    the first call to Allocate().
+///    For example, if aligned pages are required, allocating all the pages
+///    contiguously mans paying the space cost of alignment once instead of
+///    per-page.
+///
+///  - Initialize() will be called only once.
+///
+///
+/// In addition to the specific error results listed for each method,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+
+
+[
+    object,
+    uuid(23630652-56E9-4A17-AC31-796FE6E26E80),
+    helpstring("IAAFCachePageAllocator Interface"),
+    pointer_default(unique)
+]
+interface IAAFCachePageAllocator : IUnknown
+{
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  /// Initialize.
+  /// 
+  /// @param pageCount [in] Maximum number of pages to allocate
+  /// @param pageSize [in] Size in bytes of each page
+  ///
+  HRESULT Initialize (
+    [in] aafUInt32  pageCount,
+    [in] aafUInt32  pageSize);
+
+  //***********************************************************
+  //
+  // Allocate()
+  //
+  /// Allocate a cache page.
+  /// 
+  /// @param pPage [out] Pointer to the newly allocated page
+  ///
+  HRESULT Allocate (
+    [out] aafMemPtr_t *  pPage);
+
+  //***********************************************************
+  //
+  // Deallocate()
+  //
+  /// Dellocate a cache page.
+  /// 
+  /// @param page [in] Pointer to the page to deallocate
+  ///
+  HRESULT Deallocate (
+    [in] aafMemPtr_t  page);
+
+}
+
 
 
 // ************************
@@ -45841,6 +45939,76 @@ cpp_quote("")
 
   //***********************************************************
   //
+  // AAFFileIsAAFFileKind()
+  //
+  /// Is the named file an AAF file ?
+  ///
+  /// Note that the function result is returned via the pFileIsAAFFile argument.
+  /// If this function succeeds it returns AAFRESULT_SUCCESS even if the named
+  /// file is not an AAF file of the specified kind.
+  ///
+  /// This function will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - at least one of the pointer arguments is NULL.
+  ///
+  /// AAFRESULT_FILEKIND_NOT_REGISTERED
+  ///   - the specified file kind is not supported by the toolkit.
+  /// 
+  /// @param pFileName [in, string] Null-terminated string containing name of filesystem file.
+  /// @param pAAFFileKind [in] Pointer to an AUID indicating the file kind to check for
+  /// @param pFileIsAAFFile [out,retval] Returns AAFTrue if the given file is an AAF file of the specified kind,
+  /// returns AAFFalse otherwise.
+  /// 
+cpp_quote("STDAPI AAFFileIsAAFFileKind (")
+cpp_quote("          aafCharacter_constptr  pFileName,")
+cpp_quote("          aafUID_constptr  pAAFFileKind,")
+cpp_quote("          aafBool *  pFileIsAAFFile);")
+cpp_quote("")
+
+
+  //***********************************************************
+  //
+  // AAFRawStorageIsAAFFileKind()
+  //
+  /// Does the storage contain an AAF file ?
+  ///
+  /// Note that the function result is returned via the pRawStorageIsAAFFile argument.
+  /// If this function succeeds it returns AAFRESULT_SUCCESS even if the storage
+  /// is not an AAF file of the specified kind.
+  ///
+  /// This function will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - at least one of the pointer arguments is NULL.
+  ///
+  /// AAFRESULT_FILEKIND_NOT_REGISTERED
+  ///   - the specified file kind is not supported by the toolkit.
+  /// 
+  /// @param pRawStorage [in] storage containing the purported file
+  /// @param pAAFFileKind [in] Pointer to an AUID indicating the file kind to check for
+  /// @param pRawStorageIsAAFFile [out,retval] Returns AAFTrue if the given storage contains an AAF file of the
+  /// specified kind, returns AAFFalse otherwise.
+  /// 
+cpp_quote("STDAPI AAFRawStorageIsAAFFileKind (")
+cpp_quote("          IAAFRawStorage *  pRawStorage,")
+cpp_quote("          aafUID_constptr  pAAFFileKind,")
+cpp_quote("          aafBool *  pRawStorageIsAAFFile);")
+cpp_quote("")
+
+
+  //***********************************************************
+  //
   // AAFGetPluginManager()
   //
   /// Returns an interface of the plugin manager, which is used to
@@ -45986,6 +46154,82 @@ cpp_quote("          aafUInt32  pageSize,")
 cpp_quote("          IAAFRawStorage ** ppNewRawStorage);")
 cpp_quote("")
 
+  //***********************************************************
+  //
+  // AAFCreateRawStorageCached()
+  //
+  /// Create a new cached raw storage from an
+  /// existing raw storage.
+  ///
+  /// Succeeds if:
+  /// - The pRawStorage pointer is valid.
+  /// - The ppNewRawStorage pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pRawStorage or ppNewRawStorage arg is NULL.
+  ///
+  ///   
+  /// 
+  /// @param pRawStorage [in] Existing raw storage
+  /// @param pageCount [in] Count of cache pages
+  /// @param pageSize [in] Cache page size in bytes
+  /// @param ppNewRawStorage [out] Newly created cached storage
+  ///
+cpp_quote("STDAPI AAFCreateRawStorageCached (")
+cpp_quote("          IAAFRawStorage *  pRawStorage,")
+cpp_quote("          aafUInt32  pageCount,")
+cpp_quote("          aafUInt32  pageSize,")
+cpp_quote("          IAAFRawStorage ** ppNewRawStorage);")
+cpp_quote("")
+
+  //***********************************************************
+  //
+  // AAFCreateRawStorageCached2()
+  //
+  /// Create a new cached raw storage from an
+  /// existing raw storage with control over how the cache pages are allocated.
+  ///
+  /// Note that pages are allocated as needed so that the toolkit calls
+  /// Allocate() a maximum of pageCount times (fewer than pageCount calls
+  /// will be made if the data fits entirely within the cache).
+  /// 
+  /// Succeeds if:
+  /// - The pRawStorage pointer is valid.
+  /// - The pCachePageAllocator pointer is valid.
+  /// - The ppNewRawStorage pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - either pRawStorage, pCachePageAllocator or ppNewRawStorage arg is NULL.
+  ///
+  ///
+  /// 
+  /// @param pRawStorage [in] Existing raw storage
+  /// @param pageCount [in] Count of cache pages
+  /// @param pageSize [in] Cache page size in bytes
+  /// @param pCachePageAllocator [in] Cache page memory allocator
+  /// @param ppNewRawStorage [out] Newly created cached storage
+  ///
+cpp_quote("STDAPI AAFCreateRawStorageCached2 (")
+cpp_quote("          IAAFRawStorage *  pRawStorage,")
+cpp_quote("          aafUInt32  pageCount,")
+cpp_quote("          aafUInt32  pageSize,")
+cpp_quote("          IAAFCachePageAllocator*  pCachePageAllocator,")
+cpp_quote("          IAAFRawStorage ** ppNewRawStorage);")
+cpp_quote("")
 
   //***********************************************************
   //
