@@ -30,6 +30,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AAFAnalyzerMain", "AAFAnaly
 		{DEEB28F0-92D4-494F-A2CD-06E48B93C67F} = {DEEB28F0-92D4-494F-A2CD-06E48B93C67F}
 	EndProjectSection
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{6025C0E6-167D-4BD5-BFAF-FAE1F9BA4774}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BF106A3E-C282-476C-8014-D7575C66E8CD} = {BF106A3E-C282-476C-8014-D7575C66E8CD}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -60,6 +65,8 @@ Global
 		{BF106A3E-C282-476C-8014-D7575C66E8CD}.Debug.Build.0 = Debug|Win32
 		{BF106A3E-C282-476C-8014-D7575C66E8CD}.Release.ActiveCfg = Release|Win32
 		{BF106A3E-C282-476C-8014-D7575C66E8CD}.Release.Build.0 = Release|Win32
+		{6025C0E6-167D-4BD5-BFAF-FAE1F9BA4774}.Debug.ActiveCfg = Debug
+		{6025C0E6-167D-4BD5-BFAF-FAE1F9BA4774}.Release.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
