@@ -95,6 +95,8 @@ boost::shared_ptr<TestResult> EPMobDepPhase::Execute()
   EPDerivationTest derivationTest( _log, _spGraph, spRootNodes );
   spPhaseResult->AppendSubtestResult( derivationTest.Execute() );
 
+  spPhaseResult->SetResult( spPhaseResult->GetAggregateResult() );
+
   return spPhaseResult;
 }
 
