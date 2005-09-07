@@ -72,7 +72,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories=".,  ../../../Utilities/AAFAnalyzer/AAFAnalyzerBase,  ../../../Utilities/AAFAnalyzer/TestPhaseLib, ../../include, ../../../examples2/axLib, $(BOOSTINC),"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				RuntimeLibrary="3"
+				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -82,6 +82,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="../AAFAnalyzerBase/Release/AAFAnalyzerBase.lib ../TestPhaseLib/Release/TestPhaseLib.lib"
 				OutputFile="$(OutDir)/RegressionTest.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="TRUE"

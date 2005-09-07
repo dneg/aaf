@@ -24,6 +24,7 @@
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
@@ -68,9 +69,10 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".,  ../../../Utilities/AAFAnalyzer/AAFAnalyzerBase,  ../../../Utilities/AAFAnalyzer/TestPhaseLib, ../../include, ../../../examples2/axLib, $(BOOSTINC),"
+				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../Utilities/AAFAnalyzer/BaseTestImpl;../../../Utilities/AAFAnalyzer/EditProtocolTestImpl;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				RuntimeLibrary="3"
+				RuntimeLibrary="2"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
@@ -79,8 +81,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="../AAFAnalyzerBase/Release/AAFAnalyzerBase.lib ../TestPhaseLib/Release/TestPhaseLib.lib ../BaseTestImpl/Release/BaseTestImpl.lib ../EditProtocolTestImpl/Release/EditProtocolTestImpl.lib ../../../examples2/axLib/Release/axLib.lib ../../lib/AAF.lib ../../lib/AAFIID.lib"
 				OutputFile="$(OutDir)/AAFAnalyzerMain.exe"
 				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
+				IgnoreDefaultLibraryNames="MSVCRTD"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				OptimizeReferences="2"

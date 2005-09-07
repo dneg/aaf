@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,  ../../../Utilities/AAFAnalyzer/AAFAnalyzerBase,  ../../../Utilities/AAFAnalyzer/TestPhaseLib, ../../include, ../../../examples2/axLib, $(BOOSTINC),"
+				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -61,8 +61,10 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories=".,  ../../../Utilities/AAFAnalyzer/AAFAnalyzerBase,  ../../../Utilities/AAFAnalyzer/TestPhaseLib, ../../include, ../../../examples2/axLib, $(BOOSTINC),"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
-				RuntimeLibrary="4"
+				RuntimeLibrary="2"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
