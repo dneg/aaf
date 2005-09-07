@@ -346,13 +346,13 @@ AAFRESULT RemoveTestFile( const aafCharacter* p_file_name )
 
 
 #if defined( OS_MACOS )
-#define PLATFORM_NAME		L"MacOS"
+#define TEST_PLATFORM_NAME		L"MacOS"
 #elif defined( OS_WINDOWS )
-#define PLATFORM_NAME		L"Win32"
+#define TEST_PLATFORM_NAME		L"Win32"
 #elif defined( OS_UNIX )
-#define PLATFORM_NAME		L"Unix"
+#define TEST_PLATFORM_NAME		L"Unix"
 #else
-#define PLATFORM_NAME		L"Unknown"
+#define TEST_PLATFORM_NAME		L"Unknown"
 #endif
 
 
@@ -371,7 +371,7 @@ aafProductIdentification_t MakeProductID()
     static aafCharacter*    company_name = L"AAF Developers Desk";
     static aafCharacter*    product_name = L"ComModTestAAF";
     static aafCharacter*    product_version_string = L"1.0.0.0";
-    static aafCharacter*    platform = PLATFORM_NAME;
+    static aafCharacter*    platform = TEST_PLATFORM_NAME;
     aafProductIdentification_t  product_identification;
  
     product_identification.companyName = company_name;

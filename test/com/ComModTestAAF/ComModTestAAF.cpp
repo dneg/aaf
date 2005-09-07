@@ -203,7 +203,7 @@ main(int argc, char* argv[])
 	for (int i=0; i<argc; ++i) {
 		size_t argSize=strlen(argv[i])+1;
 		wargv[i]=new wchar_t[argSize];
-		if (mbstowcs(wargv[i], argv[i], argSize)==-1) {
+		if (mbstowcs(wargv[i], argv[i], argSize)==static_cast<size_t>(-1)) {
 			std::wcerr << L"ERROR: Cannot convert arguments to wide characters." << std::endl;
 			return EXIT_FAILURE;
 		}

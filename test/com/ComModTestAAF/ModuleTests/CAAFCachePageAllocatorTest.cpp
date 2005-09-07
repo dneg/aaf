@@ -32,6 +32,10 @@
 
 class TestCachePageAllocator : public IAAFCachePageAllocator {
 public:
+  // Defeat gcc warning about private ctor/dtor and no friends
+  // Note that this dummy function cannot itself be called because
+  // it requires a constructed TestCachePageAllocator object.
+  friend void dummyFriend(TestCachePageAllocator);
 
   HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void ** ppIfc);
 

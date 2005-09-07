@@ -1139,7 +1139,7 @@ HRESULT CAAFRandomRawStorage_test(
 
 		  if (mode == kAAFUnitTestReadWrite)
 			{
-			  cout << "  Writing "
+			  cout << "\tWriting "
 				   << sFileDescriptions[wType].description
 				   << endl;
 			  subtest_result = CreateAAFFile (sFileDescriptions[wType], fileName, fileKind, productID);
@@ -1152,7 +1152,7 @@ HRESULT CAAFRandomRawStorage_test(
 				   rType < kNumDescriptions;
 				   rType++)
 				{
-				  cout << "    Reading "
+				  cout << "\t\tReading "
 					   << sFileDescriptions[rType].description
 					   << endl;
 				  subtest_result = ReadAAFFile (sFileDescriptions[rType],

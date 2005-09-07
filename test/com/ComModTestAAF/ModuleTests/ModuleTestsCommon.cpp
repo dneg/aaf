@@ -63,8 +63,6 @@ void CreateSimpleAAFFile(aafWChar * pFileName,
 			 aafProductIdentification_constref productIdentification,
 			 SimpleFilePointers* pFilePointers )
 {
-  HRESULT hr = AAFRESULT_SUCCESS;
-
   // Remove the previous test file if any.
   RemoveTestFile(pFileName);
 
