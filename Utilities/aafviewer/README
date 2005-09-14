@@ -39,7 +39,7 @@ The AAFViewer uses the following programs and code:
 The AAFViewer was tested using the following software:
   - Graphviz version 1.9.0 (contains the 'dot' program)
 	http://www.research.att.com/sw/tools/graphviz/download.html
-  - J2SE version 1.4.1
+  - J2SE version 1.4.1 (*)
 	http://java.sun.com/j2se/1.4.1/download.html
   - ZVTM - Zoomable Visual Transformation Machine, version 0.8.2
 	http://zvtm.sourceforge.net/
@@ -47,6 +47,9 @@ The AAFViewer was tested using the following software:
 You need to download Graphviz and J2SE from the web sites shown.
 
 The jar file for ZVTM (zvtm.jar) and associated jar files have been placed in AAF/Utilities/aafviewer/lib.
+
+
+* Note: JRE version 1.4.2_08 on Linux has been found to exhibit slow responses to mouse and keyboard events in the drawing area after resizing the window. This problem does not occur for version 1.4.1_07.
 
 
 
