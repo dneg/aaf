@@ -104,7 +104,8 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
     if (NULL == ImplAAFContext::GetInstance ())
     {
       // Return the most liked error code.
-      return E_OUTOFMEMORY;
+	  SetLastError(E_OUTOFMEMORY);
+	  return FALSE;
     }
 
     // We don't need to be notified everytime a thread is created
