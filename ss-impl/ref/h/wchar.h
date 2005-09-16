@@ -19,7 +19,7 @@
 #if !defined(FLAT) || defined(OLE32)
 #include <stdarg.h>
 
-#if defined(__cplusplus) && !defined(__sgi) && !defined(__linux__)
+#if defined(__cplusplus) && !defined(__sgi) && !defined(__linux__) && !defined(__FreeBSD__)
 extern "C" {
 #endif
 
@@ -89,7 +89,7 @@ extern int STDCALL WideCharToMultiByte(
     int* lpUsedDefaultChar 	/* addr of flag set when default char. used */
    );
 
-#if defined(__cplusplus) && !defined(__sgi) && !defined(__linux__)
+#if defined(__cplusplus) && !defined(__sgi) && !defined(__linux__) && !defined(__FreeBSD__)
 }
 #endif
 
