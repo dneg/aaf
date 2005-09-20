@@ -23,6 +23,7 @@
 
 //project files
 #include <Test.h>
+#include <TestLevelTestResult.h>
 
 namespace aafanalyzer {
 
@@ -32,9 +33,10 @@ class FileDumper : public Test
   FileDumper(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph);
   ~FileDumper();
 
-  virtual boost::shared_ptr<TestResult> Execute();
+  virtual boost::shared_ptr<TestLevelTestResult> Execute();
   virtual AxString GetName() const;
   virtual AxString GetDescription() const;
+  static const TestInfo GetTestInfo();
 
  private:
 

@@ -39,9 +39,10 @@ class EPDerivationTest : public Test
 		    CompMobDependency::CompMobNodeVectorSP spTopLevelCompMobs );
   virtual ~EPDerivationTest();
 
-  virtual shared_ptr<TestResult> Execute();
+  virtual shared_ptr<TestLevelTestResult> Execute();
   virtual AxString GetName() const;
   virtual AxString GetDescription() const;
+  static const TestInfo GetTestInfo();
 
  private:
 

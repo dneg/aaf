@@ -23,6 +23,9 @@
 
 #include <TestPhase.h>
 
+#include <CompMobDependency.h>
+#include <EPDerivationTest.h>
+
 #include <boost/shared_ptr.hpp>
 
 namespace aafanalyzer {
@@ -40,7 +43,7 @@ class EPMobDepPhase : public TestPhase
 
   virtual AxString GetDescription() const;
   virtual AxString GetName() const;
-  virtual boost::shared_ptr<TestResult> Execute();
+  virtual boost::shared_ptr<TestPhaseLevelTestResult> Execute();
 
  private:
 

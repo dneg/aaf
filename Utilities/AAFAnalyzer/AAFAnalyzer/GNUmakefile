@@ -25,6 +25,6 @@
 
 PROGNAME = AAFAnalyzer
 
-PROGLIBS = -lBaseTest -lEditProtocolTest -lAAFAnalyzerBase -lTestPhase
+PROGLIBS = -lBaseTest -lEditProtocolTest -lAAFAnalyzerBase -lTestPhase -lRequirement -lexpat
 
 include ../aafanalyzer.mk

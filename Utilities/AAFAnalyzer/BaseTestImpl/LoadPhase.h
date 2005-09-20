@@ -40,9 +40,8 @@ class LoadPhase : public TestPhase
   LoadPhase(std::wostream& os, const std::basic_string<wchar_t> AAFFile);
   virtual ~LoadPhase();
 
-  virtual boost::shared_ptr<TestResult> Execute();  
-
   boost::shared_ptr<TestGraph> GetTestGraph();
+  virtual boost::shared_ptr<TestPhaseLevelTestResult> Execute();  
 
  private:
 

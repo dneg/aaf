@@ -23,7 +23,7 @@
 
 #include "Visitor.h"
 
-#include <TestResult.h>
+#include <DetailLevelTestResult.h>
 
 #include <Node.h>
 
@@ -48,14 +48,14 @@ class AcyclicVisitor : public Visitor
   virtual bool PreOrderVisit(Node& node);
   virtual bool PostOrderVisit(Node& node);
 
-  boost::shared_ptr<const TestResult> GetTestResult() const;
+  boost::shared_ptr<const DetailLevelTestResult> GetTestResult() const;
 
  private:
   bool IsPresent(Node::LID lid);
   void Erase(Node::LID lid);
 
   std::wostream& _os;
-  boost::shared_ptr< TestResult > _spResult;
+  boost::shared_ptr< DetailLevelTestResult > _spResult;
   Vector _Vector;
 
   // prohibited

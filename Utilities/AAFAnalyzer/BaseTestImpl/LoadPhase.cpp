@@ -21,6 +21,7 @@
 #include "LoadPhase.h"
 
 #include <TestGraph.h>
+#include <TestLevelTestResult.h>
 
 namespace {
 
@@ -52,28 +53,33 @@ boost::shared_ptr<TestGraph> LoadPhase::GetTestGraph()
   return _spTestGraph;
 }
 
-boost::shared_ptr<TestResult> LoadPhase::Execute() 
+boost::shared_ptr<TestPhaseLevelTestResult> LoadPhase::Execute() 
 {
 
-  boost::shared_ptr<TestResult> spLoadTest(new TestResult( PHASE_NAME,
-							   PHASE_DESC,
-							   L"", // explain
-							   L"", // docref
-							   TestResult::PASS ));
+  boost::shared_ptr<TestPhaseLevelTestResult> spLoadTest(
+                            new TestPhaseLevelTestResult( PHASE_NAME,
+                                                          PHASE_DESC,
+                                                          L"", // explain
+                                                          L"", // docref
+                                                          TestResult::PASS ));
+
   //load the AAF file and create the graph
-  FileLoad load(GetOutStream(), _FileName);
-  spLoadTest->AppendSubtestResult(load.Execute());
+  boost::shared_ptr<FileLoad> load(new FileLoad(GetOutStream(), _FileName));
+  boost::shared_ptr<const TestLevelTestResult> spTestResult( load->Execute() );
+  spLoadTest->AppendSubtestResult(spTestResult);
 
   //get the TestGraph object we need for other tests
-  _spTestGraph = load.GetTestGraph();
-
+  _spTestGraph = load->GetTestGraph();
   //resolve all the references in the AAF graph
-  RefResolver ref(GetOutStream(), _spTestGraph);
-  spLoadTest->AppendSubtestResult(ref.Execute());
+  boost::shared_ptr<RefResolver> ref(new RefResolver(GetOutStream(), _spTestGraph));
+  spTestResult = ref->Execute();
+  spLoadTest->AppendSubtestResult(spTestResult);
 
   //ensure the AAF file graph is acyclic
-  AcyclicAnalysis acy(GetOutStream(), _spTestGraph);
-  spLoadTest->AppendSubtestResult(acy.Execute());
+  boost::shared_ptr<AcyclicAnalysis> acy(new AcyclicAnalysis(GetOutStream(), _spTestGraph));
+  spTestResult = acy->Execute();
+  spLoadTest->AppendSubtestResult(spTestResult);
+
   spLoadTest->SetResult(spLoadTest->GetAggregateResult());
 
   return spLoadTest;

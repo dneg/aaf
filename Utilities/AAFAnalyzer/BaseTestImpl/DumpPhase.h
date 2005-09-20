@@ -23,6 +23,7 @@
 
 //test files
 #include <TestPhase.h>
+#include "FileDumper.h"
 
 namespace aafanalyzer {
 
@@ -35,7 +36,7 @@ class DumpPhase : public TestPhase
   ~DumpPhase();
 
   boost::shared_ptr<TestGraph> GetTestGraph();
-  boost::shared_ptr<TestResult> Execute();
+  boost::shared_ptr<TestPhaseLevelTestResult> Execute();
 
  private:
   boost::shared_ptr<TestGraph> _spTestGraph;

@@ -41,7 +41,7 @@ namespace aafanalyzer
 {
 
 FileLoad::FileLoad(std::wostream& os, const std::basic_string<wchar_t> AAFFile)
-  : Test(os),
+  : Test(os, GetTestInfo()),
     _File(AAFFile)
 {
 }
@@ -50,7 +50,7 @@ FileLoad::~FileLoad()
 {
 }
 
-boost::shared_ptr<TestResult> FileLoad::Execute()
+boost::shared_ptr<TestLevelTestResult> FileLoad::Execute()
 {
 
   GraphBuilder graphBuild;
@@ -58,7 +58,7 @@ boost::shared_ptr<TestResult> FileLoad::Execute()
 
   //output to screen
   //GetOutStream() << GetName() << std::endl << GetDescription() << std::endl << std::endl;
-    
+
   //build the graph and initialize TestGraph 
   boost::shared_ptr<TestGraph> spTestGraph(new TestGraph(graphBuild.CreateGraph(_File, spFactory)));
   SetTestGraph(spTestGraph);
@@ -66,12 +66,16 @@ boost::shared_ptr<TestResult> FileLoad::Execute()
   // Set result properties.
   // If the graph builder did not through an exception, then
   // it succeeded, therefore, result is PASS.
-  boost::shared_ptr<TestResult> spResult(
-            new TestResult( L"FileLoad",
-                            L"Loads and AAF file and builds the test graph.",
-                            L"File loaded correctly.",
-                            L"-", // DOCREF
-                            TestResult::PASS ) );
+  const boost::shared_ptr<const Test> me = this->shared_from_this();
+  Requirement::RequirementMapSP spMyReqs(new Requirement::RequirementMap(this->GetCoveredRequirements()));
+  boost::shared_ptr<TestLevelTestResult> spResult(
+            new TestLevelTestResult( L"FileLoad",
+                                     L"Loads and AAF file and builds the test graph.",
+                                     L"File loaded correctly.",
+                                     L"-", // DOCREF
+                                     TestResult::PASS,
+                                     me, 
+                                     spMyReqs ) );
   return spResult;
 }
 
@@ -85,6 +89,13 @@ AxString FileLoad::GetDescription() const
 {
   AxString description = L"Load an AAF file and build a graph of contained AAF objects.";
   return description;
+}
+
+const TestInfo FileLoad::GetTestInfo()
+{
+    boost::shared_ptr<std::vector<AxString> > spReqIds(new std::vector<AxString>);
+//    spReqIds->push_back(L"Requirement Id");
+    return TestInfo(L"FileLoad", spReqIds);
 }
 
 } // end of namespace diskstream

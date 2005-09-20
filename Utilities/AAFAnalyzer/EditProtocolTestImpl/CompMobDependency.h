@@ -25,6 +25,7 @@
 
 //project files
 #include <Test.h>
+#include <TestLevelTestResult.h>
 
 #include <vector>
 
@@ -45,9 +46,10 @@ class CompMobDependency : public Test
   CompMobDependency(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph);
   virtual ~CompMobDependency();
 
-  virtual boost::shared_ptr<TestResult> Execute();
+  virtual boost::shared_ptr<TestLevelTestResult> Execute();
   virtual AxString GetName() const;
   virtual AxString GetDescription() const;
+  static const TestInfo GetTestInfo();
 
   CompMobNodeVectorSP GetRootCompMobNodes();
 

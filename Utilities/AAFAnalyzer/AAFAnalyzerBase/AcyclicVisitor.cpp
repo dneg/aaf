@@ -22,6 +22,8 @@
 
 #include "Node.h"
 
+#include <Requirement.h>
+
 #include <iostream>
 
 namespace {
@@ -46,12 +48,14 @@ namespace aafanalyzer {
 
 AcyclicVisitor::  AcyclicVisitor(std::wostream& os)
   : _os(os),
-    _spResult( new TestResult( L"AcyclicVisitor",
-                               L"Detects cycles in an AAF object graph.",
-                               L"No cycles found.",
-                               L"", // DOCREF REQUIRED
-                               TestResult::PASS ) )
+    _spResult( new DetailLevelTestResult(L"AcyclicVisitor",
+                                         L"Detects cycles in an AAF object graph.",
+                                         L"No cycles found.",
+                                         L"", // DOCREF REQUIRED
+                                         TestResult::PASS,
+                                         *(new Requirement::RequirementMapSP(new Requirement::RequirementMap())) ) )
 {}
+//TODO: Pass a real RequirementVectorSP
 
 AcyclicVisitor::~AcyclicVisitor()
 {
@@ -126,7 +130,7 @@ void AcyclicVisitor::Erase(unsigned int lid)
   }  
 }
 
-boost::shared_ptr<const TestResult> AcyclicVisitor::GetTestResult() const
+boost::shared_ptr<const DetailLevelTestResult> AcyclicVisitor::GetTestResult() const
 {
   return _spResult; 
 }

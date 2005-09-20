@@ -23,6 +23,8 @@
 #include <DepthFirstTraversal.h>
 #include <AcyclicVisitor.h>
 
+#include <vector>
+
 namespace {
 
 using namespace aafanalyzer;
@@ -38,7 +40,7 @@ namespace aafanalyzer
 {
 
 AcyclicAnalysis::AcyclicAnalysis(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph)
-: Test(os)
+: Test(os, GetTestInfo())
 {
   SetTestGraph(spTestGraph);
 }
@@ -47,7 +49,7 @@ AcyclicAnalysis::~AcyclicAnalysis()
 {
 }
 
-boost::shared_ptr<TestResult> AcyclicAnalysis::Execute()
+boost::shared_ptr<TestLevelTestResult> AcyclicAnalysis::Execute()
 {
 
   boost::shared_ptr<AcyclicVisitor> spVisitor(new AcyclicVisitor(GetOutStream()));
@@ -57,13 +59,16 @@ boost::shared_ptr<TestResult> AcyclicAnalysis::Execute()
   //GetOutStream() << GetName() << std::endl << GetDescription() << std::endl << std::endl;
 
   //set result properties
-  boost::shared_ptr<TestResult> spResult(new TestResult());
+
+  const boost::shared_ptr<const Test> me = this->shared_from_this();
+  Requirement::RequirementMapSP spMyReqs(new Requirement::RequirementMap(this->GetCoveredRequirements()));
+  boost::shared_ptr<TestLevelTestResult> spResult(new TestLevelTestResult(me, spMyReqs ));
   spResult->SetName(GetName());
   spResult->SetDescription(GetDescription());
 
   dfs.TraverseDown(spVisitor, GetTestGraph()->GetRootNode()); 
-
-  boost::shared_ptr<const TestResult> spVisitorResult(spVisitor->GetTestResult());
+  
+  boost::shared_ptr<const DetailLevelTestResult> spVisitorResult( spVisitor->GetTestResult() );
 
   //Store sub results.
   spResult->AppendSubtestResult(spVisitorResult);
@@ -82,6 +87,13 @@ AxString AcyclicAnalysis::GetDescription() const
 {
   AxString description = L"Verify that source references are not cyclic.";
   return description;
+}
+
+const TestInfo AcyclicAnalysis::GetTestInfo()
+{
+    boost::shared_ptr<std::vector<AxString> > spReqIds(new std::vector<AxString>);
+//    spReqIds->push_back(L"Requirement Id");
+    return TestInfo(L"AcyclicAnalysis", spReqIds);
 }
 
 } // end of namespace aafanalyzer

@@ -23,6 +23,7 @@
 
 //project files
 #include <Test.h>
+#include <TestLevelTestResult.h>
 
 namespace aafanalyzer {
 
@@ -32,9 +33,10 @@ class FileLoad : public Test
   FileLoad(std::wostream& os, const std::basic_string<wchar_t> AAFFile);
   ~FileLoad();
 
-  boost::shared_ptr<TestResult> Execute();
+  boost::shared_ptr<TestLevelTestResult> Execute();
   AxString GetName() const;
   AxString GetDescription() const;
+  static const TestInfo GetTestInfo();
 
  private:
   const std::basic_string<wchar_t> _File;

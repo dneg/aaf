@@ -23,6 +23,7 @@
 
 //project files
 #include <Test.h>
+#include <TestLevelTestResult.h>
 
 namespace aafanalyzer {
 
@@ -32,9 +33,10 @@ class RefResolver : public Test
   RefResolver(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph);
   ~RefResolver();
 
-  boost::shared_ptr<TestResult> Execute();
+  boost::shared_ptr<TestLevelTestResult> Execute();
   AxString GetName() const;
   AxString GetDescription() const;
+  static const TestInfo GetTestInfo();
 
  private:
 

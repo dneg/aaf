@@ -26,6 +26,8 @@
 #include "MobNodeMap.h"
 #include "TempAllNodeMap.h"
 
+#include <Requirement.h>
+
 //Ax files
 #include <AxMobSlot.h>
 #include <AxComponent.h>
@@ -47,12 +49,15 @@ namespace aafanalyzer {
 ResolveRefVisitor::ResolveRefVisitor(std::wostream& os, boost::shared_ptr<EdgeMap> spEdgeMap )
 : _os(os),
   _spEdgeMap(spEdgeMap),
-  _spResult( new TestResult( L"ResolveRefVisitor",
-			     L"Visit source clip objects and resolve references..",
-			     L"-",
-			     L"-",
-			     TestResult::PASS ) )
+  _spResult( new DetailLevelTestResult( 
+                           L"ResolveRefVisitor",
+                           L"Visit source clip objects and resolve references..",
+                           L"-",
+                           L"-",
+                           TestResult::PASS,
+                           *(new Requirement::RequirementMapSP(new Requirement::RequirementMap())) ) )
 {}
+//TODO: Pass a real RequirementVectorSP
 
 ResolveRefVisitor::~ResolveRefVisitor()
 {
@@ -127,18 +132,21 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
   {
     AxString explain( L"Out-file mob referenced. ID = " );
     explain += AxStringUtil::mobid2Str( mobid );
-    boost::shared_ptr<TestResult> spWarning( new TestResult( _spResult->GetName(),
+    boost::shared_ptr<const DetailLevelTestResult> spWarning( new DetailLevelTestResult( _spResult->GetName(),
 							     L"-", // desc
 							     explain,
 							     L"-", // docref
-							     TestResult::WARN ) );
+							     TestResult::WARN,
+                                 *(new Requirement::RequirementMapSP(new Requirement::RequirementMap())) ) );
+    //TODO: Pass a real RequirementVectorSP
     _spResult->AppendSubtestResult( spWarning );
+    _spResult->SetResult( _spResult->GetAggregateResult() );
   }
 
   return true;
 }
 
-boost::shared_ptr<const TestResult> ResolveRefVisitor::GetTestResult() const
+boost::shared_ptr<const DetailLevelTestResult> ResolveRefVisitor::GetTestResult() const
 {
   return _spResult;
 }

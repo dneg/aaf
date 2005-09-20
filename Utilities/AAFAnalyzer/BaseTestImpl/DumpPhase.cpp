@@ -20,7 +20,7 @@
 
 #include "DumpPhase.h"
 
-#include "FileDumper.h"
+#include <TestLevelTestResult.h>
 
 namespace {
 
@@ -49,15 +49,17 @@ boost::shared_ptr<TestGraph> DumpPhase::GetTestGraph()
   return _spTestGraph;
 }
 
-boost::shared_ptr<TestResult> DumpPhase::Execute()
+boost::shared_ptr<TestPhaseLevelTestResult> DumpPhase::Execute()
 {
-  boost::shared_ptr<TestResult> spLoadTest(new TestResult());
+  boost::shared_ptr<TestPhaseLevelTestResult> spLoadTest(new TestPhaseLevelTestResult());
   spLoadTest->SetName(L"DumpPhase");
   spLoadTest->SetDescription(L"Output the contents of the AAF parse tree.");
 
   //dump the aaf file graph to screen
-  FileDumper dumper(GetOutStream(), GetTestGraph());
-  spLoadTest->AppendSubtestResult(dumper.Execute());
+  boost::shared_ptr<FileDumper> dumper(new FileDumper(GetOutStream(), GetTestGraph()));
+  
+  boost::shared_ptr<const TestLevelTestResult> spTestResult( dumper->Execute() );
+  spLoadTest->AppendSubtestResult(spTestResult);
   spLoadTest->SetResult(spLoadTest->GetAggregateResult());
 
   return spLoadTest;

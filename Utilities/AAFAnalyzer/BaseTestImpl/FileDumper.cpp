@@ -39,7 +39,7 @@ namespace aafanalyzer
 {
 
 FileDumper::FileDumper(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph)
-: Test(os)
+: Test(os, GetTestInfo())
 {
   SetTestGraph(spTestGraph);
 }
@@ -48,7 +48,7 @@ FileDumper::~FileDumper()
 {
 }
 
-boost::shared_ptr<TestResult> FileDumper::Execute()
+boost::shared_ptr<TestLevelTestResult> FileDumper::Execute()
 {
   boost::shared_ptr<TestVisitor> spVisitor(new TestVisitor());
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
@@ -56,7 +56,9 @@ boost::shared_ptr<TestResult> FileDumper::Execute()
   //output to screen
   //GetOutStream() << GetName() << std::endl << GetDescription() << std::endl << std::endl;
 
-  boost::shared_ptr<TestResult> spResult(new TestResult());
+  const boost::shared_ptr<const Test> me = this->shared_from_this();
+  Requirement::RequirementMapSP spMyReqs(new Requirement::RequirementMap(this->GetCoveredRequirements()));
+  boost::shared_ptr<TestLevelTestResult> spResult(new TestLevelTestResult(me, spMyReqs ));
 
   //set result properties
   spResult->SetName(GetName());
@@ -76,6 +78,13 @@ AxString FileDumper::GetDescription() const
 {
   AxString description = L"Dump an dobject graph..";
   return description;
+}
+
+const TestInfo FileDumper::GetTestInfo()
+{
+    boost::shared_ptr<std::vector<AxString> > spReqIds(new std::vector<AxString>);
+//    spReqIds->push_back(L"Requirement Id");
+    return TestInfo(L"FileDumper", spReqIds);
 }
 
 } // end of namespace diskstream

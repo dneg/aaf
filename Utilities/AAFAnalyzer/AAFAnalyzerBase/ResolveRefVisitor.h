@@ -23,7 +23,7 @@
 
 #include "TypedVisitor.h"
 
-#include <TestResult.h>
+#include <DetailLevelTestResult.h>
 
 //stl files
 #include <iostream>
@@ -41,12 +41,12 @@ class ResolveRefVisitor : public TypedVisitor
 
   virtual bool PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node);
 
-  boost::shared_ptr<const TestResult> GetTestResult() const;
+  boost::shared_ptr<const DetailLevelTestResult> GetTestResult() const;
 
  private:
   std::wostream& _os;
   boost::shared_ptr<EdgeMap> _spEdgeMap;
-  boost::shared_ptr< TestResult > _spResult;
+  boost::shared_ptr< DetailLevelTestResult > _spResult;
 
   // prohibited
   ResolveRefVisitor( const ResolveRefVisitor& );

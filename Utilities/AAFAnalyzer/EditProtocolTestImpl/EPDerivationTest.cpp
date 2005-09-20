@@ -19,6 +19,7 @@
 //=---------------------------------------------------------------------=
 
 #include <EPDerivationTest.h>
+#include <DetailLevelTestResult.h>
 
 #include <TypedVisitor.h>
 #include <DepthFirstTraversal.h>
@@ -61,12 +62,14 @@ public:
   MobChainVisitor( wostream& log )
     : TypedVisitor(),
       _log( log ),
-      _spResult( new TestResult( L"MobChainVisitor",
+      _spResult( new DetailLevelTestResult( L"MobChainVisitor",
 				 L"Visit mobs and verify derivation order.",
 				 L"", // explain
 				 L"", // DOCREF REQUIRED
-				 TestResult::PASS ) )
+				 TestResult::PASS,
+                 *(new Requirement::RequirementMapSP(new Requirement::RequirementMap())) ) )
   {}
+  //TODO: Pass a real RequirementVectorSP
 
   virtual ~MobChainVisitor()
   {}
@@ -133,7 +136,7 @@ public:
     return true;
   }
  
-  shared_ptr<TestResult> GetResult()
+  shared_ptr<DetailLevelTestResult> GetResult()
   {
     return _spResult;
   }
@@ -141,21 +144,22 @@ public:
 private:
 
   wostream& _log;
-  shared_ptr<TestResult> _spResult;
+  shared_ptr<DetailLevelTestResult> _spResult;
 };
 
 //======================================================================
 
-shared_ptr<TestResult> AnalyzeMobChain( wostream& log,
+shared_ptr<DetailLevelTestResult> AnalyzeMobChain( wostream& log,
 					shared_ptr<TestGraph> spGraph,
 					CompMobDependency::CompMobNodeSP spRootComposition )
 {
-  shared_ptr<TestResult> spResult( new TestResult( L"Verify Mob Chain",
+  shared_ptr<DetailLevelTestResult> spResult( new DetailLevelTestResult( L"Verify Mob Chain",
 						   L"Verify the structure of one mob chain.",
 						   L"", // explain
 						   L"",  // DOCREF REQUIRED
-						   TestResult::PASS ) );
-  
+						   TestResult::PASS,
+                           *(new Requirement::RequirementMapSP(new Requirement::RequirementMap())) ) );
+  //TODO: Pass a real RequirementVectorSP 
   
   AxCompositionMob axCompMob( spRootComposition->GetAAFObjectOfType() );
   AxString mobName = axCompMob.GetName();
@@ -180,7 +184,7 @@ class Analyzer
 public:
   Analyzer( wostream& log,
 		   shared_ptr<TestGraph> spGraph,
-		   shared_ptr<TestResult> spPhaseResult )
+		   shared_ptr<TestLevelTestResult> spPhaseResult )
     : _log( log ),
       _spGraph( spGraph ),
       _spPhaseResult( spPhaseResult )
@@ -194,7 +198,7 @@ public:
 private:
   wostream& _log;
   shared_ptr<TestGraph> _spGraph;
-  shared_ptr<TestResult> _spPhaseResult;
+  shared_ptr<TestLevelTestResult> _spPhaseResult;
 };
 
 //======================================================================
@@ -208,7 +212,7 @@ namespace aafanalyzer {
 EPDerivationTest::EPDerivationTest( wostream& log,
 				    shared_ptr<TestGraph> spGraph,
 				    CompMobDependency::CompMobNodeVectorSP spTopLevelCompMobs )
-  : Test( log ),
+  : Test( log, GetTestInfo() ),
     _spGraph( spGraph ),
     _spTopLevelCompMobs( spTopLevelCompMobs )
 {}
@@ -216,13 +220,17 @@ EPDerivationTest::EPDerivationTest( wostream& log,
 EPDerivationTest::~EPDerivationTest()
 {}
 
-shared_ptr<TestResult> EPDerivationTest::Execute()
+shared_ptr<TestLevelTestResult> EPDerivationTest::Execute()
 {
-  shared_ptr<TestResult> spPhaseResult( new TestResult(TEST_NAME,
+  const boost::shared_ptr<const Test> me = this->shared_from_this();
+  Requirement::RequirementMapSP spMyReqs(new Requirement::RequirementMap(this->GetCoveredRequirements()));
+  shared_ptr<TestLevelTestResult> spPhaseResult( new TestLevelTestResult(TEST_NAME,
 						       TEST_DESC,
 						       L"", // explain
 						       L"",  // DOCREF REQUIRED
-						       TestResult::PASS ) );
+						       TestResult::PASS,
+                               me, 
+                               spMyReqs ) );
   
   Analyzer analyzer( GetOutStream(), _spGraph, spPhaseResult );
   for_each( _spTopLevelCompMobs->begin(), _spTopLevelCompMobs->end(), analyzer );
@@ -240,6 +248,13 @@ AxString EPDerivationTest::GetName() const
 AxString EPDerivationTest::GetDescription() const
 {
   return TEST_DESC;
+}
+
+const TestInfo EPDerivationTest::GetTestInfo()
+{
+    boost::shared_ptr<std::vector<AxString> > spReqIds(new std::vector<AxString>);
+//    spReqIds->push_back(L"Requirement Id");
+    return TestInfo(L"EPDerivationTest", spReqIds);
 }
 
 } // end of namespace aafanalyzer

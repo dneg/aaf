@@ -25,7 +25,8 @@
 #include "Node.h"
 #include "TempAllNodeMap.h"
 
-#include <TestResult.h>
+#include <DetailLevelTestResult.h>
+#include <Requirement.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -72,12 +73,14 @@ class NodeRefCountVisitor : public TypedVisitor
 
   NodeRefCountVisitor(wostream& os)
     : _os(os),
-      _spResult( new TestResult( L"NodeRefCountVisitor",
+      _spResult( new DetailLevelTestResult( L"NodeRefCountVisitor",
 				 L"Counts references to nodes of a particular type.",
 				 L"", // explain
 				 L"", // docref
-				 TestResult::PASS ) )
+				 TestResult::PASS,
+                 *(new Requirement::RequirementMapSP(new Requirement::RequirementMap())) ) )
   {}
+  //TODO: Pass a real RequirementVectorSP
 
   virtual ~NodeRefCountVisitor()
   {}
@@ -139,7 +142,7 @@ class NodeRefCountVisitor : public TypedVisitor
     return spNodes;
   }
 
-  shared_ptr<TestResult> GetTestResult() const
+  shared_ptr<DetailLevelTestResult> GetTestResult() const
   {
     return _spResult;
   }
@@ -157,7 +160,7 @@ class NodeRefCountVisitor : public TypedVisitor
   }
 
   wostream& _os;
-  shared_ptr<TestResult> _spResult;
+  shared_ptr<DetailLevelTestResult> _spResult;
   NodeMap _nodeMap;   //<LID, ref count>
 };
 
