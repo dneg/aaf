@@ -1,0 +1,979 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE requirement-set SYSTEM "AAFRequirementsFormat.dtd" [
+    <!ENTITY DOC_AAF_EP "AAF Edit Protocol">
+    <!ENTITY VER_EP_1.0 "2005-04-08">
+]>
+<requirement-set>
+
+    <requirement-set-name>Edit Protocol Compliance Requirement Set</requirement-set-name>
+    <requirement-set-version>&VER_EP_1.0;</requirement-set-version>
+
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_001</id>
+        <name>Metadata Interchange</name>
+        <desc>Interchange of the metadata specified in this document shall be performed in an accurate and predictable manner.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>4.2.2</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_002</id>
+        <name>Import Accuracy</name>
+        <desc>Upon import, an Edit Protocol compliant application shall clearly report any alteration to the composition during the process according to fallback behaviours that are described in this document.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>4.2.2</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_003</id>
+        <name>Import Unsupported Metadata</name>
+        <desc>In the Edit Protocol Import/Export model an application is not required to import, maintain and subsequently export metadata objects from the AAF file that it cannot understand.  Applications shall not however replace or represent a subsequent exported file as the originally imported AAF file.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>4.2.3</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_004</id>
+        <name>Immutability of Mobs</name>
+        <desc>An application shall implement the rules regarding immutability of Mobs as described in the AAF Object Specification v1.1.  These rules specify how Mobs shall be identified when they are processed by an application.  Specifically, conditions are defined in which the identification of the Mob (MobID) must change, and in which the identification of the Mob must not change.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>4.2.3</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_005</id>
+        <name>Log Importing Fallback Behaviour</name>
+        <desc>The AAF Edit Protocol does not remove the requirement that importing applications shall log fallback behaviour for the benefit of the user as defined in this document.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>4.2.4</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_006</id>
+        <name>Non Edit Protocol Objects</name>
+        <desc>Inclusion of extraneous data (i.e. non-Edit Protocol Objects and/or Dark Metadata) shall not invalidata, obfuscate or change the meaning of the core Edit Protocol data.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>4.2.5</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_007</id>
+        <name>Legacy Features</name>
+        <desc>Support for legacy features is not required for compliance with the AAF Edit Protocol</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>4.2.6</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_008</id>
+        <name>Application Crash</name>
+        <desc>An application shall not lock-up, crash or give-up on exporting or importing an AAF file.  When an action is likely to take a considerable amount of time, an indication of this should be provided.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>5</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_009</id>
+        <name>Import Fallback</name>
+        <desc>Where the feature set of an application is insufficient to completely or accurately import the AAF file, an application shall observe the fallback behaviours specified throughout the AAF Edit Protocol.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>5</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_010</id>
+        <name>Diagnostic Log</name>
+        <desc>An application shall provide a mechanism to log diagnostic information for each import or export operation.  The log may be temporary, but shall be avaliable to an expert user.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>5</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_011</id>
+        <name>Log Details</name>
+        <desc>Certain fallback behaviours shall be logged, as defined in the AAF Edit Protocol.  Wherever appropriate, the diagnostic log should identify the Mob, Track and Position at which the fallback behaviour was required.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>5</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_012</id>
+        <name>Exporting Disallowed Metadata</name>
+        <desc>Where the feature set of an exporting application supports program metadata that the Edit Protocol specifically disallows (e.g. a program consisting of different audio sample rates which is disallowed in Section 7.3), the application shall not export that metadata to an Edit Protocol AAF file.  The omission of any metadata on export in order to comply with the Edit Protocol should be logged.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>5</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_013</id>
+        <name>Export Clip Method</name>
+        <desc>An application shall export each clip using one of the methods described in Section 6.1 of the AAF Edit Protocol.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_014</id>
+        <name>Import Clip Method</name>
+        <desc>An application shall import clips that use any of the methods described in Section 6.1 of the AAF Edit Protocol.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_015</id>
+        <name>Import non-Exported Data</name>
+        <desc>An application that exports file source material is required to gracefully import material that does not contain it; an application that does not export file source material is required to gracefully import material that contains it.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_016</id>
+        <name>Exoirt Mobs for Entire Derivation Chain</name>
+        <desc>An exporting application should include and reference the Mobs for the entire derivation chain to the extent that it is aware of it</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.2</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_017</id>
+        <name>End of Derivation Chain</name>
+        <desc>The end of the derivation change (i.e. the original material), to the extent an application is aware of it, shall be specified using a zero-value SourceClip object.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.2</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_018</id>
+        <name>Include CompositionMob or MasterMob</name>
+        <desc>If a reference is made to a CompositionMob or MasterMob, that Mob shall be included in the AAF file.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.2</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_019</id>
+        <name>Include SourceMob</name>
+        <desc>If a reference is made to a SourceMob, that Mob should be included in the AAF file.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.2</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_020</id>
+        <name>Include SourceMobs Wherever Possible</name>
+        <desc>It is highly desirable to include referenced SourceMobs in the AAF file wherever possible.  When an exporting application needs to reference a SourceMob that does not exist at the time, ore exists only in an external system, the application may referebce a SourceMob that is not included in the AAF file.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.2</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_021</id>
+        <name>Resolve Reference on Import</name>
+        <desc>Where a SourceMob is referenced but not included in the AAF file, the importing application shall attempt to resolve the reference to the SourceMobs that it was previously aware of.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.2.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_022</id>
+        <name>Importing Reference Outside of TimelineMobSlot</name>
+        <desc>Where a CompositionMob uses a SourceClip object to reference a TimelineMobSlot, the importing application shall treat any references beyond the extent of the TimelineMobSlot (before the begining or after the end) as if they had referenced Filler, i.e. present as black picture or silence audio.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.2.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_023</id>
+        <name>Valid Reference Outside of TimelineMobSlot</name>
+        <desc>Within a Two-Parameter Audio Dissolve effect a CompositionMob may use a SourceClip object to reference a TimelineMobSlot beyond the extent of the TimelineMobSlot (before the begining or after the end).</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.2.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_024</id>
+        <name>Search for Source</name>
+        <desc>For SourceMob references that remain unresolved, the importing application shall search the part of the derivation chain that is avaliable to find a source it may support.  If no supported source is found, some placeholder exxence shall be substituted.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.2.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_025</id>
+        <name>Top-level Composition Specification</name>
+        <desc>A top-level composition shall be specified using a CompositionMob with Mob::UsageCode property equal to Usage_TopLevel.  A top-level composition shall not be referenced by another Mob in the AAF file.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.3</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_026</id>
+        <name>Top-level Composition May Reference</name>
+        <desc>A top-level composition shall only reference the following kinds of material: a lower-level composition, a sub-clip composition, an adjusted-clip composition, a template clip, or a clip.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.3</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_027</id>
+        <name>Top-level Composition Name</name>
+        <desc>The top-level composition Mob::Name property shall be a valid name identifying the composition.  Where multiple compositions are exported, each shall have a different name.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section></section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_028</id>
+        <name>Top-Level Composition Contents</name>
+        <desc>A top-level composition shall contain one ore more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.3</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_029</id>
+        <name>Importing Top-Level Composition Fallback Behaviour</name>
+        <desc>If the importing application does not support the required number of top-level compositions, a subset shall be imported into the application.  This fallback behaviour shall be logged.  The user should be able to select which top-level compositions are imported from a list of this Mob::Names.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.3.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_030</id>
+        <name>Lower_Level Composition Specification</name>
+        <desc>A lower-level composition shall be specified using a CompositionMob with Mob::UsageCode property equal to Usage_LowerLevel.  A lower-level composition shall be referenced by a top-level or lower-level composition in the AAF file.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.4</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_031</id>
+        <name>Lower-level Composition May Reference</name>
+        <desc>A lower-level composition shall only reference the following kinds of material: a sub-clip composition, an adjusted-clip composition, a template clip, or a clip.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.4</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_032</id>
+        <name>Lower-level Composition Name</name>
+        <desc>The lower-level composition Mob::Name property shall be a valid name identifying the composition.  Where multiple compositions are exported, each shall have a different name.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.4</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_033</id>
+        <name>Importing Lower-level Composition Fallback Behaviour</name>
+        <desc>If the importing application does not support the required depth of references to lower-level compositions, the application shall replace the references to lower-level compositions with equivalent references to clips, i.e. the linkage from the top-level compositions to the clip shall not be lost.  This fallback behaviour shall be logged.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.4.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_034</id>
+        <name>Sub-clip Composition Specification</name>
+        <desc>A sub-clip composition shall be specified using a CompositionMob with Mob::UsageCode property equal to Usage_SubClip.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.5</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_035</id>
+        <name>Sub-clip Legacy Representation</name>
+        <desc>An alternative representation of a sub-clip composition is prevalent in legacy files.  This representation is a CompositionMob with Mob::AppCode property equal to 2.  An importing application may treat this as a sub-clip composition.  Any other value of Mob::AppCode property in a CompositionMob may be ignored and the CompositionMob treated as a lower-level composition.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.5</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_036</id>
+        <name>Sub-clip Composition May Reference</name>
+        <desc>A sub-clip composition shall only reference the following kinds of material: an adjusted-clip composition, a template clip, or a clip.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.5</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_037</id>
+        <name>Sub-clip Composition Contents</name>
+        <desc>Each essence track of a sub-clip composition shall contain exactly one SourceClip.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.5</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_038</id>
+        <name>Sub-clip Composition Identification</name>
+        <desc>The sub-clip Mob::Name property shall be a valid name identifying the sub-clip.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.5</section>
+        </ref>
+    </requirement>
+
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_039</id>
+        <name>CompositionMob: Sub-clip Classification</name>
+        <desc>A CompositionMob with Mob::UsageCode property equal to Usage_SubClip shall be treated as a sub-clip composition.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.5.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_040</id>
+        <name>CompositionMob: Lower-level Classification</name>
+        <desc>A CompositionMob with Mob::UsageCode property not equal to Usage_SubClip shall have the Mob::UsageCode property retained; however the Mob shall be treated as a lower-level composition.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.5.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_041</id>
+        <name>Classification of Sub-clips Not Meeting Export Restrictions</name>
+        <desc>A sub-clip composition that does not comply with the restrictions for exporting sub-clips should be treated as a lower-level composition.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.5.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_042</id>
+        <name>Importing Sub-clip Fallback Behaviour</name>
+        <desc>If the importing application does not support sub-clips, the Mob shall be treated as a lower-level composition.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.5.2</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_043</id>
+        <name>Adjusted-clip Composition Specification</name>
+        <desc>An adjusted-clip composition shall be specified using a CompositionMob with Mob::UsageCode property equal to Usage_AdjustedClip.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.6</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_044</id>
+        <name>Adjusted-clip Composition Legacy Representation</name>
+        <desc>An alternative representation of an adjusted-clip composition is prevalent in legacy files.  This representation is a MasterMob containing an OperationGroup.  An importing application may treat this as an adjusted clip composition.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.6</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_045</id>
+        <name>Adjusted-clip Composition May Reference</name>
+        <desc>An adjusted-clip composition shall only reference the following kinds of material: a template clip or a clip</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.6</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_046</id>
+        <name>Adjusted-clip Composition Contents</name>
+        <desc>Each essence track of an adjusted-clip composition shall contain exactly one OperationGroup.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.6</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_047</id>
+        <name>Adjusted-clip Composition Name</name>
+        <desc>The adjusted-clip Mob::Name property shall be a valid name identifying the adjusted-clip.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.6</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_048</id>
+        <name>Importing Adjusted-clip Fallback Behaviour</name>
+        <desc>If the importing application does not support adjusted-clips, the Mob shall be treated as a lower-level composition.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.6.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_049</id>
+        <name>Template Clip Specification</name>
+        <desc>A template clip shall be specified using a MasterMob with Mob::UsageCode property equal to Usage_Template.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.7</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_050</id>
+        <name>Template Clip Contents</name>
+        <desc>Each essence track of a template clip shall contain exactly one SourceClip.  The SourceClip shall have zero-value to denote the end of the known derivation chain.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.7</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_051</id>
+        <name>Convert Template Clip to a Clip</name>
+        <desc>If all the template clip essence tracks are updated to refer to particular sources, then the template clip shall be converted to a clip.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.7</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_052</id>
+        <name>Template Clip Name</name>
+        <desc>The template clip Mob::Name property shall be a valid name identifying the template clip.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.7</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_053</id>
+        <name>Importing Template Clip Fallback Behaviour</name>
+        <desc>If the importing application does not support template clips, the Mob shall be treated as a clip with some placeholder essence it it.  This fallback behaviour shall be logged.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.7.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_054</id>
+        <name>Clip Specification</name>
+        <desc>A clip shall be specified using a MasterMob with no Mob::UsageCode property.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.8</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_055</id>
+        <name>Clip May Reference</name>
+        <desc>A clip shall only reference the following kinds of material: a file source, an import source, a tape source, or a film source.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.8</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_056</id>
+        <name>Unique Clip Reference Type</name>
+        <desc>A MasterMob shall not reference more than one essence track of a particular file source from each time position in the MasterMob.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.8</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_057</id>
+        <name>Clip Name</name>
+        <desc>The clip Mob::Name property shall be a valid name identifying the clip.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.8</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_058</id>
+        <name>File Source Specification</name>
+        <desc>A file source shall be specified using a SourceMob with an EssenceDescriptor that is a sub-class of FileDescriptor.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.9</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_059</id>
+        <name>File Source Must Have FileDescriptor::ContainerDefinition</name>
+        <desc>The essence associated with a file SourceMob shall either be internal to the AAF file in an EssenceData object or external to the AAF file.  In either case, the file SourceMob shall have a FileDescriptor::ContainerDefinition property specifying the kind of essence container.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.9</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_060</id>
+        <name>Locator Should be Used for External Essence in File Source</name>
+        <desc>Where essence is external to the AAF file, the EssenceDescriptor::Locator property should contain a Locator object specifying the location of the essence.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.9</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_061</id>
+        <name>Locator Contents for External Essence in File Source</name>
+        <desc>Where essence is external to an AAF file, the EssenceDescriptor::Locator property should include at least one NetworkLocator that that complies with the constrains set out in Section 6.9 of the AAF Edit Protocol.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.9</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_062</id>
+        <name>Exporting File Source Containing Relative URIs</name>
+        <desc>When exporting an AAF file containing relative URIs, the exporting application should also export the target resources.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.9</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_063</id>
+        <name>Include Source Mobs when Exporting File Source</name>
+        <desc>If a file source has any of the following sources, then those source mobs should be included and referenced by the file source: an import source, a tape source, or a film source.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.9</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_064</id>
+        <name>File Source Must Refernce a Source</name>
+        <desc>If a file source does not have an import source, a tape source or a film source, then it shall reference and include a recording source.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.9</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_065</id>
+        <name>May Use EssenceData When Importing File Source</name>
+        <desc>An importing application may use the EssenceData object in the AAF file if it is present or may use the exteral essence located by the NetworkLocator.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.9.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_066</id>
+        <name>Verify File Source URIs on Import</name>
+        <desc>Importing applications should verify that URIs can be successfully resolved before attempting to use them.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.9.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_067</id>
+        <name>Importing Without Proper File Source Support</name>
+        <desc>If the importing application does not support file sources or the particular file source format or cannot locate the file source essence, it shall search along the source derivation chain to find a source it may suppoprt.  If no supported source is found, some placeholder essence shall be substituted.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.9.2</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_068</id>
+        <name>File Source Essence Cannot be Found When Importing File Source</name>
+        <desc>If file source importing fails because the importing essence cannot locate the file source essence, the file source MobID and searched paths shall be logged.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.9.2</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_069</id>
+        <name>Import File Source Read Error Fallback Behaviour</name>
+        <desc>If file source importing fails because the reading or parsing of the file source essence was unsuccessful, then the application should import as much of the essence as possible and pad any remaining duration with placeholder essence.  This fallback shall be logged.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.9.2</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_070</id>
+        <name>Use of Recording Source</name>
+        <desc>When no physical source exists for file source material, such as in the case of live recordings, a recording source may be used to represent the source.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.10</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_071</id>
+        <name>Recording Source Specification</name>
+        <desc>A recording source shall be specified using a SourceMob with a RecordingDescriptor.  A recording source is also known as a recording SourceMob.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.10</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_072</id>
+        <name>Recording Source Contents</name>
+        <desc>Each essence track of a recording source shall contain exactly one SourceClip.  The SourceClip shall have zero-value to denote the end of the known derivation chain.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.10</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_073</id>
+        <name>Recording Source Name</name>
+        <desc>The recording source Mob::Name property shall be a valid name identifying the source, e.g. a name describing a recording session.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.10</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_074</id>
+        <name>Import Source Specification</name>
+        <desc>An import source shall be specified using a SourceMob with an ImportDescriptor.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.11</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_075</id>
+        <name>Import Source Locator</name>
+        <desc>The EssenceDescriptor::Locator property shall include at least one NetworkLocator that complies with the constrains set out in Section 6.9 of the AAF Edit Protocol.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.11</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_076</id>
+        <name>Include Sources When Importing Import Source </name>
+        <desc>If an import source has any of the following source, then those source mobs should be included and referenced by the import source: a tape source or a film source.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.11</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_077</id>
+        <name>Importing Without Proper Import Source Support</name>
+        <desc>If the importing application does not support import sources or the particular import source format as determined by inspection of the file or cannot locate the file source essence, it shall search along the source  derivation chain to find a source it may support.  If no supported source is found, some placeholder essence shall be substituted.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.11.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_078</id>
+        <name>File Source Essence Cannot be Found When Importing Import Source</name>
+        <desc>If import source importing fails because the importing application cannot locate the file source essence, the file source MobID and searched paths shall be logged.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.11.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_079</id>
+        <name>Import Import Source Read Error Fallback Behaviour</name>
+        <desc>If import source importing fails because the reading or parsing of the file source essence was unsuccessful, then the application should import as much of the essence as possible and pad any remaining duration with placeholder essence.  This fallback shall be logged.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.11.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_080</id>
+        <name>Tape Source Specification</name>
+        <desc>A tape source shall be specified using a SourceMob with a TapeDescriptor.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.12</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_081</id>
+        <name>Tape Source Name</name>
+        <desc>The tape source Mob::Name property shall be a valid name identifying the tape name.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.12</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_082</id>
+        <name>Tape Source Timecode Tracks</name>
+        <desc>Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.12</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_083</id>
+        <name>Tape Source with Film Source</name>
+        <desc>If a tape has a film source, then it should be included and referenced by the tape source.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.12</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_084</id>
+        <name>Importing Tape Source Fallback Behaviour</name>
+        <desc>If the importing application does not support tape sources or the particular tape source, it shall search along the source derivation chain to find a source it may support.  If no supported source is found, some placeholder essence shall be substituted.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.12.1</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_085</id>
+        <name>Film Source Specification</name>
+        <desc>A film source shall be specified using a SourceMob with a FilmDescriptor.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.13</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_086</id>
+        <name>Film Source Name</name>
+        <desc>The film source Mob::Name property shall be a valid name identifying the film reel name.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.13</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="file" category="compositional">
+        <id>REQ_EP_087</id>
+        <name>Film Source Edgecodes</name>
+        <desc>A film SourceMob may contain one or more edgecode tracks.  Edgecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type as shown in Section 6.13 of the AAF Edit Protocol.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.13</section>
+        </ref>
+    </requirement>
+    
+    <requirement type="app" category="compositional">
+        <id>REQ_EP_088</id>
+        <name>Import Film Source Fallback Behaviour</name>
+        <desc>If the importing applcation does not support film sources, it shall search along the source derivation chain to find a source it may support.  If no supported source is found, some placeholder essence shall be substituted.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.13.1</section>
+        </ref>
+    </requirement>
+    
+</requirement-set>

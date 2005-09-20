@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT requirement-set (requirement-set-name, requirement-set-version, requirement+)>
+<!ELEMENT requirement-set-name (#PCDATA)>
+<!ELEMENT requirement-set-version (#PCDATA)>
+<!ELEMENT requirement (id, name, desc, ref)>
+<!ATTLIST requirement
+	type ( app | file ) #REQUIRED
+	category ( compositional | annotations | ad-hoc ) #REQUIRED
+>
+<!ELEMENT id (#PCDATA)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT desc (#PCDATA)>
+<!ELEMENT ref (doc, version, section)>
+<!ELEMENT doc (#PCDATA)>
+<!ELEMENT version (#PCDATA)>
+<!ELEMENT section (#PCDATA)>
