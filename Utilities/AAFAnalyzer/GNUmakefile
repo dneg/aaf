@@ -22,7 +22,8 @@
 #
 ###############################################################################
 
-ALL = AAFAnalyzerBase \
+ALL = RequirementLib \
+      AAFAnalyzerBase \
       TestPhaseLib \
       RegressionTest \
       BaseTestImpl \
@@ -32,11 +33,15 @@ ALL = AAFAnalyzerBase \
 all: $(ALL)
 
 .PHONY: AAFAnalyzerBase
-AAFAnalyzerBase:
+AAFAnalyzerBase: RequirementLib
 	cd AAFAnalyzerBase && $(MAKE)
 
+.PHONY: RequirementLib
+RequirementLib:
+	cd RequirementLib && $(MAKE)	
+
 .PHONY: TestPhaseLib
-TestPhaseLib: AAFAnalyzerBase
+TestPhaseLib: RequirementLib AAFAnalyzerBase
 	cd TestPhaseLib && $(MAKE)
 
 .PHONY: RegressionTest
@@ -44,15 +49,15 @@ RegressionTest: AAFAnalyzerBase TestPhaseLib
 	cd RegressionTest && $(MAKE)
 
 .PHONY: BaseTestImpl
-BaseTestImpl: AAFAnalyzerBase TestPhaseLib
+BaseTestImpl: AAFAnalyzerBase TestPhaseLib RequirementLib
 	cd BaseTestImpl && $(MAKE)
 
 .PHONY: EditProtocolTestImpl
-EditProtocolTestImpl: AAFAnalyzerBase TestPhaseLib
+EditProtocolTestImpl: AAFAnalyzerBase TestPhaseLib RequirementLib
 	cd EditProtocolTestImpl && $(MAKE)
 
 .PHONY: AAFAnalyzer
-AAFAnalyzer: EditProtocolTestImpl AAFAnalyzerBase TestPhaseLib
+AAFAnalyzer: EditProtocolTestImpl AAFAnalyzerBase TestPhaseLib RequirementLib BaseTestImpl EditProtocolTestImpl
 	cd AAFAnalyzer && $(MAKE)
 
 .PHONY : check
@@ -61,6 +66,7 @@ check : RegressionTest
 
 .PHONY: clean
 clean:
+	cd RequirementLib && $(MAKE) GENDEPS=0 $@
 	cd AAFAnalyzerBase && $(MAKE) GENDEPS=0 $@
 	cd TestPhaseLib && $(MAKE) GENDEPS=0 $@
 	cd RegressionTest && $(MAKE) GENDEPS=0 $@

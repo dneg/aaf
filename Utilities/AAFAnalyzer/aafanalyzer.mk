@@ -42,6 +42,7 @@ INCLUDES = -I$(AAFSDKINCLUDEDIR) \
 	   -I../BaseTestImpl \
 	   -I../EditProtocolTestImpl \
 	   -I../TestPhaseLib \
+	   -I../RequirementLib \
 	   -I$(AAFBASE)/examples2/axLib
 
 
