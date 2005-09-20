@@ -37,7 +37,7 @@ endif
 # Common definitions
 include $(AAFBASE)/build/common.mk
 
-INCLUDES = -I. -I$(AAFSDKINCLUDEDIR) -I$(AAFBASE)/examples2/axLib -I../AAFAnalyzerBase
+INCLUDES = -I. -I$(AAFSDKINCLUDEDIR) -I$(AAFBASE)/examples2/axLib -I../AAFAnalyzerBase -I../RequirementLib
 
 .PHONY : all
 all : TestPhase

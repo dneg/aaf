@@ -21,6 +21,9 @@
 #ifndef __TESTRESULT_h__
 #define __TESTRESULT_h__
 
+//Project files
+#include "Test.h"
+
 //Ax files
 #include <AxTypes.h>
 
@@ -39,16 +42,10 @@ class TestResult
 {
  public:
 
-  enum Result {PASS, WARN, FAIL};
+  enum Result      {PASS, WARN, FAIL};
+  enum ResultLevel {TOP, PHASE, TEST, DETAIL};
 
-  TestResult();
-  TestResult( const AxString& name,
-	      const AxString& desc,
-	      const AxString& explain,
-	      const AxString& docref,
-	      Result defaultResult );
-  TestResult& operator=(const TestResult& test);
-  ~TestResult();
+  virtual ~TestResult();
 
   const AxString& GetExplanation() const;
   const AxString& GetDocumentRef() const;
@@ -64,26 +61,52 @@ class TestResult
   typedef std::vector< boost::shared_ptr<const TestResult> > SubtestResultVector;
   typedef boost::shared_ptr<SubtestResultVector> SubtestResultsSP;
 
-  SubtestResultsSP GetSubtestResults() const;
-  void AppendSubtestResult( boost::shared_ptr<const TestResult> subtestResult );
+  const SubtestResultVector& GetSubtestResults() const;
   enum Result GetAggregateResult() const;
   bool ContainsSubtests() const;
-
-  void AddDetail( AxString detail );
+  
+  const Requirement::RequirementMap& GetRequirements( Result type ) const;
+  virtual const enum ResultLevel GetResultType() const =0;
+  
+  void AddDetail( const AxString& detail );
   const vector<AxString>& GetDetails() const;
 
+ protected:
+ 
+  TestResult();
+  TestResult( const AxString& name, const AxString& desc,
+              const AxString& explain, const AxString& docRef,
+              Result defaultResult );  
+  TestResult( const Requirement::RequirementMapSP& requirements );
+  TestResult( const AxString& name, const AxString& desc,
+              const AxString& explain, const AxString& docRef,
+              Result defaultResult, const Requirement::RequirementMapSP& requirements);
+              
+  void AddSubtestResult( boost::shared_ptr<const TestResult> subtestResult);
+  void SetEnumResult( Result enumResult );
+  bool ContainsRequirment( const AxString& id, Result& outContainedIn );
+  void ClearRequirements();
+  void AddRequirement( Result type, const boost::shared_ptr<const Requirement>& req );
+  void RemoveRequirement( const AxString& id );
+  const Requirement::RequirementMapSP& GetMyRequirements( Result type );
+              
  private:
+
   AxString _name;
   AxString _desc;
   AxString _expl;
   AxString _docRef;
   enum Result _result;
+ 
+  SubtestResultsSP _spSubtestResults; 
+  enum Result _aggregateEnumResult;
+  
+  const Requirement::RequirementMapSP _spPassedRequirements;
+  const Requirement::RequirementMapSP _spWarnedRequirements;
+  const Requirement::RequirementMapSP _spFailedRequirements;
 
   // Arbitrary comments that can be added to any result.
   vector<AxString> _details;
-  
-  SubtestResultsSP _spSubtestResults; 
-  enum Result _aggregateEnumResult;
 
   // prohibited
 };

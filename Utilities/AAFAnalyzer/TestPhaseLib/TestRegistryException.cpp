@@ -1,6 +1,6 @@
 //=---------------------------------------------------------------------=
 //
-// $Id$
+// $Id$ $Name$
 //
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
@@ -18,12 +18,12 @@
 //
 //=---------------------------------------------------------------------=
 
-#include "Test.h"
-#include "TestRegistry.h"
+#include "TestRegistryException.h"
+#include <AxUtil.h>
 
 namespace {
 
-using namespace aafanalyzer;
+//using namespace aafanalyzer;
 
 } // end of namespace
 
@@ -35,51 +35,11 @@ using namespace aafanalyzer;
 namespace aafanalyzer 
 {
 
-Test::Test(std::wostream& os, const TestInfo& info)
-: _os(os), _spCoveredRequirements(InitializeRequirements(info.GetName()))
-{
-}
+TestRegistryException::TestRegistryException( const wchar_t* what )
+  : AxEx( AxString(AxString(L"Test Registry: ") + AxString(what)).c_str() )
+{}
 
-const Test::ConstRequirementMapSP Test::InitializeRequirements(const AxString& name)
-{
-    TestRegistry& reg = TestRegistry::GetInstance();
-    return reg.GetRequirementsForTest(name);
-}
-
-Test::~Test()
-{
-}
-
-AxString Test::GetName() const
-{
-  AxString null;
-  return null;
-}
-
-AxString Test::GetDescription() const
-{
-  AxString null;
-  return null;
-}
-
-std::wostream& Test::GetOutStream() const
-{
-  return _os;
-}
-
-boost::shared_ptr<TestGraph> Test::GetTestGraph()
-{
-  return _spTestGraph;
-}
-
-void Test::SetTestGraph(boost::shared_ptr<TestGraph> spTestGraph)
-{
-  _spTestGraph = spTestGraph;
-}
-
-const Requirement::RequirementMap& Test::GetCoveredRequirements() const
-{
-    return *_spCoveredRequirements;
-}
+TestRegistryException::~TestRegistryException() throw()
+{}
 
 } // end of namespace diskstream

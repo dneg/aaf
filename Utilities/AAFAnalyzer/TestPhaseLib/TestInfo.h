@@ -1,6 +1,6 @@
 //=---------------------------------------------------------------------=
 //
-// $Id$ $Name$
+// $Id$
 //
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
@@ -18,42 +18,42 @@
 //
 //=---------------------------------------------------------------------=
 
-#ifndef __TESTPHASE_h__
-#define __TESTPHASE_h__
+#ifndef __TESTINFO_H_
+#define __TESTINFO_H_
 
-//test files
-#include "TestPhaseLevelTestResult.h"
+//Ax Files
+#include <AxTypes.h>
 
-//stl files
-#include <iostream>
-#include <vector>
-#include <string>
-
-//boost files
+//Boost Files
 #include <boost/shared_ptr.hpp>
+
+//Project Files
+#include <Requirement.h>
+
+//STL files
+#include <vector>
 
 namespace aafanalyzer {
 
-class TestPhase
+class TestInfo
 {
  public:
-  TestPhase(std::wostream& os);
-  virtual ~TestPhase();
 
-  virtual AxString GetDescription() const;
-  virtual AxString GetName() const;
-  virtual boost::shared_ptr<TestPhaseLevelTestResult> Execute() = 0; 
-  std::wostream& GetOutStream() const; 
+  TestInfo(const AxString& name, const boost::shared_ptr<const std::vector<AxString> >& requirements);
+  TestInfo(const TestInfo& other);
+  ~TestInfo();
+  const AxString GetName() const;
+  const boost::shared_ptr<const std::vector<AxString> > GetRequirementIds() const;
 
  private:
-  std::wostream& _os;
 
-  // prohibited
-  TestPhase();
-  TestPhase( const TestPhase& );
-  TestPhase& operator=( const TestPhase& );
+  const AxString _name;
+  const boost::shared_ptr<const std::vector<AxString> > _spRequirementIds;
+
+   // prohibited
+
 };
 
 } // end of namespace diskstream
 
-#endif/*__TEMPLATE_h__*/
+#endif /*__TESTINFO_H_*/

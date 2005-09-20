@@ -18,42 +18,35 @@
 //
 //=---------------------------------------------------------------------=
 
-#ifndef __TESTPHASE_h__
-#define __TESTPHASE_h__
+#ifndef __DETAILLEVELTESTRESULT_h__
+#define __DETAILLEVELTESTRESULT_h__
 
-//test files
-#include "TestPhaseLevelTestResult.h"
-
-//stl files
-#include <iostream>
-#include <vector>
-#include <string>
-
-//boost files
-#include <boost/shared_ptr.hpp>
+//Project files
+#include "LowLevelTestResult.h"
 
 namespace aafanalyzer {
 
-class TestPhase
+using namespace std;
+
+class DetailLevelTestResult : public LowLevelTestResult
 {
  public:
-  TestPhase(std::wostream& os);
-  virtual ~TestPhase();
 
-  virtual AxString GetDescription() const;
-  virtual AxString GetName() const;
-  virtual boost::shared_ptr<TestPhaseLevelTestResult> Execute() = 0; 
-  std::wostream& GetOutStream() const; 
+  DetailLevelTestResult( const Requirement::RequirementMapSP& requirements );
+  DetailLevelTestResult( const AxString& name, const AxString& desc,
+                         const AxString& explain, const AxString& docRef,
+                         Result defaultResult,
+                         const Requirement::RequirementMapSP& requirements );
+  ~DetailLevelTestResult();
 
+  void AppendSubtestResult( const boost::shared_ptr<const DetailLevelTestResult>& subtestResult );
+  const enum ResultLevel GetResultType() const;
  private:
-  std::wostream& _os;
-
+ 
   // prohibited
-  TestPhase();
-  TestPhase( const TestPhase& );
-  TestPhase& operator=( const TestPhase& );
+  
 };
 
 } // end of namespace diskstream
 
-#endif/*__TEMPLATE_h__*/
+#endif/*__DETAILLEVELTESTRESULT_h__*/

@@ -1,6 +1,6 @@
 //=---------------------------------------------------------------------=
 //
-// $Id$ $Name$
+// $Id$
 //
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
@@ -18,42 +18,35 @@
 //
 //=---------------------------------------------------------------------=
 
-#ifndef __TESTPHASE_h__
-#define __TESTPHASE_h__
+#ifndef __TESTINFOREGISTRAR_H_
+#define __TESTINFOREGISTRAR_H_
 
-//test files
-#include "TestPhaseLevelTestResult.h"
-
-//stl files
-#include <iostream>
-#include <vector>
-#include <string>
-
-//boost files
-#include <boost/shared_ptr.hpp>
+#include "TestRegistry.h"
 
 namespace aafanalyzer {
 
-class TestPhase
+template<class TestType>
+class TestInfoRegistrar
 {
  public:
-  TestPhase(std::wostream& os);
-  virtual ~TestPhase();
-
-  virtual AxString GetDescription() const;
-  virtual AxString GetName() const;
-  virtual boost::shared_ptr<TestPhaseLevelTestResult> Execute() = 0; 
-  std::wostream& GetOutStream() const; 
-
+  TestInfoRegistrar()
+  {
+    TestRegistry& tr = TestRegistry::GetInstance();
+    tr.Register( TestType::GetTestInfo() );
+  }
+  
+  ~TestInfoRegistrar()
+  {
+  }
+  
  private:
-  std::wostream& _os;
 
-  // prohibited
-  TestPhase();
-  TestPhase( const TestPhase& );
-  TestPhase& operator=( const TestPhase& );
+  //prohibited
+  TestInfoRegistrar( const TestInfoRegistrar& );
+  TestInfoRegistrar& operator=( const TestInfoRegistrar& );
+
 };
 
 } // end of namespace diskstream
 
-#endif/*__TEMPLATE_h__*/
+#endif /*__TESTINFOREGISTRAR_H_*/

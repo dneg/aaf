@@ -18,42 +18,18 @@
 //
 //=---------------------------------------------------------------------=
 
-#ifndef __TESTPHASE_h__
-#define __TESTPHASE_h__
+#ifndef __TESTREGISTRYEXCEPTION_H_
+#define __TESTREGISTRYEXCEPTION_H_
 
-//test files
-#include "TestPhaseLevelTestResult.h"
+//Ax files
+#include <AxEx.h>
 
-//stl files
-#include <iostream>
-#include <vector>
-#include <string>
+class TestRegistryException : public AxEx {
 
-//boost files
-#include <boost/shared_ptr.hpp>
+public:
 
-namespace aafanalyzer {
-
-class TestPhase
-{
- public:
-  TestPhase(std::wostream& os);
-  virtual ~TestPhase();
-
-  virtual AxString GetDescription() const;
-  virtual AxString GetName() const;
-  virtual boost::shared_ptr<TestPhaseLevelTestResult> Execute() = 0; 
-  std::wostream& GetOutStream() const; 
-
- private:
-  std::wostream& _os;
-
-  // prohibited
-  TestPhase();
-  TestPhase( const TestPhase& );
-  TestPhase& operator=( const TestPhase& );
+    TestRegistryException( const wchar_t* what );
+    virtual ~TestRegistryException() throw();
 };
 
-} // end of namespace diskstream
-
-#endif/*__TEMPLATE_h__*/
+#endif /*__TESTREGISTRYEXCEPTION_H_*/

@@ -42,9 +42,12 @@ using namespace std;
 // attached to the worst result.  It does not affect the result unless it is
 // done explicitly outside of this file.
 TestResult::TestResult()
-  : _result( FAIL ), 
+  : _result( FAIL ),
     _spSubtestResults(new SubtestResultVector()),
-    _aggregateEnumResult( PASS )
+    _aggregateEnumResult( PASS ),
+    _spPassedRequirements( new Requirement::RequirementMap() ),
+    _spWarnedRequirements( new Requirement::RequirementMap() ),
+    _spFailedRequirements( new Requirement::RequirementMap() )
 {}
 
 TestResult::TestResult( const AxString& name,
@@ -58,25 +61,39 @@ TestResult::TestResult( const AxString& name,
     _docRef( docRef ),
     _result( defaultResult ),
     _spSubtestResults(new SubtestResultVector()),
-    _aggregateEnumResult( PASS )
+    _aggregateEnumResult( PASS ),
+    _spPassedRequirements( new Requirement::RequirementMap() ),
+    _spWarnedRequirements( new Requirement::RequirementMap() ),
+    _spFailedRequirements( new Requirement::RequirementMap() )
+{}
+
+TestResult::TestResult ( const Requirement::RequirementMapSP& requirements )
+  : _result( FAIL ), 
+    _spSubtestResults(new SubtestResultVector()),
+    _aggregateEnumResult( PASS ),
+    _spPassedRequirements( requirements ),
+    _spWarnedRequirements( new Requirement::RequirementMap() ),
+    _spFailedRequirements( new Requirement::RequirementMap() )
+{}
+    
+TestResult::TestResult (const AxString& name, const AxString& desc,
+                        const AxString& explain, const AxString& docRef,
+                        Result defaultResult,
+                        const Requirement::RequirementMapSP& requirements)
+  : _name( name ),
+    _desc( desc ),
+    _expl( explain ),
+    _docRef( docRef ),
+    _result( defaultResult ),
+    _spSubtestResults(new SubtestResultVector()),
+    _aggregateEnumResult( PASS ),
+    _spPassedRequirements( requirements ),
+    _spWarnedRequirements( new Requirement::RequirementMap() ),
+    _spFailedRequirements( new Requirement::RequirementMap() )
 {}
 
 TestResult::~TestResult()
 {}
-
-TestResult& TestResult::operator=(const TestResult& test)
-{
-  if(this != &test)
-  {
-    _expl = test._expl;
-    _name = test._name;
-    _desc = test._desc;
-    _result = test._result;
-    _spSubtestResults = test._spSubtestResults;
-  }
-
-  return *this;
-}
 
 const AxString& TestResult::GetExplanation() const
 {
@@ -124,23 +141,12 @@ void TestResult::SetResult(Result result)
   _result = result;
 }
 
-TestResult::SubtestResultsSP TestResult::GetSubtestResults() const {
-    return _spSubtestResults;
+const TestResult::SubtestResultVector& TestResult::GetSubtestResults() const {
+    return *_spSubtestResults;
 }
 
-void TestResult::AppendSubtestResult( boost::shared_ptr<const TestResult> subtestResult ) {
-
-    _spSubtestResults->push_back( subtestResult );
-
-    //If the result of the appended test is worse than any other subtest then
-    //update the aggregate result.
-    if ( subtestResult->GetResult() > _aggregateEnumResult ) {
-        _aggregateEnumResult = subtestResult->GetResult();
-    }
-
-}
-
-enum TestResult::Result TestResult::GetAggregateResult() const {
+enum TestResult::Result TestResult::GetAggregateResult() const 
+{
     return _aggregateEnumResult;
 }
 
@@ -148,7 +154,23 @@ bool TestResult::ContainsSubtests() const {
     return !_spSubtestResults->empty();
 }
 
-void TestResult::AddDetail( AxString detail )
+const Requirement::RequirementMap& TestResult::GetRequirements( Result type ) const
+{
+    switch (type)
+    {
+        case PASS:
+            return *_spPassedRequirements;
+            break;
+        case WARN:
+            return *_spWarnedRequirements;
+            break;
+        default:
+            return *_spFailedRequirements;
+    }
+    
+}
+
+void TestResult::AddDetail( const AxString& detail )
 {
   _details.push_back( detail );
 }
@@ -156,6 +178,68 @@ void TestResult::AddDetail( AxString detail )
 const vector<AxString>& TestResult::GetDetails() const
 {
   return _details;
+}
+
+void TestResult::AddSubtestResult( boost::shared_ptr<const TestResult> subtestResult )
+{
+  _spSubtestResults->push_back( subtestResult );
+}
+
+void TestResult::SetEnumResult( Result enumResult )
+{
+  _aggregateEnumResult = enumResult;
+}
+
+bool TestResult::ContainsRequirment( const AxString& id, Result& outContainedIn )
+{
+    if ( _spPassedRequirements->find(id) != _spPassedRequirements->end() ) {
+        outContainedIn = PASS;
+        return true;
+    } else if ( _spWarnedRequirements->find(id) != _spWarnedRequirements->end() ) {
+        outContainedIn = WARN;
+        return true;
+    } else if ( _spFailedRequirements->find(id) != _spFailedRequirements->end() ) {
+        outContainedIn = FAIL;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void TestResult::ClearRequirements()
+{
+    _spPassedRequirements->clear();
+    _spWarnedRequirements->clear();
+    _spFailedRequirements->clear();
+}
+
+void TestResult::AddRequirement( Result type, const boost::shared_ptr<const Requirement>& req )
+{
+    Requirement::RequirementMapSP spMap = this->GetMyRequirements( type );
+    (*spMap)[req->GetId()] = req;
+}
+
+void TestResult::RemoveRequirement( const AxString& id )
+{
+    _spPassedRequirements->erase(id);
+    _spWarnedRequirements->erase(id);
+    _spFailedRequirements->erase(id);
+}
+
+const Requirement::RequirementMapSP& TestResult::GetMyRequirements( Result type )
+{
+    switch (type)
+    {
+        case PASS:
+            return _spPassedRequirements;
+            break;
+        case WARN:
+            return _spWarnedRequirements;
+            break;
+        default:
+            return _spFailedRequirements;
+    }
+    
 }
 
 } // end of namespace diskstream
