@@ -142,7 +142,7 @@
 /*
  *  Compiler:   GNU C++
  *  Processor:  Intel x86
- *  OS:         FreeBSD
+ *  OS:         OpenBSD
  */
 #elif defined(__GNUC__) && defined(__i386__) && defined(__OpenBSD__)
 #define CPU_INTEL
