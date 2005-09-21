@@ -114,7 +114,7 @@ ULONG STDMETHODCALLTYPE
 OMGSFIStorage::Release(void)
 {
 	TRACE("OMGSFIStorage::Release");
-	--_referenceCount;
+	ULONG result = --_referenceCount;
 	if (_referenceCount == 0)
 	{
 		if (_storage != 0)
@@ -128,7 +128,7 @@ OMGSFIStorage::Release(void)
 		}
 		delete this;
 	}
-	return _referenceCount;
+	return result;
 }
 
 
