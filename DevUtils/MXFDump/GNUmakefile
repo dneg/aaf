@@ -26,10 +26,12 @@ PACKAGE = DevUtils
 
 AAFBASE ?= ../..
 
-
 # Common definitions
 include $(AAFBASE)/build/common.mk
 
+ifeq ($(AAFPLATFORM),PPCDarwin)
+PLATFORMLIBS += -framework CoreServices
+endif
 
 # Include directories
 INCLUDES = -I$(AAFSDKINCLUDEDIR)
@@ -38,7 +40,7 @@ INCLUDES = -I$(AAFSDKINCLUDEDIR)
 all : $(OBJDIR) $(AAFSDKBINDIR)/MXFDump$(EXE)
 
 $(AAFSDKBINDIR)/MXFDump$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) $(RPATH_OPT) $(LIBCIO) -o $@
+	$(LD) $(PLATFORMLIBS) $(CXXOBJS) $(RPATH_OPT) $(LIBCIO) -o $@
 
 .PHONY : clean
 clean :
