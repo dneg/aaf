@@ -923,19 +923,27 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
 					    (axTypeDef));
 
       aafUInt32 sizeInBytes = 0;
-      CHECK_HRESULT(spTypeDefExtEnum->GetNameBufLenFromValue(propValue, &sizeInBytes));
+      HRESULT hr = spTypeDefExtEnum->GetNameBufLenFromValue(propValue, &sizeInBytes);
+      if (SUCCEEDED(hr))
+      {
+          int sizeInChars = (int)((double)sizeInBytes / sizeof(aafCharacter) + 0.5);
+          vector<aafCharacter> buf(sizeInChars);
+    
+          CHECK_HRESULT(spTypeDefExtEnum->GetNameFromValue(propValue, &buf[0], 
+                                   sizeInChars*sizeof(aafCharacter)));
+          AxString name(&buf[0]);
+    
+          string value = AxStringToString( name );
+          DotRecordNodeAttribute attribute( pStalker->GetName(), value );
 
-      int sizeInChars = (int)((double)sizeInBytes / sizeof(aafCharacter) + 0.5);
-      vector<aafCharacter> buf(sizeInChars);
+          oStalker->GetNode()->AddAttribute( attribute );
+      }
+      else
+      {
+          DotRecordNodeAttribute attribute( pStalker->GetName(), "?" );
+          oStalker->GetNode()->AddAttribute( attribute );
+      }
 
-      CHECK_HRESULT(spTypeDefExtEnum->GetNameFromValue(propValue, &buf[0], 
-						       sizeInChars*sizeof(aafCharacter)));
-      AxString name(&buf[0]);
-
-      string value = AxStringToString( name );
-      DotRecordNodeAttribute attribute( pStalker->GetName(), value );
-
-      oStalker->GetNode()->AddAttribute( attribute );
 
 
       PushStalker( oStalker );
