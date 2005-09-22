@@ -25,7 +25,7 @@
 
 PROGNAME = RegressionTest
 
-PROGLIBS = -lAAFAnalyzerBase -lTestPhase -lRequirement
+PROGLIBS = -lAAFAnalyzerBase -lTestPhase -lRequirement -lBaseTest
 
 include ../aafanalyzer.mk
 
