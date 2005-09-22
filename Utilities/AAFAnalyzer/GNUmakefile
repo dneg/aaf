@@ -22,18 +22,18 @@
 #
 ###############################################################################
 
-ALL = RequirementLib \
-      AAFAnalyzerBase \
+ALL = AAFAnalyzerBase \
+      RequirementLib \
       TestPhaseLib \
-      RegressionTest \
       BaseTestImpl \
+      RegressionTest \
       EditProtocolTestImpl \
       AAFAnalyzer
 
 all: $(ALL)
 
 .PHONY: AAFAnalyzerBase
-AAFAnalyzerBase: RequirementLib
+AAFAnalyzerBase:
 	cd AAFAnalyzerBase && $(MAKE)
 
 .PHONY: RequirementLib
@@ -41,23 +41,23 @@ RequirementLib:
 	cd RequirementLib && $(MAKE)	
 
 .PHONY: TestPhaseLib
-TestPhaseLib: RequirementLib AAFAnalyzerBase
+TestPhaseLib: AAFAnalyzerBase RequirementLib
 	cd TestPhaseLib && $(MAKE)
 
-.PHONY: RegressionTest
-RegressionTest: AAFAnalyzerBase TestPhaseLib
-	cd RegressionTest && $(MAKE)
-
 .PHONY: BaseTestImpl
-BaseTestImpl: AAFAnalyzerBase TestPhaseLib RequirementLib
+BaseTestImpl: AAFAnalyzerBase RequirementLib TestPhaseLib
 	cd BaseTestImpl && $(MAKE)
 
+.PHONY: RegressionTest
+RegressionTest: AAFAnalyzerBase RequirementLib TestPhaseLib BaseTestImpl
+	cd RegressionTest && $(MAKE)
+
 .PHONY: EditProtocolTestImpl
-EditProtocolTestImpl: AAFAnalyzerBase TestPhaseLib RequirementLib
+EditProtocolTestImpl: AAFAnalyzerBase RequirementLib TestPhaseLib BaseTestImpl
 	cd EditProtocolTestImpl && $(MAKE)
 
 .PHONY: AAFAnalyzer
-AAFAnalyzer: EditProtocolTestImpl AAFAnalyzerBase TestPhaseLib RequirementLib BaseTestImpl EditProtocolTestImpl
+AAFAnalyzer: AAFAnalyzerBase RequirementLib TestPhaseLib BaseTestImpl EditProtocolTestImpl
 	cd AAFAnalyzer && $(MAKE)
 
 .PHONY : check
