@@ -32,7 +32,6 @@
 #include "TopLevelTestResult.h"
 #include "TestInfo.h"
 #include <Requirement.h>
-#include <AxTypes.h>
 
 //STL files
 #include <map>
