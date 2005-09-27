@@ -1316,6 +1316,7 @@ HRESULT STDMETHODCALLTYPE
 				memcpy(&valueUInt32, buf, bytesRead);
 				XASSERT(valueUInt32 > 0, AAFRESULT_ZERO_SAMPLESIZE);
 				_bitsPerSample = (aafUInt16)valueUInt32;
+                _bytesPerFrame = (_bitsPerSample + 7) / 8;
 			}
 			else if(EqualAUID(&kAAFNumChannels, &opcode))
 			{
