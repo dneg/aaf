@@ -339,6 +339,100 @@ private:
 
 //=---------------------------------------------------------------------=
 
+class AxFilmDescriptor : public AxEssenceDescriptor {
+public:
+    AxFilmDescriptor( IAAFFilmDescriptorSP spIaafFilmDescriptor );
+    ~AxFilmDescriptor();
+
+    void SetFilmManufacturer( const AxString& manufacturer );
+    AxString GetFilmManufacturer();
+    
+    void SetFilmModel( const AxString& model );
+    AxString GetFilmModel();
+    
+    void SetFilmFormat( aafFilmType_t filmFormat );
+    aafFilmType_t GetFilmFormat();
+    
+    void SetFrameRate( aafUInt32 rate );
+    aafUInt32 GetFrameRate();
+    
+    void SetPerfPerFrame( aafUInt8 perfPerFrame );
+    aafUInt8 GetPerfPerFrame();
+    
+    void SetFilmAspectRatio( aafRational_t aspectRatio );
+    aafRational_t GetFilmAspectRatio();
+
+    inline operator IAAFFilmDescriptorSP ()
+    { return _spIaafFilmDescriptor; }
+
+private:
+    AxFilmDescriptor();
+    AxFilmDescriptor( const AxFilmDescriptor& );
+    AxFilmDescriptor& operator=( const AxFilmDescriptor& );
+
+    IAAFFilmDescriptorSP _spIaafFilmDescriptor;
+};
+
+//=---------------------------------------------------------------------=
+
+class AxPhysicalDescriptor : public AxEssenceDescriptor {
+public:
+    AxPhysicalDescriptor( IAAFPhysicalDescriptorSP spIaafPhysicalDescriptor );
+    ~AxPhysicalDescriptor();
+
+    inline operator IAAFPhysicalDescriptorSP ()
+    { return _spIaafPhysicalDescriptor; }
+
+private:
+    AxPhysicalDescriptor();
+    AxPhysicalDescriptor( const AxPhysicalDescriptor& );
+    AxPhysicalDescriptor& operator=( const AxPhysicalDescriptor& );
+
+    IAAFPhysicalDescriptorSP _spIaafPhysicalDescriptor;
+};
+
+//=---------------------------------------------------------------------=
+
+class AxImportDescriptor : public AxPhysicalDescriptor {
+public:
+    AxImportDescriptor( IAAFImportDescriptorSP spIaafImportDescriptor );
+    ~AxImportDescriptor();
+    
+    void Initialize();
+
+    inline operator IAAFImportDescriptorSP ()
+    { return _spIaafImportDescriptor; }
+
+private:
+    AxImportDescriptor();
+    AxImportDescriptor( const AxImportDescriptor& );
+    AxImportDescriptor& operator=( const AxImportDescriptor& );
+
+    IAAFImportDescriptorSP _spIaafImportDescriptor;
+};
+
+//=---------------------------------------------------------------------=
+
+class AxRecordingDescriptor : public AxPhysicalDescriptor {
+public:
+    AxRecordingDescriptor( IAAFRecordingDescriptorSP spIaafRecordingDescriptor );
+    ~AxRecordingDescriptor();
+    
+    void Initialize();
+
+    inline operator IAAFRecordingDescriptorSP ()
+    { return _spIaafRecordingDescriptor; }
+
+private:
+    AxRecordingDescriptor();
+    AxRecordingDescriptor( const AxRecordingDescriptor& );
+    AxRecordingDescriptor& operator=( const AxRecordingDescriptor& );
+
+    IAAFRecordingDescriptorSP _spIaafRecordingDescriptor;
+};
+
+//=---------------------------------------------------------------------=
+
 // Intentionally not derived from AxBaseObj.  I think it is just a
 // utility interface, not directly tied to any particular object.
 
