@@ -90,7 +90,7 @@ from there. For example -
 $ cd your-working-copy/AAF
 $ cp ./build/history/AAFcolormap \
      ./build/history/AAFmkchangelogs \
-     ./build/history/ AAFtagdates \
+     ./build/history/AAFtagdates \
      ./build/history/cl2html.awk \
      ./build/history/cvs2cl.pl \
      ./build/history/mkchangelogs temporary-directory
