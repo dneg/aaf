@@ -259,6 +259,7 @@ function rowcolor(files) {
 function filter(comments) {
   gsub("<", "\\&lt;", comments);
   gsub(">", "\\&gt;", comments);
+  gsub("&", "\\&amp;", comments);
   return comments;
 }
 
