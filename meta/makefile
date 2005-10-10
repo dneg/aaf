@@ -45,7 +45,7 @@ AAFMetaDict.csv : AAFMetaDict.xls
 	$(EXCEL) /e /r AAFMetaDict.xls /p .
 
 AAFMetaDictionary.h : AAFMetaDict.csv $(AWKFILE)
-	$(AWK) -f $(AWKFILE) AAFMetaDict.csv > AAFMetaDictionary.h
+	$(AWK) -f $(AWKFILE) -v SYM=r_name AAFMetaDict.csv > AAFMetaDictionary.h
 
 $(INSTALL_DIR)/AAFMetaDictionary.h: AAFMetaDictionary.h
 	@$(ECHO) "Installing new Meta Dictionary"
