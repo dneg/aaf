@@ -18,11 +18,16 @@
 //
 //=---------------------------------------------------------------------=
 
+//Base Test files
 #include "FileDumper.h"
+#include "TestVisitor.h"
 
+//Test/Result files
+#include <TestLevelTestResult.h>
+
+//Analyzer Base files
 #include <DepthFirstTraversal.h>
-#include <TestVisitor.h>
-
+#include <TestGraph.h>
 
 namespace {
 
@@ -37,28 +42,31 @@ using namespace aafanalyzer;
 
 namespace aafanalyzer 
 {
+    
+using namespace std;
+using namespace boost;
 
-FileDumper::FileDumper(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph)
+FileDumper::FileDumper(wostream& os, shared_ptr<const TestGraph> spGraph)
 : Test(os, GetTestInfo())
 {
-  SetTestGraph(spTestGraph);
+  SetTestGraph(spGraph);
 }
 
 FileDumper::~FileDumper()
 {
 }
 
-boost::shared_ptr<TestLevelTestResult> FileDumper::Execute()
+shared_ptr<TestLevelTestResult> FileDumper::Execute()
 {
-  boost::shared_ptr<TestVisitor> spVisitor(new TestVisitor());
+  shared_ptr<TestVisitor> spVisitor(new TestVisitor());
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
 
   //output to screen
-  //GetOutStream() << GetName() << std::endl << GetDescription() << std::endl << std::endl;
+  //GetOutStream() << GetName() << endl << GetDescription() << endl << endl;
 
-  const boost::shared_ptr<const Test> me = this->shared_from_this();
+  const shared_ptr<const Test> me = this->shared_from_this();
   Requirement::RequirementMapSP spMyReqs(new Requirement::RequirementMap(this->GetCoveredRequirements()));
-  boost::shared_ptr<TestLevelTestResult> spResult(new TestLevelTestResult(me, spMyReqs ));
+  shared_ptr<TestLevelTestResult> spResult(new TestLevelTestResult(me, spMyReqs ));
 
   //set result properties
   spResult->SetName(GetName());
@@ -82,7 +90,8 @@ AxString FileDumper::GetDescription() const
 
 const TestInfo FileDumper::GetTestInfo()
 {
-    boost::shared_ptr<std::vector<AxString> > spReqIds(new std::vector<AxString>);
+    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    //TODO: Push actual requirements.
 //    spReqIds->push_back(L"Requirement Id");
     return TestInfo(L"FileDumper", spReqIds);
 }

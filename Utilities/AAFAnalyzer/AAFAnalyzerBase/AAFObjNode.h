@@ -21,25 +21,27 @@
 #ifndef __AAFOBJNODE_h__
 #define __AAFOBJNODE_h__
 
-//project files
-#include "Node.h"
+//Analyzer Base files
+#include <Node.h>
 
 //Ax files
 #include <AxSmartPointer.h>
 
-//boost files
-#include <boost/shared_ptr.hpp>
-
 namespace aafanalyzer {
+
+using namespace std;
 
 class AAFObjNode : public Node
 {
  public:
   AAFObjNode(IAAFSmartPointer<IAAFObject> spIAAFObj);
-  AAFObjNode(IAAFSmartPointer<IAAFObject> spIAAFObj, const std::basic_string<wchar_t>& name);
+  AAFObjNode(IAAFSmartPointer<IAAFObject> spIAAFObj, const basic_string<wchar_t>& name);
   virtual ~AAFObjNode();
 
   IAAFSmartPointer<IAAFObject> GetAAFObject() const;
+
+ protected:
+  AAFObjNode(IAAFSmartPointer<IAAFObject> spIAAFObj, const basic_string<wchar_t>& name, Node::LID lid);
 
  private:
   IAAFSmartPointer<IAAFObject> _spIAAFObj;  

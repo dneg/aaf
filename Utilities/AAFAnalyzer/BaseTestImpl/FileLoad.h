@@ -21,25 +21,35 @@
 #ifndef __FILELOAD_h__
 #define __FILELOAD_h__
 
-//project files
+//Test/Result files
 #include <Test.h>
-#include <TestLevelTestResult.h>
+
+//Ax files
+#include <AxTypes.h>
 
 namespace aafanalyzer {
+    
+using namespace std;
+using namespace boost;
+
+class TestLevelTestResult;
+class AAFGraphInfo;
 
 class FileLoad : public Test
 {
  public:
-  FileLoad(std::wostream& os, const std::basic_string<wchar_t> AAFFile);
+  FileLoad(wostream& os, const basic_string<wchar_t> AAFFile);
   ~FileLoad();
 
-  boost::shared_ptr<TestLevelTestResult> Execute();
+  shared_ptr<TestLevelTestResult> Execute();
   AxString GetName() const;
   AxString GetDescription() const;
+  shared_ptr<const AAFGraphInfo> GetTestGraphInfo();
   static const TestInfo GetTestInfo();
 
  private:
-  const std::basic_string<wchar_t> _File;
+  const basic_string<wchar_t> _File;
+  shared_ptr<const AAFGraphInfo> _spGraphInfo;
 
   // prohibited
   FileLoad(const FileLoad&);

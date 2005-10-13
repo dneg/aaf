@@ -21,19 +21,27 @@
 #ifndef __ACYCLICANALYSIS_h__
 #define __ACYCLICANALYSIS_h__
 
-//project files
+//Test/Result files
 #include <Test.h>
-#include <TestLevelTestResult.h>
+
+//Ax files
+#include <AxTypes.h>
 
 namespace aafanalyzer {
+
+using namespace std;
+using namespace boost;
+    
+class TestLevelTestResult;
+class TestGraph;
 
 class AcyclicAnalysis : public Test
 {
  public:
-  AcyclicAnalysis(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph);
+  AcyclicAnalysis(wostream& os, shared_ptr<const TestGraph> spGraph);
   ~AcyclicAnalysis();
 
-  boost::shared_ptr<TestLevelTestResult> Execute();
+  shared_ptr<TestLevelTestResult> Execute();
   AxString GetName() const;
   AxString GetDescription() const;
   static const TestInfo GetTestInfo();

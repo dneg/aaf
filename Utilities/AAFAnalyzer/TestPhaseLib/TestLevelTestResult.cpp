@@ -18,11 +18,14 @@
 //
 //=---------------------------------------------------------------------=
 
+//Test/Result files
 #include "TestLevelTestResult.h"
-#include <TestRegistry.h>
-#include <RequirementMismatchException.h>
+#include "DetailLevelTestResult.h"
+#include "Test.h"
+#include "TestRegistry.h"
 
-#include <sstream>
+//Requirement files
+#include <RequirementMismatchException.h>
 
 namespace {
 
@@ -39,13 +42,14 @@ namespace aafanalyzer
 {
 
 using namespace std;
+using namespace boost;
 
-TestLevelTestResult::TestLevelTestResult( const boost::shared_ptr<const Test>& associatedTest,
+TestLevelTestResult::TestLevelTestResult( const shared_ptr<const Test>& associatedTest,
                                           const Requirement::RequirementMapSP& requirements )
   : LowLevelTestResult( requirements ),
     _spAssociatedTest( associatedTest )
 {
-    if ( TestRegistry::GetInstance().IsUnsafeRequirements() )
+    if ( !TestRegistry::GetInstance().IsUnsafeRequirements() )
     {
         //Ensure that the requirements covered by the result match the requirements
         //covered by the associated test.  If one vector is larger, search for the
@@ -68,17 +72,17 @@ TestLevelTestResult::TestLevelTestResult( const boost::shared_ptr<const Test>& a
     }
 }
 
-TestLevelTestResult::TestLevelTestResult( const AxString& name, 
-                                          const AxString& desc,
-                                          const AxString& explain,
-                                          const AxString& docRef,
+TestLevelTestResult::TestLevelTestResult( const wstring& name, 
+                                          const wstring& desc,
+                                          const wstring& explain,
+                                          const wstring& docRef,
                                           Result defaultResult, 
-                                          const boost::shared_ptr<const Test>& associatedTest,
+                                          const shared_ptr<const Test>& associatedTest,
                                           const Requirement::RequirementMapSP& requirements  )
   : LowLevelTestResult( name, desc, explain, docRef, defaultResult, requirements ),
     _spAssociatedTest( associatedTest )
 {
-    if ( TestRegistry::GetInstance().IsUnsafeRequirements() )
+    if ( !TestRegistry::GetInstance().IsUnsafeRequirements() )
     {
         //Ensure that the requirements covered by the result match the requirements
         //covered by the associated test.  If one vector is larger, search for the
@@ -104,7 +108,7 @@ TestLevelTestResult::TestLevelTestResult( const AxString& name,
 TestLevelTestResult::~TestLevelTestResult()
 {}
 
-void TestLevelTestResult::AppendSubtestResult( const boost::shared_ptr<const DetailLevelTestResult>& subtestResult )
+void TestLevelTestResult::AppendSubtestResult( const shared_ptr<const DetailLevelTestResult>& subtestResult )
 {
     //Throw an exception if the Detail Level Test Result contains a requirement
     //that is not covered by this Test Result.
@@ -127,8 +131,8 @@ const enum TestResult::ResultLevel TestLevelTestResult::GetResultType() const
 void TestLevelTestResult::FindRequirementMismatch( 
                                  const Requirement::RequirementMap& source,
                                  const Requirement::RequirementMap& matchWith,
-                                 const AxString& sourceName,
-                                 const AxString& matchName ) const
+                                 const wstring& sourceName,
+                                 const wstring& matchName ) const
 {
     //Loop through the source vector
     Requirement::RequirementMap::const_iterator iter;
@@ -138,16 +142,16 @@ void TestLevelTestResult::FindRequirementMismatch(
         //mathWith vector, then throw an exception.
         if ( matchWith.find( iter->first ) == matchWith.end() )
         {
-            std::wostringstream msg;
-            msg << iter->first << L" in " << sourceName << L" but not in " << matchName << ".";
-            throw RequirementMismatchException ( msg.str().c_str() );
+            wstring msg;
+            msg = iter->first + L" in " + sourceName + L" but not in " + matchName + L".";
+            throw RequirementMismatchException ( msg.c_str() );
         }
     }
 }
 
 void TestLevelTestResult::CheckDescendantRequirements( 
-            const boost::shared_ptr<const TestResult>& subtestResult,
-            const AxString& name )
+            const shared_ptr<const TestResult>& subtestResult,
+            const wstring& name )
 {
     //Check that all requirements in the subtest result are in this test result.
     for (int reqLevel = PASS; reqLevel <= FAIL; reqLevel++)
@@ -163,7 +167,7 @@ void TestLevelTestResult::CheckDescendantRequirements(
     {
         TestResult::SubtestResultVector grandchildResults = subtestResult->GetSubtestResults();
         for (unsigned int i = 0; i < grandchildResults.size(); i++) {
-            boost::shared_ptr<const TestResult> spNext = grandchildResults.at(i);
+            shared_ptr<const TestResult> spNext = grandchildResults.at(i);
             this->CheckDescendantRequirements(spNext, name + L" - " + spNext->GetName());
         }
     }

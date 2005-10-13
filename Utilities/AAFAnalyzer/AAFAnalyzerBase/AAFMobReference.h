@@ -21,21 +21,20 @@
 #ifndef __AAFMOBREFERENCE_h__
 #define __AAFMOBREFERENCE_h__
 
-//project files
-#include "Edge.h"
-
-//boost files
-#include <boost/shared_ptr.hpp>
+//Analyzer Base files
+#include <Edge.h>
 
 namespace aafanalyzer {
+
+using namespace boost;
 
 class AAFMobReference : public Edge
 {
  public:
-  AAFMobReference(boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild);
+  AAFMobReference(shared_ptr<Node> spParent, shared_ptr<Node> spChild);
   ~AAFMobReference();
 
-  bool Visit(boost::shared_ptr<Visitor> spVisitor);
+  bool Visit(shared_ptr<Visitor> spVisitor);
 
  private:
 

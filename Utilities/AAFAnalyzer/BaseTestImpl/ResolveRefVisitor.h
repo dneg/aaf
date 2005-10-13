@@ -21,32 +21,32 @@
 #ifndef __RESOLVEREFVISITOR_h__
 #define __RESOLVEREFVISITOR_h__
 
-#include "TypedVisitor.h"
-
-#include <DetailLevelTestResult.h>
-
-//stl files
-#include <iostream>
+//AAF Analyzer Base files
+#include <TypedVisitor.h>
 
 namespace aafanalyzer {
 
+using namespace std;
+using namespace boost;
+
 class Edge;
 class EdgeMap;
+class DetailLevelTestResult;
 
 class ResolveRefVisitor : public TypedVisitor
 {
  public:
-  ResolveRefVisitor(std::wostream& os, boost::shared_ptr<EdgeMap> spEdgeMap);
+  ResolveRefVisitor(wostream& os, shared_ptr<EdgeMap> spEdgeMap);
   virtual ~ResolveRefVisitor();
 
   virtual bool PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node);
 
-  boost::shared_ptr<const DetailLevelTestResult> GetTestResult() const;
+  shared_ptr<const DetailLevelTestResult> GetTestResult() const;
 
  private:
-  std::wostream& _os;
-  boost::shared_ptr<EdgeMap> _spEdgeMap;
-  boost::shared_ptr< DetailLevelTestResult > _spResult;
+  wostream& _os;
+  shared_ptr<EdgeMap> _spEdgeMap;
+  shared_ptr< DetailLevelTestResult > _spResult;
 
   // prohibited
   ResolveRefVisitor( const ResolveRefVisitor& );

@@ -21,51 +21,53 @@
 #ifndef __TEST_h__
 #define __TEST_h__
 
-//Ax files
-#include <AxTypes.h>
-
-//project files 
-#include <TestGraph.h>
-#include <Requirement.h>
+//Test/Result files
 #include "TestInfo.h"
 
-//stl files
-#include <iostream>
-#include <string>
+//Requirement files
+#include <Requirement.h>
 
-//boost files
+//Boost files
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
+//STL files
+#include <string>
+#include <iostream>
+
 namespace aafanalyzer {
 
-class TestLevelTestResult;
+using namespace std;
+using namespace boost;
 
-class Test : public boost::enable_shared_from_this<Test>
+class TestLevelTestResult;
+class TestGraph;
+
+class Test : public enable_shared_from_this<Test>
 {
  public:
-  Test(std::wostream& os, const TestInfo& info);
+  Test(wostream& os, const TestInfo& info);
   virtual ~Test();
 
-  virtual boost::shared_ptr<TestLevelTestResult> Execute() = 0;
-  virtual AxString GetName() const;
-  virtual AxString GetDescription() const;
-  std::wostream& GetOutStream() const;
-  boost::shared_ptr<TestGraph> GetTestGraph();
+  virtual shared_ptr<TestLevelTestResult> Execute() = 0;
+  virtual wstring GetName() const;
+  virtual wstring GetDescription() const;
+  wostream& GetOutStream() const;
+  shared_ptr<const TestGraph> GetTestGraph();
 
   const Requirement::RequirementMap& GetCoveredRequirements() const;
 
 protected:
-  void SetTestGraph(boost::shared_ptr<TestGraph> spTestGraph);
+  void SetTestGraph(shared_ptr<const TestGraph> spGraph);
 
  private:
-  std::wostream& _os;
-  boost::shared_ptr<TestGraph> _spTestGraph;
+  wostream& _os;
+  shared_ptr<const TestGraph> _spGraph;
   
-  typedef boost::shared_ptr<const Requirement::RequirementMap> ConstRequirementMapSP;
+  typedef shared_ptr<const Requirement::RequirementMap> ConstRequirementMapSP;
   const ConstRequirementMapSP _spCoveredRequirements;
 
-  const ConstRequirementMapSP InitializeRequirements(const AxString& name);
+  const ConstRequirementMapSP InitializeRequirements(const wstring& name);
 
   // prohibited
   Test(const Test&);

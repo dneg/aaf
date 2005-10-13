@@ -21,19 +21,27 @@
 #ifndef __FILEDUMPER_h__
 #define __FILEDUMPER_h__
 
-//project files
+//Test/Result files
 #include <Test.h>
-#include <TestLevelTestResult.h>
+
+//Ax files
+#include <AxTypes.h>
 
 namespace aafanalyzer {
+    
+using namespace std;
+using namespace boost;
+
+class TestLevelTestResult;
+class TestGraph;
 
 class FileDumper : public Test
 {
  public:
-  FileDumper(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph);
+  FileDumper(wostream& os, shared_ptr<const TestGraph> spGraph);
   ~FileDumper();
 
-  virtual boost::shared_ptr<TestLevelTestResult> Execute();
+  virtual shared_ptr<TestLevelTestResult> Execute();
   virtual AxString GetName() const;
   virtual AxString GetDescription() const;
   static const TestInfo GetTestInfo();

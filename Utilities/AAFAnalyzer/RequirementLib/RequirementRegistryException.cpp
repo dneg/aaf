@@ -18,8 +18,8 @@
 //
 //=---------------------------------------------------------------------=
 
+//Requirement files
 #include "RequirementRegistryException.h"
-#include <AxUtil.h>
 
 namespace {
 
@@ -36,7 +36,7 @@ namespace aafanalyzer
 {
 
 RequirementRegistryException::RequirementRegistryException( const wchar_t* what )
-  : AxEx( AxString(AxString(L"Requirement Registry: ") + AxString(what)).c_str() )
+  : AnalyzerException( wstring(wstring(L"Requirement Registry: ") + wstring(what)).c_str() )
 {}
 
 RequirementRegistryException::~RequirementRegistryException() throw()

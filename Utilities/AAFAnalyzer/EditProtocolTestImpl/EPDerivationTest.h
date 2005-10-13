@@ -21,8 +21,10 @@
 #ifndef __EPDerivatinTest_h__
 #define __EPDerivatinTest_h__
 
-#include <CompMobDependency.h>
+//Edit Protocol Test files
+#include "CompMobDependency.h"
 
+//Test/Result files
 #include <Test.h>
 
 namespace aafanalyzer {
@@ -30,12 +32,14 @@ namespace aafanalyzer {
 using namespace boost;
 using namespace std;
 
+class TestGraph;
+
 class EPDerivationTest : public Test
 {
  public:
 
   EPDerivationTest( wostream& log,
-		    shared_ptr<TestGraph> spGraph,
+		    shared_ptr<const TestGraph> spGraph,
 		    CompMobDependency::CompMobNodeVectorSP spTopLevelCompMobs );
   virtual ~EPDerivationTest();
 
@@ -51,7 +55,6 @@ class EPDerivationTest : public Test
   EPDerivationTest( const EPDerivationTest& );
   EPDerivationTest& operator=( const EPDerivationTest& );
 
-  shared_ptr<TestGraph> _spGraph;
   CompMobDependency::CompMobNodeVectorSP _spTopLevelCompMobs;
 };
 

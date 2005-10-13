@@ -18,6 +18,7 @@
 //
 //=---------------------------------------------------------------------=
 
+//AAF Analyzer Base files
 #include "AAFObjNode.h"
 
 namespace {
@@ -33,12 +34,20 @@ using namespace aafanalyzer;
 
 namespace aafanalyzer {
 
+using namespace std;
+
 AAFObjNode::AAFObjNode(IAAFSmartPointer<IAAFObject> spIAAFObj) : Node(L""), _spIAAFObj(spIAAFObj)
 {
 }
 
-AAFObjNode::AAFObjNode(IAAFSmartPointer<IAAFObject> spIAAFObj, const std::basic_string<wchar_t>& name) 
+AAFObjNode::AAFObjNode(IAAFSmartPointer<IAAFObject> spIAAFObj, const basic_string<wchar_t>& name) 
 : Node(name), 
+  _spIAAFObj(spIAAFObj)
+{
+}
+
+AAFObjNode::AAFObjNode(IAAFSmartPointer<IAAFObject> spIAAFObj, const basic_string<wchar_t>& name, Node::LID lid)
+: Node(name, lid),
   _spIAAFObj(spIAAFObj)
 {
 }

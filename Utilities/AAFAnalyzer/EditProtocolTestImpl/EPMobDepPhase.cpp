@@ -18,10 +18,13 @@
 //
 //=---------------------------------------------------------------------=
 
-#include <EPMobDepPhase.h>
+//Edit Protocol Test files
+#include "EPMobDepPhase.h"
 
-#include <TestResult.h>
+//Test/Result files
+#include <TestPhaseLevelTestResult.h>
 
+//STL files
 #include <sstream>
 
 namespace {
@@ -37,8 +40,10 @@ const wchar_t* PHASE_DESC=L"Analyze mob references to ensure structure complies 
 //======================================================================
 
 namespace aafanalyzer {
+    
+using namespace boost;
 
-EPMobDepPhase::EPMobDepPhase( wostream& log, shared_ptr<TestGraph> spGraph )
+EPMobDepPhase::EPMobDepPhase( wostream& log, shared_ptr<const TestGraph> spGraph )
   : TestPhase( log ),
     _log( log ),
     _spGraph( spGraph )
@@ -57,18 +62,20 @@ AxString EPMobDepPhase::GetName() const
   return PHASE_NAME;
 }
 
-boost::shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
+shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
 {
   shared_ptr<TestPhaseLevelTestResult> spPhaseResult( new TestPhaseLevelTestResult( PHASE_NAME,        // name
 						       PHASE_DESC,        // desc
 						       L"",               // explain
 						       L"",               // DOCREF REQUIRED
 						       TestResult::PASS ) );
+  // First, decorate all mob nodes with an EPTypedObjNode decoration.
+  shared_ptr<DecorateEPTest> decorator( new DecorateEPTest( _log, _spGraph ) );
+  spPhaseResult->AppendSubtestResult( decorator->Execute() );
+  spPhaseResult->SetResult( spPhaseResult->GetAggregateResult() );
 
-  // First, compute the composition mob dependencies.
-
-  boost::shared_ptr<CompMobDependency> depTest( new CompMobDependency(_log, _spGraph) );
-  //shared_ptr<TestResult> depTestResult = depTest->Execute();
+  // Second, compute the composition mob dependencies.
+  shared_ptr<CompMobDependency> depTest( new CompMobDependency(_log, _spGraph ) );
   spPhaseResult->AppendSubtestResult( depTest->Execute() );
 
   spPhaseResult->SetResult( spPhaseResult->GetAggregateResult() );
@@ -87,9 +94,9 @@ boost::shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
   ss << "found.";
   spPhaseResult->AddDetail( ss.str() );
 
-  // Second, run the dependency test to verify the chains starting
+  // Third, run the dependency test to verify the chains starting
   // with the identified root compositions.
-  boost::shared_ptr<EPDerivationTest> derivationTest( new EPDerivationTest(_log, _spGraph, spRootNodes) );
+  shared_ptr<EPDerivationTest> derivationTest( new EPDerivationTest(_log, _spGraph, spRootNodes) );
   spPhaseResult->AppendSubtestResult( derivationTest->Execute() );
 
   spPhaseResult->SetResult( spPhaseResult->GetAggregateResult() );

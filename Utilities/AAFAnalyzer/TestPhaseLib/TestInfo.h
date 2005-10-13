@@ -21,34 +21,32 @@
 #ifndef __TESTINFO_H_
 #define __TESTINFO_H_
 
-//Ax Files
-#include <AxTypes.h>
-
-//Boost Files
+//Boost files
 #include <boost/shared_ptr.hpp>
 
-//Project Files
-#include <Requirement.h>
-
 //STL files
+#include <string>
 #include <vector>
 
 namespace aafanalyzer {
+
+using namespace std;
+using namespace boost;
 
 class TestInfo
 {
  public:
 
-  TestInfo(const AxString& name, const boost::shared_ptr<const std::vector<AxString> >& requirements);
+  TestInfo(const wstring& name, const shared_ptr<const vector<wstring> >& requirements);
   TestInfo(const TestInfo& other);
   ~TestInfo();
-  const AxString GetName() const;
-  const boost::shared_ptr<const std::vector<AxString> > GetRequirementIds() const;
+  const wstring GetName() const;
+  const shared_ptr<const vector<wstring> > GetRequirementIds() const;
 
  private:
 
-  const AxString _name;
-  const boost::shared_ptr<const std::vector<AxString> > _spRequirementIds;
+  const wstring _name;
+  const shared_ptr<const vector<wstring> > _spRequirementIds;
 
    // prohibited
 

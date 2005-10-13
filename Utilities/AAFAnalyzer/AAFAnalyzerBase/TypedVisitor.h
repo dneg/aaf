@@ -21,15 +21,14 @@
 #ifndef __TYPEDVISITOR_h__
 #define __TYPEDVISITOR_h__
 
-//project files
-#include "Visitor.h"
+//Analyzer Base files
+#include <Visitor.h>
+
+//AAF Analyzer Base files
 #include "AAFTypedObjNode.h"
 
 //AAF files
 #include <AAF.h>
-
-//boost files
-#include <boost/shared_ptr.hpp>
 
 namespace aafanalyzer {
 
@@ -37,7 +36,6 @@ class AAFContainment;
 class AAFComponentReference;
 class AAFMobReference;
 class AAFSlotReference;
-
 
 class TypedVisitor : public Visitor
 {
@@ -51,6 +49,7 @@ class TypedVisitor : public Visitor
     virtual bool EdgeVisit(AAFSlotReference& edge) { return true; }
 
 #include "TypedVisitor.h.gen"
+
 };
 
 } // end of namespace diskstream

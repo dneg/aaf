@@ -18,9 +18,8 @@
 //
 //=---------------------------------------------------------------------=
 
+//AAF Analyzer Base files
 #include "TypedVisitor.h"
-
-//project files
 #include "AAFContainment.h"
 #include "AAFComponentReference.h"
 #include "AAFMobReference.h"

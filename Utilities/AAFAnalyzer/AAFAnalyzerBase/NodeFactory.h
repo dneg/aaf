@@ -24,10 +24,12 @@
 //AAF files
 #include <AxSmartPointer.h>
 
-//boost files
+//Boost files
 #include <boost/shared_ptr.hpp>
 
 namespace aafanalyzer {
+
+using namespace boost;
 
 class Node;
 
@@ -37,7 +39,7 @@ public:
   NodeFactory();
   virtual ~NodeFactory();
 
-  virtual boost::shared_ptr<Node> CreateNode(IAAFObjectSP spObj) = 0;
+  virtual shared_ptr<Node> CreateNode(IAAFObjectSP spObj) = 0;
 
  private:
 

@@ -21,23 +21,24 @@
 #ifndef __TESTREGISTRY_H_
 #define __TESTREGISTRY_H_
 
-//Ax Files
-#include <AxTypes.h>
-
-//Boost Files
-#include <boost/shared_ptr.hpp>
-
-//Project Files
-#include "Test.h"
-#include "TopLevelTestResult.h"
-#include "TestInfo.h"
+//Requirement files
 #include <Requirement.h>
 
+//Boost files
+#include <boost/shared_ptr.hpp>
+
 //STL files
+#include <string>
 #include <map>
-#include <vector>
 
 namespace aafanalyzer {
+
+using namespace std;
+using namespace boost;
+
+class TestResult;
+class TopLevelTestResult;
+class TestInfo;
 
 class TestRegistry
 {
@@ -48,18 +49,18 @@ class TestRegistry
 
   static TestRegistry& GetInstance();
   void Register( const TestInfo& info );
-  const boost::shared_ptr<const Requirement::RequirementMap> GetRequirementsForTest( const AxString& name ) const;
+  const shared_ptr<const Requirement::RequirementMap> GetRequirementsForTest( const wstring& name ) const;
   const Requirement::RequirementMap& GetRequirementCoverage() const;
-  bool VerifyTestResultCoverage(const boost::shared_ptr<TopLevelTestResult> results) const;
+  bool VerifyTestResultCoverage(const shared_ptr<TopLevelTestResult> results) const;
   void UseUnsafeRequirements();
   bool IsUnsafeRequirements();
 
  private:
 
-  typedef std::map< const AxString, boost::shared_ptr<const Requirement::RequirementMap> > Map;
+  typedef map< const wstring, shared_ptr<const Requirement::RequirementMap> > Map;
 
   TestRegistry();//using Singleton pattern to allow only one object
-  void VerifyTestResultCoverage(const boost::shared_ptr<const TestResult> result, Requirement::RequirementMap& outstandingReqs) const;
+  void VerifyTestResultCoverage(const shared_ptr<const TestResult> result, Requirement::RequirementMap& outstandingReqs) const;
 
   static TestRegistry* _pTestRegistry;
   Map _testSet;

@@ -21,7 +21,7 @@
 #ifndef __HIGHLEVELTESTRESULT_h__
 #define __HIGHLEVELTESTRESULT_h__
 
-//Project files
+//Test/Result files
 #include "TestResult.h"
 
 namespace aafanalyzer {
@@ -43,8 +43,8 @@ class HighLevelTestResult : public TestResult
 
  protected:
   HighLevelTestResult();
-  HighLevelTestResult( const AxString& name, const AxString& desc,
-                       const AxString& explain, const AxString& docRef,
+  HighLevelTestResult( const wstring& name, const wstring& desc,
+                       const wstring& explain, const wstring& docRef,
                        Result defaultResult );
 
   // prohibited

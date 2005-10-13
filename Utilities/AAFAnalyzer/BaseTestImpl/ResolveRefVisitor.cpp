@@ -18,15 +18,22 @@
 //
 //=---------------------------------------------------------------------=
 
+//Base Test files
 #include "ResolveRefVisitor.h"
 
-#include "AAFMobReference.h"
-#include "AAFSlotReference.h"
-#include "EdgeMap.h"
-#include "MobNodeMap.h"
-#include "TempAllNodeMap.h"
+//Test/Result files
+#include <DetailLevelTestResult.h>
 
+//Requirement files
 #include <Requirement.h>
+
+//AAF Analyzer Base files
+#include <AAFMobReference.h>
+#include <AAFSlotReference.h>
+#include <MobNodeMap.h>
+
+//Analyzer Base files
+#include <EdgeMap.h>
 
 //Ax files
 #include <AxMobSlot.h>
@@ -46,7 +53,10 @@ using namespace aafanalyzer;
 //======================================================================
 namespace aafanalyzer {
 
-ResolveRefVisitor::ResolveRefVisitor(std::wostream& os, boost::shared_ptr<EdgeMap> spEdgeMap )
+using namespace std;
+using namespace boost;
+
+ResolveRefVisitor::ResolveRefVisitor(wostream& os, shared_ptr<EdgeMap> spEdgeMap )
 : _os(os),
   _spEdgeMap(spEdgeMap),
   _spResult( new DetailLevelTestResult( 
@@ -75,7 +85,7 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
     return true;
   }
     
-  boost::shared_ptr<Node> spNode;
+  shared_ptr<Node> spNode;
   spNode = MobNodeMap::GetInstance().GetMobNode(mobid);
 	
   //Assert it really is a mob. (i.e. to verify the MobNodeMap is delivering good data.)
@@ -84,28 +94,29 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
   {
     //verify mob
     IAAFMobSP spVerify;
-    boost::shared_ptr<AAFObjNode> spObjNode;
-    spObjNode = boost::dynamic_pointer_cast<AAFObjNode>(spNode);
+    shared_ptr<AAFObjNode> spObjNode;
+    spObjNode = dynamic_pointer_cast<AAFObjNode>(spNode);
     AxObject axObj(spObjNode->GetAAFObject());
     assert(AxIsA(axObj, spVerify));
     
     //mob has been verified, proceed to the sourceclip
-    boost::shared_ptr<AAFTypedObjNode<IAAFSourceClip> > spSrcClp;
-    spSrcClp = boost::dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceClip> >(TempAllNodeMap::GetInstance().GetNode(node.GetLID()));
+    shared_ptr<AAFTypedObjNode<IAAFSourceClip> > spSrcClp;
+    shared_ptr<Node> temp = node.GetSharedPointerToNode();
+    spSrcClp = dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceClip> >( temp );
     
     //ensure we have the two proper nodes (spNode, spSrcClp), create a Mob Edge and add to Edgemap
     if(spSrcClp)
     {
-      boost::shared_ptr<AAFMobReference> spMobRefEdge(new AAFMobReference(spSrcClp, spNode)); 
+      shared_ptr<AAFMobReference> spMobRefEdge(new AAFMobReference(spSrcClp, spNode)); 
       _spEdgeMap->AddEdge(spMobRefEdge);
       
       //now create a Slot Edge from the source clip to the mobslot and add to Edgemap
-      boost::shared_ptr<AAFTypedObjNode<IAAFTimelineMobSlot> > spMobSlotNode;
+      shared_ptr<AAFTypedObjNode<IAAFTimelineMobSlot> > spMobSlotNode;
       EdgeMap::EdgeVectorSP mobChildren = _spEdgeMap->GetChildren(spNode);
       
       for(unsigned int i = 0; i < mobChildren->size(); i++)
       {
-	spMobSlotNode = boost::dynamic_pointer_cast<AAFTypedObjNode<IAAFTimelineMobSlot> >(mobChildren->at(i)->GetChildNode());
+	spMobSlotNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFTimelineMobSlot> >(mobChildren->at(i)->GetChildNode());
 	
 	if(spMobSlotNode)
 	{
@@ -114,7 +125,7 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
 	  
 	  if(axMobSlot.GetSlotID() == slotid)
 	  {
-	    boost::shared_ptr<AAFSlotReference> spSlotEdge(new AAFSlotReference(spSrcClp, spMobSlotNode));
+	    shared_ptr<AAFSlotReference> spSlotEdge(new AAFSlotReference(spSrcClp, spMobSlotNode));
 	    _spEdgeMap->AddEdge(spSlotEdge);
 	  }
 	}
@@ -132,7 +143,7 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
   {
     AxString explain( L"Out-file mob referenced. ID = " );
     explain += AxStringUtil::mobid2Str( mobid );
-    boost::shared_ptr<const DetailLevelTestResult> spWarning( new DetailLevelTestResult( _spResult->GetName(),
+    shared_ptr<const DetailLevelTestResult> spWarning( new DetailLevelTestResult( _spResult->GetName(),
 							     L"-", // desc
 							     explain,
 							     L"-", // docref
@@ -146,7 +157,7 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
   return true;
 }
 
-boost::shared_ptr<const DetailLevelTestResult> ResolveRefVisitor::GetTestResult() const
+shared_ptr<const DetailLevelTestResult> ResolveRefVisitor::GetTestResult() const
 {
   return _spResult;
 }

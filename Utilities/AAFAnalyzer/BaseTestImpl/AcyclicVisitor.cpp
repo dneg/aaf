@@ -18,13 +18,20 @@
 //
 //=---------------------------------------------------------------------=
 
+//Base Test files
 #include "AcyclicVisitor.h"
 
-#include "Node.h"
+//Test/Result files
+#include <DetailLevelTestResult.h>
 
+//Requirement files
 #include <Requirement.h>
 
-#include <iostream>
+//Analyzer Base files
+#include <Node.h>
+
+//STL files
+#include <ostream>
 
 namespace {
 
@@ -46,7 +53,10 @@ using namespace aafanalyzer;
 
 namespace aafanalyzer {
 
-AcyclicVisitor::  AcyclicVisitor(std::wostream& os)
+using namespace std;
+using namespace boost;
+
+AcyclicVisitor::  AcyclicVisitor(wostream& os)
   : _os(os),
     _spResult( new DetailLevelTestResult(L"AcyclicVisitor",
                                          L"Detects cycles in an AAF object graph.",
@@ -90,12 +100,12 @@ bool AcyclicVisitor::PreOrderVisit(Node& node)
   _spResult->SetResult(TestResult::FAIL);
 
   // FIXME - Dump something more useful than the vector of LIDs.
-  _os << "Nodes of the cycle:" << std::endl;
+  _os << "Nodes of the cycle:" << endl;
   for(unsigned int i = 0; i < _Vector.size(); i++)
   {
-    _os << _Vector.at(i) << std::endl;
+    _os << _Vector.at(i) << endl;
   }
-  _os << lid << std::endl;
+  _os << lid << endl;
 
   return false;
 }
@@ -130,7 +140,7 @@ void AcyclicVisitor::Erase(unsigned int lid)
   }  
 }
 
-boost::shared_ptr<const DetailLevelTestResult> AcyclicVisitor::GetTestResult() const
+shared_ptr<const DetailLevelTestResult> AcyclicVisitor::GetTestResult() const
 {
   return _spResult; 
 }

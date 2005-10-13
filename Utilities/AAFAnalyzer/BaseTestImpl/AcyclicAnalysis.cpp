@@ -18,11 +18,20 @@
 //
 //=---------------------------------------------------------------------=
 
+//Base Test files
 #include "AcyclicAnalysis.h"
-
-#include <DepthFirstTraversal.h>
 #include <AcyclicVisitor.h>
 
+//Test/Result files
+#include <TestLevelTestResult.h>
+
+//AAF Analyzer Base files
+#include <TestGraph.h>
+
+//Analyzer Base files
+#include <DepthFirstTraversal.h>
+
+//STL files
 #include <vector>
 
 namespace {
@@ -39,36 +48,39 @@ using namespace aafanalyzer;
 namespace aafanalyzer 
 {
 
-AcyclicAnalysis::AcyclicAnalysis(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph)
+using namespace std;
+using namespace boost;
+
+AcyclicAnalysis::AcyclicAnalysis(wostream& os, shared_ptr<const TestGraph> spGraph)
 : Test(os, GetTestInfo())
 {
-  SetTestGraph(spTestGraph);
+  SetTestGraph(spGraph);
 }
 
 AcyclicAnalysis::~AcyclicAnalysis()
 {
 }
 
-boost::shared_ptr<TestLevelTestResult> AcyclicAnalysis::Execute()
+shared_ptr<TestLevelTestResult> AcyclicAnalysis::Execute()
 {
 
-  boost::shared_ptr<AcyclicVisitor> spVisitor(new AcyclicVisitor(GetOutStream()));
+  shared_ptr<AcyclicVisitor> spVisitor(new AcyclicVisitor(GetOutStream()));
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
 
   //output to screen
-  //GetOutStream() << GetName() << std::endl << GetDescription() << std::endl << std::endl;
+  //GetOutStream() << GetName() << endl << GetDescription() << endl << endl;
 
   //set result properties
 
-  const boost::shared_ptr<const Test> me = this->shared_from_this();
+  const shared_ptr<const Test> me = this->shared_from_this();
   Requirement::RequirementMapSP spMyReqs(new Requirement::RequirementMap(this->GetCoveredRequirements()));
-  boost::shared_ptr<TestLevelTestResult> spResult(new TestLevelTestResult(me, spMyReqs ));
+  shared_ptr<TestLevelTestResult> spResult(new TestLevelTestResult(me, spMyReqs ));
   spResult->SetName(GetName());
   spResult->SetDescription(GetDescription());
 
   dfs.TraverseDown(spVisitor, GetTestGraph()->GetRootNode()); 
   
-  boost::shared_ptr<const DetailLevelTestResult> spVisitorResult( spVisitor->GetTestResult() );
+  shared_ptr<const DetailLevelTestResult> spVisitorResult( spVisitor->GetTestResult() );
 
   //Store sub results.
   spResult->AppendSubtestResult(spVisitorResult);
@@ -91,7 +103,8 @@ AxString AcyclicAnalysis::GetDescription() const
 
 const TestInfo AcyclicAnalysis::GetTestInfo()
 {
-    boost::shared_ptr<std::vector<AxString> > spReqIds(new std::vector<AxString>);
+    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    //TODO: Push actual requirements.
 //    spReqIds->push_back(L"Requirement Id");
     return TestInfo(L"AcyclicAnalysis", spReqIds);
 }

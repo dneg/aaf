@@ -22,52 +22,72 @@
 #
 ###############################################################################
 
-ALL = AAFAnalyzerBase \
+ALL = AnalyzerBase \
+      AAFAnalyzerBase \
+      EPAnalyzerBase \
       RequirementLib \
       TestPhaseLib \
       BaseTestImpl \
-      RegressionTest \
+      RegressionTestStructure \
       EditProtocolTestImpl \
-      AAFAnalyzer
+      AAFAnalyzer \
+      RegressionTestFiles
 
 all: $(ALL)
 
+.PHONY: RegressionTest
+RegressionTest: RegressionTestStructure RegressionTestFiles
+
+.PHONY: AnalyzerBase
+AnalyzerBase:
+	cd AnalyzerBase && $(MAKE)
+
 .PHONY: AAFAnalyzerBase
-AAFAnalyzerBase:
+AAFAnalyzerBase: AnalyzerBase
 	cd AAFAnalyzerBase && $(MAKE)
 
+.PHONY: EPAnalyzerBase
+EPAnalyzerBase: AnalyzerBase AAFAnalyzerBase
+	cd EPAnalyzerBase && $(MAKE)
+
 .PHONY: RequirementLib
-RequirementLib:
+RequirementLib: AnalyzerBase
 	cd RequirementLib && $(MAKE)	
 
 .PHONY: TestPhaseLib
-TestPhaseLib: AAFAnalyzerBase RequirementLib
+TestPhaseLib: AnalyzerBase RequirementLib
 	cd TestPhaseLib && $(MAKE)
 
 .PHONY: BaseTestImpl
-BaseTestImpl: AAFAnalyzerBase RequirementLib TestPhaseLib
+BaseTestImpl: AnalyzerBase AAFAnalyzerBase RequirementLib TestPhaseLib
 	cd BaseTestImpl && $(MAKE)
 
-.PHONY: RegressionTest
-RegressionTest: AAFAnalyzerBase RequirementLib TestPhaseLib BaseTestImpl
-	cd RegressionTest && $(MAKE)
+.PHONY: RegressionTestStructure
+RegressionTestStructure: AnalyzerBase AAFAnalyzerBase RequirementLib TestPhaseLib BaseTestImpl
+	cd RegressionTest && $(MAKE) $@
 
 .PHONY: EditProtocolTestImpl
-EditProtocolTestImpl: AAFAnalyzerBase RequirementLib TestPhaseLib BaseTestImpl
+EditProtocolTestImpl: AnalyzerBase AAFAnalyzerBase EPAnalyzerBase RequirementLib TestPhaseLib
 	cd EditProtocolTestImpl && $(MAKE)
 
 .PHONY: AAFAnalyzer
 AAFAnalyzer: AAFAnalyzerBase RequirementLib TestPhaseLib BaseTestImpl EditProtocolTestImpl
 	cd AAFAnalyzer && $(MAKE)
+	
+.PHONY: RegressionTestFiles
+RegressionTestFiles:
+	cd RegressionTest && $(MAKE) $@
 
 .PHONY : check
-check : RegressionTest
+check : RegressionTestStructure RegressionTestFiles AAFAnalyzer
 	cd RegressionTest && $(MAKE) $@
 
 .PHONY: clean
 clean:
 	cd RequirementLib && $(MAKE) GENDEPS=0 $@
+	cd AnalyzerBase && $(MAKE) GENDEPS=0 $@
 	cd AAFAnalyzerBase && $(MAKE) GENDEPS=0 $@
+	cd EPAnalyzerBase && $(MAKE) GENDEPS=0 $@
 	cd TestPhaseLib && $(MAKE) GENDEPS=0 $@
 	cd RegressionTest && $(MAKE) GENDEPS=0 $@
 	cd BaseTestImpl && $(MAKE) GENDEPS=0 $@
@@ -76,7 +96,9 @@ clean:
 
 .PHONY: realclean
 realclean:
+	cd AnalyzerBase && $(MAKE) GENDEPS=0 $@
 	cd AAFAnalyzerBase && $(MAKE) GENDEPS=0 $@
+	cd EPAnalyzerBase && $(MAKE) GENDEPS=0 $@
 	cd TestPhaseLib && $(MAKE) GENDEPS=0 $@
 	cd RegressionTest && $(MAKE) GENDEPS=0 $@
 	cd BaseTestImpl && $(MAKE) GENDEPS=0 $@

@@ -18,11 +18,16 @@
 //
 //=---------------------------------------------------------------------=
 
+//Test/Result files
 #include "TestRegistry.h"
 #include "TestRegistryException.h"
+#include "Test.h"
+#include "TestInfo.h"
+#include "TopLevelTestResult.h"
+
+//Requirement files
 #include <RequirementRegistry.h>
 #include <RequirementRegistryException.h>
-#include <sstream>
 
 namespace {
 
@@ -36,6 +41,9 @@ using namespace aafanalyzer;
 //======================================================================
 
 namespace aafanalyzer {
+
+using namespace std;
+using namespace boost;
 
 //static variable
 TestRegistry* TestRegistry::_pTestRegistry = NULL;
@@ -68,21 +76,21 @@ TestRegistry& TestRegistry::GetInstance()
 void TestRegistry::Register( const TestInfo& info )
 {
     Requirement::RequirementMapSP coveredByTest(new Requirement::RequirementMap());
-    const AxString name = info.GetName();
+    const wstring name = info.GetName();
     if ( _testSet.find( name ) == _testSet.end() )
     {
         RequirementRegistry& reqRegistry = RequirementRegistry::GetInstance();
         //Get all requirements matching the list of requirement ids.  An
         //exception is thrown if the requirement is not registered.
-        const boost::shared_ptr<const std::vector<AxString> > spRequirements = info.GetRequirementIds();
-        std::vector<AxString>::const_iterator iter;
+        const shared_ptr<const vector<wstring> > spRequirements = info.GetRequirementIds();
+        vector<wstring>::const_iterator iter;
         for ( iter = spRequirements->begin(); iter != spRequirements->end(); iter++)
         {
-            AxString id = *iter;
+            wstring id = *iter;
 
             try
             {
-                boost::shared_ptr<const Requirement> req(reqRegistry.GetRequirement(id));
+                shared_ptr<const Requirement> req(reqRegistry.GetRequirement(id));
 
                 if ( coveredByTest->find(id) == coveredByTest->end() )
                 {
@@ -102,7 +110,7 @@ void TestRegistry::Register( const TestInfo& info )
                 //by the Requirement Registry as a loaded requirement.
                 if ( _useUnsafeRequirements )
                 {
-                    boost::shared_ptr<const Requirement> unsafeReq(
+                    shared_ptr<const Requirement> unsafeReq(
                         new Requirement(id, 
                                         Requirement::FILE, 
                                         Requirement::ADHOC, 
@@ -130,21 +138,21 @@ void TestRegistry::Register( const TestInfo& info )
     }
     else
     {
-        std::wostringstream msg;
-        msg << L"Test " << name << L" is already registered.";
-        throw TestRegistryException( msg.str().c_str() );
+        wstring msg;
+        msg = L"Test " + name + L" is already registered.";
+        throw TestRegistryException( msg.c_str() );
     }
 
 }
 
-const boost::shared_ptr<const Requirement::RequirementMap> TestRegistry::GetRequirementsForTest( const AxString& name ) const
+const shared_ptr<const Requirement::RequirementMap> TestRegistry::GetRequirementsForTest( const wstring& name ) const
 {
     Map::const_iterator target = _testSet.find( name );
     if ( target == _testSet.end() )
     {
-        std::wostringstream msg;
-        msg << L"Test " << name << L" has not been registered.";
-        throw TestRegistryException( msg.str().c_str() );
+        wstring msg;
+        msg = L"Test " + name + L" has not been registered.";
+        throw TestRegistryException( msg.c_str() );
     }
     return target->second;
 }
@@ -154,7 +162,7 @@ const Requirement::RequirementMap& TestRegistry::GetRequirementCoverage() const
     return _coveredRequirements;
 }
 
-bool TestRegistry::VerifyTestResultCoverage(const boost::shared_ptr<TopLevelTestResult> results) const
+bool TestRegistry::VerifyTestResultCoverage(const shared_ptr<TopLevelTestResult> results) const
 {
     //Given a top level result, make sure that all that are supposed to be
     //covered have been covered.
@@ -164,7 +172,7 @@ bool TestRegistry::VerifyTestResultCoverage(const boost::shared_ptr<TopLevelTest
     return (outstandingReqs.size() == 0);
 }
 
-void TestRegistry::VerifyTestResultCoverage(const boost::shared_ptr<const TestResult> result, Requirement::RequirementMap& outstandingReqs) const
+void TestRegistry::VerifyTestResultCoverage(const shared_ptr<const TestResult> result, Requirement::RequirementMap& outstandingReqs) const
 {
     //Given a test result and a requirement map, remove all requirements covered
     //by the result and child results from the map.

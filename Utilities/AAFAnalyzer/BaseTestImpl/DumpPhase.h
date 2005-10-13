@@ -21,25 +21,34 @@
 #ifndef __DUMPPHASE_h__
 #define __DUMPPHASE_h__
 
-//test files
-#include <TestPhase.h>
+//Base Test files (included so the application only needs to include the Test
+//Phase and not individual tests in order to register tests).
 #include "FileDumper.h"
 
+//Test/Result files
+#include <TestPhase.h>
+
+//Ax files
+#include <AxTypes.h>
+
 namespace aafanalyzer {
+    
+using namespace std;
+using namespace boost;
 
 class TestGraph;
 
 class DumpPhase : public TestPhase
 {
  public:
-  DumpPhase(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph);
+  DumpPhase(wostream& os, shared_ptr<const TestGraph> spGraph);
   ~DumpPhase();
 
-  boost::shared_ptr<TestGraph> GetTestGraph();
-  boost::shared_ptr<TestPhaseLevelTestResult> Execute();
+  shared_ptr<const TestGraph> GetTestGraph();
+  shared_ptr<TestPhaseLevelTestResult> Execute();
 
  private:
-  boost::shared_ptr<TestGraph> _spTestGraph;
+  shared_ptr<const TestGraph> _spGraph;
 
   // prohibited
   DumpPhase();

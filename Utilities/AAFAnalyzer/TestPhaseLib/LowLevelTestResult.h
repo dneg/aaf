@@ -21,12 +21,13 @@
 #ifndef __LOWLEVELTESTRESULT_h__
 #define __LOWLEVELTESTRESULT_h__
 
-//Project files
+//Test/Result files
 #include "TestResult.h"
 
 namespace aafanalyzer {
 
 using namespace std;
+using namespace boost;
 
 class LowLevelTestResult : public TestResult
 {
@@ -37,15 +38,15 @@ class LowLevelTestResult : public TestResult
   //This must be called to change the status of a requirement.  The status of
   //requirements are not updated when another LowLevelTestResult is appended
   //as a subtest result.
-  void SetRequirementStatus( TestResult::Result level, const boost::shared_ptr<const Requirement>& req);
+  void SetRequirementStatus( TestResult::Result level, const shared_ptr<const Requirement>& req);
 
   virtual const enum ResultLevel GetResultType() const =0;
 
  protected:
 
   LowLevelTestResult( const Requirement::RequirementMapSP& requirements ) ;
-  LowLevelTestResult( const AxString& name, const AxString& desc,
-                      const AxString& explain, const AxString& docRef,
+  LowLevelTestResult( const wstring& name, const wstring& desc,
+                      const wstring& explain, const wstring& docRef,
                       Result defaultResult,
                       const Requirement::RequirementMapSP& requirements );
  

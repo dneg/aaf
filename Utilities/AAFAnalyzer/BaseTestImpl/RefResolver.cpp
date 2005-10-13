@@ -18,14 +18,17 @@
 //
 //=---------------------------------------------------------------------=
 
+//Base Test files
 #include "RefResolver.h"
+#include "ResolveRefVisitor.h"
 
-#include <DepthFirstTraversal.h>
-#include <ResolveRefVisitor.h>
+//Test/Result files
+#include <TestLevelTestResult.h>
 #include <DetailLevelTestResult.h>
 
-//boost files
-#include <boost/shared_ptr.hpp>
+//Analyzer Base files
+#include <DepthFirstTraversal.h>
+#include <TestGraph.h>
 
 namespace {
 
@@ -41,27 +44,30 @@ using namespace aafanalyzer;
 namespace aafanalyzer 
 {
 
-RefResolver::RefResolver(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph)
+using namespace std;
+using namespace boost;
+
+RefResolver::RefResolver(wostream& os, shared_ptr<const TestGraph> spGraph)
 : Test(os, GetTestInfo())
 {
-  SetTestGraph(spTestGraph);
+  SetTestGraph(spGraph);
 }
 
 RefResolver::~RefResolver()
 {
 }
 
-boost::shared_ptr<TestLevelTestResult> RefResolver::Execute()
+shared_ptr<TestLevelTestResult> RefResolver::Execute()
 {
   //TestResult visitorResult;
-  boost::shared_ptr<ResolveRefVisitor> spVisitor(new ResolveRefVisitor(GetOutStream(), GetTestGraph()->GetEdgeMap()));
+  shared_ptr<ResolveRefVisitor> spVisitor(new ResolveRefVisitor(GetOutStream(), GetTestGraph()->GetEdgeMap()));
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
 
   dfs.TraverseDown(spVisitor, GetTestGraph()->GetRootNode());
 
-  const boost::shared_ptr<const Test> me = this->shared_from_this();
+  const shared_ptr<const Test> me = this->shared_from_this();
   Requirement::RequirementMapSP spMyReqs(new Requirement::RequirementMap(this->GetCoveredRequirements()));
-  boost::shared_ptr<TestLevelTestResult> spResult(
+  shared_ptr<TestLevelTestResult> spResult(
             new TestLevelTestResult( L"ReferenceResolver",
                                      L"Resolves source references in an AAF file.",
                                      spVisitor->GetTestResult()->GetExplanation(),
@@ -69,7 +75,7 @@ boost::shared_ptr<TestLevelTestResult> RefResolver::Execute()
                                      spVisitor->GetTestResult()->GetResult(),
                                      me, 
                                      spMyReqs ) ); 
-  boost::shared_ptr<const DetailLevelTestResult> spVisitorResult( spVisitor->GetTestResult() );
+  shared_ptr<const DetailLevelTestResult> spVisitorResult( spVisitor->GetTestResult() );
   spResult->AppendSubtestResult(spVisitorResult);
 
   return spResult;
@@ -89,7 +95,8 @@ AxString RefResolver::GetDescription() const
 
 const TestInfo RefResolver::GetTestInfo()
 {
-    boost::shared_ptr<std::vector<AxString> > spReqIds(new std::vector<AxString>);
+    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    //TODO: Push actual requirements.
 //    spReqIds->push_back(L"Requirement Id");
     return TestInfo(L"RefResolver", spReqIds);
 }

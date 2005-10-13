@@ -18,7 +18,9 @@
 //
 //=---------------------------------------------------------------------=
 
+//Test/Result files
 #include "TestPhaseLevelTestResult.h"
+#include "TestLevelTestResult.h"
 
 namespace {
 
@@ -35,15 +37,16 @@ namespace aafanalyzer
 {
 
 using namespace std;
+using namespace boost;
 
 TestPhaseLevelTestResult::TestPhaseLevelTestResult()
   : HighLevelTestResult()
 {}
 
-TestPhaseLevelTestResult:: TestPhaseLevelTestResult( const AxString& name, 
-                                                     const AxString& desc,
-                                                     const AxString& explain,
-                                                     const AxString& docRef,
+TestPhaseLevelTestResult:: TestPhaseLevelTestResult( const wstring& name, 
+                                                     const wstring& desc,
+                                                     const wstring& explain,
+                                                     const wstring& docRef,
                                                      Result defaultResult )
   : HighLevelTestResult( name, desc, explain, docRef, defaultResult )
 {}
@@ -51,7 +54,7 @@ TestPhaseLevelTestResult:: TestPhaseLevelTestResult( const AxString& name,
 TestPhaseLevelTestResult::~TestPhaseLevelTestResult()
 {}
 
-void TestPhaseLevelTestResult::AppendSubtestResult( const boost::shared_ptr<const TestLevelTestResult>& subtestResult )
+void TestPhaseLevelTestResult::AppendSubtestResult( const shared_ptr<const TestLevelTestResult>& subtestResult )
 {
 
     this->AddSubtestResult( subtestResult );

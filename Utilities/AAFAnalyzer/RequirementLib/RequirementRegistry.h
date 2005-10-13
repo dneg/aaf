@@ -21,16 +21,19 @@
 #ifndef __REQUIREMENTREGISTRY_H_
 #define __REQUIREMENTREGISTRY_H_
 
-//Ax Files
-#include <AxTypes.h>
-
-//Boost Files
-#include <boost/shared_ptr.hpp>
-
-//Project Files
+//Requirement files
 #include "Requirement.h"
 
+//Boost files
+#include <boost/shared_ptr.hpp>
+
+//STL files
+#include <string>
+
 namespace aafanalyzer {
+
+using namespace std;
+using namespace boost;
 
 class RequirementRegistry
 {
@@ -40,8 +43,8 @@ class RequirementRegistry
   ~RequirementRegistry();
 
   static RequirementRegistry& GetInstance();
-  void Register( const boost::shared_ptr<const Requirement>& req );
-  const boost::shared_ptr<const Requirement> GetRequirement( const AxString& id ) const;
+  void Register( const shared_ptr<const Requirement>& req );
+  const shared_ptr<const Requirement> GetRequirement( const wstring& id ) const;
   const Requirement::RequirementMap& GetAllRequirements() const;
 
  private:

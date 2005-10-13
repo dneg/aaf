@@ -18,8 +18,8 @@
 //
 //=---------------------------------------------------------------------=
 
+//Requirement files
 #include "RequirementXMLException.h"
-#include <AxUtil.h>
 
 namespace {
 
@@ -36,7 +36,7 @@ namespace aafanalyzer
 {
 
 RequirementXMLException::RequirementXMLException( const wchar_t* what )
-  : AxEx( AxString(AxString(L"Requirements XML: ") + AxString(what)).c_str() )
+  : AnalyzerException( wstring(wstring(L"Requirements XML: ") + wstring(what)).c_str() )
 {}
 
 RequirementXMLException::~RequirementXMLException() throw()

@@ -21,15 +21,21 @@
 #ifndef __REQUIREMENTXMLEXCEPTION_H_
 #define __REQUIREMENTXMLEXCEPTION_H_
 
-//Ax files
-#include <AxEx.h>
+//Analyzer Base files
+#include <AnalyzerException.h>
 
-class RequirementXMLException : public AxEx {
+namespace aafanalyzer {
+
+using namespace std;
+
+class RequirementXMLException : public AnalyzerException {
 
 public:
 
     RequirementXMLException( const wchar_t* what );
     virtual ~RequirementXMLException() throw();
 };
+
+} // end of namespace diskstream
 
 #endif /*__REQUIREMENTXMLEXCEPTION_H_*/

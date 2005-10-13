@@ -21,27 +21,33 @@
 #ifndef __LOADPHASE_h__
 #define __LOADPHASE_h__
 
-//test files
-#include <TestPhase.h>
+//Base Test files (included so the application only needs to include the Test
+//Phase and not individual tests in order to register tests).
 #include "FileLoad.h"
 #include "RefResolver.h"
 #include "AcyclicAnalysis.h"
 
-//boost files
-#include <boost/shared_ptr.hpp>
+//Test/Result files
+#include <TestPhase.h>
+
+//Ax files
+#include <AxTypes.h>
 
 namespace aafanalyzer {
 
-class TestGraph;
+using namespace std;
+using namespace boost;
+
+class AAFGraphInfo;
 
 class LoadPhase : public TestPhase
 {
  public:
-  LoadPhase(std::wostream& os, const std::basic_string<wchar_t> AAFFile);
+  LoadPhase(wostream& os, const basic_string<wchar_t> AAFFile);
   virtual ~LoadPhase();
 
-  boost::shared_ptr<TestGraph> GetTestGraph();
-  virtual boost::shared_ptr<TestPhaseLevelTestResult> Execute();  
+  shared_ptr<const AAFGraphInfo> GetTestGraphInfo();
+  virtual shared_ptr<TestPhaseLevelTestResult> Execute();  
 
  private:
 
@@ -50,8 +56,8 @@ class LoadPhase : public TestPhase
   LoadPhase( const LoadPhase& );
   LoadPhase& operator=( const LoadPhase& );
 
-  boost::shared_ptr<TestGraph> _spTestGraph;
-  const std::basic_string<wchar_t> _FileName;
+  shared_ptr<const AAFGraphInfo> _spGraphInfo;
+  const basic_string<wchar_t> _FileName;
 };
 
 } // end of namespace diskstream

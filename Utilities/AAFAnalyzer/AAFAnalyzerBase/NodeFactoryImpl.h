@@ -21,16 +21,15 @@
 #ifndef __NODEFACTORYIMPL_h__
 #define __NODEFACTORYIMPL_h__
 
-//project files
+//AAF Analyzer Base files
 #include "NodeFactory.h"
 
-//AX Files
+//AX files
 #include <AxSmartPointer.h>
 
-//boost files
-#include <boost/shared_ptr.hpp>
-
 namespace aafanalyzer {
+
+using namespace boost;
 
 class Node;
 
@@ -40,7 +39,7 @@ class NodeFactoryImpl : public NodeFactory
   NodeFactoryImpl();
   virtual ~NodeFactoryImpl();
 
-  virtual boost::shared_ptr<Node> CreateNode(IAAFObjectSP spObj);
+  virtual shared_ptr<Node> CreateNode(IAAFObjectSP spObj);
   
  private:
 

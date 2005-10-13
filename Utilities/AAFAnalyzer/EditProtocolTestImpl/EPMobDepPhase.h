@@ -21,12 +21,17 @@
 #ifndef __EPMobDepPhase_h__
 #define __EPMobDepPhase_h__
 
-#include <TestPhase.h>
-
+//Edit Protocol Test files (included so the application only needs to include
+//the Test Phase and not individual tests in order to register tests).
+#include <DecorateEPTest.h>
 #include <CompMobDependency.h>
 #include <EPDerivationTest.h>
 
-#include <boost/shared_ptr.hpp>
+//Test/Result files
+#include <TestPhase.h>
+
+//Ax files
+#include <AxTypes.h>
 
 namespace aafanalyzer {
 
@@ -38,12 +43,12 @@ class TestGraph;
 class EPMobDepPhase : public TestPhase
 {
  public:
-  EPMobDepPhase( wostream& log, shared_ptr<TestGraph> spGraph );
+  EPMobDepPhase( wostream& log, shared_ptr<const TestGraph> spGraph );
   virtual ~EPMobDepPhase();
 
   virtual AxString GetDescription() const;
   virtual AxString GetName() const;
-  virtual boost::shared_ptr<TestPhaseLevelTestResult> Execute();
+  virtual shared_ptr<TestPhaseLevelTestResult> Execute();
 
  private:
 
@@ -53,7 +58,7 @@ class EPMobDepPhase : public TestPhase
   EPMobDepPhase& operator=( const EPMobDepPhase& );
 
   wostream& _log;
-  shared_ptr<TestGraph> _spGraph;
+  shared_ptr<const TestGraph> _spGraph;
 };
 
 } // end of namespace aafanalyzer

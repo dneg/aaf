@@ -37,12 +37,14 @@ endif
 include $(AAFBASE)/build/common.mk
 
 # Include directories
-INCLUDES = -I$(AAFSDKINCLUDEDIR) \
+INCLUDES ?= -I$(AAFSDKINCLUDEDIR) \
+	   -I../AnalyzerBase \
 	   -I../AAFAnalyzerBase \
+	   -I../EPAnalyzerBase \
+	   -I../RequirementLib \
+   	   -I../TestPhaseLib \
 	   -I../BaseTestImpl \
 	   -I../EditProtocolTestImpl \
-	   -I../TestPhaseLib \
-	   -I../RequirementLib \
 	   -I$(AAFBASE)/examples2/axLib
 
 

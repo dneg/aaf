@@ -21,10 +21,11 @@
 #ifndef __REQUIREMENTLOADER_H_
 #define __REQUIREMENTLOADER_H_
 
+//Requirement files
 #include "Requirement.h"
 
-//Ax files
-#include <AxTypes.h>
+//STL files
+#include <string>
 
 namespace aafanalyzer {
 
@@ -39,24 +40,24 @@ public:
     static void __EndElement(void* userData, const char* name);
     static void __EndData(void* userData, const char* s, int len);
 
-    void StartElement(const AxString& name, const char** attribs);
-    void EndElement(const AxString& name);
-    void EndData(const AxString& contents);
+    void StartElement(const wstring& name, const char** attribs);
+    void EndElement(const wstring& name);
+    void EndData(const wstring& contents);
     
     void ParseXML( const char* filename ) const;
     
  private:
  
-    AxString _currentData;
+    wstring _currentData;
     
-    AxString _currentId;
+    wstring _currentId;
     Requirement::RequirementType _currentType;
     Requirement::Category _currentCategory;
-    AxString _currentName;
-    AxString _currentDesc;
-    AxString _currentDocument;
-    AxString _currentVersion;
-    AxString _currentSection;
+    wstring _currentName;
+    wstring _currentDesc;
+    wstring _currentDocument;
+    wstring _currentVersion;
+    wstring _currentSection;
 
 };
 

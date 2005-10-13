@@ -18,13 +18,16 @@
 //
 //=---------------------------------------------------------------------=
 
+//Base Test files
 #include "FileLoad.h"
 
+//Test/Result files
+#include <TestLevelTestResult.h>
+
+//AAF Analyzer Base files
 #include <GraphBuilder.h>
 #include <NodeFactoryImpl.h>
-
-//boost files
-#include <boost/shared_ptr.hpp>
+#include <AAFGraphInfo.h>
 
 namespace {
 
@@ -39,8 +42,11 @@ using namespace aafanalyzer;
 
 namespace aafanalyzer 
 {
+    
+using namespace std;
+using namespace boost;
 
-FileLoad::FileLoad(std::wostream& os, const std::basic_string<wchar_t> AAFFile)
+FileLoad::FileLoad(wostream& os, const basic_string<wchar_t> AAFFile)
   : Test(os, GetTestInfo()),
     _File(AAFFile)
 {
@@ -50,25 +56,26 @@ FileLoad::~FileLoad()
 {
 }
 
-boost::shared_ptr<TestLevelTestResult> FileLoad::Execute()
+shared_ptr<TestLevelTestResult> FileLoad::Execute()
 {
 
   GraphBuilder graphBuild;
-  boost::shared_ptr<NodeFactory> spFactory(new NodeFactoryImpl());
+  shared_ptr<NodeFactory> spFactory(new NodeFactoryImpl());
 
   //output to screen
-  //GetOutStream() << GetName() << std::endl << GetDescription() << std::endl << std::endl;
+  //GetOutStream() << GetName() << endl << GetDescription() << endl << endl;
 
   //build the graph and initialize TestGraph 
-  boost::shared_ptr<TestGraph> spTestGraph(new TestGraph(graphBuild.CreateGraph(_File, spFactory)));
-  SetTestGraph(spTestGraph);
+  shared_ptr<const AAFGraphInfo> spGraphInfo( graphBuild.CreateGraph(_File, spFactory) );
+  SetTestGraph(spGraphInfo->GetGraph());
+  _spGraphInfo = spGraphInfo;
   
   // Set result properties.
   // If the graph builder did not through an exception, then
   // it succeeded, therefore, result is PASS.
-  const boost::shared_ptr<const Test> me = this->shared_from_this();
+  const shared_ptr<const Test> me = this->shared_from_this();
   Requirement::RequirementMapSP spMyReqs(new Requirement::RequirementMap(this->GetCoveredRequirements()));
-  boost::shared_ptr<TestLevelTestResult> spResult(
+  shared_ptr<TestLevelTestResult> spResult(
             new TestLevelTestResult( L"FileLoad",
                                      L"Loads and AAF file and builds the test graph.",
                                      L"File loaded correctly.",
@@ -93,9 +100,15 @@ AxString FileLoad::GetDescription() const
 
 const TestInfo FileLoad::GetTestInfo()
 {
-    boost::shared_ptr<std::vector<AxString> > spReqIds(new std::vector<AxString>);
+    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    //TODO: Push actual requirements.
 //    spReqIds->push_back(L"Requirement Id");
     return TestInfo(L"FileLoad", spReqIds);
+}
+
+shared_ptr<const AAFGraphInfo> FileLoad::GetTestGraphInfo()
+{
+  return _spGraphInfo;
 }
 
 } // end of namespace diskstream

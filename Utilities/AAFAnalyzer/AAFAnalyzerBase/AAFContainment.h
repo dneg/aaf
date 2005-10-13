@@ -21,21 +21,20 @@
 #ifndef __AAFCONTAINMENT_h__
 #define __AAFCONTAINMENT_h__
 
-//project files
-#include "Edge.h"
-
-//boost files
-#include <boost/shared_ptr.hpp>
+//Analyzer Base files
+#include <Edge.h>
 
 namespace aafanalyzer {
+
+using namespace boost;
 
 class AAFContainment : public Edge
 {
  public:
-  AAFContainment(boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild);
+  AAFContainment(shared_ptr<Node> spParent, shared_ptr<Node> spChild);
   ~AAFContainment();
 
-  bool Visit(boost::shared_ptr<Visitor> spVisitor);
+  bool Visit(shared_ptr<Visitor> spVisitor);
 
  private:
 

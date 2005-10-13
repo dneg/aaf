@@ -18,16 +18,18 @@
 //
 //=---------------------------------------------------------------------=
 
+//AAF Analyzer Base files
 #include "GraphBuilder.h"
-
-#include "EdgeMap.h"
 #include "NodeFactory.h"
 #include "AAFContainment.h"
 #include "MobNodeMap.h"
+#include "AAFGraphInfo.h"
 
-/*TEMPORARY SOLUTION UNTIL WEAK REFERENCES ARE IMPLEMENTED**/
-#include "TempAllNodeMap.h"
+//Analyzer Base files
+#include <TestGraph.h>
+#include <EdgeMap.h>
 
+//Ax files
 #include <AxBaseObjIter.h>
 #include <AxBaseObj.h>
 #include <AxObject.h>
@@ -37,6 +39,7 @@
 #include <AxMob.h>
 #include <AxSmartPointer.h>
 
+//STL files
 #include <memory>
 #include <stack>
 
@@ -44,9 +47,9 @@ namespace {
 
 using namespace aafanalyzer;
 using namespace boost;
+using namespace std;
 
-
-void UpdateNodeMap( IAAFObjectSP spObj, boost::shared_ptr<Node> spNode )
+void UpdateNodeMap( IAAFObjectSP spObj, shared_ptr<Node> spNode )
 {
   IAAFMobSP spMob;
   AxObject axObj(spObj);
@@ -58,8 +61,6 @@ void UpdateNodeMap( IAAFObjectSP spObj, boost::shared_ptr<Node> spNode )
     aafMobID_t mobid = axMob.GetMobID();
     MobNodeMap::GetInstance().AddMobNode(mobid, spNode);
   }
-  //TEMPORARY SOLUTION UNTIL WEAK REFERENCES ARE IMPLEMENTED
-  TempAllNodeMap::GetInstance().AddNode(spNode->GetLID(), spNode);
 }
 
 void BuildTree( AxBaseObjRecIter& recIter,
@@ -67,13 +68,13 @@ void BuildTree( AxBaseObjRecIter& recIter,
           NodeFactory& nodeFactory,
     EdgeMap& edgeMap )
 {
-  std::auto_ptr<AxBaseObj> nextPtr;
-  std::stack< std::pair<int, shared_ptr<Node> > > parentStack;  
+  auto_ptr<AxBaseObj> nextPtr;
+  stack< pair<int, shared_ptr<Node> > > parentStack;  
   int level = 0;
 
   // Initialize the parent stack with the root node passed as an
   // argument to this function.
-  parentStack.push(std::pair<int, shared_ptr<Node> >(level, spRootParent));
+  parentStack.push(pair<int, shared_ptr<Node> >(level, spRootParent));
 
   // Ignore the first object returned by the recursive iterator because it
   // is the root object (ie. spRootParent).
@@ -83,13 +84,13 @@ void BuildTree( AxBaseObjRecIter& recIter,
   {
     if(dynamic_cast<AxObject*>(nextPtr.get()))
      {
-       std::auto_ptr<AxObject> obj(dynamic_cast<AxObject*>(nextPtr.release()));
+       auto_ptr<AxObject> obj(dynamic_cast<AxObject*>(nextPtr.release()));
 
        // This remains for debug.
-       /*std::wcout << L"level = " << level << std::endl;
-       std::wcout << L"parentStack.size() = " << parentStack.size() << std::endl ;
-       std::wcout << L"parentStack.top().first = " << parentStack.top().first << std::endl;
-       std::wcout << L"class name = " << obj->GetClassName() << std::endl << std::endl;*/
+       /*wcout << L"level = " << level << endl;
+       wcout << L"parentStack.size() = " << parentStack.size() << endl ;
+       wcout << L"parentStack.top().first = " << parentStack.top().first << endl;
+       wcout << L"class name = " << obj->GetClassName() << endl << endl;*/
 
        // Coerce the AxObject wrapper into giving us an IAAFObjectSP
        // pointer to the wrapped AAF object.
@@ -97,7 +98,7 @@ void BuildTree( AxBaseObjRecIter& recIter,
 
        // Used the supplied factory to create a node for the
        // containment graph we are bulding.
-       boost::shared_ptr<Node> spChildNode( nodeFactory.CreateNode( spObj ) );
+       shared_ptr<Node> spChildNode( nodeFactory.CreateNode( spObj ) );
 
        // Add to the node map (if necessary)
        UpdateNodeMap( spObj, spChildNode );
@@ -108,7 +109,7 @@ void BuildTree( AxBaseObjRecIter& recIter,
        edgeMap.AddEdge( spEdge );
         
        // The child node becomes the new parent for lower level objects.
-       parentStack.push( std::pair<int, shared_ptr<Node> >(level, spChildNode) );
+       parentStack.push( pair<int, shared_ptr<Node> >(level, spChildNode) );
      }
 
     // These remain for reference.
@@ -129,7 +130,7 @@ void BuildTree( AxBaseObjRecIter& recIter,
     // the underlying exception and rethrow it.
     else if ( dynamic_cast<AxBaseObjAny<AxExHResult>*>( nextPtr.get() ) ) {
       
-      std::auto_ptr< AxBaseObjAny<AxExHResult> > ex (
+      auto_ptr< AxBaseObjAny<AxExHResult> > ex (
        dynamic_cast<AxBaseObjAny<AxExHResult>*>( nextPtr.release() ) );
       
       // Copy it, and throw the copy.
@@ -164,29 +165,32 @@ GraphBuilder::~GraphBuilder()
 {
 }
 
-TestGraph GraphBuilder::CreateGraph(const std::basic_string<wchar_t>& fileName, boost::shared_ptr<NodeFactory> spFactory)
+const shared_ptr<const AAFGraphInfo> GraphBuilder::CreateGraph(const AxString& fileName, shared_ptr<NodeFactory> spFactory)
 {
-  AxFile axFile;
-  axFile.OpenExistingRead(fileName.c_str(), 0);
   
-  AxHeader axHeader(axFile.getHeader());
+  shared_ptr<AxFile> axFile( new AxFile );
+
+  axFile->OpenExistingRead(fileName.c_str(), 0);
+  
+  AxHeader axHeader(axFile->getHeader());
   
   //create the root node
-  boost::shared_ptr<Node> spRootNode = spFactory->CreateNode(axHeader);
+  shared_ptr<Node> spRootNode = spFactory->CreateNode(axHeader);
 
   // Initialize the recursive iterator.
   AxObject axRootObject( axHeader );
-  std::auto_ptr< AxBaseObjIterPrtcl >
+  auto_ptr< AxBaseObjIterPrtcl >
     axRootObjectIter( new AxBaseSolitaryObjIter<AxObject>(axRootObject) );
   AxBaseObjRecIter recIter( axRootObjectIter );
   
   shared_ptr<EdgeMap> spEdgeMap( new EdgeMap );
   
   BuildTree( recIter, spRootNode, *spFactory, *spEdgeMap );
-  
-  axFile.Close();
 
-  return TestGraph( spEdgeMap, spRootNode );
+  shared_ptr<const TestGraph> spGraph( new TestGraph( spEdgeMap, spRootNode ) );
+  shared_ptr<const AAFGraphInfo> spInfo( new AAFGraphInfo( spGraph, axFile ) );
+
+  return spInfo;
 }
 
 }//end of namespace

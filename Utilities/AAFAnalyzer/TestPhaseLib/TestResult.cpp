@@ -18,8 +18,9 @@
 //
 //=---------------------------------------------------------------------=
 
+//Test/Result files
 #include "TestResult.h"
-#include <iostream>
+
 namespace {
 
 using namespace aafanalyzer;
@@ -35,6 +36,7 @@ namespace aafanalyzer
 {
 
 using namespace std;
+using namespace boost;
 
 // Default result is FAIL.
 // Test implementations must explicity indicate success.
@@ -50,10 +52,10 @@ TestResult::TestResult()
     _spFailedRequirements( new Requirement::RequirementMap() )
 {}
 
-TestResult::TestResult( const AxString& name,
-			const AxString& desc,
-			const AxString& explain,
-			const AxString& docRef,
+TestResult::TestResult( const wstring& name,
+			const wstring& desc,
+			const wstring& explain,
+			const wstring& docRef,
 			Result defaultResult )
   : _name( name ),
     _desc( desc ),
@@ -76,8 +78,8 @@ TestResult::TestResult ( const Requirement::RequirementMapSP& requirements )
     _spFailedRequirements( new Requirement::RequirementMap() )
 {}
     
-TestResult::TestResult (const AxString& name, const AxString& desc,
-                        const AxString& explain, const AxString& docRef,
+TestResult::TestResult (const wstring& name, const wstring& desc,
+                        const wstring& explain, const wstring& docRef,
                         Result defaultResult,
                         const Requirement::RequirementMapSP& requirements)
   : _name( name ),
@@ -95,22 +97,22 @@ TestResult::TestResult (const AxString& name, const AxString& desc,
 TestResult::~TestResult()
 {}
 
-const AxString& TestResult::GetExplanation() const
+const wstring& TestResult::GetExplanation() const
 {
   return _expl;
 }
 
-const AxString& TestResult::GetDocumentRef() const
+const wstring& TestResult::GetDocumentRef() const
 {
   return _docRef;
 }
 
-const AxString& TestResult::GetName() const
+const wstring& TestResult::GetName() const
 {
   return _name;
 }
 
-const AxString& TestResult::GetDescription() const
+const wstring& TestResult::GetDescription() const
 {
   return _desc;
 }
@@ -120,17 +122,17 @@ enum TestResult::Result TestResult::GetResult() const
   return _result;
 }
 
-void TestResult::SetExplanation(const AxString& exp)
+void TestResult::SetExplanation(const wstring& exp)
 {
   _expl = exp;
 }
 
-void TestResult::SetName(const AxString& name)
+void TestResult::SetName(const wstring& name)
 {
   _name = name;
 }
 
-void TestResult::SetDescription(const AxString& desc)
+void TestResult::SetDescription(const wstring& desc)
 {
   _desc = desc;
 }
@@ -170,17 +172,17 @@ const Requirement::RequirementMap& TestResult::GetRequirements( Result type ) co
     
 }
 
-void TestResult::AddDetail( const AxString& detail )
+void TestResult::AddDetail( const wstring& detail )
 {
   _details.push_back( detail );
 }
 
-const vector<AxString>& TestResult::GetDetails() const
+const vector<wstring>& TestResult::GetDetails() const
 {
   return _details;
 }
 
-void TestResult::AddSubtestResult( boost::shared_ptr<const TestResult> subtestResult )
+void TestResult::AddSubtestResult( shared_ptr<const TestResult> subtestResult )
 {
   _spSubtestResults->push_back( subtestResult );
 }
@@ -190,7 +192,7 @@ void TestResult::SetEnumResult( Result enumResult )
   _aggregateEnumResult = enumResult;
 }
 
-bool TestResult::ContainsRequirment( const AxString& id, Result& outContainedIn )
+bool TestResult::ContainsRequirment( const wstring& id, Result& outContainedIn )
 {
     if ( _spPassedRequirements->find(id) != _spPassedRequirements->end() ) {
         outContainedIn = PASS;
@@ -213,13 +215,13 @@ void TestResult::ClearRequirements()
     _spFailedRequirements->clear();
 }
 
-void TestResult::AddRequirement( Result type, const boost::shared_ptr<const Requirement>& req )
+void TestResult::AddRequirement( Result type, const shared_ptr<const Requirement>& req )
 {
     Requirement::RequirementMapSP spMap = this->GetMyRequirements( type );
     (*spMap)[req->GetId()] = req;
 }
 
-void TestResult::RemoveRequirement( const AxString& id )
+void TestResult::RemoveRequirement( const wstring& id )
 {
     _spPassedRequirements->erase(id);
     _spWarnedRequirements->erase(id);

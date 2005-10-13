@@ -18,8 +18,8 @@
 //
 //=---------------------------------------------------------------------=
 
+//Test/Result files
 #include "TestRegistryException.h"
-#include <AxUtil.h>
 
 namespace {
 
@@ -36,7 +36,7 @@ namespace aafanalyzer
 {
 
 TestRegistryException::TestRegistryException( const wchar_t* what )
-  : AxEx( AxString(AxString(L"Test Registry: ") + AxString(what)).c_str() )
+  : AnalyzerException( wstring(wstring(L"Test Registry: ") + wstring(what)).c_str() )
 {}
 
 TestRegistryException::~TestRegistryException() throw()

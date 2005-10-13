@@ -21,15 +21,21 @@
 #ifndef __REQUIREMENTMISMATCHEXCEPTION_H_
 #define __REQUIREMENTMISMATCHEXCEPTION_H_
 
-//Ax files
-#include <AxEx.h>
+//Analyzer Base files
+#include <AnalyzerException.h>
 
-class RequirementMismatchException : public AxEx {
+namespace aafanalyzer {
+
+using namespace std;
+
+class RequirementMismatchException : public AnalyzerException {
 
 public:
 
     RequirementMismatchException( const wchar_t* what );
     virtual ~RequirementMismatchException() throw();
 };
+
+} // end of namespace diskstream
 
 #endif /*__REQUIREMENTMISMATCHEXCEPTION_H_*/

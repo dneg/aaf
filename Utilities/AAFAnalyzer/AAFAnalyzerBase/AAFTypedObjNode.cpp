@@ -18,10 +18,8 @@
 //
 //=---------------------------------------------------------------------=
 
+//AAF Analyzer Base files
 #include "AAFTypedObjNode.h"
-
-#include "TypedVisitor.h"
-#include <AAF.h>
 
 namespace {
 
@@ -36,54 +34,25 @@ using namespace aafanalyzer;
 
 namespace aafanalyzer {
 
-
-template<typename AAFObjType>
-AAFTypedObjNode<AAFObjType>::AAFTypedObjNode(IAAFSmartPointer<AAFObjType> spObject)
-  : AAFObjNode(AxQueryInterface<AAFObjType,IAAFObject>( spObject ), L"" ),
-    _spTypedObj( spObject )
-{}
+using namespace std;
+using namespace boost;
 
 template<typename AAFObjType>
 AAFTypedObjNode<AAFObjType>::AAFTypedObjNode(IAAFSmartPointer<AAFObjType> spObject,
-					     const std::basic_string<wchar_t>& name)
-  : AAFObjNode(AxQueryInterface<AAFObjType,IAAFObject>( spObject ), name ),
-    _spTypedObj( spObject )
+					     const basic_string<wchar_t>& name)
+  : AAFObjNode(AxQueryInterface<AAFObjType,IAAFObject>( spObject ), name )
+{}
+
+template<typename AAFObjType>
+AAFTypedObjNode<AAFObjType>::AAFTypedObjNode( shared_ptr<AAFTypedObjNode<AAFObjType> > spExistingNode )
+  : AAFObjNode( spExistingNode->GetAAFObject(),
+                spExistingNode->GetName(),
+                spExistingNode->GetLID() )
 {}
 
 template<typename AAFObjType>
 AAFTypedObjNode<AAFObjType>::~AAFTypedObjNode()
-{
-}
-
-template<typename AAFObjType>
-bool AAFTypedObjNode<AAFObjType>::PreOrderVisit(boost::shared_ptr<Visitor> spVisitor)
-{
-  boost::shared_ptr<TypedVisitor> spTypedVis = boost::dynamic_pointer_cast<TypedVisitor>(spVisitor);
-  if(spTypedVis)
-  {
-    return spTypedVis->PreOrderVisit(*this);
-  }
-
-  return spVisitor->PreOrderVisit(*this);
-}
-
-template<typename AAFObjType>
-bool AAFTypedObjNode<AAFObjType>::PostOrderVisit(boost::shared_ptr<Visitor> spVisitor)
-{
-  boost::shared_ptr<TypedVisitor> spTypedVis = boost::dynamic_pointer_cast<TypedVisitor>(spVisitor);
-  if(spTypedVis)
-  {
-    return spTypedVis->PostOrderVisit(*this);
-  }
-
-  return spVisitor->PostOrderVisit(*this);
-}
-
-template<typename AAFObjType>
-IAAFSmartPointer<AAFObjType> AAFTypedObjNode<AAFObjType>::GetAAFObjectOfType() const
-{
-  return _spTypedObj;
-}
+{}
 
 #include "TypedNodeTemplate.cpp.gen"
 

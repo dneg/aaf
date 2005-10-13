@@ -18,8 +18,8 @@
 //
 //=---------------------------------------------------------------------=
 
+//Requirement files
 #include "RequirementMismatchException.h"
-#include <AxUtil.h>
 
 namespace {
 
@@ -36,7 +36,7 @@ namespace aafanalyzer
 {
 
 RequirementMismatchException::RequirementMismatchException( const wchar_t* what )
-  : AxEx( AxString(AxString(L"Requirement mismatch: ") + AxString(what)).c_str() )
+  : AnalyzerException( wstring(wstring(L"Requirement mismatch: ") + wstring(what)).c_str() )
 {}
 
 RequirementMismatchException::~RequirementMismatchException() throw()

@@ -21,25 +21,26 @@
 #ifndef __DETAILLEVELTESTRESULT_h__
 #define __DETAILLEVELTESTRESULT_h__
 
-//Project files
+//Test/Result files
 #include "LowLevelTestResult.h"
 
 namespace aafanalyzer {
 
 using namespace std;
+using namespace boost;
 
 class DetailLevelTestResult : public LowLevelTestResult
 {
  public:
 
   DetailLevelTestResult( const Requirement::RequirementMapSP& requirements );
-  DetailLevelTestResult( const AxString& name, const AxString& desc,
-                         const AxString& explain, const AxString& docRef,
+  DetailLevelTestResult( const wstring& name, const wstring& desc,
+                         const wstring& explain, const wstring& docRef,
                          Result defaultResult,
                          const Requirement::RequirementMapSP& requirements );
   ~DetailLevelTestResult();
 
-  void AppendSubtestResult( const boost::shared_ptr<const DetailLevelTestResult>& subtestResult );
+  void AppendSubtestResult( const shared_ptr<const DetailLevelTestResult>& subtestResult );
   const enum ResultLevel GetResultType() const;
  private:
  

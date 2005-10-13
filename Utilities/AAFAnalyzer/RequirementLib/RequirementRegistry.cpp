@@ -18,9 +18,9 @@
 //
 //=---------------------------------------------------------------------=
 
+//Requirement files
 #include "RequirementRegistry.h"
 #include "RequirementRegistryException.h"
-#include <sstream>
 
 namespace {
 
@@ -34,6 +34,8 @@ using namespace aafanalyzer;
 //======================================================================
 
 namespace aafanalyzer {
+
+using namespace boost;
 
 //static variable
 RequirementRegistry* RequirementRegistry::_pRequirementRegistry = NULL;
@@ -62,7 +64,7 @@ RequirementRegistry& RequirementRegistry::GetInstance()
     return *_pRequirementRegistry;
 }
 
-void RequirementRegistry::Register( const boost::shared_ptr<const Requirement>& req )
+void RequirementRegistry::Register( const shared_ptr<const Requirement>& req )
 {
     if ( _requirementSet.find( req->GetId() ) == _requirementSet.end() )
     {
@@ -70,20 +72,18 @@ void RequirementRegistry::Register( const boost::shared_ptr<const Requirement>& 
     }
     else
     {
-        std::wostringstream msg;
-        msg << L"Requirement " << req->GetId() << L" is already registered.";
-        throw RequirementRegistryException( msg.str().c_str() );
+        wstring msg = L"Requirement " + req->GetId() + L" is already registered.";
+        throw RequirementRegistryException( msg.c_str() );
     }
 }
 
-const boost::shared_ptr<const Requirement> RequirementRegistry::GetRequirement( const AxString& id ) const
+const shared_ptr<const Requirement> RequirementRegistry::GetRequirement( const wstring& id ) const
 {
     Requirement::RequirementMap::const_iterator target = _requirementSet.find( id );
     if ( target == _requirementSet.end() )
     {
-        std::wostringstream msg;
-        msg << L"Requirement " << id << L" has not been registered.";
-        throw RequirementRegistryException( msg.str().c_str() );
+        wstring msg = L"Requirement " + id + L" has not been registered.";
+        throw RequirementRegistryException( msg.c_str() );
     }    
     return target->second;
 }

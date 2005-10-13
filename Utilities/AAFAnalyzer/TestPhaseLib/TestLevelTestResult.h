@@ -21,38 +21,41 @@
 #ifndef __TESTLEVELTESTRESULT_h__
 #define __TESTLEVELTESTRESULT_h__
 
-//Project files
+//Test/Result files
 #include "LowLevelTestResult.h"
-#include "DetailLevelTestResult.h"
 
 namespace aafanalyzer {
 
 using namespace std;
+using namespace boost;
+
+class DetailLevelTestResult;
+class Test;
 
 class TestLevelTestResult : public LowLevelTestResult
 {
  public:
 
-  TestLevelTestResult( const boost::shared_ptr<const Test>& associatedTest,
+  TestLevelTestResult( const shared_ptr<const Test>& associatedTest,
                        const Requirement::RequirementMapSP& requirements );
-  TestLevelTestResult( const AxString& name, const AxString& desc,
-                       const AxString& explain, const AxString& docRef,
+  TestLevelTestResult( const wstring& name, const wstring& desc,
+                       const wstring& explain, const wstring& docRef,
                        Result defaultResult,
-                       const boost::shared_ptr<const Test>& associatedTest,
+                       const shared_ptr<const Test>& associatedTest,
                        const Requirement::RequirementMapSP& requirements );
   ~TestLevelTestResult();
 
-  void AppendSubtestResult( const boost::shared_ptr<const DetailLevelTestResult>& subtestResult );
+  void AppendSubtestResult( const shared_ptr<const DetailLevelTestResult>& subtestResult );
   const enum ResultLevel GetResultType() const;
  private:
  
-  const boost::shared_ptr<const Test> _spAssociatedTest;
+  const shared_ptr<const Test> _spAssociatedTest;
    
   void FindRequirementMismatch( const Requirement::RequirementMap& source,
                                 const Requirement::RequirementMap& matchWith,
-                                const AxString& sourceName,
-                                const AxString& matchName ) const;
-  void CheckDescendantRequirements( const boost::shared_ptr<const TestResult>& subtestResult, const AxString& name );
+                                const wstring& sourceName,
+                                const wstring& matchName ) const;
+  void CheckDescendantRequirements( const shared_ptr<const TestResult>& subtestResult, const wstring& name );
    
   // prohibited
   

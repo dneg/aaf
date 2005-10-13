@@ -21,15 +21,18 @@
 #ifndef __CompMobDependency_h__
 #define __CompMobDependency_h__
 
+//Test/Result files
+#include <Test.h>
+
+//AAF Analyzer Base files
 #include <AAFTypedObjNode.h>
 
-//project files
-#include <Test.h>
-#include <TestLevelTestResult.h>
-
+//STL files
 #include <vector>
 
 namespace aafanalyzer {
+
+class TestLevelTestResult;
 
 using namespace boost;
 using namespace std;
@@ -43,10 +46,10 @@ class CompMobDependency : public Test
   typedef vector<CompMobNodeSP> CompMobNodeVector;
   typedef shared_ptr<CompMobNodeVector> CompMobNodeVectorSP;
 
-  CompMobDependency(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph);
+  CompMobDependency(wostream& os, shared_ptr<const TestGraph> spGraph);
   virtual ~CompMobDependency();
 
-  virtual boost::shared_ptr<TestLevelTestResult> Execute();
+  virtual shared_ptr<TestLevelTestResult> Execute();
   virtual AxString GetName() const;
   virtual AxString GetDescription() const;
   static const TestInfo GetTestInfo();

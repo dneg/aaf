@@ -21,29 +21,29 @@
 #ifndef __AAFTYPEDOBJNODE_h__
 #define __AAFTYPEDOBJNODE_h__
 
-//project files
+//AAF Analyzer Base files
 #include "AAFObjNode.h"
 
 //Ax files
 #include <AxSmartPointer.h>
 
-//boost files
-#include <boost/shared_ptr.hpp>
-
 namespace aafanalyzer {
+
+using namespace std;
+using namespace boost;
 
 template<typename AAFObjType>
 class AAFTypedObjNode : public AAFObjNode
 {
  public:
-  AAFTypedObjNode(IAAFSmartPointer<AAFObjType> ObjectType );
-  AAFTypedObjNode(IAAFSmartPointer<AAFObjType> ObjectType,
-		  const std::basic_string<wchar_t>& name );
   ~AAFTypedObjNode();
   
-  bool PreOrderVisit(boost::shared_ptr<Visitor> spVisitor);
-  bool PostOrderVisit(boost::shared_ptr<Visitor> spVisitor);
-  IAAFSmartPointer<AAFObjType> GetAAFObjectOfType() const;
+  virtual IAAFSmartPointer<AAFObjType> GetAAFObjectOfType() const =0;;
+
+ protected:
+  AAFTypedObjNode(IAAFSmartPointer<AAFObjType> ObjectType,
+          const basic_string<wchar_t>& name );
+  AAFTypedObjNode<AAFObjType>( shared_ptr<AAFTypedObjNode<AAFObjType> > spExistingNode );
 
  private:
 
@@ -52,7 +52,6 @@ class AAFTypedObjNode : public AAFObjNode
   AAFTypedObjNode( const AAFTypedObjNode& );
   AAFTypedObjNode& operator=( const AAFTypedObjNode& );
 
-  IAAFSmartPointer<AAFObjType> _spTypedObj;
 };
 
 } // end of namespace diskstream

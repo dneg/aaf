@@ -18,6 +18,7 @@
 //
 //=---------------------------------------------------------------------=
 
+//Test/Result files
 #include "TestPhase.h"
 
 namespace {
@@ -34,7 +35,9 @@ using namespace aafanalyzer;
 namespace aafanalyzer 
 {
 
-TestPhase::TestPhase(std::wostream& os)
+using namespace std;
+
+TestPhase::TestPhase(wostream& os)
 : _os(os)
 {
 }
@@ -43,17 +46,17 @@ TestPhase::~TestPhase()
 {
 }
 
-AxString TestPhase::GetDescription() const
+wstring TestPhase::GetDescription() const
 {
   return L"";
 }
 
-AxString TestPhase::GetName() const
+wstring TestPhase::GetName() const
 {
   return L"";
 }
 
-std::wostream& TestPhase::GetOutStream() const
+wostream& TestPhase::GetOutStream() const
 {
   return _os;
 }

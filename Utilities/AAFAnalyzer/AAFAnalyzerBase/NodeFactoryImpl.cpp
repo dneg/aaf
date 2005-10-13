@@ -18,11 +18,12 @@
 //
 //=---------------------------------------------------------------------=
 
-
+//AAF Analyzer Base files
 #include "NodeFactoryImpl.h"
-
-#include "TypedNodeFactoryImpl.h"
 #include "TypedNodeFactoryRegistry.h"
+#include "TypedNodeFactoryImpl.h"
+
+//Ax files
 #include <AxObject.h>
 #include <AxMetaDef.h>
 
@@ -39,6 +40,8 @@ using namespace aafanalyzer;
 
 namespace aafanalyzer {
 
+using namespace boost;
+
 NodeFactoryImpl::NodeFactoryImpl()
 {
 }
@@ -47,11 +50,11 @@ NodeFactoryImpl::~NodeFactoryImpl()
 {
 }
 
-boost::shared_ptr<Node> NodeFactoryImpl::CreateNode(IAAFObjectSP spObj)
+shared_ptr<Node> NodeFactoryImpl::CreateNode(IAAFObjectSP spObj)
 {
   AxObject axObj(spObj);
   AxClassDef clsDef(axObj.GetDefinition());
-  boost::shared_ptr<TypedNodeFactory> spNodeFactory;
+  shared_ptr<TypedNodeFactory> spNodeFactory;
 
   spNodeFactory = TypedNodeFactoryRegistry::GetInstance().LookUp(clsDef);
 

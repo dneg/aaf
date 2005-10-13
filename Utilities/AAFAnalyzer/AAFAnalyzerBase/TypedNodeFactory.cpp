@@ -18,8 +18,11 @@
 //
 //=---------------------------------------------------------------------=
 
+//AAF Analyzer Base files
 #include "TypedNodeFactory.h"
-#include "Node.h"
+
+//Analyzer Base files
+#include <Node.h>
 
 namespace {
 

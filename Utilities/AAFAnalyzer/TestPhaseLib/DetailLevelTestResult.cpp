@@ -18,6 +18,7 @@
 //
 //=---------------------------------------------------------------------=
 
+//Test/Result files
 #include "DetailLevelTestResult.h"
 
 namespace {
@@ -35,15 +36,16 @@ namespace aafanalyzer
 {
 
 using namespace std;
+using namespace boost;
 
 DetailLevelTestResult::DetailLevelTestResult( const Requirement::RequirementMapSP& requirements )
   : LowLevelTestResult( requirements )
 {}
 
-DetailLevelTestResult::DetailLevelTestResult( const AxString& name, 
-                                              const AxString& desc,
-                                              const AxString& explain,
-                                              const AxString& docRef,
+DetailLevelTestResult::DetailLevelTestResult( const wstring& name, 
+                                              const wstring& desc,
+                                              const wstring& explain,
+                                              const wstring& docRef,
                                               Result defaultResult, 
                                               const Requirement::RequirementMapSP& requirements )
   : LowLevelTestResult( name, desc, explain, docRef, defaultResult, requirements )
@@ -52,7 +54,7 @@ DetailLevelTestResult::DetailLevelTestResult( const AxString& name,
 DetailLevelTestResult::~DetailLevelTestResult()
 {}
 
-void DetailLevelTestResult::AppendSubtestResult( const boost::shared_ptr<const DetailLevelTestResult>& subtestResult )
+void DetailLevelTestResult::AppendSubtestResult( const shared_ptr<const DetailLevelTestResult>& subtestResult )
 {
     this->AddSubtestResult( subtestResult );
 

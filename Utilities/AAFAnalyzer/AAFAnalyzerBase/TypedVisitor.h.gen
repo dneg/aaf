@@ -78,6 +78,8 @@
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFEssenceDescriptor>& node){ return true; }
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFFileDescriptor>& node) { return true; }
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFFileDescriptor>& node){ return true; }
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFAES3PCMDescriptor>& node) { return true; }
+    virtual bool PostOrderVisit( AAFTypedObjNode<IAAFAES3PCMDescriptor>& node){ return true; }
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFAIFCDescriptor>& node) { return true; }
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFAIFCDescriptor>& node){ return true; }
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFDigitalImageDescriptor>& node) { return true; }
@@ -90,6 +92,8 @@
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFSoundDescriptor>& node){ return true; }
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFPCMDescriptor>& node) { return true; }
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFPCMDescriptor>& node){ return true; }
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFMultipleDescriptor>& node) { return true; }
+    virtual bool PostOrderVisit( AAFTypedObjNode<IAAFMultipleDescriptor>& node){ return true; }
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFTIFFDescriptor>& node) { return true; }
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFTIFFDescriptor>& node){ return true; }
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFWAVEDescriptor>& node) { return true; }

@@ -18,6 +18,7 @@
 //
 //=---------------------------------------------------------------------=
 
+//AAF Analyzer Base files
 #include "AAFSlotReference.h"
 #include "TypedVisitor.h"
 
@@ -35,7 +36,9 @@ using namespace aafanalyzer;
 namespace aafanalyzer 
 {
 
-AAFSlotReference::AAFSlotReference(boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild)
+using namespace boost;
+
+AAFSlotReference::AAFSlotReference(shared_ptr<Node> spParent, shared_ptr<Node> spChild)
   : Edge(spParent, spChild)
 {
 }
@@ -44,9 +47,9 @@ AAFSlotReference::~AAFSlotReference()
 {
 }
 
-bool AAFSlotReference::Visit(boost::shared_ptr<Visitor> spVisitor)
+bool AAFSlotReference::Visit(shared_ptr<Visitor> spVisitor)
 {
-  boost::shared_ptr<TypedVisitor> spTypedVis = boost::dynamic_pointer_cast<TypedVisitor>(spVisitor);
+  shared_ptr<TypedVisitor> spTypedVis = dynamic_pointer_cast<TypedVisitor>(spVisitor);
   if(spTypedVis)
   {
     return spTypedVis->EdgeVisit(*this);

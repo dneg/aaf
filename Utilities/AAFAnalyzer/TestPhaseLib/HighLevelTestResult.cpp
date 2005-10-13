@@ -18,9 +18,8 @@
 //
 //=---------------------------------------------------------------------=
 
+//Test/Result files
 #include "HighLevelTestResult.h"
-
-#include <algorithm>
 
 namespace {
 
@@ -42,10 +41,10 @@ HighLevelTestResult::HighLevelTestResult()
   : TestResult()
 {}
 
-HighLevelTestResult:: HighLevelTestResult( const AxString& name, 
-                                           const AxString& desc,
-                                           const AxString& explain,
-                                           const AxString& docRef,
+HighLevelTestResult:: HighLevelTestResult( const wstring& name, 
+                                           const wstring& desc,
+                                           const wstring& explain,
+                                           const wstring& docRef,
                                            Result defaultResult )
   : TestResult( name, desc, explain, docRef, defaultResult )
 {}

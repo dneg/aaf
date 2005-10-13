@@ -21,18 +21,17 @@
 #ifndef __GRAPHBUILDER_h__
 #define __GRAPHBUILDER_h__
 
-//project files
-#include "TestGraph.h"
-
-//stl files
-#include <string>
-#include <map>
-
-//boost files
+//Boost files
 #include <boost/shared_ptr.hpp>
+
+//Ax files
+#include <AxTypes.h>
 
 namespace aafanalyzer {
 
+using namespace boost;
+
+class AAFGraphInfo;
 class NodeFactory;
 
 class GraphBuilder
@@ -42,7 +41,7 @@ class GraphBuilder
   GraphBuilder();
   ~GraphBuilder();
 
-  TestGraph CreateGraph(const std::basic_string<wchar_t>& fileName, boost::shared_ptr<NodeFactory> spFactory );
+  const shared_ptr<const AAFGraphInfo> CreateGraph(const AxString& fileName, shared_ptr<NodeFactory> spFactory );
 
  private:  
 

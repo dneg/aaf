@@ -21,16 +21,17 @@
 #ifndef __REQUIREMENT_H_
 #define __REQUIREMENT_H_
 
-//Ax files
-#include <AxTypes.h>
-
-//stl files
-#include <map>
-
-//Boost Files
+//Boost files
 #include <boost/shared_ptr.hpp>
 
+//STL files
+#include <string>
+#include <map>
+
 namespace aafanalyzer {
+
+using namespace std;
+using namespace boost;
 
 class Requirement
 {
@@ -38,37 +39,37 @@ public:
     enum RequirementType {FILE, APP};
     enum Category        {COMPOSITIONAL, ANNOTATIONS, ADHOC};
 
-    Requirement(const AxString& id,
+    Requirement(const wstring& id,
                 const RequirementType requirementType,
                 const Category category,
-                const AxString& name,
-                const AxString& desc,
-                const AxString& document,
-                const AxString& version,
-                const AxString& section);
+                const wstring& name,
+                const wstring& desc,
+                const wstring& document,
+                const wstring& version,
+                const wstring& section);
     ~Requirement();
     
-    const AxString& GetId() const;
+    const wstring& GetId() const;
     const enum RequirementType GetRequirementType() const;
     const enum Category GetCategory() const;
-    const AxString& GetName() const;
-    const AxString& GetDescription() const;
-    const AxString& GetDocument() const;
-    const AxString& GetVersion() const;
-    const AxString& GetSection() const;
+    const wstring& GetName() const;
+    const wstring& GetDescription() const;
+    const wstring& GetDocument() const;
+    const wstring& GetVersion() const;
+    const wstring& GetSection() const;
     
-    typedef std::map< const AxString, boost::shared_ptr<const Requirement> > RequirementMap;
-    typedef boost::shared_ptr<RequirementMap> RequirementMapSP;
+    typedef map< const wstring, shared_ptr<const Requirement> > RequirementMap;
+    typedef shared_ptr<RequirementMap> RequirementMapSP;
 
  private:
-    const AxString _id;
+    const wstring _id;
     const enum RequirementType _requirementType;
     const enum Category _category;
-    const AxString _name;
-    const AxString _description;
-    const AxString _document;
-    const AxString _version;
-    const AxString _section;
+    const wstring _name;
+    const wstring _description;
+    const wstring _document;
+    const wstring _version;
+    const wstring _section;
 
   // prohibited
   Requirement(const Requirement&);

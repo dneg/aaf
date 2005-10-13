@@ -21,41 +21,40 @@
 #ifndef __ACYCLICVISITOR_h__
 #define __ACYCLICVISITOR_h__
 
-#include "Visitor.h"
-
-#include <DetailLevelTestResult.h>
-
+//Analyzer Base files
+#include <Visitor.h>
 #include <Node.h>
 
-//stl files
+//STL files
 #include <vector>
-#include <iostream>
-
-//boost files
-#include <boost/shared_ptr.hpp>
 
 namespace aafanalyzer {
+
+using namespace std;
+using namespace boost;
+
+class DetailLevelTestResult;
 
 class AcyclicVisitor : public Visitor
 {
  public:
 
-  typedef std::vector<Node::LID> Vector;
+  typedef vector<Node::LID> Vector;
 
-  AcyclicVisitor(std::wostream& os);
+  AcyclicVisitor(wostream& os);
   virtual ~AcyclicVisitor();
 
   virtual bool PreOrderVisit(Node& node);
   virtual bool PostOrderVisit(Node& node);
 
-  boost::shared_ptr<const DetailLevelTestResult> GetTestResult() const;
+  shared_ptr<const DetailLevelTestResult> GetTestResult() const;
 
  private:
   bool IsPresent(Node::LID lid);
   void Erase(Node::LID lid);
 
-  std::wostream& _os;
-  boost::shared_ptr< DetailLevelTestResult > _spResult;
+  wostream& _os;
+  shared_ptr< DetailLevelTestResult > _spResult;
   Vector _Vector;
 
   // prohibited

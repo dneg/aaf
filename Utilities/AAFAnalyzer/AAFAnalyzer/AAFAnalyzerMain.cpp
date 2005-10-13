@@ -18,21 +18,33 @@
 //
 //=---------------------------------------------------------------------=
 
-//project files
+//Edit Protocol Test files
+#include <EPMobDepPhase.h>
+
+//Base Test files
 #include <LoadPhase.h>
 #include <DumpPhase.h>
+
+//Test/Result Structure files
 #include <TopLevelTestResult.h>
 #include <TestPhaseLevelTestResult.h>
-#include <EPMobDepPhase.h>
-#include <Requirement.h>
-#include <RequirementLoader.h>
-#include <RequirementMismatchException.h>
-#include <RequirementRegistryException.h>
-#include <RequirementXMLException.h>
-#include <TestRegistryException.h>
 #include <TestInfoRegistrar.h>
 #include <TestRegistry.h>
+#include <TestRegistryException.h>
+
+//Requirement files
+#include <RequirementLoader.h>
+#include <RequirementXMLException.h>
 #include <RequirementRegistry.h>
+#include <RequirementMismatchException.h>
+#include <RequirementRegistryException.h>
+#include <Requirement.h>
+
+//AAF Analyzer Base files
+#include <AAFGraphInfo.h>
+
+//Analyzer Base files
+#include <AnalyzerException.h>
 
 //Ax files
 #include <AxInit.h>
@@ -49,10 +61,12 @@
 namespace {
 
 using namespace aafanalyzer;
+using namespace std;
+using namespace boost;
 
-std::basic_string<wchar_t> LevelToIndent(unsigned int l)
+basic_string<wchar_t> LevelToIndent(unsigned int l)
 {
-  std::basic_string<wchar_t> indent;
+  basic_string<wchar_t> indent;
 
   for (; l > 0 ; l-- ) 
   {
@@ -69,7 +83,7 @@ public:
   {}
   void operator() ( const AxString& detail )
   {
-      std::wcout << LevelToIndent( _level ) << L"Detail:\t" << detail << endl;
+      wcout << LevelToIndent( _level ) << L"Detail: " << detail << endl;
   }
 private:
   unsigned int _level;
@@ -77,10 +91,10 @@ private:
 
 void ListRequirements( const AxString& title, const Requirement::RequirementMap& reqs, const int level)
 {
-  std::wcout << LevelToIndent( level ) << title << ": ";
+  wcout << LevelToIndent( level ) << title << ": ";
   if (reqs.size() == 0)
   {
-    std::wcout << "None" << std::endl;
+    wcout << "None" << endl;
   }
   else
   {
@@ -88,25 +102,25 @@ void ListRequirements( const AxString& title, const Requirement::RequirementMap&
     iter = reqs.begin();
     while ( true ) 
     {
-        std::wcout << iter->first;
+        wcout << iter->first;
         iter++;
         if (iter != reqs.end() )
         {
-          std::wcout << "; ";
+          wcout << "; ";
         }
         else
         {
           break;
         }
     }
-    std::wcout << std::endl;
+    wcout << endl;
   }
 }
 
-void OutputResultMsgs(boost::shared_ptr<const TestResult> res, unsigned int level)
+void OutputResultMsgs(shared_ptr<const TestResult> res, unsigned int level)
 {
-  std::wcout << LevelToIndent(level) << "Name:\t" << res->GetName() << std::endl;
-  std::wcout << LevelToIndent(level) << "Desc:\t" << res->GetDescription() << std::endl;
+  wcout << LevelToIndent(level) << "Name:   " << res->GetName() << endl;
+  wcout << LevelToIndent(level) << "Desc:   " << res->GetDescription() << endl;
   
   const vector<AxString>& details = res->GetDetails();
   if ( !details.empty() )
@@ -114,34 +128,32 @@ void OutputResultMsgs(boost::shared_ptr<const TestResult> res, unsigned int leve
     for_each( details.begin(), details.end(), OutputDetail( level ) );
   }
 
-  std::wcout << LevelToIndent(level) << "Result:\t";
+  wcout << LevelToIndent(level) << "Result: ";
   if(res->GetResult() == TestResult::PASS) {
-    std::wcout << L"Passed" << std::endl;
+    wcout << L"Passed" << endl;
   }
 
   else if(res->GetResult() == TestResult::WARN)
   {
-    std::wcout << L"Passed, but with warnings." << std::endl;
-    std::wcout << LevelToIndent(level) << "Reason:\t" << res->GetExplanation() << std::endl;
+    wcout << L"Passed, but with warnings." << endl;
+    wcout << LevelToIndent(level) << "Reason: " << res->GetExplanation() << endl;
   }
 
   else if(res->GetResult() == TestResult::FAIL)
   {
-    std::wcout << L"Failed" << std::endl;
-    std::wcout << LevelToIndent(level) << "Reason:\t" << res->GetExplanation() << std::endl;
+    wcout << L"Failed" << endl;
+    wcout << LevelToIndent(level) << "Reason: " << res->GetExplanation() << endl;
   }
   else
   {
     assert(0);
   }
-
-  std::wcout << std::endl;
   
   ListRequirements( L"Passing Requirements", res->GetRequirements(TestResult::PASS), level);
   ListRequirements( L"Warning Requirements", res->GetRequirements(TestResult::WARN), level);
   ListRequirements( L"Failing Requirements", res->GetRequirements(TestResult::FAIL), level);
 
-  std::wcout << std::endl;
+  wcout << endl;
   
   if ( res->ContainsSubtests() )
   {
@@ -161,6 +173,7 @@ void RegisterTests()
     TestInfoRegistrar<AcyclicAnalysis> acyclicAnalysis;
 
     //Register Edit Protocol Mob Dependency Phase tests.
+    TestInfoRegistrar<DecorateEPTest> decorateEPTest;
     TestInfoRegistrar<CompMobDependency> compMobDependency;
     TestInfoRegistrar<EPDerivationTest> epDerivationTest;
 
@@ -168,21 +181,21 @@ void RegisterTests()
     TestInfoRegistrar<FileDumper> fileDumper;   
 }
 
-void PrintRequirement( std::pair<const AxString, boost::shared_ptr<const Requirement> > entry )
+void PrintRequirement( pair<const AxString, shared_ptr<const Requirement> > entry )
 {
-    std::wcout << entry.first << L": " << entry.second->GetName() << std::endl;
+    wcout << entry.first << L": " << entry.second->GetName() << endl;
 }
 
 void OutputRequirements( const AxString& title, const Requirement::RequirementMap& reqs)
 {
-  std::wcout << std::endl << title << std::endl;
+  wcout << endl << title << endl;
   if ( !reqs.empty() )
   {
     for_each( reqs.begin(), reqs.end(), PrintRequirement );
   }
   else 
   {
-     std::wcout << L"None" << std::endl << std::endl;
+     wcout << L"None" << endl << endl;
   }
 }
 
@@ -191,19 +204,19 @@ void OutputRequirements( const AxString& title, const Requirement::RequirementMa
 class Usage
 {};
 
-std::ostream& operator<<( std::ostream& os, const Usage& )
+ostream& operator<<( ostream& os, const Usage& )
 {
-  os << "Valid usages are: " << std::endl;
-  os << "AAFAnalyzer [options] filename.aaf requirement_filename.xml" << std::endl;
-  os << "AAFAnalyzer [requirement output] requirement_filename.xml" << std::endl;
-  os << "[options] = -dump | -uncheckedrequirements | [requirement output]" << std::endl;
-  os << "[requirement output] = -allreqs | -coverage" << std::endl;
-  os << std::endl;
-  os << "-dump: Output graph of AAF file" << std::endl;
-  os << "-uncheckedrequirements: Allow tests to use unloaded requirements and test" << std::endl;
-  os << "                        results to use unassociated requirements" << std::endl;
-  os << "-allreqs: Output all loaded requirements" << std::endl;
-  os << "-coverage: Output all requirements covered by the test suite." << std::endl;
+  os << "Valid usages are: " << endl;
+  os << "AAFAnalyzer [options] filename.aaf requirement_filename.xml" << endl;
+  os << "AAFAnalyzer [requirement output] requirement_filename.xml" << endl;
+  os << "[options] = -dump | -uncheckedrequirements | [requirement output]" << endl;
+  os << "[requirement output] = -allreqs | -coverage" << endl;
+  os << endl;
+  os << "-dump: Output graph of AAF file" << endl;
+  os << "-uncheckedrequirements: Allow tests to use unloaded requirements and test" << endl;
+  os << "                        results to use unassociated requirements" << endl;
+  os << "-allreqs: Output all loaded requirements" << endl;
+  os << "-coverage: Output all requirements covered by the test suite." << endl;
   return os;
 };
 
@@ -322,17 +335,20 @@ int main( int argc, char** argv )
     const basic_string<wchar_t> fileName = AxStringUtil::mbtowc( fileNameArg.second );
 
     //Create the result object.
-    boost::shared_ptr<TopLevelTestResult> spResult(new TopLevelTestResult());
+    shared_ptr<TopLevelTestResult> spResult(new TopLevelTestResult());
     spResult->SetName( L"AAF Analyzer" );
     spResult->SetDescription( L"AAF Edit Protocol compliance test." );
 
     //first phase
     LoadPhase load( wcout, fileName );
-    boost::shared_ptr<const TestPhaseLevelTestResult> spSubResult( load.Execute() );
+    shared_ptr<const TestPhaseLevelTestResult> spSubResult( load.Execute() );
     spResult->AppendSubtestResult(spSubResult);
 
+    //Store the test graph info so the AAF file is not inadvertantley closed.
+    shared_ptr<const AAFGraphInfo> graphInfo = load.GetTestGraphInfo();
+
     // Second phase: execute the edit protocol mob dependency tests.
-    EPMobDepPhase mobDepPhase( wcout, load.GetTestGraph() );
+    EPMobDepPhase mobDepPhase( wcout, graphInfo->GetGraph() );
     spResult->AppendSubtestResult( mobDepPhase.Execute() );
 
     // More test phases go here...
@@ -340,7 +356,7 @@ int main( int argc, char** argv )
     // optional dump phase
     if ( dumpArg.first )
     {
-      DumpPhase dump(wcout, load.GetTestGraph());
+      DumpPhase dump( wcout, graphInfo->GetGraph() );
       spSubResult = dump.Execute();
       spResult->AppendSubtestResult(spSubResult);
     }
@@ -372,9 +388,17 @@ int main( int argc, char** argv )
   {
     wcout << ex.widewhat() << endl;
   }
+  catch ( const AxEx& ex )
+  {
+    wcout << L"Error: " << ex.widewhat() << endl;
+  }
+  catch ( const AnalyzerException& ex )
+  {
+    wcout << L"Error: " << ex.widewhat() << endl;
+  }
   catch ( const exception& ex )
   {
-    cout << L"Error: " << ex.what() << endl;
+    cout << "Error: " << ex.what() << endl;
   }
   catch ( ... )
   {

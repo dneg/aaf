@@ -18,11 +18,19 @@
 //
 //=---------------------------------------------------------------------=
 
+//Edit Protocol Test files
 #include "CompMobDependency.h"
+#include "NodeRefCountVisitor.h"
 
-#include <NodeRefCountVisitor.h>
-#include <DepthFirstTraversal.h>
+//Test/Result files
+#include <TestLevelTestResult.h>
 #include <DetailLevelTestResult.h>
+
+//AAF Analyzer Base files
+#include <TestGraph.h>
+
+//Analyzer Base files
+#include <DepthFirstTraversal.h>
 
 namespace {
 
@@ -38,31 +46,34 @@ using namespace aafanalyzer;
 namespace aafanalyzer 
 {
 
-CompMobDependency::CompMobDependency(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph)
+using namespace std;
+using namespace boost;
+
+CompMobDependency::CompMobDependency(wostream& os, shared_ptr<const TestGraph> spGraph)
 : Test(os, GetTestInfo() )
 {
-  SetTestGraph(spTestGraph);
+  SetTestGraph(spGraph);
 }
 
 CompMobDependency::~CompMobDependency()
 {
 }
 
-boost::shared_ptr<TestLevelTestResult> CompMobDependency::Execute()
+shared_ptr<TestLevelTestResult> CompMobDependency::Execute()
 {
 
-  boost::shared_ptr<NodeRefCountVisitor<IAAFCompositionMob> > spVisitor(
+  shared_ptr<NodeRefCountVisitor<IAAFCompositionMob> > spVisitor(
        new NodeRefCountVisitor<IAAFCompositionMob>( GetOutStream() ) );
 
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
 
   //output to screen
-  //GetOutStream() << GetName() << std::endl << GetDescription() << std::endl << std::endl;
+  //GetOutStream() << GetName() << endl << GetDescription() << endl << endl;
 
   //set result properties
-  const boost::shared_ptr<const Test> me = this->shared_from_this();
+  const shared_ptr<const Test> me = this->shared_from_this();
   Requirement::RequirementMapSP spMyReqs(new Requirement::RequirementMap(this->GetCoveredRequirements()));
-  boost::shared_ptr<TestLevelTestResult> spResult(new TestLevelTestResult( me, spMyReqs ) );
+  shared_ptr<TestLevelTestResult> spResult(new TestLevelTestResult( me, spMyReqs ) );
   spResult->SetName(GetName());
   spResult->SetDescription(GetDescription());
 
@@ -95,7 +106,8 @@ CompMobDependency::CompMobNodeVectorSP CompMobDependency::GetRootCompMobNodes()
 
 const TestInfo CompMobDependency::GetTestInfo()
 {
-    boost::shared_ptr<std::vector<AxString> > spReqIds(new std::vector<AxString>);
+    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    //TODO: Push actual requirements.
 //    spReqIds->push_back(L"Requirement Id");
     return TestInfo(L"CompMobDependency", spReqIds);
 }

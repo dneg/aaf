@@ -24,13 +24,16 @@
 //Ax files
 #include <AxTypes.h>
 
-//boost files
+//Boost files
 #include <boost/shared_ptr.hpp>
 
-//stl files
+//STL files
 #include <map>
 
 namespace aafanalyzer {
+
+using namespace std;
+using namespace boost;
 
 class Node;
 
@@ -38,12 +41,13 @@ class MobNodeMap
 {
  public:
 
-  typedef std::map<aafMobID_t, boost::shared_ptr<Node> > Map;
+  typedef map<aafMobID_t, shared_ptr<Node> > Map;
 
   bool IsPresent(aafMobID_t mobid);
   static MobNodeMap& GetInstance();
-  void AddMobNode(aafMobID_t mobid, boost::shared_ptr<Node> spNode);
-  boost::shared_ptr<Node> GetMobNode(aafMobID_t mobid);
+  void AddMobNode(aafMobID_t mobid, shared_ptr<Node> spNode);
+  void DecorateMobNode(aafMobID_t mobid, shared_ptr<Node> decoratedNode);
+  shared_ptr<Node> GetMobNode(aafMobID_t mobid);
 
  private:
 

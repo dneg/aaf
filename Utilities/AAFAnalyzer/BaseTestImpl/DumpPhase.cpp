@@ -18,8 +18,11 @@
 //
 //=---------------------------------------------------------------------=
 
+//Base Test files
 #include "DumpPhase.h"
 
+//Test/Result files
+#include <TestPhaseLevelTestResult.h>
 #include <TestLevelTestResult.h>
 
 namespace {
@@ -35,30 +38,33 @@ using namespace aafanalyzer;
 
 namespace aafanalyzer 	
 {
+    
+using namespace std;
+using namespace boost;
 
-DumpPhase::DumpPhase(std::wostream& os, boost::shared_ptr<TestGraph> spTestGraph) 
+DumpPhase::DumpPhase(wostream& os, shared_ptr<const TestGraph> spGraph) 
 : TestPhase(os),
-  _spTestGraph(spTestGraph)
+  _spGraph(spGraph)
 {}
 
 DumpPhase::~DumpPhase()
 {}
 
-boost::shared_ptr<TestGraph> DumpPhase::GetTestGraph()
+shared_ptr<const TestGraph> DumpPhase::GetTestGraph()
 {
-  return _spTestGraph;
+  return _spGraph;
 }
 
-boost::shared_ptr<TestPhaseLevelTestResult> DumpPhase::Execute()
+shared_ptr<TestPhaseLevelTestResult> DumpPhase::Execute()
 {
-  boost::shared_ptr<TestPhaseLevelTestResult> spLoadTest(new TestPhaseLevelTestResult());
+  shared_ptr<TestPhaseLevelTestResult> spLoadTest(new TestPhaseLevelTestResult());
   spLoadTest->SetName(L"DumpPhase");
   spLoadTest->SetDescription(L"Output the contents of the AAF parse tree.");
 
   //dump the aaf file graph to screen
-  boost::shared_ptr<FileDumper> dumper(new FileDumper(GetOutStream(), GetTestGraph()));
+  shared_ptr<FileDumper> dumper(new FileDumper(GetOutStream(), GetTestGraph()));
   
-  boost::shared_ptr<const TestLevelTestResult> spTestResult( dumper->Execute() );
+  shared_ptr<const TestLevelTestResult> spTestResult( dumper->Execute() );
   spLoadTest->AppendSubtestResult(spTestResult);
   spLoadTest->SetResult(spLoadTest->GetAggregateResult());
 

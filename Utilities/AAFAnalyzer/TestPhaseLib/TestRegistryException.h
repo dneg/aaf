@@ -21,15 +21,21 @@
 #ifndef __TESTREGISTRYEXCEPTION_H_
 #define __TESTREGISTRYEXCEPTION_H_
 
-//Ax files
-#include <AxEx.h>
+//Analyzer Base files
+#include <AnalyzerException.h>
 
-class TestRegistryException : public AxEx {
+namespace aafanalyzer {
+
+using namespace std;
+
+class TestRegistryException : public AnalyzerException {
 
 public:
 
     TestRegistryException( const wchar_t* what );
     virtual ~TestRegistryException() throw();
 };
+
+} // end of namespace diskstream
 
 #endif /*__TESTREGISTRYEXCEPTION_H_*/

@@ -21,15 +21,21 @@
 #ifndef __REQUIREMENTREGISTRYEXCEPTION_H_
 #define __REQUIREMENTREGISTRYEXCEPTION_H_
 
-//Ax files
-#include <AxEx.h>
+//Analyzer Base files
+#include <AnalyzerException.h>
 
-class RequirementRegistryException : public AxEx {
+namespace aafanalyzer {
+
+using namespace std;
+
+class RequirementRegistryException : public AnalyzerException {
 
 public:
 
     RequirementRegistryException( const wchar_t* what );
     virtual ~RequirementRegistryException() throw();
 };
+
+} // end of namespace diskstream
 
 #endif /*__REQUIREMENTREGISTRYEXCEPTION_H_*/

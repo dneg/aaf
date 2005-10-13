@@ -18,10 +18,16 @@
 //
 //=---------------------------------------------------------------------=
 
+//Base Test files
 #include "LoadPhase.h"
 
+//Test/Result files
 #include <TestGraph.h>
+#include <TestPhaseLevelTestResult.h>
 #include <TestLevelTestResult.h>
+
+//AAF Analyzer Base files
+#include <AAFGraphInfo.h>
 
 namespace {
 
@@ -39,8 +45,11 @@ const wchar_t* PHASE_DESC = L"Load an AAF file, reslove references, and ensure t
 
 namespace aafanalyzer 	
 {
+    
+using namespace std;
+using namespace boost;
 
-LoadPhase::LoadPhase(std::wostream& os, const std::basic_string<wchar_t> AAFFile) 
+LoadPhase::LoadPhase(wostream& os, const basic_string<wchar_t> AAFFile) 
   : TestPhase(os),
     _FileName(AAFFile)
 {}
@@ -48,15 +57,15 @@ LoadPhase::LoadPhase(std::wostream& os, const std::basic_string<wchar_t> AAFFile
 LoadPhase::~LoadPhase()
 {}
 
-boost::shared_ptr<TestGraph> LoadPhase::GetTestGraph()
+shared_ptr<const AAFGraphInfo> LoadPhase::GetTestGraphInfo()
 {
-  return _spTestGraph;
+  return _spGraphInfo;
 }
 
-boost::shared_ptr<TestPhaseLevelTestResult> LoadPhase::Execute() 
+shared_ptr<TestPhaseLevelTestResult> LoadPhase::Execute() 
 {
 
-  boost::shared_ptr<TestPhaseLevelTestResult> spLoadTest(
+  shared_ptr<TestPhaseLevelTestResult> spLoadTest(
                             new TestPhaseLevelTestResult( PHASE_NAME,
                                                           PHASE_DESC,
                                                           L"", // explain
@@ -64,19 +73,19 @@ boost::shared_ptr<TestPhaseLevelTestResult> LoadPhase::Execute()
                                                           TestResult::PASS ));
 
   //load the AAF file and create the graph
-  boost::shared_ptr<FileLoad> load(new FileLoad(GetOutStream(), _FileName));
-  boost::shared_ptr<const TestLevelTestResult> spTestResult( load->Execute() );
+  shared_ptr<FileLoad> load(new FileLoad(GetOutStream(), _FileName));
+  shared_ptr<const TestLevelTestResult> spTestResult( load->Execute() );
   spLoadTest->AppendSubtestResult(spTestResult);
 
   //get the TestGraph object we need for other tests
-  _spTestGraph = load->GetTestGraph();
+  _spGraphInfo = load->GetTestGraphInfo();
   //resolve all the references in the AAF graph
-  boost::shared_ptr<RefResolver> ref(new RefResolver(GetOutStream(), _spTestGraph));
+  shared_ptr<RefResolver> ref(new RefResolver(GetOutStream(), _spGraphInfo->GetGraph()));
   spTestResult = ref->Execute();
   spLoadTest->AppendSubtestResult(spTestResult);
 
   //ensure the AAF file graph is acyclic
-  boost::shared_ptr<AcyclicAnalysis> acy(new AcyclicAnalysis(GetOutStream(), _spTestGraph));
+  shared_ptr<AcyclicAnalysis> acy(new AcyclicAnalysis(GetOutStream(), _spGraphInfo->GetGraph()));
   spTestResult = acy->Execute();
   spLoadTest->AppendSubtestResult(spTestResult);
 

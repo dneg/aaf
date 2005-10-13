@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# $Id$ $Name$
+# $Id$
 #
 # The contents of this file are subject to the AAF SDK Public
 # Source License Agreement (the "License"); You may not use this file
@@ -22,13 +22,26 @@
 #
 ###############################################################################
 
+AAFBASE ?= ../../..
 
-PROGNAME = RegressionTest
-
-PROGLIBS = -lAAFAnalyzerBase -lTestPhase -lRequirement -lBaseTest
-
-include ../aafanalyzer.mk
-
+all:
+	cd TestFiles && $(MAKE)
+	cd TestStructure && $(MAKE)
+	
+.PHONY : RegressionTestStructure
+RegressionTestStructure :
+	cd TestStructure && $(MAKE)
+	
+.PHONY : RegressionTestFiles
+RegressionTestFiles :
+	cd TestFiles && $(MAKE)
+	
 .PHONY : check
-check : $(AAFSDKBINDIR)/RegressionTest$(EXE)
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/RegressionTest$(EXE)
+check :
+	cd TestFiles && $(MAKE) $@
+	cd TestStructure && $(MAKE) $@
+
+.PHONY: clean
+clean:
+	cd TestFiles && $(MAKE) GENDEPS=0 $@
+	cd TestStructure && $(MAKE) GENDEPS=0 $@

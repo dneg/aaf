@@ -18,8 +18,12 @@
 //
 //=---------------------------------------------------------------------=
 
+//Test/Result files
 #include "Test.h"
 #include "TestRegistry.h"
+
+//Analyzer Base files
+#include <TestGraph.h>
 
 namespace {
 
@@ -35,12 +39,15 @@ using namespace aafanalyzer;
 namespace aafanalyzer 
 {
 
-Test::Test(std::wostream& os, const TestInfo& info)
+using namespace std;
+using namespace boost;
+
+Test::Test(wostream& os, const TestInfo& info)
 : _os(os), _spCoveredRequirements(InitializeRequirements(info.GetName()))
 {
 }
 
-const Test::ConstRequirementMapSP Test::InitializeRequirements(const AxString& name)
+const Test::ConstRequirementMapSP Test::InitializeRequirements(const wstring& name)
 {
     TestRegistry& reg = TestRegistry::GetInstance();
     return reg.GetRequirementsForTest(name);
@@ -50,31 +57,31 @@ Test::~Test()
 {
 }
 
-AxString Test::GetName() const
+wstring Test::GetName() const
 {
-  AxString null;
+  wstring null;
   return null;
 }
 
-AxString Test::GetDescription() const
+wstring Test::GetDescription() const
 {
-  AxString null;
+  wstring null;
   return null;
 }
 
-std::wostream& Test::GetOutStream() const
+wostream& Test::GetOutStream() const
 {
   return _os;
 }
 
-boost::shared_ptr<TestGraph> Test::GetTestGraph()
+shared_ptr<const TestGraph> Test::GetTestGraph()
 {
-  return _spTestGraph;
+  return _spGraph;
 }
 
-void Test::SetTestGraph(boost::shared_ptr<TestGraph> spTestGraph)
+void Test::SetTestGraph(shared_ptr<const TestGraph> spGraph)
 {
-  _spTestGraph = spTestGraph;
+  _spGraph = spGraph;
 }
 
 const Requirement::RequirementMap& Test::GetCoveredRequirements() const

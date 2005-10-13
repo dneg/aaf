@@ -21,6 +21,7 @@
 #ifndef __TESTINFOREGISTRAR_H_
 #define __TESTINFOREGISTRAR_H_
 
+//Test/Result files
 #include "TestRegistry.h"
 
 namespace aafanalyzer {

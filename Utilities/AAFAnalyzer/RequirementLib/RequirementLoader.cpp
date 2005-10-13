@@ -18,18 +18,20 @@
 //
 //=---------------------------------------------------------------------=
 
+//Requirement files
 #include "RequirementLoader.h"
 #include "RequirementRegistry.h"
 #include "RequirementXMLException.h"
 
-#include <fstream>
-#include <sstream>
-
-//Expat Files
+//Expat files
 #include <expat.h>
 
 //Boost files
 #include <boost/shared_ptr.hpp>
+
+//STL files
+#include <fstream>
+#include <sstream>
 
 namespace {
 
@@ -44,6 +46,9 @@ using namespace aafanalyzer;
 
 namespace aafanalyzer 
 {
+    
+using namespace std;
+using namespace boost;
 
 RequirementLoader::RequirementLoader()
 {}
@@ -78,7 +83,7 @@ void RequirementLoader::ParseXML( const char* filename ) const
     XML_SetUserData( parser, (void*)this );
 
     //Open the XML file for input.
-    std::ifstream inp;
+    ifstream inp;
     inp.open( filename );
 
     //Parse the file using a buffer of the specified size.
@@ -92,7 +97,7 @@ void RequirementLoader::ParseXML( const char* filename ) const
 
         if ( !XML_Parse(parser, buffer, len, done) )
         {
-            std::wostringstream msg;
+            wostringstream msg;
             msg << L"expat error: " << XML_ErrorString(XML_GetErrorCode(parser));
             throw RequirementXMLException(msg.str().c_str() );
         }
@@ -103,17 +108,17 @@ void RequirementLoader::ParseXML( const char* filename ) const
 }
 
 //Called when an open tag is encountered.
-void RequirementLoader::StartElement(const AxString& name, const char** attribs)
+void RequirementLoader::StartElement(const wstring& name, const char** attribs)
 {
 
     if ( name == L"requirement" )
     {
-        std::wostringstream msg;
+        wostringstream msg;
         msg << attribs[1];
-        AxString type(msg.str().c_str() );
+        wstring type(msg.str().c_str() );
         msg.str(L"");
         msg << attribs[3];
-        AxString category(msg.str().c_str() );
+        wstring category(msg.str().c_str() );
 
         if ( type == L"app" )
         {
@@ -125,7 +130,7 @@ void RequirementLoader::StartElement(const AxString& name, const char** attribs)
         }
         else
         {
-            std::wostringstream msg;
+            wostringstream msg;
             msg << L"Unknown requirement type: " << type;
             throw RequirementXMLException(msg.str().c_str() );
         }
@@ -144,7 +149,7 @@ void RequirementLoader::StartElement(const AxString& name, const char** attribs)
         }
         else
         {
-            std::wostringstream msg;
+            wostringstream msg;
             msg << L"Unknown category: " << category;
             throw RequirementXMLException(msg.str().c_str() );
         }
@@ -192,7 +197,7 @@ void RequirementLoader::StartElement(const AxString& name, const char** attribs)
     }
     else
     {
-        std::wostringstream msg;
+        wostringstream msg;
         msg << L"Unknown tag: " << name;
         throw RequirementXMLException(msg.str().c_str() );
     }
@@ -200,11 +205,11 @@ void RequirementLoader::StartElement(const AxString& name, const char** attribs)
 }
 
 //Called when a close tag is encountered.
-void RequirementLoader::EndElement(const AxString& name)
+void RequirementLoader::EndElement(const wstring& name)
 {
     if ( name == L"requirement" )
     {
-        boost::shared_ptr<const Requirement> req(new Requirement(
+        shared_ptr<const Requirement> req(new Requirement(
             _currentId, _currentType, _currentCategory, _currentName,
             _currentDesc, _currentDocument, _currentVersion, _currentSection ));
         RequirementRegistry::GetInstance().Register( req );
@@ -251,7 +256,7 @@ void RequirementLoader::EndElement(const AxString& name)
     }
     else
     {
-        std::wostringstream msg;
+        wostringstream msg;
         msg << L"Unknown tag: /" << name;
         throw RequirementXMLException(msg.str().c_str() );
     }
@@ -259,7 +264,7 @@ void RequirementLoader::EndElement(const AxString& name)
 }
 
 //Called after a string of data (between tags) has been loaded.
-void RequirementLoader::EndData(const AxString& contents)
+void RequirementLoader::EndData(const wstring& contents)
 {
     _currentData += contents;
 }
@@ -271,7 +276,7 @@ void RequirementLoader::EndData(const AxString& contents)
 void RequirementLoader::__StartElement(void *userData, const char *name, const char **atts)
 {
     RequirementLoader* me = (RequirementLoader*) userData;
-    std::wostringstream msg;
+    wostringstream msg;
     msg << name;
     
     //Note: The atts parameter is not changed to a shared pointer because
@@ -282,7 +287,7 @@ void RequirementLoader::__StartElement(void *userData, const char *name, const c
 void RequirementLoader::__EndElement(void *userData, const char *name)
 {
     RequirementLoader* me = (RequirementLoader*) userData;
-    std::wostringstream msg;
+    wostringstream msg;
     msg << name;
     me->EndElement( msg.str().c_str() );
 }
@@ -292,10 +297,8 @@ void RequirementLoader::__EndData(void *userData, const char *s, int len)
      if (len != 0)
     {
         RequirementLoader* me = (RequirementLoader*) userData;
-        std::wostringstream msg;
+        wostringstream msg;
         msg << s;
-//std::wcerr << msg.str() << std::endl;
-//std::wcerr << msg.str().substr(0, len) << std::endl;
         me->EndData( msg.str().substr(0, len).c_str() );
     }
 }

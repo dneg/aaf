@@ -21,18 +21,17 @@
 #ifndef __TYPEDNODEFACTORYIMPL_h__
 #define __TYPEDNODEFACTORYIMPL_h__
 
-//project files
-#include "AAFTypedObjNode.h"
+//AAF Analyzer Base files
 #include "TypedNodeFactory.h"
+#include "AAFTypedObjNodeImpl.h"
 
-//AX files
+//Ax files
 #include <AxSmartPointer.h>
 #include <AxObject.h>
 
-//boost files
-#include <boost/shared_ptr.hpp>
-
 namespace aafanalyzer {
+
+using namespace boost;
 
 template<typename AAFObjType>
 class TypedNodeFactoryImpl : public TypedNodeFactory
@@ -44,7 +43,7 @@ class TypedNodeFactoryImpl : public TypedNodeFactory
   ~TypedNodeFactoryImpl()
   {}
 
-  boost::shared_ptr<Node> CreateNode(IAAFObjectSP spObj)
+  shared_ptr<Node> CreateNode(IAAFObjectSP spObj)
   {
     IAAFSmartPointer<AAFObjType> spObjOfType;
 
@@ -54,7 +53,7 @@ class TypedNodeFactoryImpl : public TypedNodeFactory
     // if the cast fails.
     AxQueryInterface( spObj, spObjOfType );
 
-    boost::shared_ptr<Node> spNode(new AAFTypedObjNode<AAFObjType>(spObjOfType,
+    shared_ptr<Node> spNode(new AAFTypedObjNodeImpl<AAFObjType>(spObjOfType,
 								   AxObject(spObj).GetClassName()));
     return spNode;
   }

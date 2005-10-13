@@ -18,8 +18,9 @@
 //
 //=---------------------------------------------------------------------=
 
+//Test/Result files
 #include "TestInfo.h"
-#include <iostream>
+
 namespace {
 
 using namespace aafanalyzer;
@@ -35,8 +36,9 @@ namespace aafanalyzer
 {
 
 using namespace std;
+using namespace boost;
 
-TestInfo::TestInfo(const AxString& name, const boost::shared_ptr<const std::vector<AxString> >& requirements)
+TestInfo::TestInfo(const wstring& name, const shared_ptr<const vector<wstring> >& requirements)
     : _name(name), _spRequirementIds(requirements)
 {
 }
@@ -50,12 +52,12 @@ TestInfo::~TestInfo()
 {
 }
 
-const AxString TestInfo::GetName() const
+const wstring TestInfo::GetName() const
 {
     return _name;
 }
 
-const boost::shared_ptr<const std::vector<AxString> > TestInfo::GetRequirementIds() const
+const shared_ptr<const vector<wstring> > TestInfo::GetRequirementIds() const
 {
     return _spRequirementIds;
 }

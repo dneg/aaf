@@ -18,6 +18,7 @@
 //
 //=---------------------------------------------------------------------=
 
+//AAF Analyzer Base files
 #include "TypedNodeFactoryImpl.h"
 
 namespace {

@@ -21,25 +21,27 @@
 #ifndef __TESTPHASELEVELTESTRESULT_h__
 #define __TESTPHASELEVELTESTRESULT_h__
 
-//Project files
+//Test/Result files
 #include "HighLevelTestResult.h"
-#include "TestLevelTestResult.h"
 
 namespace aafanalyzer {
 
 using namespace std;
+using namespace boost;
+
+class TestLevelTestResult;
 
 class TestPhaseLevelTestResult : public HighLevelTestResult
 {
  public:
 
   TestPhaseLevelTestResult();
-  TestPhaseLevelTestResult( const AxString& name, const AxString& desc,
-                            const AxString& explain, const AxString& docRef,
+  TestPhaseLevelTestResult( const wstring& name, const wstring& desc,
+                            const wstring& explain, const wstring& docRef,
                             Result defaultResult );
   ~TestPhaseLevelTestResult();
 
-  void AppendSubtestResult( const boost::shared_ptr<const TestLevelTestResult>& subtestResult );
+  void AppendSubtestResult( const shared_ptr<const TestLevelTestResult>& subtestResult );
   const enum ResultLevel GetResultType() const;
 
   // prohibited
