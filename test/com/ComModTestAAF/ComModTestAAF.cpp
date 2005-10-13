@@ -313,9 +313,7 @@ main(int argc, char* argv[])
 		CAAFInitialize aafInit;
 
 		// Make sure the shared plugins can be loaded and registered.
-#if !defined (__MACH__) && !defined(TARGET_API_MAC_CARBON)
 		CAAFInitializePlugins aafInitPlugins;
-#endif
 
 		// If encoding name is specified change the
 		// default value of file encoding to be used
