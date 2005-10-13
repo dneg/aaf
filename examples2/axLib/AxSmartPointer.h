@@ -217,11 +217,13 @@ AXSP_TDEF_B( EssenceMultiAccess )
 AXSP_TDEF_B( TypeDefVariableArrayEx )
 
 // New 1.1 objects.
+AXSP_TDEF_A( AES3PCMDescriptor )
 AXSP_TDEF_A( AuxiliaryDescriptor )
 AXSP_TDEF_A( DescriptiveFramework )
 AXSP_TDEF_A( DescriptiveMarker )
 AXSP_TDEF_A( ImportDescriptor )
 AXSP_TDEF_A( KLVDataDefinition )
+AXSP_TDEF_A( MultipleDescriptor )
 AXSP_TDEF_A( PCMDescriptor )
 AXSP_TDEF_A( PhysicalDescriptor )
 AXSP_TDEF_A( RecordingDescriptor )
