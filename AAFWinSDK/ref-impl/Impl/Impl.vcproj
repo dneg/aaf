@@ -23,7 +23,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../../ref-impl/src/Impl,../../../ref-impl/include/Om,../../../ref-impl/include/com-api/,../../../ref-impl/src/OM,../../../ref-impl/include/,../../../ref-impl/aaflib"
-				PreprocessorDefinitions="_DEBUG;OM_DEBUG;COM_NO_WINDOWS_H;_WIN32;_WINDOWS;UNICODE;WIN32"
+				PreprocessorDefinitions="_DEBUG;OM_DEBUG;OM_USE_WINDOWS_SS;COM_NO_WINDOWS_H;_WIN32;_WINDOWS;UNICODE;WIN32"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
@@ -77,7 +77,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="../../../ref-impl/src/Impl,../../../ref-impl/include/Om,../../../ref-impl/include/com-api/,../../../ref-impl/src/OM,../../../ref-impl/include/,../../../ref-impl/aaflib"
-				PreprocessorDefinitions="NDEBUG;COM_NO_WINDOWS_H;_WIN32;_WINDOWS;UNICODE;WIN32"
+				PreprocessorDefinitions="NDEBUG;OM_USE_WINDOWS_SS;COM_NO_WINDOWS_H;_WIN32;_WINDOWS;UNICODE;WIN32"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -376,7 +376,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFCDCIDescriptor.cpp">
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFCachePageAllocator.cpp">
 			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
@@ -397,7 +397,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFCachePageAllocator.cpp">
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFCDCIDescriptor.cpp">
 			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
