@@ -112,8 +112,7 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
       
       //now create a Slot Edge from the source clip to the mobslot and add to Edgemap
       shared_ptr<AAFTypedObjNode<IAAFTimelineMobSlot> > spMobSlotNode;
-      EdgeMap::EdgeVectorSP mobChildren = _spEdgeMap->GetChildren(spNode);
-      
+      EdgeMap::ConstEdgeVectorSP mobChildren = _spEdgeMap->GetChildren(spNode);    
       for(unsigned int i = 0; i < mobChildren->size(); i++)
       {
 	spMobSlotNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFTimelineMobSlot> >(mobChildren->at(i)->GetChildNode());

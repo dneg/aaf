@@ -46,7 +46,7 @@ EdgeMap::~EdgeMap()
 }
 
 
-EdgeMap::EdgeVectorSP EdgeMap::GetParents(shared_ptr<Node> spNode) const
+EdgeMap::ConstEdgeVectorSP EdgeMap::GetParents(shared_ptr<Node> spNode) const
 {
   if(!IsInMap(spNode->GetLID(), _children))
   {
@@ -56,7 +56,7 @@ EdgeMap::EdgeVectorSP EdgeMap::GetParents(shared_ptr<Node> spNode) const
   return _children[spNode->GetLID()];   
 }
 
-EdgeMap::EdgeVectorSP EdgeMap::GetChildren(shared_ptr<Node> spNode) const
+EdgeMap::ConstEdgeVectorSP EdgeMap::GetChildren(shared_ptr<Node> spNode) const
 {
   if(!IsInMap(spNode->GetLID(), _parents))
   {

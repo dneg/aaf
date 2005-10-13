@@ -53,7 +53,7 @@ DepthFirstTraversal::~DepthFirstTraversal()
 
 void DepthFirstTraversal::TraverseDown(shared_ptr<Visitor> spVisitor, shared_ptr<Node> spNode)
 {
-  EdgeMap::EdgeVectorSP theChildren = _spEdgeMap->GetChildren(spNode);  
+  EdgeMap::ConstEdgeVectorSP theChildren = _spEdgeMap->GetChildren(spNode);  
   if(!spNode->PreOrderVisit(spVisitor))
   { //method failed, do not proceed further with tests
     return;
@@ -77,7 +77,7 @@ void DepthFirstTraversal::TraverseDown(shared_ptr<Visitor> spVisitor )
 
 void DepthFirstTraversal::TraverseUp(shared_ptr<Visitor> spVisitor, shared_ptr<Node> spNode)
 {
-  EdgeMap::EdgeVectorSP theParents = _spEdgeMap->GetParents(spNode);  
+  EdgeMap::ConstEdgeVectorSP theParents = _spEdgeMap->GetParents(spNode);  
   if(!spNode->PreOrderVisit(spVisitor))
   { //method failed, do not proceed further with tests
     return;

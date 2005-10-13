@@ -46,21 +46,19 @@ class EdgeMap
   typedef vector<shared_ptr<Edge> > EdgeVector;
   typedef shared_ptr<EdgeVector> EdgeVectorSP;
   typedef map<Node::LID, EdgeVectorSP> Map;
+  typedef shared_ptr<const EdgeVector> ConstEdgeVectorSP;
 
   EdgeMap();
   ~EdgeMap();
 
-  // Warning: A pointer to a vector stored in this class is returned
-  // directly for performance reasons (rather than a copy). Modifying
-  // the vector will invalidate the EdgeMap.
-  // FIXME - Find way to declare the returned shared pointer as const.
-  EdgeVectorSP GetParents(shared_ptr<Node> spNode) const;
-  EdgeVectorSP GetChildren(shared_ptr<Node> spNode) const;
+  ConstEdgeVectorSP GetParents(shared_ptr<Node> spNode) const;
+  ConstEdgeVectorSP GetChildren(shared_ptr<Node> spNode) const;
 
   void AddEdge(shared_ptr<Edge> spEdge);
   void DecorateEdge(shared_ptr<Node> decoratedNode);
 
  private:
+ 
   bool IsInMap(Node::LID lid, const Map& map) const;
 
   mutable Map _parents;

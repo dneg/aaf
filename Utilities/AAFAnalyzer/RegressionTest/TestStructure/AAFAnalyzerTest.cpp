@@ -1170,10 +1170,10 @@ int main()
   spEdgeMap->AddEdge(edgeOne);
   spEdgeMap->AddEdge(edgeTwo);
   spEdgeMap->AddEdge(edgeThree);
-  EdgeMap::EdgeVectorSP theParentsOne = spEdgeMap->GetParents(childOne);
-  EdgeMap::EdgeVectorSP theParentsTwo = spEdgeMap->GetParents(childTwo);
-  EdgeMap::EdgeVectorSP theChildrenOne = spEdgeMap->GetChildren(parentOne);
-  EdgeMap::EdgeVectorSP theChildrenTwo = spEdgeMap->GetChildren(parentTwo);
+  EdgeMap::ConstEdgeVectorSP theParentsOne = spEdgeMap->GetParents(childOne);
+  EdgeMap::ConstEdgeVectorSP theParentsTwo = spEdgeMap->GetParents(childTwo);
+  EdgeMap::ConstEdgeVectorSP theChildrenOne = spEdgeMap->GetChildren(parentOne);
+  EdgeMap::ConstEdgeVectorSP theChildrenTwo = spEdgeMap->GetChildren(parentTwo);
 
   //ensure the correct edges were returned by checking Node LIDs
   assert(theParentsOne->front()->GetParentNode()->GetLID() == parentOne->GetLID());//parent of childOne
