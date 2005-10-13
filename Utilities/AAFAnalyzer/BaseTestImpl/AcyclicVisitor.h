@@ -27,6 +27,7 @@
 
 //STL files
 #include <vector>
+#include <set>
 
 namespace aafanalyzer {
 
@@ -50,12 +51,16 @@ class AcyclicVisitor : public Visitor
   shared_ptr<const DetailLevelTestResult> GetTestResult() const;
 
  private:
+ 
+typedef set<Node::LID> Set;
+ 
   bool IsPresent(Node::LID lid);
   void Erase(Node::LID lid);
 
   wostream& _os;
   shared_ptr< DetailLevelTestResult > _spResult;
   Vector _Vector;
+Set _Set;
 
   // prohibited
   AcyclicVisitor( const AcyclicVisitor& );

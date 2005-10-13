@@ -44,13 +44,6 @@ using namespace aafanalyzer;
 //======================================================================
 //======================================================================
 
-// FIXME - General comment here: the alogorithm can be optimized here.
-// The post order visit calls erase, and erase searches the whole
-// vector.  I beleive the end of the list can simply popped (assert
-// the LID matches that of the current node.  Further, IsPresent()
-// searchers a vector.  a map would speed this up.  This will be
-// important in deep graphs (long reference chains.).
-
 namespace aafanalyzer {
 
 using namespace std;
@@ -73,22 +66,14 @@ AcyclicVisitor::~AcyclicVisitor()
 
 bool AcyclicVisitor::IsPresent(unsigned int lid)
 {
-  for(unsigned int i = 0; i < _Vector.size(); i++)
-  {
-    if(_Vector.at(i) == lid)
-    {
-      return true;
-    }
-  }
-  
-  return false;
+  return ( _Set.find( lid ) != _Set.end() );
 }
 
 bool AcyclicVisitor::PreOrderVisit(Node& node)
 {
   Node::LID lid = node.GetLID();
 
-  if(!IsPresent(lid))
+  if ( _Set.insert(lid).second )
   {
     //add node into the vector since it was visited on this sub-branch's traversal
     _Vector.push_back(lid);
@@ -130,14 +115,8 @@ bool AcyclicVisitor::PostOrderVisit(Node& node)
 
 void AcyclicVisitor::Erase(unsigned int lid)
 {
-  for(unsigned int i = 0; i < _Vector.size(); i++)
-  {
-    if(_Vector.at(i) == lid)
-    {
-      _Vector.erase(_Vector.begin() + i);
-      break;
-    }
-  }  
+  _Vector.pop_back();
+  _Set.erase( lid );
 }
 
 shared_ptr<const DetailLevelTestResult> AcyclicVisitor::GetTestResult() const
