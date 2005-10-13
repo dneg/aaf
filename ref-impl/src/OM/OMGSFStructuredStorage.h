@@ -25,7 +25,12 @@
 #ifndef OMGSFSTRUCTUREDSTORAGE_H
 #define OMGSFSTRUCTUREDSTORAGE_H
 
+#ifndef OM_NO_STRUCTURED_STORAGE
+
 #include "OMMSStructuredStorage.h"
+
+#if defined(OM_USE_GSF_SS)
+
 #include "OMRawStorage.h"
 #include "OMFile.h"
 
@@ -264,4 +269,8 @@ void OMGSFInitialize();
 
 void OMGSFFinalize();
 
-#endif
+#endif // OM_USE_GSF_SS
+
+#endif // !OM_NO_STRUCTURED_STORAGE
+
+#endif // !OMGSFSTRUCTUREDSTORAGE_H

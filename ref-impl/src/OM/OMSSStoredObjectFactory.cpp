@@ -23,6 +23,9 @@
 //=---------------------------------------------------------------------=
 
 // @doc OMINTERNAL
+
+#ifndef OM_NO_STRUCTURED_STORAGE
+
 #include "OMSSStoredObjectFactory.h"
 
 #include "OMSSStoredObject.h"
@@ -392,3 +395,5 @@ void OMSSStoredObjectFactory::writeSignature(
 
   fclose(f);
 }
+
+#endif // !OM_NO_STRUCTURED_STORAGE

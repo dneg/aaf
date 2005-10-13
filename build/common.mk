@@ -35,6 +35,66 @@ endif
 
 include $(AAFBASE)/build/pdefs-$(AAFPLATFORM).mk
 
+
+#----------------------------------------------------------
+# AAFBUILDDIR is the directory where all the binaries will 
+# be placed. It's located in AAF toolkit directory and has
+# two components: platform name generated above and 
+# compiler name defined in the platfrom specific 
+# definitions file.
+#----------------------------------------------------------
+AAFBUILDDIR = $(AAFBASE)/AAF$(AAFPLATFORM)SDK/$(COMPILER)
+
+#----------------------------------------------------------
+# STORAGE_LIBS - Structured Storage Libraries.
+# Using wildcards, find all available structured storage
+# libraries and add them to STORAGE_LIBS.
+#----------------------------------------------------------
+
+STORAGE_LIBS=
+LINK_STG=
+
+ifndef AAF_NO_STRUCTURED_STORAGE
+
+# check for SchemaSoft implementation libSSRW2C.a
+ifeq ($(wildcard $(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIB)),$(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIB))
+	STORAGE_LIBS += $(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIB)
+	LINK_STG += -L$(AAFBUILDDIR)/sss-impl -lSSRW2C
+	ADD_CFLAGS += -DOM_USE_SCHEMASOFT_SS
+	USE_SS=1
+endif
+
+# Check for Microsoft Structured Storage Reference Implementation
+ifeq ($(wildcard $(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIB)),$(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIB))
+	STORAGE_LIBS += $(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIB)
+	LINK_STG += -L$(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR) -lrefstg
+	ADD_CFLAGS += -DOM_USE_REFERENCE_SS
+	USE_SS=1
+endif
+
+#--------------------------------------------------------------------------
+# Optional libgsf support is enabled by the LIBGSF_PATH variable which must
+# contain the path to the installed libgsf includes and library e.g.
+# make LIBGSF_PATH=/usr/local
+#
+# libgsf itself requires glib (for gobject and glib calls) and zlib
+#--------------------------------------------------------------------------
+ifdef LIBGSF_PATH
+    PLATFORMLIBS += -L$(LIBGSF_PATH)/lib -lgsf-1 -lgobject-2.0 -lglib-2.0 -lz
+    ADD_CFLAGS += -I$(LIBGSF_PATH)/include -I$(LIBGSF_PATH)/include/glib-2.0 -I$(LIBGSF_PATH)/lib/glib-2.0/include -I$(LIBGSF_PATH)/include/libgsf-1 -DUSE_LIBGSF
+	ADD_CFLAGS += -DOM_USE_GSF_SS
+	USE_SS=1
+endif
+
+endif
+
+## We do not have any Structured Storage libraries,
+## so compile without Structured Storage
+ifndef USE_SS
+    ADD_CFLAGS += -DOM_NO_STRUCTURED_STORAGE
+endif
+
+
 #--------------------------------------------------------------------------
 # Optional DV functionality requires libdv and can be turned on using e.g.
 # make LIBDV_PATH=/usr/lib
@@ -49,28 +109,6 @@ ifdef LIBDV_PATH
     ADD_CFLAGS += -DUSE_LIBDV
     OPT_CODEC_LIBS += -ldv
 endif
-
-#--------------------------------------------------------------------------
-# Optional libgsf support is enabled by the LIBGSF_PATH variable which must
-# contain the path to the installed libgsf includes and library e.g.
-# make LIBGSF_PATH=/usr/local
-#
-# libgsf itself requires glib (for gobject and glib calls) and zlib
-#--------------------------------------------------------------------------
-ifdef LIBGSF_PATH
-    PLATFORMLIBS += -L$(LIBGSF_PATH)/lib -lgsf-1 -lgobject-2.0 -lglib-2.0 -lz
-    ADD_CFLAGS += -I$(LIBGSF_PATH)/include -I$(LIBGSF_PATH)/include/glib-2.0 -I$(LIBGSF_PATH)/lib/glib-2.0/include -I$(LIBGSF_PATH)/include/libgsf-1 -DUSE_LIBGSF
-endif
-
-
-#----------------------------------------------------------
-# AAFBUILDDIR is the directory where all the binaries will 
-# be placed. It's located in AAF toolkit directory and has
-# two components: platform name generated above and 
-# compiler name defined in the platfrom specific 
-# definitions file.
-#----------------------------------------------------------
-AAFBUILDDIR = $(AAFBASE)/AAF$(AAFPLATFORM)SDK/$(COMPILER)
 
 
 #----------------------------------------------------------
@@ -200,21 +238,6 @@ CXXOBJS2 = $(CXXOBJS2A:%.c=$(OBJDIR)/%$(OBJ))
 DEPS_TMP = $(SOURCES:%.$(CPP_EXTENSION)=$(OBJDIR)/%.d)
 DEPS = $(DEPS_TMP:%.c=$(OBJDIR)/%.d)
 
-
-#----------------------------------------------------------
-# STORAGE_LIBS - Structured Storage Libraries.
-# Using wildcards, find all available structured storage
-# libraries and add them to STORAGE_LIBS.
-#----------------------------------------------------------
-
-STORAGE_LIBS=
-LINK_STG=
-# check for SchemaSoft implementation libSSRW2C.a
-ifeq ($(wildcard $(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIB)),$(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIB))
-STORAGE_LIBS += $(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIB)
-LINK_STG += -L$(AAFBUILDDIR)/sss-impl -lSSRW2C
-else
-endif
 
 #----------------------------------------------------------
 # STATIC_LINK_LINE - Link line used for static builds

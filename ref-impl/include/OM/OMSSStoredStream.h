@@ -26,6 +26,8 @@
 #ifndef OMMSSSTOREDSTREAM_H
 #define OMMSSSTOREDSTREAM_H
 
+#ifndef OM_NO_STRUCTURED_STORAGE
+
 #include "OMMSStructuredStorage.h"
 #include "OMStoredStream.h"
 
@@ -91,4 +93,6 @@ private:
 
 };
 
-#endif
+#endif // !OM_NO_STRUCTURED_STORAGE
+
+#endif // !OMSSSTOREDSTREAM_H

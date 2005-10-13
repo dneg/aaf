@@ -26,6 +26,8 @@
 #ifndef OMMSSSTOREDOBJECTFACTORY_H
 #define OMMSSSTOREDOBJECTFACTORY_H
 
+#ifndef OM_NO_STRUCTURED_STORAGE
+
 #include "OMStoredObjectFactory.h"
 #include "OMDataTypes.h"
 #include <stdlib.h>
@@ -160,4 +162,6 @@ private:
 
 };
 
-#endif
+#endif // !OM_NO_STRUCTURED_STORAGE
+
+#endif // !OMSSSTOREDOBJECTFACTORY_H

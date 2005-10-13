@@ -18,6 +18,11 @@
 //
 //
 //=---------------------------------------------------------------------=
+
+#ifndef OM_NO_STRUCTURED_STORAGE
+
+#if defined(OM_USE_GSF_SS)
+
 #include "OMAssertions.h"
 #include "OMGSFStructuredStorage.h"
 #include "OMUtilities.h"
@@ -876,3 +881,7 @@ OMGSFIStream::Clone(IStream FAR * FAR *ppstm)
 	TRACE("OMGSFIStream::Clone");
 	return STG_E_UNIMPLEMENTEDFUNCTION;
 }
+
+#endif // OM_USE_GSF_SS
+
+#endif // !OM_NO_STRUCTURED_STORAGE

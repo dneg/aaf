@@ -23,6 +23,9 @@
 //=---------------------------------------------------------------------=
 
 // @doc OMINTERNAL
+
+#ifndef OM_NO_STRUCTURED_STORAGE
+
 #include "OMMS_SSStoredObjectFactory.h"
 
 #include "OMRawStorageLockBytes.h"
@@ -325,3 +328,5 @@ static void checkStatus(HRESULT status)
     throw OMException(status);
   }
 }
+
+#endif // !OM_NO_STRUCTURED_STORAGE

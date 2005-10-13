@@ -12,6 +12,11 @@
 *  $Date$
 *  
 \******************************************************************************/
+
+#ifndef OM_NO_STRUCTURED_STORAGE
+
+#if defined(OM_USE_SCHEMASOFT_SS)
+
 #include "OMSSSStorageRWInputSource.h"
 
 
@@ -279,3 +284,6 @@ int openStructuredStorageInOMRawStorage (
 
 } //extern "C"
 
+#endif // OM_USE_SCHEMASOFT_SS
+
+#endif // !OM_NO_STRUCTURED_STORAGE

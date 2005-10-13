@@ -24,7 +24,13 @@
 
 #ifndef OMSSSSTRUCTUREDSTORAGE_H
 #define OMSSSSTRUCTUREDSTORAGE_H
+
+#ifndef OM_NO_STRUCTURED_STORAGE
+
 #include "OMMSStructuredStorage.h"
+
+#if defined(OM_USE_SCHEMASOFT_SS)
+
 #include "OMRawStorage.h"
 #include "OMFile.h"
 #include "StructuredStorage.h"
@@ -240,4 +246,9 @@ private:
 	Stream*			_stream;
 	ULONG 			_referenceCount;
 };
+
+#endif // OM_USE_SCHEMASOFT_SS
+
+#endif // !OM_NO_STRUCTURED_STORAGE
+
 #endif

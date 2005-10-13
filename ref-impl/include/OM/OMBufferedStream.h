@@ -26,6 +26,8 @@
 #ifndef OMBUFFEREDSTREAM_H
 #define OMBUFFEREDSTREAM_H
 
+#ifndef OM_NO_STRUCTURED_STORAGE
+
 #include "OMDataTypes.h"
 
   // @class Abstract base class which may be used to impose buffering
@@ -101,4 +103,6 @@ private:
 
 };
 
-#endif
+#endif // !OM_NO_STRUCTURED_STORAGE
+
+#endif // !OMBUFFEREDISTREAM_H

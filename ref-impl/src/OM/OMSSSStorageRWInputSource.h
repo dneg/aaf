@@ -36,6 +36,9 @@ $Date$
 */
 #ifndef OMSSSSTORAGERWINPUTSOURCE_H
 #define OMSSSSTORAGERWINPUTSOURCE_H
+
+#ifndef OM_NO_STRUCTURED_STORAGE
+
 #include "OMRawStorage.h"
 #include "StructuredStorage.h"
 extern "C" int openStructuredStorageInOMRawStorage (
@@ -48,4 +51,7 @@ extern "C" int createStructuredStorageInOMRawStorageEx (
     StgMode in_accessMode,
     RootStorage** out_ppRoot,
     unsigned long in_sectorSize);
+
+#endif // !OM_NO_STRUCTURED_STORAGE
+
 #endif //OMSSSSTORAGERWINPUTSOURCE_H

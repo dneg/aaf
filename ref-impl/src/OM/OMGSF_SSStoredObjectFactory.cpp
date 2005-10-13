@@ -23,7 +23,12 @@
 //=---------------------------------------------------------------------=
 
 // @doc OMINTERNAL
+
+#ifndef OM_NO_STRUCTURED_STORAGE
+
 #include "OMGSF_SSStoredObjectFactory.h"
+
+#if defined(OM_USE_GSF_SS)
 
 #include "OMSSStoredObject.h"
 #include "OMAssertions.h"
@@ -205,3 +210,7 @@ static void checkStatus(HRESULT status)
     throw OMException(status);
   }
 }
+
+#endif // OM_USE_GSF_SS
+
+#endif // !OM_NO_STRUCTURED_STORAGE

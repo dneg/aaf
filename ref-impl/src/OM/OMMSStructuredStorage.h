@@ -26,6 +26,8 @@
 #ifndef OMMSSTRUCTUREDSTORAGE_H
 #define OMMSSTRUCTUREDSTORAGE_H
 
+#ifndef OM_NO_STRUCTURED_STORAGE
+
 #include <time.h>
 #include "OMDataTypes.h"
 
@@ -40,12 +42,6 @@
 // However, the definitions in the reference implementation are still
 // needed by the OM.
 
-#if defined(OM_OS_WINDOWS)
-#define OM_USE_WINDOWS_SS
-#elif defined(OM_OS_UNIX)
-#define OM_USE_REFERENCE_SS
-#endif
-
 // Each Microsoft supplied Structured Storage implementation requires
 // us to include different header files.
 //
@@ -53,6 +49,13 @@
 #include <objbase.h>
 #elif defined (OM_USE_REFERENCE_SS)
 #include "h/storage.h"
+#elif defined(OM_USE_SCHEMASOFT_SS)
+/* XXX: need to get this out of here.  SchemaSoft stuff should not include
+ *      this header
+ */
+#  define CHAR_REFERENCE_CHAR
+#  include "h/storage.h"
+#  undef REFERENCE_CHAR
 #else
 #error "Don't know which structured storage implementation to use."
 #endif
@@ -83,7 +86,7 @@ typedef wchar_t SSCHAR;
 typedef char SSCHAR;
 #endif
 
-#if defined(OM_USE_REFERENCE_SS)
+#if !defined(OM_USE_WINDOWS_SS)
 
 // The Macintosh and reference implementation declarations
 // for LARGE_INTEGER and ULARGE_INTEGER don't have a QuadPart.
@@ -239,5 +242,7 @@ OMInt32 StgCreateDocfileOnILockBytesEx (
 
 
 #endif // OM_USE_STORAGE_EX
+
+#endif // !OM_NO_STRUCTURED_STORAGE
 
 #endif

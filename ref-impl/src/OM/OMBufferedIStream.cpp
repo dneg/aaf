@@ -24,9 +24,12 @@
 
 // @doc OMINTERNAL
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMBufferedIStream
-#include "OMBufferedIStream.h"
+
+#ifndef OM_NO_STRUCTURED_STORAGE
 
 #include "OMMSStructuredStorage.h"
+
+#include "OMBufferedIStream.h"
 #include "OMAssertions.h"
 
 HRESULT STDMETHODCALLTYPE
@@ -212,3 +215,5 @@ void OMBufferedIStream::write(const OMByte* bytes,
   ASSERT("IStream::Write() succeeded", SUCCEEDED(status));
   ASSERT("Successful write", bytesWritten == byteCount);
 }
+
+#endif // !OM_NO_STRUCTURED_STORAGE

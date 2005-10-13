@@ -24,6 +24,9 @@
 
 // @doc OMEXTERNAL
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMBufferedStream
+
+#ifndef OM_NO_STRUCTURED_STORAGE
+
 #include "OMBufferedStream.h"
 
 #include "OMAssertions.h"
@@ -156,3 +159,5 @@ void OMBufferedStream::copyFromBuffer(OMByte* bytes, OMUInt32 byteCount)
   }
   _bufferCount = _bufferCount - byteCount;
 }
+
+#endif // !OM_NO_STRUCTURED_STORAGE

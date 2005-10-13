@@ -23,6 +23,11 @@
 //=---------------------------------------------------------------------=
 
 // @doc OMINTERNAL
+
+#ifndef OM_NO_STRUCTURED_STORAGE
+
+#if defined(OM_USE_SCHEMASOFT_SS)
+
 #include "OMSS_SSStoredObjectFactory.h"
 
 #include "OMSSStoredObject.h"
@@ -190,3 +195,7 @@ static void checkStatus(HRESULT status)
     throw OMException(status);
   }
 }
+
+#endif // OM_USE_SCHEMASOFT_SS
+
+#endif // !OM_NO_STRUCTURED_STORAGE

@@ -23,6 +23,9 @@
 //=---------------------------------------------------------------------=
 
 // @doc OMEXTERNAL
+
+#ifndef OM_NO_STRUCTURED_STORAGE
+
 #include "OMMSStructuredStorage.h"
 
 #include "OMAssertions.h"
@@ -639,3 +642,5 @@ void OMMSSFinalize(void)
   MSSSLibrary::destroy();
   MSCOMLibrary::destroy();
 }
+
+#endif // !OM_NO_STRUCTURED_STORAGE

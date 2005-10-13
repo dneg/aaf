@@ -25,6 +25,7 @@
 // @doc OMEXTERNAL
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMSSStoredObject
 
+#ifndef OM_NO_STRUCTURED_STORAGE
 
 #include "OMSSStoredObject.h"
 
@@ -3286,3 +3287,5 @@ public:
 static MSSInitializer _MSSInitializer;
 
 #endif
+
+#endif // !OM_NO_STRUCTURED_STORAGE

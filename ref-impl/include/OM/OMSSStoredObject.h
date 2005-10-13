@@ -26,6 +26,8 @@
 #ifndef OMMSSSTOREDOBJECT_H
 #define OMMSSSTOREDOBJECT_H
 
+#ifndef OM_NO_STRUCTURED_STORAGE
+
 #include "OMMSStructuredStorage.h"
 #include "OMStoredObject.h"
 #include "OMDataTypes.h"
@@ -531,4 +533,6 @@ private:
 #endif
 };
 
-#endif
+#endif // !OM_NO_STRUCTURED_STORAGE
+
+#endif // !OMSSSTOREDOBJECT_H

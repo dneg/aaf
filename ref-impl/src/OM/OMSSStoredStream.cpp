@@ -24,6 +24,9 @@
 
 // @doc OMINTERNAL
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMSSStoredStream
+
+#ifndef OM_NO_STRUCTURED_STORAGE
+
 #include "OMSSStoredStream.h"
 
 #include "OMMSStructuredStorage.h"
@@ -179,3 +182,5 @@ static void checkStatus(HRESULT status)
     throw OMException(status);
   }
 }
+
+#endif // !OM_NO_STRUCTURED_STORAGE

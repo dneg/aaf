@@ -25,6 +25,8 @@
 // @doc OMINTERNAL
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMRawStorageLockBytes
 
+#ifndef OM_NO_STRUCTURED_STORAGE
+
 #include "OMRawStorageLockBytes.h"
 
 #include "OMAssertions.h"
@@ -181,3 +183,5 @@ OMRawStorageLockBytes::Stat(STATSTG *pstatstg,
   memset(pstatstg, 0, sizeof(STATSTG));
   return NOERROR;
 }
+
+#endif // !OM_NO_STRUCTURED_STORAGE

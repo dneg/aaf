@@ -18,6 +18,11 @@
 //
 //
 //=---------------------------------------------------------------------=
+
+#ifndef OM_NO_STRUCTURED_STORAGE
+
+#if defined(OM_USE_SCHEMASOFT_SS)
+
 #include "OMAssertions.h"
 #include "OMSSStructuredStorage.h"
 #include "StructuredStorage.h"
@@ -751,3 +756,6 @@ OMSSIStream::Clone(IStream FAR * FAR * /* ppstm */)
 	return STG_E_UNIMPLEMENTEDFUNCTION;
 }
 
+#endif // OM_USE_SCHEMASOFT_SS
+
+#endif // !OM_NO_STRUCTURED_STORAGE

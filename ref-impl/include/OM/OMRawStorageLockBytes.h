@@ -26,6 +26,8 @@
 #ifndef OMRAWSTORAGELOCKBYTES_H
 #define OMRAWSTORAGELOCKBYTES_H
 
+#ifndef OM_NO_STRUCTURED_STORAGE
+
 #include "OMMSStructuredStorage.h"
 
 class OMRawStorage;
@@ -97,4 +99,6 @@ private:
 
 };
 
-#endif
+#endif // !OM_NO_STRUCTURED_STORAGE
+
+#endif // !OMRAWSTORAGELOCKBYTES_H

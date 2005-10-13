@@ -53,6 +53,11 @@ const aafUID_t kAAFFileKind_AafS512Binary = kAAFFileKind_AafS512Binary_Value;
 { 0xb965c7f1, 0xf89d, 0x4490, { 0xbd, 0x22, 0x77, 0x35, 0x69, 0xb4, 0xd3, 0x61 } }
 const aafUID_t kAAFFileKind_AafG512Binary = kAAFFileKind_AafG512Binary_Value;
 
+// the enum to select the default implementation with 512 byte sectors
+#define kAAFFileKind_AafSSBinary_Legacy_Value \
+{0x42464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
+const aafUID_t kAAFFileKind_Aaf512Binary = kAAFFileKind_AafSSBinary_Legacy_Value;
+
 // the enum to select the Microsoft implementation with 4096 byte sectors
 #define kAAFFileKind_AafM4KBinary_Value \
 { 0x7653a218, 0x3e03, 0x4ecf, { 0x87, 0x98, 0xf4, 0x5f, 0xc1, 0x17, 0x11, 0x78 } }
@@ -67,6 +72,11 @@ const aafUID_t kAAFFileKind_AafS4KBinary = kAAFFileKind_AafS4KBinary_Value;
 #define kAAFFileKind_AafG4KBinary_Value \
 { 0xb44818b, 0xc3dd, 0x4f0a, { 0xad, 0x37, 0xe9, 0x71, 0x0, 0x7a, 0x88, 0xe8 } }
 const aafUID_t kAAFFileKind_AafG4KBinary = kAAFFileKind_AafG4KBinary_Value;
+
+// the enum to select the default implementation with 4096 byte sectors
+#define kAAFFileKind_Aaf4KBinary_Value \
+{0x92b02efb, 0xaf40, 0x4896, {0xa5, 0x8e, 0xd1, 0x57, 0x2f, 0x42, 0x2b, 0x58}}
+const aafUID_t kAAFFileKind_Aaf4KBinary = kAAFFileKind_Aaf4KBinary_Value;
 
 // AAF files encoded as XML (text).
 //
@@ -88,32 +98,6 @@ const aafUID_t kAAFFileKind_AafKlvBinary = kAAFFileKind_AafKlvBinary_Value;
 const aafUID_t kAAFFileKind_MxfKlvBinary = kAAFFileKind_MxfKlvBinary_Value;
 
 
-// the enum to select the installation default
-// this MUST match what is selected in ImplAAFFile.cpp
-#if defined( OS_WINDOWS )
-// DEFAULT is Schemasoft (via libSSRW2C.a).
-const aafUID_t kAAFFileKind_Aaf512Binary = kAAFFileKind_AafS512Binary_Value;
-const aafUID_t kAAFFileKind_Aaf4KBinary = kAAFFileKind_AafS4KBinary_Value;
-
-#elif defined( OS_UNIX )
-
-#ifdef USE_LIBGSF
-// When LIBGSF is requested make it the default for 512 and 4k
-const aafUID_t kAAFFileKind_Aaf512Binary = kAAFFileKind_AafG512Binary_Value;
-const aafUID_t kAAFFileKind_Aaf4KBinary = kAAFFileKind_AafG4KBinary_Value;
-#else
-// Otherwise default is Schemasoft (via libSSRW2C.a)
-const aafUID_t kAAFFileKind_Aaf512Binary = kAAFFileKind_AafS512Binary_Value;
-const aafUID_t kAAFFileKind_Aaf4KBinary = kAAFFileKind_AafS4KBinary_Value;
-#endif
-
-#else
-#error Unknown platform
-#endif
-
-
-
-
 // the following signatures could be factored into a separate file
 
 // AAF files encoded as structured storage (binary).
@@ -121,7 +105,7 @@ const aafUID_t kAAFFileKind_Aaf4KBinary = kAAFFileKind_AafS4KBinary_Value;
 // the signature actually stored in all AAF SS (512) files
 // note this is not a properly-formed SMPTE label, but this is legacy
 #define kAAFSignature_Aaf512Binary_Value \
-{0x42464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
+kAAFFileKind_AafSSBinary_Legacy_Value
 const aafUID_t kAAFSignature_Aaf512Binary = kAAFSignature_Aaf512Binary_Value; 
 
 

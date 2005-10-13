@@ -26,6 +26,8 @@
 #ifndef OMMSxMSSSTOREDOBJECTFACTORY_H
 #define OMMSxMSSSTOREDOBJECTFACTORY_H
 
+#ifndef OM_NO_STRUCTURED_STORAGE
+
 #include "OMSSStoredObjectFactory.h"
 #include "OMDataTypes.h"
 #include <stdlib.h>
@@ -69,4 +71,6 @@ protected:
 							 const OMUniqueObjectIdentification& signature);
 };
 
-#endif
+#endif // !OM_NO_STRUCTURED_STORAGE
+
+#endif // !OMMS_SSSTOREDOBJECTFACTORY_H

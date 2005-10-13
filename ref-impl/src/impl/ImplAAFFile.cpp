@@ -31,17 +31,22 @@
 #include "OMUtilities.h"
 #include "OMClassFactory.h"
 #include "OMMemoryRawStorage.h"
-#include "OMKLVStoredObject.h"
-#include "OMMXFStorage.h"
 
-#include "OMSSStoredObjectFactory.h"
-#include "OMMS_SSStoredObjectFactory.h"
-#ifdef USE_LIBGSF
-#include "OMGSF_SSStoredObjectFactory.h"
-#endif
-#include "OMSS_SSStoredObjectFactory.h"
+#ifndef OM_NO_STRUCTURED_STORAGE
+# include "OMSSStoredObjectFactory.h"
+# include "OMMS_SSStoredObjectFactory.h"
+# ifdef OM_USE_SCHEMASOFT_SS
+#  include "OMSS_SSStoredObjectFactory.h"
+# endif // OM_USE_SCHEMASOFT_SS
+# ifdef OM_USE_GSF_SS
+#  include "OMGSF_SSStoredObjectFactory.h"
+# endif // OM_USE_GSF_SS
+#endif // !OM_NO_STRUCTURED_STORAGE
+
 #include "OMXMLStoredObjectFactory.h"
 #include "OMKLVStoredObjectFactory.h"
+#include "OMKLVStoredObject.h"
+#include "OMMXFStorage.h"
 
 #include "ImplAAFDataDef.h"
 #include "ImplAAFDictionary.h"
@@ -91,11 +96,6 @@ static const aafFileRev_t sCurrentAAFObjectModelVersion = kAAFRev2;
 
 // FileKind from the point of view of the OM
 #define ENCODING(x) *reinterpret_cast<const OMStoredObjectEncoding*>(&x)
-
-// these are the installation defaults set in AAFFileKinds.h
-#define AAF512Encoding ENCODING(kAAFFileKind_Aaf512Binary)
-#define AAF4KEncoding ENCODING(kAAFFileKind_Aaf4KBinary)
-
 
 // local function for simplifying error handling.
 inline void checkResult(AAFRESULT r)
@@ -163,6 +163,33 @@ static bool areAllModeFlagsSupported (aafUInt32 modeFlags)
 	}
 }
 
+const aafUID_t *mapStructuredStorageFileKind_DefaultToActual(const aafUID_t *fk_in)
+{
+	if (fk_in == NULL)
+		return NULL;
+
+	if (*fk_in == kAAFFileKind_Aaf4KBinary)
+	{
+#if defined(OM_USE_WINDOWS_SS) || defined(OM_USE_MACINTOSH_SS) || defined(OM_USE_MACINTOSH_WRAPPED_SS) || defined(OM_USE_REFERENCE_SS)
+		return &kAAFFileKind_AafM4KBinary;
+#elif defined(OM_USE_SCHEMASOFT_SS)
+		return &kAAFFileKind_AafS512Binary;
+#elif defined(OM_USE_GSF_SS)
+		return &kAAFFileKind_AafG4KBinary;
+#endif
+	}
+	else if (*fk_in == kAAFFileKind_Aaf512Binary)
+    {
+#if defined(OM_USE_WINDOWS_SS) || defined(OM_USE_MACINTOSH_SS) || defined(OM_USE_MACINTOSH_WRAPPED_SS) || defined(OM_USE_REFERENCE_SS)
+		return &kAAFFileKind_AafM512Binary;
+#elif defined(OM_USE_SCHEMASOFT_SS)
+		return &kAAFFileKind_AafS512Binary;
+#elif defined(OM_USE_GSF_SS)
+		return &kAAFFileKind_AafG512Binary;
+#endif
+	}
+	return (fk_in);
+}
 
 
 extern "C" const aafClassID_t CLSID_AAFDictionary;
@@ -246,15 +273,7 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 
 	//NOTE: Depending on LARGE sectors flag check encoding 
 	if (modeFlags & AAF_FILE_MODE_USE_LARGE_SS_SECTORS)
-	{
-    	if (!OMFile::hasFactory(AAF4KEncoding))
-    	  return AAFRESULT_FILEKIND_NOT_REGISTERED;
-	}
-	else
-	{
-    	if (!OMFile::hasFactory(AAF512Encoding))
-    	  return AAFRESULT_FILEKIND_NOT_REGISTERED;
-	}
+    	  return AAFRESULT_BAD_FLAGS;
 
 	try
 	{
@@ -395,12 +414,12 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 	//NOTE: Depending on LARGE sectors flag set encoding 
 	if (modeFlags & AAF_FILE_MODE_USE_LARGE_SS_SECTORS)
 	{
-    	if (!OMFile::hasFactory(AAF4KEncoding))
+    	if (!OMFile::hasFactory( ENCODING( *mapStructuredStorageFileKind_DefaultToActual(&kAAFFileKind_Aaf4KBinary) )))
       		return AAFRESULT_FILEKIND_NOT_REGISTERED;
 	}
 	else
 	{
-    	if (!OMFile::hasFactory(AAF512Encoding))
+    	if (!OMFile::hasFactory( ENCODING( *mapStructuredStorageFileKind_DefaultToActual(&kAAFFileKind_Aaf512Binary) )))
       		return AAFRESULT_FILEKIND_NOT_REGISTERED;
 	}
 
@@ -546,18 +565,6 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 	//if( modeFlags )
 	 // return AAFRESULT_NOT_IN_CURRENT_VERSION;
 
-	//NOTE: check LARGE_SECTORS flag
-	if (modeFlags & AAF_FILE_MODE_USE_LARGE_SS_SECTORS)
-	{
-    	if (!OMFile::hasFactory(AAF4KEncoding))
-    	  return AAFRESULT_FILEKIND_NOT_REGISTERED;
-	}
-	else
-	{
-    	if (!OMFile::hasFactory(AAF512Encoding))
-    	  return AAFRESULT_FILEKIND_NOT_REGISTERED;
-	}
-
 	try
 	{
 	  // Create the header for the OM manager to use as the root
@@ -612,11 +619,11 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		//NOTE: Depending on LARGE sectors flag set encoding 
 		if (modeFlags & AAF_FILE_MODE_USE_LARGE_SS_SECTORS)
 		{
-			aafFileEncoding	= AAF4KEncoding;
+			aafFileEncoding	= ENCODING( *mapStructuredStorageFileKind_DefaultToActual(&kAAFFileKind_Aaf4KBinary) );
 		}
 		else
 		{
-			aafFileEncoding	= AAF512Encoding;
+			aafFileEncoding	= ENCODING( *mapStructuredStorageFileKind_DefaultToActual(&kAAFFileKind_Aaf512Binary) );
 		}
 		
 
@@ -752,7 +759,7 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 		pCStore = 0;
 		
 		// Attempt to create the file.
-		const OMStoredObjectEncoding aafFileEncoding = AAF512Encoding;
+		const OMStoredObjectEncoding aafFileEncoding =  ENCODING( *mapStructuredStorageFileKind_DefaultToActual(&kAAFFileKind_Aaf512Binary) );
 		  
 		_file = OMFile::openNewModify (pOMRawStg,
 					       _factory,
@@ -787,7 +794,7 @@ ImplAAFFile::CreateAAFFileOnRawStorage
   (IAAFRawStorage * pRawStorage,
    aafFileExistence_t existence,
    aafFileAccess_t access,
-   aafUID_constptr pFileKind,
+   aafUID_constptr pFileKind_in,
    aafUInt32 modeFlags,
    aafProductIdentification_constptr pIdent)
 {
@@ -810,6 +817,8 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 
   if (modeFlags & AAF_FILE_MODE_LAZY_LOADING)
       loadMode = OMFile::lazyLoad;
+
+    aafUID_constptr pFileKind = mapStructuredStorageFileKind_DefaultToActual(pFileKind_in);
 
   AAFRESULT hr;
   aafBoolean_t b = kAAFFalse;
@@ -1593,43 +1602,37 @@ OMRawStorage * ImplAAFFile::RawStorage ()
 
 void ImplAAFFile::registerFactories(void)
 {
-	// these are in order of preference for the installation
 
-#if defined( OS_WINDOWS )
-// DEFAULT is Schemasoft 512
+#if defined(OM_USE_WINDOWS_SS) || defined(OM_USE_MACINTOSH_SS) || defined(OM_USE_MACINTOSH_WRAPPED_SS) || defined(OM_USE_REFERENCE_SS)
 
-	assert( equalUID( kAAFFileKind_Aaf512Binary, kAAFFileKind_AafS512Binary));
-	assert( equalUID( kAAFFileKind_Aaf4KBinary, kAAFFileKind_AafS4KBinary));
-
-	OMFile::registerFactory(AAFS512Encoding,
-                          new OMSS_SSStoredObjectFactory(AAFS512Encoding,
-                                                       Signature_SSBin_512,
-                                                       L"AAF-S",
-                                                       L"AAF Schemasoft SS"));
 	OMFile::registerFactory(AAFM512Encoding,
                           new OMMS_SSStoredObjectFactory(AAFM512Encoding,
                                                        Signature_SSBin_512,
                                                        L"AAF-M",
                                                        L"AAF Microsoft SS"));
-	OMFile::registerFactory(AAFS4KEncoding,
-                          new OMSS_SSStoredObjectFactory(AAFS4KEncoding,
-                                                       Signature_SSBin_4K,
-                                                       L"AAF-S4K",
-                                                       L"AAF Schemasoft 4K"));
 	OMFile::registerFactory(AAFM4KEncoding,
                           new OMMS_SSStoredObjectFactory(AAFM4KEncoding,
                                                        Signature_SSBin_4K,
                                                        L"AAF-M4K",
                                                        L"AAF Microsoft 4K"));
 
-#elif defined( OS_UNIX )
+#endif
+#if defined(OM_USE_SCHEMASOFT_SS)
 
-// libgsf is available on all UNIX platforms
-#ifdef USE_LIBGSF
-
-	// If LIBGSF support is explicitly requested, GSF SS 512 is the default
-	assert( equalUID( kAAFFileKind_Aaf512Binary, kAAFFileKind_AafG512Binary));
-	assert( equalUID( kAAFFileKind_Aaf4KBinary, kAAFFileKind_AafG4KBinary));
+	// The SchemaSoft precompiled library is only available on these platforms:
+	// Microsoft, Mac OS X, Irix, Linux, and Solaris
+	OMFile::registerFactory(AAFS512Encoding,
+                          new OMSS_SSStoredObjectFactory(AAFS512Encoding,
+                                                       Signature_SSBin_512,
+                                                       L"AAF-S",
+                                                       L"AAF SchemaSoft SS"));
+	OMFile::registerFactory(AAFS4KEncoding,
+                          new OMSS_SSStoredObjectFactory(AAFS4KEncoding,
+                                                       Signature_SSBin_4K,
+                                                       L"AAF-S4K",
+                                                       L"AAF SchemaSoft 4K"));
+#endif
+#if defined(OM_USE_GSF_SS)
 
 	OMFile::registerFactory(AAFG512Encoding,
                           new OMGSF_SSStoredObjectFactory(AAFG512Encoding,
@@ -1641,33 +1644,9 @@ void ImplAAFFile::registerFactories(void)
                                                        Signature_SSBin_4K,
                                                        L"AAF-G4K",
                                                        L"AAF GSF 4K"));
-#else
+#endif
 
-// The Schemasoft precompiled library is only available on these platforms
-#if defined( OS_DARWIN ) || defined( OS_IRIX ) || defined( OS_LINUX ) || defined( OS_SOLARIS )
-
-	// DEFAULT is SchemaSoft 512
-	assert( equalUID( kAAFFileKind_Aaf512Binary, kAAFFileKind_AafS512Binary));
-	assert( equalUID( kAAFFileKind_Aaf4KBinary, kAAFFileKind_AafS4KBinary));
-
-	OMFile::registerFactory(AAFS512Encoding, 
-                          new OMSS_SSStoredObjectFactory(AAFS512Encoding,
-                                                       Signature_SSBin_512,
-                                                       L"AAF-S",
-                                                       L"AAF Schemasoft SS"));
-	OMFile::registerFactory(AAFS4KEncoding,
-                          new OMSS_SSStoredObjectFactory(AAFS4KEncoding,
-                                                       Signature_SSBin_4K,
-                                                       L"AAF-S4K",
-                                                       L"AAF Schemasoft 4K"));
-#else
-#error No SS implementation available on platform
-#endif // list of SchemaSoft library platforms
-
-#endif // USE_LIBGSF
-
-#endif // OS_WINDOWS,OS_UNIX
-  OMFile::registerFactory(AAFKLVEncoding,
+	OMFile::registerFactory(AAFKLVEncoding,
                           new OMKLVStoredObjectFactory(AAFKLVEncoding,
                                                        AAFKLVEncoding,
                                                        L"KLV",

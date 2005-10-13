@@ -26,6 +26,8 @@
 #ifndef OMBUFFEREDISTREAM_H
 #define OMBUFFEREDISTREAM_H
 
+#ifndef OM_NO_STRUCTURED_STORAGE
+
 #include "OMMSStructuredStorage.h"
 #include "OMBufferedStream.h"
 #include "OMDataTypes.h"
@@ -102,4 +104,6 @@ private:
 
 };
 
-#endif
+#endif // ! OM_NO_STRUCTURED_STORAGE
+
+#endif // !OMBUFFEREDISTREAM_H
