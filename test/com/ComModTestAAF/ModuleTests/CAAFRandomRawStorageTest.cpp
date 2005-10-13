@@ -1122,10 +1122,9 @@ HRESULT CAAFRandomRawStorage_test(
     aafProductIdentification_t productID)
 {
   HRESULT hr = AAFRESULT_SUCCESS;
-#ifdef __MACH__		// Need to thunk back from the SS library to make this work!!!
   if (memcmp(&fileKind, &aafFileKindAafSSBinary, sizeof(aafUID_t)) == 0)
   	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+
   try
 	{
 	  for (int wType = 0;
