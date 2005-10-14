@@ -45,12 +45,7 @@ class TestGraph
 
  private:
   shared_ptr<EdgeMap> _spEdgeMap;
-  
-  //Using a double pointer so the root node can be decorated while keeping this
-  //object constant.
-  shared_ptr<shared_ptr<Node> > _spRootNode;
-
-  shared_ptr<shared_ptr<Node> > InitializeRoot( shared_ptr<Node> spRoot );
+  mutable shared_ptr<Node> _spRootNode;
 
   // prohibited
   TestGraph();

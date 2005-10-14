@@ -41,15 +41,8 @@ using namespace boost;
 
 TestGraph::TestGraph(shared_ptr<EdgeMap> spEdgeMap, shared_ptr<Node> spRootNode)
   : _spEdgeMap( spEdgeMap ),
-    _spRootNode( InitializeRoot( spRootNode ) )
+    _spRootNode( spRootNode )
 {
-}
-
-shared_ptr<shared_ptr<Node> > TestGraph::InitializeRoot( shared_ptr<Node> spRoot )
-{
-    shared_ptr<shared_ptr<Node> > dspNode( new shared_ptr<Node> );
-    *dspNode = spRoot;
-    return dspNode;
 }
 
 /*TestGraph::TestGraph& operator=(const TestGraph& graph)
@@ -74,16 +67,16 @@ shared_ptr<EdgeMap> TestGraph::GetEdgeMap() const
 
 shared_ptr<Node> TestGraph::GetRootNode() const
 {
-  return *_spRootNode;
+  return _spRootNode;
 }
 
 //Update the node with the decorated node in all maps.
 void TestGraph::Decorate( shared_ptr<Node> decoratedNode ) const
 {
   //1. If the decorated node is the root of the tree
-  if ( (*_spRootNode)->GetLID() == decoratedNode->GetLID() )
+  if ( _spRootNode->GetLID() == decoratedNode->GetLID() )
   {
-    (*_spRootNode) = decoratedNode;
+    _spRootNode = decoratedNode;
   }
   
   //2. Do any decorating based upon the type of the node.
