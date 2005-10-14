@@ -24,7 +24,7 @@
 
 #include "AAFWideString.h"
 
-#if defined(OS_MACOS10)
+#if defined(OS_DARWIN) && defined(COMPILER_MWERKS)
 
 #pragma warn_possunwant off
 

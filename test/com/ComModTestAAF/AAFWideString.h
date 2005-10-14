@@ -25,7 +25,7 @@
 #include "AAFPlatform.h"
 
 
-#if defined(OS_MACOS10)
+#if defined(OS_DARWIN)
 // Do not declare the following functions when building with
 // CodeWarrior 9 or later.
 #if defined(COMPILER_MWERKS) && (__MWERKS__ < 0x3200)
