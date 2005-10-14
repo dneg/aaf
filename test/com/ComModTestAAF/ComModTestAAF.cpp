@@ -134,6 +134,45 @@ dumpLibInfo(std::wostream &wos)
 	}
 }
 
+static void
+listFileEncodings()
+{
+	IEnumAAFFileEncodings *pFileEncodings = 0;
+	if (AAFGetFileEncodings (&pFileEncodings) != AAFRESULT_SUCCESS) {
+		return;
+	}
+
+	static bool saw_first_one=false;
+	const unsigned int namelen = 32;
+	aafCharacter pEncodingName[namelen];
+	IAAFFileEncoding*  pEncoding = 0;
+
+	std::wcout << L"      Available file encodings: ";
+	while ( pFileEncodings->NextOne( &pEncoding ) == AAFRESULT_SUCCESS ) {
+		if( AAFRESULT_SUCCESS == pEncoding->GetName( pEncodingName, namelen)) {
+			if (saw_first_one) {
+				std::wcout << L", ";
+			} else {
+				saw_first_one = true;
+			}
+
+			std::wcout << pEncodingName;
+
+			if (pEncoding != 0) {
+				pEncoding->Release();
+				pEncoding = 0;
+			}
+		}
+	}
+
+	if (pFileEncodings != 0) {
+		pFileEncodings->Release();
+		pEncoding = 0;
+	}
+
+	std::cout << std::endl;
+}
+
 // simple helper class to initialize and cleanup AAF library.
 struct CAAFInitialize
 {
@@ -295,7 +334,9 @@ main(int argc, char* argv[])
 				<< L" -r : Run read/only tests for regression and cross-platform testing" << std::endl
 				<< L" -s : Skip specified test(s) - use with -r for tests not supported in earlier releases" << std::endl
 				<< L" -t : Terse output for specified test(s)" << std::endl
-				<< L" -e : Use to test with file encoding other than the default Structured Storage encoding" << std::endl
+				<< L" -e : Use to test with file encoding other than the default Structured Storage encoding" << std::endl;
+			listFileEncodings();
+			std::wcout << std::endl
 				<< L" --help, --list, --read, --skip, --terse, and --encoding are also supported" << std::endl
 				<< std::endl;
 			return osReturn;
