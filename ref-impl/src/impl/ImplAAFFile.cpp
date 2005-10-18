@@ -532,12 +532,15 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
+							aafUID_constptr pFileKind_in,
 							aafUInt32 modeFlags,
 							aafProductIdentification_t * pIdent)
 {
 	ImplAAFContentStorage	*pCStore = NULL;
 	AAFRESULT stat = AAFRESULT_SUCCESS;
 	aafVersionType_t		theVersion = { 1, 1 };
+
+	aafUID_constptr pFileKind = mapStructuredStorageFileKind_DefaultToActual(pFileKind_in);
 
 	if (! _initialized)
 		return AAFRESULT_NOT_INITIALIZED;
@@ -559,6 +562,9 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 
 	if (! areAllModeFlagsSupported (modeFlags))
 	  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+
+    if (!OMFile::hasFactory(ENCODING(*pFileKind)))
+      return AAFRESULT_FILEKIND_NOT_REGISTERED;
 
 	// modeFlags only in RawStorage API
 	// remove when implemented in NamedFile API
@@ -613,19 +619,8 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		pCStore = 0;
 
 		// Attempt to create the file.
-		OMStoredObjectEncoding aafFileEncoding;
-		
-
-		//NOTE: Depending on LARGE sectors flag set encoding 
-		if (modeFlags & AAF_FILE_MODE_USE_LARGE_SS_SECTORS)
-		{
-			aafFileEncoding	= ENCODING( *mapStructuredStorageFileKind_DefaultToActual(&kAAFFileKind_Aaf4KBinary) );
-		}
-		else
-		{
-			aafFileEncoding	= ENCODING( *mapStructuredStorageFileKind_DefaultToActual(&kAAFFileKind_Aaf512Binary) );
-		}
-		
+		OMStoredObjectEncoding aafFileEncoding =
+			*reinterpret_cast<const OMStoredObjectEncoding*> (pFileKind);
 
 		_file = OMFile::openNewModify(pFileName,
 									  _factory,
@@ -689,6 +684,24 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 	}
 
 	return stat;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
+							aafUInt32 modeFlags,
+							aafProductIdentification_t * pIdent)
+{
+	const aafUID_t *aafFileEncoding = NULL;
+	if (modeFlags & AAF_FILE_MODE_USE_LARGE_SS_SECTORS)
+	{
+		aafFileEncoding	= &kAAFFileKind_Aaf4KBinary;
+	}
+	else
+	{
+		aafFileEncoding	= &kAAFFileKind_Aaf512Binary;
+	}
+
+  return OpenNewModify(pFileName, aafFileEncoding, modeFlags, pIdent);
 }
 
 AAFRESULT STDMETHODCALLTYPE

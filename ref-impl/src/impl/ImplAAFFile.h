@@ -68,6 +68,12 @@ public:
 
   virtual AAFRESULT STDMETHODCALLTYPE
 	OpenNewModify (const aafCharacter * pFileName,
+				   aafUID_constptr pFileKind,
+				   aafUInt32 modeFlags,
+				   aafProductIdentification_t * pIdent);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+	OpenNewModify (const aafCharacter * pFileName,
 				   aafUInt32 modeFlags,
 				   aafProductIdentification_t * pIdent);
 
