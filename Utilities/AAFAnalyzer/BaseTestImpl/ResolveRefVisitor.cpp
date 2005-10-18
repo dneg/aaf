@@ -130,10 +130,10 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
 	}
       }
       
-      // TODO - The next level of reference detail is to create the
-      // edges from the source clip to components ultimately
-      // references. The may be multiple referenced components in
-      // the event that the source clips points to a sequence.
+      //TODO: The next level of reference detail is to create the
+      //edges from the source clip to components ultimately
+      //references. The may be multiple referenced components in
+      //the event that the source clips points to a sequence.
       
     }
   }

@@ -45,6 +45,8 @@ class TopLevelTestResult : public HighLevelTestResult
   const enum ResultLevel GetResultType() const;
 
   // prohibited
+  TopLevelTestResult( const TopLevelTestResult& );
+  TopLevelTestResult& operator=( const TopLevelTestResult& );
   
 };
 

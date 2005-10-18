@@ -30,10 +30,17 @@ using namespace std;
 
 class RequirementXMLException : public AnalyzerException {
 
-public:
+  public:
 
     RequirementXMLException( const wchar_t* what );
     virtual ~RequirementXMLException() throw();
+    
+  private:
+  
+    // prohibited
+    RequirementXMLException();
+    RequirementXMLException& operator=( const RequirementXMLException& );
+    
 };
 
 } // end of namespace diskstream

@@ -50,6 +50,12 @@ class TypedVisitor : public Visitor
 
 #include "TypedVisitor.h.gen"
 
+  private:
+  
+    // prohibited
+    TypedVisitor( const TypedVisitor& );
+    TypedVisitor& operator=( const TypedVisitor& );
+
 };
 
 } // end of namespace diskstream

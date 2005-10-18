@@ -26,10 +26,15 @@
 
 class StateMachineException : public AxEx {
 
-public:
+  public:
 
     StateMachineException( const wchar_t* what );
     virtual ~StateMachineException() throw();
+    
+  private:
+  
+    StateMachineException& operator=( const StateMachineException& );
+    
 };
 
 #endif /*__STATEMACHINEEXCEPTION_H_*/

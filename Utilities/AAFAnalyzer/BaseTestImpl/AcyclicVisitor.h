@@ -52,7 +52,7 @@ class AcyclicVisitor : public Visitor
 
  private:
  
-typedef set<Node::LID> Set;
+  typedef set<Node::LID> Set;
  
   bool IsPresent(Node::LID lid);
   void Erase(Node::LID lid);
@@ -60,9 +60,10 @@ typedef set<Node::LID> Set;
   wostream& _os;
   shared_ptr< DetailLevelTestResult > _spResult;
   Vector _Vector;
-Set _Set;
+  Set _Set;
 
   // prohibited
+  AcyclicVisitor();
   AcyclicVisitor( const AcyclicVisitor& );
   AcyclicVisitor& operator=( const AcyclicVisitor& );
 };

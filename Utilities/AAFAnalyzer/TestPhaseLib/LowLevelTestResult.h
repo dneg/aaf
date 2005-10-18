@@ -51,6 +51,8 @@ class LowLevelTestResult : public TestResult
                       const Requirement::RequirementMapSP& requirements );
  
    // prohibited
+   LowLevelTestResult( const LowLevelTestResult& );
+   LowLevelTestResult& operator=( const LowLevelTestResult& );
   
 };
 

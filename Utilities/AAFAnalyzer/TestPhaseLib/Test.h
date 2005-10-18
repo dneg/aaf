@@ -70,6 +70,7 @@ protected:
   const ConstRequirementMapSP InitializeRequirements(const wstring& name);
 
   // prohibited
+  Test();
   Test(const Test&);
   Test& operator=( const Test& );
 };

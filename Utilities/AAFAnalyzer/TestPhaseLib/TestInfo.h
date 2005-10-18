@@ -49,6 +49,8 @@ class TestInfo
   const shared_ptr<const vector<wstring> > _spRequirementIds;
 
    // prohibited
+   TestInfo();
+   TestInfo& operator=( const TestInfo& );
 
 };
 

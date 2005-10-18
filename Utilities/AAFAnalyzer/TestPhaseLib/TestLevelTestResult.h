@@ -58,6 +58,8 @@ class TestLevelTestResult : public LowLevelTestResult
   void CheckDescendantRequirements( const shared_ptr<const TestResult>& subtestResult, const wstring& name );
    
   // prohibited
+  TestLevelTestResult( const TestLevelTestResult& );
+  TestLevelTestResult operator=( const TestLevelTestResult& );
   
 };
 

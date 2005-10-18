@@ -84,7 +84,7 @@ bool AcyclicVisitor::PreOrderVisit(Node& node)
   _spResult->SetExplanation(L"Cycle detected.!");
   _spResult->SetResult(TestResult::FAIL);
 
-  // FIXME - Dump something more useful than the vector of LIDs.
+  //TODO: Dump something more useful than the vector of LIDs.
   _os << "Nodes of the cycle:" << endl;
   for(unsigned int i = 0; i < _Vector.size(); i++)
   {

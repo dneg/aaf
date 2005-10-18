@@ -30,10 +30,17 @@ using namespace std;
 
 class RequirementMismatchException : public AnalyzerException {
 
-public:
+  public:
 
     RequirementMismatchException( const wchar_t* what );
     virtual ~RequirementMismatchException() throw();
+    
+  private:
+  
+    // prohibited
+    RequirementMismatchException();
+    RequirementMismatchException& operator=( const RequirementMismatchException& );
+  
 };
 
 } // end of namespace diskstream

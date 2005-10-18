@@ -49,6 +49,7 @@ class ResolveRefVisitor : public TypedVisitor
   shared_ptr< DetailLevelTestResult > _spResult;
 
   // prohibited
+  ResolveRefVisitor();
   ResolveRefVisitor( const ResolveRefVisitor& );
   ResolveRefVisitor& operator=( const ResolveRefVisitor& );
 };

@@ -61,8 +61,8 @@ class TypedNodeFactoryRegistry
   Map _Map;  
 
   // prohibited
-  //TypedNodeFactoryRegistry( const TypedNodeFactoryRegistry& );
-  //TypedNodeFactoryRegistry& operator=( const TypedNodeFactoryRegistry& );
+  TypedNodeFactoryRegistry( const TypedNodeFactoryRegistry& );
+  TypedNodeFactoryRegistry& operator=( const TypedNodeFactoryRegistry& );
 };
 
 } // end of namespace diskstream

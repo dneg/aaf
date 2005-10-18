@@ -75,6 +75,12 @@ class EPTypedVisitor : public TypedVisitor
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node);
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node);
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node);
+    
+  private:
+  
+    // prohibited
+    EPTypedVisitor( const EPTypedVisitor& );
+    EPTypedVisitor& operator=( const EPTypedVisitor& );
 
 };
     

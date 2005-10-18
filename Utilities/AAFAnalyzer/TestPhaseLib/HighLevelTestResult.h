@@ -48,6 +48,8 @@ class HighLevelTestResult : public TestResult
                        Result defaultResult );
 
   // prohibited
+  HighLevelTestResult( const HighLevelTestResult& );
+  HighLevelTestResult& operator=( const HighLevelTestResult& );
   
 };
 

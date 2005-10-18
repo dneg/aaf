@@ -373,6 +373,11 @@ public:
 
 private:
 
+  // prohibited
+  MobChainVisitor();
+  MobChainVisitor( const MobChainVisitor& );
+  MobChainVisitor& operator=( const MobChainVisitor& );
+
   shared_ptr<DetailLevelTestResult> initializeResult()
   {
     
@@ -589,6 +594,11 @@ private:
   wostream& _log;
   shared_ptr<const TestGraph> _spGraph;
   shared_ptr<TestLevelTestResult> _spPhaseResult;
+  
+  // prohibited
+  Analyzer();
+  Analyzer& operator=( const Analyzer& );
+  
 };
 
 //======================================================================

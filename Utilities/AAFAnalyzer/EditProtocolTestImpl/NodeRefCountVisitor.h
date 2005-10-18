@@ -155,6 +155,7 @@ class NodeRefCountVisitor : public TypedVisitor
  private:
 
   // prohibited
+  NodeRefCountVisitor();
   NodeRefCountVisitor( const NodeRefCountVisitor& );
   NodeRefCountVisitor& operator=( const NodeRefCountVisitor& );
 

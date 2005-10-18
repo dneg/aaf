@@ -68,6 +68,8 @@ class TestRegistry
   bool _useUnsafeRequirements;
 
   // prohibited
+  TestRegistry( const TestRegistry& );
+  TestRegistry& operator=( const TestRegistry& );
 
 };
 

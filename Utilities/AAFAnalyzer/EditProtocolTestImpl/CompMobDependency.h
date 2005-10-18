@@ -59,6 +59,7 @@ class CompMobDependency : public Test
  private:
 
   // prohibited
+  CompMobDependency();
   CompMobDependency(const CompMobDependency&);
   CompMobDependency& operator=( const CompMobDependency& );
 

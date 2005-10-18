@@ -45,6 +45,8 @@ class DetailLevelTestResult : public LowLevelTestResult
  private:
  
   // prohibited
+  DetailLevelTestResult( const DetailLevelTestResult& );
+  DetailLevelTestResult& operator=( const DetailLevelTestResult& );
   
 };
 

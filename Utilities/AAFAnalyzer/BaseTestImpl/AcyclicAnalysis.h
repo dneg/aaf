@@ -49,6 +49,7 @@ class AcyclicAnalysis : public Test
  private:
 
   // prohibited
+  AcyclicAnalysis();
   AcyclicAnalysis(const AcyclicAnalysis&);
   AcyclicAnalysis& operator=( const AcyclicAnalysis& );
 };

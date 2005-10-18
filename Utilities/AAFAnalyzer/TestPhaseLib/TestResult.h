@@ -107,6 +107,9 @@ class TestResult
   vector<wstring> _details;
 
   // prohibited
+  TestResult( const TestResult& );
+  TestResult& operator=( const TestResult& );
+  
 };
 
 } // end of namespace diskstream

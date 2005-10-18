@@ -30,10 +30,16 @@ using namespace std;
 
 class TestRegistryException : public AnalyzerException {
 
-public:
+  public:
 
     TestRegistryException( const wchar_t* what );
     virtual ~TestRegistryException() throw();
+    
+  private:
+  
+    // prohibited
+    TestRegistryException& operator=( const TestRegistryException& );
+    
 };
 
 } // end of namespace diskstream

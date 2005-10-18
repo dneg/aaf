@@ -55,6 +55,8 @@ class RequirementRegistry
   Requirement::RequirementMap _requirementSet;
 
   // prohibited
+  RequirementRegistry( const RequirementRegistry& );
+  RequirementRegistry& operator=( const RequirementRegistry& );
 
 };
 

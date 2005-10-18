@@ -26,6 +26,9 @@ private:
 
     wstring _widewhat;
     string _what;
+    
+    // prohibited
+    AnalyzerException& operator=( const AnalyzerException& );
 };
 
 } // end of namespace diskstream

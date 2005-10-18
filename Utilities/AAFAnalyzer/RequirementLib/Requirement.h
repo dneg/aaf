@@ -72,6 +72,7 @@ public:
     const wstring _section;
 
   // prohibited
+  Requirement();
   Requirement(const Requirement&);
   Requirement& operator=( const Requirement& );
 };

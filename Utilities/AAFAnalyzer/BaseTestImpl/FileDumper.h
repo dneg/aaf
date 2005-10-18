@@ -49,6 +49,7 @@ class FileDumper : public Test
  private:
 
   // prohibited
+  FileDumper();
   FileDumper(const FileDumper&);
   FileDumper& operator=( const FileDumper& );
 };

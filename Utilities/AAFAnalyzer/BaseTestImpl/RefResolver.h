@@ -49,6 +49,7 @@ class RefResolver : public Test
  private:
 
   // prohibited
+  RefResolver();
   RefResolver(const RefResolver&);
   RefResolver& operator=( const RefResolver& );
 };

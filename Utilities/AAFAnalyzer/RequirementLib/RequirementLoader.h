@@ -58,6 +58,10 @@ public:
     wstring _currentDocument;
     wstring _currentVersion;
     wstring _currentSection;
+    
+    // prohibited
+    RequirementLoader( const RequirementLoader& );
+    RequirementLoader& operator=( const RequirementLoader& );
 
 };
 

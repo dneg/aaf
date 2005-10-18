@@ -52,6 +52,7 @@ class FileLoad : public Test
   shared_ptr<const AAFGraphInfo> _spGraphInfo;
 
   // prohibited
+  FileLoad();
   FileLoad(const FileLoad&);
   FileLoad& operator=( const FileLoad& );
 };

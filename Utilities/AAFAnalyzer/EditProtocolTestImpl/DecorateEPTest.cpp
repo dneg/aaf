@@ -305,6 +305,11 @@ public:
 
 private:
 
+  // prohibited
+  EPDecoratorVisitor();
+  EPDecoratorVisitor( const EPDecoratorVisitor& );
+  EPDecoratorVisitor& operator=( const EPDecoratorVisitor& );
+
   shared_ptr<DetailLevelTestResult> initializeResult()
   {
     
