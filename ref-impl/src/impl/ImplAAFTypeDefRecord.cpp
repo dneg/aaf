@@ -1112,6 +1112,14 @@ void ImplAAFTypeDefRecord::externalize(const OMByte* internalBytes,
 }
 
 
+size_t ImplAAFTypeDefRecord::internalSize(void) const
+{
+  if (IsRegistered ())
+	return NativeSize ();
+  else
+	return PropValSize ();
+}
+
 size_t ImplAAFTypeDefRecord::internalSize(const OMByte* /*externalBytes*/,
 										  size_t /*externalBytesSize*/) const
 {
