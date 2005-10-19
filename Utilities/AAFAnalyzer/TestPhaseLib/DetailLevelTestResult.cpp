@@ -56,6 +56,12 @@ DetailLevelTestResult::~DetailLevelTestResult()
 
 void DetailLevelTestResult::AppendSubtestResult( const shared_ptr<const DetailLevelTestResult>& subtestResult )
 {
+    //Don't allow a test result to append itself
+    if (subtestResult.get() == this)
+    {
+        return;
+    }
+    
     this->AddSubtestResult( subtestResult );
 
     //If the result of the appended test is worse than any other subtest then
