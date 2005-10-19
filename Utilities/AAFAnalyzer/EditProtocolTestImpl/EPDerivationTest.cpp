@@ -533,7 +533,18 @@ shared_ptr<DetailLevelTestResult> AnalyzeMobChain( wostream& log,
                            spReqs ) );
   
   AxCompositionMob axCompMob( spRootComposition->GetAAFObjectOfType() );
-  AxString mobName = axCompMob.GetName();
+  AxString mobName;
+  try
+  {
+    mobName = axCompMob.GetName();
+  }
+  catch ( const AxExHResult& ex )
+  {
+    if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
+    {
+      mobName = L"Unnamed Composition Mob";
+    }
+  }
   spResult->AddDetail( L"Analyzing root composition mob \"" + mobName + L"\"" );
 
   DepthFirstTraversal dft( spGraph->GetEdgeMap(),
