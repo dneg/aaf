@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE aaf-file SYSTEM "EPDerivationChain.dtd">
+
+<aaf-file>
+
+    <!-- Test named/unamed mobs -->
+
+    <top-level name="Named Top-Level"><eoc/></top-level>
+	<top-level><eoc/></top-level>
+    
+    <lower-level name = "Named Lower-Level"><eoc/></lower-level>
+    <lower-level><eoc/></lower-level>
+    
+    <sub-clip name = "Named Sub-Clip"><eoc/></sub-clip>
+    <sub-clip><eoc/></sub-clip>
+    
+    <adjusted-clip name = "Named Adjusted Clip"><eoc/></adjusted-clip>
+    <adjusted-clip><eoc/></adjusted-clip>
+    
+    <template-clip name = "Named Template Clip"><eoc/></template-clip>
+    <template-clip><eoc/></template-clip>
+    
+    <clip name = "Named Clip"><eoc/></clip>
+    <clip><eoc/></clip>
+    
+    <file-source name = "Named File Source"><eoc/></file-source>
+    <file-source><eoc/></file-source>
+    
+    <recording-source name = "Named Recording Source"><eoc/></recording-source>
+    <recording-source><eoc/></recording-source>
+    
+    <import-source name = "Named Import Source"><eoc/></import-source>
+    <import-source><eoc/></import-source>
+    
+    <tape-source name = "Named Tape Source"><eoc/></tape-source>
+    <tape-source><eoc/></tape-source>
+    
+    <film-source name = "Named Film Source"><eoc/></film-source>
+    <film-source><eoc/></film-source>
+    
+    <!-- Test non-unique Top-Level/Lower Level -->
+
+    <top-level name = "Duplicate: Top-Level/Lower-Level"><eoc/></top-level>
+    <lower-level name = "Duplicate: Top-Level/Lower-Level"><eoc/></lower-level>
+    
+	<!-- Test non-unique Top-Level -->
+
+    <top-level name = "Duplicate: Top-Level"><eoc/></top-level>        
+    <top-level name = "Duplicate: Top-Level"><eoc/></top-level>
+    	
+    <top-level name = "Duplicate: Top-Level/Sub-Clip"><eoc/></top-level>        
+    <sub-clip name = "Duplicate: Top-Level/Sub-Clip"><eoc/></sub-clip>
+
+    <top-level name = "Duplicate: Top-Level/Adjusted Clip"><eoc/></top-level>
+    <adjusted-clip name = "Duplicate: Top-Level/Adjusted Clip"><eoc/></adjusted-clip>
+    
+	<top-level name = "Duplicate: Top-Level/Template Clip"><eoc/></top-level>
+    <template-clip name = "Duplicate: Top-Level/Template Clip"><eoc/></template-clip>
+    
+    <top-level name = "Duplicate: Top-Level/Clip"><eoc/></top-level>
+    <clip name = "Duplicate: Top-Level/Clip"><eoc/></clip>
+    
+    <top-level name = "Duplicate: Top-Level/File Source"><eoc/></top-level>
+    <file-source name = "Duplicate: Top-Level/File Source"><eoc/></file-source>
+    
+    <top-level name = "Duplicate: Top-Level/Recording Source"><eoc/></top-level>
+    <recording-source name = "Duplicate: Top-Level/Recording Source"><eoc/></recording-source>
+    
+    <top-level name = "Duplicate: Top-Level/Import Source"><eoc/></top-level>
+    <import-source name = "Duplicate: Top-Level/Import Source"><eoc/></import-source>
+    
+    <top-level name = "Duplicate: Top-Level/Tape Source"><eoc/></top-level>
+    <tape-source name = "Duplicate: Top-Level/Tape Source"><eoc/></tape-source>
+    
+    <top-level name = "Duplicate: Top-Level/Film Source"><eoc/></top-level>
+    <film-source name = "Duplicate: Top-Level/Film Source"><eoc/></film-source>
+    
+	<!-- Test non-unique Lower-Level -->
+
+    <lower-level name = "Duplicate: Lower-Level"><eoc/></lower-level>        
+    <lower-level name = "Duplicate: Lower-Level"><eoc/></lower-level>
+    	
+    <lower-level name = "Duplicate: Lower-Level/Sub-Clip"><eoc/></lower-level>        
+    <sub-clip name = "Duplicate: Lower-Level/Sub-Clip"><eoc/></sub-clip>
+
+    <lower-level name = "Duplicate: Lower-Level/Adjusted Clip"><eoc/></lower-level>
+    <adjusted-clip name = "Duplicate: Lower-Level/Adjusted Clip"><eoc/></adjusted-clip>
+    
+	<lower-level name = "Duplicate: Lower-Level/Template Clip"><eoc/></lower-level>
+    <template-clip name = "Duplicate: Lower-Level/Template Clip"><eoc/></template-clip>
+    
+    <lower-level name = "Duplicate: Lower-Level/Clip"><eoc/></lower-level>
+    <clip name = "Duplicate: Lower-Level/Clip"><eoc/></clip>
+    
+    <lower-level name = "Duplicate: Lower-Level/File Source"><eoc/></lower-level>
+    <file-source name = "Duplicate: Lower-Level/File Source"><eoc/></file-source>
+    
+    <lower-level name = "Duplicate: Lower-Level/Recording Source"><eoc/></lower-level>
+    <recording-source name = "Duplicate: Lower-Level/Recording Source"><eoc/></recording-source>
+    
+    <lower-level name = "Duplicate: Lower-Level/Import Source"><eoc/></lower-level>
+    <import-source name = "Duplicate: Lower-Level/Import Source"><eoc/></import-source>
+    
+    <lower-level name = "Duplicate: Lower-Level/Tape Source"><eoc/></lower-level>
+    <tape-source name = "Duplicate: Lower-Level/Tape Source"><eoc/></tape-source>
+    
+    <lower-level name = "Duplicate: Lower-Level/Film Source"><eoc/></lower-level>
+    <film-source name = "Duplicate: Lower-Level/Film Source"><eoc/></film-source>
+    
+</aaf-file>

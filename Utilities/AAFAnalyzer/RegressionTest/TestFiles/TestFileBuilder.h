@@ -37,19 +37,19 @@ class TestFileBuilder
         TestFileBuilder( const char* outFile );
         ~TestFileBuilder();
 
-        shared_ptr<AxCompositionMob> AddTopLevel( const AxString& name );
-        shared_ptr<AxCompositionMob> AddLowerLevel( const AxString& name );
-        shared_ptr<AxCompositionMob> AddSubClip( const AxString& name );
-        shared_ptr<AxCompositionMob> AddAdjustedClip( const AxString& name );
+        shared_ptr<AxCompositionMob> AddTopLevel( const AxString& name, bool isNamed );
+        shared_ptr<AxCompositionMob> AddLowerLevel( const AxString& name, bool isNamed );
+        shared_ptr<AxCompositionMob> AddSubClip( const AxString& name, bool isNamed );
+        shared_ptr<AxCompositionMob> AddAdjustedClip( const AxString& name, bool isNamed );
 
-        shared_ptr<AxMasterMob> AddTemplateClip( const AxString& name );
-        shared_ptr<AxMasterMob> AddClip( const AxString& name );
+        shared_ptr<AxMasterMob> AddTemplateClip( const AxString& name, bool isNamed );
+        shared_ptr<AxMasterMob> AddClip( const AxString& name, bool isNamed );
 
-        shared_ptr<AxSourceMob> AddFileSource( const AxString& name );
-        shared_ptr<AxSourceMob> AddRecordingSource( const AxString& name );
-        shared_ptr<AxSourceMob> AddImportSource( const AxString& name );
-        shared_ptr<AxSourceMob> AddTapeSource( const AxString& name );
-        shared_ptr<AxSourceMob> AddFilmSource( const AxString& name );
+        shared_ptr<AxSourceMob> AddFileSource( const AxString& name, bool isNamed );
+        shared_ptr<AxSourceMob> AddRecordingSource( const AxString& name, bool isNamed );
+        shared_ptr<AxSourceMob> AddImportSource( const AxString& name, bool isNamed );
+        shared_ptr<AxSourceMob> AddTapeSource( const AxString& name, bool isNamed );
+        shared_ptr<AxSourceMob> AddFilmSource( const AxString& name, bool isNamed );
 
         void Attach( AxMob& parent, AxMob& child );
         void AttachEOC( AxMob& parent );

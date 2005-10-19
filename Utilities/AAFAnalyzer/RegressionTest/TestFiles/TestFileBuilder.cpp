@@ -89,14 +89,17 @@ TestFileBuilder::~TestFileBuilder()
     
 }
 
-shared_ptr<AxCompositionMob> TestFileBuilder::AddTopLevel( const AxString& name )
+shared_ptr<AxCompositionMob> TestFileBuilder::AddTopLevel( const AxString& name, bool isNamed )
 {           
 
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
     
     shared_ptr<AxCompositionMob> spAxCompMob( new AxCompositionMob( AxCreateInstance<IAAFCompositionMob>( axDictionary ) ) );
-    spAxCompMob->SetName( name );
+    if ( isNamed )
+    {
+        spAxCompMob->SetName( name );
+    }
     spAxCompMob->SetUsageCode(kAAFUsage_TopLevel);
     spAxCompMob->SetMobID( this->GenerateMobId() );
 
@@ -106,14 +109,17 @@ shared_ptr<AxCompositionMob> TestFileBuilder::AddTopLevel( const AxString& name 
     
 }
 
-shared_ptr<AxCompositionMob> TestFileBuilder::AddLowerLevel( const AxString& name )
+shared_ptr<AxCompositionMob> TestFileBuilder::AddLowerLevel( const AxString& name, bool isNamed )
 {           
 
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
     
     shared_ptr<AxCompositionMob> spAxCompMob( new AxCompositionMob( AxCreateInstance<IAAFCompositionMob>( axDictionary ) ) );
-    spAxCompMob->SetName( name );
+    if ( isNamed )
+    {
+        spAxCompMob->SetName( name );
+    }
     spAxCompMob->SetUsageCode(kAAFUsage_LowerLevel);
     spAxCompMob->SetMobID( this->GenerateMobId() );
 
@@ -123,14 +129,17 @@ shared_ptr<AxCompositionMob> TestFileBuilder::AddLowerLevel( const AxString& nam
     
 }
 
-shared_ptr<AxCompositionMob> TestFileBuilder::AddSubClip( const AxString& name )
+shared_ptr<AxCompositionMob> TestFileBuilder::AddSubClip( const AxString& name, bool isNamed )
 {           
 
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
     
     shared_ptr<AxCompositionMob> spAxCompMob( new AxCompositionMob( AxCreateInstance<IAAFCompositionMob>( axDictionary ) ) );
-    spAxCompMob->SetName( name );
+    if ( isNamed )
+    {
+        spAxCompMob->SetName( name );
+    }
     spAxCompMob->SetUsageCode(kAAFUsage_SubClip);
     spAxCompMob->SetMobID( this->GenerateMobId() );
 
@@ -140,14 +149,17 @@ shared_ptr<AxCompositionMob> TestFileBuilder::AddSubClip( const AxString& name )
     
 }
 
-shared_ptr<AxCompositionMob> TestFileBuilder::AddAdjustedClip( const AxString& name )
+shared_ptr<AxCompositionMob> TestFileBuilder::AddAdjustedClip( const AxString& name, bool isNamed )
 {           
 
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
     
     shared_ptr<AxCompositionMob> spAxCompMob( new AxCompositionMob( AxCreateInstance<IAAFCompositionMob>( axDictionary ) ) );
-    spAxCompMob->SetName( name );
+    if ( isNamed )
+    {
+        spAxCompMob->SetName( name );
+    }
     spAxCompMob->SetUsageCode(kAAFUsage_AdjustedClip);
     spAxCompMob->SetMobID( this->GenerateMobId() );
 
@@ -157,7 +169,7 @@ shared_ptr<AxCompositionMob> TestFileBuilder::AddAdjustedClip( const AxString& n
     
 }
 
-shared_ptr<AxMasterMob> TestFileBuilder::AddTemplateClip( const AxString& name )
+shared_ptr<AxMasterMob> TestFileBuilder::AddTemplateClip( const AxString& name, bool isNamed )
 { 
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -165,7 +177,10 @@ shared_ptr<AxMasterMob> TestFileBuilder::AddTemplateClip( const AxString& name )
 
     shared_ptr<AxMasterMob> spAxMasterMob( new AxMasterMob( AxCreateInstance<IAAFMasterMob>( axDictionary ) ) );
     spAxMasterMob->Initialize();
-    spAxMasterMob->SetName( name );
+    if ( isNamed )
+    {
+        spAxMasterMob->SetName( name );
+    }
     spAxMasterMob->SetUsageCode( kAAFUsage_Template );
     spAxMasterMob->SetMobID( this->GenerateMobId() );
 
@@ -175,7 +190,7 @@ shared_ptr<AxMasterMob> TestFileBuilder::AddTemplateClip( const AxString& name )
     
 }
 
-shared_ptr<AxMasterMob> TestFileBuilder::AddClip( const AxString& name )
+shared_ptr<AxMasterMob> TestFileBuilder::AddClip( const AxString& name, bool isNamed )
 { 
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -183,7 +198,10 @@ shared_ptr<AxMasterMob> TestFileBuilder::AddClip( const AxString& name )
 
     shared_ptr<AxMasterMob> spAxMasterMob( new AxMasterMob( AxCreateInstance<IAAFMasterMob>( axDictionary ) ) );
     spAxMasterMob->Initialize();
-    spAxMasterMob->SetName( name );
+    if ( isNamed )
+    {
+        spAxMasterMob->SetName( name );
+    }
     spAxMasterMob->SetMobID( this->GenerateMobId() );
 
     axHeader.AddMob( *spAxMasterMob );
@@ -192,14 +210,17 @@ shared_ptr<AxMasterMob> TestFileBuilder::AddClip( const AxString& name )
     
 }
 
-shared_ptr<AxSourceMob> TestFileBuilder::AddFileSource( const AxString& name )
+shared_ptr<AxSourceMob> TestFileBuilder::AddFileSource( const AxString& name, bool isNamed )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
     shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
-    spAxSrcMob->SetName( name );
+    if ( isNamed )
+    {
+        spAxSrcMob->SetName( name );
+    }
 
     AxCDCIDescriptor axFileDes( AxCreateInstance<IAAFCDCIDescriptor>( axDictionary ) );
     spAxSrcMob->SetEssenceDescriptor( axFileDes );
@@ -211,14 +232,17 @@ shared_ptr<AxSourceMob> TestFileBuilder::AddFileSource( const AxString& name )
 
 }
 
-shared_ptr<AxSourceMob> TestFileBuilder::AddRecordingSource( const AxString& name )
+shared_ptr<AxSourceMob> TestFileBuilder::AddRecordingSource( const AxString& name, bool isNamed )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
     shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
-    spAxSrcMob->SetName( name );
+    if ( isNamed )
+    {
+        spAxSrcMob->SetName( name );
+    }   
 
     AxRecordingDescriptor axRecording( AxCreateInstance<IAAFRecordingDescriptor>( axDictionary ) );
     axRecording.Initialize();
@@ -231,14 +255,17 @@ shared_ptr<AxSourceMob> TestFileBuilder::AddRecordingSource( const AxString& nam
 
 }
 
-shared_ptr<AxSourceMob> TestFileBuilder::AddImportSource( const AxString& name )
+shared_ptr<AxSourceMob> TestFileBuilder::AddImportSource( const AxString& name, bool isNamed )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
     shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
-    spAxSrcMob->SetName( name );
+    if ( isNamed )
+    {
+        spAxSrcMob->SetName( name );
+    }
 
     AxImportDescriptor axImport( AxCreateInstance<IAAFImportDescriptor>( axDictionary ) );
     axImport.Initialize();
@@ -251,14 +278,17 @@ shared_ptr<AxSourceMob> TestFileBuilder::AddImportSource( const AxString& name )
 
 }
 
-shared_ptr<AxSourceMob> TestFileBuilder::AddTapeSource( const AxString& name )
+shared_ptr<AxSourceMob> TestFileBuilder::AddTapeSource( const AxString& name, bool isNamed )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
     shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
-    spAxSrcMob->SetName( name );
+    if ( isNamed )
+    {
+        spAxSrcMob->SetName( name );
+    }
 
     AxTapeDescriptor axTape( AxCreateInstance<IAAFTapeDescriptor>( axDictionary ) );
     axTape.Initialize();
@@ -271,14 +301,17 @@ shared_ptr<AxSourceMob> TestFileBuilder::AddTapeSource( const AxString& name )
 
 }
 
-shared_ptr<AxSourceMob> TestFileBuilder::AddFilmSource( const AxString& name )
+shared_ptr<AxSourceMob> TestFileBuilder::AddFilmSource( const AxString& name, bool isNamed )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
     shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
-    spAxSrcMob->SetName( name );
+    if ( isNamed )
+    {
+        spAxSrcMob->SetName( name );
+    }
 
     AxFilmDescriptor axFilm( AxCreateInstance<IAAFFilmDescriptor>( axDictionary ) );
     spAxSrcMob->SetEssenceDescriptor( axFilm );

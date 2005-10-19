@@ -31,10 +31,16 @@ include ../../aafanalyzer.mk
 
 .PHONY : check
 check : $(AAFSDKBINDIR)/BuildTestFile$(EXE)
-	rm -f EPDerivationTest.aaf EPDerivationTest.temp EPDerivationTest.results
+	rm -f EPDerivationTest.aaf EPDerivationTest.temp EPDerivationTest.results EPNameTest.aaf EPNameTest.temp EPNameTest.results
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPDerivationTest.xml EPDerivationTest.aaf
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPDerivationTest.aaf ../../Requirements/AAFRequirements.xml >> EPDerivationTest.temp
-	grep -A `expr \`expr \\\`wc -l EPDerivationTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - \`expr \\\`grep -n "Name:   Mob Derivation Test" EPDerivationTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\`` "Name:   Mob Derivation Test" EPDerivationTest.temp >> EPDerivationTest.results
+	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Naming Test" EPDerivationTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Mob Derivation Test" EPDerivationTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Mob Derivation Test" EPDerivationTest.temp >> EPDerivationTest.results
 	@echo "Comparing EPDericationTest Expected Results (EPDerivationTest.expected) to Actual Results (EPDerivationTest.results)"
 	diff EPDerivationTest.expected EPDerivationTest.results
+	@echo "End of Test"
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPNameTest.xml EPNameTest.aaf
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPNameTest.aaf ../../Requirements/AAFRequirements.xml >> EPNameTest.temp
+	grep -A `expr \`expr \\\`wc -l EPNameTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Naming Test" EPNameTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\`` "Name:   Edit Protocol Naming Test" EPNameTest.temp >> EPNameTest.results
+	@echo "Comparing EPNameTest Expected Results (EPNameTest.expected) to Actual Results (EPNameTest.results)"
+	diff EPNameTest.expected EPNameTest.results
 	@echo "End of Test"

@@ -1,6 +1,6 @@
 //=---------------------------------------------------------------------=
 //
-// $Id$ $Name$
+// $Id$
 //
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
@@ -18,50 +18,43 @@
 //
 //=---------------------------------------------------------------------=
 
-#ifndef __EPMobDepPhase_h__
-#define __EPMobDepPhase_h__
-
-//Edit Protocol Test files (included so the application only needs to include
-//the Test Phase and not individual tests in order to register tests).
-#include <DecorateEPTest.h>
-#include <CompMobDependency.h>
-#include <EPDerivationTest.h>
-#include <EPNameTest.h>
+#ifndef __EPNameTest_h_
+#define __EPNameTest_h_
 
 //Test/Result files
-#include <TestPhase.h>
+#include <Test.h>
 
 //Ax files
 #include <AxTypes.h>
 
 namespace aafanalyzer {
 
+class TestLevelTestResult;
+
 using namespace boost;
-using namespace std;
 
-class TestGraph;
-
-class EPMobDepPhase : public TestPhase
+class EPNameTest : public Test
 {
  public:
-  EPMobDepPhase( wostream& log, shared_ptr<const TestGraph> spGraph );
-  virtual ~EPMobDepPhase();
 
-  virtual AxString GetDescription() const;
+  EPNameTest( wostream& log,
+            shared_ptr<const TestGraph> spGraph );
+  virtual ~EPNameTest();
+
+  virtual shared_ptr<TestLevelTestResult> Execute();
   virtual AxString GetName() const;
-  virtual shared_ptr<TestPhaseLevelTestResult> Execute();
+  virtual AxString GetDescription() const;
+  static const TestInfo GetTestInfo();
 
  private:
 
   // prohibited
-  EPMobDepPhase();
-  EPMobDepPhase( const EPMobDepPhase& );
-  EPMobDepPhase& operator=( const EPMobDepPhase& );
+  EPNameTest();
+  EPNameTest( const EPNameTest& );
+  EPNameTest& operator=( const EPNameTest& );
 
-  wostream& _log;
-  shared_ptr<const TestGraph> _spGraph;
 };
 
-} // end of namespace aafanalyzer
+} // end of namespace diskstream
 
-#endif
+#endif /*__EPNameTest_h_*/

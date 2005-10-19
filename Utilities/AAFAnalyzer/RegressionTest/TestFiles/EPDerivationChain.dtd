@@ -2,37 +2,37 @@
 <!ELEMENT aaf-file ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source )+>
 
 <!ELEMENT top-level ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
-<!ATTLIST top-level name CDATA #REQUIRED>
+<!ATTLIST top-level name CDATA #IMPLIED>
 
 <!ELEMENT lower-level ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
-<!ATTLIST lower-level name CDATA #REQUIRED>
+<!ATTLIST lower-level name CDATA #IMPLIED>
 
 <!ELEMENT sub-clip ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
-<!ATTLIST sub-clip name CDATA #REQUIRED>
+<!ATTLIST sub-clip name CDATA #IMPLIED>
 
 <!ELEMENT adjusted-clip ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
-<!ATTLIST adjusted-clip name CDATA #REQUIRED>
+<!ATTLIST adjusted-clip name CDATA #IMPLIED>
 
 <!ELEMENT template-clip ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
-<!ATTLIST template-clip name CDATA #REQUIRED>
+<!ATTLIST template-clip name CDATA #IMPLIED>
 
 <!ELEMENT clip ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
-<!ATTLIST clip name CDATA #REQUIRED>
+<!ATTLIST clip name CDATA #IMPLIED>
 
 <!ELEMENT file-source ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
-<!ATTLIST file-source name CDATA #REQUIRED>
+<!ATTLIST file-source name CDATA #IMPLIED>
 
 <!ELEMENT recording-source ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
-<!ATTLIST recording-source name CDATA #REQUIRED>
+<!ATTLIST recording-source name CDATA #IMPLIED>
 
 <!ELEMENT import-source ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
-<!ATTLIST import-source name CDATA #REQUIRED>
+<!ATTLIST import-source name CDATA #IMPLIED>
 
 <!ELEMENT tape-source ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
-<!ATTLIST tape-source name CDATA #REQUIRED>
+<!ATTLIST tape-source name CDATA #IMPLIED>
 
 <!ELEMENT film-source ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
-<!ATTLIST film-source name CDATA #REQUIRED>
+<!ATTLIST film-source name CDATA #IMPLIED>
 
 <!ELEMENT eoc EMPTY>
 <!ELEMENT oof EMPTY>

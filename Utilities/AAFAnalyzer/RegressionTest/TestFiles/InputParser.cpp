@@ -107,60 +107,71 @@ void InputParser::ParseXML( const char* filename ) const
 void InputParser::StartElement(const AxString& name, const char** attribs)
 {
     
-    AxString mobName;
+    bool isNamed = false;
+    AxString mobName = L"";
+    
     if ( name != L"eoc" && name != L"oof" && 
         name != L"aaf-file" && name != L"bad-eoc" )
     {
-        wostringstream ssMobName;
-        ssMobName << attribs[1];
-        mobName = ssMobName.str().c_str();
+        wostringstream ss;
+        AxString atrName;
+        
+        ss << attribs[0];
+        atrName = ss.str().c_str();
+        if ( atrName == L"name" )
+        {
+            isNamed = true;
+            ss.str( L"" );
+            ss << attribs[1];
+            mobName = ss.str().c_str();
+        }
     }
     
     shared_ptr<AxMob> spMob;
 
     if ( name == L"top-level" )
     {
-        spMob = _testFile.AddTopLevel( mobName );
+        spMob = _testFile.AddTopLevel( mobName, isNamed );
     }
     else if ( name == L"lower-level" )
     {
-        spMob = _testFile.AddLowerLevel( mobName );
+        spMob = _testFile.AddLowerLevel( mobName, isNamed );
     }
     else if ( name == L"sub-clip" )
     {
-        spMob = _testFile.AddSubClip( mobName );
+        spMob = _testFile.AddSubClip( mobName, isNamed );
     }
     else if ( name == L"adjusted-clip" )
     {
-        spMob = _testFile.AddAdjustedClip( mobName );
+        spMob = _testFile.AddAdjustedClip( mobName, isNamed );
     }
     else if ( name == L"template-clip" )
     {
-        spMob = _testFile.AddTemplateClip( mobName );
+        spMob = _testFile.AddTemplateClip( mobName, isNamed );
     }
     else if ( name == L"clip" )
     {
-        spMob = _testFile.AddClip( mobName );
+        spMob = _testFile.AddClip( mobName, isNamed );
     }
     else if ( name == L"file-source" )
     {
-        spMob = _testFile.AddFileSource( mobName );
+        spMob = _testFile.AddFileSource( mobName, isNamed );
     }
     else if ( name == L"recording-source" )
     {
-        spMob = _testFile.AddRecordingSource( mobName );
+        spMob = _testFile.AddRecordingSource( mobName, isNamed );
     }
     else if ( name == L"import-source" )
     {
-        spMob = _testFile.AddImportSource( mobName );
+        spMob = _testFile.AddImportSource( mobName, isNamed );
     }
     else if ( name == L"tape-source" )
     {
-        spMob = _testFile.AddTapeSource( mobName );
+        spMob = _testFile.AddTapeSource( mobName, isNamed );
     }
     else if ( name == L"film-source" )
     {
-        spMob = _testFile.AddFilmSource( mobName );
+        spMob = _testFile.AddFilmSource( mobName, isNamed );
     }
     else if ( name == L"eoc" )
     {

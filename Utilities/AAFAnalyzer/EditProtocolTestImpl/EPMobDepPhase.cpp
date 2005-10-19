@@ -98,6 +98,10 @@ shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
   // with the identified root compositions.
   shared_ptr<EPDerivationTest> derivationTest( new EPDerivationTest(_log, _spGraph, spRootNodes) );
   spPhaseResult->AppendSubtestResult( derivationTest->Execute() );
+  
+  // Fourth, run the naming test
+  shared_ptr<EPNameTest> nameTest( new EPNameTest( _log, _spGraph ) );
+  spPhaseResult->AppendSubtestResult( nameTest->Execute() );
 
   spPhaseResult->SetResult( spPhaseResult->GetAggregateResult() );
 
