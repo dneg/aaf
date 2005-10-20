@@ -367,3 +367,9 @@ DerivationChainStateMachine - Used by MobChainVisitor to track the current
 							  
 StateMachineException - Thrown by DerivationChainStateMachine when an unknown
 						event is passed to the state machine.
+						
+EPNameTest - Derived from Test and executed by EPMobDepPhase.  Tests a TestGraph
+			 to ensure that mobs have valid Edit Protocol names.
+			 
+EPNameVisitor - Derived from EPTypedVisitor, used by EPNameTest to verify that
+				mob names are acceptable under the Edit Protocol.
