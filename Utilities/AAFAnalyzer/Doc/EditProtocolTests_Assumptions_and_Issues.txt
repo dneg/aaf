@@ -1,0 +1,147 @@
+ 1. The Edit Protocol does not specify what type of references a file source is
+    allowed to reference.  REQ_EP_063 states that "if a file source has any of
+    the following sources, then those source mobs should be referenced and
+    included by the file source."  This is an application requirement that and
+    is a "should" not a "shall."  Until a more appropriate requirement is
+    available, REQ_EP_063 is being used to specify an invalid reference from
+    a file source.
+ 
+ 2. REQ_EP_063 only deals with references to import, tape and film sources, not
+    file sources.  This was discussed in the conference call on September 26
+    and it was concluded that this was probably an omission.  With (1),
+    REQ_EP_063 is being used to specify that a reference from a file source to
+    another file source is valid.
+    
+ 3. REQ_EP_064 states "if a file source does not have one of the above sources,
+    then it shall reference and include a recording source."  This is currently
+    being interpreted to mean that a file source must reference another source
+    (it can not be the end of the derivation chain).  The requirement is not
+    being interpreted as an if and only if, therefore, a file source may have
+    a(n) file/import/tape/file source as well as a recording source.
+    
+ 4. The Edit Protocol does not specify what types of references an import
+    source is allowed to reference.  REQ_EP_076 states that "if an import
+    source has any of the following sources, then those source mobs should be
+    included and referenced by the import source."  This is an application
+    requirement and is a "should" not a "shall."  Until a more appropriate
+    requirement is available, REQ_EP_076 is being used to specify an invalid
+    reference from an import source.
+    
+ 5. The Edit Protocol does not specify what type of references a tape source is
+    allowed to reference.  REQ_EP_083 states that "if a tape source has a film
+    source, then it should be included and referenced by the tape source.  This
+    is an application requirement and is a "should" not a "shall."  Until a
+    more appropriate requirement is available, REQ_EP_083 is being used to
+    specify an invalid reference from a tape source.
+    
+ 6. The Edit Protocol does not specify what type of references a film source is
+    allowed to reference.  Currently, a test will fail, although all
+    requirements will appear to have passed if a film source is not the end of
+    the derivation chain.
+    
+ 7. Currently a test will fail if a CompositionMob does not have a UsageCode
+    property.  However, there is no requirement in the Edit Protocol that
+    specifies that every CompositionMob must have a UsageCode property.
+    Currently, the test will fail and all requirements will appear to pass,
+    A possible solution is to fail the requirement that specifies acceptable
+    references out of the "current node."
+    
+ 8. Currently a test will fail if a CompositionMob or a MasterMob has an
+    unknown UsageCode property.  However, there is no requirement in the Edit
+    Protocol that specifies a UsageCode property must be one that currently
+    exists.  Currently, the test will fail and all requirements will appear to
+    pass.  A possible solution is to fail the requirement that specifies
+    acceptable references out of the "current node."
+    
+ 9. Currently a test will fail if a SourceMob has no descriptor.  However, the
+    Edit Protocol does not specify that a SourceMob must have a descriptor.
+    Currently, the test will fail and all requirements will appear to pass.  A
+    possible solution is to fail the requirement that specifies acceptable
+    references out of the "current node."
+    
+10. Currently a test will fail if a SourceMob has an "invalid" descriptor (ie.
+    Auxiliary).  However, the Edit Protocol does not specify that a SourceMob
+    cannot have an "invalid" descriptor.  Currently, the test will fail and all
+    requirements will appear to pass.  A possible solution is to fail the
+    requirement that specifies acceptable references out of the "current node."
+    
+11. Currently a test will fail if a SourceClip does not have a SourceReference
+    property.  However, the Edit Protocol does not specify that a SourceClip
+    must have a SourceReference property.  Currently, the test will fail and
+    all requirements will appear to pass.  A possible solution is to fail the
+    requirement that specifies acceptable references out of the "current node."
+    
+12. Tests will currently fail if the first "node" in the derivation chain is
+    anything other than a top-level composition.  REQ_EP_030 states that "a
+    lower-level composition shall be referenced by a top-level or lower-level
+    in the AAF file," but there are no similar requirements that specify other
+    types of "nodes" cannot be the initial "node" (the exception is REQ_EP_025
+    which specifies top-level composition shall not be referenced).  Also, due
+    to the way the CompMobDependency is implemented, only CompositionMobs
+    will be considered as the first "node" in a derivation chain.  Unreferenced
+    SourceMobs, MasterMobs and SourceClips will never be tested.
+    
+13. REQ_EP_026, REQ_EP_031, REQ_EP_036 and REQ_EP_045 state that top-level,
+    lower-level, sub-clip and adjusted-clip compositions respectively "shall
+    only reference the following kinds of material."  When the derivation chain
+    ends no material is referenced, therefore these requirements do not prevent
+    these compositions from being the end of the chain.  Currently, if one of
+    these compositions is the end of a chain, the test will fail, however, all
+    requirements will appear to pass.
+    
+14. As was discussed in the conference call on September 26, 2005, REQ_EP_031
+    does not specify a lower-level composition can reference another
+    lower-level composition although REQ_EP_030 implies that this is a valid
+    reference.  As was decided during the call, this was probably an omission
+    therefore, REQ_EP_031 is used to specify a valid reference from one
+    lower-level composition to another.
+    
+15. As was discussed during the conference call on September 26, 2005, the
+    figure in Section 6.1 makes it appear that a Clip may be the end of the
+    derivation chain.  Until further information is avaliable, the test will
+    assume that it is valid for a clip to be the end of the derivation chain.
+    
+16. Requirements REQ_EP_025, REQ_EP_030, REQ_EP_034, REQ_EP_043, REQ_EP_049,
+    REQ_EP_054, REQ_EP_058, REQ_EP_071, REQ_EP_074, REQ_EP_080 and REQ_EP_085
+    define the Edit Protocol material types.  These requirements are used in
+    EPDecorateTest/EPDecorateVisitor, however, there is no way for these
+    requirements to fail.
+	
+17. REQ_EP_013, REQ_EP_014 and REQ_EP_039 are all classified as file
+    requirements but they seem dependant on an importing or exporting
+    application.
+	
+18. REQ_EP_023 is an optional ("MAY") requirement.  There is no way it can
+    present a warning or a failure.
+	
+19. REQ_EP_028 does not specify if physical track numbers may be repeated. 
+    Until further information is avaliable, it is assumed that they can not be
+    repeated.
+	
+20. REQ_EP_028 does not specify if reserved physical track numbers are legal
+    values.  Until further information is avaliable, it is assumed that they are
+    illegal.
+	
+21. REQ_EP_028 does not specify if physical track numbers outside the range 1-6
+    are legal.  Until further information is avaliable, it is assumed that they
+    are illegal.
+	
+22. REQ_EP_082 does not specify if physical track numbers may be repeated. 
+    Until further information is avaliable, it is assumed that they can not be
+    repeated.
+	
+23. REQ_EP_082 does not specify if reserved physical track numbers are legal
+    values.  Until further information is avaliable, it is assumed that they are
+    illegal.
+	
+24. REQ_EP_082 does not specify if physical track numbers outside the range 1-12
+    are legal.  Until further information is avaliable, it is assumed that they
+    are illegal.
+	
+25. REQ_EP_087 does not specify if physical track numbers may be repeated. 
+    Until further information is avaliable, it is assumed that they can not be
+    repeated.
+	
+26. REQ_EP_087 does not specify if physical track numbers outside the range 1-3
+    are legal.  Until further information is avaliable, it is assumed that they
+    are illegal.
