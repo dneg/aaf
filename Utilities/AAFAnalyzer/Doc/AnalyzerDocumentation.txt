@@ -373,3 +373,12 @@ EPNameTest - Derived from Test and executed by EPMobDepPhase.  Tests a TestGraph
 			 
 EPNameVisitor - Derived from EPTypedVisitor, used by EPNameTest to verify that
 				mob names are acceptable under the Edit Protocol.
+				
+EPContainedTrackTest - Derived from Test and executed by EPMobDepPhase.  Tests
+					   the mobs on a test graph to ensure that the tracks
+					   contained within them are acceptable under the Edit
+					   Protocol.
+					   
+EPContainedTrackVisitor - Derived from EPTypedVisitor, used by
+						  EPContainedTrackTest to verify that tracks contained
+						  within mobs are valid under the Edit Protocol.

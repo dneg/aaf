@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!ELEMENT aaf-file ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source )+>
 
-<!ELEMENT top-level ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
+<!ELEMENT top-level ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc | timecode )+>
 <!ATTLIST top-level name CDATA #IMPLIED>
 
 <!ELEMENT lower-level ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
@@ -28,12 +28,18 @@
 <!ELEMENT import-source ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
 <!ATTLIST import-source name CDATA #IMPLIED>
 
-<!ELEMENT tape-source ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
+<!ELEMENT tape-source ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc | timecode )+>
 <!ATTLIST tape-source name CDATA #IMPLIED>
 
-<!ELEMENT film-source ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
+<!ELEMENT film-source ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc | edgecode )+>
 <!ATTLIST film-source name CDATA #IMPLIED>
 
 <!ELEMENT eoc EMPTY>
 <!ELEMENT oof EMPTY>
 <!ELEMENT bad-eoc EMPTY>
+
+<!ELEMENT timecode EMPTY>
+<!ATTLIST timecode physical-track-number CDATA #IMPLIED>
+
+<!ELEMENT edgecode EMPTY>
+<!ATTLIST edgecode physical-track-number CDATA #IMPLIED>

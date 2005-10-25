@@ -1,0 +1,707 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE aaf-file SYSTEM "EPDerivationChain.dtd">
+
+<aaf-file>
+
+    <!-- Test Top-Level Compositions -->   
+	<top-level name="One Primary">
+        <timecode physical-track-number="1"/>
+        <eoc/>
+    </top-level>
+
+	<top-level name="One Primary, One Alternative">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="2"/>
+        <eoc/>
+    </top-level>
+    
+    <top-level name="Two Primary">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="1"/>
+        <eoc/>
+    </top-level>
+    
+    <top-level name="One Alternative">
+        <timecode physical-track-number="2"/>
+        <eoc/>
+    </top-level>
+    
+    <top-level name="One Primary, Two Alternative">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="2"/>
+        <timecode physical-track-number="2"/>
+        <eoc/>
+    </top-level>
+    
+    <top-level name="One Primary, One Reserved(3)">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="3"/>
+        <eoc/>
+    </top-level>
+    
+    <top-level name="One Primary, One Reserved(4)">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="4"/>
+        <eoc/>
+    </top-level>
+    
+    <top-level name="One Primary, One Reserved(5)">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="5"/>
+        <eoc/>
+    </top-level>
+    
+    <top-level name="One Primary, One Reserved(6)">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </top-level>
+    
+    <top-level name="One Reserved(3)">
+        <timecode physical-track-number="3"/>
+        <eoc/>
+    </top-level>
+    
+    <top-level name="One Reserved(4)">
+        <timecode physical-track-number="4"/>
+        <eoc/>
+    </top-level>
+    
+    <top-level name="One Reserved(5)">
+        <timecode physical-track-number="5"/>
+        <eoc/>
+    </top-level>
+    
+    <top-level name="One Reserved(6)">
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </top-level>
+    
+    <top-level name="One Primary, One Illegal">
+        <timecode physical-track-number="7"/>
+        <timecode physical-track-number="1"/>
+        <eoc/>
+    </top-level>
+    
+    <top-level name="One Illegal">
+        <timecode physical-track-number="9"/>
+        <eoc/>
+    </top-level>
+    
+    <top-level name="One Primary, One Unknown">
+        <timecode physical-track-number="1"/>
+        <timecode/>
+        <eoc/>
+    </top-level>
+    
+    <top-level name="One Unknown">
+        <timecode/>
+        <eoc/>
+    </top-level>
+    
+    <!-- Test Tape Sources -->
+    
+    <tape-source name="One Primary">
+        <timecode physical-track-number="1"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux1">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="3"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux2">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="4"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux3">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="5"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux4">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux5">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+	<tape-source name="One Primary, One Aux1, One Aux2">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="4"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux1, One Aux3">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="5"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux1, One Aux4">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux1, One Aux5">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux2, One Aux3">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="5"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux2, One Aux4">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux2, One Aux5">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux3, One Aux4">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux3, One Aux5">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux4, One Aux5">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="6"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux1, One Aux2, One Aux3">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="5"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux1, One Aux2, One Aux4">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux1, One Aux2, One Aux5">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux1, One Aux3, One Aux4">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux1, One Aux3, One Aux5">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux1, One Aux4, One Aux5">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="6"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux2, One Aux3, One Aux4">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux2, One Aux3, One Aux5">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux2, One Aux4, One Aux5">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="6"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux3, One Aux4, One Aux5">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="6"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux1, One Aux2, One Aux3, One Aux4">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </tape-source>
+    
+	<tape-source name="One Primary, One Aux1, One Aux2, One Aux3, One Aux5">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+	<tape-source name="One Primary, One Aux1, One Aux2, One Aux4, One Aux5">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="6"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux1, One Aux3, One Aux4, One Aux5">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="6"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux2, One Aux3, One Aux4, One Aux5">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="6"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Aux1, One Aux2, One Aux3, One Aux4, One Aux5">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="6"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux1">
+        <timecode physical-track-number="3"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux2">
+        <timecode physical-track-number="4"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux3">
+        <timecode physical-track-number="5"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux4">
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux5">
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux1, One Aux2">
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="4"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux1, One Aux3">
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="5"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux1, One Aux4">
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux1, One Aux5">
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux2, One Aux3">
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="5"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux2, One Aux4">
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux2, One Aux5">
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux3, One Aux4">
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux3, One Aux5">
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+	<tape-source name="One Aux4, One Aux5">
+        <timecode physical-track-number="6"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+	<tape-source name="One Aux1, One Aux2, One Aux3">
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="5"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux1, One Aux2, One Aux4">
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux1, One Aux2, One Aux5">
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux1, One Aux3, One Aux4">
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux1, One Aux3, One Aux5">
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux1, One Aux4, One Aux5">
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="6"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+	<tape-source name="One Aux2, One Aux3, One Aux4">
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux2, One Aux3, One Aux5">
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux3, One Aux4, One Aux5">
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="6"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+	<tape-source name="One Aux1, One Aux2, One Aux3, One Aux4">
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux1, One Aux2, One Aux3, One Aux5">
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux1, One Aux2, One Aux4, One Aux5">
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="6"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Aux1, One Aux3, One Aux4, One Aux5">
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="6"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+	<tape-source name="One Aux2, One Aux3, One Aux4, One Aux5">
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="6"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+        
+    <tape-source name="One Aux1, One Aux2, One Aux3, One Aux4, One Aux5">
+		<timecode physical-track-number="3"/>
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="6"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="Two Primary">
+        <timecode physical-track-number="1"/>
+        <timecode physical-track-number="1"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="Two Aux1">
+        <timecode physical-track-number="3"/>
+        <timecode physical-track-number="3"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="Two Aux2">
+        <timecode physical-track-number="4"/>
+        <timecode physical-track-number="4"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="Two Aux3">
+        <timecode physical-track-number="5"/>
+        <timecode physical-track-number="5"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="Two Aux4">
+        <timecode physical-track-number="6"/>
+        <timecode physical-track-number="6"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="Two Aux5">
+        <timecode physical-track-number="7"/>
+        <timecode physical-track-number="7"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="Reserved(2)">
+        <timecode physical-track-number="2"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="Reserved(8)">
+        <timecode physical-track-number="8"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="Reserved(9)">
+        <timecode physical-track-number="9"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="Reserved(10)">
+        <timecode physical-track-number="10"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="Reserved(11)">
+        <timecode physical-track-number="11"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="Reserved(12)">
+        <timecode physical-track-number="12"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="Illegal">
+        <timecode physical-track-number="17"/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="No Timecodes">
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Primary, One Unknown">
+        <timecode physical-track-number="1"/>
+        <timecode/>
+        <eoc/>
+    </tape-source>
+    
+    <tape-source name="One Unknown">
+        <timecode/>
+        <eoc/>
+    </tape-source>
+    
+    <!-- Test Film Sources -->
+    
+    <film-source name="No Edgecodes">
+        <eoc/>
+    </film-source>
+    
+    <film-source name="One Keycode">
+        <edgecode physical-track-number="1"/>
+        <eoc/>
+    </film-source>
+    
+    <film-source name="One Ink">
+        <edgecode physical-track-number="2"/>
+        <eoc/>
+    </film-source>
+    
+    <film-source name="One Aux. Ink">
+        <edgecode physical-track-number="3"/>
+        <eoc/>
+    </film-source>
+    
+    <film-source name="One Keycode, One Ink">
+        <edgecode physical-track-number="1"/>
+        <edgecode physical-track-number="2"/>
+        <eoc/>
+    </film-source>
+    
+    <film-source name="One Keycode, One Aux. Ink">
+        <edgecode physical-track-number="1"/>
+        <edgecode physical-track-number="3"/>
+        <eoc/>
+    </film-source>
+    
+    <film-source name="One Ink, One Aux. Ink">
+        <edgecode physical-track-number="2"/>
+        <edgecode physical-track-number="3"/>
+        <eoc/>
+    </film-source>
+    
+    <film-source name="One Keycode, One Ink, One Aux. Ink">
+        <edgecode physical-track-number="1"/>
+        <edgecode physical-track-number="2"/>
+        <edgecode physical-track-number="3"/>
+        <eoc/>
+    </film-source>
+    
+    <film-source name="One Illegal">
+        <edgecode physical-track-number="4"/>
+        <eoc/>
+    </film-source>
+    
+    <film-source name="One Keycode, One Illegal">
+		<edgecode physical-track-number="1"/>
+        <edgecode physical-track-number="7"/>
+        <eoc/>
+    </film-source>
+    
+    <film-source name="Two Keycodes">
+		<edgecode physical-track-number="1"/>
+        <edgecode physical-track-number="1"/>
+        <eoc/>
+    </film-source>
+    
+    <film-source name="Two Inks">
+		<edgecode physical-track-number="2"/>
+        <edgecode physical-track-number="2"/>
+        <eoc/>
+    </film-source>
+    
+    <film-source name="Two Aux Inks">
+		<edgecode physical-track-number="3"/>
+        <edgecode physical-track-number="3"/>
+        <eoc/>
+    </film-source>
+    
+    <film-source name="One Unknown">
+        <edgecode/>
+        <eoc/>
+    </film-source>
+    
+</aaf-file>

@@ -177,6 +177,7 @@ void RegisterTests()
     TestInfoRegistrar<CompMobDependency> compMobDependency;
     TestInfoRegistrar<EPDerivationTest> epDerivationTest;
     TestInfoRegistrar<EPNameTest> epNameTest;
+    TestInfoRegistrar<EPContainedTrackTest> epTrackTest;
 
     //Register Dump Phase tests.
     TestInfoRegistrar<FileDumper> fileDumper;   

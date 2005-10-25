@@ -24,6 +24,9 @@
 //Expat files
 #include <expat.h>
 
+//Ax files
+#include <AxMob.h>
+
 //STL files
 #include <fstream>
 #include <sstream>
@@ -47,7 +50,22 @@ using namespace boost;
 
 InputParser::InputParser( const char* outFile )
     : _testFile( outFile )
-{}
+{   
+
+    //Pointers to functions to add Mobs to an AAF file.
+    _test[L"top-level"] = &TestFileBuilder::AddTopLevel;
+    _test[L"lower-level"] = &TestFileBuilder::AddLowerLevel;
+    _test[L"sub-clip"] = &TestFileBuilder::AddSubClip;
+    _test[L"adjusted-clip"] = &TestFileBuilder::AddAdjustedClip;
+    _test[L"template-clip"] = &TestFileBuilder::AddTemplateClip;
+    _test[L"clip"] = &TestFileBuilder::AddClip;
+    _test[L"file-source"] = &TestFileBuilder::AddFileSource;
+    _test[L"recording-source"] = &TestFileBuilder::AddRecordingSource;
+    _test[L"import-source"] = &TestFileBuilder::AddImportSource;
+    _test[L"tape-source"] = &TestFileBuilder::AddTapeSource;
+    _test[L"film-source"] = &TestFileBuilder::AddFilmSource;
+
+}
 
 InputParser::~InputParser()
 {}
@@ -109,13 +127,14 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
     
     bool isNamed = false;
     AxString mobName = L"";
+    shared_ptr<AxMob> spMob;
     
-    if ( name != L"eoc" && name != L"oof" && 
-        name != L"aaf-file" && name != L"bad-eoc" )
+    if ( _test.find( name ) != _test.end() )
     {
         wostringstream ss;
         AxString atrName;
         
+        //Find the mob name.
         ss << attribs[0];
         atrName = ss.str().c_str();
         if ( atrName == L"name" )
@@ -125,53 +144,18 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
             ss << attribs[1];
             mobName = ss.str().c_str();
         }
-    }
-    
-    shared_ptr<AxMob> spMob;
-
-    if ( name == L"top-level" )
-    {
-        spMob = _testFile.AddTopLevel( mobName, isNamed );
-    }
-    else if ( name == L"lower-level" )
-    {
-        spMob = _testFile.AddLowerLevel( mobName, isNamed );
-    }
-    else if ( name == L"sub-clip" )
-    {
-        spMob = _testFile.AddSubClip( mobName, isNamed );
-    }
-    else if ( name == L"adjusted-clip" )
-    {
-        spMob = _testFile.AddAdjustedClip( mobName, isNamed );
-    }
-    else if ( name == L"template-clip" )
-    {
-        spMob = _testFile.AddTemplateClip( mobName, isNamed );
-    }
-    else if ( name == L"clip" )
-    {
-        spMob = _testFile.AddClip( mobName, isNamed );
-    }
-    else if ( name == L"file-source" )
-    {
-        spMob = _testFile.AddFileSource( mobName, isNamed );
-    }
-    else if ( name == L"recording-source" )
-    {
-        spMob = _testFile.AddRecordingSource( mobName, isNamed );
-    }
-    else if ( name == L"import-source" )
-    {
-        spMob = _testFile.AddImportSource( mobName, isNamed );
-    }
-    else if ( name == L"tape-source" )
-    {
-        spMob = _testFile.AddTapeSource( mobName, isNamed );
-    }
-    else if ( name == L"film-source" )
-    {
-        spMob = _testFile.AddFilmSource( mobName, isNamed );
+        
+        //Call the appropriate add function (using function pointers is not
+        //necessary, but it gets rid of a big if statement).
+        spMob = (_testFile.*_test[name])( mobName, isNamed );
+        
+        //Push the new mob onto the stack.
+        if ( !_mobStack.empty() )
+        {
+            _testFile.Attach( *(_mobStack.top()), *spMob );
+        }
+        _mobStack.push( spMob );
+        
     }
     else if ( name == L"eoc" )
     {
@@ -181,29 +165,54 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
     {
         _testFile.AttachOOF( *(_mobStack.top()) );
     }
+    else if ( name == L"timecode" )
+    {
+        wostringstream wss;
+        AxString atrName;
+        bool hasTrackNum = false;
+        int trackNum;
+        
+        wss << attribs[0];
+        atrName = wss.str().c_str();
+        if ( atrName == L"physical-track-number" )
+        {
+            hasTrackNum = true;
+            stringstream ss;
+            ss << attribs[1];
+            ss >> trackNum;
+        }
+        _testFile.AddTimeCode( *(_mobStack.top()), trackNum, hasTrackNum );
+    }
+    else if ( name == L"edgecode" )
+    {
+        wostringstream wss;
+        AxString atrName;
+        bool hasTrackNum = false;
+        int trackNum;
+        
+        wss << attribs[0];
+        atrName = wss.str().c_str();
+        if ( atrName == L"physical-track-number" )
+        {
+            hasTrackNum = true;
+            stringstream ss;
+            ss << attribs[1];
+            ss >> trackNum;
+        }
+        _testFile.AddEdgeCode( *(_mobStack.top()), trackNum, hasTrackNum );
+    }
     else
     {
         //Do nothing
     }
-    
-    if ( name != L"eoc" && name != L"oof" && 
-         name != L"aaf-file" && name != L"bad-eoc" )
-    {
-        if ( !_mobStack.empty() )
-        {
-            _testFile.Attach( *(_mobStack.top()), *spMob );
-        }
-        _mobStack.push( spMob );
-    }
-    
+       
 }
 
 //Called when a close tag is encountered.
 void InputParser::EndElement(const AxString& name)
 {
 
-    if ( name != L"eoc" && name != L"oof" && 
-         name != L"aaf-file" && name != L"bad-eoc" )
+    if ( _test.find( name ) != _test.end() )
     {
         _mobStack.pop();
     }
@@ -262,14 +271,19 @@ int main( int argc, char** argv )
     //Input file is the second last argument.
     pair<bool,const char*> inputArg = args.get( argc-2, 1 );
     
-    // Requirements Filename is last argument.
+    //Requirements Filename is last argument.
     pair<bool, const char*> outputArg = args.get( argc-1, 2 );
         
-    //
-    //Load all of the requirements in the XML file
-    //
-    InputParser parser( outputArg.second );
-    parser.ParseXML( inputArg.second );
+    //Convert the XML file to an AAF file.
+    try
+    {
+        InputParser parser( outputArg.second );
+        parser.ParseXML( inputArg.second );
+    }
+    catch (AxString ex)
+    {
+        wcout << ex << endl;
+    }
 
     return 0;
 }

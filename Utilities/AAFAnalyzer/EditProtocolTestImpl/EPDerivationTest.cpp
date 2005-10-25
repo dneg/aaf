@@ -141,6 +141,10 @@ public:
       {
         nodeName = L"Unnamed Clip";
       }
+      else
+      {
+        throw ex;
+      }
     }
     AxString detailMsg;
     bool successfulTransition = false;
@@ -264,6 +268,10 @@ public:
       {
         nodeName = L"Unnamed Composition Mob";
       }
+      else
+      {
+        throw ex;
+      }
     }
    
     _spResult->AddDetail( L"Composition Mob: \"" + nodeName + L"\" does not have an Edit Protocol material type." );
@@ -286,6 +294,10 @@ public:
       if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
       {
         nodeName = L"Unnamed Master Mob";
+      }
+      else
+      {
+        throw ex;
       }
     }
 
@@ -310,6 +322,10 @@ public:
       if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
       {
         nodeName = L"Unnamed Source Mob";
+      }
+      else
+      {
+        throw ex;
       }
     }
 
@@ -425,6 +441,10 @@ private:
       {
         nodeName = L"Unnamed " + type;
       }
+      else
+      {
+        throw ex;
+      }
     }
     AxString detailMsg;
     bool successfulTransition = false;
@@ -457,6 +477,10 @@ private:
       if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
       {
         nodeName = L"Unnamed " + type;
+      }
+      else
+      {
+        throw ex;
       }
     }
     AxString detailMsg;
@@ -498,6 +522,10 @@ private:
           if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
           {
             nodeName = L"Unnamed " + type;
+          }
+          else
+          {
+            throw ex;
           }
         }
         
@@ -543,6 +571,10 @@ shared_ptr<DetailLevelTestResult> AnalyzeMobChain( wostream& log,
     if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
     {
       mobName = L"Unnamed Composition Mob";
+    }
+    else
+    {
+      throw ex;
     }
   }
   spResult->AddDetail( L"Analyzing root composition mob \"" + mobName + L"\"" );

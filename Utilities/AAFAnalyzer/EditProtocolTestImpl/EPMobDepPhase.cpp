@@ -102,6 +102,10 @@ shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
   // Fourth, run the naming test
   shared_ptr<EPNameTest> nameTest( new EPNameTest( _log, _spGraph ) );
   spPhaseResult->AppendSubtestResult( nameTest->Execute() );
+  
+  // Fifth, run the contained track test
+  shared_ptr<EPContainedTrackTest> trackTest( new EPContainedTrackTest( _log, _spGraph ) );
+  spPhaseResult->AppendSubtestResult( trackTest->Execute() );
 
   spPhaseResult->SetResult( spPhaseResult->GetAggregateResult() );
 

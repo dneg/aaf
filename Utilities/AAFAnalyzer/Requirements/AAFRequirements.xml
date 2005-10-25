@@ -175,7 +175,7 @@
     
     <requirement type="app" category="compositional">
         <id>REQ_EP_016</id>
-        <name>Exoirt Mobs for Entire Derivation Chain</name>
+        <name>Export Mobs for Entire Derivation Chain</name>
         <desc>An exporting application should include and reference the Mobs for the entire derivation chain to the extent that it is aware of it</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
@@ -308,7 +308,7 @@
     <requirement type="file" category="compositional">
         <id>REQ_EP_028</id>
         <name>Top-Level Composition Contents</name>
-        <desc>A top-level composition shall contain one ore more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.</desc>
+        <desc>A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -671,7 +671,7 @@
     <requirement type="file" category="compositional">
         <id>REQ_EP_061</id>
         <name>Locator Contents for External Essence in File Source</name>
-        <desc>Where essence is external to an AAF file, the EssenceDescriptor::Locator property should include at least one NetworkLocator that that complies with the constrains set out in Section 6.9 of the AAF Edit Protocol.</desc>
+        <desc>Where essence is external to an AAF file, the EssenceDescriptor::Locator property should include at least one NetworkLocator that complies with the constrains set out in Section 6.9 of the AAF Edit Protocol.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>

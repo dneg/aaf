@@ -23,11 +23,14 @@
 
 //Ax files
 #include <AxFile.h>
-#include <AxMob.h>
-#include <AxUtil.h>
+#include <AxTypes.h>
 
 //Boost files
 #include <boost/shared_ptr.hpp>
+
+class AxMob;
+
+namespace aafanalyzer {
 
 using namespace boost;
 
@@ -37,23 +40,26 @@ class TestFileBuilder
         TestFileBuilder( const char* outFile );
         ~TestFileBuilder();
 
-        shared_ptr<AxCompositionMob> AddTopLevel( const AxString& name, bool isNamed );
-        shared_ptr<AxCompositionMob> AddLowerLevel( const AxString& name, bool isNamed );
-        shared_ptr<AxCompositionMob> AddSubClip( const AxString& name, bool isNamed );
-        shared_ptr<AxCompositionMob> AddAdjustedClip( const AxString& name, bool isNamed );
+        shared_ptr<AxMob> AddTopLevel( const AxString& name, bool isNamed );
+        shared_ptr<AxMob> AddLowerLevel( const AxString& name, bool isNamed );
+        shared_ptr<AxMob> AddSubClip( const AxString& name, bool isNamed );
+        shared_ptr<AxMob> AddAdjustedClip( const AxString& name, bool isNamed );
 
-        shared_ptr<AxMasterMob> AddTemplateClip( const AxString& name, bool isNamed );
-        shared_ptr<AxMasterMob> AddClip( const AxString& name, bool isNamed );
+        shared_ptr<AxMob> AddTemplateClip( const AxString& name, bool isNamed );
+        shared_ptr<AxMob> AddClip( const AxString& name, bool isNamed );
 
-        shared_ptr<AxSourceMob> AddFileSource( const AxString& name, bool isNamed );
-        shared_ptr<AxSourceMob> AddRecordingSource( const AxString& name, bool isNamed );
-        shared_ptr<AxSourceMob> AddImportSource( const AxString& name, bool isNamed );
-        shared_ptr<AxSourceMob> AddTapeSource( const AxString& name, bool isNamed );
-        shared_ptr<AxSourceMob> AddFilmSource( const AxString& name, bool isNamed );
+        shared_ptr<AxMob> AddFileSource( const AxString& name, bool isNamed );
+        shared_ptr<AxMob> AddRecordingSource( const AxString& name, bool isNamed );
+        shared_ptr<AxMob> AddImportSource( const AxString& name, bool isNamed );
+        shared_ptr<AxMob> AddTapeSource( const AxString& name, bool isNamed );
+        shared_ptr<AxMob> AddFilmSource( const AxString& name, bool isNamed );
 
         void Attach( AxMob& parent, AxMob& child );
         void AttachEOC( AxMob& parent );
         void AttachOOF( AxMob& parent );
+        
+        void AddTimeCode( AxMob& parent, int physicalTrackNum, bool hasTrackNum );
+        void AddEdgeCode( AxMob& parent, int physicalTrackNum, bool hasTrackNum );
 
     private:
     
@@ -62,5 +68,7 @@ class TestFileBuilder
         const aafMobID_t GenerateMobId();
 
 };
+
+} // end of namespace diskstream
 
 #endif /*TESTFILE_H_*/

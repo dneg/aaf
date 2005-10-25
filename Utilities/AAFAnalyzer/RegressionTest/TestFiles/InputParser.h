@@ -26,13 +26,15 @@
 
 //Ax files
 #include <AxTypes.h>
-#include <AxMob.h>
 
 //Boost files
 #include <boost/shared_ptr.hpp>
 
 //STL files
 #include <stack>
+#include <map>
+
+class AxMob;
 
 namespace aafanalyzer {
 
@@ -57,7 +59,11 @@ public:
     void ParseXML( const char* filename ) const;
     
  private:
+ 
+    typedef shared_ptr<AxMob>(TestFileBuilder::*ptrToAddFunction)( const AxString& name, bool isNamed );   
+ 
     stack<shared_ptr<AxMob> > _mobStack;
+    map<AxString, ptrToAddFunction> _test;
     TestFileBuilder _testFile;
 
 };

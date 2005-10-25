@@ -32,6 +32,7 @@
 #include <AxMobSlot.h>
 #include <AxEssence.h>
 #include <AxUtil.h>
+#include <AxMob.h>
 
 //AAF files
 #include <AAFResult.h>
@@ -44,6 +45,20 @@
 #include <iostream>
 #include <sstream>
 
+namespace {
+
+using namespace aafanalyzer;
+
+} // end of namespace
+
+
+//======================================================================
+//======================================================================
+//======================================================================
+
+namespace aafanalyzer 
+{
+
 using namespace std;
 using namespace boost;
 
@@ -54,12 +69,11 @@ TestFileBuilder::TestFileBuilder( const char* outFile) : _mobCount( 0 )
     wostringstream ssOutFile;
     ssOutFile << outFile;
     AxString filename( ssOutFile.str().c_str() );
-    bool openExisting = false;
+
         
     try {
         if ( AxFile::isAAFFile( filename ) ) {
-            wcout << L"Existing file will be modified: ";
-            openExisting = true;
+            throw AxString( L"Error: File already exists" );
         }
     }
     catch( const AxExHResult& ex ) {
@@ -70,14 +84,8 @@ TestFileBuilder::TestFileBuilder( const char* outFile) : _mobCount( 0 )
         }
     }
 
-    if ( openExisting ) {
-        wcout << L"Open existing AAF File" << endl;
-        _axFile.OpenExistingModify( filename );
-    }
-    else {
-        wcout << L"Create new AAF File"<< endl;
-        _axFile.OpenNewModify( filename );
-    }
+    wcout << L"Create new AAF File"<< endl;
+    _axFile.OpenNewModify( filename );
         
 }
 
@@ -89,7 +97,7 @@ TestFileBuilder::~TestFileBuilder()
     
 }
 
-shared_ptr<AxCompositionMob> TestFileBuilder::AddTopLevel( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddTopLevel( const AxString& name, bool isNamed )
 {           
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -103,13 +111,15 @@ shared_ptr<AxCompositionMob> TestFileBuilder::AddTopLevel( const AxString& name,
     spAxCompMob->SetUsageCode(kAAFUsage_TopLevel);
     spAxCompMob->SetMobID( this->GenerateMobId() );
 
+
+
     axHeader.AddMob( *spAxCompMob );
     
     return spAxCompMob;
     
 }
 
-shared_ptr<AxCompositionMob> TestFileBuilder::AddLowerLevel( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddLowerLevel( const AxString& name, bool isNamed )
 {           
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -129,7 +139,7 @@ shared_ptr<AxCompositionMob> TestFileBuilder::AddLowerLevel( const AxString& nam
     
 }
 
-shared_ptr<AxCompositionMob> TestFileBuilder::AddSubClip( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddSubClip( const AxString& name, bool isNamed )
 {           
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -149,7 +159,7 @@ shared_ptr<AxCompositionMob> TestFileBuilder::AddSubClip( const AxString& name, 
     
 }
 
-shared_ptr<AxCompositionMob> TestFileBuilder::AddAdjustedClip( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddAdjustedClip( const AxString& name, bool isNamed )
 {           
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -169,7 +179,7 @@ shared_ptr<AxCompositionMob> TestFileBuilder::AddAdjustedClip( const AxString& n
     
 }
 
-shared_ptr<AxMasterMob> TestFileBuilder::AddTemplateClip( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddTemplateClip( const AxString& name, bool isNamed )
 { 
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -190,7 +200,7 @@ shared_ptr<AxMasterMob> TestFileBuilder::AddTemplateClip( const AxString& name, 
     
 }
 
-shared_ptr<AxMasterMob> TestFileBuilder::AddClip( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddClip( const AxString& name, bool isNamed )
 { 
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -210,7 +220,7 @@ shared_ptr<AxMasterMob> TestFileBuilder::AddClip( const AxString& name, bool isN
     
 }
 
-shared_ptr<AxSourceMob> TestFileBuilder::AddFileSource( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddFileSource( const AxString& name, bool isNamed )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -232,7 +242,7 @@ shared_ptr<AxSourceMob> TestFileBuilder::AddFileSource( const AxString& name, bo
 
 }
 
-shared_ptr<AxSourceMob> TestFileBuilder::AddRecordingSource( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddRecordingSource( const AxString& name, bool isNamed )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -255,7 +265,7 @@ shared_ptr<AxSourceMob> TestFileBuilder::AddRecordingSource( const AxString& nam
 
 }
 
-shared_ptr<AxSourceMob> TestFileBuilder::AddImportSource( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddImportSource( const AxString& name, bool isNamed )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -278,7 +288,7 @@ shared_ptr<AxSourceMob> TestFileBuilder::AddImportSource( const AxString& name, 
 
 }
 
-shared_ptr<AxSourceMob> TestFileBuilder::AddTapeSource( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddTapeSource( const AxString& name, bool isNamed )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -301,7 +311,7 @@ shared_ptr<AxSourceMob> TestFileBuilder::AddTapeSource( const AxString& name, bo
 
 }
 
-shared_ptr<AxSourceMob> TestFileBuilder::AddFilmSource( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddFilmSource( const AxString& name, bool isNamed )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -381,6 +391,60 @@ void TestFileBuilder::AttachOOF( AxMob& parent )
 
 }
 
+void TestFileBuilder::AddTimeCode( AxMob& parent, int physicalTrackNum, bool hasTrackNum )
+{
+    AxHeader axHeader( _axFile.getHeader() );
+    AxDictionary axDictionary( axHeader.GetDictionary() );
+
+    AxTimecode axTimecode( AxCreateInstance<IAAFTimecode>( axDictionary ) );
+
+    aafTimecode_t tc;
+    tc.startFrame = 1;
+    tc.drop = 1;
+    tc.fps = 1;
+    
+    axTimecode.Initialize( 1, tc );
+    
+    aafRational_t editRate = {1, 1};
+    AxTimelineMobSlot axSlot( parent.AppendNewTimelineSlot(editRate, axTimecode, parent.CountSlots() + 1, L"Timecode slot", 0) );    
+
+    if ( hasTrackNum )
+    {
+        axSlot.SetPhysicalNum( physicalTrackNum );
+    }
+}
+
+void TestFileBuilder::AddEdgeCode( AxMob& parent, int physicalTrackNum, bool hasTrackNum )
+{
+    AxHeader axHeader( _axFile.getHeader() );
+    AxDictionary axDictionary( axHeader.GetDictionary() );
+
+    AxEdgecode axEdgecode( AxCreateInstance<IAAFEdgecode>( axDictionary ) );
+
+    aafEdgecode_t ec;
+    ec.startFrame = 1;
+    ec.filmKind = 1;
+    ec.codeFormat = 1;
+    ec.header[0] = 1;
+    ec.header[1] = 1;
+    ec.header[2] = 1;
+    ec.header[3] = 1;
+    ec.header[4] = 1;
+    ec.header[5] = 1;
+    ec.header[6] = 1;
+    ec.header[7] = 1;
+    
+    axEdgecode.Initialize( 1, ec );
+    
+    aafRational_t editRate = {1, 1};
+    AxTimelineMobSlot axSlot( parent.AppendNewTimelineSlot(editRate, axEdgecode, parent.CountSlots() + 1, L"Edgecode slot", 0) );    
+
+    if ( hasTrackNum )
+    {
+        axSlot.SetPhysicalNum( physicalTrackNum );
+    }
+}
+
 //Return a mob ID that is unique within this file.
 const aafMobID_t TestFileBuilder::GenerateMobId()
 {
@@ -417,3 +481,5 @@ const aafMobID_t TestFileBuilder::GenerateMobId()
     return id;
 
 }
+
+} // end of namespace diskstream
