@@ -1749,26 +1749,72 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 		checkResult(pTD->QueryInterface(IID_IAAFTypeDefInt,
 					    (void**)&pTDI));
 							
-		aafInt64 val;
-		checkResult(pTDI->GetInteger(pPVal, (aafMemPtr_t) &val, sizeof (val)));
-		
-		aafInt32 hi = (aafUInt32) ((val & AAFCONSTINT64(0xffffffff00000000)) >> 32);
-		aafInt32 lo = (aafInt32) val & 0xffffffff;
-		if (hi && ((hi != ~0) || (lo >= 0)))
+		aafUInt32 size;
+		checkResult(pTDI->GetSize(&size));
+
+		aafBoolean_t isSigned;
+		checkResult(pTDI->IsSigned(&isSigned));
+
+		switch(size) {
+		case 1:
 		  {
-		    int width = os.width();
-		    char fill = os.fill();
-		    os << hex << "0x";
-		    os.width(8);
-		    os.fill('0');
-		    os << hi << lo;
-		    os.width(width);
-		    os.fill(fill);
+			if (isSigned) {
+			  aafInt8 i;
+			  checkResult(pTDI->GetInteger(pPVal, (aafMemPtr_t) &i, size));
+			  os << dec << (signed int)i;
+			} else {
+			  aafUInt8 i;
+			  checkResult(pTDI->GetInteger(pPVal, (aafMemPtr_t) &i, size));
+			  os << dec << (unsigned int)i;
+			}
 		  }
-		else
+		  break;
+		case 2:
 		  {
-		    os << "0x" << hex << lo;
+			if (isSigned) {
+			  aafInt16 i;
+			  checkResult(pTDI->GetInteger(pPVal, (aafMemPtr_t) &i, size));
+			  os << dec << i;
+			} else {
+			  aafUInt16 i;
+			  checkResult(pTDI->GetInteger(pPVal, (aafMemPtr_t) &i, size));
+			  os << dec << i;
+			}
 		  }
+		  break;
+		case 4:
+		  {
+			if (isSigned) {
+			  aafInt32 i;
+			  checkResult(pTDI->GetInteger(pPVal, (aafMemPtr_t) &i, size));
+			  os << dec << i;
+			} else {
+			  aafUInt32 i;
+			  checkResult(pTDI->GetInteger(pPVal, (aafMemPtr_t) &i, size));
+			  os << dec << i;
+			}
+		  }
+		  break;
+		case 8:
+		  {
+			if (isSigned) {
+			  aafInt64 i;
+			  checkResult(pTDI->GetInteger(pPVal, (aafMemPtr_t) &i, size));
+			  os << dec << ostream_int64(i);
+			} else {
+			  aafUInt64 i;
+			  checkResult(pTDI->GetInteger(pPVal, (aafMemPtr_t) &i, size));
+			  os << dec << ostream_int64(i);
+			}
+		  }
+		  break;
+		default:
+		  os << "***Unexpected integer size " << dec << (int) size
+			 << ".***" << endl;
+		  return E_FAIL;
+		  break;
+		}
+
 	      }				
 	    break;
 	  }
