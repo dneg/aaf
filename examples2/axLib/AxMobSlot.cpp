@@ -158,3 +158,13 @@ aafRational_t AxEventMobSlot::GetEditRate()
 
 	return rate;
 }
+
+//=---------------------------------------------------------------------=
+
+AxStaticMobSlot::AxStaticMobSlot( IAAFStaticMobSlotSP spIaafStaticMobSlot )
+:   AxMobSlot( AxQueryInterface<IAAFStaticMobSlot, IAAFMobSlot>(spIaafStaticMobSlot) ),
+    _spIaafStaticMobSlot( spIaafStaticMobSlot )
+{}
+
+AxStaticMobSlot::~AxStaticMobSlot()
+{}

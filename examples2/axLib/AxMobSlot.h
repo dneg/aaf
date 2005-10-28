@@ -111,4 +111,22 @@ private:
 
 //=---------------------------------------------------------------------=
 
+class AxStaticMobSlot : public AxMobSlot {
+public:
+    AxStaticMobSlot( IAAFStaticMobSlotSP spIaafStaticMobSlot );
+    ~AxStaticMobSlot();
+
+    operator IAAFStaticMobSlotSP ()
+    { return _spIaafStaticMobSlot; }
+
+private:
+    AxStaticMobSlot();
+    AxStaticMobSlot( const AxStaticMobSlot& );
+    AxStaticMobSlot& operator=( const AxStaticMobSlot& );
+
+    IAAFStaticMobSlotSP _spIaafStaticMobSlot;
+};
+
+//=---------------------------------------------------------------------=
+
 #endif
