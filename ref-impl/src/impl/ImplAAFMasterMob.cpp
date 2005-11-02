@@ -124,6 +124,7 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFStaticMobSlot* pStaticMobSlot = NULL;
 	aafUID_t	segDataDef;
 	ImplAAFSegment*	pSegment = NULL;
+	ImplAAFSequence*	pSequence = NULL;
 	ImplAAFSourceClip*	pSrcClip = NULL;
 	aafSourceRef_t		ref;
 	aafPosition_t		zeroPos;
@@ -180,18 +181,28 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(GetDictionary(&pDictionary));
 			CHECK(pDictionary->GetBuiltinDefs()->cdSourceClip()->
 				CreateInstance((ImplAAFObject**) &pSrcClip));
+			CHECK(pSrcClip->Initialize(pDataDef, slotLength, ref));
+
+		// For MXF it is mandatory that we use a sequence here.
+		// For AAF it is optional.
+			CHECK(pDictionary->GetBuiltinDefs()->cdSequence()->
+			    CreateInstance((ImplAAFObject **) &pSequence));
+			CHECK(pSequence->AppendComponent(pSrcClip));
+
+			CHECK(AppendNewStaticSlot(pSequence, masterSlotID, pSlotName, 
+										&pNewStaticSlot));
 
 			pDictionary->ReleaseReference();
 			pDictionary = NULL;
-
-			CHECK(pSrcClip->Initialize(pDataDef, slotLength, ref));
-			CHECK(AppendNewStaticSlot(pSrcClip, masterSlotID, pSlotName, 
-										&pNewStaticSlot));
 
 			pNewStaticSlot->ReleaseReference();
 			pNewStaticSlot = NULL;
 
 			pSrcClip->ReleaseReference();
+			pSrcClip = NULL;
+
+			pSequence->ReleaseReference();
+			pSequence = NULL;
 			
 		}
 		else
@@ -227,18 +238,28 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(pDictionary->GetBuiltinDefs()->cdSourceClip()->
 				CreateInstance((ImplAAFObject**) &pSrcClip));
 
+			CHECK(pSrcClip->Initialize(pDataDef, slotLength, ref));
+
+		// For MXF it is mandatory that we use a sequence here.
+		// For AAF it is optional.
+			CHECK(pDictionary->GetBuiltinDefs()->cdSequence()->
+			    CreateInstance((ImplAAFObject **) &pSequence));
+			CHECK(pSequence->AppendComponent(pSrcClip));
+
+			CHECK(AppendNewTimelineSlot(editRate,pSequence, masterSlotID, pSlotName, 
+										zeroPos,&pNewTimelineSlot));
+
 			pDictionary->ReleaseReference();
 			pDictionary = NULL;
-
-			CHECK(pSrcClip->Initialize(pDataDef, slotLength, ref));
-			CHECK(AppendNewTimelineSlot(editRate,pSrcClip, masterSlotID, pSlotName, 
-										zeroPos,&pNewTimelineSlot));
 
 			pNewTimelineSlot->ReleaseReference();
 			pNewTimelineSlot = NULL;
 
 			pSrcClip->ReleaseReference();
 			pSrcClip = NULL;
+
+			pSequence->ReleaseReference();
+			pSequence = NULL;
 		}
 	}
 	XEXCEPT
@@ -253,6 +274,8 @@ AAFRESULT STDMETHODCALLTYPE
 			pMobSlot->ReleaseReference();
 		if(pSrcClip != NULL)
 			pSrcClip->ReleaseReference();
+		if(pSequence != NULL)
+			pSequence->ReleaseReference();
 		if(pDictionary != NULL)
 			pDictionary->ReleaseReference();
 	}
