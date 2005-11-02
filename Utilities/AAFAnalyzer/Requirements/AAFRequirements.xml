@@ -671,7 +671,7 @@
     <requirement type="file" category="compositional">
         <id>REQ_EP_061</id>
         <name>Locator Contents for External Essence in File Source</name>
-        <desc>Where essence is external to an AAF file, the EssenceDescriptor::Locator property should include at least one NetworkLocator that complies with the constrains set out in Section 6.9 of the AAF Edit Protocol.</desc>
+        <desc>The EssenceDescriptor::Locator property should include at least one NetworkLocator that complies with the constrains set out in Section 6.9 of the AAF Edit Protocol.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -825,7 +825,7 @@
     <requirement type="file" category="compositional">
         <id>REQ_EP_075</id>
         <name>Import Source Locator</name>
-        <desc>The EssenceDescriptor::Locator property shall include at least one NetworkLocator that complies with the constrains set out in Section 6.9 of the AAF Edit Protocol.</desc>
+        <desc>The EssenceDescriptor::Locator property shall include at least one NetworkLocator that complies with the constraints set out in Section 6.9 of the AAF Edit Protocol.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -1067,7 +1067,7 @@
     <requirement type="file" category="compositional">
         <id>REQ_EP_097</id>
         <name>Context For Pulldown Use</name>
-        <desc>A Pulldown mau be used in the following contexts: 1. In a TimelineMobSlot of a file SourceMob, where the Pulldown object contains a SourceClip referencing a tape SourceMob; 2. In a TimelineMobSlot of a tape SourceMob, where the Pulldown object contains a SourceClip referencing a film SourceMob; 3. In a TimelineMobSlot of a tape SourceMob, where the Pulldown object contains a SourceClip referenceing a tape SourceMob.</desc>
+        <desc>A Pulldown may be used in the following contexts: 1. In a TimelineMobSlot of a file SourceMob, where the Pulldown object contains a SourceClip referencing a tape SourceMob; 2. In a TimelineMobSlot of a tape SourceMob, where the Pulldown object contains a SourceClip referencing a film SourceMob; 3. In a TimelineMobSlot of a tape SourceMob, where the Pulldown object contains a SourceClip referenceing a tape SourceMob.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
