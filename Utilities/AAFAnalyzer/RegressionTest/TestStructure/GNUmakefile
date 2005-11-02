@@ -24,7 +24,7 @@
 
 PROGNAME = RegressionTest
 
-PROGLIBS = -lBaseTest -lTestPhase -lRequirement -lAAFAnalyzerBase -lAnalyzerBase -lexpat
+PROGLIBS = -lBaseTest -lTestPhase -lRequirement -lAAFAnalyzerBase -lAnalyzerBase
 
 AAFBASE ?= ../../../..
 INCLUDES ?= -I$(AAFSDKINCLUDEDIR) \
