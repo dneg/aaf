@@ -1,0 +1,80 @@
+        Name:   Edit Protocol Track Contents Test
+        Desc:   Verify the correctness of data within the tracks of Edit Protocol mobs.
+        Result: Failed
+        Reason: Test Failed - See "Edit Protocol Track Contents Visitor" Visitor for details
+        Passing Requirements: None
+        Warning Requirements: None
+        Failing Requirements: REQ_EP_037; REQ_EP_046
+
+            Name:   Edit Protocol Track Contents Visitor
+            Desc:   Visit derivation chain material and make sure that their tracks contain the necessary data.
+            Result: Failed
+            Reason: 
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_037; REQ_EP_046
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Sub-Clip Composition: "Sub-Clip - Audio Timeline Operation Group" does not have exactly one SourceClip.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_037
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Sub-Clip Composition: "Sub-Clip - Audio Static Operation Group" does not have exactly one SourceClip.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_037
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Sub-Clip Composition: "Sub-Clip - Video Timeline Operation Group" does not have exactly one SourceClip.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_037
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Sub-Clip Composition: "Sub-Clip - Video Static Operation Group" does not have exactly one SourceClip.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_037
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Adjusted-Clip Composition: "Adjusted Clip - Audio Timeline Source Clip" does not have exactly one OperationGroup.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_046
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Adjusted-Clip Composition: "Adjusted Clip - Audio Static Source Clip" does not have exactly one OperationGroup.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_046
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Adjusted-Clip Composition: "Adjusted Clip - Video Timeline Source Clip" does not have exactly one OperationGroup.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_046
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Adjusted-Clip Composition: "Adjusted Clip - Video Static Source Clip" does not have exactly one OperationGroup.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_046
+

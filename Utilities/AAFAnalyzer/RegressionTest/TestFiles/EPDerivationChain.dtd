@@ -1,38 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!ELEMENT aaf-file ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source )+>
 
-<!ELEMENT top-level ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc | timecode )+>
+<!ELEMENT top-level ( source-clip | operation-group | eoc | oof | bad-eoc | timecode )+>
 <!ATTLIST top-level name CDATA #IMPLIED>
 
-<!ELEMENT lower-level ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
+<!ELEMENT lower-level ( source-clip | operation-group | eoc | oof | bad-eoc )+>
 <!ATTLIST lower-level name CDATA #IMPLIED>
 
-<!ELEMENT sub-clip ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
+<!ELEMENT sub-clip ( source-clip | operation-group | eoc | oof | bad-eoc | timecode )+>
 <!ATTLIST sub-clip name CDATA #IMPLIED>
 
-<!ELEMENT adjusted-clip ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
+<!ELEMENT adjusted-clip ( source-clip | operation-group | eoc | oof | bad-eoc | timecode )+>
 <!ATTLIST adjusted-clip name CDATA #IMPLIED>
 
-<!ELEMENT template-clip ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
+<!ELEMENT template-clip ( source-clip | operation-group | eoc | oof | bad-eoc )+>
 <!ATTLIST template-clip name CDATA #IMPLIED>
 
-<!ELEMENT clip ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
+<!ELEMENT clip ( source-clip | operation-group | eoc | oof | bad-eoc )+>
 <!ATTLIST clip name CDATA #IMPLIED>
 
-<!ELEMENT file-source ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
+<!ELEMENT file-source ( source-clip | operation-group | eoc | oof | bad-eoc )+>
 <!ATTLIST file-source name CDATA #IMPLIED>
 
-<!ELEMENT recording-source ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
+<!ELEMENT recording-source ( source-clip | operation-group | eoc | oof | bad-eoc )+>
 <!ATTLIST recording-source name CDATA #IMPLIED>
 
-<!ELEMENT import-source ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc )+>
+<!ELEMENT import-source ( source-clip | operation-group | eoc | oof | bad-eoc )+>
 <!ATTLIST import-source name CDATA #IMPLIED>
 
-<!ELEMENT tape-source ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc | timecode )+>
+<!ELEMENT tape-source ( source-clip | operation-group | eoc | oof | bad-eoc | timecode )+>
 <!ATTLIST tape-source name CDATA #IMPLIED>
 
-<!ELEMENT film-source ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | eoc | oof | bad-eoc | edgecode )+>
+<!ELEMENT film-source ( source-clip | operation-group | eoc | oof | bad-eoc | edgecode )+>
 <!ATTLIST film-source name CDATA #IMPLIED>
+
+<!ELEMENT source-clip (top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source)>
+<!ATTLIST source-clip 
+    track-type ( none | audio | picture ) #REQUIRED
+    slot-type ( timeline | static | event ) #REQUIRED
+    edit-rate-numerator CDATA #REQUIRED
+    edit-rate-denominator CDATA #REQUIRED
+>
+
+<!ELEMENT operation-group (top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source)>
+<!ATTLIST operation-group 
+    track-type ( audio | picture ) #REQUIRED
+    slot-type ( timeline | static | event ) #REQUIRED
+    edit-rate-numerator CDATA #REQUIRED
+    edit-rate-denominator CDATA #REQUIRED
+>
 
 <!ELEMENT eoc EMPTY>
 <!ELEMENT oof EMPTY>

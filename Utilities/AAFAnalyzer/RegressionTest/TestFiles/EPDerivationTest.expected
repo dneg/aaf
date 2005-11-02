@@ -17,9 +17,9 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: FAIL - Transition to Sub-Clip Composition (Initial->Sub-Clip)
+                Detail: FAIL - Transition to Sub-Clip Composition: "Initial->Sub-Clip"
                 Result: Failed
-                Reason: Sub-Clip Composition "Initial->Sub-Clip" is out of place in the derrivation chain.
+                Reason: Sub-Clip Composition: "Initial->Sub-Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: None
@@ -35,9 +35,9 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: FAIL - Transition to Adjusted Clip Composition (Initial->Adjusted Clip)
+                Detail: FAIL - Transition to Adjusted Clip Composition: "Initial->Adjusted Clip"
                 Result: Failed
-                Reason: Adjusted Clip Composition "Initial->Adjusted Clip" is out of place in the derrivation chain.
+                Reason: Adjusted Clip Composition: "Initial->Adjusted Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: None
@@ -53,13 +53,13 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Recording Source: Top Level J)
-                Detail: OK   -   Transition to Clip (Invalid out of Recording Source: Clip J)
-                Detail: OK   -     Transition to File Source (Invalid out of Recording Source: File Source J)
-                Detail: OK   -       Transition to Recording Source (Invalid out of Recording Source: Recording Source J)
-                Detail: FAIL -         Transition to Tape Source (Recording Source->Tape Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Recording Source: Top Level J"
+                Detail: OK   -   Transition to Invalid out of Recording Source: Clip J
+                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source J"
+                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source J"
+                Detail: FAIL -         Transition to Tape Source: "Recording Source->Tape Source"
                 Result: Failed
-                Reason: Tape Source "Recording Source->Tape Source" is out of place in the derrivation chain.
+                Reason: Tape Source: "Recording Source->Tape Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_072
@@ -75,13 +75,13 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Recording Source: Top Level K)
-                Detail: OK   -   Transition to Clip (Invalid out of Recording Source: Clip K)
-                Detail: OK   -     Transition to File Source (Invalid out of Recording Source: File Source K)
-                Detail: OK   -       Transition to Recording Source (Invalid out of Recording Source: Recording Source K)
-                Detail: FAIL -         Transition to Film Source (Recording Source->Film Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Recording Source: Top Level K"
+                Detail: OK   -   Transition to Invalid out of Recording Source: Clip K
+                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source K"
+                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source K"
+                Detail: FAIL -         Transition to Film Source: "Recording Source->Film Source"
                 Result: Failed
-                Reason: Film Source "Recording Source->Film Source" is out of place in the derrivation chain.
+                Reason: Film Source: "Recording Source->Film Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_072
@@ -97,10 +97,10 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Top-Level: Top-Level A)
-                Detail: FAIL -   Transition to Top Level Composition (Top-Level->Top-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Top-Level: Top-Level A"
+                Detail: FAIL -   Transition to Top Level Composition: "Top-Level->Top-Level"
                 Result: Failed
-                Reason: Top Level Composition "Top-Level->Top-Level" is out of place in the derrivation chain.
+                Reason: Top Level Composition: "Top-Level->Top-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_025; REQ_EP_026
@@ -116,12 +116,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Import Source: Top Level B)
-                Detail: OK   -   Transition to Clip (Invalid out of Import Source: Clip B)
-                Detail: OK   -     Transition to Import Source (Invalid out of Import Source: Import Source B)
-                Detail: FAIL -       Transition to Lower Level Composition (Import Source->Lower-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Import Source: Top Level B"
+                Detail: OK   -   Transition to Invalid out of Import Source: Clip B
+                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source B"
+                Detail: FAIL -       Transition to Lower Level Composition: "Import Source->Lower-Level"
                 Result: Failed
-                Reason: Lower Level Composition "Import Source->Lower-Level" is out of place in the derrivation chain.
+                Reason: Lower Level Composition: "Import Source->Lower-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_030; REQ_EP_076
@@ -137,11 +137,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Lower-Level: Top-Level A)
-                Detail: OK   -   Transition to Lower Level Composition (Invalid out of Lower-Level: Lower-Level A)
-                Detail: FAIL -     Transition to Top Level Composition (Lower-Level->Top-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Lower-Level: Top-Level A"
+                Detail: OK   -   Transition to Lower Level Composition: "Invalid out of Lower-Level: Lower-Level A"
+                Detail: FAIL -     Transition to Top Level Composition: "Lower-Level->Top-Level"
                 Result: Failed
-                Reason: Top Level Composition "Lower-Level->Top-Level" is out of place in the derrivation chain.
+                Reason: Top Level Composition: "Lower-Level->Top-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_025; REQ_EP_031
@@ -157,11 +157,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Clip: Top Level A)
-                Detail: OK   -   Transition to Clip (Invalid out of Clip: Clip A)
-                Detail: FAIL -     Transition to Top Level Composition (Clip->Top-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Clip: Top Level A"
+                Detail: OK   -   Transition to Invalid out of Clip: Clip A
+                Detail: FAIL -     Transition to Top Level Composition: "Clip->Top-Level"
                 Result: Failed
-                Reason: Top Level Composition "Clip->Top-Level" is out of place in the derrivation chain.
+                Reason: Top Level Composition: "Clip->Top-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_025; REQ_EP_055
@@ -177,11 +177,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Clip: Top Level B)
-                Detail: OK   -   Transition to Clip (Invalid out of Clip: Clip B)
-                Detail: FAIL -     Transition to Lower Level Composition (Clip->Lower-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Clip: Top Level B"
+                Detail: OK   -   Transition to Invalid out of Clip: Clip B
+                Detail: FAIL -     Transition to Lower Level Composition: "Clip->Lower-Level"
                 Result: Failed
-                Reason: Lower Level Composition "Clip->Lower-Level" is out of place in the derrivation chain.
+                Reason: Lower Level Composition: "Clip->Lower-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_030; REQ_EP_055
@@ -197,8 +197,8 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Missing EOC Template Clip: Top-Level)
-                Detail: OK   -   Transition to Template Clip (Missing EOC Template Clip)
+                Detail: OK   - Transition to Top Level Composition: "Missing EOC Template Clip: Top-Level"
+                Detail: OK   -   Transition to Template Clip: "Missing EOC Template Clip"
                 Result: Failed
                 Reason: End of derivation chain encountered without a zero-valued source clip or out of file reference at Master Mob: "Missing EOC Template Clip"
                 Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -216,11 +216,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Clip: Top Level C)
-                Detail: OK   -   Transition to Clip (Invalid out of Clip: Clip C)
-                Detail: FAIL -     Transition to Sub-Clip Composition (Clip->Sub-Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Clip: Top Level C"
+                Detail: OK   -   Transition to Invalid out of Clip: Clip C
+                Detail: FAIL -     Transition to Sub-Clip Composition: "Clip->Sub-Clip"
                 Result: Failed
-                Reason: Sub-Clip Composition "Clip->Sub-Clip" is out of place in the derrivation chain.
+                Reason: Sub-Clip Composition: "Clip->Sub-Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_055
@@ -236,11 +236,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Clip: Top Level D)
-                Detail: OK   -   Transition to Clip (Invalid out of Clip: Clip D)
-                Detail: FAIL -     Transition to Adjusted Clip Composition (Clip->Adjusted Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Clip: Top Level D"
+                Detail: OK   -   Transition to Invalid out of Clip: Clip D
+                Detail: FAIL -     Transition to Adjusted Clip Composition: "Clip->Adjusted Clip"
                 Result: Failed
-                Reason: Adjusted Clip Composition "Clip->Adjusted Clip" is out of place in the derrivation chain.
+                Reason: Adjusted Clip Composition: "Clip->Adjusted Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_055
@@ -255,52 +255,52 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (L01 Top Level)
-                Detail: OK   -   Transition to Adjusted Clip Composition (L02 Adjusted Clip)
-                Detail: OK   -     Transition to Template Clip (L03 Template Clip A)
-                Detail: OK   -       Transition to End of Derivation Chain (Source Clip)
-                Detail: OK   -   Transition to Sub-Clip Composition (L02 Sub-Clip)
-                Detail: OK   -     Transition to Adjusted Clip Composition (L03 Adjusted Clip)
-                Detail: OK   -       Transition to Clip (L05 Clip A)
-                Detail: OK   -         Transition to Film Source (L06 Film Source)
-                Detail: OK   -           Transition to End of Derivation Chain (Source Clip)
-                Detail: OK   -   Transition to Clip (L05 Clip B)
-                Detail: OK   -     Transition to Tape Source (L06 Tape Source)
-                Detail: OK   -       Transition to Film Source (L07 Film Source A)
-                Detail: OK   -         Transition to End of Derivation Chain (Source Clip)
-                Detail: OK   -     Transition to End of Derivation Chain (Source Clip)
-                Detail: OK   -   Transition to Template Clip (L02 Template Clip)
-                Detail: OK   -     Transition to End of Derivation Chain (Source Clip)
-                Detail: OK   -   Transition to Lower Level Composition (L02 Lower Level)
-                Detail: OK   -     Transition to Lower Level Composition (L03 Lower Level)
-                Detail: OK   -       Transition to Clip (L05 Clip C)
-                Detail: OK   -         Transition to Out of File Reference (Source Clip)
-                Detail: OK   -         Transition to File Source (L06 File Source)
-                Detail: OK   -           Transition to Import Source (L07 Import Source)
-                Detail: OK   -             Transition to Film Source (L08 Film Source A)
-                Detail: OK   -               Transition to End of Derivation Chain (Source Clip)
-                Detail: OK   -             Transition to Tape Source (L08 Tape Source A)
-                Detail: OK   -               Transition to End of Derivation Chain (Source Clip)
-                Detail: OK   -           Transition to Recording Source (L07 Recording Source)
-                Detail: OK   -             Transition to End of Derivation Chain (Source Clip)
-                Detail: OK   -           Transition to File Source (L07 File Source)
-                Detail: OK   -             Transition to Tape Source (L08 Tape Source B)
-                Detail: OK   -               Transition to Out of File Reference (Source Clip)
-                Detail: OK   -             Transition to Film Source (L08 Film Source B)
-                Detail: OK   -               Transition to End of Derivation Chain (Source Clip)
-                Detail: OK   -             Transition to Out of File Reference (Source Clip)
-                Detail: OK   -       Transition to Sub-Clip Composition (L04 Sub-Clip)
-                Detail: OK   -         Transition to Template Clip (L05 Template Clip A)
-                Detail: OK   -           Transition to End of Derivation Chain (Source Clip)
-                Detail: OK   -         Transition to Clip (L05 Clip D)
-                Detail: OK   -           Transition to Import Source (L06 Import Source)
-                Detail: OK   -             Transition to End of Derivation Chain (Source Clip)
-                Detail: OK   -             Transition to Out of File Reference (Source Clip)
-                Detail: OK   -       Transition to Adjusted Clip Composition (L04 Adjusted Clip)
-                Detail: OK   -         Transition to Template Clip (L05 Template Clip B)
-                Detail: OK   -           Transition to End of Derivation Chain (Source Clip)
-                Detail: OK   -     Transition to Template Clip (L03 Template Clip B)
-                Detail: OK   -       Transition to End of Derivation Chain (Source Clip)
+                Detail: OK   - Transition to Top Level Composition: "L01 Top Level"
+                Detail: OK   -   Transition to Adjusted Clip Composition: "L02 Adjusted Clip"
+                Detail: OK   -     Transition to Template Clip: "L03 Template Clip A"
+                Detail: OK   -       Transition to Source Clip
+                Detail: OK   -   Transition to Sub-Clip Composition: "L02 Sub-Clip"
+                Detail: OK   -     Transition to Adjusted Clip Composition: "L03 Adjusted Clip"
+                Detail: OK   -       Transition to L05 Clip A
+                Detail: OK   -         Transition to Film Source: "L06 Film Source"
+                Detail: OK   -           Transition to Source Clip
+                Detail: OK   -   Transition to L05 Clip B
+                Detail: OK   -     Transition to Tape Source: "L06 Tape Source"
+                Detail: OK   -       Transition to Film Source: "L07 Film Source A"
+                Detail: OK   -         Transition to Source Clip
+                Detail: OK   -     Transition to Source Clip
+                Detail: OK   -   Transition to Template Clip: "L02 Template Clip"
+                Detail: OK   -     Transition to Source Clip
+                Detail: OK   -   Transition to Lower Level Composition: "L02 Lower Level"
+                Detail: OK   -     Transition to Lower Level Composition: "L03 Lower Level"
+                Detail: OK   -       Transition to L05 Clip C
+                Detail: OK   -         Transition to Source Clip
+                Detail: OK   -         Transition to File Source: "L06 File Source"
+                Detail: OK   -           Transition to Import Source: "L07 Import Source"
+                Detail: OK   -             Transition to Film Source: "L08 Film Source A"
+                Detail: OK   -               Transition to Source Clip
+                Detail: OK   -             Transition to Tape Source: "L08 Tape Source A"
+                Detail: OK   -               Transition to Source Clip
+                Detail: OK   -           Transition to Recording Source: "L07 Recording Source"
+                Detail: OK   -             Transition to Source Clip
+                Detail: OK   -           Transition to File Source: "L07 File Source"
+                Detail: OK   -             Transition to Tape Source: "L08 Tape Source B"
+                Detail: OK   -               Transition to Source Clip
+                Detail: OK   -             Transition to Film Source: "L08 Film Source B"
+                Detail: OK   -               Transition to Source Clip
+                Detail: OK   -             Transition to Source Clip
+                Detail: OK   -       Transition to Sub-Clip Composition: "L04 Sub-Clip"
+                Detail: OK   -         Transition to Template Clip: "L05 Template Clip A"
+                Detail: OK   -           Transition to Source Clip
+                Detail: OK   -         Transition to L05 Clip D
+                Detail: OK   -           Transition to Import Source: "L06 Import Source"
+                Detail: OK   -             Transition to Source Clip
+                Detail: OK   -             Transition to Source Clip
+                Detail: OK   -       Transition to Adjusted Clip Composition: "L04 Adjusted Clip"
+                Detail: OK   -         Transition to Template Clip: "L05 Template Clip B"
+                Detail: OK   -           Transition to Source Clip
+                Detail: OK   -     Transition to Template Clip: "L03 Template Clip B"
+                Detail: OK   -       Transition to Source Clip
                 Result: Passed
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
@@ -317,13 +317,13 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Recording Source: Top Level D)
-                Detail: OK   -   Transition to Clip (Invalid out of Recording Source: Clip D)
-                Detail: OK   -     Transition to File Source (Invalid out of Recording Source: File Source D)
-                Detail: OK   -       Transition to Recording Source (Invalid out of Recording Source: Recording Source D)
-                Detail: FAIL -         Transition to Adjusted Clip Composition (Recording Source->Adjusted Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Recording Source: Top Level D"
+                Detail: OK   -   Transition to Invalid out of Recording Source: Clip D
+                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source D"
+                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source D"
+                Detail: FAIL -         Transition to Adjusted Clip Composition: "Recording Source->Adjusted Clip"
                 Result: Failed
-                Reason: Adjusted Clip Composition "Recording Source->Adjusted Clip" is out of place in the derrivation chain.
+                Reason: Adjusted Clip Composition: "Recording Source->Adjusted Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_072
@@ -339,13 +339,13 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Recording Source: Top Level E)
-                Detail: OK   -   Transition to Clip (Invalid out of Recording Source: Clip E)
-                Detail: OK   -     Transition to File Source (Invalid out of Recording Source: File Source E)
-                Detail: OK   -       Transition to Recording Source (Invalid out of Recording Source: Recording Source E)
-                Detail: FAIL -         Transition to Template Clip (Recording Source->Template Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Recording Source: Top Level E"
+                Detail: OK   -   Transition to Invalid out of Recording Source: Clip E
+                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source E"
+                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source E"
+                Detail: FAIL -         Transition to Template Clip: "Recording Source->Template Clip"
                 Result: Failed
-                Reason: Template Clip "Recording Source->Template Clip" is out of place in the derrivation chain.
+                Reason: Template Clip: "Recording Source->Template Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_072
@@ -361,13 +361,13 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Recording Source: Top Level C)
-                Detail: OK   -   Transition to Clip (Invalid out of Recording Source: Clip C)
-                Detail: OK   -     Transition to File Source (Invalid out of Recording Source: File Source C)
-                Detail: OK   -       Transition to Recording Source (Invalid out of Recording Source: Recording Source C)
-                Detail: FAIL -         Transition to Sub-Clip Composition (Recording Source->Sub-Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Recording Source: Top Level C"
+                Detail: OK   -   Transition to Invalid out of Recording Source: Clip C
+                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source C"
+                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source C"
+                Detail: FAIL -         Transition to Sub-Clip Composition: "Recording Source->Sub-Clip"
                 Result: Failed
-                Reason: Sub-Clip Composition "Recording Source->Sub-Clip" is out of place in the derrivation chain.
+                Reason: Sub-Clip Composition: "Recording Source->Sub-Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_072
@@ -383,11 +383,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Recording Source: Top Level F)
-                Detail: OK   -   Transition to Clip (Invalid out of Recording Source: Clip F)
-                Detail: OK   -     Transition to File Source (Invalid out of Recording Source: File Source F)
-                Detail: OK   -       Transition to Recording Source (Invalid out of Recording Source: Recording Source F)
-                Detail: FAIL -         Transition to Clip (Recording Source->Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Recording Source: Top Level F"
+                Detail: OK   -   Transition to Invalid out of Recording Source: Clip F
+                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source F"
+                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source F"
+                Detail: FAIL -         Transition to Recording Source->Clip
                 Result: Failed
                 Reason: Clip "Recording Source->Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
@@ -405,13 +405,13 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Recording Source: Top Level G)
-                Detail: OK   -   Transition to Clip (Invalid out of Recording Source: Clip G)
-                Detail: OK   -     Transition to File Source (Invalid out of Recording Source: File Source G)
-                Detail: OK   -       Transition to Recording Source (Invalid out of Recording Source: Recording Source G)
-                Detail: FAIL -         Transition to File Source (Recording Source->File Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Recording Source: Top Level G"
+                Detail: OK   -   Transition to Invalid out of Recording Source: Clip G
+                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source G"
+                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source G"
+                Detail: FAIL -         Transition to File Source: "Recording Source->File Source"
                 Result: Failed
-                Reason: File Source "Recording Source->File Source" is out of place in the derrivation chain.
+                Reason: File Source: "Recording Source->File Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_072
@@ -427,13 +427,13 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Recording Source: Top Level H)
-                Detail: OK   -   Transition to Clip (Invalid out of Recording Source: Clip H)
-                Detail: OK   -     Transition to File Source (Invalid out of Recording Source: File Source H)
-                Detail: OK   -       Transition to Recording Source (Invalid out of Recording Source: Recording Source H)
-                Detail: FAIL -         Transition to Recording Source (Recording Source->Recording Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Recording Source: Top Level H"
+                Detail: OK   -   Transition to Invalid out of Recording Source: Clip H
+                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source H"
+                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source H"
+                Detail: FAIL -         Transition to Recording Source: "Recording Source->Recording Source"
                 Result: Failed
-                Reason: Recording Source "Recording Source->Recording Source" is out of place in the derrivation chain.
+                Reason: Recording Source: "Recording Source->Recording Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_072
@@ -449,13 +449,13 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Recording Source: Top Level I)
-                Detail: OK   -   Transition to Clip (Invalid out of Recording Source: Clip I)
-                Detail: OK   -     Transition to File Source (Invalid out of Recording Source: File Source I)
-                Detail: OK   -       Transition to Recording Source (Invalid out of Recording Source: Recording Source I)
-                Detail: FAIL -         Transition to Import Source (Recording Source->Import Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Recording Source: Top Level I"
+                Detail: OK   -   Transition to Invalid out of Recording Source: Clip I
+                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source I"
+                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source I"
+                Detail: FAIL -         Transition to Import Source: "Recording Source->Import Source"
                 Result: Failed
-                Reason: Import Source "Recording Source->Import Source" is out of place in the derrivation chain.
+                Reason: Import Source: "Recording Source->Import Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_072
@@ -471,9 +471,9 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: FAIL - Transition to Lower Level Composition (Initial->Lower-Level)
+                Detail: FAIL - Transition to Lower Level Composition: "Initial->Lower-Level"
                 Result: Failed
-                Reason: Lower Level Composition "Initial->Lower-Level" is out of place in the derrivation chain.
+                Reason: Lower Level Composition: "Initial->Lower-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_030
@@ -489,10 +489,10 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Top-Level: Top-Level B)
-                Detail: FAIL -   Transition to File Source (Top-Level->File Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Top-Level: Top-Level B"
+                Detail: FAIL -   Transition to File Source: "Top-Level->File Source"
                 Result: Failed
-                Reason: File Source "Top-Level->File Source" is out of place in the derrivation chain.
+                Reason: File Source: "Top-Level->File Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_026
@@ -508,11 +508,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Recording Source: Top Level L)
-                Detail: OK   -   Transition to Clip (Invalid out of Recording Source: Clip L)
-                Detail: OK   -     Transition to File Source (Invalid out of Recording Source: File Source L)
-                Detail: OK   -       Transition to Recording Source (Invalid out of Recording Source: Out of File)
-                Detail: FAIL -         Transition to Out of File Reference (Source Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Recording Source: Top Level L"
+                Detail: OK   -   Transition to Invalid out of Recording Source: Clip L
+                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source L"
+                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Out of File"
+                Detail: FAIL -         Transition to Source Clip
                 Result: Failed
                 Reason: Source Clip is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
@@ -530,10 +530,10 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Top-Level: Top-Level D)
-                Detail: FAIL -   Transition to Import Source (Top-Level->Import Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Top-Level: Top-Level D"
+                Detail: FAIL -   Transition to Import Source: "Top-Level->Import Source"
                 Result: Failed
-                Reason: Import Source "Top-Level->Import Source" is out of place in the derrivation chain.
+                Reason: Import Source: "Top-Level->Import Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_026
@@ -549,10 +549,10 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Top-Level: Top-Level C)
-                Detail: FAIL -   Transition to Recording Source (Top-Level->Recording Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Top-Level: Top-Level C"
+                Detail: FAIL -   Transition to Recording Source: "Top-Level->Recording Source"
                 Result: Failed
-                Reason: Recording Source "Top-Level->Recording Source" is out of place in the derrivation chain.
+                Reason: Recording Source: "Top-Level->Recording Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_026
@@ -568,10 +568,10 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Top-Level: Top-Level E)
-                Detail: FAIL -   Transition to Tape Source (Top-Level->Tape Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Top-Level: Top-Level E"
+                Detail: FAIL -   Transition to Tape Source: "Top-Level->Tape Source"
                 Result: Failed
-                Reason: Tape Source "Top-Level->Tape Source" is out of place in the derrivation chain.
+                Reason: Tape Source: "Top-Level->Tape Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_026
@@ -587,12 +587,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Import Source: Top Level A)
-                Detail: OK   -   Transition to Clip (Invalid out of Import Source: Clip A)
-                Detail: OK   -     Transition to Import Source (Invalid out of Import Source: Import Source A)
-                Detail: FAIL -       Transition to Top Level Composition (Import Source->Top-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Import Source: Top Level A"
+                Detail: OK   -   Transition to Invalid out of Import Source: Clip A
+                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source A"
+                Detail: FAIL -       Transition to Top Level Composition: "Import Source->Top-Level"
                 Result: Failed
-                Reason: Top Level Composition "Import Source->Top-Level" is out of place in the derrivation chain.
+                Reason: Top Level Composition: "Import Source->Top-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_025; REQ_EP_076
@@ -607,8 +607,8 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Top-Level: End of Chain)
-                Detail: FAIL -   Transition to End of Derivation Chain (Source Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Top-Level: End of Chain"
+                Detail: FAIL -   Transition to Source Clip
                 Result: Passed
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
@@ -625,10 +625,10 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Top-Level: Top-Level F)
-                Detail: FAIL -   Transition to Film Source (Top-Level->Film Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Top-Level: Top-Level F"
+                Detail: FAIL -   Transition to Film Source: "Top-Level->Film Source"
                 Result: Failed
-                Reason: Film Source "Top-Level->Film Source" is out of place in the derrivation chain.
+                Reason: Film Source: "Top-Level->Film Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_026
@@ -644,8 +644,8 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Top-Level: Out of File)
-                Detail: FAIL -   Transition to Out of File Reference (Source Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Top-Level: Out of File"
+                Detail: FAIL -   Transition to Source Clip
                 Result: Failed
                 Reason: Source Clip is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -663,12 +663,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Import Source: Top Level C)
-                Detail: OK   -   Transition to Clip (Invalid out of Import Source: Clip C)
-                Detail: OK   -     Transition to Import Source (Invalid out of Import Source: Import Source C)
-                Detail: FAIL -       Transition to Sub-Clip Composition (Import Source->Sub-Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Import Source: Top Level C"
+                Detail: OK   -   Transition to Invalid out of Import Source: Clip C
+                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source C"
+                Detail: FAIL -       Transition to Sub-Clip Composition: "Import Source->Sub-Clip"
                 Result: Failed
-                Reason: Sub-Clip Composition "Import Source->Sub-Clip" is out of place in the derrivation chain.
+                Reason: Sub-Clip Composition: "Import Source->Sub-Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_076
@@ -684,11 +684,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Lower-Level: Top-Level B)
-                Detail: OK   -   Transition to Lower Level Composition (Invalid out of Lower-Level: Lower-Level B)
-                Detail: FAIL -     Transition to File Source (Lower-Level->File Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Lower-Level: Top-Level B"
+                Detail: OK   -   Transition to Lower Level Composition: "Invalid out of Lower-Level: Lower-Level B"
+                Detail: FAIL -     Transition to File Source: "Lower-Level->File Source"
                 Result: Failed
-                Reason: File Source "Lower-Level->File Source" is out of place in the derrivation chain.
+                Reason: File Source: "Lower-Level->File Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_031
@@ -704,12 +704,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Import Source: Top Level D)
-                Detail: OK   -   Transition to Clip (Invalid out of Import Source: Clip D)
-                Detail: OK   -     Transition to Import Source (Invalid out of Import Source: Import Source D)
-                Detail: FAIL -       Transition to Adjusted Clip Composition (Import Source->Adjusted Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Import Source: Top Level D"
+                Detail: OK   -   Transition to Invalid out of Import Source: Clip D
+                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source D"
+                Detail: FAIL -       Transition to Adjusted Clip Composition: "Import Source->Adjusted Clip"
                 Result: Failed
-                Reason: Adjusted Clip Composition "Import Source->Adjusted Clip" is out of place in the derrivation chain.
+                Reason: Adjusted Clip Composition: "Import Source->Adjusted Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_076
@@ -725,11 +725,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Lower-Level: Top-Level D)
-                Detail: OK   -   Transition to Lower Level Composition (Invalid out of Lower-Level: Lower-Level D)
-                Detail: FAIL -     Transition to Import Source (Lower-Level->Import Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Lower-Level: Top-Level D"
+                Detail: OK   -   Transition to Lower Level Composition: "Invalid out of Lower-Level: Lower-Level D"
+                Detail: FAIL -     Transition to Import Source: "Lower-Level->Import Source"
                 Result: Failed
-                Reason: Import Source "Lower-Level->Import Source" is out of place in the derrivation chain.
+                Reason: Import Source: "Lower-Level->Import Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_031
@@ -745,11 +745,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Lower-Level: Top-Level C)
-                Detail: OK   -   Transition to Lower Level Composition (Invalid out of Lower-Level: Lower-Level C)
-                Detail: FAIL -     Transition to Recording Source (Lower-Level->Recording Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Lower-Level: Top-Level C"
+                Detail: OK   -   Transition to Lower Level Composition: "Invalid out of Lower-Level: Lower-Level C"
+                Detail: FAIL -     Transition to Recording Source: "Lower-Level->Recording Source"
                 Result: Failed
-                Reason: Recording Source "Lower-Level->Recording Source" is out of place in the derrivation chain.
+                Reason: Recording Source: "Lower-Level->Recording Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_031
@@ -765,12 +765,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Import Source: Top Level E)
-                Detail: OK   -   Transition to Clip (Invalid out of Import Source: Clip E)
-                Detail: OK   -     Transition to Import Source (Invalid out of Import Source: Import Source E)
-                Detail: FAIL -       Transition to Template Clip (Import Source->Template Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Import Source: Top Level E"
+                Detail: OK   -   Transition to Invalid out of Import Source: Clip E
+                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source E"
+                Detail: FAIL -       Transition to Template Clip: "Import Source->Template Clip"
                 Result: Failed
-                Reason: Template Clip "Import Source->Template Clip" is out of place in the derrivation chain.
+                Reason: Template Clip: "Import Source->Template Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_076
@@ -786,11 +786,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Lower-Level: Top-Level E)
-                Detail: OK   -   Transition to Lower Level Composition (Invalid out of Lower-Level: Lower-Level E)
-                Detail: FAIL -     Transition to Tape Source (Lower-Level->Tape Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Lower-Level: Top-Level E"
+                Detail: OK   -   Transition to Lower Level Composition: "Invalid out of Lower-Level: Lower-Level E"
+                Detail: FAIL -     Transition to Tape Source: "Lower-Level->Tape Source"
                 Result: Failed
-                Reason: Tape Source "Lower-Level->Tape Source" is out of place in the derrivation chain.
+                Reason: Tape Source: "Lower-Level->Tape Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_031
@@ -806,10 +806,10 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Import Source: Top Level F)
-                Detail: OK   -   Transition to Clip (Invalid out of Import Source: Clip F)
-                Detail: OK   -     Transition to Import Source (Invalid out of Import Source: Import Source F)
-                Detail: FAIL -       Transition to Clip (Import Source->Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Import Source: Top Level F"
+                Detail: OK   -   Transition to Invalid out of Import Source: Clip F
+                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source F"
+                Detail: FAIL -       Transition to Import Source->Clip
                 Result: Failed
                 Reason: Clip "Import Source->Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
@@ -827,11 +827,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Lower-Level: Top-Level F)
-                Detail: OK   -   Transition to Lower Level Composition (Invalid out of Lower-Level: Lower-Level F)
-                Detail: FAIL -     Transition to Film Source (Lower-Level->Film Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Lower-Level: Top-Level F"
+                Detail: OK   -   Transition to Lower Level Composition: "Invalid out of Lower-Level: Lower-Level F"
+                Detail: FAIL -     Transition to Film Source: "Lower-Level->Film Source"
                 Result: Failed
-                Reason: Film Source "Lower-Level->Film Source" is out of place in the derrivation chain.
+                Reason: Film Source: "Lower-Level->Film Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_031
@@ -847,12 +847,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Import Source: Top Level G)
-                Detail: OK   -   Transition to Clip (Invalid out of Import Source: Clip G)
-                Detail: OK   -     Transition to Import Source (Invalid out of Import Source: Import Source G)
-                Detail: FAIL -       Transition to File Source (Import Source->File Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Import Source: Top Level G"
+                Detail: OK   -   Transition to Invalid out of Import Source: Clip G
+                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source G"
+                Detail: FAIL -       Transition to File Source: "Import Source->File Source"
                 Result: Failed
-                Reason: File Source "Import Source->File Source" is out of place in the derrivation chain.
+                Reason: File Source: "Import Source->File Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_076
@@ -868,9 +868,9 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Lower-Level: Top Level H)
-                Detail: OK   -   Transition to Lower Level Composition (Invalid out of Lower-Level: Out of File)
-                Detail: FAIL -     Transition to Out of File Reference (Source Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Lower-Level: Top Level H"
+                Detail: OK   -   Transition to Lower Level Composition: "Invalid out of Lower-Level: Out of File"
+                Detail: FAIL -     Transition to Source Clip
                 Result: Failed
                 Reason: Source Clip is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -887,9 +887,9 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Lower-Level: Top Level G)
-                Detail: OK   -   Transition to Lower Level Composition (Invalid out of Lower-Level: End of Chain)
-                Detail: FAIL -     Transition to End of Derivation Chain (Source Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Lower-Level: Top Level G"
+                Detail: OK   -   Transition to Lower Level Composition: "Invalid out of Lower-Level: End of Chain"
+                Detail: FAIL -     Transition to Source Clip
                 Result: Passed
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
@@ -906,12 +906,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Import Source: Top Level H)
-                Detail: OK   -   Transition to Clip (Invalid out of Import Source: Clip H)
-                Detail: OK   -     Transition to Import Source (Invalid out of Import Source: Import Source H)
-                Detail: FAIL -       Transition to Recording Source (Import Source->Recording Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Import Source: Top Level H"
+                Detail: OK   -   Transition to Invalid out of Import Source: Clip H
+                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source H"
+                Detail: FAIL -       Transition to Recording Source: "Import Source->Recording Source"
                 Result: Failed
-                Reason: Recording Source "Import Source->Recording Source" is out of place in the derrivation chain.
+                Reason: Recording Source: "Import Source->Recording Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_076
@@ -927,11 +927,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Sub-Clip: Top Level A)
-                Detail: OK   -   Transition to Sub-Clip Composition (Invalid out of Sub-Clip: Sub-Clip A)
-                Detail: FAIL -     Transition to Top Level Composition (Sub-Clip->Top-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Sub-Clip: Top Level A"
+                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip A"
+                Detail: FAIL -     Transition to Top Level Composition: "Sub-Clip->Top-Level"
                 Result: Failed
-                Reason: Top Level Composition "Sub-Clip->Top-Level" is out of place in the derrivation chain.
+                Reason: Top Level Composition: "Sub-Clip->Top-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_025; REQ_EP_036
@@ -947,12 +947,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Import Source: Top Level I)
-                Detail: OK   -   Transition to Clip (Invalid out of Import Source: Clip I)
-                Detail: OK   -     Transition to Import Source (Invalid out of Import Source: Import Source I)
-                Detail: FAIL -       Transition to Import Source (Import Source->Import Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Import Source: Top Level I"
+                Detail: OK   -   Transition to Invalid out of Import Source: Clip I
+                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source I"
+                Detail: FAIL -       Transition to Import Source: "Import Source->Import Source"
                 Result: Failed
-                Reason: Import Source "Import Source->Import Source" is out of place in the derrivation chain.
+                Reason: Import Source: "Import Source->Import Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_076
@@ -968,11 +968,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Sub-Clip: Top Level C)
-                Detail: OK   -   Transition to Sub-Clip Composition (Invalid out of Sub-Clip: Sub-Clip C)
-                Detail: FAIL -     Transition to Sub-Clip Composition (Sub-Clip->Sub-Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Sub-Clip: Top Level C"
+                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip C"
+                Detail: FAIL -     Transition to Sub-Clip Composition: "Sub-Clip->Sub-Clip"
                 Result: Failed
-                Reason: Sub-Clip Composition "Sub-Clip->Sub-Clip" is out of place in the derrivation chain.
+                Reason: Sub-Clip Composition: "Sub-Clip->Sub-Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_036
@@ -988,11 +988,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Sub-Clip: Top Level B)
-                Detail: OK   -   Transition to Sub-Clip Composition (Invalid out of Sub-Clip: Sub-Clip B)
-                Detail: FAIL -     Transition to Lower Level Composition (Sub-Clip->Lower-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Sub-Clip: Top Level B"
+                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip B"
+                Detail: FAIL -     Transition to Lower Level Composition: "Sub-Clip->Lower-Level"
                 Result: Failed
-                Reason: Lower Level Composition "Sub-Clip->Lower-Level" is out of place in the derrivation chain.
+                Reason: Lower Level Composition: "Sub-Clip->Lower-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_030; REQ_EP_036
@@ -1008,12 +1008,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Tape Source: Top Level A)
-                Detail: OK   -   Transition to Clip (Invalid out of Tape Source: Clip A)
-                Detail: OK   -     Transition to Tape Source (Invalid out of Tape Source: Tape Source A)
-                Detail: FAIL -       Transition to Top Level Composition (Tape Source->Top-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Tape Source: Top Level A"
+                Detail: OK   -   Transition to Invalid out of Tape Source: Clip A
+                Detail: OK   -     Transition to Tape Source: "Invalid out of Tape Source: Tape Source A"
+                Detail: FAIL -       Transition to Top Level Composition: "Tape Source->Top-Level"
                 Result: Failed
-                Reason: Top Level Composition "Tape Source->Top-Level" is out of place in the derrivation chain.
+                Reason: Top Level Composition: "Tape Source->Top-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_025; REQ_EP_083
@@ -1029,11 +1029,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Sub-Clip: Top Level D)
-                Detail: OK   -   Transition to Sub-Clip Composition (Invalid out of Sub-Clip: Sub-Clip D)
-                Detail: FAIL -     Transition to File Source (Sub-Clip->File Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Sub-Clip: Top Level D"
+                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip D"
+                Detail: FAIL -     Transition to File Source: "Sub-Clip->File Source"
                 Result: Failed
-                Reason: File Source "Sub-Clip->File Source" is out of place in the derrivation chain.
+                Reason: File Source: "Sub-Clip->File Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_036
@@ -1049,12 +1049,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Tape Source: Top Level B)
-                Detail: OK   -   Transition to Clip (Invalid out of Tape Source: Clip B)
-                Detail: OK   -     Transition to Tape Source (Invalid out of Tape Source: Tape Source B)
-                Detail: FAIL -       Transition to Lower Level Composition (Tape Source->Lower-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Tape Source: Top Level B"
+                Detail: OK   -   Transition to Invalid out of Tape Source: Clip B
+                Detail: OK   -     Transition to Tape Source: "Invalid out of Tape Source: Tape Source B"
+                Detail: FAIL -       Transition to Lower Level Composition: "Tape Source->Lower-Level"
                 Result: Failed
-                Reason: Lower Level Composition "Tape Source->Lower-Level" is out of place in the derrivation chain.
+                Reason: Lower Level Composition: "Tape Source->Lower-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_030; REQ_EP_083
@@ -1070,11 +1070,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Sub-Clip: Top Level E)
-                Detail: OK   -   Transition to Sub-Clip Composition (Invalid out of Sub-Clip: Sub-Clip E)
-                Detail: FAIL -     Transition to Recording Source (Sub-Clip->Recording Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Sub-Clip: Top Level E"
+                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip E"
+                Detail: FAIL -     Transition to Recording Source: "Sub-Clip->Recording Source"
                 Result: Failed
-                Reason: Recording Source "Sub-Clip->Recording Source" is out of place in the derrivation chain.
+                Reason: Recording Source: "Sub-Clip->Recording Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_036
@@ -1090,12 +1090,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Tape Source: Top Level C)
-                Detail: OK   -   Transition to Clip (Invalid out of Tape Source: Clip C)
-                Detail: OK   -     Transition to Tape Source (Invalid out of Tape Source: Tape Source C)
-                Detail: FAIL -       Transition to Sub-Clip Composition (Tape Source->Sub-Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Tape Source: Top Level C"
+                Detail: OK   -   Transition to Invalid out of Tape Source: Clip C
+                Detail: OK   -     Transition to Tape Source: "Invalid out of Tape Source: Tape Source C"
+                Detail: FAIL -       Transition to Sub-Clip Composition: "Tape Source->Sub-Clip"
                 Result: Failed
-                Reason: Sub-Clip Composition "Tape Source->Sub-Clip" is out of place in the derrivation chain.
+                Reason: Sub-Clip Composition: "Tape Source->Sub-Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_083
@@ -1111,11 +1111,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Sub-Clip: Top Level G)
-                Detail: OK   -   Transition to Sub-Clip Composition (Invalid out of Sub-Clip: Sub-Clip G)
-                Detail: FAIL -     Transition to Tape Source (Sub-Clip->Tape Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Sub-Clip: Top Level G"
+                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip G"
+                Detail: FAIL -     Transition to Tape Source: "Sub-Clip->Tape Source"
                 Result: Failed
-                Reason: Tape Source "Sub-Clip->Tape Source" is out of place in the derrivation chain.
+                Reason: Tape Source: "Sub-Clip->Tape Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_036
@@ -1131,11 +1131,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Sub-Clip: Top Level F)
-                Detail: OK   -   Transition to Sub-Clip Composition (Invalid out of Sub-Clip: Sub-Clip F)
-                Detail: FAIL -     Transition to Import Source (Sub-Clip->Import Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Sub-Clip: Top Level F"
+                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip F"
+                Detail: FAIL -     Transition to Import Source: "Sub-Clip->Import Source"
                 Result: Failed
-                Reason: Import Source "Sub-Clip->Import Source" is out of place in the derrivation chain.
+                Reason: Import Source: "Sub-Clip->Import Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_036
@@ -1151,12 +1151,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Tape Source: Top Level D)
-                Detail: OK   -   Transition to Clip (Invalid out of Tape Source: Clip D)
-                Detail: OK   -     Transition to Tape Source (Invalid out of Tape Source: Tape Source D)
-                Detail: FAIL -       Transition to Adjusted Clip Composition (Tape Source->Adjusted Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Tape Source: Top Level D"
+                Detail: OK   -   Transition to Invalid out of Tape Source: Clip D
+                Detail: OK   -     Transition to Tape Source: "Invalid out of Tape Source: Tape Source D"
+                Detail: FAIL -       Transition to Adjusted Clip Composition: "Tape Source->Adjusted Clip"
                 Result: Failed
-                Reason: Adjusted Clip Composition "Tape Source->Adjusted Clip" is out of place in the derrivation chain.
+                Reason: Adjusted Clip Composition: "Tape Source->Adjusted Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_083
@@ -1172,11 +1172,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Sub-Clip: Top Level H)
-                Detail: OK   -   Transition to Sub-Clip Composition (Invalid out of Sub-Clip: Sub-Clip H)
-                Detail: FAIL -     Transition to Film Source (Sub-Clip->Film Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Sub-Clip: Top Level H"
+                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip H"
+                Detail: FAIL -     Transition to Film Source: "Sub-Clip->Film Source"
                 Result: Failed
-                Reason: Film Source "Sub-Clip->Film Source" is out of place in the derrivation chain.
+                Reason: Film Source: "Sub-Clip->Film Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_036
@@ -1192,12 +1192,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Tape Source: Top Level E)
-                Detail: OK   -   Transition to Clip (Invalid out of Tape Source: Clip E)
-                Detail: OK   -     Transition to Tape Source (Invalid out of Tape Source: Tape Source E)
-                Detail: FAIL -       Transition to Template Clip (Tape Source->Template Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Tape Source: Top Level E"
+                Detail: OK   -   Transition to Invalid out of Tape Source: Clip E
+                Detail: OK   -     Transition to Tape Source: "Invalid out of Tape Source: Tape Source E"
+                Detail: FAIL -       Transition to Template Clip: "Tape Source->Template Clip"
                 Result: Failed
-                Reason: Template Clip "Tape Source->Template Clip" is out of place in the derrivation chain.
+                Reason: Template Clip: "Tape Source->Template Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_083
@@ -1212,9 +1212,9 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Sub-Clip: Top Level J)
-                Detail: OK   -   Transition to Sub-Clip Composition (Invalid out of Sub-Clip: Out of File)
-                Detail: FAIL -     Transition to End of Derivation Chain (Source Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Sub-Clip: Top Level J"
+                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Out of File"
+                Detail: FAIL -     Transition to Source Clip
                 Result: Passed
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
@@ -1230,9 +1230,9 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Sub-Clip: Top Level I)
-                Detail: OK   -   Transition to Sub-Clip Composition (Invalid out of Sub-Clip: End of Clip)
-                Detail: FAIL -     Transition to End of Derivation Chain (Source Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Sub-Clip: Top Level I"
+                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: End of Clip"
+                Detail: FAIL -     Transition to Source Clip
                 Result: Passed
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
@@ -1249,10 +1249,10 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Tape Source: Top Level F)
-                Detail: OK   -   Transition to Clip (Invalid out of Tape Source: Clip F)
-                Detail: OK   -     Transition to Tape Source (Invalid out of Tape Source: Tape Source F)
-                Detail: FAIL -       Transition to Clip (Tape Source->Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Tape Source: Top Level F"
+                Detail: OK   -   Transition to Invalid out of Tape Source: Clip F
+                Detail: OK   -     Transition to Tape Source: "Invalid out of Tape Source: Tape Source F"
+                Detail: FAIL -       Transition to Tape Source->Clip
                 Result: Failed
                 Reason: Clip "Tape Source->Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
@@ -1270,11 +1270,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Adjusted Clip: Top Level A)
-                Detail: OK   -   Transition to Adjusted Clip Composition (Invalid out of Adjusted Clip: Adjusted Clip A)
-                Detail: FAIL -     Transition to Top Level Composition (Adjusted Clip->Top-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Adjusted Clip: Top Level A"
+                Detail: OK   -   Transition to Adjusted Clip Composition: "Invalid out of Adjusted Clip: Adjusted Clip A"
+                Detail: FAIL -     Transition to Top Level Composition: "Adjusted Clip->Top-Level"
                 Result: Failed
-                Reason: Top Level Composition "Adjusted Clip->Top-Level" is out of place in the derrivation chain.
+                Reason: Top Level Composition: "Adjusted Clip->Top-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_025; REQ_EP_045
@@ -1290,12 +1290,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Tape Source: Top Level G)
-                Detail: OK   -   Transition to Clip (Invalid out of Tape Source: Clip G)
-                Detail: OK   -     Transition to Tape Source (Invalid out of Tape Source: Tape Source G)
-                Detail: FAIL -       Transition to File Source (Tape Source->File Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Tape Source: Top Level G"
+                Detail: OK   -   Transition to Invalid out of Tape Source: Clip G
+                Detail: OK   -     Transition to Tape Source: "Invalid out of Tape Source: Tape Source G"
+                Detail: FAIL -       Transition to File Source: "Tape Source->File Source"
                 Result: Failed
-                Reason: File Source "Tape Source->File Source" is out of place in the derrivation chain.
+                Reason: File Source: "Tape Source->File Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_083
@@ -1311,11 +1311,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Adjusted Clip: Top Level C)
-                Detail: OK   -   Transition to Adjusted Clip Composition (Invalid out of Adjusted Clip: Adjusted Clip C)
-                Detail: FAIL -     Transition to Sub-Clip Composition (Adjusted Clip->Sub-Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Adjusted Clip: Top Level C"
+                Detail: OK   -   Transition to Adjusted Clip Composition: "Invalid out of Adjusted Clip: Adjusted Clip C"
+                Detail: FAIL -     Transition to Sub-Clip Composition: "Adjusted Clip->Sub-Clip"
                 Result: Failed
-                Reason: Sub-Clip Composition "Adjusted Clip->Sub-Clip" is out of place in the derrivation chain.
+                Reason: Sub-Clip Composition: "Adjusted Clip->Sub-Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_045
@@ -1331,11 +1331,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Adjusted Clip: Top Level B)
-                Detail: OK   -   Transition to Adjusted Clip Composition (Invalid out of Adjusted Clip: Adjusted Clip B)
-                Detail: FAIL -     Transition to Lower Level Composition (Adjusted Clip->Lower-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Adjusted Clip: Top Level B"
+                Detail: OK   -   Transition to Adjusted Clip Composition: "Invalid out of Adjusted Clip: Adjusted Clip B"
+                Detail: FAIL -     Transition to Lower Level Composition: "Adjusted Clip->Lower-Level"
                 Result: Failed
-                Reason: Lower Level Composition "Adjusted Clip->Lower-Level" is out of place in the derrivation chain.
+                Reason: Lower Level Composition: "Adjusted Clip->Lower-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_036; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_030; REQ_EP_045
@@ -1351,12 +1351,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Tape Source: Top Level H)
-                Detail: OK   -   Transition to Clip (Invalid out of Tape Source: Clip H)
-                Detail: OK   -     Transition to Tape Source (Invalid out of Tape Source: Tape Source H)
-                Detail: FAIL -       Transition to Recording Source (Tape Source->Recording Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Tape Source: Top Level H"
+                Detail: OK   -   Transition to Invalid out of Tape Source: Clip H
+                Detail: OK   -     Transition to Tape Source: "Invalid out of Tape Source: Tape Source H"
+                Detail: FAIL -       Transition to Recording Source: "Tape Source->Recording Source"
                 Result: Failed
-                Reason: Recording Source "Tape Source->Recording Source" is out of place in the derrivation chain.
+                Reason: Recording Source: "Tape Source->Recording Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_083
@@ -1372,11 +1372,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Adjusted Clip: Top Level D)
-                Detail: OK   -   Transition to Adjusted Clip Composition (Invalid out of Adjusted Clip: Adjusted Clip D)
-                Detail: FAIL -     Transition to Adjusted Clip Composition (Adjusted Clip->Adjusted Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Adjusted Clip: Top Level D"
+                Detail: OK   -   Transition to Adjusted Clip Composition: "Invalid out of Adjusted Clip: Adjusted Clip D"
+                Detail: FAIL -     Transition to Adjusted Clip Composition: "Adjusted Clip->Adjusted Clip"
                 Result: Failed
-                Reason: Adjusted Clip Composition "Adjusted Clip->Adjusted Clip" is out of place in the derrivation chain.
+                Reason: Adjusted Clip Composition: "Adjusted Clip->Adjusted Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_045
@@ -1392,12 +1392,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Tape Source: Top Level I)
-                Detail: OK   -   Transition to Clip (Invalid out of Tape Source: Clip I)
-                Detail: OK   -     Transition to Tape Source (Invalid out of Tape Source: Tape Source I)
-                Detail: FAIL -       Transition to Import Source (Tape Source->Import Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Tape Source: Top Level I"
+                Detail: OK   -   Transition to Invalid out of Tape Source: Clip I
+                Detail: OK   -     Transition to Tape Source: "Invalid out of Tape Source: Tape Source I"
+                Detail: FAIL -       Transition to Import Source: "Tape Source->Import Source"
                 Result: Failed
-                Reason: Import Source "Tape Source->Import Source" is out of place in the derrivation chain.
+                Reason: Import Source: "Tape Source->Import Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_083
@@ -1413,11 +1413,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Adjusted Clip: Top Level E)
-                Detail: OK   -   Transition to Adjusted Clip Composition (Invalid out of Adjusted Clip: Adjusted Clip E)
-                Detail: FAIL -     Transition to File Source (Adjusted Clip->File Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Adjusted Clip: Top Level E"
+                Detail: OK   -   Transition to Adjusted Clip Composition: "Invalid out of Adjusted Clip: Adjusted Clip E"
+                Detail: FAIL -     Transition to File Source: "Adjusted Clip->File Source"
                 Result: Failed
-                Reason: File Source "Adjusted Clip->File Source" is out of place in the derrivation chain.
+                Reason: File Source: "Adjusted Clip->File Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_045
@@ -1433,12 +1433,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Tape Source: Top Level J)
-                Detail: OK   -   Transition to Clip (Invalid out of Tape Source: Clip J)
-                Detail: OK   -     Transition to Tape Source (Invalid out of Tape Source: Tape Source I)
-                Detail: FAIL -       Transition to Tape Source (Tape Source->Tape Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Tape Source: Top Level J"
+                Detail: OK   -   Transition to Invalid out of Tape Source: Clip J
+                Detail: OK   -     Transition to Tape Source: "Invalid out of Tape Source: Tape Source I"
+                Detail: FAIL -       Transition to Tape Source: "Tape Source->Tape Source"
                 Result: Failed
-                Reason: Tape Source "Tape Source->Tape Source" is out of place in the derrivation chain.
+                Reason: Tape Source: "Tape Source->Tape Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_083
@@ -1454,11 +1454,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Adjusted Clip: Top Level G)
-                Detail: OK   -   Transition to Adjusted Clip Composition (Invalid out of Adjusted Clip: Adjusted Clip G)
-                Detail: FAIL -     Transition to Import Source (Adjusted Clip->Import Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Adjusted Clip: Top Level G"
+                Detail: OK   -   Transition to Adjusted Clip Composition: "Invalid out of Adjusted Clip: Adjusted Clip G"
+                Detail: FAIL -     Transition to Import Source: "Adjusted Clip->Import Source"
                 Result: Failed
-                Reason: Import Source "Adjusted Clip->Import Source" is out of place in the derrivation chain.
+                Reason: Import Source: "Adjusted Clip->Import Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_045
@@ -1474,11 +1474,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Adjusted Clip: Top Level F)
-                Detail: OK   -   Transition to Adjusted Clip Composition (Invalid out of Adjusted Clip: Adjusted Clip F)
-                Detail: FAIL -     Transition to Recording Source (Adjusted Clip->Recording Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Adjusted Clip: Top Level F"
+                Detail: OK   -   Transition to Adjusted Clip Composition: "Invalid out of Adjusted Clip: Adjusted Clip F"
+                Detail: FAIL -     Transition to Recording Source: "Adjusted Clip->Recording Source"
                 Result: Failed
-                Reason: Recording Source "Adjusted Clip->Recording Source" is out of place in the derrivation chain.
+                Reason: Recording Source: "Adjusted Clip->Recording Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_045
@@ -1494,12 +1494,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Film Source: Top Level A)
-                Detail: OK   -   Transition to Clip (Invalid out of Film Source: Clip A)
-                Detail: OK   -     Transition to Film Source (Invalid out of Film Source: Film Source A)
-                Detail: FAIL -       Transition to Top Level Composition (Film Source->Top-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Film Source: Top Level A"
+                Detail: OK   -   Transition to Invalid out of Film Source: Clip A
+                Detail: OK   -     Transition to Film Source: "Invalid out of Film Source: Film Source A"
+                Detail: FAIL -       Transition to Top Level Composition: "Film Source->Top-Level"
                 Result: Failed
-                Reason: Top Level Composition "Film Source->Top-Level" is out of place in the derrivation chain.
+                Reason: Top Level Composition: "Film Source->Top-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_025
@@ -1515,11 +1515,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Adjusted Clip: Top Level H)
-                Detail: OK   -   Transition to Adjusted Clip Composition (Invalid out of Adjusted Clip: Adjusted Clip H)
-                Detail: FAIL -     Transition to Tape Source (Adjusted Clip->Tape Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Adjusted Clip: Top Level H"
+                Detail: OK   -   Transition to Adjusted Clip Composition: "Invalid out of Adjusted Clip: Adjusted Clip H"
+                Detail: FAIL -     Transition to Tape Source: "Adjusted Clip->Tape Source"
                 Result: Failed
-                Reason: Tape Source "Adjusted Clip->Tape Source" is out of place in the derrivation chain.
+                Reason: Tape Source: "Adjusted Clip->Tape Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_045
@@ -1535,12 +1535,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Film Source: Top Level B)
-                Detail: OK   -   Transition to Clip (Invalid out of Film Source: Clip B)
-                Detail: OK   -     Transition to Film Source (Invalid out of Film Source: Film Source B)
-                Detail: FAIL -       Transition to Lower Level Composition (Film Source->Lower-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Film Source: Top Level B"
+                Detail: OK   -   Transition to Invalid out of Film Source: Clip B
+                Detail: OK   -     Transition to Film Source: "Invalid out of Film Source: Film Source B"
+                Detail: FAIL -       Transition to Lower Level Composition: "Film Source->Lower-Level"
                 Result: Failed
-                Reason: Lower Level Composition "Film Source->Lower-Level" is out of place in the derrivation chain.
+                Reason: Lower Level Composition: "Film Source->Lower-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_030
@@ -1556,11 +1556,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Adjusted Clip: Top Level I)
-                Detail: OK   -   Transition to Adjusted Clip Composition (Invalid out of Adjusted Clip: Adjusted Clip I)
-                Detail: FAIL -     Transition to Film Source (Adjusted Clip->Film Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Adjusted Clip: Top Level I"
+                Detail: OK   -   Transition to Adjusted Clip Composition: "Invalid out of Adjusted Clip: Adjusted Clip I"
+                Detail: FAIL -     Transition to Film Source: "Adjusted Clip->Film Source"
                 Result: Failed
-                Reason: Film Source "Adjusted Clip->Film Source" is out of place in the derrivation chain.
+                Reason: Film Source: "Adjusted Clip->Film Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_045
@@ -1576,12 +1576,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Film Source: Top Level C)
-                Detail: OK   -   Transition to Clip (Invalid out of Film Source: Clip C)
-                Detail: OK   -     Transition to Film Source (Invalid out of Film Source: Film Source C)
-                Detail: FAIL -       Transition to Sub-Clip Composition (Film Source->Sub-Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Film Source: Top Level C"
+                Detail: OK   -   Transition to Invalid out of Film Source: Clip C
+                Detail: OK   -     Transition to Film Source: "Invalid out of Film Source: Film Source C"
+                Detail: FAIL -       Transition to Sub-Clip Composition: "Film Source->Sub-Clip"
                 Result: Failed
-                Reason: Sub-Clip Composition "Film Source->Sub-Clip" is out of place in the derrivation chain.
+                Reason: Sub-Clip Composition: "Film Source->Sub-Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: None
@@ -1597,9 +1597,9 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Adjusted Clip: Top Level K)
-                Detail: OK   -   Transition to Adjusted Clip Composition (Invalid out of Adjusted Clip: Out of File)
-                Detail: FAIL -     Transition to Out of File Reference (Source Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Adjusted Clip: Top Level K"
+                Detail: OK   -   Transition to Adjusted Clip Composition: "Invalid out of Adjusted Clip: Out of File"
+                Detail: FAIL -     Transition to Source Clip
                 Result: Failed
                 Reason: Source Clip is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -1616,9 +1616,9 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Adjusted Clip: Top Level J)
-                Detail: OK   -   Transition to Adjusted Clip Composition (Invalid out of Adjusted Clip: End of Chain)
-                Detail: FAIL -     Transition to End of Derivation Chain (Source Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Adjusted Clip: Top Level J"
+                Detail: OK   -   Transition to Adjusted Clip Composition: "Invalid out of Adjusted Clip: End of Chain"
+                Detail: FAIL -     Transition to Source Clip
                 Result: Passed
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
@@ -1635,12 +1635,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Film Source: Top Level D)
-                Detail: OK   -   Transition to Clip (Invalid out of Film Source: Clip D)
-                Detail: OK   -     Transition to Film Source (Invalid out of Film Source: Film Source D)
-                Detail: FAIL -       Transition to Adjusted Clip Composition (Film Source->Adjusted Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Film Source: Top Level D"
+                Detail: OK   -   Transition to Invalid out of Film Source: Clip D
+                Detail: OK   -     Transition to Film Source: "Invalid out of Film Source: Film Source D"
+                Detail: FAIL -       Transition to Adjusted Clip Composition: "Film Source->Adjusted Clip"
                 Result: Failed
-                Reason: Adjusted Clip Composition "Film Source->Adjusted Clip" is out of place in the derrivation chain.
+                Reason: Adjusted Clip Composition: "Film Source->Adjusted Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: None
@@ -1656,11 +1656,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Template Clip: Top Level A)
-                Detail: OK   -   Transition to Template Clip (Invalid out of Template Clip: Template Clip A)
-                Detail: FAIL -     Transition to Top Level Composition (Template Clip->Top-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Template Clip: Top Level A"
+                Detail: OK   -   Transition to Template Clip: "Invalid out of Template Clip: Template Clip A"
+                Detail: FAIL -     Transition to Top Level Composition: "Template Clip->Top-Level"
                 Result: Failed
-                Reason: Top Level Composition "Template Clip->Top-Level" is out of place in the derrivation chain.
+                Reason: Top Level Composition: "Template Clip->Top-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_025; REQ_EP_050
@@ -1676,12 +1676,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Film Source: Top Level E)
-                Detail: OK   -   Transition to Clip (Invalid out of Film Source: Clip E)
-                Detail: OK   -     Transition to Film Source (Invalid out of Film Source: Film Source E)
-                Detail: FAIL -       Transition to Template Clip (Film Source->Template Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Film Source: Top Level E"
+                Detail: OK   -   Transition to Invalid out of Film Source: Clip E
+                Detail: OK   -     Transition to Film Source: "Invalid out of Film Source: Film Source E"
+                Detail: FAIL -       Transition to Template Clip: "Film Source->Template Clip"
                 Result: Failed
-                Reason: Template Clip "Film Source->Template Clip" is out of place in the derrivation chain.
+                Reason: Template Clip: "Film Source->Template Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: None
@@ -1697,11 +1697,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Template Clip: Top Level C)
-                Detail: OK   -   Transition to Template Clip (Invalid out of Template Clip: Template Clip C)
-                Detail: FAIL -     Transition to Sub-Clip Composition (Template Clip->Sub-Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Template Clip: Top Level C"
+                Detail: OK   -   Transition to Template Clip: "Invalid out of Template Clip: Template Clip C"
+                Detail: FAIL -     Transition to Sub-Clip Composition: "Template Clip->Sub-Clip"
                 Result: Failed
-                Reason: Sub-Clip Composition "Template Clip->Sub-Clip" is out of place in the derrivation chain.
+                Reason: Sub-Clip Composition: "Template Clip->Sub-Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_050
@@ -1717,11 +1717,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Template Clip: Top Level B)
-                Detail: OK   -   Transition to Template Clip (Invalid out of Template Clip: Template Clip B)
-                Detail: FAIL -     Transition to Lower Level Composition (Template Clip->Lower-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Template Clip: Top Level B"
+                Detail: OK   -   Transition to Template Clip: "Invalid out of Template Clip: Template Clip B"
+                Detail: FAIL -     Transition to Lower Level Composition: "Template Clip->Lower-Level"
                 Result: Failed
-                Reason: Lower Level Composition "Template Clip->Lower-Level" is out of place in the derrivation chain.
+                Reason: Lower Level Composition: "Template Clip->Lower-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_030; REQ_EP_050
@@ -1737,10 +1737,10 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Film Source: Top Level F)
-                Detail: OK   -   Transition to Clip (Invalid out of Film Source: Clip F)
-                Detail: OK   -     Transition to Film Source (Invalid out of Film Source: Film Source F)
-                Detail: FAIL -       Transition to Clip (Film Source->Film Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Film Source: Top Level F"
+                Detail: OK   -   Transition to Invalid out of Film Source: Clip F
+                Detail: OK   -     Transition to Film Source: "Invalid out of Film Source: Film Source F"
+                Detail: FAIL -       Transition to Film Source->Film Source
                 Result: Failed
                 Reason: Clip "Film Source->Film Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -1758,11 +1758,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Template Clip: Top Level D)
-                Detail: OK   -   Transition to Template Clip (Invalid out of Template Clip: Template Clip D)
-                Detail: FAIL -     Transition to Adjusted Clip Composition (Template Clip->Adjusted Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Template Clip: Top Level D"
+                Detail: OK   -   Transition to Template Clip: "Invalid out of Template Clip: Template Clip D"
+                Detail: FAIL -     Transition to Adjusted Clip Composition: "Template Clip->Adjusted Clip"
                 Result: Failed
-                Reason: Adjusted Clip Composition "Template Clip->Adjusted Clip" is out of place in the derrivation chain.
+                Reason: Adjusted Clip Composition: "Template Clip->Adjusted Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_050
@@ -1778,12 +1778,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Film Source: Top Level G)
-                Detail: OK   -   Transition to Clip (Invalid out of Film Source: Clip G)
-                Detail: OK   -     Transition to Film Source (Invalid out of Film Source: Film Source G)
-                Detail: FAIL -       Transition to File Source (Film Source->File Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Film Source: Top Level G"
+                Detail: OK   -   Transition to Invalid out of Film Source: Clip G
+                Detail: OK   -     Transition to Film Source: "Invalid out of Film Source: Film Source G"
+                Detail: FAIL -       Transition to File Source: "Film Source->File Source"
                 Result: Failed
-                Reason: File Source "Film Source->File Source" is out of place in the derrivation chain.
+                Reason: File Source: "Film Source->File Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: None
@@ -1799,11 +1799,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Template Clip: Top Level E)
-                Detail: OK   -   Transition to Template Clip (Invalid out of Template Clip: Template Clip E)
-                Detail: FAIL -     Transition to Template Clip (Template Clip->Template Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Template Clip: Top Level E"
+                Detail: OK   -   Transition to Template Clip: "Invalid out of Template Clip: Template Clip E"
+                Detail: FAIL -     Transition to Template Clip: "Template Clip->Template Clip"
                 Result: Failed
-                Reason: Template Clip "Template Clip->Template Clip" is out of place in the derrivation chain.
+                Reason: Template Clip: "Template Clip->Template Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_050
@@ -1819,12 +1819,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Film Source: Top Level H)
-                Detail: OK   -   Transition to Clip (Invalid out of Film Source: Clip H)
-                Detail: OK   -     Transition to Film Source (Invalid out of Film Source: Film Source H)
-                Detail: FAIL -       Transition to Recording Source (Film Source->Recording Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Film Source: Top Level H"
+                Detail: OK   -   Transition to Invalid out of Film Source: Clip H
+                Detail: OK   -     Transition to Film Source: "Invalid out of Film Source: Film Source H"
+                Detail: FAIL -       Transition to Recording Source: "Film Source->Recording Source"
                 Result: Failed
-                Reason: Recording Source "Film Source->Recording Source" is out of place in the derrivation chain.
+                Reason: Recording Source: "Film Source->Recording Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: None
@@ -1840,11 +1840,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Template Clip: Top Level G)
-                Detail: OK   -   Transition to Template Clip (Invalid out of Template Clip: Template Clip G)
-                Detail: FAIL -     Transition to File Source (Template Clip->File Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Template Clip: Top Level G"
+                Detail: OK   -   Transition to Template Clip: "Invalid out of Template Clip: Template Clip G"
+                Detail: FAIL -     Transition to File Source: "Template Clip->File Source"
                 Result: Failed
-                Reason: File Source "Template Clip->File Source" is out of place in the derrivation chain.
+                Reason: File Source: "Template Clip->File Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_050
@@ -1860,9 +1860,9 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Template Clip: Top Level F)
-                Detail: OK   -   Transition to Template Clip (Invalid out of Template Clip: Template Clip F)
-                Detail: FAIL -     Transition to Clip (Template Clip->Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Template Clip: Top Level F"
+                Detail: OK   -   Transition to Template Clip: "Invalid out of Template Clip: Template Clip F"
+                Detail: FAIL -     Transition to Template Clip->Clip
                 Result: Failed
                 Reason: Clip "Template Clip->Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -1880,12 +1880,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Film Source: Top Level I)
-                Detail: OK   -   Transition to Clip (Invalid out of Film Source: Clip I)
-                Detail: OK   -     Transition to Film Source (Invalid out of Film Source: Film Source I)
-                Detail: FAIL -       Transition to Import Source (Film Source->Import Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Film Source: Top Level I"
+                Detail: OK   -   Transition to Invalid out of Film Source: Clip I
+                Detail: OK   -     Transition to Film Source: "Invalid out of Film Source: Film Source I"
+                Detail: FAIL -       Transition to Import Source: "Film Source->Import Source"
                 Result: Failed
-                Reason: Import Source "Film Source->Import Source" is out of place in the derrivation chain.
+                Reason: Import Source: "Film Source->Import Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: None
@@ -1901,11 +1901,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Template Clip: Top Level H)
-                Detail: OK   -   Transition to Template Clip (Invalid out of Template Clip: Template Clip H)
-                Detail: FAIL -     Transition to Recording Source (Template Clip->Recording Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Template Clip: Top Level H"
+                Detail: OK   -   Transition to Template Clip: "Invalid out of Template Clip: Template Clip H"
+                Detail: FAIL -     Transition to Recording Source: "Template Clip->Recording Source"
                 Result: Failed
-                Reason: Recording Source "Template Clip->Recording Source" is out of place in the derrivation chain.
+                Reason: Recording Source: "Template Clip->Recording Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_050
@@ -1921,12 +1921,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Film Source: Top Level J)
-                Detail: OK   -   Transition to Clip (Invalid out of Film Source: Clip J)
-                Detail: OK   -     Transition to Film Source (Invalid out of Film Source: Film Source J)
-                Detail: FAIL -       Transition to Tape Source (Film Source->Tape Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Film Source: Top Level J"
+                Detail: OK   -   Transition to Invalid out of Film Source: Clip J
+                Detail: OK   -     Transition to Film Source: "Invalid out of Film Source: Film Source J"
+                Detail: FAIL -       Transition to Tape Source: "Film Source->Tape Source"
                 Result: Failed
-                Reason: Tape Source "Film Source->Tape Source" is out of place in the derrivation chain.
+                Reason: Tape Source: "Film Source->Tape Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: None
@@ -1942,11 +1942,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Template Clip: Top Level I)
-                Detail: OK   -   Transition to Template Clip (Invalid out of Template Clip: Template Clip I)
-                Detail: FAIL -     Transition to Import Source (Template Clip->Import Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Template Clip: Top Level I"
+                Detail: OK   -   Transition to Template Clip: "Invalid out of Template Clip: Template Clip I"
+                Detail: FAIL -     Transition to Import Source: "Template Clip->Import Source"
                 Result: Failed
-                Reason: Import Source "Template Clip->Import Source" is out of place in the derrivation chain.
+                Reason: Import Source: "Template Clip->Import Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_050
@@ -1962,12 +1962,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Film Source: Top Level K)
-                Detail: OK   -   Transition to Clip (Invalid out of Film Source: Clip K)
-                Detail: OK   -     Transition to Film Source (Invalid out of Film Source: Film Source K)
-                Detail: FAIL -       Transition to Film Source (Film Source->Film Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Film Source: Top Level K"
+                Detail: OK   -   Transition to Invalid out of Film Source: Clip K
+                Detail: OK   -     Transition to Film Source: "Invalid out of Film Source: Film Source K"
+                Detail: FAIL -       Transition to Film Source: "Film Source->Film Source"
                 Result: Failed
-                Reason: Film Source "Film Source->Film Source" is out of place in the derrivation chain.
+                Reason: Film Source: "Film Source->Film Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: None
@@ -1983,11 +1983,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Template Clip: Top Level K)
-                Detail: OK   -   Transition to Template Clip (Invalid out of Template Clip: Template Clip K)
-                Detail: FAIL -     Transition to Film Source (Template Clip->Film Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Template Clip: Top Level K"
+                Detail: OK   -   Transition to Template Clip: "Invalid out of Template Clip: Template Clip K"
+                Detail: FAIL -     Transition to Film Source: "Template Clip->Film Source"
                 Result: Failed
-                Reason: Film Source "Template Clip->Film Source" is out of place in the derrivation chain.
+                Reason: Film Source: "Template Clip->Film Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_050
@@ -2003,11 +2003,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Template Clip: Top Level J)
-                Detail: OK   -   Transition to Template Clip (Invalid out of Template Clip: Template Clip J)
-                Detail: FAIL -     Transition to Tape Source (Template Clip->Tape Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Template Clip: Top Level J"
+                Detail: OK   -   Transition to Template Clip: "Invalid out of Template Clip: Template Clip J"
+                Detail: FAIL -     Transition to Tape Source: "Template Clip->Tape Source"
                 Result: Failed
-                Reason: Tape Source "Template Clip->Tape Source" is out of place in the derrivation chain.
+                Reason: Tape Source: "Template Clip->Tape Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_050
@@ -2023,10 +2023,10 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Film Source: Top Level L)
-                Detail: OK   -   Transition to Clip (Invalid out of Film Source: Clip L)
-                Detail: OK   -     Transition to Film Source (Invalid out of Film Source: Out of File)
-                Detail: FAIL -       Transition to Out of File Reference (Source Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Film Source: Top Level L"
+                Detail: OK   -   Transition to Invalid out of Film Source: Clip L
+                Detail: OK   -     Transition to Film Source: "Invalid out of Film Source: Out of File"
+                Detail: FAIL -       Transition to Source Clip
                 Result: Passed, but with warnings.
                 Reason: Source Clip is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -2044,9 +2044,9 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Template Clip: Top Level L)
-                Detail: OK   -   Transition to Template Clip (Invalid out of Template Clip: Out of File)
-                Detail: FAIL -     Transition to Out of File Reference (Source Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Template Clip: Top Level L"
+                Detail: OK   -   Transition to Template Clip: "Invalid out of Template Clip: Out of File"
+                Detail: FAIL -     Transition to Source Clip
                 Result: Failed
                 Reason: Source Clip is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -2064,7 +2064,7 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Missing EOC Top-Level)
+                Detail: OK   - Transition to Top Level Composition: "Missing EOC Top-Level"
                 Result: Failed
                 Reason: End of derivation chain encountered without a zero-valued source clip or out of file reference at Composition Mob: "Missing EOC Top-Level"
                 Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -2082,8 +2082,8 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Missing EOC Lower-Level: Top-Level)
-                Detail: OK   -   Transition to Lower Level Composition (Missing EOC Lower-Level)
+                Detail: OK   - Transition to Top Level Composition: "Missing EOC Lower-Level: Top-Level"
+                Detail: OK   -   Transition to Lower Level Composition: "Missing EOC Lower-Level"
                 Result: Failed
                 Reason: End of derivation chain encountered without a zero-valued source clip or out of file reference at Composition Mob: "Missing EOC Lower-Level"
                 Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -2101,8 +2101,8 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Missing EOC Sub-Clip: Top-Level)
-                Detail: OK   -   Transition to Sub-Clip Composition (Missing EOC Sub-Clip)
+                Detail: OK   - Transition to Top Level Composition: "Missing EOC Sub-Clip: Top-Level"
+                Detail: OK   -   Transition to Sub-Clip Composition: "Missing EOC Sub-Clip"
                 Result: Failed
                 Reason: End of derivation chain encountered without a zero-valued source clip or out of file reference at Composition Mob: "Missing EOC Sub-Clip"
                 Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -2120,8 +2120,8 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Missing EOC Adjusted Clip: Top-Level)
-                Detail: OK   -   Transition to Adjusted Clip Composition (Missing EOC Adjusted Clip)
+                Detail: OK   - Transition to Top Level Composition: "Missing EOC Adjusted Clip: Top-Level"
+                Detail: OK   -   Transition to Adjusted Clip Composition: "Missing EOC Adjusted Clip"
                 Result: Failed
                 Reason: End of derivation chain encountered without a zero-valued source clip or out of file reference at Composition Mob: "Missing EOC Adjusted Clip"
                 Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -2139,8 +2139,8 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Missing EOC Clip: Top-Level)
-                Detail: OK   -   Transition to Clip (Missing EOC Clip)
+                Detail: OK   - Transition to Top Level Composition: "Missing EOC Clip: Top-Level"
+                Detail: OK   -   Transition to Missing EOC Clip
                 Result: Failed
                 Reason: End of derivation chain encountered without a zero-valued source clip or out of file reference at Master Mob: "Missing EOC Clip"
                 Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -2158,9 +2158,9 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Missing EOC File Source: Top-Level)
-                Detail: OK   -   Transition to Clip (Missing EOC File Source: Clip)
-                Detail: OK   -     Transition to File Source (Missing EOC File Source)
+                Detail: OK   - Transition to Top Level Composition: "Missing EOC File Source: Top-Level"
+                Detail: OK   -   Transition to Missing EOC File Source: Clip
+                Detail: OK   -     Transition to File Source: "Missing EOC File Source"
                 Result: Failed
                 Reason: End of derivation chain encountered without a zero-valued source clip or out of file reference at Source Mob: "Missing EOC File Source"
                 Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -2178,11 +2178,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Clip: Top Level E)
-                Detail: OK   -   Transition to Clip (Invalid out of Clip: Clip E)
-                Detail: FAIL -     Transition to Template Clip (Clip->Template Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Clip: Top Level E"
+                Detail: OK   -   Transition to Invalid out of Clip: Clip E
+                Detail: FAIL -     Transition to Template Clip: "Clip->Template Clip"
                 Result: Failed
-                Reason: Template Clip "Clip->Template Clip" is out of place in the derrivation chain.
+                Reason: Template Clip: "Clip->Template Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_055
@@ -2198,10 +2198,10 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Missing EOC Recording Source: Top-Level)
-                Detail: OK   -   Transition to Clip (Missing EOC Recording Source: Clip)
-                Detail: OK   -     Transition to File Source (Missing EOC Recording Source: File Source)
-                Detail: OK   -       Transition to Recording Source (Missing EOC Recording Source)
+                Detail: OK   - Transition to Top Level Composition: "Missing EOC Recording Source: Top-Level"
+                Detail: OK   -   Transition to Missing EOC Recording Source: Clip
+                Detail: OK   -     Transition to File Source: "Missing EOC Recording Source: File Source"
+                Detail: OK   -       Transition to Recording Source: "Missing EOC Recording Source"
                 Result: Failed
                 Reason: End of derivation chain encountered without a zero-valued source clip or out of file reference at Source Mob: "Missing EOC Recording Source"
                 Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -2219,9 +2219,9 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Clip: Top Level F)
-                Detail: OK   -   Transition to Clip (Invalid out of Clip: Clip F)
-                Detail: FAIL -     Transition to Clip (Clip->Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Clip: Top Level F"
+                Detail: OK   -   Transition to Invalid out of Clip: Clip F
+                Detail: FAIL -     Transition to Clip->Clip
                 Result: Failed
                 Reason: Clip "Clip->Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -2239,9 +2239,9 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Missing EOC Import Source: Top-Level)
-                Detail: OK   -   Transition to Clip (Missing EOC Import Source: Clip)
-                Detail: OK   -     Transition to Import Source (Missing EOC Import Source)
+                Detail: OK   - Transition to Top Level Composition: "Missing EOC Import Source: Top-Level"
+                Detail: OK   -   Transition to Missing EOC Import Source: Clip
+                Detail: OK   -     Transition to Import Source: "Missing EOC Import Source"
                 Result: Failed
                 Reason: End of derivation chain encountered without a zero-valued source clip or out of file reference at Source Mob: "Missing EOC Import Source"
                 Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -2259,11 +2259,11 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Clip: Top Level G)
-                Detail: OK   -   Transition to Clip (Invalid out of Clip: Clip G)
-                Detail: FAIL -     Transition to Recording Source (Clip->Recording Source)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Clip: Top Level G"
+                Detail: OK   -   Transition to Invalid out of Clip: Clip G
+                Detail: FAIL -     Transition to Recording Source: "Clip->Recording Source"
                 Result: Failed
-                Reason: Recording Source "Clip->Recording Source" is out of place in the derrivation chain.
+                Reason: Recording Source: "Clip->Recording Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_055
@@ -2279,9 +2279,9 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Missing EOC Tape Source: Top-Level)
-                Detail: OK   -   Transition to Clip (Missing EOC Tape Source: Clip)
-                Detail: OK   -     Transition to Tape Source (Missing EOC Tape Source)
+                Detail: OK   - Transition to Top Level Composition: "Missing EOC Tape Source: Top-Level"
+                Detail: OK   -   Transition to Missing EOC Tape Source: Clip
+                Detail: OK   -     Transition to Tape Source: "Missing EOC Tape Source"
                 Result: Failed
                 Reason: End of derivation chain encountered without a zero-valued source clip or out of file reference at Source Mob: "Missing EOC Tape Source"
                 Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -2299,12 +2299,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of File Source: Top Level A)
-                Detail: OK   -   Transition to Clip (Invalid out of File Source: Clip A)
-                Detail: OK   -     Transition to File Source (Invalid out of File Source: File Source A)
-                Detail: FAIL -       Transition to Top Level Composition (File Source->Top-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of File Source: Top Level A"
+                Detail: OK   -   Transition to Invalid out of File Source: Clip A
+                Detail: OK   -     Transition to File Source: "Invalid out of File Source: File Source A"
+                Detail: FAIL -       Transition to Top Level Composition: "File Source->Top-Level"
                 Result: Failed
-                Reason: Top Level Composition "File Source->Top-Level" is out of place in the derrivation chain.
+                Reason: Top Level Composition: "File Source->Top-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_025; REQ_EP_063; REQ_EP_064
@@ -2320,9 +2320,9 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Missing EOC Film Source: Top-Level)
-                Detail: OK   -   Transition to Clip (Missing EOC Film Source: Clip)
-                Detail: OK   -     Transition to Film Source (Missing EOC Film Source)
+                Detail: OK   - Transition to Top Level Composition: "Missing EOC Film Source: Top-Level"
+                Detail: OK   -   Transition to Missing EOC Film Source: Clip
+                Detail: OK   -     Transition to Film Source: "Missing EOC Film Source"
                 Result: Failed
                 Reason: End of derivation chain encountered without a zero-valued source clip or out of file reference at Source Mob: "Missing EOC Film Source"
                 Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -2340,12 +2340,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of File Source: Top Level B)
-                Detail: OK   -   Transition to Clip (Invalid out of File Source: Clip B)
-                Detail: OK   -     Transition to File Source (Invalid out of File Source: File Source B)
-                Detail: FAIL -       Transition to Lower Level Composition (File Source->Lower-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of File Source: Top Level B"
+                Detail: OK   -   Transition to Invalid out of File Source: Clip B
+                Detail: OK   -     Transition to File Source: "Invalid out of File Source: File Source B"
+                Detail: FAIL -       Transition to Lower Level Composition: "File Source->Lower-Level"
                 Result: Failed
-                Reason: Lower Level Composition "File Source->Lower-Level" is out of place in the derrivation chain.
+                Reason: Lower Level Composition: "File Source->Lower-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_030; REQ_EP_063; REQ_EP_064
@@ -2361,12 +2361,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of File Source: Top Level C)
-                Detail: OK   -   Transition to Clip (Invalid out of File Source: Clip C)
-                Detail: OK   -     Transition to File Source (Invalid out of File Source: File Source C)
-                Detail: FAIL -       Transition to Sub-Clip Composition (File Source->Sub-Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of File Source: Top Level C"
+                Detail: OK   -   Transition to Invalid out of File Source: Clip C
+                Detail: OK   -     Transition to File Source: "Invalid out of File Source: File Source C"
+                Detail: FAIL -       Transition to Sub-Clip Composition: "File Source->Sub-Clip"
                 Result: Failed
-                Reason: Sub-Clip Composition "File Source->Sub-Clip" is out of place in the derrivation chain.
+                Reason: Sub-Clip Composition: "File Source->Sub-Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_063; REQ_EP_064
@@ -2382,12 +2382,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of File Source: Top Level D)
-                Detail: OK   -   Transition to Clip (Invalid out of File Source: Clip D)
-                Detail: OK   -     Transition to File Source (Invalid out of File Source: File Source D)
-                Detail: FAIL -       Transition to Adjusted Clip Composition (File Source->Adjusted Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of File Source: Top Level D"
+                Detail: OK   -   Transition to Invalid out of File Source: Clip D
+                Detail: OK   -     Transition to File Source: "Invalid out of File Source: File Source D"
+                Detail: FAIL -       Transition to Adjusted Clip Composition: "File Source->Adjusted Clip"
                 Result: Failed
-                Reason: Adjusted Clip Composition "File Source->Adjusted Clip" is out of place in the derrivation chain.
+                Reason: Adjusted Clip Composition: "File Source->Adjusted Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_063; REQ_EP_064
@@ -2403,12 +2403,12 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of File Source: Top Level E)
-                Detail: OK   -   Transition to Clip (Invalid out of File Source: Clip E)
-                Detail: OK   -     Transition to File Source (Invalid out of File Source: File Source E)
-                Detail: FAIL -       Transition to Template Clip (File Source->Template Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of File Source: Top Level E"
+                Detail: OK   -   Transition to Invalid out of File Source: Clip E
+                Detail: OK   -     Transition to File Source: "Invalid out of File Source: File Source E"
+                Detail: FAIL -       Transition to Template Clip: "File Source->Template Clip"
                 Result: Failed
-                Reason: Template Clip "File Source->Template Clip" is out of place in the derrivation chain.
+                Reason: Template Clip: "File Source->Template Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_063; REQ_EP_064
@@ -2424,10 +2424,10 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of File Source: Top Level F)
-                Detail: OK   -   Transition to Clip (Invalid out of File Source: Clip F)
-                Detail: OK   -     Transition to File Source (Invalid out of File Source: File Source F)
-                Detail: FAIL -       Transition to Clip (File Source->Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of File Source: Top Level F"
+                Detail: OK   -   Transition to Invalid out of File Source: Clip F
+                Detail: OK   -     Transition to File Source: "Invalid out of File Source: File Source F"
+                Detail: FAIL -       Transition to File Source->Clip
                 Result: Failed
                 Reason: Clip "File Source->Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -2445,10 +2445,10 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of File Source: Top Level G)
-                Detail: OK   -   Transition to Clip (Invalid out of File Source: Clip G)
-                Detail: OK   -     Transition to File Source (Invalid out of File Source: End of Chain)
-                Detail: FAIL -       Transition to End of Derivation Chain (Source Clip)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of File Source: Top Level G"
+                Detail: OK   -   Transition to Invalid out of File Source: Clip G
+                Detail: OK   -     Transition to File Source: "Invalid out of File Source: End of Chain"
+                Detail: FAIL -       Transition to Source Clip
                 Result: Failed
                 Reason: Source Clip is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -2466,13 +2466,13 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Recording Source: Top Level A)
-                Detail: OK   -   Transition to Clip (Invalid out of Recording Source: Clip A)
-                Detail: OK   -     Transition to File Source (Invalid out of Recording Source: File Source A)
-                Detail: OK   -       Transition to Recording Source (Invalid out of Recording Source: Recording Source A)
-                Detail: FAIL -         Transition to Top Level Composition (Recording Source->Top-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Recording Source: Top Level A"
+                Detail: OK   -   Transition to Invalid out of Recording Source: Clip A
+                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source A"
+                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source A"
+                Detail: FAIL -         Transition to Top Level Composition: "Recording Source->Top-Level"
                 Result: Failed
-                Reason: Top Level Composition "Recording Source->Top-Level" is out of place in the derrivation chain.
+                Reason: Top Level Composition: "Recording Source->Top-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_025; REQ_EP_072
@@ -2488,13 +2488,13 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top Level Composition (Invalid out of Recording Source: Top Level B)
-                Detail: OK   -   Transition to Clip (Invalid out of Recording Source: Clip B)
-                Detail: OK   -     Transition to File Source (Invalid out of Recording Source: File Source B)
-                Detail: OK   -       Transition to Recording Source (Invalid out of Recording Source: Recording Source B)
-                Detail: FAIL -         Transition to Lower Level Composition (Recording Source->Lower-Level)
+                Detail: OK   - Transition to Top Level Composition: "Invalid out of Recording Source: Top Level B"
+                Detail: OK   -   Transition to Invalid out of Recording Source: Clip B
+                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source B"
+                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source B"
+                Detail: FAIL -         Transition to Lower Level Composition: "Recording Source->Lower-Level"
                 Result: Failed
-                Reason: Lower Level Composition "Recording Source->Lower-Level" is out of place in the derrivation chain.
+                Reason: Lower Level Composition: "Recording Source->Lower-Level" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_030; REQ_EP_072

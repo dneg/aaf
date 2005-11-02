@@ -23,6 +23,7 @@
 
 //Regression Test Files files
 #include "TestFileBuilder.h"
+#include "SegmentInfo.h"
 
 //Ax files
 #include <AxTypes.h>
@@ -35,6 +36,7 @@
 #include <map>
 
 class AxMob;
+class AxSegment;
 
 namespace aafanalyzer {
 
@@ -60,11 +62,26 @@ public:
     
  private:
  
-    typedef shared_ptr<AxMob>(TestFileBuilder::*ptrToAddFunction)( const AxString& name, bool isNamed );   
- 
+    typedef shared_ptr<AxMob>(TestFileBuilder::*ptrToAddFunction)( const AxString& name, bool isNamed );
+    typedef shared_ptr<AxSegment>(TestFileBuilder::*ptrToCreateFunction)( AxMob& axMob, TestFileBuilder::TrackType essenceType );
+    typedef void(TestFileBuilder::*ptrToFillFunction) ( shared_ptr<AxSegment> axSegment, AxMob& axMob );
+    typedef void(TestFileBuilder::*ptrToAttachSlotFunction)( AxMob& parent, AxSegment& axSegment, aafRational_t editRate );
+    typedef pair<const AxString, const bool> OptionalStringAttrib;
+    typedef pair<const int, const bool> OptionalIntAttrib;
+
     stack<shared_ptr<AxMob> > _mobStack;
-    map<AxString, ptrToAddFunction> _test;
+    stack<SegmentInfo> _segmentStack;
+    map<AxString, ptrToAddFunction> _materialTypeMap;
+    map<AxString, ptrToCreateFunction> _createSegmentMap;
+    map<AxString, ptrToFillFunction> _fillSegmentMap;
+    map<AxString, ptrToAttachSlotFunction> _attachSlotMap;
+    map<AxString, TestFileBuilder::TrackType> _essenceMap;
     TestFileBuilder _testFile;
+    
+    const AxString GetStringAttribValue( const AxString& attrib, const char** attribs, const unsigned int size, const AxString& default_val ) const;
+    const int GetIntAtribValue( const AxString& attrib, const char** attribs, const unsigned int size, const int default_val ) const;
+    const OptionalStringAttrib GetOptionalStringAttribValue( const AxString& attrib, const char** attribs, const unsigned int size, const AxString& default_val ) const;
+    const OptionalIntAttrib GetOptionalIntAttribValue( const AxString& attrib, const char** attribs, const unsigned int size, const int default_val ) const;
 
 };
 

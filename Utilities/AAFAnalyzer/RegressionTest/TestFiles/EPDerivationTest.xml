@@ -6,79 +6,135 @@
     <!-- All valid transitions are listed in this chain -->
     
 	<top-level name="L01 Top Level">
-        <adjusted-clip name="L02 Adjusted Clip">
-            <template-clip name="L03 Template Clip A">
-                <eoc/>
-            </template-clip>
-        </adjusted-clip>
-        <sub-clip name="L02 Sub-Clip">
-            <adjusted-clip name="L03 Adjusted Clip">
-                	<clip name="L05 Clip A">
-                        <film-source name="L06 Film Source">
-                            <eoc/>
-                        </film-source>
-                    </clip>
-            </adjusted-clip>
-        </sub-clip>
-        			<clip name="L05 Clip B">
-                        <tape-source name="L06 Tape Source">
-                            <film-source name="L07 Film Source A">
-                                <eoc/>
-                            </film-source>
-                        </tape-source>
-                        <eoc/>
-                    </clip>
-        <template-clip name="L02 Template Clip">
-            <eoc/>
-        </template-clip>
-        <lower-level name="L02 Lower Level">
-            <lower-level name="L03 Lower Level">
-	                <clip name="L05 Clip C">
-                    	<oof/>
-                        <file-source name="L06 File Source">
-                            <import-source name="L07 Import Source">
-                                <film-source name="L08 Film Source A">
-                                    <eoc/>
-                                </film-source>
-                                <tape-source name="L08 Tape Source A">
-                                    <eoc/>
-                                </tape-source>
-                            </import-source>
-                            <recording-source name="L07 Recording Source">
-                                <eoc/>
-                            </recording-source>
-                            <file-source name="L07 File Source">
-                                <tape-source name="L08 Tape Source B">
-                                    <oof/>
-                                </tape-source>
-                                <film-source name="L08 Film Source B">
-                                    <eoc/>
-                                </film-source>
-                                <oof/>
-                            </file-source>
-                        </file-source>
-    	            </clip>
-                <sub-clip name="L04 Sub-Clip">
-                    <template-clip name="L05 Template Clip A">
-                        <eoc/>
-                    </template-clip>
-                    <clip name="L05 Clip D">
-                        <import-source name="L06 Import Source">
-                            <eoc/>
-                            <oof/>
-                        </import-source>
-                    </clip>
-                </sub-clip>
-                <adjusted-clip name="L04 Adjusted Clip">
-                    <template-clip name="L05 Template Clip B">
-                        <eoc/>
-                    </template-clip>
-                </adjusted-clip>
-            </lower-level>
-            <template-clip name="L03 Template Clip B">
-                <eoc/>
-            </template-clip>
-        </lower-level>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <adjusted-clip name="L02 Adjusted Clip">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <template-clip name="L03 Template Clip A">
+        	        	<eoc/>
+            		</template-clip>
+                </source-clip>
+	        </adjusted-clip>
+        </source-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <sub-clip name="L02 Sub-Clip">
+	            <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+    		        <adjusted-clip name="L03 Adjusted Clip">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		                	<clip name="L05 Clip A">
+                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                        <film-source name="L06 Film Source">
+			                            <eoc/>
+            			            </film-source>
+                                </source-clip>
+		                    </clip>
+                        </source-clip>
+	            	</adjusted-clip>
+	            </source-clip>
+	        </sub-clip>
+        </source-clip>
+           			<source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        			<clip name="L05 Clip B">
+                            <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		                        <tape-source name="L06 Tape Source">
+                                    <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                            <film-source name="L07 Film Source A">
+            			                    <eoc/>
+                        			    </film-source>
+                                    </source-clip>
+		                        </tape-source>
+                            </source-clip>
+	                        <eoc/>
+	                    </clip>
+                    </source-clip>
+		<source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <template-clip name="L02 Template Clip">
+    	        <eoc/>
+        	</template-clip>
+        </source-clip>
+		<source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <lower-level name="L02 Lower Level">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <lower-level name="L03 Lower Level">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <clip name="L05 Clip C">
+        		            	<oof/>
+                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                        <file-source name="L06 File Source">
+                                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+				                            <import-source name="L07 Import Source">
+                                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+					                                <film-source name="L08 Film Source A">
+                    					                <eoc/>
+					                                </film-source>
+                                                </source-clip>
+                                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+					                                <tape-source name="L08 Tape Source A">
+                    					                <eoc/>
+					                                </tape-source>
+                                                </source-clip>
+			                            	</import-source>
+                                        </source-clip>
+                                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+				                            <recording-source name="L07 Recording Source">
+                				                <eoc/>
+				                            </recording-source>
+                                        </source-clip>
+                                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+				                            <file-source name="L07 File Source">
+                                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+					                                <tape-source name="L08 Tape Source B">
+					                                    <oof/>
+                    					            </tape-source>
+                                                </source-clip>
+                                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+					                                <film-source name="L08 Film Source B">
+                    					                <eoc/>
+					                                </film-source>
+                                                </source-clip>
+		               			            	<oof/>
+				                            </file-source>
+                                        </source-clip>
+			                        </file-source>
+                                </source-clip>
+		    	            </clip>
+                        </source-clip>
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <sub-clip name="L04 Sub-Clip">
+                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+				                    <template-clip name="L05 Template Clip A">
+                				        <eoc/>
+				                    </template-clip>
+                                </source-clip>
+                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+				                    <clip name="L05 Clip D">
+                                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+					                        <import-source name="L06 Import Source">
+                    					        <eoc/>
+					                            <oof/>
+                    					    </import-source>
+                                        </source-clip>
+				                    </clip>
+                                </source-clip>
+			                </sub-clip>
+                        </source-clip>
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <adjusted-clip name="L04 Adjusted Clip">
+                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+				                    <template-clip name="L05 Template Clip B">
+                				        <eoc/>
+				                    </template-clip>
+                                </source-clip>
+			                </adjusted-clip>
+                        </source-clip>
+		            </lower-level>
+                </source-clip>
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <template-clip name="L03 Template Clip B">
+        		        <eoc/>
+		            </template-clip>
+                </source-clip>
+	        </lower-level>
+        </source-clip>
     </top-level>
     
     <!-- Invalid transitions out of the initial state -->
@@ -96,22 +152,34 @@
     
     <!-- Invalid transitions out of the Top-Level state -->
     <top-level name="Invalid out of Top-Level: Top-Level A">
-        <top-level name="Top-Level->Top-Level"><eoc/></top-level>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <top-level name="Top-Level->Top-Level"><eoc/></top-level>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Top-Level: Top-Level B">
-        <file-source name="Top-Level->File Source"><eoc/></file-source>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <file-source name="Top-Level->File Source"><eoc/></file-source>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Top-Level: Top-Level C">
-        <recording-source name="Top-Level->Recording Source"><eoc/></recording-source>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <recording-source name="Top-Level->Recording Source"><eoc/></recording-source>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Top-Level: Top-Level D">
-        <import-source name="Top-Level->Import Source"><eoc/></import-source>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <import-source name="Top-Level->Import Source"><eoc/></import-source>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Top-Level: Top-Level E">
-        <tape-source name="Top-Level->Tape Source"><eoc/></tape-source>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+        	<tape-source name="Top-Level->Tape Source"><eoc/></tape-source>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Top-Level: Top-Level F">
-        <film-source name="Top-Level->Film Source"><eoc/></film-source>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <film-source name="Top-Level->Film Source"><eoc/></film-source>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Top-Level: End of Chain">
         <eoc/>
@@ -122,679 +190,1207 @@
     
     <!-- Invalid transitions out of the Lower-Level state -->
     <top-level name="Invalid out of Lower-Level: Top-Level A">
-        <lower-level name="Invalid out of Lower-Level: Lower-Level A">
-            <top-level name="Lower-Level->Top-Level"><eoc/></top-level>
-        </lower-level>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <lower-level name="Invalid out of Lower-Level: Lower-Level A">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <top-level name="Lower-Level->Top-Level"><eoc/></top-level>
+                </source-clip>
+	        </lower-level>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Lower-Level: Top-Level B">
-        <lower-level name="Invalid out of Lower-Level: Lower-Level B">
-            <file-source name="Lower-Level->File Source"><eoc/></file-source>
-        </lower-level>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <lower-level name="Invalid out of Lower-Level: Lower-Level B">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Lower-Level->File Source"><eoc/></file-source>
+                </source-clip>
+	        </lower-level>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Lower-Level: Top-Level C">
-        <lower-level name="Invalid out of Lower-Level: Lower-Level C">
-            <recording-source name="Lower-Level->Recording Source"><eoc/></recording-source>
-        </lower-level>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <lower-level name="Invalid out of Lower-Level: Lower-Level C">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <recording-source name="Lower-Level->Recording Source"><eoc/></recording-source>
+                </source-clip>
+	        </lower-level>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Lower-Level: Top-Level D">
-        <lower-level name="Invalid out of Lower-Level: Lower-Level D">
-            <import-source name="Lower-Level->Import Source"><eoc/></import-source>
-        </lower-level>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <lower-level name="Invalid out of Lower-Level: Lower-Level D">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <import-source name="Lower-Level->Import Source"><eoc/></import-source>
+                </source-clip>
+	        </lower-level>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Lower-Level: Top-Level E">
-        <lower-level name="Invalid out of Lower-Level: Lower-Level E">
-            <tape-source name="Lower-Level->Tape Source"><eoc/></tape-source>
-        </lower-level>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <lower-level name="Invalid out of Lower-Level: Lower-Level E">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <tape-source name="Lower-Level->Tape Source"><eoc/></tape-source>
+                </source-clip>
+	        </lower-level>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Lower-Level: Top-Level F">
-        <lower-level name="Invalid out of Lower-Level: Lower-Level F">
-            <film-source name="Lower-Level->Film Source"><eoc/></film-source>
-        </lower-level>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <lower-level name="Invalid out of Lower-Level: Lower-Level F">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <film-source name="Lower-Level->Film Source"><eoc/></film-source>
+                </source-clip>
+	        </lower-level>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Lower-Level: Top Level G">
-        <lower-level name="Invalid out of Lower-Level: End of Chain">
-            <eoc/>
-        </lower-level>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <lower-level name="Invalid out of Lower-Level: End of Chain">
+	            <eoc/>
+	        </lower-level>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Lower-Level: Top Level H">
-        <lower-level name="Invalid out of Lower-Level: Out of File">
-            <oof/>
-        </lower-level>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <lower-level name="Invalid out of Lower-Level: Out of File">
+	            <oof/>
+    	    </lower-level>
+        </source-clip>
     </top-level>
     
     <!-- Invalid transitions out of the Sub-Clip state -->
     <top-level name="Invalid out of Sub-Clip: Top Level A">
-        <sub-clip name="Invalid out of Sub-Clip: Sub-Clip A">
-            <top-level name="Sub-Clip->Top-Level"><eoc/></top-level>
-        </sub-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <sub-clip name="Invalid out of Sub-Clip: Sub-Clip A">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <top-level name="Sub-Clip->Top-Level"><eoc/></top-level>
+                </source-clip>
+	        </sub-clip>
+        </source-clip>
     </top-level>
-        <top-level name="Invalid out of Sub-Clip: Top Level B">
-        <sub-clip name="Invalid out of Sub-Clip: Sub-Clip B">
-            <lower-level name="Sub-Clip->Lower-Level"><eoc/></lower-level>
-        </sub-clip>
+    <top-level name="Invalid out of Sub-Clip: Top Level B">
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <sub-clip name="Invalid out of Sub-Clip: Sub-Clip B">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <lower-level name="Sub-Clip->Lower-Level"><eoc/></lower-level>
+                </source-clip>
+	        </sub-clip>
+        </source-clip>
     </top-level>
-        <top-level name="Invalid out of Sub-Clip: Top Level C">
-        <sub-clip name="Invalid out of Sub-Clip: Sub-Clip C">
-            <sub-clip name="Sub-Clip->Sub-Clip"><eoc/></sub-clip>
-        </sub-clip>
+    <top-level name="Invalid out of Sub-Clip: Top Level C">
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <sub-clip name="Invalid out of Sub-Clip: Sub-Clip C">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <sub-clip name="Sub-Clip->Sub-Clip"><eoc/></sub-clip>
+                </source-clip>
+	        </sub-clip>
+        </source-clip>
     </top-level>
-        <top-level name="Invalid out of Sub-Clip: Top Level D">
-        <sub-clip name="Invalid out of Sub-Clip: Sub-Clip D">
-            <file-source name="Sub-Clip->File Source"><eoc/></file-source>
-        </sub-clip>
+    <top-level name="Invalid out of Sub-Clip: Top Level D">
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <sub-clip name="Invalid out of Sub-Clip: Sub-Clip D">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Sub-Clip->File Source"><eoc/></file-source>
+                </source-clip>
+	        </sub-clip>
+        </source-clip>
     </top-level>
-        <top-level name="Invalid out of Sub-Clip: Top Level E">
-        <sub-clip name="Invalid out of Sub-Clip: Sub-Clip E">
-            <recording-source name="Sub-Clip->Recording Source"><eoc/></recording-source>
-        </sub-clip>
+    <top-level name="Invalid out of Sub-Clip: Top Level E">
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <sub-clip name="Invalid out of Sub-Clip: Sub-Clip E">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <recording-source name="Sub-Clip->Recording Source"><eoc/></recording-source>
+                </source-clip>
+	        </sub-clip>
+        </source-clip>
     </top-level>
-        <top-level name="Invalid out of Sub-Clip: Top Level F">
-        <sub-clip name="Invalid out of Sub-Clip: Sub-Clip F">
-            <import-source name="Sub-Clip->Import Source"><eoc/></import-source>
-        </sub-clip>
+    <top-level name="Invalid out of Sub-Clip: Top Level F">
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <sub-clip name="Invalid out of Sub-Clip: Sub-Clip F">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <import-source name="Sub-Clip->Import Source"><eoc/></import-source>
+                </source-clip>
+	        </sub-clip>
+        </source-clip>
     </top-level>
-        <top-level name="Invalid out of Sub-Clip: Top Level G">
-        <sub-clip name="Invalid out of Sub-Clip: Sub-Clip G">
-            <tape-source name="Sub-Clip->Tape Source"><eoc/></tape-source>
-        </sub-clip>
+    <top-level name="Invalid out of Sub-Clip: Top Level G">
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <sub-clip name="Invalid out of Sub-Clip: Sub-Clip G">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <tape-source name="Sub-Clip->Tape Source"><eoc/></tape-source>
+                </source-clip>
+	        </sub-clip>
+        </source-clip>
     </top-level>
-        <top-level name="Invalid out of Sub-Clip: Top Level H">
-        <sub-clip name="Invalid out of Sub-Clip: Sub-Clip H">
-            <film-source name="Sub-Clip->Film Source"><eoc/></film-source>
-        </sub-clip>
+    <top-level name="Invalid out of Sub-Clip: Top Level H">
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <sub-clip name="Invalid out of Sub-Clip: Sub-Clip H">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <film-source name="Sub-Clip->Film Source"><eoc/></film-source>
+                </source-clip>
+	        </sub-clip>
+        </source-clip>
     </top-level>
-        <top-level name="Invalid out of Sub-Clip: Top Level I">
-        <sub-clip name="Invalid out of Sub-Clip: End of Clip">
-            <eoc/>
-        </sub-clip>
+    <top-level name="Invalid out of Sub-Clip: Top Level I">
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <sub-clip name="Invalid out of Sub-Clip: End of Clip">
+    	        <eoc/>
+        	</sub-clip>
+        </source-clip>
     </top-level>
-        <top-level name="Invalid out of Sub-Clip: Top Level J">
-        <sub-clip name="Invalid out of Sub-Clip: Out of File">
-            <eoc/>
-        </sub-clip>
+    <top-level name="Invalid out of Sub-Clip: Top Level J">
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <sub-clip name="Invalid out of Sub-Clip: Out of File">
+	            <eoc/>
+    	    </sub-clip>
+        </source-clip>
     </top-level>
     
     <!-- Invalid transitions out of the Adjusted Clip state -->
     <top-level name="Invalid out of Adjusted Clip: Top Level A">
-        <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip A">
-            <top-level name="Adjusted Clip->Top-Level"><eoc/></top-level>
-        </adjusted-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip A">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <top-level name="Adjusted Clip->Top-Level"><eoc/></top-level>
+                </source-clip>
+	        </adjusted-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Adjusted Clip: Top Level B">
-        <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip B">
-            <lower-level name="Adjusted Clip->Lower-Level"><eoc/></lower-level>
-        </adjusted-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip B">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <lower-level name="Adjusted Clip->Lower-Level"><eoc/></lower-level>
+                </source-clip>
+	        </adjusted-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Adjusted Clip: Top Level C">
-        <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip C">
-            <sub-clip name="Adjusted Clip->Sub-Clip"><eoc/></sub-clip>
-        </adjusted-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip C">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <sub-clip name="Adjusted Clip->Sub-Clip"><eoc/></sub-clip>
+                </source-clip>
+	        </adjusted-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Adjusted Clip: Top Level D">
-        <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip D">
-            <adjusted-clip name="Adjusted Clip->Adjusted Clip"><eoc/></adjusted-clip>
-        </adjusted-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip D">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <adjusted-clip name="Adjusted Clip->Adjusted Clip"><eoc/></adjusted-clip>
+                </source-clip>
+	        </adjusted-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Adjusted Clip: Top Level E">
-        <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip E">
-            <file-source name="Adjusted Clip->File Source"><eoc/></file-source>
-        </adjusted-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip E">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Adjusted Clip->File Source"><eoc/></file-source>
+                </source-clip>
+	        </adjusted-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Adjusted Clip: Top Level F">
-        <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip F">
-            <recording-source name="Adjusted Clip->Recording Source"><eoc/></recording-source>
-        </adjusted-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip F">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <recording-source name="Adjusted Clip->Recording Source"><eoc/></recording-source>
+                </source-clip>
+	        </adjusted-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Adjusted Clip: Top Level G">
-        <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip G">
-            <import-source name="Adjusted Clip->Import Source"><eoc/></import-source>
-        </adjusted-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip G">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <import-source name="Adjusted Clip->Import Source"><eoc/></import-source>
+                </source-clip>
+	        </adjusted-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Adjusted Clip: Top Level H">
-        <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip H">
-            <tape-source name="Adjusted Clip->Tape Source"><eoc/></tape-source>
-        </adjusted-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip H">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <tape-source name="Adjusted Clip->Tape Source"><eoc/></tape-source>
+                </source-clip>
+	        </adjusted-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Adjusted Clip: Top Level I">
-        <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip I">
-            <film-source name="Adjusted Clip->Film Source"><eoc/></film-source>
-        </adjusted-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip I">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <film-source name="Adjusted Clip->Film Source"><eoc/></film-source>
+                </source-clip>
+	        </adjusted-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Adjusted Clip: Top Level J">
-        <adjusted-clip name="Invalid out of Adjusted Clip: End of Chain">
-			<eoc/>
-        </adjusted-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <adjusted-clip name="Invalid out of Adjusted Clip: End of Chain">
+				<eoc/>
+    	    </adjusted-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Adjusted Clip: Top Level K">
-        <adjusted-clip name="Invalid out of Adjusted Clip: Out of File">
-			<oof/>
-        </adjusted-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <adjusted-clip name="Invalid out of Adjusted Clip: Out of File">
+				<oof/>
+        	</adjusted-clip>
+        </source-clip>
     </top-level>
     
     <!-- Invalid transitions out of the Template Clip state -->
     <top-level name="Invalid out of Template Clip: Top Level A">
-        <template-clip name="Invalid out of Template Clip: Template Clip A">
-            <top-level name="Template Clip->Top-Level"><eoc/></top-level>
-        </template-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <template-clip name="Invalid out of Template Clip: Template Clip A">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <top-level name="Template Clip->Top-Level"><eoc/></top-level>
+                </source-clip>
+	        </template-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Template Clip: Top Level B">
-        <template-clip name="Invalid out of Template Clip: Template Clip B">
-            <lower-level name="Template Clip->Lower-Level"><eoc/></lower-level>
-        </template-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <template-clip name="Invalid out of Template Clip: Template Clip B">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <lower-level name="Template Clip->Lower-Level"><eoc/></lower-level>
+                </source-clip>
+	        </template-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Template Clip: Top Level C">
-        <template-clip name="Invalid out of Template Clip: Template Clip C">
-            <sub-clip name="Template Clip->Sub-Clip"><eoc/></sub-clip>
-        </template-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <template-clip name="Invalid out of Template Clip: Template Clip C">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <sub-clip name="Template Clip->Sub-Clip"><eoc/></sub-clip>
+                </source-clip>
+	        </template-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Template Clip: Top Level D">
-        <template-clip name="Invalid out of Template Clip: Template Clip D">
-            <adjusted-clip name="Template Clip->Adjusted Clip"><eoc/></adjusted-clip>
-        </template-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <template-clip name="Invalid out of Template Clip: Template Clip D">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <adjusted-clip name="Template Clip->Adjusted Clip"><eoc/></adjusted-clip>
+                </source-clip>
+	        </template-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Template Clip: Top Level E">
-        <template-clip name="Invalid out of Template Clip: Template Clip E">
-            <template-clip name="Template Clip->Template Clip"><eoc/></template-clip>
-        </template-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <template-clip name="Invalid out of Template Clip: Template Clip E">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <template-clip name="Template Clip->Template Clip"><eoc/></template-clip>
+                </source-clip>
+	        </template-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Template Clip: Top Level F">
-        <template-clip name="Invalid out of Template Clip: Template Clip F">
-            <clip name="Template Clip->Clip"><eoc/></clip>
-        </template-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <template-clip name="Invalid out of Template Clip: Template Clip F">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <clip name="Template Clip->Clip"><eoc/></clip>
+                </source-clip>
+	        </template-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Template Clip: Top Level G">
-        <template-clip name="Invalid out of Template Clip: Template Clip G">
-            <file-source name="Template Clip->File Source"><eoc/></file-source>
-        </template-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <template-clip name="Invalid out of Template Clip: Template Clip G">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Template Clip->File Source"><eoc/></file-source>
+                </source-clip>
+	        </template-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Template Clip: Top Level H">
-        <template-clip name="Invalid out of Template Clip: Template Clip H">
-            <recording-source name="Template Clip->Recording Source"><eoc/></recording-source>
-        </template-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <template-clip name="Invalid out of Template Clip: Template Clip H">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <recording-source name="Template Clip->Recording Source"><eoc/></recording-source>
+                </source-clip>
+	        </template-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Template Clip: Top Level I">
-        <template-clip name="Invalid out of Template Clip: Template Clip I">
-            <import-source name="Template Clip->Import Source"><eoc/></import-source>
-        </template-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <template-clip name="Invalid out of Template Clip: Template Clip I">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <import-source name="Template Clip->Import Source"><eoc/></import-source>
+                </source-clip>
+	        </template-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Template Clip: Top Level J">
-        <template-clip name="Invalid out of Template Clip: Template Clip J">
-            <tape-source name="Template Clip->Tape Source"><eoc/></tape-source>
-        </template-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <template-clip name="Invalid out of Template Clip: Template Clip J">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <tape-source name="Template Clip->Tape Source"><eoc/></tape-source>
+                </source-clip>
+	        </template-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Template Clip: Top Level K">
-        <template-clip name="Invalid out of Template Clip: Template Clip K">
-            <film-source name="Template Clip->Film Source"><eoc/></film-source>
-        </template-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <template-clip name="Invalid out of Template Clip: Template Clip K">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <film-source name="Template Clip->Film Source"><eoc/></film-source>
+                </source-clip>
+	        </template-clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Template Clip: Top Level L">
-        <template-clip name="Invalid out of Template Clip: Out of File">
-            <oof/>
-        </template-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <template-clip name="Invalid out of Template Clip: Out of File">
+	            <oof/>
+    	    </template-clip>
+        </source-clip>
     </top-level>
     
     <!-- Invalid transitions out of the Clip state -->
     <top-level name="Invalid out of Clip: Top Level A">
-        <clip name="Invalid out of Clip: Clip A">
-            <top-level name="Clip->Top-Level"><eoc/></top-level>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Clip: Clip A">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <top-level name="Clip->Top-Level"><eoc/></top-level>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Clip: Top Level B">
-        <clip name="Invalid out of Clip: Clip B">
-            <lower-level name="Clip->Lower-Level"><eoc/></lower-level>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Clip: Clip B">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <lower-level name="Clip->Lower-Level"><eoc/></lower-level>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Clip: Top Level C">
-        <clip name="Invalid out of Clip: Clip C">
-            <sub-clip name="Clip->Sub-Clip"><eoc/></sub-clip>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Clip: Clip C">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <sub-clip name="Clip->Sub-Clip"><eoc/></sub-clip>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Clip: Top Level D">
-        <clip name="Invalid out of Clip: Clip D">
-            <adjusted-clip name="Clip->Adjusted Clip"><eoc/></adjusted-clip>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Clip: Clip D">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <adjusted-clip name="Clip->Adjusted Clip"><eoc/></adjusted-clip>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Clip: Top Level E">
-        <clip name="Invalid out of Clip: Clip E">
-            <template-clip name="Clip->Template Clip"><eoc/></template-clip>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Clip: Clip E">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <template-clip name="Clip->Template Clip"><eoc/></template-clip>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Clip: Top Level F">
-        <clip name="Invalid out of Clip: Clip F">
-            <clip name="Clip->Clip"><eoc/></clip>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Clip: Clip F">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <clip name="Clip->Clip"><eoc/></clip>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Clip: Top Level G">
-        <clip name="Invalid out of Clip: Clip G">
-            <recording-source name="Clip->Recording Source"><eoc/></recording-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Clip: Clip G">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <recording-source name="Clip->Recording Source"><eoc/></recording-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     
     <!-- Invalid transitions out of the File Source state -->
     <top-level name="Invalid out of File Source: Top Level A">
-        <clip name="Invalid out of File Source: Clip A">
-            <file-source name="Invalid out of File Source: File Source A">
-                <top-level name="File Source->Top-Level"><eoc/></top-level>
-            </file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of File Source: Clip A">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of File Source: File Source A">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <top-level name="File Source->Top-Level"><eoc/></top-level>
+                        </source-clip>
+		            </file-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of File Source: Top Level B">
-        <clip name="Invalid out of File Source: Clip B">
-            <file-source name="Invalid out of File Source: File Source B">
-                <lower-level name="File Source->Lower-Level"><eoc/></lower-level>
-            </file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of File Source: Clip B">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of File Source: File Source B">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <lower-level name="File Source->Lower-Level"><eoc/></lower-level>
+                        </source-clip>
+		            </file-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of File Source: Top Level C">
-        <clip name="Invalid out of File Source: Clip C">
-            <file-source name="Invalid out of File Source: File Source C">
-                <sub-clip name="File Source->Sub-Clip"><eoc/></sub-clip>
-            </file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of File Source: Clip C">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of File Source: File Source C">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <sub-clip name="File Source->Sub-Clip"><eoc/></sub-clip>
+                        </source-clip>
+		            </file-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of File Source: Top Level D">
-        <clip name="Invalid out of File Source: Clip D">
-            <file-source name="Invalid out of File Source: File Source D">
-                <adjusted-clip name="File Source->Adjusted Clip"><eoc/></adjusted-clip>
-            </file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of File Source: Clip D">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of File Source: File Source D">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <adjusted-clip name="File Source->Adjusted Clip"><eoc/></adjusted-clip>
+                        </source-clip>
+		            </file-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of File Source: Top Level E">
-        <clip name="Invalid out of File Source: Clip E">
-            <file-source name="Invalid out of File Source: File Source E">
-                <template-clip name="File Source->Template Clip"><eoc/></template-clip>
-            </file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of File Source: Clip E">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of File Source: File Source E">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <template-clip name="File Source->Template Clip"><eoc/></template-clip>
+                        </source-clip>
+		            </file-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of File Source: Top Level F">
-        <clip name="Invalid out of File Source: Clip F">
-            <file-source name="Invalid out of File Source: File Source F">
-                <clip name="File Source->Clip"><eoc/></clip>
-            </file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of File Source: Clip F">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of File Source: File Source F">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <clip name="File Source->Clip"><eoc/></clip>
+                        </source-clip>
+		            </file-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of File Source: Top Level G">
-        <clip name="Invalid out of File Source: Clip G">
-            <file-source name="Invalid out of File Source: End of Chain"><eoc/></file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of File Source: Clip G">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of File Source: End of Chain"><eoc/></file-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     
     <!-- Invalid transition out of the Recording Source state -->
     <top-level name="Invalid out of Recording Source: Top Level A">
-        <clip name="Invalid out of Recording Source: Clip A">
-            <file-source name="Invalid out of Recording Source: File Source A">
-                <recording-source name="Invalid out of Recording Source: Recording Source A">
-                    <top-level name="Recording Source->Top-Level"><eoc/></top-level>
-                </recording-source>
-            </file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Recording Source: Clip A">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of Recording Source: File Source A">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <recording-source name="Invalid out of Recording Source: Recording Source A">
+                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+				                    <top-level name="Recording Source->Top-Level"><eoc/></top-level>
+                                </source-clip>
+			                </recording-source>
+                        </source-clip>
+		            </file-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Recording Source: Top Level B">
-        <clip name="Invalid out of Recording Source: Clip B">
-            <file-source name="Invalid out of Recording Source: File Source B">
-                <recording-source name="Invalid out of Recording Source: Recording Source B">
-                    <lower-level name="Recording Source->Lower-Level"><eoc/></lower-level>
-                </recording-source>
-            </file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Recording Source: Clip B">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of Recording Source: File Source B">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <recording-source name="Invalid out of Recording Source: Recording Source B">
+                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+				                    <lower-level name="Recording Source->Lower-Level"><eoc/></lower-level>
+                                </source-clip>
+			                </recording-source>
+                        </source-clip>
+		            </file-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Recording Source: Top Level C">
-        <clip name="Invalid out of Recording Source: Clip C">
-            <file-source name="Invalid out of Recording Source: File Source C">
-                <recording-source name="Invalid out of Recording Source: Recording Source C">
-                    <sub-clip name="Recording Source->Sub-Clip"><eoc/></sub-clip>
-                </recording-source>
-            </file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Recording Source: Clip C">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of Recording Source: File Source C">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <recording-source name="Invalid out of Recording Source: Recording Source C">
+                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+				                    <sub-clip name="Recording Source->Sub-Clip"><eoc/></sub-clip>
+                                </source-clip>
+			                </recording-source>
+                        </source-clip>
+		            </file-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Recording Source: Top Level D">
-        <clip name="Invalid out of Recording Source: Clip D">
-            <file-source name="Invalid out of Recording Source: File Source D">
-                <recording-source name="Invalid out of Recording Source: Recording Source D">
-                    <adjusted-clip name="Recording Source->Adjusted Clip"><eoc/></adjusted-clip>
-                </recording-source>
-            </file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Recording Source: Clip D">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of Recording Source: File Source D">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <recording-source name="Invalid out of Recording Source: Recording Source D">
+                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+				                    <adjusted-clip name="Recording Source->Adjusted Clip"><eoc/></adjusted-clip>
+                                </source-clip>
+			                </recording-source>
+                        </source-clip>
+		            </file-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Recording Source: Top Level E">
-        <clip name="Invalid out of Recording Source: Clip E">
-            <file-source name="Invalid out of Recording Source: File Source E">
-                <recording-source name="Invalid out of Recording Source: Recording Source E">
-                    <template-clip name="Recording Source->Template Clip"><eoc/></template-clip>
-                </recording-source>
-            </file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Recording Source: Clip E">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of Recording Source: File Source E">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <recording-source name="Invalid out of Recording Source: Recording Source E">
+                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+				                    <template-clip name="Recording Source->Template Clip"><eoc/></template-clip>
+                                </source-clip>
+			                </recording-source>
+                        </source-clip>
+		            </file-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Recording Source: Top Level F">
-        <clip name="Invalid out of Recording Source: Clip F">
-            <file-source name="Invalid out of Recording Source: File Source F">
-                <recording-source name="Invalid out of Recording Source: Recording Source F">
-                    <clip name="Recording Source->Clip"><eoc/></clip>
-                </recording-source>
-            </file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Recording Source: Clip F">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of Recording Source: File Source F">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <recording-source name="Invalid out of Recording Source: Recording Source F">
+                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+				                    <clip name="Recording Source->Clip"><eoc/></clip>
+                                </source-clip>
+			                </recording-source>
+                        </source-clip>
+		            </file-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Recording Source: Top Level G">
-        <clip name="Invalid out of Recording Source: Clip G">
-            <file-source name="Invalid out of Recording Source: File Source G">
-                <recording-source name="Invalid out of Recording Source: Recording Source G">
-                    <file-source name="Recording Source->File Source"><eoc/></file-source>
-                </recording-source>
-            </file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Recording Source: Clip G">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of Recording Source: File Source G">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <recording-source name="Invalid out of Recording Source: Recording Source G">
+                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+				                    <file-source name="Recording Source->File Source"><eoc/></file-source>
+                                </source-clip>
+			                </recording-source>
+                        </source-clip>
+		            </file-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Recording Source: Top Level H">
-        <clip name="Invalid out of Recording Source: Clip H">
-            <file-source name="Invalid out of Recording Source: File Source H">
-                <recording-source name="Invalid out of Recording Source: Recording Source H">
-                    <recording-source name="Recording Source->Recording Source"><eoc/></recording-source>
-                </recording-source>
-            </file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Recording Source: Clip H">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of Recording Source: File Source H">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <recording-source name="Invalid out of Recording Source: Recording Source H">
+                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+				                    <recording-source name="Recording Source->Recording Source"><eoc/></recording-source>
+                                </source-clip>
+			                </recording-source>
+                        </source-clip>
+		            </file-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Recording Source: Top Level I">
-        <clip name="Invalid out of Recording Source: Clip I">
-            <file-source name="Invalid out of Recording Source: File Source I">
-                <recording-source name="Invalid out of Recording Source: Recording Source I">
-                    <import-source name="Recording Source->Import Source"><eoc/></import-source>
-                </recording-source>
-            </file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Recording Source: Clip I">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of Recording Source: File Source I">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <recording-source name="Invalid out of Recording Source: Recording Source I">
+                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+				                    <import-source name="Recording Source->Import Source"><eoc/></import-source>
+                                </source-clip>
+			                </recording-source>
+                        </source-clip>
+		            </file-source>
+                </source-clip>
+		    </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Recording Source: Top Level J">
-        <clip name="Invalid out of Recording Source: Clip J">
-            <file-source name="Invalid out of Recording Source: File Source J">
-                <recording-source name="Invalid out of Recording Source: Recording Source J">
-                    <tape-source name="Recording Source->Tape Source"><eoc/></tape-source>
-                </recording-source>
-            </file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Recording Source: Clip J">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of Recording Source: File Source J">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <recording-source name="Invalid out of Recording Source: Recording Source J">
+                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+				                    <tape-source name="Recording Source->Tape Source"><eoc/></tape-source>
+                                </source-clip>
+			                </recording-source>
+                        </source-clip>
+		            </file-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Recording Source: Top Level K">
-        <clip name="Invalid out of Recording Source: Clip K">
-            <file-source name="Invalid out of Recording Source: File Source K">
-                <recording-source name="Invalid out of Recording Source: Recording Source K">
-                    <film-source name="Recording Source->Film Source"><eoc/></film-source>
-                </recording-source>
-            </file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Recording Source: Clip K">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of Recording Source: File Source K">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <recording-source name="Invalid out of Recording Source: Recording Source K">
+                                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+				                    <film-source name="Recording Source->Film Source"><eoc/></film-source>
+                                </source-clip>
+			                </recording-source>
+                        </source-clip>
+		            </file-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Recording Source: Top Level L">
-        <clip name="Invalid out of Recording Source: Clip L">
-            <file-source name="Invalid out of Recording Source: File Source L">
-                <recording-source name="Invalid out of Recording Source: Out of File">
-					<oof/>
-                </recording-source>
-            </file-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Recording Source: Clip L">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Invalid out of Recording Source: File Source L">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <recording-source name="Invalid out of Recording Source: Out of File">
+								<oof/>
+            			    </recording-source>
+                        </source-clip>
+		            </file-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     
     <!-- Invalid transitions out of the Import Source state -->
     <top-level name="Invalid out of Import Source: Top Level A">
-        <clip name="Invalid out of Import Source: Clip A">
-            <import-source name="Invalid out of Import Source: Import Source A">
-                <top-level name="Import Source->Top-Level"><eoc/></top-level>
-            </import-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Import Source: Clip A">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <import-source name="Invalid out of Import Source: Import Source A">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <top-level name="Import Source->Top-Level"><eoc/></top-level>
+                        </source-clip>
+		            </import-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Import Source: Top Level B">
-        <clip name="Invalid out of Import Source: Clip B">
-            <import-source name="Invalid out of Import Source: Import Source B">
-                <lower-level name="Import Source->Lower-Level"><eoc/></lower-level>
-            </import-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Import Source: Clip B">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <import-source name="Invalid out of Import Source: Import Source B">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <lower-level name="Import Source->Lower-Level"><eoc/></lower-level>
+                        </source-clip>
+		            </import-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Import Source: Top Level C">
-        <clip name="Invalid out of Import Source: Clip C">
-            <import-source name="Invalid out of Import Source: Import Source C">
-                <sub-clip name="Import Source->Sub-Clip"><eoc/></sub-clip>
-            </import-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Import Source: Clip C">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <import-source name="Invalid out of Import Source: Import Source C">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <sub-clip name="Import Source->Sub-Clip"><eoc/></sub-clip>
+                        </source-clip>
+		            </import-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Import Source: Top Level D">
-        <clip name="Invalid out of Import Source: Clip D">
-            <import-source name="Invalid out of Import Source: Import Source D">
-                <adjusted-clip name="Import Source->Adjusted Clip"><eoc/></adjusted-clip>
-            </import-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Import Source: Clip D">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <import-source name="Invalid out of Import Source: Import Source D">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <adjusted-clip name="Import Source->Adjusted Clip"><eoc/></adjusted-clip>
+                        </source-clip>
+		            </import-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Import Source: Top Level E">
-        <clip name="Invalid out of Import Source: Clip E">
-            <import-source name="Invalid out of Import Source: Import Source E">
-                <template-clip name="Import Source->Template Clip"><eoc/></template-clip>
-            </import-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Import Source: Clip E">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <import-source name="Invalid out of Import Source: Import Source E">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <template-clip name="Import Source->Template Clip"><eoc/></template-clip>
+                        </source-clip>
+		            </import-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Import Source: Top Level F">
-        <clip name="Invalid out of Import Source: Clip F">
-            <import-source name="Invalid out of Import Source: Import Source F">
-                <clip name="Import Source->Clip"><eoc/></clip>
-            </import-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Import Source: Clip F">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <import-source name="Invalid out of Import Source: Import Source F">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <clip name="Import Source->Clip"><eoc/></clip>
+                        </source-clip>
+		            </import-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Import Source: Top Level G">
-        <clip name="Invalid out of Import Source: Clip G">
-            <import-source name="Invalid out of Import Source: Import Source G">
-                <file-source name="Import Source->File Source"><eoc/></file-source>
-            </import-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Import Source: Clip G">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <import-source name="Invalid out of Import Source: Import Source G">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <file-source name="Import Source->File Source"><eoc/></file-source>
+                        </source-clip>
+		            </import-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Import Source: Top Level H">
-        <clip name="Invalid out of Import Source: Clip H">
-            <import-source name="Invalid out of Import Source: Import Source H">
-                <recording-source name="Import Source->Recording Source"><eoc/></recording-source>
-            </import-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Import Source: Clip H">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <import-source name="Invalid out of Import Source: Import Source H">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <recording-source name="Import Source->Recording Source"><eoc/></recording-source>
+                        </source-clip>
+		            </import-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Import Source: Top Level I">
-        <clip name="Invalid out of Import Source: Clip I">
-            <import-source name="Invalid out of Import Source: Import Source I">
-                <import-source name="Import Source->Import Source"><eoc/></import-source>
-            </import-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Import Source: Clip I">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <import-source name="Invalid out of Import Source: Import Source I">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <import-source name="Import Source->Import Source"><eoc/></import-source>
+                        </source-clip>
+		            </import-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     
     <!-- Invalid transitions out of the Tape Source state -->
     <top-level name="Invalid out of Tape Source: Top Level A">
-        <clip name="Invalid out of Tape Source: Clip A">
-            <tape-source name="Invalid out of Tape Source: Tape Source A">
-                <top-level name="Tape Source->Top-Level"><eoc/></top-level>
-            </tape-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Tape Source: Clip A">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <tape-source name="Invalid out of Tape Source: Tape Source A">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <top-level name="Tape Source->Top-Level"><eoc/></top-level>
+                        </source-clip>
+		            </tape-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Tape Source: Top Level B">
-        <clip name="Invalid out of Tape Source: Clip B">
-            <tape-source name="Invalid out of Tape Source: Tape Source B">
-                <lower-level name="Tape Source->Lower-Level"><eoc/></lower-level>
-            </tape-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Tape Source: Clip B">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <tape-source name="Invalid out of Tape Source: Tape Source B">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <lower-level name="Tape Source->Lower-Level"><eoc/></lower-level>
+                        </source-clip>
+		            </tape-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Tape Source: Top Level C">
-        <clip name="Invalid out of Tape Source: Clip C">
-            <tape-source name="Invalid out of Tape Source: Tape Source C">
-                <sub-clip name="Tape Source->Sub-Clip"><eoc/></sub-clip>
-            </tape-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Tape Source: Clip C">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <tape-source name="Invalid out of Tape Source: Tape Source C">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <sub-clip name="Tape Source->Sub-Clip"><eoc/></sub-clip>
+                        </source-clip>
+		            </tape-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Tape Source: Top Level D">
-        <clip name="Invalid out of Tape Source: Clip D">
-            <tape-source name="Invalid out of Tape Source: Tape Source D">
-                <adjusted-clip name="Tape Source->Adjusted Clip"><eoc/></adjusted-clip>
-            </tape-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Tape Source: Clip D">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <tape-source name="Invalid out of Tape Source: Tape Source D">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <adjusted-clip name="Tape Source->Adjusted Clip"><eoc/></adjusted-clip>
+                        </source-clip>
+		            </tape-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Tape Source: Top Level E">
-        <clip name="Invalid out of Tape Source: Clip E">
-            <tape-source name="Invalid out of Tape Source: Tape Source E">
-                <template-clip name="Tape Source->Template Clip"><eoc/></template-clip>
-            </tape-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Tape Source: Clip E">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <tape-source name="Invalid out of Tape Source: Tape Source E">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <template-clip name="Tape Source->Template Clip"><eoc/></template-clip>
+                        </source-clip>
+		            </tape-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Tape Source: Top Level F">
-        <clip name="Invalid out of Tape Source: Clip F">
-            <tape-source name="Invalid out of Tape Source: Tape Source F">
-                <clip name="Tape Source->Clip"><eoc/></clip>
-            </tape-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Tape Source: Clip F">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <tape-source name="Invalid out of Tape Source: Tape Source F">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <clip name="Tape Source->Clip"><eoc/></clip>
+                        </source-clip>
+		            </tape-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Tape Source: Top Level G">
-        <clip name="Invalid out of Tape Source: Clip G">
-            <tape-source name="Invalid out of Tape Source: Tape Source G">
-                <file-source name="Tape Source->File Source"><eoc/></file-source>
-            </tape-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Tape Source: Clip G">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <tape-source name="Invalid out of Tape Source: Tape Source G">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <file-source name="Tape Source->File Source"><eoc/></file-source>
+                        </source-clip>
+		            </tape-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Tape Source: Top Level H">
-        <clip name="Invalid out of Tape Source: Clip H">
-            <tape-source name="Invalid out of Tape Source: Tape Source H">
-                <recording-source name="Tape Source->Recording Source"><eoc/></recording-source>
-            </tape-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Tape Source: Clip H">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <tape-source name="Invalid out of Tape Source: Tape Source H">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <recording-source name="Tape Source->Recording Source"><eoc/></recording-source>
+                        </source-clip>
+		            </tape-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Tape Source: Top Level I">
-        <clip name="Invalid out of Tape Source: Clip I">
-            <tape-source name="Invalid out of Tape Source: Tape Source I">
-                <import-source name="Tape Source->Import Source"><eoc/></import-source>
-            </tape-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Tape Source: Clip I">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <tape-source name="Invalid out of Tape Source: Tape Source I">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <import-source name="Tape Source->Import Source"><eoc/></import-source>
+                        </source-clip>
+		            </tape-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Tape Source: Top Level J">
-        <clip name="Invalid out of Tape Source: Clip J">
-            <tape-source name="Invalid out of Tape Source: Tape Source I">
-                <tape-source name="Tape Source->Tape Source"><eoc/></tape-source>
-            </tape-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Tape Source: Clip J">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <tape-source name="Invalid out of Tape Source: Tape Source I">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <tape-source name="Tape Source->Tape Source"><eoc/></tape-source>
+                        </source-clip>
+		            </tape-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     
     <!-- Invalid transitions out of the Film Source state -->
     <top-level name="Invalid out of Film Source: Top Level A">
-        <clip name="Invalid out of Film Source: Clip A">
-            <film-source name="Invalid out of Film Source: Film Source A">
-                <top-level name="Film Source->Top-Level"><eoc/></top-level>
-            </film-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Film Source: Clip A">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <film-source name="Invalid out of Film Source: Film Source A">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <top-level name="Film Source->Top-Level"><eoc/></top-level>
+                        </source-clip>
+		            </film-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Film Source: Top Level B">
-        <clip name="Invalid out of Film Source: Clip B">
-            <film-source name="Invalid out of Film Source: Film Source B">
-                <lower-level name="Film Source->Lower-Level"><eoc/></lower-level>
-            </film-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Film Source: Clip B">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <film-source name="Invalid out of Film Source: Film Source B">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <lower-level name="Film Source->Lower-Level"><eoc/></lower-level>
+                        </source-clip>
+		            </film-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Film Source: Top Level C">
-        <clip name="Invalid out of Film Source: Clip C">
-            <film-source name="Invalid out of Film Source: Film Source C">
-                <sub-clip name="Film Source->Sub-Clip"><eoc/></sub-clip>
-            </film-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Film Source: Clip C">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <film-source name="Invalid out of Film Source: Film Source C">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <sub-clip name="Film Source->Sub-Clip"><eoc/></sub-clip>
+                        </source-clip>
+		            </film-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Film Source: Top Level D">
-        <clip name="Invalid out of Film Source: Clip D">
-            <film-source name="Invalid out of Film Source: Film Source D">
-                <adjusted-clip name="Film Source->Adjusted Clip"><eoc/></adjusted-clip>
-            </film-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Film Source: Clip D">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <film-source name="Invalid out of Film Source: Film Source D">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <adjusted-clip name="Film Source->Adjusted Clip"><eoc/></adjusted-clip>
+                        </source-clip>
+		            </film-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Film Source: Top Level E">
-        <clip name="Invalid out of Film Source: Clip E">
-            <film-source name="Invalid out of Film Source: Film Source E">
-                <template-clip name="Film Source->Template Clip"><eoc/></template-clip>
-            </film-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Film Source: Clip E">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <film-source name="Invalid out of Film Source: Film Source E">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <template-clip name="Film Source->Template Clip"><eoc/></template-clip>
+                        </source-clip>
+		            </film-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Film Source: Top Level F">
-        <clip name="Invalid out of Film Source: Clip F">
-            <film-source name="Invalid out of Film Source: Film Source F">
-                <clip name="Film Source->Film Source"><eoc/></clip>
-            </film-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Film Source: Clip F">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <film-source name="Invalid out of Film Source: Film Source F">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <clip name="Film Source->Film Source"><eoc/></clip>
+                        </source-clip>
+		            </film-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Film Source: Top Level G">
-        <clip name="Invalid out of Film Source: Clip G">
-            <film-source name="Invalid out of Film Source: Film Source G">
-                <file-source name="Film Source->File Source"><eoc/></file-source>
-            </film-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Film Source: Clip G">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <film-source name="Invalid out of Film Source: Film Source G">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <file-source name="Film Source->File Source"><eoc/></file-source>
+                        </source-clip>
+		            </film-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Film Source: Top Level H">
-        <clip name="Invalid out of Film Source: Clip H">
-            <film-source name="Invalid out of Film Source: Film Source H">
-                <recording-source name="Film Source->Recording Source"><eoc/></recording-source>
-            </film-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Film Source: Clip H">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <film-source name="Invalid out of Film Source: Film Source H">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <recording-source name="Film Source->Recording Source"><eoc/></recording-source>
+                        </source-clip>
+		            </film-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Film Source: Top Level I">
-        <clip name="Invalid out of Film Source: Clip I">
-            <film-source name="Invalid out of Film Source: Film Source I">
-                <import-source name="Film Source->Import Source"><eoc/></import-source>
-            </film-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Film Source: Clip I">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <film-source name="Invalid out of Film Source: Film Source I">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <import-source name="Film Source->Import Source"><eoc/></import-source>
+                        </source-clip>
+		            </film-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Film Source: Top Level J">
-        <clip name="Invalid out of Film Source: Clip J">
-            <film-source name="Invalid out of Film Source: Film Source J">
-                <tape-source name="Film Source->Tape Source"><eoc/></tape-source>
-            </film-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Film Source: Clip J">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <film-source name="Invalid out of Film Source: Film Source J">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <tape-source name="Film Source->Tape Source"><eoc/></tape-source>
+                        </source-clip>
+		            </film-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Film Source: Top Level K">
-        <clip name="Invalid out of Film Source: Clip K">
-            <film-source name="Invalid out of Film Source: Film Source K">
-                <film-source name="Film Source->Film Source"><eoc/></film-source>
-            </film-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Film Source: Clip K">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <film-source name="Invalid out of Film Source: Film Source K">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <film-source name="Film Source->Film Source"><eoc/></film-source>
+                        </source-clip>
+		            </film-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Invalid out of Film Source: Top Level L">
-        <clip name="Invalid out of Film Source: Clip L">
-            <film-source name="Invalid out of Film Source: Out of File">
-				<oof/>
-            </film-source>
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Invalid out of Film Source: Clip L">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <film-source name="Invalid out of Film Source: Out of File">
+						<oof/>
+        		    </film-source>
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     
     <!-- Missing end of chains -->
     <top-level name="Missing EOC Top-Level"><bad-eoc/></top-level>
     <top-level name="Missing EOC Lower-Level: Top-Level">
-        <lower-level name="Missing EOC Lower-Level"><bad-eoc/></lower-level>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <lower-level name="Missing EOC Lower-Level"><bad-eoc/></lower-level>
+        </source-clip>
     </top-level>
     <top-level name="Missing EOC Sub-Clip: Top-Level">
-        <sub-clip name="Missing EOC Sub-Clip"><bad-eoc/></sub-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <sub-clip name="Missing EOC Sub-Clip"><bad-eoc/></sub-clip>
+        </source-clip>
     </top-level>
     <top-level name="Missing EOC Adjusted Clip: Top-Level">
-        <adjusted-clip name="Missing EOC Adjusted Clip"><bad-eoc/></adjusted-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <adjusted-clip name="Missing EOC Adjusted Clip"><bad-eoc/></adjusted-clip>
+        </source-clip>
     </top-level>
     <top-level name="Missing EOC Template Clip: Top-Level">
-        <template-clip name="Missing EOC Template Clip"><bad-eoc/></template-clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <template-clip name="Missing EOC Template Clip"><bad-eoc/></template-clip>
+        </source-clip>
     </top-level>
     <top-level name="Missing EOC Clip: Top-Level">
-        <clip name="Missing EOC Clip"><bad-eoc/></clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name="Missing EOC Clip"><bad-eoc/></clip>
+        </source-clip>
     </top-level>
     <top-level name="Missing EOC File Source: Top-Level">
-        <clip name ="Missing EOC File Source: Clip">
-            <file-source name="Missing EOC File Source"><bad-eoc/></file-source> 
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name ="Missing EOC File Source: Clip">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Missing EOC File Source"><bad-eoc/></file-source> 
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
 	<top-level name="Missing EOC Recording Source: Top-Level">
-        <clip name ="Missing EOC Recording Source: Clip">
-            <file-source name="Missing EOC Recording Source: File Source">
-                <recording-source name="Missing EOC Recording Source"><bad-eoc/></recording-source>
-            </file-source> 
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name ="Missing EOC Recording Source: Clip">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <file-source name="Missing EOC Recording Source: File Source">
+                        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+			                <recording-source name="Missing EOC Recording Source"><bad-eoc/></recording-source>
+                        </source-clip>
+		            </file-source> 
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Missing EOC Import Source: Top-Level">
-        <clip name ="Missing EOC Import Source: Clip">
-            <import-source name="Missing EOC Import Source"><bad-eoc/></import-source> 
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name ="Missing EOC Import Source: Clip">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <import-source name="Missing EOC Import Source"><bad-eoc/></import-source> 
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Missing EOC Tape Source: Top-Level">
-        <clip name ="Missing EOC Tape Source: Clip">
-            <tape-source name="Missing EOC Tape Source"><bad-eoc/></tape-source> 
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name ="Missing EOC Tape Source: Clip">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <tape-source name="Missing EOC Tape Source"><bad-eoc/></tape-source> 
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     <top-level name="Missing EOC Film Source: Top-Level">
-        <clip name ="Missing EOC Film Source: Clip">
-            <film-source name="Missing EOC Film Source"><bad-eoc/></film-source> 
-        </clip>
+        <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+	        <clip name ="Missing EOC Film Source: Clip">
+                <source-clip track-type="none" slot-type="timeline" edit-rate-numerator="1" edit-rate-denominator="1">
+		            <film-source name="Missing EOC Film Source"><bad-eoc/></film-source> 
+                </source-clip>
+	        </clip>
+        </source-clip>
     </top-level>
     
 </aaf-file>

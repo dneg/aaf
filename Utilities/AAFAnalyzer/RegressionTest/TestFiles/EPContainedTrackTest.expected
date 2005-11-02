@@ -1,4 +1,4 @@
-        Name:   Edit Protocol Mob Track Contents Test
+        Name:   Edit Protocol Mob Contained Tracks Test
         Desc:   Verify the correctness of track types within Edit Protocol mobs.
         Result: Failed
         Reason: Test Failed - See "Edit Protocol Contained Track Visitor" Visitor for details
@@ -7,7 +7,7 @@
         Failing Requirements: REQ_EP_028; REQ_EP_082; REQ_EP_087
 
             Name:   Edit Protocol Contained Track Visitor
-            Desc:   Visit top-level compositions and ensure they contain the required tracks.
+            Desc:   Visit derivation chain mateiral and ensure they contain the required tracks.
             Result: Failed
             Reason: 
             Passing Requirements: None
@@ -17,7 +17,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "Two Primary" has more than one Primary Timecode track.
+                Reason: Top-Level Composition: "Two Primary" has more than one Primary Timecode track.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -25,7 +25,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Alternative" does not have a Primary Timecode track.
+                Reason: Top-Level Composition: "One Alternative" does not have a Primary Timecode track.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -33,7 +33,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Primary, Two Alternative" has more than one Alternative Timecode track.
+                Reason: Top-Level Composition: "One Primary, Two Alternative" has more than one Alternative Timecode track.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -41,7 +41,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Primary, One Reserved(3)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 3).
+                Reason: Top-Level Composition: "One Primary, One Reserved(3)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 3).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -49,7 +49,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Primary, One Reserved(4)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 4).
+                Reason: Top-Level Composition: "One Primary, One Reserved(4)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 4).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -57,7 +57,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Primary, One Reserved(5)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 5).
+                Reason: Top-Level Composition: "One Primary, One Reserved(5)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 5).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -65,7 +65,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Primary, One Reserved(6)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 6).
+                Reason: Top-Level Composition: "One Primary, One Reserved(6)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 6).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -73,7 +73,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Reserved(3)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 3).
+                Reason: Top-Level Composition: "One Reserved(3)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 3).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -81,7 +81,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Reserved(3)" does not have a Primary Timecode track.
+                Reason: Top-Level Composition: "One Reserved(3)" does not have a Primary Timecode track.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -89,7 +89,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Reserved(4)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 4).
+                Reason: Top-Level Composition: "One Reserved(4)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 4).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -97,7 +97,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Reserved(4)" does not have a Primary Timecode track.
+                Reason: Top-Level Composition: "One Reserved(4)" does not have a Primary Timecode track.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -105,7 +105,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Reserved(5)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 5).
+                Reason: Top-Level Composition: "One Reserved(5)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 5).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -113,7 +113,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Reserved(5)" does not have a Primary Timecode track.
+                Reason: Top-Level Composition: "One Reserved(5)" does not have a Primary Timecode track.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -121,7 +121,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Reserved(6)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 6).
+                Reason: Top-Level Composition: "One Reserved(6)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 6).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -129,7 +129,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Reserved(6)" does not have a Primary Timecode track.
+                Reason: Top-Level Composition: "One Reserved(6)" does not have a Primary Timecode track.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -137,7 +137,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Primary, One Illegal" has a illegal Timecode track (MobSlot::PhysicalTrackNumber = 7).
+                Reason: Top-Level Composition: "One Primary, One Illegal" has a illegal Timecode track (MobSlot::PhysicalTrackNumber = 7).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -145,7 +145,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Illegal" has a illegal Timecode track (MobSlot::PhysicalTrackNumber = 9).
+                Reason: Top-Level Composition: "One Illegal" has a illegal Timecode track (MobSlot::PhysicalTrackNumber = 9).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -153,7 +153,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Illegal" does not have a Primary Timecode track.
+                Reason: Top-Level Composition: "One Illegal" does not have a Primary Timecode track.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -161,7 +161,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Primary, One Unknown" has 1 Timecode tracks with no MobSlot::PhysicalTrackNumber property.
+                Reason: Top-Level Composition: "One Primary, One Unknown" has 1 Timecode tracks with no MobSlot::PhysicalTrackNumber property.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -169,7 +169,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Unknown" has 1 Timecode tracks with no MobSlot::PhysicalTrackNumber property.
+                Reason: Top-Level Composition: "One Unknown" has 1 Timecode tracks with no MobSlot::PhysicalTrackNumber property.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -177,7 +177,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Top-Level Composition "One Unknown" does not have a Primary Timecode track.
+                Reason: Top-Level Composition: "One Unknown" does not have a Primary Timecode track.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_028
@@ -185,7 +185,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Tape Source "Two Primary" has more than one Primary timecode track.
+                Reason: Tape Source: "Two Primary" has more than one Primary timecode track.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_082
@@ -193,7 +193,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Tape Source "Two Aux1" has more than one Aux1 Timecode track.
+                Reason: Tape Source: "Two Aux1" has more than one Aux1 Timecode track.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_082
@@ -201,7 +201,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Tape Source "Two Aux2" has more than one Aux2 Timecode track.
+                Reason: Tape Source: "Two Aux2" has more than one Aux2 Timecode track.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_082
@@ -209,7 +209,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Tape Source "Two Aux3" has more than one Aux3 Timecode track.
+                Reason: Tape Source: "Two Aux3" has more than one Aux3 Timecode track.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_082
@@ -217,7 +217,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Tape Source "Two Aux4" has more than one Aux4 Timecode track.
+                Reason: Tape Source: "Two Aux4" has more than one Aux4 Timecode track.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_082
@@ -225,7 +225,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Tape Source "Two Aux5" has more than one Aux5 Timecode track.
+                Reason: Tape Source: "Two Aux5" has more than one Aux5 Timecode track.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_082
@@ -233,7 +233,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Tape Source "Reserved(2)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 2).
+                Reason: Tape Source: "Reserved(2)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 2).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_082
@@ -241,7 +241,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Tape Source "Reserved(8)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 8).
+                Reason: Tape Source: "Reserved(8)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 8).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_082
@@ -249,7 +249,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Tape Source "Reserved(9)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 9).
+                Reason: Tape Source: "Reserved(9)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 9).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_082
@@ -257,7 +257,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Tape Source "Reserved(10)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 10).
+                Reason: Tape Source: "Reserved(10)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 10).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_082
@@ -265,7 +265,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Tape Source "Reserved(11)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 11).
+                Reason: Tape Source: "Reserved(11)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 11).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_082
@@ -273,7 +273,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Tape Source "Reserved(12)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 12).
+                Reason: Tape Source: "Reserved(12)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 12).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_082
@@ -281,7 +281,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Tape Source "Illegal" has a illegal Timecode track (MobSlot::PhysicalTrackNumber = 17).
+                Reason: Tape Source: "Illegal" has a illegal Timecode track (MobSlot::PhysicalTrackNumber = 17).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_082
@@ -289,7 +289,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Tape Source "One Primary, One Unknown" has 1 Timecode tracks with no MobSlot::PhysicalTrackNumber property.
+                Reason: Tape Source: "One Primary, One Unknown" has 1 Timecode tracks with no MobSlot::PhysicalTrackNumber property.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_082
@@ -297,7 +297,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Tape Source "One Unknown" has 1 Timecode tracks with no MobSlot::PhysicalTrackNumber property.
+                Reason: Tape Source: "One Unknown" has 1 Timecode tracks with no MobSlot::PhysicalTrackNumber property.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_082
@@ -305,7 +305,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Film Source "One Illegal" has a illegal Edgecode track (MobSlot::PhysicalTrackNumber = 4).
+                Reason: Film Source: "One Illegal" has a illegal Edgecode track (MobSlot::PhysicalTrackNumber = 4).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_087
@@ -313,7 +313,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Film Source "One Keycode, One Illegal" has a illegal Edgecode track (MobSlot::PhysicalTrackNumber = 7).
+                Reason: Film Source: "One Keycode, One Illegal" has a illegal Edgecode track (MobSlot::PhysicalTrackNumber = 7).
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_087
@@ -321,7 +321,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Film Source "Two Keycodes" has more than one Keycode Number Edgecode track.
+                Reason: Film Source: "Two Keycodes" has more than one Keycode Number Edgecode track.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_087
@@ -329,7 +329,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Film Source "Two Inks" has more than one Ink Number Edgecode track.
+                Reason: Film Source: "Two Inks" has more than one Ink Number Edgecode track.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_087
@@ -337,7 +337,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Film Source "Two Aux Inks" has more than one Aux. Ink Number Edgecode track.
+                Reason: Film Source: "Two Aux Inks" has more than one Aux. Ink Number Edgecode track.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_087
@@ -345,7 +345,7 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Film Source "One Unknown" has 1 Edgecode tracks with no MobSlot::PhysicalTrackNumber property.
+                Reason: Film Source: "One Unknown" has 1 Edgecode tracks with no MobSlot::PhysicalTrackNumber property.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_087

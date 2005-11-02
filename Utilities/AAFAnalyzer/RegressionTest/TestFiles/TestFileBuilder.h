@@ -29,6 +29,7 @@
 #include <boost/shared_ptr.hpp>
 
 class AxMob;
+class AxSegment;
 
 namespace aafanalyzer {
 
@@ -37,6 +38,9 @@ using namespace boost;
 class TestFileBuilder
 {
     public:
+    
+        enum TrackType { NONE, AUDIO, PICTURE };
+    
         TestFileBuilder( const char* outFile );
         ~TestFileBuilder();
 
@@ -54,7 +58,15 @@ class TestFileBuilder
         shared_ptr<AxMob> AddTapeSource( const AxString& name, bool isNamed );
         shared_ptr<AxMob> AddFilmSource( const AxString& name, bool isNamed );
 
-        void Attach( AxMob& parent, AxMob& child );
+        shared_ptr<AxSegment> CreateSourceClip( AxMob& axMob, TrackType essenceType );
+        shared_ptr<AxSegment> CreateOperationGroup( AxMob& axMob, TrackType essenceType );
+        
+        void InitializeSourceClip( shared_ptr<AxSegment> axSegment, AxMob& axMob );
+        void AddToOperationGroup( shared_ptr<AxSegment> axSegment, AxMob& axMob );
+
+        void AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate );
+        void AttachEventSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate );
+        void AttachStaticSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate );
         void AttachEOC( AxMob& parent );
         void AttachOOF( AxMob& parent );
         
@@ -65,7 +77,9 @@ class TestFileBuilder
     
         AxFile _axFile;
         aafUInt32 _mobCount;
+        
         const aafMobID_t GenerateMobId();
+        void AddDataDef( AxSegment& axSegment, TrackType essenceType );
 
 };
 

@@ -1,0 +1,640 @@
+        Name:   Edit Protocol Edit Rate Test
+        Desc:   Verify that all essence tracks have valid edit rates.
+        Result: Failed
+        Reason: Test Failed - See "Edit Protocol Edit Rate Visitor" Visitor for details
+        Passing Requirements: None
+        Warning Requirements: None
+        Failing Requirements: REQ_EP_090; REQ_EP_091
+
+            Name:   Edit Protocol Edit Rate Visitor
+            Desc:   Ensure all essence tracks have valid edit rates.
+            Result: Failed
+            Reason: 
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_090; REQ_EP_091
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 42336 Top Level" has an edit rate that is not allowed for video tracks (42336/1 = 42336).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 46080 Top Level" has an edit rate that is not allowed for video tracks (46080/1 = 46080).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 84672 Top Level" has an edit rate that is not allowed for video tracks (84672/1 = 84672).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 92160 Top Level" has an edit rate that is not allowed for video tracks (92160/1 = 92160).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 169344 Top Level" has an edit rate that is not allowed for video tracks (169344/1 = 169344).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 184320 Top Level" has an edit rate that is not allowed for video tracks (184320/1 = 184320).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 441441/10 Top Level" has an edit rate that is not allowed for video tracks (441441/10 = 44144).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 480480/10 Top Level" has an edit rate that is not allowed for video tracks (480480/10 = 48048).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 882882/10 Top Level" has an edit rate that is not allowed for video tracks (882882/10 = 88288).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 960960/10 Top Level" has an edit rate that is not allowed for video tracks (960960/10 = 96096).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 1765764/10 Top Level" has an edit rate that is not allowed for video tracks (1765764/10 = 176576).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 1921920/10 Top Level" has an edit rate that is not allowed for video tracks (1921920/10 = 192192).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 4410000/1001 Top Level" has an edit rate that is not allowed for video tracks (44100000/1001 = 44056).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 4800000/1001 Top Level" has an edit rate that is not allowed for video tracks (48000000/1001 = 47952).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 8820000/1001 Top Level" has an edit rate that is not allowed for video tracks (88200000/1001 = 88112).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 9600000/1001 Top Level" has an edit rate that is not allowed for video tracks (96000000/1001 = 95904).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 176400000/1001 Top Level" has an edit rate that is not allowed for video tracks (176400000/1001 = 176224).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 192000000/1001 Top Level" has an edit rate that is not allowed for video tracks (192000000/1001 = 191808).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 45938 Top Level" has an edit rate that is not allowed for video tracks (45938/1 = 45938).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 50000 Top Level" has an edit rate that is not allowed for video tracks (50000/1 = 50000).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 91875 Top Level" has an edit rate that is not allowed for video tracks (91875/1 = 91875).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 100000 Top Level" has an edit rate that is not allowed for video tracks (100000/1 = 100000).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 183750 Top Level" has an edit rate that is not allowed for video tracks (183750/1 = 183750).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 200000 Top Level" has an edit rate that is not allowed for video tracks (200000/1 = 200000).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Zero-Numerator Top Level" has an edit rate with a zero numerator (0/1).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_091
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 211680/5 Top Level" has an edit rate that is not allowed for video tracks (211680/5 = 42336).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Zero-Denominator Top Level" has an edit rate with a zero denominator (1/0).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_091
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 230400/5 Top Level" has an edit rate that is not allowed for video tracks (230400/5 = 46080).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Negative-Numerator Top Level" has an edit rate with a negative numerator (-1/1).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_091
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 423360/5 Top Level" has an edit rate that is not allowed for video tracks (423360/5 = 84672).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Negative-Denominator Top Level" has an edit rate with a negative denominator (1/-1).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_091
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 460800/5 Top Level" has an edit rate that is not allowed for video tracks (460800/5 = 92160).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Static Top Level" is a StaticMobSlot and does not have an edit rate.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 846720/5 Top Level" has an edit rate that is not allowed for video tracks (846720/5 = 169344).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 921600/5 Top Level" has an edit rate that is not allowed for video tracks (921600/5 = 184320).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Illegal Audio Rate Top Level" has an edit rate that is not allowed for audio tracks (13/3 = 4.3333).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 44144100/1000 Top Level" has an edit rate that is not allowed for video tracks (44144100/1000 = 44144).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 48048000/1000 Top Level" has an edit rate that is not allowed for video tracks (48048000/1000 = 48048).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 88288200/1000 Top Level" has an edit rate that is not allowed for video tracks (88288200/1000 = 88288).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 96096000/1000 Top Level" has an edit rate that is not allowed for video tracks (96096000/1000 = 96096).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 176576400/1000 Top Level" has an edit rate that is not allowed for video tracks (176576400/1000 = 176576).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 192192000/1000 Top Level" has an edit rate that is not allowed for video tracks (192192000/1000 = 192192).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 275625/6 Top Level" has an edit rate that is not allowed for video tracks (275625/6 = 45938).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 100000/2 Top Level" has an edit rate that is not allowed for video tracks (100000/2 = 50000).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 551250/6 Top Level" has an edit rate that is not allowed for video tracks (551250/6 = 91875).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 1200000/12 Top Level" has an edit rate that is not allowed for video tracks (1200000/12 = 100000).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 1102500/6 Top Level" has an edit rate that is not allowed for video tracks (1102500/6 = 183750).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 400000/2 Top Level" has an edit rate that is not allowed for video tracks (400000/2 = 200000).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 1058400/25 Top Level" has an edit rate that is not allowed for video tracks (1058400/25 = 42336).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 1152000/25 Top Level" has an edit rate that is not allowed for video tracks (1152000/25 = 46080).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 2116800/25 Top Level" has an edit rate that is not allowed for video tracks (2116800/25 = 84672).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 2304000/25 Top Level" has an edit rate that is not allowed for video tracks (2304000/25 = 92160).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 4233600/25 Top Level" has an edit rate that is not allowed for video tracks (4233600/25 = 169344).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 4608000/25 Top Level" has an edit rate that is not allowed for video tracks (4608000/25 = 184320).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 44056 Top Level" has an edit rate that is not allowed for video tracks (44056/1 = 44056).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 47952 Top Level" has an edit rate that is not allowed for video tracks (47952/1 = 47952).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 88112 Top Level" has an edit rate that is not allowed for video tracks (88112/1 = 88112).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 95904 Top Level" has an edit rate that is not allowed for video tracks (95904/1 = 95904).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 176224 Top Level" has an edit rate that is not allowed for video tracks (176224/1 = 176224).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 191808 Top Level" has an edit rate that is not allowed for video tracks (191808/1 = 191808).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 1102500/24 Top Level" has an edit rate that is not allowed for video tracks (1102500/24 = 45938).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 1200000/24 Top Level" has an edit rate that is not allowed for video tracks (1200000/24 = 50000).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 2205000/24 Top Level" has an edit rate that is not allowed for video tracks (2205000/24 = 91875).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 2400000/24 Top Level" has an edit rate that is not allowed for video tracks (2400000/24 = 100000).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 4410000/24 Top Level" has an edit rate that is not allowed for video tracks (4410000/24 = 183750).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 4800000/24 Top Level" has an edit rate that is not allowed for video tracks (4800000/24 = 200000).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 44144 Top Level" has an edit rate that is not allowed for video tracks (44144/1 = 44144).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 48048 Top Level" has an edit rate that is not allowed for video tracks (48048/1 = 48048).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 88288 Top Level" has an edit rate that is not allowed for video tracks (88288/1 = 88288).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 96096 Top Level" has an edit rate that is not allowed for video tracks (96096/1 = 96096).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 176576 Top Level" has an edit rate that is not allowed for video tracks (176576/1 = 176576).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 192192 Top Level" has an edit rate that is not allowed for video tracks (192192/1 = 192192).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 88200000/2002 Top Level" has an edit rate that is not allowed for video tracks (88200000/2002 = 44056).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 96000000/2002 Top Level" has an edit rate that is not allowed for video tracks (96000000/2002 = 47952).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 176400000/2002 Top Level" has an edit rate that is not allowed for video tracks (176400000/2002 = 88112).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 192000000/2002 Top Level" has an edit rate that is not allowed for video tracks (192000000/2002 = 95904).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 352800000/2002 Top Level" has an edit rate that is not allowed for video tracks (352800000/2002 = 176224).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+
+                Name:   Edit Protocol Edit Rate Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob Slot with ID = 1 of Mob: "Video 384000000/2002 Top Level" has an edit rate that is not allowed for video tracks (384000000/2002 = 191808).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_090
+

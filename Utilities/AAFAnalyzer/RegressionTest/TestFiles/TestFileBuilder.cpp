@@ -40,6 +40,7 @@
 #include <AAFDataDefs.h>
 #include <AAFCodecDefs.h>
 #include <AAFContainerDefs.h>
+#include <AAFOperationDefs.h>
 
 //STL files
 #include <iostream>
@@ -333,23 +334,139 @@ shared_ptr<AxMob> TestFileBuilder::AddFilmSource( const AxString& name, bool isN
 
 }
 
-void TestFileBuilder::Attach( AxMob& parent, AxMob& child )
+void TestFileBuilder::AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
     
-    AxSourceClip axSrcClip( AxCreateInstance<IAAFSourceClip>( axDictionary ) );
-    AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Auxiliary ) );
+    AxTimelineMobSlot axSlot( parent.AppendNewTimelineSlot(editRate, axSegment, parent.CountSlots() + 1, L"Unnamed", 0) );
+
+}
+
+void TestFileBuilder::AttachEventSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate )
+{
+
+    AxHeader axHeader( _axFile.getHeader() );
+    AxDictionary axDictionary( axHeader.GetDictionary() );
+    
+    AxEventMobSlot axEventMobSlot( AxCreateInstance<IAAFEventMobSlot>( axDictionary ) );
+
+    axEventMobSlot.SetEditRate( editRate );
+    axEventMobSlot.SetSegment( axSegment );
+    axEventMobSlot.SetSlotID( parent.CountSlots() + 1 );
+    axEventMobSlot.SetName( L"Unnamed" );
+
+    parent.AppendSlot( axEventMobSlot );
+
+}
+
+void TestFileBuilder::AttachStaticSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate )
+{
+
+    AxHeader axHeader( _axFile.getHeader() );
+    AxDictionary axDictionary( axHeader.GetDictionary() );
+    
+    AxStaticMobSlot axStaticMobSlot( AxCreateInstance<IAAFStaticMobSlot>( axDictionary ) );
+          
+    axStaticMobSlot.SetSegment( axSegment );
+    axStaticMobSlot.SetSlotID( parent.CountSlots() + 1 );
+    axStaticMobSlot.SetName( L"Unnamed" );
+    
+    parent.AppendSlot( axStaticMobSlot );
+
+}
+
+shared_ptr<AxSegment> TestFileBuilder::CreateSourceClip( AxMob& axMob, TrackType essenceType )
+{
+    
+    AxHeader axHeader( _axFile.getHeader() );
+    AxDictionary axDictionary( axHeader.GetDictionary() );
+
+    shared_ptr<AxSourceClip> axSrcClip( new AxSourceClip( AxCreateInstance<IAAFSourceClip>( axDictionary ) ) );
+    
+    AddDataDef( *axSrcClip, essenceType );
+    
+    return axSrcClip;
+    
+}
+
+void TestFileBuilder::InitializeSourceClip( shared_ptr<AxSegment> axSegment, AxMob& axMob )
+{
+    
+    shared_ptr<AxSourceClip> axSrcClip = dynamic_pointer_cast<AxSourceClip>( axSegment );
+    
     aafSourceRef_t srcRef;
-    srcRef.sourceID     = child.GetMobID();
+    srcRef.sourceID     = axMob.GetMobID();
     srcRef.sourceSlotID = 1;
     srcRef.startTime    = 0;    
-    axSrcClip.Initialize( axDataDef, 1, srcRef);
+    
+    axSrcClip->SetLength( 1 );
+    axSrcClip->SetSourceReference( srcRef );
+  
+}
 
-    aafRational_t editRate = {1, 1};
-    AxTimelineMobSlot axSlot( parent.AppendNewTimelineSlot(editRate, axSrcClip, parent.CountSlots() + 1, L"Unnamed", 0) );
+shared_ptr<AxSegment> TestFileBuilder::CreateOperationGroup( AxMob& axMob, TrackType essenceType )
+{
+    
+    AxHeader axHeader( _axFile.getHeader() );
+    AxDictionary axDictionary( axHeader.GetDictionary() );
 
+    shared_ptr<AxOperationGroup> axOpGroup( new AxOperationGroup( AxCreateInstance<IAAFOperationGroup>( axDictionary ) ) );
+    
+    AddDataDef( *axOpGroup, essenceType );
+    axOpGroup->SetLength( 1 );
+    
+    if ( !axDictionary.isKnownOperationDef( kAAFEffectMonoAudioDissolve ) )
+    {
+//NOTE: As of right now, its only doing audio.
+        AxDataDef axAudioDataDef( axDictionary.LookupDataDef( kAAFDataDef_Sound ) );
+        AxOperationDef axOpDef( AxCreateInstance<IAAFOperationDef> ( axDictionary ) );
+        axOpDef.Initialize( kAAFEffectMonoAudioDissolve,
+                    L"Example Mono Audio Dissolve",
+                    L"No timewarp, bypass track 0, 2 mono audio inputs" );
+        axOpDef.SetIsTimeWarp( false );
+        axOpDef.SetCategory( kAAFEffectMonoAudioDissolve );
+        axOpDef.SetBypass( 0 );
+        axOpDef.SetNumberInputs( 2 );
+        axOpDef.SetDataDef( axAudioDataDef );
+        axDictionary.RegisterOperationDef( axOpDef );
+    }
+    AxOperationDef axOpDef( axDictionary.LookupOperationDef( kAAFEffectMonoAudioDissolve ) );
+    
+    axOpGroup->SetOperationDef( axOpDef );
+    
+    return axOpGroup;
+}
+
+void TestFileBuilder::AddToOperationGroup( shared_ptr<AxSegment> axSegment, AxMob& axMob )
+{
+
+    AxHeader axHeader( _axFile.getHeader() );
+    AxDictionary axDictionary( axHeader.GetDictionary() );
+
+    shared_ptr<AxOperationGroup> axOpGroup = dynamic_pointer_cast<AxOperationGroup>( axSegment );
+
+    shared_ptr<AxSourceClip> axSrcClip( new AxSourceClip( AxCreateInstance<IAAFSourceClip>( axDictionary ) ) );
+    axSrcClip->SetDataDef( axOpGroup->GetDataDef() );
+    InitializeSourceClip( axSrcClip, axMob );
+    
+    axOpGroup->AppendInputSegment( *axSrcClip );
+    
+}
+
+void TestFileBuilder::AddDataDef( AxSegment& axSrcClip, TrackType essenceType )
+{
+
+    AxHeader axHeader( _axFile.getHeader() );
+    AxDictionary axDictionary( axHeader.GetDictionary() );    
+
+    switch ( essenceType )
+    {
+        case AUDIO: axSrcClip.SetDataDef( axDictionary.LookupDataDef( kAAFDataDef_Sound ) ); break;
+        case PICTURE: axSrcClip.SetDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) ); break;
+        default: axSrcClip.SetDataDef( axDictionary.LookupDataDef( kAAFDataDef_Auxiliary ) ); break;
+    }
 }
 
 void TestFileBuilder::AttachEOC( AxMob& parent )
