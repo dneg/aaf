@@ -27,7 +27,23 @@
 //AAF Analyzer Base files
 #include <TypedVisitor.h>
 
+//Ax files
+#include <AxTypes.h>
+
+//Boost files
+#include <boost/shared_ptr.hpp>
+
+//STL files
+#include <set>
+
+class AxMob;
+class AxClassDef;
+class AxMobSlot;
+
 namespace aafanalyzer {
+
+using namespace std;
+using namespace boost;
 
 class EPTopLevelComposition;
 class EPLowerLevelComposition;
@@ -40,6 +56,8 @@ class EPRecordingSource;
 class EPImportSource;
 class EPTapeSource;
 class EPFilmSource;
+class TestInfo;
+class DetailLevelTestResult;
 
 class EPTypedVisitor : public TypedVisitor
 {
@@ -49,6 +67,9 @@ class EPTypedVisitor : public TypedVisitor
   using TypedVisitor::PostOrderVisit;
     
   public:
+  
+    typedef set<shared_ptr<AxMobSlot> > TrackSet;
+  
     EPTypedVisitor();
     virtual ~EPTypedVisitor();
 
@@ -75,6 +96,14 @@ class EPTypedVisitor : public TypedVisitor
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node);
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node);
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node);
+    
+  protected:
+
+    //Functions commonly needed by EPTypedVisitors.  Put them in the base class
+    //to avoid constantly re-implementing them.
+    AxString GetMobName( AxMob& axMob, const AxString& type );
+    bool IsType( AxClassDef& clsDef, aafUID_t type, aafUID_t parentType );
+    shared_ptr<TrackSet> GetEssenceTracks( AxMob& axMob );
     
   private:
   

@@ -21,6 +21,17 @@
 //Edit Protocol Analyzer Base files
 #include "EPTypedVisitor.h"
 
+//Ax files
+#include <AxMob.h>
+#include <AxEx.h>
+#include <AxMetaDef.h>
+#include <AxMobSlot.h>
+#include <AxIterator.h>
+#include <AxDefObject.h>
+
+//AAF files
+#include <AAFResult.h>
+
 namespace {
 
 using namespace aafanalyzer;
@@ -34,6 +45,7 @@ using namespace aafanalyzer;
 namespace aafanalyzer
 {
 
+using namespace std;
 using namespace boost;
 
 EPTypedVisitor::EPTypedVisitor()
@@ -206,6 +218,71 @@ bool EPTypedVisitor::PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>
     shared_ptr<Node> spNode = node.GetSharedPointerToNode();
     shared_ptr<AAFTypedObjNode<IAAFSourceMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceMob> >(spNode);
     return this->PostOrderVisit( *spBaseNode );
+}
+
+AxString EPTypedVisitor::GetMobName( AxMob& axMob, const AxString& type )
+{
+    //Get the name of the mob
+    AxString nodeName;
+    try
+    {
+        nodeName = type + L": \"" + axMob.GetName() + L"\"";
+    }
+    catch ( const AxExHResult& ex )
+    {
+      if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
+      {
+        nodeName = L"Unnamed " + type;
+      }
+      else
+      {
+        throw ex;
+      }
+    }
+    
+    return nodeName;
+    
+}
+
+bool EPTypedVisitor::IsType( AxClassDef& clsDef, aafUID_t type, aafUID_t parentType )
+{
+    aafUID_t auid = clsDef.GetAUID();
+    
+    if ( auid == type )
+    {
+        return true;
+    }
+    else if ( auid == parentType )
+    {
+        return false;
+    }
+
+    AxClassDef parentDef( clsDef.GetParent() );
+    return IsType( parentDef, type, parentType );
+}
+
+shared_ptr<EPTypedVisitor::TrackSet> EPTypedVisitor::GetEssenceTracks( AxMob& axMob )
+{
+    shared_ptr<TrackSet> spEssenceTracks( new TrackSet );
+    
+    //Get a mob slot iterator
+    AxMobSlotIter slotIter( axMob.GetSlots() );
+
+    //Storage for value returned by iterator.
+    IAAFSmartPointer2<IAAFMobSlot> mobSlotSP; 
+
+    //Repeat until the iterator is out of mob slots.
+    while ( slotIter.NextOne( mobSlotSP ) )
+    {
+        shared_ptr<AxMobSlot> spMobSlot( new AxMobSlot( mobSlotSP ) );
+        AxDataDef axDataDef( spMobSlot->GetDataDef() );
+        if ( axDataDef.IsPictureKind() || axDataDef.IsSoundKind() )
+        {
+            spEssenceTracks->insert( spMobSlot );
+        }
+    }
+    
+    return spEssenceTracks;
 }
 
 } // end of namespace diskstream
