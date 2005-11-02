@@ -79,7 +79,13 @@ public:
   EPDecoratorVisitor( wostream& log, shared_ptr<const TestGraph> spTestGraph )
     : TypedVisitor(),
       _log( log ),
-      _spResult( this->initializeResult() ),
+      _spResult( new DetailLevelTestResult( L"EPDecoratorVisitor",
+                                            L"Visit mobs and decorate them with their derivation chain material types.",
+                                            L"", // explain
+                                            L"", // DOCREF REQUIRED
+                                            TestResult::PASS,
+                                            TestRegistry::GetInstance().GetRequirementsForTest( DecorateEPTest::GetTestInfo().GetName() )
+               )                          ),
       _spGraph( spTestGraph )
   {
     _knownDescriptors.insert( kAAFClassID_FileDescriptor );
@@ -309,25 +315,6 @@ private:
   EPDecoratorVisitor();
   EPDecoratorVisitor( const EPDecoratorVisitor& );
   EPDecoratorVisitor& operator=( const EPDecoratorVisitor& );
-
-  shared_ptr<DetailLevelTestResult> initializeResult()
-  {
-    
-    shared_ptr<const Requirement::RequirementMap> spConstReqs = TestRegistry::GetInstance().GetRequirementsForTest( DecorateEPTest::GetTestInfo().GetName() );  
-    Requirement::RequirementMapSP spReqs( new Requirement::RequirementMap( *spConstReqs) );
-    
-    shared_ptr<DetailLevelTestResult> retVal(   
-        new DetailLevelTestResult( L"EPDecoratorVisitor",
-                                   L"Visit mobs and decorate them with their derivation chain material types.",
-                                   L"", // explain
-                                   L"", // DOCREF REQUIRED
-                                   TestResult::PASS,
-                                   spReqs
-                                 ) );
-
-    return retVal;
-
-  }
 
   //Return a AUID that matches an acceptable descriptor type or the base
   //type (kAAFClassID_EssenceDescriptor).

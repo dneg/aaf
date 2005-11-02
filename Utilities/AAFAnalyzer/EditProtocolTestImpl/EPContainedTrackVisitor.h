@@ -70,10 +70,8 @@ class EPContainedTrackVisitor : public EPTypedVisitor
     wostream& _log;
     shared_ptr<DetailLevelTestResult> _spResult;
 
-    shared_ptr<DetailLevelTestResult> InitializeResult();
-    bool IsType( AxClassDef& clsDef, aafUID_t type, aafUID_t parentType );
     void AddFailure( const AxString& reqId, const AxString& explain );
-    shared_ptr<TrackMap> CountTracks( const AxString& nodeName, AxMob& axMob, aafUID_t trackType, unsigned int& unnumberedTracks );
+    shared_ptr<TrackMap> CountTracks( AxMob& axMob, aafUID_t trackType, unsigned int& unnumberedTracks );
 
     // prohibited
     EPContainedTrackVisitor();

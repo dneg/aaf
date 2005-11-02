@@ -49,7 +49,13 @@ using namespace boost;
 EPNameVisitor::EPNameVisitor( wostream& log )
     : EPTypedVisitor(),
       _log( log ),
-      _spResult( this->InitializeResult()  )
+      _spResult( new DetailLevelTestResult( L"Edit Protocol Naming Visitor",
+                                            L"Visit derivation chain mobs and verify they have valid names.",
+                                            L"", // explain
+                                            L"", // DOCREF REQUIRED
+                                            TestResult::PASS,
+                                            TestRegistry::GetInstance().GetRequirementsForTest( EPNameTest::GetTestInfo().GetName() )
+               )                          )
 {}
 
 EPNameVisitor::~EPNameVisitor()
@@ -265,25 +271,6 @@ void EPNameVisitor::CheckForUniqueNames( NameSet& names, const AxString& reqId, 
                        
         }
     }
-}
-
-shared_ptr<DetailLevelTestResult> EPNameVisitor::InitializeResult()
-{
-    
-    shared_ptr<const Requirement::RequirementMap> spConstReqs = TestRegistry::GetInstance().GetRequirementsForTest( EPNameTest::GetTestInfo().GetName() );
-    Requirement::RequirementMapSP spReqs( new Requirement::RequirementMap( *spConstReqs) );
-    
-    shared_ptr<DetailLevelTestResult> retVal(   
-        new DetailLevelTestResult( L"Edit Protocol Naming Visitor",
-                                   L"Visit derivation chain mobs and verify they have valid names.",
-                                   L"", // explain
-                                   L"", // DOCREF REQUIRED
-                                   TestResult::PASS,
-                                   spReqs
-                                 ) );
-
-    return retVal;
-    
 }
 
 } // end of namespace aafanalyzer

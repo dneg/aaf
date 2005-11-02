@@ -49,7 +49,8 @@ class TestRegistry
 
   static TestRegistry& GetInstance();
   void Register( const TestInfo& info );
-  const shared_ptr<const Requirement::RequirementMap> GetRequirementsForTest( const wstring& name ) const;
+  const shared_ptr<Requirement::RequirementMap> GetRequirementsForTest( const wstring& name ) const;
+  const shared_ptr<const Requirement::RequirementMap> GetConstRequirementsForTest( const wstring& name ) const;
   const Requirement::RequirementMap& GetRequirementCoverage() const;
   bool VerifyTestResultCoverage(const shared_ptr<TopLevelTestResult> results) const;
   void UseUnsafeRequirements();

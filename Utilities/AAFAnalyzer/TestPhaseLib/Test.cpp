@@ -50,7 +50,7 @@ Test::Test(wostream& os, const TestInfo& info)
 const Test::ConstRequirementMapSP Test::InitializeRequirements(const wstring& name)
 {
     TestRegistry& reg = TestRegistry::GetInstance();
-    return reg.GetRequirementsForTest(name);
+    return reg.GetConstRequirementsForTest(name);
 }
 
 Test::~Test()

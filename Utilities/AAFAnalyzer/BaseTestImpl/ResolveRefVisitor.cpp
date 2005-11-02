@@ -20,9 +20,11 @@
 
 //Base Test files
 #include "ResolveRefVisitor.h"
+#include "RefResolver.h"
 
 //Test/Result files
 #include <DetailLevelTestResult.h>
+#include <TestRegistry.h>
 
 //Requirement files
 #include <Requirement.h>
@@ -65,9 +67,9 @@ ResolveRefVisitor::ResolveRefVisitor(wostream& os, shared_ptr<EdgeMap> spEdgeMap
                            L"-",
                            L"-",
                            TestResult::PASS,
-                           *(new Requirement::RequirementMapSP(new Requirement::RequirementMap())) ) )
+                           TestRegistry::GetInstance().GetRequirementsForTest( RefResolver::GetTestInfo().GetName() )
+           )                          )
 {}
-//TODO: Pass a real RequirementVectorSP
 
 ResolveRefVisitor::~ResolveRefVisitor()
 {

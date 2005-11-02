@@ -90,7 +90,13 @@ public:
   MobChainVisitor( wostream& log )
     : EPTypedVisitor(),
       _log( log ),
-      _spResult( this->initializeResult()  ),
+      _spResult( new DetailLevelTestResult( L"MobChainVisitor",
+                                            L"Visit mobs and verify derivation order.",
+                                            L"", // explain
+                                            L"", // DOCREF REQUIRED
+                                            TestResult::PASS,
+                                            TestRegistry::GetInstance().GetRequirementsForTest( EPDerivationTest::GetTestInfo().GetName() )
+               )                          ),
       _stateMachine( log )
   {}
 
@@ -257,25 +263,9 @@ public:
   virtual bool PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node )
   {
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    AxString nodeName;
-    try
-    {
-      nodeName = axCompMob.GetName();
-    }
-    catch ( const AxExHResult& ex )
-    {
-      if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-      {
-        nodeName = L"Unnamed Composition Mob";
-      }
-      else
-      {
-        throw ex;
-      }
-    }
-   
-    _spResult->AddDetail( L"Composition Mob: \"" + nodeName + L"\" does not have an Edit Protocol material type." );
-    _spResult->SetExplanation( L"Composition Mob \"" + nodeName + L"\" is out of place in the derrivation chain." );
+    AxString nodeName = this->GetMobName( axCompMob, L"Composition Mob" ); 
+    _spResult->AddDetail( nodeName + L" does not have an Edit Protocol material type." );
+    _spResult->SetExplanation( nodeName + L" is out of place in the derrivation chain." );
     _spResult->SetResult( TestResult::FAIL );
 
     return false;
@@ -284,25 +274,9 @@ public:
   virtual bool PreOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node )
   {
     AxMasterMob axMastMob( node.GetAAFObjectOfType() );
-    AxString nodeName;
-    try
-    {
-      nodeName = axMastMob.GetName();
-    }
-    catch ( const AxExHResult& ex )
-    {
-      if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-      {
-        nodeName = L"Unnamed Master Mob";
-      }
-      else
-      {
-        throw ex;
-      }
-    }
-
-    _spResult->AddDetail( L"Master Mob: \"" + nodeName + L"\" does not have an Edit Protocol material type." );
-    _spResult->SetExplanation( L"Master Mob \"" + nodeName + L"\" is out of place in the derrivation chain." );
+    AxString nodeName = this->GetMobName( axMastMob, L"Master Mob" );
+    _spResult->AddDetail( nodeName + L" does not have an Edit Protocol material type." );
+    _spResult->SetExplanation( nodeName + L" is out of place in the derrivation chain." );
     _spResult->SetResult( TestResult::FAIL );
 
     return false;
@@ -312,25 +286,9 @@ public:
   virtual bool PreOrderVisit( AAFTypedObjNode<IAAFSourceMob>& node )
   {
     AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
-    AxString nodeName;
-    try
-    {
-      nodeName = axSrcMob.GetName();
-    }
-    catch ( const AxExHResult& ex )
-    {
-      if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-      {
-        nodeName = L"Unnamed Source Mob";
-      }
-      else
-      {
-        throw ex;
-      }
-    }
-
-    _spResult->AddDetail( L"Source Mob: \"" + nodeName + L"\" does not have an Edit Protocol material type." );
-    _spResult->SetExplanation( L"Source Mob \"" + nodeName + L"\" is out of place in the derrivation chain." );
+    AxString nodeName = this->GetMobName( axSrcMob, L"Source Mob" );
+    _spResult->AddDetail( nodeName + L" does not have an Edit Protocol material type." );
+    _spResult->SetExplanation( nodeName + L" is out of place in the derrivation chain." );
     _spResult->SetResult( TestResult::FAIL );
 
     return false;
@@ -394,25 +352,6 @@ private:
   MobChainVisitor( const MobChainVisitor& );
   MobChainVisitor& operator=( const MobChainVisitor& );
 
-  shared_ptr<DetailLevelTestResult> initializeResult()
-  {
-    
-    shared_ptr<const Requirement::RequirementMap> spConstReqs = TestRegistry::GetInstance().GetRequirementsForTest( EPDerivationTest::GetTestInfo().GetName() );  
-    Requirement::RequirementMapSP spReqs( new Requirement::RequirementMap( *spConstReqs) );
-    
-    shared_ptr<DetailLevelTestResult> retVal(   
-        new DetailLevelTestResult( L"MobChainVisitor",
-                                   L"Visit mobs and verify derivation order.",
-                                   L"", // explain
-                                   L"", // DOCREF REQUIRED
-                                   TestResult::PASS,
-                                   spReqs
-                                 ) );
-
-    return retVal;
-
-  }
-
   //Return a AUID that is in the state machines Event map.
   aafUID_t GetAcceptedAUID( AxClassDef& clsDef ) const
   {
@@ -430,22 +369,8 @@ private:
   
   bool VisitMobWithUsageCode( AxMob& axMob, const AxString& type )
   {
-    AxString nodeName;
-    try
-    {
-      nodeName = axMob.GetName();
-    }
-    catch ( const AxExHResult& ex )
-    {
-      if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-      {
-        nodeName = L"Unnamed " + type;
-      }
-      else
-      {
-        throw ex;
-      }
-    }
+    AxString nodeName = this->GetMobName( axMob, type );
+
     AxString detailMsg;
     bool successfulTransition = false;
     vector<shared_ptr<const Requirement> > failingReqIds;
@@ -458,7 +383,7 @@ private:
       {
         _spResult->SetRequirementStatus( TestResult::FAIL, failingReqIds.at( i ) );
       }
-      _spResult->SetExplanation( type + L" \"" + nodeName + L"\" is out of place in the derrivation chain." );
+      _spResult->SetExplanation( nodeName + L" is out of place in the derrivation chain." );
       _spResult->SetResult( TestResult::FAIL );
     }
     return successfulTransition;
@@ -467,22 +392,8 @@ private:
   bool VisitMobWithDescriptor( AAFTypedObjNode<IAAFSourceMob>& node, const AxString& type )
   {
     AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
-    AxString nodeName;
-    try
-    {
-      nodeName = axSrcMob.GetName();
-    }
-    catch ( const AxExHResult& ex )
-    {
-      if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-      {
-        nodeName = L"Unnamed " + type;
-      }
-      else
-      {
-        throw ex;
-      }
-    }
+    AxString nodeName = this->GetMobName( axSrcMob, type );
+
     AxString detailMsg;
     bool successfulTransition = false;
     vector<shared_ptr<const Requirement> > failingReqIds;
@@ -498,7 +409,7 @@ private:
       {
         _spResult->SetRequirementStatus( TestResult::FAIL, failingReqIds.at( i ) );
       }
-      _spResult->SetExplanation( type + L" \"" + nodeName + L"\" is out of place in the derrivation chain." );
+      _spResult->SetExplanation( nodeName + L" is out of place in the derrivation chain." );
       _spResult->SetResult( TestResult::FAIL );
     }
 
@@ -509,28 +420,12 @@ private:
   {
     bool successfulTransition = _stateMachine.TransitionBack();
 
+    AxString nodeName = this->GetMobName( axMob, type );
+
     if ( !successfulTransition )
-    {
-        
-        AxString nodeName;
-        try
-        {
-          nodeName = axMob.GetName();
-        }
-        catch ( const AxExHResult& ex )
-        {
-          if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-          {
-            nodeName = L"Unnamed " + type;
-          }
-          else
-          {
-            throw ex;
-          }
-        }
-        
+    {        
         _spResult->SetRequirementStatus( TestResult::FAIL, RequirementRegistry::GetInstance().GetRequirement( L"REQ_EP_017" ) );
-        _spResult->SetExplanation( L"End of derivation chain encountered without a zero-valued source clip or out of file reference at " + type + L": \"" + nodeName + L"\"");
+        _spResult->SetExplanation( L"End of derivation chain encountered without a zero-valued source clip or out of file reference at " + nodeName );
         _spResult->SetResult( TestResult::FAIL );
     }
     
@@ -549,16 +444,13 @@ shared_ptr<DetailLevelTestResult> AnalyzeMobChain( wostream& log,
 					shared_ptr<const TestGraph> spGraph,
 					CompMobDependency::CompMobNodeSP spRootComposition )
 {
-    
-  shared_ptr<const Requirement::RequirementMap> spConstReqs = TestRegistry::GetInstance().GetRequirementsForTest( EPDerivationTest::GetTestInfo().GetName() );  
-  Requirement::RequirementMapSP spReqs( new Requirement::RequirementMap( *spConstReqs) );
-    
+
   shared_ptr<DetailLevelTestResult> spResult( new DetailLevelTestResult( L"Verify Mob Chain",
 						   L"Verify the structure of one mob chain.",
 						   L"", // explain
 						   L"",  // DOCREF REQUIRED
 						   TestResult::PASS,
-                           spReqs ) );
+                           TestRegistry::GetInstance().GetRequirementsForTest( EPDerivationTest::GetTestInfo().GetName() ) ) );
   
   AxCompositionMob axCompMob( spRootComposition->GetAAFObjectOfType() );
   AxString mobName;

@@ -40,7 +40,7 @@
 
 namespace {
 
-const wchar_t* TEST_NAME = L"Edit Protocol Mob Track Contents Test";
+const wchar_t* TEST_NAME = L"Edit Protocol Mob Contained Tracks Test";
 const wchar_t* TEST_DESC = L"Verify the correctness of track types within Edit Protocol mobs.";
 
 } // end of namespace

@@ -145,7 +145,14 @@ void TestRegistry::Register( const TestInfo& info )
 
 }
 
-const shared_ptr<const Requirement::RequirementMap> TestRegistry::GetRequirementsForTest( const wstring& name ) const
+const shared_ptr<Requirement::RequirementMap> TestRegistry::GetRequirementsForTest( const wstring& name ) const
+{
+    shared_ptr<const Requirement::RequirementMap> spConstReqs = this->GetConstRequirementsForTest( name );
+    Requirement::RequirementMapSP spReqs( new Requirement::RequirementMap( *spConstReqs) );
+    return spReqs;
+}
+
+const shared_ptr<const Requirement::RequirementMap> TestRegistry::GetConstRequirementsForTest( const wstring& name ) const
 {
     Map::const_iterator target = _testSet.find( name );
     if ( target == _testSet.end() )

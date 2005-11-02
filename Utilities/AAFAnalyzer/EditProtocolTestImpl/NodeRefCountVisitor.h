@@ -21,8 +21,12 @@
 #ifndef __NODEREFCOUNTVISITOR_h__
 #define __NODEREFCOUNTVISITOR_h__
 
+//Edit Protocol Test files
+#include "CompMobDependency.h"
+
 //Test/Result files
 #include <DetailLevelTestResult.h>
+#include <TestRegistry.h>
 
 //Requirement files
 #include <Requirement.h>
@@ -76,14 +80,14 @@ class NodeRefCountVisitor : public TypedVisitor
 
   NodeRefCountVisitor(wostream& os)
     : _os(os),
-      _spResult( new DetailLevelTestResult( L"NodeRefCountVisitor",
-				 L"Counts references to nodes of a particular type.",
-				 L"", // explain
-				 L"", // docref
-				 TestResult::PASS,
-                 *(new Requirement::RequirementMapSP(new Requirement::RequirementMap())) ) )
+      _spResult( new DetailLevelTestResult( L"Edit Protocol Contained Track Visitor",
+                                            L"Visit derivation chain mateiral and ensure they contain the required tracks.",
+                                            L"", // explain
+                                            L"", // DOCREF REQUIRED
+                                            TestResult::PASS,
+                                            TestRegistry::GetInstance().GetRequirementsForTest( CompMobDependency::GetTestInfo().GetName() )
+               )                          )
   {}
-  //TODO: Pass a real RequirementVectorSP
 
   virtual ~NodeRefCountVisitor()
   {}

@@ -204,7 +204,8 @@ bool DerivationChainStateMachine::Transition( aafUID_t event, const AxString& ne
 
     TransitionMap::const_iterator transIter = _transitionMap.find( make_pair( currentState, event ) );
     
-    detail = Indent() + L"Transition to " + nameIter->second + L" (" + nextName + L")";
+//    detail = Indent() + L"Transition to " + nameIter->second + L" (" + nextName + L")";
+    detail = Indent() + L"Transition to " + nextName;
 
     if ( transIter != _transitionMap.end() )
     {

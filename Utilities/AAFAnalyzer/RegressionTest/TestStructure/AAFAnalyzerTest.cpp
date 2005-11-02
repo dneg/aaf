@@ -23,6 +23,7 @@
 #include "Test2Stub.h"
 
 //Base Test files
+#include <AcyclicAnalysis.h>
 #include <AcyclicVisitor.h>
 #include <ResolveRefVisitor.h>
 #include <TestVisitor.h>
@@ -225,7 +226,7 @@ void CheckRegistries()
     {
         try
         {
-            if ( tReg.GetRequirementsForTest(L"Test1Stub")->size() != 3 )
+            if ( tReg.GetConstRequirementsForTest(L"Test1Stub")->size() != 3 )
             {
                 cout << "Incorrect number of requirements returned." << endl;
                 testStatus = false;
@@ -288,7 +289,7 @@ void CheckRegistries()
     try
     {
         AxString temp = L"Unregistered";
-        tReg.GetRequirementsForTest(L"Unregistered");
+        tReg.GetConstRequirementsForTest(L"Unregistered");
         cout << "Exception should have been thrown when searching for an unregistered test." << endl;
         cout << "Test 6 failed" << endl;
     } 
@@ -1196,6 +1197,7 @@ int main()
   dfs.TraverseUp(spTestVisitor, fooOne);
 
   //test the Acyclic Visitor
+  TestInfoRegistrar<AcyclicAnalysis> regAA;
   cout << "***CYCLE TESTER (no cycles)***" << endl;
   shared_ptr<AcyclicVisitor> spAcyclicVisitorA(new AcyclicVisitor(wcout));
   dfs.TraverseDown(spAcyclicVisitorA, parentOne);

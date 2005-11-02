@@ -41,7 +41,6 @@
 #include <AAFResult.h>
 
 //STL files
-#include <map>
 #include <sstream>
 
 namespace {
@@ -55,7 +54,14 @@ namespace aafanalyzer {
 using namespace boost;
  
 EPContainedTrackVisitor::EPContainedTrackVisitor( wostream& log )
-    : _log(log), _spResult( this->InitializeResult() )
+    : _log(log),
+      _spResult( new DetailLevelTestResult( L"Edit Protocol Contained Track Visitor",
+                                            L"Visit derivation chain mateiral and ensure they contain the required tracks.",
+                                            L"", // explain
+                                            L"", // DOCREF REQUIRED
+                                            TestResult::PASS,
+                                            TestRegistry::GetInstance().GetRequirementsForTest( EPContainedTrackTest::GetTestInfo().GetName() )
+               )                          )
 {
 }
     
@@ -69,25 +75,10 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, 
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
     
     //Get the name of the mob
-    AxString nodeName;
-    try
-    {
-        nodeName = L"Top-Level Composition \"" + axCompMob.GetName() + L"\"";
-    }
-    catch ( const AxExHResult& ex )
-    {
-      if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-      {
-        nodeName = L"Unnamed Top-Level Composition";
-      }
-      else
-      {
-        throw ex;
-      }
-    }
+    AxString nodeName = this->GetMobName( axCompMob, L"Top-Level Composition");
     
     unsigned int unnumberedtracks;
-    shared_ptr<TrackMap> spTrackMap( CountTracks( nodeName, axCompMob, kAAFClassID_Timecode, unnumberedtracks ) );
+    shared_ptr<TrackMap> spTrackMap( CountTracks( axCompMob, kAAFClassID_Timecode, unnumberedtracks ) );
     
     TrackMap::const_iterator mapIter;
     bool testPassed = true;
@@ -164,25 +155,10 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTap
     AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
     
     //Get the name of the mob
-    AxString nodeName;
-    try
-    {
-        nodeName = L"Tape Source \"" + axSrcMob.GetName() + L"\"";
-    }
-    catch ( const AxExHResult& ex )
-    {
-      if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-      {
-        nodeName = L"Tape Source";
-      }
-      else
-      {
-        throw ex;
-      }
-    }
+    AxString nodeName = this->GetMobName( axSrcMob, L"Tape Source" );
     
     unsigned int unnumberedtracks;
-    shared_ptr<TrackMap> spTrackMap( CountTracks( nodeName, axSrcMob, kAAFClassID_Timecode, unnumberedtracks ) );
+    shared_ptr<TrackMap> spTrackMap( CountTracks( axSrcMob, kAAFClassID_Timecode, unnumberedtracks ) );
     
     TrackMap::const_iterator mapIter;
     bool testPassed = true;
@@ -255,25 +231,10 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFil
     AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
     
     //Get the name of the mob
-    AxString nodeName;
-    try
-    {
-        nodeName = L"Film Source \"" + axSrcMob.GetName() + L"\"";
-    }
-    catch ( const AxExHResult& ex )
-    {
-      if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-      {
-        nodeName = L"Film Source";
-      }
-      else
-      {
-        throw ex;
-      }
-    }
+    AxString nodeName = this->GetMobName( axSrcMob, L"Film Source" );
     
     unsigned int unnumberedtracks;
-    shared_ptr<TrackMap> spTrackMap( CountTracks( nodeName, axSrcMob, kAAFClassID_EdgeCode, unnumberedtracks ) );
+    shared_ptr<TrackMap> spTrackMap( CountTracks( axSrcMob, kAAFClassID_EdgeCode, unnumberedtracks ) );
     
     TrackMap::const_iterator mapIter;
     bool testPassed = true;
@@ -350,40 +311,6 @@ shared_ptr<DetailLevelTestResult> EPContainedTrackVisitor::GetResult()
     return _spResult;
 }
    
-shared_ptr<DetailLevelTestResult> EPContainedTrackVisitor::InitializeResult()
-{
-    shared_ptr<const Requirement::RequirementMap> spConstReqs = TestRegistry::GetInstance().GetRequirementsForTest( EPContainedTrackTest::GetTestInfo().GetName() );
-    Requirement::RequirementMapSP spReqs( new Requirement::RequirementMap( *spConstReqs) );
-    
-    shared_ptr<DetailLevelTestResult> retVal(   
-        new DetailLevelTestResult( L"Edit Protocol Contained Track Visitor",
-                                   L"Visit top-level compositions and ensure they contain the required tracks.",
-                                   L"", // explain
-                                   L"", // DOCREF REQUIRED
-                                   TestResult::PASS,
-                                   spReqs
-                                 ) );
-
-    return retVal;
-}
-
-bool EPContainedTrackVisitor::IsType( AxClassDef& clsDef, aafUID_t type, aafUID_t parentType )
-{
-    aafUID_t auid = clsDef.GetAUID();
-    
-    if ( auid == type )
-    {
-        return true;
-    }
-    else if ( auid == parentType )
-    {
-        return false;
-    }
-
-    AxClassDef parentDef( clsDef.GetParent() );
-    return IsType( parentDef, type, parentType );
-}
-
 void EPContainedTrackVisitor::AddFailure( const AxString& reqId, const AxString& explain )
 {
     shared_ptr<const Requirement> failingReq = RequirementRegistry::GetInstance().GetRequirement( reqId );
@@ -403,7 +330,7 @@ void EPContainedTrackVisitor::AddFailure( const AxString& reqId, const AxString&
     _spResult->SetRequirementStatus( TestResult::FAIL, failingReq );
 }
 
-shared_ptr<EPContainedTrackVisitor::TrackMap> EPContainedTrackVisitor::CountTracks( const AxString& nodeName, AxMob& axMob, aafUID_t trackType, unsigned int& unnumberedTracks )
+shared_ptr<EPContainedTrackVisitor::TrackMap> EPContainedTrackVisitor::CountTracks( AxMob& axMob, aafUID_t trackType, unsigned int& unnumberedTracks )
 {
     
     shared_ptr<TrackMap> spTrackMap( new TrackMap );
@@ -425,7 +352,7 @@ shared_ptr<EPContainedTrackVisitor::TrackMap> EPContainedTrackVisitor::CountTrac
         {
             AxSegment axSegment( axMobSlot.GetSegment() );
             AxClassDef segClsDef( axSegment.GetDefinition() );
-            //Find out if this is a timecode track.
+            //Find out if this is a trackType track.
             if ( this->IsType( segClsDef, trackType, kAAFClassID_Segment ) )
             {
                 try {

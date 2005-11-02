@@ -20,9 +20,11 @@
 
 //Base Test files
 #include "AcyclicVisitor.h"
+#include "AcyclicAnalysis.h"
 
 //Test/Result files
 #include <DetailLevelTestResult.h>
+#include <TestRegistry.h>
 
 //Requirement files
 #include <Requirement.h>
@@ -56,9 +58,10 @@ AcyclicVisitor::  AcyclicVisitor(wostream& os)
                                          L"No cycles found.",
                                          L"", // DOCREF REQUIRED
                                          TestResult::PASS,
-                                         *(new Requirement::RequirementMapSP(new Requirement::RequirementMap())) ) )
+                                         //*(new Requirement::RequirementMapSP(new Requirement::RequirementMap()))
+                                         TestRegistry::GetInstance().GetRequirementsForTest( AcyclicAnalysis::GetTestInfo().GetName() )
+             )                         )
 {}
-//TODO: Pass a real RequirementVectorSP
 
 AcyclicVisitor::~AcyclicVisitor()
 {

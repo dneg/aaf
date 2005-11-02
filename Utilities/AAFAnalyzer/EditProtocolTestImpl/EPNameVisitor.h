@@ -78,7 +78,6 @@ class EPNameVisitor : public EPTypedVisitor
     
     bool VisitComposition( const AxString& type, const AxString& reqId, AxCompositionMob& axCompMob );
     bool VisitNonComposition( const AxString& type, const AxString& reqId, AxMob& axMob );
-    shared_ptr<DetailLevelTestResult> InitializeResult();
     void CheckForUniqueNames( NameSet& names, const AxString& reqId, const AxString& type );
 
     // prohibited

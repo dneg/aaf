@@ -28,6 +28,9 @@
 #include <EPDerivationTest.h>
 #include <EPNameTest.h>
 #include <EPContainedTrackTest.h>
+#include <EPTrackContentsTest.h>
+#include <EPLocatorTest.h>
+#include <EPEditRateTest.h>
 
 //Test/Result files
 #include <TestPhase.h>
