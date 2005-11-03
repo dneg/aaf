@@ -359,6 +359,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 
 	/* Set the essence to indicate that you have finished writing the samples */
 	check(pEssenceAccess->CompleteWrite());
+	check(pHeader2->UpdateEssenceContainers());
 
 	pEssenceAccess->Release();
 
