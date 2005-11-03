@@ -187,6 +187,7 @@ AAFRESULT STDMETHODCALLTYPE
 		// For AAF it is optional.
 			CHECK(pDictionary->GetBuiltinDefs()->cdSequence()->
 			    CreateInstance((ImplAAFObject **) &pSequence));
+			CHECK(pSequence->Initialize(pDataDef));
 			CHECK(pSequence->AppendComponent(pSrcClip));
 
 			CHECK(AppendNewStaticSlot(pSequence, masterSlotID, pSlotName, 
@@ -244,6 +245,7 @@ AAFRESULT STDMETHODCALLTYPE
 		// For AAF it is optional.
 			CHECK(pDictionary->GetBuiltinDefs()->cdSequence()->
 			    CreateInstance((ImplAAFObject **) &pSequence));
+			CHECK(pSequence->Initialize(pDataDef));
 			CHECK(pSequence->AppendComponent(pSrcClip));
 
 			CHECK(AppendNewTimelineSlot(editRate,pSequence, masterSlotID, pSlotName, 
