@@ -119,9 +119,9 @@ bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource
                 
                 if ( !fileFound )
                 {
-                    AddResult( L"REQ_EP_060",
-                               L"EssenceDescriptor::Locator property of " + mobName + L" does not contain a locator pointing to any known file.",
-                               TestResult::WARN );
+                    _spResult->AddInformationResult( L"REQ_EP_060", 
+                                                     L"EssenceDescriptor::Locator property of " + mobName + L" does not contain a locator pointing to any known file.", 
+                                                     TestResult::WARN );
                 }
                 
                 locIter.Reset();
@@ -129,9 +129,9 @@ bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource
             }
             else if ( containerFormat != kAAFContainerDef_AAF )
             {
-                AddResult( L"REQ_EP_059",
-                           L"Essence associated with " + mobName + L" is neither internal or external.",
-                           TestResult::FAIL );
+                _spResult->AddInformationResult( L"REQ_EP_059", 
+                                                 L"Essence associated with " + mobName + L" is neither internal or external.",
+                                                 TestResult::FAIL );
                 testPassed = false;
             }
             
@@ -156,9 +156,9 @@ bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource
             
             if ( !locatorFound )
             {
-                AddResult( L"REQ_EP_061",
-                           L"EssenceDescriptor::Locator property of " + mobName + L" does not include any NetworkLocators that complies with the constrains set out in Section 6.9 of the AAF Edit Protocol.",
-                           TestResult::WARN );
+                _spResult->AddInformationResult( L"REQ_EP_061", 
+                                                 L"EssenceDescriptor::Locator property of " + mobName + L" does not include any NetworkLocators that complies with the constrains set out in Section 6.9 of the AAF Edit Protocol.",
+                                                 TestResult::WARN );
             }
             
         }
@@ -197,9 +197,9 @@ bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource
         {
             throw ex;
         }
-        AddResult( L"REQ_EP_059",
-                   mobName + L" does not have a FileDescriptor::ContainerDefinition property.",
-                   TestResult::FAIL );
+        _spResult->AddInformationResult( L"REQ_EP_059", 
+                                         mobName + L" does not have a FileDescriptor::ContainerDefinition property.",
+                                         TestResult::FAIL );
         testPassed = false;
     }        
     
@@ -238,9 +238,9 @@ bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSour
             
         if ( !locatorFound )
         {
-            AddResult( L"REQ_EP_075",
-                       L"EssenceDescriptor::Locator property of " + this->GetMobName( axSrcMob, L"Import Source" ) + L" does not include any NetworkLocators that complies with the constrains set out in Section 6.9 of the AAF Edit Protocol.",
-                       TestResult::FAIL );
+            _spResult->AddInformationResult( L"REQ_EP_075", 
+                                             L"EssenceDescriptor::Locator property of " + this->GetMobName( axSrcMob, L"Import Source" ) + L" does not include any NetworkLocators that complies with the constrains set out in Section 6.9 of the AAF Edit Protocol.",
+                                             TestResult::FAIL );
             return false;
         }
             
@@ -251,9 +251,9 @@ bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSour
         {
             throw ex;
         }
-        AddResult( L"REQ_EP_075", 
-                   this->GetMobName( axSrcMob, L"Import Source" ) + L" does not have an EssenceDescriptor::Locator property.",
-                   TestResult::FAIL );
+        _spResult->AddInformationResult( L"REQ_EP_075", 
+                                         this->GetMobName( axSrcMob, L"Import Source" ) + L" does not have an EssenceDescriptor::Locator property.",
+                                         TestResult::FAIL );
         return false;
     }
 
@@ -301,25 +301,6 @@ bool EPLocatorVisitor::EdgeVisit(AAFSlotReference& edge)
 shared_ptr<DetailLevelTestResult> EPLocatorVisitor::GetResult()
 {
     return _spResult;
-}
-   
-void EPLocatorVisitor::AddResult( const AxString& reqId, const AxString& explain, TestResult::Result result )
-{
-    shared_ptr<const Requirement> requirement = RequirementRegistry::GetInstance().GetRequirement( reqId );
-    Requirement::RequirementMapSP reqMapSP(new Requirement::RequirementMap);
-    (*reqMapSP)[reqId] = requirement;
-    
-    shared_ptr<DetailLevelTestResult> spResult( new DetailLevelTestResult( _spResult->GetName(),
-                                L"-", // desc
-                                explain,
-                                L"-", // docref
-                                result,
-                                reqMapSP ) );
-    spResult->SetRequirementStatus( result, requirement );
-    
-    _spResult->AppendSubtestResult( spResult );
-    _spResult->SetResult( _spResult->GetAggregateResult() );
-    _spResult->SetRequirementStatus( result, requirement );
 }
 
 } // end of namespace aafanalyzer

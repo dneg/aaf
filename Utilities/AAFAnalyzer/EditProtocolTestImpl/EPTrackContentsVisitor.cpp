@@ -87,7 +87,7 @@ bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, E
             ss << L" in " << mobName << L" does not have exactly one SourceClip.";
 
             AxString explain( ss.str().c_str() );
-            AddFailure( L"REQ_EP_037", explain );
+            _spResult->AddInformationResult( L"REQ_EP_037", explain, TestResult::FAIL );
             testPassed = false;
         }
     }
@@ -115,7 +115,7 @@ bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, E
             ss << L" in " << mobName << L" does not have exactly one OperationGroup.";
 
             AxString explain( ss.str().c_str() );
-            AddFailure( L"REQ_EP_046", explain );
+            _spResult->AddInformationResult( L"REQ_EP_046", explain, TestResult::FAIL );
             testPassed = false;
         }
     }
@@ -137,25 +137,7 @@ shared_ptr<DetailLevelTestResult> EPTrackContentsVisitor::GetResult()
 {
     return _spResult;
 }
-   
-void EPTrackContentsVisitor::AddFailure( const AxString& reqId, const AxString& explain )
-{
-    shared_ptr<const Requirement> failingReq = RequirementRegistry::GetInstance().GetRequirement( reqId );
-    Requirement::RequirementMapSP reqMapSP(new Requirement::RequirementMap);
-    (*reqMapSP)[reqId] = failingReq;
-    
-    shared_ptr<DetailLevelTestResult> spFailure( new DetailLevelTestResult( _spResult->GetName(),
-                                L"-", // desc
-                                explain,
-                                L"-", // docref
-                                TestResult::FAIL,
-                                reqMapSP ) );
-    spFailure->SetRequirementStatus( TestResult::FAIL, failingReq );
-    
-    _spResult->AppendSubtestResult( spFailure );
-    _spResult->SetResult( _spResult->GetAggregateResult() );
-    _spResult->SetRequirementStatus( TestResult::FAIL, failingReq );
-}
+
 
 unsigned int EPTrackContentsVisitor::CountSegments( AxMobSlot& track, aafUID_t segmentType )
 {

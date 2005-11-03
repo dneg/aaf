@@ -102,17 +102,21 @@
     assume that it is valid for a clip to be the end of the derivation chain.
     
 16. Requirements REQ_EP_025, REQ_EP_030, REQ_EP_034, REQ_EP_043, REQ_EP_049,
-    REQ_EP_054, REQ_EP_058, REQ_EP_071, REQ_EP_074, REQ_EP_080 and REQ_EP_085
-    define the Edit Protocol material types.  These requirements are used in
-    EPDecorateTest/EPDecorateVisitor, however, there is no way for these
-    requirements to fail.
+    REQ_EP_054, REQ_EP_058, REQ_EP_071, REQ_EP_074, REQ_EP_080, REQ_EP_085 and
+    REQ_EP_096 define terms used in the Edit Protocol.  Some of these
+    requirements are used to find particular data, however, they can not
+    generate a warning or a failure.  These should not be requirements, they
+    should be definitions (ie. Instead of using shall, REQ_EP_043 should be
+    rewritten as "Let an adjusted-clip composistion be defined as a
+    CompositionMob with Mob::UsageCode property equal to Usage_AdjustedClip"
 	
 17. REQ_EP_013, REQ_EP_014 and REQ_EP_039 are all classified as file
     requirements but they seem dependant on an importing or exporting
     application.
 	
-18. REQ_EP_023 is an optional ("MAY") requirement.  There is no way it can
-    present a warning or a failure.
+18. REQ_EP_023 and REQ_EP_097 are optional ("MAY") requirements.  There is no
+    way they can present a warning or a failure - they are not currently being
+    tested.
 	
 19. REQ_EP_028 does not specify if physical track numbers may be repeated. 
     Until further information is avaliable, it is assumed that they can not be
@@ -145,3 +149,79 @@
 26. REQ_EP_087 does not specify if physical track numbers outside the range 1-3
     are legal.  Until further information is avaliable, it is assumed that they
     are illegal.
+    
+27. Timecode track is not defined.  It is assumed to be a TimelineMobSlot with
+    a Timecode segment.
+    
+28. Edgecode track is not defined.  It is assumed to be a TimelineMobSlot with
+    an Edgecode segment.
+    
+29. The legal layout of a derivation chain is not specified in test, only in
+    the diagram.
+    
+30. REQ_EP_037 states each essence track of a sub-clip composition shall contain
+    exactly one SourceClip - what about sequences of one SourceClip?
+    
+31. REQ_EP_046 states each essence track of an adjusted-clip composition shall
+    contain exactly one OperationGroup - what about sequence of one 
+    OperationGroup?
+    
+32. What does REQ_EP_056 mean?
+
+33. Essence track is not defined.  It is assumed to be a MobSlot that has an
+    Sound or Picture DataDefinition.
+    
+34. REQ_EP_091 states that the edit rate of an essence track must be equivalent
+    to value in the table.  However, StaticMobSlots do not have edit rates.
+    As was noted above, it is assumed that an essence track is a MobSlot with
+    a Sound or Picture DataDefinition.  How should REQ_EP_091 treat 
+    StaticMobSlots?
+    
+35. REQ_EP_061 and REQ_EP_075 require that URIs comply with RFC 2396 and also
+	that absolute URIs conform to RFC 1738.  However, RFC 2396 updates RFC 1738.
+	If a URI complies with RFC 2396, but one of the updates cause it to not
+	conform with RFC 1738 should the test fail?  What if in order to comform to
+	RFC 1738 it can not comply with RFC 2396.
+	
+36. REQ_EP_061 and REQ_EP_075 require that if a NetworkLocator contains a
+	"relative URI, the base URI should be determined from the URI of the AAF
+	file itself."  What exactly does this mean?
+	
+37. REQ_EP_059 says that essence associated with a file SourceMob shall be
+    internal to the AAF file or external to the AAF file.  If the 
+    FileDescriptor::ContainerDefinition property is used to determine if the
+    essence is internal or external, what values indicate internal and what
+    values indicate external.  Are there some values that are illegal?  For now
+    assume the only legal values are kAAFContainerDef_External and
+    kAAFContainerDef_AAF.
+    
+38. REQ_EP_060 states there should be a Locator specifying the location of the
+    essence.  REQ_EP_061 states there should be a NetworkLocator that complies
+    with a set of constraints.  These requirements do not state that these must
+    be the same locator.  There are enough differences in these requirements
+    (60: Locator, 61: NetworkLocator; 60: External to the AAF File; 61: Internal
+    or External is not specified), that the test is currently being implemented
+    to accept two differnt locators that will meet these requeirements.
+    
+39. The URI validator that is currently being used does not accept wide
+	characters.  It also does not appear to accept relative URIs.  Until
+	a different URI validator is found, these problems will exist when
+	validating URIs.
+	
+40. REQ_EP_060 tests if a file exists at the location pointed to by the locator.
+    Currently this is done assuming the path is specified as an absolute URI.
+    Once a URI tool that deals with relative URIs, this can be modified to
+    to allow the path to be absolute or relative.
+    
+41. The words "valid name" are used throughout the Edit Protocol, but what makes
+	a name valid is never determined.  Until further information is avaliable,
+	it is assumed that a name is valid if an AAF Object has a name property that
+	has been set.
+	
+42. REQ_EP_099 and REQ_EP_100 state that the edit rates of audio tracks must
+	equal the sample rate and the edit rates of video tracks must be less than
+	or equal to the sample rate respectively.  Currently, it is assumed that an
+	audio track an essence track where IsSoundKind() is true and a video track
+	is an essence track where IsPictureKind() is true.  This includes 
+	StaticMobSlots, which do not have edit rates.  Until more information is
+	avaliable, all StaticMobSlots will cause test failures.

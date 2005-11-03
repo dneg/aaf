@@ -102,25 +102,6 @@ bool EPEditRateVisitor::EdgeVisit(AAFSlotReference& edge)
     return _spResult;
  }
     
-void EPEditRateVisitor::AddFailure( const AxString& reqId, const AxString& explain )
-{
-    shared_ptr<const Requirement> failingReq = RequirementRegistry::GetInstance().GetRequirement( reqId );
-    Requirement::RequirementMapSP reqMapSP(new Requirement::RequirementMap);
-    (*reqMapSP)[reqId] = failingReq;
-    
-    shared_ptr<DetailLevelTestResult> spFailure( new DetailLevelTestResult( _spResult->GetName(),
-                                L"-", // desc
-                                explain,
-                                L"-", // docref
-                                TestResult::FAIL,
-                                reqMapSP ) );
-    spFailure->SetRequirementStatus( TestResult::FAIL, failingReq );
-    
-    _spResult->AppendSubtestResult( spFailure );
-    _spResult->SetResult( _spResult->GetAggregateResult() );
-    _spResult->SetRequirementStatus( TestResult::FAIL, failingReq );
-}
-
 bool EPEditRateVisitor::VisitMob( AxMob& axMob )
 {
 
@@ -149,8 +130,7 @@ bool EPEditRateVisitor::VisitMob( AxMob& axMob )
             wstringstream ss;
             ss << L"Mob Slot with ID = " << slotId << L" of " << mobName
                << L" is a StaticMobSlot and does not have an edit rate.";
-            this->AddFailure( L"REQ_EP_090",
-                              ss.str().c_str() );
+            _spResult->AddInformationResult( L"REQ_EP_090", ss.str().c_str(), TestResult::FAIL );
         }
         else if ( this->IsType( clsDef, kAAFClassID_EventMobSlot, kAAFClassID_MobSlot ) )
         {
@@ -166,8 +146,7 @@ bool EPEditRateVisitor::VisitMob( AxMob& axMob )
             wstringstream ss;
             ss << L"Mob Slot with ID = " << slotId << L" of " << mobName
                << L" is not a known type of MobSlot and its edit rate cannot be accessed.";
-            this->AddFailure( L"REQ_EP_090",
-                              ss.str().c_str() );
+            _spResult->AddInformationResult( L"REQ_EP_090", ss.str().c_str(), TestResult::FAIL );
         }
     }
 
@@ -186,28 +165,28 @@ bool EPEditRateVisitor::TestEditRate( aafRational_t editRate, AxDataDef& axDataD
     {
         ss << L"has an edit rate with a negative numerator (" << editRate.numerator
            << L"/" << editRate.denominator << L").";
-        this->AddFailure( L"REQ_EP_091", ss.str().c_str() );
+        _spResult->AddInformationResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL );
         return false;
     }
     else if ( editRate.denominator < 0 )
     {
         ss << L"has an edit rate with a negative denominator (" << editRate.numerator
            << L"/" << editRate.denominator << L").";
-        this->AddFailure( L"REQ_EP_091", ss.str().c_str() );
+        _spResult->AddInformationResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL );
         return false;
     }
     else if ( editRate.numerator == 0 )
     {
         ss << L"has an edit rate with a zero numerator (" << editRate.numerator
            << L"/" << editRate.denominator << L").";
-        this->AddFailure( L"REQ_EP_091", ss.str().c_str() );
+        _spResult->AddInformationResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL );
         return false;
     }
     else if ( editRate.denominator == 0 )
     {
         ss << L"has an edit rate with a zero denominator (" << editRate.numerator
            << L"/" << editRate.denominator << L").";
-        this->AddFailure( L"REQ_EP_091", ss.str().c_str() );
+        _spResult->AddInformationResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL );
         return false;
     }
     else if ( !_erTable.IsInTable( editRate, axDataDef.IsPictureKind() ) )
@@ -225,7 +204,7 @@ bool EPEditRateVisitor::TestEditRate( aafRational_t editRate, AxDataDef& axDataD
            << L" = " 
            << _erTable.Round( (double)editRate.numerator/(double)editRate.denominator)
            << L").";
-        this->AddFailure( L"REQ_EP_090", ss.str().c_str() );
+        _spResult->AddInformationResult( L"REQ_EP_090", ss.str().c_str(), TestResult::FAIL );
         return false;
     }
     

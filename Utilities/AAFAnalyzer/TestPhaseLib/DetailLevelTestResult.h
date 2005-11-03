@@ -42,6 +42,7 @@ class DetailLevelTestResult : public LowLevelTestResult
 
   void AppendSubtestResult( const shared_ptr<const DetailLevelTestResult>& subtestResult );
   const enum ResultLevel GetResultType() const;
+  void AddInformationResult( const wstring& reqId, const wstring& explain, Result result );
  private:
  
   // prohibited

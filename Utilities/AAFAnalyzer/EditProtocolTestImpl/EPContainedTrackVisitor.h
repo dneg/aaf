@@ -70,7 +70,6 @@ class EPContainedTrackVisitor : public EPTypedVisitor
     wostream& _log;
     shared_ptr<DetailLevelTestResult> _spResult;
 
-    void AddFailure( const AxString& reqId, const AxString& explain );
     shared_ptr<TrackMap> CountTracks( AxMob& axMob, aafUID_t trackType, unsigned int& unnumberedTracks );
 
     // prohibited

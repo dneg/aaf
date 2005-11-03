@@ -71,7 +71,6 @@ class EPEditRateVisitor : public EPTypedVisitor
     shared_ptr<DetailLevelTestResult> _spResult;
     AllowedEditRateTable _erTable;
 
-    void AddFailure( const AxString& reqId, const AxString& explain );
     bool VisitMob( AxMob& axMob );
     bool TestEditRate( aafRational_t editRate, AxDataDef& axDataDef, const AxString& mobName, aafSlotID_t slotId );
 

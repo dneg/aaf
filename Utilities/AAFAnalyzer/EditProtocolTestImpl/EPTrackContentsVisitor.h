@@ -69,7 +69,6 @@ class EPTrackContentsVisitor : public EPTypedVisitor
     shared_ptr<DetailLevelTestResult> _spResult;
 
     unsigned int CountSegments( AxMobSlot& track, aafUID_t segmentType );
-    void AddFailure( const AxString& reqId, const AxString& explain );
 
     // prohibited
     EPTrackContentsVisitor();

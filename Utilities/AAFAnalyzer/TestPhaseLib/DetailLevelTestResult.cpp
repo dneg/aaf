@@ -20,6 +20,7 @@
 
 //Test/Result files
 #include "DetailLevelTestResult.h"
+#include "RequirementMismatchException.h"
 
 namespace {
 
@@ -74,6 +75,35 @@ void DetailLevelTestResult::AppendSubtestResult( const shared_ptr<const DetailLe
 const enum TestResult::ResultLevel DetailLevelTestResult::GetResultType() const
 {
   return TestResult::DETAIL;
+}
+
+void DetailLevelTestResult::AddInformationResult( const wstring& reqId, const wstring& explain, Result result )
+{
+//    shared_ptr<const Requirement> requirement = RequirementRegistry::GetInstance().GetRequirement( reqId );
+    
+    Result reqStatus;
+    if ( !this->ContainsRequirment( reqId, reqStatus ) )
+    {
+        wstring msg;
+        msg = L"Cannot add information result for requirement: " + reqId + L" because it is not in the DetailLevelTestResult " + this->GetName();
+        throw RequirementMismatchException ( msg.c_str() );
+    }
+    
+    Requirement::RequirementMapSP reqMapSP(new Requirement::RequirementMap);
+    shared_ptr<const Requirement> requirement = (*(this->GetMyRequirements( reqStatus )))[reqId];
+    (*reqMapSP)[reqId] = requirement;
+    
+    shared_ptr<DetailLevelTestResult> spResult( new DetailLevelTestResult( this->GetName(),
+                                L"-", // desc
+                                explain,
+                                L"-", // docref
+                                result,
+                                reqMapSP ) );
+    spResult->SetRequirementStatus( result, requirement );
+    
+    this->AppendSubtestResult( spResult );
+    this->SetResult( this->GetAggregateResult() );
+    this->SetRequirementStatus( result, requirement );
 }
 
 } // end of namespace diskstream

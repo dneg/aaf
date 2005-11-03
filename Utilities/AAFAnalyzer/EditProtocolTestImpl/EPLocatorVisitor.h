@@ -64,7 +64,6 @@ class EPLocatorVisitor : public EPTypedVisitor
     wostream& _log;
     shared_ptr<DetailLevelTestResult> _spResult;
 
-    void AddResult( const AxString& reqId, const AxString& explain, TestResult::Result result );
     bool CheckNetworkLocator( AxNetworkLocator& axNetLocator );
 
     // prohibited

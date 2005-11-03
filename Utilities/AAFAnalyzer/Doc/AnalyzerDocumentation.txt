@@ -382,3 +382,22 @@ EPContainedTrackTest - Derived from Test and executed by EPMobDepPhase.  Tests
 EPContainedTrackVisitor - Derived from EPTypedVisitor, used by
 						  EPContainedTrackTest to verify that tracks contained
 						  within mobs are valid under the Edit Protocol.
+						  
+EPTrackContentsTest - Derived from test and executed by EPMobDepPhase.  Test
+					  tracks within mobs of a TestGraph to make sure they
+					  contain valid content.
+					  
+EPTrackContentsVisitor - Derived from EPTypedVisitor, used by
+						 EPTrackContentsTest to veryify that tracks contained
+						 within mobs of a TestGraph have valid contents.
+						 
+EPEditRateTest - Derived from test and execured by EPMobDepPhase.  Tests
+				 essence tracks within mobs of a TestGraph to make sure they
+				 have valid edit rates.
+				 
+EPEditRateVisitor - Derived from EPTypedVisitor, used by EPEditRate test to
+					verify that essence tracks contained within mobs of a
+					TestGraph have valid edit rates.
+					
+AllowedEditRateTable - Store all valid essence track edit rates and determine if
+					   any given rate is located in the table.
