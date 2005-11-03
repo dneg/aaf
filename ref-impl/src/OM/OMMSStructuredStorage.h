@@ -49,8 +49,8 @@
 #include <objbase.h>
 #elif defined (OM_USE_REFERENCE_SS)
 #include "h/storage.h"
-#elif defined(OM_USE_SCHEMASOFT_SS)
-/* XXX: need to get this out of here.  SchemaSoft stuff should not include
+#elif defined(OM_USE_SCHEMASOFT_SS) || defined(OM_USE_GSF_SS)
+/* XXX: need to get this out of here.  SchemaSoft and libgsf stuff should not include
  *      this header
  */
 #  define CHAR_REFERENCE_CHAR
