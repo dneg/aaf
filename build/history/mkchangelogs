@@ -13,7 +13,7 @@
 # the License for the specific language governing rights and limitations
 # under the License.
 #
-# The Original Code of this file is Copyright 1998-2004, Licensor of the
+# The Original Code of this file is Copyright 1998-2005, Licensor of the
 # AAF Association.
 #
 # The Initial Developer of the Original Code of this file and the
@@ -92,7 +92,10 @@ writeFooter ()
 
 usage ()
 {
-  echo "$TOOLNAME : Usage : $TOOLNAME [-v -f -h] <tagdates> <colormap>"
+  echo "$TOOLNAME : Usage : $TOOLNAME [-v -f -n -h] <tagdates> <colormap>"
+  echo "    -v = output messages indicating progress"
+  echo "    -f = modify the working copy without asking permission"
+  echo "    -n = include changes made since the last tag"
 }
 
 verbosePrint ()
@@ -108,8 +111,9 @@ TOOLPATH=${0%/${TOOLNAME}}
 
 VERBOSE=0
 FORCE=0
+NOW=0
 
-while getopts ":vfh" opt
+while getopts ":vfnh" opt
 do
   case $opt in
   v)
@@ -117,6 +121,9 @@ do
     ;;
   f)
     FORCE=1
+    ;;
+  n)
+    NOW=1
     ;;
   h)
     usage
@@ -202,9 +209,12 @@ do
   fi
 done < $tagstufffile
 
-tagstuff[i]="head"
-tagstuff[i+1]=""
-tagstuff[i+2]=""
+if [ $NOW == 1 ]
+then
+  tagstuff[i]="head"
+  tagstuff[i+1]=""
+  tagstuff[i+2]=""
+fi
 
 let n=${#tagstuff[@]}/3
 
