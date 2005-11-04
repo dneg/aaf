@@ -98,8 +98,9 @@ $ temporary-directory/AAFmkchangelogs
 
 AAFmkchangelogs accepts the following options - 
 
--v = be verbose - indicates progress
--f = force - go ahead and modify my working copy
+    -v = output messages indicating progress
+    -f = modify the working copy without asking permission
+    -n = include changes made since the last tag
 
 Note that the first time you you execute this step, all of the pages
 are generated from scratch. If you retain the output (and
