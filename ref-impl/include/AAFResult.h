@@ -28,14 +28,10 @@
 #define AAFRESULT_FAILED(Status) ((AAFRESULT)(Status)<0)
 #define AAFRESULT_SUCCEEDED(Status) (!(AAFRESULT_FAILED(Status)))
 
-#ifndef MAKE_HRESULT
-#define MAKE_HRESULT(sev,fac,code) \
-    ((HRESULT) (((aafUInt32)(sev)<<31) | ((aafUInt32)(fac)<<16) | ((aafUInt32)(code))) )
-#endif
-
 // #define _FACILITY_AAF    FACILITY_ITF
 #define _FACILITY_AAF 0x12
-#define MAKE_AAFHRESULT( code ) MAKE_HRESULT( SEVERITY_ERROR, _FACILITY_AAF, code )
+#define MAKE_AAFHRESULT( code ) \
+    ((HRESULT) (((aafUInt32)(SEVERITY_ERROR)<<31) | ((aafUInt32)(_FACILITY_AAF)<<16) | ((aafUInt32)(code))) )
 
 /* SESSION/FILE Error Codes */
 #define AAFRESULT_BAD_SESSION                MAKE_AAFHRESULT(0x0010)
