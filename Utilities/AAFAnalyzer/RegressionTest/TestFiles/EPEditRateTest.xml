@@ -1404,5 +1404,73 @@
         </source-clip>
         <timecode/>
     </top-level>
+    
+    <!-- Test Video Edit Rate/Sample Rate -->
+
+    <clip name="Video Track edit rate equals sample rate Clip">
+        <source-clip slot-type="timeline" edit-rate-denominator="15" edit-rate-numerator="30" track-type="picture">
+            <file-source name="Video Track edit rate equals sample rate File Source" sample-rate-denominator="2" sample-rate-numerator="4">
+                <eoc/>
+            </file-source>
+        </source-clip>
+    </clip>
+    <clip name="Video Track edit rate greater than sample rate Clip">
+        <source-clip slot-type="timeline" edit-rate-denominator="15" edit-rate-numerator="30" track-type="picture">
+            <file-source name="Video Track edit rate greater than sample rate File Source" sample-rate-denominator="3" sample-rate-numerator="4">
+                <eoc/>
+            </file-source>
+        </source-clip>
+    </clip>
+    <clip name="Video Track edit rate less than sample rate Clip">
+        <source-clip slot-type="timeline" edit-rate-denominator="25" edit-rate-numerator="30" track-type="picture">
+            <file-source name="Video Track edit rate less than sample rate File Source" sample-rate-denominator="2" sample-rate-numerator="4">
+                <eoc/>
+            </file-source>
+        </source-clip>
+    </clip>
+    <clip name="Static Video Track Clip">
+        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="picture">
+            <file-source name="Static Video Track Clip" sample-rate-denominator="1" sample-rate-numerator="1">
+                <eoc/>
+            </file-source>
+        </source-clip>
+    </clip>
+    <clip name="Null Track edit rate equals sample rate Clip">
+        <source-clip slot-type="timeline" edit-rate-denominator="15" edit-rate-numerator="30" track-type="none">
+            <file-source name="Null Track edit rate equals sample rate File Source" sample-rate-denominator="2" sample-rate-numerator="4">
+                <eoc/>
+            </file-source>
+        </source-clip>
+    </clip>
+    <clip name="Null Track edit rate greater than sample rate Clip">
+        <source-clip slot-type="timeline" edit-rate-denominator="15" edit-rate-numerator="30" track-type="none">
+            <file-source name="Null Track edit rate greater than sample rate File Source" sample-rate-denominator="3" sample-rate-numerator="4">
+                <eoc/>
+            </file-source>
+        </source-clip>
+    </clip>
+    <clip name="Null Track edit rate less than sample rate Clip">
+        <source-clip slot-type="timeline" edit-rate-denominator="25" edit-rate-numerator="30" track-type="none">
+            <file-source name="Null Track edit rate less than sample rate File Source" sample-rate-denominator="2" sample-rate-numerator="4">
+                <eoc/>
+            </file-source>
+        </source-clip>
+    </clip>
+    
+    <!-- Make sure identical audio and sample rates do not fail-->
+    <clip name="Clip 1">
+        <source-clip slot-type="timeline" edit-rate-denominator="24" edit-rate-numerator="600" track-type="audio">
+            <file-source name="File Source 1" sample-rate-denominator="24" sample-rate-numerator="600">
+                <eoc/>
+            </file-source>
+        </source-clip>
+    </clip>
+    <clip name="Clip 2">
+        <source-clip slot-type="timeline" edit-rate-denominator="24" edit-rate-numerator="600" track-type="audio">
+            <file-source name="File Source 1" sample-rate-denominator="24" sample-rate-numerator="600">
+                <eoc/>
+            </file-source>
+        </source-clip>
+    </clip>
 
 </aaf-file>

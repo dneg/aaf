@@ -1,0 +1,686 @@
+Definitions:
+	Edit Protocol Material Type - The material types defined in Section 6.1 of
+								  the Edit protocol.
+
+Test Name:
+	FileLoad
+Description:
+	Load an AAF file and create a test graph.
+Requirements Tested:
+	NONE
+Warn Conditions:
+	NONE
+Fail Conditions:
+	NONE
+Issues:
+	NONE
+
+Test Name:
+	RefResolver
+Description:
+	Visit all mobs and resolve references.
+Requirements Tested:
+	NONE
+Warn Conditions:
+	REQ_??_??? - Present a warning if a mob references a mob that is not in the 
+				 open AAF file.
+Fail Conditions:
+	NONE
+Issues:
+	NONE
+
+Test Name:
+	AcyclicAnalysis
+Description:
+	Determine if the test graph contains any cycles.
+Requirements Tested:
+	NONE
+Warn Conditions:
+	NONE
+Fail Conditions:
+	REQ_??_??? - Fail if a cycle is detected in the test graph.
+Issues:
+	NONE
+
+Test Name:
+	DecorateEPTest
+Description:
+	Visit all mobs and decorate each mob using the decorator design pattern
+with its Edit Protocol material type.
+Requirements Tested:
+	NONE
+Warn Conditions:
+	NONE
+Fail Conditions:
+	NONE
+Issues:
+	NONE
+
+Test Name:
+	CompMobDependency
+Description:
+	Visit all composition mobs to determine which ones are unreferenced.
+Requirements Tested:
+	NONE
+Warn Conditions:
+	NONE
+Fail Conditions:
+	NONE
+Issues:
+	NONE
+
+Test Name:
+	EPDerivationTest
+Description:
+	Trace down the derivation chain starting at the unfererenced composition
+	mobs identified in the CompMobDependency test.  Verify that the chain can
+	be represented by the state machine in section 6.1 of the Edit Protocol.
+Requirements Tested:
+	REQ_EP_017 (6.2)
+		The end of the derivation change (i.e. the original material), to the
+		extent an application is aware of it, shall be specified using a
+		zero-value SourceClip object.
+	REQ_EP_018 (6.2)
+		If a reference is made to a CompositionMob or MasterMob, that Mob shall
+		be included in the AAF file.
+	REQ_EP_019 (6.2)
+		If a reference is made to a SourceMob, that Mob should be included in
+		the AAF file.
+	REQ_EP_025 (6.3)
+		A top-level composition shall be specified using a CompositionMob with
+		Mob::UsageCode property equal to Usage_TopLevel.  A top-level
+		composition shall not be referenced by another Mob in the AAF file.
+	REQ_EP_026 (6.3)
+		A top-level composition shall only reference the following kinds of
+		material: a lower-level composition, a sub-clip composition, an
+		adjusted-clip composition, a template clip, or a clip.
+	REQ_EP_030 (6.4)
+		A lower-level composition shall be specified using a CompositionMob with
+		Mob::UsageCode property equal to Usage_LowerLevel.  A lower-level
+		composition shall be referenced by a top-level or lower-level
+		composition in the AAF file.
+	REQ_EP_031 (6.4)
+		A lower-level composition shall only reference the following kinds of
+		material: a sub-clip composition, an adjusted-clip composition, a
+		template clip, or a clip.
+	REQ_EP_036 (6.5)
+		A sub-clip composition shall only reference the following kinds of
+		material: an adjusted-clip composition, a template clip, or a clip.
+	REQ_EP_045 (6.6)
+		An adjusted-clip composition shall only reference the following kinds of
+		material: a template clip or a clip
+	REQ_EP_050 (6.7)
+		Each essence track of a template clip shall contain exactly one
+		SourceClip.  The SourceClip shall have zero-value to denote the end of
+		the known derivation chain.
+	REQ_EP_055 (6.8)
+		A clip shall only reference the following kinds of material: a file
+		source, an import source, a tape source, or a film source.
+	REQ_EP_063 (6.9)
+		If a file source has any of the following sources, then those source
+		mobs should be included and referenced by the file source: an import
+		source, a tape source, or a film source.
+	REQ_EP_064 (6.9)
+		If a file source does not have an import source, a tape source or a film
+		source, then it shall reference and include a recording source.
+	REQ_EP_072 (6.10)
+		Each essence track of a recording source shall contain exactly one
+		SourceClip.  The SourceClip shall have zero-value to denote the end of
+		the known derivation chain.
+	REQ_EP_076 (6.11)
+		If an import source has any of the following source, then those source
+		mobs should be included and referenced by the import source: a tape
+		source or a film source.
+	REQ_EP_083 (6.12)
+		If a tape has a film source, then it should be included and referenced
+		by the tape source.
+Warn Conditions:
+	REQ_EP_019 - Present a warning for an out of file source mob reference.
+Fail Conditions:
+	REQ_EP_017 - Fail if the derivation chain ends with something other than a
+				 zero-valued SourceClip object.
+	REQ_EP_018 - Fail for an out of file master of composition mob reference.
+	REQ_EP_025 - Fail if this mob causes an illegal transition in the state
+				 machine in section 6.1.
+	REQ_EP_026 - Fail if any other type of material is referenced.
+	REQ_EP_030 - Fail if this mob causes an illegal transition in the state
+				 machine in section 6.1.
+	REQ_EP_031 - Fail if any other type of material is referenced.
+	REQ_EP_036 - Fail if any other type of material is referenced.
+	REQ_EP_045 - Fail if any other type of material is referenced.
+	REQ_EP_050 - Fail for an illegal transition out of a template clip
+				 (anything that is not a zero-value SourceClip object).
+	REQ_EP_055 - Fail if any other type of material is referenced.
+	REQ_EP_063/REQ_EP_064 - Fail if any other type of material is referenced.
+	REQ_EP_072 - Fail for an illegal transition out of a recording source
+				 (anything that is not a zero-value SourceClip object).
+	REQ_EP_076 - Fail if any other type of material is referenced.
+	REQ_EP_083 - Fail if any other type of material is referenced.
+	REQ_EP_??? - Fail is a mob is encountered that was not decorated by
+				 DecorateEPTest.  This implies that the mob does not have any
+				 edit protocol material type.
+	REQ_EP_??? - Fail for an illegal transition out of a film source (anything
+				 that is not a zero-value SourceClip object).
+Issues:
+ 1. The Edit Protocol does not specify what type of references a file source is
+    allowed to reference.  REQ_EP_063 states that "if a file source has any of
+    the following sources, then those source mobs should be referenced and
+    included by the file source."  This is an application requirement that and
+    is a "should" not a "shall."  Until a more appropriate requirement is
+    available, REQ_EP_063 is being used to specify an invalid reference from
+    a file source.
+ 
+ 2. REQ_EP_063 only deals with references to import, tape and film sources, not
+    file sources.  This was discussed in the conference call on September 26
+    and it was concluded that this was probably an omission.  With (1),
+    REQ_EP_063 is being used to specify that a reference from a file source to
+    another file source is valid.
+    
+ 3. REQ_EP_064 states "if a file source does not have one of the above sources,
+    then it shall reference and include a recording source."  This is currently
+    being interpreted to mean that a file source must reference another source
+    (it can not be the end of the derivation chain).  The requirement is not
+    being interpreted as an if and only if, therefore, a file source may have
+    a(n) file/import/tape/file source as well as a recording source.
+    
+ 4. The Edit Protocol does not specify what types of references an import
+    source is allowed to reference.  REQ_EP_076 states that "if an import
+    source has any of the following sources, then those source mobs should be
+    included and referenced by the import source."  This is an application
+    requirement and is a "should" not a "shall."  Until a more appropriate
+    requirement is available, REQ_EP_076 is being used to specify an invalid
+    reference from an import source.
+    
+ 5. The Edit Protocol does not specify what type of references a tape source is
+    allowed to reference.  REQ_EP_083 states that "if a tape source has a film
+    source, then it should be included and referenced by the tape source.  This
+    is an application requirement and is a "should" not a "shall."  Until a
+    more appropriate requirement is available, REQ_EP_083 is being used to
+    specify an invalid reference from a tape source.
+    
+ 6. The Edit Protocol does not specify what type of references a film source is
+    allowed to reference.  Currently, a test will fail, although all
+    requirements will appear to have passed if a film source is not the end of
+    the derivation chain.
+    
+ 7. Currently a test will fail if a CompositionMob does not have a UsageCode
+    property.  However, there is no requirement in the Edit Protocol that
+    specifies that every CompositionMob must have a UsageCode property.
+    Currently, the test will fail and all requirements will appear to pass,
+    A possible solution is to fail the requirement that specifies acceptable
+    references out of the "current node."
+    
+ 8. Currently a test will fail if a CompositionMob or a MasterMob has an
+    unknown UsageCode property.  However, there is no requirement in the Edit
+    Protocol that specifies a UsageCode property must be one that currently
+    exists.  Currently, the test will fail and all requirements will appear to
+    pass.  A possible solution is to fail the requirement that specifies
+    acceptable references out of the "current node."
+    
+ 9. Currently a test will fail if a SourceMob has no descriptor.  However, the
+    Edit Protocol does not specify that a SourceMob must have a descriptor.
+    Currently, the test will fail and all requirements will appear to pass.  A
+    possible solution is to fail the requirement that specifies acceptable
+    references out of the "current node."
+    
+10. Currently a test will fail if a SourceMob has an "invalid" descriptor (ie.
+    Auxiliary).  However, the Edit Protocol does not specify that a SourceMob
+    cannot have an "invalid" descriptor.  Currently, the test will fail and all
+    requirements will appear to pass.  A possible solution is to fail the
+    requirement that specifies acceptable references out of the "current node."
+    
+11. Currently a test will fail if a SourceClip does not have a SourceReference
+    property.  However, the Edit Protocol does not specify that a SourceClip
+    must have a SourceReference property.  Currently, the test will fail and
+    all requirements will appear to pass.  A possible solution is to fail the
+    requirement that specifies acceptable references out of the "current node."
+    
+12. Tests will currently fail if the first "node" in the derivation chain is
+    anything other than a top-level composition.  REQ_EP_030 states that "a
+    lower-level composition shall be referenced by a top-level or lower-level
+    in the AAF file," but there are no similar requirements that specify other
+    types of "nodes" cannot be the initial "node" (the exception is REQ_EP_025
+    which specifies top-level composition shall not be referenced).  Also, due
+    to the way the CompMobDependency is implemented, only CompositionMobs
+    will be considered as the first "node" in a derivation chain.  Unreferenced
+    SourceMobs, MasterMobs and SourceClips will never be tested.
+    
+13. REQ_EP_026, REQ_EP_031, REQ_EP_036 and REQ_EP_045 state that top-level,
+    lower-level, sub-clip and adjusted-clip compositions respectively "shall
+    only reference the following kinds of material."  When the derivation chain
+    ends no material is referenced, therefore these requirements do not prevent
+    these compositions from being the end of the chain.  Currently, if one of
+    these compositions is the end of a chain, the test will fail, however, all
+    requirements will appear to pass.
+    
+14. As was discussed in the conference call on September 26, 2005, REQ_EP_031
+    does not specify a lower-level composition can reference another
+    lower-level composition although REQ_EP_030 implies that this is a valid
+    reference.  As was decided during the call, this was probably an omission
+    therefore, REQ_EP_031 is used to specify a valid reference from one
+    lower-level composition to another.
+    
+15. As was discussed during the conference call on September 26, 2005, the
+    figure in Section 6.1 makes it appear that a Clip may be the end of the
+    derivation chain.  Until further information is avaliable, the test will
+    assume that it is valid for a clip to be the end of the derivation chain.
+    
+29. The legal layout of a derivation chain is not specified in test, only in
+    the diagram.
+
+43. The term zero-valued SourceClip object is not defined.  For the purpose of
+	this test, it is assumed to be a SourceClip object with a SourceID = 
+	{ {0,0,0,0,0,0,0,0,0,0,0,0}, 0, 0, 0, 0, { 0, 0, 0, {0,0,0,0,0,0,0,0} } } =
+	00000000000000000000000000000000-00000000-0000-0000-0000000000000000.
+	
+44. The term essence track is not defined.  For the purpose of this test
+	(REQ_EP_050, REQ_EP_072), it is aussumed to be any SourceClip object along
+	the derivation chain.
+
+Test Name:
+	EPNameTest
+Description:
+	Visit all mobs and ensure that they are correctly named and also that the
+	MobSlots contained within are properly named.
+Requirements Tested:
+	REQ_EP_027 (6.3)
+		The top-level composition Mob::Name property shall be a valid name
+		identifying the composition.  Where multiple compositions are exported,
+		each shall have a different name.
+	REQ_EP_032 (6.4)
+		The lower-level composition Mob::Name property shall be a valid name
+		identifying the composition.  Where multiple compositions are exported,
+		each shall have a different name.
+	REQ_EP_038 (6.5)
+		The sub-clip Mob::Name property shall be a valid name identifying the
+		sub-clip.
+	REQ_EP_047 (6.6)
+		The adjusted-clip Mob::Name property shall be a valid name identifying
+		the adjusted-clip.
+	REQ_EP_052 (6.7)
+		The template clip Mob::Name property shall be a valid name identifying
+		the template clip.
+	REQ_EP_057 (6.8)
+		The clip Mob::Name property shall be a valid name identifying the clip.
+	REQ_EP_073 (6.10)
+		The recording source Mob::Name property shall be a valid name
+		identifying the source, e.g. a name describing a recording session.
+	REQ_EP_081 (6.12)
+		The tape source Mob::Name property shall be a valid name identifying the
+		tape name.
+	REQ_EP_086 (6.13)
+		The film source Mob::Name property shall be a valid name identifying the
+		film reel name.
+	REQ_EP_101 (7.5)
+		The MobSlot::Name property shall be a valid name identifying the essence
+		track.  Where multiple essence tracks are exported, each shall have a
+		different Name.
+Warn Conditions:
+	NONE
+Fail Conditions:
+	REQ_EP_027 - Fail if the mob does not have a valid name.
+	REQ_EP_027 - Fail if the mob has the same name as any other composition mob.
+	REQ_EP_032 - Fail if the mob does not have a valid name.
+	REQ_EP_032 - Fail if the mob has the same name as any other composition mob.
+	REQ_EP_038 - Fail if the mob does not have a valid name.
+	REQ_EP_047 - Fail if the mob does not have a valid name.
+	REQ_EP_052 - Fail if the mob does not have a valid name.
+	REQ_EP_057 - Fail if the mob does not have a valid name.
+	REQ_EP_073 - Fail if the mob does not have a valid name.
+	REQ_EP_081 - Fial if the mob does not have a valid name.
+	REQ_EP_086 - Fail if the mob does not have a valid name.
+	REQ_EP_101 - Fail if the MobSlot does not have a valid name.
+	REQ_EP_101 - Fail if any two essence tracks have the same name.
+Issues:
+33. Essence track is not defined.  In the context of this test (REQ_EP_101) it
+	is assumed to be a MobSlot that has a Sound or Picture DataDefinition.
+	
+41. The words "valid name" are used throughout the Edit Protocol, but what makes
+	a name valid is never determined.  Until further information is avaliable,
+	it is assumed that a name is valid if an AAF Object has a name property that
+	has been set.
+
+Test Name:
+	EPContainedTrackTest
+Description:
+	Visit Top-Level Compositions, Tape and File Sources to ensure that they
+	contain the necessary tracks.
+Requirements Tested:
+	REQ_EP_028 (6.3)
+		A top-level composition shall contain one or more timecode tracks and
+		include a Primary timecode track.  Timecode tracks shall use the
+		MobSlot::PhysicalTrackNumber property to distinguish their type, as
+		shown in Section 6.3 of the AAF Edit Protocol.
+	REQ_EP_082 (6.12)
+		Timecode tracks in a tape SourceMob shall use the
+		MobSlot::PhysicalTrackNumber property to distinguish their type, as
+		shown in the table in Section 6.12 of the AAF Edit Protocol.
+	REQ_EP_087 (6.13)
+		A film SourceMob may contain one or more edgecode tracks.  Edgecode
+		tracks shall use the MobSlot::PhysicalTrackNumber property to
+		distinguish their type as shown in Section 6.13 of the AAF Edit
+		Protocol.
+Warn Conditions:
+	NONE
+Fail Conditions:
+	REQ_EP_028 - Fail if the mob has any timecode tracks with no
+				 PhysicalTrackNumber	property.
+	REQ_EP_028 - Fail if there is a timecode track with a PhysicalTrackNumber
+				 not in the table.
+	REQ_EP_028 - Fail if a reserved PhysicalTrackNumber is used on a timecode
+				 track.
+	REQ_EP_028 - Fail if a PhysicalTrackNumber in the table is used on more
+				 than one timecode track.
+	REQ_EP_028 - Fail if there is no Primary Timecode Track.
+	REQ_EP_082 - Fail if the mob has any timecode tracks with no
+				 PhysicalTrackNumber property.
+	REQ_EP_082 - Fail if there is a timecode track with a PhysicalTrackNumber
+				 not in the table.
+	REQ_EP_082 - Fail if a reserved PhysicalTrackNumber is used on a timecode
+				 track.
+	REQ_EP_082 - Fail if a PhysicalTrackNumber in the table is used on more
+				 than one timecode track.
+	REQ_EP_087 - Fail if the mob has any edgecode tracks with no
+				 PhysicalTrackNumber property.
+	REQ_EP_087 - Fail if there is an edgecode track with a PhysicalTrackNumber
+				 not in the table.
+	REQ_EP_087 - Fail if a PhysicalTrackNumber in the table is used on more
+				 than one edgecode track.
+Issues:
+19. REQ_EP_028 does not specify if physical track numbers may be repeated. 
+    Until further information is avaliable, it is assumed that they can not be
+    repeated.
+	
+20. REQ_EP_028 does not specify if reserved physical track numbers are legal
+    values.  Until further information is avaliable, it is assumed that they are
+    illegal.
+	
+21. REQ_EP_028 does not specify if physical track numbers outside the range 1-6
+    are legal.  Until further information is avaliable, it is assumed that they
+    are illegal.
+	
+22. REQ_EP_082 does not specify if physical track numbers may be repeated. 
+    Until further information is avaliable, it is assumed that they can not be
+    repeated.
+	
+23. REQ_EP_082 does not specify if reserved physical track numbers are legal
+    values.  Until further information is avaliable, it is assumed that they are
+    illegal.
+	
+24. REQ_EP_082 does not specify if physical track numbers outside the range 1-12
+    are legal.  Until further information is avaliable, it is assumed that they
+    are illegal.
+	
+25. REQ_EP_087 does not specify if physical track numbers may be repeated. 
+    Until further information is avaliable, it is assumed that they can not be
+    repeated.
+	
+26. REQ_EP_087 does not specify if physical track numbers outside the range 1-3
+    are legal.  Until further information is avaliable, it is assumed that they
+    are illegal.
+    
+27. Timecode track is not defined.  It is assumed to be a TimelineMobSlot with
+    a Timecode segment.
+    
+28. Edgecode track is not defined.  It is assumed to be a TimelineMobSlot with
+    an Edgecode segment.
+
+Test Name:
+	EPTrackContentsTest
+Description:
+	Visit mobs and ensure that the tracks within have valid contents.
+Requirements Tested:
+	REQ_EP_037 (6.5)
+		Each essence track of a sub-clip composition shall contain exactly one
+		SourceClip.
+	REQ_EP_046 (6.6)
+		Each essence track of an adjusted-clip composition shall contain exactly
+		one OperationGroup.
+	REQ_EP_103 (7.6)
+		The MobSlot::PhysicalTrackNumber property shall be specified for essence
+		MobSlots within the following kinds of Mobs: CompositionMob, MasterMob,
+		recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+Warn Conditions:
+	NONE
+Fail Conditions:
+	REQ_EP_037 - Fail if the mob does not have exactly one SourceClip object.
+	REQ_EP_046 = Fail if the mob does not have exactly one OperationGroup
+				 object.
+	REQ_EP_103 - Fail if the mob has an essence track without a
+				 PhysicalTrackNumber property specified.
+Issues:
+30. REQ_EP_037 states each essence track of a sub-clip composition shall contain
+    exactly one SourceClip - what about sequences of one SourceClip? Currently, 
+    sequences are not accepted.
+	
+31. REQ_EP_046 states each essence track of an adjusted-clip composition shall
+    contain exactly one OperationGroup - what about sequence of one
+	OperationGroup?  Currently sequences are not accepted.
+	
+33. Essence track is not defined.  In the context of this test (REQ_EP_103) it
+	is assumed to be a MobSlot that has a Sound or Picture DataDefinition.
+
+Test Name:
+	EPLocatorTest
+Description:
+	Visit File and Import Sources and ensure that they contain valid locators.
+Requirements Tested:
+	REQ_EP_059 (6.9)
+		The essence associated with a file SourceMob shall either be internal to
+		the AAF file in an EssenceData object or external to the AAF file.  In
+		either case, the file SourceMob shall have a
+		FileDescriptor::ContainerDefinition property specifying the kind of
+		essence container.
+	REQ_EP_060 (6.9)
+		Where essence is external to the AAF file, the
+		EssenceDescriptor::Locator property should contain a Locator object
+		specifying the location of the essence.
+	REQ_EP_061 (6.9)
+		The EssenceDescriptor::Locator property should include at least one
+		NetworkLocator that complies with the constrains set out in Section 6.9
+		of the AAF Edit Protocol.
+	REQ_EP_075 (6.11)
+		The EssenceDescriptor::Locator property shall include at least one
+		NetworkLocator that complies with the constraints set out in Section 6.9
+		of the AAF Edit Protocol.
+Warn Conditions:
+	REQ_EP_060 - Present a warning if the no file referenced by a locator can
+				 be found.
+	REQ_EP_061 - Present a warning if none of the NetworkLocators comply with
+		 		 the constraints set out in Section 6.9.
+Fail Conditions:
+	REQ_EP_059 - Fail if the ContainerFormat of any file descriptor is
+				 something other than kAAFContainerDef_External or
+				 kAAFContainerDef_AAF.
+	REQ_EP_075 - Fail if none of the NetworkLocators comply with the constrains
+				 set out in Section 6.9.
+Issues:
+ *  The URI validator currently being used is libURI
+	(http://sourceforge.net/projects/liburi/) is not sufficient for this test.
+	Until a better validator is avaliable, this test will be registered but not
+	run.
+	
+35. REQ_EP_061 and REQ_EP_075 require that URIs comply with RFC 2396 and also
+	that absolute URIs conform to RFC 1738.  However, RFC 2396 updates RFC 1738.
+	If a URI complies with RFC 2396, but one of the updates cause it to not
+	conform with RFC 1738 should the test fail?  What if in order to comform to
+	RFC 1738 it can not comply with RFC 2396.
+	
+36. REQ_EP_061 and REQ_EP_075 require that if a NetworkLocator contains a
+	"relative URI, the base URI should be determined from the URI of the AAF
+	file itself."  What exactly does this mean?
+	
+37. REQ_EP_059 says that essence associated with a file SourceMob shall be
+    internal to the AAF file or external to the AAF file.  If the 
+    FileDescriptor::ContainerDefinition property is used to determine if the
+    essence is internal or external, what values indicate internal and what
+    values indicate external.  Are there some values that are illegal?  For now
+    assume the only legal values are kAAFContainerDef_External and
+    kAAFContainerDef_AAF.
+    
+38. REQ_EP_060 states there should be a Locator specifying the location of the
+    essence.  REQ_EP_061 states there should be a NetworkLocator that complies
+    with a set of constraints.  These requirements do not state that these must
+    be the same locator.  There are enough differences in these requirements
+    (60: Locator, 61: NetworkLocator; 60: External to the AAF File; 61: Internal
+    or External is not specified), that the test is currently being implemented
+    to accept two differnt locators that will meet these requeirements.
+    
+39. The URI validator that is currently being used does not accept wide
+	characters.  It also does not appear to accept relative URIs.  Until
+	a different URI validator is found, these problems will exist when
+	validating URIs.
+	
+40. REQ_EP_060 tests if a file exists at the location pointed to by the locator.
+    Currently this is done assuming the path is specified as an absolute URI.
+    Once a URI tool that deals with relative URIs, this can be modified to
+    to allow the path to be absolute or relative.
+
+45. How do you acuratley check that a file exists (ie. it is insufficient to
+    check if the file can be open using an ifstream) in a platform independant
+    fashion?
+
+Test Name:
+	EPEditRateTest
+Description:
+	Visit all mobs and make sure the tracks contained within have valid edit
+	and sample rates.
+Requirements Tested:
+	REQ_EP_091 (7.1)
+		The edit rate value shall be equivalent to the values in the table in
+		Section 7.1 of the AAF Edit Protocol.
+	REQ_EP_092 (7.1)
+		A rational with a zero or negative numerator or denominator shall not be
+		used as an edit rate value.
+	REQ_EP_099 (7.3)
+		All audio tracks within a file shall have the same edit rate and sample
+		rate.
+	REQ_EP_100 (7.4)
+		The video edit rate shall be less than or equal to the video sample
+		rate.
+Warn Conditions:
+	NONE
+Fail Conditions:
+	REQ_EP_091 - Fail if the edit rate of an essence track is not equivalent to
+				 a value in the	table in Section 7.1.
+	REQ_EP_091 - Fail if an essence track is a static or unknown type of
+				 MobSlot.
+	REQ_EP_092 - Fail if the edit rate of an essence track has a numerator or
+				 denominator that is less than or equal to zero.
+	REQ_EP_099 - Fail if all audio tracks in the AAF file do not have the same
+				 edit rate.  Also fail if this edit rate is not equivalent to
+				 the sample rate of all audio tracks in the file.
+	REQ_EP_099 - Fail if a audio track is a static or unknown type of MobSlot.
+	REQ_EP_100 - Fail if a video track has an edit rate that is less greater
+				 than its sample rate.
+	REQ_EP_100 - Fail if a video track is a static or unknown type of MobSlot.
+Issues:
+33. Essence track is not defined.  It is assumed to be a MobSlot that has an
+    Sound or Picture DataDefinition.
+    
+34. REQ_EP_091 states that the edit rate of an essence track must be equivalent
+    to value in the table.  However, StaticMobSlots do not have edit rates.
+    As was noted above, it is assumed that an essence track is a MobSlot with
+    a Sound or Picture DataDefinition.  How should REQ_EP_091 treat 
+    StaticMobSlots?
+	
+42. REQ_EP_099 and REQ_EP_100 state that the edit rates of audio tracks must
+	equal the sample rate and the edit rates of video tracks must be less than
+	or equal to the sample rate respectively.  Currently, it is assumed that an
+	audio track is a mob slot where IsSoundKind() is true that contains a
+	File Source mob	and a video track is a mob slot where IsPictureKind() is
+	true that contains a File Source mob.  This includes StaticMobSlots, which
+	do not have edit rates.  Until more information is avaliable, all 
+	StaticMobSlots will cause test failures.
+	
+Other Issues:
+
+Requirements:
+	REQ_EP_025 (6.3)
+		A top-level composition shall be specified using a CompositionMob with
+		Mob::UsageCode property equal to Usage_TopLevel.  A top-level
+		composition shall not be referenced by another Mob in the AAF file.
+	REQ_EP_030 (6.4)
+		A lower-level composition shall be specified using a CompositionMob with
+		Mob::UsageCode property equal to Usage_LowerLevel.  A lower-level
+		composition shall be referenced by a top-level or lower-level
+		composition in the AAF file.
+	REQ_EP_034 (6.5)
+		A sub-clip composition shall be specified using a CompositionMob with
+		Mob::UsageCode property equal to Usage_SubClip.
+	REQ_EP_043 (6.6)
+		An adjusted-clip composition shall be specified using a CompositionMob
+		with Mob::UsageCode property equal to Usage_AdjustedClip.
+	REQ_EP_049 (6.7)
+		A template clip shall be specified using a MasterMob with Mob::UsageCode
+		property equal to Usage_Template.
+	REQ_EP_054 (6.8)
+		A clip shall be specified using a MasterMob with no Mob::UsageCode
+		property.
+	REQ_EP_058 (6.9)
+		A file source shall be specified using a SourceMob with an
+		EssenceDescriptor that is a sub-class of FileDescriptor.
+	REQ_EP_071 (6.10)
+		A recording source shall be specified using a SourceMob with a
+		RecordingDescriptor.  A recording source is also known as a recording
+		SourceMob.
+	REQ_EP_074 (6.11)
+		An import source shall be specified using a SourceMob with an
+		ImportDescriptor.
+	REQ_EP_080 (6.12)
+		A tape source shall be specified using a SourceMob with a
+		TapeDescriptor.
+	REQ_EP_085 (6.13)
+		A film source shall be specified using a SourceMob with a
+		FilmDescriptor.
+	REQ_EP_096 (7.2)
+		Pull up and pull down shall be specified using a Pulldown object.
+Issue:
+16. Requirements REQ_EP_025, REQ_EP_030, REQ_EP_034, REQ_EP_043, REQ_EP_049,
+    REQ_EP_054, REQ_EP_058, REQ_EP_071, REQ_EP_074, REQ_EP_080, REQ_EP_085 and
+    REQ_EP_096 define terms used in the Edit Protocol.  Some of these
+    requirements are used to find particular data, however, they can not
+    generate a warning or a failure.  These should not be requirements, they
+    should be definitions (ie. Instead of using shall, REQ_EP_043 should be
+    rewritten as "Let an adjusted-clip composistion be defined as a
+    CompositionMob with Mob::UsageCode property equal to Usage_AdjustedClip"
+
+Requirements:
+	REQ_EP_013 (6.1)
+		An application shall export each clip using one of the methods described
+		in Section 6.1 of the AAF Edit Protocol.
+	REQ_EP_014 (6.1)
+		An application shall import clips that use any of the methods described
+		in Section 6.1 of the AAF Edit Protocol.
+	REQ_EP_039 (6.5.1)
+		A CompositionMob with Mob::UsageCode property equal to Usage_SubClip
+		shall be treated as a sub-clip composition.
+Issue:
+17. REQ_EP_013, REQ_EP_014 and REQ_EP_039 are all classified as file
+    requirements but they seem dependant on an importing or exporting
+    application.  They are not currently being tested.
+
+Requirements:
+	REQ_EP_023 (6.2.1)
+		Within a Two-Parameter Audio Dissolve effect a CompositionMob may use a
+		SourceClip object to reference a TimelineMobSlot beyond the extent of
+		the TimelineMobSlot (before the begining or after the end).
+	REQ_EP_097 (7.2)
+		A Pulldown may be used in the following contexts: 1. In a
+		TimelineMobSlot of a file SourceMob, where the Pulldown object contains
+		a SourceClip referencing a tape SourceMob; 2. In a TimelineMobSlot of a
+		tape SourceMob, where the Pulldown object contains a SourceClip
+		referencing a film SourceMob; 3. In a TimelineMobSlot of a tape
+		SourceMob, where the Pulldown object contains a SourceClip referenceing
+		a tape SourceMob.
+Issue:
+18. REQ_EP_023 and REQ_EP_097 are optional ("MAY") requirements.  There is no
+    way they can present a warning or a failure - they are not currently being
+    tested.
+	
+Requirements:
+	REQ_EP_056 (6.8)
+		A MasterMob shall not reference more than one essence track of a
+		particular file source from each time position in the MasterMob.
+Issue:
+	32. What does REQ_EP_056 mean?

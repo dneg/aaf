@@ -38,6 +38,9 @@
 #include <AxComponent.h>
 #include <AxMetaDef.h>
 
+//AAF files
+#include <AAFResult.h>
+
 //STL files
 #include <sstream>
 
@@ -92,6 +95,8 @@ bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, E
         }
     }
     
+    testPassed = VisitEssenceTracks( axCompMob, L"Composition Mob" ) && testPassed;
+       
     return testPassed;
 }
 
@@ -120,7 +125,45 @@ bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, E
         }
     }
     
+    testPassed = VisitEssenceTracks( axCompMob, L"Composition Mob" ) && testPassed;
+    
     return testPassed;
+}
+
+bool EPTrackContentsVisitor::PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node )
+{
+    AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
+    return VisitEssenceTracks( axCompMob, L"Composition Mob" );
+}
+
+bool EPTrackContentsVisitor::PreOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node )
+{
+    AxMasterMob axMastMob( node.GetAAFObjectOfType() );
+    return VisitEssenceTracks( axMastMob, L"Master Mob" );
+}
+
+bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRecordingSource>& node )
+{
+    AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
+    return VisitEssenceTracks( axSrcMob, L"Recording Source" );
+}
+
+bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node )
+{
+    AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
+    return VisitEssenceTracks( axSrcMob, L"Import Source" );
+}
+
+bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node )
+{
+    AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
+    return VisitEssenceTracks( axSrcMob, L"Tape Source" );
+}
+
+bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node )
+{
+    AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
+    return VisitEssenceTracks( axSrcMob, L"Film Source" );
 }
 
 bool EPTrackContentsVisitor::EdgeVisit(AAFComponentReference& edge)
@@ -151,6 +194,39 @@ unsigned int EPTrackContentsVisitor::CountSegments( AxMobSlot& track, aafUID_t s
     {
         return 0;
     }
+}
+
+bool EPTrackContentsVisitor::VisitEssenceTracks( AxMob& axMob, const AxString& type )
+{
+    shared_ptr<TrackSet> spEssenceTracks = this->GetEssenceTracks( axMob );
+    
+    TrackSet::const_iterator iter;
+    
+    for( iter = spEssenceTracks->begin(); iter != spEssenceTracks->end(); iter++ )
+    {
+        try
+        {
+            (*iter)->GetPhysicalNum();
+        }
+        catch ( const AxExHResult& ex )
+        {
+            if ( ex.getHResult() != AAFRESULT_PROP_NOT_PRESENT )
+            {
+                throw ex;
+            }
+            AxString mobName = this->GetMobName( axMob, type );
+
+            wstringstream ss;
+            ss << L"Slot with ID ";
+            ss << (*iter)->GetSlotID();
+            ss << L" in " << mobName << L" does not have a MobSlot::PhysicalTrackNumber property.";
+            
+            _spResult->AddInformationResult( L"REQ_EP_103", ss.str().c_str(), TestResult::FAIL );
+            
+        }
+    }
+    
+    return true;
 }
 
 } // end of namespace aafanalyzer

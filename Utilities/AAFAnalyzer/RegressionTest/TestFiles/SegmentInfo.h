@@ -34,31 +34,41 @@ class SegmentInfo
 
     public:
 
-        SegmentInfo( const AxString& name, shared_ptr<AxSegment> axSegment, const AxString& trackType, const AxString& slotType, const aafRational_t editRate )
-            : name( name ), segment( axSegment ), trackType( trackType ), slotType( slotType ), editRate( editRate )
+        SegmentInfo( const AxString& element, shared_ptr<AxSegment> axSegment, const AxString& trackType, const AxString& slotType, const aafRational_t editRate, InputParser::OptionalStringAttrib name, InputParser::OptionalIntAttrib physicalTrackNum )
+            : element( element ), 
+              segment( axSegment ), 
+              trackType( trackType ), 
+              slotType( slotType ), 
+              editRate( editRate ), 
+              name( name ),
+              physicalTrackNum( physicalTrackNum )
         {}
         
         ~SegmentInfo()
         {}
 
         SegmentInfo( const SegmentInfo& other )
-        {
-            this->name = other.name;
-            this->segment = other.segment;
-            this->trackType = other.trackType;
-            this->slotType = other.slotType;
-            this->editRate = other.editRate;
-        }
+            : element( other.element ), 
+              segment( other.segment ), 
+              trackType( other.trackType ), 
+              slotType( other.slotType ), 
+              editRate( other.editRate ), 
+              name( other.name ),
+              physicalTrackNum( other.physicalTrackNum )
+        {}
         
-        //TODO: Implement this
-        SegmentInfo& operator=( const SegmentInfo& other );
+        AxString                            element;
+        shared_ptr<AxSegment>               segment;
+        AxString                            trackType;
+        AxString                            slotType;
+        aafRational_t                       editRate;
+        InputParser::OptionalStringAttrib   name;
+        InputParser::OptionalIntAttrib      physicalTrackNum;
 
-        AxString                    name;
-        shared_ptr<AxSegment>       segment;
-        AxString                    trackType;
-        AxString                    slotType;
-        aafRational_t               editRate;
-        
+    private:
+    
+        //prohibited:
+        SegmentInfo& operator=( const SegmentInfo& other );        
 
 };
 

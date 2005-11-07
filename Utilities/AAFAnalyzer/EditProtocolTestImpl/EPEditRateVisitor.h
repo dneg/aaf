@@ -46,6 +46,8 @@ namespace aafanalyzer {
 using namespace boost;
 
 class DetailLevelTestResult;
+class EPAudioTrack;
+class EPVideoTrack;
 
 class EPEditRateVisitor : public EPTypedVisitor
 {
@@ -63,16 +65,28 @@ class EPEditRateVisitor : public EPTypedVisitor
     virtual bool EdgeVisit(AAFComponentReference& edge);
     virtual bool EdgeVisit(AAFSlotReference& edge);
     
+    void CheckAudioSampleRates();
+    
     shared_ptr<DetailLevelTestResult> GetResult();
     
   private:
    
+    typedef pair<aafInt32, aafInt32> RationalKey;
+    typedef map<RationalKey, unsigned int> RateMap;
+   
     wostream& _log;
     shared_ptr<DetailLevelTestResult> _spResult;
     AllowedEditRateTable _erTable;
+  
+    RateMap _audioEditRates;
+    RateMap _audioSampleRates;
+    unsigned int _staticAudioTracks;
+    unsigned int _unknownAudioTracks;
 
     bool VisitMob( AxMob& axMob );
     bool TestEditRate( aafRational_t editRate, AxDataDef& axDataDef, const AxString& mobName, aafSlotID_t slotId );
+    void VisitAudioTrack( shared_ptr<EPAudioTrack> spTrack, aafRational_t editRate );
+    bool VisitVideoTrack( shared_ptr<EPVideoTrack> spTrack, aafRational_t editRate );
 
     // prohibited
     EPEditRateVisitor();

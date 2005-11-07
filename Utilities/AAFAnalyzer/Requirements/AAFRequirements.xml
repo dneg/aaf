@@ -301,7 +301,7 @@
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
-            <section></section>
+            <section>6.3</section>
         </ref>
     </requirement>
     
@@ -495,7 +495,7 @@
     <requirement type="file" category="compositional">
         <id>REQ_EP_045</id>
         <name>Adjusted-clip Composition May Reference</name>
-        <desc>An adjusted-clip composition shall only reference the following kinds of material: a template clip or a clip</desc>
+        <desc>An adjusted-clip composition shall only reference the following kinds of material: a template clip or a clip.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -1001,7 +1001,7 @@
     <requirement type="file" category="compositional">
         <id>REQ_EP_091</id>
         <name>Edit Rate Value</name>
-        <desc>The edit rate value shall be equivalent to the values in the table in section 7.1 of the AAF Edit Protocol.</desc>
+        <desc>The edit rate value shall be equivalent to the values in the table in Section 7.1 of the AAF Edit Protocol.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -1331,7 +1331,7 @@
     <requirement type="file" category="compositional">
         <id>REQ_EP_121</id>
         <name>Specification of a Clip with Multiple File Source Choices</name>
-        <desc>A clip with multiple file source choices shall be specified using an Essence.</desc>
+        <desc>A clip with multiple file source choices shall be specified using an EssenceGroup object in a MasterMob.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -1815,7 +1815,7 @@
     <requirement type="file" category="compositional">
         <id>REQ_EP_165</id>
         <name>Effect Invokation Method</name>
-        <desc>An effect shall be invoke using an OperationGroup object.</desc>
+        <desc>An effect shall be invoked using an OperationGroup object.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>

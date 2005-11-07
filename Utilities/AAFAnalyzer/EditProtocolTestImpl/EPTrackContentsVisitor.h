@@ -57,6 +57,13 @@ class EPTrackContentsVisitor : public EPTypedVisitor
 
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node );
+    
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node );
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRecordingSource>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node );
        
     virtual bool EdgeVisit(AAFComponentReference& edge);
     virtual bool EdgeVisit(AAFSlotReference& edge);
@@ -69,6 +76,7 @@ class EPTrackContentsVisitor : public EPTypedVisitor
     shared_ptr<DetailLevelTestResult> _spResult;
 
     unsigned int CountSegments( AxMobSlot& track, aafUID_t segmentType );
+    bool VisitEssenceTracks( AxMob& axMob, const AxString& type );
 
     // prohibited
     EPTrackContentsVisitor();

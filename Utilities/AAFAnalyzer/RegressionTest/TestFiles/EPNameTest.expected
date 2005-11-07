@@ -4,7 +4,7 @@
         Reason: Test Failed - See "Edit Protocol Naming Visitor" Visitor for details
         Passing Requirements: None
         Warning Requirements: None
-        Failing Requirements: REQ_EP_027; REQ_EP_032; REQ_EP_038; REQ_EP_047; REQ_EP_052; REQ_EP_057; REQ_EP_073; REQ_EP_081; REQ_EP_086
+        Failing Requirements: REQ_EP_027; REQ_EP_032; REQ_EP_038; REQ_EP_047; REQ_EP_052; REQ_EP_057; REQ_EP_073; REQ_EP_081; REQ_EP_086; REQ_EP_101
 
             Name:   Edit Protocol Naming Visitor
             Desc:   Visit derivation chain mobs and verify they have valid names.
@@ -12,7 +12,7 @@
             Reason: 
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_027; REQ_EP_032; REQ_EP_038; REQ_EP_047; REQ_EP_052; REQ_EP_057; REQ_EP_073; REQ_EP_081; REQ_EP_086
+            Failing Requirements: REQ_EP_027; REQ_EP_032; REQ_EP_038; REQ_EP_047; REQ_EP_052; REQ_EP_057; REQ_EP_073; REQ_EP_081; REQ_EP_086; REQ_EP_101
 
                 Name:   Edit Protocol Naming Visitor
                 Desc:   -
@@ -98,6 +98,38 @@
                 Name:   Edit Protocol Naming Visitor
                 Desc:   -
                 Result: Failed
+                Reason: MobSlot with ID = 1 of Essence - Static Audio - Top-Level B does not have a valid name.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_101
+
+                Name:   Edit Protocol Naming Visitor
+                Desc:   -
+                Result: Failed
+                Reason: MobSlot with ID = 1 of Essence - Static Picture - Top-Level B does not have a valid name.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_101
+
+                Name:   Edit Protocol Naming Visitor
+                Desc:   -
+                Result: Failed
+                Reason: MobSlot with ID = 1 of Essence - Timeline Audio - Top-Level B does not have a valid name.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_101
+
+                Name:   Edit Protocol Naming Visitor
+                Desc:   -
+                Result: Failed
+                Reason: MobSlot with ID = 1 of Essence - Timeline Picture - Top-Level B does not have a valid name.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_101
+
+                Name:   Edit Protocol Naming Visitor
+                Desc:   -
+                Result: Failed
                 Reason: Top-Level Composition "Duplicate: Top-Level" does not have a unique composition name.
                 Passing Requirements: None
                 Warning Requirements: None
@@ -158,4 +190,68 @@
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_032
+
+                Name:   Edit Protocol Naming Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Essence Track "Different Mob Duplicate Static Audio" does not have a unique essence track name.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_101
+
+                Name:   Edit Protocol Naming Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Essence Track "Different Mob Duplicate Static Picture" does not have a unique essence track name.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_101
+
+                Name:   Edit Protocol Naming Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Essence Track "Different Mob Duplicate Timeline Audio" does not have a unique essence track name.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_101
+
+                Name:   Edit Protocol Naming Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Essence Track "Different Mob Duplicate Timeline Picture" does not have a unique essence track name.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_101
+
+                Name:   Edit Protocol Naming Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Essence Track "Same Mob Duplicate Static Audio" does not have a unique essence track name.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_101
+
+                Name:   Edit Protocol Naming Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Essence Track "Same Mob Duplicate Static Picture" does not have a unique essence track name.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_101
+
+                Name:   Edit Protocol Naming Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Essence Track "Same Mob Duplicate Timeline Audio" does not have a unique essence track name.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_101
+
+                Name:   Edit Protocol Naming Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Essence Track "Same Mob Duplicate Timeline Picture" does not have a unique essence track name.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_101
 

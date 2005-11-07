@@ -98,7 +98,7 @@ TestFileBuilder::~TestFileBuilder()
     
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddTopLevel( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddTopLevel( const AxString& name, bool isNamed, aafRational_t ratNothing )
 {           
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -120,7 +120,7 @@ shared_ptr<AxMob> TestFileBuilder::AddTopLevel( const AxString& name, bool isNam
     
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddLowerLevel( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddLowerLevel( const AxString& name, bool isNamed, aafRational_t ratNothing )
 {           
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -140,7 +140,7 @@ shared_ptr<AxMob> TestFileBuilder::AddLowerLevel( const AxString& name, bool isN
     
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddSubClip( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddSubClip( const AxString& name, bool isNamed, aafRational_t ratNothing )
 {           
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -160,7 +160,7 @@ shared_ptr<AxMob> TestFileBuilder::AddSubClip( const AxString& name, bool isName
     
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddAdjustedClip( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddAdjustedClip( const AxString& name, bool isNamed, aafRational_t ratNothing )
 {           
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -180,7 +180,7 @@ shared_ptr<AxMob> TestFileBuilder::AddAdjustedClip( const AxString& name, bool i
     
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddTemplateClip( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddTemplateClip( const AxString& name, bool isNamed, aafRational_t ratNothing )
 { 
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -201,7 +201,7 @@ shared_ptr<AxMob> TestFileBuilder::AddTemplateClip( const AxString& name, bool i
     
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddClip( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddClip( const AxString& name, bool isNamed, aafRational_t ratNothing )
 { 
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -221,7 +221,7 @@ shared_ptr<AxMob> TestFileBuilder::AddClip( const AxString& name, bool isNamed )
     
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddFileSource( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -234,6 +234,7 @@ shared_ptr<AxMob> TestFileBuilder::AddFileSource( const AxString& name, bool isN
     }
 
     AxCDCIDescriptor axFileDes( AxCreateInstance<IAAFCDCIDescriptor>( axDictionary ) );
+    axFileDes.SetSampleRate( sampleRate );
     spAxSrcMob->SetEssenceDescriptor( axFileDes );
     spAxSrcMob->SetMobID( this->GenerateMobId() );
 
@@ -243,7 +244,7 @@ shared_ptr<AxMob> TestFileBuilder::AddFileSource( const AxString& name, bool isN
 
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddRecordingSource( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddRecordingSource( const AxString& name, bool isNamed, aafRational_t ratNothing )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -266,7 +267,7 @@ shared_ptr<AxMob> TestFileBuilder::AddRecordingSource( const AxString& name, boo
 
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddImportSource( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddImportSource( const AxString& name, bool isNamed, aafRational_t ratNothing )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -289,7 +290,7 @@ shared_ptr<AxMob> TestFileBuilder::AddImportSource( const AxString& name, bool i
 
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddTapeSource( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddTapeSource( const AxString& name, bool isNamed, aafRational_t ratNothing )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -312,7 +313,7 @@ shared_ptr<AxMob> TestFileBuilder::AddTapeSource( const AxString& name, bool isN
 
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddFilmSource( const AxString& name, bool isNamed )
+shared_ptr<AxMob> TestFileBuilder::AddFilmSource( const AxString& name, bool isNamed, aafRational_t ratNothing )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -334,17 +335,32 @@ shared_ptr<AxMob> TestFileBuilder::AddFilmSource( const AxString& name, bool isN
 
 }
 
-void TestFileBuilder::AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate )
+void TestFileBuilder::AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
     
-    AxTimelineMobSlot axSlot( parent.AppendNewTimelineSlot(editRate, axSegment, parent.CountSlots() + 1, L"Unnamed", 0) );
+    AxTimelineMobSlot axTimelineMobSlot( AxCreateInstance<IAAFTimelineMobSlot>( axDictionary ) );
+    
+    axTimelineMobSlot.SetEditRate( editRate );
+    axTimelineMobSlot.SetSegment( axSegment );
+    axTimelineMobSlot.SetSlotID( parent.CountSlots() + 1 );
+    axTimelineMobSlot.SetOrigin( 0 );
+    if ( isNamed )
+    {
+        axTimelineMobSlot.SetName( name );
+    }
+    if ( isNumbered )
+    {
+        axTimelineMobSlot.SetPhysicalNum( physicalTrackNum );
+    }
+
+    parent.AppendSlot( axTimelineMobSlot );
 
 }
 
-void TestFileBuilder::AttachEventSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate )
+void TestFileBuilder::AttachEventSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -355,13 +371,20 @@ void TestFileBuilder::AttachEventSlot( AxMob& parent, AxSegment& axSegment, aafR
     axEventMobSlot.SetEditRate( editRate );
     axEventMobSlot.SetSegment( axSegment );
     axEventMobSlot.SetSlotID( parent.CountSlots() + 1 );
-    axEventMobSlot.SetName( L"Unnamed" );
+    if ( isNamed )
+    {
+        axEventMobSlot.SetName( name );
+    }
+    if ( isNumbered )
+    {
+        axEventMobSlot.SetPhysicalNum( physicalTrackNum );
+    }
 
     parent.AppendSlot( axEventMobSlot );
 
 }
 
-void TestFileBuilder::AttachStaticSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate )
+void TestFileBuilder::AttachStaticSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered  )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -371,7 +394,14 @@ void TestFileBuilder::AttachStaticSlot( AxMob& parent, AxSegment& axSegment, aaf
           
     axStaticMobSlot.SetSegment( axSegment );
     axStaticMobSlot.SetSlotID( parent.CountSlots() + 1 );
-    axStaticMobSlot.SetName( L"Unnamed" );
+    if ( isNamed )
+    {
+        axStaticMobSlot.SetName( name );
+    }
+    if ( isNumbered )
+    {
+        axStaticMobSlot.SetPhysicalNum( physicalTrackNum );
+    }
     
     parent.AppendSlot( axStaticMobSlot );
 

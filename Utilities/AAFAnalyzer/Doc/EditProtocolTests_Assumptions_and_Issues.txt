@@ -160,11 +160,12 @@
     the diagram.
     
 30. REQ_EP_037 states each essence track of a sub-clip composition shall contain
-    exactly one SourceClip - what about sequences of one SourceClip?
+    exactly one SourceClip - what about sequences of one SourceClip?  Currently,
+    sequences are not accepted.
     
 31. REQ_EP_046 states each essence track of an adjusted-clip composition shall
     contain exactly one OperationGroup - what about sequence of one 
-    OperationGroup?
+    OperationGroup?  Currently sequences are not accepted.
     
 32. What does REQ_EP_056 mean?
 
@@ -221,7 +222,21 @@
 42. REQ_EP_099 and REQ_EP_100 state that the edit rates of audio tracks must
 	equal the sample rate and the edit rates of video tracks must be less than
 	or equal to the sample rate respectively.  Currently, it is assumed that an
-	audio track an essence track where IsSoundKind() is true and a video track
-	is an essence track where IsPictureKind() is true.  This includes 
-	StaticMobSlots, which do not have edit rates.  Until more information is
-	avaliable, all StaticMobSlots will cause test failures.
+	audio track is a mob slot where IsSoundKind() is true that contains a
+	File Source mob	and a video track is a mob slot where IsPictureKind() is
+	true that contains a File Source mob.  This includes StaticMobSlots, which
+	do not have edit rates.  Until more information is avaliable, all 
+	StaticMobSlots will cause test failures.
+	
+43. The term zero-valued SourceClip object is not defined.  For the purpose of
+	this test, it is assumed to be a SourceClip object with a SourceID = 
+	{ {0,0,0,0,0,0,0,0,0,0,0,0}, 0, 0, 0, 0, { 0, 0, 0, {0,0,0,0,0,0,0,0} } } =
+	00000000000000000000000000000000-00000000-0000-0000-0000000000000000.
+	
+44. The term essence track is not defined.  For the purpose of this test
+	(REQ_EP_050, REQ_EP_072), it is aussumed to be any SourceClip object along
+	the derivation chain.
+	
+45. How do you acuratley check that a file exists (ie. it is insufficient to
+    check if the file can be open using an ifstream) in a platform independant
+    fashion?

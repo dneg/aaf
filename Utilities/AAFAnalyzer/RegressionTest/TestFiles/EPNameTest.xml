@@ -8,103 +8,275 @@
     <top-level name="Named Top-Level"><eoc/></top-level>
 	<top-level><eoc/></top-level>
     
-    <lower-level name = "Named Lower-Level"><eoc/></lower-level>
+    <lower-level name="Named Lower-Level"><eoc/></lower-level>
     <lower-level><eoc/></lower-level>
     
-    <sub-clip name = "Named Sub-Clip"><eoc/></sub-clip>
+    <sub-clip name="Named Sub-Clip"><eoc/></sub-clip>
     <sub-clip><eoc/></sub-clip>
     
-    <adjusted-clip name = "Named Adjusted Clip"><eoc/></adjusted-clip>
+    <adjusted-clip name="Named Adjusted Clip"><eoc/></adjusted-clip>
     <adjusted-clip><eoc/></adjusted-clip>
     
-    <template-clip name = "Named Template Clip"><eoc/></template-clip>
+    <template-clip name="Named Template Clip"><eoc/></template-clip>
     <template-clip><eoc/></template-clip>
     
-    <clip name = "Named Clip"><eoc/></clip>
+    <clip name="Named Clip"><eoc/></clip>
     <clip><eoc/></clip>
     
-    <file-source name = "Named File Source"><eoc/></file-source>
-    <file-source><eoc/></file-source>
+    <file-source name="Named File Source" sample-rate-numerator="1" sample-rate-denominator="1"><eoc/></file-source>
+    <file-source sample-rate-numerator="1" sample-rate-denominator="1"><eoc/></file-source>
     
-    <recording-source name = "Named Recording Source"><eoc/></recording-source>
+    <recording-source name="Named Recording Source"><eoc/></recording-source>
     <recording-source><eoc/></recording-source>
     
-    <import-source name = "Named Import Source"><eoc/></import-source>
+    <import-source name="Named Import Source"><eoc/></import-source>
     <import-source><eoc/></import-source>
     
-    <tape-source name = "Named Tape Source"><eoc/></tape-source>
+    <tape-source name="Named Tape Source"><eoc/></tape-source>
     <tape-source><eoc/></tape-source>
     
-    <film-source name = "Named Film Source"><eoc/></film-source>
+    <film-source name="Named Film Source"><eoc/></film-source>
     <film-source><eoc/></film-source>
     
     <!-- Test non-unique Top-Level/Lower Level -->
 
-    <top-level name = "Duplicate: Top-Level/Lower-Level"><eoc/></top-level>
-    <lower-level name = "Duplicate: Top-Level/Lower-Level"><eoc/></lower-level>
+    <top-level name="Duplicate: Top-Level/Lower-Level"><eoc/></top-level>
+    <lower-level name="Duplicate: Top-Level/Lower-Level"><eoc/></lower-level>
     
 	<!-- Test non-unique Top-Level -->
 
-    <top-level name = "Duplicate: Top-Level"><eoc/></top-level>        
-    <top-level name = "Duplicate: Top-Level"><eoc/></top-level>
+    <top-level name="Duplicate: Top-Level"><eoc/></top-level>        
+    <top-level name="Duplicate: Top-Level"><eoc/></top-level>
     	
-    <top-level name = "Duplicate: Top-Level/Sub-Clip"><eoc/></top-level>        
-    <sub-clip name = "Duplicate: Top-Level/Sub-Clip"><eoc/></sub-clip>
+    <top-level name="Duplicate: Top-Level/Sub-Clip"><eoc/></top-level>        
+    <sub-clip name="Duplicate: Top-Level/Sub-Clip"><eoc/></sub-clip>
 
-    <top-level name = "Duplicate: Top-Level/Adjusted Clip"><eoc/></top-level>
-    <adjusted-clip name = "Duplicate: Top-Level/Adjusted Clip"><eoc/></adjusted-clip>
+    <top-level name="Duplicate: Top-Level/Adjusted Clip"><eoc/></top-level>
+    <adjusted-clip name="Duplicate: Top-Level/Adjusted Clip"><eoc/></adjusted-clip>
     
-	<top-level name = "Duplicate: Top-Level/Template Clip"><eoc/></top-level>
-    <template-clip name = "Duplicate: Top-Level/Template Clip"><eoc/></template-clip>
+	<top-level name="Duplicate: Top-Level/Template Clip"><eoc/></top-level>
+    <template-clip name="Duplicate: Top-Level/Template Clip"><eoc/></template-clip>
     
-    <top-level name = "Duplicate: Top-Level/Clip"><eoc/></top-level>
-    <clip name = "Duplicate: Top-Level/Clip"><eoc/></clip>
+    <top-level name="Duplicate: Top-Level/Clip"><eoc/></top-level>
+    <clip name="Duplicate: Top-Level/Clip"><eoc/></clip>
     
-    <top-level name = "Duplicate: Top-Level/File Source"><eoc/></top-level>
-    <file-source name = "Duplicate: Top-Level/File Source"><eoc/></file-source>
+    <top-level name="Duplicate: Top-Level/File Source"><eoc/></top-level>
+    <file-source name="Duplicate: Top-Level/File Source" sample-rate-numerator="1" sample-rate-denominator="1"><eoc/></file-source>
     
-    <top-level name = "Duplicate: Top-Level/Recording Source"><eoc/></top-level>
-    <recording-source name = "Duplicate: Top-Level/Recording Source"><eoc/></recording-source>
+    <top-level name="Duplicate: Top-Level/Recording Source"><eoc/></top-level>
+    <recording-source name="Duplicate: Top-Level/Recording Source"><eoc/></recording-source>
     
-    <top-level name = "Duplicate: Top-Level/Import Source"><eoc/></top-level>
-    <import-source name = "Duplicate: Top-Level/Import Source"><eoc/></import-source>
+    <top-level name="Duplicate: Top-Level/Import Source"><eoc/></top-level>
+    <import-source name="Duplicate: Top-Level/Import Source"><eoc/></import-source>
     
-    <top-level name = "Duplicate: Top-Level/Tape Source"><eoc/></top-level>
-    <tape-source name = "Duplicate: Top-Level/Tape Source"><eoc/></tape-source>
+    <top-level name="Duplicate: Top-Level/Tape Source"><eoc/></top-level>
+    <tape-source name="Duplicate: Top-Level/Tape Source"><eoc/></tape-source>
     
-    <top-level name = "Duplicate: Top-Level/Film Source"><eoc/></top-level>
-    <film-source name = "Duplicate: Top-Level/Film Source"><eoc/></film-source>
+    <top-level name="Duplicate: Top-Level/Film Source"><eoc/></top-level>
+    <film-source name="Duplicate: Top-Level/Film Source"><eoc/></film-source>
     
 	<!-- Test non-unique Lower-Level -->
 
-    <lower-level name = "Duplicate: Lower-Level"><eoc/></lower-level>        
-    <lower-level name = "Duplicate: Lower-Level"><eoc/></lower-level>
+    <lower-level name="Duplicate: Lower-Level"><eoc/></lower-level>        
+    <lower-level name="Duplicate: Lower-Level"><eoc/></lower-level>
     	
-    <lower-level name = "Duplicate: Lower-Level/Sub-Clip"><eoc/></lower-level>        
-    <sub-clip name = "Duplicate: Lower-Level/Sub-Clip"><eoc/></sub-clip>
+    <lower-level name="Duplicate: Lower-Level/Sub-Clip"><eoc/></lower-level>        
+    <sub-clip name="Duplicate: Lower-Level/Sub-Clip"><eoc/></sub-clip>
 
-    <lower-level name = "Duplicate: Lower-Level/Adjusted Clip"><eoc/></lower-level>
-    <adjusted-clip name = "Duplicate: Lower-Level/Adjusted Clip"><eoc/></adjusted-clip>
+    <lower-level name="Duplicate: Lower-Level/Adjusted Clip"><eoc/></lower-level>
+    <adjusted-clip name="Duplicate: Lower-Level/Adjusted Clip"><eoc/></adjusted-clip>
     
-	<lower-level name = "Duplicate: Lower-Level/Template Clip"><eoc/></lower-level>
-    <template-clip name = "Duplicate: Lower-Level/Template Clip"><eoc/></template-clip>
+	<lower-level name="Duplicate: Lower-Level/Template Clip"><eoc/></lower-level>
+    <template-clip name="Duplicate: Lower-Level/Template Clip"><eoc/></template-clip>
     
-    <lower-level name = "Duplicate: Lower-Level/Clip"><eoc/></lower-level>
-    <clip name = "Duplicate: Lower-Level/Clip"><eoc/></clip>
+    <lower-level name="Duplicate: Lower-Level/Clip"><eoc/></lower-level>
+    <clip name="Duplicate: Lower-Level/Clip"><eoc/></clip>
     
-    <lower-level name = "Duplicate: Lower-Level/File Source"><eoc/></lower-level>
-    <file-source name = "Duplicate: Lower-Level/File Source"><eoc/></file-source>
+    <lower-level name="Duplicate: Lower-Level/File Source"><eoc/></lower-level>
+    <file-source name="Duplicate: Lower-Level/File Source" sample-rate-numerator="1" sample-rate-denominator="1"><eoc/></file-source>
     
-    <lower-level name = "Duplicate: Lower-Level/Recording Source"><eoc/></lower-level>
-    <recording-source name = "Duplicate: Lower-Level/Recording Source"><eoc/></recording-source>
+    <lower-level name="Duplicate: Lower-Level/Recording Source"><eoc/></lower-level>
+    <recording-source name="Duplicate: Lower-Level/Recording Source"><eoc/></recording-source>
     
-    <lower-level name = "Duplicate: Lower-Level/Import Source"><eoc/></lower-level>
-    <import-source name = "Duplicate: Lower-Level/Import Source"><eoc/></import-source>
+    <lower-level name="Duplicate: Lower-Level/Import Source"><eoc/></lower-level>
+    <import-source name="Duplicate: Lower-Level/Import Source"><eoc/></import-source>
     
-    <lower-level name = "Duplicate: Lower-Level/Tape Source"><eoc/></lower-level>
-    <tape-source name = "Duplicate: Lower-Level/Tape Source"><eoc/></tape-source>
+    <lower-level name="Duplicate: Lower-Level/Tape Source"><eoc/></lower-level>
+    <tape-source name="Duplicate: Lower-Level/Tape Source"><eoc/></tape-source>
     
-    <lower-level name = "Duplicate: Lower-Level/Film Source"><eoc/></lower-level>
-    <film-source name = "Duplicate: Lower-Level/Film Source"><eoc/></film-source>
+    <lower-level name="Duplicate: Lower-Level/Film Source"><eoc/></lower-level>
+    <film-source name="Duplicate: Lower-Level/Film Source"><eoc/></film-source>
     
+    <!-- Test Essence Track names (Static Audio) -->
+
+    <top-level name="Essence - Static Audio - Top-Level A">
+        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio" name="Named Static Audio">
+            <template-clip name="Essence - Static Audio - Template A"><eoc/></template-clip>
+        </source-clip>
+    </top-level>
+    <top-level name="Essence - Static Audio - Top-Level B">
+        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio">
+            <template-clip name="Essence - Static Audio - Template B"><eoc/></template-clip>
+        </source-clip>
+    </top-level>
+    <top-level name="Essence - Static Audio - Top-Level C">
+        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio" name="Same Mob Duplicate Static Audio">
+            <template-clip name="Essence - Static Audio - Template C1"><eoc/></template-clip>
+        </source-clip>
+        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio" name="Same Mob Duplicate Static Audio">
+            <template-clip name="Essence - Static Audio - Template C2"><eoc/></template-clip>
+        </source-clip>
+    </top-level>
+    <top-level name="Essence - Static Audio - Top-Level D">
+        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio" name="Different Mob Duplicate Static Audio Outer 1">
+			<clip name="Essence - Static Audio - Clip D1">
+                <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio" name="Different Mob Duplicate Static Audio">
+                    <film-source name="Essence - Static Audio Film Source D1"><eoc/></film-source>
+                </source-clip>
+            </clip>
+        </source-clip>
+        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio" name="Different Mob Duplicate Static Audio Outer 2">
+			<clip name="Essence - Static Audio - Clip D2">
+                <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio" name="Different Mob Duplicate Static Audio">
+                    <film-source name="Essence - Static Audio Film Source D2"><eoc/></film-source>
+                </source-clip>
+            </clip>
+        </source-clip>
+    </top-level>
+    
+    <!-- Test Essence Track names (Static Picture) -->
+
+    <top-level name="Essence - Static Picture - Top-Level A">
+        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="picture" name="Named Static Picture">
+            <template-clip name="Essence - Static Picture - Template A"><eoc/></template-clip>
+        </source-clip>
+    </top-level>
+    <top-level name="Essence - Static Picture - Top-Level B">
+        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="picture">
+            <template-clip name="Essence - Static Picture - Template B"><eoc/></template-clip>
+        </source-clip>
+    </top-level>
+    <top-level name="Essence - Static Picture - Top-Level C">
+        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="picture" name="Same Mob Duplicate Static Picture">
+            <template-clip name="Essence - Static Picture - Template C1"><eoc/></template-clip>
+        </source-clip>
+        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="picture" name="Same Mob Duplicate Static Picture">
+            <template-clip name="Essence - Static Picture - Template C2"><eoc/></template-clip>
+        </source-clip>
+    </top-level>
+    <top-level name="Essence - Static Picture - Top-Level D">
+        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="picture" name="Different Mob Duplicate Static Picture Outer 1">
+			<clip name="Essence - Static Picture - Clip D1">
+                <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="picture" name="Different Mob Duplicate Static Picture">
+                    <film-source name="Essence - Static Picture Film Source D1"><eoc/></film-source>
+                </source-clip>
+            </clip>
+        </source-clip>
+        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="picture" name="Different Mob Duplicate Static Picture Outer 2">
+			<clip name="Essence - Static Picture - Clip D2">
+                <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="picture" name="Different Mob Duplicate Static Picture">
+                    <film-source name="Essence - Static Picture Film Source D2"><eoc/></film-source>
+                </source-clip>
+            </clip>
+        </source-clip>
+    </top-level>
+    
+    <!-- Test Essence Track names (Timeline Audio) -->
+
+    <top-level name="Essence - Timeline Audio - Top-Level A">
+        <source-clip slot-type="timeline" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio" name="Named Timeline Audio">
+            <template-clip name="Essence - Timeline Audio - Template A"><eoc/></template-clip>
+        </source-clip>
+    </top-level>
+    <top-level name="Essence - Timeline Audio - Top-Level B">
+        <source-clip slot-type="timeline" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio">
+            <template-clip name="Essence - Timeline Audio - Template B"><eoc/></template-clip>
+        </source-clip>
+    </top-level>
+    <top-level name="Essence - Timeline Audio - Top-Level C">
+        <source-clip slot-type="timeline" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio" name="Same Mob Duplicate Timeline Audio">
+            <template-clip name="Essence - Timeline Audio - Template C1"><eoc/></template-clip>
+        </source-clip>
+        <source-clip slot-type="timeline" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio" name="Same Mob Duplicate Timeline Audio">
+            <template-clip name="Essence - Timeline Audio - Template C2"><eoc/></template-clip>
+        </source-clip>
+    </top-level>
+    <top-level name="Essence - Timeline Audio - Top-Level D">
+        <source-clip slot-type="timeline" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio" name="Different Mob Duplicate Timeline Audio Outer 1">
+			<clip name="Essence - Timeline Audio - Clip D1">
+                <source-clip slot-type="timeline" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio" name="Different Mob Duplicate Timeline Audio">
+                    <film-source name="Essence - Timeline Audio Film Source D1"><eoc/></film-source>
+                </source-clip>
+            </clip>
+        </source-clip>
+        <source-clip slot-type="timeline" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio" name="Different Mob Duplicate Timeline Audio Outer 2">
+			<clip name="Essence - Timeline Audio - Clip D2">
+                <source-clip slot-type="timeline" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio" name="Different Mob Duplicate Timeline Audio">
+                    <film-source name="Essence - Timeline Audio Film Source D2"><eoc/></film-source>
+                </source-clip>
+            </clip>
+        </source-clip>
+    </top-level>
+    
+    <!-- Test Essence Track names (Timeline Picture) -->
+
+    <top-level name="Essence - Timeline Picture - Top-Level A">
+        <source-clip slot-type="timeline" edit-rate-denominator="1" edit-rate-numerator="1" track-type="picture" name="Named Timeline Picture">
+            <template-clip name="Essence - Timeline Picture - Template A"><eoc/></template-clip>
+        </source-clip>
+    </top-level>
+    <top-level name="Essence - Timeline Picture - Top-Level B">
+        <source-clip slot-type="timeline" edit-rate-denominator="1" edit-rate-numerator="1" track-type="picture">
+            <template-clip name="Essence - Timeline Picture - Template B"><eoc/></template-clip>
+        </source-clip>
+    </top-level>
+    <top-level name="Essence - Timeline Picture - Top-Level C">
+        <source-clip slot-type="timeline" edit-rate-denominator="1" edit-rate-numerator="1" track-type="picture" name="Same Mob Duplicate Timeline Picture">
+            <template-clip name="Essence - Timeline Picture - Template C1"><eoc/></template-clip>
+        </source-clip>
+        <source-clip slot-type="timeline" edit-rate-denominator="1" edit-rate-numerator="1" track-type="picture" name="Same Mob Duplicate Timeline Picture">
+            <template-clip name="Essence - Timeline Picture - Template C2"><eoc/></template-clip>
+        </source-clip>
+    </top-level>
+    <top-level name="Essence - Timeline Picture - Top-Level D">
+        <source-clip slot-type="timeline" edit-rate-denominator="1" edit-rate-numerator="1" track-type="picture" name="Different Mob Duplicate Timeline Picture Outer 1">
+			<clip name="Essence - Timeline Picture - Clip D1">
+                <source-clip slot-type="timeline" edit-rate-denominator="1" edit-rate-numerator="1" track-type="picture" name="Different Mob Duplicate Timeline Picture">
+                    <film-source name="Essence - Timeline Picture Film Source D1"><eoc/></film-source>
+                </source-clip>
+            </clip>
+        </source-clip>
+        <source-clip slot-type="timeline" edit-rate-denominator="1" edit-rate-numerator="1" track-type="picture" name="Different Mob Duplicate Timeline Picture Outer 2">
+			<clip name="Essence - Timeline Picture - Clip D2">
+                <source-clip slot-type="timeline" edit-rate-denominator="1" edit-rate-numerator="1" track-type="picture" name="Different Mob Duplicate Timeline Picture">
+                    <film-source name="Essence - Timeline Picture Film Source D2"><eoc/></film-source>
+                </source-clip>
+            </clip>
+        </source-clip>
+    </top-level>
+    
+    <!-- Test non-Essence Track names -->
+    
+    <top-level name="Non-Essence Without Name Top-Level">
+        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="none">
+            <template-clip name="Non-Essence Without Name Template"><eoc/></template-clip>
+        </source-clip>
+    </top-level>
+    
+    <top-level name="Non-Essence Duplicate Names Top-Level A">
+        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="none" name="Duplicate Non-Essence">
+            <template-clip name="Non-Essence Duplicate Names Template A"><eoc/></template-clip>
+        </source-clip>
+    </top-level>
+    <top-level name="Non-Essence Duplicate Names Top-Level B">
+        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="none" name="Duplicate Non-Essence">
+            <template-clip name="Non-Essence Duplicate Names Template B"><eoc/></template-clip>
+        </source-clip>
+    </top-level>
+    <top-level name="Non-Essence Duplicate Names (with Essence) Top-Level">
+        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio" name="Duplicate Non-Essence">
+            <template-clip name="Non-Essence Duplicate Names (with Essence) Template"><eoc/></template-clip>
+        </source-clip>
+    </top-level>
+
 </aaf-file>

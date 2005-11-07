@@ -54,6 +54,8 @@ class EPNameVisitor : public EPTypedVisitor
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPTemplateClip>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPClip>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRecordingSource>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node );
@@ -73,11 +75,13 @@ class EPNameVisitor : public EPTypedVisitor
     wostream& _log;
     shared_ptr<DetailLevelTestResult> _spResult;
     NameMap _compositionNames;
+    NameMap _essenceTrackNames;
     NameSet _topLevelNames;
     NameSet _lowerLevelNames;
     
     bool VisitComposition( const AxString& type, const AxString& reqId, AxCompositionMob& axCompMob );
     bool VisitNonComposition( const AxString& type, const AxString& reqId, AxMob& axMob );
+    bool VisitEssenceTracks( const AxString& mobName, AxMob& axMob );
     void CheckForUniqueNames( NameSet& names, const AxString& reqId, const AxString& type );
 
     // prohibited

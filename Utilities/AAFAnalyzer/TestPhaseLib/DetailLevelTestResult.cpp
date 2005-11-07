@@ -79,8 +79,6 @@ const enum TestResult::ResultLevel DetailLevelTestResult::GetResultType() const
 
 void DetailLevelTestResult::AddInformationResult( const wstring& reqId, const wstring& explain, Result result )
 {
-//    shared_ptr<const Requirement> requirement = RequirementRegistry::GetInstance().GetRequirement( reqId );
-    
     Result reqStatus;
     if ( !this->ContainsRequirment( reqId, reqStatus ) )
     {

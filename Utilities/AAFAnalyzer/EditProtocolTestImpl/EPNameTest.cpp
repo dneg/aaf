@@ -93,12 +93,12 @@ shared_ptr<TestLevelTestResult> EPNameTest::Execute()
     //the visitor.
     for (int reqLevel = TestResult::PASS; reqLevel <= TestResult::FAIL; reqLevel++)
     {
-      Requirement::RequirementMap childReqs = spVisitor->GetResult()->GetRequirements( (TestResult::Result)reqLevel );
-      Requirement::RequirementMap::const_iterator iter;
-      for( iter = childReqs.begin(); iter != childReqs.end(); ++iter )
-      {
-        spResult->SetRequirementStatus( (TestResult::Result)reqLevel, iter->second );
-      }
+        Requirement::RequirementMap childReqs = spVisitor->GetResult()->GetRequirements( (TestResult::Result)reqLevel );
+        Requirement::RequirementMap::const_iterator iter;
+        for( iter = childReqs.begin(); iter != childReqs.end(); ++iter )
+        {
+            spResult->SetRequirementStatus( (TestResult::Result)reqLevel, iter->second );
+        }
     }
 
     return spResult;
@@ -127,6 +127,7 @@ const TestInfo EPNameTest::GetTestInfo()
     spReqIds->push_back(L"REQ_EP_073");     //Recording Source
     spReqIds->push_back(L"REQ_EP_081");     //Tape Source
     spReqIds->push_back(L"REQ_EP_086");     //Film Source
+    spReqIds->push_back(L"REQ_EP_101");     //Essence Tracks
     return TestInfo(L"EPNameTest", spReqIds);
 }
 

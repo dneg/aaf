@@ -44,19 +44,19 @@ class TestFileBuilder
         TestFileBuilder( const char* outFile );
         ~TestFileBuilder();
 
-        shared_ptr<AxMob> AddTopLevel( const AxString& name, bool isNamed );
-        shared_ptr<AxMob> AddLowerLevel( const AxString& name, bool isNamed );
-        shared_ptr<AxMob> AddSubClip( const AxString& name, bool isNamed );
-        shared_ptr<AxMob> AddAdjustedClip( const AxString& name, bool isNamed );
+        shared_ptr<AxMob> AddTopLevel( const AxString& name, bool isNamed, aafRational_t ratNothing );
+        shared_ptr<AxMob> AddLowerLevel( const AxString& name, bool isNamed, aafRational_t ratNothing );
+        shared_ptr<AxMob> AddSubClip( const AxString& name, bool isNamed, aafRational_t ratNothing );
+        shared_ptr<AxMob> AddAdjustedClip( const AxString& name, bool isNamed, aafRational_t ratNothing );
 
-        shared_ptr<AxMob> AddTemplateClip( const AxString& name, bool isNamed );
-        shared_ptr<AxMob> AddClip( const AxString& name, bool isNamed );
+        shared_ptr<AxMob> AddTemplateClip( const AxString& name, bool isNamed, aafRational_t ratNothing );
+        shared_ptr<AxMob> AddClip( const AxString& name, bool isNamed, aafRational_t ratNothing );
 
-        shared_ptr<AxMob> AddFileSource( const AxString& name, bool isNamed );
-        shared_ptr<AxMob> AddRecordingSource( const AxString& name, bool isNamed );
-        shared_ptr<AxMob> AddImportSource( const AxString& name, bool isNamed );
-        shared_ptr<AxMob> AddTapeSource( const AxString& name, bool isNamed );
-        shared_ptr<AxMob> AddFilmSource( const AxString& name, bool isNamed );
+        shared_ptr<AxMob> AddFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate );
+        shared_ptr<AxMob> AddRecordingSource( const AxString& name, bool isNamed, aafRational_t ratNothing );
+        shared_ptr<AxMob> AddImportSource( const AxString& name, bool isNamed, aafRational_t ratNothing );
+        shared_ptr<AxMob> AddTapeSource( const AxString& name, bool isNamed, aafRational_t ratNothing );
+        shared_ptr<AxMob> AddFilmSource( const AxString& name, bool isNamed, aafRational_t ratNothing );
 
         shared_ptr<AxSegment> CreateSourceClip( AxMob& axMob, TrackType essenceType );
         shared_ptr<AxSegment> CreateOperationGroup( AxMob& axMob, TrackType essenceType );
@@ -64,9 +64,9 @@ class TestFileBuilder
         void InitializeSourceClip( shared_ptr<AxSegment> axSegment, AxMob& axMob );
         void AddToOperationGroup( shared_ptr<AxSegment> axSegment, AxMob& axMob );
 
-        void AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate );
-        void AttachEventSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate );
-        void AttachStaticSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate );
+        void AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered );
+        void AttachEventSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered );
+        void AttachStaticSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered );
         void AttachEOC( AxMob& parent );
         void AttachOOF( AxMob& parent );
         

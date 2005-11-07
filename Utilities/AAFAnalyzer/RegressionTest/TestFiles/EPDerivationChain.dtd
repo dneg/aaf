@@ -20,7 +20,11 @@
 <!ATTLIST clip name CDATA #IMPLIED>
 
 <!ELEMENT file-source ( source-clip | operation-group | eoc | oof | bad-eoc )+>
-<!ATTLIST file-source name CDATA #IMPLIED>
+<!ATTLIST file-source 
+	name CDATA #IMPLIED
+    sample-rate-numerator CDATA #REQUIRED
+    sample-rate-denominator CDATA #REQUIRED
+>
 
 <!ELEMENT recording-source ( source-clip | operation-group | eoc | oof | bad-eoc )+>
 <!ATTLIST recording-source name CDATA #IMPLIED>
@@ -40,6 +44,8 @@
     slot-type ( timeline | static | event ) #REQUIRED
     edit-rate-numerator CDATA #REQUIRED
     edit-rate-denominator CDATA #REQUIRED
+    name CDATA #IMPLIED
+    physical-track-number CDATA #IMPLIED
 >
 
 <!ELEMENT operation-group (top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source)>
@@ -48,6 +54,8 @@
     slot-type ( timeline | static | event ) #REQUIRED
     edit-rate-numerator CDATA #REQUIRED
     edit-rate-denominator CDATA #REQUIRED
+    name CDATA #IMPLIED
+    physical-track-number CDATA #IMPLIED
 >
 
 <!ELEMENT eoc EMPTY>

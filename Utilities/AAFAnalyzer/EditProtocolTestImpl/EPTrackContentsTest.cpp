@@ -117,8 +117,9 @@ AxString EPTrackContentsTest::GetDescription() const
 const TestInfo EPTrackContentsTest::GetTestInfo()
 {
     shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
-    spReqIds->push_back(L"REQ_EP_037");     //Top-Level Composition
-    spReqIds->push_back(L"REQ_EP_046");     //Tape Source
+    spReqIds->push_back(L"REQ_EP_037");     //Sub-Clip Composition
+    spReqIds->push_back(L"REQ_EP_046");     //Adjusted Clip Composition
+    spReqIds->push_back(L"REQ_EP_103");     //Physical Track Numbers
     return TestInfo(L"EPTrackContentsTest", spReqIds);
 }
 

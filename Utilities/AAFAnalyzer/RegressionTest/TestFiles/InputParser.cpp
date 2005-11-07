@@ -20,6 +20,7 @@
 
 //Regression Test Files files
 #include "InputParser.h"
+#include "SegmentInfo.h"
 
 //Expat files
 #include <expat.h>
@@ -101,6 +102,19 @@ InputParser::InputParser( const char* outFile )
     _essenceMap[L"none"] = TestFileBuilder::NONE;
     _essenceMap[L"audio"] = TestFileBuilder::AUDIO;
     _essenceMap[L"picture"] = TestFileBuilder::PICTURE;
+    
+    //Set up optional rational parameter names
+    _optRationalParam[L"top-level"] = L"";
+    _optRationalParam[L"lower-level"] = L"";
+    _optRationalParam[L"sub-clip"] = L"";
+    _optRationalParam[L"adjusted-clip"] = L"";
+    _optRationalParam[L"template-clip"] = L"";
+    _optRationalParam[L"clip"] = L"";
+    _optRationalParam[L"file-source"] = L"sample-rate";
+    _optRationalParam[L"recording-source"] = L"";
+    _optRationalParam[L"import-source"] = L"";
+    _optRationalParam[L"tape-source"] = L"";
+    _optRationalParam[L"film-source"] = L"";
 
 }
 
@@ -176,15 +190,21 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
         AxString atrName;
         
         //Find the mob name.
-        OptionalStringAttrib mobName = GetOptionalStringAttribValue( L"name", attribs, 2, L"" );
+        OptionalStringAttrib mobName = GetOptionalStringAttribValue( L"name", attribs, 6, L"" );
+
+        OptionalIntAttrib rationalNumerator = GetOptionalIntAttribValue( _optRationalParam[name] + L"-numerator", attribs, 6, 1 );
+        OptionalIntAttrib rationalDenominator = GetOptionalIntAttribValue( _optRationalParam[name] + L"-denominator", attribs, 6, 1 );
+        aafRational_t optRational;
+        optRational.numerator = rationalNumerator.first;
+        optRational.denominator = rationalDenominator.first;
         
         //Call the appropriate add function.
-        shared_ptr<AxMob> spMob = (_testFile.*_materialTypeMap[name])( mobName.first, mobName.second );
+        shared_ptr<AxMob> spMob = (_testFile.*_materialTypeMap[name])( mobName.first, mobName.second, optRational );
 
         if ( !_segmentStack.empty() )
         {
             //Call the appropriate initialize/add function.
-            (_testFile.*_fillSegmentMap[_segmentStack.top().name])( _segmentStack.top().segment, *spMob );
+            (_testFile.*_fillSegmentMap[_segmentStack.top().element])( _segmentStack.top().segment, *spMob );
         }
         
         //Push the new mob onto the stack.
@@ -193,15 +213,17 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
     }
     else if ( _createSegmentMap.find( name ) != _createSegmentMap.end() )
     {
-        AxString essenceType = GetStringAttribValue( L"track-type", attribs, 8, L"none" );
-        AxString slotType = GetStringAttribValue( L"slot-type", attribs, 8, L"timeline" );
+        AxString essenceType = GetStringAttribValue( L"track-type", attribs, 12, L"none" );
+        AxString slotType = GetStringAttribValue( L"slot-type", attribs, 12, L"timeline" );
         aafRational_t editRate;
-        editRate.numerator = GetIntAtribValue(L"edit-rate-numerator", attribs, 8, 1);
-        editRate.denominator = GetIntAtribValue(L"edit-rate-denominator", attribs, 8, 1);
+        editRate.numerator = GetIntAtribValue(L"edit-rate-numerator", attribs, 12, 1);
+        editRate.denominator = GetIntAtribValue(L"edit-rate-denominator", attribs, 12, 1);
+        OptionalStringAttrib segName = GetOptionalStringAttribValue( L"name", attribs, 12, L"" );
+        OptionalIntAttrib physicalTrackNum = GetOptionalIntAttribValue( L"physical-track-number", attribs, 12, 1 );
 
         //Create an empty segment and push it onto the segment stack
         shared_ptr<AxSegment> spSegment = (_testFile.*_createSegmentMap[name])( *(_mobStack.top()), _essenceMap[essenceType] );
-        _segmentStack.push( SegmentInfo( name, spSegment, essenceType, slotType, editRate ) );
+        _segmentStack.push( SegmentInfo( name, spSegment, essenceType, slotType, editRate, segName, physicalTrackNum ) );
     }
     else if ( name == L"eoc" )
     {
@@ -239,7 +261,15 @@ void InputParser::EndElement(const AxString& name)
     else if ( _createSegmentMap.find( name ) != _createSegmentMap.end() )
     {
         //Call the appropriate attach function.
-        (_testFile.*_attachSlotMap[_segmentStack.top().slotType])( *(_mobStack.top()), *(_segmentStack.top().segment), _segmentStack.top().editRate );
+        (_testFile.*_attachSlotMap[_segmentStack.top().slotType])( 
+            *(_mobStack.top()), 
+            *(_segmentStack.top().segment), 
+            _segmentStack.top().editRate, 
+            _segmentStack.top().name.first, 
+            _segmentStack.top().name.second,
+            _segmentStack.top().physicalTrackNum.first, 
+            _segmentStack.top().physicalTrackNum.second
+           );
         _segmentStack.pop();
     }
     

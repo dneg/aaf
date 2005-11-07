@@ -32,9 +32,15 @@
 
 //Ax files
 #include <AxUtil.h>
+#include <AxMobSlot.h>
+#include <AxIterator.h>
+#include <AxDefObject.h>
 
 //AAF files
 #include <AAFResult.h>
+
+//STL files
+#include <sstream>
 
 namespace {
 
@@ -105,6 +111,20 @@ bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPClip>& node )
 {
     AxMasterMob axMastMob( node.GetAAFObjectOfType() );
     return this->VisitNonComposition( L"Clip", L"REQ_EP_057", axMastMob );
+}
+
+bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node )
+{
+    AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
+    AxString nodeName = this->GetMobName( axSrcMob, L"File Source" );
+    return this->VisitEssenceTracks( nodeName, axSrcMob );
+}
+
+bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node )
+{
+    AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
+    AxString nodeName = this->GetMobName( axSrcMob, L"Import Source" );
+    return this->VisitEssenceTracks( nodeName, axSrcMob );
 }
 
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRecordingSource>& node )
@@ -188,7 +208,7 @@ bool EPNameVisitor::VisitComposition( const AxString& type, const AxString& reqI
         _compositionNames[nodeName] = 1;
     }
     
-    return true;
+    return VisitEssenceTracks( nodeName, axCompMob );
     
 }
 
@@ -232,43 +252,81 @@ bool EPNameVisitor::VisitNonComposition( const AxString& type, const AxString& r
         }
     }
     
-    return true;
+    return VisitEssenceTracks( nodeName, axMob );
+    
+}
+
+bool EPNameVisitor::VisitEssenceTracks( const AxString& mobName, AxMob& axMob )
+{
+
+    bool testPassed = true;
+
+    shared_ptr<TrackSet> spEssenceTracks( this->GetEssenceTracks( axMob ) );
+    
+    TrackSet::const_iterator iter;
+    
+    for ( iter = spEssenceTracks->begin(); iter != spEssenceTracks->end(); iter++ )
+    {
+        try
+        {
+            AxString trackName = (*iter)->GetName();
+            if ( _essenceTrackNames.find( trackName ) == _essenceTrackNames.end() )
+            {
+                _essenceTrackNames[trackName] = 1;
+            }
+            else
+            {
+                _essenceTrackNames[trackName] = _essenceTrackNames[trackName] + 1;
+            }
+        }
+        catch ( const AxExHResult& ex )
+        {
+            if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
+            {
+                aafSlotID_t slotId = (*iter)->GetSlotID();
+                wstringstream ss;
+                ss << L"MobSlot with ID = " << slotId << L" of " << mobName << L" does not have a valid name.";
+                _spResult->AddInformationResult( L"REQ_EP_101", ss.str().c_str(), TestResult::FAIL );
+                testPassed = false;
+            }
+            else
+            {
+                throw ex;
+            }
+        }
+    }
+    
+    return testPassed;
+    
 }
 
 void EPNameVisitor::CheckForUniqueNames()
 {
+    //Check composition names for uniqueness
     this->CheckForUniqueNames( _topLevelNames, L"REQ_EP_027", L"Top-Level Composition" );
     this->CheckForUniqueNames( _lowerLevelNames, L"REQ_EP_032", L"Lower-Level Composition" );
+    
+    //Check essence track names for uniqueness
+    NameMap::const_iterator iter;
+    for ( iter = _essenceTrackNames.begin(); iter != _essenceTrackNames.end(); iter++ )
+    {
+        if ( iter->second != 1 )
+        {
+            AxString explain( L"Essence Track \"" + iter->first + L"\" does not have a unique essence track name." );
+            _spResult->AddInformationResult( L"REQ_EP_101", explain, TestResult::FAIL );
+        }
+    }
 }
 
 void EPNameVisitor::CheckForUniqueNames( NameSet& names, const AxString& reqId, const AxString& type )
 {
-    
     NameSet::const_iterator iter;
-
     for ( iter = names.begin(); iter != names.end(); iter++ )
     {
-
         if ( _compositionNames[*iter] != 1 )
         {
-           
-            shared_ptr<const Requirement> failingReq = RequirementRegistry::GetInstance().GetRequirement( reqId );
-            Requirement::RequirementMapSP reqMapSP(new Requirement::RequirementMap);
-            (*reqMapSP)[reqId] = failingReq;
-                
             AxString explain( type + L" \"" + *iter + L"\" does not have a unique composition name." );
-            shared_ptr<DetailLevelTestResult> spFailure( new DetailLevelTestResult( _spResult->GetName(),
-                                        L"-", // desc
-                                        explain,
-                                        L"-", // docref
-                                        TestResult::FAIL,
-                                        reqMapSP ) );
-            spFailure->SetRequirementStatus( TestResult::FAIL, failingReq );
-                
-            _spResult->AppendSubtestResult( spFailure );
-            _spResult->SetResult( _spResult->GetAggregateResult() );
-            _spResult->SetRequirementStatus( TestResult::FAIL, failingReq );
-                       
+            _spResult->AddInformationResult( reqId, explain, TestResult::FAIL );
         }
     }
 }

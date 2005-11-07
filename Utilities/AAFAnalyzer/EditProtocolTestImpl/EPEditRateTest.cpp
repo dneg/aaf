@@ -79,6 +79,7 @@ shared_ptr<TestLevelTestResult> EPEditRateTest::Execute()
                                  spMyReqs ) );
 
     dfs.TraverseDown( spVisitor, GetTestGraph()->GetRootNode() );
+    spVisitor->CheckAudioSampleRates();
 
     spResult->AppendSubtestResult( spVisitor->GetResult() );
 
@@ -117,8 +118,10 @@ AxString EPEditRateTest::GetDescription() const
 const TestInfo EPEditRateTest::GetTestInfo()
 {
     shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
-    spReqIds->push_back(L"REQ_EP_090");
-    spReqIds->push_back(L"REQ_EP_091");
+    spReqIds->push_back(L"REQ_EP_091");     //In table
+    spReqIds->push_back(L"REQ_EP_092");     //Numerator/Denominator > 0
+    spReqIds->push_back(L"REQ_EP_099");     //Audio Tracks
+    spReqIds->push_back(L"REQ_EP_100");     //Video Tracks
     return TestInfo(L"EPEditRateTest", spReqIds);
 }
 

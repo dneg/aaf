@@ -4,7 +4,7 @@
         Reason: Test Failed - See "Edit Protocol Track Contents Visitor" Visitor for details
         Passing Requirements: None
         Warning Requirements: None
-        Failing Requirements: REQ_EP_037; REQ_EP_046
+        Failing Requirements: REQ_EP_037; REQ_EP_046; REQ_EP_103
 
             Name:   Edit Protocol Track Contents Visitor
             Desc:   Visit derivation chain material and make sure that their tracks contain the necessary data.
@@ -12,7 +12,7 @@
             Reason: 
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_037; REQ_EP_046
+            Failing Requirements: REQ_EP_037; REQ_EP_046; REQ_EP_103
 
                 Name:   Edit Protocol Track Contents Visitor
                 Desc:   -
@@ -77,4 +77,100 @@
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_046
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Composition Mob: "Top-Level Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_103
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Composition Mob: "Lower-Level Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_103
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Adjusted-Clip Composition: "Adjusted Clip Essence With Physical Track Number" does not have exactly one OperationGroup.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_046
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Adjusted-Clip Composition: "Adjusted Clip Essence Without Physical Track Number" does not have exactly one OperationGroup.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_046
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Composition Mob: "Adjusted Clip Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_103
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Composition Mob: "Sub-Clip Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_103
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Master Mob: "Template Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_103
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Master Mob: "Clip Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_103
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Recording Source: "Recording Source Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_103
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Import Source: "Import Source Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_103
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Tape Source: "Tape Source Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_103
+
+                Name:   Edit Protocol Track Contents Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Film Source: "Film Source Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_103
 

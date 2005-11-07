@@ -23,7 +23,7 @@
 
 //Regression Test Files files
 #include "TestFileBuilder.h"
-#include "SegmentInfo.h"
+//#include "SegmentInfo.h"
 
 //Ax files
 #include <AxTypes.h>
@@ -40,6 +40,8 @@ class AxSegment;
 
 namespace aafanalyzer {
 
+class SegmentInfo;
+
 using namespace std;
 using namespace boost;
 
@@ -50,6 +52,9 @@ public:
     InputParser( const char* outFile );
     ~InputParser();
     
+    typedef pair<const AxString, const bool> OptionalStringAttrib;
+    typedef pair<const int, const bool> OptionalIntAttrib;
+
     static void __StartElement(void* userData, const char* name, const char** atts);
     static void __EndElement(void* userData, const char* name);
     static void __EndData(void* userData, const char* s, int len);
@@ -62,12 +67,10 @@ public:
     
  private:
  
-    typedef shared_ptr<AxMob>(TestFileBuilder::*ptrToAddFunction)( const AxString& name, bool isNamed );
+    typedef shared_ptr<AxMob>(TestFileBuilder::*ptrToAddFunction)( const AxString& name, bool isNamed, aafRational_t rationalParam );
     typedef shared_ptr<AxSegment>(TestFileBuilder::*ptrToCreateFunction)( AxMob& axMob, TestFileBuilder::TrackType essenceType );
     typedef void(TestFileBuilder::*ptrToFillFunction) ( shared_ptr<AxSegment> axSegment, AxMob& axMob );
-    typedef void(TestFileBuilder::*ptrToAttachSlotFunction)( AxMob& parent, AxSegment& axSegment, aafRational_t editRate );
-    typedef pair<const AxString, const bool> OptionalStringAttrib;
-    typedef pair<const int, const bool> OptionalIntAttrib;
+    typedef void(TestFileBuilder::*ptrToAttachSlotFunction)( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered );
 
     stack<shared_ptr<AxMob> > _mobStack;
     stack<SegmentInfo> _segmentStack;
@@ -76,6 +79,7 @@ public:
     map<AxString, ptrToFillFunction> _fillSegmentMap;
     map<AxString, ptrToAttachSlotFunction> _attachSlotMap;
     map<AxString, TestFileBuilder::TrackType> _essenceMap;
+    map<AxString, AxString> _optRationalParam;
     TestFileBuilder _testFile;
     
     const AxString GetStringAttribValue( const AxString& attrib, const char** attribs, const unsigned int size, const AxString& default_val ) const;
