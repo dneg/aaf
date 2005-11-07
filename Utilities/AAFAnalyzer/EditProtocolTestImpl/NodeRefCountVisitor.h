@@ -28,9 +28,6 @@
 #include <DetailLevelTestResult.h>
 #include <TestRegistry.h>
 
-//Requirement files
-#include <Requirement.h>
-
 //AAF Analyzer Base files
 #include <TypedVisitor.h>
 

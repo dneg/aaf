@@ -26,15 +26,10 @@
 #include <DetailLevelTestResult.h>
 #include <TestRegistry.h>
 
-//Requirement files
-#include <RequirementRegistry.h>
-#include <Requirement.h>
-
 //Ax files
 #include <AxMob.h>
 #include <AxDefObject.h>
 #include <AxMobSlot.h>
-#include <AxIterator.h>
 #include <AxComponent.h>
 #include <AxMetaDef.h>
 
