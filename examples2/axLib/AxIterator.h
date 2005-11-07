@@ -127,7 +127,7 @@ typedef AxIterator< IAAFSmartPointer2<IAAFContainerDef>,        IEnumAAFContaine
         AxContainerDefsIter;
         
 typedef AxIterator< IAAFSmartPointer2<IAAFInterpolationDef>,    IEnumAAFInterpolationDefs,  AddrOfSmartPointer2<IAAFInterpolationDef> >
-        AxInterpolationrDefsIter;
+        AxInterpolationDefsIter;
         
 typedef AxIterator< IAAFSmartPointer2<IAAFCodecDef>,            IEnumAAFCodecDefs,          AddrOfSmartPointer2<IAAFCodecDef> >
         AxCodecDefsIter;
