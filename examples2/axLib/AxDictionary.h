@@ -53,6 +53,10 @@ public:
 	IEnumAAFDataDefsSP GetDataDefs();
 	IEnumAAFOperationDefsSP GetOperationDefs();
 	IEnumAAFParameterDefsSP GetParameterDefs();
+    IEnumAAFPluginDefsSP GetPluginDefs();
+    IEnumAAFContainerDefsSP GetContainerDefs();
+    IEnumAAFInterpolationDefsSP GetInterpolationDefs();
+    IEnumAAFCodecDefsSP GetCodecDefs();
 
 	void RegisterOpaqueTypeDef( IAAFTypeDefSP );
 	void RegisterOperationDef( IAAFOperationDefSP );
@@ -60,6 +64,10 @@ public:
 	void RegisterCodecDef( IAAFCodecDefSP );
 	void RegisterKLVDataKey( const aafUID_t& uuid,
 				 IAAFTypeDefSP spTypeDef );
+    void RegisterDataDef( IAAFDataDefSP );
+    void RegisterPluginDef( IAAFPluginDefSP );
+    void RegisterContainerDef( IAAFContainerDefSP );
+    void RegisterInterpolationDef( IAAFInterpolationDefSP );
 
 	IUnknownSP CreateInstance( const aafUID_t& auid,
 				  			   const IID& iid );
