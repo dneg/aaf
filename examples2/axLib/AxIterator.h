@@ -96,64 +96,70 @@ private:
 	IAAFSmartPointer< EnumeratorType > _spEnumerator;
 };
 
-typedef AxIterator< IAAFSmartPointer2<IAAFProperty>,            IEnumAAFProperties,         AddrOfSmartPointer2<IAAFProperty> >
+typedef AxIterator< IAAFSmartPointer2<IAAFProperty>,                IEnumAAFProperties,         AddrOfSmartPointer2<IAAFProperty> >
         AxPropertyIter;
 
-typedef AxIterator< IAAFSmartPointer2<IAAFPropertyValue>,       IEnumAAFPropertyValues,     AddrOfSmartPointer2<IAAFPropertyValue> >
+typedef AxIterator< IAAFSmartPointer2<IAAFPropertyValue>,           IEnumAAFPropertyValues,     AddrOfSmartPointer2<IAAFPropertyValue> >
         AxPropertyValueIter;
 
-typedef AxIterator< IAAFSmartPointer2<IAAFMob>,                 IEnumAAFMobs,               AddrOfSmartPointer2<IAAFMob> >
+typedef AxIterator< IAAFSmartPointer2<IAAFMob>,                     IEnumAAFMobs,               AddrOfSmartPointer2<IAAFMob> >
         AxMobIter;
 
-typedef AxIterator< IAAFSmartPointer2<IAAFEssenceData>,         IEnumAAFEssenceData,        AddrOfSmartPointer2<IAAFEssenceData> >
+typedef AxIterator< IAAFSmartPointer2<IAAFEssenceData>,             IEnumAAFEssenceData,        AddrOfSmartPointer2<IAAFEssenceData> >
         AxEssenceIter;
 
-typedef AxIterator< IAAFSmartPointer2<IAAFMobSlot>,             IEnumAAFMobSlots,           AddrOfSmartPointer2<IAAFMobSlot> >
+typedef AxIterator< IAAFSmartPointer2<IAAFMobSlot>,                 IEnumAAFMobSlots,           AddrOfSmartPointer2<IAAFMobSlot> >
         AxMobSlotIter;
 
-typedef AxIterator< IAAFSmartPointer2<IAAFDataDef>,             IEnumAAFDataDefs,           AddrOfSmartPointer2<IAAFDataDef> >
+typedef AxIterator< IAAFSmartPointer2<IAAFDataDef>,                 IEnumAAFDataDefs,           AddrOfSmartPointer2<IAAFDataDef> >
         AxDataDefsIter;
 
-typedef AxIterator< IAAFSmartPointer2<IAAFOperationDef>,        IEnumAAFOperationDefs,      AddrOfSmartPointer2<IAAFOperationDef> >
+typedef AxIterator< IAAFSmartPointer2<IAAFOperationDef>,            IEnumAAFOperationDefs,      AddrOfSmartPointer2<IAAFOperationDef> >
         AxOperationDefIter;
 
-typedef AxIterator< IAAFSmartPointer2<IAAFParameterDef>,        IEnumAAFParameterDefs,      AddrOfSmartPointer2<IAAFParameterDef> >
+typedef AxIterator< IAAFSmartPointer2<IAAFParameterDef>,            IEnumAAFParameterDefs,      AddrOfSmartPointer2<IAAFParameterDef> >
         AxParameterDefsIter;
         
-typedef AxIterator< IAAFSmartPointer2<IAAFPluginDef>,           IEnumAAFPluginDefs,         AddrOfSmartPointer2<IAAFPluginDef> >
+typedef AxIterator< IAAFSmartPointer2<IAAFPluginDef>,               IEnumAAFPluginDefs,         AddrOfSmartPointer2<IAAFPluginDef> >
         AxPluginDefsIter;
         
-typedef AxIterator< IAAFSmartPointer2<IAAFContainerDef>,        IEnumAAFContainerDefs,      AddrOfSmartPointer2<IAAFContainerDef> >
+typedef AxIterator< IAAFSmartPointer2<IAAFContainerDef>,            IEnumAAFContainerDefs,      AddrOfSmartPointer2<IAAFContainerDef> >
         AxContainerDefsIter;
         
-typedef AxIterator< IAAFSmartPointer2<IAAFInterpolationDef>,    IEnumAAFInterpolationDefs,  AddrOfSmartPointer2<IAAFInterpolationDef> >
+typedef AxIterator< IAAFSmartPointer2<IAAFInterpolationDef>,        IEnumAAFInterpolationDefs,  AddrOfSmartPointer2<IAAFInterpolationDef> >
         AxInterpolationDefsIter;
         
-typedef AxIterator< IAAFSmartPointer2<IAAFCodecDef>,            IEnumAAFCodecDefs,          AddrOfSmartPointer2<IAAFCodecDef> >
+typedef AxIterator< IAAFSmartPointer2<IAAFCodecDef>,                IEnumAAFCodecDefs,          AddrOfSmartPointer2<IAAFCodecDef> >
         AxCodecDefsIter;
 
-typedef AxIterator< aafUID_t,                                   IEnumAAFCodecFlavours,      AddrOfAafUID >
+typedef AxIterator< IAAFSmartPointer2<IAAFKLVDataDefinition>,       IEnumAAFKLVDataDefs,        AddrOfSmartPointer2<IAAFKLVDataDefinition> >
+        AxKLVDataDefsIter;
+        
+typedef AxIterator< IAAFSmartPointer2<IAAFTaggedValueDefinition>,   IEnumAAFTaggedValueDefs,    AddrOfSmartPointer2<IAAFTaggedValueDefinition> >
+        AxTaggedValueDefsIter;
+
+typedef AxIterator< aafUID_t,                                       IEnumAAFCodecFlavours,      AddrOfAafUID >
         AxCodecFlavoursIter;
 
-typedef AxIterator< aafUID_t,                                   IEnumAAFLoadedPlugins,      AddrOfAafUID >
+typedef AxIterator< aafUID_t,                                       IEnumAAFLoadedPlugins,      AddrOfAafUID >
         AxLoadedPluginsIter;
 
-typedef AxIterator< IAAFSmartPointer2<IAAFComponent>,           IEnumAAFComponents,         AddrOfSmartPointer2<IAAFComponent> >
+typedef AxIterator< IAAFSmartPointer2<IAAFComponent>,               IEnumAAFComponents,         AddrOfSmartPointer2<IAAFComponent> >
         AxComponentsIter;
 
-typedef AxIterator< IAAFSmartPointer2<IAAFSegment>,             IEnumAAFSegments,           AddrOfSmartPointer2<IAAFSegment> >
+typedef AxIterator< IAAFSmartPointer2<IAAFSegment>,                 IEnumAAFSegments,           AddrOfSmartPointer2<IAAFSegment> >
         AxSegmentsIter;
 
-typedef AxIterator< IAAFSmartPointer2<IAAFClassDef>,            IEnumAAFClassDefs,          AddrOfSmartPointer2<IAAFClassDef> >
+typedef AxIterator< IAAFSmartPointer2<IAAFClassDef>,                IEnumAAFClassDefs,          AddrOfSmartPointer2<IAAFClassDef> >
         AxClassDefIter;
 
-typedef AxIterator< IAAFSmartPointer2<IAAFTypeDef>,             IEnumAAFTypeDefs,           AddrOfSmartPointer2<IAAFTypeDef> >
+typedef AxIterator< IAAFSmartPointer2<IAAFTypeDef>,                 IEnumAAFTypeDefs,           AddrOfSmartPointer2<IAAFTypeDef> >
         AxTypeDefIter;
 
-typedef AxIterator< IAAFSmartPointer2<IAAFPropertyDef>,         IEnumAAFPropertyDefs,       AddrOfSmartPointer2<IAAFPropertyDef> >
+typedef AxIterator< IAAFSmartPointer2<IAAFPropertyDef>,             IEnumAAFPropertyDefs,       AddrOfSmartPointer2<IAAFPropertyDef> >
         AxPropertyDefIter;
 
-typedef AxIterator< IAAFSmartPointer2<IAAFLocator>,             IEnumAAFLocators,           AddrOfSmartPointer2<IAAFLocator> >
+typedef AxIterator< IAAFSmartPointer2<IAAFLocator>,                 IEnumAAFLocators,           AddrOfSmartPointer2<IAAFLocator> >
         AxLocatorIter;
 #if 0
 // the old ones

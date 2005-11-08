@@ -229,6 +229,9 @@ AXSP_TDEF_A( PhysicalDescriptor )
 AXSP_TDEF_A( RecordingDescriptor )
 AXSP_TDEF_A( SoundDescriptor )
 AXSP_TDEF_A( TaggedValueDefinition )
+AXSP_TDEF_B( Dictionary2 )
+AXSP_TDEF_C( IEnumAAFKLVDataDefs )
+AXSP_TDEF_C( IEnumAAFTaggedValueDefs )
 
 // plugin interfaces
 AXSP_TDEF_C( IAAFPlugin )

@@ -246,26 +246,28 @@ std::auto_ptr<AxArrayIterator<TypeDef> > AxArrayIterator<TypeDef>::Clone()
 
 //=---------------------------------------------------------------------=
 
-template class AxIterator< IAAFSmartPointer2<IAAFProperty>,         IEnumAAFProperties,         AddrOfSmartPointer2<IAAFProperty> >;
-template class AxIterator< IAAFSmartPointer2<IAAFPropertyValue>,    IEnumAAFPropertyValues,     AddrOfSmartPointer2<IAAFPropertyValue> >;
-template class AxIterator< IAAFSmartPointer2<IAAFMob>,              IEnumAAFMobs,               AddrOfSmartPointer2<IAAFMob> >;
-template class AxIterator< IAAFSmartPointer2<IAAFEssenceData>,      IEnumAAFEssenceData,        AddrOfSmartPointer2<IAAFEssenceData> >;
-template class AxIterator< IAAFSmartPointer2<IAAFMobSlot>,          IEnumAAFMobSlots,           AddrOfSmartPointer2<IAAFMobSlot> >;
-template class AxIterator< IAAFSmartPointer2<IAAFDataDef>,          IEnumAAFDataDefs,           AddrOfSmartPointer2<IAAFDataDef> >;
-template class AxIterator< IAAFSmartPointer2<IAAFOperationDef>,     IEnumAAFOperationDefs,      AddrOfSmartPointer2<IAAFOperationDef> >;
-template class AxIterator< IAAFSmartPointer2<IAAFParameterDef>,     IEnumAAFParameterDefs,      AddrOfSmartPointer2<IAAFParameterDef> >;
-template class AxIterator< IAAFSmartPointer2<IAAFPluginDef>,        IEnumAAFPluginDefs,         AddrOfSmartPointer2<IAAFPluginDef> >;
-template class AxIterator< IAAFSmartPointer2<IAAFContainerDef>,     IEnumAAFContainerDefs,      AddrOfSmartPointer2<IAAFContainerDef> >;
-template class AxIterator< IAAFSmartPointer2<IAAFInterpolationDef>, IEnumAAFInterpolationDefs,  AddrOfSmartPointer2<IAAFInterpolationDef> >;
-template class AxIterator< IAAFSmartPointer2<IAAFCodecDef>,         IEnumAAFCodecDefs,          AddrOfSmartPointer2<IAAFCodecDef> >;
-template class AxIterator< aafUID_t,                                IEnumAAFCodecFlavours,      AddrOfAafUID >;
-template class AxIterator< aafUID_t,                                IEnumAAFLoadedPlugins,      AddrOfAafUID >;
-template class AxIterator< IAAFSmartPointer2<IAAFComponent>,        IEnumAAFComponents,         AddrOfSmartPointer2<IAAFComponent> >;
-template class AxIterator< IAAFSmartPointer2<IAAFSegment>,          IEnumAAFSegments,           AddrOfSmartPointer2<IAAFSegment> >;
-template class AxIterator< IAAFSmartPointer2<IAAFClassDef>,         IEnumAAFClassDefs,          AddrOfSmartPointer2<IAAFClassDef> >;
-template class AxIterator< IAAFSmartPointer2<IAAFTypeDef>,          IEnumAAFTypeDefs,           AddrOfSmartPointer2<IAAFTypeDef> >;
-template class AxIterator< IAAFSmartPointer2<IAAFPropertyDef>,      IEnumAAFPropertyDefs,       AddrOfSmartPointer2<IAAFPropertyDef> >;
-template class AxIterator< IAAFSmartPointer2<IAAFLocator>,          IEnumAAFLocators,           AddrOfSmartPointer2<IAAFLocator> >;
+template class AxIterator< IAAFSmartPointer2<IAAFProperty>,                 IEnumAAFProperties,         AddrOfSmartPointer2<IAAFProperty> >;
+template class AxIterator< IAAFSmartPointer2<IAAFPropertyValue>,            IEnumAAFPropertyValues,     AddrOfSmartPointer2<IAAFPropertyValue> >;
+template class AxIterator< IAAFSmartPointer2<IAAFMob>,                      IEnumAAFMobs,               AddrOfSmartPointer2<IAAFMob> >;
+template class AxIterator< IAAFSmartPointer2<IAAFEssenceData>,              IEnumAAFEssenceData,        AddrOfSmartPointer2<IAAFEssenceData> >;
+template class AxIterator< IAAFSmartPointer2<IAAFMobSlot>,                  IEnumAAFMobSlots,           AddrOfSmartPointer2<IAAFMobSlot> >;
+template class AxIterator< IAAFSmartPointer2<IAAFDataDef>,                  IEnumAAFDataDefs,           AddrOfSmartPointer2<IAAFDataDef> >;
+template class AxIterator< IAAFSmartPointer2<IAAFOperationDef>,             IEnumAAFOperationDefs,      AddrOfSmartPointer2<IAAFOperationDef> >;
+template class AxIterator< IAAFSmartPointer2<IAAFParameterDef>,             IEnumAAFParameterDefs,      AddrOfSmartPointer2<IAAFParameterDef> >;
+template class AxIterator< IAAFSmartPointer2<IAAFPluginDef>,                IEnumAAFPluginDefs,         AddrOfSmartPointer2<IAAFPluginDef> >;
+template class AxIterator< IAAFSmartPointer2<IAAFContainerDef>,             IEnumAAFContainerDefs,      AddrOfSmartPointer2<IAAFContainerDef> >;
+template class AxIterator< IAAFSmartPointer2<IAAFInterpolationDef>,         IEnumAAFInterpolationDefs,  AddrOfSmartPointer2<IAAFInterpolationDef> >;
+template class AxIterator< IAAFSmartPointer2<IAAFCodecDef>,                 IEnumAAFCodecDefs,          AddrOfSmartPointer2<IAAFCodecDef> >;
+template class AxIterator< IAAFSmartPointer2<IAAFKLVDataDefinition>,        IEnumAAFKLVDataDefs,        AddrOfSmartPointer2<IAAFKLVDataDefinition> >;
+template class AxIterator< IAAFSmartPointer2<IAAFTaggedValueDefinition>,    IEnumAAFTaggedValueDefs,    AddrOfSmartPointer2<IAAFTaggedValueDefinition> >;
+template class AxIterator< aafUID_t,                                        IEnumAAFCodecFlavours,      AddrOfAafUID >;
+template class AxIterator< aafUID_t,                                        IEnumAAFLoadedPlugins,      AddrOfAafUID >;
+template class AxIterator< IAAFSmartPointer2<IAAFComponent>,                IEnumAAFComponents,         AddrOfSmartPointer2<IAAFComponent> >;
+template class AxIterator< IAAFSmartPointer2<IAAFSegment>,                  IEnumAAFSegments,           AddrOfSmartPointer2<IAAFSegment> >;
+template class AxIterator< IAAFSmartPointer2<IAAFClassDef>,                 IEnumAAFClassDefs,          AddrOfSmartPointer2<IAAFClassDef> >;
+template class AxIterator< IAAFSmartPointer2<IAAFTypeDef>,                  IEnumAAFTypeDefs,           AddrOfSmartPointer2<IAAFTypeDef> >;
+template class AxIterator< IAAFSmartPointer2<IAAFPropertyDef>,              IEnumAAFPropertyDefs,       AddrOfSmartPointer2<IAAFPropertyDef> >;
+template class AxIterator< IAAFSmartPointer2<IAAFLocator>,                  IEnumAAFLocators,           AddrOfSmartPointer2<IAAFLocator> >;
 
 
 template class AxArrayIterator< IAAFTypeDefFixedArray >;

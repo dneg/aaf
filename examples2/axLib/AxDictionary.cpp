@@ -23,7 +23,12 @@
 #include <AAFResult.h>
 
 AxDictionary::AxDictionary( IAAFDictionarySP spIaafDictionary )
-:	AxObject( AxQueryInterface<IAAFDictionary, IAAFObject>(spIaafDictionary) ),
+: AxObject( AxQueryInterface<IAAFDictionary, IAAFObject>( spIaafDictionary ) ),
+    _spIaafDictionary( AxQueryInterface<IAAFDictionary, IAAFDictionary2>( spIaafDictionary ) )
+{}
+
+AxDictionary::AxDictionary( IAAFDictionary2SP spIaafDictionary )
+:	AxObject( AxQueryInterface<IAAFDictionary2, IAAFObject>(spIaafDictionary) ),
 	_spIaafDictionary( spIaafDictionary )
 {}
 
@@ -249,6 +254,24 @@ IEnumAAFCodecDefsSP AxDictionary::GetCodecDefs()
     return spIEnumAAFCodecDefs;
 }
 
+IEnumAAFKLVDataDefsSP AxDictionary::GetKLVDataDefs()
+{
+    IEnumAAFKLVDataDefsSP spIEnumAAFKLVDataDefs;
+
+    CHECK_HRESULT( _spIaafDictionary->GetKLVDataDefs( &spIEnumAAFKLVDataDefs ) );
+
+    return spIEnumAAFKLVDataDefs;
+}
+
+IEnumAAFTaggedValueDefsSP AxDictionary::GetTaggedValueDefs()
+{
+    IEnumAAFTaggedValueDefsSP spIEnumAAFTaggedValueDefs;
+
+    CHECK_HRESULT( _spIaafDictionary->GetTaggedValueDefs( &spIEnumAAFTaggedValueDefs ) );
+
+    return spIEnumAAFTaggedValueDefs;
+}
+
 void AxDictionary::RegisterOpaqueTypeDef( IAAFTypeDefSP spTypeDef )
 {
 	CHECK_HRESULT( _spIaafDictionary->RegisterOpaqueTypeDef( spTypeDef ) );
@@ -293,6 +316,16 @@ void AxDictionary::RegisterContainerDef( IAAFContainerDefSP spIaafContainerDef )
 void AxDictionary::RegisterInterpolationDef( IAAFInterpolationDefSP spIaafInterpolationDef )
 {
     CHECK_HRESULT( _spIaafDictionary->RegisterInterpolationDef( spIaafInterpolationDef ) );
+}
+
+void AxDictionary::RegisterKLVDataDef( IAAFKLVDataDefinitionSP spIaafKLVDataDef )
+{
+    CHECK_HRESULT( _spIaafDictionary->RegisterKLVDataDef( spIaafKLVDataDef ) );
+}
+
+void AxDictionary::RegisterTaggedValueDef( IAAFTaggedValueDefinitionSP spIaafTaggedValueDef )
+{
+    CHECK_HRESULT( _spIaafDictionary->RegisterTaggedValueDef( spIaafTaggedValueDef ) );
 }
 
 IUnknownSP AxDictionary::CreateInstance( const aafUID_t& auid,
