@@ -219,6 +219,8 @@ AXSP_TDEF_B( TypeDefVariableArrayEx )
 // New 1.1 objects.
 AXSP_TDEF_A( AES3PCMDescriptor )
 AXSP_TDEF_A( AuxiliaryDescriptor )
+AXSP_TDEF_B( DataDef2 )
+AXSP_TDEF_B( DataDef3 )
 AXSP_TDEF_A( DescriptiveFramework )
 AXSP_TDEF_A( DescriptiveMarker )
 AXSP_TDEF_A( ImportDescriptor )

@@ -235,12 +235,28 @@ IEnumAAFCodecFlavoursSP AxCodecDef::EnumCodecFlavours()
 
 AxDataDef::AxDataDef( IAAFDataDefSP spIaafDataDef )
 :	AxDefObject( AxQueryInterface<IAAFDataDef, IAAFDefObject>(spIaafDataDef) ),
-	_spIaafDataDef( spIaafDataDef )
+	_spIaafDataDef( AxQueryInterface<IAAFDataDef,IAAFDataDef3>( spIaafDataDef ) )
+{}
+
+AxDataDef::AxDataDef( IAAFDataDef2SP spIaafDataDef )
+:   AxDefObject( AxQueryInterface<IAAFDataDef2, IAAFDefObject>(spIaafDataDef) ),
+    _spIaafDataDef( AxQueryInterface<IAAFDataDef2,IAAFDataDef3>( spIaafDataDef ) )
+{}
+
+AxDataDef::AxDataDef( IAAFDataDef3SP spIaafDataDef )
+:   AxDefObject( AxQueryInterface<IAAFDataDef3, IAAFDefObject>(spIaafDataDef) ),
+    _spIaafDataDef( spIaafDataDef )
 {}
 
 AxDataDef::~AxDataDef()
 {}
 
+void AxDataDef::Initialize( const aafUID_t& uid,
+                 const AxString& name,
+                 const AxString& desc )
+{
+    CHECK_HRESULT( _spIaafDataDef->Initialize( uid, name.c_str(), desc.c_str() ) );
+}
 
 bool AxDataDef::IsSoundKind()
 {
@@ -258,6 +274,87 @@ bool AxDataDef::IsPictureKind()
 	CHECK_HRESULT( _spIaafDataDef->IsPictureKind( &isPictureKind ) );
 
 	return isPictureKind ? true : false;
+}
+
+bool AxDataDef::IsMatteKind()
+{
+    aafBoolean_t isMatteKind;
+
+    CHECK_HRESULT( _spIaafDataDef->IsMatteKind( &isMatteKind ) );
+
+    return isMatteKind ? true : false;
+}
+
+bool AxDataDef::IsPictureWithMatteKind()
+{
+    aafBoolean_t isPictureWithMatteKind;
+
+    CHECK_HRESULT( _spIaafDataDef->IsPictureWithMatteKind( &isPictureWithMatteKind ) );
+
+    return isPictureWithMatteKind ? true : false;
+}
+
+bool AxDataDef::IsEdgecodeKind()
+{
+    aafBoolean_t isEdgecodeKind;
+
+    CHECK_HRESULT( _spIaafDataDef->IsEdgecodeKind( &isEdgecodeKind ) );
+
+    return isEdgecodeKind ? true : false;
+}
+
+bool AxDataDef::IsTimecodeKind()
+{
+    aafBoolean_t isTimecodeKind;
+
+    CHECK_HRESULT( _spIaafDataDef->IsTimecodeKind( &isTimecodeKind ) );
+
+    return isTimecodeKind ? true : false;
+}
+
+bool AxDataDef::IsAuxiliaryKind()
+{
+    aafBoolean_t isAuxiliaryKind;
+
+    CHECK_HRESULT( _spIaafDataDef->IsAuxiliaryKind( &isAuxiliaryKind ) );
+
+    return isAuxiliaryKind ? true : false;
+}
+
+bool AxDataDef::IsDescriptiveMetadataKind()
+{
+    aafBoolean_t isDescriptiveMetadataKind;
+
+    CHECK_HRESULT( _spIaafDataDef->IsDescriptiveMetadataKind( &isDescriptiveMetadataKind ) );
+
+    return isDescriptiveMetadataKind ? true : false;
+}
+
+bool AxDataDef::DoesDataDefConvertTo ( IAAFDataDefSP id )
+{
+    aafBoolean_t doesConvertTo;
+
+    CHECK_HRESULT( _spIaafDataDef->DoesDataDefConvertTo( id, &doesConvertTo ) );
+    
+    return doesConvertTo ? true : false;
+}
+
+bool AxDataDef::IsDataDefOf ( IAAFDataDefSP dataDef )
+{
+    aafBoolean_t isDataDefOf;
+    
+    CHECK_HRESULT( _spIaafDataDef->IsDataDefOf( dataDef, &isDataDefOf ) );
+    
+    return isDataDefOf ? true : false;
+}
+
+bool AxDataDef::DoesDataDefConvertFrom ( IAAFDataDefSP dataDef )
+{
+    aafBoolean_t doesConvertFrom;
+    
+    CHECK_HRESULT( _spIaafDataDef->DoesDataDefConvertFrom( dataDef, &doesConvertFrom ) );
+    
+    return doesConvertFrom ? true : false;
 }
 
 //=---------------------------------------------------------------------=

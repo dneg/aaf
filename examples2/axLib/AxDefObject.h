@@ -173,20 +173,42 @@ private:
 class AxDataDef: public AxDefObject {
 public:
 	AxDataDef( IAAFDataDefSP spIaafDataDef );
+    AxDataDef( IAAFDataDef2SP spIaafDataDef );
+    AxDataDef( IAAFDataDef3SP spIaafDataDef );
 	~AxDataDef();
+
+    void Initialize( const aafUID_t&,
+                const AxString& name,
+                const AxString& desc );
 
 	bool IsSoundKind();
 	bool IsPictureKind();
+    bool IsMatteKind();
+    bool IsPictureWithMatteKind();
+    bool IsEdgecodeKind();
+    bool IsTimecodeKind();
+    bool IsAuxiliaryKind();
+    bool IsDescriptiveMetadataKind();
+
+    bool DoesDataDefConvertTo ( IAAFDataDefSP );
+    bool IsDataDefOf ( IAAFDataDefSP );
+    bool DoesDataDefConvertFrom ( IAAFDataDefSP );
 		
 	inline operator IAAFDataDefSP ()
-	{ return _spIaafDataDef; }
+	{ return AxQueryInterface<IAAFDataDef3,IAAFDataDef>( _spIaafDataDef ); }
+    
+    inline operator IAAFDataDef2SP ()
+    { return AxQueryInterface<IAAFDataDef3,IAAFDataDef2>( _spIaafDataDef ); }
+    
+    inline operator IAAFDataDef3SP ()
+    { return _spIaafDataDef; }
 
 private:
 	AxDataDef();
 	AxDataDef( const AxDataDef& );
 	AxDataDef& operator=( const AxDataDef& );
 	
-	IAAFDataDefSP _spIaafDataDef;
+	IAAFDataDef3SP _spIaafDataDef;
 };
 
 //=---------------------------------------------------------------------=
