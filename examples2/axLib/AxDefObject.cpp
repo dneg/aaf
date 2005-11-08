@@ -336,3 +336,97 @@ aafUInt32 AxOperationDef::GetBypass()
   CHECK_HRESULT( _spIaafOperationDef->GetBypass( &bypass ) );
   return bypass;
 }
+
+//=---------------------------------------------------------------------=
+
+AxKLVDataDef::AxKLVDataDef( IAAFKLVDataDefinitionSP spIaafKLVDataDef )
+:   AxDefObject( AxQueryInterface<IAAFKLVDataDefinition, IAAFDefObject>(spIaafKLVDataDef) ),
+    _spIaafKLVDataDef( spIaafKLVDataDef )
+{}
+
+AxKLVDataDef::~AxKLVDataDef()
+{}
+
+void AxKLVDataDef::Initialize( const aafUID_t& uid,
+                 const AxString& name,
+                 const AxString& desc )
+{
+    CHECK_HRESULT( _spIaafKLVDataDef->Initialize( uid, name.c_str(), desc.c_str() ) );
+}
+
+void AxKLVDataDef::AddParentProperty( IAAFPropertyDefSP parentProperty )
+{
+    CHECK_HRESULT( _spIaafKLVDataDef->AddParentProperty( parentProperty ) );
+}
+
+void AxKLVDataDef::RemoveParentProperty( IAAFPropertyDefSP parentProperty )
+{
+    CHECK_HRESULT( _spIaafKLVDataDef->RemoveParentProperty( parentProperty ) );
+}
+
+void AxKLVDataDef::SetKLVDataType( IAAFTypeDefSP typeDef )
+{
+    CHECK_HRESULT( _spIaafKLVDataDef->SetKLVDataType( typeDef ) );
+}
+
+IEnumAAFPropertyDefsSP AxKLVDataDef::GetParentProperties()
+{
+  IEnumAAFPropertyDefsSP parentProperties;
+  CHECK_HRESULT( _spIaafKLVDataDef->GetParentProperties( &parentProperties ) );
+  return parentProperties;
+}
+
+aafUInt32 AxKLVDataDef::CountParentProperties()
+{
+  aafUInt32 numProperties;
+  CHECK_HRESULT( _spIaafKLVDataDef->CountParentProperties( &numProperties ) );
+  return numProperties;
+}
+
+IAAFTypeDefSP AxKLVDataDef::GetKLVDataType()
+{
+  IAAFTypeDefSP klvData;
+  CHECK_HRESULT( _spIaafKLVDataDef->GetKLVDataType( &klvData ) );
+  return klvData;
+}
+
+//=---------------------------------------------------------------------=
+
+AxTaggedValueDef::AxTaggedValueDef( IAAFTaggedValueDefinitionSP spIaafTaggedValueDef )
+:   AxDefObject( AxQueryInterface<IAAFTaggedValueDefinition, IAAFDefObject>(spIaafTaggedValueDef) ),
+    _spIaafTaggedValueDef( spIaafTaggedValueDef )
+{}
+
+AxTaggedValueDef::~AxTaggedValueDef()
+{}
+
+void AxTaggedValueDef::Initialize( const aafUID_t& uid,
+                 const AxString& name,
+                 const AxString& desc )
+{
+    CHECK_HRESULT( _spIaafTaggedValueDef->Initialize( uid, name.c_str(), desc.c_str() ) );
+}
+
+void AxTaggedValueDef::AddParentProperty( IAAFPropertyDefSP parentProperty )
+{
+    CHECK_HRESULT( _spIaafTaggedValueDef->AddParentProperty( parentProperty ) );
+}
+
+void AxTaggedValueDef::RemoveParentProperty( IAAFPropertyDefSP parentProperty )
+{
+    CHECK_HRESULT( _spIaafTaggedValueDef->RemoveParentProperty( parentProperty ) );
+}
+
+IEnumAAFPropertyDefsSP AxTaggedValueDef::GetParentProperties()
+{
+  IEnumAAFPropertyDefsSP parentProperties;
+  CHECK_HRESULT( _spIaafTaggedValueDef->GetParentProperties( &parentProperties ) );
+  return parentProperties;
+}
+
+aafUInt32 AxTaggedValueDef::CountParentProperties()
+{
+  aafUInt32 numProperties;
+  CHECK_HRESULT( _spIaafTaggedValueDef->CountParentProperties( &numProperties ) );
+  return numProperties;
+}
