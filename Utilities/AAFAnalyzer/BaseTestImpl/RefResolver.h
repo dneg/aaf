@@ -34,6 +34,7 @@ using namespace boost;
 
 class TestLevelTestResult;
 class TestGraph;
+class AxClassDef;
 
 class RefResolver : public Test
 {

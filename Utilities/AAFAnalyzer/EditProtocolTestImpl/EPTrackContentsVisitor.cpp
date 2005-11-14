@@ -26,6 +26,10 @@
 #include <DetailLevelTestResult.h>
 #include <TestRegistry.h>
 
+//Analyzer Base files
+#include <DepthFirstTraversal.h>
+#include <EdgeMap.h>
+
 //Ax files
 #include <AxMob.h>
 #include <AxDefObject.h>
@@ -40,6 +44,61 @@
 #include <sstream>
 
 namespace {
+    
+using namespace aafanalyzer;
+
+class ParentMobVisitor : public EPTypedVisitor
+{
+    public:
+        ParentMobVisitor()
+        {}
+        
+        ~ParentMobVisitor()
+        {}
+        
+        bool PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node )
+        {
+            _needsPhysicalNum = true;
+            return false;
+        }
+        
+        bool PreOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node )
+        {
+            _needsPhysicalNum = true;
+            return false;
+        }
+
+        bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node )
+        {
+            _needsPhysicalNum = false;
+            return false;
+        }
+        
+        bool PreOrderVisit( AAFTypedObjNode<IAAFSourceMob>& node )
+        {
+            _needsPhysicalNum = true;
+            return false;
+        }
+        
+        bool PreOrderVisit( AAFTypedObjNode<IAAFMob>& node )
+        {
+            _needsPhysicalNum = false;
+            return false;
+        }
+        
+        const bool NeedsPhysicalTrackNum()
+        {
+            return _needsPhysicalNum;
+        }
+        
+    private:
+    
+        bool _needsPhysicalNum;
+    
+        // prohibited
+        ParentMobVisitor( const ParentMobVisitor& );
+        ParentMobVisitor& operator=( const ParentMobVisitor& );
+};
 
 } // end of namespace
 
@@ -49,8 +108,9 @@ namespace aafanalyzer {
 
 using namespace boost;
  
-EPTrackContentsVisitor::EPTrackContentsVisitor( wostream& log )
+EPTrackContentsVisitor::EPTrackContentsVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap )
     : _log(log),
+      _spEdgeMap( spEdgeMap ),
       _spResult( new DetailLevelTestResult( L"Edit Protocol Track Contents Visitor",
                                             L"Visit derivation chain material and make sure that their tracks contain the necessary data.",
                                             L"", // explain
@@ -58,150 +118,96 @@ EPTrackContentsVisitor::EPTrackContentsVisitor( wostream& log )
                                             TestResult::PASS,
                                             TestRegistry::GetInstance().GetRequirementsForTest( EPTrackContentsTest::GetTestInfo().GetName() )
                )                          )
-{
-}
+{}
     
 EPTrackContentsVisitor::~EPTrackContentsVisitor()
+{}
+
+bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPAudioTrack>& node )
 {
+    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
+    return this->PreOrderVisit( *spGeneric );
 }
 
-bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node )
+bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPVideoTrack>& node )
 {
-    bool testPassed = true;
+    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
+    return this->PreOrderVisit( *spGeneric );
+}
 
-    AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    shared_ptr<TrackSet> spEssenceTrack = this->GetEssenceTracks( axCompMob );
+bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack>& node )
+{
+    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
+    return this->PreOrderVisit( *spGeneric );
+}
 
-    TrackSet::const_iterator iter;
-    for ( iter = spEssenceTrack->begin(); iter != spEssenceTrack->end(); iter++ )
+bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPAudioTrack>& node )
+{
+    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
+    return this->PreOrderVisit( *spGeneric );
+}
+
+bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPVideoTrack>& node )
+{
+    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
+    return this->PreOrderVisit( *spGeneric );
+}
+
+bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPEssenceTrack>& node )
+{
+    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
+    return this->PreOrderVisit( *spGeneric );
+}
+
+bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPAudioTrack>& node )
+{
+    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
+    return this->PreOrderVisit( *spGeneric );
+}
+
+bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPVideoTrack>& node )
+{
+    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
+    return this->PreOrderVisit( *spGeneric );
+}
+
+bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPEssenceTrack>& node )
+{
+    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
+    return this->PreOrderVisit( *spGeneric );
+}
+
+bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPAudioTrack>& node )
+{
+    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
+    return this->PreOrderVisit( *spGeneric );
+}
+
+bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPVideoTrack>& node )
+{
+    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
+    return this->PreOrderVisit( *spGeneric );
+}
+
+bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEssenceTrack>& node )
+{
+    
+    //Find the parent of this mob slot, if it is a File Source mob slot (or
+    //an unknown type), there is no requirement that it has a PhysicalTrackNumber.
+    shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+    DepthFirstTraversal dfs( _spEdgeMap, spNode );
+    shared_ptr<ParentMobVisitor> spVisitor( new ParentMobVisitor );
+    
+    dfs.TraverseUp( spVisitor );
+    
+    if ( spVisitor->NeedsPhysicalTrackNum() )
     {
-        if ( CountSegments( **iter, kAAFClassID_SourceClip ) != 1 )
-        {
-            AxString mobName = this->GetMobName( axCompMob, L"Sub-Clip Composition" );
-
-            wstringstream ss;
-            ss << L"Slot with ID ";
-            ss << (*iter)->GetSlotID();
-            ss << L" in " << mobName << L" does not have exactly one SourceClip.";
-
-            AxString explain( ss.str().c_str() );
-            _spResult->AddInformationResult( L"REQ_EP_037", explain, TestResult::FAIL );
-            testPassed = false;
-        }
-    }
     
-    testPassed = VisitEssenceTracks( axCompMob, L"Composition Mob" ) && testPassed;
-       
-    return testPassed;
-}
-
-bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node )
-{
-    bool testPassed = true;
-
-    AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    shared_ptr<TrackSet> spEssenceTrack = this->GetEssenceTracks( axCompMob );
-
-    TrackSet::const_iterator iter;
-    for ( iter = spEssenceTrack->begin(); iter != spEssenceTrack->end(); iter++ )
-    {
-        if ( CountSegments( **iter, kAAFClassID_OperationGroup ) != 1 )
-        {
-            AxString mobName = this->GetMobName( axCompMob, L"Adjusted-Clip Composition" );
-
-            wstringstream ss;
-            ss << L"Slot with ID ";
-            ss << (*iter)->GetSlotID();
-            ss << L" in " << mobName << L" does not have exactly one OperationGroup.";
-
-            AxString explain( ss.str().c_str() );
-            _spResult->AddInformationResult( L"REQ_EP_046", explain, TestResult::FAIL );
-            testPassed = false;
-        }
-    }
-    
-    testPassed = VisitEssenceTracks( axCompMob, L"Composition Mob" ) && testPassed;
-    
-    return testPassed;
-}
-
-bool EPTrackContentsVisitor::PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node )
-{
-    AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    return VisitEssenceTracks( axCompMob, L"Composition Mob" );
-}
-
-bool EPTrackContentsVisitor::PreOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node )
-{
-    AxMasterMob axMastMob( node.GetAAFObjectOfType() );
-    return VisitEssenceTracks( axMastMob, L"Master Mob" );
-}
-
-bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRecordingSource>& node )
-{
-    AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
-    return VisitEssenceTracks( axSrcMob, L"Recording Source" );
-}
-
-bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node )
-{
-    AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
-    return VisitEssenceTracks( axSrcMob, L"Import Source" );
-}
-
-bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node )
-{
-    AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
-    return VisitEssenceTracks( axSrcMob, L"Tape Source" );
-}
-
-bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node )
-{
-    AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
-    return VisitEssenceTracks( axSrcMob, L"Film Source" );
-}
-
-bool EPTrackContentsVisitor::EdgeVisit(AAFComponentReference& edge)
-{
-    return false;
-}
-
-bool EPTrackContentsVisitor::EdgeVisit(AAFSlotReference& edge)
-{
-    return false;
-}
-    
-shared_ptr<DetailLevelTestResult> EPTrackContentsVisitor::GetResult()
-{
-    return _spResult;
-}
-
-
-unsigned int EPTrackContentsVisitor::CountSegments( AxMobSlot& track, aafUID_t segmentType )
-{
-    AxSegment axSegment( track.GetSegment() );
-    AxClassDef clsDef( axSegment.GetDefinition() );
-    if ( this->IsType( clsDef, segmentType, kAAFClassID_Segment ) )
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-bool EPTrackContentsVisitor::VisitEssenceTracks( AxMob& axMob, const AxString& type )
-{
-    shared_ptr<TrackSet> spEssenceTracks = this->GetEssenceTracks( axMob );
-    
-    TrackSet::const_iterator iter;
-    
-    for( iter = spEssenceTracks->begin(); iter != spEssenceTracks->end(); iter++ )
-    {
+        AxMobSlot axMobSlot( node.GetAAFObjectOfType() );
+        
         try
         {
-            (*iter)->GetPhysicalNum();
+            axMobSlot.GetPhysicalNum();
         }
         catch ( const AxExHResult& ex )
         {
@@ -209,19 +215,28 @@ bool EPTrackContentsVisitor::VisitEssenceTracks( AxMob& axMob, const AxString& t
             {
                 throw ex;
             }
-            AxString mobName = this->GetMobName( axMob, type );
-
+            AxString mobName = this->GetMobName( _spEdgeMap, node );
+    
             wstringstream ss;
             ss << L"Slot with ID ";
-            ss << (*iter)->GetSlotID();
+            ss << axMobSlot.GetSlotID();
             ss << L" in " << mobName << L" does not have a MobSlot::PhysicalTrackNumber property.";
             
             _spResult->AddInformationResult( L"REQ_EP_103", ss.str().c_str(), TestResult::FAIL );
+         
+            return false;
             
         }
+        
     }
     
     return true;
+    
+}
+
+shared_ptr<DetailLevelTestResult> EPTrackContentsVisitor::GetResult()
+{
+    return _spResult;
 }
 
 } // end of namespace aafanalyzer

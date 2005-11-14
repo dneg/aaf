@@ -20,7 +20,6 @@
 
 //Analyzer Base files
 #include "Visitor.h"
-#include "Node.h"
 #include "Edge.h"
 
 namespace {
@@ -56,6 +55,16 @@ bool Visitor::PostOrderVisit(Node& node)
 bool Visitor::EdgeVisit(Edge& edge)
 {
   return true;
+}
+
+void Visitor::RecordVisit( Node::LID id )
+{
+  _visitedNodes.insert( id );
+}
+
+bool Visitor::HaveVisited( Node::LID id )
+{
+  return ( _visitedNodes.find( id ) != _visitedNodes.end() );
 }
 
 }

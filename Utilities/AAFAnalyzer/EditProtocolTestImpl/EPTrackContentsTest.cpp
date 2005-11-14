@@ -64,7 +64,7 @@ EPTrackContentsTest::~EPTrackContentsTest()
 shared_ptr<TestLevelTestResult> EPTrackContentsTest::Execute()
 {
     
-    shared_ptr<EPTrackContentsVisitor> spVisitor(new EPTrackContentsVisitor( GetOutStream() ) );
+    shared_ptr<EPTrackContentsVisitor> spVisitor(new EPTrackContentsVisitor( GetOutStream(), GetTestGraph()->GetEdgeMap() ) );
 
     DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
     
@@ -117,8 +117,6 @@ AxString EPTrackContentsTest::GetDescription() const
 const TestInfo EPTrackContentsTest::GetTestInfo()
 {
     shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
-    spReqIds->push_back(L"REQ_EP_037");     //Sub-Clip Composition
-    spReqIds->push_back(L"REQ_EP_046");     //Adjusted Clip Composition
     spReqIds->push_back(L"REQ_EP_103");     //Physical Track Numbers
     return TestInfo(L"EPTrackContentsTest", spReqIds);
 }

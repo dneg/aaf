@@ -1771,7 +1771,7 @@
     <requirement type="file" category="compositional">
         <id>REQ_EP_161</id>
         <name>Definition Object Name</name>
-        <desc>The DefinitionObject::Name property of all DefinitionObjects in the Dictionary shall be a valid, meaningful name,</desc>
+        <desc>The DefinitionObject::Name property of all DefinitionObjects in the Dictionary shall be a valid, meaningful name.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>

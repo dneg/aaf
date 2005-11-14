@@ -44,9 +44,9 @@ class TypedVisitor : public Visitor
     virtual ~TypedVisitor();
 
     virtual bool EdgeVisit(AAFContainment& edge) { return true; }
-    virtual bool EdgeVisit(AAFComponentReference& edge) { return true; }
-    virtual bool EdgeVisit(AAFMobReference& edge) { return true; }
-    virtual bool EdgeVisit(AAFSlotReference& edge) { return true; }
+    virtual bool EdgeVisit(AAFComponentReference& edge) { return false; }
+    virtual bool EdgeVisit(AAFMobReference& edge) { return false; }
+    virtual bool EdgeVisit(AAFSlotReference& edge) { return false; }
 
 #include "TypedVisitor.h.gen"
 

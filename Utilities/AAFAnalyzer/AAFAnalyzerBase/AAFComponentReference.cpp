@@ -58,4 +58,10 @@ bool AAFComponentReference::Visit(shared_ptr<Visitor> spVisitor)
   return spVisitor->EdgeVisit(*this);
 }
 
+shared_ptr<Edge> AAFComponentReference::CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const
+{
+    shared_ptr<Edge> spNewEdge( new AAFComponentReference( spParent, spChild ) );
+    return spNewEdge;
+}
+
 } // end of namespace diskstream

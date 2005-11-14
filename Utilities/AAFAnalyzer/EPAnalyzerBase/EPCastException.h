@@ -1,6 +1,6 @@
 //=---------------------------------------------------------------------=
 //
-// $Id$
+// $Id$ $Name$
 //
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
@@ -18,33 +18,31 @@
 //
 //=---------------------------------------------------------------------=
 
-#ifndef __AAFCONTAINMENT_h__
-#define __AAFCONTAINMENT_h__
+#ifndef __EPCastException_h_
+#define __EPCastException_h_
 
 //Analyzer Base files
-#include <Edge.h>
+#include <AnalyzerException.h>
 
 namespace aafanalyzer {
 
-using namespace boost;
+using namespace std;
 
-class AAFContainment : public Edge
-{
- public:
-  AAFContainment(shared_ptr<Node> spParent, shared_ptr<Node> spChild);
-  ~AAFContainment();
+class EPCastException : public AnalyzerException {
 
-  bool Visit(shared_ptr<Visitor> spVisitor);
-    virtual shared_ptr<Edge> CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const;
+  public:
 
- private:
-
-  // prohibited
-  AAFContainment();
-  AAFContainment( const AAFContainment& );
-  AAFContainment& operator=( const AAFContainment& );
+    EPCastException( const wchar_t* what );
+    virtual ~EPCastException() throw();
+    
+  private:
+  
+    // prohibited
+    EPCastException();
+    EPCastException& operator=( const EPCastException& );
+    
 };
 
 } // end of namespace diskstream
 
-#endif
+#endif /*__EPCastException_h_*/

@@ -315,6 +315,9 @@ Requirements Tested:
 		The MobSlot::Name property shall be a valid name identifying the essence
 		track.  Where multiple essence tracks are exported, each shall have a
 		different Name.
+	REQ_EP_161 (11.1)
+		The DefinitionObject::Name property of all DefinitionObjects in the
+		Dictionary shall be a valid, meaningful name.
 Warn Conditions:
 	NONE
 Fail Conditions:
@@ -331,6 +334,8 @@ Fail Conditions:
 	REQ_EP_086 - Fail if the mob does not have a valid name.
 	REQ_EP_101 - Fail if the MobSlot does not have a valid name.
 	REQ_EP_101 - Fail if any two essence tracks have the same name.
+	REQ_EP_161 - Fail if any DefinitionObject in the dictionary does not have
+				 a valid name.
 Issues:
 33. Essence track is not defined.  In the context of this test (REQ_EP_101) it
 	is assumed to be a MobSlot that has a Sound or Picture DataDefinition.
@@ -339,18 +344,28 @@ Issues:
 	a name valid is never determined.  Until further information is avaliable,
 	it is assumed that a name is valid if an AAF Object has a name property that
 	has been set.
+	
+46. REQ_EP_161 can not easily be regression tested as there does not appear to
+	be any way to add a DefinitionObject to the dictionary without first calling
+	its initialize method.  The initialize method will provide the
+	DefinitionObject with a valid name.
 
 Test Name:
 	EPContainedTrackTest
 Description:
-	Visit Top-Level Compositions, Tape and File Sources to ensure that they
-	contain the necessary tracks.
+	Make sure that mobs contain all the tracks that they must contain.
 Requirements Tested:
 	REQ_EP_028 (6.3)
 		A top-level composition shall contain one or more timecode tracks and
 		include a Primary timecode track.  Timecode tracks shall use the
 		MobSlot::PhysicalTrackNumber property to distinguish their type, as
 		shown in Section 6.3 of the AAF Edit Protocol.
+	REQ_EP_037 (6.5)
+		Each essence track of a sub-clip composition shall contain exactly one
+		SourceClip.
+	REQ_EP_046 (6.6)
+		Each essence track of an adjusted-clip composition shall contain exactly
+		one OperationGroup.
 	REQ_EP_082 (6.12)
 		Timecode tracks in a tape SourceMob shall use the
 		MobSlot::PhysicalTrackNumber property to distinguish their type, as
@@ -372,6 +387,9 @@ Fail Conditions:
 	REQ_EP_028 - Fail if a PhysicalTrackNumber in the table is used on more
 				 than one timecode track.
 	REQ_EP_028 - Fail if there is no Primary Timecode Track.
+	REQ_EP_037 - Fail if the mob does not have exactly one SourceClip object.
+	REQ_EP_046 - Fail if the mob does not have exactly one OperationGroup
+				 object.
 	REQ_EP_082 - Fail if the mob has any timecode tracks with no
 				 PhysicalTrackNumber property.
 	REQ_EP_082 - Fail if there is a timecode track with a PhysicalTrackNumber
@@ -419,36 +437,12 @@ Issues:
     are legal.  Until further information is avaliable, it is assumed that they
     are illegal.
     
-27. Timecode track is not defined.  It is assumed to be a TimelineMobSlot with
-    a Timecode segment.
+27. Timecode track is not defined.  It is assumed to be a MobSlot where
+	IsTimecodeType is true.
     
-28. Edgecode track is not defined.  It is assumed to be a TimelineMobSlot with
-    an Edgecode segment.
+28. Edgecode track is not defined.  It is assumed to be a MobSlot where
+    IsEdgecodeType is true.
 
-Test Name:
-	EPTrackContentsTest
-Description:
-	Visit mobs and ensure that the tracks within have valid contents.
-Requirements Tested:
-	REQ_EP_037 (6.5)
-		Each essence track of a sub-clip composition shall contain exactly one
-		SourceClip.
-	REQ_EP_046 (6.6)
-		Each essence track of an adjusted-clip composition shall contain exactly
-		one OperationGroup.
-	REQ_EP_103 (7.6)
-		The MobSlot::PhysicalTrackNumber property shall be specified for essence
-		MobSlots within the following kinds of Mobs: CompositionMob, MasterMob,
-		recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
-Warn Conditions:
-	NONE
-Fail Conditions:
-	REQ_EP_037 - Fail if the mob does not have exactly one SourceClip object.
-	REQ_EP_046 = Fail if the mob does not have exactly one OperationGroup
-				 object.
-	REQ_EP_103 - Fail if the mob has an essence track without a
-				 PhysicalTrackNumber property specified.
-Issues:
 30. REQ_EP_037 states each essence track of a sub-clip composition shall contain
     exactly one SourceClip - what about sequences of one SourceClip? Currently, 
     sequences are not accepted.
@@ -456,7 +450,22 @@ Issues:
 31. REQ_EP_046 states each essence track of an adjusted-clip composition shall
     contain exactly one OperationGroup - what about sequence of one
 	OperationGroup?  Currently sequences are not accepted.
-	
+
+Test Name:
+	EPTrackContentsTest
+Description:
+	Visit mobs and ensure that the tracks within have valid contents.
+Requirements Tested:
+	REQ_EP_103 (7.6)
+		The MobSlot::PhysicalTrackNumber property shall be specified for essence
+		MobSlots within the following kinds of Mobs: CompositionMob, MasterMob,
+		recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+Warn Conditions:
+	NONE
+Fail Conditions:
+	REQ_EP_103 - Fail if the mob has an essence track without a
+				 PhysicalTrackNumber property specified.
+Issues:
 33. Essence track is not defined.  In the context of this test (REQ_EP_103) it
 	is assumed to be a MobSlot that has a Sound or Picture DataDefinition.
 
@@ -543,8 +552,7 @@ Issues:
 Test Name:
 	EPEditRateTest
 Description:
-	Visit all mobs and make sure the tracks contained within have valid edit
-	and sample rates.
+	Make sure that all tracks have valid contents.
 Requirements Tested:
 	REQ_EP_091 (7.1)
 		The edit rate value shall be equivalent to the values in the table in
@@ -575,8 +583,8 @@ Fail Conditions:
 				 than its sample rate.
 	REQ_EP_100 - Fail if a video track is a static or unknown type of MobSlot.
 Issues:
-33. Essence track is not defined.  It is assumed to be a MobSlot that has an
-    Sound or Picture DataDefinition.
+33. Essence track is not defined.  In the context of this test it is assumed to,
+	be a MobSlot that has an Sound or Picture DataDefinition.
     
 34. REQ_EP_091 states that the edit rate of an essence track must be equivalent
     to value in the table.  However, StaticMobSlots do not have edit rates.

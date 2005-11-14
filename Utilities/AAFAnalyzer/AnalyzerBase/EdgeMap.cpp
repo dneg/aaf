@@ -109,12 +109,12 @@ void EdgeMap::DecorateEdge(shared_ptr<Node> decoratedNode)
             {
                 if ( _children[cid]->at(j)->GetParentNode()->GetLID() == id )
                 {
-                    shared_ptr<Edge> decoratedChildEdge( new Edge( decoratedNode, childNode ) );
+                    shared_ptr<Edge> decoratedChildEdge( _children[cid]->at(j)->CreateNewEdge( decoratedNode, childNode ) );
                     _children[cid]->at(j) = decoratedChildEdge;
                     break;
                 }
             }
-            shared_ptr<Edge> decoratedEdge( new Edge( decoratedNode, childNode ) );
+            shared_ptr<Edge> decoratedEdge( _parents[id]->at(i)->CreateNewEdge( decoratedNode, childNode ) );
             _parents[id]->at(i) = decoratedEdge;
         }
 
@@ -131,12 +131,12 @@ void EdgeMap::DecorateEdge(shared_ptr<Node> decoratedNode)
             {
                 if ( _parents[pid]->at(j)->GetChildNode()->GetLID() == id )
                 {
-                    shared_ptr<Edge> decoratedParentEdge( new Edge( parentNode, decoratedNode ) );
+                      shared_ptr<Edge> decoratedParentEdge( _parents[pid]->at(j)->CreateNewEdge( parentNode, decoratedNode ) );
                     _parents[pid]->at(j) = decoratedParentEdge;
                     break;
                 }
             }
-            shared_ptr<Edge> decoratedEdge( new Edge( parentNode, decoratedNode ) );
+              shared_ptr<Edge> decoratedEdge( _children[id]->at(i)->CreateNewEdge( parentNode, decoratedNode ) );
             _children[id]->at(i) = decoratedEdge;
         }
     }

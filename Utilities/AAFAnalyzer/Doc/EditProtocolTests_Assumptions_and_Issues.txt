@@ -150,11 +150,11 @@
     are legal.  Until further information is avaliable, it is assumed that they
     are illegal.
     
-27. Timecode track is not defined.  It is assumed to be a TimelineMobSlot with
-    a Timecode segment.
+27. Timecode track is not defined.  It is assumed to be a MobSlot where
+	IsTimecodeType is true.
     
-28. Edgecode track is not defined.  It is assumed to be a TimelineMobSlot with
-    an Edgecode segment.
+28. Edgecode track is not defined.  It is assumed to be a MobSlot where
+    IsEdgecodeType is true.
     
 29. The legal layout of a derivation chain is not specified in test, only in
     the diagram.
@@ -240,3 +240,8 @@
 45. How do you acuratley check that a file exists (ie. it is insufficient to
     check if the file can be open using an ifstream) in a platform independant
     fashion?
+    
+46. REQ_EP_161 can not easily be regression tested as there does not appear to
+	be any way to add a DefinitionObject to the dictionary without first calling
+	its initialize method.  The initialize method will provide the
+	DefinitionObject with a valid name.

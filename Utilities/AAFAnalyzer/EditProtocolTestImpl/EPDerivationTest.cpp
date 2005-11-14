@@ -71,18 +71,6 @@ const wchar_t* TEST_DESC = L"Verify the correctness of mob derivation chains.";
 //
 // These conventions are implemented using the statemachine implemented
 // by DerivationChainStateMachine.
-//
-// Pending the implementation of the state machine, we simple verify
-// that the root compositions are in top-level.
-//
-// About the EdgeVisit methods: To visit all mobs in the derivation
-// chain we must follow containment edges, and mob reference edges.
-// The base class follows these by default so we do nothing here. We do
-// not, however, want to follow slot references or component
-// references. Doing so would be useless because we'd miss the
-// referenced mob object, further, it would be redundant if we are
-// also folloing the mob reference.
-
 
 class MobChainVisitor : public EPTypedVisitor
 {
@@ -106,52 +94,40 @@ public:
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition>& node )
   {
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    return this->VisitMobWithUsageCode( axCompMob, L"Top Level Composition" );
+    return this->VisitMobWithUsageCode( axCompMob, node.GetLID(), EPTopLevelComposition::GetName() );
   }
   
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPLowerLevelComposition>& node )
   {
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    return this->VisitMobWithUsageCode( axCompMob, L"Lower Level Composition" );
+    return this->VisitMobWithUsageCode( axCompMob, node.GetLID(), EPLowerLevelComposition::GetName() );
   }
   
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node )
   {
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    return this->VisitMobWithUsageCode( axCompMob, L"Sub-Clip Composition" );
+    return this->VisitMobWithUsageCode( axCompMob, node.GetLID(), EPSubClipComposition::GetName() );
   }
   
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node )
   {
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    return this->VisitMobWithUsageCode( axCompMob, L"Adjusted Clip Composition" );
+    return this->VisitMobWithUsageCode( axCompMob, node.GetLID(), EPAdjustedClipComposition::GetName() );
   }
   
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPTemplateClip>& node )
   {
     AxMasterMob axMastMob( node.GetAAFObjectOfType() );
-    return this->VisitMobWithUsageCode( axMastMob, L"Template Clip" );
+    return this->VisitMobWithUsageCode( axMastMob, node.GetLID(), EPTemplateClip::GetName() );
   }
   
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPClip>& node )
   {
+       
     AxMasterMob axMastMob( node.GetAAFObjectOfType() );
-    AxString nodeName;
-    try
-    {
-      nodeName = axMastMob.GetName();
-    }
-    catch ( const AxExHResult& ex )
-    {
-      if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-      {
-        nodeName = L"Unnamed Clip";
-      }
-      else
-      {
-        throw ex;
-      }
-    }
+    
+    AxString nodeName = this->GetMobName( axMastMob, EPClip::GetName() );
+    
     AxString detailMsg;
     bool successfulTransition = false;
     vector<shared_ptr<const Requirement> > failingReqIds;
@@ -164,37 +140,51 @@ public:
       {
         _spResult->SetRequirementStatus( TestResult::FAIL, failingReqIds.at( i ) );
       }
-      _spResult->SetExplanation( L"Clip \"" + nodeName + L"\" is out of place in the derrivation chain." );
+      _spResult->SetExplanation( nodeName + L" is out of place in the derrivation chain." );
       _spResult->SetResult( TestResult::FAIL );
+      return false;
     }
 
-    return successfulTransition;
+    //If this node has already been visited, and this visit resulted in a
+    //successful transition, all nodes that follow on the derivation chain must
+    //be in the correct sequence, therefore, the traversal of this part of the
+    //derivation chain can be terminated.
+    
+    Node::LID lid = node.GetLID();
+    
+    if ( this->HaveVisited( lid ) )
+    {
+        return false;
+    }
+    this->RecordVisit( lid );
+    
+    return true;
 
   }
   
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node )
   {
-    return this->VisitMobWithDescriptor( node, L"File Source" );
+    return this->VisitMobWithDescriptor( node, EPFileSource::GetName() );
   }
   
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRecordingSource>& node )
   {
-    return this->VisitMobWithDescriptor( node, L"Recording Source" );
+    return this->VisitMobWithDescriptor( node, EPRecordingSource::GetName() );
   }
   
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node )
   {
-    return this->VisitMobWithDescriptor( node, L"Import Source" );
+    return this->VisitMobWithDescriptor( node, EPImportSource::GetName() );
   }
   
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node )
   {
-    return this->VisitMobWithDescriptor( node, L"Tape Source" );
+    return this->VisitMobWithDescriptor( node, EPTapeSource::GetName() );
   }
   
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node )
   {
-    return this->VisitMobWithDescriptor( node, L"Film Source" );
+    return this->VisitMobWithDescriptor( node, EPFilmSource::GetName() );
   }
   
   virtual bool PreOrderVisit( AAFTypedObjNode<IAAFSourceClip>& node )
@@ -254,9 +244,22 @@ public:
         }
       }
       _spResult->SetExplanation( L"Source Clip is out of place in the derrivation chain." );
+      return false;
     }
     
-    return successfulTransition;
+    //If this node has already been visited, and this visit resulted in a
+    //successful transition, all nodes that follow on the derivation chain must
+    //be in the correct sequence, therefore, the traversal of this part of the
+    //derivation chain can be terminated.
+    
+    Node::LID lid = node.GetLID();
+    
+    if ( this->HaveVisited( lid ) )
+    {
+        return false;
+    }
+    
+    return true;
 
   }
 
@@ -282,11 +285,21 @@ public:
     return false;
   }
 
-
   virtual bool PreOrderVisit( AAFTypedObjNode<IAAFSourceMob>& node )
   {
     AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
     AxString nodeName = this->GetMobName( axSrcMob, L"Source Mob" );
+    _spResult->AddDetail( nodeName + L" does not have an Edit Protocol material type." );
+    _spResult->SetExplanation( nodeName + L" is out of place in the derrivation chain." );
+    _spResult->SetResult( TestResult::FAIL );
+
+    return false;
+  }
+  
+  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFMob>& node )
+  {
+    AxMob axMob( node.GetAAFObjectOfType() );
+    AxString nodeName = this->GetMobName( axMob, L"Mob" );
     _spResult->AddDetail( nodeName + L" does not have an Edit Protocol material type." );
     _spResult->SetExplanation( nodeName + L" is out of place in the derrivation chain." );
     _spResult->SetResult( TestResult::FAIL );
@@ -329,17 +342,12 @@ public:
     
     return true;
   }
-  
-  virtual bool EdgeVisit(AAFComponentReference& edge)
+ 
+  virtual bool EdgeVisit(AAFMobReference& edge)
   {
-    return false;
+    return true;
   }
 
-  virtual bool EdgeVisit(AAFSlotReference& edge)
-  {
-    return false;
-  }
- 
   shared_ptr<DetailLevelTestResult> GetResult()
   {
     return _spResult;
@@ -367,7 +375,7 @@ private:
     
   }
   
-  bool VisitMobWithUsageCode( AxMob& axMob, const AxString& type )
+  bool VisitMobWithUsageCode( AxMob& axMob, Node::LID lid, const AxString& type )
   {
     AxString nodeName = this->GetMobName( axMob, type );
 
@@ -385,8 +393,21 @@ private:
       }
       _spResult->SetExplanation( nodeName + L" is out of place in the derrivation chain." );
       _spResult->SetResult( TestResult::FAIL );
+      return false;
     }
-    return successfulTransition;
+    
+    //If this node has already been visited, and this visit resulted in a
+    //successful transition, all nodes that follow on the derivation chain must
+    //be in the correct sequence, therefore, the traversal of this part of the
+    //derivation chain can be terminated.
+       
+    if ( this->HaveVisited( lid ) )
+    {
+        return false;
+    }
+    
+    return true;
+    
   }
   
   bool VisitMobWithDescriptor( AAFTypedObjNode<IAAFSourceMob>& node, const AxString& type )
@@ -411,9 +432,23 @@ private:
       }
       _spResult->SetExplanation( nodeName + L" is out of place in the derrivation chain." );
       _spResult->SetResult( TestResult::FAIL );
+      return false;
     }
 
-    return successfulTransition;
+    //If this node has already been visited, and this visit resulted in a
+    //successful transition, all nodes that follow on the derivation chain must
+    //be in the correct sequence, therefore, the traversal of this part of the
+    //derivation chain can be terminated.
+
+    Node::LID lid = node.GetLID();
+       
+    if ( this->HaveVisited( lid ) )
+    {
+        return false;
+    }
+    
+    return true;
+    
   }
 
   bool PostVisitMob( AxMob& axMob, const AxString& type )

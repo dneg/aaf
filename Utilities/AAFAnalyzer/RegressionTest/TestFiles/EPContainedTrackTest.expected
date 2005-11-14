@@ -4,7 +4,7 @@
         Reason: Test Failed - See "Edit Protocol Contained Track Visitor" Visitor for details
         Passing Requirements: None
         Warning Requirements: None
-        Failing Requirements: REQ_EP_028; REQ_EP_082; REQ_EP_087
+        Failing Requirements: REQ_EP_028; REQ_EP_037; REQ_EP_046; REQ_EP_082; REQ_EP_087
 
             Name:   Edit Protocol Contained Track Visitor
             Desc:   Visit derivation chain mateiral and ensure they contain the required tracks.
@@ -12,7 +12,7 @@
             Reason: 
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_028; REQ_EP_082; REQ_EP_087
+            Failing Requirements: REQ_EP_028; REQ_EP_037; REQ_EP_046; REQ_EP_082; REQ_EP_087
 
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
@@ -349,4 +349,68 @@
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_087
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Sub-Clip Composition: "Sub-Clip - Audio Timeline Operation Group" does not have exactly one SourceClip.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_037
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Sub-Clip Composition: "Sub-Clip - Audio Static Operation Group" does not have exactly one SourceClip.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_037
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Sub-Clip Composition: "Sub-Clip - Video Timeline Operation Group" does not have exactly one SourceClip.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_037
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Sub-Clip Composition: "Sub-Clip - Video Static Operation Group" does not have exactly one SourceClip.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_037
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Adjusted-Clip Composition: "Adjusted Clip - Audio Timeline Source Clip" does not have exactly one OperationGroup.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_046
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Adjusted-Clip Composition: "Adjusted Clip - Audio Static Source Clip" does not have exactly one OperationGroup.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_046
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Adjusted-Clip Composition: "Adjusted Clip - Video Timeline Source Clip" does not have exactly one OperationGroup.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_046
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Adjusted-Clip Composition: "Adjusted Clip - Video Static Source Clip" does not have exactly one OperationGroup.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_046
 

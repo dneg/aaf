@@ -34,12 +34,13 @@ class Node;
 class Edge
 {
  public:
-  Edge(shared_ptr<Node> spParent, shared_ptr<Node> spChild);
+  Edge( shared_ptr<Node> spParent, shared_ptr<Node> spChild );
   virtual ~Edge();
 
   virtual bool Visit(shared_ptr<Visitor> spVisitor);
   shared_ptr<Node> GetParentNode() const;
   shared_ptr<Node> GetChildNode() const;
+  virtual shared_ptr<Edge> CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const;
 
  private:
   shared_ptr<Node> _spParentNode;

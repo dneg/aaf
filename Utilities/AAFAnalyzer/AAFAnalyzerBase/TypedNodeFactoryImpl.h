@@ -57,6 +57,21 @@ class TypedNodeFactoryImpl : public TypedNodeFactory
 								   AxObject(spObj).GetClassName()));
     return spNode;
   }
+  
+ shared_ptr<Node> CreateNodeFrom( shared_ptr<AAFObjNode> spNode )
+ {
+    IAAFObjectSP spObj = spNode->GetAAFObject();
+    IAAFSmartPointer<AAFObjType> spObjOfType;
+
+    // Cast spObj from IAAFObjectSP to a smart pointer of type
+    // AAFObjType. AxQueryInterface does this without the complexity
+    // of calling QueryInterface directly.  It will throw an exception
+    // if the cast fails.
+    AxQueryInterface( spObj, spObjOfType );
+
+    shared_ptr<Node> spNewNode( new AAFTypedObjNodeImpl<AAFObjType>( spObjOfType, spNode ) );
+    return spNewNode;
+ }
 
  private:
 

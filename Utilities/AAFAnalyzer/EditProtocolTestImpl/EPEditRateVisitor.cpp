@@ -56,8 +56,9 @@ namespace aafanalyzer {
 
 using namespace boost;
  
-EPEditRateVisitor::EPEditRateVisitor( wostream& log )
-    : _log(log), 
+EPEditRateVisitor::EPEditRateVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap )
+    : _log(log),
+      _spEdgeMap( spEdgeMap ),
       _spResult( new DetailLevelTestResult( L"Edit Protocol Edit Rate Visitor",
                                             L"Ensure all essence tracks have valid edit rates.",
                                             L"", // explain
@@ -74,137 +75,172 @@ EPEditRateVisitor::~EPEditRateVisitor()
 {
 }
 
-bool EPEditRateVisitor::PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node )
+bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPAudioTrack>& node )
 {
-    AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    return this->VisitMob( axCompMob );
+    //Video Specific Processing
+    AxTimelineMobSlot axMobSlot( node.GetAAFObjectOfType() );
+    aafRational_t editRate = axMobSlot.GetEditRate();
+    VisitAudioTrack( node.GetEPObject(), editRate );
+
+    //General Processing
+    shared_ptr<EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFTimelineMobSlot, EPEssenceTrack>() );
+    return this->PreOrderVisit( *spGeneric );
 }
 
-bool EPEditRateVisitor::PreOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node )
+bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPVideoTrack>& node )
 {
-    AxMasterMob axMastMob( node.GetAAFObjectOfType() );
-    return this->VisitMob( axMastMob );
-}
+    bool testPassed = true;
 
-bool EPEditRateVisitor::PreOrderVisit( AAFTypedObjNode<IAAFSourceMob>& node )
-{
-    AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
-    return this->VisitMob( axSrcMob );
-}
-       
-bool EPEditRateVisitor::EdgeVisit(AAFComponentReference& edge)
-{
-    return false;
-}
-
-bool EPEditRateVisitor::EdgeVisit(AAFSlotReference& edge)
-{
-    return false;
-}
+    //General Processing
+    shared_ptr<EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFTimelineMobSlot, EPEssenceTrack>() );
+    testPassed = this->PreOrderVisit( *spGeneric );
     
+    //Video Specific Processing
+    AxTimelineMobSlot axMobSlot( node.GetAAFObjectOfType() );
+    aafRational_t editRate = axMobSlot.GetEditRate();
+    return VisitVideoTrack( node.GetEPObject(), editRate ) && testPassed;
+}
+
+bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack>& node )
+{
+    AxTimelineMobSlot axMobSlot( node.GetAAFObjectOfType() );
+    aafRational_t editRate = axMobSlot.GetEditRate();
+    AxString mobName = this->GetMobName( _spEdgeMap, node );
+    return TestEditRate( editRate, axMobSlot, mobName );
+}
+
+bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPAudioTrack>& node )
+{
+    //Audio Specific Processing
+    _staticAudioTracks++;
+    
+    //General Processing
+    shared_ptr<EPTypedObjNode<IAAFStaticMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFStaticMobSlot, EPEssenceTrack>() );
+    return this->PreOrderVisit( *spGeneric );
+}
+
+bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPVideoTrack>& node )
+{
+    //Video Specific Processing
+    wstringstream ss;
+    
+    AxStaticMobSlot axMobSlot( node.GetAAFObjectOfType() );
+    aafSlotID_t slotId = axMobSlot.GetSlotID();
+    AxString mobName = this->GetMobName( _spEdgeMap, node );
+
+    ss << L"Video Track in MobSlot with ID = " << slotId << L" of " << mobName
+       << L" is in a StaticMobSlot and does not have an edit rate to compare with a sample rate.";
+    _spResult->AddInformationResult( L"REQ_EP_100", ss.str().c_str(), TestResult::FAIL );
+    
+    //General Processing
+    shared_ptr<EPTypedObjNode<IAAFStaticMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFStaticMobSlot, EPEssenceTrack>() );
+    return this->PreOrderVisit( *spGeneric );
+}
+
+bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPEssenceTrack>& node )
+{
+    //Don't bother getting the static mob slot because it does not have
+    //an edit rate.
+    wstringstream ss;
+    
+    AxStaticMobSlot axMobSlot( node.GetAAFObjectOfType() );
+    aafSlotID_t slotId = axMobSlot.GetSlotID();
+    AxString mobName = this->GetMobName( _spEdgeMap, node );
+    
+    ss << L"Mob Slot with ID = " << slotId << L" of " << mobName
+       << L" is a StaticMobSlot and does not have an edit rate.";
+    _spResult->AddInformationResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL );
+    return false;
+}
+
+bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPAudioTrack>& node )
+{
+    //Video Specific Processing
+    AxEventMobSlot axMobSlot( node.GetAAFObjectOfType() );
+    aafRational_t editRate = axMobSlot.GetEditRate();
+    VisitAudioTrack( node.GetEPObject(), editRate );
+
+    //General Processing
+    shared_ptr<EPTypedObjNode<IAAFEventMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFEventMobSlot, EPEssenceTrack>() );
+    return this->PreOrderVisit( *spGeneric );
+}
+
+bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPVideoTrack>& node )
+{
+    bool testPassed = true;
+
+    //General Processing
+    shared_ptr<EPTypedObjNode<IAAFEventMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFEventMobSlot, EPEssenceTrack>() );
+    testPassed = this->PreOrderVisit( *spGeneric );
+    
+    //Video Specific Processing
+    AxEventMobSlot axMobSlot( node.GetAAFObjectOfType() );
+    aafRational_t editRate = axMobSlot.GetEditRate();
+    return VisitVideoTrack( node.GetEPObject(), editRate ) && testPassed;
+}
+
+bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPEssenceTrack>& node )
+{
+    AxEventMobSlot axMobSlot( node.GetAAFObjectOfType() );
+    aafRational_t editRate = axMobSlot.GetEditRate();
+    AxString mobName = this->GetMobName( _spEdgeMap, node );
+    return TestEditRate( editRate, axMobSlot, mobName );
+}
+
+bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPAudioTrack>& node )
+{
+    //Audio Specific Processing
+    _staticAudioTracks++;
+    
+    //General Processing
+    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
+    return this->PreOrderVisit( *spGeneric );
+}
+
+bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPVideoTrack>& node )
+{
+    //Video Specific Processing
+    wstringstream ss;
+
+    AxMobSlot axMobSlot( node.GetAAFObjectOfType() );
+    aafSlotID_t slotId = axMobSlot.GetSlotID();
+    AxString mobName = this->GetMobName( _spEdgeMap, node );
+
+    ss << L"Video Track in MobSlot with ID = " << slotId << L" of " << mobName
+       << L" is in an unknown type of MobSlot and does not have an edit rate that can be accessed to compare with a sample rate.";
+    _spResult->AddInformationResult( L"REQ_EP_100", ss.str().c_str(), TestResult::FAIL );
+    
+    //General Processing
+    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
+    return this->PreOrderVisit( *spGeneric );
+}
+
+bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEssenceTrack>& node )
+{
+    //This is an unknown type of mob slot so there is no way to get an
+    //edit rate
+    wstringstream ss;
+    
+    AxMobSlot axMobSlot( node.GetAAFObjectOfType() );
+    aafSlotID_t slotId = axMobSlot.GetSlotID();
+    AxString mobName = this->GetMobName( _spEdgeMap, node );
+    
+    ss << L"Mob Slot with ID = " << slotId << L" of " << mobName
+       << L" is not a known type of MobSlot and its edit rate cannot be accessed.";
+    _spResult->AddInformationResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL );
+    return false;
+}
+
  shared_ptr<DetailLevelTestResult> EPEditRateVisitor::GetResult()
  {
     return _spResult;
  }
-    
-bool EPEditRateVisitor::VisitMob( AxMob& axMob )
+
+bool EPEditRateVisitor::TestEditRate( aafRational_t editRate, AxMobSlot& axMobSlot, const AxString& mobName )
 {
 
-    AxString mobName = this->GetMobName( axMob, L"Mob" );
-    
-    shared_ptr<TrackSet> essenceTracks = this->GetEssenceTracks( axMob );
-    TrackSet::const_iterator iter;
-    
-    bool testPassed = true;
-    
-    for ( iter = essenceTracks->begin(); iter != essenceTracks->end(); iter++ )
-    {
-        
-        //Attempt to convert the essence track to an audio and video track
-        //(one will return a null pointer because the data def cannot be sound
-        // and picture).
-        shared_ptr<EPAudioTrack> spAudioTrack( EPAudioTrack::CreateAudioTrack( **iter ) );
-        shared_ptr<EPVideoTrack> spVideoTrack( EPVideoTrack::CreateVideoTrack( **iter ) );
-        
-        aafSlotID_t slotId = (*iter)->GetSlotID();
-        AxClassDef clsDef( (*iter)->GetDefinition() );
-        if ( this->IsType( clsDef, kAAFClassID_TimelineMobSlot, kAAFClassID_MobSlot ) )
-        {
-            AxTimelineMobSlot axMobSlot( AxQueryInterface<IAAFMobSlot, IAAFTimelineMobSlot>( **iter ) );
-            aafRational_t editRate = axMobSlot.GetEditRate();
-            AxDataDef axDataDef( axMobSlot.GetDataDef() );
-            testPassed = TestEditRate( editRate, axDataDef, mobName, slotId );
-            if ( spAudioTrack )
-            {
-                VisitAudioTrack( spAudioTrack, editRate );
-            }
-            else if ( spVideoTrack )
-            {
-                testPassed = VisitVideoTrack( spVideoTrack, editRate ) && testPassed;
-            }
-        }
-        else if ( this->IsType( clsDef, kAAFClassID_StaticMobSlot, kAAFClassID_MobSlot ) )
-        {
-            //Don't bother getting the static mob slot because it does not have
-            //an edit rate.
-            wstringstream ss;
-            ss << L"Mob Slot with ID = " << slotId << L" of " << mobName
-               << L" is a StaticMobSlot and does not have an edit rate.";
-            _spResult->AddInformationResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL );
-            if ( spAudioTrack )
-            {
-                _staticAudioTracks++;
-            }
-            else if ( spVideoTrack )
-            {
-                ss.str( L"" );
-                ss << L"Video Track in MobSlot with ID = " << slotId << L" of " << mobName
-                   << L" is in a StaticMobSlot and does not have an edit rate to compare with a sample rate.";
-                _spResult->AddInformationResult( L"REQ_EP_100", ss.str().c_str(), TestResult::FAIL );
-            }
-        }
-        else if ( this->IsType( clsDef, kAAFClassID_EventMobSlot, kAAFClassID_MobSlot ) )
-        {
-            AxEventMobSlot axMobSlot( AxQueryInterface<IAAFMobSlot, IAAFEventMobSlot>( **iter ) );
-            aafRational_t editRate = axMobSlot.GetEditRate();
-            AxDataDef axDataDef( axMobSlot.GetDataDef() );
-            testPassed = TestEditRate( editRate, axDataDef, mobName, slotId );
-            if ( spAudioTrack )
-            {
-                VisitAudioTrack( spAudioTrack, editRate );
-            }
-            else if ( spVideoTrack )
-            {
-                testPassed = VisitVideoTrack( spVideoTrack, editRate ) && testPassed;
-            }
-        }
-        else
-        {
-            //This is an unknown type of mob slot so there is no way to get an
-            //edit rate
-            wstringstream ss;
-            ss << L"Mob Slot with ID = " << slotId << L" of " << mobName
-               << L" is not a known type of MobSlot and its edit rate cannot be accessed.";
-            _spResult->AddInformationResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL );
-            if ( spAudioTrack )
-            {
-                _unknownAudioTracks++;
-            }
-            else if ( spVideoTrack )
-            {
-                ss.str( L"" );
-                ss << L"Video Track in MobSlot with ID = " << slotId << L" of " << mobName
-                   << L" is in an unknown type of MobSlot and does not have an edit rate that can be accessed to compare with a sample rate.";
-                _spResult->AddInformationResult( L"REQ_EP_100", ss.str().c_str(), TestResult::FAIL );
-            }
-        }
-    }
-
-    return testPassed;
-}
-
-bool EPEditRateVisitor::TestEditRate( aafRational_t editRate, AxDataDef& axDataDef, const AxString& mobName, aafSlotID_t slotId )
-{
+    AxDataDef axDataDef( axMobSlot.GetDataDef() );
+    aafSlotID_t slotId = axMobSlot.GetSlotID();
 
     wstringstream ss;
     
@@ -264,7 +300,7 @@ bool EPEditRateVisitor::TestEditRate( aafRational_t editRate, AxDataDef& axDataD
 
 void EPEditRateVisitor::VisitAudioTrack( shared_ptr<EPAudioTrack> spTrack, aafRational_t editRate )
 {
-
+    
     RationalKey erKey( editRate.numerator, editRate.denominator );
 
     if ( _audioEditRates.find( erKey ) == _audioEditRates.end() )
@@ -297,13 +333,13 @@ bool EPEditRateVisitor::VisitVideoTrack( shared_ptr<EPVideoTrack> spTrack, aafRa
     AxSourceMob axSrcMob( AxQueryInterface<IAAFMob, IAAFSourceMob>( spTrack->GetMob() ) );
     AxFileDescriptor axFileDes( AxQueryInterface<IAAFEssenceDescriptor, IAAFFileDescriptor>( axSrcMob.GetEssenceDescriptor() ) );
     aafRational_t sampleRate = axFileDes.GetSampleRate();
-    
+
     double dEditRate = (double)editRate.numerator/(double)editRate.denominator;
     double dSampleRate = (double)sampleRate.numerator/(double)sampleRate.denominator;
     
     if ( dEditRate > dSampleRate )
     {
-        AxString mobName = this->GetMobName( axSrcMob, L"File Source Mob" );
+        AxString mobName = this->GetMobName( axSrcMob, EPFileSource::GetName() );
         wstringstream ss;
         ss << L"Video Track in MobSlot with ID = "
            << spTrack->GetMobSlot().GetSlotID()

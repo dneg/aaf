@@ -155,6 +155,7 @@ void CheckRegistries()
     else 
     {
         cout << "Test 1 failed" << endl;
+        assert( false );
     }
     
     /*Test 2:
@@ -170,6 +171,7 @@ void CheckRegistries()
         rReg.Register( req01 );
         cout << "Exception should have been thrown when re-registering requirement." << endl;
         cout << "Test 2 failed" << endl;
+        assert( false );
     } 
     catch ( RequirementRegistryException ex ) 
     {
@@ -191,6 +193,7 @@ void CheckRegistries()
         rReg.GetRequirement(temp);
         cout << "Exception should have been thrown when searching for an unregistered requirement." << endl;
         cout << "Test 3 failed" << endl;
+        assert( false );
     } 
     catch ( RequirementRegistryException ex ) 
     {
@@ -255,6 +258,7 @@ void CheckRegistries()
     else 
     {
         cout << "Test 4 failed" << endl;
+        assert( false );
     }
     
     /*Test 5:
@@ -270,6 +274,7 @@ void CheckRegistries()
         TestInfoRegistrar<Test1Stub> tir;
         cout << "Exception should have been thrown when re-registering requirement." << endl;
         cout << "Test 5 failed" << endl;
+        assert( false );
     } 
     catch ( TestRegistryException ex ) 
     {
@@ -292,6 +297,7 @@ void CheckRegistries()
         tReg.GetConstRequirementsForTest(L"Unregistered");
         cout << "Exception should have been thrown when searching for an unregistered test." << endl;
         cout << "Test 6 failed" << endl;
+        assert( false );
     } 
     catch ( TestRegistryException ex ) 
     {
@@ -516,6 +522,7 @@ void CheckTestResultRequirements()
     else 
     {
         cout << "Test 1 failed" << endl;
+        assert( false );
     }
     
     /*Test 2:
@@ -592,6 +599,7 @@ void CheckTestResultRequirements()
     else 
     {
         cout << "Test 2 failed" << endl;
+        assert( false );
     }
     
     /*Test 3:
@@ -642,6 +650,7 @@ void CheckTestResultRequirements()
     else 
     {
         cout << "Test 3 failed" << endl;
+        assert( false );
     }
      
     /*Test Level Test Result:
@@ -742,6 +751,7 @@ void CheckTestResultRequirements()
     else 
     {
         cout << "Test 4 failed" << endl;
+        assert( false );
     }
 
     /*Test 5:
@@ -758,6 +768,7 @@ void CheckTestResultRequirements()
         tltr1->AppendSubtestResult(dltr100);
         cout << "DLTR100 incorrectly appended to TLTR1" << endl;
         cout << "Test 5 failed" << endl;
+        assert( false );
     }
     catch ( RequirementMismatchException ex )
     {
@@ -827,6 +838,7 @@ void CheckTestResultRequirements()
     else 
     {
         cout << "Test 6 failed" << endl;
+        assert( false );
     }
      
     /*Test 7:
@@ -894,6 +906,7 @@ void CheckTestResultRequirements()
     else 
     {
         cout << "Test 7 failed" << endl;
+        assert( false );
     }
      
     /*Test Phase Level Test Result:
@@ -955,6 +968,7 @@ void CheckTestResultRequirements()
     else 
     {
         cout << "Test 8 failed" << endl;
+        assert( false );
     }
      
     /*Test 9:
@@ -1000,6 +1014,7 @@ void CheckTestResultRequirements()
     else 
     {
         cout << "Test 9 failed" << endl;
+        assert( false );
     }
      
     /*Top Level Test Result:
@@ -1068,6 +1083,7 @@ void CheckTestResultRequirements()
     else 
     {
         cout << "Test 10 failed" << endl;
+        assert( false );
     }
 
     /*Test 11:
@@ -1115,6 +1131,7 @@ void CheckTestResultRequirements()
     else 
     {
         cout << "Test 11 failed" << endl;
+        assert( false );
     }
 
     //Test Registry
@@ -1139,9 +1156,11 @@ void CheckTestResultRequirements()
     if ( !tReg.VerifyTestResultCoverage(top) ) {
         cout << "Registry did not correctly verify complete coverage." << endl;
         cout << "Test 12 failed" << endl;
+        assert( false );
     } else if ( tReg.VerifyTestResultCoverage(topFail) ) {
         cout << "Registry incorrectly verified complete coverage." << endl;
-        cout << "Test 12 failed" << endl;        
+        cout << "Test 12 failed" << endl;    
+        assert( false );    
     } else {
         cout << "Test 12 passed" << endl;
     }

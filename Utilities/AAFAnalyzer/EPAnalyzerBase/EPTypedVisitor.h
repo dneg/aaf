@@ -45,19 +45,7 @@ namespace aafanalyzer {
 using namespace std;
 using namespace boost;
 
-class EPTopLevelComposition;
-class EPLowerLevelComposition;
-class EPSubClipComposition;
-class EPAdjustedClipComposition;
-class EPTemplateClip;
-class EPClip;
-class EPFileSource;
-class EPRecordingSource;
-class EPImportSource;
-class EPTapeSource;
-class EPFilmSource;
-class TestInfo;
-class DetailLevelTestResult;
+class EdgeMap;
 
 class EPTypedVisitor : public TypedVisitor
 {
@@ -68,44 +56,49 @@ class EPTypedVisitor : public TypedVisitor
     
   public:
   
-    typedef set<shared_ptr<AxMobSlot> > TrackSet;
+    typedef set<shared_ptr<AxMobSlot> > MobSlotSet;
   
     EPTypedVisitor();
     virtual ~EPTypedVisitor();
 
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition>& node);
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPLowerLevelComposition>& node);
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node);
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node);
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPTemplateClip>& node);
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPClip>& node);
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node);
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRecordingSource>& node);
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node);
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node);
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node);
-
-    virtual bool PostOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition>& node);
-    virtual bool PostOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPLowerLevelComposition>& node);
-    virtual bool PostOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node);
-    virtual bool PostOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node);
-    virtual bool PostOrderVisit( EPTypedObjNode<IAAFMasterMob, EPTemplateClip>& node);
-    virtual bool PostOrderVisit( EPTypedObjNode<IAAFMasterMob, EPClip>& node);
-    virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node);
-    virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRecordingSource>& node);
-    virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node);
-    virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node);
-    virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node);
-    
+    #include <EPTypedVisitor.h.gen>
+     
   protected:
 
     //Functions commonly needed by EPTypedVisitors.  Put them in the base class
     //to avoid constantly re-implementing them.
     AxString GetMobName( AxMob& axMob, const AxString& type );
+    AxString GetMobName( shared_ptr<EdgeMap> spEdgeMap, Node& node );
+    
     bool IsType( AxClassDef& clsDef, aafUID_t type, aafUID_t parentType );
-    shared_ptr<TrackSet> GetEssenceTracks( AxMob& axMob );
+
+    //TODO: These are currently only used by EPContainedTrackVisitor, they may
+    //      not be needed by any other class and therefore can be pushed down
+    //      to EPContainedTrackVisitor.  They are being left here for the time
+    //      being in case any future tests require them.
+    shared_ptr<MobSlotSet> GetEssenceTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
+    shared_ptr<MobSlotSet> GetAudioTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
+    shared_ptr<MobSlotSet> GetVideoTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
+    shared_ptr<MobSlotSet> GetTimecodeTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
+    shared_ptr<MobSlotSet> GetEdgecodeTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
     
   private:
+
+    template <typename AAFObjectType, typename EPObjectType>
+    bool ForwardPreOrderVisit( EPTypedObjNode<AAFObjectType, EPObjectType>& node )
+    {
+      shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+      shared_ptr<AAFTypedObjNode<AAFObjectType> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<AAFObjectType> >(spNode);
+      return this->PreOrderVisit( *spBaseNode );
+    }
+    
+    template <typename AAFObjectType, typename EPObjectType>
+    bool ForwardPostOrderVisit( EPTypedObjNode<AAFObjectType, EPObjectType>& node )
+    {
+      shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+      shared_ptr<AAFTypedObjNode<AAFObjectType> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<AAFObjectType> >(spNode);
+      return this->PostOrderVisit( *spBaseNode );
+    }
   
     // prohibited
     EPTypedVisitor( const EPTypedVisitor& );

@@ -21,6 +21,10 @@
 //Edit Protocol Analyzer Base files
 #include "EPTypedVisitor.h"
 
+//Analyzer Base files
+#include <DepthFirstTraversal.h>
+#include <EdgeMap.h>
+
 //Ax files
 #include <AxMob.h>
 #include <AxEx.h>
@@ -35,6 +39,334 @@
 namespace {
 
 using namespace aafanalyzer;
+
+class ParentMobVisitor : public EPTypedVisitor
+{
+    public:
+        ParentMobVisitor()
+        {}
+        
+        ~ParentMobVisitor()
+        {}
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition>& node )
+        {
+            AxCompositionMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, L"Top-Level Composition" );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPLowerLevelComposition>& node )
+        {
+            AxCompositionMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, L"Lower-Level Composition" );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node )
+        {
+            AxCompositionMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, L"Sub-Clip Composition" );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node )
+        {
+            AxCompositionMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, L"Adjusted Clip Composition" );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPTemplateClip>& node )
+        {
+            AxMasterMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, L"Template Clip" );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPClip>& node )
+        {
+            AxMasterMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, L"Clip" );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node )
+        {
+            AxSourceMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, L"File Source" );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRecordingSource>& node )
+        {
+            AxSourceMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, L"Recording Source" );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node )
+        {
+            AxSourceMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, L"Import Source" );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node )
+        {
+            AxSourceMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, L"Tape Source" );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node )
+        {
+            AxSourceMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, L"Film Source" );
+            return false;
+        }
+        
+        bool PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node )
+        {
+            AxCompositionMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, L"Composition Mob" );
+            return false;
+        }
+        
+        bool PreOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node )
+        {
+            AxMasterMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, L"Master Mob" );
+            return false;
+        }
+        
+        bool PreOrderVisit( AAFTypedObjNode<IAAFSourceMob>& node )
+        {
+            AxSourceMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, L"Source Mob" );
+            return false;
+        }
+        
+        bool PreOrderVisit( AAFTypedObjNode<IAAFMob>& node )
+        {
+            AxMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, L"Mob" );
+            return false;
+        }
+        
+        const AxString GetParentName()
+        {
+            return _parentName;
+        }
+        
+    private:
+    
+        AxString _parentName;
+    
+        // prohibited
+        ParentMobVisitor( const ParentMobVisitor& );
+        ParentMobVisitor& operator=( const ParentMobVisitor& );
+};
+
+class ChildMobSlotVisitor : public EPTypedVisitor
+{
+    public:
+        ChildMobSlotVisitor()
+            : _spEssenceTracks( new EPTypedVisitor::MobSlotSet ),
+              _spAudioTracks( new EPTypedVisitor::MobSlotSet ),
+              _spVideoTracks( new EPTypedVisitor::MobSlotSet ),
+              _spTimecodeTracks( new EPTypedVisitor::MobSlotSet ),
+              _spEdgecodeTracks( new EPTypedVisitor::MobSlotSet )
+        {}
+        
+        ~ChildMobSlotVisitor()
+        {}
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxTimelineMobSlot( node.GetAAFObjectOfType() ) );
+            _spEssenceTracks->insert( spSlot );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPAudioTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxTimelineMobSlot( node.GetAAFObjectOfType() ) );
+            _spEssenceTracks->insert( spSlot );
+            _spAudioTracks->insert( spSlot );            
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPVideoTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxTimelineMobSlot( node.GetAAFObjectOfType() ) );
+            _spEssenceTracks->insert( spSlot );
+            _spVideoTracks->insert( spSlot );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPTimecodeTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxTimelineMobSlot( node.GetAAFObjectOfType() ) );
+            _spTimecodeTracks->insert( spSlot );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPEdgecodeTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxTimelineMobSlot( node.GetAAFObjectOfType() ) );
+            _spEdgecodeTracks->insert( spSlot );
+            return false;
+        }
+
+        bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPEssenceTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxStaticMobSlot( node.GetAAFObjectOfType() ) );
+            _spEssenceTracks->insert( spSlot );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPAudioTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxStaticMobSlot( node.GetAAFObjectOfType() ) );
+            _spEssenceTracks->insert( spSlot );
+            _spAudioTracks->insert( spSlot );            
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPVideoTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxStaticMobSlot( node.GetAAFObjectOfType() ) );
+            _spEssenceTracks->insert( spSlot );
+            _spVideoTracks->insert( spSlot );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPTimecodeTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxStaticMobSlot( node.GetAAFObjectOfType() ) );
+            _spTimecodeTracks->insert( spSlot );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPEdgecodeTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxStaticMobSlot( node.GetAAFObjectOfType() ) );
+            _spEdgecodeTracks->insert( spSlot );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPEssenceTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxEventMobSlot( node.GetAAFObjectOfType() ) );
+            _spEssenceTracks->insert( spSlot );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPAudioTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxEventMobSlot( node.GetAAFObjectOfType() ) );
+            _spEssenceTracks->insert( spSlot );
+            _spAudioTracks->insert( spSlot );            
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPVideoTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxEventMobSlot( node.GetAAFObjectOfType() ) );
+            _spEssenceTracks->insert( spSlot );
+            _spVideoTracks->insert( spSlot );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPTimecodeTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxEventMobSlot( node.GetAAFObjectOfType() ) );
+            _spTimecodeTracks->insert( spSlot );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPEdgecodeTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxEventMobSlot( node.GetAAFObjectOfType() ) );
+            _spEdgecodeTracks->insert( spSlot );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEssenceTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxMobSlot( node.GetAAFObjectOfType() ) );
+            _spEssenceTracks->insert( spSlot );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPAudioTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxMobSlot( node.GetAAFObjectOfType() ) );
+            _spEssenceTracks->insert( spSlot );
+            _spAudioTracks->insert( spSlot );            
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPVideoTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxMobSlot( node.GetAAFObjectOfType() ) );
+            _spEssenceTracks->insert( spSlot );
+            _spVideoTracks->insert( spSlot );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPTimecodeTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxMobSlot( node.GetAAFObjectOfType() ) );
+            _spTimecodeTracks->insert( spSlot );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEdgecodeTrack>& node )
+        {
+            shared_ptr<AxMobSlot> spSlot( new AxMobSlot( node.GetAAFObjectOfType() ) );
+            _spEdgecodeTracks->insert( spSlot );
+            return false;
+        }
+        
+        shared_ptr<EPTypedVisitor::MobSlotSet> GetEssenceTracks()
+        {
+            return _spEssenceTracks;
+        }
+
+        shared_ptr<EPTypedVisitor::MobSlotSet> GetAudioTracks()
+        {
+            return _spAudioTracks;
+        }
+        
+        shared_ptr<EPTypedVisitor::MobSlotSet> GetVideoTracks()
+        {
+            return _spVideoTracks;
+        }
+        
+        shared_ptr<EPTypedVisitor::MobSlotSet> GetTimecodeTracks()
+        {
+            return _spTimecodeTracks;
+        }
+        
+        shared_ptr<EPTypedVisitor::MobSlotSet> GetEdgecodeTracks()
+        {
+            return _spEdgecodeTracks;
+        }
+       
+    private:
+    
+        shared_ptr<EPTypedVisitor::MobSlotSet> _spEssenceTracks;
+        shared_ptr<EPTypedVisitor::MobSlotSet> _spAudioTracks;
+        shared_ptr<EPTypedVisitor::MobSlotSet> _spVideoTracks;
+        shared_ptr<EPTypedVisitor::MobSlotSet> _spTimecodeTracks;
+        shared_ptr<EPTypedVisitor::MobSlotSet> _spEdgecodeTracks;
+        
+        // prohibited
+        ChildMobSlotVisitor( const ChildMobSlotVisitor& );
+        ChildMobSlotVisitor& operator=( const ChildMobSlotVisitor& );
+};
 
 } // end of namespace
 
@@ -54,170 +386,6 @@ EPTypedVisitor::EPTypedVisitor()
 
 EPTypedVisitor::~EPTypedVisitor()
 { 
-}
-
-/* 
- * Because we are using templates, a PreOrderVisit and a PostOrderVisit must
- * be suplied for every type of EPTypedObjNode.  If behaviour depends on the
- * type of the Mob and not the Edit Protocol material type, an identical
- * implementation would need to be provided for each material type.  Therefore,
- * make the default behaviour of all material type PreOrder and PostOrder visits
- * to be to forward on the call to a visit for the Mob type.  This behaviour
- * can be overriden in the concrete visitor.
- */
-
-bool EPTypedVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFCompositionMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFCompositionMob> >(spNode);
-    return this->PreOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPLowerLevelComposition>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFCompositionMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFCompositionMob> >(spNode);
-    return this->PreOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFCompositionMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFCompositionMob> >(spNode);
-    return this->PreOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFCompositionMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFCompositionMob> >(spNode);
-    return this->PreOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPTemplateClip>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFMasterMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFMasterMob> >(spNode);
-    return this->PreOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPClip>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFMasterMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFMasterMob> >(spNode);
-    return this->PreOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFSourceMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceMob> >(spNode);
-    return this->PreOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRecordingSource>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFSourceMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceMob> >(spNode);
-    return this->PreOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFSourceMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceMob> >(spNode);
-    return this->PreOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFSourceMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceMob> >(spNode);
-    return this->PreOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFSourceMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceMob> >(spNode);
-    return this->PreOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PostOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFCompositionMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFCompositionMob> >(spNode);
-    return this->PostOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PostOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPLowerLevelComposition>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFCompositionMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFCompositionMob> >(spNode);
-    return this->PostOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PostOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFCompositionMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFCompositionMob> >(spNode);
-    return this->PostOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PostOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFCompositionMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFCompositionMob> >(spNode);
-    return this->PostOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PostOrderVisit( EPTypedObjNode<IAAFMasterMob, EPTemplateClip>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFMasterMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFMasterMob> >(spNode);
-    return this->PostOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PostOrderVisit( EPTypedObjNode<IAAFMasterMob, EPClip>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFMasterMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFMasterMob> >(spNode);
-    return this->PostOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFSourceMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceMob> >(spNode);
-    return this->PostOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRecordingSource>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFSourceMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceMob> >(spNode);
-    return this->PostOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFSourceMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceMob> >(spNode);
-    return this->PostOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFSourceMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceMob> >(spNode);
-    return this->PostOrderVisit( *spBaseNode );
-}
-
-bool EPTypedVisitor::PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node)
-{
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-    shared_ptr<AAFTypedObjNode<IAAFSourceMob> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceMob> >(spNode);
-    return this->PostOrderVisit( *spBaseNode );
 }
 
 AxString EPTypedVisitor::GetMobName( AxMob& axMob, const AxString& type )
@@ -244,6 +412,16 @@ AxString EPTypedVisitor::GetMobName( AxMob& axMob, const AxString& type )
     
 }
 
+AxString EPTypedVisitor::GetMobName( shared_ptr<EdgeMap> spEdgeMap, Node& node )
+{
+    shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+    DepthFirstTraversal dfs( spEdgeMap, spNode );
+    shared_ptr<ParentMobVisitor> spVisitor( new ParentMobVisitor );
+    
+    dfs.TraverseUp( spVisitor );
+    return spVisitor->GetParentName();
+}
+
 bool EPTypedVisitor::IsType( AxClassDef& clsDef, aafUID_t type, aafUID_t parentType )
 {
     aafUID_t auid = clsDef.GetAUID();
@@ -261,29 +439,56 @@ bool EPTypedVisitor::IsType( AxClassDef& clsDef, aafUID_t type, aafUID_t parentT
     return IsType( parentDef, type, parentType );
 }
 
-shared_ptr<EPTypedVisitor::TrackSet> EPTypedVisitor::GetEssenceTracks( AxMob& axMob )
+shared_ptr<EPTypedVisitor::MobSlotSet> EPTypedVisitor::GetEssenceTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node )
 {
-    shared_ptr<TrackSet> spEssenceTracks( new TrackSet );
+    shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+    DepthFirstTraversal dfs( spEdgeMap, spNode );
+    shared_ptr<ChildMobSlotVisitor> spVisitor( new ChildMobSlotVisitor );
     
-    //Get a mob slot iterator
-    AxMobSlotIter slotIter( axMob.GetSlots() );
-
-    //Storage for value returned by iterator.
-    IAAFSmartPointer2<IAAFMobSlot> mobSlotSP; 
-
-    //Repeat until the iterator is out of mob slots.
-    while ( slotIter.NextOne( mobSlotSP ) )
-    {
-        shared_ptr<AxMobSlot> spMobSlot( new AxMobSlot( mobSlotSP ) );
-        AxDataDef axDataDef( spMobSlot->GetDataDef() );
-        if ( axDataDef.IsPictureKind() || axDataDef.IsSoundKind() )
-        {
-            spEssenceTracks->insert( spMobSlot );
-        }
-    }
-    
-    return spEssenceTracks;
+    dfs.TraverseDown( spVisitor );
+    return spVisitor->GetEssenceTracks();
 }
+
+shared_ptr<EPTypedVisitor::MobSlotSet> EPTypedVisitor::GetAudioTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node )
+{
+    shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+    DepthFirstTraversal dfs( spEdgeMap, spNode );
+    shared_ptr<ChildMobSlotVisitor> spVisitor( new ChildMobSlotVisitor );
+    
+    dfs.TraverseDown( spVisitor );
+    return spVisitor->GetAudioTracks();
+}
+
+shared_ptr<EPTypedVisitor::MobSlotSet> EPTypedVisitor::GetVideoTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node )
+{
+    shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+    DepthFirstTraversal dfs( spEdgeMap, spNode );
+    shared_ptr<ChildMobSlotVisitor> spVisitor( new ChildMobSlotVisitor );
+    
+    dfs.TraverseDown( spVisitor );
+    return spVisitor->GetVideoTracks();
+}
+
+shared_ptr<EPTypedVisitor::MobSlotSet> EPTypedVisitor::GetTimecodeTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node )
+{
+    shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+    DepthFirstTraversal dfs( spEdgeMap, spNode );
+    shared_ptr<ChildMobSlotVisitor> spVisitor( new ChildMobSlotVisitor );
+    
+    dfs.TraverseDown( spVisitor );
+    return spVisitor->GetTimecodeTracks();
+}
+
+shared_ptr<EPTypedVisitor::MobSlotSet> EPTypedVisitor::GetEdgecodeTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node )
+{
+    shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+    DepthFirstTraversal dfs( spEdgeMap, spNode );
+    shared_ptr<ChildMobSlotVisitor> spVisitor( new ChildMobSlotVisitor );
+    
+    dfs.TraverseDown( spVisitor );
+    return spVisitor->GetEdgecodeTracks();
+}
+
 
 } // end of namespace diskstream
 

@@ -23,9 +23,13 @@
 
 //AAF Analyzer Base files
 #include "AAFObjNode.h"
+#include "TypedNodeFactoryRegistry.h"
+#include "TypedNodeFactory.h"
 
 //Ax files
 #include <AxSmartPointer.h>
+#include <AxDictionary.h>
+#include <AxMetaDef.h>
 
 namespace aafanalyzer {
 
@@ -38,12 +42,43 @@ class AAFTypedObjNode : public AAFObjNode
  public:
   ~AAFTypedObjNode();
   
-  virtual IAAFSmartPointer<AAFObjType> GetAAFObjectOfType() const =0;;
+  virtual IAAFSmartPointer<AAFObjType> GetAAFObjectOfType() const =0;
+  
+  //This function will return a new node and all type information about the
+  //actual type of the templated parameter will be lost.  Therefore, this node
+  //should not be stored anywhere unless it is acceptable to use the node
+  //without complete type information.
+  template<typename To>
+  shared_ptr<AAFTypedObjNode<To> > DownCast()
+  {
+
+    //Get the dictionary.
+    AxObject axObj( this->GetAAFObject() );
+    AxDictionary axDictionary( axObj.GetDictionary() );
+
+    //Find the class definition of the class to cast to.
+    To* pTo = NULL;
+    AxClassDef clsDef( axDictionary.LookupClassDef( AxAUID(pTo) ) );
+
+    //Find the TypedNodeFactory for the class to cast to.
+    shared_ptr<TypedNodeFactory> spNodeFactory;
+    spNodeFactory = TypedNodeFactoryRegistry::GetInstance().LookUp(clsDef);
+    
+    //Get a shared pointer to this node.
+    shared_ptr<AAFObjNode> spThis = 
+        dynamic_pointer_cast<AAFObjNode>( this->GetSharedPointerToNode() );
+
+    //Return the casted node.  If the cast is not legal, the node factory will
+    //throw an exception.
+    return dynamic_pointer_cast<AAFTypedObjNode<To> > ( spNodeFactory->CreateNodeFrom( spThis ) );
+
+  }
 
  protected:
   AAFTypedObjNode(IAAFSmartPointer<AAFObjType> ObjectType,
           const basic_string<wchar_t>& name );
-  AAFTypedObjNode<AAFObjType>( shared_ptr<AAFTypedObjNode<AAFObjType> > spExistingNode );
+  AAFTypedObjNode( IAAFSmartPointer<AAFObjType> ObjectType,
+          shared_ptr<Node> spExistingNode );
 
  private:
 

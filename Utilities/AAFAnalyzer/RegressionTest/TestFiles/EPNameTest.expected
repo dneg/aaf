@@ -2,7 +2,7 @@
         Desc:   Verify the correctness of mob names.
         Result: Failed
         Reason: Test Failed - See "Edit Protocol Naming Visitor" Visitor for details
-        Passing Requirements: None
+        Passing Requirements: REQ_EP_161
         Warning Requirements: None
         Failing Requirements: REQ_EP_027; REQ_EP_032; REQ_EP_038; REQ_EP_047; REQ_EP_052; REQ_EP_057; REQ_EP_073; REQ_EP_081; REQ_EP_086; REQ_EP_101
 
@@ -10,7 +10,7 @@
             Desc:   Visit derivation chain mobs and verify they have valid names.
             Result: Failed
             Reason: 
-            Passing Requirements: None
+            Passing Requirements: REQ_EP_161
             Warning Requirements: None
             Failing Requirements: REQ_EP_027; REQ_EP_032; REQ_EP_038; REQ_EP_047; REQ_EP_052; REQ_EP_057; REQ_EP_073; REQ_EP_081; REQ_EP_086; REQ_EP_101
 
@@ -45,7 +45,7 @@
                 Desc:   -
                 Detail: Mob ID: 08080808080808080808080808080808-00000008-0008-0008-0808080808080808
                 Result: Failed
-                Reason: Adjusted Clip Composition does not have a valid name.
+                Reason: Adjusted-Clip Composition does not have a valid name.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_047
@@ -98,7 +98,7 @@
                 Name:   Edit Protocol Naming Visitor
                 Desc:   -
                 Result: Failed
-                Reason: MobSlot with ID = 1 of Essence - Static Audio - Top-Level B does not have a valid name.
+                Reason: MobSlot with ID = 1 of Top-Level Composition: "Essence - Static Audio - Top-Level B" does not have a valid name.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_101
@@ -106,7 +106,7 @@
                 Name:   Edit Protocol Naming Visitor
                 Desc:   -
                 Result: Failed
-                Reason: MobSlot with ID = 1 of Essence - Static Picture - Top-Level B does not have a valid name.
+                Reason: MobSlot with ID = 1 of Top-Level Composition: "Essence - Static Picture - Top-Level B" does not have a valid name.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_101
@@ -114,7 +114,7 @@
                 Name:   Edit Protocol Naming Visitor
                 Desc:   -
                 Result: Failed
-                Reason: MobSlot with ID = 1 of Essence - Timeline Audio - Top-Level B does not have a valid name.
+                Reason: MobSlot with ID = 1 of Top-Level Composition: "Essence - Timeline Audio - Top-Level B" does not have a valid name.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_101
@@ -122,7 +122,7 @@
                 Name:   Edit Protocol Naming Visitor
                 Desc:   -
                 Result: Failed
-                Reason: MobSlot with ID = 1 of Essence - Timeline Picture - Top-Level B does not have a valid name.
+                Reason: MobSlot with ID = 1 of Top-Level Composition: "Essence - Timeline Picture - Top-Level B" does not have a valid name.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_101

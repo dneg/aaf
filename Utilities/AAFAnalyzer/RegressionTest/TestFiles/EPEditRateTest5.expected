@@ -17,7 +17,7 @@
                 Name:   Edit Protocol Edit Rate Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Mob Slot with ID = 1 of Mob: "Clip 1" is a StaticMobSlot and does not have an edit rate.
+                Reason: Mob Slot with ID = 1 of Clip: "Clip 1" is a StaticMobSlot and does not have an edit rate.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_091
@@ -25,7 +25,7 @@
                 Name:   Edit Protocol Edit Rate Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Mob Slot with ID = 1 of Mob: "Clip 2" is a StaticMobSlot and does not have an edit rate.
+                Reason: Mob Slot with ID = 1 of Clip: "Clip 2" is a StaticMobSlot and does not have an edit rate.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_091

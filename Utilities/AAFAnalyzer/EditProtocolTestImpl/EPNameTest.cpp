@@ -64,7 +64,7 @@ EPNameTest::~EPNameTest()
 shared_ptr<TestLevelTestResult> EPNameTest::Execute()
 {
     
-    shared_ptr<EPNameVisitor> spVisitor(new EPNameVisitor( GetOutStream() ) );
+    shared_ptr<EPNameVisitor> spVisitor(new EPNameVisitor( GetOutStream(), GetTestGraph()->GetEdgeMap() ) );
 
     DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
     
@@ -128,6 +128,7 @@ const TestInfo EPNameTest::GetTestInfo()
     spReqIds->push_back(L"REQ_EP_081");     //Tape Source
     spReqIds->push_back(L"REQ_EP_086");     //Film Source
     spReqIds->push_back(L"REQ_EP_101");     //Essence Tracks
+    spReqIds->push_back(L"REQ_EP_161");     //Definition Objects
     return TestInfo(L"EPNameTest", spReqIds);
 }
 

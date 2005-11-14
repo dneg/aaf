@@ -61,31 +61,88 @@ namespace aafanalyzer {
     
 using namespace boost;
 
-AxMobSlot& EPTrack::GetMobSlot()
+EPTrackObject::EPTrackObject()
+{}
+
+EPTrackObject::~EPTrackObject()
+{}
+
+const AxString EPTrackObject::GetName()
+{
+    return L"Edit Protocol Track Object";
+}
+
+//======================================================================
+
+EPEssenceTrack::EPEssenceTrack()
+{}
+
+EPEssenceTrack::~EPEssenceTrack()
+{}
+
+const AxString EPEssenceTrack::GetName()
+{
+    return L"Essence Track";
+}
+
+//======================================================================
+
+EPTimecodeTrack::EPTimecodeTrack()
+{}
+
+EPTimecodeTrack::~EPTimecodeTrack()
+{}
+
+const AxString EPTimecodeTrack::GetName()
+{
+    return L"Timecode Track";
+}
+
+//======================================================================
+
+EPEdgecodeTrack::EPEdgecodeTrack()
+{}
+
+EPEdgecodeTrack::~EPEdgecodeTrack()
+{}
+
+const AxString EPEdgecodeTrack::GetName()
+{
+    return L"Edgecode Track";
+}
+
+//======================================================================
+
+AxMobSlot& EPCompleteTrack::GetMobSlot()
 {
     return _mobSlot;
 }
 
-AxSourceClip& EPTrack::GetSourceClip()
+AxSourceClip& EPCompleteTrack::GetSourceClip()
 {
     return _sourceClip;
 }
 
-AxMob& EPTrack::GetMob()
+AxMob& EPCompleteTrack::GetMob()
 {
     return _mob;
 }
         
-EPTrack::EPTrack( IAAFMobSlotSP mobSlot, IAAFSourceClipSP clip, IAAFMobSP mob )
+EPCompleteTrack::EPCompleteTrack( IAAFMobSlotSP mobSlot, IAAFSourceClipSP clip, IAAFMobSP mob )
     : _mobSlot( mobSlot ),
       _sourceClip( clip ),
       _mob( mob )
 {}
 
+const AxString EPCompleteTrack::GetName()
+{
+    return L"Edit Protocol Complete Track";
+}
+
 //======================================================================
 
 EPAudioTrack::EPAudioTrack( IAAFMobSlotSP mobSlot, IAAFSourceClipSP clip, IAAFMobSP mob )
-    : EPTrack( mobSlot, clip, mob )
+    : EPCompleteTrack( mobSlot, clip, mob )
 {}
 
 shared_ptr<EPAudioTrack> EPAudioTrack::CreateAudioTrack( AxMobSlot& axMobSlot )
@@ -125,10 +182,15 @@ shared_ptr<EPAudioTrack> EPAudioTrack::CreateAudioTrack( AxMobSlot& axMobSlot )
     
 }
 
+const AxString EPAudioTrack::GetName()
+{
+    return L"Audio Track";
+}
+
 //======================================================================
 
 EPVideoTrack::EPVideoTrack( IAAFMobSlotSP mobSlot, IAAFSourceClipSP clip, IAAFMobSP mob )
-    : EPTrack( mobSlot, clip, mob )
+    : EPCompleteTrack( mobSlot, clip, mob )
 {}
 
 shared_ptr<EPVideoTrack> EPVideoTrack::CreateVideoTrack( AxMobSlot& axMobSlot )
@@ -166,6 +228,11 @@ shared_ptr<EPVideoTrack> EPVideoTrack::CreateVideoTrack( AxMobSlot& axMobSlot )
     //track.
     return shared_ptr<EPVideoTrack>();
     
+}
+
+const AxString EPVideoTrack::GetName()
+{
+    return L"Video Track";
 }
 
 } // end of namespace diskstream

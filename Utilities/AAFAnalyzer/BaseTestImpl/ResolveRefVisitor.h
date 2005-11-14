@@ -40,7 +40,7 @@ class ResolveRefVisitor : public TypedVisitor
   virtual ~ResolveRefVisitor();
 
   virtual bool PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node);
-
+  
   shared_ptr<const DetailLevelTestResult> GetTestResult() const;
 
  private:

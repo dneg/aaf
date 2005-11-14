@@ -58,4 +58,10 @@ bool AAFSlotReference::Visit(shared_ptr<Visitor> spVisitor)
   return spVisitor->EdgeVisit(*this);
 }
 
+shared_ptr<Edge> AAFSlotReference::CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const
+{
+    shared_ptr<Edge> spNewEdge( new AAFSlotReference( spParent, spChild ) );
+    return spNewEdge;
+}
+
 } // end of namespace diskstream

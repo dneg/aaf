@@ -49,8 +49,9 @@ namespace aafanalyzer {
 
 using namespace boost;
  
-EPContainedTrackVisitor::EPContainedTrackVisitor( wostream& log )
+EPContainedTrackVisitor::EPContainedTrackVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap )
     : _log(log),
+      _spEdgeMap( spEdgeMap ),
       _spResult( new DetailLevelTestResult( L"Edit Protocol Contained Track Visitor",
                                             L"Visit derivation chain mateiral and ensure they contain the required tracks.",
                                             L"", // explain
@@ -58,12 +59,10 @@ EPContainedTrackVisitor::EPContainedTrackVisitor( wostream& log )
                                             TestResult::PASS,
                                             TestRegistry::GetInstance().GetRequirementsForTest( EPContainedTrackTest::GetTestInfo().GetName() )
                )                          )
-{
-}
+{}
     
 EPContainedTrackVisitor::~EPContainedTrackVisitor()
-{
-}
+{}
 
 bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition>& node )
 {
@@ -71,12 +70,12 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, 
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
     
     //Get the name of the mob
-    AxString nodeName = this->GetMobName( axCompMob, L"Top-Level Composition");
+    AxString nodeName = this->GetMobName( axCompMob, EPTopLevelComposition::GetName() );
     
     unsigned int unnumberedtracks;
-    shared_ptr<TrackMap> spTrackMap( CountTracks( axCompMob, kAAFClassID_Timecode, unnumberedtracks ) );
+    shared_ptr<TrackNumberMap> spTrackNumMap( CountTrackCodes( this->GetTimecodeTracks( _spEdgeMap, node ), unnumberedtracks ) );
     
-    TrackMap::const_iterator mapIter;
+    TrackNumberMap::const_iterator mapIter;
     bool testPassed = true;
     
     //Ensure all tracks have a physical track number
@@ -89,7 +88,7 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, 
         testPassed = false;
     }    
     
-    for ( mapIter = spTrackMap->begin(); mapIter != spTrackMap->end(); mapIter++ )
+    for ( mapIter = spTrackNumMap->begin(); mapIter != spTrackNumMap->end(); mapIter++ )
     {
     
         switch (mapIter->first)
@@ -135,7 +134,7 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, 
     }
     
     //5. Ensure there are >= 1 primary timecode tracks
-    if ( spTrackMap->find( 1 ) == spTrackMap->end() )
+    if ( spTrackNumMap->find( 1 ) == spTrackNumMap->end() )
     {
         _spResult->AddInformationResult( L"REQ_EP_028", nodeName + L" does not have a Primary Timecode track.", TestResult::FAIL );
         testPassed = false;
@@ -145,18 +144,74 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, 
     
 }
 
+bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node )
+{
+    bool testPassed = true;
+
+    AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
+    shared_ptr<MobSlotSet> spEssenceTrack = this->GetEssenceTracks( _spEdgeMap, node );
+
+    MobSlotSet::const_iterator iter;
+    for ( iter = spEssenceTrack->begin(); iter != spEssenceTrack->end(); iter++ )
+    {
+        if ( CountSegments( **iter, kAAFClassID_SourceClip ) != 1 )
+        {
+            AxString mobName = this->GetMobName( axCompMob, EPSubClipComposition::GetName() );
+
+            wstringstream ss;
+            ss << L"Slot with ID ";
+            ss << (*iter)->GetSlotID();
+            ss << L" in " << mobName << L" does not have exactly one SourceClip.";
+
+            AxString explain( ss.str().c_str() );
+            _spResult->AddInformationResult( L"REQ_EP_037", explain, TestResult::FAIL );
+            testPassed = false;
+        }
+    }
+          
+    return testPassed;
+}
+
+bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node )
+{
+    bool testPassed = true;
+
+    AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
+    shared_ptr<MobSlotSet> spEssenceTrack = this->GetEssenceTracks( _spEdgeMap, node );
+
+    MobSlotSet::const_iterator iter;
+    for ( iter = spEssenceTrack->begin(); iter != spEssenceTrack->end(); iter++ )
+    {
+        if ( CountSegments( **iter, kAAFClassID_OperationGroup ) != 1 )
+        {
+            AxString mobName = this->GetMobName( axCompMob, EPAdjustedClipComposition::GetName() );
+
+            wstringstream ss;
+            ss << L"Slot with ID ";
+            ss << (*iter)->GetSlotID();
+            ss << L" in " << mobName << L" does not have exactly one OperationGroup.";
+
+            AxString explain( ss.str().c_str() );
+            _spResult->AddInformationResult( L"REQ_EP_046", explain, TestResult::FAIL );
+            testPassed = false;
+        }
+    }
+        
+    return testPassed;
+}
+
 bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node )
 {
   
     AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
     
     //Get the name of the mob
-    AxString nodeName = this->GetMobName( axSrcMob, L"Tape Source" );
+    AxString nodeName = this->GetMobName( axSrcMob, EPTapeSource::GetName() );
     
     unsigned int unnumberedtracks;
-    shared_ptr<TrackMap> spTrackMap( CountTracks( axSrcMob, kAAFClassID_Timecode, unnumberedtracks ) );
+    shared_ptr<TrackNumberMap> spTrackNumMap( CountTrackCodes( this->GetTimecodeTracks( _spEdgeMap, node ), unnumberedtracks ) );
     
-    TrackMap::const_iterator mapIter;
+    TrackNumberMap::const_iterator mapIter;
     bool testPassed = true;
 
     //Ensure all tracks have a physical track number
@@ -169,7 +224,7 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTap
         testPassed = false;
     }
     
-    for ( mapIter = spTrackMap->begin(); mapIter != spTrackMap->end(); mapIter++ )
+    for ( mapIter = spTrackNumMap->begin(); mapIter != spTrackNumMap->end(); mapIter++ )
     {
     
         switch (mapIter->first)
@@ -218,7 +273,6 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTap
     }
     
     return testPassed;
-
 }
 
 bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node )
@@ -230,9 +284,9 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFil
     AxString nodeName = this->GetMobName( axSrcMob, L"Film Source" );
     
     unsigned int unnumberedtracks;
-    shared_ptr<TrackMap> spTrackMap( CountTracks( axSrcMob, kAAFClassID_EdgeCode, unnumberedtracks ) );
+    shared_ptr<TrackNumberMap> spTrackNumMap( CountTrackCodes( this->GetEdgecodeTracks( _spEdgeMap, node ), unnumberedtracks ) );
     
-    TrackMap::const_iterator mapIter;
+    TrackNumberMap::const_iterator mapIter;
     bool testPassed = true;
 
     //Ensure all tracks have a physical track number
@@ -245,7 +299,7 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFil
         testPassed = false;
     }
     
-    for ( mapIter = spTrackMap->begin(); mapIter != spTrackMap->end(); mapIter++ )
+    for ( mapIter = spTrackNumMap->begin(); mapIter != spTrackNumMap->end(); mapIter++ )
     {
     
         switch (mapIter->first)
@@ -292,74 +346,64 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFil
 
 }
 
-bool EPContainedTrackVisitor::EdgeVisit(AAFComponentReference& edge)
-{
-    return false;
-}
-
-bool EPContainedTrackVisitor::EdgeVisit(AAFSlotReference& edge)
-{
-    return false;
-}
-    
 shared_ptr<DetailLevelTestResult> EPContainedTrackVisitor::GetResult()
 {
     return _spResult;
 }
 
-shared_ptr<EPContainedTrackVisitor::TrackMap> EPContainedTrackVisitor::CountTracks( AxMob& axMob, aafUID_t trackType, unsigned int& unnumberedTracks )
+shared_ptr<EPContainedTrackVisitor::TrackNumberMap> EPContainedTrackVisitor::CountTrackCodes( shared_ptr<EPTypedVisitor::MobSlotSet> tracks, unsigned int& unnumberedTracks )
 {
-    
-    shared_ptr<TrackMap> spTrackMap( new TrackMap );
+    shared_ptr<TrackNumberMap> spTrackMap( new TrackNumberMap );
     unnumberedTracks = 0;
     
-    //Get a mob slot iterator
-    AxMobSlotIter slotIter( axMob.GetSlots() );
-
-    //Storage for value returned by iterator.
-    IAAFSmartPointer2<IAAFMobSlot> spMobSlot; 
-
-    //Repeat until the iterator is out of mob slots.
-    while ( slotIter.NextOne( spMobSlot ) )
+    EPTypedVisitor::MobSlotSet::const_iterator iter;
+    
+    for ( iter = tracks->begin(); iter != tracks->end(); iter++ )
     {
-        AxMobSlot axMobSlot( spMobSlot );
-        AxClassDef slotClsDef( axMobSlot.GetDefinition() );
-        //Find out if it's a timeline mob slot
-        if ( this->IsType( slotClsDef, kAAFClassID_TimelineMobSlot, kAAFClassID_MobSlot ) )
-        {
-            AxSegment axSegment( axMobSlot.GetSegment() );
-            AxClassDef segClsDef( axSegment.GetDefinition() );
-            //Find out if this is a trackType track.
-            if ( this->IsType( segClsDef, trackType, kAAFClassID_Segment ) )
+        try {
+            aafUInt32 physicalTrackNumber = (*iter)->GetPhysicalNum();
+            if ( spTrackMap->find( physicalTrackNumber ) == spTrackMap->end() )
             {
-                try {
-                    aafUInt32 physicalTrackNumber = axMobSlot.GetPhysicalNum();
-                    if ( spTrackMap->find( physicalTrackNumber ) == spTrackMap->end() )
-                    {
-                        (*spTrackMap)[physicalTrackNumber] = 1;
-                    }
-                    else
-                    {
-                        (*spTrackMap)[physicalTrackNumber] = (*spTrackMap)[physicalTrackNumber] + 1;
-                    }
-                }
-                catch ( const AxExHResult& ex )
-                {
-                    if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-                    {
-                        unnumberedTracks++;
-                    }
-                    else
-                    {
-                        throw ex;
-                    }
-                }
+                (*spTrackMap)[physicalTrackNumber] = 1;
+            }
+            else
+            {
+                (*spTrackMap)[physicalTrackNumber] = (*spTrackMap)[physicalTrackNumber] + 1;
+            }
+        }
+        catch ( const AxExHResult& ex )
+        {
+            if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
+            {
+                unnumberedTracks++;
+            }
+            else
+            {
+                throw ex;
             }
         }
     }
     
     return spTrackMap;
     
+}
+
+unsigned int EPContainedTrackVisitor::CountSegments( AxMobSlot& track, aafUID_t segmentType )
+{
+
+    //TODO: Once the requirements are clarified, it may be useful to rewrite
+    //      this method using a visitor to allow sequences to be accessed.
+
+    AxSegment axSegment( track.GetSegment() );
+    AxClassDef clsDef( axSegment.GetDefinition() );
+    if ( this->IsType( clsDef, segmentType, kAAFClassID_Segment ) )
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
     
 } // end of namespace aafanalyzer

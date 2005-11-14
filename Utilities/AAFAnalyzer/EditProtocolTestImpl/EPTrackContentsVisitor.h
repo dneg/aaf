@@ -51,32 +51,30 @@ class EPTrackContentsVisitor : public EPTypedVisitor
 
   public:
   
-    EPTrackContentsVisitor( wostream& log );
+    EPTrackContentsVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap );
     
     virtual ~EPTrackContentsVisitor();
-
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node );
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node );
-    
-    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node );
-    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node );
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRecordingSource>& node );
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node );
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node );
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node );
-       
-    virtual bool EdgeVisit(AAFComponentReference& edge);
-    virtual bool EdgeVisit(AAFSlotReference& edge);
+   
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPAudioTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPVideoTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPAudioTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPVideoTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPEssenceTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPAudioTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPVideoTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPEssenceTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPAudioTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPVideoTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEssenceTrack>& node );
     
     shared_ptr<DetailLevelTestResult> GetResult();
     
   private:
    
     wostream& _log;
+    shared_ptr<EdgeMap> _spEdgeMap;
     shared_ptr<DetailLevelTestResult> _spResult;
-
-    unsigned int CountSegments( AxMobSlot& track, aafUID_t segmentType );
-    bool VisitEssenceTracks( AxMob& axMob, const AxString& type );
 
     // prohibited
     EPTrackContentsVisitor();

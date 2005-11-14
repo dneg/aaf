@@ -1,6 +1,6 @@
 //=---------------------------------------------------------------------=
 //
-// $Id$
+// $Id$ $Name$
 //
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
@@ -18,12 +18,12 @@
 //
 //=---------------------------------------------------------------------=
 
-//AAF Analyzer Base files
-#include "AAFTypedObjNode.h"
+//Edit Protocol Analyzer Base files
+#include "EPCastException.h"
 
 namespace {
 
-using namespace aafanalyzer;
+//using namespace aafanalyzer;
 
 } // end of namespace
 
@@ -32,29 +32,14 @@ using namespace aafanalyzer;
 //======================================================================
 //======================================================================
 
-namespace aafanalyzer {
+namespace aafanalyzer 
+{
 
-using namespace std;
-using namespace boost;
-
-template<typename AAFObjType>
-AAFTypedObjNode<AAFObjType>::AAFTypedObjNode(IAAFSmartPointer<AAFObjType> spObject,
-					     const basic_string<wchar_t>& name)
-  : AAFObjNode(AxQueryInterface<AAFObjType,IAAFObject>( spObject ), name )
+EPCastException::EPCastException( const wchar_t* what )
+  : AnalyzerException( wstring(wstring(L"Edit Protocol Cating Error: ") + wstring(what)).c_str() )
 {}
 
-template<typename AAFObjType>
-AAFTypedObjNode<AAFObjType>::AAFTypedObjNode( IAAFSmartPointer<AAFObjType> spObject,
-                         shared_ptr<Node> spExistingNode )
-  : AAFObjNode( AxQueryInterface<AAFObjType,IAAFObject>( spObject ),
-                spExistingNode->GetName(),
-                spExistingNode->GetLID() )
+EPCastException::~EPCastException() throw()
 {}
-
-template<typename AAFObjType>
-AAFTypedObjNode<AAFObjType>::~AAFTypedObjNode()
-{}
-
-#include "TypedNodeTemplate.cpp.gen"
 
 } // end of namespace diskstream

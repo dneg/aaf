@@ -63,6 +63,12 @@ shared_ptr<Node> Edge::GetChildNode() const
   return _spChildNode;
 }
 
+shared_ptr<Edge> Edge::CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const
+{
+    shared_ptr<Edge> spNewEdge( new Edge( spParent, spChild ) );
+    return spNewEdge;
+}
+
 } // end of namespace diskstream
 
 

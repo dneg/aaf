@@ -64,7 +64,7 @@ EPEditRateTest::~EPEditRateTest()
 shared_ptr<TestLevelTestResult> EPEditRateTest::Execute()
 {
     
-    shared_ptr<EPEditRateVisitor> spVisitor(new EPEditRateVisitor( GetOutStream() ) );
+    shared_ptr<EPEditRateVisitor> spVisitor(new EPEditRateVisitor( GetOutStream(), GetTestGraph()->GetEdgeMap() ) );
 
     DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
     

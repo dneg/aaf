@@ -21,10 +21,14 @@
 #ifndef __EPTrack__
 #define __EPTrack__
 
+//Edit Protocol Analyzer Base files
+#include "EPObjects.h"
+
 //Ax files
 #include <AxMobSlot.h>
 #include <AxComponent.h>
 #include <AxMob.h>
+#include <AxTypes.h>
 
 //Boost files
 #include<boost/shared_ptr.hpp>
@@ -35,6 +39,86 @@ namespace aafanalyzer {
 
 using namespace boost;
 
+class EPTrackObject : public EPObject
+{
+    public:
+        ~EPTrackObject();
+        static const AxString GetName();
+
+    protected:
+        EPTrackObject();
+
+    private:
+        //prohibited
+        EPTrackObject( const EPTrackObject& );
+        EPTrackObject& operator=( const EPTrackObject& );
+};
+
+//======================================================================
+
+/*
+ * This class represents a timecode track, which is currently defined as a
+ * MobSlot where IsTimecodeType() true.
+ */
+
+class EPTimecodeTrack : public EPTrackObject
+{
+    public:
+        EPTimecodeTrack();
+        ~EPTimecodeTrack();
+        static const AxString GetName();
+
+    private:
+
+        //prohibited
+        EPTimecodeTrack( const EPTimecodeTrack& );
+        EPTimecodeTrack& operator=( const EPTimecodeTrack& );
+};
+
+//======================================================================
+
+/*
+ * This class represents a edgecode track, which is currently defined as a
+ * MobSlot where IsEdgecodeType() true.
+ */
+
+class EPEdgecodeTrack : public EPTrackObject
+{
+    public:
+        EPEdgecodeTrack();
+        ~EPEdgecodeTrack();
+        static const AxString GetName();
+
+    private:
+
+        //prohibited
+        EPEdgecodeTrack( const EPEdgecodeTrack& );
+        EPEdgecodeTrack& operator=( const EPEdgecodeTrack& );
+};
+
+//======================================================================
+
+/*
+ * This class represents an essence track, which is currently defined as a
+ * MobSlot where IsPictureType() or IsAudioType is true.
+ */
+
+class EPEssenceTrack : public EPTrackObject
+{
+    public:
+        EPEssenceTrack();
+        ~EPEssenceTrack();
+        static const AxString GetName();
+
+    private:
+
+        //prohibited
+        EPEssenceTrack( const EPEssenceTrack& );
+        EPEssenceTrack& operator=( const EPEssenceTrack& );
+};
+
+//======================================================================
+
 /*
  * This interface abstracts the idea of a track within the context of the Edit
  * Protocol.  Currently a track is considered to be:
@@ -43,22 +127,23 @@ using namespace boost;
  *      b) The SourceClip contained within the MobSlot
  *      c) The Mob referenced by the SourceClip
  * 
- * (Note: This does not match with the definition of an Essence Track, so it
- *        has not been included as a derived class of EPTrack).
- * 
  */
+ 
+ //TODO: Pending clarificaiton of requirements, the definition in part (b) may
+ //      have to be changed (to allow for sequences).
 
-class EPTrack
+class EPCompleteTrack : public EPTrackObject
 {
     public:
        
         AxMobSlot& GetMobSlot();
         AxSourceClip& GetSourceClip();
         AxMob& GetMob();
+        static const AxString GetName();
         
     protected:
     
-        EPTrack( IAAFMobSlotSP mobSlot, IAAFSourceClipSP clip, IAAFMobSP mob );
+        EPCompleteTrack( IAAFMobSlotSP mobSlot, IAAFSourceClipSP clip, IAAFMobSP mob );
 
     private:
 
@@ -67,9 +152,9 @@ class EPTrack
         AxMob           _mob;
 
         //prohibited
-        EPTrack();
-        EPTrack( const EPTrack& );
-        EPTrack& operator=( const EPTrack& );
+        EPCompleteTrack();
+        EPCompleteTrack( const EPCompleteTrack& );
+        EPCompleteTrack& operator=( const EPCompleteTrack& );
 };
 
 //======================================================================
@@ -82,11 +167,12 @@ class EPTrack
  * 
  */
 
-class EPAudioTrack : public EPTrack
+class EPAudioTrack : public EPCompleteTrack, public EPEssenceTrack
 {
     public:
 
         static shared_ptr<EPAudioTrack> CreateAudioTrack( AxMobSlot& axMobSlot );
+        static const AxString GetName();
 
     private:
 
@@ -108,11 +194,12 @@ class EPAudioTrack : public EPTrack
  * 
  */
 
-class EPVideoTrack : public EPTrack
+class EPVideoTrack : public EPCompleteTrack, public EPEssenceTrack
 {
     public:
 
         static shared_ptr<EPVideoTrack> CreateVideoTrack( AxMobSlot& axMobSlot );
+        static const AxString GetName();
 
     private:
 

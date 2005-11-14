@@ -35,6 +35,7 @@ class AAFSlotReference : public Edge
   ~AAFSlotReference();
 
   bool Visit(shared_ptr<Visitor> spVisitor);
+  virtual shared_ptr<Edge> CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const;
 
  private:
 

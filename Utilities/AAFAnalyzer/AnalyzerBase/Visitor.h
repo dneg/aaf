@@ -21,25 +21,38 @@
 #ifndef __VISITOR_h__
 #define __VISITOR_h__
 
+//Analyzer Base files
+#include "Node.h"
+
 //Boost files
 #include <boost/shared_ptr.hpp>
 
+//STL files
+#include <set>
+
 namespace aafanalyzer {
 
-class Node;
 class Edge;
 
 class Visitor
 {
  public:
+ 
   Visitor();
   virtual ~Visitor();
 
   virtual bool PreOrderVisit(Node& node);
   virtual bool PostOrderVisit(Node& node);
   virtual bool EdgeVisit(Edge& edge);
+  
+ protected:
+ 
+  void RecordVisit( Node::LID id );
+  bool HaveVisited( Node::LID id );
 
  private:
+
+  set<Node::LID> _visitedNodes;
 
   // prohibited
   Visitor( const Visitor& );

@@ -42,7 +42,7 @@ using namespace boost;
 
 template<typename AAFObjType>
 AAFTypedObjNodeDecorator<AAFObjType>::AAFTypedObjNodeDecorator( const shared_ptr<AAFTypedObjNode<AAFObjType> > spNode )
-  : AAFTypedObjNode<AAFObjType>( spNode ),
+  : AAFTypedObjNode<AAFObjType>( spNode->GetAAFObjectOfType(), spNode ),
     _spNode( spNode )
 {}
 
@@ -65,5 +65,10 @@ void AAFTypedObjNodeDecorator<AAFObjType>::Decorate( shared_ptr<Node> decoratedN
 template class AAFTypedObjNodeDecorator<IAAFCompositionMob>;
 template class AAFTypedObjNodeDecorator<IAAFMasterMob>;
 template class AAFTypedObjNodeDecorator<IAAFSourceMob>;
+
+template class AAFTypedObjNodeDecorator<IAAFTimelineMobSlot>;
+template class AAFTypedObjNodeDecorator<IAAFStaticMobSlot>;
+template class AAFTypedObjNodeDecorator<IAAFEventMobSlot>;
+template class AAFTypedObjNodeDecorator<IAAFMobSlot>;
 
 } // end of namespace diskstream

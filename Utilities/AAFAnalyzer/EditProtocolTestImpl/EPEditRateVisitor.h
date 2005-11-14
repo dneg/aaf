@@ -54,16 +54,22 @@ class EPEditRateVisitor : public EPTypedVisitor
 
   public:
 
-    EPEditRateVisitor( wostream& log );
+    EPEditRateVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap );
     
     virtual ~EPEditRateVisitor();
 
-    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node );
-    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node );
-    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFSourceMob>& node );
-       
-    virtual bool EdgeVisit(AAFComponentReference& edge);
-    virtual bool EdgeVisit(AAFSlotReference& edge);
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPAudioTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPVideoTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPAudioTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPVideoTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPEssenceTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPAudioTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPVideoTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPEssenceTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPAudioTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPVideoTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEssenceTrack>& node );
     
     void CheckAudioSampleRates();
     
@@ -75,6 +81,7 @@ class EPEditRateVisitor : public EPTypedVisitor
     typedef map<RationalKey, unsigned int> RateMap;
    
     wostream& _log;
+    shared_ptr<EdgeMap> _spEdgeMap;
     shared_ptr<DetailLevelTestResult> _spResult;
     AllowedEditRateTable _erTable;
   
@@ -83,8 +90,7 @@ class EPEditRateVisitor : public EPTypedVisitor
     unsigned int _staticAudioTracks;
     unsigned int _unknownAudioTracks;
 
-    bool VisitMob( AxMob& axMob );
-    bool TestEditRate( aafRational_t editRate, AxDataDef& axDataDef, const AxString& mobName, aafSlotID_t slotId );
+    bool TestEditRate( aafRational_t editRate, AxMobSlot& axMobSlot, const AxString& mobName );
     void VisitAudioTrack( shared_ptr<EPAudioTrack> spTrack, aafRational_t editRate );
     bool VisitVideoTrack( shared_ptr<EPVideoTrack> spTrack, aafRational_t editRate );
 

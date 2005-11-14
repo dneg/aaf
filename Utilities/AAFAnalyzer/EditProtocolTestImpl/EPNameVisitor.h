@@ -32,6 +32,8 @@
 #include <map>
 #include <set>
 
+class AxDefObject;
+
 namespace aafanalyzer {
 
 class DetailLevelTestResult;
@@ -44,7 +46,7 @@ class EPNameVisitor : public EPTypedVisitor
 
   public:
   
-    EPNameVisitor( wostream& log );
+    EPNameVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap );
 
     virtual ~EPNameVisitor();
 
@@ -54,14 +56,33 @@ class EPNameVisitor : public EPTypedVisitor
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPTemplateClip>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPClip>& node );
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node );
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRecordingSource>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node );
-       
-    virtual bool EdgeVisit(AAFComponentReference& edge);
-    virtual bool EdgeVisit(AAFSlotReference& edge);
+    
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPAudioTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPVideoTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPAudioTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPVideoTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPEssenceTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPAudioTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPVideoTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPEssenceTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPAudioTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPVideoTrack>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEssenceTrack>& node );
+    
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFDataDef>& node );
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFParameterDef>& node );
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFPluginDef>& node );
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFContainerDef>& node );
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFInterpolationDef>& node );
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFTaggedValueDefinition>& node );
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFOperationDef>& node );
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFCodecDef>& node );
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFKLVDataDefinition>& node );
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFDefObject>& node );
     
     shared_ptr<DetailLevelTestResult> GetResult();
     
@@ -73,6 +94,8 @@ class EPNameVisitor : public EPTypedVisitor
     typedef set<AxString> NameSet;
   
     wostream& _log;
+    shared_ptr<EdgeMap> _spEdgeMap;
+    
     shared_ptr<DetailLevelTestResult> _spResult;
     NameMap _compositionNames;
     NameMap _essenceTrackNames;
@@ -81,7 +104,6 @@ class EPNameVisitor : public EPTypedVisitor
     
     bool VisitComposition( const AxString& type, const AxString& reqId, AxCompositionMob& axCompMob );
     bool VisitNonComposition( const AxString& type, const AxString& reqId, AxMob& axMob );
-    bool VisitEssenceTracks( const AxString& mobName, AxMob& axMob );
     void CheckForUniqueNames( NameSet& names, const AxString& reqId, const AxString& type );
 
     // prohibited

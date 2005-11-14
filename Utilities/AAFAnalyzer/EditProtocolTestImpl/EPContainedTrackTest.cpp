@@ -63,8 +63,8 @@ EPContainedTrackTest::~EPContainedTrackTest()
 
 shared_ptr<TestLevelTestResult> EPContainedTrackTest::Execute()
 {
-    
-    shared_ptr<EPContainedTrackVisitor> spVisitor(new EPContainedTrackVisitor( GetOutStream() ) );
+
+    shared_ptr<EPContainedTrackVisitor> spVisitor(new EPContainedTrackVisitor( GetOutStream(), GetTestGraph()->GetEdgeMap() ) );
 
     DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
     
@@ -118,6 +118,8 @@ const TestInfo EPContainedTrackTest::GetTestInfo()
 {
     shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
     spReqIds->push_back(L"REQ_EP_028");     //Top-Level Composition
+    spReqIds->push_back(L"REQ_EP_037");     //Sub-Clip Composition
+    spReqIds->push_back(L"REQ_EP_046");     //Adjusted Clip Composition
     spReqIds->push_back(L"REQ_EP_082");     //Tape Source
     spReqIds->push_back(L"REQ_EP_087");     //Film Source
     return TestInfo(L"EPContainedTrackTest", spReqIds);

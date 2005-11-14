@@ -21,9 +21,6 @@
 //AAF Analyzer Base files
 #include "TypedNodeFactory.h"
 
-//Analyzer Base files
-#include <Node.h>
-
 namespace {
 
 using namespace aafanalyzer;

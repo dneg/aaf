@@ -36,6 +36,8 @@ class AAFTypedObjNodeImpl : public AAFTypedObjNode<AAFObjType>
   AAFTypedObjNodeImpl(IAAFSmartPointer<AAFObjType> ObjectType );
   AAFTypedObjNodeImpl(IAAFSmartPointer<AAFObjType> ObjectType,
 		  const basic_string<wchar_t>& name );
+  AAFTypedObjNodeImpl(IAAFSmartPointer<AAFObjType> ObjectType,
+          shared_ptr<Node> spNode );
   ~AAFTypedObjNodeImpl();
   
   bool PreOrderVisit(shared_ptr<Visitor> spVisitor);

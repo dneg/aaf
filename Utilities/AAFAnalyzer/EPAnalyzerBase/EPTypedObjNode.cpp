@@ -38,8 +38,9 @@ namespace aafanalyzer {
 using namespace boost;
 
 template<typename AAFObjType, typename EPObjType>
-EPTypedObjNode<AAFObjType, EPObjType>::EPTypedObjNode( const shared_ptr<AAFTypedObjNode<AAFObjType> > spNode )
-  : AAFTypedObjNodeDecorator<AAFObjType>( spNode )
+EPTypedObjNode<AAFObjType, EPObjType>::EPTypedObjNode( const shared_ptr<AAFTypedObjNode<AAFObjType> > spNode, shared_ptr<EPObjType> spEPObject )
+  : AAFTypedObjNodeDecorator<AAFObjType>( spNode ),
+    _spEPObject( spEPObject )
 {}
 
 template<typename AAFObjType, typename EPObjType>
@@ -81,16 +82,45 @@ bool EPTypedObjNode<AAFObjType, EPObjType>::PostOrderVisit(shared_ptr<Visitor> s
   return spVisitor->PostOrderVisit(*this);
 }
 
-template class EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition>;
-template class EPTypedObjNode<IAAFCompositionMob, EPLowerLevelComposition>;
-template class EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>;
-template class EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>;
-template class EPTypedObjNode<IAAFMasterMob, EPTemplateClip>;
-template class EPTypedObjNode<IAAFMasterMob, EPClip>;
-template class EPTypedObjNode<IAAFSourceMob, EPFileSource>;
-template class EPTypedObjNode<IAAFSourceMob, EPRecordingSource>;
-template class EPTypedObjNode<IAAFSourceMob, EPImportSource>;
-template class EPTypedObjNode<IAAFSourceMob, EPTapeSource>;
-template class EPTypedObjNode<IAAFSourceMob, EPFilmSource>;
+template<typename AAFObjType, typename EPObjType>
+shared_ptr<EPObjType> EPTypedObjNode<AAFObjType, EPObjType>::GetEPObject()
+{
+    return _spEPObject;
+}
+
+//Derivation Chain Object Nodes
+template class EPTypedObjNode<IAAFCompositionMob,   EPTopLevelComposition>;
+template class EPTypedObjNode<IAAFCompositionMob,   EPLowerLevelComposition>;
+template class EPTypedObjNode<IAAFCompositionMob,   EPSubClipComposition>;
+template class EPTypedObjNode<IAAFCompositionMob,   EPAdjustedClipComposition>;
+template class EPTypedObjNode<IAAFMasterMob,        EPTemplateClip>;
+template class EPTypedObjNode<IAAFMasterMob,        EPClip>;
+template class EPTypedObjNode<IAAFSourceMob,        EPFileSource>;
+template class EPTypedObjNode<IAAFSourceMob,        EPRecordingSource>;
+template class EPTypedObjNode<IAAFSourceMob,        EPImportSource>;
+template class EPTypedObjNode<IAAFSourceMob,        EPTapeSource>;
+template class EPTypedObjNode<IAAFSourceMob,        EPFilmSource>;
+
+//Mob Slot Object Nodes
+template class EPTypedObjNode<IAAFTimelineMobSlot,  EPEssenceTrack>;
+template class EPTypedObjNode<IAAFTimelineMobSlot,  EPAudioTrack>;
+template class EPTypedObjNode<IAAFTimelineMobSlot,  EPVideoTrack>;
+template class EPTypedObjNode<IAAFTimelineMobSlot,  EPTimecodeTrack>;
+template class EPTypedObjNode<IAAFTimelineMobSlot,  EPEdgecodeTrack>;
+template class EPTypedObjNode<IAAFStaticMobSlot,    EPEssenceTrack>;
+template class EPTypedObjNode<IAAFStaticMobSlot,    EPAudioTrack>;
+template class EPTypedObjNode<IAAFStaticMobSlot,    EPVideoTrack>;
+template class EPTypedObjNode<IAAFStaticMobSlot,    EPTimecodeTrack>;
+template class EPTypedObjNode<IAAFStaticMobSlot,    EPEdgecodeTrack>;
+template class EPTypedObjNode<IAAFEventMobSlot,     EPEssenceTrack>;
+template class EPTypedObjNode<IAAFEventMobSlot,     EPAudioTrack>;
+template class EPTypedObjNode<IAAFEventMobSlot,     EPVideoTrack>;
+template class EPTypedObjNode<IAAFEventMobSlot,     EPTimecodeTrack>;
+template class EPTypedObjNode<IAAFEventMobSlot,     EPEdgecodeTrack>;
+template class EPTypedObjNode<IAAFMobSlot,          EPEssenceTrack>;
+template class EPTypedObjNode<IAAFMobSlot,          EPAudioTrack>;
+template class EPTypedObjNode<IAAFMobSlot,          EPVideoTrack>;
+template class EPTypedObjNode<IAAFMobSlot,          EPTimecodeTrack>;
+template class EPTypedObjNode<IAAFMobSlot,          EPEdgecodeTrack>;
 
 } // end of namespace diskstream

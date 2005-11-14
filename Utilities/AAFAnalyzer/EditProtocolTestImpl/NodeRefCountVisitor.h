@@ -105,6 +105,10 @@ class NodeRefCountVisitor : public TypedVisitor
 
     return true;
   }
+  
+  virtual bool EdgeVisit(AAFComponentReference& edge) { return true; }
+  virtual bool EdgeVisit(AAFMobReference& edge) { return true; }
+  virtual bool EdgeVisit(AAFSlotReference& edge) { return true; }
 
   // Returns a map that maps ref counts to all nodes with that ref count.
   // i.e. map[0] = vector<Node::LID> // a vector of unreferenced nodes

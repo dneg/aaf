@@ -53,9 +53,6 @@ class EPLocatorVisitor : public EPTypedVisitor
 
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node );
-       
-    virtual bool EdgeVisit(AAFComponentReference& edge);
-    virtual bool EdgeVisit(AAFSlotReference& edge);
     
     shared_ptr<DetailLevelTestResult> GetResult();
     

@@ -29,6 +29,7 @@
 //Edit Protocol Analyzer Base files
 #include <EPTypedObjNode.h>
 #include <EPObjects.h>
+#include <EPTrack.h>
 
 //AAF Analyzer Base files
 #include <MobNodeMap.h>
@@ -42,6 +43,8 @@
 #include <AxMob.h>
 #include <AxMetaDef.h>
 #include <AxEssence.h>
+#include <AxMobSlot.h>
+#include <AxDefObject.h>
 
 //AAF files
 #include <AAFResult.h>
@@ -63,15 +66,6 @@ const wchar_t* TEST_DESC = L"Decorate the nodes of the graph with their edit pro
 
 // EPDecoratorVisitor visits all mob types and decorates the nodes with the
 // appropriate edit protocol material type.
-//
-// About the EdgeVisit methods: To visit all mobs in the derivation
-// chain we must follow containment edges, and mob reference edges.
-// The base class follows these by default so we do nothing here. We do
-// not, however, want to follow slot references or component
-// references. Doing so would be useless because we'd miss the
-// referenced mob object, further, it would be redundant if we are
-// also folloing the mob reference.
-
 
 class EPDecoratorVisitor : public TypedVisitor
 {
@@ -102,45 +96,27 @@ public:
   virtual bool PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node )
   {
     
-    //If the node has already been decorated by this test, don't bother
-    //decorating it again.
-    if ( this->IsDecorated( node.GetLID() ) )
-    {
-      return false;
-    }
-
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
 
     try
     {
       //Find the usage code to find the proper type of decoration for the node.
       aafUID_t usageCode = axCompMob.GetUsageCode();
-      shared_ptr<AAFTypedObjNode<IAAFCompositionMob> > spNode =
-        dynamic_pointer_cast<AAFTypedObjNode<IAAFCompositionMob> >( 
-          node.GetSharedPointerToNode() );
       if ( usageCode == kAAFUsage_TopLevel )
       {
-        shared_ptr<EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition> > 
-            spDecorated( new EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition>( spNode ) );
-        _spGraph->Decorate( spDecorated );
+        this->DecorateMob<IAAFCompositionMob, EPTopLevelComposition>( node );
       }
       else if ( usageCode == kAAFUsage_LowerLevel )
       {
-        shared_ptr<EPTypedObjNode<IAAFCompositionMob, EPLowerLevelComposition> > 
-            spDecorated( new EPTypedObjNode<IAAFCompositionMob, EPLowerLevelComposition>( spNode ) );
-        _spGraph->Decorate( spDecorated );
+        this->DecorateMob<IAAFCompositionMob, EPLowerLevelComposition>( node );
       }
       else if ( usageCode == kAAFUsage_SubClip )
       {
-        shared_ptr<EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition> > 
-            spDecorated( new EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>( spNode ) );
-        _spGraph->Decorate( spDecorated );
+        this->DecorateMob<IAAFCompositionMob, EPSubClipComposition>( node );
       }
       else if ( usageCode == kAAFUsage_AdjustedClip )
       {
-        shared_ptr<EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition> > 
-            spDecorated( new EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>( spNode ) );
-        _spGraph->Decorate( spDecorated );
+        this->DecorateMob<IAAFCompositionMob, EPAdjustedClipComposition>( node );
       }
       //There are no other valid composition mob/usage code combinations.  That
       //means that the material type for the derivation chain is unknown,
@@ -159,8 +135,6 @@ public:
       }
     }
     
-    _decoratedNodes.insert( node.GetLID() );
-    
     return true;
 
   }
@@ -168,12 +142,6 @@ public:
   virtual bool PreOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node )
   {
     
-    //If the node has already been decorated by this test, don't bother
-    //decorating it again.
-    if ( this->IsDecorated( node.GetLID() ) )
-    {
-      return false;
-    }
     AxMasterMob axMastMob( node.GetAAFObjectOfType() );
 
     try
@@ -183,12 +151,7 @@ public:
 
       if ( usageCode == kAAFUsage_Template )
       {
-        shared_ptr<AAFTypedObjNode<IAAFMasterMob> > spNode =
-          dynamic_pointer_cast<AAFTypedObjNode<IAAFMasterMob> >( 
-            node.GetSharedPointerToNode() );
-        shared_ptr<EPTypedObjNode<IAAFMasterMob, EPTemplateClip> > 
-            spDecorated( new EPTypedObjNode<IAAFMasterMob, EPTemplateClip>( spNode ) );
-        _spGraph->Decorate( spDecorated );
+        this->DecorateMob<IAAFMasterMob, EPTemplateClip>( node );
       }
       //There are no other valid composition mob/usage code combinations.  That
       //means that the material type for the derivation chain is unknown,
@@ -200,20 +163,13 @@ public:
       //If this is a clip, then decorate it.
       if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
       {
-        shared_ptr<AAFTypedObjNode<IAAFMasterMob> > spNode =
-          dynamic_pointer_cast<AAFTypedObjNode<IAAFMasterMob> >( 
-            node.GetSharedPointerToNode() );
-        shared_ptr<EPTypedObjNode<IAAFMasterMob, EPClip> > 
-            spDecorated( new EPTypedObjNode<IAAFMasterMob, EPClip>( spNode ) );
-        _spGraph->Decorate( spDecorated );
+        this->DecorateMob<IAAFMasterMob, EPClip>( node );
       }
       else
       {
         throw ex;
       }
     }
-    
-    _decoratedNodes.insert( node.GetLID() );
     
     return true;
 
@@ -222,12 +178,6 @@ public:
   virtual bool PreOrderVisit( AAFTypedObjNode<IAAFSourceMob>& node )
   {
     
-    //If the node has already been decorated by this test, don't bother
-    //decorating it again.
-    if ( this->IsDecorated( node.GetLID() ) )
-    {
-      return false;
-    }
     AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
 
     try
@@ -236,39 +186,26 @@ public:
       AxEssenceDescriptor descriptor( axSrcMob.GetEssenceDescriptor() );
       AxClassDef clsDef( descriptor.GetDefinition() );
       aafUID_t descriptorAUID = GetAcceptedAUID( clsDef );
-      shared_ptr<AAFTypedObjNode<IAAFSourceMob> > spNode =
-        dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceMob> >( 
-            node.GetSharedPointerToNode() );
 
       if ( descriptorAUID == kAAFClassID_FileDescriptor )
       {
-        shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > 
-            spDecorated( new EPTypedObjNode<IAAFSourceMob, EPFileSource>( spNode ) );
-        _spGraph->Decorate( spDecorated );
+        this->DecorateMob<IAAFSourceMob, EPFileSource>( node );
       }
       else if ( descriptorAUID == kAAFClassID_RecordingDescriptor )
       {
-        shared_ptr<EPTypedObjNode<IAAFSourceMob, EPRecordingSource> > 
-            spDecorated( new EPTypedObjNode<IAAFSourceMob, EPRecordingSource>( spNode ) );
-        _spGraph->Decorate( spDecorated );
+        this->DecorateMob<IAAFSourceMob, EPRecordingSource>( node );
       }
       else if ( descriptorAUID == kAAFClassID_ImportDescriptor )
       {
-        shared_ptr<EPTypedObjNode<IAAFSourceMob, EPImportSource> > 
-            spDecorated( new EPTypedObjNode<IAAFSourceMob, EPImportSource>( spNode ) );
-        _spGraph->Decorate( spDecorated );
+        this->DecorateMob<IAAFSourceMob, EPImportSource>( node );
       }
       else if ( descriptorAUID == kAAFClassID_TapeDescriptor )
       {
-        shared_ptr<EPTypedObjNode<IAAFSourceMob, EPTapeSource> > 
-            spDecorated( new EPTypedObjNode<IAAFSourceMob, EPTapeSource>( spNode ) );
-        _spGraph->Decorate( spDecorated );
+        this->DecorateMob<IAAFSourceMob, EPTapeSource>( node );
       }
       else if ( descriptorAUID == kAAFClassID_FilmDescriptor )
       {
-        shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFilmSource> > 
-            spDecorated( new EPTypedObjNode<IAAFSourceMob, EPFilmSource>( spNode ) );
-        _spGraph->Decorate( spDecorated );
+        this->DecorateMob<IAAFSourceMob, EPFilmSource>( node );
       }
       //There are no other valid source mob/descriptor code combinations.  That
       //means that the material type for the derivation chain is unknown,
@@ -288,27 +225,51 @@ public:
       }
     }
     
-    _decoratedNodes.insert( node.GetLID() );
-    
     return true;
 
   }
- 
-  virtual bool EdgeVisit(AAFComponentReference& edge)
-  {
-    return false;
-  }
 
-  virtual bool EdgeVisit(AAFSlotReference& edge)
+  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFTimelineMobSlot>& node )
   {
-    return false;
+    
+    AxTimelineMobSlot axMobSlot( node.GetAAFObjectOfType() );
+    DecorateMobSlot<IAAFTimelineMobSlot>( axMobSlot, node );
+    return true;
+    
   }
- 
+  
+  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFStaticMobSlot>& node )
+  {
+    
+    AxStaticMobSlot axMobSlot( node.GetAAFObjectOfType() );
+    DecorateMobSlot<IAAFStaticMobSlot>( axMobSlot, node );
+    return true;
+    
+  }
+  
+  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFEventMobSlot>& node )
+  {
+    
+    AxEventMobSlot axMobSlot( node.GetAAFObjectOfType() );
+    DecorateMobSlot<IAAFEventMobSlot>( axMobSlot, node );
+    return true;
+    
+  }
+  
+  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFMobSlot>& node )
+  {
+    
+    AxMobSlot axMobSlot( node.GetAAFObjectOfType() );
+    DecorateMobSlot<IAAFMobSlot>( axMobSlot, node );    
+    return true;
+    
+  }
+  
   shared_ptr<DetailLevelTestResult> GetResult()
   {
     return _spResult;
   }
-
+  
 private:
 
   // prohibited
@@ -332,16 +293,83 @@ private:
     
   }
   
-  bool IsDecorated( Node::LID id )
+  template <typename AAFObjectType>
+  void DecorateMobSlot ( AxMobSlot& axMobSlot, AAFTypedObjNode<AAFObjectType>& node )
   {
-    return ( _decoratedNodes.find( id ) != _decoratedNodes.end() );
+
+    AxDataDef axDataDef( axMobSlot.GetDataDef() );
+    
+    //Check if this is an essence track.
+    if ( axDataDef.IsPictureKind() || axDataDef.IsSoundKind() )
+    {
+        
+      shared_ptr<EPAudioTrack> spAudio( EPAudioTrack::CreateAudioTrack( axMobSlot ) );
+      shared_ptr<EPVideoTrack> spVideo( EPVideoTrack::CreateVideoTrack( axMobSlot ) );
+                
+      //Now check if it is an audio or video track.
+      if ( spAudio )
+      {
+        this->DecorateMob<AAFObjectType, EPAudioTrack>( node, spAudio );
+      }
+      else if ( spVideo )
+      {
+        this->DecorateMob<AAFObjectType, EPVideoTrack>( node, spVideo );
+      }
+      else
+      {
+        this->DecorateMob<AAFObjectType, EPEssenceTrack>( node );
+      }
+    }
+    else if ( axDataDef.IsTimecodeKind() )
+    {
+      this->DecorateMob<AAFObjectType, EPTimecodeTrack>( node );
+    }
+    else if ( axDataDef.IsEdgecodeKind() )
+    {
+      this->DecorateMob<AAFObjectType, EPEdgecodeTrack>( node );
+    }
+    
+  }
+  
+  template <typename AAFObjectType, typename EPObjectType>
+  void DecorateMob( AAFTypedObjNode<AAFObjectType>& node )
+  {
+    //Get a shared pointer to the node.
+    shared_ptr<AAFTypedObjNode<AAFObjectType> > spNode =
+        dynamic_pointer_cast<AAFTypedObjNode<AAFObjectType> >( 
+            node.GetSharedPointerToNode() );
+
+    //Create the EPObject
+    shared_ptr<EPObjectType> spEPObj( new EPObjectType() );
+
+    //Create a decorated node.
+    shared_ptr<EPTypedObjNode<AAFObjectType, EPObjectType> > 
+        spDecorated( new EPTypedObjNode<AAFObjectType, EPObjectType>( spNode, spEPObj ) );
+        
+    //Decorate the node in the graph.
+    _spGraph->Decorate( spDecorated );   
+  }
+  
+  template <typename AAFObjectType, typename EPObjectType>
+  void DecorateMob( AAFTypedObjNode<AAFObjectType>& node, shared_ptr<EPObjectType> spEPObj )
+  {
+    //Get a shared pointer to the node.
+    shared_ptr<AAFTypedObjNode<AAFObjectType> > spNode =
+        dynamic_pointer_cast<AAFTypedObjNode<AAFObjectType> >( 
+            node.GetSharedPointerToNode() );
+
+    //Create a decorated node.
+    shared_ptr<EPTypedObjNode<AAFObjectType, EPObjectType> > 
+        spDecorated( new EPTypedObjNode<AAFObjectType, EPObjectType>( spNode, spEPObj ) );
+        
+    //Decorate the node in the graph.
+    _spGraph->Decorate( spDecorated );   
   }
 
   wostream& _log;
   shared_ptr<DetailLevelTestResult> _spResult;
   shared_ptr<const TestGraph> _spGraph;
   set<aafUID_t> _knownDescriptors;
-  set<Node::LID> _decoratedNodes;
   
 };
 

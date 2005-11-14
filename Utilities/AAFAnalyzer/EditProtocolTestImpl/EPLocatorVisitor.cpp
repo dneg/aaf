@@ -69,12 +69,10 @@ EPLocatorVisitor::EPLocatorVisitor( wostream& log )
                                             TestResult::PASS,
                                             TestRegistry::GetInstance().GetRequirementsForTest( EPLocatorTest::GetTestInfo().GetName() )
                )                          )
-{
-}
+{}
     
 EPLocatorVisitor::~EPLocatorVisitor()
-{
-}
+{}
 
 bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node )
 {
@@ -82,7 +80,7 @@ bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource
     bool testPassed = true;
     AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
 
-    AxString mobName = this->GetMobName( axSrcMob, L"File Source" );
+    AxString mobName = this->GetMobName( axSrcMob, EPFileSource::GetName() );
 
     try
     {
@@ -252,7 +250,7 @@ bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSour
             throw ex;
         }
         _spResult->AddInformationResult( L"REQ_EP_075", 
-                                         this->GetMobName( axSrcMob, L"Import Source" ) + L" does not have an EssenceDescriptor::Locator property.",
+                                         this->GetMobName( axSrcMob, EPImportSource::GetName() ) + L" does not have an EssenceDescriptor::Locator property.",
                                          TestResult::FAIL );
         return false;
     }
@@ -288,16 +286,6 @@ bool EPLocatorVisitor::CheckNetworkLocator( AxNetworkLocator& axNetLocator )
     return true;
 }
 
-bool EPLocatorVisitor::EdgeVisit(AAFComponentReference& edge)
-{
-    return false;
-}
-
-bool EPLocatorVisitor::EdgeVisit(AAFSlotReference& edge)
-{
-    return false;
-}
-    
 shared_ptr<DetailLevelTestResult> EPLocatorVisitor::GetResult()
 {
     return _spResult;

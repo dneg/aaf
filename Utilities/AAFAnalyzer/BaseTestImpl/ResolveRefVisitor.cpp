@@ -32,20 +32,164 @@
 //AAF Analyzer Base files
 #include <AAFMobReference.h>
 #include <AAFSlotReference.h>
+#include <AAFComponentReference.h>
 #include <MobNodeMap.h>
 
 //Analyzer Base files
 #include <EdgeMap.h>
+#include <DepthFirstTraversal.h>
 
 //Ax files
 #include <AxMobSlot.h>
 #include <AxComponent.h>
-#include <AAFResult.h>
 #include <AxUtil.h>
+
+//AAF files
+#include <AAFResult.h>
+
+//STL files
+#include <set>
 
 namespace {
 
 using namespace aafanalyzer;
+using namespace boost;
+using namespace std;
+
+class ResolveSlotRefVisitor : public TypedVisitor
+{
+ public:
+ 
+  ResolveSlotRefVisitor(wostream& os, aafSlotID_t slotId)
+    : _os(os),
+      _slotId( slotId )
+  {}
+
+  virtual ~ResolveSlotRefVisitor()
+  {}
+
+  //Note: We cannot do a node cast in this situation since we need the node
+  //      of the correct type to create an edge.
+  virtual bool PreOrderVisit(AAFTypedObjNode<IAAFTimelineMobSlot>& node)
+  {
+    AxTimelineMobSlot axMobSlot( node.GetAAFObjectOfType() );
+    aafSlotID_t slotId = axMobSlot.GetSlotID();
+    
+    if ( slotId == _slotId )
+    {
+        _spMobSlot = node.GetSharedPointerToNode();
+        //The node was found, there is no need to traverse further.
+        return false;
+    }
+
+    return true;
+  }
+  
+  virtual bool PreOrderVisit(AAFTypedObjNode<IAAFStaticMobSlot>& node)
+  {
+    AxStaticMobSlot axMobSlot( node.GetAAFObjectOfType() );
+    aafSlotID_t slotId = axMobSlot.GetSlotID();
+    
+    if ( slotId == _slotId )
+    {
+        _spMobSlot = node.GetSharedPointerToNode();
+        //The node was found, there is no need to traverse further.
+        return false;
+    }
+
+    return true;
+  }
+    
+  virtual bool PreOrderVisit(AAFTypedObjNode<IAAFEventMobSlot>& node)
+  {
+    AxEventMobSlot axMobSlot( node.GetAAFObjectOfType() );
+    aafSlotID_t slotId = axMobSlot.GetSlotID();
+    
+    if ( slotId == _slotId )
+    {
+        _spMobSlot = node.GetSharedPointerToNode();
+        //The node was found, there is no need to traverse further.
+        return false;
+    }
+
+    return true;
+  }
+
+  virtual bool PreOrderVisit(AAFTypedObjNode<IAAFMobSlot>& node)
+  {
+    AxMobSlot axMobSlot( node.GetAAFObjectOfType() );
+    aafSlotID_t slotId = axMobSlot.GetSlotID();
+    
+    if ( slotId == _slotId )
+    {
+        _spMobSlot = node.GetSharedPointerToNode();
+        //The node was found, there is no need to traverse further.
+        return false;
+    }
+
+    return true;
+  }
+  
+  virtual bool EdgeVisit(AAFContainment& edge)
+  {
+    //Don't continue the traversal if the mob slot has been found.
+    return !_spMobSlot;
+  }
+  
+  shared_ptr<Node> GetMobSlot() const
+  {
+    return _spMobSlot;
+  }
+
+ private:
+  wostream& _os;
+  aafSlotID_t _slotId;
+  shared_ptr<Node> _spMobSlot;
+
+  // prohibited
+  ResolveSlotRefVisitor();
+  ResolveSlotRefVisitor( const ResolveSlotRefVisitor& );
+  ResolveSlotRefVisitor& operator=( const ResolveSlotRefVisitor& );
+};
+
+class ResolveComponentRefVisitor : public TypedVisitor
+{
+ public:
+ 
+  typedef set<shared_ptr<Node> > NodeSet;
+  typedef shared_ptr<NodeSet> NodeSetSP;
+ 
+  ResolveComponentRefVisitor(wostream& os)
+    : _os(os),
+      _spNodes( new NodeSet )
+  {}
+
+  virtual ~ResolveComponentRefVisitor()
+  {}
+
+  virtual bool PreOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
+  {
+    //Add the source clip to the set of source clips.
+    _spNodes->insert( node.GetSharedPointerToNode() );
+    
+    //We have reached the source clip, there is no need to traverse any further.
+    return false;
+  }
+  
+  NodeSetSP GetReferencedNodes() const
+  {
+    return _spNodes;
+  }
+
+ private:
+  wostream& _os;
+  NodeSetSP _spNodes;
+
+  // prohibited
+  ResolveComponentRefVisitor();
+  ResolveComponentRefVisitor( const ResolveComponentRefVisitor& );
+  ResolveComponentRefVisitor& operator=( const ResolveComponentRefVisitor& );
+};
 
 } // end of namespace
 
@@ -111,32 +255,34 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
     {
       shared_ptr<AAFMobReference> spMobRefEdge(new AAFMobReference(spSrcClp, spNode)); 
       _spEdgeMap->AddEdge(spMobRefEdge);
-      
+
       //now create a Slot Edge from the source clip to the mobslot and add to Edgemap
-      shared_ptr<AAFTypedObjNode<IAAFTimelineMobSlot> > spMobSlotNode;
-      EdgeMap::ConstEdgeVectorSP mobChildren = _spEdgeMap->GetChildren(spNode);    
-      for(unsigned int i = 0; i < mobChildren->size(); i++)
+      shared_ptr<ResolveSlotRefVisitor> spSlotVisitor( new ResolveSlotRefVisitor( _os, srcRef.sourceSlotID ) );
+      DepthFirstTraversal slotDFT( _spEdgeMap, spNode );
+      slotDFT.TraverseDown( spSlotVisitor );
+      shared_ptr<Node> spMobSlotNode = spSlotVisitor->GetMobSlot();
+      
+      if ( spMobSlotNode )
       {
-	spMobSlotNode = dynamic_pointer_cast<AAFTypedObjNode<IAAFTimelineMobSlot> >(mobChildren->at(i)->GetChildNode());
-	
-	if(spMobSlotNode)
-	{
-	  AxTimelineMobSlot axMobSlot(spMobSlotNode->GetAAFObjectOfType());
-	  aafSlotID_t slotid = srcRef.sourceSlotID;
-	  
-	  if(axMobSlot.GetSlotID() == slotid)
-	  {
-	    shared_ptr<AAFSlotReference> spSlotEdge(new AAFSlotReference(spSrcClp, spMobSlotNode));
-	    _spEdgeMap->AddEdge(spSlotEdge);
-	  }
-	}
+        shared_ptr<AAFSlotReference> spSlotEdge( new AAFSlotReference(spSrcClp, spMobSlotNode) );
+        _spEdgeMap->AddEdge( spSlotEdge );
+
+        //Now make a reference from the source clip to all source clips
+        //referenced from this mob slot.
+        shared_ptr<ResolveComponentRefVisitor> spCompVisitor( new ResolveComponentRefVisitor( _os ) );
+        DepthFirstTraversal dfs( _spEdgeMap, spMobSlotNode );
+        dfs.TraverseDown( spCompVisitor );
+        ResolveComponentRefVisitor::NodeSetSP spNodes = spCompVisitor->GetReferencedNodes();
+        
+        ResolveComponentRefVisitor::NodeSet::const_iterator iter;
+        
+        for ( iter = spNodes->begin(); iter != spNodes->end(); iter++ )
+        {
+          shared_ptr<AAFComponentReference> spCompEdge( new AAFComponentReference(spSrcClp, *iter) );
+          _spEdgeMap->AddEdge( spCompEdge );
+        }
+        
       }
-      
-      //TODO: The next level of reference detail is to create the
-      //edges from the source clip to components ultimately
-      //references. The may be multiple referenced components in
-      //the event that the source clips points to a sequence.
-      
     }
   }
   //keep track of unresolved source clips

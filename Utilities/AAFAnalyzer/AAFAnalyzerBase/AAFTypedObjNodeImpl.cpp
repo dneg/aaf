@@ -59,6 +59,13 @@ AAFTypedObjNodeImpl<AAFObjType>::AAFTypedObjNodeImpl(IAAFSmartPointer<AAFObjType
 {}
 
 template<typename AAFObjType>
+AAFTypedObjNodeImpl<AAFObjType>::AAFTypedObjNodeImpl(IAAFSmartPointer<AAFObjType> spObject,
+                         shared_ptr<Node> spNode )
+  : AAFTypedObjNode<AAFObjType>( spObject, spNode ),
+    _spTypedObj( spObject )
+{}
+
+template<typename AAFObjType>
 AAFTypedObjNodeImpl<AAFObjType>::~AAFTypedObjNodeImpl()
 {}
 
@@ -95,34 +102,14 @@ IAAFSmartPointer<AAFObjType> AAFTypedObjNodeImpl<AAFObjType>::GetAAFObjectOfType
 template<typename AAFObjType>
 void AAFTypedObjNodeImpl<AAFObjType>::Decorate( shared_ptr<Node> decoratedNode )
 {
-
-    shared_ptr<AAFTypedObjNode<IAAFSourceMob> > spSrcMob = dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceMob> >( this->GetSharedPointerToNode() );
-    if ( spSrcMob )
+    shared_ptr<AAFTypedObjNode<IAAFMob> > spMob = dynamic_pointer_cast<AAFTypedObjNode<IAAFMob> >( this->GetSharedPointerToNode() );
+    if ( spMob )
     {
-        AxSourceMob axSrcMob( spSrcMob->GetAAFObjectOfType() );
-        aafMobID_t mobid = axSrcMob.GetMobID();
+        AxMob axMob( spMob->GetAAFObjectOfType() );
+        aafMobID_t mobid = axMob.GetMobID();
         MobNodeMap::GetInstance().DecorateMobNode( mobid, decoratedNode );
         return;
     }
-    
-    shared_ptr<AAFTypedObjNode<IAAFCompositionMob> > spCompMob = dynamic_pointer_cast<AAFTypedObjNode<IAAFCompositionMob> >( this->GetSharedPointerToNode() );
-    if ( spCompMob )
-    {
-        AxCompositionMob axCompMob( spCompMob->GetAAFObjectOfType() );
-        aafMobID_t mobid = axCompMob.GetMobID();
-        MobNodeMap::GetInstance().DecorateMobNode( mobid, decoratedNode );
-        return;
-    }
-    
-    shared_ptr<AAFTypedObjNode<IAAFMasterMob> > spMastMob = dynamic_pointer_cast<AAFTypedObjNode<IAAFMasterMob> >( this->GetSharedPointerToNode() );
-    if ( spMastMob )
-    {
-        AxMasterMob axMastMob( spMastMob->GetAAFObjectOfType() );
-        aafMobID_t mobid = axMastMob.GetMobID();
-        MobNodeMap::GetInstance().DecorateMobNode( mobid, decoratedNode );
-        return;
-    }
-    
 }
 
 #include "TypedNodeImplTemplate.cpp.gen"
