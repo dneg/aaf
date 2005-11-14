@@ -1508,7 +1508,26 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         OMWeakObjectReference & r = wr->reference();
         OMStorable* object = r.getValue();
         ASSERT("Valid object", object != 0);
+#if 1 // HACK
+        // In AAF the properties with the following ids are historically and
+        // currently weak references, in MXF they are simply labels so
+        // persist them as such. In AAF they'll eventually become a new kind
+        // of reference. tjb 11/14/05
+        //
+        if ((id == 0x0201) || (id == 0x3004) || (id == 0x3005)){
+          OMUniqueObjectIdentification k = r.identification();
+          _storage->write(id, _reorderBytes);
+          OMPropertySize s = sizeof(OMKLVKey);
+          _storage->write(s, _reorderBytes);
+          OMKLVKey k2; // 8,166m
+          convert(k2, k);
+          _storage->writeKLVKey(k2);
+        } else {
+          referenceSave(object, id);
+        }
+#else
         referenceSave(object, id);
+#endif
         break;
       }
       case SF_WEAK_OBJECT_REFERENCE_VECTOR: {
