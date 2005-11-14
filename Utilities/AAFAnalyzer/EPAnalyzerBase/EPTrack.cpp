@@ -21,6 +21,9 @@
 //Edit Protocol Analyzer Base files
 #include "EPTrack.h"
 
+//AAF Analyzer Base files
+#include <MobNodeMap.h>
+
 //Ax files
 #include <AxDefObject.h>
 #include <AxMetaDef.h>
@@ -48,6 +51,15 @@ bool IsType( AxClassDef& clsDef, aafUID_t type, aafUID_t parentType )
 
     AxClassDef parentDef( clsDef.GetParent() );
     return IsType( parentDef, type, parentType );
+}
+
+bool IsReferenceInFile( AxSourceClip& axSrcClip )
+{
+    aafSourceRef_t srcRef = axSrcClip.GetSourceReference();
+    aafMobID_t mobid = srcRef.sourceID;   
+    shared_ptr<Node> spNode;
+    spNode = MobNodeMap::GetInstance().GetMobNode(mobid);
+    return spNode != NULL;
 }
 
 } // end of namespace
@@ -159,18 +171,23 @@ shared_ptr<EPAudioTrack> EPAudioTrack::CreateAudioTrack( AxMobSlot& axMobSlot )
         {
             //3. Ensure the source clip contains  a source mob.
             AxSourceClip axSrcClip( AxQueryInterface<IAAFSegment, IAAFSourceClip>( axSegment ) );
-            AxMob axMob( axSrcClip.ResolveRef() );
-            AxClassDef mobClsDef( axMob.GetDefinition() );
-            if ( IsType( mobClsDef, kAAFClassID_SourceMob, kAAFClassID_Mob ) )
+            
+            //4. Make sure that the referenced source mob is in this AAF file.
+            if ( IsReferenceInFile( axSrcClip ) )
             {
-                //4. Ensure the source mob is a file source mob.
-                AxSourceMob axSrcMob( AxQueryInterface<IAAFMob, IAAFSourceMob>( axMob ) );
-                AxEssenceDescriptor descriptor( axSrcMob.GetEssenceDescriptor() );
-                AxClassDef desClsDef( descriptor.GetDefinition() );
-                if ( IsType( desClsDef, kAAFClassID_FileDescriptor, kAAFClassID_EssenceDescriptor ) )
+                AxMob axMob( axSrcClip.ResolveRef() );
+                AxClassDef mobClsDef( axMob.GetDefinition() );
+                if ( IsType( mobClsDef, kAAFClassID_SourceMob, kAAFClassID_Mob ) )
                 {
-                    shared_ptr<EPAudioTrack> spTrack( new EPAudioTrack( axMobSlot, axSrcClip, axSrcMob ) );
-                    return spTrack;
+                    //4. Ensure the source mob is a file source mob.
+                    AxSourceMob axSrcMob( AxQueryInterface<IAAFMob, IAAFSourceMob>( axMob ) );
+                    AxEssenceDescriptor descriptor( axSrcMob.GetEssenceDescriptor() );
+                    AxClassDef desClsDef( descriptor.GetDefinition() );
+                    if ( IsType( desClsDef, kAAFClassID_FileDescriptor, kAAFClassID_EssenceDescriptor ) )
+                    {
+                        shared_ptr<EPAudioTrack> spTrack( new EPAudioTrack( axMobSlot, axSrcClip, axSrcMob ) );
+                        return spTrack;
+                    }
                 }
             }
         }
@@ -207,18 +224,23 @@ shared_ptr<EPVideoTrack> EPVideoTrack::CreateVideoTrack( AxMobSlot& axMobSlot )
         {
             //3. Ensure the source clip contains  a source mob.
             AxSourceClip axSrcClip( AxQueryInterface<IAAFSegment, IAAFSourceClip>( axSegment ) );
-            AxMob axMob( axSrcClip.ResolveRef() );
-            AxClassDef mobClsDef( axMob.GetDefinition() );
-            if ( IsType( mobClsDef, kAAFClassID_SourceMob, kAAFClassID_Mob ) )
+
+            //4. Make sure that the referenced source mob is in this AAF file.
+            if ( IsReferenceInFile( axSrcClip ) )
             {
-                //4. Ensure the source mob is a file source mob.
-                AxSourceMob axSrcMob( AxQueryInterface<IAAFMob, IAAFSourceMob>( axMob ) );
-                AxEssenceDescriptor descriptor( axSrcMob.GetEssenceDescriptor() );
-                AxClassDef desClsDef( descriptor.GetDefinition() );
-                if ( IsType( desClsDef, kAAFClassID_FileDescriptor, kAAFClassID_EssenceDescriptor ) )
+                AxMob axMob( axSrcClip.ResolveRef() );
+                AxClassDef mobClsDef( axMob.GetDefinition() );
+                if ( IsType( mobClsDef, kAAFClassID_SourceMob, kAAFClassID_Mob ) )
                 {
-                    shared_ptr<EPVideoTrack> spTrack( new EPVideoTrack( axMobSlot, axSrcClip, axSrcMob ) );
-                    return spTrack;
+                    //5. Ensure the source mob is a file source mob.
+                    AxSourceMob axSrcMob( AxQueryInterface<IAAFMob, IAAFSourceMob>( axMob ) );
+                    AxEssenceDescriptor descriptor( axSrcMob.GetEssenceDescriptor() );
+                    AxClassDef desClsDef( descriptor.GetDefinition() );
+                    if ( IsType( desClsDef, kAAFClassID_FileDescriptor, kAAFClassID_EssenceDescriptor ) )
+                    {
+                        shared_ptr<EPVideoTrack> spTrack( new EPVideoTrack( axMobSlot, axSrcClip, axSrcMob ) );
+                        return spTrack;
+                    }
                 }
             }
         }
