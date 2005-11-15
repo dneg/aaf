@@ -148,15 +148,6 @@ static const OMUInt32 fixedPartitionSize =
   sizeof(OMUInt32) + // count of essence container labels
   sizeof(OMUInt32);  // size of each essence container label
 
-static const OMPropertyId PID_InterchangeObject_InstanceUID = 0x3c0a;
-
-// {01011502-0000-0000-060E-2B3401010101}
-static const OMObjectIdentification Property_InterchangeObject_InstanceUID =
-{0x01011502, 0x0000, 0x0000, {0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x01}};
-
-static const OMPropertyId PID_Root_ObjectDirectory = 0x003;
-static const OMPropertyId PID_Root_FormatVersion   = 0x004;
-
 // Incrementing the following value serves to distinguish between
 // files with minor but compatible differences.  Incrementing the
 // following value does not invalidate files.
