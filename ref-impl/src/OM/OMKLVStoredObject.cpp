@@ -2158,22 +2158,10 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
   OMUInt64 elementCountPosition = _storage->reserve(sizeof(elementCount));
   _storage->write(elementSize, _reorderBytes);
 
-  // Object::InstanceUID     3c.0a
+  // Instance UID
   _storage->write(PID_InterchangeObject_InstanceUID, _reorderBytes);
   OMKLVKey iuidk;
   convert(iuidk, Property_InterchangeObject_InstanceUID);
-  _storage->writeKLVKey(iuidk);
-  elementCount = elementCount + 1;
-  // ? Root::ObjectDirectory f7.03
-  // ? Root::FormatVersion   7f.04
-  // Root::MetaDictionary    00.01
-  _storage->write(PID_Root_MetaDictionary, _reorderBytes);
-  convert(iuidk, Property_Root_MetaDictionary);
-  _storage->writeKLVKey(iuidk);
-  elementCount = elementCount + 1;
-  // Root::Header            00.02
-  _storage->write(PID_Root_Header, _reorderBytes);
-  convert(iuidk, Property_Root_Header);
   _storage->writeKLVKey(iuidk);
   elementCount = elementCount + 1;
 
