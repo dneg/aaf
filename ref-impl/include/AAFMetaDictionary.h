@@ -48,8 +48,8 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Mon Oct 10 14:42:57 BST 2005
-// by user phil on system pilot16.
+// This file was generated on Wed Nov 16 15:14:26 EST 2005
+// by user tbingham on system tbinghampc.
 //
 // Key to macros.
 //
@@ -7691,1148 +7691,1148 @@ AAF_INSTANCE_TABLE_BEGIN()
 
 AAF_INSTANCE_GROUP(OperationDefinitionInstances, OperationDefinition)
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_VideoDissolve,OperationDef_VideoDissolve,"kAAFEffectVideoDissolve",""), 
-      // {0c3bea40-fc05-11d2-8a29-0050040ef7d2}
-      AAF_LITERAL_AUID(0x0c3bea40,
-        0xfc05, 0x11d2,
-        0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {0C3BEA40-FC05-11D2-8A29-0050040EF7D2}
+      AAF_LITERAL_AUID(0x0C3BEA40,
+        0xFC05, 0x11D2,
+        0x8A, 0x29, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_VideoDissolve")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {0c3bea40-fc05-11d2-8a29-0050040ef7d2}
-      AAF_LITERAL_AUID(0x0c3bea40,
-        0xfc05, 0x11d2,
-        0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {0C3BEA40-FC05-11D2-8A29-0050040EF7D2}
+      AAF_LITERAL_AUID(0x0C3BEA40,
+        0xFC05, 0x11D2,
+        0x8A, 0x29, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_VideoDissolve,OperationDef_VideoDissolve,"kAAFEffectVideoDissolve",""), 
-      // {0c3bea40-fc05-11d2-8a29-0050040ef7d2}
-      AAF_LITERAL_AUID(0x0c3bea40,
-        0xfc05, 0x11d2,
-        0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {0C3BEA40-FC05-11D2-8A29-0050040EF7D2}
+      AAF_LITERAL_AUID(0x0C3BEA40,
+        0xFC05, 0x11D2,
+        0x8A, 0x29, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_SMPTEVideoWipe,OperationDef_SMPTEVideoWipe,"kAAFEffectSMPTEVideoWipe",""), 
-      // {0c3bea44-fc05-11d2-8a29-0050040ef7d2}
-      AAF_LITERAL_AUID(0x0c3bea44,
-        0xfc05, 0x11d2,
-        0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {0C3BEA44-FC05-11D2-8A29-0050040EF7D2}
+      AAF_LITERAL_AUID(0x0C3BEA44,
+        0xFC05, 0x11D2,
+        0x8A, 0x29, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_SMPTEVideoWipe")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {0c3bea44-fc05-11d2-8a29-0050040ef7d2}
-      AAF_LITERAL_AUID(0x0c3bea44,
-        0xfc05, 0x11d2,
-        0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {0C3BEA44-FC05-11D2-8A29-0050040EF7D2}
+      AAF_LITERAL_AUID(0x0C3BEA44,
+        0xFC05, 0x11D2,
+        0x8A, 0x29, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_SMPTEVideoWipe,OperationDef_SMPTEVideoWipe,"kAAFEffectSMPTEVideoWipe",""), 
-      // {0c3bea44-fc05-11d2-8a29-0050040ef7d2}
-      AAF_LITERAL_AUID(0x0c3bea44,
-        0xfc05, 0x11d2,
-        0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {0C3BEA44-FC05-11D2-8A29-0050040EF7D2}
+      AAF_LITERAL_AUID(0x0C3BEA44,
+        0xFC05, 0x11D2,
+        0x8A, 0x29, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_VideoSpeedControl,OperationDef_VideoSpeedControl,"kAAFEffectVideoSpeedControl",""), 
-      // {9d2ea890-0968-11d3-8a38-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9d2ea890,
-        0x0968, 0x11d3,
-        0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {9D2EA890-0968-11D3-8A38-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9D2EA890,
+        0x0968, 0x11D3,
+        0x8A, 0x38, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_VideoSpeedControl")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9d2ea890-0968-11d3-8a38-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9d2ea890,
-        0x0968, 0x11d3,
-        0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9D2EA890-0968-11D3-8A38-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9D2EA890,
+        0x0968, 0x11D3,
+        0x8A, 0x38, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_VideoSpeedControl,OperationDef_VideoSpeedControl,"kAAFEffectVideoSpeedControl",""), 
-      // {9d2ea890-0968-11d3-8a38-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9d2ea890,
-        0x0968, 0x11d3,
-        0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9D2EA890-0968-11D3-8A38-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9D2EA890,
+        0x0968, 0x11D3,
+        0x8A, 0x38, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_VideoRepeat,OperationDef_VideoRepeat,"kAAFEffectVideoRepeat",""), 
-      // {9d2ea891-0968-11d3-8a38-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9d2ea891,
-        0x0968, 0x11d3,
-        0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {9D2EA891-0968-11D3-8A38-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9D2EA891,
+        0x0968, 0x11D3,
+        0x8A, 0x38, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_VideoRepeat")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9d2ea891-0968-11d3-8a38-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9d2ea891,
-        0x0968, 0x11d3,
-        0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9D2EA891-0968-11D3-8A38-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9D2EA891,
+        0x0968, 0x11D3,
+        0x8A, 0x38, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_VideoRepeat,OperationDef_VideoRepeat,"kAAFEffectVideoRepeat",""), 
-      // {9d2ea891-0968-11d3-8a38-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9d2ea891,
-        0x0968, 0x11d3,
-        0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9D2EA891-0968-11D3-8A38-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9D2EA891,
+        0x0968, 0x11D3,
+        0x8A, 0x38, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_Flip,OperationDef_Flip,"",""), 
-      // {f1db0f32-8d64-11d3-80df-006008143e6f}
-      AAF_LITERAL_AUID(0xf1db0f32,
-        0x8d64, 0x11d3,
-        0x80, 0xdf, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f), "")
+      // {F1DB0F32-8D64-11D3-80DF-006008143E6F}
+      AAF_LITERAL_AUID(0xF1DB0F32,
+        0x8D64, 0x11D3,
+        0x80, 0xDF, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_Flip")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {f1db0f32-8d64-11d3-80df-006008143e6f}
-      AAF_LITERAL_AUID(0xf1db0f32,
-        0x8d64, 0x11d3,
-        0x80, 0xdf, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {F1DB0F32-8D64-11D3-80DF-006008143E6F}
+      AAF_LITERAL_AUID(0xF1DB0F32,
+        0x8D64, 0x11D3,
+        0x80, 0xDF, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_Flip,OperationDef_Flip,"",""), 
-      // {f1db0f32-8d64-11d3-80df-006008143e6f}
-      AAF_LITERAL_AUID(0xf1db0f32,
-        0x8d64, 0x11d3,
-        0x80, 0xdf, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {F1DB0F32-8D64-11D3-80DF-006008143E6F}
+      AAF_LITERAL_AUID(0xF1DB0F32,
+        0x8D64, 0x11D3,
+        0x80, 0xDF, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_Flop,OperationDef_Flop,"",""), 
-      // {f1db0f34-8d64-11d3-80df-006008143e6f}
-      AAF_LITERAL_AUID(0xf1db0f34,
-        0x8d64, 0x11d3,
-        0x80, 0xdf, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f), "")
+      // {F1DB0F34-8D64-11D3-80DF-006008143E6F}
+      AAF_LITERAL_AUID(0xF1DB0F34,
+        0x8D64, 0x11D3,
+        0x80, 0xDF, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_Flop")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {f1db0f34-8d64-11d3-80df-006008143e6f}
-      AAF_LITERAL_AUID(0xf1db0f34,
-        0x8d64, 0x11d3,
-        0x80, 0xdf, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {F1DB0F34-8D64-11D3-80DF-006008143E6F}
+      AAF_LITERAL_AUID(0xF1DB0F34,
+        0x8D64, 0x11D3,
+        0x80, 0xDF, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_Flop,OperationDef_Flop,"",""), 
-      // {f1db0f34-8d64-11d3-80df-006008143e6f}
-      AAF_LITERAL_AUID(0xf1db0f34,
-        0x8d64, 0x11d3,
-        0x80, 0xdf, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {F1DB0F34-8D64-11D3-80DF-006008143E6F}
+      AAF_LITERAL_AUID(0xF1DB0F34,
+        0x8D64, 0x11D3,
+        0x80, 0xDF, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_FlipFlop,OperationDef_FlipFlop,"",""), 
-      // {f1db0f33-8d64-11d3-80df-006008143e6f}
-      AAF_LITERAL_AUID(0xf1db0f33,
-        0x8d64, 0x11d3,
-        0x80, 0xdf, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f), "")
+      // {F1DB0F33-8D64-11D3-80DF-006008143E6F}
+      AAF_LITERAL_AUID(0xF1DB0F33,
+        0x8D64, 0x11D3,
+        0x80, 0xDF, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_FlipFlop")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {f1db0f33-8d64-11d3-80df-006008143e6f}
-      AAF_LITERAL_AUID(0xf1db0f33,
-        0x8d64, 0x11d3,
-        0x80, 0xdf, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {F1DB0F33-8D64-11D3-80DF-006008143E6F}
+      AAF_LITERAL_AUID(0xF1DB0F33,
+        0x8D64, 0x11D3,
+        0x80, 0xDF, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_FlipFlop,OperationDef_FlipFlop,"",""), 
-      // {f1db0f33-8d64-11d3-80df-006008143e6f}
-      AAF_LITERAL_AUID(0xf1db0f33,
-        0x8d64, 0x11d3,
-        0x80, 0xdf, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {F1DB0F33-8D64-11D3-80DF-006008143E6F}
+      AAF_LITERAL_AUID(0xF1DB0F33,
+        0x8D64, 0x11D3,
+        0x80, 0xDF, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_VideoPosition,OperationDef_VideoPosition,"",""), 
-      // {86f5711e-ee72-450c-a118-17cf3b175dff}
-      AAF_LITERAL_AUID(0x86f5711e,
-        0xee72, 0x450c,
-        0xa1, 0x18, 0x17, 0xcf, 0x3b, 0x17, 0x5d, 0xff), "")
+      // {86F5711E-EE72-450C-A118-17CF3B175DFF}
+      AAF_LITERAL_AUID(0x86F5711E,
+        0xEE72, 0x450C,
+        0xA1, 0x18, 0x17, 0xCF, 0x3B, 0x17, 0x5D, 0xFF), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_VideoPosition")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {86f5711e-ee72-450c-a118-17cf3b175dff}
-      AAF_LITERAL_AUID(0x86f5711e,
-        0xee72, 0x450c,
-        0xa1, 0x18, 0x17, 0xcf, 0x3b, 0x17, 0x5d, 0xff))
+      // {86F5711E-EE72-450C-A118-17CF3B175DFF}
+      AAF_LITERAL_AUID(0x86F5711E,
+        0xEE72, 0x450C,
+        0xA1, 0x18, 0x17, 0xCF, 0x3B, 0x17, 0x5D, 0xFF))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_VideoPosition,OperationDef_VideoPosition,"",""), 
-      // {86f5711e-ee72-450c-a118-17cf3b175dff}
-      AAF_LITERAL_AUID(0x86f5711e,
-        0xee72, 0x450c,
-        0xa1, 0x18, 0x17, 0xcf, 0x3b, 0x17, 0x5d, 0xff))
+      // {86F5711E-EE72-450C-A118-17CF3B175DFF}
+      AAF_LITERAL_AUID(0x86F5711E,
+        0xEE72, 0x450C,
+        0xA1, 0x18, 0x17, 0xCF, 0x3B, 0x17, 0x5D, 0xFF))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_VideoCrop,OperationDef_VideoCrop,"",""), 
-      // {f5826680-26c5-4149-8554-43d3c7a3bc09}
-      AAF_LITERAL_AUID(0xf5826680,
-        0x26c5, 0x4149,
-        0x85, 0x54, 0x43, 0xd3, 0xc7, 0xa3, 0xbc, 0x09), "")
+      // {F5826680-26C5-4149-8554-43D3C7A3BC09}
+      AAF_LITERAL_AUID(0xF5826680,
+        0x26C5, 0x4149,
+        0x85, 0x54, 0x43, 0xD3, 0xC7, 0xA3, 0xBC, 0x09), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_VideoCrop")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {f5826680-26c5-4149-8554-43d3c7a3bc09}
-      AAF_LITERAL_AUID(0xf5826680,
-        0x26c5, 0x4149,
-        0x85, 0x54, 0x43, 0xd3, 0xc7, 0xa3, 0xbc, 0x09))
+      // {F5826680-26C5-4149-8554-43D3C7A3BC09}
+      AAF_LITERAL_AUID(0xF5826680,
+        0x26C5, 0x4149,
+        0x85, 0x54, 0x43, 0xD3, 0xC7, 0xA3, 0xBC, 0x09))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_VideoCrop,OperationDef_VideoCrop,"",""), 
-      // {f5826680-26c5-4149-8554-43d3c7a3bc09}
-      AAF_LITERAL_AUID(0xf5826680,
-        0x26c5, 0x4149,
-        0x85, 0x54, 0x43, 0xd3, 0xc7, 0xa3, 0xbc, 0x09))
+      // {F5826680-26C5-4149-8554-43D3C7A3BC09}
+      AAF_LITERAL_AUID(0xF5826680,
+        0x26C5, 0x4149,
+        0x85, 0x54, 0x43, 0xD3, 0xC7, 0xA3, 0xBC, 0x09))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_VideoScale,OperationDef_VideoScale,"",""), 
-      // {2e0a119d-e6f7-4bee-b5dc-6dd42988687e}
-      AAF_LITERAL_AUID(0x2e0a119d,
-        0xe6f7, 0x4bee,
-        0xb5, 0xdc, 0x6d, 0xd4, 0x29, 0x88, 0x68, 0x7e), "")
+      // {2E0A119D-E6F7-4BEE-B5DC-6DD42988687E}
+      AAF_LITERAL_AUID(0x2E0A119D,
+        0xE6F7, 0x4BEE,
+        0xB5, 0xDC, 0x6D, 0xD4, 0x29, 0x88, 0x68, 0x7E), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_VideoScale")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {2e0a119d-e6f7-4bee-b5dc-6dd42988687e}
-      AAF_LITERAL_AUID(0x2e0a119d,
-        0xe6f7, 0x4bee,
-        0xb5, 0xdc, 0x6d, 0xd4, 0x29, 0x88, 0x68, 0x7e))
+      // {2E0A119D-E6F7-4BEE-B5DC-6DD42988687E}
+      AAF_LITERAL_AUID(0x2E0A119D,
+        0xE6F7, 0x4BEE,
+        0xB5, 0xDC, 0x6D, 0xD4, 0x29, 0x88, 0x68, 0x7E))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_VideoScale,OperationDef_VideoScale,"",""), 
-      // {2e0a119d-e6f7-4bee-b5dc-6dd42988687e}
-      AAF_LITERAL_AUID(0x2e0a119d,
-        0xe6f7, 0x4bee,
-        0xb5, 0xdc, 0x6d, 0xd4, 0x29, 0x88, 0x68, 0x7e))
+      // {2E0A119D-E6F7-4BEE-B5DC-6DD42988687E}
+      AAF_LITERAL_AUID(0x2E0A119D,
+        0xE6F7, 0x4BEE,
+        0xB5, 0xDC, 0x6D, 0xD4, 0x29, 0x88, 0x68, 0x7E))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_VideoRotate,OperationDef_VideoRotate,"",""), 
-      // {f2ca330d-8d45-4db4-b1b5-136ab055586f}
-      AAF_LITERAL_AUID(0xf2ca330d,
-        0x8d45, 0x4db4,
-        0xb1, 0xb5, 0x13, 0x6a, 0xb0, 0x55, 0x58, 0x6f), "")
+      // {F2CA330D-8D45-4DB4-B1B5-136AB055586F}
+      AAF_LITERAL_AUID(0xF2CA330D,
+        0x8D45, 0x4DB4,
+        0xB1, 0xB5, 0x13, 0x6A, 0xB0, 0x55, 0x58, 0x6F), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_VideoRotate")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {f2ca330d-8d45-4db4-b1b5-136ab055586f}
-      AAF_LITERAL_AUID(0xf2ca330d,
-        0x8d45, 0x4db4,
-        0xb1, 0xb5, 0x13, 0x6a, 0xb0, 0x55, 0x58, 0x6f))
+      // {F2CA330D-8D45-4DB4-B1B5-136AB055586F}
+      AAF_LITERAL_AUID(0xF2CA330D,
+        0x8D45, 0x4DB4,
+        0xB1, 0xB5, 0x13, 0x6A, 0xB0, 0x55, 0x58, 0x6F))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_VideoRotate,OperationDef_VideoRotate,"",""), 
-      // {f2ca330d-8d45-4db4-b1b5-136ab055586f}
-      AAF_LITERAL_AUID(0xf2ca330d,
-        0x8d45, 0x4db4,
-        0xb1, 0xb5, 0x13, 0x6a, 0xb0, 0x55, 0x58, 0x6f))
+      // {F2CA330D-8D45-4DB4-B1B5-136AB055586F}
+      AAF_LITERAL_AUID(0xF2CA330D,
+        0x8D45, 0x4DB4,
+        0xB1, 0xB5, 0x13, 0x6A, 0xB0, 0x55, 0x58, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_VideoCornerPinning,OperationDef_VideoCornerPinning,"",""), 
-      // {21d5c51a-8acb-46d5-9392-5cae640c8836}
-      AAF_LITERAL_AUID(0x21d5c51a,
-        0x8acb, 0x46d5,
-        0x93, 0x92, 0x5c, 0xae, 0x64, 0x0c, 0x88, 0x36), "")
+      // {21D5C51A-8ACB-46D5-9392-5CAE640C8836}
+      AAF_LITERAL_AUID(0x21D5C51A,
+        0x8ACB, 0x46D5,
+        0x93, 0x92, 0x5C, 0xAE, 0x64, 0x0C, 0x88, 0x36), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_VideoCornerPinning")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {21d5c51a-8acb-46d5-9392-5cae640c8836}
-      AAF_LITERAL_AUID(0x21d5c51a,
-        0x8acb, 0x46d5,
-        0x93, 0x92, 0x5c, 0xae, 0x64, 0x0c, 0x88, 0x36))
+      // {21D5C51A-8ACB-46D5-9392-5CAE640C8836}
+      AAF_LITERAL_AUID(0x21D5C51A,
+        0x8ACB, 0x46D5,
+        0x93, 0x92, 0x5C, 0xAE, 0x64, 0x0C, 0x88, 0x36))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_VideoCornerPinning,OperationDef_VideoCornerPinning,"",""), 
-      // {21d5c51a-8acb-46d5-9392-5cae640c8836}
-      AAF_LITERAL_AUID(0x21d5c51a,
-        0x8acb, 0x46d5,
-        0x93, 0x92, 0x5c, 0xae, 0x64, 0x0c, 0x88, 0x36))
+      // {21D5C51A-8ACB-46D5-9392-5CAE640C8836}
+      AAF_LITERAL_AUID(0x21D5C51A,
+        0x8ACB, 0x46D5,
+        0x93, 0x92, 0x5C, 0xAE, 0x64, 0x0C, 0x88, 0x36))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_VideoAlphaWithinVideoKey,OperationDef_VideoAlphaWithinVideoKey,"",""), 
-      // {14db900e-d537-49f6-889b-012568fcc234}
-      AAF_LITERAL_AUID(0x14db900e,
-        0xd537, 0x49f6,
-        0x88, 0x9b, 0x01, 0x25, 0x68, 0xfc, 0xc2, 0x34), "")
+      // {14DB900E-D537-49F6-889B-012568FCC234}
+      AAF_LITERAL_AUID(0x14DB900E,
+        0xD537, 0x49F6,
+        0x88, 0x9B, 0x01, 0x25, 0x68, 0xFC, 0xC2, 0x34), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_VideoAlphaWithinVideoKey")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {14db900e-d537-49f6-889b-012568fcc234}
-      AAF_LITERAL_AUID(0x14db900e,
-        0xd537, 0x49f6,
-        0x88, 0x9b, 0x01, 0x25, 0x68, 0xfc, 0xc2, 0x34))
+      // {14DB900E-D537-49F6-889B-012568FCC234}
+      AAF_LITERAL_AUID(0x14DB900E,
+        0xD537, 0x49F6,
+        0x88, 0x9B, 0x01, 0x25, 0x68, 0xFC, 0xC2, 0x34))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_VideoAlphaWithinVideoKey,OperationDef_VideoAlphaWithinVideoKey,"",""), 
-      // {14db900e-d537-49f6-889b-012568fcc234}
-      AAF_LITERAL_AUID(0x14db900e,
-        0xd537, 0x49f6,
-        0x88, 0x9b, 0x01, 0x25, 0x68, 0xfc, 0xc2, 0x34))
+      // {14DB900E-D537-49F6-889B-012568FCC234}
+      AAF_LITERAL_AUID(0x14DB900E,
+        0xD537, 0x49F6,
+        0x88, 0x9B, 0x01, 0x25, 0x68, 0xFC, 0xC2, 0x34))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_VideoSeparateAlphaKey,OperationDef_VideoSeparateAlphaKey,"",""), 
-      // {e599cb0f-ba5f-4192-9356-51eb19c08589}
-      AAF_LITERAL_AUID(0xe599cb0f,
-        0xba5f, 0x4192,
-        0x93, 0x56, 0x51, 0xeb, 0x19, 0xc0, 0x85, 0x89), "")
+      // {E599CB0F-BA5F-4192-9356-51EB19C08589}
+      AAF_LITERAL_AUID(0xE599CB0F,
+        0xBA5F, 0x4192,
+        0x93, 0x56, 0x51, 0xEB, 0x19, 0xC0, 0x85, 0x89), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_VideoSeparateAlphaKey")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {e599cb0f-ba5f-4192-9356-51eb19c08589}
-      AAF_LITERAL_AUID(0xe599cb0f,
-        0xba5f, 0x4192,
-        0x93, 0x56, 0x51, 0xeb, 0x19, 0xc0, 0x85, 0x89))
+      // {E599CB0F-BA5F-4192-9356-51EB19C08589}
+      AAF_LITERAL_AUID(0xE599CB0F,
+        0xBA5F, 0x4192,
+        0x93, 0x56, 0x51, 0xEB, 0x19, 0xC0, 0x85, 0x89))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_VideoSeparateAlphaKey,OperationDef_VideoSeparateAlphaKey,"",""), 
-      // {e599cb0f-ba5f-4192-9356-51eb19c08589}
-      AAF_LITERAL_AUID(0xe599cb0f,
-        0xba5f, 0x4192,
-        0x93, 0x56, 0x51, 0xeb, 0x19, 0xc0, 0x85, 0x89))
+      // {E599CB0F-BA5F-4192-9356-51EB19C08589}
+      AAF_LITERAL_AUID(0xE599CB0F,
+        0xBA5F, 0x4192,
+        0x93, 0x56, 0x51, 0xEB, 0x19, 0xC0, 0x85, 0x89))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_VideoLuminanceKey,OperationDef_VideoLuminanceKey,"",""), 
-      // {38ff7903-69e5-476b-be5a-eafc2000f011}
-      AAF_LITERAL_AUID(0x38ff7903,
-        0x69e5, 0x476b,
-        0xbe, 0x5a, 0xea, 0xfc, 0x20, 0x00, 0xf0, 0x11), "")
+      // {38FF7903-69E5-476B-BE5A-EAFC2000F011}
+      AAF_LITERAL_AUID(0x38FF7903,
+        0x69E5, 0x476B,
+        0xBE, 0x5A, 0xEA, 0xFC, 0x20, 0x00, 0xF0, 0x11), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_VideoLuminanceKey")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {38ff7903-69e5-476b-be5a-eafc2000f011}
-      AAF_LITERAL_AUID(0x38ff7903,
-        0x69e5, 0x476b,
-        0xbe, 0x5a, 0xea, 0xfc, 0x20, 0x00, 0xf0, 0x11))
+      // {38FF7903-69E5-476B-BE5A-EAFC2000F011}
+      AAF_LITERAL_AUID(0x38FF7903,
+        0x69E5, 0x476B,
+        0xBE, 0x5A, 0xEA, 0xFC, 0x20, 0x00, 0xF0, 0x11))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_VideoLuminanceKey,OperationDef_VideoLuminanceKey,"",""), 
-      // {38ff7903-69e5-476b-be5a-eafc2000f011}
-      AAF_LITERAL_AUID(0x38ff7903,
-        0x69e5, 0x476b,
-        0xbe, 0x5a, 0xea, 0xfc, 0x20, 0x00, 0xf0, 0x11))
+      // {38FF7903-69E5-476B-BE5A-EAFC2000F011}
+      AAF_LITERAL_AUID(0x38FF7903,
+        0x69E5, 0x476B,
+        0xBE, 0x5A, 0xEA, 0xFC, 0x20, 0x00, 0xF0, 0x11))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_VideoChromaKey,OperationDef_VideoChromaKey,"",""), 
-      // {30a315c2-71e5-4e82-a4ef-0513ee056b65}
-      AAF_LITERAL_AUID(0x30a315c2,
-        0x71e5, 0x4e82,
-        0xa4, 0xef, 0x05, 0x13, 0xee, 0x05, 0x6b, 0x65), "")
+      // {30A315C2-71E5-4E82-A4EF-0513EE056B65}
+      AAF_LITERAL_AUID(0x30A315C2,
+        0x71E5, 0x4E82,
+        0xA4, 0xEF, 0x05, 0x13, 0xEE, 0x05, 0x6B, 0x65), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_VideoChromaKey")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {30a315c2-71e5-4e82-a4ef-0513ee056b65}
-      AAF_LITERAL_AUID(0x30a315c2,
-        0x71e5, 0x4e82,
-        0xa4, 0xef, 0x05, 0x13, 0xee, 0x05, 0x6b, 0x65))
+      // {30A315C2-71E5-4E82-A4EF-0513EE056B65}
+      AAF_LITERAL_AUID(0x30A315C2,
+        0x71E5, 0x4E82,
+        0xA4, 0xEF, 0x05, 0x13, 0xEE, 0x05, 0x6B, 0x65))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_VideoChromaKey,OperationDef_VideoChromaKey,"",""), 
-      // {30a315c2-71e5-4e82-a4ef-0513ee056b65}
-      AAF_LITERAL_AUID(0x30a315c2,
-        0x71e5, 0x4e82,
-        0xa4, 0xef, 0x05, 0x13, 0xee, 0x05, 0x6b, 0x65))
+      // {30A315C2-71E5-4E82-A4EF-0513EE056B65}
+      AAF_LITERAL_AUID(0x30A315C2,
+        0x71E5, 0x4E82,
+        0xA4, 0xEF, 0x05, 0x13, 0xEE, 0x05, 0x6B, 0x65))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_MonoAudioGain,OperationDef_MonoAudioGain,"kAAFEffectMonoAudioGain",""), 
-      // {9d2ea894-0968-11d3-8a38-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9d2ea894,
-        0x0968, 0x11d3,
-        0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {9D2EA894-0968-11D3-8A38-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9D2EA894,
+        0x0968, 0x11D3,
+        0x8A, 0x38, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_MonoAudioGain")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9d2ea894-0968-11d3-8a38-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9d2ea894,
-        0x0968, 0x11d3,
-        0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9D2EA894-0968-11D3-8A38-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9D2EA894,
+        0x0968, 0x11D3,
+        0x8A, 0x38, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_MonoAudioGain,OperationDef_MonoAudioGain,"kAAFEffectMonoAudioGain",""), 
-      // {9d2ea894-0968-11d3-8a38-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9d2ea894,
-        0x0968, 0x11d3,
-        0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9D2EA894-0968-11D3-8A38-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9D2EA894,
+        0x0968, 0x11D3,
+        0x8A, 0x38, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_MonoAudioPan,OperationDef_MonoAudioPan,"kAAFEffectMonoAudioPan",""), 
-      // {9d2ea893-0968-11d3-8a38-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9d2ea893,
-        0x0968, 0x11d3,
-        0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {9D2EA893-0968-11D3-8A38-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9D2EA893,
+        0x0968, 0x11D3,
+        0x8A, 0x38, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_MonoAudioPan")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9d2ea893-0968-11d3-8a38-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9d2ea893,
-        0x0968, 0x11d3,
-        0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9D2EA893-0968-11D3-8A38-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9D2EA893,
+        0x0968, 0x11D3,
+        0x8A, 0x38, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_MonoAudioPan,OperationDef_MonoAudioPan,"kAAFEffectMonoAudioPan",""), 
-      // {9d2ea893-0968-11d3-8a38-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9d2ea893,
-        0x0968, 0x11d3,
-        0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9D2EA893-0968-11D3-8A38-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9D2EA893,
+        0x0968, 0x11D3,
+        0x8A, 0x38, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_MonoAudioDissolve,OperationDef_MonoAudioDissolve,"kAAFEffectMonoAudioDissolve",""), 
-      // {0c3bea41-fc05-11d2-8a29-0050040ef7d2}
-      AAF_LITERAL_AUID(0x0c3bea41,
-        0xfc05, 0x11d2,
-        0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {0C3BEA41-FC05-11D2-8A29-0050040EF7D2}
+      AAF_LITERAL_AUID(0x0C3BEA41,
+        0xFC05, 0x11D2,
+        0x8A, 0x29, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_MonoAudioDissolve")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {0c3bea41-fc05-11d2-8a29-0050040ef7d2}
-      AAF_LITERAL_AUID(0x0c3bea41,
-        0xfc05, 0x11d2,
-        0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {0C3BEA41-FC05-11D2-8A29-0050040EF7D2}
+      AAF_LITERAL_AUID(0x0C3BEA41,
+        0xFC05, 0x11D2,
+        0x8A, 0x29, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_MonoAudioDissolve,OperationDef_MonoAudioDissolve,"kAAFEffectMonoAudioDissolve",""), 
-      // {0c3bea41-fc05-11d2-8a29-0050040ef7d2}
-      AAF_LITERAL_AUID(0x0c3bea41,
-        0xfc05, 0x11d2,
-        0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {0C3BEA41-FC05-11D2-8A29-0050040EF7D2}
+      AAF_LITERAL_AUID(0x0C3BEA41,
+        0xFC05, 0x11D2,
+        0x8A, 0x29, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_TwoParameterMonoAudioDissolve,OperationDef_TwoParameterMonoAudioDissolve,"",""), 
-      // {2311bd90-b5da-4285-aa3a-8552848779b3}
-      AAF_LITERAL_AUID(0x2311bd90,
-        0xb5da, 0x4285,
-        0xaa, 0x3a, 0x85, 0x52, 0x84, 0x87, 0x79, 0xb3), "")
+      // {2311BD90-B5DA-4285-AA3A-8552848779B3}
+      AAF_LITERAL_AUID(0x2311BD90,
+        0xB5DA, 0x4285,
+        0xAA, 0x3A, 0x85, 0x52, 0x84, 0x87, 0x79, 0xB3), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_TwoParameterMonoAudioDissolve")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {2311bd90-b5da-4285-aa3a-8552848779b3}
-      AAF_LITERAL_AUID(0x2311bd90,
-        0xb5da, 0x4285,
-        0xaa, 0x3a, 0x85, 0x52, 0x84, 0x87, 0x79, 0xb3))
+      // {2311BD90-B5DA-4285-AA3A-8552848779B3}
+      AAF_LITERAL_AUID(0x2311BD90,
+        0xB5DA, 0x4285,
+        0xAA, 0x3A, 0x85, 0x52, 0x84, 0x87, 0x79, 0xB3))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_TwoParameterMonoAudioDissolve,OperationDef_TwoParameterMonoAudioDissolve,"",""), 
-      // {2311bd90-b5da-4285-aa3a-8552848779b3}
-      AAF_LITERAL_AUID(0x2311bd90,
-        0xb5da, 0x4285,
-        0xaa, 0x3a, 0x85, 0x52, 0x84, 0x87, 0x79, 0xb3))
+      // {2311BD90-B5DA-4285-AA3A-8552848779B3}
+      AAF_LITERAL_AUID(0x2311BD90,
+        0xB5DA, 0x4285,
+        0xAA, 0x3A, 0x85, 0x52, 0x84, 0x87, 0x79, 0xB3))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_Unknown,OperationDef_Unknown,"kAAFOperationUnknown",""), 
-      // {1575e350-fca3-11d2-8a2a-0050040ef7d2}
-      AAF_LITERAL_AUID(0x1575e350,
-        0xfca3, 0x11d2,
-        0x8a, 0x2a, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {1575E350-FCA3-11D2-8A2A-0050040EF7D2}
+      AAF_LITERAL_AUID(0x1575E350,
+        0xFCA3, 0x11D2,
+        0x8A, 0x2A, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_Unknown")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {1575e350-fca3-11d2-8a2a-0050040ef7d2}
-      AAF_LITERAL_AUID(0x1575e350,
-        0xfca3, 0x11d2,
-        0x8a, 0x2a, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {1575E350-FCA3-11D2-8A2A-0050040EF7D2}
+      AAF_LITERAL_AUID(0x1575E350,
+        0xFCA3, 0x11D2,
+        0x8A, 0x2A, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_Unknown,OperationDef_Unknown,"kAAFOperationUnknown",""), 
-      // {1575e350-fca3-11d2-8a2a-0050040ef7d2}
-      AAF_LITERAL_AUID(0x1575e350,
-        0xfca3, 0x11d2,
-        0x8a, 0x2a, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {1575E350-FCA3-11D2-8A2A-0050040EF7D2}
+      AAF_LITERAL_AUID(0x1575E350,
+        0xFCA3, 0x11D2,
+        0x8A, 0x2A, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_VideoFadeToBlack,OperationDef_VideoFadeToBlack,"kAAFEffectVideoFadeToBlack",""), 
-      // {0c3bea43-fc05-11d2-8a29-0050040ef7d2}
-      AAF_LITERAL_AUID(0x0c3bea43,
-        0xfc05, 0x11d2,
-        0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {0C3BEA43-FC05-11D2-8A29-0050040EF7D2}
+      AAF_LITERAL_AUID(0x0C3BEA43,
+        0xFC05, 0x11D2,
+        0x8A, 0x29, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_VideoFadeToBlack")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {0c3bea43-fc05-11d2-8a29-0050040ef7d2}
-      AAF_LITERAL_AUID(0x0c3bea43,
-        0xfc05, 0x11d2,
-        0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {0C3BEA43-FC05-11D2-8A29-0050040EF7D2}
+      AAF_LITERAL_AUID(0x0C3BEA43,
+        0xFC05, 0x11D2,
+        0x8A, 0x29, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_VideoFadeToBlack,OperationDef_VideoFadeToBlack,"kAAFEffectVideoFadeToBlack",""), 
-      // {0c3bea43-fc05-11d2-8a29-0050040ef7d2}
-      AAF_LITERAL_AUID(0x0c3bea43,
-        0xfc05, 0x11d2,
-        0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {0C3BEA43-FC05-11D2-8A29-0050040EF7D2}
+      AAF_LITERAL_AUID(0x0C3BEA43,
+        0xFC05, 0x11D2,
+        0x8A, 0x29, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_PictureWithMate,OperationDef_PictureWithMate,"kAAFEffectPictureWithMate",""), 
-      // {0a3c75e0-fd82-11d2-8a2b-0050040ef7d2}
-      AAF_LITERAL_AUID(0x0a3c75e0,
-        0xfd82, 0x11d2,
-        0x8a, 0x2b, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {0A3C75E0-FD82-11D2-8A2B-0050040EF7D2}
+      AAF_LITERAL_AUID(0x0A3C75E0,
+        0xFD82, 0x11D2,
+        0x8A, 0x2B, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_PictureWithMate")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {0a3c75e0-fd82-11d2-8a2b-0050040ef7d2}
-      AAF_LITERAL_AUID(0x0a3c75e0,
-        0xfd82, 0x11d2,
-        0x8a, 0x2b, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {0A3C75E0-FD82-11D2-8A2B-0050040EF7D2}
+      AAF_LITERAL_AUID(0x0A3C75E0,
+        0xFD82, 0x11D2,
+        0x8A, 0x2B, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_PictureWithMate,OperationDef_PictureWithMate,"kAAFEffectPictureWithMate",""), 
-      // {0a3c75e0-fd82-11d2-8a2b-0050040ef7d2}
-      AAF_LITERAL_AUID(0x0a3c75e0,
-        0xfd82, 0x11d2,
-        0x8a, 0x2b, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {0A3C75E0-FD82-11D2-8A2B-0050040EF7D2}
+      AAF_LITERAL_AUID(0x0A3C75E0,
+        0xFD82, 0x11D2,
+        0x8A, 0x2B, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_VideoFrameToMask,OperationDef_VideoFrameToMask,"kAAFEffectVideoFrameToMask",""), 
-      // {9d2ea892-0968-11d3-8a38-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9d2ea892,
-        0x0968, 0x11d3,
-        0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {9D2EA892-0968-11D3-8A38-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9D2EA892,
+        0x0968, 0x11D3,
+        0x8A, 0x38, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_VideoFrameToMask")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9d2ea892-0968-11d3-8a38-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9d2ea892,
-        0x0968, 0x11d3,
-        0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9D2EA892-0968-11D3-8A38-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9D2EA892,
+        0x0968, 0x11D3,
+        0x8A, 0x38, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_VideoFrameToMask,OperationDef_VideoFrameToMask,"kAAFEffectVideoFrameToMask",""), 
-      // {9d2ea892-0968-11d3-8a38-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9d2ea892,
-        0x0968, 0x11d3,
-        0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9D2EA892-0968-11D3-8A38-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9D2EA892,
+        0x0968, 0x11D3,
+        0x8A, 0x38, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_StereoAudioDissolve,OperationDef_StereoAudioDissolve,"kAAFEffectStereoAudioDissolve",""), 
-      // {0c3bea42-fc05-11d2-8a29-0050040ef7d2}
-      AAF_LITERAL_AUID(0x0c3bea42,
-        0xfc05, 0x11d2,
-        0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {0C3BEA42-FC05-11D2-8A29-0050040EF7D2}
+      AAF_LITERAL_AUID(0x0C3BEA42,
+        0xFC05, 0x11D2,
+        0x8A, 0x29, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_StereoAudioDissolve")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {0c3bea42-fc05-11d2-8a29-0050040ef7d2}
-      AAF_LITERAL_AUID(0x0c3bea42,
-        0xfc05, 0x11d2,
-        0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {0C3BEA42-FC05-11D2-8A29-0050040EF7D2}
+      AAF_LITERAL_AUID(0x0C3BEA42,
+        0xFC05, 0x11D2,
+        0x8A, 0x29, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_StereoAudioDissolve,OperationDef_StereoAudioDissolve,"kAAFEffectStereoAudioDissolve",""), 
-      // {0c3bea42-fc05-11d2-8a29-0050040ef7d2}
-      AAF_LITERAL_AUID(0x0c3bea42,
-        0xfc05, 0x11d2,
-        0x8a, 0x29, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {0C3BEA42-FC05-11D2-8A29-0050040EF7D2}
+      AAF_LITERAL_AUID(0x0C3BEA42,
+        0xFC05, 0x11D2,
+        0x8A, 0x29, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_StereoAudioGain,OperationDef_StereoAudioGain,"kAAFEffectStereoAudioGain",""), 
-      // {9d2ea895-0968-11d3-8a38-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9d2ea895,
-        0x0968, 0x11d3,
-        0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {9D2EA895-0968-11D3-8A38-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9D2EA895,
+        0x0968, 0x11D3,
+        0x8A, 0x38, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_StereoAudioGain")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9d2ea895-0968-11d3-8a38-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9d2ea895,
-        0x0968, 0x11d3,
-        0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9D2EA895-0968-11D3-8A38-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9D2EA895,
+        0x0968, 0x11D3,
+        0x8A, 0x38, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_StereoAudioGain,OperationDef_StereoAudioGain,"kAAFEffectStereoAudioGain",""), 
-      // {9d2ea895-0968-11d3-8a38-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9d2ea895,
-        0x0968, 0x11d3,
-        0x8a, 0x38, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9D2EA895-0968-11D3-8A38-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9D2EA895,
+        0x0968, 0x11D3,
+        0x8A, 0x38, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(OperationDefinition, AAF_SYMBOL(OperationDef_MonoAudioMixdown,OperationDef_MonoAudioMixdown,"kAAFEffectMonoAudioMixdown",""), 
-      // {8d896ad0-2261-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x8d896ad0,
-        0x2261, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {8D896AD0-2261-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x8D896AD0,
+        0x2261, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "OperationDef_MonoAudioMixdown")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {8d896ad0-2261-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x8d896ad0,
-        0x2261, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {8D896AD0-2261-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x8D896AD0,
+        0x2261, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(OperationDefinition, AAF_SYMBOL(OperationDef_MonoAudioMixdown,OperationDef_MonoAudioMixdown,"kAAFEffectMonoAudioMixdown",""), 
-      // {8d896ad0-2261-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x8d896ad0,
-        0x2261, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {8D896AD0-2261-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x8D896AD0,
+        0x2261, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
 AAF_INSTANCE_GROUP_END(OperationDefinitionInstances, OperationDefinition)
 AAF_INSTANCE_GROUP_SEPARATOR()
 AAF_INSTANCE_GROUP(ParameterDefinitionInstances, ParameterDefinition)
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_Level,ParameterDef_Level,"kAAFParameterDefLevel",""), 
-      // {e4962320-2267-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0xe4962320,
-        0x2267, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {E4962320-2267-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0xE4962320,
+        0x2267, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_Level")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {e4962320-2267-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0xe4962320,
-        0x2267, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {E4962320-2267-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0xE4962320,
+        0x2267, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_Level,ParameterDef_Level,"kAAFParameterDefLevel",""), 
-      // {e4962320-2267-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0xe4962320,
-        0x2267, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {E4962320-2267-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0xE4962320,
+        0x2267, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTEWipeNumber,ParameterDef_SMPTEWipeNumber,"kAAFParameterDefSMPTEWipeNumber",""), 
-      // {e4962323-2267-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0xe4962323,
-        0x2267, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {E4962323-2267-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0xE4962323,
+        0x2267, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_SMPTEWipeNumber")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {e4962323-2267-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0xe4962323,
-        0x2267, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {E4962323-2267-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0xE4962323,
+        0x2267, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTEWipeNumber,ParameterDef_SMPTEWipeNumber,"kAAFParameterDefSMPTEWipeNumber",""), 
-      // {e4962323-2267-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0xe4962323,
-        0x2267, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {E4962323-2267-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0xE4962323,
+        0x2267, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTEReverse,ParameterDef_SMPTEReverse,"kAAFParameterDefSMPTEReverse",""), 
-      // {9c894ba0-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba0,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {9C894BA0-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA0,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_SMPTEReverse")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9c894ba0-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba0,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA0-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA0,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTEReverse,ParameterDef_SMPTEReverse,"kAAFParameterDefSMPTEReverse",""), 
-      // {9c894ba0-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba0,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA0-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA0,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_SpeedRatio,ParameterDef_SpeedRatio,"kAAFParameterDefSpeedRatio",""), 
-      // {72559a80-24d7-11d3-8a50-0050040ef7d2}
-      AAF_LITERAL_AUID(0x72559a80,
-        0x24d7, 0x11d3,
-        0x8a, 0x50, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {72559A80-24D7-11D3-8A50-0050040EF7D2}
+      AAF_LITERAL_AUID(0x72559A80,
+        0x24D7, 0x11D3,
+        0x8A, 0x50, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_SpeedRatio")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {72559a80-24d7-11d3-8a50-0050040ef7d2}
-      AAF_LITERAL_AUID(0x72559a80,
-        0x24d7, 0x11d3,
-        0x8a, 0x50, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {72559A80-24D7-11D3-8A50-0050040EF7D2}
+      AAF_LITERAL_AUID(0x72559A80,
+        0x24D7, 0x11D3,
+        0x8A, 0x50, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_SpeedRatio,ParameterDef_SpeedRatio,"kAAFParameterDefSpeedRatio",""), 
-      // {72559a80-24d7-11d3-8a50-0050040ef7d2}
-      AAF_LITERAL_AUID(0x72559a80,
-        0x24d7, 0x11d3,
-        0x8a, 0x50, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {72559A80-24D7-11D3-8A50-0050040EF7D2}
+      AAF_LITERAL_AUID(0x72559A80,
+        0x24D7, 0x11D3,
+        0x8A, 0x50, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_PositionOffsetX,ParameterDef_PositionOffsetX,"",""), 
-      // {c573a510-071a-454f-b617-ad6ae69054c2}
-      AAF_LITERAL_AUID(0xc573a510,
-        0x071a, 0x454f,
-        0xb6, 0x17, 0xad, 0x6a, 0xe6, 0x90, 0x54, 0xc2), "")
+      // {C573A510-071A-454F-B617-AD6AE69054C2}
+      AAF_LITERAL_AUID(0xC573A510,
+        0x071A, 0x454F,
+        0xB6, 0x17, 0xAD, 0x6A, 0xE6, 0x90, 0x54, 0xC2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_PositionOffsetX")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {c573a510-071a-454f-b617-ad6ae69054c2}
-      AAF_LITERAL_AUID(0xc573a510,
-        0x071a, 0x454f,
-        0xb6, 0x17, 0xad, 0x6a, 0xe6, 0x90, 0x54, 0xc2))
+      // {C573A510-071A-454F-B617-AD6AE69054C2}
+      AAF_LITERAL_AUID(0xC573A510,
+        0x071A, 0x454F,
+        0xB6, 0x17, 0xAD, 0x6A, 0xE6, 0x90, 0x54, 0xC2))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_PositionOffsetX,ParameterDef_PositionOffsetX,"",""), 
-      // {c573a510-071a-454f-b617-ad6ae69054c2}
-      AAF_LITERAL_AUID(0xc573a510,
-        0x071a, 0x454f,
-        0xb6, 0x17, 0xad, 0x6a, 0xe6, 0x90, 0x54, 0xc2))
+      // {C573A510-071A-454F-B617-AD6AE69054C2}
+      AAF_LITERAL_AUID(0xC573A510,
+        0x071A, 0x454F,
+        0xB6, 0x17, 0xAD, 0x6A, 0xE6, 0x90, 0x54, 0xC2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_PositionOffsetY,ParameterDef_PositionOffsetY,"",""), 
-      // {82e27478-1336-4ea3-bcb9-6b8f17864c42}
-      AAF_LITERAL_AUID(0x82e27478,
-        0x1336, 0x4ea3,
-        0xbc, 0xb9, 0x6b, 0x8f, 0x17, 0x86, 0x4c, 0x42), "")
+      // {82E27478-1336-4EA3-BCB9-6B8F17864C42}
+      AAF_LITERAL_AUID(0x82E27478,
+        0x1336, 0x4EA3,
+        0xBC, 0xB9, 0x6B, 0x8F, 0x17, 0x86, 0x4C, 0x42), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_PositionOffsetY")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {82e27478-1336-4ea3-bcb9-6b8f17864c42}
-      AAF_LITERAL_AUID(0x82e27478,
-        0x1336, 0x4ea3,
-        0xbc, 0xb9, 0x6b, 0x8f, 0x17, 0x86, 0x4c, 0x42))
+      // {82E27478-1336-4EA3-BCB9-6B8F17864C42}
+      AAF_LITERAL_AUID(0x82E27478,
+        0x1336, 0x4EA3,
+        0xBC, 0xB9, 0x6B, 0x8F, 0x17, 0x86, 0x4C, 0x42))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_PositionOffsetY,ParameterDef_PositionOffsetY,"",""), 
-      // {82e27478-1336-4ea3-bcb9-6b8f17864c42}
-      AAF_LITERAL_AUID(0x82e27478,
-        0x1336, 0x4ea3,
-        0xbc, 0xb9, 0x6b, 0x8f, 0x17, 0x86, 0x4c, 0x42))
+      // {82E27478-1336-4EA3-BCB9-6B8F17864C42}
+      AAF_LITERAL_AUID(0x82E27478,
+        0x1336, 0x4EA3,
+        0xBC, 0xB9, 0x6B, 0x8F, 0x17, 0x86, 0x4C, 0x42))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_CropLeft,ParameterDef_CropLeft,"",""), 
-      // {d47b3377-318c-4657-a9d8-75811b6dc3d1}
-      AAF_LITERAL_AUID(0xd47b3377,
-        0x318c, 0x4657,
-        0xa9, 0xd8, 0x75, 0x81, 0x1b, 0x6d, 0xc3, 0xd1), "")
+      // {D47B3377-318C-4657-A9D8-75811B6DC3D1}
+      AAF_LITERAL_AUID(0xD47B3377,
+        0x318C, 0x4657,
+        0xA9, 0xD8, 0x75, 0x81, 0x1B, 0x6D, 0xC3, 0xD1), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_CropLeft")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {d47b3377-318c-4657-a9d8-75811b6dc3d1}
-      AAF_LITERAL_AUID(0xd47b3377,
-        0x318c, 0x4657,
-        0xa9, 0xd8, 0x75, 0x81, 0x1b, 0x6d, 0xc3, 0xd1))
+      // {D47B3377-318C-4657-A9D8-75811B6DC3D1}
+      AAF_LITERAL_AUID(0xD47B3377,
+        0x318C, 0x4657,
+        0xA9, 0xD8, 0x75, 0x81, 0x1B, 0x6D, 0xC3, 0xD1))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_CropLeft,ParameterDef_CropLeft,"",""), 
-      // {d47b3377-318c-4657-a9d8-75811b6dc3d1}
-      AAF_LITERAL_AUID(0xd47b3377,
-        0x318c, 0x4657,
-        0xa9, 0xd8, 0x75, 0x81, 0x1b, 0x6d, 0xc3, 0xd1))
+      // {D47B3377-318C-4657-A9D8-75811B6DC3D1}
+      AAF_LITERAL_AUID(0xD47B3377,
+        0x318C, 0x4657,
+        0xA9, 0xD8, 0x75, 0x81, 0x1B, 0x6D, 0xC3, 0xD1))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_CropRight,ParameterDef_CropRight,"",""), 
-      // {5ecc9dd5-21c1-462b-9fec-c2bd85f14033}
-      AAF_LITERAL_AUID(0x5ecc9dd5,
-        0x21c1, 0x462b,
-        0x9f, 0xec, 0xc2, 0xbd, 0x85, 0xf1, 0x40, 0x33), "")
+      // {5ECC9DD5-21C1-462B-9FEC-C2BD85F14033}
+      AAF_LITERAL_AUID(0x5ECC9DD5,
+        0x21C1, 0x462B,
+        0x9F, 0xEC, 0xC2, 0xBD, 0x85, 0xF1, 0x40, 0x33), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_CropRight")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {5ecc9dd5-21c1-462b-9fec-c2bd85f14033}
-      AAF_LITERAL_AUID(0x5ecc9dd5,
-        0x21c1, 0x462b,
-        0x9f, 0xec, 0xc2, 0xbd, 0x85, 0xf1, 0x40, 0x33))
+      // {5ECC9DD5-21C1-462B-9FEC-C2BD85F14033}
+      AAF_LITERAL_AUID(0x5ECC9DD5,
+        0x21C1, 0x462B,
+        0x9F, 0xEC, 0xC2, 0xBD, 0x85, 0xF1, 0x40, 0x33))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_CropRight,ParameterDef_CropRight,"",""), 
-      // {5ecc9dd5-21c1-462b-9fec-c2bd85f14033}
-      AAF_LITERAL_AUID(0x5ecc9dd5,
-        0x21c1, 0x462b,
-        0x9f, 0xec, 0xc2, 0xbd, 0x85, 0xf1, 0x40, 0x33))
+      // {5ECC9DD5-21C1-462B-9FEC-C2BD85F14033}
+      AAF_LITERAL_AUID(0x5ECC9DD5,
+        0x21C1, 0x462B,
+        0x9F, 0xEC, 0xC2, 0xBD, 0x85, 0xF1, 0x40, 0x33))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_CropTop,ParameterDef_CropTop,"",""), 
-      // {8170a539-9b55-4051-9d4e-46598d01b914}
-      AAF_LITERAL_AUID(0x8170a539,
-        0x9b55, 0x4051,
-        0x9d, 0x4e, 0x46, 0x59, 0x8d, 0x01, 0xb9, 0x14), "")
+      // {8170A539-9B55-4051-9D4E-46598D01B914}
+      AAF_LITERAL_AUID(0x8170A539,
+        0x9B55, 0x4051,
+        0x9D, 0x4E, 0x46, 0x59, 0x8D, 0x01, 0xB9, 0x14), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_CropTop")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {8170a539-9b55-4051-9d4e-46598d01b914}
-      AAF_LITERAL_AUID(0x8170a539,
-        0x9b55, 0x4051,
-        0x9d, 0x4e, 0x46, 0x59, 0x8d, 0x01, 0xb9, 0x14))
+      // {8170A539-9B55-4051-9D4E-46598D01B914}
+      AAF_LITERAL_AUID(0x8170A539,
+        0x9B55, 0x4051,
+        0x9D, 0x4E, 0x46, 0x59, 0x8D, 0x01, 0xB9, 0x14))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_CropTop,ParameterDef_CropTop,"",""), 
-      // {8170a539-9b55-4051-9d4e-46598d01b914}
-      AAF_LITERAL_AUID(0x8170a539,
-        0x9b55, 0x4051,
-        0x9d, 0x4e, 0x46, 0x59, 0x8d, 0x01, 0xb9, 0x14))
+      // {8170A539-9B55-4051-9D4E-46598D01B914}
+      AAF_LITERAL_AUID(0x8170A539,
+        0x9B55, 0x4051,
+        0x9D, 0x4E, 0x46, 0x59, 0x8D, 0x01, 0xB9, 0x14))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_CropBottom,ParameterDef_CropBottom,"",""), 
-      // {154ba82b-990a-4c80-9101-3037e28839a1}
-      AAF_LITERAL_AUID(0x154ba82b,
-        0x990a, 0x4c80,
-        0x91, 0x01, 0x30, 0x37, 0xe2, 0x88, 0x39, 0xa1), "")
+      // {154BA82B-990A-4C80-9101-3037E28839A1}
+      AAF_LITERAL_AUID(0x154BA82B,
+        0x990A, 0x4C80,
+        0x91, 0x01, 0x30, 0x37, 0xE2, 0x88, 0x39, 0xA1), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_CropBottom")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {154ba82b-990a-4c80-9101-3037e28839a1}
-      AAF_LITERAL_AUID(0x154ba82b,
-        0x990a, 0x4c80,
-        0x91, 0x01, 0x30, 0x37, 0xe2, 0x88, 0x39, 0xa1))
+      // {154BA82B-990A-4C80-9101-3037E28839A1}
+      AAF_LITERAL_AUID(0x154BA82B,
+        0x990A, 0x4C80,
+        0x91, 0x01, 0x30, 0x37, 0xE2, 0x88, 0x39, 0xA1))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_CropBottom,ParameterDef_CropBottom,"",""), 
-      // {154ba82b-990a-4c80-9101-3037e28839a1}
-      AAF_LITERAL_AUID(0x154ba82b,
-        0x990a, 0x4c80,
-        0x91, 0x01, 0x30, 0x37, 0xe2, 0x88, 0x39, 0xa1))
+      // {154BA82B-990A-4C80-9101-3037E28839A1}
+      AAF_LITERAL_AUID(0x154BA82B,
+        0x990A, 0x4C80,
+        0x91, 0x01, 0x30, 0x37, 0xE2, 0x88, 0x39, 0xA1))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_ScaleX,ParameterDef_ScaleX,"",""), 
-      // {8d568129-847e-11d5-935a-50f857c10000}
-      AAF_LITERAL_AUID(0x8d568129,
-        0x847e, 0x11d5,
-        0x93, 0x5a, 0x50, 0xf8, 0x57, 0xc1, 0x00, 0x00), "")
+      // {8D568129-847E-11D5-935A-50F857C10000}
+      AAF_LITERAL_AUID(0x8D568129,
+        0x847E, 0x11D5,
+        0x93, 0x5A, 0x50, 0xF8, 0x57, 0xC1, 0x00, 0x00), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_ScaleX")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {8d568129-847e-11d5-935a-50f857c10000}
-      AAF_LITERAL_AUID(0x8d568129,
-        0x847e, 0x11d5,
-        0x93, 0x5a, 0x50, 0xf8, 0x57, 0xc1, 0x00, 0x00))
+      // {8D568129-847E-11D5-935A-50F857C10000}
+      AAF_LITERAL_AUID(0x8D568129,
+        0x847E, 0x11D5,
+        0x93, 0x5A, 0x50, 0xF8, 0x57, 0xC1, 0x00, 0x00))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_ScaleX,ParameterDef_ScaleX,"",""), 
-      // {8d568129-847e-11d5-935a-50f857c10000}
-      AAF_LITERAL_AUID(0x8d568129,
-        0x847e, 0x11d5,
-        0x93, 0x5a, 0x50, 0xf8, 0x57, 0xc1, 0x00, 0x00))
+      // {8D568129-847E-11D5-935A-50F857C10000}
+      AAF_LITERAL_AUID(0x8D568129,
+        0x847E, 0x11D5,
+        0x93, 0x5A, 0x50, 0xF8, 0x57, 0xC1, 0x00, 0x00))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_ScaleY,ParameterDef_ScaleY,"",""), 
-      // {8d56812a-847e-11d5-935a-50f857c10000}
-      AAF_LITERAL_AUID(0x8d56812a,
-        0x847e, 0x11d5,
-        0x93, 0x5a, 0x50, 0xf8, 0x57, 0xc1, 0x00, 0x00), "")
+      // {8D56812A-847E-11D5-935A-50F857C10000}
+      AAF_LITERAL_AUID(0x8D56812A,
+        0x847E, 0x11D5,
+        0x93, 0x5A, 0x50, 0xF8, 0x57, 0xC1, 0x00, 0x00), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_ScaleY")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {8d56812a-847e-11d5-935a-50f857c10000}
-      AAF_LITERAL_AUID(0x8d56812a,
-        0x847e, 0x11d5,
-        0x93, 0x5a, 0x50, 0xf8, 0x57, 0xc1, 0x00, 0x00))
+      // {8D56812A-847E-11D5-935A-50F857C10000}
+      AAF_LITERAL_AUID(0x8D56812A,
+        0x847E, 0x11D5,
+        0x93, 0x5A, 0x50, 0xF8, 0x57, 0xC1, 0x00, 0x00))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_ScaleY,ParameterDef_ScaleY,"",""), 
-      // {8d56812a-847e-11d5-935a-50f857c10000}
-      AAF_LITERAL_AUID(0x8d56812a,
-        0x847e, 0x11d5,
-        0x93, 0x5a, 0x50, 0xf8, 0x57, 0xc1, 0x00, 0x00))
+      // {8D56812A-847E-11D5-935A-50F857C10000}
+      AAF_LITERAL_AUID(0x8D56812A,
+        0x847E, 0x11D5,
+        0x93, 0x5A, 0x50, 0xF8, 0x57, 0xC1, 0x00, 0x00))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_Rotation,ParameterDef_Rotation,"",""), 
-      // {062cfbd8-f4b1-4a50-b944-f39e2fc73c17}
-      AAF_LITERAL_AUID(0x062cfbd8,
-        0xf4b1, 0x4a50,
-        0xb9, 0x44, 0xf3, 0x9e, 0x2f, 0xc7, 0x3c, 0x17), "")
+      // {062CFBD8-F4B1-4A50-B944-F39E2FC73C17}
+      AAF_LITERAL_AUID(0x062CFBD8,
+        0xF4B1, 0x4A50,
+        0xB9, 0x44, 0xF3, 0x9E, 0x2F, 0xC7, 0x3C, 0x17), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_Rotation")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {062cfbd8-f4b1-4a50-b944-f39e2fc73c17}
-      AAF_LITERAL_AUID(0x062cfbd8,
-        0xf4b1, 0x4a50,
-        0xb9, 0x44, 0xf3, 0x9e, 0x2f, 0xc7, 0x3c, 0x17))
+      // {062CFBD8-F4B1-4A50-B944-F39E2FC73C17}
+      AAF_LITERAL_AUID(0x062CFBD8,
+        0xF4B1, 0x4A50,
+        0xB9, 0x44, 0xF3, 0x9E, 0x2F, 0xC7, 0x3C, 0x17))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_Rotation,ParameterDef_Rotation,"",""), 
-      // {062cfbd8-f4b1-4a50-b944-f39e2fc73c17}
-      AAF_LITERAL_AUID(0x062cfbd8,
-        0xf4b1, 0x4a50,
-        0xb9, 0x44, 0xf3, 0x9e, 0x2f, 0xc7, 0x3c, 0x17))
+      // {062CFBD8-F4B1-4A50-B944-F39E2FC73C17}
+      AAF_LITERAL_AUID(0x062CFBD8,
+        0xF4B1, 0x4A50,
+        0xB9, 0x44, 0xF3, 0x9E, 0x2F, 0xC7, 0x3C, 0x17))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_PinTopLeftX,ParameterDef_PinTopLeftX,"",""), 
-      // {72a3b4a2-873d-4733-9052-9f83a706ca5b}
-      AAF_LITERAL_AUID(0x72a3b4a2,
-        0x873d, 0x4733,
-        0x90, 0x52, 0x9f, 0x83, 0xa7, 0x06, 0xca, 0x5b), "")
+      // {72A3B4A2-873D-4733-9052-9F83A706CA5B}
+      AAF_LITERAL_AUID(0x72A3B4A2,
+        0x873D, 0x4733,
+        0x90, 0x52, 0x9F, 0x83, 0xA7, 0x06, 0xCA, 0x5B), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_PinTopLeftX")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {72a3b4a2-873d-4733-9052-9f83a706ca5b}
-      AAF_LITERAL_AUID(0x72a3b4a2,
-        0x873d, 0x4733,
-        0x90, 0x52, 0x9f, 0x83, 0xa7, 0x06, 0xca, 0x5b))
+      // {72A3B4A2-873D-4733-9052-9F83A706CA5B}
+      AAF_LITERAL_AUID(0x72A3B4A2,
+        0x873D, 0x4733,
+        0x90, 0x52, 0x9F, 0x83, 0xA7, 0x06, 0xCA, 0x5B))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_PinTopLeftX,ParameterDef_PinTopLeftX,"",""), 
-      // {72a3b4a2-873d-4733-9052-9f83a706ca5b}
-      AAF_LITERAL_AUID(0x72a3b4a2,
-        0x873d, 0x4733,
-        0x90, 0x52, 0x9f, 0x83, 0xa7, 0x06, 0xca, 0x5b))
+      // {72A3B4A2-873D-4733-9052-9F83A706CA5B}
+      AAF_LITERAL_AUID(0x72A3B4A2,
+        0x873D, 0x4733,
+        0x90, 0x52, 0x9F, 0x83, 0xA7, 0x06, 0xCA, 0x5B))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_PinTopLeftY,ParameterDef_PinTopLeftY,"",""), 
-      // {29e4d78f-a502-4ebb-8c07-ed5a0320c1b0}
-      AAF_LITERAL_AUID(0x29e4d78f,
-        0xa502, 0x4ebb,
-        0x8c, 0x07, 0xed, 0x5a, 0x03, 0x20, 0xc1, 0xb0), "")
+      // {29E4D78F-A502-4EBB-8C07-ED5A0320C1B0}
+      AAF_LITERAL_AUID(0x29E4D78F,
+        0xA502, 0x4EBB,
+        0x8C, 0x07, 0xED, 0x5A, 0x03, 0x20, 0xC1, 0xB0), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_PinTopLeftY")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {29e4d78f-a502-4ebb-8c07-ed5a0320c1b0}
-      AAF_LITERAL_AUID(0x29e4d78f,
-        0xa502, 0x4ebb,
-        0x8c, 0x07, 0xed, 0x5a, 0x03, 0x20, 0xc1, 0xb0))
+      // {29E4D78F-A502-4EBB-8C07-ED5A0320C1B0}
+      AAF_LITERAL_AUID(0x29E4D78F,
+        0xA502, 0x4EBB,
+        0x8C, 0x07, 0xED, 0x5A, 0x03, 0x20, 0xC1, 0xB0))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_PinTopLeftY,ParameterDef_PinTopLeftY,"",""), 
-      // {29e4d78f-a502-4ebb-8c07-ed5a0320c1b0}
-      AAF_LITERAL_AUID(0x29e4d78f,
-        0xa502, 0x4ebb,
-        0x8c, 0x07, 0xed, 0x5a, 0x03, 0x20, 0xc1, 0xb0))
+      // {29E4D78F-A502-4EBB-8C07-ED5A0320C1B0}
+      AAF_LITERAL_AUID(0x29E4D78F,
+        0xA502, 0x4EBB,
+        0x8C, 0x07, 0xED, 0x5A, 0x03, 0x20, 0xC1, 0xB0))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_PinTopRightX,ParameterDef_PinTopRightX,"",""), 
-      // {a95296c0-1ed9-4925-8481-2096c72e818d}
-      AAF_LITERAL_AUID(0xa95296c0,
-        0x1ed9, 0x4925,
-        0x84, 0x81, 0x20, 0x96, 0xc7, 0x2e, 0x81, 0x8d), "")
+      // {A95296C0-1ED9-4925-8481-2096C72E818D}
+      AAF_LITERAL_AUID(0xA95296C0,
+        0x1ED9, 0x4925,
+        0x84, 0x81, 0x20, 0x96, 0xC7, 0x2E, 0x81, 0x8D), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_PinTopRightX")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {a95296c0-1ed9-4925-8481-2096c72e818d}
-      AAF_LITERAL_AUID(0xa95296c0,
-        0x1ed9, 0x4925,
-        0x84, 0x81, 0x20, 0x96, 0xc7, 0x2e, 0x81, 0x8d))
+      // {A95296C0-1ED9-4925-8481-2096C72E818D}
+      AAF_LITERAL_AUID(0xA95296C0,
+        0x1ED9, 0x4925,
+        0x84, 0x81, 0x20, 0x96, 0xC7, 0x2E, 0x81, 0x8D))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_PinTopRightX,ParameterDef_PinTopRightX,"",""), 
-      // {a95296c0-1ed9-4925-8481-2096c72e818d}
-      AAF_LITERAL_AUID(0xa95296c0,
-        0x1ed9, 0x4925,
-        0x84, 0x81, 0x20, 0x96, 0xc7, 0x2e, 0x81, 0x8d))
+      // {A95296C0-1ED9-4925-8481-2096C72E818D}
+      AAF_LITERAL_AUID(0xA95296C0,
+        0x1ED9, 0x4925,
+        0x84, 0x81, 0x20, 0x96, 0xC7, 0x2E, 0x81, 0x8D))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_PinTopRightY,ParameterDef_PinTopRightY,"",""), 
-      // {ce1757ae-7a0b-45d9-b3f3-3686adff1e2d}
-      AAF_LITERAL_AUID(0xce1757ae,
-        0x7a0b, 0x45d9,
-        0xb3, 0xf3, 0x36, 0x86, 0xad, 0xff, 0x1e, 0x2d), "")
+      // {CE1757AE-7A0B-45D9-B3F3-3686ADFF1E2D}
+      AAF_LITERAL_AUID(0xCE1757AE,
+        0x7A0B, 0x45D9,
+        0xB3, 0xF3, 0x36, 0x86, 0xAD, 0xFF, 0x1E, 0x2D), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_PinTopRightY")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {ce1757ae-7a0b-45d9-b3f3-3686adff1e2d}
-      AAF_LITERAL_AUID(0xce1757ae,
-        0x7a0b, 0x45d9,
-        0xb3, 0xf3, 0x36, 0x86, 0xad, 0xff, 0x1e, 0x2d))
+      // {CE1757AE-7A0B-45D9-B3F3-3686ADFF1E2D}
+      AAF_LITERAL_AUID(0xCE1757AE,
+        0x7A0B, 0x45D9,
+        0xB3, 0xF3, 0x36, 0x86, 0xAD, 0xFF, 0x1E, 0x2D))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_PinTopRightY,ParameterDef_PinTopRightY,"",""), 
-      // {ce1757ae-7a0b-45d9-b3f3-3686adff1e2d}
-      AAF_LITERAL_AUID(0xce1757ae,
-        0x7a0b, 0x45d9,
-        0xb3, 0xf3, 0x36, 0x86, 0xad, 0xff, 0x1e, 0x2d))
+      // {CE1757AE-7A0B-45D9-B3F3-3686ADFF1E2D}
+      AAF_LITERAL_AUID(0xCE1757AE,
+        0x7A0B, 0x45D9,
+        0xB3, 0xF3, 0x36, 0x86, 0xAD, 0xFF, 0x1E, 0x2D))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_PinBottomLeftX,ParameterDef_PinBottomLeftX,"",""), 
-      // {08b2bc81-9b1b-4c01-ba73-bba3554ed029}
-      AAF_LITERAL_AUID(0x08b2bc81,
-        0x9b1b, 0x4c01,
-        0xba, 0x73, 0xbb, 0xa3, 0x55, 0x4e, 0xd0, 0x29), "")
+      // {08B2BC81-9B1B-4C01-BA73-BBA3554ED029}
+      AAF_LITERAL_AUID(0x08B2BC81,
+        0x9B1B, 0x4C01,
+        0xBA, 0x73, 0xBB, 0xA3, 0x55, 0x4E, 0xD0, 0x29), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_PinBottomLeftX")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {08b2bc81-9b1b-4c01-ba73-bba3554ed029}
-      AAF_LITERAL_AUID(0x08b2bc81,
-        0x9b1b, 0x4c01,
-        0xba, 0x73, 0xbb, 0xa3, 0x55, 0x4e, 0xd0, 0x29))
+      // {08B2BC81-9B1B-4C01-BA73-BBA3554ED029}
+      AAF_LITERAL_AUID(0x08B2BC81,
+        0x9B1B, 0x4C01,
+        0xBA, 0x73, 0xBB, 0xA3, 0x55, 0x4E, 0xD0, 0x29))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_PinBottomLeftX,ParameterDef_PinBottomLeftX,"",""), 
-      // {08b2bc81-9b1b-4c01-ba73-bba3554ed029}
-      AAF_LITERAL_AUID(0x08b2bc81,
-        0x9b1b, 0x4c01,
-        0xba, 0x73, 0xbb, 0xa3, 0x55, 0x4e, 0xd0, 0x29))
+      // {08B2BC81-9B1B-4C01-BA73-BBA3554ED029}
+      AAF_LITERAL_AUID(0x08B2BC81,
+        0x9B1B, 0x4C01,
+        0xBA, 0x73, 0xBB, 0xA3, 0x55, 0x4E, 0xD0, 0x29))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_PinBottomLeftY,ParameterDef_PinBottomLeftY,"",""), 
-      // {c163f2ff-cd83-4655-826e-3724ab7fa092}
-      AAF_LITERAL_AUID(0xc163f2ff,
-        0xcd83, 0x4655,
-        0x82, 0x6e, 0x37, 0x24, 0xab, 0x7f, 0xa0, 0x92), "")
+      // {C163F2FF-CD83-4655-826E-3724AB7FA092}
+      AAF_LITERAL_AUID(0xC163F2FF,
+        0xCD83, 0x4655,
+        0x82, 0x6E, 0x37, 0x24, 0xAB, 0x7F, 0xA0, 0x92), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_PinBottomLeftY")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {c163f2ff-cd83-4655-826e-3724ab7fa092}
-      AAF_LITERAL_AUID(0xc163f2ff,
-        0xcd83, 0x4655,
-        0x82, 0x6e, 0x37, 0x24, 0xab, 0x7f, 0xa0, 0x92))
+      // {C163F2FF-CD83-4655-826E-3724AB7FA092}
+      AAF_LITERAL_AUID(0xC163F2FF,
+        0xCD83, 0x4655,
+        0x82, 0x6E, 0x37, 0x24, 0xAB, 0x7F, 0xA0, 0x92))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_PinBottomLeftY,ParameterDef_PinBottomLeftY,"",""), 
-      // {c163f2ff-cd83-4655-826e-3724ab7fa092}
-      AAF_LITERAL_AUID(0xc163f2ff,
-        0xcd83, 0x4655,
-        0x82, 0x6e, 0x37, 0x24, 0xab, 0x7f, 0xa0, 0x92))
+      // {C163F2FF-CD83-4655-826E-3724AB7FA092}
+      AAF_LITERAL_AUID(0xC163F2FF,
+        0xCD83, 0x4655,
+        0x82, 0x6E, 0x37, 0x24, 0xAB, 0x7F, 0xA0, 0x92))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_PinBottomRightX,ParameterDef_PinBottomRightX,"",""), 
-      // {53bc5884-897f-479e-b833-191f8692100d}
-      AAF_LITERAL_AUID(0x53bc5884,
-        0x897f, 0x479e,
-        0xb8, 0x33, 0x19, 0x1f, 0x86, 0x92, 0x10, 0x0d), "")
+      // {53BC5884-897F-479E-B833-191F8692100D}
+      AAF_LITERAL_AUID(0x53BC5884,
+        0x897F, 0x479E,
+        0xB8, 0x33, 0x19, 0x1F, 0x86, 0x92, 0x10, 0x0D), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_PinBottomRightX")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {53bc5884-897f-479e-b833-191f8692100d}
-      AAF_LITERAL_AUID(0x53bc5884,
-        0x897f, 0x479e,
-        0xb8, 0x33, 0x19, 0x1f, 0x86, 0x92, 0x10, 0x0d))
+      // {53BC5884-897F-479E-B833-191F8692100D}
+      AAF_LITERAL_AUID(0x53BC5884,
+        0x897F, 0x479E,
+        0xB8, 0x33, 0x19, 0x1F, 0x86, 0x92, 0x10, 0x0D))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_PinBottomRightX,ParameterDef_PinBottomRightX,"",""), 
-      // {53bc5884-897f-479e-b833-191f8692100d}
-      AAF_LITERAL_AUID(0x53bc5884,
-        0x897f, 0x479e,
-        0xb8, 0x33, 0x19, 0x1f, 0x86, 0x92, 0x10, 0x0d))
+      // {53BC5884-897F-479E-B833-191F8692100D}
+      AAF_LITERAL_AUID(0x53BC5884,
+        0x897F, 0x479E,
+        0xB8, 0x33, 0x19, 0x1F, 0x86, 0x92, 0x10, 0x0D))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_PinBottomRightY,ParameterDef_PinBottomRightY,"",""), 
-      // {812fb15b-0b95-4406-878d-efaa1cffc129}
-      AAF_LITERAL_AUID(0x812fb15b,
-        0x0b95, 0x4406,
-        0x87, 0x8d, 0xef, 0xaa, 0x1c, 0xff, 0xc1, 0x29), "")
+      // {812FB15B-0B95-4406-878D-EFAA1CFFC129}
+      AAF_LITERAL_AUID(0x812FB15B,
+        0x0B95, 0x4406,
+        0x87, 0x8D, 0xEF, 0xAA, 0x1C, 0xFF, 0xC1, 0x29), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_PinBottomRightY")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {812fb15b-0b95-4406-878d-efaa1cffc129}
-      AAF_LITERAL_AUID(0x812fb15b,
-        0x0b95, 0x4406,
-        0x87, 0x8d, 0xef, 0xaa, 0x1c, 0xff, 0xc1, 0x29))
+      // {812FB15B-0B95-4406-878D-EFAA1CFFC129}
+      AAF_LITERAL_AUID(0x812FB15B,
+        0x0B95, 0x4406,
+        0x87, 0x8D, 0xEF, 0xAA, 0x1C, 0xFF, 0xC1, 0x29))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_PinBottomRightY,ParameterDef_PinBottomRightY,"",""), 
-      // {812fb15b-0b95-4406-878d-efaa1cffc129}
-      AAF_LITERAL_AUID(0x812fb15b,
-        0x0b95, 0x4406,
-        0x87, 0x8d, 0xef, 0xaa, 0x1c, 0xff, 0xc1, 0x29))
+      // {812FB15B-0B95-4406-878D-EFAA1CFFC129}
+      AAF_LITERAL_AUID(0x812FB15B,
+        0x0B95, 0x4406,
+        0x87, 0x8D, 0xEF, 0xAA, 0x1C, 0xFF, 0xC1, 0x29))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_AlphaKeyInvertAlpha,ParameterDef_AlphaKeyInvertAlpha,"",""), 
-      // {a2667f65-65d8-4abf-a179-0b9b93413949}
-      AAF_LITERAL_AUID(0xa2667f65,
-        0x65d8, 0x4abf,
-        0xa1, 0x79, 0x0b, 0x9b, 0x93, 0x41, 0x39, 0x49), "")
+      // {A2667F65-65D8-4ABF-A179-0B9B93413949}
+      AAF_LITERAL_AUID(0xA2667F65,
+        0x65D8, 0x4ABF,
+        0xA1, 0x79, 0x0B, 0x9B, 0x93, 0x41, 0x39, 0x49), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_AlphaKeyInvertAlpha")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {a2667f65-65d8-4abf-a179-0b9b93413949}
-      AAF_LITERAL_AUID(0xa2667f65,
-        0x65d8, 0x4abf,
-        0xa1, 0x79, 0x0b, 0x9b, 0x93, 0x41, 0x39, 0x49))
+      // {A2667F65-65D8-4ABF-A179-0B9B93413949}
+      AAF_LITERAL_AUID(0xA2667F65,
+        0x65D8, 0x4ABF,
+        0xA1, 0x79, 0x0B, 0x9B, 0x93, 0x41, 0x39, 0x49))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_AlphaKeyInvertAlpha,ParameterDef_AlphaKeyInvertAlpha,"",""), 
-      // {a2667f65-65d8-4abf-a179-0b9b93413949}
-      AAF_LITERAL_AUID(0xa2667f65,
-        0x65d8, 0x4abf,
-        0xa1, 0x79, 0x0b, 0x9b, 0x93, 0x41, 0x39, 0x49))
+      // {A2667F65-65D8-4ABF-A179-0B9B93413949}
+      AAF_LITERAL_AUID(0xA2667F65,
+        0x65D8, 0x4ABF,
+        0xA1, 0x79, 0x0B, 0x9B, 0x93, 0x41, 0x39, 0x49))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_LumKeyLevel,ParameterDef_LumKeyLevel,"",""), 
-      // {21ed5b0f-b7a0-43bc-b779-c47f85bf6c4d}
-      AAF_LITERAL_AUID(0x21ed5b0f,
-        0xb7a0, 0x43bc,
-        0xb7, 0x79, 0xc4, 0x7f, 0x85, 0xbf, 0x6c, 0x4d), "")
+      // {21ED5B0F-B7A0-43BC-B779-C47F85BF6C4D}
+      AAF_LITERAL_AUID(0x21ED5B0F,
+        0xB7A0, 0x43BC,
+        0xB7, 0x79, 0xC4, 0x7F, 0x85, 0xBF, 0x6C, 0x4D), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_LumKeyLevel")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {21ed5b0f-b7a0-43bc-b779-c47f85bf6c4d}
-      AAF_LITERAL_AUID(0x21ed5b0f,
-        0xb7a0, 0x43bc,
-        0xb7, 0x79, 0xc4, 0x7f, 0x85, 0xbf, 0x6c, 0x4d))
+      // {21ED5B0F-B7A0-43BC-B779-C47F85BF6C4D}
+      AAF_LITERAL_AUID(0x21ED5B0F,
+        0xB7A0, 0x43BC,
+        0xB7, 0x79, 0xC4, 0x7F, 0x85, 0xBF, 0x6C, 0x4D))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_LumKeyLevel,ParameterDef_LumKeyLevel,"",""), 
-      // {21ed5b0f-b7a0-43bc-b779-c47f85bf6c4d}
-      AAF_LITERAL_AUID(0x21ed5b0f,
-        0xb7a0, 0x43bc,
-        0xb7, 0x79, 0xc4, 0x7f, 0x85, 0xbf, 0x6c, 0x4d))
+      // {21ED5B0F-B7A0-43BC-B779-C47F85BF6C4D}
+      AAF_LITERAL_AUID(0x21ED5B0F,
+        0xB7A0, 0x43BC,
+        0xB7, 0x79, 0xC4, 0x7F, 0x85, 0xBF, 0x6C, 0x4D))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_LumKeyClip,ParameterDef_LumKeyClip,"",""), 
-      // {cbd39b25-3ece-441e-ba2c-da473ab5cc7c}
-      AAF_LITERAL_AUID(0xcbd39b25,
-        0x3ece, 0x441e,
-        0xba, 0x2c, 0xda, 0x47, 0x3a, 0xb5, 0xcc, 0x7c), "")
+      // {CBD39B25-3ECE-441E-BA2C-DA473AB5CC7C}
+      AAF_LITERAL_AUID(0xCBD39B25,
+        0x3ECE, 0x441E,
+        0xBA, 0x2C, 0xDA, 0x47, 0x3A, 0xB5, 0xCC, 0x7C), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_LumKeyClip")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {cbd39b25-3ece-441e-ba2c-da473ab5cc7c}
-      AAF_LITERAL_AUID(0xcbd39b25,
-        0x3ece, 0x441e,
-        0xba, 0x2c, 0xda, 0x47, 0x3a, 0xb5, 0xcc, 0x7c))
+      // {CBD39B25-3ECE-441E-BA2C-DA473AB5CC7C}
+      AAF_LITERAL_AUID(0xCBD39B25,
+        0x3ECE, 0x441E,
+        0xBA, 0x2C, 0xDA, 0x47, 0x3A, 0xB5, 0xCC, 0x7C))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_LumKeyClip,ParameterDef_LumKeyClip,"",""), 
-      // {cbd39b25-3ece-441e-ba2c-da473ab5cc7c}
-      AAF_LITERAL_AUID(0xcbd39b25,
-        0x3ece, 0x441e,
-        0xba, 0x2c, 0xda, 0x47, 0x3a, 0xb5, 0xcc, 0x7c))
+      // {CBD39B25-3ECE-441E-BA2C-DA473AB5CC7C}
+      AAF_LITERAL_AUID(0xCBD39B25,
+        0x3ECE, 0x441E,
+        0xBA, 0x2C, 0xDA, 0x47, 0x3A, 0xB5, 0xCC, 0x7C))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_Amplitude,ParameterDef_Amplitude,"kAAFParameterDefAmplitude",""), 
-      // {e4962321-2267-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0xe4962321,
-        0x2267, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {E4962321-2267-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0xE4962321,
+        0x2267, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_Amplitude")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {e4962321-2267-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0xe4962321,
-        0x2267, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {E4962321-2267-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0xE4962321,
+        0x2267, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_Amplitude,ParameterDef_Amplitude,"kAAFParameterDefAmplitude",""), 
-      // {e4962321-2267-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0xe4962321,
-        0x2267, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {E4962321-2267-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0xE4962321,
+        0x2267, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_Pan,ParameterDef_Pan,"kAAFParameterDefPan",""), 
-      // {e4962322-2267-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0xe4962322,
-        0x2267, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {E4962322-2267-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0xE4962322,
+        0x2267, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_Pan")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {e4962322-2267-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0xe4962322,
-        0x2267, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {E4962322-2267-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0xE4962322,
+        0x2267, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_Pan,ParameterDef_Pan,"kAAFParameterDefPan",""), 
-      // {e4962322-2267-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0xe4962322,
-        0x2267, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {E4962322-2267-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0xE4962322,
+        0x2267, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_OutgoingLevel,ParameterDef_OutgoingLevel,"",""), 
-      // {9e610007-1be2-41e1-bb11-c95de9964d03}
-      AAF_LITERAL_AUID(0x9e610007,
-        0x1be2, 0x41e1,
-        0xbb, 0x11, 0xc9, 0x5d, 0xe9, 0x96, 0x4d, 0x03), "")
+      // {9E610007-1BE2-41E1-BB11-C95DE9964D03}
+      AAF_LITERAL_AUID(0x9E610007,
+        0x1BE2, 0x41E1,
+        0xBB, 0x11, 0xC9, 0x5D, 0xE9, 0x96, 0x4D, 0x03), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_OutgoingLevel")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9e610007-1be2-41e1-bb11-c95de9964d03}
-      AAF_LITERAL_AUID(0x9e610007,
-        0x1be2, 0x41e1,
-        0xbb, 0x11, 0xc9, 0x5d, 0xe9, 0x96, 0x4d, 0x03))
+      // {9E610007-1BE2-41E1-BB11-C95DE9964D03}
+      AAF_LITERAL_AUID(0x9E610007,
+        0x1BE2, 0x41E1,
+        0xBB, 0x11, 0xC9, 0x5D, 0xE9, 0x96, 0x4D, 0x03))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_OutgoingLevel,ParameterDef_OutgoingLevel,"",""), 
-      // {9e610007-1be2-41e1-bb11-c95de9964d03}
-      AAF_LITERAL_AUID(0x9e610007,
-        0x1be2, 0x41e1,
-        0xbb, 0x11, 0xc9, 0x5d, 0xe9, 0x96, 0x4d, 0x03))
+      // {9E610007-1BE2-41E1-BB11-C95DE9964D03}
+      AAF_LITERAL_AUID(0x9E610007,
+        0x1BE2, 0x41E1,
+        0xBB, 0x11, 0xC9, 0x5D, 0xE9, 0x96, 0x4D, 0x03))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_IncomingLevel,ParameterDef_IncomingLevel,"",""), 
-      // {48cea642-a8f9-455b-82b3-86c814b797c7}
-      AAF_LITERAL_AUID(0x48cea642,
-        0xa8f9, 0x455b,
-        0x82, 0xb3, 0x86, 0xc8, 0x14, 0xb7, 0x97, 0xc7), "")
+      // {48CEA642-A8F9-455B-82B3-86C814B797C7}
+      AAF_LITERAL_AUID(0x48CEA642,
+        0xA8F9, 0x455B,
+        0x82, 0xB3, 0x86, 0xC8, 0x14, 0xB7, 0x97, 0xC7), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_IncomingLevel")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {48cea642-a8f9-455b-82b3-86c814b797c7}
-      AAF_LITERAL_AUID(0x48cea642,
-        0xa8f9, 0x455b,
-        0x82, 0xb3, 0x86, 0xc8, 0x14, 0xb7, 0x97, 0xc7))
+      // {48CEA642-A8F9-455B-82B3-86C814B797C7}
+      AAF_LITERAL_AUID(0x48CEA642,
+        0xA8F9, 0x455B,
+        0x82, 0xB3, 0x86, 0xC8, 0x14, 0xB7, 0x97, 0xC7))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_IncomingLevel,ParameterDef_IncomingLevel,"",""), 
-      // {48cea642-a8f9-455b-82b3-86c814b797c7}
-      AAF_LITERAL_AUID(0x48cea642,
-        0xa8f9, 0x455b,
-        0x82, 0xb3, 0x86, 0xc8, 0x14, 0xb7, 0x97, 0xc7))
+      // {48CEA642-A8F9-455B-82B3-86C814B797C7}
+      AAF_LITERAL_AUID(0x48CEA642,
+        0xA8F9, 0x455B,
+        0x82, 0xB3, 0x86, 0xC8, 0x14, 0xB7, 0x97, 0xC7))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTESoft,ParameterDef_SMPTESoft,"kAAFParameterDefSMPTESoft",""), 
-      // {9c894ba1-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba1,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {9C894BA1-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA1,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_SMPTESoft")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9c894ba1-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba1,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA1-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA1,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTESoft,ParameterDef_SMPTESoft,"kAAFParameterDefSMPTESoft",""), 
-      // {9c894ba1-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba1,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA1-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA1,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTEBorder,ParameterDef_SMPTEBorder,"kAAFParameterDefSMPTEBorder",""), 
-      // {9c894ba2-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba2,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {9C894BA2-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA2,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_SMPTEBorder")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9c894ba2-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba2,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA2-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA2,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTEBorder,ParameterDef_SMPTEBorder,"kAAFParameterDefSMPTEBorder",""), 
-      // {9c894ba2-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba2,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA2-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA2,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTEPosition,ParameterDef_SMPTEPosition,"kAAFParameterDefSMPTEPosition",""), 
-      // {9c894ba3-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba3,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {9C894BA3-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA3,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_SMPTEPosition")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9c894ba3-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba3,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA3-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA3,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTEPosition,ParameterDef_SMPTEPosition,"kAAFParameterDefSMPTEPosition",""), 
-      // {9c894ba3-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba3,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA3-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA3,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTEModulator,ParameterDef_SMPTEModulator,"kAAFParameterDefSMPTEModulator",""), 
-      // {9c894ba4-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba4,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {9C894BA4-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA4,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_SMPTEModulator")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9c894ba4-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba4,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA4-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA4,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTEModulator,ParameterDef_SMPTEModulator,"kAAFParameterDefSMPTEModulator",""), 
-      // {9c894ba4-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba4,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA4-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA4,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTEShadow,ParameterDef_SMPTEShadow,"kAAFParameterDefSMPTEShadow",""), 
-      // {9c894ba5-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba5,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {9C894BA5-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA5,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_SMPTEShadow")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9c894ba5-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba5,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA5-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA5,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTEShadow,ParameterDef_SMPTEShadow,"kAAFParameterDefSMPTEShadow",""), 
-      // {9c894ba5-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba5,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA5-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA5,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTETumble,ParameterDef_SMPTETumble,"kAAFParameterDefSMPTETumble",""), 
-      // {9c894ba6-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba6,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {9C894BA6-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA6,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_SMPTETumble")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9c894ba6-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba6,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA6-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA6,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTETumble,ParameterDef_SMPTETumble,"kAAFParameterDefSMPTETumble",""), 
-      // {9c894ba6-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba6,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA6-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA6,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTESpotlight,ParameterDef_SMPTESpotlight,"kAAFParameterDefSMPTESpotlight",""), 
-      // {9c894ba7-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba7,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {9C894BA7-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA7,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_SMPTESpotlight")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9c894ba7-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba7,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA7-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA7,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTESpotlight,ParameterDef_SMPTESpotlight,"kAAFParameterDefSMPTESpotlight",""), 
-      // {9c894ba7-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba7,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA7-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA7,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTEReplicationH,ParameterDef_SMPTEReplicationH,"kAAFParameterDefSMPTEReplicationH",""), 
-      // {9c894ba8-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba8,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {9C894BA8-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA8,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_SMPTEReplicationH")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9c894ba8-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba8,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA8-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA8,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTEReplicationH,ParameterDef_SMPTEReplicationH,"kAAFParameterDefSMPTEReplicationH",""), 
-      // {9c894ba8-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba8,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA8-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA8,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTEReplicationV,ParameterDef_SMPTEReplicationV,"kAAFParameterDefSMPTEReplicationV",""), 
-      // {9c894ba9-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba9,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {9C894BA9-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA9,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_SMPTEReplicationV")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9c894ba9-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba9,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA9-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA9,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTEReplicationV,ParameterDef_SMPTEReplicationV,"kAAFParameterDefSMPTEReplicationV",""), 
-      // {9c894ba9-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894ba9,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BA9-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BA9,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTECheckerboard,ParameterDef_SMPTECheckerboard,"kAAFParameterDefSMPTECheckerboard",""), 
-      // {9c894baa-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894baa,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {9C894BAA-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BAA,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_SMPTECheckerboard")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9c894baa-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894baa,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BAA-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BAA,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_SMPTECheckerboard,ParameterDef_SMPTECheckerboard,"kAAFParameterDefSMPTECheckerboard",""), 
-      // {9c894baa-2277-11d3-8a4c-0050040ef7d2}
-      AAF_LITERAL_AUID(0x9c894baa,
-        0x2277, 0x11d3,
-        0x8a, 0x4c, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {9C894BAA-2277-11D3-8A4C-0050040EF7D2}
+      AAF_LITERAL_AUID(0x9C894BAA,
+        0x2277, 0x11D3,
+        0x8A, 0x4C, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ParameterDefinition, AAF_SYMBOL(ParameterDef_PhaseOffset,ParameterDef_PhaseOffset,"kAAFParameterDefPhaseOffset",""), 
-      // {5f1c2560-2415-11d3-8a4f-0050040ef7d2}
-      AAF_LITERAL_AUID(0x5f1c2560,
-        0x2415, 0x11d3,
-        0x8a, 0x4f, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "")
+      // {5F1C2560-2415-11D3-8A4F-0050040EF7D2}
+      AAF_LITERAL_AUID(0x5F1C2560,
+        0x2415, 0x11D3,
+        0x8A, 0x4F, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ParameterDef_PhaseOffset")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {5f1c2560-2415-11d3-8a4f-0050040ef7d2}
-      AAF_LITERAL_AUID(0x5f1c2560,
-        0x2415, 0x11d3,
-        0x8a, 0x4f, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {5F1C2560-2415-11D3-8A4F-0050040EF7D2}
+      AAF_LITERAL_AUID(0x5F1C2560,
+        0x2415, 0x11D3,
+        0x8A, 0x4F, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(ParameterDefinition, AAF_SYMBOL(ParameterDef_PhaseOffset,ParameterDef_PhaseOffset,"kAAFParameterDefPhaseOffset",""), 
-      // {5f1c2560-2415-11d3-8a4f-0050040ef7d2}
-      AAF_LITERAL_AUID(0x5f1c2560,
-        0x2415, 0x11d3,
-        0x8a, 0x4f, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {5F1C2560-2415-11D3-8A4F-0050040EF7D2}
+      AAF_LITERAL_AUID(0x5F1C2560,
+        0x2415, 0x11D3,
+        0x8A, 0x4F, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
 AAF_INSTANCE_GROUP_END(ParameterDefinitionInstances, ParameterDefinition)
 AAF_INSTANCE_GROUP_SEPARATOR()
 AAF_INSTANCE_GROUP(DataDefinitionInstances, DataDefinition)
   AAF_INSTANCE(DataDefinition, AAF_SYMBOL(DataDef_Picture,DataDef_Picture,"","Picture data"), 
-      // {01030202-0100-0000-060e-2b3404010101}
+      // {01030202-0100-0000-060E-2B3404010101}
       AAF_LITERAL_AUID(0x01030202,
         0x0100, 0x0000,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01), "Picture data")
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "Picture data")
     AAF_INSTANCE_PROPERTY(Name, String, "DataDef_Picture")
     AAF_INSTANCE_PROPERTY(Description, String, "Picture data")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {01030202-0100-0000-060e-2b3404010101}
+      // {01030202-0100-0000-060E-2B3404010101}
       AAF_LITERAL_AUID(0x01030202,
         0x0100, 0x0000,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_END(DataDefinition, AAF_SYMBOL(DataDef_Picture,DataDef_Picture,"","Picture data"), 
-      // {01030202-0100-0000-060e-2b3404010101}
+      // {01030202-0100-0000-060E-2B3404010101}
       AAF_LITERAL_AUID(0x01030202,
         0x0100, 0x0000,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(DataDefinition, AAF_SYMBOL(DataDef_LegacyPicture,DataDef_LegacyPicture,"DDEF_Picture","Picture data (legacy)"), 
       // {6F3C8CE1-6CEF-11D2-807D-006008143E6F}
@@ -8853,58 +8853,58 @@ AAF_INSTANCE_GROUP(DataDefinitionInstances, DataDefinition)
         0x80, 0x7D, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(DataDefinition, AAF_SYMBOL(DataDef_Matte,DataDef_Matte,"DDEF_Matte","Matte data"), 
-      // {05CBA731-1DAA-11d3-80AD-006008143E6F}
+      // {05CBA731-1DAA-11D3-80AD-006008143E6F}
       AAF_LITERAL_AUID(0x05CBA731,
-        0x1DAA, 0x11d3,
+        0x1DAA, 0x11D3,
         0x80, 0xAD, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F), "Matte data")
     AAF_INSTANCE_PROPERTY(Name, String, "DataDef_Matte")
     AAF_INSTANCE_PROPERTY(Description, String, "Matte data")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {05CBA731-1DAA-11d3-80AD-006008143E6F}
+      // {05CBA731-1DAA-11D3-80AD-006008143E6F}
       AAF_LITERAL_AUID(0x05CBA731,
-        0x1DAA, 0x11d3,
+        0x1DAA, 0x11D3,
         0x80, 0xAD, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_END(DataDefinition, AAF_SYMBOL(DataDef_Matte,DataDef_Matte,"DDEF_Matte","Matte data"), 
-      // {05CBA731-1DAA-11d3-80AD-006008143E6F}
+      // {05CBA731-1DAA-11D3-80AD-006008143E6F}
       AAF_LITERAL_AUID(0x05CBA731,
-        0x1DAA, 0x11d3,
+        0x1DAA, 0x11D3,
         0x80, 0xAD, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(DataDefinition, AAF_SYMBOL(DataDef_PictureWithMatte,DataDef_PictureWithMatte,"DDEF_PictureWithMatte","Picture and Matte data"), 
-      // {05CBA732-1DAA-11d3-80AD-006008143E6F}
+      // {05CBA732-1DAA-11D3-80AD-006008143E6F}
       AAF_LITERAL_AUID(0x05CBA732,
-        0x1DAA, 0x11d3,
+        0x1DAA, 0x11D3,
         0x80, 0xAD, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F), "Picture and Matte data")
     AAF_INSTANCE_PROPERTY(Name, String, "DataDef_PictureWithMatte")
     AAF_INSTANCE_PROPERTY(Description, String, "Picture and Matte data")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {05CBA732-1DAA-11d3-80AD-006008143E6F}
+      // {05CBA732-1DAA-11D3-80AD-006008143E6F}
       AAF_LITERAL_AUID(0x05CBA732,
-        0x1DAA, 0x11d3,
+        0x1DAA, 0x11D3,
         0x80, 0xAD, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_END(DataDefinition, AAF_SYMBOL(DataDef_PictureWithMatte,DataDef_PictureWithMatte,"DDEF_PictureWithMatte","Picture and Matte data"), 
-      // {05CBA732-1DAA-11d3-80AD-006008143E6F}
+      // {05CBA732-1DAA-11D3-80AD-006008143E6F}
       AAF_LITERAL_AUID(0x05CBA732,
-        0x1DAA, 0x11d3,
+        0x1DAA, 0x11D3,
         0x80, 0xAD, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(DataDefinition, AAF_SYMBOL(DataDef_Sound,DataDef_Sound,"","Sound data"), 
-      // {01030202-0200-0000-060e-2b3404010101}
+      // {01030202-0200-0000-060E-2B3404010101}
       AAF_LITERAL_AUID(0x01030202,
         0x0200, 0x0000,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01), "Sound data")
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "Sound data")
     AAF_INSTANCE_PROPERTY(Name, String, "DataDef_Sound")
     AAF_INSTANCE_PROPERTY(Description, String, "Sound data")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {01030202-0200-0000-060e-2b3404010101}
+      // {01030202-0200-0000-060E-2B3404010101}
       AAF_LITERAL_AUID(0x01030202,
         0x0200, 0x0000,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_END(DataDefinition, AAF_SYMBOL(DataDef_Sound,DataDef_Sound,"","Sound data"), 
-      // {01030202-0200-0000-060e-2b3404010101}
+      // {01030202-0200-0000-060E-2B3404010101}
       AAF_LITERAL_AUID(0x01030202,
         0x0200, 0x0000,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(DataDefinition, AAF_SYMBOL(DataDef_LegacySound,DataDef_LegacySound,"DDEF_Sound","Sound data (legacy)"), 
       // {78E1EBE1-6CEF-11D2-807D-006008143E6F}
@@ -8925,22 +8925,22 @@ AAF_INSTANCE_GROUP(DataDefinitionInstances, DataDefinition)
         0x80, 0x7D, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(DataDefinition, AAF_SYMBOL(DataDef_Timecode,DataDef_Timecode,"","Timecode data"), 
-      // {01030201-0100-0000-060e-2b3404010101}
+      // {01030201-0100-0000-060E-2B3404010101}
       AAF_LITERAL_AUID(0x01030201,
         0x0100, 0x0000,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01), "Timecode data")
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "Timecode data")
     AAF_INSTANCE_PROPERTY(Name, String, "DataDef_Timecode")
     AAF_INSTANCE_PROPERTY(Description, String, "Timecode data")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {01030201-0100-0000-060e-2b3404010101}
+      // {01030201-0100-0000-060E-2B3404010101}
       AAF_LITERAL_AUID(0x01030201,
         0x0100, 0x0000,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_END(DataDefinition, AAF_SYMBOL(DataDef_Timecode,DataDef_Timecode,"","Timecode data"), 
-      // {01030201-0100-0000-060e-2b3404010101}
+      // {01030201-0100-0000-060E-2B3404010101}
       AAF_LITERAL_AUID(0x01030201,
         0x0100, 0x0000,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(DataDefinition, AAF_SYMBOL(DataDef_LegacyTimecode,DataDef_LegacyTimecode,"DDEF_Timecode","Timecode data (legacy)"), 
       // {7F275E81-77E5-11D2-807F-006008143E6F}
@@ -8961,76 +8961,76 @@ AAF_INSTANCE_GROUP(DataDefinitionInstances, DataDefinition)
         0x80, 0x7F, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(DataDefinition, AAF_SYMBOL(DataDef_Edgecode,DataDef_Edgecode,"DDEF_Edgecode","Edgecode data"), 
-      // {d2bb2af0-d234-11d2-89ee-006097116212}
-      AAF_LITERAL_AUID(0xd2bb2af0,
-        0xd234, 0x11d2,
-        0x89, 0xee, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12), "Edgecode data")
+      // {D2BB2AF0-D234-11D2-89EE-006097116212}
+      AAF_LITERAL_AUID(0xD2BB2AF0,
+        0xD234, 0x11D2,
+        0x89, 0xEE, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12), "Edgecode data")
     AAF_INSTANCE_PROPERTY(Name, String, "DataDef_Edgecode")
     AAF_INSTANCE_PROPERTY(Description, String, "Edgecode data")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {d2bb2af0-d234-11d2-89ee-006097116212}
-      AAF_LITERAL_AUID(0xd2bb2af0,
-        0xd234, 0x11d2,
-        0x89, 0xee, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12))
+      // {D2BB2AF0-D234-11D2-89EE-006097116212}
+      AAF_LITERAL_AUID(0xD2BB2AF0,
+        0xD234, 0x11D2,
+        0x89, 0xEE, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12))
   AAF_INSTANCE_END(DataDefinition, AAF_SYMBOL(DataDef_Edgecode,DataDef_Edgecode,"DDEF_Edgecode","Edgecode data"), 
-      // {d2bb2af0-d234-11d2-89ee-006097116212}
-      AAF_LITERAL_AUID(0xd2bb2af0,
-        0xd234, 0x11d2,
-        0x89, 0xee, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12))
+      // {D2BB2AF0-D234-11D2-89EE-006097116212}
+      AAF_LITERAL_AUID(0xD2BB2AF0,
+        0xD234, 0x11D2,
+        0x89, 0xEE, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(DataDefinition, AAF_SYMBOL(DataDef_DescriptiveMetadata,DataDef_DescriptiveMetadata,"","Descriptive metadata"), 
-      // {01030201-1000-0000-060e-2b3404010101}
+      // {01030201-1000-0000-060E-2B3404010101}
       AAF_LITERAL_AUID(0x01030201,
         0x1000, 0x0000,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01), "Descriptive metadata")
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "Descriptive metadata")
     AAF_INSTANCE_PROPERTY(Name, String, "DataDef_DescriptiveMetadata")
     AAF_INSTANCE_PROPERTY(Description, String, "Descriptive metadata")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {01030201-1000-0000-060e-2b3404010101}
+      // {01030201-1000-0000-060E-2B3404010101}
       AAF_LITERAL_AUID(0x01030201,
         0x1000, 0x0000,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_END(DataDefinition, AAF_SYMBOL(DataDef_DescriptiveMetadata,DataDef_DescriptiveMetadata,"","Descriptive metadata"), 
-      // {01030201-1000-0000-060e-2b3404010101}
+      // {01030201-1000-0000-060E-2B3404010101}
       AAF_LITERAL_AUID(0x01030201,
         0x1000, 0x0000,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(DataDefinition, AAF_SYMBOL(DataDef_Auxiliary,DataDef_Auxiliary,"","Auxiliary data"), 
-      // {01030203-0100-0000-060e-2b3404010105}
+      // {01030203-0100-0000-060E-2B3404010105}
       AAF_LITERAL_AUID(0x01030203,
         0x0100, 0x0000,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x05), "Auxiliary data")
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x05), "Auxiliary data")
     AAF_INSTANCE_PROPERTY(Name, String, "DataDef_Auxiliary")
     AAF_INSTANCE_PROPERTY(Description, String, "Auxiliary data")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {01030203-0100-0000-060e-2b3404010105}
+      // {01030203-0100-0000-060E-2B3404010105}
       AAF_LITERAL_AUID(0x01030203,
         0x0100, 0x0000,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x05))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x05))
   AAF_INSTANCE_END(DataDefinition, AAF_SYMBOL(DataDef_Auxiliary,DataDef_Auxiliary,"","Auxiliary data"), 
-      // {01030203-0100-0000-060e-2b3404010105}
+      // {01030203-0100-0000-060E-2B3404010105}
       AAF_LITERAL_AUID(0x01030203,
         0x0100, 0x0000,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x05))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x05))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(DataDefinition, AAF_SYMBOL(DataDef_Unknown,DataDef_Unknown,"DDEF_Unknown","Data kind not known"), 
-      // {851419d0-2e4f-11d3-8a5b-0050040ef7d2}
-      AAF_LITERAL_AUID(0x851419d0,
-        0x2e4f, 0x11d3,
-        0x8a, 0x5b, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2), "Data kind not known")
+      // {851419D0-2E4F-11D3-8A5B-0050040EF7D2}
+      AAF_LITERAL_AUID(0x851419D0,
+        0x2E4F, 0x11D3,
+        0x8A, 0x5B, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2), "Data kind not known")
     AAF_INSTANCE_PROPERTY(Name, String, "DataDef_Unknown")
     AAF_INSTANCE_PROPERTY(Description, String, "Data kind not known")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {851419d0-2e4f-11d3-8a5b-0050040ef7d2}
-      AAF_LITERAL_AUID(0x851419d0,
-        0x2e4f, 0x11d3,
-        0x8a, 0x5b, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {851419D0-2E4F-11D3-8A5B-0050040EF7D2}
+      AAF_LITERAL_AUID(0x851419D0,
+        0x2E4F, 0x11D3,
+        0x8A, 0x5B, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
   AAF_INSTANCE_END(DataDefinition, AAF_SYMBOL(DataDef_Unknown,DataDef_Unknown,"DDEF_Unknown","Data kind not known"), 
-      // {851419d0-2e4f-11d3-8a5b-0050040ef7d2}
-      AAF_LITERAL_AUID(0x851419d0,
-        0x2e4f, 0x11d3,
-        0x8a, 0x5b, 0x00, 0x50, 0x04, 0x0e, 0xf7, 0xd2))
+      // {851419D0-2E4F-11D3-8A5B-0050040EF7D2}
+      AAF_LITERAL_AUID(0x851419D0,
+        0x2E4F, 0x11D3,
+        0x8A, 0x5B, 0x00, 0x50, 0x04, 0x0E, 0xF7, 0xD2))
 AAF_INSTANCE_GROUP_END(DataDefinitionInstances, DataDefinition)
 AAF_INSTANCE_GROUP_SEPARATOR()
 AAF_INSTANCE_GROUP(ContainerDefinitionInstances, ContainerDefinition)
@@ -9086,230 +9086,230 @@ AAF_INSTANCE_GROUP(ContainerDefinitionInstances, ContainerDefinition)
         0x80, 0x9B, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_AAFMSS,ContainerDef_AAFMSS,"ContainerAAFMSS",""), 
-      // {42464141-000D-4D4F-060e-2b34010101FF}
+      // {42464141-000D-4D4F-060E-2B34010101FF}
       AAF_LITERAL_AUID(0x42464141,
         0x000D, 0x4D4F,
-        0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xFF), "")
+        0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0xFF), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_AAFMSS")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {42464141-000D-4D4F-060e-2b34010101FF}
+      // {42464141-000D-4D4F-060E-2B34010101FF}
       AAF_LITERAL_AUID(0x42464141,
         0x000D, 0x4D4F,
-        0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xFF))
+        0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0xFF))
   AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_AAFMSS,ContainerDef_AAFMSS,"ContainerAAFMSS",""), 
-      // {42464141-000D-4D4F-060e-2b34010101FF}
+      // {42464141-000D-4D4F-060E-2B34010101FF}
       AAF_LITERAL_AUID(0x42464141,
         0x000D, 0x4D4F,
-        0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xFF))
+        0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0xFF))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_AAFKLV,ContainerDef_AAFKLV,"ContainerAAFKLV",""), 
-      // {4B464141-000D-4D4F-060e-2b34010101FF}
+      // {4B464141-000D-4D4F-060E-2B34010101FF}
       AAF_LITERAL_AUID(0x4B464141,
         0x000D, 0x4D4F,
-        0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xFF), "")
+        0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0xFF), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_AAFKLV")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {4B464141-000D-4D4F-060e-2b34010101FF}
+      // {4B464141-000D-4D4F-060E-2B34010101FF}
       AAF_LITERAL_AUID(0x4B464141,
         0x000D, 0x4D4F,
-        0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xFF))
+        0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0xFF))
   AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_AAFKLV,ContainerDef_AAFKLV,"ContainerAAFKLV",""), 
-      // {4B464141-000D-4D4F-060e-2b34010101FF}
+      // {4B464141-000D-4D4F-060E-2B34010101FF}
       AAF_LITERAL_AUID(0x4B464141,
         0x000D, 0x4D4F,
-        0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xFF))
+        0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0xFF))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_AAFXML,ContainerDef_AAFXML,"ContainerAAFXML",""), 
-      // {58464141-000D-4D4F-060e-2b34010101FF}
+      // {58464141-000D-4D4F-060E-2B34010101FF}
       AAF_LITERAL_AUID(0x58464141,
         0x000D, 0x4D4F,
-        0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xFF), "")
+        0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0xFF), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_AAFXML")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {58464141-000D-4D4F-060e-2b34010101FF}
+      // {58464141-000D-4D4F-060E-2B34010101FF}
       AAF_LITERAL_AUID(0x58464141,
         0x000D, 0x4D4F,
-        0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xFF))
+        0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0xFF))
   AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_AAFXML,ContainerDef_AAFXML,"ContainerAAFXML",""), 
-      // {58464141-000D-4D4F-060e-2b34010101FF}
+      // {58464141-000D-4D4F-060E-2B34010101FF}
       AAF_LITERAL_AUID(0x58464141,
         0x000D, 0x4D4F,
-        0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xFF))
+        0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0xFF))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_RIFFWAVE,ContainerDef_RIFFWAVE,"",""), 
-      // {0d011301-0101-0100-060e-2b3404010106}
-      AAF_LITERAL_AUID(0x0d011301,
+      // {0D011301-0101-0100-060E-2B3404010106}
+      AAF_LITERAL_AUID(0x0D011301,
         0x0101, 0x0100,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x06), "")
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x06), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_RIFFWAVE")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {0d011301-0101-0100-060e-2b3404010106}
-      AAF_LITERAL_AUID(0x0d011301,
+      // {0D011301-0101-0100-060E-2B3404010106}
+      AAF_LITERAL_AUID(0x0D011301,
         0x0101, 0x0100,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x06))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x06))
   AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_RIFFWAVE,ContainerDef_RIFFWAVE,"",""), 
-      // {0d011301-0101-0100-060e-2b3404010106}
-      AAF_LITERAL_AUID(0x0d011301,
+      // {0D011301-0101-0100-060E-2B3404010106}
+      AAF_LITERAL_AUID(0x0D011301,
         0x0101, 0x0100,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x06))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x06))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_JFIF,ContainerDef_JFIF,"",""), 
-      // {0d011301-0102-0200-060e-2b3404010107}
-      AAF_LITERAL_AUID(0x0d011301,
+      // {0D011301-0102-0200-060E-2B3404010107}
+      AAF_LITERAL_AUID(0x0D011301,
         0x0102, 0x0200,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x07), "")
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x07), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_JFIF")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {0d011301-0102-0200-060e-2b3404010107}
-      AAF_LITERAL_AUID(0x0d011301,
+      // {0D011301-0102-0200-060E-2B3404010107}
+      AAF_LITERAL_AUID(0x0D011301,
         0x0102, 0x0200,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x07))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x07))
   AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_JFIF,ContainerDef_JFIF,"",""), 
-      // {0d011301-0102-0200-060e-2b3404010107}
-      AAF_LITERAL_AUID(0x0d011301,
+      // {0D011301-0102-0200-060E-2B3404010107}
+      AAF_LITERAL_AUID(0x0D011301,
         0x0102, 0x0200,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x07))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x07))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_AIFFAIFC,ContainerDef_AIFFAIFC,"",""), 
-      // {0d011301-0104-0100-060e-2b3404010106}
-      AAF_LITERAL_AUID(0x0d011301,
+      // {0D011301-0104-0100-060E-2B3404010106}
+      AAF_LITERAL_AUID(0x0D011301,
         0x0104, 0x0100,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x06), "")
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x06), "")
     AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_AIFFAIFC")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {0d011301-0104-0100-060e-2b3404010106}
-      AAF_LITERAL_AUID(0x0d011301,
+      // {0D011301-0104-0100-060E-2B3404010106}
+      AAF_LITERAL_AUID(0x0D011301,
         0x0104, 0x0100,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x06))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x06))
   AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_AIFFAIFC,ContainerDef_AIFFAIFC,"",""), 
-      // {0d011301-0104-0100-060e-2b3404010106}
-      AAF_LITERAL_AUID(0x0d011301,
+      // {0D011301-0104-0100-060E-2B3404010106}
+      AAF_LITERAL_AUID(0x0D011301,
         0x0104, 0x0100,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x06))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x06))
 AAF_INSTANCE_GROUP_END(ContainerDefinitionInstances, ContainerDefinition)
 AAF_INSTANCE_GROUP_SEPARATOR()
 AAF_INSTANCE_GROUP(InterpolationDefinitionInstances, InterpolatorDefinition)
   AAF_INSTANCE(InterpolationDefinition, AAF_SYMBOL(InterpolationDef_None,InterpolationDef_None,"NoInterpolator",""), 
-      // {5B6C85A3-0EDE-11d3-80A9-006008143E6F}
+      // {5B6C85A3-0EDE-11D3-80A9-006008143E6F}
       AAF_LITERAL_AUID(0x5B6C85A3,
-        0x0EDE, 0x11d3,
+        0x0EDE, 0x11D3,
         0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F), "")
     AAF_INSTANCE_PROPERTY(Name, String, "InterpolationDef_None")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {5B6C85A3-0EDE-11d3-80A9-006008143E6F}
+      // {5B6C85A3-0EDE-11D3-80A9-006008143E6F}
       AAF_LITERAL_AUID(0x5B6C85A3,
-        0x0EDE, 0x11d3,
+        0x0EDE, 0x11D3,
         0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_END(InterpolationDefinition, AAF_SYMBOL(InterpolationDef_None,InterpolationDef_None,"NoInterpolator",""), 
-      // {5B6C85A3-0EDE-11d3-80A9-006008143E6F}
+      // {5B6C85A3-0EDE-11D3-80A9-006008143E6F}
       AAF_LITERAL_AUID(0x5B6C85A3,
-        0x0EDE, 0x11d3,
+        0x0EDE, 0x11D3,
         0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(InterpolationDefinition, AAF_SYMBOL(InterpolationDef_Linear,InterpolationDef_Linear,"LinearInterpolator",""), 
-      // {5B6C85A4-0EDE-11d3-80A9-006008143e6f}
+      // {5B6C85A4-0EDE-11D3-80A9-006008143E6F}
       AAF_LITERAL_AUID(0x5B6C85A4,
-        0x0EDE, 0x11d3,
-        0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f), "")
+        0x0EDE, 0x11D3,
+        0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F), "")
     AAF_INSTANCE_PROPERTY(Name, String, "InterpolationDef_Linear")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {5B6C85A4-0EDE-11d3-80A9-006008143e6f}
+      // {5B6C85A4-0EDE-11D3-80A9-006008143E6F}
       AAF_LITERAL_AUID(0x5B6C85A4,
-        0x0EDE, 0x11d3,
-        0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+        0x0EDE, 0x11D3,
+        0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_END(InterpolationDefinition, AAF_SYMBOL(InterpolationDef_Linear,InterpolationDef_Linear,"LinearInterpolator",""), 
-      // {5B6C85A4-0EDE-11d3-80A9-006008143e6f}
+      // {5B6C85A4-0EDE-11D3-80A9-006008143E6F}
       AAF_LITERAL_AUID(0x5B6C85A4,
-        0x0EDE, 0x11d3,
-        0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+        0x0EDE, 0x11D3,
+        0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(InterpolationDefinition, AAF_SYMBOL(InterpolationDef_Constant,InterpolationDef_Constant,"ConstantInterpolator",""), 
-      // {5B6C85A5-0EDE-11d3-80A9-006008143E6F}
+      // {5B6C85A5-0EDE-11D3-80A9-006008143E6F}
       AAF_LITERAL_AUID(0x5B6C85A5,
-        0x0EDE, 0x11d3,
+        0x0EDE, 0x11D3,
         0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F), "")
     AAF_INSTANCE_PROPERTY(Name, String, "InterpolationDef_Constant")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {5B6C85A5-0EDE-11d3-80A9-006008143E6F}
+      // {5B6C85A5-0EDE-11D3-80A9-006008143E6F}
       AAF_LITERAL_AUID(0x5B6C85A5,
-        0x0EDE, 0x11d3,
+        0x0EDE, 0x11D3,
         0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_END(InterpolationDefinition, AAF_SYMBOL(InterpolationDef_Constant,InterpolationDef_Constant,"ConstantInterpolator",""), 
-      // {5B6C85A5-0EDE-11d3-80A9-006008143E6F}
+      // {5B6C85A5-0EDE-11D3-80A9-006008143E6F}
       AAF_LITERAL_AUID(0x5B6C85A5,
-        0x0EDE, 0x11d3,
+        0x0EDE, 0x11D3,
         0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(InterpolationDefinition, AAF_SYMBOL(InterpolationDef_BSpline,InterpolationDef_BSpline,"BSplineInterpolator",""), 
-      // {5B6C85A6-0EDE-11d3-80A9-006008143e6f}
+      // {5B6C85A6-0EDE-11D3-80A9-006008143E6F}
       AAF_LITERAL_AUID(0x5B6C85A6,
-        0x0EDE, 0x11d3,
-        0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f), "")
+        0x0EDE, 0x11D3,
+        0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F), "")
     AAF_INSTANCE_PROPERTY(Name, String, "InterpolationDef_BSpline")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {5B6C85A6-0EDE-11d3-80A9-006008143e6f}
+      // {5B6C85A6-0EDE-11D3-80A9-006008143E6F}
       AAF_LITERAL_AUID(0x5B6C85A6,
-        0x0EDE, 0x11d3,
-        0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+        0x0EDE, 0x11D3,
+        0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_END(InterpolationDefinition, AAF_SYMBOL(InterpolationDef_BSpline,InterpolationDef_BSpline,"BSplineInterpolator",""), 
-      // {5B6C85A6-0EDE-11d3-80A9-006008143e6f}
+      // {5B6C85A6-0EDE-11D3-80A9-006008143E6F}
       AAF_LITERAL_AUID(0x5B6C85A6,
-        0x0EDE, 0x11d3,
-        0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+        0x0EDE, 0x11D3,
+        0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(InterpolationDefinition, AAF_SYMBOL(InterpolationDef_Log,InterpolationDef_Log,"LogInterpolator",""), 
-      // {15829ec3-1f24-458a-960d-c65bb23c2aa1}
-      AAF_LITERAL_AUID(0x15829ec3,
-        0x1f24, 0x458a,
-        0x96, 0x0d, 0xc6, 0x5b, 0xb2, 0x3c, 0x2a, 0xa1), "")
+      // {15829EC3-1F24-458A-960D-C65BB23C2AA1}
+      AAF_LITERAL_AUID(0x15829EC3,
+        0x1F24, 0x458A,
+        0x96, 0x0D, 0xC6, 0x5B, 0xB2, 0x3C, 0x2A, 0xA1), "")
     AAF_INSTANCE_PROPERTY(Name, String, "InterpolationDef_Log")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {15829ec3-1f24-458a-960d-c65bb23c2aa1}
-      AAF_LITERAL_AUID(0x15829ec3,
-        0x1f24, 0x458a,
-        0x96, 0x0d, 0xc6, 0x5b, 0xb2, 0x3c, 0x2a, 0xa1))
+      // {15829EC3-1F24-458A-960D-C65BB23C2AA1}
+      AAF_LITERAL_AUID(0x15829EC3,
+        0x1F24, 0x458A,
+        0x96, 0x0D, 0xC6, 0x5B, 0xB2, 0x3C, 0x2A, 0xA1))
   AAF_INSTANCE_END(InterpolationDefinition, AAF_SYMBOL(InterpolationDef_Log,InterpolationDef_Log,"LogInterpolator",""), 
-      // {15829ec3-1f24-458a-960d-c65bb23c2aa1}
-      AAF_LITERAL_AUID(0x15829ec3,
-        0x1f24, 0x458a,
-        0x96, 0x0d, 0xc6, 0x5b, 0xb2, 0x3c, 0x2a, 0xa1))
+      // {15829EC3-1F24-458A-960D-C65BB23C2AA1}
+      AAF_LITERAL_AUID(0x15829EC3,
+        0x1F24, 0x458A,
+        0x96, 0x0D, 0xC6, 0x5B, 0xB2, 0x3C, 0x2A, 0xA1))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(InterpolationDefinition, AAF_SYMBOL(InterpolationDef_Power,InterpolationDef_Power,"PowerInterpolator",""), 
-      // {c09153f7-bd18-4e5a-ad09-cbdd654fa001}
-      AAF_LITERAL_AUID(0xc09153f7,
-        0xbd18, 0x4e5a,
-        0xad, 0x09, 0xcb, 0xdd, 0x65, 0x4f, 0xa0, 0x01), "")
+      // {C09153F7-BD18-4E5A-AD09-CBDD654FA001}
+      AAF_LITERAL_AUID(0xC09153F7,
+        0xBD18, 0x4E5A,
+        0xAD, 0x09, 0xCB, 0xDD, 0x65, 0x4F, 0xA0, 0x01), "")
     AAF_INSTANCE_PROPERTY(Name, String, "InterpolationDef_Power")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {c09153f7-bd18-4e5a-ad09-cbdd654fa001}
-      AAF_LITERAL_AUID(0xc09153f7,
-        0xbd18, 0x4e5a,
-        0xad, 0x09, 0xcb, 0xdd, 0x65, 0x4f, 0xa0, 0x01))
+      // {C09153F7-BD18-4E5A-AD09-CBDD654FA001}
+      AAF_LITERAL_AUID(0xC09153F7,
+        0xBD18, 0x4E5A,
+        0xAD, 0x09, 0xCB, 0xDD, 0x65, 0x4F, 0xA0, 0x01))
   AAF_INSTANCE_END(InterpolationDefinition, AAF_SYMBOL(InterpolationDef_Power,InterpolationDef_Power,"PowerInterpolator",""), 
-      // {c09153f7-bd18-4e5a-ad09-cbdd654fa001}
-      AAF_LITERAL_AUID(0xc09153f7,
-        0xbd18, 0x4e5a,
-        0xad, 0x09, 0xcb, 0xdd, 0x65, 0x4f, 0xa0, 0x01))
+      // {C09153F7-BD18-4E5A-AD09-CBDD654FA001}
+      AAF_LITERAL_AUID(0xC09153F7,
+        0xBD18, 0x4E5A,
+        0xAD, 0x09, 0xCB, 0xDD, 0x65, 0x4F, 0xA0, 0x01))
 AAF_INSTANCE_GROUP_END(InterpolationDefinitionInstances, InterpolatorDefinition)
 AAF_INSTANCE_GROUP_SEPARATOR()
 AAF_INSTANCE_GROUP(OPDefinitionInstances, OPDefinition)
   AAF_INSTANCE(OPDefinition, AAF_SYMBOL(OPDef_EditProtocol,OPDef_EditProtocol,"","Operational Pattern for the AAF Edit Protocol"), 
-      // {0d011201-0100-0000-060e-2b3404010105}
-      AAF_LITERAL_AUID(0x0d011201,
+      // {0D011201-0100-0000-060E-2B3404010105}
+      AAF_LITERAL_AUID(0x0D011201,
         0x0100, 0x0000,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x05), "Operational Pattern for the AAF Edit Protocol")
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x05), "Operational Pattern for the AAF Edit Protocol")
     AAF_INSTANCE_PROPERTY(Name, String, "OPDef_EditProtocol")
     AAF_INSTANCE_PROPERTY(Description, String, "Operational Pattern for the AAF Edit Protocol")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {0d011201-0100-0000-060e-2b3404010105}
-      AAF_LITERAL_AUID(0x0d011201,
+      // {0D011201-0100-0000-060E-2B3404010105}
+      AAF_LITERAL_AUID(0x0D011201,
         0x0100, 0x0000,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x05))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x05))
   AAF_INSTANCE_END(OPDefinition, AAF_SYMBOL(OPDef_EditProtocol,OPDef_EditProtocol,"","Operational Pattern for the AAF Edit Protocol"), 
-      // {0d011201-0100-0000-060e-2b3404010105}
-      AAF_LITERAL_AUID(0x0d011201,
+      // {0D011201-0100-0000-060E-2B3404010105}
+      AAF_LITERAL_AUID(0x0D011201,
         0x0100, 0x0000,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x05))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x05))
 AAF_INSTANCE_GROUP_END(OPDefinitionInstances, OPDefinition)
 AAF_INSTANCE_GROUP_SEPARATOR()
 AAF_INSTANCE_GROUP(KLVDataDefinitionInstances, KLVDataDefinition)
@@ -9320,501 +9320,501 @@ AAF_INSTANCE_GROUP_END(TaggedValueDefinitionInstances, TaggedValueDefinition)
 AAF_INSTANCE_GROUP_SEPARATOR()
 AAF_INSTANCE_GROUP(PluginDefinitionInstances, PluginDefinition)
   AAF_INSTANCE(PluginDefinition, AAF_SYMBOL(Platform_Independent,Platform_Independent,"kAAFPlatformIndependant",""), 
-      // {3d1dd891-e793-11d2-809e-006008143e6f}
-      AAF_LITERAL_AUID(0x3d1dd891,
-        0xe793, 0x11d2,
-        0x80, 0x9e, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f), "")
+      // {3D1DD891-E793-11D2-809E-006008143E6F}
+      AAF_LITERAL_AUID(0x3D1DD891,
+        0xE793, 0x11D2,
+        0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F), "")
     AAF_INSTANCE_PROPERTY(Name, String, "Platform_Independent")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {3d1dd891-e793-11d2-809e-006008143e6f}
-      AAF_LITERAL_AUID(0x3d1dd891,
-        0xe793, 0x11d2,
-        0x80, 0x9e, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {3D1DD891-E793-11D2-809E-006008143E6F}
+      AAF_LITERAL_AUID(0x3D1DD891,
+        0xE793, 0x11D2,
+        0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_END(PluginDefinition, AAF_SYMBOL(Platform_Independent,Platform_Independent,"kAAFPlatformIndependant",""), 
-      // {3d1dd891-e793-11d2-809e-006008143e6f}
-      AAF_LITERAL_AUID(0x3d1dd891,
-        0xe793, 0x11d2,
-        0x80, 0x9e, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {3D1DD891-E793-11D2-809E-006008143E6F}
+      AAF_LITERAL_AUID(0x3D1DD891,
+        0xE793, 0x11D2,
+        0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(PluginDefinition, AAF_SYMBOL(Engine_None,Engine_None,"kAAFNoEngine",""), 
-      // {9fdef8c1-e847-11d2-809e-006008143e6f}
-      AAF_LITERAL_AUID(0x9fdef8c1,
-        0xe847, 0x11d2,
-        0x80, 0x9e, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f), "")
+      // {9FDEF8C1-E847-11D2-809E-006008143E6F}
+      AAF_LITERAL_AUID(0x9FDEF8C1,
+        0xE847, 0x11D2,
+        0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F), "")
     AAF_INSTANCE_PROPERTY(Name, String, "Engine_None")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {9fdef8c1-e847-11d2-809e-006008143e6f}
-      AAF_LITERAL_AUID(0x9fdef8c1,
-        0xe847, 0x11d2,
-        0x80, 0x9e, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {9FDEF8C1-E847-11D2-809E-006008143E6F}
+      AAF_LITERAL_AUID(0x9FDEF8C1,
+        0xE847, 0x11D2,
+        0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_END(PluginDefinition, AAF_SYMBOL(Engine_None,Engine_None,"kAAFNoEngine",""), 
-      // {9fdef8c1-e847-11d2-809e-006008143e6f}
-      AAF_LITERAL_AUID(0x9fdef8c1,
-        0xe847, 0x11d2,
-        0x80, 0x9e, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {9FDEF8C1-E847-11D2-809E-006008143E6F}
+      AAF_LITERAL_AUID(0x9FDEF8C1,
+        0xE847, 0x11D2,
+        0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(PluginDefinition, AAF_SYMBOL(PluginAPI_EssenceAccess,PluginAPI_EssenceAccess,"kAAFEssencePluginAPI",""), 
-      // {69c870a1-e793-11d2-809e-006008143e6f}
-      AAF_LITERAL_AUID(0x69c870a1,
-        0xe793, 0x11d2,
-        0x80, 0x9e, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f), "")
+      // {69C870A1-E793-11D2-809E-006008143E6F}
+      AAF_LITERAL_AUID(0x69C870A1,
+        0xE793, 0x11D2,
+        0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F), "")
     AAF_INSTANCE_PROPERTY(Name, String, "PluginAPI_EssenceAccess")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {69c870a1-e793-11d2-809e-006008143e6f}
-      AAF_LITERAL_AUID(0x69c870a1,
-        0xe793, 0x11d2,
-        0x80, 0x9e, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {69C870A1-E793-11D2-809E-006008143E6F}
+      AAF_LITERAL_AUID(0x69C870A1,
+        0xE793, 0x11D2,
+        0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_END(PluginDefinition, AAF_SYMBOL(PluginAPI_EssenceAccess,PluginAPI_EssenceAccess,"kAAFEssencePluginAPI",""), 
-      // {69c870a1-e793-11d2-809e-006008143e6f}
-      AAF_LITERAL_AUID(0x69c870a1,
-        0xe793, 0x11d2,
-        0x80, 0x9e, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {69C870A1-E793-11D2-809E-006008143E6F}
+      AAF_LITERAL_AUID(0x69C870A1,
+        0xE793, 0x11D2,
+        0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(PluginDefinition, AAF_SYMBOL(PluginCategory_Codec,PluginCategory_Codec,"kAAFPluginNoCategory",""), 
-      // {56905e0b-537d-11d4-a36c-009027dfca6a}
-      AAF_LITERAL_AUID(0x56905e0b,
-        0x537d, 0x11d4,
-        0xa3, 0x6c, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x6a), "")
+      // {56905E0B-537D-11D4-A36C-009027DFCA6A}
+      AAF_LITERAL_AUID(0x56905E0B,
+        0x537D, 0x11D4,
+        0xA3, 0x6C, 0x00, 0x90, 0x27, 0xDF, 0xCA, 0x6A), "")
     AAF_INSTANCE_PROPERTY(Name, String, "PluginCategory_Codec")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {56905e0b-537d-11d4-a36c-009027dfca6a}
-      AAF_LITERAL_AUID(0x56905e0b,
-        0x537d, 0x11d4,
-        0xa3, 0x6c, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x6a))
+      // {56905E0B-537D-11D4-A36C-009027DFCA6A}
+      AAF_LITERAL_AUID(0x56905E0B,
+        0x537D, 0x11D4,
+        0xA3, 0x6C, 0x00, 0x90, 0x27, 0xDF, 0xCA, 0x6A))
   AAF_INSTANCE_END(PluginDefinition, AAF_SYMBOL(PluginCategory_Codec,PluginCategory_Codec,"kAAFPluginNoCategory",""), 
-      // {56905e0b-537d-11d4-a36c-009027dfca6a}
-      AAF_LITERAL_AUID(0x56905e0b,
-        0x537d, 0x11d4,
-        0xa3, 0x6c, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x6a))
+      // {56905E0B-537D-11D4-A36C-009027DFCA6A}
+      AAF_LITERAL_AUID(0x56905E0B,
+        0x537D, 0x11D4,
+        0xA3, 0x6C, 0x00, 0x90, 0x27, 0xDF, 0xCA, 0x6A))
 AAF_INSTANCE_GROUP_END(PluginDefinitionInstances, PluginDefinition)
 AAF_INSTANCE_GROUP_SEPARATOR()
 AAF_INSTANCE_GROUP(CodecDefinitionInstances, CodecDefinition)
   AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecDef_None,CodecDef_None,"kAAFNoCodec",""), 
-      // {568fb761-9458-11d2-8089-006008143e6f}
-      AAF_LITERAL_AUID(0x568fb761,
-        0x9458, 0x11d2,
-        0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f), "")
+      // {568FB761-9458-11D2-8089-006008143E6F}
+      AAF_LITERAL_AUID(0x568FB761,
+        0x9458, 0x11D2,
+        0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CodecDef_None")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {568fb761-9458-11d2-8089-006008143e6f}
-      AAF_LITERAL_AUID(0x568fb761,
-        0x9458, 0x11d2,
-        0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {568FB761-9458-11D2-8089-006008143E6F}
+      AAF_LITERAL_AUID(0x568FB761,
+        0x9458, 0x11D2,
+        0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecDef_None,CodecDef_None,"kAAFNoCodec",""), 
-      // {568fb761-9458-11d2-8089-006008143e6f}
-      AAF_LITERAL_AUID(0x568fb761,
-        0x9458, 0x11d2,
-        0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {568FB761-9458-11D2-8089-006008143E6F}
+      AAF_LITERAL_AUID(0x568FB761,
+        0x9458, 0x11D2,
+        0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecDef_PCM,CodecDef_PCM,"kAAFCodecPCM",""), 
-      // {90ac17c8-e3e2-4596-9e9e-a6dd1c70c892}
-      AAF_LITERAL_AUID(0x90ac17c8,
-        0xe3e2, 0x4596,
-        0x9e, 0x9e, 0xa6, 0xdd, 0x1c, 0x70, 0xc8, 0x92), "")
+      // {90AC17C8-E3E2-4596-9E9E-A6DD1C70C892}
+      AAF_LITERAL_AUID(0x90AC17C8,
+        0xE3E2, 0x4596,
+        0x9E, 0x9E, 0xA6, 0xDD, 0x1C, 0x70, 0xC8, 0x92), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CodecDef_PCM")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {90ac17c8-e3e2-4596-9e9e-a6dd1c70c892}
-      AAF_LITERAL_AUID(0x90ac17c8,
-        0xe3e2, 0x4596,
-        0x9e, 0x9e, 0xa6, 0xdd, 0x1c, 0x70, 0xc8, 0x92))
+      // {90AC17C8-E3E2-4596-9E9E-A6DD1C70C892}
+      AAF_LITERAL_AUID(0x90AC17C8,
+        0xE3E2, 0x4596,
+        0x9E, 0x9E, 0xA6, 0xDD, 0x1C, 0x70, 0xC8, 0x92))
   AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecDef_PCM,CodecDef_PCM,"kAAFCodecPCM",""), 
-      // {90ac17c8-e3e2-4596-9e9e-a6dd1c70c892}
-      AAF_LITERAL_AUID(0x90ac17c8,
-        0xe3e2, 0x4596,
-        0x9e, 0x9e, 0xa6, 0xdd, 0x1c, 0x70, 0xc8, 0x92))
+      // {90AC17C8-E3E2-4596-9E9E-A6DD1C70C892}
+      AAF_LITERAL_AUID(0x90AC17C8,
+        0xE3E2, 0x4596,
+        0x9E, 0x9E, 0xA6, 0xDD, 0x1C, 0x70, 0xC8, 0x92))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecDef_WAVE,CodecDef_WAVE,"kAAFCodecWAVE",""), 
-      // {820f09b1-eb9b-11d2-809f-006008143e6f}
-      AAF_LITERAL_AUID(0x820f09b1,
-        0xeb9b, 0x11d2,
-        0x80, 0x9f, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f), "")
+      // {820F09B1-EB9B-11D2-809F-006008143E6F}
+      AAF_LITERAL_AUID(0x820F09B1,
+        0xEB9B, 0x11D2,
+        0x80, 0x9F, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CodecDef_WAVE")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {820f09b1-eb9b-11d2-809f-006008143e6f}
-      AAF_LITERAL_AUID(0x820f09b1,
-        0xeb9b, 0x11d2,
-        0x80, 0x9f, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {820F09B1-EB9B-11D2-809F-006008143E6F}
+      AAF_LITERAL_AUID(0x820F09B1,
+        0xEB9B, 0x11D2,
+        0x80, 0x9F, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecDef_WAVE,CodecDef_WAVE,"kAAFCodecWAVE",""), 
-      // {820f09b1-eb9b-11d2-809f-006008143e6f}
-      AAF_LITERAL_AUID(0x820f09b1,
-        0xeb9b, 0x11d2,
-        0x80, 0x9f, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {820F09B1-EB9B-11D2-809F-006008143E6F}
+      AAF_LITERAL_AUID(0x820F09B1,
+        0xEB9B, 0x11D2,
+        0x80, 0x9F, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecDef_AIFC,CodecDef_AIFC,"kAAFCODEC_AIFC",""), 
-      // {4b1c1a45-03f2-11d4-80fb-006008143e6f}
-      AAF_LITERAL_AUID(0x4b1c1a45,
-        0x03f2, 0x11d4,
-        0x80, 0xfb, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f), "")
+      // {4B1C1A45-03F2-11D4-80FB-006008143E6F}
+      AAF_LITERAL_AUID(0x4B1C1A45,
+        0x03F2, 0x11D4,
+        0x80, 0xFB, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CodecDef_AIFC")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {4b1c1a45-03f2-11d4-80fb-006008143e6f}
-      AAF_LITERAL_AUID(0x4b1c1a45,
-        0x03f2, 0x11d4,
-        0x80, 0xfb, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {4B1C1A45-03F2-11D4-80FB-006008143E6F}
+      AAF_LITERAL_AUID(0x4B1C1A45,
+        0x03F2, 0x11D4,
+        0x80, 0xFB, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecDef_AIFC,CodecDef_AIFC,"kAAFCODEC_AIFC",""), 
-      // {4b1c1a45-03f2-11d4-80fb-006008143e6f}
-      AAF_LITERAL_AUID(0x4b1c1a45,
-        0x03f2, 0x11d4,
-        0x80, 0xfb, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {4B1C1A45-03F2-11D4-80FB-006008143E6F}
+      AAF_LITERAL_AUID(0x4B1C1A45,
+        0x03F2, 0x11D4,
+        0x80, 0xFB, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecDef_JPEG,CodecDef_JPEG,"kAAFCodecJPEG",""), 
-      // {18634f8c-3bab-11d3-bfd6-00104bc9156d}
-      AAF_LITERAL_AUID(0x18634f8c,
-        0x3bab, 0x11d3,
-        0xbf, 0xd6, 0x00, 0x10, 0x4b, 0xc9, 0x15, 0x6d), "")
+      // {18634F8C-3BAB-11D3-BFD6-00104BC9156D}
+      AAF_LITERAL_AUID(0x18634F8C,
+        0x3BAB, 0x11D3,
+        0xBF, 0xD6, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CodecDef_JPEG")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {18634f8c-3bab-11d3-bfd6-00104bc9156d}
-      AAF_LITERAL_AUID(0x18634f8c,
-        0x3bab, 0x11d3,
-        0xbf, 0xd6, 0x00, 0x10, 0x4b, 0xc9, 0x15, 0x6d))
+      // {18634F8C-3BAB-11D3-BFD6-00104BC9156D}
+      AAF_LITERAL_AUID(0x18634F8C,
+        0x3BAB, 0x11D3,
+        0xBF, 0xD6, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D))
   AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecDef_JPEG,CodecDef_JPEG,"kAAFCodecJPEG",""), 
-      // {18634f8c-3bab-11d3-bfd6-00104bc9156d}
-      AAF_LITERAL_AUID(0x18634f8c,
-        0x3bab, 0x11d3,
-        0xbf, 0xd6, 0x00, 0x10, 0x4b, 0xc9, 0x15, 0x6d))
+      // {18634F8C-3BAB-11D3-BFD6-00104BC9156D}
+      AAF_LITERAL_AUID(0x18634F8C,
+        0x3BAB, 0x11D3,
+        0xBF, 0xD6, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecDef_CDCI,CodecDef_CDCI,"kAAFCodecCDCI",""), 
-      // {4e84045e-0f29-11d4-a359-009027dfca6a}
-      AAF_LITERAL_AUID(0x4e84045e,
-        0x0f29, 0x11d4,
-        0xa3, 0x59, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x6a), "")
+      // {4E84045E-0F29-11D4-A359-009027DFCA6A}
+      AAF_LITERAL_AUID(0x4E84045E,
+        0x0F29, 0x11D4,
+        0xA3, 0x59, 0x00, 0x90, 0x27, 0xDF, 0xCA, 0x6A), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CodecDef_CDCI")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {4e84045e-0f29-11d4-a359-009027dfca6a}
-      AAF_LITERAL_AUID(0x4e84045e,
-        0x0f29, 0x11d4,
-        0xa3, 0x59, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x6a))
+      // {4E84045E-0F29-11D4-A359-009027DFCA6A}
+      AAF_LITERAL_AUID(0x4E84045E,
+        0x0F29, 0x11D4,
+        0xA3, 0x59, 0x00, 0x90, 0x27, 0xDF, 0xCA, 0x6A))
   AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecDef_CDCI,CodecDef_CDCI,"kAAFCodecCDCI",""), 
-      // {4e84045e-0f29-11d4-a359-009027dfca6a}
-      AAF_LITERAL_AUID(0x4e84045e,
-        0x0f29, 0x11d4,
-        0xa3, 0x59, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x6a))
+      // {4E84045E-0F29-11D4-A359-009027DFCA6A}
+      AAF_LITERAL_AUID(0x4E84045E,
+        0x0F29, 0x11D4,
+        0xA3, 0x59, 0x00, 0x90, 0x27, 0xDF, 0xCA, 0x6A))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecDef_RGBA,CodecDef_RGBA,"kAAFCodecRGBA",""), 
-      // {4e84045f-0f29-11d4-a359-009027dfca6a}
-      AAF_LITERAL_AUID(0x4e84045f,
-        0x0f29, 0x11d4,
-        0xa3, 0x59, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x6a), "")
+      // {4E84045F-0F29-11D4-A359-009027DFCA6A}
+      AAF_LITERAL_AUID(0x4E84045F,
+        0x0F29, 0x11D4,
+        0xA3, 0x59, 0x00, 0x90, 0x27, 0xDF, 0xCA, 0x6A), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CodecDef_RGBA")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {4e84045f-0f29-11d4-a359-009027dfca6a}
-      AAF_LITERAL_AUID(0x4e84045f,
-        0x0f29, 0x11d4,
-        0xa3, 0x59, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x6a))
+      // {4E84045F-0F29-11D4-A359-009027DFCA6A}
+      AAF_LITERAL_AUID(0x4E84045F,
+        0x0F29, 0x11D4,
+        0xA3, 0x59, 0x00, 0x90, 0x27, 0xDF, 0xCA, 0x6A))
   AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecDef_RGBA,CodecDef_RGBA,"kAAFCodecRGBA",""), 
-      // {4e84045f-0f29-11d4-a359-009027dfca6a}
-      AAF_LITERAL_AUID(0x4e84045f,
-        0x0f29, 0x11d4,
-        0xa3, 0x59, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x6a))
+      // {4E84045F-0F29-11D4-A359-009027DFCA6A}
+      AAF_LITERAL_AUID(0x4E84045F,
+        0x0F29, 0x11D4,
+        0xA3, 0x59, 0x00, 0x90, 0x27, 0xDF, 0xCA, 0x6A))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecFlavour_None,CodecFlavour_None,"kAAFNilCodecFlavour",""), 
-      // {1b31f3b1-9450-11d2-8089-006008143e6f}
-      AAF_LITERAL_AUID(0x1b31f3b1,
-        0x9450, 0x11d2,
-        0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f), "")
+      // {1B31F3B1-9450-11D2-8089-006008143E6F}
+      AAF_LITERAL_AUID(0x1B31F3B1,
+        0x9450, 0x11D2,
+        0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CodecFlavour_None")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {1b31f3b1-9450-11d2-8089-006008143e6f}
-      AAF_LITERAL_AUID(0x1b31f3b1,
-        0x9450, 0x11d2,
-        0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {1B31F3B1-9450-11D2-8089-006008143E6F}
+      AAF_LITERAL_AUID(0x1B31F3B1,
+        0x9450, 0x11D2,
+        0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecFlavour_None,CodecFlavour_None,"kAAFNilCodecFlavour",""), 
-      // {1b31f3b1-9450-11d2-8089-006008143e6f}
-      AAF_LITERAL_AUID(0x1b31f3b1,
-        0x9450, 0x11d2,
-        0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f))
+      // {1B31F3B1-9450-11D2-8089-006008143E6F}
+      AAF_LITERAL_AUID(0x1B31F3B1,
+        0x9450, 0x11D2,
+        0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecFlavour_LegacyDV_625_50,CodecFlavour_LegacyDV_625_50,"",""), 
-      // {af4de587-23d7-4c7c-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c7c,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11), "")
+      // {AF4DE587-23D7-4C7C-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C7C,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CodecFlavour_LegacyDV_625_50")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {af4de587-23d7-4c7c-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c7c,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+      // {AF4DE587-23D7-4C7C-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C7C,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11))
   AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecFlavour_LegacyDV_625_50,CodecFlavour_LegacyDV_625_50,"",""), 
-      // {af4de587-23d7-4c7c-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c7c,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+      // {AF4DE587-23D7-4C7C-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C7C,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecFlavour_LegacyDV_525_60,CodecFlavour_LegacyDV_525_60,"",""), 
-      // {af4de587-23d7-4c7d-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c7d,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11), "")
+      // {AF4DE587-23D7-4C7D-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C7D,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CodecFlavour_LegacyDV_525_60")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {af4de587-23d7-4c7d-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c7d,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+      // {AF4DE587-23D7-4C7D-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C7D,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11))
   AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecFlavour_LegacyDV_525_60,CodecFlavour_LegacyDV_525_60,"",""), 
-      // {af4de587-23d7-4c7d-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c7d,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+      // {AF4DE587-23D7-4C7D-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C7D,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecFlavour_IEC_DV_625_50,CodecFlavour_IEC_DV_625_50,"",""), 
-      // {af4de587-23d7-4c7e-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c7e,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11), "")
+      // {AF4DE587-23D7-4C7E-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C7E,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CodecFlavour_IEC_DV_625_50")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {af4de587-23d7-4c7e-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c7e,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+      // {AF4DE587-23D7-4C7E-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C7E,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11))
   AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecFlavour_IEC_DV_625_50,CodecFlavour_IEC_DV_625_50,"",""), 
-      // {af4de587-23d7-4c7e-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c7e,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+      // {AF4DE587-23D7-4C7E-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C7E,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecFlavour_IEC_DV_525_60,CodecFlavour_IEC_DV_525_60,"",""), 
-      // {af4de587-23d7-4c7f-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c7f,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11), "")
+      // {AF4DE587-23D7-4C7F-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C7F,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CodecFlavour_IEC_DV_525_60")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {af4de587-23d7-4c7f-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c7f,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+      // {AF4DE587-23D7-4C7F-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C7F,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11))
   AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecFlavour_IEC_DV_525_60,CodecFlavour_IEC_DV_525_60,"",""), 
-      // {af4de587-23d7-4c7f-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c7f,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+      // {AF4DE587-23D7-4C7F-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C7F,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecFlavour_DV_Based_25Mbps_525_60,CodecFlavour_DV_Based_25Mbps_525_60,"",""), 
-      // {af4de587-23d7-4c80-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c80,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11), "")
+      // {AF4DE587-23D7-4C80-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C80,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CodecFlavour_DV_Based_25Mbps_525_60")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {af4de587-23d7-4c80-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c80,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+      // {AF4DE587-23D7-4C80-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C80,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11))
   AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecFlavour_DV_Based_25Mbps_525_60,CodecFlavour_DV_Based_25Mbps_525_60,"",""), 
-      // {af4de587-23d7-4c80-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c80,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+      // {AF4DE587-23D7-4C80-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C80,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecFlavour_DV_Based_25Mbps_625_50,CodecFlavour_DV_Based_25Mbps_625_50,"",""), 
-      // {af4de587-23d7-4c81-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c81,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11), "")
+      // {AF4DE587-23D7-4C81-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C81,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CodecFlavour_DV_Based_25Mbps_625_50")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {af4de587-23d7-4c81-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c81,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+      // {AF4DE587-23D7-4C81-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C81,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11))
   AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecFlavour_DV_Based_25Mbps_625_50,CodecFlavour_DV_Based_25Mbps_625_50,"",""), 
-      // {af4de587-23d7-4c81-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c81,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+      // {AF4DE587-23D7-4C81-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C81,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecFlavour_DV_Based_50Mbps_525_60,CodecFlavour_DV_Based_50Mbps_525_60,"",""), 
-      // {af4de587-23d7-4c82-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c82,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11), "")
+      // {AF4DE587-23D7-4C82-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C82,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CodecFlavour_DV_Based_50Mbps_525_60")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {af4de587-23d7-4c82-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c82,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+      // {AF4DE587-23D7-4C82-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C82,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11))
   AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecFlavour_DV_Based_50Mbps_525_60,CodecFlavour_DV_Based_50Mbps_525_60,"",""), 
-      // {af4de587-23d7-4c82-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c82,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+      // {AF4DE587-23D7-4C82-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C82,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CodecDefinition, AAF_SYMBOL(CodecFlavour_DV_Based_50Mbps_625_50,CodecFlavour_DV_Based_50Mbps_625_50,"",""), 
-      // {af4de587-23d7-4c83-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c83,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11), "")
+      // {AF4DE587-23D7-4C83-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C83,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CodecFlavour_DV_Based_50Mbps_625_50")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {af4de587-23d7-4c83-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c83,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+      // {AF4DE587-23D7-4C83-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C83,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11))
   AAF_INSTANCE_END(CodecDefinition, AAF_SYMBOL(CodecFlavour_DV_Based_50Mbps_625_50,CodecFlavour_DV_Based_50Mbps_625_50,"",""), 
-      // {af4de587-23d7-4c83-b37b-c1c13870e711}
-      AAF_LITERAL_AUID(0xaf4de587,
-        0x23d7, 0x4c83,
-        0xb3, 0x7b, 0xc1, 0xc1, 0x38, 0x70, 0xe7, 0x11))
+      // {AF4DE587-23D7-4C83-B37B-C1C13870E711}
+      AAF_LITERAL_AUID(0xAF4DE587,
+        0x23D7, 0x4C83,
+        0xB3, 0x7B, 0xC1, 0xC1, 0x38, 0x70, 0xE7, 0x11))
 AAF_INSTANCE_GROUP_END(CodecDefinitionInstances, CodecDefinition)
 AAF_INSTANCE_GROUP_SEPARATOR()
 AAF_INSTANCE_GROUP(CompressionDefinitionInstances, CompressionDefinition)
   AAF_INSTANCE(CompressionDefinition, AAF_SYMBOL(CompressionDef_AAF_CMPR_FULL_JPEG,CompressionDef_AAF_CMPR_FULL_JPEG,"AAF_CMPR_FULL_JPEG",""), 
-      // {edb35383-6d30-11d3-a036-006094eb75cb}
-      AAF_LITERAL_AUID(0xedb35383,
-        0x6d30, 0x11d3,
-        0xa0, 0x36, 0x00, 0x60, 0x94, 0xeb, 0x75, 0xcb), "")
+      // {EDB35383-6D30-11D3-A036-006094EB75CB}
+      AAF_LITERAL_AUID(0xEDB35383,
+        0x6D30, 0x11D3,
+        0xA0, 0x36, 0x00, 0x60, 0x94, 0xEB, 0x75, 0xCB), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CompressionDef_AAF_CMPR_FULL_JPEG")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {edb35383-6d30-11d3-a036-006094eb75cb}
-      AAF_LITERAL_AUID(0xedb35383,
-        0x6d30, 0x11d3,
-        0xa0, 0x36, 0x00, 0x60, 0x94, 0xeb, 0x75, 0xcb))
+      // {EDB35383-6D30-11D3-A036-006094EB75CB}
+      AAF_LITERAL_AUID(0xEDB35383,
+        0x6D30, 0x11D3,
+        0xA0, 0x36, 0x00, 0x60, 0x94, 0xEB, 0x75, 0xCB))
   AAF_INSTANCE_END(CompressionDefinition, AAF_SYMBOL(CompressionDef_AAF_CMPR_FULL_JPEG,CompressionDef_AAF_CMPR_FULL_JPEG,"AAF_CMPR_FULL_JPEG",""), 
-      // {edb35383-6d30-11d3-a036-006094eb75cb}
-      AAF_LITERAL_AUID(0xedb35383,
-        0x6d30, 0x11d3,
-        0xa0, 0x36, 0x00, 0x60, 0x94, 0xeb, 0x75, 0xcb))
+      // {EDB35383-6D30-11D3-A036-006094EB75CB}
+      AAF_LITERAL_AUID(0xEDB35383,
+        0x6D30, 0x11D3,
+        0xA0, 0x36, 0x00, 0x60, 0x94, 0xEB, 0x75, 0xCB))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CompressionDefinition, AAF_SYMBOL(CompressionDef_AAF_CMPR_AUNC422,CompressionDef_AAF_CMPR_AUNC422,"AAF_CMPR_AUNC422",""), 
-      // {edb35391-6d30-11d3-a036-006094eb75cb}
-      AAF_LITERAL_AUID(0xedb35391,
-        0x6d30, 0x11d3,
-        0xa0, 0x36, 0x00, 0x60, 0x94, 0xeb, 0x75, 0xcb), "")
+      // {EDB35391-6D30-11D3-A036-006094EB75CB}
+      AAF_LITERAL_AUID(0xEDB35391,
+        0x6D30, 0x11D3,
+        0xA0, 0x36, 0x00, 0x60, 0x94, 0xEB, 0x75, 0xCB), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CompressionDef_AAF_CMPR_AUNC422")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {edb35391-6d30-11d3-a036-006094eb75cb}
-      AAF_LITERAL_AUID(0xedb35391,
-        0x6d30, 0x11d3,
-        0xa0, 0x36, 0x00, 0x60, 0x94, 0xeb, 0x75, 0xcb))
+      // {EDB35391-6D30-11D3-A036-006094EB75CB}
+      AAF_LITERAL_AUID(0xEDB35391,
+        0x6D30, 0x11D3,
+        0xA0, 0x36, 0x00, 0x60, 0x94, 0xEB, 0x75, 0xCB))
   AAF_INSTANCE_END(CompressionDefinition, AAF_SYMBOL(CompressionDef_AAF_CMPR_AUNC422,CompressionDef_AAF_CMPR_AUNC422,"AAF_CMPR_AUNC422",""), 
-      // {edb35391-6d30-11d3-a036-006094eb75cb}
-      AAF_LITERAL_AUID(0xedb35391,
-        0x6d30, 0x11d3,
-        0xa0, 0x36, 0x00, 0x60, 0x94, 0xeb, 0x75, 0xcb))
+      // {EDB35391-6D30-11D3-A036-006094EB75CB}
+      AAF_LITERAL_AUID(0xEDB35391,
+        0x6D30, 0x11D3,
+        0xA0, 0x36, 0x00, 0x60, 0x94, 0xEB, 0x75, 0xCB))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CompressionDefinition, AAF_SYMBOL(CompressionDef_LegacyDV,CompressionDef_LegacyDV,"",""), 
-      // {edb35390-6d30-11d3-a036-006094eb75cb}
-      AAF_LITERAL_AUID(0xedb35390,
-        0x6d30, 0x11d3,
-        0xa0, 0x36, 0x00, 0x60, 0x94, 0xeb, 0x75, 0xcb), "")
+      // {EDB35390-6D30-11D3-A036-006094EB75CB}
+      AAF_LITERAL_AUID(0xEDB35390,
+        0x6D30, 0x11D3,
+        0xA0, 0x36, 0x00, 0x60, 0x94, 0xEB, 0x75, 0xCB), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CompressionDef_LegacyDV")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {edb35390-6d30-11d3-a036-006094eb75cb}
-      AAF_LITERAL_AUID(0xedb35390,
-        0x6d30, 0x11d3,
-        0xa0, 0x36, 0x00, 0x60, 0x94, 0xeb, 0x75, 0xcb))
+      // {EDB35390-6D30-11D3-A036-006094EB75CB}
+      AAF_LITERAL_AUID(0xEDB35390,
+        0x6D30, 0x11D3,
+        0xA0, 0x36, 0x00, 0x60, 0x94, 0xEB, 0x75, 0xCB))
   AAF_INSTANCE_END(CompressionDefinition, AAF_SYMBOL(CompressionDef_LegacyDV,CompressionDef_LegacyDV,"",""), 
-      // {edb35390-6d30-11d3-a036-006094eb75cb}
-      AAF_LITERAL_AUID(0xedb35390,
-        0x6d30, 0x11d3,
-        0xa0, 0x36, 0x00, 0x60, 0x94, 0xeb, 0x75, 0xcb))
+      // {EDB35390-6D30-11D3-A036-006094EB75CB}
+      AAF_LITERAL_AUID(0xEDB35390,
+        0x6D30, 0x11D3,
+        0xA0, 0x36, 0x00, 0x60, 0x94, 0xEB, 0x75, 0xCB))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CompressionDefinition, AAF_SYMBOL(CompressionDef_IEC_DV_525_60,CompressionDef_IEC_DV_525_60,"",""), 
-      // {04010202-0201-0100-060e-2b3404010101}
+      // {04010202-0201-0100-060E-2B3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0201, 0x0100,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01), "")
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CompressionDef_IEC_DV_525_60")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {04010202-0201-0100-060e-2b3404010101}
+      // {04010202-0201-0100-060E-2B3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0201, 0x0100,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_END(CompressionDefinition, AAF_SYMBOL(CompressionDef_IEC_DV_525_60,CompressionDef_IEC_DV_525_60,"",""), 
-      // {04010202-0201-0100-060e-2b3404010101}
+      // {04010202-0201-0100-060E-2B3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0201, 0x0100,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CompressionDefinition, AAF_SYMBOL(CompressionDef_IEC_DV_625_50,CompressionDef_IEC_DV_625_50,"",""), 
-      // {04010202-0201-0200-060e-2b3404010101}
+      // {04010202-0201-0200-060E-2B3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0201, 0x0200,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01), "")
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CompressionDef_IEC_DV_625_50")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {04010202-0201-0200-060e-2b3404010101}
+      // {04010202-0201-0200-060E-2B3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0201, 0x0200,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_END(CompressionDefinition, AAF_SYMBOL(CompressionDef_IEC_DV_625_50,CompressionDef_IEC_DV_625_50,"",""), 
-      // {04010202-0201-0200-060e-2b3404010101}
+      // {04010202-0201-0200-060E-2B3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0201, 0x0200,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CompressionDefinition, AAF_SYMBOL(CompressionDef_DV_Based_25Mbps_525_60,CompressionDef_DV_Based_25Mbps_525_60,"",""), 
-      // {04010202-0202-0100-060e-2b3404010101}
+      // {04010202-0202-0100-060E-2B3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0202, 0x0100,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01), "")
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CompressionDef_DV_Based_25Mbps_525_60")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {04010202-0202-0100-060e-2b3404010101}
+      // {04010202-0202-0100-060E-2B3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0202, 0x0100,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_END(CompressionDefinition, AAF_SYMBOL(CompressionDef_DV_Based_25Mbps_525_60,CompressionDef_DV_Based_25Mbps_525_60,"",""), 
-      // {04010202-0202-0100-060e-2b3404010101}
+      // {04010202-0202-0100-060E-2B3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0202, 0x0100,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CompressionDefinition, AAF_SYMBOL(CompressionDef_DV_Based_25Mbps_625_50,CompressionDef_DV_Based_25Mbps_625_50,"",""), 
-      // {04010202-0202-0200-060e-2b3404010101}
+      // {04010202-0202-0200-060E-2B3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0202, 0x0200,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01), "")
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CompressionDef_DV_Based_25Mbps_625_50")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {04010202-0202-0200-060e-2b3404010101}
+      // {04010202-0202-0200-060E-2B3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0202, 0x0200,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_END(CompressionDefinition, AAF_SYMBOL(CompressionDef_DV_Based_25Mbps_625_50,CompressionDef_DV_Based_25Mbps_625_50,"",""), 
-      // {04010202-0202-0200-060e-2b3404010101}
+      // {04010202-0202-0200-060E-2B3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0202, 0x0200,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CompressionDefinition, AAF_SYMBOL(CompressionDef_DV_Based_50Mbps_525_60,CompressionDef_DV_Based_50Mbps_525_60,"",""), 
-      // {04010202-0202-0300-060e-2b3404010101}
+      // {04010202-0202-0300-060E-2B3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0202, 0x0300,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01), "")
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CompressionDef_DV_Based_50Mbps_525_60")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {04010202-0202-0300-060e-2b3404010101}
+      // {04010202-0202-0300-060E-2B3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0202, 0x0300,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_END(CompressionDefinition, AAF_SYMBOL(CompressionDef_DV_Based_50Mbps_525_60,CompressionDef_DV_Based_50Mbps_525_60,"",""), 
-      // {04010202-0202-0300-060e-2b3404010101}
+      // {04010202-0202-0300-060E-2B3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0202, 0x0300,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(CompressionDefinition, AAF_SYMBOL(CompressionDef_DV_Based_50Mbps_625_50,CompressionDef_DV_Based_50Mbps_625_50,"",""), 
-      // {04010202-0202-0400-060e-2b3404010101}
+      // {04010202-0202-0400-060E-2B3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0202, 0x0400,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01), "")
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "")
     AAF_INSTANCE_PROPERTY(Name, String, "CompressionDef_DV_Based_50Mbps_625_50")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
-      // {04010202-0202-0400-060e-2b3404010101}
+      // {04010202-0202-0400-060E-2B3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0202, 0x0400,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_END(CompressionDefinition, AAF_SYMBOL(CompressionDef_DV_Based_50Mbps_625_50,CompressionDef_DV_Based_50Mbps_625_50,"",""), 
-      // {04010202-0202-0400-060e-2b3404010101}
+      // {04010202-0202-0400-060E-2B3404010101}
       AAF_LITERAL_AUID(0x04010202,
         0x0202, 0x0400,
-        0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01))
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
 AAF_INSTANCE_GROUP_END(CompressionDefinitionInstances, CompressionDefinition)
 
 AAF_INSTANCE_TABLE_END()
