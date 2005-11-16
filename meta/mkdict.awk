@@ -1592,8 +1592,11 @@ function formatAUID(O01, O02, O03, O04, O05, O06, O07, O08,
 
   s = formatAUIS(a01, a02, a03, a04, a05, a06, a07, a08,
                  a09, a10, a11, a12, a13, a14, a15, a16);
-  return sprintf("\n%s// %s\n%sAAF_LITERAL_AUID(0x%s%s%s%s,\n%s  0x%s%s, 0x%s%s,\n%s  0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s)",
+  l = formatAsLabel(a01, a02, a03, a04, a05, a06, a07, a08,
+                    a09, a10, a11, a12, a13, a14, a15, a16);
+  return sprintf("\n%s// %s\n%s// %s\n%sAAF_LITERAL_AUID(0x%s%s%s%s,\n%s  0x%s%s, 0x%s%s,\n%s  0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s)",
              indent, s, indent,
+             l, indent,
              a09, a10, a11, a12, indent,
              a13, a14, a15, a16, indent,
              a01, a02, a03, a04,
@@ -1608,6 +1611,20 @@ function formatAUIS(O01, O02, O03, O04, O05, O06, O07, O08,
              O13, O14, O15, O16,
              O01, O02, O03, O04,
              O05, O06, O07, O08);
+}
+
+function formatAsLabel(O01, O02, O03, O04, O05, O06, O07, O08,
+                       O09, O10, O11, O12, O13, O14, O15, O16)
+{
+  if ((O01 == "06") && (O02 == "0E") && (O03 == "2B") && (O04 == "34") && (O05 == "02") && (O06 == "06"))
+    L06 = 53;
+  else
+    L06= O06;
+  return sprintf("%s.%s.%s.%s.%s.%s.%s.%s.%s.%s.%s.%s.%s.%s.%s.%s",
+             O01, O02, O03, O04,
+             O05, L06, O07, O08,
+             O09, O10, O11, O12,
+             O13, O14, O15, O16);
 }
 
 function formatTag( tag )
