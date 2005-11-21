@@ -700,7 +700,7 @@ AxGPITrigger::AxGPITrigger( IAAFGPITriggerSP spIaafGPITrigger )
 :	AxEvent( AxQueryInterface<IAAFGPITrigger, IAAFEvent>(spIaafGPITrigger) ),
 	_spIaafGPITrigger( spIaafGPITrigger )
 {}
-
+    
 AxGPITrigger::~AxGPITrigger()
 {}
 
@@ -717,5 +717,114 @@ void AxGPITrigger::SetActiveState( aafBoolean_t activeState )
 {
 	CHECK_HRESULT( _spIaafGPITrigger->SetActiveState( activeState ) );
 }
+
+//=---------------------------------------------------------------------=
+
+AxTimecodeStream::AxTimecodeStream( IAAFTimecodeStreamSP spIaafTimecodeStream )
+:   AxSegment( AxQueryInterface<IAAFTimecodeStream, IAAFSegment>(spIaafTimecodeStream) ),
+    _spIaafTimecodeStream( spIaafTimecodeStream )
+{}
+
+AxTimecodeStream::~AxTimecodeStream()
+{}
+
+aafTimecode_t AxTimecodeStream::GetPositionTimecode ( aafPosition_t position )
+{
+    aafTimecode_t timecode;
+
+    CHECK_HRESULT( _spIaafTimecodeStream->GetPositionTimecode( position, &timecode ) );
+
+    return timecode;
+}
+
+aafInt32 AxTimecodeStream::GetUserDataLength ()
+{
+    aafInt32 length;
+
+    CHECK_HRESULT( _spIaafTimecodeStream->GetUserDataLength( &length ) );
+
+    return length;
+}
+
+aafRational_t AxTimecodeStream::GetSampleRate ()
+{
+    aafRational_t sampleRate;
+
+    CHECK_HRESULT( _spIaafTimecodeStream->GetSampleRate( &sampleRate ) );
+
+    return sampleRate;
+}
+
+aafTimecodeSourceType_t AxTimecodeStream::GetSourceType ()
+{
+    aafTimecodeSourceType_t sourceType;
+
+    CHECK_HRESULT( _spIaafTimecodeStream->GetSourceType( &sourceType ) );
+
+    return sourceType;
+}
+
+aafUInt32 AxTimecodeStream::GetSampleSize ()
+{
+    aafUInt32 sampleSize;
+
+    CHECK_HRESULT( _spIaafTimecodeStream->GetSampleSize( &sampleSize ) );
+
+    return sampleSize;
+}
+
+aafUInt32 AxTimecodeStream::GetSourceBufLen ()
+{
+    aafUInt32 sourceBufLen;
+
+    CHECK_HRESULT( _spIaafTimecodeStream->GetSourceBufLen( &sourceBufLen ) );
+
+    return sourceBufLen;
+}
+
+void AxTimecodeStream::GetUserDataAtPosition ( aafPosition_t position, aafInt32 buflen, aafDataBuffer_t buffer )
+{
+    CHECK_HRESULT( _spIaafTimecodeStream->GetUserDataAtPosition( position, buflen, buffer ) );
+}
+
+void AxTimecodeStream::GetSource( aafUInt32 valueSize, aafDataBuffer_t pValue, aafUInt32* bytesRead )
+{
+    CHECK_HRESULT( _spIaafTimecodeStream->GetSource( valueSize, pValue, bytesRead ) );
+}
+
+void AxTimecodeStream::SetPositionTimecode ( aafPosition_t position, aafTimecode_t timecode)
+{
+    CHECK_HRESULT( _spIaafTimecodeStream->SetPositionTimecode( position, timecode ) );
+}
+
+void AxTimecodeStream::SetUserDataAtPosition ( aafPosition_t position, aafInt32 buflen, aafDataBuffer_t buffer )
+{
+    CHECK_HRESULT( _spIaafTimecodeStream->SetUserDataAtPosition( position, buflen, buffer ) );
+}
+
+void AxTimecodeStream::SetSampleRate ( aafRational_t sampleRate )
+{
+    CHECK_HRESULT( _spIaafTimecodeStream->SetSampleRate( sampleRate ) );
+}
+
+void AxTimecodeStream::SetSourceType ( aafTimecodeSourceType_t sourceType )
+{
+    CHECK_HRESULT( _spIaafTimecodeStream->SetSourceType( sourceType ) );
+}
+
+void AxTimecodeStream::SetSource (aafUInt32 valueSize, aafDataBuffer_t pValue)
+{
+    CHECK_HRESULT( _spIaafTimecodeStream->SetSource( valueSize, pValue ) );
+}
+
+//=---------------------------------------------------------------------=
+
+AxTimecodeStream12M::AxTimecodeStream12M( IAAFTimecodeStream12MSP spIaafTimecodeStream12M )
+:   AxTimecodeStream( AxQueryInterface<IAAFTimecodeStream12M, IAAFTimecodeStream>(spIaafTimecodeStream12M) ),
+    _spIaafTimecodeStream12M( spIaafTimecodeStream12M )
+{}
+
+AxTimecodeStream12M::~AxTimecodeStream12M()
+{}
 
 //=---------------------------------------------------------------------=
