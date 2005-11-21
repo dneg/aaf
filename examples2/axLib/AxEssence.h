@@ -487,4 +487,30 @@ private:
 	IAAFEssenceFormatSP _spIaafEssenceFormat;
 };
 
+//=---------------------------------------------------------------------=
+
+class AxAuxiliaryDescriptor : public AxPhysicalDescriptor {
+public:
+    AxAuxiliaryDescriptor( IAAFAuxiliaryDescriptorSP spIaafAuxiliaryDescriptor );
+    ~AxAuxiliaryDescriptor();
+    
+    void Initialize();
+
+    AxString GetMimeType ();
+    AxString GetCharSet ();
+    
+    void SetMimeType ( const AxString& mimeType );
+    void SetCharSet ( const AxString& charSet );
+
+    inline operator IAAFAuxiliaryDescriptorSP ()
+    { return _spIaafAuxiliaryDescriptor; }
+
+private:
+    AxAuxiliaryDescriptor();
+    AxAuxiliaryDescriptor( const AxAuxiliaryDescriptor& );
+    AxAuxiliaryDescriptor& operator=( const AxAuxiliaryDescriptor& );
+
+    IAAFAuxiliaryDescriptorSP _spIaafAuxiliaryDescriptor;
+};
+
 #endif

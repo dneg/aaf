@@ -843,3 +843,66 @@ void AxEssenceFormat::GetFormatSpecifier( const aafUID_t& essenceFormatCode,
 
 //=---------------------------------------------------------------------=
 
+AxAuxiliaryDescriptor::AxAuxiliaryDescriptor( IAAFAuxiliaryDescriptorSP spIaafAuxiliaryDescriptor )
+:   AxPhysicalDescriptor( AxQueryInterface<IAAFAuxiliaryDescriptor, IAAFPhysicalDescriptor>(spIaafAuxiliaryDescriptor) ),
+    _spIaafAuxiliaryDescriptor( spIaafAuxiliaryDescriptor )
+{}
+
+AxAuxiliaryDescriptor::~AxAuxiliaryDescriptor()
+{}
+
+void AxAuxiliaryDescriptor::Initialize()
+{
+    // noop
+}
+
+AxString AxAuxiliaryDescriptor::GetMimeType ()
+{
+    aafUInt32 sizeInBytes = 0;
+
+    CHECK_HRESULT( _spIaafAuxiliaryDescriptor->GetMimeTypeBufLen( &sizeInBytes ) );
+
+    // size is in bytes!  Divide by sizeof(aafCharacter) to allocate correctly
+    // sized aafCharacter array.  Add one to account for possible rounding.
+
+    int sizeInChars = (sizeInBytes /sizeof(aafCharacter)) + 1;
+    std::vector< aafCharacter > buf( sizeInChars );
+
+    CHECK_HRESULT( _spIaafAuxiliaryDescriptor->GetMimeType( &buf[0], sizeInChars*sizeof(aafCharacter) ) );
+    
+    AxString mimeType( &buf[0] );
+
+    return mimeType;
+}
+
+AxString AxAuxiliaryDescriptor::GetCharSet ()
+{
+    aafUInt32 sizeInBytes = 0;
+
+    CHECK_HRESULT( _spIaafAuxiliaryDescriptor->GetCharSetBufLen( &sizeInBytes ) );
+
+    // size is in bytes!  Divide by sizeof(aafCharacter) to allocate correctly
+    // sized aafCharacter array.  Add one to account for possible rounding.
+
+    int sizeInChars = (sizeInBytes /sizeof(aafCharacter)) + 1;
+    std::vector< aafCharacter > buf( sizeInChars );
+
+    CHECK_HRESULT( _spIaafAuxiliaryDescriptor->GetCharSet( &buf[0], sizeInChars*sizeof(aafCharacter) ) );
+    
+    AxString charSet( &buf[0] );
+
+    return charSet;
+}
+    
+void AxAuxiliaryDescriptor::SetMimeType ( const AxString& mimeType )
+{
+    CHECK_HRESULT( _spIaafAuxiliaryDescriptor->SetMimeType( mimeType.c_str() ) );
+}
+
+void AxAuxiliaryDescriptor::SetCharSet ( const AxString& charSet )
+{
+    CHECK_HRESULT( _spIaafAuxiliaryDescriptor->SetCharSet( charSet.c_str() ) );
+}
+
+//=---------------------------------------------------------------------=
+
