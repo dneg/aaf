@@ -23,6 +23,7 @@
 
 //Edit Protocol Analyzer Base files
 #include "EPObjects.h"
+#include "EPDerivationChainObject.h"
 #include "EPTrack.h"
 #include "EPEffect.h"
 #include "EPCastException.h"

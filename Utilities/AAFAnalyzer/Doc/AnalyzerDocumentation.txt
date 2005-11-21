@@ -498,7 +498,7 @@ StateMachineException - Thrown by DerivationChainStateMachine when an unknown
 EPNameTest - Derived from Test and executed by EPMobDepPhase.  Tests a TestGraph
 			 to ensure that objects have valid Edit Protocol names.
 			 
-EPNameVisitor - Derived from EPTypedVisitor, used by EPNameTest to verify that
+EPNameVisitor - Derived from EPTypedVisitor.  Used by EPNameTest to verify that
 				object names are acceptable under the Edit Protocol.
 				
 EPContainedTrackTest - Derived from Test and executed by EPMobDepPhase.  Tests
@@ -506,9 +506,14 @@ EPContainedTrackTest - Derived from Test and executed by EPMobDepPhase.  Tests
 					   contained within them are acceptable under the Edit
 					   Protocol.
 					   
-EPContainedTrackVisitor - Derived from EPTypedVisitor, used by
+EPContainedTrackVisitor - Derived from EPTypedVisitor.  Used by
 						  EPContainedTrackTest to verify that tracks contained
 						  within mobs are valid under the Edit Protocol.
+						  
+AuxiliarySlotVisitor - Derived from EPTyped visitor.  Used by
+					   EPContainedTrackVisitor to verify that Auxiliary Source
+					   Mobs have valid mob slots.  (Declared and defined in an
+					   anonymous namespace).
 						  
 EPTrackContentsTest - Derived from test and executed by EPMobDepPhase.  Test
 					  tracks within mobs of a TestGraph to make sure they

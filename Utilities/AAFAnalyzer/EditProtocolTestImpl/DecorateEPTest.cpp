@@ -28,7 +28,7 @@
 
 //Edit Protocol Analyzer Base files
 #include <EPTypedObjNode.h>
-#include <EPObjects.h>
+#include <EPDerivationChainObject.h>
 #include <EPTrack.h>
 #include <EPEffect.h>
 
@@ -89,6 +89,7 @@ public:
     _knownDescriptors.insert( kAAFClassID_ImportDescriptor );
     _knownDescriptors.insert( kAAFClassID_TapeDescriptor );
     _knownDescriptors.insert( kAAFClassID_FilmDescriptor );
+    _knownDescriptors.insert( kAAFClassID_AuxiliaryDescriptor );
     _knownDescriptors.insert( kAAFClassID_EssenceDescriptor );    //Used to indicate failure.
   }
 
@@ -222,6 +223,10 @@ public:
       else if ( descriptorAUID == kAAFClassID_FilmDescriptor )
       {
         this->DecorateNode<IAAFSourceMob, EPFilmSource>( node );
+      }
+      else if ( descriptorAUID == kAAFClassID_AuxiliaryDescriptor )
+      {
+        this->DecorateNode<IAAFSourceMob, EPAuxiliarySource>( node );
       }
       //There are no other valid source mob/descriptor code combinations.  That
       //means that the material type for the derivation chain is unknown,

@@ -26,20 +26,85 @@
 #include <DetailLevelTestResult.h>
 #include <TestRegistry.h>
 
+//Analyzer Base files
+#include <DepthFirstTraversal.h>
+
 //Ax files
 #include <AxMob.h>
 #include <AxMetaDef.h>
 #include <AxMobSlot.h>
 #include <AxIterator.h>
 #include <AxComponent.h>
+#include <AxDefObject.h>
 
 //AAF files
 #include <AAFResult.h>
+#include <AAFDataDefs.h>
 
 //STL files
 #include <sstream>
 
 namespace {
+
+using namespace aafanalyzer;
+using namespace boost;
+    
+class AuxiliarySlotVisitor : public EPTypedVisitor
+{
+    public:
+        AuxiliarySlotVisitor( shared_ptr<EdgeMap> spEdgeMap, shared_ptr<DetailLevelTestResult> spResult )
+            : _spEdgeMap( spEdgeMap ), _spResult( spResult ), _testPassed( true )
+        {}
+        
+        ~AuxiliarySlotVisitor()
+        {}
+        
+        bool PreOrderVisit( AAFTypedObjNode<IAAFTimelineMobSlot>& node )
+        {
+            shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCast<IAAFMobSlot>() );
+            return this->PreOrderVisit( *spGeneric );
+        }
+        
+        bool PreOrderVisit( AAFTypedObjNode<IAAFEventMobSlot>& node )
+        {
+            shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCast<IAAFMobSlot>() );
+            return this->PreOrderVisit( *spGeneric );
+        }
+        
+        bool PreOrderVisit( AAFTypedObjNode<IAAFStaticMobSlot>& node )
+        {
+            shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCast<IAAFMobSlot>() );
+            return this->PreOrderVisit( *spGeneric );
+        }
+        
+        bool PreOrderVisit( AAFTypedObjNode<IAAFMobSlot>& node )
+        {
+            AxMobSlot axMobSlot( node.GetAAFObjectOfType() );
+            AxSegment axSegment( axMobSlot.GetSegment() );
+            AxDataDef dataDef ( axSegment.GetDataDef() );
+            if ( dataDef.GetAUID() != kAAFDataDef_Auxiliary  )
+            {
+                _spResult->AddInformationResult( L"REQ_EP_136", this->GetMobSlotName( _spEdgeMap, node ) + L" has a segment with a Data Definition that is not DataDef_Auxiliary.", TestResult::FAIL );
+                _testPassed = false;
+            }
+            return false;
+        }
+        
+        bool AreSlotsOk()
+        {
+            return _testPassed;
+        }
+        
+    private:
+
+        shared_ptr<EdgeMap> _spEdgeMap;
+        shared_ptr<DetailLevelTestResult> _spResult;
+        bool _testPassed;
+    
+        // prohibited
+        AuxiliarySlotVisitor( const AuxiliarySlotVisitor& );
+        AuxiliarySlotVisitor& operator=( const AuxiliarySlotVisitor& );
+};
 
 } // end of namespace
 
@@ -73,11 +138,11 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, 
     AxString nodeName = this->GetMobName( axCompMob, EPTopLevelComposition::GetName() );
     
     unsigned int unnumberedtracks;
-    shared_ptr<TrackNumberMap> spTrackNumMap( CountTrackCodes( this->GetTimecodeTracks( _spEdgeMap, node ), unnumberedtracks ) );
-    
-    TrackNumberMap::const_iterator mapIter;
-    bool testPassed = true;
-    
+    shared_ptr<MobSlotSet> timecodeTracks = this->GetTimecodeTracks( _spEdgeMap, node );
+
+    bool testPassed = this->CheckPrimaryTimecodeTracks( timecodeTracks, node );
+    shared_ptr<TrackNumberMap> spTrackNumMap( CountTrackCodes( timecodeTracks, unnumberedtracks ) );
+       
     //Ensure all tracks have a physical track number
     if (unnumberedtracks != 0)
     {
@@ -87,6 +152,8 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, 
         _spResult->AddInformationResult( L"REQ_EP_028", explain, TestResult::FAIL );
         testPassed = false;
     }    
+
+    TrackNumberMap::const_iterator mapIter;
     
     for ( mapIter = spTrackNumMap->begin(); mapIter != spTrackNumMap->end(); mapIter++ )
     {
@@ -142,6 +209,11 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, 
     
     return testPassed;
     
+}
+
+bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPLowerLevelComposition>& node )
+{
+    return this->CheckPrimaryTimecodeTracks( this->GetTimecodeTracks( _spEdgeMap, node ), node );
 }
 
 bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node )
@@ -281,7 +353,7 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFil
     AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
     
     //Get the name of the mob
-    AxString nodeName = this->GetMobName( axSrcMob, L"Film Source" );
+    AxString nodeName = this->GetMobName( axSrcMob, EPFilmSource::GetName() );
     
     unsigned int unnumberedtracks;
     shared_ptr<TrackNumberMap> spTrackNumMap( CountTrackCodes( this->GetEdgecodeTracks( _spEdgeMap, node ), unnumberedtracks ) );
@@ -346,6 +418,37 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFil
 
 }
 
+bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPAuxiliarySource>& node )
+{
+    AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
+    
+    if ( axSrcMob.CountSlots() < 1 )
+    {
+        _spResult->AddInformationResult( L"REQ_EP_136", this->GetMobSlotName( _spEdgeMap, node ) + L" does not have any mob slots.", TestResult::FAIL);
+        return false;
+    }
+    
+    /*
+     * 
+     * Loop through all the slots, making sure they:
+     * 
+     *  (1) Are Timeline, Event or Static
+     *  (2) Have auxiliary segments
+     * 
+     */
+    shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+    DepthFirstTraversal dfs( _spEdgeMap, spNode );
+    shared_ptr<AuxiliarySlotVisitor> spVisitor( new AuxiliarySlotVisitor( _spEdgeMap, _spResult ) );
+    
+    dfs.TraverseDown( spVisitor );
+    if ( !spVisitor->AreSlotsOk() )
+    {
+        return false;
+    }
+    
+    return true;
+}
+
 shared_ptr<DetailLevelTestResult> EPContainedTrackVisitor::GetResult()
 {
     return _spResult;
@@ -404,6 +507,42 @@ unsigned int EPContainedTrackVisitor::CountSegments( AxMobSlot& track, aafUID_t 
     {
         return 0;
     }
+}
+
+bool EPContainedTrackVisitor::CheckPrimaryTimecodeTracks( shared_ptr<EPTypedVisitor::MobSlotSet> tracks, Node& node )
+{
+    
+    bool testPassed = true;
+    
+    EPTypedVisitor::MobSlotSet::const_iterator iter;
+    for ( iter = tracks->begin(); iter != tracks->end(); iter++ )
+    {
+        try {
+            aafUInt32 physicalTrackNumber = (*iter)->GetPhysicalNum();
+            if ( physicalTrackNumber == 1 )
+            {
+                if ( CountSegments( **iter, kAAFClassID_Timecode ) != 1)
+                {
+                    wstringstream ss;
+                    ss << L"Mob slot with ID = " << (*iter)->GetSlotID()
+                       << L" of " << this->GetMobSlotName( _spEdgeMap, node )
+                       << L" is a timecode track that does not consist of a single Timecode object.";
+                    _spResult->AddInformationResult( L"REQ_EP_131", ss.str().c_str(), TestResult::FAIL );
+                    testPassed = false;
+                }                
+            }
+        }
+        catch ( const AxExHResult& ex )
+        {
+            if ( ex.getHResult() != AAFRESULT_PROP_NOT_PRESENT )
+            {
+                throw ex;
+            }
+        }
+    }
+    
+    return testPassed;
+    
 }
     
 } // end of namespace aafanalyzer

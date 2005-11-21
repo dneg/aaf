@@ -46,7 +46,7 @@ class TestFileBuilder
 {
     public:
     
-        enum TrackType { NONE, AUDIO, PICTURE, TIMECODE, EDGECODE };
+        enum TrackType { NONE, AUDIO, PICTURE, TIMECODE, EDGECODE, AUXILIARY };
     
         TestFileBuilder( const char* outFile );
         ~TestFileBuilder();
@@ -68,11 +68,13 @@ class TestFileBuilder
         shared_ptr<AxMob> AddImportSource( const AxString& name, bool isNamed, aafRational_t ratNothing );
         shared_ptr<AxMob> AddTapeSource( const AxString& name, bool isNamed, aafRational_t ratNothing );
         shared_ptr<AxMob> AddFilmSource( const AxString& name, bool isNamed, aafRational_t ratNothing );
+        shared_ptr<AxMob> AddAuxiliarySource( const AxString& name, bool isNamed, aafRational_t ratNothing );
 
         //Create Segments:
         //Type A:
         shared_ptr<AxComponent> CreateTimecode( TrackType essenceType, const aafUID_t& uidNothing );
         shared_ptr<AxComponent> CreateEdgecode( TrackType essenceType, const aafUID_t& uidNothing );
+        shared_ptr<AxComponent> CreateTimecodeStream12M( TrackType essenceType, const aafUID_t& uidNothing );
         shared_ptr<AxComponent> CreateEOC( TrackType essenceType, const aafUID_t& uidNothing );
         shared_ptr<AxComponent> CreateOOF( TrackType essenceType, const aafUID_t& uidNothing );
 

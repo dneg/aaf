@@ -55,10 +55,12 @@ class EPContainedTrackVisitor : public EPTypedVisitor
     virtual ~EPContainedTrackVisitor();
 
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPLowerLevelComposition>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPAuxiliarySource>& node );
     
     shared_ptr<DetailLevelTestResult> GetResult();
     
@@ -72,6 +74,7 @@ class EPContainedTrackVisitor : public EPTypedVisitor
 
     shared_ptr<TrackNumberMap> CountTrackCodes( shared_ptr<EPTypedVisitor::MobSlotSet> tracks, unsigned int& unnumberedTracks );
     unsigned int CountSegments( AxMobSlot& track, aafUID_t segmentType );
+    bool CheckPrimaryTimecodeTracks( shared_ptr<EPTypedVisitor::MobSlotSet> tracks, Node& node );
 
     // prohibited
     EPContainedTrackVisitor();

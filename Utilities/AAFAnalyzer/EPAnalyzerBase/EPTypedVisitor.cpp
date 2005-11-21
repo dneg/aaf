@@ -55,77 +55,84 @@ class ParentMobVisitor : public EPTypedVisitor
         bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition>& node )
         {
             AxCompositionMob axMob( node.GetAAFObjectOfType() );
-            _parentName = this->GetMobName( axMob, L"Top-Level Composition" );
+            _parentName = this->GetMobName( axMob, EPTopLevelComposition::GetName() );
             return false;
         }
         
         bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPLowerLevelComposition>& node )
         {
             AxCompositionMob axMob( node.GetAAFObjectOfType() );
-            _parentName = this->GetMobName( axMob, L"Lower-Level Composition" );
+            _parentName = this->GetMobName( axMob, EPLowerLevelComposition::GetName() );
             return false;
         }
         
         bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node )
         {
             AxCompositionMob axMob( node.GetAAFObjectOfType() );
-            _parentName = this->GetMobName( axMob, L"Sub-Clip Composition" );
+            _parentName = this->GetMobName( axMob, EPSubClipComposition::GetName() );
             return false;
         }
         
         bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node )
         {
             AxCompositionMob axMob( node.GetAAFObjectOfType() );
-            _parentName = this->GetMobName( axMob, L"Adjusted Clip Composition" );
+            _parentName = this->GetMobName( axMob, EPAdjustedClipComposition::GetName() );
             return false;
         }
         
         bool PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPTemplateClip>& node )
         {
             AxMasterMob axMob( node.GetAAFObjectOfType() );
-            _parentName = this->GetMobName( axMob, L"Template Clip" );
+            _parentName = this->GetMobName( axMob, EPTemplateClip::GetName() );
             return false;
         }
         
         bool PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPClip>& node )
         {
             AxMasterMob axMob( node.GetAAFObjectOfType() );
-            _parentName = this->GetMobName( axMob, L"Clip" );
+            _parentName = this->GetMobName( axMob, EPClip::GetName() );
             return false;
         }
         
         bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node )
         {
             AxSourceMob axMob( node.GetAAFObjectOfType() );
-            _parentName = this->GetMobName( axMob, L"File Source" );
+            _parentName = this->GetMobName( axMob, EPFileSource::GetName() );
             return false;
         }
         
         bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRecordingSource>& node )
         {
             AxSourceMob axMob( node.GetAAFObjectOfType() );
-            _parentName = this->GetMobName( axMob, L"Recording Source" );
+            _parentName = this->GetMobName( axMob, EPRecordingSource::GetName() );
             return false;
         }
         
         bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node )
         {
             AxSourceMob axMob( node.GetAAFObjectOfType() );
-            _parentName = this->GetMobName( axMob, L"Import Source" );
+            _parentName = this->GetMobName( axMob, EPImportSource::GetName() );
             return false;
         }
         
         bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node )
         {
             AxSourceMob axMob( node.GetAAFObjectOfType() );
-            _parentName = this->GetMobName( axMob, L"Tape Source" );
+            _parentName = this->GetMobName( axMob, EPTapeSource::GetName() );
             return false;
         }
         
         bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node )
         {
             AxSourceMob axMob( node.GetAAFObjectOfType() );
-            _parentName = this->GetMobName( axMob, L"Film Source" );
+            _parentName = this->GetMobName( axMob, EPFilmSource::GetName() );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPAuxiliarySource>& node )
+        {
+            AxSourceMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, EPAuxiliarySource::GetName() );
             return false;
         }
         

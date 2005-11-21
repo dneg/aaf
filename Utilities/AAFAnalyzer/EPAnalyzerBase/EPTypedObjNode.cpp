@@ -100,6 +100,7 @@ template class EPTypedObjNode<IAAFSourceMob,        EPRecordingSource>;
 template class EPTypedObjNode<IAAFSourceMob,        EPImportSource>;
 template class EPTypedObjNode<IAAFSourceMob,        EPTapeSource>;
 template class EPTypedObjNode<IAAFSourceMob,        EPFilmSource>;
+template class EPTypedObjNode<IAAFSourceMob,        EPAuxiliarySource>;
 
 //Mob Slot Object Nodes
 template class EPTypedObjNode<IAAFTimelineMobSlot,  EPEssenceTrack>;

@@ -1663,4 +1663,121 @@
         </timeline-mob-slot>
     </adjusted-clip>
     
+    <!-- Check the contents of primarty timecode tracks -->
+    <top-level name="Top Level - Correct Primary Timecode">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
+            <timecode track-type="timecode"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Top Level - Incorrect Primary Timecode">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
+            <timecode-stream-12m track-type="timecode"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <lower-level name="Lower Level - Correct Primary Timecode">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
+            <timecode track-type="timecode"/>
+        </timeline-mob-slot>
+    </lower-level>
+    
+    <lower-level name="Lower Level - Incorrect Primary Timecode">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
+            <timecode-stream-12m track-type="timecode"/>
+        </timeline-mob-slot>
+    </lower-level>
+
+    <!-- Test Auxiliary Sources -->
+    <auxiliary-source name="Aux. Source No Mob Slot">
+        <bad-eoc/>
+    </auxiliary-source>
+    
+    <auxiliary-source name="Aux. Source Timeline Mob Slot with Bad Segment">
+		<timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <source-clip track-type="audio">
+                <template-clip>
+                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                        <eoc track-type="audio"/>
+                    </timeline-mob-slot>
+                </template-clip>
+            </source-clip>
+        </timeline-mob-slot>
+    </auxiliary-source>
+    
+    <auxiliary-source name="Aux. Source Static Mob Slot with Bad Segment">
+		<static-mob-slot>
+            <source-clip track-type="audio">
+                <template-clip>
+                    <static-mob-slot>
+                        <eoc track-type="audio"/>
+                    </static-mob-slot>
+                </template-clip>
+            </source-clip>
+        </static-mob-slot>
+    </auxiliary-source>
+    
+    <auxiliary-source name="Aux. Source Timeline Mob Slot with Good Segment">
+		<timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <source-clip track-type="auxiliary">
+                <template-clip>
+                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                        <eoc track-type="auxiliary"/>
+                    </timeline-mob-slot>
+                </template-clip>
+            </source-clip>
+        </timeline-mob-slot>
+    </auxiliary-source>
+    
+    <auxiliary-source name="Aux. Source Static Mob Slot with Good Segment">
+		<static-mob-slot>
+            <source-clip track-type="auxiliary">
+                <template-clip>
+                    <static-mob-slot>
+                        <eoc track-type="auxiliary"/>
+                    </static-mob-slot>
+                </template-clip>
+            </source-clip>
+        </static-mob-slot>
+    </auxiliary-source>
+    
+    <auxiliary-source name="Aux. Source 2 Good Segments, 2 Bad Segments">
+		<timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <source-clip track-type="audio">
+                <template-clip>
+                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                        <eoc track-type="audio"/>
+                    </timeline-mob-slot>
+                </template-clip>
+            </source-clip>
+        </timeline-mob-slot>
+		<static-mob-slot>
+            <source-clip track-type="audio">
+                <template-clip>
+                    <static-mob-slot>
+                        <eoc track-type="audio"/>
+                    </static-mob-slot>
+                </template-clip>
+            </source-clip>
+        </static-mob-slot>
+		<timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <source-clip track-type="auxiliary">
+                <template-clip>
+                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                        <eoc track-type="auxiliary"/>
+                    </timeline-mob-slot>
+                </template-clip>
+            </source-clip>
+        </timeline-mob-slot>
+		<static-mob-slot>
+            <source-clip track-type="auxiliary">
+                <template-clip>
+                    <static-mob-slot>
+                        <eoc track-type="auxiliary"/>
+                    </static-mob-slot>
+                </template-clip>
+            </source-clip>
+        </static-mob-slot>
+    </auxiliary-source>
+    
 </aaf-file>

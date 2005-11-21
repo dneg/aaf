@@ -331,6 +331,27 @@ shared_ptr<AxMob> TestFileBuilder::AddFilmSource( const AxString& name, bool isN
     return spAxSrcMob;  
 }
 
+shared_ptr<AxMob> TestFileBuilder::AddAuxiliarySource( const AxString& name, bool isNamed, aafRational_t ratNothing )
+{
+    AxHeader axHeader( _axFile.getHeader() );
+    AxDictionary axDictionary( axHeader.GetDictionary() );
+
+    shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
+    if ( isNamed )
+    {
+        spAxSrcMob->SetName( name );
+    }
+
+    AxAuxiliaryDescriptor axAux( AxCreateInstance<IAAFAuxiliaryDescriptor>( axDictionary ) );
+    axAux.SetMimeType( L"audio/midi" );
+    spAxSrcMob->SetEssenceDescriptor( axAux );
+    spAxSrcMob->SetMobID( this->GenerateMobId() );
+
+    axHeader.AddMob( *spAxSrcMob );
+    
+    return spAxSrcMob;  
+}
+
 /*
  * 
  * Create Components
@@ -381,6 +402,17 @@ shared_ptr<AxComponent> TestFileBuilder::CreateEdgecode( TrackType essenceType, 
 
     return axEdgecode;    
 
+}
+
+shared_ptr<AxComponent> TestFileBuilder::CreateTimecodeStream12M( TrackType essenceType, const aafUID_t& uidNothing )
+{
+    AxHeader axHeader( _axFile.getHeader() );
+    AxDictionary axDictionary( axHeader.GetDictionary() );
+
+    shared_ptr<AxTimecodeStream12M> axTimecodeStream( new AxTimecodeStream12M( AxCreateInstance<IAAFTimecodeStream12M>( axDictionary ) ) );
+    AddDataDef( *axTimecodeStream, essenceType );
+    
+    return axTimecodeStream;
 }
 
 shared_ptr<AxComponent> TestFileBuilder::CreateEOC( TrackType essenceType, const aafUID_t& uidNothing )
@@ -670,11 +702,12 @@ void TestFileBuilder::AddDataDef( AxComponent& axComponent, TrackType essenceTyp
 
     switch ( essenceType )
     {
-        case AUDIO: axComponent.SetDataDef( axDictionary.LookupDataDef( kAAFDataDef_Sound ) ); break;
-        case PICTURE: axComponent.SetDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) ); break;
-        case TIMECODE: axComponent.SetDataDef( axDictionary.LookupDataDef( kAAFDataDef_Timecode ) ); break;
-        case EDGECODE:axComponent.SetDataDef( axDictionary.LookupDataDef( kAAFDataDef_Edgecode ) ); break;
-        default: axComponent.SetDataDef( axDictionary.LookupDataDef( kAAFDataDef_Unknown ) );
+        case AUDIO:     axComponent.SetDataDef( axDictionary.LookupDataDef( kAAFDataDef_Sound       ) ); break;
+        case PICTURE:   axComponent.SetDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture     ) ); break;
+        case TIMECODE:  axComponent.SetDataDef( axDictionary.LookupDataDef( kAAFDataDef_Timecode    ) ); break;
+        case EDGECODE:  axComponent.SetDataDef( axDictionary.LookupDataDef( kAAFDataDef_Edgecode    ) ); break;
+        case AUXILIARY: axComponent.SetDataDef( axDictionary.LookupDataDef( kAAFDataDef_Auxiliary   ) ); break;
+        default:        axComponent.SetDataDef( axDictionary.LookupDataDef( kAAFDataDef_Unknown     ) );
     }
 }
 

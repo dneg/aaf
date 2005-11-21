@@ -122,6 +122,8 @@ const TestInfo EPContainedTrackTest::GetTestInfo()
     spReqIds->push_back(L"REQ_EP_046");     //Adjusted Clip Composition
     spReqIds->push_back(L"REQ_EP_082");     //Tape Source
     spReqIds->push_back(L"REQ_EP_087");     //Film Source
+    spReqIds->push_back(L"REQ_EP_131");     //Primary timecode track contents for Top-Level and Lower-Level Compositions.
+    spReqIds->push_back(L"REQ_EP_136");     //Auxiliary Source
     return TestInfo(L"EPContainedTrackTest", spReqIds);
 }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!ENTITY OPERATION_GROUP "mono-audio-dissolve">
-<!ELEMENT aaf-file ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source )+>
+<!ELEMENT aaf-file ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | auxiliary-source )+>
 
 <!-- Mobs -->
 
@@ -41,6 +41,9 @@
 <!ELEMENT film-source ( timeline-mob-slot | static-mob-slot | event-mob-slot | mono-audio-dissolve | bad-eoc )+>
 <!ATTLIST film-source name CDATA #IMPLIED>
 
+<!ELEMENT auxiliary-source ( timeline-mob-slot | static-mob-slot | event-mob-slot | mono-audio-dissolve | bad-eoc )+>
+<!ATTLIST auxiliary-source name CDATA #IMPLIED>
+
 <!-- Type A Components -->
 
 <!ELEMENT timecode EMPTY>
@@ -49,23 +52,26 @@
 <!ELEMENT edgecode EMPTY>
 <!ATTLIST edgecode track-type ( edgecode ) #REQUIRED>
 
+<!ELEMENT timecode-stream-12m EMPTY>
+<!ATTLIST timecode-stream-12m track-type ( timecode ) #REQUIRED>
+
 <!ELEMENT eoc EMPTY>
-<!ATTLIST eoc track-type ( none | audio | picture ) #REQUIRED>
+<!ATTLIST eoc track-type ( none | audio | picture | auxiliary ) #REQUIRED>
 
 <!ELEMENT oof EMPTY>
-<!ATTLIST oof track-type ( none | audio | picture ) #REQUIRED>
+<!ATTLIST oof track-type ( none | audio | picture | auxiliary ) #REQUIRED>
 
 <!-- Type B Components -->
 
-<!ELEMENT source-clip ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source )>
-<!ATTLIST source-clip track-type ( none | audio | picture ) #REQUIRED>
+<!ELEMENT source-clip ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | auxiliary-source )>
+<!ATTLIST source-clip track-type ( none | audio | picture | auxiliary ) #REQUIRED>
 
 <!-- Type C Components -->
-<!ELEMENT transition ( video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )>
-<!ATTLIST transition track-type ( none | audio | picture ) #REQUIRED>
+<!ELEMENT transition ( video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )>
+<!ATTLIST transition track-type ( none | audio | picture | auxiliary ) #REQUIRED>
 
-<!ELEMENT sequence ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | transition )+>
-<!ATTLIST sequence track-type ( none | audio | picture ) #REQUIRED>
+<!ELEMENT sequence ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | transition | timecode-stream-12m )+>
+<!ATTLIST sequence track-type ( none | audio | picture | auxiliary ) #REQUIRED>
 
 <!-- Type D components -->
 
@@ -79,13 +85,13 @@
     		Contain 1 Segment
 -->
 
-<!ELEMENT video-dissolve ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT video-dissolve ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST video-dissolve track-type ( picture ) #REQUIRED>
 
-<!ELEMENT smpte-video-wipe ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT smpte-video-wipe ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST smpte-video-wipe track-type ( picture ) #REQUIRED>
 
-<!ELEMENT video-speed-control ( speed-ratio?, ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )* )>
+<!ELEMENT video-speed-control ( speed-ratio?, ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )* )>
 <!ATTLIST video-speed-control track-type ( picture ) #REQUIRED>
 
 	<!ELEMENT speed-ratio EMPTY>
@@ -94,60 +100,60 @@
         denominator CDATA #REQUIRED
     >
 
-<!ELEMENT video-repeat ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT video-repeat ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST video-repeat track-type ( picture ) #REQUIRED>
 
-<!ELEMENT video-flip ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT video-flip ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST video-flip track-type ( picture ) #REQUIRED>
 
-<!ELEMENT video-flop ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT video-flop ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST video-flop track-type ( picture ) #REQUIRED>
 
-<!ELEMENT video-flip-flop ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT video-flip-flop ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST video-flip-flop track-type ( picture ) #REQUIRED>
 
-<!ELEMENT video-position ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT video-position ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST video-position track-type ( picture ) #REQUIRED>
 
-<!ELEMENT video-crop ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT video-crop ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST video-crop track-type ( picture ) #REQUIRED>
 
-<!ELEMENT video-scale ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT video-scale ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST video-scale track-type ( picture ) #REQUIRED>
 
-<!ELEMENT video-rotate ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT video-rotate ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST video-rotate track-type ( picture ) #REQUIRED>
 
-<!ELEMENT video-corner-pinning ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT video-corner-pinning ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST video-corner-pinning track-type ( picture ) #REQUIRED>
 
-<!ELEMENT alpha-with-video-key ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT alpha-with-video-key ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST alpha-with-video-key track-type ( picture ) #REQUIRED>
 
-<!ELEMENT separate-alpha-key ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT separate-alpha-key ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST separate-alpha-key track-type ( picture ) #REQUIRED>
 
-<!ELEMENT luminance-key ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT luminance-key ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST luminance-key track-type ( picture ) #REQUIRED>
 
-<!ELEMENT chroma-key ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT chroma-key ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST chroma-key track-type ( picture ) #REQUIRED>
 
-<!ELEMENT mono-audio-gain ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT mono-audio-gain ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST mono-audio-gain track-type ( audio ) #REQUIRED>
 
-<!ELEMENT mono-audio-pan ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT mono-audio-pan ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST mono-audio-pan track-type ( audio ) #REQUIRED>
 
-<!ELEMENT mono-audio-dissolve ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT mono-audio-dissolve ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST mono-audio-dissolve track-type ( audio ) #REQUIRED>
 
-<!ELEMENT two-parameter-mono-audio-dissolve ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence )*>
+<!ELEMENT two-parameter-mono-audio-dissolve ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
 <!ATTLIST two-parameter-mono-audio-dissolve track-type ( audio ) #REQUIRED>
 
 <!-- Mob Slots -->
 
-<!ELEMENT timeline-mob-slot ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | timecode | edgecode | sequence )>
+<!ELEMENT timeline-mob-slot ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | timecode | edgecode | sequence | timecode-stream-12m )>
 <!ATTLIST timeline-mob-slot
     edit-rate-numerator CDATA #REQUIRED
     edit-rate-denominator CDATA #REQUIRED
@@ -155,13 +161,13 @@
     physical-track-number CDATA #IMPLIED
 >
 
-<!ELEMENT static-mob-slot ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | timecode | edgecode | sequence )>
+<!ELEMENT static-mob-slot ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | timecode | edgecode | sequence | timecode-stream-12m )>
 <!ATTLIST static-mob-slot
     name CDATA #IMPLIED
     physical-track-number CDATA #IMPLIED
 >
 
-<!ELEMENT event-mob-slot ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | timecode | edgecode | sequence )>
+<!ELEMENT event-mob-slot ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | timecode | edgecode | sequence | timecode-stream-12m )>
 <!ATTLIST event-mob-slot
     edit-rate-numerator CDATA #REQUIRED
     edit-rate-denominator CDATA #REQUIRED

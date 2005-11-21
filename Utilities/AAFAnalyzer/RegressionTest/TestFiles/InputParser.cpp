@@ -89,11 +89,13 @@ InputParser::InputParser( const char* outFile )
     _materialTypeMap[L"import-source"] = &TestFileBuilder::AddImportSource;
     _materialTypeMap[L"tape-source"] = &TestFileBuilder::AddTapeSource;
     _materialTypeMap[L"film-source"] = &TestFileBuilder::AddFilmSource;
+    _materialTypeMap[L"auxiliary-source"] = &TestFileBuilder::AddAuxiliarySource;
     
     //Pointers to functions to create empty segments.
     _createSegmentMap[L"source-clip"] = &TestFileBuilder::CreateSourceClip;
     _createSegmentMap[L"timecode"] = &TestFileBuilder::CreateTimecode;
     _createSegmentMap[L"edgecode"] = &TestFileBuilder::CreateEdgecode;
+    _createSegmentMap[L"timecode-stream-12m"] = &TestFileBuilder::CreateTimecodeStream12M;
     _createSegmentMap[L"eoc"] = &TestFileBuilder::CreateEOC;
     _createSegmentMap[L"oof"] = &TestFileBuilder::CreateOOF;
     _createSegmentMap[L"transition"] = &TestFileBuilder::CreateTransition;
@@ -159,6 +161,7 @@ InputParser::InputParser( const char* outFile )
     _essenceMap[L"picture"] = TestFileBuilder::PICTURE;
     _essenceMap[L"timecode"] = TestFileBuilder::TIMECODE;
     _essenceMap[L"edgecode"] = TestFileBuilder::EDGECODE;
+    _essenceMap[L"auxiliary"] = TestFileBuilder::AUXILIARY;
     
     //Set up optional rational parameter names
     _optRationalParam[L"top-level"] = L"";
@@ -172,11 +175,13 @@ InputParser::InputParser( const char* outFile )
     _optRationalParam[L"import-source"] = L"";
     _optRationalParam[L"tape-source"] = L"";
     _optRationalParam[L"film-source"] = L"";
+    _optRationalParam[L"auxiliary-source"] = L"";
     
     //Set up the effect parameters
     _effectMap[L"source-clip"] = kAAFOperationDef_Unknown;
     _effectMap[L"timecode"] = kAAFOperationDef_Unknown;
     _effectMap[L"edgecode"] = kAAFOperationDef_Unknown;
+    _effectMap[L"timecode-stream-12m"] = kAAFOperationDef_Unknown;
     _effectMap[L"eoc"] = kAAFOperationDef_Unknown;
     _effectMap[L"oof"] = kAAFOperationDef_Unknown;
     _effectMap[L"transition"] = kAAFOperationDef_Unknown;

@@ -33,7 +33,7 @@
                 Name:   Edit Protocol Track Contents Visitor
                 Desc:   -
                 Result: Failed
-                Reason: Slot with ID 1 in Adjusted Clip Composition: "Adjusted Clip Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+                Reason: Slot with ID 1 in Adjusted-Clip Composition: "Adjusted Clip Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_103

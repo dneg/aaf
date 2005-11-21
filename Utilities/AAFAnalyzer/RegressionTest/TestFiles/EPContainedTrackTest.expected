@@ -4,7 +4,7 @@
         Reason: Test Failed - See "Edit Protocol Contained Track Visitor" Visitor for details
         Passing Requirements: None
         Warning Requirements: None
-        Failing Requirements: REQ_EP_028; REQ_EP_037; REQ_EP_046; REQ_EP_082; REQ_EP_087
+        Failing Requirements: REQ_EP_028; REQ_EP_037; REQ_EP_046; REQ_EP_082; REQ_EP_087; REQ_EP_131; REQ_EP_136
 
             Name:   Edit Protocol Contained Track Visitor
             Desc:   Visit derivation chain mateiral and ensure they contain the required tracks.
@@ -12,7 +12,7 @@
             Reason: 
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_028; REQ_EP_037; REQ_EP_046; REQ_EP_082; REQ_EP_087
+            Failing Requirements: REQ_EP_028; REQ_EP_037; REQ_EP_046; REQ_EP_082; REQ_EP_087; REQ_EP_131; REQ_EP_136
 
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
@@ -413,4 +413,60 @@
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_046
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob slot with ID = 1 of Top-Level Composition: "Top Level - Incorrect Primary Timecode" is a timecode track that does not consist of a single Timecode object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_131
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob slot with ID = 1 of Lower-Level Composition: "Lower Level - Incorrect Primary Timecode" is a timecode track that does not consist of a single Timecode object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_131
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Auxiliary Source: "Aux. Source No Mob Slot" does not have any mob slots.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_136
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob slot with ID = 1 of Auxiliary Source: "Aux. Source Timeline Mob Slot with Bad Segment" has a segment with a Data Definition that is not DataDef_Auxiliary.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_136
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob slot with ID = 1 of Auxiliary Source: "Aux. Source Static Mob Slot with Bad Segment" has a segment with a Data Definition that is not DataDef_Auxiliary.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_136
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob slot with ID = 1 of Auxiliary Source: "Aux. Source 2 Good Segments, 2 Bad Segments" has a segment with a Data Definition that is not DataDef_Auxiliary.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_136
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob slot with ID = 2 of Auxiliary Source: "Aux. Source 2 Good Segments, 2 Bad Segments" has a segment with a Data Definition that is not DataDef_Auxiliary.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_136
 
