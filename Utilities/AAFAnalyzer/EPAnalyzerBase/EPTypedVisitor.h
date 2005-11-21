@@ -69,6 +69,7 @@ class EPTypedVisitor : public TypedVisitor
     //to avoid constantly re-implementing them.
     AxString GetMobName( AxMob& axMob, const AxString& type );
     AxString GetMobName( shared_ptr<EdgeMap> spEdgeMap, Node& node );
+    AxString GetMobSlotName( shared_ptr<EdgeMap> spEdgeMap, Node& node );
     
     bool IsType( AxClassDef& clsDef, aafUID_t type, aafUID_t parentType );
 

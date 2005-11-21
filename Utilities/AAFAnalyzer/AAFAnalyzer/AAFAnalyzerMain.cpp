@@ -184,6 +184,7 @@ void RegisterTests()
     TestInfoRegistrar<EPTrackContentsTest> epTrackContentsTest;
     TestInfoRegistrar<EPLocatorTest> epLocatorTest;
     TestInfoRegistrar<EPEditRateTest> epEditRateTest;
+    TestInfoRegistrar<EPEffectTest> epEffectTest;
 
     //Register Dump Phase tests.
     TestInfoRegistrar<FileDumper> fileDumper;   

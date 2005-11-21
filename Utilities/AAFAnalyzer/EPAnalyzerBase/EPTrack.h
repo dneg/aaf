@@ -132,7 +132,7 @@ class EPEssenceTrack : public EPTrackObject
  //TODO: Pending clarificaiton of requirements, the definition in part (b) may
  //      have to be changed (to allow for sequences).
 
-class EPCompleteTrack : public EPTrackObject
+class EPExtendedEssenceTrack : public EPEssenceTrack
 {
     public:
        
@@ -143,7 +143,7 @@ class EPCompleteTrack : public EPTrackObject
         
     protected:
     
-        EPCompleteTrack( IAAFMobSlotSP mobSlot, IAAFSourceClipSP clip, IAAFMobSP mob );
+        EPExtendedEssenceTrack( IAAFMobSlotSP mobSlot, IAAFSourceClipSP clip, IAAFMobSP mob );
 
     private:
 
@@ -152,9 +152,9 @@ class EPCompleteTrack : public EPTrackObject
         AxMob           _mob;
 
         //prohibited
-        EPCompleteTrack();
-        EPCompleteTrack( const EPCompleteTrack& );
-        EPCompleteTrack& operator=( const EPCompleteTrack& );
+        EPExtendedEssenceTrack();
+        EPExtendedEssenceTrack( const EPExtendedEssenceTrack& );
+        EPExtendedEssenceTrack& operator=( const EPExtendedEssenceTrack& );
 };
 
 //======================================================================
@@ -167,7 +167,7 @@ class EPCompleteTrack : public EPTrackObject
  * 
  */
 
-class EPAudioTrack : public EPCompleteTrack, public EPEssenceTrack
+class EPAudioTrack : public EPExtendedEssenceTrack
 {
     public:
 
@@ -194,7 +194,7 @@ class EPAudioTrack : public EPCompleteTrack, public EPEssenceTrack
  * 
  */
 
-class EPVideoTrack : public EPCompleteTrack, public EPEssenceTrack
+class EPVideoTrack : public EPExtendedEssenceTrack
 {
     public:
 

@@ -1980,7 +1980,7 @@
     <requirement type="file" category="compositional">
         <id>REQ_EP_180</id>
         <name>Video Dissolve Effect Use</name>
-        <desc>The Video Dissolve effect shall be used by an OperationGroup within a Transition object.</desc>
+        <desc>The Video Dissolve effect shall only be used by an OperationGroup within a Transition object.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>

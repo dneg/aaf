@@ -123,4 +123,28 @@ template class EPTypedObjNode<IAAFMobSlot,          EPVideoTrack>;
 template class EPTypedObjNode<IAAFMobSlot,          EPTimecodeTrack>;
 template class EPTypedObjNode<IAAFMobSlot,          EPEdgecodeTrack>;
 
+//Effect Object Nodes
+template class EPTypedObjNode<IAAFOperationGroup,   EPEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPVideoDissolveEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPSMPTEVideoWipeEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPVideoSpeedControlEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPVideoRepeatEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPVideoFlipEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPVideoFlopEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPVideoFlipFlopEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPVideoPositionEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPVideoCropEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPVideoScaleEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPVideoRotateEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPVideoCornerPinningEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPAlphaWithVideoKeyEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPSeparateAlphaKeyEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPLuminanceKeyEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPChromaKeyEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPMonoAudioGainEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPMonoAudioPanEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPSingleParameterAudioDissolveEffect>;
+template class EPTypedObjNode<IAAFOperationGroup,   EPTwoParameterAudioDissolveEffect>;
+
+
 } // end of namespace diskstream

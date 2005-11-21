@@ -1,0 +1,232 @@
+        Name:   Edit Protocol Effect Test
+        Desc:   Verify that all effects in the AAF file are valid.
+        Result: Failed
+        Reason: Test Failed - See "Edit Protocol Effect Visitor" Visitor for details
+        Passing Requirements: None
+        Warning Requirements: None
+        Failing Requirements: REQ_EP_180; REQ_EP_183; REQ_EP_186; REQ_EP_187; REQ_EP_190; REQ_EP_194; REQ_EP_197; REQ_EP_200; REQ_EP_203; REQ_EP_206; REQ_EP_209; REQ_EP_212; REQ_EP_215; REQ_EP_220; REQ_EP_225; REQ_EP_228; REQ_EP_231; REQ_EP_234; REQ_EP_240; REQ_EP_244; REQ_EP_247
+
+            Name:   Edit Protocol Effect Visitor
+            Desc:   Visit effects and make sure they are valid.
+            Result: Failed
+            Reason: 
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_180; REQ_EP_183; REQ_EP_186; REQ_EP_187; REQ_EP_190; REQ_EP_194; REQ_EP_197; REQ_EP_200; REQ_EP_203; REQ_EP_206; REQ_EP_209; REQ_EP_212; REQ_EP_215; REQ_EP_220; REQ_EP_225; REQ_EP_228; REQ_EP_231; REQ_EP_234; REQ_EP_240; REQ_EP_244; REQ_EP_247
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Video Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition: "Video Dissolve not in Transition" is not within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_180
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: SMPTE Video Wipe Effect in Mob slot with ID = 1 of Top-Level Composition: "SMPTE Video Wipe not in Transition" is not within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_183
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Single-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition: "Mono Audio Dissolve not in Transition" is not within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_244
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Two-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition: "Two Parameter Mobo Audio Dissolve not in Transition" is not within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_247
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Video Speed Control Effect in Mob slot with ID = 1 of Top-Level Composition: "Video Speed Control child of Transition" is within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_186
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Video Repeat Effect in Mob slot with ID = 1 of Top-Level Composition: "Video Repeat child of Transition" is within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_190
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Video Flip Effect in Mob slot with ID = 1 of Top-Level Composition: "Video Flip child of Transition" is within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_194
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Video Flop Effect in Mob slot with ID = 1 of Top-Level Composition: "Video Flop child of Transition" is within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_197
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Video Flip-Flop Effect in Mob slot with ID = 1 of Top-Level Composition: "Video Flip-Flop child of Transition" is within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_200
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Video Position Effect in Mob slot with ID = 1 of Top-Level Composition: "Video Position child of Transition" is within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_203
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Video Crop Effect in Mob slot with ID = 1 of Top-Level Composition: "Video Crop child of Transition" is within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_206
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Video Scale Effect in Mob slot with ID = 1 of Top-Level Composition: "Video Scale child of Transition" is within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_209
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Video Rotate Effect in Mob slot with ID = 1 of Top-Level Composition: "Video Rotate child of Transition" is within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_212
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Video Corner Pinning Effect in Mob slot with ID = 1 of Top-Level Composition: "Video Corner Pinning child of Transition" is within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_215
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key child of Transition" is within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_220
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Separate Alpha Key child of Transition" is within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_225
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Luminance Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Luminance Key child of Transition" is within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_228
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Chroma Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Chroma Key child of Transition" is within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_231
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mono Audio Gain Effect in Mob slot with ID = 1 of Top-Level Composition: "Mono Audio Gain child of Transition" is within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_234
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mono Audio Pan Effect in Mob slot with ID = 1 of Top-Level Composition: "Mono Audio Pan child of Transition" is within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_240
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Video Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition: "Video Dissolve grandchild of Transition" is not within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_180
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: SMPTE Video Wipe Effect in Mob slot with ID = 1 of Top-Level Composition: "SMPTE Video Wipe grandchild of Transition" is not within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_183
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Single-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition: "Mono Audio Dissolve grandchild of Transition" is not within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_244
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Two-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition: "Two Parameter Mobo Audio Dissolve grandchild of Transition" is not within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_247
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Passed, but with warnings.
+                Reason: Video Speed Control Effect in Mob slot with ID = 1 of Top-Level Composition: "Speed Ratio Zero Denominator" has a Speed Ratio parameter with a 0 denominator (1/0).
+                Passing Requirements: None
+                Warning Requirements: REQ_EP_187
+                Failing Requirements: None
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Video Speed Control Effect in Mob slot with ID = 1 of Top-Level Composition: "Speed Ratio of Zero" has a Speed Ratio parameter with a ratio value of 0 (0/1).
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_187
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Video Speed Control Effect in Mob slot with ID = 1 of Top-Level Composition: "Speed Ratio Missing" does not have a Speed Ratio parameter.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_187
+

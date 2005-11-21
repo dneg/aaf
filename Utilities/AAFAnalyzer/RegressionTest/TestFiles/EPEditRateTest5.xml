@@ -6,18 +6,26 @@
     <!-- Test all static tracks -->
 
     <clip name="Clip 1">
-        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio">
-            <file-source name="File Source 1" sample-rate-denominator="24" sample-rate-numerator="600">
-                <eoc/>
-            </file-source>
-        </source-clip>
+        <static-mob-slot>
+	        <source-clip track-type="audio">
+    	        <file-source name="File Source 1" sample-rate-denominator="24" sample-rate-numerator="600">
+					<timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                        <eoc track-type="none"/>
+                    </timeline-mob-slot>
+            	</file-source>
+	        </source-clip>
+        </static-mob-slot>
     </clip>
     <clip name="Clip 2">
-        <source-clip slot-type="static" edit-rate-denominator="1" edit-rate-numerator="1" track-type="audio">
-            <file-source name="File Source 1" sample-rate-denominator="24" sample-rate-numerator="1200000">
-                <eoc/>
-            </file-source>
-        </source-clip>
+        <static-mob-slot>
+	        <source-clip track-type="audio">
+    	        <file-source name="File Source 1" sample-rate-denominator="24" sample-rate-numerator="1200000">
+					<timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                        <eoc track-type="none"/>
+                    </timeline-mob-slot>
+            	</file-source>
+	        </source-clip>
+        </static-mob-slot>
     </clip>
 
 </aaf-file>

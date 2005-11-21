@@ -69,25 +69,21 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Recording Source: Top Level J"
+            Detail: Analyzing root composition mob "Initial->Lower-Level"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
             Warning Requirements: None
-            Failing Requirements: REQ_EP_072
+            Failing Requirements: REQ_EP_030
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Recording Source: Top Level J"
-                Detail: OK   -   Transition to Clip: "Invalid out of Recording Source: Clip J"
-                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source J"
-                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source J"
-                Detail: FAIL -         Transition to Tape Source: "Recording Source->Tape Source"
+                Detail: FAIL - Transition to Lower-Level Composition: "Initial->Lower-Level"
                 Result: Failed
-                Reason: Tape Source: "Recording Source->Tape Source" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
+                Reason: Lower-Level Composition: "Initial->Lower-Level" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
-                Failing Requirements: REQ_EP_072
+                Failing Requirements: REQ_EP_030
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
@@ -113,7 +109,48 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Top-Level: Top-Level C"
+            Detail: Analyzing root composition mob "Invalid out of Top-Level: Top-Level A"
+            Result: Failed
+            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_025; REQ_EP_026
+
+                Name:   MobChainVisitor
+                Desc:   Visit mobs and verify derivation order.
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Top-Level: Top-Level A"
+                Detail: FAIL -   Transition to Top-Level Composition: "Top-Level->Top-Level"
+                Result: Failed
+                Reason: Top-Level Composition: "Top-Level->Top-Level" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_025; REQ_EP_026
+
+            Name:   Verify Mob Chain
+            Desc:   Verify the structure of one mob chain.
+            Detail: Analyzing root composition mob "Invalid out of Recording Source: Top Level L"
+            Result: Failed
+            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
+            Warning Requirements: REQ_EP_019
+            Failing Requirements: REQ_EP_072
+
+                Name:   MobChainVisitor
+                Desc:   Visit mobs and verify derivation order.
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Recording Source: Top Level L"
+                Detail: OK   -   Transition to Clip: "Invalid out of Recording Source: Clip L"
+                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source L"
+                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Out of File"
+                Detail: FAIL -         Transition to Source Clip
+                Result: Failed
+                Reason: Source Clip is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
+                Warning Requirements: REQ_EP_019
+                Failing Requirements: REQ_EP_072
+
+            Name:   Verify Mob Chain
+            Desc:   Verify the structure of one mob chain.
+            Detail: Analyzing root composition mob "Invalid out of Top-Level: Top-Level F"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
             Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -122,34 +159,13 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Top-Level: Top-Level C"
-                Detail: FAIL -   Transition to Recording Source: "Top-Level->Recording Source"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Top-Level: Top-Level F"
+                Detail: FAIL -   Transition to Film Source: "Top-Level->Film Source"
                 Result: Failed
-                Reason: Recording Source: "Top-Level->Recording Source" is out of place in the derrivation chain.
+                Reason: Film Source: "Top-Level->Film Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_026
-
-            Name:   Verify Mob Chain
-            Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Import Source: Top Level A"
-            Result: Failed
-            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
-            Warning Requirements: None
-            Failing Requirements: REQ_EP_025; REQ_EP_076
-
-                Name:   MobChainVisitor
-                Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Import Source: Top Level A"
-                Detail: OK   -   Transition to Clip: "Invalid out of Import Source: Clip A"
-                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source A"
-                Detail: FAIL -       Transition to Top-Level Composition: "Import Source->Top-Level"
-                Result: Failed
-                Reason: Top-Level Composition: "Import Source->Top-Level" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_025; REQ_EP_076
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
@@ -174,26 +190,7 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Top-Level: Out of File"
-            Result: Failed
-            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
-            Warning Requirements: None
-            Failing Requirements: REQ_EP_018
-
-                Name:   MobChainVisitor
-                Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Top-Level: Out of File"
-                Detail: FAIL -   Transition to Source Clip
-                Result: Failed
-                Reason: Source Clip is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_018
-
-            Name:   Verify Mob Chain
-            Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Lower-Level: Top-Level C"
+            Detail: Analyzing root composition mob "Invalid out of Lower-Level: Top-Level B"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
             Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -202,18 +199,18 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Lower-Level: Top-Level C"
-                Detail: OK   -   Transition to Lower-Level Composition: "Invalid out of Lower-Level: Lower-Level C"
-                Detail: FAIL -     Transition to Recording Source: "Lower-Level->Recording Source"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Lower-Level: Top-Level B"
+                Detail: OK   -   Transition to Lower-Level Composition: "Invalid out of Lower-Level: Lower-Level B"
+                Detail: FAIL -     Transition to File Source: "Lower-Level->File Source"
                 Result: Failed
-                Reason: Recording Source: "Lower-Level->Recording Source" is out of place in the derrivation chain.
+                Reason: File Source: "Lower-Level->File Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_031
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Import Source: Top Level E"
+            Detail: Analyzing root composition mob "Invalid out of Import Source: Top Level D"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
             Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
@@ -222,78 +219,101 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Import Source: Top Level E"
-                Detail: OK   -   Transition to Clip: "Invalid out of Import Source: Clip E"
-                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source E"
-                Detail: FAIL -       Transition to Template Clip: "Import Source->Template Clip"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Import Source: Top Level D"
+                Detail: OK   -   Transition to Clip: "Invalid out of Import Source: Clip D"
+                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source D"
+                Detail: FAIL -       Transition to Adjusted-Clip Composition: "Import Source->Adjusted Clip"
                 Result: Failed
-                Reason: Template Clip: "Import Source->Template Clip" is out of place in the derrivation chain.
+                Reason: Adjusted-Clip Composition: "Import Source->Adjusted Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_076
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Lower-Level: Top Level G"
-            Result: Passed
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
-            Warning Requirements: None
-            Failing Requirements: None
-
-                Name:   MobChainVisitor
-                Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Lower-Level: Top Level G"
-                Detail: OK   -   Transition to Lower-Level Composition: "Invalid out of Lower-Level: End of Chain"
-                Detail: FAIL -     Transition to Source Clip
-                Result: Passed
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
-                Warning Requirements: None
-                Failing Requirements: None
-
-            Name:   Verify Mob Chain
-            Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Sub-Clip: Top Level B"
+            Detail: Analyzing root composition mob "Invalid out of Lower-Level: Top-Level F"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
             Warning Requirements: None
-            Failing Requirements: REQ_EP_030; REQ_EP_036
+            Failing Requirements: REQ_EP_031
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Sub-Clip: Top Level B"
-                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip B"
-                Detail: FAIL -     Transition to Lower-Level Composition: "Sub-Clip->Lower-Level"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Lower-Level: Top-Level F"
+                Detail: OK   -   Transition to Lower-Level Composition: "Invalid out of Lower-Level: Lower-Level F"
+                Detail: FAIL -     Transition to Film Source: "Lower-Level->Film Source"
                 Result: Failed
-                Reason: Lower-Level Composition: "Sub-Clip->Lower-Level" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+                Reason: Film Source: "Lower-Level->Film Source" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
-                Failing Requirements: REQ_EP_030; REQ_EP_036
+                Failing Requirements: REQ_EP_031
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Tape Source: Top Level A"
+            Detail: Analyzing root composition mob "Invalid out of Import Source: Top Level G"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
             Warning Requirements: None
-            Failing Requirements: REQ_EP_025; REQ_EP_083
+            Failing Requirements: REQ_EP_076
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Tape Source: Top Level A"
-                Detail: OK   -   Transition to Clip: "Invalid out of Tape Source: Clip A"
-                Detail: OK   -     Transition to Tape Source: "Invalid out of Tape Source: Tape Source A"
-                Detail: FAIL -       Transition to Top-Level Composition: "Tape Source->Top-Level"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Import Source: Top Level G"
+                Detail: OK   -   Transition to Clip: "Invalid out of Import Source: Clip G"
+                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source G"
+                Detail: FAIL -       Transition to File Source: "Import Source->File Source"
                 Result: Failed
-                Reason: Top-Level Composition: "Tape Source->Top-Level" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
+                Reason: File Source: "Import Source->File Source" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
                 Warning Requirements: None
-                Failing Requirements: REQ_EP_025; REQ_EP_083
+                Failing Requirements: REQ_EP_076
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Sub-Clip: Top Level F"
+            Detail: Analyzing root composition mob "Invalid out of Sub-Clip: Top Level A"
+            Result: Failed
+            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_025; REQ_EP_036
+
+                Name:   MobChainVisitor
+                Desc:   Visit mobs and verify derivation order.
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Sub-Clip: Top Level A"
+                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip A"
+                Detail: FAIL -     Transition to Top-Level Composition: "Sub-Clip->Top-Level"
+                Result: Failed
+                Reason: Top-Level Composition: "Sub-Clip->Top-Level" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_025; REQ_EP_036
+
+            Name:   Verify Mob Chain
+            Desc:   Verify the structure of one mob chain.
+            Detail: Analyzing root composition mob "Invalid out of Import Source: Top Level I"
+            Result: Failed
+            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_076
+
+                Name:   MobChainVisitor
+                Desc:   Visit mobs and verify derivation order.
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Import Source: Top Level I"
+                Detail: OK   -   Transition to Clip: "Invalid out of Import Source: Clip I"
+                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source I"
+                Detail: FAIL -       Transition to Import Source: "Import Source->Import Source"
+                Result: Failed
+                Reason: Import Source: "Import Source->Import Source" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_076
+
+            Name:   Verify Mob Chain
+            Desc:   Verify the structure of one mob chain.
+            Detail: Analyzing root composition mob "Invalid out of Sub-Clip: Top Level E"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
             Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -302,18 +322,18 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Sub-Clip: Top Level F"
-                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip F"
-                Detail: FAIL -     Transition to Import Source: "Sub-Clip->Import Source"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Sub-Clip: Top Level E"
+                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip E"
+                Detail: FAIL -     Transition to Recording Source: "Sub-Clip->Recording Source"
                 Result: Failed
-                Reason: Import Source: "Sub-Clip->Import Source" is out of place in the derrivation chain.
+                Reason: Recording Source: "Sub-Clip->Recording Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_036
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Tape Source: Top Level D"
+            Detail: Analyzing root composition mob "Invalid out of Tape Source: Top Level C"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
             Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
@@ -322,36 +342,35 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Tape Source: Top Level D"
-                Detail: OK   -   Transition to Clip: "Invalid out of Tape Source: Clip D"
-                Detail: OK   -     Transition to Tape Source: "Invalid out of Tape Source: Tape Source D"
-                Detail: FAIL -       Transition to Adjusted-Clip Composition: "Tape Source->Adjusted Clip"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Tape Source: Top Level C"
+                Detail: OK   -   Transition to Clip: "Invalid out of Tape Source: Clip C"
+                Detail: OK   -     Transition to Tape Source: "Invalid out of Tape Source: Tape Source C"
+                Detail: FAIL -       Transition to Sub-Clip Composition: "Tape Source->Sub-Clip"
                 Result: Failed
-                Reason: Adjusted-Clip Composition: "Tape Source->Adjusted Clip" is out of place in the derrivation chain.
+                Reason: Sub-Clip Composition: "Tape Source->Sub-Clip" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_083
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Tape Source: Top Level F"
+            Detail: Analyzing root composition mob "Invalid out of Sub-Clip: Top Level I"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
             Warning Requirements: None
-            Failing Requirements: REQ_EP_083
+            Failing Requirements: None
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Tape Source: Top Level F"
-                Detail: OK   -   Transition to Clip: "Invalid out of Tape Source: Clip F"
-                Detail: OK   -     Transition to Tape Source: "Invalid out of Tape Source: Tape Source F"
-                Detail: FAIL -       Transition to Clip: "Tape Source->Clip"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Sub-Clip: Top Level I"
+                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: End of Chain"
+                Detail: FAIL -     Transition to Source Clip
                 Result: Failed
-                Reason: Clip: "Tape Source->Clip" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
+                Reason: Source Clip is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
-                Failing Requirements: REQ_EP_083
+                Failing Requirements: None
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
@@ -438,7 +457,8 @@
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
             Detail: Analyzing root composition mob "Invalid out of Adjusted Clip: Top Level J"
-            Result: Passed
+            Result: Failed
+            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
             Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
             Warning Requirements: None
             Failing Requirements: None
@@ -448,7 +468,8 @@
                 Detail: OK   - Transition to Top-Level Composition: "Invalid out of Adjusted Clip: Top Level J"
                 Detail: OK   -   Transition to Adjusted-Clip Composition: "Invalid out of Adjusted Clip: End of Chain"
                 Detail: FAIL -     Transition to Source Clip
-                Result: Passed
+                Result: Failed
+                Reason: Source Clip is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: None
@@ -697,6 +718,28 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
+            Detail: Analyzing root composition mob "Invalid out of Recording Source: Top Level D"
+            Result: Failed
+            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_072
+
+                Name:   MobChainVisitor
+                Desc:   Visit mobs and verify derivation order.
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Recording Source: Top Level D"
+                Detail: OK   -   Transition to Clip: "Invalid out of Recording Source: Clip D"
+                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source D"
+                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source D"
+                Detail: FAIL -         Transition to Adjusted-Clip Composition: "Recording Source->Adjusted Clip"
+                Result: Failed
+                Reason: Adjusted-Clip Composition: "Recording Source->Adjusted Clip" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_072
+
+            Name:   Verify Mob Chain
+            Desc:   Verify the structure of one mob chain.
             Detail: Analyzing root composition mob "Invalid out of Recording Source: Top Level C"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
@@ -741,7 +784,7 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Recording Source: Top Level D"
+            Detail: Analyzing root composition mob "Invalid out of Recording Source: Top Level I"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
             Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
@@ -750,13 +793,13 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Recording Source: Top Level D"
-                Detail: OK   -   Transition to Clip: "Invalid out of Recording Source: Clip D"
-                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source D"
-                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source D"
-                Detail: FAIL -         Transition to Adjusted-Clip Composition: "Recording Source->Adjusted Clip"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Recording Source: Top Level I"
+                Detail: OK   -   Transition to Clip: "Invalid out of Recording Source: Clip I"
+                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source I"
+                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source I"
+                Detail: FAIL -         Transition to Import Source: "Recording Source->Import Source"
                 Result: Failed
-                Reason: Adjusted-Clip Composition: "Recording Source->Adjusted Clip" is out of place in the derrivation chain.
+                Reason: Import Source: "Recording Source->Import Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_072
@@ -807,68 +850,6 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Recording Source: Top Level H"
-            Result: Failed
-            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
-            Warning Requirements: None
-            Failing Requirements: REQ_EP_072
-
-                Name:   MobChainVisitor
-                Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Recording Source: Top Level H"
-                Detail: OK   -   Transition to Clip: "Invalid out of Recording Source: Clip H"
-                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source H"
-                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source H"
-                Detail: FAIL -         Transition to Recording Source: "Recording Source->Recording Source"
-                Result: Failed
-                Reason: Recording Source: "Recording Source->Recording Source" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_072
-
-            Name:   Verify Mob Chain
-            Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Recording Source: Top Level I"
-            Result: Failed
-            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
-            Warning Requirements: None
-            Failing Requirements: REQ_EP_072
-
-                Name:   MobChainVisitor
-                Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Recording Source: Top Level I"
-                Detail: OK   -   Transition to Clip: "Invalid out of Recording Source: Clip I"
-                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source I"
-                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source I"
-                Detail: FAIL -         Transition to Import Source: "Recording Source->Import Source"
-                Result: Failed
-                Reason: Import Source: "Recording Source->Import Source" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_072
-
-            Name:   Verify Mob Chain
-            Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Initial->Sub-Clip"
-            Result: Failed
-            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
-            Warning Requirements: None
-            Failing Requirements: None
-
-                Name:   MobChainVisitor
-                Desc:   Visit mobs and verify derivation order.
-                Detail: FAIL - Transition to Sub-Clip Composition: "Initial->Sub-Clip"
-                Result: Failed
-                Reason: Sub-Clip Composition: "Initial->Sub-Clip" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
-                Warning Requirements: None
-                Failing Requirements: None
-
-            Name:   Verify Mob Chain
-            Desc:   Verify the structure of one mob chain.
             Detail: Analyzing root composition mob "Initial->Adjusted Clip"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
@@ -906,29 +887,7 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Recording Source: Top Level L"
-            Result: Failed
-            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
-            Warning Requirements: REQ_EP_019
-            Failing Requirements: REQ_EP_072
-
-                Name:   MobChainVisitor
-                Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Recording Source: Top Level L"
-                Detail: OK   -   Transition to Clip: "Invalid out of Recording Source: Clip L"
-                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source L"
-                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Out of File"
-                Detail: FAIL -         Transition to Source Clip
-                Result: Failed
-                Reason: Source Clip is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
-                Warning Requirements: REQ_EP_019
-                Failing Requirements: REQ_EP_072
-
-            Name:   Verify Mob Chain
-            Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Top-Level: Top-Level D"
+            Detail: Analyzing root composition mob "Invalid out of Top-Level: Top-Level C"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
             Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -937,10 +896,10 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Top-Level: Top-Level D"
-                Detail: FAIL -   Transition to Import Source: "Top-Level->Import Source"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Top-Level: Top-Level C"
+                Detail: FAIL -   Transition to Recording Source: "Top-Level->Recording Source"
                 Result: Failed
-                Reason: Import Source: "Top-Level->Import Source" is out of place in the derrivation chain.
+                Reason: Recording Source: "Top-Level->Recording Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_026
@@ -967,7 +926,8 @@
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
             Detail: Analyzing root composition mob "Invalid out of Top-Level: End of Chain"
-            Result: Passed
+            Result: Failed
+            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
             Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
             Warning Requirements: None
             Failing Requirements: None
@@ -976,10 +936,30 @@
                 Desc:   Visit mobs and verify derivation order.
                 Detail: OK   - Transition to Top-Level Composition: "Invalid out of Top-Level: End of Chain"
                 Detail: FAIL -   Transition to Source Clip
-                Result: Passed
+                Result: Failed
+                Reason: Source Clip is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: None
+
+            Name:   Verify Mob Chain
+            Desc:   Verify the structure of one mob chain.
+            Detail: Analyzing root composition mob "Invalid out of Top-Level: Out of File"
+            Result: Failed
+            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
+            Passing Requirements: REQ_EP_017; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_018
+
+                Name:   MobChainVisitor
+                Desc:   Visit mobs and verify derivation order.
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Top-Level: Out of File"
+                Detail: FAIL -   Transition to Source Clip
+                Result: Failed
+                Reason: Source Clip is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_018
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
@@ -1004,24 +984,23 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Import Source: Top Level D"
+            Detail: Analyzing root composition mob "Invalid out of Lower-Level: Top-Level C"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
             Warning Requirements: None
-            Failing Requirements: REQ_EP_076
+            Failing Requirements: REQ_EP_031
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Import Source: Top Level D"
-                Detail: OK   -   Transition to Clip: "Invalid out of Import Source: Clip D"
-                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source D"
-                Detail: FAIL -       Transition to Adjusted-Clip Composition: "Import Source->Adjusted Clip"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Lower-Level: Top-Level C"
+                Detail: OK   -   Transition to Lower-Level Composition: "Invalid out of Lower-Level: Lower-Level C"
+                Detail: FAIL -     Transition to Recording Source: "Lower-Level->Recording Source"
                 Result: Failed
-                Reason: Adjusted-Clip Composition: "Import Source->Adjusted Clip" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
+                Reason: Recording Source: "Lower-Level->Recording Source" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
-                Failing Requirements: REQ_EP_076
+                Failing Requirements: REQ_EP_031
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
@@ -1045,23 +1024,24 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Lower-Level: Top-Level E"
+            Detail: Analyzing root composition mob "Invalid out of Import Source: Top Level E"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
             Warning Requirements: None
-            Failing Requirements: REQ_EP_031
+            Failing Requirements: REQ_EP_076
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Lower-Level: Top-Level E"
-                Detail: OK   -   Transition to Lower-Level Composition: "Invalid out of Lower-Level: Lower-Level E"
-                Detail: FAIL -     Transition to Tape Source: "Lower-Level->Tape Source"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Import Source: Top Level E"
+                Detail: OK   -   Transition to Clip: "Invalid out of Import Source: Clip E"
+                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source E"
+                Detail: FAIL -       Transition to Template Clip: "Import Source->Template Clip"
                 Result: Failed
-                Reason: Tape Source: "Lower-Level->Tape Source" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+                Reason: Template Clip: "Import Source->Template Clip" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
                 Warning Requirements: None
-                Failing Requirements: REQ_EP_031
+                Failing Requirements: REQ_EP_076
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
@@ -1086,44 +1066,23 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Import Source: Top Level G"
+            Detail: Analyzing root composition mob "Invalid out of Lower-Level: Top Level G"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
             Warning Requirements: None
-            Failing Requirements: REQ_EP_076
+            Failing Requirements: None
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Import Source: Top Level G"
-                Detail: OK   -   Transition to Clip: "Invalid out of Import Source: Clip G"
-                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source G"
-                Detail: FAIL -       Transition to File Source: "Import Source->File Source"
-                Result: Failed
-                Reason: File Source: "Import Source->File Source" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_076
-
-            Name:   Verify Mob Chain
-            Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Lower-Level: Top Level H"
-            Result: Failed
-            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
-            Warning Requirements: None
-            Failing Requirements: REQ_EP_018
-
-                Name:   MobChainVisitor
-                Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Lower-Level: Top Level H"
-                Detail: OK   -   Transition to Lower-Level Composition: "Invalid out of Lower-Level: Out of File"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Lower-Level: Top Level G"
+                Detail: OK   -   Transition to Lower-Level Composition: "Invalid out of Lower-Level: End of Chain"
                 Detail: FAIL -     Transition to Source Clip
                 Result: Failed
                 Reason: Source Clip is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
-                Failing Requirements: REQ_EP_018
+                Failing Requirements: None
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
@@ -1148,24 +1107,23 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Import Source: Top Level I"
+            Detail: Analyzing root composition mob "Invalid out of Sub-Clip: Top Level B"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
             Warning Requirements: None
-            Failing Requirements: REQ_EP_076
+            Failing Requirements: REQ_EP_030; REQ_EP_036
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Import Source: Top Level I"
-                Detail: OK   -   Transition to Clip: "Invalid out of Import Source: Clip I"
-                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source I"
-                Detail: FAIL -       Transition to Import Source: "Import Source->Import Source"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Sub-Clip: Top Level B"
+                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip B"
+                Detail: FAIL -     Transition to Lower-Level Composition: "Sub-Clip->Lower-Level"
                 Result: Failed
-                Reason: Import Source: "Import Source->Import Source" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
+                Reason: Lower-Level Composition: "Sub-Clip->Lower-Level" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
-                Failing Requirements: REQ_EP_076
+                Failing Requirements: REQ_EP_030; REQ_EP_036
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
@@ -1189,23 +1147,24 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Sub-Clip: Top Level D"
+            Detail: Analyzing root composition mob "Invalid out of Tape Source: Top Level A"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
             Warning Requirements: None
-            Failing Requirements: REQ_EP_036
+            Failing Requirements: REQ_EP_025; REQ_EP_083
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Sub-Clip: Top Level D"
-                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip D"
-                Detail: FAIL -     Transition to File Source: "Sub-Clip->File Source"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Tape Source: Top Level A"
+                Detail: OK   -   Transition to Clip: "Invalid out of Tape Source: Clip A"
+                Detail: OK   -     Transition to Tape Source: "Invalid out of Tape Source: Tape Source A"
+                Detail: FAIL -       Transition to Top-Level Composition: "Tape Source->Top-Level"
                 Result: Failed
-                Reason: File Source: "Sub-Clip->File Source" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+                Reason: Top-Level Composition: "Tape Source->Top-Level" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
                 Warning Requirements: None
-                Failing Requirements: REQ_EP_036
+                Failing Requirements: REQ_EP_025; REQ_EP_083
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
@@ -1230,24 +1189,23 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Tape Source: Top Level C"
+            Detail: Analyzing root composition mob "Invalid out of Sub-Clip: Top Level F"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
             Warning Requirements: None
-            Failing Requirements: REQ_EP_083
+            Failing Requirements: REQ_EP_036
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Tape Source: Top Level C"
-                Detail: OK   -   Transition to Clip: "Invalid out of Tape Source: Clip C"
-                Detail: OK   -     Transition to Tape Source: "Invalid out of Tape Source: Tape Source C"
-                Detail: FAIL -       Transition to Sub-Clip Composition: "Tape Source->Sub-Clip"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Sub-Clip: Top Level F"
+                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip F"
+                Detail: FAIL -     Transition to Import Source: "Sub-Clip->Import Source"
                 Result: Failed
-                Reason: Sub-Clip Composition: "Tape Source->Sub-Clip" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
+                Reason: Import Source: "Sub-Clip->Import Source" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
-                Failing Requirements: REQ_EP_083
+                Failing Requirements: REQ_EP_036
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
@@ -1271,23 +1229,24 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Sub-Clip: Top Level H"
+            Detail: Analyzing root composition mob "Invalid out of Tape Source: Top Level D"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
             Warning Requirements: None
-            Failing Requirements: REQ_EP_036
+            Failing Requirements: REQ_EP_083
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Sub-Clip: Top Level H"
-                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip H"
-                Detail: FAIL -     Transition to Film Source: "Sub-Clip->Film Source"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Tape Source: Top Level D"
+                Detail: OK   -   Transition to Clip: "Invalid out of Tape Source: Clip D"
+                Detail: OK   -     Transition to Tape Source: "Invalid out of Tape Source: Tape Source D"
+                Detail: FAIL -       Transition to Adjusted-Clip Composition: "Tape Source->Adjusted Clip"
                 Result: Failed
-                Reason: Film Source: "Sub-Clip->Film Source" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+                Reason: Adjusted-Clip Composition: "Tape Source->Adjusted Clip" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
                 Warning Requirements: None
-                Failing Requirements: REQ_EP_036
+                Failing Requirements: REQ_EP_083
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
@@ -1313,20 +1272,43 @@
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
             Detail: Analyzing root composition mob "Invalid out of Sub-Clip: Top Level J"
-            Result: Passed
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+            Result: Failed
+            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
+            Passing Requirements: REQ_EP_017; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
             Warning Requirements: None
-            Failing Requirements: None
+            Failing Requirements: REQ_EP_018
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
                 Detail: OK   - Transition to Top-Level Composition: "Invalid out of Sub-Clip: Top Level J"
                 Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Out of File"
                 Detail: FAIL -     Transition to Source Clip
-                Result: Passed
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+                Result: Failed
+                Reason: Source Clip is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
-                Failing Requirements: None
+                Failing Requirements: REQ_EP_018
+
+            Name:   Verify Mob Chain
+            Desc:   Verify the structure of one mob chain.
+            Detail: Analyzing root composition mob "Invalid out of Tape Source: Top Level F"
+            Result: Failed
+            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_083
+
+                Name:   MobChainVisitor
+                Desc:   Visit mobs and verify derivation order.
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Tape Source: Top Level F"
+                Detail: OK   -   Transition to Clip: "Invalid out of Tape Source: Clip F"
+                Detail: OK   -     Transition to Tape Source: "Invalid out of Tape Source: Tape Source F"
+                Detail: FAIL -       Transition to Clip: "Tape Source->Clip"
+                Result: Failed
+                Reason: Clip: "Tape Source->Clip" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_083
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
@@ -2249,44 +2231,69 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Initial->Lower-Level"
+            Detail: Analyzing root composition mob "Invalid out of Recording Source: Top Level H"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
             Warning Requirements: None
-            Failing Requirements: REQ_EP_030
+            Failing Requirements: REQ_EP_072
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: FAIL - Transition to Lower-Level Composition: "Initial->Lower-Level"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Recording Source: Top Level H"
+                Detail: OK   -   Transition to Clip: "Invalid out of Recording Source: Clip H"
+                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source H"
+                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source H"
+                Detail: FAIL -         Transition to Recording Source: "Recording Source->Recording Source"
                 Result: Failed
-                Reason: Lower-Level Composition: "Initial->Lower-Level" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+                Reason: Recording Source: "Recording Source->Recording Source" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
-                Failing Requirements: REQ_EP_030
+                Failing Requirements: REQ_EP_072
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Top-Level: Top-Level A"
+            Detail: Analyzing root composition mob "Initial->Sub-Clip"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
             Warning Requirements: None
-            Failing Requirements: REQ_EP_025; REQ_EP_026
+            Failing Requirements: None
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Top-Level: Top-Level A"
-                Detail: FAIL -   Transition to Top-Level Composition: "Top-Level->Top-Level"
+                Detail: FAIL - Transition to Sub-Clip Composition: "Initial->Sub-Clip"
                 Result: Failed
-                Reason: Top-Level Composition: "Top-Level->Top-Level" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+                Reason: Sub-Clip Composition: "Initial->Sub-Clip" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
-                Failing Requirements: REQ_EP_025; REQ_EP_026
+                Failing Requirements: None
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Top-Level: Top-Level F"
+            Detail: Analyzing root composition mob "Invalid out of Recording Source: Top Level J"
+            Result: Failed
+            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_072
+
+                Name:   MobChainVisitor
+                Desc:   Visit mobs and verify derivation order.
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Recording Source: Top Level J"
+                Detail: OK   -   Transition to Clip: "Invalid out of Recording Source: Clip J"
+                Detail: OK   -     Transition to File Source: "Invalid out of Recording Source: File Source J"
+                Detail: OK   -       Transition to Recording Source: "Invalid out of Recording Source: Recording Source J"
+                Detail: FAIL -         Transition to Tape Source: "Recording Source->Tape Source"
+                Result: Failed
+                Reason: Tape Source: "Recording Source->Tape Source" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_072
+
+            Name:   Verify Mob Chain
+            Desc:   Verify the structure of one mob chain.
+            Detail: Analyzing root composition mob "Invalid out of Top-Level: Top-Level D"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
             Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -2295,13 +2302,34 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Top-Level: Top-Level F"
-                Detail: FAIL -   Transition to Film Source: "Top-Level->Film Source"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Top-Level: Top-Level D"
+                Detail: FAIL -   Transition to Import Source: "Top-Level->Import Source"
                 Result: Failed
-                Reason: Film Source: "Top-Level->Film Source" is out of place in the derrivation chain.
+                Reason: Import Source: "Top-Level->Import Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_026
+
+            Name:   Verify Mob Chain
+            Desc:   Verify the structure of one mob chain.
+            Detail: Analyzing root composition mob "Invalid out of Import Source: Top Level A"
+            Result: Failed
+            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_025; REQ_EP_076
+
+                Name:   MobChainVisitor
+                Desc:   Visit mobs and verify derivation order.
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Import Source: Top Level A"
+                Detail: OK   -   Transition to Clip: "Invalid out of Import Source: Clip A"
+                Detail: OK   -     Transition to Import Source: "Invalid out of Import Source: Import Source A"
+                Detail: FAIL -       Transition to Top-Level Composition: "Import Source->Top-Level"
+                Result: Failed
+                Reason: Top-Level Composition: "Import Source->Top-Level" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_083
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_025; REQ_EP_076
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
@@ -2325,7 +2353,7 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Lower-Level: Top-Level B"
+            Detail: Analyzing root composition mob "Invalid out of Lower-Level: Top-Level E"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
             Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -2334,58 +2362,38 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Lower-Level: Top-Level B"
-                Detail: OK   -   Transition to Lower-Level Composition: "Invalid out of Lower-Level: Lower-Level B"
-                Detail: FAIL -     Transition to File Source: "Lower-Level->File Source"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Lower-Level: Top-Level E"
+                Detail: OK   -   Transition to Lower-Level Composition: "Invalid out of Lower-Level: Lower-Level E"
+                Detail: FAIL -     Transition to Tape Source: "Lower-Level->Tape Source"
                 Result: Failed
-                Reason: File Source: "Lower-Level->File Source" is out of place in the derrivation chain.
+                Reason: Tape Source: "Lower-Level->Tape Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_031
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Lower-Level: Top-Level F"
+            Detail: Analyzing root composition mob "Invalid out of Lower-Level: Top Level H"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+            Passing Requirements: REQ_EP_017; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
             Warning Requirements: None
-            Failing Requirements: REQ_EP_031
+            Failing Requirements: REQ_EP_018
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Lower-Level: Top-Level F"
-                Detail: OK   -   Transition to Lower-Level Composition: "Invalid out of Lower-Level: Lower-Level F"
-                Detail: FAIL -     Transition to Film Source: "Lower-Level->Film Source"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Lower-Level: Top Level H"
+                Detail: OK   -   Transition to Lower-Level Composition: "Invalid out of Lower-Level: Out of File"
+                Detail: FAIL -     Transition to Source Clip
                 Result: Failed
-                Reason: Film Source: "Lower-Level->Film Source" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+                Reason: Source Clip is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
-                Failing Requirements: REQ_EP_031
+                Failing Requirements: REQ_EP_018
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Sub-Clip: Top Level A"
-            Result: Failed
-            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
-            Warning Requirements: None
-            Failing Requirements: REQ_EP_025; REQ_EP_036
-
-                Name:   MobChainVisitor
-                Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Sub-Clip: Top Level A"
-                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip A"
-                Detail: FAIL -     Transition to Top-Level Composition: "Sub-Clip->Top-Level"
-                Result: Failed
-                Reason: Top-Level Composition: "Sub-Clip->Top-Level" is out of place in the derrivation chain.
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_025; REQ_EP_036
-
-            Name:   Verify Mob Chain
-            Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Sub-Clip: Top Level E"
+            Detail: Analyzing root composition mob "Invalid out of Sub-Clip: Top Level D"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
             Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
@@ -2394,32 +2402,34 @@
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Sub-Clip: Top Level E"
-                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip E"
-                Detail: FAIL -     Transition to Recording Source: "Sub-Clip->Recording Source"
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Sub-Clip: Top Level D"
+                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip D"
+                Detail: FAIL -     Transition to File Source: "Sub-Clip->File Source"
                 Result: Failed
-                Reason: Recording Source: "Sub-Clip->Recording Source" is out of place in the derrivation chain.
+                Reason: File Source: "Sub-Clip->File Source" is out of place in the derrivation chain.
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_036
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Invalid out of Sub-Clip: Top Level I"
-            Result: Passed
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+            Detail: Analyzing root composition mob "Invalid out of Sub-Clip: Top Level H"
+            Result: Failed
+            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
             Warning Requirements: None
-            Failing Requirements: None
+            Failing Requirements: REQ_EP_036
 
                 Name:   MobChainVisitor
                 Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Sub-Clip: Top Level I"
-                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: End of Clip"
-                Detail: FAIL -     Transition to Source Clip
-                Result: Passed
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+                Detail: OK   - Transition to Top-Level Composition: "Invalid out of Sub-Clip: Top Level H"
+                Detail: OK   -   Transition to Sub-Clip Composition: "Invalid out of Sub-Clip: Sub-Clip H"
+                Detail: FAIL -     Transition to Film Source: "Sub-Clip->Film Source"
+                Result: Failed
+                Reason: Film Source: "Sub-Clip->Film Source" is out of place in the derrivation chain.
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
-                Failing Requirements: None
+                Failing Requirements: REQ_EP_036
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.

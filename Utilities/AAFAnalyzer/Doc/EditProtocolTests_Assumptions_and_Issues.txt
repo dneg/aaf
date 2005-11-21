@@ -245,3 +245,43 @@
 	be any way to add a DefinitionObject to the dictionary without first calling
 	its initialize method.  The initialize method will provide the
 	DefinitionObject with a valid name.
+	
+47. There is no requirement that specifies when it is legal to end the
+	derivation chain.  Currently, an illegal end of the derivation chain is
+	detected based upon the diagram in section 6.1.  A failure will be reported,
+	but, not requirements will be shown as failing.
+	
+48. Effects are being classified solely based upon their AUIDs, not the rest
+	of their definition.  There should be a requirement that can be tested that
+	states the AUID can only be used for effects matching the definitions
+	specified in section 12.
+	
+49. Section 12 uses the phrases "within a Transition object" and "not within
+	"a transition object".  This is not clear.  Currently it is assumed to mean
+	that the direct parent must or must not be a Transition object, however, it
+	is ok if an ancestor higher than a parent is a Transition object.
+	
+50. The URI validator currently being used is libURI
+	(http://sourceforge.net/projects/liburi/) is not sufficient for this test.
+	Until a better validator is avaliable, this test will be registered but not
+	run.
+	
+51. REQ_EP_187 does not specify if the Speed Ratio parameter should be constant
+	or varying value.  Currently it is assumed that it must be constant in order
+	for there to be a ratio value of zero.  Tests will fail if it is not
+	constant.
+	
+52. It is assumed that REQ_EP_187 applies only to Speed Ratio Parameters that
+	belong to Video Speed Control effects.
+	
+53. There is no easy way to regression test varying value or non-rational Speed
+	Ratio parameters for REQ_EP_187
+	
+54. Currently, if a test fails or issues a warning, traversal down the current
+	path will be terminated.  This could mask further warnings or failures.  In
+	some cases, there is no choice but to do this (ie. Once a mob/clip is out of
+	place in the derivation chain, it is not possible to verify if further
+	mobs/clips are in the correct place), however, in other cases, it is should
+	be possible to continue testing (ie. any non-structural test).  Switching
+	the tests to continue along the chain should not effect any of the
+	regression tests.

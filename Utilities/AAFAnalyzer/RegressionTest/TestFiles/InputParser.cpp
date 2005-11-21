@@ -20,13 +20,18 @@
 
 //Regression Test Files files
 #include "InputParser.h"
-#include "SegmentInfo.h"
+#include "SlotInfo.h"
 
 //Expat files
 #include <expat.h>
 
 //Ax files
 #include <AxMob.h>
+#include <AxComponent.h>
+
+//AAF files
+#include <AAFOperationDefs.h>
+#include <AAFParameterDefs.h>
 
 //STL files
 #include <fstream>
@@ -87,21 +92,73 @@ InputParser::InputParser( const char* outFile )
     
     //Pointers to functions to create empty segments.
     _createSegmentMap[L"source-clip"] = &TestFileBuilder::CreateSourceClip;
-    _createSegmentMap[L"operation-group"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"timecode"] = &TestFileBuilder::CreateTimecode;
+    _createSegmentMap[L"edgecode"] = &TestFileBuilder::CreateEdgecode;
+    _createSegmentMap[L"eoc"] = &TestFileBuilder::CreateEOC;
+    _createSegmentMap[L"oof"] = &TestFileBuilder::CreateOOF;
+    _createSegmentMap[L"transition"] = &TestFileBuilder::CreateTransition;
+    _createSegmentMap[L"sequence"] = &TestFileBuilder::CreateSequence;
+    _createSegmentMap[L"video-dissolve"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"smpte-video-wipe"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"video-speed-control"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"video-repeat"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"video-flip"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"video-flop"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"video-flip-flop"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"video-position"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"video-crop"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"video-scale"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"video-rotate"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"video-corner-pinning"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"alpha-with-video-key"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"separate-alpha-key"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"luminance-key"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"chroma-key"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"mono-audio-gain"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"mono-audio-pan"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"mono-audio-dissolve"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"two-parameter-mono-audio-dissolve"] = &TestFileBuilder::CreateOperationGroup;
+    
     
     //Pointers to functions to fill segments.
-    _fillSegmentMap[L"source-clip"] = &TestFileBuilder::InitializeSourceClip;
-    _fillSegmentMap[L"operation-group"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapB[L"source-clip"] = &TestFileBuilder::InitializeSourceClip;
+    _fillSegmentMapC[L"transition"] = &TestFileBuilder::AddToTransition;
+    _fillSegmentMapC[L"sequence"] = &TestFileBuilder::AddToSequence;
+    _fillSegmentMapD[L"video-dissolve"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"smpte-video-wipe"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"video-speed-control"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"video-repeat"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"video-flip"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"video-flop"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"video-flip-flop"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"video-position"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"video-crop"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"video-scale"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"video-rotate"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"video-corner-pinning"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"alpha-with-video-key"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"separate-alpha-key"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"luminance-key"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"chroma-key"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"mono-audio-gain"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"mono-audio-pan"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"mono-audio-dissolve"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapD[L"two-parameter-mono-audio-dissolve"] = &TestFileBuilder::AddToOperationGroup;
     
     //Pointers to functions to attach slots.
-    _attachSlotMap[L"timeline"] = &TestFileBuilder::AttachTimelineSlot;
-    _attachSlotMap[L"static"] = &TestFileBuilder::AttachStaticSlot;
-    _attachSlotMap[L"event"] = &TestFileBuilder::AttachEventSlot;
+    _attachSlotMap[L"timeline-mob-slot"] = &TestFileBuilder::AttachTimelineSlot;
+    _attachSlotMap[L"static-mob-slot"] = &TestFileBuilder::AttachStaticSlot;
+    _attachSlotMap[L"event-mob-slot"] = &TestFileBuilder::AttachEventSlot;
+    
+    //Pointer to functions to attach parameters.
+    _attachParameterMap[L"speed-ratio"] = &TestFileBuilder::AttachConstantRationalParameter;
     
     //Mapping from XML Essence Types to Track Types
     _essenceMap[L"none"] = TestFileBuilder::NONE;
     _essenceMap[L"audio"] = TestFileBuilder::AUDIO;
     _essenceMap[L"picture"] = TestFileBuilder::PICTURE;
+    _essenceMap[L"timecode"] = TestFileBuilder::TIMECODE;
+    _essenceMap[L"edgecode"] = TestFileBuilder::EDGECODE;
     
     //Set up optional rational parameter names
     _optRationalParam[L"top-level"] = L"";
@@ -115,6 +172,39 @@ InputParser::InputParser( const char* outFile )
     _optRationalParam[L"import-source"] = L"";
     _optRationalParam[L"tape-source"] = L"";
     _optRationalParam[L"film-source"] = L"";
+    
+    //Set up the effect parameters
+    _effectMap[L"source-clip"] = kAAFOperationDef_Unknown;
+    _effectMap[L"timecode"] = kAAFOperationDef_Unknown;
+    _effectMap[L"edgecode"] = kAAFOperationDef_Unknown;
+    _effectMap[L"eoc"] = kAAFOperationDef_Unknown;
+    _effectMap[L"oof"] = kAAFOperationDef_Unknown;
+    _effectMap[L"transition"] = kAAFOperationDef_Unknown;
+    _effectMap[L"sequence"] = kAAFOperationDef_Unknown;
+
+    _effectMap[L"video-dissolve"] = kAAFOperationDef_VideoDissolve;
+    _effectMap[L"smpte-video-wipe"] = kAAFOperationDef_SMPTEVideoWipe;
+    _effectMap[L"video-speed-control"] = kAAFOperationDef_VideoSpeedControl;
+    _effectMap[L"video-repeat"] = kAAFOperationDef_VideoRepeat;
+    _effectMap[L"video-flip"] = kAAFOperationDef_Flip;
+    _effectMap[L"video-flop"] = kAAFOperationDef_Flop;
+    _effectMap[L"video-flip-flop"] = kAAFOperationDef_FlipFlop;
+    _effectMap[L"video-position"] = kAAFOperationDef_VideoPosition;
+    _effectMap[L"video-crop"] = kAAFOperationDef_VideoCrop;
+    _effectMap[L"video-scale"] = kAAFOperationDef_VideoScale;
+    _effectMap[L"video-rotate"] = kAAFOperationDef_VideoRotate;
+    _effectMap[L"video-corner-pinning"] = kAAFOperationDef_VideoCornerPinning;
+    _effectMap[L"alpha-with-video-key"] = kAAFOperationDef_VideoAlphaWithinVideoKey;
+    _effectMap[L"separate-alpha-key"] = kAAFOperationDef_VideoSeparateAlphaKey;
+    _effectMap[L"luminance-key"] = kAAFOperationDef_VideoLuminanceKey;
+    _effectMap[L"chroma-key"] = kAAFOperationDef_VideoChromaKey;
+    _effectMap[L"mono-audio-gain"] = kAAFOperationDef_MonoAudioGain;
+    _effectMap[L"mono-audio-pan"] = kAAFOperationDef_MonoAudioPan;
+    _effectMap[L"mono-audio-dissolve"] = kAAFOperationDef_MonoAudioDissolve;
+    _effectMap[L"two-parameter-mono-audio-dissolve"] = kAAFOperationDef_TwoParameterMonoAudioDissolve;
+    
+    //Set up the parameter parameters
+    _parameterTypeMap[L"speed-ratio"] = kAAFParameterDef_SpeedRatio;
 
 }
 
@@ -201,10 +291,11 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
         //Call the appropriate add function.
         shared_ptr<AxMob> spMob = (_testFile.*_materialTypeMap[name])( mobName.first, mobName.second, optRational );
 
-        if ( !_segmentStack.empty() )
+        if ( !_componentStack.empty() )
         {
             //Call the appropriate initialize/add function.
-            (_testFile.*_fillSegmentMap[_segmentStack.top().element])( _segmentStack.top().segment, *spMob );
+            shared_ptr<AxSegment> axSegment = dynamic_pointer_cast<AxSegment>( _componentStack.top().second );
+            (_testFile.*_fillSegmentMapB[_componentStack.top().first])( axSegment, *spMob );
         }
         
         //Push the new mob onto the stack.
@@ -213,35 +304,53 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
     }
     else if ( _createSegmentMap.find( name ) != _createSegmentMap.end() )
     {
-        AxString essenceType = GetStringAttribValue( L"track-type", attribs, 12, L"none" );
-        AxString slotType = GetStringAttribValue( L"slot-type", attribs, 12, L"timeline" );
-        aafRational_t editRate;
-        editRate.numerator = GetIntAtribValue(L"edit-rate-numerator", attribs, 12, 1);
-        editRate.denominator = GetIntAtribValue(L"edit-rate-denominator", attribs, 12, 1);
-        OptionalStringAttrib segName = GetOptionalStringAttribValue( L"name", attribs, 12, L"" );
-        OptionalIntAttrib physicalTrackNum = GetOptionalIntAttribValue( L"physical-track-number", attribs, 12, 1 );
+        AxString essenceType = GetStringAttribValue( L"track-type", attribs, 2, L"none" );
 
         //Create an empty segment and push it onto the segment stack
-        shared_ptr<AxSegment> spSegment = (_testFile.*_createSegmentMap[name])( *(_mobStack.top()), _essenceMap[essenceType] );
-        _segmentStack.push( SegmentInfo( name, spSegment, essenceType, slotType, editRate, segName, physicalTrackNum ) );
+        shared_ptr<AxComponent> spComponent = (_testFile.*_createSegmentMap[name])( _essenceMap[essenceType], _effectMap[name] );
+
+        if ( !_slotStack.empty() )
+        {
+            if ( _slotStack.top().componentsSinceSlot != 0 )
+            {
+                if ( _fillSegmentMapC.find( _componentStack.top().first ) != _fillSegmentMapC.end() )
+                {
+                    (_testFile.*_fillSegmentMapC[_componentStack.top().first])( _componentStack.top().second, *spComponent );
+                }
+                else if ( _fillSegmentMapD.find( _componentStack.top().first ) != _fillSegmentMapD.end() )
+                {
+                    shared_ptr<AxSegment> axSegment = dynamic_pointer_cast<AxSegment>( _componentStack.top().second );
+                    (_testFile.*_fillSegmentMapD[_componentStack.top().first])( axSegment, *spComponent, 1 );
+                }
+            }
+            _slotStack.top().componentsSinceSlot++;
+        }
+        _componentStack.push( ComponentPair( name, spComponent ) );
+
     }
-    else if ( name == L"eoc" )
+    else if ( _attachSlotMap.find( name ) != _attachSlotMap.end() )
     {
-        _testFile.AttachEOC( *(_mobStack.top()) );
+        aafRational_t editRate;
+        editRate.numerator = GetIntAtribValue(L"edit-rate-numerator", attribs, 8, 1);
+        editRate.denominator = GetIntAtribValue(L"edit-rate-denominator", attribs, 8, 1);
+        OptionalStringAttrib segName = GetOptionalStringAttribValue( L"name", attribs, 8, L"" );
+        OptionalIntAttrib physicalTrackNum = GetOptionalIntAttribValue( L"physical-track-number", attribs, 8, 1 );
+        _slotStack.push( SlotInfo( name, editRate, segName, physicalTrackNum ) );
     }
-    else if ( name == L"timecode" )
+    else if ( _attachParameterMap.find( name ) != _attachParameterMap.end() )
     {
-        OptionalIntAttrib trackNum = GetOptionalIntAttribValue( L"physical-track-number", attribs, 2, 0 );
-        _testFile.AddTimeCode( *(_mobStack.top()), trackNum.first, trackNum.second );
-    }
-    else if ( name == L"edgecode" )
-    {
-        OptionalIntAttrib trackNum = GetOptionalIntAttribValue( L"physical-track-number", attribs, 2, 0 );
-        _testFile.AddEdgeCode( *(_mobStack.top()), trackNum.first, trackNum.second );
-    }
-    else if ( name == L"oof" )
-    {
-        _testFile.AttachOOF( *(_mobStack.top()) );
+        //Only one of these values should be defined, at most one non-zero will
+        //be returned.  Sum the three to get the actual value of the parameter.
+        aafUInt32 numerator = GetIntAtribValue( L"numerator", attribs, 4, 0 );
+        aafUInt32 boolParam = GetBoolAtribValue( L"bool-value", attribs, 4, false );
+        aafUInt32 intParam = GetIntAtribValue( L"int-value", attribs, 4, 0 );
+        aafUInt32 param1 = numerator + boolParam + intParam;
+        
+        aafUInt32 param2 = GetIntAtribValue( L"denominator", attribs, 4, 0 );
+        
+        shared_ptr<AxOperationGroup> axOpGroup = dynamic_pointer_cast<AxOperationGroup>( _componentStack.top().second );
+        (_testFile.*_attachParameterMap[name])( *axOpGroup, _parameterTypeMap[name], param1, param2 );
+        
     }
     else
     {
@@ -258,19 +367,36 @@ void InputParser::EndElement(const AxString& name)
     {
         _mobStack.pop();
     }
-    else if ( _createSegmentMap.find( name ) != _createSegmentMap.end() )
+    else if ( _attachSlotMap.find( name ) != _attachSlotMap.end() )
     {
         //Call the appropriate attach function.
-        (_testFile.*_attachSlotMap[_segmentStack.top().slotType])( 
+        shared_ptr<AxSegment> axSegment = dynamic_pointer_cast<AxSegment>( _componentStack.top().second );
+        (_testFile.*_attachSlotMap[name])( 
             *(_mobStack.top()), 
-            *(_segmentStack.top().segment), 
-            _segmentStack.top().editRate, 
-            _segmentStack.top().name.first, 
-            _segmentStack.top().name.second,
-            _segmentStack.top().physicalTrackNum.first, 
-            _segmentStack.top().physicalTrackNum.second
+            *axSegment, 
+            _slotStack.top().editRate, 
+            _slotStack.top().name.first, 
+            _slotStack.top().name.second,
+            _slotStack.top().physicalTrackNum.first, 
+            _slotStack.top().physicalTrackNum.second
            );
-        _segmentStack.pop();
+        _componentStack.pop();
+        _slotStack.pop();
+    }
+    else if ( _createSegmentMap.find( name ) != _createSegmentMap.end() )
+    {
+        if ( !_slotStack.empty() )
+        {
+            _slotStack.top().componentsSinceSlot--;
+            if ( _slotStack.top().componentsSinceSlot != 0 )
+            {
+                _componentStack.pop();
+            }
+        }
+        else
+        {
+            _componentStack.pop();
+        }
     }
     
 }
@@ -331,6 +457,10 @@ const AxString InputParser::GetStringAttribValue( const AxString& attrib, const 
             ss << attribs[i+1];
             return ss.str().c_str();
         }
+        else if ( atrName.length() == 0 )
+        {
+            break;
+        }
     }
     
     return default_val;
@@ -355,6 +485,44 @@ const int InputParser::GetIntAtribValue( const AxString& attrib, const char** at
             ss >> retVal;
             return retVal;
         }
+        else if ( atrName.length() == 0 )
+        {
+            break;
+        }
+    }
+ 
+    return default_val;
+}
+
+const int InputParser::GetBoolAtribValue( const AxString& attrib, const char** attribs, const unsigned int size, const int default_val ) const
+{
+
+    for ( unsigned int i = 0; i < size; i += 2 )
+    {
+        wostringstream wss;
+        AxString atrName;
+        
+        wss << attribs[i];
+        atrName = wss.str().c_str();
+        if ( atrName == attrib )
+        {
+            wstringstream ss;
+            
+            ss << attribs[i+1];
+            AxString boolStr =  ss.str().c_str();
+            if ( boolStr == L"true" )
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if ( atrName.length() == 0 )
+        {
+            break;
+        }
     }
  
     return default_val;
@@ -376,6 +544,10 @@ const InputParser::OptionalStringAttrib InputParser::GetOptionalStringAttribValu
             ss << attribs[i+1];
             return OptionalStringAttrib( ss.str().c_str(), true );
         }
+        else if ( atrName.length() == 0 )
+        {
+            break;
+        }
     }
     
     return OptionalStringAttrib( default_val, false );
@@ -383,7 +555,7 @@ const InputParser::OptionalStringAttrib InputParser::GetOptionalStringAttribValu
 
 const InputParser::OptionalIntAttrib InputParser::GetOptionalIntAttribValue( const AxString& attrib, const char** attribs, const unsigned int size, const int default_val ) const
 {
-    
+
     for ( unsigned int i = 0; i < size; i += 2 )
     {
         wostringstream wss;
@@ -399,6 +571,10 @@ const InputParser::OptionalIntAttrib InputParser::GetOptionalIntAttribValue( con
             ss << attribs[i+1];
             ss >> retVal;
             return OptionalIntAttrib( retVal, true );
+        } 
+        else if ( atrName.length() == 0 )
+        {
+            break;
         }
     }
  

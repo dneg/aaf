@@ -30,6 +30,7 @@
 #include <EPTypedObjNode.h>
 #include <EPObjects.h>
 #include <EPTrack.h>
+#include <EPEffect.h>
 
 //AAF Analyzer Base files
 #include <MobNodeMap.h>
@@ -50,6 +51,7 @@
 #include <AAFResult.h>
 #include <AAFExtEnum.h>
 #include <AAFClassDefUIDs.h>
+#include <AAFOperationDefs.h>
 
 //STL files
 #include <set>
@@ -104,19 +106,19 @@ public:
       aafUID_t usageCode = axCompMob.GetUsageCode();
       if ( usageCode == kAAFUsage_TopLevel )
       {
-        this->DecorateMob<IAAFCompositionMob, EPTopLevelComposition>( node );
+          this->DecorateNode<IAAFCompositionMob, EPTopLevelComposition>( node );
       }
       else if ( usageCode == kAAFUsage_LowerLevel )
       {
-        this->DecorateMob<IAAFCompositionMob, EPLowerLevelComposition>( node );
+          this->DecorateNode<IAAFCompositionMob, EPLowerLevelComposition>( node );
       }
       else if ( usageCode == kAAFUsage_SubClip )
       {
-        this->DecorateMob<IAAFCompositionMob, EPSubClipComposition>( node );
+          this->DecorateNode<IAAFCompositionMob, EPSubClipComposition>( node );
       }
       else if ( usageCode == kAAFUsage_AdjustedClip )
       {
-        this->DecorateMob<IAAFCompositionMob, EPAdjustedClipComposition>( node );
+          this->DecorateNode<IAAFCompositionMob, EPAdjustedClipComposition>( node );
       }
       //There are no other valid composition mob/usage code combinations.  That
       //means that the material type for the derivation chain is unknown,
@@ -151,7 +153,7 @@ public:
 
       if ( usageCode == kAAFUsage_Template )
       {
-        this->DecorateMob<IAAFMasterMob, EPTemplateClip>( node );
+        this->DecorateNode<IAAFMasterMob, EPTemplateClip>( node );
       }
       //There are no other valid composition mob/usage code combinations.  That
       //means that the material type for the derivation chain is unknown,
@@ -163,7 +165,7 @@ public:
       //If this is a clip, then decorate it.
       if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
       {
-        this->DecorateMob<IAAFMasterMob, EPClip>( node );
+        this->DecorateNode<IAAFMasterMob, EPClip>( node );
       }
       else
       {
@@ -182,6 +184,20 @@ public:
 
     try
     {
+        
+      /*
+       * 
+       * Note: A visitor could be used to properly classify Source Mobs into
+       *       their correct Edit Protocol material types.  This would require
+       *       implementing a PreOrderVisit for every accepted descriptor and
+       *       every known descriptor that is derived from an accepted
+       *       descriptor.  Also, a mechanism would be needed to pass the
+       *       Edit Protocol type from the visitor to this function.  Unless a
+       *       good reason presents itself to use the above mentioned method,
+       *       the current method will be used.
+       * 
+       */
+        
       //Find the type of descriptor on the node to properly decorate it.
       AxEssenceDescriptor descriptor( axSrcMob.GetEssenceDescriptor() );
       AxClassDef clsDef( descriptor.GetDefinition() );
@@ -189,23 +205,23 @@ public:
 
       if ( descriptorAUID == kAAFClassID_FileDescriptor )
       {
-        this->DecorateMob<IAAFSourceMob, EPFileSource>( node );
+        this->DecorateNode<IAAFSourceMob, EPFileSource>( node );
       }
       else if ( descriptorAUID == kAAFClassID_RecordingDescriptor )
       {
-        this->DecorateMob<IAAFSourceMob, EPRecordingSource>( node );
+        this->DecorateNode<IAAFSourceMob, EPRecordingSource>( node );
       }
       else if ( descriptorAUID == kAAFClassID_ImportDescriptor )
       {
-        this->DecorateMob<IAAFSourceMob, EPImportSource>( node );
+        this->DecorateNode<IAAFSourceMob, EPImportSource>( node );
       }
       else if ( descriptorAUID == kAAFClassID_TapeDescriptor )
       {
-        this->DecorateMob<IAAFSourceMob, EPTapeSource>( node );
+        this->DecorateNode<IAAFSourceMob, EPTapeSource>( node );
       }
       else if ( descriptorAUID == kAAFClassID_FilmDescriptor )
       {
-        this->DecorateMob<IAAFSourceMob, EPFilmSource>( node );
+        this->DecorateNode<IAAFSourceMob, EPFilmSource>( node );
       }
       //There are no other valid source mob/descriptor code combinations.  That
       //means that the material type for the derivation chain is unknown,
@@ -265,6 +281,100 @@ public:
     
   }
   
+  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFOperationGroup>& node )
+  {
+    AxOperationGroup axOpGroup( node.GetAAFObjectOfType() );
+    AxOperationDef axOpDef( axOpGroup.GetOperationDef() );
+    aafUID_t opDef = axOpDef.GetAUID();
+    
+    if ( opDef == kAAFOperationDef_VideoDissolve )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPVideoDissolveEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_SMPTEVideoWipe )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPSMPTEVideoWipeEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_VideoSpeedControl )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPVideoSpeedControlEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_VideoRepeat )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPVideoRepeatEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_Flip )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPVideoFlipEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_Flop )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPVideoFlopEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_FlipFlop )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPVideoFlipFlopEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_VideoPosition )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPVideoPositionEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_VideoCrop )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPVideoCropEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_VideoScale )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPVideoScaleEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_VideoRotate )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPVideoRotateEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_VideoCornerPinning )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPVideoCornerPinningEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_VideoAlphaWithinVideoKey )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPAlphaWithVideoKeyEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_VideoSeparateAlphaKey )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPSeparateAlphaKeyEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_VideoLuminanceKey )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPLuminanceKeyEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_VideoChromaKey )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPChromaKeyEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_MonoAudioGain )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPMonoAudioGainEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_MonoAudioPan )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPMonoAudioPanEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_MonoAudioDissolve )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPSingleParameterAudioDissolveEffect>( node );
+    }
+    else if ( opDef == kAAFOperationDef_TwoParameterMonoAudioDissolve )
+    {
+        this->DecorateNode<IAAFOperationGroup, EPTwoParameterAudioDissolveEffect>( node );
+    }
+    else
+    {
+        this->DecorateNode<IAAFOperationGroup, EPEffect>( node );
+    }
+    
+    return true;
+  }
+  
   shared_ptr<DetailLevelTestResult> GetResult()
   {
     return _spResult;
@@ -309,30 +419,30 @@ private:
       //Now check if it is an audio or video track.
       if ( spAudio )
       {
-        this->DecorateMob<AAFObjectType, EPAudioTrack>( node, spAudio );
+        this->DecorateNode<AAFObjectType, EPAudioTrack>( node, spAudio );
       }
       else if ( spVideo )
       {
-        this->DecorateMob<AAFObjectType, EPVideoTrack>( node, spVideo );
+        this->DecorateNode<AAFObjectType, EPVideoTrack>( node, spVideo );
       }
       else
       {
-        this->DecorateMob<AAFObjectType, EPEssenceTrack>( node );
+        this->DecorateNode<AAFObjectType, EPEssenceTrack>( node );
       }
     }
     else if ( axDataDef.IsTimecodeKind() )
     {
-      this->DecorateMob<AAFObjectType, EPTimecodeTrack>( node );
+      this->DecorateNode<AAFObjectType, EPTimecodeTrack>( node );
     }
     else if ( axDataDef.IsEdgecodeKind() )
     {
-      this->DecorateMob<AAFObjectType, EPEdgecodeTrack>( node );
+      this->DecorateNode<AAFObjectType, EPEdgecodeTrack>( node );
     }
     
   }
   
   template <typename AAFObjectType, typename EPObjectType>
-  void DecorateMob( AAFTypedObjNode<AAFObjectType>& node )
+  void DecorateNode( AAFTypedObjNode<AAFObjectType>& node )
   {
     //Get a shared pointer to the node.
     shared_ptr<AAFTypedObjNode<AAFObjectType> > spNode =
@@ -351,7 +461,7 @@ private:
   }
   
   template <typename AAFObjectType, typename EPObjectType>
-  void DecorateMob( AAFTypedObjNode<AAFObjectType>& node, shared_ptr<EPObjectType> spEPObj )
+  void DecorateNode( AAFTypedObjNode<AAFObjectType>& node, shared_ptr<EPObjectType> spEPObj )
   {
     //Get a shared pointer to the node.
     shared_ptr<AAFTypedObjNode<AAFObjectType> > spNode =

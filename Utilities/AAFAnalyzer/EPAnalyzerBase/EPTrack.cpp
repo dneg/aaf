@@ -125,36 +125,36 @@ const AxString EPEdgecodeTrack::GetName()
 
 //======================================================================
 
-AxMobSlot& EPCompleteTrack::GetMobSlot()
+AxMobSlot& EPExtendedEssenceTrack::GetMobSlot()
 {
     return _mobSlot;
 }
 
-AxSourceClip& EPCompleteTrack::GetSourceClip()
+AxSourceClip& EPExtendedEssenceTrack::GetSourceClip()
 {
     return _sourceClip;
 }
 
-AxMob& EPCompleteTrack::GetMob()
+AxMob& EPExtendedEssenceTrack::GetMob()
 {
     return _mob;
 }
         
-EPCompleteTrack::EPCompleteTrack( IAAFMobSlotSP mobSlot, IAAFSourceClipSP clip, IAAFMobSP mob )
+EPExtendedEssenceTrack::EPExtendedEssenceTrack( IAAFMobSlotSP mobSlot, IAAFSourceClipSP clip, IAAFMobSP mob )
     : _mobSlot( mobSlot ),
       _sourceClip( clip ),
       _mob( mob )
 {}
 
-const AxString EPCompleteTrack::GetName()
+const AxString EPExtendedEssenceTrack::GetName()
 {
-    return L"Edit Protocol Complete Track";
+    return L"Edit Protocol Extended Essence Track";
 }
 
 //======================================================================
 
 EPAudioTrack::EPAudioTrack( IAAFMobSlotSP mobSlot, IAAFSourceClipSP clip, IAAFMobSP mob )
-    : EPCompleteTrack( mobSlot, clip, mob )
+    : EPExtendedEssenceTrack( mobSlot, clip, mob )
 {}
 
 shared_ptr<EPAudioTrack> EPAudioTrack::CreateAudioTrack( AxMobSlot& axMobSlot )
@@ -207,7 +207,7 @@ const AxString EPAudioTrack::GetName()
 //======================================================================
 
 EPVideoTrack::EPVideoTrack( IAAFMobSlotSP mobSlot, IAAFSourceClipSP clip, IAAFMobSP mob )
-    : EPCompleteTrack( mobSlot, clip, mob )
+    : EPExtendedEssenceTrack( mobSlot, clip, mob )
 {}
 
 shared_ptr<EPVideoTrack> EPVideoTrack::CreateVideoTrack( AxMobSlot& axMobSlot )

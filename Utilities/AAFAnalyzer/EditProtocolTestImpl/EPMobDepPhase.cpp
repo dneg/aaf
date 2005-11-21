@@ -119,6 +119,10 @@ shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
   // Eighth, run the edit rate test
   shared_ptr<EPEditRateTest> editRateTest( new EPEditRateTest( _log, _spGraph ) );
   spPhaseResult->AppendSubtestResult( editRateTest->Execute() );
+  
+  // Ninth, run the effect test
+  shared_ptr<EPEffectTest> effectTest( new EPEffectTest( _log, _spGraph ) );
+  spPhaseResult->AppendSubtestResult( effectTest->Execute() );
 
   spPhaseResult->SetResult( spPhaseResult->GetAggregateResult() );
 

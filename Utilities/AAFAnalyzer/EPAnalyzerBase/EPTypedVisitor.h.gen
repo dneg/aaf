@@ -60,4 +60,46 @@
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFMobSlot,EPTimecodeTrack>& node) { return this->ForwardPostOrderVisit<IAAFMobSlot,EPTimecodeTrack>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot,EPEdgecodeTrack>& node) { return this->ForwardPreOrderVisit<IAAFMobSlot,EPEdgecodeTrack>( node ); }
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFMobSlot,EPEdgecodeTrack>& node) { return this->ForwardPostOrderVisit<IAAFMobSlot,EPEdgecodeTrack>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoDissolveEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPVideoDissolveEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoDissolveEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPVideoDissolveEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPSMPTEVideoWipeEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPSMPTEVideoWipeEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPSMPTEVideoWipeEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPSMPTEVideoWipeEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoSpeedControlEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPVideoSpeedControlEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoSpeedControlEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPVideoSpeedControlEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoRepeatEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPVideoRepeatEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoRepeatEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPVideoRepeatEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoFlipEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPVideoFlipEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoFlipEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPVideoFlipEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoFlopEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPVideoFlopEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoFlopEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPVideoFlopEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoFlipFlopEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPVideoFlipFlopEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoFlipFlopEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPVideoFlipFlopEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoPositionEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPVideoPositionEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoPositionEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPVideoPositionEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoCropEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPVideoCropEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoCropEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPVideoCropEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoScaleEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPVideoScaleEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoScaleEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPVideoScaleEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoRotateEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPVideoRotateEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoRotateEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPVideoRotateEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoCornerPinningEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPVideoCornerPinningEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPVideoCornerPinningEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPVideoCornerPinningEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPAlphaWithVideoKeyEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPAlphaWithVideoKeyEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPAlphaWithVideoKeyEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPAlphaWithVideoKeyEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPSeparateAlphaKeyEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPSeparateAlphaKeyEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPSeparateAlphaKeyEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPSeparateAlphaKeyEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPLuminanceKeyEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPLuminanceKeyEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPLuminanceKeyEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPLuminanceKeyEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPChromaKeyEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPChromaKeyEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPChromaKeyEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPChromaKeyEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPMonoAudioGainEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPMonoAudioGainEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPMonoAudioGainEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPMonoAudioGainEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPMonoAudioPanEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPMonoAudioPanEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPMonoAudioPanEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPMonoAudioPanEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPSingleParameterAudioDissolveEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPSingleParameterAudioDissolveEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPSingleParameterAudioDissolveEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPSingleParameterAudioDissolveEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPTwoParameterAudioDissolveEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPTwoParameterAudioDissolveEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPTwoParameterAudioDissolveEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPTwoParameterAudioDissolveEffect>( node ); }
 

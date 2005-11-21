@@ -24,6 +24,7 @@
 //Edit Protocol Analyzer Base files
 #include "EPObjects.h"
 #include "EPTrack.h"
+#include "EPEffect.h"
 #include "EPCastException.h"
 
 //AAF Analyzer Base files

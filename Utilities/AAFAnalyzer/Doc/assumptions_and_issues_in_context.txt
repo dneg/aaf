@@ -54,7 +54,23 @@ Warn Conditions:
 Fail Conditions:
 	NONE
 Issues:
-	NONE
+33. Essence track is not defined.  It is assumed to 	be a MobSlot that has a
+	Sound or Picture DataDefinition.
+	
+	
+42. REQ_EP_099 and REQ_EP_100 state that the edit rates of audio tracks must
+	equal the sample rate and the edit rates of video tracks must be less than
+	or equal to the sample rate respectively.  Currently, it is assumed that an
+	audio track is a mob slot where IsSoundKind() is true that contains a
+	File Source mob	and a video track is a mob slot where IsPictureKind() is
+	true that contains a File Source mob.  This includes StaticMobSlots, which
+	do not have edit rates.  Until more information is avaliable, all 
+	StaticMobSlots will cause test failures.
+	
+48. Effects are being classified solely based upon their AUIDs, not the rest
+	of their definition.  There should be a requirement that can be tested that
+	states the AUID can only be used for effects matching the definitions
+	specified in section 12.
 
 Test Name:
 	CompMobDependency
@@ -161,6 +177,9 @@ Fail Conditions:
 				 edit protocol material type.
 	REQ_EP_??? - Fail for an illegal transition out of a film source (anything
 				 that is not a zero-value SourceClip object).
+	REQ_EP_??? - Fail if an illegal end of chain is encountered.
+	REQ_EP_??? - Fail if an illegal transition out of a Film Source is
+				 encountered.
 Issues:
  1. The Edit Protocol does not specify what type of references a file source is
     allowed to reference.  REQ_EP_063 states that "if a file source has any of
@@ -275,7 +294,14 @@ Issues:
 	
 44. The term essence track is not defined.  For the purpose of this test
 	(REQ_EP_050, REQ_EP_072), it is aussumed to be any SourceClip object along
-	the derivation chain.
+	the derivation chain.  If this is correct, the term should be changed as
+	it conflicts with the definition of Essence Track used throughout other
+	tests.
+	
+47. There is no requirement that specifies when it is legal to end the
+	derivation chain.  Currently, an illegal end of the derivation chain is
+	detected based upon the diagram in section 6.1.  A failure will be reported,
+	but, not requirements will be shown as failing.
 
 Test Name:
 	EPNameTest
@@ -337,9 +363,6 @@ Fail Conditions:
 	REQ_EP_161 - Fail if any DefinitionObject in the dictionary does not have
 				 a valid name.
 Issues:
-33. Essence track is not defined.  In the context of this test (REQ_EP_101) it
-	is assumed to be a MobSlot that has a Sound or Picture DataDefinition.
-	
 41. The words "valid name" are used throughout the Edit Protocol, but what makes
 	a name valid is never determined.  Until further information is avaliable,
 	it is assumed that a name is valid if an AAF Object has a name property that
@@ -466,8 +489,7 @@ Fail Conditions:
 	REQ_EP_103 - Fail if the mob has an essence track without a
 				 PhysicalTrackNumber property specified.
 Issues:
-33. Essence track is not defined.  In the context of this test (REQ_EP_103) it
-	is assumed to be a MobSlot that has a Sound or Picture DataDefinition.
+	NONE
 
 Test Name:
 	EPLocatorTest
@@ -504,11 +526,6 @@ Fail Conditions:
 	REQ_EP_075 - Fail if none of the NetworkLocators comply with the constrains
 				 set out in Section 6.9.
 Issues:
- *  The URI validator currently being used is libURI
-	(http://sourceforge.net/projects/liburi/) is not sufficient for this test.
-	Until a better validator is avaliable, this test will be registered but not
-	run.
-	
 35. REQ_EP_061 and REQ_EP_075 require that URIs comply with RFC 2396 and also
 	that absolute URIs conform to RFC 1738.  However, RFC 2396 updates RFC 1738.
 	If a URI complies with RFC 2396, but one of the updates cause it to not
@@ -548,6 +565,11 @@ Issues:
 45. How do you acuratley check that a file exists (ie. it is insufficient to
     check if the file can be open using an ifstream) in a platform independant
     fashion?
+    
+50. The URI validator currently being used is libURI
+	(http://sourceforge.net/projects/liburi/) is not sufficient for this test.
+	Until a better validator is avaliable, this test will be registered but not
+	run.
 
 Test Name:
 	EPEditRateTest
@@ -582,24 +604,149 @@ Fail Conditions:
 	REQ_EP_100 - Fail if a video track has an edit rate that is less greater
 				 than its sample rate.
 	REQ_EP_100 - Fail if a video track is a static or unknown type of MobSlot.
-Issues:
-33. Essence track is not defined.  In the context of this test it is assumed to,
-	be a MobSlot that has an Sound or Picture DataDefinition.
-    
+Issues:   
 34. REQ_EP_091 states that the edit rate of an essence track must be equivalent
     to value in the table.  However, StaticMobSlots do not have edit rates.
     As was noted above, it is assumed that an essence track is a MobSlot with
     a Sound or Picture DataDefinition.  How should REQ_EP_091 treat 
     StaticMobSlots?
+
+Test Name:
+	EPEffectTest
+Description:
+	Make sure that all effects are contained within the proper objects.
+Requirements Tested:
+	REQ_EP_180 (12.1)
+		The Video Dissolve effect shall only be used by an OperationGroup within
+		a Transition object.
+	REQ_EP_183 (12.2)
+		The SMPTE Video Wipe effect shall only be used by an OperationGroup
+		within a Transition object.
+	REQ_EP_186 (12.3)
+		The Video Speed Control effect shall only be used by an OperationGroup
+		not contained withing a Transition object.
+	REQ_EP_187  (12.3.2)
+		A ratio value of 0 shall not be used for the Speed Ratio paremeter of a
+		Video Speed Control effect.
+	REQ_EP_190 (12.4)
+		The Video Repeat effect shall only be used by an OperationGroup not
+		contained within a Transition object.
+	REQ_EP_194 (12.5)
+		The Video Flip effect shall only be used by an OperationGroup not
+		contained within a Transition object.
+	REQ_EP_197 (12.6)
+		The Video Flop effect shall only be used by an OperationGroup not
+		contained within a Transition object.
+	REQ_EP_200 (12.7)
+		The Video Flip-Flop effect shall only be used by an OperationGroup not
+		contained within a Transition object.
+	REQ_EP_203 (12.8)
+		The Video Position effect shall only be used by an OperationGroup not
+		contained within a Transition object.
+	REQ_EP_206 (12.9)
+		The Video Crop Effect shall only be used by an OperationGroup not
+		contained within a Transition object.
+	REQ_EP_209 (12.10)
+		The Video Scale effect shall only be used by an OperationGroup not
+		contained within a Transition object.
+	REQ_EP_212 (12.11)
+		The Video Rotate effect shall only be used by an OperationGroup not
+		contained within a Transition object.
+	REQ_EP_215 (12.12)
+		The Video Corner Pinning effect shall only be used by an OperationGroup
+		not contained within a Transition object.
+	REQ_EP_220 (12.13)
+		The Alpha With Video Key effect shall only be used by an OperationGroup
+		not contained within a Transition object.
+	REQ_EP_225 (12.14)
+		The Separate Alpha Key effect shall only be used by an OperationGroup
+		not contained within a Transition object.
+	REQ_EP_228 (12.15)
+		The Luminance Key effect shall only be used by an OperationGroup not
+		contained within a Transition object.
+	REQ_EP_231 (12.16)
+		The Chroma Key effect shall only be used by an OperationGroup not
+		contained within a Transition object.
+	REQ_EP_234 (12.17)
+		The Mono Audio Gain effect shall only be used by an OperationGroup not
+		contained within a Transition object.
+	REQ_EP_240 (12.18)
+		The Mono Audio Pan effect shall only be used by an OperationGroup not
+		contained within a Transition object.
+	REQ_EP_244 (12.19)
+		The Single-Parameter Mono Audio Dissolve effect shall only be used by an 
+		OperationGroup within a Transition object.
+	REQ_EP_247 (12.20)
+		The Two-Parameter Mono Audio Dissolve effect shall only be used by an 
+		OperationGroup within a Transition object.
+Warn Conditions:
+	REQ_EP_187 - Issue a warning if there is a ratio with a zero denominator on
+				 a Speed Ratio Parameter of a Video Speed Control effect.
+Fail Conditions:
+	REQ_EP_180 - Fail if the Operation Group is not a direct child of a
+				 Transition object.
+	REQ_EP_183 - Fail if the Operation Group is not a direct child of a
+				 Transition object.
+	REQ_EP_186 - Fail if the Operation Group is a direct child of a Transition
+				 object.
+	REQ_EP_187 - Fail if there is a zero numerator on a Speed Ratio Parameter of
+				 a Video Speed Control effect.
+	REQ_EP_187 - Fail if there is no Speed Ratio Parameter on a Video Speed
+				 Control effect.
+	REQ_EP_187 - Fail if the Speed Ratio Parameter on a Video Speed Control
+				 effect is not a rational type.
+	REQ_EP_187 - Fail if the Speed Ratio Parameter on a Video Speed Control is
+				 a varying value.
+	REQ_EP_190 - Fail if the Operation Group is a direct child of a Transition
+				 object.
+	REQ_EP_194 - Fail if the Operation Group is a direct child of a Transition
+				 object.
+	REQ_EP_197 - Fail if the Operation Group is a direct child of a Transition
+				 object.
+	REQ_EP_200 - Fail if the Operation Group is a direct child of a Transition
+				 object.
+	REQ_EP_203 - Fail if the Operation Group is a direct child of a Transition
+				 object.
+	REQ_EP_206 - Fail if the Operation Group is a direct child of a Transition
+				 object.
+	REQ_EP_209 - Fail if the Operation Group is a direct child of a Transition
+				 object.
+	REQ_EP_212 - Fail if the Operation Group is a direct child of a Transition
+				 object.
+	REQ_EP_215 - Fail if the Operation Group is a direct child of a Transition
+				 object.
+	REQ_EP_220 - Fail if the Operation Group is a direct child of a Transition
+				 object.
+	REQ_EP_225 - Fail if the Operation Group is a direct child of a Transition
+				 object.
+	REQ_EP_228 - Fail if the Operation Group is a direct child of a Transition
+				 object.
+	REQ_EP_231 - Fail if the Operation Group is a direct child of a Transition
+				 object.
+	REQ_EP_234 - Fail if the Operation Group is a direct child of a Transition
+				 object.
+	REQ_EP_240 - Fail if the Operation Group is a direct child of a Transition
+				 object.
+	REQ_EP_244 - Fail if the Operation Group is not a direct child of a
+				 Transition object.
+	REQ_EP_247 - Fail if the Operation Group is not a direct child of a
+				 Transition object.
+Issues:
+49. Section 12 uses the phrases "within a Transition object" and "not within
+	"a transition object".  This is not clear.  Currently it is assumed to mean
+	that the direct parent must or must not be a Transition object, however, it
+	is ok if an ancestor higher than a parent is a Transition object.
+
+51. REQ_EP_187 does not specify if the Speed Ratio parameter should be constant
+	or varying value.  Currently it is assumed that it must be constant in order
+	for there to be a ratio value of zero.  Tests will fail if it is not
+	constant.
 	
-42. REQ_EP_099 and REQ_EP_100 state that the edit rates of audio tracks must
-	equal the sample rate and the edit rates of video tracks must be less than
-	or equal to the sample rate respectively.  Currently, it is assumed that an
-	audio track is a mob slot where IsSoundKind() is true that contains a
-	File Source mob	and a video track is a mob slot where IsPictureKind() is
-	true that contains a File Source mob.  This includes StaticMobSlots, which
-	do not have edit rates.  Until more information is avaliable, all 
-	StaticMobSlots will cause test failures.
+52. It is assumed that REQ_EP_187 applies only to Speed Ratio Parameters that
+	belong to Video Speed Control effects.
+	
+53. There is no easy way to regression test varying value or non-rational Speed
+	Ratio parameters for REQ_EP_187
 	
 Other Issues:
 
@@ -691,4 +838,18 @@ Requirements:
 		A MasterMob shall not reference more than one essence track of a
 		particular file source from each time position in the MasterMob.
 Issue:
-	32. What does REQ_EP_056 mean?
+32. What does REQ_EP_056 mean?
+	
+Requirements:
+	NONE
+Issue:
+54. Currently, if a test fails or issues a warning, traversal down the current
+	path will be terminated.  This could mask further warnings or failures.  In
+	some cases, there is no choice but to do this (ie. Once a mob/clip is out of
+	place in the derivation chain, it is not possible to verify if further
+	mobs/clips are in the correct place), however, in other cases, it is should
+	be possible to continue testing (ie. any non-structural test).  Switching
+	the tests to continue along the chain should not effect any of the
+	regression tests.
+	
+	

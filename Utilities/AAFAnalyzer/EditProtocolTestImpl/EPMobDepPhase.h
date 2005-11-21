@@ -31,6 +31,7 @@
 #include <EPTrackContentsTest.h>
 #include <EPLocatorTest.h>
 #include <EPEditRateTest.h>
+#include <EPEffectTest.h>
 
 //Test/Result files
 #include <TestPhase.h>

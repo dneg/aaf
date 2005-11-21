@@ -243,6 +243,15 @@ public:
             _spResult->SetResult( TestResult::FAIL );
         }
       }
+    
+      //TODO: This should not be necessary.  There needs to be a requirement
+      //      that fails on an illegal End Of Chain.  Until something fails,
+      //      this code must be here to ensure a failure is reported.
+      if ( _spResult->GetResult() == TestResult::PASS )
+      {
+          _spResult->SetResult( TestResult::FAIL );
+      }
+      
       _spResult->SetExplanation( L"Source Clip is out of place in the derrivation chain." );
       return false;
     }

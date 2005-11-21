@@ -18,60 +18,53 @@
 //
 //=---------------------------------------------------------------------=
 
-#ifndef __SegmentInfo_h_
-#define __SegmentInfo_h_
+#ifndef __SlotInfo_h_
+#define __SlotInfo_h_
 
 #include <AxTypes.h>
-#include <AxComponent.h>
 #include <boost/shared_ptr.hpp>
 
 namespace aafanalyzer {
 
 using namespace boost;
 
-class SegmentInfo
+class SlotInfo
 {
 
     public:
 
-        SegmentInfo( const AxString& element, shared_ptr<AxSegment> axSegment, const AxString& trackType, const AxString& slotType, const aafRational_t editRate, InputParser::OptionalStringAttrib name, InputParser::OptionalIntAttrib physicalTrackNum )
+        SlotInfo( const AxString& element, const aafRational_t editRate, InputParser::OptionalStringAttrib name, InputParser::OptionalIntAttrib physicalTrackNum )
             : element( element ), 
-              segment( axSegment ), 
-              trackType( trackType ), 
-              slotType( slotType ), 
               editRate( editRate ), 
               name( name ),
-              physicalTrackNum( physicalTrackNum )
+              physicalTrackNum( physicalTrackNum ),
+              componentsSinceSlot( 0 )
         {}
         
-        ~SegmentInfo()
+        ~SlotInfo()
         {}
 
-        SegmentInfo( const SegmentInfo& other )
+        SlotInfo( const SlotInfo& other )
             : element( other.element ), 
-              segment( other.segment ), 
-              trackType( other.trackType ), 
-              slotType( other.slotType ), 
               editRate( other.editRate ), 
               name( other.name ),
-              physicalTrackNum( other.physicalTrackNum )
+              physicalTrackNum( other.physicalTrackNum ),
+              componentsSinceSlot( other.componentsSinceSlot )
         {}
         
         AxString                            element;
-        shared_ptr<AxSegment>               segment;
-        AxString                            trackType;
-        AxString                            slotType;
         aafRational_t                       editRate;
         InputParser::OptionalStringAttrib   name;
         InputParser::OptionalIntAttrib      physicalTrackNum;
+        aafUInt32                           componentsSinceSlot;
 
     private:
     
         //prohibited:
-        SegmentInfo& operator=( const SegmentInfo& other );        
+        SlotInfo& operator=( const SlotInfo& other );        
 
 };
 
 } // end of namespace diskstream
 
-#endif /*__SegmentInfo_h_*/
+#endif /*__SlotInfo_h_*/

@@ -76,9 +76,9 @@ RequirementRegistry - Single spot of storage for all requirements that have
 					  analyzer program may access the RequirementRegistry and
 					  obtain Requirement Objects based upon their ids.
 					  
-RequirementMismatchException - Thrown by RequirementRegistry when attempting to
+RequirementRegistryException - Thrown by RequirementRegistry when attempting to
 							   register a requirement that has already been
-							   accessed or when attempting to access an
+							   registered or when attempting to access an
 							   unregistered requirement.
 							   
 --------------------------------------------------------------------------------
@@ -169,13 +169,14 @@ AAFAnalyzerBase:
 	The AAFAnalyzerBase library extends the AnalyzerBase library adding
 functionality specific to AAF.
 
-AAFComponentReference - ???
+AAFContainment - An edge that represents two nodes that are adjacent in a
+				 recursive iterator.
 
-AAFMobReference - ???
+AAFMobReference - An edge between a source clip node and a mob node.
 
-AAFSlotReference - ???
+AAFSlotReference - An edge between a source clip node and a mob slot node.
 
-AAFComponentReference - ???
+AAFComponentReference - An edge between two source clip nodes.
 
 AAFObjNode - A graph node that is associated with an AAF.  Although the AAF
 			 object has a specific type, this node only provides access to the
@@ -243,6 +244,8 @@ EPAnalyzerBase:
 	The EPAnalyzerBase library extends the AAFAnalyzerBase library adding
 functionality specific to the AAF Edit Protocol.
 
+EPObject - Base class for any Edit Protocol object.
+
 EPDerivationChainObject - Base type for any object in the Edit Protocol
 						  Derivation Chain.
 						  
@@ -268,6 +271,63 @@ EPFilmSource - A Film Source.
 
 EPTapeSource - A Tape Source.
 
+EPTrackObject - Base type for any Edit Protocol Track object.
+
+EPTimecodeTrack - A Timecode Track.
+
+EPEdgecodeTrack - An Edgecode Track.
+
+EPEssenceTrack - An Essence Track.
+
+EPExtendedEssenceTrack - An Essence Track plus information about the child
+						 source clip and the mob which it references.
+
+EPAudioTrack - An Audio Track.
+
+EPVideoTrack - A Video Track.
+
+EPEffect - Base type for any Edit Protocol Effect object.
+
+EPVideoDissolveEffect - A Video Dissolve Effect.
+
+EPSMPTEVideoWipeEffect - An SMPTE Video Wipe Effect.
+
+EPVideoSpeedControlEffect - A Video Speed Control Effect.
+
+EPVideoRepeatEffect - A Video Repeat Effect.
+
+EPVideoFlipEffect - A Video Flip Effect.
+
+EPVideoFlopEffect - A Video Flop Effect.
+
+EPFlipFlopEffect - A Video Flip-Flop Effect.
+
+EPVideoPositionEffect - A Video Position Effect.
+
+EPVideoCropEffect - A Video Crop Effect.
+
+EPVideoScaleEffect - A Video Scale Effect.
+
+EPVideoRotateEffect - A Video Rotate Effect.
+
+EPVideoCornerPinningEffect - A Video Corner Pinning Effect.
+
+EPAlphaWithVideoKeyEffect - An Alpha with Video Key Effect.
+
+EPSeparateAlphaKeyEffect - A Separate-Alpha Key Effect.
+
+EPLuminanceKeyEffect - A Luminance Key Effect.
+
+EPChromaKeyEffect - A Chroma Key Effect.
+
+EPAudioGainEffect - An Audio Gain Effect.
+
+EPAudioPanEffect - An Audio Pan Effect.
+
+EPSingleParameterAudioDissolveEffect - An Audio Dissolve Effect.
+
+EPTwoParameterAudioDissolveEffect - A Two-Parameter Audio Dissolve Effect.
+
 EPTypedObjNode - Derived from AAFTypedObjNodeDecorator, used to decorate
 				 AAFTypedObjNodes with an Edit Protocol Derivation Chain type. 
 				 Valuse for the template parameters must come from the following
@@ -285,6 +345,50 @@ EPTypedObjNode - Derived from AAFTypedObjNodeDecorator, used to decorate
 					IAAFSourceMob		EPImportSource
 					IAAFSourceMob		EPFilmSource
 					IAAFSourceMob		EPTapeSource
+					IAAFTimelineMobSlot	EPEssenceTrack
+					IAAFTimelineMobSlot	EPAudioTrack
+					IAAFTimelineMobSlot	EPVideoTrack
+					IAAFTimelineMobSlot	EPTimecodeTrack
+					IAAFTimelineMobSlot	EPEdgecodeTrack
+					IAAFStaticMobSlot	EPEssenceTrack
+					IAAFStaticMobSlot	EPAudioTrack
+					IAAFStaticMobSlot	EPVideoTrack
+					IAAFStaticMobSlot	EPTimecodeTrack
+					IAAFStaticMobSlot	EPEdgecodeTrack
+					IAAFEventMobSlot	EPEssenceTrack
+					IAAFEventMobSlot	EPAudioTrack
+					IAAFEventMobSlot	EPVideoTrack
+					IAAFEventMobSlot	EPTimecodeTrack
+					IAAFEventMobSlot	EPEdgecodeTrack
+					IAAFMobSlot			EPEssenceTrack
+					IAAFMobSlot			EPAudioTrack
+					IAAFMobSlot			EPVideoTrack
+					IAAFMobSlot			EPTimecodeTrack
+					IAAFMobSlot			EPEdgecodeTrack
+					IAAFOperationGroup	EPVideoDissolveEffect
+					IAAFOperationGroup	EPSMPTEVideoWipeEffect
+					IAAFOperationGroup	EPVideoSpeedControlEffect
+					IAAFOperationGroup	EPVideoRepeatEffect
+					IAAFOperationGroup	EPVideoFlipEffect
+					IAAFOperationGroup	EPVideoFlopEffect
+					IAAFOperationGroup	EPFlipFlopEffect
+					IAAFOperationGroup	EPVideoPositionEffect
+					IAAFOperationGroup	EPVideoCropEffect
+					IAAFOperationGroup	EPVideoScaleEffect
+					IAAFOperationGroup	EPVideoRotateEffect
+					IAAFOperationGroup	EPVideoCornerPinningEffect
+					IAAFOperationGroup	EPAlphaWithVideoKeyEffect
+					IAAFOperationGroup	EPSeparateAlphaKeyEffect
+					IAAFOperationGroup	EPLuminanceKeyEffect
+					IAAFOperationGroup	EPChromaKeyEffect
+					IAAFOperationGroup	EPAudioGainEffect
+					IAAFOperationGroup	EPAudioPanEffect
+					IAAFOperationGroup	EPSingleParameterAudioDissolveEffect
+					IAAFOperationGroup	EPTwoParameterAudioDissolveEffect
+					IAAFOperationGroup	EPEffect
+					
+EPCastException - Thrown by EPTypedObjNode when attempting an illegal cast on
+				  the EPObjType parameter of an EPTypedObjNode.
 					
 EPTypedVisitor - Derived from TypedVisitor.  Implements PreOrderVisit() and
 				 PostOrderVisit() for EPTypedObjNodes with the parameters in the
@@ -293,12 +397,22 @@ EPTypedVisitor - Derived from TypedVisitor.  Implements PreOrderVisit() and
 				 order to accomplish this, the PreOrderVisit and PostOrderVisit
 				 methods in TypedVisitor are exposed using the using
 			     declaration.
+			     
+ParentMobSlotVisitor - Derived from EPTypedVisitor and used by EPTypedVisitor.
+					   Visits AAFContainment edges to find the first mob above
+					   a given node.  (Declared and defined in an anonymous 
+					   namespace).
+					   
+ChildMobSlotVisitor - Derived from EPTypedVisitor and used by EPTypedVisitor.
+					  Visits AAFContainment edges to find  tracks that are
+					  contained beneath a given node.  (Declared and defined in
+					  an anonymous namespace).
 				 
 --------------------------------------------------------------------------------
 
-TestPhaseLib:
+BaseTestImpl:
 
-	The TestPhaseLib library implements the test used to test the basic
+	The BaseTestImpl library implements the test used to test the basic
 structure of an AAF file versus the requirements set out in the AAF Object
 Specification.
 
@@ -321,6 +435,16 @@ RefResolver - Derived from Test and executed by LoadPhase.  This test traverses
 ResolveRefVisitor - Derived from TypedVisitor and used by RefResolver.  This
 					visitor visits AAFTypedObjNode<IAAFSourceClip> objects and
 					checks for out of file references.
+					
+ResolveComponentRefVisitor - Derived from TypedVisitor and used by
+							 ResolveRefVisitor.  This visitor visits source clip
+							 objects to create AAFComponentReference edges.
+							 (Declared and defined in an anonymous namespace).
+							 
+ResolveSlotRefVisitor - Derived from TypedVisitor and used by
+						ResolveSlotRefVisitor.  This visitor visits mob slot
+						objects to create AAFSlotReference edges.
+						(Declared and defined in an anonymous namespace).
 					
 DumpPhase - Derived from TestPhase, outputs a TestGraph to the console.
 
@@ -346,6 +470,7 @@ DecorateEPTest - Derived from Test and executed by EPMobDepPhase.  Decorates
 EPDecoratorVisitor - Derived from TypedVisitor, used by DecorateEPTest to
 					 decorate AAFTypedObjNodes with template parameters
 					 IAAFCompositionMob, IAAFMasterMob and IAAFSourceMob.
+					 (Declared and defined in an anonymous namespace).
 					 
 CompMobDependency - Derived from Test and executed by EPMobDepPhase.  Counts
 					the number of references to each mob in a TestGraph.
@@ -358,8 +483,10 @@ EPDerivationTest - Derived from Test and executed by EPMobDepPhase.  Tests a
 				   
 MobChainVisitor - Derived from EPTypedVisitor, used by EPDerivationTest to
 				  verify that a TestGraph forms a valid derivation chain.
+				  (Declared and defined in an anonymous namespace).
 				  
-Analyzer - Used by MobChainVisitor to implement a for_each loop.
+Analyzer - Used by MobChainVisitor to implement a for_each loop.  (Declared and
+		   defined in an anonymous namespace).
 
 DerivationChainStateMachine - Used by MobChainVisitor to track the current
 							  position in a derivation chain and to detect any
@@ -369,10 +496,10 @@ StateMachineException - Thrown by DerivationChainStateMachine when an unknown
 						event is passed to the state machine.
 						
 EPNameTest - Derived from Test and executed by EPMobDepPhase.  Tests a TestGraph
-			 to ensure that mobs have valid Edit Protocol names.
+			 to ensure that objects have valid Edit Protocol names.
 			 
 EPNameVisitor - Derived from EPTypedVisitor, used by EPNameTest to verify that
-				mob names are acceptable under the Edit Protocol.
+				object names are acceptable under the Edit Protocol.
 				
 EPContainedTrackTest - Derived from Test and executed by EPMobDepPhase.  Tests
 					   the mobs on a test graph to ensure that the tracks
@@ -401,3 +528,25 @@ EPEditRateVisitor - Derived from EPTypedVisitor, used by EPEditRate test to
 					
 AllowedEditRateTable - Store all valid essence track edit rates and determine if
 					   any given rate is located in the table.
+					   
+EPEffectTest - Derived from Test and executed by EPMobDepPhase.  Tests
+			   OperationGroups to ensure they meet the requirements set out for
+			   effects in the Edit Protocol.
+
+EPEffectVisitor - Derived from EPTypedVisitor, used by EPEffectTest to verify
+				  that all OperationGroups are valid.
+
+EPLocatorTest - Derived from Test and executed by EPMobDepPhase.  Test that
+				locators in Import and File Sources are valid (currently not
+				being executed).
+			
+EPLocatorVisitor - Derived from EPTypedVisitor, used by EPVisitorTest to verify
+				   that locators are valid.  Currently uses the library libURI
+				   (http://sourceforge.net/projects/liburi/),however, this 
+				   library is not sufficient and will need to be changed.  To
+				   run the library with this test the LD_LIBRARY_PATH variable
+				   will need to be set to include the path of the library
+				   (install directory is /usr/local/lib).  Also, to install the
+				   library, the code must be modified - one function specifies
+				   a default parameter value in the function definition and
+				   declaration - remove the default value in the definition.

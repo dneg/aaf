@@ -58,37 +58,43 @@ check : $(AAFSDKBINDIR)/BuildTestFile$(EXE)
 	@echo "End of Test"
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPEditRateTest.xml EPEditRateTest.aaf
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPEditRateTest.aaf ../../Requirements/AAFRequirements.xml >> EPEditRateTest.temp
-	grep -A `expr \`expr \\\`wc -l EPEditRateTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPEditRateTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\`` "Name:   Edit Protocol Edit Rate Test" EPEditRateTest.temp >> EPEditRateTest.results
+	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Effect Test" EPEditRateTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPEditRateTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Edit Rate Test" EPEditRateTest.temp >> EPEditRateTest.results
 	@echo "Comparing EPEditRateTest Expected Results (EPEditRateTest.expected) to Actual Results (EPEditRateTest.results)"
 	diff EPEditRateTest.expected EPEditRateTest.results
 	@echo "End of Test"
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPEditRateTest2.xml EPEditRateTest2.aaf
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPEditRateTest2.aaf ../../Requirements/AAFRequirements.xml >> EPEditRateTest2.temp
-	grep -A `expr \`expr \\\`wc -l EPEditRateTest2.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPEditRateTest2.temp | sed 's_\([0-9]*\).*_\1_'\\\`\`` "Name:   Edit Protocol Edit Rate Test" EPEditRateTest2.temp >> EPEditRateTest2.results
+	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Effect Test" EPEditRateTest2.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPEditRateTest2.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Edit Rate Test" EPEditRateTest2.temp >> EPEditRateTest2.results
 	@echo "Comparing EPEditRateTest2 Expected Results (EPEditRateTest2.expected) to Actual Results (EPEditRateTest2.results)"
 	diff EPEditRateTest2.expected EPEditRateTest2.results
 	@echo "End of Test"
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPEditRateTest3.xml EPEditRateTest3.aaf
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPEditRateTest3.aaf ../../Requirements/AAFRequirements.xml >> EPEditRateTest3.temp
-	grep -A `expr \`expr \\\`wc -l EPEditRateTest3.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPEditRateTest3.temp | sed 's_\([0-9]*\).*_\1_'\\\`\`` "Name:   Edit Protocol Edit Rate Test" EPEditRateTest3.temp >> EPEditRateTest3.results
+	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Effect Test" EPEditRateTest3.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPEditRateTest3.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Edit Rate Test" EPEditRateTest3.temp >> EPEditRateTest3.results
 	@echo "Comparing EPEditRateTest3 Expected Results (EPEditRateTest3.expected) to Actual Results (EPEditRateTest3.results)"
 	diff EPEditRateTest3.expected EPEditRateTest3.results
 	@echo "End of Test"
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPEditRateTest4.xml EPEditRateTest4.aaf
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPEditRateTest4.aaf ../../Requirements/AAFRequirements.xml >> EPEditRateTest4.temp
-	grep -A `expr \`expr \\\`wc -l EPEditRateTest4.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPEditRateTest4.temp | sed 's_\([0-9]*\).*_\1_'\\\`\`` "Name:   Edit Protocol Edit Rate Test" EPEditRateTest4.temp >> EPEditRateTest4.results
+	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Effect Test" EPEditRateTest4.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPEditRateTest4.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Edit Rate Test" EPEditRateTest4.temp >> EPEditRateTest4.results
 	@echo "Comparing EPEditRateTest4 Expected Results (EPEditRateTest4.expected) to Actual Results (EPEditRateTest4.results)"
 	diff EPEditRateTest4.expected EPEditRateTest4.results
 	@echo "End of Test"
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPEditRateTest5.xml EPEditRateTest5.aaf
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPEditRateTest5.aaf ../../Requirements/AAFRequirements.xml >> EPEditRateTest5.temp
-	grep -A `expr \`expr \\\`wc -l EPEditRateTest5.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPEditRateTest5.temp | sed 's_\([0-9]*\).*_\1_'\\\`\`` "Name:   Edit Protocol Edit Rate Test" EPEditRateTest5.temp >> EPEditRateTest5.results
+	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Effect Test" EPEditRateTest5.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPEditRateTest5.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Edit Rate Test" EPEditRateTest5.temp >> EPEditRateTest5.results
 	@echo "Comparing EPEditRateTest5 Expected Results (EPEditRateTest5.expected) to Actual Results (EPEditRateTest5.results)"
 	diff EPEditRateTest5.expected EPEditRateTest5.results
 	@echo "End of Test"
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPEditRateTest6.xml EPEditRateTest6.aaf
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPEditRateTest6.aaf ../../Requirements/AAFRequirements.xml >> EPEditRateTest6.temp
-	grep -A `expr \`expr \\\`wc -l EPEditRateTest6.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPEditRateTest6.temp | sed 's_\([0-9]*\).*_\1_'\\\`\`` "Name:   Edit Protocol Edit Rate Test" EPEditRateTest6.temp >> EPEditRateTest6.results
+	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Effect Test" EPEditRateTest6.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPEditRateTest6.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Edit Rate Test" EPEditRateTest6.temp >> EPEditRateTest6.results
 	@echo "Comparing EPEditRateTest6 Expected Results (EPEditRateTest6.expected) to Actual Results (EPEditRateTest6.results)"
 	diff EPEditRateTest6.expected EPEditRateTest6.results
+	@echo "End of Test"
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPEffectTest.xml EPEffectTest.aaf
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPEffectTest.aaf ../../Requirements/AAFRequirements.xml >> EPEffectTest.temp
+	grep -A `expr \`expr \\\`wc -l EPEffectTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Effect Test" EPEffectTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\`` "Name:   Edit Protocol Effect Test" EPEffectTest.temp >> EPEffectTest.results
+	@echo "Comparing EPEffectTest Expected Results (EPEffectTest.expected) to Actual Results (EPEffectTest.results)"
+	diff EPEffectTest.expected EPEffectTest.results
 	@echo "End of Test"

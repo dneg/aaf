@@ -36,6 +36,9 @@
 //AAF files
 #include <AAFResult.h>
 
+//STL files
+#include <sstream>
+
 namespace {
 
 using namespace aafanalyzer;
@@ -154,14 +157,49 @@ class ParentMobVisitor : public EPTypedVisitor
             return false;
         }
         
-        const AxString GetParentName()
+        bool PreOrderVisit( AAFTypedObjNode<IAAFTimelineMobSlot>& node )
+        {
+            shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCast<IAAFMobSlot>() );
+            return this->PreOrderVisit( *spGeneric );
+        }
+        
+        bool PreOrderVisit( AAFTypedObjNode<IAAFEventMobSlot>& node )
+        {
+            shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCast<IAAFMobSlot>() );
+            return this->PreOrderVisit( *spGeneric );
+        }
+        
+        bool PreOrderVisit( AAFTypedObjNode<IAAFStaticMobSlot>& node )
+        {
+            shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCast<IAAFMobSlot>() );
+            return this->PreOrderVisit( *spGeneric );
+        }
+        
+        bool PreOrderVisit( AAFTypedObjNode<IAAFMobSlot>& node )
+        {
+            AxMobSlot axMobSlot( node.GetAAFObjectOfType() );
+            aafSlotID_t slotId = axMobSlot.GetSlotID();
+            
+            wstringstream ss;
+            ss << L"Mob slot with ID = " << slotId << " of ";
+            _slotName = ss.str().c_str();
+            return true;
+        }
+        
+        const AxString GetParentMobName()
         {
             return _parentName;
+        }
+        
+        const AxString GetParentSlotName()
+        {
+            return _slotName + _parentName;
         }
         
     private:
     
         AxString _parentName;
+        AxString _slotName;
     
         // prohibited
         ParentMobVisitor( const ParentMobVisitor& );
@@ -419,7 +457,17 @@ AxString EPTypedVisitor::GetMobName( shared_ptr<EdgeMap> spEdgeMap, Node& node )
     shared_ptr<ParentMobVisitor> spVisitor( new ParentMobVisitor );
     
     dfs.TraverseUp( spVisitor );
-    return spVisitor->GetParentName();
+    return spVisitor->GetParentMobName();
+}
+
+AxString EPTypedVisitor::GetMobSlotName( shared_ptr<EdgeMap> spEdgeMap, Node& node )
+{
+    shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+    DepthFirstTraversal dfs( spEdgeMap, spNode );
+    shared_ptr<ParentMobVisitor> spVisitor( new ParentMobVisitor );
+    
+    dfs.TraverseUp( spVisitor );
+    return spVisitor->GetParentSlotName();
 }
 
 bool EPTypedVisitor::IsType( AxClassDef& clsDef, aafUID_t type, aafUID_t parentType )
