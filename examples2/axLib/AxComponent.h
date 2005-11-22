@@ -31,24 +31,43 @@ class AxComponent : public AxObject {
 
 public:
 	AxComponent( IAAFComponentSP spIaafComponent );
+    AxComponent( IAAFComponent2SP spIaafComponent );
 	virtual ~AxComponent();
 
 	aafLength_t GetLength();
 	void SetLength( const aafLength_t& len );
 
-
 	void SetDataDef( IAAFDataDefSP );
 	IAAFDataDefSP GetDataDef();
+    
+    void AppendKLVData( IAAFKLVDataSP klvData );
+    void AppendComment( const AxString& name, const AxString& value );
+    void AppendAttribute( const AxString& name, const AxString& value );
+    
+    aafUInt32 CountKLVData();
+    aafUInt32 CountComments();
+    aafUInt32 CountAttributes();
+    
+    IEnumAAFKLVDataSP GetKLVData();
+    IEnumAAFTaggedValuesSP GetComments();
+    IEnumAAFTaggedValuesSP GetAttributes();
+    
+    void RemoveKLVData( IAAFKLVDataSP klvpData );
+    void RemoveComment( IAAFTaggedValueSP comment );
+    void RemoveAttribute( IAAFTaggedValueSP attribute );
 
-	operator IAAFComponentSP ()
-	{ return _spIaafComponent; };
+    inline operator IAAFComponentSP ()
+    { return AxQueryInterface<IAAFComponent2,IAAFComponent>( _spIaafComponent ); }
+
+    inline operator IAAFComponent2SP ()
+    { return _spIaafComponent; }
 
 private:
 	AxComponent();
 	AxComponent( const AxComponent& );
 	AxComponent& operator=( const AxComponent& );
 
-	IAAFComponentSP _spIaafComponent;
+	IAAFComponent2SP _spIaafComponent;
 };
 
 //=---------------------------------------------------------------------=

@@ -23,8 +23,13 @@
 //=---------------------------------------------------------------------=
 
 AxComponent::AxComponent( IAAFComponentSP spIaafComponent )
-:	AxObject( AxQueryInterface<IAAFComponent, IAAFObject>( spIaafComponent ) ),
-	_spIaafComponent( spIaafComponent )
+: AxObject( AxQueryInterface<IAAFComponent, IAAFObject>( spIaafComponent ) ),
+    _spIaafComponent( AxQueryInterface<IAAFComponent, IAAFComponent2>( spIaafComponent ) )
+{}
+
+AxComponent::AxComponent( IAAFComponent2SP spIaafComponent )
+: AxObject( AxQueryInterface<IAAFComponent2, IAAFObject>( spIaafComponent ) ),
+    _spIaafComponent( spIaafComponent )
 {}
 
 AxComponent::~AxComponent()
@@ -56,6 +61,90 @@ IAAFDataDefSP AxComponent::GetDataDef()
 	CHECK_HRESULT( _spIaafComponent->GetDataDef( &spIaafDataDef ) );
 
 	return spIaafDataDef;
+}
+
+void AxComponent::AppendKLVData( IAAFKLVDataSP klvData )
+{
+    CHECK_HRESULT( _spIaafComponent->AppendKLVData( klvData ) );
+}
+
+void AxComponent::AppendComment( const AxString& name, const AxString& value )
+{
+    CHECK_HRESULT( _spIaafComponent->AppendComment( name.c_str(), value.c_str() ) );
+}
+
+void AxComponent::AppendAttribute( const AxString& name, const AxString& value )
+{
+    CHECK_HRESULT( _spIaafComponent->AppendAttribute( name.c_str(), value.c_str() ) );
+}
+
+aafUInt32 AxComponent::CountKLVData()
+{
+    aafUInt32 numKLVData;
+
+    CHECK_HRESULT( _spIaafComponent->CountKLVData( &numKLVData ) );
+
+    return numKLVData;
+}
+
+aafUInt32 AxComponent::CountComments()
+{
+    aafUInt32 numComments;
+
+    CHECK_HRESULT( _spIaafComponent->CountComments( &numComments ) );
+
+    return numComments;
+}
+
+aafUInt32 AxComponent::CountAttributes()
+{
+    aafUInt32 numAttribs;
+
+    CHECK_HRESULT( _spIaafComponent->CountAttributes( &numAttribs ) );
+
+    return numAttribs;
+}
+
+IEnumAAFKLVDataSP AxComponent::GetKLVData()
+{
+    IEnumAAFKLVDataSP spIaafKLVData;
+
+    CHECK_HRESULT( _spIaafComponent->GetKLVData( &spIaafKLVData ) );
+
+    return spIaafKLVData;
+}
+
+IEnumAAFTaggedValuesSP AxComponent::GetComments()
+{
+    IEnumAAFTaggedValuesSP spIaafTaggedValues;
+
+    CHECK_HRESULT( _spIaafComponent->GetComments( &spIaafTaggedValues ) );
+
+    return spIaafTaggedValues;
+}
+
+IEnumAAFTaggedValuesSP AxComponent::GetAttributes()
+{
+    IEnumAAFTaggedValuesSP spIaafTaggedValues;
+
+    CHECK_HRESULT( _spIaafComponent->GetAttributes( &spIaafTaggedValues ) );
+
+    return spIaafTaggedValues;
+}
+
+void AxComponent::RemoveKLVData( IAAFKLVDataSP klvpData )
+{
+    CHECK_HRESULT( _spIaafComponent->RemoveKLVData( klvpData ) );
+}
+
+void AxComponent::RemoveComment( IAAFTaggedValueSP comment )
+{
+    CHECK_HRESULT( _spIaafComponent->RemoveComment( comment ) );
+}
+
+void AxComponent::RemoveAttribute( IAAFTaggedValueSP attribute )
+{
+    CHECK_HRESULT( _spIaafComponent->RemoveAttribute( attribute ) );
 }
 
 //=---------------------------------------------------------------------=
