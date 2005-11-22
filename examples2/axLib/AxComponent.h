@@ -25,6 +25,8 @@
 #include "AxSmartPointer.h"
 #include "AxObject.h"
 
+#include <vector>
+
 //=---------------------------------------------------------------------=
 
 class AxComponent : public AxObject {
@@ -492,6 +494,33 @@ private:
     AxTimecodeStream12M& operator=( const AxTimecodeStream12M& );
 
     IAAFTimecodeStream12MSP _spIaafTimecodeStream12M;
+};
+
+//=---------------------------------------------------------------------=
+
+class AxDescriptiveMarker : public AxCommentMarker {
+
+public:
+    AxDescriptiveMarker( IAAFDescriptiveMarkerSP spIaafDescriptiveMarker );
+    virtual ~AxDescriptiveMarker();
+    
+    void Initialize();
+    
+    std::vector<aafUInt32> GetDescribedSlotIDs();
+    IAAFDescriptiveFrameworkSP GetDescriptiveFramework();
+    
+    void SetDescribedSlotIDs( aafUInt32 numberElements, aafUInt32* describedSlotIDs );
+    void SetDescriptiveFramework( IAAFDescriptiveFrameworkSP descriptiveFramework );
+
+    inline operator IAAFDescriptiveMarkerSP ()
+    { return _spIaafDescriptiveMarker; }
+
+private:
+    AxDescriptiveMarker();
+    AxDescriptiveMarker( const AxDescriptiveMarker& );
+    AxDescriptiveMarker& operator=( const AxDescriptiveMarker& );
+
+    IAAFDescriptiveMarkerSP _spIaafDescriptiveMarker;
 };
 
 //=---------------------------------------------------------------------=

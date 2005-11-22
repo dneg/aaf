@@ -917,3 +917,50 @@ AxTimecodeStream12M::~AxTimecodeStream12M()
 {}
 
 //=---------------------------------------------------------------------=
+
+AxDescriptiveMarker::AxDescriptiveMarker( IAAFDescriptiveMarkerSP spIaafDescriptiveMarker )
+:   AxCommentMarker( AxQueryInterface<IAAFDescriptiveMarker, IAAFCommentMarker>(spIaafDescriptiveMarker) ),
+    _spIaafDescriptiveMarker( spIaafDescriptiveMarker )
+{}
+
+AxDescriptiveMarker::~AxDescriptiveMarker()
+{}
+
+void AxDescriptiveMarker::Initialize()
+{
+    // noop
+}
+
+std::vector<aafUInt32> AxDescriptiveMarker::GetDescribedSlotIDs()
+{
+    aafUInt32 numberOfElements = 0;
+
+    CHECK_HRESULT( _spIaafDescriptiveMarker->GetDescribedSlotIDsSize( &numberOfElements ) );
+    
+    std::vector<aafUInt32> describedSlotIds; 
+
+    CHECK_HRESULT( _spIaafDescriptiveMarker->GetDescribedSlotIDs( numberOfElements, &(describedSlotIds[0]) ) ); 
+    
+    return describedSlotIds;
+}
+
+IAAFDescriptiveFrameworkSP AxDescriptiveMarker::GetDescriptiveFramework()
+{
+    IAAFDescriptiveFrameworkSP descriptiveFramework;
+
+    CHECK_HRESULT( _spIaafDescriptiveMarker->GetDescriptiveFramework( &descriptiveFramework ) );
+
+    return descriptiveFramework;
+}
+
+void AxDescriptiveMarker::SetDescribedSlotIDs( aafUInt32 numberElements, aafUInt32* describedSlotIDs )
+{
+    CHECK_HRESULT( _spIaafDescriptiveMarker->SetDescribedSlotIDs( numberElements, describedSlotIDs ) );
+}
+
+void AxDescriptiveMarker::SetDescriptiveFramework( IAAFDescriptiveFrameworkSP descriptiveFramework )
+{
+    CHECK_HRESULT( _spIaafDescriptiveMarker->SetDescriptiveFramework( descriptiveFramework ) );
+}
+
+//=---------------------------------------------------------------------=
