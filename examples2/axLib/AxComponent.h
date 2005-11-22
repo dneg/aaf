@@ -225,6 +225,9 @@ public:
 
 	aafSlotID_t GetSourceMobSlotID();
 	void SetSourceMobSlotID( const aafSlotID_t& slotid );
+    
+    operator IAAFSourceReferenceSP ()
+    { return _spIaafSourceReference; }
 
 private:
 	AxSourceReference();
