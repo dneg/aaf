@@ -304,3 +304,8 @@
 	derivation chain.  This may be correct, but, if it is not, the derivation
 	test will fail when an Auxiliary SourceMob is encountered in the derivation
 	chain.
+
+59. REQ_EP_149 and REQ_EP_150 prevent CommentMarkers from being used in places
+	where DescriptiveMarkers are allowed.  It is assumed that CommentMarker
+	refers to the base class and any subclass other than DescriptiveMarker and
+	its subclasses.

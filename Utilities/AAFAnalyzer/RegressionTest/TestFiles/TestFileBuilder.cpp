@@ -35,6 +35,7 @@
 #include <AxMob.h>
 #include <AxParameter.h>
 #include <AxMetaDef.h>
+#include <AxDescriptiveFramework.h>
 
 //AAF files
 #include <AAFResult.h>
@@ -485,15 +486,39 @@ shared_ptr<AxComponent> TestFileBuilder::CreateSequence( TrackType essenceType, 
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
     shared_ptr<AxSequence> axSequence( new AxSequence( AxCreateInstance<IAAFSequence>( axDictionary ) ) );
+    axSequence->SetLength( 0 );
     
     AddDataDef( *axSequence, essenceType );
     
     return axSequence;
 }
 
+shared_ptr<AxComponent> TestFileBuilder::CreateCommentMarker( TrackType essenceType, const aafUID_t& uidNothing )
+{
+    AxHeader axHeader( _axFile.getHeader() );
+    AxDictionary axDictionary( axHeader.GetDictionary() );
+
+    shared_ptr<AxCommentMarker> axCommentMarker( new AxCommentMarker( AxCreateInstance<IAAFCommentMarker>( axDictionary ) ) );
+    
+    AddDataDef( *axCommentMarker, essenceType );
+    
+    return axCommentMarker;
+}
+
+shared_ptr<AxComponent> TestFileBuilder::CreateDescriptiveMarker( TrackType essenceType, const aafUID_t& uidNothing )
+{
+    AxHeader axHeader( _axFile.getHeader() );
+    AxDictionary axDictionary( axHeader.GetDictionary() );
+
+    shared_ptr<AxDescriptiveMarker> axDesMarker( new AxDescriptiveMarker( AxCreateInstance<IAAFDescriptiveMarker>( axDictionary ) ) );
+    
+    AddDataDef( *axDesMarker, essenceType );
+    
+    return axDesMarker;
+}
+
 shared_ptr<AxComponent> TestFileBuilder::CreateOperationGroup( TrackType essenceType, const aafUID_t& opDefId )
 {
-    
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
@@ -513,13 +538,13 @@ shared_ptr<AxComponent> TestFileBuilder::CreateOperationGroup( TrackType essence
  * 
  */
 
-void TestFileBuilder::InitializeSourceClip( shared_ptr<AxSegment> axSegment, AxMob& axMob )
+void TestFileBuilder::InitializeSourceClip( shared_ptr<AxSourceReference> parent, AxMob& child )
 {
     
-    shared_ptr<AxSourceClip> axSrcClip = dynamic_pointer_cast<AxSourceClip>( axSegment );
+    shared_ptr<AxSourceClip> axSrcClip = dynamic_pointer_cast<AxSourceClip>( parent );
     
     aafSourceRef_t srcRef;
-    srcRef.sourceID     = axMob.GetMobID();
+    srcRef.sourceID     = child.GetMobID();
     srcRef.sourceSlotID = 1;
     srcRef.startTime    = 0;    
     
@@ -528,32 +553,51 @@ void TestFileBuilder::InitializeSourceClip( shared_ptr<AxSegment> axSegment, AxM
   
 }
 
-void TestFileBuilder::AddToTransition( shared_ptr<AxObject> axObject, AxObject& axObj )
+void TestFileBuilder::AddToTransition( shared_ptr<AxComponent> parent, AxComponent& child )
 {
-    shared_ptr<AxTransition> axTransition = dynamic_pointer_cast<AxTransition>( axObject );
+    shared_ptr<AxTransition> axTransition = dynamic_pointer_cast<AxTransition>( parent );
     
-    shared_ptr<AxOperationGroup> axOpGroup( new AxOperationGroup( AxQueryInterface<IAAFObject, IAAFOperationGroup>( axObj ) ) );
+    shared_ptr<AxOperationGroup> axOpGroup( new AxOperationGroup( AxQueryInterface<IAAFComponent, IAAFOperationGroup>( child ) ) );
     
     axTransition->SetOperationGroup( *axOpGroup );
 }
 
-void TestFileBuilder::AddToSequence( shared_ptr<AxObject> axObject, AxObject& axObj )
+void TestFileBuilder::AddToSequence( shared_ptr<AxComponent> parent, AxComponent& child )
 {
-    shared_ptr<AxSequence> axSequence = dynamic_pointer_cast<AxSequence>( axObject );
-    
-    shared_ptr<AxComponent> axComponent( new AxComponent( AxQueryInterface<IAAFObject, IAAFComponent>( axObj ) ) );
-    
-    axSequence->AppendComponent( *axComponent );
+    shared_ptr<AxSequence> axSequence = dynamic_pointer_cast<AxSequence>( parent );
+
+    axSequence->AppendComponent( child );
 }
 
-void TestFileBuilder::AddToOperationGroup( shared_ptr<AxSegment> axSegment, AxObject& axObj, int property )
+void TestFileBuilder::AddToCommentMarker( shared_ptr<AxComponent> parent, AxComponent& child )
 {
-    shared_ptr<AxOperationGroup> axOpGroup = dynamic_pointer_cast<AxOperationGroup>( axSegment );
-
-    shared_ptr<AxSegment> axChildSegment( new AxSegment( AxQueryInterface<IAAFObject, IAAFSegment>( axObj ) ) );
-    axChildSegment->SetDataDef( axOpGroup->GetDataDef() );
+    shared_ptr<AxCommentMarker> axCommentMarker = dynamic_pointer_cast<AxCommentMarker>( parent );
     
-    axOpGroup->AppendInputSegment( *axChildSegment );    
+    shared_ptr<AxSourceReference> axSrcRef( new AxSourceReference( AxQueryInterface<IAAFComponent, IAAFSourceReference>( child ) ) );
+    
+    axCommentMarker->SetAnnotation( *axSrcRef );
+}
+
+void TestFileBuilder::AddToOperationGroup( shared_ptr<AxSegment> parent, AxSegment& child, int property )
+{
+    shared_ptr<AxOperationGroup> axOpGroup = dynamic_pointer_cast<AxOperationGroup>( parent );
+
+    if ( property == INPUT_SEGMENT )
+    {
+        child.SetDataDef( axOpGroup->GetDataDef() );   
+        axOpGroup->AppendInputSegment( child );    
+    }
+}
+
+/*
+ * 
+ * Comments
+ * 
+ */
+
+void TestFileBuilder::AddComment( shared_ptr<AxComponent> axComponent, const AxString& name, const AxString& value )
+{
+    axComponent->AppendComment( name, value );
 }
 
 /*
@@ -652,6 +696,16 @@ void TestFileBuilder::AttachConstantRationalParameter( AxOperationGroup& axOpGro
     axParam.Initialize( *(this->GetParameterDef( paramDefId, axDictionary )), sizeof(param), (aafDataBuffer_t)&param );
     
     axOpGroup.AddParameter( axParam );
+}
+
+void TestFileBuilder::AttachDescriptiveFramework( shared_ptr<AxDescriptiveMarker> axMarker )
+{
+    AxHeader axHeader( _axFile.getHeader() );
+    AxDictionary axDictionary( axHeader.GetDictionary() );
+    
+    AxDescriptiveFramework axDesFwk( AxCreateInstance<IAAFDescriptiveFramework>( axDictionary ) );
+    
+    axMarker->SetDescriptiveFramework( axDesFwk );
 }
 
 /*

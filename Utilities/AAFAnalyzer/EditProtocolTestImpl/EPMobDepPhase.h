@@ -32,6 +32,7 @@
 #include <EPLocatorTest.h>
 #include <EPEditRateTest.h>
 #include <EPEffectTest.h>
+#include <EPAnnotationTest.h>
 
 //Test/Result files
 #include <TestPhase.h>

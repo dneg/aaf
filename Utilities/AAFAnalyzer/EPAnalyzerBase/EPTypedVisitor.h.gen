@@ -28,6 +28,8 @@
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot,EPAudioTrack>& node) { return this->ForwardPostOrderVisit<IAAFTimelineMobSlot,EPAudioTrack>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot,EPVideoTrack>& node) { return this->ForwardPreOrderVisit<IAAFTimelineMobSlot,EPVideoTrack>( node ); }
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot,EPVideoTrack>& node) { return this->ForwardPostOrderVisit<IAAFTimelineMobSlot,EPVideoTrack>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot,EPNonEssenceTrack>& node) { return this->ForwardPreOrderVisit<IAAFTimelineMobSlot,EPNonEssenceTrack>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot,EPNonEssenceTrack>& node) { return this->ForwardPostOrderVisit<IAAFTimelineMobSlot,EPNonEssenceTrack>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot,EPTimecodeTrack>& node) { return this->ForwardPreOrderVisit<IAAFTimelineMobSlot,EPTimecodeTrack>( node ); }
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot,EPTimecodeTrack>& node) { return this->ForwardPostOrderVisit<IAAFTimelineMobSlot,EPTimecodeTrack>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot,EPEdgecodeTrack>& node) { return this->ForwardPreOrderVisit<IAAFTimelineMobSlot,EPEdgecodeTrack>( node ); }
@@ -38,6 +40,8 @@
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFStaticMobSlot,EPAudioTrack>& node) { return this->ForwardPostOrderVisit<IAAFStaticMobSlot,EPAudioTrack>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot,EPVideoTrack>& node) { return this->ForwardPreOrderVisit<IAAFStaticMobSlot,EPVideoTrack>( node ); }
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFStaticMobSlot,EPVideoTrack>& node) { return this->ForwardPostOrderVisit<IAAFStaticMobSlot,EPVideoTrack>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot,EPNonEssenceTrack>& node) { return this->ForwardPreOrderVisit<IAAFStaticMobSlot,EPNonEssenceTrack>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFStaticMobSlot,EPNonEssenceTrack>& node) { return this->ForwardPostOrderVisit<IAAFStaticMobSlot,EPNonEssenceTrack>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot,EPTimecodeTrack>& node) { return this->ForwardPreOrderVisit<IAAFStaticMobSlot,EPTimecodeTrack>( node ); }
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFStaticMobSlot,EPTimecodeTrack>& node) { return this->ForwardPostOrderVisit<IAAFStaticMobSlot,EPTimecodeTrack>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot,EPEdgecodeTrack>& node) { return this->ForwardPreOrderVisit<IAAFStaticMobSlot,EPEdgecodeTrack>( node ); }
@@ -48,6 +52,8 @@
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFEventMobSlot,EPAudioTrack>& node) { return this->ForwardPostOrderVisit<IAAFEventMobSlot,EPAudioTrack>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot,EPVideoTrack>& node) { return this->ForwardPreOrderVisit<IAAFEventMobSlot,EPVideoTrack>( node ); }
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFEventMobSlot,EPVideoTrack>& node) { return this->ForwardPostOrderVisit<IAAFEventMobSlot,EPVideoTrack>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot,EPNonEssenceTrack>& node) { return this->ForwardPreOrderVisit<IAAFEventMobSlot,EPNonEssenceTrack>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFEventMobSlot,EPNonEssenceTrack>& node) { return this->ForwardPostOrderVisit<IAAFEventMobSlot,EPNonEssenceTrack>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot,EPTimecodeTrack>& node) { return this->ForwardPreOrderVisit<IAAFEventMobSlot,EPTimecodeTrack>( node ); }
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFEventMobSlot,EPTimecodeTrack>& node) { return this->ForwardPostOrderVisit<IAAFEventMobSlot,EPTimecodeTrack>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot,EPEdgecodeTrack>& node) { return this->ForwardPreOrderVisit<IAAFEventMobSlot,EPEdgecodeTrack>( node ); }
@@ -58,6 +64,8 @@
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFMobSlot,EPAudioTrack>& node) { return this->ForwardPostOrderVisit<IAAFMobSlot,EPAudioTrack>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot,EPVideoTrack>& node) { return this->ForwardPreOrderVisit<IAAFMobSlot,EPVideoTrack>( node ); }
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFMobSlot,EPVideoTrack>& node) { return this->ForwardPostOrderVisit<IAAFMobSlot,EPVideoTrack>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot,EPNonEssenceTrack>& node) { return this->ForwardPreOrderVisit<IAAFMobSlot,EPNonEssenceTrack>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFMobSlot,EPNonEssenceTrack>& node) { return this->ForwardPostOrderVisit<IAAFMobSlot,EPNonEssenceTrack>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot,EPTimecodeTrack>& node) { return this->ForwardPreOrderVisit<IAAFMobSlot,EPTimecodeTrack>( node ); }
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFMobSlot,EPTimecodeTrack>& node) { return this->ForwardPostOrderVisit<IAAFMobSlot,EPTimecodeTrack>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot,EPEdgecodeTrack>& node) { return this->ForwardPreOrderVisit<IAAFMobSlot,EPEdgecodeTrack>( node ); }

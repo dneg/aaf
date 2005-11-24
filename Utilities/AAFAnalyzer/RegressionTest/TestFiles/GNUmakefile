@@ -94,7 +94,13 @@ check : $(AAFSDKBINDIR)/BuildTestFile$(EXE)
 	@echo "End of Test"
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPEffectTest.xml EPEffectTest.aaf
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPEffectTest.aaf ../../Requirements/AAFRequirements.xml >> EPEffectTest.temp
-	grep -A `expr \`expr \\\`wc -l EPEffectTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Effect Test" EPEffectTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\`` "Name:   Edit Protocol Effect Test" EPEffectTest.temp >> EPEffectTest.results
+	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Annotation Test" EPEffectTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Effect Test" EPEffectTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Effect Test" EPEffectTest.temp >> EPEffectTest.results
 	@echo "Comparing EPEffectTest Expected Results (EPEffectTest.expected) to Actual Results (EPEffectTest.results)"
 	diff EPEffectTest.expected EPEffectTest.results
+	@echo "End of Test"
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPAnnotationTest.xml EPAnnotationTest.aaf
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPAnnotationTest.aaf ../../Requirements/AAFRequirements.xml >> EPAnnotationTest.temp
+	grep -A `expr \`expr \\\`wc -l EPAnnotationTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Annotation Test" EPAnnotationTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\`` "Name:   Edit Protocol Annotation Test" EPAnnotationTest.temp >> EPAnnotationTest.results
+	@echo "Comparing EPAnnotationTest Expected Results (EPAnnotationTest.expected) to Actual Results (EPAnnotationTest.results)"
+	diff EPAnnotationTest.expected EPAnnotationTest.results
 	@echo "End of Test"

@@ -555,3 +555,9 @@ EPLocatorVisitor - Derived from EPTypedVisitor, used by EPVisitorTest to verify
 				   library, the code must be modified - one function specifies
 				   a default parameter value in the function definition and
 				   declaration - remove the default value in the definition.
+
+EPAnnotationTest - Derived from Test and executed by EPMobDepPhase.  Test that
+				   all annotations in the AAF file are legal.
+
+EPAnnotationVisitor - Derived from EPTypedVisitor, used by EPAnnotationTest to
+					  verify that all annotations are legal.

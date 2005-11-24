@@ -1,77 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!ENTITY OPERATION_GROUP "mono-audio-dissolve">
-<!ELEMENT aaf-file ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | auxiliary-source )+>
+
+<!ENTITY % MOB "top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | auxiliary-source">
+<!ENTITY % MOB_SLOT "timeline-mob-slot | static-mob-slot | event-mob-slot">
+<!ENTITY % OPERATION_GROUP "video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve">
+<!ENTITY % SOURCE_REFERENCE "source-clip | eoc | oof">
+<!ENTITY % SEGMENT "sequence | timecode | timecode-stream-12m | edgecode | comment-marker | descriptive-marker | %SOURCE_REFERENCE; | %OPERATION_GROUP;">
+<!ENTITY % COMPONENT "transition | %SEGMENT;">
+<!ENTITY % COMMENTS_AND_COMPONENTS "( comment | %COMPONENT; )*">
+<!ENTITY % COMMENTS_AND_SEGMENTS "( comment | %SEGMENT; )*">
+<!ENTITY % ESSENCE_TYPE "none | audio | picture | timecode | edgecode | auxiliary">
+
+<!ELEMENT aaf-file ( %MOB; )+>
 
 <!-- Mobs -->
 
-<!ELEMENT top-level ( timeline-mob-slot | static-mob-slot | event-mob-slot | mono-audio-dissolve | bad-eoc )+>
+<!ELEMENT top-level ( %MOB_SLOT; | bad-eoc )+>
 <!ATTLIST top-level name CDATA #IMPLIED>
 
-<!ELEMENT lower-level ( timeline-mob-slot | static-mob-slot | event-mob-slot | mono-audio-dissolve | bad-eoc )+>
+<!ELEMENT lower-level ( %MOB_SLOT; | bad-eoc )+>
 <!ATTLIST lower-level name CDATA #IMPLIED>
 
-<!ELEMENT sub-clip ( timeline-mob-slot | static-mob-slot | event-mob-slot | mono-audio-dissolve | bad-eoc )+>
+<!ELEMENT sub-clip ( %MOB_SLOT; | bad-eoc )+>
 <!ATTLIST sub-clip name CDATA #IMPLIED>
 
-<!ELEMENT adjusted-clip ( timeline-mob-slot | static-mob-slot | event-mob-slot | mono-audio-dissolve | bad-eoc )+>
+<!ELEMENT adjusted-clip ( %MOB_SLOT; | bad-eoc )+>
 <!ATTLIST adjusted-clip name CDATA #IMPLIED>
 
-<!ELEMENT template-clip ( timeline-mob-slot | static-mob-slot | event-mob-slot | mono-audio-dissolve | bad-eoc )+>
+<!ELEMENT template-clip ( %MOB_SLOT; | bad-eoc )+>
 <!ATTLIST template-clip name CDATA #IMPLIED>
 
-<!ELEMENT clip ( timeline-mob-slot | static-mob-slot | event-mob-slot | mono-audio-dissolve | bad-eoc )+>
+<!ELEMENT clip ( %MOB_SLOT; | bad-eoc )+>
 <!ATTLIST clip name CDATA #IMPLIED>
 
-<!ELEMENT file-source ( timeline-mob-slot | static-mob-slot | event-mob-slot | mono-audio-dissolve | bad-eoc )+>
+<!ELEMENT file-source ( %MOB_SLOT; | bad-eoc )+>
 <!ATTLIST file-source 
 	name CDATA #IMPLIED
     sample-rate-numerator CDATA #REQUIRED
     sample-rate-denominator CDATA #REQUIRED
 >
 
-<!ELEMENT recording-source ( timeline-mob-slot | static-mob-slot | event-mob-slot | mono-audio-dissolve | bad-eoc )+>
+<!ELEMENT recording-source ( %MOB_SLOT; | bad-eoc )+>
 <!ATTLIST recording-source name CDATA #IMPLIED>
 
-<!ELEMENT import-source ( timeline-mob-slot | static-mob-slot | event-mob-slot | mono-audio-dissolve | bad-eoc )+>
+<!ELEMENT import-source ( %MOB_SLOT; | bad-eoc )+>
 <!ATTLIST import-source name CDATA #IMPLIED>
 
-<!ELEMENT tape-source ( timeline-mob-slot | static-mob-slot | event-mob-slot | mono-audio-dissolve | bad-eoc )+>
+<!ELEMENT tape-source ( %MOB_SLOT; | bad-eoc )+>
 <!ATTLIST tape-source name CDATA #IMPLIED>
 
-<!ELEMENT film-source ( timeline-mob-slot | static-mob-slot | event-mob-slot | mono-audio-dissolve | bad-eoc )+>
+<!ELEMENT film-source ( %MOB_SLOT; | bad-eoc )+>
 <!ATTLIST film-source name CDATA #IMPLIED>
 
-<!ELEMENT auxiliary-source ( timeline-mob-slot | static-mob-slot | event-mob-slot | mono-audio-dissolve | bad-eoc )+>
+<!ELEMENT auxiliary-source ( %MOB_SLOT; | bad-eoc )+>
 <!ATTLIST auxiliary-source name CDATA #IMPLIED>
+
+<!-- Comments -->
+<!ELEMENT comment EMPTY>
+<!ATTLIST comment
+    name CDATA #REQUIRED
+    value CDATA #REQUIRED
+>
 
 <!-- Type A Components -->
 
-<!ELEMENT timecode EMPTY>
+<!ELEMENT timecode ( comment* )>
 <!ATTLIST timecode track-type ( timecode ) #REQUIRED>
 
-<!ELEMENT edgecode EMPTY>
+<!ELEMENT edgecode ( comment* )>
 <!ATTLIST edgecode track-type ( edgecode ) #REQUIRED>
 
-<!ELEMENT timecode-stream-12m EMPTY>
+<!ELEMENT timecode-stream-12m ( comment* )>
 <!ATTLIST timecode-stream-12m track-type ( timecode ) #REQUIRED>
 
-<!ELEMENT eoc EMPTY>
-<!ATTLIST eoc track-type ( none | audio | picture | auxiliary ) #REQUIRED>
+<!ELEMENT eoc ( comment* )>
+<!ATTLIST eoc track-type ( %ESSENCE_TYPE; ) #REQUIRED>
 
-<!ELEMENT oof EMPTY>
-<!ATTLIST oof track-type ( none | audio | picture | auxiliary ) #REQUIRED>
+<!ELEMENT oof ( comment* )>
+<!ATTLIST oof track-type ( %ESSENCE_TYPE; ) #REQUIRED>
 
 <!-- Type B Components -->
 
-<!ELEMENT source-clip ( top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | auxiliary-source )>
+<!ELEMENT source-clip ( comment*, ( %MOB; ), comment* )>
 <!ATTLIST source-clip track-type ( none | audio | picture | auxiliary ) #REQUIRED>
 
 <!-- Type C Components -->
-<!ELEMENT transition ( video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )>
-<!ATTLIST transition track-type ( none | audio | picture | auxiliary ) #REQUIRED>
+<!ELEMENT transition ( %COMMENTS_AND_SEGMENTS; )>
+<!ATTLIST transition track-type ( %ESSENCE_TYPE; ) #REQUIRED>
 
-<!ELEMENT sequence ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | transition | timecode-stream-12m )+>
-<!ATTLIST sequence track-type ( none | audio | picture | auxiliary ) #REQUIRED>
+<!ELEMENT sequence ( comment*, ( %COMPONENT; ), %COMMENTS_AND_COMPONENTS; )>
+<!ATTLIST sequence track-type ( %ESSENCE_TYPE; ) #REQUIRED>
+
+<!ELEMENT comment-marker ( comment*, ( %SOURCE_REFERENCE; )?, comment* )>
+<!ATTLIST comment-marker track-type ( %ESSENCE_TYPE; ) #REQUIRED>
+
+<!ELEMENT descriptive-marker ( comment*, ( ( ( %SOURCE_REFERENCE; )?, comment*, descriptive-framework? ) | ( descriptive-framework?, comment*, ( %SOURCE_REFERENCE; )? ) ), comment* )>
+<!ATTLIST descriptive-marker track-type ( %ESSENCE_TYPE; ) #REQUIRED>
 
 <!-- Type D components -->
 
@@ -85,13 +108,13 @@
     		Contain 1 Segment
 -->
 
-<!ELEMENT video-dissolve ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT video-dissolve ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST video-dissolve track-type ( picture ) #REQUIRED>
 
-<!ELEMENT smpte-video-wipe ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT smpte-video-wipe ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST smpte-video-wipe track-type ( picture ) #REQUIRED>
 
-<!ELEMENT video-speed-control ( speed-ratio?, ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )* )>
+<!ELEMENT video-speed-control ( %COMMENTS_AND_COMPONENTS;, speed-ratio?, %COMMENTS_AND_COMPONENTS; )>
 <!ATTLIST video-speed-control track-type ( picture ) #REQUIRED>
 
 	<!ELEMENT speed-ratio EMPTY>
@@ -100,60 +123,60 @@
         denominator CDATA #REQUIRED
     >
 
-<!ELEMENT video-repeat ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT video-repeat ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST video-repeat track-type ( picture ) #REQUIRED>
 
-<!ELEMENT video-flip ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT video-flip ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST video-flip track-type ( picture ) #REQUIRED>
 
-<!ELEMENT video-flop ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT video-flop ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST video-flop track-type ( picture ) #REQUIRED>
 
-<!ELEMENT video-flip-flop ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT video-flip-flop ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST video-flip-flop track-type ( picture ) #REQUIRED>
 
-<!ELEMENT video-position ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT video-position ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST video-position track-type ( picture ) #REQUIRED>
 
-<!ELEMENT video-crop ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT video-crop ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST video-crop track-type ( picture ) #REQUIRED>
 
-<!ELEMENT video-scale ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT video-scale ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST video-scale track-type ( picture ) #REQUIRED>
 
-<!ELEMENT video-rotate ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT video-rotate ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST video-rotate track-type ( picture ) #REQUIRED>
 
-<!ELEMENT video-corner-pinning ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT video-corner-pinning ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST video-corner-pinning track-type ( picture ) #REQUIRED>
 
-<!ELEMENT alpha-with-video-key ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT alpha-with-video-key ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST alpha-with-video-key track-type ( picture ) #REQUIRED>
 
-<!ELEMENT separate-alpha-key ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT separate-alpha-key ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST separate-alpha-key track-type ( picture ) #REQUIRED>
 
-<!ELEMENT luminance-key ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT luminance-key ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST luminance-key track-type ( picture ) #REQUIRED>
 
-<!ELEMENT chroma-key ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT chroma-key ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST chroma-key track-type ( picture ) #REQUIRED>
 
-<!ELEMENT mono-audio-gain ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT mono-audio-gain ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST mono-audio-gain track-type ( audio ) #REQUIRED>
 
-<!ELEMENT mono-audio-pan ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT mono-audio-pan ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST mono-audio-pan track-type ( audio ) #REQUIRED>
 
-<!ELEMENT mono-audio-dissolve ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT mono-audio-dissolve ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST mono-audio-dissolve track-type ( audio ) #REQUIRED>
 
-<!ELEMENT two-parameter-mono-audio-dissolve ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | sequence | timecode-stream-12m )*>
+<!ELEMENT two-parameter-mono-audio-dissolve ( %COMMENTS_AND_SEGMENTS; )>
 <!ATTLIST two-parameter-mono-audio-dissolve track-type ( audio ) #REQUIRED>
 
 <!-- Mob Slots -->
 
-<!ELEMENT timeline-mob-slot ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | timecode | edgecode | sequence | timecode-stream-12m )>
+<!ELEMENT timeline-mob-slot ( %SEGMENT; )>
 <!ATTLIST timeline-mob-slot
     edit-rate-numerator CDATA #REQUIRED
     edit-rate-denominator CDATA #REQUIRED
@@ -161,19 +184,22 @@
     physical-track-number CDATA #IMPLIED
 >
 
-<!ELEMENT static-mob-slot ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | timecode | edgecode | sequence | timecode-stream-12m )>
+<!ELEMENT static-mob-slot ( %SEGMENT; )>
 <!ATTLIST static-mob-slot
     name CDATA #IMPLIED
     physical-track-number CDATA #IMPLIED
 >
 
-<!ELEMENT event-mob-slot ( source-clip | eoc | oof | video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve | timecode | edgecode | sequence | timecode-stream-12m )>
+<!ELEMENT event-mob-slot ( %SEGMENT; )>
 <!ATTLIST event-mob-slot
     edit-rate-numerator CDATA #REQUIRED
     edit-rate-denominator CDATA #REQUIRED
     name CDATA #IMPLIED
     physical-track-number CDATA #IMPLIED
 >
+
+<!-- Other Interchange Objects -->
+<!ELEMENT descriptive-framework EMPTY>
 
 <!-- End a derivation chain on a mob -->
 <!ELEMENT bad-eoc EMPTY>

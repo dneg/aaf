@@ -1650,7 +1650,7 @@
     <requirement type="file" category="compositional">
         <id>REQ_EP_150</id>
         <name>Comment Marker Placement</name>
-        <desc>CommentMarkers shall be placed only in EventMobSlots.</desc>
+        <desc>CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>

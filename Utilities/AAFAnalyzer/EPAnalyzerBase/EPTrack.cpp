@@ -99,6 +99,19 @@ const AxString EPEssenceTrack::GetName()
 
 //======================================================================
 
+EPNonEssenceTrack::EPNonEssenceTrack()
+{}
+
+EPNonEssenceTrack::~EPNonEssenceTrack()
+{}
+
+const AxString EPNonEssenceTrack::GetName()
+{
+    return L"Non-Essence Track";
+}
+
+//======================================================================
+
 EPTimecodeTrack::EPTimecodeTrack()
 {}
 

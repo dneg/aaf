@@ -123,6 +123,10 @@ shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
   // Ninth, run the effect test
   shared_ptr<EPEffectTest> effectTest( new EPEffectTest( _log, _spGraph ) );
   spPhaseResult->AppendSubtestResult( effectTest->Execute() );
+  
+  // Tenth, run the annotation test
+  shared_ptr<EPAnnotationTest> annotationTest( new EPAnnotationTest( _log, _spGraph ) );
+  spPhaseResult->AppendSubtestResult( annotationTest->Execute() );
 
   spPhaseResult->SetResult( spPhaseResult->GetAggregateResult() );
 

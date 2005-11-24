@@ -57,8 +57,7 @@ Issues:
 33. Essence track is not defined.  It is assumed to 	be a MobSlot that has a
 	Sound or Picture DataDefinition.
 	
-	
-42. REQ_EP_099 and REQ_EP_100 state that the edit rates of audio tracks must
+	42. REQ_EP_099 and REQ_EP_100 state that the edit rates of audio tracks must
 	equal the sample rate and the edit rates of video tracks must be less than
 	or equal to the sample rate respectively.  Currently, it is assumed that an
 	audio track is a mob slot where IsSoundKind() is true that contains a
@@ -779,6 +778,43 @@ Issues:
 	
 53. There is no easy way to regression test varying value or non-rational Speed
 	Ratio parameters for REQ_EP_187
+	
+Test Name:
+	EPAnnotationTestTest
+Description:
+	Make sure that annotations in an AAF file are legal.
+Requirements Tested:
+	REQ_EP_147 (10.1)
+		Component::UserComments shall only be used on: the Segment of a MobSlot
+		or a CommentMarker (or its subclasses).
+	REQ_EP_149 (10.1)
+		CommentMarkers may be used for annotations that are not associated with
+		a specific essence track; otherwise DescriptiveMarkers (or its 
+		subclasses) shall be used.
+	REQ_EP_150 (10.1)
+		CommentMarkers shall be placed only in EventMobSlots.  
+		DescriptiveMarkers may be placed in any kind of MobSlot (e.g. 
+		TimelineMobSlot, EventMobSlot, StaticMobSlot).
+Warn Conditions:
+	NONE
+Fail Conditions:
+	REQ_EP_147 - Fail if the number of UserComments on a component is greater
+				 than zero, and the component is not a CommentMarker or the 
+				 child of a MobSlot.
+	REQ_EP_149 - Fail if a CommentMarker base class or subclass other than 
+				 DescripteMarker and its subclasses) is included within an
+				 essence track.
+	REQ_EP_150 - Fail if a CommentMarker base class or subclass other than
+				 DescriptiveMarker han an ancestor MobSlot that is not an
+				 EventMobSlot.
+Issues:   
+33. Essence track is not defined.  It is assumed to 	be a MobSlot that has a
+	Sound or Picture DataDefinition.
+
+59. REQ_EP_149 and REQ_EP_150 prevent CommentMarkers from being used in places
+	where DescriptiveMarkers are allowed.  It is assumed that CommentMarker
+	refers to the base class and any subclass other than DescriptiveMarker and
+	its subclasses.
 	
 Other Issues:
 

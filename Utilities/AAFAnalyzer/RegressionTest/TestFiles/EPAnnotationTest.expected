@@ -1,0 +1,64 @@
+        Name:   Edit Protocol Annotation Test
+        Desc:   Verify that all annotations in an AAF file are legal.
+        Result: Failed
+        Reason: Test Failed - See "Edit Protocol Annotation Visitor" Visitor for details
+        Passing Requirements: None
+        Warning Requirements: None
+        Failing Requirements: REQ_EP_147; REQ_EP_149; REQ_EP_150
+
+            Name:   Edit Protocol Annotation Visitor
+            Desc:   Visit components to make sure they do not have illegal annotations.
+            Result: Failed
+            Reason: 
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_147; REQ_EP_149; REQ_EP_150
+
+                Name:   Edit Protocol Annotation Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob slot with ID = 1 of Top-Level Composition: "Illegal User Comments" contains a Component that illegally uses the Component::UserComments property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_147
+
+                Name:   Edit Protocol Annotation Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob slot with ID = 1 of Top-Level Composition: "CommentMarker in Essence Track" is an essence track and uses CommentMarkers for annotations.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_149
+
+                Name:   Edit Protocol Annotation Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob slot with ID = 1 of Top-Level Composition: "CommentMarker nested in Timeline Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_150
+
+                Name:   Edit Protocol Annotation Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob slot with ID = 1 of Top-Level Composition: "CommentMarker in Timeline Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_150
+
+                Name:   Edit Protocol Annotation Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob slot with ID = 1 of Top-Level Composition: "CommentMarker nested in Static Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_150
+
+                Name:   Edit Protocol Annotation Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob slot with ID = 1 of Top-Level Composition: "CommentMarker in Static Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_150
+

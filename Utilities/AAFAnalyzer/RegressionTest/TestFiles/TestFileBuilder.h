@@ -37,6 +37,8 @@ class AxDictionary;
 class AxOperationDef;
 class AxParameterDef;
 class AxConstantValue;
+class AxDescriptiveMarker;
+class AxSourceReference;
 
 namespace aafanalyzer {
 
@@ -47,6 +49,8 @@ class TestFileBuilder
     public:
     
         enum TrackType { NONE, AUDIO, PICTURE, TIMECODE, EDGECODE, AUXILIARY };
+        static const int INPUT_SEGMENT = 1;
+        static const int RENDERING = 2;
     
         TestFileBuilder( const char* outFile );
         ~TestFileBuilder();
@@ -84,20 +88,26 @@ class TestFileBuilder
         //Type C:
         shared_ptr<AxComponent> CreateTransition( TrackType essenceType, const aafUID_t& uidNothing );
         shared_ptr<AxComponent> CreateSequence( TrackType essenceType, const aafUID_t& uidNothing );
+        shared_ptr<AxComponent> CreateCommentMarker( TrackType essenceType, const aafUID_t& uidNothing );
+        shared_ptr<AxComponent> CreateDescriptiveMarker( TrackType essenceType, const aafUID_t& uidNothing );
         
         //Type D:
         shared_ptr<AxComponent> CreateOperationGroup( TrackType essenceType, const aafUID_t& opDefId );
        
         //Fill Components:
         //Type B:
-        void InitializeSourceClip( shared_ptr<AxSegment> axSegment, AxMob& axMob );
+        void InitializeSourceClip( shared_ptr<AxSourceReference> parent, AxMob& child );
         
         //Type C:
-        void AddToTransition( shared_ptr<AxObject> axObject, AxObject& axObj );
-        void AddToSequence( shared_ptr<AxObject> axObject, AxObject& axObj );
+        void AddToTransition( shared_ptr<AxComponent> parent, AxComponent& child );
+        void AddToSequence( shared_ptr<AxComponent> parent, AxComponent& child );
+        void AddToCommentMarker( shared_ptr<AxComponent> parent, AxComponent& child );
 
         //Type D:
-        void AddToOperationGroup( shared_ptr<AxSegment> axSegment, AxObject& axObj, int property );
+        void AddToOperationGroup( shared_ptr<AxSegment> parent, AxSegment& child, int property );
+        
+        //Comment:
+        void AddComment( shared_ptr<AxComponent> axComponent, const AxString& name, const AxString& value );
 
         //Mob Slots:
         void AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered );
@@ -106,6 +116,9 @@ class TestFileBuilder
         
         //Parameters:
         void AttachConstantRationalParameter( AxOperationGroup& axOpGroup, const aafUID_t& paramDefId, aafUInt32 numerator, aafUInt32 denominator );
+        
+        //Interchange Objects:
+        void AttachDescriptiveFramework( shared_ptr<AxDescriptiveMarker> axMarker );
         
 
     private:

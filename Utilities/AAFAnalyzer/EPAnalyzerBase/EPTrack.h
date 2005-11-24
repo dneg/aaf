@@ -57,11 +57,32 @@ class EPTrackObject : public EPObject
 //======================================================================
 
 /*
+ * This class represents a non-essence track, which is currently defined as a
+ * MobSlot where IsPictureType() or IsAudioType is false.
+ */
+
+class EPNonEssenceTrack : public EPTrackObject
+{
+    public:
+        EPNonEssenceTrack();
+        ~EPNonEssenceTrack();
+        static const AxString GetName();
+
+    private:
+
+        //prohibited
+        EPNonEssenceTrack( const EPNonEssenceTrack& );
+        EPNonEssenceTrack& operator=( const EPNonEssenceTrack& );
+};
+
+//======================================================================
+
+/*
  * This class represents a timecode track, which is currently defined as a
  * MobSlot where IsTimecodeType() true.
  */
 
-class EPTimecodeTrack : public EPTrackObject
+class EPTimecodeTrack : public EPNonEssenceTrack
 {
     public:
         EPTimecodeTrack();
@@ -82,7 +103,7 @@ class EPTimecodeTrack : public EPTrackObject
  * MobSlot where IsEdgecodeType() true.
  */
 
-class EPEdgecodeTrack : public EPTrackObject
+class EPEdgecodeTrack : public EPNonEssenceTrack
 {
     public:
         EPEdgecodeTrack();

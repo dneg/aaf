@@ -38,6 +38,7 @@ class AxObject;
 class AxMob;
 class AxComponent;
 class AxSegment;
+class AxSourceReference;
 
 namespace aafanalyzer {
 
@@ -87,7 +88,7 @@ public:
     
     //Type B (One Mob Referenced)
     //SourceReference, SourceClip
-    typedef void(TestFileBuilder::*ptrToFillFunctionB) ( shared_ptr<AxSegment> axSegment, AxMob& axMob );
+    typedef void(TestFileBuilder::*ptrToFillFunctionB) ( shared_ptr<AxSourceReference> parent, AxMob& child );
     //NOTE: SourceReference is an abstract class.  Although the general create
     //      function will be sufficient to create new descendant classes, a
     //      specialized fill function will be needed.  In many cases, that
@@ -97,13 +98,14 @@ public:
     
     //Type C (Interchange Objects can be attached (one or many in an array) )
     //Transition, Sequence, CommentMarker, DescriptiveMarker, Pulldown
-    typedef void(TestFileBuilder::*ptrToFillFunctionC) ( shared_ptr<AxObject> axObject, AxObject& axObj );
+    typedef void(TestFileBuilder::*ptrToFillFunctionC) ( shared_ptr<AxComponent> parent, AxComponent& child );
     
-    //Type D (Multiple InterchangeObjects assigned to different properties)
+    //Type D (Multiple Segments assigned to different properties)
     //OperationGroup, Selector, EssenceGroups
-    typedef void(TestFileBuilder::*ptrToFillFunctionD) ( shared_ptr<AxSegment> axSegment, AxObject& axObj, int property );
+    typedef void(TestFileBuilder::*ptrToFillFunctionD) ( shared_ptr<AxSegment> parent, AxSegment& child, int property );
 
     typedef pair<AxString, shared_ptr<AxComponent> > ComponentPair;
+    typedef pair<AxString, AxString> TypeDPair;
 
     stack<shared_ptr<AxMob> > _mobStack;
     stack<ComponentPair> _componentStack;
@@ -123,6 +125,7 @@ public:
     map<AxString, AxString> _optRationalParam;
     map<AxString, aafUID_t> _effectMap;
     map<AxString, aafUID_t> _parameterTypeMap;
+    map<TypeDPair, int> _typeDPropertyMap;
     
     TestFileBuilder _testFile;
     

@@ -65,15 +65,30 @@ InputParser::InputParser( const char* outFile )
      *       to reduce the average runtime (map search instead of linear if
      *       statement comparison) and to eliminate the need to maintain multiple
      *       if statements (only maps need to be maintained).
+     */
+     
+    /*
      * 
-     * Also: The XML elements eof, oof, timecode, edgecode, aaf-file and bad-eoc
-     *       are not contained in any of these maps.  This has been done because
-     *       there are not a sufficient number of function (>2) with the same
-     *       signature to warrant the map for the first 4 elements.  If more
-     *       functions with the same signatures are implemented, maps may easily
-     *       be added.  The last two elements are included in the DTD so XML
-     *       test files will compile they do not have any effect on the file
-     *       structure.
+     * This generated file has much of the setup code, the following are
+     * initialized within the file:
+     * 
+     * 1. _createSegmentMap[OperationGroup] = &TestFileBuilder::CreateOperationGroup;
+     * 2. _fillSegmentMapD[OperationGroup] = &TestFileBuilder::AddToOperationGroup;
+     * 3. _effectMap[TypeDPair( OperationGroup, Segment )] = &TestFileBuilder::INPUT_SEGMENT;
+     * 4. _effectMap[Non-OperationGroup Component] = kAAFOperationDef_Unknown;
+     * 5. _optRationalParam[MaterialType] = L"";
+     * 6. _essenceMap[EssenceType] = TestFileBuilder::Upper(EssenceType);
+     * 
+     * For (5), a default value is provided for all Material Types but can be
+     * overridden by specifying a value below the include.
+     * 
+     */
+    #include "InputParser.cpp.gen"
+    
+    /*
+     * 
+     * The following entries must be made manually as they depend upon the type
+     * of object being added.
      * 
      */
 
@@ -91,7 +106,7 @@ InputParser::InputParser( const char* outFile )
     _materialTypeMap[L"film-source"] = &TestFileBuilder::AddFilmSource;
     _materialTypeMap[L"auxiliary-source"] = &TestFileBuilder::AddAuxiliarySource;
     
-    //Pointers to functions to create empty segments.
+    //Pointers to functions to create empty components.
     _createSegmentMap[L"source-clip"] = &TestFileBuilder::CreateSourceClip;
     _createSegmentMap[L"timecode"] = &TestFileBuilder::CreateTimecode;
     _createSegmentMap[L"edgecode"] = &TestFileBuilder::CreateEdgecode;
@@ -100,52 +115,18 @@ InputParser::InputParser( const char* outFile )
     _createSegmentMap[L"oof"] = &TestFileBuilder::CreateOOF;
     _createSegmentMap[L"transition"] = &TestFileBuilder::CreateTransition;
     _createSegmentMap[L"sequence"] = &TestFileBuilder::CreateSequence;
-    _createSegmentMap[L"video-dissolve"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"smpte-video-wipe"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"video-speed-control"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"video-repeat"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"video-flip"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"video-flop"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"video-flip-flop"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"video-position"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"video-crop"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"video-scale"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"video-rotate"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"video-corner-pinning"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"alpha-with-video-key"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"separate-alpha-key"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"luminance-key"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"chroma-key"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"mono-audio-gain"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"mono-audio-pan"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"mono-audio-dissolve"] = &TestFileBuilder::CreateOperationGroup;
-    _createSegmentMap[L"two-parameter-mono-audio-dissolve"] = &TestFileBuilder::CreateOperationGroup;
+    _createSegmentMap[L"comment-marker"] = &TestFileBuilder::CreateCommentMarker;
+    _createSegmentMap[L"descriptive-marker"] = &TestFileBuilder::CreateDescriptiveMarker;
+    //Any new (non-OperationGroup) component must be added to this list.
     
     
-    //Pointers to functions to fill segments.
+    //Pointers to functions to fill components.
     _fillSegmentMapB[L"source-clip"] = &TestFileBuilder::InitializeSourceClip;
     _fillSegmentMapC[L"transition"] = &TestFileBuilder::AddToTransition;
     _fillSegmentMapC[L"sequence"] = &TestFileBuilder::AddToSequence;
-    _fillSegmentMapD[L"video-dissolve"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"smpte-video-wipe"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"video-speed-control"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"video-repeat"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"video-flip"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"video-flop"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"video-flip-flop"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"video-position"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"video-crop"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"video-scale"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"video-rotate"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"video-corner-pinning"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"alpha-with-video-key"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"separate-alpha-key"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"luminance-key"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"chroma-key"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"mono-audio-gain"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"mono-audio-pan"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"mono-audio-dissolve"] = &TestFileBuilder::AddToOperationGroup;
-    _fillSegmentMapD[L"two-parameter-mono-audio-dissolve"] = &TestFileBuilder::AddToOperationGroup;
+    _fillSegmentMapC[L"comment-marker"] = &TestFileBuilder::AddToCommentMarker;
+    _fillSegmentMapC[L"descriptive-marker"] = &TestFileBuilder::AddToCommentMarker;
+    //Any new Type B, C or D (non-OperationGroup) component must be added to this list.
     
     //Pointers to functions to attach slots.
     _attachSlotMap[L"timeline-mob-slot"] = &TestFileBuilder::AttachTimelineSlot;
@@ -155,38 +136,10 @@ InputParser::InputParser( const char* outFile )
     //Pointer to functions to attach parameters.
     _attachParameterMap[L"speed-ratio"] = &TestFileBuilder::AttachConstantRationalParameter;
     
-    //Mapping from XML Essence Types to Track Types
-    _essenceMap[L"none"] = TestFileBuilder::NONE;
-    _essenceMap[L"audio"] = TestFileBuilder::AUDIO;
-    _essenceMap[L"picture"] = TestFileBuilder::PICTURE;
-    _essenceMap[L"timecode"] = TestFileBuilder::TIMECODE;
-    _essenceMap[L"edgecode"] = TestFileBuilder::EDGECODE;
-    _essenceMap[L"auxiliary"] = TestFileBuilder::AUXILIARY;
-    
-    //Set up optional rational parameter names
-    _optRationalParam[L"top-level"] = L"";
-    _optRationalParam[L"lower-level"] = L"";
-    _optRationalParam[L"sub-clip"] = L"";
-    _optRationalParam[L"adjusted-clip"] = L"";
-    _optRationalParam[L"template-clip"] = L"";
-    _optRationalParam[L"clip"] = L"";
+    //Override optional rational parameter names
     _optRationalParam[L"file-source"] = L"sample-rate";
-    _optRationalParam[L"recording-source"] = L"";
-    _optRationalParam[L"import-source"] = L"";
-    _optRationalParam[L"tape-source"] = L"";
-    _optRationalParam[L"film-source"] = L"";
-    _optRationalParam[L"auxiliary-source"] = L"";
     
     //Set up the effect parameters
-    _effectMap[L"source-clip"] = kAAFOperationDef_Unknown;
-    _effectMap[L"timecode"] = kAAFOperationDef_Unknown;
-    _effectMap[L"edgecode"] = kAAFOperationDef_Unknown;
-    _effectMap[L"timecode-stream-12m"] = kAAFOperationDef_Unknown;
-    _effectMap[L"eoc"] = kAAFOperationDef_Unknown;
-    _effectMap[L"oof"] = kAAFOperationDef_Unknown;
-    _effectMap[L"transition"] = kAAFOperationDef_Unknown;
-    _effectMap[L"sequence"] = kAAFOperationDef_Unknown;
-
     _effectMap[L"video-dissolve"] = kAAFOperationDef_VideoDissolve;
     _effectMap[L"smpte-video-wipe"] = kAAFOperationDef_SMPTEVideoWipe;
     _effectMap[L"video-speed-control"] = kAAFOperationDef_VideoSpeedControl;
@@ -207,9 +160,15 @@ InputParser::InputParser( const char* outFile )
     _effectMap[L"mono-audio-pan"] = kAAFOperationDef_MonoAudioPan;
     _effectMap[L"mono-audio-dissolve"] = kAAFOperationDef_MonoAudioDissolve;
     _effectMap[L"two-parameter-mono-audio-dissolve"] = kAAFOperationDef_TwoParameterMonoAudioDissolve;
+    //Any new effects must be added to this list.
     
     //Set up the parameter parameters
     _parameterTypeMap[L"speed-ratio"] = kAAFParameterDef_SpeedRatio;
+    
+    //Set up property constants
+    //Any new (Type D Component, object) pair must be added to this list if it is
+    //not an (OperationGroup, Segment) pair.
+
 
 }
 
@@ -299,8 +258,8 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
         if ( !_componentStack.empty() )
         {
             //Call the appropriate initialize/add function.
-            shared_ptr<AxSegment> axSegment = dynamic_pointer_cast<AxSegment>( _componentStack.top().second );
-            (_testFile.*_fillSegmentMapB[_componentStack.top().first])( axSegment, *spMob );
+            shared_ptr<AxSourceReference> axSrcRef = dynamic_pointer_cast<AxSourceReference>( _componentStack.top().second );
+            (_testFile.*_fillSegmentMapB[_componentStack.top().first])( axSrcRef, *spMob );
         }
         
         //Push the new mob onto the stack.
@@ -324,8 +283,9 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
                 }
                 else if ( _fillSegmentMapD.find( _componentStack.top().first ) != _fillSegmentMapD.end() )
                 {
-                    shared_ptr<AxSegment> axSegment = dynamic_pointer_cast<AxSegment>( _componentStack.top().second );
-                    (_testFile.*_fillSegmentMapD[_componentStack.top().first])( axSegment, *spComponent, 1 );
+                    shared_ptr<AxSegment> axParentSegment = dynamic_pointer_cast<AxSegment>( _componentStack.top().second );
+                    shared_ptr<AxSegment> axChildSegment = dynamic_pointer_cast<AxSegment>( spComponent );
+                    (_testFile.*_fillSegmentMapD[_componentStack.top().first])( axParentSegment, *axChildSegment, _typeDPropertyMap[TypeDPair( _componentStack.top().first, name )] );
                 }
             }
             _slotStack.top().componentsSinceSlot++;
@@ -356,6 +316,17 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
         shared_ptr<AxOperationGroup> axOpGroup = dynamic_pointer_cast<AxOperationGroup>( _componentStack.top().second );
         (_testFile.*_attachParameterMap[name])( *axOpGroup, _parameterTypeMap[name], param1, param2 );
         
+    }
+    else if ( name == L"comment" )
+    {
+        AxString commentName = GetStringAttribValue( L"name", attribs, 4, L"" );
+        AxString comment = GetStringAttribValue( L"value", attribs, 4, L"" );
+        _testFile.AddComment( _componentStack.top().second, commentName, comment );
+    }
+    else if ( name == L"descriptive-framework")
+    {
+        shared_ptr<AxDescriptiveMarker> axMarker = dynamic_pointer_cast<AxDescriptiveMarker>( _componentStack.top().second );
+        _testFile.AttachDescriptiveFramework( axMarker );
     }
     else
     {

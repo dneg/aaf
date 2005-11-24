@@ -435,13 +435,20 @@ private:
         this->DecorateNode<AAFObjectType, EPEssenceTrack>( node );
       }
     }
-    else if ( axDataDef.IsTimecodeKind() )
+    else
     {
-      this->DecorateNode<AAFObjectType, EPTimecodeTrack>( node );
-    }
-    else if ( axDataDef.IsEdgecodeKind() )
-    {
-      this->DecorateNode<AAFObjectType, EPEdgecodeTrack>( node );
+      if ( axDataDef.IsTimecodeKind() )
+      {
+        this->DecorateNode<AAFObjectType, EPTimecodeTrack>( node );
+      }
+      else if ( axDataDef.IsEdgecodeKind() )
+      {
+        this->DecorateNode<AAFObjectType, EPEdgecodeTrack>( node );
+      }
+      else
+      {
+        this->DecorateNode<AAFObjectType, EPNonEssenceTrack>( node );
+      }
     }
     
   }
