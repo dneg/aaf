@@ -218,6 +218,7 @@ TARGET_H_FILES = \
 	$(AAFSDK_INCLUDE)/AAFFileMode.h \
 	$(AAFSDK_INCLUDE)/AAFInterpolatorDefs.h \
 	$(AAFSDK_INCLUDE)/AAFMetaDictionary.h \
+	$(AAFSDK_INCLUDE)/AAFOPDefs.h \
 	$(AAFSDK_INCLUDE)/AAFOperationCategories.h \
 	$(AAFSDK_INCLUDE)/AAFOperationDefs.h \
 	$(AAFSDK_INCLUDE)/AAFParameterDefs.h \
@@ -471,6 +472,9 @@ $(AAFSDK_INCLUDE)/AAFMetaDictionary.h : $(TOOLKIT_INCLUDE)/AAFMetaDictionary.h
 $(AAFSDK_INCLUDE)/AAFOperationCategories.h : $(TOOLKIT_INCLUDE)/AAFOperationCategories.h
 	$(UPDATE) $(TOOLKIT_INCLUDE)/AAFOperationCategories.h $@
 
+$(AAFSDK_INCLUDE)/AAFOPDefs.h : $(TOOLKIT_INCLUDE)/AAFOPDefs.h
+	$(UPDATE) $(TOOLKIT_INCLUDE)/AAFOPDefs.h $@
+	
 $(AAFSDK_INCLUDE)/AAFOperationDefs.h : $(TOOLKIT_INCLUDE)/AAFOperationDefs.h
 	$(UPDATE) $(TOOLKIT_INCLUDE)/AAFOperationDefs.h $@
 
