@@ -24,13 +24,18 @@
 
 #include <iostream>
 
-AxHeader::AxHeader( IAAFHeaderSP spIaafHeader )
-:	AxObject( AxQueryInterface<IAAFHeader,IAAFObject>(spIaafHeader) ),
+AxHeader::AxHeader( IAAFHeader2SP spIaafHeader )
+:	AxObject( AxQueryInterface<IAAFHeader2, IAAFObject>(spIaafHeader) ),
 	_spIaafHeader( spIaafHeader )
 {}
 
+AxHeader::AxHeader( IAAFHeaderSP spIaafHeader )
+: AxObject( AxQueryInterface<IAAFHeader, IAAFObject>( spIaafHeader ) ),
+    _spIaafHeader( AxQueryInterface<IAAFHeader, IAAFHeader2>( spIaafHeader ) )
+{}
+
 AxHeader::AxHeader( const AxHeader& other )
-:	AxObject( AxQueryInterface<IAAFHeader,IAAFObject>(other._spIaafHeader) ),
+:	AxObject( AxQueryInterface<IAAFHeader2,IAAFObject>(other._spIaafHeader) ),
 	_spIaafHeader( other._spIaafHeader )
 {}
 
@@ -186,6 +191,177 @@ aafUInt32 AxHeader::CountEssence() const
 void AxHeader::AddMob( IAAFMobSP spIaafMob )
 {
 	CHECK_HRESULT( _spIaafHeader->AddMob( spIaafMob ) );
+}
+
+void AxHeader::RemoveMob( IAAFMobSP spIaafMob )
+{
+    CHECK_HRESULT( _spIaafHeader->RemoveMob( spIaafMob ) );
+}
+
+
+IEnumAAFEssenceDataSP AxHeader::EnumEssenceData()
+{
+    IEnumAAFEssenceDataSP spEssence;
+
+    CHECK_HRESULT(_spIaafHeader->EnumEssenceData(&spEssence));
+
+    return spEssence;
+}
+
+void AxHeader::AddEssenceData( IAAFEssenceDataSP spIaafEssenceData )
+{
+    CHECK_HRESULT( _spIaafHeader->AddEssenceData( spIaafEssenceData ) );
+}
+
+void AxHeader::RemoveEssenceData( IAAFEssenceDataSP spIaafEssenceData )
+{
+    CHECK_HRESULT( _spIaafHeader->RemoveEssenceData( spIaafEssenceData ) );
+}
+
+IAAFIdentificationSP AxHeader::GetLastIdentification()
+{
+    IAAFIdentificationSP spIaafIdent;
+
+    CHECK_HRESULT( _spIaafHeader->GetLastIdentification( &spIaafIdent ) );
+
+    return spIaafIdent;
+}
+
+IAAFIdentificationSP AxHeader::LookupIdentification( aafUID_constref generation )
+{
+    IAAFIdentificationSP spIaafIdent;
+
+    CHECK_HRESULT( _spIaafHeader->LookupIdentification( generation, &spIaafIdent ) );
+
+    return spIaafIdent;
+}
+
+IEnumAAFIdentificationsSP AxHeader::GetIdentifications()
+{
+    IEnumAAFIdentificationsSP spIdentifications;
+
+    CHECK_HRESULT(_spIaafHeader->GetIdentifications(&spIdentifications));
+
+    return spIdentifications;
+}
+
+void AxHeader::AppendIdentification( IAAFIdentificationSP spIaafIdent )
+{
+    CHECK_HRESULT( _spIaafHeader->AppendIdentification( spIaafIdent ) );
+}
+
+aafProductVersion_t AxHeader::GetRefImplVersion()
+{
+    aafProductVersion_t productVersion;
+
+    CHECK_HRESULT( _spIaafHeader->GetRefImplVersion( &productVersion ) );
+
+    return productVersion;
+}
+
+aafVersionType_t AxHeader::GetFileRevision()
+{
+    aafVersionType_t versionType;
+
+    CHECK_HRESULT( _spIaafHeader->GetFileRevision( &versionType ) );
+
+    return versionType;
+}
+
+aafTimeStamp_t AxHeader::GetLastModified()
+{
+    aafTimeStamp_t timeStamp;
+
+    CHECK_HRESULT( _spIaafHeader->GetLastModified( &timeStamp ) );
+
+    return timeStamp;
+}
+
+IAAFMobSP AxHeader::GetPrimaryMob()
+{
+    IAAFMobSP spIaafMob;
+
+    CHECK_HRESULT( _spIaafHeader->GetPrimaryMob( &spIaafMob ) );
+
+    return spIaafMob;
+}
+
+void AxHeader::SetPrimaryMob( IAAFMobSP spIaafPrimaryMob )
+{
+    CHECK_HRESULT( _spIaafHeader->SetPrimaryMob( spIaafPrimaryMob ) );
+}
+
+aafUID_t AxHeader::GetOperationalPattern()
+{
+    aafUID_t operationalPattern;
+
+    CHECK_HRESULT( _spIaafHeader->GetOperationalPattern( &operationalPattern ) );
+
+    return operationalPattern;
+}
+
+void AxHeader::SetOperationalPattern( aafUID_constref operationalPatternID )
+{
+    CHECK_HRESULT( _spIaafHeader->SetOperationalPattern( operationalPatternID ) );
+}
+
+void AxHeader::UpdateEssenceContainers()
+{
+    CHECK_HRESULT( _spIaafHeader->UpdateEssenceContainers() );
+}
+
+std::vector<aafUID_t> AxHeader::GetEssenceContainers()
+{
+    aafUInt32 numberOfContainers = 0;
+
+    CHECK_HRESULT( _spIaafHeader->CountEssenceContainers( &numberOfContainers ) );
+    
+    std::vector<aafUID_t> essenceContainers( numberOfContainers ); 
+
+    CHECK_HRESULT( _spIaafHeader->GetEssenceContainers( numberOfContainers, &(essenceContainers[0]) ) ); 
+    
+    return essenceContainers;
+}
+
+aafBoolean_t AxHeader::IsEssenceContainerPresent( aafUID_constref essenceContainerID )
+{
+    aafBoolean_t isContainerPresent;
+
+    CHECK_HRESULT( _spIaafHeader->IsEssenceContainerPresent( essenceContainerID, &isContainerPresent ) );
+
+    return isContainerPresent;
+}
+
+std::vector<aafUID_t> AxHeader::GetDescriptiveSchemes()
+{
+    aafUInt32 numberOfSchemes = 0;
+
+    CHECK_HRESULT( _spIaafHeader->CountDescriptiveSchemes( &numberOfSchemes ) );
+    
+    std::vector<aafUID_t> descriptiveSchemes( numberOfSchemes ); 
+
+    CHECK_HRESULT( _spIaafHeader->GetDescriptiveSchemes( numberOfSchemes, &(descriptiveSchemes[0]) ) ); 
+    
+    return descriptiveSchemes;
+}
+
+aafBoolean_t AxHeader::IsDescriptiveSchemePresent( aafUID_constref descriptiveSchemeID )
+{
+    aafBoolean_t isSchemePresent;
+
+    CHECK_HRESULT( _spIaafHeader->IsDescriptiveSchemePresent( descriptiveSchemeID, &isSchemePresent ) );
+
+    return isSchemePresent;
+}
+
+void AxHeader::AddDescriptiveScheme( aafUID_constref descriptiveSchemeID )
+{
+    CHECK_HRESULT( _spIaafHeader->AddDescriptiveScheme( descriptiveSchemeID ) );
+}
+
+void AxHeader::RemoveDescriptiveScheme( aafUID_constref descriptiveSchemeID )
+{
+    CHECK_HRESULT( _spIaafHeader->RemoveDescriptiveScheme( descriptiveSchemeID ) );
 }
 
 std::wostream& AxHeader::dump( std::wostream& os ) const

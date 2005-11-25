@@ -32,6 +32,7 @@ class AxHeader : public AxObject {
 public:
 
 	AxHeader( IAAFHeaderSP spIaafHeader );
+    AxHeader( IAAFHeader2SP spIaafHeader );
 	AxHeader( const AxHeader& );
 	virtual ~AxHeader();
 
@@ -55,13 +56,46 @@ public:
 	aafUInt32 CountEssence() const;
 
 	void AddMob( IAAFMobSP spIaafMob );
+
+    void RemoveMob( IAAFMobSP spIaafMob );
+
+    IEnumAAFEssenceDataSP EnumEssenceData();
+    void AddEssenceData( IAAFEssenceDataSP spIaafEssenceData );
+    void RemoveEssenceData( IAAFEssenceDataSP spIaafEssenceData );
+    
+    IAAFIdentificationSP GetLastIdentification();
+    IAAFIdentificationSP LookupIdentification( aafUID_constref generation );
+    IEnumAAFIdentificationsSP GetIdentifications();
+    void AppendIdentification( IAAFIdentificationSP spIaafIdent );
+    
+    aafProductVersion_t GetRefImplVersion();
+    aafVersionType_t GetFileRevision();
+    aafTimeStamp_t GetLastModified();
+    
+    IAAFMobSP GetPrimaryMob();
+    void SetPrimaryMob( IAAFMobSP spIaafPrimaryMob );
+    
+    aafUID_t GetOperationalPattern();
+    void SetOperationalPattern( aafUID_constref operationalPatternID );
+    
+    void UpdateEssenceContainers();
+    std::vector<aafUID_t> GetEssenceContainers();
+    aafBoolean_t IsEssenceContainerPresent( aafUID_constref essenceContainerID );
+    
+    std::vector<aafUID_t> GetDescriptiveSchemes();
+    aafBoolean_t IsDescriptiveSchemePresent( aafUID_constref descriptiveSchemeID );
+    void AddDescriptiveScheme( aafUID_constref descriptiveSchemeID );
+    void RemoveDescriptiveScheme( aafUID_constref descriptiveSchemeID );
 	
 #if 0
 	// FIXME - Not ready to use this yet.
 	std::vector< IAAFIdentificationSP > LookupIdentifications();
 #endif
 
-	operator IAAFHeaderSP ()
+    inline operator IAAFHeaderSP ()
+    { return AxQueryInterface<IAAFHeader2,IAAFHeader>( _spIaafHeader ); }
+
+	inline operator IAAFHeader2SP ()
 	{ return _spIaafHeader; }
 
 	std::wostream& dump( std::wostream& os ) const;
@@ -71,7 +105,7 @@ private:
 	AxHeader();
 	AxHeader& operator=( const AxHeader& );
 
-	mutable IAAFHeaderSP _spIaafHeader;
+	mutable IAAFHeader2SP _spIaafHeader;
 };
 
 std::wostream& operator<<( std::wostream& os, const AxHeader& obj );
