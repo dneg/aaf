@@ -96,6 +96,23 @@ bool AxDictionary::isKnownParameterDef( const aafUID_t& paramId )
 	return result;
 }
 
+bool AxDictionary::isKnownInterpolationDef( const aafUID_t& intId )
+{
+    IAAFInterpolationDefSP spIaafInterpolationDef;
+
+    HRESULT hr = _spIaafDictionary->LookupInterpolationDef( intId, &spIaafInterpolationDef );
+
+    bool result = true;
+    if ( AAFRESULT_NO_MORE_OBJECTS == hr ) {
+        result = false;
+    }
+    else if ( AAFRESULT_SUCCESS != hr ) {
+        CHECK_HRESULT( hr );
+    }
+
+    return result;
+}
+
 void AxDictionary::RegisterClassDef( IAAFClassDefSP spIaafClassDef )
 {
 	CHECK_HRESULT( _spIaafDictionary->RegisterClassDef( spIaafClassDef ) );

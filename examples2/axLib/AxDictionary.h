@@ -37,6 +37,7 @@ public:
 	bool isKnownTypeDef( const aafUID_t& typeId );
 	bool isKnownOperationDef( const aafUID_t& opId );
 	bool isKnownParameterDef( const aafUID_t& paramId );
+    bool isKnownInterpolationDef( const aafUID_t& intId );
 	
 	void RegisterClassDef( IAAFClassDefSP spIaafClassDef );
 
