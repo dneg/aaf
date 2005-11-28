@@ -71,4 +71,69 @@ AxVaryingValue::AxVaryingValue( IAAFVaryingValueSP spIaafVaryingValue )
 AxVaryingValue::~AxVaryingValue()
 {}
 
+void AxVaryingValue::Initialize( IAAFParameterDefSP spParameterDef, IAAFInterpolationDefSP spInterpolation )
+{
+  CHECK_HRESULT( _spIaafVaryingValue->Initialize( spParameterDef, spInterpolation ) );
+}
+
+void AxVaryingValue::AddControlPoint( IAAFControlPointSP spControlPoint )
+{
+  CHECK_HRESULT( _spIaafVaryingValue->AddControlPoint( spControlPoint ) );
+}
+
+IEnumAAFControlPointsSP AxVaryingValue::GetControlPoints()
+{
+  IEnumAAFControlPointsSP controlPoints;
+
+  CHECK_HRESULT( _spIaafVaryingValue->GetControlPoints( &controlPoints ) );
+
+  return controlPoints;
+}
+
+aafUInt32 AxVaryingValue::CountControlPoints()
+{
+  aafUInt32 numControlPoints;
+
+  CHECK_HRESULT( _spIaafVaryingValue->CountControlPoints( &numControlPoints ) );
+
+  return numControlPoints;
+}
+
+IAAFControlPointSP AxVaryingValue::GetControlPointAt( aafUInt32 index )
+{
+  IAAFControlPointSP controlPointAt;
+
+  CHECK_HRESULT( _spIaafVaryingValue->GetControlPointAt( index, &controlPointAt ) );
+
+  return controlPointAt;
+}
+
+void AxVaryingValue::RemoveControlPointAt( aafUInt32 index )
+{
+  CHECK_HRESULT( _spIaafVaryingValue->RemoveControlPointAt( index ) );
+}
+
+IAAFInterpolationDefSP AxVaryingValue::GetInterpolationDefinition()
+{
+  IAAFInterpolationDefSP interpolationDef;
+
+  CHECK_HRESULT( _spIaafVaryingValue->GetInterpolationDefinition( &interpolationDef ) );
+
+  return interpolationDef;
+}
+
+aafInt32 AxVaryingValue::GetValueBufLen()
+{
+  aafInt32 length;
+
+  CHECK_HRESULT( _spIaafVaryingValue->GetValueBufLen( &length ) );
+
+  return length;
+}
+
+void AxVaryingValue::GetInterpolatedValue( aafRational_t inputValue, aafInt32 valueSize, aafDataBuffer_t pValue, aafInt32* bytesRead )
+{
+  CHECK_HRESULT( _spIaafVaryingValue->GetInterpolatedValue( inputValue, valueSize, pValue, bytesRead ) );
+}
+
 //=---------------------------------------------------------------------=

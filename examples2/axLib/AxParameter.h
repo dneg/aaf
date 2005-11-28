@@ -92,6 +92,32 @@ class AxVaryingValue : public AxParameter {
  public:
   AxVaryingValue( IAAFVaryingValueSP spIaafVaryingValue );
   virtual ~AxVaryingValue();
+  
+  void Initialize( IAAFParameterDefSP spParameterDef, IAAFInterpolationDefSP spInterpolation );
+
+  void AddControlPoint( IAAFControlPointSP spControlPoint );
+  void RemoveControlPointAt( aafUInt32 index );
+  IEnumAAFControlPointsSP GetControlPoints();
+  aafUInt32 CountControlPoints();
+  IAAFControlPointSP GetControlPointAt( aafUInt32 index );
+
+  IAAFInterpolationDefSP GetInterpolationDefinition();
+  aafInt32 GetValueBufLen();
+  void GetInterpolatedValue( aafRational_t inputValue, aafInt32 valueSize, aafDataBuffer_t pValue, aafInt32* bytesRead );
+
+  template <typename ParamType>
+  void GetValue( aafRational_t inputValue, ParamType& val )
+  {
+    ParamType tmp;
+    aafUInt32 bytesRead;
+    GetInterpolatedValue( inputValue, sizeof(tmp), reinterpret_cast<aafDataBuffer_t>(&tmp), &bytesRead );
+    if ( sizeof(tmp) == bytesRead ) {
+      val = tmp;
+    }
+    else {
+      throw AxEx( L"size mismatch in AxVaryingValue::GetValue()" );      
+    }
+  }
 
   inline operator IAAFVaryingValueSP ()
     { return _spIaafVaryingValue; }
