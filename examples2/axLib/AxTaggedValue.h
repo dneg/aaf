@@ -1,5 +1,5 @@
-#ifndef __AxKLV_h__
-#define __AxKLV_h__
+#ifndef __AxTaggedValue_h__
+#define __AxTaggedValue_h__
 
 //=---------------------------------------------------------------------=
 //
