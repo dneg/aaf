@@ -36,6 +36,23 @@ void AxKLVData::Initialize( aafUID_t  key,
 						   const_cast<aafDataBuffer_t>(pValue) ) );
 }
 
+aafUID_t AxKLVData::GetKey()
+{
+    aafUID_t key;
+    
+    CHECK_HRESULT( _spIaafKLVData->GetKey( &key ) );
+    
+    return key;
+}
 
+void AxKLVData::GetValue( aafUInt32 valueSize, aafDataBuffer_t pValue, aafUInt32* bytesRead)
+{
+    CHECK_HRESULT( _spIaafKLVData->GetValue( valueSize, pValue, bytesRead ) );
+}
+
+void AxKLVData::SetValue( aafUInt32 valueSize, aafDataBuffer_t pValue )
+{
+    CHECK_HRESULT( _spIaafKLVData->SetValue( valueSize, pValue ) );
+}
 
 

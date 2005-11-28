@@ -28,19 +28,17 @@
 
 //=---------------------------------------------------------------------=
 
-class AxKLVData : public AxObject {
+class AxTaggedValue : public AxObject {
 
 public:
-	AxKLVData( IAAFKLVDataSP spIaafKLVData );
-	virtual ~AxKLVData();
+	AxTaggedValue( IAAFTaggedValueSP spIaafTaggedValue );
+	virtual ~AxTaggedValue();
 
-	void Initialize( aafUID_t  key,
-					 aafUInt32 length,
-					 const aafDataBuffer_t pValue );
-                     
-    aafUID_t GetKey();
+    void Initialize( AxString name, IAAFTypeDefSP typeDef, aafUInt32 valueSize, aafDataBuffer_t pValue );
+    AxString GetName();
+    IAAFTypeDefSP GetTypeDefinition();
     void GetValue( aafUInt32 valueSize, aafDataBuffer_t pValue, aafUInt32* bytesRead);
-    void SetValue( aafUInt32 valueSize, aafDataBuffer_t pValue );
+    void SetValue ( aafUInt32 valueSize, aafDataBuffer_t pValue );
 
     template <typename ParamType>
     void GetValue( ParamType& val )
@@ -52,7 +50,7 @@ public:
             val = tmp;
         }
         else {
-            throw AxEx( L"size mismatch in AxKLVData::GetValue()" );      
+            throw AxEx( L"size mismatch in AxTaggedValue::GetValue()" );      
         }
       }
       
@@ -63,15 +61,15 @@ public:
         SetValue( sizeof(tmp), reinterpret_cast<aafDataBuffer_t>(&tmp) );
     }
 
-	operator IAAFKLVDataSP ()
-	{ return _spIaafKLVData; }
+	operator IAAFTaggedValueSP ()
+	{ return _spIaafTaggedValue; }
 
 private:
-	AxKLVData();
-	AxKLVData( const AxKLVData& );
-	AxKLVData& operator=( const AxKLVData& );
+	AxTaggedValue();
+	AxTaggedValue( const AxTaggedValue& );
+	AxTaggedValue& operator=( const AxTaggedValue& );
 
-	IAAFKLVDataSP _spIaafKLVData;
+	IAAFTaggedValueSP _spIaafTaggedValue;
 };
 
 
