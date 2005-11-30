@@ -4,13 +4,35 @@
 <!ENTITY % MOB_SLOT "timeline-mob-slot | static-mob-slot | event-mob-slot">
 <!ENTITY % OPERATION_GROUP "video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve">
 <!ENTITY % SOURCE_REFERENCE "source-clip | eoc | oof">
-<!ENTITY % SEGMENT "sequence | timecode | timecode-stream-12m | edgecode | comment-marker | descriptive-marker | %SOURCE_REFERENCE; | %OPERATION_GROUP;">
+<!ENTITY % SEGMENT "sequence | timecode | timecode-stream-12m | edgecode | comment-marker | descriptive-marker | operation-group | %SOURCE_REFERENCE; | %OPERATION_GROUP;">
 <!ENTITY % COMPONENT "transition | %SEGMENT;">
-<!ENTITY % COMMENTS_AND_COMPONENTS "( comment | %COMPONENT; )*">
-<!ENTITY % COMMENTS_AND_SEGMENTS "( comment | %SEGMENT; )*">
+<!ENTITY % COMMENTS_AND_COMPONENTS "( comment | klv-data | %COMPONENT; )*">
+<!ENTITY % COMMENTS_AND_SEGMENTS "( comment | klv-data | %SEGMENT; )*">
 <!ENTITY % ESSENCE_TYPE "none | audio | picture | timecode | edgecode | auxiliary">
 
-<!ELEMENT aaf-file ( %MOB; )+>
+<!ELEMENT aaf-file ( dictionary?, ( %MOB; ) )+>
+<!ATTLIST aaf-file operational-pattern ( edit-protocol | invalid ) #IMPLIED >
+
+<!-- Dictionary and Definitions -->
+<!ELEMENT dictionary ( klv-data-def | tagged-value-def | operation-def )+>
+
+<!ELEMENT klv-data-def EMPTY>
+<!ATTLIST klv-data-def
+    name CDATA #REQUIRED
+    description CDATA #REQUIRED
+>
+
+<!ELEMENT tagged-value-def EMPTY>
+<!ATTLIST tagged-value-def
+    name CDATA #REQUIRED
+    description CDATA #REQUIRED
+>
+
+<!ELEMENT operation-def EMPTY>
+<!ATTLIST operation-def
+    name CDATA #REQUIRED
+    description CDATA #REQUIRED
+>
 
 <!-- Mobs -->
 
@@ -54,47 +76,73 @@
 <!ELEMENT auxiliary-source ( %MOB_SLOT; | bad-eoc )+>
 <!ATTLIST auxiliary-source name CDATA #IMPLIED>
 
-<!-- Comments -->
+<!-- Annotations -->
 <!ELEMENT comment EMPTY>
 <!ATTLIST comment
     name CDATA #REQUIRED
     value CDATA #REQUIRED
 >
 
+<!ELEMENT klv-data EMPTY>
+<!ATTLIST klv-data
+    key-name CDATA #REQUIRED
+    value CDATA #REQUIRED
+>
+
 <!-- Type A Components -->
 
-<!ELEMENT timecode ( comment* )>
-<!ATTLIST timecode track-type ( timecode ) #REQUIRED>
+<!ELEMENT timecode ( ( comment | klv-data )* )>
+<!ATTLIST timecode
+    track-type ( timecode ) #REQUIRED
+    length CDATA #IMPLIED>
 
-<!ELEMENT edgecode ( comment* )>
-<!ATTLIST edgecode track-type ( edgecode ) #REQUIRED>
+<!ELEMENT edgecode ( ( comment | klv-data )* )>
+<!ATTLIST edgecode
+    track-type ( edgecode ) #REQUIRED
+    length CDATA #IMPLIED>
 
-<!ELEMENT timecode-stream-12m ( comment* )>
-<!ATTLIST timecode-stream-12m track-type ( timecode ) #REQUIRED>
+<!ELEMENT timecode-stream-12m ( ( comment | klv-data )* )>
+<!ATTLIST timecode-stream-12m
+    track-type ( timecode ) #REQUIRED
+    length CDATA #IMPLIED>
 
-<!ELEMENT eoc ( comment* )>
-<!ATTLIST eoc track-type ( %ESSENCE_TYPE; ) #REQUIRED>
+<!ELEMENT eoc ( ( comment | klv-data )* )>
+<!ATTLIST eoc 
+    track-type ( %ESSENCE_TYPE; ) #REQUIRED
+    length CDATA #IMPLIED>
 
-<!ELEMENT oof ( comment* )>
-<!ATTLIST oof track-type ( %ESSENCE_TYPE; ) #REQUIRED>
+<!ELEMENT oof ( ( comment | klv-data )* )>
+<!ATTLIST oof 
+    track-type ( %ESSENCE_TYPE; ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!-- Type B Components -->
 
-<!ELEMENT source-clip ( comment*, ( %MOB; ), comment* )>
-<!ATTLIST source-clip track-type ( none | audio | picture | auxiliary ) #REQUIRED>
+<!ELEMENT source-clip ( ( comment | klv-data )*, ( %MOB; ), ( comment | klv-data )* )>
+<!ATTLIST source-clip
+    track-type ( %ESSENCE_TYPE; ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!-- Type C Components -->
 <!ELEMENT transition ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST transition track-type ( %ESSENCE_TYPE; ) #REQUIRED>
+<!ATTLIST transition
+    track-type ( %ESSENCE_TYPE; ) #REQUIRED
+    length CDATA #IMPLIED>
 
-<!ELEMENT sequence ( comment*, ( %COMPONENT; ), %COMMENTS_AND_COMPONENTS; )>
-<!ATTLIST sequence track-type ( %ESSENCE_TYPE; ) #REQUIRED>
+<!ELEMENT sequence ( ( comment | klv-data )*, ( %COMPONENT; ), %COMMENTS_AND_COMPONENTS; )>
+<!ATTLIST sequence
+    track-type ( %ESSENCE_TYPE; ) #REQUIRED
+    length CDATA #IMPLIED>
 
-<!ELEMENT comment-marker ( comment*, ( %SOURCE_REFERENCE; )?, comment* )>
-<!ATTLIST comment-marker track-type ( %ESSENCE_TYPE; ) #REQUIRED>
+<!ELEMENT comment-marker ( ( comment | klv-data )*, ( %SOURCE_REFERENCE; )?, ( comment | klv-data )* )>
+<!ATTLIST comment-marker
+    track-type ( %ESSENCE_TYPE; ) #REQUIRED
+    length CDATA #IMPLIED>
 
-<!ELEMENT descriptive-marker ( comment*, ( ( ( %SOURCE_REFERENCE; )?, comment*, descriptive-framework? ) | ( descriptive-framework?, comment*, ( %SOURCE_REFERENCE; )? ) ), comment* )>
-<!ATTLIST descriptive-marker track-type ( %ESSENCE_TYPE; ) #REQUIRED>
+<!ELEMENT descriptive-marker ( ( comment | klv-data )*, ( ( ( %SOURCE_REFERENCE; )?, ( comment | klv-data )*, descriptive-framework? ) | ( descriptive-framework?, ( comment | klv-data )*, ( %SOURCE_REFERENCE; )? ) ), ( comment | klv-data )* )>
+<!ATTLIST descriptive-marker
+    track-type ( %ESSENCE_TYPE; ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!-- Type D components -->
 
@@ -108,71 +156,124 @@
     		Contain 1 Segment
 -->
 
+<!ELEMENT operation-group ( %COMMENTS_AND_SEGMENTS; )>
+<!ATTLIST operation-group
+    track-type ( %ESSENCE_TYPE; ) #REQUIRED
+    length CDATA #IMPLIED
+    operation-definition CDATA #REQUIRED>
+
 <!ELEMENT video-dissolve ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST video-dissolve track-type ( picture ) #REQUIRED>
+<!ATTLIST video-dissolve
+    track-type ( picture ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!ELEMENT smpte-video-wipe ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST smpte-video-wipe track-type ( picture ) #REQUIRED>
+<!ATTLIST smpte-video-wipe
+    track-type ( picture ) #REQUIRED
+    length CDATA #IMPLIED>
 
-<!ELEMENT video-speed-control ( %COMMENTS_AND_COMPONENTS;, speed-ratio?, %COMMENTS_AND_COMPONENTS; )>
-<!ATTLIST video-speed-control track-type ( picture ) #REQUIRED>
+<!ELEMENT video-speed-control ( %COMMENTS_AND_COMPONENTS;, ( constant-speed-ratio | varying-speed-ratio )?, %COMMENTS_AND_COMPONENTS; )>
+<!ATTLIST video-speed-control
+    track-type ( picture ) #REQUIRED
+    length CDATA #IMPLIED>
 
-	<!ELEMENT speed-ratio EMPTY>
-	<!ATTLIST speed-ratio
+	<!ELEMENT constant-speed-ratio EMPTY>
+	<!ATTLIST constant-speed-ratio
         numerator CDATA #REQUIRED
         denominator CDATA #REQUIRED
     >
 
+	<!ELEMENT varying-speed-ratio EMPTY>
+	<!ATTLIST varying-speed-ratio
+        numerator CDATA #REQUIRED
+        denominator CDATA #REQUIRED
+        interpolator ( b-spline | constant | linear | log | none | power ) #REQUIRED
+    >
+
 <!ELEMENT video-repeat ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST video-repeat track-type ( picture ) #REQUIRED>
+<!ATTLIST video-repeat
+    track-type ( picture ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!ELEMENT video-flip ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST video-flip track-type ( picture ) #REQUIRED>
+<!ATTLIST video-flip
+    track-type ( picture ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!ELEMENT video-flop ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST video-flop track-type ( picture ) #REQUIRED>
+<!ATTLIST video-flop
+    track-type ( picture ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!ELEMENT video-flip-flop ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST video-flip-flop track-type ( picture ) #REQUIRED>
+<!ATTLIST video-flip-flop
+    track-type ( picture ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!ELEMENT video-position ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST video-position track-type ( picture ) #REQUIRED>
+<!ATTLIST video-position
+    track-type ( picture ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!ELEMENT video-crop ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST video-crop track-type ( picture ) #REQUIRED>
+<!ATTLIST video-crop
+    track-type ( picture ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!ELEMENT video-scale ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST video-scale track-type ( picture ) #REQUIRED>
+<!ATTLIST video-scale
+    track-type ( picture ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!ELEMENT video-rotate ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST video-rotate track-type ( picture ) #REQUIRED>
+<!ATTLIST video-rotate
+    track-type ( picture ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!ELEMENT video-corner-pinning ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST video-corner-pinning track-type ( picture ) #REQUIRED>
+<!ATTLIST video-corner-pinning
+    track-type ( picture ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!ELEMENT alpha-with-video-key ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST alpha-with-video-key track-type ( picture ) #REQUIRED>
+<!ATTLIST alpha-with-video-key
+    track-type ( picture ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!ELEMENT separate-alpha-key ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST separate-alpha-key track-type ( picture ) #REQUIRED>
+<!ATTLIST separate-alpha-key
+    track-type ( picture ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!ELEMENT luminance-key ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST luminance-key track-type ( picture ) #REQUIRED>
+<!ATTLIST luminance-key
+    track-type ( picture ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!ELEMENT chroma-key ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST chroma-key track-type ( picture ) #REQUIRED>
+<!ATTLIST chroma-key
+    track-type ( picture ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!ELEMENT mono-audio-gain ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST mono-audio-gain track-type ( audio ) #REQUIRED>
+<!ATTLIST mono-audio-gain
+    track-type ( audio ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!ELEMENT mono-audio-pan ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST mono-audio-pan track-type ( audio ) #REQUIRED>
+<!ATTLIST mono-audio-pan
+    track-type ( audio ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!ELEMENT mono-audio-dissolve ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST mono-audio-dissolve track-type ( audio ) #REQUIRED>
+<!ATTLIST mono-audio-dissolve
+    track-type ( audio ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!ELEMENT two-parameter-mono-audio-dissolve ( %COMMENTS_AND_SEGMENTS; )>
-<!ATTLIST two-parameter-mono-audio-dissolve track-type ( audio ) #REQUIRED>
+<!ATTLIST two-parameter-mono-audio-dissolve
+    track-type ( audio ) #REQUIRED
+    length CDATA #IMPLIED>
 
 <!-- Mob Slots -->
 

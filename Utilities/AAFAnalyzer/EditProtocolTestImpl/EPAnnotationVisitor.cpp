@@ -29,6 +29,9 @@
 //Ax files
 #include <AxComponent.h>
 #include <AxEx.h>
+#include <AxTaggedValue.h>
+#include <AxKLVData.h>
+#include <AxDefObject.h>
 
 //AAF files
 #include <AAFResult.h>
@@ -524,12 +527,103 @@ bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFMobSlot>& node )
     return PopStacks();
 }
 
+/*
+ * 
+ * TaggedValue/KLVData/Definitions
+ * 
+ */
+ 
+bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFTaggedValue>& node )
+{
+    AxTaggedValue axTaggedVal( node.GetAAFObjectOfType() );
+    _taggedValueNames.insert( axTaggedVal.GetName() );
+    return false;
+}
+
+bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFKLVData>& node )
+{
+    AxKLVData axKLVData( node.GetAAFObjectOfType() );
+    _klvDataKeys.insert( axKLVData.GetKey() );
+    return false;
+}
+
+bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFTaggedValueDefinition>& node )
+{
+    AxTaggedValueDef axTaggedValDef( node.GetAAFObjectOfType() );
+    _taggedValueDefs.insert( axTaggedValDef.GetName() );
+    return false;
+}
+
+bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFKLVDataDefinition>& node )
+{
+    AxKLVDataDef axKLVDataDef( node.GetAAFObjectOfType() );
+    _klvDataDefs.insert( axKLVDataDef.GetAUID() );
+    return false;
+}
+
+/*
+ * 
+ * Helper Functions
+ * 
+ */
+
     
 bool EPAnnotationVisitor::PopStacks()
 {
     _isParentMobSlot.pop();
     return true;
 }
+
+/*
+ * 
+ * Check Functions
+ * 
+ */
+void EPAnnotationVisitor::CheckForTaggedValueDefinitions()
+{    
+    //Remove all registered TaggedValues from the registered set.
+    set<AxString>::const_iterator dIter;
+    for ( dIter = _taggedValueDefs.begin(); dIter != _taggedValueDefs.end(); dIter++ )
+    {
+        _taggedValueNames.erase( *dIter );
+    }
+    
+    //Fail for every unregistered TaggedValue.
+    set<AxString>::const_iterator uIter;
+    for ( uIter = _taggedValueNames.begin(); uIter != _taggedValueNames.end(); uIter++ )
+    {
+        _spResult->AddInformationResult(
+            L"REQ_EP_151",
+            L"TaggedValue \"" + *uIter + L"\" is not documented in the dictionary.",
+            TestResult::FAIL );
+    }
+}
+
+void EPAnnotationVisitor::CheckForKLVValueDefinitions()
+{
+    //Remove all registered TaggedValues from the registered set.
+    set<aafUID_t>::const_iterator dIter;
+    for ( dIter = _klvDataDefs.begin(); dIter != _klvDataDefs.end(); dIter++ )
+    {
+        _klvDataKeys.erase( *dIter );
+    }
+    
+    //Fail for every unregistered TaggedValue.
+    set<aafUID_t>::const_iterator uIter;
+    for ( uIter = _klvDataKeys.begin(); uIter != _klvDataKeys.end(); uIter++ )
+    {
+        _spResult->AddInformationResult(
+            L"REQ_EP_152",
+            L"KLVData with key " + AxStringUtil::uid2Str(*uIter) + L" is not documented in the dictionary.",
+            TestResult::FAIL );
+    }
+}
+
+/*
+ * 
+ * Accessors
+ * 
+ */
 
 shared_ptr<DetailLevelTestResult> EPAnnotationVisitor::GetResult()
 {

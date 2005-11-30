@@ -33,7 +33,6 @@
 #include <AxMob.h>
 #include <AxMetaDef.h>
 #include <AxMobSlot.h>
-#include <AxIterator.h>
 #include <AxComponent.h>
 #include <AxDefObject.h>
 

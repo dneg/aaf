@@ -30,7 +30,6 @@
 #include <AxEx.h>
 #include <AxMetaDef.h>
 #include <AxMobSlot.h>
-#include <AxIterator.h>
 #include <AxDefObject.h>
 
 //AAF files

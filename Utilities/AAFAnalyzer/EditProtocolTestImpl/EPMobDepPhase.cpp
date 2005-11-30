@@ -127,6 +127,18 @@ shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
   // Tenth, run the annotation test
   shared_ptr<EPAnnotationTest> annotationTest( new EPAnnotationTest( _log, _spGraph ) );
   spPhaseResult->AppendSubtestResult( annotationTest->Execute() );
+  
+  // Eleventh, run the definition test
+  shared_ptr<EPDefinitionTest> definitionTest( new EPDefinitionTest( _log, _spGraph ) );
+  spPhaseResult->AppendSubtestResult( definitionTest->Execute() );
+  
+  // Twelevth, run the header test
+  shared_ptr<EPHeaderTest> headerTest( new EPHeaderTest( _log, _spGraph ) );
+  spPhaseResult->AppendSubtestResult( headerTest->Execute() );
+  
+  // Thirteenth, run the parameter test
+  shared_ptr<EPParameterTest> parameterTest( new EPParameterTest( _log, _spGraph ) );
+  spPhaseResult->AppendSubtestResult( parameterTest->Execute() );
 
   spPhaseResult->SetResult( spPhaseResult->GetAggregateResult() );
 

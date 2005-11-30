@@ -710,6 +710,16 @@ Requirements Tested:
 	REQ_EP_247 (12.20)
 		The Two-Parameter Mono Audio Dissolve effect shall only be used by an 
 		OperationGroup within a Transition object.
+	REQ_EP_248 (12.20.4)
+		In a Two-Parameter Mono Audio Dissolve effect, although the incoming
+		segment is first faded up only at a point X, the incoming segment must
+		be specified from the begining of the Transition.
+	REQ_EP_249 (12.20.4)
+		In a Two-Parameter Mono Audio Dissolve effect, although the incomming
+		segment is first faded up only at a point X, the incoming segment must
+		be specified from the beginning of the Transition.  Similarily, although
+		the outgoing segment is completely faded down at point Y, the outgoing
+		segment must be specified to the end of the Transition.
 Warn Conditions:
 	REQ_EP_187 - Issue a warning if there is a ratio with a zero denominator on
 				 a Speed Ratio Parameter of a Video Speed Control effect.
@@ -762,6 +772,26 @@ Fail Conditions:
 				 Transition object.
 	REQ_EP_247 - Fail if the Operation Group is not a direct child of a
 				 Transition object.
+	REQ_EP_248 - Fail if the Operation Group is not a direct child of a
+				 Transition object.
+	REQ_EP_248 - Fail if the length of the incoming segment is less than the
+				 length of the effect's transition.
+	REQ_EP_248 - Fail if the incoming segment does not have a length property.
+	REQ_EP_248 - Fail if the effect's transition does not have a length
+				 property.
+	REQ_EP_248 - Fail if there is not incoming segment.
+	REQ_EP_249 - Fail if the Operation Group is not a direct child of a
+				 Transition object.
+	REQ_EP_249 - Fail if the length of the incoming segment is less than the
+				 length of the effect's transition.
+	REQ_EP_249 - Fail if the length of the outgoing segment is less than the
+				 length of the effect's transition.
+	REQ_EP_249 - Fail if the incoming segment does not have a length property.
+	REQ_EP_249 - Fail if the outgoing segment does not have a length property.
+	REQ_EP_249 - Fail if the effect's transition does not have a length
+				 property.
+	REQ_EP_249 - Fail if there is no incoming segment.
+	REQ_EP_249 - Fail if there is no outgoing segment.
 Issues:
 49. Section 12 uses the phrases "within a Transition object" and "not within
 	"a transition object".  This is not clear.  Currently it is assumed to mean
@@ -776,11 +806,35 @@ Issues:
 52. It is assumed that REQ_EP_187 applies only to Speed Ratio Parameters that
 	belong to Video Speed Control effects.
 	
-53. There is no easy way to regression test varying value or non-rational Speed
-	Ratio parameters for REQ_EP_187
+53. There is no easy way to regression test Speed Ratio parameters for
+	REQ_EP_187.
+	
+64. When testing REQ_EP_248 and REQ_EP_249 it is assumed that the parent of a
+	transition must be a sequence.  Under the current AAF Object specification,
+	this appears to be a valid assumption, however, should the specification
+	change, the requirements may need to change.
+
+65. When REQ_EP_248 and REQ_EP_249 state that segments must be specified from
+	the begining/to the end of a Transition, it is assumed that this means the
+	length of the segment must be at least as long as the transition.
+
+66. REQ_EP_248 and REQ_EP_249 cannot be accuratley regression tested as the
+    implementation of the AAF object model does not allow the following failure
+    cases of these requirements:
+    	a) Incoming or Outgoing Segments that are too short.
+    	b) Transitions or Segments with no length.
+    	c) A Transition with no outgoing segment.
+
+67. The conditions tested by REQ_EP_248 are a subset of the conditions tested by
+	REQ_EP_249.  REQ_EP_248 is not necessary since when it fails, an identical
+	failure of REQ_EP_249 will be produced.
+
+68. REQ_EP_248 and REQ_EP_249 are requirements for Two-Parameter Mono Audio
+	Dissolve effects.  There should probably be an analogous requirement for
+	Single Parameter Mono Audio Dissolve effects.
 	
 Test Name:
-	EPAnnotationTestTest
+	EPAnnotationTest
 Description:
 	Make sure that annotations in an AAF file are legal.
 Requirements Tested:
@@ -795,6 +849,13 @@ Requirements Tested:
 		CommentMarkers shall be placed only in EventMobSlots.  
 		DescriptiveMarkers may be placed in any kind of MobSlot (e.g. 
 		TimelineMobSlot, EventMobSlot, StaticMobSlot).
+	REQ_EP_151 (10.1)
+		Exporting applications shall document all TaggedValues in use using 
+		TaggedValueDefinition objects in the Dictionary::TaggedValueDefinitions
+		property.
+	REQ_EP_152 (10.1)
+		Exporting applications shall document all KLVData in use in
+		KLVDataDefinition objects in the Dictionary::KLVDefinitions property.
 Warn Conditions:
 	NONE
 Fail Conditions:
@@ -807,6 +868,10 @@ Fail Conditions:
 	REQ_EP_150 - Fail if a CommentMarker base class or subclass other than
 				 DescriptiveMarker han an ancestor MobSlot that is not an
 				 EventMobSlot.
+	REQ_EP_151 - Fail if a TaggedValue has a name that does not have a
+				 correspondingly named TaggedValueDefinition in the dictionary.
+	REQ_EP_152 - Fail if a KLVData object has a key that does not have a
+				 KLVDataDefinition with the same AUID in the dictionary.
 Issues:   
 33. Essence track is not defined.  It is assumed to 	be a MobSlot that has a
 	Sound or Picture DataDefinition.
@@ -816,6 +881,77 @@ Issues:
 	refers to the base class and any subclass other than DescriptiveMarker and
 	its subclasses.
 	
+60. REQ_EP_149 referes to classes included within an essence track.  It is
+	assumed that this means any component that is a descendant (ie. contained
+	within through some level of nesting), of a MobSlot.
+
+Test Name:
+	EPDefinitionTest
+Description:
+	Make sure DefinitionObjects are used properly.
+Requirements Tested:
+	REQ_EP_162 (11.1)
+		An OperationDefinition object in an AAF file shall have a data
+		definition value consistent with the data definition of an
+		OperationGroup object that references it.
+Warn Conditions:
+	REQ_EP_162 - Present a warning if an OperationDefinition is in the
+				 dictionary but is not referenced by an OperationGroup.
+Fail Conditions:
+	REQ_EP_162 - Fail if the data definition of an OperationGroup is not the
+				 same as the data definition of the OperationDefinition that it
+				 references.
+Issues:   
+61. It is assumed that for data definition values to be consistent in
+	REQ_EP_162, AxDataDef::IsDataDefOf() must return true.
+	
+62. For REQ_EP_162 It is assumed that a warning should be presented if there is
+	an OperationDefinition in the AAF file that is not referenced.
+	
+63. It is not possible to save an AAF file with an unreferenced
+	OperationDefinition so the warn condition of REQ_EP_162 can not be tested.
+	
+Test Name:
+	EPHeaderTest
+Description:
+	Make sure the Header of an AAF file is valid under the Edit Protocol.
+Requirements Tested:
+	REQ_EP_255 (15)
+		Header::OperationalPattern should be equal to OpEditProtocol.
+Warn Conditions:
+	NONE
+Fail Conditions:
+	REQ_EP_255 - The Header::OperationPattern property is not present or not
+				 equal to OpEditProtocol.
+Issues:   
+	NONE
+	
+Test Name:
+	EPParameterTest
+Description:
+	Make sure all parameters in an AAF file are valid under the Edit Protocol.
+Requirements Tested:
+	REQ_EP_174 (11.5)
+		Effect parameters shall be specified using ConstantValue or VaryingValue 
+		objects.
+	REQ_EP_175 (11.5.1)
+		Interpolation between ControlPoints within VaryingValue objects shall be 
+		specified as one of the following: ConstantInterpolator,
+		LinearInterpolator, LogInterpolator, PowerInterpolator,
+		BSplineInterpolator.
+Warn Conditions:
+	NONE
+Fail Conditions:
+	REQ_EP_174 - Fail if a Parameter that is not a ConstantValue or VaryingValue
+				 (or a subclass) is encountered.
+	REQ_EP_175 - Fail if a VaryingValue has an illegal interpolator definition.
+Issues:   
+69. It is assumed that sub-classes of ConstantValue and VaryingValue are legal
+	for REQ_EP_174, but any other sub-class of Parameter is illegal.
+	
+70. There is no easy way to regression test REQ_EP_174 with the current testing
+	framework.
+
 Other Issues:
 
 Requirements:
@@ -917,7 +1053,20 @@ Issue:
 	place in the derivation chain, it is not possible to verify if further
 	mobs/clips are in the correct place), however, in other cases, it is should
 	be possible to continue testing (ie. any non-structural test).  Switching
-	the tests to continue along the chain should not effect any of the
-	regression tests.
+	the tests to continue along the chain should not effect the	regression tests
+	unless noted within the XML files.
 	
+Requirements:
+	NONE
+Issue:
+71. When building the test graph, it is assumed that properties with a Record
+	data type will not contain any strong references.  According to the AAF
+	object specification, strong references are allowed.  If stong references
+	are used from records, the test graph will be incomplete.  Furthermore, it
+	is assumed that property's with data types of FixedArray or VariableArray
+	will not be arrays of Indirect or Opaque data types.  It is also assumed
+	that the Rename data type will not be used with a base data type of Indirect
+	or Opaque.  The AAF object specification allows Indirects and Opaques to be
+	used in this way and if this assumption is incorrect, the AAF Analyzer will
+	throw an exception and terminate before analyzing the file.
 	

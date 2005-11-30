@@ -4,7 +4,7 @@
         Reason: Test Failed - See "Edit Protocol Effect Visitor" Visitor for details
         Passing Requirements: None
         Warning Requirements: None
-        Failing Requirements: REQ_EP_180; REQ_EP_183; REQ_EP_186; REQ_EP_187; REQ_EP_190; REQ_EP_194; REQ_EP_197; REQ_EP_200; REQ_EP_203; REQ_EP_206; REQ_EP_209; REQ_EP_212; REQ_EP_215; REQ_EP_220; REQ_EP_225; REQ_EP_228; REQ_EP_231; REQ_EP_234; REQ_EP_240; REQ_EP_244; REQ_EP_247
+        Failing Requirements: REQ_EP_180; REQ_EP_183; REQ_EP_186; REQ_EP_187; REQ_EP_190; REQ_EP_194; REQ_EP_197; REQ_EP_200; REQ_EP_203; REQ_EP_206; REQ_EP_209; REQ_EP_212; REQ_EP_215; REQ_EP_220; REQ_EP_225; REQ_EP_228; REQ_EP_231; REQ_EP_234; REQ_EP_240; REQ_EP_244; REQ_EP_247; REQ_EP_248; REQ_EP_249
 
             Name:   Edit Protocol Effect Visitor
             Desc:   Visit effects and make sure they are valid.
@@ -12,7 +12,7 @@
             Reason: 
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_180; REQ_EP_183; REQ_EP_186; REQ_EP_187; REQ_EP_190; REQ_EP_194; REQ_EP_197; REQ_EP_200; REQ_EP_203; REQ_EP_206; REQ_EP_209; REQ_EP_212; REQ_EP_215; REQ_EP_220; REQ_EP_225; REQ_EP_228; REQ_EP_231; REQ_EP_234; REQ_EP_240; REQ_EP_244; REQ_EP_247
+            Failing Requirements: REQ_EP_180; REQ_EP_183; REQ_EP_186; REQ_EP_187; REQ_EP_190; REQ_EP_194; REQ_EP_197; REQ_EP_200; REQ_EP_203; REQ_EP_206; REQ_EP_209; REQ_EP_212; REQ_EP_215; REQ_EP_220; REQ_EP_225; REQ_EP_228; REQ_EP_231; REQ_EP_234; REQ_EP_240; REQ_EP_244; REQ_EP_247; REQ_EP_248; REQ_EP_249
 
                 Name:   Edit Protocol Effect Visitor
                 Desc:   -
@@ -45,6 +45,22 @@
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_247
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Two-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition: "Two Parameter Mobo Audio Dissolve not in Transition" is not within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_248
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Two-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition: "Two Parameter Mobo Audio Dissolve not in Transition" is not within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_249
 
                 Name:   Edit Protocol Effect Visitor
                 Desc:   -
@@ -208,6 +224,22 @@
 
                 Name:   Edit Protocol Effect Visitor
                 Desc:   -
+                Result: Failed
+                Reason: Two-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition: "Two Parameter Mobo Audio Dissolve grandchild of Transition" is not within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_248
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Two-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition: "Two Parameter Mobo Audio Dissolve grandchild of Transition" is not within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_249
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
                 Result: Passed, but with warnings.
                 Reason: Video Speed Control Effect in Mob slot with ID = 1 of Top-Level Composition: "Speed Ratio Zero Denominator" has a Speed Ratio parameter with a 0 denominator (1/0).
                 Passing Requirements: None
@@ -229,4 +261,28 @@
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_187
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Video Speed Control Effect in Mob slot with ID = 1 of Top-Level Composition: "Varying Speed Ration" has a Speed Ratio parameter that is not constant
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_187
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Two-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition: "Two-Parameter Mono Audio Dissolve - No Incoming Segment" does not have an incoming segment.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_248
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Two-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition: "Two-Parameter Mono Audio Dissolve - No Incoming Segment" does not have an incoming segment.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_249
 

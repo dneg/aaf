@@ -3,13 +3,8 @@
 
 <aaf-file>
 
-    <!-- Initialize the dictionary -->
-    <dictionary>
-        <tagged-value-def description="Should Pass" name="Test Case 1"/>
-        <tagged-value-def description="Should Pass" name="Test Case 2"/>
-        <tagged-value-def description="Should Fail" name="Test Case 3"/>
-        <klv-data-def description="Should Pass" name="KLV Test"/>
-    </dictionary>
+	<!-- This test is the same as EPAnnotationTest, but, does not have any
+         dictionary entries so it should result in extra failures -->
     
     <!-- Test UserComments property -->
     <top-level name="User Comments in Mob Slot Segment">
@@ -35,6 +30,11 @@
         </event-mob-slot>
     </top-level>
     
+	<!-- NOTE: Currently this test case is not causing an error because the
+	           comment is not in the dictionary.  This is occuring because
+        	   the traversal ends when a UserComment is detected in the second
+        	   sequence.  If the traversal is made to continue, this test case
+        	   will fail -->
     <top-level name="Illegal User Comments">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
 			<sequence track-type="none">

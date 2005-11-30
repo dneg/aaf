@@ -26,10 +26,14 @@
 #include <DetailLevelTestResult.h>
 #include <TestRegistry.h>
 
+//Analyzer Base files
+#include <DepthFirstTraversal.h>
+
 //Ax files
 #include <AxComponent.h>
 #include <AxParameter.h>
 #include <AxEx.h>
+#include <AxIterator.h>
 
 //AAF files
 #include <AAFClassDefUIDs.h>
@@ -40,6 +44,92 @@
 #include <sstream>
 
 namespace {
+
+using namespace aafanalyzer;
+
+class TransitionInputVisitor : public TypedVisitor
+{
+    public:
+        TransitionInputVisitor()
+        {}
+        
+        ~TransitionInputVisitor()
+        {}
+
+        bool PreOrderVisit( AAFTypedObjNode<IAAFTransition>& node )
+        {
+            //The traversal started at an operation group and should have
+            //proceeded here immediatley.  Record the address of this transition
+            //object and continue up to the parent sequence.
+            _spIaafTransition = AxQueryInterface<IAAFTransition, IAAFComponent>( node.GetAAFObjectOfType() );
+            return true;
+        }
+        
+        bool PreOrderVisit( AAFTypedObjNode<IAAFSequence>& node )
+        {
+            AxSequence axSequence( node.GetAAFObjectOfType() );
+
+            //The graph may not return edges in order, therefore, we need to
+            //loop through and find the correct transition by address.  Use
+            //this method as an iterator does not guarantee an orderd traversal.
+            aafUInt32 index = 0;
+            aafUInt32 numComponents = axSequence.CountComponents();
+
+            for ( ; index < numComponents; index++ )
+            {
+                if ( axSequence.GetComponentAt( index ) == _spIaafTransition )
+                {
+                    break;
+                }
+            }
+            
+            if ( index >= numComponents )
+            {
+                //A fatal error has occured as the transition was not found.
+                //Throw an exception.
+            }
+            
+            //Get the preceeding and following components
+            if ( index > 0 )
+            {
+                _spPreceeding = axSequence.GetComponentAt( index - 1);
+            }
+            if ( index < numComponents - 1 )
+            {
+                _spFollowing = axSequence.GetComponentAt( index + 1);
+            }
+
+            //Traversal should start at an operation group, traverse up to
+            //the parent transition and then up to this sequence.  There is
+            //no need to traverse any further.
+            return false;
+        }
+        
+        IAAFComponentSP GetPreceedingComponent()
+        {
+            return _spPreceeding;
+        }
+        
+        IAAFComponentSP GetFollowingComponent()
+        {
+            return _spFollowing;
+        }
+      
+        IAAFTransitionSP GetTransition()
+        {
+            return AxQueryInterface<IAAFComponent, IAAFTransition>( _spIaafTransition );
+        }
+        
+    private:
+    
+        IAAFComponentSP _spIaafTransition;
+        IAAFComponentSP _spPreceeding;
+        IAAFComponentSP _spFollowing;
+    
+        // prohibited
+        TransitionInputVisitor( const TransitionInputVisitor& );
+        TransitionInputVisitor& operator=( const TransitionInputVisitor& );
+};
 
 } // end of namespace
 
@@ -292,6 +382,137 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, true, L"REQ_EP_247", EPTwoParameterAudioDissolveEffect::GetName() );
+    
+    AxString name = EPTwoParameterAudioDissolveEffect::GetName() + L" in " + this->GetMobSlotName( _spEdgeMap, node );
+    if ( !testPassed )
+    {
+        //Parent is not a transition, so, we can't check REQ_EP_249.
+        AxString explain = name + L" is not within a Transition object.";
+        _spResult->AddInformationResult( L"REQ_EP_248", explain, TestResult::FAIL );
+        _spResult->AddInformationResult( L"REQ_EP_249", explain, TestResult::FAIL );
+    }
+    else
+    {
+        shared_ptr<TransitionInputVisitor> spVisitor( new TransitionInputVisitor() );
+        shared_ptr<Node> spNode( node.GetSharedPointerToNode() );
+        DepthFirstTraversal dft( _spEdgeMap, spNode );
+        dft.TraverseUp( spVisitor );
+        
+        bool incomingPassed = true;
+        bool outgoingPassed = true;
+        
+        aafLength_t transitionLen;
+        AxTransition axTransition( spVisitor->GetTransition() );
+        try
+        {
+            transitionLen = axTransition.GetLength();
+        }
+        catch ( const AxExHResult& ex )
+        {
+            if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
+            {
+                AxString explain = L"Transition object of " + name 
+                                 + L" does not have a length property.";
+                _spResult->AddInformationResult( L"REQ_EP_248", explain, TestResult::FAIL );
+                _spResult->AddInformationResult( L"REQ_EP_249", explain, TestResult::FAIL );
+                incomingPassed = false;
+                outgoingPassed = false;
+            }
+            else
+            {
+                throw ex;
+            }
+        }
+        
+        if ( spVisitor->GetFollowingComponent() )
+        {
+            aafLength_t incomingLen;            
+            AxComponent incoming( spVisitor->GetFollowingComponent() );
+            try
+            {
+                incomingLen = incoming.GetLength();
+            }
+            catch ( const AxExHResult& ex )
+            {
+                if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
+                {
+                    AxString explain = L"Incoming segment of " + name 
+                                     + L" does not have a length property.";
+                    _spResult->AddInformationResult( L"REQ_EP_248", explain, TestResult::FAIL );
+                    _spResult->AddInformationResult( L"REQ_EP_249", explain, TestResult::FAIL );
+                    incomingPassed = false;
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
+            
+            if ( incomingPassed && incomingLen < transitionLen )
+            {
+                wstringstream ss;
+                
+                ss << name << L" has an incoming segment with length = "
+                   << incomingLen << L" and a transition with length = "
+                   << transitionLen << L".";
+                _spResult->AddInformationResult( L"REQ_EP_248", ss.str().c_str(), TestResult::FAIL );
+                _spResult->AddInformationResult( L"REQ_EP_249", ss.str().c_str(), TestResult::FAIL );
+                incomingPassed = false;
+            }            
+        }
+        else
+        {
+            AxString explain = name + L" does not have an incoming segment.";
+            _spResult->AddInformationResult( L"REQ_EP_248", explain, TestResult::FAIL );
+            _spResult->AddInformationResult( L"REQ_EP_249", explain, TestResult::FAIL );
+            testPassed = false;
+        }
+        
+        if ( spVisitor->GetPreceedingComponent() )
+        {
+            aafLength_t outgoingLen;            
+            AxComponent outgoing( spVisitor->GetPreceedingComponent() );
+            try
+            {
+                outgoingLen = outgoing.GetLength();
+            }
+            catch ( const AxExHResult& ex )
+            {
+                if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
+                {
+                    AxString explain = L"Outgoing segment of " + name 
+                                     + L" does not have a length property.";
+                    _spResult->AddInformationResult( L"REQ_EP_249", explain, TestResult::FAIL );
+                    outgoingPassed = false;
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
+            
+            if ( outgoingPassed && outgoingLen < transitionLen )
+            {
+                wstringstream ss;
+                
+                ss << name << L" has an outgoing segment with length = "
+                   << outgoingLen << L" and a transition with length = "
+                   << transitionLen << L".";
+                _spResult->AddInformationResult( L"REQ_EP_249", ss.str().c_str(), TestResult::FAIL );
+                outgoingPassed = false;
+            }            
+        }
+        else
+        {
+            AxString explain = name + L" does not have an outgoing segment.";
+            _spResult->AddInformationResult( L"REQ_EP_249", explain, TestResult::FAIL );
+            testPassed = false;
+        }
+        
+        testPassed = incomingPassed && outgoingPassed;
+        
+    }
+    
     _isParentTransition.push( false );
     return testPassed;
 }

@@ -1,0 +1,14 @@
+        Name:   Edit Protocol Header Test
+        Desc:   Verify the AAF file header is valid.
+        Result: Passed
+        Passing Requirements: REQ_EP_255
+        Warning Requirements: None
+        Failing Requirements: None
+
+            Name:   Edit Protocol Header Visitor
+            Desc:   Visit the AAF File Header and verify it meets the Edit Protocol requirements.
+            Result: Passed
+            Passing Requirements: REQ_EP_255
+            Warning Requirements: None
+            Failing Requirements: None
+

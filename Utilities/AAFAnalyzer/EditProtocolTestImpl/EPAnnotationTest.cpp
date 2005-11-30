@@ -79,6 +79,8 @@ shared_ptr<TestLevelTestResult> EPAnnotationTest::Execute()
                                  spMyReqs ) );
 
     dfs.TraverseDown( spVisitor, GetTestGraph()->GetRootNode() );
+    spVisitor->CheckForTaggedValueDefinitions();
+    spVisitor->CheckForKLVValueDefinitions();
 
     spResult->AppendSubtestResult( spVisitor->GetResult() );
 
@@ -120,6 +122,8 @@ const TestInfo EPAnnotationTest::GetTestInfo()
     spReqIds->push_back(L"REQ_EP_147");     //UserComments property.
     spReqIds->push_back(L"REQ_EP_149");     //CommentMarker in Essence Tracks.
     spReqIds->push_back(L"REQ_EP_150");     //CommentMarker in EventMob Slots.
+    spReqIds->push_back(L"REQ_EP_151");     //TaggedValues registered.
+    spReqIds->push_back(L"REQ_EP_152");     //KLVData registered.
     return TestInfo(L"EPAnnotationTest", spReqIds);
 }
 

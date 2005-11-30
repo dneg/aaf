@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE aaf-file SYSTEM "EPDerivationChain.dtd">
+
+<aaf-file>
+   
+	<!-- Test Operation Definitions -->
+    <top-level name="Valid OperationGroup/OperationDefinition">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <mono-audio-dissolve track-type="audio"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Invalid OperationGroup/OperationDefinition">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+			<operation-group operation-definition="chroma-key" track-type="audio"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+</aaf-file>

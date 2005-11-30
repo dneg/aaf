@@ -28,6 +28,9 @@
 //Boost files
 #include <boost/shared_ptr.hpp>
 
+//STL files
+#include <map>
+
 class AxObject;
 class AxMob;
 class AxComponent;
@@ -39,10 +42,12 @@ class AxParameterDef;
 class AxConstantValue;
 class AxDescriptiveMarker;
 class AxSourceReference;
+class AxInterpolationDef;
 
 namespace aafanalyzer {
 
 using namespace boost;
+using namespace std;
 
 class TestFileBuilder
 {
@@ -54,6 +59,11 @@ class TestFileBuilder
     
         TestFileBuilder( const char* outFile );
         ~TestFileBuilder();
+
+        //Definition Objects:
+        void CreateKLVDataDefinition( const AxString& name, const AxString& description );
+        void CreateTaggedValueDefinition( const AxString& name, const AxString& description );
+        void CreateOperationDefinition( const AxString& name, const AxString& description );
 
         //Mobs:
         //Composition:
@@ -76,23 +86,23 @@ class TestFileBuilder
 
         //Create Segments:
         //Type A:
-        shared_ptr<AxComponent> CreateTimecode( TrackType essenceType, const aafUID_t& uidNothing );
-        shared_ptr<AxComponent> CreateEdgecode( TrackType essenceType, const aafUID_t& uidNothing );
-        shared_ptr<AxComponent> CreateTimecodeStream12M( TrackType essenceType, const aafUID_t& uidNothing );
-        shared_ptr<AxComponent> CreateEOC( TrackType essenceType, const aafUID_t& uidNothing );
-        shared_ptr<AxComponent> CreateOOF( TrackType essenceType, const aafUID_t& uidNothing );
+        shared_ptr<AxComponent> CreateTimecode( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
+        shared_ptr<AxComponent> CreateEdgecode( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
+        shared_ptr<AxComponent> CreateTimecodeStream12M( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
+        shared_ptr<AxComponent> CreateEOC( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
+        shared_ptr<AxComponent> CreateOOF( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
 
         //Type B:
-        shared_ptr<AxComponent> CreateSourceClip( TrackType essenceType, const aafUID_t& uidNothing );
+        shared_ptr<AxComponent> CreateSourceClip( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
 
         //Type C:
-        shared_ptr<AxComponent> CreateTransition( TrackType essenceType, const aafUID_t& uidNothing );
-        shared_ptr<AxComponent> CreateSequence( TrackType essenceType, const aafUID_t& uidNothing );
-        shared_ptr<AxComponent> CreateCommentMarker( TrackType essenceType, const aafUID_t& uidNothing );
-        shared_ptr<AxComponent> CreateDescriptiveMarker( TrackType essenceType, const aafUID_t& uidNothing );
+        shared_ptr<AxComponent> CreateTransition( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
+        shared_ptr<AxComponent> CreateSequence( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
+        shared_ptr<AxComponent> CreateCommentMarker( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
+        shared_ptr<AxComponent> CreateDescriptiveMarker( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
         
         //Type D:
-        shared_ptr<AxComponent> CreateOperationGroup( TrackType essenceType, const aafUID_t& opDefId );
+        shared_ptr<AxComponent> CreateOperationGroup( TrackType essenceType, const AxString& opDef, aafLength_t length, bool hasLength );
        
         //Fill Components:
         //Type B:
@@ -106,8 +116,9 @@ class TestFileBuilder
         //Type D:
         void AddToOperationGroup( shared_ptr<AxSegment> parent, AxSegment& child, int property );
         
-        //Comment:
+        //Annotation:
         void AddComment( shared_ptr<AxComponent> axComponent, const AxString& name, const AxString& value );
+        void AddKLVData( shared_ptr<AxComponent> axComponent, const AxString& keyName, const AxString& value );
 
         //Mob Slots:
         void AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered );
@@ -115,21 +126,27 @@ class TestFileBuilder
         void AttachStaticSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered );
         
         //Parameters:
-        void AttachConstantRationalParameter( AxOperationGroup& axOpGroup, const aafUID_t& paramDefId, aafUInt32 numerator, aafUInt32 denominator );
+        void AttachConstantRationalParameter( AxOperationGroup& axOpGroup, const aafUID_t& paramDefId, aafUInt32 numerator, aafUInt32 denominator, const aafUID_t& uidNothing );
+        void AttachVaryingRationalParameter( AxOperationGroup& axOpGroup, const aafUID_t& paramDefId, aafUInt32 numerator, aafUInt32 denominator, const aafUID_t& interpolationDefId );
         
         //Interchange Objects:
         void AttachDescriptiveFramework( shared_ptr<AxDescriptiveMarker> axMarker );
         
+        //Other:
+        void SetOperationalPattern( aafUID_t pattern );
 
     private:
     
         AxFile _axFile;
         aafUInt32 _mobCount;
+        map<AxString, aafUID_t> _namedAUIDs;
         
         const aafMobID_t GenerateMobId();
+        const aafUID_t GenerateAUID();
         void AddDataDef( AxComponent& axComponent, TrackType essenceType );
-        shared_ptr<AxOperationDef> GetOperationDef( const aafUID_t& opDefId, AxDictionary& axDictionary );
+        shared_ptr<AxOperationDef> GetOperationDef( const AxString& opDef, AxDictionary& axDictionary );
         shared_ptr<AxParameterDef> GetParameterDef( const aafUID_t& paramDefId, AxDictionary& axDictionary );
+        shared_ptr<AxInterpolationDef> GetInterpolationDef( const aafUID_t& interpolationDefId, AxDictionary& axDictionary );
 
 };
 

@@ -32,6 +32,8 @@
 //AAF files
 #include <AAFOperationDefs.h>
 #include <AAFParameterDefs.h>
+#include <AAFInterpolatorDefs.h>
+#include <AAFOPDefs.h>
 
 //STL files
 #include <fstream>
@@ -74,8 +76,8 @@ InputParser::InputParser( const char* outFile )
      * 
      * 1. _createSegmentMap[OperationGroup] = &TestFileBuilder::CreateOperationGroup;
      * 2. _fillSegmentMapD[OperationGroup] = &TestFileBuilder::AddToOperationGroup;
-     * 3. _effectMap[TypeDPair( OperationGroup, Segment )] = &TestFileBuilder::INPUT_SEGMENT;
-     * 4. _effectMap[Non-OperationGroup Component] = kAAFOperationDef_Unknown;
+     * 3. _typeDPropertyMap[TypeDPair( OperationGroup, Segment )] = &TestFileBuilder::INPUT_SEGMENT;
+     * 4. _effectMap[Non-OperationGroup Component] = L"";
      * 5. _optRationalParam[MaterialType] = L"";
      * 6. _essenceMap[EssenceType] = TestFileBuilder::Upper(EssenceType);
      * 
@@ -91,84 +93,113 @@ InputParser::InputParser( const char* outFile )
      * of object being added.
      * 
      */
+     
+     //Pointers to functions to add Definitions objects.
+     _definitionMap[L"klv-data-def"]     = &TestFileBuilder::CreateKLVDataDefinition;
+     _definitionMap[L"tagged-value-def"] = &TestFileBuilder::CreateTaggedValueDefinition;
+     _definitionMap[L"operation-def"]    = &TestFileBuilder::CreateOperationDefinition;
 
     //Pointers to functions to add Mobs to an AAF file.
-    _materialTypeMap[L"top-level"] = &TestFileBuilder::AddTopLevel;
-    _materialTypeMap[L"lower-level"] = &TestFileBuilder::AddLowerLevel;
-    _materialTypeMap[L"sub-clip"] = &TestFileBuilder::AddSubClip;
-    _materialTypeMap[L"adjusted-clip"] = &TestFileBuilder::AddAdjustedClip;
-    _materialTypeMap[L"template-clip"] = &TestFileBuilder::AddTemplateClip;
-    _materialTypeMap[L"clip"] = &TestFileBuilder::AddClip;
-    _materialTypeMap[L"file-source"] = &TestFileBuilder::AddFileSource;
+    _materialTypeMap[L"top-level"]        = &TestFileBuilder::AddTopLevel;
+    _materialTypeMap[L"lower-level"]      = &TestFileBuilder::AddLowerLevel;
+    _materialTypeMap[L"sub-clip"]         = &TestFileBuilder::AddSubClip;
+    _materialTypeMap[L"adjusted-clip"]    = &TestFileBuilder::AddAdjustedClip;
+    _materialTypeMap[L"template-clip"]    = &TestFileBuilder::AddTemplateClip;
+    _materialTypeMap[L"clip"]             = &TestFileBuilder::AddClip;
+    _materialTypeMap[L"file-source"]      = &TestFileBuilder::AddFileSource;
     _materialTypeMap[L"recording-source"] = &TestFileBuilder::AddRecordingSource;
-    _materialTypeMap[L"import-source"] = &TestFileBuilder::AddImportSource;
-    _materialTypeMap[L"tape-source"] = &TestFileBuilder::AddTapeSource;
-    _materialTypeMap[L"film-source"] = &TestFileBuilder::AddFilmSource;
+    _materialTypeMap[L"import-source"]    = &TestFileBuilder::AddImportSource;
+    _materialTypeMap[L"tape-source"]      = &TestFileBuilder::AddTapeSource;
+    _materialTypeMap[L"film-source"]      = &TestFileBuilder::AddFilmSource;
     _materialTypeMap[L"auxiliary-source"] = &TestFileBuilder::AddAuxiliarySource;
     
     //Pointers to functions to create empty components.
-    _createSegmentMap[L"source-clip"] = &TestFileBuilder::CreateSourceClip;
-    _createSegmentMap[L"timecode"] = &TestFileBuilder::CreateTimecode;
-    _createSegmentMap[L"edgecode"] = &TestFileBuilder::CreateEdgecode;
+    _createSegmentMap[L"source-clip"]         = &TestFileBuilder::CreateSourceClip;
+    _createSegmentMap[L"timecode"]            = &TestFileBuilder::CreateTimecode;
+    _createSegmentMap[L"edgecode"]            = &TestFileBuilder::CreateEdgecode;
     _createSegmentMap[L"timecode-stream-12m"] = &TestFileBuilder::CreateTimecodeStream12M;
-    _createSegmentMap[L"eoc"] = &TestFileBuilder::CreateEOC;
-    _createSegmentMap[L"oof"] = &TestFileBuilder::CreateOOF;
-    _createSegmentMap[L"transition"] = &TestFileBuilder::CreateTransition;
-    _createSegmentMap[L"sequence"] = &TestFileBuilder::CreateSequence;
-    _createSegmentMap[L"comment-marker"] = &TestFileBuilder::CreateCommentMarker;
-    _createSegmentMap[L"descriptive-marker"] = &TestFileBuilder::CreateDescriptiveMarker;
+    _createSegmentMap[L"eoc"]                 = &TestFileBuilder::CreateEOC;
+    _createSegmentMap[L"oof"]                 = &TestFileBuilder::CreateOOF;
+    _createSegmentMap[L"transition"]          = &TestFileBuilder::CreateTransition;
+    _createSegmentMap[L"sequence"]            = &TestFileBuilder::CreateSequence;
+    _createSegmentMap[L"comment-marker"]      = &TestFileBuilder::CreateCommentMarker;
+    _createSegmentMap[L"descriptive-marker"]  = &TestFileBuilder::CreateDescriptiveMarker;
+    _createSegmentMap[L"operation-group"]     = &TestFileBuilder::CreateOperationGroup;
     //Any new (non-OperationGroup) component must be added to this list.
     
     
     //Pointers to functions to fill components.
-    _fillSegmentMapB[L"source-clip"] = &TestFileBuilder::InitializeSourceClip;
-    _fillSegmentMapC[L"transition"] = &TestFileBuilder::AddToTransition;
-    _fillSegmentMapC[L"sequence"] = &TestFileBuilder::AddToSequence;
-    _fillSegmentMapC[L"comment-marker"] = &TestFileBuilder::AddToCommentMarker;
+    _fillSegmentMapB[L"source-clip"]        = &TestFileBuilder::InitializeSourceClip;
+    _fillSegmentMapC[L"transition"]         = &TestFileBuilder::AddToTransition;
+    _fillSegmentMapC[L"sequence"]           = &TestFileBuilder::AddToSequence;
+    _fillSegmentMapC[L"comment-marker"]     = &TestFileBuilder::AddToCommentMarker;
     _fillSegmentMapC[L"descriptive-marker"] = &TestFileBuilder::AddToCommentMarker;
+    _fillSegmentMapD[L"operation-group"]    = &TestFileBuilder::AddToOperationGroup;
     //Any new Type B, C or D (non-OperationGroup) component must be added to this list.
     
     //Pointers to functions to attach slots.
     _attachSlotMap[L"timeline-mob-slot"] = &TestFileBuilder::AttachTimelineSlot;
-    _attachSlotMap[L"static-mob-slot"] = &TestFileBuilder::AttachStaticSlot;
-    _attachSlotMap[L"event-mob-slot"] = &TestFileBuilder::AttachEventSlot;
+    _attachSlotMap[L"static-mob-slot"]   = &TestFileBuilder::AttachStaticSlot;
+    _attachSlotMap[L"event-mob-slot"]    = &TestFileBuilder::AttachEventSlot;
     
     //Pointer to functions to attach parameters.
-    _attachParameterMap[L"speed-ratio"] = &TestFileBuilder::AttachConstantRationalParameter;
+    _attachParameterMap[L"constant-speed-ratio"] = &TestFileBuilder::AttachConstantRationalParameter;
+    _attachParameterMap[L"varying-speed-ratio"]  = &TestFileBuilder::AttachVaryingRationalParameter;
+    
+    //Pointer to functions to add annotations (to components).
+    _annotationMap[L"comment"]  = &TestFileBuilder::AddComment;
+    _annotationMap[L"klv-data"] = &TestFileBuilder::AddKLVData;
+
+    //Prefix used to look up the annotation id in the xml.
+    
+    _annotationIds[L"comment"]  = L"";
+    _annotationIds[L"klv-data"] = L"key-";
     
     //Override optional rational parameter names
     _optRationalParam[L"file-source"] = L"sample-rate";
     
     //Set up the effect parameters
-    _effectMap[L"video-dissolve"] = kAAFOperationDef_VideoDissolve;
-    _effectMap[L"smpte-video-wipe"] = kAAFOperationDef_SMPTEVideoWipe;
-    _effectMap[L"video-speed-control"] = kAAFOperationDef_VideoSpeedControl;
-    _effectMap[L"video-repeat"] = kAAFOperationDef_VideoRepeat;
-    _effectMap[L"video-flip"] = kAAFOperationDef_Flip;
-    _effectMap[L"video-flop"] = kAAFOperationDef_Flop;
-    _effectMap[L"video-flip-flop"] = kAAFOperationDef_FlipFlop;
-    _effectMap[L"video-position"] = kAAFOperationDef_VideoPosition;
-    _effectMap[L"video-crop"] = kAAFOperationDef_VideoCrop;
-    _effectMap[L"video-scale"] = kAAFOperationDef_VideoScale;
-    _effectMap[L"video-rotate"] = kAAFOperationDef_VideoRotate;
-    _effectMap[L"video-corner-pinning"] = kAAFOperationDef_VideoCornerPinning;
-    _effectMap[L"alpha-with-video-key"] = kAAFOperationDef_VideoAlphaWithinVideoKey;
-    _effectMap[L"separate-alpha-key"] = kAAFOperationDef_VideoSeparateAlphaKey;
-    _effectMap[L"luminance-key"] = kAAFOperationDef_VideoLuminanceKey;
-    _effectMap[L"chroma-key"] = kAAFOperationDef_VideoChromaKey;
-    _effectMap[L"mono-audio-gain"] = kAAFOperationDef_MonoAudioGain;
-    _effectMap[L"mono-audio-pan"] = kAAFOperationDef_MonoAudioPan;
-    _effectMap[L"mono-audio-dissolve"] = kAAFOperationDef_MonoAudioDissolve;
-    _effectMap[L"two-parameter-mono-audio-dissolve"] = kAAFOperationDef_TwoParameterMonoAudioDissolve;
+    _effectMap[L"video-dissolve"]                    = L"Video Dissolve";
+    _effectMap[L"smpte-video-wipe"]                  = L"SMPTE Video Wipe";
+    _effectMap[L"video-speed-control"]               = L"Video Speed Control";
+    _effectMap[L"video-repeat"]                      = L"Video Repeat";
+    _effectMap[L"video-flip"]                        = L"Video Flip";
+    _effectMap[L"video-flop"]                        = L"Video Flop";
+    _effectMap[L"video-flip-flop"]                   = L"Video Flip Flop";
+    _effectMap[L"video-position"]                    = L"Video Position";
+    _effectMap[L"video-crop"]                        = L"Video Crop";
+    _effectMap[L"video-scale"]                       = L"Video Scale";
+    _effectMap[L"video-rotate"]                      = L"Video Rotate";
+    _effectMap[L"video-corner-pinning"]              = L"Video Corner Pinning";
+    _effectMap[L"alpha-with-video-key"]              = L"Alpha With Video Key effect";
+    _effectMap[L"separate-alpha-key"]                = L"Separate Alpha Key effect";
+    _effectMap[L"luminance-key"]                     = L"Luminance Key";
+    _effectMap[L"chroma-key"]                        = L"Chroma Key";
+    _effectMap[L"mono-audio-gain"]                   = L"Mono Audio Gain";
+    _effectMap[L"mono-audio-pan"]                    = L"Mono Audio Pan";
+    _effectMap[L"mono-audio-dissolve"]               = L"Mono Audio Dissolve";
+    _effectMap[L"two-parameter-mono-audio-dissolve"] = L"Two-Parameter Mono Audio Dissolve";
     //Any new effects must be added to this list.
     
     //Set up the parameter parameters
-    _parameterTypeMap[L"speed-ratio"] = kAAFParameterDef_SpeedRatio;
+    _parameterTypeMap[L"constant-speed-ratio"] = kAAFParameterDef_SpeedRatio;
+    _parameterTypeMap[L"varying-speed-ratio"]  = kAAFParameterDef_SpeedRatio;
+    
+    //Set up the interpolation map
+    _interpolationTypeMap[L"b-spline"] = kAAFInterpolationDef_BSpline;
+    _interpolationTypeMap[L"constant"] = kAAFInterpolationDef_Constant;
+    _interpolationTypeMap[L"linear"]   = kAAFInterpolationDef_Linear;
+    _interpolationTypeMap[L"log"]      = kAAFInterpolationDef_Log;
+    _interpolationTypeMap[L"none"]     = kAAFInterpolationDef_None;
+    _interpolationTypeMap[L"power"]    = kAAFInterpolationDef_Power;
     
     //Set up property constants
     //Any new (Type D Component, object) pair must be added to this list if it is
     //not an (OperationGroup, Segment) pair.
 
+    //Set up the operational pattern map.
+    _operationalPatternMap[L"edit-protocol"] = kAAFOPDef_EditProtocol;
+    _operationalPatternMap[L"invalid"]       = kAAFOperationDef_Unknown;      //Any invalid AUID will do.
 
 }
 
@@ -268,10 +299,12 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
     }
     else if ( _createSegmentMap.find( name ) != _createSegmentMap.end() )
     {
-        AxString essenceType = GetStringAttribValue( L"track-type", attribs, 2, L"none" );
+        AxString essenceType = GetStringAttribValue( L"track-type", attribs, 6, L"none" );
+        AxString effectType = GetStringAttribValue( L"operation-definition", attribs, 6, name );        
+        OptionalIntAttrib length = GetOptionalIntAttribValue( L"length", attribs, 6, 1 );
 
         //Create an empty segment and push it onto the segment stack
-        shared_ptr<AxComponent> spComponent = (_testFile.*_createSegmentMap[name])( _essenceMap[essenceType], _effectMap[name] );
+        shared_ptr<AxComponent> spComponent = (_testFile.*_createSegmentMap[name])( _essenceMap[essenceType], _effectMap[effectType], length.first, length.second );
 
         if ( !_slotStack.empty() )
         {
@@ -306,27 +339,42 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
     {
         //Only one of these values should be defined, at most one non-zero will
         //be returned.  Sum the three to get the actual value of the parameter.
-        aafUInt32 numerator = GetIntAtribValue( L"numerator", attribs, 4, 0 );
-        aafUInt32 boolParam = GetBoolAtribValue( L"bool-value", attribs, 4, false );
-        aafUInt32 intParam = GetIntAtribValue( L"int-value", attribs, 4, 0 );
+        aafUInt32 numerator = GetIntAtribValue( L"numerator", attribs, 6, 0 );
+        aafUInt32 boolParam = GetBoolAtribValue( L"bool-value", attribs, 6, false );
+        aafUInt32 intParam = GetIntAtribValue( L"int-value", attribs, 6, 0 );
         aafUInt32 param1 = numerator + boolParam + intParam;
         
-        aafUInt32 param2 = GetIntAtribValue( L"denominator", attribs, 4, 0 );
+        aafUInt32 param2 = GetIntAtribValue( L"denominator", attribs, 6, 0 );
+        AxString interpolator = GetStringAttribValue( L"interpolator", attribs, 6, L"none" );
         
         shared_ptr<AxOperationGroup> axOpGroup = dynamic_pointer_cast<AxOperationGroup>( _componentStack.top().second );
-        (_testFile.*_attachParameterMap[name])( *axOpGroup, _parameterTypeMap[name], param1, param2 );
+        (_testFile.*_attachParameterMap[name])( *axOpGroup, _parameterTypeMap[name], param1, param2, _interpolationTypeMap[interpolator] );
         
     }
-    else if ( name == L"comment" )
+    else if ( _definitionMap.find( name ) != _definitionMap.end() )
     {
-        AxString commentName = GetStringAttribValue( L"name", attribs, 4, L"" );
-        AxString comment = GetStringAttribValue( L"value", attribs, 4, L"" );
-        _testFile.AddComment( _componentStack.top().second, commentName, comment );
+        AxString defName = GetStringAttribValue( L"name", attribs, 4, L"" );
+        AxString desc = GetStringAttribValue( L"description", attribs, 4, L"" );
+        (_testFile.*_definitionMap[name])( defName, desc );
+    }
+    else if ( _annotationMap.find( name) != _annotationMap.end() )
+    {
+        AxString annotationName = GetStringAttribValue( _annotationIds[name] + L"name", attribs, 4, L"" );
+        AxString value = GetStringAttribValue( L"value", attribs, 4, L"" );
+        (_testFile.*_annotationMap[name])( _componentStack.top().second, annotationName, value );
     }
     else if ( name == L"descriptive-framework")
     {
         shared_ptr<AxDescriptiveMarker> axMarker = dynamic_pointer_cast<AxDescriptiveMarker>( _componentStack.top().second );
         _testFile.AttachDescriptiveFramework( axMarker );
+    }
+    else if ( name == L"aaf-file" )
+    {
+        AxString operationalPattern = GetStringAttribValue( L"operational-pattern", attribs, 2, L"none" );
+        if ( operationalPattern != L"none" )
+        {
+            _testFile.SetOperationalPattern( _operationalPatternMap[operationalPattern] );
+        }
     }
     else
     {

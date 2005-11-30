@@ -46,6 +46,7 @@
     _typeDPropertyMap[TypeDPair( L"video-dissolve", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-dissolve", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-dissolve", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"video-dissolve", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-dissolve", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-dissolve", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-dissolve", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -76,6 +77,7 @@
     _typeDPropertyMap[TypeDPair( L"smpte-video-wipe", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"smpte-video-wipe", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"smpte-video-wipe", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"smpte-video-wipe", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"smpte-video-wipe", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"smpte-video-wipe", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"smpte-video-wipe", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -106,6 +108,7 @@
     _typeDPropertyMap[TypeDPair( L"video-speed-control", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-speed-control", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-speed-control", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"video-speed-control", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-speed-control", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-speed-control", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-speed-control", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -136,6 +139,7 @@
     _typeDPropertyMap[TypeDPair( L"video-repeat", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-repeat", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-repeat", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"video-repeat", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-repeat", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-repeat", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-repeat", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -166,6 +170,7 @@
     _typeDPropertyMap[TypeDPair( L"video-flip", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-flip", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-flip", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"video-flip", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-flip", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-flip", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-flip", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -196,6 +201,7 @@
     _typeDPropertyMap[TypeDPair( L"video-flop", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-flop", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-flop", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"video-flop", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-flop", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-flop", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-flop", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -226,6 +232,7 @@
     _typeDPropertyMap[TypeDPair( L"video-flip-flop", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-flip-flop", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-flip-flop", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"video-flip-flop", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-flip-flop", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-flip-flop", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-flip-flop", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -256,6 +263,7 @@
     _typeDPropertyMap[TypeDPair( L"video-position", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-position", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-position", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"video-position", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-position", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-position", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-position", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -286,6 +294,7 @@
     _typeDPropertyMap[TypeDPair( L"video-crop", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-crop", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-crop", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"video-crop", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-crop", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-crop", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-crop", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -316,6 +325,7 @@
     _typeDPropertyMap[TypeDPair( L"video-scale", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-scale", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-scale", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"video-scale", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-scale", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-scale", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-scale", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -346,6 +356,7 @@
     _typeDPropertyMap[TypeDPair( L"video-rotate", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-rotate", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-rotate", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"video-rotate", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-rotate", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-rotate", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-rotate", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -376,6 +387,7 @@
     _typeDPropertyMap[TypeDPair( L"video-corner-pinning", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-corner-pinning", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-corner-pinning", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"video-corner-pinning", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-corner-pinning", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-corner-pinning", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"video-corner-pinning", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -406,6 +418,7 @@
     _typeDPropertyMap[TypeDPair( L"alpha-with-video-key", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"alpha-with-video-key", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"alpha-with-video-key", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"alpha-with-video-key", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"alpha-with-video-key", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"alpha-with-video-key", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"alpha-with-video-key", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -436,6 +449,7 @@
     _typeDPropertyMap[TypeDPair( L"separate-alpha-key", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"separate-alpha-key", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"separate-alpha-key", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"separate-alpha-key", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"separate-alpha-key", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"separate-alpha-key", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"separate-alpha-key", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -466,6 +480,7 @@
     _typeDPropertyMap[TypeDPair( L"luminance-key", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"luminance-key", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"luminance-key", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"luminance-key", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"luminance-key", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"luminance-key", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"luminance-key", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -496,6 +511,7 @@
     _typeDPropertyMap[TypeDPair( L"chroma-key", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"chroma-key", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"chroma-key", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"chroma-key", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"chroma-key", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"chroma-key", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"chroma-key", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -526,6 +542,7 @@
     _typeDPropertyMap[TypeDPair( L"mono-audio-gain", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"mono-audio-gain", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"mono-audio-gain", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"mono-audio-gain", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"mono-audio-gain", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"mono-audio-gain", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"mono-audio-gain", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -556,6 +573,7 @@
     _typeDPropertyMap[TypeDPair( L"mono-audio-pan", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"mono-audio-pan", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"mono-audio-pan", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"mono-audio-pan", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"mono-audio-pan", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"mono-audio-pan", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"mono-audio-pan", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -586,6 +604,7 @@
     _typeDPropertyMap[TypeDPair( L"mono-audio-dissolve", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"mono-audio-dissolve", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"mono-audio-dissolve", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"mono-audio-dissolve", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"mono-audio-dissolve", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"mono-audio-dissolve", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"mono-audio-dissolve", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -616,6 +635,7 @@
     _typeDPropertyMap[TypeDPair( L"two-parameter-mono-audio-dissolve", L"edgecode" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"two-parameter-mono-audio-dissolve", L"comment-marker" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"two-parameter-mono-audio-dissolve", L"descriptive-marker" )] = TestFileBuilder::INPUT_SEGMENT;
+    _typeDPropertyMap[TypeDPair( L"two-parameter-mono-audio-dissolve", L"operation-group" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"two-parameter-mono-audio-dissolve", L"source-clip" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"two-parameter-mono-audio-dissolve", L"eoc" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"two-parameter-mono-audio-dissolve", L"oof" )] = TestFileBuilder::INPUT_SEGMENT;
@@ -640,14 +660,15 @@
     _typeDPropertyMap[TypeDPair( L"two-parameter-mono-audio-dissolve", L"mono-audio-dissolve" )] = TestFileBuilder::INPUT_SEGMENT;
     _typeDPropertyMap[TypeDPair( L"two-parameter-mono-audio-dissolve", L"two-parameter-mono-audio-dissolve" )] = TestFileBuilder::INPUT_SEGMENT;
 
-    _effectMap[L"transition"] = kAAFOperationDef_Unknown;
-    _effectMap[L"sequence"] = kAAFOperationDef_Unknown;
-    _effectMap[L"timecode"] = kAAFOperationDef_Unknown;
-    _effectMap[L"timecode-stream-12m"] = kAAFOperationDef_Unknown;
-    _effectMap[L"edgecode"] = kAAFOperationDef_Unknown;
-    _effectMap[L"comment-marker"] = kAAFOperationDef_Unknown;
-    _effectMap[L"descriptive-marker"] = kAAFOperationDef_Unknown;
-    _effectMap[L"%SOURCE_REFERENCE;"] = kAAFOperationDef_Unknown;
+    _effectMap[L"transition"] = L"";
+    _effectMap[L"sequence"] = L"";
+    _effectMap[L"timecode"] = L"";
+    _effectMap[L"timecode-stream-12m"] = L"";
+    _effectMap[L"edgecode"] = L"";
+    _effectMap[L"comment-marker"] = L"";
+    _effectMap[L"descriptive-marker"] = L"";
+    _effectMap[L"operation-group"] = L"";
+    _effectMap[L"%SOURCE_REFERENCE;"] = L"";
 
     _optRationalParam[L"top-level"] = L"";
     _optRationalParam[L"lower-level"] = L"";

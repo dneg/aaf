@@ -2,17 +2,17 @@
         Desc:   Verify that all annotations in an AAF file are legal.
         Result: Failed
         Reason: Test Failed - See "Edit Protocol Annotation Visitor" Visitor for details
-        Passing Requirements: REQ_EP_151; REQ_EP_152
+        Passing Requirements: None
         Warning Requirements: None
-        Failing Requirements: REQ_EP_147; REQ_EP_149; REQ_EP_150
+        Failing Requirements: REQ_EP_147; REQ_EP_149; REQ_EP_150; REQ_EP_151; REQ_EP_152
 
             Name:   Edit Protocol Annotation Visitor
             Desc:   Visit components to make sure they do not have illegal annotations.
             Result: Failed
             Reason: 
-            Passing Requirements: REQ_EP_151; REQ_EP_152
+            Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_147; REQ_EP_149; REQ_EP_150
+            Failing Requirements: REQ_EP_147; REQ_EP_149; REQ_EP_150; REQ_EP_151; REQ_EP_152
 
                 Name:   Edit Protocol Annotation Visitor
                 Desc:   -
@@ -61,4 +61,28 @@
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_150
+
+                Name:   Edit Protocol Annotation Visitor
+                Desc:   -
+                Result: Failed
+                Reason: TaggedValue "Test Case 1" is not documented in the dictionary.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_151
+
+                Name:   Edit Protocol Annotation Visitor
+                Desc:   -
+                Result: Failed
+                Reason: TaggedValue "Test Case 2" is not documented in the dictionary.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_151
+
+                Name:   Edit Protocol Annotation Visitor
+                Desc:   -
+                Result: Failed
+                Reason: KLVData with key 00000012-0012-0012-1212121212121212 is not documented in the dictionary.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_152
 

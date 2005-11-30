@@ -31,9 +31,6 @@
 //AAF files
 #include <AAFClassDefUIDs.h>
 
-//STL files
-#include <set>
-
 //Not in the aafanalyzer namespace so the forward declaration must be made
 //outside of the namespace.
 class AxClassDef;

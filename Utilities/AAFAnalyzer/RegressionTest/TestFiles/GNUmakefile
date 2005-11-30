@@ -100,7 +100,43 @@ check : $(AAFSDKBINDIR)/BuildTestFile$(EXE)
 	@echo "End of Test"
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPAnnotationTest.xml EPAnnotationTest.aaf
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPAnnotationTest.aaf ../../Requirements/AAFRequirements.xml >> EPAnnotationTest.temp
-	grep -A `expr \`expr \\\`wc -l EPAnnotationTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Annotation Test" EPAnnotationTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\`` "Name:   Edit Protocol Annotation Test" EPAnnotationTest.temp >> EPAnnotationTest.results
+	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Definition Test" EPAnnotationTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Annotation Test" EPAnnotationTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Annotation Test" EPAnnotationTest.temp >> EPAnnotationTest.results
 	@echo "Comparing EPAnnotationTest Expected Results (EPAnnotationTest.expected) to Actual Results (EPAnnotationTest.results)"
 	diff EPAnnotationTest.expected EPAnnotationTest.results
+	@echo "End of Test"
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPAnnotationTest2.xml EPAnnotationTest2.aaf
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPAnnotationTest2.aaf ../../Requirements/AAFRequirements.xml >> EPAnnotationTest2.temp
+	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Definition Test" EPAnnotationTest2.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Annotation Test" EPAnnotationTest2.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Annotation Test" EPAnnotationTest2.temp >> EPAnnotationTest2.results
+	@echo "Comparing EPAnnotationTest 2 Expected Results (EPAnnotationTest2.expected) to Actual Results (EPAnnotationTest2.results)"
+	diff EPAnnotationTest2.expected EPAnnotationTest2.results
+	@echo "End of Test"
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPDefinitionTest.xml EPDefinitionTest.aaf
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPDefinitionTest.aaf ../../Requirements/AAFRequirements.xml >> EPDefinitionTest.temp
+	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Header Test" EPDefinitionTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Definition Test" EPDefinitionTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Definition Test" EPDefinitionTest.temp >> EPDefinitionTest.results
+	@echo "Comparing EPDefinitionTest Expected Results (EPDefinitionTest.expected) to Actual Results (EPDefinitionTest.results)"
+	diff EPDefinitionTest.expected EPDefinitionTest.results
+	@echo "End of Test"
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPHeaderTest1.xml EPHeaderTest1.aaf
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPHeaderTest1.aaf ../../Requirements/AAFRequirements.xml >> EPHeaderTest1.temp
+	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Parameter Test" EPHeaderTest1.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Header Test" EPHeaderTest1.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Header Test" EPHeaderTest1.temp >> EPHeaderTest1.results
+	@echo "Comparing EPHeaderTest 1 Expected Results (EPHeaderTest1.expected) to Actual Results (EPHeaderTest1.results)"
+	diff EPHeaderTest1.expected EPHeaderTest1.results
+	@echo "End of Test"
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPHeaderTest2.xml EPHeaderTest2.aaf
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPHeaderTest2.aaf ../../Requirements/AAFRequirements.xml >> EPHeaderTest2.temp
+	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Parameter Test" EPHeaderTest2.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Header Test" EPHeaderTest2.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Header Test" EPHeaderTest2.temp >> EPHeaderTest2.results
+	@echo "Comparing EPHeaderTest 2 Expected Results (EPHeaderTest2.expected) to Actual Results (EPHeaderTest2.results)"
+	diff EPHeaderTest2.expected EPHeaderTest2.results
+	@echo "End of Test"
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPHeaderTest3.xml EPHeaderTest3.aaf
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPHeaderTest3.aaf ../../Requirements/AAFRequirements.xml >> EPHeaderTest3.temp
+	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Parameter Test" EPHeaderTest3.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Header Test" EPHeaderTest3.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Header Test" EPHeaderTest3.temp >> EPHeaderTest3.results
+	@echo "Comparing EPHeaderTest 3 Expected Results (EPHeaderTest3.expected) to Actual Results (EPHeaderTest3.results)"
+	diff EPHeaderTest3.expected EPHeaderTest3.results
+	@echo "End of Test"
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPParameterTest.xml EPParameterTest.aaf
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPParameterTest.aaf ../../Requirements/AAFRequirements.xml >> EPParameterTest.temp
+	grep -A `expr \`expr \\\`wc -l EPParameterTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Parameter Test" EPParameterTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\`` "Name:   Edit Protocol Parameter Test" EPParameterTest.temp >> EPParameterTest.results
+	@echo "Comparing EPParameterTest Expected Results (EPParameterTest.expected) to Actual Results (EPParameterTest.results)"
+	diff EPParameterTest.expected EPParameterTest.results
 	@echo "End of Test"

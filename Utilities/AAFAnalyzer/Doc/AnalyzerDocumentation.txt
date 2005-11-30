@@ -540,6 +540,11 @@ EPEffectTest - Derived from Test and executed by EPMobDepPhase.  Tests
 
 EPEffectVisitor - Derived from EPTypedVisitor, used by EPEffectTest to verify
 				  that all OperationGroups are valid.
+				  
+TransitionInputVisitor - Derived from TypedVisitor and used by EFEffectVisitor.
+						 Visits the parents of an effect to find the transition
+						 in which it is contained and the input segments to the
+						 transition.
 
 EPLocatorTest - Derived from Test and executed by EPMobDepPhase.  Test that
 				locators in Import and File Sources are valid (currently not
@@ -561,3 +566,22 @@ EPAnnotationTest - Derived from Test and executed by EPMobDepPhase.  Test that
 
 EPAnnotationVisitor - Derived from EPTypedVisitor, used by EPAnnotationTest to
 					  verify that all annotations are legal.
+
+EPDefinitionTest - Derived from Test and executed by EPMobDepPhase.  Test that
+				   all DefinitionObjects are properly used.
+				   
+EPDefinitionVisitor - Derived from EPTypedVisitor, used by EPDefinitionTest to
+					  verify that all DefinitionObjects are used legally.
+					  
+EPHeaderTest - Derived from Test and executed by EPMobDepPhase.  Test that the
+			   header of an AAF file complies to the Edit Protocol.
+			   
+EPHeaderVisitor - Derived from TypedVisitor, used by EPDefinitionTest to verify
+				  the header of the AAF file is valid.
+
+EPParameterTest - Derived from Test and executed by EPMobDepPhase.  Test that
+				  all parameters with an AAF file meet the Edit Protocol
+				  requirements.
+
+EPParameterVisitor - Derived from EPTypedVisitor, used by EPParameterTest to
+					 verify that all parameters in an AAF file are legal.

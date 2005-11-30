@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE aaf-file SYSTEM "EPDerivationChain.dtd">
+
+<aaf-file>
+   
+	<!-- Make sure the file is not empty -->
+    <top-level name="Missing OperationalDefinition">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc track-type="none"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+</aaf-file>

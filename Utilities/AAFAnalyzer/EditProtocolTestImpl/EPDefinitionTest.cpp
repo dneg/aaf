@@ -19,8 +19,8 @@
 //=---------------------------------------------------------------------=
 
 //Edit Protocol Test files
-#include "EPEffectTest.h"
-#include "EPEffectVisitor.h"
+#include "EPDefinitionTest.h"
+#include "EPDefinitionVisitor.h"
 
 //Test/Result files
 #include <TestLevelTestResult.h>
@@ -40,8 +40,8 @@
 
 namespace {
 
-const wchar_t* TEST_NAME = L"Edit Protocol Effect Test";
-const wchar_t* TEST_DESC = L"Verify that all effects in the AAF file are valid.";
+const wchar_t* TEST_NAME = L"Edit Protocol Definition Test";
+const wchar_t* TEST_DESC = L"Verify the use of DataDefinition objects throught the file.";
 
 } // end of namespace
 
@@ -51,20 +51,20 @@ namespace aafanalyzer {
 
 using namespace std;
 
-EPEffectTest::EPEffectTest( wostream& log,
-                              shared_ptr<const TestGraph> spGraph )
+EPDefinitionTest::EPDefinitionTest( wostream& log,
+                                            shared_ptr<const TestGraph> spGraph )
   : Test( log, GetTestInfo() )
 {
     SetTestGraph(spGraph);
 }
 
-EPEffectTest::~EPEffectTest()
+EPDefinitionTest::~EPDefinitionTest()
 {}
 
-shared_ptr<TestLevelTestResult> EPEffectTest::Execute()
+shared_ptr<TestLevelTestResult> EPDefinitionTest::Execute()
 {
     
-    shared_ptr<EPEffectVisitor> spVisitor(new EPEffectVisitor( GetOutStream(), GetTestGraph()->GetEdgeMap() ) );
+    shared_ptr<EPDefinitionVisitor> spVisitor(new EPDefinitionVisitor( GetOutStream(), GetTestGraph()->GetEdgeMap() ) );
 
     DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
     
@@ -79,13 +79,14 @@ shared_ptr<TestLevelTestResult> EPEffectTest::Execute()
                                  spMyReqs ) );
 
     dfs.TraverseDown( spVisitor, GetTestGraph()->GetRootNode() );
+    spVisitor->CheckForUnusedOperationDefinitions();
 
     spResult->AppendSubtestResult( spVisitor->GetResult() );
 
     spResult->SetResult( spResult->GetAggregateResult() );
     if ( spResult->GetResult() == TestResult::FAIL )
     {
-        spResult->SetExplanation(L"Test Failed - See \"Edit Protocol Effect Visitor\" Visitor for details");
+        spResult->SetExplanation(L"Test Failed - See \"Edit Protocol Track Contents Visitor\" Visitor for details");
     }
     
     //Update the requirement status based upon the status of the requirements in
@@ -104,43 +105,21 @@ shared_ptr<TestLevelTestResult> EPEffectTest::Execute()
 
 }
 
-AxString EPEffectTest::GetName() const
+AxString EPDefinitionTest::GetName() const
 {
   return TEST_NAME;
 }
 
-AxString EPEffectTest::GetDescription() const
+AxString EPDefinitionTest::GetDescription() const
 {
   return TEST_DESC;
 }
 
-const TestInfo EPEffectTest::GetTestInfo()
+const TestInfo EPDefinitionTest::GetTestInfo()
 {
     shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
-    spReqIds->push_back(L"REQ_EP_180");     //Video Dissolve in Transition.
-    spReqIds->push_back(L"REQ_EP_183");     //SMPTE Video Wipe in Transition.
-    spReqIds->push_back(L"REQ_EP_186");     //Video Speed Control not in Transition.
-    spReqIds->push_back(L"REQ_EP_187");     //Speed Ratio parameter is not 0.
-    spReqIds->push_back(L"REQ_EP_190");     //Video Repeat not in Transition.
-    spReqIds->push_back(L"REQ_EP_194");     //Video Flip not in Transition.
-    spReqIds->push_back(L"REQ_EP_197");     //Video Flop not in Transition.
-    spReqIds->push_back(L"REQ_EP_200");     //Video Flip-Flop not in Transition.
-    spReqIds->push_back(L"REQ_EP_203");     //Video Position not in Transition.
-    spReqIds->push_back(L"REQ_EP_206");     //Video Crop not in Transition.
-    spReqIds->push_back(L"REQ_EP_209");     //Video Scale not in Transition.
-    spReqIds->push_back(L"REQ_EP_212");     //Video Rotate not in Transition.
-    spReqIds->push_back(L"REQ_EP_215");     //Video Corner Pinning not in Transition.
-    spReqIds->push_back(L"REQ_EP_220");     //Alpha With Video Key not in Transition.
-    spReqIds->push_back(L"REQ_EP_225");     //Separate Alpha Key not in Transition.
-    spReqIds->push_back(L"REQ_EP_228");     //Luminance Key not in Transition.
-    spReqIds->push_back(L"REQ_EP_231");     //Chroma Key not in Transition.
-    spReqIds->push_back(L"REQ_EP_234");     //Mono Audio Gain not in Transition.
-    spReqIds->push_back(L"REQ_EP_240");     //Mono Audio Pan not in Transition.
-    spReqIds->push_back(L"REQ_EP_244");     //Single-Parameter Mono Audio Dissolve in Transition.
-    spReqIds->push_back(L"REQ_EP_247");     //Two-Parameter Audio Dissolve in Transition.
-    spReqIds->push_back(L"REQ_EP_248");     //Two-Parameter Mono Audio Dissolve Input Length.
-    spReqIds->push_back(L"REQ_EP_249");     //Two-Parameter Mono Audio Dissolve Input Length.
-    return TestInfo(L"EPEffectTest", spReqIds);
+    spReqIds->push_back(L"REQ_EP_162");     //Operation Group/Definition
+    return TestInfo(L"EPDefinitionTest", spReqIds);
 }
 
 } // end of namespace aafanalyzer

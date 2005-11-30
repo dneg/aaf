@@ -38,6 +38,11 @@
 #include <AxEx.h>
 #include <AxMob.h>
 #include <AxSmartPointer.h>
+#include <AxProperty.h>
+#include <AxMetaDef.h>
+
+//AAF files
+#include <AAFTypes.h>
 
 //STL files
 #include <memory>
@@ -46,7 +51,6 @@
 namespace {
 
 using namespace aafanalyzer;
-using namespace boost;
 using namespace std;
 
 void UpdateNodeMap( IAAFObjectSP spObj, shared_ptr<Node> spNode )
@@ -112,11 +116,30 @@ void BuildTree( AxBaseObjRecIter& recIter,
        parentStack.push( pair<int, shared_ptr<Node> >(level, spChildNode) );
      }
 
-    // These remain for reference.
-    // We don't care about the individual properties, and property
-    // values. The iterator returns them, but we just ignore them.
-    // else if ( dynamic_cast<AxProperty*>( nextPtr.get() ) ) {
-    // }
+     else if ( dynamic_cast<AxProperty*>( nextPtr.get() ) ) {
+        
+        //We cannot let the traversal continue over an properties with types
+        //that can not be determined until runtime.  The iterator will return
+        //StrongObjectReferences, Sets, VarriableArrays, Records, FixedArrays,
+        //Indirects, Opaques and Renames.  Of these, FixedArrays and Indirects
+        //have types that must be determined at runtime.  Therefore, stop
+        //traversal on these properties.
+        
+        auto_ptr<AxProperty> prop(dynamic_cast<AxProperty*>(nextPtr.release()));
+        AxPropertyDef axPropDef( prop->GetDefinition() );
+        AxTypeDef axTypeDef( axPropDef.GetTypeDef() );
+        eAAFTypeCategory_t typeCategory = axTypeDef.GetTypeCategory();
+
+        if(  typeCategory == kAAFTypeCatOpaque || typeCategory == kAAFTypeCatIndirect )
+        {
+            recIter.PopStack();
+        }
+
+        
+     }
+    // This remains for reference.
+    // We don't care about the individual property values. The iterator returns
+    // them, but we just ignore them.
     // else if ( dynamic_cast<AxPropertyValue*>( nextPtr.get() ) ) {
     // }
 

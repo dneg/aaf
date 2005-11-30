@@ -44,7 +44,7 @@ done
 # Populate effect map (for non-operation group components)
 for compparams in $NON_OG_COMPONENT_PARAMS
 do
-    echo '    _effectMap[L"'$compparams'"] = kAAFOperationDef_Unknown;' >&4
+    echo '    _effectMap[L"'$compparams'"] = L"";' >&4
 done
 
 echo >&4

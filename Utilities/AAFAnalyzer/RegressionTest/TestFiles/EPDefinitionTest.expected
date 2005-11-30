@@ -1,0 +1,24 @@
+        Name:   Edit Protocol Definition Test
+        Desc:   Verify the use of DataDefinition objects throught the file.
+        Result: Failed
+        Reason: Test Failed - See "Edit Protocol Track Contents Visitor" Visitor for details
+        Passing Requirements: None
+        Warning Requirements: None
+        Failing Requirements: REQ_EP_162
+
+            Name:   Edit Protocol Definition Visitor
+            Desc:   Visit Data Definitions and Components to make sure all Data Definitions are valid.
+            Result: Failed
+            Reason: 
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_162
+
+                Name:   Edit Protocol Definition Visitor
+                Desc:   -
+                Result: Failed
+                Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition: "Invalid OperationGroup/OperationDefinition" has data definition value "Sound" and references OperationDefinition "Chroma Key" with data definition value "Picture".
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_162
+

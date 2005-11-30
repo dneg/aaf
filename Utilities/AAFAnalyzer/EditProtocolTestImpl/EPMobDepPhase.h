@@ -33,6 +33,9 @@
 #include <EPEditRateTest.h>
 #include <EPEffectTest.h>
 #include <EPAnnotationTest.h>
+#include <EPDefinitionTest.h>
+#include <EPHeaderTest.h>
+#include <EPParameterTest.h>
 
 //Test/Result files
 #include <TestPhase.h>

@@ -25,8 +25,6 @@
 #include <EPTypedVisitor.h>
 #include <EPTypedObjNode.h>
 
-//Ax files
-
 //STL files
 #include <stack>
 

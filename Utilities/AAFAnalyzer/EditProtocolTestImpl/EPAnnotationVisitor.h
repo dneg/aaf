@@ -27,6 +27,7 @@
 
 //STL files
 #include <stack>
+#include <set>
 
 class AxComponent;
 
@@ -66,6 +67,11 @@ class EPAnnotationVisitor : public EPTypedVisitor
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFScopeReference>& node );
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFEssenceGroup>& node );
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFSelector>& node );
+    
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFTaggedValue>& node );
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFKLVData>& node );
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFTaggedValueDefinition>& node );
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFKLVDataDefinition>& node );
     
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPAudioTrack>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPVideoTrack>& node );
@@ -120,6 +126,8 @@ class EPAnnotationVisitor : public EPTypedVisitor
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFMobSlot>& node );
     
     shared_ptr<DetailLevelTestResult> GetResult();
+    void CheckForTaggedValueDefinitions();
+    void CheckForKLVValueDefinitions();
     
   private:
   
@@ -130,6 +138,11 @@ class EPAnnotationVisitor : public EPTypedVisitor
     bool        _isAncestorEssenceTrack;
     bool        _isAncestorEventMobSlot;
     stack<bool> _isParentMobSlot;
+    
+    set<AxString> _taggedValueNames;
+    set<AxString> _taggedValueDefs;
+    set<aafUID_t> _klvDataKeys;
+    set<aafUID_t> _klvDataDefs;
     
     bool PopStacks();
        
