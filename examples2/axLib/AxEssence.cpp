@@ -906,3 +906,117 @@ void AxAuxiliaryDescriptor::SetCharSet ( const AxString& charSet )
 
 //=---------------------------------------------------------------------=
 
+aafUID_t AxSoundDescriptor::GetCompression()
+{
+    aafUID_t compression;
+    
+    CHECK_HRESULT( _spIaafSoundDescriptor->GetCompression( &compression ) );
+
+    return compression;
+}
+
+aafUInt32 AxSoundDescriptor::GetChannelCount()
+{
+    aafUInt32 channelCount;
+    
+    CHECK_HRESULT( _spIaafSoundDescriptor->GetChannelCount( &channelCount ) );
+
+    return channelCount;
+}
+
+aafRational_t AxSoundDescriptor::GetAudioSamplingRate()
+{
+    aafRational_t rate;
+    
+    CHECK_HRESULT( _spIaafSoundDescriptor->GetAudioSamplingRate( &rate ) );
+
+    return rate;
+}
+
+aafBoolean_t AxSoundDescriptor::IsLocked()
+{
+    aafBoolean_t isLocked;
+    
+    CHECK_HRESULT( _spIaafSoundDescriptor->IsLocked( &isLocked ) );
+
+    return isLocked;
+}
+
+aafElectroSpatialFormulation_t AxSoundDescriptor::GetElectroSpatialFormulation()
+{
+    aafElectroSpatialFormulation_t formulation;
+    
+    CHECK_HRESULT( _spIaafSoundDescriptor->GetElectroSpatialFormulation( &formulation ) );
+
+    return formulation;
+}
+
+aafInt8 AxSoundDescriptor::GetAudioRefLevel()
+{
+    aafInt8 level;
+    
+    CHECK_HRESULT( _spIaafSoundDescriptor->GetAudioRefLevel( &level ) );
+
+    return level;
+}
+
+aafInt8 AxSoundDescriptor::GetDialNorm()
+{
+    aafInt8 dialNorm;
+    
+    CHECK_HRESULT( _spIaafSoundDescriptor->GetDialNorm( &dialNorm ) );
+
+    return dialNorm;
+}
+
+aafUInt32 AxSoundDescriptor::GetQuantizationBits()
+{
+    aafUInt32 bitsCount;
+    
+    CHECK_HRESULT( _spIaafSoundDescriptor->GetQuantizationBits( &bitsCount ) );
+
+    return bitsCount;
+}
+                
+void AxSoundDescriptor::SetCompression( aafUID_constref compression )
+{
+    CHECK_HRESULT( _spIaafSoundDescriptor->SetCompression( compression ) );
+}
+
+void AxSoundDescriptor::SetChannelCount( aafUInt32 channelCount )
+{
+    CHECK_HRESULT( _spIaafSoundDescriptor->SetChannelCount( channelCount ) );
+}
+
+void AxSoundDescriptor::SetAudioSamplingRate( aafRational_t rate )
+{
+    CHECK_HRESULT( _spIaafSoundDescriptor->SetAudioSamplingRate( rate ) );
+}
+
+void AxSoundDescriptor::SetIsLocked( aafBoolean_t locked )
+{
+    CHECK_HRESULT( _spIaafSoundDescriptor->SetIsLocked( locked ) );
+}
+
+void AxSoundDescriptor::SetElectroSpatialFormulation( aafElectroSpatialFormulation_t formulation )
+{
+    CHECK_HRESULT( _spIaafSoundDescriptor->SetElectroSpatialFormulation( formulation ) );
+}
+
+void AxSoundDescriptor::SetAudioRefLevel( aafInt8 level )
+{
+    CHECK_HRESULT( _spIaafSoundDescriptor->SetAudioRefLevel( level ) );
+}
+
+void AxSoundDescriptor::SetDialNorm( aafInt8 dialNorm )
+{
+    CHECK_HRESULT( _spIaafSoundDescriptor->SetDialNorm( dialNorm ) );
+}
+
+void AxSoundDescriptor::SetQuantizationBits( aafUInt32 bitsCount )
+{
+    CHECK_HRESULT( _spIaafSoundDescriptor->SetQuantizationBits( bitsCount ) );
+}
+
+//=---------------------------------------------------------------------=
+
