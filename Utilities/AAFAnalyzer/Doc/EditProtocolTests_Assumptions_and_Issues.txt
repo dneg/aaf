@@ -363,3 +363,5 @@
 	or Opaque.  The AAF object specification allows Indirects and Opaques to be
 	used in this way and if this assumption is incorrect, the AAF Analyzer will
 	throw an exception and terminate before analyzing the file.
+	
+72. Should REQ_EP_012, REQ_EP_062 and REQ_EP_160 be FILE requirements?

@@ -1069,4 +1069,20 @@ Issue:
 	or Opaque.  The AAF object specification allows Indirects and Opaques to be
 	used in this way and if this assumption is incorrect, the AAF Analyzer will
 	throw an exception and terminate before analyzing the file.
-	
+
+Requirements:
+	REQ_EP_012 (5)
+		Where the feature set of an exporting application supports program
+		metadata that the Edit Protocol specifically disallows (e.g. a program
+		consisting of different audio sample rates which is disallowed in
+		Section 7.3), the application shall not export that metadata to an Edit
+		Protocol AAF file.  The omission of any metadata on export in order to
+		comply with the Edit Protocol should be logged.
+	REQ_EP_062 (6.9)
+		When exporting an AAF file containing relative URIs, the exporting 
+		application should also export the target resources.
+	REQ_EP_160 (11.1)
+		All effects in an AAF file shall be defined with OperationDefinition and
+		ParameterDefinition objects in the Dictionary.
+Issue:
+72. Should REQ_EP_012, REQ_EP_062 and REQ_EP_160 be FILE requirements?

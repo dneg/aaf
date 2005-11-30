@@ -1,0 +1,376 @@
+REQ_EP_013
+An application shall export each clip using one of the methods described in
+Section 6.1 of the AAF Edit Protocol.
+6.1
+> Should this be an APP requirement?
+
+REQ_EP_014
+An application shall import clips that use any of the methods described in
+Section 6.1 of the AAF Edit Protocol.
+6.1
+> Should this be an APP requirement?
+
+REQ_EP_023
+Within a Two-Parameter Audio Dissolve effect a CompositionMob may use a
+SourceClip object to reference a TimelineMobSlot beyond the extent of the
+TimelineMobSlot (before the begining or after the end).
+6.2.1
+> This is a MAY requirement
+
+REQ_EP_034
+A sub-clip composition shall be specified using a CompositionMob with 
+Mob::UsageCode property equal to Usage_SubClip.
+6.5
+> This is a definition
+
+REQ_EP_039
+A CompositionMob with Mob::UsageCode property equal to Usage_SubClip shall
+be treated as a sub-clip composition.
+6.5.1
+> Should this be an APP requirement?
+
+REQ_EP_043
+An adjusted-clip composition shall be specified using a CompositionMob with 
+Mob::UsageCode property equal to Usage_AdjustedClip.
+6.6
+> This is a definition
+
+REQ_EP_049
+A template clip shall be specified using a MasterMob with Mob::UsageCode 
+property equal to Usage_Template.
+6.7
+> This is a definition
+
+REQ_EP_054
+A clip shall be specified using a MasterMob with no Mob::UsageCode property.
+6.8
+> This is a definition
+
+REQ_EP_056
+A MasterMob shall not reference more than one essence track of a particular
+file source from each time position in the MasterMob.
+> What does this mean?
+
+REQ_EP_058
+A file source shall be specified using a SourceMob with an EssenceDescriptor 
+that is a sub-class of FileDescriptor.
+6.9
+> This is a definition
+
+REQ_EP_071
+A recording source shall be specified using a SourceMob with a 
+RecordingDescriptor.  A recording source is also known as a recording SourceMob.
+6.10
+> This is a definition
+
+REQ_EP_074
+An import source shall be specified using a SourceMob with an ImportDescriptor.
+6.11
+> This is a definition
+
+REQ_EP_080
+A tape source shall be specified using a SourceMob with a TapeDescriptor.
+6.12
+> This is a definition
+
+REQ_EP_085
+A film source shall be specified using a SourceMob with a FilmDescriptor.
+6.13
+> This is a definition
+
+REQ_EP_096
+Pull up and pull down shall be specified using a Pulldown object.
+7.2
+> This is a definition.
+
+REQ_EP_097
+A Pulldown may be used in the following contexts: 1. In a TimelineMobSlot of a 
+file SourceMob, where the Pulldown object contains a SourceClip referencing a
+tape SourceMob; 2. In a TimelineMobSlot of a tape SourceMob, where the Pulldown
+object contains a SourceClip referencing a film SourceMob; 3. In a
+TimelineMobSlot of a tape SourceMob, where the Pulldown object contains a
+SourceClip referenceing a tape SourceMob.
+7.2
+> This is a MAY requirement
+
+REQ_EP_108
+The marked IN and OUT points and user position shall be specified using the 
+TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos
+optional properties respectively.
+7.7
+> This seems to indicate that if the positions are marked, they should be
+> marked using the specified optional properties.  If this is the case, how do
+> you test that they are not specified some other way?  If this is not the
+> case, what should be tested?
+
+REQ_EP_110
+Within a CompositionMob or MasterMob, multi-channel audio shall be represented 
+using multiple tracks with mono sound Data Definition.  Within a CompositionMob
+or MasterMob, a multi-channel sound Data Definition shall not be used.
+7.8
+> 1: How do we know that multi-channel audio is being represented.
+> 2: OK - can check that a multi-channel sound Data Definition is not used.
+
+REQ_EP_111
+The intended placement of each audio track when played shall be indicated using 
+the MobSlot::PhysicalTrackNumber property.  The Physical Track Number shall be
+an integer in the range 1 to the total number of audio tracks in the program. 
+Six channel surround tracks shall be numbered in accordance with SMPTE 320M
+Standard Assignment B (1=Left; 2=Right; 3=Center; 4=Low Frequency Effects;
+5=Left Surround; 6=Right Surround).
+7.8
+> 1: How do we know the intended placement?
+> 2: OK - Can check that PhysicalTrackNumber is in the range 1 to total number
+> of audio tracks.
+> 3. What is the meaning of "program" in the context of this requirement
+> 4. How do we know if six-channel surround is being used or if the tracks are
+> being numbered correctly?
+
+REQ_EP_112
+Within a SourceMob, multi-channel audio shall be represented in either of the 
+following ways: a single track with a multi-channel sound Data Definition and a
+single audio EssenceDescriptor object of multiple channels; or multiple tracks
+with a mono sound Data Definition and a MultipleDescriptor containing the same
+number of mono audio EssenceDescriptors.
+7.8
+> If it is represented in an illegal way, how do we determine that
+> multi-channel audio is being represented?
+
+REQ_EP_113
+To reference a single channel of a multi-channel track from a mono track, the 
+SourceReference::ChannelIDs property shall be used with a single element in the
+array.
+7.8
+> This is a pass condition, what constitutes a fail?
+
+REQ_EP_114
+To reference multiple channels of a multi-channel track from a multi-channel 
+track, the SourceReference::ChannelIDs property shall be used with multiple
+elements in the array.
+7.8
+> This is a pass condition, what constitutes a fail?
+
+REQ_EP_115
+To reference multiple mono tracks from a multi-channel track, the 
+SourceReference::MonoSourceSlotIDs shall be used with multiple elements in the
+array.
+7.8
+> This is a pass condition, what constitutes a fail?
+
+REQ_EP_116
+When exporting multi-channel essence as a single file SourceMob where the 
+multi-channel essence requires a codec that is not widely avaliable, the
+exporting application should also export the individual channels as separate
+essence and file SourceMobs, linked into the Mob reference chain.
+7.8.1
+> How do we determine it multi-channel essence requires a codec that is not
+> widely avaliabe?
+> How do we check (to present a warning) if the individual channels are
+> exported as separate essence.
+
+REQ_EP_121
+A clip with multiple file source choices shall be specified using an 
+EssenceGroup object in a MasterMob.
+7.9
+> Is this a definition?  If not, how do we know that a clip has multiple file
+> source choices and what would be a fail condition?
+
+REQ_EP_128
+A track of edgecode shall be specified using one or more Edgecode objects.
+7.11
+> This is a definition.
+
+REQ_EP_129
+A track of timecode shall be specified using one or more Timecode objects or a 
+TimecodeStream12M object.
+7.11
+> This is a definition.
+
+REQ_EP_135
+Each auxiliary file EssenceData object shall be specified using a SourceMob
+with an AuxiliaryDescriptor.
+9.1.1
+> Is this a definition?  If not, what is being tested?
+
+REQ_EP_137
+An AAF Mob (such as an AAF composition) may reference an auxiliary SourceMob 
+using a SourceReference (or sub-class thereof) from a DataDef_Auxiliary Slot in
+the referencing Mob to the DataDef_Auxiliary Slot in the auxiliary SourceMob.
+9.1.1
+> This is a MAY requirement
+
+REQ_EP_138
+An embedded auxiliary file shall be specified using an EssenceData object 
+containing the auxiliary file data.  The EssenceData object is linked to the
+auxiliary SourceMob using a common MobID.
+9.1.1
+> Is this a definition?  If not, what is being tested?
+
+REQ_EP_142
+No more than one MIDI auxiliary file shall be referenced from a given 
+composition.
+9.2
+> How you determine if a MIDI auxiliary file is being referenced?
+>
+
+REQ_EP_143
+A referenced MIDI file shall conform to the standard MIDI specification version 
+1.
+9.2
+> OK if we can find a good parser.  The one at
+> http://www.jdkoftinoff.com/main/Free_Projects/C++_MIDI_Library/ might work,
+> but I'd like to know if something else is being used elsewhere in AAF code. 
+> If not, I'd like to get someone else opinion on if this library will work.
+
+REQ_EP_144
+The AuxiliaryDescriptor::MimeType property for a referenced MIDI file shall be 
+"audio/midi".
+9.2
+> This is a definition.
+
+REQ_EP_145
+The importing application shall parse the MIDI file, including tempo maps, to 
+determine synchronization at further points in the composition.
+9.2
+> Should this be an application requirement?  If not, how do we test this?
+
+REQ_EP_148
+The Data Definition for non-essence tracks containing annotations shall be 
+DataDef_DescriptiveMetadata.
+10.1
+> What object do I need to check the data definition of?  Is it just getting the
+> Data Definition of a mob slot of any non-essence track that has an object
+> under it which contains annotations?
+
+REQ_EP_156
+Importing applications should be aware that legacy files might contain 
+CommentMarkers in tracks with unexpected DataDefinitions such as
+DataDef_LegacyPicture or DataDef_LegacySound or others.  The importing
+application may freely convert such DataDefinitions to
+DataDef_DescriptiveMetadata.
+10.1.1
+> This is a MAY requirement.
+
+REQ_EP_163
+The effects defined in the Edit Protocol should be used with the AAF v1.1 data 
+definition values of DataDef_Picture and DataDef_Sound.  The deprecated data
+definition values of DataDef_LegacyPicture and DataDef_LegacySound should only
+be used when working with legacy AAF v1.0 files.
+11.1
+> What is being tested here?
+
+REQ_EP_165
+An effect shall be invoked using an OperationGroup object.
+11.2
+> How do you tell when an effect is being invoked
+
+REQ_EP_167
+The OperationGroup shall be contained in a Transition object between two 
+Segments.
+11.2.1
+> With REQ_EP_168 what does this mean?
+
+REQ_EP_168
+The OperationGroup shall not be contained in a Transition object.
+11.2.2
+> With REQ_EP_167 what does this mean?
+
+REQ_EP_169
+Multiple effects sharing common material shall be constructed within a 
+NestedScope object.  A continuous section of common material, used by several
+effects, shall be represented as a single segment in the NestedScope.
+11.2.3
+> How do you determine if common material is being shared multiple effects?
+
+REQ_EP_170
+Effects on multiple layers shall be constructed within a NestedScope object.  
+The layers shall be ordered background to foreground within the Slots of the
+NestedScope.
+11.3
+> What is an effect on multiple layers?
+
+REQ_EP_172
+A nested group of tracks within a Segment of a CompositionMob shall be specified
+using a NestedScope object.
+11.4
+> This is a definition.
+
+REQ_EP_173
+A ScopeReference shall reference an existing MobSlot or NestedScope track.
+11.4.2
+> Is there anything else that it can reference?  How does this test fail?
+
+REQ_EP_178
+Effects that take multiple video inputs shall have all of their parameters VH 
+normalized to the first video input unless explicitly stated otherwise in the
+effect definition.
+11.6
+> How do we check that they are normalized?  How is it otherwise stated?
+
+REQ_EP_188
+An importing application that supports video speed control effects shall accept 
+and present the Video Speed Control effect, following the precepts of Section
+4.2.4 of the AAF Edit Protocol.
+12.3.3
+> Should this be an APP requirement?
+
+REQ_EP_191
+The Edit Protocol deprecates the use of specifying a Video Repeat Effect by 
+using a SourceClip in a TimelineMobSlot that references a still frame in a
+StaticMobSlot.  An exporting application shall not use this representation and
+an importing application need not accept it.
+12.4.1
+> OK: if this means that a video source clip in a timeline mob slot can not
+> reference a StaticMobSlot.
+
+REQ_EP_218
+In an Alpha With Video Key effect the alpha channel shall be contained within a 
+channel of the foreground video essence, using either RGBA or YUVA.  The essence
+descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a
+CDCIDescriptor object (or a sub-class) for CDCI.  The alpha channel shall be
+indicated by the essence descriptor.
+12.13
+> What is tested here?
+
+REQ_EP_219
+In an Alpha With Video Key effect the DigitalImageDescriptor::AlphaTransparency 
+property shall be present and specify whether the minimum Alpha value or the
+maximum Alpha value indicates complete transparency.  The
+ParameterDef_AlphaKeyInvertAlpha parameter indicates wheter the transparency
+indicated by the DigitalImageDescriptor::AlphaTransparency property should be
+inverted.
+12.13
+> Where is the DigitialImageDescriptor::AlphaTransparency property located?
+
+REQ_EP_223
+In a Separate-Alpha Key effect the alpha channel shall be contained within a 
+channel of separate essence, using either RGBA or YUVA.  The essence descriptor
+shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor
+object (or a sub-class) for CDCI.  Where the alpha channel is indicated by the
+essence descriptor, the channel shall be used as the alpha channel.  Where the
+alpha channel is not indicated by the essence descriptor, the luminance value of
+essence shall be used as the alpha channel.
+12.14
+> What is tested here
+
+REQ_EP_224
+In a Separate-Alpha Key effect the DigitalImageDescriptor::AlphaTransparency 
+property shall be present and specify whether the minimum Alpha value or the
+maximum Alpha value indicates complete transparency.  The
+ParameterDef_AlphaKeyInvertAlpha parameter indicates whether the transparency
+indicated by the DigitalImageDescriptor::AlphaTransparency property should be
+inverted.
+12.14
+> Where is the DigitialImageDescriptor::AlphaTransparency property located?
+
+REQ_EP_238
+A Mono Audio Pan effect shall only be applied to audio tracks that refer to mono
+essence.
+12.18
+> How do you determine if a track refers to Mono essence?
+
+REQ_EP_239
+Audio pan effects shall not be nested.  The top-level pan value shall be 
+applied.
+12.18
+> What is being tested?
