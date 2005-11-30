@@ -906,6 +906,14 @@ void AxAuxiliaryDescriptor::SetCharSet ( const AxString& charSet )
 
 //=---------------------------------------------------------------------=
 
+AxSoundDescriptor::AxSoundDescriptor( IAAFSoundDescriptorSP spIaafSoundDescriptor )
+:   AxFileDescriptor( AxQueryInterface<IAAFSoundDescriptor, IAAFFileDescriptor>(spIaafSoundDescriptor) ),
+    _spIaafSoundDescriptor( spIaafSoundDescriptor )
+{}
+
+AxSoundDescriptor::~AxSoundDescriptor()
+{}
+
 aafUID_t AxSoundDescriptor::GetCompression()
 {
     aafUID_t compression;
