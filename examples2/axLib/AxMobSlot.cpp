@@ -95,8 +95,13 @@ IAAFDataDefSP AxMobSlot::GetDataDef()
 //=---------------------------------------------------------------------=
 
 AxTimelineMobSlot::AxTimelineMobSlot( IAAFTimelineMobSlotSP spIaafTimelineMobSlot )
-:	AxMobSlot( AxQueryInterface<IAAFTimelineMobSlot, IAAFMobSlot>(spIaafTimelineMobSlot) ),
-	_spIaafTimelineMobSlot( spIaafTimelineMobSlot )
+: AxMobSlot( AxQueryInterface<IAAFTimelineMobSlot, IAAFMobSlot>( spIaafTimelineMobSlot ) ),
+    _spIaafTimelineMobSlot( AxQueryInterface<IAAFTimelineMobSlot, IAAFTimelineMobSlot2>( spIaafTimelineMobSlot ) )
+{}
+
+AxTimelineMobSlot::AxTimelineMobSlot( IAAFTimelineMobSlot2SP spIaafTimelineMobSlot )
+: AxMobSlot( AxQueryInterface<IAAFTimelineMobSlot2, IAAFMobSlot>( spIaafTimelineMobSlot ) ),
+    _spIaafTimelineMobSlot( spIaafTimelineMobSlot )
 {}
 
 AxTimelineMobSlot::~AxTimelineMobSlot()
@@ -117,6 +122,21 @@ void AxTimelineMobSlot::SetEditRate( const aafRational_t& rate )
 	CHECK_HRESULT( _spIaafTimelineMobSlot->SetEditRate( rate ) );
 }
 
+void AxTimelineMobSlot::SetMarkIn( aafPosition_t value )
+{
+    CHECK_HRESULT( _spIaafTimelineMobSlot->SetMarkIn( value ) );
+}
+
+void AxTimelineMobSlot::SetMarkOut( aafPosition_t value )
+{
+    CHECK_HRESULT( _spIaafTimelineMobSlot->SetMarkOut( value ) );
+}
+
+void AxTimelineMobSlot::SetUserPos ( aafPosition_t value )
+{
+    CHECK_HRESULT( _spIaafTimelineMobSlot->SetUserPos( value ) );
+}
+
 aafPosition_t AxTimelineMobSlot::GetOrigin()
 {
 	aafPosition_t pos;
@@ -125,6 +145,7 @@ aafPosition_t AxTimelineMobSlot::GetOrigin()
 
 	return pos;
 }
+
 aafRational_t AxTimelineMobSlot::GetEditRate()
 {
 	aafRational_t rate;
@@ -132,6 +153,33 @@ aafRational_t AxTimelineMobSlot::GetEditRate()
 	CHECK_HRESULT( _spIaafTimelineMobSlot->GetEditRate( &rate ) );
 
 	return rate;
+}
+
+aafPosition_t AxTimelineMobSlot::GetMarkIn()
+{
+    aafPosition_t pos;
+
+    CHECK_HRESULT( _spIaafTimelineMobSlot->GetMarkIn( &pos ) );
+
+    return pos;
+}
+
+aafPosition_t AxTimelineMobSlot::GetMarkOut()
+{
+    aafPosition_t pos;
+
+    CHECK_HRESULT( _spIaafTimelineMobSlot->GetMarkOut( &pos ) );
+
+    return pos;
+}
+
+aafPosition_t AxTimelineMobSlot::GetUserPos()
+{
+    aafPosition_t pos;
+
+    CHECK_HRESULT( _spIaafTimelineMobSlot->GetUserPos( &pos ) );
+
+    return pos;
 }
 
 //=---------------------------------------------------------------------=

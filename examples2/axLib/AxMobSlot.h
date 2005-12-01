@@ -65,26 +65,35 @@ private:
 class AxTimelineMobSlot : public AxMobSlot {
 public:
 	AxTimelineMobSlot( IAAFTimelineMobSlotSP spIaafTimelineMobSlot );
+    AxTimelineMobSlot( IAAFTimelineMobSlot2SP spIaafTimelineMobSlot );
 	~AxTimelineMobSlot();
 
 	void Initialize();
 
 	void SetOrigin( aafPosition_t origin );
-
 	void SetEditRate( const aafRational_t& rate );
+    void SetMarkIn( aafPosition_t value );
+    void SetMarkOut( aafPosition_t value );
+    void SetUserPos ( aafPosition_t value );
 
 	aafPosition_t GetOrigin();
 	aafRational_t GetEditRate();
+    aafPosition_t GetMarkIn();
+    aafPosition_t GetMarkOut();
+    aafPosition_t GetUserPos();
+   
+    inline operator IAAFTimelineMobSlotSP ()
+    { return AxQueryInterface<IAAFTimelineMobSlot2,IAAFTimelineMobSlot>( _spIaafTimelineMobSlot ); }
 
-	operator IAAFTimelineMobSlotSP ()
-	{ return _spIaafTimelineMobSlot; }
+    inline operator IAAFTimelineMobSlot2SP ()
+    { return _spIaafTimelineMobSlot; }
 
 private:
 	AxTimelineMobSlot();
 	AxTimelineMobSlot( const AxTimelineMobSlot& );
 	AxTimelineMobSlot& operator=( const AxTimelineMobSlot& );
 
-	IAAFTimelineMobSlotSP _spIaafTimelineMobSlot;
+	IAAFTimelineMobSlot2SP _spIaafTimelineMobSlot;
 };
 
 //=---------------------------------------------------------------------=
