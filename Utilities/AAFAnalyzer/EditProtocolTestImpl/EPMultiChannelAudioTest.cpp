@@ -19,8 +19,8 @@
 //=---------------------------------------------------------------------=
 
 //Edit Protocol Test files
-#include "EPTrackContentsTest.h"
-#include "EPTrackContentsVisitor.h"
+#include "EPMultiChannelAudioTest.h"
+#include "EPMultiChannelAudioVisitor.h"
 
 //Test/Result files
 #include <TestLevelTestResult.h>
@@ -40,8 +40,8 @@
 
 namespace {
 
-const wchar_t* TEST_NAME = L"Edit Protocol Track Contents Test";
-const wchar_t* TEST_DESC = L"Verify the correctness of data within the tracks of Edit Protocol mobs.";
+const wchar_t* TEST_NAME = L"Edit Protocol Multi-Channel Audio Test";
+const wchar_t* TEST_DESC = L"Verify that multi-channel audio is used correctly within the AAF file.";
 
 } // end of namespace
 
@@ -51,20 +51,20 @@ namespace aafanalyzer {
 
 using namespace std;
 
-EPTrackContentsTest::EPTrackContentsTest( wostream& log,
+EPMultiChannelAudioTest::EPMultiChannelAudioTest( wostream& log,
                                             shared_ptr<const TestGraph> spGraph )
   : Test( log, GetTestInfo() )
 {
     SetTestGraph(spGraph);
 }
 
-EPTrackContentsTest::~EPTrackContentsTest()
+EPMultiChannelAudioTest::~EPMultiChannelAudioTest()
 {}
 
-shared_ptr<TestLevelTestResult> EPTrackContentsTest::Execute()
+shared_ptr<TestLevelTestResult> EPMultiChannelAudioTest::Execute()
 {
     
-    shared_ptr<EPTrackContentsVisitor> spVisitor(new EPTrackContentsVisitor( GetOutStream(), GetTestGraph()->GetEdgeMap() ) );
+    shared_ptr<EPMultiChannelAudioVisitor> spVisitor(new EPMultiChannelAudioVisitor( GetOutStream() ) );
 
     DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
     
@@ -85,7 +85,7 @@ shared_ptr<TestLevelTestResult> EPTrackContentsTest::Execute()
     spResult->SetResult( spResult->GetAggregateResult() );
     if ( spResult->GetResult() == TestResult::FAIL )
     {
-        spResult->SetExplanation(L"Test Failed - See \"Edit Protocol Track Contents Visitor\" Visitor for details");
+        spResult->SetExplanation(L"Test Failed - See \"Edit Protocol Multi-Channel Audio Visitor\" Visitor for details");
     }
     
     //Update the requirement status based upon the status of the requirements in
@@ -104,22 +104,21 @@ shared_ptr<TestLevelTestResult> EPTrackContentsTest::Execute()
 
 }
 
-AxString EPTrackContentsTest::GetName() const
+AxString EPMultiChannelAudioTest::GetName() const
 {
   return TEST_NAME;
 }
 
-AxString EPTrackContentsTest::GetDescription() const
+AxString EPMultiChannelAudioTest::GetDescription() const
 {
   return TEST_DESC;
 }
 
-const TestInfo EPTrackContentsTest::GetTestInfo()
+const TestInfo EPMultiChannelAudioTest::GetTestInfo()
 {
     shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
-    spReqIds->push_back(L"REQ_EP_103");     //Physical Track Numbers
-    spReqIds->push_back(L"REQ_EP_108");     //Marked IN, OUT and UserPos
-    return TestInfo(L"EPTrackContentsTest", spReqIds);
+    spReqIds->push_back(L"REQ_EP_110");     //Audio in a Composition or Master Mob
+    return TestInfo(L"EPMultiChannelAudioTest", spReqIds);
 }
 
 } // end of namespace aafanalyzer

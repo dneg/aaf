@@ -71,7 +71,7 @@ public:
  
     typedef shared_ptr<AxMob>(TestFileBuilder::*ptrToAddFunction)( const AxString& name, bool isNamed, aafRational_t rationalParam );
     typedef shared_ptr<AxComponent>(TestFileBuilder::*ptrToCreateFunction)( TestFileBuilder::TrackType essenceType, const AxString& strParam, aafLength_t length, bool hasLength );
-    typedef void(TestFileBuilder::*ptrToAttachSlotFunction)( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered );
+    typedef void(TestFileBuilder::*ptrToAttachSlotFunction)( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int markedIn, bool isMarkedIn, int markedOut, bool isMarkedOut );
     typedef void(TestFileBuilder::*ptrToAttachParameterFunction)( AxOperationGroup& axOpGroup, const aafUID_t& paramDefId, aafUInt32 intParam1, aafUInt32 intParam2, const aafUID_t& interpolationDefId );
     typedef void(TestFileBuilder::*ptrToCreateDefFunction)( const AxString& name, const AxString& description );
     typedef void(TestFileBuilder::*ptrToAddAnnotationFunction)( shared_ptr<AxComponent> axComponent, const AxString& keyName, const AxString& value );

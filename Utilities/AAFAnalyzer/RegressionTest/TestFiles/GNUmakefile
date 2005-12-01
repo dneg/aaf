@@ -136,7 +136,13 @@ check : $(AAFSDKBINDIR)/BuildTestFile$(EXE)
 	@echo "End of Test"
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPParameterTest.xml EPParameterTest.aaf
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPParameterTest.aaf ../../Requirements/AAFRequirements.xml >> EPParameterTest.temp
-	grep -A `expr \`expr \\\`wc -l EPParameterTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Parameter Test" EPParameterTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\`` "Name:   Edit Protocol Parameter Test" EPParameterTest.temp >> EPParameterTest.results
+	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Multi-Channel Audio Test" EPParameterTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Parameter Test" EPParameterTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Parameter Test" EPParameterTest.temp >> EPParameterTest.results
 	@echo "Comparing EPParameterTest Expected Results (EPParameterTest.expected) to Actual Results (EPParameterTest.results)"
 	diff EPParameterTest.expected EPParameterTest.results
+	@echo "End of Test"
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPMultiChannelAudioTest.xml EPMultiChannelAudioTest.aaf
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPMultiChannelAudioTest.aaf ../../Requirements/AAFRequirements.xml >> EPMultiChannelAudioTest.temp
+	grep -A `expr \`expr \\\`wc -l EPMultiChannelAudioTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Multi-Channel Audio Test" EPMultiChannelAudioTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\`` "Name:   Edit Protocol Multi-Channel Audio Test" EPMultiChannelAudioTest.temp >> EPMultiChannelAudioTest.results
+	@echo "Comparing EPMultiChannelAudioTest Expected Results (EPMultiChannelAudioTest.expected) to Actual Results (EPMultiChannelAudioTest.results)"
+	diff EPMultiChannelAudioTest.expected EPMultiChannelAudioTest.results
 	@echo "End of Test"

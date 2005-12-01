@@ -18,23 +18,15 @@
 //
 //=---------------------------------------------------------------------=
 
-#ifndef __EPLocatorVisitor_h_
-#define __EPLocatorVisitor_h_
+#ifndef __EPMultiChannelAudioVisitor_h_
+#define __EPMultiChannelAudioVisitor_h_
 
 //Edit Protocol Analyzer Base files
 #include <EPTypedVisitor.h>
 #include <EPTypedObjNode.h>
 
-//Test/Result files
-#include <TestResult.h>
-
-//Ax files
-#include <AxTypes.h>
-
-//Not in the aafanalyzer namespace so the forward declaration must be made
-//outside of the namespace.
-class AxClassDef;
-class AxNetworkLocator;
+//STL files
+#include <set>
 
 namespace aafanalyzer {
 
@@ -42,36 +34,41 @@ using namespace boost;
 
 class DetailLevelTestResult;
 
-class EPLocatorVisitor : public EPTypedVisitor
+class EPMultiChannelAudioVisitor : public EPTypedVisitor
 {
 
   public:
-  
-    EPLocatorVisitor( wostream& log );
-    
-    virtual ~EPLocatorVisitor();
 
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMonoAudioFileSource>& node );
+    EPMultiChannelAudioVisitor( wostream& log );
+    
+    virtual ~EPMultiChannelAudioVisitor();
+
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMultiChannelAudioFileSource>& node );
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node );
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node );
+    
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node );
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node );
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFSourceMob>& node );
+       
+    virtual bool PostOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node );
+    virtual bool PostOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node );
+    
+    virtual bool EdgeVisit( AAFMobReference& edge );
     
     shared_ptr<DetailLevelTestResult> GetResult();
     
   private:
-   
+
     wostream& _log;
     shared_ptr<DetailLevelTestResult> _spResult;
-
-    bool CheckNetworkLocator( AxNetworkLocator& axNetLocator );
+    aafUInt32 _level;
 
     // prohibited
-    EPLocatorVisitor();
-    EPLocatorVisitor( const EPLocatorVisitor& );
-    EPLocatorVisitor& operator=( const EPLocatorVisitor& );
+    EPMultiChannelAudioVisitor();
+    EPMultiChannelAudioVisitor( const EPMultiChannelAudioVisitor& );
+    EPMultiChannelAudioVisitor& operator=( const EPMultiChannelAudioVisitor& );
   
 };
 
 } // end of namespace diskstream
 
-#endif /*__EPLocatorVisitor_h_*/
+#endif /*__EPMultiChannelAudioVisitor_h_*/

@@ -128,6 +128,10 @@ void RequirementLoader::StartElement(const wstring& name, const char** attribs)
         {
             _currentType = Requirement::FILE;
         }
+        else if ( type == L"definition" )
+        {
+            _currentType = Requirement::DEFINITION;
+        }
         else
         {
             wostringstream msg;

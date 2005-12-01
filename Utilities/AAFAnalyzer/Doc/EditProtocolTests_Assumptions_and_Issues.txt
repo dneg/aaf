@@ -101,14 +101,15 @@
     derivation chain.  Until further information is avaliable, the test will
     assume that it is valid for a clip to be the end of the derivation chain.
 
-16. Requirements REQ_EP_025, REQ_EP_030, REQ_EP_034, REQ_EP_043, REQ_EP_049,
-    REQ_EP_054, REQ_EP_058, REQ_EP_071, REQ_EP_074, REQ_EP_080, REQ_EP_085 and
-    REQ_EP_096 define terms used in the Edit Protocol.  Some of these
+16. Requirements REQ_EP_025, REQ_EP_030, DEF_EP_034, DEF_EP_043, DEF_EP_049,
+    DEF_EP_054, DEF_EP_058, DEF_EP_071, DEF_EP_074, DEF_EP_080, DEF_EP_085 and
+    DEF_EP_096 define terms used in the Edit Protocol.  Some of these
     requirements are used to find particular data, however, they can not
     generate a warning or a failure.  These should not be requirements, they
-    should be definitions (ie. Instead of using shall, REQ_EP_043 should be
+    should be definitions (ie. Instead of using shall, DEF_EP_043 should be
     rewritten as "Let an adjusted-clip composistion be defined as a
-    CompositionMob with Mob::UsageCode property equal to Usage_AdjustedClip"
+    CompositionMob with Mob::UsageCode property equal to Usage_AdjustedClip".
+    These requirements can not be tested.
 
 17. REQ_EP_013, REQ_EP_014 and REQ_EP_039 are all classified as file
     requirements but they seem dependant on an importing or exporting
@@ -365,3 +366,23 @@
 	throw an exception and terminate before analyzing the file.
 	
 72. Should REQ_EP_012, REQ_EP_062 and REQ_EP_160 be FILE requirements?
+
+73. Currently, error messages attempt to indicate which object in an AAF file
+	causes a warning or a failure.  However, there are many cases where
+	objects are hard to identify.  TestResult could be modified so that each
+	failure and warning is associated with a node of the test graph.  This would
+	be of minimal value with the current text-based interface, however, if a GUI
+	is added, or the -dump functionality is extended, the node id could be very
+	useful in identifying the problem object.
+
+74. REQ_EP_110 referes to mono and multi-channel sound Data Definitions that do
+	not exist.  It is assumed that these refer to sound descriptors with 1 or
+	more than one channels respectively.
+	
+75. It is assumed that REQ_EP_110 means SoundDescriptors with multiple channels
+	cannot occur in the derivation chain after a Composition or MasterMob.
+	
+76. There is not much to be tested for REQ_EP_108.  Currently it is being used
+	to ensure either both or neither of the TimelineMobSlot::MarkIn and
+	TimelineMobSlot::MarkOut properties are present and that the MarkOut point
+	does not occur before the MarkIn point.

@@ -139,6 +139,10 @@ shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
   // Thirteenth, run the parameter test
   shared_ptr<EPParameterTest> parameterTest( new EPParameterTest( _log, _spGraph ) );
   spPhaseResult->AppendSubtestResult( parameterTest->Execute() );
+  
+  // Fourteenth, run the multi-channel audio test
+  shared_ptr<EPMultiChannelAudioTest> mcaTest( new EPMultiChannelAudioTest( _log, _spGraph ) );
+  spPhaseResult->AppendSubtestResult( mcaTest->Execute() );
 
   spPhaseResult->SetResult( spPhaseResult->GetAggregateResult() );
 

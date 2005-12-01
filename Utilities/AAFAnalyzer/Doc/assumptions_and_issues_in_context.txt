@@ -514,13 +514,23 @@ Requirements Tested:
 		The MobSlot::PhysicalTrackNumber property shall be specified for essence
 		MobSlots within the following kinds of Mobs: CompositionMob, MasterMob,
 		recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+	REQ_EP_108 (7.7)
+		The marked IN and OUT points and user position shall be specified using
+		the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and 
+		TimelineMobSlot::UserPos optional properties respectively.
 Warn Conditions:
-	NONE
+	REQ_EP_108 - Issue a warning if a TimelineMobSlot has a MarkIn property but
+				 no MarkOut property or vice-versa.
+	REQ_EP_108 - Issue a warning if a TimelineMobSlot has a MarkIn point that is
+			     after the MarkOut point.
 Fail Conditions:
 	REQ_EP_103 - Fail if the mob has an essence track without a
 				 PhysicalTrackNumber property specified.
 Issues:
-	NONE
+76. There is not much to be tested for REQ_EP_108.  Currently it is being used
+	to ensure either both or neither of the TimelineMobSlot::MarkIn and
+	TimelineMobSlot::MarkOut properties are present and that the MarkOut point
+	does not occur before the MarkIn point.
 
 Test Name:
 	EPLocatorTest
@@ -952,6 +962,30 @@ Issues:
 70. There is no easy way to regression test REQ_EP_174 with the current testing
 	framework.
 
+Test Name:
+	EPMultiChannelAudioTest
+Description:
+	Make sure use of multi-channel audio is acceptable under tha Edit Prorocol.
+Requirements Tested:
+	REQ_EP_110 (7.8)
+		Within a CompositionMob or MasterMob, multi-channel audio shall be
+		represented using multiple tracks with mono sound Data Definition.
+		Within a CompositionMob or MasterMob, a multi-channel sound Data
+		Definition shall not be used.
+Warn Conditions:
+	NONE
+Fail Conditions:
+	REQ_EP_110 - Fail if a Source Mob with a Sound Descriptor with more than
+				 1 channel is found after traversing past a Composition or
+				 Master Mob.
+Issues:   
+74. REQ_EP_110 referes to mono and multi-channel sound Data Definitions that do
+	not exist.  It is assumed that these refer to sound descriptors with 1 or
+	more than one channels respectively.
+	
+75. It is assumed that REQ_EP_110 means SoundDescriptors with multiple channels
+	cannot occur in the derivation chain after a Composition or MasterMob.
+
 Other Issues:
 
 Requirements:
@@ -964,45 +998,46 @@ Requirements:
 		Mob::UsageCode property equal to Usage_LowerLevel.  A lower-level
 		composition shall be referenced by a top-level or lower-level
 		composition in the AAF file.
-	REQ_EP_034 (6.5)
+	DEF_EP_034 (6.5)
 		A sub-clip composition shall be specified using a CompositionMob with
 		Mob::UsageCode property equal to Usage_SubClip.
-	REQ_EP_043 (6.6)
+	DEF_EP_043 (6.6)
 		An adjusted-clip composition shall be specified using a CompositionMob
 		with Mob::UsageCode property equal to Usage_AdjustedClip.
-	REQ_EP_049 (6.7)
+	DEF_EP_049 (6.7)
 		A template clip shall be specified using a MasterMob with Mob::UsageCode
 		property equal to Usage_Template.
-	REQ_EP_054 (6.8)
+	DEF_EP_054 (6.8)
 		A clip shall be specified using a MasterMob with no Mob::UsageCode
 		property.
-	REQ_EP_058 (6.9)
+	DEF_EP_058 (6.9)
 		A file source shall be specified using a SourceMob with an
 		EssenceDescriptor that is a sub-class of FileDescriptor.
-	REQ_EP_071 (6.10)
+	DEF_EP_071 (6.10)
 		A recording source shall be specified using a SourceMob with a
 		RecordingDescriptor.  A recording source is also known as a recording
 		SourceMob.
-	REQ_EP_074 (6.11)
+	DEF_EP_074 (6.11)
 		An import source shall be specified using a SourceMob with an
 		ImportDescriptor.
-	REQ_EP_080 (6.12)
+	DEF_EP_080 (6.12)
 		A tape source shall be specified using a SourceMob with a
 		TapeDescriptor.
-	REQ_EP_085 (6.13)
+	DEF_EP_085 (6.13)
 		A film source shall be specified using a SourceMob with a
 		FilmDescriptor.
-	REQ_EP_096 (7.2)
+	DEF_EP_096 (7.2)
 		Pull up and pull down shall be specified using a Pulldown object.
 Issue:
-16. Requirements REQ_EP_025, REQ_EP_030, REQ_EP_034, REQ_EP_043, REQ_EP_049,
-    REQ_EP_054, REQ_EP_058, REQ_EP_071, REQ_EP_074, REQ_EP_080, REQ_EP_085 and
-    REQ_EP_096 define terms used in the Edit Protocol.  Some of these
+16. Requirements REQ_EP_025, REQ_EP_030, DEF_EP_034, DEF_EP_043, DEF_EP_049,
+    DEF_EP_054, DEF_EP_058, DEF_EP_071, DEF_EP_074, DEF_EP_080, DEF_EP_085 and
+    DEF_EP_096 define terms used in the Edit Protocol.  Some of these
     requirements are used to find particular data, however, they can not
     generate a warning or a failure.  These should not be requirements, they
-    should be definitions (ie. Instead of using shall, REQ_EP_043 should be
+    should be definitions (ie. Instead of using shall, DEF_EP_043 should be
     rewritten as "Let an adjusted-clip composistion be defined as a
-    CompositionMob with Mob::UsageCode property equal to Usage_AdjustedClip"
+    CompositionMob with Mob::UsageCode property equal to Usage_AdjustedClip".
+    These requirements can not be tested.
 
 Requirements:
 	REQ_EP_013 (6.1)
@@ -1086,3 +1121,14 @@ Requirements:
 		ParameterDefinition objects in the Dictionary.
 Issue:
 72. Should REQ_EP_012, REQ_EP_062 and REQ_EP_160 be FILE requirements?
+
+Requirements:
+	NONE
+Issue:
+73. Currently, error messages attempt to indicate which object in an AAF file
+	causes a warning or a failure.  However, there are many cases where
+	objects are hard to identify.  TestResult could be modified so that each
+	failure and warning is associated with a node of the test graph.  This would
+	be of minimal value with the current text-based interface, however, if a GUI
+	is added, or the -dump functionality is extended, the node id could be very
+	useful in identifying the problem object.

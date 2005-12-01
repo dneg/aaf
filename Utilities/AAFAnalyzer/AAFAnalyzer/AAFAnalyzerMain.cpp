@@ -189,6 +189,7 @@ void RegisterTests()
     TestInfoRegistrar<EPDefinitionTest> epDefinitionTest;
     TestInfoRegistrar<EPHeaderTest> epHeaderTest;
     TestInfoRegistrar<EPParameterTest> epParameterTest;
+    TestInfoRegistrar<EPMultiChannelAudioTest> epMultiChannelAudioTest;
 
     //Register Dump Phase tests.
     TestInfoRegistrar<FileDumper> fileDumper;   

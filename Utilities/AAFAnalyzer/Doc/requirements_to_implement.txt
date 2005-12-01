@@ -17,71 +17,16 @@ TimelineMobSlot (before the begining or after the end).
 6.2.1
 > This is a MAY requirement
 
-REQ_EP_034
-A sub-clip composition shall be specified using a CompositionMob with 
-Mob::UsageCode property equal to Usage_SubClip.
-6.5
-> This is a definition
-
 REQ_EP_039
 A CompositionMob with Mob::UsageCode property equal to Usage_SubClip shall
 be treated as a sub-clip composition.
 6.5.1
 > Should this be an APP requirement?
 
-REQ_EP_043
-An adjusted-clip composition shall be specified using a CompositionMob with 
-Mob::UsageCode property equal to Usage_AdjustedClip.
-6.6
-> This is a definition
-
-REQ_EP_049
-A template clip shall be specified using a MasterMob with Mob::UsageCode 
-property equal to Usage_Template.
-6.7
-> This is a definition
-
-REQ_EP_054
-A clip shall be specified using a MasterMob with no Mob::UsageCode property.
-6.8
-> This is a definition
-
 REQ_EP_056
 A MasterMob shall not reference more than one essence track of a particular
 file source from each time position in the MasterMob.
 > What does this mean?
-
-REQ_EP_058
-A file source shall be specified using a SourceMob with an EssenceDescriptor 
-that is a sub-class of FileDescriptor.
-6.9
-> This is a definition
-
-REQ_EP_071
-A recording source shall be specified using a SourceMob with a 
-RecordingDescriptor.  A recording source is also known as a recording SourceMob.
-6.10
-> This is a definition
-
-REQ_EP_074
-An import source shall be specified using a SourceMob with an ImportDescriptor.
-6.11
-> This is a definition
-
-REQ_EP_080
-A tape source shall be specified using a SourceMob with a TapeDescriptor.
-6.12
-> This is a definition
-
-REQ_EP_085
-A film source shall be specified using a SourceMob with a FilmDescriptor.
-6.13
-> This is a definition
-
-REQ_EP_096
-Pull up and pull down shall be specified using a Pulldown object.
-7.2
-> This is a definition.
 
 REQ_EP_097
 A Pulldown may be used in the following contexts: 1. In a TimelineMobSlot of a 
@@ -92,24 +37,6 @@ TimelineMobSlot of a tape SourceMob, where the Pulldown object contains a
 SourceClip referenceing a tape SourceMob.
 7.2
 > This is a MAY requirement
-
-REQ_EP_108
-The marked IN and OUT points and user position shall be specified using the 
-TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos
-optional properties respectively.
-7.7
-> This seems to indicate that if the positions are marked, they should be
-> marked using the specified optional properties.  If this is the case, how do
-> you test that they are not specified some other way?  If this is not the
-> case, what should be tested?
-
-REQ_EP_110
-Within a CompositionMob or MasterMob, multi-channel audio shall be represented 
-using multiple tracks with mono sound Data Definition.  Within a CompositionMob
-or MasterMob, a multi-channel sound Data Definition shall not be used.
-7.8
-> 1: How do we know that multi-channel audio is being represented.
-> 2: OK - can check that a multi-channel sound Data Definition is not used.
 
 REQ_EP_111
 The intended placement of each audio track when played shall be indicated using 

@@ -100,18 +100,20 @@ InputParser::InputParser( const char* outFile )
      _definitionMap[L"operation-def"]    = &TestFileBuilder::CreateOperationDefinition;
 
     //Pointers to functions to add Mobs to an AAF file.
-    _materialTypeMap[L"top-level"]        = &TestFileBuilder::AddTopLevel;
-    _materialTypeMap[L"lower-level"]      = &TestFileBuilder::AddLowerLevel;
-    _materialTypeMap[L"sub-clip"]         = &TestFileBuilder::AddSubClip;
-    _materialTypeMap[L"adjusted-clip"]    = &TestFileBuilder::AddAdjustedClip;
-    _materialTypeMap[L"template-clip"]    = &TestFileBuilder::AddTemplateClip;
-    _materialTypeMap[L"clip"]             = &TestFileBuilder::AddClip;
-    _materialTypeMap[L"file-source"]      = &TestFileBuilder::AddFileSource;
-    _materialTypeMap[L"recording-source"] = &TestFileBuilder::AddRecordingSource;
-    _materialTypeMap[L"import-source"]    = &TestFileBuilder::AddImportSource;
-    _materialTypeMap[L"tape-source"]      = &TestFileBuilder::AddTapeSource;
-    _materialTypeMap[L"film-source"]      = &TestFileBuilder::AddFilmSource;
-    _materialTypeMap[L"auxiliary-source"] = &TestFileBuilder::AddAuxiliarySource;
+    _materialTypeMap[L"top-level"]           = &TestFileBuilder::AddTopLevel;
+    _materialTypeMap[L"lower-level"]         = &TestFileBuilder::AddLowerLevel;
+    _materialTypeMap[L"sub-clip"]            = &TestFileBuilder::AddSubClip;
+    _materialTypeMap[L"adjusted-clip"]       = &TestFileBuilder::AddAdjustedClip;
+    _materialTypeMap[L"template-clip"]       = &TestFileBuilder::AddTemplateClip;
+    _materialTypeMap[L"clip"]                = &TestFileBuilder::AddClip;
+    _materialTypeMap[L"file-source"]         = &TestFileBuilder::AddFileSource;
+    _materialTypeMap[L"mono-audio"]          = &TestFileBuilder::AddMonoAudioFileSource;
+    _materialTypeMap[L"multi-channel-audio"] = &TestFileBuilder::AddMultiChannelAudioFileSource;
+    _materialTypeMap[L"recording-source"]    = &TestFileBuilder::AddRecordingSource;
+    _materialTypeMap[L"import-source"]       = &TestFileBuilder::AddImportSource;
+    _materialTypeMap[L"tape-source"]         = &TestFileBuilder::AddTapeSource;
+    _materialTypeMap[L"film-source"]         = &TestFileBuilder::AddFilmSource;
+    _materialTypeMap[L"auxiliary-source"]    = &TestFileBuilder::AddAuxiliarySource;
     
     //Pointers to functions to create empty components.
     _createSegmentMap[L"source-clip"]         = &TestFileBuilder::CreateSourceClip;
@@ -329,11 +331,13 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
     else if ( _attachSlotMap.find( name ) != _attachSlotMap.end() )
     {
         aafRational_t editRate;
-        editRate.numerator = GetIntAtribValue(L"edit-rate-numerator", attribs, 8, 1);
-        editRate.denominator = GetIntAtribValue(L"edit-rate-denominator", attribs, 8, 1);
-        OptionalStringAttrib segName = GetOptionalStringAttribValue( L"name", attribs, 8, L"" );
-        OptionalIntAttrib physicalTrackNum = GetOptionalIntAttribValue( L"physical-track-number", attribs, 8, 1 );
-        _slotStack.push( SlotInfo( name, editRate, segName, physicalTrackNum ) );
+        editRate.numerator = GetIntAtribValue(L"edit-rate-numerator", attribs, 12, 1);
+        editRate.denominator = GetIntAtribValue(L"edit-rate-denominator", attribs, 12, 1);
+        OptionalStringAttrib segName = GetOptionalStringAttribValue( L"name", attribs, 12, L"" );
+        OptionalIntAttrib physicalTrackNum = GetOptionalIntAttribValue( L"physical-track-number", attribs, 12, 1 );
+        OptionalIntAttrib markedInPoint = GetOptionalIntAttribValue( L"marked-in-point", attribs, 12, 0 );
+        OptionalIntAttrib markedOutPoint = GetOptionalIntAttribValue( L"marked-out-point", attribs, 12, 0 );
+        _slotStack.push( SlotInfo( name, editRate, segName, physicalTrackNum, markedInPoint, markedOutPoint ) );
     }
     else if ( _attachParameterMap.find( name ) != _attachParameterMap.end() )
     {
@@ -402,7 +406,11 @@ void InputParser::EndElement(const AxString& name)
             _slotStack.top().name.first, 
             _slotStack.top().name.second,
             _slotStack.top().physicalTrackNum.first, 
-            _slotStack.top().physicalTrackNum.second
+            _slotStack.top().physicalTrackNum.second,
+            _slotStack.top().markedInPoint.first,
+            _slotStack.top().markedInPoint.second,
+            _slotStack.top().markedOutPoint.first,
+            _slotStack.top().markedOutPoint.second
            );
         _componentStack.pop();
         _slotStack.pop();

@@ -84,6 +84,7 @@ public:
                )                          ),
       _spGraph( spTestGraph )
   {
+    _knownDescriptors.insert( kAAFClassID_SoundDescriptor );
     _knownDescriptors.insert( kAAFClassID_FileDescriptor );
     _knownDescriptors.insert( kAAFClassID_RecordingDescriptor );
     _knownDescriptors.insert( kAAFClassID_ImportDescriptor );
@@ -204,7 +205,21 @@ public:
       AxClassDef clsDef( descriptor.GetDefinition() );
       aafUID_t descriptorAUID = GetAcceptedAUID( clsDef );
 
-      if ( descriptorAUID == kAAFClassID_FileDescriptor )
+      //We must check for SoundDescriptors before checking for FileDescriptors
+      //since FileDescriptior is the super-class of SoundDescriptor.
+      if ( descriptorAUID == kAAFClassID_SoundDescriptor )
+      {
+        AxSoundDescriptor soundDescriptor( AxQueryInterface<IAAFEssenceDescriptor, IAAFSoundDescriptor>( descriptor ) );
+        if ( soundDescriptor.GetChannelCount() == 1 )
+        {
+          this->DecorateNode<IAAFSourceMob, EPMonoAudioFileSource>( node );
+        }
+        else
+        {
+          this->DecorateNode<IAAFSourceMob, EPMultiChannelAudioFileSource>( node );
+        }
+      }
+      else if ( descriptorAUID == kAAFClassID_FileDescriptor )
       {
         this->DecorateNode<IAAFSourceMob, EPFileSource>( node );
       }

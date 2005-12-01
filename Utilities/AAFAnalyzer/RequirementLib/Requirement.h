@@ -36,7 +36,7 @@ using namespace boost;
 class Requirement
 {
 public:
-    enum RequirementType {FILE, APP};
+    enum RequirementType {FILE, APP, DEFINITION};
     enum Category        {COMPOSITIONAL, ANNOTATIONS, ADHOC};
 
     Requirement(const wstring& id,

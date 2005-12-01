@@ -299,6 +299,50 @@ shared_ptr<AxMob> TestFileBuilder::AddFileSource( const AxString& name, bool isN
     return spAxSrcMob;
 }
 
+shared_ptr<AxMob> TestFileBuilder::AddMonoAudioFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate )
+{
+    AxHeader axHeader( _axFile.getHeader() );
+    AxDictionary axDictionary( axHeader.GetDictionary() );
+
+    shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
+    if ( isNamed )
+    {
+        spAxSrcMob->SetName( name );
+    }
+
+    AxSoundDescriptor axSoundDes( AxQueryInterface<IAAFPCMDescriptor, IAAFSoundDescriptor>( AxCreateInstance<IAAFPCMDescriptor>( axDictionary ) ) );
+    axSoundDes.SetSampleRate( sampleRate );
+    axSoundDes.SetChannelCount( 1 );
+    spAxSrcMob->SetEssenceDescriptor( axSoundDes );
+    spAxSrcMob->SetMobID( this->GenerateMobId() );
+
+    axHeader.AddMob( *spAxSrcMob );
+    
+    return spAxSrcMob;
+}
+
+shared_ptr<AxMob> TestFileBuilder::AddMultiChannelAudioFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate )
+{
+    AxHeader axHeader( _axFile.getHeader() );
+    AxDictionary axDictionary( axHeader.GetDictionary() );
+
+    shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
+    if ( isNamed )
+    {
+        spAxSrcMob->SetName( name );
+    }
+
+    AxSoundDescriptor axSoundDes( AxQueryInterface<IAAFPCMDescriptor, IAAFSoundDescriptor>( AxCreateInstance<IAAFPCMDescriptor>( axDictionary ) ) );
+    axSoundDes.SetSampleRate( sampleRate );
+    axSoundDes.SetChannelCount( 2 );
+    spAxSrcMob->SetEssenceDescriptor( axSoundDes );
+    spAxSrcMob->SetMobID( this->GenerateMobId() );
+
+    axHeader.AddMob( *spAxSrcMob );
+    
+    return spAxSrcMob;
+}
+
 shared_ptr<AxMob> TestFileBuilder::AddRecordingSource( const AxString& name, bool isNamed, aafRational_t ratNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
@@ -733,7 +777,7 @@ void TestFileBuilder::AddKLVData( shared_ptr<AxComponent> axComponent, const AxS
  * 
  */
 
-void TestFileBuilder::AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered )
+void TestFileBuilder::AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int markedIn, bool isMarkedIn, int markedOut, bool isMarkedOut )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -753,12 +797,20 @@ void TestFileBuilder::AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, a
     {
         axTimelineMobSlot.SetPhysicalNum( physicalTrackNum );
     }
+    if ( isMarkedIn )
+    {
+        axTimelineMobSlot.SetMarkIn( markedIn );
+    }
+    if ( isMarkedOut )
+    {
+        axTimelineMobSlot.SetMarkOut( markedOut );
+    }
 
     parent.AppendSlot( axTimelineMobSlot );
 
 }
 
-void TestFileBuilder::AttachEventSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered )
+void TestFileBuilder::AttachEventSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int intNothing1, bool boolNothing1, int intNothing2, bool boolNothing2 )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -782,7 +834,7 @@ void TestFileBuilder::AttachEventSlot( AxMob& parent, AxSegment& axSegment, aafR
 
 }
 
-void TestFileBuilder::AttachStaticSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered  )
+void TestFileBuilder::AttachStaticSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int intNothing1, bool boolNothing1, int intNothing2, bool boolNothing2 )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );

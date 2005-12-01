@@ -65,6 +65,8 @@ class EPTrackContentsVisitor : public EPTypedVisitor
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPVideoTrack>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEssenceTrack>& node );
     
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFTimelineMobSlot>& node );
+    
     shared_ptr<DetailLevelTestResult> GetResult();
     
   private:

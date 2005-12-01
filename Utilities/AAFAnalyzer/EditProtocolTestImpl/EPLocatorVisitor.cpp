@@ -74,6 +74,18 @@ EPLocatorVisitor::EPLocatorVisitor( wostream& log )
 EPLocatorVisitor::~EPLocatorVisitor()
 {}
 
+bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMonoAudioFileSource>& node )
+{
+    shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
+    return this->PreOrderVisit( *spGeneric );
+}
+  
+bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMultiChannelAudioFileSource>& node )
+{
+    shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
+    return this->PreOrderVisit( *spGeneric );
+}
+
 bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node )
 {
 

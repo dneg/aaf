@@ -158,6 +158,54 @@ class EPFileSource : public EPDerivationChainObject
 
 //======================================================================
 
+class EPAudioFileSource : public EPFileSource
+{
+ public:
+  ~EPAudioFileSource();
+  static const AxString GetName();
+
+ private:
+
+  //prohibited
+  EPAudioFileSource();
+  EPAudioFileSource( const EPAudioFileSource& );
+  EPAudioFileSource& operator=( const EPAudioFileSource& );
+};
+
+//======================================================================
+
+class EPMonoAudioFileSource : public EPFileSource
+{
+ public:
+  EPMonoAudioFileSource();
+  ~EPMonoAudioFileSource();
+  static const AxString GetName();
+
+ private:
+
+  //prohibited
+  EPMonoAudioFileSource( const EPMonoAudioFileSource& );
+  EPMonoAudioFileSource& operator=( const EPMonoAudioFileSource& );
+};
+
+//======================================================================
+
+class EPMultiChannelAudioFileSource : public EPFileSource
+{
+ public:
+  EPMultiChannelAudioFileSource();
+  ~EPMultiChannelAudioFileSource();
+  static const AxString GetName();
+
+ private:
+
+  //prohibited
+  EPMultiChannelAudioFileSource( const EPMultiChannelAudioFileSource& );
+  EPMultiChannelAudioFileSource& operator=( const EPMultiChannelAudioFileSource& );
+};
+
+//======================================================================
+
 class EPRecordingSource : public EPDerivationChainObject
 {
  public:

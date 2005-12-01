@@ -68,6 +68,18 @@ class ParentMobVisitor : public EPTypedVisitor
             return false;
         }
 
+        bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMonoAudioFileSource>& node )
+        {
+            shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
+            return this->PreOrderVisit( *spGeneric );
+        }
+  
+        bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMultiChannelAudioFileSource>& node )
+        {
+            shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
+            return this->PreOrderVisit( *spGeneric );
+        }
+
         bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node )
         {
             _needsPhysicalNum = false;
@@ -125,20 +137,111 @@ EPTrackContentsVisitor::~EPTrackContentsVisitor()
 
 bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPAudioTrack>& node )
 {
-    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
-    return this->PreOrderVisit( *spGeneric );
+    bool testPassed;
+    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGenericEP( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
+    testPassed = this->PreOrderVisit( *spGenericEP );
+    shared_ptr<AAFTypedObjNode<IAAFTimelineMobSlot> > spGenericAAF( node.DownCast<IAAFTimelineMobSlot>() );
+    testPassed = this->PreOrderVisit( *spGenericAAF ) && testPassed;
+    return testPassed;
 }
 
 bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPVideoTrack>& node )
 {
-    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
-    return this->PreOrderVisit( *spGeneric );
+    bool testPassed;
+    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGenericEP( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
+    testPassed = this->PreOrderVisit( *spGenericEP );
+    shared_ptr<AAFTypedObjNode<IAAFTimelineMobSlot> > spGenericAAF( node.DownCast<IAAFTimelineMobSlot>() );
+    testPassed = this->PreOrderVisit( *spGenericAAF ) && testPassed;
+    return testPassed;
 }
 
 bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack>& node )
 {
-    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
-    return this->PreOrderVisit( *spGeneric );
+    bool testPassed;
+    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGenericEP( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
+    testPassed = this->PreOrderVisit( *spGenericEP );
+    shared_ptr<AAFTypedObjNode<IAAFTimelineMobSlot> > spGenericAAF( node.DownCast<IAAFTimelineMobSlot>() );
+    testPassed = this->PreOrderVisit( *spGenericAAF ) && testPassed;
+    return testPassed;
+}
+
+bool EPTrackContentsVisitor::PreOrderVisit( AAFTypedObjNode<IAAFTimelineMobSlot>& node )
+{
+    
+    bool hasIn;
+    bool hasOut;
+    aafPosition_t markIn = 0;
+    aafPosition_t markOut = 0;
+    
+    AxTimelineMobSlot axMobSlot( node.GetAAFObjectOfType() );
+        
+    //Get the marked IN position.
+    try
+    {
+        markIn = axMobSlot.GetMarkIn();
+        hasIn = true;
+    }
+    catch ( const AxExHResult& ex )
+    {
+        if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
+        {
+            hasIn = false;
+        }
+        else
+        {
+            throw ex;
+        }
+    }
+    
+    //Get the marked OUT position.
+    try
+    {
+        markOut = axMobSlot.GetMarkOut();
+        hasOut = true;
+    }
+    catch ( const AxExHResult& ex )
+    {
+        if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
+        {
+            hasOut = false;
+        }
+        else
+        {
+            throw ex;
+        }
+    }
+    
+    if ( hasIn == hasOut )
+    {
+        if ( markOut < markIn )
+        {
+            wstringstream ss;
+            ss << this->GetMobSlotName( _spEdgeMap, node )
+               << L" has a marked in point that occurs after the marked out point (IN = "
+               << markIn << L"; OUT = " << markOut << ").";
+            _spResult->AddInformationResult( L"REQ_EP_108", ss.str().c_str(), TestResult::WARN ); 
+            return false;
+        }
+    }
+    else
+    {
+        AxString explain;
+        if ( hasIn )
+        {
+            explain = this->GetMobSlotName( _spEdgeMap, node ) +
+                      L" has a marked in point but no marked out point.";
+        }
+        else
+        {
+            explain = this->GetMobSlotName( _spEdgeMap, node ) +
+                      L" has a marked out point but no marked in point.";
+        }
+        _spResult->AddInformationResult( L"REQ_EP_108", explain, TestResult::WARN );
+        return false;
+    }
+    
+    return true;
+    
 }
 
 bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPAudioTrack>& node )

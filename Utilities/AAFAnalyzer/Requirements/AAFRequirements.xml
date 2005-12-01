@@ -371,8 +371,8 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_034</id>
+    <requirement type="definition" category="compositional">
+        <id>DEF_EP_034</id>
         <name>Sub-clip Composition Specification</name>
         <desc>A sub-clip composition shall be specified using a CompositionMob with Mob::UsageCode property equal to Usage_SubClip.</desc>
         <ref>
@@ -470,8 +470,8 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_043</id>
+    <requirement type="definition" category="compositional">
+        <id>DEF_EP_043</id>
         <name>Adjusted-clip Composition Specification</name>
         <desc>An adjusted-clip composition shall be specified using a CompositionMob with Mob::UsageCode property equal to Usage_AdjustedClip.</desc>
         <ref>
@@ -536,8 +536,8 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_049</id>
+    <requirement type="definition" category="compositional">
+        <id>DEF_EP_049</id>
         <name>Template Clip Specification</name>
         <desc>A template clip shall be specified using a MasterMob with Mob::UsageCode property equal to Usage_Template.</desc>
         <ref>
@@ -591,8 +591,8 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_054</id>
+    <requirement type="definition" category="compositional">
+        <id>DEF_EP_054</id>
         <name>Clip Specification</name>
         <desc>A clip shall be specified using a MasterMob with no Mob::UsageCode property.</desc>
         <ref>
@@ -635,8 +635,8 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_058</id>
+    <requirement type="definition" category="compositional">
+        <id>DEF_EP_058</id>
         <name>File Source Specification</name>
         <desc>A file source shall be specified using a SourceMob with an EssenceDescriptor that is a sub-class of FileDescriptor.</desc>
         <ref>
@@ -778,8 +778,8 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_071</id>
+    <requirement type="definition" category="compositional">
+        <id>DEF_EP_071</id>
         <name>Recording Source Specification</name>
         <desc>A recording source shall be specified using a SourceMob with a RecordingDescriptor.  A recording source is also known as a recording SourceMob.</desc>
         <ref>
@@ -811,8 +811,8 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_074</id>
+    <requirement type="definition" category="compositional">
+        <id>DEF_EP_074</id>
         <name>Import Source Specification</name>
         <desc>An import source shall be specified using a SourceMob with an ImportDescriptor.</desc>
         <ref>
@@ -877,8 +877,8 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_080</id>
+    <requirement type="definition" category="compositional">
+        <id>DEF_EP_080</id>
         <name>Tape Source Specification</name>
         <desc>A tape source shall be specified using a SourceMob with a TapeDescriptor.</desc>
         <ref>
@@ -932,8 +932,8 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_085</id>
+    <requirement type="definition" category="compositional">
+        <id>DEF_EP_085</id>
         <name>Film Source Specification</name>
         <desc>A film source shall be specified using a SourceMob with a FilmDescriptor.</desc>
         <ref>
@@ -1053,8 +1053,8 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_096</id>
+    <requirement type="definition" category="compositional">
+        <id>DEF_EP_096</id>
         <name>Pull Up/Down Specification</name>
         <desc>Pull up and pull down shall be specified using a Pulldown object.</desc>
         <ref>

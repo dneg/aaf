@@ -36,6 +36,7 @@
 #include <EPDefinitionTest.h>
 #include <EPHeaderTest.h>
 #include <EPParameterTest.h>
+#include <EPMultiChannelAudioTest.h>
 
 //Test/Result files
 #include <TestPhase.h>

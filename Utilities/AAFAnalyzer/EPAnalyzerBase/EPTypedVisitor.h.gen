@@ -12,6 +12,10 @@
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFMasterMob,EPClip>& node) { return this->ForwardPostOrderVisit<IAAFMasterMob,EPClip>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob,EPFileSource>& node) { return this->ForwardPreOrderVisit<IAAFSourceMob,EPFileSource>( node ); }
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob,EPFileSource>& node) { return this->ForwardPostOrderVisit<IAAFSourceMob,EPFileSource>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob,EPMonoAudioFileSource>& node) { return this->ForwardPreOrderVisit<IAAFSourceMob,EPMonoAudioFileSource>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob,EPMonoAudioFileSource>& node) { return this->ForwardPostOrderVisit<IAAFSourceMob,EPMonoAudioFileSource>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob,EPMultiChannelAudioFileSource>& node) { return this->ForwardPreOrderVisit<IAAFSourceMob,EPMultiChannelAudioFileSource>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob,EPMultiChannelAudioFileSource>& node) { return this->ForwardPostOrderVisit<IAAFSourceMob,EPMultiChannelAudioFileSource>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob,EPRecordingSource>& node) { return this->ForwardPreOrderVisit<IAAFSourceMob,EPRecordingSource>( node ); }
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob,EPRecordingSource>& node) { return this->ForwardPostOrderVisit<IAAFSourceMob,EPRecordingSource>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob,EPImportSource>& node) { return this->ForwardPreOrderVisit<IAAFSourceMob,EPImportSource>( node ); }

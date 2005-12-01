@@ -135,6 +135,42 @@ const AxString EPFileSource::GetName()
 {
     return L"File Source";
 }
+
+//======================================================================
+
+EPAudioFileSource::~EPAudioFileSource()
+{}
+
+const AxString EPAudioFileSource::GetName()
+{
+    return L"Audio File Source";
+}
+
+//======================================================================
+
+EPMonoAudioFileSource::EPMonoAudioFileSource()
+{}
+
+EPMonoAudioFileSource::~EPMonoAudioFileSource()
+{}
+
+const AxString EPMonoAudioFileSource::GetName()
+{
+    return L"Mono Audio File Source";
+}
+
+//======================================================================
+
+EPMultiChannelAudioFileSource::EPMultiChannelAudioFileSource()
+{}
+
+EPMultiChannelAudioFileSource::~EPMultiChannelAudioFileSource()
+{}
+
+const AxString EPMultiChannelAudioFileSource::GetName()
+{
+    return L"Multi-Channel Audio File Source";
+}
   
 //======================================================================
 

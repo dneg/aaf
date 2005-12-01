@@ -4,7 +4,7 @@
 <!ELEMENT requirement-set-version (#PCDATA)>
 <!ELEMENT requirement (id, name, desc, ref)>
 <!ATTLIST requirement
-	type ( app | file ) #REQUIRED
+	type ( app | file | definition ) #REQUIRED
 	category ( compositional | annotations | ad-hoc ) #REQUIRED
 >
 <!ELEMENT id (#PCDATA)>

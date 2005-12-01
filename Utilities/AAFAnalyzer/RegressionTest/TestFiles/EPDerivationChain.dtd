@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!ENTITY % MOB "top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | auxiliary-source">
+<!ENTITY % MOB "top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | auxiliary-source | multi-channel-audio | mono-audio">
 <!ENTITY % MOB_SLOT "timeline-mob-slot | static-mob-slot | event-mob-slot">
 <!ENTITY % OPERATION_GROUP "video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve">
 <!ENTITY % SOURCE_REFERENCE "source-clip | eoc | oof">
@@ -56,6 +56,20 @@
 
 <!ELEMENT file-source ( %MOB_SLOT; | bad-eoc )+>
 <!ATTLIST file-source 
+	name CDATA #IMPLIED
+    sample-rate-numerator CDATA #REQUIRED
+    sample-rate-denominator CDATA #REQUIRED
+>
+
+<!ELEMENT multi-channel-audio ( %MOB_SLOT; | bad-eoc )+>
+<!ATTLIST multi-channel-audio 
+	name CDATA #IMPLIED
+    sample-rate-numerator CDATA #REQUIRED
+    sample-rate-denominator CDATA #REQUIRED
+>
+
+<!ELEMENT mono-audio ( %MOB_SLOT; | bad-eoc )+>
+<!ATTLIST mono-audio 
 	name CDATA #IMPLIED
     sample-rate-numerator CDATA #REQUIRED
     sample-rate-denominator CDATA #REQUIRED
@@ -283,6 +297,8 @@
     edit-rate-denominator CDATA #REQUIRED
     name CDATA #IMPLIED
     physical-track-number CDATA #IMPLIED
+    marked-in-point CDATA #IMPLIED
+    marked-out-point CDATA #IMPLIED
 >
 
 <!ELEMENT static-mob-slot ( %SEGMENT; )>

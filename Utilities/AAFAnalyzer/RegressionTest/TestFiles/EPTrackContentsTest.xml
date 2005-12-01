@@ -379,4 +379,222 @@
         </timeline-mob-slot>
     </film-source>
     
+    <!-- Test marked IN and OUT points with all types of timeline mob slots -->
+    
+    <top-level name="Audio Timeline Slot - No IN; No OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc track-type="audio"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Audio Timeline Slot - No IN; OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-out-point="10">
+            <eoc track-type="audio"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Audio Timeline Slot - IN; No OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10">
+            <eoc track-type="audio"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Audio Timeline Slot - IN after OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="5">
+            <eoc track-type="audio"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Audio Timeline Slot - IN at OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="10">
+            <eoc track-type="audio"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Audio Timeline Slot - IN before OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="20">
+            <eoc track-type="audio"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Auxiliary Timeline Slot - No IN; No OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc track-type="auxiliary"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Auxiliary Timeline Slot - No IN; OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-out-point="10">
+            <eoc track-type="auxiliary"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Auxiliary Timeline Slot - IN; No OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10">
+            <eoc track-type="auxiliary"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Auxiliary Timeline Slot - IN after OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="5">
+            <eoc track-type="auxiliary"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Auxiliary Timeline Slot - IN at OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="10">
+            <eoc track-type="auxiliary"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Auxiliary Timeline Slot - IN before OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="20">
+            <eoc track-type="auxiliary"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Edgecode Timeline Slot - No IN; No OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc track-type="edgecode"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Edgecode Timeline Slot - No IN; OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-out-point="10">
+            <eoc track-type="edgecode"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Edgecode Timeline Slot - IN; No OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10">
+            <eoc track-type="edgecode"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Edgecode Timeline Slot - IN after OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="5">
+            <eoc track-type="edgecode"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Edgecode Timeline Slot - IN at OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="10">
+            <eoc track-type="edgecode"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Edgecode Timeline Slot - IN before OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="20">
+            <eoc track-type="edgecode"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Unknown Timeline Slot - No IN; No OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc track-type="none"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Unknown Timeline Slot - No IN; OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-out-point="10">
+            <eoc track-type="none"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Unknown Timeline Slot - IN; No OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10">
+            <eoc track-type="none"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Unknown Timeline Slot - IN after OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="5">
+            <eoc track-type="none"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Unknown Timeline Slot - IN at OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="10">
+            <eoc track-type="none"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Unknown Timeline Slot - IN before OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="20">
+            <eoc track-type="none"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Video Timeline Slot - No IN; No OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc track-type="picture"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Video Timeline Slot - No IN; OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-out-point="10">
+            <eoc track-type="picture"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Video Timeline Slot - IN; No OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10">
+            <eoc track-type="picture"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Video Timeline Slot - IN after OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="5">
+            <eoc track-type="picture"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Video Timeline Slot - IN at OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="10">
+            <eoc track-type="picture"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Video Timeline Slot - IN before OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="20">
+            <eoc track-type="picture"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Timecode Timeline Slot - No IN; No OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc track-type="timecode"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Timecode Timeline Slot - No IN; OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-out-point="10">
+            <eoc track-type="picture"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Timecode Timeline Slot - IN; No OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10">
+            <eoc track-type="picture"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Timecode Timeline Slot - IN after OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="5">
+            <eoc track-type="picture"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Timecode Timeline Slot - IN at OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="10">
+            <eoc track-type="picture"/>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Timecode Timeline Slot - IN before OUT">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="20">
+            <eoc track-type="picture"/>
+        </timeline-mob-slot>
+    </top-level>
+    
 </aaf-file>

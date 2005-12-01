@@ -79,13 +79,14 @@ bool AcyclicVisitor::PreOrderVisit(Node& node)
   if ( _Set.insert(lid).second )
   {
     
-    //The node was properly inserted into the set, therefore, there a cycle has
+    //The node was properly inserted into the set, therefore, a cycle has
     //not yet been detected.  If this node has already been visited, that means
     //that there are no cycles down this sub-branch, so the node can be removed
     //from the set and the traversal of this sub-branch can be halted.
     if ( this->HaveVisited( lid ) )
     {
         _Set.erase( lid );
+        return false;
     }
     
     //add node into the vector since it was visited on this sub-branch's traversal

@@ -96,6 +96,8 @@ template class EPTypedObjNode<IAAFCompositionMob,   EPAdjustedClipComposition>;
 template class EPTypedObjNode<IAAFMasterMob,        EPTemplateClip>;
 template class EPTypedObjNode<IAAFMasterMob,        EPClip>;
 template class EPTypedObjNode<IAAFSourceMob,        EPFileSource>;
+template class EPTypedObjNode<IAAFSourceMob,        EPMonoAudioFileSource>;
+template class EPTypedObjNode<IAAFSourceMob,        EPMultiChannelAudioFileSource>;
 template class EPTypedObjNode<IAAFSourceMob,        EPRecordingSource>;
 template class EPTypedObjNode<IAAFSourceMob,        EPImportSource>;
 template class EPTypedObjNode<IAAFSourceMob,        EPTapeSource>;

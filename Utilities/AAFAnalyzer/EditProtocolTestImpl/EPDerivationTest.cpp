@@ -162,6 +162,18 @@ public:
 
   }
   
+  virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMonoAudioFileSource>& node )
+  {
+    shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
+    return this->PreOrderVisit( *spGeneric );
+  }
+  
+  virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMultiChannelAudioFileSource>& node )
+  {
+    shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
+    return this->PreOrderVisit( *spGeneric );
+  }
+  
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node )
   {
     return this->VisitMobWithDescriptor( node, EPFileSource::GetName() );

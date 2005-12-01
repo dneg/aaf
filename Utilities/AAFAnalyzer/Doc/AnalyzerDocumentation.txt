@@ -585,3 +585,11 @@ EPParameterTest - Derived from Test and executed by EPMobDepPhase.  Test that
 
 EPParameterVisitor - Derived from EPTypedVisitor, used by EPParameterTest to
 					 verify that all parameters in an AAF file are legal.
+
+EPMultiChannelAudioTest - Derived from Test and executed by EPMobDepPhase.  Test
+						  that multi-channel audio is used properly within an
+						  AAF file.
+
+EPMultiChannelAudioVisitor - Derived from EPTypedVisitor, used by
+							 EPMultiChannelAudioTest to verify the proper use
+							 of multi-channel audio.

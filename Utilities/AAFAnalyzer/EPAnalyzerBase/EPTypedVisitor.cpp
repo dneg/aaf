@@ -93,6 +93,20 @@ class ParentMobVisitor : public EPTypedVisitor
             return false;
         }
         
+        bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMonoAudioFileSource>& node )
+        {
+            AxSourceMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, EPMonoAudioFileSource::GetName() );
+            return false;
+        }
+          
+        bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMultiChannelAudioFileSource>& node )
+        {
+            AxSourceMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, EPMultiChannelAudioFileSource::GetName() );
+            return false;
+        }
+        
         bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node )
         {
             AxSourceMob axMob( node.GetAAFObjectOfType() );
