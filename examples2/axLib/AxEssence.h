@@ -27,6 +27,7 @@
 #include "AxObject.h"
 
 #include <utility>
+#include <vector>
 
 //=---------------------------------------------------------------------=
 
@@ -297,6 +298,46 @@ private:
 	AxCDCIDescriptor& operator=( const AxCDCIDescriptor& );
 	
 	IAAFCDCIDescriptorSP _spIaafCDCIDescriptor;
+};
+
+//=---------------------------------------------------------------------=
+
+class AxRGBADescriptor : public AxDigitalImageDescriptor {
+public:
+    AxRGBADescriptor( IAAFRGBADescriptor2SP spIaafRGBADescriptor );
+    AxRGBADescriptor( IAAFRGBADescriptorSP spIaafRGBADescriptor );
+    ~AxRGBADescriptor();
+
+    void SetPixelLayout( std::vector<aafRGBAComponent_t> pixelLayoutArray );
+    void SetPalette( std::vector<aafUInt8> palette );
+    void SetPaletteLayout( std::vector<aafRGBAComponent_t> paletteLayoutArray );
+    void SetComponentMaxRef( aafUInt32 componentMaxRef );
+    void SetComponentMinRef( aafUInt32 componentMinRef );
+    void SetAlphaMaxRef( aafUInt32 alphaMaxRef );
+    void SetAlphaMinRef( aafUInt32 alphaMinRef );
+    void SetScanningDirection( aafScanningDirection_t scanningDirection );
+
+    std::vector<aafRGBAComponent_t> GetPixelLayout();
+    std::vector<aafUInt8> GetPalette();
+    std::vector<aafRGBAComponent_t> GetPaletteLayout();
+    aafUInt32 GetComponentMaxRef();
+    aafUInt32 GetComponentMinRef();
+    aafUInt32 GetAlphaMaxRef();
+    aafUInt32 GetAlphaMinRef();
+    aafScanningDirectionType_t GetScanningDirection();
+
+    inline operator IAAFRGBADescriptorSP ()
+    { return AxQueryInterface<IAAFRGBADescriptor2,IAAFRGBADescriptor>( _spIaafRGBADescriptor ); }
+
+    inline operator IAAFRGBADescriptor2SP ()
+    { return _spIaafRGBADescriptor; }
+
+private:
+    AxRGBADescriptor();
+    AxRGBADescriptor( const AxRGBADescriptor& );
+    AxRGBADescriptor& operator=( const AxRGBADescriptor& );
+    
+    IAAFRGBADescriptor2SP _spIaafRGBADescriptor;
 };
 
 //=---------------------------------------------------------------------=
