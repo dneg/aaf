@@ -4,7 +4,7 @@
         Reason: Test Failed - See "Edit Protocol Effect Visitor" Visitor for details
         Passing Requirements: None
         Warning Requirements: None
-        Failing Requirements: REQ_EP_180; REQ_EP_183; REQ_EP_186; REQ_EP_187; REQ_EP_190; REQ_EP_194; REQ_EP_197; REQ_EP_200; REQ_EP_203; REQ_EP_206; REQ_EP_209; REQ_EP_212; REQ_EP_215; REQ_EP_220; REQ_EP_225; REQ_EP_228; REQ_EP_231; REQ_EP_234; REQ_EP_240; REQ_EP_244; REQ_EP_247; REQ_EP_248; REQ_EP_249
+        Failing Requirements: REQ_EP_180; REQ_EP_183; REQ_EP_186; REQ_EP_187; REQ_EP_190; REQ_EP_194; REQ_EP_197; REQ_EP_200; REQ_EP_203; REQ_EP_206; REQ_EP_209; REQ_EP_212; REQ_EP_215; REQ_EP_218; REQ_EP_219; REQ_EP_220; REQ_EP_223; REQ_EP_224; REQ_EP_225; REQ_EP_228; REQ_EP_231; REQ_EP_234; REQ_EP_240; REQ_EP_244; REQ_EP_247; REQ_EP_248; REQ_EP_249
 
             Name:   Edit Protocol Effect Visitor
             Desc:   Visit effects and make sure they are valid.
@@ -12,7 +12,7 @@
             Reason: 
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_180; REQ_EP_183; REQ_EP_186; REQ_EP_187; REQ_EP_190; REQ_EP_194; REQ_EP_197; REQ_EP_200; REQ_EP_203; REQ_EP_206; REQ_EP_209; REQ_EP_212; REQ_EP_215; REQ_EP_220; REQ_EP_225; REQ_EP_228; REQ_EP_231; REQ_EP_234; REQ_EP_240; REQ_EP_244; REQ_EP_247; REQ_EP_248; REQ_EP_249
+            Failing Requirements: REQ_EP_180; REQ_EP_183; REQ_EP_186; REQ_EP_187; REQ_EP_190; REQ_EP_194; REQ_EP_197; REQ_EP_200; REQ_EP_203; REQ_EP_206; REQ_EP_209; REQ_EP_212; REQ_EP_215; REQ_EP_218; REQ_EP_219; REQ_EP_220; REQ_EP_223; REQ_EP_224; REQ_EP_225; REQ_EP_228; REQ_EP_231; REQ_EP_234; REQ_EP_240; REQ_EP_244; REQ_EP_247; REQ_EP_248; REQ_EP_249
 
                 Name:   Edit Protocol Effect Visitor
                 Desc:   -
@@ -29,6 +29,38 @@
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_183
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key not in Transition" has an incorrect number of input segments. Expecting 2 segments and found 0 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_218
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key not in Transition" has an incorrect number of input segments. Expecting 2 segments and found 0 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_219
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Separate Alpha Key not in Transition" has an incorrect number of input segments. Expecting 3 segments and found 0 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_223
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Separate Alpha Key not in Transition" has an incorrect number of input segments. Expecting 3 segments and found 0 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_224
 
                 Name:   Edit Protocol Effect Visitor
                 Desc:   -
@@ -153,10 +185,42 @@
                 Name:   Edit Protocol Effect Visitor
                 Desc:   -
                 Result: Failed
+                Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key child of Transition" has an incorrect number of input segments. Expecting 2 segments and found 0 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_218
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key child of Transition" has an incorrect number of input segments. Expecting 2 segments and found 0 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_219
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
                 Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Separate Alpha Key child of Transition" is within a Transition object.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_225
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Separate Alpha Key child of Transition" has an incorrect number of input segments. Expecting 3 segments and found 0 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_223
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Separate Alpha Key child of Transition" has an incorrect number of input segments. Expecting 3 segments and found 0 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_224
 
                 Name:   Edit Protocol Effect Visitor
                 Desc:   -
@@ -205,6 +269,38 @@
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_183
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key grandchild of Transition" has an incorrect number of input segments. Expecting 2 segments and found 0 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_218
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key grandchild of Transition" has an incorrect number of input segments. Expecting 2 segments and found 0 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_219
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Separate Alpha Key grandchild of Transition" has an incorrect number of input segments. Expecting 3 segments and found 0 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_223
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Separate Alpha Key grandchild of Transition" has an incorrect number of input segments. Expecting 3 segments and found 0 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_224
 
                 Name:   Edit Protocol Effect Visitor
                 Desc:   -
@@ -285,4 +381,300 @@
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_249
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key - Too Few Inputs" has an incorrect number of input segments. Expecting 2 segments and found 1 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_218
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key - Too Few Inputs" has an incorrect number of input segments. Expecting 2 segments and found 1 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_219
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key - Too Many Inputs" has an incorrect number of input segments. Expecting 2 segments and found 3 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_218
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key - Too Many Inputs" has an incorrect number of input segments. Expecting 2 segments and found 3 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_219
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key - Foreground is EOC" is a null source reference.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_218
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key - Foreground is EOC" is a null source reference.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_219
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Passed, but with warnings.
+                Reason: Input to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key - Input is out of file" is an out-of-file reference.
+                Passing Requirements: None
+                Warning Requirements: REQ_EP_218
+                Failing Requirements: None
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Passed, but with warnings.
+                Reason: Input to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key - Input is out of file" is an out-of-file reference.
+                Passing Requirements: None
+                Warning Requirements: REQ_EP_219
+                Failing Requirements: None
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key - Input is not Source Reference" is not a SourceReference.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_218
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key - Input is not Source Reference" is not a SourceReference.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_219
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input Unnamed Composition Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key - Input is Composition" does not have a RGBADescriptor or a CDCIDescriptor.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_218
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input Unnamed Composition Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key - Input is Composition" does not have the DigitalImageDescriptor::AlphaTransparency property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_219
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input Unnamed Master Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key - Input is Master" does not have a RGBADescriptor or a CDCIDescriptor.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_218
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input Unnamed Master Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key - Input is Master" does not have the DigitalImageDescriptor::AlphaTransparency property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_219
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input Unnamed Source Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key - Input is Illegal Source" does not have a RGBADescriptor or a CDCIDescriptor.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_218
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input Unnamed Source Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key - Input is Illegal Source" does not have the DigitalImageDescriptor::AlphaTransparency property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_219
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input Unnamed CDCI Digital Image File Source to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key - Input is CDIC Source without Alpha Transparency Set" does not have the DigitalImageDescriptor::AlphaTransparency property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_219
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input Unnamed RGBA Digital Image File Source to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Alpha With Video Key - Input is RGBA Source without Alpha Transparency Set" does not have the DigitalImageDescriptor::AlphaTransparency property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_219
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Seperate Alpha Key - Too Few Inputs" has an incorrect number of input segments. Expecting 3 segments and found 2 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_223
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Seperate Alpha Key - Too Few Inputs" has an incorrect number of input segments. Expecting 3 segments and found 2 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_224
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Seperate Alpha Key - Too Many Inputs" has an incorrect number of input segments. Expecting 3 segments and found 4 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_223
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Seperate Alpha Key - Too Many Inputs" has an incorrect number of input segments. Expecting 3 segments and found 4 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_224
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input to Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Seperate Alpha Key - Foreground is EOC" is a null source reference.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_223
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input to Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Seperate Alpha Key - Foreground is EOC" is a null source reference.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_224
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Passed, but with warnings.
+                Reason: Input to Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Seperate Alpha Key - Input is out of file" is an out-of-file reference.
+                Passing Requirements: None
+                Warning Requirements: REQ_EP_223
+                Failing Requirements: None
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Passed, but with warnings.
+                Reason: Input to Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Seperate Alpha Key - Input is out of file" is an out-of-file reference.
+                Passing Requirements: None
+                Warning Requirements: REQ_EP_224
+                Failing Requirements: None
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Seperate Alpha Key - Input is not Source Reference" has an incorrect number of input segments. Expecting 3 segments and found 2 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_223
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Seperate Alpha Key - Input is not Source Reference" has an incorrect number of input segments. Expecting 3 segments and found 2 segments.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_224
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input Unnamed Composition Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Seperate Alpha Key - Input is Composition" does not have a RGBADescriptor or a CDCIDescriptor.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_223
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input Unnamed Composition Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Seperate Alpha Key - Input is Composition" does not have the DigitalImageDescriptor::AlphaTransparency property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_224
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input Unnamed Master Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Seperate Alpha Key - Input is Master" does not have a RGBADescriptor or a CDCIDescriptor.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_223
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input Unnamed Master Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Seperate Alpha Key - Input is Master" does not have the DigitalImageDescriptor::AlphaTransparency property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_224
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input Unnamed Source Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Seperate Alpha Key - Input is Illegal Source" does not have a RGBADescriptor or a CDCIDescriptor.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_223
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input Unnamed Source Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Seperate Alpha Key - Input is Illegal Source" does not have the DigitalImageDescriptor::AlphaTransparency property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_224
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input Unnamed CDCI Digital Image File Source to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Seperate Alpha Key - Input is CDIC Source without Alpha Transparency Set" does not have the DigitalImageDescriptor::AlphaTransparency property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_224
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Input Unnamed RGBA Digital Image File Source to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition: "Seperate Alpha Key - Input is RGBA Source without Alpha Transparency Set" does not have the DigitalImageDescriptor::AlphaTransparency property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_224
+
+                Name:   Edit Protocol Effect Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Single-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition: "Heredity Test" is not within a Transition object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_244
 

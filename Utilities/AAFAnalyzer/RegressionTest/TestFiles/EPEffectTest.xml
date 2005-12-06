@@ -806,5 +806,384 @@
             </sequence>
         </timeline-mob-slot>
     </top-level>
+    
+    <!-- Test the Alpha Effects -->
+    <top-level name="Alpha With Video Key - Too Few Inputs">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <alpha-with-video-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                </alpha-with-video-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Alpha With Video Key - Too Many Inputs">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <alpha-with-video-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <eoc track-type="picture"/>
+                    <eoc track-type="picture"/>
+                </alpha-with-video-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Alpha With Video Key - Foreground is EOC">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <alpha-with-video-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <eoc track-type="picture"/>
+                </alpha-with-video-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Alpha With Video Key - Input is out of file">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <alpha-with-video-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <oof track-type="picture"/>
+                </alpha-with-video-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Alpha With Video Key - Input is not Source Reference">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <alpha-with-video-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+					<comment-marker track-type="picture"/>
+                </alpha-with-video-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Alpha With Video Key - Input is Composition">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <alpha-with-video-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <source-clip track-type="picture">
+                        <top-level>
+                            <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                                <eoc track-type="picture"/>
+                            </timeline-mob-slot>
+                        </top-level>
+                    </source-clip>
+                </alpha-with-video-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Alpha With Video Key - Input is Master">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <alpha-with-video-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <source-clip track-type="picture">
+                        <template-clip>
+                            <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                                <eoc track-type="picture"/>
+                            </timeline-mob-slot>
+                        </template-clip>
+                    </source-clip>
+                </alpha-with-video-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Alpha With Video Key - Input is Illegal Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <alpha-with-video-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <source-clip track-type="picture">
+                        <tape-source>
+                            <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                                <eoc track-type="picture"/>
+                            </timeline-mob-slot>
+                        </tape-source>
+                    </source-clip>
+                </alpha-with-video-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Alpha With Video Key - Input is CDIC Source with Alpha Transparency Set">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <alpha-with-video-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <source-clip track-type="picture">
+						<cdci-source sample-rate-denominator="1" sample-rate-numerator="1" alpha-transparency="max">
+                            <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+								<eoc track-type="picture"/>
+                            </timeline-mob-slot>
+                        </cdci-source>
+                    </source-clip>
+                </alpha-with-video-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Alpha With Video Key - Input is CDIC Source without Alpha Transparency Set">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <alpha-with-video-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <source-clip track-type="picture">
+						<cdci-source sample-rate-denominator="1" sample-rate-numerator="1">
+                            <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+								<eoc track-type="picture"/>
+                            </timeline-mob-slot>
+                        </cdci-source>
+                    </source-clip>
+                </alpha-with-video-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Alpha With Video Key - Input is RGBA Source with Alpha Transparency Set">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <alpha-with-video-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <source-clip track-type="picture">
+						<rgba-source sample-rate-denominator="1" sample-rate-numerator="1" alpha-transparency="min">
+                            <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+								<eoc track-type="picture"/>
+                            </timeline-mob-slot>
+                        </rgba-source>
+                    </source-clip>
+                </alpha-with-video-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Alpha With Video Key - Input is RGBA Source without Alpha Transparency Set">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <alpha-with-video-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <source-clip track-type="picture">
+						<rgba-source sample-rate-denominator="1" sample-rate-numerator="1">
+                            <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+								<eoc track-type="picture"/>
+                            </timeline-mob-slot>
+                        </rgba-source>
+                    </source-clip>
+                </alpha-with-video-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+
+    <top-level name="Seperate Alpha Key - Too Few Inputs">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <separate-alpha-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <eoc track-type="picture"/>
+                </separate-alpha-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Seperate Alpha Key - Too Many Inputs">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <separate-alpha-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <eoc track-type="picture"/>
+                    <eoc track-type="picture"/>
+                    <eoc track-type="picture"/>
+                </separate-alpha-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Seperate Alpha Key - Foreground is EOC">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <separate-alpha-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <eoc track-type="picture"/>
+                    <eoc track-type="picture"/>
+                </separate-alpha-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Seperate Alpha Key - Input is out of file">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <separate-alpha-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <eoc track-type="picture"/>
+                    <oof track-type="picture"/>
+                </separate-alpha-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Seperate Alpha Key - Input is not Source Reference">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <separate-alpha-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+					<comment-marker track-type="picture"/>
+                </separate-alpha-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Seperate Alpha Key - Input is Composition">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <separate-alpha-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <eoc track-type="picture"/>
+                    <source-clip track-type="picture">
+                        <top-level>
+                            <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                                <eoc track-type="picture"/>
+                            </timeline-mob-slot>
+                        </top-level>
+                    </source-clip>
+                </separate-alpha-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Seperate Alpha Key - Input is Master">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <separate-alpha-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <eoc track-type="picture"/>
+                    <source-clip track-type="picture">
+                        <template-clip>
+                            <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                                <eoc track-type="picture"/>
+                            </timeline-mob-slot>
+                        </template-clip>
+                    </source-clip>
+                </separate-alpha-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Seperate Alpha Key - Input is Illegal Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <separate-alpha-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <eoc track-type="picture"/>
+                    <source-clip track-type="picture">
+                        <tape-source>
+                            <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                                <eoc track-type="picture"/>
+                            </timeline-mob-slot>
+                        </tape-source>
+                    </source-clip>
+                </separate-alpha-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Seperate Alpha Key - Input is CDIC Source with Alpha Transparency Set">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <separate-alpha-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <eoc track-type="picture"/>
+                    <source-clip track-type="picture">
+						<cdci-source sample-rate-denominator="1" sample-rate-numerator="1" alpha-transparency="max">
+                            <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+								<eoc track-type="picture"/>
+                            </timeline-mob-slot>
+                        </cdci-source>
+                    </source-clip>
+                </separate-alpha-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Seperate Alpha Key - Input is CDIC Source without Alpha Transparency Set">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <separate-alpha-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <eoc track-type="picture"/>
+                    <source-clip track-type="picture">
+						<cdci-source sample-rate-denominator="1" sample-rate-numerator="1">
+                            <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+								<eoc track-type="picture"/>
+                            </timeline-mob-slot>
+                        </cdci-source>
+                    </source-clip>
+                </separate-alpha-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Seperate Alpha Key - Input is RGBA Source with Alpha Transparency Set">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <separate-alpha-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <eoc track-type="picture"/>
+                    <source-clip track-type="picture">
+						<rgba-source sample-rate-denominator="1" sample-rate-numerator="1" alpha-transparency="min">
+                            <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+								<eoc track-type="picture"/>
+                            </timeline-mob-slot>
+                        </rgba-source>
+                    </source-clip>
+                </separate-alpha-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Seperate Alpha Key - Input is RGBA Source without Alpha Transparency Set">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="picture">
+                <separate-alpha-key track-type="picture" length="1">
+					<eoc track-type="picture"/>
+                    <eoc track-type="picture"/>
+                    <source-clip track-type="picture">
+						<rgba-source sample-rate-denominator="1" sample-rate-numerator="1">
+                            <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+								<eoc track-type="picture"/>
+                            </timeline-mob-slot>
+                        </rgba-source>
+                    </source-clip>
+                </separate-alpha-key>    
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <!-- Test that the correct result are produced when a failure occus on one
+         branch of the file, but not on the next branch. -->
+    <top-level name="Heredity Test">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="audio">
+                <eoc track-type="audio" length="1"/>
+                <mono-audio-dissolve track-type="audio" length="1"/>
+                <eoc track-type="audio" length="1"/>
+            </sequence>
+        </timeline-mob-slot>
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="audio">
+                <eoc track-type="audio" length="1"/>
+                <mono-audio-pan track-type="audio" length="1"/>
+                <eoc track-type="audio" length="1"/>
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
 
 </aaf-file>

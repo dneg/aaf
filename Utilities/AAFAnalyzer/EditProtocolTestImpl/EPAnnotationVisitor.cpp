@@ -55,10 +55,10 @@ EPAnnotationVisitor::EPAnnotationVisitor( wostream& log, shared_ptr<EdgeMap> spE
                                             L"", // DOCREF REQUIRED
                                             TestResult::PASS,
                                             TestRegistry::GetInstance().GetRequirementsForTest( EPAnnotationTest::GetTestInfo().GetName() )
-               )                          ),
-      _isAncestorEssenceTrack( false ),
-      _isAncestorEventMobSlot( false )
+               )                          )
 {
+    _isAncestorEssenceTrack.push( false );
+    _isAncestorEventMobSlot.push( false );
     _isParentMobSlot.push( false );
 }
     
@@ -194,7 +194,7 @@ bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFCommentMarker>& nod
     
     bool testPassed = true;
     
-    if ( _isAncestorEssenceTrack )
+    if ( _isAncestorEssenceTrack.top() )
     {
         //Ancestor is an essence track
         _spResult->AddInformationResult( L"REQ_EP_149", this->GetMobSlotName( _spEdgeMap, node) + L" is an essence track and uses CommentMarkers for annotations.", TestResult::FAIL );
@@ -202,14 +202,20 @@ bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFCommentMarker>& nod
     }
     
     //Need to ensure that parent is event mob slot
-    if ( !_isAncestorEventMobSlot )
+    if ( !_isAncestorEventMobSlot.top() )
     {
         _spResult->AddInformationResult( L"REQ_EP_150", this->GetMobSlotName( _spEdgeMap, node) + L" is not an Event Mob Slot but contains a CommentMarker.", TestResult::FAIL );
         testPassed = false;
     }
     
     //Update State
-    _isParentMobSlot.push( false );
+    //If the traversal is going to stop, then the parent should not change as
+    //this nodes children will not be visited, and this node will not be post
+    //order visited.
+    if ( testPassed )
+    {
+        _isParentMobSlot.push( false );
+    }
     
     return testPassed;
 }
@@ -366,33 +372,33 @@ bool EPAnnotationVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEdgecodeT
 //Base cases:
 bool EPAnnotationVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPEssenceTrack>& node )
 {
-    _isAncestorEventMobSlot = true;
+    _isAncestorEventMobSlot.push( true );
     _isParentMobSlot.push( true );
-    _isAncestorEssenceTrack = true;
+    _isAncestorEssenceTrack.push( true );
     return true;
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPNonEssenceTrack>& node )
 {
-    _isAncestorEventMobSlot = true;
+    _isAncestorEventMobSlot.push( true );
     _isParentMobSlot.push( true );
-    _isAncestorEssenceTrack = false;
+    _isAncestorEssenceTrack.push( false );
     return true;
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEssenceTrack>& node )
 {
-    _isAncestorEventMobSlot = false;
+    _isAncestorEventMobSlot.push( false );
     _isParentMobSlot.push( true );
-    _isAncestorEssenceTrack = true;
+    _isAncestorEssenceTrack.push( true );
     return true;
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPNonEssenceTrack>& node )
 {
-    _isAncestorEventMobSlot = false;
+    _isAncestorEventMobSlot.push( false );
     _isParentMobSlot.push( true );
-    _isAncestorEssenceTrack = false;
+    _isAncestorEssenceTrack.push( false );
     return true;
 }
 
@@ -404,107 +410,128 @@ bool EPAnnotationVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPNonEssenc
  
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFComponent>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFTransition>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFSegment>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFSequence>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFFiller>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFSourceReference>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFSourceClip>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFEvent>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFGPITrigger>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFCommentMarker>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFDescriptiveMarker>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFEdgecode>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFTimecode>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFTimecodeStream>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFTimecodeStream12M>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFPulldown>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFOperationGroup>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFNestedScope>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFScopeReference>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFEssenceGroup>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFSelector>& node )
 {
-    return PopStacks();
+    _isParentMobSlot.pop();
+    return true;
 }
 
 bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFTimelineMobSlot>& node )
@@ -570,7 +597,10 @@ bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFKLVDataDefinition>&
     
 bool EPAnnotationVisitor::PopStacks()
 {
+    _isAncestorEssenceTrack.pop();
+    _isAncestorEventMobSlot.pop();
     _isParentMobSlot.pop();
+
     return true;
 }
 

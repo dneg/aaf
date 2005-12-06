@@ -33,8 +33,6 @@
 //Boost files
 #include<boost/shared_ptr.hpp>
 
-class AxClassDef;
-
 namespace aafanalyzer {
 
 using namespace boost;

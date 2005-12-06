@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!ENTITY % MOB "top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | auxiliary-source | multi-channel-audio | mono-audio">
+<!ENTITY % MOB "top-level | lower-level | sub-clip | adjusted-clip | template-clip | clip | file-source | recording-source | import-source | tape-source | film-source | auxiliary-source | multi-channel-audio | mono-audio | cdci-source | rgba-source">
 <!ENTITY % MOB_SLOT "timeline-mob-slot | static-mob-slot | event-mob-slot">
 <!ENTITY % OPERATION_GROUP "video-dissolve | smpte-video-wipe | video-speed-control | video-repeat | video-flip | video-flop | video-flip-flop | video-position | video-crop | video-scale | video-rotate | video-corner-pinning | alpha-with-video-key | separate-alpha-key | luminance-key | chroma-key | mono-audio-gain | mono-audio-pan | mono-audio-dissolve | two-parameter-mono-audio-dissolve">
 <!ENTITY % SOURCE_REFERENCE "source-clip | eoc | oof">
@@ -73,6 +73,22 @@
 	name CDATA #IMPLIED
     sample-rate-numerator CDATA #REQUIRED
     sample-rate-denominator CDATA #REQUIRED
+>
+
+<!ELEMENT cdci-source ( %MOB_SLOT; | bad-eoc )+>
+<!ATTLIST cdci-source 
+	name CDATA #IMPLIED
+    sample-rate-numerator CDATA #REQUIRED
+    sample-rate-denominator CDATA #REQUIRED
+    alpha-transparency ( max | min ) #IMPLIED
+>
+
+<!ELEMENT rgba-source ( %MOB_SLOT; | bad-eoc )+>
+<!ATTLIST rgba-source 
+	name CDATA #IMPLIED
+    sample-rate-numerator CDATA #REQUIRED
+    sample-rate-denominator CDATA #REQUIRED
+    alpha-transparency ( max | min ) #IMPLIED
 >
 
 <!ELEMENT recording-source ( %MOB_SLOT; | bad-eoc )+>

@@ -38,7 +38,6 @@
 //Not in the aafanalyzer namespace so the forward declaration must be made
 //outside of the namespace.
 class AxMobSlot;
-class AxClassDef;
 class AxDataDef;
 
 namespace aafanalyzer {

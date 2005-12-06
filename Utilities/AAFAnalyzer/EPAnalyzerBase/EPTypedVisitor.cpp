@@ -92,6 +92,27 @@ class ParentMobVisitor : public EPTypedVisitor
             _parentName = this->GetMobName( axMob, EPClip::GetName() );
             return false;
         }
+
+        bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRGBAImageFileSource>& node )
+        {
+            AxSourceMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, EPRGBAImageFileSource::GetName() );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPCDCIImageFileSource>& node )
+        {
+            AxSourceMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, EPCDCIImageFileSource::GetName() );
+            return false;
+        }
+        
+        bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImageFileSource>& node )
+        {
+            AxSourceMob axMob( node.GetAAFObjectOfType() );
+            _parentName = this->GetMobName( axMob, EPImageFileSource::GetName() );
+            return false;
+        }
         
         bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMonoAudioFileSource>& node )
         {
@@ -488,23 +509,6 @@ AxString EPTypedVisitor::GetMobSlotName( shared_ptr<EdgeMap> spEdgeMap, Node& no
     
     dfs.TraverseUp( spVisitor );
     return spVisitor->GetParentSlotName();
-}
-
-bool EPTypedVisitor::IsType( AxClassDef& clsDef, aafUID_t type, aafUID_t parentType )
-{
-    aafUID_t auid = clsDef.GetAUID();
-    
-    if ( auid == type )
-    {
-        return true;
-    }
-    else if ( auid == parentType )
-    {
-        return false;
-    }
-
-    AxClassDef parentDef( clsDef.GetParent() );
-    return IsType( parentDef, type, parentType );
 }
 
 shared_ptr<EPTypedVisitor::MobSlotSet> EPTypedVisitor::GetEssenceTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node )

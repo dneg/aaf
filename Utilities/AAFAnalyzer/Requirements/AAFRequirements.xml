@@ -1405,8 +1405,8 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_128</id>
+    <requirement type="definition" category="compositional">
+        <id>DEF_EP_128</id>
         <name>Edgecode Specification</name>
         <desc>A track of edgecode shall be specified using one or more Edgecode objects.</desc>
         <ref>
@@ -1416,8 +1416,8 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_129</id>
+    <requirement type="definition" category="compositional">
+        <id>DEF_EP_129</id>
         <name>Timecode Specification</name>
         <desc>A track of timecode shall be specified using one or more Timecode objects or a TimecodeStream12M object.</desc>
         <ref>
@@ -1482,8 +1482,8 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_135</id>
+    <requirement type="definition" category="compositional">
+        <id>DEF_EP_135</id>
         <name>Specification of Auxiliary Data</name>
         <desc>Each auxiliary file EssenceData object shall be specified using a SourceMob with an AuxiliaryDescriptor.</desc>
         <ref>
@@ -1581,8 +1581,8 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_144</id>
+    <requirement type="definition" category="compositional">
+        <id>DEF_EP_144</id>
         <name>MIDI Mime Type</name>
         <desc>The AuxiliaryDescriptor::MimeType property for a referenced MIDI file shall be "audio/midi".</desc>
         <ref>
@@ -1592,7 +1592,7 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
+    <requirement type="app" category="compositional">
         <id>REQ_EP_145</id>
         <name>Importing MIDI Files</name>
         <desc>The importing application shall parse the MIDI file, including tempo maps, to determine synchronization at further points in the composition.</desc>
@@ -1812,8 +1812,8 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_165</id>
+    <requirement type="definition" category="compositional">
+        <id>DEF_EP_165</id>
         <name>Effect Invokation Method</name>
         <desc>An effect shall be invoked using an OperationGroup object.</desc>
         <ref>
@@ -1867,8 +1867,8 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_170</id>
+    <requirement type="definition" category="compositional">
+        <id>DEF_EP_170</id>
         <name>Invoking Effects on Multiple Layers</name>
         <desc>Effects on multiple layers shall be constructed within a NestedScope object.  The layers shall be ordered background to foreground within the Slots of the NestedScope.</desc>
         <ref>
@@ -2065,7 +2065,7 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
+    <requirement type="app" category="compositional">
         <id>REQ_EP_188</id>
         <name>Importing Video Speed Control Effects</name>
         <desc>An importing application that supports video speed control effects shall accept and present the Video Speed Control effect, following the precepts of Section 4.2.4 of the AAF Edit Protocol.</desc>

@@ -46,30 +46,255 @@
 
 //AAF Analyzer Base files
 #include <GraphBuilder.h>
+#include <ResolveRefVisitor.h>
 #include <TypedVisitor.h>
 #include <NodeFactoryImpl.h>
 #include <NodeFactory.h>
 #include <AAFTypedObjNode.h>
+#include <AAFGraphInfo.h>
+#include <AAFContainment.h>
+#include <AAFMobReference.h>
+#include <AAFSlotReference.h>
+#include <AAFComponentReference.h>
+#include <RefResolver.h>
 
 //Analyzer Base files
 #include <DepthFirstTraversal.h>
 #include <EdgeMap.h>
 #include <Edge.h>
+#include <TestGraph.h>
 
 //Ax files
 #include <AxTypes.h>
+#include <AxMob.h>
+#include <AxMobSlot.h>
+#include <AxComponent.h>
+#include <AxSmartPointer.h>
+#include <AxInit.h>
 
 //Boost files
 #include <boost/shared_ptr.hpp>
 
 //STL files
 #include <iostream>
+#include <map>
+#include <sstream>
 
 namespace {
 
 using namespace aafanalyzer;
 using namespace std;
 using namespace boost;
+
+void NameNodes( shared_ptr<Node> spRoot, shared_ptr<EdgeMap> spEdgeMap, map<AxString, Node::LID>& names, AxString& slotName, map<IAAFComponentSP, int>& clipIds, map<Node::LID, shared_ptr<Node> >& nodes )
+{
+    
+    nodes[spRoot->GetLID()] = spRoot;
+    
+    //The very minimum we can do is cast the node to an AAFObjNode.
+    shared_ptr<AAFObjNode> spAAFRoot = dynamic_pointer_cast<AAFObjNode>( spRoot );
+    AxObject axObj( spAAFRoot->GetAAFObject() );
+
+    //Object types to consider:
+    IAAFHeaderSP            spHeader;
+    IAAFContentStorageSP    spContentStorage;
+    IAAFMobSP               spMob;
+    IAAFMobSlotSP           spMobSlot;
+    IAAFSequenceSP          spSequence;
+    IAAFSourceClipSP        spSourceClip;
+       
+    if ( AxIsA( axObj, spSourceClip ) )
+    {
+        //Need to name source clip
+        IAAFComponentSP address = AxQueryInterface<IAAFSourceClip, IAAFComponent>( spSourceClip );
+        if ( clipIds.find( address ) == clipIds.end() )
+        {
+            names[L"Source Clip " + slotName] = spRoot->GetLID();
+        }
+        else
+        {
+            wstringstream name;
+            name << L"Source Clip " << slotName << L"." <<  clipIds[address];
+            names[name.str().c_str()] = spRoot->GetLID();
+        }
+        
+        //Don't traverse past the source clip
+        return;
+    }
+    else if ( AxIsA( axObj, spSequence ) )
+    {
+        names[L"Sequence " + slotName] = spRoot->GetLID();
+        
+        //Now, we need to find the index of each component in the sequence and
+        //the address of the object being stored there.
+        AxSequence axSequence( spSequence );
+        for ( unsigned int i = 0; i < axSequence.CountComponents(); i++ )
+        {
+            clipIds[axSequence.GetComponentAt(i)] = i + 1;
+        }
+        
+    }
+    else if ( AxIsA( axObj, spMobSlot ) )
+    {
+        AxMobSlot axMobSlot( spMobSlot );
+        slotName = axMobSlot.GetName();
+        names[slotName] = spRoot->GetLID();
+        slotName = slotName.substr( slotName.length() - 3 );
+    }
+    else if ( AxIsA( axObj, spMob ) )
+    {
+        AxMob axMob( spMob );
+        names[axMob.GetName()] = spRoot->GetLID();
+    }
+    
+    //Traverse
+    EdgeMap::ConstEdgeVectorSP children = spEdgeMap->GetChildren( spRoot );
+    for ( unsigned int i = 0; i < children->size(); i++ )
+    {
+        NameNodes( children->at(i)->GetChildNode(), spEdgeMap, names, slotName, clipIds, nodes );
+    }
+    
+    return;
+
+}
+
+template<typename EdgeType>
+unsigned int CountEdges( map<Node::LID, shared_ptr<Node> >& nodes, shared_ptr<EdgeMap> edgeMap )
+{
+    
+    unsigned int count = 0;
+    map<Node::LID, shared_ptr<Node> >::const_iterator iter;
+    
+    for ( iter = nodes.begin(); iter != nodes.end(); iter++ )
+    {
+        EdgeMap::ConstEdgeVectorSP children = edgeMap->GetChildren( iter->second );
+        for ( unsigned int i = 0; i < children->size(); i++ )
+        {
+            shared_ptr<Edge> spEdge = children->at(i);
+            shared_ptr<EdgeType> spTypedEdge = dynamic_pointer_cast<EdgeType>( spEdge );
+            if ( spTypedEdge )
+            {
+                count++;
+            }
+        }
+    }
+    
+    return count;
+    
+}
+
+template<typename EdgeType>
+bool EdgeExists( shared_ptr<Node> parent, Node::LID childId, shared_ptr<EdgeMap> spEdgeMap )
+{
+    EdgeMap::ConstEdgeVectorSP children = spEdgeMap->GetChildren( parent );
+    for ( unsigned int i = 0; i < children->size(); i++ )
+    {
+        shared_ptr<Edge> spEdge = children->at(i);
+        if ( spEdge->GetChildNode()->GetLID() == childId )
+        {
+            shared_ptr<EdgeType> spTypedEdge = dynamic_pointer_cast<EdgeType>( spEdge );
+            if ( spTypedEdge )
+            {
+                //Edge was found to be of the correct type.
+                return true;
+            }
+            else
+            {
+                //Edge was found, but it is the wrong type.
+                return false;
+            }
+        }
+    }
+    //Edge was not found
+    return false;
+}
+
+void CheckEdges( const AxString& filename )
+{
+  //Test the Graph Builder
+  GraphBuilder graphBuild;
+  shared_ptr<NodeFactory> spFactory(new NodeFactoryImpl());
+  shared_ptr<const AAFGraphInfo> spGraphInfo( graphBuild.CreateGraph(filename, spFactory) );
+  shared_ptr<const TestGraph> spTestGraph( spGraphInfo->GetGraph() );
+
+  //First, attempt to give an appropriate name to every node of a type that we
+  //care about (Mob, MobSlot, Sequence, SourceClip).  There are easier ways to
+  //do this, but, the test avoids using Analzer structures wherever possible.
+  AxString slotName;
+  map<AxString, Node::LID> namedNodes;
+  map<Node::LID, shared_ptr<Node> > nodeMap;
+  map<IAAFComponentSP, int> addressMap;
+  NameNodes( spTestGraph->GetRootNode(), spTestGraph->GetEdgeMap(), namedNodes, slotName, addressMap, nodeMap );
+
+  //Now check that there are the correct number of nodes in the graph:
+  //  3 Header -> (Content Storage, Dictionary, Identification)
+  //  4 Dictionary -> Container Definition
+  // 12 Dictionary -> Data Definition
+  // 40 Defined in the XML file
+  // --
+  // 59 Total
+  //All of these edges should be Containment Edges
+
+  cout << "***Graph Builder Tester***" << endl;
+  unsigned int containmentEdges = CountEdges<AAFContainment>( nodeMap, spTestGraph->GetEdgeMap() );
+  unsigned int mobEdges = CountEdges<AAFMobReference>( nodeMap, spTestGraph->GetEdgeMap() );
+  unsigned int slotEdges = CountEdges<AAFSlotReference>( nodeMap, spTestGraph->GetEdgeMap() );
+  unsigned int componentEdges = CountEdges<AAFComponentReference>( nodeMap, spTestGraph->GetEdgeMap() );
+  
+  cout << "Containment Edges: " << containmentEdges << endl;
+  cout << "Mob References: " << mobEdges << endl;
+  cout << "Mob Slot References: " << mobEdges << endl;
+  cout << "Component References: " << componentEdges << endl;
+  
+  assert( containmentEdges == 59 );
+  assert( mobEdges == 0 );
+  assert( slotEdges == 0 );
+  assert( componentEdges == 0 );
+
+  //Test the ResolveRefVisitor
+  TestInfoRegistrar<RefResolver> registerRefResolver;
+  shared_ptr<RefResolver> ref( new RefResolver( wcerr, spTestGraph ) );
+  ref->Execute();
+  
+  //Now check that there are the correct number of nodes in the graph:
+  //59 Containment Edges from before + 4 Mob References + 4 Mob Slot References
+  //+ 8 Component References
+
+  cout << "***ResolveRef Tester***" << endl;
+  containmentEdges = CountEdges<AAFContainment>( nodeMap, spTestGraph->GetEdgeMap() );
+  mobEdges = CountEdges<AAFMobReference>( nodeMap, spTestGraph->GetEdgeMap() );
+  slotEdges = CountEdges<AAFSlotReference>( nodeMap, spTestGraph->GetEdgeMap() );
+  componentEdges = CountEdges<AAFComponentReference>( nodeMap, spTestGraph->GetEdgeMap() );
+  
+  cout << "Containment Edges: " << containmentEdges << endl;
+  cout << "Mob References: " << mobEdges << endl;
+  cout << "Mob Slot References: " << mobEdges << endl;
+  cout << "Component References: " << componentEdges << endl;
+  
+  assert( containmentEdges == 59 );
+  assert( mobEdges == 4 );
+  assert( slotEdges == 4 );
+  assert( componentEdges == 8 );
+  
+  //Now test that the 16 resolved edges are the edges that we expect.
+  assert(EdgeExists<AAFMobReference>(nodeMap[namedNodes[L"Source Clip 1.A.1"]], namedNodes[L"Mob 2"], spTestGraph->GetEdgeMap() ) );
+  assert(EdgeExists<AAFMobReference>(nodeMap[namedNodes[L"Source Clip 1.A.2"]], namedNodes[L"Mob 3"], spTestGraph->GetEdgeMap() ) );
+  assert(EdgeExists<AAFMobReference>(nodeMap[namedNodes[L"Source Clip 1.A.3"]], namedNodes[L"Mob 4"], spTestGraph->GetEdgeMap() ) );
+  assert(EdgeExists<AAFMobReference>(nodeMap[namedNodes[L"Source Clip 1.B"]], namedNodes[L"Mob 5"], spTestGraph->GetEdgeMap() ) );
+  assert(EdgeExists<AAFSlotReference>(nodeMap[namedNodes[L"Source Clip 1.A.1"]], namedNodes[L"Slot 2.B"], spTestGraph->GetEdgeMap() ) );
+  assert(EdgeExists<AAFSlotReference>(nodeMap[namedNodes[L"Source Clip 1.A.2"]], namedNodes[L"Slot 3.B"], spTestGraph->GetEdgeMap() ) );
+  assert(EdgeExists<AAFSlotReference>(nodeMap[namedNodes[L"Source Clip 1.A.3"]], namedNodes[L"Slot 4.A"], spTestGraph->GetEdgeMap() ) );
+  assert(EdgeExists<AAFSlotReference>(nodeMap[namedNodes[L"Source Clip 1.B"]], namedNodes[L"Slot 5.A"], spTestGraph->GetEdgeMap() ) );
+  assert(EdgeExists<AAFComponentReference>(nodeMap[namedNodes[L"Source Clip 1.A.1"]], namedNodes[L"Source Clip 2.B"], spTestGraph->GetEdgeMap() ) );
+  assert(EdgeExists<AAFComponentReference>(nodeMap[namedNodes[L"Source Clip 1.A.2"]], namedNodes[L"Source Clip 3.B"], spTestGraph->GetEdgeMap() ) );
+  assert(EdgeExists<AAFComponentReference>(nodeMap[namedNodes[L"Source Clip 1.A.3"]], namedNodes[L"Source Clip 4.A.1"], spTestGraph->GetEdgeMap() ) );
+  assert(EdgeExists<AAFComponentReference>(nodeMap[namedNodes[L"Source Clip 1.A.3"]], namedNodes[L"Source Clip 4.A.1"], spTestGraph->GetEdgeMap() ) );
+  assert(EdgeExists<AAFComponentReference>(nodeMap[namedNodes[L"Source Clip 1.A.3"]], namedNodes[L"Source Clip 4.A.1"], spTestGraph->GetEdgeMap() ) );
+  assert(EdgeExists<AAFComponentReference>(nodeMap[namedNodes[L"Source Clip 1.B"]], namedNodes[L"Source Clip 5.A.1"], spTestGraph->GetEdgeMap() ) );
+  assert(EdgeExists<AAFComponentReference>(nodeMap[namedNodes[L"Source Clip 1.B"]], namedNodes[L"Source Clip 5.A.2"], spTestGraph->GetEdgeMap() ) );
+  assert(EdgeExists<AAFComponentReference>(nodeMap[namedNodes[L"Source Clip 1.B"]], namedNodes[L"Source Clip 5.A.3"], spTestGraph->GetEdgeMap() ) );
+  
+}
 
 void CheckRegistries()
 {
@@ -1167,13 +1392,21 @@ void CheckTestResultRequirements()
 
 }
 
+
 } // end of namespace
 
 //used to test the basic data structures of the software architecture
-int main()
+int main( int argc, char** argv )
 {
 
   using namespace aafanalyzer;
+  
+  AxInit initObj;
+  AxCmdLineArgs args( argc, argv );
+  pair<bool,const char*> inputArg = args.get( argc-1, 1 );
+  wostringstream ssOutFile;
+  ssOutFile << inputArg.second;
+  AxString filename( ssOutFile.str().c_str() );
     
   //shared_ptr<Node> parentOne(new AAFTypedObjNode<IAAFObject>(L"Header"));
   shared_ptr<Node> parentOne(new Node());
@@ -1229,6 +1462,8 @@ int main()
   dfs.TraverseDown(spAcyclicVisitorB, parentOne);
   shared_ptr<const TestResult> resultB( spAcyclicVisitorB->GetTestResult() );
   assert( resultB->GetResult() == TestResult::FAIL );
+
+  CheckEdges( filename );
 
   cout << "Completed Basic Testing Successfully!" << endl << endl;
   

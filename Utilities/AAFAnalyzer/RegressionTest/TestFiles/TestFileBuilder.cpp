@@ -169,7 +169,7 @@ void TestFileBuilder::CreateOperationDefinition( const AxString& name, const AxS
  * 
  */
 
-shared_ptr<AxMob> TestFileBuilder::AddTopLevel( const AxString& name, bool isNamed, aafRational_t ratNothing )
+shared_ptr<AxMob> TestFileBuilder::AddTopLevel( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {           
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -187,7 +187,7 @@ shared_ptr<AxMob> TestFileBuilder::AddTopLevel( const AxString& name, bool isNam
     return spAxCompMob;    
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddLowerLevel( const AxString& name, bool isNamed, aafRational_t ratNothing )
+shared_ptr<AxMob> TestFileBuilder::AddLowerLevel( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {           
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -205,7 +205,7 @@ shared_ptr<AxMob> TestFileBuilder::AddLowerLevel( const AxString& name, bool isN
     return spAxCompMob;   
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddSubClip( const AxString& name, bool isNamed, aafRational_t ratNothing )
+shared_ptr<AxMob> TestFileBuilder::AddSubClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {           
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -223,7 +223,7 @@ shared_ptr<AxMob> TestFileBuilder::AddSubClip( const AxString& name, bool isName
     return spAxCompMob;   
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddAdjustedClip( const AxString& name, bool isNamed, aafRational_t ratNothing )
+shared_ptr<AxMob> TestFileBuilder::AddAdjustedClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {           
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -241,7 +241,7 @@ shared_ptr<AxMob> TestFileBuilder::AddAdjustedClip( const AxString& name, bool i
     return spAxCompMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddTemplateClip( const AxString& name, bool isNamed, aafRational_t ratNothing )
+shared_ptr<AxMob> TestFileBuilder::AddTemplateClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 { 
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -260,7 +260,7 @@ shared_ptr<AxMob> TestFileBuilder::AddTemplateClip( const AxString& name, bool i
     return spAxMasterMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddClip( const AxString& name, bool isNamed, aafRational_t ratNothing )
+shared_ptr<AxMob> TestFileBuilder::AddClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 { 
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -278,7 +278,7 @@ shared_ptr<AxMob> TestFileBuilder::AddClip( const AxString& name, bool isNamed, 
     return spAxMasterMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate )
+shared_ptr<AxMob> TestFileBuilder::AddFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -289,7 +289,17 @@ shared_ptr<AxMob> TestFileBuilder::AddFileSource( const AxString& name, bool isN
         spAxSrcMob->SetName( name );
     }
 
-    AxCDCIDescriptor axFileDes( AxCreateInstance<IAAFCDCIDescriptor>( axDictionary ) );
+
+    AxWAVEDescriptor axFileDes( AxCreateInstance<IAAFWAVEDescriptor>( axDictionary ) );
+
+    //Fake a wave header.  It would be nice if we didn't need to do this, but
+    //as of right now, all other well-known FileDescriptors that are of
+    //non-normative essence types are being declared elsewhere and we don't want
+    //to confuse between them and a "basic" file source mob.
+    aafUInt8* buffer = new aafUInt8[ sizeof(aafUInt8[44]) ];
+    AxBuffer<aafUInt8> header = AxBuffer<aafUInt8>( std::auto_ptr<aafUInt8>( buffer ), sizeof( aafUInt8[44] ) );;   
+    axFileDes.SetSummary( header.GetSize(), header.GetPtr().get() );
+    
     axFileDes.SetSampleRate( sampleRate );
     spAxSrcMob->SetEssenceDescriptor( axFileDes );
     spAxSrcMob->SetMobID( this->GenerateMobId() );
@@ -299,7 +309,7 @@ shared_ptr<AxMob> TestFileBuilder::AddFileSource( const AxString& name, bool isN
     return spAxSrcMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddMonoAudioFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate )
+shared_ptr<AxMob> TestFileBuilder::AddMonoAudioFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -321,7 +331,7 @@ shared_ptr<AxMob> TestFileBuilder::AddMonoAudioFileSource( const AxString& name,
     return spAxSrcMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddMultiChannelAudioFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate )
+shared_ptr<AxMob> TestFileBuilder::AddMultiChannelAudioFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -343,7 +353,59 @@ shared_ptr<AxMob> TestFileBuilder::AddMultiChannelAudioFileSource( const AxStrin
     return spAxSrcMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddRecordingSource( const AxString& name, bool isNamed, aafRational_t ratNothing )
+shared_ptr<AxMob> TestFileBuilder::AddRGBAFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 alphaVal, bool hasAlphaType )
+{
+    AxHeader axHeader( _axFile.getHeader() );
+    AxDictionary axDictionary( axHeader.GetDictionary() );
+
+    shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
+    if ( isNamed )
+    {
+        spAxSrcMob->SetName( name );
+    }
+
+    AxRGBADescriptor axRGBADes( AxCreateInstance<IAAFRGBADescriptor>( axDictionary ) );
+    axRGBADes.SetSampleRate( sampleRate );
+    if ( hasAlphaType )
+    {
+        axRGBADes.SetAlphaTransparency( alphaVal );
+    }
+    
+    spAxSrcMob->SetEssenceDescriptor( axRGBADes );
+    spAxSrcMob->SetMobID( this->GenerateMobId() );
+
+    axHeader.AddMob( *spAxSrcMob );
+    
+    return spAxSrcMob;
+}
+
+shared_ptr<AxMob> TestFileBuilder::AddCDCIFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 alphaVal, bool hasAlphaType )
+{
+    AxHeader axHeader( _axFile.getHeader() );
+    AxDictionary axDictionary( axHeader.GetDictionary() );
+
+    shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
+    if ( isNamed )
+    {
+        spAxSrcMob->SetName( name );
+    }
+
+    AxCDCIDescriptor axCDCIDes( AxCreateInstance<IAAFCDCIDescriptor>( axDictionary ) );
+    axCDCIDes.SetSampleRate( sampleRate );
+    if ( hasAlphaType )
+    {
+        axCDCIDes.SetAlphaTransparency( alphaVal );
+    }
+    
+    spAxSrcMob->SetEssenceDescriptor( axCDCIDes );
+    spAxSrcMob->SetMobID( this->GenerateMobId() );
+
+    axHeader.AddMob( *spAxSrcMob );
+    
+    return spAxSrcMob;
+}
+
+shared_ptr<AxMob> TestFileBuilder::AddRecordingSource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -364,7 +426,7 @@ shared_ptr<AxMob> TestFileBuilder::AddRecordingSource( const AxString& name, boo
     return spAxSrcMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddImportSource( const AxString& name, bool isNamed, aafRational_t ratNothing )
+shared_ptr<AxMob> TestFileBuilder::AddImportSource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -385,7 +447,7 @@ shared_ptr<AxMob> TestFileBuilder::AddImportSource( const AxString& name, bool i
     return spAxSrcMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddTapeSource( const AxString& name, bool isNamed, aafRational_t ratNothing )
+shared_ptr<AxMob> TestFileBuilder::AddTapeSource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -406,7 +468,7 @@ shared_ptr<AxMob> TestFileBuilder::AddTapeSource( const AxString& name, bool isN
     return spAxSrcMob;  
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddFilmSource( const AxString& name, bool isNamed, aafRational_t ratNothing )
+shared_ptr<AxMob> TestFileBuilder::AddFilmSource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -426,7 +488,7 @@ shared_ptr<AxMob> TestFileBuilder::AddFilmSource( const AxString& name, bool isN
     return spAxSrcMob;  
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddAuxiliarySource( const AxString& name, bool isNamed, aafRational_t ratNothing )
+shared_ptr<AxMob> TestFileBuilder::AddAuxiliarySource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );

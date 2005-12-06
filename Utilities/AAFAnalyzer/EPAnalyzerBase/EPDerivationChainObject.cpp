@@ -138,6 +138,9 @@ const AxString EPFileSource::GetName()
 
 //======================================================================
 
+EPAudioFileSource::EPAudioFileSource()
+{}
+
 EPAudioFileSource::~EPAudioFileSource()
 {}
 
@@ -170,6 +173,45 @@ EPMultiChannelAudioFileSource::~EPMultiChannelAudioFileSource()
 const AxString EPMultiChannelAudioFileSource::GetName()
 {
     return L"Multi-Channel Audio File Source";
+}
+
+//======================================================================
+
+EPImageFileSource::EPImageFileSource()
+{}
+
+EPImageFileSource::~EPImageFileSource()
+{}
+
+const AxString EPImageFileSource::GetName()
+{
+    return L"Digital Image File Source";
+}
+
+//======================================================================
+
+EPRGBAImageFileSource::EPRGBAImageFileSource()
+{}
+
+EPRGBAImageFileSource::~EPRGBAImageFileSource()
+{}
+
+const AxString EPRGBAImageFileSource::GetName()
+{
+    return L"RGBA Digital Image File Source";
+}
+
+//======================================================================
+
+EPCDCIImageFileSource::EPCDCIImageFileSource()
+{}
+
+EPCDCIImageFileSource::~EPCDCIImageFileSource()
+{}
+
+const AxString EPCDCIImageFileSource::GetName()
+{
+    return L"CDCI Digital Image File Source";
 }
   
 //======================================================================

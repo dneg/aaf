@@ -74,6 +74,24 @@ EPLocatorVisitor::EPLocatorVisitor( wostream& log )
 EPLocatorVisitor::~EPLocatorVisitor()
 {}
 
+bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRGBAImageFileSource>& node )
+{
+    shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
+    return this->PreOrderVisit( *spGeneric );
+}
+
+bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPCDCIImageFileSource>& node )
+{
+    shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
+    return this->PreOrderVisit( *spGeneric );
+}
+
+bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImageFileSource>& node )
+{
+    shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
+    return this->PreOrderVisit( *spGeneric );
+}
+
 bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMonoAudioFileSource>& node )
 {
     shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
@@ -151,11 +169,10 @@ bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource
             {
                 //If this is a Network Locator
                 AxLocator axLocator( spLocator );
-                AxClassDef clsDef( axLocator.GetDefinition() );
-                
-                if ( this->IsType( clsDef, kAAFClassID_NetworkLocator, kAAFClassID_Locator ) )
+                IAAFNetworkLocatorSP spNetLoc;
+                if ( AxIsA( axLocator, spNetLoc ) )
                 {
-                    AxNetworkLocator axNetLoc( AxQueryInterface<IAAFLocator, IAAFNetworkLocator>( axLocator ) );
+                    AxNetworkLocator axNetLoc( spNetLoc );
                     if ( CheckNetworkLocator( axNetLoc ) )
                     {
                         locatorFound = true;
@@ -233,11 +250,10 @@ bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSour
         {
             //If this is a Network Locator
             AxLocator axLocator( spLocator );
-            AxClassDef clsDef( axLocator.GetDefinition() );
-
-            if ( this->IsType( clsDef, kAAFClassID_NetworkLocator, kAAFClassID_Locator ) )
+            IAAFNetworkLocatorSP spNetLoc;
+            if ( AxIsA( axLocator, spNetLoc ) )
             {
-                AxNetworkLocator axNetLoc( AxQueryInterface<IAAFLocator, IAAFNetworkLocator>( axLocator ) );
+                AxNetworkLocator axNetLoc( spNetLoc );
                 if ( CheckNetworkLocator( axNetLoc ) )
                 {
                     locatorFound = true;

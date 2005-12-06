@@ -21,14 +21,16 @@
 #ifndef __TYPEDNODEFACTORYREGISTRY_h__
 #define __TYPEDNODEFACTORYREGISTRY_h__
 
-//Ax files
-#include <AxMetaDef.h>
+//AAF files
+#include <AAFTypes.h>
 
 //Boost files
 #include <boost/shared_ptr.hpp>
 
 //STL files
 #include <map>
+
+class AxClassDef;
 
 namespace aafanalyzer {
 

@@ -37,7 +37,6 @@
 #include <set>
 
 class AxMob;
-class AxClassDef;
 class AxMobSlot;
 
 namespace aafanalyzer {
@@ -70,8 +69,6 @@ class EPTypedVisitor : public TypedVisitor
     AxString GetMobName( AxMob& axMob, const AxString& type );
     AxString GetMobName( shared_ptr<EdgeMap> spEdgeMap, Node& node );
     AxString GetMobSlotName( shared_ptr<EdgeMap> spEdgeMap, Node& node );
-    
-    bool IsType( AxClassDef& clsDef, aafUID_t type, aafUID_t parentType );
 
     //TODO: These are currently only used by EPContainedTrackVisitor, they may
     //      not be needed by any other class and therefore can be pushed down

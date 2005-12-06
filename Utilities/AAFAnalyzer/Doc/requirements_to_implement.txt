@@ -102,22 +102,11 @@ EssenceGroup object in a MasterMob.
 > Is this a definition?  If not, how do we know that a clip has multiple file
 > source choices and what would be a fail condition?
 
-REQ_EP_128
-A track of edgecode shall be specified using one or more Edgecode objects.
-7.11
-> This is a definition.
-
-REQ_EP_129
+DEF_EP_129
 A track of timecode shall be specified using one or more Timecode objects or a 
 TimecodeStream12M object.
 7.11
 > This is a definition.
-
-REQ_EP_135
-Each auxiliary file EssenceData object shall be specified using a SourceMob
-with an AuxiliaryDescriptor.
-9.1.1
-> Is this a definition?  If not, what is being tested?
 
 REQ_EP_137
 An AAF Mob (such as an AAF composition) may reference an auxiliary SourceMob 
@@ -149,18 +138,6 @@ A referenced MIDI file shall conform to the standard MIDI specification version
 > but I'd like to know if something else is being used elsewhere in AAF code. 
 > If not, I'd like to get someone else opinion on if this library will work.
 
-REQ_EP_144
-The AuxiliaryDescriptor::MimeType property for a referenced MIDI file shall be 
-"audio/midi".
-9.2
-> This is a definition.
-
-REQ_EP_145
-The importing application shall parse the MIDI file, including tempo maps, to 
-determine synchronization at further points in the composition.
-9.2
-> Should this be an application requirement?  If not, how do we test this?
-
 REQ_EP_148
 The Data Definition for non-essence tracks containing annotations shall be 
 DataDef_DescriptiveMetadata.
@@ -186,11 +163,6 @@ be used when working with legacy AAF v1.0 files.
 11.1
 > What is being tested here?
 
-REQ_EP_165
-An effect shall be invoked using an OperationGroup object.
-11.2
-> How do you tell when an effect is being invoked
-
 REQ_EP_167
 The OperationGroup shall be contained in a Transition object between two 
 Segments.
@@ -208,13 +180,6 @@ NestedScope object.  A continuous section of common material, used by several
 effects, shall be represented as a single segment in the NestedScope.
 11.2.3
 > How do you determine if common material is being shared multiple effects?
-
-REQ_EP_170
-Effects on multiple layers shall be constructed within a NestedScope object.  
-The layers shall be ordered background to foreground within the Slots of the
-NestedScope.
-11.3
-> What is an effect on multiple layers?
 
 REQ_EP_172
 A nested group of tracks within a Segment of a CompositionMob shall be specified
@@ -234,13 +199,6 @@ effect definition.
 11.6
 > How do we check that they are normalized?  How is it otherwise stated?
 
-REQ_EP_188
-An importing application that supports video speed control effects shall accept 
-and present the Video Speed Control effect, following the precepts of Section
-4.2.4 of the AAF Edit Protocol.
-12.3.3
-> Should this be an APP requirement?
-
 REQ_EP_191
 The Edit Protocol deprecates the use of specifying a Video Repeat Effect by 
 using a SourceClip in a TimelineMobSlot that references a still frame in a
@@ -249,46 +207,6 @@ an importing application need not accept it.
 12.4.1
 > OK: if this means that a video source clip in a timeline mob slot can not
 > reference a StaticMobSlot.
-
-REQ_EP_218
-In an Alpha With Video Key effect the alpha channel shall be contained within a 
-channel of the foreground video essence, using either RGBA or YUVA.  The essence
-descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a
-CDCIDescriptor object (or a sub-class) for CDCI.  The alpha channel shall be
-indicated by the essence descriptor.
-12.13
-> What is tested here?
-
-REQ_EP_219
-In an Alpha With Video Key effect the DigitalImageDescriptor::AlphaTransparency 
-property shall be present and specify whether the minimum Alpha value or the
-maximum Alpha value indicates complete transparency.  The
-ParameterDef_AlphaKeyInvertAlpha parameter indicates wheter the transparency
-indicated by the DigitalImageDescriptor::AlphaTransparency property should be
-inverted.
-12.13
-> Where is the DigitialImageDescriptor::AlphaTransparency property located?
-
-REQ_EP_223
-In a Separate-Alpha Key effect the alpha channel shall be contained within a 
-channel of separate essence, using either RGBA or YUVA.  The essence descriptor
-shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor
-object (or a sub-class) for CDCI.  Where the alpha channel is indicated by the
-essence descriptor, the channel shall be used as the alpha channel.  Where the
-alpha channel is not indicated by the essence descriptor, the luminance value of
-essence shall be used as the alpha channel.
-12.14
-> What is tested here
-
-REQ_EP_224
-In a Separate-Alpha Key effect the DigitalImageDescriptor::AlphaTransparency 
-property shall be present and specify whether the minimum Alpha value or the
-maximum Alpha value indicates complete transparency.  The
-ParameterDef_AlphaKeyInvertAlpha parameter indicates whether the transparency
-indicated by the DigitalImageDescriptor::AlphaTransparency property should be
-inverted.
-12.14
-> Where is the DigitialImageDescriptor::AlphaTransparency property located?
 
 REQ_EP_238
 A Mono Audio Pan effect shall only be applied to audio tracks that refer to mono

@@ -28,6 +28,7 @@
 //STL files
 #include <stack>
 
+class AxOperationGroup;
 
 namespace aafanalyzer {
 
@@ -82,6 +83,7 @@ class EPEffectVisitor : public EPTypedVisitor
     shared_ptr<DetailLevelTestResult> _spResult;
     
     bool VeirfyTransitionRequirement( AAFTypedObjNode<IAAFOperationGroup>& node, bool withinTransition, const AxString& reqId, const AxString& type );
+    bool VerifyAlphaRequirements( AxOperationGroup& axOpGroup, const AxString& effectType, aafUInt32 expectedInputs, const AxString& descriptorReq, const AxString& alphaReq, const AxString& slotName );
     
     // prohibited
     EPEffectVisitor();

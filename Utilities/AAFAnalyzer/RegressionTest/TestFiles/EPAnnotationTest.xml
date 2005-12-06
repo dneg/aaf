@@ -63,9 +63,7 @@
             </sequence>
         </event-mob-slot>
     </top-level>
-
-	<!-- NEED TO TEST A DESCRIPTIVE MARKER IN AN ESSENCE TRACK -->
-    
+   
     <!-- Test CommentMarkes in Mob Slots (and nested in mob slots) -->
     <!-- Note: "CommentMarker in Essence Track" above test tests nested in an event mob slot -->
     <top-level name="CommentMarker in Event Mob Slot">
@@ -81,7 +79,7 @@
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+       
     <top-level name="CommentMarker in Timeline Mob Slot">
 		<timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
 			<comment-marker track-type="none"/>
@@ -146,5 +144,47 @@
             </sequence>
         </timeline-mob-slot>
     </top-level>
+    
+    <!-- Test that the correct result are produced when a failure occus on one
+         branch of the file, but not on the next branch. -->
+    <top-level name="Heredity Test 1">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+			<sequence track-type="none">
+                <sequence track-type="none"  length="1">
+                    <comment value="Should Fail" name="Test Case 3"/>
+                    <eoc track-type="none" length="1"/>
+                </sequence>
+            </sequence>
+        </timeline-mob-slot>
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <source-clip track-type="none">
+                <comment value="Should Pass" name="Test Case 1"/>
+                <lower-level>
+                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                        <eoc track-type="none"/>
+                    </timeline-mob-slot>
+                </lower-level>
+            </source-clip>
+        </timeline-mob-slot>
+    </top-level>
+    
+    <top-level name="Heredity Test 2">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <source-clip track-type="audio">
+                <clip>
+            		<event-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                        <sequence track-type="audio">
+            				<comment-marker track-type="audio" length="1"/>
+                        </sequence>
+                    </event-mob-slot>
+            		<event-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                        <sequence track-type="none">
+            				<comment-marker track-type="none" length="1"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+            </source-clip>
+        </timeline-mob-slot>
+    </top-level>    
 
 </aaf-file>

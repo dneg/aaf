@@ -36,7 +36,6 @@
 
 //Not in the aafanalyzer namespace so the forward declaration must be made
 //outside of the namespace.
-class AxClassDef;
 class AxMob;
 
 namespace aafanalyzer {
@@ -73,7 +72,10 @@ class EPContainedTrackVisitor : public EPTypedVisitor
     shared_ptr<DetailLevelTestResult> _spResult;
 
     shared_ptr<TrackNumberMap> CountTrackCodes( shared_ptr<EPTypedVisitor::MobSlotSet> tracks, unsigned int& unnumberedTracks );
-    unsigned int CountSegments( AxMobSlot& track, aafUID_t segmentType );
+
+    template<typename SegmentTypeSP>
+    unsigned int CountSegments( AxMobSlot& track );
+
     bool CheckPrimaryTimecodeTracks( shared_ptr<EPTypedVisitor::MobSlotSet> tracks, Node& node );
 
     // prohibited

@@ -83,16 +83,7 @@ public:
                                             TestRegistry::GetInstance().GetRequirementsForTest( DecorateEPTest::GetTestInfo().GetName() )
                )                          ),
       _spGraph( spTestGraph )
-  {
-    _knownDescriptors.insert( kAAFClassID_SoundDescriptor );
-    _knownDescriptors.insert( kAAFClassID_FileDescriptor );
-    _knownDescriptors.insert( kAAFClassID_RecordingDescriptor );
-    _knownDescriptors.insert( kAAFClassID_ImportDescriptor );
-    _knownDescriptors.insert( kAAFClassID_TapeDescriptor );
-    _knownDescriptors.insert( kAAFClassID_FilmDescriptor );
-    _knownDescriptors.insert( kAAFClassID_AuxiliaryDescriptor );
-    _knownDescriptors.insert( kAAFClassID_EssenceDescriptor );    //Used to indicate failure.
-  }
+  {}
 
   virtual ~EPDecoratorVisitor()
   {}
@@ -199,15 +190,25 @@ public:
        *       the current method will be used.
        * 
        */
-        
+
+      //Shared pointers used to determine types.
+      IAAFSoundDescriptorSP         spSoundDescriptor;
+      IAAFRGBADescriptorSP          spRGBADescriptor;
+      IAAFCDCIDescriptorSP          spCDCIDescriptor;
+      IAAFDigitalImageDescriptorSP  spDigitalImageDescriptor;
+      IAAFFileDescriptorSP          spFileDescriptor;
+      IAAFRecordingDescriptorSP     spRecordingDescriptor;
+      IAAFImportDescriptorSP        spImportDescriptor;
+      IAAFTapeDescriptorSP          spTapeDescriptor;
+      IAAFFilmDescriptorSP          spFilmDescriptor;
+      IAAFAuxiliaryDescriptorSP     spAuxDescriptor;
+      
       //Find the type of descriptor on the node to properly decorate it.
       AxEssenceDescriptor descriptor( axSrcMob.GetEssenceDescriptor() );
-      AxClassDef clsDef( descriptor.GetDefinition() );
-      aafUID_t descriptorAUID = GetAcceptedAUID( clsDef );
 
       //We must check for SoundDescriptors before checking for FileDescriptors
       //since FileDescriptior is the super-class of SoundDescriptor.
-      if ( descriptorAUID == kAAFClassID_SoundDescriptor )
+      if ( AxIsA( descriptor, spSoundDescriptor ) )
       {
         AxSoundDescriptor soundDescriptor( AxQueryInterface<IAAFEssenceDescriptor, IAAFSoundDescriptor>( descriptor ) );
         if ( soundDescriptor.GetChannelCount() == 1 )
@@ -219,27 +220,44 @@ public:
           this->DecorateNode<IAAFSourceMob, EPMultiChannelAudioFileSource>( node );
         }
       }
-      else if ( descriptorAUID == kAAFClassID_FileDescriptor )
+      //We must check for RGBA and CDCI Descriptors before checking for
+      //DigitalImageDescriptors since DigitalImageDescriptor is a super-class.
+      else if ( AxIsA( descriptor, spRGBADescriptor ) )
+      {
+        this->DecorateNode<IAAFSourceMob, EPRGBAImageFileSource>( node );
+      }
+      else if ( AxIsA( descriptor, spCDCIDescriptor ) )
+      {
+        this->DecorateNode<IAAFSourceMob, EPCDCIImageFileSource>( node );
+      }
+      //We must check for DigitalImageDescriptors before checking for
+      //FileDescriptors since FileDescriptior is the super-class of
+      //DigitalImageDescriptor.
+      else if ( AxIsA( descriptor, spDigitalImageDescriptor ) )
+      {
+        this->DecorateNode<IAAFSourceMob, EPImageFileSource>( node );
+      }
+      else if ( AxIsA( descriptor, spFileDescriptor ) )
       {
         this->DecorateNode<IAAFSourceMob, EPFileSource>( node );
       }
-      else if ( descriptorAUID == kAAFClassID_RecordingDescriptor )
+      else if ( AxIsA( descriptor, spRecordingDescriptor ) )
       {
         this->DecorateNode<IAAFSourceMob, EPRecordingSource>( node );
       }
-      else if ( descriptorAUID == kAAFClassID_ImportDescriptor )
+      else if ( AxIsA( descriptor, spImportDescriptor ) )
       {
         this->DecorateNode<IAAFSourceMob, EPImportSource>( node );
       }
-      else if ( descriptorAUID == kAAFClassID_TapeDescriptor )
+      else if ( AxIsA( descriptor, spTapeDescriptor ) )
       {
         this->DecorateNode<IAAFSourceMob, EPTapeSource>( node );
       }
-      else if ( descriptorAUID == kAAFClassID_FilmDescriptor )
+      else if ( AxIsA( descriptor, spFilmDescriptor ) )
       {
         this->DecorateNode<IAAFSourceMob, EPFilmSource>( node );
       }
-      else if ( descriptorAUID == kAAFClassID_AuxiliaryDescriptor )
+      else if ( AxIsA( descriptor, spAuxDescriptor ) )
       {
         this->DecorateNode<IAAFSourceMob, EPAuxiliarySource>( node );
       }
@@ -406,22 +424,6 @@ private:
   EPDecoratorVisitor();
   EPDecoratorVisitor( const EPDecoratorVisitor& );
   EPDecoratorVisitor& operator=( const EPDecoratorVisitor& );
-
-  //Return a AUID that matches an acceptable descriptor type or the base
-  //type (kAAFClassID_EssenceDescriptor).
-  aafUID_t GetAcceptedAUID( AxClassDef& clsDef ) const
-  {
-    aafUID_t auid = clsDef.GetAUID();
-       
-    if ( _knownDescriptors.find(auid) != _knownDescriptors.end() )
-    {
-        return auid;
-    }
-
-    AxClassDef parentDef( clsDef.GetParent() );
-    return GetAcceptedAUID( parentDef );
-    
-  }
   
   template <typename AAFObjectType>
   void DecorateMobSlot ( AxMobSlot& axMobSlot, AAFTypedObjNode<AAFObjectType>& node )
@@ -506,7 +508,6 @@ private:
   wostream& _log;
   shared_ptr<DetailLevelTestResult> _spResult;
   shared_ptr<const TestGraph> _spGraph;
-  set<aafUID_t> _knownDescriptors;
   
 };
 

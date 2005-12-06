@@ -130,7 +130,11 @@ const TestInfo EPEffectTest::GetTestInfo()
     spReqIds->push_back(L"REQ_EP_209");     //Video Scale not in Transition.
     spReqIds->push_back(L"REQ_EP_212");     //Video Rotate not in Transition.
     spReqIds->push_back(L"REQ_EP_215");     //Video Corner Pinning not in Transition.
+    spReqIds->push_back(L"REQ_EP_218");     //Alpha With Video Key has RGBA or CDIC descriptor.
+    spReqIds->push_back(L"REQ_EP_219");     //Alpha With Video Key has AlphaTransparency property.
     spReqIds->push_back(L"REQ_EP_220");     //Alpha With Video Key not in Transition.
+    spReqIds->push_back(L"REQ_EP_223");     //Separate Alpha Key has RGBA or CDIC descriptor.
+    spReqIds->push_back(L"REQ_EP_224");     //Separate Alpha Key has AlphaTransparency property.
     spReqIds->push_back(L"REQ_EP_225");     //Separate Alpha Key not in Transition.
     spReqIds->push_back(L"REQ_EP_228");     //Luminance Key not in Transition.
     spReqIds->push_back(L"REQ_EP_231");     //Chroma Key not in Transition.

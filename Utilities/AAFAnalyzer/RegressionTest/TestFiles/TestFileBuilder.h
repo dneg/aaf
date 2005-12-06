@@ -67,24 +67,26 @@ class TestFileBuilder
 
         //Mobs:
         //Composition:
-        shared_ptr<AxMob> AddTopLevel( const AxString& name, bool isNamed, aafRational_t ratNothing );
-        shared_ptr<AxMob> AddLowerLevel( const AxString& name, bool isNamed, aafRational_t ratNothing );
-        shared_ptr<AxMob> AddSubClip( const AxString& name, bool isNamed, aafRational_t ratNothing );
-        shared_ptr<AxMob> AddAdjustedClip( const AxString& name, bool isNamed, aafRational_t ratNothing );
+        shared_ptr<AxMob> AddTopLevel( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing );
+        shared_ptr<AxMob> AddLowerLevel( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing );
+        shared_ptr<AxMob> AddSubClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing );
+        shared_ptr<AxMob> AddAdjustedClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing );
 
         //Master:
-        shared_ptr<AxMob> AddTemplateClip( const AxString& name, bool isNamed, aafRational_t ratNothing );
-        shared_ptr<AxMob> AddClip( const AxString& name, bool isNamed, aafRational_t ratNothing );
+        shared_ptr<AxMob> AddTemplateClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing );
+        shared_ptr<AxMob> AddClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing );
 
         //Source:
-        shared_ptr<AxMob> AddFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate );
-        shared_ptr<AxMob> AddMonoAudioFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate );
-        shared_ptr<AxMob> AddMultiChannelAudioFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate );
-        shared_ptr<AxMob> AddRecordingSource( const AxString& name, bool isNamed, aafRational_t ratNothing );
-        shared_ptr<AxMob> AddImportSource( const AxString& name, bool isNamed, aafRational_t ratNothing );
-        shared_ptr<AxMob> AddTapeSource( const AxString& name, bool isNamed, aafRational_t ratNothing );
-        shared_ptr<AxMob> AddFilmSource( const AxString& name, bool isNamed, aafRational_t ratNothing );
-        shared_ptr<AxMob> AddAuxiliarySource( const AxString& name, bool isNamed, aafRational_t ratNothing );
+        shared_ptr<AxMob> AddFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 intNothing, bool boolNothing );
+        shared_ptr<AxMob> AddMonoAudioFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 intNothing, bool boolNothing );
+        shared_ptr<AxMob> AddMultiChannelAudioFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 intNothing, bool boolNothing );
+        shared_ptr<AxMob> AddRGBAFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 alphaVal, bool hasAlphaType );
+        shared_ptr<AxMob> AddCDCIFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 alphaVal, bool hasAlphaType );
+        shared_ptr<AxMob> AddRecordingSource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing );
+        shared_ptr<AxMob> AddImportSource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing );
+        shared_ptr<AxMob> AddTapeSource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing );
+        shared_ptr<AxMob> AddFilmSource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing );
+        shared_ptr<AxMob> AddAuxiliarySource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing );
 
         //Create Segments:
         //Type A:

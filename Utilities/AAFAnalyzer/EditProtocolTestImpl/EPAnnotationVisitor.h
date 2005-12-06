@@ -135,8 +135,8 @@ class EPAnnotationVisitor : public EPTypedVisitor
     shared_ptr<EdgeMap> _spEdgeMap;
     shared_ptr<DetailLevelTestResult> _spResult;
     
-    bool        _isAncestorEssenceTrack;
-    bool        _isAncestorEventMobSlot;
+    stack<bool> _isAncestorEssenceTrack;
+    stack<bool> _isAncestorEventMobSlot;
     stack<bool> _isParentMobSlot;
     
     set<AxString> _taggedValueNames;

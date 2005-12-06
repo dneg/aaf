@@ -23,6 +23,7 @@
 #include "TypedNodeFactoryImpl.h"
 
 //Ax files
+#include <AxMetaDef.h>
 #include <AxSmartPointer.h>
 
 //AAF files

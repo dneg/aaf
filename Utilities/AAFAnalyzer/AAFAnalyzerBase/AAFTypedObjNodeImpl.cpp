@@ -25,6 +25,7 @@
 
 //Ax files
 #include <AxMob.h>
+#include <AxSmartPointer.h>
 
 //AAF files
 #include <AAF.h>
@@ -102,12 +103,18 @@ IAAFSmartPointer<AAFObjType> AAFTypedObjNodeImpl<AAFObjType>::GetAAFObjectOfType
 template<typename AAFObjType>
 void AAFTypedObjNodeImpl<AAFObjType>::Decorate( shared_ptr<Node> decoratedNode )
 {
-    shared_ptr<AAFTypedObjNode<IAAFMob> > spMob = dynamic_pointer_cast<AAFTypedObjNode<IAAFMob> >( this->GetSharedPointerToNode() );
+    shared_ptr<AAFObjNode> spMob = dynamic_pointer_cast<AAFObjNode>( this->GetSharedPointerToNode() );
     if ( spMob )
     {
-        AxMob axMob( spMob->GetAAFObjectOfType() );
-        aafMobID_t mobid = axMob.GetMobID();
-        MobNodeMap::GetInstance().DecorateMobNode( mobid, decoratedNode );
+        AxObject axObject( spMob->GetAAFObject() );
+        IAAFMobSP spMob;
+
+        if ( AxIsA(axObject, spMob) )
+        {
+            AxMob axMob( spMob );
+            aafMobID_t mobid = axMob.GetMobID();
+            MobNodeMap::GetInstance().DecorateMobNode( mobid, decoratedNode );
+        }
         return;
     }
 }

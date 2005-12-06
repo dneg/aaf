@@ -109,6 +109,8 @@ InputParser::InputParser( const char* outFile )
     _materialTypeMap[L"file-source"]         = &TestFileBuilder::AddFileSource;
     _materialTypeMap[L"mono-audio"]          = &TestFileBuilder::AddMonoAudioFileSource;
     _materialTypeMap[L"multi-channel-audio"] = &TestFileBuilder::AddMultiChannelAudioFileSource;
+    _materialTypeMap[L"cdci-source"]         = &TestFileBuilder::AddCDCIFileSource;
+    _materialTypeMap[L"rgba-source"]         = &TestFileBuilder::AddRGBAFileSource;
     _materialTypeMap[L"recording-source"]    = &TestFileBuilder::AddRecordingSource;
     _materialTypeMap[L"import-source"]       = &TestFileBuilder::AddImportSource;
     _materialTypeMap[L"tape-source"]         = &TestFileBuilder::AddTapeSource;
@@ -153,7 +155,6 @@ InputParser::InputParser( const char* outFile )
     _annotationMap[L"klv-data"] = &TestFileBuilder::AddKLVData;
 
     //Prefix used to look up the annotation id in the xml.
-    
     _annotationIds[L"comment"]  = L"";
     _annotationIds[L"klv-data"] = L"key-";
     
@@ -277,16 +278,30 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
         AxString atrName;
         
         //Find the mob name.
-        OptionalStringAttrib mobName = GetOptionalStringAttribValue( L"name", attribs, 6, L"" );
+        OptionalStringAttrib mobName = GetOptionalStringAttribValue( L"name", attribs, 8, L"" );
 
-        OptionalIntAttrib rationalNumerator = GetOptionalIntAttribValue( _optRationalParam[name] + L"-numerator", attribs, 6, 1 );
-        OptionalIntAttrib rationalDenominator = GetOptionalIntAttribValue( _optRationalParam[name] + L"-denominator", attribs, 6, 1 );
+        OptionalIntAttrib rationalNumerator = GetOptionalIntAttribValue( _optRationalParam[name] + L"-numerator", attribs, 8, 1 );
+        OptionalIntAttrib rationalDenominator = GetOptionalIntAttribValue( _optRationalParam[name] + L"-denominator", attribs, 8, 1 );
+        OptionalStringAttrib alphaTransparency = GetOptionalStringAttribValue( L"alpha-transparency", attribs, 8, L"max" );
+
         aafRational_t optRational;
         optRational.numerator = rationalNumerator.first;
         optRational.denominator = rationalDenominator.first;
         
+        //Note: This logic will have to change a bit if another type of mob
+        //requires an optional aafUInt32 parameter.
+        aafAlphaTransparency_t transType;
+        if ( alphaTransparency.first == L"max" )
+        {
+            transType = kAAFMaxValueTransparent;
+        }
+        else
+        {
+            transType = kAAFMinValueTransparent;
+        }            
+        
         //Call the appropriate add function.
-        shared_ptr<AxMob> spMob = (_testFile.*_materialTypeMap[name])( mobName.first, mobName.second, optRational );
+        shared_ptr<AxMob> spMob = (_testFile.*_materialTypeMap[name])( mobName.first, mobName.second, optRational, transType, alphaTransparency.second );
 
         if ( !_componentStack.empty() )
         {

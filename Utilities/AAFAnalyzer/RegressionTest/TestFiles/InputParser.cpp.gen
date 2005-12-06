@@ -682,6 +682,10 @@
     _optRationalParam[L"tape-source"] = L"";
     _optRationalParam[L"film-source"] = L"";
     _optRationalParam[L"auxiliary-source"] = L"";
+    _optRationalParam[L"multi-channel-audio"] = L"";
+    _optRationalParam[L"mono-audio"] = L"";
+    _optRationalParam[L"cdci-source"] = L"";
+    _optRationalParam[L"rgba-source"] = L"";
     _optRationalParam[L"timeline-mob-slot"] = L"";
     _optRationalParam[L"static-mob-slot"] = L"";
     _optRationalParam[L"event-mob-slot"] = L"";

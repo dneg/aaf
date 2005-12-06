@@ -16,6 +16,12 @@
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob,EPMonoAudioFileSource>& node) { return this->ForwardPostOrderVisit<IAAFSourceMob,EPMonoAudioFileSource>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob,EPMultiChannelAudioFileSource>& node) { return this->ForwardPreOrderVisit<IAAFSourceMob,EPMultiChannelAudioFileSource>( node ); }
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob,EPMultiChannelAudioFileSource>& node) { return this->ForwardPostOrderVisit<IAAFSourceMob,EPMultiChannelAudioFileSource>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob,EPImageFileSource>& node) { return this->ForwardPreOrderVisit<IAAFSourceMob,EPImageFileSource>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob,EPImageFileSource>& node) { return this->ForwardPostOrderVisit<IAAFSourceMob,EPImageFileSource>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob,EPRGBAImageFileSource>& node) { return this->ForwardPreOrderVisit<IAAFSourceMob,EPRGBAImageFileSource>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob,EPRGBAImageFileSource>& node) { return this->ForwardPostOrderVisit<IAAFSourceMob,EPRGBAImageFileSource>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob,EPCDCIImageFileSource>& node) { return this->ForwardPreOrderVisit<IAAFSourceMob,EPCDCIImageFileSource>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob,EPCDCIImageFileSource>& node) { return this->ForwardPostOrderVisit<IAAFSourceMob,EPCDCIImageFileSource>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob,EPRecordingSource>& node) { return this->ForwardPreOrderVisit<IAAFSourceMob,EPRecordingSource>( node ); }
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob,EPRecordingSource>& node) { return this->ForwardPostOrderVisit<IAAFSourceMob,EPRecordingSource>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob,EPImportSource>& node) { return this->ForwardPreOrderVisit<IAAFSourceMob,EPImportSource>( node ); }

@@ -41,7 +41,7 @@ check :
 	cd TestFiles && $(MAKE) $@
 	cd TestStructure && $(MAKE) $@
 
-.PHONY: clean
-clean:
+.PHONY : clean
+clean :
 	cd TestFiles && $(MAKE) GENDEPS=0 $@
 	cd TestStructure && $(MAKE) GENDEPS=0 $@

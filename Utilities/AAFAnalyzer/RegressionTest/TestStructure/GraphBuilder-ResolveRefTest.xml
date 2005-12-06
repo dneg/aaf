@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE aaf-file SYSTEM "../TestFiles/EPDerivationChain.dtd">
+
+<aaf-file>
+	
+    <!--
+         Set up a file that can be used to test that:
+        
+         (1) The TestGraph is build properly.
+         (2) References are correctly resolved.
+        
+         The regression test code assumes the structure of this file, therefore
+         any modifications to this file should be accompinied by modifications
+         to the regression test.
+    -->
+
+    <!--
+		 NOTE: The structure of these 5 mobs are identical with the following
+        	   exceptions.
+        	(1) Mob 1 referes to Mob 2, Mob 3, Mob 4 and Mob 5 while the other
+        		mobs have end of chain references.
+        	(2) Mob 1, Mob 4 and Mob 5 have their first slot contain a sequence
+        		of 3 source clips and their second slot contain a single source
+        		clip.  Mob 2 and Mob 3 have the order of slots refersed.
+    -->
+    
+    <top-level name="Mob 1">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.A">
+            <sequence track-type="audio">
+                <source-clip track-type="audio" length="1">
+                                    
+                    <clip name="Mob 2">
+                        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 2.B">
+							<eoc track-type="audio" length="1"/>
+                        </timeline-mob-slot>
+                        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 2.A">
+                            <sequence track-type="audio">
+								<eoc track-type="audio" length="1"/>
+                                <eoc track-type="audio" length="1"/>
+                                <eoc track-type="audio" length="1"/>
+                            </sequence>
+                        </timeline-mob-slot>
+                    </clip>
+                    
+                </source-clip>
+				<source-clip track-type="audio" length="1">
+                    
+                    <clip name="Mob 3">
+						<timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 3.B">
+							<eoc track-type="audio" length="1"/>
+                        </timeline-mob-slot>
+                        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 3.A">
+                            <sequence track-type="audio">
+								<eoc track-type="audio" length="1"/>
+                                <eoc track-type="audio" length="1"/>
+                                <eoc track-type="audio" length="1"/>
+                            </sequence>
+                        </timeline-mob-slot>
+                    </clip>
+                    
+                </source-clip>
+				<source-clip track-type="audio" length="1">
+                    
+                    <clip name="Mob 4">
+                        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 4.A">
+                            <sequence track-type="audio">
+								<eoc track-type="audio" length="1"/>
+                                <eoc track-type="audio" length="1"/>
+                                <eoc track-type="audio" length="1"/>
+                            </sequence>
+                        </timeline-mob-slot>
+                        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 4.B">
+							<eoc track-type="audio" length="1"/>
+                        </timeline-mob-slot>
+                    </clip>
+                    
+                </source-clip>
+            </sequence>
+        </timeline-mob-slot>
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.B">
+            <source-clip track-type="audio" length="1">
+                
+                    <clip name="Mob 5">
+                        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 5.A">
+                            <sequence track-type="audio">
+								<eoc track-type="audio" length="1"/>
+                                <eoc track-type="audio" length="1"/>
+                                <eoc track-type="audio" length="1"/>
+                            </sequence>
+                        </timeline-mob-slot>
+                        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 5.B">
+							<eoc track-type="audio" length="1"/>
+                        </timeline-mob-slot>
+                    </clip>
+                
+            </source-clip>
+        </timeline-mob-slot>
+    </top-level>
+        
+</aaf-file>

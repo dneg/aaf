@@ -62,3 +62,19 @@
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_150
 
+                Name:   Edit Protocol Annotation Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob slot with ID = 1 of Top-Level Composition: "Heredity Test 1" contains a Component that illegally uses the Component::UserComments property.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_147
+
+                Name:   Edit Protocol Annotation Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob slot with ID = 1 of Unnamed Clip is an essence track and uses CommentMarkers for annotations.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_149
+

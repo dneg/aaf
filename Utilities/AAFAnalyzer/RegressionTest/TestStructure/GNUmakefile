@@ -40,4 +40,6 @@ include ../../aafanalyzer.mk
 
 .PHONY : check
 check : $(AAFSDKBINDIR)/RegressionTest$(EXE)
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/RegressionTest$(EXE)
+	rm -f *.aaf
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) GraphBuilder-ResolveRefTest.xml GraphBuilder-ResolveRefTest.aaf
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/RegressionTest$(EXE) GraphBuilder-ResolveRefTest.aaf

@@ -36,23 +36,6 @@ namespace {
 
 using namespace aafanalyzer;
 
-bool IsType( AxClassDef& clsDef, aafUID_t type, aafUID_t parentType )
-{
-    aafUID_t auid = clsDef.GetAUID();
-    
-    if ( auid == type )
-    {
-        return true;
-    }
-    else if ( auid == parentType )
-    {
-        return false;
-    }
-
-    AxClassDef parentDef( clsDef.GetParent() );
-    return IsType( parentDef, type, parentType );
-}
-
 bool IsReferenceInFile( AxSourceClip& axSrcClip )
 {
     aafSourceRef_t srcRef = axSrcClip.GetSourceReference();
@@ -179,24 +162,24 @@ shared_ptr<EPAudioTrack> EPAudioTrack::CreateAudioTrack( AxMobSlot& axMobSlot )
     {
         //2. Ensure the segment is a source clip.
         AxSegment axSegment( axMobSlot.GetSegment() );
-        AxClassDef segClsDef( axSegment.GetDefinition() );
-        if ( IsType( segClsDef, kAAFClassID_SourceClip, kAAFClassID_Segment ) )
+        IAAFSourceClipSP spSrcClip;
+        if ( AxIsA( axSegment, spSrcClip ) )
         {
             //3. Ensure the source clip contains  a source mob.
-            AxSourceClip axSrcClip( AxQueryInterface<IAAFSegment, IAAFSourceClip>( axSegment ) );
+            AxSourceClip axSrcClip( spSrcClip );
             
             //4. Make sure that the referenced source mob is in this AAF file.
             if ( IsReferenceInFile( axSrcClip ) )
             {
                 AxMob axMob( axSrcClip.ResolveRef() );
-                AxClassDef mobClsDef( axMob.GetDefinition() );
-                if ( IsType( mobClsDef, kAAFClassID_SourceMob, kAAFClassID_Mob ) )
+                IAAFSourceMobSP spSourceMob;
+                if ( AxIsA( axMob, spSourceMob ) )
                 {
                     //4. Ensure the source mob is a file source mob.
-                    AxSourceMob axSrcMob( AxQueryInterface<IAAFMob, IAAFSourceMob>( axMob ) );
+                    AxSourceMob axSrcMob( spSourceMob );
                     AxEssenceDescriptor descriptor( axSrcMob.GetEssenceDescriptor() );
-                    AxClassDef desClsDef( descriptor.GetDefinition() );
-                    if ( IsType( desClsDef, kAAFClassID_FileDescriptor, kAAFClassID_EssenceDescriptor ) )
+                    IAAFFileDescriptorSP spFileDes;
+                    if ( AxIsA( descriptor, spFileDes ) )
                     {
                         shared_ptr<EPAudioTrack> spTrack( new EPAudioTrack( axMobSlot, axSrcClip, axSrcMob ) );
                         return spTrack;
@@ -232,24 +215,24 @@ shared_ptr<EPVideoTrack> EPVideoTrack::CreateVideoTrack( AxMobSlot& axMobSlot )
     {
         //2. Ensure the segment is a source clip.
         AxSegment axSegment( axMobSlot.GetSegment() );
-        AxClassDef segClsDef( axSegment.GetDefinition() );
-        if ( IsType( segClsDef, kAAFClassID_SourceClip, kAAFClassID_Segment ) )
+        IAAFSourceClipSP spSrcClip;
+        if ( AxIsA( axSegment, spSrcClip ) )
         {
             //3. Ensure the source clip contains  a source mob.
-            AxSourceClip axSrcClip( AxQueryInterface<IAAFSegment, IAAFSourceClip>( axSegment ) );
+            AxSourceClip axSrcClip( spSrcClip );
 
             //4. Make sure that the referenced source mob is in this AAF file.
             if ( IsReferenceInFile( axSrcClip ) )
             {
                 AxMob axMob( axSrcClip.ResolveRef() );
-                AxClassDef mobClsDef( axMob.GetDefinition() );
-                if ( IsType( mobClsDef, kAAFClassID_SourceMob, kAAFClassID_Mob ) )
+                IAAFSourceMobSP spSrcMob;
+                if ( AxIsA( axMob, spSrcMob ) )
                 {
                     //5. Ensure the source mob is a file source mob.
-                    AxSourceMob axSrcMob( AxQueryInterface<IAAFMob, IAAFSourceMob>( axMob ) );
+                    AxSourceMob axSrcMob( spSrcMob );
                     AxEssenceDescriptor descriptor( axSrcMob.GetEssenceDescriptor() );
-                    AxClassDef desClsDef( descriptor.GetDefinition() );
-                    if ( IsType( desClsDef, kAAFClassID_FileDescriptor, kAAFClassID_EssenceDescriptor ) )
+                    IAAFFileDescriptorSP spFileDes;
+                    if ( AxIsA( descriptor, spFileDes ) )
                     {
                         shared_ptr<EPVideoTrack> spTrack( new EPVideoTrack( axMobSlot, axSrcClip, axSrcMob ) );
                         return spTrack;

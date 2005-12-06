@@ -33,7 +33,6 @@
 
 //Not in the aafanalyzer namespace so the forward declaration must be made
 //outside of the namespace.
-class AxClassDef;
 class AxNetworkLocator;
 
 namespace aafanalyzer {
@@ -51,6 +50,9 @@ class EPLocatorVisitor : public EPTypedVisitor
     
     virtual ~EPLocatorVisitor();
 
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRGBAImageFileSource>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPCDCIImageFileSource>& node );
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImageFileSource>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMonoAudioFileSource>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMultiChannelAudioFileSource>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node );

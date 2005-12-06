@@ -164,17 +164,19 @@ class EPAudioFileSource : public EPFileSource
   ~EPAudioFileSource();
   static const AxString GetName();
 
+ protected:
+  EPAudioFileSource();
+
  private:
 
   //prohibited
-  EPAudioFileSource();
   EPAudioFileSource( const EPAudioFileSource& );
   EPAudioFileSource& operator=( const EPAudioFileSource& );
 };
 
 //======================================================================
 
-class EPMonoAudioFileSource : public EPFileSource
+class EPMonoAudioFileSource : public EPAudioFileSource
 {
  public:
   EPMonoAudioFileSource();
@@ -190,7 +192,7 @@ class EPMonoAudioFileSource : public EPFileSource
 
 //======================================================================
 
-class EPMultiChannelAudioFileSource : public EPFileSource
+class EPMultiChannelAudioFileSource : public EPAudioFileSource
 {
  public:
   EPMultiChannelAudioFileSource();
@@ -202,6 +204,55 @@ class EPMultiChannelAudioFileSource : public EPFileSource
   //prohibited
   EPMultiChannelAudioFileSource( const EPMultiChannelAudioFileSource& );
   EPMultiChannelAudioFileSource& operator=( const EPMultiChannelAudioFileSource& );
+};
+
+//======================================================================
+
+
+class EPImageFileSource : public EPFileSource
+{
+ public:
+  EPImageFileSource();
+  ~EPImageFileSource();
+  static const AxString GetName();
+
+ private:
+
+  //prohibited
+  EPImageFileSource( const EPImageFileSource& );
+  EPImageFileSource& operator=( const EPImageFileSource& );
+};
+
+//======================================================================
+
+class EPRGBAImageFileSource : public EPImageFileSource
+{
+ public:
+  EPRGBAImageFileSource();
+  ~EPRGBAImageFileSource();
+  static const AxString GetName();
+
+ private:
+
+  //prohibited
+  EPRGBAImageFileSource( const EPRGBAImageFileSource& );
+  EPRGBAImageFileSource& operator=( const EPRGBAImageFileSource& );
+};
+
+//======================================================================
+
+class EPCDCIImageFileSource : public EPImageFileSource
+{
+ public:
+  EPCDCIImageFileSource();
+  ~EPCDCIImageFileSource();
+  static const AxString GetName();
+
+ private:
+
+  //prohibited
+  EPCDCIImageFileSource( const EPCDCIImageFileSource& );
+  EPCDCIImageFileSource& operator=( const EPCDCIImageFileSource& );
 };
 
 //======================================================================

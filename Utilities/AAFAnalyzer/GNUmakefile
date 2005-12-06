@@ -75,7 +75,7 @@ AAFAnalyzer: AAFAnalyzerBase RequirementLib TestPhaseLib BaseTestImpl EditProtoc
 	cd AAFAnalyzer && $(MAKE)
 	
 .PHONY: RegressionTestFiles
-RegressionTestFiles:
+RegressionTestFiles: AAFAnalyzerBase RequirementLib TestPhaseLib BaseTestImpl EditProtocolTestImpl AAFAnalyzer
 	cd RegressionTest && $(MAKE) $@
 
 .PHONY : check

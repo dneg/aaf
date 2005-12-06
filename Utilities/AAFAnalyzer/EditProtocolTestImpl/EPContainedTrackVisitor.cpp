@@ -225,7 +225,7 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, 
     MobSlotSet::const_iterator iter;
     for ( iter = spEssenceTrack->begin(); iter != spEssenceTrack->end(); iter++ )
     {
-        if ( CountSegments( **iter, kAAFClassID_SourceClip ) != 1 )
+        if ( CountSegments<IAAFSourceClipSP>( **iter ) != 1 )
         {
             AxString mobName = this->GetMobName( axCompMob, EPSubClipComposition::GetName() );
 
@@ -253,7 +253,7 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, 
     MobSlotSet::const_iterator iter;
     for ( iter = spEssenceTrack->begin(); iter != spEssenceTrack->end(); iter++ )
     {
-        if ( CountSegments( **iter, kAAFClassID_OperationGroup ) != 1 )
+        if ( CountSegments<IAAFOperationGroupSP>( **iter ) != 1 )
         {
             AxString mobName = this->GetMobName( axCompMob, EPAdjustedClipComposition::GetName() );
 
@@ -490,15 +490,16 @@ shared_ptr<EPContainedTrackVisitor::TrackNumberMap> EPContainedTrackVisitor::Cou
     
 }
 
-unsigned int EPContainedTrackVisitor::CountSegments( AxMobSlot& track, aafUID_t segmentType )
+template<typename SegmentTypeSP>
+unsigned int EPContainedTrackVisitor::CountSegments( AxMobSlot& track )
 {
 
     //TODO: Once the requirements are clarified, it may be useful to rewrite
     //      this method using a visitor to allow sequences to be accessed.
 
     AxSegment axSegment( track.GetSegment() );
-    AxClassDef clsDef( axSegment.GetDefinition() );
-    if ( this->IsType( clsDef, segmentType, kAAFClassID_Segment ) )
+    SegmentTypeSP spTypedSegment;
+    if ( AxIsA( axSegment, spTypedSegment ) )
     {
         return 1;
     }
@@ -520,7 +521,7 @@ bool EPContainedTrackVisitor::CheckPrimaryTimecodeTracks( shared_ptr<EPTypedVisi
             aafUInt32 physicalTrackNumber = (*iter)->GetPhysicalNum();
             if ( physicalTrackNumber == 1 )
             {
-                if ( CountSegments( **iter, kAAFClassID_Timecode ) != 1)
+                if ( CountSegments<IAAFTimecodeSP>( **iter ) != 1)
                 {
                     wstringstream ss;
                     ss << L"Mob slot with ID = " << (*iter)->GetSlotID()
