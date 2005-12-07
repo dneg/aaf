@@ -1713,7 +1713,7 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="compositional">
+    <requirement type="app" category="compositional">
         <id>REQ_EP_156</id>
         <name>Importing Legacy Annotations</name>
         <desc>Importing applications should be aware that legacy files might contain CommentMarkers in tracks with unexpected DataDefinitions such as DataDef_LegacyPicture or DataDef_LegacySound or others.  The importing application may freely convert such DataDefinitions to DataDef_DescriptiveMetadata.</desc>

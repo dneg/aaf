@@ -32,6 +32,13 @@
 //Ax files
 #include <AxDefObject.h>
 #include <AxComponent.h>
+#include <AxHeader.h>
+
+//AAF files
+#include <AAFDataDefs.h>
+
+//STL files
+#include <sstream>
 
 namespace {
     
@@ -60,11 +67,44 @@ EPDefinitionVisitor::EPDefinitionVisitor( wostream& log, shared_ptr<EdgeMap> spE
 EPDefinitionVisitor::~EPDefinitionVisitor()
 {}
 
+bool EPDefinitionVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationDef, EPEffect>& node )
+{
+    AxOperationDef axOpDef( node.GetAAFObjectOfType() );
+    aafUID_t identification = axOpDef.GetAUID();
+    AxDataDef axDataDef( axOpDef.GetDataDef() );
+    aafUID_t dataDef = axDataDef.GetAUID();
+    
+    AxString msg = L"OperationDefinition \"" + 
+                   axOpDef.GetName() +
+                   L"\" has DataDefinition = DataDef_";
+    
+    if ( dataDef == kAAFDataDef_Picture || dataDef == kAAFDataDef_Sound )
+    {
+        _opDataDefCurrent.insert( msg + axDataDef.GetName() + L"." );
+        
+    }
+    else if ( dataDef == kAAFDataDef_LegacyPicture || dataDef == kAAFDataDef_LegacySound )
+    {
+        _opDataDefLegacy.insert( msg + L"Legacy" + axDataDef.GetName() + L"." );
+    }
+    
+    shared_ptr<AAFTypedObjNode<IAAFOperationDef> > spGeneric( node.DownCastToAAF<IAAFOperationDef>() );
+    return this->PreOrderVisit( *spGeneric );
+    
+}
+
 bool EPDefinitionVisitor::PreOrderVisit( AAFTypedObjNode<IAAFOperationDef>& node )
 {
     AxOperationDef axOpDef( node.GetAAFObjectOfType() );
     _registeredDefinitions[axOpDef.GetAUID()] = axOpDef.GetName();
     return false;
+}
+
+bool EPDefinitionVisitor::PreOrderVisit( AAFTypedObjNode<IAAFHeader>& node )
+{
+    AxHeader axHeader( node.GetAAFObjectOfType() );
+    _fileVersion = axHeader.GetRefImplVersion();
+    return true;
 }
 
 bool EPDefinitionVisitor::PreOrderVisit( AAFTypedObjNode<IAAFOperationGroup>& node )
@@ -78,12 +118,30 @@ bool EPDefinitionVisitor::PreOrderVisit( AAFTypedObjNode<IAAFOperationGroup>& no
 
     if ( !axOpGroupDDef.IsDataDefOf( axOpDefDDef ) )
     {
+        aafUID_t auid = axOpGroupDDef.GetAUID();
+        AxString groupLegacy = L"";
+        if ( auid == kAAFDataDef_LegacyPicture ||
+             auid == kAAFDataDef_LegacySound ||
+             auid == kAAFDataDef_LegacyTimecode )
+        {
+            groupLegacy = L"Legacy ";
+        }
+
+        auid = axOpDefDDef.GetAUID();
+        AxString defLegacy = L"";
+        if ( auid == kAAFDataDef_LegacyPicture ||
+             auid == kAAFDataDef_LegacySound ||
+             auid == kAAFDataDef_LegacyTimecode )
+        {
+            defLegacy = L"Legacy ";
+        }        
+        
         _spResult->AddInformationResult( 
             L"REQ_EP_162", 
             L"OperationGroup in " + this->GetMobSlotName( _spEdgeMap, node ) + 
-                L" has data definition value \"" + axOpGroupDDef.GetName() + 
+                L" has data definition value \"" + groupLegacy + axOpGroupDDef.GetName() + 
                 L"\" and references OperationDefinition \"" + axOpDef.GetName() +
-                L"\" with data definition value \"" + axOpDefDDef.GetName() + L"\".", 
+                L"\" with data definition value \"" + defLegacy + axOpDefDDef.GetName() + L"\".", 
             TestResult::FAIL );
     }
 
@@ -111,6 +169,35 @@ void EPDefinitionVisitor::CheckForUnusedOperationDefinitions()
             TestResult::WARN );
     }
     
+}
+
+void EPDefinitionVisitor::CheckLegacyData()
+{
+    if ( _fileVersion.major < 1 || 
+        ( _fileVersion.major == 1 && _fileVersion.minor == 0 ) )
+    {
+        //Legacy data is ok, warn if non-legacy data is found.
+        set<AxString>::const_iterator iter;
+        for ( iter = _opDataDefCurrent.begin(); iter != _opDataDefCurrent.end(); iter++ )
+        {
+            wstringstream ss;
+            ss << *iter << L" in an AAF Version " << _fileVersion.major
+               << L"." << _fileVersion.minor << L" file.";
+            _spResult->AddInformationResult( L"REQ_EP_163", ss.str().c_str(), TestResult::WARN );
+        }
+    }
+    else
+    {
+        //Legacy data is illegal, therefore fail.
+        set<AxString>::const_iterator iter;
+        for ( iter = _opDataDefLegacy.begin(); iter != _opDataDefLegacy.end(); iter++ )
+        {
+            wstringstream ss;
+            ss << *iter << L" in an AAF Version " << _fileVersion.major
+               << L"." << _fileVersion.minor << L" file.";
+            _spResult->AddInformationResult( L"REQ_EP_163", ss.str().c_str(), TestResult::FAIL );
+        }
+    }
 }
 
 shared_ptr<DetailLevelTestResult> EPDefinitionVisitor::GetResult()

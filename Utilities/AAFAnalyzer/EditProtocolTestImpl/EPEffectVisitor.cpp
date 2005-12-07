@@ -865,6 +865,14 @@ bool EPEffectVisitor::VeirfyTransitionRequirement( AAFTypedObjNode<IAAFOperation
             explain += L"not ";
         }
         explain += L"within a Transition object.";
+        if ( withinTransition )
+        {
+            _spResult->AddInformationResult( L"REQ_EP_163", explain, TestResult::FAIL );
+        }
+        else
+        {
+            _spResult->AddInformationResult( L"REQ_EP_164", explain, TestResult::FAIL );
+        }
         _spResult->AddInformationResult( reqId, explain, TestResult::FAIL );
         return false;
     }

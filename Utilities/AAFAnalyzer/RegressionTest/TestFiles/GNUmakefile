@@ -116,6 +116,12 @@ check : $(AAFSDKBINDIR)/BuildTestFile$(EXE)
 	@echo "Comparing EPDefinitionTest Expected Results (EPDefinitionTest.expected) to Actual Results (EPDefinitionTest.results)"
 	diff EPDefinitionTest.expected EPDefinitionTest.results
 	@echo "End of Test"
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPDefinitionTest2.xml EPDefinitionTest2.aaf
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPDefinitionTest2.aaf ../../Requirements/AAFRequirements.xml >> EPDefinitionTest2.temp
+	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Header Test" EPDefinitionTest2.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Definition Test" EPDefinitionTest2.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Definition Test" EPDefinitionTest2.temp >> EPDefinitionTest2.results
+	@echo "Comparing EPDefinitionTest Expected Results (EPDefinitionTest2.expected) to Actual Results (EPDefinitionTest2.results)"
+	diff EPDefinitionTest2.expected EPDefinitionTest2.results
+	@echo "End of Test"
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPHeaderTest1.xml EPHeaderTest1.aaf
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):/usr/local/lib:$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) EPHeaderTest1.aaf ../../Requirements/AAFRequirements.xml >> EPHeaderTest1.temp
 	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Parameter Test" EPHeaderTest1.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Header Test" EPHeaderTest1.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Header Test" EPHeaderTest1.temp >> EPHeaderTest1.results

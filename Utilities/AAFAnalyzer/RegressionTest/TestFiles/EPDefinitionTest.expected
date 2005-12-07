@@ -2,7 +2,7 @@
         Desc:   Verify the use of DataDefinition objects throught the file.
         Result: Failed
         Reason: Test Failed - See "Edit Protocol Track Contents Visitor" Visitor for details
-        Passing Requirements: None
+        Passing Requirements: REQ_EP_163
         Warning Requirements: None
         Failing Requirements: REQ_EP_162
 
@@ -10,7 +10,7 @@
             Desc:   Visit Data Definitions and Components to make sure all Data Definitions are valid.
             Result: Failed
             Reason: 
-            Passing Requirements: None
+            Passing Requirements: REQ_EP_163
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
 

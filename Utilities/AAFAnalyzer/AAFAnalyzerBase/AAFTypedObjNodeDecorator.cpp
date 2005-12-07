@@ -73,4 +73,6 @@ template class AAFTypedObjNodeDecorator<IAAFMobSlot>;
 
 template class AAFTypedObjNodeDecorator<IAAFOperationGroup>;
 
+template class AAFTypedObjNodeDecorator<IAAFOperationDef>;
+
 } // end of namespace diskstream

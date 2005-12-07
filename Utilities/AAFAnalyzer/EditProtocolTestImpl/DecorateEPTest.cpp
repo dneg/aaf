@@ -83,7 +83,29 @@ public:
                                             TestRegistry::GetInstance().GetRequirementsForTest( DecorateEPTest::GetTestInfo().GetName() )
                )                          ),
       _spGraph( spTestGraph )
-  {}
+  {
+    //Setup the list of effects defined by the Edit Protocol
+    _editProtocolEffects.insert( kAAFOperationDef_VideoDissolve );
+    _editProtocolEffects.insert( kAAFOperationDef_SMPTEVideoWipe );
+    _editProtocolEffects.insert( kAAFOperationDef_VideoSpeedControl );
+    _editProtocolEffects.insert( kAAFOperationDef_VideoRepeat );
+    _editProtocolEffects.insert( kAAFOperationDef_Flip );
+    _editProtocolEffects.insert( kAAFOperationDef_Flop );
+    _editProtocolEffects.insert( kAAFOperationDef_FlipFlop );
+    _editProtocolEffects.insert( kAAFOperationDef_VideoPosition );
+    _editProtocolEffects.insert( kAAFOperationDef_VideoCrop );
+    _editProtocolEffects.insert( kAAFOperationDef_VideoScale );
+    _editProtocolEffects.insert( kAAFOperationDef_VideoRotate );
+    _editProtocolEffects.insert( kAAFOperationDef_VideoCornerPinning );
+    _editProtocolEffects.insert( kAAFOperationDef_VideoAlphaWithinVideoKey );
+    _editProtocolEffects.insert( kAAFOperationDef_VideoSeparateAlphaKey );
+    _editProtocolEffects.insert( kAAFOperationDef_VideoLuminanceKey );
+    _editProtocolEffects.insert( kAAFOperationDef_VideoChromaKey );
+    _editProtocolEffects.insert( kAAFOperationDef_MonoAudioGain );
+    _editProtocolEffects.insert( kAAFOperationDef_MonoAudioPan );
+    _editProtocolEffects.insert( kAAFOperationDef_MonoAudioDissolve );
+    _editProtocolEffects.insert( kAAFOperationDef_TwoParameterMonoAudioDissolve );
+  }
 
   virtual ~EPDecoratorVisitor()
   {}
@@ -405,9 +427,18 @@ public:
     {
         this->DecorateNode<IAAFOperationGroup, EPTwoParameterAudioDissolveEffect>( node );
     }
-    else
+    
+    return true;
+  }
+  
+  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFOperationDef>& node )
+  {
+    AxOperationDef axOpDef( node.GetAAFObjectOfType() );
+    aafUID_t opDef = axOpDef.GetAUID();
+
+    if ( _editProtocolEffects.find( opDef ) != _editProtocolEffects.end() )
     {
-        this->DecorateNode<IAAFOperationGroup, EPEffect>( node );
+        this->DecorateNode<IAAFOperationDef, EPEffect>( node );
     }
     
     return true;
@@ -508,6 +539,7 @@ private:
   wostream& _log;
   shared_ptr<DetailLevelTestResult> _spResult;
   shared_ptr<const TestGraph> _spGraph;
+  set<aafUID_t> _editProtocolEffects;
   
 };
 

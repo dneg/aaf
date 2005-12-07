@@ -200,19 +200,19 @@ class ParentMobVisitor : public EPTypedVisitor
         
         bool PreOrderVisit( AAFTypedObjNode<IAAFTimelineMobSlot>& node )
         {
-            shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCast<IAAFMobSlot>() );
+            shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCastToAAF<IAAFMobSlot>() );
             return this->PreOrderVisit( *spGeneric );
         }
         
         bool PreOrderVisit( AAFTypedObjNode<IAAFEventMobSlot>& node )
         {
-            shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCast<IAAFMobSlot>() );
+            shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCastToAAF<IAAFMobSlot>() );
             return this->PreOrderVisit( *spGeneric );
         }
         
         bool PreOrderVisit( AAFTypedObjNode<IAAFStaticMobSlot>& node )
         {
-            shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCast<IAAFMobSlot>() );
+            shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCastToAAF<IAAFMobSlot>() );
             return this->PreOrderVisit( *spGeneric );
         }
         

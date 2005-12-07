@@ -49,7 +49,7 @@ class AAFTypedObjNode : public AAFObjNode
   //should not be stored anywhere unless it is acceptable to use the node
   //without complete type information.
   template<typename To>
-  shared_ptr<AAFTypedObjNode<To> > DownCast()
+  shared_ptr<AAFTypedObjNode<To> > DownCastToAAF()
   {
 
     //Get the dictionary.

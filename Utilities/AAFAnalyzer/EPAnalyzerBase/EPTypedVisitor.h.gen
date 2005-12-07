@@ -122,4 +122,6 @@
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPSingleParameterAudioDissolveEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPSingleParameterAudioDissolveEffect>( node ); }
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPTwoParameterAudioDissolveEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationGroup,EPTwoParameterAudioDissolveEffect>( node ); }
     virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationGroup,EPTwoParameterAudioDissolveEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationGroup,EPTwoParameterAudioDissolveEffect>( node ); }
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationDef,EPEffect>& node) { return this->ForwardPreOrderVisit<IAAFOperationDef,EPEffect>( node ); }
+    virtual bool PostOrderVisit( EPTypedObjNode<IAAFOperationDef,EPEffect>& node) { return this->ForwardPostOrderVisit<IAAFOperationDef,EPEffect>( node ); }
 

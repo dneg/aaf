@@ -156,5 +156,8 @@ template class EPTypedObjNode<IAAFOperationGroup,   EPMonoAudioPanEffect>;
 template class EPTypedObjNode<IAAFOperationGroup,   EPSingleParameterAudioDissolveEffect>;
 template class EPTypedObjNode<IAAFOperationGroup,   EPTwoParameterAudioDissolveEffect>;
 
+//Effect Data Definition Nodes
+template class EPTypedObjNode<IAAFOperationDef,     EPEffect>;
+
 
 } // end of namespace diskstream

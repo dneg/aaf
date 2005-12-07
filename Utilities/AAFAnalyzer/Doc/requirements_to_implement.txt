@@ -146,34 +146,6 @@ DataDef_DescriptiveMetadata.
 > Data Definition of a mob slot of any non-essence track that has an object
 > under it which contains annotations?
 
-REQ_EP_156
-Importing applications should be aware that legacy files might contain 
-CommentMarkers in tracks with unexpected DataDefinitions such as
-DataDef_LegacyPicture or DataDef_LegacySound or others.  The importing
-application may freely convert such DataDefinitions to
-DataDef_DescriptiveMetadata.
-10.1.1
-> This is a MAY requirement.
-
-REQ_EP_163
-The effects defined in the Edit Protocol should be used with the AAF v1.1 data 
-definition values of DataDef_Picture and DataDef_Sound.  The deprecated data
-definition values of DataDef_LegacyPicture and DataDef_LegacySound should only
-be used when working with legacy AAF v1.0 files.
-11.1
-> What is being tested here?
-
-REQ_EP_167
-The OperationGroup shall be contained in a Transition object between two 
-Segments.
-11.2.1
-> With REQ_EP_168 what does this mean?
-
-REQ_EP_168
-The OperationGroup shall not be contained in a Transition object.
-11.2.2
-> With REQ_EP_167 what does this mean?
-
 REQ_EP_169
 Multiple effects sharing common material shall be constructed within a 
 NestedScope object.  A continuous section of common material, used by several

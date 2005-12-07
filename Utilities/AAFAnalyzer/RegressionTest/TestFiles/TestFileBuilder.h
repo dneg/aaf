@@ -138,12 +138,14 @@ class TestFileBuilder
         
         //Other:
         void SetOperationalPattern( aafUID_t pattern );
+        void UseLegacyEffectDefinitions();
 
     private:
     
         AxFile _axFile;
         aafUInt32 _mobCount;
         map<AxString, aafUID_t> _namedAUIDs;
+        bool _useLegacyEffectDefinitions;
         
         const aafMobID_t GenerateMobId();
         const aafUID_t GenerateAUID();

@@ -75,7 +75,9 @@ using namespace boost;
  * 
  */
 
-TestFileBuilder::TestFileBuilder( const char* outFile) : _mobCount( 0 )
+TestFileBuilder::TestFileBuilder( const char* outFile) 
+    : _mobCount( 0 ), 
+      _useLegacyEffectDefinitions( false )
 {
     AxInit initObj;
     wostringstream ssOutFile;
@@ -967,6 +969,11 @@ void TestFileBuilder::SetOperationalPattern( aafUID_t pattern )
     axHeader.SetOperationalPattern( pattern );
 }
 
+void TestFileBuilder::UseLegacyEffectDefinitions()
+{
+    _useLegacyEffectDefinitions = true;
+}
+
 /*
  * 
  * Helper Functions
@@ -1043,7 +1050,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         
         if ( opDef == L"Video Dissolve" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacyPicture;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Picture;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_VideoDissolve;
             axOpDef.Initialize( opDefId,
                         L"Video Dissolve",
@@ -1054,7 +1070,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"SMPTE Video Wipe" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacyPicture;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Picture;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_SMPTEVideoWipe;
             axOpDef.Initialize( opDefId,
                         L"SMPTE Video Wipe",
@@ -1065,7 +1090,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"Video Speed Control" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacyPicture;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Picture;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_VideoSpeedControl;
             axOpDef.Initialize( opDefId,
                         L"Video Speed Control",
@@ -1077,7 +1111,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"Video Repeat" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacyPicture;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Picture;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_VideoRepeat;       
             axOpDef.Initialize( opDefId,
                         L"Video Repeat",
@@ -1089,7 +1132,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"Video Flip" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacyPicture;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Picture;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_Flip;       
             axOpDef.Initialize( opDefId,
                         L"Video Flip",
@@ -1101,7 +1153,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"Video Flop" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacyPicture;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Picture;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_Flop;       
             axOpDef.Initialize( opDefId,
                         L"Video Flop",
@@ -1113,7 +1174,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"Video Flip Flop" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacyPicture;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Picture;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_FlipFlop;       
             axOpDef.Initialize( opDefId,
                         L"Video Flip Flop",
@@ -1125,7 +1195,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"Video Position" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacyPicture;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Picture;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_VideoPosition;       
             axOpDef.Initialize( opDefId,
                         L"Video Position",
@@ -1136,7 +1215,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"Video Crop" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacyPicture;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Picture;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_VideoCrop;       
             axOpDef.Initialize( opDefId,
                         L"Video Crop",
@@ -1147,7 +1235,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"Video Scale" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacyPicture;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Picture;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_VideoScale;       
             axOpDef.Initialize( opDefId,
                         L"Video Scale",
@@ -1158,7 +1255,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"Video Rotate" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacyPicture;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Picture;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_VideoRotate;       
             axOpDef.Initialize( opDefId,
                         L"Video Rotate",
@@ -1169,7 +1275,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"Video Corner Pinning" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacyPicture;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Picture;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_VideoCornerPinning;       
             axOpDef.Initialize( opDefId,
                         L"Video Corner Pinning",
@@ -1180,7 +1295,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"Alpha With Video Key effect" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacyPicture;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Picture;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_VideoAlphaWithinVideoKey;       
             axOpDef.Initialize( opDefId,
                         L"Alpha With Video Key effect",
@@ -1192,7 +1316,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"Separate Alpha Key effect" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacyPicture;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Picture;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_VideoSeparateAlphaKey;       
             axOpDef.Initialize( opDefId,
                         L"Separate Alpha Key effect",
@@ -1204,7 +1337,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"Luminance Key" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacyPicture;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Picture;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_VideoLuminanceKey;       
             axOpDef.Initialize( opDefId,
                         L"Luminance Key",
@@ -1216,7 +1358,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"Chroma Key" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacyPicture;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Picture;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_VideoChromaKey;       
             axOpDef.Initialize( opDefId,
                         L"Chroma Key",
@@ -1228,7 +1379,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"Mono Audio Gain" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Sound ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacySound;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Sound;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_MonoAudioGain;       
             axOpDef.Initialize( opDefId,
                         L"Mono Audio Gain",
@@ -1240,7 +1400,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"Mono Audio Pan" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Sound ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacySound;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Sound;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_MonoAudioPan;       
             axOpDef.Initialize( opDefId,
                         L"Mono Audio Pan",
@@ -1252,7 +1421,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"Mono Audio Dissolve" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Sound ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacySound;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Sound;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_MonoAudioDissolve,       
             axOpDef.Initialize( opDefId,
                         L"Mono Audio Dissolve",
@@ -1263,7 +1441,16 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         }
         else if ( opDef == L"Two-Parameter Mono Audio Dissolve" )
         {
-            AxDataDef axDataDef( axDictionary.LookupDataDef( kAAFDataDef_Sound ) );
+            aafUID_t dataDefId;
+            if ( _useLegacyEffectDefinitions )
+            {
+                dataDefId = kAAFDataDef_LegacySound;
+            }
+            else
+            {
+                dataDefId = kAAFDataDef_Sound;
+            }
+            AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
             opDefId = kAAFOperationDef_TwoParameterMonoAudioDissolve;       
             axOpDef.Initialize( opDefId,
                         L"Two-Parameter Mono Audio Dissolve",

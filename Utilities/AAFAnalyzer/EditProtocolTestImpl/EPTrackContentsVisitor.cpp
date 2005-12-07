@@ -158,7 +158,7 @@ bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, 
     bool testPassed;
     shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGenericEP( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
     testPassed = this->PreOrderVisit( *spGenericEP );
-    shared_ptr<AAFTypedObjNode<IAAFTimelineMobSlot> > spGenericAAF( node.DownCast<IAAFTimelineMobSlot>() );
+    shared_ptr<AAFTypedObjNode<IAAFTimelineMobSlot> > spGenericAAF( node.DownCastToAAF<IAAFTimelineMobSlot>() );
     testPassed = this->PreOrderVisit( *spGenericAAF ) && testPassed;
     return testPassed;
 }
@@ -168,7 +168,7 @@ bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, 
     bool testPassed;
     shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGenericEP( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
     testPassed = this->PreOrderVisit( *spGenericEP );
-    shared_ptr<AAFTypedObjNode<IAAFTimelineMobSlot> > spGenericAAF( node.DownCast<IAAFTimelineMobSlot>() );
+    shared_ptr<AAFTypedObjNode<IAAFTimelineMobSlot> > spGenericAAF( node.DownCastToAAF<IAAFTimelineMobSlot>() );
     testPassed = this->PreOrderVisit( *spGenericAAF ) && testPassed;
     return testPassed;
 }
@@ -178,7 +178,7 @@ bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, 
     bool testPassed;
     shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGenericEP( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
     testPassed = this->PreOrderVisit( *spGenericEP );
-    shared_ptr<AAFTypedObjNode<IAAFTimelineMobSlot> > spGenericAAF( node.DownCast<IAAFTimelineMobSlot>() );
+    shared_ptr<AAFTypedObjNode<IAAFTimelineMobSlot> > spGenericAAF( node.DownCastToAAF<IAAFTimelineMobSlot>() );
     testPassed = this->PreOrderVisit( *spGenericAAF ) && testPassed;
     return testPassed;
 }

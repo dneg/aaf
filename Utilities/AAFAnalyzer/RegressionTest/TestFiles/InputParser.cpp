@@ -389,10 +389,15 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
     }
     else if ( name == L"aaf-file" )
     {
-        AxString operationalPattern = GetStringAttribValue( L"operational-pattern", attribs, 2, L"none" );
+        AxString operationalPattern = GetStringAttribValue( L"operational-pattern", attribs, 4, L"none" );
+        AxString effectDataDefs = GetStringAttribValue( L"effect-data-definitions", attribs, 4, L"current" );
         if ( operationalPattern != L"none" )
         {
             _testFile.SetOperationalPattern( _operationalPatternMap[operationalPattern] );
+        }
+        if ( effectDataDefs != L"current" )
+        {
+            _testFile.UseLegacyEffectDefinitions();
         }
     }
     else

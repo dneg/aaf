@@ -38,10 +38,7 @@ using namespace boost;
 template<typename AAFObjType, typename EPObjType>
 class EPTypedObjNode : public AAFTypedObjNodeDecorator<AAFObjType>
 {
-    
-  //Allow ancestor Cast function to be called.
-  using AAFTypedObjNodeDecorator<AAFObjType>::DownCast;
-    
+   
  public:
   EPTypedObjNode( const shared_ptr<AAFTypedObjNode<AAFObjType> > spNode,
                   shared_ptr<EPObjType> spEPObject );

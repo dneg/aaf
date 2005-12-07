@@ -657,6 +657,11 @@ Test Name:
 Description:
 	Make sure that all effects are contained within the proper objects.
 Requirements Tested:
+	REQ_EP_167 (11.2.1)
+		The OperationGroup shall be contained in a Transition object between two 
+		Segments.
+	REQ_EP_168 (11.2.2)
+		The OperationGroup shall not be contained in a Transition object.
 	REQ_EP_180 (12.1)
 		The Video Dissolve effect shall only be used by an OperationGroup within
 		a Transition object.
@@ -771,6 +776,11 @@ Warn Conditions:
 	REQ_EP_224 - Issue a warning if the 3rd input to the Operation Group is an
 				 out of file reference.
 Fail Conditions:
+	REQ_EP_167 - Fail if REQ_EP_180, REQ_EP_183, REQ_EP_244 or REQ_EP_247 fails.
+	REQ_EP_168 - Fail if REQ_EP_186, REQ_EP_190, REQ_EP_194, REQ_EP_197,
+				 REQ_EP_200, REQ_EP_203, REQ_EP_206, REQ_EP_209, REQ_EP_212,
+				 REQ_EP_215, REQ_EP_220, REQ_EP_225, REQ_EP_228, REQ_EP_231,
+				 REQ_EP_234, REQ_EP_240 or REQ_EP_244 fails.
 	REQ_EP_180 - Fail if the Operation Group is not a direct child of a
 				 Transition object.
 	REQ_EP_183 - Fail if the Operation Group is not a direct child of a
@@ -932,6 +942,9 @@ Issues:
 	by the essence descriptor or how to find the luminance calue of the essence.
 	Until clarification is provided, this will not be tested.
 	
+95. REQ_EP_163 and REQ_EP_164 are redundant as they only fail when more specific
+	versions of the requirement fail.
+	
 Test Name:
 	EPAnnotationTest
 Description:
@@ -997,22 +1010,37 @@ Requirements Tested:
 		An OperationDefinition object in an AAF file shall have a data
 		definition value consistent with the data definition of an
 		OperationGroup object that references it.
+	REQ_EP_163 (11.1)
+		The effects defined in the Edit Protocol should be used with the AAF
+		v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The
+		deprecated data definition values of DataDef_LegacyPicture and
+		DataDef_LegacySound should only be used when working with legacy AAF
+		v1.0 files.
 Warn Conditions:
 	REQ_EP_162 - Present a warning if an OperationDefinition is in the
 				 dictionary but is not referenced by an OperationGroup.
+	REQ_EP_163 - Present a warning if an Effect's OperationDefinition is using
+				 an up to date Data Definition and the file version is <= 1.0.
 Fail Conditions:
 	REQ_EP_162 - Fail if the data definition of an OperationGroup is not the
 				 same as the data definition of the OperationDefinition that it
 				 references.
+	REQ_EP_163 - Fail if the data definition of an Effect's OperationDefinition
+				 is a legacy definition and the file version is > 1.0.
 Issues:   
 61. It is assumed that for data definition values to be consistent in
 	REQ_EP_162, AxDataDef::IsDataDefOf() must return true.
 	
-62. For REQ_EP_162 It is assumed that a warning should be presented if there is
+62. For REQ_EP_162 it is assumed that a warning should be presented if there is
 	an OperationDefinition in the AAF file that is not referenced.
 	
 63. It is not possible to save an AAF file with an unreferenced
-	OperationDefinition so the warn condition of REQ_EP_162 can not be tested.
+	OperationDefinition so the warn condition of REQ_EP_162 can not be
+	regression tested.
+	
+96. Under the current regression testing system there is no way to save an AAF
+	file as anything other than version 1.1, so the warn condition of REQ_EP_163
+	is not tested, nor are all of the pass conditions.
 	
 Test Name:
 	EPHeaderTest
@@ -1348,3 +1376,11 @@ Requirements:
 Issue:
 93. For REQ_EP_178, how is it checked that inputs are VH normalized to the first
 	video input.  Also, where can it be stated to do otherwise?
+	
+Requirements:
+	REQ_EP_148 (10.1)
+		The Data Definition for non-essence tracks containing annotations shall
+		DataDef_DescriptiveMetadata.
+Issue:
+94. Tracks/MobSlots do not have data definitions.  What types of objects can
+	legaly have these definitions?

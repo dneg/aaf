@@ -102,8 +102,9 @@
     assume that it is valid for a clip to be the end of the derivation chain.
 
 16. Requirements REQ_EP_025, REQ_EP_030, DEF_EP_034, DEF_EP_043, DEF_EP_049,
-    DEF_EP_054, DEF_EP_058, DEF_EP_071, DEF_EP_074, DEF_EP_080, DEF_EP_085 and
-    DEF_EP_096 define terms used in the Edit Protocol.  Some of these
+    DEF_EP_054, DEF_EP_058, DEF_EP_071, DEF_EP_074, DEF_EP_080, DEF_EP_085,
+    DEF_EP_096, DEF_EP_128, DEF_EP_129, DEF_EP_135, DEF_EP_144, DEF_EP_165 and
+    DEF_EP_170 define terms used in the Edit Protocol.  Some of these
     requirements are used to find particular data, however, they can not
     generate a warning or a failure.  These should not be requirements, they
     should be definitions (ie. Instead of using shall, DEF_EP_043 should be
@@ -318,11 +319,12 @@
 61. It is assumed that for data definition values to be consistent in
 	REQ_EP_162, AxDataDef::IsDataDefOf() must return true.
 
-62. For REQ_EP_162 It is assumed that a warning should be presented if there is
+62. For REQ_EP_162 it is assumed that a warning should be presented if there is
 	an OperationDefinition in the AAF file that is not referenced.
 
 63. It is not possible to save an AAF file with an unreferenced
-	OperationDefinition so the warn condition of REQ_EP_162 can not be tested.
+	OperationDefinition so the warn condition of REQ_EP_162 can not be
+	regression tested.
 
 64. When testing REQ_EP_248 and REQ_EP_249 it is assumed that the parent of a
 	transition must be a sequence.  Under the current AAF Object specification,
@@ -442,3 +444,13 @@
 
 93. For REQ_EP_178, how is it checked that inputs are VH normalized to the first
 	video input.  Also, where can it be stated to do otherwise?
+
+94. Tracks/MobSlots do not have data definitions.  What types of objects can
+	legaly have these definitions?
+
+95. REQ_EP_163 and REQ_EP_164 are redundant as they only fail when more specific
+	versions of the requirement fail.
+	
+96. Under the current regression testing system there is no way to save an AAF
+	file as anything other than version 1.1, so the warn condition of REQ_EP_163
+	is not tested, nor are all of the pass conditions.

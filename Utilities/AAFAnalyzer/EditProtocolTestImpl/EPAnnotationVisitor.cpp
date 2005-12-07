@@ -73,109 +73,109 @@ EPAnnotationVisitor::~EPAnnotationVisitor()
  
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFTransition>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCast<IAAFComponent>() );
+    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCastToAAF<IAAFComponent>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFSegment>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCast<IAAFComponent>() );
+    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCastToAAF<IAAFComponent>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFSequence>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCast<IAAFComponent>() );
+    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCastToAAF<IAAFComponent>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFFiller>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCast<IAAFComponent>() );
+    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCastToAAF<IAAFComponent>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFSourceReference>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCast<IAAFComponent>() );
+    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCastToAAF<IAAFComponent>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFSourceClip>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCast<IAAFComponent>() );
+    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCastToAAF<IAAFComponent>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFEvent>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCast<IAAFComponent>() );
+    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCastToAAF<IAAFComponent>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFGPITrigger>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCast<IAAFComponent>() );
+    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCastToAAF<IAAFComponent>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFEdgecode>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCast<IAAFComponent>() );
+    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCastToAAF<IAAFComponent>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFTimecode>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCast<IAAFComponent>() );
+    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCastToAAF<IAAFComponent>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFTimecodeStream>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCast<IAAFComponent>() );
+    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCastToAAF<IAAFComponent>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFTimecodeStream12M>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCast<IAAFComponent>() );
+    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCastToAAF<IAAFComponent>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFPulldown>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCast<IAAFComponent>() );
+    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCastToAAF<IAAFComponent>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFOperationGroup>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCast<IAAFComponent>() );
+    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCastToAAF<IAAFComponent>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFNestedScope>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCast<IAAFComponent>() );
+    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCastToAAF<IAAFComponent>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFScopeReference>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCast<IAAFComponent>() );
+    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCastToAAF<IAAFComponent>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFEssenceGroup>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCast<IAAFComponent>() );
+    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCastToAAF<IAAFComponent>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFSelector>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCast<IAAFComponent>() );
+    shared_ptr<AAFTypedObjNode<IAAFComponent> > spGeneric( node.DownCastToAAF<IAAFComponent>() );
     return this->PreOrderVisit( *spGeneric );
 }
 

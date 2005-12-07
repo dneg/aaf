@@ -80,6 +80,7 @@ shared_ptr<TestLevelTestResult> EPDefinitionTest::Execute()
 
     dfs.TraverseDown( spVisitor, GetTestGraph()->GetRootNode() );
     spVisitor->CheckForUnusedOperationDefinitions();
+    spVisitor->CheckLegacyData();
 
     spResult->AppendSubtestResult( spVisitor->GetResult() );
 
@@ -118,7 +119,8 @@ AxString EPDefinitionTest::GetDescription() const
 const TestInfo EPDefinitionTest::GetTestInfo()
 {
     shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
-    spReqIds->push_back(L"REQ_EP_162");     //Operation Group/Definition
+    spReqIds->push_back(L"REQ_EP_162");     //Operation Group/Definition.
+    spReqIds->push_back(L"REQ_EP_163");     //Legacy Data Defs in Operation Definitions.
     return TestInfo(L"EPDefinitionTest", spReqIds);
 }
 

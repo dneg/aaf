@@ -52,10 +52,14 @@ class EPDefinitionVisitor : public EPTypedVisitor
     
     virtual ~EPDefinitionVisitor();
    
+    virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationDef, EPEffect>& node );
+
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFOperationDef>& node );
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFOperationGroup>& node );
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFHeader>& node );
     
     void CheckForUnusedOperationDefinitions();
+    void CheckLegacyData();
     
     shared_ptr<DetailLevelTestResult> GetResult();
     
@@ -66,6 +70,9 @@ class EPDefinitionVisitor : public EPTypedVisitor
     shared_ptr<DetailLevelTestResult> _spResult;
     set<aafUID_t> _usedDefinitions;
     map<aafUID_t, AxString> _registeredDefinitions;
+    set<AxString> _opDataDefCurrent;
+    set<AxString> _opDataDefLegacy;
+    aafProductVersion_t _fileVersion;
 
     // prohibited
     EPDefinitionVisitor();

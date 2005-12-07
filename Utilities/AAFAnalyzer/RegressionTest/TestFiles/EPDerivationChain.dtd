@@ -11,7 +11,9 @@
 <!ENTITY % ESSENCE_TYPE "none | audio | picture | timecode | edgecode | auxiliary">
 
 <!ELEMENT aaf-file ( dictionary?, ( %MOB; ) )+>
-<!ATTLIST aaf-file operational-pattern ( edit-protocol | invalid ) #IMPLIED >
+<!ATTLIST aaf-file
+    operational-pattern ( edit-protocol | invalid ) #IMPLIED 
+    effect-data-definitions ( current | legacy ) #IMPLIED >
 
 <!-- Dictionary and Definitions -->
 <!ELEMENT dictionary ( klv-data-def | tagged-value-def | operation-def )+>
