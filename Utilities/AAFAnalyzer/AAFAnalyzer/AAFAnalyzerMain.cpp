@@ -120,7 +120,7 @@ void ListRequirements( const AxString& title, const Requirement::RequirementMap&
   }
 }
 
-void OutputResultMsgs(shared_ptr<const TestResult> res, unsigned int level)
+void OutputVerboseResultMsgs(shared_ptr<const TestResult> res, unsigned int level)
 {
   wcout << LevelToIndent(level) << "Name:   " << res->GetName() << endl;
   wcout << LevelToIndent(level) << "Desc:   " << res->GetDescription() << endl;
@@ -162,10 +162,39 @@ void OutputResultMsgs(shared_ptr<const TestResult> res, unsigned int level)
   {
     TestResult::SubtestResultVector subResults = res->GetSubtestResults();
     for (unsigned int i = 0; i < subResults.size(); i++) {
-        OutputResultMsgs(subResults.at(i), level + 1);
+        OutputVerboseResultMsgs(subResults.at(i), level + 1);
     }
   }
  
+}
+
+void OutputSimpleResultMsgs( shared_ptr<const TestResult> res )
+{
+
+    Requirement::RequirementMap::const_iterator iter;
+
+    const Requirement::RequirementMap& failures = res->GetRequirements( TestResult::FAIL );
+    for ( iter = failures.begin(); iter != failures.end(); iter++ )
+    {
+        shared_ptr<const Requirement> req = iter->second;
+        wcout << req->GetId() << L": \"" << req->GetName() << L"\" caused a failure." << endl;
+        wcout << L"Description: " << req->GetDescription() << endl;
+        wcout << L"See " << req->GetDocument() << L"(" << req->GetVersion()
+              << L") Section " << req->GetSection() << endl;
+        wcout << endl;
+    }
+    
+    const Requirement::RequirementMap& warnings = res->GetRequirements( TestResult::WARN );
+    for ( iter = warnings.begin(); iter != warnings.end(); iter++ )
+    {
+        shared_ptr<const Requirement> req = iter->second;
+        wcout << req->GetId() << L": \"" << req->GetName() << L"\" caused a warning." << endl;
+        wcout << L"Description: " << req->GetDescription() << endl;
+        wcout << L"See " << req->GetDocument() << L"(" << req->GetVersion()
+              << L") Section " << req->GetSection() << endl;
+        wcout << endl;
+    }
+    
 }
 
 void RegisterTests()
@@ -231,6 +260,7 @@ ostream& operator<<( ostream& os, const Usage& )
   os << "                        results to use unassociated requirements" << endl;
   os << "-allreqs: Output all loaded requirements" << endl;
   os << "-coverage: Output all requirements covered by the test suite." << endl;
+  os << "-verbose: Output details of how warnings and failures were discovered." << endl;
   return os;
 };
 
@@ -244,6 +274,8 @@ int main( int argc, char** argv )
   using namespace boost;
   using namespace std;
   using namespace aafanalyzer;
+
+  int regressionTestModifier = 1;
 
   try
   {
@@ -264,6 +296,17 @@ int main( int argc, char** argv )
     
     // Allow test to register with unregistered requirements
     pair<bool, int> unsafeRegistryArg = args.get ( "-uncheckedrequirements" );
+    
+    // Show verbose output
+    pair<bool, int> verboseOutput = args.get( "-verbose" );
+
+    // Undocumented parameter used to return 0 when the regression tests run
+    // even if there are failures
+    pair<bool, int> regressionTest = args.get( "-regressiontest" );
+    if ( regressionTest.first )
+    {
+        regressionTestModifier = 0;
+    }
 
     // Filename is the second last argument.
     pair<bool,const char*> fileNameArg = args.get( argc-2, 1 );
@@ -271,7 +314,9 @@ int main( int argc, char** argv )
     // Requirements Filename is last argument.
     pair<bool, const char*> requirementsFile = args.get( argc-1, 2 );
     
-    int numFlags = dumpArg.first + allReqsArg.first + coverageArg.first + unsafeRegistryArg.first;
+    int numFlags = dumpArg.first + allReqsArg.first + coverageArg.first + 
+                   unsafeRegistryArg.first + verboseOutput.first + 
+                   regressionTest.first;
     
     bool runTests;
     
@@ -316,6 +361,7 @@ int main( int argc, char** argv )
       OutputRequirements(L"All Loaded Requirements", RequirementRegistry::GetInstance().GetAllRequirements());
       if ( !runTests && !coverageArg.first )
       {
+        //No tests were run so report a success.
         return 0;
       }
     }
@@ -336,6 +382,7 @@ int main( int argc, char** argv )
       OutputRequirements(L"Requirements Covered By Tests", TestRegistry::GetInstance().GetRequirementCoverage());
       if ( !runTests )
       {
+        //No tests were run so report a success.
         return 0;
       }
     }
@@ -375,8 +422,33 @@ int main( int argc, char** argv )
       spResult->AppendSubtestResult(spSubResult);
     }
 
-    spResult->SetResult(spResult->GetAggregateResult());      
-    OutputResultMsgs(spResult, 0);
+    spResult->SetResult(spResult->GetAggregateResult());
+    if ( verboseOutput.first )
+    {
+        OutputVerboseResultMsgs(spResult, 0);
+    }
+    else
+    {
+        OutputSimpleResultMsgs( spResult );
+    }
+    
+    TestResult::Result exitCode = spResult->GetResult();
+    if ( exitCode == TestResult::FAIL )
+    {
+        //Failures occured
+        return 1 * regressionTestModifier;
+    }
+    else if ( exitCode == TestResult::WARN )
+    {
+        //Warnings, but no failures occured
+        return 2 * regressionTestModifier;
+    }
+    else
+    {
+        //All tests passed
+        return 0;
+    }
+    
   }
   catch ( const Usage& ex )
   {
@@ -423,5 +495,6 @@ int main( int argc, char** argv )
     wcout << L"Error: unhandled exeption" << endl;
   }
   
-  return 0;
+  //An exception occured and all tests were not run.
+  return 3 * regressionTestModifier;
 }

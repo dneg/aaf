@@ -454,3 +454,6 @@
 96. Under the current regression testing system there is no way to save an AAF
 	file as anything other than version 1.1, so the warn condition of REQ_EP_163
 	is not tested, nor are all of the pass conditions.
+
+97. There are 4 ways the derivation chain test can fail that are not associated
+	with requirements.
