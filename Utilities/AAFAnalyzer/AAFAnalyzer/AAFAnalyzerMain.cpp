@@ -252,7 +252,7 @@ ostream& operator<<( ostream& os, const Usage& )
   os << "Valid usages are: " << endl;
   os << "AAFAnalyzer [options] filename.aaf requirement_filename.xml" << endl;
   os << "AAFAnalyzer [requirement output] requirement_filename.xml" << endl;
-  os << "[options] = -dump | -uncheckedrequirements | [requirement output]" << endl;
+  os << "[options] = -dump | -uncheckedrequirements | -verbose | [requirement output]" << endl;
   os << "[requirement output] = -allreqs | -coverage" << endl;
   os << endl;
   os << "-dump: Output graph of AAF file" << endl;
