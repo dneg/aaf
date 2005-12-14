@@ -5,12 +5,14 @@
     is a "should" not a "shall."  Until a more appropriate requirement is
     available, REQ_EP_063 is being used to specify an invalid reference from
     a file source.
+(Requirements Elaboration)
 
  2. REQ_EP_063 only deals with references to import, tape and film sources, not
     file sources.  This was discussed in the conference call on September 26
     and it was concluded that this was probably an omission.  With (1),
     REQ_EP_063 is being used to specify that a reference from a file source to
     another file source is valid.
+(Requirements Elaboration)
 
  3. REQ_EP_064 states "if a file source does not have one of the above sources,
     then it shall reference and include a recording source."  This is currently
@@ -18,6 +20,7 @@
     (it can not be the end of the derivation chain).  The requirement is not
     being interpreted as an if and only if, therefore, a file source may have
     a(n) file/import/tape/file source as well as a recording source.
+(Assumption Validation)
 
  4. The Edit Protocol does not specify what types of references an import
     source is allowed to reference.  REQ_EP_076 states that "if an import
@@ -26,6 +29,7 @@
     requirement and is a "should" not a "shall."  Until a more appropriate
     requirement is available, REQ_EP_076 is being used to specify an invalid
     reference from an import source.
+(Requirements Elaboration)
 
  5. The Edit Protocol does not specify what type of references a tape source is
     allowed to reference.  REQ_EP_083 states that "if a tape source has a film
@@ -33,11 +37,13 @@
     is an application requirement and is a "should" not a "shall."  Until a
     more appropriate requirement is available, REQ_EP_083 is being used to
     specify an invalid reference from a tape source.
+(Requirements Elaboration)
 
  6. The Edit Protocol does not specify what type of references a film source is
     allowed to reference.  Currently, a test will fail, although all
     requirements will appear to have passed if a film source is not the end of
     the derivation chain.
+(Requirements Elaboration)
 
  7. Currently a test will fail if a CompositionMob does not have a UsageCode
     property.  However, there is no requirement in the Edit Protocol that
@@ -45,6 +51,7 @@
     Currently, the test will fail and all requirements will appear to pass,
     A possible solution is to fail the requirement that specifies acceptable
     references out of the "current node."
+(Assumption Validation - Requiremetns Elaboration)
 
  8. Currently a test will fail if a CompositionMob or a MasterMob has an
     unknown UsageCode property.  However, there is no requirement in the Edit
@@ -52,24 +59,28 @@
     exists.  Currently, the test will fail and all requirements will appear to
     pass.  A possible solution is to fail the requirement that specifies
     acceptable references out of the "current node."
+(Assumption Validation - Requiremetns Elaboration)
 
  9. Currently a test will fail if a SourceMob has no descriptor.  However, the
     Edit Protocol does not specify that a SourceMob must have a descriptor.
     Currently, the test will fail and all requirements will appear to pass.  A
     possible solution is to fail the requirement that specifies acceptable
     references out of the "current node."
+(Assumption Validation - Requiremetns Elaboration)
 
 10. Currently a test will fail if a SourceMob has an "invalid" descriptor (ie.
     Auxiliary).  However, the Edit Protocol does not specify that a SourceMob
     cannot have an "invalid" descriptor.  Currently, the test will fail and all
     requirements will appear to pass.  A possible solution is to fail the
     requirement that specifies acceptable references out of the "current node."
+(Assumption Validation - Requiremetns Elaboration)
 
 11. Currently a test will fail if a SourceClip does not have a SourceReference
     property.  However, the Edit Protocol does not specify that a SourceClip
     must have a SourceReference property.  Currently, the test will fail and
     all requirements will appear to pass.  A possible solution is to fail the
     requirement that specifies acceptable references out of the "current node."
+(Assumption Validation - Requiremetns Elaboration)
 
 12. Tests will currently fail if the first "node" in the derivation chain is
     anything other than a top-level composition.  REQ_EP_030 states that "a
@@ -80,6 +91,7 @@
     to the way the CompMobDependency is implemented, only CompositionMobs
     will be considered as the first "node" in a derivation chain.  Unreferenced
     SourceMobs, MasterMobs and SourceClips will never be tested.
+(Assumption Validation - Requiremetns Elaboration)
 
 13. REQ_EP_026, REQ_EP_031, REQ_EP_036 and REQ_EP_045 state that top-level,
     lower-level, sub-clip and adjusted-clip compositions respectively "shall
@@ -88,6 +100,7 @@
     these compositions from being the end of the chain.  Currently, if one of
     these compositions is the end of a chain, the test will fail, however, all
     requirements will appear to pass.
+(Assumption Validation - Requiremetns Elaboration)
 
 14. As was discussed in the conference call on September 26, 2005, REQ_EP_031
     does not specify a lower-level composition can reference another
@@ -95,11 +108,13 @@
     reference.  As was decided during the call, this was probably an omission
     therefore, REQ_EP_031 is used to specify a valid reference from one
     lower-level composition to another.
+(Requirements Elaboration)
 
 15. As was discussed during the conference call on September 26, 2005, the
     figure in Section 6.1 makes it appear that a Clip may be the end of the
     derivation chain.  Until further information is avaliable, the test will
     assume that it is valid for a clip to be the end of the derivation chain.
+(Requirements Elaboration)
 
 16. Requirements REQ_EP_025, REQ_EP_030, DEF_EP_034, DEF_EP_043, DEF_EP_049,
     DEF_EP_054, DEF_EP_058, DEF_EP_071, DEF_EP_074, DEF_EP_080, DEF_EP_085,
@@ -111,84 +126,105 @@
     rewritten as "Let an adjusted-clip composistion be defined as a
     CompositionMob with Mob::UsageCode property equal to Usage_AdjustedClip".
     These requirements can not be tested.
+(Requirements Change)
 
 17. REQ_EP_013, REQ_EP_014 and REQ_EP_039 are all classified as file
     requirements but they seem dependant on an importing or exporting
     application.
+(XML Change)
 
 18. REQ_EP_023 and REQ_EP_097 are optional ("MAY") requirements.  There is no
     way they can present a warning or a failure - they are not currently being
     tested.
+(Open Question - How do we treat "MAY" requirements)
 
 19. REQ_EP_028 does not specify if physical track numbers may be repeated.
     Until further information is avaliable, it is assumed that they can not be
     repeated.
+(Assumption Validation - Requiremetns Elaboration)
 
 20. REQ_EP_028 does not specify if reserved physical track numbers are legal
     values.  Until further information is avaliable, it is assumed that they are
     illegal.
+(Assumption Validation - Requiremetns Elaboration)
 
 21. REQ_EP_028 does not specify if physical track numbers outside the range 1-6
     are legal.  Until further information is avaliable, it is assumed that they
     are illegal.
+(Assumption Validation - Requiremetns Elaboration)
 
 22. REQ_EP_082 does not specify if physical track numbers may be repeated.
     Until further information is avaliable, it is assumed that they can not be
     repeated.
+(Assumption Validation - Requiremetns Elaboration)
 
 23. REQ_EP_082 does not specify if reserved physical track numbers are legal
     values.  Until further information is avaliable, it is assumed that they are
     illegal.
+(Assumption Validation - Requiremetns Elaboration)
 
 24. REQ_EP_082 does not specify if physical track numbers outside the range 1-12
     are legal.  Until further information is avaliable, it is assumed that they
     are illegal.
+(Assumption Validation - Requiremetns Elaboration)
 
 25. REQ_EP_087 does not specify if physical track numbers may be repeated.
     Until further information is avaliable, it is assumed that they can not be
     repeated.
+(Assumption Validation - Requiremetns Elaboration)
 
 26. REQ_EP_087 does not specify if physical track numbers outside the range 1-3
     are legal.  Until further information is avaliable, it is assumed that they
     are illegal.
+(Assumption Validation - Requiremetns Elaboration)
 
 27. Timecode track is not defined.  It is assumed to be a MobSlot where
     IsTimecodeType is true.
+(Assumption Validation - Requiremetns Elaboration)
 
 28. Edgecode track is not defined.  It is assumed to be a MobSlot where
     IsEdgecodeType is true.
+(Assumption Validation - Requiremetns Elaboration)
 
-29. The legal layout of a derivation chain is not specified in test, only in
+29. The legal layout of a derivation chain is not specified in text, only in
     the diagram.
+(Requirements Elaboration)
 
 30. REQ_EP_037 states each essence track of a sub-clip composition shall contain
     exactly one SourceClip - what about sequences of one SourceClip?  Currently,
     sequences are not accepted.
+(Assumption Validation - Requiremetns Elaboration)
 
 31. REQ_EP_046 states each essence track of an adjusted-clip composition shall
     contain exactly one OperationGroup - what about sequence of one
     OperationGroup?  Currently sequences are not accepted.
+(Assumption Validation - Requiremetns Elaboration)
 
 32. What does REQ_EP_056 mean?
+(Requirements Clarification)
 
-33. Essence track is not defined.  It is assumed to be a MobSlot that has an
-    Sound or Picture DataDefinition.
+33. Essence track is not defined.  It is assumed to be a MobSlot where
+    IsSoundKind() or IsPictureKind() returns true.
+(Assumption Validation - Requiremetns Elaboration)
 
 34. REQ_EP_091 states that the edit rate of an essence track must be equivalent
     to value in the table.  However, StaticMobSlots do not have edit rates.
     As was noted above, it is assumed that an essence track is a MobSlot with
     a Sound or Picture DataDefinition.  How should REQ_EP_091 treat
     StaticMobSlots?
+(Assumption Validation - Requiremetns Elaboration)
 
 35. REQ_EP_061 and REQ_EP_075 require that URIs comply with RFC 2396 and also
     that absolute URIs conform to RFC 1738.  However, RFC 2396 updates RFC 1738.
     If a URI complies with RFC 2396, but one of the updates cause it to not
     conform with RFC 1738 should the test fail?  What if in order to comform to
     RFC 1738 it can not comply with RFC 2396.
+(Requirements Clarification)
 
 36. REQ_EP_061 and REQ_EP_075 require that if a NetworkLocator contains a
     "relative URI, the base URI should be determined from the URI of the AAF
     file itself."  What exactly does this mean?
+(Requirements Clarification)
 
 37. REQ_EP_059 says that essence associated with a file SourceMob shall be
     internal to the AAF file or external to the AAF file.  If the
@@ -197,6 +233,7 @@
     values indicate external.  Are there some values that are illegal?  For now
     assume the only legal values are kAAFContainerDef_External and
     kAAFContainerDef_AAF.
+(Assumption Validation - Requiremetns Elaboration)
 
 38. REQ_EP_060 states there should be a Locator specifying the location of the
     essence.  REQ_EP_061 states there should be a NetworkLocator that complies
@@ -205,21 +242,25 @@
     (60: Locator, 61: NetworkLocator; 60: External to the AAF File; 61: Internal
     or External is not specified), that the test is currently being implemented
     to accept two differnt locators that will meet these requeirements.
+(Assumption Validation - Requiremetns Elaboration)
 
 39. The URI validator that is currently being used does not accept wide
     characters.  It also does not appear to accept relative URIs.  Until
     a different URI validator is found, these problems will exist when
     validating URIs.
+(Library Needed)
 
 40. REQ_EP_060 tests if a file exists at the location pointed to by the locator.
     Currently this is done assuming the path is specified as an absolute URI.
     Once a URI tool that deals with relative URIs, this can be modified to
     to allow the path to be absolute or relative.
+(Library Needed)
 
 41. The words "valid name" are used throughout the Edit Protocol, but what makes
     a name valid is never determined.  Until further information is avaliable,
     it is assumed that a name is valid if an AAF Object has a name property that
     has been set.
+(Assumption Validation - Requiremetns Elaboration)
 
 42. REQ_EP_099 and REQ_EP_100 state that the edit rates of audio tracks must
     equal the sample rate and the edit rates of video tracks must be less than
@@ -229,55 +270,67 @@
     true that contains a File Source mob.  This includes StaticMobSlots, which
     do not have edit rates.  Until more information is avaliable, all
     StaticMobSlots will cause test failures.
+(Assumption Validation - Requiremetns Elaboration)
 
 43. The term zero-valued SourceClip object is not defined.  For the purpose of
     this test, it is assumed to be a SourceClip object with a SourceID =
     { {0,0,0,0,0,0,0,0,0,0,0,0}, 0, 0, 0, 0, { 0, 0, 0, {0,0,0,0,0,0,0,0} } } =
     00000000000000000000000000000000-00000000-0000-0000-0000000000000000.
+(Assumption Validation - Requiremetns Elaboration)
 
 44. The term essence track is not defined.  For the purpose of this test
     (REQ_EP_050, REQ_EP_072), it is aussumed to be any SourceClip object along
     the derivation chain.
+(Assumption Validation - Requiremetns Elaboration)
 
 45. How do you acuratley check that a file exists (ie. it is insufficient to
     check if the file can be open using an ifstream) in a platform independant
     fashion?
+(Coding Needed)
 
 46. REQ_EP_161 can not easily be regression tested as there does not appear to
     be any way to add a DefinitionObject to the dictionary without first calling
     its initialize method.  The initialize method will provide the
     DefinitionObject with a valid name.
+(Regression Test Issue)
 
 47. There is no requirement that specifies when it is legal to end the
     derivation chain.  Currently, an illegal end of the derivation chain is
     detected based upon the diagram in section 6.1.  A failure will be reported,
     but, not requirements will be shown as failing.
+(Assumption Validation - Requiremetns Elaboration)
 
 48. Effects are being classified solely based upon their AUIDs, not the rest
     of their definition.  There should be a requirement that can be tested that
     states the AUID can only be used for effects matching the definitions
     specified in section 12.
+(Requirements Elaboration)
 
 49. Section 12 uses the phrases "within a Transition object" and "not within
     "a transition object".  This is not clear.  Currently it is assumed to mean
     that the direct parent must or must not be a Transition object, however, it
     is ok if an ancestor higher than a parent is a Transition object.
+(Assumption Validation - Requiremetns Elaboration)
 
 50. The URI validator currently being used is libURI
     (http://sourceforge.net/projects/liburi/) is not sufficient for this test.
     Until a better validator is avaliable, this test will be registered but not
     run.
+(Library Needed)
 
 51. REQ_EP_187 does not specify if the Speed Ratio parameter should be constant
     or varying value.  Currently it is assumed that it must be constant in order
     for there to be a ratio value of zero.  Tests will fail if it is not
     constant.
+(Assumption Validation - Requiremetns Elaboration)
 
 52. It is assumed that REQ_EP_187 applies only to Speed Ratio Parameters that
     belong to Video Speed Control effects.
+(Assumption Validation - Requiremetns Elaboration)
 
 53. There is no easy way to regression test Speed Ratio parameters for
     REQ_EP_187.
+(Regression Test Issue)
 
 54. Currently, if a test fails or issues a warning, traversal down the current
     path will be terminated.  This could mask further warnings or failures.  In
@@ -285,55 +338,67 @@
     place in the derivation chain, it is not possible to verify if further
     mobs/clips are in the correct place), however, in other cases, it is should
     be possible to continue testing (ie. any non-structural test).  Switching
-    the tests to continue along the chain should not effect the    regression tests
+    the tests to continue along the chain should not effect the regression tests
     unless noted within the XML files.
+(Analyzer Structure Issue)
 
 55. It is assumed that REQ_EP_131 means that a Primary Timecode mob slot can only
     have one Timecode object (ie. No sequences and it can not be the child of
     another segment).
+(Assumption Validation - Requiremetns Elaboration)
 
 56. REQ_EP_131 refers to Primary Timecode Tracks in Lower-Level compositions.
     Primary Timecode Tracks are only defined for Top-Level Compositions and Tape
     Sources.  It is assumed that the definition is consistent.
+(Assumption Validation - Requiremetns Elaboration)
 
 57. REQ_EP_136 says the slots in an Auxiliary SourceMob may be timeline, event
-    or static.  May implies that this is optional, so any time of slot is legal.
+    or static.  May implies that this is optional, so any type of slot is legal.
     If this is not correct, the requirement should be written with a shall in
     place of the may.
+(Requirement Clarification)
 
 58. Auxiliary SourceMobs are defined in section 9.1.1 and requirements specify
     what data they can include.  However, they do not fit anywhere in the
-    derivation chain.  This may be correct, but, if it is not, the derivation
+    derivation chain.  This may be correct, but, if it is, the derivation
     test will fail when an Auxiliary SourceMob is encountered in the derivation
     chain.
+(Requirement Clarification)
 
 59. REQ_EP_149 and REQ_EP_150 prevent CommentMarkers from being used in places
     where DescriptiveMarkers are allowed.  It is assumed that CommentMarker
     refers to the base class and any subclass other than DescriptiveMarker and
     its subclasses.
+(Assumption Validation - Requiremetns Elaboration)
 
 60. REQ_EP_149 referes to annotations not associated with a specific essence
     track.  It is assumed that an annotation is associated with the MobSlot that
     the component with the annotation is contained within.
+(Assumption Validation - Requiremetns Elaboration)
 
 61. It is assumed that for data definition values to be consistent in
     REQ_EP_162, AxDataDef::IsDataDefOf() must return true.
+(Assumption Validation - Requiremetns Elaboration)
 
 62. For REQ_EP_162 it is assumed that a warning should be presented if there is
     an OperationDefinition in the AAF file that is not referenced.
+(Assumption Validation - Requiremetns Elaboration)
 
 63. It is not possible to save an AAF file with an unreferenced
     OperationDefinition so the warn condition of REQ_EP_162 can not be
     regression tested.
+(Regression Test Issue)
 
 64. When testing REQ_EP_248 and REQ_EP_249 it is assumed that the parent of a
     transition must be a sequence.  Under the current AAF Object specification,
     this appears to be a valid assumption, however, should the specification
     change, the requirements may need to change.
+(Assumption Validation - Requiremetns Elaboration)
 
 65. When REQ_EP_248 and REQ_EP_249 state that segments must be specified from
     the begining/to the end of a Transition, it is assumed that this means the
     length of the segment must be at least as long as the transition.
+(Assumption Validation - Requiremetns Elaboration)
 
 66. REQ_EP_248 and REQ_EP_249 cannot be accuratley regression tested as the
     implementation of the AAF object model does not allow the following failure
@@ -341,20 +406,25 @@
         a) Incoming or Outgoing Segments that are too short.
         b) Transitions or Segments with no length.
         c) A Transition with no outgoing segment.
+(Regression Test Issue)
 
 67. The conditions tested by REQ_EP_248 are a subset of the conditions tested by
     REQ_EP_249.  REQ_EP_248 is not necessary since when it fails, an identical
     failure of REQ_EP_249 will be produced.
+(Requirements Overlap)
 
 68. REQ_EP_248 and REQ_EP_249 are requirements for Two-Parameter Mono Audio
     Dissolve effects.  There should probably be an analogous requirement for
     Single Parameter Mono Audio Dissolve effects.
+(Missing Requirements)
 
 69. It is assumed that sub-classes of ConstantValue and VaryingValue are legal
     for REQ_EP_174, but any other sub-class of Parameter is illegal.
+(Assumption Validation - Requiremetns Elaboration)
 
 70. There is no easy way to regression test REQ_EP_174 with the current testing
     framework.
+(Regression Test Issue)
 
 71. When building the test graph, it is assumed that properties with a Record
     data type will not contain any strong references.  According to the AAF
@@ -366,8 +436,10 @@
     or Opaque.  The AAF object specification allows Indirects and Opaques to be
     used in this way and if this assumption is incorrect, the AAF Analyzer will
     throw an exception and terminate before analyzing the file.
+(Assumption Validation)
 
 72. Should REQ_EP_012, REQ_EP_062 and REQ_EP_160 be FILE requirements?
+(XML Change)
 
 73. Currently, error messages attempt to indicate which object in an AAF file
     causes a warning or a failure.  However, there are many cases where
@@ -376,30 +448,37 @@
     be of minimal value with the current text-based interface, however, if a GUI
     is added, or the -dump functionality is extended, the node id could be very
     useful in identifying the problem object.
+(Analyzer Enhancement)
 
 74. REQ_EP_110 referes to mono and multi-channel sound Data Definitions that do
     not exist.  It is assumed that these refer to sound descriptors with 1 or
     more than one channels respectively.
+(Assumption Validation - Requiremetns Elaboration)
 
 75. It is assumed that REQ_EP_110 means SoundDescriptors with multiple channels
     cannot occur in the derivation chain after a Composition or MasterMob.
+(Assumption Validation - Requiremetns Elaboration)
 
 76. There is not much to be tested for REQ_EP_108.  Currently it is being used
     to ensure either both or neither of the TimelineMobSlot::MarkIn and
     TimelineMobSlot::MarkOut properties are present and that the MarkOut point
     does not occur before the MarkIn point.
+(Assumption Validation - Requiremetns Elaboration)
 
 77. For REQ_EP_218 it is assumed that the 2nd input to an OpetaionGroup for an
     Alpha with Video Key Effect must be a Source References to a file SourceMob
-    with an    RGBADescriptor or a CDCIDescriptor.
+    with an RGBADescriptor or a CDCIDescriptor.
+(Assumption Validation - Requiremetns Elaboration)
 
 78. For REQ_EP_219 it is assumed that the 2nd input to an OpetaionGroup for an
     Alpha with Video Key Effect must be a Source References to a file SourceMob
     with a DigitalImageDescriptor.
+(Assumption Validation - Requiremetns Elaboration)
 
 79. For REQ_EP_223 it is assumed that the 3rd input to an OpetaionGroup for a
     Separate-Alpha Key Effect must be a Source References to a file SourceMob
-    with an    RGBADescriptor or a CDCIDescriptor.
+    with an RGBADescriptor or a CDCIDescriptor.
+(Assumption Validation - Requiremetns Elaboration)
 
 80. For REQ_EP_223 it is assumed that the 3rd input to an OpetaionGroup for an
     Separate=Alpha Key Effect must be a Source References to a file SourceMob
@@ -408,58 +487,76 @@
 81. In REQ_EP_219, it is not known how to test if the alpha channel is indicated
     by the essence descriptor.  Until clarification is provided, this will not
     be tested.
+(Requirements Elaboration)
 
 82. In REQ_EP_223, it is not known how to test if the alpha channel is indicated
     by the essence descriptor or how to find the luminance calue of the essence.
     Until clarification is provided, this will not be tested.
+(Requirements Elaboration)
 
 83. REQ_EP_150 states CommentMarkers shall be placed only in EventMobSlots.  It
     is assumed that this means, the component with the CommentMarker (or the
     CommentMarker) must be contained within an EventMobSlot.
+(Assumption Validation - Requiremetns Elaboration)
 
 84. What should be tested for REQ_EP_111?
+(Requirement Clarification)
 
 85. REQ_EP_112, REQ_EP_113, REQ_EP_114 and REQ_EP_115 refer to multi-channel
     tracks and mono tracks.  Tracks do not have channels, this needs to be
     clarified.
+(Requirement Clarification)
 
 86. REQ_EP_110 and REQ_EP_112 refer to multi-channel sound Data Definitions.
     This Data Definition does not exist and must be clarified.
+(Requirement Clarification)
 
 87. What should be tested for REQ_EP_116?
+(Requirement Clarification)
 
 88. Should there be any requirements about the StillFrame property for
     REQ_EP_121?
+(Missing Requirement)
 
 89. For DEF_EP_129 should TimecodeStream12M objects be validated?
+(Requirement Elaboration)
 
 90. REQ_EP_138 is confusing because nothing has to be done to comply with the
     Edit Protocol.  The requirement is the same as the general AAF Object
     Specification requirement but applied to an auxiliary file.
+(Unnecessary Requirement)
 
 91. Should REQ_EP_143 be tested?
+(Requirement Clarification)
 
 92. Is there a representation of a nested group other than the one in REQ_EP_172
     that should be rejected?
+(Requirement Elaboration)
 
 93. For REQ_EP_178, how is it checked that inputs are VH normalized to the first
     video input.  Also, where can it be stated to do otherwise?
+(Requirement Elaboration)
 
-94. Tracks/MobSlots do not have data definitions.  What types of objects can
-    legaly have these definitions?
+94. For REQ_EP_148 Tracks/MobSlots do not have data definitions.  What types of
+    objects can legaly have these definitions?
+(Requirement Clarification)
 
 95. REQ_EP_163 and REQ_EP_164 are redundant as they only fail when more specific
     versions of the requirement fail.
+(Redundant Requirements)
 
 96. Under the current regression testing system there is no way to save an AAF
     file as anything other than version 1.1, so the warn condition of REQ_EP_163
     is not tested, nor are all of the pass conditions.
+(Regression Test Issue)
 
 97. There are 4 ways the derivation chain test can fail that are not associated
     with requirements.
+(Missing Requirements)
 
 98. Should StaticMobSlots be allowed in derivation chains, if so, what do they
     mean?
+(Requirements Elaboration)
 
 99. Currently, references from TimelineMobSlots to TimelineMobSlots and
     EventMobSlots are being properly resolved.  References from TimelineMobSlots
@@ -502,6 +599,7 @@
     Although this issue needs to be resolved, none of the tests that have been
     implemented visit AAFComponentReference Edges, so changes will not effect
     the currently implemented test set.
+(Analyzer Structure - SDK Issues)
 
 100. In the AAF SDK, when a Component is added to a Sequence, the Length of the
      Sequence is updated.  However, if a Sequence contains another Sequence and
@@ -509,3 +607,4 @@
      Sequence is not updated.  It is probably true that when the length of any
      Component is updated, its parent Sequence's Length property is not updated.
      This may be known and intended, but, it may not.
+(SDK Issues)

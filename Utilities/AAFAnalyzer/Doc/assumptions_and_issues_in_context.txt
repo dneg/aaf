@@ -54,14 +54,14 @@ Warn Conditions:
 Fail Conditions:
     NONE
 Issues:
-33. Essence track is not defined.  It is assumed to be a MobSlot that has a
-    Sound or Picture DataDefinition.
+33. Essence track is not defined.  It is assumed to be a MobSlot where
+	IsSoundKind() or IsPictureKind() returns true.
 
 42. REQ_EP_099 and REQ_EP_100 state that the edit rates of audio tracks must
     equal the sample rate and the edit rates of video tracks must be less than
     or equal to the sample rate respectively.  Currently, it is assumed that an
     audio track is a mob slot where IsSoundKind() is true that contains a
-    File Source mob    and a video track is a mob slot where IsPictureKind() is
+    File Source mob and a video track is a mob slot where IsPictureKind() is
     true that contains a File Source mob.  This includes StaticMobSlots, which
     do not have edit rates.  Until more information is avaliable, all
     StaticMobSlots will cause test failures.
@@ -283,7 +283,7 @@ Issues:
     derivation chain.  Until further information is avaliable, the test will
     assume that it is valid for a clip to be the end of the derivation chain.
 
-29. The legal layout of a derivation chain is not specified in test, only in
+29. The legal layout of a derivation chain is not specified in text, only in
     the diagram.
 
 43. The term zero-valued SourceClip object is not defined.  For the purpose of
@@ -304,7 +304,7 @@ Issues:
 
 58. Auxiliary SourceMobs are defined in section 9.1.1 and requirements specify
     what data they can include.  However, they do not fit anywhere in the
-    derivation chain.  This may be correct, but, if it is not, the derivation
+    derivation chain.  This may be correct, but, if it is, the derivation
     test will fail when an Auxiliary SourceMob is encountered in the derivation
     chain.
 
@@ -504,7 +504,7 @@ Issues:
     Sources.  It is assumed that the definition is consistent.
 
 57. REQ_EP_136 says the slots in an Auxiliary SourceMob may be timeline, event
-    or static.  May implies that this is optional, so any time of slot is legal.
+    or static.  May implies that this is optional, so any type of slot is legal.
     If this is not correct, the requirement should be written with a shall in
     place of the may.
 
@@ -931,7 +931,7 @@ Issues:
 
 79. For REQ_EP_223 it is assumed that the 3rd input to an OpetaionGroup for a
     Separate-Alpha Key Effect must be a Source References to a file SourceMob
-    with an    RGBADescriptor or a CDCIDescriptor.
+    with an RGBADescriptor or a CDCIDescriptor.
 
 80. For REQ_EP_223 it is assumed that the 3rd input to an OpetaionGroup for an
     Separate=Alpha Key Effect must be a Source References to a file SourceMob
@@ -988,8 +988,8 @@ Fail Conditions:
     REQ_EP_152 - Fail if a KLVData object has a key that does not have a
                  KLVDataDefinition with the same AUID in the dictionary.
 Issues:
-33. Essence track is not defined.  It is assumed to     be a MobSlot that has a
-    Sound or Picture DataDefinition.
+33. Essence track is not defined.  It is assumed to be a MobSlot where
+	IsSoundKind() or IsPictureKind() returns true.
 
 59. REQ_EP_149 and REQ_EP_150 prevent CommentMarkers from being used in places
     where DescriptiveMarkers are allowed.  It is assumed that CommentMarker
@@ -1385,8 +1385,8 @@ Requirements:
         The Data Definition for non-essence tracks containing annotations shall
         DataDef_DescriptiveMetadata.
 Issue:
-94. Tracks/MobSlots do not have data definitions.  What types of objects can
-    legaly have these definitions?
+94. For REQ_EP_148 Tracks/MobSlots do not have data definitions.  What types of
+	objects can legaly have these definitions?
 
 Requirements:
     NONE
