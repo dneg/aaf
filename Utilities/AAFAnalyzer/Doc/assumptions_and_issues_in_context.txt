@@ -54,10 +54,10 @@ Warn Conditions:
 Fail Conditions:
     NONE
 Issues:
-33. Essence track is not defined.  It is assumed to     be a MobSlot that has a
+33. Essence track is not defined.  It is assumed to be a MobSlot that has a
     Sound or Picture DataDefinition.
 
-    42. REQ_EP_099 and REQ_EP_100 state that the edit rates of audio tracks must
+42. REQ_EP_099 and REQ_EP_100 state that the edit rates of audio tracks must
     equal the sample rate and the edit rates of video tracks must be less than
     or equal to the sample rate respectively.  Currently, it is assumed that an
     audio track is a mob slot where IsSoundKind() is true that contains a
